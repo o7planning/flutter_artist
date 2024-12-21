@@ -119,7 +119,7 @@ class _FlutterArtist {
     int notificationFetchPeriodInSeconds = 60,
   }) async {
     if (__adapter != null) {
-      throw "FluDatablocksAdapter already registered!";
+      throw "FlutterArtistAdapter already registered!";
     }
     __adapter = flutterArtistAdapter;
     //
