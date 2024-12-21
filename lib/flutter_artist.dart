@@ -89,7 +89,7 @@ part '_dialog_/_dialog_constants.dart';
 part '_dialog_/_dialog_size.dart';
 part '_dialog_/_error_viewer_dialog.dart';
 part '_dialog_/_form_data_info_dialog.dart';
-part '_dialog_/_global_flu_structure_dialog.dart';
+part '_dialog_/_gallery_room_dialog.dart';
 part '_dialog_/_location_info_dialog.dart';
 part '_dialog_/_ui_components_dialog.dart';
 part '_enum_/_enums.dart';

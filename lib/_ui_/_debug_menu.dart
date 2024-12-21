@@ -68,7 +68,7 @@ class _DebugMenuState extends State<DebugMenu> implements FluErrorListener {
                   if (isSystemUser && FlutterArtist.canShowFrameStructure())
                     _buildPopupMenuItem(
                       iconData: _fluStructureIconData,
-                      title: 'Flu Structure',
+                      title: 'Frame Structure',
                       onTab: _showFluStructure,
                     ),
                   if (isSystemUser && FlutterArtist._canShowUiComponentDialog())
@@ -79,9 +79,9 @@ class _DebugMenuState extends State<DebugMenu> implements FluErrorListener {
                     ),
                   if (isSystemUser)
                     _buildPopupMenuItem(
-                      iconData: _globalFluStructureIconData,
-                      title: 'Global Flu Structure',
-                      onTab: _showGlobalFluStructure,
+                      iconData: _galleryRoomIconData,
+                      title: 'Gallery Room',
+                      onTab: _showGalleryRoom,
                     ),
                   if (isSystemUser) _divider(),
                   if (isSystemUser)
@@ -150,9 +150,9 @@ class _DebugMenuState extends State<DebugMenu> implements FluErrorListener {
     FlutterArtist._showRestDebugDialog!(context);
   }
 
-  Future<void> _showGlobalFluStructure() async {
+  Future<void> _showGalleryRoom() async {
     Navigator.pop(context, null);
-    await FlutterArtist.showFlutterArtistStructureDialog();
+    await FlutterArtist.showGalleryRoomDialog();
   }
 
   void _clearCodeFlow() {

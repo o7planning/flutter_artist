@@ -285,9 +285,9 @@ class _FlutterArtist {
     return adapter.isOverlaysOpen();
   }
 
-  Future<void> showFlutterArtistStructureDialog() async {
+  Future<void> showGalleryRoomDialog() async {
     BuildContext context = adapter.getCurrentContext();
-    await _showFlutterArtistStructureDialog(context: context, frame: null);
+    await _showGalleryRoomDialog(context: context, frame: null);
   }
 
   Future<void> showFlowLogDialog() async {

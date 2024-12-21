@@ -136,7 +136,7 @@ abstract class Frame {
 
   Future<void> showFrameStructureDialog() async {
     BuildContext context = FlutterArtist.adapter.getCurrentContext();
-    await _showFlutterArtistStructureDialog(context: context, frame: this);
+    await _showGalleryRoomDialog(context: context, frame: this);
   }
 
   Future<void> showActiveUiComponentsDialog() async {

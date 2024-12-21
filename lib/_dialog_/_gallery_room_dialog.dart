@@ -3,21 +3,21 @@ part of '../flutter_artist.dart';
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-class _GlobalFluStructureDialog extends StatefulWidget {
+class _GalleryRoomDialog extends StatefulWidget {
   final Frame? frame;
 
-  const _GlobalFluStructureDialog({
+  const _GalleryRoomDialog({
     required this.frame,
     super.key,
   });
 
   @override
-  State<_GlobalFluStructureDialog> createState() {
-    return __GlobalFluStructureDialogState();
+  State<_GalleryRoomDialog> createState() {
+    return _GalleryRoomDialogState();
   }
 }
 
-class __GlobalFluStructureDialogState extends State<_GlobalFluStructureDialog> {
+class _GalleryRoomDialogState extends State<_GalleryRoomDialog> {
   Frame? _currentFrame;
 
   @override
@@ -39,8 +39,7 @@ class __GlobalFluStructureDialogState extends State<_GlobalFluStructureDialog> {
     );
 
     AlertDialog alert = _CustomAlertDialog(
-      titleText:
-          _currentFrame == null ? "Global Flu Structure" : "Flu Structure",
+      titleText: _currentFrame == null ? "Gallery Room" : "Frame Structure",
       content: contentWidget,
       contentPadding: EdgeInsets.zero,
       closeDialog: () {
@@ -103,14 +102,14 @@ class __GlobalFluStructureDialogState extends State<_GlobalFluStructureDialog> {
   }
 }
 
-Future<void> _showFlutterArtistStructureDialog({
+Future<void> _showGalleryRoomDialog({
   required BuildContext context,
   required Frame? frame,
 }) async {
   await showDialog(
     context: context,
     builder: (BuildContext context) {
-      return _GlobalFluStructureDialog(frame: frame);
+      return _GalleryRoomDialog(frame: frame);
     },
   );
 }
