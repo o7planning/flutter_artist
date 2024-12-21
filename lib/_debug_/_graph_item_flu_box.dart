@@ -1,0 +1,122 @@
+part of '../flutter_artist.dart';
+
+class _GraphItemFluBox extends StatefulWidget {
+  final Function() gotoFlutterArtist;
+  final Frame frame;
+
+  const _GraphItemFluBox({
+    super.key,
+    required this.gotoFlutterArtist,
+    required this.frame,
+  });
+
+  @override
+  State<_GraphItemFluBox> createState() => _GraphItemFluBoxState();
+}
+
+class _GraphItemFluBoxState extends State<_GraphItemFluBox> {
+  static const double _graphBoxImageWidth = 40;
+  static const double _graphBoxImageHeight = 32;
+
+  static const double iconSize = 18;
+
+  static const double extraWidth = 40;
+  static const double spacing = 5;
+  static const double padding = 5;
+
+  @override
+  Widget build(BuildContext context) {
+    double boxWidth = _calculateBoxWidth();
+
+    return SizedBox(
+      width: boxWidth,
+      child: Container(
+        padding: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          color: _rootGraphBoxBgColor,
+          borderRadius: BorderRadius.circular(4),
+          boxShadow: [
+            _graphBoxShadow,
+          ],
+        ),
+        child: _buildRootBoxContent(),
+      ),
+    );
+  }
+
+  Widget _buildRootBoxContent() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(
+              "packages/flutter_artist/static-rs/flu.png",
+              width: _graphBoxImageWidth,
+              height: _graphBoxImageHeight,
+            ),
+            const SizedBox(width: 5),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(5),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 10,
+                      ),
+                      child: Text(
+                        _getFluName(),
+                        style: _getTextStyle(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 5,
+                ),
+                minimumSize: Size.zero,
+              ),
+              onPressed: widget.gotoFlutterArtist,
+              child: const Icon(
+                _uptoGlobalFluIconData,
+                color: Colors.white,
+                size: iconSize,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  TextStyle _getTextStyle() {
+    return const TextStyle(
+      fontSize: _graphBoxFontSizeRootBox,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+
+  String _getFluName() {
+    return getClassName(widget.frame);
+  }
+
+  double _calculateBoxWidth() {
+    return extraWidth +
+        _graphBoxImageWidth +
+        2 * spacing +
+        2 * padding +
+        iconSize +
+        _calculateTextSize(
+          text: _getFluName(),
+          style: _getTextStyle(),
+        ).width;
+  }
+}

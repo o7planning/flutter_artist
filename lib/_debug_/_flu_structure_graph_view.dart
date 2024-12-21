@@ -1,0 +1,150 @@
+part of '../flutter_artist.dart';
+
+class _FluStructureGraphView extends StatefulWidget {
+  final Function() onPressedBack;
+  final Frame frame;
+
+  const _FluStructureGraphView({
+    required this.frame,
+    required this.onPressedBack,
+    super.key,
+  });
+
+  @override
+  State<_FluStructureGraphView> createState() => _FluStructureGraphViewState();
+}
+
+class _FluStructureGraphViewState extends State<_FluStructureGraphView> {
+  final Graph graph = Graph()..isTree = false;
+  BuchheimWalkerConfiguration configuration =
+      CustomBuchheimWalkerConfiguration();
+  late Map<String, _GraphItem> graphItemMap;
+
+  String? _highlighBlockFilterName;
+
+  static const double paddingVertical = 60;
+  static const double paddingHorizontal = 640;
+
+  static const double itemWidth = 280;
+  static const double? itemHeight = null; // 160;
+
+  late _GraphItem rootItem;
+
+  @override
+  void initState() {
+    super.initState();
+    //
+    rootItem = _toRootDebugGraphItem(widget.frame);
+    graphItemMap = <String, _GraphItem>{};
+    final String rootNodeId = rootItem.name;
+    //
+    graphItemMap[rootNodeId] = rootItem;
+    //
+    Map<String, Node> nodeMap = {};
+    //
+
+    final rootNode = Node.Id(rootNodeId);
+    nodeMap[rootNodeId] = rootNode;
+    //
+    _addToMapCascade(
+      currentNode: rootNode,
+      childItems: rootItem.children,
+      graphItemMap: graphItemMap,
+      nodeMap: nodeMap,
+    );
+  }
+
+  void _addToMapCascade({
+    required Node currentNode,
+    required List<_GraphItem> childItems,
+    required Map<String, _GraphItem> graphItemMap,
+    required Map<String, Node> nodeMap,
+  }) {
+    for (var childGraphItem in childItems) {
+      String childNodeId = childGraphItem.name;
+      graphItemMap[childNodeId] = childGraphItem;
+      Node childNode = Node.Id(childNodeId);
+      nodeMap[childNodeId] = childNode;
+
+      graph.addEdge(
+        currentNode,
+        childNode,
+        paint: Paint()..color = Colors.black87,
+      );
+
+      if (childGraphItem.children.isNotEmpty) {
+        _addToMapCascade(
+          currentNode: childNode,
+          childItems: childGraphItem.children,
+          graphItemMap: graphItemMap,
+          nodeMap: nodeMap,
+        );
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 600,
+      child: _CustomAppContainer.transparent(
+        child: InteractiveViewer(
+          constrained: false,
+          boundaryMargin: const EdgeInsets.symmetric(
+            horizontal: paddingHorizontal,
+            vertical: paddingVertical,
+          ),
+          minScale: 1,
+          maxScale: 1,
+          child: GraphView(
+            graph: graph,
+            algorithm: BuchheimWalkerAlgorithm(
+              configuration,
+              TreeEdgeRenderer(configuration),
+            ),
+            paint: Paint()
+              ..color = Colors.green
+              ..strokeWidth = 1
+              ..style = PaintingStyle.stroke,
+            builder: (Node node) {
+              var a = node.key!.value as String?;
+              return rectangleWidget(a);
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget rectangleWidget(String? id) {
+    _GraphItem item = graphItemMap[id!]!;
+    return InkWell(
+      onTap: () {
+        // print('clicked');
+      },
+      child: SizedBox(
+        // width: itemWidth,
+        // height: itemHeight,
+        child: item.frame != null
+            ? _GraphItemFluBox(
+                frame: item.frame!,
+                gotoFlutterArtist: widget.onPressedBack,
+              )
+            : _GraphItemBlockBox(
+                key: Key("Blk-${item.block!.name}"),
+                block: item.block!,
+                highlighBlockFilterName: _highlighBlockFilterName,
+                refreshGraph: (String? filterName) {
+                  _highlighBlockFilterName = filterName;
+                  setState(() {});
+                },
+              ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+}
