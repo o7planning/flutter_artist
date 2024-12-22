@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
 class NotificationButtonBuilder extends StatefulWidget {
-  final Widget Function(BaseNotificationSummary? notificationSummary) build;
+  final Widget Function(INotificationSummary? notificationSummary) build;
 
   const NotificationButtonBuilder({
     super.key,
@@ -16,7 +16,7 @@ class NotificationButtonBuilder extends StatefulWidget {
 
 class _NotificationButtonBuilderState extends State<NotificationButtonBuilder>
     implements FluNotificationListener {
-  BaseNotificationSummary? _notificationSummary;
+  INotificationSummary? _notificationSummary;
 
   @override
   void initState() {
@@ -36,7 +36,7 @@ class _NotificationButtonBuilderState extends State<NotificationButtonBuilder>
   }
 
   @override
-  void handleNotification(BaseNotificationSummary notificationSummary) {
+  void handleNotification(INotificationSummary notificationSummary) {
     setState(() {
       _notificationSummary = notificationSummary;
     });

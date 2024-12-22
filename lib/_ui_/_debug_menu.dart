@@ -34,7 +34,7 @@ class _DebugMenuState extends State<DebugMenu> implements FluErrorListener {
 
   @override
   Widget build(BuildContext context) {
-    FluLoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
+    ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
     bool hasRecentErrors = FlutterArtist.hasRecentErrors();
     bool isSystemUser = loggedInUser?.isSystemUser ?? false;
     //

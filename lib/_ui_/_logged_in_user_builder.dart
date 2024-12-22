@@ -3,7 +3,7 @@ part of '../flutter_artist.dart';
 class LoggedInUserBuilder extends StatefulWidget {
   final Object ownerClassInstance;
   final String? description;
-  final Widget Function(FluLoggedInUser? user) build;
+  final Widget Function(ILoggedInUser? user) build;
 
   const LoggedInUserBuilder({
     super.key,
@@ -52,7 +52,7 @@ class _LoggedInUserBuilderState extends _WidgetState<LoggedInUserBuilder> {
   Widget build(BuildContext context) {
     _LoggedInUserManager manager = FlutterArtist._loggedInUserManager;
     //
-    FluLoggedInUser? user = FlutterArtist.loggedInUser;
+    ILoggedInUser? user = FlutterArtist.loggedInUser;
     return VisibilityDetector(
       key: Key(keyId),
       onVisibilityChanged: (visibilityInfo) {
@@ -68,7 +68,7 @@ class _LoggedInUserBuilderState extends _WidgetState<LoggedInUserBuilder> {
   }
 
   void _addWidgetStateListener({
-    FluLoggedInUser? user,
+    ILoggedInUser? user,
     required bool isShowing,
   }) {
     FlutterArtist._loggedInUserManager._addWidgetStateListener(

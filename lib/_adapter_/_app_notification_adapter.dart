@@ -3,19 +3,19 @@ part of '../flutter_artist.dart';
 ///
 ///
 interface class AppNotificationAdapter {
-  Future<ApiResult<BaseNotificationSummary>> callApiGetNotificationSummary() {
+  Future<ApiResult<INotificationSummary>> callApiGetNotificationSummary() {
     throw UnimplementedError();
   }
 
-  Future<ApiResult<BaseNotification>> callApiGetNotifications() {
+  Future<ApiResult<INotification>> callApiGetNotifications() {
     throw UnimplementedError();
   }
 
-  String toJson(BaseNotificationSummary notificationSummary) {
+  String toJson(INotificationSummary notificationSummary) {
     throw UnimplementedError();
   }
 
-  BaseNotificationSummary? fromJson(String json) {
+  INotificationSummary? fromJson(String json) {
     throw UnimplementedError();
   }
 }

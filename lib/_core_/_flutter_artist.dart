@@ -26,7 +26,7 @@ class _FlutterArtist {
     maxDisplayErrorCount: 20,
   );
 
-  late final _BaseNotificationEngine __fluNotificationEngine;
+  late final _NotificationEngine __fluNotificationEngine;
   late final CodeFlowLogger codeFlowLogger = CodeFlowLogger();
 
   final List<Frame> _rencentFrames = [];
@@ -91,7 +91,7 @@ class _FlutterArtist {
     return __fluLoggedInUserAdapter;
   }
 
-  FluLoggedInUser? get loggedInUser {
+  ILoggedInUser? get loggedInUser {
     return _loggedInUserManager.loggedInUser;
   }
 
@@ -107,7 +107,7 @@ class _FlutterArtist {
   /// }
   /// ```
   ///
-  Future<void> setOrUpdateLoggedInUser(FluLoggedInUser loggedInUser) async {
+  Future<void> setOrUpdateLoggedInUser(ILoggedInUser loggedInUser) async {
     await _loggedInUserManager.setOrUpdateLoggedInUser(loggedInUser);
   }
 
@@ -134,7 +134,7 @@ class _FlutterArtist {
     //
     // FluNotificationAdapter ready, start Notification
     //
-    __fluNotificationEngine = _BaseNotificationEngine();
+    __fluNotificationEngine = _NotificationEngine();
     __fluNotificationEngine.start();
   }
 
@@ -337,7 +337,7 @@ class _FlutterArtist {
     }
   }
 
-  void _notifyNotification(BaseNotificationSummary notificationSummary) {
+  void _notifyNotification(INotificationSummary notificationSummary) {
     for (FluNotificationListener listener in [..._notificationListeners]) {
       if (listener is State) {
         State state = listener as State;

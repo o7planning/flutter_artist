@@ -1,5 +1,5 @@
 part of '../flutter_artist.dart';
 
-interface class BaseNotificationSummary {
+interface class INotificationSummary {
   // Nothing
 }

@@ -3,9 +3,9 @@ part of '../flutter_artist.dart';
 class _LoggedInUserManager {
   final String __hiveKeyLoggedInUser = "---flu-logged-in-user-hive-key---";
 
-  FluLoggedInUser? _loggedInUser;
+  ILoggedInUser? _loggedInUser;
 
-  FluLoggedInUser? get loggedInUser => _loggedInUser;
+  ILoggedInUser? get loggedInUser => _loggedInUser;
 
   final Map<_WidgetState, bool> _widgetStateListeners = {};
 
@@ -40,7 +40,7 @@ class _LoggedInUserManager {
     }
   }
 
-  Future<void> setOrUpdateLoggedInUser(FluLoggedInUser loggedInUser) async {
+  Future<void> setOrUpdateLoggedInUser(ILoggedInUser loggedInUser) async {
     LoggedInUserAdapter? loggedInUserAdapter =
         FlutterArtist.loggedInUserAdapter;
     if (loggedInUserAdapter == null) {

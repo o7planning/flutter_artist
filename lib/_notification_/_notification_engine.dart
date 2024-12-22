@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
-class _BaseNotificationEngine {
-  _BaseNotificationEngine();
+class _NotificationEngine {
+  _NotificationEngine();
 
   String __keyForNotificationSummary(String loggedInUserName) {
     return "$loggedInUserName-short-notification-summary--";
@@ -28,9 +28,9 @@ class _BaseNotificationEngine {
       print("No FluNotificationAdapter");
       return;
     }
-    FluLoggedInUser? user = FlutterArtist.loggedInUser;
+    ILoggedInUser? user = FlutterArtist.loggedInUser;
     if (user == null) {
-      print("No FluLoggedInUser");
+      print("No ILoggedInUser");
       return;
     }
     final String loggedInUserName = user.userName;
@@ -50,7 +50,7 @@ class _BaseNotificationEngine {
       //
       final String? notificationSummaryJsonLocal =
           notificationSummaryBox.get(notificationSummaryKey);
-      BaseNotificationSummary? notificationSummaryLocal;
+      INotificationSummary? notificationSummaryLocal;
       try {
         if (notificationSummaryJsonLocal != null) {
           notificationSummaryLocal =
@@ -78,10 +78,10 @@ class _BaseNotificationEngine {
         }
       }
       //
-      BaseNotificationSummary? fetchedData;
+      INotificationSummary? fetchedData;
       try {
         // Fetch from Server:
-        ApiResult<BaseNotificationSummary> result =
+        ApiResult<INotificationSummary> result =
             await adapter.callApiGetNotificationSummary();
         if (result.isError()) {
           FlutterArtist.errorLogger.addError(
