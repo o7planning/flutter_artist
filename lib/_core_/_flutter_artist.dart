@@ -18,7 +18,7 @@ class _FlutterArtist {
 
   final _LoggedInUserManager _loggedInUserManager = _LoggedInUserManager();
   LoggedInUserAdapter? __fluLoggedInUserAdapter;
-  AppNotificationAdapter? __fluNotificationAdapter;
+  NotificationAdapter? __fluNotificationAdapter;
 
   Function(BuildContext context)? _showRestDebugDialog;
 
@@ -83,7 +83,7 @@ class _FlutterArtist {
     return __adapter!;
   }
 
-  AppNotificationAdapter? get notificationAdapter {
+  NotificationAdapter? get notificationAdapter {
     return __fluNotificationAdapter;
   }
 
@@ -113,7 +113,7 @@ class _FlutterArtist {
 
   Future<void> config({
     required FlutterArtistAdapter flutterArtistAdapter,
-    required AppNotificationAdapter? notificationAdapter,
+    required NotificationAdapter? notificationAdapter,
     required LoggedInUserAdapter? loggedInUserAdapter,
     required Function(BuildContext context)? showRestDebugDialog,
     int notificationFetchPeriodInSeconds = 60,

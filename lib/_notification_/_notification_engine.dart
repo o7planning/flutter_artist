@@ -23,7 +23,7 @@ class _NotificationEngine {
   }
 
   Future<void> __getNotificationSummary() async {
-    AppNotificationAdapter? adapter = FlutterArtist.notificationAdapter;
+    NotificationAdapter? adapter = FlutterArtist.notificationAdapter;
     if (adapter == null) {
       print("No FluNotificationAdapter");
       return;

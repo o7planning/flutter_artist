@@ -2,7 +2,7 @@ part of '../flutter_artist.dart';
 
 ///
 ///
-interface class AppNotificationAdapter {
+interface class NotificationAdapter {
   Future<ApiResult<INotificationSummary>> callApiGetNotificationSummary() {
     throw UnimplementedError();
   }
