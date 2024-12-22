@@ -13,7 +13,7 @@ const IconData _dataStateErrorIconData =
 
 const IconData _listenerIconData = cupertino.CupertinoIcons.ear;
 
-const IconData _changeSourceIconData = cupertino.CupertinoIcons.speaker_zzz;
+const IconData _changeSourceIconData = cupertino.CupertinoIcons.bolt;
 
 const IconData _independentIconData = cupertino.CupertinoIcons.app_badge;
 
