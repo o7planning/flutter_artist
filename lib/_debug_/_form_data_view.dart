@@ -239,7 +239,7 @@ class _FormDataViewState extends State<_FormDataView> {
                   "Here is a list of affected blocks:"),
           const Divider(height: 10),
           ...listeners.map(
-            (listener) => _FluBlockTypeWidget(
+            (listener) => _FrameBlockTypeWidget(
               frameBlockType: listener,
               isListener: true,
               isNotifier: false,

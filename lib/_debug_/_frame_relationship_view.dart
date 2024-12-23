@@ -97,7 +97,7 @@ class _FrameRelationshipViewState extends State<_FrameRelationshipView> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _FluInfoView(frame: selectedBlock?.frame),
+                _FrameInfoView(frame: selectedBlock?.frame),
                 const Divider(),
                 if (listeners.isNotEmpty)
                   _buildListeners(selectedBlock!, listeners),
@@ -149,7 +149,7 @@ class _FrameRelationshipViewState extends State<_FrameRelationshipView> {
         ),
         const SizedBox(height: 10),
         ...listeners.map(
-          (listener) => _FluBlockTypeWidget(
+          (listener) => _FrameBlockTypeWidget(
               frameBlockType: listener,
               isListener: true,
               isNotifier: false,
@@ -192,7 +192,7 @@ class _FrameRelationshipViewState extends State<_FrameRelationshipView> {
         ),
         const SizedBox(height: 10),
         ...notifiers.map(
-          (notifier) => _FluBlockTypeWidget(
+          (notifier) => _FrameBlockTypeWidget(
               frameBlockType: notifier,
               isListener: false,
               isNotifier: true,
