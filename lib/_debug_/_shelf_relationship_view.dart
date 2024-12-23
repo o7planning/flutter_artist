@@ -45,7 +45,7 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
   Widget build(BuildContext context) {
     if (widget.shelf == null) {
       return const Center(
-        child: Text("No Flu selected"),
+        child: Text("No Shelf Selected"),
       );
     }
     _selectDefaultBlockIfNeed();

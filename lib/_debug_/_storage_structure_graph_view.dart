@@ -102,7 +102,7 @@ class _StorageStructureGraphViewState
         ? const SizedBox(
             child: Center(
               child: Text(
-                "No Flu",
+                "No Shelf",
                 style: TextStyle(
                   fontSize: 13,
                 ),

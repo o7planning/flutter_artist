@@ -25,7 +25,7 @@ class _NotificationEngine {
   Future<void> __getNotificationSummary() async {
     NotificationAdapter? adapter = Storage.notificationAdapter;
     if (adapter == null) {
-      print("No FluNotificationAdapter");
+      print("No NotificationAdapter");
       return;
     }
     ILoggedInUser? user = Storage.loggedInUser;
