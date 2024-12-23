@@ -44,7 +44,7 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
       return widget.shelf!._findMountedWidgetStates(
         activeOnly: true,
         withPagination: true,
-        withBlockFrament: true,
+        withBlockFragment: true,
         withFilter: true,
         withForm: true,
         withControlBar: true,
@@ -53,7 +53,7 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
       return widget.block!._findMountedWidgetStates(
         activeOnly: false,
         withPagination: true,
-        withBlockFrament: true,
+        withBlockFragment: true,
         withFilter: true,
         withForm: true,
         withControlBar: true,

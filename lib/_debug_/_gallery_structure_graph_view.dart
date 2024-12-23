@@ -2,13 +2,13 @@ part of '../flutter_artist.dart';
 
 class _GalleryStructureGraphView extends StatefulWidget {
   final _GalleryStructureGraphController controller;
-  final Function(Shelf shelf) onSelectFrameToShowGraph;
-  final Function(Shelf shelf) onSelectFrameToShowTreeView;
+  final Function(Shelf shelf) onSelectShelfToShowGraph;
+  final Function(Shelf shelf) onSelectShelfToShowTreeView;
 
   const _GalleryStructureGraphView({
     required this.controller,
-    required this.onSelectFrameToShowGraph,
-    required this.onSelectFrameToShowTreeView,
+    required this.onSelectShelfToShowGraph,
+    required this.onSelectShelfToShowTreeView,
   });
 
   @override
@@ -36,7 +36,7 @@ class _GalleryStructureGraphViewState
     super.initState();
     widget.controller._setSelectedShelf = (Shelf shelf) {
       setState(() {
-        selectedShelfName = FlutterArtist._getShelfName(shelf.runtimeType);
+        selectedShelfName = Storage._getShelfName(shelf.runtimeType);
       });
     };
   }
@@ -197,11 +197,10 @@ class _GalleryStructureGraphViewState
       isListener: false,
       shelfName: "Global Flu",
     );
-    Map<String, Shelf?> shelfMap = FlutterArtist.shelfMap;
-    Map<String, Shelf?> shelfListenerMap = FlutterArtist._getListenerShelves();
-    Map<String, Shelf?> shelfNotifierMap = FlutterArtist._getNotifierShelves();
-    Map<String, Shelf?> shelfIndependentMap =
-        FlutterArtist._getIndependentShelves();
+    Map<String, Shelf?> shelfMap = Storage.shelfMap;
+    Map<String, Shelf?> shelfListenerMap = Storage._getListenerShelves();
+    Map<String, Shelf?> shelfNotifierMap = Storage._getNotifierShelves();
+    Map<String, Shelf?> shelfIndependentMap = Storage._getIndependentShelves();
 
     for (String shelfName in shelfMap.keys) {
       _GraphGItem item = _GraphGItem(
@@ -260,7 +259,7 @@ class _GalleryStructureGraphViewState
     if (item.isRoot) {
       return const SizedBox(width: 10, height: 10);
     } else {
-      return _GraphItemSimpleFrameBox(
+      return _GraphItemSimpleShelfBox(
         isRoot: item.isRoot,
         isSelected: item.shelfName == selectedShelfName,
         isListener: item.isListener,
@@ -281,16 +280,16 @@ class _GalleryStructureGraphViewState
 
   void _onSelectFluToShowGraph(_GraphGItem item) {
     Shelf? shelf = item.shelf;
-    shelf ??= FlutterArtist._createShelf(item.shelfName);
-    widget.onSelectFrameToShowGraph(shelf);
+    shelf ??= Storage._createShelf(item.shelfName);
+    widget.onSelectShelfToShowGraph(shelf);
   }
 
   void _onSelectFluToShowTreeView(_GraphGItem item) {
     setState(() {
       selectedShelfName = item.shelfName;
       Shelf? shelf = item.shelf;
-      shelf ??= FlutterArtist._createShelf(item.shelfName);
-      widget.onSelectFrameToShowTreeView(shelf);
+      shelf ??= Storage._createShelf(item.shelfName);
+      widget.onSelectShelfToShowTreeView(shelf);
     });
   }
 

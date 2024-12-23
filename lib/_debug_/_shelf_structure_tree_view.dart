@@ -1,11 +1,11 @@
 part of '../flutter_artist.dart';
 
-class _FrameStructureTreeView extends StatefulWidget {
+class _ShelfStructureTreeView extends StatefulWidget {
   final Shelf shelf;
   final Block? selectedBlock;
   final Function(Block block) onSelectBlock;
 
-  const _FrameStructureTreeView({
+  const _ShelfStructureTreeView({
     required super.key,
     required this.shelf,
     required this.selectedBlock,
@@ -14,11 +14,11 @@ class _FrameStructureTreeView extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _FrameStructureTreeViewState();
+    return _ShelfStructureTreeViewState();
   }
 }
 
-class _FrameStructureTreeViewState extends State<_FrameStructureTreeView> {
+class _ShelfStructureTreeViewState extends State<_ShelfStructureTreeView> {
   TreeViewController<dynamic, TreeNode<dynamic>>? _treeViewController;
   late TreeNode<dynamic> rootTreeNode;
   TreeNode<dynamic>? _currentNode;
@@ -74,9 +74,9 @@ class _FrameStructureTreeViewState extends State<_FrameStructureTreeView> {
           } else if (data is Block) {
             title = getClassName(data);
             List<ShelfBlockType> listeners =
-                FlutterArtist._getListenerBlocks(notifierBlock: data);
+                Storage._getListenerBlocks(notifierBlock: data);
             List<ShelfBlockType> notifiers =
-                FlutterArtist._getNotifierBlocks(listenerBlock: data);
+                Storage._getNotifierBlocks(listenerBlock: data);
             isListener = notifiers.isNotEmpty;
             isNotifier = listeners.isNotEmpty;
           } else {

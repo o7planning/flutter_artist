@@ -33,7 +33,7 @@ class _FormDataViewState extends State<_FormDataView> {
   void initState() {
     super.initState();
     //
-    listeners = FlutterArtist._changeManager.getChangeListeners(
+    listeners = Storage._changeManager.getChangeListeners(
       sourceBlock: widget.blockForm.block,
     );
   }
@@ -239,7 +239,7 @@ class _FormDataViewState extends State<_FormDataView> {
                   "Here is a list of affected blocks:"),
           const Divider(height: 10),
           ...listeners.map(
-            (listener) => _FrameBlockTypeWidget(
+            (listener) => _ShelfBlockTypeWidget(
               shelfBlockType: listener,
               isListener: true,
               isNotifier: false,

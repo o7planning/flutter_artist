@@ -50,9 +50,9 @@ class _LoggedInUserBuilderState extends _WidgetState<LoggedInUserBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    _LoggedInUserManager manager = FlutterArtist._loggedInUserManager;
+    _LoggedInUserManager manager = Storage._loggedInUserManager;
     //
-    ILoggedInUser? user = FlutterArtist.loggedInUser;
+    ILoggedInUser? user = Storage.loggedInUser;
     return VisibilityDetector(
       key: Key(keyId),
       onVisibilityChanged: (visibilityInfo) {
@@ -71,7 +71,7 @@ class _LoggedInUserBuilderState extends _WidgetState<LoggedInUserBuilder> {
     ILoggedInUser? user,
     required bool isShowing,
   }) {
-    FlutterArtist._loggedInUserManager._addWidgetStateListener(
+    Storage._loggedInUserManager._addWidgetStateListener(
       widgetState: this,
       isShowing: isShowing,
     );
@@ -80,7 +80,7 @@ class _LoggedInUserBuilderState extends _WidgetState<LoggedInUserBuilder> {
   @override
   void dispose() {
     super.dispose();
-    FlutterArtist._loggedInUserManager._removeWidgetStateListener(
+    Storage._loggedInUserManager._removeWidgetStateListener(
       widgetState: this,
     );
   }

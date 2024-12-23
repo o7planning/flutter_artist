@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-class _GraphItemSimpleFrameBox extends StatefulWidget {
+class _GraphItemSimpleShelfBox extends StatefulWidget {
   final bool isRoot;
   final bool isSelected;
   final bool isListener;
@@ -10,7 +10,7 @@ class _GraphItemSimpleFrameBox extends StatefulWidget {
   final Function()? onSelectFluToShowGraph;
   final Function()? onSelectFluToShowTreeView;
 
-  const _GraphItemSimpleFrameBox({
+  const _GraphItemSimpleShelfBox({
     super.key,
     required this.isRoot,
     required this.isSelected,
@@ -23,11 +23,11 @@ class _GraphItemSimpleFrameBox extends StatefulWidget {
   });
 
   @override
-  State<_GraphItemSimpleFrameBox> createState() =>
-      _GraphItemSimpleFrameBoxState();
+  State<_GraphItemSimpleShelfBox> createState() =>
+      _GraphItemSimpleShelfBoxState();
 }
 
-class _GraphItemSimpleFrameBoxState extends State<_GraphItemSimpleFrameBox> {
+class _GraphItemSimpleShelfBoxState extends State<_GraphItemSimpleShelfBox> {
   static const double extraWidth = 16;
   static const double shelfIconWidth = 40;
   static const double shelfIconHeight = 32;

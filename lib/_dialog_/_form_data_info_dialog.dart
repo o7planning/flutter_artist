@@ -59,7 +59,7 @@ class _FormDataInfoDialogState extends State<_FormDataInfoDialog> {
                 });
               },
             )
-          : _FrameStructureGraphView(
+          : _ShelfStructureGraphView(
               shelf: widget.blockForm.block.shelf,
               onPressedBack: () {
                 setState(() {

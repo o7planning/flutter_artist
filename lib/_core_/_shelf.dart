@@ -27,7 +27,7 @@ abstract class Shelf {
 
   bool _queryLocked = false;
 
-  String get name => FlutterArtist._getShelfName(runtimeType);
+  String get name => Storage._getShelfName(runtimeType);
 
   Shelf() {
     __onInit();
@@ -126,7 +126,7 @@ abstract class Shelf {
 
   Future<void> showMessageDialog(
       {required String message, String? details}) async {
-    BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    BuildContext context = Storage.adapter.getCurrentContext();
     await _showMessageDialog(
       context: context,
       message: message,
@@ -135,12 +135,12 @@ abstract class Shelf {
   }
 
   Future<void> showShelfStructureDialog() async {
-    BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    BuildContext context = Storage.adapter.getCurrentContext();
     await _showGalleryRoomDialog(context: context, shelf: this);
   }
 
   Future<void> showActiveUiComponentsDialog() async {
-    BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    BuildContext context = Storage.adapter.getCurrentContext();
     await _showActiveUiComponentsDialog(context: context, shelf: this);
   }
 
@@ -164,7 +164,7 @@ abstract class Shelf {
 
   void __findMountedWidgetStates({
     required List<Block> blocks,
-    required bool withBlockFrament,
+    required bool withBlockFragment,
     required bool withFilter,
     required bool withForm,
     required bool withControlBar,
@@ -176,7 +176,7 @@ abstract class Shelf {
       Map<_WidgetState, bool> m = block._findMountedWidgetStates(
         activeOnly: activeOnly,
         withPagination: withPagination,
-        withBlockFrament: withBlockFrament,
+        withBlockFragment: withBlockFragment,
         withFilter: withFilter,
         withForm: withForm,
         withControlBar: withControlBar,
@@ -184,7 +184,7 @@ abstract class Shelf {
       founds.addAll(m);
       __findMountedWidgetStates(
         withPagination: withPagination,
-        withBlockFrament: withBlockFrament,
+        withBlockFragment: withBlockFragment,
         withFilter: withFilter,
         withForm: withForm,
         withControlBar: withControlBar,
@@ -196,7 +196,7 @@ abstract class Shelf {
   }
 
   Map<_WidgetState, bool> _findMountedWidgetStates({
-    required bool withBlockFrament,
+    required bool withBlockFragment,
     required bool withPagination,
     required bool withFilter,
     required bool withForm,
@@ -206,7 +206,7 @@ abstract class Shelf {
     Map<_WidgetState, bool> founds = {};
     __findMountedWidgetStates(
       withPagination: withPagination,
-      withBlockFrament: withBlockFrament,
+      withBlockFragment: withBlockFragment,
       withFilter: withFilter,
       withForm: withForm,
       withControlBar: withControlBar,
@@ -318,7 +318,7 @@ abstract class Shelf {
       for (BlockAndFormWraper blkOrForm in blockOrForms) {
         needToUpdate = true;
         if (blkOrForm.block != null) {
-          FlutterArtist.codeFlowLogger._addInfo(
+          Storage.codeFlowLogger._addInfo(
             isLibCode: true,
             object: this,
             info: "Querying lazy block: ${getClassName(blkOrForm.block)}",
@@ -336,7 +336,7 @@ abstract class Shelf {
             break;
           }
         } else if (blkOrForm.blockForm != null) {
-          FlutterArtist.codeFlowLogger._addInfo(
+          Storage.codeFlowLogger._addInfo(
             isLibCode: true,
             object: this,
             info:

@@ -1,20 +1,20 @@
 part of '../flutter_artist.dart';
 
-class _GraphItemFrameBox extends StatefulWidget {
-  final Function() gotoFlutterArtist;
+class _GraphItemShelfBox extends StatefulWidget {
+  final Function() gotoStorage;
   final Shelf shelf;
 
-  const _GraphItemFrameBox({
+  const _GraphItemShelfBox({
     super.key,
-    required this.gotoFlutterArtist,
+    required this.gotoStorage,
     required this.shelf,
   });
 
   @override
-  State<_GraphItemFrameBox> createState() => _GraphItemFrameBoxState();
+  State<_GraphItemShelfBox> createState() => _GraphItemShelfBoxState();
 }
 
-class _GraphItemFrameBoxState extends State<_GraphItemFrameBox> {
+class _GraphItemShelfBoxState extends State<_GraphItemShelfBox> {
   static const double _graphBoxImageWidth = 40;
   static const double _graphBoxImageHeight = 32;
 
@@ -84,7 +84,7 @@ class _GraphItemFrameBoxState extends State<_GraphItemFrameBox> {
                 ),
                 minimumSize: Size.zero,
               ),
-              onPressed: widget.gotoFlutterArtist,
+              onPressed: widget.gotoStorage,
               child: const Icon(
                 _uptoGlobalFluIconData,
                 color: Colors.white,

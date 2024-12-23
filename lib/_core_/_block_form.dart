@@ -76,7 +76,7 @@ abstract class BlockForm<I extends Object, D extends Object> with DebugMixin {
       block.shelf._startNewLazyQueryTransactionIfNeed();
     }
     if (isShowing) {
-      FlutterArtist._addRecentShelf(block.shelf);
+      Storage._addRecentShelf(block.shelf);
     }
   }
 
@@ -196,7 +196,7 @@ abstract class BlockForm<I extends Object, D extends Object> with DebugMixin {
     required String message,
     required List<String>? errorDetails,
   }) {
-    FlutterArtist.adapter.showErrorSnackbar(
+    Storage.adapter.showErrorSnackbar(
       message: message,
       errorDetails: errorDetails,
     );
@@ -208,8 +208,8 @@ abstract class BlockForm<I extends Object, D extends Object> with DebugMixin {
     required StackTrace stackTrace,
     required bool showSnackbar,
   }) {
-    FlutterArtist.errorLogger.addError(
-      shelfName: FlutterArtist._getShelfName(block.shelf.runtimeType),
+    Storage.errorLogger.addError(
+      shelfName: Storage._getShelfName(block.shelf.runtimeType),
       message: error.toString(),
       errorDetails: null,
       stackTrace: stackTrace,
@@ -231,7 +231,7 @@ abstract class BlockForm<I extends Object, D extends Object> with DebugMixin {
   }
 
   Future<bool> saveForm() async {
-    FlutterArtist.codeFlowLogger._addMethodCall(
+    Storage.codeFlowLogger._addMethodCall(
       isLibCode: true,
       object: this,
       methodName: "saveForm",
@@ -247,7 +247,7 @@ abstract class BlockForm<I extends Object, D extends Object> with DebugMixin {
   }
 
   Future<bool> _saveFormWithOverlayAndRestorable() async {
-    return await FlutterArtist.executeTask(
+    return await Storage.executeTask(
       asyncFunction: () async {
         return await _saveFormWithRestorable();
       },
@@ -292,7 +292,7 @@ abstract class BlockForm<I extends Object, D extends Object> with DebugMixin {
       __isSaving = true;
       this.block.updateControlBarWidgets();
       //
-      FlutterArtist.codeFlowLogger._addMethodCall(
+      Storage.codeFlowLogger._addMethodCall(
         isLibCode: false,
         object: this,
         methodName: calledMethodName,
@@ -306,7 +306,7 @@ abstract class BlockForm<I extends Object, D extends Object> with DebugMixin {
           ? await callApiCreate(formMapData: formMapData)
           : await callApiUpdate(formMapData: formMapData);
       //
-      FlutterArtist.fireSourceChanged(
+      Storage.fireSourceChanged(
         sourceBlock: block,
         itemIdString: null,
       );
@@ -344,7 +344,7 @@ abstract class BlockForm<I extends Object, D extends Object> with DebugMixin {
     required final bool isNew,
     required bool forceForm,
   }) async {
-    FlutterArtist.codeFlowLogger._addMethodCall(
+    Storage.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
@@ -394,7 +394,7 @@ abstract class BlockForm<I extends Object, D extends Object> with DebugMixin {
     required bool isNew,
   }) async {
     try {
-      FlutterArtist.codeFlowLogger._addMethodCall(
+      Storage.codeFlowLogger._addMethodCall(
         isLibCode: false,
         route: null,
         object: this,
@@ -442,7 +442,7 @@ abstract class BlockForm<I extends Object, D extends Object> with DebugMixin {
     required D? refreshedItem,
     required bool isNew,
   }) {
-    FlutterArtist.codeFlowLogger._addMethodCall(
+    Storage.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
@@ -456,7 +456,7 @@ abstract class BlockForm<I extends Object, D extends Object> with DebugMixin {
     Map<String, dynamic> newFormData;
     if (data._dataState == DataState.ready) {
       try {
-        FlutterArtist.codeFlowLogger._addMethodCall(
+        Storage.codeFlowLogger._addMethodCall(
           isLibCode: false,
           object: this,
           methodName: "prepareFormData",

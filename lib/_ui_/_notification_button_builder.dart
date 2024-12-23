@@ -21,13 +21,13 @@ class _NotificationButtonBuilderState extends State<NotificationButtonBuilder>
   @override
   void initState() {
     super.initState();
-    FlutterArtist.addNotificationListener(this);
+    Storage.addNotificationListener(this);
   }
 
   @override
   void dispose() {
     super.dispose();
-    FlutterArtist.removeNotificationListener(this);
+    Storage.removeNotificationListener(this);
   }
 
   @override

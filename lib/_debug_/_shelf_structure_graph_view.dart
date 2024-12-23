@@ -1,21 +1,21 @@
 part of '../flutter_artist.dart';
 
-class _FrameStructureGraphView extends StatefulWidget {
+class _ShelfStructureGraphView extends StatefulWidget {
   final Function() onPressedBack;
   final Shelf shelf;
 
-  const _FrameStructureGraphView({
+  const _ShelfStructureGraphView({
     required this.shelf,
     required this.onPressedBack,
     super.key,
   });
 
   @override
-  State<_FrameStructureGraphView> createState() =>
-      _FrameStructureGraphViewState();
+  State<_ShelfStructureGraphView> createState() =>
+      _ShelfStructureGraphViewState();
 }
 
-class _FrameStructureGraphViewState extends State<_FrameStructureGraphView> {
+class _ShelfStructureGraphViewState extends State<_ShelfStructureGraphView> {
   final Graph graph = Graph()..isTree = false;
   BuchheimWalkerConfiguration configuration =
       _CustomBuchheimWalkerConfiguration();
@@ -127,9 +127,9 @@ class _FrameStructureGraphViewState extends State<_FrameStructureGraphView> {
         // width: itemWidth,
         // height: itemHeight,
         child: item.shelf != null
-            ? _GraphItemFrameBox(
+            ? _GraphItemShelfBox(
                 shelf: item.shelf!,
-                gotoFlutterArtist: widget.onPressedBack,
+                gotoStorage: widget.onPressedBack,
               )
             : _GraphItemBlockBox(
                 key: Key("Blk-${item.block!.name}"),

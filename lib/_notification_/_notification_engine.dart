@@ -15,7 +15,7 @@ class _NotificationEngine {
     print("${getClassName(this)}.start()");
     await __getNotificationSummary();
     Timer.periodic(
-      Duration(seconds: FlutterArtist.notificationFetchPeriodInSeconds),
+      Duration(seconds: Storage.notificationFetchPeriodInSeconds),
       (Timer timer) {
         __getNotificationSummary();
       },
@@ -23,12 +23,12 @@ class _NotificationEngine {
   }
 
   Future<void> __getNotificationSummary() async {
-    NotificationAdapter? adapter = FlutterArtist.notificationAdapter;
+    NotificationAdapter? adapter = Storage.notificationAdapter;
     if (adapter == null) {
       print("No FluNotificationAdapter");
       return;
     }
-    ILoggedInUser? user = FlutterArtist.loggedInUser;
+    ILoggedInUser? user = Storage.loggedInUser;
     if (user == null) {
       print("No ILoggedInUser");
       return;
@@ -57,7 +57,7 @@ class _NotificationEngine {
               adapter.fromJson(notificationSummaryJsonLocal);
         }
       } catch (e, stackTrace) {
-        FlutterArtist.errorLogger.addError(
+        Storage.errorLogger.addError(
           shelfName: null,
           message: "Invalid Local Notification Summary JSON",
           errorDetails: null,
@@ -69,11 +69,10 @@ class _NotificationEngine {
       if (lastFetch != null) {
         DateTime now = DateTime.now();
         Duration diff = now.difference(lastFetch);
-        if (diff.inSeconds <
-                FlutterArtist.notificationFetchPeriodInSeconds - 1 &&
+        if (diff.inSeconds < Storage.notificationFetchPeriodInSeconds - 1 &&
             notificationSummaryLocal != null) {
           print("Ignore to fetch notification..");
-          FlutterArtist._notifyNotification(notificationSummaryLocal);
+          Storage._notifyNotification(notificationSummaryLocal);
           return;
         }
       }
@@ -84,7 +83,7 @@ class _NotificationEngine {
         ApiResult<INotificationSummary> result =
             await adapter.callApiGetNotificationSummary();
         if (result.isError()) {
-          FlutterArtist.errorLogger.addError(
+          Storage.errorLogger.addError(
             shelfName: null,
             message: result.errorMessage!,
             errorDetails: result.errorDetails,
@@ -96,7 +95,7 @@ class _NotificationEngine {
       } catch (e, stackTrace) {
         print("Fetch Notification Error: $e");
         print(stackTrace);
-        FlutterArtist.errorLogger.addError(
+        Storage.errorLogger.addError(
           shelfName: null,
           message: "Fetch Notification Error: $e",
           errorDetails: null,
@@ -106,19 +105,19 @@ class _NotificationEngine {
       }
       //
       if (fetchedData == null) {
-        FlutterArtist.errorLogger.addError(
+        Storage.errorLogger.addError(
           shelfName: null,
           message: "No Notification Summary Data",
           errorDetails: null,
           stackTrace: null,
         );
         if (notificationSummaryLocal != null) {
-          FlutterArtist._notifyNotification(notificationSummaryLocal);
+          Storage._notifyNotification(notificationSummaryLocal);
         }
         return;
       }
       //
-      FlutterArtist._notifyNotification(fetchedData);
+      Storage._notifyNotification(fetchedData);
       //
       try {
         String notificationSummaryJSON = adapter.toJson(fetchedData);
@@ -127,7 +126,7 @@ class _NotificationEngine {
           notificationSummaryJSON,
         );
       } catch (e, stackTrace) {
-        FlutterArtist.errorLogger.addError(
+        Storage.errorLogger.addError(
           shelfName: null,
           message: "Error ${getClassName(adapter)}.toJson()",
           errorDetails: null,

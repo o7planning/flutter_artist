@@ -1,11 +1,11 @@
 part of '../flutter_artist.dart';
 
 class _GalleryStructureView extends StatefulWidget {
-  final Function(Shelf shelf) onSelectFrameToShowGraph;
+  final Function(Shelf shelf) onSelectShelfToShowGraph;
 
   const _GalleryStructureView({
     super.key,
-    required this.onSelectFrameToShowGraph,
+    required this.onSelectShelfToShowGraph,
   });
 
   @override
@@ -31,8 +31,8 @@ class _GalleryStructureViewState extends State<_GalleryStructureView> {
           height: 130,
           child: _GalleryStructureGraphView(
             controller: globalFluStructureGraphController,
-            onSelectFrameToShowGraph: widget.onSelectFrameToShowGraph,
-            onSelectFrameToShowTreeView: (Shelf shelf) {
+            onSelectShelfToShowGraph: widget.onSelectShelfToShowGraph,
+            onSelectShelfToShowTreeView: (Shelf shelf) {
               setState(() {
                 _selectedShelf = shelf;
               });
@@ -46,7 +46,7 @@ class _GalleryStructureViewState extends State<_GalleryStructureView> {
             shelf: _selectedShelf,
             onSelectShelfBlockType: (ShelfBlockType shelfBlockType) {
               Type shelfType = shelfBlockType.shelfType;
-              Shelf? shelf = FlutterArtist._findShelf(shelfType);
+              Shelf? shelf = Storage._findShelf(shelfType);
               if (shelf != null) {
                 globalFluStructureGraphController.setSelectedShelf(shelf);
               }

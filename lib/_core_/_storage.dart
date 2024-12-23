@@ -1,19 +1,18 @@
 part of '../flutter_artist.dart';
 
-typedef FrameCreator<S> = S Function();
+typedef ShelfCreator<S> = S Function();
 
-final FlutterArtist = _FlutterArtist();
+final Storage = _Storage();
 
 const _isOverlayMode = false;
 
-class _FlutterArtist {
-  _FlutterArtistData? _globalFluData;
-  final Map<String, FrameCreator> __shelfCreatorMap = {};
+class _Storage {
+  _StorageData? _globalFluData;
+  final Map<String, ShelfCreator> __shelfCreatorMap = {};
   final Map<String, Shelf> __shelfMap = {};
 
   int notificationFetchPeriodInSeconds = 60;
-  final _FlutterArtistChangeManager _changeManager =
-      _FlutterArtistChangeManager();
+  final _StorageChangeManager _changeManager = _StorageChangeManager();
   FlutterArtistAdapter? __adapter;
 
   final _LoggedInUserManager _loggedInUserManager = _LoggedInUserManager();
@@ -37,7 +36,7 @@ class _FlutterArtist {
 
   final List<Future<dynamic>> __futureTaskList = [];
 
-  _FlutterArtistData? get globalFluData {
+  _StorageData? get globalFluData {
     return _globalFluData;
   }
 
@@ -64,7 +63,7 @@ class _FlutterArtist {
     _changeManager._notifyChange(sourceBlock, itemIdString);
   }
 
-  void registerGlobalFluData(_FlutterArtistData globalFluData) {
+  void registerGlobalFluData(_StorageData globalFluData) {
     if (_globalFluData != null) {
       throw "\n*************************************************************"
           "\n >>>>>> GlobalFluData already registered!"
@@ -149,9 +148,9 @@ class _FlutterArtist {
     return type.toString();
   }
 
-  void registerShelf<F extends Shelf>(FrameCreator<F> builder) {
+  void registerShelf<F extends Shelf>(ShelfCreator<F> builder) {
     final String key = _getShelfName(F);
-    FrameCreator? mng = __shelfCreatorMap[key];
+    ShelfCreator? mng = __shelfCreatorMap[key];
     if (mng == null) {
       __shelfCreatorMap[key] = builder;
     }
@@ -162,12 +161,12 @@ class _FlutterArtist {
     if (shelf != null) {
       return shelf;
     }
-    print("FLUTTER ARTIST DEBUG >>>>>>>>>>>>>>> create Frame: $shelfName");
+    print("FLUTTER ARTIST DEBUG >>>>>>>>>>>>>>> create Shelf: $shelfName");
 
-    FrameCreator? creator = __shelfCreatorMap[shelfName];
+    ShelfCreator? creator = __shelfCreatorMap[shelfName];
     if (creator == null) {
       throw "\n**********************************************************************************************************"
-          "\n '${F.toString()}' not found. You need to call FlutterArtist.lazyPut(()=> $shelfName())"
+          "\n '${F.toString()}' not found. You need to call Storage.lazyPut(()=> $shelfName())"
           "\n**********************************************************************************************************";
     }
     shelf = creator() as F;
@@ -369,7 +368,7 @@ class _FlutterArtist {
     }
   }
 
-  void _checkToRemoveFrame(Shelf shelf) {
+  void _checkToRemoveShelf(Shelf shelf) {
     // TODO.
   }
 
@@ -413,30 +412,30 @@ class _FlutterArtist {
     required Map<String, Shelf> foundShelfMap,
   }) {
     for (Block rootListenerBlock in listenerShelf.rootBlocks) {
-      __findNotifierFrameCascade(
+      __findNotifierShelfCascade(
         listenerBlock: rootListenerBlock,
-        foundFrameMap: foundShelfMap,
+        foundShelfMap: foundShelfMap,
       );
     }
   }
 
   // Private Method. Only for use in this class.
-  void __findNotifierFrameCascade({
+  void __findNotifierShelfCascade({
     required Block listenerBlock,
-    required Map<String, Shelf> foundFrameMap,
+    required Map<String, Shelf> foundShelfMap,
   }) {
     for (SourceOfChange notifier in listenerBlock.listenForChangesFrom ?? []) {
       Type notifierShelfType = notifier.shelfType;
       String shelfName = _getShelfName(notifierShelfType);
       Shelf? notifierShelf = __shelfMap[shelfName];
       if (notifierShelf != null) {
-        foundFrameMap[shelfName] = notifierShelf;
+        foundShelfMap[shelfName] = notifierShelf;
       }
     }
     for (Block childListenerBlock in listenerBlock.childBlocks) {
-      __findNotifierFrameCascade(
+      __findNotifierShelfCascade(
         listenerBlock: childListenerBlock,
-        foundFrameMap: foundFrameMap,
+        foundShelfMap: foundShelfMap,
       );
     }
   }
@@ -452,7 +451,7 @@ class _FlutterArtist {
       Shelf shelf = __shelfMap[shelfName]!;
 
       for (Block rootBlock in shelf.rootBlocks) {
-        bool found = __foundListenerFrameCascade(block: rootBlock);
+        bool found = __foundListenerShelfCascade(block: rootBlock);
         if (found) {
           foundShelfMap[shelfName] = shelf;
           break;
@@ -463,13 +462,13 @@ class _FlutterArtist {
   }
 
   // Private Method. Only for use in this class.
-  bool __foundListenerFrameCascade({required Block block}) {
+  bool __foundListenerShelfCascade({required Block block}) {
     if (block.listenForChangesFrom != null &&
         block.listenForChangesFrom!.isNotEmpty) {
       return true;
     }
     for (Block childBlock in block.childBlocks) {
-      bool found = __foundListenerFrameCascade(block: childBlock);
+      bool found = __foundListenerShelfCascade(block: childBlock);
       if (found) {
         return true;
       }

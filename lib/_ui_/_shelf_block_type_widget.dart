@@ -1,12 +1,12 @@
 part of '../flutter_artist.dart';
 
-class _FrameBlockTypeWidget extends StatelessWidget {
+class _ShelfBlockTypeWidget extends StatelessWidget {
   final Function()? onTap;
   final ShelfBlockType shelfBlockType;
   final bool isListener;
   final bool isNotifier;
 
-  const _FrameBlockTypeWidget({
+  const _ShelfBlockTypeWidget({
     required this.onTap,
     required this.shelfBlockType,
     required this.isListener,
@@ -53,7 +53,7 @@ class _FrameBlockTypeWidget extends StatelessWidget {
   }
 
   Widget _buildFlu() {
-    Shelf? shelf = FlutterArtist._findShelf(shelfBlockType.shelfType);
+    Shelf? shelf = Storage._findShelf(shelfBlockType.shelfType);
     String? shelfName = shelf?.name;
     String? description = shelf?.description;
 

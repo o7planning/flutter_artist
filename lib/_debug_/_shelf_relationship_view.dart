@@ -55,7 +55,7 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
       children: [
         SizedBox(
           width: 300,
-          child: _FrameStructureTreeView(
+          child: _ShelfStructureTreeView(
             key: Key("Tree-${getClassName(widget.shelf!)}"),
             shelf: widget.shelf!,
             selectedBlock: selectedBlock,
@@ -77,10 +77,10 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
   Widget _buildRelatedBlockInfos() {
     List<ShelfBlockType> listeners = selectedBlock == null
         ? []
-        : FlutterArtist._getListenerBlocks(notifierBlock: selectedBlock!);
+        : Storage._getListenerBlocks(notifierBlock: selectedBlock!);
     List<ShelfBlockType> notifiers = selectedBlock == null
         ? []
-        : FlutterArtist._getNotifierBlocks(listenerBlock: selectedBlock!);
+        : Storage._getNotifierBlocks(listenerBlock: selectedBlock!);
     //
     return _CustomAppContainer(
       height: double.maxFinite,
@@ -110,7 +110,7 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
   }
 
   void _onSelectFluBlockType(ShelfBlockType shelfBlockType) {
-    Shelf? shelf = FlutterArtist._findShelf(shelfBlockType.shelfType);
+    Shelf? shelf = Storage._findShelf(shelfBlockType.shelfType);
     if (shelf != null) {
       // TODO ...
     }
@@ -149,7 +149,7 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
         ),
         const SizedBox(height: 10),
         ...listeners.map(
-          (listener) => _FrameBlockTypeWidget(
+          (listener) => _ShelfBlockTypeWidget(
               shelfBlockType: listener,
               isListener: true,
               isNotifier: false,
@@ -192,7 +192,7 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
         ),
         const SizedBox(height: 10),
         ...notifiers.map(
-          (notifier) => _FrameBlockTypeWidget(
+          (notifier) => _ShelfBlockTypeWidget(
               shelfBlockType: notifier,
               isListener: false,
               isNotifier: true,

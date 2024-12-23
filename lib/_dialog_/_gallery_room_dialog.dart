@@ -18,13 +18,13 @@ class _GalleryRoomDialog extends StatefulWidget {
 }
 
 class _GalleryRoomDialogState extends State<_GalleryRoomDialog> {
-  Shelf? _currentFrame;
+  Shelf? _currentShelf;
 
   @override
   void initState() {
     super.initState();
-    FlutterArtist._loadAll();
-    _currentFrame = widget.shelf;
+    Storage._loadAll();
+    _currentShelf = widget.shelf;
   }
 
   @override
@@ -39,7 +39,7 @@ class _GalleryRoomDialogState extends State<_GalleryRoomDialog> {
     );
 
     AlertDialog alert = _CustomAlertDialog(
-      titleText: _currentFrame == null ? "Gallery Room" : "Frame Structure",
+      titleText: _currentShelf == null ? "Storage" : "Shelf Structure",
       content: contentWidget,
       contentPadding: EdgeInsets.zero,
       closeDialog: () {
@@ -52,12 +52,12 @@ class _GalleryRoomDialogState extends State<_GalleryRoomDialog> {
   Widget _buildMainWidget() {
     return Stack(
       children: [
-        _currentFrame == null
+        _currentShelf == null
             ? _GalleryStructureView(
-                onSelectFrameToShowGraph: _setDetailedFlu,
+                onSelectShelfToShowGraph: _setDetailedFlu,
               )
-            : _FrameStructureGraphView(
-                shelf: _currentFrame!,
+            : _ShelfStructureGraphView(
+                shelf: _currentShelf!,
                 onPressedBack: () {
                   _setDetailedFlu(null);
                 },
@@ -97,7 +97,7 @@ class _GalleryRoomDialogState extends State<_GalleryRoomDialog> {
     Shelf? shelf,
   ) {
     setState(() {
-      _currentFrame = shelf;
+      _currentShelf = shelf;
     });
   }
 }
