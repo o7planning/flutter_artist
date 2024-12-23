@@ -1,9 +1,9 @@
 part of '../flutter_artist.dart';
 
-class _FluInfoView extends StatelessWidget {
+class _FrameInfoView extends StatelessWidget {
   final Frame? frame;
 
-  const _FluInfoView({required this.frame});
+  const _FrameInfoView({required this.frame});
 
   @override
   Widget build(BuildContext context) {

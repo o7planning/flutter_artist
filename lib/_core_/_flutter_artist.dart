@@ -17,8 +17,8 @@ class _FlutterArtist {
   FlutterArtistAdapter? __adapter;
 
   final _LoggedInUserManager _loggedInUserManager = _LoggedInUserManager();
-  LoggedInUserAdapter? __fluLoggedInUserAdapter;
-  NotificationAdapter? __fluNotificationAdapter;
+  LoggedInUserAdapter? __loggedInUserAdapter;
+  NotificationAdapter? __notificationAdapter;
 
   Function(BuildContext context)? _showRestDebugDialog;
 
@@ -26,7 +26,7 @@ class _FlutterArtist {
     maxDisplayErrorCount: 20,
   );
 
-  late final _NotificationEngine __fluNotificationEngine;
+  late final _NotificationEngine __notificationEngine;
   late final CodeFlowLogger codeFlowLogger = CodeFlowLogger();
 
   final List<Frame> _rencentFrames = [];
@@ -84,11 +84,11 @@ class _FlutterArtist {
   }
 
   NotificationAdapter? get notificationAdapter {
-    return __fluNotificationAdapter;
+    return __notificationAdapter;
   }
 
   LoggedInUserAdapter? get loggedInUserAdapter {
-    return __fluLoggedInUserAdapter;
+    return __loggedInUserAdapter;
   }
 
   ILoggedInUser? get loggedInUser {
@@ -123,19 +123,19 @@ class _FlutterArtist {
     }
     __adapter = flutterArtistAdapter;
     //
-    __fluLoggedInUserAdapter = loggedInUserAdapter;
+    __loggedInUserAdapter = loggedInUserAdapter;
     await _loggedInUserManager._initFromLocal();
     //
     _showRestDebugDialog = showRestDebugDialog;
     //
-    __fluNotificationAdapter = notificationAdapter;
+    __notificationAdapter = notificationAdapter;
     //
     this.notificationFetchPeriodInSeconds = notificationFetchPeriodInSeconds;
     //
     // FluNotificationAdapter ready, start Notification
     //
-    __fluNotificationEngine = _NotificationEngine();
-    __fluNotificationEngine.start();
+    __notificationEngine = _NotificationEngine();
+    __notificationEngine.start();
   }
 
   Map<String, Frame?> get frameMap {

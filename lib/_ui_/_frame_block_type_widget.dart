@@ -1,12 +1,12 @@
 part of '../flutter_artist.dart';
 
-class _FluBlockTypeWidget extends StatelessWidget {
+class _FrameBlockTypeWidget extends StatelessWidget {
   final Function()? onTap;
   final FrameBlockType frameBlockType;
   final bool isListener;
   final bool isNotifier;
 
-  const _FluBlockTypeWidget({
+  const _FrameBlockTypeWidget({
     required this.onTap,
     required this.frameBlockType,
     required this.isListener,

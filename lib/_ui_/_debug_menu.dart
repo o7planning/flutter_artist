@@ -67,7 +67,7 @@ class _DebugMenuState extends State<DebugMenu> implements FluErrorListener {
                   if (isSystemUser && hasRecentErrors) _divider(),
                   if (isSystemUser && FlutterArtist.canShowFrameStructure())
                     _buildPopupMenuItem(
-                      iconData: _fluStructureIconData,
+                      iconData: _frameStructureIconData,
                       title: 'Frame Structure',
                       onTab: _showFluStructure,
                     ),
