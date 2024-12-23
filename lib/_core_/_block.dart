@@ -1828,38 +1828,67 @@ abstract class Block<I extends Object, D extends Object,
     }
   }
 
-  ///
-  /// Load Item Detail.
-  ///
-  Future<bool> loadItemDetailToEdit({
+  Future<bool> loadItemDetailAndSetAsCurrent({
     required I item,
-    required Function()? route,
+    required bool forceLoadFormData,
+    Function()? route,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: route,
       object: this,
-      methodName: "loadItemDetailToEdit",
+      methodName: "loadItemDetailAndSetAsCurrent",
       parameters: {
         "item": item,
+        "forceLoadFormData": forceLoadFormData,
       },
     );
     //
-    const bool forceFormTrue = true;
-
     bool success = await _prepareToShowOrEditWithOverlayAndRestorable(
       item: item,
       justQueried: false,
       suggestedSelection: null,
-      forceForm: forceFormTrue,
+      forceForm: forceLoadFormData,
     );
-
     if (success) {
       _executeRoute(route: route);
       return true;
     }
     return false;
   }
+
+  ///
+  /// Load Item Detail.
+  ///
+  // Future<bool> loadItemDetailToEdit({
+  //   required I item,
+  //   required Function()? route,
+  // }) async {
+  //   FlutterArtist.codeFlowLogger._addMethodCall(
+  //     isLibCode: true,
+  //     route: route,
+  //     object: this,
+  //     methodName: "loadItemDetailToEdit",
+  //     parameters: {
+  //       "item": item,
+  //     },
+  //   );
+  //   //
+  //   const bool forceFormTrue = true;
+  //
+  //   bool success = await _prepareToShowOrEditWithOverlayAndRestorable(
+  //     item: item,
+  //     justQueried: false,
+  //     suggestedSelection: null,
+  //     forceForm: forceFormTrue,
+  //   );
+  //
+  //   if (success) {
+  //     _executeRoute(route: route);
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
   Future<bool> _prepareToShowOrEditWithOverlayAndRestorable({
     required SuggestedSelection? suggestedSelection,
@@ -2130,33 +2159,6 @@ abstract class Block<I extends Object, D extends Object,
     }
     //
     return true;
-  }
-
-  Future<bool> loadItemDetailToShow({
-    required I item,
-    Function()? route,
-  }) async {
-    FlutterArtist.codeFlowLogger._addMethodCall(
-      isLibCode: true,
-      route: route,
-      object: this,
-      methodName: "loadItemDetailToShow",
-      parameters: {
-        "item": item,
-      },
-    );
-    //
-    bool success = await _prepareToShowOrEditWithOverlayAndRestorable(
-      item: item,
-      justQueried: false,
-      suggestedSelection: null,
-      forceForm: false,
-    );
-    if (success) {
-      _executeRoute(route: route);
-      return true;
-    }
-    return false;
   }
 
   Future<bool> deleteCurrentItem() async {
