@@ -5,11 +5,11 @@ part of '../flutter_artist.dart';
 
 class _DevelopmentModeSettingsDialog extends StatefulWidget {
   final String title;
-  final Frame frame;
+  final Shelf shelf;
 
   const _DevelopmentModeSettingsDialog({
     this.title = 'Development Mode Settings',
-    required this.frame,
+    required this.shelf,
     super.key,
   });
 
@@ -87,13 +87,13 @@ class _DevelopmentModeSettingsDialogState
 
 Future<void> _showDevelopmentSettingsDialog({
   required BuildContext context,
-  required Frame frame,
+  required Shelf shelf,
 }) async {
   await showDialog(
     context: context,
     builder: (BuildContext context) {
       return _DevelopmentModeSettingsDialog(
-        frame: frame,
+        shelf: shelf,
       );
     },
   );

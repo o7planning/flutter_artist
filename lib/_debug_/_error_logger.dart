@@ -14,14 +14,14 @@ class ErrorLogger {
   ErrorInfo? get lastError => _errorInfos.isEmpty ? null : _errorInfos.first;
 
   void addError({
-    required String? frameName,
+    required String? shelfName,
     required String message,
     required List<String>? errorDetails,
     required StackTrace? stackTrace,
   }) {
     ErrorInfo errorInfo = ErrorInfo(
       id: ++_errorCount,
-      frameName: frameName,
+      shelfName: shelfName,
       message: message,
       errorDetails: errorDetails,
       stackTrace: stackTrace,

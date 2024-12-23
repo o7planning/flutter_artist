@@ -30,7 +30,7 @@ class _FormDataInfoDialogState extends State<_FormDataInfoDialog> {
     AlertDialog alert = _CustomAlertDialog(
       titleText: showFormData
           ? "${getClassName(widget.blockForm)} - Form Data"
-          : "${getClassName(widget.blockForm.block.frame)} - Structure",
+          : "${getClassName(widget.blockForm.block.shelf)} - Structure",
       contentPadding: const EdgeInsets.all(5),
       content: _buildMainContent(
         context,
@@ -60,7 +60,7 @@ class _FormDataInfoDialogState extends State<_FormDataInfoDialog> {
               },
             )
           : _FrameStructureGraphView(
-              frame: widget.blockForm.block.frame,
+              shelf: widget.blockForm.block.shelf,
               onPressedBack: () {
                 setState(() {
                   showFormData = true;

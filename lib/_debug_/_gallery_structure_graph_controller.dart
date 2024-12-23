@@ -1,11 +1,11 @@
 part of '../flutter_artist.dart';
 
 class _GalleryStructureGraphController {
-  Function(Frame frame)? _setSelectedFrame;
+  Function(Shelf shelf)? _setSelectedShelf;
 
-  void setSelectedFrame(Frame frame) {
-    if (_setSelectedFrame != null) {
-      _setSelectedFrame!(frame);
+  void setSelectedShelf(Shelf shelf) {
+    if (_setSelectedShelf != null) {
+      _setSelectedShelf!(shelf);
     }
   }
 }

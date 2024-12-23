@@ -10,7 +10,7 @@ class _CodeFlowItemView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Frame? frame = codeFlowItem._getFlu();
+    Shelf? shelf = codeFlowItem._getShelf();
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -33,9 +33,9 @@ class _CodeFlowItemView extends StatelessWidget {
           ],
         ),
         const Divider(),
-        if (codeFlowItem.isMethodCall() && frame != null)
-          _FrameInfoView(frame: frame),
-        if (codeFlowItem.isMethodCall() && frame != null) const Divider(),
+        if (codeFlowItem.isMethodCall() && shelf != null)
+          _ShelfInfoView(shelf: shelf),
+        if (codeFlowItem.isMethodCall() && shelf != null) const Divider(),
         if (codeFlowItem.isMethodCall())
           Card(
             child: _CodeFlowMethodView(

@@ -1,13 +1,13 @@
 part of '../flutter_artist.dart';
 
 class _FlutterArtistChangeManager {
-  final Map<String, Frame> _registedFrameMap = {};
+  final Map<String, Shelf> _registedShelfMap = {};
 
   // ===========================================================================
   // ===========================================================================
 
-  void _registerFrame(String frameName, Frame frame) {
-    _registedFrameMap[frameName] = frame;
+  void _registerShelf(String shelfName, Shelf shelf) {
+    _registedShelfMap[shelfName] = shelf;
   }
 
   // ===========================================================================
@@ -15,8 +15,8 @@ class _FlutterArtistChangeManager {
 
   Map<SourceOfChange, List<Block>> _getNotifierAndListenerMap() {
     Map<SourceOfChange, List<Block>> returnMap = {};
-    for (Frame frame in _registedFrameMap.values) {
-      for (Block block in frame.rootBlocks) {
+    for (Shelf shelf in _registedShelfMap.values) {
+      for (Block block in shelf.rootBlocks) {
         __registerListenerBlockCascade(block, returnMap);
       }
     }
@@ -43,14 +43,14 @@ class _FlutterArtistChangeManager {
   // ===========================================================================
 
   @deprecated
-  List<FrameBlockType> getChangeListeners({required Block sourceBlock}) {
+  List<ShelfBlockType> getChangeListeners({required Block sourceBlock}) {
     SourceOfChange source = _blockToSourceOfChange(sourceBlock);
 
     List<Block> listenerBlocks = _getNotifierAndListenerMap()[source] ?? [];
     return listenerBlocks
         .map(
-          (b) => FrameBlockType(
-            frameType: b.frame.runtimeType,
+          (b) => ShelfBlockType(
+            shelfType: b.shelf.runtimeType,
             blockType: b.runtimeType,
           ),
         )
@@ -58,10 +58,10 @@ class _FlutterArtistChangeManager {
   }
 
   SourceOfChange _blockToSourceOfChange(Block sourceBlock) {
-    Type frameType = sourceBlock.frame.runtimeType;
+    Type shelfType = sourceBlock.shelf.runtimeType;
     Type blockType = sourceBlock.runtimeType;
     SourceOfChange source = SourceOfChange(
-      frameType: frameType,
+      shelfType: shelfType,
       blockType: blockType,
     );
     return source;
@@ -89,7 +89,7 @@ class _FlutterArtistChangeManager {
     //
     if (queryBlocks.isNotEmpty) {
       // TODO: Neu co 2 Flu thi sao??
-      queryBlocks.first.frame._queryBlocks(
+      queryBlocks.first.shelf._queryBlocks(
         queryType: QueryType.forceQuery,
         blocks: queryBlocks,
       );

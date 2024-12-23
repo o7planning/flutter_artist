@@ -49,7 +49,7 @@ abstract class Block<I extends Object, D extends Object,
 
   final BlockHiddenBehavior hiddenBehavior;
 
-  late final Frame frame;
+  late final Shelf shelf;
 
   final String? blockFilterName;
 
@@ -240,7 +240,7 @@ abstract class Block<I extends Object, D extends Object,
   }) {
     _paginationWidgetStateListeners[formWidgetState] = isShowing;
     if (isShowing) {
-      FlutterArtist._addRecentFrame(frame);
+      FlutterArtist._addRecentShelf(shelf);
     }
   }
 
@@ -248,7 +248,7 @@ abstract class Block<I extends Object, D extends Object,
     required _WidgetState formWidgetState,
   }) {
     _paginationWidgetStateListeners.remove(formWidgetState);
-    FlutterArtist._checkToRemoveFrame(frame);
+    FlutterArtist._checkToRemoveFrame(shelf);
   }
 
   void _addControlBarWidgetStateListener({
@@ -257,7 +257,7 @@ abstract class Block<I extends Object, D extends Object,
   }) {
     _controlBarWidgetStateListeners[formWidgetState] = isShowing;
     if (isShowing) {
-      FlutterArtist._addRecentFrame(frame);
+      FlutterArtist._addRecentShelf(shelf);
     }
   }
 
@@ -265,7 +265,7 @@ abstract class Block<I extends Object, D extends Object,
     required _WidgetState formWidgetState,
   }) {
     _controlBarWidgetStateListeners.remove(formWidgetState);
-    FlutterArtist._checkToRemoveFrame(frame);
+    FlutterArtist._checkToRemoveFrame(shelf);
   }
 
   void _addWidgetStateListener({
@@ -277,12 +277,12 @@ abstract class Block<I extends Object, D extends Object,
     bool activeCURRENT = hasActiveUiComponent();
     //
     if (isShowing) {
-      FlutterArtist._addRecentFrame(frame);
+      FlutterArtist._addRecentShelf(shelf);
     }
     //
     if (!activeOLD && activeCURRENT) {
       // Fire event:
-      frame._startNewLazyQueryTransactionIfNeed();
+      shelf._startNewLazyQueryTransactionIfNeed();
     } else if (activeOLD && !activeCURRENT) {
       _fireBlockHidden();
     }
@@ -294,7 +294,7 @@ abstract class Block<I extends Object, D extends Object,
     bool activeCURRENT = hasActiveUiComponent();
     //
     if (activeOLD && !activeCURRENT) {
-      FlutterArtist._checkToRemoveFrame(frame);
+      FlutterArtist._checkToRemoveFrame(shelf);
       _fireBlockHidden();
     }
   }
@@ -540,7 +540,7 @@ abstract class Block<I extends Object, D extends Object,
     );
     //
     FlutterArtist.errorLogger.addError(
-      frameName: FlutterArtist._getFrameName(frame.runtimeType),
+      shelfName: FlutterArtist._getShelfName(shelf.runtimeType),
       message: msg,
       errorDetails: apiError.errorDetails,
       stackTrace: stackTrace,
@@ -563,7 +563,7 @@ abstract class Block<I extends Object, D extends Object,
     required bool showSnackbar,
   }) {
     FlutterArtist.errorLogger.addError(
-      frameName: FlutterArtist._getFrameName(frame.runtimeType),
+      shelfName: FlutterArtist._getShelfName(shelf.runtimeType),
       message: message,
       errorDetails: errorDetails,
       stackTrace: null,
@@ -1018,7 +1018,7 @@ abstract class Block<I extends Object, D extends Object,
   void _restoreAll() {
     Block rootBlock = getRootBlock();
     rootBlock.__restoreThisAndChildren();
-    frame.updateAllWidgets();
+    shelf.updateAllWidgets();
   }
 
   void _applyNewStateAll({bool clearNeedToReQuery = false}) {
@@ -1027,7 +1027,7 @@ abstract class Block<I extends Object, D extends Object,
       clearNeedToReQuery: clearNeedToReQuery,
     );
     rootBlock.__setChildrenForParent();
-    frame.updateAllWidgets();
+    shelf.updateAllWidgets();
   }
 
   void __setChildrenForParent() {
@@ -1756,7 +1756,7 @@ abstract class Block<I extends Object, D extends Object,
         action: action,
         afterQuickAction: afterQuickAction,
       );
-      frame.updateAllWidgets();
+      shelf.updateAllWidgets();
       return success;
     } catch (e, stacktrace) {
       _handleError(
@@ -1767,7 +1767,7 @@ abstract class Block<I extends Object, D extends Object,
         showSnackbar: true,
       );
       //
-      frame.updateAllWidgets();
+      shelf.updateAllWidgets();
       return false;
     }
   }
@@ -1777,7 +1777,7 @@ abstract class Block<I extends Object, D extends Object,
   }) async {
     try {
       bool success = await _executeQuickCreateWithOverlay(data: data);
-      frame.updateAllWidgets();
+      shelf.updateAllWidgets();
       return success;
     } catch (e, stacktrace) {
       _handleError(
@@ -1788,7 +1788,7 @@ abstract class Block<I extends Object, D extends Object,
         showSnackbar: true,
       );
       //
-      frame.updateAllWidgets();
+      shelf.updateAllWidgets();
       return false;
     }
   }
@@ -1812,7 +1812,7 @@ abstract class Block<I extends Object, D extends Object,
         item: item,
         data: data,
       );
-      frame.updateAllWidgets();
+      shelf.updateAllWidgets();
       return success;
     } catch (e, stacktrace) {
       _handleError(
@@ -1823,7 +1823,7 @@ abstract class Block<I extends Object, D extends Object,
         showSnackbar: true,
       );
       //
-      frame.updateAllWidgets();
+      shelf.updateAllWidgets();
       return false;
     }
   }

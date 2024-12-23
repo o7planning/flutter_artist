@@ -4,10 +4,10 @@ part of '../flutter_artist.dart';
 // -----------------------------------------------------------------------------
 
 class _GalleryRoomDialog extends StatefulWidget {
-  final Frame? frame;
+  final Shelf? shelf;
 
   const _GalleryRoomDialog({
-    required this.frame,
+    required this.shelf,
     super.key,
   });
 
@@ -18,13 +18,13 @@ class _GalleryRoomDialog extends StatefulWidget {
 }
 
 class _GalleryRoomDialogState extends State<_GalleryRoomDialog> {
-  Frame? _currentFrame;
+  Shelf? _currentFrame;
 
   @override
   void initState() {
     super.initState();
     FlutterArtist._loadAll();
-    _currentFrame = widget.frame;
+    _currentFrame = widget.shelf;
   }
 
   @override
@@ -57,7 +57,7 @@ class _GalleryRoomDialogState extends State<_GalleryRoomDialog> {
                 onSelectFrameToShowGraph: _setDetailedFlu,
               )
             : _FrameStructureGraphView(
-                frame: _currentFrame!,
+                shelf: _currentFrame!,
                 onPressedBack: () {
                   _setDetailedFlu(null);
                 },
@@ -94,22 +94,22 @@ class _GalleryRoomDialogState extends State<_GalleryRoomDialog> {
   }
 
   void _setDetailedFlu(
-    Frame? frame,
+    Shelf? shelf,
   ) {
     setState(() {
-      _currentFrame = frame;
+      _currentFrame = shelf;
     });
   }
 }
 
 Future<void> _showGalleryRoomDialog({
   required BuildContext context,
-  required Frame? frame,
+  required Shelf? shelf,
 }) async {
   await showDialog(
     context: context,
     builder: (BuildContext context) {
-      return _GalleryRoomDialog(frame: frame);
+      return _GalleryRoomDialog(shelf: shelf);
     },
   );
 }

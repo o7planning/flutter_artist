@@ -2,13 +2,13 @@ part of '../flutter_artist.dart';
 
 class _FrameBlockTypeWidget extends StatelessWidget {
   final Function()? onTap;
-  final FrameBlockType frameBlockType;
+  final ShelfBlockType shelfBlockType;
   final bool isListener;
   final bool isNotifier;
 
   const _FrameBlockTypeWidget({
     required this.onTap,
-    required this.frameBlockType,
+    required this.shelfBlockType,
     required this.isListener,
     required this.isNotifier,
   });
@@ -53,12 +53,12 @@ class _FrameBlockTypeWidget extends StatelessWidget {
   }
 
   Widget _buildFlu() {
-    Frame? frame = FlutterArtist._findFrame(frameBlockType.frameType);
-    String? frameName = frame?.name;
-    String? description = frame?.description;
+    Shelf? shelf = FlutterArtist._findShelf(shelfBlockType.shelfType);
+    String? shelfName = shelf?.name;
+    String? description = shelf?.description;
 
     Widget w = Text(
-      frameName ?? " - ",
+      shelfName ?? " - ",
       style: const TextStyle(fontSize: 12),
     );
     return description == null
@@ -71,7 +71,7 @@ class _FrameBlockTypeWidget extends StatelessWidget {
 
   Widget _buildBlock() {
     return Text(
-      frameBlockType.blockType.toString(),
+      shelfBlockType.blockType.toString(),
       style: const TextStyle(fontSize: 12),
     );
   }

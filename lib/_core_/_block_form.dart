@@ -73,10 +73,10 @@ abstract class BlockForm<I extends Object, D extends Object> with DebugMixin {
     bool isShowingOLD = _formWidgetStateListeners[formWidgetState] ?? false;
     _formWidgetStateListeners[formWidgetState] = isShowing;
     if (!isShowingOLD && isShowing) {
-      block.frame._startNewLazyQueryTransactionIfNeed();
+      block.shelf._startNewLazyQueryTransactionIfNeed();
     }
     if (isShowing) {
-      FlutterArtist._addRecentFrame(block.frame);
+      FlutterArtist._addRecentShelf(block.shelf);
     }
   }
 
@@ -209,7 +209,7 @@ abstract class BlockForm<I extends Object, D extends Object> with DebugMixin {
     required bool showSnackbar,
   }) {
     FlutterArtist.errorLogger.addError(
-      frameName: FlutterArtist._getFrameName(block.frame.runtimeType),
+      shelfName: FlutterArtist._getShelfName(block.shelf.runtimeType),
       message: error.toString(),
       errorDetails: null,
       stackTrace: stackTrace,

@@ -3,7 +3,7 @@ part of '../flutter_artist.dart';
 abstract class BlockFilter<S extends FilterSnapshot> with DebugMixin {
   late final String name;
 
-  late final Frame frame;
+  late final Shelf shelf;
 
   final List<Block> _blocks = [];
 
@@ -104,13 +104,13 @@ abstract class BlockFilter<S extends FilterSnapshot> with DebugMixin {
   }) {
     _widgetStateListeners[widgetState] = isShowing;
     if (isShowing) {
-      FlutterArtist._addRecentFrame(frame);
+      FlutterArtist._addRecentShelf(shelf);
     }
   }
 
   void _removeWidgetStateListener({required State widgetState}) {
     _widgetStateListeners.remove(widgetState);
-    FlutterArtist._checkToRemoveFrame(frame);
+    FlutterArtist._checkToRemoveFrame(shelf);
   }
 
   void updateWidgets() {

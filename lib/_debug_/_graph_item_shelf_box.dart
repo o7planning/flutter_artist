@@ -2,12 +2,12 @@ part of '../flutter_artist.dart';
 
 class _GraphItemFrameBox extends StatefulWidget {
   final Function() gotoFlutterArtist;
-  final Frame frame;
+  final Shelf shelf;
 
   const _GraphItemFrameBox({
     super.key,
     required this.gotoFlutterArtist,
-    required this.frame,
+    required this.shelf,
   });
 
   @override
@@ -105,7 +105,7 @@ class _GraphItemFrameBoxState extends State<_GraphItemFrameBox> {
   }
 
   String _getFluName() {
-    return getClassName(widget.frame);
+    return getClassName(widget.shelf);
   }
 
   double _calculateBoxWidth() {

@@ -5,8 +5,8 @@ class _GraphItemSimpleFrameBox extends StatefulWidget {
   final bool isSelected;
   final bool isListener;
   final bool isNotifier;
-  final String frameName;
-  final Frame? frame;
+  final String shelfName;
+  final Shelf? shelf;
   final Function()? onSelectFluToShowGraph;
   final Function()? onSelectFluToShowTreeView;
 
@@ -16,8 +16,8 @@ class _GraphItemSimpleFrameBox extends StatefulWidget {
     required this.isSelected,
     required this.isListener,
     required this.isNotifier,
-    required this.frameName,
-    required this.frame,
+    required this.shelfName,
+    required this.shelf,
     required this.onSelectFluToShowGraph,
     required this.onSelectFluToShowTreeView,
   });
@@ -29,8 +29,8 @@ class _GraphItemSimpleFrameBox extends StatefulWidget {
 
 class _GraphItemSimpleFrameBoxState extends State<_GraphItemSimpleFrameBox> {
   static const double extraWidth = 16;
-  static const double frameIconWidth = 40;
-  static const double frameIconHeight = 32;
+  static const double shelfIconWidth = 40;
+  static const double shelfIconHeight = 32;
   static const double spacing = 5;
   static const double padding = 5;
   static const double iconSize = 16;
@@ -42,9 +42,9 @@ class _GraphItemSimpleFrameBoxState extends State<_GraphItemSimpleFrameBox> {
   @override
   Widget build(BuildContext context) {
     Size textSize =
-        _calculateTextSize(text: widget.frameName, style: textStyle);
+        _calculateTextSize(text: widget.shelfName, style: textStyle);
     double boxWidth =
-        extraWidth + 2 * padding + frameIconWidth + spacing + textSize.width;
+        extraWidth + 2 * padding + shelfIconWidth + spacing + textSize.width;
 
     if (widget.isListener) {
       boxWidth += padding + iconSize;
@@ -60,7 +60,7 @@ class _GraphItemSimpleFrameBoxState extends State<_GraphItemSimpleFrameBox> {
         decoration: BoxDecoration(
           color: widget.isSelected
               ? _selectedGraphBoxBgColor
-              : widget.frame == null //
+              : widget.shelf == null //
                   ? _inactiveGraphBoxBgColor
                   : _activeGraphBoxBgColor,
           borderRadius: BorderRadius.circular(4),
@@ -90,8 +90,8 @@ class _GraphItemSimpleFrameBoxState extends State<_GraphItemSimpleFrameBox> {
                 message: "Show Flu structure in the Graph",
                 child: Image.asset(
                   "packages/flutter_artist/static-rs/flu.png",
-                  width: frameIconWidth,
-                  height: frameIconHeight,
+                  width: shelfIconWidth,
+                  height: shelfIconHeight,
                 ),
               ),
             ),
@@ -106,7 +106,7 @@ class _GraphItemSimpleFrameBoxState extends State<_GraphItemSimpleFrameBox> {
                       vertical: 10,
                     ),
                     child: Text(
-                      widget.frameName,
+                      widget.shelfName,
                       style: textStyle,
                     ),
                   ),

@@ -2,8 +2,8 @@ part of '../flutter_artist.dart';
 
 class _GalleryStructureGraphView extends StatefulWidget {
   final _GalleryStructureGraphController controller;
-  final Function(Frame frame) onSelectFrameToShowGraph;
-  final Function(Frame frame) onSelectFrameToShowTreeView;
+  final Function(Shelf shelf) onSelectFrameToShowGraph;
+  final Function(Shelf shelf) onSelectFrameToShowTreeView;
 
   const _GalleryStructureGraphView({
     required this.controller,
@@ -24,7 +24,7 @@ class _GalleryStructureGraphViewState
     NliType.notifier,
   };
 
-  String? selectedFluName;
+  String? selectedShelfName;
 
   final BuchheimWalkerConfiguration config =
       _GalerryBuchheimWalkerConfiguration();
@@ -34,9 +34,9 @@ class _GalleryStructureGraphViewState
   @override
   void initState() {
     super.initState();
-    widget.controller._setSelectedFrame = (Frame frame) {
+    widget.controller._setSelectedShelf = (Shelf shelf) {
       setState(() {
-        selectedFluName = FlutterArtist._getFrameName(frame.runtimeType);
+        selectedShelfName = FlutterArtist._getShelfName(shelf.runtimeType);
       });
     };
   }
@@ -58,7 +58,7 @@ class _GalleryStructureGraphViewState
   void selectedDefaultFlu(_GraphGItem rootItem) {
     bool found = false;
     for (_GraphGItem item in rootItem.children) {
-      if (item.frameName == selectedFluName) {
+      if (item.shelfName == selectedShelfName) {
         found = true;
         break;
       }
@@ -76,7 +76,7 @@ class _GalleryStructureGraphViewState
     final Graph graph = Graph()..isTree = false;
     _GraphGItem rootItem = _createRootItemAndChildren();
     Map<String, _GraphGItem> graphItemMap = <String, _GraphGItem>{};
-    final String rootNodeId = rootItem.frameName;
+    final String rootNodeId = rootItem.shelfName;
     //
     graphItemMap[rootNodeId] = rootItem;
     //
@@ -195,30 +195,30 @@ class _GalleryStructureGraphViewState
       isRoot: true,
       isNotifier: false,
       isListener: false,
-      frameName: "Global Flu",
+      shelfName: "Global Flu",
     );
-    Map<String, Frame?> frameMap = FlutterArtist.frameMap;
-    Map<String, Frame?> frameListenerMap = FlutterArtist._getListenerFrames();
-    Map<String, Frame?> frameNotifierMap = FlutterArtist._getNotifierFrames();
-    Map<String, Frame?> frameIndependentMap =
-        FlutterArtist._getIndependentFrames();
+    Map<String, Shelf?> shelfMap = FlutterArtist.shelfMap;
+    Map<String, Shelf?> shelfListenerMap = FlutterArtist._getListenerShelves();
+    Map<String, Shelf?> shelfNotifierMap = FlutterArtist._getNotifierShelves();
+    Map<String, Shelf?> shelfIndependentMap =
+        FlutterArtist._getIndependentShelves();
 
-    for (String frameName in frameMap.keys) {
+    for (String shelfName in shelfMap.keys) {
       _GraphGItem item = _GraphGItem(
         isRoot: false,
-        isNotifier: frameNotifierMap.containsKey(frameName),
-        isListener: frameListenerMap.containsKey(frameName),
-        frameName: frameName,
-        frame: frameMap[frameName],
+        isNotifier: shelfNotifierMap.containsKey(shelfName),
+        isListener: shelfListenerMap.containsKey(shelfName),
+        shelfName: shelfName,
+        shelf: shelfMap[shelfName],
       );
       if (nliTypes.contains(NliType.notifier) &&
-          frameNotifierMap.containsKey(frameName)) {
+          shelfNotifierMap.containsKey(shelfName)) {
         root.children.add(item);
       } else if (nliTypes.contains(NliType.listener) &&
-          frameListenerMap.containsKey(frameName)) {
+          shelfListenerMap.containsKey(shelfName)) {
         root.children.add(item);
       } else if (nliTypes.contains(NliType.independent) &&
-          frameIndependentMap.containsKey(frameName)) {
+          shelfIndependentMap.containsKey(shelfName)) {
         root.children.add(item);
       }
     }
@@ -233,7 +233,7 @@ class _GalleryStructureGraphViewState
     required Map<String, Node> nodeMap,
   }) {
     for (var childGraphItem in childItems) {
-      String childNodeId = childGraphItem.frameName;
+      String childNodeId = childGraphItem.shelfName;
       graphItemMap[childNodeId] = childGraphItem;
       Node childNode = Node.Id(childNodeId);
       nodeMap[childNodeId] = childNode;
@@ -262,11 +262,11 @@ class _GalleryStructureGraphViewState
     } else {
       return _GraphItemSimpleFrameBox(
         isRoot: item.isRoot,
-        isSelected: item.frameName == selectedFluName,
+        isSelected: item.shelfName == selectedShelfName,
         isListener: item.isListener,
         isNotifier: item.isNotifier,
-        frameName: item.frameName,
-        frame: item.frame,
+        shelfName: item.shelfName,
+        shelf: item.shelf,
         onSelectFluToShowGraph: item.isRoot
             ? null
             : () {
@@ -280,17 +280,17 @@ class _GalleryStructureGraphViewState
   }
 
   void _onSelectFluToShowGraph(_GraphGItem item) {
-    Frame? frame = item.frame;
-    frame ??= FlutterArtist._createFrame(item.frameName);
-    widget.onSelectFrameToShowGraph(frame);
+    Shelf? shelf = item.shelf;
+    shelf ??= FlutterArtist._createShelf(item.shelfName);
+    widget.onSelectFrameToShowGraph(shelf);
   }
 
   void _onSelectFluToShowTreeView(_GraphGItem item) {
     setState(() {
-      selectedFluName = item.frameName;
-      Frame? frame = item.frame;
-      frame ??= FlutterArtist._createFrame(item.frameName);
-      widget.onSelectFrameToShowTreeView(frame);
+      selectedShelfName = item.shelfName;
+      Shelf? shelf = item.shelf;
+      shelf ??= FlutterArtist._createShelf(item.shelfName);
+      widget.onSelectFrameToShowTreeView(shelf);
     });
   }
 

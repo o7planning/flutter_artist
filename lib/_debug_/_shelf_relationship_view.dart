@@ -1,49 +1,49 @@
 part of '../flutter_artist.dart';
 
-class _FrameRelationshipView extends StatefulWidget {
-  final _FrameRelationshipController frameRelationshipController;
-  final Frame? frame;
-  final Function(FrameBlockType frameBlockType) onSelectFrameBlockType;
+class _ShelfRelationshipView extends StatefulWidget {
+  final _ShelfRelationshipController shelfRelationshipController;
+  final Shelf? shelf;
+  final Function(ShelfBlockType shelfBlockType) onSelectShelfBlockType;
 
-  const _FrameRelationshipView({
-    required this.frameRelationshipController,
-    required this.frame,
-    required this.onSelectFrameBlockType,
+  const _ShelfRelationshipView({
+    required this.shelfRelationshipController,
+    required this.shelf,
+    required this.onSelectShelfBlockType,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _FrameRelationshipViewState();
+    return _ShelfRelationshipViewState();
   }
 }
 
-class _FrameRelationshipViewState extends State<_FrameRelationshipView> {
+class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
   Block? selectedBlock;
 
   @override
   void initState() {
     super.initState();
-    widget.frameRelationshipController._setFrameBlockType =
-        (FrameBlockType frameBlockType) {
+    widget.shelfRelationshipController._setShelfBlockType =
+        (ShelfBlockType shelfBlockType) {
       //
     };
   }
 
   void _selectDefaultBlockIfNeed() {
-    if (widget.frame == null) {
+    if (widget.shelf == null) {
       selectedBlock = null;
     } else {
       String? blockName = selectedBlock?.name;
       if (blockName != null) {
-        selectedBlock = widget.frame!.findBlock(blockName);
+        selectedBlock = widget.shelf!.findBlock(blockName);
       }
-      selectedBlock ??= widget.frame!.rootBlocks.firstOrNull;
+      selectedBlock ??= widget.shelf!.rootBlocks.firstOrNull;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.frame == null) {
+    if (widget.shelf == null) {
       return const Center(
         child: Text("No Flu selected"),
       );
@@ -56,8 +56,8 @@ class _FrameRelationshipViewState extends State<_FrameRelationshipView> {
         SizedBox(
           width: 300,
           child: _FrameStructureTreeView(
-            key: Key("Tree-${getClassName(widget.frame!)}"),
-            frame: widget.frame!,
+            key: Key("Tree-${getClassName(widget.shelf!)}"),
+            shelf: widget.shelf!,
             selectedBlock: selectedBlock,
             onSelectBlock: (Block block) {
               setState(() {
@@ -75,10 +75,10 @@ class _FrameRelationshipViewState extends State<_FrameRelationshipView> {
   }
 
   Widget _buildRelatedBlockInfos() {
-    List<FrameBlockType> listeners = selectedBlock == null
+    List<ShelfBlockType> listeners = selectedBlock == null
         ? []
         : FlutterArtist._getListenerBlocks(notifierBlock: selectedBlock!);
-    List<FrameBlockType> notifiers = selectedBlock == null
+    List<ShelfBlockType> notifiers = selectedBlock == null
         ? []
         : FlutterArtist._getNotifierBlocks(listenerBlock: selectedBlock!);
     //
@@ -97,7 +97,7 @@ class _FrameRelationshipViewState extends State<_FrameRelationshipView> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _FrameInfoView(frame: selectedBlock?.frame),
+                _ShelfInfoView(shelf: selectedBlock?.shelf),
                 const Divider(),
                 if (listeners.isNotEmpty)
                   _buildListeners(selectedBlock!, listeners),
@@ -109,16 +109,16 @@ class _FrameRelationshipViewState extends State<_FrameRelationshipView> {
     );
   }
 
-  void _onSelectFluBlockType(FrameBlockType frameBlockType) {
-    Frame? frame = FlutterArtist._findFrame(frameBlockType.frameType);
-    if (frame != null) {
+  void _onSelectFluBlockType(ShelfBlockType shelfBlockType) {
+    Shelf? shelf = FlutterArtist._findShelf(shelfBlockType.shelfType);
+    if (shelf != null) {
       // TODO ...
     }
 
-    widget.onSelectFrameBlockType(frameBlockType);
+    widget.onSelectShelfBlockType(shelfBlockType);
   }
 
-  Widget _buildListeners(Block block, List<FrameBlockType> listeners) {
+  Widget _buildListeners(Block block, List<ShelfBlockType> listeners) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,7 +150,7 @@ class _FrameRelationshipViewState extends State<_FrameRelationshipView> {
         const SizedBox(height: 10),
         ...listeners.map(
           (listener) => _FrameBlockTypeWidget(
-              frameBlockType: listener,
+              shelfBlockType: listener,
               isListener: true,
               isNotifier: false,
               onTap: () {
@@ -161,7 +161,7 @@ class _FrameRelationshipViewState extends State<_FrameRelationshipView> {
     );
   }
 
-  Widget _buildNotifiers(Block block, List<FrameBlockType> notifiers) {
+  Widget _buildNotifiers(Block block, List<ShelfBlockType> notifiers) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -193,7 +193,7 @@ class _FrameRelationshipViewState extends State<_FrameRelationshipView> {
         const SizedBox(height: 10),
         ...notifiers.map(
           (notifier) => _FrameBlockTypeWidget(
-              frameBlockType: notifier,
+              shelfBlockType: notifier,
               isListener: false,
               isNotifier: true,
               onTap: () {

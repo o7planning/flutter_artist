@@ -1,9 +1,9 @@
 part of '../flutter_artist.dart';
 
-abstract class Frame {
-  late final FrameStructure _frameStruct;
+abstract class Shelf {
+  late final ShelfStructure _shelfStruct;
 
-  String? get description => _frameStruct.description;
+  String? get description => _shelfStruct.description;
 
   final Map<String, Block> __blockMap = {};
 
@@ -27,22 +27,22 @@ abstract class Frame {
 
   bool _queryLocked = false;
 
-  String get name => FlutterArtist._getFrameName(runtimeType);
+  String get name => FlutterArtist._getShelfName(runtimeType);
 
-  Frame() {
+  Shelf() {
     __onInit();
   }
 
   void __onInit() {
-    _frameStruct = registerStructure();
+    _shelfStruct = registerStructure();
 
-    for (String blockFilterName in _frameStruct.blockFilters.keys) {
-      BlockFilter blockFilter = _frameStruct.blockFilters[blockFilterName]!;
+    for (String blockFilterName in _shelfStruct.blockFilters.keys) {
+      BlockFilter blockFilter = _shelfStruct.blockFilters[blockFilterName]!;
       blockFilter.name = blockFilterName;
-      blockFilter.frame = this;
+      blockFilter.shelf = this;
     }
 
-    List<Block> rootBlocks = _frameStruct.blocks;
+    List<Block> rootBlocks = _shelfStruct.blocks;
     for (Block rootBlock in rootBlocks) {
       rootBlock.parent = null;
       __rootBlocks.add(rootBlock);
@@ -52,10 +52,10 @@ abstract class Frame {
 
   void __registerBlockCascade(Block block) {
     __blockMap[block.name] = block;
-    block.frame = this;
+    block.shelf = this;
     if (block.blockFilterName != null) {
       BlockFilter? blockFilter =
-          _frameStruct.blockFilters[block.blockFilterName!];
+          _shelfStruct.blockFilters[block.blockFilterName!];
       if (blockFilter == null) {
         throw "BlockFilter not found '${block.blockFilterName}'";
       }
@@ -119,7 +119,7 @@ abstract class Frame {
   // ***************************************************************************
   // ***************************************************************************
 
-  FrameStructure registerStructure();
+  ShelfStructure registerStructure();
 
   // ***************************************************************************
   // ***************************************************************************
@@ -134,14 +134,14 @@ abstract class Frame {
     );
   }
 
-  Future<void> showFrameStructureDialog() async {
+  Future<void> showShelfStructureDialog() async {
     BuildContext context = FlutterArtist.adapter.getCurrentContext();
-    await _showGalleryRoomDialog(context: context, frame: this);
+    await _showGalleryRoomDialog(context: context, shelf: this);
   }
 
   Future<void> showActiveUiComponentsDialog() async {
     BuildContext context = FlutterArtist.adapter.getCurrentContext();
-    await _showActiveUiComponentsDialog(context: context, frame: this);
+    await _showActiveUiComponentsDialog(context: context, shelf: this);
   }
 
   // ***************************************************************************
@@ -153,10 +153,10 @@ abstract class Frame {
   }
 
   BlockFilter? findBlockFilter(String blockFilterName) {
-    return _frameStruct.blockFilters[blockFilterName];
+    return _shelfStruct.blockFilters[blockFilterName];
   }
 
-  List<String> get filterNames => [..._frameStruct.blockFilters.keys];
+  List<String> get filterNames => [..._shelfStruct.blockFilters.keys];
 
   // ***************************************************************************
   // ***************************************************************************

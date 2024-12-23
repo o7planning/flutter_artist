@@ -1,9 +1,9 @@
 part of '../flutter_artist.dart';
 
-class _FrameInfoView extends StatelessWidget {
-  final Frame? frame;
+class _ShelfInfoView extends StatelessWidget {
+  final Shelf? shelf;
 
-  const _FrameInfoView({required this.frame});
+  const _ShelfInfoView({required this.shelf});
 
   @override
   Widget build(BuildContext context) {
@@ -22,17 +22,17 @@ class _FrameInfoView extends StatelessWidget {
         height: 40,
       ),
       title: Text(
-        getClassName(frame),
+        getClassName(shelf),
         style: const TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.bold,
           color: Colors.black87,
         ),
       ),
-      subtitle: frame?.description == null
+      subtitle: shelf?.description == null
           ? null
           : Text(
-              frame!.description!,
+              shelf!.description!,
               style: const TextStyle(
                 fontSize: 12,
                 color: Colors.grey,

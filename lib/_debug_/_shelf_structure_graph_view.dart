@@ -2,10 +2,10 @@ part of '../flutter_artist.dart';
 
 class _FrameStructureGraphView extends StatefulWidget {
   final Function() onPressedBack;
-  final Frame frame;
+  final Shelf shelf;
 
   const _FrameStructureGraphView({
-    required this.frame,
+    required this.shelf,
     required this.onPressedBack,
     super.key,
   });
@@ -35,7 +35,7 @@ class _FrameStructureGraphViewState extends State<_FrameStructureGraphView> {
   void initState() {
     super.initState();
     //
-    rootItem = _toRootDebugGraphItem(widget.frame);
+    rootItem = _toRootDebugGraphItem(widget.shelf);
     graphItemMap = <String, _GraphItem>{};
     final String rootNodeId = rootItem.name;
     //
@@ -126,9 +126,9 @@ class _FrameStructureGraphViewState extends State<_FrameStructureGraphView> {
       child: SizedBox(
         // width: itemWidth,
         // height: itemHeight,
-        child: item.frame != null
+        child: item.shelf != null
             ? _GraphItemFrameBox(
-                frame: item.frame!,
+                shelf: item.shelf!,
                 gotoFlutterArtist: widget.onPressedBack,
               )
             : _GraphItemBlockBox(

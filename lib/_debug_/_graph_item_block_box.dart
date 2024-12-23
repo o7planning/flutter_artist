@@ -175,7 +175,7 @@ class _GraphItemBlockBoxState extends State<_GraphItemBlockBox> {
     BlockFilter? blockFilter = widget.block.blockFilter;
     Color color = Colors.white;
     if (blockFilter != null) {
-      List<String> filterNames = widget.block.frame.filterNames
+      List<String> filterNames = widget.block.shelf.filterNames
         ..sort((a, b) => a.compareTo(b));
       int idx = filterNames.indexOf(blockFilter.name);
       color = _filterColors.length > idx //

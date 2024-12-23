@@ -4,7 +4,7 @@ part of '../flutter_artist.dart';
 // -----------------------------------------------------------------------------
 
 class _UiComponentsDialog extends StatefulWidget {
-  Frame? frame;
+  Shelf? shelf;
   Block? block;
   final bool showActiveOnly;
 
@@ -14,8 +14,8 @@ class _UiComponentsDialog extends StatefulWidget {
     super.key,
   });
 
-  _UiComponentsDialog.frame({
-    required Frame this.frame,
+  _UiComponentsDialog.shelf({
+    required Shelf this.shelf,
     this.showActiveOnly = true,
     super.key,
   });
@@ -30,7 +30,7 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
   static const double fontSize = 13;
 
   String _title() {
-    if (widget.frame != null) {
+    if (widget.shelf != null) {
       return "Active UI Components in current screen";
     } else if (widget.block != null) {
       return "Mounted UI Components of the Block";
@@ -40,8 +40,8 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
   }
 
   Map<_WidgetState, bool> _findWidgetStates() {
-    if (widget.frame != null) {
-      return widget.frame!._findMountedWidgetStates(
+    if (widget.shelf != null) {
+      return widget.shelf!._findMountedWidgetStates(
         activeOnly: true,
         withPagination: true,
         withBlockFrament: true,
@@ -213,13 +213,13 @@ Future<void> _showBlockUiComponentsDialog({
 
 Future<void> _showActiveUiComponentsDialog({
   required BuildContext context,
-  required Frame frame,
+  required Shelf shelf,
 }) async {
   await showDialog(
     context: context,
     builder: (BuildContext context) {
-      return _UiComponentsDialog.frame(
-        frame: frame,
+      return _UiComponentsDialog.shelf(
+        shelf: shelf,
       );
     },
   );

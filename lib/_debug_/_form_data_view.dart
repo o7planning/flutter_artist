@@ -27,7 +27,7 @@ class _FormDataViewState extends State<_FormDataView> {
 
   static const int tabLength = 4;
 
-  late List<FrameBlockType> listeners;
+  late List<ShelfBlockType> listeners;
 
   @override
   void initState() {
@@ -240,7 +240,7 @@ class _FormDataViewState extends State<_FormDataView> {
           const Divider(height: 10),
           ...listeners.map(
             (listener) => _FrameBlockTypeWidget(
-              frameBlockType: listener,
+              shelfBlockType: listener,
               isListener: true,
               isNotifier: false,
               onTap: null,
@@ -282,7 +282,7 @@ class _FormDataViewState extends State<_FormDataView> {
                       height: 20,
                     ),
                     label: '',
-                    text: getClassName(widget.blockForm.block.frame),
+                    text: getClassName(widget.blockForm.block.shelf),
                   ),
                 ),
               ),

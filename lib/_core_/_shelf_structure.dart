@@ -1,11 +1,11 @@
 part of '../flutter_artist.dart';
 
-class FrameStructure {
+class ShelfStructure {
   final String? description;
   final Map<String, BlockFilter> blockFilters;
   final List<Block> blocks;
 
-  FrameStructure({
+  ShelfStructure({
     this.description,
     required this.blockFilters,
     required this.blocks,

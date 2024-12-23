@@ -8,8 +8,8 @@ const _isOverlayMode = false;
 
 class _FlutterArtist {
   _FlutterArtistData? _globalFluData;
-  final Map<String, FrameCreator> __frameCreatorMap = {};
-  final Map<String, Frame> __frameMap = {};
+  final Map<String, FrameCreator> __shelfCreatorMap = {};
+  final Map<String, Shelf> __shelfMap = {};
 
   int notificationFetchPeriodInSeconds = 60;
   final _FlutterArtistChangeManager _changeManager =
@@ -29,7 +29,7 @@ class _FlutterArtist {
   late final _NotificationEngine __notificationEngine;
   late final CodeFlowLogger codeFlowLogger = CodeFlowLogger();
 
-  final List<Frame> _rencentFrames = [];
+  final List<Shelf> _rencentShelves = [];
 
   final List<FluErrorListener> _errorListeners = [];
   final List<FluNotificationListener> _notificationListeners = [];
@@ -51,8 +51,8 @@ class _FlutterArtist {
   ///
   Future<void> logout({required Function() offAllAndGotoRoute}) async {
     _totalErrorCount = 0;
-    __frameMap.clear();
-    _rencentFrames.clear();
+    __shelfMap.clear();
+    _rencentShelves.clear();
     await _loggedInUserManager._logout();
     offAllAndGotoRoute();
   }
@@ -138,68 +138,68 @@ class _FlutterArtist {
     __notificationEngine.start();
   }
 
-  Map<String, Frame?> get frameMap {
-    Map<String, Frame?> m = __frameCreatorMap
-        .map((k, v) => MapEntry<String, Frame?>(k, null))
-      ..addAll(__frameMap);
+  Map<String, Shelf?> get shelfMap {
+    Map<String, Shelf?> m = __shelfCreatorMap
+        .map((k, v) => MapEntry<String, Shelf?>(k, null))
+      ..addAll(__shelfMap);
     return m;
   }
 
-  String _getFrameName(Type type) {
+  String _getShelfName(Type type) {
     return type.toString();
   }
 
-  void registerFrame<F extends Frame>(FrameCreator<F> builder) {
-    final String key = _getFrameName(F);
-    FrameCreator? mng = __frameCreatorMap[key];
+  void registerFrame<F extends Shelf>(FrameCreator<F> builder) {
+    final String key = _getShelfName(F);
+    FrameCreator? mng = __shelfCreatorMap[key];
     if (mng == null) {
-      __frameCreatorMap[key] = builder;
+      __shelfCreatorMap[key] = builder;
     }
   }
 
-  F _createFrame<F extends Frame>(String frameName) {
-    F? frame = __frameMap[frameName] as F?;
-    if (frame != null) {
-      return frame;
+  F _createShelf<F extends Shelf>(String shelfName) {
+    F? shelf = __shelfMap[shelfName] as F?;
+    if (shelf != null) {
+      return shelf;
     }
-    print("FLUTTER ARTIST DEBUG >>>>>>>>>>>>>>> create Frame: $frameName");
+    print("FLUTTER ARTIST DEBUG >>>>>>>>>>>>>>> create Frame: $shelfName");
 
-    FrameCreator? creator = __frameCreatorMap[frameName];
+    FrameCreator? creator = __shelfCreatorMap[shelfName];
     if (creator == null) {
       throw "\n**********************************************************************************************************"
-          "\n '${F.toString()}' not found. You need to call FlutterArtist.lazyPut(()=> $frameName())"
+          "\n '${F.toString()}' not found. You need to call FlutterArtist.lazyPut(()=> $shelfName())"
           "\n**********************************************************************************************************";
     }
-    frame = creator() as F;
-    __frameMap[frameName] = frame;
-    _changeManager._registerFrame(frameName, frame);
-    return frame;
+    shelf = creator() as F;
+    __shelfMap[shelfName] = shelf;
+    _changeManager._registerShelf(shelfName, shelf);
+    return shelf;
   }
 
   void _loadAll() {
-    for (String frameName in __frameCreatorMap.keys) {
-      _createFrame(frameName);
+    for (String shelfName in __shelfCreatorMap.keys) {
+      _createShelf(shelfName);
     }
   }
 
-  Frame? _findFrame(Type frameType) {
-    final String key = _getFrameName(frameType);
-    Frame? frame = __frameMap[key];
-    frame ??= _createFrame(key);
-    return frame;
+  Shelf? _findShelf(Type shelfType) {
+    final String key = _getShelfName(shelfType);
+    Shelf? shelf = __shelfMap[key];
+    shelf ??= _createShelf(key);
+    return shelf;
   }
 
-  F findFrame<F extends Frame>() {
-    final String key = _getFrameName(F);
-    Frame? frame = __frameMap[key];
-    frame ??= _createFrame(key);
-    return frame as F;
+  F findFrame<F extends Shelf>() {
+    final String key = _getShelfName(F);
+    Shelf? shelf = __shelfMap[key];
+    shelf ??= _createShelf(key);
+    return shelf as F;
   }
 
-  F? findOrNullFlu<F extends Frame>() {
-    final String key = _getFrameName(F);
-    F? frame = __frameMap[key] as F?;
-    return frame;
+  F? findOrNullFlu<F extends Shelf>() {
+    final String key = _getShelfName(F);
+    F? shelf = __shelfMap[key] as F?;
+    return shelf;
   }
 
   void addErrorListener(FluErrorListener listener) {
@@ -223,16 +223,16 @@ class _FlutterArtist {
   }
 
   bool _canShowUiComponentDialog() {
-    Frame? frame = _recentFrame();
-    return frame != null;
+    Shelf? shelf = _recentShelf();
+    return shelf != null;
   }
 
   Future<void> showUiComponentsDialog() async {
-    Frame? frame = _recentFrame();
-    if (frame == null) {
+    Shelf? shelf = _recentShelf();
+    if (shelf == null) {
       return;
     }
-    await frame.showActiveUiComponentsDialog();
+    await shelf.showActiveUiComponentsDialog();
   }
 
   Future<dynamic> executeTask({
@@ -287,7 +287,7 @@ class _FlutterArtist {
 
   Future<void> showGalleryRoomDialog() async {
     BuildContext context = adapter.getCurrentContext();
-    await _showGalleryRoomDialog(context: context, frame: null);
+    await _showGalleryRoomDialog(context: context, shelf: null);
   }
 
   Future<void> showFlowLogDialog() async {
@@ -295,17 +295,17 @@ class _FlutterArtist {
     await _showFlowLogViewerDialog(context: context);
   }
 
-  Future<void> showFrameStructure() async {
-    Frame? frame = _recentFrame();
-    if (frame == null) {
+  Future<void> showShelfStructure() async {
+    Shelf? shelf = _recentShelf();
+    if (shelf == null) {
       return;
     }
-    await frame.showFrameStructureDialog();
+    await shelf.showShelfStructureDialog();
   }
 
-  bool canShowFrameStructure() {
-    Frame? frame = _recentFrame();
-    return frame != null;
+  bool canShowShelfStructure() {
+    Shelf? shelf = _recentShelf();
+    return shelf != null;
   }
 
   Future<void> showRecentErrors() async {
@@ -350,44 +350,44 @@ class _FlutterArtist {
     }
   }
 
-  void _addRecentFrame(Frame frame) {
-    if (_rencentFrames.isEmpty) {
-      _rencentFrames.add(frame);
+  void _addRecentShelf(Shelf shelf) {
+    if (_rencentShelves.isEmpty) {
+      _rencentShelves.add(shelf);
     } else {
-      if (_rencentFrames.first == frame) {
+      if (_rencentShelves.first == shelf) {
         return;
       } else {
-        int idx = _rencentFrames.indexOf(frame);
+        int idx = _rencentShelves.indexOf(shelf);
         if (idx == -1) {
-          _rencentFrames.insert(0, frame);
+          _rencentShelves.insert(0, shelf);
         } else {
-          var temp = _rencentFrames[0];
-          _rencentFrames[0] = _rencentFrames[idx];
-          _rencentFrames[idx] = temp;
+          var temp = _rencentShelves[0];
+          _rencentShelves[0] = _rencentShelves[idx];
+          _rencentShelves[idx] = temp;
         }
       }
     }
   }
 
-  void _checkToRemoveFrame(Frame frame) {
+  void _checkToRemoveFrame(Shelf shelf) {
     // TODO.
   }
 
-  Frame? _recentFrame() {
-    return _rencentFrames.isEmpty ? null : _rencentFrames.first;
+  Shelf? _recentShelf() {
+    return _rencentShelves.isEmpty ? null : _rencentShelves.first;
   }
 
   // ===========================================================================
   // ===========================================================================
 
   // @Callable
-  Map<String, Frame> _getIndependentFrames() {
-    Map<String, Frame> notifierMap = _getNotifierFrames();
-    Map<String, Frame> listenerMap = _getListenerFrames();
-    Map<String, Frame> map = {}..addAll(__frameMap);
-    map.removeWhere((frameName, frame) =>
-        notifierMap.keys.contains(frameName) ||
-        listenerMap.keys.contains(frameName));
+  Map<String, Shelf> _getIndependentShelves() {
+    Map<String, Shelf> notifierMap = _getNotifierShelves();
+    Map<String, Shelf> listenerMap = _getListenerShelves();
+    Map<String, Shelf> map = {}..addAll(__shelfMap);
+    map.removeWhere((shelfName, shelf) =>
+        notifierMap.keys.contains(shelfName) ||
+        listenerMap.keys.contains(shelfName));
     return map;
   }
 
@@ -395,27 +395,27 @@ class _FlutterArtist {
   // ===========================================================================
 
   // @Callable
-  Map<String, Frame> _getNotifierFrames() {
-    Map<String, Frame> foundFrameMap = {};
+  Map<String, Shelf> _getNotifierShelves() {
+    Map<String, Shelf> foundShelfMap = {};
     //
-    for (Frame frame in __frameMap.values) {
-      __findNotifierFrames(
-        listenerFrame: frame,
-        foundFrameMap: foundFrameMap,
+    for (Shelf shelf in __shelfMap.values) {
+      __findNotifierShelves(
+        listenerShelf: shelf,
+        foundShelfMap: foundShelfMap,
       );
     }
-    return foundFrameMap;
+    return foundShelfMap;
   }
 
   // Private Method. Only for use in this class.
-  void __findNotifierFrames({
-    required Frame listenerFrame,
-    required Map<String, Frame> foundFrameMap,
+  void __findNotifierShelves({
+    required Shelf listenerShelf,
+    required Map<String, Shelf> foundShelfMap,
   }) {
-    for (Block rootListenerBlock in listenerFrame.rootBlocks) {
+    for (Block rootListenerBlock in listenerShelf.rootBlocks) {
       __findNotifierFrameCascade(
         listenerBlock: rootListenerBlock,
-        foundFrameMap: foundFrameMap,
+        foundFrameMap: foundShelfMap,
       );
     }
   }
@@ -423,14 +423,14 @@ class _FlutterArtist {
   // Private Method. Only for use in this class.
   void __findNotifierFrameCascade({
     required Block listenerBlock,
-    required Map<String, Frame> foundFrameMap,
+    required Map<String, Shelf> foundFrameMap,
   }) {
     for (SourceOfChange notifier in listenerBlock.listenForChangesFrom ?? []) {
-      Type notifierFluType = notifier.frameType;
-      String frameName = _getFrameName(notifierFluType);
-      Frame? notifierFlu = __frameMap[frameName];
-      if (notifierFlu != null) {
-        foundFrameMap[frameName] = notifierFlu;
+      Type notifierShelfType = notifier.shelfType;
+      String shelfName = _getShelfName(notifierShelfType);
+      Shelf? notifierShelf = __shelfMap[shelfName];
+      if (notifierShelf != null) {
+        foundFrameMap[shelfName] = notifierShelf;
       }
     }
     for (Block childListenerBlock in listenerBlock.childBlocks) {
@@ -445,21 +445,21 @@ class _FlutterArtist {
   // ===========================================================================
 
   // @Callable
-  Map<String, Frame> _getListenerFrames() {
-    Map<String, Frame> foundFrameMap = {};
+  Map<String, Shelf> _getListenerShelves() {
+    Map<String, Shelf> foundShelfMap = {};
     //
-    for (String frameName in __frameMap.keys) {
-      Frame frame = __frameMap[frameName]!;
+    for (String shelfName in __shelfMap.keys) {
+      Shelf shelf = __shelfMap[shelfName]!;
 
-      for (Block rootBlock in frame.rootBlocks) {
+      for (Block rootBlock in shelf.rootBlocks) {
         bool found = __foundListenerFrameCascade(block: rootBlock);
         if (found) {
-          foundFrameMap[frameName] = frame;
+          foundShelfMap[shelfName] = shelf;
           break;
         }
       }
     }
-    return foundFrameMap;
+    return foundShelfMap;
   }
 
   // Private Method. Only for use in this class.
@@ -481,14 +481,14 @@ class _FlutterArtist {
   // ===========================================================================
 
   // Callable.
-  List<FrameBlockType> _getNotifierBlocks({
+  List<ShelfBlockType> _getNotifierBlocks({
     required Block listenerBlock,
   }) {
-    List<FrameBlockType> foundFluBlockTypes = [];
+    List<ShelfBlockType> foundFluBlockTypes = [];
     for (SourceOfChange notifier in listenerBlock.listenForChangesFrom ?? []) {
       foundFluBlockTypes.add(
-        FrameBlockType(
-          frameType: notifier.frameType,
+        ShelfBlockType(
+          shelfType: notifier.shelfType,
           blockType: notifier.blockType,
         ),
       );
@@ -500,15 +500,15 @@ class _FlutterArtist {
   // ===========================================================================
 
   // Callable.
-  List<FrameBlockType> _getListenerBlocks({required Block notifierBlock}) {
-    List<FrameBlockType> foundFluBlockTypes = [];
+  List<ShelfBlockType> _getListenerBlocks({required Block notifierBlock}) {
+    List<ShelfBlockType> foundFluBlockTypes = [];
 
-    for (String frameName in __frameMap.keys) {
-      Frame? frame = __frameMap[frameName];
-      if (frame == null) {
+    for (String shelfName in __shelfMap.keys) {
+      Shelf? shelf = __shelfMap[shelfName];
+      if (shelf == null) {
         continue;
       }
-      for (Block rootBlock in frame.rootBlocks) {
+      for (Block rootBlock in shelf.rootBlocks) {
         __findListenerBlocksCascade(
           notifierBlock: notifierBlock,
           blockToCheck: rootBlock,
@@ -523,14 +523,14 @@ class _FlutterArtist {
   void __findListenerBlocksCascade({
     required Block notifierBlock,
     required Block blockToCheck,
-    required List<FrameBlockType> foundFluBlockTypes,
+    required List<ShelfBlockType> foundFluBlockTypes,
   }) {
     for (SourceOfChange notifier in blockToCheck.listenForChangesFrom ?? []) {
-      if (notifier.frameType == notifierBlock.frame.runtimeType &&
+      if (notifier.shelfType == notifierBlock.shelf.runtimeType &&
           notifier.blockType == notifierBlock.runtimeType) {
         foundFluBlockTypes.add(
-          FrameBlockType(
-            frameType: blockToCheck.frame.runtimeType,
+          ShelfBlockType(
+            shelfType: blockToCheck.shelf.runtimeType,
             blockType: blockToCheck.runtimeType,
           ),
         );

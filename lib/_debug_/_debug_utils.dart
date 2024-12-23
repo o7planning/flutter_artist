@@ -1,8 +1,8 @@
 part of '../flutter_artist.dart';
 
-_GraphItem _toRootDebugGraphItem(Frame frame) {
-  _GraphItem rootItem = _GraphItem.frame(frame);
-  for (Block rootBlock in frame.rootBlocks) {
+_GraphItem _toRootDebugGraphItem(Shelf shelf) {
+  _GraphItem rootItem = _GraphItem.shelf(shelf);
+  for (Block rootBlock in shelf.rootBlocks) {
     _GraphItem item = _toDebugGraphItemCascade(rootBlock);
     rootItem.children.add(item);
   }

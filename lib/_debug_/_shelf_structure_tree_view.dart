@@ -1,13 +1,13 @@
 part of '../flutter_artist.dart';
 
 class _FrameStructureTreeView extends StatefulWidget {
-  final Frame frame;
+  final Shelf shelf;
   final Block? selectedBlock;
   final Function(Block block) onSelectBlock;
 
   const _FrameStructureTreeView({
     required super.key,
-    required this.frame,
+    required this.shelf,
     required this.selectedBlock,
     required this.onSelectBlock,
   });
@@ -69,13 +69,13 @@ class _FrameStructureTreeViewState extends State<_FrameStructureTreeView> {
           bool isListener = false;
           bool isNotifier = false;
 
-          if (data is Frame) {
+          if (data is Shelf) {
             title = getClassName(data);
           } else if (data is Block) {
             title = getClassName(data);
-            List<FrameBlockType> listeners =
+            List<ShelfBlockType> listeners =
                 FlutterArtist._getListenerBlocks(notifierBlock: data);
-            List<FrameBlockType> notifiers =
+            List<ShelfBlockType> notifiers =
                 FlutterArtist._getNotifierBlocks(listenerBlock: data);
             isListener = notifiers.isNotEmpty;
             isNotifier = listeners.isNotEmpty;
@@ -141,16 +141,16 @@ class _FrameStructureTreeViewState extends State<_FrameStructureTreeView> {
   }
 
   TreeNode _getRootWithChildren() {
-    TreeNode frameNode = TreeNode(
-      key: "Flu-${getClassName(widget.frame)}",
-      data: widget.frame,
+    TreeNode shelfNode = TreeNode(
+      key: "Shelf-${getClassName(widget.shelf)}",
+      data: widget.shelf,
       parent: null,
     );
-    rootTreeNode = TreeNode.root()..add(frameNode);
+    rootTreeNode = TreeNode.root()..add(shelfNode);
 
-    List<Block> rootBlocks = widget.frame.rootBlocks;
+    List<Block> rootBlocks = widget.shelf.rootBlocks;
     for (Block rootBlock in rootBlocks) {
-      _addChildCascade(frameNode, rootBlock);
+      _addChildCascade(shelfNode, rootBlock);
     }
 
     return rootTreeNode;

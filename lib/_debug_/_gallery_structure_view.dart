@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
 class _GalleryStructureView extends StatefulWidget {
-  final Function(Frame frame) onSelectFrameToShowGraph;
+  final Function(Shelf shelf) onSelectFrameToShowGraph;
 
   const _GalleryStructureView({
     super.key,
@@ -18,10 +18,10 @@ class _GalleryStructureViewState extends State<_GalleryStructureView> {
   final _GalleryStructureGraphController globalFluStructureGraphController =
       _GalleryStructureGraphController();
 
-  final _FrameRelationshipController frameRelationshipController =
-      _FrameRelationshipController();
+  final _ShelfRelationshipController shelfRelationshipController =
+      _ShelfRelationshipController();
 
-  Frame? _selectedFrame;
+  Shelf? _selectedShelf;
 
   @override
   Widget build(BuildContext context) {
@@ -32,23 +32,23 @@ class _GalleryStructureViewState extends State<_GalleryStructureView> {
           child: _GalleryStructureGraphView(
             controller: globalFluStructureGraphController,
             onSelectFrameToShowGraph: widget.onSelectFrameToShowGraph,
-            onSelectFrameToShowTreeView: (Frame frame) {
+            onSelectFrameToShowTreeView: (Shelf shelf) {
               setState(() {
-                _selectedFrame = frame;
+                _selectedShelf = shelf;
               });
             },
           ),
         ),
         const Divider(),
         Expanded(
-          child: _FrameRelationshipView(
-            frameRelationshipController: frameRelationshipController,
-            frame: _selectedFrame,
-            onSelectFrameBlockType: (FrameBlockType frameBlockType) {
-              Type frameType = frameBlockType.frameType;
-              Frame? frame = FlutterArtist._findFrame(frameType);
-              if (frame != null) {
-                globalFluStructureGraphController.setSelectedFrame(frame);
+          child: _ShelfRelationshipView(
+            shelfRelationshipController: shelfRelationshipController,
+            shelf: _selectedShelf,
+            onSelectShelfBlockType: (ShelfBlockType shelfBlockType) {
+              Type shelfType = shelfBlockType.shelfType;
+              Shelf? shelf = FlutterArtist._findShelf(shelfType);
+              if (shelf != null) {
+                globalFluStructureGraphController.setSelectedShelf(shelf);
               }
             },
           ),

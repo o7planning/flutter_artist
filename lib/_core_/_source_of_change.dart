@@ -1,37 +1,37 @@
 part of '../flutter_artist.dart';
 
 class SourceOfChange extends Equatable {
-  Type frameType;
+  Type shelfType;
   Type blockType;
 
   SourceOfChange({
-    required this.frameType,
+    required this.shelfType,
     required this.blockType,
   });
 
   @override
-  List<Object?> get props => [frameType, blockType];
+  List<Object?> get props => [shelfType, blockType];
 
   @override
   String toString() {
-    return "SourceOfChange[$frameType >> $blockType]";
+    return "SourceOfChange[$shelfType >> $blockType]";
   }
 }
 
-class FrameBlockType extends Equatable {
-  Type frameType;
+class ShelfBlockType extends Equatable {
+  Type shelfType;
   Type blockType;
 
-  FrameBlockType({
-    required this.frameType,
+  ShelfBlockType({
+    required this.shelfType,
     required this.blockType,
   });
 
   @override
-  List<Object?> get props => [frameType, blockType];
+  List<Object?> get props => [shelfType, blockType];
 
   @override
   String toString() {
-    return "FluBlockType[$frameType >> $blockType]";
+    return "FluBlockType[$shelfType >> $blockType]";
   }
 }

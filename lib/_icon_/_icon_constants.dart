@@ -43,7 +43,7 @@ const IconData _breadcrumbIconData = cupertino.CupertinoIcons.arrow_right;
 
 const IconData _errorIconData = cupertino.CupertinoIcons.exclamationmark_square;
 
-const IconData _frameStructureIconData = cupertino.CupertinoIcons.layers_alt;
+const IconData _shelfStructureIconData = cupertino.CupertinoIcons.layers_alt;
 
 const IconData _galleryRoomIconData = cupertino.CupertinoIcons.globe;
 

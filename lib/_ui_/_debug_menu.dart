@@ -65,9 +65,9 @@ class _DebugMenuState extends State<DebugMenu> implements FluErrorListener {
                       onTab: _showRecentErrors,
                     ),
                   if (isSystemUser && hasRecentErrors) _divider(),
-                  if (isSystemUser && FlutterArtist.canShowFrameStructure())
+                  if (isSystemUser && FlutterArtist.canShowShelfStructure())
                     _buildPopupMenuItem(
-                      iconData: _frameStructureIconData,
+                      iconData: _shelfStructureIconData,
                       title: 'Frame Structure',
                       onTab: _showFluStructure,
                     ),
@@ -167,7 +167,7 @@ class _DebugMenuState extends State<DebugMenu> implements FluErrorListener {
 
   Future<void> _showFluStructure() async {
     Navigator.pop(context, null);
-    await FlutterArtist.showFrameStructure();
+    await FlutterArtist.showShelfStructure();
   }
 
   Future<void> _showRecentErrors() async {
