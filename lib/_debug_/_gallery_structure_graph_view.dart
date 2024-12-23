@@ -27,7 +27,7 @@ class _GalleryStructureGraphViewState
   String? selectedFluName;
 
   final BuchheimWalkerConfiguration config =
-      GalerryBuchheimWalkerConfiguration();
+      _GalerryBuchheimWalkerConfiguration();
 
   final EdgeInsets boundaryMargin = const EdgeInsets.only(left: 20, right: 20);
 

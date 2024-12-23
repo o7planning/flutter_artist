@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-class CustomBuchheimWalkerConfiguration extends BuchheimWalkerConfiguration {
+class _CustomBuchheimWalkerConfiguration extends BuchheimWalkerConfiguration {
   @override
   int siblingSeparation = 40;
 
@@ -26,7 +26,7 @@ class CustomBuchheimWalkerConfiguration extends BuchheimWalkerConfiguration {
   }
 }
 
-class GalerryBuchheimWalkerConfiguration extends BuchheimWalkerConfiguration {
+class _GalerryBuchheimWalkerConfiguration extends BuchheimWalkerConfiguration {
   @override
   int siblingSeparation = 20;
 

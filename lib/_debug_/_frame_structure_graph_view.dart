@@ -18,7 +18,7 @@ class _FrameStructureGraphView extends StatefulWidget {
 class _FrameStructureGraphViewState extends State<_FrameStructureGraphView> {
   final Graph graph = Graph()..isTree = false;
   BuchheimWalkerConfiguration configuration =
-      CustomBuchheimWalkerConfiguration();
+      _CustomBuchheimWalkerConfiguration();
   late Map<String, _GraphItem> graphItemMap;
 
   String? _highlighBlockFilterName;
