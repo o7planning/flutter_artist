@@ -1980,17 +1980,17 @@ abstract class Block<I extends Object, D extends Object,
           isLibCode: false,
           route: null,
           object: this,
-          methodName: "callApiRefreshItem",
+          methodName: "callApiLoadItemDetail",
           parameters: {
             "item": item,
           },
         );
         //
-        result = await callApiRefreshItem(item: item);
+        result = await callApiLoadItemDetail(item: item);
       } catch (e, stacktrace) {
         _handleError(
           className: getClassName(this),
-          methodName: "callApiRefreshItem",
+          methodName: "callApiLoadItemDetail",
           error: e,
           stackTrace: stacktrace,
           showSnackbar: true,
@@ -2000,7 +2000,7 @@ abstract class Block<I extends Object, D extends Object,
       }
       if (result.errorMessage != null) {
         _handleRestError(
-          methodName: "callApiRefreshItem",
+          methodName: "callApiLoadItemDetail",
           message: result.errorMessage!,
           errorDetails: result.errorDetails,
           showSnackbar: true,
@@ -2413,7 +2413,7 @@ abstract class Block<I extends Object, D extends Object,
   // Call delete instead of
   Future<ApiResult<void>> callApiDelete({required I item});
 
-  Future<ApiResult<D>> callApiRefreshItem({required I item});
+  Future<ApiResult<D>> callApiLoadItemDetail({required I item});
 
   bool canCreate() {
     if (blockForm == null || this.__isPreparingFormCreation) {
