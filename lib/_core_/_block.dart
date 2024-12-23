@@ -1828,7 +1828,7 @@ abstract class Block<I extends Object, D extends Object,
     }
   }
 
-  Future<bool> loadItemDetailAndSetAsCurrent({
+  Future<bool> refreshItemAndSetAsCurrent({
     required I item,
     required bool forceLoadFormData,
     Function()? route,
@@ -1837,7 +1837,7 @@ abstract class Block<I extends Object, D extends Object,
       isLibCode: true,
       route: route,
       object: this,
-      methodName: "loadItemDetailAndSetAsCurrent",
+      methodName: "refreshItemAndSetAsCurrent",
       parameters: {
         "item": item,
         "forceLoadFormData": forceLoadFormData,
@@ -1856,39 +1856,6 @@ abstract class Block<I extends Object, D extends Object,
     }
     return false;
   }
-
-  ///
-  /// Load Item Detail.
-  ///
-  // Future<bool> loadItemDetailToEdit({
-  //   required I item,
-  //   required Function()? route,
-  // }) async {
-  //   FlutterArtist.codeFlowLogger._addMethodCall(
-  //     isLibCode: true,
-  //     route: route,
-  //     object: this,
-  //     methodName: "loadItemDetailToEdit",
-  //     parameters: {
-  //       "item": item,
-  //     },
-  //   );
-  //   //
-  //   const bool forceFormTrue = true;
-  //
-  //   bool success = await _prepareToShowOrEditWithOverlayAndRestorable(
-  //     item: item,
-  //     justQueried: false,
-  //     suggestedSelection: null,
-  //     forceForm: forceFormTrue,
-  //   );
-  //
-  //   if (success) {
-  //     _executeRoute(route: route);
-  //     return true;
-  //   }
-  //   return false;
-  // }
 
   Future<bool> _prepareToShowOrEditWithOverlayAndRestorable({
     required SuggestedSelection? suggestedSelection,
@@ -1980,17 +1947,17 @@ abstract class Block<I extends Object, D extends Object,
           isLibCode: false,
           route: null,
           object: this,
-          methodName: "callApiLoadItemDetail",
+          methodName: "callApiRefreshItem",
           parameters: {
             "item": item,
           },
         );
         //
-        result = await callApiLoadItemDetail(item: item);
+        result = await callApiRefreshItem(item: item);
       } catch (e, stacktrace) {
         _handleError(
           className: getClassName(this),
-          methodName: "callApiLoadItemDetail",
+          methodName: "callApiRefreshItem",
           error: e,
           stackTrace: stacktrace,
           showSnackbar: true,
@@ -2000,7 +1967,7 @@ abstract class Block<I extends Object, D extends Object,
       }
       if (result.errorMessage != null) {
         _handleRestError(
-          methodName: "callApiLoadItemDetail",
+          methodName: "callApiRefreshItem",
           message: result.errorMessage!,
           errorDetails: result.errorDetails,
           showSnackbar: true,
@@ -2413,7 +2380,7 @@ abstract class Block<I extends Object, D extends Object,
   // Call delete instead of
   Future<ApiResult<void>> callApiDelete({required I item});
 
-  Future<ApiResult<D>> callApiLoadItemDetail({required I item});
+  Future<ApiResult<D>> callApiRefreshItem({required I item});
 
   bool canCreate() {
     if (blockForm == null || this.__isPreparingFormCreation) {
