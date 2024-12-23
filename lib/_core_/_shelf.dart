@@ -136,7 +136,7 @@ abstract class Shelf {
 
   Future<void> showShelfStructureDialog() async {
     BuildContext context = Storage.adapter.getCurrentContext();
-    await _showGalleryRoomDialog(context: context, shelf: this);
+    await _showStorageDialog(context: context, shelf: this);
   }
 
   Future<void> showActiveUiComponentsDialog() async {

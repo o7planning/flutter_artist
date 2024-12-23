@@ -1,22 +1,22 @@
 part of '../flutter_artist.dart';
 
-class _GalleryStructureView extends StatefulWidget {
+class _StorageStructureView extends StatefulWidget {
   final Function(Shelf shelf) onSelectShelfToShowGraph;
 
-  const _GalleryStructureView({
+  const _StorageStructureView({
     super.key,
     required this.onSelectShelfToShowGraph,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _GalleryStructureViewState();
+    return _StorageStructureViewState();
   }
 }
 
-class _GalleryStructureViewState extends State<_GalleryStructureView> {
-  final _GalleryStructureGraphController globalFluStructureGraphController =
-      _GalleryStructureGraphController();
+class _StorageStructureViewState extends State<_StorageStructureView> {
+  final _StorageStructureGraphController globalFluStructureGraphController =
+      _StorageStructureGraphController();
 
   final _ShelfRelationshipController shelfRelationshipController =
       _ShelfRelationshipController();
@@ -29,7 +29,7 @@ class _GalleryStructureViewState extends State<_GalleryStructureView> {
       children: [
         SizedBox(
           height: 130,
-          child: _GalleryStructureGraphView(
+          child: _StorageStructureGraphView(
             controller: globalFluStructureGraphController,
             onSelectShelfToShowGraph: widget.onSelectShelfToShowGraph,
             onSelectShelfToShowTreeView: (Shelf shelf) {

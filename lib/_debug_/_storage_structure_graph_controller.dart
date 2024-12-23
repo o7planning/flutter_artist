@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-class _GalleryStructureGraphController {
+class _StorageStructureGraphController {
   Function(Shelf shelf)? _setSelectedShelf;
 
   void setSelectedShelf(Shelf shelf) {

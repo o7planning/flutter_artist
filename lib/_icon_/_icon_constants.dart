@@ -45,7 +45,7 @@ const IconData _errorIconData = cupertino.CupertinoIcons.exclamationmark_square;
 
 const IconData _shelfStructureIconData = cupertino.CupertinoIcons.layers_alt;
 
-const IconData _galleryRoomIconData = cupertino.CupertinoIcons.globe;
+const IconData _storageIconData = cupertino.CupertinoIcons.globe;
 
 const IconData _flowLogIconData = cupertino.CupertinoIcons.flowchart;
 

@@ -1,23 +1,23 @@
 part of '../flutter_artist.dart';
 
-class _GalleryStructureGraphView extends StatefulWidget {
-  final _GalleryStructureGraphController controller;
+class _StorageStructureGraphView extends StatefulWidget {
+  final _StorageStructureGraphController controller;
   final Function(Shelf shelf) onSelectShelfToShowGraph;
   final Function(Shelf shelf) onSelectShelfToShowTreeView;
 
-  const _GalleryStructureGraphView({
+  const _StorageStructureGraphView({
     required this.controller,
     required this.onSelectShelfToShowGraph,
     required this.onSelectShelfToShowTreeView,
   });
 
   @override
-  State<_GalleryStructureGraphView> createState() =>
-      _GalleryStructureGraphViewState();
+  State<_StorageStructureGraphView> createState() =>
+      _StorageStructureGraphViewState();
 }
 
-class _GalleryStructureGraphViewState
-    extends State<_GalleryStructureGraphView> {
+class _StorageStructureGraphViewState
+    extends State<_StorageStructureGraphView> {
   final Set<NliType> nliTypes = {
     NliType.independent,
     NliType.listener,

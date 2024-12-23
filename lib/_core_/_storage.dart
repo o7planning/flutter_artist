@@ -284,9 +284,9 @@ class _Storage {
     return adapter.isOverlaysOpen();
   }
 
-  Future<void> showGalleryRoomDialog() async {
+  Future<void> showStorageDialog() async {
     BuildContext context = adapter.getCurrentContext();
-    await _showGalleryRoomDialog(context: context, shelf: null);
+    await _showStorageDialog(context: context, shelf: null);
   }
 
   Future<void> showFlowLogDialog() async {

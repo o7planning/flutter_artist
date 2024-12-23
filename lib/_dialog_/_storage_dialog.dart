@@ -3,21 +3,21 @@ part of '../flutter_artist.dart';
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-class _GalleryRoomDialog extends StatefulWidget {
+class _StorageDialog extends StatefulWidget {
   final Shelf? shelf;
 
-  const _GalleryRoomDialog({
+  const _StorageDialog({
     required this.shelf,
     super.key,
   });
 
   @override
-  State<_GalleryRoomDialog> createState() {
-    return _GalleryRoomDialogState();
+  State<_StorageDialog> createState() {
+    return _StorageDialogState();
   }
 }
 
-class _GalleryRoomDialogState extends State<_GalleryRoomDialog> {
+class _StorageDialogState extends State<_StorageDialog> {
   Shelf? _currentShelf;
 
   @override
@@ -53,7 +53,7 @@ class _GalleryRoomDialogState extends State<_GalleryRoomDialog> {
     return Stack(
       children: [
         _currentShelf == null
-            ? _GalleryStructureView(
+            ? _StorageStructureView(
                 onSelectShelfToShowGraph: _setDetailedFlu,
               )
             : _ShelfStructureGraphView(
@@ -102,14 +102,14 @@ class _GalleryRoomDialogState extends State<_GalleryRoomDialog> {
   }
 }
 
-Future<void> _showGalleryRoomDialog({
+Future<void> _showStorageDialog({
   required BuildContext context,
   required Shelf? shelf,
 }) async {
   await showDialog(
     context: context,
     builder: (BuildContext context) {
-      return _GalleryRoomDialog(shelf: shelf);
+      return _StorageDialog(shelf: shelf);
     },
   );
 }

@@ -79,9 +79,9 @@ class _DebugMenuState extends State<DebugMenu> implements FluErrorListener {
                     ),
                   if (isSystemUser)
                     _buildPopupMenuItem(
-                      iconData: _galleryRoomIconData,
-                      title: 'Gallery Room',
-                      onTab: _showGalleryRoom,
+                      iconData: _storageIconData,
+                      title: 'Storage',
+                      onTab: _showStorage,
                     ),
                   if (isSystemUser) _divider(),
                   if (isSystemUser)
@@ -149,9 +149,9 @@ class _DebugMenuState extends State<DebugMenu> implements FluErrorListener {
     Storage._showRestDebugDialog!(context);
   }
 
-  Future<void> _showGalleryRoom() async {
+  Future<void> _showStorage() async {
     Navigator.pop(context, null);
-    await Storage.showGalleryRoomDialog();
+    await Storage.showStorageDialog();
   }
 
   void _clearCodeFlow() {
