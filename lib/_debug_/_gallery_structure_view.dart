@@ -1,23 +1,22 @@
 part of '../flutter_artist.dart';
 
-class _FlutterArtistStructureView extends StatefulWidget {
+class _GalleryStructureView extends StatefulWidget {
   final Function(Frame frame) onSelectFrameToShowGraph;
 
-  const _FlutterArtistStructureView({
+  const _GalleryStructureView({
     super.key,
     required this.onSelectFrameToShowGraph,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return __FlutterArtistStructureViewState();
+    return _GalleryStructureViewState();
   }
 }
 
-class __FlutterArtistStructureViewState
-    extends State<_FlutterArtistStructureView> {
-  final _GlobalFluStructureGraphController globalFluStructureGraphController =
-      _GlobalFluStructureGraphController();
+class _GalleryStructureViewState extends State<_GalleryStructureView> {
+  final _GalleryStructureGraphController globalFluStructureGraphController =
+      _GalleryStructureGraphController();
 
   final _FrameRelationshipController frameRelationshipController =
       _FrameRelationshipController();
@@ -30,7 +29,7 @@ class __FlutterArtistStructureViewState
       children: [
         SizedBox(
           height: 130,
-          child: _GlobalFluStructureGraphView(
+          child: _GalleryStructureGraphView(
             controller: globalFluStructureGraphController,
             onSelectFrameToShowGraph: widget.onSelectFrameToShowGraph,
             onSelectFrameToShowTreeView: (Frame frame) {

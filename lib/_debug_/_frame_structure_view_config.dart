@@ -26,7 +26,7 @@ class CustomBuchheimWalkerConfiguration extends BuchheimWalkerConfiguration {
   }
 }
 
-class GlobalFluBuchheimWalkerConfiguration extends BuchheimWalkerConfiguration {
+class GalerryBuchheimWalkerConfiguration extends BuchheimWalkerConfiguration {
   @override
   int siblingSeparation = 20;
 

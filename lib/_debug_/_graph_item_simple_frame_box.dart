@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-class _GraphItemSimpleFluBox extends StatefulWidget {
+class _GraphItemSimpleFrameBox extends StatefulWidget {
   final bool isRoot;
   final bool isSelected;
   final bool isListener;
@@ -10,7 +10,7 @@ class _GraphItemSimpleFluBox extends StatefulWidget {
   final Function()? onSelectFluToShowGraph;
   final Function()? onSelectFluToShowTreeView;
 
-  const _GraphItemSimpleFluBox({
+  const _GraphItemSimpleFrameBox({
     super.key,
     required this.isRoot,
     required this.isSelected,
@@ -23,10 +23,11 @@ class _GraphItemSimpleFluBox extends StatefulWidget {
   });
 
   @override
-  State<_GraphItemSimpleFluBox> createState() => _GraphItemSimpleFluBoxState();
+  State<_GraphItemSimpleFrameBox> createState() =>
+      _GraphItemSimpleFrameBoxState();
 }
 
-class _GraphItemSimpleFluBoxState extends State<_GraphItemSimpleFluBox> {
+class _GraphItemSimpleFrameBoxState extends State<_GraphItemSimpleFrameBox> {
   static const double extraWidth = 16;
   static const double frameIconWidth = 40;
   static const double frameIconHeight = 32;

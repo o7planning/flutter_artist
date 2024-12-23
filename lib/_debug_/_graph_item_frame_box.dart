@@ -1,20 +1,20 @@
 part of '../flutter_artist.dart';
 
-class _GraphItemFluBox extends StatefulWidget {
+class _GraphItemFrameBox extends StatefulWidget {
   final Function() gotoFlutterArtist;
   final Frame frame;
 
-  const _GraphItemFluBox({
+  const _GraphItemFrameBox({
     super.key,
     required this.gotoFlutterArtist,
     required this.frame,
   });
 
   @override
-  State<_GraphItemFluBox> createState() => _GraphItemFluBoxState();
+  State<_GraphItemFrameBox> createState() => _GraphItemFrameBoxState();
 }
 
-class _GraphItemFluBoxState extends State<_GraphItemFluBox> {
+class _GraphItemFrameBoxState extends State<_GraphItemFrameBox> {
   static const double _graphBoxImageWidth = 40;
   static const double _graphBoxImageHeight = 32;
 

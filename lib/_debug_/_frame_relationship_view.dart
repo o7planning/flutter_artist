@@ -55,7 +55,7 @@ class _FrameRelationshipViewState extends State<_FrameRelationshipView> {
       children: [
         SizedBox(
           width: 300,
-          child: _FluStructureTreeView(
+          child: _FrameStructureTreeView(
             key: Key("Tree-${getClassName(widget.frame!)}"),
             frame: widget.frame!,
             selectedBlock: selectedBlock,

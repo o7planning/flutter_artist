@@ -53,10 +53,10 @@ class _GalleryRoomDialogState extends State<_GalleryRoomDialog> {
     return Stack(
       children: [
         _currentFrame == null
-            ? _FlutterArtistStructureView(
+            ? _GalleryStructureView(
                 onSelectFrameToShowGraph: _setDetailedFlu,
               )
-            : _FluStructureGraphView(
+            : _FrameStructureGraphView(
                 frame: _currentFrame!,
                 onPressedBack: () {
                   _setDetailedFlu(null);

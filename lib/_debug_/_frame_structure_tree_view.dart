@@ -1,11 +1,11 @@
 part of '../flutter_artist.dart';
 
-class _FluStructureTreeView extends StatefulWidget {
+class _FrameStructureTreeView extends StatefulWidget {
   final Frame frame;
   final Block? selectedBlock;
   final Function(Block block) onSelectBlock;
 
-  const _FluStructureTreeView({
+  const _FrameStructureTreeView({
     required super.key,
     required this.frame,
     required this.selectedBlock,
@@ -14,11 +14,11 @@ class _FluStructureTreeView extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return __FluStructureTreeViewState();
+    return _FrameStructureTreeViewState();
   }
 }
 
-class __FluStructureTreeViewState extends State<_FluStructureTreeView> {
+class _FrameStructureTreeViewState extends State<_FrameStructureTreeView> {
   TreeViewController<dynamic, TreeNode<dynamic>>? _treeViewController;
   late TreeNode<dynamic> rootTreeNode;
   TreeNode<dynamic>? _currentNode;

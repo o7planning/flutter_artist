@@ -59,7 +59,7 @@ class _FormDataInfoDialogState extends State<_FormDataInfoDialog> {
                 });
               },
             )
-          : _FluStructureGraphView(
+          : _FrameStructureGraphView(
               frame: widget.blockForm.block.frame,
               onPressedBack: () {
                 setState(() {

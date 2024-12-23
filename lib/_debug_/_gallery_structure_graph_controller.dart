@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-class _GlobalFluStructureGraphController {
+class _GalleryStructureGraphController {
   Function(Frame frame)? _setSelectedFrame;
 
   void setSelectedFrame(Frame frame) {

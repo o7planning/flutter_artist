@@ -1,23 +1,23 @@
 part of '../flutter_artist.dart';
 
-class _GlobalFluStructureGraphView extends StatefulWidget {
-  final _GlobalFluStructureGraphController controller;
+class _GalleryStructureGraphView extends StatefulWidget {
+  final _GalleryStructureGraphController controller;
   final Function(Frame frame) onSelectFrameToShowGraph;
   final Function(Frame frame) onSelectFrameToShowTreeView;
 
-  const _GlobalFluStructureGraphView({
+  const _GalleryStructureGraphView({
     required this.controller,
     required this.onSelectFrameToShowGraph,
     required this.onSelectFrameToShowTreeView,
   });
 
   @override
-  State<_GlobalFluStructureGraphView> createState() =>
-      __GlobalFluStructureGraphViewState();
+  State<_GalleryStructureGraphView> createState() =>
+      _GalleryStructureGraphViewState();
 }
 
-class __GlobalFluStructureGraphViewState
-    extends State<_GlobalFluStructureGraphView> {
+class _GalleryStructureGraphViewState
+    extends State<_GalleryStructureGraphView> {
   final Set<NliType> nliTypes = {
     NliType.independent,
     NliType.listener,
@@ -27,7 +27,7 @@ class __GlobalFluStructureGraphViewState
   String? selectedFluName;
 
   final BuchheimWalkerConfiguration config =
-      GlobalFluBuchheimWalkerConfiguration();
+      GalerryBuchheimWalkerConfiguration();
 
   final EdgeInsets boundaryMargin = const EdgeInsets.only(left: 20, right: 20);
 
@@ -260,7 +260,7 @@ class __GlobalFluStructureGraphViewState
     if (item.isRoot) {
       return const SizedBox(width: 10, height: 10);
     } else {
-      return _GraphItemSimpleFluBox(
+      return _GraphItemSimpleFrameBox(
         isRoot: item.isRoot,
         isSelected: item.frameName == selectedFluName,
         isListener: item.isListener,

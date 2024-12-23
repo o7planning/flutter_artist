@@ -1,20 +1,21 @@
 part of '../flutter_artist.dart';
 
-class _FluStructureGraphView extends StatefulWidget {
+class _FrameStructureGraphView extends StatefulWidget {
   final Function() onPressedBack;
   final Frame frame;
 
-  const _FluStructureGraphView({
+  const _FrameStructureGraphView({
     required this.frame,
     required this.onPressedBack,
     super.key,
   });
 
   @override
-  State<_FluStructureGraphView> createState() => _FluStructureGraphViewState();
+  State<_FrameStructureGraphView> createState() =>
+      _FrameStructureGraphViewState();
 }
 
-class _FluStructureGraphViewState extends State<_FluStructureGraphView> {
+class _FrameStructureGraphViewState extends State<_FrameStructureGraphView> {
   final Graph graph = Graph()..isTree = false;
   BuchheimWalkerConfiguration configuration =
       CustomBuchheimWalkerConfiguration();
@@ -126,7 +127,7 @@ class _FluStructureGraphViewState extends State<_FluStructureGraphView> {
         // width: itemWidth,
         // height: itemHeight,
         child: item.frame != null
-            ? _GraphItemFluBox(
+            ? _GraphItemFrameBox(
                 frame: item.frame!,
                 gotoFlutterArtist: widget.onPressedBack,
               )
