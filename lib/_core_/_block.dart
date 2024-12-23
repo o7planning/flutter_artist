@@ -1831,7 +1831,7 @@ abstract class Block<I extends Object, D extends Object,
   ///
   /// Load Item Detail.
   ///
-  Future<bool> loadItemToShowOrEdit({
+  Future<bool> loadItemDetailToEdit({
     required I item,
     required Function()? route,
   }) async {
@@ -1839,7 +1839,7 @@ abstract class Block<I extends Object, D extends Object,
       isLibCode: true,
       route: route,
       object: this,
-      methodName: "loadItemToShowOrEdit",
+      methodName: "loadItemDetailToEdit",
       parameters: {
         "item": item,
       },
@@ -2132,7 +2132,7 @@ abstract class Block<I extends Object, D extends Object,
     return true;
   }
 
-  Future<bool> show({
+  Future<bool> loadItemDetailToShow({
     required I item,
     Function()? route,
   }) async {
@@ -2140,7 +2140,7 @@ abstract class Block<I extends Object, D extends Object,
       isLibCode: true,
       route: route,
       object: this,
-      methodName: "show",
+      methodName: "loadItemDetailToShow",
       parameters: {
         "item": item,
       },
