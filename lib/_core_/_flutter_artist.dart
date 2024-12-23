@@ -149,7 +149,7 @@ class _FlutterArtist {
     return type.toString();
   }
 
-  void registerFrame<F extends Shelf>(FrameCreator<F> builder) {
+  void registerShelf<F extends Shelf>(FrameCreator<F> builder) {
     final String key = _getShelfName(F);
     FrameCreator? mng = __shelfCreatorMap[key];
     if (mng == null) {
@@ -189,7 +189,7 @@ class _FlutterArtist {
     return shelf;
   }
 
-  F findFrame<F extends Shelf>() {
+  F findShelf<F extends Shelf>() {
     final String key = _getShelfName(F);
     Shelf? shelf = __shelfMap[key];
     shelf ??= _createShelf(key);
