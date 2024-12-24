@@ -19,7 +19,7 @@ class _LoggedInUserManager {
 
   // Callable in this Library.
   Future<void> _initFromLocal() async {
-    LoggedInUserAdapter? loggedInUserAdapter = Storage.loggedInUserAdapter;
+    LoggedInUserAdapter? loggedInUserAdapter = StorageX.loggedInUserAdapter;
     if (loggedInUserAdapter == null) {
       return;
     }
@@ -40,7 +40,7 @@ class _LoggedInUserManager {
   }
 
   Future<void> setOrUpdateLoggedInUser(ILoggedInUser loggedInUser) async {
-    LoggedInUserAdapter? loggedInUserAdapter = Storage.loggedInUserAdapter;
+    LoggedInUserAdapter? loggedInUserAdapter = StorageX.loggedInUserAdapter;
     if (loggedInUserAdapter == null) {
       throw "\n***************************************************************"
           "\n No LoggedInUserAdapter. You need to config it in GlobalFlu.config()"

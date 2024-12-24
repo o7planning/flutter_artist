@@ -27,7 +27,7 @@ abstract class Shelf {
 
   bool _queryLocked = false;
 
-  String get name => Storage._getShelfName(runtimeType);
+  String get name => StorageX._getShelfName(runtimeType);
 
   Shelf() {
     __onInit();
@@ -126,7 +126,7 @@ abstract class Shelf {
 
   Future<void> showMessageDialog(
       {required String message, String? details}) async {
-    BuildContext context = Storage.adapter.getCurrentContext();
+    BuildContext context = StorageX.adapter.getCurrentContext();
     await _showMessageDialog(
       context: context,
       message: message,
@@ -135,12 +135,12 @@ abstract class Shelf {
   }
 
   Future<void> showShelfStructureDialog() async {
-    BuildContext context = Storage.adapter.getCurrentContext();
+    BuildContext context = StorageX.adapter.getCurrentContext();
     await _showStorageDialog(context: context, shelf: this);
   }
 
   Future<void> showActiveUiComponentsDialog() async {
-    BuildContext context = Storage.adapter.getCurrentContext();
+    BuildContext context = StorageX.adapter.getCurrentContext();
     await _showActiveUiComponentsDialog(context: context, shelf: this);
   }
 
@@ -318,7 +318,7 @@ abstract class Shelf {
       for (BlockAndFormWraper blkOrForm in blockOrForms) {
         needToUpdate = true;
         if (blkOrForm.block != null) {
-          Storage.codeFlowLogger._addInfo(
+          StorageX.codeFlowLogger._addInfo(
             isLibCode: true,
             object: this,
             info: "Querying lazy block: ${getClassName(blkOrForm.block)}",
@@ -336,7 +336,7 @@ abstract class Shelf {
             break;
           }
         } else if (blkOrForm.blockForm != null) {
-          Storage.codeFlowLogger._addInfo(
+          StorageX.codeFlowLogger._addInfo(
             isLibCode: true,
             object: this,
             info:

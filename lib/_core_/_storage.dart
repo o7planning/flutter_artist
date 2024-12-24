@@ -2,11 +2,11 @@ part of '../flutter_artist.dart';
 
 typedef ShelfCreator<S> = S Function();
 
-final Storage = _Storage();
+final StorageX = _StorageX();
 
 const _isOverlayMode = false;
 
-class _Storage {
+class _StorageX {
   _StorageData? _globalFluData;
   final Map<String, ShelfCreator> __shelfCreatorMap = {};
   final Map<String, Shelf> __shelfMap = {};

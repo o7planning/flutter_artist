@@ -240,7 +240,7 @@ abstract class Block<I extends Object, D extends Object,
   }) {
     _paginationWidgetStateListeners[formWidgetState] = isShowing;
     if (isShowing) {
-      Storage._addRecentShelf(shelf);
+      StorageX._addRecentShelf(shelf);
     }
   }
 
@@ -248,7 +248,7 @@ abstract class Block<I extends Object, D extends Object,
     required _WidgetState formWidgetState,
   }) {
     _paginationWidgetStateListeners.remove(formWidgetState);
-    Storage._checkToRemoveShelf(shelf);
+    StorageX._checkToRemoveShelf(shelf);
   }
 
   void _addControlBarWidgetStateListener({
@@ -257,7 +257,7 @@ abstract class Block<I extends Object, D extends Object,
   }) {
     _controlBarWidgetStateListeners[formWidgetState] = isShowing;
     if (isShowing) {
-      Storage._addRecentShelf(shelf);
+      StorageX._addRecentShelf(shelf);
     }
   }
 
@@ -265,7 +265,7 @@ abstract class Block<I extends Object, D extends Object,
     required _WidgetState formWidgetState,
   }) {
     _controlBarWidgetStateListeners.remove(formWidgetState);
-    Storage._checkToRemoveShelf(shelf);
+    StorageX._checkToRemoveShelf(shelf);
   }
 
   void _addWidgetStateListener({
@@ -277,7 +277,7 @@ abstract class Block<I extends Object, D extends Object,
     bool activeCURRENT = hasActiveUiComponent();
     //
     if (isShowing) {
-      Storage._addRecentShelf(shelf);
+      StorageX._addRecentShelf(shelf);
     }
     //
     if (!activeOLD && activeCURRENT) {
@@ -294,13 +294,13 @@ abstract class Block<I extends Object, D extends Object,
     bool activeCURRENT = hasActiveUiComponent();
     //
     if (activeOLD && !activeCURRENT) {
-      Storage._checkToRemoveShelf(shelf);
+      StorageX._checkToRemoveShelf(shelf);
       _fireBlockHidden();
     }
   }
 
   void _fireBlockHidden() {
-    Storage.codeFlowLogger._addEvent(
+    StorageX.codeFlowLogger._addEvent(
       object: this,
       event: "Block '${getClassName(this)}' just hides all UI Components!",
       isLibCode: true,
@@ -436,7 +436,7 @@ abstract class Block<I extends Object, D extends Object,
     required String message,
     required List<String>? errorDetails,
   }) {
-    Storage.adapter.showErrorSnackbar(
+    StorageX.adapter.showErrorSnackbar(
       message: message,
       errorDetails: errorDetails,
     );
@@ -449,7 +449,7 @@ abstract class Block<I extends Object, D extends Object,
     if (blockFilter == null) {
       return true;
     }
-    return await Storage.executeTask(
+    return await StorageX.executeTask(
       asyncFunction: () async {
         return await __prepareFilter(
           suggestedFilterData: suggestedFilterData,
@@ -468,7 +468,7 @@ abstract class Block<I extends Object, D extends Object,
       return true;
     }
     try {
-      Storage.codeFlowLogger._addMethodCall(
+      StorageX.codeFlowLogger._addMethodCall(
         isLibCode: false,
         object: blockFilter!,
         methodName: "prepareData",
@@ -490,7 +490,7 @@ abstract class Block<I extends Object, D extends Object,
       return false;
     }
     try {
-      Storage.codeFlowLogger._addMethodCall(
+      StorageX.codeFlowLogger._addMethodCall(
         isLibCode: false,
         object: blockFilter!,
         methodName: "takeSnapshot",
@@ -533,14 +533,14 @@ abstract class Block<I extends Object, D extends Object,
     String msg =
         "Call $className.$methodName() error: ${apiError.errorMessage}";
     //
-    Storage.codeFlowLogger._addError(
+    StorageX.codeFlowLogger._addError(
       isLibCode: true,
       object: this,
       error: msg,
     );
     //
-    Storage.errorLogger.addError(
-      shelfName: Storage._getShelfName(shelf.runtimeType),
+    StorageX.errorLogger.addError(
+      shelfName: StorageX._getShelfName(shelf.runtimeType),
       message: msg,
       errorDetails: apiError.errorDetails,
       stackTrace: stackTrace,
@@ -562,13 +562,13 @@ abstract class Block<I extends Object, D extends Object,
     required List<String>? errorDetails,
     required bool showSnackbar,
   }) {
-    Storage.errorLogger.addError(
-      shelfName: Storage._getShelfName(shelf.runtimeType),
+    StorageX.errorLogger.addError(
+      shelfName: StorageX._getShelfName(shelf.runtimeType),
       message: message,
       errorDetails: errorDetails,
       stackTrace: null,
     );
-    Storage.codeFlowLogger._addError(
+    StorageX.codeFlowLogger._addError(
       object: this,
       error: message,
       isLibCode: true,
@@ -595,7 +595,7 @@ abstract class Block<I extends Object, D extends Object,
 
   /// Empty Query and set block to "Pending State".
   Future<bool> emptyQuery({Function()? route}) async {
-    Storage.codeFlowLogger._addMethodCall(
+    StorageX.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: route,
       object: this,
@@ -621,7 +621,7 @@ abstract class Block<I extends Object, D extends Object,
 
   /// Empty Query and create new record and set block to "Ready State".
   Future<bool> emptyQueryAndCreate({Function()? route}) async {
-    Storage.codeFlowLogger._addMethodCall(
+    StorageX.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: route,
       object: this,
@@ -656,7 +656,7 @@ abstract class Block<I extends Object, D extends Object,
     PageableData? pageable,
     Function()? route,
   }) async {
-    Storage.codeFlowLogger._addMethodCall(
+    StorageX.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: route,
       object: this,
@@ -702,7 +702,7 @@ abstract class Block<I extends Object, D extends Object,
     PageableData? pageable,
     Function()? route,
   }) async {
-    Storage.codeFlowLogger._addMethodCall(
+    StorageX.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: route,
       object: this,
@@ -737,7 +737,7 @@ abstract class Block<I extends Object, D extends Object,
     required SuggestedSelection? suggestedSelection,
     required PageableData? pageable,
   }) async {
-    return await Storage.executeTask(
+    return await StorageX.executeTask(
       asyncFunction: () async {
         return __queryWithRestorable(
           queryType: queryType,
@@ -846,7 +846,7 @@ abstract class Block<I extends Object, D extends Object,
           pageable ?? __pageable ?? const PageableData(page: 1, pageSize: null);
       ApiResult<PageData<I>?> result;
       try {
-        Storage.codeFlowLogger._addMethodCall(
+        StorageX.codeFlowLogger._addMethodCall(
           isLibCode: false,
           route: null,
           object: this,
@@ -1105,7 +1105,7 @@ abstract class Block<I extends Object, D extends Object,
   /// Loại bỏ phần tử này ra khỏi giao diện vì nó đã không còn tồn tại trên máy chủ.
   ///
   void __removeItemFromList({required I removeItem}) {
-    Storage.codeFlowLogger._addMethodCall(
+    StorageX.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
@@ -1128,7 +1128,7 @@ abstract class Block<I extends Object, D extends Object,
     SuggestedSelection? suggestedSelection,
     required I notFoundItem,
   }) async {
-    Storage.codeFlowLogger._addMethodCall(
+    StorageX.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
@@ -1150,7 +1150,7 @@ abstract class Block<I extends Object, D extends Object,
     //
     if (isCurrent) {
       if (siblingItem != null) {
-        Storage.codeFlowLogger._addInfo(
+        StorageX.codeFlowLogger._addInfo(
           isLibCode: true,
           object: this,
           info: "Selecting sibling item",
@@ -1166,7 +1166,7 @@ abstract class Block<I extends Object, D extends Object,
           return false;
         }
       } else {
-        Storage.codeFlowLogger._addInfo(
+        StorageX.codeFlowLogger._addInfo(
           isLibCode: true,
           object: this,
           info: "Switching block to none-mode",
@@ -1189,7 +1189,7 @@ abstract class Block<I extends Object, D extends Object,
     required D refreshedItemDetail,
     required bool forceForm,
   }) async {
-    Storage.codeFlowLogger._addMethodCall(
+    StorageX.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
@@ -1209,7 +1209,7 @@ abstract class Block<I extends Object, D extends Object,
     //
     bool editable = _isAllowEdit(refreshedItem: refreshedItemDetail);
     //
-    Storage.codeFlowLogger._addInfo(
+    StorageX.codeFlowLogger._addInfo(
       object: this,
       info: 'Allow Edit? $editable',
       isLibCode: true,
@@ -1259,7 +1259,7 @@ abstract class Block<I extends Object, D extends Object,
     required bool clearListForThis,
     required DataState dataState,
   }) async {
-    Storage.codeFlowLogger._addMethodCall(
+    StorageX.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
@@ -1330,7 +1330,7 @@ abstract class Block<I extends Object, D extends Object,
   Future<bool> _executeQuickCreateWithOverlay({
     required QuickActionData data,
   }) async {
-    return await Storage.executeTask(
+    return await StorageX.executeTask(
       asyncFunction: () async {
         return await __executeQuickCreateAction(data: data);
       },
@@ -1344,7 +1344,7 @@ abstract class Block<I extends Object, D extends Object,
     ApiResult<D> result;
     try {
       result = await callApiQuickCreate(data: data);
-      Storage.fireSourceChanged(
+      StorageX.fireSourceChanged(
         sourceBlock: this,
         itemIdString: null,
       );
@@ -1383,7 +1383,7 @@ abstract class Block<I extends Object, D extends Object,
     required I item,
     required QuickActionData data,
   }) async {
-    return await Storage.executeTask(
+    return await StorageX.executeTask(
       asyncFunction: () async {
         return await __executeQuickUpdateAction(item: item, data: data);
       },
@@ -1397,7 +1397,7 @@ abstract class Block<I extends Object, D extends Object,
     ApiResult<D> result;
     try {
       result = await callApiQuickUpdate(item: item, data: data);
-      Storage.fireSourceChanged(
+      StorageX.fireSourceChanged(
         sourceBlock: this,
         itemIdString: null,
       );
@@ -1437,7 +1437,7 @@ abstract class Block<I extends Object, D extends Object,
     required QuickActionData action,
     required AfterQuickAction? afterQuickAction,
   }) async {
-    return await Storage.executeTask(
+    return await StorageX.executeTask(
       asyncFunction: () async {
         bool success = await __executeQuickAction(
           suggestedFilterData: suggestedFilterData,
@@ -1447,7 +1447,7 @@ abstract class Block<I extends Object, D extends Object,
         );
         if (success) {
           try {
-            BuildContext context = Storage.adapter.getCurrentContext();
+            BuildContext context = StorageX.adapter.getCurrentContext();
             action.executeRoute(context);
           } catch (e, stackTrace) {
             print("Error: $e");
@@ -1716,7 +1716,7 @@ abstract class Block<I extends Object, D extends Object,
     required QuickActionData action,
     required AfterQuickAction? afterQuickAction,
   }) async {
-    Storage.codeFlowLogger._addMethodCall(
+    StorageX.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
@@ -1730,7 +1730,7 @@ abstract class Block<I extends Object, D extends Object,
     );
     if (actionConfirmation != null) {
       bool confirm = false;
-      BuildContext context = Storage.adapter.getCurrentContext();
+      BuildContext context = StorageX.adapter.getCurrentContext();
       if (actionConfirmation.type == ActionConfirmationType.delete) {
         confirm = await _showConfirmDeleteDialog(
           context: context,
@@ -1797,7 +1797,7 @@ abstract class Block<I extends Object, D extends Object,
     required I item,
     required QuickActionData data,
   }) async {
-    Storage.codeFlowLogger._addMethodCall(
+    StorageX.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
@@ -1833,7 +1833,7 @@ abstract class Block<I extends Object, D extends Object,
     required bool forceLoadFormData,
     Function()? route,
   }) async {
-    Storage.codeFlowLogger._addMethodCall(
+    StorageX.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: route,
       object: this,
@@ -1863,7 +1863,7 @@ abstract class Block<I extends Object, D extends Object,
     required bool forceForm,
     required bool justQueried,
   }) async {
-    return await Storage.executeTask(
+    return await StorageX.executeTask(
       asyncFunction: () async {
         return await _prepareToShowOrEditWithRestorable(
           suggestedSelection: suggestedSelection,
@@ -1924,7 +1924,7 @@ abstract class Block<I extends Object, D extends Object,
     required bool forceForm,
     required bool justQueried,
   }) async {
-    Storage.codeFlowLogger._addMethodCall(
+    StorageX.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
@@ -1943,7 +1943,7 @@ abstract class Block<I extends Object, D extends Object,
     } else {
       ApiResult<D> result;
       try {
-        Storage.codeFlowLogger._addMethodCall(
+        StorageX.codeFlowLogger._addMethodCall(
           isLibCode: false,
           route: null,
           object: this,
@@ -2015,7 +2015,7 @@ abstract class Block<I extends Object, D extends Object,
   Future<bool> prepareToCreate({
     required Function()? route,
   }) async {
-    Storage.codeFlowLogger._addMethodCall(
+    StorageX.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: route,
       object: this,
@@ -2045,7 +2045,7 @@ abstract class Block<I extends Object, D extends Object,
     if (!__checkBeforeFormCreation(showErrorMessage: false)) {
       return false;
     }
-    return await Storage.executeTask(
+    return await StorageX.executeTask(
       asyncFunction: () async {
         return await _prepareToCreateWithRestorable();
       },
@@ -2083,7 +2083,7 @@ abstract class Block<I extends Object, D extends Object,
 
   // Private method. Only for use in this class.
   Future<bool> __prepareToCreate() async {
-    Storage.codeFlowLogger._addMethodCall(
+    StorageX.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
@@ -2129,7 +2129,7 @@ abstract class Block<I extends Object, D extends Object,
   }
 
   Future<bool> deleteCurrentItem() async {
-    Storage.codeFlowLogger._addMethodCall(
+    StorageX.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
@@ -2146,7 +2146,7 @@ abstract class Block<I extends Object, D extends Object,
   }
 
   Future<bool> showConfirmDeleteDialog({String? detals}) async {
-    BuildContext context = Storage.adapter.getCurrentContext();
+    BuildContext context = StorageX.adapter.getCurrentContext();
     bool confirm = await _showConfirmDeleteDialog(
       context: context,
       details: detals ?? "",
@@ -2158,7 +2158,7 @@ abstract class Block<I extends Object, D extends Object,
     required String message,
     String? detals,
   }) async {
-    BuildContext context = Storage.adapter.getCurrentContext();
+    BuildContext context = StorageX.adapter.getCurrentContext();
     await _showMessageDialog(
       context: context,
       message: message,
@@ -2167,7 +2167,7 @@ abstract class Block<I extends Object, D extends Object,
   }
 
   Future<bool> delete(I item) async {
-    Storage.codeFlowLogger._addMethodCall(
+    StorageX.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
@@ -2196,7 +2196,7 @@ abstract class Block<I extends Object, D extends Object,
   }
 
   Future<bool> _deleteWithOverlayAndRestorable(I item) async {
-    return await Storage.executeTask(
+    return await StorageX.executeTask(
       asyncFunction: () async {
         return await _deleteWithRestorable(item);
       },
@@ -2239,7 +2239,7 @@ abstract class Block<I extends Object, D extends Object,
       }
       ApiResult<void> result;
       try {
-        Storage.codeFlowLogger._addMethodCall(
+        StorageX.codeFlowLogger._addMethodCall(
           isLibCode: false,
           route: null,
           object: this,
@@ -2250,7 +2250,7 @@ abstract class Block<I extends Object, D extends Object,
         );
         //
         result = await callApiDelete(item: item);
-        Storage.fireSourceChanged(
+        StorageX.fireSourceChanged(
           sourceBlock: this,
           itemIdString: null,
         );
@@ -2322,7 +2322,7 @@ abstract class Block<I extends Object, D extends Object,
   /// Phương thức này được gọi để refresh "currentItem".
   ///
   Future<bool> refreshCurrentItem() async {
-    Storage.codeFlowLogger._addMethodCall(
+    StorageX.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,

@@ -50,9 +50,9 @@ class _LoggedInUserBuilderState extends _WidgetState<LoggedInUserBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    _LoggedInUserManager manager = Storage._loggedInUserManager;
+    _LoggedInUserManager manager = StorageX._loggedInUserManager;
     //
-    ILoggedInUser? user = Storage.loggedInUser;
+    ILoggedInUser? user = StorageX.loggedInUser;
     return VisibilityDetector(
       key: Key(keyId),
       onVisibilityChanged: (visibilityInfo) {
@@ -71,7 +71,7 @@ class _LoggedInUserBuilderState extends _WidgetState<LoggedInUserBuilder> {
     ILoggedInUser? user,
     required bool isShowing,
   }) {
-    Storage._loggedInUserManager._addWidgetStateListener(
+    StorageX._loggedInUserManager._addWidgetStateListener(
       widgetState: this,
       isShowing: isShowing,
     );
@@ -80,7 +80,7 @@ class _LoggedInUserBuilderState extends _WidgetState<LoggedInUserBuilder> {
   @override
   void dispose() {
     super.dispose();
-    Storage._loggedInUserManager._removeWidgetStateListener(
+    StorageX._loggedInUserManager._removeWidgetStateListener(
       widgetState: this,
     );
   }

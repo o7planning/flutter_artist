@@ -53,7 +53,7 @@ class _ShelfBlockTypeWidget extends StatelessWidget {
   }
 
   Widget _buildFlu() {
-    Shelf? shelf = Storage._findShelf(shelfBlockType.shelfType);
+    Shelf? shelf = StorageX._findShelf(shelfBlockType.shelfType);
     String? shelfName = shelf?.name;
     String? description = shelf?.description;
 

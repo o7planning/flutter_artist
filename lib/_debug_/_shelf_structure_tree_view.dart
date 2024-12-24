@@ -74,9 +74,9 @@ class _ShelfStructureTreeViewState extends State<_ShelfStructureTreeView> {
           } else if (data is Block) {
             title = getClassName(data);
             List<ShelfBlockType> listeners =
-                Storage._getListenerBlocks(notifierBlock: data);
+                StorageX._getListenerBlocks(notifierBlock: data);
             List<ShelfBlockType> notifiers =
-                Storage._getNotifierBlocks(listenerBlock: data);
+                StorageX._getNotifierBlocks(listenerBlock: data);
             isListener = notifiers.isNotEmpty;
             isNotifier = listeners.isNotEmpty;
           } else {

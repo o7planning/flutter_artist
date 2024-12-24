@@ -15,7 +15,7 @@ class _NotificationEngine {
     print("${getClassName(this)}.start()");
     await __getNotificationSummary();
     Timer.periodic(
-      Duration(seconds: Storage.notificationFetchPeriodInSeconds),
+      Duration(seconds: StorageX.notificationFetchPeriodInSeconds),
       (Timer timer) {
         __getNotificationSummary();
       },
@@ -23,12 +23,12 @@ class _NotificationEngine {
   }
 
   Future<void> __getNotificationSummary() async {
-    NotificationAdapter? adapter = Storage.notificationAdapter;
+    NotificationAdapter? adapter = StorageX.notificationAdapter;
     if (adapter == null) {
       print("No NotificationAdapter");
       return;
     }
-    ILoggedInUser? user = Storage.loggedInUser;
+    ILoggedInUser? user = StorageX.loggedInUser;
     if (user == null) {
       print("No ILoggedInUser");
       return;
@@ -57,7 +57,7 @@ class _NotificationEngine {
               adapter.fromJson(notificationSummaryJsonLocal);
         }
       } catch (e, stackTrace) {
-        Storage.errorLogger.addError(
+        StorageX.errorLogger.addError(
           shelfName: null,
           message: "Invalid Local Notification Summary JSON",
           errorDetails: null,
@@ -69,10 +69,10 @@ class _NotificationEngine {
       if (lastFetch != null) {
         DateTime now = DateTime.now();
         Duration diff = now.difference(lastFetch);
-        if (diff.inSeconds < Storage.notificationFetchPeriodInSeconds - 1 &&
+        if (diff.inSeconds < StorageX.notificationFetchPeriodInSeconds - 1 &&
             notificationSummaryLocal != null) {
           print("Ignore to fetch notification..");
-          Storage._notifyNotification(notificationSummaryLocal);
+          StorageX._notifyNotification(notificationSummaryLocal);
           return;
         }
       }
@@ -83,7 +83,7 @@ class _NotificationEngine {
         ApiResult<INotificationSummary> result =
             await adapter.callApiGetNotificationSummary();
         if (result.isError()) {
-          Storage.errorLogger.addError(
+          StorageX.errorLogger.addError(
             shelfName: null,
             message: result.errorMessage!,
             errorDetails: result.errorDetails,
@@ -95,7 +95,7 @@ class _NotificationEngine {
       } catch (e, stackTrace) {
         print("Fetch Notification Error: $e");
         print(stackTrace);
-        Storage.errorLogger.addError(
+        StorageX.errorLogger.addError(
           shelfName: null,
           message: "Fetch Notification Error: $e",
           errorDetails: null,
@@ -105,19 +105,19 @@ class _NotificationEngine {
       }
       //
       if (fetchedData == null) {
-        Storage.errorLogger.addError(
+        StorageX.errorLogger.addError(
           shelfName: null,
           message: "No Notification Summary Data",
           errorDetails: null,
           stackTrace: null,
         );
         if (notificationSummaryLocal != null) {
-          Storage._notifyNotification(notificationSummaryLocal);
+          StorageX._notifyNotification(notificationSummaryLocal);
         }
         return;
       }
       //
-      Storage._notifyNotification(fetchedData);
+      StorageX._notifyNotification(fetchedData);
       //
       try {
         String notificationSummaryJSON = adapter.toJson(fetchedData);
@@ -126,7 +126,7 @@ class _NotificationEngine {
           notificationSummaryJSON,
         );
       } catch (e, stackTrace) {
-        Storage.errorLogger.addError(
+        StorageX.errorLogger.addError(
           shelfName: null,
           message: "Error ${getClassName(adapter)}.toJson()",
           errorDetails: null,

@@ -40,7 +40,7 @@ class _CodeFlowViewerState extends State<_CodeFlowViewer> {
 
   @override
   Widget build(BuildContext context) {
-    List<_CodeFlowItem> items = [...Storage.codeFlowLogger._codeFlowItems];
+    List<_CodeFlowItem> items = [...StorageX.codeFlowLogger._codeFlowItems];
     items = items.where((item) => _checkItem(item)).toList();
 
     if (!items.contains(selectedFlowItem)) {

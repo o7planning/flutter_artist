@@ -49,7 +49,7 @@ abstract class BlockFilter<S extends FilterSnapshot> with DebugMixin {
   Future<bool> queryBlocks({
     SuggestedFilterData? suggestedFilterData,
   }) async {
-    Storage.codeFlowLogger._addMethodCall(
+    StorageX.codeFlowLogger._addMethodCall(
       isLibCode: true,
       object: this,
       methodName: "queryBlocks",
@@ -104,13 +104,13 @@ abstract class BlockFilter<S extends FilterSnapshot> with DebugMixin {
   }) {
     _widgetStateListeners[widgetState] = isShowing;
     if (isShowing) {
-      Storage._addRecentShelf(shelf);
+      StorageX._addRecentShelf(shelf);
     }
   }
 
   void _removeWidgetStateListener({required State widgetState}) {
     _widgetStateListeners.remove(widgetState);
-    Storage._checkToRemoveShelf(shelf);
+    StorageX._checkToRemoveShelf(shelf);
   }
 
   void updateWidgets() {
@@ -139,7 +139,7 @@ abstract class BlockFilter<S extends FilterSnapshot> with DebugMixin {
     List<String>? errorDetails,
   }) {
     if (_blocks.isNotEmpty) {
-      Storage.adapter.showErrorSnackbar(
+      StorageX.adapter.showErrorSnackbar(
         message: message,
         errorDetails: errorDetails,
       );

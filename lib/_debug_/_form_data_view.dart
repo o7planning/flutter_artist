@@ -33,7 +33,7 @@ class _FormDataViewState extends State<_FormDataView> {
   void initState() {
     super.initState();
     //
-    listeners = Storage._changeManager.getChangeListeners(
+    listeners = StorageX._changeManager.getChangeListeners(
       sourceBlock: widget.blockForm.block,
     );
   }

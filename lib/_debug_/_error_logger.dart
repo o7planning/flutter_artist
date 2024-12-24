@@ -30,7 +30,7 @@ class ErrorLogger {
       _errorInfos.removeLast();
     }
     _errorInfos.insert(0, errorInfo);
-    Storage._totalErrorCount++;
-    Storage._notifyError();
+    StorageX._totalErrorCount++;
+    StorageX._notifyError();
   }
 }

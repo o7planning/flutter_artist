@@ -24,7 +24,7 @@ class _DebugMenuState extends State<DebugMenu> implements FluErrorListener {
   @override
   void initState() {
     super.initState();
-    Storage.addErrorListener(this);
+    StorageX.addErrorListener(this);
   }
 
   @override
@@ -34,8 +34,8 @@ class _DebugMenuState extends State<DebugMenu> implements FluErrorListener {
 
   @override
   Widget build(BuildContext context) {
-    ILoggedInUser? loggedInUser = Storage.loggedInUser;
-    bool hasRecentErrors = Storage.hasRecentErrors();
+    ILoggedInUser? loggedInUser = StorageX.loggedInUser;
+    bool hasRecentErrors = StorageX.hasRecentErrors();
     bool isSystemUser = loggedInUser?.isSystemUser ?? false;
     //
     return InkWell(
@@ -65,13 +65,13 @@ class _DebugMenuState extends State<DebugMenu> implements FluErrorListener {
                       onTab: _showRecentErrors,
                     ),
                   if (isSystemUser && hasRecentErrors) _divider(),
-                  if (isSystemUser && Storage.canShowShelfStructure())
+                  if (isSystemUser && StorageX.canShowShelfStructure())
                     _buildPopupMenuItem(
                       iconData: _shelfStructureIconData,
                       title: 'Shelf Structure',
                       onTab: _showFluStructure,
                     ),
-                  if (isSystemUser && Storage._canShowUiComponentDialog())
+                  if (isSystemUser && StorageX._canShowUiComponentDialog())
                     _buildPopupMenuItem(
                       iconData: _uiComponentsIconData,
                       title: 'UI Components',
@@ -97,7 +97,7 @@ class _DebugMenuState extends State<DebugMenu> implements FluErrorListener {
                       onTab: _showFlowLogStructure,
                     ),
                   if (isSystemUser) _divider(),
-                  if (isSystemUser && Storage._showRestDebugDialog != null)
+                  if (isSystemUser && StorageX._showRestDebugDialog != null)
                     _buildPopupMenuItem(
                       iconData: _restDebugIconData,
                       title: 'Rest Debug Viewer',
@@ -109,7 +109,7 @@ class _DebugMenuState extends State<DebugMenu> implements FluErrorListener {
               );
             },
       child: widget.menuButtonBuilder(
-        errorCount: Storage._totalErrorCount,
+        errorCount: StorageX._totalErrorCount,
       ),
     );
   }
@@ -141,36 +141,36 @@ class _DebugMenuState extends State<DebugMenu> implements FluErrorListener {
 
   Future<void> _showUiComponentsDialog() async {
     Navigator.pop(context, null);
-    await Storage.showUiComponentsDialog();
+    await StorageX.showUiComponentsDialog();
   }
 
   Future<void> _showRestDebugDialog() async {
     Navigator.pop(context, null);
-    Storage._showRestDebugDialog!(context);
+    StorageX._showRestDebugDialog!(context);
   }
 
   Future<void> _showStorage() async {
     Navigator.pop(context, null);
-    await Storage.showStorageDialog();
+    await StorageX.showStorageDialog();
   }
 
   void _clearCodeFlow() {
     Navigator.pop(context, null);
-    Storage.codeFlowLogger.clear();
+    StorageX.codeFlowLogger.clear();
   }
 
   Future<void> _showFlowLogStructure() async {
     Navigator.pop(context, null);
-    await Storage.showFlowLogDialog();
+    await StorageX.showFlowLogDialog();
   }
 
   Future<void> _showFluStructure() async {
     Navigator.pop(context, null);
-    await Storage.showShelfStructure();
+    await StorageX.showShelfStructure();
   }
 
   Future<void> _showRecentErrors() async {
     Navigator.pop(context, null);
-    await Storage.showRecentErrors();
+    await StorageX.showRecentErrors();
   }
 }
