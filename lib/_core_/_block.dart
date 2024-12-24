@@ -1056,8 +1056,8 @@ abstract class Block<I extends Object, D extends Object,
   }
 
   void __backupThisAndChildren() {
-    printFormDebug(
-        " -------------------------> TEMPORARY!  - ${data._dataState.name.toUpperCase()}");
+    // printFormDebug(
+    //     " -------------------------> TEMPORARY!  - ${data._dataState.name.toUpperCase()}");
     this.data._backup();
     for (var childBlock in _childBlocks) {
       childBlock.__backupThisAndChildren();
@@ -1065,8 +1065,8 @@ abstract class Block<I extends Object, D extends Object,
   }
 
   void __restoreThisAndChildren() {
-    printFormDebug(
-        " -------------------------> NORMAL! - ${data._dataState.name.toUpperCase()}");
+    // printFormDebug(
+    //     " -------------------------> NORMAL! - ${data._dataState.name.toUpperCase()}");
     this.data._restore();
     this.blockFilter?._restore();
     for (var childBlock in _childBlocks) {
@@ -1076,8 +1076,8 @@ abstract class Block<I extends Object, D extends Object,
   }
 
   void __applyNewStateThisAndChildren({bool clearNeedToReQuery = false}) {
-    printFormDebug(
-        " -------------------------> NORMAL! - ${data._dataState.name.toUpperCase()}");
+    // printFormDebug(
+    //     " -------------------------> NORMAL! - ${data._dataState.name.toUpperCase()}");
 
     this.data._applyNewState();
     this.blockFilter?._applyNewState();
@@ -1102,7 +1102,7 @@ abstract class Block<I extends Object, D extends Object,
   }
 
   ///
-  /// Loại bỏ phần tử này ra khỏi giao diện vì nó đã không còn tồn tại trên máy chủ.
+  /// Remove this item from Interface because it no longer exists on the server
   ///
   void __removeItemFromList({required I removeItem}) {
     StorageX.codeFlowLogger._addMethodCall(
