@@ -9,6 +9,10 @@ abstract class BlockFilter<S extends FilterSnapshot> {
 
   List<Block> get blocks => [..._blocks];
 
+  final List<NonBlock> _nonBlocks = [];
+
+  List<NonBlock> get nonBlocks => [..._nonBlocks];
+
   S? _currentSnapshot;
 
   List<Restorable> get restorableCriteria;

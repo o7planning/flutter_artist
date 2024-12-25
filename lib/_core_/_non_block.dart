@@ -2,6 +2,12 @@ part of '../flutter_artist.dart';
 
 abstract class NonBlock<D extends Object, S extends FilterSnapshot>
     extends BaseBlk {
+  final String name;
+
+  final String? filterName;
+
+  late final BlockFilter<S>? blockFilter;
+
   late final NonBlockData<D, S> data = NonBlockData<D, S>(this);
 
   final NonBlockHiddenBehavior hiddenBehavior;
@@ -9,8 +15,18 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
   final Map<_WidgetState, bool> _nonBlockFragmentWidgetStateListeners = {};
 
   NonBlock({
+    required this.name,
+    required this.filterName,
     required this.hiddenBehavior,
   });
+
+  String getDataTypeAsString() {
+    return D.toString();
+  }
+
+  String getFilterSnapshotTypeAsString() {
+    return S.toString();
+  }
 
   Future<bool> query() async {
     // TODO: Take Snapshot

@@ -7,6 +7,8 @@ abstract class Shelf {
 
   final Map<String, NonBlock> __nonBlockMap = {};
 
+  final List<NonBlock> __nonBlocks = [];
+
   final Map<String, Block> __blockMap = {};
 
   final List<Block> __rootBlocks = [];
@@ -44,6 +46,49 @@ abstract class Shelf {
       blockFilter.shelf = this;
     }
 
+    List<NonBlock> nonBlocks = _shelfStruct.nonBlocks;
+
+    for (NonBlock nonBlock in nonBlocks) {
+      if (__nonBlockMap.containsKey(nonBlock.name)) {
+        throw "Duplicated non-block '${nonBlock.name}' in '${getClassName(this)}'";
+      } else {
+        __nonBlockMap[nonBlock.name] = nonBlock;
+      }
+      nonBlock.shelf = this;
+      __nonBlocks.add(nonBlock);
+      //
+      if (nonBlock.filterName != null) {
+        BlockFilter? blockFilter =
+            _shelfStruct.blockFilters[nonBlock.filterName!];
+        if (blockFilter == null) {
+          throw "BlockFilter not found '${nonBlock.filterName}' in '${getClassName(this)}'";
+        }
+        //
+        const Type filterSnapshotType = FilterSnapshot;
+        final String filterSnapshotBase = filterSnapshotType.toString();
+        final String filterSnapshotBF =
+            blockFilter.getFilterSnapshotTypeAsString();
+        final String filterSnapshotB = nonBlock.getFilterSnapshotTypeAsString();
+        //
+        if (filterSnapshotBF == filterSnapshotBase) {
+          throw "You need to create your own class that extends from '$filterSnapshotBase' "
+              "as Filter-Snapshot for '${getClassName(blockFilter)}'\n"
+              " >> Currently, Filter-Snapshot of '${getClassName(blockFilter)}' Block-Filter is '$filterSnapshotBF'\n";
+        }
+        //
+        if (filterSnapshotBF != filterSnapshotB) {
+          throw "NonBlock and Block-Filter must have the same Filter-Snapshot type.\n"
+              " >> Filter-Snapshot of '${getClassName(nonBlock)}' NonBlock is '$filterSnapshotB'\n"
+              " >> Filter-Snapshot of '${getClassName(blockFilter)}' Block-Filter is '$filterSnapshotBF'\n";
+        }
+        //
+        blockFilter._nonBlocks.add(nonBlock);
+        nonBlock.blockFilter = blockFilter;
+      } else {
+        nonBlock.blockFilter = null;
+      }
+    }
+
     List<Block> rootBlocks = _shelfStruct.blocks;
     for (Block rootBlock in rootBlocks) {
       rootBlock.parent = null;
@@ -53,13 +98,18 @@ abstract class Shelf {
   }
 
   void __registerBlockCascade(Block block) {
-    __blockMap[block.name] = block;
+    if (__blockMap.containsKey(block.name)) {
+      throw "Duplicated block '${block.name}' in '${getClassName(this)}'";
+    } else {
+      __blockMap[block.name] = block;
+    }
+    //
     block.shelf = this;
     if (block.blockFilterName != null) {
       BlockFilter? blockFilter =
           _shelfStruct.blockFilters[block.blockFilterName!];
       if (blockFilter == null) {
-        throw "BlockFilter not found '${block.blockFilterName}'";
+        throw "BlockFilter not found '${block.blockFilterName}' in '${getClassName(this)}'";
       }
       const Type filterSnapshotType = FilterSnapshot;
       final String filterSnapshotBase = filterSnapshotType.toString();
@@ -149,6 +199,10 @@ abstract class Shelf {
   // ***************************************************************************
   // ***************************************************************************
   // ***************************************************************************
+
+  NonBlock? findNonBlock(String nonBlockName) {
+    return __nonBlockMap[nonBlockName];
+  }
 
   Block? findBlock(String blockName) {
     return __blockMap[blockName];
