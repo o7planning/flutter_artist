@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-abstract class BlockForm<I extends Object, D extends Object> with DebugMixin {
+abstract class BlockForm<I extends Object, D extends Object> {
   QueryMode _queryMode = QueryMode.lazy;
 
   late QueryMode _tempQueryMode = _queryMode;

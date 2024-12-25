@@ -5,6 +5,8 @@ abstract class Shelf {
 
   String? get description => _shelfStruct.description;
 
+  final Map<String, NonBlock> __nonBlockMap = {};
+
   final Map<String, Block> __blockMap = {};
 
   final List<Block> __rootBlocks = [];

@@ -137,6 +137,8 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
         return _paginationIconData;
       case WidgetStateType.loggedInUser:
         return _loggedUserIconData;
+      case WidgetStateType.nonBlockFragment:
+        return _nonBlockFragmentIconData;
     }
   }
 

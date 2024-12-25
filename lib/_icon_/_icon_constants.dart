@@ -74,6 +74,8 @@ const IconData _otherClassIconData =
 
 const IconData _blockFragmentIconData = cupertino.CupertinoIcons.pano;
 
+const IconData _nonBlockFragmentIconData = cupertino.CupertinoIcons.pano_fill;
+
 const IconData _paginationIconData = cupertino.CupertinoIcons.ellipsis_circle;
 
 const IconData _loggedUserIconData =
