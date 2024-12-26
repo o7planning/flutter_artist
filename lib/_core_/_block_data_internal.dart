@@ -74,8 +74,6 @@ class _InternalBlockData<I extends Object, D extends Object,
   void _restore() {
     if (__isTemporaryMode) {
       __current = __currentBk;
-      // __currentItem = __currentItemBk;
-      // __currentItemDetail = __currentItemDetailBk;
       _dataState = __dataStateBk;
       _items
         ..clear()

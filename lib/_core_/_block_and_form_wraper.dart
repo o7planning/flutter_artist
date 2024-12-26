@@ -1,15 +1,25 @@
 part of '../flutter_artist.dart';
 
-class BlockAndFormWraper {
+class NBBFWraper {
+  NonBlock? nonBlock;
   Block? block;
   BlockForm? blockForm;
 
-  BlockAndFormWraper.block(Block this.block);
+  NBBFWraper.nonBlock(NonBlock this.nonBlock);
 
-  BlockAndFormWraper.blockForm(BlockForm this.blockForm);
+  NBBFWraper.block(Block this.block);
+
+  NBBFWraper.blockForm(BlockForm this.blockForm);
 
   @override
   String toString() {
-    return block != null ? getClassName(block) : getClassName(blockForm!);
+    if (nonBlock != null) {
+      return getClassName(nonBlock);
+    } else if (block != null) {
+      return getClassName(block);
+    } else if (blockForm != null) {
+      return getClassName(blockForm);
+    }
+    return super.toString();
   }
 }

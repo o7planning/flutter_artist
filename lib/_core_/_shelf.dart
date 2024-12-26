@@ -290,7 +290,7 @@ abstract class Shelf {
       __lazyBlocksToQuery.clear();
 
       print(
-          "\n\n@@@@@@@>>>>>>>>>>>>>>> _startNewLazyQueryTransactionIfNeed - ID: $__currentTransactionNumber");
+          "\n\n@@@@@@@>>>>>>>>>>>>>>> query - ID: $__currentTransactionNumber");
 
       Timer(
         const Duration(milliseconds: 0), // 200
@@ -301,7 +301,7 @@ abstract class Shelf {
 
   Future<void> __queryLazyList() async {
     _queryLocked = true;
-    final List<BlockAndFormWraper> lazyBlockOrForms = __findTopLazyBlocks();
+    final List<NBBFWraper> lazyBlockOrForms = __findTopLazyBlocks();
     if (lazyBlockOrForms.isEmpty) {
       __lastTransactionNumber = __currentTransactionNumber;
       _queryLocked = false;
@@ -322,25 +322,34 @@ abstract class Shelf {
     }
   }
 
-  void __findTopLazyBlocksCascade(
-      List<Block> blocks, List<BlockAndFormWraper> founds) {
+  void __findLazyNonBlocks(List<NBBFWraper> founds) {
+    for (NonBlock nonBlock in __nonBlocks) {
+      if (nonBlock.hasActiveUiComponent() &&
+          nonBlock.data.dataState == DataState.pending) {
+        founds.add(NBBFWraper.nonBlock(nonBlock));
+      }
+    }
+  }
+
+  void __findTopLazyBlocksCascade(List<Block> blocks, List<NBBFWraper> founds) {
     for (Block block in blocks) {
       // _hasActiveWidgetAndNeedToQuery()
       if (block.hasActiveBlockFragmentWidget(alsoCheckChildren: true) &&
           block.dataState == DataState.pending) {
-        founds.add(BlockAndFormWraper.block(block));
+        founds.add(NBBFWraper.block(block));
       } else if (block.blockForm != null &&
           block.blockForm!.hasActiveFormWidget() &&
           block.blockForm!.dataState == DataState.pending) {
-        founds.add(BlockAndFormWraper.blockForm(block.blockForm!));
+        founds.add(NBBFWraper.blockForm(block.blockForm!));
       } else {
         __findTopLazyBlocksCascade(block._childBlocks, founds);
       }
     }
   }
 
-  List<BlockAndFormWraper> __findTopLazyBlocks() {
-    final List<BlockAndFormWraper> founds = [];
+  List<NBBFWraper> __findTopLazyBlocks() {
+    final List<NBBFWraper> founds = [];
+    __findLazyNonBlocks(founds);
     __findTopLazyBlocksCascade(__rootBlocks, founds);
     return founds;
   }
@@ -349,8 +358,8 @@ abstract class Shelf {
     required QueryType queryType,
     required List<Block> blocks,
   }) async {
-    List<BlockAndFormWraper> blockOrForms =
-        blocks.map((b) => BlockAndFormWraper.block(b)).toList();
+    List<NBBFWraper> blockOrForms =
+        blocks.map((b) => NBBFWraper.block(b)).toList();
     return await _queryBlockOrForms(
       queryType: queryType,
       blockOrForms: blockOrForms,
@@ -360,7 +369,7 @@ abstract class Shelf {
   // TODO Kiem tra cha con cua cac Block.
   Future<bool> _queryBlockOrForms({
     required QueryType queryType,
-    required List<BlockAndFormWraper> blockOrForms,
+    required List<NBBFWraper> blockOrForms,
   }) async {
     if (blockOrForms.isEmpty) {
       return true;
@@ -371,9 +380,24 @@ abstract class Shelf {
       print(
           "@@@@@@@@@@@@@@@@@@@@@@@@@@@ >>>>>>>>>>> queryBlocks: $blockOrForms");
 
-      for (BlockAndFormWraper blkOrForm in blockOrForms) {
+      for (NBBFWraper blkOrForm in blockOrForms) {
         needToUpdate = true;
-        if (blkOrForm.block != null) {
+        // QUERY NON-BLOCK:
+        if (blkOrForm.nonBlock != null) {
+          StorageX.codeFlowLogger._addInfo(
+            isLibCode: true,
+            object: this,
+            info:
+                "Querying lazy non-block: ${getClassName(blkOrForm.nonBlock)}",
+          );
+          //
+          success = await blkOrForm.nonBlock!._queryWithOverlayAndRestorable();
+          if (!success) {
+            break;
+          }
+        }
+        // QUERY BLOCK:
+        else if (blkOrForm.block != null) {
           StorageX.codeFlowLogger._addInfo(
             isLibCode: true,
             object: this,
@@ -391,7 +415,9 @@ abstract class Shelf {
           if (!success) {
             break;
           }
-        } else if (blkOrForm.blockForm != null) {
+        }
+        // QUERY BLOCK-FORM:
+        else if (blkOrForm.blockForm != null) {
           StorageX.codeFlowLogger._addInfo(
             isLibCode: true,
             object: this,
@@ -435,6 +461,10 @@ abstract class Shelf {
   }
 
   void updateAllWidgets() {
+    for (NonBlock nonBlock in __nonBlocks) {
+      nonBlock.updateControlBarWidgets();
+      nonBlock.updateFragmentWidgets();
+    }
     for (Block block in __rootBlocks) {
       __updateAllWidgetsCascade(block);
     }

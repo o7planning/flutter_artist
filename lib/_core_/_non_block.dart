@@ -6,6 +6,8 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
 
   final String? filterName;
 
+  bool __isQuerying = false;
+
   late final BlockFilter<S>? blockFilter;
 
   late final NonBlockData<D, S> data = NonBlockData<D, S>(this);
@@ -28,9 +30,104 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
     return S.toString();
   }
 
+  void _backupAll() {
+    this.data._backup();
+  }
+
+  void _restoreAll() {
+    this.data._restore();
+    this.blockFilter?._restore();
+  }
+
+  void _applyNewStateAll() {
+    this.data._applyNewState();
+    this.blockFilter?._applyNewState();
+  }
+
+  void updateControlBarWidgets() {
+    // TODO: .......
+  }
+
+  void updateFragmentWidgets() {
+    _removeUnmountedWidgetStates(_nonBlockFragmentWidgetStateListeners);
+
+    for (_WidgetState state in _nonBlockFragmentWidgetStateListeners.keys) {
+      if (state.mounted) {
+        state.refreshState();
+      }
+    }
+  }
+
+  ///
+  ///
+  ///
+  @nonVirtual
   Future<bool> query() async {
-    // TODO: Take Snapshot
-    S? filterSnapshot = null;
+    StorageX.codeFlowLogger._addMethodCall(
+      isLibCode: true,
+      route: null,
+      object: this,
+      methodName: "query",
+      parameters: {},
+    );
+    //
+    bool success = false;
+    __isQuerying = true;
+    this.updateControlBarWidgets();
+    try {
+      success = await _queryWithOverlayAndRestorable();
+    } finally {
+      __isQuerying = false;
+      this.updateControlBarWidgets();
+    }
+    return success;
+  }
+
+  Future<ApiResult<D>> callApiQuery({
+    required S? filterSnapshot,
+  });
+
+  Future<bool> _queryWithOverlayAndRestorable() async {
+    return await StorageX.executeTask(
+      asyncFunction: () async {
+        return __queryWithRestorable();
+      },
+    );
+  }
+
+  // Private method (Only for use in this class)
+  Future<bool> __queryWithRestorable() async {
+    try {
+      _backupAll();
+      bool success = await __queryThisAndChildren();
+      //
+      if (!success) {
+        _restoreAll();
+        return false;
+      } else {
+        _applyNewStateAll();
+        return true;
+      }
+    } catch (e, stacktrace) {
+      _handleError(
+        className: getClassName(this),
+        methodName: 'query',
+        error: e,
+        stackTrace: stacktrace,
+        showSnackbar: true,
+      );
+      //
+      _restoreAll();
+      return false;
+    }
+  }
+
+  Future<bool> __queryThisAndChildren() async {
+    final S filterSnapshot = blockFilter == null
+        ? EmptyFilterSnapshot() as S
+        : blockFilter!._currentSnapshot!;
+    //
+
     ApiResult<D> result;
     try {
       StorageX.codeFlowLogger._addMethodCall(
@@ -41,19 +138,20 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
         parameters: {},
       );
       //
-      result = await callApiQuery(filterSnapshot: filterSnapshot);
-    } catch (e, stackTrace) {
+      result = await callApiQuery(
+        filterSnapshot: filterSnapshot,
+      );
+    } catch (e, stacktrace) {
       _handleError(
         className: getClassName(this),
         methodName: "callApiQuery",
         error: e,
-        stackTrace: stackTrace,
+        stackTrace: stacktrace,
         showSnackbar: true,
       );
       //
       return false;
     }
-    //
     if (result.errorMessage != null) {
       _handleRestError(
         methodName: "callApiQuery",
@@ -70,13 +168,8 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
       data: result.data,
       dataState: DataState.ready,
     );
-
     return true;
   }
-
-  Future<ApiResult<D>> callApiQuery({
-    required S? filterSnapshot,
-  });
 
   bool hasActiveNonBlockFragmentWidget() {
     _removeUnmountedWidgetStates(_nonBlockFragmentWidgetStateListeners);
