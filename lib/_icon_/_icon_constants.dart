@@ -61,6 +61,7 @@ const IconData _copyToClipboardIconData =
 const IconData _queryModeEagerIconData =
     cupertino.CupertinoIcons.arrow_right_arrow_left_square;
 
+@deprecated
 const IconData _dialogCloseIconData = cupertino.CupertinoIcons.clear_circled;
 
 const IconData _blockControlBarIconData =

@@ -24,7 +24,8 @@ dependencies:
 
   flutter_artist_rest_core:
     path: ../flutter_artist_rest_core
-
+  flutter_artist_dialogs:
+    path: ../flutter_artist_dialogs
 
 dev_dependencies:
   flutter_test:

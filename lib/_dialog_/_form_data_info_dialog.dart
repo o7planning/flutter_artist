@@ -27,7 +27,7 @@ class _FormDataInfoDialogState extends State<_FormDataInfoDialog> {
     Size size = _calculateDebugDialogSize(context);
 
     // Set up the AlertDialog
-    AlertDialog alert = _CustomAlertDialog(
+    AlertDialog alert = CustomAlertDialog(
       titleText: showFormData
           ? "${getClassName(widget.blockForm)} - Form Data"
           : "${getClassName(widget.blockForm.block.shelf)} - Structure",

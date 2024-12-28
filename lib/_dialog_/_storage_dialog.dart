@@ -38,7 +38,7 @@ class _StorageDialogState extends State<_StorageDialog> {
       child: _buildMainWidget(),
     );
 
-    AlertDialog alert = _CustomAlertDialog(
+    AlertDialog alert = CustomAlertDialog(
       titleText: _currentShelf == null ? "Storage" : "Shelf Structure",
       content: contentWidget,
       contentPadding: EdgeInsets.zero,

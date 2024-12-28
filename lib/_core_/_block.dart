@@ -1648,12 +1648,12 @@ abstract class Block<I extends Object, D extends Object,
       bool confirm = false;
       BuildContext context = StorageX.adapter.getCurrentContext();
       if (actionConfirmation.type == ActionConfirmationType.delete) {
-        confirm = await _showConfirmDeleteDialog(
+        confirm = await dialogs.showConfirmDeleteDialog(
           context: context,
           details: actionConfirmation.details ?? "",
         );
       } else if (actionConfirmation.type == ActionConfirmationType.custom) {
-        confirm = await _showConfirmDialog(
+        confirm = await dialogs.showConfirmDialog(
           context: context,
           message: actionConfirmation.message,
           details: actionConfirmation.details ?? "",
@@ -2063,7 +2063,7 @@ abstract class Block<I extends Object, D extends Object,
 
   Future<bool> showConfirmDeleteDialog({String? detals}) async {
     BuildContext context = StorageX.adapter.getCurrentContext();
-    bool confirm = await _showConfirmDeleteDialog(
+    bool confirm = await dialogs.showConfirmDeleteDialog(
       context: context,
       details: detals ?? "",
     );
@@ -2075,7 +2075,7 @@ abstract class Block<I extends Object, D extends Object,
     String? detals,
   }) async {
     BuildContext context = StorageX.adapter.getCurrentContext();
-    await _showMessageDialog(
+    await dialogs.showMessageDialog(
       context: context,
       message: message,
       details: detals ?? "",

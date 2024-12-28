@@ -26,7 +26,7 @@ class _DevelopmentModeSettingsDialogState
   @override
   Widget build(BuildContext context) {
     // Set up the AlertDialog
-    AlertDialog alert = _CustomAlertDialog(
+    AlertDialog alert = CustomAlertDialog(
       titleText: widget.title,
       contentPadding: const EdgeInsets.all(5),
       content: _buildMainContent(context),

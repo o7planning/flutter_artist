@@ -179,7 +179,7 @@ abstract class Shelf {
   Future<void> showMessageDialog(
       {required String message, String? details}) async {
     BuildContext context = StorageX.adapter.getCurrentContext();
-    await _showMessageDialog(
+    await dialogs.showMessageDialog(
       context: context,
       message: message,
       details: details,
