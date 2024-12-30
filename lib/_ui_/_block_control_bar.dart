@@ -152,15 +152,17 @@ class _BlockControlBarState extends _WidgetState<BlockControlBar> {
           _ControlBarButton(
             tooltip: "Delete",
             iconData: _formDeleteIconData,
-            iconColor: widget.showDeleteButton && widget.block.canDelete()
-                ? Colors.red
-                : Colors.black26,
+            iconColor:
+                widget.showDeleteButton && widget.block.canDeleteCurrentItem()
+                    ? Colors.red
+                    : Colors.black26,
             onAction: widget.block.isDeleting,
-            onPressed: widget.showDeleteButton && widget.block.canDelete()
-                ? () {
-                    _doDelete(widget.block);
-                  }
-                : null,
+            onPressed:
+                widget.showDeleteButton && widget.block.canDeleteCurrentItem()
+                    ? () {
+                        _doDelete(widget.block);
+                      }
+                    : null,
           ),
       ],
       divider: _buildSpaceSeparator(),

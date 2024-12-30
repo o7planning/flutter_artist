@@ -122,10 +122,72 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
     }
   }
 
+  // Private method. Only for use in this class.
+  Future<bool> __prepareFilter({
+    required SuggestedFilterData? suggestedFilterData,
+    required bool force,
+  }) async {
+    if (blockFilter == null) {
+      return true;
+    }
+    try {
+      StorageX.codeFlowLogger._addMethodCall(
+        isLibCode: false,
+        object: blockFilter!,
+        methodName: "prepareData",
+        parameters: {
+          "suggestedFilterData": suggestedFilterData,
+        },
+        route: null,
+      );
+      //
+      await blockFilter!.prepareData(suggestedFilterData: suggestedFilterData);
+    } catch (e, stacktrace) {
+      _handleError(
+        className: getClassName(blockFilter),
+        methodName: 'prepareData',
+        error: e,
+        stackTrace: stacktrace,
+        showSnackbar: true,
+      );
+      return false;
+    }
+    try {
+      StorageX.codeFlowLogger._addMethodCall(
+        isLibCode: false,
+        object: blockFilter!,
+        methodName: "takeSnapshot",
+        parameters: {},
+        route: null,
+      );
+      //
+      S filterSnapshot = blockFilter!.takeSnapshot();
+      blockFilter!._currentSnapshot = filterSnapshot;
+      return true;
+    } catch (e, stacktrace) {
+      _handleError(
+        className: getClassName(blockFilter),
+        methodName: 'prepareData',
+        error: e,
+        stackTrace: stacktrace,
+        showSnackbar: true,
+      );
+      return false;
+    }
+  }
+
   Future<bool> __queryThisAndChildren() async {
-    final S filterSnapshot = blockFilter == null
+    bool success = await __prepareFilter(
+      suggestedFilterData: null, // suggestedFilterData,
+      force: true,
+    );
+    if (!success) {
+      return false;
+    }
+    //
+    final S? filterSnapshot = blockFilter == null
         ? EmptyFilterSnapshot() as S
-        : blockFilter!._currentSnapshot!;
+        : blockFilter!._currentSnapshot;
     //
 
     ApiResult<D> result;

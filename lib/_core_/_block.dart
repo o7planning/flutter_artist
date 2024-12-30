@@ -1550,12 +1550,17 @@ abstract class Block<I extends Object, D extends Object,
     }
   }
 
-  bool _isAllowDeleteCurrentItem() {
-    D? currentItem = data.currentItemDetail;
-    if (currentItem == null) {
-      return false;
+  bool _isAllowDeleteItem({required I item}) {
+    final bool isCurrent = data.isCurrentItem(item: item);
+    if (!isCurrent) {
+      return true;
+    } else {
+      D? currentItem = data.currentItemDetail;
+      if (currentItem == null) {
+        return false;
+      }
+      return _isAllowDelete(refreshedItem: currentItem);
     }
-    return _isAllowDelete(refreshedItem: currentItem);
   }
 
   bool needToKeepItemInList({
@@ -2061,11 +2066,11 @@ abstract class Block<I extends Object, D extends Object,
     return false;
   }
 
-  Future<bool> showConfirmDeleteDialog({String? detals}) async {
+  Future<bool> showConfirmDeleteDialog({String? details}) async {
     BuildContext context = StorageX.adapter.getCurrentContext();
     bool confirm = await dialogs.showConfirmDeleteDialog(
       context: context,
-      details: detals ?? "",
+      details: details ?? "",
     );
     return confirm;
   }
@@ -2082,6 +2087,86 @@ abstract class Block<I extends Object, D extends Object,
     );
   }
 
+  Future<bool> deleteItemByIdAsString({required String itemId}) async {
+    StorageX.codeFlowLogger._addMethodCall(
+      isLibCode: true,
+      route: null,
+      object: this,
+      methodName: "deleteItemByIdAsString",
+      parameters: {
+        "itemId": itemId,
+      },
+    );
+    //
+    I? item = data.findItemByIdString(itemId);
+    final bool inList = item != null;
+    //
+    if (item == null) {
+      ApiResult<D> result;
+      try {
+        result = await StorageX.executeTask(
+          asyncFunction: () async {
+            return await callApiFindItemByIdAsString(itemId: itemId);
+          },
+        );
+      } catch (e, stackTrace) {
+        _handleError(
+          className: getClassName(this),
+          methodName: "callApiRefreshItemByIdAsString",
+          error: e,
+          stackTrace: stackTrace,
+          showSnackbar: true,
+        );
+        //
+        return false;
+      }
+      //
+      if (result.isError()) {
+        _handleRestError(
+          methodName: "callApiRefreshItemByIdAsString",
+          message: result.errorMessage!,
+          errorDetails: result.errorDetails,
+          showSnackbar: true,
+        );
+        return false;
+      }
+      D? itemDetail = result.data;
+      if (itemDetail == null) {
+        return true;
+      }
+      try {
+        item = this.convertItemDetailToItem(itemDetail: itemDetail);
+      } catch (e, stackTrace) {
+        _handleError(
+          className: getClassName(this),
+          methodName: "convertItemDetailToItem",
+          error: e,
+          stackTrace: stackTrace,
+          showSnackbar: true,
+        );
+        //
+        return false;
+      }
+    }
+    //
+    if (!canDelete(item: item)) {
+      return false;
+    }
+    bool confirm = await showConfirmDeleteDialog(details: getClassName(item));
+    if (!confirm) {
+      return false;
+    }
+    __isDeleting = true;
+    this.updateControlBarWidgets();
+    bool success = false;
+    try {
+      success = await _deleteWithOverlayAndRestorable(item);
+    } finally {
+      __isDeleting = false;
+    }
+    return success;
+  }
+
   Future<bool> delete(I item) async {
     StorageX.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -2093,10 +2178,10 @@ abstract class Block<I extends Object, D extends Object,
       },
     );
     //
-    if (!canDelete()) {
+    if (!canDelete(item: item)) {
       return false;
     }
-    bool confirm = await showConfirmDeleteDialog(detals: getClassName(item));
+    bool confirm = await showConfirmDeleteDialog(details: getClassName(item));
     if (!confirm) {
       return false;
     }
@@ -2147,11 +2232,13 @@ abstract class Block<I extends Object, D extends Object,
   // Private method. Only for use in this class only.
   Future<bool> __delete(I item) async {
     try {
-      if (blockForm?.data._formMode == FormMode.creation) {
+      final bool isCurrent = data.isCurrentItem(item: item);
+
+      if (isCurrent && blockForm?.data._formMode == FormMode.creation) {
         return false;
       }
       if (blockForm?.data._formMode == FormMode.none) {
-        return false;
+        // return false;
       }
       ApiResult<void> result;
       try {
@@ -2190,34 +2277,33 @@ abstract class Block<I extends Object, D extends Object,
         );
         return false;
       } else {
-        final I? currentItem = data.currentItem;
-        final I? sibling = data._findSiblingItem(item: item);
-        // Remove Item
-        if (currentItem != null &&
-            getItemIdAsString(currentItem) != getItemIdAsString(item)) {
+        if (!isCurrent) {
           __removeItemFromList(removeItem: item);
-          return true;
-        }
-        __removeItemFromList(removeItem: item);
-
-        //
-        if (sibling != null) {
-          bool success = await __prepareToShowOrEdit(
-            item: sibling,
-            justQueried: false,
-            suggestedSelection: null,
-            forceForm: false,
-          );
-          if (!success) {
-            return false;
-          }
         } else {
-          bool success = await _switchThisAndChildrenToNoneMode(
-            clearListForThis: false,
-            dataState: DataState.ready,
-          );
-          if (!success) {
-            return false;
+          // Deleted current item ==> find sibling.
+          final I? sibling = data._findSiblingItem(item: item);
+          // Remove Item
+          __removeItemFromList(removeItem: item);
+
+          //
+          if (sibling != null) {
+            bool success = await __prepareToShowOrEdit(
+              item: sibling,
+              justQueried: false,
+              suggestedSelection: null,
+              forceForm: false,
+            );
+            if (!success) {
+              return false;
+            }
+          } else {
+            bool success = await _switchThisAndChildrenToNoneMode(
+              clearListForThis: false,
+              dataState: DataState.ready,
+            );
+            if (!success) {
+              return false;
+            }
           }
         }
       }
@@ -2298,6 +2384,8 @@ abstract class Block<I extends Object, D extends Object,
 
   Future<ApiResult<D>> callApiRefreshItem({required I item});
 
+  Future<ApiResult<D>> callApiFindItemByIdAsString({required String itemId});
+
   bool canCreate() {
     if (blockForm == null || this.__isPreparingFormCreation) {
       return false;
@@ -2324,7 +2412,15 @@ abstract class Block<I extends Object, D extends Object,
     return blockForm!.data._formMode != FormMode.none;
   }
 
-  bool canDelete() {
+  bool canDeleteCurrentItem() {
+    I? currentItem = data.currentItem;
+    if (currentItem == null) {
+      return false;
+    }
+    return canDelete(item: currentItem!);
+  }
+
+  bool canDelete({required I item}) {
     if (__isDeleting) {
       return false;
     }
@@ -2335,11 +2431,13 @@ abstract class Block<I extends Object, D extends Object,
         return false;
       }
     }
-    bool can = blockForm!.data._formMode != FormMode.none;
-    if (!can) {
-      return false;
-    }
-    return _isAllowDeleteCurrentItem();
+    final bool isCurrent = data.isCurrentItem(item: item);
+    // if()
+    // bool can = blockForm!.data._formMode != FormMode.none;
+    // if (!can) {
+    //   return false;
+    // }
+    return _isAllowDeleteItem(item: item);
   }
 
   bool canEditOnForm() {
