@@ -134,6 +134,7 @@ enum WidgetStateType {
   controlBar,
   form,
   blockFragment,
+  shelfFragment,
   //
   nonBlockFragment,
   loggedInUser;

@@ -33,6 +33,8 @@ abstract class Shelf {
 
   String get name => StorageX._getShelfName(runtimeType);
 
+  final Map<_WidgetState, bool> _shelfWidgetStateListeners = {};
+
   Shelf() {
     __onInit();
   }
@@ -461,6 +463,12 @@ abstract class Shelf {
   }
 
   void updateAllWidgets() {
+    for (_WidgetState state in _shelfWidgetStateListeners.keys) {
+      if (state.mounted) {
+        state.refreshState();
+      }
+    }
+    //
     for (NonBlock nonBlock in __nonBlocks) {
       nonBlock.updateControlBarWidgets();
       nonBlock.updateFragmentWidgets();
@@ -468,5 +476,16 @@ abstract class Shelf {
     for (Block block in __rootBlocks) {
       __updateAllWidgetsCascade(block);
     }
+  }
+
+  void _addWidgetStateListener({
+    required _WidgetState widgetState,
+    required bool isShowing,
+  }) {
+    _shelfWidgetStateListeners[widgetState] = isShowing;
+  }
+
+  void _removeWidgetStateListener({required State widgetState}) {
+    _shelfWidgetStateListeners.remove(widgetState);
   }
 }

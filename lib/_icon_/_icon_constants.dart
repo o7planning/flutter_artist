@@ -79,6 +79,8 @@ const IconData _nonBlockFragmentIconData = cupertino.CupertinoIcons.pano_fill;
 
 const IconData _paginationIconData = cupertino.CupertinoIcons.ellipsis_circle;
 
+const IconData _shelfFragmentIconData = cupertino.CupertinoIcons.tray;
+
 const IconData _loggedUserIconData =
     cupertino.CupertinoIcons.person_crop_circle;
 

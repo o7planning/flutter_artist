@@ -139,6 +139,8 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
         return _loggedUserIconData;
       case WidgetStateType.nonBlockFragment:
         return _nonBlockFragmentIconData;
+      case WidgetStateType.shelfFragment:
+        return _shelfFragmentIconData;
     }
   }
 

@@ -121,6 +121,7 @@ part '_ui_/_notification_button_builder.dart';
 part '_ui_/_number_pagination.dart';
 part '_ui_/_shelf_block_type_widget.dart';
 part '_ui_/_shelf_info_view.dart';
+part '_ui_/_shelves_safe_layout_area.dart';
 part '_ui_/_simple_accordion.dart';
 part '_ui_/_simple_accordion_section.dart';
 part '_ui_/_simple_small_icon_button.dart';
