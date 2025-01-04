@@ -45,24 +45,20 @@ class BlockFormData<I extends Object, D extends Object> {
   BlockFormData({required this.blockForm});
 
   bool _isDirty() {
-    if (_initialFormData.length != _currentFormData.length) {
-      return true;
-    }
-    for (String key in _currentFormData.keys) {
+    Set<String> keySet = {}
+      ..addAll(_initialFormData.keys)
+      ..addAll(_currentFormData.keys);
+    //
+    for (String key in keySet) {
       dynamic currentValue = _currentFormData[key];
       dynamic initialValue = _initialFormData[key];
-      if (currentValue != initialValue) {
+      bool eq = _compareDynamicAndDynamic(currentValue, initialValue);
+      if (!eq) {
         return true;
       }
     }
     return false;
   }
-
-  // void _reset() {
-  //   _currentFormData
-  //     ..clear()
-  //     ..addAll(_initialFormData);
-  // }
 
   void _updateFormData(Map<String, dynamic> formData) {
     _justInited = true;
