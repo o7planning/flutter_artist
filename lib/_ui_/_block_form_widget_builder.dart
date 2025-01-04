@@ -81,7 +81,6 @@ class _BlockFormWidgetBuilderState
 
   Widget _buildMain() {
     __executeAfterBuild();
-    print("widget.blockForm.isEnabled() = ${widget.blockForm.isEnabled()}");
     //
     return FormBuilder(
       key: formKey,

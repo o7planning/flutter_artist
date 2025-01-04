@@ -124,7 +124,13 @@ abstract class BlockForm<I extends Object, D extends Object> {
   }
 
   void resetForm() {
-    _formKey.currentState?.patchValue(data._initialFormData);
+    Map<String, dynamic> initData = {...data._initialFormData};
+    for (String key in _formKey.currentState?.instantValue.keys ?? []) {
+      if (!initData.containsKey(key)) {
+        initData[key] = null;
+      }
+    }
+    _formKey.currentState?.patchValue(initData);
     //
     updateFormWidgets();
     block.updateControlBarWidgets();
