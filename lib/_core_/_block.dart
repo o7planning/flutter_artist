@@ -2445,10 +2445,12 @@ abstract class Block<I extends Object, D extends Object,
       return false;
     }
     if (parent != null) {
-      if (parent!.formMode == FormMode.none ||
-          parent!.formMode == FormMode.creation ||
-          parent!.data.currentItemDetail == null) {
-        return false;
+      if (parent!.blockForm != null) {
+        if (parent!.formMode == FormMode.none ||
+            parent!.formMode == FormMode.creation ||
+            parent!.data.currentItemDetail == null) {
+          return false;
+        }
       }
     }
     switch (blockForm!.data._formMode) {
