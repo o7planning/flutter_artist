@@ -111,7 +111,7 @@ part '_ui_/_control_bar_button.dart';
 part '_ui_/_custom_app_container.dart';
 part '_ui_/_custom_control_bar.dart';
 part '_ui_/_custom_control_bar_item.dart';
-part '_ui_/_custom_control_bar_single_item.dart';
+part '_ui_/_custom_single_item_control_bar.dart';
 part '_ui_/_debug_menu.dart';
 part '_ui_/_dev_container.dart';
 part '_ui_/_floating_button.dart';

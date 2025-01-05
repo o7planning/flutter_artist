@@ -1,26 +1,29 @@
 part of '../flutter_artist.dart';
 
 class CustomControlBarItem extends StatelessWidget {
-  final EdgeInsets padding;
-  final Block block;
-  final String? description;
   final Widget child;
   final Function() onPressed;
+  final Function()? route;
 
   const CustomControlBarItem({
     super.key,
-    required this.padding,
-    required this.block,
-    this.description,
     required this.child,
     required this.onPressed,
+    this.route,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onPressed,
+      onTap: _onPressed,
       child: child,
     );
+  }
+
+  void _onPressed() {
+    onPressed();
+    if (route != null) {
+      route!();
+    }
   }
 }

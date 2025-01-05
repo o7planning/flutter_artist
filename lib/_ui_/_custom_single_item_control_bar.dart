@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-class CustomControlBarSingleItem extends StatelessWidget {
+class CustomSingleItemControlBar extends StatelessWidget {
   final EdgeInsets margin;
   final EdgeInsets padding;
   final Decoration? decoration;
@@ -14,7 +14,7 @@ class CustomControlBarSingleItem extends StatelessWidget {
   ///
   final Object ownerClassInstance;
 
-  const CustomControlBarSingleItem({
+  const CustomSingleItemControlBar({
     super.key,
     this.margin = EdgeInsets.zero,
     this.padding = EdgeInsets.zero,
