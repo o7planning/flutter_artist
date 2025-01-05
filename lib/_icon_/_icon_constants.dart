@@ -66,6 +66,9 @@ const IconData _dialogCloseIconData = cupertino.CupertinoIcons.clear_circled;
 
 const IconData _blockControlBarIconData =
     cupertino.CupertinoIcons.game_controller;
+const IconData _blockCustomControlBarIconData =
+    cupertino.CupertinoIcons.gamecontroller_fill;
+
 const IconData _blockFilterIconData = Icons.filter_alt_outlined;
 const IconData _blockFormIconData = cupertino.CupertinoIcons.film_fill;
 const IconData _blockFormNoneIconData = cupertino.CupertinoIcons.capsule;

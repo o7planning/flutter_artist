@@ -6,6 +6,8 @@ class BlockFormWidgetBuilder extends StatefulWidget {
   final String? description;
 
   final Widget Function(BlockForm blkForm) build;
+  @Deprecated("Chua su dung")
+  final Function()? onAfterBuild;
 
   const BlockFormWidgetBuilder({
     super.key,
@@ -13,6 +15,7 @@ class BlockFormWidgetBuilder extends StatefulWidget {
     required this.description,
     required this.blockForm,
     required this.build,
+    this.onAfterBuild,
   });
 
   @override

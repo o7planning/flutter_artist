@@ -129,6 +129,8 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
         return _blockFilterIconData;
       case WidgetStateType.controlBar:
         return _blockControlBarIconData;
+      case WidgetStateType.customControlBar:
+        return _blockCustomControlBarIconData;
       case WidgetStateType.form:
         return _blockFormIconData;
       case WidgetStateType.blockFragment:

@@ -132,6 +132,7 @@ enum WidgetStateType {
   pagination,
   filter,
   controlBar,
+  customControlBar,
   form,
   blockFragment,
   shelfFragment,

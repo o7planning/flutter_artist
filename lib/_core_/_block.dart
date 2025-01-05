@@ -2390,7 +2390,7 @@ abstract class Block<I extends Object, D extends Object,
     if (blockForm == null || this.__isPreparingFormCreation) {
       return false;
     }
-    if (parent != null) {
+    if (parent != null && parent!.blockForm != null) {
       if (parent!.formMode == FormMode.none ||
           parent!.formMode == FormMode.creation) {
         return false;

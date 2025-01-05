@@ -193,7 +193,8 @@ class _BlockControlBarState extends _WidgetState<BlockControlBar> {
               ),
             if (loggedInUser?.isSystemUser ?? false)
               Tooltip(
-                message: widget.block.formMode.tooltip,
+                message:
+                    "${widget.block.formMode.tooltip} [${getClassName(widget.block)}]",
                 child: Icon(
                   widget.block.formMode == FormMode.none
                       ? _formNoneModeIconData
