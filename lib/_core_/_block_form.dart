@@ -162,6 +162,8 @@ abstract class BlockForm<I extends Object, D extends Object> {
 
   void setFormInstantValue(String propertyName, dynamic value) {
     _formKey.currentState?.patchValue({propertyName: value});
+    data._currentFormData[propertyName] = value;
+    this.updateFormWidgets();
   }
 
   // Developer do not call this method!
