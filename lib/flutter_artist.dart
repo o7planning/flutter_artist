@@ -103,6 +103,7 @@ part '_notification_/_notification.dart';
 part '_notification_/_notification_engine.dart';
 part '_notification_/_notification_summary.dart';
 part '_ui_/_base_pagination.dart';
+part '_ui_/_control_button.dart';
 part '_ui_/_block_control_bar.dart';
 part '_ui_/_block_filter_fragment_widget_builder.dart';
 part '_ui_/_block_form_widget_builder.dart';
