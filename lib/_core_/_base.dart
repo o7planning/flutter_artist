@@ -30,7 +30,7 @@ abstract class BaseBlk {
     );
     //
     FlutterArtist.errorLogger.addError(
-      shelfName: FlutterArtist._getShelfName(shelf.runtimeType),
+      shelfName: FlutterArtist.storage._getShelfName(shelf.runtimeType),
       message: msg,
       errorDetails: apiError.errorDetails,
       stackTrace: stackTrace,
@@ -53,7 +53,7 @@ abstract class BaseBlk {
     required bool showSnackbar,
   }) {
     FlutterArtist.errorLogger.addError(
-      shelfName: FlutterArtist._getShelfName(shelf.runtimeType),
+      shelfName: FlutterArtist.storage._getShelfName(shelf.runtimeType),
       message: message,
       errorDetails: errorDetails,
       stackTrace: null,

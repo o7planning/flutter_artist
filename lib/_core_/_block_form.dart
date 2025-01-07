@@ -217,7 +217,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
     required bool showSnackbar,
   }) {
     FlutterArtist.errorLogger.addError(
-      shelfName: FlutterArtist._getShelfName(block.shelf.runtimeType),
+      shelfName: FlutterArtist.storage._getShelfName(block.shelf.runtimeType),
       message: error.toString(),
       errorDetails: null,
       stackTrace: stackTrace,
@@ -314,7 +314,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
           ? await callApiCreate(formMapData: formMapData)
           : await callApiUpdate(formMapData: formMapData);
       //
-      FlutterArtist.fireSourceChanged(
+      FlutterArtist.storage.fireSourceChanged(
         sourceBlock: block,
         itemIdString: null,
       );

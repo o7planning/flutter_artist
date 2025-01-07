@@ -53,7 +53,7 @@ class _ShelfBlockTypeWidget extends StatelessWidget {
   }
 
   Widget _buildFlu() {
-    Shelf? shelf = FlutterArtist._findShelf(shelfBlockType.shelfType);
+    Shelf? shelf = FlutterArtist.storage._findShelf(shelfBlockType.shelfType);
     String? shelfName = shelf?.name;
     String? description = shelf?.description;
 

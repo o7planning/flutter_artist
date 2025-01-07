@@ -1260,7 +1260,7 @@ abstract class Block<I extends Object, D extends Object,
     ApiResult<D> result;
     try {
       result = await callApiQuickCreate(data: data);
-      FlutterArtist.fireSourceChanged(
+      FlutterArtist.storage.fireSourceChanged(
         sourceBlock: this,
         itemIdString: null,
       );
@@ -1313,7 +1313,7 @@ abstract class Block<I extends Object, D extends Object,
     ApiResult<D> result;
     try {
       result = await callApiQuickUpdate(item: item, data: data);
-      FlutterArtist.fireSourceChanged(
+      FlutterArtist.storage.fireSourceChanged(
         sourceBlock: this,
         itemIdString: null,
       );
@@ -2253,7 +2253,7 @@ abstract class Block<I extends Object, D extends Object,
         );
         //
         result = await callApiDelete(item: item);
-        FlutterArtist.fireSourceChanged(
+        FlutterArtist.storage.fireSourceChanged(
           sourceBlock: this,
           itemIdString: null,
         );

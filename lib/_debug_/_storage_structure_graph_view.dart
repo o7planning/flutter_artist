@@ -36,7 +36,9 @@ class _StorageStructureGraphViewState
     super.initState();
     widget.controller._setSelectedShelf = (Shelf shelf) {
       setState(() {
-        selectedShelfName = FlutterArtist._getShelfName(shelf.runtimeType);
+        selectedShelfName = FlutterArtist.storage._getShelfName(
+          shelf.runtimeType,
+        );
       });
     };
   }
@@ -197,11 +199,13 @@ class _StorageStructureGraphViewState
       isListener: false,
       shelfName: "Global Flu",
     );
-    Map<String, Shelf?> shelfMap = FlutterArtist.shelfMap;
-    Map<String, Shelf?> shelfListenerMap = FlutterArtist._getListenerShelves();
-    Map<String, Shelf?> shelfNotifierMap = FlutterArtist._getNotifierShelves();
+    Map<String, Shelf?> shelfMap = FlutterArtist.storage.shelfMap;
+    Map<String, Shelf?> shelfListenerMap =
+        FlutterArtist.storage._getListenerShelves();
+    Map<String, Shelf?> shelfNotifierMap =
+        FlutterArtist.storage._getNotifierShelves();
     Map<String, Shelf?> shelfIndependentMap =
-        FlutterArtist._getIndependentShelves();
+        FlutterArtist.storage._getIndependentShelves();
 
     for (String shelfName in shelfMap.keys) {
       _GraphGItem item = _GraphGItem(
@@ -281,7 +285,7 @@ class _StorageStructureGraphViewState
 
   void _onSelectFluToShowGraph(_GraphGItem item) {
     Shelf? shelf = item.shelf;
-    shelf ??= FlutterArtist._createShelf(item.shelfName);
+    shelf ??= FlutterArtist.storage._createShelf(item.shelfName);
     widget.onSelectShelfToShowGraph(shelf);
   }
 
@@ -289,7 +293,7 @@ class _StorageStructureGraphViewState
     setState(() {
       selectedShelfName = item.shelfName;
       Shelf? shelf = item.shelf;
-      shelf ??= FlutterArtist._createShelf(item.shelfName);
+      shelf ??= FlutterArtist.storage._createShelf(item.shelfName);
       widget.onSelectShelfToShowTreeView(shelf);
     });
   }

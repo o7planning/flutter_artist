@@ -31,7 +31,7 @@ abstract class Shelf {
 
   bool _queryLocked = false;
 
-  String get name => FlutterArtist._getShelfName(runtimeType);
+  String get name => FlutterArtist.storage._getShelfName(runtimeType);
 
   final Map<_WidgetState, bool> _shelfWidgetStateListeners = {};
 

@@ -23,7 +23,7 @@ class _StorageDialogState extends State<_StorageDialog> {
   @override
   void initState() {
     super.initState();
-    FlutterArtist._loadAll();
+    FlutterArtist.storage._loadAll();
     _currentShelf = widget.shelf;
   }
 

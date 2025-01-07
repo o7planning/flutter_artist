@@ -46,7 +46,7 @@ class _StorageStructureViewState extends State<_StorageStructureView> {
             shelf: _selectedShelf,
             onSelectShelfBlockType: (ShelfBlockType shelfBlockType) {
               Type shelfType = shelfBlockType.shelfType;
-              Shelf? shelf = FlutterArtist._findShelf(shelfType);
+              Shelf? shelf = FlutterArtist.storage._findShelf(shelfType);
               if (shelf != null) {
                 globalFluStructureGraphController.setSelectedShelf(shelf);
               }
