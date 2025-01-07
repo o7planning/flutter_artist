@@ -25,7 +25,7 @@ abstract class BaseBlk {
     //
     FlutterArtist.codeFlowLogger._addError(
       isLibCode: true,
-      object: this,
+      ownerClassInstance: this,
       error: msg,
     );
     //
@@ -59,7 +59,7 @@ abstract class BaseBlk {
       stackTrace: null,
     );
     FlutterArtist.codeFlowLogger._addError(
-      object: this,
+      ownerClassInstance: this,
       error: message,
       isLibCode: true,
     );

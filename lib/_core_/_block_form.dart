@@ -241,7 +241,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
   Future<bool> saveForm() async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
-      object: this,
+      ownerClassInstance: this,
       methodName: "saveForm",
       parameters: {},
       route: null,
@@ -302,7 +302,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
       //
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
-        object: this,
+        ownerClassInstance: this,
         methodName: calledMethodName,
         parameters: {
           "formMapData": formMapData,
@@ -355,7 +355,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
-      object: this,
+      ownerClassInstance: this,
       methodName: "_prepareForm",
       parameters: {
         "refreshedItem": refreshedItem,
@@ -405,7 +405,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
         route: null,
-        object: this,
+        ownerClassInstance: this,
         methodName: "prepareFormMasterData",
         parameters: {
           "refreshedItem": refreshedItem,
@@ -453,7 +453,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
-      object: this,
+      ownerClassInstance: this,
       methodName: "__copyItemDataToFormKeyState",
       parameters: {
         "refreshedItem": refreshedItem,
@@ -466,7 +466,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
       try {
         FlutterArtist.codeFlowLogger._addMethodCall(
           isLibCode: false,
-          object: this,
+          ownerClassInstance: this,
           methodName: "prepareFormData",
           parameters: {
             "blockFilter": block.blockFilter,

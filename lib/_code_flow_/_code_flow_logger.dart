@@ -24,7 +24,7 @@ class CodeFlowLogger {
   // ===========================================================================
 
   void addMethodCall({
-    required Object object,
+    required Object ownerClassInstance,
     required StackTrace currentStackTrace,
     required Map<String, dynamic>? parameters,
   }) {
@@ -33,14 +33,14 @@ class CodeFlowLogger {
     _CodeFlowItem item;
     try {
       item = _CodeFlowItem._methodCallFromStackTrace(
-        object: object,
+        ownerClassInstance: ownerClassInstance,
         currentStackTrace: currentStackTrace,
         arguments: parameters,
         isLibCode: false,
       );
     } catch (e) {
       item = _CodeFlowItem._methodCall(
-        object: object,
+        ownerClassInstance: ownerClassInstance,
         methodName: "Something Error",
         arguments: parameters,
         isLibCode: false,
@@ -50,7 +50,7 @@ class CodeFlowLogger {
   }
 
   void _addMethodCall({
-    required Object object,
+    required Object ownerClassInstance,
     required String methodName,
     required Map<String, dynamic>? parameters,
     required Function()? route,
@@ -59,7 +59,7 @@ class CodeFlowLogger {
     __markDateTime();
     //
     _CodeFlowItem log = _CodeFlowItem._methodCall(
-      object: object,
+      ownerClassInstance: ownerClassInstance,
       methodName: methodName,
       arguments: parameters,
       isLibCode: isLibCode,
@@ -71,25 +71,25 @@ class CodeFlowLogger {
   // ===========================================================================
 
   void addInfo({
-    required Object object,
+    required Object ownerClassInstance,
     required String info,
   }) {
     return _addInfo(
-      object: object,
+      ownerClassInstance: ownerClassInstance,
       info: info,
       isLibCode: false,
     );
   }
 
   void _addInfo({
-    required Object object,
+    required Object ownerClassInstance,
     required String info,
     required bool isLibCode,
   }) {
     __markDateTime();
     //
     _CodeFlowItem log = _CodeFlowItem._info(
-      object: object,
+      ownerClassInstance: ownerClassInstance,
       info: info,
       isLibCode: isLibCode,
     );
@@ -97,14 +97,14 @@ class CodeFlowLogger {
   }
 
   void _addEvent({
-    required Object object,
+    required Object ownerClassInstance,
     required String event,
     required bool isLibCode,
   }) {
     __markDateTime();
     //
     _CodeFlowItem log = _CodeFlowItem._info(
-      object: object,
+      ownerClassInstance: ownerClassInstance,
       info: event,
       isLibCode: isLibCode,
     );
@@ -115,25 +115,25 @@ class CodeFlowLogger {
   // ===========================================================================
 
   void addError({
-    required Object object,
+    required Object ownerClassInstance,
     required String error,
   }) {
     return _addError(
-      object: object,
+      ownerClassInstance: ownerClassInstance,
       error: error,
       isLibCode: false,
     );
   }
 
   void _addError({
-    required Object object,
+    required Object ownerClassInstance,
     required String error,
     required bool isLibCode,
   }) {
     __markDateTime();
     //
     _CodeFlowItem log = _CodeFlowItem._error(
-      object: object,
+      ownerClassInstance: ownerClassInstance,
       error: error,
       isLibCode: isLibCode,
     );

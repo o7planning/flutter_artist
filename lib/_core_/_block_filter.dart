@@ -55,7 +55,7 @@ abstract class BlockFilter<S extends FilterSnapshot> {
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
-      object: this,
+      ownerClassInstance: this,
       methodName: "queryBlocks",
       parameters: {
         "suggestedFilterData": suggestedFilterData,

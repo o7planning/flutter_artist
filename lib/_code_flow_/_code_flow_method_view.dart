@@ -103,7 +103,7 @@ class _CodeFlowMethodView extends StatelessWidget {
   }
 
   String _title() {
-    return getClassName(codeFlowItem.object);
+    return getClassName(codeFlowItem.ownerClassInstance);
   }
 
   String _subtitle() {

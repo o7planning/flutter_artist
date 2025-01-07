@@ -13,10 +13,10 @@ class _CodeFlowItem {
   bool get isDevCode => !isLibCode;
 
   CodeFlowType codeFlowType;
-  final Object object;
+  final Object ownerClassInstance;
 
   _CodeFlowItem._methodCallFromStackTrace({
-    required this.object,
+    required this.ownerClassInstance,
     required StackTrace currentStackTrace,
     required Map<String, dynamic>? arguments,
     required this.isLibCode,
@@ -30,7 +30,7 @@ class _CodeFlowItem {
         id = __flowLogItemSEQ++;
 
   _CodeFlowItem._methodCall({
-    required this.object,
+    required this.ownerClassInstance,
     required String methodName,
     required Map<String, dynamic>? arguments,
     required this.isLibCode,
@@ -41,7 +41,7 @@ class _CodeFlowItem {
         id = __flowLogItemSEQ++;
 
   _CodeFlowItem._info({
-    required this.object,
+    required this.ownerClassInstance,
     required this.info,
     required this.isLibCode,
   })  : codeFlowType = CodeFlowType.info,
@@ -50,7 +50,7 @@ class _CodeFlowItem {
         id = __flowLogItemSEQ++;
 
   _CodeFlowItem._error({
-    required this.object,
+    required this.ownerClassInstance,
     required this.error,
     required this.isLibCode,
   })  : codeFlowType = CodeFlowType.error,
@@ -67,15 +67,15 @@ class _CodeFlowItem {
   }
 
   bool isBlock() {
-    return object is Block;
+    return ownerClassInstance is Block;
   }
 
   bool isBlockFilter() {
-    return object is BlockFilter;
+    return ownerClassInstance is BlockFilter;
   }
 
   bool isBlockForm() {
-    return object is BlockForm;
+    return ownerClassInstance is BlockForm;
   }
 
   bool isOtherClass() {
@@ -110,12 +110,12 @@ class _CodeFlowItem {
   }
 
   Shelf? _getShelf() {
-    if (object is Block) {
-      return (object as Block).shelf;
-    } else if (object is BlockFilter) {
-      return (object as BlockFilter).shelf;
-    } else if (object is BlockForm) {
-      return (object as BlockForm).block.shelf;
+    if (ownerClassInstance is Block) {
+      return (ownerClassInstance as Block).shelf;
+    } else if (ownerClassInstance is BlockFilter) {
+      return (ownerClassInstance as BlockFilter).shelf;
+    } else if (ownerClassInstance is BlockForm) {
+      return (ownerClassInstance as BlockForm).block.shelf;
     }
     return null;
   }

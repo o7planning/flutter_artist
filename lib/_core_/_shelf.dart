@@ -388,7 +388,7 @@ abstract class Shelf {
         if (blkOrForm.nonBlock != null) {
           FlutterArtist.codeFlowLogger._addInfo(
             isLibCode: true,
-            object: this,
+            ownerClassInstance: this,
             info:
                 "Querying lazy non-block: ${getClassName(blkOrForm.nonBlock)}",
           );
@@ -402,7 +402,7 @@ abstract class Shelf {
         else if (blkOrForm.block != null) {
           FlutterArtist.codeFlowLogger._addInfo(
             isLibCode: true,
-            object: this,
+            ownerClassInstance: this,
             info: "Querying lazy block: ${getClassName(blkOrForm.block)}",
           );
           //
@@ -422,7 +422,7 @@ abstract class Shelf {
         else if (blkOrForm.blockForm != null) {
           FlutterArtist.codeFlowLogger._addInfo(
             isLibCode: true,
-            object: this,
+            ownerClassInstance: this,
             info:
                 "Querying lazy block form: ${getClassName(blkOrForm.blockForm)}",
           );

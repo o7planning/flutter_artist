@@ -66,7 +66,7 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
-      object: this,
+      ownerClassInstance: this,
       methodName: "query",
       parameters: {},
     );
@@ -133,7 +133,7 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
-        object: blockFilter!,
+        ownerClassInstance: blockFilter!,
         methodName: "prepareData",
         parameters: {
           "suggestedFilterData": suggestedFilterData,
@@ -155,7 +155,7 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
-        object: blockFilter!,
+        ownerClassInstance: blockFilter!,
         methodName: "takeSnapshot",
         parameters: {},
         route: null,
@@ -195,7 +195,7 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
         route: null,
-        object: this,
+        ownerClassInstance: this,
         methodName: "callApiQuery",
         parameters: {},
       );
@@ -285,7 +285,7 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
 
   void _fireNonBlockHidden() {
     FlutterArtist.codeFlowLogger._addEvent(
-      object: this,
+      ownerClassInstance: this,
       event: "NonBlock '${getClassName(this)}' just hides all UI Components!",
       isLibCode: true,
     );

@@ -297,7 +297,7 @@ abstract class Block<I extends Object, D extends Object,
 
   void _fireBlockHidden() {
     FlutterArtist.codeFlowLogger._addEvent(
-      object: this,
+      ownerClassInstance: this,
       event: "Block '${getClassName(this)}' just hides all UI Components!",
       isLibCode: true,
     );
@@ -456,7 +456,7 @@ abstract class Block<I extends Object, D extends Object,
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
-        object: blockFilter!,
+        ownerClassInstance: blockFilter!,
         methodName: "prepareData",
         parameters: {
           "suggestedFilterData": suggestedFilterData,
@@ -478,7 +478,7 @@ abstract class Block<I extends Object, D extends Object,
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
-        object: blockFilter!,
+        ownerClassInstance: blockFilter!,
         methodName: "takeSnapshot",
         parameters: {},
         route: null,
@@ -514,7 +514,7 @@ abstract class Block<I extends Object, D extends Object,
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: route,
-      object: this,
+      ownerClassInstance: this,
       methodName: "emptyQuery",
       parameters: {},
     );
@@ -540,7 +540,7 @@ abstract class Block<I extends Object, D extends Object,
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: route,
-      object: this,
+      ownerClassInstance: this,
       methodName: "emptyQueryAndCreate",
       parameters: {},
     );
@@ -575,7 +575,7 @@ abstract class Block<I extends Object, D extends Object,
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: route,
-      object: this,
+      ownerClassInstance: this,
       methodName: "query",
       parameters: {
         "suggestedFilterData": suggestedFilterData,
@@ -621,7 +621,7 @@ abstract class Block<I extends Object, D extends Object,
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: route,
-      object: this,
+      ownerClassInstance: this,
       methodName: "queryAndPrepareToEdit",
       parameters: {
         "suggestedFilterData": suggestedFilterData,
@@ -765,7 +765,7 @@ abstract class Block<I extends Object, D extends Object,
         FlutterArtist.codeFlowLogger._addMethodCall(
           isLibCode: false,
           route: null,
-          object: this,
+          ownerClassInstance: this,
           methodName: "callApiQuery",
           parameters: {},
         );
@@ -1024,7 +1024,7 @@ abstract class Block<I extends Object, D extends Object,
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
-      object: this,
+      ownerClassInstance: this,
       methodName: "__removeItemFromList",
       parameters: {
         "removeItem": removeItem,
@@ -1047,7 +1047,7 @@ abstract class Block<I extends Object, D extends Object,
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
-      object: this,
+      ownerClassInstance: this,
       methodName: "__removeNotFoundItemAndRefreshChildren",
       parameters: {
         "suggestedSelection": suggestedSelection,
@@ -1068,7 +1068,7 @@ abstract class Block<I extends Object, D extends Object,
       if (siblingItem != null) {
         FlutterArtist.codeFlowLogger._addInfo(
           isLibCode: true,
-          object: this,
+          ownerClassInstance: this,
           info: "Selecting sibling item",
         );
         //
@@ -1084,7 +1084,7 @@ abstract class Block<I extends Object, D extends Object,
       } else {
         FlutterArtist.codeFlowLogger._addInfo(
           isLibCode: true,
-          object: this,
+          ownerClassInstance: this,
           info: "Switching block to none-mode",
         );
         //
@@ -1108,7 +1108,7 @@ abstract class Block<I extends Object, D extends Object,
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
-      object: this,
+      ownerClassInstance: this,
       methodName: "__insertOrReplaceItemInListAndRefreshChildren",
       parameters: {
         "suggestedSelection": suggestedSelection,
@@ -1126,7 +1126,7 @@ abstract class Block<I extends Object, D extends Object,
     bool editable = _isAllowEdit(refreshedItem: refreshedItemDetail);
     //
     FlutterArtist.codeFlowLogger._addInfo(
-      object: this,
+      ownerClassInstance: this,
       info: 'Allow Edit? $editable',
       isLibCode: true,
     );
@@ -1178,7 +1178,7 @@ abstract class Block<I extends Object, D extends Object,
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
-      object: this,
+      ownerClassInstance: this,
       methodName: "_switchThisAndChildrenToNoneMode",
       parameters: {
         "clearListForThis": clearListForThis,
@@ -1640,7 +1640,7 @@ abstract class Block<I extends Object, D extends Object,
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
-      object: this,
+      ownerClassInstance: this,
       methodName: "executeQuickAction",
       parameters: {
         "suggestedFilterData": suggestedFilterData,
@@ -1721,7 +1721,7 @@ abstract class Block<I extends Object, D extends Object,
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
-      object: this,
+      ownerClassInstance: this,
       methodName: "executeQuickUpdateAction",
       parameters: {
         "item": item,
@@ -1757,7 +1757,7 @@ abstract class Block<I extends Object, D extends Object,
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: route,
-      object: this,
+      ownerClassInstance: this,
       methodName: "refreshItemAndSetAsCurrent",
       parameters: {
         "item": item,
@@ -1848,7 +1848,7 @@ abstract class Block<I extends Object, D extends Object,
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
-      object: this,
+      ownerClassInstance: this,
       methodName: "__prepareToShowOrEdit",
       parameters: {
         "suggestedSelection": suggestedSelection,
@@ -1867,7 +1867,7 @@ abstract class Block<I extends Object, D extends Object,
         FlutterArtist.codeFlowLogger._addMethodCall(
           isLibCode: false,
           route: null,
-          object: this,
+          ownerClassInstance: this,
           methodName: "callApiRefreshItem",
           parameters: {
             "item": item,
@@ -1939,7 +1939,7 @@ abstract class Block<I extends Object, D extends Object,
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: route,
-      object: this,
+      ownerClassInstance: this,
       methodName: "prepareToCreate",
       parameters: {},
     );
@@ -2007,7 +2007,7 @@ abstract class Block<I extends Object, D extends Object,
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
-      object: this,
+      ownerClassInstance: this,
       methodName: "__prepareToCreate",
       parameters: {},
     );
@@ -2053,7 +2053,7 @@ abstract class Block<I extends Object, D extends Object,
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
-      object: this,
+      ownerClassInstance: this,
       methodName: "deleteCurrentItem",
       parameters: {},
     );
@@ -2091,7 +2091,7 @@ abstract class Block<I extends Object, D extends Object,
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
-      object: this,
+      ownerClassInstance: this,
       methodName: "deleteItemByIdAsString",
       parameters: {
         "itemId": itemId,
@@ -2171,7 +2171,7 @@ abstract class Block<I extends Object, D extends Object,
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
-      object: this,
+      ownerClassInstance: this,
       methodName: "delete",
       parameters: {
         "item": item,
@@ -2245,7 +2245,7 @@ abstract class Block<I extends Object, D extends Object,
         FlutterArtist.codeFlowLogger._addMethodCall(
           isLibCode: false,
           route: null,
-          object: this,
+          ownerClassInstance: this,
           methodName: "callApiDelete",
           parameters: {
             "item": item,
@@ -2327,7 +2327,7 @@ abstract class Block<I extends Object, D extends Object,
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
-      object: this,
+      ownerClassInstance: this,
       methodName: "refreshCurrentItem",
       parameters: {},
     );
