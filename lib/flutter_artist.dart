@@ -20,7 +20,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:graphview/GraphView.dart';
 import 'package:hive/hive.dart';
 import 'package:number_pagination/number_pagination.dart' as number_pagination;
-import 'package:tab_container/tab_container.dart';
+import 'package:tabbed_view/tabbed_view.dart';
 import 'package:uuid/uuid.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
