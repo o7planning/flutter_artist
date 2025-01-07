@@ -17,7 +17,7 @@ class _FormDataView extends StatefulWidget {
 }
 
 class _FormDataViewState extends State<_FormDataView> {
-  static const double iconSize = 16;
+  static const double iconSize = 18;
   static const double fontSize = 13;
 
   static const int instantValueTab = 2;
@@ -29,11 +29,13 @@ class _FormDataViewState extends State<_FormDataView> {
 
   late List<ShelfBlockType> listeners;
 
+  late TabbedViewController _controller;
+
   @override
   void initState() {
     super.initState();
     //
-    listeners = StorageX._changeManager.getChangeListeners(
+    listeners = FlutterArtist._changeManager.getChangeListeners(
       sourceBlock: widget.blockForm.block,
     );
   }
@@ -70,6 +72,16 @@ class _FormDataViewState extends State<_FormDataView> {
     }
   }
 
+  Color _getTabIconColor(TabStatus tabStatus) {
+    return tabStatus == TabStatus.selected ? Colors.indigo : Colors.black;
+  }
+
+  EdgeInsets _getTabPadding(TabStatus tabStatus) {
+    return tabStatus == TabStatus.selected
+        ? EdgeInsets.all(5)
+        : EdgeInsets.fromLTRB(5, 10, 5, 5);
+  }
+
   Widget _buildTabContainer() {
     BlockFormData blockFormData = widget.blockForm.data;
     Map<String, dynamic> initial0Value = blockFormData.initial0FormData;
@@ -79,76 +91,134 @@ class _FormDataViewState extends State<_FormDataView> {
     String initial0Json = toJson(initial0Value);
     String initial1Json = toJson(initial1Value);
     String instantJson = toJson(instantValue);
+
     //
-    return TabContainer(
-      borderRadius: BorderRadius.circular(20),
-      tabEdge: TabEdge.top,
-      tabMaxLength: 85,
-      tabsStart: 0.01,
-      curve: Curves.easeIn,
-      transitionBuilder: (child, animation) {
-        animation = CurvedAnimation(
-          curve: Curves.easeIn,
-          parent: animation,
-        );
-        return SlideTransition(
-          position: Tween(
-            begin: const Offset(0.2, 0.0),
-            end: const Offset(0.0, 0.0),
-          ).animate(animation),
-          child: FadeTransition(
-            opacity: animation,
-            child: child,
-          ),
-        );
-      },
-      colors: List.generate(
-        tabLength,
-        (idx) => Theme.of(context).primaryColorLight,
-      ).toList(),
-      selectedTextStyle: const TextStyle(fontSize: fontSize),
-      unselectedTextStyle: const TextStyle(fontSize: fontSize),
-      tabs: [
-        _buildTabTitle(
-          iconData: _formValueIconData,
-          iconColor: null,
-          title: "Init",
+
+    List<TabData> tabs = [];
+
+    tabs.add(
+      TabData(
+        text: ' Init',
+        closable: false,
+        leading: (context, status) => Icon(
+          _formValueIconData,
+          color: _getTabIconColor(status),
+          size: iconSize,
         ),
-        _buildTabTitle(
-          iconData: _formValueIconData,
-          iconColor: null,
-          title: "Initial",
-        ),
-        _buildTabTitle(
-          iconData: _formValueIconData,
-          iconColor: null,
-          title: "Current",
-        ),
-        _buildTabTitle(
-          iconData: _effectIconData,
-          iconColor: listeners.isNotEmpty ? Colors.blue : null,
-          title: "",
-        ),
-      ],
-      children: [
-        _buildTabContent(
+        content: _buildTabContent(
           info:
               "The values returned by ${getClassName(widget.blockForm)}.prepareFormData() method.",
           json: initial0Json,
         ),
-        _buildTabContent(
+      ),
+    );
+    tabs.add(
+      TabData(
+        text: ' Initial',
+        closable: false,
+        leading: (context, status) => Icon(
+          _formValueIconData,
+          color: _getTabIconColor(status),
+          size: iconSize,
+        ),
+        content: _buildTabContent(
           info: "Initial Form values",
           json: initial1Json,
         ),
-        _buildTabContent(
+      ),
+    );
+    tabs.add(
+      TabData(
+        text: ' Current',
+        closable: false,
+        leading: (context, status) => Icon(
+          _formValueIconData,
+          color: _getTabIconColor(status),
+          size: iconSize,
+        ),
+        content: _buildTabContent(
           info: "The current values of the form (Will be passed to the "
               "${getClassName(widget.blockForm)}.callApiCreate() "
               "or ${getClassName(widget.blockForm)}.callApiUpdate() method).",
           json: instantJson,
         ),
-        _buildFormChangeListenerInfo(),
-      ],
+      ),
     );
+
+    tabs.add(
+      TabData(
+        text: ' ',
+        closable: false,
+        leading: (context, status) => Icon(
+          _effectIconData,
+          color: _getTabIconColor(status),
+          size: iconSize,
+        ),
+        content: _buildFormChangeListenerInfo(),
+      ),
+    );
+    //
+    _controller = TabbedViewController(tabs);
+    TabbedView tabbedView = TabbedView(controller: _controller);
+
+    TabbedViewThemeData themeData = TabbedViewThemeData.classic();
+    final borderSide = BorderSide(color: Colors.grey, width: 0.7);
+    final borderSideTransparent =
+        BorderSide(color: Colors.transparent, width: 0.5);
+    //
+    final boxDecoTabDeselected = BoxDecoration(
+      shape: BoxShape.rectangle,
+      border: Border(
+        left: borderSide,
+        right: borderSide,
+        top: borderSide,
+        bottom: borderSide,
+      ),
+    );
+    final boxDecoTabSelected = BoxDecoration(
+      shape: BoxShape.rectangle,
+      border: Border(
+        left: borderSide,
+        right: borderSide,
+        top: borderSide,
+        bottom: borderSideTransparent,
+      ),
+    );
+    final boxDecoContent = BoxDecoration(
+      shape: BoxShape.rectangle,
+      border: Border(
+        left: borderSide,
+        right: borderSide,
+        bottom: borderSide,
+        top: borderSideTransparent,
+      ),
+    );
+    //
+    TabStatusThemeData selectedStatus = TabStatusThemeData()
+      ..decoration = boxDecoTabSelected
+      ..fontColor = Colors.indigo;
+    themeData.tab
+      ..hoverButtonColor = Colors.indigo.withAlpha(40)
+      ..highlightedStatus.decoration = boxDecoTabSelected
+      ..selectedStatus = selectedStatus
+      ..decoration = boxDecoTabDeselected;
+    //
+    themeData.tabsArea
+      ..border = Border(bottom: BorderSide(color: Colors.transparent, width: 0))
+      ..gapBottomBorder = borderSide
+      ..initialGap = 20
+      ..middleGap = 5
+      ..minimalFinalGap = 2;
+    //
+    themeData.contentArea.decoration = boxDecoContent;
+
+    TabbedViewTheme tabbedViewTheme = TabbedViewTheme(
+      data: themeData,
+      child: tabbedView,
+    );
+
+    //
+    return tabbedViewTheme;
   }
 
   Widget _buildTabTitle({

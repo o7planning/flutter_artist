@@ -1,5 +1,5 @@
 part of '../flutter_artist.dart';
 
-abstract class _StorageData {
+class _Storage {
   //
 }

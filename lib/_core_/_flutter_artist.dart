@@ -7,7 +7,7 @@ final FlutterArtist = _FlutterArtist();
 const _isOverlayMode = false;
 
 class _FlutterArtist {
-  _StorageData? _globalFluData;
+  final _Storage? storage = _Storage();
   final Map<String, ShelfCreator> __shelfCreatorMap = {};
   final Map<String, Shelf> __shelfMap = {};
 
@@ -37,8 +37,8 @@ class _FlutterArtist {
 
   final List<Future<dynamic>> __futureTaskList = [];
 
-  _StorageData? get globalFluData {
-    return _globalFluData;
+  _Storage? get globalFluData {
+    return storage;
   }
 
   ///
@@ -64,20 +64,11 @@ class _FlutterArtist {
     _changeManager._notifyChange(sourceBlock, itemIdString);
   }
 
-  void registerGlobalFluData(_StorageData globalFluData) {
-    if (_globalFluData != null) {
-      throw "\n*************************************************************"
-          "\n >>>>>> GlobalFluData already registered!"
-          "\n*************************************************************";
-    }
-    _globalFluData = globalFluData;
-  }
-
   FlutterArtistAdapter get adapter {
     if (__adapter == null) {
       throw "\n*************************************************************"
-          "\n >>>>>> FluDatablocksAdapter is not registered!. "
-          "\n >>>>>> You need to call GlobalFlu.config() in main.dart"
+          "\n >>>>>> FlutterArtistAdapter is not registered!. "
+          "\n >>>>>> You need to call FlutterArtist.config() in main.dart"
           "\n*************************************************************";
     }
     return __adapter!;
