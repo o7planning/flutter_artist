@@ -89,7 +89,7 @@ class _GraphItemSimpleShelfBoxState extends State<_GraphItemSimpleShelfBox> {
               child: Tooltip(
                 message: "Show Flu structure in the Graph",
                 child: Image.asset(
-                  "packages/flutter_artist/static-rs/flu.png",
+                  "packages/flutter_artist/static-rs/shelf.png",
                   width: shelfIconWidth,
                   height: shelfIconHeight,
                 ),

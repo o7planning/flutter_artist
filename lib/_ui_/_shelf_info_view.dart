@@ -17,7 +17,7 @@ class _ShelfInfoView extends StatelessWidget {
         vertical: -3,
       ),
       leading: Image.asset(
-        "packages/flutter_artist/static-rs/flu.png",
+        "packages/flutter_artist/static-rs/shelf.png",
         width: 40,
         height: 40,
       ),

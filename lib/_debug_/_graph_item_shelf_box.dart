@@ -52,7 +52,7 @@ class _GraphItemShelfBoxState extends State<_GraphItemShelfBox> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
-              "packages/flutter_artist/static-rs/flu.png",
+              "packages/flutter_artist/static-rs/shelf.png",
               width: _graphBoxImageWidth,
               height: _graphBoxImageHeight,
             ),

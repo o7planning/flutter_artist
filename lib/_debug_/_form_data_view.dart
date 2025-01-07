@@ -347,7 +347,7 @@ class _FormDataViewState extends State<_FormDataView> {
                   child: _IconLabelText(
                     style: const TextStyle(fontSize: fontSize),
                     icon: Image.asset(
-                      "packages/flutter_artist/static-rs/flu.png",
+                      "packages/flutter_artist/static-rs/shelf.png",
                       width: 24,
                       height: 20,
                     ),
