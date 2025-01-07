@@ -63,7 +63,7 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
   ///
   @nonVirtual
   Future<bool> query() async {
-    StorageX.codeFlowLogger._addMethodCall(
+    FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
@@ -88,7 +88,7 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
   });
 
   Future<bool> _queryWithOverlayAndRestorable() async {
-    return await StorageX.executeTask(
+    return await FlutterArtist.executeTask(
       asyncFunction: () async {
         return __queryWithRestorable();
       },
@@ -131,7 +131,7 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
       return true;
     }
     try {
-      StorageX.codeFlowLogger._addMethodCall(
+      FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
         object: blockFilter!,
         methodName: "prepareData",
@@ -153,7 +153,7 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
       return false;
     }
     try {
-      StorageX.codeFlowLogger._addMethodCall(
+      FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
         object: blockFilter!,
         methodName: "takeSnapshot",
@@ -192,7 +192,7 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
 
     ApiResult<D> result;
     try {
-      StorageX.codeFlowLogger._addMethodCall(
+      FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
         route: null,
         object: this,
@@ -261,7 +261,7 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
     bool activeCURRENT = hasActiveUiComponent();
     //
     if (isShowing) {
-      StorageX._addRecentShelf(shelf);
+      FlutterArtist._addRecentShelf(shelf);
     }
     //
     if (!activeOLD && activeCURRENT) {
@@ -278,13 +278,13 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
     bool activeCURRENT = hasActiveUiComponent();
     //
     if (activeOLD && !activeCURRENT) {
-      StorageX._checkToRemoveShelf(shelf);
+      FlutterArtist._checkToRemoveShelf(shelf);
       _fireNonBlockHidden();
     }
   }
 
   void _fireNonBlockHidden() {
-    StorageX.codeFlowLogger._addEvent(
+    FlutterArtist.codeFlowLogger._addEvent(
       object: this,
       event: "NonBlock '${getClassName(this)}' just hides all UI Components!",
       isLibCode: true,

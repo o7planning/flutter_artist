@@ -23,14 +23,14 @@ abstract class BaseBlk {
     String msg =
         "Call $className.$methodName() error: ${apiError.errorMessage}";
     //
-    StorageX.codeFlowLogger._addError(
+    FlutterArtist.codeFlowLogger._addError(
       isLibCode: true,
       object: this,
       error: msg,
     );
     //
-    StorageX.errorLogger.addError(
-      shelfName: StorageX._getShelfName(shelf.runtimeType),
+    FlutterArtist.errorLogger.addError(
+      shelfName: FlutterArtist._getShelfName(shelf.runtimeType),
       message: msg,
       errorDetails: apiError.errorDetails,
       stackTrace: stackTrace,
@@ -52,13 +52,13 @@ abstract class BaseBlk {
     required List<String>? errorDetails,
     required bool showSnackbar,
   }) {
-    StorageX.errorLogger.addError(
-      shelfName: StorageX._getShelfName(shelf.runtimeType),
+    FlutterArtist.errorLogger.addError(
+      shelfName: FlutterArtist._getShelfName(shelf.runtimeType),
       message: message,
       errorDetails: errorDetails,
       stackTrace: null,
     );
-    StorageX.codeFlowLogger._addError(
+    FlutterArtist.codeFlowLogger._addError(
       object: this,
       error: message,
       isLibCode: true,
@@ -77,7 +77,7 @@ abstract class BaseBlk {
     required String message,
     required List<String>? errorDetails,
   }) {
-    StorageX.adapter.showErrorSnackbar(
+    FlutterArtist.adapter.showErrorSnackbar(
       message: message,
       errorDetails: errorDetails,
     );

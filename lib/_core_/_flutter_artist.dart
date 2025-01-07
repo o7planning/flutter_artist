@@ -2,17 +2,18 @@ part of '../flutter_artist.dart';
 
 typedef ShelfCreator<S> = S Function();
 
-final StorageX = _StorageX();
+final FlutterArtist = _FlutterArtist();
 
 const _isOverlayMode = false;
 
-class _StorageX {
+class _FlutterArtist {
   _StorageData? _globalFluData;
   final Map<String, ShelfCreator> __shelfCreatorMap = {};
   final Map<String, Shelf> __shelfMap = {};
 
   int notificationFetchPeriodInSeconds = 60;
-  final _StorageChangeManager _changeManager = _StorageChangeManager();
+  final _FlutterArtistChangeManager _changeManager =
+      _FlutterArtistChangeManager();
   FlutterArtistAdapter? __adapter;
 
   final _LoggedInUserManager _loggedInUserManager = _LoggedInUserManager();

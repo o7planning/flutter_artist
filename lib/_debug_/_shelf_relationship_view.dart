@@ -77,10 +77,10 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
   Widget _buildRelatedBlockInfos() {
     List<ShelfBlockType> listeners = selectedBlock == null
         ? []
-        : StorageX._getListenerBlocks(notifierBlock: selectedBlock!);
+        : FlutterArtist._getListenerBlocks(notifierBlock: selectedBlock!);
     List<ShelfBlockType> notifiers = selectedBlock == null
         ? []
-        : StorageX._getNotifierBlocks(listenerBlock: selectedBlock!);
+        : FlutterArtist._getNotifierBlocks(listenerBlock: selectedBlock!);
     //
     return _CustomAppContainer(
       height: double.maxFinite,
@@ -110,7 +110,7 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
   }
 
   void _onSelectFluBlockType(ShelfBlockType shelfBlockType) {
-    Shelf? shelf = StorageX._findShelf(shelfBlockType.shelfType);
+    Shelf? shelf = FlutterArtist._findShelf(shelfBlockType.shelfType);
     if (shelf != null) {
       // TODO ...
     }

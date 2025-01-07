@@ -76,7 +76,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
       block.shelf._startNewLazyQueryTransactionIfNeed();
     }
     if (isShowing) {
-      StorageX._addRecentShelf(block.shelf);
+      FlutterArtist._addRecentShelf(block.shelf);
     }
   }
 
@@ -204,7 +204,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
     required String message,
     required List<String>? errorDetails,
   }) {
-    StorageX.adapter.showErrorSnackbar(
+    FlutterArtist.adapter.showErrorSnackbar(
       message: message,
       errorDetails: errorDetails,
     );
@@ -216,8 +216,8 @@ abstract class BlockForm<I extends Object, D extends Object> {
     required StackTrace stackTrace,
     required bool showSnackbar,
   }) {
-    StorageX.errorLogger.addError(
-      shelfName: StorageX._getShelfName(block.shelf.runtimeType),
+    FlutterArtist.errorLogger.addError(
+      shelfName: FlutterArtist._getShelfName(block.shelf.runtimeType),
       message: error.toString(),
       errorDetails: null,
       stackTrace: stackTrace,
@@ -239,7 +239,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
   }
 
   Future<bool> saveForm() async {
-    StorageX.codeFlowLogger._addMethodCall(
+    FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       object: this,
       methodName: "saveForm",
@@ -255,7 +255,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
   }
 
   Future<bool> _saveFormWithOverlayAndRestorable() async {
-    return await StorageX.executeTask(
+    return await FlutterArtist.executeTask(
       asyncFunction: () async {
         return await _saveFormWithRestorable();
       },
@@ -300,7 +300,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
       __isSaving = true;
       this.block.updateControlBarWidgets();
       //
-      StorageX.codeFlowLogger._addMethodCall(
+      FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
         object: this,
         methodName: calledMethodName,
@@ -314,7 +314,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
           ? await callApiCreate(formMapData: formMapData)
           : await callApiUpdate(formMapData: formMapData);
       //
-      StorageX.fireSourceChanged(
+      FlutterArtist.fireSourceChanged(
         sourceBlock: block,
         itemIdString: null,
       );
@@ -352,7 +352,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
     required final bool isNew,
     required bool forceForm,
   }) async {
-    StorageX.codeFlowLogger._addMethodCall(
+    FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
@@ -402,7 +402,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
     required bool isNew,
   }) async {
     try {
-      StorageX.codeFlowLogger._addMethodCall(
+      FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
         route: null,
         object: this,
@@ -450,7 +450,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
     required D? refreshedItem,
     required bool isNew,
   }) {
-    StorageX.codeFlowLogger._addMethodCall(
+    FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
@@ -464,7 +464,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
     Map<String, dynamic> newFormData;
     if (data._dataState == DataState.ready) {
       try {
-        StorageX.codeFlowLogger._addMethodCall(
+        FlutterArtist.codeFlowLogger._addMethodCall(
           isLibCode: false,
           object: this,
           methodName: "prepareFormData",

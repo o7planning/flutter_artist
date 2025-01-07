@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-class _StorageChangeManager {
+class _FlutterArtistChangeManager {
   final Map<String, Shelf> _registedShelfMap = {};
 
   // ===========================================================================

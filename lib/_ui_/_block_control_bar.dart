@@ -175,7 +175,7 @@ class _BlockControlBarState extends _WidgetState<BlockControlBar> {
   }
 
   Widget _buildLeftButtons(BuildContext context) {
-    ILoggedInUser? loggedInUser = StorageX.loggedInUser;
+    ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
     Widget? left2 = _buildLeft2Buttons();
     return _buildBreadCrumb(
           overflow: ScrollableOverflow(
@@ -307,7 +307,7 @@ class _BlockControlBarState extends _WidgetState<BlockControlBar> {
   }
 
   Widget? _buildRight3Buttons(BuildContext context) {
-    ILoggedInUser? loggedInUser = StorageX.loggedInUser;
+    ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
     return _buildBreadCrumb(
       children: [
         if (widget.block.blockForm != null &&
@@ -345,7 +345,7 @@ class _BlockControlBarState extends _WidgetState<BlockControlBar> {
   }
 
   void _back() {
-    StorageX.adapter.navigationBack();
+    FlutterArtist.adapter.navigationBack();
   }
 
   void _saveForm(Block block) {

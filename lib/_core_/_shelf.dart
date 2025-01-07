@@ -31,7 +31,7 @@ abstract class Shelf {
 
   bool _queryLocked = false;
 
-  String get name => StorageX._getShelfName(runtimeType);
+  String get name => FlutterArtist._getShelfName(runtimeType);
 
   final Map<_WidgetState, bool> _shelfWidgetStateListeners = {};
 
@@ -180,7 +180,7 @@ abstract class Shelf {
 
   Future<void> showMessageDialog(
       {required String message, String? details}) async {
-    BuildContext context = StorageX.adapter.getCurrentContext();
+    BuildContext context = FlutterArtist.adapter.getCurrentContext();
     await dialogs.showMessageDialog(
       context: context,
       message: message,
@@ -189,12 +189,12 @@ abstract class Shelf {
   }
 
   Future<void> showShelfStructureDialog() async {
-    BuildContext context = StorageX.adapter.getCurrentContext();
+    BuildContext context = FlutterArtist.adapter.getCurrentContext();
     await _showStorageDialog(context: context, shelf: this);
   }
 
   Future<void> showActiveUiComponentsDialog() async {
-    BuildContext context = StorageX.adapter.getCurrentContext();
+    BuildContext context = FlutterArtist.adapter.getCurrentContext();
     await _showActiveUiComponentsDialog(context: context, shelf: this);
   }
 
@@ -386,7 +386,7 @@ abstract class Shelf {
         needToUpdate = true;
         // QUERY NON-BLOCK:
         if (blkOrForm.nonBlock != null) {
-          StorageX.codeFlowLogger._addInfo(
+          FlutterArtist.codeFlowLogger._addInfo(
             isLibCode: true,
             object: this,
             info:
@@ -400,7 +400,7 @@ abstract class Shelf {
         }
         // QUERY BLOCK:
         else if (blkOrForm.block != null) {
-          StorageX.codeFlowLogger._addInfo(
+          FlutterArtist.codeFlowLogger._addInfo(
             isLibCode: true,
             object: this,
             info: "Querying lazy block: ${getClassName(blkOrForm.block)}",
@@ -420,7 +420,7 @@ abstract class Shelf {
         }
         // QUERY BLOCK-FORM:
         else if (blkOrForm.blockForm != null) {
-          StorageX.codeFlowLogger._addInfo(
+          FlutterArtist.codeFlowLogger._addInfo(
             isLibCode: true,
             object: this,
             info:

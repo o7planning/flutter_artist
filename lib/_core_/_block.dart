@@ -236,7 +236,7 @@ abstract class Block<I extends Object, D extends Object,
   }) {
     _paginationWidgetStateListeners[formWidgetState] = isShowing;
     if (isShowing) {
-      StorageX._addRecentShelf(shelf);
+      FlutterArtist._addRecentShelf(shelf);
     }
   }
 
@@ -244,7 +244,7 @@ abstract class Block<I extends Object, D extends Object,
     required _WidgetState formWidgetState,
   }) {
     _paginationWidgetStateListeners.remove(formWidgetState);
-    StorageX._checkToRemoveShelf(shelf);
+    FlutterArtist._checkToRemoveShelf(shelf);
   }
 
   void _addControlBarWidgetStateListener({
@@ -253,7 +253,7 @@ abstract class Block<I extends Object, D extends Object,
   }) {
     _controlBarWidgetStateListeners[formWidgetState] = isShowing;
     if (isShowing) {
-      StorageX._addRecentShelf(shelf);
+      FlutterArtist._addRecentShelf(shelf);
     }
   }
 
@@ -261,7 +261,7 @@ abstract class Block<I extends Object, D extends Object,
     required _WidgetState formWidgetState,
   }) {
     _controlBarWidgetStateListeners.remove(formWidgetState);
-    StorageX._checkToRemoveShelf(shelf);
+    FlutterArtist._checkToRemoveShelf(shelf);
   }
 
   void _addWidgetStateListener({
@@ -273,7 +273,7 @@ abstract class Block<I extends Object, D extends Object,
     bool activeCURRENT = hasActiveUiComponent();
     //
     if (isShowing) {
-      StorageX._addRecentShelf(shelf);
+      FlutterArtist._addRecentShelf(shelf);
     }
     //
     if (!activeOLD && activeCURRENT) {
@@ -290,13 +290,13 @@ abstract class Block<I extends Object, D extends Object,
     bool activeCURRENT = hasActiveUiComponent();
     //
     if (activeOLD && !activeCURRENT) {
-      StorageX._checkToRemoveShelf(shelf);
+      FlutterArtist._checkToRemoveShelf(shelf);
       _fireBlockHidden();
     }
   }
 
   void _fireBlockHidden() {
-    StorageX.codeFlowLogger._addEvent(
+    FlutterArtist.codeFlowLogger._addEvent(
       object: this,
       event: "Block '${getClassName(this)}' just hides all UI Components!",
       isLibCode: true,
@@ -435,7 +435,7 @@ abstract class Block<I extends Object, D extends Object,
     if (blockFilter == null) {
       return true;
     }
-    return await StorageX.executeTask(
+    return await FlutterArtist.executeTask(
       asyncFunction: () async {
         return await __prepareFilter(
           suggestedFilterData: suggestedFilterData,
@@ -454,7 +454,7 @@ abstract class Block<I extends Object, D extends Object,
       return true;
     }
     try {
-      StorageX.codeFlowLogger._addMethodCall(
+      FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
         object: blockFilter!,
         methodName: "prepareData",
@@ -476,7 +476,7 @@ abstract class Block<I extends Object, D extends Object,
       return false;
     }
     try {
-      StorageX.codeFlowLogger._addMethodCall(
+      FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
         object: blockFilter!,
         methodName: "takeSnapshot",
@@ -511,7 +511,7 @@ abstract class Block<I extends Object, D extends Object,
 
   /// Empty Query and set block to "Pending State".
   Future<bool> emptyQuery({Function()? route}) async {
-    StorageX.codeFlowLogger._addMethodCall(
+    FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: route,
       object: this,
@@ -537,7 +537,7 @@ abstract class Block<I extends Object, D extends Object,
 
   /// Empty Query and create new record and set block to "Ready State".
   Future<bool> emptyQueryAndCreate({Function()? route}) async {
-    StorageX.codeFlowLogger._addMethodCall(
+    FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: route,
       object: this,
@@ -572,7 +572,7 @@ abstract class Block<I extends Object, D extends Object,
     PageableData? pageable,
     Function()? route,
   }) async {
-    StorageX.codeFlowLogger._addMethodCall(
+    FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: route,
       object: this,
@@ -618,7 +618,7 @@ abstract class Block<I extends Object, D extends Object,
     PageableData? pageable,
     Function()? route,
   }) async {
-    StorageX.codeFlowLogger._addMethodCall(
+    FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: route,
       object: this,
@@ -653,7 +653,7 @@ abstract class Block<I extends Object, D extends Object,
     required SuggestedSelection? suggestedSelection,
     required PageableData? pageable,
   }) async {
-    return await StorageX.executeTask(
+    return await FlutterArtist.executeTask(
       asyncFunction: () async {
         return __queryWithRestorable(
           queryType: queryType,
@@ -762,7 +762,7 @@ abstract class Block<I extends Object, D extends Object,
           pageable ?? __pageable ?? const PageableData(page: 1, pageSize: null);
       ApiResult<PageData<I>?> result;
       try {
-        StorageX.codeFlowLogger._addMethodCall(
+        FlutterArtist.codeFlowLogger._addMethodCall(
           isLibCode: false,
           route: null,
           object: this,
@@ -1021,7 +1021,7 @@ abstract class Block<I extends Object, D extends Object,
   /// Remove this item from Interface because it no longer exists on the server
   ///
   void __removeItemFromList({required I removeItem}) {
-    StorageX.codeFlowLogger._addMethodCall(
+    FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
@@ -1044,7 +1044,7 @@ abstract class Block<I extends Object, D extends Object,
     SuggestedSelection? suggestedSelection,
     required I notFoundItem,
   }) async {
-    StorageX.codeFlowLogger._addMethodCall(
+    FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
@@ -1066,7 +1066,7 @@ abstract class Block<I extends Object, D extends Object,
     //
     if (isCurrent) {
       if (siblingItem != null) {
-        StorageX.codeFlowLogger._addInfo(
+        FlutterArtist.codeFlowLogger._addInfo(
           isLibCode: true,
           object: this,
           info: "Selecting sibling item",
@@ -1082,7 +1082,7 @@ abstract class Block<I extends Object, D extends Object,
           return false;
         }
       } else {
-        StorageX.codeFlowLogger._addInfo(
+        FlutterArtist.codeFlowLogger._addInfo(
           isLibCode: true,
           object: this,
           info: "Switching block to none-mode",
@@ -1105,7 +1105,7 @@ abstract class Block<I extends Object, D extends Object,
     required D refreshedItemDetail,
     required bool forceForm,
   }) async {
-    StorageX.codeFlowLogger._addMethodCall(
+    FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
@@ -1125,7 +1125,7 @@ abstract class Block<I extends Object, D extends Object,
     //
     bool editable = _isAllowEdit(refreshedItem: refreshedItemDetail);
     //
-    StorageX.codeFlowLogger._addInfo(
+    FlutterArtist.codeFlowLogger._addInfo(
       object: this,
       info: 'Allow Edit? $editable',
       isLibCode: true,
@@ -1175,7 +1175,7 @@ abstract class Block<I extends Object, D extends Object,
     required bool clearListForThis,
     required DataState dataState,
   }) async {
-    StorageX.codeFlowLogger._addMethodCall(
+    FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
@@ -1246,7 +1246,7 @@ abstract class Block<I extends Object, D extends Object,
   Future<bool> _executeQuickCreateWithOverlay({
     required QuickActionData data,
   }) async {
-    return await StorageX.executeTask(
+    return await FlutterArtist.executeTask(
       asyncFunction: () async {
         return await __executeQuickCreateAction(data: data);
       },
@@ -1260,7 +1260,7 @@ abstract class Block<I extends Object, D extends Object,
     ApiResult<D> result;
     try {
       result = await callApiQuickCreate(data: data);
-      StorageX.fireSourceChanged(
+      FlutterArtist.fireSourceChanged(
         sourceBlock: this,
         itemIdString: null,
       );
@@ -1299,7 +1299,7 @@ abstract class Block<I extends Object, D extends Object,
     required I item,
     required QuickActionData data,
   }) async {
-    return await StorageX.executeTask(
+    return await FlutterArtist.executeTask(
       asyncFunction: () async {
         return await __executeQuickUpdateAction(item: item, data: data);
       },
@@ -1313,7 +1313,7 @@ abstract class Block<I extends Object, D extends Object,
     ApiResult<D> result;
     try {
       result = await callApiQuickUpdate(item: item, data: data);
-      StorageX.fireSourceChanged(
+      FlutterArtist.fireSourceChanged(
         sourceBlock: this,
         itemIdString: null,
       );
@@ -1353,7 +1353,7 @@ abstract class Block<I extends Object, D extends Object,
     required QuickActionData action,
     required AfterQuickAction? afterQuickAction,
   }) async {
-    return await StorageX.executeTask(
+    return await FlutterArtist.executeTask(
       asyncFunction: () async {
         bool success = await __executeQuickAction(
           suggestedFilterData: suggestedFilterData,
@@ -1363,7 +1363,7 @@ abstract class Block<I extends Object, D extends Object,
         );
         if (success) {
           try {
-            BuildContext context = StorageX.adapter.getCurrentContext();
+            BuildContext context = FlutterArtist.adapter.getCurrentContext();
             action.executeRoute(context);
           } catch (e, stackTrace) {
             print("Error: $e");
@@ -1637,7 +1637,7 @@ abstract class Block<I extends Object, D extends Object,
     required QuickActionData action,
     required AfterQuickAction? afterQuickAction,
   }) async {
-    StorageX.codeFlowLogger._addMethodCall(
+    FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
@@ -1651,7 +1651,7 @@ abstract class Block<I extends Object, D extends Object,
     );
     if (actionConfirmation != null) {
       bool confirm = false;
-      BuildContext context = StorageX.adapter.getCurrentContext();
+      BuildContext context = FlutterArtist.adapter.getCurrentContext();
       if (actionConfirmation.type == ActionConfirmationType.delete) {
         confirm = await dialogs.showConfirmDeleteDialog(
           context: context,
@@ -1718,7 +1718,7 @@ abstract class Block<I extends Object, D extends Object,
     required I item,
     required QuickActionData data,
   }) async {
-    StorageX.codeFlowLogger._addMethodCall(
+    FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
@@ -1754,7 +1754,7 @@ abstract class Block<I extends Object, D extends Object,
     required bool forceLoadFormData,
     Function()? route,
   }) async {
-    StorageX.codeFlowLogger._addMethodCall(
+    FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: route,
       object: this,
@@ -1784,7 +1784,7 @@ abstract class Block<I extends Object, D extends Object,
     required bool forceForm,
     required bool justQueried,
   }) async {
-    return await StorageX.executeTask(
+    return await FlutterArtist.executeTask(
       asyncFunction: () async {
         return await _prepareToShowOrEditWithRestorable(
           suggestedSelection: suggestedSelection,
@@ -1845,7 +1845,7 @@ abstract class Block<I extends Object, D extends Object,
     required bool forceForm,
     required bool justQueried,
   }) async {
-    StorageX.codeFlowLogger._addMethodCall(
+    FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
@@ -1864,7 +1864,7 @@ abstract class Block<I extends Object, D extends Object,
     } else {
       ApiResult<D> result;
       try {
-        StorageX.codeFlowLogger._addMethodCall(
+        FlutterArtist.codeFlowLogger._addMethodCall(
           isLibCode: false,
           route: null,
           object: this,
@@ -1936,7 +1936,7 @@ abstract class Block<I extends Object, D extends Object,
   Future<bool> prepareToCreate({
     required Function()? route,
   }) async {
-    StorageX.codeFlowLogger._addMethodCall(
+    FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: route,
       object: this,
@@ -1966,7 +1966,7 @@ abstract class Block<I extends Object, D extends Object,
     if (!__checkBeforeFormCreation(showErrorMessage: false)) {
       return false;
     }
-    return await StorageX.executeTask(
+    return await FlutterArtist.executeTask(
       asyncFunction: () async {
         return await _prepareToCreateWithRestorable();
       },
@@ -2004,7 +2004,7 @@ abstract class Block<I extends Object, D extends Object,
 
   // Private method. Only for use in this class.
   Future<bool> __prepareToCreate() async {
-    StorageX.codeFlowLogger._addMethodCall(
+    FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
@@ -2050,7 +2050,7 @@ abstract class Block<I extends Object, D extends Object,
   }
 
   Future<bool> deleteCurrentItem() async {
-    StorageX.codeFlowLogger._addMethodCall(
+    FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
@@ -2067,7 +2067,7 @@ abstract class Block<I extends Object, D extends Object,
   }
 
   Future<bool> showConfirmDeleteDialog({String? details}) async {
-    BuildContext context = StorageX.adapter.getCurrentContext();
+    BuildContext context = FlutterArtist.adapter.getCurrentContext();
     bool confirm = await dialogs.showConfirmDeleteDialog(
       context: context,
       details: details ?? "",
@@ -2079,7 +2079,7 @@ abstract class Block<I extends Object, D extends Object,
     required String message,
     String? detals,
   }) async {
-    BuildContext context = StorageX.adapter.getCurrentContext();
+    BuildContext context = FlutterArtist.adapter.getCurrentContext();
     await dialogs.showMessageDialog(
       context: context,
       message: message,
@@ -2088,7 +2088,7 @@ abstract class Block<I extends Object, D extends Object,
   }
 
   Future<bool> deleteItemByIdAsString({required String itemId}) async {
-    StorageX.codeFlowLogger._addMethodCall(
+    FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
@@ -2104,7 +2104,7 @@ abstract class Block<I extends Object, D extends Object,
     if (item == null) {
       ApiResult<D> result;
       try {
-        result = await StorageX.executeTask(
+        result = await FlutterArtist.executeTask(
           asyncFunction: () async {
             return await callApiFindItemByIdAsString(itemId: itemId);
           },
@@ -2168,7 +2168,7 @@ abstract class Block<I extends Object, D extends Object,
   }
 
   Future<bool> delete(I item) async {
-    StorageX.codeFlowLogger._addMethodCall(
+    FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
@@ -2197,7 +2197,7 @@ abstract class Block<I extends Object, D extends Object,
   }
 
   Future<bool> _deleteWithOverlayAndRestorable(I item) async {
-    return await StorageX.executeTask(
+    return await FlutterArtist.executeTask(
       asyncFunction: () async {
         return await _deleteWithRestorable(item);
       },
@@ -2242,7 +2242,7 @@ abstract class Block<I extends Object, D extends Object,
       }
       ApiResult<void> result;
       try {
-        StorageX.codeFlowLogger._addMethodCall(
+        FlutterArtist.codeFlowLogger._addMethodCall(
           isLibCode: false,
           route: null,
           object: this,
@@ -2253,7 +2253,7 @@ abstract class Block<I extends Object, D extends Object,
         );
         //
         result = await callApiDelete(item: item);
-        StorageX.fireSourceChanged(
+        FlutterArtist.fireSourceChanged(
           sourceBlock: this,
           itemIdString: null,
         );
@@ -2324,7 +2324,7 @@ abstract class Block<I extends Object, D extends Object,
   /// Phương thức này được gọi để refresh "currentItem".
   ///
   Future<bool> refreshCurrentItem() async {
-    StorageX.codeFlowLogger._addMethodCall(
+    FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       object: this,
