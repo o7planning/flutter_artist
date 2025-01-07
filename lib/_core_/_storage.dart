@@ -1,8 +1,9 @@
 part of '../flutter_artist.dart';
 
 class _Storage {
-  final _FlutterArtistChangeManager _changeManager =
-      _FlutterArtistChangeManager();
+  final _StorageChangeManager _changeManager = _StorageChangeManager();
+
+  final List<Shelf> _rencentShelves = [];
 
   final Map<String, ShelfCreator> __shelfCreatorMap = {};
   final Map<String, Shelf> __shelfMap = {};
@@ -72,7 +73,7 @@ class _Storage {
     return shelf as F;
   }
 
-  F? findOrNullFlu<F extends Shelf>() {
+  F? findOrNullShelf<F extends Shelf>() {
     final String key = _getShelfName(F);
     F? shelf = __shelfMap[key] as F?;
     return shelf;
@@ -241,8 +242,35 @@ class _Storage {
     return foundFluBlockTypes;
   }
 
-// ===========================================================================
-// ===========================================================================
+  void _addRecentShelf(Shelf shelf) {
+    if (_rencentShelves.isEmpty) {
+      _rencentShelves.add(shelf);
+    } else {
+      if (_rencentShelves.first == shelf) {
+        return;
+      } else {
+        int idx = _rencentShelves.indexOf(shelf);
+        if (idx == -1) {
+          _rencentShelves.insert(0, shelf);
+        } else {
+          var temp = _rencentShelves[0];
+          _rencentShelves[0] = _rencentShelves[idx];
+          _rencentShelves[idx] = temp;
+        }
+      }
+    }
+  }
+
+  void _checkToRemoveShelf(Shelf shelf) {
+    // TODO.
+  }
+
+  Shelf? _recentShelf() {
+    return _rencentShelves.isEmpty ? null : _rencentShelves.first;
+  }
+
+  // ===========================================================================
+  // ===========================================================================
 
   void _logout() {
     __shelfMap.clear();

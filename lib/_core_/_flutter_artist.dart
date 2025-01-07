@@ -26,8 +26,6 @@ class _FlutterArtist {
   late final _NotificationEngine __notificationEngine;
   late final CodeFlowLogger codeFlowLogger = CodeFlowLogger();
 
-  final List<Shelf> _rencentShelves = [];
-
   final List<FluErrorListener> _errorListeners = [];
   final List<FluNotificationListener> _notificationListeners = [];
   int _totalErrorCount = 0;
@@ -41,7 +39,7 @@ class _FlutterArtist {
   ///
   /// GetX sample code:
   /// ```dart
-  /// GlobalFlu.logout(offAllAndGotoRoute: () {
+  /// FlutterArtist.logout(offAllAndGotoRoute: () {
   ///    Get.offAllNamed(LoginScreen.routeName);
   /// });
   /// ```
@@ -49,7 +47,7 @@ class _FlutterArtist {
   Future<void> logout({required Function() offAllAndGotoRoute}) async {
     _totalErrorCount = 0;
     storage._logout();
-    _rencentShelves.clear();
+    storage._rencentShelves.clear();
     await _loggedInUserManager._logout();
     offAllAndGotoRoute();
   }
@@ -140,12 +138,12 @@ class _FlutterArtist {
   }
 
   bool _canShowUiComponentDialog() {
-    Shelf? shelf = _recentShelf();
+    Shelf? shelf = storage._recentShelf();
     return shelf != null;
   }
 
   Future<void> showUiComponentsDialog() async {
-    Shelf? shelf = _recentShelf();
+    Shelf? shelf = storage._recentShelf();
     if (shelf == null) {
       return;
     }
@@ -213,7 +211,7 @@ class _FlutterArtist {
   }
 
   Future<void> showShelfStructure() async {
-    Shelf? shelf = _recentShelf();
+    Shelf? shelf = storage._recentShelf();
     if (shelf == null) {
       return;
     }
@@ -221,7 +219,7 @@ class _FlutterArtist {
   }
 
   bool canShowShelfStructure() {
-    Shelf? shelf = _recentShelf();
+    Shelf? shelf = storage._recentShelf();
     return shelf != null;
   }
 
@@ -266,34 +264,4 @@ class _FlutterArtist {
       listener.handleNotification(notificationSummary);
     }
   }
-
-  void _addRecentShelf(Shelf shelf) {
-    if (_rencentShelves.isEmpty) {
-      _rencentShelves.add(shelf);
-    } else {
-      if (_rencentShelves.first == shelf) {
-        return;
-      } else {
-        int idx = _rencentShelves.indexOf(shelf);
-        if (idx == -1) {
-          _rencentShelves.insert(0, shelf);
-        } else {
-          var temp = _rencentShelves[0];
-          _rencentShelves[0] = _rencentShelves[idx];
-          _rencentShelves[idx] = temp;
-        }
-      }
-    }
-  }
-
-  void _checkToRemoveShelf(Shelf shelf) {
-    // TODO.
-  }
-
-  Shelf? _recentShelf() {
-    return _rencentShelves.isEmpty ? null : _rencentShelves.first;
-  }
-
-// ===========================================================================
-// ===========================================================================
 }

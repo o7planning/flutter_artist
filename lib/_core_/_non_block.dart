@@ -261,7 +261,7 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
     bool activeCURRENT = hasActiveUiComponent();
     //
     if (isShowing) {
-      FlutterArtist._addRecentShelf(shelf);
+      FlutterArtist.storage._addRecentShelf(shelf);
     }
     //
     if (!activeOLD && activeCURRENT) {
@@ -278,7 +278,7 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
     bool activeCURRENT = hasActiveUiComponent();
     //
     if (activeOLD && !activeCURRENT) {
-      FlutterArtist._checkToRemoveShelf(shelf);
+      FlutterArtist.storage._checkToRemoveShelf(shelf);
       _fireNonBlockHidden();
     }
   }

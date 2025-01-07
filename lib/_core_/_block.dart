@@ -236,7 +236,7 @@ abstract class Block<I extends Object, D extends Object,
   }) {
     _paginationWidgetStateListeners[formWidgetState] = isShowing;
     if (isShowing) {
-      FlutterArtist._addRecentShelf(shelf);
+      FlutterArtist.storage._addRecentShelf(shelf);
     }
   }
 
@@ -244,7 +244,7 @@ abstract class Block<I extends Object, D extends Object,
     required _WidgetState formWidgetState,
   }) {
     _paginationWidgetStateListeners.remove(formWidgetState);
-    FlutterArtist._checkToRemoveShelf(shelf);
+    FlutterArtist.storage._checkToRemoveShelf(shelf);
   }
 
   void _addControlBarWidgetStateListener({
@@ -253,7 +253,7 @@ abstract class Block<I extends Object, D extends Object,
   }) {
     _controlBarWidgetStateListeners[formWidgetState] = isShowing;
     if (isShowing) {
-      FlutterArtist._addRecentShelf(shelf);
+      FlutterArtist.storage._addRecentShelf(shelf);
     }
   }
 
@@ -261,7 +261,7 @@ abstract class Block<I extends Object, D extends Object,
     required _WidgetState formWidgetState,
   }) {
     _controlBarWidgetStateListeners.remove(formWidgetState);
-    FlutterArtist._checkToRemoveShelf(shelf);
+    FlutterArtist.storage._checkToRemoveShelf(shelf);
   }
 
   void _addWidgetStateListener({
@@ -273,7 +273,7 @@ abstract class Block<I extends Object, D extends Object,
     bool activeCURRENT = hasActiveUiComponent();
     //
     if (isShowing) {
-      FlutterArtist._addRecentShelf(shelf);
+      FlutterArtist.storage._addRecentShelf(shelf);
     }
     //
     if (!activeOLD && activeCURRENT) {
@@ -290,7 +290,7 @@ abstract class Block<I extends Object, D extends Object,
     bool activeCURRENT = hasActiveUiComponent();
     //
     if (activeOLD && !activeCURRENT) {
-      FlutterArtist._checkToRemoveShelf(shelf);
+      FlutterArtist.storage._checkToRemoveShelf(shelf);
       _fireBlockHidden();
     }
   }

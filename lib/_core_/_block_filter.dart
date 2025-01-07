@@ -108,13 +108,13 @@ abstract class BlockFilter<S extends FilterSnapshot> {
   }) {
     _widgetStateListeners[widgetState] = isShowing;
     if (isShowing) {
-      FlutterArtist._addRecentShelf(shelf);
+      FlutterArtist.storage._addRecentShelf(shelf);
     }
   }
 
   void _removeWidgetStateListener({required State widgetState}) {
     _widgetStateListeners.remove(widgetState);
-    FlutterArtist._checkToRemoveShelf(shelf);
+    FlutterArtist.storage._checkToRemoveShelf(shelf);
   }
 
   void updateWidgets() {

@@ -76,7 +76,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
       block.shelf._startNewLazyQueryTransactionIfNeed();
     }
     if (isShowing) {
-      FlutterArtist._addRecentShelf(block.shelf);
+      FlutterArtist.storage._addRecentShelf(block.shelf);
     }
   }
 

@@ -40,7 +40,7 @@ class _ShelfBlockTypeWidget extends StatelessWidget {
           ),
           items: [
             BreadCrumbItem(
-              content: _buildFlu(),
+              content: _buildShelf(),
             ),
             BreadCrumbItem(
               content: _buildBlock(),
@@ -52,7 +52,7 @@ class _ShelfBlockTypeWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildFlu() {
+  Widget _buildShelf() {
     Shelf? shelf = FlutterArtist.storage._findShelf(shelfBlockType.shelfType);
     String? shelfName = shelf?.name;
     String? description = shelf?.description;
