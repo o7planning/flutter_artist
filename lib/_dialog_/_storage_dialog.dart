@@ -39,7 +39,7 @@ class _StorageDialogState extends State<_StorageDialog> {
     );
 
     AlertDialog alert = CustomAlertDialog(
-      titleText: _currentShelf == null ? "Storage" : "Shelf Structure",
+      titleText: _currentShelf == null ? "Storage Viewer" : "Shelf Structure",
       content: contentWidget,
       contentPadding: EdgeInsets.zero,
       closeDialog: () {

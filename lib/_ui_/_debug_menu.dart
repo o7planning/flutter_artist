@@ -80,7 +80,7 @@ class _DebugMenuState extends State<DebugMenu> implements FluErrorListener {
                   if (isSystemUser)
                     _buildPopupMenuItem(
                       iconData: _storageIconData,
-                      title: 'Storage',
+                      title: 'Storage Viewer',
                       onTab: _showStorage,
                     ),
                   if (isSystemUser) _divider(),
