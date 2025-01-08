@@ -1,23 +1,5 @@
 part of '../flutter_artist.dart';
 
-class SourceOfChange extends Equatable {
-  Type shelfType;
-  Type blockType;
-
-  SourceOfChange({
-    required this.shelfType,
-    required this.blockType,
-  });
-
-  @override
-  List<Object?> get props => [shelfType, blockType];
-
-  @override
-  String toString() {
-    return "SourceOfChange[$shelfType >> $blockType]";
-  }
-}
-
 class ShelfBlockType extends Equatable {
   Type shelfType;
   Type blockType;

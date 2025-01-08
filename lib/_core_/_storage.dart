@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
 class _Storage {
-  final _StorageChangeManager _changeManager = _StorageChangeManager();
+  // final _StorageChangeManager _changeManager = _StorageChangeManager();
 
   final List<Shelf> _rencentShelves = [];
 
@@ -9,10 +9,10 @@ class _Storage {
   final Map<String, Shelf> __shelfMap = {};
 
   void fireSourceChanged({
-    required Block sourceBlock,
+    required Block eventBlock,
     required String? itemIdString,
   }) {
-    _changeManager._notifyChange(sourceBlock, itemIdString);
+    _notifyChange(eventBlock, itemIdString);
   }
 
   Map<String, Shelf?> get shelfMap {
@@ -49,7 +49,7 @@ class _Storage {
     }
     shelf = creator() as F;
     __shelfMap[shelfName] = shelf;
-    _changeManager._registerShelf(shelfName, shelf);
+    // _changeManager._registerShelf(shelfName, shelf);
     return shelf;
   }
 
@@ -119,17 +119,38 @@ class _Storage {
     }
   }
 
+  // TODO: Xem lai
+  bool _contains(List<Type> listenTypes, Type type) {
+    for (Type t in listenTypes) {
+      if (t == type) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   // Private Method. Only for use in this class.
   void __findNotifierShelfCascade({
     required Block listenerBlock,
     required Map<String, Shelf> foundShelfMap,
   }) {
-    for (SourceOfChange notifier in listenerBlock.listenForChangesFrom ?? []) {
-      Type notifierShelfType = notifier.shelfType;
-      String shelfName = _getShelfName(notifierShelfType);
-      Shelf? notifierShelf = __shelfMap[shelfName];
-      if (notifierShelf != null) {
-        foundShelfMap[shelfName] = notifierShelf;
+    List<Type> listenTypes = listenerBlock.listenItemTypes;
+
+    for (Shelf shelf in __shelfMap.values) {
+      if (shelf == listenerBlock.shelf) {
+        continue;
+      }
+      List<Block> allBlocks = shelf.blocks;
+      for (Block blk in allBlocks) {
+        if (!blk.fireEvent) {
+          continue;
+        }
+        Type itemType = blk.getItemType();
+        if (_contains(listenTypes, itemType)) {
+          String shelfType = _getShelfName(shelf.runtimeType);
+          foundShelfMap[shelfType] = shelf;
+          continue;
+        }
       }
     }
     for (Block childListenerBlock in listenerBlock.childBlocks) {
@@ -163,8 +184,7 @@ class _Storage {
 
   // Private Method. Only for use in this class.
   bool __foundListenerShelfCascade({required Block block}) {
-    if (block.listenForChangesFrom != null &&
-        block.listenForChangesFrom!.isNotEmpty) {
+    if (block.listenItemTypes.isNotEmpty) {
       return true;
     }
     for (Block childBlock in block.childBlocks) {
@@ -180,8 +200,9 @@ class _Storage {
 // ===========================================================================
 
   // Callable.
-  List<ShelfBlockType> _getListenerBlocks({required Block notifierBlock}) {
-    List<ShelfBlockType> foundFluBlockTypes = [];
+  List<ShelfBlockType> _getListenerShelfBlockTypes(
+      {required Block eventBlock}) {
+    List<ShelfBlockType> foundShelfBlockTypes = [];
 
     for (String shelfName in __shelfMap.keys) {
       Shelf? shelf = __shelfMap[shelfName];
@@ -189,57 +210,66 @@ class _Storage {
         continue;
       }
       for (Block rootBlock in shelf.rootBlocks) {
-        __findListenerBlocksCascade(
-          notifierBlock: notifierBlock,
+        __findListenerShelfBlockTypesCascade(
+          eventBlock: eventBlock,
           blockToCheck: rootBlock,
-          foundFluBlockTypes: foundFluBlockTypes,
+          foundShelfBlockTypes: foundShelfBlockTypes,
         );
       }
     }
-    return foundFluBlockTypes;
+    return foundShelfBlockTypes;
   }
 
   // Private Method. Only for use in this class.
-  void __findListenerBlocksCascade({
-    required Block notifierBlock,
+  void __findListenerShelfBlockTypesCascade({
+    required Block eventBlock,
     required Block blockToCheck,
-    required List<ShelfBlockType> foundFluBlockTypes,
+    required List<ShelfBlockType> foundShelfBlockTypes,
   }) {
-    for (SourceOfChange notifier in blockToCheck.listenForChangesFrom ?? []) {
-      if (notifier.shelfType == notifierBlock.shelf.runtimeType &&
-          notifier.blockType == notifierBlock.runtimeType) {
-        foundFluBlockTypes.add(
-          ShelfBlockType(
-            shelfType: blockToCheck.shelf.runtimeType,
-            blockType: blockToCheck.runtimeType,
-          ),
-        );
-        break;
-      }
+    if (!eventBlock.fireEvent) {
+      return;
+    }
+    final Type itemType = eventBlock.getItemType();
+    if (_contains(blockToCheck.listenItemTypes, itemType)) {
+      foundShelfBlockTypes.add(
+        ShelfBlockType(
+          shelfType: blockToCheck.shelf.runtimeType,
+          blockType: blockToCheck.runtimeType,
+        ),
+      );
     }
     for (Block childBlock in blockToCheck.childBlocks) {
-      __findListenerBlocksCascade(
-        notifierBlock: notifierBlock,
+      __findListenerShelfBlockTypesCascade(
+        eventBlock: eventBlock,
         blockToCheck: childBlock,
-        foundFluBlockTypes: foundFluBlockTypes,
+        foundShelfBlockTypes: foundShelfBlockTypes,
       );
     }
   }
 
   // Callable.
-  List<ShelfBlockType> _getNotifierBlocks({
+  List<ShelfBlockType> _getEventShelfBlockTypes({
     required Block listenerBlock,
   }) {
-    List<ShelfBlockType> foundFluBlockTypes = [];
-    for (SourceOfChange notifier in listenerBlock.listenForChangesFrom ?? []) {
-      foundFluBlockTypes.add(
-        ShelfBlockType(
-          shelfType: notifier.shelfType,
-          blockType: notifier.blockType,
-        ),
-      );
+    List<ShelfBlockType> foundShelfBlockTypes = [];
+
+    for (Shelf shelf in __shelfMap.values) {
+      List<Block> allBlocks = shelf.blocks;
+      for (Block blk in allBlocks) {
+        if (!blk.fireEvent) {
+          continue;
+        }
+        if (_contains(listenerBlock.listenItemTypes, blk.getItemType())) {
+          foundShelfBlockTypes.add(
+            ShelfBlockType(
+              shelfType: shelf.runtimeType,
+              blockType: blk.runtimeType,
+            ),
+          );
+        }
+      }
     }
-    return foundFluBlockTypes;
+    return foundShelfBlockTypes;
   }
 
   void _addRecentShelf(Shelf shelf) {
@@ -274,5 +304,190 @@ class _Storage {
 
   void _logout() {
     __shelfMap.clear();
+  }
+
+  // ===========================================================================
+  // ===========================================================================
+
+  // ===========================================================================
+  // ===========================================================================
+
+  // ===========================================================================
+  // ===========================================================================
+
+  // ===========================================================================
+  // ===========================================================================
+
+  // ===========================================================================
+  // ===========================================================================
+
+  // ===========================================================================
+  // ===========================================================================
+
+  // ===========================================================================
+  // ===========================================================================
+
+  // Map<SourceOfChange, List<Block>> _getNotifierAndListenerMap() {
+  //   Map<SourceOfChange, List<Block>> returnMap = {};
+  //   for (Shelf shelf in _registedShelfMap.values) {
+  //     for (Block block in shelf.rootBlocks) {
+  //       __registerListenerBlockCascade(block, returnMap);
+  //     }
+  //   }
+  //   return returnMap;
+  // }
+  //
+  // void __registerListenerBlockCascade(
+  //   Block listenerBlock,
+  //   Map<SourceOfChange, List<Block>> returnMap,
+  // ) {
+  //   List<SourceOfChange>? sources = listenerBlock.listenForChangesFrom;
+  //   for (SourceOfChange source in sources ?? []) {
+  //     List<Block>? list = returnMap[source];
+  //     if (list == null) {
+  //       list = [];
+  //       returnMap[source] = list;
+  //     }
+  //     list.add(listenerBlock);
+  //   }
+  //   for (Block childBlock in listenerBlock._childBlocks) {
+  //     __registerListenerBlockCascade(childBlock, returnMap);
+  //   }
+  // }
+
+  // ===========================================================================
+  // ===========================================================================
+
+  // List<ShelfBlockType> getChangeListeners({required Block eventBlock}) {
+  //
+  //   Type eventItemType = eventBlock.getItemType();
+  //
+  //   for(Shelf listenShelf in _registedShelfMap.values) {
+  //     if(listenShelf == eventBlock.shelf) {
+  //       continue;
+  //     }
+  //     for(Block listenBlk in listenShelf.blocks) {
+  //      //if( listenBlk.listenItemTypes)
+  //     }
+  //
+  //   }
+  //   SourceOfChange source = _blockToSourceOfChange(eventBlock);
+  //
+  //   List<Block> listenerBlocks = _getNotifierAndListenerMap()[source] ?? [];
+  //   return listenerBlocks
+  //       .map(
+  //         (b) => ShelfBlockType(
+  //           shelfType: b.shelf.runtimeType,
+  //           blockType: b.runtimeType,
+  //         ),
+  //       )
+  //       .toList();
+  // }
+
+  // SourceOfChange _blockToSourceOfChange(Block sourceBlock) {
+  //   Type shelfType = sourceBlock.shelf.runtimeType;
+  //   Type blockType = sourceBlock.runtimeType;
+  //   SourceOfChange source = SourceOfChange(
+  //     shelfType: shelfType,
+  //     blockType: blockType,
+  //   );
+  //   return source;
+  // }
+
+  // List<Block> _getListenerBlocks(Block eventBlock)  {
+  //   List<Block> foundListenerBlocks = [];
+  //
+  //   for (String shelfName in __shelfMap.keys) {
+  //     Shelf? shelf = __shelfMap[shelfName];
+  //     if (shelf == null) {
+  //       continue;
+  //     }
+  //     for (Block rootBlock in shelf.rootBlocks) {
+  //       __findListenerShelfBlockTypesCascade(
+  //         eventBlock: eventBlock,
+  //         blockToCheck: rootBlock,
+  //         foundListenerBlocks: foundListenerBlocks,
+  //       );
+  //     }
+  //   }
+  //   return foundListenerBlocks;
+  // }
+
+  void _notifyChange(Block eventBlock, String? itemIdString) {
+    Type eventItemType = eventBlock.getItemType();
+    print("~~~~~~~~~> Event Item Type: $eventItemType");
+    //
+    List<ShelfBlockType> listeners =
+        _getListenerShelfBlockTypes(eventBlock: eventBlock);
+
+    // SourceOfChange source = _blockToSourceOfChange(eventBlock);
+    // print("~~~~~~~~~> SourceOfChange: ${source}");
+
+    List<Block> listenerBlocks = _getListenerBlocks(eventBlock: eventBlock);
+    for (Block listenerBlock in listenerBlocks) {
+      if (!listenerBlock.hasActiveBlockFragmentWidget(
+        alsoCheckChildren: true,
+      )) {
+        listenerBlock.data.setToPending();
+      }
+    }
+    List<Block> queryBlocks = [];
+    for (Block listenerBlock in listenerBlocks) {
+      if (listenerBlock.hasActiveBlockFragmentWidget(
+        alsoCheckChildren: true,
+      )) {
+        queryBlocks.add(listenerBlock);
+      }
+    }
+    //
+    if (queryBlocks.isNotEmpty) {
+      // TODO: Neu co 2 Flu thi sao??
+      queryBlocks.first.shelf._queryBlocks(
+        queryType: QueryType.forceQuery,
+        blocks: queryBlocks,
+      );
+    }
+  }
+
+  // Callable.
+  List<Block> _getListenerBlocks({required Block eventBlock}) {
+    List<Block> foundListenerBlocks = [];
+
+    for (String shelfName in __shelfMap.keys) {
+      Shelf? shelf = __shelfMap[shelfName];
+      if (shelf == null) {
+        continue;
+      }
+      for (Block rootBlock in shelf.rootBlocks) {
+        __findListenerBlocksCascade(
+          eventBlock: eventBlock,
+          blockToCheck: rootBlock,
+          foundListenerBlocks: foundListenerBlocks,
+        );
+      }
+    }
+    return foundListenerBlocks;
+  }
+
+  // Private Method. Only for use in this class.
+  void __findListenerBlocksCascade({
+    required Block eventBlock,
+    required Block blockToCheck,
+    required List<Block> foundListenerBlocks,
+  }) {
+    if (!eventBlock.fireEvent) {
+      return;
+    }
+    final Type itemType = eventBlock.getItemType();
+    if (_contains(blockToCheck.listenItemTypes, itemType)) {
+      foundListenerBlocks.add(blockToCheck);
+    }
+    for (Block childBlock in blockToCheck.childBlocks) {
+      __findListenerBlocksCascade(
+        eventBlock: eventBlock,
+        blockToCheck: childBlock,
+        foundListenerBlocks: foundListenerBlocks,
+      );
+    }
   }
 }

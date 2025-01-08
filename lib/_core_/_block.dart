@@ -87,11 +87,6 @@ abstract class Block<I extends Object, D extends Object,
 
   final Mailbox mailbox = Mailbox();
 
-  final List<SourceOfChange>? _listenForChangesFrom;
-
-  List<SourceOfChange>? get listenForChangesFrom =>
-      _listenForChangesFrom == null ? null : [..._listenForChangesFrom];
-
   final Map<_WidgetState, bool> _blockFragmentWidgetStateListeners = {};
   final Map<_WidgetState, bool> _controlBarWidgetStateListeners = {};
   final Map<_WidgetState, bool> _paginationWidgetStateListeners = {};
@@ -105,12 +100,10 @@ abstract class Block<I extends Object, D extends Object,
     required this.blockForm,
     this.fireEvent = false,
     List<Type> listenItemTypes = const [],
-    required List<SourceOfChange>? listenForChangesFrom,
     required List<Block>? childBlocks,
   })  : __pageSize = pageSize,
         _childBlocks = childBlocks ?? [],
-        __listenItemTypes = listenItemTypes,
-        _listenForChangesFrom = listenForChangesFrom {
+        __listenItemTypes = listenItemTypes {
     for (Block childBlock in _childBlocks) {
       childBlock.parent = this;
     }
@@ -152,9 +145,9 @@ abstract class Block<I extends Object, D extends Object,
     return ret;
   }
 
-  bool get isChangeListener {
-    return _listenForChangesFrom != null && _listenForChangesFrom.isNotEmpty;
-  }
+  // bool get isChangeListener {
+  //   return _listenForChangesFrom != null && _listenForChangesFrom.isNotEmpty;
+  // }
 
   void updateFragmentWidgets() {
     Map<_WidgetState, bool> widgetStates = _findMountedWidgetStates(
@@ -1270,7 +1263,7 @@ abstract class Block<I extends Object, D extends Object,
     try {
       result = await callApiQuickCreate(data: data);
       FlutterArtist.storage.fireSourceChanged(
-        sourceBlock: this,
+        eventBlock: this,
         itemIdString: null,
       );
     } catch (e, stacktrace) {
@@ -1323,7 +1316,7 @@ abstract class Block<I extends Object, D extends Object,
     try {
       result = await callApiQuickUpdate(item: item, data: data);
       FlutterArtist.storage.fireSourceChanged(
-        sourceBlock: this,
+        eventBlock: this,
         itemIdString: null,
       );
     } catch (e, stacktrace) {
@@ -1593,7 +1586,7 @@ abstract class Block<I extends Object, D extends Object,
     }
     //
     FlutterArtist.storage.fireSourceChanged(
-      sourceBlock: this,
+      eventBlock: this,
       itemIdString: null,
     );
     //
@@ -2268,7 +2261,7 @@ abstract class Block<I extends Object, D extends Object,
         //
         result = await callApiDelete(item: item);
         FlutterArtist.storage.fireSourceChanged(
-          sourceBlock: this,
+          eventBlock: this,
           itemIdString: null,
         );
       } catch (e, stacktrace) {

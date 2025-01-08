@@ -9,6 +9,8 @@ abstract class Shelf {
 
   final List<NonBlock> __nonBlocks = [];
 
+  List<NonBlock> get nonBlocks => [...__nonBlocks];
+
   final Map<String, Block> __blockMap = {};
 
   final List<Block> __rootBlocks = [];
@@ -161,14 +163,14 @@ abstract class Shelf {
   }
 
   // Local Use
-  bool _isChangeListener() {
-    for (Block block in blocks) {
-      if (block.isChangeListener) {
-        return true;
-      }
-    }
-    return false;
-  }
+  // bool _isChangeListener() {
+  //   for (Block block in blocks) {
+  //     if (block.isChangeListener) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
 
   // ***************************************************************************
   // ***************************************************************************

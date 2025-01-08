@@ -35,8 +35,8 @@ class _FormDataViewState extends State<_FormDataView> {
   void initState() {
     super.initState();
     //
-    listeners = FlutterArtist.storage._changeManager.getChangeListeners(
-      sourceBlock: widget.blockForm.block,
+    listeners = FlutterArtist.storage._getListenerShelfBlockTypes(
+      eventBlock: widget.blockForm.block,
     );
   }
 

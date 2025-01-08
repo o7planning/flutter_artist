@@ -73,10 +73,10 @@ class _ShelfStructureTreeViewState extends State<_ShelfStructureTreeView> {
             title = getClassName(data);
           } else if (data is Block) {
             title = getClassName(data);
-            List<ShelfBlockType> listeners =
-                FlutterArtist.storage._getListenerBlocks(notifierBlock: data);
-            List<ShelfBlockType> notifiers =
-                FlutterArtist.storage._getNotifierBlocks(listenerBlock: data);
+            List<ShelfBlockType> listeners = FlutterArtist.storage
+                ._getListenerShelfBlockTypes(eventBlock: data);
+            List<ShelfBlockType> notifiers = FlutterArtist.storage
+                ._getEventShelfBlockTypes(listenerBlock: data);
             isListener = notifiers.isNotEmpty;
             isNotifier = listeners.isNotEmpty;
           } else {

@@ -27,7 +27,6 @@ abstract class SingleItemBlock<I extends Object, D extends Object,
     required super.blockFilterName,
     required super.blockForm,
     required super.childBlocks,
-    required super.listenForChangesFrom,
   });
 
   @override

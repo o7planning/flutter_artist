@@ -77,12 +77,12 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
   Widget _buildRelatedBlockInfos() {
     List<ShelfBlockType> listeners = selectedBlock == null
         ? []
-        : FlutterArtist.storage._getListenerBlocks(
-            notifierBlock: selectedBlock!,
+        : FlutterArtist.storage._getListenerShelfBlockTypes(
+            eventBlock: selectedBlock!,
           );
     List<ShelfBlockType> notifiers = selectedBlock == null
         ? []
-        : FlutterArtist.storage._getNotifierBlocks(
+        : FlutterArtist.storage._getEventShelfBlockTypes(
             listenerBlock: selectedBlock!,
           );
     //
