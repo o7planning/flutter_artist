@@ -19,7 +19,7 @@ enum BlockHiddenBehavior {
 // =============================================================================
 // =============================================================================
 
-enum NonBlockHiddenBehavior {
+enum ScalarHiddenBehavior {
   none,
   clear;
 }
@@ -137,6 +137,6 @@ enum WidgetStateType {
   blockFragment,
   shelfFragment,
   //
-  nonBlockFragment,
+  scalarFragment,
   loggedInUser;
 }

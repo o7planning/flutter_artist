@@ -5,11 +5,11 @@ abstract class Shelf {
 
   String? get description => _shelfStruct.description;
 
-  final Map<String, NonBlock> __nonBlockMap = {};
+  final Map<String, Scalar> __scalarMap = {};
 
-  final List<NonBlock> __nonBlocks = [];
+  final List<Scalar> __scalars = [];
 
-  List<NonBlock> get nonBlocks => [...__nonBlocks];
+  List<Scalar> get scalars => [...__scalars];
 
   final Map<String, Block> __blockMap = {};
 
@@ -50,29 +50,29 @@ abstract class Shelf {
       blockFilter.shelf = this;
     }
 
-    List<NonBlock> nonBlocks = _shelfStruct.nonBlocks;
+    List<Scalar> scalars = _shelfStruct.scalars;
 
-    for (NonBlock nonBlock in nonBlocks) {
-      if (__nonBlockMap.containsKey(nonBlock.name)) {
-        throw "Duplicated non-block '${nonBlock.name}' in '${getClassName(this)}'";
+    for (Scalar scalar in scalars) {
+      if (__scalarMap.containsKey(scalar.name)) {
+        throw "Duplicated Scalar '${scalar.name}' in '${getClassName(this)}'";
       } else {
-        __nonBlockMap[nonBlock.name] = nonBlock;
+        __scalarMap[scalar.name] = scalar;
       }
-      nonBlock.shelf = this;
-      __nonBlocks.add(nonBlock);
+      scalar.shelf = this;
+      __scalars.add(scalar);
       //
-      if (nonBlock.filterName != null) {
+      if (scalar.filterName != null) {
         BlockFilter? blockFilter =
-            _shelfStruct.blockFilters[nonBlock.filterName!];
+            _shelfStruct.blockFilters[scalar.filterName!];
         if (blockFilter == null) {
-          throw "BlockFilter not found '${nonBlock.filterName}' in '${getClassName(this)}'";
+          throw "BlockFilter not found '${scalar.filterName}' in '${getClassName(this)}'";
         }
         //
         const Type filterSnapshotType = FilterSnapshot;
         final String filterSnapshotBase = filterSnapshotType.toString();
         final String filterSnapshotBF =
             blockFilter.getFilterSnapshotTypeAsString();
-        final String filterSnapshotB = nonBlock.getFilterSnapshotTypeAsString();
+        final String filterSnapshotB = scalar.getFilterSnapshotTypeAsString();
         //
         if (filterSnapshotBF == filterSnapshotBase) {
           throw "You need to create your own class that extends from '$filterSnapshotBase' "
@@ -81,15 +81,15 @@ abstract class Shelf {
         }
         //
         if (filterSnapshotBF != filterSnapshotB) {
-          throw "NonBlock and Block-Filter must have the same Filter-Snapshot type.\n"
-              " >> Filter-Snapshot of '${getClassName(nonBlock)}' NonBlock is '$filterSnapshotB'\n"
+          throw "Scalar and Block-Filter must have the same Filter-Snapshot type.\n"
+              " >> Filter-Snapshot of '${getClassName(scalar)}' Scalar is '$filterSnapshotB'\n"
               " >> Filter-Snapshot of '${getClassName(blockFilter)}' Block-Filter is '$filterSnapshotBF'\n";
         }
         //
-        blockFilter._nonBlocks.add(nonBlock);
-        nonBlock.blockFilter = blockFilter;
+        blockFilter._scalars.add(scalar);
+        scalar.blockFilter = blockFilter;
       } else {
-        nonBlock.blockFilter = null;
+        scalar.blockFilter = null;
       }
     }
 
@@ -204,8 +204,8 @@ abstract class Shelf {
   // ***************************************************************************
   // ***************************************************************************
 
-  NonBlock? findNonBlock(String nonBlockName) {
-    return __nonBlockMap[nonBlockName];
+  Scalar? findScalar(String scalarName) {
+    return __scalarMap[scalarName];
   }
 
   Block? findBlock(String blockName) {
@@ -326,11 +326,11 @@ abstract class Shelf {
     }
   }
 
-  void __findLazyNonBlocks(List<NBBFWraper> founds) {
-    for (NonBlock nonBlock in __nonBlocks) {
-      if (nonBlock.hasActiveUiComponent() &&
-          nonBlock.data.dataState == DataState.pending) {
-        founds.add(NBBFWraper.nonBlock(nonBlock));
+  void __findLazyScalars(List<NBBFWraper> founds) {
+    for (Scalar scalar in __scalars) {
+      if (scalar.hasActiveUiComponent() &&
+          scalar.data.dataState == DataState.pending) {
+        founds.add(NBBFWraper.scalar(scalar));
       }
     }
   }
@@ -353,16 +353,16 @@ abstract class Shelf {
 
   List<NBBFWraper> __findTopLazyBlocks() {
     final List<NBBFWraper> founds = [];
-    __findLazyNonBlocks(founds);
+    __findLazyScalars(founds);
     __findTopLazyBlocksCascade(__rootBlocks, founds);
     return founds;
   }
 
-  Future<bool> _queryNonBlocks({
-    required List<NonBlock> nonBlocks,
+  Future<bool> _queryScalars({
+    required List<Scalar> scalars,
   }) async {
-    for (NonBlock nonBlock in nonBlocks) {
-      bool success = await nonBlock.query();
+    for (Scalar scalar in scalars) {
+      bool success = await scalar.query();
       if (!success) {
         return false;
       }
@@ -398,16 +398,15 @@ abstract class Shelf {
 
       for (NBBFWraper blkOrForm in blockOrForms) {
         needToUpdate = true;
-        // QUERY NON-BLOCK:
-        if (blkOrForm.nonBlock != null) {
+        // QUERY SCALAR:
+        if (blkOrForm.scalar != null) {
           FlutterArtist.codeFlowLogger._addInfo(
             isLibCode: true,
             ownerClassInstance: this,
-            info:
-                "Querying lazy non-block: ${getClassName(blkOrForm.nonBlock)}",
+            info: "Querying lazy Scalar: ${getClassName(blkOrForm.scalar)}",
           );
           //
-          success = await blkOrForm.nonBlock!._queryWithOverlayAndRestorable();
+          success = await blkOrForm.scalar!._queryWithOverlayAndRestorable();
           if (!success) {
             break;
           }
@@ -483,9 +482,9 @@ abstract class Shelf {
       }
     }
     //
-    for (NonBlock nonBlock in __nonBlocks) {
-      nonBlock.updateControlBarWidgets();
-      nonBlock.updateFragmentWidgets();
+    for (Scalar scalar in __scalars) {
+      scalar.updateControlBarWidgets();
+      scalar.updateFragmentWidgets();
     }
     for (Block block in __rootBlocks) {
       __updateAllWidgetsCascade(block);

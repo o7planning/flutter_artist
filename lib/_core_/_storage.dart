@@ -219,21 +219,21 @@ class _Storage {
     return foundListenerBlocks;
   }
 
-  List<NonBlock> _getListenerNonBlocks({required Block eventBlock}) {
-    List<NonBlock> foundListenerNonBlocks = [];
+  List<Scalar> _getListenerScalars({required Block eventBlock}) {
+    List<Scalar> foundListenerScalars = [];
 
     for (String shelfName in __shelfMap.keys) {
       Shelf? shelf = __shelfMap[shelfName];
       if (shelf == null) {
         continue;
       }
-      for (NonBlock nonBlock in shelf.nonBlocks) {
-        if (_contains(nonBlock.listenItemTypes, eventBlock.getItemType())) {
-          foundListenerNonBlocks.add(nonBlock);
+      for (Scalar scalar in shelf.scalars) {
+        if (_contains(scalar.listenItemTypes, eventBlock.getItemType())) {
+          foundListenerScalars.add(scalar);
         }
       }
     }
-    return foundListenerNonBlocks;
+    return foundListenerScalars;
   }
 
   // Callable.
@@ -350,25 +350,25 @@ class _Storage {
     Type eventItemType = eventBlock.getItemType();
     print("~~~~~~~~~> Event Item Type: $eventItemType");
     //
-    final List<NonBlock> listenerNonBlocks = _getListenerNonBlocks(
+    final List<Scalar> listenerScalars = _getListenerScalars(
       eventBlock: eventBlock,
     );
-    for (NonBlock listenerNonBlock in listenerNonBlocks) {
-      if (!listenerNonBlock.hasActiveNonBlockFragmentWidget()) {
-        listenerNonBlock.data.setToPending();
+    for (Scalar listenerScalar in listenerScalars) {
+      if (!listenerScalar.hasActiveScalarFragmentWidget()) {
+        listenerScalar.data.setToPending();
       }
     }
-    final List<NonBlock> queryNonBlocks = [];
-    for (NonBlock listenerNonBlock in listenerNonBlocks) {
-      if (listenerNonBlock.hasActiveNonBlockFragmentWidget()) {
-        queryNonBlocks.add(listenerNonBlock);
+    final List<Scalar> queryScalars = [];
+    for (Scalar listenerScalar in listenerScalars) {
+      if (listenerScalar.hasActiveScalarFragmentWidget()) {
+        queryScalars.add(listenerScalar);
       }
     }
     //
-    if (queryNonBlocks.isNotEmpty) {
+    if (queryScalars.isNotEmpty) {
       // TODO: Neu co 2 Shelf(s) thi sao??
-      queryNonBlocks.first.shelf._queryNonBlocks(
-        nonBlocks: queryNonBlocks,
+      queryScalars.first.shelf._queryScalars(
+        scalars: queryScalars,
       );
     }
     //
