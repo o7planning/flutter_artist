@@ -102,8 +102,6 @@ part '_core_/_shelf_block_type.dart';
 
 part '_core_/_storage.dart';
 
-part '_core_/_storage_change_manager.dart';
-
 part '_core_/_suggested_filter_data.dart';
 
 part '_core_/_suggested_selection.dart';
