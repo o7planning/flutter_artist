@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-abstract class NonBlock<D extends Object, S extends FilterSnapshot>
+abstract class Scalar<D extends Object, S extends FilterSnapshot>
     extends BaseBlk {
   final String name;
 
@@ -14,13 +14,13 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
 
   late final BlockFilter<S>? blockFilter;
 
-  late final NonBlockData<D, S> data = NonBlockData<D, S>(this);
+  late final ScalarData<D, S> data = ScalarData<D, S>(this);
 
-  final NonBlockHiddenBehavior hiddenBehavior;
+  final ScalarHiddenBehavior hiddenBehavior;
 
-  final Map<_WidgetState, bool> _nonBlockFragmentWidgetStateListeners = {};
+  final Map<_WidgetState, bool> _scalarFragmentWidgetStateListeners = {};
 
-  NonBlock({
+  Scalar({
     required this.name,
     required this.filterName,
     required this.hiddenBehavior,
@@ -54,9 +54,9 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
   }
 
   void updateFragmentWidgets() {
-    _removeUnmountedWidgetStates(_nonBlockFragmentWidgetStateListeners);
+    _removeUnmountedWidgetStates(_scalarFragmentWidgetStateListeners);
 
-    for (_WidgetState state in _nonBlockFragmentWidgetStateListeners.keys) {
+    for (_WidgetState state in _scalarFragmentWidgetStateListeners.keys) {
       if (state.mounted) {
         state.refreshState();
       }
@@ -238,10 +238,10 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
     return true;
   }
 
-  bool hasActiveNonBlockFragmentWidget() {
-    _removeUnmountedWidgetStates(_nonBlockFragmentWidgetStateListeners);
+  bool hasActiveScalarFragmentWidget() {
+    _removeUnmountedWidgetStates(_scalarFragmentWidgetStateListeners);
 
-    var map = {..._nonBlockFragmentWidgetStateListeners};
+    var map = {..._scalarFragmentWidgetStateListeners};
     for (State widgetState in map.keys) {
       if (widgetState.mounted) {
         bool isShowing = map[widgetState] ?? false;
@@ -254,7 +254,7 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
   }
 
   bool hasActiveUiComponent() {
-    return hasActiveNonBlockFragmentWidget();
+    return hasActiveScalarFragmentWidget();
   }
 
   void _addWidgetStateListener({
@@ -262,7 +262,7 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
     required bool isShowing,
   }) {
     bool activeOLD = hasActiveUiComponent();
-    _nonBlockFragmentWidgetStateListeners[widgetState] = isShowing;
+    _scalarFragmentWidgetStateListeners[widgetState] = isShowing;
     bool activeCURRENT = hasActiveUiComponent();
     //
     if (isShowing) {
@@ -273,28 +273,28 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
       // Fire event:
       shelf._startNewLazyQueryTransactionIfNeed();
     } else if (activeOLD && !activeCURRENT) {
-      _fireNonBlockHidden();
+      _fireScalarHidden();
     }
   }
 
   void _removeWidgetStateListener({required State widgetState}) {
     bool activeOLD = hasActiveUiComponent();
-    _nonBlockFragmentWidgetStateListeners.remove(widgetState);
+    _scalarFragmentWidgetStateListeners.remove(widgetState);
     bool activeCURRENT = hasActiveUiComponent();
     //
     if (activeOLD && !activeCURRENT) {
       FlutterArtist.storage._checkToRemoveShelf(shelf);
-      _fireNonBlockHidden();
+      _fireScalarHidden();
     }
   }
 
-  void _fireNonBlockHidden() {
+  void _fireScalarHidden() {
     FlutterArtist.codeFlowLogger._addEvent(
       ownerClassInstance: this,
-      event: "NonBlock '${getClassName(this)}' just hides all UI Components!",
+      event: "Scalar '${getClassName(this)}' just hides all UI Components!",
       isLibCode: true,
     );
-    if (hiddenBehavior == NonBlockHiddenBehavior.clear) {
+    if (hiddenBehavior == ScalarHiddenBehavior.clear) {
       Future.delayed(
         const Duration(seconds: 0),
         () {

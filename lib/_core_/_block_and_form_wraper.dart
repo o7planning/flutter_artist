@@ -1,11 +1,11 @@
 part of '../flutter_artist.dart';
 
 class NBBFWraper {
-  NonBlock? nonBlock;
+  Scalar? scalar;
   Block? block;
   BlockForm? blockForm;
 
-  NBBFWraper.nonBlock(NonBlock this.nonBlock);
+  NBBFWraper.scalar(Scalar this.scalar);
 
   NBBFWraper.block(Block this.block);
 
@@ -13,8 +13,8 @@ class NBBFWraper {
 
   @override
   String toString() {
-    if (nonBlock != null) {
-      return getClassName(nonBlock);
+    if (scalar != null) {
+      return getClassName(scalar);
     } else if (block != null) {
       return getClassName(block);
     } else if (blockForm != null) {

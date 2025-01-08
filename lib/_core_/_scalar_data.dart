@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
-class NonBlockData<D extends Object, S extends FilterSnapshot> {
-  final NonBlock<D, S> nonBlock;
+class ScalarData<D extends Object, S extends FilterSnapshot> {
+  final Scalar<D, S> scalar;
 
   bool __isTemporaryMode = false;
 
@@ -21,10 +21,10 @@ class NonBlockData<D extends Object, S extends FilterSnapshot> {
 
   DataState __dataStateBk = DataState.pending;
 
-  NonBlockData(this.nonBlock);
+  ScalarData(this.scalar);
 
   void setToPending() {
-    print(" --> Set to pending ${getClassName(nonBlock)}");
+    print(" --> Set to pending ${getClassName(scalar)}");
     _dataState = DataState.pending;
   }
 

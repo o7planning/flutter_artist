@@ -9,9 +9,9 @@ abstract class BlockFilter<S extends FilterSnapshot> {
 
   List<Block> get blocks => [..._blocks];
 
-  final List<NonBlock> _nonBlocks = [];
+  final List<Scalar> _scalars = [];
 
-  List<NonBlock> get nonBlocks => [..._nonBlocks];
+  List<Scalar> get scalars => [..._scalars];
 
   S? _currentSnapshot;
 

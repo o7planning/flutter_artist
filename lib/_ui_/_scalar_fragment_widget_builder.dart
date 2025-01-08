@@ -1,27 +1,27 @@
 part of '../flutter_artist.dart';
 
-class NonBlockFragmentWidgetBuilder extends StatefulWidget {
-  final NonBlock nonBlock;
+class ScalarFragmentWidgetBuilder extends StatefulWidget {
+  final Scalar scalar;
   final Object ownerClassInstance;
   final String? description;
-  final Widget Function(NonBlock blk) build;
+  final Widget Function(Scalar blk) build;
 
-  const NonBlockFragmentWidgetBuilder({
+  const ScalarFragmentWidgetBuilder({
     super.key,
     required this.ownerClassInstance,
     required this.description,
-    required this.nonBlock,
+    required this.scalar,
     required this.build,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _NonBlockFragmentWidgetBuilderState();
+    return _ScalarFragmentWidgetBuilderState();
   }
 }
 
-class _NonBlockFragmentWidgetBuilderState
-    extends _WidgetState<NonBlockFragmentWidgetBuilder> {
+class _ScalarFragmentWidgetBuilderState
+    extends _WidgetState<ScalarFragmentWidgetBuilder> {
   late final String keyId;
 
   @override
@@ -30,12 +30,12 @@ class _NonBlockFragmentWidgetBuilderState
   @override
   String get description {
     return widget.description == null || widget.description!.trim().isEmpty
-        ? "${getClassName(widget.nonBlock)} (NonBlock Fragment)"
+        ? "${getClassName(widget.scalar)} (Scalar Fragment)"
         : widget.description!;
   }
 
   @override
-  WidgetStateType get type => WidgetStateType.nonBlockFragment;
+  WidgetStateType get type => WidgetStateType.scalarFragment;
 
   @override
   void refreshState() {
@@ -46,8 +46,7 @@ class _NonBlockFragmentWidgetBuilderState
   void initState() {
     super.initState();
     //
-    keyId =
-        _generateVisibilityDetectorId(prefix: getClassName(widget.nonBlock));
+    keyId = _generateVisibilityDetectorId(prefix: getClassName(widget.scalar));
     //
     _addWidgetStateListener(isShowing: true);
   }
@@ -61,15 +60,15 @@ class _NonBlockFragmentWidgetBuilderState
         _addWidgetStateListener(isShowing: visiblePercentage > 0);
       },
       child: showMode == ShowMode.production
-          ? widget.build(widget.nonBlock)
+          ? widget.build(widget.scalar)
           : _DevContainer(
-              child: widget.build(widget.nonBlock),
+              child: widget.build(widget.scalar),
             ),
     );
   }
 
   void _addWidgetStateListener({required bool isShowing}) {
-    widget.nonBlock._addWidgetStateListener(
+    widget.scalar._addWidgetStateListener(
       widgetState: this,
       isShowing: isShowing,
     );
@@ -78,6 +77,6 @@ class _NonBlockFragmentWidgetBuilderState
   @override
   void dispose() {
     super.dispose();
-    widget.nonBlock._removeWidgetStateListener(widgetState: this);
+    widget.scalar._removeWidgetStateListener(widgetState: this);
   }
 }
