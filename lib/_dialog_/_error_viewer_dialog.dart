@@ -130,7 +130,7 @@ class _ErrorViewerDialogState extends State<ErrorViewerDialog> {
           _buildExpansionTile(
             iconData: _infoIconData,
             title: _errorInfo!.message,
-            subtitle: "Flu: ${_errorInfo!.shelfName}",
+            subtitle: "Shelf: ${_errorInfo!.shelfName}",
             index: 0,
             initiallyExpanded: true,
             children: _errorInfo!.errorDetails == null

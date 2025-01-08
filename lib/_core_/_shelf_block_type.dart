@@ -14,6 +14,6 @@ class ShelfBlockType extends Equatable {
 
   @override
   String toString() {
-    return "FluBlockType[$shelfType >> $blockType]";
+    return "ShelfBlockType[$shelfType >> $blockType]";
   }
 }
