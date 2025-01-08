@@ -268,10 +268,10 @@
             </list>
           </value>
         </entry>
-        <entry key="tab_container">
+        <entry key="tabbed_view">
           <value>
             <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/tab_container-3.5.3/lib" />
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/tabbed_view-1.19.1/lib" />
             </list>
           </value>
         </entry>
@@ -360,7 +360,7 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/stack_trace-1.11.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/stream_channel-2.1.2/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/string_scanner-1.2.0/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/tab_container-3.5.3/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/tabbed_view-1.19.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/term_glyph-1.2.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/test_api-0.7.2/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/typed_data-1.4.0/lib" />
