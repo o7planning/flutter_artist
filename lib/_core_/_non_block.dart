@@ -8,6 +8,10 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
 
   bool __isQuerying = false;
 
+  final List<Type> __listenItemTypes;
+
+  List<Type> get listenItemTypes => [...__listenItemTypes];
+
   late final BlockFilter<S>? blockFilter;
 
   late final NonBlockData<D, S> data = NonBlockData<D, S>(this);
@@ -20,7 +24,8 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
     required this.name,
     required this.filterName,
     required this.hiddenBehavior,
-  });
+    List<Type> listenTypes = const [],
+  }) : __listenItemTypes = listenTypes;
 
   String getDataTypeAsString() {
     return D.toString();

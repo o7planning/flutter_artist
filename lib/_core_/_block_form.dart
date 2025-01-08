@@ -314,10 +314,6 @@ abstract class BlockForm<I extends Object, D extends Object> {
           ? await callApiCreate(formMapData: formMapData)
           : await callApiUpdate(formMapData: formMapData);
       //
-      FlutterArtist.storage.fireSourceChanged(
-        sourceBlock: block,
-        itemIdString: null,
-      );
       __isSaving = false;
     } catch (e, stacktrace) {
       _handleError(

@@ -63,6 +63,16 @@ abstract class Block<I extends Object, D extends Object,
 
   final int? __pageSize;
 
+  final bool fireEvent;
+
+  // final List<Type> __eventItemTypes;
+  //
+  // List<Type> get eventItemTypes => [...__eventItemTypes];
+
+  final List<Type> __listenItemTypes;
+
+  List<Type> get listenItemTypes => [...__listenItemTypes];
+
   PageableData? get __pageable => __pageSize == null
       ? null
       : PageableData(
@@ -97,10 +107,13 @@ abstract class Block<I extends Object, D extends Object,
     this.hiddenBehavior = BlockHiddenBehavior.none,
     required this.blockFilterName,
     required this.blockForm,
+    this.fireEvent = false,
+    List<Type> listenItemTypes = const [],
     required List<SourceOfChange>? listenForChangesFrom,
     required List<Block>? childBlocks,
   })  : __pageSize = pageSize,
         _childBlocks = childBlocks ?? [],
+        __listenItemTypes = listenItemTypes,
         _listenForChangesFrom = listenForChangesFrom {
     for (Block childBlock in _childBlocks) {
       childBlock.parent = this;
@@ -1582,6 +1595,11 @@ abstract class Block<I extends Object, D extends Object,
       );
       return false;
     }
+    //
+    FlutterArtist.storage.fireSourceChanged(
+      sourceBlock: this,
+      itemIdString: null,
+    );
     //
     D? savedItemDetail = result.data;
     bool keepInList;

@@ -68,6 +68,9 @@ class _StorageChangeManager {
   }
 
   void _notifyChange(Block sourceBlock, String? itemIdString) {
+    Type eventItemType = sourceBlock.getItemType();
+    print("~~~~~~~~~> Event Item Type: $eventItemType");
+    //
     SourceOfChange source = _blockToSourceOfChange(sourceBlock);
     print("~~~~~~~~~> SourceOfChange: ${source}");
     List<Block> listenerBlocks = _getNotifierAndListenerMap()[source] ?? [];
