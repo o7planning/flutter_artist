@@ -84,7 +84,7 @@ abstract class BlockData<I extends Object, D extends Object,
   void _applyNewState();
 
   void setToPending() {
-    print(" --> set to pending ${getClassName(block)}");
+    print(" --> Set to pending ${getClassName(block)}");
     _dataState = DataState.pending;
   }
 

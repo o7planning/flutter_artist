@@ -358,6 +358,18 @@ abstract class Shelf {
     return founds;
   }
 
+  Future<bool> _queryNonBlocks({
+    required List<NonBlock> nonBlocks,
+  }) async {
+    for (NonBlock nonBlock in nonBlocks) {
+      bool success = await nonBlock.query();
+      if (!success) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   Future<bool> _queryBlocks({
     required QueryType queryType,
     required List<Block> blocks,

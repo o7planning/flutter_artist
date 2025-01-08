@@ -200,9 +200,8 @@ class _Storage {
 // ===========================================================================
 
   // Callable.
-  List<ShelfBlockType> _getListenerShelfBlockTypes(
-      {required Block eventBlock}) {
-    List<ShelfBlockType> foundShelfBlockTypes = [];
+  List<Block> _getListenerBlocks({required Block eventBlock}) {
+    List<Block> foundListenerBlocks = [];
 
     for (String shelfName in __shelfMap.keys) {
       Shelf? shelf = __shelfMap[shelfName];
@@ -210,48 +209,78 @@ class _Storage {
         continue;
       }
       for (Block rootBlock in shelf.rootBlocks) {
-        __findListenerShelfBlockTypesCascade(
+        __findListenerBlocksCascade(
           eventBlock: eventBlock,
           blockToCheck: rootBlock,
-          foundShelfBlockTypes: foundShelfBlockTypes,
+          foundListenerBlocks: foundListenerBlocks,
         );
       }
+    }
+    return foundListenerBlocks;
+  }
+
+  List<NonBlock> _getListenerNonBlocks({required Block eventBlock}) {
+    List<NonBlock> foundListenerNonBlocks = [];
+
+    for (String shelfName in __shelfMap.keys) {
+      Shelf? shelf = __shelfMap[shelfName];
+      if (shelf == null) {
+        continue;
+      }
+      for (NonBlock nonBlock in shelf.nonBlocks) {
+        if (_contains(nonBlock.listenItemTypes, eventBlock.getItemType())) {
+          foundListenerNonBlocks.add(nonBlock);
+        }
+      }
+    }
+    return foundListenerNonBlocks;
+  }
+
+  // Callable.
+  List<ShelfBlockType> _getListenerShelfBlockTypes({
+    required Block eventBlock,
+  }) {
+    List<Block> listenerBlocks = _getListenerBlocks(eventBlock: eventBlock);
+
+    List<ShelfBlockType> foundShelfBlockTypes = [];
+    for (Block listenerBlock in listenerBlocks) {
+      foundShelfBlockTypes.add(
+        ShelfBlockType(
+          shelfType: listenerBlock.shelf.runtimeType,
+          blockType: listenerBlock.runtimeType,
+        ),
+      );
     }
     return foundShelfBlockTypes;
   }
 
   // Private Method. Only for use in this class.
-  void __findListenerShelfBlockTypesCascade({
+  void __findListenerBlocksCascade({
     required Block eventBlock,
     required Block blockToCheck,
-    required List<ShelfBlockType> foundShelfBlockTypes,
+    required List<Block> foundListenerBlocks,
   }) {
     if (!eventBlock.fireEvent) {
       return;
     }
-    final Type itemType = eventBlock.getItemType();
-    if (_contains(blockToCheck.listenItemTypes, itemType)) {
-      foundShelfBlockTypes.add(
-        ShelfBlockType(
-          shelfType: blockToCheck.shelf.runtimeType,
-          blockType: blockToCheck.runtimeType,
-        ),
-      );
+    final Type eventItemType = eventBlock.getItemType();
+    if (_contains(blockToCheck.listenItemTypes, eventItemType)) {
+      foundListenerBlocks.add(blockToCheck);
     }
     for (Block childBlock in blockToCheck.childBlocks) {
-      __findListenerShelfBlockTypesCascade(
+      __findListenerBlocksCascade(
         eventBlock: eventBlock,
         blockToCheck: childBlock,
-        foundShelfBlockTypes: foundShelfBlockTypes,
+        foundListenerBlocks: foundListenerBlocks,
       );
     }
   }
 
   // Callable.
-  List<ShelfBlockType> _getEventShelfBlockTypes({
+  List<Block> _getEventBlocks({
     required Block listenerBlock,
   }) {
-    List<ShelfBlockType> foundShelfBlockTypes = [];
+    List<Block> foundEventBlocks = [];
 
     for (Shelf shelf in __shelfMap.values) {
       List<Block> allBlocks = shelf.blocks;
@@ -260,16 +289,31 @@ class _Storage {
           continue;
         }
         if (_contains(listenerBlock.listenItemTypes, blk.getItemType())) {
-          foundShelfBlockTypes.add(
-            ShelfBlockType(
-              shelfType: shelf.runtimeType,
-              blockType: blk.runtimeType,
-            ),
-          );
+          foundEventBlocks.add(blk);
         }
       }
     }
-    return foundShelfBlockTypes;
+    return foundEventBlocks;
+  }
+
+  // Callable.
+  List<ShelfBlockType> _getEventShelfBlockTypes({
+    required Block listenerBlock,
+  }) {
+    final List<Block> foundEventBlocks = _getEventBlocks(
+      listenerBlock: listenerBlock,
+    );
+
+    List<ShelfBlockType> foundEventShelfBlockTypes = [];
+    for (Block eventBlock in foundEventBlocks) {
+      foundEventShelfBlockTypes.add(
+        ShelfBlockType(
+          shelfType: eventBlock.shelf.runtimeType,
+          blockType: eventBlock.runtimeType,
+        ),
+      );
+    }
+    return foundEventShelfBlockTypes;
   }
 
   void _addRecentShelf(Shelf shelf) {
@@ -302,128 +346,34 @@ class _Storage {
   // ===========================================================================
   // ===========================================================================
 
-  void _logout() {
-    __shelfMap.clear();
-  }
-
-  // ===========================================================================
-  // ===========================================================================
-
-  // ===========================================================================
-  // ===========================================================================
-
-  // ===========================================================================
-  // ===========================================================================
-
-  // ===========================================================================
-  // ===========================================================================
-
-  // ===========================================================================
-  // ===========================================================================
-
-  // ===========================================================================
-  // ===========================================================================
-
-  // ===========================================================================
-  // ===========================================================================
-
-  // Map<SourceOfChange, List<Block>> _getNotifierAndListenerMap() {
-  //   Map<SourceOfChange, List<Block>> returnMap = {};
-  //   for (Shelf shelf in _registedShelfMap.values) {
-  //     for (Block block in shelf.rootBlocks) {
-  //       __registerListenerBlockCascade(block, returnMap);
-  //     }
-  //   }
-  //   return returnMap;
-  // }
-  //
-  // void __registerListenerBlockCascade(
-  //   Block listenerBlock,
-  //   Map<SourceOfChange, List<Block>> returnMap,
-  // ) {
-  //   List<SourceOfChange>? sources = listenerBlock.listenForChangesFrom;
-  //   for (SourceOfChange source in sources ?? []) {
-  //     List<Block>? list = returnMap[source];
-  //     if (list == null) {
-  //       list = [];
-  //       returnMap[source] = list;
-  //     }
-  //     list.add(listenerBlock);
-  //   }
-  //   for (Block childBlock in listenerBlock._childBlocks) {
-  //     __registerListenerBlockCascade(childBlock, returnMap);
-  //   }
-  // }
-
-  // ===========================================================================
-  // ===========================================================================
-
-  // List<ShelfBlockType> getChangeListeners({required Block eventBlock}) {
-  //
-  //   Type eventItemType = eventBlock.getItemType();
-  //
-  //   for(Shelf listenShelf in _registedShelfMap.values) {
-  //     if(listenShelf == eventBlock.shelf) {
-  //       continue;
-  //     }
-  //     for(Block listenBlk in listenShelf.blocks) {
-  //      //if( listenBlk.listenItemTypes)
-  //     }
-  //
-  //   }
-  //   SourceOfChange source = _blockToSourceOfChange(eventBlock);
-  //
-  //   List<Block> listenerBlocks = _getNotifierAndListenerMap()[source] ?? [];
-  //   return listenerBlocks
-  //       .map(
-  //         (b) => ShelfBlockType(
-  //           shelfType: b.shelf.runtimeType,
-  //           blockType: b.runtimeType,
-  //         ),
-  //       )
-  //       .toList();
-  // }
-
-  // SourceOfChange _blockToSourceOfChange(Block sourceBlock) {
-  //   Type shelfType = sourceBlock.shelf.runtimeType;
-  //   Type blockType = sourceBlock.runtimeType;
-  //   SourceOfChange source = SourceOfChange(
-  //     shelfType: shelfType,
-  //     blockType: blockType,
-  //   );
-  //   return source;
-  // }
-
-  // List<Block> _getListenerBlocks(Block eventBlock)  {
-  //   List<Block> foundListenerBlocks = [];
-  //
-  //   for (String shelfName in __shelfMap.keys) {
-  //     Shelf? shelf = __shelfMap[shelfName];
-  //     if (shelf == null) {
-  //       continue;
-  //     }
-  //     for (Block rootBlock in shelf.rootBlocks) {
-  //       __findListenerShelfBlockTypesCascade(
-  //         eventBlock: eventBlock,
-  //         blockToCheck: rootBlock,
-  //         foundListenerBlocks: foundListenerBlocks,
-  //       );
-  //     }
-  //   }
-  //   return foundListenerBlocks;
-  // }
-
   void _notifyChange(Block eventBlock, String? itemIdString) {
     Type eventItemType = eventBlock.getItemType();
     print("~~~~~~~~~> Event Item Type: $eventItemType");
     //
-    List<ShelfBlockType> listeners =
-        _getListenerShelfBlockTypes(eventBlock: eventBlock);
-
-    // SourceOfChange source = _blockToSourceOfChange(eventBlock);
-    // print("~~~~~~~~~> SourceOfChange: ${source}");
-
-    List<Block> listenerBlocks = _getListenerBlocks(eventBlock: eventBlock);
+    final List<NonBlock> listenerNonBlocks = _getListenerNonBlocks(
+      eventBlock: eventBlock,
+    );
+    for (NonBlock listenerNonBlock in listenerNonBlocks) {
+      if (!listenerNonBlock.hasActiveNonBlockFragmentWidget()) {
+        listenerNonBlock.data.setToPending();
+      }
+    }
+    final List<NonBlock> queryNonBlocks = [];
+    for (NonBlock listenerNonBlock in listenerNonBlocks) {
+      if (listenerNonBlock.hasActiveNonBlockFragmentWidget()) {
+        queryNonBlocks.add(listenerNonBlock);
+      }
+    }
+    //
+    if (queryNonBlocks.isNotEmpty) {
+      // TODO: Neu co 2 Shelf(s) thi sao??
+      queryNonBlocks.first.shelf._queryNonBlocks(
+        nonBlocks: queryNonBlocks,
+      );
+    }
+    //
+    final List<Block> listenerBlocks =
+        _getListenerBlocks(eventBlock: eventBlock);
     for (Block listenerBlock in listenerBlocks) {
       if (!listenerBlock.hasActiveBlockFragmentWidget(
         alsoCheckChildren: true,
@@ -431,7 +381,7 @@ class _Storage {
         listenerBlock.data.setToPending();
       }
     }
-    List<Block> queryBlocks = [];
+    final List<Block> queryBlocks = [];
     for (Block listenerBlock in listenerBlocks) {
       if (listenerBlock.hasActiveBlockFragmentWidget(
         alsoCheckChildren: true,
@@ -441,7 +391,7 @@ class _Storage {
     }
     //
     if (queryBlocks.isNotEmpty) {
-      // TODO: Neu co 2 Flu thi sao??
+      // TODO: Neu co 2 Shelf(s) thi sao??
       queryBlocks.first.shelf._queryBlocks(
         queryType: QueryType.forceQuery,
         blocks: queryBlocks,
@@ -449,45 +399,10 @@ class _Storage {
     }
   }
 
-  // Callable.
-  List<Block> _getListenerBlocks({required Block eventBlock}) {
-    List<Block> foundListenerBlocks = [];
+  // ===========================================================================
+  // ===========================================================================
 
-    for (String shelfName in __shelfMap.keys) {
-      Shelf? shelf = __shelfMap[shelfName];
-      if (shelf == null) {
-        continue;
-      }
-      for (Block rootBlock in shelf.rootBlocks) {
-        __findListenerBlocksCascade(
-          eventBlock: eventBlock,
-          blockToCheck: rootBlock,
-          foundListenerBlocks: foundListenerBlocks,
-        );
-      }
-    }
-    return foundListenerBlocks;
-  }
-
-  // Private Method. Only for use in this class.
-  void __findListenerBlocksCascade({
-    required Block eventBlock,
-    required Block blockToCheck,
-    required List<Block> foundListenerBlocks,
-  }) {
-    if (!eventBlock.fireEvent) {
-      return;
-    }
-    final Type itemType = eventBlock.getItemType();
-    if (_contains(blockToCheck.listenItemTypes, itemType)) {
-      foundListenerBlocks.add(blockToCheck);
-    }
-    for (Block childBlock in blockToCheck.childBlocks) {
-      __findListenerBlocksCascade(
-        eventBlock: eventBlock,
-        blockToCheck: childBlock,
-        foundListenerBlocks: foundListenerBlocks,
-      );
-    }
+  void _logout() {
+    __shelfMap.clear();
   }
 }

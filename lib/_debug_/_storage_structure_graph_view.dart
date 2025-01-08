@@ -143,7 +143,7 @@ class _StorageStructureGraphViewState
       children: [
         _FloatingButton(
           selected: nliTypes.contains(NliType.listener),
-          tooltip: 'Show/Hide Listener Flu(s)',
+          tooltip: 'Show/Hide Listener Shelves',
           onPressed: () {
             var type = NliType.listener;
             setState(() {
@@ -159,7 +159,7 @@ class _StorageStructureGraphViewState
         const SizedBox(width: 10),
         _FloatingButton(
           selected: nliTypes.contains(NliType.notifier),
-          tooltip: 'Show/Hide Notifier Flu(s)',
+          tooltip: 'Show/Hide Notifier Shelves',
           onPressed: () {
             var type = NliType.notifier;
             setState(() {
@@ -175,7 +175,7 @@ class _StorageStructureGraphViewState
         const SizedBox(width: 10),
         _FloatingButton(
           selected: nliTypes.contains(NliType.independent),
-          tooltip: 'Show/Hide Independent Flu(s)',
+          tooltip: 'Show/Hide Independent Shelves',
           onPressed: () {
             var type = NliType.independent;
             setState(() {

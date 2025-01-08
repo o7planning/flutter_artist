@@ -23,6 +23,11 @@ class NonBlockData<D extends Object, S extends FilterSnapshot> {
 
   NonBlockData(this.nonBlock);
 
+  void setToPending() {
+    print(" --> Set to pending ${getClassName(nonBlock)}");
+    _dataState = DataState.pending;
+  }
+
   void _updateFrom({
     required S? filterSnapshot,
     required D? data,

@@ -97,18 +97,20 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
                 ),
               ),
             )
-          : Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _ShelfInfoView(shelf: selectedBlock?.shelf),
-                const Divider(),
-                if (listeners.isNotEmpty)
-                  _buildListeners(selectedBlock!, listeners),
-                const SizedBox(height: 10),
-                if (notifiers.isNotEmpty)
-                  _buildNotifiers(selectedBlock!, notifiers),
-              ],
+          : SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _ShelfInfoView(shelf: selectedBlock?.shelf),
+                  const Divider(),
+                  if (listeners.isNotEmpty)
+                    _buildListeners(selectedBlock!, listeners),
+                  const SizedBox(height: 10),
+                  if (notifiers.isNotEmpty)
+                    _buildNotifiers(selectedBlock!, notifiers),
+                ],
+              ),
             ),
     );
   }

@@ -68,7 +68,7 @@ class _GraphItemShelfBoxState extends State<_GraphItemShelfBox> {
                         vertical: 10,
                       ),
                       child: Text(
-                        _getFluName(),
+                        _getShelfName(),
                         style: _getTextStyle(),
                       ),
                     ),
@@ -104,7 +104,7 @@ class _GraphItemShelfBoxState extends State<_GraphItemShelfBox> {
     );
   }
 
-  String _getFluName() {
+  String _getShelfName() {
     return getClassName(widget.shelf);
   }
 
@@ -115,7 +115,7 @@ class _GraphItemShelfBoxState extends State<_GraphItemShelfBox> {
         2 * padding +
         iconSize +
         _calculateTextSize(
-          text: _getFluName(),
+          text: _getShelfName(),
           style: _getTextStyle(),
         ).width;
   }
