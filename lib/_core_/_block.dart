@@ -65,10 +65,6 @@ abstract class Block<I extends Object, D extends Object,
 
   final bool fireEvent;
 
-  // final List<Type> __eventItemTypes;
-  //
-  // List<Type> get eventItemTypes => [...__eventItemTypes];
-
   final List<Type> __listenItemTypes;
 
   List<Type> get listenItemTypes => [...__listenItemTypes];
