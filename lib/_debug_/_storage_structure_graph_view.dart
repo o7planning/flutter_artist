@@ -203,7 +203,7 @@ class _StorageStructureGraphViewState
     Map<String, Shelf?> shelfListenerMap =
         FlutterArtist.storage._getListenerShelves();
     Map<String, Shelf?> shelfNotifierMap =
-        FlutterArtist.storage._getNotifierShelves();
+        FlutterArtist.storage._getEventShelves();
     Map<String, Shelf?> shelfIndependentMap =
         FlutterArtist.storage._getIndependentShelves();
 
@@ -268,7 +268,7 @@ class _StorageStructureGraphViewState
         isRoot: item.isRoot,
         isSelected: item.shelfName == selectedShelfName,
         isListener: item.isListener,
-        isNotifier: item.isNotifier,
+        isEventSource: item.isNotifier,
         shelfName: item.shelfName,
         shelf: item.shelf,
         onSelectFluToShowGraph: item.isRoot

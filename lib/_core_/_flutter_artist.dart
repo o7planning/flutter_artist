@@ -27,7 +27,7 @@ class _FlutterArtist {
   late final CodeFlowLogger codeFlowLogger = CodeFlowLogger();
 
   final List<FluErrorListener> _errorListeners = [];
-  final List<FluNotificationListener> _notificationListeners = [];
+  final List<INotificationListener> _notificationListeners = [];
   int _totalErrorCount = 0;
 
   final List<Future<dynamic>> __futureTaskList = [];
@@ -127,13 +127,13 @@ class _FlutterArtist {
     _errorListeners.remove(listener);
   }
 
-  void addNotificationListener(FluNotificationListener listener) {
+  void addNotificationListener(INotificationListener listener) {
     if (!_notificationListeners.contains(listener)) {
       _notificationListeners.add(listener);
     }
   }
 
-  void removeNotificationListener(FluNotificationListener listener) {
+  void removeNotificationListener(INotificationListener listener) {
     _notificationListeners.remove(listener);
   }
 
@@ -253,7 +253,7 @@ class _FlutterArtist {
   }
 
   void _notifyNotification(INotificationSummary notificationSummary) {
-    for (FluNotificationListener listener in [..._notificationListeners]) {
+    for (INotificationListener listener in [..._notificationListeners]) {
       if (listener is State) {
         State state = listener as State;
         if (!state.mounted) {

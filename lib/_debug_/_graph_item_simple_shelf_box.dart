@@ -4,7 +4,7 @@ class _GraphItemSimpleShelfBox extends StatefulWidget {
   final bool isRoot;
   final bool isSelected;
   final bool isListener;
-  final bool isNotifier;
+  final bool isEventSource;
   final String shelfName;
   final Shelf? shelf;
   final Function()? onSelectFluToShowGraph;
@@ -15,7 +15,7 @@ class _GraphItemSimpleShelfBox extends StatefulWidget {
     required this.isRoot,
     required this.isSelected,
     required this.isListener,
-    required this.isNotifier,
+    required this.isEventSource,
     required this.shelfName,
     required this.shelf,
     required this.onSelectFluToShowGraph,
@@ -49,7 +49,7 @@ class _GraphItemSimpleShelfBoxState extends State<_GraphItemSimpleShelfBox> {
     if (widget.isListener) {
       boxWidth += padding + iconSize;
     }
-    if (widget.isNotifier) {
+    if (widget.isEventSource) {
       boxWidth += padding + iconSize;
     }
 
@@ -113,8 +113,8 @@ class _GraphItemSimpleShelfBoxState extends State<_GraphItemSimpleShelfBox> {
                 ),
               ),
             ),
-            if (widget.isNotifier) const SizedBox(width: spacing),
-            if (widget.isNotifier)
+            if (widget.isEventSource) const SizedBox(width: spacing),
+            if (widget.isEventSource)
               const Icon(
                 _changeSourceIconData,
                 size: iconSize,

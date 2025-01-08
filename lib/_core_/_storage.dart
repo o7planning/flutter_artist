@@ -84,37 +84,37 @@ class _Storage {
 
   // @Callable
   Map<String, Shelf> _getIndependentShelves() {
-    Map<String, Shelf> notifierMap = _getNotifierShelves();
+    Map<String, Shelf> eventMap = _getEventShelves();
     Map<String, Shelf> listenerMap = _getListenerShelves();
     Map<String, Shelf> map = {}..addAll(__shelfMap);
     map.removeWhere((shelfName, shelf) =>
-        notifierMap.keys.contains(shelfName) ||
+        eventMap.keys.contains(shelfName) ||
         listenerMap.keys.contains(shelfName));
     return map;
   }
 
   // @Callable
-  Map<String, Shelf> _getNotifierShelves() {
-    Map<String, Shelf> foundShelfMap = {};
+  Map<String, Shelf> _getEventShelves() {
+    Map<String, Shelf> foundEventShelfMap = {};
     //
     for (Shelf shelf in __shelfMap.values) {
-      __findNotifierShelves(
+      __findEventShelves(
         listenerShelf: shelf,
-        foundShelfMap: foundShelfMap,
+        foundEventShelfMap: foundEventShelfMap,
       );
     }
-    return foundShelfMap;
+    return foundEventShelfMap;
   }
 
   // Private Method. Only for use in this class.
-  void __findNotifierShelves({
+  void __findEventShelves({
     required Shelf listenerShelf,
-    required Map<String, Shelf> foundShelfMap,
+    required Map<String, Shelf> foundEventShelfMap,
   }) {
     for (Block rootListenerBlock in listenerShelf.rootBlocks) {
-      __findNotifierShelfCascade(
+      __findEventShelfCascade(
         listenerBlock: rootListenerBlock,
-        foundShelfMap: foundShelfMap,
+        foundShelfMap: foundEventShelfMap,
       );
     }
   }
@@ -130,7 +130,7 @@ class _Storage {
   }
 
   // Private Method. Only for use in this class.
-  void __findNotifierShelfCascade({
+  void __findEventShelfCascade({
     required Block listenerBlock,
     required Map<String, Shelf> foundShelfMap,
   }) {
@@ -154,7 +154,7 @@ class _Storage {
       }
     }
     for (Block childListenerBlock in listenerBlock.childBlocks) {
-      __findNotifierShelfCascade(
+      __findEventShelfCascade(
         listenerBlock: childListenerBlock,
         foundShelfMap: foundShelfMap,
       );

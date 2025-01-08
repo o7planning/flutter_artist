@@ -15,7 +15,7 @@ class NotificationButtonBuilder extends StatefulWidget {
 }
 
 class _NotificationButtonBuilderState extends State<NotificationButtonBuilder>
-    implements FluNotificationListener {
+    implements INotificationListener {
   INotificationSummary? _notificationSummary;
 
   @override
