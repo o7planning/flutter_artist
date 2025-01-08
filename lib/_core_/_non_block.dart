@@ -24,7 +24,7 @@ abstract class NonBlock<D extends Object, S extends FilterSnapshot>
     required this.name,
     required this.filterName,
     required this.hiddenBehavior,
-    List<Type> listenTypes = const [],
+    required List<Type> listenTypes,
   }) : __listenItemTypes = listenTypes;
 
   String getDataTypeAsString() {
