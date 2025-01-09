@@ -2,7 +2,7 @@ part of '../flutter_artist.dart';
 
 class _ShelfBlockTypeWidget extends StatelessWidget {
   final Function()? onTap;
-  final ShelfBlockType shelfBlockType;
+  final ShelfBlockScalarType shelfBlockType;
   final bool isListener;
   final bool isNotifier;
 

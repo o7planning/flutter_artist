@@ -3,7 +3,7 @@ part of '../flutter_artist.dart';
 class _ShelfRelationshipView extends StatefulWidget {
   final _ShelfRelationshipController shelfRelationshipController;
   final Shelf? shelf;
-  final Function(ShelfBlockType shelfBlockType) onSelectShelfBlockType;
+  final Function(ShelfBlockScalarType shelfBlockType) onSelectShelfBlockType;
 
   const _ShelfRelationshipView({
     required this.shelfRelationshipController,
@@ -18,26 +18,42 @@ class _ShelfRelationshipView extends StatefulWidget {
 }
 
 class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
-  Block? selectedBlock;
+  _BlockOrScalar? selectedBlockOrScalar;
 
   @override
   void initState() {
     super.initState();
     widget.shelfRelationshipController._setShelfBlockType =
-        (ShelfBlockType shelfBlockType) {
+        (ShelfBlockScalarType shelfBlockType) {
       //
     };
   }
 
-  void _selectDefaultBlockIfNeed() {
+  void _selectDefaultBlockOrScalarIfNeed() {
     if (widget.shelf == null) {
-      selectedBlock = null;
+      selectedBlockOrScalar = null;
     } else {
-      String? blockName = selectedBlock?.name;
-      if (blockName != null) {
-        selectedBlock = widget.shelf!.findBlock(blockName);
+      if (selectedBlockOrScalar?.shelf != widget.shelf) {
+        selectedBlockOrScalar = null;
       }
-      selectedBlock ??= widget.shelf!.rootBlocks.firstOrNull;
+      String? blockName = selectedBlockOrScalar?.block?.name;
+      String? scalarName = selectedBlockOrScalar?.scalar?.name;
+      if (blockName != null) {
+        Block block = widget.shelf!.findBlock(blockName)!;
+        selectedBlockOrScalar = _BlockOrScalar.block(block);
+      } else if (scalarName != null) {
+        Scalar scalar = widget.shelf!.findScalar(scalarName)!;
+        selectedBlockOrScalar = _BlockOrScalar.scalar(scalar);
+      }
+      if (selectedBlockOrScalar == null) {
+        if (widget.shelf!.rootBlocks.isNotEmpty) {
+          Block block = widget.shelf!.rootBlocks.first;
+          selectedBlockOrScalar = _BlockOrScalar.block(block);
+        } else if (widget.shelf!.scalars.isNotEmpty) {
+          Scalar scalar = widget.shelf!.scalars.first;
+          selectedBlockOrScalar = _BlockOrScalar.scalar(scalar);
+        }
+      }
     }
   }
 
@@ -48,7 +64,7 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
         child: Text("No Shelf Selected"),
       );
     }
-    _selectDefaultBlockIfNeed();
+    _selectDefaultBlockOrScalarIfNeed();
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,10 +74,10 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
           child: _ShelfStructureTreeView(
             key: Key("Tree-${getClassName(widget.shelf!)}"),
             shelf: widget.shelf!,
-            selectedBlock: selectedBlock,
-            onSelectBlock: (Block block) {
+            selectedBlockOrScalar: selectedBlockOrScalar,
+            onSelectBlockOrScalar: (_BlockOrScalar blockOrScalar) {
               setState(() {
-                selectedBlock = block;
+                selectedBlockOrScalar = blockOrScalar;
               });
             },
           ),
@@ -75,23 +91,33 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
   }
 
   Widget _buildRelatedBlockInfos() {
-    List<ShelfBlockType> listeners = selectedBlock == null
-        ? []
-        : FlutterArtist.storage._getListenerShelfBlockTypes(
-            eventBlock: selectedBlock!,
-          );
-    List<ShelfBlockType> notifiers = selectedBlock == null
-        ? []
-        : FlutterArtist.storage._getEventShelfBlockTypes(
-            listenerBlock: selectedBlock!,
-          );
+    List<ShelfBlockScalarType> listeners = [];
+    List<ShelfBlockScalarType> notifiers = [];
+    if (selectedBlockOrScalar?.block != null) {
+      listeners = FlutterArtist.storage._getListenerShelfBlockTypes(
+        eventBlockOrScalar: _BlockOrScalar.block(selectedBlockOrScalar!.block!),
+      );
+      notifiers = FlutterArtist.storage._getEventShelfBlockTypes(
+        listenerBlockScalar:
+            _BlockOrScalar.block(selectedBlockOrScalar!.block!),
+      );
+    } else if (selectedBlockOrScalar?.scalar != null) {
+      listeners = FlutterArtist.storage._getListenerShelfBlockTypes(
+        eventBlockOrScalar:
+            _BlockOrScalar.scalar(selectedBlockOrScalar!.scalar!),
+      );
+      notifiers = FlutterArtist.storage._getListenerShelfBlockTypes(
+        eventBlockOrScalar:
+            _BlockOrScalar.scalar(selectedBlockOrScalar!.scalar!),
+      );
+    }
     //
     return _CustomAppContainer(
       height: double.maxFinite,
-      child: selectedBlock == null
+      child: selectedBlockOrScalar == null
           ? const Center(
               child: Text(
-                "No Block Selected",
+                "No Block or Scalar Selected",
                 style: TextStyle(
                   fontSize: 13,
                 ),
@@ -102,20 +128,20 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _ShelfInfoView(shelf: selectedBlock?.shelf),
+                  _ShelfInfoView(shelf: selectedBlockOrScalar?.shelf),
                   const Divider(),
                   if (listeners.isNotEmpty)
-                    _buildListeners(selectedBlock!, listeners),
+                    _buildListeners(selectedBlockOrScalar!, listeners),
                   const SizedBox(height: 10),
                   if (notifiers.isNotEmpty)
-                    _buildNotifiers(selectedBlock!, notifiers),
+                    _buildNotifiers(selectedBlockOrScalar!, notifiers),
                 ],
               ),
             ),
     );
   }
 
-  void _onSelectFluBlockType(ShelfBlockType shelfBlockType) {
+  void _onSelectFluBlockType(ShelfBlockScalarType shelfBlockType) {
     Shelf? shelf = FlutterArtist.storage._findShelf(shelfBlockType.shelfType);
     if (shelf != null) {
       // TODO ...
@@ -124,7 +150,16 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
     widget.onSelectShelfBlockType(shelfBlockType);
   }
 
-  Widget _buildListeners(Block block, List<ShelfBlockType> listeners) {
+  String _getClassName(_BlockOrScalar blockOrScalar) {
+    if (blockOrScalar.block != null) {
+      return getClassName(blockOrScalar.block!);
+    } else {
+      return getClassName(blockOrScalar.scalar!);
+    }
+  }
+
+  Widget _buildListeners(
+      _BlockOrScalar blockOrScalar, List<ShelfBlockScalarType> listeners) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,7 +177,7 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
               child: SizedBox(width: 5),
             ),
             TextSpan(
-              text: getClassName(block),
+              text: _getClassName(blockOrScalar),
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
               ),
@@ -167,7 +202,8 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
     );
   }
 
-  Widget _buildNotifiers(Block block, List<ShelfBlockType> notifiers) {
+  Widget _buildNotifiers(
+      _BlockOrScalar blockOrScalar, List<ShelfBlockScalarType> notifiers) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,7 +221,7 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
               child: SizedBox(width: 5),
             ),
             TextSpan(
-              text: getClassName(block),
+              text: _getClassName(blockOrScalar),
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
               ),

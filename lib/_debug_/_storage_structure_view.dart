@@ -44,7 +44,7 @@ class _StorageStructureViewState extends State<_StorageStructureView> {
           child: _ShelfRelationshipView(
             shelfRelationshipController: shelfRelationshipController,
             shelf: _selectedShelf,
-            onSelectShelfBlockType: (ShelfBlockType shelfBlockType) {
+            onSelectShelfBlockType: (ShelfBlockScalarType shelfBlockType) {
               Type shelfType = shelfBlockType.shelfType;
               Shelf? shelf = FlutterArtist.storage._findShelf(shelfType);
               if (shelf != null) {

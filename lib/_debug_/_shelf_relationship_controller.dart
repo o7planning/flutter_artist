@@ -1,9 +1,9 @@
 part of '../flutter_artist.dart';
 
 class _ShelfRelationshipController {
-  Function(ShelfBlockType shelfBlockType)? _setShelfBlockType;
+  Function(ShelfBlockScalarType shelfBlockType)? _setShelfBlockType;
 
-  void setFluBlockType(ShelfBlockType shelfBlockType) {
+  void setFluBlockType(ShelfBlockScalarType shelfBlockType) {
     if (_setShelfBlockType != null) {
       _setShelfBlockType!(shelfBlockType);
     }

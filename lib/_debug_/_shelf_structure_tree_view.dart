@@ -2,14 +2,14 @@ part of '../flutter_artist.dart';
 
 class _ShelfStructureTreeView extends StatefulWidget {
   final Shelf shelf;
-  final Block? selectedBlock;
-  final Function(Block block) onSelectBlock;
+  final _BlockOrScalar? selectedBlockOrScalar;
+  final Function(_BlockOrScalar blockOrScalar) onSelectBlockOrScalar;
 
   const _ShelfStructureTreeView({
     required super.key,
     required this.shelf,
-    required this.selectedBlock,
-    required this.onSelectBlock,
+    required this.selectedBlockOrScalar,
+    required this.onSelectBlockOrScalar,
   });
 
   @override
@@ -71,12 +71,14 @@ class _ShelfStructureTreeViewState extends State<_ShelfStructureTreeView> {
 
           if (data is Shelf) {
             title = getClassName(data);
-          } else if (data is Block) {
+          } else if (data is _BlockOrScalar) {
             title = getClassName(data);
-            List<ShelfBlockType> listeners = FlutterArtist.storage
-                ._getListenerShelfBlockTypes(eventBlock: data);
-            List<ShelfBlockType> notifiers = FlutterArtist.storage
-                ._getEventShelfBlockTypes(listenerBlock: data);
+            //
+            List<ShelfBlockScalarType> listeners = FlutterArtist.storage
+                ._getListenerShelfBlockTypes(eventBlockOrScalar: data);
+
+            List<ShelfBlockScalarType> notifiers = FlutterArtist.storage
+                ._getEventShelfBlockTypes(listenerBlockScalar: data);
             isListener = notifiers.isNotEmpty;
             isNotifier = listeners.isNotEmpty;
           } else {
@@ -129,7 +131,7 @@ class _ShelfStructureTreeViewState extends State<_ShelfStructureTreeView> {
                 setState(() {
                   _currentNode = node;
                   if (node.data is Block) {
-                    widget.onSelectBlock(node.data);
+                    widget.onSelectBlockOrScalar(node.data);
                   }
                 });
               },
@@ -150,24 +152,42 @@ class _ShelfStructureTreeViewState extends State<_ShelfStructureTreeView> {
 
     List<Block> rootBlocks = widget.shelf.rootBlocks;
     for (Block rootBlock in rootBlocks) {
-      _addChildCascade(shelfNode, rootBlock);
+      _addChildBlockCascade(shelfNode, rootBlock);
+    }
+    List<Scalar> scalars = widget.shelf.scalars;
+    for (Scalar scalar in scalars) {
+      _addChildScalar(shelfNode, scalar);
     }
 
     return rootTreeNode;
   }
 
-  void _addChildCascade(TreeNode currentNode, Block block) {
+  void _addChildBlockCascade(TreeNode currentNode, Block block) {
+    _BlockOrScalar blockOrScalar = _BlockOrScalar.block(block);
     TreeNode childNode = TreeNode(
       key: "Block-${block.name}",
-      data: block,
+      data: blockOrScalar,
       // parent: currentNode,
     );
-    if (block.name == widget.selectedBlock?.name) {
+    if (blockOrScalar == widget.selectedBlockOrScalar) {
       _currentNode = childNode;
     }
     currentNode.add(childNode);
     for (Block childBlock in block.childBlocks) {
-      _addChildCascade(childNode, childBlock);
+      _addChildBlockCascade(childNode, childBlock);
     }
+  }
+
+  void _addChildScalar(TreeNode currentNode, Scalar scalar) {
+    _BlockOrScalar blockOrScalar = _BlockOrScalar.scalar(scalar);
+    TreeNode childNode = TreeNode(
+      key: "Scalar-${scalar.name}",
+      data: blockOrScalar,
+      // parent: currentNode,
+    );
+    if (blockOrScalar == widget.selectedBlockOrScalar) {
+      _currentNode = childNode;
+    }
+    currentNode.add(childNode);
   }
 }

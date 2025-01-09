@@ -27,7 +27,7 @@ class _FormDataViewState extends State<_FormDataView> {
 
   static const int tabLength = 4;
 
-  late List<ShelfBlockType> listeners;
+  late List<ShelfBlockScalarType> listeners;
 
   late TabbedViewController _controller;
 
@@ -36,7 +36,7 @@ class _FormDataViewState extends State<_FormDataView> {
     super.initState();
     //
     listeners = FlutterArtist.storage._getListenerShelfBlockTypes(
-      eventBlock: widget.blockForm.block,
+      eventBlockOrScalar: _BlockOrScalar.block(widget.blockForm.block),
     );
   }
 
