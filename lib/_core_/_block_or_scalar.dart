@@ -12,9 +12,57 @@ class _BlockOrScalar extends Equatable {
     }
   }
 
+  int get itemCount {
+    if (block != null) {
+      return block!.data.items.length;
+    } else {
+      return scalar!.data.data == null ? 0 : 1;
+    }
+  }
+
+  BlockFilter? get dataFilter {
+    if (block != null) {
+      return block!.blockFilter;
+    } else {
+      return scalar!.blockFilter;
+    }
+  }
+
+  String getFilterSnapshotTypeAsString() {
+    if (block != null) {
+      return block!.getFilterSnapshotTypeAsString();
+    } else {
+      return scalar!.getFilterSnapshotTypeAsString();
+    }
+  }
+
+  String get blockOrScalarClassName {
+    if (block != null) {
+      return getClassName(block!);
+    } else {
+      return getClassName(scalar!);
+    }
+  }
+
+  String get name {
+    if (block != null) {
+      return block!.name;
+    } else {
+      return scalar!.name;
+    }
+  }
+
   bool get isBlock => block != null;
 
   bool get isScalar => scalar != null;
+
+  DataState get dataState {
+    if (block != null) {
+      return block!.dataState;
+    } else {
+      return scalar!.dataState;
+    }
+  }
 
   List<Type> get listenItemTypes {
     if (block != null) {
@@ -35,6 +83,14 @@ class _BlockOrScalar extends Equatable {
   const _BlockOrScalar.block(this.block) : scalar = null;
 
   const _BlockOrScalar.scalar(this.scalar) : block = null;
+
+  bool hasActiveUiComponent() {
+    if (block != null) {
+      return block!.hasActiveUiComponent();
+    } else {
+      return scalar!.hasActiveUiComponent();
+    }
+  }
 
   @override
   List<Object?> get props => [block?.name, scalar?.name];

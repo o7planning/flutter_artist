@@ -1,23 +1,25 @@
 part of '../flutter_artist.dart';
 
-class _GraphItemBlockBox extends StatefulWidget {
-  final Block block;
+class _GraphItemBlockOrScalarBox extends StatefulWidget {
+  final _BlockOrScalar blockOrScalar;
   final String? highlighBlockFilterName;
 
   final Function(String? filterName) refreshGraph;
 
-  const _GraphItemBlockBox({
+  const _GraphItemBlockOrScalarBox({
     required super.key,
-    required this.block,
+    required this.blockOrScalar,
     required this.refreshGraph,
     required this.highlighBlockFilterName,
   });
 
   @override
-  State<_GraphItemBlockBox> createState() => _GraphItemBlockBoxState();
+  State<_GraphItemBlockOrScalarBox> createState() =>
+      _GraphItemBlockOrScalarBoxState();
 }
 
-class _GraphItemBlockBoxState extends State<_GraphItemBlockBox> {
+class _GraphItemBlockOrScalarBoxState
+    extends State<_GraphItemBlockOrScalarBox> {
   int filterColorIdx = 0;
 
   static const double minBoxWidth = 220;
@@ -30,9 +32,8 @@ class _GraphItemBlockBoxState extends State<_GraphItemBlockBox> {
 
   @override
   Widget build(BuildContext context) {
-    bool hasActiveWidget =
-        widget.block.hasActiveBlockFragmentWidget(alsoCheckChildren: false) ||
-            (widget.block.blockForm?.hasActiveFormWidget() ?? false);
+    bool hasActiveWidget = widget.blockOrScalar.hasActiveUiComponent();
+    //
     double boxWidth = _calculateBoxWidth();
 
     return SizedBox(
@@ -89,12 +90,12 @@ class _GraphItemBlockBoxState extends State<_GraphItemBlockBox> {
                     _IconLabelText(
                       style: _getBlockNameTextStyle(),
                       label: 'Name: ',
-                      text: _getBlockNameText(),
+                      text: _getBlockOrScalarNameText(),
                     ),
                     _IconLabelText(
                       style: _getBlockNameTextStyle(),
                       label: 'Class: ',
-                      text: _getBlockClassNameText(),
+                      text: _getBlockOrScalarClassNameText(),
                     ),
                   ],
                 ),
@@ -118,7 +119,7 @@ class _GraphItemBlockBoxState extends State<_GraphItemBlockBox> {
         spacing +
         2 * padding +
         _calculateTextSize(
-          text: "Name: ${_getBlockNameText()}",
+          text: "Name: ${_getBlockOrScalarNameText()}",
           style: _getBlockNameTextStyle(),
         ).width;
     //
@@ -127,7 +128,7 @@ class _GraphItemBlockBoxState extends State<_GraphItemBlockBox> {
         spacing +
         2 * padding +
         _calculateTextSize(
-          text: "Class: ${_getBlockClassNameText()}",
+          text: "Class: ${_getBlockOrScalarClassNameText()}",
           style: _getBlockNameTextStyle(),
         ).width;
     //
@@ -157,10 +158,10 @@ class _GraphItemBlockBoxState extends State<_GraphItemBlockBox> {
         iconSize +
         lastLineBlockSpacing +
         _calculateTextSize(
-          text: "BLOCK     ${widget.block.data.items.length.toString()}",
+          text: "BLOCK     ${widget.blockOrScalar.itemCount.toString()}",
           style: _getSummaryTextStyle(),
         ).width;
-    if (widget.block.blockForm != null) {
+    if (widget.blockOrScalar.block?.blockForm != null) {
       width += spacing +
           iconSize +
           _calculateTextSize(
@@ -172,11 +173,12 @@ class _GraphItemBlockBoxState extends State<_GraphItemBlockBox> {
   }
 
   Widget _buildFilterColor() {
-    BlockFilter? blockFilter = widget.block.blockFilter;
+    BlockFilter? blockFilter = widget.blockOrScalar.dataFilter;
     Color color = Colors.white;
     if (blockFilter != null) {
-      List<String> filterNames = widget.block.shelf.filterNames
+      List<String> filterNames = widget.blockOrScalar.shelf.filterNames
         ..sort((a, b) => a.compareTo(b));
+      //
       int idx = filterNames.indexOf(blockFilter.name);
       color = _filterColors.length > idx //
           ? _filterColors[idx]
@@ -193,12 +195,18 @@ class _GraphItemBlockBoxState extends State<_GraphItemBlockBox> {
     );
   }
 
-  String _getBlockNameText() {
-    return widget.block.name;
+  String _getBlockOrScalarNameText() {
+    return widget.blockOrScalar.name;
   }
 
-  String _getBlockClassNameText() {
-    return "${getClassName(widget.block)}<${widget.block.getItemTypeAsString()}, ${widget.block.getItemDetailTypeAsString()},..>";
+  String _getBlockOrScalarClassNameText() {
+    if (widget.blockOrScalar.isBlock) {
+      Block block = widget.blockOrScalar.block!;
+      return "${getClassName(block)}<${block.getItemTypeAsString()}, ${block.getItemDetailTypeAsString()},..>";
+    } else {
+      Scalar scalar = widget.blockOrScalar.scalar!;
+      return "${getClassName(scalar)}<${scalar.getDataTypeAsString()},..>";
+    }
   }
 
   TextStyle _getSummaryTextStyle() {
@@ -224,18 +232,19 @@ class _GraphItemBlockBoxState extends State<_GraphItemBlockBox> {
   }
 
   String _getFilterTextRow1() {
-    BlockFilter? blockFilter = widget.block.blockFilter;
+    BlockFilter? blockFilter = widget.blockOrScalar.dataFilter;
     return blockFilter == null ? "[No Filter]" : blockFilter.name;
   }
 
   String _getFilterTextRow2() {
-    BlockFilter? blockFilter = widget.block.blockFilter;
-    String filterSnapshotType = widget.block.getFilterSnapshotTypeAsString();
+    BlockFilter? blockFilter = widget.blockOrScalar.dataFilter;
+    String filterSnapshotType =
+        widget.blockOrScalar.getFilterSnapshotTypeAsString();
     return "${blockFilter == null ? '' : getClassName(blockFilter)} [$filterSnapshotType]";
   }
 
   Widget _buildFilterInfo() {
-    BlockFilter? blockFilter = widget.block.blockFilter;
+    BlockFilter? blockFilter = widget.blockOrScalar.dataFilter;
     //
     Widget row = MouseRegion(
       onEnter: blockFilter == null
@@ -298,7 +307,7 @@ class _GraphItemBlockBoxState extends State<_GraphItemBlockBox> {
               verticalOffset: -85,
               message: "FILTER: ${blockFilter.name} "
                   "- Class: ${getClassName(blockFilter)} "
-                  "- Snapshot: ${widget.block.getFilterSnapshotTypeAsString()}",
+                  "- Snapshot: ${widget.blockOrScalar.getFilterSnapshotTypeAsString()}",
               child: row,
             ),
     );
@@ -326,18 +335,25 @@ class _GraphItemBlockBoxState extends State<_GraphItemBlockBox> {
     return Row(
       children: [
         Expanded(
-          child: _buildBlockDataState(widget.block),
+          child: _buildBlockDataState(widget.blockOrScalar),
         ),
-        if (widget.block.blockForm != null) const SizedBox(width: 5),
-        if (widget.block.blockForm != null)
-          _buildFormDataState(widget.block.blockForm!),
+        if (widget.blockOrScalar.block?.blockForm != null)
+          const SizedBox(width: 5),
+        if (widget.blockOrScalar.block?.blockForm != null)
+          _buildFormDataState(widget.blockOrScalar.block!.blockForm!),
       ],
     );
   }
 
   String _tooltipMessage(String name, String className, DataState dataState) {
     return "$name: $className - Data State: ${dataState.name.toUpperCase()} - "
-        "Items: ${widget.block.data.items.length}";
+        "Items: ${widget.blockOrScalar.itemCount}";
+  }
+
+  String _tooltipMessage2(_BlockOrScalar blockOrScalar, DataState dataState) {
+    String className = blockOrScalar.blockOrScalarClassName;
+    return "${blockOrScalar.isBlock ? 'BLOCK' : 'SCALAR'}: $className - Data State: ${dataState.name.toUpperCase()} - "
+        "Items: ${blockOrScalar.itemCount}";
   }
 
   IconData _dataStateIconData(DataState dataState) {
@@ -362,19 +378,19 @@ class _GraphItemBlockBoxState extends State<_GraphItemBlockBox> {
     }
   }
 
-  Widget _buildBlockDataState(Block block) {
-    final DataState dataState = block.dataState;
+  Widget _buildBlockDataState(_BlockOrScalar blockOrScalar) {
+    final DataState dataState = blockOrScalar.dataState;
     //
     return Container(
       padding: const EdgeInsets.all(3),
-      color: _dataStateBgColor(block.dataState),
+      color: _dataStateBgColor(dataState),
       child: _tooltip(
-        message: _tooltipMessage("BLOCK", getClassName(block), dataState),
+        message: _tooltipMessage2(blockOrScalar, dataState),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Icon(
-              _dataStateIconData(block.dataState),
+              _dataStateIconData(dataState),
               size: iconSize,
               color: _graphBoxTextColor,
             ),
@@ -385,7 +401,7 @@ class _GraphItemBlockBoxState extends State<_GraphItemBlockBox> {
             ),
             const Spacer(),
             Text(
-              widget.block.data.items.length.toString(),
+              blockOrScalar.itemCount.toString(),
               style: _getSummaryTextStyle(),
             ),
           ],
@@ -422,9 +438,10 @@ class _GraphItemBlockBoxState extends State<_GraphItemBlockBox> {
   }
 
   void _showBlockUiComponentDialog() {
-    _showBlockUiComponentsDialog(
-      context: context,
-      block: widget.block,
-    );
+    // TODO: _showBlockUiComponentDialog
+    // _showBlockUiComponentsDialog(
+    //   context: context,
+    //   block: widget.block,
+    // );
   }
 }

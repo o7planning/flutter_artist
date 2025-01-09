@@ -1,20 +1,20 @@
 part of '../flutter_artist.dart';
 
 class _GraphItem {
-  Block? block;
+  _BlockOrScalar? blockOrScalar;
   Shelf? shelf;
 
   final List<_GraphItem> children = [];
 
   _GraphItem.shelf(this.shelf);
 
-  _GraphItem.block(this.block);
+  _GraphItem.blockOrScalar(this.blockOrScalar);
 
   String get name {
     if (shelf != null) {
       return "-";
     } else {
-      return block!.name;
+      return blockOrScalar!.name;
     }
   }
 }

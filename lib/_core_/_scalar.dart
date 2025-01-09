@@ -16,6 +16,8 @@ abstract class Scalar<D extends Object, S extends FilterSnapshot>
 
   late final ScalarData<D, S> data = ScalarData<D, S>(this);
 
+  DataState get dataState => data._dataState;
+
   final ScalarHiddenBehavior hiddenBehavior;
 
   final Map<_WidgetState, bool> _scalarFragmentWidgetStateListeners = {};

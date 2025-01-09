@@ -123,24 +123,20 @@ class _ShelfStructureGraphViewState extends State<_ShelfStructureGraphView> {
       onTap: () {
         // print('clicked');
       },
-      child: SizedBox(
-        // width: itemWidth,
-        // height: itemHeight,
-        child: item.shelf != null
-            ? _GraphItemShelfBox(
-                shelf: item.shelf!,
-                gotoStorage: widget.onPressedBack,
-              )
-            : _GraphItemBlockBox(
-                key: Key("Blk-${item.block!.name}"),
-                block: item.block!,
-                highlighBlockFilterName: _highlighBlockFilterName,
-                refreshGraph: (String? filterName) {
-                  _highlighBlockFilterName = filterName;
-                  setState(() {});
-                },
-              ),
-      ),
+      child: item.shelf != null
+          ? _GraphItemShelfBox(
+              shelf: item.shelf!,
+              gotoStorage: widget.onPressedBack,
+            )
+          : _GraphItemBlockOrScalarBox(
+              key: Key("Blk-${item.blockOrScalar!.name}"),
+              blockOrScalar: item.blockOrScalar!,
+              highlighBlockFilterName: _highlighBlockFilterName,
+              refreshGraph: (String? filterName) {
+                _highlighBlockFilterName = filterName;
+                setState(() {});
+              },
+            ),
     );
   }
 

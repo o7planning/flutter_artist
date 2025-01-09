@@ -10,7 +10,7 @@ _GraphItem _toRootDebugGraphItem(Shelf shelf) {
 }
 
 _GraphItem _toDebugGraphItemCascade(Block block) {
-  _GraphItem item = _GraphItem.block(block);
+  _GraphItem item = _GraphItem.blockOrScalar(_BlockOrScalar.block(block));
   for (Block childBlock in block.childBlocks) {
     _GraphItem childItem = _toDebugGraphItemCascade(childBlock);
     item.children.add(childItem);
