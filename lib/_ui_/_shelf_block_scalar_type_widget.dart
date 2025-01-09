@@ -20,6 +20,9 @@ class _ShelfBlockScalarTypeWidget extends StatelessWidget {
         vertical: 3,
         horizontal: 0,
       ),
+      color: shelfBlockScalarType.isBlock
+          ? Colors.white
+          : Colors.yellow[50],
       child: ListTile(
         minLeadingWidth: 0,
         horizontalTitleGap: 10,

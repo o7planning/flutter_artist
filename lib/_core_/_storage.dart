@@ -237,7 +237,7 @@ class _Storage {
   }
 
   // Callable.
-  List<ShelfBlockScalarType> _getListenerShelfBlockTypes({
+  List<ShelfBlockScalarType> _getListenerShelfBlockScalarTypes({
     required _BlockOrScalar eventBlockOrScalar,
   }) {
     if (eventBlockOrScalar.block != null) {
