@@ -82,7 +82,7 @@ class _StorageDialogState extends State<_StorageDialog> {
           ),
           onPressed: null,
           child: const Text(
-            "Global Flu Graph",
+            "Storage Graph",
             style: TextStyle(
               fontSize: _graphBoxFontSizeChildBox,
               color: _graphBoxTextColor,
