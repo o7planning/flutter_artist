@@ -86,7 +86,7 @@ class _GraphItemShelfBoxState extends State<_GraphItemShelfBox> {
               ),
               onPressed: widget.gotoStorage,
               child: const Icon(
-                _uptoGlobalFluIconData,
+                _uptoStorageIconData,
                 color: Colors.white,
                 size: iconSize,
               ),

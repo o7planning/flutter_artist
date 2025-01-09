@@ -20,7 +20,7 @@ const IconData _independentIconData = cupertino.CupertinoIcons.app_badge;
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-const IconData _uptoGlobalFluIconData =
+const IconData _uptoStorageIconData =
     cupertino.CupertinoIcons.arrow_turn_right_up;
 
 // -----------------------------------------------------------------------------

@@ -197,7 +197,7 @@ class _StorageStructureGraphViewState
       isRoot: true,
       isNotifier: false,
       isListener: false,
-      shelfName: "Global Flu",
+      shelfName: "Storage",
     );
     Map<String, Shelf?> shelfMap = FlutterArtist.storage.shelfMap;
     Map<String, Shelf?> shelfListenerMap =
