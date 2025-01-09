@@ -108,7 +108,7 @@ part '_core_/_suggested_selection.dart';
 
 part '_core_/_typedef.dart';
 
-part '_debug_/_block_or_scalar.dart';
+part '_core_/_block_or_scalar.dart';
 
 part '_debug_/_constants.dart';
 
