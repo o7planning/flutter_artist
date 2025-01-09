@@ -98,7 +98,7 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
         eventBlockOrScalar: _BlockOrScalar.block(selectedBlockOrScalar!.block!),
       );
       notifiers = FlutterArtist.storage._getEventShelfBlockTypes(
-        listenerBlockScalar:
+        listenerBlockOrScalar:
             _BlockOrScalar.block(selectedBlockOrScalar!.block!),
       );
     } else if (selectedBlockOrScalar?.scalar != null) {
@@ -106,8 +106,8 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
         eventBlockOrScalar:
             _BlockOrScalar.scalar(selectedBlockOrScalar!.scalar!),
       );
-      notifiers = FlutterArtist.storage._getListenerShelfBlockTypes(
-        eventBlockOrScalar:
+      notifiers = FlutterArtist.storage._getEventShelfBlockTypes(
+        listenerBlockOrScalar:
             _BlockOrScalar.scalar(selectedBlockOrScalar!.scalar!),
       );
     }
@@ -159,41 +159,60 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
   }
 
   Widget _buildListeners(
-      _BlockOrScalar blockOrScalar, List<ShelfBlockScalarType> listeners) {
+    _BlockOrScalar blockOrScalar,
+    List<ShelfBlockScalarType> listeners,
+  ) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text.rich(
-          TextSpan(children: [
-            const WidgetSpan(
-              child: Icon(
-                _changeSourceIconData,
-                size: 16,
-                color: _notifierColor,
+          TextSpan(
+            children: [
+              const WidgetSpan(
+                child: Icon(
+                  _eventSourceIconData,
+                  size: 16,
+                  color: _eventSourceColor,
+                ),
               ),
-            ),
-            const WidgetSpan(
-              child: SizedBox(width: 5),
-            ),
-            TextSpan(
-              text: _getClassName(blockOrScalar),
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
+              const WidgetSpan(
+                child: SizedBox(width: 5),
               ),
-            ),
-            const TextSpan(
-                text: " is Notifier Block, "
-                    "when data changes on this block, it will notify the following Listener blocks:"),
-          ]),
+              TextSpan(
+                text: _getClassName(blockOrScalar),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              if (blockOrScalar.isBlock)
+                TextSpan(
+                  text: " is Event Block. It emits an event when its item (",
+                ),
+              if (blockOrScalar.isBlock)
+                TextSpan(
+                  text: blockOrScalar.block!.getItemTypeAsString(),
+                  style: TextStyle(
+                    color: Colors.indigo,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              if (blockOrScalar.isBlock)
+                TextSpan(
+                  text: ") changes. "
+                      "When data changes on this block, "
+                      "it will notify the following Listener blocks or scalars:",
+                ),
+            ],
+          ),
           style: const TextStyle(fontSize: 13),
         ),
         const SizedBox(height: 10),
         ...listeners.map(
-          (listener) => _ShelfBlockTypeWidget(
-              shelfBlockType: listener,
+          (listener) => _ShelfBlockScalarTypeWidget(
+              shelfBlockScalarType: listener,
               isListener: true,
-              isNotifier: false,
+              isEventSource: false,
               onTap: () {
                 _onSelectFluBlockType(listener);
               }),
@@ -209,35 +228,49 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text.rich(
-          TextSpan(children: [
-            const WidgetSpan(
-              child: Icon(
-                _listenerIconData,
-                size: 16,
-                color: _listenerColor,
+          TextSpan(
+            children: [
+              const WidgetSpan(
+                child: Icon(
+                  _listenerIconData,
+                  size: 16,
+                  color: _listenerColor,
+                ),
               ),
-            ),
-            const WidgetSpan(
-              child: SizedBox(width: 5),
-            ),
-            TextSpan(
-              text: _getClassName(blockOrScalar),
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
+              const WidgetSpan(
+                child: SizedBox(width: 5),
               ),
-            ),
-            const TextSpan(
-                text: " is Listener Block, "
-                    "This block will be refreshed if the data on the following blocks changes:"),
-          ]),
+              TextSpan(
+                text: _getClassName(blockOrScalar),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextSpan(
+                  text:
+                      " is ${blockOrScalar.isBlock ? 'Listener Block' : 'Listener Scalar'}. "
+                      "It listens for changes on Item types: "),
+              TextSpan(
+                text: "${blockOrScalar.listenItemTypesAsStrings}",
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextSpan(
+                text: ". This ${blockOrScalar.isBlock ? 'block' : 'scalar'} "
+                    "will be refreshed if the data on the following blocks changes:",
+              ),
+            ],
+          ),
           style: const TextStyle(fontSize: 13),
         ),
         const SizedBox(height: 10),
         ...notifiers.map(
-          (notifier) => _ShelfBlockTypeWidget(
-              shelfBlockType: notifier,
+          (notifier) => _ShelfBlockScalarTypeWidget(
+              shelfBlockScalarType: notifier,
               isListener: false,
-              isNotifier: true,
+              isEventSource: true,
               onTap: () {
                 _onSelectFluBlockType(notifier);
               }),

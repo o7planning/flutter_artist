@@ -1,16 +1,16 @@
 part of '../flutter_artist.dart';
 
-class _ShelfBlockTypeWidget extends StatelessWidget {
+class _ShelfBlockScalarTypeWidget extends StatelessWidget {
   final Function()? onTap;
-  final ShelfBlockScalarType shelfBlockType;
+  final ShelfBlockScalarType shelfBlockScalarType;
   final bool isListener;
-  final bool isNotifier;
+  final bool isEventSource;
 
-  const _ShelfBlockTypeWidget({
+  const _ShelfBlockScalarTypeWidget({
     required this.onTap,
-    required this.shelfBlockType,
+    required this.shelfBlockScalarType,
     required this.isListener,
-    required this.isNotifier,
+    required this.isEventSource,
   });
 
   @override
@@ -26,9 +26,9 @@ class _ShelfBlockTypeWidget extends StatelessWidget {
         dense: true,
         visualDensity: const VisualDensity(vertical: -3, horizontal: -3),
         leading: Icon(
-          isListener ? _listenerIconData : _changeSourceIconData,
+          isListener ? _listenerIconData : _eventSourceIconData,
           size: 16,
-          color: isListener ? _listenerColor : _notifierColor,
+          color: isListener ? _listenerColor : _eventSourceColor,
         ),
         title: BreadCrumb(
           divider: const Padding(
@@ -42,9 +42,14 @@ class _ShelfBlockTypeWidget extends StatelessWidget {
             BreadCrumbItem(
               content: _buildShelf(),
             ),
-            BreadCrumbItem(
-              content: _buildBlock(),
-            ),
+            if (shelfBlockScalarType.isBlock)
+              BreadCrumbItem(
+                content: _buildBlock(),
+              ),
+            if (shelfBlockScalarType.isScalar)
+              BreadCrumbItem(
+                content: _buildScalar(),
+              ),
           ],
         ),
         onTap: onTap,
@@ -53,7 +58,8 @@ class _ShelfBlockTypeWidget extends StatelessWidget {
   }
 
   Widget _buildShelf() {
-    Shelf? shelf = FlutterArtist.storage._findShelf(shelfBlockType.shelfType);
+    Shelf? shelf =
+        FlutterArtist.storage._findShelf(shelfBlockScalarType.shelfType);
     String? shelfName = shelf?.name;
     String? description = shelf?.description;
 
@@ -71,7 +77,14 @@ class _ShelfBlockTypeWidget extends StatelessWidget {
 
   Widget _buildBlock() {
     return Text(
-      shelfBlockType.blockType.toString(),
+      shelfBlockScalarType.blockType.toString(),
+      style: const TextStyle(fontSize: 12),
+    );
+  }
+
+  Widget _buildScalar() {
+    return Text(
+      shelfBlockScalarType.scalarType.toString(),
       style: const TextStyle(fontSize: 12),
     );
   }

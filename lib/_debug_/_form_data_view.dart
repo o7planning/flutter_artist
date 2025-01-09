@@ -309,10 +309,10 @@ class _FormDataViewState extends State<_FormDataView> {
                   "Here is a list of affected blocks:"),
           const Divider(height: 10),
           ...listeners.map(
-            (listener) => _ShelfBlockTypeWidget(
-              shelfBlockType: listener,
+            (listener) => _ShelfBlockScalarTypeWidget(
+              shelfBlockScalarType: listener,
               isListener: true,
-              isNotifier: false,
+              isEventSource: false,
               onTap: null,
             ),
           ),

@@ -12,6 +12,26 @@ class _BlockOrScalar extends Equatable {
     }
   }
 
+  bool get isBlock => block != null;
+
+  bool get isScalar => scalar != null;
+
+  List<Type> get listenItemTypes {
+    if (block != null) {
+      return block!.listenItemTypes;
+    } else {
+      return scalar!.listenItemTypes;
+    }
+  }
+
+  List<String> get listenItemTypesAsStrings {
+    if (block != null) {
+      return block!.listenItemTypes.map((type) => type.toString()).toList();
+    } else {
+      return scalar!.listenItemTypes.map((type) => type.toString()).toList();
+    }
+  }
+
   const _BlockOrScalar.block(this.block) : scalar = null;
 
   const _BlockOrScalar.scalar(this.scalar) : block = null;

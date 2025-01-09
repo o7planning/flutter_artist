@@ -222,7 +222,7 @@ part '_ui_/_number_pagination.dart';
 
 part '_ui_/_scalar_fragment_widget_builder.dart';
 
-part '_ui_/_shelf_block_type_widget.dart';
+part '_ui_/_shelf_block_scalar_type_widget.dart';
 
 part '_ui_/_shelf_info_view.dart';
 

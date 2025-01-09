@@ -5,12 +5,16 @@ class ShelfBlockScalarType extends Equatable {
   final Type? blockType;
   final Type? scalarType;
 
-  ShelfBlockScalarType.block({
+  bool get isBlock => blockType != null;
+
+  bool get isScalar => scalarType != null;
+
+  const ShelfBlockScalarType.block({
     required this.shelfType,
     required this.blockType,
   }) : scalarType = null;
 
-  ShelfBlockScalarType.scalar({
+  const ShelfBlockScalarType.scalar({
     required this.shelfType,
     required this.scalarType,
   }) : blockType = null;

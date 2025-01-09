@@ -82,7 +82,7 @@ class _ShelfStructureTreeViewState extends State<_ShelfStructureTreeView> {
                 ._getListenerShelfBlockTypes(eventBlockOrScalar: data);
 
             List<ShelfBlockScalarType> notifiers = FlutterArtist.storage
-                ._getEventShelfBlockTypes(listenerBlockScalar: data);
+                ._getEventShelfBlockTypes(listenerBlockOrScalar: data);
             isListener = notifiers.isNotEmpty;
             isNotifier = listeners.isNotEmpty;
           } else {
@@ -107,7 +107,7 @@ class _ShelfStructureTreeViewState extends State<_ShelfStructureTreeView> {
                         color: isListener
                             ? _listenerColor
                             : isNotifier
-                                ? _notifierColor
+                                ? _eventSourceColor
                                 : Colors.black,
                         fontWeight: _currentNode == node
                             ? FontWeight.bold
@@ -118,9 +118,9 @@ class _ShelfStructureTreeViewState extends State<_ShelfStructureTreeView> {
                   if (isNotifier) const SizedBox(width: 5),
                   if (isNotifier)
                     const Icon(
-                      _changeSourceIconData,
+                      _eventSourceIconData,
                       size: 16,
-                      color: _notifierColor,
+                      color: _eventSourceColor,
                     ),
                   if (isListener) const SizedBox(width: 5),
                   if (isListener)
@@ -134,7 +134,7 @@ class _ShelfStructureTreeViewState extends State<_ShelfStructureTreeView> {
               onTap: () {
                 setState(() {
                   _currentNode = node;
-                  if (node.data is Block) {
+                  if (node.data is _BlockOrScalar) {
                     widget.onSelectBlockOrScalar(node.data);
                   }
                 });

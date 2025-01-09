@@ -170,7 +170,7 @@ class _StorageStructureGraphViewState
               }
             });
           },
-          iconData: _changeSourceIconData,
+          iconData: _eventSourceIconData,
         ),
         const SizedBox(width: 10),
         _FloatingButton(

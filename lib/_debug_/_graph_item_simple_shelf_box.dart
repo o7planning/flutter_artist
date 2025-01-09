@@ -116,7 +116,7 @@ class _GraphItemSimpleShelfBoxState extends State<_GraphItemSimpleShelfBox> {
             if (widget.isEventSource) const SizedBox(width: spacing),
             if (widget.isEventSource)
               const Icon(
-                _changeSourceIconData,
+                _eventSourceIconData,
                 size: iconSize,
                 color: Colors.deepOrange,
               ),
