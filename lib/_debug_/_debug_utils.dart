@@ -6,6 +6,10 @@ _GraphItem _toRootDebugGraphItem(Shelf shelf) {
     _GraphItem item = _toDebugGraphItemCascade(rootBlock);
     rootItem.children.add(item);
   }
+  for (Scalar scalar in shelf.scalars) {
+    _GraphItem item = _GraphItem.blockOrScalar(_BlockOrScalar.scalar(scalar));
+    rootItem.children.add(item);
+  }
   return rootItem;
 }
 

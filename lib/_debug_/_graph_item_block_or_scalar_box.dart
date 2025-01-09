@@ -158,7 +158,8 @@ class _GraphItemBlockOrScalarBoxState
         iconSize +
         lastLineBlockSpacing +
         _calculateTextSize(
-          text: "BLOCK     ${widget.blockOrScalar.itemCount.toString()}",
+          text:
+              "${widget.blockOrScalar.isBlock ? 'BLOCK' : 'SCALAR'}     ${widget.blockOrScalar.itemCount.toString()}",
           style: _getSummaryTextStyle(),
         ).width;
     if (widget.blockOrScalar.block?.blockForm != null) {
@@ -396,7 +397,7 @@ class _GraphItemBlockOrScalarBoxState
             ),
             const SizedBox(width: 5),
             Text(
-              "BLOCK",
+              widget.blockOrScalar.isBlock ? 'BLOCK' : 'SCALAR',
               style: _getSummaryTextStyle(),
             ),
             const Spacer(),
