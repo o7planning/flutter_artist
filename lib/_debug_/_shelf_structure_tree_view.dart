@@ -72,7 +72,11 @@ class _ShelfStructureTreeViewState extends State<_ShelfStructureTreeView> {
           if (data is Shelf) {
             title = getClassName(data);
           } else if (data is _BlockOrScalar) {
-            title = getClassName(data);
+            if (data.block != null) {
+              title = getClassName(data.block!);
+            } else {
+              title = getClassName(data.scalar!);
+            }
             //
             List<ShelfBlockScalarType> listeners = FlutterArtist.storage
                 ._getListenerShelfBlockTypes(eventBlockOrScalar: data);
