@@ -20,7 +20,7 @@ class _BlockOrScalarInfoView extends StatelessWidget {
         blockOrScalar.isBlock ? _blockIconData : _scalarIconData,
         size: 18,
       ),
-      title: Text.rich(
+      title: SelectableText.rich(
         style: TextStyle(fontSize: _blockOrScalaInfoFontSize),
         TextSpan(
           children: [
@@ -33,7 +33,7 @@ class _BlockOrScalarInfoView extends StatelessWidget {
               ),
             ),
             TextSpan(
-              text: blockOrScalar.blockOrScalaClassParametersAsString,
+              text: blockOrScalar.blockOrScalaClassParametersDefinition,
               style: const TextStyle(
                 color: _classParametersColor,
               ),

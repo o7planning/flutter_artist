@@ -76,7 +76,9 @@ class _GraphItemBlockOrScalarBoxState
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
-              "packages/flutter_artist/static-rs/block.png",
+              widget.blockOrScalar.isBlock
+                  ? "packages/flutter_artist/static-rs/block.png"
+                  : "packages/flutter_artist/static-rs/scalar.png",
               width: _graphBoxImageWidth,
               height: _graphBoxImageHeight,
             ),
@@ -92,10 +94,13 @@ class _GraphItemBlockOrScalarBoxState
                       label: 'Name: ',
                       text: _getBlockOrScalarNameText(),
                     ),
-                    _IconLabelText(
-                      style: _getBlockNameTextStyle(),
-                      label: 'Class: ',
-                      text: _getBlockOrScalarClassNameText(),
+                    Tooltip(
+                      message: widget.blockOrScalar.blockOrScalaClassDefinition,
+                      child: _IconLabelText(
+                        style: _getBlockNameTextStyle(),
+                        label: 'Class: ',
+                        text: _getBlockOrScalarClassNameText(),
+                      ),
                     ),
                   ],
                 ),
@@ -201,12 +206,13 @@ class _GraphItemBlockOrScalarBoxState
   }
 
   String _getBlockOrScalarClassNameText() {
+    String className = widget.blockOrScalar.blockOrScalarClassName;
     if (widget.blockOrScalar.isBlock) {
       Block block = widget.blockOrScalar.block!;
-      return "${getClassName(block)}<${block.getItemTypeAsString()}, ${block.getItemDetailTypeAsString()},..>";
+      return "$className<${block.getItemTypeAsString()}, ${block.getItemDetailTypeAsString()}, S, SF>";
     } else {
       Scalar scalar = widget.blockOrScalar.scalar!;
-      return "${getClassName(scalar)}<${scalar.getDataTypeAsString()},..>";
+      return "$className<${scalar.getDataTypeAsString()}, S>";
     }
   }
 

@@ -64,11 +64,19 @@ class _BlockOrScalar extends Equatable {
 
   bool get isScalar => scalar != null;
 
-  String get blockOrScalaClassParametersAsString {
+  String get blockOrScalaClassParametersDefinition {
     if (block != null) {
       return block!._classParametersDefinition;
     } else {
       return scalar!._classParametersDefinition;
+    }
+  }
+
+  String get blockOrScalaClassDefinition {
+    if (block != null) {
+      return block!._classDefinition;
+    } else {
+      return scalar!._classDefinition;
     }
   }
 
