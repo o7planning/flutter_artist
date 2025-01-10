@@ -441,7 +441,7 @@ class _GraphItemBlockOrScalarBoxState
 
   Widget _buildFormDataState(BlockForm blockForm) {
     final DataState dataState = blockForm.dataState;
-    final bool active = widget.blockOrScalar.hasActiveUiComponent();
+    final bool active = blockForm.hasActiveFormWidget();
     //
     return Container(
       padding: const EdgeInsets.all(3),
