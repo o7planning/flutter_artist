@@ -189,7 +189,7 @@ class _Storage {
         listenerBlock: listenerBlock,
       );
       for (var eb in eventBlocks) {
-        foundMap[eb.fullName] = eb;
+        foundMap[eb._fullName] = eb;
       }
     }
     for (Scalar listenerScalar in listenerShelf.scalars) {
@@ -197,7 +197,7 @@ class _Storage {
         listenerScalar: listenerScalar,
       );
       for (var eb in eventBlocks) {
-        foundMap[eb.fullName] = eb;
+        foundMap[eb._fullName] = eb;
       }
     }
     return foundMap.values.toList();
@@ -212,7 +212,7 @@ class _Storage {
         eventBlock: eventBlock,
       );
       for (var lb in listenerBlocks) {
-        foundMap[lb.fullName] = lb;
+        foundMap[lb._fullName] = lb;
       }
     }
     return foundMap.values.toList();
@@ -227,7 +227,7 @@ class _Storage {
         eventBlock: eventBlock,
       );
       for (var scalar in listenerScalars) {
-        foundMap[scalar.fullName] = scalar;
+        foundMap[scalar._fullName] = scalar;
       }
     }
     return foundMap.values.toList();
@@ -249,7 +249,7 @@ class _Storage {
       for (Block blockToCheck in shelf.blocks) {
         final Type eventItemType = eventBlock.getItemType();
         if (_contains(blockToCheck.listenItemTypes, eventItemType)) {
-          foundMap[blockToCheck.fullName] = blockToCheck;
+          foundMap[blockToCheck._fullName] = blockToCheck;
         }
       }
     }
@@ -270,7 +270,7 @@ class _Storage {
       }
       for (Scalar scalar in shelf.scalars) {
         if (_contains(scalar.listenItemTypes, eventBlock.getItemType())) {
-          foundMap[scalar.fullName] = scalar;
+          foundMap[scalar._fullName] = scalar;
         }
       }
     }
@@ -326,7 +326,7 @@ class _Storage {
           continue;
         }
         if (_contains(listenerBlock.listenItemTypes, blk.getItemType())) {
-          foundMap[blk.fullName] = blk;
+          foundMap[blk._fullName] = blk;
         }
       }
     }
@@ -346,7 +346,7 @@ class _Storage {
           continue;
         }
         if (_contains(listenerScalar.listenItemTypes, blk.getItemType())) {
-          foundMap[blk.fullName] = blk;
+          foundMap[blk._fullName] = blk;
         }
       }
     }

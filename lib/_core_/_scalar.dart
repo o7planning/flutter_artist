@@ -4,7 +4,7 @@ abstract class Scalar<D extends Object, S extends FilterSnapshot>
     extends BaseBlk {
   final String name;
 
-  String get fullName {
+  String get _fullName {
     return "${shelf.name} >> $name";
   }
 

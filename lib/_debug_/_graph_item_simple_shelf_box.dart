@@ -87,7 +87,7 @@ class _GraphItemSimpleShelfBoxState extends State<_GraphItemSimpleShelfBox> {
               ),
               onPressed: widget.onSelectFluToShowGraph,
               child: Tooltip(
-                message: "Show Flu structure in the Graph",
+                message: "Show Shelf structure in the Graph",
                 child: Image.asset(
                   "packages/flutter_artist/static-rs/shelf.png",
                   width: shelfIconWidth,
@@ -100,7 +100,7 @@ class _GraphItemSimpleShelfBoxState extends State<_GraphItemSimpleShelfBox> {
               child: InkWell(
                 onTap: widget.onSelectFluToShowTreeView,
                 child: Tooltip(
-                  message: "Show Flu structure in the Tree",
+                  message: "Show Shelf structure in the Tree",
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       vertical: 10,
