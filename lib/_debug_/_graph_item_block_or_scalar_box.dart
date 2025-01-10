@@ -94,8 +94,10 @@ class _GraphItemBlockOrScalarBoxState
                       label: 'Name: ',
                       text: _getBlockOrScalarNameText(),
                     ),
-                    Tooltip(
-                      message: widget.blockOrScalar.blockOrScalaClassDefinition,
+                    _buildTooltip(
+                      message:
+                          "Class: ${widget.blockOrScalar.blockOrScalarClassName}\n"
+                          "Parameters: ${widget.blockOrScalar.blockOrScalarClassParametersDefinition}",
                       child: _IconLabelText(
                         style: _getBlockNameTextStyle(),
                         label: 'Class: ',
@@ -310,31 +312,13 @@ class _GraphItemBlockOrScalarBoxState
       ),
       child: blockFilter == null
           ? row
-          : _tooltip(
+          : _buildCustomTooltip(
               verticalOffset: -85,
               message: "FILTER: ${blockFilter.name} \n"
                   "Class: ${getClassName(blockFilter)} "
                   "| Snapshot: ${widget.blockOrScalar.getFilterSnapshotTypeAsString()}",
               child: row,
             ),
-    );
-  }
-
-  Widget _tooltip({
-    required Widget child,
-    required String message,
-    double verticalOffset = 18,
-  }) {
-    return Tooltip(
-      triggerMode: TooltipTriggerMode.manual,
-      verticalOffset: verticalOffset,
-      message: message,
-      textStyle: const TextStyle(fontSize: 13, color: Colors.white),
-      decoration: BoxDecoration(
-        color: Colors.blueGrey,
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: child,
     );
   }
 
@@ -412,7 +396,7 @@ class _GraphItemBlockOrScalarBoxState
     return Container(
       padding: const EdgeInsets.all(3),
       color: _dataStateBgColor(dataState),
-      child: _tooltip(
+      child: _buildCustomTooltip(
         message: _blockOrScalarTooltipMessage(blockOrScalar, dataState, active),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -448,7 +432,7 @@ class _GraphItemBlockOrScalarBoxState
     return Container(
       padding: const EdgeInsets.all(3),
       color: _dataStateBgColor(blockForm.dataState),
-      child: _tooltip(
+      child: _buildCustomTooltip(
         message: _formTooltipMessage(
           blockForm,
         ),

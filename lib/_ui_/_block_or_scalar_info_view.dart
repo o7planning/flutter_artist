@@ -33,7 +33,7 @@ class _BlockOrScalarInfoView extends StatelessWidget {
               ),
             ),
             TextSpan(
-              text: blockOrScalar.blockOrScalaClassParametersDefinition,
+              text: blockOrScalar.blockOrScalarClassParametersDefinition,
               style: const TextStyle(
                 color: _classParametersColor,
               ),

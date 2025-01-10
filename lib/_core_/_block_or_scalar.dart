@@ -64,7 +64,7 @@ class _BlockOrScalar extends Equatable {
 
   bool get isScalar => scalar != null;
 
-  String get blockOrScalaClassParametersDefinition {
+  String get blockOrScalarClassParametersDefinition {
     if (block != null) {
       return block!._classParametersDefinition;
     } else {
@@ -72,7 +72,7 @@ class _BlockOrScalar extends Equatable {
     }
   }
 
-  String get blockOrScalaClassDefinition {
+  String get blockOrScalarClassDefinition {
     if (block != null) {
       return block!._classDefinition;
     } else {
