@@ -352,15 +352,20 @@ class _GraphItemBlockOrScalarBoxState
     );
   }
 
-  String _tooltipMessage(
-      String name, String className, DataState dataState, bool active) {
-    return "$name: $className \n"
+  String _formTooltipMessage(
+    BlockForm blockForm,
+  ) {
+    String className = getClassName(blockForm);
+    final DataState dataState = blockForm.dataState;
+    final bool active = blockForm.hasActiveFormWidget();
+    //
+    return "FORM: $className \n"
         "Data State: ${dataState.name.toUpperCase()} "
         "| Visibility: ${active ? 'VISIBLE' : 'HIDDEN'} "
-        "| Items: ${widget.blockOrScalar.itemCount}";
+        "| Mode: ${blockForm.data.formMode.name.toUpperCase()}";
   }
 
-  String _tooltipMessage2(
+  String _blockOrScalarTooltipMessage(
       _BlockOrScalar blockOrScalar, DataState dataState, bool active) {
     String className = blockOrScalar.blockOrScalarClassName;
     return "${blockOrScalar.isBlock ? 'BLOCK' : 'SCALAR'}: $className \n"
@@ -408,7 +413,7 @@ class _GraphItemBlockOrScalarBoxState
       padding: const EdgeInsets.all(3),
       color: _dataStateBgColor(dataState),
       child: _tooltip(
-        message: _tooltipMessage2(blockOrScalar, dataState, active),
+        message: _blockOrScalarTooltipMessage(blockOrScalar, dataState, active),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -440,18 +445,12 @@ class _GraphItemBlockOrScalarBoxState
   }
 
   Widget _buildFormDataState(BlockForm blockForm) {
-    final DataState dataState = blockForm.dataState;
-    final bool active = blockForm.hasActiveFormWidget();
-    //
     return Container(
       padding: const EdgeInsets.all(3),
       color: _dataStateBgColor(blockForm.dataState),
       child: _tooltip(
-        message: _tooltipMessage(
-          "FORM",
-          getClassName(blockForm),
-          dataState,
-          active,
+        message: _formTooltipMessage(
+          blockForm,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
