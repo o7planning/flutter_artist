@@ -105,9 +105,9 @@ class _ShelfStructureTreeViewState extends State<_ShelfStructureTreeView> {
                         overflow: TextOverflow.ellipsis,
                         fontSize: 12,
                         color: isListener
-                            ? _listenerColor
+                            ? _listenerTextColor
                             : isNotifier
-                                ? _eventSourceColor
+                                ? _eventSourceTextColor
                                 : Colors.black,
                         fontWeight: _currentNode == node
                             ? FontWeight.bold
@@ -120,14 +120,14 @@ class _ShelfStructureTreeViewState extends State<_ShelfStructureTreeView> {
                     const Icon(
                       _eventSourceIconData,
                       size: 16,
-                      color: _eventSourceColor,
+                      color: _eventSourceIconColor,
                     ),
                   if (isListener) const SizedBox(width: 5),
                   if (isListener)
                     const Icon(
                       _listenerIconData,
                       size: 16,
-                      color: _listenerColor,
+                      color: _listenerIconColor,
                     )
                 ],
               ),

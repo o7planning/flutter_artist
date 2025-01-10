@@ -170,7 +170,7 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
                 child: Icon(
                   _eventSourceIconData,
                   size: 16,
-                  color: _eventSourceColor,
+                  color: _eventSourceIconColor,
                 ),
               ),
               const WidgetSpan(
@@ -234,7 +234,7 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
                 child: Icon(
                   _listenerIconData,
                   size: 16,
-                  color: _listenerColor,
+                  color: _listenerIconColor,
                 ),
               ),
               const WidgetSpan(

@@ -21,7 +21,7 @@ class _StorageStructureGraphViewState
   final Set<NliType> nliTypes = {
     NliType.independent,
     NliType.listener,
-    NliType.notifier,
+    NliType.eventSource,
   };
 
   String? selectedShelfName;
@@ -155,13 +155,14 @@ class _StorageStructureGraphViewState
             });
           },
           iconData: _listenerIconData,
+          iconColor: _listenerIconColor,
         ),
         const SizedBox(width: 10),
         _FloatingButton(
-          selected: nliTypes.contains(NliType.notifier),
-          tooltip: 'Show/Hide Notifier Shelves',
+          selected: nliTypes.contains(NliType.eventSource),
+          tooltip: 'Show/Hide Event Shelves',
           onPressed: () {
-            var type = NliType.notifier;
+            var type = NliType.eventSource;
             setState(() {
               if (nliTypes.contains(type)) {
                 nliTypes.remove(type);
@@ -171,6 +172,7 @@ class _StorageStructureGraphViewState
             });
           },
           iconData: _eventSourceIconData,
+          iconColor: _eventSourceIconColor,
         ),
         const SizedBox(width: 10),
         _FloatingButton(
@@ -187,6 +189,7 @@ class _StorageStructureGraphViewState
             });
           },
           iconData: _independentIconData,
+          iconColor: _nonEventOrListenerIconColor,
         ),
       ],
     );
@@ -215,7 +218,7 @@ class _StorageStructureGraphViewState
         shelfName: shelfName,
         shelf: shelfMap[shelfName],
       );
-      if (nliTypes.contains(NliType.notifier) &&
+      if (nliTypes.contains(NliType.eventSource) &&
           shelfNotifierMap.containsKey(shelfName)) {
         root.children.add(item);
       } else if (nliTypes.contains(NliType.listener) &&

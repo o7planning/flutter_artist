@@ -53,7 +53,7 @@ enum CodeFlowType {
 enum NliType {
   independent,
   listener,
-  notifier;
+  eventSource;
 }
 
 enum FormMode {

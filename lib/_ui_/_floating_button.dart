@@ -3,12 +3,14 @@ part of '../flutter_artist.dart';
 class _FloatingButton extends StatelessWidget {
   final bool selected;
   final String tooltip;
+  final Color iconColor;
   final IconData iconData;
   final Function() onPressed;
 
   const _FloatingButton({
     required this.selected,
     required this.iconData,
+    required this.iconColor,
     required this.onPressed,
     required this.tooltip,
   });
@@ -27,6 +29,7 @@ class _FloatingButton extends StatelessWidget {
         child: Icon(
           iconData,
           size: 16,
+          color: iconColor,
         ),
       ),
     );

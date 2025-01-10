@@ -1,4 +1,9 @@
 part of '../flutter_artist.dart';
 
-const Color _eventSourceColor = Colors.deepOrange;
-const Color _listenerColor = Colors.indigo;
+final Color _listenerTextColor = Colors.indigo;
+final Color _eventSourceTextColor = Colors.red;
+
+const Color _eventSourceIconColor = Colors.red;
+const Color _listenerIconColor = Colors.indigo;
+
+const Color _nonEventOrListenerIconColor = Colors.indigo;

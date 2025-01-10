@@ -29,7 +29,7 @@ class _ShelfBlockScalarTypeWidget extends StatelessWidget {
         leading: Icon(
           isListener ? _listenerIconData : _eventSourceIconData,
           size: 16,
-          color: isListener ? _listenerColor : _eventSourceColor,
+          color: isListener ? _listenerIconColor : _eventSourceIconColor,
         ),
         title: BreadCrumb(
           divider: const Padding(
