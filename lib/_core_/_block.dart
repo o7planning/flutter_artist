@@ -1557,6 +1557,7 @@ abstract class Block<I extends Object, D extends Object,
     }
   }
 
+  // TODO: Xem cac phuong thuc nay dc goi o dau.
   ///
   /// Allows deleting an Item or not according to the application logic.
   ///
