@@ -48,7 +48,8 @@ abstract class Block<I extends Object, D extends Object,
   }
 
   String get _classDefinition {
-    return "${getClassName(this)}<${getItemTypeAsString()}, ${getItemDetailTypeAsString()}, ${getFilterSnapshotTypeAsString()}>";
+    return "${getClassName(this)}<${getItemTypeAsString()}, ${getItemDetailTypeAsString()}, "
+        "${getFilterSnapshotTypeAsString()}, ${getSuggestedFormDataTypeAsString()}>";
   }
 
   final String? description;
@@ -143,6 +144,10 @@ abstract class Block<I extends Object, D extends Object,
 
   String getFilterSnapshotTypeAsString() {
     return S.toString();
+  }
+
+  String getSuggestedFormDataTypeAsString() {
+    return SF.toString();
   }
 
   List<Block> get descendantBlocks {
