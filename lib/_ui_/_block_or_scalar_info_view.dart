@@ -21,6 +21,7 @@ class _BlockOrScalarInfoView extends StatelessWidget {
         size: 18,
       ),
       title: Text.rich(
+        style: TextStyle(fontSize: _blockOrScalaInfoFontSize),
         TextSpan(
           children: [
             WidgetSpan(child: SizedBox(width: 3)),

@@ -35,6 +35,8 @@ const double _graphBoxFontSizeRootBox = 13;
 
 const double _graphBoxFontSizeChildBox = 11.5;
 
+const double _blockOrScalaInfoFontSize = 12;
+
 const Color _graphBoxDataStateReadyBgColor = Colors.green;
 const Color _graphBoxDataStatePendingBgColor = Colors.black54;
 const Color _graphBoxDataStateErrorBgColor = Colors.deepOrangeAccent;
