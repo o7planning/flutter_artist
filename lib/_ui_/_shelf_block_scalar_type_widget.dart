@@ -43,14 +43,9 @@ class _ShelfBlockScalarTypeWidget extends StatelessWidget {
             BreadCrumbItem(
               content: _buildShelf(),
             ),
-            if (shelfBlockScalarType.isBlock)
-              BreadCrumbItem(
-                content: _buildBlock(),
-              ),
-            if (shelfBlockScalarType.isScalar)
-              BreadCrumbItem(
-                content: _buildScalar(),
-              ),
+            BreadCrumbItem(
+              content: _buildBlockOrScalar(),
+            ),
           ],
         ),
         onTap: onTap,
@@ -76,17 +71,30 @@ class _ShelfBlockScalarTypeWidget extends StatelessWidget {
           );
   }
 
-  Widget _buildBlock() {
-    return Text(
-      shelfBlockScalarType.blockType.toString(),
-      style: const TextStyle(fontSize: 12),
+  Widget _buildBlockOrScalar() {
+    Shelf? shelf = FlutterArtist.storage._findShelf(
+      shelfBlockScalarType.shelfType,
     );
-  }
+    String tooltipMessage = "";
 
-  Widget _buildScalar() {
-    return Text(
-      shelfBlockScalarType.scalarType.toString(),
-      style: const TextStyle(fontSize: 12),
+    Widget w;
+    if (shelfBlockScalarType.isBlock) {
+      w = Text(
+        shelfBlockScalarType.blockType.toString(),
+        style: const TextStyle(fontSize: 12),
+      );
+      tooltipMessage = shelfBlockScalarType.blockClassDefinition ?? "";
+    } else {
+      w = Text(
+        shelfBlockScalarType.scalarType.toString(),
+        style: const TextStyle(fontSize: 12),
+      );
+      tooltipMessage = shelfBlockScalarType.scalarClassDefinition ?? "";
+    }
+    return Tooltip(
+      // verticalOffset: -70,
+      message: tooltipMessage,
+      child: w,
     );
   }
 }

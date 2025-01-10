@@ -92,12 +92,12 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
 
   Widget _buildRelatedBlockInfos() {
     List<ShelfBlockScalarType> listeners = [];
-    List<ShelfBlockScalarType> notifiers = [];
+    List<ShelfBlockScalarType> eventSources = [];
     if (selectedBlockOrScalar?.block != null) {
       listeners = FlutterArtist.storage._getListenerShelfBlockScalarTypes(
         eventBlockOrScalar: _BlockOrScalar.block(selectedBlockOrScalar!.block!),
       );
-      notifiers = FlutterArtist.storage._getEventShelfBlockTypes(
+      eventSources = FlutterArtist.storage._getEventShelfBlockTypes(
         listenerBlockOrScalar:
             _BlockOrScalar.block(selectedBlockOrScalar!.block!),
       );
@@ -106,7 +106,7 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
         eventBlockOrScalar:
             _BlockOrScalar.scalar(selectedBlockOrScalar!.scalar!),
       );
-      notifiers = FlutterArtist.storage._getEventShelfBlockTypes(
+      eventSources = FlutterArtist.storage._getEventShelfBlockTypes(
         listenerBlockOrScalar:
             _BlockOrScalar.scalar(selectedBlockOrScalar!.scalar!),
       );
@@ -138,8 +138,8 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
                   if (listeners.isNotEmpty)
                     _buildListeners(selectedBlockOrScalar!, listeners),
                   const SizedBox(height: 10),
-                  if (notifiers.isNotEmpty)
-                    _buildNotifiers(selectedBlockOrScalar!, notifiers),
+                  if (eventSources.isNotEmpty)
+                    _buildEventSources(selectedBlockOrScalar!, eventSources),
                 ],
               ),
             ),
@@ -221,7 +221,7 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
     );
   }
 
-  Widget _buildNotifiers(
+  Widget _buildEventSources(
       _BlockOrScalar blockOrScalar, List<ShelfBlockScalarType> notifiers) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,

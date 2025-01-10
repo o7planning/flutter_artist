@@ -3,12 +3,12 @@ part of '../flutter_artist.dart';
 class _FormDataView extends StatefulWidget {
   final BlockForm blockForm;
   final String locationInfo;
-  final Function() onPressedFlu;
+  final Function() onPressedShelf;
 
   const _FormDataView({
     required this.blockForm,
     required this.locationInfo,
-    required this.onPressedFlu,
+    required this.onPressedShelf,
     super.key,
   });
 
@@ -154,7 +154,7 @@ class _FormDataViewState extends State<_FormDataView> {
           color: _getTabIconColor(status),
           size: iconSize,
         ),
-        content: _buildFormChangeListenerInfo(),
+        content: _buildFormEventListenerInfo(),
       ),
     );
     //
@@ -294,29 +294,31 @@ class _FormDataViewState extends State<_FormDataView> {
     );
   }
 
-  Widget _buildFormChangeListenerInfo() {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          _buildInfo(
-              info:
-                  "When you successfully add or modify a record on the '${getClassName(widget.blockForm.block)}' block, "
-                  "the listening blocks will be switched to the 'pending' state, "
-                  "they will be lazily queried again when they are visible on the screen.\n"
-                  "Here is a list of affected blocks:"),
-          const Divider(height: 10),
-          ...listeners.map(
-            (listener) => _ShelfBlockScalarTypeWidget(
-              shelfBlockScalarType: listener,
-              isListener: true,
-              isEventSource: false,
-              onTap: null,
+  Widget _buildFormEventListenerInfo() {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            _buildInfo(
+                info:
+                    "When you successfully add or modify a record on the '${getClassName(widget.blockForm.block)}' block, "
+                    "the listening blocks will be switched to the 'pending' state, "
+                    "they will be lazily queried again when they are visible on the screen.\n"
+                    "Here is a list of affected blocks or scalars:"),
+            const Divider(height: 10),
+            ...listeners.map(
+              (listener) => _ShelfBlockScalarTypeWidget(
+                shelfBlockScalarType: listener,
+                isListener: true,
+                isEventSource: false,
+                onTap: null,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -343,7 +345,7 @@ class _FormDataViewState extends State<_FormDataView> {
             items: [
               BreadCrumbItem(
                 content: InkWell(
-                  onTap: widget.onPressedFlu,
+                  onTap: widget.onPressedShelf,
                   child: _IconLabelText(
                     style: const TextStyle(fontSize: fontSize),
                     icon: Image.asset(

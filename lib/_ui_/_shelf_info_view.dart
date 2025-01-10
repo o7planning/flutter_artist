@@ -8,6 +8,7 @@ class _ShelfInfoView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      titleAlignment: ListTileTitleAlignment.top,
       contentPadding: EdgeInsets.zero,
       minLeadingWidth: 0,
       horizontalTitleGap: 5,

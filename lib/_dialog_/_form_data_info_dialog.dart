@@ -53,7 +53,7 @@ class _FormDataInfoDialogState extends State<_FormDataInfoDialog> {
           ? _FormDataView(
               blockForm: widget.blockForm,
               locationInfo: widget.locationInfo,
-              onPressedFlu: () {
+              onPressedShelf: () {
                 setState(() {
                   showFormData = false;
                 });

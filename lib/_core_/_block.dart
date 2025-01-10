@@ -47,6 +47,10 @@ abstract class Block<I extends Object, D extends Object,
     return "${shelf.name} > $name";
   }
 
+  String get _classDefinition {
+    return "${getClassName(this)}<${getItemTypeAsString()}, ${getItemDetailTypeAsString()}, ${getFilterSnapshotTypeAsString()}>";
+  }
+
   final String? description;
 
   final BlockHiddenBehavior hiddenBehavior;

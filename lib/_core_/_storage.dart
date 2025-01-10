@@ -295,6 +295,7 @@ class _Storage {
           ShelfBlockScalarType.block(
             shelfType: listenerBlock.shelf.runtimeType,
             blockType: listenerBlock.runtimeType,
+            blockClassDefinition: listenerBlock._classDefinition,
           ),
         );
       }
@@ -303,6 +304,7 @@ class _Storage {
           ShelfBlockScalarType.scalar(
             shelfType: listenerScalar.shelf.runtimeType,
             scalarType: listenerScalar.runtimeType,
+            scalarClassDefinition: listenerScalar._classDefinition,
           ),
         );
       }
@@ -374,6 +376,7 @@ class _Storage {
         ShelfBlockScalarType.block(
           shelfType: eventBlock.shelf.runtimeType,
           blockType: eventBlock.runtimeType,
+          blockClassDefinition: eventBlock._classDefinition,
         ),
       );
     }

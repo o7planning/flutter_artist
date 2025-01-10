@@ -8,6 +8,10 @@ abstract class Scalar<D extends Object, S extends FilterSnapshot>
     return "${shelf.name} >> $name";
   }
 
+  String get _classDefinition {
+    return "${getClassName(this)}<${getDataTypeAsString()}, ${getFilterSnapshotTypeAsString()}>";
+  }
+
   final String? filterName;
 
   final String? description;
