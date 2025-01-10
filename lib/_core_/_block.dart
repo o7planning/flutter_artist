@@ -1972,6 +1972,8 @@ abstract class Block<I extends Object, D extends Object,
       return false;
     }
     //
+    suggestedFormData?._formAction = FormAction.create;
+    //
     bool success = false;
     __isPreparingFormCreation = true;
     this.updateControlBarWidgets();
