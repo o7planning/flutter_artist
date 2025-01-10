@@ -1,8 +1,3 @@
 part of '../flutter_artist.dart';
 
-
-
-
-abstract class SuggestedFilterData {
-
-}
+abstract class SuggestedFilterData {}

@@ -1972,7 +1972,7 @@ abstract class Block<I extends Object, D extends Object,
       return false;
     }
     //
-    suggestedFormData?._formAction = FormAction.create;
+    suggestedFormData?.formAction = FormAction.create;
     //
     bool success = false;
     __isPreparingFormCreation = true;
