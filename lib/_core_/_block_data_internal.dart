@@ -1,7 +1,10 @@
 part of '../flutter_artist.dart';
 
-class _InternalBlockData<I extends Object, D extends Object,
-    S extends FilterSnapshot> extends BlockData<I, D, S> {
+class _InternalBlockData<
+    I extends Object,
+    D extends Object,
+    S extends FilterSnapshot,
+    SF extends SuggestedFormData> extends BlockData<I, D, S, SF> {
   bool __isTemporaryMode = false;
 
   DataState __dataStateBk = DataState.pending;
@@ -23,7 +26,7 @@ class _InternalBlockData<I extends Object, D extends Object,
   PaginationData? __paginationBk;
 
   _InternalBlockData.empty(
-    Block<I, D, S> block,
+    Block<I, D, S, SF> block,
     PageableData? pageable,
   ) : super(
           block: block,

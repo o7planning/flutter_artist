@@ -106,6 +106,8 @@ part '_core_/_storage.dart';
 
 part '_core_/_suggested_filter_data.dart';
 
+part '_core_/_suggested_form_data.dart';
+
 part '_core_/_suggested_selection.dart';
 
 part '_core_/_typedef.dart';

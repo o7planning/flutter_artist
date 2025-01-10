@@ -1,8 +1,11 @@
 part of '../flutter_artist.dart';
 
-abstract class BlockData<I extends Object, D extends Object,
-    S extends FilterSnapshot> implements PageData<I> {
-  final Block<I, D, S> block;
+abstract class BlockData<
+    I extends Object,
+    D extends Object,
+    S extends FilterSnapshot,
+    SF extends SuggestedFormData> implements PageData<I> {
+  final Block<I, D, S, SF> block;
 
   late final List<I> _items;
 

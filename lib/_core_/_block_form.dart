@@ -1,6 +1,7 @@
 part of '../flutter_artist.dart';
 
-abstract class BlockForm<I extends Object, D extends Object> {
+abstract class BlockForm<I extends Object, D extends Object,
+    SF extends SuggestedFormData> {
   QueryMode _queryMode = QueryMode.lazy;
 
   late QueryMode _tempQueryMode = _queryMode;
@@ -12,7 +13,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
 
   late final BlockFormData data = BlockFormData(blockForm: this);
 
-  late final Block<I, D, FilterSnapshot> block;
+  late final Block<I, D, FilterSnapshot, SF> block;
 
   DataState get dataState => data._dataState;
 
@@ -185,7 +186,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
   /// This method is called before [prepareFormData] method.
   ///
   Future<ApiResult<void>?>? prepareFormMasterData({
-    required BlockFilter? blockFilter,
+    required BlockFilter? blockFilter, // TODO: FilterSnapShot??
     required D? refreshedItem,
     required bool isNew,
   });
@@ -195,6 +196,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
   ///
   Map<String, dynamic> prepareFormData({
     required BlockFilter? blockFilter,
+    required SF? suggestedFormData,
     required D? refreshedItem,
     required bool isNew,
   });
@@ -344,6 +346,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
   }
 
   Future<bool> _prepareForm({
+    required SF? suggestedFormData,
     required D? refreshedItem,
     required final bool isNew,
     required bool forceForm,
@@ -382,6 +385,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
     }
     //
     bool success = __copyItemDataToFormKeyState(
+      suggestedFormData: suggestedFormData,
       refreshedItem: refreshedItem,
       isNew: isNew,
     );
@@ -393,7 +397,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
 
   // Private method in this class.
   Future<bool> __prepareFormMasterData({
-    required BlockFilter? blockFilter,
+    required BlockFilter? blockFilter, // TODO: FilterSnapShot??
     required D? refreshedItem,
     required bool isNew,
   }) async {
@@ -443,6 +447,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
 
   // Private method. Only for use in this class.
   bool __copyItemDataToFormKeyState({
+    required SF? suggestedFormData,
     required D? refreshedItem,
     required bool isNew,
   }) {
@@ -466,6 +471,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
           methodName: "prepareFormData",
           parameters: {
             "blockFilter": block.blockFilter,
+            "suggestedFormData": suggestedFormData,
             "refreshedItem": refreshedItem,
             "isNew": isNew,
           },
@@ -474,6 +480,7 @@ abstract class BlockForm<I extends Object, D extends Object> {
         //
         newFormData = prepareFormData(
           blockFilter: block.blockFilter,
+          suggestedFormData: suggestedFormData,
           refreshedItem: refreshedItem,
           isNew: isNew,
         );

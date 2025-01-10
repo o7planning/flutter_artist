@@ -19,7 +19,7 @@ part of '../flutter_artist.dart';
 /// ```
 ///
 abstract class Block<I extends Object, D extends Object,
-    S extends FilterSnapshot> extends BaseBlk {
+    S extends FilterSnapshot, SF extends SuggestedFormData> extends BaseBlk {
   QueryMode _queryMode = QueryMode.lazy;
   late QueryMode _tempQueryMode = _queryMode;
 
@@ -63,7 +63,7 @@ abstract class Block<I extends Object, D extends Object,
 
   String? get parentBlockName => parent?.name;
 
-  final BlockForm<I, D>? blockForm;
+  final BlockForm<I, D, SF>? blockForm;
 
   final List<Block> _childBlocks;
 
@@ -84,7 +84,8 @@ abstract class Block<I extends Object, D extends Object,
           pageSize: __pageSize,
         );
 
-  late final BlockData<I, D, S> data = _InternalBlockData<I, D, S>.empty(
+  late final BlockData<I, D, S, SF> data =
+      _InternalBlockData<I, D, S, SF>.empty(
     this,
     __pageable,
   );
@@ -152,10 +153,6 @@ abstract class Block<I extends Object, D extends Object,
     }
     return ret;
   }
-
-  // bool get isChangeListener {
-  //   return _listenForChangesFrom != null && _listenForChangesFrom.isNotEmpty;
-  // }
 
   void updateFragmentWidgets() {
     Map<_WidgetState, bool> widgetStates = _findMountedWidgetStates(
@@ -884,7 +881,7 @@ abstract class Block<I extends Object, D extends Object,
     } else if (postQueryBehavior == PostQueryBehavior.createNewItem) {
       data._dataState = DataState.ready;
       // Create New Item
-      bool success = await __prepareToCreate();
+      bool success = await __prepareToCreate(suggestedFormData: null);
       if (!success) {
         return false;
       }
@@ -1153,6 +1150,7 @@ abstract class Block<I extends Object, D extends Object,
         dataState: DataState.pending,
       );
       bool success = await blockForm!._prepareForm(
+        suggestedFormData: null,
         refreshedItem: refreshedItemDetail,
         isNew: false,
         forceForm: forceForm,
@@ -1228,6 +1226,7 @@ abstract class Block<I extends Object, D extends Object,
         dataState: DataState.ready,
       );
       bool success = await blockForm!._prepareForm(
+        suggestedFormData: null,
         refreshedItem: nullItemDetail,
         isNew: false,
         forceForm: false,
@@ -1946,9 +1945,10 @@ abstract class Block<I extends Object, D extends Object,
   }
 
   ///
-  /// Nhẩy tới một trang mới có Form tạo một bản ghi mới.
+  /// Prepare to create an item in a Form.
   ///
   Future<bool> prepareToCreate({
+    SF? suggestedFormData,
     required Function()? route,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -1967,7 +1967,9 @@ abstract class Block<I extends Object, D extends Object,
     __isPreparingFormCreation = true;
     this.updateControlBarWidgets();
     try {
-      success = await _prepareToCreateWithOverlayAndRestorable();
+      success = await _prepareToCreateWithOverlayAndRestorable(
+        suggestedFormData: suggestedFormData,
+      );
     } finally {
       __isPreparingFormCreation = false;
     }
@@ -1977,25 +1979,33 @@ abstract class Block<I extends Object, D extends Object,
     return success;
   }
 
-  Future<bool> _prepareToCreateWithOverlayAndRestorable() async {
+  Future<bool> _prepareToCreateWithOverlayAndRestorable({
+    required SF? suggestedFormData,
+  }) async {
     if (!__checkBeforeFormCreation(showErrorMessage: false)) {
       return false;
     }
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
-        return await _prepareToCreateWithRestorable();
+        return await _prepareToCreateWithRestorable(
+          suggestedFormData: suggestedFormData,
+        );
       },
     );
   }
 
-  Future<bool> _prepareToCreateWithRestorable() async {
+  Future<bool> _prepareToCreateWithRestorable({
+    required SF? suggestedFormData,
+  }) async {
     if (!__checkBeforeFormCreation(showErrorMessage: false)) {
       return false;
     }
     try {
       _backupAll();
       //
-      bool success = await __prepareToCreate();
+      bool success = await __prepareToCreate(
+        suggestedFormData: suggestedFormData,
+      );
       if (!success) {
         _restoreAll();
         return false;
@@ -2018,7 +2028,9 @@ abstract class Block<I extends Object, D extends Object,
   }
 
   // Private method. Only for use in this class.
-  Future<bool> __prepareToCreate() async {
+  Future<bool> __prepareToCreate({
+    required SF? suggestedFormData,
+  }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
@@ -2043,6 +2055,7 @@ abstract class Block<I extends Object, D extends Object,
       dataState: DataState.pending,
     );
     bool success = await blockForm!._prepareForm(
+      suggestedFormData: suggestedFormData,
       refreshedItem: nullItemDetail,
       isNew: true,
       forceForm: true,

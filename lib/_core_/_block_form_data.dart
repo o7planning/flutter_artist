@@ -1,7 +1,8 @@
 part of '../flutter_artist.dart';
 
-class BlockFormData<I extends Object, D extends Object> {
-  final BlockForm<I, D> blockForm;
+class BlockFormData<I extends Object, D extends Object,
+    SF extends SuggestedFormData> {
+  final BlockForm<I, D, SF> blockForm;
 
   bool _justInited = false;
 

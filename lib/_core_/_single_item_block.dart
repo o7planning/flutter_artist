@@ -18,8 +18,11 @@ part of '../flutter_artist.dart';
 /// }
 /// ```
 ///
-abstract class SingleItemBlock<I extends Object, D extends Object,
-    S extends FilterSnapshot> extends Block<I, D, S> {
+abstract class SingleItemBlock<
+    I extends Object,
+    D extends Object,
+    S extends FilterSnapshot,
+    SF extends SuggestedFormData> extends Block<I, D, S, SF> {
   SingleItemBlock({
     required super.name,
     required super.description,
