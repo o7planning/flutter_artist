@@ -21,7 +21,6 @@ class _BlockOrScalarInfoView extends StatelessWidget {
         size: 18,
       ),
       title: Text.rich(
-        textAlign: TextAlign.center,
         TextSpan(
           children: [
             WidgetSpan(child: SizedBox(width: 3)),
@@ -33,8 +32,7 @@ class _BlockOrScalarInfoView extends StatelessWidget {
               ),
             ),
             TextSpan(text: "<"),
-            if (blockOrScalar.isBlock)
-              TextSpan(text: blockOrScalar.blockOrScalaClassParametersAsString),
+            TextSpan(text: blockOrScalar.blockOrScalaClassParametersAsString),
             TextSpan(text: ">"),
           ],
         ),
