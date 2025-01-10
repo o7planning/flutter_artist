@@ -187,6 +187,7 @@ abstract class BlockForm<I extends Object, D extends Object,
   ///
   Future<ApiResult<void>?>? prepareFormMasterData({
     required BlockFilter? blockFilter, // TODO: FilterSnapShot??
+    required SF? suggestedFormData,
     required D? refreshedItem,
     required bool isNew,
   });
@@ -371,6 +372,7 @@ abstract class BlockForm<I extends Object, D extends Object,
     if (needToLoad) {
       bool success = await __prepareFormMasterData(
         blockFilter: block.blockFilter,
+        suggestedFormData: suggestedFormData,
         refreshedItem: refreshedItem,
         isNew: isNew,
       );
@@ -398,6 +400,7 @@ abstract class BlockForm<I extends Object, D extends Object,
   // Private method in this class.
   Future<bool> __prepareFormMasterData({
     required BlockFilter? blockFilter, // TODO: FilterSnapShot??
+    required SF? suggestedFormData,
     required D? refreshedItem,
     required bool isNew,
   }) async {
@@ -408,14 +411,16 @@ abstract class BlockForm<I extends Object, D extends Object,
         ownerClassInstance: this,
         methodName: "prepareFormMasterData",
         parameters: {
-          "refreshedItem": refreshedItem,
           "blockFilter": blockFilter,
+          "suggestedFormData": suggestedFormData,
+          "refreshedItem": refreshedItem,
           "isNew": isNew,
         },
       );
       //
       Future<ApiResult<void>?>? future = prepareFormMasterData(
         blockFilter: blockFilter,
+        suggestedFormData: suggestedFormData,
         refreshedItem: refreshedItem,
         isNew: isNew,
       );

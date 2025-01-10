@@ -30,15 +30,13 @@ class _ShelfInfoView extends StatelessWidget {
           color: Colors.black87,
         ),
       ),
-      subtitle: shelf?.description == null
-          ? null
-          : Text(
-              shelf!.description!,
-              style: const TextStyle(
-                fontSize: 12,
-                color: Colors.grey,
-              ),
-            ),
+      subtitle: Text(
+        shelf?.description ?? '[No Description]',
+        style: const TextStyle(
+          fontSize: 12,
+          color: Colors.grey,
+        ),
+      ),
     );
   }
 }
