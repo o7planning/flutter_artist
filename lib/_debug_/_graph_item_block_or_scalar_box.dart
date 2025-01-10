@@ -368,6 +368,15 @@ class _GraphItemBlockOrScalarBoxState
     }
   }
 
+  IconData _visibilityIconData(bool visible) {
+    switch (visible) {
+      case true:
+        return _visibitityTrueIconData;
+      case false:
+        return _visibitityFalseIconData;
+    }
+  }
+
   Color _dataStateBgColor(DataState dataState) {
     switch (dataState) {
       case DataState.pending:
@@ -381,6 +390,7 @@ class _GraphItemBlockOrScalarBoxState
 
   Widget _buildBlockDataState(_BlockOrScalar blockOrScalar) {
     final DataState dataState = blockOrScalar.dataState;
+    bool visibility = blockOrScalar.hasActiveUiComponent();
     //
     return Container(
       padding: const EdgeInsets.all(3),
@@ -392,6 +402,12 @@ class _GraphItemBlockOrScalarBoxState
           children: [
             Icon(
               _dataStateIconData(dataState),
+              size: iconSize,
+              color: _graphBoxTextColor,
+            ),
+            const SizedBox(width: 2),
+            Icon(
+              _visibilityIconData(visibility),
               size: iconSize,
               color: _graphBoxTextColor,
             ),

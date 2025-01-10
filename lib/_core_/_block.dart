@@ -2424,7 +2424,7 @@ abstract class Block<I extends Object, D extends Object,
     if (currentItem == null) {
       return false;
     }
-    return canDelete(item: currentItem!);
+    return canDelete(item: currentItem);
   }
 
   bool canDelete({required I item}) {
@@ -2432,13 +2432,15 @@ abstract class Block<I extends Object, D extends Object,
       return false;
     }
     if (parent != null) {
-      if (parent!.formMode == FormMode.none ||
-          parent!.formMode == FormMode.creation ||
-          parent!.data.currentItemDetail == null) {
-        return false;
+      if (parent!.blockForm != null) {
+        if (parent!.formMode == FormMode.none ||
+            parent!.formMode == FormMode.creation ||
+            parent!.data.currentItemDetail == null) {
+          return false;
+        }
       }
     }
-    final bool isCurrent = data.isCurrentItem(item: item);
+    // final bool isCurrent = data.isCurrentItem(item: item);
     // if()
     // bool can = blockForm!.data._formMode != FormMode.none;
     // if (!can) {

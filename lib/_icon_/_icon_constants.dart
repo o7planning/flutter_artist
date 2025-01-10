@@ -1,5 +1,8 @@
 part of '../flutter_artist.dart';
 
+const IconData _visibitityTrueIconData = cupertino.CupertinoIcons.eye;
+const IconData _visibitityFalseIconData = cupertino.CupertinoIcons.eye_slash;
+
 const IconData _dataStatePendingIconData = cupertino.CupertinoIcons.slowmo;
 
 const IconData _dataStateReadyIconData =

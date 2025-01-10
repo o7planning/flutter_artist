@@ -41,3 +41,17 @@ const Color _graphBoxDataStateErrorBgColor = Colors.deepOrangeAccent;
 
 const Color _graphBoxTextColor = Colors.white;
 final Color _graphBoxHighlighFilterColor = Colors.amberAccent.withAlpha(80);
+
+//
+final Color _listenerTextColor = Colors.indigo;
+final Color _eventSourceTextColor = Colors.red;
+
+final TextStyle _listenerTextStyle = TextStyle(
+  color: _listenerTextColor,
+  fontWeight: FontWeight.bold,
+);
+
+final TextStyle _eventSourceTextStyle = TextStyle(
+  color: _eventSourceTextColor,
+  fontWeight: FontWeight.bold,
+);

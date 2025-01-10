@@ -185,21 +185,24 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              if (blockOrScalar.isBlock) TextSpan(text: " is "),
               if (blockOrScalar.isBlock)
                 TextSpan(
-                  text: " is Event Block. It emits an event when its item (",
+                  text: "Event Block",
+                  style: _eventSourceTextStyle,
                 ),
               if (blockOrScalar.isBlock)
                 TextSpan(
-                  text: blockOrScalar.block!.getItemTypeAsString(),
-                  style: TextStyle(
-                    color: Colors.indigo,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  text: ". It emits an event when its item ",
                 ),
               if (blockOrScalar.isBlock)
                 TextSpan(
-                  text: ") changes. "
+                  text: "(${blockOrScalar.block!.getItemTypeAsString()})",
+                  style: _listenerTextStyle,
+                ),
+              if (blockOrScalar.isBlock)
+                TextSpan(
+                  text: " changes. "
                       "When data changes on this block, "
                       "it will notify the following Listener blocks or scalars:",
                 ),
@@ -246,16 +249,17 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              TextSpan(text: " is "),
               TextSpan(
-                  text:
-                      " is ${blockOrScalar.isBlock ? 'Listener Block' : 'Listener Scalar'}. "
-                      "It listens for changes on Item types: "),
+                text: blockOrScalar.isBlock
+                    ? 'Listener Block'
+                    : 'Listener Scalar',
+                style: _listenerTextStyle,
+              ),
+              TextSpan(text: ". It listens for changes on Item types: "),
               TextSpan(
                 text: "${blockOrScalar.listenItemTypesAsStrings}",
-                style: TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: _eventSourceTextStyle,
               ),
               TextSpan(
                 text: ". This ${blockOrScalar.isBlock ? 'block' : 'scalar'} "
