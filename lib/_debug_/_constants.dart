@@ -7,3 +7,5 @@ const Color _eventSourceIconColor = Colors.red;
 const Color _listenerIconColor = Colors.indigo;
 
 const Color _nonEventOrListenerIconColor = Colors.indigo;
+
+const Color _classParametersColor = Colors.purpleAccent;

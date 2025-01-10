@@ -9,7 +9,11 @@ abstract class Scalar<D extends Object, S extends FilterSnapshot>
   }
 
   String get _classDefinition {
-    return "${getClassName(this)}<${getDataTypeAsString()}, ${getFilterSnapshotTypeAsString()}>";
+    return "${getClassName(this)}$_classParametersDefinition";
+  }
+
+  String get _classParametersDefinition {
+    return "<${getDataTypeAsString()}, ${getFilterSnapshotTypeAsString()}>";
   }
 
   final String? filterName;

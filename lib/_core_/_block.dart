@@ -48,7 +48,11 @@ abstract class Block<I extends Object, D extends Object,
   }
 
   String get _classDefinition {
-    return "${getClassName(this)}<${getItemTypeAsString()}, ${getItemDetailTypeAsString()}, "
+    return "${getClassName(this)}$_classParametersDefinition";
+  }
+
+  String get _classParametersDefinition {
+    return "<${getItemTypeAsString()}, ${getItemDetailTypeAsString()}, "
         "${getFilterSnapshotTypeAsString()}, ${getSuggestedFormDataTypeAsString()}>";
   }
 

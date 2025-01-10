@@ -64,24 +64,12 @@ class _BlockOrScalar extends Equatable {
 
   bool get isScalar => scalar != null;
 
-  List<String> get blockOrScalaClassParameters {
-    if (block != null) {
-      return [
-        block!.getItemTypeAsString(),
-        block!.getItemDetailTypeAsString(),
-        block!.getFilterSnapshotTypeAsString()
-      ];
-    } else {
-      return [
-        scalar!.getDataTypeAsString(),
-        scalar!.getFilterSnapshotTypeAsString()
-      ];
-    }
-  }
-
   String get blockOrScalaClassParametersAsString {
-    List<String> list = blockOrScalaClassParameters;
-    return list.join(", ");
+    if (block != null) {
+      return block!._classParametersDefinition;
+    } else {
+      return scalar!._classParametersDefinition;
+    }
   }
 
   DataState get dataState {

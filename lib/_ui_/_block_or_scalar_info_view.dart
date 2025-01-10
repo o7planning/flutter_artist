@@ -32,9 +32,12 @@ class _BlockOrScalarInfoView extends StatelessWidget {
                 color: Colors.black87,
               ),
             ),
-            TextSpan(text: "<"),
-            TextSpan(text: blockOrScalar.blockOrScalaClassParametersAsString),
-            TextSpan(text: ">"),
+            TextSpan(
+              text: blockOrScalar.blockOrScalaClassParametersAsString,
+              style: const TextStyle(
+                color: _classParametersColor,
+              ),
+            ),
           ],
         ),
       ),
