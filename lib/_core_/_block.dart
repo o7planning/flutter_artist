@@ -43,6 +43,10 @@ abstract class Block<I extends Object, D extends Object,
 
   final String name;
 
+  String get fullName {
+    return "${shelf.name} > $name";
+  }
+
   final String? description;
 
   final BlockHiddenBehavior hiddenBehavior;

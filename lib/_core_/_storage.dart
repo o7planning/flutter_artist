@@ -95,28 +95,23 @@ class _Storage {
 
   // @Callable
   Map<String, Shelf> _getEventShelves() {
+    // Name, Shelf
     Map<String, Shelf> foundEventShelfMap = {};
     //
     for (Shelf shelf in __shelfMap.values) {
-      __findEventShelves(
-        listenerShelf: shelf,
-        foundEventShelfMap: foundEventShelfMap,
-      );
+      List<Block> listenerBlocks = _getListenerBlocksByShelf(eventShelf: shelf);
+      if (listenerBlocks.isNotEmpty) {
+        foundEventShelfMap[shelf.name] = shelf;
+        continue;
+      }
+      List<Scalar> listenerScalars =
+          _getListenerScalarsByShelf(eventShelf: shelf);
+      if (listenerScalars.isNotEmpty) {
+        foundEventShelfMap[shelf.name] = shelf;
+        continue;
+      }
     }
     return foundEventShelfMap;
-  }
-
-  // Private Method. Only for use in this class.
-  void __findEventShelves({
-    required Shelf listenerShelf,
-    required Map<String, Shelf> foundEventShelfMap,
-  }) {
-    for (Block rootListenerBlock in listenerShelf.rootBlocks) {
-      __findEventShelfCascade(
-        listenerBlock: rootListenerBlock,
-        foundShelfMap: foundEventShelfMap,
-      );
-    }
   }
 
   // TODO: Xem lai
@@ -166,61 +161,107 @@ class _Storage {
 
   // @Callable
   Map<String, Shelf> _getListenerShelves() {
+    // Name, Shelf
     Map<String, Shelf> foundShelfMap = {};
     //
     for (String shelfName in __shelfMap.keys) {
-      Shelf shelf = __shelfMap[shelfName]!;
+      Shelf listenerShelf = __shelfMap[shelfName]!;
 
-      for (Block rootBlock in shelf.rootBlocks) {
-        bool found = __foundListenerShelfCascade(block: rootBlock);
-        if (found) {
-          foundShelfMap[shelfName] = shelf;
-          break;
-        }
+      List<Block> listenerBlocks =
+          _getEventBlocksByShelf(listenerShelf: listenerShelf);
+      if (listenerBlocks.isNotEmpty) {
+        foundShelfMap[shelfName] = listenerShelf;
+        break;
       }
     }
     return foundShelfMap;
   }
 
-  // Private Method. Only for use in this class.
-  bool __foundListenerShelfCascade({required Block block}) {
-    if (block.listenItemTypes.isNotEmpty) {
-      return true;
-    }
-    for (Block childBlock in block.childBlocks) {
-      bool found = __foundListenerShelfCascade(block: childBlock);
-      if (found) {
-        return true;
+  // ===========================================================================
+  // ===========================================================================
+
+  List<Block> _getEventBlocksByShelf({required Shelf listenerShelf}) {
+    // FullName, Block
+    Map<String, Block> foundMap = {};
+    //
+    for (Block listenerBlock in listenerShelf.blocks) {
+      List<Block> eventBlocks = _getEventBlocksByBlock(
+        listenerBlock: listenerBlock,
+      );
+      for (var eb in eventBlocks) {
+        foundMap[eb.fullName] = eb;
       }
     }
-    return false;
+    for (Scalar listenerScalar in listenerShelf.scalars) {
+      List<Block> eventBlocks = _getEventBlocksByScalar(
+        listenerScalar: listenerScalar,
+      );
+      for (var eb in eventBlocks) {
+        foundMap[eb.fullName] = eb;
+      }
+    }
+    return foundMap.values.toList();
   }
 
-// ===========================================================================
-// ===========================================================================
+  List<Block> _getListenerBlocksByShelf({required Shelf eventShelf}) {
+    // FullName, Block
+    Map<String, Block> foundMap = {};
+    //
+    for (Block eventBlock in eventShelf.blocks) {
+      List<Block> listenerBlocks = _getListenerBlocksByBlock(
+        eventBlock: eventBlock,
+      );
+      for (var lb in listenerBlocks) {
+        foundMap[lb.fullName] = lb;
+      }
+    }
+    return foundMap.values.toList();
+  }
+
+  List<Scalar> _getListenerScalarsByShelf({required Shelf eventShelf}) {
+    // FullName, Scalar
+    Map<String, Scalar> foundMap = {};
+    //
+    for (Block eventBlock in eventShelf.blocks) {
+      List<Scalar> listenerScalars = _getListenerScalarsByBlock(
+        eventBlock: eventBlock,
+      );
+      for (var scalar in listenerScalars) {
+        foundMap[scalar.fullName] = scalar;
+      }
+    }
+    return foundMap.values.toList();
+  }
 
   // Callable.
-  List<Block> _getListenerBlocks({required Block eventBlock}) {
-    List<Block> foundListenerBlocks = [];
+  List<Block> _getListenerBlocksByBlock({required Block eventBlock}) {
+    if (!eventBlock.fireEvent) {
+      return [];
+    }
+    // FullName, Block
+    Map<String, Block> foundMap = {};
 
     for (String shelfName in __shelfMap.keys) {
       Shelf? shelf = __shelfMap[shelfName];
       if (shelf == null) {
         continue;
       }
-      for (Block rootBlock in shelf.rootBlocks) {
-        __findListenerBlocksCascade(
-          eventBlock: eventBlock,
-          blockToCheck: rootBlock,
-          foundListenerBlocks: foundListenerBlocks,
-        );
+      for (Block blockToCheck in shelf.blocks) {
+        final Type eventItemType = eventBlock.getItemType();
+        if (_contains(blockToCheck.listenItemTypes, eventItemType)) {
+          foundMap[blockToCheck.fullName] = blockToCheck;
+        }
       }
     }
-    return foundListenerBlocks;
+    return foundMap.values.toList();
   }
 
-  List<Scalar> _getListenerScalars({required Block eventBlock}) {
-    List<Scalar> foundListenerScalars = [];
+  List<Scalar> _getListenerScalarsByBlock({required Block eventBlock}) {
+    if (!eventBlock.fireEvent) {
+      return [];
+    }
+    // FullName, Scalar
+    Map<String, Scalar> foundMap = {};
 
     for (String shelfName in __shelfMap.keys) {
       Shelf? shelf = __shelfMap[shelfName];
@@ -229,11 +270,11 @@ class _Storage {
       }
       for (Scalar scalar in shelf.scalars) {
         if (_contains(scalar.listenItemTypes, eventBlock.getItemType())) {
-          foundListenerScalars.add(scalar);
+          foundMap[scalar.fullName] = scalar;
         }
       }
     }
-    return foundListenerScalars;
+    return foundMap.values.toList();
   }
 
   // Callable.
@@ -241,10 +282,10 @@ class _Storage {
     required _BlockOrScalar eventBlockOrScalar,
   }) {
     if (eventBlockOrScalar.block != null) {
-      List<Block> listenerBlocks = _getListenerBlocks(
+      List<Block> listenerBlocks = _getListenerBlocksByBlock(
         eventBlock: eventBlockOrScalar.block!,
       );
-      List<Scalar> listenerScalars = _getListenerScalars(
+      List<Scalar> listenerScalars = _getListenerScalarsByBlock(
         eventBlock: eventBlockOrScalar.block!,
       );
       //
@@ -271,33 +312,12 @@ class _Storage {
     }
   }
 
-  // Private Method. Only for use in this class.
-  void __findListenerBlocksCascade({
-    required Block eventBlock,
-    required Block blockToCheck,
-    required List<Block> foundListenerBlocks,
-  }) {
-    if (!eventBlock.fireEvent) {
-      return;
-    }
-    final Type eventItemType = eventBlock.getItemType();
-    if (_contains(blockToCheck.listenItemTypes, eventItemType)) {
-      foundListenerBlocks.add(blockToCheck);
-    }
-    for (Block childBlock in blockToCheck.childBlocks) {
-      __findListenerBlocksCascade(
-        eventBlock: eventBlock,
-        blockToCheck: childBlock,
-        foundListenerBlocks: foundListenerBlocks,
-      );
-    }
-  }
-
   // Callable.
-  List<Block> _getEventBlocksForListenerBlock({
+  List<Block> _getEventBlocksByBlock({
     required Block listenerBlock,
   }) {
-    List<Block> foundEventBlocks = [];
+    // FullName, Block
+    Map<String, Block> foundMap = {};
 
     for (Shelf shelf in __shelfMap.values) {
       List<Block> allBlocks = shelf.blocks;
@@ -306,31 +326,31 @@ class _Storage {
           continue;
         }
         if (_contains(listenerBlock.listenItemTypes, blk.getItemType())) {
-          foundEventBlocks.add(blk);
+          foundMap[blk.fullName] = blk;
         }
       }
     }
-    return foundEventBlocks;
+    return foundMap.values.toList();
   }
 
   // Callable.
-  List<Block> _getEventBlocksForListenerScalar({
+  List<Block> _getEventBlocksByScalar({
     required Scalar listenerScalar,
   }) {
-    List<Block> foundEventBlocks = [];
+    // FullName, Block
+    Map<String, Block> foundMap = {};
 
     for (Shelf shelf in __shelfMap.values) {
-      List<Block> allBlocks = shelf.blocks;
-      for (Block blk in allBlocks) {
+      for (Block blk in shelf.blocks) {
         if (!blk.fireEvent) {
           continue;
         }
         if (_contains(listenerScalar.listenItemTypes, blk.getItemType())) {
-          foundEventBlocks.add(blk);
+          foundMap[blk.fullName] = blk;
         }
       }
     }
-    return foundEventBlocks;
+    return foundMap.values.toList();
   }
 
   // Callable.
@@ -339,11 +359,11 @@ class _Storage {
   }) {
     final List<Block> foundEventBlocks;
     if (listenerBlockOrScalar.block != null) {
-      foundEventBlocks = _getEventBlocksForListenerBlock(
+      foundEventBlocks = _getEventBlocksByBlock(
         listenerBlock: listenerBlockOrScalar.block!,
       );
     } else {
-      foundEventBlocks = _getEventBlocksForListenerScalar(
+      foundEventBlocks = _getEventBlocksByScalar(
         listenerScalar: listenerBlockOrScalar.scalar!,
       );
     }
@@ -394,7 +414,7 @@ class _Storage {
     Type eventItemType = eventBlock.getItemType();
     print("~~~~~~~~~> Event Item Type: $eventItemType");
     //
-    final List<Scalar> listenerScalars = _getListenerScalars(
+    final List<Scalar> listenerScalars = _getListenerScalarsByBlock(
       eventBlock: eventBlock,
     );
     for (Scalar listenerScalar in listenerScalars) {
@@ -417,7 +437,7 @@ class _Storage {
     }
     //
     final List<Block> listenerBlocks =
-        _getListenerBlocks(eventBlock: eventBlock);
+        _getListenerBlocksByBlock(eventBlock: eventBlock);
     for (Block listenerBlock in listenerBlocks) {
       if (!listenerBlock.hasActiveBlockFragmentWidget(
         alsoCheckChildren: true,

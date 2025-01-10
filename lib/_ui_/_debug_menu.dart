@@ -20,7 +20,7 @@ class DebugMenu extends StatefulWidget {
   }
 }
 
-class _DebugMenuState extends State<DebugMenu> implements FluErrorListener {
+class _DebugMenuState extends State<DebugMenu> implements IErrorListener {
   @override
   void initState() {
     super.initState();

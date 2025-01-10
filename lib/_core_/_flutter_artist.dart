@@ -26,7 +26,7 @@ class _FlutterArtist {
   late final _NotificationEngine __notificationEngine;
   late final CodeFlowLogger codeFlowLogger = CodeFlowLogger();
 
-  final List<FluErrorListener> _errorListeners = [];
+  final List<IErrorListener> _errorListeners = [];
   final List<INotificationListener> _notificationListeners = [];
   int _totalErrorCount = 0;
 
@@ -117,13 +117,13 @@ class _FlutterArtist {
     __notificationEngine.start();
   }
 
-  void addErrorListener(FluErrorListener listener) {
+  void addErrorListener(IErrorListener listener) {
     if (!_errorListeners.contains(listener)) {
       _errorListeners.add(listener);
     }
   }
 
-  void removeErrorListener(FluErrorListener listener) {
+  void removeErrorListener(IErrorListener listener) {
     _errorListeners.remove(listener);
   }
 
@@ -240,7 +240,7 @@ class _FlutterArtist {
   }
 
   void _notifyError() {
-    for (FluErrorListener listener in [..._errorListeners]) {
+    for (IErrorListener listener in [..._errorListeners]) {
       if (listener is State) {
         State state = listener as State;
         if (!state.mounted) {
