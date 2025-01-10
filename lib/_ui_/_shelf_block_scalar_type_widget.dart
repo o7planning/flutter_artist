@@ -72,11 +72,7 @@ class _ShelfBlockScalarTypeWidget extends StatelessWidget {
   }
 
   Widget _buildBlockOrScalar() {
-    Shelf? shelf = FlutterArtist.storage._findShelf(
-      shelfBlockScalarType.shelfType,
-    );
     String tooltipMessage = "";
-
     Widget w;
     if (shelfBlockScalarType.isBlock) {
       w = Text(
@@ -92,7 +88,6 @@ class _ShelfBlockScalarTypeWidget extends StatelessWidget {
       tooltipMessage = shelfBlockScalarType.scalarClassDefinition ?? "";
     }
     return Tooltip(
-      // verticalOffset: -70,
       message: tooltipMessage,
       child: w,
     );
