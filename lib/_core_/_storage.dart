@@ -167,11 +167,11 @@ class _Storage {
     for (String shelfName in __shelfMap.keys) {
       Shelf listenerShelf = __shelfMap[shelfName]!;
 
-      List<Block> listenerBlocks =
+      List<Block> eventBlocks =
           _getEventBlocksByShelf(listenerShelf: listenerShelf);
-      if (listenerBlocks.isNotEmpty) {
+      if (eventBlocks.isNotEmpty) {
         foundShelfMap[shelfName] = listenerShelf;
-        break;
+        continue;
       }
     }
     return foundShelfMap;
