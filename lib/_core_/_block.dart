@@ -1772,7 +1772,7 @@ abstract class Block<I extends Object, D extends Object,
     }
   }
 
-  Future<bool> refreshItemAndSetAsCurrent({
+  Future<bool> prepareToShowOrEdit({
     required I item,
     required bool forceLoadFormData,
     Function()? route,
@@ -1781,7 +1781,7 @@ abstract class Block<I extends Object, D extends Object,
       isLibCode: true,
       route: route,
       ownerClassInstance: this,
-      methodName: "refreshItemAndSetAsCurrent",
+      methodName: "prepareToShowOrEdit",
       parameters: {
         "item": item,
         "forceLoadFormData": forceLoadFormData,
