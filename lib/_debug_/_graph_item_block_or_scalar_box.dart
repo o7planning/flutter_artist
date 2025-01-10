@@ -312,9 +312,9 @@ class _GraphItemBlockOrScalarBoxState
           ? row
           : _tooltip(
               verticalOffset: -85,
-              message: "FILTER: ${blockFilter.name} "
-                  "- Class: ${getClassName(blockFilter)} "
-                  "- Snapshot: ${widget.blockOrScalar.getFilterSnapshotTypeAsString()}",
+              message: "FILTER: ${blockFilter.name} \n"
+                  "Class: ${getClassName(blockFilter)} "
+                  "| Snapshot: ${widget.blockOrScalar.getFilterSnapshotTypeAsString()}",
               child: row,
             ),
     );
@@ -352,15 +352,21 @@ class _GraphItemBlockOrScalarBoxState
     );
   }
 
-  String _tooltipMessage(String name, String className, DataState dataState) {
-    return "$name: $className - Data State: ${dataState.name.toUpperCase()} - "
-        "Items: ${widget.blockOrScalar.itemCount}";
+  String _tooltipMessage(
+      String name, String className, DataState dataState, bool active) {
+    return "$name: $className \n"
+        "Data State: ${dataState.name.toUpperCase()} "
+        "| Visibility: ${active ? 'VISIBLE' : 'HIDDEN'} "
+        "| Items: ${widget.blockOrScalar.itemCount}";
   }
 
-  String _tooltipMessage2(_BlockOrScalar blockOrScalar, DataState dataState) {
+  String _tooltipMessage2(
+      _BlockOrScalar blockOrScalar, DataState dataState, bool active) {
     String className = blockOrScalar.blockOrScalarClassName;
-    return "${blockOrScalar.isBlock ? 'BLOCK' : 'SCALAR'}: $className - Data State: ${dataState.name.toUpperCase()} - "
-        "Items: ${blockOrScalar.itemCount}";
+    return "${blockOrScalar.isBlock ? 'BLOCK' : 'SCALAR'}: $className \n"
+        "Data State: ${dataState.name.toUpperCase()} "
+        "| Visibility: ${active ? 'VISIBLE' : 'HIDDEN'} "
+        "| Items: ${blockOrScalar.itemCount}";
   }
 
   IconData _dataStateIconData(DataState dataState) {
@@ -396,13 +402,13 @@ class _GraphItemBlockOrScalarBoxState
 
   Widget _buildBlockDataState(_BlockOrScalar blockOrScalar) {
     final DataState dataState = blockOrScalar.dataState;
-    bool visibility = blockOrScalar.hasActiveUiComponent();
+    bool active = blockOrScalar.hasActiveUiComponent();
     //
     return Container(
       padding: const EdgeInsets.all(3),
       color: _dataStateBgColor(dataState),
       child: _tooltip(
-        message: _tooltipMessage2(blockOrScalar, dataState),
+        message: _tooltipMessage2(blockOrScalar, dataState, active),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -413,7 +419,7 @@ class _GraphItemBlockOrScalarBoxState
             ),
             const SizedBox(width: 2),
             Icon(
-              _visibilityIconData(visibility),
+              _visibilityIconData(active),
               size: iconSize,
               color: _graphBoxTextColor,
             ),
@@ -435,12 +441,18 @@ class _GraphItemBlockOrScalarBoxState
 
   Widget _buildFormDataState(BlockForm blockForm) {
     final DataState dataState = blockForm.dataState;
+    final bool active = widget.blockOrScalar.hasActiveUiComponent();
     //
     return Container(
       padding: const EdgeInsets.all(3),
       color: _dataStateBgColor(blockForm.dataState),
       child: _tooltip(
-        message: _tooltipMessage("FORM", getClassName(blockForm), dataState),
+        message: _tooltipMessage(
+          "FORM",
+          getClassName(blockForm),
+          dataState,
+          active,
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
