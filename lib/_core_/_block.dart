@@ -1474,14 +1474,6 @@ abstract class Block<I extends Object, D extends Object,
     return true;
   }
 
-  ///
-  /// Check if this item is allowed to be edited or not.
-  /// If true, the user can edit it on the form. Otherwise the form is read-only.
-  ///
-  bool isAllowEdit({required D refreshedItem}) {
-    return true;
-  }
-
   bool hasCurrentItem() {
     return data.currentItemDetail != null;
   }
@@ -1501,15 +1493,21 @@ abstract class Block<I extends Object, D extends Object,
   }
 
   ///
-  /// Check if this block is allowed to be created or not.
-  /// If true, the user can create it on the form.
+  /// Allows creating a new Item or not according to the application logic.
   ///
   bool isAllowCreate() {
     return true;
   }
 
   ///
-  /// Check if this block is allowed to be deleted or not.
+  /// Allows edit of an Item or not according to the application logic.
+  ///
+  bool isAllowEdit({required D refreshedItem}) {
+    return true;
+  }
+
+  ///
+  /// Allows deleting an Item or not according to the application logic.
   ///
   bool isAllowDelete({required D refreshedItem}) {
     return true;
@@ -1523,6 +1521,9 @@ abstract class Block<I extends Object, D extends Object,
     return _isAllowEdit(refreshedItem: currentItem);
   }
 
+  ///
+  /// Allows deleting an Item or not according to the application logic.
+  ///
   bool _isAllowEdit({required D refreshedItem}) {
     try {
       return isAllowEdit(refreshedItem: refreshedItem);
@@ -1538,6 +1539,9 @@ abstract class Block<I extends Object, D extends Object,
     }
   }
 
+  ///
+  /// Allows creating a new Item or not according to the application logic.
+  ///
   bool _isAllowCreate() {
     try {
       return isAllowCreate();
@@ -1553,6 +1557,9 @@ abstract class Block<I extends Object, D extends Object,
     }
   }
 
+  ///
+  /// Allows deleting an Item or not according to the application logic.
+  ///
   bool _isAllowDelete({required D refreshedItem}) {
     try {
       return isAllowDelete(refreshedItem: refreshedItem);
@@ -1568,6 +1575,9 @@ abstract class Block<I extends Object, D extends Object,
     }
   }
 
+  ///
+  /// Allows deleting an Item or not according to the application logic.
+  ///
   bool _isAllowDeleteItem({required I item}) {
     final bool isCurrent = data.isCurrentItem(item: item);
     if (!isCurrent) {
@@ -1606,8 +1616,8 @@ abstract class Block<I extends Object, D extends Object,
       itemIdString: null,
     );
     //
-    D? savedItemDetail = result.data;
-    bool keepInList;
+    final D? savedItemDetail = result.data;
+    final bool keepInList;
     if (savedItemDetail == null) {
       keepInList = false;
     } else {
