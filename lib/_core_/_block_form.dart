@@ -358,6 +358,7 @@ abstract class BlockForm<I extends Object, D extends Object,
       ownerClassInstance: this,
       methodName: "_prepareForm",
       parameters: {
+        "suggestedFormData": suggestedFormData,
         "refreshedItem": refreshedItem,
         "isNew": isNew,
         "forceForm": forceForm,

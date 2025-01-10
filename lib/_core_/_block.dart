@@ -1965,7 +1965,7 @@ abstract class Block<I extends Object, D extends Object,
       route: route,
       ownerClassInstance: this,
       methodName: "prepareToCreate",
-      parameters: {},
+      parameters: {"suggestedFormData": suggestedFormData},
     );
     //
     if (!__checkBeforeFormCreation(showErrorMessage: true)) {
@@ -2045,7 +2045,7 @@ abstract class Block<I extends Object, D extends Object,
       route: null,
       ownerClassInstance: this,
       methodName: "__prepareToCreate",
-      parameters: {},
+      parameters: {"suggestedFormData": suggestedFormData},
     );
     //
     if (!__checkBeforeFormCreation(showErrorMessage: false)) {
