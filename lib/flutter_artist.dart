@@ -112,7 +112,7 @@ part '_core_/_typedef.dart';
 
 part '_debug_/_constants.dart';
 
-part '_debug_/_debug_colors.dart';
+part '_debug_/_debug_colors_and_styles.dart';
 
 part '_debug_/_debug_utils.dart';
 
@@ -145,6 +145,8 @@ part '_debug_/_storage_structure_graph_controller.dart';
 part '_debug_/_storage_structure_graph_view.dart';
 
 part '_debug_/_storage_structure_view.dart';
+
+part '_ui_/_block_or_scalar_info_view.dart';
 
 part '_debug_/_text_size_utils.dart';
 

@@ -93,6 +93,7 @@ const IconData _loggedUserIconData =
 // const IconData _fluIconData = cupertino.CupertinoIcons.;
 
 const IconData _blockIconData = cupertino.CupertinoIcons.calendar;
+const IconData _scalarIconData = cupertino.CupertinoIcons.smallcircle_circle;
 
 const IconData _locationIconData = cupertino.CupertinoIcons.location_solid;
 

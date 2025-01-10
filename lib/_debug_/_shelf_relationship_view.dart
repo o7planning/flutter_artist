@@ -130,6 +130,11 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
                 children: [
                   _ShelfInfoView(shelf: selectedBlockOrScalar?.shelf),
                   const Divider(),
+                  if (selectedBlockOrScalar != null)
+                    _BlockOrScalarInfoView(
+                      blockOrScalar: selectedBlockOrScalar!,
+                    ),
+                  if (selectedBlockOrScalar != null) const Divider(),
                   if (listeners.isNotEmpty)
                     _buildListeners(selectedBlockOrScalar!, listeners),
                   const SizedBox(height: 10),
@@ -148,14 +153,6 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
     }
 
     widget.onSelectShelfBlockType(shelfBlockType);
-  }
-
-  String _getClassName(_BlockOrScalar blockOrScalar) {
-    if (blockOrScalar.block != null) {
-      return getClassName(blockOrScalar.block!);
-    } else {
-      return getClassName(blockOrScalar.scalar!);
-    }
   }
 
   Widget _buildListeners(
@@ -180,7 +177,7 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
                 child: SizedBox(width: 5),
               ),
               TextSpan(
-                text: _getClassName(blockOrScalar),
+                text: blockOrScalar.blockOrScalarClassName,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
@@ -244,7 +241,7 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
                 child: SizedBox(width: 5),
               ),
               TextSpan(
-                text: _getClassName(blockOrScalar),
+                text: blockOrScalar.blockOrScalarClassName,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),

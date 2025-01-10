@@ -6,6 +6,8 @@ abstract class Scalar<D extends Object, S extends FilterSnapshot>
 
   final String? filterName;
 
+  final String? description;
+
   bool __isQuerying = false;
 
   final List<Type> __listenItemTypes;
@@ -24,6 +26,7 @@ abstract class Scalar<D extends Object, S extends FilterSnapshot>
 
   Scalar({
     required this.name,
+    required this.description,
     required this.filterName,
     required this.hiddenBehavior,
     required List<Type> listenTypes,

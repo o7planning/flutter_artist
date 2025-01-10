@@ -44,6 +44,14 @@ class _BlockOrScalar extends Equatable {
     }
   }
 
+  String? get description {
+    if (block != null) {
+      return block!.description;
+    } else {
+      return scalar!.description;
+    }
+  }
+
   String get name {
     if (block != null) {
       return block!.name;
@@ -55,6 +63,26 @@ class _BlockOrScalar extends Equatable {
   bool get isBlock => block != null;
 
   bool get isScalar => scalar != null;
+
+  List<String> get blockOrScalaClassParameters {
+    if (block != null) {
+      return [
+        block!.getItemTypeAsString(),
+        block!.getItemDetailTypeAsString(),
+        block!.getFilterSnapshotTypeAsString()
+      ];
+    } else {
+      return [
+        scalar!.getDataTypeAsString(),
+        scalar!.getFilterSnapshotTypeAsString()
+      ];
+    }
+  }
+
+  String get blockOrScalaClassParametersAsString {
+    List<String> list = blockOrScalaClassParameters;
+    return list.join(", ");
+  }
 
   DataState get dataState {
     if (block != null) {
