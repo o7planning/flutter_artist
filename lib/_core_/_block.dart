@@ -1772,19 +1772,17 @@ abstract class Block<I extends Object, D extends Object,
     }
   }
 
-  Future<bool> prepareToShowOrEdit({
+  Future<bool> prepareToShowAndEdit({
     required I item,
-    required bool forceLoadFormData,
     Function()? route,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: route,
       ownerClassInstance: this,
-      methodName: "prepareToShowOrEdit",
+      methodName: "prepareToShowAndEdit",
       parameters: {
         "item": item,
-        "forceLoadFormData": forceLoadFormData,
       },
     );
     //
@@ -1792,7 +1790,34 @@ abstract class Block<I extends Object, D extends Object,
       item: item,
       justQueried: false,
       suggestedSelection: null,
-      forceForm: forceLoadFormData,
+      forceForm: true,
+    );
+    if (success) {
+      _executeRoute(route: route);
+      return true;
+    }
+    return false;
+  }
+
+  Future<bool> prepareToShow({
+    required I item,
+    Function()? route,
+  }) async {
+    FlutterArtist.codeFlowLogger._addMethodCall(
+      isLibCode: true,
+      route: route,
+      ownerClassInstance: this,
+      methodName: "prepareToShow",
+      parameters: {
+        "item": item,
+      },
+    );
+    //
+    bool success = await _prepareToShowOrEditWithOverlayAndRestorable(
+      item: item,
+      justQueried: false,
+      suggestedSelection: null,
+      forceForm: false,
     );
     if (success) {
       _executeRoute(route: route);
