@@ -1500,7 +1500,7 @@ abstract class Block<I extends Object, D extends Object,
   }
 
   ///
-  /// Allows edit of an Item or not according to the application logic.
+  /// Allows edit an Item or not according to the application logic.
   ///
   bool isAllowEdit({required D refreshedItem}) {
     return true;
@@ -1513,6 +1513,9 @@ abstract class Block<I extends Object, D extends Object,
     return true;
   }
 
+  ///
+  /// Allows edit current item or not according to the application logic.
+  ///
   bool _isAllowEditCurrentItem() {
     D? currentItem = data.currentItemDetail;
     if (currentItem == null) {
@@ -1783,7 +1786,7 @@ abstract class Block<I extends Object, D extends Object,
     }
   }
 
-  Future<bool> prepareToShowAndEdit({
+  Future<bool> prepareToEdit({
     required I item,
     Function()? route,
   }) async {
@@ -1791,7 +1794,7 @@ abstract class Block<I extends Object, D extends Object,
       isLibCode: true,
       route: route,
       ownerClassInstance: this,
-      methodName: "prepareToShowAndEdit",
+      methodName: "prepareToEdit",
       parameters: {
         "item": item,
       },
