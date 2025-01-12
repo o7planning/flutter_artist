@@ -7,7 +7,7 @@ final FlutterArtist = _FlutterArtist();
 const _isOverlayMode = false;
 
 class _FlutterArtist {
-  final _Storage storage = _Storage();
+  _Storage storage = _Storage();
 
   int notificationFetchPeriodInSeconds = 60;
 
@@ -32,8 +32,8 @@ class _FlutterArtist {
 
   final List<Future<dynamic>> __futureTaskList = [];
 
-  _Storage? get globalFluData {
-    return storage;
+  void resetForTestOnly() {
+    storage = _Storage();
   }
 
   ///
@@ -98,7 +98,8 @@ class _FlutterArtist {
     int notificationFetchPeriodInSeconds = 60,
   }) async {
     if (__adapter != null) {
-      throw "FlutterArtistAdapter already registered!";
+      // throw "FlutterArtistAdapter already registered!";
+      return;
     }
     __adapter = flutterArtistAdapter;
     //

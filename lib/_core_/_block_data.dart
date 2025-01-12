@@ -17,6 +17,12 @@ abstract class BlockData<
     return [..._items];
   }
 
+  int get itemCount => _items.length;
+
+  bool get isEmpty => _items.isEmpty;
+
+  bool get isNotEmpty => _items.isNotEmpty;
+
   String? _currentParentItemId;
 
   S? _currentFilterSnapshot;
