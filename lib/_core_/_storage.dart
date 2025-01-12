@@ -44,7 +44,7 @@ class _Storage {
     ShelfCreator? creator = __shelfCreatorMap[shelfName];
     if (creator == null) {
       throw "\n**********************************************************************************************************"
-          "\n '$shelfName' not found. You need to call FlutterArtist.storage.registerShelf(()=> $shelfName())"
+          "\n ERROR: '$shelfName' not found. You need to call:\n FlutterArtist.storage.registerShelf(()=> $shelfName())"
           "\n**********************************************************************************************************";
     }
     shelf = creator() as F;
