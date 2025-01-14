@@ -1730,11 +1730,23 @@ abstract class Block<I extends Object, D extends Object,
     }
   }
 
-  Future<bool> executeQuickCreateAction({
-    required QuickActionData data,
+  Future<bool> executeQuickCreateAction<A extends QuickActionData>({
+    required CustomConfirmation<A>? customConfirmation,
+    required A action,
   }) async {
+    //
+    // Confirmation:
+    //
+    bool confirm = await __showConfirmDialogForAction(
+      customConfirmation: customConfirmation,
+      action: action,
+    );
+    if (!confirm) {
+      return false;
+    }
+    //
     try {
-      bool success = await _executeQuickCreateWithOverlay(data: data);
+      bool success = await _executeQuickCreateWithOverlay(data: action);
       shelf.updateAllWidgets();
       return success;
     } catch (e, stacktrace) {
@@ -1751,9 +1763,47 @@ abstract class Block<I extends Object, D extends Object,
     }
   }
 
-  Future<bool> executeQuickUpdateAction({
+  Future<bool> __showDefaultConfirmDialogForAction(
+    QuickActionData action,
+  ) async {
+    return await showConfirmDialog(
+      message: 'Are you sure you want to perform this action?',
+      details: action.actionInfo,
+    );
+  }
+
+  Future<bool> __showConfirmDialogForAction<A extends QuickActionData>({
+    required A action,
+    required CustomConfirmation<A>? customConfirmation,
+  }) async {
+    if (!action.needToConfirm) {
+      return true;
+    }
+    final CustomConfirmation<A> _confirmForAction =
+        customConfirmation ?? __showDefaultConfirmDialogForAction;
+    //
+    try {
+      return await _confirmForAction(action);
+    } catch (e, stackTrace) {
+      _handleError(
+        className: getClassName(this),
+        methodName: "confirmForAction",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackbar: true,
+      );
+      return false;
+    }
+  }
+
+  ///
+  /// This method will call [callApiQuickUpdate] method.
+  /// So you need to implement [callApiQuickUpdate] method.
+  ///
+  Future<bool> executeQuickUpdateAction<A extends QuickActionData>({
     required I item,
-    required QuickActionData data,
+    required CustomConfirmation<A>? customConfirmation,
+    required A action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -1762,13 +1812,24 @@ abstract class Block<I extends Object, D extends Object,
       methodName: "executeQuickUpdateAction",
       parameters: {
         "item": item,
-        "data": data,
+        "data": action,
       },
     );
+    //
+    // Confirmation:
+    //
+    bool confirm = await __showConfirmDialogForAction(
+      customConfirmation: customConfirmation,
+      action: action,
+    );
+    if (!confirm) {
+      return false;
+    }
+    //
     try {
       bool success = await _executeQuickUpdateWithOverlay(
         item: item,
-        data: data,
+        data: action,
       );
       shelf.updateAllWidgets();
       return success;
@@ -2144,6 +2205,17 @@ abstract class Block<I extends Object, D extends Object,
     return false;
   }
 
+  Future<bool> showConfirmDialog(
+      {required String message, String? details}) async {
+    BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    bool confirm = await dialogs.showConfirmDialog(
+      context: context,
+      message: message,
+      details: details ?? "",
+    );
+    return confirm;
+  }
+
   Future<bool> showConfirmDeleteDialog({String? details}) async {
     BuildContext context = FlutterArtist.adapter.getCurrentContext();
     bool confirm = await dialogs.showConfirmDeleteDialog(
@@ -2430,6 +2502,22 @@ abstract class Block<I extends Object, D extends Object,
     return success;
   }
 
+  ///
+  /// This method is called when you can [executeQuickUpdateAction] method.
+  ///
+  /// ```dart
+  /// Future<ApiResult<D>> callApiQuickUpdate({
+  ///     required I item,
+  ///     required QuickActionData data,
+  /// }) {
+  ///     if(data is SomeAction1) {
+  ///        // Do stuff
+  ///     } else if(data is SomeAction2) {
+  ///        // Do stuff
+  ///     }
+  /// }
+  /// ```
+  ///
   Future<ApiResult<D>> callApiQuickUpdate({
     required I item,
     required QuickActionData data,
@@ -2437,6 +2525,20 @@ abstract class Block<I extends Object, D extends Object,
     throw UnimplementedError("Override me!");
   }
 
+  ///
+  /// This method is called when you can [executeQuickCreateAction] method.
+  /// ```dart
+  /// Future<ApiResult<D>> callApiQuickCreate({
+  ///     required QuickActionData data,
+  /// }) {
+  ///     if(data is SomeAction1) {
+  ///        // Do stuff
+  ///     } else if(data is SomeAction2) {
+  ///        // Do stuff
+  ///     }
+  /// }
+  /// ```
+  ///
   Future<ApiResult<D>> callApiQuickCreate({
     required QuickActionData data,
   }) async {

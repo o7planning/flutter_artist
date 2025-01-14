@@ -1,5 +1,9 @@
 part of '../flutter_artist.dart';
 
+typedef CustomConfirmation<A extends QuickActionData> = Future<bool> Function(
+  A action,
+);
+
 enum ActionConfirmationType {
   delete,
   custom;
