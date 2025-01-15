@@ -21,7 +21,7 @@ class _ShelfStructureGraphViewState extends State<_ShelfStructureGraphView> {
       _CustomBuchheimWalkerConfiguration();
   late Map<String, _GraphItem> graphItemMap;
 
-  String? _highlighBlockFilterName;
+  String? _highlighDataFilterName;
 
   static const double paddingVertical = 60;
   static const double paddingHorizontal = 640;
@@ -131,9 +131,9 @@ class _ShelfStructureGraphViewState extends State<_ShelfStructureGraphView> {
           : _GraphItemBlockOrScalarBox(
               key: Key("Blk-${item.blockOrScalar!.name}"),
               blockOrScalar: item.blockOrScalar!,
-              highlighBlockFilterName: _highlighBlockFilterName,
+              highlighDataFilterName: _highlighDataFilterName,
               refreshGraph: (String? filterName) {
-                _highlighBlockFilterName = filterName;
+                _highlighDataFilterName = filterName;
                 setState(() {});
               },
             ),

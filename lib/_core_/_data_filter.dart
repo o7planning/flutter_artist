@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-abstract class BlockFilter<S extends FilterSnapshot> {
+abstract class DataFilter<S extends FilterSnapshot> {
   late final String name;
 
   late final Shelf shelf;

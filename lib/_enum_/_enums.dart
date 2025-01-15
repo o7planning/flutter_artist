@@ -45,7 +45,7 @@ enum ListBehavior {
 
 enum CodeFlowItemType {
   blockMethod,
-  blockFilterMethod,
+  dataFilterMethod,
   blockFormMethod,
 }
 

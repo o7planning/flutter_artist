@@ -186,7 +186,7 @@ abstract class BlockForm<I extends Object, D extends Object,
   /// This method is called before [prepareFormData] method.
   ///
   Future<ApiResult<void>?>? prepareFormMasterData({
-    required BlockFilter? blockFilter, // TODO: FilterSnapShot??
+    required DataFilter? dataFilter, // TODO: FilterSnapShot??
     required SF? suggestedFormData,
     required D? refreshedItem,
     required bool isNew,
@@ -196,7 +196,7 @@ abstract class BlockForm<I extends Object, D extends Object,
   /// This method is called after [prepareFormMasterData].
   ///
   Map<String, dynamic> prepareFormData({
-    required BlockFilter? blockFilter,
+    required DataFilter? dataFilter,
     required SF? suggestedFormData,
     required D? refreshedItem,
     required bool isNew,
@@ -372,7 +372,7 @@ abstract class BlockForm<I extends Object, D extends Object,
     //
     if (needToLoad) {
       bool success = await __prepareFormMasterData(
-        blockFilter: block.blockFilter,
+        dataFilter: block.dataFilter,
         suggestedFormData: suggestedFormData,
         refreshedItem: refreshedItem,
         isNew: isNew,
@@ -400,7 +400,7 @@ abstract class BlockForm<I extends Object, D extends Object,
 
   // Private method in this class.
   Future<bool> __prepareFormMasterData({
-    required BlockFilter? blockFilter, // TODO: FilterSnapShot??
+    required DataFilter? dataFilter, // TODO: FilterSnapShot??
     required SF? suggestedFormData,
     required D? refreshedItem,
     required bool isNew,
@@ -412,7 +412,7 @@ abstract class BlockForm<I extends Object, D extends Object,
         ownerClassInstance: this,
         methodName: "prepareFormMasterData",
         parameters: {
-          "blockFilter": blockFilter,
+          "dataFilter": dataFilter,
           "suggestedFormData": suggestedFormData,
           "refreshedItem": refreshedItem,
           "isNew": isNew,
@@ -420,7 +420,7 @@ abstract class BlockForm<I extends Object, D extends Object,
       );
       //
       Future<ApiResult<void>?>? future = prepareFormMasterData(
-        blockFilter: blockFilter,
+        dataFilter: dataFilter,
         suggestedFormData: suggestedFormData,
         refreshedItem: refreshedItem,
         isNew: isNew,
@@ -476,7 +476,7 @@ abstract class BlockForm<I extends Object, D extends Object,
           ownerClassInstance: this,
           methodName: "prepareFormData",
           parameters: {
-            "blockFilter": block.blockFilter,
+            "dataFilter": block.dataFilter,
             "suggestedFormData": suggestedFormData,
             "refreshedItem": refreshedItem,
             "isNew": isNew,
@@ -485,7 +485,7 @@ abstract class BlockForm<I extends Object, D extends Object,
         );
         //
         newFormData = prepareFormData(
-          blockFilter: block.blockFilter,
+          dataFilter: block.dataFilter,
           suggestedFormData: suggestedFormData,
           refreshedItem: refreshedItem,
           isNew: isNew,

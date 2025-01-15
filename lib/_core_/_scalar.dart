@@ -26,7 +26,7 @@ abstract class Scalar<D extends Object, S extends FilterSnapshot>
 
   List<Type> get listenItemTypes => [...__listenItemTypes];
 
-  late final BlockFilter<S>? blockFilter;
+  late final DataFilter<S>? dataFilter;
 
   late final ScalarData<D, S> data = ScalarData<D, S>(this);
 
@@ -58,12 +58,12 @@ abstract class Scalar<D extends Object, S extends FilterSnapshot>
 
   void _restoreAll() {
     this.data._restore();
-    this.blockFilter?._restore();
+    this.dataFilter?._restore();
   }
 
   void _applyNewStateAll() {
     this.data._applyNewState();
-    this.blockFilter?._applyNewState();
+    this.dataFilter?._applyNewState();
   }
 
   void updateControlBarWidgets() {
@@ -149,13 +149,13 @@ abstract class Scalar<D extends Object, S extends FilterSnapshot>
     required SuggestedFilterData? suggestedFilterData,
     required bool force,
   }) async {
-    if (blockFilter == null) {
+    if (dataFilter == null) {
       return true;
     }
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
-        ownerClassInstance: blockFilter!,
+        ownerClassInstance: dataFilter!,
         methodName: "prepareData",
         parameters: {
           "suggestedFilterData": suggestedFilterData,
@@ -163,10 +163,10 @@ abstract class Scalar<D extends Object, S extends FilterSnapshot>
         route: null,
       );
       //
-      await blockFilter!.prepareData(suggestedFilterData: suggestedFilterData);
+      await dataFilter!.prepareData(suggestedFilterData: suggestedFilterData);
     } catch (e, stacktrace) {
       _handleError(
-        className: getClassName(blockFilter),
+        className: getClassName(dataFilter),
         methodName: 'prepareData',
         error: e,
         stackTrace: stacktrace,
@@ -177,18 +177,18 @@ abstract class Scalar<D extends Object, S extends FilterSnapshot>
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
-        ownerClassInstance: blockFilter!,
+        ownerClassInstance: dataFilter!,
         methodName: "takeSnapshot",
         parameters: {},
         route: null,
       );
       //
-      S filterSnapshot = blockFilter!.takeSnapshot();
-      blockFilter!._currentSnapshot = filterSnapshot;
+      S filterSnapshot = dataFilter!.takeSnapshot();
+      dataFilter!._currentSnapshot = filterSnapshot;
       return true;
     } catch (e, stacktrace) {
       _handleError(
-        className: getClassName(blockFilter),
+        className: getClassName(dataFilter),
         methodName: 'prepareData',
         error: e,
         stackTrace: stacktrace,
@@ -207,9 +207,9 @@ abstract class Scalar<D extends Object, S extends FilterSnapshot>
       return false;
     }
     //
-    final S? filterSnapshot = blockFilter == null
+    final S? filterSnapshot = dataFilter == null
         ? EmptyFilterSnapshot() as S
-        : blockFilter!._currentSnapshot;
+        : dataFilter!._currentSnapshot;
     //
 
     ApiResult<D> result;

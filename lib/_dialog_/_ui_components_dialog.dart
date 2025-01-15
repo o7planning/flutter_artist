@@ -126,7 +126,7 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
   IconData _getIconData(WidgetStateType type) {
     switch (type) {
       case WidgetStateType.filter:
-        return _blockFilterIconData;
+        return _dataFilterIconData;
       case WidgetStateType.controlBar:
         return _blockControlBarIconData;
       case WidgetStateType.customControlBar:

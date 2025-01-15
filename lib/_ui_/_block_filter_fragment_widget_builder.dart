@@ -1,27 +1,27 @@
 part of '../flutter_artist.dart';
 
-class BlockFilterFragmentWidgetBuilder extends StatefulWidget {
-  final BlockFilter blockFilter;
+class DataFilterFragmentWidgetBuilder extends StatefulWidget {
+  final DataFilter dataFilter;
   final Object ownerClassInstance;
   final String? description;
-  final Widget Function(BlockFilter blkFilter) build;
+  final Widget Function(DataFilter dataFlr) build;
 
-  const BlockFilterFragmentWidgetBuilder({
+  const DataFilterFragmentWidgetBuilder({
     super.key,
     required this.ownerClassInstance,
     required this.description,
-    required this.blockFilter,
+    required this.dataFilter,
     required this.build,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _BlockFilterFragmentWidgetBuilderState();
+    return _DataFilterFragmentWidgetBuilderState();
   }
 }
 
-class _BlockFilterFragmentWidgetBuilderState
-    extends _WidgetState<BlockFilterFragmentWidgetBuilder> {
+class _DataFilterFragmentWidgetBuilderState
+    extends _WidgetState<DataFilterFragmentWidgetBuilder> {
   late final String keyId;
 
   @override
@@ -30,7 +30,7 @@ class _BlockFilterFragmentWidgetBuilderState
   @override
   String get description {
     return widget.description == null || widget.description!.trim().isEmpty
-        ? "${getClassName(widget.blockFilter)} (Filter)"
+        ? "${getClassName(widget.dataFilter)} (Filter)"
         : widget.description!;
   }
 
@@ -47,7 +47,7 @@ class _BlockFilterFragmentWidgetBuilderState
     super.initState();
     //
     keyId = _generateVisibilityDetectorId(
-      prefix: getClassName(widget.blockFilter),
+      prefix: getClassName(widget.dataFilter),
     );
     //
     _addWidgetStateListener(isShowing: true);
@@ -56,7 +56,7 @@ class _BlockFilterFragmentWidgetBuilderState
   @override
   void dispose() {
     super.dispose();
-    widget.blockFilter._removeWidgetStateListener(widgetState: this);
+    widget.dataFilter._removeWidgetStateListener(widgetState: this);
   }
 
   @override
@@ -68,15 +68,15 @@ class _BlockFilterFragmentWidgetBuilderState
         _addWidgetStateListener(isShowing: visiblePercentage > 0);
       },
       child: showMode == ShowMode.production
-          ? widget.build(widget.blockFilter)
+          ? widget.build(widget.dataFilter)
           : _DevContainer(
-              child: widget.build(widget.blockFilter),
+              child: widget.build(widget.dataFilter),
             ),
     );
   }
 
   void _addWidgetStateListener({required bool isShowing}) {
-    widget.blockFilter
+    widget.dataFilter
         ._addWidgetStateListener(widgetState: this, isShowing: isShowing);
   }
 }

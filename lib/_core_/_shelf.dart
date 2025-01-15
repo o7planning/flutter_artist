@@ -44,10 +44,10 @@ abstract class Shelf {
   void __onInit() {
     _shelfStruct = registerStructure();
 
-    for (String blockFilterName in _shelfStruct.blockFilters.keys) {
-      BlockFilter blockFilter = _shelfStruct.blockFilters[blockFilterName]!;
-      blockFilter.name = blockFilterName;
-      blockFilter.shelf = this;
+    for (String dataFilterName in _shelfStruct.dataFilters.keys) {
+      DataFilter dataFilter = _shelfStruct.dataFilters[dataFilterName]!;
+      dataFilter.name = dataFilterName;
+      dataFilter.shelf = this;
     }
 
     List<Scalar> scalars = _shelfStruct.scalars;
@@ -62,34 +62,33 @@ abstract class Shelf {
       __scalars.add(scalar);
       //
       if (scalar.filterName != null) {
-        BlockFilter? blockFilter =
-            _shelfStruct.blockFilters[scalar.filterName!];
-        if (blockFilter == null) {
-          throw "BlockFilter not found '${scalar.filterName}' in '${getClassName(this)}'";
+        DataFilter? dataFilter = _shelfStruct.dataFilters[scalar.filterName!];
+        if (dataFilter == null) {
+          throw "DataFilter not found '${scalar.filterName}' in '${getClassName(this)}'";
         }
         //
         const Type filterSnapshotType = FilterSnapshot;
         final String filterSnapshotBase = filterSnapshotType.toString();
         final String filterSnapshotBF =
-            blockFilter.getFilterSnapshotTypeAsString();
+            dataFilter.getFilterSnapshotTypeAsString();
         final String filterSnapshotB = scalar.getFilterSnapshotTypeAsString();
         //
         if (filterSnapshotBF == filterSnapshotBase) {
           throw "You need to create your own class that extends from '$filterSnapshotBase' "
-              "as Filter-Snapshot for '${getClassName(blockFilter)}'\n"
-              " >> Currently, Filter-Snapshot of '${getClassName(blockFilter)}' Block-Filter is '$filterSnapshotBF'\n";
+              "as Filter-Snapshot for '${getClassName(dataFilter)}'\n"
+              " >> Currently, Filter-Snapshot of '${getClassName(dataFilter)}' Block-Filter is '$filterSnapshotBF'\n";
         }
         //
         if (filterSnapshotBF != filterSnapshotB) {
           throw "Scalar and Block-Filter must have the same Filter-Snapshot type.\n"
               " >> Filter-Snapshot of '${getClassName(scalar)}' Scalar is '$filterSnapshotB'\n"
-              " >> Filter-Snapshot of '${getClassName(blockFilter)}' Block-Filter is '$filterSnapshotBF'\n";
+              " >> Filter-Snapshot of '${getClassName(dataFilter)}' Block-Filter is '$filterSnapshotBF'\n";
         }
         //
-        blockFilter._scalars.add(scalar);
-        scalar.blockFilter = blockFilter;
+        dataFilter._scalars.add(scalar);
+        scalar.dataFilter = dataFilter;
       } else {
-        scalar.blockFilter = null;
+        scalar.dataFilter = null;
       }
     }
 
@@ -109,34 +108,33 @@ abstract class Shelf {
     }
     //
     block.shelf = this;
-    if (block.blockFilterName != null) {
-      BlockFilter? blockFilter =
-          _shelfStruct.blockFilters[block.blockFilterName!];
-      if (blockFilter == null) {
-        throw "BlockFilter not found '${block.blockFilterName}' in '${getClassName(this)}'";
+    if (block.dataFilterName != null) {
+      DataFilter? dataFilter = _shelfStruct.dataFilters[block.dataFilterName!];
+      if (dataFilter == null) {
+        throw "DataFilter not found '${block.dataFilterName}' in '${getClassName(this)}'";
       }
       const Type filterSnapshotType = FilterSnapshot;
       final String filterSnapshotBase = filterSnapshotType.toString();
       final String filterSnapshotBF =
-          blockFilter.getFilterSnapshotTypeAsString();
+          dataFilter.getFilterSnapshotTypeAsString();
       final String filterSnapshotB = block.getFilterSnapshotTypeAsString();
       //
       if (filterSnapshotBF == filterSnapshotBase) {
         throw "You need to create your own class that extends from '$filterSnapshotBase' "
-            "as Filter-Snapshot for '${getClassName(blockFilter)}'\n"
-            " >> Currently, Filter-Snapshot of '${getClassName(blockFilter)}' Block-Filter is '$filterSnapshotBF'\n";
+            "as Filter-Snapshot for '${getClassName(dataFilter)}'\n"
+            " >> Currently, Filter-Snapshot of '${getClassName(dataFilter)}' Block-Filter is '$filterSnapshotBF'\n";
       }
       //
       if (filterSnapshotBF != filterSnapshotB) {
         throw "Block and Block-Filter must have the same Filter-Snapshot type.\n"
             " >> Filter-Snapshot of '${getClassName(block)}' Block is '$filterSnapshotB'\n"
-            " >> Filter-Snapshot of '${getClassName(blockFilter)}' Block-Filter is '$filterSnapshotBF'\n";
+            " >> Filter-Snapshot of '${getClassName(dataFilter)}' Block-Filter is '$filterSnapshotBF'\n";
       }
       //
-      blockFilter._blocks.add(block);
-      block.blockFilter = blockFilter;
+      dataFilter._blocks.add(block);
+      block.dataFilter = dataFilter;
     } else {
-      block.blockFilter = null;
+      block.dataFilter = null;
       //
       const Type emptyFilterSnapshotType = EmptyFilterSnapshot;
       final String filterSnapshotEmpty = emptyFilterSnapshotType.toString();
@@ -212,11 +210,11 @@ abstract class Shelf {
     return __blockMap[blockName];
   }
 
-  BlockFilter? findBlockFilter(String blockFilterName) {
-    return _shelfStruct.blockFilters[blockFilterName];
+  DataFilter? findDataFilter(String dataFilterName) {
+    return _shelfStruct.dataFilters[dataFilterName];
   }
 
-  List<String> get filterNames => [..._shelfStruct.blockFilters.keys];
+  List<String> get filterNames => [..._shelfStruct.dataFilters.keys];
 
   // ***************************************************************************
   // ***************************************************************************
@@ -469,7 +467,7 @@ abstract class Shelf {
     block.updatePaginationWidgets();
     block.updateControlBarWidgets();
     block.blockForm?.updateFormWidgets();
-    block.blockFilter?.updateWidgets();
+    block.dataFilter?.updateWidgets();
     for (Block childBlock in block._childBlocks) {
       __updateAllWidgetsCascade(childBlock);
     }

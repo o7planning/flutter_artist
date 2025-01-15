@@ -70,8 +70,8 @@ class _CodeFlowItem {
     return ownerClassInstance is Block;
   }
 
-  bool isBlockFilter() {
-    return ownerClassInstance is BlockFilter;
+  bool isDataFilter() {
+    return ownerClassInstance is DataFilter;
   }
 
   bool isBlockForm() {
@@ -79,7 +79,7 @@ class _CodeFlowItem {
   }
 
   bool isOtherClass() {
-    return !isBlock() && !isBlockFilter() && !isBlockForm();
+    return !isBlock() && !isDataFilter() && !isBlockForm();
   }
 
   bool isPrivateMethodCall() {
@@ -112,8 +112,8 @@ class _CodeFlowItem {
   Shelf? _getShelf() {
     if (ownerClassInstance is Block) {
       return (ownerClassInstance as Block).shelf;
-    } else if (ownerClassInstance is BlockFilter) {
-      return (ownerClassInstance as BlockFilter).shelf;
+    } else if (ownerClassInstance is DataFilter) {
+      return (ownerClassInstance as DataFilter).shelf;
     } else if (ownerClassInstance is BlockForm) {
       return (ownerClassInstance as BlockForm).block.shelf;
     }

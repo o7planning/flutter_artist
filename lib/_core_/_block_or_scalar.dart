@@ -20,11 +20,11 @@ class _BlockOrScalar extends Equatable {
     }
   }
 
-  BlockFilter? get dataFilter {
+  DataFilter? get dataFilter {
     if (block != null) {
-      return block!.blockFilter;
+      return block!.dataFilter;
     } else {
-      return scalar!.blockFilter;
+      return scalar!.dataFilter;
     }
   }
 

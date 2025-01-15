@@ -60,9 +60,9 @@ abstract class Block<I extends Object, D extends Object,
 
   final BlockHiddenBehavior hiddenBehavior;
 
-  final String? blockFilterName;
+  final String? dataFilterName;
 
-  late final BlockFilter<S>? blockFilter;
+  late final DataFilter<S>? dataFilter;
 
   late final Block? parent;
 
@@ -110,7 +110,7 @@ abstract class Block<I extends Object, D extends Object,
     required this.description,
     int pageSize = 20,
     this.hiddenBehavior = BlockHiddenBehavior.none,
-    required this.blockFilterName,
+    required this.dataFilterName,
     required this.blockForm,
     required this.fireEvent,
     required List<Type> listenItemTypes,
@@ -361,8 +361,8 @@ abstract class Block<I extends Object, D extends Object,
       }
     }
     //
-    if (withFilter && blockFilter != null) {
-      ret.addAll(blockFilter!._findMountedWidgetStates(activeOnly: activeOnly));
+    if (withFilter && dataFilter != null) {
+      ret.addAll(dataFilter!._findMountedWidgetStates(activeOnly: activeOnly));
     }
     //
     if ((withForm || withControlBar) && blockForm != null) {
@@ -448,7 +448,7 @@ abstract class Block<I extends Object, D extends Object,
     required SuggestedFilterData? suggestedFilterData,
     required bool force,
   }) async {
-    if (blockFilter == null) {
+    if (dataFilter == null) {
       return true;
     }
     return await FlutterArtist.executeTask(
@@ -466,13 +466,13 @@ abstract class Block<I extends Object, D extends Object,
     required SuggestedFilterData? suggestedFilterData,
     required bool force,
   }) async {
-    if (blockFilter == null) {
+    if (dataFilter == null) {
       return true;
     }
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
-        ownerClassInstance: blockFilter!,
+        ownerClassInstance: dataFilter!,
         methodName: "prepareData",
         parameters: {
           "suggestedFilterData": suggestedFilterData,
@@ -480,10 +480,10 @@ abstract class Block<I extends Object, D extends Object,
         route: null,
       );
       //
-      await blockFilter!.prepareData(suggestedFilterData: suggestedFilterData);
+      await dataFilter!.prepareData(suggestedFilterData: suggestedFilterData);
     } catch (e, stacktrace) {
       _handleError(
-        className: getClassName(blockFilter),
+        className: getClassName(dataFilter),
         methodName: 'prepareData',
         error: e,
         stackTrace: stacktrace,
@@ -494,18 +494,18 @@ abstract class Block<I extends Object, D extends Object,
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
-        ownerClassInstance: blockFilter!,
+        ownerClassInstance: dataFilter!,
         methodName: "takeSnapshot",
         parameters: {},
         route: null,
       );
       //
-      S filterSnapshot = blockFilter!.takeSnapshot();
-      blockFilter!._currentSnapshot = filterSnapshot;
+      S filterSnapshot = dataFilter!.takeSnapshot();
+      dataFilter!._currentSnapshot = filterSnapshot;
       return true;
     } catch (e, stacktrace) {
       _handleError(
-        className: getClassName(blockFilter),
+        className: getClassName(dataFilter),
         methodName: 'prepareData',
         error: e,
         stackTrace: stacktrace,
@@ -768,9 +768,9 @@ abstract class Block<I extends Object, D extends Object,
     PageData<I>? pageData;
     DataState dataState = DataState.pending;
     //
-    final S filterSnapshot = blockFilter == null
+    final S filterSnapshot = dataFilter == null
         ? EmptyFilterSnapshot() as S
-        : blockFilter!._currentSnapshot!;
+        : dataFilter!._currentSnapshot!;
     //
     PageableData callingPageable;
     if (needRealQuery) {
@@ -1000,10 +1000,10 @@ abstract class Block<I extends Object, D extends Object,
     // printFormDebug(
     //     " -------------------------> NORMAL! - ${data._dataState.name.toUpperCase()}");
     this.data._restore();
-    this.blockFilter?._restore();
+    this.dataFilter?._restore();
     for (var childBlock in _childBlocks) {
       childBlock.__restoreThisAndChildren();
-      childBlock.blockFilter?._restore();
+      childBlock.dataFilter?._restore();
     }
   }
 
@@ -1012,10 +1012,10 @@ abstract class Block<I extends Object, D extends Object,
     //     " -------------------------> NORMAL! - ${data._dataState.name.toUpperCase()}");
 
     this.data._applyNewState();
-    this.blockFilter?._applyNewState();
+    this.dataFilter?._applyNewState();
     for (var childBlock in _childBlocks) {
       childBlock.__applyNewStateThisAndChildren();
-      childBlock.blockFilter?._applyNewState();
+      childBlock.dataFilter?._applyNewState();
     }
   }
 

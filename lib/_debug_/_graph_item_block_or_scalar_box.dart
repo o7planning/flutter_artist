@@ -2,7 +2,7 @@ part of '../flutter_artist.dart';
 
 class _GraphItemBlockOrScalarBox extends StatefulWidget {
   final _BlockOrScalar blockOrScalar;
-  final String? highlighBlockFilterName;
+  final String? highlighDataFilterName;
 
   final Function(String? filterName) refreshGraph;
 
@@ -10,7 +10,7 @@ class _GraphItemBlockOrScalarBox extends StatefulWidget {
     required super.key,
     required this.blockOrScalar,
     required this.refreshGraph,
-    required this.highlighBlockFilterName,
+    required this.highlighDataFilterName,
   });
 
   @override
@@ -181,13 +181,13 @@ class _GraphItemBlockOrScalarBoxState
   }
 
   Widget _buildFilterColor() {
-    BlockFilter? blockFilter = widget.blockOrScalar.dataFilter;
+    DataFilter? dataFilter = widget.blockOrScalar.dataFilter;
     Color color = Colors.white;
-    if (blockFilter != null) {
+    if (dataFilter != null) {
       List<String> filterNames = widget.blockOrScalar.shelf.filterNames
         ..sort((a, b) => a.compareTo(b));
       //
-      int idx = filterNames.indexOf(blockFilter.name);
+      int idx = filterNames.indexOf(dataFilter.name);
       color = _filterColors.length > idx //
           ? _filterColors[idx]
           : Colors.transparent;
@@ -241,27 +241,27 @@ class _GraphItemBlockOrScalarBoxState
   }
 
   String _getFilterTextRow1() {
-    BlockFilter? blockFilter = widget.blockOrScalar.dataFilter;
-    return blockFilter == null ? "[No Filter]" : blockFilter.name;
+    DataFilter? dataFilter = widget.blockOrScalar.dataFilter;
+    return dataFilter == null ? "[No Filter]" : dataFilter.name;
   }
 
   String _getFilterTextRow2() {
-    BlockFilter? blockFilter = widget.blockOrScalar.dataFilter;
+    DataFilter? dataFilter = widget.blockOrScalar.dataFilter;
     String filterSnapshotType =
         widget.blockOrScalar.getFilterSnapshotTypeAsString();
-    return "${blockFilter == null ? '' : getClassName(blockFilter)} [$filterSnapshotType]";
+    return "${dataFilter == null ? '' : getClassName(dataFilter)} [$filterSnapshotType]";
   }
 
   Widget _buildFilterInfo() {
-    BlockFilter? blockFilter = widget.blockOrScalar.dataFilter;
+    DataFilter? dataFilter = widget.blockOrScalar.dataFilter;
     //
     Widget row = MouseRegion(
-      onEnter: blockFilter == null
+      onEnter: dataFilter == null
           ? null
           : (_) {
-              widget.refreshGraph(blockFilter.name);
+              widget.refreshGraph(dataFilter.name);
             },
-      onExit: blockFilter == null
+      onExit: dataFilter == null
           ? null
           : (_) {
               widget.refreshGraph(null);
@@ -274,7 +274,7 @@ class _GraphItemBlockOrScalarBoxState
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const Icon(
-                _blockFilterIconData,
+                _dataFilterIconData,
                 size: 16,
               ),
               const SizedBox(width: 5),
@@ -300,22 +300,22 @@ class _GraphItemBlockOrScalarBoxState
       decoration: BoxDecoration(
         border: Border.all(
           width: 0.5,
-          color: widget.highlighBlockFilterName != null &&
-                  blockFilter?.name == widget.highlighBlockFilterName
+          color: widget.highlighDataFilterName != null &&
+                  dataFilter?.name == widget.highlighDataFilterName
               ? _graphBoxHighlighFilterColor
               : Colors.grey,
         ),
-        color: widget.highlighBlockFilterName != null &&
-                blockFilter?.name == widget.highlighBlockFilterName
+        color: widget.highlighDataFilterName != null &&
+                dataFilter?.name == widget.highlighDataFilterName
             ? _graphBoxHighlighFilterColor
             : Colors.transparent,
       ),
-      child: blockFilter == null
+      child: dataFilter == null
           ? row
           : _buildCustomTooltip(
               verticalOffset: -85,
-              message: "FILTER: ${blockFilter.name} \n"
-                  "Class: ${getClassName(blockFilter)} "
+              message: "FILTER: ${dataFilter.name} \n"
+                  "Class: ${getClassName(dataFilter)} "
                   "| Snapshot: ${widget.blockOrScalar.getFilterSnapshotTypeAsString()}",
               child: row,
             ),
