@@ -79,14 +79,14 @@ abstract class Shelf {
           throw __registerError(
               "You need to create your own class that extends from '$filterSnapshotBase' "
               "as Filter-Snapshot for '${getClassName(dataFilter)}'\n"
-              " >> Currently, Filter-Snapshot of '${getClassName(dataFilter)}' Block-Filter is '$filterSnapshotBF'");
+              " >> Currently, Filter-Snapshot of '${getClassName(dataFilter)}'  Data-Filter is '$filterSnapshotBF'");
         }
         //
         if (filterSnapshotBF != filterSnapshotB) {
           throw __registerError(
-              "Scalar and Block-Filter must have the same Filter-Snapshot type.\n"
+              "Scalar and  Data-Filter must have the same Filter-Snapshot type.\n"
               " >> Filter-Snapshot of '${getClassName(scalar)}' Scalar is '$filterSnapshotB'\n"
-              " >> Filter-Snapshot of '${getClassName(dataFilter)}' Block-Filter is '$filterSnapshotBF'");
+              " >> Filter-Snapshot of '${getClassName(dataFilter)}'  Data-Filter is '$filterSnapshotBF'");
         }
         //
         dataFilter._scalars.add(scalar);
@@ -129,14 +129,14 @@ abstract class Shelf {
         throw __registerError(
             "You need to create your own class that extends from '$filterSnapshotBase' "
             "as Filter-Snapshot for '${getClassName(dataFilter)}'\n"
-            " >> Currently, Filter-Snapshot of '${getClassName(dataFilter)}' Block-Filter is '$filterSnapshotBF'");
+            " >> Currently, Filter-Snapshot of '${getClassName(dataFilter)}'  Data-Filter is '$filterSnapshotBF'");
       }
       //
       if (filterSnapshotBF != filterSnapshotB) {
         throw __registerError(
-            "Block and Block-Filter must have the same Filter-Snapshot type.\n"
+            "Block and  Data-Filter must have the same Filter-Snapshot type.\n"
             " >> Filter-Snapshot of '${getClassName(block)}' Block is '$filterSnapshotB'\n"
-            " >> Filter-Snapshot of '${getClassName(dataFilter)}' Block-Filter is '$filterSnapshotBF'");
+            " >> Filter-Snapshot of '${getClassName(dataFilter)}'  Data-Filter is '$filterSnapshotBF'");
       }
       //
       dataFilter._blocks.add(block);
@@ -151,7 +151,7 @@ abstract class Shelf {
       if (filterSnapshotB != filterSnapshotEmpty) {
         throw __registerError(
             "Filter-Snapshot of '${getClassName(block)}' block must be '$filterSnapshotEmpty' "
-            "because this block does not have a Block-Filter.\n"
+            "because this block does not have a  Data-Filter.\n"
             " >> Currently, its Filter-Snapshot is '$filterSnapshotB'");
       }
     }
