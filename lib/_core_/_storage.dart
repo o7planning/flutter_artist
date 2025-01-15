@@ -1,8 +1,6 @@
 part of '../flutter_artist.dart';
 
 class _Storage {
-  // final _StorageChangeManager _changeManager = _StorageChangeManager();
-
   final List<Shelf> _rencentShelves = [];
 
   final Map<String, ShelfCreator> __shelfCreatorMap = {};
@@ -27,11 +25,12 @@ class _Storage {
   }
 
   void registerShelf<F extends Shelf>(ShelfCreator<F> builder) {
-    final String key = _getShelfName(F);
-    ShelfCreator? mng = __shelfCreatorMap[key];
-    if (mng == null) {
-      __shelfCreatorMap[key] = builder;
+    final String shelfName = _getShelfName(F);
+    ShelfCreator? creator = __shelfCreatorMap[shelfName];
+    if (creator == null) {
+      __shelfCreatorMap[shelfName] = builder;
     }
+    _createShelf(shelfName);
   }
 
   F _createShelf<F extends Shelf>(String shelfName) {
@@ -49,7 +48,7 @@ class _Storage {
     }
     shelf = creator() as F;
     __shelfMap[shelfName] = shelf;
-    // _changeManager._registerShelf(shelfName, shelf);
+    //
     return shelf;
   }
 
@@ -60,22 +59,22 @@ class _Storage {
   }
 
   Shelf? _findShelf(Type shelfType) {
-    final String key = _getShelfName(shelfType);
-    Shelf? shelf = __shelfMap[key];
-    shelf ??= _createShelf(key);
+    final String shelfName = _getShelfName(shelfType);
+    Shelf? shelf = __shelfMap[shelfName];
+    shelf ??= _createShelf(shelfName);
     return shelf;
   }
 
   F findShelf<F extends Shelf>() {
-    final String key = _getShelfName(F);
-    Shelf? shelf = __shelfMap[key];
-    shelf ??= _createShelf(key);
+    final String shelfName = _getShelfName(F);
+    Shelf? shelf = __shelfMap[shelfName];
+    shelf ??= _createShelf(shelfName);
     return shelf as F;
   }
 
   F? findOrNullShelf<F extends Shelf>() {
-    final String key = _getShelfName(F);
-    F? shelf = __shelfMap[key] as F?;
+    final String shelfName = _getShelfName(F);
+    F? shelf = __shelfMap[shelfName] as F?;
     return shelf;
   }
 
