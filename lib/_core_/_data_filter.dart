@@ -13,6 +13,22 @@ abstract class DataFilter<S extends FilterSnapshot> {
 
   List<Scalar> get scalars => [..._scalars];
 
+  int __currentSnapshotId = 0;
+  int? __currentSuccessSnapshotId;
+
+  int? get currentSuccessSnapshotId => __currentSuccessSnapshotId;
+
+  ///
+  /// Map<SnapshotId, FilterSnapshot>
+  ///
+  final Map<int, S> __filterSnapshots = {};
+
+  S? get currentSuccessFilterSnapshot {
+    return __currentSuccessSnapshotId == null
+        ? null
+        : __filterSnapshots[__currentSuccessSnapshotId];
+  }
+
   S? _currentSnapshot;
 
   List<Restorable> get restorableCriteria;
@@ -22,11 +38,11 @@ abstract class DataFilter<S extends FilterSnapshot> {
   ///
   /// This method is always called whenever the [Block.queryXxx()] method is called.
   ///
-  /// When calling this method from outside you can pass parameter [suggestedFilterData].
-  /// This parameter will always be null if you call the [Block.queryXxx()] method.
+  /// When calling this method from outside you can pass parameter [suggestedFilterSnapshot].
+  /// This parameter will always be null if you call the [Block.queryXxx()] method. (??????)
   ///
   /// ```Dart
-  /// Future<void> prepareData({SuggestedFilterData? suggestedFilterData}) {
+  /// Future<void> prepareData({MyFilterSnapshot? suggestedFilterSnapshot}) {
   ///     ApiResult<dynamic>? r1 = await callYourApi1();
   ///     // Throws ApiError if r1.isError()
   ///     r1?.throwIfError();
@@ -39,6 +55,7 @@ abstract class DataFilter<S extends FilterSnapshot> {
   ///
   Future<void> prepareData({
     SuggestedFilterData? suggestedFilterData,
+    S? suggestedFilterSnapshot,
   });
 
   String getFilterSnapshotTypeAsString() {
@@ -52,6 +69,7 @@ abstract class DataFilter<S extends FilterSnapshot> {
 
   Future<bool> queryBlocks({
     SuggestedFilterData? suggestedFilterData,
+    S? suggestedFilterSnapshot,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -59,6 +77,7 @@ abstract class DataFilter<S extends FilterSnapshot> {
       methodName: "queryBlocks",
       parameters: {
         "suggestedFilterData": suggestedFilterData,
+        "suggestedFilterSnapshot": suggestedFilterSnapshot,
       },
       route: null,
     );
