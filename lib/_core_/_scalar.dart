@@ -1,6 +1,26 @@
 part of '../flutter_artist.dart';
 
-abstract class Scalar<D, S extends FilterSnapshot> extends DataContainer {
+///
+/// [V] - Value.
+///
+/// ```
+/// class OrderSummaryScalar
+///        extends Scalar<OrderSummaryData, EmptyFilterSnapshot> {
+///
+/// }
+/// ```
+///
+/// Query and get data:
+///
+/// ```dart
+/// OrderSummaryShelf shelf = FlutterArtist.storage.findShelf();
+/// OrderSummaryScalar scalar = shelf.findOrderSummaryShelf();
+/// await scalar.query();
+///
+/// OrderSummaryData value = scalar.data.value;
+/// ```
+///
+abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
   final String name;
 
   String get _shortPathName {
@@ -27,7 +47,7 @@ abstract class Scalar<D, S extends FilterSnapshot> extends DataContainer {
 
   late final DataFilter<S>? dataFilter;
 
-  late final ScalarData<D, S> data = ScalarData<D, S>(this);
+  late final ScalarData<V, S> data = ScalarData<V, S>(this);
 
   DataState get dataState => data._dataState;
 
@@ -44,7 +64,7 @@ abstract class Scalar<D, S extends FilterSnapshot> extends DataContainer {
   }) : __listenItemTypes = listenTypes;
 
   String getDataTypeAsString() {
-    return D.toString();
+    return V.toString();
   }
 
   String getFilterSnapshotTypeAsString() {
@@ -104,7 +124,7 @@ abstract class Scalar<D, S extends FilterSnapshot> extends DataContainer {
     return success;
   }
 
-  Future<ApiResult<D>> callApiQuery({
+  Future<ApiResult<V>> callApiQuery({
     required S? filterSnapshot,
   });
 
@@ -213,7 +233,7 @@ abstract class Scalar<D, S extends FilterSnapshot> extends DataContainer {
         : dataFilter!._currentSnapshot;
     //
 
-    ApiResult<D> result;
+    ApiResult<V> result;
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,

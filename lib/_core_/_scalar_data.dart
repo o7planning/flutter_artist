@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
-class ScalarData<D, S extends FilterSnapshot> {
-  final Scalar<D, S> scalar;
+class ScalarData<V, S extends FilterSnapshot> {
+  final Scalar<V, S> scalar;
 
   bool __isTemporaryMode = false;
 
@@ -9,11 +9,11 @@ class ScalarData<D, S extends FilterSnapshot> {
 
   S? get currentFilterSnapshot => _currentFilterSnapshot;
 
-  D? _data;
+  V? _value;
 
-  D? get data => _data;
+  V? get value => _value;
 
-  D? __dataBk;
+  V? __valueBk;
 
   DataState _dataState = DataState.pending;
 
@@ -30,11 +30,11 @@ class ScalarData<D, S extends FilterSnapshot> {
 
   void _updateFrom({
     required S? filterSnapshot,
-    required D? data,
+    required V? data,
     required DataState dataState,
   }) {
     _currentFilterSnapshot = filterSnapshot;
-    _data = data;
+    _value = data;
     _dataState = dataState;
   }
 
@@ -42,7 +42,7 @@ class ScalarData<D, S extends FilterSnapshot> {
     if (!__isTemporaryMode) {
       __isTemporaryMode = true;
       __dataStateBk = _dataState;
-      __dataBk = _data;
+      __valueBk = _value;
     }
   }
 
@@ -51,7 +51,7 @@ class ScalarData<D, S extends FilterSnapshot> {
     if (__isTemporaryMode) {
       __isTemporaryMode = false;
       __dataStateBk = DataState.pending;
-      __dataBk = null;
+      __valueBk = null;
     }
   }
 
@@ -60,7 +60,7 @@ class ScalarData<D, S extends FilterSnapshot> {
     if (__isTemporaryMode) {
       __isTemporaryMode = false;
       _dataState = __dataStateBk;
-      _data = __dataBk;
+      _value = __valueBk;
     }
   }
 }

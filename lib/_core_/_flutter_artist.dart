@@ -32,6 +32,7 @@ class _FlutterArtist {
 
   final List<Future<dynamic>> __futureTaskList = [];
 
+  @Deprecated("Do Not Use")
   void resetForTestOnly() {
     storage = _Storage();
   }

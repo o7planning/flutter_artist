@@ -16,7 +16,7 @@ class _BlockOrScalar extends Equatable {
     if (block != null) {
       return block!.data.items.length;
     } else {
-      return scalar!.data.data == null ? 0 : 1;
+      return scalar!.data.value == null ? 0 : 1;
     }
   }
 

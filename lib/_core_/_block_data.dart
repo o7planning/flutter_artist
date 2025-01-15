@@ -283,7 +283,6 @@ abstract class BlockData<
     return null;
   }
 
-
   I? findItemById(ID id) {
     for (I item in _items) {
       if (block.getItemId(item) == id) {
