@@ -445,7 +445,7 @@ abstract class Block<I extends Object, D extends Object,
   }
 
   Future<bool> _prepareFilterWithOverlay({
-    required SuggestedFilterData? suggestedFilterData,
+    required S? suggestedFilterSnapshot,
     required bool force,
   }) async {
     if (dataFilter == null) {
@@ -454,7 +454,7 @@ abstract class Block<I extends Object, D extends Object,
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
         return await __prepareFilter(
-          suggestedFilterData: suggestedFilterData,
+          suggestedFilterSnapshot: suggestedFilterSnapshot,
           force: force,
         );
       },
@@ -463,7 +463,7 @@ abstract class Block<I extends Object, D extends Object,
 
   // Private method. Only for use in this class.
   Future<bool> __prepareFilter({
-    required SuggestedFilterData? suggestedFilterData,
+    required S? suggestedFilterSnapshot,
     required bool force,
   }) async {
     if (dataFilter == null) {
@@ -475,12 +475,14 @@ abstract class Block<I extends Object, D extends Object,
         ownerClassInstance: dataFilter!,
         methodName: "prepareData",
         parameters: {
-          "suggestedFilterData": suggestedFilterData,
+          "suggestedFilterSnapshot": suggestedFilterSnapshot,
         },
         route: null,
       );
       //
-      await dataFilter!.prepareData(suggestedFilterData: suggestedFilterData);
+      await dataFilter!.prepareData(
+        suggestedFilterSnapshot: suggestedFilterSnapshot,
+      );
     } catch (e, stacktrace) {
       _handleError(
         className: getClassName(dataFilter),
@@ -539,7 +541,7 @@ abstract class Block<I extends Object, D extends Object,
     bool success = await _queryWithOverlayAndRestorable(
       queryType: QueryType.emptyQuery,
       listBehavior: ListBehavior.replace,
-      suggestedFilterData: null,
+      suggestedFilterSnapshot: null,
       postQueryBehavior: PostQueryBehavior.selectAvailableItem,
       suggestedSelection: null,
       pageable: null, // Reset to default pageable.
@@ -565,7 +567,7 @@ abstract class Block<I extends Object, D extends Object,
     bool success = await _queryWithOverlayAndRestorable(
       queryType: QueryType.emptyQuery,
       listBehavior: ListBehavior.replace,
-      suggestedFilterData: null,
+      suggestedFilterSnapshot: null,
       postQueryBehavior: PostQueryBehavior.createNewItem,
       suggestedSelection: null,
       pageable: null, // Reset to default pageable.
@@ -583,7 +585,7 @@ abstract class Block<I extends Object, D extends Object,
   @nonVirtual
   Future<bool> query({
     ListBehavior listBehavior = ListBehavior.replace,
-    SuggestedFilterData? suggestedFilterData,
+    S? suggestedFilterSnapshot,
     SuggestedSelection? suggestedSelection,
     PageableData? pageable,
     Function()? route,
@@ -594,7 +596,7 @@ abstract class Block<I extends Object, D extends Object,
       ownerClassInstance: this,
       methodName: "query",
       parameters: {
-        "suggestedFilterData": suggestedFilterData,
+        "suggestedFilterSnapshot": suggestedFilterSnapshot,
         "suggestedSelection": suggestedSelection,
         "pageable": pageable,
       },
@@ -607,7 +609,7 @@ abstract class Block<I extends Object, D extends Object,
       success = await _queryWithOverlayAndRestorable(
         queryType: QueryType.forceQuery,
         listBehavior: listBehavior,
-        suggestedFilterData: suggestedFilterData,
+        suggestedFilterSnapshot: suggestedFilterSnapshot,
         postQueryBehavior: PostQueryBehavior.selectAvailableItem,
         suggestedSelection: suggestedSelection,
         pageable: pageable,
@@ -628,7 +630,7 @@ abstract class Block<I extends Object, D extends Object,
   ///
   @nonVirtual
   Future<bool> queryAndPrepareToEdit({
-    SuggestedFilterData? suggestedFilterData,
+    S? suggestedFilterSnapshot,
     ListBehavior listBehavior = ListBehavior.replace,
     SuggestedSelection? suggestedSelection,
     PageableData? pageable,
@@ -640,7 +642,7 @@ abstract class Block<I extends Object, D extends Object,
       ownerClassInstance: this,
       methodName: "queryAndPrepareToEdit",
       parameters: {
-        "suggestedFilterData": suggestedFilterData,
+        "suggestedFilterSnapshot": suggestedFilterSnapshot,
         "suggestedSelection": suggestedSelection,
         "pageable": pageable,
       },
@@ -649,7 +651,7 @@ abstract class Block<I extends Object, D extends Object,
     bool success = await _queryWithOverlayAndRestorable(
       queryType: QueryType.forceQuery,
       listBehavior: listBehavior,
-      suggestedFilterData: suggestedFilterData,
+      suggestedFilterSnapshot: suggestedFilterSnapshot,
       postQueryBehavior: PostQueryBehavior.selectAvailableItemToEdit,
       suggestedSelection: suggestedSelection,
       pageable: pageable,
@@ -664,7 +666,7 @@ abstract class Block<I extends Object, D extends Object,
   Future<bool> _queryWithOverlayAndRestorable({
     required QueryType queryType,
     required ListBehavior listBehavior,
-    required SuggestedFilterData? suggestedFilterData,
+    required S? suggestedFilterSnapshot,
     required PostQueryBehavior postQueryBehavior,
     required SuggestedSelection? suggestedSelection,
     required PageableData? pageable,
@@ -674,7 +676,7 @@ abstract class Block<I extends Object, D extends Object,
         return __queryWithRestorable(
           queryType: queryType,
           listBehavior: listBehavior,
-          suggestedFilterData: suggestedFilterData,
+          suggestedFilterSnapshot: suggestedFilterSnapshot,
           postQueryBehavior: postQueryBehavior,
           suggestedSelection: suggestedSelection,
           pageable: pageable,
@@ -687,7 +689,7 @@ abstract class Block<I extends Object, D extends Object,
   Future<bool> __queryWithRestorable({
     required QueryType queryType,
     required ListBehavior listBehavior,
-    required SuggestedFilterData? suggestedFilterData,
+    required S? suggestedFilterSnapshot,
     required PostQueryBehavior postQueryBehavior,
     required SuggestedSelection? suggestedSelection,
     required PageableData? pageable,
@@ -697,7 +699,7 @@ abstract class Block<I extends Object, D extends Object,
       bool success = await __queryThisAndChildren(
         queryType: queryType,
         listBehavior: listBehavior,
-        suggestedFilterData: suggestedFilterData,
+        suggestedFilterSnapshot: suggestedFilterSnapshot,
         postQueryBehavior: postQueryBehavior,
         suggestedSelection: suggestedSelection,
         pageable: pageable,
@@ -729,13 +731,13 @@ abstract class Block<I extends Object, D extends Object,
   Future<bool> __queryThisAndChildren({
     required QueryType queryType,
     required ListBehavior listBehavior,
-    required SuggestedFilterData? suggestedFilterData,
+    required S? suggestedFilterSnapshot,
     required PostQueryBehavior postQueryBehavior,
     required SuggestedSelection? suggestedSelection,
     required PageableData? pageable,
   }) async {
     bool success = await __prepareFilter(
-      suggestedFilterData: suggestedFilterData,
+      suggestedFilterSnapshot: suggestedFilterSnapshot,
       force: true,
     );
     if (!success) {
@@ -1175,7 +1177,7 @@ abstract class Block<I extends Object, D extends Object,
       bool success = await childBlock.__queryThisAndChildren(
         queryType: QueryType.queryIfNeed,
         listBehavior: ListBehavior.replace,
-        suggestedFilterData: null,
+        suggestedFilterSnapshot: null,
         postQueryBehavior: PostQueryBehavior.selectAvailableItem,
         suggestedSelection: childQueryDirective,
         pageable: null, // TODO: Null or last pageable?
@@ -1366,7 +1368,7 @@ abstract class Block<I extends Object, D extends Object,
   }
 
   Future<bool> _executeQuickActionWithOverlay({
-    required SuggestedFilterData? suggestedFilterData,
+    required S? suggestedFilterSnapshot,
     required SuggestedSelection? suggestedSelection,
     required QuickActionData action,
     required AfterQuickAction? afterQuickAction,
@@ -1374,7 +1376,7 @@ abstract class Block<I extends Object, D extends Object,
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
         bool success = await __executeQuickAction(
-          suggestedFilterData: suggestedFilterData,
+          suggestedFilterSnapshot: suggestedFilterSnapshot,
           suggestedSelection: suggestedSelection,
           data: action,
           afterQuickAction: afterQuickAction,
@@ -1394,7 +1396,7 @@ abstract class Block<I extends Object, D extends Object,
   }
 
   Future<bool> __executeQuickAction({
-    required SuggestedFilterData? suggestedFilterData,
+    required S? suggestedFilterSnapshot,
     required SuggestedSelection? suggestedSelection,
     required QuickActionData data,
     required AfterQuickAction? afterQuickAction,
@@ -1445,7 +1447,7 @@ abstract class Block<I extends Object, D extends Object,
             success = await __queryThisAndChildren(
               queryType: QueryType.forceQuery,
               listBehavior: ListBehavior.replace,
-              suggestedFilterData: suggestedFilterData,
+              suggestedFilterSnapshot: suggestedFilterSnapshot,
               postQueryBehavior: PostQueryBehavior.selectAvailableItem,
               suggestedSelection: suggestedSelection,
               pageable: null, // TODO: Xem lai!
@@ -1668,7 +1670,7 @@ abstract class Block<I extends Object, D extends Object,
   /// so you need to override [callApiQuickAction] method.
   ///
   Future<bool> executeQuickAction({
-    SuggestedFilterData? suggestedFilterData,
+    S? suggestedFilterSnapshot,
     SuggestedSelection? suggestedSelection,
     required ActionConfirmation? actionConfirmation,
     required QuickActionData action,
@@ -1680,7 +1682,7 @@ abstract class Block<I extends Object, D extends Object,
       ownerClassInstance: this,
       methodName: "executeQuickAction",
       parameters: {
-        "suggestedFilterData": suggestedFilterData,
+        "suggestedFilterSnapshot": suggestedFilterSnapshot,
         "suggestedSelection": suggestedSelection,
         "action": action,
         "afterQuickAction": afterQuickAction,
@@ -1709,7 +1711,7 @@ abstract class Block<I extends Object, D extends Object,
     }
     try {
       bool success = await _executeQuickActionWithOverlay(
-        suggestedFilterData: suggestedFilterData,
+        suggestedFilterSnapshot: suggestedFilterSnapshot,
         suggestedSelection: suggestedSelection,
         action: action,
         afterQuickAction: afterQuickAction,

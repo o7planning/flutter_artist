@@ -420,7 +420,7 @@ abstract class Shelf {
           success = await blkOrForm.block!._queryWithOverlayAndRestorable(
             queryType: queryType,
             listBehavior: ListBehavior.replace,
-            suggestedFilterData: null,
+            suggestedFilterSnapshot: null,
             postQueryBehavior: PostQueryBehavior.selectAvailableItem,
             suggestedSelection: null,
             pageable: null, // TODO: Reset?

@@ -13,7 +13,7 @@ abstract class DataFilter<S extends FilterSnapshot> {
 
   List<Scalar> get scalars => [..._scalars];
 
-  int __currentSnapshotId = 0;
+  int __currentTryingSnapshotId = 0;
   int? __currentSuccessSnapshotId;
 
   int? get currentSuccessSnapshotId => __currentSuccessSnapshotId;
@@ -21,12 +21,12 @@ abstract class DataFilter<S extends FilterSnapshot> {
   ///
   /// Map<SnapshotId, FilterSnapshot>
   ///
-  final Map<int, S> __filterSnapshots = {};
+  final Map<int, S> __filterSnapshotsMap = {};
 
   S? get currentSuccessFilterSnapshot {
     return __currentSuccessSnapshotId == null
         ? null
-        : __filterSnapshots[__currentSuccessSnapshotId];
+        : __filterSnapshotsMap[__currentSuccessSnapshotId];
   }
 
   S? _currentSnapshot;
@@ -35,10 +35,19 @@ abstract class DataFilter<S extends FilterSnapshot> {
 
   final Map<_WidgetState, bool> _widgetStateListeners = {};
 
+  String getFilterSnapshotTypeAsString() {
+    return S.toString();
+  }
+
+  ///
+  /// This method is called immediately after calling [prepareData()] method if there are no errors.
+  ///
+  S takeSnapshot();
+
   ///
   /// This method is always called whenever the [Block.queryXxx()] method is called.
   ///
-  /// When calling this method from outside you can pass parameter [suggestedFilterSnapshot].
+  /// When calling [DataFilter.queryBlock()] method from outside you can pass parameter [suggestedFilterSnapshot].
   /// This parameter will always be null if you call the [Block.queryXxx()] method. (??????)
   ///
   /// ```Dart
@@ -54,21 +63,33 @@ abstract class DataFilter<S extends FilterSnapshot> {
   /// ```
   ///
   Future<void> prepareData({
-    SuggestedFilterData? suggestedFilterData,
     S? suggestedFilterSnapshot,
   });
 
-  String getFilterSnapshotTypeAsString() {
-    return S.toString();
+  Future<_TryingFilter<S>?> __prepareData({
+    S? suggestedFilterSnapshot,
+  }) async {
+    try {
+      __currentTryingSnapshotId + 1;
+      final int tryingSnapshotId = __currentTryingSnapshotId;
+      //
+      await prepareData(
+        suggestedFilterSnapshot: suggestedFilterSnapshot,
+      );
+      // If no error:
+      S tryingSnapshot = takeSnapshot();
+      __filterSnapshotsMap[tryingSnapshotId] = tryingSnapshot;
+      return _TryingFilter(
+        tryingFilterSnapshotId: tryingSnapshotId,
+        tryingFilterSnapshot: tryingSnapshot,
+      );
+    } catch (e, stackTrace) {
+      // TODO: Xu ly Error!
+      return null;
+    }
   }
 
-  ///
-  /// This method is called immediately after calling prepareData() method if there are no errors.
-  ///
-  S takeSnapshot();
-
   Future<bool> queryBlocks({
-    SuggestedFilterData? suggestedFilterData,
     S? suggestedFilterSnapshot,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -76,15 +97,29 @@ abstract class DataFilter<S extends FilterSnapshot> {
       ownerClassInstance: this,
       methodName: "queryBlocks",
       parameters: {
-        "suggestedFilterData": suggestedFilterData,
         "suggestedFilterSnapshot": suggestedFilterSnapshot,
       },
       route: null,
     );
     //
+    _TryingFilter<S>? tryingFilter = await __prepareData(
+      suggestedFilterSnapshot: suggestedFilterSnapshot,
+    );
+    //
+    if (tryingFilter == null) {
+      return false;
+    }
+    final int tryingFilterSnapshotId = tryingFilter.tryingFilterSnapshotId;
+    final S tryingFilterSnapshot = tryingFilter.tryingFilterSnapshot;
+    //
+    for (Scalar scalar in _scalars) {
+      scalar.query();
+    }
     bool success = true;
     for (Block block in _blocks) {
-      bool s = await block.query(suggestedFilterData: suggestedFilterData);
+      bool s = await block.query(
+        suggestedFilterSnapshot: suggestedFilterSnapshot,
+      );
       if (!s) {
         success = s;
       }

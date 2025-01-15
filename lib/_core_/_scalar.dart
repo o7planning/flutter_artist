@@ -146,7 +146,7 @@ abstract class Scalar<D extends Object, S extends FilterSnapshot>
 
   // Private method. Only for use in this class.
   Future<bool> __prepareFilter({
-    required SuggestedFilterData? suggestedFilterData,
+    required S? suggestedFilterSnapshot,
     required bool force,
   }) async {
     if (dataFilter == null) {
@@ -158,12 +158,14 @@ abstract class Scalar<D extends Object, S extends FilterSnapshot>
         ownerClassInstance: dataFilter!,
         methodName: "prepareData",
         parameters: {
-          "suggestedFilterData": suggestedFilterData,
+          "suggestedFilterSnapshot": suggestedFilterSnapshot,
         },
         route: null,
       );
       //
-      await dataFilter!.prepareData(suggestedFilterData: suggestedFilterData);
+      await dataFilter!.prepareData(
+        suggestedFilterSnapshot: suggestedFilterSnapshot,
+      );
     } catch (e, stacktrace) {
       _handleError(
         className: getClassName(dataFilter),
@@ -200,7 +202,7 @@ abstract class Scalar<D extends Object, S extends FilterSnapshot>
 
   Future<bool> __queryThisAndChildren() async {
     bool success = await __prepareFilter(
-      suggestedFilterData: null, // suggestedFilterData,
+      suggestedFilterSnapshot: null,
       force: true,
     );
     if (!success) {
