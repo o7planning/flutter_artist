@@ -8,7 +8,7 @@ abstract class DataContainer {
     required String methodName,
     required dynamic error,
     required StackTrace stackTrace,
-    required bool showSnackbar,
+    required bool showSnackBar,
   }) {
     ApiError apiError;
     if (error is ApiError) {
@@ -38,7 +38,7 @@ abstract class DataContainer {
     //
     print(msg);
     print(stackTrace);
-    if (showSnackbar) {
+    if (showSnackBar) {
       showErrorSnackbar(
         message: msg,
         errorDetails: apiError.errorDetails,
@@ -50,7 +50,7 @@ abstract class DataContainer {
     required String methodName,
     required String message,
     required List<String>? errorDetails,
-    required bool showSnackbar,
+    required bool showSnackBar,
   }) {
     FlutterArtist.errorLogger.addError(
       shelfName: FlutterArtist.storage._getShelfName(shelf.runtimeType),
@@ -65,7 +65,7 @@ abstract class DataContainer {
     );
     String msg = "Call ${getClassName(this)}.$methodName() error: $message";
     print(msg);
-    if (showSnackbar) {
+    if (showSnackBar) {
       showErrorSnackbar(
         message: msg,
         errorDetails: errorDetails,

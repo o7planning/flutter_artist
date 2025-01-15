@@ -492,7 +492,7 @@ abstract class Block<
         methodName: 'prepareData',
         error: e,
         stackTrace: stacktrace,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       return false;
     }
@@ -514,7 +514,7 @@ abstract class Block<
         methodName: 'prepareData',
         error: e,
         stackTrace: stacktrace,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       return false;
     }
@@ -721,7 +721,7 @@ abstract class Block<
         methodName: 'query',
         error: e,
         stackTrace: stacktrace,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       //
       _restoreAll();
@@ -801,7 +801,7 @@ abstract class Block<
           methodName: "callApiQuery",
           error: e,
           stackTrace: stacktrace,
-          showSnackbar: true,
+          showSnackBar: true,
         );
         //
         return false;
@@ -811,7 +811,7 @@ abstract class Block<
           methodName: "callApiQuery",
           message: result.errorMessage!,
           errorDetails: result.errorDetails,
-          showSnackbar: true,
+          showSnackBar: true,
         );
         return false;
       }
@@ -1293,7 +1293,7 @@ abstract class Block<
         methodName: 'callApiQuickCreate',
         error: e,
         stackTrace: stacktrace,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       //
       return false;
@@ -1311,7 +1311,7 @@ abstract class Block<
         methodName: "_processSaveActionRestResult",
         error: e,
         stackTrace: stacktrace,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       //
       return false;
@@ -1346,7 +1346,7 @@ abstract class Block<
         methodName: 'callApiQuickUpdate',
         error: e,
         stackTrace: stacktrace,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       return false;
     }
@@ -1363,7 +1363,7 @@ abstract class Block<
         methodName: '_processSaveActionRestResult',
         error: e,
         stackTrace: stacktrace,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       //
       return false;
@@ -1412,7 +1412,7 @@ abstract class Block<
           methodName: "callApiQuickAction",
           message: result.errorMessage!,
           errorDetails: result.errorDetails,
-          showSnackbar: true,
+          showSnackBar: true,
         );
         return false;
       } else {
@@ -1424,7 +1424,7 @@ abstract class Block<
         methodName: 'callApiQuickAction',
         error: e,
         stackTrace: stacktrace,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       return false;
     }
@@ -1469,7 +1469,7 @@ abstract class Block<
           methodName: methodName,
           error: e,
           stackTrace: stacktrace,
-          showSnackbar: true,
+          showSnackBar: true,
         );
         //
         _restoreAll();
@@ -1541,7 +1541,7 @@ abstract class Block<
         methodName: "isAllowEdit",
         error: e,
         stackTrace: stackTrace,
-        showSnackbar: false,
+        showSnackBar: false,
       );
       return false;
     }
@@ -1559,7 +1559,7 @@ abstract class Block<
         methodName: "isAllowCreate",
         error: e,
         stackTrace: stackTrace,
-        showSnackbar: false,
+        showSnackBar: false,
       );
       return false;
     }
@@ -1578,7 +1578,7 @@ abstract class Block<
         methodName: "isAllowDelete",
         error: e,
         stackTrace: stackTrace,
-        showSnackbar: false,
+        showSnackBar: false,
       );
       return false;
     }
@@ -1615,7 +1615,7 @@ abstract class Block<
         methodName: calledMethodName,
         message: result.errorMessage!,
         errorDetails: result.errorDetails,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       return false;
     }
@@ -1727,7 +1727,7 @@ abstract class Block<
         methodName: "executeQuickAction",
         error: e,
         stackTrace: stacktrace,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       //
       shelf.updateAllWidgets();
@@ -1760,7 +1760,7 @@ abstract class Block<
         methodName: 'executeQuickCreateAction',
         error: e,
         stackTrace: stacktrace,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       //
       shelf.updateAllWidgets();
@@ -1795,7 +1795,7 @@ abstract class Block<
         methodName: "confirmForAction",
         error: e,
         stackTrace: stackTrace,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       return false;
     }
@@ -1844,7 +1844,7 @@ abstract class Block<
         methodName: "quickUpdate",
         error: e,
         stackTrace: stacktrace,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       //
       shelf.updateAllWidgets();
@@ -1954,7 +1954,7 @@ abstract class Block<
         methodName: "prepareToEdit",
         error: e,
         stackTrace: stacktrace,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       //
       _restoreAll();
@@ -2009,7 +2009,7 @@ abstract class Block<
           methodName: "callApiRefreshItem",
           error: e,
           stackTrace: stacktrace,
-          showSnackbar: true,
+          showSnackBar: true,
         );
         //
         return false;
@@ -2019,7 +2019,7 @@ abstract class Block<
           methodName: "callApiRefreshItem",
           message: result.errorMessage!,
           errorDetails: result.errorDetails,
-          showSnackbar: true,
+          showSnackBar: true,
         );
         return false;
       } else {
@@ -2135,7 +2135,7 @@ abstract class Block<
         methodName: "prepareToCreate",
         error: e,
         stackTrace: stacktrace,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       //
       _restoreAll();
@@ -2270,7 +2270,7 @@ abstract class Block<
           methodName: "callApiRefreshItemByIdAsString",
           error: e,
           stackTrace: stackTrace,
-          showSnackbar: true,
+          showSnackBar: true,
         );
         //
         return false;
@@ -2281,7 +2281,7 @@ abstract class Block<
           methodName: "callApiRefreshItemByIdAsString",
           message: result.errorMessage!,
           errorDetails: result.errorDetails,
-          showSnackbar: true,
+          showSnackBar: true,
         );
         return false;
       }
@@ -2297,7 +2297,7 @@ abstract class Block<
           methodName: "convertItemDetailToItem",
           error: e,
           stackTrace: stackTrace,
-          showSnackbar: true,
+          showSnackBar: true,
         );
         //
         return false;
@@ -2376,7 +2376,7 @@ abstract class Block<
         methodName: "delete",
         error: e,
         stackTrace: stacktrace,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       //
       _restoreAll();
@@ -2418,7 +2418,7 @@ abstract class Block<
           methodName: "callApiDelete",
           error: e,
           stackTrace: stacktrace,
-          showSnackbar: true,
+          showSnackBar: true,
         );
         //
         return false;
@@ -2428,7 +2428,7 @@ abstract class Block<
           methodName: "callApiDelete",
           message: result.errorMessage!,
           errorDetails: result.errorDetails,
-          showSnackbar: true,
+          showSnackBar: true,
         );
         return false;
       } else {
@@ -2469,7 +2469,7 @@ abstract class Block<
         methodName: "__delete",
         error: e,
         stackTrace: stacktrace,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       return false;
     }

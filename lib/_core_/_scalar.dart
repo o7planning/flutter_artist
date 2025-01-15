@@ -136,7 +136,7 @@ abstract class Scalar<D extends Object, S extends FilterSnapshot>
         methodName: 'query',
         error: e,
         stackTrace: stacktrace,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       //
       _restoreAll();
@@ -172,7 +172,7 @@ abstract class Scalar<D extends Object, S extends FilterSnapshot>
         methodName: 'prepareData',
         error: e,
         stackTrace: stacktrace,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       return false;
     }
@@ -194,7 +194,7 @@ abstract class Scalar<D extends Object, S extends FilterSnapshot>
         methodName: 'prepareData',
         error: e,
         stackTrace: stacktrace,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       return false;
     }
@@ -233,7 +233,7 @@ abstract class Scalar<D extends Object, S extends FilterSnapshot>
         methodName: "callApiQuery",
         error: e,
         stackTrace: stacktrace,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       //
       return false;
@@ -243,7 +243,7 @@ abstract class Scalar<D extends Object, S extends FilterSnapshot>
         methodName: "callApiQuery",
         message: result.errorMessage!,
         errorDetails: result.errorDetails,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       return false;
     }

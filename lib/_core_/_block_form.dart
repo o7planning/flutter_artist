@@ -217,7 +217,7 @@ abstract class BlockForm<I extends Object, D extends Object,
     required String methodName,
     required dynamic error,
     required StackTrace stackTrace,
-    required bool showSnackbar,
+    required bool showSnackBar,
   }) {
     FlutterArtist.errorLogger.addError(
       shelfName: FlutterArtist.storage._getShelfName(block.shelf.runtimeType),
@@ -228,7 +228,7 @@ abstract class BlockForm<I extends Object, D extends Object,
     String msg = "Call ${getClassName(this)}.$methodName() error: $error";
     print(msg);
     print(stackTrace);
-    if (showSnackbar) {
+    if (showSnackBar) {
       showErrorSnackbar(
         message: msg,
         errorDetails: null,
@@ -284,7 +284,7 @@ abstract class BlockForm<I extends Object, D extends Object,
         methodName: "saveForm",
         error: e,
         stackTrace: stacktrace,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       //
       block._restoreAll();
@@ -323,7 +323,7 @@ abstract class BlockForm<I extends Object, D extends Object,
         methodName: calledMethodName,
         error: e,
         stackTrace: stacktrace,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       __isSaving = false;
       return false;
@@ -339,7 +339,7 @@ abstract class BlockForm<I extends Object, D extends Object,
         methodName: '_processSaveActionRestResult',
         error: e,
         stackTrace: stacktrace,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       //
       return false;
@@ -433,7 +433,7 @@ abstract class BlockForm<I extends Object, D extends Object,
             methodName: "prepareFormMasterData",
             message: result.errorMessage!,
             errorDetails: result.errorDetails,
-            showSnackbar: true,
+            showSnackBar: true,
           );
           return false;
         }
@@ -444,7 +444,7 @@ abstract class BlockForm<I extends Object, D extends Object,
         methodName: "prepareFormMasterData",
         error: e,
         stackTrace: stacktrace,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       //
       return false;
@@ -495,7 +495,7 @@ abstract class BlockForm<I extends Object, D extends Object,
           methodName: "prepareFormData",
           error: e,
           stackTrace: stacktrace,
-          showSnackbar: true,
+          showSnackBar: true,
         );
         //
         return false;
@@ -515,7 +515,7 @@ abstract class BlockForm<I extends Object, D extends Object,
         methodName: "prepareFormData",
         error: e,
         stackTrace: stacktrace,
-        showSnackbar: true,
+        showSnackBar: true,
       );
       //
       return false;
