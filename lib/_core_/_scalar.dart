@@ -3,7 +3,7 @@ part of '../flutter_artist.dart';
 abstract class Scalar<D, S extends FilterSnapshot> extends DataContainer {
   final String name;
 
-  String get _fullName {
+  String get _shortPathName {
     return "${shelf.name} >> $name";
   }
 

@@ -226,7 +226,7 @@ class _Storage {
         eventBlock: eventBlock,
       );
       for (var scalar in listenerScalars) {
-        foundMap[scalar._fullName] = scalar;
+        foundMap[scalar._shortPathName] = scalar;
       }
     }
     return foundMap.values.toList();
@@ -269,7 +269,7 @@ class _Storage {
       }
       for (Scalar scalar in shelf.scalars) {
         if (_contains(scalar.listenItemTypes, eventBlock.getItemType())) {
-          foundMap[scalar._fullName] = scalar;
+          foundMap[scalar._shortPathName] = scalar;
         }
       }
     }
