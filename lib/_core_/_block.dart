@@ -18,8 +18,11 @@ part of '../flutter_artist.dart';
 /// }
 /// ```
 ///
-abstract class Block<I extends Object, D extends Object,
-    S extends FilterSnapshot, SF extends SuggestedFormData> extends BaseBlk {
+abstract class Block<
+    I extends Object,
+    D extends Object,
+    S extends FilterSnapshot,
+    SF extends SuggestedFormData> extends DataContainer {
   QueryMode _queryMode = QueryMode.lazy;
   late QueryMode _tempQueryMode = _queryMode;
 

@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-abstract class BaseBlk {
+abstract class DataContainer {
   late final Shelf shelf;
 
   void _handleError({
