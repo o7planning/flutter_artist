@@ -43,7 +43,7 @@ abstract class Block<I extends Object, D extends Object,
 
   final String name;
 
-  String get _fullName {
+  String get _shortPathName {
     return "${shelf.name} > $name";
   }
 

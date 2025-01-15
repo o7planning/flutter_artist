@@ -189,7 +189,7 @@ class _Storage {
         listenerBlock: listenerBlock,
       );
       for (var eb in eventBlocks) {
-        foundMap[eb._fullName] = eb;
+        foundMap[eb._shortPathName] = eb;
       }
     }
     for (Scalar listenerScalar in listenerShelf.scalars) {
@@ -197,7 +197,7 @@ class _Storage {
         listenerScalar: listenerScalar,
       );
       for (var eb in eventBlocks) {
-        foundMap[eb._fullName] = eb;
+        foundMap[eb._shortPathName] = eb;
       }
     }
     return foundMap.values.toList();
@@ -212,7 +212,7 @@ class _Storage {
         eventBlock: eventBlock,
       );
       for (var lb in listenerBlocks) {
-        foundMap[lb._fullName] = lb;
+        foundMap[lb._shortPathName] = lb;
       }
     }
     return foundMap.values.toList();
@@ -249,7 +249,7 @@ class _Storage {
       for (Block blockToCheck in shelf.blocks) {
         final Type eventItemType = eventBlock.getItemType();
         if (_contains(blockToCheck.listenItemTypes, eventItemType)) {
-          foundMap[blockToCheck._fullName] = blockToCheck;
+          foundMap[blockToCheck._shortPathName] = blockToCheck;
         }
       }
     }
@@ -328,7 +328,7 @@ class _Storage {
           continue;
         }
         if (_contains(listenerBlock.listenItemTypes, blk.getItemType())) {
-          foundMap[blk._fullName] = blk;
+          foundMap[blk._shortPathName] = blk;
         }
       }
     }
@@ -348,7 +348,7 @@ class _Storage {
           continue;
         }
         if (_contains(listenerScalar.listenItemTypes, blk.getItemType())) {
-          foundMap[blk._fullName] = blk;
+          foundMap[blk._shortPathName] = blk;
         }
       }
     }
