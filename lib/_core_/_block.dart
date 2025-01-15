@@ -1,11 +1,22 @@
 part of '../flutter_artist.dart';
 
 ///
+/// Block example:
+/// ```dart
+/// class EmployeeBlock
+///       extends Block<int,EmployeeInfo,EmployeeData,
+///                      EmptyFilterSnapshot,SuggestedFormData> {
+///
+/// }
+/// ```
+/// [ID] is Id Type of Item. For Example: [int].
+///
 /// [I] is item. For example:
 /// ```dart
 /// class EmployeeInfo {
 ///     int id;
 ///     String name;
+///     ...
 /// }
 /// ```
 /// [D]: Item Detail. For example:
@@ -15,6 +26,12 @@ part of '../flutter_artist.dart';
 ///     String name;
 ///     String email;
 ///     String phoneNumber;
+/// }
+/// ```
+/// You need to implement [convertItemDetailToItem] method to convert Item-Detail to Item.
+/// ```dart
+/// EmployeeInfo convertItemDetailToItem({EmployeeData itemDetail}) {
+///    return EmployeeInfo(itemDetail.id, itemDetail.name);
 /// }
 /// ```
 ///
