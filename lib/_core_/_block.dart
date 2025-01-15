@@ -636,7 +636,7 @@ abstract class Block<
   Future<bool> queryAndPrepareToEdit({
     S? suggestedFilterSnapshot,
     ListBehavior listBehavior = ListBehavior.replace,
-    SuggestedSelection? suggestedSelection,
+    SuggestedSelection<ID>? suggestedSelection,
     PageableData? pageable,
     Function()? route,
   }) async {
@@ -846,9 +846,9 @@ abstract class Block<
       // OLD Current Item
       I? suggestedCurrentItem = data.currentItem;
       if (suggestedSelection != null &&
-          suggestedSelection.itemIdStringToSetAsCurrent != null) {
+          suggestedSelection.itemIdToSetAsCurrent != null) {
         suggestedCurrentItem = data.findItemById(
-          suggestedSelection.itemIdStringToSetAsCurrent!,
+          suggestedSelection.itemIdToSetAsCurrent!,
         );
       }
 

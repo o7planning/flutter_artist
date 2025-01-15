@@ -1,12 +1,12 @@
 part of '../flutter_artist.dart';
 
 class SuggestedSelection<ID> {
-  final ID? itemIdStringToSetAsCurrent;
+  final ID? itemIdToSetAsCurrent;
 
   Map<String, SuggestedSelection> children = {};
 
   SuggestedSelection({
-    required this.itemIdStringToSetAsCurrent,
+    required this.itemIdToSetAsCurrent,
   });
 
   SuggestedSelection? findChildDirective(String childBlockName) {
