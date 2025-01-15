@@ -1,6 +1,6 @@
 import 'package:flutter_artist/restorable/restorable.dart';
 
-class RestorableObject<E extends Object> extends Restorable<E?> {
+class RestorableObject<E> extends Restorable<E?> {
   E Function(E value) _copy;
 
   RestorableObject(

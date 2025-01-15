@@ -19,6 +19,7 @@ part of '../flutter_artist.dart';
 /// ```
 ///
 abstract class Block<
+    ID extends Object,
     I extends Object,
     D extends Object,
     S extends FilterSnapshot,
@@ -71,7 +72,7 @@ abstract class Block<
 
   String? get parentBlockName => parent?.name;
 
-  final BlockForm<I, D, SF>? blockForm;
+  final BlockForm<ID, I, D, SF>? blockForm;
 
   final List<Block> _childBlocks;
 
@@ -92,8 +93,8 @@ abstract class Block<
           pageSize: __pageSize,
         );
 
-  late final BlockData<I, D, S, SF> data =
-      _InternalBlockData<I, D, S, SF>.empty(
+  late final BlockData<ID, I, D, S, SF> data =
+      _InternalBlockData<ID, I, D, S, SF>.empty(
     this,
     __pageable,
   );
@@ -830,10 +831,10 @@ abstract class Block<
       dataState = DataState.pending;
     }
     //
-    String? currentParentItem = parentItemIdString;
+    Object? currentParentItem = parentItemId;
     data._updateFrom(
       forceListBehavior: forceListBehavior,
-      currentParentItem: currentParentItem,
+      currentParentItemId: currentParentItem,
       filterSnapshot: filterSnapshot,
       pageable: callingPageable,
       pageData: pageData,
@@ -846,7 +847,7 @@ abstract class Block<
       I? suggestedCurrentItem = data.currentItem;
       if (suggestedSelection != null &&
           suggestedSelection.itemIdStringToSetAsCurrent != null) {
-        suggestedCurrentItem = data.findItemByIdString(
+        suggestedCurrentItem = data.findItemById(
           suggestedSelection.itemIdStringToSetAsCurrent!,
         );
       }
@@ -909,12 +910,12 @@ abstract class Block<
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
 
-  String? getCurrentItemIdString() {
+  ID? getCurrentItemId() {
     if (data.currentItemDetail == null) {
       return null;
     }
     I item = convertItemDetailToItem(itemDetail: data.currentItemDetail!);
-    return getItemIdAsString(item);
+    return getItemId(item);
   }
 
   I convertItemDetailToItem({required D itemDetail});
@@ -925,13 +926,13 @@ abstract class Block<
         : convertItemDetailToItem(itemDetail: itemDetail);
   }
 
-  String getItemIdAsString(I item);
+  ID getItemId(I item);
 
-  String? get parentItemIdString {
+  Object? get parentItemId {
     if (parent == null) {
       return null;
     } else {
-      return parent!.getCurrentItemIdString();
+      return parent!.getCurrentItemId();
     }
   }
 
@@ -1214,10 +1215,10 @@ abstract class Block<
       S? filterSnapshot = data.currentFilterSnapshot;
       //
       PageData<I> emptyAppPage = PageData.empty();
-      String? currentParentItem = parentItemIdString;
+      Object? currentParentItem = parentItemId;
 
       data._updateFrom(
-        currentParentItem: currentParentItem,
+        currentParentItemId: currentParentItem,
         filterSnapshot: filterSnapshot,
         forceListBehavior: ListBehavior.replace,
         pageable: __pageable,
@@ -2242,18 +2243,18 @@ abstract class Block<
     );
   }
 
-  Future<bool> deleteItemByIdAsString({required String itemId}) async {
+  Future<bool> deleteItemById({required ID itemId}) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       ownerClassInstance: this,
-      methodName: "deleteItemByIdAsString",
+      methodName: "deleteItemById",
       parameters: {
         "itemId": itemId,
       },
     );
     //
-    I? item = data.findItemByIdString(itemId);
+    I? item = data.findItemById(itemId);
     final bool inList = item != null;
     //
     if (item == null) {
@@ -2261,13 +2262,13 @@ abstract class Block<
       try {
         result = await FlutterArtist.executeTask(
           asyncFunction: () async {
-            return await callApiFindItemByIdAsString(itemId: itemId);
+            return await callApiFindItemById(itemId: itemId);
           },
         );
       } catch (e, stackTrace) {
         _handleError(
           className: getClassName(this),
-          methodName: "callApiRefreshItemByIdAsString",
+          methodName: "callApiFindItemById",
           error: e,
           stackTrace: stackTrace,
           showSnackBar: true,
@@ -2278,7 +2279,7 @@ abstract class Block<
       //
       if (result.isError()) {
         _handleRestError(
-          methodName: "callApiRefreshItemByIdAsString",
+          methodName: "callApiFindItemById",
           message: result.errorMessage!,
           errorDetails: result.errorDetails,
           showSnackBar: true,
@@ -2304,7 +2305,7 @@ abstract class Block<
       }
     }
     //
-    if (!canDelete(item: item)) {
+    if (item == null || !canDelete(item: item)) {
       return false;
     }
     bool confirm = await showConfirmDeleteDialog(details: getClassName(item));
@@ -2569,7 +2570,7 @@ abstract class Block<
 
   Future<ApiResult<D>> callApiRefreshItem({required I item});
 
-  Future<ApiResult<D>> callApiFindItemByIdAsString({required String itemId});
+  Future<ApiResult<D>> callApiFindItemById({required ID itemId});
 
   bool canCreate() {
     if (blockForm == null || this.__isPreparingFormCreation) {

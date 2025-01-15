@@ -1,26 +1,26 @@
 part of '../flutter_artist.dart';
 
 class FormUtils {
-  static void removeItemFromList<E>({
+  static void removeItemFromList<E, ID>({
     required List<E> items,
     required E removeItem,
-    required String Function(E item) getItemIdAsString,
+    required ID Function(E item) getItemId,
   }) {
     int idx = items.indexWhere((it) {
-      return getItemIdAsString(it) == getItemIdAsString(removeItem);
+      return getItemId(it) == getItemId(removeItem);
     });
     if (idx != -1) {
       items.removeAt(idx);
     }
   }
 
-  static void insertOrReplaceItemInList<E>({
+  static void insertOrReplaceItemInList<E, ID>({
     required List<E> items,
     required E item,
-    required String Function(E item) getItemIdAsString,
+    required ID Function(E item) getItemId,
   }) {
     int idx = items.indexWhere((it) {
-      return getItemIdAsString(it) == getItemIdAsString(item);
+      return getItemId(it) == getItemId(item);
     });
     if (idx == -1) {
       items.insert(0, item);
@@ -29,13 +29,13 @@ class FormUtils {
     }
   }
 
-  static E? findSiblingItemInList<E>({
+  static E? findSiblingItemInList<E, ID>({
     required List<E> items,
     required E item,
-    required String Function(E item) getItemIdAsString,
+    required ID Function(E item) getItemId,
   }) {
     int idx = items.indexWhere((e) {
-      return getItemIdAsString(e) == getItemIdAsString(item);
+      return getItemId(e) == getItemId(item);
     });
     if (idx == -1) {
       if (items.isNotEmpty) {

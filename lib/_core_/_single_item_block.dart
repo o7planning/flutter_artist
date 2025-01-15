@@ -1,6 +1,8 @@
 part of '../flutter_artist.dart';
 
 ///
+/// [ID] is Id type of Item. For example: [String].
+///
 /// [I] is item. For example:
 /// ```dart
 /// class EmployeeInfo {
@@ -19,10 +21,11 @@ part of '../flutter_artist.dart';
 /// ```
 ///
 abstract class SingleItemBlock<
+    ID extends Object,
     I extends Object,
     D extends Object,
     S extends FilterSnapshot,
-    SF extends SuggestedFormData> extends Block<I, D, S, SF> {
+    SF extends SuggestedFormData> extends Block<ID, I, D, S, SF> {
   SingleItemBlock({
     required super.name,
     required super.description,

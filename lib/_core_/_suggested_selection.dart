@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
-class SuggestedSelection {
-  final String? itemIdStringToSetAsCurrent;
+class SuggestedSelection<ID> {
+  final ID? itemIdStringToSetAsCurrent;
 
   Map<String, SuggestedSelection> children = {};
 

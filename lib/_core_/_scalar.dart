@@ -1,7 +1,6 @@
 part of '../flutter_artist.dart';
 
-abstract class Scalar<D extends Object, S extends FilterSnapshot>
-    extends DataContainer {
+abstract class Scalar<D, S extends FilterSnapshot> extends DataContainer {
   final String name;
 
   String get _fullName {

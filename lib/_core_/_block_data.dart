@@ -1,11 +1,12 @@
 part of '../flutter_artist.dart';
 
 abstract class BlockData<
+    ID extends Object,
     I extends Object,
     D extends Object,
     S extends FilterSnapshot,
     SF extends SuggestedFormData> implements PageData<I> {
-  final Block<I, D, S, SF> block;
+  final Block<ID, I, D, S, SF> block;
 
   late final List<I> _items;
 
@@ -23,7 +24,7 @@ abstract class BlockData<
 
   bool get isNotEmpty => _items.isNotEmpty;
 
-  String? _currentParentItemId;
+  Object? _currentParentItemId;
 
   S? _currentFilterSnapshot;
 
@@ -118,8 +119,8 @@ abstract class BlockData<
     I? foundItem = _findItemSameIdWith(
       item: item,
     );
-    int idx = _checkedItems.indexWhere(
-        (it) => block.getItemIdAsString(it) == block.getItemIdAsString(item));
+    int idx = _checkedItems
+        .indexWhere((it) => block.getItemId(it) == block.getItemId(item));
     if (idx != -1) {
       if (foundItem != null) {
         _checkedItems[idx] = foundItem;
@@ -147,12 +148,12 @@ abstract class BlockData<
     FormUtils.removeItemFromList(
       items: _items,
       removeItem: removeItem,
-      getItemIdAsString: block.getItemIdAsString,
+      getItemId: block.getItemId,
     );
     FormUtils.removeItemFromList(
       items: _checkedItems,
       removeItem: removeItem,
-      getItemIdAsString: block.getItemIdAsString,
+      getItemId: block.getItemId,
     );
   }
 
@@ -163,20 +164,20 @@ abstract class BlockData<
     FormUtils.insertOrReplaceItemInList(
       items: _items,
       item: item,
-      getItemIdAsString: block.getItemIdAsString,
+      getItemId: block.getItemId,
     );
     FormUtils.insertOrReplaceItemInList(
       items: _checkedItems,
       item: item,
-      getItemIdAsString: block.getItemIdAsString,
+      getItemId: block.getItemId,
     );
   }
 
-  I? _findItemByIdString({
-    required String idString,
+  I? _findItemById({
+    required ID itemId,
   }) {
     for (var it in _items) {
-      if (block.getItemIdAsString(it) == idString) {
+      if (block.getItemId(it) == itemId) {
         return it;
       }
     }
@@ -189,7 +190,7 @@ abstract class BlockData<
     return _isListContainItem(
       items: _items,
       item: item,
-      getItemIdAsString: block.getItemIdAsString,
+      getItemId: block.getItemId,
     );
   }
 
@@ -197,8 +198,7 @@ abstract class BlockData<
     required I item,
   }) {
     return __current._item != null &&
-        block.getItemIdAsString(item) ==
-            block.getItemIdAsString(__current._item!);
+        block.getItemId(item) == block.getItemId(__current._item!);
   }
 
   void __append({required List<I> appendItems}) {
@@ -208,7 +208,7 @@ abstract class BlockData<
       I? it = _getItemBySameItemId(
         items: appendItems,
         sameItem: item,
-        getItemIdAsString: block.getItemIdAsString,
+        getItemId: block.getItemId,
       );
       if (it != null) {
         all.add(it);
@@ -226,7 +226,7 @@ abstract class BlockData<
 
   void _updateFrom({
     required ListBehavior forceListBehavior,
-    required String? currentParentItem,
+    required Object? currentParentItemId,
     required S? filterSnapshot,
     required PageableData? pageable,
     required PageData<I>? pageData,
@@ -234,14 +234,14 @@ abstract class BlockData<
   }) {
     // Check if currentFilterSnapshot changed.
     if (forceListBehavior == ListBehavior.replace ||
-        _currentParentItemId != currentParentItem ||
+        _currentParentItemId != currentParentItemId ||
         _currentFilterSnapshot != filterSnapshot) {
       _items.clear();
     }
     //
     PageData<I> ap = pageData ?? PageData<I>.empty();
     //
-    _currentParentItemId = currentParentItem;
+    _currentParentItemId = currentParentItemId;
     _currentFilterSnapshot = filterSnapshot;
     _lastQueryResult = pageData;
     _dataState = dataState;
@@ -268,7 +268,7 @@ abstract class BlockData<
     return FormUtils.findSiblingItemInList(
       items: items,
       item: item,
-      getItemIdAsString: block.getItemIdAsString,
+      getItemId: block.getItemId,
     );
   }
 
@@ -276,16 +276,17 @@ abstract class BlockData<
     required I item,
   }) {
     for (var it in _items) {
-      if (block.getItemIdAsString(item) == block.getItemIdAsString(it)) {
+      if (block.getItemId(item) == block.getItemId(it)) {
         return it;
       }
     }
     return null;
   }
 
-  I? findItemByIdString(String id) {
+
+  I? findItemById(ID id) {
     for (I item in _items) {
-      if (block.getItemIdAsString(item) == id) {
+      if (block.getItemId(item) == id) {
         return item;
       }
     }
@@ -296,8 +297,8 @@ abstract class BlockData<
     I? foundItem = _findItemSameIdWith(
       item: item,
     );
-    int idx = _checkedItems.indexWhere(
-        (it) => block.getItemIdAsString(it) == block.getItemIdAsString(item));
+    int idx = _checkedItems
+        .indexWhere((it) => block.getItemId(it) == block.getItemId(item));
     if (idx != -1) {
       if (foundItem != null) {
         _checkedItems[idx] = foundItem;
@@ -311,8 +312,8 @@ abstract class BlockData<
   }
 
   void setUncheckedItem(I item) {
-    int idx = _checkedItems.indexWhere(
-        (it) => block.getItemIdAsString(it) == block.getItemIdAsString(item));
+    int idx = _checkedItems
+        .indexWhere((it) => block.getItemId(it) == block.getItemId(item));
     if (idx != -1) {
       _checkedItems.removeAt(idx);
     }

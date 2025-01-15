@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-class ScalarData<D extends Object, S extends FilterSnapshot> {
+class ScalarData<D, S extends FilterSnapshot> {
   final Scalar<D, S> scalar;
 
   bool __isTemporaryMode = false;

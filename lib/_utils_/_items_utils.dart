@@ -1,13 +1,13 @@
 part of '../flutter_artist.dart';
 
-bool _isListContainItem<I>({
+bool _isListContainItem<I, ID>({
   required List<I> items,
   required I item,
-  required String Function(I it) getItemIdAsString,
+  required ID Function(I it) getItemId,
 }) {
-  String itemId = getItemIdAsString(item);
+  ID itemId = getItemId(item);
   for (I it in items) {
-    String itId = getItemIdAsString(it);
+    ID itId = getItemId(it);
     if (itId == itemId) {
       return true;
     }
@@ -15,14 +15,14 @@ bool _isListContainItem<I>({
   return false;
 }
 
-I? _getItemBySameItemId<I>({
+I? _getItemBySameItemId<I, ID>({
   required List<I> items,
   required I sameItem,
-  required String Function(I it) getItemIdAsString,
+  required ID Function(I it) getItemId,
 }) {
-  String sameItemId = getItemIdAsString(sameItem);
+  ID sameItemId = getItemId(sameItem);
   for (I it in items) {
-    String itId = getItemIdAsString(it);
+    ID itId = getItemId(it);
     if (itId == sameItemId) {
       return it;
     }
