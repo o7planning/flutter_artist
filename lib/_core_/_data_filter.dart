@@ -102,15 +102,15 @@ abstract class DataFilter<S extends FilterSnapshot> {
       route: null,
     );
     //
-    _TryingFilter<S>? tryingFilter = await __prepareData(
-      suggestedFilterSnapshot: suggestedFilterSnapshot,
-    );
-    //
-    if (tryingFilter == null) {
-      return false;
-    }
-    final int tryingFilterSnapshotId = tryingFilter.tryingFilterSnapshotId;
-    final S tryingFilterSnapshot = tryingFilter.tryingFilterSnapshot;
+    // _TryingFilter<S>? tryingFilter = await __prepareData(
+    //   suggestedFilterSnapshot: suggestedFilterSnapshot,
+    // );
+    // //
+    // if (tryingFilter == null) {
+    //   return false;
+    // }
+    // final int tryingFilterSnapshotId = tryingFilter.tryingFilterSnapshotId;
+    // final S tryingFilterSnapshot = tryingFilter.tryingFilterSnapshot;
     //
     for (Scalar scalar in _scalars) {
       scalar.query();
