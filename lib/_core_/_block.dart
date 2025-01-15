@@ -103,8 +103,6 @@ abstract class Block<
 
   DataState get dataState => data._dataState;
 
-  final Mailbox mailbox = Mailbox();
-
   final Map<_WidgetState, bool> _blockFragmentWidgetStateListeners = {};
   final Map<_WidgetState, bool> _controlBarWidgetStateListeners = {};
   final Map<_WidgetState, bool> _paginationWidgetStateListeners = {};

@@ -54,7 +54,6 @@ part '_core_/_data_filter.dart';
 part '_core_/_error_listener.dart';
 part '_core_/_filter_snapshot.dart';
 part '_core_/_flutter_artist.dart';
-part '_core_/_mailbox.dart';
 part '_core_/_notification_listener.dart';
 part '_core_/_quick_action_data.dart';
 part '_core_/_scalar.dart';
