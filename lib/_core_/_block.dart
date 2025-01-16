@@ -86,23 +86,26 @@ abstract class Block<
 
   final BlockHiddenBehavior hiddenBehavior;
 
-  final String? dataFilterName;
+  ///
+  /// DataFilter Name registered in [Shelf.registerStructure()] method.
+  ///
+  final String? registerDataFilterName;
 
   ///
   /// This field is not null.
   /// If this block does not declare a DataFilter, it will have the default DataFilter.
   ///
-  late final DataFilter<S> _dataFilter;
+  late final DataFilter<S> _registeredOrDefaultDataFilter;
 
   ///
   /// Returns a DataFilter declared in the [Shelf.registerStructure()] method.
   /// The return value may be null.
   ///
   DataFilter<S>? get dataFilter {
-    if (_dataFilter is _DefaultDataFilter) {
+    if (_registeredOrDefaultDataFilter is _DefaultDataFilter) {
       return null;
     } else {
-      return _dataFilter;
+      return _registeredOrDefaultDataFilter;
     }
   }
 
@@ -150,7 +153,7 @@ abstract class Block<
     required this.description,
     int pageSize = 20,
     this.hiddenBehavior = BlockHiddenBehavior.none,
-    required this.dataFilterName,
+    required this.registerDataFilterName,
     required this.blockForm,
     required this.fireEvent,
     required List<Type> listenItemTypes,
@@ -444,8 +447,12 @@ abstract class Block<
       }
     }
     //
-    if (withFilter && dataFilter != null) {
-      ret.addAll(dataFilter!._findMountedWidgetStates(activeOnly: activeOnly));
+    if (withFilter) {
+      ret.addAll(
+        _registeredOrDefaultDataFilter._findMountedWidgetStates(
+          activeOnly: activeOnly,
+        ),
+      );
     }
     //
     if ((withForm || withControlBar) && blockForm != null) {
@@ -527,79 +534,79 @@ abstract class Block<
     //
   }
 
-  Future<bool> _prepareFilterWithOverlay({
-    required S? suggestedFilterSnapshot,
-    required bool force,
-  }) async {
-    if (dataFilter == null) {
-      return true;
-    }
-    return await FlutterArtist.executeTask(
-      asyncFunction: () async {
-        return await __prepareFilter(
-          suggestedFilterSnapshot: suggestedFilterSnapshot,
-          force: force,
-        );
-      },
-    );
-  }
+  // Future<bool> _prepareFilterWithOverlay({
+  //   required S? suggestedFilterSnapshot,
+  //   required bool force,
+  // }) async {
+  //   if (dataFilter == null) {
+  //     return true;
+  //   }
+  //   return await FlutterArtist.executeTask(
+  //     asyncFunction: () async {
+  //       return await __prepareFilter(
+  //         suggestedFilterSnapshot: suggestedFilterSnapshot,
+  //         force: force,
+  //       );
+  //     },
+  //   );
+  // }
 
   // Private method. Only for use in this class.
-  @Deprecated("Khong su dung nua, xoa di")
-  Future<bool> __prepareFilter({
-    required S? suggestedFilterSnapshot,
-    required bool force,
-  }) async {
-    if (dataFilter == null) {
-      return true;
-    }
-    try {
-      FlutterArtist.codeFlowLogger._addMethodCall(
-        isLibCode: false,
-        ownerClassInstance: dataFilter!,
-        methodName: "prepareData",
-        parameters: {
-          "suggestedFilterSnapshot": suggestedFilterSnapshot,
-        },
-        route: null,
-      );
-      //
-      await dataFilter!.prepareData(
-        suggestedFilterSnapshot: suggestedFilterSnapshot,
-      );
-    } catch (e, stacktrace) {
-      _handleError(
-        className: getClassName(dataFilter),
-        methodName: 'prepareData',
-        error: e,
-        stackTrace: stacktrace,
-        showSnackBar: true,
-      );
-      return false;
-    }
-    try {
-      FlutterArtist.codeFlowLogger._addMethodCall(
-        isLibCode: false,
-        ownerClassInstance: dataFilter!,
-        methodName: "takeSnapshot",
-        parameters: {},
-        route: null,
-      );
-      //
-      S filterSnapshot = dataFilter!.takeSnapshot();
-      dataFilter!._currentSnapshot = filterSnapshot;
-      return true;
-    } catch (e, stacktrace) {
-      _handleError(
-        className: getClassName(dataFilter),
-        methodName: 'prepareData',
-        error: e,
-        stackTrace: stacktrace,
-        showSnackBar: true,
-      );
-      return false;
-    }
-  }
+  // @Deprecated("Khong su dung nua, xoa di")
+  // Future<bool> __prepareFilter({
+  //   required S? suggestedFilterSnapshot,
+  //   required bool force,
+  // }) async {
+  //   if (dataFilter == null) {
+  //     return true;
+  //   }
+  //   try {
+  //     FlutterArtist.codeFlowLogger._addMethodCall(
+  //       isLibCode: false,
+  //       ownerClassInstance: dataFilter!,
+  //       methodName: "prepareData",
+  //       parameters: {
+  //         "suggestedFilterSnapshot": suggestedFilterSnapshot,
+  //       },
+  //       route: null,
+  //     );
+  //     //
+  //     await dataFilter!.prepareData(
+  //       suggestedFilterSnapshot: suggestedFilterSnapshot,
+  //     );
+  //   } catch (e, stacktrace) {
+  //     _handleError(
+  //       className: getClassName(dataFilter),
+  //       methodName: 'prepareData',
+  //       error: e,
+  //       stackTrace: stacktrace,
+  //       showSnackBar: true,
+  //     );
+  //     return false;
+  //   }
+  //   try {
+  //     FlutterArtist.codeFlowLogger._addMethodCall(
+  //       isLibCode: false,
+  //       ownerClassInstance: dataFilter!,
+  //       methodName: "takeSnapshot",
+  //       parameters: {},
+  //       route: null,
+  //     );
+  //     //
+  //     S filterSnapshot = dataFilter!.takeSnapshot();
+  //     dataFilter!._currentSnapshot = filterSnapshot;
+  //     return true;
+  //   } catch (e, stacktrace) {
+  //     _handleError(
+  //       className: getClassName(dataFilter),
+  //       methodName: 'prepareData',
+  //       error: e,
+  //       stackTrace: stacktrace,
+  //       showSnackBar: true,
+  //     );
+  //     return false;
+  //   }
+  // }
 
   void _executeRoute({Function()? route}) {
     try {
@@ -686,7 +693,8 @@ abstract class Block<
       },
     );
     //
-    bool success = await _dataFilter._queryAllWithOverlayAndRestorable(
+    bool success =
+        await _registeredOrDefaultDataFilter._queryAllWithOverlayAndRestorable(
       // Suggestion for DataFilter
       suggestedFilterSnapshot: suggestedFilterSnapshot,
       forceBlockWithQueryOptions: _BlockWithQueryOptions(
@@ -1095,10 +1103,10 @@ abstract class Block<
     // printFormDebug(
     //     " -------------------------> NORMAL! - ${data._dataState.name.toUpperCase()}");
     this.data._restore();
-    this.dataFilter?._restore();
+    this._registeredOrDefaultDataFilter._restore();
     for (var childBlock in _childBlocks) {
       childBlock.__restoreThisAndChildren();
-      childBlock.dataFilter?._restore();
+      childBlock._registeredOrDefaultDataFilter._restore();
     }
   }
 
@@ -1107,10 +1115,10 @@ abstract class Block<
     //     " -------------------------> NORMAL! - ${data._dataState.name.toUpperCase()}");
 
     this.data._applyNewState();
-    this.dataFilter?._applyNewState();
+    this._registeredOrDefaultDataFilter._applyNewState();
     for (var childBlock in _childBlocks) {
       childBlock.__applyNewStateThisAndChildren();
-      childBlock.dataFilter?._applyNewState();
+      childBlock._registeredOrDefaultDataFilter._applyNewState();
     }
   }
 

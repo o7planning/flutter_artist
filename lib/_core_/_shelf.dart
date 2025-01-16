@@ -62,11 +62,12 @@ abstract class Shelf {
       scalar.shelf = this;
       __scalars.add(scalar);
       //
-      if (scalar.filterName != null) {
-        DataFilter? dataFilter = _shelfStruct.dataFilters[scalar.filterName!];
+      if (scalar.registerDataFilterName != null) {
+        DataFilter? dataFilter =
+            _shelfStruct.dataFilters[scalar.registerDataFilterName!];
         if (dataFilter == null) {
           throw _registerError(
-              "DataFilter not found '${scalar.filterName}' in '${getClassName(this)}'");
+              "DataFilter not found '${scalar.registerDataFilterName}' in '${getClassName(this)}'");
         }
         //
         const Type filterSnapshotType = FilterSnapshot;
@@ -90,7 +91,7 @@ abstract class Shelf {
         }
         //
         dataFilter._scalars.add(scalar);
-        scalar._dataFilter = dataFilter;
+        scalar._registeredOrDefaultDataFilter = dataFilter;
       } else {
         // Default DataFilter.
         DataFilter defaultDataFilter = _DefaultDataFilter(
@@ -98,7 +99,7 @@ abstract class Shelf {
           shelf: this,
         );
         defaultDataFilter._scalars.add(scalar);
-        scalar._dataFilter = defaultDataFilter;
+        scalar._registeredOrDefaultDataFilter = defaultDataFilter;
         //
         const Type emptyFilterSnapshotType = EmptyFilterSnapshot;
         final String filterSnapshotEmpty = emptyFilterSnapshotType.toString();
@@ -131,11 +132,12 @@ abstract class Shelf {
     }
     //
     block.shelf = this;
-    if (block.dataFilterName != null) {
-      DataFilter? dataFilter = _shelfStruct.dataFilters[block.dataFilterName!];
+    if (block.registerDataFilterName != null) {
+      DataFilter? dataFilter =
+          _shelfStruct.dataFilters[block.registerDataFilterName!];
       if (dataFilter == null) {
         throw _registerError(
-            "DataFilter not found '${block.dataFilterName}' in '${getClassName(this)}'");
+            "DataFilter not found '${block.registerDataFilterName}' in '${getClassName(this)}'");
       }
       const Type filterSnapshotType = FilterSnapshot;
       final String filterSnapshotBase = filterSnapshotType.toString();
@@ -158,14 +160,14 @@ abstract class Shelf {
       }
       //
       dataFilter._blocks.add(block);
-      block._dataFilter = dataFilter;
+      block._registeredOrDefaultDataFilter = dataFilter;
     } else {
       DataFilter defaultDataFilter = _DefaultDataFilter(
         name: "${block.name}-@-default-block-data-filter",
         shelf: this,
       );
       defaultDataFilter._blocks.add(block);
-      block._dataFilter = defaultDataFilter;
+      block._registeredOrDefaultDataFilter = defaultDataFilter;
       //
       const Type emptyFilterSnapshotType = EmptyFilterSnapshot;
       final String filterSnapshotEmpty = emptyFilterSnapshotType.toString();
@@ -504,7 +506,7 @@ abstract class Shelf {
     block.updatePaginationWidgets();
     block.updateControlBarWidgets();
     block.blockForm?.updateFormWidgets();
-    block.dataFilter?.updateWidgets();
+    block._registeredOrDefaultDataFilter.updateWidgets();
     for (Block childBlock in block._childBlocks) {
       __updateAllWidgetsCascade(childBlock);
     }

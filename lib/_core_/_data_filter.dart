@@ -45,11 +45,6 @@ abstract class DataFilter<S extends FilterSnapshot> {
   S takeSnapshot();
 
   ///
-  /// This method is always called whenever the [Block.queryXxx()] method is called.
-  ///
-  /// When calling [DataFilter.queryBlock()] method from outside you can pass parameter [suggestedFilterSnapshot].
-  /// This parameter will always be null if you call the [Block.queryXxx()] method. (??????)
-  ///
   /// ```Dart
   /// Future<void> prepareData({MyFilterSnapshot? suggestedFilterSnapshot}) {
   ///     ApiResult<dynamic>? r1 = await callYourApi1();
@@ -87,6 +82,7 @@ abstract class DataFilter<S extends FilterSnapshot> {
 
   ///
   /// Query all Scalars and Blocks of this DataFilter if they are visible on the UI.
+  ///
   /// Any Scalar or Block that is not queried will be set to LAZY state.
   ///
   Future<bool> queryAll({

@@ -367,7 +367,7 @@ abstract class BlockForm<ID extends Object, I extends Object, D extends Object,
     //
     if (needToLoad) {
       bool success = await __prepareFormMasterData(
-        dataFilter: block.dataFilter,
+        dataFilter: block._registeredOrDefaultDataFilter,
         suggestedFormData: suggestedFormData,
         refreshedItem: refreshedItem,
         isNew: isNew,
@@ -471,7 +471,7 @@ abstract class BlockForm<ID extends Object, I extends Object, D extends Object,
           ownerClassInstance: this,
           methodName: "prepareFormData",
           parameters: {
-            "dataFilter": block.dataFilter,
+            "dataFilter": block._registeredOrDefaultDataFilter,
             "suggestedFormData": suggestedFormData,
             "refreshedItem": refreshedItem,
             "isNew": isNew,
@@ -480,7 +480,7 @@ abstract class BlockForm<ID extends Object, I extends Object, D extends Object,
         );
         //
         newFormData = prepareFormData(
-          dataFilter: block.dataFilter,
+          dataFilter: block._registeredOrDefaultDataFilter,
           suggestedFormData: suggestedFormData,
           refreshedItem: refreshedItem,
           isNew: isNew,

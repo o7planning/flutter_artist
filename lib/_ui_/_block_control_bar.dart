@@ -274,7 +274,7 @@ class _BlockControlBarState extends _WidgetState<BlockControlBar> {
           _ControlBarButton(
             tooltip: "Save",
             iconData: _formSaveIconData,
-            onAction: widget.block.blockForm?.isSaving ?? false,
+            onAction: widget.block.__isSaving,
             onPressed: widget.showSaveButton &&
                     widget.block.blockForm != null &&
                     widget.block.blockForm!.isDirty()

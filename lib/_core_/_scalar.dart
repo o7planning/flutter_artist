@@ -35,7 +35,10 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
     return "<${getDataTypeAsString()}, ${getFilterSnapshotTypeAsString()}>";
   }
 
-  final String? filterName;
+  ///
+  /// DataFilter Name registered in [Shelf.registerStructure()] method.
+  ///
+  final String? registerDataFilterName;
 
   final String? description;
 
@@ -47,13 +50,21 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
 
   List<Type> get listenItemTypes => [...__listenItemTypes];
 
-  late final DataFilter<S> _dataFilter;
+  ///
+  /// This field is not null.
+  /// If this scalar does not declare a DataFilter, it will have the default DataFilter.
+  ///
+  late final DataFilter<S> _registeredOrDefaultDataFilter;
 
+  ///
+  /// Returns a DataFilter declared in the [Shelf.registerStructure()] method.
+  /// The return value may be null.
+  ///
   DataFilter<S>? get dataFilter {
-    if (_dataFilter is _DefaultDataFilter) {
+    if (_registeredOrDefaultDataFilter is _DefaultDataFilter) {
       return null;
     } else {
-      return _dataFilter;
+      return _registeredOrDefaultDataFilter;
     }
   }
 
@@ -68,7 +79,7 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
   Scalar({
     required this.name,
     required this.description,
-    required this.filterName,
+    required this.registerDataFilterName,
     required this.hiddenBehavior,
     required List<Type> listenTypes,
   }) : __listenItemTypes = listenTypes;
@@ -87,12 +98,12 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
 
   void _restoreAll() {
     this.data._restore();
-    this.dataFilter?._restore();
+    this._registeredOrDefaultDataFilter._restore();
   }
 
   void _applyNewStateAll() {
     this.data._applyNewState();
-    this.dataFilter?._applyNewState();
+    this._registeredOrDefaultDataFilter._applyNewState();
   }
 
   void updateControlBarWidgets() {
@@ -124,7 +135,8 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
       parameters: {},
     );
     //
-    bool success = await _dataFilter._queryAllWithOverlayAndRestorable(
+    bool success =
+        await _registeredOrDefaultDataFilter._queryAllWithOverlayAndRestorable(
       // Suggestion for DataFilter
       suggestedFilterSnapshot: suggestedFilterSnapshot,
       forceBlockWithQueryOptions: null,
