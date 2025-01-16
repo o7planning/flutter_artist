@@ -42,6 +42,7 @@ abstract class Block<
     S extends FilterSnapshot,
     SF extends SuggestedFormData> extends DataContainer {
   QueryMode _queryMode = QueryMode.lazy;
+
   late QueryMode _tempQueryMode = _queryMode;
 
   QueryMode get queryMode => _queryMode;
@@ -215,14 +216,32 @@ abstract class Block<
 
   void __refreshDeletingState({required bool isDeleting}) {
     try {
-      __isDeleting = isQuerying;
+      __isDeleting = isDeleting;
       this.updateControlBarWidgets();
     } catch (e) {}
   }
 
-  void __refreshSavingState({required bool isSaving}) {
+  void _refreshSavingState({required bool isSaving}) {
     try {
       __isSaving = isSaving;
+      this.updateControlBarWidgets();
+    } catch (e) {}
+  }
+
+  void __refreshRefreshingCurrentItemState({
+    required bool isRefreshingCurrentItem,
+  }) {
+    try {
+      __isRefreshingCurrentItem = isRefreshingCurrentItem;
+      this.updateControlBarWidgets();
+    } catch (e) {}
+  }
+
+  void __refreshPreparingFormCreationState({
+    required bool isPreparingFormCreation,
+  }) {
+    try {
+      __isPreparingFormCreation = isPreparingFormCreation;
       this.updateControlBarWidgets();
     } catch (e) {}
   }
@@ -2074,8 +2093,14 @@ abstract class Block<
           },
         );
         //
+        __refreshRefreshingCurrentItemState(isRefreshingCurrentItem: true);
+        //
         result = await callApiRefreshItem(item: item);
+        //
+        __refreshRefreshingCurrentItemState(isRefreshingCurrentItem: false);
       } catch (e, stacktrace) {
+        __refreshRefreshingCurrentItemState(isRefreshingCurrentItem: false);
+        //
         _handleError(
           className: getClassName(this),
           methodName: "callApiRefreshItem",
@@ -2151,16 +2176,10 @@ abstract class Block<
     //
     suggestedFormData?.formAction = FormAction.create;
     //
-    bool success = false;
-    __isPreparingFormCreation = true;
-    this.updateControlBarWidgets();
-    try {
-      success = await _prepareToCreateWithOverlayAndRestorable(
-        suggestedFormData: suggestedFormData,
-      );
-    } finally {
-      __isPreparingFormCreation = false;
-    }
+    bool success = await _prepareToCreateWithOverlayAndRestorable(
+      suggestedFormData: suggestedFormData,
+    );
+    //
     if (success) {
       _executeRoute(route: route);
     }
@@ -2242,12 +2261,20 @@ abstract class Block<
       formMode: FormMode.creation,
       dataState: DataState.pending,
     );
-    bool success = await blockForm!._prepareForm(
-      suggestedFormData: suggestedFormData,
-      refreshedItem: nullItemDetail,
-      isNew: true,
-      forceForm: true,
-    );
+    //
+    bool success = false;
+    try {
+      __refreshPreparingFormCreationState(isPreparingFormCreation: true);
+      //
+      success = await blockForm!._prepareForm(
+        suggestedFormData: suggestedFormData,
+        refreshedItem: nullItemDetail,
+        isNew: true,
+        forceForm: true,
+      );
+    } finally {
+      __refreshPreparingFormCreationState(isPreparingFormCreation: false);
+    }
     if (!success) {
       return false;
     }
@@ -2383,14 +2410,7 @@ abstract class Block<
     if (!confirm) {
       return false;
     }
-    __isDeleting = true;
-    this.updateControlBarWidgets();
-    bool success = false;
-    try {
-      success = await _deleteWithOverlayAndRestorable(item);
-    } finally {
-      __isDeleting = false;
-    }
+    bool success = await _deleteWithOverlayAndRestorable(item);
     return success;
   }
 
@@ -2412,14 +2432,7 @@ abstract class Block<
     if (!confirm) {
       return false;
     }
-    bool success = false;
-    __isDeleting = true;
-    this.updateControlBarWidgets();
-    try {
-      success = await _deleteWithOverlayAndRestorable(item);
-    } finally {
-      __isDeleting = false;
-    }
+    bool success = await _deleteWithOverlayAndRestorable(item);
     return success;
   }
 
@@ -2479,12 +2492,18 @@ abstract class Block<
           },
         );
         //
+        __refreshDeletingState(isDeleting: true);
+        //
         result = await callApiDelete(item: item);
         FlutterArtist.storage.fireSourceChanged(
           eventBlock: this,
           itemIdString: null,
         );
+        //
+        __refreshDeletingState(isDeleting: false);
       } catch (e, stacktrace) {
+        __refreshDeletingState(isDeleting: false);
+        //
         _handleError(
           className: getClassName(this),
           methodName: "callApiDelete",
@@ -2562,20 +2581,12 @@ abstract class Block<
     if (!canRefresh()) {
       return false;
     }
-    bool success = false;
-    try {
-      __isRefreshingCurrentItem = true;
-      this.updateControlBarWidgets();
-      //
-      success = await _prepareToShowOrEditWithOverlayAndRestorable(
-        item: data.currentItem!,
-        justQueried: false,
-        suggestedSelection: null,
-        forceForm: false,
-      );
-    } finally {
-      __isRefreshingCurrentItem = false;
-    }
+    bool success = await _prepareToShowOrEditWithOverlayAndRestorable(
+      item: data.currentItem!,
+      justQueried: false,
+      suggestedSelection: null,
+      forceForm: false,
+    );
     return success;
   }
 
@@ -2655,7 +2666,7 @@ abstract class Block<
   }
 
   bool canSave() {
-    if (blockForm == null || blockForm!.isSaving) {
+    if (blockForm == null || this.__isSaving) {
       return false;
     }
     if (parent != null) {
@@ -2688,17 +2699,11 @@ abstract class Block<
         }
       }
     }
-    // final bool isCurrent = data.isCurrentItem(item: item);
-    // if()
-    // bool can = blockForm!.data._formMode != FormMode.none;
-    // if (!can) {
-    //   return false;
-    // }
     return _isAllowDeleteItem(item: item);
   }
 
   bool canEditOnForm() {
-    if (blockForm == null || blockForm!.__isSaving) {
+    if (blockForm == null || __isSaving) {
       return false;
     }
     if (parent != null) {

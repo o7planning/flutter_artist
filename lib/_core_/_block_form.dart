@@ -6,11 +6,6 @@ abstract class BlockForm<ID extends Object, I extends Object, D extends Object,
 
   late QueryMode _tempQueryMode = _queryMode;
 
-  // TODO: Chuyen sang Block.
-  bool __isSaving = false;
-
-  bool get isSaving => __isSaving;
-
   late final BlockFormData data = BlockFormData(blockForm: this);
 
   late final Block<ID, I, D, FilterSnapshot, SF> block;
@@ -238,7 +233,7 @@ abstract class BlockForm<ID extends Object, I extends Object, D extends Object,
 
   // Private method. Only for use in this class.
   bool __checkValidBeforeSave() {
-    return !__isSaving && (_formKey.currentState?.validate() ?? false);
+    return !block.__isSaving && (_formKey.currentState?.validate() ?? false);
   }
 
   Future<bool> saveForm() async {
@@ -300,9 +295,6 @@ abstract class BlockForm<ID extends Object, I extends Object, D extends Object,
     //
     ApiResult<D> result;
     try {
-      __isSaving = true;
-      this.block.updateControlBarWidgets();
-      //
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
         ownerClassInstance: this,
@@ -313,19 +305,22 @@ abstract class BlockForm<ID extends Object, I extends Object, D extends Object,
         route: null,
       );
       //
+      block._refreshSavingState(isSaving: true);
+      //
       result = data.isNew
           ? await callApiCreate(formMapData: formMapData)
           : await callApiUpdate(formMapData: formMapData);
       //
-      __isSaving = false;
+      block._refreshSavingState(isSaving: false);
     } catch (e, stacktrace) {
+      block._refreshSavingState(isSaving: false);
+      //
       _handleError(
         methodName: calledMethodName,
         error: e,
         stackTrace: stacktrace,
         showSnackBar: true,
       );
-      __isSaving = false;
       return false;
     }
     try {
