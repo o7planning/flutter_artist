@@ -54,7 +54,7 @@ abstract class Shelf {
 
     for (Scalar scalar in scalars) {
       if (__scalarMap.containsKey(scalar.name)) {
-        throw __registerError(
+        throw _registerError(
             "Duplicated Scalar '${scalar.name}' in '${getClassName(this)}'");
       } else {
         __scalarMap[scalar.name] = scalar;
@@ -65,7 +65,7 @@ abstract class Shelf {
       if (scalar.filterName != null) {
         DataFilter? dataFilter = _shelfStruct.dataFilters[scalar.filterName!];
         if (dataFilter == null) {
-          throw __registerError(
+          throw _registerError(
               "DataFilter not found '${scalar.filterName}' in '${getClassName(this)}'");
         }
         //
@@ -76,14 +76,14 @@ abstract class Shelf {
         final String filterSnapshotB = scalar.getFilterSnapshotTypeAsString();
         //
         if (filterSnapshotBF == filterSnapshotBase) {
-          throw __registerError(
+          throw _registerError(
               "You need to create your own class that extends from '$filterSnapshotBase' "
               "as Filter-Snapshot for '${getClassName(dataFilter)}'\n"
               " >> Currently, Filter-Snapshot of '${getClassName(dataFilter)}'  Data-Filter is '$filterSnapshotBF'");
         }
         //
         if (filterSnapshotBF != filterSnapshotB) {
-          throw __registerError(
+          throw _registerError(
               "Scalar and  Data-Filter must have the same Filter-Snapshot type.\n"
               " >> Filter-Snapshot of '${getClassName(scalar)}' Scalar is '$filterSnapshotB'\n"
               " >> Filter-Snapshot of '${getClassName(dataFilter)}'  Data-Filter is '$filterSnapshotBF'");
@@ -106,7 +106,7 @@ abstract class Shelf {
 
   void __registerBlockCascade(Block block) {
     if (__blockMap.containsKey(block.name)) {
-      throw __registerError(
+      throw _registerError(
           "Duplicated block '${block.name}' in '${getClassName(this)}'");
     } else {
       __blockMap[block.name] = block;
@@ -116,7 +116,7 @@ abstract class Shelf {
     if (block.dataFilterName != null) {
       DataFilter? dataFilter = _shelfStruct.dataFilters[block.dataFilterName!];
       if (dataFilter == null) {
-        throw __registerError(
+        throw _registerError(
             "DataFilter not found '${block.dataFilterName}' in '${getClassName(this)}'");
       }
       const Type filterSnapshotType = FilterSnapshot;
@@ -126,14 +126,14 @@ abstract class Shelf {
       final String filterSnapshotB = block.getFilterSnapshotTypeAsString();
       //
       if (filterSnapshotBF == filterSnapshotBase) {
-        throw __registerError(
+        throw _registerError(
             "You need to create your own class that extends from '$filterSnapshotBase' "
             "as Filter-Snapshot for '${getClassName(dataFilter)}'\n"
             " >> Currently, Filter-Snapshot of '${getClassName(dataFilter)}'  Data-Filter is '$filterSnapshotBF'");
       }
       //
       if (filterSnapshotBF != filterSnapshotB) {
-        throw __registerError(
+        throw _registerError(
             "Block and  Data-Filter must have the same Filter-Snapshot type.\n"
             " >> Filter-Snapshot of '${getClassName(block)}' Block is '$filterSnapshotB'\n"
             " >> Filter-Snapshot of '${getClassName(dataFilter)}'  Data-Filter is '$filterSnapshotBF'");
@@ -149,7 +149,7 @@ abstract class Shelf {
       final String filterSnapshotB = block.getFilterSnapshotTypeAsString();
       //
       if (filterSnapshotB != filterSnapshotEmpty) {
-        throw __registerError(
+        throw _registerError(
             "Filter-Snapshot of '${getClassName(block)}' block must be '$filterSnapshotEmpty' "
             "because this block does not have a  Data-Filter.\n"
             " >> Currently, its Filter-Snapshot is '$filterSnapshotB'");
@@ -158,12 +158,6 @@ abstract class Shelf {
     for (Block childBlock in block.childBlocks) {
       __registerBlockCascade(childBlock);
     }
-  }
-
-  String __registerError(String message) {
-    return "\n*********************************************************************************************\n"
-        "$message"
-        "\n*********************************************************************************************\n";
   }
 
   List<Block> get blocks {
