@@ -73,7 +73,7 @@ abstract class Block<
   }
 
   String get _classParametersDefinition {
-    return "<${getItemTypeAsString()}, ${getItemDetailTypeAsString()}, "
+    return "<${getItemIdTypeAsString()}, ${getItemTypeAsString()}, ${getItemDetailTypeAsString()}, "
         "${getFilterSnapshotTypeAsString()}, ${getSuggestedFormDataTypeAsString()}>";
   }
 
@@ -155,6 +155,10 @@ abstract class Block<
 
   Type getFilterSnapshotType() {
     return S;
+  }
+
+  String getItemIdTypeAsString() {
+    return ID.toString();
   }
 
   String getItemTypeAsString() {

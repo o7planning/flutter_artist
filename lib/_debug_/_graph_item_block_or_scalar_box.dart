@@ -211,7 +211,7 @@ class _GraphItemBlockOrScalarBoxState
     String className = widget.blockOrScalar.blockOrScalarClassName;
     if (widget.blockOrScalar.isBlock) {
       Block block = widget.blockOrScalar.block!;
-      return "$className<${block.getItemTypeAsString()}, ${block.getItemDetailTypeAsString()}, S, SF>";
+      return "$className<${block.getItemIdTypeAsString()}, ${block.getItemTypeAsString()}, ${block.getItemDetailTypeAsString()}, S, SF>";
     } else {
       Scalar scalar = widget.blockOrScalar.scalar!;
       return "$className<${scalar.getDataTypeAsString()}, S>";
