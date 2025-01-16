@@ -66,66 +66,195 @@ abstract class DataFilter<S extends FilterSnapshot> {
     S? suggestedFilterSnapshot,
   });
 
-  Future<_FilterSnapshotWrapper<S>?> __prepareData({
+  Future<_FilterSnapshotWrapper<S>> __prepareData({
     S? suggestedFilterSnapshot,
   }) async {
-    try {
-      __currentTryingSnapshotId + 1;
-      final int tryingSnapshotId = __currentTryingSnapshotId;
-      //
-      await prepareData(
-        suggestedFilterSnapshot: suggestedFilterSnapshot,
-      );
-      // If no error:
-      S tryingSnapshot = takeSnapshot();
-      __filterSnapshotsMap[tryingSnapshotId] = tryingSnapshot;
-      return _FilterSnapshotWrapper(
-        filterSnapshotId: tryingSnapshotId,
-        filterSnapshot: tryingSnapshot,
-      );
-    } catch (e, stackTrace) {
-      // TODO: Xu ly Error!
-      return null;
-    }
+    __currentTryingSnapshotId + 1;
+    final int tryingSnapshotId = __currentTryingSnapshotId;
+    //
+    await prepareData(
+      suggestedFilterSnapshot: suggestedFilterSnapshot,
+    );
+    // If no error:
+    S tryingSnapshot = takeSnapshot();
+    __filterSnapshotsMap[tryingSnapshotId] = tryingSnapshot;
+    //
+    return _FilterSnapshotWrapper(
+      filterSnapshotId: tryingSnapshotId,
+      filterSnapshot: tryingSnapshot,
+    );
   }
 
-  Future<bool> queryBlocks({
+  ///
+  /// Query all Scalars and Blocks of this DataFilter if they are visible on the UI.
+  /// Any Scalar or Block that is not queried will be set to LAZY state.
+  ///
+  Future<bool> queryAll({
     S? suggestedFilterSnapshot,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       ownerClassInstance: this,
-      methodName: "queryBlocks",
+      methodName: "queryAll",
       parameters: {
         "suggestedFilterSnapshot": suggestedFilterSnapshot,
       },
       route: null,
     );
-    //
-    _FilterSnapshotWrapper<S>? tryingSnapshot = await __prepareData(
+    return await _queryAllWithOverlayAndRestorable(
       suggestedFilterSnapshot: suggestedFilterSnapshot,
+      forceBlockWithQueryOptions: null,
+      forceScalarWithQueryOptions: null,
     );
+  }
+
+  ///
+  /// Query all Scalars and Blocks of this DataFilter if they are visible on the UI.
+  /// Any Scalar or Block that is not queried will be set to LAZY state.
+  ///
+  /// [forceBlockWithQueryOptions.block] will be queried mandatory.
+  ///
+  Future<bool> _queryAllWithOverlayAndRestorable({
+    required S? suggestedFilterSnapshot,
+    required _BlockWithQueryOptions? forceBlockWithQueryOptions,
+    required _ScalarWithQueryOptions? forceScalarWithQueryOptions,
+  }) async {
+    return await FlutterArtist.executeTask(
+      asyncFunction: () async {
+        return await __queryAllIfNeedWithRestorable(
+          suggestedFilterSnapshot: suggestedFilterSnapshot,
+          forceBlockWithQueryOptions: null,
+          forceScalarWithQueryOptions: null,
+        );
+      },
+    );
+  }
+
+  ///
+  /// Query all Scalars and Blocks of this DataFilter if they are visible on the UI.
+  /// Any Scalar or Block that is not queried will be set to LAZY state.
+  ///
+  Future<bool> __queryAllIfNeedWithRestorable({
+    required S? suggestedFilterSnapshot,
+    required _BlockWithQueryOptions? forceBlockWithQueryOptions,
+    required _ScalarWithQueryOptions? forceScalarWithQueryOptions,
+  }) async {
+    final List<Scalar> queryScalars = _scalars;
+    // TODO: Kiem tra danh sach cac Block can query. ???????????????????????????????????????????????????????????????????
+    // TODO: Loai bo cac Block con ra khoi query. ??????????????????????????????????????????????????????????????????????
+    final List<Block> queryBlocks = _blocks;
     //
-    if (tryingSnapshot == null) {
-      return false;
-    }
-    final int tryingFilterSnapshotId = tryingSnapshot.filterSnapshotId;
-    final S tryingFilterSnapshot = tryingSnapshot.filterSnapshot;
+    // Start QUERY:
     //
-    for (Scalar scalar in _scalars) {
-      scalar.query();
-    }
-    bool success = true;
-    for (Block block in _blocks) {
-      bool s = await block.query(
+    try {
+      __backupAll(
+        scalars: queryScalars,
+        blocks: queryBlocks,
+      );
+      //
+      _FilterSnapshotWrapper<S> tryingSnapshot = await __prepareData(
         suggestedFilterSnapshot: suggestedFilterSnapshot,
       );
-      if (!s) {
-        success = s;
+      //
+      final int tryingFilterSnapshotId = tryingSnapshot.filterSnapshotId;
+      final S tryingFilterSnapshot = tryingSnapshot.filterSnapshot;
+      //
+      for (Scalar scalar in queryScalars) {
+        bool success = await scalar.__queryThis(
+          filterSnapshot: tryingFilterSnapshot,
+        );
+        if (!success) {
+          // Throw error to restore all....
+          throw _QueryError();
+        }
       }
+      bool success = true;
+      for (Block block in queryBlocks) {
+        bool success = await block.__queryThisAndChildren(
+          queryType: QueryType.forceQuery,
+          listBehavior: ListBehavior.replace,
+          filterSnapshot: tryingFilterSnapshot,
+          postQueryBehavior: PostQueryBehavior.selectAvailableItem,
+          suggestedSelection: null,
+          pageable: null,
+        );
+        if (!success) {
+          // Throw error to restore all....
+          throw _QueryError();
+        }
+      }
+      //
+      __applyNewStateAll(
+        scalars: queryScalars,
+        blocks: queryBlocks,
+      );
+      //
+      return success;
+    } catch (e) {
+      // Restore all...
+      __restoreAll(
+        scalars: queryScalars,
+        blocks: queryBlocks,
+      );
+      return false;
     }
-    return success;
   }
+
+  // ***************************************************************************
+  // *** BACKUP, RESTORE, APPLY ***
+  // ***************************************************************************
+
+  void __backupAll({
+    required List<Scalar> scalars,
+    required List<Block> blocks,
+  }) {
+    for (Scalar scalar in scalars) {
+      scalar._backupAll();
+    }
+    for (Block block in blocks) {
+      block._backupAll();
+    }
+  }
+
+  void __restoreAll({
+    required List<Scalar> scalars,
+    required List<Block> blocks,
+  }) {
+    for (Scalar scalar in scalars) {
+      scalar._restoreAll();
+    }
+    for (Block block in blocks) {
+      block._restoreAll();
+    }
+  }
+
+  void __applyNewStateAll({
+    required List<Scalar> scalars,
+    required List<Block> blocks,
+  }) {
+    for (Scalar scalar in scalars) {
+      scalar._applyNewStateAll();
+    }
+    for (Block block in blocks) {
+      block._applyNewStateAll();
+    }
+  }
+
+  void _restore() {
+    for (Restorable bk in restorableCriteria) {
+      bk.restore();
+    }
+  }
+
+  void _applyNewState() {
+    for (Restorable bk in restorableCriteria) {
+      bk.applyNewState();
+    }
+  }
+
+  // ***************************************************************************
+  // *** UI COMPONENTS ***
+  // ***************************************************************************
 
   bool hasActiveFilterFragmentWidget() {
     _removeUnmountedWidgetStates(_widgetStateListeners);
@@ -177,18 +306,6 @@ abstract class DataFilter<S extends FilterSnapshot> {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }
-    }
-  }
-
-  void _restore() {
-    for (Restorable bk in restorableCriteria) {
-      bk.restore();
-    }
-  }
-
-  void _applyNewState() {
-    for (Restorable bk in restorableCriteria) {
-      bk.applyNewState();
     }
   }
 

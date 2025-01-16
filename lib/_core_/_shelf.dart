@@ -90,9 +90,26 @@ abstract class Shelf {
         }
         //
         dataFilter._scalars.add(scalar);
-        scalar.dataFilter = dataFilter;
+        scalar._dataFilter = dataFilter;
       } else {
-        scalar.dataFilter = null;
+        // Default DataFilter.
+        DataFilter defaultDataFilter = _DefaultDataFilter(
+          name: "${scalar.name}-@-default-scalar-data-filter",
+          shelf: this,
+        );
+        defaultDataFilter._scalars.add(scalar);
+        scalar._dataFilter = defaultDataFilter;
+        //
+        const Type emptyFilterSnapshotType = EmptyFilterSnapshot;
+        final String filterSnapshotEmpty = emptyFilterSnapshotType.toString();
+        final String filterSnapshotB = scalar.getFilterSnapshotTypeAsString();
+        //
+        if (filterSnapshotB != filterSnapshotEmpty) {
+          throw _registerError(
+              "Filter-Snapshot of '${getClassName(scalar)}' scalar must be '$filterSnapshotEmpty' "
+              "because this scalar does not have a  Data-Filter.\n"
+              " >> Currently, its Filter-Snapshot is '$filterSnapshotB'");
+        }
       }
     }
 
@@ -107,7 +124,8 @@ abstract class Shelf {
   void __registerBlockCascade(Block block) {
     if (__blockMap.containsKey(block.name)) {
       throw _registerError(
-          "Duplicated block '${block.name}' in '${getClassName(this)}'");
+          "Duplicated block '${block.name}' in '${getClassName(this)}'\n"
+          "Double-check ${getClassName(this)}.registerStructure() method");
     } else {
       __blockMap[block.name] = block;
     }
@@ -140,9 +158,14 @@ abstract class Shelf {
       }
       //
       dataFilter._blocks.add(block);
-      block.dataFilter = dataFilter;
+      block._dataFilter = dataFilter;
     } else {
-      block.dataFilter = null;
+      DataFilter defaultDataFilter = _DefaultDataFilter(
+        name: "${block.name}-@-default-block-data-filter",
+        shelf: this,
+      );
+      defaultDataFilter._blocks.add(block);
+      block._dataFilter = defaultDataFilter;
       //
       const Type emptyFilterSnapshotType = EmptyFilterSnapshot;
       final String filterSnapshotEmpty = emptyFilterSnapshotType.toString();
@@ -312,7 +335,8 @@ abstract class Shelf {
 
   Future<void> __queryLazyList() async {
     _queryLocked = true;
-    final List<NBBFWraper> lazyBlockOrForms = __findTopLazyBlocks();
+    final List<_ScalarOrBlockOrFormWrapper> lazyBlockOrForms =
+        __findTopLazyScalarOrBlockOrForms();
     if (lazyBlockOrForms.isEmpty) {
       __lastTransactionNumber = __currentTransactionNumber;
       _queryLocked = false;
@@ -323,9 +347,9 @@ abstract class Shelf {
 
       print(
           "@@@@@@@@@@@@ __queryLazyList: ID:  Start >>>>>>>>>>> lazyBlockOrForms: $lazyBlockOrForms");
-      await _queryBlockOrForms(
+      await _queryLazyScalarOrBlockOrForms(
         queryType: QueryType.forceQuery,
-        blockOrForms: lazyBlockOrForms,
+        scalarOrBlockOrFormWrappers: lazyBlockOrForms,
       );
       print(
           "@@@@@@@@@@@@ __queryLazyList: ID:  End >>>>>>>>>>> lazyBlockOrForms: $lazyBlockOrForms");
@@ -333,33 +357,34 @@ abstract class Shelf {
     }
   }
 
-  void __findLazyScalars(List<NBBFWraper> founds) {
+  void __findLazyScalars(List<_ScalarOrBlockOrFormWrapper> founds) {
     for (Scalar scalar in __scalars) {
       if (scalar.hasActiveUiComponent() &&
           scalar.data.dataState == DataState.pending) {
-        founds.add(NBBFWraper.scalar(scalar));
+        founds.add(_ScalarOrBlockOrFormWrapper.scalar(scalar));
       }
     }
   }
 
-  void __findTopLazyBlocksCascade(List<Block> blocks, List<NBBFWraper> founds) {
+  void __findTopLazyBlocksCascade(
+      List<Block> blocks, List<_ScalarOrBlockOrFormWrapper> founds) {
     for (Block block in blocks) {
       // _hasActiveWidgetAndNeedToQuery()
       if (block.hasActiveBlockFragmentWidget(alsoCheckChildren: true) &&
           block.dataState == DataState.pending) {
-        founds.add(NBBFWraper.block(block));
+        founds.add(_ScalarOrBlockOrFormWrapper.block(block));
       } else if (block.blockForm != null &&
           block.blockForm!.hasActiveFormWidget() &&
           block.blockForm!.dataState == DataState.pending) {
-        founds.add(NBBFWraper.blockForm(block.blockForm!));
+        founds.add(_ScalarOrBlockOrFormWrapper.blockForm(block.blockForm!));
       } else {
         __findTopLazyBlocksCascade(block._childBlocks, founds);
       }
     }
   }
 
-  List<NBBFWraper> __findTopLazyBlocks() {
-    final List<NBBFWraper> founds = [];
+  List<_ScalarOrBlockOrFormWrapper> __findTopLazyScalarOrBlockOrForms() {
+    final List<_ScalarOrBlockOrFormWrapper> founds = [];
     __findLazyScalars(founds);
     __findTopLazyBlocksCascade(__rootBlocks, founds);
     return founds;
@@ -381,52 +406,55 @@ abstract class Shelf {
     required QueryType queryType,
     required List<Block> blocks,
   }) async {
-    List<NBBFWraper> blockOrForms =
-        blocks.map((b) => NBBFWraper.block(b)).toList();
-    return await _queryBlockOrForms(
+    List<_ScalarOrBlockOrFormWrapper> blockOrForms =
+        blocks.map((b) => _ScalarOrBlockOrFormWrapper.block(b)).toList();
+    //
+    return await _queryLazyScalarOrBlockOrForms(
       queryType: queryType,
-      blockOrForms: blockOrForms,
+      scalarOrBlockOrFormWrappers: blockOrForms,
     );
   }
 
   // TODO Kiem tra cha con cua cac Block.
-  Future<bool> _queryBlockOrForms({
+  Future<bool> _queryLazyScalarOrBlockOrForms({
     required QueryType queryType,
-    required List<NBBFWraper> blockOrForms,
+    required List<_ScalarOrBlockOrFormWrapper> scalarOrBlockOrFormWrappers,
   }) async {
-    if (blockOrForms.isEmpty) {
+    if (scalarOrBlockOrFormWrappers.isEmpty) {
       return true;
     }
     bool needToUpdate = false;
     bool success = false;
     try {
       print(
-          "@@@@@@@@@@@@@@@@@@@@@@@@@@@ >>>>>>>>>>> queryBlocks: $blockOrForms");
+          "@@@@@@@@@@@@@@@@@@@@@@@@@@@ >>>>>>>>>>> : $scalarOrBlockOrFormWrappers");
 
-      for (NBBFWraper blkOrForm in blockOrForms) {
+      for (_ScalarOrBlockOrFormWrapper wrapper in scalarOrBlockOrFormWrappers) {
         needToUpdate = true;
         // QUERY SCALAR:
-        if (blkOrForm.scalar != null) {
+        if (wrapper.scalar != null) {
           FlutterArtist.codeFlowLogger._addInfo(
             isLibCode: true,
             ownerClassInstance: this,
-            info: "Querying lazy Scalar: ${getClassName(blkOrForm.scalar)}",
+            info: "Querying lazy Scalar: ${getClassName(wrapper.scalar)}",
           );
           //
-          success = await blkOrForm.scalar!._queryWithOverlayAndRestorable();
-          if (!success) {
-            break;
-          }
+          // TODO: Mở rào này ra ???????????????????????????????????????????????????????????????????????????
+          // TODO: ???????????????????????????????????????????????????????????????????????????
+          // success = await wrapper.scalar!._queryWithOverlayAndRestorable();
+          // if (!success) {
+          //   break;
+          // }
         }
         // QUERY BLOCK:
-        else if (blkOrForm.block != null) {
+        else if (wrapper.block != null) {
           FlutterArtist.codeFlowLogger._addInfo(
             isLibCode: true,
             ownerClassInstance: this,
-            info: "Querying lazy block: ${getClassName(blkOrForm.block)}",
+            info: "Querying lazy block: ${getClassName(wrapper.block)}",
           );
           //
-          success = await blkOrForm.block!._queryWithOverlayAndRestorable(
+          success = await wrapper.block!._queryWithOverlayAndRestorable(
             queryType: queryType,
             listBehavior: ListBehavior.replace,
             suggestedFilterSnapshot: null,
@@ -439,15 +467,15 @@ abstract class Shelf {
           }
         }
         // QUERY BLOCK-FORM:
-        else if (blkOrForm.blockForm != null) {
+        else if (wrapper.blockForm != null) {
           FlutterArtist.codeFlowLogger._addInfo(
             isLibCode: true,
             ownerClassInstance: this,
             info:
-                "Querying lazy block form: ${getClassName(blkOrForm.blockForm)}",
+                "Querying lazy block form: ${getClassName(wrapper.blockForm)}",
           );
           //
-          Block block = blkOrForm.blockForm!.block;
+          Block block = wrapper.blockForm!.block;
           Object? currentItem = block.data.currentItemDetail;
           if (currentItem != null) {
             success = await block._prepareToShowOrEditWithOverlayAndRestorable(

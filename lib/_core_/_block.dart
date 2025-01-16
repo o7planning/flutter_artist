@@ -46,6 +46,14 @@ abstract class Block<
 
   QueryMode get queryMode => _queryMode;
 
+  bool __isQuerying = false;
+
+  bool get isQuerying => __isQuerying;
+
+  bool __isSaving = false;
+
+  bool get isSaving => __isSaving;
+
   bool __isDeleting = false;
 
   bool get isDeleting => __isDeleting;
@@ -57,10 +65,6 @@ abstract class Block<
   bool __isPreparingFormCreation = false;
 
   bool get isPreparingFormCreation => __isPreparingFormCreation;
-
-  bool __isQuerying = false;
-
-  bool get isQuerying => __isQuerying;
 
   final String name;
 
@@ -83,7 +87,23 @@ abstract class Block<
 
   final String? dataFilterName;
 
-  late final DataFilter<S>? dataFilter;
+  ///
+  /// This field is not null.
+  /// If this block does not declare a DataFilter, it will have the default DataFilter.
+  ///
+  late final DataFilter<S> _dataFilter;
+
+  ///
+  /// Returns a DataFilter declared in the [Shelf.registerStructure()] method.
+  /// The return value may be null.
+  ///
+  DataFilter<S>? get dataFilter {
+    if (_dataFilter is _DefaultDataFilter) {
+      return null;
+    } else {
+      return _dataFilter;
+    }
+  }
 
   late final Block? parent;
 
@@ -135,8 +155,8 @@ abstract class Block<
     required List<Type> listenItemTypes,
     required List<Block>? childBlocks,
   })  : __pageSize = pageSize,
-        _childBlocks = childBlocks ?? [],
-        __listenItemTypes = listenItemTypes {
+        __listenItemTypes = listenItemTypes,
+        _childBlocks = childBlocks ?? [] {
     for (Block childBlock in _childBlocks) {
       childBlock.parent = this;
     }
@@ -184,6 +204,27 @@ abstract class Block<
       ret.addAll(childBlock.descendantBlocks);
     }
     return ret;
+  }
+
+  void __refreshQueryingState({required bool isQuerying}) {
+    try {
+      __isQuerying = isQuerying;
+      this.updateControlBarWidgets();
+    } catch (e) {}
+  }
+
+  void __refreshDeletingState({required bool isDeleting}) {
+    try {
+      __isDeleting = isQuerying;
+      this.updateControlBarWidgets();
+    } catch (e) {}
+  }
+
+  void __refreshSavingState({required bool isSaving}) {
+    try {
+      __isSaving = isSaving;
+      this.updateControlBarWidgets();
+    } catch (e) {}
   }
 
   void updateFragmentWidgets() {
@@ -485,6 +526,7 @@ abstract class Block<
   }
 
   // Private method. Only for use in this class.
+  @Deprecated("Khong su dung nua, xoa di")
   Future<bool> __prepareFilter({
     required S? suggestedFilterSnapshot,
     required bool force,
@@ -625,27 +667,42 @@ abstract class Block<
       },
     );
     //
-    bool success = false;
-    __isQuerying = true;
-    this.updateControlBarWidgets();
-    try {
-      success = await _queryWithOverlayAndRestorable(
-        queryType: QueryType.forceQuery,
-        listBehavior: listBehavior,
-        suggestedFilterSnapshot: suggestedFilterSnapshot,
-        postQueryBehavior: PostQueryBehavior.selectAvailableItem,
-        suggestedSelection: suggestedSelection,
+    bool success = await _dataFilter._queryAllWithOverlayAndRestorable(
+      // Suggestion for DataFilter
+      suggestedFilterSnapshot: suggestedFilterSnapshot,
+      forceBlockWithQueryOptions: _BlockWithQueryOptions(
+        block: this,
         pageable: pageable,
-      );
-    } finally {
-      __isQuerying = false;
-      this.updateControlBarWidgets();
-    }
-
-    if (success) {
-      _executeRoute(route: route);
-    }
+        listBehavior: listBehavior,
+        suggestedSelection: suggestedSelection,
+        postQueryBehavior: PostQueryBehavior.selectAvailableItem,
+      ),
+      forceScalarWithQueryOptions: null,
+    );
+    //
     return success;
+    //
+    // bool success = false;
+    // __isQuerying = true;
+    // this.updateControlBarWidgets();
+    // try {
+    //   success = await _queryWithOverlayAndRestorable(
+    //     queryType: QueryType.forceQuery,
+    //     listBehavior: listBehavior,
+    //     suggestedFilterSnapshot: suggestedFilterSnapshot,
+    //     postQueryBehavior: PostQueryBehavior.selectAvailableItem,
+    //     suggestedSelection: suggestedSelection,
+    //     pageable: pageable,
+    //   );
+    // } finally {
+    //   __isQuerying = false;
+    //   this.updateControlBarWidgets();
+    // }
+    //
+    // if (success) {
+    //   _executeRoute(route: route);
+    // }
+    // return success;
   }
 
   ///
@@ -686,6 +743,7 @@ abstract class Block<
     return success;
   }
 
+  @Deprecated("Xoá phương thức này, không sử dụng nữa.")
   Future<bool> _queryWithOverlayAndRestorable({
     required QueryType queryType,
     required ListBehavior listBehavior,
@@ -694,25 +752,26 @@ abstract class Block<
     required SuggestedSelection? suggestedSelection,
     required PageableData? pageable,
   }) async {
-    return await FlutterArtist.executeTask(
-      asyncFunction: () async {
-        return __queryWithRestorable(
-          queryType: queryType,
-          listBehavior: listBehavior,
-          suggestedFilterSnapshot: suggestedFilterSnapshot,
-          postQueryBehavior: postQueryBehavior,
-          suggestedSelection: suggestedSelection,
-          pageable: pageable,
-        );
-      },
-    );
+    // return await FlutterArtist.executeTask(
+    //   asyncFunction: () async {
+    //     return __queryWithRestorable(
+    //       queryType: queryType,
+    //       listBehavior: listBehavior,
+    //       filterSnapshot:  suggestedFilterSnapshot,
+    //       postQueryBehavior: postQueryBehavior,
+    //       suggestedSelection: suggestedSelection,
+    //       pageable: pageable,
+    //     );
+    //   },
+    // );
+    return true;
   }
 
   // Private method (Only for use in this class)
   Future<bool> __queryWithRestorable({
     required QueryType queryType,
     required ListBehavior listBehavior,
-    required S? suggestedFilterSnapshot,
+    required S filterSnapshot,
     required PostQueryBehavior postQueryBehavior,
     required SuggestedSelection? suggestedSelection,
     required PageableData? pageable,
@@ -722,7 +781,7 @@ abstract class Block<
       bool success = await __queryThisAndChildren(
         queryType: queryType,
         listBehavior: listBehavior,
-        suggestedFilterSnapshot: suggestedFilterSnapshot,
+        filterSnapshot: filterSnapshot,
         postQueryBehavior: postQueryBehavior,
         suggestedSelection: suggestedSelection,
         pageable: pageable,
@@ -732,7 +791,7 @@ abstract class Block<
         _restoreAll();
         return false;
       } else {
-        _applyNewStateAll(clearNeedToReQuery: true);
+        _applyNewStateAll();
         return true;
       }
     } catch (e, stacktrace) {
@@ -754,19 +813,11 @@ abstract class Block<
   Future<bool> __queryThisAndChildren({
     required QueryType queryType,
     required ListBehavior listBehavior,
-    required S? suggestedFilterSnapshot,
+    required S filterSnapshot,
     required PostQueryBehavior postQueryBehavior,
     required SuggestedSelection? suggestedSelection,
     required PageableData? pageable,
   }) async {
-    bool success = await __prepareFilter(
-      suggestedFilterSnapshot: suggestedFilterSnapshot,
-      force: true,
-    );
-    if (!success) {
-      return false;
-    }
-    //
     bool needRealQuery = false;
     ListBehavior forceListBehavior = listBehavior;
     switch (queryType) {
@@ -793,10 +844,6 @@ abstract class Block<
     PageData<I>? pageData;
     DataState dataState = DataState.pending;
     //
-    final S filterSnapshot = dataFilter == null
-        ? EmptyFilterSnapshot() as S
-        : dataFilter!._currentSnapshot!;
-    //
     PageableData callingPageable;
     if (needRealQuery) {
       callingPageable =
@@ -811,11 +858,17 @@ abstract class Block<
           parameters: {},
         );
         //
+        __refreshQueryingState(isQuerying: true);
+        //
         result = await callApiQuery(
           filterSnapshot: filterSnapshot,
           pageable: callingPageable,
         );
+        //
+        __refreshQueryingState(isQuerying: false);
       } catch (e, stacktrace) {
+        __refreshQueryingState(isQuerying: false);
+        //
         _handleError(
           className: getClassName(this),
           methodName: "callApiQuery",
@@ -978,11 +1031,9 @@ abstract class Block<
     shelf.updateAllWidgets();
   }
 
-  void _applyNewStateAll({bool clearNeedToReQuery = false}) {
+  void _applyNewStateAll() {
     Block rootBlock = getRootBlock();
-    rootBlock.__applyNewStateThisAndChildren(
-      clearNeedToReQuery: clearNeedToReQuery,
-    );
+    rootBlock.__applyNewStateThisAndChildren();
     rootBlock.__setChildrenForParent();
     shelf.updateAllWidgets();
   }
@@ -1032,7 +1083,7 @@ abstract class Block<
     }
   }
 
-  void __applyNewStateThisAndChildren({bool clearNeedToReQuery = false}) {
+  void __applyNewStateThisAndChildren() {
     // printFormDebug(
     //     " -------------------------> NORMAL! - ${data._dataState.name.toUpperCase()}");
 
@@ -1200,7 +1251,7 @@ abstract class Block<
       bool success = await childBlock.__queryThisAndChildren(
         queryType: QueryType.queryIfNeed,
         listBehavior: ListBehavior.replace,
-        suggestedFilterSnapshot: null,
+        filterSnapshot: null,
         postQueryBehavior: PostQueryBehavior.selectAvailableItem,
         suggestedSelection: childQueryDirective,
         pageable: null, // TODO: Null or last pageable?
@@ -1470,7 +1521,7 @@ abstract class Block<
             success = await __queryThisAndChildren(
               queryType: QueryType.forceQuery,
               listBehavior: ListBehavior.replace,
-              suggestedFilterSnapshot: suggestedFilterSnapshot,
+              filterSnapshot: suggestedFilterSnapshot,
               postQueryBehavior: PostQueryBehavior.selectAvailableItem,
               suggestedSelection: suggestedSelection,
               pageable: null, // TODO: Xem lai!
@@ -2577,8 +2628,6 @@ abstract class Block<
     throw UnimplementedError("Override me!");
   }
 
-  // Developer do not call this method!
-  // Call query() instead of
   Future<ApiResult<PageData<I>?>> callApiQuery({
     required S filterSnapshot,
     required PageableData pageable,

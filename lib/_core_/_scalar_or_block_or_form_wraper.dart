@@ -1,15 +1,15 @@
 part of '../flutter_artist.dart';
 
-class NBBFWraper {
+class _ScalarOrBlockOrFormWrapper {
   Scalar? scalar;
   Block? block;
   BlockForm? blockForm;
 
-  NBBFWraper.scalar(Scalar this.scalar);
+  _ScalarOrBlockOrFormWrapper.scalar(Scalar this.scalar);
 
-  NBBFWraper.block(Block this.block);
+  _ScalarOrBlockOrFormWrapper.block(Block this.block);
 
-  NBBFWraper.blockForm(BlockForm this.blockForm);
+  _ScalarOrBlockOrFormWrapper.blockForm(BlockForm this.blockForm);
 
   @override
   String toString() {

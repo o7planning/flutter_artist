@@ -41,11 +41,21 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
 
   bool __isQuerying = false;
 
+  bool get isQuerying => __isQuerying;
+
   final List<Type> __listenItemTypes;
 
   List<Type> get listenItemTypes => [...__listenItemTypes];
 
-  late final DataFilter<S>? dataFilter;
+  late final DataFilter<S> _dataFilter;
+
+  DataFilter<S>? get dataFilter {
+    if (_dataFilter is _DefaultDataFilter) {
+      return null;
+    } else {
+      return _dataFilter;
+    }
+  }
 
   late final ScalarData<V, S> data = ScalarData<V, S>(this);
 
@@ -103,7 +113,9 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
   ///
   ///
   @nonVirtual
-  Future<bool> query() async {
+  Future<bool> query({
+    S? suggestedFilterSnapshot,
+  }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
@@ -112,127 +124,141 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
       parameters: {},
     );
     //
-    bool success = false;
-    __isQuerying = true;
-    this.updateControlBarWidgets();
-    try {
-      success = await _queryWithOverlayAndRestorable();
-    } finally {
-      __isQuerying = false;
-      this.updateControlBarWidgets();
-    }
+    bool success = await _dataFilter._queryAllWithOverlayAndRestorable(
+      // Suggestion for DataFilter
+      suggestedFilterSnapshot: suggestedFilterSnapshot,
+      forceBlockWithQueryOptions: null,
+      forceScalarWithQueryOptions: _ScalarWithQueryOptions(
+        scalar: this,
+      ),
+    );
+    //
     return success;
+    //
+    // bool success = false;
+    // __isQuerying = true;
+    // this.updateControlBarWidgets();
+    // try {
+    //   // TODO: Remove.
+    //   // success = await _queryWithOverlayAndRestorable();
+    // } finally {
+    //   __isQuerying = false;
+    //   this.updateControlBarWidgets();
+    // }
+    // return success;
   }
 
   Future<ApiResult<V>> callApiQuery({
     required S? filterSnapshot,
   });
 
-  Future<bool> _queryWithOverlayAndRestorable() async {
-    return await FlutterArtist.executeTask(
-      asyncFunction: () async {
-        return __queryWithRestorable();
-      },
-    );
-  }
+  // TODO: Remove.
+  // Future<bool> _queryWithOverlayAndRestorable() async {
+  //   return await FlutterArtist.executeTask(
+  //     asyncFunction: () async {
+  //       return __queryWithRestorable();
+  //     },
+  //   );
+  // }
 
   // Private method (Only for use in this class)
-  Future<bool> __queryWithRestorable() async {
-    try {
-      _backupAll();
-      bool success = await __queryThisAndChildren();
-      //
-      if (!success) {
-        _restoreAll();
-        return false;
-      } else {
-        _applyNewStateAll();
-        return true;
-      }
-    } catch (e, stacktrace) {
-      _handleError(
-        className: getClassName(this),
-        methodName: 'query',
-        error: e,
-        stackTrace: stacktrace,
-        showSnackBar: true,
-      );
-      //
-      _restoreAll();
-      return false;
-    }
-  }
+  // @Deprecated("Xoa di, khong su dung nua")
+  // Future<bool> __queryWithRestorable({
+  //   required S filterSnapshot,
+  // }) async {
+  //   try {
+  //     _backupAll();
+  //     bool success = await __queryThis(
+  //       filterSnapshot: filterSnapshot,
+  //     );
+  //     //
+  //     if (!success) {
+  //       _restoreAll();
+  //       return false;
+  //     } else {
+  //       _applyNewStateAll();
+  //       return true;
+  //     }
+  //   } catch (e, stacktrace) {
+  //     _handleError(
+  //       className: getClassName(this),
+  //       methodName: 'query',
+  //       error: e,
+  //       stackTrace: stacktrace,
+  //       showSnackBar: true,
+  //     );
+  //     //
+  //     _restoreAll();
+  //     return false;
+  //   }
+  // }
 
   // Private method. Only for use in this class.
-  Future<bool> __prepareFilter({
-    required S? suggestedFilterSnapshot,
-    required bool force,
-  }) async {
-    if (dataFilter == null) {
-      return true;
-    }
+  // Future<bool> __prepareFilter({
+  //   required S? suggestedFilterSnapshot,
+  //   required bool force,
+  // }) async {
+  //   if (dataFilter == null) {
+  //     return true;
+  //   }
+  //   try {
+  //     FlutterArtist.codeFlowLogger._addMethodCall(
+  //       isLibCode: false,
+  //       ownerClassInstance: dataFilter!,
+  //       methodName: "prepareData",
+  //       parameters: {
+  //         "suggestedFilterSnapshot": suggestedFilterSnapshot,
+  //       },
+  //       route: null,
+  //     );
+  //     //
+  //     await dataFilter!.prepareData(
+  //       suggestedFilterSnapshot: suggestedFilterSnapshot,
+  //     );
+  //   } catch (e, stacktrace) {
+  //     _handleError(
+  //       className: getClassName(dataFilter),
+  //       methodName: 'prepareData',
+  //       error: e,
+  //       stackTrace: stacktrace,
+  //       showSnackBar: true,
+  //     );
+  //     return false;
+  //   }
+  //   try {
+  //     FlutterArtist.codeFlowLogger._addMethodCall(
+  //       isLibCode: false,
+  //       ownerClassInstance: dataFilter!,
+  //       methodName: "takeSnapshot",
+  //       parameters: {},
+  //       route: null,
+  //     );
+  //     //
+  //     S filterSnapshot = dataFilter!.takeSnapshot();
+  //     dataFilter!._currentSnapshot = filterSnapshot;
+  //     return true;
+  //   } catch (e, stacktrace) {
+  //     _handleError(
+  //       className: getClassName(dataFilter),
+  //       methodName: 'prepareData',
+  //       error: e,
+  //       stackTrace: stacktrace,
+  //       showSnackBar: true,
+  //     );
+  //     return false;
+  //   }
+  // }
+
+  void __refreshQueryingState({required bool isQuerying}) {
     try {
-      FlutterArtist.codeFlowLogger._addMethodCall(
-        isLibCode: false,
-        ownerClassInstance: dataFilter!,
-        methodName: "prepareData",
-        parameters: {
-          "suggestedFilterSnapshot": suggestedFilterSnapshot,
-        },
-        route: null,
-      );
-      //
-      await dataFilter!.prepareData(
-        suggestedFilterSnapshot: suggestedFilterSnapshot,
-      );
-    } catch (e, stacktrace) {
-      _handleError(
-        className: getClassName(dataFilter),
-        methodName: 'prepareData',
-        error: e,
-        stackTrace: stacktrace,
-        showSnackBar: true,
-      );
-      return false;
-    }
-    try {
-      FlutterArtist.codeFlowLogger._addMethodCall(
-        isLibCode: false,
-        ownerClassInstance: dataFilter!,
-        methodName: "takeSnapshot",
-        parameters: {},
-        route: null,
-      );
-      //
-      S filterSnapshot = dataFilter!.takeSnapshot();
-      dataFilter!._currentSnapshot = filterSnapshot;
-      return true;
-    } catch (e, stacktrace) {
-      _handleError(
-        className: getClassName(dataFilter),
-        methodName: 'prepareData',
-        error: e,
-        stackTrace: stacktrace,
-        showSnackBar: true,
-      );
-      return false;
-    }
+      __isQuerying = isQuerying;
+      this.updateControlBarWidgets();
+    } catch (e) {}
   }
 
-  Future<bool> __queryThisAndChildren() async {
-    bool success = await __prepareFilter(
-      suggestedFilterSnapshot: null,
-      force: true,
-    );
-    if (!success) {
-      return false;
-    }
-    //
-    final S? filterSnapshot = dataFilter == null
-        ? EmptyFilterSnapshot() as S
-        : dataFilter!._currentSnapshot;
-    //
-
+  Future<bool> __queryThis({
+    required S filterSnapshot,
+  }) async {
     ApiResult<V> result;
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
@@ -243,10 +269,16 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
         parameters: {},
       );
       //
+      __refreshQueryingState(isQuerying: true);
+      //
       result = await callApiQuery(
         filterSnapshot: filterSnapshot,
       );
+      //
+      __refreshQueryingState(isQuerying: false);
     } catch (e, stacktrace) {
+      __refreshQueryingState(isQuerying: false);
+      //
       _handleError(
         className: getClassName(this),
         methodName: "callApiQuery",
@@ -266,7 +298,6 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
       );
       return false;
     }
-
     // TODO: Xu ly cac tinh huong loi???
     data._updateFrom(
       filterSnapshot: filterSnapshot,
