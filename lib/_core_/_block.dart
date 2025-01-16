@@ -1710,20 +1710,21 @@ abstract class Block<
     if (actionConfirmation != null) {
       bool confirm = false;
       BuildContext context = FlutterArtist.adapter.getCurrentContext();
-      if (actionConfirmation.type == ActionConfirmationType.delete) {
-        confirm = await dialogs.showConfirmDeleteDialog(
-          context: context,
-          details: actionConfirmation.details ?? "",
-        );
-      } else if (actionConfirmation.type == ActionConfirmationType.custom) {
-        confirm = await dialogs.showConfirmDialog(
-          context: context,
-          message: actionConfirmation.message,
-          details: actionConfirmation.details ?? "",
-        );
-      } else {
-        throw "TODO-executeQuickAction";
+      //
+      switch (actionConfirmation.type) {
+        case ActionConfirmationType.delete:
+          confirm = await dialogs.showConfirmDeleteDialog(
+            context: context,
+            details: actionConfirmation.details ?? "",
+          );
+        case ActionConfirmationType.custom:
+          confirm = await dialogs.showConfirmDialog(
+            context: context,
+            message: actionConfirmation.message,
+            details: actionConfirmation.details ?? "",
+          );
       }
+      //
       if (!confirm) {
         return false;
       }
