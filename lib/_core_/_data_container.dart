@@ -39,7 +39,7 @@ abstract class DataContainer {
     print(msg);
     print(stackTrace);
     if (showSnackBar) {
-      showErrorSnackbar(
+      showErrorSnackBar(
         message: msg,
         errorDetails: apiError.errorDetails,
       );
@@ -66,18 +66,18 @@ abstract class DataContainer {
     String msg = "Call ${getClassName(this)}.$methodName() error: $message";
     print(msg);
     if (showSnackBar) {
-      showErrorSnackbar(
+      showErrorSnackBar(
         message: msg,
         errorDetails: errorDetails,
       );
     }
   }
 
-  void showErrorSnackbar({
+  void showErrorSnackBar({
     required String message,
     required List<String>? errorDetails,
   }) {
-    FlutterArtist.adapter.showErrorSnackbar(
+    FlutterArtist.adapter.showErrorSnackBar(
       message: message,
       errorDetails: errorDetails,
     );

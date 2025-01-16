@@ -16,7 +16,7 @@ interface class FlutterArtistAdapter {
     throw UnimplementedError();
   }
 
-  void showErrorSnackbar({
+  void showErrorSnackBar({
     required String message,
     required List<String>? errorDetails,
   }) {

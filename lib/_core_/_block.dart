@@ -2068,7 +2068,7 @@ abstract class Block<
     if (blockForm == null) {
       if (showErrorMessage) {
         String msg = "${getClassName(this)} has no BlockForm";
-        showErrorSnackbar(message: msg, errorDetails: null);
+        showErrorSnackBar(message: msg, errorDetails: null);
       }
       return false;
     }

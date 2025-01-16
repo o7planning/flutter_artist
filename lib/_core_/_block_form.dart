@@ -203,11 +203,11 @@ abstract class BlockForm<ID extends Object, I extends Object, D extends Object,
   });
 
   // TODO: Co ca trong Block.
-  void showErrorSnackbar({
+  void showErrorSnackBar({
     required String message,
     required List<String>? errorDetails,
   }) {
-    FlutterArtist.adapter.showErrorSnackbar(
+    FlutterArtist.adapter.showErrorSnackBar(
       message: message,
       errorDetails: errorDetails,
     );
@@ -229,7 +229,7 @@ abstract class BlockForm<ID extends Object, I extends Object, D extends Object,
     print(msg);
     print(stackTrace);
     if (showSnackBar) {
-      showErrorSnackbar(
+      showErrorSnackBar(
         message: msg,
         errorDetails: null,
       );

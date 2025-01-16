@@ -192,12 +192,12 @@ abstract class DataFilter<S extends FilterSnapshot> {
     }
   }
 
-  void showErrorSnackbar({
+  void showErrorSnackBar({
     required String message,
     List<String>? errorDetails,
   }) {
     if (_blocks.isNotEmpty) {
-      FlutterArtist.adapter.showErrorSnackbar(
+      FlutterArtist.adapter.showErrorSnackBar(
         message: message,
         errorDetails: errorDetails,
       );
