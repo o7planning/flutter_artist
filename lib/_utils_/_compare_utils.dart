@@ -3,6 +3,23 @@ part of '../flutter_artist.dart';
 ///
 /// This function is used to check for "dirty" in a form.
 ///
+bool _compareDynamicAndDynamic(dynamic value, dynamic other) {
+  if (value is Iterable) {
+    return _compareIterableAndDynamic(value, other);
+  } else if (other is Iterable) {
+    return _compareIterableAndDynamic(other, value);
+  } else if (value is Map) {
+    return _compareMapAndDynamic(value, other);
+  } else if (other is Map) {
+    return _compareMapAndDynamic(other, value);
+  } else {
+    return value == other;
+  }
+}
+
+///
+/// This function is used to check for "dirty" in a form.
+///
 bool _compareMapAndMap(Map map, Map other) {
   Set<dynamic> keys = {}
     ..addAll(map.keys)
@@ -98,18 +115,5 @@ bool _compareMapAndDynamic(Map map, dynamic other) {
     } else {
       return false;
     }
-  }
-}
-
-///
-/// This function is used to check for "dirty" in a form.
-///
-bool _compareDynamicAndDynamic(dynamic value, dynamic other) {
-  if (value is Iterable) {
-    return _compareIterableAndDynamic(value, other);
-  } else if (value is Map) {
-    return _compareMapAndDynamic(value, other);
-  } else {
-    return value == other;
   }
 }
