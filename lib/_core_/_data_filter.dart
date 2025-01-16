@@ -66,7 +66,7 @@ abstract class DataFilter<S extends FilterSnapshot> {
     S? suggestedFilterSnapshot,
   });
 
-  Future<_TryingFilter<S>?> __prepareData({
+  Future<_FilterSnapshotWrapper<S>?> __prepareData({
     S? suggestedFilterSnapshot,
   }) async {
     try {
@@ -79,9 +79,9 @@ abstract class DataFilter<S extends FilterSnapshot> {
       // If no error:
       S tryingSnapshot = takeSnapshot();
       __filterSnapshotsMap[tryingSnapshotId] = tryingSnapshot;
-      return _TryingFilter(
-        tryingFilterSnapshotId: tryingSnapshotId,
-        tryingFilterSnapshot: tryingSnapshot,
+      return _FilterSnapshotWrapper(
+        filterSnapshotId: tryingSnapshotId,
+        filterSnapshot: tryingSnapshot,
       );
     } catch (e, stackTrace) {
       // TODO: Xu ly Error!
@@ -102,15 +102,15 @@ abstract class DataFilter<S extends FilterSnapshot> {
       route: null,
     );
     //
-    // _TryingFilter<S>? tryingFilter = await __prepareData(
-    //   suggestedFilterSnapshot: suggestedFilterSnapshot,
-    // );
-    // //
-    // if (tryingFilter == null) {
-    //   return false;
-    // }
-    // final int tryingFilterSnapshotId = tryingFilter.tryingFilterSnapshotId;
-    // final S tryingFilterSnapshot = tryingFilter.tryingFilterSnapshot;
+    _FilterSnapshotWrapper<S>? tryingSnapshot = await __prepareData(
+      suggestedFilterSnapshot: suggestedFilterSnapshot,
+    );
+    //
+    if (tryingSnapshot == null) {
+      return false;
+    }
+    final int tryingFilterSnapshotId = tryingSnapshot.filterSnapshotId;
+    final S tryingFilterSnapshot = tryingSnapshot.filterSnapshot;
     //
     for (Scalar scalar in _scalars) {
       scalar.query();

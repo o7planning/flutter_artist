@@ -65,7 +65,7 @@ part '_core_/_single_item_block.dart';
 part '_core_/_storage.dart';
 part '_core_/_suggested_form_data.dart';
 part '_core_/_suggested_selection.dart';
-part '_core_/_trying_filter.dart';
+part '_core_/_filter_snapshot_wrapper.dart';
 part '_core_/_typedef.dart';
 part '_debug_/_constants.dart';
 part '_debug_/_debug_colors_and_styles.dart';
