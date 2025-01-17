@@ -4,13 +4,13 @@ class _XShelf {
   final Shelf shelf;
 
   // All DataFilters
-  final List<_XDataFilter> xDataFilters = [];
+  final List<_XDataFilter> allXDataFilters = [];
 
   // All Root Blocks
-  final List<_XBlock> rootXBlocks = [];
+  final List<_XBlock> allRootXBlocks = [];
 
   // All Scalars
-  final List<_XScalar> xScalars = [];
+  final List<_XScalar> allXScalars = [];
 
   // All DataFilters of Shelf
   // <String dataFilterName, _XScalar>
@@ -68,7 +68,7 @@ class _XShelf {
       __addXBlockCascade(
         block: rootBlock,
         xBlockParent: null,
-        siblingXBlocks: rootXBlocks,
+        siblingXBlocks: allRootXBlocks,
       );
     }
     //
@@ -176,7 +176,7 @@ class _XShelf {
   }) {
     _XDataFilter xDataFilter = _XDataFilter(dataFilter: dataFilter);
     //
-    xDataFilters.add(xDataFilter);
+    allXDataFilters.add(xDataFilter);
     allXDataFilterMap[xDataFilter.name] = xDataFilter;
   }
 
@@ -191,7 +191,7 @@ class _XShelf {
       xDataFilter: xDataFilter,
     );
     //
-    xScalars.add(xScalar);
+    allXScalars.add(xScalar);
     allXScalarMap[scalar.name] = xScalar;
   }
 

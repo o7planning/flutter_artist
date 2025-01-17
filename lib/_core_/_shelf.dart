@@ -560,7 +560,7 @@ abstract class Shelf {
       forceQueryBlockForms: forceQueryBlockForms,
     );
     //
-    for (_XScalar xScalar in xShelf.xScalars) {
+    for (_XScalar xScalar in xShelf.allXScalars) {
       if (!xScalar.needQuery) {
         continue;
       }

@@ -4,7 +4,7 @@ class _XBlock {
   bool needQuery = false;
   final Block block;
 
-    final _XDataFilter xDataFilter;
+  final _XDataFilter xDataFilter;
 
   // Query Options:
   ListBehavior? listBehavior;

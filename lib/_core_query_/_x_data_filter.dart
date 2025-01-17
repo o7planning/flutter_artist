@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
 class _XDataFilter {
-  bool needQuery = false;
+  bool queried = false;
   final DataFilter dataFilter;
   FilterSnapshot? suggestedFilterSnapshot;
 
