@@ -5,6 +5,9 @@ abstract class Shelf {
 
   String? get description => _shelfStruct.description;
 
+  // All dataFilters including the default dataFilter.
+  final List<DataFilter> _allDataFilters = [];
+
   final Map<String, Scalar> __scalarMap = {};
 
   final List<Scalar> __scalars = [];
@@ -48,6 +51,8 @@ abstract class Shelf {
       DataFilter dataFilter = _shelfStruct.dataFilters[dataFilterName]!;
       dataFilter.name = dataFilterName;
       dataFilter.shelf = this;
+      //
+      _allDataFilters.add(dataFilter);
     }
 
     List<Scalar> scalars = _shelfStruct.scalars;
@@ -100,6 +105,8 @@ abstract class Shelf {
         );
         defaultDataFilter._scalars.add(scalar);
         scalar._registeredOrDefaultDataFilter = defaultDataFilter;
+        //
+        _allDataFilters.add(defaultDataFilter);
         //
         const Type emptyFilterSnapshotType = EmptyFilterSnapshot;
         final String filterSnapshotEmpty = emptyFilterSnapshotType.toString();
@@ -169,6 +176,8 @@ abstract class Shelf {
       defaultDataFilter._blocks.add(block);
       block._registeredOrDefaultDataFilter = defaultDataFilter;
       //
+      _allDataFilters.add(defaultDataFilter);
+      //
       const Type emptyFilterSnapshotType = EmptyFilterSnapshot;
       final String filterSnapshotEmpty = emptyFilterSnapshotType.toString();
       final String filterSnapshotB = block.getFilterSnapshotTypeAsString();
@@ -193,16 +202,6 @@ abstract class Shelf {
     }
     return ret;
   }
-
-  // Local Use
-  // bool _isChangeListener() {
-  //   for (Block block in blocks) {
-  //     if (block.isChangeListener) {
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -251,7 +250,7 @@ abstract class Shelf {
   List<String> get filterNames => [..._shelfStruct.dataFilters.keys];
 
   // ***************************************************************************
-  // ***************************************************************************
+  // ******** UI COMPONENTS ****************************************************
   // ***************************************************************************
 
   void __findMountedWidgetStates({
@@ -274,6 +273,7 @@ abstract class Shelf {
         withControlBar: withControlBar,
       );
       founds.addAll(m);
+      //
       __findMountedWidgetStates(
         withPagination: withPagination,
         withBlockFragment: withBlockFragment,
@@ -307,6 +307,45 @@ abstract class Shelf {
       founds: founds,
     );
     return founds;
+  }
+
+  void __updateAllWidgetsCascade(Block block) {
+    block.updateFragmentWidgets();
+    block.updatePaginationWidgets();
+    block.updateControlBarWidgets();
+    block.blockForm?.updateFormWidgets();
+    block._registeredOrDefaultDataFilter.updateWidgets();
+    //
+    for (Block childBlock in block._childBlocks) {
+      __updateAllWidgetsCascade(childBlock);
+    }
+  }
+
+  void updateAllWidgets() {
+    for (_WidgetState state in _shelfWidgetStateListeners.keys) {
+      if (state.mounted) {
+        state.refreshState();
+      }
+    }
+    //
+    for (Scalar scalar in __scalars) {
+      scalar.updateControlBarWidgets();
+      scalar.updateFragmentWidgets();
+    }
+    for (Block block in __rootBlocks) {
+      __updateAllWidgetsCascade(block);
+    }
+  }
+
+  void _addWidgetStateListener({
+    required _WidgetState widgetState,
+    required bool isShowing,
+  }) {
+    _shelfWidgetStateListeners[widgetState] = isShowing;
+  }
+
+  void _removeWidgetStateListener({required State widgetState}) {
+    _shelfWidgetStateListeners.remove(widgetState);
   }
 
   // ***************************************************************************
@@ -501,41 +540,30 @@ abstract class Shelf {
     return success;
   }
 
-  void __updateAllWidgetsCascade(Block block) {
-    block.updateFragmentWidgets();
-    block.updatePaginationWidgets();
-    block.updateControlBarWidgets();
-    block.blockForm?.updateFormWidgets();
-    block._registeredOrDefaultDataFilter.updateWidgets();
-    for (Block childBlock in block._childBlocks) {
-      __updateAllWidgetsCascade(childBlock);
-    }
-  }
+  // ***************************************************************************
+  // ********** QUERY **********************************************************
+  // ***************************************************************************
 
-  void updateAllWidgets() {
-    for (_WidgetState state in _shelfWidgetStateListeners.keys) {
-      if (state.mounted) {
-        state.refreshState();
+  void _query({
+    required DataFilter? forceDataFilter,
+    required FilterSnapshot? suggestedFilterSnapshot,
+    required List<Scalar> forceQueryScalars,
+    required List<Block> forceQueryBlocks,
+    required List<BlockForm> forceQueryBlockForms,
+  }) {
+    _XShelf xShelf = _XShelf(
+      shelf: this,
+      forceDataFilter: forceDataFilter,
+      suggestedFilterSnapshot: suggestedFilterSnapshot,
+      forceQueryScalars: forceQueryScalars,
+      forceQueryBlocks: forceQueryBlocks,
+      forceQueryBlockForms: forceQueryBlockForms,
+    );
+    //
+    for (_XScalar xScalar in xShelf.xScalars) {
+      if (!xScalar.needQuery) {
+        continue;
       }
     }
-    //
-    for (Scalar scalar in __scalars) {
-      scalar.updateControlBarWidgets();
-      scalar.updateFragmentWidgets();
-    }
-    for (Block block in __rootBlocks) {
-      __updateAllWidgetsCascade(block);
-    }
-  }
-
-  void _addWidgetStateListener({
-    required _WidgetState widgetState,
-    required bool isShowing,
-  }) {
-    _shelfWidgetStateListeners[widgetState] = isShowing;
-  }
-
-  void _removeWidgetStateListener({required State widgetState}) {
-    _shelfWidgetStateListeners.remove(widgetState);
   }
 }

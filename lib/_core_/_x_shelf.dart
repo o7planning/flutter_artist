@@ -2,24 +2,47 @@ part of '../flutter_artist.dart';
 
 class _XShelf {
   final Shelf shelf;
+
+  // All DataFilters
+  final List<_XDataFilter> xDataFilters = [];
+
+  // All Root Blocks
   final List<_XBlock> rootXBlocks = [];
+
+  // All Scalars
   final List<_XScalar> xScalars = [];
 
+  // All DataFilters of Shelf
+  // <String dataFilterName, _XScalar>
+  final Map<String, _XDataFilter> allXDataFilterMap = {};
+
   // All Scalars of Shelf
+  // <String scalarName, _XScalar>
   final Map<String, _XScalar> allXScalarMap = {};
 
   // All Blocks of Shelf
+  // <String blockName, _XBlock>
   final Map<String, _XBlock> allXBlockMap = {};
 
   // All BlockForm of Shelf
+  // <String blockName, _XBlockForm>
   final Map<String, _XBlockForm> allXBlockFormMap = {};
 
   _XShelf({
     required this.shelf,
+    required DataFilter? forceDataFilter,
+    required FilterSnapshot? suggestedFilterSnapshot,
     required List<Scalar> forceQueryScalars,
     required List<Block> forceQueryBlocks,
     required List<BlockForm> forceQueryBlockForms,
   }) {
+    if (forceDataFilter != null) {
+      assert(forceDataFilter.shelf == shelf);
+    }
+    if (forceDataFilter != null && suggestedFilterSnapshot != null) {
+      assert(forceDataFilter.getFilterSnapshotTypeAsString() ==
+          suggestedFilterSnapshot.runtimeType.toString());
+    }
     for (Scalar s in forceQueryScalars) {
       assert(s.shelf == shelf);
     }
@@ -30,10 +53,15 @@ class _XShelf {
       assert(f.block.shelf == shelf);
     }
     //
+    for (DataFilter dataFilter in shelf._allDataFilters) {
+      __addXDataFilter(
+        dataFilter: dataFilter,
+      );
+    }
+    //
     for (Scalar scalar in shelf.scalars) {
       __addXScalar(
         scalar: scalar,
-        siblingXScalars: xScalars,
       );
     }
     for (Block rootBlock in shelf.rootBlocks) {
@@ -44,6 +72,12 @@ class _XShelf {
       );
     }
     //
+    if (forceDataFilter != null && suggestedFilterSnapshot != null) {
+      __setSuggestedFilterSnapshot(
+        dataFilter: forceDataFilter,
+        suggestedFilterSnapshot: suggestedFilterSnapshot,
+      );
+    }
     __setForceQueryScalars(forceQueryScalars);
     __setForceQueryBlocks(forceQueryBlocks);
     __setForceQueryBlockForms(forceQueryBlockForms);
@@ -52,6 +86,14 @@ class _XShelf {
   // ***************************************************************************
   // SET FORCE QUERY:
   // ***************************************************************************
+
+  void __setSuggestedFilterSnapshot({
+    required DataFilter dataFilter,
+    required FilterSnapshot suggestedFilterSnapshot,
+  }) {
+    _XDataFilter xDataFilter = allXDataFilterMap[dataFilter.name]!;
+    xDataFilter.suggestedFilterSnapshot = suggestedFilterSnapshot;
+  }
 
   void __setForceQueryScalars(List<Scalar> forceQueryScalars) {
     // Force query:
@@ -129,13 +171,21 @@ class _XShelf {
   //
   // ***************************************************************************
 
+  void __addXDataFilter({
+    required DataFilter dataFilter,
+  }) {
+    _XDataFilter xDataFilter = _XDataFilter(dataFilter: dataFilter);
+    //
+    xDataFilters.add(xDataFilter);
+    allXDataFilterMap[xDataFilter.name] = xDataFilter;
+  }
+
   void __addXScalar({
     required Scalar scalar,
-    required List<_XScalar> siblingXScalars,
   }) {
     _XScalar xScalar = _XScalar(scalar);
-    siblingXScalars.add(xScalar);
     //
+    xScalars.add(xScalar);
     allXScalarMap[scalar.name] = xScalar;
   }
 

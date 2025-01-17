@@ -4,6 +4,13 @@ class _XBlock {
   bool needQuery = false;
   final Block block;
 
+  // Query Options:
+  ListBehavior? listBehavior;
+  SuggestedSelection? suggestedSelection;
+  PostQueryBehavior? postQueryBehavior;
+  PageableData? pageable;
+
+  //
   final _XBlock? xBlockParent;
   final _XBlockForm? xBlockForm;
   final List<_XBlock> childXBlocks = [];
