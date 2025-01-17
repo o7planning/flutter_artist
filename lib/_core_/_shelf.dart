@@ -376,8 +376,10 @@ abstract class Shelf {
 
   Future<void> __queryLazyList() async {
     _queryLocked = true;
+    //
     final List<_ScalarOrBlockOrFormWrapper> lazyBlockOrForms =
         __findTopLazyScalarOrBlockOrForms();
+    //
     if (lazyBlockOrForms.isEmpty) {
       __lastTransactionNumber = __currentTransactionNumber;
       _queryLocked = false;
@@ -386,77 +388,14 @@ abstract class Shelf {
       print("@@@@@@@@@@@@ __queryLazyList: ID: $__currentTransactionNumber");
       __lastTransactionNumber = __currentTransactionNumber;
 
-      print(
-          "@@@@@@@@@@@@ __queryLazyList: ID:  Start >>>>>>>>>>> lazyBlockOrForms: $lazyBlockOrForms");
       await _queryLazyScalarOrBlockOrForms(
         queryType: QueryType.forceQuery,
         scalarOrBlockOrFormWrappers: lazyBlockOrForms,
       );
-      print(
-          "@@@@@@@@@@@@ __queryLazyList: ID:  End >>>>>>>>>>> lazyBlockOrForms: $lazyBlockOrForms");
       _queryLocked = false;
     }
   }
 
-  void __findLazyScalars(List<_ScalarOrBlockOrFormWrapper> founds) {
-    for (Scalar scalar in __scalars) {
-      if (scalar.hasActiveUiComponent() &&
-          scalar.data.dataState == DataState.pending) {
-        founds.add(_ScalarOrBlockOrFormWrapper.scalar(scalar));
-      }
-    }
-  }
-
-  void __findTopLazyBlocksCascade(
-      List<Block> blocks, List<_ScalarOrBlockOrFormWrapper> founds) {
-    for (Block block in blocks) {
-      // _hasActiveWidgetAndNeedToQuery()
-      if (block.hasActiveBlockFragmentWidget(alsoCheckChildren: true) &&
-          block.dataState == DataState.pending) {
-        founds.add(_ScalarOrBlockOrFormWrapper.block(block));
-      } else if (block.blockForm != null &&
-          block.blockForm!.hasActiveFormWidget() &&
-          block.blockForm!.dataState == DataState.pending) {
-        founds.add(_ScalarOrBlockOrFormWrapper.blockForm(block.blockForm!));
-      } else {
-        __findTopLazyBlocksCascade(block._childBlocks, founds);
-      }
-    }
-  }
-
-  List<_ScalarOrBlockOrFormWrapper> __findTopLazyScalarOrBlockOrForms() {
-    final List<_ScalarOrBlockOrFormWrapper> founds = [];
-    __findLazyScalars(founds);
-    __findTopLazyBlocksCascade(__rootBlocks, founds);
-    return founds;
-  }
-
-  Future<bool> _queryScalars({
-    required List<Scalar> scalars,
-  }) async {
-    for (Scalar scalar in scalars) {
-      bool success = await scalar.query();
-      if (!success) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  Future<bool> _queryBlocks({
-    required QueryType queryType,
-    required List<Block> blocks,
-  }) async {
-    List<_ScalarOrBlockOrFormWrapper> blockOrForms =
-        blocks.map((b) => _ScalarOrBlockOrFormWrapper.block(b)).toList();
-    //
-    return await _queryLazyScalarOrBlockOrForms(
-      queryType: queryType,
-      scalarOrBlockOrFormWrappers: blockOrForms,
-    );
-  }
-
-  // TODO Kiem tra cha con cua cac Block.
   Future<bool> _queryLazyScalarOrBlockOrForms({
     required QueryType queryType,
     required List<_ScalarOrBlockOrFormWrapper> scalarOrBlockOrFormWrappers,
@@ -464,6 +403,35 @@ abstract class Shelf {
     if (scalarOrBlockOrFormWrappers.isEmpty) {
       return true;
     }
+    final List<_ScalarOpt> scalarOpts = [];
+    final List<_BlockOpt> blockOpts = [];
+    final List<_BlockFormOpt> blockFormOpts = [];
+    //
+    for (_ScalarOrBlockOrFormWrapper wrapper in scalarOrBlockOrFormWrappers) {
+      if (wrapper.scalar != null) {
+        scalarOpts.add(_ScalarOpt(scalar: wrapper.scalar!));
+      } else if (wrapper.block != null) {
+        blockOpts.add(_BlockOpt(
+          block: wrapper.block!,
+          pageable: null,
+          listBehavior: null,
+          suggestedSelection: null,
+          postQueryBehavior: null,
+        ));
+      } else if (wrapper.blockForm != null) {
+        blockFormOpts.add(_BlockFormOpt(blockForm: wrapper.blockForm!));
+      }
+    }
+    //
+    return await _queryAllWithOverlayAndRestorable(
+      forceDataFilterOpt: null,
+      forceQueryScalarOpts: scalarOpts,
+      forceQueryBlockOpts: blockOpts,
+      forceQueryBlockFormOpts: blockFormOpts,
+    );
+    //
+    //
+    //
     bool needToUpdate = false;
     bool success = false;
     try {
@@ -541,15 +509,131 @@ abstract class Shelf {
   }
 
   // ***************************************************************************
+  //
+  //
+  //
+  // ***************************************************************************
+
+  void __findLazyScalars(List<_ScalarOrBlockOrFormWrapper> founds) {
+    for (Scalar scalar in __scalars) {
+      if (scalar.hasActiveUiComponent() &&
+          scalar.data.dataState == DataState.pending) {
+        founds.add(_ScalarOrBlockOrFormWrapper.scalar(scalar));
+      }
+    }
+  }
+
+  void __findTopLazyBlocksCascade(
+      List<Block> blocks, List<_ScalarOrBlockOrFormWrapper> founds) {
+    for (Block block in blocks) {
+      // _hasActiveWidgetAndNeedToQuery()
+      if (block.hasActiveBlockFragmentWidget(alsoCheckChildren: true) &&
+          block.dataState == DataState.pending) {
+        founds.add(_ScalarOrBlockOrFormWrapper.block(block));
+      } else if (block.blockForm != null &&
+          block.blockForm!.hasActiveFormWidget() &&
+          block.blockForm!.dataState == DataState.pending) {
+        founds.add(_ScalarOrBlockOrFormWrapper.blockForm(block.blockForm!));
+      } else {
+        __findTopLazyBlocksCascade(block._childBlocks, founds);
+      }
+    }
+  }
+
+  List<_ScalarOrBlockOrFormWrapper> __findTopLazyScalarOrBlockOrForms() {
+    final List<_ScalarOrBlockOrFormWrapper> founds = [];
+    __findLazyScalars(founds);
+    __findTopLazyBlocksCascade(__rootBlocks, founds);
+    return founds;
+  }
+
+  Future<bool> _queryScalars({
+    required List<Scalar> scalars,
+  }) async {
+    for (Scalar scalar in scalars) {
+      bool success = await scalar.query();
+      if (!success) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  Future<bool> _queryBlocks({
+    required QueryType queryType,
+    required List<Block> blocks,
+  }) async {
+    List<_ScalarOrBlockOrFormWrapper> blockOrForms =
+        blocks.map((b) => _ScalarOrBlockOrFormWrapper.block(b)).toList();
+    //
+    return await _queryLazyScalarOrBlockOrForms(
+      queryType: queryType,
+      scalarOrBlockOrFormWrappers: blockOrForms,
+    );
+  }
+
+  // ***************************************************************************
+  // ********** BACKUP & RESTORE & APPLY ***************************************
+  // ***************************************************************************
+
+  void __backupAll() {
+    for (DataFilter dataFilter in _allDataFilters) {
+      dataFilter._backup();
+    }
+    //
+    for (Scalar scalar in __scalars) {
+      scalar._backup();
+    }
+    //
+    for (Block rootBlock in __rootBlocks) {
+      rootBlock._backupAll();
+    }
+    // TODO: Backup BlockForm ????????????????????????????????????????????????????
+    //
+    updateAllWidgets();
+  }
+
+  void __restoreAll() {
+    for (DataFilter dataFilter in _allDataFilters) {
+      dataFilter._restore();
+    }
+    //
+    for (Scalar scalar in scalars) {
+      scalar._restore();
+    }
+    for (Block block in blocks) {
+      block._restoreAll();
+    }
+    // TODO: Restore BlockForm ????????????????????????????????????????????????????
+    //
+    updateAllWidgets();
+  }
+
+  void __applyNewStateAll() {
+    for (DataFilter dataFilter in _allDataFilters) {
+      dataFilter._applyNewState();
+    }
+    //
+    for (Scalar scalar in scalars) {
+      scalar._applyNewStateAll();
+    }
+    for (Block block in blocks) {
+      block._applyNewStateAll();
+    }
+    //
+    updateAllWidgets();
+  }
+
+  // ***************************************************************************
   // ********** QUERY **********************************************************
   // ***************************************************************************
 
-  void _query({
+  Future<bool> _queryAllWithOverlayAndRestorable({
     required _DataFilterOpt? forceDataFilterOpt,
     required List<_ScalarOpt> forceQueryScalarOpts,
     required List<_BlockOpt> forceQueryBlockOpts,
     required List<_BlockFormOpt> forceQueryBlockFormOpts,
-  }) {
+  }) async {
     _XShelf xShelf = _XShelf(
       shelf: this,
       forceDataFilterOpt: forceDataFilterOpt,
@@ -558,10 +642,25 @@ abstract class Shelf {
       forceQueryBlockFormOpts: forceQueryBlockFormOpts,
     );
     //
-    for (_XScalar xScalar in xShelf.allXScalars) {
-      if (!xScalar.needQuery) {
-        continue;
+    try {
+      __backupAll();
+      //
+      for (_XScalar xScalar in xShelf.allXScalars) {
+        if (!xScalar.needQuery) {
+          continue;
+        }
       }
+      //
+      __applyNewStateAll();
+      return true;
+    } catch (e) {
+      __restoreAll();
+      //
+      if (e is _QueryError) {
+        // Do not showSnackBar any more...
+      }
+
+      return false;
     }
   }
 }

@@ -29,7 +29,9 @@ abstract class DataFilter<S extends FilterSnapshot> {
         : __filterSnapshotsMap[__currentSuccessSnapshotId];
   }
 
-  S? _currentSnapshot;
+  S? __filterSnapshotBk;
+
+  S? _filterSnapshot;
 
   List<Restorable> get restorableCriteria;
 
@@ -97,10 +99,23 @@ abstract class DataFilter<S extends FilterSnapshot> {
       },
       route: null,
     );
-    return await _queryAllWithOverlayAndRestorable(
-      suggestedFilterSnapshot: suggestedFilterSnapshot,
-      forceBlockWithQueryOptions: null,
-      forceScalarWithQueryOptions: null,
+    return await shelf._queryAllWithOverlayAndRestorable(
+      forceDataFilterOpt: _DataFilterOpt(
+        dataFilter: this,
+        suggestedFilterSnapshot: suggestedFilterSnapshot,
+      ),
+      forceQueryScalarOpts: _scalars.map((s) => _ScalarOpt(scalar: s)).toList(),
+      forceQueryBlockOpts: _blocks
+          .map(
+            (b) => _BlockOpt(
+                block: b,
+                pageable: null,
+                listBehavior: null,
+                suggestedSelection: null,
+                postQueryBehavior: null),
+          )
+          .toList(),
+      forceQueryBlockFormOpts: [],
     );
   }
 
@@ -205,7 +220,7 @@ abstract class DataFilter<S extends FilterSnapshot> {
     required List<Block> blocks,
   }) {
     for (Scalar scalar in scalars) {
-      scalar._backupAll();
+      scalar._backup();
     }
     for (Block block in blocks) {
       block._backupAll();
@@ -217,7 +232,7 @@ abstract class DataFilter<S extends FilterSnapshot> {
     required List<Block> blocks,
   }) {
     for (Scalar scalar in scalars) {
-      scalar._restoreAll();
+      scalar._restore();
     }
     for (Block block in blocks) {
       block._restoreAll();
@@ -236,13 +251,20 @@ abstract class DataFilter<S extends FilterSnapshot> {
     }
   }
 
+  void _backup() {
+    __filterSnapshotBk = _filterSnapshot;
+  }
+
   void _restore() {
+    _filterSnapshot = __filterSnapshotBk;
+    //
     for (Restorable bk in restorableCriteria) {
       bk.restore();
     }
   }
 
   void _applyNewState() {
+    __filterSnapshotBk = null;
     for (Restorable bk in restorableCriteria) {
       bk.applyNewState();
     }

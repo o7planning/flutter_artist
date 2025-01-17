@@ -693,6 +693,28 @@ abstract class Block<
       },
     );
     //
+    return await shelf._queryAllWithOverlayAndRestorable(
+      forceDataFilterOpt: _DataFilterOpt(
+        dataFilter: _registeredOrDefaultDataFilter,
+        suggestedFilterSnapshot: suggestedFilterSnapshot,
+      ),
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: [
+        _BlockOpt(
+          block: this,
+          pageable: pageable,
+          listBehavior: listBehavior,
+          suggestedSelection: suggestedSelection,
+          postQueryBehavior: PostQueryBehavior.selectAvailableItem,
+        ),
+      ],
+      forceQueryBlockFormOpts: [],
+    );
+
+    //
+    //
+    //
+    //
     bool success =
         await _registeredOrDefaultDataFilter._queryAllWithOverlayAndRestorable(
       // Suggestion for DataFilter
@@ -1055,14 +1077,14 @@ abstract class Block<
   void _restoreAll() {
     Block rootBlock = getRootBlock();
     rootBlock.__restoreThisAndChildren();
-    shelf.updateAllWidgets();
+    // shelf.updateAllWidgets();
   }
 
   void _applyNewStateAll() {
     Block rootBlock = getRootBlock();
     rootBlock.__applyNewStateThisAndChildren();
     rootBlock.__setChildrenForParent();
-    shelf.updateAllWidgets();
+    // shelf.updateAllWidgets();
   }
 
   void __setChildrenForParent() {

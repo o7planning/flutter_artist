@@ -92,18 +92,16 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
     return S.toString();
   }
 
-  void _backupAll() {
+  void _backup() {
     this.data._backup();
   }
 
-  void _restoreAll() {
+  void _restore() {
     this.data._restore();
-    this._registeredOrDefaultDataFilter._restore();
   }
 
   void _applyNewStateAll() {
     this.data._applyNewState();
-    this._registeredOrDefaultDataFilter._applyNewState();
   }
 
   void updateControlBarWidgets() {
@@ -134,6 +132,20 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
       methodName: "query",
       parameters: {},
     );
+    //
+    return await shelf._queryAllWithOverlayAndRestorable(
+      forceDataFilterOpt: _DataFilterOpt(
+        dataFilter: _registeredOrDefaultDataFilter,
+        suggestedFilterSnapshot: suggestedFilterSnapshot,
+      ),
+      forceQueryScalarOpts: [_ScalarOpt(scalar: this)],
+      forceQueryBlockOpts: [],
+      forceQueryBlockFormOpts: [],
+    );
+
+    //
+    //
+    //
     //
     bool success =
         await _registeredOrDefaultDataFilter._queryAllWithOverlayAndRestorable(

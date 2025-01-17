@@ -5,9 +5,9 @@ part of '../flutter_artist.dart';
 ///
 class _BlockOpt {
   final Block block;
-  final ListBehavior listBehavior;
+  final ListBehavior? listBehavior;
   final SuggestedSelection? suggestedSelection;
-  final PostQueryBehavior postQueryBehavior;
+  final PostQueryBehavior? postQueryBehavior;
   final PageableData? pageable;
 
   _BlockOpt({
