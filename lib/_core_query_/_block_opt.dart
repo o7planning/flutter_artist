@@ -1,13 +1,16 @@
 part of '../flutter_artist.dart';
 
-class _BlockWithQueryOptions {
+///
+/// Block with Query Options
+///
+class _BlockOpt {
   final Block block;
   final ListBehavior listBehavior;
   final SuggestedSelection? suggestedSelection;
   final PostQueryBehavior postQueryBehavior;
   final PageableData? pageable;
 
-  _BlockWithQueryOptions({
+  _BlockOpt({
     required this.block,
     required this.pageable,
     required this.listBehavior,

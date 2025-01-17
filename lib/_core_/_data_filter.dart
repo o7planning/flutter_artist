@@ -112,8 +112,8 @@ abstract class DataFilter<S extends FilterSnapshot> {
   ///
   Future<bool> _queryAllWithOverlayAndRestorable({
     required S? suggestedFilterSnapshot,
-    required _BlockWithQueryOptions? forceBlockWithQueryOptions,
-    required _ScalarWithQueryOptions? forceScalarWithQueryOptions,
+    required _BlockOpt? forceBlockWithQueryOptions,
+    required _ScalarOpt? forceScalarWithQueryOptions,
   }) async {
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
@@ -132,8 +132,8 @@ abstract class DataFilter<S extends FilterSnapshot> {
   ///
   Future<bool> __queryAllIfNeedWithRestorable({
     required S? suggestedFilterSnapshot,
-    required _BlockWithQueryOptions? forceBlockWithQueryOptions,
-    required _ScalarWithQueryOptions? forceScalarWithQueryOptions,
+    required _BlockOpt? forceBlockWithQueryOptions,
+    required _ScalarOpt? forceScalarWithQueryOptions,
   }) async {
     final List<Scalar> queryScalars = _scalars;
     // TODO: Kiem tra danh sach cac Block can query. ???????????????????????????????????????????????????????????????????

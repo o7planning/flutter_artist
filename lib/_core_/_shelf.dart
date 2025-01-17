@@ -545,19 +545,17 @@ abstract class Shelf {
   // ***************************************************************************
 
   void _query({
-    required DataFilter? forceDataFilter,
-    required FilterSnapshot? suggestedFilterSnapshot,
-    required List<Scalar> forceQueryScalars,
-    required List<Block> forceQueryBlocks,
-    required List<BlockForm> forceQueryBlockForms,
+    required _DataFilterOpt? forceDataFilterOpt,
+    required List<_ScalarOpt> forceQueryScalarOpts,
+    required List<_BlockOpt> forceQueryBlockOpts,
+    required List<_BlockFormOpt> forceQueryBlockFormOpts,
   }) {
     _XShelf xShelf = _XShelf(
       shelf: this,
-      forceDataFilter: forceDataFilter,
-      suggestedFilterSnapshot: suggestedFilterSnapshot,
-      forceQueryScalars: forceQueryScalars,
-      forceQueryBlocks: forceQueryBlocks,
-      forceQueryBlockForms: forceQueryBlockForms,
+      forceDataFilterOpt: forceDataFilterOpt,
+      forceQueryScalarOpts: forceQueryScalarOpts,
+      forceQueryBlockOpts: forceQueryBlockOpts,
+      forceQueryBlockFormOpts: forceQueryBlockFormOpts,
     );
     //
     for (_XScalar xScalar in xShelf.allXScalars) {

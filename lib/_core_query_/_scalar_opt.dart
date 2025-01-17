@@ -1,9 +1,12 @@
 part of '../flutter_artist.dart';
 
-class _ScalarWithQueryOptions {
+///
+/// Scalar with Query Options
+///
+class _ScalarOpt {
   final Scalar scalar;
 
-  _ScalarWithQueryOptions({
+  _ScalarOpt({
     required this.scalar,
   });
 }

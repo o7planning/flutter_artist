@@ -30,27 +30,22 @@ class _XShelf {
 
   _XShelf({
     required this.shelf,
-    required DataFilter? forceDataFilter,
-    required FilterSnapshot? suggestedFilterSnapshot,
-    required List<Scalar> forceQueryScalars,
-    required List<Block> forceQueryBlocks,
-    required List<BlockForm> forceQueryBlockForms,
+    required _DataFilterOpt? forceDataFilterOpt,
+    required List<_ScalarOpt> forceQueryScalarOpts,
+    required List<_BlockOpt> forceQueryBlockOpts,
+    required List<_BlockFormOpt> forceQueryBlockFormOpts,
   }) {
-    if (forceDataFilter != null) {
-      assert(forceDataFilter.shelf == shelf);
+    if (forceDataFilterOpt != null) {
+      assert(forceDataFilterOpt.dataFilter.shelf == shelf);
     }
-    if (forceDataFilter != null && suggestedFilterSnapshot != null) {
-      assert(forceDataFilter.getFilterSnapshotTypeAsString() ==
-          suggestedFilterSnapshot.runtimeType.toString());
+    for (_ScalarOpt scalarOpt in forceQueryScalarOpts) {
+      assert(scalarOpt.scalar.shelf == shelf);
     }
-    for (Scalar s in forceQueryScalars) {
-      assert(s.shelf == shelf);
+    for (_BlockOpt blockOpt in forceQueryBlockOpts) {
+      assert(blockOpt.block.shelf == shelf);
     }
-    for (Block b in forceQueryBlocks) {
-      assert(b.shelf == shelf);
-    }
-    for (BlockForm f in forceQueryBlockForms) {
-      assert(f.block.shelf == shelf);
+    for (_BlockFormOpt blockFormOpt in forceQueryBlockFormOpts) {
+      assert(blockFormOpt.blockForm.shelf == shelf);
     }
     //
     for (DataFilter dataFilter in shelf._allDataFilters) {
@@ -72,33 +67,31 @@ class _XShelf {
       );
     }
     //
-    if (forceDataFilter != null && suggestedFilterSnapshot != null) {
-      __setSuggestedFilterSnapshot(
-        dataFilter: forceDataFilter,
-        suggestedFilterSnapshot: suggestedFilterSnapshot,
-      );
-    }
-    __setForceQueryScalars(forceQueryScalars);
-    __setForceQueryBlocks(forceQueryBlocks);
-    __setForceQueryBlockForms(forceQueryBlockForms);
+    __setForceDataFilter(forceDataFilterOpt);
+    __setForceQueryScalars(forceQueryScalarOpts);
+    __setForceQueryBlocks(forceQueryBlockOpts);
+    __setForceQueryBlockForms(forceQueryBlockFormOpts);
   }
 
   // ***************************************************************************
   // SET FORCE QUERY:
   // ***************************************************************************
 
-  void __setSuggestedFilterSnapshot({
-    required DataFilter dataFilter,
-    required FilterSnapshot suggestedFilterSnapshot,
-  }) {
-    _XDataFilter xDataFilter = allXDataFilterMap[dataFilter.name]!;
-    xDataFilter.suggestedFilterSnapshot = suggestedFilterSnapshot;
+  void __setForceDataFilter(_DataFilterOpt? forceDataFilter) {
+    if (forceDataFilter != null &&
+        forceDataFilter.suggestedFilterSnapshot != null) {
+      _XDataFilter xDataFilter =
+          allXDataFilterMap[forceDataFilter.dataFilter.name]!;
+      xDataFilter.suggestedFilterSnapshot =
+          forceDataFilter.suggestedFilterSnapshot;
+    }
   }
 
-  void __setForceQueryScalars(List<Scalar> forceQueryScalars) {
+  void __setForceQueryScalars(List<_ScalarOpt> forceQueryScalars) {
     // Force query:
-    for (Scalar s in forceQueryScalars) {
-      _XScalar xScalar = allXScalarMap[s.name]!;
+    for (_ScalarOpt scalarOpt in forceQueryScalars) {
+      Scalar scalar = scalarOpt.scalar;
+      _XScalar xScalar = allXScalarMap[scalar.name]!;
       xScalar.needQuery = true;
     }
     // Optional Query:
@@ -132,10 +125,11 @@ class _XShelf {
     }
   }
 
-  void __setForceQueryBlocks(List<Block> forceQueryBlocks) {
+  void __setForceQueryBlocks(List<_BlockOpt> forceQueryBlocks) {
     // Force query:
-    for (Block b in forceQueryBlocks) {
-      _XBlock xBlock = allXBlockMap[b.name]!;
+    for (_BlockOpt blockOpt in forceQueryBlocks) {
+      Block block = blockOpt.block;
+      _XBlock xBlock = allXBlockMap[block.name]!;
       xBlock.needQuery = true;
     }
     // Optional Query:
@@ -144,10 +138,11 @@ class _XShelf {
     }
   }
 
-  void __setForceQueryBlockForms(List<BlockForm> forceQueryBlockForms) {
+  void __setForceQueryBlockForms(List<_BlockFormOpt> forceQueryBlockForms) {
     // Force query:
-    for (BlockForm f in forceQueryBlockForms) {
-      _XBlockForm xBlockForm = allXBlockFormMap[f.block.name]!;
+    for (_BlockFormOpt blockFormOpt in forceQueryBlockForms) {
+      BlockForm blockForm = blockFormOpt.blockForm;
+      _XBlockForm xBlockForm = allXBlockFormMap[blockForm.block.name]!;
       xBlockForm.needQuery = true;
     }
     // Optional Query:

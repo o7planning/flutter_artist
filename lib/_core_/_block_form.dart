@@ -8,6 +8,8 @@ abstract class BlockForm<ID extends Object, I extends Object, D extends Object,
 
   late final BlockFormData data = BlockFormData(blockForm: this);
 
+  Shelf get shelf => block.shelf;
+
   late final Block<ID, I, D, FilterSnapshot, SF> block;
 
   DataState get dataState => data._dataState;

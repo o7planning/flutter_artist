@@ -140,7 +140,7 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
       // Suggestion for DataFilter
       suggestedFilterSnapshot: suggestedFilterSnapshot,
       forceBlockWithQueryOptions: null,
-      forceScalarWithQueryOptions: _ScalarWithQueryOptions(
+      forceScalarWithQueryOptions: _ScalarOpt(
         scalar: this,
       ),
     );
