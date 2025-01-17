@@ -4,6 +4,8 @@ class _XBlock {
   bool needQuery = false;
   final Block block;
 
+    final _XDataFilter xDataFilter;
+
   // Query Options:
   ListBehavior? listBehavior;
   SuggestedSelection? suggestedSelection;
@@ -18,6 +20,7 @@ class _XBlock {
   _XBlock({
     required this.block,
     required this.xBlockParent,
+    required this.xDataFilter,
     required this.xBlockForm,
   });
 

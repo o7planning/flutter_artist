@@ -183,7 +183,13 @@ class _XShelf {
   void __addXScalar({
     required Scalar scalar,
   }) {
-    _XScalar xScalar = _XScalar(scalar);
+    _XDataFilter xDataFilter =
+        allXDataFilterMap[scalar._registeredOrDefaultDataFilter.name]!;
+    //
+    _XScalar xScalar = _XScalar(
+      scalar: scalar,
+      xDataFilter: xDataFilter,
+    );
     //
     xScalars.add(xScalar);
     allXScalarMap[scalar.name] = xScalar;
@@ -194,12 +200,17 @@ class _XShelf {
     required _XBlock? xBlockParent,
     required List<_XBlock> siblingXBlocks,
   }) {
+    _XDataFilter xDataFilter =
+        allXDataFilterMap[block._registeredOrDefaultDataFilter.name]!;
+    //
     _XBlockForm? xBlockForm = block.blockForm == null //
         ? null
         : _XBlockForm(blockForm: block.blockForm!);
+    //
     _XBlock xBlock = _XBlock(
       block: block,
       xBlockParent: xBlockParent,
+      xDataFilter: xDataFilter,
       xBlockForm: xBlockForm,
     );
     xBlockForm?.xBlock = xBlock;
