@@ -697,7 +697,7 @@ abstract class Block<
         await _registeredOrDefaultDataFilter._queryAllWithOverlayAndRestorable(
       // Suggestion for DataFilter
       suggestedFilterSnapshot: suggestedFilterSnapshot,
-      forceBlockWithQueryOptions: _BlockWithQueryOptions(
+      forceBlockWithQueryOptions: _BlockOpt(
         block: this,
         pageable: pageable,
         listBehavior: listBehavior,
