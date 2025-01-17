@@ -859,6 +859,7 @@ abstract class Block<
 
   // Cascade query:
   // Private method (Only for use in this class)
+  @Deprecated("Khong su dung nua, da chuyen sang Shelf")
   Future<bool> __queryThisAndChildren({
     required QueryType queryType,
     required ListBehavior listBehavior,

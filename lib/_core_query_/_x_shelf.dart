@@ -131,6 +131,13 @@ class _XShelf {
       Block block = blockOpt.block;
       _XBlock xBlock = allXBlockMap[block.name]!;
       xBlock.needQuery = true;
+      xBlock.setOptions(
+        queryType: blockOpt.queryType,
+        listBehavior: blockOpt.listBehavior,
+        suggestedSelection: blockOpt.suggestedSelection,
+        postQueryBehavior: blockOpt.postQueryBehavior,
+        pageable: blockOpt.pageable,
+      );
     }
     // Optional Query:
     for (_XBlock xBlock in allXBlockMap.values) {

@@ -64,7 +64,7 @@ abstract class DataFilter<S extends FilterSnapshot> {
   });
 
   Future<_FilterSnapshotWrapper<S>> __prepareData({
-    S? suggestedFilterSnapshot,
+    required S? suggestedFilterSnapshot,
   }) async {
     __currentTryingSnapshotId + 1;
     final int tryingSnapshotId = __currentTryingSnapshotId;
@@ -109,6 +109,7 @@ abstract class DataFilter<S extends FilterSnapshot> {
           .map(
             (b) => _BlockOpt(
                 block: b,
+                queryType: null,
                 pageable: null,
                 listBehavior: null,
                 suggestedSelection: null,

@@ -628,6 +628,9 @@ abstract class Shelf {
   // ********** QUERY **********************************************************
   // ***************************************************************************
 
+  ///
+  /// VERY IMPORTANT METHOD:
+  ///
   Future<bool> _queryAllWithOverlayAndRestorable({
     required _DataFilterOpt? forceDataFilterOpt,
     required List<_ScalarOpt> forceQueryScalarOpts,
@@ -649,13 +652,39 @@ abstract class Shelf {
         if (!xScalar.needQuery) {
           continue;
         }
+        final _XDataFilter xDataFilter = xScalar.xDataFilter;
+        final DataFilter dataFilter = xDataFilter.dataFilter;
+        final Scalar scalar = xScalar.scalar;
+        //
+        final FilterSnapshot filterSnapshot;
+        if (!xDataFilter.queried) {
+          _FilterSnapshotWrapper result = await dataFilter.__prepareData(
+            suggestedFilterSnapshot: xDataFilter.suggestedFilterSnapshot,
+          );
+          filterSnapshot = result.filterSnapshot;
+          dataFilter._filterSnapshot = filterSnapshot;
+          xDataFilter.queried = true;
+        } else {
+          filterSnapshot = dataFilter._filterSnapshot!;
+        }
+        //
+        bool success = await scalar.__queryThis(filterSnapshot: filterSnapshot);
+        if (!success) {
+          throw _QueryError();
+        }
+      }
+      //
+      for (_XBlock xBlock in xShelf.allRootXBlocks) {
+        if (!xBlock.needQuery) {
+          // TODO ???
+        }
       }
       //
       __applyNewStateAll();
       return true;
     } catch (e) {
       __restoreAll();
-      //
+      // If _QueryError, no need to show SnackBar any more..
       if (e is _QueryError) {
         // Do not showSnackBar any more...
       }
@@ -663,4 +692,173 @@ abstract class Shelf {
       return false;
     }
   }
+
+  // ***************************************************************************
+  // ********* QUERY BLOCK *****************************************************
+  // ***************************************************************************
+
+  // Cascade query:
+  // Private method (Only for use in this class)
+  // Future<bool> __queryThisBlockAndChildren({
+  //   required _XBlock xBlock,
+  // }) async {
+  //   bool needRealQuery = false;
+  //   ListBehavior forceListBehavior = listBehavior;
+  //   switch (queryType) {
+  //     case QueryType.emptyQuery:
+  //       {
+  //         needRealQuery = false;
+  //         forceListBehavior = ListBehavior.replace;
+  //       }
+  //     case QueryType.forceQuery:
+  //       {
+  //         needRealQuery = true;
+  //       }
+  //     case QueryType.queryIfNeed:
+  //       {
+  //         bool guiActive = hasActiveUiComponent();
+  //         if (guiActive || _tempQueryMode == QueryMode.eager) {
+  //           needRealQuery = true;
+  //         } else {
+  //           needRealQuery = false;
+  //         }
+  //       }
+  //   }
+  //   //
+  //   PageData<I>? pageData;
+  //   DataState dataState = DataState.pending;
+  //   //
+  //   PageableData callingPageable;
+  //   if (needRealQuery) {
+  //     callingPageable =
+  //         pageable ?? __pageable ?? const PageableData(page: 1, pageSize: null);
+  //     ApiResult<PageData<I>?> result;
+  //     try {
+  //       FlutterArtist.codeFlowLogger._addMethodCall(
+  //         isLibCode: false,
+  //         route: null,
+  //         ownerClassInstance: this,
+  //         methodName: "callApiQuery",
+  //         parameters: {},
+  //       );
+  //       //
+  //       __refreshQueryingState(isQuerying: true);
+  //       //
+  //       result = await callApiQuery(
+  //         filterSnapshot: filterSnapshot,
+  //         pageable: callingPageable,
+  //       );
+  //       //
+  //       __refreshQueryingState(isQuerying: false);
+  //     } catch (e, stacktrace) {
+  //       __refreshQueryingState(isQuerying: false);
+  //       //
+  //       _handleError(
+  //         className: getClassName(this),
+  //         methodName: "callApiQuery",
+  //         error: e,
+  //         stackTrace: stacktrace,
+  //         showSnackBar: true,
+  //       );
+  //       //
+  //       return false;
+  //     }
+  //     if (result.errorMessage != null) {
+  //       _handleRestError(
+  //         methodName: "callApiQuery",
+  //         message: result.errorMessage!,
+  //         errorDetails: result.errorDetails,
+  //         showSnackBar: true,
+  //       );
+  //       return false;
+  //     }
+  //     pageData = result.data;
+  //     dataState = DataState.ready;
+  //   }
+  //   // needRealQuery = false
+  //   else {
+  //     forceListBehavior = ListBehavior.replace;
+  //     callingPageable = __pageable ??
+  //         const PageableData(
+  //           page: 1,
+  //           pageSize: null,
+  //         );
+  //     pageData = PageData<I>.empty();
+  //     dataState = DataState.pending;
+  //   }
+  //   //
+  //   Object? currentParentItem = parentItemId;
+  //   data._updateFrom(
+  //     forceListBehavior: forceListBehavior,
+  //     currentParentItemId: currentParentItem,
+  //     filterSnapshot: filterSnapshot,
+  //     pageable: callingPageable,
+  //     pageData: pageData,
+  //     dataState: dataState,
+  //   );
+  //
+  //   if (postQueryBehavior == PostQueryBehavior.selectAvailableItem ||
+  //       postQueryBehavior == PostQueryBehavior.selectAvailableItemToEdit) {
+  //     // OLD Current Item
+  //     I? suggestedCurrentItem = data.currentItem;
+  //     if (suggestedSelection != null &&
+  //         suggestedSelection.itemIdToSetAsCurrent != null) {
+  //       suggestedCurrentItem = data.findItemById(
+  //         suggestedSelection.itemIdToSetAsCurrent!,
+  //       );
+  //     }
+  //
+  //     I? itemWithSameId = suggestedCurrentItem == null
+  //         ? null
+  //         : data._findItemSameIdWith(item: suggestedCurrentItem);
+  //
+  //     if (itemWithSameId == null) {
+  //       // Find first Item...
+  //       I? firstItem = data.findFirstItem();
+  //       if (firstItem != null) {
+  //         bool success = await __prepareToShowOrEdit(
+  //           item: firstItem,
+  //           justQueried: true,
+  //           suggestedSelection: suggestedSelection,
+  //           forceForm: false,
+  //         );
+  //         if (!success) {
+  //           return false;
+  //         }
+  //       } else {
+  //         bool success = await _switchThisAndChildrenToNoneMode(
+  //           clearListForThis: false,
+  //           dataState: dataState,
+  //         );
+  //         if (!success) {
+  //           return false;
+  //         }
+  //       }
+  //       //
+  //       return true;
+  //     } else {
+  //       bool success = await __prepareToShowOrEdit(
+  //         item: itemWithSameId,
+  //         justQueried: true,
+  //         suggestedSelection: suggestedSelection,
+  //         forceForm:
+  //             postQueryBehavior == PostQueryBehavior.selectAvailableItemToEdit,
+  //       );
+  //       if (!success) {
+  //         return false;
+  //       }
+  //       return true;
+  //     }
+  //   } else if (postQueryBehavior == PostQueryBehavior.createNewItem) {
+  //     data._dataState = DataState.ready;
+  //     // Create New Item
+  //     bool success = await __prepareToCreate(suggestedFormData: null);
+  //     if (!success) {
+  //       return false;
+  //     }
+  //     return true;
+  //   } else {
+  //     throw "TODO $postQueryBehavior";
+  //   }
+  // }
 }
