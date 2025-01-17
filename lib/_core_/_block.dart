@@ -41,8 +41,10 @@ abstract class Block<
     D extends Object,
     S extends FilterSnapshot,
     SF extends SuggestedFormData> extends DataContainer {
+  @Deprecated("Xoa di, khong su dung")
   QueryMode _queryMode = QueryMode.lazy;
 
+  @Deprecated("Xoa di, khong su dung")
   late QueryMode _tempQueryMode = _queryMode;
 
   QueryMode get queryMode => _queryMode;

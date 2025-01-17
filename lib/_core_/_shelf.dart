@@ -409,17 +409,24 @@ abstract class Shelf {
     //
     for (_ScalarOrBlockOrFormWrapper wrapper in scalarOrBlockOrFormWrappers) {
       if (wrapper.scalar != null) {
-        scalarOpts.add(_ScalarOpt(scalar: wrapper.scalar!));
+        scalarOpts.add(
+          _ScalarOpt(scalar: wrapper.scalar!),
+        );
       } else if (wrapper.block != null) {
-        blockOpts.add(_BlockOpt(
-          block: wrapper.block!,
-          pageable: null,
-          listBehavior: null,
-          suggestedSelection: null,
-          postQueryBehavior: null,
-        ));
+        blockOpts.add(
+          _BlockOpt(
+            block: wrapper.block!,
+            queryType: null,
+            pageable: null,
+            listBehavior: null,
+            suggestedSelection: null,
+            postQueryBehavior: null,
+          ),
+        );
       } else if (wrapper.blockForm != null) {
-        blockFormOpts.add(_BlockFormOpt(blockForm: wrapper.blockForm!));
+        blockFormOpts.add(
+          _BlockFormOpt(blockForm: wrapper.blockForm!),
+        );
       }
     }
     //
@@ -730,8 +737,12 @@ abstract class Shelf {
   //   //
   //   PageableData callingPageable;
   //   if (needRealQuery) {
-  //     callingPageable =
-  //         pageable ?? __pageable ?? const PageableData(page: 1, pageSize: null);
+  //     callingPageable = pageable ??
+  //         __pageable ??
+  //         const PageableData(
+  //           page: 1,
+  //           pageSize: null,
+  //         );
   //     ApiResult<PageData<I>?> result;
   //     try {
   //       FlutterArtist.codeFlowLogger._addMethodCall(

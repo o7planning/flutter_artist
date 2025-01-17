@@ -7,11 +7,11 @@ class _XBlock {
   final _XDataFilter xDataFilter;
 
   // Query Options:
-  QueryType? queryType;
-  ListBehavior? listBehavior;
-  SuggestedSelection? suggestedSelection;
-  PostQueryBehavior? postQueryBehavior;
-  PageableData? pageable;
+  QueryType? __queryType;
+  ListBehavior? __listBehavior;
+  SuggestedSelection? __suggestedSelection;
+  PostQueryBehavior? __postQueryBehavior;
+  PageableData? __pageable;
 
   //
   final _XBlock? xBlockParent;
@@ -25,6 +25,29 @@ class _XBlock {
     required this.xBlockForm,
   });
 
+  QueryType get queryType {
+    // TODO: Xem lai gia tri mac dinh
+    return __queryType ?? QueryType.queryIfNeed;
+  }
+
+  ListBehavior get listBehavior {
+    // TODO: Xem lai gia tri mac dinh
+    return __listBehavior ?? ListBehavior.replace;
+  }
+
+  SuggestedSelection? get suggestedSelection {
+    return __suggestedSelection;
+  }
+
+  PostQueryBehavior get postQueryBehavior {
+    // TODO: Xem lai gia tri mac dinh
+    return __postQueryBehavior ?? PostQueryBehavior.selectAvailableItem;
+  }
+
+  PageableData? get pageable {
+    return __pageable;
+  }
+
   void setOptions({
     required QueryType? queryType,
     required ListBehavior? listBehavior,
@@ -32,11 +55,11 @@ class _XBlock {
     required PostQueryBehavior? postQueryBehavior,
     required PageableData? pageable,
   }) {
-    this.queryType = queryType;
-    this.listBehavior = listBehavior;
-    this.suggestedSelection = suggestedSelection;
-    this.postQueryBehavior = postQueryBehavior;
-    this.pageable = pageable;
+    __queryType = queryType;
+    __listBehavior = listBehavior;
+    __suggestedSelection = suggestedSelection;
+    __postQueryBehavior = postQueryBehavior;
+    __pageable = pageable;
   }
 
   String get name => block.name;
