@@ -690,7 +690,10 @@ abstract class Block<
   }
 
   /// Empty Query and create new record and set block to "Ready State".
-  Future<bool> emptyQueryAndCreate({Function()? route}) async {
+  Future<bool> emptyQueryAndCreate({
+    S? suggestedFilterSnapshot,
+    Function()? route,
+  }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: route,
@@ -700,7 +703,10 @@ abstract class Block<
     );
     //
     bool success = await shelf._queryAllWithOverlayAndRestorable(
-      forceDataFilterOpt: null,
+      forceDataFilterOpt: _DataFilterOpt(
+        dataFilter: this._registeredOrDefaultDataFilter,
+        suggestedFilterSnapshot: suggestedFilterSnapshot,
+      ),
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [
         _BlockOpt(
@@ -915,7 +921,8 @@ abstract class Block<
             thisXBlock: thisXBlock,
             item: firstItem,
             justQueried: true,
-            forceForm : postQueryBehavior == PostQueryBehavior.selectAvailableItemToEdit,
+            forceForm: postQueryBehavior ==
+                PostQueryBehavior.selectAvailableItemToEdit,
           );
           if (!success) {
             return false;
