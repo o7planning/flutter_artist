@@ -1,6 +1,7 @@
 part of '../flutter_artist.dart';
 
-class _DefaultDataFilter extends DataFilter<EmptyFilterSnapshot> {
+class _DefaultDataFilter
+    extends DataFilter<EmptyFilterData, EmptyFilterSnapshot> {
   _DefaultDataFilter({
     required String name,
     required Shelf shelf,

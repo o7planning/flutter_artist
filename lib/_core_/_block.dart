@@ -11,7 +11,7 @@ part of '../flutter_artist.dart';
 /// ```
 /// [ID] is Id Type of Item. For Example: [int].
 ///
-/// [I] is item. For example:
+/// [ITEM] is item. For example:
 /// ```dart
 /// class EmployeeInfo {
 ///     int id;
@@ -37,10 +37,11 @@ part of '../flutter_artist.dart';
 ///
 abstract class Block<
     ID extends Object,
-    I extends Object,
-    D extends Object,
-    S extends FilterSnapshot,
-    SF extends SuggestedFormData> extends DataContainer {
+    ITEM extends Object,
+    ITEM_DETAIL extends Object,
+    SUGGESTED_FILTER_DATA extends SuggestedFilterData,
+    FILTER_SNAPSHOT extends FilterSnapshot,
+    SUGGESTED_FORM_DATA extends SuggestedFormData> extends DataContainer {
   @Deprecated("Xoa di, khong su dung")
   QueryMode _queryMode = QueryMode.lazy;
 
@@ -97,13 +98,14 @@ abstract class Block<
   /// This field is not null.
   /// If this block does not declare a DataFilter, it will have the default DataFilter.
   ///
-  late final DataFilter<S> _registeredOrDefaultDataFilter;
+  late final DataFilter<SUGGESTED_FILTER_DATA, FILTER_SNAPSHOT>
+      _registeredOrDefaultDataFilter;
 
   ///
   /// Returns a DataFilter declared in the [Shelf.registerStructure()] method.
   /// The return value may be null.
   ///
-  DataFilter<S>? get dataFilter {
+  DataFilter<SUGGESTED_FILTER_DATA, FILTER_SNAPSHOT>? get dataFilter {
     if (_registeredOrDefaultDataFilter is _DefaultDataFilter) {
       return null;
     } else {
@@ -115,7 +117,8 @@ abstract class Block<
 
   String? get parentBlockName => parent?.name;
 
-  final BlockForm<ID, I, D, S, SF>? blockForm;
+  final BlockForm<ID, ITEM, ITEM_DETAIL, SUGGESTED_FILTER_DATA, FILTER_SNAPSHOT,
+      SUGGESTED_FORM_DATA>? blockForm;
 
   final List<Block> _childBlocks;
 
@@ -136,8 +139,10 @@ abstract class Block<
           pageSize: __pageSize,
         );
 
-  late final BlockData<ID, I, D, S, SF> data =
-      _InternalBlockData<ID, I, D, S, SF>.empty(
+  late final BlockData<ID, ITEM, ITEM_DETAIL, SUGGESTED_FILTER_DATA,
+          FILTER_SNAPSHOT, SUGGESTED_FORM_DATA> data =
+      _InternalBlockData<ID, ITEM, ITEM_DETAIL, SUGGESTED_FILTER_DATA,
+          FILTER_SNAPSHOT, SUGGESTED_FORM_DATA>.empty(
     this,
     __pageable,
   );
@@ -173,15 +178,15 @@ abstract class Block<
   }
 
   Type getItemType() {
-    return I;
+    return ITEM;
   }
 
   Type itemDetailType() {
-    return D;
+    return ITEM_DETAIL;
   }
 
   Type getFilterSnapshotType() {
-    return S;
+    return FILTER_SNAPSHOT;
   }
 
   String getItemIdTypeAsString() {
@@ -189,19 +194,19 @@ abstract class Block<
   }
 
   String getItemTypeAsString() {
-    return I.toString();
+    return ITEM.toString();
   }
 
   String getItemDetailTypeAsString() {
-    return D.toString();
+    return ITEM_DETAIL.toString();
   }
 
   String getFilterSnapshotTypeAsString() {
-    return S.toString();
+    return FILTER_SNAPSHOT.toString();
   }
 
   String getSuggestedFormDataTypeAsString() {
-    return SF.toString();
+    return SUGGESTED_FORM_DATA.toString();
   }
 
   List<Block> get descendantBlocks {
@@ -596,7 +601,7 @@ abstract class Block<
   @nonVirtual
   Future<bool> query({
     ListBehavior listBehavior = ListBehavior.replace,
-    S? suggestedFilterSnapshot,
+    FILTER_SNAPSHOT? suggestedFilterSnapshot,
     SuggestedSelection? suggestedSelection,
     PageableData? pageable,
     Function()? route,
@@ -643,7 +648,7 @@ abstract class Block<
   ///
   @nonVirtual
   Future<bool> queryAndPrepareToEdit({
-    S? suggestedFilterSnapshot,
+    FILTER_SNAPSHOT? suggestedFilterSnapshot,
     ListBehavior listBehavior = ListBehavior.replace,
     SuggestedSelection<ID>? suggestedSelection,
     PageableData? pageable,
@@ -691,7 +696,7 @@ abstract class Block<
 
   /// Empty Query and create new record and set block to "Ready State".
   Future<bool> emptyQueryAndCreate({
-    S? suggestedFilterSnapshot,
+    FILTER_SNAPSHOT? suggestedFilterSnapshot,
     Function()? route,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -750,14 +755,15 @@ abstract class Block<
     final _XDataFilter xDataFilter = thisXBlock.xDataFilter;
     final DataFilter dataFilter = xDataFilter.dataFilter;
     //
-    final S filterSnapshot;
+    final FILTER_SNAPSHOT filterSnapshot;
     //
     print("\n${getClassName(this)} ~~~~~~~~~~~~> dataFilter: ${xDataFilter}");
     if (!xDataFilter.queried) {
       print(
           "${getClassName(this)} ~~~~~~~~~~~~> execute dataFilter: ${getClassName(xDataFilter.dataFilter)}");
 
-      S? suggestedFilterSnapshot = xDataFilter.suggestedFilterSnapshot as S?;
+      FILTER_SNAPSHOT? suggestedFilterSnapshot =
+          xDataFilter.suggestedFilterSnapshot as FILTER_SNAPSHOT?;
       print(
           "${getClassName(this)} ~~~~~~~~~~~~> suggestedFilterSnapshot: ${suggestedFilterSnapshot}");
       //
@@ -766,11 +772,11 @@ abstract class Block<
       _FilterSnapshotWrapper result = await dataFilter.__prepareData(
         suggestedFilterSnapshot: suggestedFilterSnapshot,
       );
-      filterSnapshot = result.filterSnapshot as S;
+      filterSnapshot = result.filterSnapshot as FILTER_SNAPSHOT;
       dataFilter._filterSnapshot = filterSnapshot;
       xDataFilter.queried = true;
     } else {
-      filterSnapshot = dataFilter._filterSnapshot! as S;
+      filterSnapshot = dataFilter._filterSnapshot! as FILTER_SNAPSHOT;
     }
     print(
         "${getClassName(this)} ~~~~~~~~~~~~> filterSnapshot: ${filterSnapshot}");
@@ -811,7 +817,7 @@ abstract class Block<
     print(
         "${getClassName(this)} ~~~~~~~~~~~~> needRealQuery: ${needRealQuery}");
     //
-    PageData<I>? pageData;
+    PageData<ITEM>? pageData;
     DataState dataState = DataState.pending;
     //
     PageableData callingPageable;
@@ -819,7 +825,7 @@ abstract class Block<
       callingPageable =
           pageable ?? __pageable ?? const PageableData(page: 1, pageSize: null);
       //
-      ApiResult<PageData<I>?> result;
+      ApiResult<PageData<ITEM>?> result;
       try {
         FlutterArtist.codeFlowLogger._addMethodCall(
           isLibCode: false,
@@ -874,7 +880,7 @@ abstract class Block<
             page: 1,
             pageSize: null,
           );
-      pageData = PageData<I>.empty();
+      pageData = PageData<ITEM>.empty();
       dataState = DataState.pending;
     }
     //
@@ -896,7 +902,7 @@ abstract class Block<
     if (postQueryBehavior == PostQueryBehavior.selectAvailableItem ||
         postQueryBehavior == PostQueryBehavior.selectAvailableItemToEdit) {
       // OLD Current Item
-      I? suggestedCurrentItem = data.currentItem;
+      ITEM? suggestedCurrentItem = data.currentItem;
       if (suggestedSelection != null &&
           suggestedSelection.itemIdToSetAsCurrent != null) {
         suggestedCurrentItem = data.findItemById(
@@ -904,7 +910,7 @@ abstract class Block<
         );
       }
 
-      I? itemWithSameId = suggestedCurrentItem == null
+      ITEM? itemWithSameId = suggestedCurrentItem == null
           ? null
           : data._findItemSameIdWith(item: suggestedCurrentItem);
 
@@ -914,7 +920,7 @@ abstract class Block<
 
       if (itemWithSameId == null) {
         // Find first Item...
-        I? firstItem = data.findFirstItem();
+        ITEM? firstItem = data.findFirstItem();
         print("${getClassName(this)} ~~~~~~~~~~~~> firstItem: ${firstItem}");
         if (firstItem != null) {
           bool success = await __prepareToShowOrEdit(
@@ -978,19 +984,19 @@ abstract class Block<
     if (data.currentItemDetail == null) {
       return null;
     }
-    I item = convertItemDetailToItem(itemDetail: data.currentItemDetail!);
+    ITEM item = convertItemDetailToItem(itemDetail: data.currentItemDetail!);
     return getItemId(item);
   }
 
-  I convertItemDetailToItem({required D itemDetail});
+  ITEM convertItemDetailToItem({required ITEM_DETAIL itemDetail});
 
-  I? __convertItemDetailToItem({required D? itemDetail}) {
+  ITEM? __convertItemDetailToItem({required ITEM_DETAIL? itemDetail}) {
     return itemDetail == null
         ? null
         : convertItemDetailToItem(itemDetail: itemDetail);
   }
 
-  ID getItemId(I item);
+  ID getItemId(ITEM item);
 
   Object? get parentItemId {
     if (parent == null) {
@@ -1048,7 +1054,7 @@ abstract class Block<
   // @canOverride
   void setChildrenForParent({
     required Object currentItemOfParentBlock,
-    required List<I> items,
+    required List<ITEM> items,
   }) {
     // Override if need.
   }
@@ -1083,8 +1089,8 @@ abstract class Block<
 // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
   void __setCurrentItem({
-    required I? item,
-    required D? itemDetail,
+    required ITEM? item,
+    required ITEM_DETAIL? itemDetail,
   }) {
     data._setCurrentItem(
       refreshedItemDetail: itemDetail,
@@ -1095,7 +1101,7 @@ abstract class Block<
   ///
   /// Remove this item from Interface because it no longer exists on the server
   ///
-  void __removeItemFromList({required I removeItem}) {
+  void __removeItemFromList({required ITEM removeItem}) {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
@@ -1115,7 +1121,7 @@ abstract class Block<
   Future<bool> __removeNotFoundItemAndRefreshChildren({
     required _XBlock thisXBlock,
     SuggestedSelection? suggestedSelection,
-    required I notFoundItem,
+    required ITEM notFoundItem,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -1131,7 +1137,7 @@ abstract class Block<
     final bool isCurrent = data.isCurrentItem(
       item: notFoundItem,
     );
-    final I? siblingItem = data._findSiblingItem(
+    final ITEM? siblingItem = data._findSiblingItem(
       item: notFoundItem,
     );
     //
@@ -1176,7 +1182,7 @@ abstract class Block<
 
   Future<bool> __insertOrReplaceItemInListAndRefreshChildren({
     required _XBlock thisXBlock,
-    required D refreshedItemDetail,
+    required ITEM_DETAIL refreshedItemDetail,
     required bool forceForm,
   }) async {
     __assertThisXBlock(thisXBlock);
@@ -1192,7 +1198,8 @@ abstract class Block<
       },
     );
     //
-    I refreshedItem = convertItemDetailToItem(itemDetail: refreshedItemDetail);
+    ITEM refreshedItem =
+        convertItemDetailToItem(itemDetail: refreshedItemDetail);
     data._insertOrReplaceItem(
       item: refreshedItem,
       itemDetail: refreshedItemDetail,
@@ -1264,9 +1271,9 @@ abstract class Block<
 
     if (clearListForThis) {
       // TODO: Xem lai.
-      S? filterSnapshot = data.filterSnapshot;
+      FILTER_SNAPSHOT? filterSnapshot = data.filterSnapshot;
       //
-      PageData<I> emptyAppPage = PageData.empty();
+      PageData<ITEM> emptyAppPage = PageData.empty();
       Object? currentParentItem = parentItemId;
 
       data._updateFrom(
@@ -1279,8 +1286,8 @@ abstract class Block<
       );
     }
 
-    const I? nullItem = null;
-    const D? nullItemDetail = null;
+    const ITEM? nullItem = null;
+    const ITEM_DETAIL? nullItemDetail = null;
     __setCurrentItem(
       itemDetail: nullItemDetail,
       item: nullItem,
@@ -1381,7 +1388,7 @@ abstract class Block<
     required _XBlock thisXBlock,
     required QuickActionData data,
   }) async {
-    ApiResult<D> result;
+    ApiResult<ITEM_DETAIL> result;
     try {
       result = await callApiQuickCreate(data: data);
       FlutterArtist.storage.fireSourceChanged(
@@ -1420,7 +1427,7 @@ abstract class Block<
   }
 
   Future<bool> _executeQuickUpdateWithOverlayAndRestorable({
-    required I item,
+    required ITEM item,
     required QuickActionData data,
   }) async {
     return await FlutterArtist.executeTask(
@@ -1434,7 +1441,7 @@ abstract class Block<
   }
 
   Future<bool> __executeQuickUpdateActionWithRestorable({
-    required I item,
+    required ITEM item,
     required QuickActionData data,
   }) async {
     _XShelf xShelf = _XShelf(
@@ -1481,12 +1488,12 @@ abstract class Block<
 
   Future<bool> __executeQuickUpdateAction({
     required _XBlock thisXBlock,
-    required I item,
+    required ITEM item,
     required QuickActionData data,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    ApiResult<D> result;
+    ApiResult<ITEM_DETAIL> result;
     try {
       result = await callApiQuickUpdate(item: item, data: data);
       FlutterArtist.storage.fireSourceChanged(
@@ -1525,7 +1532,7 @@ abstract class Block<
   }
 
   Future<bool> _executeQuickActionWithOverlayAndRestorable({
-    required S? suggestedFilterSnapshot,
+    required FILTER_SNAPSHOT? suggestedFilterSnapshot,
     required SuggestedSelection? suggestedSelection,
     required QuickActionData action,
     required AfterQuickAction? afterQuickAction,
@@ -1553,7 +1560,7 @@ abstract class Block<
   }
 
   Future<bool> __executeQuickActionWithRestorable({
-    required S? suggestedFilterSnapshot,
+    required FILTER_SNAPSHOT? suggestedFilterSnapshot,
     required SuggestedSelection? suggestedSelection,
     required QuickActionData data,
     required AfterQuickAction? afterQuickAction,
@@ -1701,14 +1708,14 @@ abstract class Block<
   ///
   /// Allows edit an Item or not according to the application logic.
   ///
-  bool isAllowEdit({required D refreshedItem}) {
+  bool isAllowEdit({required ITEM_DETAIL refreshedItem}) {
     return true;
   }
 
   ///
   /// Allows deleting an Item or not according to the application logic.
   ///
-  bool isAllowDelete({required D refreshedItem}) {
+  bool isAllowDelete({required ITEM_DETAIL refreshedItem}) {
     return true;
   }
 
@@ -1716,7 +1723,7 @@ abstract class Block<
   /// Allows edit current item or not according to the application logic.
   ///
   bool _isAllowEditCurrentItem() {
-    D? currentItem = data.currentItemDetail;
+    ITEM_DETAIL? currentItem = data.currentItemDetail;
     if (currentItem == null) {
       return false;
     }
@@ -1726,7 +1733,7 @@ abstract class Block<
   ///
   /// Allows deleting an Item or not according to the application logic.
   ///
-  bool _isAllowEdit({required D refreshedItem}) {
+  bool _isAllowEdit({required ITEM_DETAIL refreshedItem}) {
     try {
       return isAllowEdit(refreshedItem: refreshedItem);
     } catch (e, stackTrace) {
@@ -1763,7 +1770,7 @@ abstract class Block<
   ///
   /// Allows deleting an Item or not according to the application logic.
   ///
-  bool _isAllowDelete({required D refreshedItem}) {
+  bool _isAllowDelete({required ITEM_DETAIL refreshedItem}) {
     try {
       return isAllowDelete(refreshedItem: refreshedItem);
     } catch (e, stackTrace) {
@@ -1781,12 +1788,12 @@ abstract class Block<
   ///
   /// Allows deleting an Item or not according to the application logic.
   ///
-  bool _isAllowDeleteItem({required I item}) {
+  bool _isAllowDeleteItem({required ITEM item}) {
     final bool isCurrent = data.isCurrentItem(item: item);
     if (!isCurrent) {
       return true;
     } else {
-      D? currentItem = data.currentItemDetail;
+      ITEM_DETAIL? currentItem = data.currentItemDetail;
       if (currentItem == null) {
         return false;
       }
@@ -1795,14 +1802,14 @@ abstract class Block<
   }
 
   bool needToKeepItemInList({
-    required S? filterSnapshot,
-    required D savedItem,
+    required FILTER_SNAPSHOT? filterSnapshot,
+    required ITEM_DETAIL savedItem,
   });
 
   Future<bool> _processSaveActionRestResult({
     required _XBlock thisXBlock,
     required String calledMethodName,
-    required ApiResult<D> result,
+    required ApiResult<ITEM_DETAIL> result,
   }) async {
     if (result.errorMessage != null) {
       _handleRestError(
@@ -1819,7 +1826,7 @@ abstract class Block<
       itemIdString: null,
     );
     //
-    final D? savedItemDetail = result.data;
+    final ITEM_DETAIL? savedItemDetail = result.data;
     final bool keepInList;
     if (savedItemDetail == null) {
       keepInList = false;
@@ -1843,8 +1850,8 @@ abstract class Block<
     }
     // savedItem = null or !keepInList
     else {
-      I? savedItem = __convertItemDetailToItem(itemDetail: savedItemDetail);
-      final I? removeItem = savedItem ?? data.currentItem;
+      ITEM? savedItem = __convertItemDetailToItem(itemDetail: savedItemDetail);
+      final ITEM? removeItem = savedItem ?? data.currentItem;
 
       if (removeItem != null) {
         bool success = await __removeNotFoundItemAndRefreshChildren(
@@ -1868,7 +1875,7 @@ abstract class Block<
   /// so you need to override [callApiQuickAction] method.
   ///
   Future<bool> executeQuickAction({
-    S? suggestedFilterSnapshot,
+    FILTER_SNAPSHOT? suggestedFilterSnapshot,
     SuggestedSelection? suggestedSelection,
     required ActionConfirmation? actionConfirmation,
     required QuickActionData action,
@@ -2003,7 +2010,7 @@ abstract class Block<
   /// So you need to implement [callApiQuickUpdate] method.
   ///
   Future<bool> executeQuickUpdateAction<A extends QuickActionData>({
-    required I item,
+    required ITEM item,
     required CustomConfirmation<A>? customConfirmation,
     required A action,
   }) async {
@@ -2050,7 +2057,7 @@ abstract class Block<
   }
 
   Future<bool> prepareToEdit({
-    required I item,
+    required ITEM item,
     Function()? route,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -2077,7 +2084,7 @@ abstract class Block<
   }
 
   Future<bool> prepareToShow({
-    required I item,
+    required ITEM item,
     Function()? route,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -2105,7 +2112,7 @@ abstract class Block<
 
   Future<bool> _prepareToShowOrEditWithOverlayAndRestorable({
     required SuggestedSelection? suggestedSelection,
-    required I item,
+    required ITEM item,
     required bool forceForm,
     required bool justQueried,
   }) async {
@@ -2123,7 +2130,7 @@ abstract class Block<
 
   Future<bool> _prepareToShowOrEditWithRestorable({
     required SuggestedSelection? suggestedSelection,
-    required I item,
+    required ITEM item,
     required bool forceForm,
     required bool justQueried,
   }) async {
@@ -2189,7 +2196,7 @@ abstract class Block<
   // Private method (Only for use in this class)
   Future<bool> __prepareToShowOrEdit({
     required _XBlock thisXBlock,
-    required I item,
+    required ITEM item,
     required bool forceForm,
     required bool justQueried,
   }) async {
@@ -2207,11 +2214,11 @@ abstract class Block<
       },
     );
     //
-    D refreshedItem;
-    if (item is D && justQueried) {
+    ITEM_DETAIL refreshedItem;
+    if (item is ITEM_DETAIL && justQueried) {
       refreshedItem = item;
     } else {
-      ApiResult<D> result;
+      ApiResult<ITEM_DETAIL> result;
       try {
         FlutterArtist.codeFlowLogger._addMethodCall(
           isLibCode: false,
@@ -2294,7 +2301,7 @@ abstract class Block<
   /// Prepare to create an item in a Form.
   ///
   Future<bool> prepareToCreate({
-    SF? suggestedFormData,
+    SUGGESTED_FORM_DATA? suggestedFormData,
     required Function()? route,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -2322,7 +2329,7 @@ abstract class Block<
   }
 
   Future<bool> _prepareToCreateWithOverlayAndRestorable({
-    required SF? suggestedFormData,
+    required SUGGESTED_FORM_DATA? suggestedFormData,
   }) async {
     if (!__checkBeforeFormCreation(showErrorMessage: false)) {
       return false;
@@ -2337,7 +2344,7 @@ abstract class Block<
   }
 
   Future<bool> _prepareToCreateWithRestorable({
-    required SF? suggestedFormData,
+    required SUGGESTED_FORM_DATA? suggestedFormData,
   }) async {
     if (!__checkBeforeFormCreation(showErrorMessage: false)) {
       return false;
@@ -2394,7 +2401,7 @@ abstract class Block<
   // Private method. Only for use in this class.
   Future<bool> __prepareToCreate({
     required _XBlock thisXBlock,
-    required SF? suggestedFormData,
+    required SUGGESTED_FORM_DATA? suggestedFormData,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -2407,8 +2414,8 @@ abstract class Block<
     if (!__checkBeforeFormCreation(showErrorMessage: false)) {
       return false;
     }
-    const I? nullItem = null;
-    const D? nullItemDetail = null;
+    const ITEM? nullItem = null;
+    const ITEM_DETAIL? nullItemDetail = null;
     __setCurrentItem(
       itemDetail: nullItemDetail,
       item: nullItem,
@@ -2462,7 +2469,7 @@ abstract class Block<
     );
     //
 
-    I? currentItem = data.currentItem;
+    ITEM? currentItem = data.currentItem;
     if (currentItem != null) {
       return delete(currentItem);
     }
@@ -2512,11 +2519,11 @@ abstract class Block<
       },
     );
     //
-    I? item = data.findItemById(itemId);
+    ITEM? item = data.findItemById(itemId);
     final bool inList = item != null;
     //
     if (item == null) {
-      ApiResult<D> result;
+      ApiResult<ITEM_DETAIL> result;
       try {
         result = await FlutterArtist.executeTask(
           asyncFunction: () async {
@@ -2544,7 +2551,7 @@ abstract class Block<
         );
         return false;
       }
-      D? itemDetail = result.data;
+      ITEM_DETAIL? itemDetail = result.data;
       if (itemDetail == null) {
         return true;
       }
@@ -2574,7 +2581,7 @@ abstract class Block<
     return success;
   }
 
-  Future<bool> delete(I item) async {
+  Future<bool> delete(ITEM item) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
@@ -2596,7 +2603,7 @@ abstract class Block<
     return success;
   }
 
-  Future<bool> _deleteWithOverlayAndRestorable(I item) async {
+  Future<bool> _deleteWithOverlayAndRestorable(ITEM item) async {
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
         return await _deleteWithRestorable(item);
@@ -2604,7 +2611,7 @@ abstract class Block<
     );
   }
 
-  Future<bool> _deleteWithRestorable(I item) async {
+  Future<bool> _deleteWithRestorable(ITEM item) async {
     _XShelf xShelf = _XShelf(
       shelf: shelf,
       forceDataFilterOpt: null,
@@ -2656,7 +2663,7 @@ abstract class Block<
   // Private method. Only for use in this class only.
   Future<bool> __delete({
     required _XBlock thisXBlock,
-    required I item,
+    required ITEM item,
   }) async {
     try {
       final bool isCurrent = data.isCurrentItem(item: item);
@@ -2714,7 +2721,7 @@ abstract class Block<
           __removeItemFromList(removeItem: item);
         } else {
           // Deleted current item ==> find sibling.
-          final I? sibling = data._findSiblingItem(item: item);
+          final ITEM? sibling = data._findSiblingItem(item: item);
           // Remove Item
           __removeItemFromList(removeItem: item);
 
@@ -2794,8 +2801,8 @@ abstract class Block<
   /// }
   /// ```
   ///
-  Future<ApiResult<D>> callApiQuickUpdate({
-    required I item,
+  Future<ApiResult<ITEM_DETAIL>> callApiQuickUpdate({
+    required ITEM item,
     required QuickActionData data,
   }) async {
     throw UnimplementedError("Override me!");
@@ -2815,7 +2822,7 @@ abstract class Block<
   /// }
   /// ```
   ///
-  Future<ApiResult<D>> callApiQuickCreate({
+  Future<ApiResult<ITEM_DETAIL>> callApiQuickCreate({
     required QuickActionData data,
   }) async {
     throw UnimplementedError("Override me!");
@@ -2827,18 +2834,18 @@ abstract class Block<
     throw UnimplementedError("Override me!");
   }
 
-  Future<ApiResult<PageData<I>?>> callApiQuery({
-    required S filterSnapshot,
+  Future<ApiResult<PageData<ITEM>?>> callApiQuery({
+    required FILTER_SNAPSHOT filterSnapshot,
     required PageableData pageable,
   });
 
   // Developer do not call this method!
   // Call delete instead of
-  Future<ApiResult<void>> callApiDelete({required I item});
+  Future<ApiResult<void>> callApiDelete({required ITEM item});
 
-  Future<ApiResult<D>> callApiRefreshItem({required I item});
+  Future<ApiResult<ITEM_DETAIL>> callApiRefreshItem({required ITEM item});
 
-  Future<ApiResult<D>> callApiFindItemById({required ID itemId});
+  Future<ApiResult<ITEM_DETAIL>> callApiFindItemById({required ID itemId});
 
   bool canCreate() {
     if (blockForm == null || this.__isPreparingFormCreation) {
@@ -2867,14 +2874,14 @@ abstract class Block<
   }
 
   bool canDeleteCurrentItem() {
-    I? currentItem = data.currentItem;
+    ITEM? currentItem = data.currentItem;
     if (currentItem == null) {
       return false;
     }
     return canDelete(item: currentItem);
   }
 
-  bool canDelete({required I item}) {
+  bool canDelete({required ITEM item}) {
     if (__isDeleting) {
       return false;
     }

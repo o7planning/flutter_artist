@@ -1,11 +1,12 @@
 part of '../flutter_artist.dart';
 
 abstract class BlockForm<
-    ID extends Object, //
-    I extends Object,
-    D extends Object,
-    S extends FilterSnapshot,
-    SF extends SuggestedFormData> {
+    ID extends Object,
+    ITEM extends Object,
+    ITEM_DETAIL extends Object,
+    SUGGESTED_FILTER_DATA extends SuggestedFilterData,
+    FILTER_SNAPSHOT extends FilterSnapshot,
+    SUGGESTED_FORM_DATA extends SuggestedFormData> {
   QueryMode _queryMode = QueryMode.lazy;
 
   late QueryMode _tempQueryMode = _queryMode;
@@ -14,7 +15,8 @@ abstract class BlockForm<
 
   Shelf get shelf => block.shelf;
 
-  late final Block<ID, I, D, FilterSnapshot, SF> block;
+  late final Block<ID, ITEM, ITEM_DETAIL, SUGGESTED_FILTER_DATA,
+      FILTER_SNAPSHOT, SUGGESTED_FORM_DATA> block;
 
   DataState get dataState => data._dataState;
 
@@ -29,7 +31,7 @@ abstract class BlockForm<
 
   late AutovalidateMode autovalidateMode = _defaultAutovalidateMode;
 
-  D? item;
+  ITEM_DETAIL? item;
 
   final Map<_WidgetState, bool> _formWidgetStateListeners = {};
 
@@ -174,13 +176,13 @@ abstract class BlockForm<
 
   // Developer do not call this method!
   // Call saveForm() instead of
-  Future<ApiResult<D>> callApiCreate({
+  Future<ApiResult<ITEM_DETAIL>> callApiCreate({
     required Map<String, dynamic> formMapData,
   });
 
   // Developer do not call this method!
   // Call saveForm() instead of
-  Future<ApiResult<D>> callApiUpdate({
+  Future<ApiResult<ITEM_DETAIL>> callApiUpdate({
     required Map<String, dynamic> formMapData,
   });
 
@@ -191,10 +193,9 @@ abstract class BlockForm<
   /// This method is called before [prepareFormData] method.
   ///
   Future<ApiResult<void>?>? prepareFormMasterData({
-    required S? filterSnapshot,
-    // required DataFilter? dataFilter, // TODO: FilterSnapShot??
-    required SF? suggestedFormData,
-    required D? refreshedItem,
+    required FILTER_SNAPSHOT? filterSnapshot,
+    required SUGGESTED_FORM_DATA? suggestedFormData,
+    required ITEM_DETAIL? refreshedItem,
     required bool isNew,
   });
 
@@ -202,9 +203,9 @@ abstract class BlockForm<
   /// This method is called after [prepareFormMasterData].
   ///
   Map<String, dynamic> prepareFormData({
-    required S? filterSnapshot,
-    required SF? suggestedFormData,
-    required D? refreshedItem,
+    required FILTER_SNAPSHOT? filterSnapshot,
+    required SUGGESTED_FORM_DATA? suggestedFormData,
+    required ITEM_DETAIL? refreshedItem,
     required bool isNew,
   });
 
@@ -328,7 +329,7 @@ abstract class BlockForm<
     //
     String calledMethodName = data.isNew ? 'callApiCreate' : 'callApiUpdate';
     //
-    ApiResult<D> result;
+    ApiResult<ITEM_DETAIL> result;
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
@@ -361,7 +362,6 @@ abstract class BlockForm<
     try {
       return await block._processSaveActionRestResult(
         thisXBlock: thisXBlock,
-        // suggestedSelection: null,
         calledMethodName: calledMethodName,
         result: result,
       );
@@ -378,8 +378,8 @@ abstract class BlockForm<
   }
 
   Future<bool> _prepareForm({
-    required SF? suggestedFormData,
-    required D? refreshedItem,
+    required SUGGESTED_FORM_DATA? suggestedFormData,
+    required ITEM_DETAIL? refreshedItem,
     required final bool isNew,
     required bool forceForm,
   }) async {
@@ -401,7 +401,8 @@ abstract class BlockForm<
     // Init Extra data for Edit Form:
     //
     if (needToLoad) {
-      S? filterSnapshot = block.data.filterSnapshot as S?;
+      FILTER_SNAPSHOT? filterSnapshot =
+          block.data.filterSnapshot as FILTER_SNAPSHOT?;
       //
       bool success = await __prepareFormMasterData(
         filterSnapshot: filterSnapshot,
@@ -432,9 +433,9 @@ abstract class BlockForm<
 
   // Private method in this class.
   Future<bool> __prepareFormMasterData({
-    required S? filterSnapshot,
-    required SF? suggestedFormData,
-    required D? refreshedItem,
+    required FILTER_SNAPSHOT? filterSnapshot,
+    required SUGGESTED_FORM_DATA? suggestedFormData,
+    required ITEM_DETAIL? refreshedItem,
     required bool isNew,
   }) async {
     try {
@@ -485,8 +486,8 @@ abstract class BlockForm<
 
   // Private method. Only for use in this class.
   bool __copyItemDataToFormKeyState({
-    required SF? suggestedFormData,
-    required D? refreshedItem,
+    required SUGGESTED_FORM_DATA? suggestedFormData,
+    required ITEM_DETAIL? refreshedItem,
     required bool isNew,
   }) {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -503,7 +504,8 @@ abstract class BlockForm<
     Map<String, dynamic> newFormData;
     if (data._dataState == DataState.ready) {
       try {
-        S? filterSnapshot = block.data.filterSnapshot as S?;
+        FILTER_SNAPSHOT? filterSnapshot =
+            block.data.filterSnapshot as FILTER_SNAPSHOT?;
         //
         FlutterArtist.codeFlowLogger._addMethodCall(
           isLibCode: false,

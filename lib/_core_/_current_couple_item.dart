@@ -1,10 +1,10 @@
 part of '../flutter_artist.dart';
 
-class _CurrentCoupleItem<I, D> {
-  final I? _item;
-  final D? _itemDetail;
+class _CurrentCoupleItem<ITEM, ITEM_DETAIL> {
+  final ITEM? _item;
+  final ITEM_DETAIL? _itemDetail;
 
-  _CurrentCoupleItem({required I? item, required D? itemDetail})
+  _CurrentCoupleItem({required ITEM? item, required ITEM_DETAIL? itemDetail})
       : _item = item,
         _itemDetail = itemDetail,
         assert((item == null && itemDetail == null) ||

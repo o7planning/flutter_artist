@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
 ///
-/// [V] - Value.
+/// [VALUE] - Value.
 ///
 /// ```
 /// class OrderSummaryScalar
@@ -20,7 +20,8 @@ part of '../flutter_artist.dart';
 /// OrderSummaryData value = scalar.data.value;
 /// ```
 ///
-abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
+abstract class Scalar<VALUE, SUGGESTED_FILTER_DATA extends SuggestedFilterData,
+    FILTER_SNAPSHOT extends FilterSnapshot> extends DataContainer {
   final String name;
 
   String get _shortPathName {
@@ -54,13 +55,14 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
   /// This field is not null.
   /// If this scalar does not declare a DataFilter, it will have the default DataFilter.
   ///
-  late final DataFilter<S> _registeredOrDefaultDataFilter;
+  late final DataFilter<SUGGESTED_FILTER_DATA, FILTER_SNAPSHOT>
+      _registeredOrDefaultDataFilter;
 
   ///
   /// Returns a DataFilter declared in the [Shelf.registerStructure()] method.
   /// The return value may be null.
   ///
-  DataFilter<S>? get dataFilter {
+  DataFilter<SUGGESTED_FILTER_DATA, FILTER_SNAPSHOT>? get dataFilter {
     if (_registeredOrDefaultDataFilter is _DefaultDataFilter) {
       return null;
     } else {
@@ -68,7 +70,8 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
     }
   }
 
-  late final ScalarData<V, S> data = ScalarData<V, S>(this);
+  late final ScalarData<VALUE, SUGGESTED_FILTER_DATA, FILTER_SNAPSHOT> data =
+      ScalarData<VALUE, SUGGESTED_FILTER_DATA, FILTER_SNAPSHOT>(this);
 
   DataState get dataState => data._dataState;
 
@@ -86,11 +89,11 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
         __listenItemTypes = listenTypes;
 
   String getDataTypeAsString() {
-    return V.toString();
+    return VALUE.toString();
   }
 
   String getFilterSnapshotTypeAsString() {
-    return S.toString();
+    return FILTER_SNAPSHOT.toString();
   }
 
   void _backup() {
@@ -137,7 +140,7 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
   ///
   @nonVirtual
   Future<bool> query({
-    S? suggestedFilterSnapshot,
+    FILTER_SNAPSHOT? suggestedFilterSnapshot,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -158,8 +161,8 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
     );
   }
 
-  Future<ApiResult<V>> callApiQuery({
-    required S? filterSnapshot,
+  Future<ApiResult<VALUE>> callApiQuery({
+    required FILTER_SNAPSHOT? filterSnapshot,
   });
 
   void __refreshQueryingState({required bool isQuerying}) {
@@ -170,9 +173,9 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
   }
 
   Future<bool> __queryThis({
-    required S filterSnapshot,
+    required FILTER_SNAPSHOT filterSnapshot,
   }) async {
-    ApiResult<V> result;
+    ApiResult<VALUE> result;
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,

@@ -3,7 +3,7 @@ part of '../flutter_artist.dart';
 ///
 /// [ID] is Id type of Item. For example: [String].
 ///
-/// [I] is item. For example:
+/// [ITEM] is item. For example:
 /// ```dart
 /// class EmployeeInfo {
 ///     int id;
@@ -21,11 +21,14 @@ part of '../flutter_artist.dart';
 /// ```
 ///
 abstract class SingleItemBlock<
-    ID extends Object,
-    I extends Object,
-    D extends Object,
-    S extends FilterSnapshot,
-    SF extends SuggestedFormData> extends Block<ID, I, D, S, SF> {
+        ID extends Object,
+        ITEM extends Object,
+        ITEM_DETAIL extends Object,
+        FILTER_SNAPSHOT extends FilterSnapshot,
+        SUGGESTED_FILTER_DATA extends SuggestedFilterData,
+        SUGGESTED_FORM_DATA extends SuggestedFormData>
+    extends Block<ID, ITEM, ITEM_DETAIL, SUGGESTED_FILTER_DATA, FILTER_SNAPSHOT,
+        SUGGESTED_FORM_DATA> {
   SingleItemBlock({
     required super.name,
     required super.description,
@@ -39,17 +42,17 @@ abstract class SingleItemBlock<
 
   @override
   @nonVirtual
-  Future<ApiResult<PageData<I>?>> callApiQuery({
-    required S filterSnapshot,
+  Future<ApiResult<PageData<ITEM>?>> callApiQuery({
+    required FILTER_SNAPSHOT filterSnapshot,
     required PageableData? pageable,
   }) async {
-    ApiResult<I>? result = await callApiSingleItemQuery(
+    ApiResult<ITEM>? result = await callApiSingleItemQuery(
       filterSnapshot: filterSnapshot,
     );
     return result.toPageDataResult();
   }
 
-  Future<ApiResult<I>> callApiSingleItemQuery({
-    required S filterSnapshot,
+  Future<ApiResult<ITEM>> callApiSingleItemQuery({
+    required FILTER_SNAPSHOT filterSnapshot,
   });
 }

@@ -2,11 +2,13 @@ part of '../flutter_artist.dart';
 
 class BlockFormData<
     ID extends Object,
-    I extends Object,
-    D extends Object,
-    S extends FilterSnapshot, //
-    SF extends SuggestedFormData> {
-  final BlockForm<ID, I, D, S, SF> blockForm;
+    ITEM extends Object,
+    ITEM_DETAIL extends Object,
+    SUGGESTED_FILTER_DATA extends SuggestedFilterData,
+    FILTER_SNAPSHOT extends FilterSnapshot, //
+    SUGGESTED_FORM_DATA extends SuggestedFormData> {
+  final BlockForm<ID, ITEM, ITEM_DETAIL, SUGGESTED_FILTER_DATA, FILTER_SNAPSHOT,
+      SUGGESTED_FORM_DATA> blockForm;
 
   bool _justInited = false;
 
@@ -80,7 +82,7 @@ class BlockFormData<
   }
 
   void _setCurrentItem({
-    required D? refreshedItemDetail,
+    required ITEM_DETAIL? refreshedItemDetail,
     required FormMode formMode,
     required DataState dataState,
   }) {

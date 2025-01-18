@@ -2,19 +2,21 @@ part of '../flutter_artist.dart';
 
 abstract class BlockData<
     ID extends Object,
-    I extends Object,
-    D extends Object,
-    S extends FilterSnapshot,
-    SF extends SuggestedFormData> implements PageData<I> {
-  final Block<ID, I, D, S, SF> block;
+    ITEM extends Object,
+    ITEM_DETAIL extends Object,
+    SUGGESTED_FILTER_DATA extends SuggestedFilterData,
+    FILTER_SNAPSHOT extends FilterSnapshot,
+    SUGGESTED_FORM_DATA extends SuggestedFormData> implements PageData<ITEM> {
+  final Block<ID, ITEM, ITEM_DETAIL, SUGGESTED_FILTER_DATA, FILTER_SNAPSHOT,
+      SUGGESTED_FORM_DATA> block;
 
-  late final List<I> _items;
+  late final List<ITEM> _items;
 
   ///
   /// return a copied list of items.
   ///
   @override
-  List<I> get items {
+  List<ITEM> get items {
     return [..._items];
   }
 
@@ -26,11 +28,11 @@ abstract class BlockData<
 
   Object? _currentParentItemId;
 
-  S? _filterSnapshot;
+  FILTER_SNAPSHOT? _filterSnapshot;
 
-  S? get filterSnapshot => _filterSnapshot;
+  FILTER_SNAPSHOT? get filterSnapshot => _filterSnapshot;
 
-  PageData<I>? _lastQueryResult;
+  PageData<ITEM>? _lastQueryResult;
 
   ///
   /// ```dart
@@ -45,7 +47,7 @@ abstract class BlockData<
   /// }
   /// ```
   ///
-  PageData<I>? get lastQueryResult => _lastQueryResult;
+  PageData<ITEM>? get lastQueryResult => _lastQueryResult;
 
   late PageableData? _pageable;
 
@@ -56,31 +58,31 @@ abstract class BlockData<
   @override
   PaginationData? get pagination => PaginationData.copy(_pagination);
 
-  _CurrentCoupleItem<I, D> __current = _CurrentCoupleItem(
+  _CurrentCoupleItem<ITEM, ITEM_DETAIL> __current = _CurrentCoupleItem(
     item: null,
     itemDetail: null,
   );
 
-  I? get currentItem => __current._item;
+  ITEM? get currentItem => __current._item;
 
-  D? get currentItemDetail => __current._itemDetail;
+  ITEM_DETAIL? get currentItemDetail => __current._itemDetail;
 
   DataState _dataState = DataState.pending;
 
   DataState get dataState => _dataState;
 
-  final List<I> _checkedItems = [];
+  final List<ITEM> _checkedItems = [];
 
   ///
   /// return a copied list of checked items.
   ///
-  List<I> get checkedItems {
+  List<ITEM> get checkedItems {
     return [..._checkedItems];
   }
 
   BlockData({
     required this.block,
-    required List<I> items,
+    required List<ITEM> items,
     required PaginationData? pagination,
     required PageableData? pageable,
   })  : _items = items,
@@ -99,9 +101,9 @@ abstract class BlockData<
   }
 
   void _updateCheckedItems() {
-    List<I> newCheckedItems = [];
+    List<ITEM> newCheckedItems = [];
     for (var it in _checkedItems) {
-      I? newCheckItem = _findItemSameIdWith(
+      ITEM? newCheckItem = _findItemSameIdWith(
         item: it,
       );
       if (newCheckItem != null) {
@@ -114,9 +116,9 @@ abstract class BlockData<
   }
 
   void _setCheckedItem({
-    required I item,
+    required ITEM item,
   }) {
-    I? foundItem = _findItemSameIdWith(
+    ITEM? foundItem = _findItemSameIdWith(
       item: item,
     );
     int idx = _checkedItems
@@ -133,8 +135,8 @@ abstract class BlockData<
   }
 
   void _setCurrentItem({
-    required I? refreshedItem,
-    required D? refreshedItemDetail,
+    required ITEM? refreshedItem,
+    required ITEM_DETAIL? refreshedItemDetail,
   }) {
     __current = _CurrentCoupleItem(
       item: refreshedItem,
@@ -143,7 +145,7 @@ abstract class BlockData<
   }
 
   void _removeItem({
-    required I removeItem,
+    required ITEM removeItem,
   }) {
     FormUtils.removeItemFromList(
       items: _items,
@@ -158,8 +160,8 @@ abstract class BlockData<
   }
 
   void _insertOrReplaceItem({
-    required D itemDetail,
-    required I item,
+    required ITEM_DETAIL itemDetail,
+    required ITEM item,
   }) {
     FormUtils.insertOrReplaceItemInList(
       items: _items,
@@ -173,7 +175,7 @@ abstract class BlockData<
     );
   }
 
-  I? _findItemById({
+  ITEM? _findItemById({
     required ID itemId,
   }) {
     for (var it in _items) {
@@ -185,7 +187,7 @@ abstract class BlockData<
   }
 
   bool _isContains({
-    required I item,
+    required ITEM item,
   }) {
     return _isListContainItem(
       items: _items,
@@ -195,17 +197,17 @@ abstract class BlockData<
   }
 
   bool isCurrentItem({
-    required I item,
+    required ITEM item,
   }) {
     return __current._item != null &&
         block.getItemId(item) == block.getItemId(__current._item!);
   }
 
-  void __append({required List<I> appendItems}) {
-    List<I> all = [];
-    List<I> tailItems = [...appendItems];
-    for (I item in _items) {
-      I? it = _getItemBySameItemId(
+  void __append({required List<ITEM> appendItems}) {
+    List<ITEM> all = [];
+    List<ITEM> tailItems = [...appendItems];
+    for (ITEM item in _items) {
+      ITEM? it = _getItemBySameItemId(
         items: appendItems,
         sameItem: item,
         getItemId: block.getItemId,
@@ -227,9 +229,9 @@ abstract class BlockData<
   void _updateFrom({
     required ListBehavior forceListBehavior,
     required Object? currentParentItemId,
-    required S? filterSnapshot,
+    required FILTER_SNAPSHOT? filterSnapshot,
     required PageableData? pageable,
-    required PageData<I>? pageData,
+    required PageData<ITEM>? pageData,
     required DataState dataState,
   }) {
     // Check if filterSnapshot changed.
@@ -239,7 +241,7 @@ abstract class BlockData<
       _items.clear();
     }
     //
-    PageData<I> ap = pageData ?? PageData<I>.empty();
+    PageData<ITEM> ap = pageData ?? PageData<ITEM>.empty();
     //
     _currentParentItemId = currentParentItemId;
     _filterSnapshot = filterSnapshot;
@@ -258,12 +260,12 @@ abstract class BlockData<
     _updateCheckedItems();
   }
 
-  I? findFirstItem() {
+  ITEM? findFirstItem() {
     return _items.isEmpty ? null : _items[0];
   }
 
-  I? _findSiblingItem({
-    required I item,
+  ITEM? _findSiblingItem({
+    required ITEM item,
   }) {
     return FormUtils.findSiblingItemInList(
       items: items,
@@ -272,8 +274,8 @@ abstract class BlockData<
     );
   }
 
-  I? _findItemSameIdWith({
-    required I item,
+  ITEM? _findItemSameIdWith({
+    required ITEM item,
   }) {
     for (var it in _items) {
       if (block.getItemId(item) == block.getItemId(it)) {
@@ -283,8 +285,8 @@ abstract class BlockData<
     return null;
   }
 
-  I? findItemById(ID id) {
-    for (I item in _items) {
+  ITEM? findItemById(ID id) {
+    for (ITEM item in _items) {
       if (block.getItemId(item) == id) {
         return item;
       }
@@ -292,8 +294,8 @@ abstract class BlockData<
     return null;
   }
 
-  void setCheckedItem(I item) {
-    I? foundItem = _findItemSameIdWith(
+  void setCheckedItem(ITEM item) {
+    ITEM? foundItem = _findItemSameIdWith(
       item: item,
     );
     int idx = _checkedItems
@@ -310,7 +312,7 @@ abstract class BlockData<
     block.updateFragmentWidgets();
   }
 
-  void setUncheckedItem(I item) {
+  void setUncheckedItem(ITEM item) {
     int idx = _checkedItems
         .indexWhere((it) => block.getItemId(it) == block.getItemId(item));
     if (idx != -1) {

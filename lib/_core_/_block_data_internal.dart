@@ -1,33 +1,38 @@
 part of '../flutter_artist.dart';
 
 class _InternalBlockData<
-    ID extends Object,
-    I extends Object,
-    D extends Object,
-    S extends FilterSnapshot,
-    SF extends SuggestedFormData> extends BlockData<ID, I, D, S, SF> {
+        ID extends Object,
+        ITEM extends Object,
+        ITEM_DETAIL extends Object,
+        SUGGESTED_FILTER_DATA extends SuggestedFilterData,
+        FILTER_SNAPSHOT extends FilterSnapshot,
+        SUGGESTED_FORM_DATA extends SuggestedFormData>
+    extends BlockData<ID, ITEM, ITEM_DETAIL, SUGGESTED_FILTER_DATA,
+        FILTER_SNAPSHOT, SUGGESTED_FORM_DATA> {
   bool __isTemporaryMode = false;
 
   DataState __dataStateBk = DataState.pending;
 
-  _CurrentCoupleItem<I, D> __currentBk = _CurrentCoupleItem(
+  _CurrentCoupleItem<ITEM, ITEM_DETAIL> __currentBk = _CurrentCoupleItem(
     item: null,
     itemDetail: null,
   );
 
-  final List<I> __itemsBk = [];
-  final List<I> __checkedItemsBk = [];
+  final List<ITEM> __itemsBk = [];
+  final List<ITEM> __checkedItemsBk = [];
 
   Object? __currentParentItemIdBk;
 
-  S? __filterSnapshotBk;
+  FILTER_SNAPSHOT? __filterSnapshotBk;
 
-  PageData<I>? __lastQueryResultBk;
+  PageData<ITEM>? __lastQueryResultBk;
 
   PaginationData? __paginationBk;
 
   _InternalBlockData.empty(
-    Block<ID, I, D, S, SF> block,
+    Block<ID, ITEM, ITEM_DETAIL, SUGGESTED_FILTER_DATA, FILTER_SNAPSHOT,
+            SUGGESTED_FORM_DATA>
+        block,
     PageableData? pageable,
   ) : super(
           block: block,

@@ -1,6 +1,8 @@
 part of '../flutter_artist.dart';
 
-abstract class DataFilter<S extends FilterSnapshot> {
+abstract class DataFilter<
+    SUGGESTED_FILTER_DATA extends SuggestedFilterData, //
+    FILTER_SNAPSHOT extends FilterSnapshot> {
   late final String name;
 
   late final Shelf shelf;
@@ -21,30 +23,30 @@ abstract class DataFilter<S extends FilterSnapshot> {
   ///
   /// Map<SnapshotId, FilterSnapshot>
   ///
-  final Map<int, S> __filterSnapshotsMap = {};
+  final Map<int, FILTER_SNAPSHOT> __filterSnapshotsMap = {};
 
-  S? get currentSuccessFilterSnapshot {
+  FILTER_SNAPSHOT? get currentSuccessFilterSnapshot {
     return __currentSuccessSnapshotId == null
         ? null
         : __filterSnapshotsMap[__currentSuccessSnapshotId];
   }
 
-  S? __filterSnapshotBk;
+  FILTER_SNAPSHOT? __filterSnapshotBk;
 
-  S? _filterSnapshot;
+  FILTER_SNAPSHOT? _filterSnapshot;
 
   List<Restorable> get restorableCriteria;
 
   final Map<_WidgetState, bool> _widgetStateListeners = {};
 
   String getFilterSnapshotTypeAsString() {
-    return S.toString();
+    return FILTER_SNAPSHOT.toString();
   }
 
   ///
   /// This method is called immediately after calling [prepareData()] method if there are no errors.
   ///
-  S takeSnapshot();
+  FILTER_SNAPSHOT takeSnapshot();
 
   ///
   /// ```Dart
@@ -60,11 +62,11 @@ abstract class DataFilter<S extends FilterSnapshot> {
   /// ```
   ///
   Future<void> prepareData({
-    S? suggestedFilterSnapshot,
+    FILTER_SNAPSHOT? suggestedFilterSnapshot,
   });
 
-  Future<_FilterSnapshotWrapper<S>> __prepareData({
-    required S? suggestedFilterSnapshot,
+  Future<_FilterSnapshotWrapper<FILTER_SNAPSHOT>> __prepareData({
+    required FILTER_SNAPSHOT? suggestedFilterSnapshot,
   }) async {
     __currentTryingSnapshotId + 1;
     final int tryingSnapshotId = __currentTryingSnapshotId;
@@ -74,7 +76,7 @@ abstract class DataFilter<S extends FilterSnapshot> {
         suggestedFilterSnapshot: suggestedFilterSnapshot,
       );
       // If no error:
-      S tryingSnapshot = takeSnapshot();
+      FILTER_SNAPSHOT tryingSnapshot = takeSnapshot();
       __filterSnapshotsMap[tryingSnapshotId] = tryingSnapshot;
       //
       return _FilterSnapshotWrapper(
@@ -95,7 +97,7 @@ abstract class DataFilter<S extends FilterSnapshot> {
   /// Any Scalar or Block that is not queried will be set to LAZY state.
   ///
   Future<bool> queryAll({
-    S? suggestedFilterSnapshot,
+    FILTER_SNAPSHOT? suggestedFilterSnapshot,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,

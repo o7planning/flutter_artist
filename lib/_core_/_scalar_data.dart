@@ -1,19 +1,20 @@
 part of '../flutter_artist.dart';
 
-class ScalarData<V, S extends FilterSnapshot> {
-  final Scalar<V, S> scalar;
+class ScalarData<VALUE, SUGGESTED_FILTER_DATA extends SuggestedFilterData,
+    FILTER_SNAPSHOT extends FilterSnapshot> {
+  final Scalar<VALUE, SUGGESTED_FILTER_DATA, FILTER_SNAPSHOT> scalar;
 
   bool __isTemporaryMode = false;
 
-  S? _filterSnapshot;
+  FILTER_SNAPSHOT? _filterSnapshot;
 
-  S? get filterSnapshot => _filterSnapshot;
+  FILTER_SNAPSHOT? get filterSnapshot => _filterSnapshot;
 
-  V? _value;
+  VALUE? _value;
 
-  V? get value => _value;
+  VALUE? get value => _value;
 
-  V? __valueBk;
+  VALUE? __valueBk;
 
   DataState _dataState = DataState.pending;
 
@@ -29,8 +30,8 @@ class ScalarData<V, S extends FilterSnapshot> {
   }
 
   void _updateFrom({
-    required S? filterSnapshot,
-    required V? data,
+    required FILTER_SNAPSHOT? filterSnapshot,
+    required VALUE? data,
     required DataState dataState,
   }) {
     _filterSnapshot = filterSnapshot;
