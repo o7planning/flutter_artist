@@ -879,8 +879,6 @@ abstract class Block<
       filterSnapshot = dataFilter._filterSnapshot! as S;
     }
     //
-    print("~~~> filterSnapshot: $filterSnapshot");
-    //
     final QueryType queryType = thisXBlock.queryType;
     final ListBehavior listBehavior = thisXBlock.listBehavior;
     final PostQueryBehavior postQueryBehavior = thisXBlock.postQueryBehavior;
@@ -910,7 +908,6 @@ abstract class Block<
           }
         }
     }
-    print("~~~> needRealQuery: $needRealQuery");
     //
     PageData<I>? pageData;
     DataState dataState = DataState.pending;
@@ -962,8 +959,6 @@ abstract class Block<
       }
       pageData = result.data;
       dataState = DataState.ready;
-
-      print("~~~> pageData: $pageData >> ${pageData?.items}");
     }
     // needRealQuery = false
     else {

@@ -211,8 +211,10 @@ abstract class Shelf {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> showMessageDialog(
-      {required String message, String? details}) async {
+  Future<void> showMessageDialog({
+    required String message,
+    String? details,
+  }) async {
     BuildContext context = FlutterArtist.adapter.getCurrentContext();
     await dialogs.showMessageDialog(
       context: context,
@@ -314,7 +316,8 @@ abstract class Shelf {
   // ***************************************************************************
 
   void updateAllUIComponents() {
-    _updateShelfWidgets();
+    print("|----> ${getClassName(this)}.updateAllUIComponents()");
+    __updateShelfWidgets();
     //
     for (Scalar scalar in __scalars) {
       scalar.updateAllUIComponents();
@@ -333,7 +336,7 @@ abstract class Shelf {
     }
   }
 
-  void _updateShelfWidgets() {
+  void __updateShelfWidgets() {
     for (_WidgetState state in _shelfWidgetStateListeners.keys) {
       if (state.mounted) {
         state.refreshState();
@@ -594,8 +597,7 @@ abstract class Shelf {
       }
       //
       for (_XBlock xBlock in xShelf.allRootXBlocks) {
-        print("Query: ${xBlock}");
-        xBlock.block.__queryThisAndChildren(
+        await xBlock.block.__queryThisAndChildren(
           thisXBlock: xBlock,
         );
       }
@@ -611,182 +613,6 @@ abstract class Shelf {
         // TODO: Do not showSnackBar any more...
       }
       return false;
-    } finally {
-      updateAllUIComponents();
     }
   }
-
-// ***************************************************************************
-// ********* QUERY BLOCK *****************************************************
-// ***************************************************************************
-
-// Cascade query:
-// Private method (Only for use in this class)
-// Future<bool> __queryThisBlockAndChildren({
-//   required _XBlock xBlock,
-// }) async {
-//   final bool forceQuery = xBlock.needQuery;
-//   bool needRealQuery = false;
-//   ListBehavior forceListBehavior = listBehavior;
-//   switch (queryType) {
-//     case QueryType.emptyQuery:
-//       {
-//         needRealQuery = false;
-//         forceListBehavior = ListBehavior.replace;
-//       }
-//     case QueryType.forceQuery:
-//       {
-//         needRealQuery = true;
-//       }
-//     case QueryType.queryIfNeed:
-//       {
-//         bool guiActive = hasActiveUiComponent();
-//         if (guiActive || _tempQueryMode == QueryMode.eager) {
-//           needRealQuery = true;
-//         } else {
-//           needRealQuery = false;
-//         }
-//       }
-//   }
-//   //
-//   PageData<I>? pageData;
-//   DataState dataState = DataState.pending;
-//   //
-//   PageableData callingPageable;
-//   if (needRealQuery) {
-//     callingPageable = pageable ??
-//         __pageable ??
-//         const PageableData(
-//           page: 1,
-//           pageSize: null,
-//         );
-//     ApiResult<PageData<I>?> result;
-//     try {
-//       FlutterArtist.codeFlowLogger._addMethodCall(
-//         isLibCode: false,
-//         route: null,
-//         ownerClassInstance: this,
-//         methodName: "callApiQuery",
-//         parameters: {},
-//       );
-//       //
-//       __refreshQueryingState(isQuerying: true);
-//       //
-//       result = await callApiQuery(
-//         filterSnapshot: filterSnapshot,
-//         pageable: callingPageable,
-//       );
-//       //
-//       __refreshQueryingState(isQuerying: false);
-//     } catch (e, stacktrace) {
-//       __refreshQueryingState(isQuerying: false);
-//       //
-//       _handleError(
-//         className: getClassName(this),
-//         methodName: "callApiQuery",
-//         error: e,
-//         stackTrace: stacktrace,
-//         showSnackBar: true,
-//       );
-//       //
-//       return false;
-//     }
-//     if (result.errorMessage != null) {
-//       _handleRestError(
-//         methodName: "callApiQuery",
-//         message: result.errorMessage!,
-//         errorDetails: result.errorDetails,
-//         showSnackBar: true,
-//       );
-//       return false;
-//     }
-//     pageData = result.data;
-//     dataState = DataState.ready;
-//   }
-//   // needRealQuery = false
-//   else {
-//     forceListBehavior = ListBehavior.replace;
-//     callingPageable = __pageable ??
-//         const PageableData(
-//           page: 1,
-//           pageSize: null,
-//         );
-//     pageData = PageData<I>.empty();
-//     dataState = DataState.pending;
-//   }
-//   //
-//   Object? currentParentItem = parentItemId;
-//   data._updateFrom(
-//     forceListBehavior: forceListBehavior,
-//     currentParentItemId: currentParentItem,
-//     filterSnapshot: filterSnapshot,
-//     pageable: callingPageable,
-//     pageData: pageData,
-//     dataState: dataState,
-//   );
-//
-//   if (postQueryBehavior == PostQueryBehavior.selectAvailableItem ||
-//       postQueryBehavior == PostQueryBehavior.selectAvailableItemToEdit) {
-//     // OLD Current Item
-//     I? suggestedCurrentItem = data.currentItem;
-//     if (suggestedSelection != null &&
-//         suggestedSelection.itemIdToSetAsCurrent != null) {
-//       suggestedCurrentItem = data.findItemById(
-//         suggestedSelection.itemIdToSetAsCurrent!,
-//       );
-//     }
-//
-//     I? itemWithSameId = suggestedCurrentItem == null
-//         ? null
-//         : data._findItemSameIdWith(item: suggestedCurrentItem);
-//
-//     if (itemWithSameId == null) {
-//       // Find first Item...
-//       I? firstItem = data.findFirstItem();
-//       if (firstItem != null) {
-//         bool success = await __prepareToShowOrEdit(
-//           item: firstItem,
-//           justQueried: true,
-//           suggestedSelection: suggestedSelection,
-//           forceForm: false,
-//         );
-//         if (!success) {
-//           return false;
-//         }
-//       } else {
-//         bool success = await _switchThisAndChildrenToNoneMode(
-//           clearListForThis: false,
-//           dataState: dataState,
-//         );
-//         if (!success) {
-//           return false;
-//         }
-//       }
-//       //
-//       return true;
-//     } else {
-//       bool success = await __prepareToShowOrEdit(
-//         item: itemWithSameId,
-//         justQueried: true,
-//         suggestedSelection: suggestedSelection,
-//         forceForm:
-//             postQueryBehavior == PostQueryBehavior.selectAvailableItemToEdit,
-//       );
-//       if (!success) {
-//         return false;
-//       }
-//       return true;
-//     }
-//   } else if (postQueryBehavior == PostQueryBehavior.createNewItem) {
-//     data._dataState = DataState.ready;
-//     // Create New Item
-//     bool success = await __prepareToCreate(suggestedFormData: null);
-//     if (!success) {
-//       return false;
-//     }
-//     return true;
-//   } else {
-//     throw "TODO $postQueryBehavior";
-//   }
-// }
 }
