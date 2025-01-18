@@ -309,33 +309,41 @@ abstract class Shelf {
     return founds;
   }
 
-  void __updateAllWidgetsCascade(Block block) {
-    block.updateFragmentWidgets();
-    block.updatePaginationWidgets();
-    block.updateControlBarWidgets();
-    block.blockForm?.updateFormWidgets();
-    block._registeredOrDefaultDataFilter.updateWidgets();
+  // ***************************************************************************
+  // ****** UPDATE UI COMPONENTS ***********************************************
+  // ***************************************************************************
+
+  void updateAllUIComponents() {
+    _updateShelfWidgets();
     //
-    for (Block childBlock in block._childBlocks) {
-      __updateAllWidgetsCascade(childBlock);
+    for (Scalar scalar in __scalars) {
+      scalar.updateAllUIComponents();
+    }
+    //
+    for (Block block in __rootBlocks) {
+      __updateBlockAllUiComponentCascade(block);
     }
   }
 
-  void updateAllWidgets() {
+  void __updateBlockAllUiComponentCascade(Block block) {
+    block.updateAllUIComponents();
+    //
+    for (Block childBlock in block._childBlocks) {
+      __updateBlockAllUiComponentCascade(childBlock);
+    }
+  }
+
+  void _updateShelfWidgets() {
     for (_WidgetState state in _shelfWidgetStateListeners.keys) {
       if (state.mounted) {
         state.refreshState();
       }
     }
-    //
-    for (Scalar scalar in __scalars) {
-      scalar.updateControlBarWidgets();
-      scalar.updateFragmentWidgets();
-    }
-    for (Block block in __rootBlocks) {
-      __updateAllWidgetsCascade(block);
-    }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _addWidgetStateListener({
     required _WidgetState widgetState,
@@ -480,31 +488,6 @@ abstract class Shelf {
     return founds;
   }
 
-  // Future<bool> _queryScalars({
-  //   required List<Scalar> scalars,
-  // }) async {
-  //   for (Scalar scalar in scalars) {
-  //     bool success = await scalar.query();
-  //     if (!success) {
-  //       return false;
-  //     }
-  //   }
-  //   return true;
-  // }
-
-  // Future<bool> _queryBlocks({
-  //   required QueryType queryType,
-  //   required List<Block> blocks,
-  // }) async {
-  //   List<_ScalarOrBlockOrFormWrapper> blockOrForms =
-  //       blocks.map((b) => _ScalarOrBlockOrFormWrapper.block(b)).toList();
-  //   //
-  //   return await _queryLazyScalarOrBlockOrForms(
-  //     queryType: queryType,
-  //     scalarOrBlockOrFormWrappers: blockOrForms,
-  //   );
-  // }
-
   // ***************************************************************************
   // ********** BACKUP & RESTORE & APPLY ***************************************
   // ***************************************************************************
@@ -523,7 +506,7 @@ abstract class Shelf {
     }
     // TODO: Backup BlockForm ????????????????????????????????????????????????????
     //
-    updateAllWidgets();
+    updateAllUIComponents();
   }
 
   void __restoreAll() {
@@ -539,7 +522,7 @@ abstract class Shelf {
     }
     // TODO: Restore BlockForm ????????????????????????????????????????????????????
     //
-    updateAllWidgets();
+    updateAllUIComponents();
   }
 
   void __applyNewStateAll() {
@@ -554,7 +537,7 @@ abstract class Shelf {
       block._applyNewStateAll();
     }
     //
-    updateAllWidgets();
+    updateAllUIComponents();
   }
 
   // ***************************************************************************
@@ -611,6 +594,7 @@ abstract class Shelf {
       }
       //
       for (_XBlock xBlock in xShelf.allRootXBlocks) {
+        print("Query: ${xBlock}");
         xBlock.block.__queryThisAndChildren(
           thisXBlock: xBlock,
         );
@@ -627,6 +611,8 @@ abstract class Shelf {
         // TODO: Do not showSnackBar any more...
       }
       return false;
+    } finally {
+      updateAllUIComponents();
     }
   }
 

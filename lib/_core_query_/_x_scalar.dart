@@ -11,4 +11,9 @@ class _XScalar {
   });
 
   String get name => scalar.name;
+
+  @override
+  String toString() {
+    return "${getClassName(this)}(${getClassName(scalar)} - needQuery: $needQuery)";
+  }
 }

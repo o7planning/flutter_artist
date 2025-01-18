@@ -16,4 +16,9 @@ class _DataFilterOpt {
           suggestedFilterSnapshot.runtimeType.toString());
     }
   }
+
+  @override
+  String toString() {
+    return "${getClassName(this)}(${getClassName(dataFilter)})";
+  }
 }

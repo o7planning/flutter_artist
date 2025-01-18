@@ -12,6 +12,6 @@ class _BlockFormOpt {
 
   @override
   String toString() {
-    return "${getClassName(this)}(${blockForm.block.name})";
+    return "${getClassName(this)}(${getClassName(blockForm)})";
   }
 }

@@ -10,4 +10,9 @@ class _XDataFilter {
   });
 
   String get name => dataFilter.name;
+
+  @override
+  String toString() {
+    return "${getClassName(this)}(${getClassName(dataFilter)} - queried: $queried)";
+  }
 }

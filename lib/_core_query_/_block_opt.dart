@@ -23,6 +23,6 @@ class _BlockOpt {
 
   @override
   String toString() {
-    return "${getClassName(this)}(${block.name})";
+    return "${getClassName(this)}(${getClassName(block)})";
   }
 }

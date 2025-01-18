@@ -104,6 +104,15 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
     this.data._applyNewState();
   }
 
+  // ***************************************************************************
+  // ****** UPDATE UI COMPONENTS ***********************************************
+  // ***************************************************************************
+
+  void updateAllUIComponents() {
+    updateControlBarWidgets();
+    updateFragmentWidgets();
+  }
+
   void updateControlBarWidgets() {
     // TODO: .......
   }
@@ -117,6 +126,10 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
       }
     }
   }
+
+  // ***************************************************************************
+  // ******                      ***********************************************
+  // ***************************************************************************
 
   ///
   ///

@@ -252,6 +252,20 @@ abstract class Block<
     } catch (e) {}
   }
 
+  // ***************************************************************************
+  // ****** UPDATE UI COMPONENTS ***********************************************
+  // ***************************************************************************
+
+  void updateAllUIComponents() {
+    _registeredOrDefaultDataFilter.updateWidgets();
+    //
+    updateFragmentWidgets();
+    updatePaginationWidgets();
+    updateControlBarWidgets();
+    //
+    blockForm?.updateFormWidgets();
+  }
+
   void updateFragmentWidgets() {
     Map<_WidgetState, bool> widgetStates = _findMountedWidgetStates(
       activeOnly: false,
@@ -822,47 +836,6 @@ abstract class Block<
     return true;
   }
 
-  // Private method (Only for use in this class)
-  // Future<bool> __queryWithRestorable({
-  //   required QueryType queryType,
-  //   required ListBehavior listBehavior,
-  //   required S filterSnapshot,
-  //   required PostQueryBehavior postQueryBehavior,
-  //   required SuggestedSelection? suggestedSelection,
-  //   required PageableData? pageable,
-  // }) async {
-  //   try {
-  //     _backupAll();
-  //     bool success = await __queryThisAndChildren(
-  //       queryType: queryType,
-  //       listBehavior: listBehavior,
-  //       filterSnapshot: filterSnapshot,
-  //       postQueryBehavior: postQueryBehavior,
-  //       suggestedSelection: suggestedSelection,
-  //       pageable: pageable,
-  //     );
-  //     //
-  //     if (!success) {
-  //       _restoreAll();
-  //       return false;
-  //     } else {
-  //       _applyNewStateAll();
-  //       return true;
-  //     }
-  //   } catch (e, stacktrace) {
-  //     _handleError(
-  //       className: getClassName(this),
-  //       methodName: 'query',
-  //       error: e,
-  //       stackTrace: stacktrace,
-  //       showSnackBar: true,
-  //     );
-  //     //
-  //     _restoreAll();
-  //     return false;
-  //   }
-  // }
-
   // Cascade query:
   // Private method (Only for use in this class)
   Future<bool> __queryThisAndChildren({
@@ -906,6 +879,8 @@ abstract class Block<
       filterSnapshot = dataFilter._filterSnapshot! as S;
     }
     //
+    print("~~~> filterSnapshot: $filterSnapshot");
+    //
     final QueryType queryType = thisXBlock.queryType;
     final ListBehavior listBehavior = thisXBlock.listBehavior;
     final PostQueryBehavior postQueryBehavior = thisXBlock.postQueryBehavior;
@@ -935,6 +910,7 @@ abstract class Block<
           }
         }
     }
+    print("~~~> needRealQuery: $needRealQuery");
     //
     PageData<I>? pageData;
     DataState dataState = DataState.pending;
@@ -986,6 +962,8 @@ abstract class Block<
       }
       pageData = result.data;
       dataState = DataState.ready;
+
+      print("~~~> pageData: $pageData >> ${pageData?.items}");
     }
     // needRealQuery = false
     else {
@@ -1130,14 +1108,14 @@ abstract class Block<
   void _restoreAll() {
     Block rootBlock = getRootBlock();
     rootBlock.__restoreThisAndChildren();
-    // shelf.updateAllWidgets();
+    // shelf.updateAllUiComponents();
   }
 
   void _applyNewStateAll() {
     Block rootBlock = getRootBlock();
     rootBlock.__applyNewStateThisAndChildren();
     rootBlock.__setChildrenForParent();
-    // shelf.updateAllWidgets();
+    // shelf.updateAllUiComponents();
   }
 
   void __setChildrenForParent() {
@@ -2069,7 +2047,7 @@ abstract class Block<
       //
       return false;
     } finally {
-      shelf.updateAllWidgets();
+      shelf.updateAllUIComponents();
     }
   }
 
@@ -2091,7 +2069,7 @@ abstract class Block<
     try {
       bool success =
           await _executeQuickCreateWithOverlayAndRestorable(data: action);
-      shelf.updateAllWidgets();
+      shelf.updateAllUIComponents();
       return success;
     } catch (e, stacktrace) {
       _handleError(
@@ -2102,7 +2080,7 @@ abstract class Block<
         showSnackBar: true,
       );
       //
-      shelf.updateAllWidgets();
+      shelf.updateAllUIComponents();
       return false;
     }
   }
@@ -2175,7 +2153,7 @@ abstract class Block<
         item: item,
         data: action,
       );
-      shelf.updateAllWidgets();
+      shelf.updateAllUIComponents();
       return success;
     } catch (e, stacktrace) {
       _handleError(
@@ -2186,7 +2164,7 @@ abstract class Block<
         showSnackBar: true,
       );
       //
-      shelf.updateAllWidgets();
+      shelf.updateAllUIComponents();
       return false;
     }
   }

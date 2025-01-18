@@ -8,4 +8,9 @@ class _XBlockForm {
   _XBlockForm({
     required this.blockForm,
   });
+
+  @override
+  String toString() {
+    return "${getClassName(this)}(${getClassName(blockForm)} - needQuery: $needQuery)";
+  }
 }

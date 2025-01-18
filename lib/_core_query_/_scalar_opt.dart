@@ -12,6 +12,6 @@ class _ScalarOpt {
 
   @override
   String toString() {
-    return "${getClassName(this)}(${scalar.name})";
+    return "${getClassName(this)}(${getClassName(scalar)}))";
   }
 }

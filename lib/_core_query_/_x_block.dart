@@ -67,4 +67,9 @@ class _XBlock {
   }
 
   String get name => block.name;
+
+  @override
+  String toString() {
+    return "${getClassName(this)}(${getClassName(block)} - needQuery: $needQuery)";
+  }
 }
