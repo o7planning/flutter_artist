@@ -895,7 +895,7 @@ abstract class Block<
     final S filterSnapshot;
     //
     if (!xDataFilter.queried) {
-      // May throw _QueryError:
+      // May throw _TransactionError:
       _FilterSnapshotWrapper result = await dataFilter.__prepareData(
         suggestedFilterSnapshot: xDataFilter.suggestedFilterSnapshot,
       );
