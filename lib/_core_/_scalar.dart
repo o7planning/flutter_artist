@@ -162,7 +162,6 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
     required S? filterSnapshot,
   });
 
-
   void __refreshQueryingState({required bool isQuerying}) {
     try {
       __isQuerying = isQuerying;

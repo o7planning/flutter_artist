@@ -864,7 +864,7 @@ abstract class Block<
       dataState = DataState.ready;
 
       print(
-          "${getClassName(this)} ~~~~~~~~~~~~> callApiQuery/itemCount = ${pageData?.items?.length}");
+          "${getClassName(this)} ~~~~~~~~~~~~> callApiQuery/itemCount = ${pageData?.items.length}");
     }
     // needRealQuery = false
     else {
@@ -1020,14 +1020,12 @@ abstract class Block<
   void _restoreAll() {
     Block rootBlock = getRootBlock();
     rootBlock.__restoreThisAndChildren();
-    // shelf.updateAllUiComponents();
   }
 
   void _applyNewStateAll() {
     Block rootBlock = getRootBlock();
     rootBlock.__applyNewStateThisAndChildren();
     rootBlock.__setChildrenForParent();
-    // shelf.updateAllUiComponents();
   }
 
   void __setChildrenForParent() {
@@ -1056,8 +1054,6 @@ abstract class Block<
   }
 
   void __backupThisAndChildren() {
-    // printFormDebug(
-    //     " -------------------------> TEMPORARY!  - ${data._dataState.name.toUpperCase()}");
     this.data._backup();
     for (var childBlock in _childBlocks) {
       childBlock.__backupThisAndChildren();
@@ -1065,8 +1061,6 @@ abstract class Block<
   }
 
   void __restoreThisAndChildren() {
-    // printFormDebug(
-    //     " -------------------------> NORMAL! - ${data._dataState.name.toUpperCase()}");
     this.data._restore();
     this._registeredOrDefaultDataFilter._restore();
     for (var childBlock in _childBlocks) {
@@ -1076,9 +1070,6 @@ abstract class Block<
   }
 
   void __applyNewStateThisAndChildren() {
-    // printFormDebug(
-    //     " -------------------------> NORMAL! - ${data._dataState.name.toUpperCase()}");
-
     this.data._applyNewState();
     this._registeredOrDefaultDataFilter._applyNewState();
     for (var childBlock in _childBlocks) {
@@ -1158,7 +1149,6 @@ abstract class Block<
           thisXBlock: thisXBlock,
           justQueried: false,
           item: siblingItem,
-          // suggestedSelection: suggestedSelection,
           forceForm: false,
         );
         if (!success) {
@@ -1186,7 +1176,6 @@ abstract class Block<
 
   Future<bool> __insertOrReplaceItemInListAndRefreshChildren({
     required _XBlock thisXBlock,
-    // required SuggestedSelection? suggestedSelection,
     required D refreshedItemDetail,
     required bool forceForm,
   }) async {
@@ -1198,7 +1187,6 @@ abstract class Block<
       ownerClassInstance: this,
       methodName: "__insertOrReplaceItemInListAndRefreshChildren",
       parameters: {
-        // "suggestedSelection": suggestedSelection,
         "refreshedItemDetail": refreshedItemDetail,
         "forceForm": forceForm,
       },
@@ -1415,7 +1403,6 @@ abstract class Block<
     try {
       return await _processSaveActionRestResult(
         thisXBlock: thisXBlock,
-        // suggestedSelection: null,
         calledMethodName: "callApiQuickCreate",
         result: result,
       );
@@ -1600,8 +1587,6 @@ abstract class Block<
       //
       bool success = await __executeQuickAction(
         thisXBlock: thisXBlock,
-        // suggestedFilterSnapshot: suggestedFilterSnapshot,
-        // suggestedSelection: suggestedSelection,
         data: data,
         afterQuickAction: afterQuickAction,
       );
@@ -1620,8 +1605,6 @@ abstract class Block<
 
   Future<bool> __executeQuickAction({
     required _XBlock thisXBlock,
-    // required S? suggestedFilterSnapshot,
-    // required SuggestedSelection? suggestedSelection,
     required QuickActionData data,
     required AfterQuickAction? afterQuickAction,
   }) async {
@@ -1665,7 +1648,6 @@ abstract class Block<
               thisXBlock: thisXBlock,
               item: this.data.currentItem!,
               justQueried: false,
-              // suggestedSelection: suggestedSelection,
               forceForm: false,
             );
           case AfterQuickAction.query:
@@ -1819,7 +1801,6 @@ abstract class Block<
 
   Future<bool> _processSaveActionRestResult({
     required _XBlock thisXBlock,
-    // required SuggestedSelection? suggestedSelection,
     required String calledMethodName,
     required ApiResult<D> result,
   }) async {
@@ -1852,7 +1833,6 @@ abstract class Block<
     if (savedItemDetail != null && keepInList) {
       bool success = await __insertOrReplaceItemInListAndRefreshChildren(
         thisXBlock: thisXBlock,
-        // suggestedSelection: suggestedSelection,
         refreshedItemDetail: savedItemDetail,
         forceForm: false,
       );
@@ -2177,7 +2157,6 @@ abstract class Block<
         thisXBlock: thisXBlock,
         item: item,
         justQueried: justQueried,
-        // suggestedSelection: suggestedSelection,
         forceForm: forceForm,
       );
 
@@ -2210,7 +2189,6 @@ abstract class Block<
   // Private method (Only for use in this class)
   Future<bool> __prepareToShowOrEdit({
     required _XBlock thisXBlock,
-    // required SuggestedSelection? suggestedSelection,
     required I item,
     required bool forceForm,
     required bool justQueried,
@@ -2223,7 +2201,6 @@ abstract class Block<
       ownerClassInstance: this,
       methodName: "__prepareToShowOrEdit",
       parameters: {
-        // "suggestedSelection": suggestedSelection,
         "item": item,
         "forceForm": forceForm,
         "justQueried": justQueried,
@@ -2292,7 +2269,6 @@ abstract class Block<
     //
     bool success = await __insertOrReplaceItemInListAndRefreshChildren(
       thisXBlock: thisXBlock,
-      // suggestedSelection: suggestedSelection,
       refreshedItemDetail: refreshedItem,
       forceForm: forceForm,
     );
@@ -2748,7 +2724,6 @@ abstract class Block<
               thisXBlock: thisXBlock,
               item: sibling,
               justQueried: false,
-              // suggestedSelection: null,
               forceForm: false,
             );
             if (!success) {
