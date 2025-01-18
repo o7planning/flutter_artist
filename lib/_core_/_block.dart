@@ -155,12 +155,13 @@ abstract class Block<
     required this.description,
     int pageSize = 20,
     this.hiddenBehavior = BlockHiddenBehavior.none,
-    required this.registerDataFilterName,
+    required String? dataFilterName,
     required this.blockForm,
     required this.fireEvent,
     required List<Type> listenItemTypes,
     required List<Block>? childBlocks,
-  })  : __pageSize = pageSize,
+  })  : registerDataFilterName = dataFilterName,
+        __pageSize = pageSize,
         __listenItemTypes = listenItemTypes,
         _childBlocks = childBlocks ?? [] {
     for (Block childBlock in _childBlocks) {
@@ -2291,7 +2292,7 @@ abstract class Block<
     thisXBlock.suggestedSelection = suggestedSelection;
     //
     try {
-      _backupAll();
+      shelf.__backupAll();
       //
       _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
       bool success = await __prepareToShowOrEdit(
@@ -2303,10 +2304,10 @@ abstract class Block<
       );
 
       if (!success) {
-        _restoreAll();
+        shelf.__restoreAll();
         return false;
       } else {
-        _applyNewStateAll();
+        shelf.__applyNewStateAll();
         //
         return true;
       }
@@ -2319,7 +2320,7 @@ abstract class Block<
         showSnackBar: true,
       );
       //
-      _restoreAll();
+      shelf.__restoreAll();
       return false;
     }
   }

@@ -32,7 +32,7 @@ abstract class SingleItemBlock<
     super.hiddenBehavior,
     required super.fireEvent,
     required super.listenItemTypes,
-    required super.registerDataFilterName,
+    required super.dataFilterName,
     required super.blockForm,
     required super.childBlocks,
   });
