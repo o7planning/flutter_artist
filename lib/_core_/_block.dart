@@ -1269,7 +1269,7 @@ abstract class Block<
 
     if (clearListForThis) {
       // TODO: Xem lai.
-      S? filterSnapshot = data.currentFilterSnapshot;
+      S? filterSnapshot = data.filterSnapshot;
       //
       PageData<I> emptyAppPage = PageData.empty();
       Object? currentParentItem = parentItemId;
@@ -1837,7 +1837,7 @@ abstract class Block<
       keepInList = false;
     } else {
       keepInList = needToKeepItemInList(
-        filterSnapshot: data.currentFilterSnapshot,
+        filterSnapshot: data.filterSnapshot,
         savedItem: savedItemDetail,
       );
     }

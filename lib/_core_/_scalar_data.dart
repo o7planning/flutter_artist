@@ -5,9 +5,9 @@ class ScalarData<V, S extends FilterSnapshot> {
 
   bool __isTemporaryMode = false;
 
-  S? _currentFilterSnapshot;
+  S? _filterSnapshot;
 
-  S? get currentFilterSnapshot => _currentFilterSnapshot;
+  S? get filterSnapshot => _filterSnapshot;
 
   V? _value;
 
@@ -33,7 +33,7 @@ class ScalarData<V, S extends FilterSnapshot> {
     required V? data,
     required DataState dataState,
   }) {
-    _currentFilterSnapshot = filterSnapshot;
+    _filterSnapshot = filterSnapshot;
     _value = data;
     _dataState = dataState;
   }

@@ -26,9 +26,9 @@ abstract class BlockData<
 
   Object? _currentParentItemId;
 
-  S? _currentFilterSnapshot;
+  S? _filterSnapshot;
 
-  S? get currentFilterSnapshot => _currentFilterSnapshot;
+  S? get filterSnapshot => _filterSnapshot;
 
   PageData<I>? _lastQueryResult;
 
@@ -232,17 +232,17 @@ abstract class BlockData<
     required PageData<I>? pageData,
     required DataState dataState,
   }) {
-    // Check if currentFilterSnapshot changed.
+    // Check if filterSnapshot changed.
     if (forceListBehavior == ListBehavior.replace ||
         _currentParentItemId != currentParentItemId ||
-        _currentFilterSnapshot != filterSnapshot) {
+        _filterSnapshot != filterSnapshot) {
       _items.clear();
     }
     //
     PageData<I> ap = pageData ?? PageData<I>.empty();
     //
     _currentParentItemId = currentParentItemId;
-    _currentFilterSnapshot = filterSnapshot;
+    _filterSnapshot = filterSnapshot;
     _lastQueryResult = pageData;
     _dataState = dataState;
     //

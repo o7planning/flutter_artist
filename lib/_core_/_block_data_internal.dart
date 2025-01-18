@@ -20,7 +20,7 @@ class _InternalBlockData<
 
   Object? __currentParentItemIdBk;
 
-  S? __currentFilterSnapshotBk;
+  S? __filterSnapshotBk;
 
   PageData<I>? __lastQueryResultBk;
 
@@ -50,7 +50,7 @@ class _InternalBlockData<
         ..addAll(_checkedItems);
       __paginationBk = PaginationData.copy(_pagination);
       __currentParentItemIdBk = _currentParentItemId;
-      __currentFilterSnapshotBk = _currentFilterSnapshot;
+      __filterSnapshotBk = _filterSnapshot;
       __lastQueryResultBk = _lastQueryResult;
       //
       block.blockForm?.data._backup();
@@ -67,7 +67,7 @@ class _InternalBlockData<
       __checkedItemsBk.clear();
       __paginationBk = null;
       __currentParentItemIdBk = null;
-      __currentFilterSnapshotBk = null;
+      __filterSnapshotBk = null;
       __lastQueryResultBk = null;
       //
       block.blockForm?.data._applyNewState();
@@ -87,7 +87,7 @@ class _InternalBlockData<
         ..addAll(__checkedItemsBk);
       _pagination = __paginationBk;
       _currentParentItemId = __currentParentItemIdBk;
-      _currentFilterSnapshot = __currentFilterSnapshotBk;
+      _filterSnapshot = __filterSnapshotBk;
       _lastQueryResult = __lastQueryResultBk;
       //
       block.blockForm?.data._restore();

@@ -401,7 +401,7 @@ abstract class BlockForm<
     // Init Extra data for Edit Form:
     //
     if (needToLoad) {
-      S? filterSnapshot = block.data.currentFilterSnapshot as S?;
+      S? filterSnapshot = block.data.filterSnapshot as S?;
       //
       bool success = await __prepareFormMasterData(
         filterSnapshot: filterSnapshot,
@@ -503,7 +503,7 @@ abstract class BlockForm<
     Map<String, dynamic> newFormData;
     if (data._dataState == DataState.ready) {
       try {
-        S? filterSnapshot = block.data.currentFilterSnapshot as S?;
+        S? filterSnapshot = block.data.filterSnapshot as S?;
         //
         FlutterArtist.codeFlowLogger._addMethodCall(
           isLibCode: false,
