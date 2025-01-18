@@ -79,10 +79,11 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
   Scalar({
     required this.name,
     required this.description,
-    required this.registerDataFilterName,
+    required String? dataFilterName,
     required this.hiddenBehavior,
     required List<Type> listenTypes,
-  }) : __listenItemTypes = listenTypes;
+  })  : registerDataFilterName = dataFilterName,
+        __listenItemTypes = listenTypes;
 
   String getDataTypeAsString() {
     return V.toString();

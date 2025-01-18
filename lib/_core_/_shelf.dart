@@ -316,15 +316,20 @@ abstract class Shelf {
   // ***************************************************************************
 
   void updateAllUIComponents() {
-    print("|----> ${getClassName(this)}.updateAllUIComponents()");
-    __updateShelfWidgets();
-    //
-    for (Scalar scalar in __scalars) {
-      scalar.updateAllUIComponents();
-    }
-    //
-    for (Block block in __rootBlocks) {
-      __updateBlockAllUiComponentCascade(block);
+    try {
+      print("|----> ${getClassName(this)}.updateAllUIComponents()");
+      __updateShelfWidgets();
+      //
+      for (Scalar scalar in __scalars) {
+        scalar.updateAllUIComponents();
+      }
+      //
+      for (Block block in __rootBlocks) {
+        __updateBlockAllUiComponentCascade(block);
+      }
+    } catch (e, stackTrace) {
+      print("ERROR: $e");
+      print(stackTrace);
     }
   }
 

@@ -93,7 +93,7 @@ class _BlockFormWidgetBuilderState
         if (mounted) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             widget.blockForm.block.updateControlBarWidgets();
-            widget.blockForm.updateFormWidgets();
+            widget.blockForm.updateAllUIComponents();
           });
         }
       },

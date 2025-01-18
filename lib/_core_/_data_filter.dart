@@ -326,7 +326,11 @@ abstract class DataFilter<S extends FilterSnapshot> {
     FlutterArtist.storage._checkToRemoveShelf(shelf);
   }
 
-  void updateWidgets() {
+  void updateAllUIComponents() {
+    _updateWidgets();
+  }
+
+  void _updateWidgets() {
     _removeUnmountedWidgetStates(_widgetStateListeners);
     for (_WidgetState widgetState in [..._widgetStateListeners.keys]) {
       if (widgetState.mounted) {

@@ -78,10 +78,14 @@ abstract class BlockForm<ID extends Object, I extends Object, D extends Object,
     }
   }
 
+  void updateAllUIComponents() {
+    __updateFormWidgets();
+  }
+
   ///
   /// Call this method to refresh Widgets..
   ///
-  void updateFormWidgets() {
+  void __updateFormWidgets() {
     List<_WidgetState> list = _getMountedFormWidgetStates();
     for (_WidgetState formWidgetState in list) {
       if (formWidgetState.mounted) {
@@ -130,7 +134,7 @@ abstract class BlockForm<ID extends Object, I extends Object, D extends Object,
     }
     _formKey.currentState?.patchValue(initData);
     //
-    updateFormWidgets();
+    updateAllUIComponents();
     block.updateControlBarWidgets();
   }
 
@@ -161,7 +165,7 @@ abstract class BlockForm<ID extends Object, I extends Object, D extends Object,
   void setFormInstantValue(String propertyName, dynamic value) {
     _formKey.currentState?.patchValue({propertyName: value});
     data._currentFormData[propertyName] = value;
-    this.updateFormWidgets();
+    this.updateAllUIComponents();
   }
 
   // Developer do not call this method!
@@ -527,7 +531,7 @@ abstract class BlockForm<ID extends Object, I extends Object, D extends Object,
     }
     try {
       data._updateFormData(newFormData);
-      updateFormWidgets(); // TODO: Xu ly loi?
+      updateAllUIComponents(); // TODO: Xu ly loi?
       block.updateControlBarWidgets();
       //
       _formKey.currentState?.patchValue(newFormData);

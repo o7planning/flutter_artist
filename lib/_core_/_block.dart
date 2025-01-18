@@ -257,13 +257,13 @@ abstract class Block<
   // ***************************************************************************
 
   void updateAllUIComponents() {
-    _registeredOrDefaultDataFilter.updateWidgets();
+    _registeredOrDefaultDataFilter.updateAllUIComponents();
     //
     updateFragmentWidgets();
     updatePaginationWidgets();
     updateControlBarWidgets();
     //
-    blockForm?.updateFormWidgets();
+    blockForm?.updateAllUIComponents();
   }
 
   void updateFragmentWidgets() {
@@ -547,84 +547,6 @@ abstract class Block<
     return false;
   }
 
-  void onInit() {
-    //
-  }
-
-  // Future<bool> _prepareFilterWithOverlay({
-  //   required S? suggestedFilterSnapshot,
-  //   required bool force,
-  // }) async {
-  //   if (dataFilter == null) {
-  //     return true;
-  //   }
-  //   return await FlutterArtist.executeTask(
-  //     asyncFunction: () async {
-  //       return await __prepareFilter(
-  //         suggestedFilterSnapshot: suggestedFilterSnapshot,
-  //         force: force,
-  //       );
-  //     },
-  //   );
-  // }
-
-  // Private method. Only for use in this class.
-  // @Deprecated("Khong su dung nua, xoa di")
-  // Future<bool> __prepareFilter({
-  //   required S? suggestedFilterSnapshot,
-  //   required bool force,
-  // }) async {
-  //   if (dataFilter == null) {
-  //     return true;
-  //   }
-  //   try {
-  //     FlutterArtist.codeFlowLogger._addMethodCall(
-  //       isLibCode: false,
-  //       ownerClassInstance: dataFilter!,
-  //       methodName: "prepareData",
-  //       parameters: {
-  //         "suggestedFilterSnapshot": suggestedFilterSnapshot,
-  //       },
-  //       route: null,
-  //     );
-  //     //
-  //     await dataFilter!.prepareData(
-  //       suggestedFilterSnapshot: suggestedFilterSnapshot,
-  //     );
-  //   } catch (e, stacktrace) {
-  //     _handleError(
-  //       className: getClassName(dataFilter),
-  //       methodName: 'prepareData',
-  //       error: e,
-  //       stackTrace: stacktrace,
-  //       showSnackBar: true,
-  //     );
-  //     return false;
-  //   }
-  //   try {
-  //     FlutterArtist.codeFlowLogger._addMethodCall(
-  //       isLibCode: false,
-  //       ownerClassInstance: dataFilter!,
-  //       methodName: "takeSnapshot",
-  //       parameters: {},
-  //       route: null,
-  //     );
-  //     //
-  //     S filterSnapshot = dataFilter!.takeSnapshot();
-  //     dataFilter!._currentSnapshot = filterSnapshot;
-  //     return true;
-  //   } catch (e, stacktrace) {
-  //     _handleError(
-  //       className: getClassName(dataFilter),
-  //       methodName: 'prepareData',
-  //       error: e,
-  //       stackTrace: stacktrace,
-  //       showSnackBar: true,
-  //     );
-  //     return false;
-  //   }
-  // }
-
   void _executeRoute({Function()? route}) {
     try {
       if (route != null) {
@@ -645,46 +567,21 @@ abstract class Block<
       parameters: {},
     );
     //
-
-    bool success = await _queryWithOverlayAndRestorable(
-      queryType: QueryType.emptyQuery,
-      listBehavior: ListBehavior.replace,
-      suggestedFilterSnapshot: null,
-      postQueryBehavior: PostQueryBehavior.selectAvailableItem,
-      suggestedSelection: null,
-      pageable: null, // Reset to default pageable.
+    return await shelf._queryAllWithOverlayAndRestorable(
+      forceDataFilterOpt: null,
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: [
+        _BlockOpt(
+          queryType: QueryType.emptyQuery,
+          block: this,
+          pageable: null,
+          listBehavior: ListBehavior.replace,
+          suggestedSelection: null,
+          postQueryBehavior: PostQueryBehavior.selectAvailableItem,
+        ),
+      ],
+      forceQueryBlockFormOpts: [],
     );
-
-    if (success) {
-      _executeRoute(route: route);
-    }
-    return success;
-  }
-
-  /// Empty Query and create new record and set block to "Ready State".
-  Future<bool> emptyQueryAndCreate({Function()? route}) async {
-    FlutterArtist.codeFlowLogger._addMethodCall(
-      isLibCode: true,
-      route: route,
-      ownerClassInstance: this,
-      methodName: "emptyQueryAndCreate",
-      parameters: {},
-    );
-    //
-
-    bool success = await _queryWithOverlayAndRestorable(
-      queryType: QueryType.emptyQuery,
-      listBehavior: ListBehavior.replace,
-      suggestedFilterSnapshot: null,
-      postQueryBehavior: PostQueryBehavior.createNewItem,
-      suggestedSelection: null,
-      pageable: null, // Reset to default pageable.
-    );
-
-    if (success) {
-      _executeRoute(route: route);
-    }
-    return success;
   }
 
   ///
@@ -728,50 +625,6 @@ abstract class Block<
       ],
       forceQueryBlockFormOpts: [],
     );
-
-    //
-    //
-    //
-    //
-    // bool success =
-    //     await _registeredOrDefaultDataFilter._queryAllWithOverlayAndRestorable(
-    //   // Suggestion for DataFilter
-    //   suggestedFilterSnapshot: suggestedFilterSnapshot,
-    //   forceBlockWithQueryOptions: _BlockOpt(
-    //     block: this,
-    //     pageable: pageable,
-    //     listBehavior: listBehavior,
-    //     suggestedSelection: suggestedSelection,
-    //     postQueryBehavior: PostQueryBehavior.selectAvailableItem,
-    //   ),
-    //   forceScalarWithQueryOptions: null,
-    // );
-    //
-    // return success;
-
-    // =========================================================================
-    //
-    // bool success = false;
-    // __isQuerying = true;
-    // this.updateControlBarWidgets();
-    // try {
-    //   success = await _queryWithOverlayAndRestorable(
-    //     queryType: QueryType.forceQuery,
-    //     listBehavior: listBehavior,
-    //     suggestedFilterSnapshot: suggestedFilterSnapshot,
-    //     postQueryBehavior: PostQueryBehavior.selectAvailableItem,
-    //     suggestedSelection: suggestedSelection,
-    //     pageable: pageable,
-    //   );
-    // } finally {
-    //   __isQuerying = false;
-    //   this.updateControlBarWidgets();
-    // }
-    //
-    // if (success) {
-    //   _executeRoute(route: route);
-    // }
-    // return success;
   }
 
   ///
@@ -797,21 +650,27 @@ abstract class Block<
       },
     );
     //
-    bool success = await _queryWithOverlayAndRestorable(
-      queryType: QueryType.forceQuery,
-      listBehavior: listBehavior,
-      suggestedFilterSnapshot: suggestedFilterSnapshot,
-      postQueryBehavior: PostQueryBehavior.selectAvailableItemToEdit,
-      suggestedSelection: suggestedSelection,
-      pageable: pageable,
+    return await shelf._queryAllWithOverlayAndRestorable(
+      forceDataFilterOpt: _DataFilterOpt(
+        dataFilter: _registeredOrDefaultDataFilter,
+        suggestedFilterSnapshot: suggestedFilterSnapshot,
+      ),
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: [
+        _BlockOpt(
+          queryType: null,
+          block: this,
+          pageable: pageable,
+          listBehavior: listBehavior,
+          suggestedSelection: suggestedSelection,
+          postQueryBehavior: PostQueryBehavior.selectAvailableItemToEdit,
+        ),
+      ],
+      forceQueryBlockFormOpts: [],
     );
-
-    if (success) {
-      _executeRoute(route: route);
-    }
-    return success;
   }
 
+  // TODO ??????????????????????????????????????????????????????????????????????????????
   @Deprecated("Xoá phương thức này, không sử dụng nữa.")
   Future<bool> _queryWithOverlayAndRestorable({
     required QueryType queryType,
@@ -867,7 +726,10 @@ abstract class Block<
     //
     final S filterSnapshot;
     //
+    print("\n${getClassName(this)} ~~~~~~~~~~~~> DATAFILTER: ${xDataFilter}");
     if (!xDataFilter.queried) {
+      print(
+          "${getClassName(this)} ~~~~~~~~~~~~> EXECUTE DATAFILTER: ${xDataFilter}");
       // May throw _TransactionError:
       _FilterSnapshotWrapper result = await dataFilter.__prepareData(
         suggestedFilterSnapshot: xDataFilter.suggestedFilterSnapshot,
@@ -878,6 +740,8 @@ abstract class Block<
     } else {
       filterSnapshot = dataFilter._filterSnapshot! as S;
     }
+    print(
+        "${getClassName(this)} ~~~~~~~~~~~~> FILTER SNAPSHORT: ${filterSnapshot}");
     //
     final QueryType queryType = thisXBlock.queryType;
     final ListBehavior listBehavior = thisXBlock.listBehavior;
@@ -929,6 +793,7 @@ abstract class Block<
         //
         __refreshQueryingState(isQuerying: true);
         //
+        print("${getClassName(this)} ~~~~~~~~~~~~> callApiQuery");
         result = await callApiQuery(
           filterSnapshot: filterSnapshot,
           pageable: callingPageable,
@@ -959,6 +824,9 @@ abstract class Block<
       }
       pageData = result.data;
       dataState = DataState.ready;
+
+      print(
+          "${getClassName(this)} ~~~~~~~~~~~~> callApiQuery/pageData = ${pageData?.items?.length}");
     }
     // needRealQuery = false
     else {
