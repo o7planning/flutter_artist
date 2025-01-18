@@ -39,6 +39,10 @@ class _XBlock {
     return __suggestedSelection;
   }
 
+  set suggestedSelection(value) {
+    __suggestedSelection = value;
+  }
+
   PostQueryBehavior get postQueryBehavior {
     // TODO: Xem lai gia tri mac dinh
     return __postQueryBehavior ?? PostQueryBehavior.selectAvailableItem;

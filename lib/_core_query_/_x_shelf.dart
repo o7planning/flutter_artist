@@ -73,6 +73,10 @@ class _XShelf {
     __setForceQueryBlockForms(forceQueryBlockFormOpts);
   }
 
+  _XBlock? findXBlockByName(String name) {
+    return allXBlockMap[name];
+  }
+
   // ***************************************************************************
   // SET FORCE QUERY:
   // ***************************************************************************

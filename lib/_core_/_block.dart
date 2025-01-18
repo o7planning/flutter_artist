@@ -703,6 +703,7 @@ abstract class Block<
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [
         _BlockOpt(
+          queryType: null,
           block: this,
           pageable: pageable,
           listBehavior: listBehavior,
@@ -717,21 +718,23 @@ abstract class Block<
     //
     //
     //
-    bool success =
-        await _registeredOrDefaultDataFilter._queryAllWithOverlayAndRestorable(
-      // Suggestion for DataFilter
-      suggestedFilterSnapshot: suggestedFilterSnapshot,
-      forceBlockWithQueryOptions: _BlockOpt(
-        block: this,
-        pageable: pageable,
-        listBehavior: listBehavior,
-        suggestedSelection: suggestedSelection,
-        postQueryBehavior: PostQueryBehavior.selectAvailableItem,
-      ),
-      forceScalarWithQueryOptions: null,
-    );
+    // bool success =
+    //     await _registeredOrDefaultDataFilter._queryAllWithOverlayAndRestorable(
+    //   // Suggestion for DataFilter
+    //   suggestedFilterSnapshot: suggestedFilterSnapshot,
+    //   forceBlockWithQueryOptions: _BlockOpt(
+    //     block: this,
+    //     pageable: pageable,
+    //     listBehavior: listBehavior,
+    //     suggestedSelection: suggestedSelection,
+    //     postQueryBehavior: PostQueryBehavior.selectAvailableItem,
+    //   ),
+    //   forceScalarWithQueryOptions: null,
+    // );
     //
-    return success;
+    // return success;
+
+    // =========================================================================
     //
     // bool success = false;
     // __isQuerying = true;
@@ -819,57 +822,96 @@ abstract class Block<
   }
 
   // Private method (Only for use in this class)
-  Future<bool> __queryWithRestorable({
-    required QueryType queryType,
-    required ListBehavior listBehavior,
-    required S filterSnapshot,
-    required PostQueryBehavior postQueryBehavior,
-    required SuggestedSelection? suggestedSelection,
-    required PageableData? pageable,
-  }) async {
-    try {
-      _backupAll();
-      bool success = await __queryThisAndChildren(
-        queryType: queryType,
-        listBehavior: listBehavior,
-        filterSnapshot: filterSnapshot,
-        postQueryBehavior: postQueryBehavior,
-        suggestedSelection: suggestedSelection,
-        pageable: pageable,
-      );
-      //
-      if (!success) {
-        _restoreAll();
-        return false;
-      } else {
-        _applyNewStateAll();
-        return true;
-      }
-    } catch (e, stacktrace) {
-      _handleError(
-        className: getClassName(this),
-        methodName: 'query',
-        error: e,
-        stackTrace: stacktrace,
-        showSnackBar: true,
-      );
-      //
-      _restoreAll();
-      return false;
-    }
-  }
+  // Future<bool> __queryWithRestorable({
+  //   required QueryType queryType,
+  //   required ListBehavior listBehavior,
+  //   required S filterSnapshot,
+  //   required PostQueryBehavior postQueryBehavior,
+  //   required SuggestedSelection? suggestedSelection,
+  //   required PageableData? pageable,
+  // }) async {
+  //   try {
+  //     _backupAll();
+  //     bool success = await __queryThisAndChildren(
+  //       queryType: queryType,
+  //       listBehavior: listBehavior,
+  //       filterSnapshot: filterSnapshot,
+  //       postQueryBehavior: postQueryBehavior,
+  //       suggestedSelection: suggestedSelection,
+  //       pageable: pageable,
+  //     );
+  //     //
+  //     if (!success) {
+  //       _restoreAll();
+  //       return false;
+  //     } else {
+  //       _applyNewStateAll();
+  //       return true;
+  //     }
+  //   } catch (e, stacktrace) {
+  //     _handleError(
+  //       className: getClassName(this),
+  //       methodName: 'query',
+  //       error: e,
+  //       stackTrace: stacktrace,
+  //       showSnackBar: true,
+  //     );
+  //     //
+  //     _restoreAll();
+  //     return false;
+  //   }
+  // }
 
   // Cascade query:
   // Private method (Only for use in this class)
-  @Deprecated("Khong su dung nua, da chuyen sang Shelf")
   Future<bool> __queryThisAndChildren({
-    required QueryType queryType,
-    required ListBehavior listBehavior,
-    required S filterSnapshot,
-    required PostQueryBehavior postQueryBehavior,
-    required SuggestedSelection? suggestedSelection,
-    required PageableData? pageable,
+    required _XBlock thisXBlock,
+    // required QueryType queryType,
+    // required ListBehavior listBehavior,
+    // required S filterSnapshot,
+    // required PostQueryBehavior postQueryBehavior,
+    // required SuggestedSelection? suggestedSelection,
+    // required PageableData? pageable,
   }) async {
+    __assertThisXBlock(thisXBlock);
+    //
+    if (!thisXBlock.needQuery) {
+      // Query child blocks:
+      for (_XBlock childXBlock in thisXBlock.childXBlocks) {
+        bool success = await __queryThisAndChildren(
+          thisXBlock: childXBlock,
+        );
+        if (!success) {
+          return false;
+        }
+      }
+      return true;
+    }
+    // Force Query this Block:
+    final _XDataFilter xDataFilter = thisXBlock.xDataFilter;
+    final DataFilter dataFilter = xDataFilter.dataFilter;
+    //
+    final S filterSnapshot;
+    //
+    if (!xDataFilter.queried) {
+      // May throw _QueryError:
+      _FilterSnapshotWrapper result = await dataFilter.__prepareData(
+        suggestedFilterSnapshot: xDataFilter.suggestedFilterSnapshot,
+      );
+      filterSnapshot = result.filterSnapshot as S;
+      dataFilter._filterSnapshot = filterSnapshot;
+      xDataFilter.queried = true;
+    } else {
+      filterSnapshot = dataFilter._filterSnapshot! as S;
+    }
+    //
+    final QueryType queryType = thisXBlock.queryType;
+    final ListBehavior listBehavior = thisXBlock.listBehavior;
+    final PostQueryBehavior postQueryBehavior = thisXBlock.postQueryBehavior;
+    final SuggestedSelection? suggestedSelection =
+        thisXBlock.suggestedSelection;
+    final PageableData? pageable = thisXBlock.pageable;
+    //
     bool needRealQuery = false;
     ListBehavior forceListBehavior = listBehavior;
     switch (queryType) {
@@ -885,7 +927,7 @@ abstract class Block<
       case QueryType.queryIfNeed:
         {
           bool guiActive = hasActiveUiComponent();
-          if (guiActive || _tempQueryMode == QueryMode.eager) {
+          if (guiActive) {
             needRealQuery = true;
           } else {
             needRealQuery = false;
@@ -900,6 +942,7 @@ abstract class Block<
     if (needRealQuery) {
       callingPageable =
           pageable ?? __pageable ?? const PageableData(page: 1, pageSize: null);
+      //
       ApiResult<PageData<I>?> result;
       try {
         FlutterArtist.codeFlowLogger._addMethodCall(
@@ -985,9 +1028,10 @@ abstract class Block<
         I? firstItem = data.findFirstItem();
         if (firstItem != null) {
           bool success = await __prepareToShowOrEdit(
+            thisXBlock: thisXBlock,
             item: firstItem,
             justQueried: true,
-            suggestedSelection: suggestedSelection,
+            // suggestedSelection: suggestedSelection,
             forceForm: false,
           );
           if (!success) {
@@ -995,6 +1039,7 @@ abstract class Block<
           }
         } else {
           bool success = await _switchThisAndChildrenToNoneMode(
+            thisXBlock: thisXBlock,
             clearListForThis: false,
             dataState: dataState,
           );
@@ -1006,9 +1051,10 @@ abstract class Block<
         return true;
       } else {
         bool success = await __prepareToShowOrEdit(
+          thisXBlock: thisXBlock,
           item: itemWithSameId,
           justQueried: true,
-          suggestedSelection: suggestedSelection,
+          // suggestedSelection: suggestedSelection,
           forceForm:
               postQueryBehavior == PostQueryBehavior.selectAvailableItemToEdit,
         );
@@ -1020,7 +1066,10 @@ abstract class Block<
     } else if (postQueryBehavior == PostQueryBehavior.createNewItem) {
       data._dataState = DataState.ready;
       // Create New Item
-      bool success = await __prepareToCreate(suggestedFormData: null);
+      bool success = await __prepareToCreate(
+        thisXBlock: thisXBlock,
+        suggestedFormData: null,
+      );
       if (!success) {
         return false;
       }
@@ -1180,11 +1229,9 @@ abstract class Block<
     );
   }
 
-  ///
-  /// Loại bỏ notFoundItem ra khỏi danh sách đồng thời tìm kiếm item anh em để lựa chọn.
-  ///
   // Private Method. Only for use in this class.
   Future<bool> __removeNotFoundItemAndRefreshChildren({
+    required _XBlock thisXBlock,
     SuggestedSelection? suggestedSelection,
     required I notFoundItem,
   }) async {
@@ -1217,9 +1264,10 @@ abstract class Block<
         );
         //
         bool success = await __prepareToShowOrEdit(
+          thisXBlock: thisXBlock,
           justQueried: false,
           item: siblingItem,
-          suggestedSelection: suggestedSelection,
+          // suggestedSelection: suggestedSelection,
           forceForm: false,
         );
         if (!success) {
@@ -1233,6 +1281,7 @@ abstract class Block<
         );
         //
         bool success = await _switchThisAndChildrenToNoneMode(
+          thisXBlock: thisXBlock,
           clearListForThis: false,
           dataState: DataState.ready,
         );
@@ -1245,17 +1294,20 @@ abstract class Block<
   }
 
   Future<bool> __insertOrReplaceItemInListAndRefreshChildren({
-    required SuggestedSelection? suggestedSelection,
+    required _XBlock thisXBlock,
+    // required SuggestedSelection? suggestedSelection,
     required D refreshedItemDetail,
     required bool forceForm,
   }) async {
+    __assertThisXBlock(thisXBlock);
+    //
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       ownerClassInstance: this,
       methodName: "__insertOrReplaceItemInListAndRefreshChildren",
       parameters: {
-        "suggestedSelection": suggestedSelection,
+        // "suggestedSelection": suggestedSelection,
         "refreshedItemDetail": refreshedItemDetail,
         "forceForm": forceForm,
       },
@@ -1297,16 +1349,20 @@ abstract class Block<
       }
     }
     //
-    for (var childBlock in _childBlocks) {
-      SuggestedSelection? childQueryDirective =
-          suggestedSelection?.findChildDirective(childBlock.name);
-      bool success = await childBlock.__queryThisAndChildren(
-        queryType: QueryType.queryIfNeed,
-        listBehavior: ListBehavior.replace,
-        filterSnapshot: null,
-        postQueryBehavior: PostQueryBehavior.selectAvailableItem,
-        suggestedSelection: childQueryDirective,
-        pageable: null, // TODO: Null or last pageable?
+    for (_XBlock childXBlock in thisXBlock.childXBlocks) {
+      SuggestedSelection? childSelectionDirective = thisXBlock
+          .suggestedSelection
+          ?.findChildDirective(childXBlock.block.name);
+      childXBlock.suggestedSelection = childSelectionDirective;
+      //
+      bool success = await childXBlock.block.__queryThisAndChildren(
+        thisXBlock: childXBlock,
+        // queryType: QueryType.queryIfNeed,
+        // listBehavior: ListBehavior.replace,
+        // filterSnapshot: null,
+        // postQueryBehavior: PostQueryBehavior.selectAvailableItem,
+        // suggestedSelection: childQueryDirective,
+        // pageable: null, // TODO: Null or last pageable?
       );
       if (!success) {
         return false;
@@ -1317,6 +1373,7 @@ abstract class Block<
   }
 
   Future<bool> _switchThisAndChildrenToNoneMode({
+    required _XBlock thisXBlock,
     required bool clearListForThis,
     required DataState dataState,
   }) async {
@@ -1373,8 +1430,10 @@ abstract class Block<
       }
     }
     //
-    for (var childBlock in _childBlocks) {
+    for (_XBlock childXBlock in thisXBlock.childXBlocks) {
+      final Block childBlock = childXBlock.block;
       bool success = await childBlock._switchThisAndChildrenToNoneMode(
+        thisXBlock: childXBlock,
         clearListForThis: true,
         dataState: dataState,
       );
@@ -1389,18 +1448,64 @@ abstract class Block<
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
-  Future<bool> _executeQuickCreateWithOverlay({
+  Future<bool> _executeQuickCreateWithOverlayAndRestorable({
     required QuickActionData data,
   }) async {
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
-        return await __executeQuickCreateAction(data: data);
+        return await _executeQuickCreateWithRestorable(data: data);
       },
     );
   }
 
+  Future<bool> _executeQuickCreateWithRestorable({
+    required QuickActionData data,
+  }) async {
+    _XShelf xShelf = _XShelf(
+      shelf: shelf,
+      forceDataFilterOpt: null,
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: _childBlocks
+          .map(
+            (b) => _BlockOpt(
+              block: b,
+              queryType: null,
+              pageable: null,
+              listBehavior: null,
+              suggestedSelection: null,
+              postQueryBehavior: null,
+            ),
+          )
+          .toList(),
+      forceQueryBlockFormOpts: [],
+    );
+    //
+    _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
+    //
+    try {
+      shelf.__backupAll();
+      //
+      bool success = await __executeQuickCreateAction(
+        thisXBlock: thisXBlock,
+        data: data,
+      );
+      if (success) {
+        shelf.__applyNewStateAll();
+      } else {
+        shelf.__restoreAll();
+      }
+
+      return success;
+    } catch (e, stackTrace) {
+      // TODO: Xu ly loi.
+      shelf.__restoreAll();
+      return false;
+    }
+  }
+
   // Private Method. Only for use in this class.
   Future<bool> __executeQuickCreateAction({
+    required _XBlock thisXBlock,
     required QuickActionData data,
   }) async {
     ApiResult<D> result;
@@ -1424,7 +1529,8 @@ abstract class Block<
     //
     try {
       return await _processSaveActionRestResult(
-        suggestedSelection: null,
+        thisXBlock: thisXBlock,
+        // suggestedSelection: null,
         calledMethodName: "callApiQuickCreate",
         result: result,
       );
@@ -1441,21 +1547,73 @@ abstract class Block<
     }
   }
 
-  Future<bool> _executeQuickUpdateWithOverlay({
+  Future<bool> _executeQuickUpdateWithOverlayAndRestorable({
     required I item,
     required QuickActionData data,
   }) async {
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
-        return await __executeQuickUpdateAction(item: item, data: data);
+        return await __executeQuickUpdateActionWithRestorable(
+          item: item,
+          data: data,
+        );
       },
     );
   }
 
-  Future<bool> __executeQuickUpdateAction({
+  Future<bool> __executeQuickUpdateActionWithRestorable({
     required I item,
     required QuickActionData data,
   }) async {
+    _XShelf xShelf = _XShelf(
+      shelf: shelf,
+      forceDataFilterOpt: null,
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: _childBlocks
+          .map(
+            (b) => _BlockOpt(
+              block: b,
+              queryType: null,
+              pageable: null,
+              listBehavior: null,
+              suggestedSelection: null,
+              postQueryBehavior: null,
+            ),
+          )
+          .toList(),
+      forceQueryBlockFormOpts: [],
+    );
+    //
+    _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
+    //
+    try {
+      shelf.__backupAll();
+      bool success = await __executeQuickUpdateAction(
+        thisXBlock: thisXBlock,
+        item: item,
+        data: data,
+      );
+      if (success) {
+        shelf.__applyNewStateAll();
+      } else {
+        shelf.__restoreAll();
+      }
+      return success;
+    } catch (e, stackTrace) {
+      // TODO: Xu ly loi
+      shelf.__restoreAll();
+      //
+      return false;
+    }
+  }
+
+  Future<bool> __executeQuickUpdateAction({
+    required _XBlock thisXBlock,
+    required I item,
+    required QuickActionData data,
+  }) async {
+    __assertThisXBlock(thisXBlock);
+    //
     ApiResult<D> result;
     try {
       result = await callApiQuickUpdate(item: item, data: data);
@@ -1476,7 +1634,8 @@ abstract class Block<
     //
     try {
       return await _processSaveActionRestResult(
-        suggestedSelection: null,
+        thisXBlock: thisXBlock,
+        // suggestedSelection: null,
         calledMethodName: "callApiQuickUpdate",
         result: result,
       );
@@ -1493,7 +1652,7 @@ abstract class Block<
     }
   }
 
-  Future<bool> _executeQuickActionWithOverlay({
+  Future<bool> _executeQuickActionWithOverlayAndRestorable({
     required S? suggestedFilterSnapshot,
     required SuggestedSelection? suggestedSelection,
     required QuickActionData action,
@@ -1501,7 +1660,7 @@ abstract class Block<
   }) async {
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
-        bool success = await __executeQuickAction(
+        bool success = await __executeQuickActionWithRestorable(
           suggestedFilterSnapshot: suggestedFilterSnapshot,
           suggestedSelection: suggestedSelection,
           data: action,
@@ -1521,12 +1680,68 @@ abstract class Block<
     );
   }
 
-  Future<bool> __executeQuickAction({
+  Future<bool> __executeQuickActionWithRestorable({
     required S? suggestedFilterSnapshot,
     required SuggestedSelection? suggestedSelection,
     required QuickActionData data,
     required AfterQuickAction? afterQuickAction,
   }) async {
+    _XShelf xShelf = _XShelf(
+      shelf: shelf,
+      forceDataFilterOpt: _DataFilterOpt(
+        dataFilter: _registeredOrDefaultDataFilter,
+        suggestedFilterSnapshot: suggestedFilterSnapshot,
+      ),
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: _childBlocks
+          .map(
+            (b) => _BlockOpt(
+              block: b,
+              queryType: null,
+              pageable: null,
+              listBehavior: null,
+              suggestedSelection: null,
+              postQueryBehavior: null,
+            ),
+          )
+          .toList(),
+      forceQueryBlockFormOpts: [],
+    );
+    //
+    try {
+      shelf.__backupAll();
+      //
+      _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
+      //
+      bool success = await __executeQuickAction(
+        thisXBlock: thisXBlock,
+        // suggestedFilterSnapshot: suggestedFilterSnapshot,
+        // suggestedSelection: suggestedSelection,
+        data: data,
+        afterQuickAction: afterQuickAction,
+      );
+      if (!success) {
+        shelf.__restoreAll();
+      } else {
+        shelf.__applyNewStateAll();
+      }
+      return success;
+    } catch (e, stackTrace) {
+      // TODO: Xu ly loi.
+      shelf.__restoreAll();
+      return false;
+    }
+  }
+
+  Future<bool> __executeQuickAction({
+    required _XBlock thisXBlock,
+    // required S? suggestedFilterSnapshot,
+    // required SuggestedSelection? suggestedSelection,
+    required QuickActionData data,
+    required AfterQuickAction? afterQuickAction,
+  }) async {
+    __assertThisXBlock(thisXBlock);
+    //
     ApiResult<void> result;
     try {
       result = await callApiQuickAction(data: data);
@@ -1554,7 +1769,6 @@ abstract class Block<
     if (afterQuickAction != null) {
       String methodName = "";
       try {
-        _backupAll();
         bool success = false;
         switch (afterQuickAction) {
           case AfterQuickAction.refreshCurrentItem:
@@ -1563,29 +1777,27 @@ abstract class Block<
               return true;
             }
             success = await __prepareToShowOrEdit(
+              thisXBlock: thisXBlock,
               item: this.data.currentItem!,
               justQueried: false,
-              suggestedSelection: suggestedSelection,
+              // suggestedSelection: suggestedSelection,
               forceForm: false,
             );
           case AfterQuickAction.query:
             methodName = "query";
+            thisXBlock.needQuery = true;
+            //
             success = await __queryThisAndChildren(
-              queryType: QueryType.forceQuery,
-              listBehavior: ListBehavior.replace,
-              filterSnapshot: suggestedFilterSnapshot,
-              postQueryBehavior: PostQueryBehavior.selectAvailableItem,
-              suggestedSelection: suggestedSelection,
-              pageable: null, // TODO: Xem lai!
+              thisXBlock: thisXBlock,
+              // queryType: QueryType.forceQuery,
+              // listBehavior: ListBehavior.replace,
+              // filterSnapshot: suggestedFilterSnapshot,
+              // postQueryBehavior: PostQueryBehavior.selectAvailableItem,
+              // suggestedSelection: suggestedSelection,
+              // pageable: null, // TODO: Xem lai!
             );
         }
-        if (!success) {
-          _restoreAll();
-          return false;
-        } else {
-          _applyNewStateAll();
-          return true;
-        }
+        return success;
       } catch (e, stacktrace) {
         _handleError(
           className: getClassName(this),
@@ -1594,8 +1806,6 @@ abstract class Block<
           stackTrace: stacktrace,
           showSnackBar: true,
         );
-        //
-        _restoreAll();
         return false;
       }
     }
@@ -1729,7 +1939,8 @@ abstract class Block<
   });
 
   Future<bool> _processSaveActionRestResult({
-    required SuggestedSelection? suggestedSelection,
+    required _XBlock thisXBlock,
+    // required SuggestedSelection? suggestedSelection,
     required String calledMethodName,
     required ApiResult<D> result,
   }) async {
@@ -1761,7 +1972,8 @@ abstract class Block<
     //
     if (savedItemDetail != null && keepInList) {
       bool success = await __insertOrReplaceItemInListAndRefreshChildren(
-        suggestedSelection: suggestedSelection,
+        thisXBlock: thisXBlock,
+        // suggestedSelection: suggestedSelection,
         refreshedItemDetail: savedItemDetail,
         forceForm: false,
       );
@@ -1777,6 +1989,7 @@ abstract class Block<
 
       if (removeItem != null) {
         bool success = await __removeNotFoundItemAndRefreshChildren(
+          thisXBlock: thisXBlock,
           notFoundItem: removeItem,
         );
         if (!success) {
@@ -1837,13 +2050,12 @@ abstract class Block<
       }
     }
     try {
-      bool success = await _executeQuickActionWithOverlay(
+      bool success = await _executeQuickActionWithOverlayAndRestorable(
         suggestedFilterSnapshot: suggestedFilterSnapshot,
         suggestedSelection: suggestedSelection,
         action: action,
         afterQuickAction: afterQuickAction,
       );
-      shelf.updateAllWidgets();
       return success;
     } catch (e, stacktrace) {
       _handleError(
@@ -1854,8 +2066,9 @@ abstract class Block<
         showSnackBar: true,
       );
       //
-      shelf.updateAllWidgets();
       return false;
+    } finally {
+      shelf.updateAllWidgets();
     }
   }
 
@@ -1875,7 +2088,8 @@ abstract class Block<
     }
     //
     try {
-      bool success = await _executeQuickCreateWithOverlay(data: action);
+      bool success =
+          await _executeQuickCreateWithOverlayAndRestorable(data: action);
       shelf.updateAllWidgets();
       return success;
     } catch (e, stacktrace) {
@@ -1956,7 +2170,7 @@ abstract class Block<
     }
     //
     try {
-      bool success = await _executeQuickUpdateWithOverlay(
+      bool success = await _executeQuickUpdateWithOverlayAndRestorable(
         item: item,
         data: action,
       );
@@ -2054,13 +2268,37 @@ abstract class Block<
     required bool forceForm,
     required bool justQueried,
   }) async {
+    _XShelf xShelf = _XShelf(
+      shelf: shelf,
+      forceDataFilterOpt: null,
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: _childBlocks
+          .map(
+            (b) => _BlockOpt(
+              block: b,
+              queryType: null,
+              pageable: null,
+              listBehavior: null,
+              suggestedSelection: null,
+              postQueryBehavior: null,
+            ),
+          )
+          .toList(),
+      forceQueryBlockFormOpts: [],
+    );
+    //
+    _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
+    thisXBlock.suggestedSelection = suggestedSelection;
+    //
     try {
       _backupAll();
       //
+      _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
       bool success = await __prepareToShowOrEdit(
+        thisXBlock: thisXBlock,
         item: item,
         justQueried: justQueried,
-        suggestedSelection: suggestedSelection,
+        // suggestedSelection: suggestedSelection,
         forceForm: forceForm,
       );
 
@@ -2092,18 +2330,21 @@ abstract class Block<
   ///
   // Private method (Only for use in this class)
   Future<bool> __prepareToShowOrEdit({
-    required SuggestedSelection? suggestedSelection,
+    required _XBlock thisXBlock,
+    // required SuggestedSelection? suggestedSelection,
     required I item,
     required bool forceForm,
     required bool justQueried,
   }) async {
+    __assertThisXBlock(thisXBlock);
+    //
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       ownerClassInstance: this,
       methodName: "__prepareToShowOrEdit",
       parameters: {
-        "suggestedSelection": suggestedSelection,
+        // "suggestedSelection": suggestedSelection,
         "item": item,
         "forceForm": forceForm,
         "justQueried": justQueried,
@@ -2154,8 +2395,10 @@ abstract class Block<
         return false;
       } else {
         if (result.data == null) {
-          bool success =
-              await __removeNotFoundItemAndRefreshChildren(notFoundItem: item);
+          bool success = await __removeNotFoundItemAndRefreshChildren(
+            thisXBlock: thisXBlock,
+            notFoundItem: item,
+          );
           if (!success) {
             return false;
           }
@@ -2167,7 +2410,8 @@ abstract class Block<
     }
     //
     bool success = await __insertOrReplaceItemInListAndRefreshChildren(
-      suggestedSelection: suggestedSelection,
+      thisXBlock: thisXBlock,
+      // suggestedSelection: suggestedSelection,
       refreshedItemDetail: refreshedItem,
       forceForm: forceForm, // ??????
     );
@@ -2240,10 +2484,32 @@ abstract class Block<
     if (!__checkBeforeFormCreation(showErrorMessage: false)) {
       return false;
     }
+    _XShelf xShelf = _XShelf(
+      shelf: shelf,
+      forceDataFilterOpt: null,
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: _childBlocks
+          .map(
+            (b) => _BlockOpt(
+              block: b,
+              queryType: null,
+              pageable: null,
+              listBehavior: null,
+              suggestedSelection: null,
+              postQueryBehavior: null,
+            ),
+          )
+          .toList(),
+      forceQueryBlockFormOpts: [],
+    );
+    //
+    _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
+    //
     try {
       _backupAll();
       //
       bool success = await __prepareToCreate(
+        thisXBlock: thisXBlock,
         suggestedFormData: suggestedFormData,
       );
       if (!success) {
@@ -2269,6 +2535,7 @@ abstract class Block<
 
   // Private method. Only for use in this class.
   Future<bool> __prepareToCreate({
+    required _XBlock thisXBlock,
     required SF? suggestedFormData,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -2312,8 +2579,10 @@ abstract class Block<
       return false;
     }
     //
-    for (var childBlock in _childBlocks) {
+    for (_XBlock childXBlock in thisXBlock.childXBlocks) {
+      final Block childBlock = childXBlock.block;
       bool success = await childBlock._switchThisAndChildrenToNoneMode(
+        thisXBlock: childXBlock,
         clearListForThis: true,
         dataState: DataState.ready,
       );
@@ -2478,14 +2747,38 @@ abstract class Block<
   }
 
   Future<bool> _deleteWithRestorable(I item) async {
+    _XShelf xShelf = _XShelf(
+      shelf: shelf,
+      forceDataFilterOpt: null,
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: _childBlocks
+          .map(
+            (b) => _BlockOpt(
+              block: b,
+              queryType: null,
+              pageable: null,
+              listBehavior: null,
+              suggestedSelection: null,
+              postQueryBehavior: null,
+            ),
+          )
+          .toList(),
+      forceQueryBlockFormOpts: [],
+    );
+    //
+    _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
+    //
     try {
-      _backupAll();
-      bool success = await __delete(item);
+      shelf.__backupAll();
+      bool success = await __delete(
+        thisXBlock: thisXBlock,
+        item: item,
+      );
 
       if (!success) {
-        _restoreAll();
+        shelf.__restoreAll();
       } else {
-        _applyNewStateAll();
+        shelf.__applyNewStateAll();
       }
       return success;
     } catch (e, stacktrace) {
@@ -2497,13 +2790,16 @@ abstract class Block<
         showSnackBar: true,
       );
       //
-      _restoreAll();
+      shelf.__restoreAll();
       return false;
     }
   }
 
   // Private method. Only for use in this class only.
-  Future<bool> __delete(I item) async {
+  Future<bool> __delete({
+    required _XBlock thisXBlock,
+    required I item,
+  }) async {
     try {
       final bool isCurrent = data.isCurrentItem(item: item);
 
@@ -2567,9 +2863,10 @@ abstract class Block<
           //
           if (sibling != null) {
             bool success = await __prepareToShowOrEdit(
+              thisXBlock: thisXBlock,
               item: sibling,
               justQueried: false,
-              suggestedSelection: null,
+              // suggestedSelection: null,
               forceForm: false,
             );
             if (!success) {
@@ -2577,6 +2874,7 @@ abstract class Block<
             }
           } else {
             bool success = await _switchThisAndChildrenToNoneMode(
+              thisXBlock: thisXBlock,
               clearListForThis: false,
               dataState: DataState.ready,
             );
@@ -2787,5 +3085,9 @@ abstract class Block<
         return true;
       }
     }
+  }
+
+  void __assertThisXBlock(_XBlock thisXBlock) {
+    assert(thisXBlock.block == this && thisXBlock.name == name);
   }
 }

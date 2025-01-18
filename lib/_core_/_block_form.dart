@@ -266,16 +266,38 @@ abstract class BlockForm<ID extends Object, I extends Object, D extends Object,
     if (!__checkValidBeforeSave()) {
       return false;
     }
+    _XShelf xShelf = _XShelf(
+      shelf: shelf,
+      forceDataFilterOpt: null,
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: block._childBlocks
+          .map(
+            (b) => _BlockOpt(
+              block: b,
+              queryType: null,
+              pageable: null,
+              listBehavior: null,
+              suggestedSelection: null,
+              postQueryBehavior: null,
+            ),
+          )
+          .toList(),
+      forceQueryBlockFormOpts: [],
+    );
+    //
+    _XBlock thisXBlock = xShelf.findXBlockByName(block.name)!;
     try {
-      block._backupAll();
-      bool success = await __saveForm();
+      shelf.__backupAll();
+      bool success = await __saveForm(
+        thisXBlock: thisXBlock,
+      );
 
       if (!success) {
-        block._restoreAll();
-        return false;
+        shelf.__restoreAll();
+      } else {
+        shelf.__applyNewStateAll();
       }
-      block._applyNewStateAll();
-      return true;
+      return success;
     } catch (e, stacktrace) {
       _handleError(
         methodName: "saveForm",
@@ -290,7 +312,9 @@ abstract class BlockForm<ID extends Object, I extends Object, D extends Object,
   }
 
   // Private method. Only for use in this class.
-  Future<bool> __saveForm() async {
+  Future<bool> __saveForm({
+    required _XBlock thisXBlock,
+  }) async {
     Map<String, dynamic> formMapData = data.currentFormData;
     //
     String calledMethodName = data.isNew ? 'callApiCreate' : 'callApiUpdate';
@@ -327,7 +351,8 @@ abstract class BlockForm<ID extends Object, I extends Object, D extends Object,
     }
     try {
       return await block._processSaveActionRestResult(
-        suggestedSelection: null,
+        thisXBlock: thisXBlock,
+        // suggestedSelection: null,
         calledMethodName: calledMethodName,
         result: result,
       );

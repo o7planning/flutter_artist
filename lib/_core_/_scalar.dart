@@ -147,17 +147,17 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
     //
     //
     //
-    bool success =
-        await _registeredOrDefaultDataFilter._queryAllWithOverlayAndRestorable(
-      // Suggestion for DataFilter
-      suggestedFilterSnapshot: suggestedFilterSnapshot,
-      forceBlockWithQueryOptions: null,
-      forceScalarWithQueryOptions: _ScalarOpt(
-        scalar: this,
-      ),
-    );
-    //
-    return success;
+    // bool success =
+    //     await _registeredOrDefaultDataFilter._queryAllWithOverlayAndRestorable(
+    //   // Suggestion for DataFilter
+    //   suggestedFilterSnapshot: suggestedFilterSnapshot,
+    //   forceBlockWithQueryOptions: null,
+    //   forceScalarWithQueryOptions: _ScalarOpt(
+    //     scalar: this,
+    //   ),
+    // );
+    // //
+    // return success;
     //
     // bool success = false;
     // __isQuerying = true;

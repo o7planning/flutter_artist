@@ -69,17 +69,23 @@ abstract class DataFilter<S extends FilterSnapshot> {
     __currentTryingSnapshotId + 1;
     final int tryingSnapshotId = __currentTryingSnapshotId;
     //
-    await prepareData(
-      suggestedFilterSnapshot: suggestedFilterSnapshot,
-    );
-    // If no error:
-    S tryingSnapshot = takeSnapshot();
-    __filterSnapshotsMap[tryingSnapshotId] = tryingSnapshot;
-    //
-    return _FilterSnapshotWrapper(
-      filterSnapshotId: tryingSnapshotId,
-      filterSnapshot: tryingSnapshot,
-    );
+    try {
+      await prepareData(
+        suggestedFilterSnapshot: suggestedFilterSnapshot,
+      );
+      // If no error:
+      S tryingSnapshot = takeSnapshot();
+      __filterSnapshotsMap[tryingSnapshotId] = tryingSnapshot;
+      //
+      return _FilterSnapshotWrapper(
+        filterSnapshotId: tryingSnapshotId,
+        filterSnapshot: tryingSnapshot,
+      );
+    } catch (e, stackTrace) {
+      // TODO: Xử lý lỗi ?????????????????????????????????????????????????????????????????????
+      // TODO: Xử lý lỗi ?????????????????????????????????????????????????????????????????????
+      throw _QueryError();
+    }
   }
 
   ///
@@ -126,91 +132,91 @@ abstract class DataFilter<S extends FilterSnapshot> {
   ///
   /// [forceBlockWithQueryOptions.block] will be queried mandatory.
   ///
-  Future<bool> _queryAllWithOverlayAndRestorable({
-    required S? suggestedFilterSnapshot,
-    required _BlockOpt? forceBlockWithQueryOptions,
-    required _ScalarOpt? forceScalarWithQueryOptions,
-  }) async {
-    return await FlutterArtist.executeTask(
-      asyncFunction: () async {
-        return await __queryAllIfNeedWithRestorable(
-          suggestedFilterSnapshot: suggestedFilterSnapshot,
-          forceBlockWithQueryOptions: null,
-          forceScalarWithQueryOptions: null,
-        );
-      },
-    );
-  }
+  // Future<bool> _queryAllWithOverlayAndRestorable({
+  //   required S? suggestedFilterSnapshot,
+  //   required _BlockOpt? forceBlockWithQueryOptions,
+  //   required _ScalarOpt? forceScalarWithQueryOptions,
+  // }) async {
+  //   return await FlutterArtist.executeTask(
+  //     asyncFunction: () async {
+  //       return await __queryAllIfNeedWithRestorable(
+  //         suggestedFilterSnapshot: suggestedFilterSnapshot,
+  //         forceBlockWithQueryOptions: null,
+  //         forceScalarWithQueryOptions: null,
+  //       );
+  //     },
+  //   );
+  // }
 
   ///
   /// Query all Scalars and Blocks of this DataFilter if they are visible on the UI.
   /// Any Scalar or Block that is not queried will be set to LAZY state.
   ///
-  Future<bool> __queryAllIfNeedWithRestorable({
-    required S? suggestedFilterSnapshot,
-    required _BlockOpt? forceBlockWithQueryOptions,
-    required _ScalarOpt? forceScalarWithQueryOptions,
-  }) async {
-    final List<Scalar> queryScalars = _scalars;
-    // TODO: Kiem tra danh sach cac Block can query. ???????????????????????????????????????????????????????????????????
-    // TODO: Loai bo cac Block con ra khoi query. ??????????????????????????????????????????????????????????????????????
-    final List<Block> queryBlocks = _blocks;
-    //
-    // Start QUERY:
-    //
-    try {
-      __backupAll(
-        scalars: queryScalars,
-        blocks: queryBlocks,
-      );
-      //
-      _FilterSnapshotWrapper<S> tryingSnapshot = await __prepareData(
-        suggestedFilterSnapshot: suggestedFilterSnapshot,
-      );
-      //
-      final int tryingFilterSnapshotId = tryingSnapshot.filterSnapshotId;
-      final S tryingFilterSnapshot = tryingSnapshot.filterSnapshot;
-      //
-      for (Scalar scalar in queryScalars) {
-        bool success = await scalar.__queryThis(
-          filterSnapshot: tryingFilterSnapshot,
-        );
-        if (!success) {
-          // Throw error to restore all....
-          throw _QueryError();
-        }
-      }
-      bool success = true;
-      for (Block block in queryBlocks) {
-        bool success = await block.__queryThisAndChildren(
-          queryType: QueryType.forceQuery,
-          listBehavior: ListBehavior.replace,
-          filterSnapshot: tryingFilterSnapshot,
-          postQueryBehavior: PostQueryBehavior.selectAvailableItem,
-          suggestedSelection: null,
-          pageable: null,
-        );
-        if (!success) {
-          // Throw error to restore all....
-          throw _QueryError();
-        }
-      }
-      //
-      __applyNewStateAll(
-        scalars: queryScalars,
-        blocks: queryBlocks,
-      );
-      //
-      return success;
-    } catch (e) {
-      // Restore all...
-      __restoreAll(
-        scalars: queryScalars,
-        blocks: queryBlocks,
-      );
-      return false;
-    }
-  }
+  // Future<bool> __queryAllIfNeedWithRestorable({
+  //   required S? suggestedFilterSnapshot,
+  //   required _BlockOpt? forceBlockWithQueryOptions,
+  //   required _ScalarOpt? forceScalarWithQueryOptions,
+  // }) async {
+  //   final List<Scalar> queryScalars = _scalars;
+  //   // TODO: Kiem tra danh sach cac Block can query. ???????????????????????????????????????????????????????????????????
+  //   // TODO: Loai bo cac Block con ra khoi query. ??????????????????????????????????????????????????????????????????????
+  //   final List<Block> queryBlocks = _blocks;
+  //   //
+  //   // Start QUERY:
+  //   //
+  //   try {
+  //     __backupAll(
+  //       scalars: queryScalars,
+  //       blocks: queryBlocks,
+  //     );
+  //     //
+  //     _FilterSnapshotWrapper<S> tryingSnapshot = await __prepareData(
+  //       suggestedFilterSnapshot: suggestedFilterSnapshot,
+  //     );
+  //     //
+  //     final int tryingFilterSnapshotId = tryingSnapshot.filterSnapshotId;
+  //     final S tryingFilterSnapshot = tryingSnapshot.filterSnapshot;
+  //     //
+  //     for (Scalar scalar in queryScalars) {
+  //       bool success = await scalar.__queryThis(
+  //         filterSnapshot: tryingFilterSnapshot,
+  //       );
+  //       if (!success) {
+  //         // Throw error to restore all....
+  //         throw _QueryError();
+  //       }
+  //     }
+  //     bool success = true;
+  //     for (Block block in queryBlocks) {
+  //       bool success = await block.__queryThisAndChildren(
+  //         queryType: QueryType.forceQuery,
+  //         listBehavior: ListBehavior.replace,
+  //         filterSnapshot: tryingFilterSnapshot,
+  //         postQueryBehavior: PostQueryBehavior.selectAvailableItem,
+  //         suggestedSelection: null,
+  //         pageable: null,
+  //       );
+  //       if (!success) {
+  //         // Throw error to restore all....
+  //         throw _QueryError();
+  //       }
+  //     }
+  //     //
+  //     __applyNewStateAll(
+  //       scalars: queryScalars,
+  //       blocks: queryBlocks,
+  //     );
+  //     //
+  //     return success;
+  //   } catch (e) {
+  //     // Restore all...
+  //     __restoreAll(
+  //       scalars: queryScalars,
+  //       blocks: queryBlocks,
+  //     );
+  //     return false;
+  //   }
+  // }
 
   // ***************************************************************************
   // *** BACKUP, RESTORE, APPLY ***
