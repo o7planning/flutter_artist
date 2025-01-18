@@ -554,30 +554,30 @@ abstract class Shelf {
     return founds;
   }
 
-  Future<bool> _queryScalars({
-    required List<Scalar> scalars,
-  }) async {
-    for (Scalar scalar in scalars) {
-      bool success = await scalar.query();
-      if (!success) {
-        return false;
-      }
-    }
-    return true;
-  }
+  // Future<bool> _queryScalars({
+  //   required List<Scalar> scalars,
+  // }) async {
+  //   for (Scalar scalar in scalars) {
+  //     bool success = await scalar.query();
+  //     if (!success) {
+  //       return false;
+  //     }
+  //   }
+  //   return true;
+  // }
 
-  Future<bool> _queryBlocks({
-    required QueryType queryType,
-    required List<Block> blocks,
-  }) async {
-    List<_ScalarOrBlockOrFormWrapper> blockOrForms =
-        blocks.map((b) => _ScalarOrBlockOrFormWrapper.block(b)).toList();
-    //
-    return await _queryLazyScalarOrBlockOrForms(
-      queryType: queryType,
-      scalarOrBlockOrFormWrappers: blockOrForms,
-    );
-  }
+  // Future<bool> _queryBlocks({
+  //   required QueryType queryType,
+  //   required List<Block> blocks,
+  // }) async {
+  //   List<_ScalarOrBlockOrFormWrapper> blockOrForms =
+  //       blocks.map((b) => _ScalarOrBlockOrFormWrapper.block(b)).toList();
+  //   //
+  //   return await _queryLazyScalarOrBlockOrForms(
+  //     queryType: queryType,
+  //     scalarOrBlockOrFormWrappers: blockOrForms,
+  //   );
+  // }
 
   // ***************************************************************************
   // ********** BACKUP & RESTORE & APPLY ***************************************

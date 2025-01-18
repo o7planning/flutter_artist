@@ -71,6 +71,7 @@ part '_core_query_/_block_opt.dart';
 part '_core_query_/_data_filter_opt.dart';
 part '_core_query_/_filter_snapshot_wrapper.dart';
 part '_core_query_/_query_error.dart';
+part '_core_query_/_scalar_and_block_list.dart';
 part '_core_query_/_scalar_opt.dart';
 part '_core_query_/_scalar_or_block_or_form_wraper.dart';
 part '_core_query_/_x_block.dart';

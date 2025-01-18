@@ -390,7 +390,7 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
     if (hiddenBehavior == ScalarHiddenBehavior.clear) {
       Future.delayed(
         const Duration(seconds: 0),
-        () {
+            () {
           // TODO: ???????????????
           // this.emptyQuery();
         },

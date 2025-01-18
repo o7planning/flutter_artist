@@ -412,7 +412,7 @@ class _Storage {
   // ===========================================================================
   // ===========================================================================
 
-  void _notifyChange(Block eventBlock, String? itemIdString) {
+  Future<void> _notifyChange(Block eventBlock, String? itemIdString) async {
     Type eventItemType = eventBlock.getItemType();
     print("~~~~~~~~~> Event Item Type: $eventItemType");
     //
@@ -424,43 +424,68 @@ class _Storage {
         listenerScalar.data.setToPending();
       }
     }
-    final List<Scalar> queryScalars = [];
+    // <String shelfName>
+    Map<String, _ScalarAndBlockList> queryMap = {};
+
     for (Scalar listenerScalar in listenerScalars) {
       if (listenerScalar.hasActiveScalarFragmentWidget()) {
-        queryScalars.add(listenerScalar);
+        String shelfName = listenerScalar.shelf.name;
+        _ScalarAndBlockList sbList =
+            queryMap[shelfName] ?? _ScalarAndBlockList();
+        queryMap[shelfName] = sbList;
+        sbList.queryScalars.add(listenerScalar);
       }
-    }
-    //
-    if (queryScalars.isNotEmpty) {
-      // TODO: Neu co 2 Shelf(s) thi sao??
-      queryScalars.first.shelf._queryScalars(
-        scalars: queryScalars,
-      );
     }
     //
     final List<Block> listenerBlocks =
         _getListenerBlocksByBlock(eventBlock: eventBlock);
     for (Block listenerBlock in listenerBlocks) {
-      if (!listenerBlock.hasActiveBlockFragmentWidget(
+      // TODO: Doi thanh hasActiveUiComponents()??
+      final bool active = listenerBlock.hasActiveBlockFragmentWidget(
         alsoCheckChildren: true,
-      )) {
+      );
+      if (!active) {
         listenerBlock.data.setToPending();
       }
     }
-    final List<Block> queryBlocks = [];
+
     for (Block listenerBlock in listenerBlocks) {
-      if (listenerBlock.hasActiveBlockFragmentWidget(
+      // TODO: Doi thanh hasActiveUiComponents()??
+      final bool active = listenerBlock.hasActiveBlockFragmentWidget(
         alsoCheckChildren: true,
-      )) {
-        queryBlocks.add(listenerBlock);
+      );
+      if (active) {
+        String shelfName = listenerBlock.shelf.name;
+        _ScalarAndBlockList sbList =
+            queryMap[shelfName] ?? _ScalarAndBlockList();
+        queryMap[shelfName] = sbList;
+        sbList.queryBlocks.add(listenerBlock);
       }
     }
     //
-    if (queryBlocks.isNotEmpty) {
-      // TODO: Neu co 2 Shelf(s) thi sao??
-      queryBlocks.first.shelf._queryBlocks(
-        queryType: QueryType.forceQuery,
-        blocks: queryBlocks,
+    for (String shelfName in queryMap.keys) {
+      Shelf shelf = __shelfMap[shelfName]!;
+      _ScalarAndBlockList sbList = queryMap[shelfName]!;
+      //
+      await shelf._queryAllWithOverlayAndRestorable(
+        forceDataFilterOpt: null,
+        forceQueryScalarOpts: sbList.queryScalars
+            .map(
+              (s) => _ScalarOpt(scalar: s),
+            )
+            .toList(),
+        forceQueryBlockOpts: sbList.queryBlocks
+            .map(
+              (b) => _BlockOpt(
+                  block: b,
+                  queryType: null,
+                  pageable: null,
+                  listBehavior: null,
+                  suggestedSelection: null,
+                  postQueryBehavior: null),
+            )
+            .toList(),
+        forceQueryBlockFormOpts: [],
       );
     }
   }
