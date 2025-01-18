@@ -30,7 +30,7 @@ abstract class Shelf {
 
   int __lastTransactionNumber = 0;
 
-  int __currentTransactionNumber = 0;
+  int __transactionId = 0;
 
   final List<Block> __lazyBlocksToQuery = [];
 
@@ -360,13 +360,10 @@ abstract class Shelf {
       );
     }
 
-    if (__currentTransactionNumber == __lastTransactionNumber) {
-      __currentTransactionNumber++;
+    if (__transactionId == __lastTransactionNumber) {
+      __transactionId++;
       __lazyBlocksToQuery.clear();
-
-      print(
-          "\n\n@@@@@@@>>>>>>>>>>>>>>> query - ID: $__currentTransactionNumber");
-
+      //
       Timer(
         const Duration(milliseconds: 0), // 200
         __queryLazyList,
@@ -381,12 +378,14 @@ abstract class Shelf {
         __findTopLazyScalarOrBlockOrForms();
     //
     if (lazyBlockOrForms.isEmpty) {
-      __lastTransactionNumber = __currentTransactionNumber;
+      __lastTransactionNumber = __transactionId;
       _queryLocked = false;
       return;
     } else {
-      print("@@@@@@@@@@@@ __queryLazyList: ID: $__currentTransactionNumber");
-      __lastTransactionNumber = __currentTransactionNumber;
+      print("@@@@@@@@@@@@ Query Lazy List: ID: $__transactionId");
+      print("@@@@@@@@@@@@ Query Lazy List: Count: ${lazyBlockOrForms.length}");
+      //
+      __lastTransactionNumber = __transactionId;
 
       await _queryLazyScalarOrBlockOrForms(
         queryType: QueryType.forceQuery,
@@ -430,89 +429,16 @@ abstract class Shelf {
       }
     }
     //
+    print("@@@@@@@@@@@@ Query Lazy List: scalarOpts: $scalarOpts");
+    print("@@@@@@@@@@@@ Query Lazy List: blockOpts: $blockOpts");
+    print("@@@@@@@@@@@@ Query Lazy List: blockFormOpts: $blockFormOpts");
+    //
     return await _queryAllWithOverlayAndRestorable(
       forceDataFilterOpt: null,
       forceQueryScalarOpts: scalarOpts,
       forceQueryBlockOpts: blockOpts,
       forceQueryBlockFormOpts: blockFormOpts,
     );
-    //
-    //
-    //
-    // bool needToUpdate = false;
-    // bool success = false;
-    // try {
-    //   print(
-    //       "@@@@@@@@@@@@@@@@@@@@@@@@@@@ >>>>>>>>>>> : $scalarOrBlockOrFormWrappers");
-    //
-    //   for (_ScalarOrBlockOrFormWrapper wrapper in scalarOrBlockOrFormWrappers) {
-    //     needToUpdate = true;
-    //     // QUERY SCALAR:
-    //     if (wrapper.scalar != null) {
-    //       FlutterArtist.codeFlowLogger._addInfo(
-    //         isLibCode: true,
-    //         ownerClassInstance: this,
-    //         info: "Querying lazy Scalar: ${getClassName(wrapper.scalar)}",
-    //       );
-    //       //
-    //       // TODO: Mở rào này ra ???????????????????????????????????????????????????????????????????????????
-    //       // TODO: ???????????????????????????????????????????????????????????????????????????
-    //       // success = await wrapper.scalar!._queryWithOverlayAndRestorable();
-    //       // if (!success) {
-    //       //   break;
-    //       // }
-    //     }
-    //     // QUERY BLOCK:
-    //     else if (wrapper.block != null) {
-    //       FlutterArtist.codeFlowLogger._addInfo(
-    //         isLibCode: true,
-    //         ownerClassInstance: this,
-    //         info: "Querying lazy block: ${getClassName(wrapper.block)}",
-    //       );
-    //       //
-    //       success = await wrapper.block!._queryWithOverlayAndRestorable(
-    //         queryType: queryType,
-    //         listBehavior: ListBehavior.replace,
-    //         suggestedFilterSnapshot: null,
-    //         postQueryBehavior: PostQueryBehavior.selectAvailableItem,
-    //         suggestedSelection: null,
-    //         pageable: null, // TODO: Reset?
-    //       );
-    //       if (!success) {
-    //         break;
-    //       }
-    //     }
-    //     // QUERY BLOCK-FORM:
-    //     else if (wrapper.blockForm != null) {
-    //       FlutterArtist.codeFlowLogger._addInfo(
-    //         isLibCode: true,
-    //         ownerClassInstance: this,
-    //         info:
-    //             "Querying lazy block form: ${getClassName(wrapper.blockForm)}",
-    //       );
-    //       //
-    //       Block block = wrapper.blockForm!.block;
-    //       Object? currentItem = block.data.currentItemDetail;
-    //       if (currentItem != null) {
-    //         success = await block._prepareToShowOrEditWithOverlayAndRestorable(
-    //           item: currentItem,
-    //           justQueried: false,
-    //           suggestedSelection: null,
-    //           forceForm: true,
-    //         );
-    //         if (!success) {
-    //           break;
-    //         }
-    //       }
-    //     }
-    //   }
-    // } catch (e) {
-    //   success = false;
-    // }
-    // if (needToUpdate) {
-    //   updateAllWidgets();
-    // }
-    // return success;
   }
 
   // ***************************************************************************
@@ -676,7 +602,9 @@ abstract class Shelf {
           filterSnapshot = dataFilter._filterSnapshot!;
         }
         //
-        bool success = await scalar.__queryThis(filterSnapshot: filterSnapshot);
+        bool success = await scalar.__queryThis(
+          filterSnapshot: filterSnapshot,
+        );
         if (!success) {
           throw _QueryError();
         }
@@ -685,12 +613,6 @@ abstract class Shelf {
       for (_XBlock xBlock in xShelf.allRootXBlocks) {
         xBlock.block.__queryThisAndChildren(
           thisXBlock: xBlock,
-          // queryType: xBlock.queryType,
-          // listBehavior: xBlock.listBehavior,
-          // filterSnapshot: xBlock.filterSnapshot,
-          // postQueryBehavior: postQueryBehavior,
-          // suggestedSelection: suggestedSelection,
-          // pageable: pageable,
         );
       }
       //
@@ -698,11 +620,12 @@ abstract class Shelf {
       return true;
     } catch (e) {
       __restoreAll();
+      // TODO: Xu ly loi ????????????????????????????????????????????????????????????????
+      // TODO: Xu ly loi ????????????????????????????????????????????????????????????????
       // If _QueryError, no need to show SnackBar any more..
       if (e is _QueryError) {
-        // Do not showSnackBar any more...
+        // TODO: Do not showSnackBar any more...
       }
-
       return false;
     }
   }

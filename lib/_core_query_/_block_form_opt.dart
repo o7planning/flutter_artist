@@ -9,4 +9,9 @@ class _BlockFormOpt {
   _BlockFormOpt({
     required this.blockForm,
   });
+
+  @override
+  String toString() {
+    return "${getClassName(this)}(${blockForm.block.name})";
+  }
 }

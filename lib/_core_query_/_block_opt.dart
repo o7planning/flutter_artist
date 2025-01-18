@@ -20,4 +20,9 @@ class _BlockOpt {
     required this.suggestedSelection,
     required this.postQueryBehavior,
   });
+
+  @override
+  String toString() {
+    return "${getClassName(this)}(${block.name})";
+  }
 }

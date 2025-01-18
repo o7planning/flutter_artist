@@ -9,4 +9,9 @@ class _ScalarOpt {
   _ScalarOpt({
     required this.scalar,
   });
+
+  @override
+  String toString() {
+    return "${getClassName(this)}(${scalar.name})";
+  }
 }
