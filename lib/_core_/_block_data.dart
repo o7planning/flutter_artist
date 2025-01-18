@@ -7,6 +7,9 @@ abstract class BlockData<
     SUGGESTED_FILTER_DATA extends SuggestedFilterData,
     FILTER_SNAPSHOT extends FilterSnapshot,
     SUGGESTED_FORM_DATA extends SuggestedFormData> implements PageData<ITEM> {
+  ///
+  /// Owner block
+  ///
   final Block<ID, ITEM, ITEM_DETAIL, SUGGESTED_FILTER_DATA, FILTER_SNAPSHOT,
       SUGGESTED_FORM_DATA> block;
 
