@@ -439,80 +439,80 @@ abstract class Shelf {
     //
     //
     //
-    bool needToUpdate = false;
-    bool success = false;
-    try {
-      print(
-          "@@@@@@@@@@@@@@@@@@@@@@@@@@@ >>>>>>>>>>> : $scalarOrBlockOrFormWrappers");
-
-      for (_ScalarOrBlockOrFormWrapper wrapper in scalarOrBlockOrFormWrappers) {
-        needToUpdate = true;
-        // QUERY SCALAR:
-        if (wrapper.scalar != null) {
-          FlutterArtist.codeFlowLogger._addInfo(
-            isLibCode: true,
-            ownerClassInstance: this,
-            info: "Querying lazy Scalar: ${getClassName(wrapper.scalar)}",
-          );
-          //
-          // TODO: Mở rào này ra ???????????????????????????????????????????????????????????????????????????
-          // TODO: ???????????????????????????????????????????????????????????????????????????
-          // success = await wrapper.scalar!._queryWithOverlayAndRestorable();
-          // if (!success) {
-          //   break;
-          // }
-        }
-        // QUERY BLOCK:
-        else if (wrapper.block != null) {
-          FlutterArtist.codeFlowLogger._addInfo(
-            isLibCode: true,
-            ownerClassInstance: this,
-            info: "Querying lazy block: ${getClassName(wrapper.block)}",
-          );
-          //
-          success = await wrapper.block!._queryWithOverlayAndRestorable(
-            queryType: queryType,
-            listBehavior: ListBehavior.replace,
-            suggestedFilterSnapshot: null,
-            postQueryBehavior: PostQueryBehavior.selectAvailableItem,
-            suggestedSelection: null,
-            pageable: null, // TODO: Reset?
-          );
-          if (!success) {
-            break;
-          }
-        }
-        // QUERY BLOCK-FORM:
-        else if (wrapper.blockForm != null) {
-          FlutterArtist.codeFlowLogger._addInfo(
-            isLibCode: true,
-            ownerClassInstance: this,
-            info:
-                "Querying lazy block form: ${getClassName(wrapper.blockForm)}",
-          );
-          //
-          Block block = wrapper.blockForm!.block;
-          Object? currentItem = block.data.currentItemDetail;
-          if (currentItem != null) {
-            success = await block._prepareToShowOrEditWithOverlayAndRestorable(
-              item: currentItem,
-              justQueried: false,
-              suggestedSelection: null,
-              forceForm: true,
-            );
-            if (!success) {
-              break;
-            }
-          }
-        }
-      }
-    } catch (e) {
-      success = false;
-    }
-    if (needToUpdate) {
-      updateAllWidgets();
-    }
-    return success;
+    // bool needToUpdate = false;
+    // bool success = false;
+    // try {
+    //   print(
+    //       "@@@@@@@@@@@@@@@@@@@@@@@@@@@ >>>>>>>>>>> : $scalarOrBlockOrFormWrappers");
+    //
+    //   for (_ScalarOrBlockOrFormWrapper wrapper in scalarOrBlockOrFormWrappers) {
+    //     needToUpdate = true;
+    //     // QUERY SCALAR:
+    //     if (wrapper.scalar != null) {
+    //       FlutterArtist.codeFlowLogger._addInfo(
+    //         isLibCode: true,
+    //         ownerClassInstance: this,
+    //         info: "Querying lazy Scalar: ${getClassName(wrapper.scalar)}",
+    //       );
+    //       //
+    //       // TODO: Mở rào này ra ???????????????????????????????????????????????????????????????????????????
+    //       // TODO: ???????????????????????????????????????????????????????????????????????????
+    //       // success = await wrapper.scalar!._queryWithOverlayAndRestorable();
+    //       // if (!success) {
+    //       //   break;
+    //       // }
+    //     }
+    //     // QUERY BLOCK:
+    //     else if (wrapper.block != null) {
+    //       FlutterArtist.codeFlowLogger._addInfo(
+    //         isLibCode: true,
+    //         ownerClassInstance: this,
+    //         info: "Querying lazy block: ${getClassName(wrapper.block)}",
+    //       );
+    //       //
+    //       success = await wrapper.block!._queryWithOverlayAndRestorable(
+    //         queryType: queryType,
+    //         listBehavior: ListBehavior.replace,
+    //         suggestedFilterSnapshot: null,
+    //         postQueryBehavior: PostQueryBehavior.selectAvailableItem,
+    //         suggestedSelection: null,
+    //         pageable: null, // TODO: Reset?
+    //       );
+    //       if (!success) {
+    //         break;
+    //       }
+    //     }
+    //     // QUERY BLOCK-FORM:
+    //     else if (wrapper.blockForm != null) {
+    //       FlutterArtist.codeFlowLogger._addInfo(
+    //         isLibCode: true,
+    //         ownerClassInstance: this,
+    //         info:
+    //             "Querying lazy block form: ${getClassName(wrapper.blockForm)}",
+    //       );
+    //       //
+    //       Block block = wrapper.blockForm!.block;
+    //       Object? currentItem = block.data.currentItemDetail;
+    //       if (currentItem != null) {
+    //         success = await block._prepareToShowOrEditWithOverlayAndRestorable(
+    //           item: currentItem,
+    //           justQueried: false,
+    //           suggestedSelection: null,
+    //           forceForm: true,
+    //         );
+    //         if (!success) {
+    //           break;
+    //         }
+    //       }
+    //     }
+    //   }
+    // } catch (e) {
+    //   success = false;
+    // }
+    // if (needToUpdate) {
+    //   updateAllWidgets();
+    // }
+    // return success;
   }
 
   // ***************************************************************************
