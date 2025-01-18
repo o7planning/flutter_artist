@@ -129,7 +129,7 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
   }
 
   // ***************************************************************************
-  // ******                      ***********************************************
+  // ***************************************************************************
   // ***************************************************************************
 
   ///
@@ -156,136 +156,12 @@ abstract class Scalar<V, S extends FilterSnapshot> extends DataContainer {
       forceQueryBlockOpts: [],
       forceQueryBlockFormOpts: [],
     );
-
-    //
-    //
-    //
-    //
-    // bool success =
-    //     await _registeredOrDefaultDataFilter._queryAllWithOverlayAndRestorable(
-    //   // Suggestion for DataFilter
-    //   suggestedFilterSnapshot: suggestedFilterSnapshot,
-    //   forceBlockWithQueryOptions: null,
-    //   forceScalarWithQueryOptions: _ScalarOpt(
-    //     scalar: this,
-    //   ),
-    // );
-    // //
-    // return success;
-    //
-    // bool success = false;
-    // __isQuerying = true;
-    // this.updateControlBarWidgets();
-    // try {
-    //   // TODO: Remove.
-    //   // success = await _queryWithOverlayAndRestorable();
-    // } finally {
-    //   __isQuerying = false;
-    //   this.updateControlBarWidgets();
-    // }
-    // return success;
   }
 
   Future<ApiResult<V>> callApiQuery({
     required S? filterSnapshot,
   });
 
-  // TODO: Remove.
-  // Future<bool> _queryWithOverlayAndRestorable() async {
-  //   return await FlutterArtist.executeTask(
-  //     asyncFunction: () async {
-  //       return __queryWithRestorable();
-  //     },
-  //   );
-  // }
-
-  // Private method (Only for use in this class)
-  // @Deprecated("Xoa di, khong su dung nua")
-  // Future<bool> __queryWithRestorable({
-  //   required S filterSnapshot,
-  // }) async {
-  //   try {
-  //     _backupAll();
-  //     bool success = await __queryThis(
-  //       filterSnapshot: filterSnapshot,
-  //     );
-  //     //
-  //     if (!success) {
-  //       _restoreAll();
-  //       return false;
-  //     } else {
-  //       _applyNewStateAll();
-  //       return true;
-  //     }
-  //   } catch (e, stacktrace) {
-  //     _handleError(
-  //       className: getClassName(this),
-  //       methodName: 'query',
-  //       error: e,
-  //       stackTrace: stacktrace,
-  //       showSnackBar: true,
-  //     );
-  //     //
-  //     _restoreAll();
-  //     return false;
-  //   }
-  // }
-
-  // Private method. Only for use in this class.
-  // Future<bool> __prepareFilter({
-  //   required S? suggestedFilterSnapshot,
-  //   required bool force,
-  // }) async {
-  //   if (dataFilter == null) {
-  //     return true;
-  //   }
-  //   try {
-  //     FlutterArtist.codeFlowLogger._addMethodCall(
-  //       isLibCode: false,
-  //       ownerClassInstance: dataFilter!,
-  //       methodName: "prepareData",
-  //       parameters: {
-  //         "suggestedFilterSnapshot": suggestedFilterSnapshot,
-  //       },
-  //       route: null,
-  //     );
-  //     //
-  //     await dataFilter!.prepareData(
-  //       suggestedFilterSnapshot: suggestedFilterSnapshot,
-  //     );
-  //   } catch (e, stacktrace) {
-  //     _handleError(
-  //       className: getClassName(dataFilter),
-  //       methodName: 'prepareData',
-  //       error: e,
-  //       stackTrace: stacktrace,
-  //       showSnackBar: true,
-  //     );
-  //     return false;
-  //   }
-  //   try {
-  //     FlutterArtist.codeFlowLogger._addMethodCall(
-  //       isLibCode: false,
-  //       ownerClassInstance: dataFilter!,
-  //       methodName: "takeSnapshot",
-  //       parameters: {},
-  //       route: null,
-  //     );
-  //     //
-  //     S filterSnapshot = dataFilter!.takeSnapshot();
-  //     dataFilter!._currentSnapshot = filterSnapshot;
-  //     return true;
-  //   } catch (e, stacktrace) {
-  //     _handleError(
-  //       className: getClassName(dataFilter),
-  //       methodName: 'prepareData',
-  //       error: e,
-  //       stackTrace: stacktrace,
-  //       showSnackBar: true,
-  //     );
-  //     return false;
-  //   }
-  // }
 
   void __refreshQueryingState({required bool isQuerying}) {
     try {
