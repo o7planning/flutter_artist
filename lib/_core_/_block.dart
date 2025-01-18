@@ -670,41 +670,10 @@ abstract class Block<
     );
   }
 
-  // TODO ??????????????????????????????????????????????????????????????????????????????
-  @Deprecated("Xoá phương thức này, không sử dụng nữa.")
-  Future<bool> _queryWithOverlayAndRestorable({
-    required QueryType queryType,
-    required ListBehavior listBehavior,
-    required S? suggestedFilterSnapshot,
-    required PostQueryBehavior postQueryBehavior,
-    required SuggestedSelection? suggestedSelection,
-    required PageableData? pageable,
-  }) async {
-    // return await FlutterArtist.executeTask(
-    //   asyncFunction: () async {
-    //     return __queryWithRestorable(
-    //       queryType: queryType,
-    //       listBehavior: listBehavior,
-    //       filterSnapshot:  suggestedFilterSnapshot,
-    //       postQueryBehavior: postQueryBehavior,
-    //       suggestedSelection: suggestedSelection,
-    //       pageable: pageable,
-    //     );
-    //   },
-    // );
-    return true;
-  }
-
   // Cascade query:
   // Private method (Only for use in this class)
   Future<bool> __queryThisAndChildren({
     required _XBlock thisXBlock,
-    // required QueryType queryType,
-    // required ListBehavior listBehavior,
-    // required S filterSnapshot,
-    // required PostQueryBehavior postQueryBehavior,
-    // required SuggestedSelection? suggestedSelection,
-    // required PageableData? pageable,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -1199,12 +1168,6 @@ abstract class Block<
       //
       bool success = await childXBlock.block.__queryThisAndChildren(
         thisXBlock: childXBlock,
-        // queryType: QueryType.queryIfNeed,
-        // listBehavior: ListBehavior.replace,
-        // filterSnapshot: null,
-        // postQueryBehavior: PostQueryBehavior.selectAvailableItem,
-        // suggestedSelection: childQueryDirective,
-        // pageable: null, // TODO: Null or last pageable?
       );
       if (!success) {
         return false;
@@ -1631,12 +1594,6 @@ abstract class Block<
             //
             success = await __queryThisAndChildren(
               thisXBlock: thisXBlock,
-              // queryType: QueryType.forceQuery,
-              // listBehavior: ListBehavior.replace,
-              // filterSnapshot: suggestedFilterSnapshot,
-              // postQueryBehavior: PostQueryBehavior.selectAvailableItem,
-              // suggestedSelection: suggestedSelection,
-              // pageable: null, // TODO: Xem lai!
             );
         }
         return success;
