@@ -396,7 +396,6 @@ abstract class BlockForm<
       },
     );
     //
-
     bool needToLoad = forceForm || hasActiveFormWidget();
     //
     // Init Extra data for Edit Form:

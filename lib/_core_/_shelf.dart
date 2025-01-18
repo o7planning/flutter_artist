@@ -561,6 +561,27 @@ abstract class Shelf {
     required List<_BlockOpt> forceQueryBlockOpts,
     required List<_BlockFormOpt> forceQueryBlockFormOpts,
   }) async {
+    return await FlutterArtist.executeTask(
+      asyncFunction: () async {
+        return await _queryAllWithRestorable(
+          forceDataFilterOpt: forceDataFilterOpt,
+          forceQueryScalarOpts: forceQueryScalarOpts,
+          forceQueryBlockOpts: forceQueryBlockOpts,
+          forceQueryBlockFormOpts: forceQueryBlockFormOpts,
+        );
+      },
+    );
+  }
+
+  ///
+  /// VERY IMPORTANT METHOD:
+  ///
+  Future<bool> _queryAllWithRestorable({
+    required _DataFilterOpt? forceDataFilterOpt,
+    required List<_ScalarOpt> forceQueryScalarOpts,
+    required List<_BlockOpt> forceQueryBlockOpts,
+    required List<_BlockFormOpt> forceQueryBlockFormOpts,
+  }) async {
     _XShelf xShelf = _XShelf(
       shelf: this,
       forceDataFilterOpt: forceDataFilterOpt,
@@ -604,9 +625,39 @@ abstract class Shelf {
       }
       //
       for (_XBlock xBlock in xShelf.allRootXBlocks) {
-        await xBlock.block.__queryThisAndChildren(
+        bool success = await xBlock.block.__queryThisAndChildren(
           thisXBlock: xBlock,
         );
+        //
+        if (!success) {
+          throw _TransactionError();
+        }
+      }
+      //
+      for (_XBlockForm xBlockForm in xShelf.allXBlockForms) {
+        if (!xBlockForm.needQuery) {
+          continue;
+        }
+        Object? currentItemDetail =
+            xBlockForm.blockForm.block.data.currentItemDetail;
+
+        // TODO: Co can cai nay khong?
+        // xBlockForm.blockForm.data._setCurrentItem(
+        //   refreshedItemDetail: currentItemDetail,
+        //   formMode: FormMode.edit,
+        //   dataState: DataState.pending,
+        // );
+
+        bool success = await xBlockForm.blockForm._prepareForm(
+          suggestedFormData: xBlockForm.suggestedFormData,
+          refreshedItem: currentItemDetail,
+          isNew: currentItemDetail == null, // TODO: Can kiem tra lai.
+          forceForm: true,
+        );
+        //
+        if (!success) {
+          throw _TransactionError();
+        }
       }
       //
       __applyNewStateAll();

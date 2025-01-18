@@ -884,6 +884,8 @@ abstract class Block<
     //
     print(
         "${getClassName(this)} ~~~~~~~~~~~~> postQueryBehavior: ${postQueryBehavior}");
+    print(
+        "${getClassName(this)} ~~~~~~~~~~~~> suggestedSelection: ${suggestedSelection}");
     //
     if (postQueryBehavior == PostQueryBehavior.selectAvailableItem ||
         postQueryBehavior == PostQueryBehavior.selectAvailableItemToEdit) {
@@ -907,12 +909,15 @@ abstract class Block<
       if (itemWithSameId == null) {
         // Find first Item...
         I? firstItem = data.findFirstItem();
+        print("${getClassName(this)} ~~~~~~~~~~~~> firstItem: ${firstItem}");
         if (firstItem != null) {
           bool success = await __prepareToShowOrEdit(
             thisXBlock: thisXBlock,
             item: firstItem,
             justQueried: true,
-            forceForm: false,
+            // forceForm : postQueryBehavior == PostQueryBehavior.selectAvailableItemToEdit,
+            forceForm:
+                false, // TODO: (TEST HERE) ?????????????????????????????????????????????????????????????????
           );
           if (!success) {
             return false;

@@ -12,6 +12,9 @@ class _XShelf {
   // All Scalars
   final List<_XScalar> allXScalars = [];
 
+  // All Scalars
+  final List<_XBlockForm> allXBlockForms = [];
+
   // All DataFilters of Shelf
   // <String dataFilterName, _XScalar>
   final Map<String, _XDataFilter> allXDataFilterMap = {};
@@ -211,7 +214,10 @@ class _XShelf {
     //
     _XBlockForm? xBlockForm = block.blockForm == null //
         ? null
-        : _XBlockForm(blockForm: block.blockForm!);
+        : _XBlockForm(
+            blockForm: block.blockForm!,
+            suggestedFormData: null,
+          );
     //
     _XBlock xBlock = _XBlock(
       block: block,
@@ -224,6 +230,7 @@ class _XShelf {
     //
     allXBlockMap[block.name] = xBlock;
     if (xBlockForm != null) {
+      allXBlockForms.add(xBlockForm);
       allXBlockFormMap[block.name] = xBlockForm;
     }
     //
