@@ -1,6 +1,10 @@
 part of '../flutter_artist.dart';
 
-abstract class BlockForm<ID extends Object, I extends Object, D extends Object,
+abstract class BlockForm<
+    ID extends Object, //
+    I extends Object,
+    D extends Object,
+    S extends FilterSnapshot,
     SF extends SuggestedFormData> {
   QueryMode _queryMode = QueryMode.lazy;
 
@@ -187,7 +191,8 @@ abstract class BlockForm<ID extends Object, I extends Object, D extends Object,
   /// This method is called before [prepareFormData] method.
   ///
   Future<ApiResult<void>?>? prepareFormMasterData({
-    required DataFilter? dataFilter, // TODO: FilterSnapShot??
+    required S? filterSnapshot,
+    // required DataFilter? dataFilter, // TODO: FilterSnapShot??
     required SF? suggestedFormData,
     required D? refreshedItem,
     required bool isNew,
@@ -197,7 +202,7 @@ abstract class BlockForm<ID extends Object, I extends Object, D extends Object,
   /// This method is called after [prepareFormMasterData].
   ///
   Map<String, dynamic> prepareFormData({
-    required DataFilter? dataFilter,
+    required S? filterSnapshot,
     required SF? suggestedFormData,
     required D? refreshedItem,
     required bool isNew,
@@ -397,8 +402,10 @@ abstract class BlockForm<ID extends Object, I extends Object, D extends Object,
     // Init Extra data for Edit Form:
     //
     if (needToLoad) {
+      S? filterSnapshot = block.data.currentFilterSnapshot as S?;
+      //
       bool success = await __prepareFormMasterData(
-        dataFilter: block._registeredOrDefaultDataFilter,
+        filterSnapshot: filterSnapshot,
         suggestedFormData: suggestedFormData,
         refreshedItem: refreshedItem,
         isNew: isNew,
@@ -426,7 +433,7 @@ abstract class BlockForm<ID extends Object, I extends Object, D extends Object,
 
   // Private method in this class.
   Future<bool> __prepareFormMasterData({
-    required DataFilter? dataFilter, // TODO: FilterSnapShot??
+    required S? filterSnapshot,
     required SF? suggestedFormData,
     required D? refreshedItem,
     required bool isNew,
@@ -438,7 +445,7 @@ abstract class BlockForm<ID extends Object, I extends Object, D extends Object,
         ownerClassInstance: this,
         methodName: "prepareFormMasterData",
         parameters: {
-          "dataFilter": dataFilter,
+          "filterSnapshot": filterSnapshot,
           "suggestedFormData": suggestedFormData,
           "refreshedItem": refreshedItem,
           "isNew": isNew,
@@ -446,7 +453,7 @@ abstract class BlockForm<ID extends Object, I extends Object, D extends Object,
       );
       //
       Future<ApiResult<void>?>? future = prepareFormMasterData(
-        dataFilter: dataFilter,
+        filterSnapshot: filterSnapshot,
         suggestedFormData: suggestedFormData,
         refreshedItem: refreshedItem,
         isNew: isNew,
@@ -497,12 +504,14 @@ abstract class BlockForm<ID extends Object, I extends Object, D extends Object,
     Map<String, dynamic> newFormData;
     if (data._dataState == DataState.ready) {
       try {
+        S? filterSnapshot = block.data.currentFilterSnapshot as S?;
+        //
         FlutterArtist.codeFlowLogger._addMethodCall(
           isLibCode: false,
           ownerClassInstance: this,
           methodName: "prepareFormData",
           parameters: {
-            "dataFilter": block._registeredOrDefaultDataFilter,
+            "filterSnapshot": filterSnapshot,
             "suggestedFormData": suggestedFormData,
             "refreshedItem": refreshedItem,
             "isNew": isNew,
@@ -511,7 +520,7 @@ abstract class BlockForm<ID extends Object, I extends Object, D extends Object,
         );
         //
         newFormData = prepareFormData(
-          dataFilter: block._registeredOrDefaultDataFilter,
+          filterSnapshot: filterSnapshot,
           suggestedFormData: suggestedFormData,
           refreshedItem: refreshedItem,
           isNew: isNew,

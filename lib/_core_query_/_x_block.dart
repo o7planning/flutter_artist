@@ -26,8 +26,16 @@ class _XBlock {
   });
 
   QueryType get queryType {
-    // TODO: Xem lai gia tri mac dinh
-    return __queryType ?? QueryType.queryIfNeed;
+    switch (__queryType) {
+      case null:
+        return needQuery ? QueryType.forceQuery : QueryType.queryIfNeed;
+      case QueryType.emptyQuery:
+        return QueryType.emptyQuery;
+      case QueryType.forceQuery:
+        return QueryType.forceQuery;
+      case QueryType.queryIfNeed:
+        return needQuery ? QueryType.forceQuery : QueryType.queryIfNeed;
+    }
   }
 
   ListBehavior get listBehavior {

@@ -235,4 +235,10 @@ class _XShelf {
       );
     }
   }
+
+  void printMe() {
+    for (String key in allXBlockMap.keys) {
+      print("XShelf/block: $key - ${allXBlockMap[key]}");
+    }
+  }
 }

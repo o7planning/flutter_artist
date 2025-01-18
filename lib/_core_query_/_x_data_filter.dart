@@ -13,6 +13,6 @@ class _XDataFilter {
 
   @override
   String toString() {
-    return "${getClassName(this)}(${getClassName(dataFilter)} - queried: $queried)";
+    return "${getClassName(dataFilter)} - queried: $queried >>> $suggestedFilterSnapshot";
   }
 }

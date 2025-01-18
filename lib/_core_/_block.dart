@@ -115,7 +115,7 @@ abstract class Block<
 
   String? get parentBlockName => parent?.name;
 
-  final BlockForm<ID, I, D, SF>? blockForm;
+  final BlockForm<ID, I, D, S, SF>? blockForm;
 
   final List<Block> _childBlocks;
 
@@ -550,6 +550,7 @@ abstract class Block<
   void _executeRoute({Function()? route}) {
     try {
       if (route != null) {
+        print("  ~~~~~~~~~~~~~~~~~~> Go to Route");
         route();
       }
     } catch (e, stackTrace) {
@@ -567,7 +568,7 @@ abstract class Block<
       parameters: {},
     );
     //
-    return await shelf._queryAllWithOverlayAndRestorable(
+    bool success = await shelf._queryAllWithOverlayAndRestorable(
       forceDataFilterOpt: null,
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [
@@ -582,6 +583,11 @@ abstract class Block<
       ],
       forceQueryBlockFormOpts: [],
     );
+    //
+    if (success) {
+      _executeRoute(route: route);
+    }
+    return success;
   }
 
   ///
@@ -607,7 +613,7 @@ abstract class Block<
       },
     );
     //
-    return await shelf._queryAllWithOverlayAndRestorable(
+    bool success = await shelf._queryAllWithOverlayAndRestorable(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: _registeredOrDefaultDataFilter,
         suggestedFilterSnapshot: suggestedFilterSnapshot,
@@ -625,6 +631,11 @@ abstract class Block<
       ],
       forceQueryBlockFormOpts: [],
     );
+    //
+    if (success) {
+      _executeRoute(route: route);
+    }
+    return success;
   }
 
   ///
@@ -649,8 +660,10 @@ abstract class Block<
         "pageable": pageable,
       },
     );
+
+    print("\n\n${getClassName(this)} ~~~~~~~~~~~~> queryAndPrepareToEdit()");
     //
-    return await shelf._queryAllWithOverlayAndRestorable(
+    bool success = await shelf._queryAllWithOverlayAndRestorable(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: _registeredOrDefaultDataFilter,
         suggestedFilterSnapshot: suggestedFilterSnapshot,
@@ -658,7 +671,7 @@ abstract class Block<
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [
         _BlockOpt(
-          queryType: null,
+          queryType: QueryType.forceQuery,
           block: this,
           pageable: pageable,
           listBehavior: listBehavior,
@@ -668,6 +681,44 @@ abstract class Block<
       ],
       forceQueryBlockFormOpts: [],
     );
+    //
+    print("Success: $success");
+    if (success) {
+      _executeRoute(route: route);
+    }
+    return success;
+  }
+
+  /// Empty Query and create new record and set block to "Ready State".
+  Future<bool> emptyQueryAndCreate({Function()? route}) async {
+    FlutterArtist.codeFlowLogger._addMethodCall(
+      isLibCode: true,
+      route: route,
+      ownerClassInstance: this,
+      methodName: "emptyQueryAndCreate",
+      parameters: {},
+    );
+    //
+    bool success = await shelf._queryAllWithOverlayAndRestorable(
+      forceDataFilterOpt: null,
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: [
+        _BlockOpt(
+          queryType: QueryType.emptyQuery,
+          block: this,
+          pageable: null,
+          listBehavior: ListBehavior.replace,
+          suggestedSelection: null,
+          postQueryBehavior: PostQueryBehavior.createNewItem,
+        ),
+      ],
+      forceQueryBlockFormOpts: [],
+    );
+    //
+    if (success) {
+      _executeRoute(route: route);
+    }
+    return success;
   }
 
   // Cascade query:
@@ -680,7 +731,7 @@ abstract class Block<
     if (!thisXBlock.needQuery) {
       // Query child blocks:
       for (_XBlock childXBlock in thisXBlock.childXBlocks) {
-        bool success = await __queryThisAndChildren(
+        bool success = await childXBlock.block.__queryThisAndChildren(
           thisXBlock: childXBlock,
         );
         if (!success) {
@@ -695,13 +746,19 @@ abstract class Block<
     //
     final S filterSnapshot;
     //
-    print("\n${getClassName(this)} ~~~~~~~~~~~~> DATAFILTER: ${xDataFilter}");
+    print("\n${getClassName(this)} ~~~~~~~~~~~~> dataFilter: ${xDataFilter}");
     if (!xDataFilter.queried) {
       print(
-          "${getClassName(this)} ~~~~~~~~~~~~> EXECUTE DATAFILTER: ${xDataFilter}");
+          "${getClassName(this)} ~~~~~~~~~~~~> execute dataFilter: ${getClassName(xDataFilter.dataFilter)}");
+
+      S? suggestedFilterSnapshot = xDataFilter.suggestedFilterSnapshot as S?;
+      print(
+          "${getClassName(this)} ~~~~~~~~~~~~> suggestedFilterSnapshot: ${suggestedFilterSnapshot}");
+      //
       // May throw _TransactionError:
+      //
       _FilterSnapshotWrapper result = await dataFilter.__prepareData(
-        suggestedFilterSnapshot: xDataFilter.suggestedFilterSnapshot,
+        suggestedFilterSnapshot: suggestedFilterSnapshot,
       );
       filterSnapshot = result.filterSnapshot as S;
       dataFilter._filterSnapshot = filterSnapshot;
@@ -710,7 +767,7 @@ abstract class Block<
       filterSnapshot = dataFilter._filterSnapshot! as S;
     }
     print(
-        "${getClassName(this)} ~~~~~~~~~~~~> FILTER SNAPSHORT: ${filterSnapshot}");
+        "${getClassName(this)} ~~~~~~~~~~~~> filterSnapshot: ${filterSnapshot}");
     //
     final QueryType queryType = thisXBlock.queryType;
     final ListBehavior listBehavior = thisXBlock.listBehavior;
@@ -718,6 +775,9 @@ abstract class Block<
     final SuggestedSelection? suggestedSelection =
         thisXBlock.suggestedSelection;
     final PageableData? pageable = thisXBlock.pageable;
+    //
+    print(
+        "${getClassName(this)} ~~~~~~~~~~~~> needQuery: ${thisXBlock.needQuery} - queryType: ${queryType}");
     //
     bool needRealQuery = false;
     ListBehavior forceListBehavior = listBehavior;
@@ -741,6 +801,9 @@ abstract class Block<
           }
         }
     }
+    //
+    print(
+        "${getClassName(this)} ~~~~~~~~~~~~> needRealQuery: ${needRealQuery}");
     //
     PageData<I>? pageData;
     DataState dataState = DataState.pending;
@@ -795,7 +858,7 @@ abstract class Block<
       dataState = DataState.ready;
 
       print(
-          "${getClassName(this)} ~~~~~~~~~~~~> callApiQuery/pageData = ${pageData?.items?.length}");
+          "${getClassName(this)} ~~~~~~~~~~~~> callApiQuery/itemCount = ${pageData?.items?.length}");
     }
     // needRealQuery = false
     else {
@@ -818,7 +881,10 @@ abstract class Block<
       pageData: pageData,
       dataState: dataState,
     );
-
+    //
+    print(
+        "${getClassName(this)} ~~~~~~~~~~~~> postQueryBehavior: ${postQueryBehavior}");
+    //
     if (postQueryBehavior == PostQueryBehavior.selectAvailableItem ||
         postQueryBehavior == PostQueryBehavior.selectAvailableItemToEdit) {
       // OLD Current Item
@@ -834,6 +900,10 @@ abstract class Block<
           ? null
           : data._findItemSameIdWith(item: suggestedCurrentItem);
 
+      //
+      print(
+          "${getClassName(this)} ~~~~~~~~~~~~> itemWithSameId: ${itemWithSameId}");
+
       if (itemWithSameId == null) {
         // Find first Item...
         I? firstItem = data.findFirstItem();
@@ -842,7 +912,6 @@ abstract class Block<
             thisXBlock: thisXBlock,
             item: firstItem,
             justQueried: true,
-            // suggestedSelection: suggestedSelection,
             forceForm: false,
           );
           if (!success) {
@@ -861,11 +930,12 @@ abstract class Block<
         //
         return true;
       } else {
+        print(
+            "${getClassName(this)} ~~~~~~~~~~~~> __prepareToShowOrEdit($itemWithSameId)");
         bool success = await __prepareToShowOrEdit(
           thisXBlock: thisXBlock,
           item: itemWithSameId,
           justQueried: true,
-          // suggestedSelection: suggestedSelection,
           forceForm:
               postQueryBehavior == PostQueryBehavior.selectAvailableItemToEdit,
         );
@@ -1161,7 +1231,7 @@ abstract class Block<
     }
     //
     for (_XBlock childXBlock in thisXBlock.childXBlocks) {
-      SuggestedSelection? childSelectionDirective = thisXBlock
+      SuggestedSelection? childSelectionDirective = childXBlock
           .suggestedSelection
           ?.findChildDirective(childXBlock.block.name);
       childXBlock.suggestedSelection = childSelectionDirective;
@@ -2208,12 +2278,15 @@ abstract class Block<
       }
     }
     //
+    print("${getClassName(this)} ~~~~~~~~~~~~> refreshedItem: $refreshedItem");
+    //
     bool success = await __insertOrReplaceItemInListAndRefreshChildren(
       thisXBlock: thisXBlock,
       // suggestedSelection: suggestedSelection,
       refreshedItemDetail: refreshedItem,
-      forceForm: forceForm, // ??????
+      forceForm: forceForm,
     );
+    print("${getClassName(this)} ~~~~~~~~~~~~> success: $success");
     if (!success) {
       return false;
     }
@@ -2887,6 +2960,10 @@ abstract class Block<
   }
 
   void __assertThisXBlock(_XBlock thisXBlock) {
-    assert(thisXBlock.block == this && thisXBlock.name == name);
+    if (thisXBlock.block != this || thisXBlock.name != name) {
+      String message = "Error Assets block: ${thisXBlock.block} - $this";
+      print("FATAL ERROR: $message");
+      throw message;
+    }
   }
 }
