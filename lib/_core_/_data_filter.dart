@@ -43,6 +43,10 @@ abstract class DataFilter<
     return FILTER_SNAPSHOT.toString();
   }
 
+  String getSuggestedFilterDataTypeAsString() {
+    return SUGGESTED_FILTER_DATA.toString();
+  }
+
   ///
   /// This method is called immediately after calling [prepareData()] method if there are no errors.
   ///
@@ -50,7 +54,7 @@ abstract class DataFilter<
 
   ///
   /// ```Dart
-  /// Future<void> prepareData({MyFilterSnapshot? suggestedFilterSnapshot}) {
+  /// Future<void> prepareData({MySuggestedFilterData? suggestedFilterData}) {
   ///     ApiResult<dynamic>? r1 = await callYourApi1();
   ///     // Throws ApiError if r1.isError()
   ///     r1?.throwIfError();
@@ -62,18 +66,18 @@ abstract class DataFilter<
   /// ```
   ///
   Future<void> prepareData({
-    FILTER_SNAPSHOT? suggestedFilterSnapshot,
+    SUGGESTED_FILTER_DATA? suggestedFilterData,
   });
 
   Future<_FilterSnapshotWrapper<FILTER_SNAPSHOT>> __prepareData({
-    required FILTER_SNAPSHOT? suggestedFilterSnapshot,
+    required SUGGESTED_FILTER_DATA? suggestedFilterData,
   }) async {
     __currentTryingSnapshotId + 1;
     final int tryingSnapshotId = __currentTryingSnapshotId;
     //
     try {
       await prepareData(
-        suggestedFilterSnapshot: suggestedFilterSnapshot,
+        suggestedFilterData: suggestedFilterData,
       );
       // If no error:
       FILTER_SNAPSHOT tryingSnapshot = takeSnapshot();
@@ -97,21 +101,21 @@ abstract class DataFilter<
   /// Any Scalar or Block that is not queried will be set to LAZY state.
   ///
   Future<bool> queryAll({
-    FILTER_SNAPSHOT? suggestedFilterSnapshot,
+    SUGGESTED_FILTER_DATA? suggestedFilterData,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       ownerClassInstance: this,
       methodName: "queryAll",
       parameters: {
-        "suggestedFilterSnapshot": suggestedFilterSnapshot,
+        "suggestedFilterData": suggestedFilterData,
       },
       route: null,
     );
     return await shelf._queryAllWithOverlayAndRestorable(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: this,
-        suggestedFilterSnapshot: suggestedFilterSnapshot,
+        suggestedFilterData: suggestedFilterData,
       ),
       forceQueryScalarOpts: _scalars.map((s) => _ScalarOpt(scalar: s)).toList(),
       forceQueryBlockOpts: _blocks
@@ -136,14 +140,14 @@ abstract class DataFilter<
   /// [forceBlockWithQueryOptions.block] will be queried mandatory.
   ///
   // Future<bool> _queryAllWithOverlayAndRestorable({
-  //   required S? suggestedFilterSnapshot,
+  //   required S? suggestedFilterData,
   //   required _BlockOpt? forceBlockWithQueryOptions,
   //   required _ScalarOpt? forceScalarWithQueryOptions,
   // }) async {
   //   return await FlutterArtist.executeTask(
   //     asyncFunction: () async {
   //       return await __queryAllIfNeedWithRestorable(
-  //         suggestedFilterSnapshot: suggestedFilterSnapshot,
+  //         suggestedFilterData: suggestedFilterData,
   //         forceBlockWithQueryOptions: null,
   //         forceScalarWithQueryOptions: null,
   //       );
@@ -156,7 +160,7 @@ abstract class DataFilter<
   /// Any Scalar or Block that is not queried will be set to LAZY state.
   ///
   // Future<bool> __queryAllIfNeedWithRestorable({
-  //   required S? suggestedFilterSnapshot,
+  //   required S? suggestedFilterData,
   //   required _BlockOpt? forceBlockWithQueryOptions,
   //   required _ScalarOpt? forceScalarWithQueryOptions,
   // }) async {
@@ -174,7 +178,7 @@ abstract class DataFilter<
   //     );
   //     //
   //     _FilterSnapshotWrapper<S> tryingSnapshot = await __prepareData(
-  //       suggestedFilterSnapshot: suggestedFilterSnapshot,
+  //       suggestedFilterData: suggestedFilterData,
   //     );
   //     //
   //     final int tryingFilterSnapshotId = tryingSnapshot.filterSnapshotId;

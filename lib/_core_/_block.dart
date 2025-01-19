@@ -117,8 +117,8 @@ abstract class Block<
 
   String? get parentBlockName => parent?.name;
 
-  final BlockForm<ID, ITEM, ITEM_DETAIL, SUGGESTED_FILTER_DATA, FILTER_SNAPSHOT,
-      SUGGESTED_FORM_DATA>? blockForm;
+  final BlockForm<ID, ITEM, ITEM_DETAIL, FILTER_SNAPSHOT, SUGGESTED_FORM_DATA>?
+      blockForm;
 
   final List<Block> _childBlocks;
 
@@ -199,6 +199,10 @@ abstract class Block<
 
   String getItemDetailTypeAsString() {
     return ITEM_DETAIL.toString();
+  }
+
+  String getSuggestedFilterDataTypeAsString() {
+    return SUGGESTED_FILTER_DATA.toString();
   }
 
   String getFilterSnapshotTypeAsString() {
@@ -601,7 +605,7 @@ abstract class Block<
   @nonVirtual
   Future<bool> query({
     ListBehavior listBehavior = ListBehavior.replace,
-    FILTER_SNAPSHOT? suggestedFilterSnapshot,
+    SUGGESTED_FILTER_DATA? suggestedFilterData,
     SuggestedSelection? suggestedSelection,
     PageableData? pageable,
     Function()? route,
@@ -612,7 +616,7 @@ abstract class Block<
       ownerClassInstance: this,
       methodName: "query",
       parameters: {
-        "suggestedFilterSnapshot": suggestedFilterSnapshot,
+        "suggestedFilterData": suggestedFilterData,
         "suggestedSelection": suggestedSelection,
         "pageable": pageable,
       },
@@ -621,7 +625,7 @@ abstract class Block<
     bool success = await shelf._queryAllWithOverlayAndRestorable(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: _registeredOrDefaultDataFilter,
-        suggestedFilterSnapshot: suggestedFilterSnapshot,
+        suggestedFilterData: suggestedFilterData,
       ),
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [
@@ -648,7 +652,7 @@ abstract class Block<
   ///
   @nonVirtual
   Future<bool> queryAndPrepareToEdit({
-    FILTER_SNAPSHOT? suggestedFilterSnapshot,
+    SUGGESTED_FILTER_DATA? suggestedFilterData,
     ListBehavior listBehavior = ListBehavior.replace,
     SuggestedSelection<ID>? suggestedSelection,
     PageableData? pageable,
@@ -660,7 +664,7 @@ abstract class Block<
       ownerClassInstance: this,
       methodName: "queryAndPrepareToEdit",
       parameters: {
-        "suggestedFilterSnapshot": suggestedFilterSnapshot,
+        "suggestedFilterData": suggestedFilterData,
         "suggestedSelection": suggestedSelection,
         "pageable": pageable,
       },
@@ -671,7 +675,7 @@ abstract class Block<
     bool success = await shelf._queryAllWithOverlayAndRestorable(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: _registeredOrDefaultDataFilter,
-        suggestedFilterSnapshot: suggestedFilterSnapshot,
+        suggestedFilterData: suggestedFilterData,
       ),
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [
@@ -696,7 +700,7 @@ abstract class Block<
 
   /// Empty Query and create new record and set block to "Ready State".
   Future<bool> emptyQueryAndCreate({
-    FILTER_SNAPSHOT? suggestedFilterSnapshot,
+    SUGGESTED_FILTER_DATA? suggestedFilterData,
     Function()? route,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -710,7 +714,7 @@ abstract class Block<
     bool success = await shelf._queryAllWithOverlayAndRestorable(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: this._registeredOrDefaultDataFilter,
-        suggestedFilterSnapshot: suggestedFilterSnapshot,
+        suggestedFilterData: suggestedFilterData,
       ),
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [
@@ -762,15 +766,15 @@ abstract class Block<
       print(
           "${getClassName(this)} ~~~~~~~~~~~~> execute dataFilter: ${getClassName(xDataFilter.dataFilter)}");
 
-      FILTER_SNAPSHOT? suggestedFilterSnapshot =
-          xDataFilter.suggestedFilterSnapshot as FILTER_SNAPSHOT?;
+      SUGGESTED_FILTER_DATA? suggestedFilterData =
+          xDataFilter.suggestedFilterData as SUGGESTED_FILTER_DATA?;
       print(
-          "${getClassName(this)} ~~~~~~~~~~~~> suggestedFilterSnapshot: ${suggestedFilterSnapshot}");
+          "${getClassName(this)} ~~~~~~~~~~~~> suggestedFilterData: ${suggestedFilterData}");
       //
       // May throw _TransactionError:
       //
       _FilterSnapshotWrapper result = await dataFilter.__prepareData(
-        suggestedFilterSnapshot: suggestedFilterSnapshot,
+        suggestedFilterData: suggestedFilterData,
       );
       filterSnapshot = result.filterSnapshot as FILTER_SNAPSHOT;
       dataFilter._filterSnapshot = filterSnapshot;
@@ -1532,7 +1536,7 @@ abstract class Block<
   }
 
   Future<bool> _executeQuickActionWithOverlayAndRestorable({
-    required FILTER_SNAPSHOT? suggestedFilterSnapshot,
+    required SUGGESTED_FILTER_DATA? suggestedFilterData,
     required SuggestedSelection? suggestedSelection,
     required QuickActionData action,
     required AfterQuickAction? afterQuickAction,
@@ -1540,7 +1544,7 @@ abstract class Block<
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
         bool success = await __executeQuickActionWithRestorable(
-          suggestedFilterSnapshot: suggestedFilterSnapshot,
+          suggestedFilterData: suggestedFilterData,
           suggestedSelection: suggestedSelection,
           data: action,
           afterQuickAction: afterQuickAction,
@@ -1560,7 +1564,7 @@ abstract class Block<
   }
 
   Future<bool> __executeQuickActionWithRestorable({
-    required FILTER_SNAPSHOT? suggestedFilterSnapshot,
+    required SUGGESTED_FILTER_DATA? suggestedFilterData,
     required SuggestedSelection? suggestedSelection,
     required QuickActionData data,
     required AfterQuickAction? afterQuickAction,
@@ -1569,7 +1573,7 @@ abstract class Block<
       shelf: shelf,
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: _registeredOrDefaultDataFilter,
-        suggestedFilterSnapshot: suggestedFilterSnapshot,
+        suggestedFilterData: suggestedFilterData,
       ),
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: _childBlocks
@@ -1875,7 +1879,7 @@ abstract class Block<
   /// so you need to override [callApiQuickAction] method.
   ///
   Future<bool> executeQuickAction({
-    FILTER_SNAPSHOT? suggestedFilterSnapshot,
+    SUGGESTED_FILTER_DATA? suggestedFilterData,
     SuggestedSelection? suggestedSelection,
     required ActionConfirmation? actionConfirmation,
     required QuickActionData action,
@@ -1887,7 +1891,7 @@ abstract class Block<
       ownerClassInstance: this,
       methodName: "executeQuickAction",
       parameters: {
-        "suggestedFilterSnapshot": suggestedFilterSnapshot,
+        "suggestedFilterData": suggestedFilterData,
         "suggestedSelection": suggestedSelection,
         "action": action,
         "afterQuickAction": afterQuickAction,
@@ -1917,7 +1921,7 @@ abstract class Block<
     }
     try {
       bool success = await _executeQuickActionWithOverlayAndRestorable(
-        suggestedFilterSnapshot: suggestedFilterSnapshot,
+        suggestedFilterData: suggestedFilterData,
         suggestedSelection: suggestedSelection,
         action: action,
         afterQuickAction: afterQuickAction,

@@ -4,7 +4,6 @@ abstract class BlockForm<
     ID extends Object,
     ITEM extends Object,
     ITEM_DETAIL extends Object,
-    SUGGESTED_FILTER_DATA extends SuggestedFilterData,
     FILTER_SNAPSHOT extends FilterSnapshot,
     SUGGESTED_FORM_DATA extends SuggestedFormData> {
   QueryMode _queryMode = QueryMode.lazy;
@@ -15,8 +14,8 @@ abstract class BlockForm<
 
   Shelf get shelf => block.shelf;
 
-  late final Block<ID, ITEM, ITEM_DETAIL, SUGGESTED_FILTER_DATA,
-      FILTER_SNAPSHOT, SUGGESTED_FORM_DATA> block;
+  late final Block<ID, ITEM, ITEM_DETAIL, SuggestedFilterData, FILTER_SNAPSHOT,
+      SUGGESTED_FORM_DATA> block;
 
   DataState get dataState => data._dataState;
 

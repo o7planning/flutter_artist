@@ -75,6 +75,29 @@ abstract class Shelf {
               "DataFilter not found '${scalar.registerDataFilterName}' in '${getClassName(this)}'");
         }
         //
+        const Type suggestedFilterDataType = SuggestedFilterData;
+        final String suggestedFilterDataBase =
+            suggestedFilterDataType.toString();
+        final String suggestedFilterDataBF =
+            dataFilter.getSuggestedFilterDataTypeAsString();
+        final String suggestedFilterDataB =
+            scalar.getSuggestedFilterDataTypeAsString();
+        //
+        if (suggestedFilterDataBF == suggestedFilterDataBase) {
+          throw _registerError(
+              "You need to create your own class that extends from '$suggestedFilterDataBase' "
+              "as SUGGESTED_FILTER_DATA for '${getClassName(dataFilter)}' \n"
+              "Or using $EmptyFilterData as SUGGESTED_FILTER_DATA \n"
+              " >> Currently, ${getClassName(dataFilter)}.SUGGESTED_FILTER_DATA = $suggestedFilterDataBF");
+        }
+        //
+        if (suggestedFilterDataBF != suggestedFilterDataB) {
+          throw _registerError(
+              "The Scalar and its Suggested-Filter-Data must have the same SUGGESTED_FILTER_DATA type. \n"
+              " >> ${getClassName(scalar)}.SUGGESTED_FILTER_DATA = $suggestedFilterDataB \n"
+              " >> ${getClassName(dataFilter)}.SUGGESTED_FILTER_DATA = $suggestedFilterDataBF");
+        }
+        // ----------------
         const Type filterSnapshotType = FilterSnapshot;
         final String filterSnapshotBase = filterSnapshotType.toString();
         final String filterSnapshotBF =
@@ -84,15 +107,16 @@ abstract class Shelf {
         if (filterSnapshotBF == filterSnapshotBase) {
           throw _registerError(
               "You need to create your own class that extends from '$filterSnapshotBase' "
-              "as Filter-Snapshot for '${getClassName(dataFilter)}'\n"
-              " >> Currently, Filter-Snapshot of '${getClassName(dataFilter)}'  Data-Filter is '$filterSnapshotBF'");
+              "as FILTER_SNAPSHOT for '${getClassName(dataFilter)}' \n"
+              "Or using $EmptyFilterSnapshot as FILTER_SNAPSHOT \n"
+              " >> Currently, ${getClassName(dataFilter)}.FILTER_SNAPSHOT = $filterSnapshotBF");
         }
         //
         if (filterSnapshotBF != filterSnapshotB) {
           throw _registerError(
-              "Scalar and  Data-Filter must have the same Filter-Snapshot type.\n"
-              " >> Filter-Snapshot of '${getClassName(scalar)}' Scalar is '$filterSnapshotB'\n"
-              " >> Filter-Snapshot of '${getClassName(dataFilter)}'  Data-Filter is '$filterSnapshotBF'");
+              "The Scalar and its Data-Filter must have the same FILTER_SNAPSHOT type. \n"
+              " >> ${getClassName(scalar)}.FILTER_SNAPSHOT = $filterSnapshotB \n"
+              " >> ${getClassName(dataFilter)}.FILTER_SNAPSHOT = $filterSnapshotBF");
         }
         //
         dataFilter._scalars.add(scalar);
@@ -114,9 +138,9 @@ abstract class Shelf {
         //
         if (filterSnapshotB != filterSnapshotEmpty) {
           throw _registerError(
-              "Filter-Snapshot of '${getClassName(scalar)}' scalar must be '$filterSnapshotEmpty' "
-              "because this scalar does not have a  Data-Filter.\n"
-              " >> Currently, its Filter-Snapshot is '$filterSnapshotB'");
+              "FILTER_SNAPSHOT of '${getClassName(scalar)}' scalar must be '$filterSnapshotEmpty' "
+              "because this scalar does not have a DATA_FILTER.\n"
+              " >> Currently, ${getClassName(scalar)}.FILTER_SNAPSHOT = $filterSnapshotB");
         }
       }
     }
@@ -146,6 +170,30 @@ abstract class Shelf {
         throw _registerError(
             "DataFilter not found '${block.registerDataFilterName}' in '${getClassName(this)}'");
       }
+      //
+      //
+      const Type suggestedFilterDataType = SuggestedFilterData;
+      final String suggestedFilterDataBase = suggestedFilterDataType.toString();
+      final String suggestedFilterDataBF =
+          dataFilter.getSuggestedFilterDataTypeAsString();
+      final String suggestedFilterDataB =
+          block.getSuggestedFilterDataTypeAsString();
+      //
+      if (suggestedFilterDataBF == suggestedFilterDataBase) {
+        throw _registerError(
+            "You need to create your own class that extends from '$suggestedFilterDataBase' "
+            "as SUGGESTED_FILTER_DATA for '${getClassName(dataFilter)}' \n"
+            "Or using $EmptyFilterData as SUGGESTED_FILTER_DATA \n"
+            " >> Currently, ${getClassName(dataFilter)}.SUGGESTED_FILTER_DATA = $suggestedFilterDataBF");
+      }
+      //
+      if (suggestedFilterDataBF != suggestedFilterDataB) {
+        throw _registerError(
+            "The Scalar and its Suggested-Filter-Data must have the same SUGGESTED_FILTER_DATA type. \n"
+            " >> ${getClassName(block)}.SUGGESTED_FILTER_DATA = $suggestedFilterDataB \n"
+            " >> ${getClassName(dataFilter)}.SUGGESTED_FILTER_DATA = $suggestedFilterDataBF");
+      }
+      // -----------------
       const Type filterSnapshotType = FilterSnapshot;
       final String filterSnapshotBase = filterSnapshotType.toString();
       final String filterSnapshotBF =
@@ -155,15 +203,15 @@ abstract class Shelf {
       if (filterSnapshotBF == filterSnapshotBase) {
         throw _registerError(
             "You need to create your own class that extends from '$filterSnapshotBase' "
-            "as Filter-Snapshot for '${getClassName(dataFilter)}'\n"
-            " >> Currently, Filter-Snapshot of '${getClassName(dataFilter)}'  Data-Filter is '$filterSnapshotBF'");
+            "as FILTER_SNAPSHOT for '${getClassName(dataFilter)}'\n"
+            " >> Currently, ${getClassName(dataFilter)}.FILTER_SNAPSHOT = $filterSnapshotBF");
       }
       //
       if (filterSnapshotBF != filterSnapshotB) {
         throw _registerError(
-            "Block and  Data-Filter must have the same Filter-Snapshot type.\n"
-            " >> Filter-Snapshot of '${getClassName(block)}' Block is '$filterSnapshotB'\n"
-            " >> Filter-Snapshot of '${getClassName(dataFilter)}'  Data-Filter is '$filterSnapshotBF'");
+            "The Block and its Data-Filter must have the same FILTER_SNAPSHOT type. \n"
+            " >> ${getClassName(block)}.FILTER_SNAPSHOT = $filterSnapshotB \n"
+            " >> ${getClassName(dataFilter)}.FILTER_SNAPSHOT = $filterSnapshotBF");
       }
       //
       dataFilter._blocks.add(block);
@@ -185,8 +233,8 @@ abstract class Shelf {
       if (filterSnapshotB != filterSnapshotEmpty) {
         throw _registerError(
             "Filter-Snapshot of '${getClassName(block)}' block must be '$filterSnapshotEmpty' "
-            "because this block does not have a  Data-Filter.\n"
-            " >> Currently, its Filter-Snapshot is '$filterSnapshotB'");
+            "because this block does not have a DATA_FILTER.\n"
+            " >> Currently, ${getClassName(block)}.FILTER_SNAPSHOT = $filterSnapshotB");
       }
     }
     for (Block childBlock in block.childBlocks) {
@@ -607,7 +655,7 @@ abstract class Shelf {
         if (!xDataFilter.queried) {
           // May throw _TransactionError:
           _FilterSnapshotWrapper result = await dataFilter.__prepareData(
-            suggestedFilterSnapshot: xDataFilter.suggestedFilterSnapshot,
+            suggestedFilterData: xDataFilter.suggestedFilterData,
           );
           filterSnapshot = result.filterSnapshot;
           dataFilter._filterSnapshot = filterSnapshot;

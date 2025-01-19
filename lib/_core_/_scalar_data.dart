@@ -1,7 +1,12 @@
 part of '../flutter_artist.dart';
 
-class ScalarData<VALUE, SUGGESTED_FILTER_DATA extends SuggestedFilterData,
+class ScalarData<
+    VALUE extends Object,
+    SUGGESTED_FILTER_DATA extends SuggestedFilterData,
     FILTER_SNAPSHOT extends FilterSnapshot> {
+  ///
+  /// Owner Scalar.
+  ///
   final Scalar<VALUE, SUGGESTED_FILTER_DATA, FILTER_SNAPSHOT> scalar;
 
   bool __isTemporaryMode = false;

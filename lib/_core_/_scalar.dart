@@ -20,7 +20,9 @@ part of '../flutter_artist.dart';
 /// OrderSummaryData value = scalar.data.value;
 /// ```
 ///
-abstract class Scalar<VALUE, SUGGESTED_FILTER_DATA extends SuggestedFilterData,
+abstract class Scalar<
+    VALUE extends Object,
+    SUGGESTED_FILTER_DATA extends SuggestedFilterData,
     FILTER_SNAPSHOT extends FilterSnapshot> extends DataContainer {
   final String name;
 
@@ -33,7 +35,7 @@ abstract class Scalar<VALUE, SUGGESTED_FILTER_DATA extends SuggestedFilterData,
   }
 
   String get _classParametersDefinition {
-    return "<${getDataTypeAsString()}, ${getFilterSnapshotTypeAsString()}>";
+    return "<${getSuggestedFilterDataTypeAsString()}, ${getValueTypeAsString()}, ${getFilterSnapshotTypeAsString()}>";
   }
 
   ///
@@ -88,8 +90,12 @@ abstract class Scalar<VALUE, SUGGESTED_FILTER_DATA extends SuggestedFilterData,
   })  : registerDataFilterName = dataFilterName,
         __listenItemTypes = listenTypes;
 
-  String getDataTypeAsString() {
+  String getValueTypeAsString() {
     return VALUE.toString();
+  }
+
+  String getSuggestedFilterDataTypeAsString() {
+    return SUGGESTED_FILTER_DATA.toString();
   }
 
   String getFilterSnapshotTypeAsString() {
@@ -140,20 +146,20 @@ abstract class Scalar<VALUE, SUGGESTED_FILTER_DATA extends SuggestedFilterData,
   ///
   @nonVirtual
   Future<bool> query({
-    FILTER_SNAPSHOT? suggestedFilterSnapshot,
+    SUGGESTED_FILTER_DATA? suggestedFilterData,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       ownerClassInstance: this,
       methodName: "query",
-      parameters: {},
+      parameters: {"suggestedFilterData": suggestedFilterData},
     );
     //
     return await shelf._queryAllWithOverlayAndRestorable(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: _registeredOrDefaultDataFilter,
-        suggestedFilterSnapshot: suggestedFilterSnapshot,
+        suggestedFilterData: suggestedFilterData,
       ),
       forceQueryScalarOpts: [_ScalarOpt(scalar: this)],
       forceQueryBlockOpts: [],

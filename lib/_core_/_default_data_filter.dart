@@ -12,7 +12,7 @@ class _DefaultDataFilter
 
   @override
   Future<void> prepareData({
-    EmptyFilterSnapshot? suggestedFilterSnapshot,
+    EmptyFilterData? suggestedFilterData,
   }) async {
     // Do nothing
   }
