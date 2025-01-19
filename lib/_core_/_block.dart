@@ -19,7 +19,9 @@ part of '../flutter_artist.dart';
 ///     ...
 /// }
 /// ```
-/// [D]: Item Detail. For example:
+///
+/// [ITEM_DETAIL]: Item Detail.
+/// You need to implement [convertItemDetailToItem] method to convert Item-Detail to Item.
 /// ```dart
 ///  class EmployeeData  {
 ///     int id;
@@ -27,11 +29,36 @@ part of '../flutter_artist.dart';
 ///     String email;
 ///     String phoneNumber;
 /// }
+///
+/// class EmployeeBlock extends Block<...> {
+///
+///     EmployeeInfo convertItemDetailToItem({EmployeeData itemDetail}) {
+///       return EmployeeInfo(itemDetail.id, itemDetail.name);
+///     }
+/// }
 /// ```
-/// You need to implement [convertItemDetailToItem] method to convert Item-Detail to Item.
-/// ```dart
-/// EmployeeInfo convertItemDetailToItem({EmployeeData itemDetail}) {
-///    return EmployeeInfo(itemDetail.id, itemDetail.name);
+///
+/// [FILTER_INPUT]:
+/// ```
+/// class EmployeeFilterInput extends FilterInput {
+///    String? searchText,
+///    int? departmentId;
+/// }
+/// ```
+///
+/// [FILTER_CRITERIA]:
+/// ```
+/// class EmployeeFilterCriteria extends FilterCriteria {
+///    String? searchText,
+///    DepartmentInfo? department;
+/// }
+/// ```
+///
+/// [SUGGESTED_FORM_DATA]: Additional parameters are used to create a record in the Form.
+/// For example: Create an employee with the specified department.
+/// ```
+/// class EmployeeExtraFormData extends SuggestedFormData {
+///    DepartmentInfo? department;
 /// }
 /// ```
 ///
@@ -766,10 +793,8 @@ abstract class Block<
       print(
           "${getClassName(this)} ~~~~~~~~~~~~> execute dataFilter: ${getClassName(xDataFilter.dataFilter)}");
 
-      FILTER_INPUT? filterInput =
-          xDataFilter.filterInput as FILTER_INPUT?;
-      print(
-          "${getClassName(this)} ~~~~~~~~~~~~> filterInput: ${filterInput}");
+      FILTER_INPUT? filterInput = xDataFilter.filterInput as FILTER_INPUT?;
+      print("${getClassName(this)} ~~~~~~~~~~~~> filterInput: ${filterInput}");
       //
       // May throw _TransactionError:
       //
