@@ -1,10 +1,10 @@
 part of '../flutter_artist.dart';
 
-abstract class EmptyFilterCriteria extends Equatable {
-  const EmptyFilterCriteria();
+abstract class FilterCriteria extends Equatable {
+  const FilterCriteria();
 }
 
-class EmptyEmptyFilterCriteria extends EmptyFilterCriteria {
+class EmptyFilterCriteria extends FilterCriteria {
   @override
   List<Object?> get props => [];
 }

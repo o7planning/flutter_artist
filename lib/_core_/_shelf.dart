@@ -76,8 +76,7 @@ abstract class Shelf {
         }
         //
         const Type suggestedCriteriaType = SuggestedCriteria;
-        final String suggestedCriteriaBase =
-            suggestedCriteriaType.toString();
+        final String suggestedCriteriaBase = suggestedCriteriaType.toString();
         final String suggestedCriteriaBF =
             dataFilter.getSuggestedCriteriaTypeAsString();
         final String suggestedCriteriaB =
@@ -98,18 +97,17 @@ abstract class Shelf {
               " >> ${getClassName(dataFilter)}.SUGGESTED_CRITERIA = $suggestedCriteriaBF");
         }
         // ----------------
-        const Type filterCriteriaType = EmptyFilterCriteria;
+        const Type filterCriteriaType = FilterCriteria;
         final String filterCriteriaBase = filterCriteriaType.toString();
         final String filterCriteriaBF =
-            dataFilter.getEmptyFilterCriteriaTypeAsString();
-        final String filterCriteriaB =
-            scalar.getEmptyFilterCriteriaTypeAsString();
+            dataFilter.getFilterCriteriaTypeAsString();
+        final String filterCriteriaB = scalar.getFilterCriteriaTypeAsString();
         //
         if (filterCriteriaBF == filterCriteriaBase) {
           throw _registerError(
               "You need to create your own class that extends from '$filterCriteriaBase' "
               "as FILTER_CRITERIA for '${getClassName(dataFilter)}' \n"
-              "Or using $EmptyEmptyFilterCriteria as FILTER_CRITERIA \n"
+              "Or using $EmptyFilterCriteria as FILTER_CRITERIA \n"
               " >> Currently, ${getClassName(dataFilter)}.FILTER_CRITERIA = $filterCriteriaBF");
         }
         //
@@ -133,11 +131,9 @@ abstract class Shelf {
         //
         _allDataFilters.add(defaultDataFilter);
         //
-        const Type emptyEmptyFilterCriteriaType = EmptyEmptyFilterCriteria;
-        final String filterCriteriaEmpty =
-            emptyEmptyFilterCriteriaType.toString();
-        final String filterCriteriaB =
-            scalar.getEmptyFilterCriteriaTypeAsString();
+        const Type emptyFilterCriteriaType = EmptyFilterCriteria;
+        final String filterCriteriaEmpty = emptyFilterCriteriaType.toString();
+        final String filterCriteriaB = scalar.getFilterCriteriaTypeAsString();
         //
         if (filterCriteriaB != filterCriteriaEmpty) {
           throw _registerError(
@@ -197,11 +193,11 @@ abstract class Shelf {
             " >> ${getClassName(dataFilter)}.SUGGESTED_CRITERIA = $suggestedCriteriaBF");
       }
       // -----------------
-      const Type filterCriteriaType = EmptyFilterCriteria;
+      const Type filterCriteriaType = FilterCriteria;
       final String filterCriteriaBase = filterCriteriaType.toString();
       final String filterCriteriaBF =
-          dataFilter.getEmptyFilterCriteriaTypeAsString();
-      final String filterCriteriaB = block.getEmptyFilterCriteriaTypeAsString();
+          dataFilter.getFilterCriteriaTypeAsString();
+      final String filterCriteriaB = block.getFilterCriteriaTypeAsString();
       //
       if (filterCriteriaBF == filterCriteriaBase) {
         throw _registerError(
@@ -229,10 +225,9 @@ abstract class Shelf {
       //
       _allDataFilters.add(defaultDataFilter);
       //
-      const Type emptyEmptyFilterCriteriaType = EmptyEmptyFilterCriteria;
-      final String filterCriteriaEmpty =
-          emptyEmptyFilterCriteriaType.toString();
-      final String filterCriteriaB = block.getEmptyFilterCriteriaTypeAsString();
+      const Type emptyFilterCriteriaType = EmptyFilterCriteria;
+      final String filterCriteriaEmpty = emptyFilterCriteriaType.toString();
+      final String filterCriteriaB = block.getFilterCriteriaTypeAsString();
       //
       if (filterCriteriaB != filterCriteriaEmpty) {
         throw _registerError(
@@ -655,7 +650,7 @@ abstract class Shelf {
         final DataFilter dataFilter = xDataFilter.dataFilter;
         final Scalar scalar = xScalar.scalar;
         //
-        final EmptyFilterCriteria filterCriteria;
+        final FilterCriteria filterCriteria;
         if (!xDataFilter.queried) {
           // May throw _TransactionError:
           _EmptyFilterCriteriaWrapper result = await dataFilter.__prepareData(

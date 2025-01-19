@@ -5,7 +5,7 @@ part of '../flutter_artist.dart';
 /// ```dart
 /// class EmployeeBlock
 ///       extends Block<int,EmployeeInfo,EmployeeData,
-///                      EmptyEmptyFilterCriteria,SuggestedFormData> {
+///                      EmptyFilterCriteria,SuggestedFormData> {
 ///
 /// }
 /// ```
@@ -40,7 +40,7 @@ abstract class Block<
     ITEM extends Object,
     ITEM_DETAIL extends Object,
     SUGGESTED_CRITERIA extends SuggestedCriteria,
-    FILTER_CRITERIA extends EmptyFilterCriteria,
+    FILTER_CRITERIA extends FilterCriteria,
     SUGGESTED_FORM_DATA extends SuggestedFormData> extends DataContainer {
   @Deprecated("Xoa di, khong su dung")
   QueryMode _queryMode = QueryMode.lazy;
@@ -82,7 +82,7 @@ abstract class Block<
 
   String get _classParametersDefinition {
     return "<${getItemIdTypeAsString()}, ${getItemTypeAsString()}, ${getItemDetailTypeAsString()}, "
-        "${getEmptyFilterCriteriaTypeAsString()}, ${getSuggestedFormDataTypeAsString()}>";
+        "${getFilterCriteriaTypeAsString()}, ${getSuggestedFormDataTypeAsString()}>";
   }
 
   final String? description;
@@ -205,7 +205,7 @@ abstract class Block<
     return SUGGESTED_CRITERIA.toString();
   }
 
-  String getEmptyFilterCriteriaTypeAsString() {
+  String getFilterCriteriaTypeAsString() {
     return FILTER_CRITERIA.toString();
   }
 

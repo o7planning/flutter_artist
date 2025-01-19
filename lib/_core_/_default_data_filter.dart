@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
 class _DefaultDataFilter
-    extends DataFilter<EmptySuggestedCriteria, EmptyEmptyFilterCriteria> {
+    extends DataFilter<EmptySuggestedCriteria, EmptyFilterCriteria> {
   _DefaultDataFilter({
     required String name,
     required Shelf shelf,
@@ -21,7 +21,7 @@ class _DefaultDataFilter
   List<Restorable> get restorableCriteria => [];
 
   @override
-  EmptyEmptyFilterCriteria createCriteria() {
-    return EmptyEmptyFilterCriteria();
+  EmptyFilterCriteria createCriteria() {
+    return EmptyFilterCriteria();
   }
 }

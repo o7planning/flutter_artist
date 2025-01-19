@@ -4,7 +4,7 @@ abstract class BlockForm<
     ID extends Object,
     ITEM extends Object,
     ITEM_DETAIL extends Object,
-    FILTER_CRITERIA extends EmptyFilterCriteria,
+    FILTER_CRITERIA extends FilterCriteria,
     SUGGESTED_FORM_DATA extends SuggestedFormData> {
   QueryMode _queryMode = QueryMode.lazy;
 

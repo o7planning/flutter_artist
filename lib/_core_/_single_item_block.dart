@@ -24,8 +24,8 @@ abstract class SingleItemBlock<
         ID extends Object,
         ITEM extends Object,
         ITEM_DETAIL extends Object,
-        FILTER_CRITERIA extends EmptyFilterCriteria,
         SUGGESTED_CRITERIA extends SuggestedCriteria,
+        FILTER_CRITERIA extends FilterCriteria,
         SUGGESTED_FORM_DATA extends SuggestedFormData>
     extends Block<ID, ITEM, ITEM_DETAIL, SUGGESTED_CRITERIA, FILTER_CRITERIA,
         SUGGESTED_FORM_DATA> {

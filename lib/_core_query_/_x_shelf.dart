@@ -85,8 +85,7 @@ class _XShelf {
   // ***************************************************************************
 
   void __setForceDataFilter(_DataFilterOpt? forceDataFilter) {
-    if (forceDataFilter != null &&
-        forceDataFilter.suggestedCriteria != null) {
+    if (forceDataFilter != null && forceDataFilter.suggestedCriteria != null) {
       _XDataFilter xDataFilter =
           allXDataFilterMap[forceDataFilter.dataFilter.name]!;
       xDataFilter.suggestedCriteria = forceDataFilter.suggestedCriteria;

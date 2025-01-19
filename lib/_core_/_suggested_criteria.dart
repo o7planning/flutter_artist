@@ -1,9 +1,9 @@
 part of '../flutter_artist.dart';
 
 abstract class SuggestedCriteria {
-  // Empty
+  const SuggestedCriteria();
 }
 
 class EmptySuggestedCriteria extends SuggestedCriteria {
-  // Empty
+  const EmptySuggestedCriteria();
 }

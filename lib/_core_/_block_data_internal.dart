@@ -5,7 +5,7 @@ class _InternalBlockData<
         ITEM extends Object,
         ITEM_DETAIL extends Object,
         SUGGESTED_CRITERIA extends SuggestedCriteria,
-        FILTER_CRITERIA extends EmptyFilterCriteria,
+        FILTER_CRITERIA extends FilterCriteria,
         SUGGESTED_FORM_DATA extends SuggestedFormData>
     extends BlockData<ID, ITEM, ITEM_DETAIL, SUGGESTED_CRITERIA,
         FILTER_CRITERIA, SUGGESTED_FORM_DATA> {

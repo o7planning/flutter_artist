@@ -3,7 +3,7 @@ part of '../flutter_artist.dart';
 class ScalarData<
     VALUE extends Object,
     SUGGESTED_CRITERIA extends SuggestedCriteria,
-    FILTER_CRITERIA extends EmptyFilterCriteria> {
+    FILTER_CRITERIA extends FilterCriteria> {
   ///
   /// Owner Scalar.
   ///

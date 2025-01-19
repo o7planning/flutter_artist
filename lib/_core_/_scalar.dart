@@ -5,7 +5,7 @@ part of '../flutter_artist.dart';
 ///
 /// ```
 /// class OrderSummaryScalar
-///        extends Scalar<OrderSummaryData, EmptyEmptyFilterCriteria> {
+///        extends Scalar<OrderSummaryData, EmptyFilterCriteria> {
 ///
 /// }
 /// ```
@@ -23,7 +23,7 @@ part of '../flutter_artist.dart';
 abstract class Scalar<
     VALUE extends Object,
     SUGGESTED_CRITERIA extends SuggestedCriteria,
-    FILTER_CRITERIA extends EmptyFilterCriteria> extends DataContainer {
+    FILTER_CRITERIA extends FilterCriteria> extends DataContainer {
   final String name;
 
   String get _shortPathName {
@@ -35,7 +35,7 @@ abstract class Scalar<
   }
 
   String get _classParametersDefinition {
-    return "<${getSuggestedCriteriaTypeAsString()}, ${getValueTypeAsString()}, ${getEmptyFilterCriteriaTypeAsString()}>";
+    return "<${getSuggestedCriteriaTypeAsString()}, ${getValueTypeAsString()}, ${getFilterCriteriaTypeAsString()}>";
   }
 
   ///
@@ -98,7 +98,7 @@ abstract class Scalar<
     return SUGGESTED_CRITERIA.toString();
   }
 
-  String getEmptyFilterCriteriaTypeAsString() {
+  String getFilterCriteriaTypeAsString() {
     return FILTER_CRITERIA.toString();
   }
 

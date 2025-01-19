@@ -2,7 +2,7 @@ part of '../flutter_artist.dart';
 
 abstract class DataFilter<
     SUGGESTED_CRITERIA extends SuggestedCriteria, //
-    FILTER_CRITERIA extends EmptyFilterCriteria> {
+    FILTER_CRITERIA extends FilterCriteria> {
   late final String name;
 
   late final Shelf shelf;
@@ -39,7 +39,7 @@ abstract class DataFilter<
 
   final Map<_WidgetState, bool> _widgetStateListeners = {};
 
-  String getEmptyFilterCriteriaTypeAsString() {
+  String getFilterCriteriaTypeAsString() {
     return FILTER_CRITERIA.toString();
   }
 
