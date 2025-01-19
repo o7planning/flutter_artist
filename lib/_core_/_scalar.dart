@@ -20,8 +20,14 @@ part of '../flutter_artist.dart';
 /// OrderSummaryData value = scalar.data.value;
 /// ```
 ///
-abstract class Scalar<VALUE extends Object, FILTER_INPUT extends FilterInput,
-    FILTER_CRITERIA extends FilterCriteria> extends DataContainer {
+abstract class Scalar<
+    VALUE extends Object,
+    FILTER_INPUT extends FilterInput, // EmptyFilterInput
+    FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
+    > extends DataContainer {
+  ///
+  /// Scalar name. It is unique in a Shelf.
+  ///
   final String name;
 
   String get _shortPathName {

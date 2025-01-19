@@ -66,9 +66,10 @@ abstract class Block<
     ID extends Object,
     ITEM extends Object,
     ITEM_DETAIL extends Object,
-    FILTER_INPUT extends FilterInput,
-    FILTER_CRITERIA extends FilterCriteria,
-    EXTRA_INPUT extends ExtraInput> extends DataContainer {
+    FILTER_INPUT extends FilterInput, // EmptyFilterInput
+    FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
+    EXTRA_INPUT extends ExtraInput // EmptyExtraInput
+    > extends DataContainer {
   @Deprecated("Xoa di, khong su dung")
   QueryMode _queryMode = QueryMode.lazy;
 
@@ -97,6 +98,9 @@ abstract class Block<
 
   bool get isPreparingFormCreation => __isPreparingFormCreation;
 
+  ///
+  /// Block name. It is unique in a Shelf.
+  ///
   final String name;
 
   String get _shortPathName {

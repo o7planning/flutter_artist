@@ -1,8 +1,9 @@
 part of '../flutter_artist.dart';
 
 abstract class DataFilter<
-    FILTER_INPUT extends FilterInput, //
-    FILTER_CRITERIA extends FilterCriteria> {
+    FILTER_INPUT extends FilterInput, // EmptyFilterInput
+    FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
+    > {
   late final String name;
 
   late final Shelf shelf;

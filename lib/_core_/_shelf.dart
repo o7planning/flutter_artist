@@ -82,17 +82,16 @@ abstract class Shelf {
         //
         if (filterInputBF == filterInputBase) {
           throw _registerError(
-              "You need to create your own class that extends from '$filterInputBase' "
-              "as FILTER_INPUT for '${getClassName(dataFilter)}' \n"
-              "Or using $EmptyFilterInput as FILTER_INPUT \n"
-              " >> Currently, ${getClassName(dataFilter)}.FILTER_INPUT = $filterInputBF");
+              "You need to create your own class that extends the '$filterInputBase' class \n"
+              "or use the 'EmptyFilterInput' class to use in the '${getClassName(dataFilter)}' declaration \n\n"
+              " >> Currently, ${getClassName(dataFilter)}<FILTER_INPUT> = <$filterInputBF>");
         }
         //
         if (filterInputBF != filterInputB) {
           throw _registerError(
-              "The Scalar and its Filter-Input must have the same FILTER_INPUT type. \n"
-              " >> ${getClassName(scalar)}.FILTER_INPUT = $filterInputB \n"
-              " >> ${getClassName(dataFilter)}.FILTER_INPUT = $filterInputBF");
+              "The Scalar and its Filter-Input must have the same FILTER_INPUT type. \n\n"
+              " >> ${getClassName(scalar)}<FILTER_INPUT> = <$filterInputB> \n"
+              " >> ${getClassName(dataFilter)}<FILTER_INPUT> = <$filterInputBF>");
         }
         // ----------------
         const Type filterCriteriaType = FilterCriteria;
@@ -103,17 +102,16 @@ abstract class Shelf {
         //
         if (filterCriteriaBF == filterCriteriaBase) {
           throw _registerError(
-              "You need to create your own class that extends from '$filterCriteriaBase' "
-              "as FILTER_CRITERIA for '${getClassName(dataFilter)}' \n"
-              "Or using $EmptyFilterCriteria as FILTER_CRITERIA \n"
-              " >> Currently, ${getClassName(dataFilter)}.FILTER_CRITERIA = $filterCriteriaBF");
+              "You need to create your own class that extends the '$filterCriteriaBase' class \n"
+              "or use the 'EmptyFilterCriteria' class to use in the '${getClassName(dataFilter)}' declaration \n\n"
+              " >> Currently, ${getClassName(dataFilter)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
         }
         //
         if (filterCriteriaBF != filterCriteriaB) {
           throw _registerError(
-              "The Scalar and its Data-Filter must have the same FILTER_CRITERIA type. \n"
-              " >> ${getClassName(scalar)}.FILTER_CRITERIA = $filterCriteriaB \n"
-              " >> ${getClassName(dataFilter)}.FILTER_CRITERIA = $filterCriteriaBF");
+              "The Scalar and its Data-Filter must have the same FILTER_CRITERIA type. \n\n"
+              " >> ${getClassName(scalar)}<FILTER_CRITERIA> = <$filterCriteriaB> \n"
+              " >> ${getClassName(dataFilter)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
         }
         //
         dataFilter._scalars.add(scalar);
@@ -136,8 +134,8 @@ abstract class Shelf {
         if (filterCriteriaB != filterCriteriaEmpty) {
           throw _registerError(
               "FILTER_CRITERIA of '${getClassName(scalar)}' scalar must be '$filterCriteriaEmpty' "
-              "because this scalar does not have a DATA_FILTER.\n"
-              " >> Currently, ${getClassName(scalar)}.FILTER_CRITERIA = $filterCriteriaB");
+              "because this scalar does not have a DATA_FILTER. \n\n"
+              " >> Currently, ${getClassName(scalar)}<FILTER_CRITERIA> = <$filterCriteriaB>");
         }
       }
     }
@@ -176,17 +174,16 @@ abstract class Shelf {
       //
       if (filterInputBF == filterInputBase) {
         throw _registerError(
-            "You need to create your own class that extends from '$filterInputBase' "
-            "as FILTER_INPUT for '${getClassName(dataFilter)}' \n"
-            "Or using $EmptyFilterInput as FILTER_INPUT \n"
-            " >> Currently, ${getClassName(dataFilter)}.FILTER_INPUT = $filterInputBF");
+            "You need to create your own class that extends the '$filterInputBase' class \n"
+            "or use the 'EmptyFilterInput' class to use in the '${getClassName(dataFilter)}' declaration \n\n"
+            " >> Currently, ${getClassName(dataFilter)}<FILTER_INPUT> = <$filterInputBF>");
       }
       //
       if (filterInputBF != filterInputB) {
         throw _registerError(
-            "The Scalar and its Filter-Input must have the same FILTER_INPUT type. \n"
-            " >> ${getClassName(block)}.FILTER_INPUT = $filterInputB \n"
-            " >> ${getClassName(dataFilter)}.FILTER_INPUT = $filterInputBF");
+            "The Scalar and its Filter-Input must have the same FILTER_INPUT type.\n\n"
+            " >> ${getClassName(block)}<FILTER_INPUT> = <$filterInputB> \n"
+            " >> ${getClassName(dataFilter)}<FILTER_INPUT> = <$filterInputBF>");
       }
       // -----------------
       const Type filterCriteriaType = FilterCriteria;
@@ -198,15 +195,15 @@ abstract class Shelf {
       if (filterCriteriaBF == filterCriteriaBase) {
         throw _registerError(
             "You need to create your own class that extends from '$filterCriteriaBase' "
-            "as FILTER_CRITERIA for '${getClassName(dataFilter)}'\n"
-            " >> Currently, ${getClassName(dataFilter)}.FILTER_CRITERIA = $filterCriteriaBF");
+            "as FILTER_CRITERIA for '${getClassName(dataFilter)}'\n\n"
+            " >> Currently, ${getClassName(dataFilter)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
       }
       //
       if (filterCriteriaBF != filterCriteriaB) {
         throw _registerError(
             "The Block and its Data-Filter must have the same FILTER_CRITERIA type. \n"
-            " >> ${getClassName(block)}.FILTER_CRITERIA = $filterCriteriaB \n"
-            " >> ${getClassName(dataFilter)}.FILTER_CRITERIA = $filterCriteriaBF");
+            " >> ${getClassName(block)}<FILTER_CRITERIA> = <$filterCriteriaB> \n"
+            " >> ${getClassName(dataFilter)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
       }
       //
       dataFilter._blocks.add(block);
@@ -228,10 +225,22 @@ abstract class Shelf {
       if (filterCriteriaB != filterCriteriaEmpty) {
         throw _registerError(
             "Filter-Criteria of '${getClassName(block)}' block must be '$filterCriteriaEmpty' "
-            "because this block does not have a DATA_FILTER.\n"
-            " >> Currently, ${getClassName(block)}.FILTER_CRITERIA = $filterCriteriaB");
+            "because this block does not have a DATA_FILTER.\n\n"
+            " >> Currently, ${getClassName(block)}<FILTER_CRITERIA> = <$filterCriteriaB>");
       }
     }
+    //
+    Type extraInputB = ExtraInput;
+    String extraInputTypeB = extraInputB.toString();
+    String extraInputTypeStr = block.getExtraInputTypeAsString();
+
+    if (extraInputTypeStr == extraInputTypeB) {
+      throw _registerError(
+          "You need to create your own class that extends the '$extraInputTypeB' class \n"
+          "or use the 'EmptyExtraInput' class to use in the '${getClassName(block)}' declaration \n\n"
+          " >> Currently, ${getClassName(block)}<EXTRA_INPUT> = <$extraInputTypeStr>");
+    }
+    //
     for (Block childBlock in block.childBlocks) {
       __registerBlockCascade(childBlock);
     }
