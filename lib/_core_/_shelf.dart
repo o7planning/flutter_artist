@@ -52,7 +52,7 @@ abstract class Shelf {
     //
     return "\n*********************************************************************************************\n"
         "$message"
-        "\n*** You may need to restart the application. ***\n"
+        "\n\n  *** You may need to restart the application after editing the code. ***"
         "\n*********************************************************************************************\n";
   }
 
