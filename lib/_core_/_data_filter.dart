@@ -50,7 +50,7 @@ abstract class DataFilter<
   ///
   /// This method is called immediately after calling [prepareData()] method if there are no errors.
   ///
-  FILTER_CRITERIA createCriteria();
+  FILTER_CRITERIA createFilterCriteria();
 
   ///
   /// ```Dart
@@ -80,7 +80,7 @@ abstract class DataFilter<
         suggestedCriteria: suggestedCriteria,
       );
       // If no error:
-      FILTER_CRITERIA tryingCriteria = createCriteria();
+      FILTER_CRITERIA tryingCriteria = createFilterCriteria();
       __filterCriteriasMap[tryingCriteriaId] = tryingCriteria;
       //
       return _EmptyFilterCriteriaWrapper(

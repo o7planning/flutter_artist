@@ -21,7 +21,7 @@ class _DefaultDataFilter
   List<Restorable> get restorableCriteria => [];
 
   @override
-  EmptyFilterCriteria createCriteria() {
+  EmptyFilterCriteria createFilterCriteria() {
     return EmptyFilterCriteria();
   }
 }
