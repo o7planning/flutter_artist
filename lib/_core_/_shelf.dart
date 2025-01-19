@@ -72,7 +72,8 @@ abstract class Shelf {
     for (Scalar scalar in scalars) {
       if (__scalarMap.containsKey(scalar.name)) {
         throw ___registerError(
-            "Duplicated Scalar '${scalar.name}' in '${getClassName(this)}'");
+            "Duplicated Scalar '${scalar.name}' in '${getClassName(this)}'\n"
+            "Double-check ${getClassName(this)}.registerStructure() method");
       } else {
         __scalarMap[scalar.name] = scalar;
       }
@@ -84,7 +85,8 @@ abstract class Shelf {
             _shelfStruct.dataFilters[scalar.registerDataFilterName!];
         if (dataFilter == null) {
           throw ___registerError(
-              "DataFilter not found '${scalar.registerDataFilterName}' in '${getClassName(this)}'");
+              "DataFilter not found '${scalar.registerDataFilterName}' in '${getClassName(this)}'\n"
+              "Double-check ${getClassName(this)}.registerStructure() method");
         }
         //
         const Type filterInputType = FilterInput;
@@ -175,7 +177,8 @@ abstract class Shelf {
           _shelfStruct.dataFilters[block.registerDataFilterName!];
       if (dataFilter == null) {
         throw ___registerError(
-            "DataFilter not found '${block.registerDataFilterName}' in '${getClassName(this)}'");
+            "DataFilter not found '${block.registerDataFilterName}' in '${getClassName(this)}'\n"
+            "Double-check ${getClassName(this)}.registerStructure() method");
       }
       //
       //
