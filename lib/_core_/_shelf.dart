@@ -77,8 +77,7 @@ abstract class Shelf {
         //
         const Type filterInputType = FilterInput;
         final String filterInputBase = filterInputType.toString();
-        final String filterInputBF =
-            dataFilter.getFilterInputTypeAsString();
+        final String filterInputBF = dataFilter.getFilterInputTypeAsString();
         final String filterInputB = scalar.getFilterInputTypeAsString();
         //
         if (filterInputBF == filterInputBase) {
@@ -172,8 +171,7 @@ abstract class Shelf {
       //
       const Type filterInputType = FilterInput;
       final String filterInputBase = filterInputType.toString();
-      final String filterInputBF =
-          dataFilter.getFilterInputTypeAsString();
+      final String filterInputBF = dataFilter.getFilterInputTypeAsString();
       final String filterInputB = block.getFilterInputTypeAsString();
       //
       if (filterInputBF == filterInputBase) {
@@ -694,7 +692,7 @@ abstract class Shelf {
         // );
 
         bool success = await xBlockForm.blockForm._prepareForm(
-          suggestedFormData: xBlockForm.suggestedFormData,
+          extraInput: xBlockForm.extraInput,
           refreshedItem: currentItemDetail,
           isNew: currentItemDetail == null, // TODO: Can kiem tra lai.
           forceForm: true,

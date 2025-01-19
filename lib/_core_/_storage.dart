@@ -44,7 +44,7 @@ class _Storage {
     if (creator == null) {
       throw _registerError(
           " ERROR: '$shelfName' not found. You need to call:\n "
-          " FlutterArtist.storage.registerShelf(()=> $shelfName())");
+              " FlutterArtist.storage.registerShelf(()=> $shelfName())");
     }
     shelf = creator() as F;
     __shelfMap[shelfName] = shelf;
@@ -87,7 +87,7 @@ class _Storage {
     Map<String, Shelf> listenerMap = _getListenerShelves();
     Map<String, Shelf> map = {}..addAll(__shelfMap);
     map.removeWhere((shelfName, shelf) =>
-        eventMap.keys.contains(shelfName) ||
+    eventMap.keys.contains(shelfName) ||
         listenerMap.keys.contains(shelfName));
     return map;
   }
@@ -104,7 +104,7 @@ class _Storage {
         continue;
       }
       List<Scalar> listenerScalars =
-          _getListenerScalarsByShelf(eventShelf: shelf);
+      _getListenerScalarsByShelf(eventShelf: shelf);
       if (listenerScalars.isNotEmpty) {
         foundEventShelfMap[shelf.name] = shelf;
         continue;
@@ -167,7 +167,7 @@ class _Storage {
       Shelf listenerShelf = __shelfMap[shelfName]!;
 
       List<Block> eventBlocks =
-          _getEventBlocksByShelf(listenerShelf: listenerShelf);
+      _getEventBlocksByShelf(listenerShelf: listenerShelf);
       if (eventBlocks.isNotEmpty) {
         foundShelfMap[shelfName] = listenerShelf;
         continue;
@@ -438,7 +438,7 @@ class _Storage {
     }
     //
     final List<Block> listenerBlocks =
-        _getListenerBlocksByBlock(eventBlock: eventBlock);
+    _getListenerBlocksByBlock(eventBlock: eventBlock);
     for (Block listenerBlock in listenerBlocks) {
       // TODO: Doi thanh hasActiveUiComponents()??
       final bool active = listenerBlock.hasActiveBlockFragmentWidget(
@@ -472,18 +472,19 @@ class _Storage {
         forceQueryScalarOpts: sbList.queryScalars
             .map(
               (s) => _ScalarOpt(scalar: s),
-            )
+        )
             .toList(),
         forceQueryBlockOpts: sbList.queryBlocks
             .map(
-              (b) => _BlockOpt(
+              (b) =>
+              _BlockOpt(
                   block: b,
                   queryType: null,
                   pageable: null,
                   listBehavior: null,
                   suggestedSelection: null,
                   postQueryBehavior: null),
-            )
+        )
             .toList(),
         forceQueryBlockFormOpts: [],
       );

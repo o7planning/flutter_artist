@@ -5,7 +5,7 @@ part of '../flutter_artist.dart';
 /// ```dart
 /// class EmployeeBlock
 ///       extends Block<int, EmployeeInfo, EmployeeData,
-///                      EmptyFilterCriteria, SuggestedFormData> {
+///                      EmptyFilterCriteria, ExtraInput> {
 ///
 /// }
 /// ```
@@ -54,10 +54,10 @@ part of '../flutter_artist.dart';
 /// }
 /// ```
 ///
-/// [SUGGESTED_FORM_DATA]: Additional parameters are used to create a record in the Form.
+/// [EXTRA_INPUT]: Additional parameters are used to create a record in the Form.
 /// For example: Create an employee with the specified department.
 /// ```
-/// class EmployeeExtraFormData extends SuggestedFormData {
+/// class EmployeeExtraFormData extends ExtraInput {
 ///    DepartmentInfo? department;
 /// }
 /// ```
@@ -68,7 +68,7 @@ abstract class Block<
     ITEM_DETAIL extends Object,
     FILTER_INPUT extends FilterInput,
     FILTER_CRITERIA extends FilterCriteria,
-    SUGGESTED_FORM_DATA extends SuggestedFormData> extends DataContainer {
+    EXTRA_INPUT extends ExtraInput> extends DataContainer {
   @Deprecated("Xoa di, khong su dung")
   QueryMode _queryMode = QueryMode.lazy;
 
@@ -109,7 +109,7 @@ abstract class Block<
 
   String get _classParametersDefinition {
     return "<${getItemIdTypeAsString()}, ${getItemTypeAsString()}, ${getItemDetailTypeAsString()}, "
-        "${getFilterCriteriaTypeAsString()}, ${getSuggestedFormDataTypeAsString()}>";
+        "${getFilterCriteriaTypeAsString()}, ${getExtraInputTypeAsString()}>";
   }
 
   final String? description;
@@ -144,7 +144,7 @@ abstract class Block<
 
   String? get parentBlockName => parent?.name;
 
-  final BlockForm<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA, SUGGESTED_FORM_DATA>?
+  final BlockForm<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA, EXTRA_INPUT>?
       blockForm;
 
   final List<Block> _childBlocks;
@@ -167,9 +167,9 @@ abstract class Block<
         );
 
   late final BlockData<ID, ITEM, ITEM_DETAIL, FILTER_INPUT, FILTER_CRITERIA,
-          SUGGESTED_FORM_DATA> data =
+          EXTRA_INPUT> data =
       _InternalBlockData<ID, ITEM, ITEM_DETAIL, FILTER_INPUT, FILTER_CRITERIA,
-          SUGGESTED_FORM_DATA>.empty(
+          EXTRA_INPUT>.empty(
     this,
     __pageable,
   );
@@ -236,8 +236,8 @@ abstract class Block<
     return FILTER_CRITERIA.toString();
   }
 
-  String getSuggestedFormDataTypeAsString() {
-    return SUGGESTED_FORM_DATA.toString();
+  String getExtraInputTypeAsString() {
+    return EXTRA_INPUT.toString();
   }
 
   List<Block> get descendantBlocks {
@@ -994,7 +994,7 @@ abstract class Block<
       // Create New Item
       bool success = await __prepareToCreate(
         thisXBlock: thisXBlock,
-        suggestedFormData: null,
+        extraInput: null,
       );
       if (!success) {
         return false;
@@ -1254,7 +1254,7 @@ abstract class Block<
         dataState: DataState.pending,
       );
       bool success = await blockForm!._prepareForm(
-        suggestedFormData: null,
+        extraInput: null,
         refreshedItem: refreshedItemDetail,
         isNew: false,
         forceForm: forceForm,
@@ -1329,7 +1329,7 @@ abstract class Block<
         dataState: DataState.ready,
       );
       bool success = await blockForm!._prepareForm(
-        suggestedFormData: null,
+        extraInput: null,
         refreshedItem: nullItemDetail,
         isNew: false,
         forceForm: false,
@@ -2330,7 +2330,7 @@ abstract class Block<
   /// Prepare to create an item in a Form.
   ///
   Future<bool> prepareToCreate({
-    SUGGESTED_FORM_DATA? suggestedFormData,
+    EXTRA_INPUT? extraInput,
     required Function()? route,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -2338,17 +2338,17 @@ abstract class Block<
       route: route,
       ownerClassInstance: this,
       methodName: "prepareToCreate",
-      parameters: {"suggestedFormData": suggestedFormData},
+      parameters: {"extraInput": extraInput},
     );
     //
     if (!__checkBeforeFormCreation(showErrorMessage: true)) {
       return false;
     }
     //
-    suggestedFormData?.formAction = FormAction.create;
+    extraInput?.formAction = FormAction.create;
     //
     bool success = await _prepareToCreateWithOverlayAndRestorable(
-      suggestedFormData: suggestedFormData,
+      extraInput: extraInput,
     );
     //
     if (success) {
@@ -2358,7 +2358,7 @@ abstract class Block<
   }
 
   Future<bool> _prepareToCreateWithOverlayAndRestorable({
-    required SUGGESTED_FORM_DATA? suggestedFormData,
+    required EXTRA_INPUT? extraInput,
   }) async {
     if (!__checkBeforeFormCreation(showErrorMessage: false)) {
       return false;
@@ -2366,14 +2366,14 @@ abstract class Block<
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
         return await _prepareToCreateWithRestorable(
-          suggestedFormData: suggestedFormData,
+          extraInput: extraInput,
         );
       },
     );
   }
 
   Future<bool> _prepareToCreateWithRestorable({
-    required SUGGESTED_FORM_DATA? suggestedFormData,
+    required EXTRA_INPUT? extraInput,
   }) async {
     if (!__checkBeforeFormCreation(showErrorMessage: false)) {
       return false;
@@ -2404,7 +2404,7 @@ abstract class Block<
       //
       bool success = await __prepareToCreate(
         thisXBlock: thisXBlock,
-        suggestedFormData: suggestedFormData,
+        extraInput: extraInput,
       );
       if (!success) {
         _restoreAll();
@@ -2430,14 +2430,14 @@ abstract class Block<
   // Private method. Only for use in this class.
   Future<bool> __prepareToCreate({
     required _XBlock thisXBlock,
-    required SUGGESTED_FORM_DATA? suggestedFormData,
+    required EXTRA_INPUT? extraInput,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       ownerClassInstance: this,
       methodName: "__prepareToCreate",
-      parameters: {"suggestedFormData": suggestedFormData},
+      parameters: {"extraInput": extraInput},
     );
     //
     if (!__checkBeforeFormCreation(showErrorMessage: false)) {
@@ -2461,7 +2461,7 @@ abstract class Block<
       __refreshPreparingFormCreationState(isPreparingFormCreation: true);
       //
       success = await blockForm!._prepareForm(
-        suggestedFormData: suggestedFormData,
+        extraInput: extraInput,
         refreshedItem: nullItemDetail,
         isNew: true,
         forceForm: true,
