@@ -1,10 +1,10 @@
 part of '../flutter_artist.dart';
 
-class _EmptyFilterCriteriaWrapper<S extends FilterCriteria> {
+class _FilterCriteriaWrapper<S extends FilterCriteria> {
   final int filterCriteriaId;
   final S filterCriteria;
 
-  _EmptyFilterCriteriaWrapper({
+  _FilterCriteriaWrapper({
     required this.filterCriteriaId,
     required this.filterCriteria,
   });

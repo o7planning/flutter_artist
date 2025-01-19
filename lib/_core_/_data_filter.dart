@@ -25,7 +25,7 @@ abstract class DataFilter<
   ///
   final Map<int, FILTER_CRITERIA> __filterCriteriasMap = {};
 
-  FILTER_CRITERIA? get currentSuccessEmptyFilterCriteria {
+  FILTER_CRITERIA? get currentSuccessFilterCriteria {
     return __currentSuccessCriteriaId == null
         ? null
         : __filterCriteriasMap[__currentSuccessCriteriaId];
@@ -69,7 +69,7 @@ abstract class DataFilter<
     SUGGESTED_CRITERIA? suggestedCriteria,
   });
 
-  Future<_EmptyFilterCriteriaWrapper<FILTER_CRITERIA>> __prepareData({
+  Future<_FilterCriteriaWrapper<FILTER_CRITERIA>> __prepareData({
     required SUGGESTED_CRITERIA? suggestedCriteria,
   }) async {
     __currentTryingCriteriaId + 1;
@@ -83,7 +83,7 @@ abstract class DataFilter<
       FILTER_CRITERIA tryingCriteria = createFilterCriteria();
       __filterCriteriasMap[tryingCriteriaId] = tryingCriteria;
       //
-      return _EmptyFilterCriteriaWrapper(
+      return _FilterCriteriaWrapper(
         filterCriteriaId: tryingCriteriaId,
         filterCriteria: tryingCriteria,
       );
@@ -133,137 +133,9 @@ abstract class DataFilter<
     );
   }
 
-  ///
-  /// Query all Scalars and Blocks of this DataFilter if they are visible on the UI.
-  /// Any Scalar or Block that is not queried will be set to LAZY state.
-  ///
-  /// [forceBlockWithQueryOptions.block] will be queried mandatory.
-  ///
-  // Future<bool> _queryAllWithOverlayAndRestorable({
-  //   required S? suggestedCriteria,
-  //   required _BlockOpt? forceBlockWithQueryOptions,
-  //   required _ScalarOpt? forceScalarWithQueryOptions,
-  // }) async {
-  //   return await FlutterArtist.executeTask(
-  //     asyncFunction: () async {
-  //       return await __queryAllIfNeedWithRestorable(
-  //         suggestedCriteria: suggestedCriteria,
-  //         forceBlockWithQueryOptions: null,
-  //         forceScalarWithQueryOptions: null,
-  //       );
-  //     },
-  //   );
-  // }
-
-  ///
-  /// Query all Scalars and Blocks of this DataFilter if they are visible on the UI.
-  /// Any Scalar or Block that is not queried will be set to LAZY state.
-  ///
-  // Future<bool> __queryAllIfNeedWithRestorable({
-  //   required S? suggestedCriteria,
-  //   required _BlockOpt? forceBlockWithQueryOptions,
-  //   required _ScalarOpt? forceScalarWithQueryOptions,
-  // }) async {
-  //   final List<Scalar> queryScalars = _scalars;
-  //   // TODO: Kiem tra danh sach cac Block can query. ???????????????????????????????????????????????????????????????????
-  //   // TODO: Loai bo cac Block con ra khoi query. ??????????????????????????????????????????????????????????????????????
-  //   final List<Block> queryBlocks = _blocks;
-  //   //
-  //   // Start QUERY:
-  //   //
-  //   try {
-  //     __backupAll(
-  //       scalars: queryScalars,
-  //       blocks: queryBlocks,
-  //     );
-  //     //
-  //     _EmptyFilterCriteriaWrapper<S> tryingCriteria = await __prepareData(
-  //       suggestedCriteria: suggestedCriteria,
-  //     );
-  //     //
-  //     final int tryingEmptyFilterCriteriaId = tryingCriteria.filterCriteriaId;
-  //     final S tryingEmptyFilterCriteria = tryingCriteria.filterCriteria;
-  //     //
-  //     for (Scalar scalar in queryScalars) {
-  //       bool success = await scalar.__queryThis(
-  //         filterCriteria: tryingEmptyFilterCriteria,
-  //       );
-  //       if (!success) {
-  //         // Throw error to restore all....
-  //         throw _TransactionError();
-  //       }
-  //     }
-  //     bool success = true;
-  //     for (Block block in queryBlocks) {
-  //       bool success = await block.__queryThisAndChildren(
-  //         queryType: QueryType.forceQuery,
-  //         listBehavior: ListBehavior.replace,
-  //         filterCriteria: tryingEmptyFilterCriteria,
-  //         postQueryBehavior: PostQueryBehavior.selectAvailableItem,
-  //         suggestedSelection: null,
-  //         pageable: null,
-  //       );
-  //       if (!success) {
-  //         // Throw error to restore all....
-  //         throw _TransactionError();
-  //       }
-  //     }
-  //     //
-  //     __applyNewStateAll(
-  //       scalars: queryScalars,
-  //       blocks: queryBlocks,
-  //     );
-  //     //
-  //     return success;
-  //   } catch (e) {
-  //     // Restore all...
-  //     __restoreAll(
-  //       scalars: queryScalars,
-  //       blocks: queryBlocks,
-  //     );
-  //     return false;
-  //   }
-  // }
-
   // ***************************************************************************
   // *** BACKUP, RESTORE, APPLY ***
   // ***************************************************************************
-
-  void __backupAll({
-    required List<Scalar> scalars,
-    required List<Block> blocks,
-  }) {
-    for (Scalar scalar in scalars) {
-      scalar._backup();
-    }
-    for (Block block in blocks) {
-      block._backupAll();
-    }
-  }
-
-  void __restoreAll({
-    required List<Scalar> scalars,
-    required List<Block> blocks,
-  }) {
-    for (Scalar scalar in scalars) {
-      scalar._restore();
-    }
-    for (Block block in blocks) {
-      block._restoreAll();
-    }
-  }
-
-  void __applyNewStateAll({
-    required List<Scalar> scalars,
-    required List<Block> blocks,
-  }) {
-    for (Scalar scalar in scalars) {
-      scalar._applyNewStateAll();
-    }
-    for (Block block in blocks) {
-      block._applyNewStateAll();
-    }
-  }
 
   void _backup() {
     __filterCriteriaBk = _filterCriteria;

@@ -4,8 +4,8 @@ part of '../flutter_artist.dart';
 /// Block example:
 /// ```dart
 /// class EmployeeBlock
-///       extends Block<int,EmployeeInfo,EmployeeData,
-///                      EmptyFilterCriteria,SuggestedFormData> {
+///       extends Block<int, EmployeeInfo, EmployeeData,
+///                      EmptyFilterCriteria, SuggestedFormData> {
 ///
 /// }
 /// ```
@@ -185,7 +185,7 @@ abstract class Block<
     return ITEM_DETAIL;
   }
 
-  Type getEmptyFilterCriteriaType() {
+  Type getFilterCriteriaType() {
     return FILTER_CRITERIA;
   }
 
@@ -773,7 +773,7 @@ abstract class Block<
       //
       // May throw _TransactionError:
       //
-      _EmptyFilterCriteriaWrapper result = await dataFilter.__prepareData(
+      _FilterCriteriaWrapper result = await dataFilter.__prepareData(
         suggestedCriteria: suggestedCriteria,
       );
       filterCriteria = result.filterCriteria as FILTER_CRITERIA;

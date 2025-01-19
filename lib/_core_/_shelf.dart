@@ -653,7 +653,7 @@ abstract class Shelf {
         final FilterCriteria filterCriteria;
         if (!xDataFilter.queried) {
           // May throw _TransactionError:
-          _EmptyFilterCriteriaWrapper result = await dataFilter.__prepareData(
+          _FilterCriteriaWrapper result = await dataFilter.__prepareData(
             suggestedCriteria: xDataFilter.suggestedCriteria,
           );
           filterCriteria = result.filterCriteria;

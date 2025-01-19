@@ -107,7 +107,7 @@ class _XShelf {
       final Scalar scalar = xScalar.scalar;
       final bool active = scalar.hasActiveUiComponent();
       final bool lazyOrError = scalar.dataState != DataState.ready;
-      // TODO: Cần so sánh EmptyFilterCriteria của Scalar và DataFilter.
+      // TODO: Cần so sánh FilterCriteria của Scalar và DataFilter.
       if (active && lazyOrError) {
         xScalar.needQuery = true;
       }
@@ -120,7 +120,7 @@ class _XShelf {
       final Block block = xBlock.block;
       final bool active = block.hasActiveUiComponent();
       final bool lazyOrError = block.dataState != DataState.ready;
-      // TODO: Cần so sánh EmptyFilterCriteria của Block và DataFilter.
+      // TODO: Cần so sánh FilterCriteria của Block và DataFilter.
       if (active && lazyOrError) {
         xBlock.needQuery = true;
       }
@@ -163,7 +163,7 @@ class _XShelf {
         final BlockForm blockForm = xBlockForm.blockForm;
         final bool active = blockForm.hasActiveFormWidget();
         final bool lazyOrError = blockForm.dataState != DataState.ready;
-        // TODO: Cần so sánh EmptyFilterCriteria ???
+        // TODO: Cần so sánh FilterCriteria ???
         if (active && lazyOrError) {
           xBlockForm.needQuery = true;
         }
