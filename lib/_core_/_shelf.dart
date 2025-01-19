@@ -75,27 +75,27 @@ abstract class Shelf {
               "DataFilter not found '${scalar.registerDataFilterName}' in '${getClassName(this)}'");
         }
         //
-        const Type suggestedFilterDataType = SuggestedFilterData;
+        const Type suggestedFilterDataType = SuggestedCriteria;
         final String suggestedFilterDataBase =
             suggestedFilterDataType.toString();
         final String suggestedFilterDataBF =
-            dataFilter.getSuggestedFilterDataTypeAsString();
+            dataFilter.getSuggestedCriteriaTypeAsString();
         final String suggestedFilterDataB =
-            scalar.getSuggestedFilterDataTypeAsString();
+            scalar.getSuggestedCriteriaTypeAsString();
         //
         if (suggestedFilterDataBF == suggestedFilterDataBase) {
           throw _registerError(
               "You need to create your own class that extends from '$suggestedFilterDataBase' "
-              "as SUGGESTED_FILTER_DATA for '${getClassName(dataFilter)}' \n"
-              "Or using $EmptyFilterData as SUGGESTED_FILTER_DATA \n"
-              " >> Currently, ${getClassName(dataFilter)}.SUGGESTED_FILTER_DATA = $suggestedFilterDataBF");
+              "as SUGGESTED_CRITERIA for '${getClassName(dataFilter)}' \n"
+              "Or using $EmptySuggestedCriteria as SUGGESTED_CRITERIA \n"
+              " >> Currently, ${getClassName(dataFilter)}.SUGGESTED_CRITERIA = $suggestedFilterDataBF");
         }
         //
         if (suggestedFilterDataBF != suggestedFilterDataB) {
           throw _registerError(
-              "The Scalar and its Suggested-Filter-Data must have the same SUGGESTED_FILTER_DATA type. \n"
-              " >> ${getClassName(scalar)}.SUGGESTED_FILTER_DATA = $suggestedFilterDataB \n"
-              " >> ${getClassName(dataFilter)}.SUGGESTED_FILTER_DATA = $suggestedFilterDataBF");
+              "The Scalar and its Suggested-Criteria must have the same SUGGESTED_CRITERIA type. \n"
+              " >> ${getClassName(scalar)}.SUGGESTED_CRITERIA = $suggestedFilterDataB \n"
+              " >> ${getClassName(dataFilter)}.SUGGESTED_CRITERIA = $suggestedFilterDataBF");
         }
         // ----------------
         const Type filterCriteriaType = EmptyFilterCriteria;
@@ -175,26 +175,26 @@ abstract class Shelf {
       }
       //
       //
-      const Type suggestedFilterDataType = SuggestedFilterData;
+      const Type suggestedFilterDataType = SuggestedCriteria;
       final String suggestedFilterDataBase = suggestedFilterDataType.toString();
       final String suggestedFilterDataBF =
-          dataFilter.getSuggestedFilterDataTypeAsString();
+          dataFilter.getSuggestedCriteriaTypeAsString();
       final String suggestedFilterDataB =
-          block.getSuggestedFilterDataTypeAsString();
+          block.getSuggestedCriteriaTypeAsString();
       //
       if (suggestedFilterDataBF == suggestedFilterDataBase) {
         throw _registerError(
             "You need to create your own class that extends from '$suggestedFilterDataBase' "
-            "as SUGGESTED_FILTER_DATA for '${getClassName(dataFilter)}' \n"
-            "Or using $EmptyFilterData as SUGGESTED_FILTER_DATA \n"
-            " >> Currently, ${getClassName(dataFilter)}.SUGGESTED_FILTER_DATA = $suggestedFilterDataBF");
+            "as SUGGESTED_CRITERIA for '${getClassName(dataFilter)}' \n"
+            "Or using $EmptySuggestedCriteria as SUGGESTED_CRITERIA \n"
+            " >> Currently, ${getClassName(dataFilter)}.SUGGESTED_CRITERIA = $suggestedFilterDataBF");
       }
       //
       if (suggestedFilterDataBF != suggestedFilterDataB) {
         throw _registerError(
-            "The Scalar and its Suggested-Filter-Data must have the same SUGGESTED_FILTER_DATA type. \n"
-            " >> ${getClassName(block)}.SUGGESTED_FILTER_DATA = $suggestedFilterDataB \n"
-            " >> ${getClassName(dataFilter)}.SUGGESTED_FILTER_DATA = $suggestedFilterDataBF");
+            "The Scalar and its Suggested-Criteria must have the same SUGGESTED_CRITERIA type. \n"
+            " >> ${getClassName(block)}.SUGGESTED_CRITERIA = $suggestedFilterDataB \n"
+            " >> ${getClassName(dataFilter)}.SUGGESTED_CRITERIA = $suggestedFilterDataBF");
       }
       // -----------------
       const Type filterCriteriaType = EmptyFilterCriteria;

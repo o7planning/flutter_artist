@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
 class _DefaultDataFilter
-    extends DataFilter<EmptyFilterData, EmptyEmptyFilterCriteria> {
+    extends DataFilter<EmptySuggestedCriteria, EmptyEmptyFilterCriteria> {
   _DefaultDataFilter({
     required String name,
     required Shelf shelf,
@@ -12,7 +12,7 @@ class _DefaultDataFilter
 
   @override
   Future<void> prepareData({
-    EmptyFilterData? suggestedFilterData,
+    EmptySuggestedCriteria? suggestedFilterData,
   }) async {
     // Do nothing
   }

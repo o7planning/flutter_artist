@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
 abstract class DataFilter<
-    SUGGESTED_FILTER_DATA extends SuggestedFilterData, //
+    SUGGESTED_CRITERIA extends SuggestedCriteria, //
     FILTER_CRITERIA extends EmptyFilterCriteria> {
   late final String name;
 
@@ -43,8 +43,8 @@ abstract class DataFilter<
     return FILTER_CRITERIA.toString();
   }
 
-  String getSuggestedFilterDataTypeAsString() {
-    return SUGGESTED_FILTER_DATA.toString();
+  String getSuggestedCriteriaTypeAsString() {
+    return SUGGESTED_CRITERIA.toString();
   }
 
   ///
@@ -54,7 +54,7 @@ abstract class DataFilter<
 
   ///
   /// ```Dart
-  /// Future<void> prepareData({MySuggestedFilterData? suggestedFilterData}) {
+  /// Future<void> prepareData({MySuggestedCriteria? suggestedFilterData}) {
   ///     ApiResult<dynamic>? r1 = await callYourApi1();
   ///     // Throws ApiError if r1.isError()
   ///     r1?.throwIfError();
@@ -66,11 +66,11 @@ abstract class DataFilter<
   /// ```
   ///
   Future<void> prepareData({
-    SUGGESTED_FILTER_DATA? suggestedFilterData,
+    SUGGESTED_CRITERIA? suggestedFilterData,
   });
 
   Future<_EmptyFilterCriteriaWrapper<FILTER_CRITERIA>> __prepareData({
-    required SUGGESTED_FILTER_DATA? suggestedFilterData,
+    required SUGGESTED_CRITERIA? suggestedFilterData,
   }) async {
     __currentTryingCriteriaId + 1;
     final int tryingCriteriaId = __currentTryingCriteriaId;
@@ -101,7 +101,7 @@ abstract class DataFilter<
   /// Any Scalar or Block that is not queried will be set to LAZY state.
   ///
   Future<bool> queryAll({
-    SUGGESTED_FILTER_DATA? suggestedFilterData,
+    SUGGESTED_CRITERIA? suggestedFilterData,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,

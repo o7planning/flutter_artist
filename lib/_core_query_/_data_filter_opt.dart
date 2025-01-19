@@ -5,7 +5,7 @@ part of '../flutter_artist.dart';
 ///
 class _DataFilterOpt {
   final DataFilter dataFilter;
-  final SuggestedFilterData? suggestedFilterData;
+  final SuggestedCriteria? suggestedFilterData;
 
   _DataFilterOpt({
     required this.dataFilter,

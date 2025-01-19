@@ -22,7 +22,7 @@ part of '../flutter_artist.dart';
 ///
 abstract class Scalar<
     VALUE extends Object,
-    SUGGESTED_FILTER_DATA extends SuggestedFilterData,
+    SUGGESTED_CRITERIA extends SuggestedCriteria,
     FILTER_CRITERIA extends EmptyFilterCriteria> extends DataContainer {
   final String name;
 
@@ -35,7 +35,7 @@ abstract class Scalar<
   }
 
   String get _classParametersDefinition {
-    return "<${getSuggestedFilterDataTypeAsString()}, ${getValueTypeAsString()}, ${getEmptyFilterCriteriaTypeAsString()}>";
+    return "<${getSuggestedCriteriaTypeAsString()}, ${getValueTypeAsString()}, ${getEmptyFilterCriteriaTypeAsString()}>";
   }
 
   ///
@@ -57,14 +57,14 @@ abstract class Scalar<
   /// This field is not null.
   /// If this scalar does not declare a DataFilter, it will have the default DataFilter.
   ///
-  late final DataFilter<SUGGESTED_FILTER_DATA, FILTER_CRITERIA>
+  late final DataFilter<SUGGESTED_CRITERIA, FILTER_CRITERIA>
       _registeredOrDefaultDataFilter;
 
   ///
   /// Returns a DataFilter declared in the [Shelf.registerStructure()] method.
   /// The return value may be null.
   ///
-  DataFilter<SUGGESTED_FILTER_DATA, FILTER_CRITERIA>? get dataFilter {
+  DataFilter<SUGGESTED_CRITERIA, FILTER_CRITERIA>? get dataFilter {
     if (_registeredOrDefaultDataFilter is _DefaultDataFilter) {
       return null;
     } else {
@@ -72,8 +72,8 @@ abstract class Scalar<
     }
   }
 
-  late final ScalarData<VALUE, SUGGESTED_FILTER_DATA, FILTER_CRITERIA> data =
-      ScalarData<VALUE, SUGGESTED_FILTER_DATA, FILTER_CRITERIA>(this);
+  late final ScalarData<VALUE, SUGGESTED_CRITERIA, FILTER_CRITERIA> data =
+      ScalarData<VALUE, SUGGESTED_CRITERIA, FILTER_CRITERIA>(this);
 
   DataState get dataState => data._dataState;
 
@@ -94,8 +94,8 @@ abstract class Scalar<
     return VALUE.toString();
   }
 
-  String getSuggestedFilterDataTypeAsString() {
-    return SUGGESTED_FILTER_DATA.toString();
+  String getSuggestedCriteriaTypeAsString() {
+    return SUGGESTED_CRITERIA.toString();
   }
 
   String getEmptyFilterCriteriaTypeAsString() {
@@ -146,7 +146,7 @@ abstract class Scalar<
   ///
   @nonVirtual
   Future<bool> query({
-    SUGGESTED_FILTER_DATA? suggestedFilterData,
+    SUGGESTED_CRITERIA? suggestedFilterData,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,

@@ -39,7 +39,7 @@ abstract class Block<
     ID extends Object,
     ITEM extends Object,
     ITEM_DETAIL extends Object,
-    SUGGESTED_FILTER_DATA extends SuggestedFilterData,
+    SUGGESTED_CRITERIA extends SuggestedCriteria,
     FILTER_CRITERIA extends EmptyFilterCriteria,
     SUGGESTED_FORM_DATA extends SuggestedFormData> extends DataContainer {
   @Deprecated("Xoa di, khong su dung")
@@ -98,14 +98,14 @@ abstract class Block<
   /// This field is not null.
   /// If this block does not declare a DataFilter, it will have the default DataFilter.
   ///
-  late final DataFilter<SUGGESTED_FILTER_DATA, FILTER_CRITERIA>
+  late final DataFilter<SUGGESTED_CRITERIA, FILTER_CRITERIA>
       _registeredOrDefaultDataFilter;
 
   ///
   /// Returns a DataFilter declared in the [Shelf.registerStructure()] method.
   /// The return value may be null.
   ///
-  DataFilter<SUGGESTED_FILTER_DATA, FILTER_CRITERIA>? get dataFilter {
+  DataFilter<SUGGESTED_CRITERIA, FILTER_CRITERIA>? get dataFilter {
     if (_registeredOrDefaultDataFilter is _DefaultDataFilter) {
       return null;
     } else {
@@ -139,9 +139,9 @@ abstract class Block<
           pageSize: __pageSize,
         );
 
-  late final BlockData<ID, ITEM, ITEM_DETAIL, SUGGESTED_FILTER_DATA,
+  late final BlockData<ID, ITEM, ITEM_DETAIL, SUGGESTED_CRITERIA,
           FILTER_CRITERIA, SUGGESTED_FORM_DATA> data =
-      _InternalBlockData<ID, ITEM, ITEM_DETAIL, SUGGESTED_FILTER_DATA,
+      _InternalBlockData<ID, ITEM, ITEM_DETAIL, SUGGESTED_CRITERIA,
           FILTER_CRITERIA, SUGGESTED_FORM_DATA>.empty(
     this,
     __pageable,
@@ -201,8 +201,8 @@ abstract class Block<
     return ITEM_DETAIL.toString();
   }
 
-  String getSuggestedFilterDataTypeAsString() {
-    return SUGGESTED_FILTER_DATA.toString();
+  String getSuggestedCriteriaTypeAsString() {
+    return SUGGESTED_CRITERIA.toString();
   }
 
   String getEmptyFilterCriteriaTypeAsString() {
@@ -605,7 +605,7 @@ abstract class Block<
   @nonVirtual
   Future<bool> query({
     ListBehavior listBehavior = ListBehavior.replace,
-    SUGGESTED_FILTER_DATA? suggestedFilterData,
+    SUGGESTED_CRITERIA? suggestedFilterData,
     SuggestedSelection? suggestedSelection,
     PageableData? pageable,
     Function()? route,
@@ -652,7 +652,7 @@ abstract class Block<
   ///
   @nonVirtual
   Future<bool> queryAndPrepareToEdit({
-    SUGGESTED_FILTER_DATA? suggestedFilterData,
+    SUGGESTED_CRITERIA? suggestedFilterData,
     ListBehavior listBehavior = ListBehavior.replace,
     SuggestedSelection<ID>? suggestedSelection,
     PageableData? pageable,
@@ -700,7 +700,7 @@ abstract class Block<
 
   /// Empty Query and create new record and set block to "Ready State".
   Future<bool> emptyQueryAndCreate({
-    SUGGESTED_FILTER_DATA? suggestedFilterData,
+    SUGGESTED_CRITERIA? suggestedFilterData,
     Function()? route,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -766,8 +766,8 @@ abstract class Block<
       print(
           "${getClassName(this)} ~~~~~~~~~~~~> execute dataFilter: ${getClassName(xDataFilter.dataFilter)}");
 
-      SUGGESTED_FILTER_DATA? suggestedFilterData =
-          xDataFilter.suggestedFilterData as SUGGESTED_FILTER_DATA?;
+      SUGGESTED_CRITERIA? suggestedFilterData =
+          xDataFilter.suggestedFilterData as SUGGESTED_CRITERIA?;
       print(
           "${getClassName(this)} ~~~~~~~~~~~~> suggestedFilterData: ${suggestedFilterData}");
       //
@@ -1536,7 +1536,7 @@ abstract class Block<
   }
 
   Future<bool> _executeQuickActionWithOverlayAndRestorable({
-    required SUGGESTED_FILTER_DATA? suggestedFilterData,
+    required SUGGESTED_CRITERIA? suggestedFilterData,
     required SuggestedSelection? suggestedSelection,
     required QuickActionData action,
     required AfterQuickAction? afterQuickAction,
@@ -1564,7 +1564,7 @@ abstract class Block<
   }
 
   Future<bool> __executeQuickActionWithRestorable({
-    required SUGGESTED_FILTER_DATA? suggestedFilterData,
+    required SUGGESTED_CRITERIA? suggestedFilterData,
     required SuggestedSelection? suggestedSelection,
     required QuickActionData data,
     required AfterQuickAction? afterQuickAction,
@@ -1879,7 +1879,7 @@ abstract class Block<
   /// so you need to override [callApiQuickAction] method.
   ///
   Future<bool> executeQuickAction({
-    SUGGESTED_FILTER_DATA? suggestedFilterData,
+    SUGGESTED_CRITERIA? suggestedFilterData,
     SuggestedSelection? suggestedSelection,
     required ActionConfirmation? actionConfirmation,
     required QuickActionData action,
