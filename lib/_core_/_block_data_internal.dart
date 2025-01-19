@@ -5,10 +5,10 @@ class _InternalBlockData<
         ITEM extends Object,
         ITEM_DETAIL extends Object,
         SUGGESTED_FILTER_DATA extends SuggestedFilterData,
-        FILTER_SNAPSHOT extends FilterSnapshot,
+        FILTER_CRITERIA extends EmptyFilterCriteria,
         SUGGESTED_FORM_DATA extends SuggestedFormData>
     extends BlockData<ID, ITEM, ITEM_DETAIL, SUGGESTED_FILTER_DATA,
-        FILTER_SNAPSHOT, SUGGESTED_FORM_DATA> {
+        FILTER_CRITERIA, SUGGESTED_FORM_DATA> {
   bool __isTemporaryMode = false;
 
   DataState __dataStateBk = DataState.pending;
@@ -23,14 +23,14 @@ class _InternalBlockData<
 
   Object? __currentParentItemIdBk;
 
-  FILTER_SNAPSHOT? __filterSnapshotBk;
+  FILTER_CRITERIA? __filterCriteriaBk;
 
   PageData<ITEM>? __lastQueryResultBk;
 
   PaginationData? __paginationBk;
 
   _InternalBlockData.empty(
-    Block<ID, ITEM, ITEM_DETAIL, SUGGESTED_FILTER_DATA, FILTER_SNAPSHOT,
+    Block<ID, ITEM, ITEM_DETAIL, SUGGESTED_FILTER_DATA, FILTER_CRITERIA,
             SUGGESTED_FORM_DATA>
         block,
     PageableData? pageable,
@@ -55,7 +55,7 @@ class _InternalBlockData<
         ..addAll(_checkedItems);
       __paginationBk = PaginationData.copy(_pagination);
       __currentParentItemIdBk = _currentParentItemId;
-      __filterSnapshotBk = _filterSnapshot;
+      __filterCriteriaBk = _filterCriteria;
       __lastQueryResultBk = _lastQueryResult;
       //
       block.blockForm?.data._backup();
@@ -72,7 +72,7 @@ class _InternalBlockData<
       __checkedItemsBk.clear();
       __paginationBk = null;
       __currentParentItemIdBk = null;
-      __filterSnapshotBk = null;
+      __filterCriteriaBk = null;
       __lastQueryResultBk = null;
       //
       block.blockForm?.data._applyNewState();
@@ -92,7 +92,7 @@ class _InternalBlockData<
         ..addAll(__checkedItemsBk);
       _pagination = __paginationBk;
       _currentParentItemId = __currentParentItemIdBk;
-      _filterSnapshot = __filterSnapshotBk;
+      _filterCriteria = __filterCriteriaBk;
       _lastQueryResult = __lastQueryResultBk;
       //
       block.blockForm?.data._restore();

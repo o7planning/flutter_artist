@@ -24,10 +24,10 @@ abstract class SingleItemBlock<
         ID extends Object,
         ITEM extends Object,
         ITEM_DETAIL extends Object,
-        FILTER_SNAPSHOT extends FilterSnapshot,
+        FILTER_CRITERIA extends EmptyFilterCriteria,
         SUGGESTED_FILTER_DATA extends SuggestedFilterData,
         SUGGESTED_FORM_DATA extends SuggestedFormData>
-    extends Block<ID, ITEM, ITEM_DETAIL, SUGGESTED_FILTER_DATA, FILTER_SNAPSHOT,
+    extends Block<ID, ITEM, ITEM_DETAIL, SUGGESTED_FILTER_DATA, FILTER_CRITERIA,
         SUGGESTED_FORM_DATA> {
   SingleItemBlock({
     required super.name,
@@ -43,16 +43,16 @@ abstract class SingleItemBlock<
   @override
   @nonVirtual
   Future<ApiResult<PageData<ITEM>?>> callApiQuery({
-    required FILTER_SNAPSHOT filterSnapshot,
+    required FILTER_CRITERIA filterCriteria,
     required PageableData? pageable,
   }) async {
     ApiResult<ITEM>? result = await callApiSingleItemQuery(
-      filterSnapshot: filterSnapshot,
+      filterCriteria: filterCriteria,
     );
     return result.toPageDataResult();
   }
 
   Future<ApiResult<ITEM>> callApiSingleItemQuery({
-    required FILTER_SNAPSHOT filterSnapshot,
+    required FILTER_CRITERIA filterCriteria,
   });
 }

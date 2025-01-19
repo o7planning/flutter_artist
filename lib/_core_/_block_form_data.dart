@@ -5,12 +5,12 @@ class BlockFormData<
     ITEM extends Object,
     ITEM_DETAIL extends Object,
     SUGGESTED_FILTER_DATA extends SuggestedFilterData,
-    FILTER_SNAPSHOT extends FilterSnapshot, //
+    FILTER_CRITERIA extends EmptyFilterCriteria, //
     SUGGESTED_FORM_DATA extends SuggestedFormData> {
   ///
   /// Owner BlockForm.
   ///
-  final BlockForm<ID, ITEM, ITEM_DETAIL, FILTER_SNAPSHOT, SUGGESTED_FORM_DATA>
+  final BlockForm<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA, SUGGESTED_FORM_DATA>
       blockForm;
 
   bool _justInited = false;

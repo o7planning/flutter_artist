@@ -98,25 +98,26 @@ abstract class Shelf {
               " >> ${getClassName(dataFilter)}.SUGGESTED_FILTER_DATA = $suggestedFilterDataBF");
         }
         // ----------------
-        const Type filterSnapshotType = FilterSnapshot;
-        final String filterSnapshotBase = filterSnapshotType.toString();
-        final String filterSnapshotBF =
-            dataFilter.getFilterSnapshotTypeAsString();
-        final String filterSnapshotB = scalar.getFilterSnapshotTypeAsString();
+        const Type filterCriteriaType = EmptyFilterCriteria;
+        final String filterCriteriaBase = filterCriteriaType.toString();
+        final String filterCriteriaBF =
+            dataFilter.getEmptyFilterCriteriaTypeAsString();
+        final String filterCriteriaB =
+            scalar.getEmptyFilterCriteriaTypeAsString();
         //
-        if (filterSnapshotBF == filterSnapshotBase) {
+        if (filterCriteriaBF == filterCriteriaBase) {
           throw _registerError(
-              "You need to create your own class that extends from '$filterSnapshotBase' "
-              "as FILTER_SNAPSHOT for '${getClassName(dataFilter)}' \n"
-              "Or using $EmptyFilterSnapshot as FILTER_SNAPSHOT \n"
-              " >> Currently, ${getClassName(dataFilter)}.FILTER_SNAPSHOT = $filterSnapshotBF");
+              "You need to create your own class that extends from '$filterCriteriaBase' "
+              "as FILTER_CRITERIA for '${getClassName(dataFilter)}' \n"
+              "Or using $EmptyEmptyFilterCriteria as FILTER_CRITERIA \n"
+              " >> Currently, ${getClassName(dataFilter)}.FILTER_CRITERIA = $filterCriteriaBF");
         }
         //
-        if (filterSnapshotBF != filterSnapshotB) {
+        if (filterCriteriaBF != filterCriteriaB) {
           throw _registerError(
-              "The Scalar and its Data-Filter must have the same FILTER_SNAPSHOT type. \n"
-              " >> ${getClassName(scalar)}.FILTER_SNAPSHOT = $filterSnapshotB \n"
-              " >> ${getClassName(dataFilter)}.FILTER_SNAPSHOT = $filterSnapshotBF");
+              "The Scalar and its Data-Filter must have the same FILTER_CRITERIA type. \n"
+              " >> ${getClassName(scalar)}.FILTER_CRITERIA = $filterCriteriaB \n"
+              " >> ${getClassName(dataFilter)}.FILTER_CRITERIA = $filterCriteriaBF");
         }
         //
         dataFilter._scalars.add(scalar);
@@ -132,15 +133,17 @@ abstract class Shelf {
         //
         _allDataFilters.add(defaultDataFilter);
         //
-        const Type emptyFilterSnapshotType = EmptyFilterSnapshot;
-        final String filterSnapshotEmpty = emptyFilterSnapshotType.toString();
-        final String filterSnapshotB = scalar.getFilterSnapshotTypeAsString();
+        const Type emptyEmptyFilterCriteriaType = EmptyEmptyFilterCriteria;
+        final String filterCriteriaEmpty =
+            emptyEmptyFilterCriteriaType.toString();
+        final String filterCriteriaB =
+            scalar.getEmptyFilterCriteriaTypeAsString();
         //
-        if (filterSnapshotB != filterSnapshotEmpty) {
+        if (filterCriteriaB != filterCriteriaEmpty) {
           throw _registerError(
-              "FILTER_SNAPSHOT of '${getClassName(scalar)}' scalar must be '$filterSnapshotEmpty' "
+              "FILTER_CRITERIA of '${getClassName(scalar)}' scalar must be '$filterCriteriaEmpty' "
               "because this scalar does not have a DATA_FILTER.\n"
-              " >> Currently, ${getClassName(scalar)}.FILTER_SNAPSHOT = $filterSnapshotB");
+              " >> Currently, ${getClassName(scalar)}.FILTER_CRITERIA = $filterCriteriaB");
         }
       }
     }
@@ -194,24 +197,24 @@ abstract class Shelf {
             " >> ${getClassName(dataFilter)}.SUGGESTED_FILTER_DATA = $suggestedFilterDataBF");
       }
       // -----------------
-      const Type filterSnapshotType = FilterSnapshot;
-      final String filterSnapshotBase = filterSnapshotType.toString();
-      final String filterSnapshotBF =
-          dataFilter.getFilterSnapshotTypeAsString();
-      final String filterSnapshotB = block.getFilterSnapshotTypeAsString();
+      const Type filterCriteriaType = EmptyFilterCriteria;
+      final String filterCriteriaBase = filterCriteriaType.toString();
+      final String filterCriteriaBF =
+          dataFilter.getEmptyFilterCriteriaTypeAsString();
+      final String filterCriteriaB = block.getEmptyFilterCriteriaTypeAsString();
       //
-      if (filterSnapshotBF == filterSnapshotBase) {
+      if (filterCriteriaBF == filterCriteriaBase) {
         throw _registerError(
-            "You need to create your own class that extends from '$filterSnapshotBase' "
-            "as FILTER_SNAPSHOT for '${getClassName(dataFilter)}'\n"
-            " >> Currently, ${getClassName(dataFilter)}.FILTER_SNAPSHOT = $filterSnapshotBF");
+            "You need to create your own class that extends from '$filterCriteriaBase' "
+            "as FILTER_CRITERIA for '${getClassName(dataFilter)}'\n"
+            " >> Currently, ${getClassName(dataFilter)}.FILTER_CRITERIA = $filterCriteriaBF");
       }
       //
-      if (filterSnapshotBF != filterSnapshotB) {
+      if (filterCriteriaBF != filterCriteriaB) {
         throw _registerError(
-            "The Block and its Data-Filter must have the same FILTER_SNAPSHOT type. \n"
-            " >> ${getClassName(block)}.FILTER_SNAPSHOT = $filterSnapshotB \n"
-            " >> ${getClassName(dataFilter)}.FILTER_SNAPSHOT = $filterSnapshotBF");
+            "The Block and its Data-Filter must have the same FILTER_CRITERIA type. \n"
+            " >> ${getClassName(block)}.FILTER_CRITERIA = $filterCriteriaB \n"
+            " >> ${getClassName(dataFilter)}.FILTER_CRITERIA = $filterCriteriaBF");
       }
       //
       dataFilter._blocks.add(block);
@@ -226,15 +229,16 @@ abstract class Shelf {
       //
       _allDataFilters.add(defaultDataFilter);
       //
-      const Type emptyFilterSnapshotType = EmptyFilterSnapshot;
-      final String filterSnapshotEmpty = emptyFilterSnapshotType.toString();
-      final String filterSnapshotB = block.getFilterSnapshotTypeAsString();
+      const Type emptyEmptyFilterCriteriaType = EmptyEmptyFilterCriteria;
+      final String filterCriteriaEmpty =
+          emptyEmptyFilterCriteriaType.toString();
+      final String filterCriteriaB = block.getEmptyFilterCriteriaTypeAsString();
       //
-      if (filterSnapshotB != filterSnapshotEmpty) {
+      if (filterCriteriaB != filterCriteriaEmpty) {
         throw _registerError(
-            "Filter-Snapshot of '${getClassName(block)}' block must be '$filterSnapshotEmpty' "
+            "Filter-Criteria of '${getClassName(block)}' block must be '$filterCriteriaEmpty' "
             "because this block does not have a DATA_FILTER.\n"
-            " >> Currently, ${getClassName(block)}.FILTER_SNAPSHOT = $filterSnapshotB");
+            " >> Currently, ${getClassName(block)}.FILTER_CRITERIA = $filterCriteriaB");
       }
     }
     for (Block childBlock in block.childBlocks) {
@@ -651,21 +655,21 @@ abstract class Shelf {
         final DataFilter dataFilter = xDataFilter.dataFilter;
         final Scalar scalar = xScalar.scalar;
         //
-        final FilterSnapshot filterSnapshot;
+        final EmptyFilterCriteria filterCriteria;
         if (!xDataFilter.queried) {
           // May throw _TransactionError:
-          _FilterSnapshotWrapper result = await dataFilter.__prepareData(
+          _EmptyFilterCriteriaWrapper result = await dataFilter.__prepareData(
             suggestedFilterData: xDataFilter.suggestedFilterData,
           );
-          filterSnapshot = result.filterSnapshot;
-          dataFilter._filterSnapshot = filterSnapshot;
+          filterCriteria = result.filterCriteria;
+          dataFilter._filterCriteria = filterCriteria;
           xDataFilter.queried = true;
         } else {
-          filterSnapshot = dataFilter._filterSnapshot!;
+          filterCriteria = dataFilter._filterCriteria!;
         }
         //
         bool success = await scalar.__queryThis(
-          filterSnapshot: filterSnapshot,
+          filterCriteria: filterCriteria,
         );
         if (!success) {
           throw _TransactionError();

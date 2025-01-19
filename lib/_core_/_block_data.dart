@@ -5,12 +5,12 @@ abstract class BlockData<
     ITEM extends Object,
     ITEM_DETAIL extends Object,
     SUGGESTED_FILTER_DATA extends SuggestedFilterData,
-    FILTER_SNAPSHOT extends FilterSnapshot,
+    FILTER_CRITERIA extends EmptyFilterCriteria,
     SUGGESTED_FORM_DATA extends SuggestedFormData> implements PageData<ITEM> {
   ///
   /// Owner block
   ///
-  final Block<ID, ITEM, ITEM_DETAIL, SUGGESTED_FILTER_DATA, FILTER_SNAPSHOT,
+  final Block<ID, ITEM, ITEM_DETAIL, SUGGESTED_FILTER_DATA, FILTER_CRITERIA,
       SUGGESTED_FORM_DATA> block;
 
   late final List<ITEM> _items;
@@ -31,9 +31,9 @@ abstract class BlockData<
 
   Object? _currentParentItemId;
 
-  FILTER_SNAPSHOT? _filterSnapshot;
+  FILTER_CRITERIA? _filterCriteria;
 
-  FILTER_SNAPSHOT? get filterSnapshot => _filterSnapshot;
+  FILTER_CRITERIA? get filterCriteria => _filterCriteria;
 
   PageData<ITEM>? _lastQueryResult;
 
@@ -232,22 +232,22 @@ abstract class BlockData<
   void _updateFrom({
     required ListBehavior forceListBehavior,
     required Object? currentParentItemId,
-    required FILTER_SNAPSHOT? filterSnapshot,
+    required FILTER_CRITERIA? filterCriteria,
     required PageableData? pageable,
     required PageData<ITEM>? pageData,
     required DataState dataState,
   }) {
-    // Check if filterSnapshot changed.
+    // Check if filterCriteria changed.
     if (forceListBehavior == ListBehavior.replace ||
         _currentParentItemId != currentParentItemId ||
-        _filterSnapshot != filterSnapshot) {
+        _filterCriteria != filterCriteria) {
       _items.clear();
     }
     //
     PageData<ITEM> ap = pageData ?? PageData<ITEM>.empty();
     //
     _currentParentItemId = currentParentItemId;
-    _filterSnapshot = filterSnapshot;
+    _filterCriteria = filterCriteria;
     _lastQueryResult = pageData;
     _dataState = dataState;
     //

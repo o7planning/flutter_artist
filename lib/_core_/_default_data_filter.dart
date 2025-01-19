@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
 class _DefaultDataFilter
-    extends DataFilter<EmptyFilterData, EmptyFilterSnapshot> {
+    extends DataFilter<EmptyFilterData, EmptyEmptyFilterCriteria> {
   _DefaultDataFilter({
     required String name,
     required Shelf shelf,
@@ -21,7 +21,7 @@ class _DefaultDataFilter
   List<Restorable> get restorableCriteria => [];
 
   @override
-  EmptyFilterSnapshot takeSnapshot() {
-    return EmptyFilterSnapshot();
+  EmptyEmptyFilterCriteria createCriteria() {
+    return EmptyEmptyFilterCriteria();
   }
 }

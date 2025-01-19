@@ -12,7 +12,7 @@ class _DataFilterOpt {
     required this.suggestedFilterData,
   }) {
     if (suggestedFilterData != null) {
-      assert(dataFilter.getFilterSnapshotTypeAsString() ==
+      assert(dataFilter.getEmptyFilterCriteriaTypeAsString() ==
           suggestedFilterData.runtimeType.toString());
     }
   }

@@ -3,17 +3,17 @@ part of '../flutter_artist.dart';
 class ScalarData<
     VALUE extends Object,
     SUGGESTED_FILTER_DATA extends SuggestedFilterData,
-    FILTER_SNAPSHOT extends FilterSnapshot> {
+    FILTER_CRITERIA extends EmptyFilterCriteria> {
   ///
   /// Owner Scalar.
   ///
-  final Scalar<VALUE, SUGGESTED_FILTER_DATA, FILTER_SNAPSHOT> scalar;
+  final Scalar<VALUE, SUGGESTED_FILTER_DATA, FILTER_CRITERIA> scalar;
 
   bool __isTemporaryMode = false;
 
-  FILTER_SNAPSHOT? _filterSnapshot;
+  FILTER_CRITERIA? _filterCriteria;
 
-  FILTER_SNAPSHOT? get filterSnapshot => _filterSnapshot;
+  FILTER_CRITERIA? get filterCriteria => _filterCriteria;
 
   VALUE? _value;
 
@@ -35,11 +35,11 @@ class ScalarData<
   }
 
   void _updateFrom({
-    required FILTER_SNAPSHOT? filterSnapshot,
+    required FILTER_CRITERIA? filterCriteria,
     required VALUE? data,
     required DataState dataState,
   }) {
-    _filterSnapshot = filterSnapshot;
+    _filterCriteria = filterCriteria;
     _value = data;
     _dataState = dataState;
   }

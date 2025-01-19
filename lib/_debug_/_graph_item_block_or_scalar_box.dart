@@ -247,9 +247,9 @@ class _GraphItemBlockOrScalarBoxState
 
   String _getFilterTextRow2() {
     DataFilter? dataFilter = widget.blockOrScalar.dataFilter;
-    String filterSnapshotType =
-        widget.blockOrScalar.getFilterSnapshotTypeAsString();
-    return "${dataFilter == null ? '' : getClassName(dataFilter)} [$filterSnapshotType]";
+    String filterCriteriaType =
+        widget.blockOrScalar.getEmptyFilterCriteriaTypeAsString();
+    return "${dataFilter == null ? '' : getClassName(dataFilter)} [$filterCriteriaType]";
   }
 
   Widget _buildFilterInfo() {
@@ -316,7 +316,7 @@ class _GraphItemBlockOrScalarBoxState
               verticalOffset: -85,
               message: "FILTER: ${dataFilter.name} \n"
                   "Class: ${getClassName(dataFilter)} "
-                  "| Snapshot: ${widget.blockOrScalar.getFilterSnapshotTypeAsString()}",
+                  "| Criteria: ${widget.blockOrScalar.getEmptyFilterCriteriaTypeAsString()}",
               child: row,
             ),
     );

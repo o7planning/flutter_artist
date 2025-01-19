@@ -5,7 +5,7 @@ part of '../flutter_artist.dart';
 /// ```dart
 /// class EmployeeBlock
 ///       extends Block<int,EmployeeInfo,EmployeeData,
-///                      EmptyFilterSnapshot,SuggestedFormData> {
+///                      EmptyEmptyFilterCriteria,SuggestedFormData> {
 ///
 /// }
 /// ```
@@ -40,7 +40,7 @@ abstract class Block<
     ITEM extends Object,
     ITEM_DETAIL extends Object,
     SUGGESTED_FILTER_DATA extends SuggestedFilterData,
-    FILTER_SNAPSHOT extends FilterSnapshot,
+    FILTER_CRITERIA extends EmptyFilterCriteria,
     SUGGESTED_FORM_DATA extends SuggestedFormData> extends DataContainer {
   @Deprecated("Xoa di, khong su dung")
   QueryMode _queryMode = QueryMode.lazy;
@@ -82,7 +82,7 @@ abstract class Block<
 
   String get _classParametersDefinition {
     return "<${getItemIdTypeAsString()}, ${getItemTypeAsString()}, ${getItemDetailTypeAsString()}, "
-        "${getFilterSnapshotTypeAsString()}, ${getSuggestedFormDataTypeAsString()}>";
+        "${getEmptyFilterCriteriaTypeAsString()}, ${getSuggestedFormDataTypeAsString()}>";
   }
 
   final String? description;
@@ -98,14 +98,14 @@ abstract class Block<
   /// This field is not null.
   /// If this block does not declare a DataFilter, it will have the default DataFilter.
   ///
-  late final DataFilter<SUGGESTED_FILTER_DATA, FILTER_SNAPSHOT>
+  late final DataFilter<SUGGESTED_FILTER_DATA, FILTER_CRITERIA>
       _registeredOrDefaultDataFilter;
 
   ///
   /// Returns a DataFilter declared in the [Shelf.registerStructure()] method.
   /// The return value may be null.
   ///
-  DataFilter<SUGGESTED_FILTER_DATA, FILTER_SNAPSHOT>? get dataFilter {
+  DataFilter<SUGGESTED_FILTER_DATA, FILTER_CRITERIA>? get dataFilter {
     if (_registeredOrDefaultDataFilter is _DefaultDataFilter) {
       return null;
     } else {
@@ -117,7 +117,7 @@ abstract class Block<
 
   String? get parentBlockName => parent?.name;
 
-  final BlockForm<ID, ITEM, ITEM_DETAIL, FILTER_SNAPSHOT, SUGGESTED_FORM_DATA>?
+  final BlockForm<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA, SUGGESTED_FORM_DATA>?
       blockForm;
 
   final List<Block> _childBlocks;
@@ -140,9 +140,9 @@ abstract class Block<
         );
 
   late final BlockData<ID, ITEM, ITEM_DETAIL, SUGGESTED_FILTER_DATA,
-          FILTER_SNAPSHOT, SUGGESTED_FORM_DATA> data =
+          FILTER_CRITERIA, SUGGESTED_FORM_DATA> data =
       _InternalBlockData<ID, ITEM, ITEM_DETAIL, SUGGESTED_FILTER_DATA,
-          FILTER_SNAPSHOT, SUGGESTED_FORM_DATA>.empty(
+          FILTER_CRITERIA, SUGGESTED_FORM_DATA>.empty(
     this,
     __pageable,
   );
@@ -185,8 +185,8 @@ abstract class Block<
     return ITEM_DETAIL;
   }
 
-  Type getFilterSnapshotType() {
-    return FILTER_SNAPSHOT;
+  Type getEmptyFilterCriteriaType() {
+    return FILTER_CRITERIA;
   }
 
   String getItemIdTypeAsString() {
@@ -205,8 +205,8 @@ abstract class Block<
     return SUGGESTED_FILTER_DATA.toString();
   }
 
-  String getFilterSnapshotTypeAsString() {
-    return FILTER_SNAPSHOT.toString();
+  String getEmptyFilterCriteriaTypeAsString() {
+    return FILTER_CRITERIA.toString();
   }
 
   String getSuggestedFormDataTypeAsString() {
@@ -759,7 +759,7 @@ abstract class Block<
     final _XDataFilter xDataFilter = thisXBlock.xDataFilter;
     final DataFilter dataFilter = xDataFilter.dataFilter;
     //
-    final FILTER_SNAPSHOT filterSnapshot;
+    final FILTER_CRITERIA filterCriteria;
     //
     print("\n${getClassName(this)} ~~~~~~~~~~~~> dataFilter: ${xDataFilter}");
     if (!xDataFilter.queried) {
@@ -773,17 +773,17 @@ abstract class Block<
       //
       // May throw _TransactionError:
       //
-      _FilterSnapshotWrapper result = await dataFilter.__prepareData(
+      _EmptyFilterCriteriaWrapper result = await dataFilter.__prepareData(
         suggestedFilterData: suggestedFilterData,
       );
-      filterSnapshot = result.filterSnapshot as FILTER_SNAPSHOT;
-      dataFilter._filterSnapshot = filterSnapshot;
+      filterCriteria = result.filterCriteria as FILTER_CRITERIA;
+      dataFilter._filterCriteria = filterCriteria;
       xDataFilter.queried = true;
     } else {
-      filterSnapshot = dataFilter._filterSnapshot! as FILTER_SNAPSHOT;
+      filterCriteria = dataFilter._filterCriteria! as FILTER_CRITERIA;
     }
     print(
-        "${getClassName(this)} ~~~~~~~~~~~~> filterSnapshot: ${filterSnapshot}");
+        "${getClassName(this)} ~~~~~~~~~~~~> filterCriteria: ${filterCriteria}");
     //
     final QueryType queryType = thisXBlock.queryType;
     final ListBehavior listBehavior = thisXBlock.listBehavior;
@@ -843,7 +843,7 @@ abstract class Block<
         //
         print("${getClassName(this)} ~~~~~~~~~~~~> callApiQuery");
         result = await callApiQuery(
-          filterSnapshot: filterSnapshot,
+          filterCriteria: filterCriteria,
           pageable: callingPageable,
         );
         //
@@ -892,7 +892,7 @@ abstract class Block<
     data._updateFrom(
       forceListBehavior: forceListBehavior,
       currentParentItemId: currentParentItem,
-      filterSnapshot: filterSnapshot,
+      filterCriteria: filterCriteria,
       pageable: callingPageable,
       pageData: pageData,
       dataState: dataState,
@@ -1275,14 +1275,14 @@ abstract class Block<
 
     if (clearListForThis) {
       // TODO: Xem lai.
-      FILTER_SNAPSHOT? filterSnapshot = data.filterSnapshot;
+      FILTER_CRITERIA? filterCriteria = data.filterCriteria;
       //
       PageData<ITEM> emptyAppPage = PageData.empty();
       Object? currentParentItem = parentItemId;
 
       data._updateFrom(
         currentParentItemId: currentParentItem,
-        filterSnapshot: filterSnapshot,
+        filterCriteria: filterCriteria,
         forceListBehavior: ListBehavior.replace,
         pageable: __pageable,
         pageData: emptyAppPage,
@@ -1806,7 +1806,7 @@ abstract class Block<
   }
 
   bool needToKeepItemInList({
-    required FILTER_SNAPSHOT? filterSnapshot,
+    required FILTER_CRITERIA? filterCriteria,
     required ITEM_DETAIL savedItem,
   });
 
@@ -1836,7 +1836,7 @@ abstract class Block<
       keepInList = false;
     } else {
       keepInList = needToKeepItemInList(
-        filterSnapshot: data.filterSnapshot,
+        filterCriteria: data.filterCriteria,
         savedItem: savedItemDetail,
       );
     }
@@ -2839,7 +2839,7 @@ abstract class Block<
   }
 
   Future<ApiResult<PageData<ITEM>?>> callApiQuery({
-    required FILTER_SNAPSHOT filterSnapshot,
+    required FILTER_CRITERIA filterCriteria,
     required PageableData pageable,
   });
 

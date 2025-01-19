@@ -28,11 +28,11 @@ class _BlockOrScalar extends Equatable {
     }
   }
 
-  String getFilterSnapshotTypeAsString() {
+  String getEmptyFilterCriteriaTypeAsString() {
     if (block != null) {
-      return block!.getFilterSnapshotTypeAsString();
+      return block!.getEmptyFilterCriteriaTypeAsString();
     } else {
-      return scalar!.getFilterSnapshotTypeAsString();
+      return scalar!.getEmptyFilterCriteriaTypeAsString();
     }
   }
 

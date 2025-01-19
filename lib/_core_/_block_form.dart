@@ -4,7 +4,7 @@ abstract class BlockForm<
     ID extends Object,
     ITEM extends Object,
     ITEM_DETAIL extends Object,
-    FILTER_SNAPSHOT extends FilterSnapshot,
+    FILTER_CRITERIA extends EmptyFilterCriteria,
     SUGGESTED_FORM_DATA extends SuggestedFormData> {
   QueryMode _queryMode = QueryMode.lazy;
 
@@ -14,7 +14,7 @@ abstract class BlockForm<
 
   Shelf get shelf => block.shelf;
 
-  late final Block<ID, ITEM, ITEM_DETAIL, SuggestedFilterData, FILTER_SNAPSHOT,
+  late final Block<ID, ITEM, ITEM_DETAIL, SuggestedFilterData, FILTER_CRITERIA,
       SUGGESTED_FORM_DATA> block;
 
   DataState get dataState => data._dataState;
@@ -192,7 +192,7 @@ abstract class BlockForm<
   /// This method is called before [prepareFormData] method.
   ///
   Future<ApiResult<void>?>? prepareFormMasterData({
-    required FILTER_SNAPSHOT? filterSnapshot,
+    required FILTER_CRITERIA? filterCriteria,
     required SUGGESTED_FORM_DATA? suggestedFormData,
     required ITEM_DETAIL? refreshedItem,
     required bool isNew,
@@ -202,7 +202,7 @@ abstract class BlockForm<
   /// This method is called after [prepareFormMasterData].
   ///
   Map<String, dynamic> prepareFormData({
-    required FILTER_SNAPSHOT? filterSnapshot,
+    required FILTER_CRITERIA? filterCriteria,
     required SUGGESTED_FORM_DATA? suggestedFormData,
     required ITEM_DETAIL? refreshedItem,
     required bool isNew,
@@ -400,11 +400,11 @@ abstract class BlockForm<
     // Init Extra data for Edit Form:
     //
     if (needToLoad) {
-      FILTER_SNAPSHOT? filterSnapshot =
-          block.data.filterSnapshot as FILTER_SNAPSHOT?;
+      FILTER_CRITERIA? filterCriteria =
+          block.data.filterCriteria as FILTER_CRITERIA?;
       //
       bool success = await __prepareFormMasterData(
-        filterSnapshot: filterSnapshot,
+        filterCriteria: filterCriteria,
         suggestedFormData: suggestedFormData,
         refreshedItem: refreshedItem,
         isNew: isNew,
@@ -432,7 +432,7 @@ abstract class BlockForm<
 
   // Private method in this class.
   Future<bool> __prepareFormMasterData({
-    required FILTER_SNAPSHOT? filterSnapshot,
+    required FILTER_CRITERIA? filterCriteria,
     required SUGGESTED_FORM_DATA? suggestedFormData,
     required ITEM_DETAIL? refreshedItem,
     required bool isNew,
@@ -444,7 +444,7 @@ abstract class BlockForm<
         ownerClassInstance: this,
         methodName: "prepareFormMasterData",
         parameters: {
-          "filterSnapshot": filterSnapshot,
+          "filterCriteria": filterCriteria,
           "suggestedFormData": suggestedFormData,
           "refreshedItem": refreshedItem,
           "isNew": isNew,
@@ -452,7 +452,7 @@ abstract class BlockForm<
       );
       //
       Future<ApiResult<void>?>? future = prepareFormMasterData(
-        filterSnapshot: filterSnapshot,
+        filterCriteria: filterCriteria,
         suggestedFormData: suggestedFormData,
         refreshedItem: refreshedItem,
         isNew: isNew,
@@ -503,15 +503,15 @@ abstract class BlockForm<
     Map<String, dynamic> newFormData;
     if (data._dataState == DataState.ready) {
       try {
-        FILTER_SNAPSHOT? filterSnapshot =
-            block.data.filterSnapshot as FILTER_SNAPSHOT?;
+        FILTER_CRITERIA? filterCriteria =
+            block.data.filterCriteria as FILTER_CRITERIA?;
         //
         FlutterArtist.codeFlowLogger._addMethodCall(
           isLibCode: false,
           ownerClassInstance: this,
           methodName: "prepareFormData",
           parameters: {
-            "filterSnapshot": filterSnapshot,
+            "filterCriteria": filterCriteria,
             "suggestedFormData": suggestedFormData,
             "refreshedItem": refreshedItem,
             "isNew": isNew,
@@ -520,7 +520,7 @@ abstract class BlockForm<
         );
         //
         newFormData = prepareFormData(
-          filterSnapshot: filterSnapshot,
+          filterCriteria: filterCriteria,
           suggestedFormData: suggestedFormData,
           refreshedItem: refreshedItem,
           isNew: isNew,

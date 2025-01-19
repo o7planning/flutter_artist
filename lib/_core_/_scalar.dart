@@ -5,7 +5,7 @@ part of '../flutter_artist.dart';
 ///
 /// ```
 /// class OrderSummaryScalar
-///        extends Scalar<OrderSummaryData, EmptyFilterSnapshot> {
+///        extends Scalar<OrderSummaryData, EmptyEmptyFilterCriteria> {
 ///
 /// }
 /// ```
@@ -23,7 +23,7 @@ part of '../flutter_artist.dart';
 abstract class Scalar<
     VALUE extends Object,
     SUGGESTED_FILTER_DATA extends SuggestedFilterData,
-    FILTER_SNAPSHOT extends FilterSnapshot> extends DataContainer {
+    FILTER_CRITERIA extends EmptyFilterCriteria> extends DataContainer {
   final String name;
 
   String get _shortPathName {
@@ -35,7 +35,7 @@ abstract class Scalar<
   }
 
   String get _classParametersDefinition {
-    return "<${getSuggestedFilterDataTypeAsString()}, ${getValueTypeAsString()}, ${getFilterSnapshotTypeAsString()}>";
+    return "<${getSuggestedFilterDataTypeAsString()}, ${getValueTypeAsString()}, ${getEmptyFilterCriteriaTypeAsString()}>";
   }
 
   ///
@@ -57,14 +57,14 @@ abstract class Scalar<
   /// This field is not null.
   /// If this scalar does not declare a DataFilter, it will have the default DataFilter.
   ///
-  late final DataFilter<SUGGESTED_FILTER_DATA, FILTER_SNAPSHOT>
+  late final DataFilter<SUGGESTED_FILTER_DATA, FILTER_CRITERIA>
       _registeredOrDefaultDataFilter;
 
   ///
   /// Returns a DataFilter declared in the [Shelf.registerStructure()] method.
   /// The return value may be null.
   ///
-  DataFilter<SUGGESTED_FILTER_DATA, FILTER_SNAPSHOT>? get dataFilter {
+  DataFilter<SUGGESTED_FILTER_DATA, FILTER_CRITERIA>? get dataFilter {
     if (_registeredOrDefaultDataFilter is _DefaultDataFilter) {
       return null;
     } else {
@@ -72,8 +72,8 @@ abstract class Scalar<
     }
   }
 
-  late final ScalarData<VALUE, SUGGESTED_FILTER_DATA, FILTER_SNAPSHOT> data =
-      ScalarData<VALUE, SUGGESTED_FILTER_DATA, FILTER_SNAPSHOT>(this);
+  late final ScalarData<VALUE, SUGGESTED_FILTER_DATA, FILTER_CRITERIA> data =
+      ScalarData<VALUE, SUGGESTED_FILTER_DATA, FILTER_CRITERIA>(this);
 
   DataState get dataState => data._dataState;
 
@@ -98,8 +98,8 @@ abstract class Scalar<
     return SUGGESTED_FILTER_DATA.toString();
   }
 
-  String getFilterSnapshotTypeAsString() {
-    return FILTER_SNAPSHOT.toString();
+  String getEmptyFilterCriteriaTypeAsString() {
+    return FILTER_CRITERIA.toString();
   }
 
   void _backup() {
@@ -168,7 +168,7 @@ abstract class Scalar<
   }
 
   Future<ApiResult<VALUE>> callApiQuery({
-    required FILTER_SNAPSHOT? filterSnapshot,
+    required FILTER_CRITERIA? filterCriteria,
   });
 
   void __refreshQueryingState({required bool isQuerying}) {
@@ -179,7 +179,7 @@ abstract class Scalar<
   }
 
   Future<bool> __queryThis({
-    required FILTER_SNAPSHOT filterSnapshot,
+    required FILTER_CRITERIA filterCriteria,
   }) async {
     ApiResult<VALUE> result;
     try {
@@ -194,7 +194,7 @@ abstract class Scalar<
       __refreshQueryingState(isQuerying: true);
       //
       result = await callApiQuery(
-        filterSnapshot: filterSnapshot,
+        filterCriteria: filterCriteria,
       );
       //
       __refreshQueryingState(isQuerying: false);
@@ -222,7 +222,7 @@ abstract class Scalar<
     }
     // TODO: Xu ly cac tinh huong loi???
     data._updateFrom(
-      filterSnapshot: filterSnapshot,
+      filterCriteria: filterCriteria,
       data: result.data,
       dataState: DataState.ready,
     );

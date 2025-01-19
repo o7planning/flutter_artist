@@ -2,7 +2,7 @@ part of '../flutter_artist.dart';
 
 abstract class DataFilter<
     SUGGESTED_FILTER_DATA extends SuggestedFilterData, //
-    FILTER_SNAPSHOT extends FilterSnapshot> {
+    FILTER_CRITERIA extends EmptyFilterCriteria> {
   late final String name;
 
   late final Shelf shelf;
@@ -15,32 +15,32 @@ abstract class DataFilter<
 
   List<Scalar> get scalars => [..._scalars];
 
-  int __currentTryingSnapshotId = 0;
-  int? __currentSuccessSnapshotId;
+  int __currentTryingCriteriaId = 0;
+  int? __currentSuccessCriteriaId;
 
-  int? get currentSuccessSnapshotId => __currentSuccessSnapshotId;
+  int? get currentSuccessCriteriaId => __currentSuccessCriteriaId;
 
   ///
-  /// Map<SnapshotId, FilterSnapshot>
+  /// Map<CriteriaId, EmptyFilterCriteria>
   ///
-  final Map<int, FILTER_SNAPSHOT> __filterSnapshotsMap = {};
+  final Map<int, FILTER_CRITERIA> __filterCriteriasMap = {};
 
-  FILTER_SNAPSHOT? get currentSuccessFilterSnapshot {
-    return __currentSuccessSnapshotId == null
+  FILTER_CRITERIA? get currentSuccessEmptyFilterCriteria {
+    return __currentSuccessCriteriaId == null
         ? null
-        : __filterSnapshotsMap[__currentSuccessSnapshotId];
+        : __filterCriteriasMap[__currentSuccessCriteriaId];
   }
 
-  FILTER_SNAPSHOT? __filterSnapshotBk;
+  FILTER_CRITERIA? __filterCriteriaBk;
 
-  FILTER_SNAPSHOT? _filterSnapshot;
+  FILTER_CRITERIA? _filterCriteria;
 
   List<Restorable> get restorableCriteria;
 
   final Map<_WidgetState, bool> _widgetStateListeners = {};
 
-  String getFilterSnapshotTypeAsString() {
-    return FILTER_SNAPSHOT.toString();
+  String getEmptyFilterCriteriaTypeAsString() {
+    return FILTER_CRITERIA.toString();
   }
 
   String getSuggestedFilterDataTypeAsString() {
@@ -50,7 +50,7 @@ abstract class DataFilter<
   ///
   /// This method is called immediately after calling [prepareData()] method if there are no errors.
   ///
-  FILTER_SNAPSHOT takeSnapshot();
+  FILTER_CRITERIA createCriteria();
 
   ///
   /// ```Dart
@@ -69,23 +69,23 @@ abstract class DataFilter<
     SUGGESTED_FILTER_DATA? suggestedFilterData,
   });
 
-  Future<_FilterSnapshotWrapper<FILTER_SNAPSHOT>> __prepareData({
+  Future<_EmptyFilterCriteriaWrapper<FILTER_CRITERIA>> __prepareData({
     required SUGGESTED_FILTER_DATA? suggestedFilterData,
   }) async {
-    __currentTryingSnapshotId + 1;
-    final int tryingSnapshotId = __currentTryingSnapshotId;
+    __currentTryingCriteriaId + 1;
+    final int tryingCriteriaId = __currentTryingCriteriaId;
     //
     try {
       await prepareData(
         suggestedFilterData: suggestedFilterData,
       );
       // If no error:
-      FILTER_SNAPSHOT tryingSnapshot = takeSnapshot();
-      __filterSnapshotsMap[tryingSnapshotId] = tryingSnapshot;
+      FILTER_CRITERIA tryingCriteria = createCriteria();
+      __filterCriteriasMap[tryingCriteriaId] = tryingCriteria;
       //
-      return _FilterSnapshotWrapper(
-        filterSnapshotId: tryingSnapshotId,
-        filterSnapshot: tryingSnapshot,
+      return _EmptyFilterCriteriaWrapper(
+        filterCriteriaId: tryingCriteriaId,
+        filterCriteria: tryingCriteria,
       );
     } catch (e, stackTrace) {
       print(stackTrace);
@@ -177,16 +177,16 @@ abstract class DataFilter<
   //       blocks: queryBlocks,
   //     );
   //     //
-  //     _FilterSnapshotWrapper<S> tryingSnapshot = await __prepareData(
+  //     _EmptyFilterCriteriaWrapper<S> tryingCriteria = await __prepareData(
   //       suggestedFilterData: suggestedFilterData,
   //     );
   //     //
-  //     final int tryingFilterSnapshotId = tryingSnapshot.filterSnapshotId;
-  //     final S tryingFilterSnapshot = tryingSnapshot.filterSnapshot;
+  //     final int tryingEmptyFilterCriteriaId = tryingCriteria.filterCriteriaId;
+  //     final S tryingEmptyFilterCriteria = tryingCriteria.filterCriteria;
   //     //
   //     for (Scalar scalar in queryScalars) {
   //       bool success = await scalar.__queryThis(
-  //         filterSnapshot: tryingFilterSnapshot,
+  //         filterCriteria: tryingEmptyFilterCriteria,
   //       );
   //       if (!success) {
   //         // Throw error to restore all....
@@ -198,7 +198,7 @@ abstract class DataFilter<
   //       bool success = await block.__queryThisAndChildren(
   //         queryType: QueryType.forceQuery,
   //         listBehavior: ListBehavior.replace,
-  //         filterSnapshot: tryingFilterSnapshot,
+  //         filterCriteria: tryingEmptyFilterCriteria,
   //         postQueryBehavior: PostQueryBehavior.selectAvailableItem,
   //         suggestedSelection: null,
   //         pageable: null,
@@ -266,11 +266,11 @@ abstract class DataFilter<
   }
 
   void _backup() {
-    __filterSnapshotBk = _filterSnapshot;
+    __filterCriteriaBk = _filterCriteria;
   }
 
   void _restore() {
-    _filterSnapshot = __filterSnapshotBk;
+    _filterCriteria = __filterCriteriaBk;
     //
     for (Restorable bk in restorableCriteria) {
       bk.restore();
@@ -278,7 +278,7 @@ abstract class DataFilter<
   }
 
   void _applyNewState() {
-    __filterSnapshotBk = null;
+    __filterCriteriaBk = null;
     for (Restorable bk in restorableCriteria) {
       bk.applyNewState();
     }
