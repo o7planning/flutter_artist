@@ -5,7 +5,7 @@ part of '../flutter_artist.dart';
 /// ```dart
 /// class EmployeeBlock
 ///       extends Block<int, EmployeeInfo, EmployeeData,
-///                      EmptyFilterCriteria, ExtraInput> {
+///                     EmptyFilerInput, EmptyFilterCriteria, EmptyExtraInput> {
 ///
 /// }
 /// ```
@@ -54,10 +54,10 @@ part of '../flutter_artist.dart';
 /// }
 /// ```
 ///
-/// [EXTRA_INPUT]: Additional parameters are used to create a record in the Form.
+/// [EXTRA_INPUT]: Additional form data are used to create a record in the Form.
 /// For example: Create an employee with the specified department.
 /// ```
-/// class EmployeeExtraFormData extends ExtraInput {
+/// class EmployeeExtraInput extends ExtraInput {
 ///    DepartmentInfo? department;
 /// }
 /// ```
