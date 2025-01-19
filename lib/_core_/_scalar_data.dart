@@ -28,7 +28,7 @@ class ScalarData<VALUE extends Object, FILTER_INPUT extends FilterInput,
   ScalarData(this.scalar);
 
   void setToPending() {
-    print(" --> Set to pending ${getClassName(scalar)}");
+    print(" --> ${getClassName(scalar)} --> Set To Pending");
     _dataState = DataState.pending;
   }
 
