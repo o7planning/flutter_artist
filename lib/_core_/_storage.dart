@@ -42,7 +42,7 @@ class _Storage {
 
     ShelfCreator? creator = __shelfCreatorMap[shelfName];
     if (creator == null) {
-      throw _registerError(
+      throw _printFatalError(
           " ERROR: '$shelfName' not found. You need to call:\n "
           " FlutterArtist.storage.registerShelf(()=> $shelfName())");
     }
@@ -494,6 +494,15 @@ class _Storage {
   // ===========================================================================
 
   void _logout() {
+    __shelfMap.clear();
+  }
+
+  ///
+  /// Very Dangerous!!! Only call on startup.
+  ///
+  void __clear() {
+    _rencentShelves.clear();
+    __shelfCreatorMap.clear();
     __shelfMap.clear();
   }
 }

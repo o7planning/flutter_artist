@@ -44,6 +44,18 @@ abstract class Shelf {
     __onInit();
   }
 
+  ///
+  /// Very Dangerous Method. Call Internal only.
+  ///
+  String ___registerError(String message) {
+    FlutterArtist.storage.__clear();
+    //
+    return "\n*********************************************************************************************\n"
+        "$message"
+        "\n*** You may need to restart the application. ***\n"
+        "\n*********************************************************************************************\n";
+  }
+
   void __onInit() {
     _shelfStruct = registerStructure();
 
@@ -59,7 +71,7 @@ abstract class Shelf {
 
     for (Scalar scalar in scalars) {
       if (__scalarMap.containsKey(scalar.name)) {
-        throw _registerError(
+        throw ___registerError(
             "Duplicated Scalar '${scalar.name}' in '${getClassName(this)}'");
       } else {
         __scalarMap[scalar.name] = scalar;
@@ -71,7 +83,7 @@ abstract class Shelf {
         DataFilter? dataFilter =
             _shelfStruct.dataFilters[scalar.registerDataFilterName!];
         if (dataFilter == null) {
-          throw _registerError(
+          throw ___registerError(
               "DataFilter not found '${scalar.registerDataFilterName}' in '${getClassName(this)}'");
         }
         //
@@ -81,14 +93,14 @@ abstract class Shelf {
         final String filterInputB = scalar.getFilterInputTypeAsString();
         //
         if (filterInputBF == filterInputBase) {
-          throw _registerError(
+          throw ___registerError(
               "You need to create your own class that extends the '$filterInputBase' class \n"
               "or use the 'EmptyFilterInput' class to use in the '${getClassName(dataFilter)}' declaration \n\n"
               " >> Currently, ${getClassName(dataFilter)}<FILTER_INPUT> = <$filterInputBF>");
         }
         //
         if (filterInputBF != filterInputB) {
-          throw _registerError(
+          throw ___registerError(
               "The Scalar and its Filter-Input must have the same FILTER_INPUT type. \n\n"
               " >> ${getClassName(scalar)}<FILTER_INPUT> = <$filterInputB> \n"
               " >> ${getClassName(dataFilter)}<FILTER_INPUT> = <$filterInputBF>");
@@ -101,14 +113,14 @@ abstract class Shelf {
         final String filterCriteriaB = scalar.getFilterCriteriaTypeAsString();
         //
         if (filterCriteriaBF == filterCriteriaBase) {
-          throw _registerError(
+          throw ___registerError(
               "You need to create your own class that extends the '$filterCriteriaBase' class \n"
               "or use the 'EmptyFilterCriteria' class to use in the '${getClassName(dataFilter)}' declaration \n\n"
               " >> Currently, ${getClassName(dataFilter)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
         }
         //
         if (filterCriteriaBF != filterCriteriaB) {
-          throw _registerError(
+          throw ___registerError(
               "The Scalar and its Data-Filter must have the same FILTER_CRITERIA type. \n\n"
               " >> ${getClassName(scalar)}<FILTER_CRITERIA> = <$filterCriteriaB> \n"
               " >> ${getClassName(dataFilter)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
@@ -132,7 +144,7 @@ abstract class Shelf {
         final String filterCriteriaB = scalar.getFilterCriteriaTypeAsString();
         //
         if (filterCriteriaB != filterCriteriaEmpty) {
-          throw _registerError(
+          throw ___registerError(
               "FILTER_CRITERIA of '${getClassName(scalar)}' scalar must be '$filterCriteriaEmpty' "
               "because this scalar does not have a DATA_FILTER. \n\n"
               " >> Currently, ${getClassName(scalar)}<FILTER_CRITERIA> = <$filterCriteriaB>");
@@ -150,7 +162,7 @@ abstract class Shelf {
 
   void __registerBlockCascade(Block block) {
     if (__blockMap.containsKey(block.name)) {
-      throw _registerError(
+      throw ___registerError(
           "Duplicated block '${block.name}' in '${getClassName(this)}'\n"
           "Double-check ${getClassName(this)}.registerStructure() method");
     } else {
@@ -162,7 +174,7 @@ abstract class Shelf {
       DataFilter? dataFilter =
           _shelfStruct.dataFilters[block.registerDataFilterName!];
       if (dataFilter == null) {
-        throw _registerError(
+        throw ___registerError(
             "DataFilter not found '${block.registerDataFilterName}' in '${getClassName(this)}'");
       }
       //
@@ -173,14 +185,14 @@ abstract class Shelf {
       final String filterInputB = block.getFilterInputTypeAsString();
       //
       if (filterInputBF == filterInputBase) {
-        throw _registerError(
+        throw ___registerError(
             "You need to create your own class that extends the '$filterInputBase' class \n"
             "or use the 'EmptyFilterInput' class to use in the '${getClassName(dataFilter)}' declaration \n\n"
             " >> Currently, ${getClassName(dataFilter)}<FILTER_INPUT> = <$filterInputBF>");
       }
       //
       if (filterInputBF != filterInputB) {
-        throw _registerError(
+        throw ___registerError(
             "The Scalar and its Filter-Input must have the same FILTER_INPUT type.\n\n"
             " >> ${getClassName(block)}<FILTER_INPUT> = <$filterInputB> \n"
             " >> ${getClassName(dataFilter)}<FILTER_INPUT> = <$filterInputBF>");
@@ -193,14 +205,14 @@ abstract class Shelf {
       final String filterCriteriaB = block.getFilterCriteriaTypeAsString();
       //
       if (filterCriteriaBF == filterCriteriaBase) {
-        throw _registerError(
+        throw ___registerError(
             "You need to create your own class that extends from '$filterCriteriaBase' "
             "as FILTER_CRITERIA for '${getClassName(dataFilter)}'\n\n"
             " >> Currently, ${getClassName(dataFilter)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
       }
       //
       if (filterCriteriaBF != filterCriteriaB) {
-        throw _registerError(
+        throw ___registerError(
             "The Block and its Data-Filter must have the same FILTER_CRITERIA type. \n"
             " >> ${getClassName(block)}<FILTER_CRITERIA> = <$filterCriteriaB> \n"
             " >> ${getClassName(dataFilter)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
@@ -223,7 +235,7 @@ abstract class Shelf {
       final String filterCriteriaB = block.getFilterCriteriaTypeAsString();
       //
       if (filterCriteriaB != filterCriteriaEmpty) {
-        throw _registerError(
+        throw ___registerError(
             "Filter-Criteria of '${getClassName(block)}' block must be '$filterCriteriaEmpty' "
             "because this block does not have a DATA_FILTER.\n\n"
             " >> Currently, ${getClassName(block)}<FILTER_CRITERIA> = <$filterCriteriaB>");
@@ -235,7 +247,7 @@ abstract class Shelf {
     String extraInputTypeStr = block.getExtraInputTypeAsString();
 
     if (extraInputTypeStr == extraInputTypeB) {
-      throw _registerError(
+      throw ___registerError(
           "You need to create your own class that extends the '$extraInputTypeB' class \n"
           "or use the 'EmptyExtraInput' class to use in the '${getClassName(block)}' declaration \n\n"
           " >> Currently, ${getClassName(block)}<EXTRA_INPUT> = <$extraInputTypeStr>");

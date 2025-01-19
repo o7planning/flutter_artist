@@ -44,7 +44,7 @@ class _LoggedInUserManager {
     LoggedInUserAdapter? loggedInUserAdapter =
         FlutterArtist.loggedInUserAdapter;
     if (loggedInUserAdapter == null) {
-      throw _registerError(
+      throw _printFatalError(
           " No LoggedInUserAdapter. You need to config it in FlutterArtist.config()");
     }
     if (_loggedInUser != null &&

@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-String _registerError(String message) {
+String _printFatalError(String message) {
   return "\n*********************************************************************************************\n"
       "$message"
       "\n*********************************************************************************************\n";

@@ -55,7 +55,7 @@ class _FlutterArtist {
 
   FlutterArtistAdapter get adapter {
     if (__adapter == null) {
-      throw _registerError(" >>>>>> FlutterArtistAdapter is not registered!. "
+      throw _printFatalError(" >>>>>> FlutterArtistAdapter is not registered!. "
           "\n >>>>>> You need to call FlutterArtist.config() in main.dart");
     }
     return __adapter!;
@@ -97,7 +97,7 @@ class _FlutterArtist {
     int notificationFetchPeriodInSeconds = 60,
   }) async {
     if (__adapter != null) {
-      throw _registerError("FlutterArtistAdapter already registered!");
+      throw _printFatalError("FlutterArtistAdapter already registered!");
     }
     __adapter = flutterArtistAdapter;
     //
