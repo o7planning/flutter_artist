@@ -154,7 +154,7 @@ abstract class Scalar<
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
-      route: null,
+      navigate: null,
       ownerClassInstance: this,
       methodName: "query",
       parameters: {"filterInput": filterInput},
@@ -189,7 +189,7 @@ abstract class Scalar<
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
-        route: null,
+        navigate: null,
         ownerClassInstance: this,
         methodName: "callApiQuery",
         parameters: {},

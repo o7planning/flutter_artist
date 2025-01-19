@@ -587,11 +587,11 @@ abstract class Block<
     return false;
   }
 
-  void _executeRoute({Function()? route}) {
+  void _executeRoute({Function()? navigate}) {
     try {
-      if (route != null) {
-        print("  ~~~~~~~~~~~~~~~~~~> Go to Route");
-        route();
+      if (navigate != null) {
+        print("  ~~~~~~~~~~~~~~~~~~> navigate");
+        navigate();
       }
     } catch (e, stackTrace) {
       print(stackTrace);
@@ -599,10 +599,10 @@ abstract class Block<
   }
 
   /// Empty Query and set block to "Pending State".
-  Future<bool> emptyQuery({Function()? route}) async {
+  Future<bool> emptyQuery({Function()? navigate}) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
-      route: route,
+      navigate: navigate,
       ownerClassInstance: this,
       methodName: "emptyQuery",
       parameters: {},
@@ -625,7 +625,7 @@ abstract class Block<
     );
     //
     if (success) {
-      _executeRoute(route: route);
+      _executeRoute(navigate: navigate);
     }
     return success;
   }
@@ -639,11 +639,11 @@ abstract class Block<
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
     PageableData? pageable,
-    Function()? route,
+    Function()? navigate,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
-      route: route,
+      navigate: navigate,
       ownerClassInstance: this,
       methodName: "query",
       parameters: {
@@ -673,7 +673,7 @@ abstract class Block<
     );
     //
     if (success) {
-      _executeRoute(route: route);
+      _executeRoute(navigate: navigate);
     }
     return success;
   }
@@ -687,11 +687,11 @@ abstract class Block<
     ListBehavior listBehavior = ListBehavior.replace,
     SuggestedSelection<ID>? suggestedSelection,
     PageableData? pageable,
-    Function()? route,
+    Function()? navigate,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
-      route: route,
+      navigate: navigate,
       ownerClassInstance: this,
       methodName: "queryAndPrepareToEdit",
       parameters: {
@@ -724,7 +724,7 @@ abstract class Block<
     //
     print("Success: $success");
     if (success) {
-      _executeRoute(route: route);
+      _executeRoute(navigate: navigate);
     }
     return success;
   }
@@ -732,11 +732,11 @@ abstract class Block<
   /// Empty Query and create new record and set block to "Ready State".
   Future<bool> emptyQueryAndCreate({
     FILTER_INPUT? filterInput,
-    Function()? route,
+    Function()? navigate,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
-      route: route,
+      navigate: navigate,
       ownerClassInstance: this,
       methodName: "emptyQueryAndCreate",
       parameters: {},
@@ -762,7 +762,7 @@ abstract class Block<
     );
     //
     if (success) {
-      _executeRoute(route: route);
+      _executeRoute(navigate: navigate);
     }
     return success;
   }
@@ -862,7 +862,7 @@ abstract class Block<
       try {
         FlutterArtist.codeFlowLogger._addMethodCall(
           isLibCode: false,
-          route: null,
+          navigate: null,
           ownerClassInstance: this,
           methodName: "callApiQuery",
           parameters: {},
@@ -1137,7 +1137,7 @@ abstract class Block<
   void __removeItemFromList({required ITEM removeItem}) {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
-      route: null,
+      navigate: null,
       ownerClassInstance: this,
       methodName: "__removeItemFromList",
       parameters: {
@@ -1158,7 +1158,7 @@ abstract class Block<
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
-      route: null,
+      navigate: null,
       ownerClassInstance: this,
       methodName: "__removeNotFoundItemAndRefreshChildren",
       parameters: {
@@ -1222,7 +1222,7 @@ abstract class Block<
     //
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
-      route: null,
+      navigate: null,
       ownerClassInstance: this,
       methodName: "__insertOrReplaceItemInListAndRefreshChildren",
       parameters: {
@@ -1292,7 +1292,7 @@ abstract class Block<
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
-      route: null,
+      navigate: null,
       ownerClassInstance: this,
       methodName: "_switchThisAndChildrenToNoneMode",
       parameters: {
@@ -1916,7 +1916,7 @@ abstract class Block<
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
-      route: null,
+      navigate: null,
       ownerClassInstance: this,
       methodName: "executeQuickAction",
       parameters: {
@@ -2049,7 +2049,7 @@ abstract class Block<
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
-      route: null,
+      navigate: null,
       ownerClassInstance: this,
       methodName: "executeQuickUpdateAction",
       parameters: {
@@ -2091,11 +2091,11 @@ abstract class Block<
 
   Future<bool> prepareToEdit({
     required ITEM item,
-    Function()? route,
+    Function()? navigate,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
-      route: route,
+      navigate: navigate,
       ownerClassInstance: this,
       methodName: "prepareToEdit",
       parameters: {
@@ -2110,7 +2110,7 @@ abstract class Block<
       forceForm: true,
     );
     if (success) {
-      _executeRoute(route: route);
+      _executeRoute(navigate: navigate);
       return true;
     }
     return false;
@@ -2118,11 +2118,11 @@ abstract class Block<
 
   Future<bool> prepareToShow({
     required ITEM item,
-    Function()? route,
+    Function()? navigate,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
-      route: route,
+      navigate: navigate,
       ownerClassInstance: this,
       methodName: "prepareToShow",
       parameters: {
@@ -2137,7 +2137,7 @@ abstract class Block<
       forceForm: false,
     );
     if (success) {
-      _executeRoute(route: route);
+      _executeRoute(navigate: navigate);
       return true;
     }
     return false;
@@ -2237,7 +2237,7 @@ abstract class Block<
     //
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
-      route: null,
+      navigate: null,
       ownerClassInstance: this,
       methodName: "__prepareToShowOrEdit",
       parameters: {
@@ -2255,7 +2255,7 @@ abstract class Block<
       try {
         FlutterArtist.codeFlowLogger._addMethodCall(
           isLibCode: false,
-          route: null,
+          navigate: null,
           ownerClassInstance: this,
           methodName: "callApiRefreshItem",
           parameters: {
@@ -2335,11 +2335,11 @@ abstract class Block<
   ///
   Future<bool> prepareToCreate({
     EXTRA_INPUT? extraInput,
-    required Function()? route,
+    required Function()? navigate,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
-      route: route,
+      navigate: navigate,
       ownerClassInstance: this,
       methodName: "prepareToCreate",
       parameters: {"extraInput": extraInput},
@@ -2356,7 +2356,7 @@ abstract class Block<
     );
     //
     if (success) {
-      _executeRoute(route: route);
+      _executeRoute(navigate: navigate);
     }
     return success;
   }
@@ -2438,7 +2438,7 @@ abstract class Block<
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
-      route: null,
+      navigate: null,
       ownerClassInstance: this,
       methodName: "__prepareToCreate",
       parameters: {"extraInput": extraInput},
@@ -2495,7 +2495,7 @@ abstract class Block<
   Future<bool> deleteCurrentItem() async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
-      route: null,
+      navigate: null,
       ownerClassInstance: this,
       methodName: "deleteCurrentItem",
       parameters: {},
@@ -2544,7 +2544,7 @@ abstract class Block<
   Future<bool> deleteItemById({required ID itemId}) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
-      route: null,
+      navigate: null,
       ownerClassInstance: this,
       methodName: "deleteItemById",
       parameters: {
@@ -2617,7 +2617,7 @@ abstract class Block<
   Future<bool> delete(ITEM item) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
-      route: null,
+      navigate: null,
       ownerClassInstance: this,
       methodName: "delete",
       parameters: {
@@ -2711,7 +2711,7 @@ abstract class Block<
       try {
         FlutterArtist.codeFlowLogger._addMethodCall(
           isLibCode: false,
-          route: null,
+          navigate: null,
           ownerClassInstance: this,
           methodName: "callApiDelete",
           parameters: {
@@ -2800,7 +2800,7 @@ abstract class Block<
   Future<bool> refreshCurrentItem() async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
-      route: null,
+      navigate: null,
       ownerClassInstance: this,
       methodName: "refreshCurrentItem",
       parameters: {},

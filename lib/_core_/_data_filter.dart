@@ -111,7 +111,7 @@ abstract class DataFilter<
       parameters: {
         "filterInput": filterInput,
       },
-      route: null,
+      navigate: null,
     );
     return await shelf._queryAllWithOverlayAndRestorable(
       forceDataFilterOpt: _DataFilterOpt(

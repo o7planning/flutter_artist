@@ -53,7 +53,7 @@ class CodeFlowLogger {
     required Object ownerClassInstance,
     required String methodName,
     required Map<String, dynamic>? parameters,
-    required Function()? route,
+    required Function()? navigate,
     required bool isLibCode,
   }) {
     __markDateTime();

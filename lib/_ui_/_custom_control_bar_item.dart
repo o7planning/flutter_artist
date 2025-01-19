@@ -3,13 +3,13 @@ part of '../flutter_artist.dart';
 class CustomControlBarItem extends StatelessWidget {
   final Widget child;
   final Function() onPressed;
-  final Function()? route;
+  final Function()? navigate;
 
   const CustomControlBarItem({
     super.key,
     required this.child,
     required this.onPressed,
-    this.route,
+    this.navigate,
   });
 
   @override
@@ -22,8 +22,8 @@ class CustomControlBarItem extends StatelessWidget {
 
   void _onPressed() {
     onPressed();
-    if (route != null) {
-      route!();
+    if (navigate != null) {
+      navigate!();
     }
   }
 }

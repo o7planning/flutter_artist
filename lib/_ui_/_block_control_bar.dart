@@ -357,7 +357,7 @@ class _BlockControlBarState extends _WidgetState<BlockControlBar> {
   }
 
   void _prepareToCreate(Block block) {
-    widget.block.prepareToCreate(route: null);
+    widget.block.prepareToCreate(navigate: null);
   }
 
   void _resetForm(Block block) {
