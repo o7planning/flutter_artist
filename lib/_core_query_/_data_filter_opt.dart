@@ -5,15 +5,15 @@ part of '../flutter_artist.dart';
 ///
 class _DataFilterOpt {
   final DataFilter dataFilter;
-  final SuggestedCriteria? suggestedCriteria;
+  final FilterInput? filterInput;
 
   _DataFilterOpt({
     required this.dataFilter,
-    required this.suggestedCriteria,
+    required this.filterInput,
   }) {
-    if (suggestedCriteria != null) {
-      assert(dataFilter.getSuggestedCriteriaTypeAsString() ==
-          suggestedCriteria.runtimeType.toString());
+    if (filterInput != null) {
+      assert(dataFilter.getFilterInputTypeAsString() ==
+          filterInput.runtimeType.toString());
     }
   }
 

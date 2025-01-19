@@ -4,11 +4,11 @@ class _InternalBlockData<
         ID extends Object,
         ITEM extends Object,
         ITEM_DETAIL extends Object,
-        SUGGESTED_CRITERIA extends SuggestedCriteria,
+        FILTER_INPUT extends FilterInput,
         FILTER_CRITERIA extends FilterCriteria,
         SUGGESTED_FORM_DATA extends SuggestedFormData>
-    extends BlockData<ID, ITEM, ITEM_DETAIL, SUGGESTED_CRITERIA,
-        FILTER_CRITERIA, SUGGESTED_FORM_DATA> {
+    extends BlockData<ID, ITEM, ITEM_DETAIL, FILTER_INPUT, FILTER_CRITERIA,
+        SUGGESTED_FORM_DATA> {
   bool __isTemporaryMode = false;
 
   DataState __dataStateBk = DataState.pending;
@@ -30,7 +30,7 @@ class _InternalBlockData<
   PaginationData? __paginationBk;
 
   _InternalBlockData.empty(
-    Block<ID, ITEM, ITEM_DETAIL, SUGGESTED_CRITERIA, FILTER_CRITERIA,
+    Block<ID, ITEM, ITEM_DETAIL, FILTER_INPUT, FILTER_CRITERIA,
             SUGGESTED_FORM_DATA>
         block,
     PageableData? pageable,

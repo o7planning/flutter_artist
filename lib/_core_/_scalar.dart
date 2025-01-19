@@ -20,9 +20,7 @@ part of '../flutter_artist.dart';
 /// OrderSummaryData value = scalar.data.value;
 /// ```
 ///
-abstract class Scalar<
-    VALUE extends Object,
-    SUGGESTED_CRITERIA extends SuggestedCriteria,
+abstract class Scalar<VALUE extends Object, FILTER_INPUT extends FilterInput,
     FILTER_CRITERIA extends FilterCriteria> extends DataContainer {
   final String name;
 
@@ -35,7 +33,7 @@ abstract class Scalar<
   }
 
   String get _classParametersDefinition {
-    return "<${getSuggestedCriteriaTypeAsString()}, ${getValueTypeAsString()}, ${getFilterCriteriaTypeAsString()}>";
+    return "<${getFilterInputTypeAsString()}, ${getValueTypeAsString()}, ${getFilterCriteriaTypeAsString()}>";
   }
 
   ///
@@ -57,14 +55,14 @@ abstract class Scalar<
   /// This field is not null.
   /// If this scalar does not declare a DataFilter, it will have the default DataFilter.
   ///
-  late final DataFilter<SUGGESTED_CRITERIA, FILTER_CRITERIA>
+  late final DataFilter<FILTER_INPUT, FILTER_CRITERIA>
       _registeredOrDefaultDataFilter;
 
   ///
   /// Returns a DataFilter declared in the [Shelf.registerStructure()] method.
   /// The return value may be null.
   ///
-  DataFilter<SUGGESTED_CRITERIA, FILTER_CRITERIA>? get dataFilter {
+  DataFilter<FILTER_INPUT, FILTER_CRITERIA>? get dataFilter {
     if (_registeredOrDefaultDataFilter is _DefaultDataFilter) {
       return null;
     } else {
@@ -72,8 +70,8 @@ abstract class Scalar<
     }
   }
 
-  late final ScalarData<VALUE, SUGGESTED_CRITERIA, FILTER_CRITERIA> data =
-      ScalarData<VALUE, SUGGESTED_CRITERIA, FILTER_CRITERIA>(this);
+  late final ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA> data =
+      ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
 
   DataState get dataState => data._dataState;
 
@@ -94,8 +92,8 @@ abstract class Scalar<
     return VALUE.toString();
   }
 
-  String getSuggestedCriteriaTypeAsString() {
-    return SUGGESTED_CRITERIA.toString();
+  String getFilterInputTypeAsString() {
+    return FILTER_INPUT.toString();
   }
 
   String getFilterCriteriaTypeAsString() {
@@ -146,20 +144,20 @@ abstract class Scalar<
   ///
   @nonVirtual
   Future<bool> query({
-    SUGGESTED_CRITERIA? suggestedCriteria,
+    FILTER_INPUT? filterInput,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       ownerClassInstance: this,
       methodName: "query",
-      parameters: {"suggestedCriteria": suggestedCriteria},
+      parameters: {"filterInput": filterInput},
     );
     //
     return await shelf._queryAllWithOverlayAndRestorable(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: _registeredOrDefaultDataFilter,
-        suggestedCriteria: suggestedCriteria,
+        filterInput: filterInput,
       ),
       forceQueryScalarOpts: [_ScalarOpt(scalar: this)],
       forceQueryBlockOpts: [],

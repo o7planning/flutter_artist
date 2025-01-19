@@ -4,7 +4,7 @@ class BlockFormData<
     ID extends Object,
     ITEM extends Object,
     ITEM_DETAIL extends Object,
-    SUGGESTED_CRITERIA extends SuggestedCriteria,
+    FILTER_INPUT extends FilterInput,
     FILTER_CRITERIA extends FilterCriteria, //
     SUGGESTED_FORM_DATA extends SuggestedFormData> {
   ///

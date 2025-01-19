@@ -14,7 +14,7 @@ abstract class BlockForm<
 
   Shelf get shelf => block.shelf;
 
-  late final Block<ID, ITEM, ITEM_DETAIL, SuggestedCriteria, FILTER_CRITERIA,
+  late final Block<ID, ITEM, ITEM_DETAIL, FilterInput, FILTER_CRITERIA,
       SUGGESTED_FORM_DATA> block;
 
   DataState get dataState => data._dataState;

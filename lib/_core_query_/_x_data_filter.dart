@@ -3,7 +3,7 @@ part of '../flutter_artist.dart';
 class _XDataFilter {
   bool queried = false;
   final DataFilter dataFilter;
-  SuggestedCriteria? suggestedCriteria;
+  FilterInput? filterInput;
 
   _XDataFilter({
     required this.dataFilter,
@@ -13,6 +13,6 @@ class _XDataFilter {
 
   @override
   String toString() {
-    return "${getClassName(dataFilter)} - queried: $queried >>> SUGGESTED_CRITERIA: $suggestedCriteria";
+    return "${getClassName(dataFilter)} - queried: $queried >>> FILTER_INPUT: $filterInput";
   }
 }

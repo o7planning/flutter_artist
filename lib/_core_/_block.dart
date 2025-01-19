@@ -39,7 +39,7 @@ abstract class Block<
     ID extends Object,
     ITEM extends Object,
     ITEM_DETAIL extends Object,
-    SUGGESTED_CRITERIA extends SuggestedCriteria,
+    FILTER_INPUT extends FilterInput,
     FILTER_CRITERIA extends FilterCriteria,
     SUGGESTED_FORM_DATA extends SuggestedFormData> extends DataContainer {
   @Deprecated("Xoa di, khong su dung")
@@ -98,14 +98,14 @@ abstract class Block<
   /// This field is not null.
   /// If this block does not declare a DataFilter, it will have the default DataFilter.
   ///
-  late final DataFilter<SUGGESTED_CRITERIA, FILTER_CRITERIA>
+  late final DataFilter<FILTER_INPUT, FILTER_CRITERIA>
       _registeredOrDefaultDataFilter;
 
   ///
   /// Returns a DataFilter declared in the [Shelf.registerStructure()] method.
   /// The return value may be null.
   ///
-  DataFilter<SUGGESTED_CRITERIA, FILTER_CRITERIA>? get dataFilter {
+  DataFilter<FILTER_INPUT, FILTER_CRITERIA>? get dataFilter {
     if (_registeredOrDefaultDataFilter is _DefaultDataFilter) {
       return null;
     } else {
@@ -139,10 +139,10 @@ abstract class Block<
           pageSize: __pageSize,
         );
 
-  late final BlockData<ID, ITEM, ITEM_DETAIL, SUGGESTED_CRITERIA,
-          FILTER_CRITERIA, SUGGESTED_FORM_DATA> data =
-      _InternalBlockData<ID, ITEM, ITEM_DETAIL, SUGGESTED_CRITERIA,
-          FILTER_CRITERIA, SUGGESTED_FORM_DATA>.empty(
+  late final BlockData<ID, ITEM, ITEM_DETAIL, FILTER_INPUT, FILTER_CRITERIA,
+          SUGGESTED_FORM_DATA> data =
+      _InternalBlockData<ID, ITEM, ITEM_DETAIL, FILTER_INPUT, FILTER_CRITERIA,
+          SUGGESTED_FORM_DATA>.empty(
     this,
     __pageable,
   );
@@ -201,8 +201,8 @@ abstract class Block<
     return ITEM_DETAIL.toString();
   }
 
-  String getSuggestedCriteriaTypeAsString() {
-    return SUGGESTED_CRITERIA.toString();
+  String getFilterInputTypeAsString() {
+    return FILTER_INPUT.toString();
   }
 
   String getFilterCriteriaTypeAsString() {
@@ -605,7 +605,7 @@ abstract class Block<
   @nonVirtual
   Future<bool> query({
     ListBehavior listBehavior = ListBehavior.replace,
-    SUGGESTED_CRITERIA? suggestedCriteria,
+    FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
     PageableData? pageable,
     Function()? route,
@@ -616,7 +616,7 @@ abstract class Block<
       ownerClassInstance: this,
       methodName: "query",
       parameters: {
-        "suggestedCriteria": suggestedCriteria,
+        "filterInput": filterInput,
         "suggestedSelection": suggestedSelection,
         "pageable": pageable,
       },
@@ -625,7 +625,7 @@ abstract class Block<
     bool success = await shelf._queryAllWithOverlayAndRestorable(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: _registeredOrDefaultDataFilter,
-        suggestedCriteria: suggestedCriteria,
+        filterInput: filterInput,
       ),
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [
@@ -652,7 +652,7 @@ abstract class Block<
   ///
   @nonVirtual
   Future<bool> queryAndPrepareToEdit({
-    SUGGESTED_CRITERIA? suggestedCriteria,
+    FILTER_INPUT? filterInput,
     ListBehavior listBehavior = ListBehavior.replace,
     SuggestedSelection<ID>? suggestedSelection,
     PageableData? pageable,
@@ -664,7 +664,7 @@ abstract class Block<
       ownerClassInstance: this,
       methodName: "queryAndPrepareToEdit",
       parameters: {
-        "suggestedCriteria": suggestedCriteria,
+        "filterInput": filterInput,
         "suggestedSelection": suggestedSelection,
         "pageable": pageable,
       },
@@ -675,7 +675,7 @@ abstract class Block<
     bool success = await shelf._queryAllWithOverlayAndRestorable(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: _registeredOrDefaultDataFilter,
-        suggestedCriteria: suggestedCriteria,
+        filterInput: filterInput,
       ),
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [
@@ -700,7 +700,7 @@ abstract class Block<
 
   /// Empty Query and create new record and set block to "Ready State".
   Future<bool> emptyQueryAndCreate({
-    SUGGESTED_CRITERIA? suggestedCriteria,
+    FILTER_INPUT? filterInput,
     Function()? route,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -714,7 +714,7 @@ abstract class Block<
     bool success = await shelf._queryAllWithOverlayAndRestorable(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: this._registeredOrDefaultDataFilter,
-        suggestedCriteria: suggestedCriteria,
+        filterInput: filterInput,
       ),
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [
@@ -766,15 +766,15 @@ abstract class Block<
       print(
           "${getClassName(this)} ~~~~~~~~~~~~> execute dataFilter: ${getClassName(xDataFilter.dataFilter)}");
 
-      SUGGESTED_CRITERIA? suggestedCriteria =
-          xDataFilter.suggestedCriteria as SUGGESTED_CRITERIA?;
+      FILTER_INPUT? filterInput =
+          xDataFilter.filterInput as FILTER_INPUT?;
       print(
-          "${getClassName(this)} ~~~~~~~~~~~~> suggestedCriteria: ${suggestedCriteria}");
+          "${getClassName(this)} ~~~~~~~~~~~~> filterInput: ${filterInput}");
       //
       // May throw _TransactionError:
       //
       _FilterCriteriaWrapper result = await dataFilter.__prepareData(
-        suggestedCriteria: suggestedCriteria,
+        filterInput: filterInput,
       );
       filterCriteria = result.filterCriteria as FILTER_CRITERIA;
       dataFilter._filterCriteria = filterCriteria;
@@ -1536,7 +1536,7 @@ abstract class Block<
   }
 
   Future<bool> _executeQuickActionWithOverlayAndRestorable({
-    required SUGGESTED_CRITERIA? suggestedCriteria,
+    required FILTER_INPUT? filterInput,
     required SuggestedSelection? suggestedSelection,
     required QuickActionData action,
     required AfterQuickAction? afterQuickAction,
@@ -1544,7 +1544,7 @@ abstract class Block<
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
         bool success = await __executeQuickActionWithRestorable(
-          suggestedCriteria: suggestedCriteria,
+          filterInput: filterInput,
           suggestedSelection: suggestedSelection,
           data: action,
           afterQuickAction: afterQuickAction,
@@ -1564,7 +1564,7 @@ abstract class Block<
   }
 
   Future<bool> __executeQuickActionWithRestorable({
-    required SUGGESTED_CRITERIA? suggestedCriteria,
+    required FILTER_INPUT? filterInput,
     required SuggestedSelection? suggestedSelection,
     required QuickActionData data,
     required AfterQuickAction? afterQuickAction,
@@ -1573,7 +1573,7 @@ abstract class Block<
       shelf: shelf,
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: _registeredOrDefaultDataFilter,
-        suggestedCriteria: suggestedCriteria,
+        filterInput: filterInput,
       ),
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: _childBlocks
@@ -1879,7 +1879,7 @@ abstract class Block<
   /// so you need to override [callApiQuickAction] method.
   ///
   Future<bool> executeQuickAction({
-    SUGGESTED_CRITERIA? suggestedCriteria,
+    FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
     required ActionConfirmation? actionConfirmation,
     required QuickActionData action,
@@ -1891,7 +1891,7 @@ abstract class Block<
       ownerClassInstance: this,
       methodName: "executeQuickAction",
       parameters: {
-        "suggestedCriteria": suggestedCriteria,
+        "filterInput": filterInput,
         "suggestedSelection": suggestedSelection,
         "action": action,
         "afterQuickAction": afterQuickAction,
@@ -1921,7 +1921,7 @@ abstract class Block<
     }
     try {
       bool success = await _executeQuickActionWithOverlayAndRestorable(
-        suggestedCriteria: suggestedCriteria,
+        filterInput: filterInput,
         suggestedSelection: suggestedSelection,
         action: action,
         afterQuickAction: afterQuickAction,

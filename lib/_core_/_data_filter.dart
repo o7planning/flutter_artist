@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
 abstract class DataFilter<
-    SUGGESTED_CRITERIA extends SuggestedCriteria, //
+    FILTER_INPUT extends FilterInput, //
     FILTER_CRITERIA extends FilterCriteria> {
   late final String name;
 
@@ -43,8 +43,8 @@ abstract class DataFilter<
     return FILTER_CRITERIA.toString();
   }
 
-  String getSuggestedCriteriaTypeAsString() {
-    return SUGGESTED_CRITERIA.toString();
+  String getFilterInputTypeAsString() {
+    return FILTER_INPUT.toString();
   }
 
   ///
@@ -54,7 +54,7 @@ abstract class DataFilter<
 
   ///
   /// ```Dart
-  /// Future<void> prepareData({MySuggestedCriteria? suggestedCriteria}) {
+  /// Future<void> prepareData({MyFilterInput? filterInput}) {
   ///     ApiResult<dynamic>? r1 = await callYourApi1();
   ///     // Throws ApiError if r1.isError()
   ///     r1?.throwIfError();
@@ -66,18 +66,18 @@ abstract class DataFilter<
   /// ```
   ///
   Future<void> prepareData({
-    SUGGESTED_CRITERIA? suggestedCriteria,
+    FILTER_INPUT? filterInput,
   });
 
   Future<_FilterCriteriaWrapper<FILTER_CRITERIA>> __prepareData({
-    required SUGGESTED_CRITERIA? suggestedCriteria,
+    required FILTER_INPUT? filterInput,
   }) async {
     __currentTryingCriteriaId + 1;
     final int tryingCriteriaId = __currentTryingCriteriaId;
     //
     try {
       await prepareData(
-        suggestedCriteria: suggestedCriteria,
+        filterInput: filterInput,
       );
       // If no error:
       FILTER_CRITERIA tryingCriteria = createFilterCriteria();
@@ -101,21 +101,21 @@ abstract class DataFilter<
   /// Any Scalar or Block that is not queried will be set to LAZY state.
   ///
   Future<bool> queryAll({
-    SUGGESTED_CRITERIA? suggestedCriteria,
+    FILTER_INPUT? filterInput,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       ownerClassInstance: this,
       methodName: "queryAll",
       parameters: {
-        "suggestedCriteria": suggestedCriteria,
+        "filterInput": filterInput,
       },
       route: null,
     );
     return await shelf._queryAllWithOverlayAndRestorable(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: this,
-        suggestedCriteria: suggestedCriteria,
+        filterInput: filterInput,
       ),
       forceQueryScalarOpts: _scalars.map((s) => _ScalarOpt(scalar: s)).toList(),
       forceQueryBlockOpts: _blocks
