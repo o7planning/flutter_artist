@@ -146,20 +146,20 @@ abstract class Scalar<
   ///
   @nonVirtual
   Future<bool> query({
-    SUGGESTED_CRITERIA? suggestedFilterData,
+    SUGGESTED_CRITERIA? suggestedCriteria,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       route: null,
       ownerClassInstance: this,
       methodName: "query",
-      parameters: {"suggestedFilterData": suggestedFilterData},
+      parameters: {"suggestedCriteria": suggestedCriteria},
     );
     //
     return await shelf._queryAllWithOverlayAndRestorable(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: _registeredOrDefaultDataFilter,
-        suggestedFilterData: suggestedFilterData,
+        suggestedCriteria: suggestedCriteria,
       ),
       forceQueryScalarOpts: [_ScalarOpt(scalar: this)],
       forceQueryBlockOpts: [],

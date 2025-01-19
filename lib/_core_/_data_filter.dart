@@ -54,7 +54,7 @@ abstract class DataFilter<
 
   ///
   /// ```Dart
-  /// Future<void> prepareData({MySuggestedCriteria? suggestedFilterData}) {
+  /// Future<void> prepareData({MySuggestedCriteria? suggestedCriteria}) {
   ///     ApiResult<dynamic>? r1 = await callYourApi1();
   ///     // Throws ApiError if r1.isError()
   ///     r1?.throwIfError();
@@ -66,18 +66,18 @@ abstract class DataFilter<
   /// ```
   ///
   Future<void> prepareData({
-    SUGGESTED_CRITERIA? suggestedFilterData,
+    SUGGESTED_CRITERIA? suggestedCriteria,
   });
 
   Future<_EmptyFilterCriteriaWrapper<FILTER_CRITERIA>> __prepareData({
-    required SUGGESTED_CRITERIA? suggestedFilterData,
+    required SUGGESTED_CRITERIA? suggestedCriteria,
   }) async {
     __currentTryingCriteriaId + 1;
     final int tryingCriteriaId = __currentTryingCriteriaId;
     //
     try {
       await prepareData(
-        suggestedFilterData: suggestedFilterData,
+        suggestedCriteria: suggestedCriteria,
       );
       // If no error:
       FILTER_CRITERIA tryingCriteria = createCriteria();
@@ -101,21 +101,21 @@ abstract class DataFilter<
   /// Any Scalar or Block that is not queried will be set to LAZY state.
   ///
   Future<bool> queryAll({
-    SUGGESTED_CRITERIA? suggestedFilterData,
+    SUGGESTED_CRITERIA? suggestedCriteria,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       ownerClassInstance: this,
       methodName: "queryAll",
       parameters: {
-        "suggestedFilterData": suggestedFilterData,
+        "suggestedCriteria": suggestedCriteria,
       },
       route: null,
     );
     return await shelf._queryAllWithOverlayAndRestorable(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: this,
-        suggestedFilterData: suggestedFilterData,
+        suggestedCriteria: suggestedCriteria,
       ),
       forceQueryScalarOpts: _scalars.map((s) => _ScalarOpt(scalar: s)).toList(),
       forceQueryBlockOpts: _blocks
@@ -140,14 +140,14 @@ abstract class DataFilter<
   /// [forceBlockWithQueryOptions.block] will be queried mandatory.
   ///
   // Future<bool> _queryAllWithOverlayAndRestorable({
-  //   required S? suggestedFilterData,
+  //   required S? suggestedCriteria,
   //   required _BlockOpt? forceBlockWithQueryOptions,
   //   required _ScalarOpt? forceScalarWithQueryOptions,
   // }) async {
   //   return await FlutterArtist.executeTask(
   //     asyncFunction: () async {
   //       return await __queryAllIfNeedWithRestorable(
-  //         suggestedFilterData: suggestedFilterData,
+  //         suggestedCriteria: suggestedCriteria,
   //         forceBlockWithQueryOptions: null,
   //         forceScalarWithQueryOptions: null,
   //       );
@@ -160,7 +160,7 @@ abstract class DataFilter<
   /// Any Scalar or Block that is not queried will be set to LAZY state.
   ///
   // Future<bool> __queryAllIfNeedWithRestorable({
-  //   required S? suggestedFilterData,
+  //   required S? suggestedCriteria,
   //   required _BlockOpt? forceBlockWithQueryOptions,
   //   required _ScalarOpt? forceScalarWithQueryOptions,
   // }) async {
@@ -178,7 +178,7 @@ abstract class DataFilter<
   //     );
   //     //
   //     _EmptyFilterCriteriaWrapper<S> tryingCriteria = await __prepareData(
-  //       suggestedFilterData: suggestedFilterData,
+  //       suggestedCriteria: suggestedCriteria,
   //     );
   //     //
   //     final int tryingEmptyFilterCriteriaId = tryingCriteria.filterCriteriaId;

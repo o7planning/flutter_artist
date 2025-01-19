@@ -605,7 +605,7 @@ abstract class Block<
   @nonVirtual
   Future<bool> query({
     ListBehavior listBehavior = ListBehavior.replace,
-    SUGGESTED_CRITERIA? suggestedFilterData,
+    SUGGESTED_CRITERIA? suggestedCriteria,
     SuggestedSelection? suggestedSelection,
     PageableData? pageable,
     Function()? route,
@@ -616,7 +616,7 @@ abstract class Block<
       ownerClassInstance: this,
       methodName: "query",
       parameters: {
-        "suggestedFilterData": suggestedFilterData,
+        "suggestedCriteria": suggestedCriteria,
         "suggestedSelection": suggestedSelection,
         "pageable": pageable,
       },
@@ -625,7 +625,7 @@ abstract class Block<
     bool success = await shelf._queryAllWithOverlayAndRestorable(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: _registeredOrDefaultDataFilter,
-        suggestedFilterData: suggestedFilterData,
+        suggestedCriteria: suggestedCriteria,
       ),
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [
@@ -652,7 +652,7 @@ abstract class Block<
   ///
   @nonVirtual
   Future<bool> queryAndPrepareToEdit({
-    SUGGESTED_CRITERIA? suggestedFilterData,
+    SUGGESTED_CRITERIA? suggestedCriteria,
     ListBehavior listBehavior = ListBehavior.replace,
     SuggestedSelection<ID>? suggestedSelection,
     PageableData? pageable,
@@ -664,7 +664,7 @@ abstract class Block<
       ownerClassInstance: this,
       methodName: "queryAndPrepareToEdit",
       parameters: {
-        "suggestedFilterData": suggestedFilterData,
+        "suggestedCriteria": suggestedCriteria,
         "suggestedSelection": suggestedSelection,
         "pageable": pageable,
       },
@@ -675,7 +675,7 @@ abstract class Block<
     bool success = await shelf._queryAllWithOverlayAndRestorable(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: _registeredOrDefaultDataFilter,
-        suggestedFilterData: suggestedFilterData,
+        suggestedCriteria: suggestedCriteria,
       ),
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [
@@ -700,7 +700,7 @@ abstract class Block<
 
   /// Empty Query and create new record and set block to "Ready State".
   Future<bool> emptyQueryAndCreate({
-    SUGGESTED_CRITERIA? suggestedFilterData,
+    SUGGESTED_CRITERIA? suggestedCriteria,
     Function()? route,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -714,7 +714,7 @@ abstract class Block<
     bool success = await shelf._queryAllWithOverlayAndRestorable(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: this._registeredOrDefaultDataFilter,
-        suggestedFilterData: suggestedFilterData,
+        suggestedCriteria: suggestedCriteria,
       ),
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [
@@ -766,15 +766,15 @@ abstract class Block<
       print(
           "${getClassName(this)} ~~~~~~~~~~~~> execute dataFilter: ${getClassName(xDataFilter.dataFilter)}");
 
-      SUGGESTED_CRITERIA? suggestedFilterData =
-          xDataFilter.suggestedFilterData as SUGGESTED_CRITERIA?;
+      SUGGESTED_CRITERIA? suggestedCriteria =
+          xDataFilter.suggestedCriteria as SUGGESTED_CRITERIA?;
       print(
-          "${getClassName(this)} ~~~~~~~~~~~~> suggestedFilterData: ${suggestedFilterData}");
+          "${getClassName(this)} ~~~~~~~~~~~~> suggestedCriteria: ${suggestedCriteria}");
       //
       // May throw _TransactionError:
       //
       _EmptyFilterCriteriaWrapper result = await dataFilter.__prepareData(
-        suggestedFilterData: suggestedFilterData,
+        suggestedCriteria: suggestedCriteria,
       );
       filterCriteria = result.filterCriteria as FILTER_CRITERIA;
       dataFilter._filterCriteria = filterCriteria;
@@ -1536,7 +1536,7 @@ abstract class Block<
   }
 
   Future<bool> _executeQuickActionWithOverlayAndRestorable({
-    required SUGGESTED_CRITERIA? suggestedFilterData,
+    required SUGGESTED_CRITERIA? suggestedCriteria,
     required SuggestedSelection? suggestedSelection,
     required QuickActionData action,
     required AfterQuickAction? afterQuickAction,
@@ -1544,7 +1544,7 @@ abstract class Block<
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
         bool success = await __executeQuickActionWithRestorable(
-          suggestedFilterData: suggestedFilterData,
+          suggestedCriteria: suggestedCriteria,
           suggestedSelection: suggestedSelection,
           data: action,
           afterQuickAction: afterQuickAction,
@@ -1564,7 +1564,7 @@ abstract class Block<
   }
 
   Future<bool> __executeQuickActionWithRestorable({
-    required SUGGESTED_CRITERIA? suggestedFilterData,
+    required SUGGESTED_CRITERIA? suggestedCriteria,
     required SuggestedSelection? suggestedSelection,
     required QuickActionData data,
     required AfterQuickAction? afterQuickAction,
@@ -1573,7 +1573,7 @@ abstract class Block<
       shelf: shelf,
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: _registeredOrDefaultDataFilter,
-        suggestedFilterData: suggestedFilterData,
+        suggestedCriteria: suggestedCriteria,
       ),
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: _childBlocks
@@ -1879,7 +1879,7 @@ abstract class Block<
   /// so you need to override [callApiQuickAction] method.
   ///
   Future<bool> executeQuickAction({
-    SUGGESTED_CRITERIA? suggestedFilterData,
+    SUGGESTED_CRITERIA? suggestedCriteria,
     SuggestedSelection? suggestedSelection,
     required ActionConfirmation? actionConfirmation,
     required QuickActionData action,
@@ -1891,7 +1891,7 @@ abstract class Block<
       ownerClassInstance: this,
       methodName: "executeQuickAction",
       parameters: {
-        "suggestedFilterData": suggestedFilterData,
+        "suggestedCriteria": suggestedCriteria,
         "suggestedSelection": suggestedSelection,
         "action": action,
         "afterQuickAction": afterQuickAction,
@@ -1921,7 +1921,7 @@ abstract class Block<
     }
     try {
       bool success = await _executeQuickActionWithOverlayAndRestorable(
-        suggestedFilterData: suggestedFilterData,
+        suggestedCriteria: suggestedCriteria,
         suggestedSelection: suggestedSelection,
         action: action,
         afterQuickAction: afterQuickAction,
