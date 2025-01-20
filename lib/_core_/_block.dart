@@ -1021,6 +1021,10 @@ abstract class Block<
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
 
+  ID getItemId(ITEM item);
+
+  ITEM convertItemDetailToItem({required ITEM_DETAIL itemDetail});
+
   ID? getCurrentItemId() {
     if (data.currentItemDetail == null) {
       return null;
@@ -1029,15 +1033,11 @@ abstract class Block<
     return getItemId(item);
   }
 
-  ITEM convertItemDetailToItem({required ITEM_DETAIL itemDetail});
-
   ITEM? __convertItemDetailToItem({required ITEM_DETAIL? itemDetail}) {
     return itemDetail == null
         ? null
         : convertItemDetailToItem(itemDetail: itemDetail);
   }
-
-  ID getItemId(ITEM item);
 
   Object? get parentItemId {
     if (parent == null) {
@@ -1059,45 +1059,20 @@ abstract class Block<
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
-  void _backupAll() {
+  void _backupAllFromRoot() {
     Block rootBlock = getRootBlock();
     rootBlock.__backupThisAndChildren();
   }
 
-  void _restoreAll() {
+  void _restoreAllFromRoot() {
     Block rootBlock = getRootBlock();
     rootBlock.__restoreThisAndChildren();
   }
 
-  void _applyNewStateAll() {
+  void _applyNewStateAllFromRoot() {
     Block rootBlock = getRootBlock();
     rootBlock.__applyNewStateThisAndChildren();
     rootBlock.__setChildrenForParent();
-  }
-
-  void __setChildrenForParent() {
-    try {
-      Object? itemParent = parent?.data.currentItemDetail;
-      if (itemParent != null && data.dataState == DataState.ready) {
-        setChildrenForParent(
-          currentItemOfParentBlock: itemParent,
-          items: data.items,
-        );
-      }
-    } catch (e, stackTrace) {
-      print(stackTrace);
-    }
-    for (var childBlock in _childBlocks) {
-      childBlock.__setChildrenForParent();
-    }
-  }
-
-  // @canOverride
-  void setChildrenForParent({
-    required Object currentItemOfParentBlock,
-    required List<ITEM> items,
-  }) {
-    // Override if need.
   }
 
   void __backupThisAndChildren() {
@@ -1123,6 +1098,35 @@ abstract class Block<
       childBlock.__applyNewStateThisAndChildren();
       childBlock._registeredOrDefaultDataFilter._applyNewState();
     }
+  }
+
+  // =============== @@@@@@@@@@@@@@@@@@ ========================================
+  // =============== @@@@@@@@@@@@@@@@@@ ========================================
+  // =============== @@@@@@@@@@@@@@@@@@ ========================================
+
+  void __setChildrenForParent() {
+    try {
+      Object? itemParent = parent?.data.currentItemDetail;
+      if (itemParent != null && data.dataState == DataState.ready) {
+        setChildrenForParent(
+          currentItemOfParentBlock: itemParent,
+          items: data.items,
+        );
+      }
+    } catch (e, stackTrace) {
+      print(stackTrace);
+    }
+    for (var childBlock in _childBlocks) {
+      childBlock.__setChildrenForParent();
+    }
+  }
+
+  // @canOverride
+  void setChildrenForParent({
+    required Object currentItemOfParentBlock,
+    required List<ITEM> items,
+  }) {
+    // Override if need.
   }
 
 // =============== @@@@@@@@@@@@@@@@@@ ========================================
@@ -2417,17 +2421,17 @@ abstract class Block<
     _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
     try {
-      _backupAll();
+      _backupAllFromRoot();
       //
       bool success = await __prepareToCreate(
         thisXBlock: thisXBlock,
         extraInput: extraInput,
       );
       if (!success) {
-        _restoreAll();
+        _restoreAllFromRoot();
         return false;
       } else {
-        _applyNewStateAll();
+        _applyNewStateAllFromRoot();
         return true;
       }
     } catch (e, stackTrace) {
@@ -2439,7 +2443,7 @@ abstract class Block<
         showSnackBar: true,
       );
       //
-      _restoreAll();
+      _restoreAllFromRoot();
       return false;
     }
   }
