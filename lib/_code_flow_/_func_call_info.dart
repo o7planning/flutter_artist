@@ -40,29 +40,37 @@ class FuncCallInfo {
   }) {
     print("STACK TRACE: $currentStackTrace");
     final frames = currentStackTrace.toString().split('\n');
-    final String frame0 = frames[0].trim();
-    final String frame1 = frames.length > 1 ? frames[1] : "";
-    final String frame2 = frames.length > 2 ? frames[2] : "";
-    //
-    String line1;
-    String line2;
-    if (frame0.startsWith("dart-sdk/")) {
-      line1 = frame1.trim();
-      line2 = frame2.trim();
-    } else {
-      line1 = frame0.trim();
-      line2 = frame1.trim();
+
+    String? myLine1; // First line not startWith "dart-sdk/"
+    String? myLine2; // Second line not startWith "dart-sdk/"
+    for (String frame in frames) {
+      String line = frame.trim();
+      if (line.startsWith("dart-sdk/")) {
+        continue;
+      } else {
+        if (myLine1 == null) {
+          myLine1 = line;
+        } else if (myLine2 == null) {
+          myLine2 = line;
+          break;
+        }
+      }
+    }
+    _TraceLineInfo? info1;
+    _TraceLineInfo? info2;
+    if (myLine1 != null) {
+      info1 = _TraceLineInfo.parseLine(myLine1);
+    }
+    if (myLine2 != null) {
+      info2 = _TraceLineInfo.parseLine(myLine2);
     }
 
-    final _TraceLineInfo info1 = _TraceLineInfo.parseLine(line1);
-    final _TraceLineInfo info2 = _TraceLineInfo.parseLine(line2);
-
     return FuncCallInfo._(
-      funcName: info1.functionName,
-      callerFuncName: info2.functionName,
-      filePath: info1.filePath,
-      lineNumber: info1.lineNumber,
-      columnNumber: info1.columnNumber,
+      funcName: info2?.functionName ?? info1?.functionName ?? "-",
+      callerFuncName: null,
+      filePath: info2?.filePath ?? info1?.filePath ?? "_",
+      lineNumber: info2?.lineNumber ?? info1?.lineNumber ?? -1,
+      columnNumber: info2?.columnNumber ?? info1?.columnNumber ?? -1,
       arguments: null,
     );
   }
