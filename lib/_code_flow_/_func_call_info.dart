@@ -38,7 +38,7 @@ class FuncCallInfo {
     required StackTrace currentStackTrace,
     required Map<String, dynamic>? arguments,
   }) {
-    print("STACK TRACE: $currentStackTrace");
+    // print("STACK TRACE: $currentStackTrace");
     final frames = currentStackTrace.toString().split('\n');
 
     String? myLine1; // First line not startWith "dart-sdk/"
@@ -65,12 +65,23 @@ class FuncCallInfo {
       info2 = _TraceLineInfo.parseLine(myLine2);
     }
 
+    _TraceLineInfo? info;
+    if (info1 != null && info1.isNamedFunction) {
+      info = info1;
+    } else if (info2 != null && info2.isNamedFunction) {
+      info = info2;
+    } else {
+      info = info1;
+    }
+    print(">>>>>>>> info1: $info1");
+    print(">>>>>>>> info2: $info2");
+
     return FuncCallInfo._(
-      funcName: info2?.functionName ?? info1?.functionName ?? "-",
+      funcName: info?.functionName ?? "-",
       callerFuncName: null,
-      filePath: info2?.filePath ?? info1?.filePath ?? "_",
-      lineNumber: info2?.lineNumber ?? info1?.lineNumber ?? -1,
-      columnNumber: info2?.columnNumber ?? info1?.columnNumber ?? -1,
+      filePath: info?.filePath ?? "_",
+      lineNumber: info?.lineNumber ?? -1,
+      columnNumber: info?.columnNumber ?? -1,
       arguments: null,
     );
   }
@@ -113,6 +124,10 @@ class _TraceLineInfo {
     required this.functionName,
   });
 
+  bool get isNamedFunction {
+    return functionName != "<fn>";
+  }
+
   static _TraceLineInfo parseLine(String traceLine) {
     final idx = traceLine.indexOf(' ');
     final String filePath = traceLine.substring(0, idx).trim();
@@ -143,5 +158,10 @@ class _TraceLineInfo {
       columnNumber: columnNumber,
       functionName: functionName,
     );
+  }
+
+  @override
+  String toString() {
+    return "[$functionName, $lineNumber]";
   }
 }
