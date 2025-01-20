@@ -124,7 +124,7 @@ class _GraphItemBlockOrScalarBoxState
                 ),
                 _buildTooltip(
                   message:
-                      "Class: ${widget.blockOrScalar.blockOrScalarClassName}\n"
+                      "${widget.blockOrScalar.isBlock? 'BLOCK':'SCALAR'}: ${widget.blockOrScalar.blockOrScalarClassName}\n"
                       "Parameters: ${widget.blockOrScalar.blockOrScalarClassParametersDefinition}",
                   child: _IconLabelText(
                     style: _getBlockNameTextStyle(),
