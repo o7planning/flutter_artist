@@ -79,13 +79,15 @@ class _ShelfBlockScalarTypeWidget extends StatelessWidget {
         shelfBlockScalarType.blockType.toString(),
         style: const TextStyle(fontSize: 12),
       );
-      tooltipMessage = shelfBlockScalarType.blockClassDefinition ?? "";
+      tooltipMessage =
+          "BLOCK: ${shelfBlockScalarType.className}\n${shelfBlockScalarType.classParameterDefinition}";
     } else {
       w = Text(
         shelfBlockScalarType.scalarType.toString(),
         style: const TextStyle(fontSize: 12),
       );
-      tooltipMessage = shelfBlockScalarType.scalarClassDefinition ?? "";
+      tooltipMessage =
+          "SCALAR: ${shelfBlockScalarType.className}\n${shelfBlockScalarType.classParameterDefinition}";
     }
     return Tooltip(
       message: tooltipMessage,

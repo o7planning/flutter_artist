@@ -5,8 +5,16 @@ class ShelfBlockScalarType extends Equatable {
   final Type? blockType;
   final Type? scalarType;
 
-  final String? blockClassDefinition;
-  final String? scalarClassDefinition;
+  final String classDefinition;
+  final String classParameterDefinition;
+
+  String get className {
+    if (blockType != null) {
+      return blockType.toString();
+    } else {
+      return scalarType.toString();
+    }
+  }
 
   bool get isBlock => blockType != null;
 
@@ -15,16 +23,16 @@ class ShelfBlockScalarType extends Equatable {
   const ShelfBlockScalarType.block({
     required this.shelfType,
     required this.blockType,
-    required this.blockClassDefinition,
-  })  : scalarType = null,
-        scalarClassDefinition = null;
+    required this.classDefinition,
+    required this.classParameterDefinition,
+  }) : scalarType = null;
 
   const ShelfBlockScalarType.scalar({
     required this.shelfType,
     required this.scalarType,
-    required this.scalarClassDefinition,
-  })  : blockType = null,
-        blockClassDefinition = null;
+    required this.classDefinition,
+    required this.classParameterDefinition,
+  }) : blockType = null;
 
   @override
   List<Object?> get props => [shelfType, blockType, scalarType];
