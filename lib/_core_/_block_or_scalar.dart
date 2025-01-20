@@ -28,6 +28,14 @@ class _BlockOrScalar extends Equatable {
     }
   }
 
+  String getFilterInputTypeAsString() {
+    if (block != null) {
+      return block!.getFilterInputTypeAsString();
+    } else {
+      return scalar!.getFilterInputTypeAsString();
+    }
+  }
+
   String getFilterCriteriaTypeAsString() {
     if (block != null) {
       return block!.getFilterCriteriaTypeAsString();
@@ -63,6 +71,14 @@ class _BlockOrScalar extends Equatable {
   bool get isBlock => block != null;
 
   bool get isScalar => scalar != null;
+
+  String get filterClassParametersDefinition {
+    if (block != null) {
+      return block!._registeredOrDefaultDataFilter._classParametersDefinition;
+    } else {
+      return scalar!._registeredOrDefaultDataFilter._classParametersDefinition;
+    }
+  }
 
   String get blockOrScalarClassParametersDefinition {
     if (block != null) {

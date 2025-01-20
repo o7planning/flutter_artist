@@ -124,8 +124,8 @@ class _GraphItemBlockOrScalarBoxState
                 ),
                 _buildTooltip(
                   message:
-                      "${widget.blockOrScalar.isBlock? 'BLOCK':'SCALAR'}: ${widget.blockOrScalar.blockOrScalarClassName}\n"
-                      "Parameters: ${widget.blockOrScalar.blockOrScalarClassParametersDefinition}",
+                      "${widget.blockOrScalar.isBlock ? 'BLOCK' : 'SCALAR'}: ${widget.blockOrScalar.blockOrScalarClassName}\n"
+                      "${widget.blockOrScalar.blockOrScalarClassParametersDefinition}",
                   child: _IconLabelText(
                     style: _getBlockNameTextStyle(),
                     label: 'Class: ',
@@ -289,9 +289,12 @@ class _GraphItemBlockOrScalarBoxState
 
   String _getFilterTextRow2() {
     DataFilter? dataFilter = widget.blockOrScalar.dataFilter;
+    String filterInputType = widget.blockOrScalar.getFilterInputTypeAsString();
     String filterCriteriaType =
         widget.blockOrScalar.getFilterCriteriaTypeAsString();
-    return "${dataFilter == null ? '' : getClassName(dataFilter)} <$filterCriteriaType>";
+
+    return "${dataFilter == null ? '' : getClassName(dataFilter)} "
+        "${widget.showClassParameters ? widget.blockOrScalar.filterClassParametersDefinition : ''}";
   }
 
   Widget _buildFilterInfo() {
@@ -356,9 +359,8 @@ class _GraphItemBlockOrScalarBoxState
           ? row
           : _buildCustomTooltip(
               verticalOffset: -85,
-              message: "FILTER: ${dataFilter.name} \n"
-                  "Class: ${getClassName(dataFilter)} "
-                  "| Criteria: ${widget.blockOrScalar.getFilterCriteriaTypeAsString()}",
+              message: "FILTER: ${getClassName(dataFilter)} \n"
+                  "${widget.blockOrScalar.filterClassParametersDefinition}",
               child: row,
             ),
     );

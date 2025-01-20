@@ -40,6 +40,16 @@ abstract class DataFilter<
 
   final Map<_WidgetState, bool> _widgetStateListeners = {};
 
+
+  String get _classDefinition {
+    return "${getClassName(this)}$_classParametersDefinition";
+  }
+
+  String get _classParametersDefinition {
+    return "<${getFilterInputTypeAsString()}, ${getFilterCriteriaTypeAsString()}>";
+  }
+
+
   String getFilterCriteriaTypeAsString() {
     return FILTER_CRITERIA.toString();
   }
