@@ -31,6 +31,8 @@ class _ShelfStructureGraphViewState extends State<_ShelfStructureGraphView> {
 
   late _GraphItem rootItem;
 
+  bool _showClassParameters = false;
+
   @override
   void initState() {
     super.initState();
@@ -86,6 +88,32 @@ class _ShelfStructureGraphViewState extends State<_ShelfStructureGraphView> {
 
   @override
   Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        _buildGraphLayer(context),
+        Positioned(
+          top: 5,
+          right: 5,
+          child: _buildFloatingButtonLayer(context),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFloatingButtonLayer(BuildContext context) {
+    return _buildTooltip(
+      child: _SimpleSmallIconButton(
+        onPressed: () {
+          _showClassParameters = !_showClassParameters;
+          setState(() {});
+        },
+        iconData: Icons.more_outlined,
+      ),
+      message: 'Show/Hide Class Parameters Definition',
+    );
+  }
+
+  Widget _buildGraphLayer(BuildContext context) {
     return SizedBox(
       height: 600,
       child: _CustomAppContainer.transparent(
@@ -132,6 +160,7 @@ class _ShelfStructureGraphViewState extends State<_ShelfStructureGraphView> {
               key: Key("Blk-${item.blockOrScalar!.name}"),
               blockOrScalar: item.blockOrScalar!,
               highlighDataFilterName: _highlighDataFilterName,
+              showClassParameters: _showClassParameters,
               refreshGraph: (String? filterName) {
                 _highlighDataFilterName = filterName;
                 setState(() {});

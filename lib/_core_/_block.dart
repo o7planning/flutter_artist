@@ -113,7 +113,7 @@ abstract class Block<
 
   String get _classParametersDefinition {
     return "<${getItemIdTypeAsString()}, ${getItemTypeAsString()}, ${getItemDetailTypeAsString()}, "
-        "${getFilterCriteriaTypeAsString()}, ${getExtraInputTypeAsString()}>";
+        "${getFilterInputTypeAsString()}, ${getFilterCriteriaTypeAsString()}, ${getExtraInputTypeAsString()}>";
   }
 
   final String? description;

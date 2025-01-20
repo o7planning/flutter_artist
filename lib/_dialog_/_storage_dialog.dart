@@ -54,12 +54,12 @@ class _StorageDialogState extends State<_StorageDialog> {
       children: [
         _currentShelf == null
             ? _StorageStructureView(
-                onSelectShelfToShowGraph: _setDetailedFlu,
+                onSelectShelfToShowGraph: _setDetailedShelf,
               )
             : _ShelfStructureGraphView(
                 shelf: _currentShelf!,
                 onPressedBack: () {
-                  _setDetailedFlu(null);
+                  _setDetailedShelf(null);
                 },
               ),
         Positioned(
@@ -93,7 +93,7 @@ class _StorageDialogState extends State<_StorageDialog> {
     );
   }
 
-  void _setDetailedFlu(
+  void _setDetailedShelf(
     Shelf? shelf,
   ) {
     setState(() {

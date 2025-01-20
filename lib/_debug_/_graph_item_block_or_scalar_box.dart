@@ -4,6 +4,8 @@ class _GraphItemBlockOrScalarBox extends StatefulWidget {
   final _BlockOrScalar blockOrScalar;
   final String? highlighDataFilterName;
 
+  final bool showClassParameters;
+
   final Function(String? filterName) refreshGraph;
 
   const _GraphItemBlockOrScalarBox({
@@ -11,6 +13,7 @@ class _GraphItemBlockOrScalarBox extends StatefulWidget {
     required this.blockOrScalar,
     required this.refreshGraph,
     required this.highlighDataFilterName,
+    required this.showClassParameters,
   });
 
   @override
@@ -72,50 +75,67 @@ class _GraphItemBlockOrScalarBoxState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset(
-              widget.blockOrScalar.isBlock
-                  ? "packages/flutter_artist/static-rs/block.png"
-                  : "packages/flutter_artist/static-rs/scalar.png",
-              width: _graphBoxImageWidth,
-              height: _graphBoxImageHeight,
-            ),
-            const SizedBox(width: spacing),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _IconLabelText(
-                      style: _getBlockNameTextStyle(),
-                      label: 'Name: ',
-                      text: _getBlockOrScalarNameText(),
-                    ),
-                    _buildTooltip(
-                      message:
-                          "Class: ${widget.blockOrScalar.blockOrScalarClassName}\n"
-                          "Parameters: ${widget.blockOrScalar.blockOrScalarClassParametersDefinition}",
-                      child: _IconLabelText(
-                        style: _getBlockNameTextStyle(),
-                        label: 'Class: ',
-                        text: _getBlockOrScalarClassNameText(),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+        _buildBlockOrScalarShortInfo(),
+        if (widget.showClassParameters) Divider(height: 8),
+        if (widget.showClassParameters) _buildBlockOrScalarParams(),
         const SizedBox(height: 5),
         _buildFilterInfo(),
         const SizedBox(height: 2),
         _buildFilterColor(),
         const SizedBox(height: 3),
         _buildDataStateRow(),
+      ],
+    );
+  }
+
+  String _line3ClassParamsDefinition() {
+    return widget.blockOrScalar.blockOrScalarClassParametersDefinition;
+  }
+
+  Widget _buildBlockOrScalarParams() {
+    return Text(
+      _line3ClassParamsDefinition(),
+      style: _getBlockClassParameterTextStyle(),
+    );
+  }
+
+  Widget _buildBlockOrScalarShortInfo() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Image.asset(
+          widget.blockOrScalar.isBlock
+              ? "packages/flutter_artist/static-rs/block.png"
+              : "packages/flutter_artist/static-rs/scalar.png",
+          width: _graphBoxImageWidth,
+          height: _graphBoxImageHeight,
+        ),
+        const SizedBox(width: spacing),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _IconLabelText(
+                  style: _getBlockNameTextStyle(),
+                  label: 'Name: ',
+                  text: _getBlockOrScalarNameText(),
+                ),
+                _buildTooltip(
+                  message:
+                      "Class: ${widget.blockOrScalar.blockOrScalarClassName}\n"
+                      "Parameters: ${widget.blockOrScalar.blockOrScalarClassParametersDefinition}",
+                  child: _IconLabelText(
+                    style: _getBlockNameTextStyle(),
+                    label: 'Class: ',
+                    text: _getBlockOrScalarClassNameText(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -139,6 +159,15 @@ class _GraphItemBlockOrScalarBoxState
           style: _getBlockNameTextStyle(),
         ).width;
     //
+    double blkLine3 = widget.showClassParameters
+        ? extraWidth +
+            2 * padding +
+            _calculateTextSize(
+              text: _line3ClassParamsDefinition(),
+              style: _getBlockClassParameterTextStyle(),
+            ).width
+        : 0;
+    //
     double filterLine1 = extraWidth +
         2 * padding +
         _calculateTextSize(
@@ -155,8 +184,15 @@ class _GraphItemBlockOrScalarBoxState
     //
     double lastLine = _calculateLastLineWidth();
     //
-    double m = max(max(blkLine1, blkLine2), max(filterLine1, filterLine2));
-    return max(m, lastLine);
+    var list = [
+      blkLine1,
+      blkLine2,
+      blkLine3,
+      filterLine1,
+      filterLine2,
+      lastLine
+    ];
+    return list.fold(0, (a, b) => max(a, b));
   }
 
   double _calculateLastLineWidth() {
@@ -210,11 +246,9 @@ class _GraphItemBlockOrScalarBoxState
   String _getBlockOrScalarClassNameText() {
     String className = widget.blockOrScalar.blockOrScalarClassName;
     if (widget.blockOrScalar.isBlock) {
-      Block block = widget.blockOrScalar.block!;
-      return "$className<${block.getItemIdTypeAsString()}, ${block.getItemTypeAsString()}, ${block.getItemDetailTypeAsString()}, S, SF>";
+      return className;
     } else {
-      Scalar scalar = widget.blockOrScalar.scalar!;
-      return "$className<${scalar.getValueTypeAsString()}, S>";
+      return className;
     }
   }
 
@@ -229,6 +263,14 @@ class _GraphItemBlockOrScalarBoxState
   TextStyle _getBlockNameTextStyle() {
     return const TextStyle(
       fontSize: _graphBoxFontSizeChildBox,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+
+  TextStyle _getBlockClassParameterTextStyle() {
+    return const TextStyle(
+      fontSize: _graphBoxFontSizeChildBox,
+      color: _classParametersColor,
       overflow: TextOverflow.ellipsis,
     );
   }
@@ -249,7 +291,7 @@ class _GraphItemBlockOrScalarBoxState
     DataFilter? dataFilter = widget.blockOrScalar.dataFilter;
     String filterCriteriaType =
         widget.blockOrScalar.getFilterCriteriaTypeAsString();
-    return "${dataFilter == null ? '' : getClassName(dataFilter)} [$filterCriteriaType]";
+    return "${dataFilter == null ? '' : getClassName(dataFilter)} <$filterCriteriaType>";
   }
 
   Widget _buildFilterInfo() {
