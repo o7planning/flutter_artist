@@ -8,6 +8,9 @@ abstract class Shelf extends _XBase {
   // All dataFilters including the default dataFilter.
   final List<DataFilter> _allDataFilters = [];
 
+  // All blockForms.
+  final List<BlockForm> _allBlockForms = [];
+
   final Map<String, Scalar> __scalarMap = {};
 
   final List<Scalar> __scalars = [];
@@ -169,6 +172,9 @@ abstract class Shelf extends _XBase {
           "Double-check ${getClassName(this)}.registerStructure() method");
     } else {
       __blockMap[block.name] = block;
+      if (block.blockForm != null) {
+        _allBlockForms.add(block.blockForm!);
+      }
     }
     //
     block.shelf = this;
@@ -577,11 +583,11 @@ abstract class Shelf extends _XBase {
     }
     //
     for (Block rootBlock in __rootBlocks) {
-      rootBlock._backupAll();
+      rootBlock._backupAllFromRoot();
     }
-    // TODO: Backup BlockForm ????????????????????????????????????????????????????
-    //
-    // updateAllUIComponents();
+    for (BlockForm blockForm in _allBlockForms) {
+      blockForm._backup();
+    }
   }
 
   void __restoreAll() {
@@ -592,10 +598,12 @@ abstract class Shelf extends _XBase {
     for (Scalar scalar in scalars) {
       scalar._restore();
     }
-    for (Block block in blocks) {
-      block._restoreAll();
+    for (Block block in __rootBlocks) {
+      block._restoreAllFromRoot();
     }
-    // TODO: Restore BlockForm ????????????????????????????????????????????????????
+    for (BlockForm blockForm in _allBlockForms) {
+      blockForm._restore();
+    }
     //
     updateAllUIComponents();
   }
@@ -606,10 +614,13 @@ abstract class Shelf extends _XBase {
     }
     //
     for (Scalar scalar in scalars) {
-      scalar._applyNewStateAll();
+      scalar._applyNewState();
     }
-    for (Block block in blocks) {
-      block._applyNewStateAll();
+    for (Block block in __rootBlocks) {
+      block._applyNewStateAllFromRoot();
+    }
+    for (BlockForm blockForm in _allBlockForms) {
+      blockForm._applyNewState();
     }
     //
     updateAllUIComponents();

@@ -108,6 +108,10 @@ abstract class Scalar<
     return FILTER_CRITERIA.toString();
   }
 
+  // ***************************************************************************
+  // ****** BACKUP & RESTORE & APPLY *******************************************
+  // ***************************************************************************
+
   void _backup() {
     this.data._backup();
   }
@@ -116,7 +120,7 @@ abstract class Scalar<
     this.data._restore();
   }
 
-  void _applyNewStateAll() {
+  void _applyNewState() {
     this.data._applyNewState();
   }
 
