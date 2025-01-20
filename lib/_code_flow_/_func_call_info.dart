@@ -25,13 +25,20 @@ class FuncCallInfo {
         lineNumber = null,
         columnNumber = null;
 
-  // dart-sdk/lib/_internal/js_dev_runtime/patch/core_patch.dart 702:28   get current
-  // packages/flutter_leantek/screens/okr_manager/filter/a.dart 128:66  [_onSelectTimeFrame]
-  // packages/flutter_leantek/screens/okr_manager/filter/a.dart 59:9    <fn>
+  //
+  // dart-sdk/lib/_internal/js_dev_runtime/patch/core_patch.dart 702:28                      get current
+  // packages/flutter_leantek/screens/dashboard/section/my_goals_okr_completion.dart 242:37  <fn>
+  // dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 610:19                     <fn>
+  // dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 634:23                     <fn>
+  // dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 532:3                      _asyncStartSync
+  // packages/flutter_leantek/screens/dashboard/section/my_goals_okr_completion.dart 239:16  [_onPressOkrCompletionStatus]
+  // packages/flutter_leantek/screens/dashboard/section/my_goals_okr_completion.dart 107:35  <fn>
+  //
   factory FuncCallInfo.fromCurrentStackTrace({
     required StackTrace currentStackTrace,
     required Map<String, dynamic>? arguments,
   }) {
+    print("STACK TRACE: $currentStackTrace");
     final frames = currentStackTrace.toString().split('\n');
     final String frame0 = frames[0].trim();
     final String frame1 = frames.length > 1 ? frames[1] : "";
