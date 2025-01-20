@@ -64,7 +64,7 @@ class FuncCallInfo {
     if (myLine2 != null) {
       info2 = _TraceLineInfo.parseLine(myLine2);
     }
-
+    //
     _TraceLineInfo? info;
     if (info1 != null && info1.isNamedFunction) {
       info = info1;
@@ -73,9 +73,7 @@ class FuncCallInfo {
     } else {
       info = info1;
     }
-    print(">>>>>>>> info1: $info1");
-    print(">>>>>>>> info2: $info2");
-
+    //
     return FuncCallInfo._(
       funcName: info?.functionName ?? "-",
       callerFuncName: null,
