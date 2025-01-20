@@ -18,8 +18,11 @@ abstract class _XBase {
         errorDetails: null,
       );
     }
+    //
     String msg =
         "Call ${getClassName(this)}.$methodName() error: ${apiError.errorMessage}";
+    print(msg);
+    print(stackTrace);
     //
     FlutterArtist.codeFlowLogger._addError(
       isLibCode: true,
@@ -34,8 +37,6 @@ abstract class _XBase {
       stackTrace: stackTrace,
     );
     //
-    print(msg);
-    print(stackTrace);
     if (showSnackBar) {
       showErrorSnackBar(
         message: msg,

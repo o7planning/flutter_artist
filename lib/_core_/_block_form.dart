@@ -441,7 +441,7 @@ abstract class BlockForm<
         ApiResult<void>? result = await future;
 
         if (result != null && result.isError()) {
-          block._handleRestError(
+          _handleRestError(
             shelf: shelf,
             methodName: "prepareFormMasterData",
             message: result.errorMessage!,
