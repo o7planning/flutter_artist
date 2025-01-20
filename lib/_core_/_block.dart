@@ -69,7 +69,9 @@ abstract class Block<
     FILTER_INPUT extends FilterInput, // EmptyFilterInput
     FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
     EXTRA_INPUT extends ExtraInput // EmptyExtraInput
-    > extends DataContainer {
+    > extends _XBase {
+  late final Shelf shelf;
+
   @Deprecated("Xoa di, khong su dung")
   QueryMode _queryMode = QueryMode.lazy;
 
@@ -464,7 +466,7 @@ abstract class Block<
       Future.delayed(
         const Duration(seconds: 0),
         () {
-          this.emptyQuery();
+          this.clear();
         },
       );
     }
@@ -598,13 +600,15 @@ abstract class Block<
     }
   }
 
-  /// Empty Query and set block to "Pending State".
-  Future<bool> emptyQuery({Function()? navigate}) async {
+  ///
+  /// Clear and set block to "Pending State".
+  ///
+  Future<bool> clear({Function()? navigate}) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: navigate,
       ownerClassInstance: this,
-      methodName: "emptyQuery",
+      methodName: "clear",
       parameters: {},
     );
     //
@@ -613,7 +617,7 @@ abstract class Block<
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [
         _BlockOpt(
-          queryType: QueryType.emptyQuery,
+          queryType: QueryType.clear,
           block: this,
           pageable: null,
           listBehavior: ListBehavior.replace,
@@ -729,8 +733,11 @@ abstract class Block<
     return success;
   }
 
-  /// Empty Query and create new record and set block to "Ready State".
-  Future<bool> emptyQueryAndCreate({
+  ///
+  /// Clear and prepare Form to create new record.
+  /// If this block has a BlockForm its data state set to "Ready", else its data state set to "Pending".
+  ///
+  Future<bool> clearAndPrepareToCreate({
     FILTER_INPUT? filterInput,
     Function()? navigate,
   }) async {
@@ -738,7 +745,7 @@ abstract class Block<
       isLibCode: true,
       navigate: navigate,
       ownerClassInstance: this,
-      methodName: "emptyQueryAndCreate",
+      methodName: "clearAndPrepareToCreate",
       parameters: {},
     );
     //
@@ -750,7 +757,7 @@ abstract class Block<
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [
         _BlockOpt(
-          queryType: QueryType.emptyQuery,
+          queryType: QueryType.clear,
           block: this,
           pageable: null,
           listBehavior: ListBehavior.replace,
@@ -827,7 +834,7 @@ abstract class Block<
     bool needRealQuery = false;
     ListBehavior forceListBehavior = listBehavior;
     switch (queryType) {
-      case QueryType.emptyQuery:
+      case QueryType.clear:
         {
           needRealQuery = false;
           forceListBehavior = ListBehavior.replace;
@@ -877,14 +884,14 @@ abstract class Block<
         );
         //
         __refreshQueryingState(isQuerying: false);
-      } catch (e, stacktrace) {
+      } catch (e, stackTrace) {
         __refreshQueryingState(isQuerying: false);
         //
         _handleError(
-          className: getClassName(this),
+          shelf: shelf,
           methodName: "callApiQuery",
           error: e,
-          stackTrace: stacktrace,
+          stackTrace: stackTrace,
           showSnackBar: true,
         );
         //
@@ -892,6 +899,7 @@ abstract class Block<
       }
       if (result.errorMessage != null) {
         _handleRestError(
+          shelf: shelf,
           methodName: "callApiQuery",
           message: result.errorMessage!,
           errorDetails: result.errorDetails,
@@ -1301,17 +1309,19 @@ abstract class Block<
       },
     );
     //
-
     if (clearListForThis) {
-      // TODO: Xem lai.
-      FILTER_CRITERIA? filterCriteria = data.filterCriteria;
+      //
+      // Apply "DataFilter._filterCriteria" for this Block.
+      //
+      final FILTER_CRITERIA? criteriaOfThisDataFilter =
+          this._registeredOrDefaultDataFilter._filterCriteria;
       //
       PageData<ITEM> emptyAppPage = PageData.empty();
       Object? currentParentItem = parentItemId;
 
       data._updateFrom(
         currentParentItemId: currentParentItem,
-        filterCriteria: filterCriteria,
+        filterCriteria: criteriaOfThisDataFilter,
         forceListBehavior: ListBehavior.replace,
         pageable: __pageable,
         pageData: emptyAppPage,
@@ -1428,12 +1438,12 @@ abstract class Block<
         eventBlock: this,
         itemIdString: null,
       );
-    } catch (e, stacktrace) {
+    } catch (e, stackTrace) {
       _handleError(
-        className: getClassName(this),
+        shelf: shelf,
         methodName: 'callApiQuickCreate',
         error: e,
-        stackTrace: stacktrace,
+        stackTrace: stackTrace,
         showSnackBar: true,
       );
       //
@@ -1446,12 +1456,12 @@ abstract class Block<
         calledMethodName: "callApiQuickCreate",
         result: result,
       );
-    } catch (e, stacktrace) {
+    } catch (e, stackTrace) {
       _handleError(
-        className: getClassName(this),
+        shelf: shelf,
         methodName: "_processSaveActionRestResult",
         error: e,
-        stackTrace: stacktrace,
+        stackTrace: stackTrace,
         showSnackBar: true,
       );
       //
@@ -1533,12 +1543,12 @@ abstract class Block<
         eventBlock: this,
         itemIdString: null,
       );
-    } catch (e, stacktrace) {
+    } catch (e, stackTrace) {
       _handleError(
-        className: getClassName(this),
+        shelf: shelf,
         methodName: 'callApiQuickUpdate',
         error: e,
-        stackTrace: stacktrace,
+        stackTrace: stackTrace,
         showSnackBar: true,
       );
       return false;
@@ -1551,12 +1561,12 @@ abstract class Block<
         calledMethodName: "callApiQuickUpdate",
         result: result,
       );
-    } catch (e, stacktrace) {
+    } catch (e, stackTrace) {
       _handleError(
-        className: getClassName(this),
+        shelf: shelf,
         methodName: '_processSaveActionRestResult',
         error: e,
-        stackTrace: stacktrace,
+        stackTrace: stackTrace,
         showSnackBar: true,
       );
       //
@@ -1655,6 +1665,7 @@ abstract class Block<
       result = await callApiQuickAction(data: data);
       if (result.errorMessage != null) {
         _handleRestError(
+          shelf: shelf,
           methodName: "callApiQuickAction",
           message: result.errorMessage!,
           errorDetails: result.errorDetails,
@@ -1664,12 +1675,12 @@ abstract class Block<
       } else {
         // Do nothing.
       }
-    } catch (e, stacktrace) {
+    } catch (e, stackTrace) {
       _handleError(
-        className: getClassName(this),
+        shelf: shelf,
         methodName: 'callApiQuickAction',
         error: e,
-        stackTrace: stacktrace,
+        stackTrace: stackTrace,
         showSnackBar: true,
       );
       return false;
@@ -1699,12 +1710,12 @@ abstract class Block<
             );
         }
         return success;
-      } catch (e, stacktrace) {
+      } catch (e, stackTrace) {
         _handleError(
-          className: getClassName(this),
+          shelf: shelf,
           methodName: methodName,
           error: e,
-          stackTrace: stacktrace,
+          stackTrace: stackTrace,
           showSnackBar: true,
         );
         return false;
@@ -1771,7 +1782,7 @@ abstract class Block<
       return isAllowEdit(refreshedItem: refreshedItem);
     } catch (e, stackTrace) {
       _handleError(
-        className: getClassName(this),
+        shelf: shelf,
         methodName: "isAllowEdit",
         error: e,
         stackTrace: stackTrace,
@@ -1789,7 +1800,7 @@ abstract class Block<
       return isAllowCreate();
     } catch (e, stackTrace) {
       _handleError(
-        className: getClassName(this),
+        shelf: shelf,
         methodName: "isAllowCreate",
         error: e,
         stackTrace: stackTrace,
@@ -1808,7 +1819,7 @@ abstract class Block<
       return isAllowDelete(refreshedItem: refreshedItem);
     } catch (e, stackTrace) {
       _handleError(
-        className: getClassName(this),
+        shelf: shelf,
         methodName: "isAllowDelete",
         error: e,
         stackTrace: stackTrace,
@@ -1846,6 +1857,7 @@ abstract class Block<
   }) async {
     if (result.errorMessage != null) {
       _handleRestError(
+        shelf: shelf,
         methodName: calledMethodName,
         message: result.errorMessage!,
         errorDetails: result.errorDetails,
@@ -1956,12 +1968,12 @@ abstract class Block<
         afterQuickAction: afterQuickAction,
       );
       return success;
-    } catch (e, stacktrace) {
+    } catch (e, stackTrace) {
       _handleError(
-        className: getClassName(this),
+        shelf: shelf,
         methodName: "executeQuickAction",
         error: e,
-        stackTrace: stacktrace,
+        stackTrace: stackTrace,
         showSnackBar: true,
       );
       //
@@ -1991,12 +2003,12 @@ abstract class Block<
           await _executeQuickCreateWithOverlayAndRestorable(data: action);
       shelf.updateAllUIComponents();
       return success;
-    } catch (e, stacktrace) {
+    } catch (e, stackTrace) {
       _handleError(
-        className: getClassName(this),
+        shelf: shelf,
         methodName: 'executeQuickCreateAction',
         error: e,
-        stackTrace: stacktrace,
+        stackTrace: stackTrace,
         showSnackBar: true,
       );
       //
@@ -2028,7 +2040,7 @@ abstract class Block<
       return await _confirmForAction(action);
     } catch (e, stackTrace) {
       _handleError(
-        className: getClassName(this),
+        shelf: shelf,
         methodName: "confirmForAction",
         error: e,
         stackTrace: stackTrace,
@@ -2075,12 +2087,12 @@ abstract class Block<
       );
       shelf.updateAllUIComponents();
       return success;
-    } catch (e, stacktrace) {
+    } catch (e, stackTrace) {
       _handleError(
-        className: getClassName(this),
+        shelf: shelf,
         methodName: "quickUpdate",
         error: e,
-        stackTrace: stacktrace,
+        stackTrace: stackTrace,
         showSnackBar: true,
       );
       //
@@ -2208,12 +2220,12 @@ abstract class Block<
         //
         return true;
       }
-    } catch (e, stacktrace) {
+    } catch (e, stackTrace) {
       _handleError(
-        className: getClassName(this),
+        shelf: shelf,
         methodName: "prepareToEdit",
         error: e,
-        stackTrace: stacktrace,
+        stackTrace: stackTrace,
         showSnackBar: true,
       );
       //
@@ -2268,14 +2280,14 @@ abstract class Block<
         result = await callApiRefreshItem(item: item);
         //
         __refreshRefreshingCurrentItemState(isRefreshingCurrentItem: false);
-      } catch (e, stacktrace) {
+      } catch (e, stackTrace) {
         __refreshRefreshingCurrentItemState(isRefreshingCurrentItem: false);
         //
         _handleError(
-          className: getClassName(this),
+          shelf: shelf,
           methodName: "callApiRefreshItem",
           error: e,
-          stackTrace: stacktrace,
+          stackTrace: stackTrace,
           showSnackBar: true,
         );
         //
@@ -2283,6 +2295,7 @@ abstract class Block<
       }
       if (result.errorMessage != null) {
         _handleRestError(
+          shelf: shelf,
           methodName: "callApiRefreshItem",
           message: result.errorMessage!,
           errorDetails: result.errorDetails,
@@ -2417,12 +2430,12 @@ abstract class Block<
         _applyNewStateAll();
         return true;
       }
-    } catch (e, stacktrace) {
+    } catch (e, stackTrace) {
       _handleError(
-        className: getClassName(this),
+        shelf: shelf,
         methodName: "prepareToCreate",
         error: e,
-        stackTrace: stacktrace,
+        stackTrace: stackTrace,
         showSnackBar: true,
       );
       //
@@ -2565,7 +2578,7 @@ abstract class Block<
         );
       } catch (e, stackTrace) {
         _handleError(
-          className: getClassName(this),
+          shelf: shelf,
           methodName: "callApiFindItemById",
           error: e,
           stackTrace: stackTrace,
@@ -2577,6 +2590,7 @@ abstract class Block<
       //
       if (result.isError()) {
         _handleRestError(
+          shelf: shelf,
           methodName: "callApiFindItemById",
           message: result.errorMessage!,
           errorDetails: result.errorDetails,
@@ -2592,7 +2606,7 @@ abstract class Block<
         item = this.convertItemDetailToItem(itemDetail: itemDetail);
       } catch (e, stackTrace) {
         _handleError(
-          className: getClassName(this),
+          shelf: shelf,
           methodName: "convertItemDetailToItem",
           error: e,
           stackTrace: stackTrace,
@@ -2679,12 +2693,12 @@ abstract class Block<
         shelf.__applyNewStateAll();
       }
       return success;
-    } catch (e, stacktrace) {
+    } catch (e, stackTrace) {
       _handleError(
-        className: getClassName(this),
+        shelf: shelf,
         methodName: "delete",
         error: e,
-        stackTrace: stacktrace,
+        stackTrace: stackTrace,
         showSnackBar: true,
       );
       //
@@ -2728,14 +2742,14 @@ abstract class Block<
         );
         //
         __refreshDeletingState(isDeleting: false);
-      } catch (e, stacktrace) {
+      } catch (e, stackTrace) {
         __refreshDeletingState(isDeleting: false);
         //
         _handleError(
-          className: getClassName(this),
+          shelf: shelf,
           methodName: "callApiDelete",
           error: e,
-          stackTrace: stacktrace,
+          stackTrace: stackTrace,
           showSnackBar: true,
         );
         //
@@ -2743,6 +2757,7 @@ abstract class Block<
       }
       if (result.errorMessage != null) {
         _handleRestError(
+          shelf: shelf,
           methodName: "callApiDelete",
           message: result.errorMessage!,
           errorDetails: result.errorDetails,
@@ -2782,12 +2797,12 @@ abstract class Block<
         }
       }
       return true;
-    } catch (e, stacktrace) {
+    } catch (e, stackTrace) {
       _handleError(
-        className: getClassName(this),
+        shelf: shelf,
         methodName: "__delete",
         error: e,
-        stackTrace: stacktrace,
+        stackTrace: stackTrace,
         showSnackBar: true,
       );
       return false;

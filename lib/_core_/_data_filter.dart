@@ -3,10 +3,10 @@ part of '../flutter_artist.dart';
 abstract class DataFilter<
     FILTER_INPUT extends FilterInput, // EmptyFilterInput
     FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
-    > {
-  late final String name;
-
+    > extends _XBase {
   late final Shelf shelf;
+
+  late final String name;
 
   final List<Block> _blocks = [];
 
@@ -40,7 +40,6 @@ abstract class DataFilter<
 
   final Map<_WidgetState, bool> _widgetStateListeners = {};
 
-
   String get _classDefinition {
     return "${getClassName(this)}$_classParametersDefinition";
   }
@@ -48,7 +47,6 @@ abstract class DataFilter<
   String get _classParametersDefinition {
     return "<${getFilterInputTypeAsString()}, ${getFilterCriteriaTypeAsString()}>";
   }
-
 
   String getFilterCriteriaTypeAsString() {
     return FILTER_CRITERIA.toString();
@@ -87,6 +85,7 @@ abstract class DataFilter<
     final int tryingCriteriaId = __currentTryingCriteriaId;
     //
     try {
+      // This method may throw ApiError.
       await prepareData(
         filterInput: filterInput,
       );
@@ -99,9 +98,14 @@ abstract class DataFilter<
         filterCriteria: tryingCriteria,
       );
     } catch (e, stackTrace) {
-      print(stackTrace);
-      // TODO: Xử lý lỗi ?????????????????????????????????????????????????????????????????????
-      // TODO: Xử lý lỗi ?????????????????????????????????????????????????????????????????????
+      _handleError(
+        shelf: shelf,
+        methodName: "callApiQuery",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      //
       throw _TransactionError();
     }
   }

@@ -111,7 +111,7 @@ enum QueryMode {
 
 enum QueryType {
   /// Clear all data.
-  emptyQuery,
+  clear,
 
   /// Force query.
   forceQuery,

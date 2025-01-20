@@ -1,10 +1,8 @@
 part of '../flutter_artist.dart';
 
-abstract class DataContainer {
-  late final Shelf shelf;
-
+abstract class _XBase {
   void _handleError({
-    required String className,
+    required Shelf shelf,
     required String methodName,
     required dynamic error,
     required StackTrace stackTrace,
@@ -21,7 +19,7 @@ abstract class DataContainer {
       );
     }
     String msg =
-        "Call $className.$methodName() error: ${apiError.errorMessage}";
+        "Call ${getClassName(this)}.$methodName() error: ${apiError.errorMessage}";
     //
     FlutterArtist.codeFlowLogger._addError(
       isLibCode: true,
@@ -47,6 +45,7 @@ abstract class DataContainer {
   }
 
   void _handleRestError({
+    required Shelf shelf,
     required String methodName,
     required String message,
     required List<String>? errorDetails,

@@ -289,9 +289,6 @@ class _GraphItemBlockOrScalarBoxState
 
   String _getFilterTextRow2() {
     DataFilter? dataFilter = widget.blockOrScalar.dataFilter;
-    String filterInputType = widget.blockOrScalar.getFilterInputTypeAsString();
-    String filterCriteriaType =
-        widget.blockOrScalar.getFilterCriteriaTypeAsString();
 
     return "${dataFilter == null ? '' : getClassName(dataFilter)} "
         "${widget.showClassParameters ? widget.blockOrScalar.filterClassParametersDefinition : ''}";

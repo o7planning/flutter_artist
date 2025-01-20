@@ -24,7 +24,9 @@ abstract class Scalar<
     VALUE extends Object,
     FILTER_INPUT extends FilterInput, // EmptyFilterInput
     FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
-    > extends DataContainer {
+    > extends _XBase {
+  late final Shelf shelf;
+
   ///
   /// Scalar name. It is unique in a Shelf.
   ///
@@ -202,14 +204,14 @@ abstract class Scalar<
       );
       //
       __refreshQueryingState(isQuerying: false);
-    } catch (e, stacktrace) {
+    } catch (e, stackTrace) {
       __refreshQueryingState(isQuerying: false);
       //
       _handleError(
-        className: getClassName(this),
+        shelf: shelf,
         methodName: "callApiQuery",
         error: e,
-        stackTrace: stacktrace,
+        stackTrace: stackTrace,
         showSnackBar: true,
       );
       //
@@ -217,6 +219,7 @@ abstract class Scalar<
     }
     if (result.errorMessage != null) {
       _handleRestError(
+        shelf: shelf,
         methodName: "callApiQuery",
         message: result.errorMessage!,
         errorDetails: result.errorDetails,

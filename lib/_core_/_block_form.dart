@@ -5,7 +5,7 @@ abstract class BlockForm<
     ITEM extends Object,
     ITEM_DETAIL extends Object,
     FILTER_CRITERIA extends FilterCriteria,
-    EXTRA_INPUT extends ExtraInput> {
+    EXTRA_INPUT extends ExtraInput> extends _XBase {
   QueryMode _queryMode = QueryMode.lazy;
 
   late QueryMode _tempQueryMode = _queryMode;
@@ -219,29 +219,6 @@ abstract class BlockForm<
     );
   }
 
-  void _handleError({
-    required String methodName,
-    required dynamic error,
-    required StackTrace stackTrace,
-    required bool showSnackBar,
-  }) {
-    FlutterArtist.errorLogger.addError(
-      shelfName: FlutterArtist.storage._getShelfName(block.shelf.runtimeType),
-      message: error.toString(),
-      errorDetails: null,
-      stackTrace: stackTrace,
-    );
-    String msg = "Call ${getClassName(this)}.$methodName() error: $error";
-    print(msg);
-    print(stackTrace);
-    if (showSnackBar) {
-      showErrorSnackBar(
-        message: msg,
-        errorDetails: null,
-      );
-    }
-  }
-
   // Private method. Only for use in this class.
   bool __checkValidBeforeSave() {
     return !block.__isSaving && (_formKey.currentState?.validate() ?? false);
@@ -307,11 +284,12 @@ abstract class BlockForm<
         shelf.__applyNewStateAll();
       }
       return success;
-    } catch (e, stacktrace) {
+    } catch (e, stackTrace) {
       _handleError(
+        shelf: shelf,
         methodName: "saveForm",
         error: e,
-        stackTrace: stacktrace,
+        stackTrace: stackTrace,
         showSnackBar: true,
       );
       //
@@ -347,13 +325,14 @@ abstract class BlockForm<
           : await callApiUpdate(formMapData: formMapData);
       //
       block._refreshSavingState(isSaving: false);
-    } catch (e, stacktrace) {
+    } catch (e, stackTrace) {
       block._refreshSavingState(isSaving: false);
       //
       _handleError(
+        shelf: shelf,
         methodName: calledMethodName,
         error: e,
-        stackTrace: stacktrace,
+        stackTrace: stackTrace,
         showSnackBar: true,
       );
       return false;
@@ -364,11 +343,12 @@ abstract class BlockForm<
         calledMethodName: calledMethodName,
         result: result,
       );
-    } catch (e, stacktrace) {
+    } catch (e, stackTrace) {
       _handleError(
+        shelf: shelf,
         methodName: '_processSaveActionRestResult',
         error: e,
-        stackTrace: stacktrace,
+        stackTrace: stackTrace,
         showSnackBar: true,
       );
       //
@@ -462,6 +442,7 @@ abstract class BlockForm<
 
         if (result != null && result.isError()) {
           block._handleRestError(
+            shelf: shelf,
             methodName: "prepareFormMasterData",
             message: result.errorMessage!,
             errorDetails: result.errorDetails,
@@ -471,11 +452,12 @@ abstract class BlockForm<
         }
       }
       return true;
-    } catch (e, stacktrace) {
+    } catch (e, stackTrace) {
       _handleError(
+        shelf: shelf,
         methodName: "prepareFormMasterData",
         error: e,
-        stackTrace: stacktrace,
+        stackTrace: stackTrace,
         showSnackBar: true,
       );
       //
@@ -525,11 +507,12 @@ abstract class BlockForm<
           refreshedItem: refreshedItem,
           isNew: isNew,
         );
-      } catch (e, stacktrace) {
+      } catch (e, stackTrace) {
         _handleError(
+          shelf: shelf,
           methodName: "prepareFormData",
           error: e,
-          stackTrace: stacktrace,
+          stackTrace: stackTrace,
           showSnackBar: true,
         );
         //
@@ -545,11 +528,12 @@ abstract class BlockForm<
       //
       _formKey.currentState?.patchValue(newFormData);
       return true;
-    } catch (e, stacktrace) {
+    } catch (e, stackTrace) {
       _handleError(
+        shelf: shelf,
         methodName: "prepareFormData",
         error: e,
-        stackTrace: stacktrace,
+        stackTrace: stackTrace,
         showSnackBar: true,
       );
       //
