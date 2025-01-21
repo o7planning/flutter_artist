@@ -2686,7 +2686,7 @@ abstract class Block<
     //
     try {
       shelf.__backupAll();
-      bool success = await __delete(
+      bool success = await __deleteItem(
         thisXBlock: thisXBlock,
         item: item,
       );
@@ -2712,7 +2712,7 @@ abstract class Block<
   }
 
   // Private method. Only for use in this class only.
-  Future<bool> __delete({
+  Future<bool> __deleteItem({
     required _XBlock thisXBlock,
     required ITEM item,
   }) async {
@@ -2836,6 +2836,101 @@ abstract class Block<
     );
     return success;
   }
+
+  // ***************************************************************************
+  // ************* ITEM SELECTION/CHECK METHOD *********************************
+  // ***************************************************************************
+
+  void __updateUiComponentAfterCheckOrSelection() {
+    updateAllUIComponents();
+  }
+
+  void setCheckedItem(ITEM item) {
+    data._setCheckedItem(item);
+    __updateUiComponentAfterCheckOrSelection();
+  }
+
+  void setSelectedItem(ITEM item) {
+    data._setSelectedItem(item);
+    __updateUiComponentAfterCheckOrSelection();
+  }
+
+  // -------
+
+  void setCheckedItems(List<ITEM> items) {
+    data._setCheckedItems(items);
+    __updateUiComponentAfterCheckOrSelection();
+  }
+
+  void setSelectedItems(List<ITEM> items) {
+    data._setSelectedItems(items);
+    __updateUiComponentAfterCheckOrSelection();
+  }
+
+  // -------
+
+  void addCheckedItem(ITEM item) {
+    data._addCheckedItem(item);
+    __updateUiComponentAfterCheckOrSelection();
+  }
+
+  // TODO: Kieemr
+  void addSelectedItem(ITEM item) {
+    data._addSelectedItem(item);
+    __updateUiComponentAfterCheckOrSelection();
+  }
+
+  // -------
+
+  void addCheckedItems(List<ITEM> items) {
+    data._addCheckedItems(items);
+    __updateUiComponentAfterCheckOrSelection();
+  }
+
+  void addSelectedItems(List<ITEM> items) {
+    data._addSelectedItems(items);
+    __updateUiComponentAfterCheckOrSelection();
+  }
+
+  // -------
+
+  void uncheckItem(ITEM item) {
+    data._uncheckItem(item);
+    __updateUiComponentAfterCheckOrSelection();
+  }
+
+  void deselectItem(ITEM item) {
+    data._deselectItem(item);
+    __updateUiComponentAfterCheckOrSelection();
+  }
+
+  // -------
+
+  void uncheckAll() {
+    data._uncheckAll();
+    __updateUiComponentAfterCheckOrSelection();
+  }
+
+  void deselectAll() {
+    data._deselectAll();
+    __updateUiComponentAfterCheckOrSelection();
+  }
+
+  // -------
+
+  void checkAll() {
+    data._checkAll();
+    __updateUiComponentAfterCheckOrSelection();
+  }
+
+  void selectAll() {
+    data._selectAll();
+    __updateUiComponentAfterCheckOrSelection();
+  }
+
+  // ***************************************************************************
+  // ************* API METHOD **************************************************
+  // ***************************************************************************
 
   ///
   /// This method is called when you can [executeQuickUpdateAction] method.
