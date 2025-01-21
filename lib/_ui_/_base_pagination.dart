@@ -33,7 +33,7 @@ class _BasePaginationState extends _WidgetState<BasePagination> {
   }
 
   @override
-  void removeWidgetStateListener({required _WidgetState thisWidgetState}) {
+  void removeWidgetStateListener() {
     widget.block._removePaginationWidgetStateListener(
       formWidgetState: this,
     );

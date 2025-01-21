@@ -87,6 +87,8 @@ const IconData _paginationIconData = cupertino.CupertinoIcons.ellipsis_circle;
 
 const IconData _shelfFragmentIconData = cupertino.CupertinoIcons.tray;
 
+const IconData _controlButtonIconData = Icons.smart_button;
+
 const IconData _loggedUserIconData =
     cupertino.CupertinoIcons.person_crop_circle;
 

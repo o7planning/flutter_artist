@@ -123,29 +123,6 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
     );
   }
 
-  IconData _getIconData(WidgetStateType type) {
-    switch (type) {
-      case WidgetStateType.filter:
-        return _dataFilterIconData;
-      case WidgetStateType.controlBar:
-        return _blockControlBarIconData;
-      case WidgetStateType.customControlBar:
-        return _blockCustomControlBarIconData;
-      case WidgetStateType.form:
-        return _blockFormIconData;
-      case WidgetStateType.blockFragment:
-        return _blockFragmentIconData;
-      case WidgetStateType.pagination:
-        return _paginationIconData;
-      case WidgetStateType.loggedInUser:
-        return _loggedUserIconData;
-      case WidgetStateType.scalarFragment:
-        return _scalarFragmentIconData;
-      case WidgetStateType.shelfFragment:
-        return _shelfFragmentIconData;
-    }
-  }
-
   Widget _buildRowInfo({
     required MapEntry<_WidgetState, bool> widgetStateEntry,
   }) {
@@ -170,7 +147,7 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
                 : Colors.grey[200],
           ),
           child: Icon(
-            _getIconData(widgetStateEntry.key.type),
+            widgetStateEntry.key.type.iconData,
             size: 24,
           ),
         ),

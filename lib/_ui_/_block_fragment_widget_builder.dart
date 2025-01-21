@@ -37,7 +37,7 @@ class _BlockFragmentWidgetBuilderState
   }
 
   @override
-  void removeWidgetStateListener({required _WidgetState thisWidgetState}) {
+  void removeWidgetStateListener() {
     widget.block._removeWidgetStateListener(
       widgetState: this,
     );

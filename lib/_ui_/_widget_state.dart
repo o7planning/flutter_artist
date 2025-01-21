@@ -9,7 +9,7 @@ abstract class _WidgetState<W extends _StatefulWidget> extends State<W> {
 
   void addWidgetStateListener({required bool isShowing});
 
-  void removeWidgetStateListener({required _WidgetState thisWidgetState});
+  void removeWidgetStateListener();
 
   Widget buildContent(BuildContext context);
 
@@ -61,8 +61,6 @@ abstract class _WidgetState<W extends _StatefulWidget> extends State<W> {
   void dispose() {
     super.dispose();
     //
-    removeWidgetStateListener(
-      thisWidgetState: this,
-    );
+    removeWidgetStateListener();
   }
 }

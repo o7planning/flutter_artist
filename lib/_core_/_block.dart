@@ -189,6 +189,7 @@ abstract class Block<
 
   DataState get dataState => data._dataState;
 
+  final Map<_WidgetState, bool> _controlButtonWidgetStateListeners = {};
   final Map<_WidgetState, bool> _blockFragmentWidgetStateListeners = {};
   final Map<_WidgetState, bool> _controlBarWidgetStateListeners = {};
   final Map<_WidgetState, bool> _paginationWidgetStateListeners = {};
@@ -427,6 +428,23 @@ abstract class Block<
     required _WidgetState formWidgetState,
   }) {
     _controlBarWidgetStateListeners.remove(formWidgetState);
+    FlutterArtist.storage._checkToRemoveShelf(shelf);
+  }
+
+  void _addControlButtonWidgetStateListener({
+    required _WidgetState formWidgetState,
+    required bool isShowing,
+  }) {
+    _controlButtonWidgetStateListeners[formWidgetState] = isShowing;
+    if (isShowing) {
+      FlutterArtist.storage._addRecentShelf(shelf);
+    }
+  }
+
+  void _removeControlButtonWidgetStateListener({
+    required _WidgetState formWidgetState,
+  }) {
+    _controlButtonWidgetStateListeners.remove(formWidgetState);
     FlutterArtist.storage._checkToRemoveShelf(shelf);
   }
 

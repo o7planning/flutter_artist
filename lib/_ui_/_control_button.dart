@@ -29,20 +29,23 @@ class _ControlButtonState extends _WidgetState<ControlButton> {
   WidgetStateType get type => WidgetStateType.customControlBar;
 
   @override
-  void addWidgetStateListener({required bool isShowing}) {
-    // TODO: implement addWidgetStateListener
-  }
-
-  @override
   Widget buildContent(BuildContext context) {
     // TODO: implement buildContent
     throw UnimplementedError();
   }
 
   @override
-  void removeWidgetStateListener({
-    required _WidgetState<_StatefulWidget> thisWidgetState,
-  }) {
-    // TODO: implement removeWidgetStateListener
+  void addWidgetStateListener({required bool isShowing}) {
+    widget.block._addControlButtonWidgetStateListener(
+      formWidgetState: this,
+      isShowing: isShowing,
+    );
+  }
+
+  @override
+  void removeWidgetStateListener() {
+    widget.block._removeControlButtonWidgetStateListener(
+      formWidgetState: this,
+    );
   }
 }

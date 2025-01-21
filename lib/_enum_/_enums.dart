@@ -144,6 +144,7 @@ enum WidgetStateType {
   form,
   blockFragment,
   shelfFragment,
+  controlButton,
   //
   scalarFragment,
   loggedInUser;
@@ -170,6 +171,33 @@ extension WidgetStateTypeE on WidgetStateType {
         return "ScalarFragment";
       case WidgetStateType.loggedInUser:
         return "LoggedInUser";
+      case WidgetStateType.controlButton:
+        return "ControlButton";
+    }
+  }
+
+  IconData get iconData {
+    switch (this) {
+      case WidgetStateType.filter:
+        return _dataFilterIconData;
+      case WidgetStateType.controlBar:
+        return _blockControlBarIconData;
+      case WidgetStateType.customControlBar:
+        return _blockCustomControlBarIconData;
+      case WidgetStateType.form:
+        return _blockFormIconData;
+      case WidgetStateType.blockFragment:
+        return _blockFragmentIconData;
+      case WidgetStateType.pagination:
+        return _paginationIconData;
+      case WidgetStateType.loggedInUser:
+        return _loggedUserIconData;
+      case WidgetStateType.scalarFragment:
+        return _scalarFragmentIconData;
+      case WidgetStateType.shelfFragment:
+        return _shelfFragmentIconData;
+      case WidgetStateType.controlButton:
+        return _controlButtonIconData;
     }
   }
 }

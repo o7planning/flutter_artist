@@ -41,8 +41,7 @@ class _LoggedInUserBuilderState extends _WidgetState<LoggedInUserBuilder> {
   }
 
   @override
-  void removeWidgetStateListener(
-      {required _WidgetState<_StatefulWidget> thisWidgetState}) {
+  void removeWidgetStateListener() {
     FlutterArtist._loggedInUserManager._removeWidgetStateListener(
       widgetState: this,
     );

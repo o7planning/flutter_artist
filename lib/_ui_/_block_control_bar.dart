@@ -53,9 +53,9 @@ class _BlockControlBarState extends _WidgetState<BlockControlBar> {
   }
 
   @override
-  void removeWidgetStateListener({required _WidgetState thisWidgetState}) {
+  void removeWidgetStateListener() {
     widget.block._removeControlBarWidgetStateListener(
-      formWidgetState: thisWidgetState,
+      formWidgetState: this,
     );
   }
 

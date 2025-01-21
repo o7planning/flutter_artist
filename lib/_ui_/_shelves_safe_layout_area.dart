@@ -43,11 +43,11 @@ class _ShelvesSafeLayoutAreaState extends _WidgetState<ShelvesSafeLayoutArea> {
   }
 
   @override
-  void removeWidgetStateListener({
-    required _WidgetState<_StatefulWidget> thisWidgetState,
-  }) {
+  void removeWidgetStateListener() {
     for (Shelf shelf in widget.shelves) {
-      shelf._removeWidgetStateListener(widgetState: this);
+      shelf._removeWidgetStateListener(
+        widgetState: this,
+      );
     }
   }
 }

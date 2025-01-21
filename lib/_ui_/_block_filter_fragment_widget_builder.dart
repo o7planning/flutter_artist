@@ -38,7 +38,7 @@ class _DataFilterFragmentWidgetBuilderState
   }
 
   @override
-  void removeWidgetStateListener({required _WidgetState thisWidgetState}) {
+  void removeWidgetStateListener() {
     widget.dataFilter._removeWidgetStateListener(widgetState: this);
   }
 

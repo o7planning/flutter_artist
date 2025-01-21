@@ -43,9 +43,9 @@ class _BlockFormWidgetBuilderState
   }
 
   @override
-  void removeWidgetStateListener({required _WidgetState thisWidgetState}) {
+  void removeWidgetStateListener() {
     widget.blockForm._removeWidgetStateListener(
-      formWidgetState: thisWidgetState,
+      formWidgetState: this,
     );
   }
 
