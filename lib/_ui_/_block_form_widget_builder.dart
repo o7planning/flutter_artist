@@ -3,7 +3,8 @@ part of '../flutter_artist.dart';
 class BlockFormWidgetBuilder extends _StatefulWidget {
   final BlockForm blockForm;
 
-  final Widget Function(BlockForm blkForm) build;
+  final Widget Function() build;
+
   @Deprecated("Chua su dung")
   final Function()? onAfterBuild;
 
@@ -73,7 +74,7 @@ class _BlockFormWidgetBuilderState
       },
       child: AbsorbPointer(
         absorbing: !widget.blockForm.isEnabled(),
-        child: widget.build(widget.blockForm),
+        child: widget.build(),
       ),
     );
   }

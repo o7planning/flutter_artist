@@ -2,7 +2,7 @@ part of '../flutter_artist.dart';
 
 class BlockFragmentWidgetBuilder extends _StatefulWidget {
   final Block block;
-  final Widget Function(Block blk) build;
+  final Widget Function() build;
 
   const BlockFragmentWidgetBuilder({
     super.key,
@@ -45,6 +45,6 @@ class _BlockFragmentWidgetBuilderState
 
   @override
   Widget buildContent(BuildContext context) {
-    return widget.build(widget.block);
+    return widget.build();
   }
 }

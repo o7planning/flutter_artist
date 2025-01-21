@@ -2,7 +2,7 @@ part of '../flutter_artist.dart';
 
 class ScalarFragmentWidgetBuilder extends _StatefulWidget {
   final Scalar scalar;
-  final Widget Function(Scalar blk) build;
+  final Widget Function() build;
 
   const ScalarFragmentWidgetBuilder({
     super.key,
@@ -30,7 +30,7 @@ class _ScalarFragmentWidgetBuilderState
 
   @override
   Widget buildContent(BuildContext context) {
-    return widget.build(widget.scalar);
+    return widget.build();
   }
 
   @override

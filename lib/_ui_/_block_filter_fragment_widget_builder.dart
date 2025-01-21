@@ -3,7 +3,7 @@ part of '../flutter_artist.dart';
 class DataFilterFragmentWidgetBuilder extends _StatefulWidget {
   final DataFilter dataFilter;
 
-  final Widget Function(DataFilter dataFlr) build;
+  final Widget Function() build;
 
   const DataFilterFragmentWidgetBuilder({
     super.key,
@@ -44,6 +44,6 @@ class _DataFilterFragmentWidgetBuilderState
 
   @override
   Widget buildContent(BuildContext context) {
-    return widget.build(widget.dataFilter);
+    return widget.build();
   }
 }
