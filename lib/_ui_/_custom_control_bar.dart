@@ -48,8 +48,7 @@ class _CustomControlBarState extends _WidgetState<CustomControlBar> {
   }
 
   @override
-  void removeWidgetStateListener(
-      {required _WidgetState<_StatefulWidget> thisWidgetState}) {
+  void removeWidgetStateListener() {
     // TODO: implement removeWidgetStateListener
   }
 }

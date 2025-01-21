@@ -42,8 +42,9 @@ class _ScalarFragmentWidgetBuilderState
   }
 
   @override
-  void removeWidgetStateListener(
-      {required _WidgetState<_StatefulWidget> thisWidgetState}) {
-    widget.scalar._removeWidgetStateListener(widgetState: this);
+  void removeWidgetStateListener() {
+    widget.scalar._removeWidgetStateListener(
+      widgetState: this,
+    );
   }
 }
