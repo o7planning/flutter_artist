@@ -940,33 +940,59 @@ abstract class Block<
     print(
         "${getClassName(this)} ~~~~~~~~~~~~> suggestedSelection: ${suggestedSelection}");
     //
-    if (postQueryBehavior == PostQueryBehavior.selectAvailableItem ||
-        postQueryBehavior == PostQueryBehavior.selectAvailableItemToEdit) {
-      // OLD Current Item
-      ITEM? suggestedCurrentItem = data.currentItem;
-      if (suggestedSelection != null &&
-          suggestedSelection.itemIdToSetAsCurrent != null) {
-        suggestedCurrentItem = data.findItemById(
-          suggestedSelection.itemIdToSetAsCurrent!,
-        );
-      }
+    switch (postQueryBehavior) {
+      case PostQueryBehavior.selectAvailableItem:
+      case PostQueryBehavior.selectAvailableItemToEdit:
+        // OLD Current Item
+        ITEM? suggestedCurrentItem = data.currentItem;
+        if (suggestedSelection != null &&
+            suggestedSelection.itemIdToSetAsCurrent != null) {
+          suggestedCurrentItem = data.findItemById(
+            suggestedSelection.itemIdToSetAsCurrent!,
+          );
+        }
 
-      ITEM? itemWithSameId = suggestedCurrentItem == null
-          ? null
-          : data.findItemSameIdWith(item: suggestedCurrentItem);
+        ITEM? itemWithSameId = suggestedCurrentItem == null
+            ? null
+            : data.findItemSameIdWith(item: suggestedCurrentItem);
 
-      //
-      print(
-          "${getClassName(this)} ~~~~~~~~~~~~> itemWithSameId: ${itemWithSameId}");
+        //
+        print(
+            "${getClassName(this)} ~~~~~~~~~~~~> itemWithSameId: ${itemWithSameId}");
 
-      if (itemWithSameId == null) {
-        // Find first Item...
-        ITEM? firstItem = data.findFirstItem();
-        print("${getClassName(this)} ~~~~~~~~~~~~> firstItem: ${firstItem}");
-        if (firstItem != null) {
+        if (itemWithSameId == null) {
+          // Find first Item...
+          ITEM? firstItem = data.findFirstItem();
+          print("${getClassName(this)} ~~~~~~~~~~~~> firstItem: ${firstItem}");
+          if (firstItem != null) {
+            bool success = await __prepareToShowOrEdit(
+              thisXBlock: thisXBlock,
+              item: firstItem,
+              justQueried: true,
+              forceForm: postQueryBehavior ==
+                  PostQueryBehavior.selectAvailableItemToEdit,
+            );
+            if (!success) {
+              return false;
+            }
+          } else {
+            bool success = await _switchThisAndChildrenToNoneMode(
+              thisXBlock: thisXBlock,
+              clearListForThis: false,
+              dataState: dataState,
+            );
+            if (!success) {
+              return false;
+            }
+          }
+          //
+          return true;
+        } else {
+          print(
+              "${getClassName(this)} ~~~~~~~~~~~~> __prepareToShowOrEdit($itemWithSameId)");
           bool success = await __prepareToShowOrEdit(
             thisXBlock: thisXBlock,
-            item: firstItem,
+            item: itemWithSameId,
             justQueried: true,
             forceForm: postQueryBehavior ==
                 PostQueryBehavior.selectAvailableItemToEdit,
@@ -974,46 +1000,19 @@ abstract class Block<
           if (!success) {
             return false;
           }
-        } else {
-          bool success = await _switchThisAndChildrenToNoneMode(
-            thisXBlock: thisXBlock,
-            clearListForThis: false,
-            dataState: dataState,
-          );
-          if (!success) {
-            return false;
-          }
+          return true;
         }
-        //
-        return true;
-      } else {
-        print(
-            "${getClassName(this)} ~~~~~~~~~~~~> __prepareToShowOrEdit($itemWithSameId)");
-        bool success = await __prepareToShowOrEdit(
+      case PostQueryBehavior.createNewItem:
+        data._dataState = DataState.ready;
+        // Create New Item
+        bool success = await __prepareToCreate(
           thisXBlock: thisXBlock,
-          item: itemWithSameId,
-          justQueried: true,
-          forceForm:
-              postQueryBehavior == PostQueryBehavior.selectAvailableItemToEdit,
+          extraInput: null,
         );
         if (!success) {
           return false;
         }
         return true;
-      }
-    } else if (postQueryBehavior == PostQueryBehavior.createNewItem) {
-      data._dataState = DataState.ready;
-      // Create New Item
-      bool success = await __prepareToCreate(
-        thisXBlock: thisXBlock,
-        extraInput: null,
-      );
-      if (!success) {
-        return false;
-      }
-      return true;
-    } else {
-      throw "TODO $postQueryBehavior";
     }
   }
 
@@ -1410,22 +1409,22 @@ abstract class Block<
     _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
     try {
-      shelf.__backupAll();
+      shelf._backupAll();
       //
       bool success = await __executeQuickCreateAction(
         thisXBlock: thisXBlock,
         data: data,
       );
       if (success) {
-        shelf.__applyNewStateAll();
+        shelf._applyNewStateAll();
       } else {
-        shelf.__restoreAll();
+        shelf._restoreAll();
       }
 
       return success;
     } catch (e, stackTrace) {
       // TODO: Xu ly loi.
-      shelf.__restoreAll();
+      shelf._restoreAll();
       return false;
     }
   }
@@ -1513,21 +1512,28 @@ abstract class Block<
     _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
     try {
-      shelf.__backupAll();
+      shelf._backupAll();
       bool success = await __executeQuickUpdateAction(
         thisXBlock: thisXBlock,
         item: item,
         data: data,
       );
       if (success) {
-        shelf.__applyNewStateAll();
+        shelf._applyNewStateAll();
       } else {
-        shelf.__restoreAll();
+        shelf._restoreAll();
       }
       return success;
     } catch (e, stackTrace) {
-      // TODO: Xu ly loi
-      shelf.__restoreAll();
+      shelf._restoreAll();
+      //
+      _handleError(
+        shelf: shelf,
+        methodName: "__executeQuickUpdateActionWithRestorable",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
       //
       return false;
     }
@@ -1561,7 +1567,6 @@ abstract class Block<
     try {
       return await _processSaveActionRestResult(
         thisXBlock: thisXBlock,
-        // suggestedSelection: null,
         calledMethodName: "callApiQuickUpdate",
         result: result,
       );
@@ -1595,7 +1600,7 @@ abstract class Block<
         if (success) {
           try {
             BuildContext context = FlutterArtist.adapter.getCurrentContext();
-            action.executeRoute(context);
+            action.navigate(context);
           } catch (e, stackTrace) {
             print("Error: $e");
             print(stackTrace);
@@ -1635,7 +1640,7 @@ abstract class Block<
     );
     //
     try {
-      shelf.__backupAll();
+      shelf._backupAll();
       //
       _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
       //
@@ -1645,14 +1650,21 @@ abstract class Block<
         afterQuickAction: afterQuickAction,
       );
       if (!success) {
-        shelf.__restoreAll();
+        shelf._restoreAll();
       } else {
-        shelf.__applyNewStateAll();
+        shelf._applyNewStateAll();
       }
       return success;
     } catch (e, stackTrace) {
-      // TODO: Xu ly loi.
-      shelf.__restoreAll();
+      shelf._restoreAll();
+      //
+      _handleError(
+        shelf: shelf,
+        methodName: "__executeQuickAction",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
       return false;
     }
   }
@@ -2206,7 +2218,7 @@ abstract class Block<
     thisXBlock.suggestedSelection = suggestedSelection;
     //
     try {
-      shelf.__backupAll();
+      shelf._backupAll();
       //
       _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
       bool success = await __prepareToShowOrEdit(
@@ -2217,10 +2229,10 @@ abstract class Block<
       );
 
       if (!success) {
-        shelf.__restoreAll();
+        shelf._restoreAll();
         return false;
       } else {
-        shelf.__applyNewStateAll();
+        shelf._applyNewStateAll();
         //
         return true;
       }
@@ -2233,7 +2245,7 @@ abstract class Block<
         showSnackBar: true,
       );
       //
-      shelf.__restoreAll();
+      shelf._restoreAll();
       return false;
     }
   }
@@ -2685,16 +2697,16 @@ abstract class Block<
     _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
     try {
-      shelf.__backupAll();
+      shelf._backupAll();
       bool success = await __deleteItem(
         thisXBlock: thisXBlock,
         item: item,
       );
 
       if (!success) {
-        shelf.__restoreAll();
+        shelf._restoreAll();
       } else {
-        shelf.__applyNewStateAll();
+        shelf._applyNewStateAll();
       }
       return success;
     } catch (e, stackTrace) {
@@ -2706,7 +2718,7 @@ abstract class Block<
         showSnackBar: true,
       );
       //
-      shelf.__restoreAll();
+      shelf._restoreAll();
       return false;
     }
   }

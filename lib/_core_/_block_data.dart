@@ -241,6 +241,22 @@ abstract class BlockData<
     );
   }
 
+  // bool containsSelectedItems(List<ITEM> items) {
+  //   return FormUtils.isListContainItems(
+  //     targetList: _selectedItems,
+  //     items: items,
+  //     getItemId: block.getItemId,
+  //   );
+  // }
+  //
+  // bool containsCheckedItems(List<ITEM> items) {
+  //   return FormUtils.isListContainItems(
+  //     targetList: _checkedItems,
+  //     items: items,
+  //     getItemId: block.getItemId,
+  //   );
+  // }
+
   bool containsItem({
     required ITEM item,
   }) {

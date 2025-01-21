@@ -9,7 +9,7 @@ abstract class QuickActionData {
     required this.actionInfo,
   });
 
-  void executeRoute(BuildContext context);
+  void navigate(BuildContext context);
 }
 
 class SimpleQuickActionData extends QuickActionData {
@@ -24,7 +24,7 @@ class SimpleQuickActionData extends QuickActionData {
   });
 
   @override
-  void executeRoute(BuildContext context) {
+  void navigate(BuildContext context) {
     route(context);
   }
 }

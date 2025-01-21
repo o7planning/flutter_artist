@@ -573,7 +573,7 @@ abstract class Shelf extends _XBase {
   // ********** BACKUP & RESTORE & APPLY ***************************************
   // ***************************************************************************
 
-  void __backupAll() {
+  void _backupAll() {
     for (DataFilter dataFilter in _allDataFilters) {
       dataFilter._backup();
     }
@@ -587,7 +587,7 @@ abstract class Shelf extends _XBase {
     }
   }
 
-  void __restoreAll() {
+  void _restoreAll() {
     for (DataFilter dataFilter in _allDataFilters) {
       dataFilter._restore();
     }
@@ -602,7 +602,7 @@ abstract class Shelf extends _XBase {
     updateAllUIComponents();
   }
 
-  void __applyNewStateAll() {
+  void _applyNewStateAll() {
     for (DataFilter dataFilter in _allDataFilters) {
       dataFilter._applyNewState();
     }
@@ -662,7 +662,7 @@ abstract class Shelf extends _XBase {
     xShelf.printMe();
     //
     try {
-      __backupAll();
+      _backupAll();
       //
       for (_XScalar xScalar in xShelf.allXScalars) {
         if (!xScalar.needQuery) {
@@ -729,10 +729,10 @@ abstract class Shelf extends _XBase {
         }
       }
       //
-      __applyNewStateAll();
+      _applyNewStateAll();
       return true;
     } catch (e, stackTrace) {
-      __restoreAll();
+      _restoreAll();
       //
       // If _TransactionError, no need to show SnackBar any more..
       //

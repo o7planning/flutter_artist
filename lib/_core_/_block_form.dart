@@ -273,15 +273,15 @@ abstract class BlockForm<
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(block.name)!;
     try {
-      shelf.__backupAll();
+      shelf._backupAll();
       bool success = await __saveForm(
         thisXBlock: thisXBlock,
       );
 
       if (!success) {
-        shelf.__restoreAll();
+        shelf._restoreAll();
       } else {
-        shelf.__applyNewStateAll();
+        shelf._applyNewStateAll();
       }
       return success;
     } catch (e, stackTrace) {
