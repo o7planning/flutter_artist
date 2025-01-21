@@ -3053,7 +3053,7 @@ abstract class Block<
   }
 
   // ***************************************************************************
-  // *********** __canXXX() method *********************************************
+  // *********** __checkAncestorsSafeXXX() method ******************************
   // ***************************************************************************
 
   // TODO: Viet chi tiet hon:
@@ -3128,7 +3128,7 @@ abstract class Block<
   ///
   /// Check if Ancestor Blocks in Safe State to Edit item in current Block.
   ///
-  bool __checkAncestorsSafeToEditItem({required ITEM_DETAIL refreshedItem}) {
+  bool __checkAncestorsSafeToEditItem({required ITEM_DETAIL? itemDetail}) {
     if (parent == null) {
       return true;
     }
@@ -3141,8 +3141,12 @@ abstract class Block<
           break; // Do nothing
       }
     }
-    return parent!.__checkAncestorsSafeToEditItem(refreshedItem: refreshedItem);
+    return parent!.__checkAncestorsSafeToEditItem(itemDetail: null);
   }
+
+  // ***************************************************************************
+  // *********** __canXXX() method *********************************************
+  // ***************************************************************************
 
   bool __canDeleteItem({required ITEM item, required bool checkAllow}) {
     if (__isDeleting) {
@@ -3192,7 +3196,7 @@ abstract class Block<
       return false;
     }
     //
-    bool ancestorsSafe = __checkAncestorsSafeToEditItem(refreshedItem: item);
+    bool ancestorsSafe = __checkAncestorsSafeToEditItem(itemDetail: item);
     if (!ancestorsSafe) {
       return false;
     }
