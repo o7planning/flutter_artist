@@ -38,7 +38,7 @@ part of '../flutter_artist.dart';
 /// }
 /// ```
 ///
-/// [FILTER_INPUT]:
+/// [FILTER_INPUT]: Additional data to create or modify [DataFilter].
 /// ```
 /// class EmployeeFilterInput extends FilterInput {
 ///    String? searchText,
@@ -46,7 +46,12 @@ part of '../flutter_artist.dart';
 /// }
 /// ```
 ///
-/// [FILTER_CRITERIA]:
+/// [FILTER_CRITERIA]: These are the criteria for filtering the data.
+///
+/// When the [Block.query] or [Scalar.query] method is called,
+/// this [FilterCriteria] is created automatically by the [DataFilter]
+/// via the [DataFilter.createFilterCriteria] method
+/// and passed to the [Block.callApiQuery] or [Scalar.callApiQuery] method.
 /// ```
 /// class EmployeeFilterCriteria extends FilterCriteria {
 ///    String? searchText,
@@ -129,7 +134,7 @@ abstract class Block<
 
   ///
   /// This field is not null.
-  /// If this block does not declare a DataFilter, it will have the default DataFilter.
+  /// If this block does not declare a [DataFilter], it will have the default [DataFilter].
   ///
   late final DataFilter<FILTER_INPUT, FILTER_CRITERIA>
       _registeredOrDefaultDataFilter;
@@ -1249,7 +1254,7 @@ abstract class Block<
       itemDetail: refreshedItemDetail,
     );
     //
-    bool editable = _isAllowEdit(refreshedItem: refreshedItemDetail);
+    bool editable = canEditItemOnForm(item: refreshedItemDetail);
     //
     FlutterArtist.codeFlowLogger._addInfo(
       ownerClassInstance: this,
@@ -1708,7 +1713,7 @@ abstract class Block<
         switch (afterQuickAction) {
           case AfterQuickAction.refreshCurrentItem:
             methodName = "refreshCurrentItem";
-            if (!canRefresh()) {
+            if (!canRefreshCurrentItem()) {
               return true;
             }
             success = await __prepareToShowOrEdit(
@@ -1744,6 +1749,7 @@ abstract class Block<
     return data.currentItemDetail != null;
   }
 
+  // TODO: Xem lai phuong thuc nay. No da duoc goi o dau.
   bool hasCurrentItemAndAllowEdit() {
     return data.currentItemDetail != null &&
         _isAllowEdit(
@@ -1751,114 +1757,12 @@ abstract class Block<
         );
   }
 
+  // TODO: Xem lai phuong thuc nay. No da duoc goi o dau.
   bool hasCurrentItemAndAllowDelete() {
     return data.currentItemDetail != null &&
-        _isAllowDelete(
+        __isAllowDelete(
           refreshedItem: data.currentItemDetail!,
         );
-  }
-
-  ///
-  /// Allows creating a new Item or not according to the application logic.
-  ///
-  bool isAllowCreate() {
-    return true;
-  }
-
-  ///
-  /// Allows edit an Item or not according to the application logic.
-  ///
-  bool isAllowEdit({required ITEM_DETAIL refreshedItem}) {
-    return true;
-  }
-
-  ///
-  /// Allows deleting an Item or not according to the application logic.
-  ///
-  bool isAllowDelete({required ITEM_DETAIL refreshedItem}) {
-    return true;
-  }
-
-  ///
-  /// Allows edit current item or not according to the application logic.
-  ///
-  bool _isAllowEditCurrentItem() {
-    ITEM_DETAIL? currentItem = data.currentItemDetail;
-    if (currentItem == null) {
-      return false;
-    }
-    return _isAllowEdit(refreshedItem: currentItem);
-  }
-
-  ///
-  /// Allows deleting an Item or not according to the application logic.
-  ///
-  bool _isAllowEdit({required ITEM_DETAIL refreshedItem}) {
-    try {
-      return isAllowEdit(refreshedItem: refreshedItem);
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "isAllowEdit",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: false,
-      );
-      return false;
-    }
-  }
-
-  ///
-  /// Allows creating a new Item or not according to the application logic.
-  ///
-  bool _isAllowCreate() {
-    try {
-      return isAllowCreate();
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "isAllowCreate",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: false,
-      );
-      return false;
-    }
-  }
-
-  // TODO: Xem cac phuong thuc nay dc goi o dau.
-  ///
-  /// Allows deleting an Item or not according to the application logic.
-  ///
-  bool _isAllowDelete({required ITEM_DETAIL refreshedItem}) {
-    try {
-      return isAllowDelete(refreshedItem: refreshedItem);
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "isAllowDelete",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: false,
-      );
-      return false;
-    }
-  }
-
-  ///
-  /// Allows deleting an Item or not according to the application logic.
-  ///
-  bool _isAllowDeleteItem({required ITEM item}) {
-    final bool isCurrent = data.isCurrentItem(item: item);
-    if (!isCurrent) {
-      return true;
-    } else {
-      ITEM_DETAIL? currentItem = data.currentItemDetail;
-      if (currentItem == null) {
-        return false;
-      }
-      return _isAllowDelete(refreshedItem: currentItem);
-    }
   }
 
   bool needToKeepItemInList({
@@ -2633,7 +2537,7 @@ abstract class Block<
       }
     }
     //
-    if (item == null || !canDelete(item: item)) {
+    if (item == null || !canDeleteItem(item: item)) {
       return false;
     }
     bool confirm = await showConfirmDeleteDialog(details: getClassName(item));
@@ -2655,7 +2559,7 @@ abstract class Block<
       },
     );
     //
-    if (!canDelete(item: item)) {
+    if (!canDeleteItem(item: item)) {
       return false;
     }
     bool confirm = await showConfirmDeleteDialog(details: getClassName(item));
@@ -2837,7 +2741,7 @@ abstract class Block<
       parameters: {},
     );
     //
-    if (!canRefresh()) {
+    if (!canRefreshCurrentItem()) {
       return false;
     }
     bool success = await _prepareToShowOrEditWithOverlayAndRestorable(
@@ -3012,30 +2916,336 @@ abstract class Block<
 
   Future<ApiResult<ITEM_DETAIL>> callApiFindItemById({required ID itemId});
 
-  bool canCreate() {
+  // ***************************************************************************
+  // *********** isAllowXXX() method *******************************************
+  // ***************************************************************************
+
+  ///
+  /// Allows querying the block or not according to the application logic.
+  ///
+  bool isAllowQuery() {
+    return true;
+  }
+
+  ///
+  /// Allows creating a new Item or not according to the application logic.
+  ///
+  bool isAllowCreate() {
+    return true;
+  }
+
+  ///
+  /// Allows edit an Item or not according to the application logic.
+  ///
+  bool isAllowEdit({required ITEM_DETAIL refreshedItem}) {
+    return true;
+  }
+
+  ///
+  /// Allows deleting an Item or not according to the application logic.
+  ///
+  bool isAllowDelete({required ITEM_DETAIL refreshedItem}) {
+    return true;
+  }
+
+  // ***************************************************************************
+  // *********** __isAllowXXX() method *****************************************
+  // ***************************************************************************
+
+  ///
+  /// Allows deleting an Item or not according to the application logic.
+  ///
+  bool __isAllowQuery() {
+    try {
+      return isAllowQuery();
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: "isAllowEdit",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: false,
+      );
+      return false;
+    }
+  }
+
+  ///
+  /// Allows edit current item or not according to the application logic.
+  ///
+  bool __isAllowEditCurrentItem() {
+    ITEM_DETAIL? currentItem = data.currentItemDetail;
+    if (currentItem == null) {
+      return false;
+    }
+    return _isAllowEdit(refreshedItem: currentItem);
+  }
+
+  ///
+  /// Allows deleting an Item or not according to the application logic.
+  ///
+  bool _isAllowEdit({required ITEM_DETAIL refreshedItem}) {
+    try {
+      return isAllowEdit(refreshedItem: refreshedItem);
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: "isAllowEdit",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: false,
+      );
+      return false;
+    }
+  }
+
+  ///
+  /// Allows creating a new Item or not according to the application logic.
+  ///
+  bool _isAllowCreate() {
+    try {
+      return isAllowCreate();
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: "isAllowCreate",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: false,
+      );
+      return false;
+    }
+  }
+
+  ///
+  /// Allows deleting an Item or not according to the application logic.
+  ///
+  bool __isAllowDelete({required ITEM_DETAIL refreshedItem}) {
+    try {
+      return isAllowDelete(refreshedItem: refreshedItem);
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: "isAllowDelete",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: false,
+      );
+      return false;
+    }
+  }
+
+  ///
+  /// Allows deleting an Item or not according to the application logic.
+  ///
+  bool _isAllowDeleteItem({required ITEM item}) {
+    final bool isCurrent = data.isCurrentItem(item: item);
+    if (!isCurrent) {
+      // TODO: Xem lại chỗ này. cần kiểm tra với phương thức isAllowDelete().
+      return true;
+    } else {
+      ITEM_DETAIL? currentItem = data.currentItemDetail;
+      if (currentItem == null) {
+        return false;
+      }
+      return __isAllowDelete(refreshedItem: currentItem);
+    }
+  }
+
+  // ***************************************************************************
+  // *********** __canXXX() method *********************************************
+  // ***************************************************************************
+
+  // TODO: Viet chi tiet hon:
+  ///
+  /// Check if Ancestor Blocks in Safe State to Query in current Block.
+  ///
+  bool __checkAncestorsSafeToQuery() {
+    if (parent == null) {
+      return true;
+    }
+    //
+    if (!parent!.hasCurrentItem()) {
+      return false;
+    }
+    //
+    switch (parent!.formMode) {
+      case FormMode.none:
+      case FormMode.creation:
+        return false;
+      case FormMode.edit:
+        break; // Do nothing
+    }
+    //
+    return parent!.__checkAncestorsSafeToQuery();
+  }
+
+  // TODO: Viet chi tiet hon:
+  ///
+  /// Check if Ancestor Blocks in Safe State to Delete item in current Block.
+  ///
+  bool __checkAncestorsSafeToDelete(ITEM? item) {
+    if (parent == null) {
+      return true;
+    }
+    // TODO: Kiểm tra nếu item là current thì mới cần đk này:
+    if (parent!.blockForm != null) {
+      switch (parent!.formMode) {
+        case FormMode.none:
+        case FormMode.creation:
+          return false;
+        case FormMode.edit:
+          break; // Do nothing
+      }
+    }
+    //
+    return parent!.__checkAncestorsSafeToDelete(null);
+  }
+
+  // TODO: Viet chi tiet hon:
+  ///
+  /// Check if Ancestor Blocks in Safe State to Create item in current Block.
+  ///
+  bool __checkAncestorsSafeToCreate() {
+    if (parent == null) {
+      return true;
+    }
+    //
+    if (parent!.blockForm != null) {
+      switch (parent!.formMode) {
+        case FormMode.none:
+        case FormMode.creation:
+          return false;
+        case FormMode.edit:
+          break; // Do nothing
+      }
+    }
+    //
+    return parent!.__checkAncestorsSafeToCreate();
+  }
+
+  // TODO: Viet chi tiet hon:
+  ///
+  /// Check if Ancestor Blocks in Safe State to Edit item in current Block.
+  ///
+  bool __checkAncestorsSafeToEditItem({required ITEM_DETAIL refreshedItem}) {
+    if (parent == null) {
+      return true;
+    }
+    if (parent!.blockForm != null) {
+      switch (parent!.formMode) {
+        case FormMode.none:
+        case FormMode.creation:
+          return false;
+        case FormMode.edit:
+          break; // Do nothing
+      }
+    }
+    return parent!.__checkAncestorsSafeToEditItem(refreshedItem: refreshedItem);
+  }
+
+  bool __canDeleteItem({required ITEM item, required bool checkAllow}) {
+    if (__isDeleting) {
+      return false;
+    }
+    //
+    bool ancestorsSafe = __checkAncestorsSafeToDelete(item);
+    if (!ancestorsSafe) {
+      return false;
+    }
+    //
+    return checkAllow ? _isAllowDeleteItem(item: item) : true;
+  }
+
+  bool __canCreateItem({required bool checkAllow}) {
     if (blockForm == null || this.__isPreparingFormCreation) {
       return false;
     }
-    if (parent != null && parent!.blockForm != null) {
-      if (parent!.formMode == FormMode.none ||
-          parent!.formMode == FormMode.creation) {
-        return false;
-      }
+    bool ancestorSafe = __checkAncestorsSafeToCreate();
+    if (!ancestorSafe) {
+      return false;
     }
-    return _isAllowCreate();
+    return checkAllow ? _isAllowCreate() : true;
   }
 
-  bool canSave() {
+  bool __canSave({required bool checkAllow}) {
     if (blockForm == null || this.__isSaving) {
       return false;
     }
-    if (parent != null) {
-      if (parent!.formMode == FormMode.none ||
-          parent!.formMode == FormMode.creation) {
+    switch (blockForm!.data._formMode) {
+      case FormMode.none:
         return false;
+      case FormMode.creation:
+        break; // Do nothing.
+      case FormMode.edit:
+        break; // Do nothing.
+    }
+    //
+    return checkAllow ? _isAllowCreate() && __isAllowEditCurrentItem() : true;
+  }
+
+  bool __canEditItemOnForm({
+    required ITEM_DETAIL item,
+    required bool checkAllow,
+  }) {
+    if (blockForm == null || __isSaving) {
+      return false;
+    }
+    //
+    bool ancestorsSafe = __checkAncestorsSafeToEditItem(refreshedItem: item);
+    if (!ancestorsSafe) {
+      return false;
+    }
+    switch (blockForm!.data._formMode) {
+      case FormMode.none:
+        return false;
+      case FormMode.creation:
+        break; // Do nothing.
+      case FormMode.edit:
+        break; // Do nothing.
+    }
+    return checkAllow ? _isAllowEdit(refreshedItem: item) : true;
+  }
+
+  bool __canEditCurrentItemOnForm({required bool checkAllow}) {
+    if (data.currentItemDetail == null || __isRefreshingCurrentItem) {
+      return false;
+    }
+    //
+    return __canEditItemOnForm(
+      item: data.currentItemDetail!,
+      checkAllow: checkAllow,
+    );
+  }
+
+  bool __canRefreshCurrentItem() {
+    if (data.currentItemDetail == null || __isRefreshingCurrentItem) {
+      return false;
+    }
+    //
+    if (blockForm != null) {
+      switch (blockForm!.data._formMode) {
+        case FormMode.none:
+        case FormMode.creation:
+          return false;
+        case FormMode.edit:
+          break; // Do nothing
       }
     }
-    return blockForm!.data._formMode != FormMode.none;
+    //
+    return true;
+  }
+
+  // ***************************************************************************
+  // *********** canXXX() method ***********************************************
+  // ***************************************************************************
+
+  bool canCreateItem() {
+    return __canCreateItem(checkAllow: true);
+  }
+
+  bool canSave() {
+    return __canSave(checkAllow: true);
   }
 
   bool canDeleteCurrentItem() {
@@ -3043,78 +3253,48 @@ abstract class Block<
     if (currentItem == null) {
       return false;
     }
-    return canDelete(item: currentItem);
+    return canDeleteItem(item: currentItem);
   }
 
-  bool canDelete({required ITEM item}) {
-    if (__isDeleting) {
-      return false;
-    }
-    if (parent != null) {
-      if (parent!.blockForm != null) {
-        if (parent!.formMode == FormMode.none ||
-            parent!.formMode == FormMode.creation ||
-            parent!.data.currentItemDetail == null) {
-          return false;
-        }
-      }
-    }
-    return _isAllowDeleteItem(item: item);
+  bool canDeleteItem({required ITEM item}) {
+    return __canDeleteItem(item: item, checkAllow: true);
   }
 
-  bool canEditOnForm() {
-    if (blockForm == null || __isSaving) {
-      return false;
-    }
-    if (parent != null) {
-      if (parent!.blockForm != null) {
-        if (parent!.formMode == FormMode.none ||
-            parent!.formMode == FormMode.creation ||
-            parent!.data.currentItemDetail == null) {
-          return false;
-        }
-      }
-    }
-    switch (blockForm!.data._formMode) {
-      case FormMode.none:
-        return false;
-      case FormMode.creation:
-        return _isAllowCreate();
-      case FormMode.edit:
-        return _isAllowEditCurrentItem();
-    }
+  bool canEditItemOnForm({required ITEM_DETAIL item}) {
+    return __canEditItemOnForm(item: item, checkAllow: true);
   }
 
-  bool canRefresh() {
-    if (__isRefreshingCurrentItem) {
-      return false;
-    }
-    if (data.currentItemDetail == null) {
-      return false;
-    }
-    if (blockForm != null) {
-      if (blockForm!.data._formMode == FormMode.creation ||
-          blockForm!.data._formMode == FormMode.none) {
-        return false;
-      }
-    }
-    return true;
+  bool canEditCurrentItemOnForm() {
+    return __canEditCurrentItemOnForm(checkAllow: true);
   }
 
-  bool canQuery() {
+  ///
+  /// Checks whether the current item can be refreshed.
+  ///
+  /// This method will return [true] if all the usual conditions are met.
+  ///
+  bool canRefreshCurrentItem() {
+    return __canRefreshCurrentItem();
+  }
+
+  bool __canQuery({required bool checkAllow}) {
     if (__isQuerying) {
       return false;
     }
-    if (parent == null) {
-      return true;
-    } else {
-      if (parent!.data.currentItemDetail == null) {
-        return false;
-      } else {
-        return true;
-      }
+    bool ancestorsSafe = __checkAncestorsSafeToQuery();
+    if (!ancestorsSafe) {
+      return false;
     }
+    return checkAllow ? __isAllowQuery() : true;
   }
+
+  bool canQuery() {
+    return __canQuery(checkAllow: true);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+  // ***************************************************************************
 
   void __assertThisXBlock(_XBlock thisXBlock) {
     if (thisXBlock.block != this || thisXBlock.name != name) {

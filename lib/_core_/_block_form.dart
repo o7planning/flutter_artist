@@ -127,7 +127,7 @@ abstract class BlockForm<
   }
 
   bool isEnabled() {
-    return block.canEditOnForm();
+    return block.canEditCurrentItemOnForm();
   }
 
   void resetForm() {

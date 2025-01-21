@@ -142,7 +142,7 @@ class _BlockControlBarState extends _WidgetState<BlockControlBar> {
             tooltip: "Create",
             iconData: _formCreateIconData,
             onAction: widget.block.isPreparingFormCreation,
-            onPressed: widget.showCreateButton && widget.block.canCreate()
+            onPressed: widget.showCreateButton && widget.block.canCreateItem()
                 ? () {
                     _prepareToCreate(widget.block);
                   }
@@ -240,11 +240,12 @@ class _BlockControlBarState extends _WidgetState<BlockControlBar> {
             tooltip: "Refresh Current Item",
             iconData: _formRefreshIconData,
             onAction: widget.block.isRefreshingCurrentItem,
-            onPressed: widget.showRefreshButton && widget.block.canRefresh()
-                ? () {
-                    _refreshForm(widget.block);
-                  }
-                : null,
+            onPressed:
+                widget.showRefreshButton && widget.block.canRefreshCurrentItem()
+                    ? () {
+                        _refreshForm(widget.block);
+                      }
+                    : null,
           ),
         if (widget.showQueryButton)
           _ControlBarButton(
