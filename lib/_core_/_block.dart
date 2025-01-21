@@ -953,7 +953,7 @@ abstract class Block<
 
       ITEM? itemWithSameId = suggestedCurrentItem == null
           ? null
-          : data._findItemSameIdWith(item: suggestedCurrentItem);
+          : data.findItemSameIdWith(item: suggestedCurrentItem);
 
       //
       print(
@@ -1182,7 +1182,7 @@ abstract class Block<
     final bool isCurrent = data.isCurrentItem(
       item: notFoundItem,
     );
-    final ITEM? siblingItem = data._findSiblingItem(
+    final ITEM? siblingItem = data.findSiblingItem(
       item: notFoundItem,
     );
     //
@@ -2773,7 +2773,7 @@ abstract class Block<
           __removeItemFromList(removeItem: item);
         } else {
           // Deleted current item ==> find sibling.
-          final ITEM? sibling = data._findSiblingItem(item: item);
+          final ITEM? sibling = data.findSiblingItem(item: item);
           // Remove Item
           __removeItemFromList(removeItem: item);
 

@@ -1,54 +1,138 @@
 part of '../flutter_artist.dart';
 
 class FormUtils {
-  static void removeItemFromList<E, ID>({
-    required List<E> items,
-    required E removeItem,
-    required ID Function(E item) getItemId,
+  static ITEM? findItemById<ITEM, ID>({
+    required ID id,
+    required List<ITEM> targetList,
+    required ID Function(ITEM item) getItemId,
   }) {
-    int idx = items.indexWhere((it) {
+    for (ITEM item in targetList) {
+      if (getItemId(item) == id) {
+        return item;
+      }
+    }
+    return null;
+  }
+
+  static void removeItemFromList<ITEM, ID>({
+    required ITEM removeItem,
+    required List<ITEM> targetList,
+    required ID Function(ITEM item) getItemId,
+  }) {
+    int idx = targetList.indexWhere((it) {
       return getItemId(it) == getItemId(removeItem);
     });
     if (idx != -1) {
-      items.removeAt(idx);
+      targetList.removeAt(idx);
     }
   }
 
-  static void insertOrReplaceItemInList<E, ID>({
-    required List<E> items,
-    required E item,
-    required ID Function(E item) getItemId,
+  static void insertOrReplaceItemInList<ITEM, ID>({
+    required ITEM item,
+    required List<ITEM> targetList,
+    required ID Function(ITEM item) getItemId,
   }) {
-    int idx = items.indexWhere((it) {
+    int idx = targetList.indexWhere((it) {
       return getItemId(it) == getItemId(item);
     });
     if (idx == -1) {
-      items.insert(0, item);
+      targetList.insert(0, item);
     } else {
-      items[idx] = item;
+      targetList[idx] = item;
     }
   }
 
-  static E? findSiblingItemInList<E, ID>({
-    required List<E> items,
-    required E item,
-    required ID Function(E item) getItemId,
+  static void insertOrReplaceItemsInList<ITEM, ID>({
+    required List<ITEM> items,
+    required List<ITEM> targetList,
+    required ID Function(ITEM item) getItemId,
   }) {
-    int idx = items.indexWhere((e) {
+    for (ITEM item in items) {
+      insertOrReplaceItemInList(
+        item: item,
+        targetList: targetList,
+        getItemId: getItemId,
+      );
+    }
+  }
+
+  static void replaceItemInList<ITEM, ID>({
+    required ITEM replacementItem,
+    required List<ITEM> targetList,
+    required ID Function(ITEM item) getItemId,
+  }) {
+    int idx = targetList.indexWhere((it) {
+      return getItemId(it) == getItemId(replacementItem);
+    });
+    if (idx != -1) {
+      targetList[idx] = replacementItem;
+    }
+  }
+
+  static void replaceItemsInList<ITEM, ID>({
+    required List<ITEM> replacementItems,
+    required List<ITEM> targetList,
+    required ID Function(ITEM item) getItemId,
+  }) {
+    for (ITEM replacementItem in replacementItems) {
+      replaceItemInList(
+        replacementItem: replacementItem,
+        targetList: targetList,
+        getItemId: getItemId,
+      );
+    }
+  }
+
+  static ITEM? findSiblingItemInList<ITEM, ID>({
+    required List<ITEM> targetList,
+    required ITEM item,
+    required ID Function(ITEM item) getItemId,
+  }) {
+    int idx = targetList.indexWhere((e) {
       return getItemId(e) == getItemId(item);
     });
     if (idx == -1) {
-      if (items.isNotEmpty) {
-        return items[0];
+      if (targetList.isNotEmpty) {
+        return targetList[0];
       }
       return null;
     } else {
-      if (idx + 1 < items.length) {
-        return items[idx + 1];
+      if (idx + 1 < targetList.length) {
+        return targetList[idx + 1];
       } else if (idx - 1 >= 0) {
-        return items[idx - 1];
+        return targetList[idx - 1];
       }
       return null;
     }
+  }
+
+  ///
+  /// Append items to targetList.
+  ///
+  static void appendItemsToList<ITEM, ID>({
+    required List<ITEM> appendItems,
+    required List<ITEM> targetList,
+    required ID Function(ITEM item) getItemId,
+  }) {
+    List<ITEM> all = [];
+    List<ITEM> tailItems = [...appendItems];
+    for (ITEM item in targetList) {
+      ITEM? it = _getItemBySameItemId(
+        items: appendItems,
+        sameItem: item,
+        getItemId: getItemId,
+      );
+      if (it != null) {
+        all.add(it);
+        tailItems.remove(it);
+      } else {
+        all.add(item);
+      }
+    }
+    all.addAll(tailItems);
+    //
+    targetList
+      ..clear()
+      ..addAll(all);
   }
 }

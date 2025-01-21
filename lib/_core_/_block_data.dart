@@ -14,6 +14,8 @@ abstract class BlockData<
       block;
 
   late final List<ITEM> _items;
+  final List<ITEM> _selectedItems = [];
+  final List<ITEM> _checkedItems = [];
 
   ///
   /// return a copied list of items.
@@ -21,6 +23,20 @@ abstract class BlockData<
   @override
   List<ITEM> get items {
     return [..._items];
+  }
+
+  ///
+  /// return a copied list of checked items.
+  ///
+  List<ITEM> get checkedItems {
+    return [..._checkedItems];
+  }
+
+  ///
+  /// return a copied list of selected items.
+  ///
+  List<ITEM> get selectedItems {
+    return [..._selectedItems];
   }
 
   int get itemCount => _items.length;
@@ -74,15 +90,6 @@ abstract class BlockData<
 
   DataState get dataState => _dataState;
 
-  final List<ITEM> _checkedItems = [];
-
-  ///
-  /// return a copied list of checked items.
-  ///
-  List<ITEM> get checkedItems {
-    return [..._checkedItems];
-  }
-
   BlockData({
     required this.block,
     required List<ITEM> items,
@@ -106,7 +113,7 @@ abstract class BlockData<
   void _updateCheckedItems() {
     List<ITEM> newCheckedItems = [];
     for (var it in _checkedItems) {
-      ITEM? newCheckItem = _findItemSameIdWith(
+      ITEM? newCheckItem = findItemSameIdWith(
         item: it,
       );
       if (newCheckItem != null) {
@@ -116,25 +123,6 @@ abstract class BlockData<
     _checkedItems
       ..clear()
       ..addAll(newCheckedItems);
-  }
-
-  void _setCheckedItem({
-    required ITEM item,
-  }) {
-    ITEM? foundItem = _findItemSameIdWith(
-      item: item,
-    );
-    int idx = _checkedItems
-        .indexWhere((it) => block.getItemId(it) == block.getItemId(item));
-    if (idx != -1) {
-      if (foundItem != null) {
-        _checkedItems[idx] = foundItem;
-      }
-    } else {
-      if (foundItem != null) {
-        _checkedItems.add(foundItem);
-      }
-    }
   }
 
   void _setCurrentItem({
@@ -151,12 +139,17 @@ abstract class BlockData<
     required ITEM removeItem,
   }) {
     FormUtils.removeItemFromList(
-      items: _items,
+      targetList: _items,
       removeItem: removeItem,
       getItemId: block.getItemId,
     );
     FormUtils.removeItemFromList(
-      items: _checkedItems,
+      targetList: _checkedItems,
+      removeItem: removeItem,
+      getItemId: block.getItemId,
+    );
+    FormUtils.removeItemFromList(
+      targetList: _selectedItems,
       removeItem: removeItem,
       getItemId: block.getItemId,
     );
@@ -167,12 +160,17 @@ abstract class BlockData<
     required ITEM item,
   }) {
     FormUtils.insertOrReplaceItemInList(
-      items: _items,
+      targetList: _items,
       item: item,
       getItemId: block.getItemId,
     );
     FormUtils.insertOrReplaceItemInList(
-      items: _checkedItems,
+      targetList: _checkedItems,
+      item: item,
+      getItemId: block.getItemId,
+    );
+    FormUtils.insertOrReplaceItemInList(
+      targetList: _selectedItems,
       item: item,
       getItemId: block.getItemId,
     );
@@ -202,31 +200,26 @@ abstract class BlockData<
   bool isCurrentItem({
     required ITEM item,
   }) {
-    return __current._item != null &&
-        block.getItemId(item) == block.getItemId(__current._item!);
+    ITEM? currIt = __current._item;
+    return currIt != null && block.getItemId(item) == block.getItemId(currIt);
   }
 
-  void __append({required List<ITEM> appendItems}) {
-    List<ITEM> all = [];
-    List<ITEM> tailItems = [...appendItems];
-    for (ITEM item in _items) {
-      ITEM? it = _getItemBySameItemId(
-        items: appendItems,
-        sameItem: item,
-        getItemId: block.getItemId,
-      );
-      if (it != null) {
-        all.add(it);
-        tailItems.remove(it);
-      } else {
-        all.add(item);
-      }
-    }
-    all.addAll(tailItems);
-    //
-    _items
-      ..clear()
-      ..addAll(all);
+  void __appendItems({required List<ITEM> appendItems}) {
+    FormUtils.appendItemsToList(
+      appendItems: appendItems,
+      targetList: _items,
+      getItemId: block.getItemId,
+    );
+    FormUtils.replaceItemsInList(
+      replacementItems: appendItems,
+      targetList: _selectedItems,
+      getItemId: block.getItemId,
+    );
+    FormUtils.replaceItemsInList(
+      replacementItems: appendItems,
+      targetList: _checkedItems,
+      getItemId: block.getItemId,
+    );
   }
 
   void _updateFrom({
@@ -253,7 +246,7 @@ abstract class BlockData<
     //
     // Append to _items:
     //
-    __append(appendItems: ap.items);
+    __appendItems(appendItems: ap.items);
     //
     _pageable = pageable?.copy();
     _pagination = PaginationData.copy(ap.pagination);
@@ -263,76 +256,136 @@ abstract class BlockData<
     _updateCheckedItems();
   }
 
+  // ***************************************************************************
+  // ******* PUBLIC ITEM METHODS ***********************************************
+  // ***************************************************************************
+
   ITEM? findFirstItem() {
     return _items.isEmpty ? null : _items[0];
   }
 
-  ITEM? _findSiblingItem({
+  ITEM? findSiblingItem({
     required ITEM item,
   }) {
     return FormUtils.findSiblingItemInList(
-      items: items,
       item: item,
+      targetList: _items,
       getItemId: block.getItemId,
     );
   }
 
-  ITEM? _findItemSameIdWith({
+  ITEM? findItemSameIdWith({
     required ITEM item,
   }) {
-    for (var it in _items) {
-      if (block.getItemId(item) == block.getItemId(it)) {
-        return it;
-      }
-    }
-    return null;
+    ID id = block.getItemId(item);
+    return findItemById(id);
   }
 
   ITEM? findItemById(ID id) {
-    for (ITEM item in _items) {
-      if (block.getItemId(item) == id) {
-        return item;
-      }
-    }
-    return null;
-  }
-
-  void setCheckedItem(ITEM item) {
-    ITEM? foundItem = _findItemSameIdWith(
-      item: item,
+    FormUtils.findItemById(
+      id: id,
+      targetList: _items,
+      getItemId: block.getItemId,
     );
-    int idx = _checkedItems
-        .indexWhere((it) => block.getItemId(it) == block.getItemId(item));
-    if (idx != -1) {
-      if (foundItem != null) {
-        _checkedItems[idx] = foundItem;
-      }
-    } else {
-      if (foundItem != null) {
-        _checkedItems.add(foundItem);
-      }
-    }
-    block.updateFragmentWidgets();
   }
 
-  void setUncheckedItem(ITEM item) {
-    int idx = _checkedItems
-        .indexWhere((it) => block.getItemId(it) == block.getItemId(item));
-    if (idx != -1) {
-      _checkedItems.removeAt(idx);
-    }
-    block.updateFragmentWidgets();
+  // ***************************************************************************
+  // ******* PRIVATE ITEM METHODS **********************************************
+  // ***************************************************************************
+
+  void _setCheckedItem(ITEM item) {
+    _uncheckAll();
+    _addCheckedItem(item);
   }
 
-  void uncheckAll() {
+  void _setSelectedItem(ITEM item) {
+    _uncheckAll();
+    _addSelectedItem(item);
+  }
+
+  // ---------------------------------------------------------------------------
+
+  void _setCheckedItems(List<ITEM> items) {
+    _uncheckAll();
+    _addCheckedItems(items);
+  }
+
+  void _setSelectedItems(List<ITEM> items) {
+    _uncheckAll();
+    _addSelectedItems(items);
+  }
+
+  // ---------------------------------------------------------------------------
+
+  void _addCheckedItem(ITEM item) {
+    FormUtils.insertOrReplaceItemInList(
+      item: item,
+      targetList: _checkedItems,
+      getItemId: block.getItemId,
+    );
+  }
+
+  void _addSelectedItem(ITEM item) {
+    FormUtils.insertOrReplaceItemInList(
+      item: item,
+      targetList: _selectedItems,
+      getItemId: block.getItemId,
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+
+  void _addCheckedItems(List<ITEM> items) {
+    FormUtils.insertOrReplaceItemsInList(
+      items: items,
+      targetList: _checkedItems,
+      getItemId: block.getItemId,
+    );
+  }
+
+  void _addSelectedItems(List<ITEM> items) {
+    FormUtils.insertOrReplaceItemsInList(
+      items: items,
+      targetList: _selectedItems,
+      getItemId: block.getItemId,
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+
+  void _uncheckItem(ITEM item) {
+    FormUtils.removeItemFromList(
+      removeItem: item,
+      targetList: _checkedItems,
+      getItemId: block.getItemId,
+    );
+  }
+
+  void _deselectItem(ITEM item) {
+    FormUtils.removeItemFromList(
+      removeItem: item,
+      targetList: _selectedItems,
+      getItemId: block.getItemId,
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+
+  void _uncheckAll() {
     _checkedItems.clear();
-    block.updateFragmentWidgets();
   }
 
-  void checkAll() {
-    _checkedItems
-      ..clear()
-      ..addAll(_items);
-    block.updateFragmentWidgets();
+  void _deselectAll() {
+    _selectedItems.clear();
+  }
+
+  // ---------------------------------------------------------------------------
+
+  void _checkAll() {
+    _setCheckedItems(_items);
+  }
+
+  void _selectAll() {
+    _setSelectedItems(_items);
   }
 }
