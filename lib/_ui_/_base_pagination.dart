@@ -19,29 +19,13 @@ abstract class BasePagination extends _StatefulWidget {
 }
 
 class _BasePaginationState extends _WidgetState<BasePagination> {
-  late final String keyId;
-
   @override
-  Widget build(BuildContext context) {
-    return VisibilityDetector(
-      key: Key(keyId),
-      onVisibilityChanged: (visibilityInfo) {
-        var visiblePercentage = visibilityInfo.visibleFraction * 100;
-        _addPaginationWidgetStateListener(isShowing: visiblePercentage > 0);
-      },
-      child: showMode == ShowMode.production
-          ? _buildMain()
-          : _DevContainer(
-              child: _buildMain(),
-            ),
-    );
-  }
-
-  Widget _buildMain() {
+  Widget buildContent(BuildContext context) {
     return widget.build();
   }
 
-  void _addPaginationWidgetStateListener({required bool isShowing}) {
+  @override
+  void addWidgetStateListener({required bool isShowing}) {
     widget.block._addPaginationWidgetStateListener(
       formWidgetState: this,
       isShowing: isShowing,
@@ -49,36 +33,17 @@ class _BasePaginationState extends _WidgetState<BasePagination> {
   }
 
   @override
-  String get description {
-    return widget.description == null || widget.description!.trim().isEmpty
-        ? "${getClassName(widget.block)} (Pagination)"
-        : widget.description!;
+  void removeWidgetStateListener({required _WidgetState thisWidgetState}) {
+    widget.block._removePaginationWidgetStateListener(
+      formWidgetState: this,
+    );
   }
-
-  @override
-  String get locationInfo => getClassName(widget.ownerClassInstance);
 
   @override
   WidgetStateType get type => WidgetStateType.pagination;
 
   @override
-  void refreshState() {
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    keyId = _generateVisibilityDetectorId(
-        prefix: "ControlBar-${getClassName(widget.block)}");
-    _addPaginationWidgetStateListener(isShowing: true);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    widget.block._removePaginationWidgetStateListener(
-      formWidgetState: this,
-    );
+  String getWidgetOwnerClassName() {
+    return getClassName(widget.block);
   }
 }

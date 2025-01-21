@@ -19,52 +19,21 @@ class ShelvesSafeLayoutArea extends _StatefulWidget {
 }
 
 class _ShelvesSafeLayoutAreaState extends _WidgetState<ShelvesSafeLayoutArea> {
-  late final String keyId;
-
   @override
-  String get locationInfo => getClassName(widget.ownerClassInstance);
-
-  @override
-  String get description {
-    return widget.description == null || widget.description!.trim().isEmpty
-        ? "(ShelvesSafeLayoutArea)"
-        : widget.description!;
+  String getWidgetOwnerClassName() {
+    return "ShelvesSafeLayoutArea";
   }
 
   @override
   WidgetStateType get type => WidgetStateType.shelfFragment;
 
   @override
-  void refreshState() {
-    setState(() {});
+  Widget buildContent(BuildContext context) {
+    return widget.build();
   }
 
   @override
-  void initState() {
-    super.initState();
-    //
-    keyId = _generateVisibilityDetectorId(prefix: "shelves");
-    //
-    _addWidgetStateListener(isShowing: true);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return VisibilityDetector(
-      key: Key(keyId),
-      onVisibilityChanged: (visibilityInfo) {
-        var visiblePercentage = visibilityInfo.visibleFraction * 100;
-        _addWidgetStateListener(isShowing: visiblePercentage > 0);
-      },
-      child: showMode == ShowMode.production
-          ? widget.build()
-          : _DevContainer(
-              child: widget.build(),
-            ),
-    );
-  }
-
-  void _addWidgetStateListener({required bool isShowing}) {
+  void addWidgetStateListener({required bool isShowing}) {
     for (Shelf shelf in widget.shelves) {
       shelf._addWidgetStateListener(
         widgetState: this,
@@ -74,8 +43,9 @@ class _ShelvesSafeLayoutAreaState extends _WidgetState<ShelvesSafeLayoutArea> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
+  void removeWidgetStateListener({
+    required _WidgetState<_StatefulWidget> thisWidgetState,
+  }) {
     for (Shelf shelf in widget.shelves) {
       shelf._removeWidgetStateListener(widgetState: this);
     }

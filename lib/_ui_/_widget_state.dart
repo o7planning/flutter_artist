@@ -7,14 +7,62 @@ abstract class _WidgetState<W extends _StatefulWidget> extends State<W> {
 
   WidgetStateType get type;
 
-  String get locationInfo;
+  void addWidgetStateListener({required bool isShowing});
 
-  String get description;
+  void removeWidgetStateListener({required _WidgetState thisWidgetState});
 
-  void refreshState();
+  Widget buildContent(BuildContext context);
+
+  @override
+  String get locationInfo => getClassName(widget.ownerClassInstance);
+
+  ///
+  /// Class name of Owner (Block, BlockForm, DataFilter).
+  ///
+  String getWidgetOwnerClassName();
+
+  String get description {
+    return widget.description == null || widget.description!.trim().isEmpty
+        ? "${getWidgetOwnerClassName()} (${type.name})"
+        : widget.description!;
+  }
+
+  void refreshState() {
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return VisibilityDetector(
+      key: Key(keyId),
+      onVisibilityChanged: (visibilityInfo) {
+        var visiblePercentage = visibilityInfo.visibleFraction * 100;
+        addWidgetStateListener(isShowing: visiblePercentage > 0);
+      },
+      child: showMode == ShowMode.production
+          ? buildContent(context)
+          : _DevContainer(
+              child: buildContent(context),
+            ),
+    );
+  }
 
   @override
   void initState() {
     super.initState();
+    //
+    keyId = _generateVisibilityDetectorId(
+        prefix:
+            "${type.toString()}-${getClassName(widget)}"); // widget= widget.block
+    addWidgetStateListener(isShowing: true);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    //
+    removeWidgetStateListener(
+      thisWidgetState: this,
+    );
   }
 }

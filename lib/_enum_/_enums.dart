@@ -148,3 +148,28 @@ enum WidgetStateType {
   scalarFragment,
   loggedInUser;
 }
+
+extension WidgetStateTypeE on WidgetStateType {
+  String get name {
+    switch (this) {
+      case WidgetStateType.pagination:
+        return "Pagination";
+      case WidgetStateType.filter:
+        return "DataFilter";
+      case WidgetStateType.controlBar:
+        return "ControlBar";
+      case WidgetStateType.customControlBar:
+        return "CustomControlBar";
+      case WidgetStateType.form:
+        return "BlockForm";
+      case WidgetStateType.blockFragment:
+        return "BlockFragment";
+      case WidgetStateType.shelfFragment:
+        return "ShelfFragment";
+      case WidgetStateType.scalarFragment:
+        return "ScalarFragment";
+      case WidgetStateType.loggedInUser:
+        return "LoggedInUser";
+    }
+  }
+}

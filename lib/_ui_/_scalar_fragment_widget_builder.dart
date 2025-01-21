@@ -20,52 +20,21 @@ class ScalarFragmentWidgetBuilder extends _StatefulWidget {
 
 class _ScalarFragmentWidgetBuilderState
     extends _WidgetState<ScalarFragmentWidgetBuilder> {
-  late final String keyId;
-
   @override
-  String get locationInfo => getClassName(widget.ownerClassInstance);
-
-  @override
-  String get description {
-    return widget.description == null || widget.description!.trim().isEmpty
-        ? "${getClassName(widget.scalar)} (Scalar Fragment)"
-        : widget.description!;
+  String getWidgetOwnerClassName() {
+    return getClassName(widget.scalar);
   }
 
   @override
   WidgetStateType get type => WidgetStateType.scalarFragment;
 
   @override
-  void refreshState() {
-    setState(() {});
+  Widget buildContent(BuildContext context) {
+    return widget.build(widget.scalar);
   }
 
   @override
-  void initState() {
-    super.initState();
-    //
-    keyId = _generateVisibilityDetectorId(prefix: getClassName(widget.scalar));
-    //
-    _addWidgetStateListener(isShowing: true);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return VisibilityDetector(
-      key: Key(keyId),
-      onVisibilityChanged: (visibilityInfo) {
-        var visiblePercentage = visibilityInfo.visibleFraction * 100;
-        _addWidgetStateListener(isShowing: visiblePercentage > 0);
-      },
-      child: showMode == ShowMode.production
-          ? widget.build(widget.scalar)
-          : _DevContainer(
-              child: widget.build(widget.scalar),
-            ),
-    );
-  }
-
-  void _addWidgetStateListener({required bool isShowing}) {
+  void addWidgetStateListener({required bool isShowing}) {
     widget.scalar._addWidgetStateListener(
       widgetState: this,
       isShowing: isShowing,
@@ -73,8 +42,8 @@ class _ScalarFragmentWidgetBuilderState
   }
 
   @override
-  void dispose() {
-    super.dispose();
+  void removeWidgetStateListener(
+      {required _WidgetState<_StatefulWidget> thisWidgetState}) {
     widget.scalar._removeWidgetStateListener(widgetState: this);
   }
 }

@@ -29,38 +29,27 @@ class CustomControlBar extends _StatefulWidget {
 
 class _CustomControlBarState extends _WidgetState<CustomControlBar> {
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: widget.padding,
-      margin: widget.margin,
-      decoration: widget.decoration,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          ...widget.startControlBarItems,
-          Spacer(),
-          ...widget.endControlBarItems,
-        ],
-      ),
-    );
+  String getWidgetOwnerClassName() {
+    return getClassName(widget.block);
   }
-
-  @override
-  String get description {
-    return widget.description == null || widget.description!.trim().isEmpty
-        ? "${getClassName(widget.block)} (Custom Control bar)"
-        : widget.description!;
-  }
-
-  @override
-  String get locationInfo => getClassName(widget.ownerClassInstance);
 
   @override
   WidgetStateType get type => WidgetStateType.customControlBar;
 
   @override
-  void refreshState() {
-    setState(() {});
+  void addWidgetStateListener({required bool isShowing}) {
+    // TODO: implement addWidgetStateListener
+  }
+
+  @override
+  cupertino.Widget buildContent(cupertino.BuildContext context) {
+    // TODO: implement buildContent
+    throw UnimplementedError();
+  }
+
+  @override
+  void removeWidgetStateListener(
+      {required _WidgetState<_StatefulWidget> thisWidgetState}) {
+    // TODO: implement removeWidgetStateListener
   }
 }

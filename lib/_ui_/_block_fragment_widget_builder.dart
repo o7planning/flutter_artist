@@ -20,52 +20,16 @@ class BlockFragmentWidgetBuilder extends _StatefulWidget {
 
 class _BlockFragmentWidgetBuilderState
     extends _WidgetState<BlockFragmentWidgetBuilder> {
-  late final String keyId;
-
   @override
-  String get locationInfo => getClassName(widget.ownerClassInstance);
-
-  @override
-  String get description {
-    return widget.description == null || widget.description!.trim().isEmpty
-        ? "${getClassName(widget.block)} (Block Fragment)"
-        : widget.description!;
+  String getWidgetOwnerClassName() {
+    return getClassName(widget.block);
   }
 
   @override
   WidgetStateType get type => WidgetStateType.blockFragment;
 
   @override
-  void refreshState() {
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    //
-    keyId = _generateVisibilityDetectorId(prefix: getClassName(widget.block));
-    //
-    _addWidgetStateListener(isShowing: true);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return VisibilityDetector(
-      key: Key(keyId),
-      onVisibilityChanged: (visibilityInfo) {
-        var visiblePercentage = visibilityInfo.visibleFraction * 100;
-        _addWidgetStateListener(isShowing: visiblePercentage > 0);
-      },
-      child: showMode == ShowMode.production
-          ? widget.build(widget.block)
-          : _DevContainer(
-              child: widget.build(widget.block),
-            ),
-    );
-  }
-
-  void _addWidgetStateListener({required bool isShowing}) {
+  void addWidgetStateListener({required bool isShowing}) {
     widget.block._addWidgetStateListener(
       widgetState: this,
       isShowing: isShowing,
@@ -73,8 +37,14 @@ class _BlockFragmentWidgetBuilderState
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    widget.block._removeWidgetStateListener(widgetState: this);
+  void removeWidgetStateListener({required _WidgetState thisWidgetState}) {
+    widget.block._removeWidgetStateListener(
+      widgetState: this,
+    );
+  }
+
+  @override
+  Widget buildContent(BuildContext context) {
+    return widget.build(widget.block);
   }
 }

@@ -24,37 +24,28 @@ class BlockFormWidgetBuilder extends _StatefulWidget {
 
 class _BlockFormWidgetBuilderState
     extends _WidgetState<BlockFormWidgetBuilder> {
-  late final String keyId;
-
   GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
 
   @override
-  String get locationInfo => getClassName(widget.ownerClassInstance);
-
-  @override
-  String get description {
-    return widget.description == null || widget.description!.trim().isEmpty
-        ? "${getClassName(widget.blockForm)} (BlockForm)"
-        : widget.description!;
+  String getWidgetOwnerClassName() {
+    return getClassName(widget.blockForm);
   }
 
   @override
   WidgetStateType get type => WidgetStateType.form;
 
   @override
-  void refreshState() {
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    keyId = _generateVisibilityDetectorId(
-      prefix: getClassName(widget.blockForm),
-    );
+  void addWidgetStateListener({required bool isShowing}) {
     widget.blockForm._addWidgetStateListener(
       formWidgetState: this,
       isShowing: true,
+    );
+  }
+
+  @override
+  void removeWidgetStateListener({required _WidgetState thisWidgetState}) {
+    widget.blockForm._removeWidgetStateListener(
+      formWidgetState: thisWidgetState,
     );
   }
 
@@ -65,22 +56,7 @@ class _BlockFormWidgetBuilderState
   }
 
   @override
-  Widget build(BuildContext context) {
-    return VisibilityDetector(
-      key: Key(keyId),
-      onVisibilityChanged: (visibilityInfo) {
-        var visiblePercentage = visibilityInfo.visibleFraction * 100;
-        _addWidgetStateListener(isShowing: visiblePercentage > 0);
-      },
-      child: showMode == ShowMode.production
-          ? _buildMain()
-          : _DevContainer(
-              child: _buildMain(),
-            ),
-    );
-  }
-
-  Widget _buildMain() {
+  Widget buildContent(BuildContext context) {
     __executeAfterBuild();
     //
     return FormBuilder(
@@ -105,12 +81,5 @@ class _BlockFormWidgetBuilderState
   Future<void> __executeAfterBuild() async {
     await Future.delayed(Duration.zero);
     widget.blockForm._afterBuildFormWidget();
-  }
-
-  void _addWidgetStateListener({required bool isShowing}) {
-    widget.blockForm._addWidgetStateListener(
-      formWidgetState: this,
-      isShowing: isShowing,
-    );
   }
 }

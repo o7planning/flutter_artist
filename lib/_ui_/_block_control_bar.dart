@@ -37,40 +37,15 @@ class _BlockControlBarState extends _WidgetState<BlockControlBar> {
   final Color _dividerColor = Colors.indigo.withAlpha(80);
 
   @override
-  String get description {
-    return widget.description == null || widget.description!.trim().isEmpty
-        ? "${getClassName(widget.block)} (Control bar)"
-        : widget.description!;
-  }
-
-  @override
-  String get locationInfo => getClassName(widget.ownerClassInstance);
-
-  @override
   WidgetStateType get type => WidgetStateType.controlBar;
 
   @override
-  void refreshState() {
-    setState(() {});
+  String getWidgetOwnerClassName() {
+    return getClassName(widget.block);
   }
 
   @override
-  void initState() {
-    super.initState();
-    keyId = _generateVisibilityDetectorId(
-        prefix: "ControlBar-${getClassName(widget.block)}");
-    _addControlBarWidgetStateListener(isShowing: true);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    widget.block._removeControlBarWidgetStateListener(
-      formWidgetState: this,
-    );
-  }
-
-  void _addControlBarWidgetStateListener({required bool isShowing}) {
+  void addWidgetStateListener({required bool isShowing}) {
     widget.block._addControlBarWidgetStateListener(
       formWidgetState: this,
       isShowing: isShowing,
@@ -78,22 +53,14 @@ class _BlockControlBarState extends _WidgetState<BlockControlBar> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return VisibilityDetector(
-      key: Key(keyId),
-      onVisibilityChanged: (visibilityInfo) {
-        var visiblePercentage = visibilityInfo.visibleFraction * 100;
-        _addControlBarWidgetStateListener(isShowing: visiblePercentage > 0);
-      },
-      child: showMode == ShowMode.production
-          ? _buildMain()
-          : _DevContainer(
-              child: _buildMain(),
-            ),
+  void removeWidgetStateListener({required _WidgetState thisWidgetState}) {
+    widget.block._removeControlBarWidgetStateListener(
+      formWidgetState: thisWidgetState,
     );
   }
 
-  Widget _buildMain() {
+  @override
+  Widget buildContent(BuildContext context) {
     return _CustomAppContainer.bar(
       padding: widget.padding,
       child: Row(
