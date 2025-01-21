@@ -3237,6 +3237,16 @@ abstract class Block<
   }
 
   bool __canEditCurrentItemOnForm({required bool checkAllow}) {
+    if (blockForm != null) {
+      switch (blockForm!.data._formMode) {
+        case FormMode.creation:
+          return true;
+        case FormMode.edit:
+          break; // Continue check below.
+        case FormMode.none:
+          return false;
+      }
+    }
     if (data.currentItemDetail == null || __isRefreshingCurrentItem) {
       return false;
     }

@@ -42,9 +42,8 @@ class _CustomControlBarState extends _WidgetState<CustomControlBar> {
   }
 
   @override
-  cupertino.Widget buildContent(cupertino.BuildContext context) {
-    // TODO: implement buildContent
-    throw UnimplementedError();
+  Widget buildContent(BuildContext context) {
+    return Text("TODO");
   }
 
   @override
