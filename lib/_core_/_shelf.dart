@@ -585,9 +585,6 @@ abstract class Shelf extends _XBase {
     for (Block rootBlock in __rootBlocks) {
       rootBlock._backupAllFromRoot();
     }
-    for (BlockForm blockForm in _allBlockForms) {
-      blockForm._backup();
-    }
   }
 
   void __restoreAll() {
@@ -600,9 +597,6 @@ abstract class Shelf extends _XBase {
     }
     for (Block block in __rootBlocks) {
       block._restoreAllFromRoot();
-    }
-    for (BlockForm blockForm in _allBlockForms) {
-      blockForm._restore();
     }
     //
     updateAllUIComponents();
@@ -618,9 +612,6 @@ abstract class Shelf extends _XBase {
     }
     for (Block block in __rootBlocks) {
       block._applyNewStateAllFromRoot();
-    }
-    for (BlockForm blockForm in _allBlockForms) {
-      blockForm._applyNewState();
     }
     //
     updateAllUIComponents();
