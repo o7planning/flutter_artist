@@ -72,7 +72,7 @@ class _InternalBlockData<
     if (__isTemporaryMode) {
       __isTemporaryMode = false;
       __currentBk = _CurrentCoupleItem(item: null, itemDetail: null);
-      __dataStateBk = DataState.pending; // TODO: Xem lai. ???
+      __dataStateBk = DataState.pending;
       __itemsBk.clear();
       __checkedItemsBk.clear();
       __selectedItemsBk.clear();

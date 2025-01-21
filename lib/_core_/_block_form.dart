@@ -540,20 +540,4 @@ abstract class BlockForm<
       return false;
     }
   }
-
-  // ***************************************************************************
-  // ****** BACKUP & RESTORE & APPLY *******************************************
-  // ***************************************************************************
-
-  void _backup() {
-    this.data._backup();
-  }
-
-  void _restore() {
-    this.data._restore();
-  }
-
-  void _applyNewState() {
-    this.data._applyNewState();
-  }
 }
