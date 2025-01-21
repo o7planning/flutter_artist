@@ -1,15 +1,13 @@
 part of '../flutter_artist.dart';
 
-class BlockFragmentWidgetBuilder extends StatefulWidget {
+class BlockFragmentWidgetBuilder extends _StatefulWidget {
   final Block block;
-  final Object ownerClassInstance;
-  final String? description;
   final Widget Function(Block blk) build;
 
   const BlockFragmentWidgetBuilder({
     super.key,
-    required this.ownerClassInstance,
-    required this.description,
+    required super.ownerClassInstance,
+    required super.description,
     required this.block,
     required this.build,
   });

@@ -1,21 +1,15 @@
 part of '../flutter_artist.dart';
 
-class ControlButton extends StatefulWidget {
+class ControlButton extends _StatefulWidget {
   final Block block;
-  final String? description;
 
   final Widget child;
 
-  ///
-  /// The owner class instance.
-  ///
-  final Object ownerClassInstance;
-
   const ControlButton({
     super.key,
-    required this.ownerClassInstance,
+    required super.ownerClassInstance,
+    super.description,
     required this.block,
-    this.description,
     required this.child,
   });
 

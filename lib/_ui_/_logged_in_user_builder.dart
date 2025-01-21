@@ -1,14 +1,12 @@
 part of '../flutter_artist.dart';
 
-class LoggedInUserBuilder extends StatefulWidget {
-  final Object ownerClassInstance;
-  final String? description;
+class LoggedInUserBuilder extends _StatefulWidget {
   final Widget Function(ILoggedInUser? user) build;
 
   const LoggedInUserBuilder({
     super.key,
-    required this.ownerClassInstance,
-    required this.description,
+    required super.ownerClassInstance,
+    required super.description,
     required this.build,
   });
 

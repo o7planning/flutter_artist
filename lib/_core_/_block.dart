@@ -1428,8 +1428,15 @@ abstract class Block<
 
       return success;
     } catch (e, stackTrace) {
-      // TODO: Xu ly loi.
       shelf._restoreAll();
+      //
+      _handleError(
+        shelf: shelf,
+        methodName: "__executeQuickCreateAction",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
       return false;
     }
   }
@@ -2537,7 +2544,7 @@ abstract class Block<
       }
     }
     //
-    if (item == null || !canDeleteItem(item: item)) {
+    if (!canDeleteItem(item: item)) {
       return false;
     }
     bool confirm = await showConfirmDeleteDialog(details: getClassName(item));
@@ -3260,6 +3267,7 @@ abstract class Block<
     return canDeleteItem(item: currentItem);
   }
 
+  // TODO: Đổi sang kiểu ITEM_DETAIL?
   bool canDeleteItem({required ITEM item}) {
     return __canDeleteItem(item: item, checkAllow: true);
   }

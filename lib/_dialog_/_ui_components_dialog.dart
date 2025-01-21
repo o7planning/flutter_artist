@@ -4,21 +4,21 @@ part of '../flutter_artist.dart';
 // -----------------------------------------------------------------------------
 
 class _UiComponentsDialog extends StatefulWidget {
-  Shelf? shelf;
-  Block? block;
+  final Shelf? shelf;
+  final Block? block;
   final bool showActiveOnly;
 
-  _UiComponentsDialog.block({
+  const _UiComponentsDialog.block({
     required Block this.block,
     this.showActiveOnly = true,
     super.key,
-  });
+  }) : shelf = null;
 
-  _UiComponentsDialog.shelf({
+  const _UiComponentsDialog.shelf({
     required Shelf this.shelf,
     this.showActiveOnly = true,
     super.key,
-  });
+  }) : block = null;
 
   @override
   State<StatefulWidget> createState() {

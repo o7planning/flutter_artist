@@ -289,7 +289,7 @@ abstract class BlockData<
   }
 
   ITEM? findItemById(ID itemId) {
-    FormUtils.findItemById(
+    return FormUtils.findItemById(
       id: itemId,
       targetList: _items,
       getItemId: block.getItemId,

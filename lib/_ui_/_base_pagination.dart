@@ -1,15 +1,13 @@
 part of '../flutter_artist.dart';
 
-abstract class BasePagination extends StatefulWidget {
+abstract class BasePagination extends _StatefulWidget {
   final Block block;
-  final String? description;
-  final Object ownerClassInstance;
 
   const BasePagination({
     super.key,
     required this.block,
-    required this.description,
-    required this.ownerClassInstance,
+    required super.description,
+    required super.ownerClassInstance,
   });
 
   Widget build();

@@ -1,0 +1,16 @@
+part of '../flutter_artist.dart';
+
+abstract class _StatefulWidget extends StatefulWidget {
+  ///
+  /// The owner class instance.
+  ///
+  final Object ownerClassInstance;
+
+  final String? description;
+
+  const _StatefulWidget({
+    required super.key,
+    required this.ownerClassInstance,
+    required this.description,
+  });
+}

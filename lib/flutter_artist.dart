@@ -142,6 +142,7 @@ part '_ui_/_shelves_safe_layout_area.dart';
 part '_ui_/_simple_accordion.dart';
 part '_ui_/_simple_accordion_section.dart';
 part '_ui_/_simple_small_icon_button.dart';
+part '_ui_/_stateful_widget.dart';
 part '_ui_/_widget_state.dart';
 part '_utils_/_compare_utils.dart';
 part '_utils_/_form_utils.dart';

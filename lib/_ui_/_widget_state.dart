@@ -1,7 +1,9 @@
 part of '../flutter_artist.dart';
 
-abstract class _WidgetState<W extends StatefulWidget> extends State<W> {
+abstract class _WidgetState<W extends _StatefulWidget> extends State<W> {
   ShowMode showMode = ShowMode.production;
+
+  late final String keyId;
 
   WidgetStateType get type;
 
@@ -10,4 +12,9 @@ abstract class _WidgetState<W extends StatefulWidget> extends State<W> {
   String get description;
 
   void refreshState();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 }

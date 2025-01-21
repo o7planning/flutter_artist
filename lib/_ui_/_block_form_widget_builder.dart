@@ -1,9 +1,7 @@
 part of '../flutter_artist.dart';
 
-class BlockFormWidgetBuilder extends StatefulWidget {
+class BlockFormWidgetBuilder extends _StatefulWidget {
   final BlockForm blockForm;
-  final Object ownerClassInstance;
-  final String? description;
 
   final Widget Function(BlockForm blkForm) build;
   @Deprecated("Chua su dung")
@@ -11,8 +9,8 @@ class BlockFormWidgetBuilder extends StatefulWidget {
 
   const BlockFormWidgetBuilder({
     super.key,
-    required this.ownerClassInstance,
-    required this.description,
+    required super.ownerClassInstance,
+    required super.description,
     required this.blockForm,
     required this.build,
     this.onAfterBuild,

@@ -1,9 +1,9 @@
 part of '../flutter_artist.dart';
 
 class _CodeFlowFuncTraceInfoView extends StatelessWidget {
-  FuncCallInfo funcCallInfo;
+  final FuncCallInfo funcCallInfo;
 
-  _CodeFlowFuncTraceInfoView({required this.funcCallInfo});
+  const _CodeFlowFuncTraceInfoView({required this.funcCallInfo});
 
   @override
   Widget build(BuildContext context) {

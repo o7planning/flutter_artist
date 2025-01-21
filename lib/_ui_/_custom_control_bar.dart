@@ -1,28 +1,22 @@
 part of '../flutter_artist.dart';
 
-class CustomControlBar extends StatefulWidget {
+class CustomControlBar extends _StatefulWidget {
   final EdgeInsets margin;
   final EdgeInsets padding;
   final Decoration? decoration;
   final Block block;
-  final String? description;
 
   final List<CustomControlBarItem> startControlBarItems;
   final List<CustomControlBarItem> endControlBarItems;
-
-  ///
-  /// The owner class instance.
-  ///
-  final Object ownerClassInstance;
 
   const CustomControlBar({
     super.key,
     this.margin = EdgeInsets.zero,
     this.padding = EdgeInsets.zero,
-    required this.ownerClassInstance,
+    required super.ownerClassInstance,
+    super.description,
     this.decoration,
     required this.block,
-    this.description,
     required this.startControlBarItems,
     required this.endControlBarItems,
   });

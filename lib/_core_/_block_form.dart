@@ -380,8 +380,7 @@ abstract class BlockForm<
     // Init Extra data for Edit Form:
     //
     if (needToLoad) {
-      FILTER_CRITERIA? filterCriteria =
-          block.data.filterCriteria as FILTER_CRITERIA?;
+      FILTER_CRITERIA? filterCriteria = block.data.filterCriteria;
       //
       bool success = await __prepareFormMasterData(
         filterCriteria: filterCriteria,
@@ -485,8 +484,7 @@ abstract class BlockForm<
     Map<String, dynamic> newFormData;
     if (data._dataState == DataState.ready) {
       try {
-        FILTER_CRITERIA? filterCriteria =
-            block.data.filterCriteria as FILTER_CRITERIA?;
+        FILTER_CRITERIA? filterCriteria = block.data.filterCriteria;
         //
         FlutterArtist.codeFlowLogger._addMethodCall(
           isLibCode: false,

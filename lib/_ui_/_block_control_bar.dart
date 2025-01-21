@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-class BlockControlBar extends StatefulWidget {
+class BlockControlBar extends _StatefulWidget {
   final EdgeInsets padding;
   final Block block;
   final bool showRefreshButton;
@@ -11,18 +11,11 @@ class BlockControlBar extends StatefulWidget {
   final bool showFormInfoButton;
   final bool showBackButton;
 
-  final String? description;
-
-  ///
-  /// The owner class instance.
-  ///
-  final Object ownerClassInstance;
-
   const BlockControlBar({
     super.key,
     this.padding = const EdgeInsets.all(5),
-    required this.description,
-    required this.ownerClassInstance,
+    required super.ownerClassInstance,
+    required super.description,
     required this.block,
     required this.showRefreshButton,
     required this.showQueryButton,
@@ -42,8 +35,6 @@ class BlockControlBar extends StatefulWidget {
 class _BlockControlBarState extends _WidgetState<BlockControlBar> {
   static const double _dividerHeight = 20;
   final Color _dividerColor = Colors.indigo.withAlpha(80);
-
-  late final String keyId;
 
   @override
   String get description {

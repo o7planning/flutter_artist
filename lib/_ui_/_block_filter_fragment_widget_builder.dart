@@ -1,15 +1,14 @@
 part of '../flutter_artist.dart';
 
-class DataFilterFragmentWidgetBuilder extends StatefulWidget {
+class DataFilterFragmentWidgetBuilder extends _StatefulWidget {
   final DataFilter dataFilter;
-  final Object ownerClassInstance;
-  final String? description;
+
   final Widget Function(DataFilter dataFlr) build;
 
   const DataFilterFragmentWidgetBuilder({
     super.key,
-    required this.ownerClassInstance,
-    required this.description,
+    required super.ownerClassInstance,
+    required super.description,
     required this.dataFilter,
     required this.build,
   });

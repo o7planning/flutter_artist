@@ -1,15 +1,13 @@
 part of '../flutter_artist.dart';
 
-class ScalarFragmentWidgetBuilder extends StatefulWidget {
+class ScalarFragmentWidgetBuilder extends _StatefulWidget {
   final Scalar scalar;
-  final Object ownerClassInstance;
-  final String? description;
   final Widget Function(Scalar blk) build;
 
   const ScalarFragmentWidgetBuilder({
     super.key,
-    required this.ownerClassInstance,
-    required this.description,
+    required super.ownerClassInstance,
+    required super.description,
     required this.scalar,
     required this.build,
   });

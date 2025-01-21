@@ -1,15 +1,13 @@
 part of '../flutter_artist.dart';
 
-class ShelvesSafeLayoutArea extends StatefulWidget {
+class ShelvesSafeLayoutArea extends _StatefulWidget {
   final List<Shelf> shelves;
-  final Object ownerClassInstance;
-  final String? description;
   final Widget Function() build;
 
   const ShelvesSafeLayoutArea({
     super.key,
-    required this.ownerClassInstance,
-    required this.description,
+    required super.ownerClassInstance,
+    required super.description,
     required this.shelves,
     required this.build,
   }) : assert(shelves.length > 0);
