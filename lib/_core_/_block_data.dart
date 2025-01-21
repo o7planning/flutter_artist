@@ -225,11 +225,27 @@ abstract class BlockData<
     return currIt != null && block.getItemId(item) == block.getItemId(currIt);
   }
 
+  bool isSelectedItem(ITEM item) {
+    return FormUtils.isListContainItem(
+      targetList: _selectedItems,
+      item: item,
+      getItemId: block.getItemId,
+    );
+  }
+
+  bool isCheckedItem(ITEM item) {
+    return FormUtils.isListContainItem(
+      targetList: _checkedItems,
+      item: item,
+      getItemId: block.getItemId,
+    );
+  }
+
   bool containsItem({
     required ITEM item,
   }) {
     return FormUtils.isListContainItem(
-      items: _items,
+      targetList: _items,
       item: item,
       getItemId: block.getItemId,
     );
@@ -269,24 +285,24 @@ abstract class BlockData<
   // ***************************************************************************
 
   void _setCheckedItem(ITEM item) {
-    _uncheckAll();
+    _uncheckAllItems();
     _addCheckedItem(item);
   }
 
   void _setSelectedItem(ITEM item) {
-    _uncheckAll();
+    _uncheckAllItems();
     _addSelectedItem(item);
   }
 
   // ---------------------------------------------------------------------------
 
   void _setCheckedItems(List<ITEM> items) {
-    _uncheckAll();
+    _uncheckAllItems();
     _addCheckedItems(items);
   }
 
   void _setSelectedItems(List<ITEM> items) {
-    _uncheckAll();
+    _uncheckAllItems();
     _addSelectedItems(items);
   }
 
@@ -336,7 +352,7 @@ abstract class BlockData<
     );
   }
 
-  void _deselectItem(ITEM item) {
+  void _deselectItemItems(ITEM item) {
     FormUtils.removeItemFromList(
       removeItem: item,
       targetList: _selectedItems,
@@ -346,7 +362,7 @@ abstract class BlockData<
 
   // ---------------------------------------------------------------------------
 
-  void _uncheckAll() {
+  void _uncheckAllItems() {
     _checkedItems.clear();
   }
 
@@ -356,11 +372,11 @@ abstract class BlockData<
 
   // ---------------------------------------------------------------------------
 
-  void _checkAll() {
+  void _checkAllItems() {
     _setCheckedItems(_items);
   }
 
-  void _selectAll() {
+  void _selectAllItems() {
     _setSelectedItems(_items);
   }
 }

@@ -2850,6 +2850,7 @@ abstract class Block<
     __updateUiComponentAfterCheckOrSelection();
   }
 
+  // TODO: Kiểm tra nếu chưa có current thì sét thành current.
   void setSelectedItem(ITEM item) {
     data._setSelectedItem(item);
     __updateUiComponentAfterCheckOrSelection();
@@ -2862,6 +2863,7 @@ abstract class Block<
     __updateUiComponentAfterCheckOrSelection();
   }
 
+  // TODO: Kiểm tra nếu chưa có current thì sét thành current.
   void setSelectedItems(List<ITEM> items) {
     data._setSelectedItems(items);
     __updateUiComponentAfterCheckOrSelection();
@@ -2874,7 +2876,7 @@ abstract class Block<
     __updateUiComponentAfterCheckOrSelection();
   }
 
-  // TODO: Kieemr
+  // TODO: Kiểm tra nếu chưa có current thì sét thành current.
   void addSelectedItem(ITEM item) {
     data._addSelectedItem(item);
     __updateUiComponentAfterCheckOrSelection();
@@ -2887,6 +2889,7 @@ abstract class Block<
     __updateUiComponentAfterCheckOrSelection();
   }
 
+  // TODO: Kiểm tra nếu chưa có current thì sét thành current.
   void addSelectedItems(List<ITEM> items) {
     data._addSelectedItems(items);
     __updateUiComponentAfterCheckOrSelection();
@@ -2899,32 +2902,35 @@ abstract class Block<
     __updateUiComponentAfterCheckOrSelection();
   }
 
+  // TODO: Kiểm tra nếu nếu đang là currentItem thì setCurrent null.
   void deselectItem(ITEM item) {
-    data._deselectItem(item);
+    data._deselectItemItems(item);
     __updateUiComponentAfterCheckOrSelection();
   }
 
   // -------
 
-  void uncheckAll() {
-    data._uncheckAll();
+  void uncheckAllItems() {
+    data._uncheckAllItems();
     __updateUiComponentAfterCheckOrSelection();
   }
 
-  void deselectAll() {
+  // TODO: Kiểm tra nếu có current thì set current null.
+  void deselectAllItems() {
     data._deselectAll();
     __updateUiComponentAfterCheckOrSelection();
   }
 
   // -------
 
-  void checkAll() {
-    data._checkAll();
+  void checkAllItems() {
+    data._checkAllItems();
     __updateUiComponentAfterCheckOrSelection();
   }
 
-  void selectAll() {
-    data._selectAll();
+  // TODO: Kiểm tra nếu chưa có current thì sét thành current.
+  void selectAllItems() {
+    data._selectAllItems();
     __updateUiComponentAfterCheckOrSelection();
   }
 

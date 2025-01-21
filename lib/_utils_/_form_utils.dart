@@ -14,6 +14,20 @@ class FormUtils {
     return null;
   }
 
+  // static void removeDuplicatedItemsFromList<ITEM, ID>({
+  //   required List<ITEM> targetList,
+  //   required ID Function(ITEM item) getItemId,
+  // }) {
+  //   List<ITEM> newList= [];
+  //
+  //   int idx = targetList.indexWhere((it) {
+  //     return getItemId(it) == getItemId(removeItem);
+  //   });
+  //   if (idx != -1) {
+  //     targetList.removeAt(idx);
+  //   }
+  // }
+
   static void removeItemFromList<ITEM, ID>({
     required ITEM removeItem,
     required List<ITEM> targetList,
@@ -137,16 +151,34 @@ class FormUtils {
   }
 
   static bool isListContainItem<ITEM, ID>({
-    required List<ITEM> items,
     required ITEM item,
+    required List<ITEM> targetList,
     required ID Function(ITEM it) getItemId,
   }) {
     ID itemId = getItemId(item);
     return findItemById(
           id: itemId,
-          targetList: items,
+          targetList: targetList,
           getItemId: getItemId,
         ) !=
         null;
+  }
+
+  static bool isListContainItems<ITEM, ID>({
+    required List<ITEM> items,
+    required List<ITEM> targetList,
+    required ID Function(ITEM it) getItemId,
+  }) {
+    for (ITEM item in items) {
+      bool contains = isListContainItem(
+        item: item,
+        targetList: targetList,
+        getItemId: getItemId,
+      );
+      if (!contains) {
+        return false;
+      }
+    }
+    return true;
   }
 }
