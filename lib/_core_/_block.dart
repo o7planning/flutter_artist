@@ -1137,7 +1137,7 @@ abstract class Block<
     required ITEM? item,
     required ITEM_DETAIL? itemDetail,
   }) {
-    data._setCurrentItem(
+    data._setCurrentItemOnly(
       refreshedItemDetail: itemDetail,
       refreshedItem: item,
     );

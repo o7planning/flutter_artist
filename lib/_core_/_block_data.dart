@@ -106,26 +106,14 @@ abstract class BlockData<
   void _applyNewState();
 
   void setToPending() {
-    print(" --> Set to pending ${getClassName(block)}");
+    print(" --> ${getClassName(block)} --> Set To Pending");
     _dataState = DataState.pending;
   }
 
-  void _updateCheckedItems() {
-    List<ITEM> newCheckedItems = [];
-    for (var it in _checkedItems) {
-      ITEM? newCheckItem = findItemSameIdWith(
-        item: it,
-      );
-      if (newCheckItem != null) {
-        newCheckedItems.add(newCheckItem);
-      }
-    }
-    _checkedItems
-      ..clear()
-      ..addAll(newCheckedItems);
-  }
-
-  void _setCurrentItem({
+  ///
+  /// Set item as current, and no more other actions (Insert, Update list).
+  ///
+  void _setCurrentItemOnly({
     required ITEM? refreshedItem,
     required ITEM_DETAIL? refreshedItemDetail,
   }) {
@@ -176,34 +164,6 @@ abstract class BlockData<
     );
   }
 
-  ITEM? _findItemById({
-    required ID itemId,
-  }) {
-    for (var it in _items) {
-      if (block.getItemId(it) == itemId) {
-        return it;
-      }
-    }
-    return null;
-  }
-
-  bool _isContains({
-    required ITEM item,
-  }) {
-    return _isListContainItem(
-      items: _items,
-      item: item,
-      getItemId: block.getItemId,
-    );
-  }
-
-  bool isCurrentItem({
-    required ITEM item,
-  }) {
-    ITEM? currIt = __current._item;
-    return currIt != null && block.getItemId(item) == block.getItemId(currIt);
-  }
-
   void __appendItems({required List<ITEM> appendItems}) {
     FormUtils.appendItemsToList(
       appendItems: appendItems,
@@ -252,13 +212,28 @@ abstract class BlockData<
     _pagination = PaginationData.copy(ap.pagination);
     //
     block.blockForm?.data._formMode = FormMode.none;
-    //
-    _updateCheckedItems();
   }
 
   // ***************************************************************************
   // ******* PUBLIC ITEM METHODS ***********************************************
   // ***************************************************************************
+
+  bool isCurrentItem({
+    required ITEM item,
+  }) {
+    ITEM? currIt = __current._item;
+    return currIt != null && block.getItemId(item) == block.getItemId(currIt);
+  }
+
+  bool containsItem({
+    required ITEM item,
+  }) {
+    return FormUtils.isListContainItem(
+      items: _items,
+      item: item,
+      getItemId: block.getItemId,
+    );
+  }
 
   ITEM? findFirstItem() {
     return _items.isEmpty ? null : _items[0];
@@ -281,9 +256,9 @@ abstract class BlockData<
     return findItemById(id);
   }
 
-  ITEM? findItemById(ID id) {
+  ITEM? findItemById(ID itemId) {
     FormUtils.findItemById(
-      id: id,
+      id: itemId,
       targetList: _items,
       getItemId: block.getItemId,
     );

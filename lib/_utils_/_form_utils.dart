@@ -135,4 +135,18 @@ class FormUtils {
       ..clear()
       ..addAll(all);
   }
+
+  static bool isListContainItem<ITEM, ID>({
+    required List<ITEM> items,
+    required ITEM item,
+    required ID Function(ITEM it) getItemId,
+  }) {
+    ID itemId = getItemId(item);
+    return findItemById(
+          id: itemId,
+          targetList: items,
+          getItemId: getItemId,
+        ) !=
+        null;
+  }
 }

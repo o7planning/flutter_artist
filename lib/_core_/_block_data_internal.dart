@@ -19,7 +19,10 @@ class _InternalBlockData<
   );
 
   final List<ITEM> __itemsBk = [];
+
   final List<ITEM> __checkedItemsBk = [];
+
+  final List<ITEM> __selectedItemsBk = [];
 
   Object? __currentParentItemIdBk;
 
@@ -52,6 +55,9 @@ class _InternalBlockData<
       __checkedItemsBk
         ..clear()
         ..addAll(_checkedItems);
+      __selectedItemsBk
+        ..clear()
+        ..addAll(_selectedItems);
       __paginationBk = PaginationData.copy(_pagination);
       __currentParentItemIdBk = _currentParentItemId;
       __filterCriteriaBk = _filterCriteria;
@@ -69,6 +75,7 @@ class _InternalBlockData<
       __dataStateBk = DataState.pending; // TODO: Xem lai. ???
       __itemsBk.clear();
       __checkedItemsBk.clear();
+      __selectedItemsBk.clear();
       __paginationBk = null;
       __currentParentItemIdBk = null;
       __filterCriteriaBk = null;
@@ -89,6 +96,9 @@ class _InternalBlockData<
       _checkedItems
         ..clear()
         ..addAll(__checkedItemsBk);
+      _selectedItems
+        ..clear()
+        ..addAll(__selectedItemsBk);
       _pagination = __paginationBk;
       _currentParentItemId = __currentParentItemIdBk;
       _filterCriteria = __filterCriteriaBk;
