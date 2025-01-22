@@ -113,6 +113,7 @@ abstract class BlockForm<
     //
     updateAllUIComponents();
     block.updateControlBarWidgets();
+    block.updateControlWidgets();
   }
 
   // TODO: Change name!

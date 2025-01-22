@@ -195,7 +195,9 @@ abstract class DataFilter<
     }
   }
 
-  void _removeFilterFragmentWidgetState({required State widgetState}) {
+  void _removeFilterFragmentWidgetState({
+    required State widgetState,
+  }) {
     _filterFragmentWidgetStates.remove(widgetState);
     FlutterArtist.storage._checkToRemoveShelf(shelf);
   }
