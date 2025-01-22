@@ -30,8 +30,7 @@ class _ControlButtonState extends _WidgetState<ControlButton> {
 
   @override
   Widget buildContent(BuildContext context) {
-    // TODO: implement buildContent
-    throw UnimplementedError();
+    return widget.child;
   }
 
   @override

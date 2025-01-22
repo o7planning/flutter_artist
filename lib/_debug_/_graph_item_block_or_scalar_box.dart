@@ -413,9 +413,9 @@ class _GraphItemBlockOrScalarBoxState
   IconData _visibilityIconData(bool visible) {
     switch (visible) {
       case true:
-        return _visibitityTrueIconData;
+        return _visibleTrueIconData;
       case false:
-        return _visibitityFalseIconData;
+        return _visibleFalseIconData;
     }
   }
 
