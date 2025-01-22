@@ -129,7 +129,10 @@ abstract class Scalar<
   // ****** UPDATE UI COMPONENTS ***********************************************
   // ***************************************************************************
 
-  void updateAllUIComponents() {
+  void updateAllUIComponents({required bool withoutFilters}) {
+    if (!withoutFilters) {
+      dataFilter?.updateAllUIComponents();
+    }
     updateControlWidgets();
     updateFragmentWidgets();
   }

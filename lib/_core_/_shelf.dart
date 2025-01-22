@@ -398,12 +398,16 @@ abstract class Shelf extends _XBase {
       print("|----> ${getClassName(this)}.updateAllUIComponents()");
       __updateShelfWidgets();
       //
+      for (DataFilter dataFilter in _allDataFilters) {
+        dataFilter.updateAllUIComponents();
+      }
+      //
       for (Scalar scalar in __scalars) {
-        scalar.updateAllUIComponents();
+        scalar.updateAllUIComponents(withoutFilters: true);
       }
       //
       for (Block block in __rootBlocks) {
-        __updateBlockAllUiComponentCascade(block);
+        __updateAllBlockUIComponentsCascade(block, withoutFilters: true);
       }
     } catch (e, stackTrace) {
       print("ERROR: $e");
@@ -411,11 +415,17 @@ abstract class Shelf extends _XBase {
     }
   }
 
-  void __updateBlockAllUiComponentCascade(Block block) {
-    block.updateAllUIComponents();
+  void __updateAllBlockUIComponentsCascade(
+    Block block, {
+    required bool withoutFilters,
+  }) {
+    block.updateAllUIComponents(withoutFilters: withoutFilters);
     //
     for (Block childBlock in block._childBlocks) {
-      __updateBlockAllUiComponentCascade(childBlock);
+      __updateAllBlockUIComponentsCascade(
+        childBlock,
+        withoutFilters: withoutFilters,
+      );
     }
   }
 

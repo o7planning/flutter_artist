@@ -2696,7 +2696,7 @@ abstract class Block<
   // ***************************************************************************
 
   void __updateUIComponentAfterCheckedOrSelected() {
-    updateAllUIComponents();
+    updateAllUIComponents(withoutFilters: false);
   }
 
   void setCheckedItem(ITEM item) {
@@ -2858,8 +2858,10 @@ abstract class Block<
   // ****** UPDATE UI COMPONENTS ***********************************************
   // ***************************************************************************
 
-  void updateAllUIComponents() {
-    _registeredOrDefaultDataFilter.updateAllUIComponents();
+  void updateAllUIComponents({required bool withoutFilters}) {
+    if (!withoutFilters) {
+      dataFilter?.updateAllUIComponents();
+    }
     //
     updateBlockFragmentWidgets();
     updatePaginationWidgets();
