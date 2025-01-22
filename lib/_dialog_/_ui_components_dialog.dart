@@ -182,7 +182,7 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
   }
 }
 
-Future<void> _showBlockUiComponentsDialog({
+Future<void> _showBlockUIComponentsDialog({
   required BuildContext context,
   required Block block,
 }) async {
@@ -196,7 +196,7 @@ Future<void> _showBlockUiComponentsDialog({
   );
 }
 
-Future<void> _showActiveUiComponentsDialog({
+Future<void> _showActiveUIComponentsDialog({
   required BuildContext context,
   required Shelf shelf,
 }) async {

@@ -44,7 +44,7 @@ class _BlockControlButtonState extends _WidgetState<BlockControl> {
           ? null
           : () {
               () async {
-                bool success = await onPressedAsync!();
+                bool success = await onPressedAsync();
                 if (success && widget.navigate != null) {
                   widget.navigate!();
                 }

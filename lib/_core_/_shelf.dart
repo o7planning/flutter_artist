@@ -303,7 +303,7 @@ abstract class Shelf extends _XBase {
 
   Future<void> showActiveUiComponentsDialog() async {
     BuildContext context = FlutterArtist.adapter.getCurrentContext();
-    await _showActiveUiComponentsDialog(context: context, shelf: this);
+    await _showActiveUIComponentsDialog(context: context, shelf: this);
   }
 
   // ***************************************************************************

@@ -42,7 +42,7 @@ class _ControlButtonState extends _WidgetState<ScalarControl> {
           ? null
           : () {
               () async {
-                bool success = await onPressedAsync!();
+                bool success = await onPressedAsync();
                 if (success && widget.navigate != null) {
                   widget.navigate!();
                 }
