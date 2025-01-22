@@ -300,64 +300,6 @@ abstract class Block<
     } catch (e) {}
   }
 
-  // ***************************************************************************
-  // ****** UPDATE UI COMPONENTS ***********************************************
-  // ***************************************************************************
-
-  void updateAllUIComponents() {
-    _registeredOrDefaultDataFilter.updateAllUIComponents();
-    //
-    updateFragmentWidgets();
-    updatePaginationWidgets();
-    updateControlBarWidgets();
-    //
-    blockForm?.updateAllUIComponents();
-  }
-
-  void updateFragmentWidgets() {
-    Map<_WidgetState, bool> widgetStates = _findMountedWidgetStates(
-      activeOnly: false,
-      withBlockFragment: true,
-      withFilter: false,
-      withForm: false,
-      withControlBar: false,
-      withPagination: false,
-    );
-
-    for (_WidgetState state in widgetStates.keys) {
-      if (state.mounted) {
-        state.refreshState();
-      }
-    }
-  }
-
-  void updateBlockFragmentWidgets() {
-    List<_WidgetState> list = _getMountedBlockFragmentWidgetStates();
-    for (_WidgetState widgetState in list) {
-      if (widgetState.mounted) {
-        widgetState.refreshState();
-      }
-    }
-  }
-
-  void updateControlBarWidgets() {
-    List<_WidgetState> list = _getMountedControlBarWidgetStates();
-    for (_WidgetState widgetState in list) {
-      if (widgetState.mounted) {
-        widgetState.refreshState();
-      }
-    }
-  }
-
-  void updatePaginationWidgets() {
-    List<_WidgetState> list = _getMountedPaginationWidgetStates();
-    for (_WidgetState widgetState in list) {
-      if (widgetState.mounted) {
-        widgetState.refreshState();
-      }
-    }
-  }
-
   List<_WidgetState> _getMountedBlockFragmentWidgetStates() {
     _removeUnmountedWidgetStates(_blockFragmentWidgetStateListeners);
     List<_WidgetState> ret = [];
@@ -384,18 +326,18 @@ abstract class Block<
     return ret;
   }
 
-  List<_WidgetState> _getMountedControlBarWidgetStates() {
-    _removeUnmountedWidgetStates(_controlBarWidgetStateListeners);
-    List<_WidgetState> ret = [];
-    for (_WidgetState widgetState in [
-      ..._controlBarWidgetStateListeners.keys
-    ]) {
-      if (widgetState.mounted) {
-        ret.add(widgetState);
-      }
-    }
-    return ret;
-  }
+  // List<_WidgetState> _getMountedControlBarWidgetStates() {
+  //   _removeUnmountedWidgetStates(_controlBarWidgetStateListeners);
+  //   List<_WidgetState> ret = [];
+  //   for (_WidgetState widgetState in [
+  //     ..._controlBarWidgetStateListeners.keys
+  //   ]) {
+  //     if (widgetState.mounted) {
+  //       ret.add(widgetState);
+  //     }
+  //   }
+  //   return ret;
+  // }
 
   void _addPaginationWidgetStateListener({
     required _WidgetState formWidgetState,
@@ -2944,6 +2886,71 @@ abstract class Block<
   Future<ApiResult<ITEM_DETAIL>> callApiRefreshItem({required ITEM item});
 
   Future<ApiResult<ITEM_DETAIL>> callApiFindItemById({required ID itemId});
+
+  // ***************************************************************************
+  // ****** UPDATE UI COMPONENTS ***********************************************
+  // ***************************************************************************
+
+  void updateAllUIComponents() {
+    _registeredOrDefaultDataFilter.updateAllUIComponents();
+    //
+    updateFragmentWidgets();
+    updatePaginationWidgets();
+    updateControlBarWidgets();
+    //
+    blockForm?.updateAllUIComponents();
+  }
+
+  void updateFragmentWidgets() {
+    Map<_WidgetState, bool> widgetStates = _findMountedWidgetStates(
+      activeOnly: false,
+      withBlockFragment: true,
+      withFilter: false,
+      withForm: false,
+      withControlBar: false,
+      withPagination: false,
+    );
+
+    for (_WidgetState state in widgetStates.keys) {
+      if (state.mounted) {
+        state.refreshState();
+      }
+    }
+  }
+
+  void updateBlockFragmentWidgets() {
+    List<_WidgetState> list = _getMountedBlockFragmentWidgetStates();
+    for (_WidgetState widgetState in list) {
+      if (widgetState.mounted) {
+        widgetState.refreshState();
+      }
+    }
+  }
+
+  void updateControlBarWidgets() {
+    for (_WidgetState widgetState in _controlBarWidgetStateListeners.keys) {
+      if (widgetState.mounted) {
+        widgetState.refreshState();
+      }
+    }
+  }
+
+  void updateControlWidgets() {
+    for (_WidgetState widgetState in _controlButtonWidgetStateListeners.keys) {
+      if (widgetState.mounted) {
+        widgetState.refreshState();
+      }
+    }
+  }
+
+  void updatePaginationWidgets() {
+    List<_WidgetState> list = _getMountedPaginationWidgetStates();
+    for (_WidgetState widgetState in list) {
+      if (widgetState.mounted) {
+        widgetState.refreshState();
+      }
+    }
+  }
 
   // ***************************************************************************
   // *********** isAllowXXX() method *******************************************
