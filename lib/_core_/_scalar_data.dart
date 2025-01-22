@@ -50,7 +50,6 @@ class ScalarData<VALUE extends Object, FILTER_INPUT extends FilterInput,
     }
   }
 
-  @override
   void _applyNewState() {
     if (__isTemporaryMode) {
       __isTemporaryMode = false;
@@ -59,7 +58,6 @@ class ScalarData<VALUE extends Object, FILTER_INPUT extends FilterInput,
     }
   }
 
-  @override
   void _restore() {
     if (__isTemporaryMode) {
       __isTemporaryMode = false;
