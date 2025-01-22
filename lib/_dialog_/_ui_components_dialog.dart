@@ -48,6 +48,7 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
         withFilter: true,
         withForm: true,
         withControlBar: true,
+        withControl: true,
       );
     } else if (widget.block != null) {
       return widget.block!._findMountedWidgetStates(
@@ -57,6 +58,7 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
         withFilter: true,
         withForm: true,
         withControlBar: true,
+        withControl: true,
       );
     } else {
       throw UnimplementedError();

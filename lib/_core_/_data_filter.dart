@@ -176,8 +176,6 @@ abstract class DataFilter<
   // ***************************************************************************
 
   bool hasActiveFilterFragmentWidget() {
-    _removeUnmountedWidgetStates(_widgetStateListeners);
-
     for (State widgetState in _widgetStateListeners.keys) {
       bool isShowing = _widgetStateListeners[widgetState] ?? false;
       if (isShowing && widgetState.mounted) {
@@ -185,23 +183,6 @@ abstract class DataFilter<
       }
     }
     return false;
-  }
-
-  Map<_WidgetState, bool> _findMountedWidgetStates({
-    required bool activeOnly,
-  }) {
-    _removeUnmountedWidgetStates(_widgetStateListeners);
-
-    Map<_WidgetState, bool> ret = {};
-    Map<_WidgetState, bool> m = {..._widgetStateListeners};
-    for (_WidgetState key in m.keys) {
-      if (key.mounted) {
-        if (!activeOnly || m[key]!) {
-          ret[key] = m[key]!;
-        }
-      }
-    }
-    return ret;
   }
 
   void _addWidgetStateListener({
@@ -224,7 +205,6 @@ abstract class DataFilter<
   }
 
   void _updateWidgets() {
-    _removeUnmountedWidgetStates(_widgetStateListeners);
     for (_WidgetState widgetState in [..._widgetStateListeners.keys]) {
       if (widgetState.mounted) {
         widgetState.refreshState();
@@ -232,6 +212,7 @@ abstract class DataFilter<
     }
   }
 
+  @override
   void showErrorSnackBar({
     required String message,
     List<String>? errorDetails,

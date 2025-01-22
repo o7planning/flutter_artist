@@ -300,45 +300,6 @@ abstract class Block<
     } catch (e) {}
   }
 
-  List<_WidgetState> _getMountedBlockFragmentWidgetStates() {
-    _removeUnmountedWidgetStates(_blockFragmentWidgetStateListeners);
-    List<_WidgetState> ret = [];
-    for (_WidgetState widgetState in [
-      ..._blockFragmentWidgetStateListeners.keys
-    ]) {
-      if (widgetState.mounted) {
-        ret.add(widgetState);
-      }
-    }
-    return ret;
-  }
-
-  List<_WidgetState> _getMountedPaginationWidgetStates() {
-    _removeUnmountedWidgetStates(_paginationWidgetStateListeners);
-    List<_WidgetState> ret = [];
-    for (_WidgetState widgetState in [
-      ..._paginationWidgetStateListeners.keys
-    ]) {
-      if (widgetState.mounted) {
-        ret.add(widgetState);
-      }
-    }
-    return ret;
-  }
-
-  // List<_WidgetState> _getMountedControlBarWidgetStates() {
-  //   _removeUnmountedWidgetStates(_controlBarWidgetStateListeners);
-  //   List<_WidgetState> ret = [];
-  //   for (_WidgetState widgetState in [
-  //     ..._controlBarWidgetStateListeners.keys
-  //   ]) {
-  //     if (widgetState.mounted) {
-  //       ret.add(widgetState);
-  //     }
-  //   }
-  //   return ret;
-  // }
-
   void _addPaginationWidgetStateListener({
     required _WidgetState formWidgetState,
     required bool isShowing,
@@ -442,51 +403,32 @@ abstract class Block<
     required bool withBlockFragment,
     required bool withFilter,
     required bool withForm,
+    required bool withControl,
     required bool withControlBar,
     required bool activeOnly,
   }) {
-    _removeUnmountedWidgetStates(_blockFragmentWidgetStateListeners);
-
     Map<_WidgetState, bool> ret = {};
+    if (withFilter) {
+      ret.addAll(_registeredOrDefaultDataFilter._widgetStateListeners);
+    }
     //
     if (withBlockFragment) {
-      Map<_WidgetState, bool> m = {..._blockFragmentWidgetStateListeners};
-      for (_WidgetState key in m.keys) {
-        if (key.mounted) {
-          if (!activeOnly || m[key]!) {
-            ret[key] = m[key]!;
-          }
-        }
-      }
+      ret.addAll(_blockFragmentWidgetStateListeners);
     }
     //
     if (withPagination) {
-      Map<_WidgetState, bool> m = {..._paginationWidgetStateListeners};
-      for (_WidgetState key in m.keys) {
-        if (key.mounted) {
-          if (!activeOnly || m[key]!) {
-            ret[key] = m[key]!;
-          }
-        }
-      }
+      ret.addAll(_paginationWidgetStateListeners);
     }
     //
-    if (withFilter) {
-      ret.addAll(
-        _registeredOrDefaultDataFilter._findMountedWidgetStates(
-          activeOnly: activeOnly,
-        ),
-      );
+    if (withControlBar) {
+      ret.addAll(_controlBarWidgetStateListeners);
+    }
+    if (withControl) {
+      ret.addAll(_controlButtonWidgetStateListeners);
     }
     //
-    if ((withForm || withControlBar) && blockForm != null) {
-      ret.addAll(
-        blockForm!._findMountedWidgetStates(
-          activeOnly: activeOnly,
-          withForm: withForm,
-          withControlBar: withControlBar,
-        ),
-      );
+    if (withForm && blockForm != null) {
+      ret.addAll(blockForm!._formWidgetStateListeners);
     }
     return ret;
   }
@@ -505,8 +447,6 @@ abstract class Block<
   }
 
   bool hasActiveBlockFragmentWidget({required bool alsoCheckChildren}) {
-    _removeUnmountedWidgetStates(_blockFragmentWidgetStateListeners);
-
     var map = {..._blockFragmentWidgetStateListeners};
     for (State widgetState in map.keys) {
       if (widgetState.mounted) {
@@ -529,8 +469,6 @@ abstract class Block<
   }
 
   bool hasActiveControlBarWidget() {
-    _removeUnmountedWidgetStates(_controlBarWidgetStateListeners);
-
     for (_WidgetState controlBarState in _controlBarWidgetStateListeners.keys) {
       bool visibility =
           _controlBarWidgetStateListeners[controlBarState] ?? false;
@@ -542,8 +480,6 @@ abstract class Block<
   }
 
   bool hasActivePaginationWidget() {
-    _removeUnmountedWidgetStates(_paginationWidgetStateListeners);
-
     for (_WidgetState paginationState in _paginationWidgetStateListeners.keys) {
       bool visibility =
           _paginationWidgetStateListeners[paginationState] ?? false;
@@ -2894,33 +2830,15 @@ abstract class Block<
   void updateAllUIComponents() {
     _registeredOrDefaultDataFilter.updateAllUIComponents();
     //
-    updateFragmentWidgets();
+    updateBlockFragmentWidgets();
     updatePaginationWidgets();
     updateControlBarWidgets();
     //
     blockForm?.updateAllUIComponents();
   }
 
-  void updateFragmentWidgets() {
-    Map<_WidgetState, bool> widgetStates = _findMountedWidgetStates(
-      activeOnly: false,
-      withBlockFragment: true,
-      withFilter: false,
-      withForm: false,
-      withControlBar: false,
-      withPagination: false,
-    );
-
-    for (_WidgetState state in widgetStates.keys) {
-      if (state.mounted) {
-        state.refreshState();
-      }
-    }
-  }
-
   void updateBlockFragmentWidgets() {
-    List<_WidgetState> list = _getMountedBlockFragmentWidgetStates();
-    for (_WidgetState widgetState in list) {
+    for (_WidgetState widgetState in _blockFragmentWidgetStateListeners.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }
@@ -2944,8 +2862,7 @@ abstract class Block<
   }
 
   void updatePaginationWidgets() {
-    List<_WidgetState> list = _getMountedPaginationWidgetStates();
-    for (_WidgetState widgetState in list) {
+    for (_WidgetState widgetState in _paginationWidgetStateListeners.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }

@@ -36,38 +36,6 @@ abstract class BlockForm<
 
   BlockForm();
 
-  Map<_WidgetState, bool> _findMountedWidgetStates({
-    required bool activeOnly,
-    required bool withForm,
-    required bool withControlBar,
-  }) {
-    Map<_WidgetState, bool> ret = {};
-    if (withForm) {
-      _removeUnmountedWidgetStates(_formWidgetStateListeners);
-      Map<_WidgetState, bool> m = {..._formWidgetStateListeners};
-      for (_WidgetState key in m.keys) {
-        if (key.mounted) {
-          if (!activeOnly || m[key]!) {
-            ret[key] = m[key]!;
-          }
-        }
-      }
-    }
-    //
-    if (withControlBar) {
-      _removeUnmountedWidgetStates(block._controlBarWidgetStateListeners);
-      Map<_WidgetState, bool> m = {...block._controlBarWidgetStateListeners};
-      for (_WidgetState key in m.keys) {
-        if (key.mounted) {
-          if (!activeOnly || m[key]!) {
-            ret[key] = m[key]!;
-          }
-        }
-      }
-    }
-    return ret;
-  }
-
   //
   void _addWidgetStateListener({
     required _WidgetState formWidgetState,
@@ -107,7 +75,6 @@ abstract class BlockForm<
   }
 
   List<_WidgetState> _getMountedFormWidgetStates() {
-    _removeUnmountedWidgetStates(_formWidgetStateListeners);
     List<_WidgetState> ret = [];
     for (_WidgetState widgetState in [..._formWidgetStateListeners.keys]) {
       if (widgetState.mounted) {
@@ -118,8 +85,6 @@ abstract class BlockForm<
   }
 
   bool hasActiveFormWidget() {
-    _removeUnmountedWidgetStates(_formWidgetStateListeners);
-
     for (State formWidgetState in _formWidgetStateListeners.keys) {
       bool isShowing = _formWidgetStateListeners[formWidgetState] ?? false;
       if (isShowing && formWidgetState.mounted) {

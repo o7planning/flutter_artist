@@ -42,8 +42,8 @@ abstract class _WidgetState<W extends _StatefulWidget> extends State<W> {
       child: showMode == ShowMode.production
           ? buildContent(context)
           : _DevContainer(
-        child: buildContent(context),
-      ),
+              child: buildContent(context),
+            ),
     );
   }
 
@@ -53,7 +53,7 @@ abstract class _WidgetState<W extends _StatefulWidget> extends State<W> {
     //
     keyId = _generateVisibilityDetectorId(
         prefix:
-        "${type.toString()}-${getClassName(widget)}"); // widget= widget.block
+            "${type.toString()}-${getClassName(widget)}"); // widget= widget.block
     addWidgetStateListener(isShowing: true);
   }
 

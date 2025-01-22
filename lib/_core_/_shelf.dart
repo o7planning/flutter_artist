@@ -334,6 +334,7 @@ abstract class Shelf extends _XBase {
     required bool withFilter,
     required bool withForm,
     required bool withControlBar,
+    required bool withControl,
     required bool activeOnly,
     required bool withPagination,
     required Map<_WidgetState, bool> founds,
@@ -346,6 +347,7 @@ abstract class Shelf extends _XBase {
         withFilter: withFilter,
         withForm: withForm,
         withControlBar: withControlBar,
+        withControl: withControl,
       );
       founds.addAll(m);
       //
@@ -355,6 +357,7 @@ abstract class Shelf extends _XBase {
         withFilter: withFilter,
         withForm: withForm,
         withControlBar: withControlBar,
+        withControl: withControl,
         activeOnly: activeOnly,
         blocks: block.childBlocks,
         founds: founds,
@@ -368,6 +371,7 @@ abstract class Shelf extends _XBase {
     required bool withFilter,
     required bool withForm,
     required bool withControlBar,
+    required bool withControl,
     required bool activeOnly,
   }) {
     Map<_WidgetState, bool> founds = {};
@@ -377,6 +381,7 @@ abstract class Shelf extends _XBase {
       withFilter: withFilter,
       withForm: withForm,
       withControlBar: withControlBar,
+      withControl: withControl,
       activeOnly: activeOnly,
       blocks: __rootBlocks,
       founds: founds,
