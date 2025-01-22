@@ -180,14 +180,10 @@ abstract class BlockForm<
     this.updateAllUIComponents();
   }
 
-  // Developer do not call this method!
-  // Call saveForm() instead of
   Future<ApiResult<ITEM_DETAIL>> callApiCreate({
     required Map<String, dynamic> formMapData,
   });
 
-  // Developer do not call this method!
-  // Call saveForm() instead of
   Future<ApiResult<ITEM_DETAIL>> callApiUpdate({
     required Map<String, dynamic> formMapData,
   });

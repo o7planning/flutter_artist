@@ -1,5 +1,7 @@
 part of '../flutter_artist.dart';
 
+typedef ShelfCreator<S> = S Function();
+
 class _Storage {
   final List<Shelf> _rencentShelves = [];
 

@@ -615,7 +615,7 @@ abstract class Block<
   void _executeRoute({Function()? navigate}) {
     try {
       if (navigate != null) {
-        print("  ~~~~~~~~~~~~~~~~~~> navigate");
+        printLog("  ~~~~~~~~~~~~~~~~~~> navigate");
         navigate();
       }
     } catch (e, stackTrace) {
@@ -728,7 +728,7 @@ abstract class Block<
       },
     );
 
-    print("\n\n${getClassName(this)} ~~~~~~~~~~~~> queryAndPrepareToEdit()");
+    printLog("\n\n${getClassName(this)} ~~~~~~~~~~~~> queryAndPrepareToEdit()");
     //
     bool success = await shelf._queryAllWithOverlayAndRestorable(
       forceDataFilterOpt: _DataFilterOpt(
@@ -749,7 +749,7 @@ abstract class Block<
       forceQueryBlockFormOpts: [],
     );
     //
-    print("Success: $success");
+    printLog("Success: $success");
     if (success) {
       _executeRoute(navigate: navigate);
     }
@@ -822,13 +822,15 @@ abstract class Block<
     //
     final FILTER_CRITERIA filterCriteria;
     //
-    print("\n${getClassName(this)} ~~~~~~~~~~~~> dataFilter: ${xDataFilter}");
+    printLog(
+        "\n${getClassName(this)} ~~~~~~~~~~~~> dataFilter: ${xDataFilter}");
     if (!xDataFilter.queried) {
-      print(
+      printLog(
           "${getClassName(this)} ~~~~~~~~~~~~> execute dataFilter: ${getClassName(xDataFilter.dataFilter)}");
 
       FILTER_INPUT? filterInput = xDataFilter.filterInput as FILTER_INPUT?;
-      print("${getClassName(this)} ~~~~~~~~~~~~> filterInput: ${filterInput}");
+      printLog(
+          "${getClassName(this)} ~~~~~~~~~~~~> filterInput: ${filterInput}");
       //
       // May throw _TransactionError:
       //
@@ -841,7 +843,7 @@ abstract class Block<
     } else {
       filterCriteria = dataFilter._filterCriteria! as FILTER_CRITERIA;
     }
-    print(
+    printLog(
         "${getClassName(this)} ~~~~~~~~~~~~> filterCriteria: ${filterCriteria}");
     //
     final QueryType queryType = thisXBlock.queryType;
@@ -851,7 +853,7 @@ abstract class Block<
         thisXBlock.suggestedSelection;
     final PageableData? pageable = thisXBlock.pageable;
     //
-    print(
+    printLog(
         "${getClassName(this)} ~~~~~~~~~~~~> needQuery: ${thisXBlock.needQuery} - queryType: ${queryType}");
     //
     bool needRealQuery = false;
@@ -877,7 +879,7 @@ abstract class Block<
         }
     }
     //
-    print(
+    printLog(
         "${getClassName(this)} ~~~~~~~~~~~~> needRealQuery: ${needRealQuery}");
     //
     PageData<ITEM>? pageData;
@@ -900,7 +902,7 @@ abstract class Block<
         //
         __refreshQueryingState(isQuerying: true);
         //
-        print("${getClassName(this)} ~~~~~~~~~~~~> callApiQuery");
+        printLog("${getClassName(this)} ~~~~~~~~~~~~> callApiQuery");
         result = await callApiQuery(
           filterCriteria: filterCriteria,
           pageable: callingPageable,
@@ -933,7 +935,7 @@ abstract class Block<
       pageData = result.data;
       dataState = DataState.ready;
 
-      print(
+      printLog(
           "${getClassName(this)} ~~~~~~~~~~~~> callApiQuery/itemCount = ${pageData?.items.length}");
     }
     // needRealQuery = false
@@ -958,9 +960,9 @@ abstract class Block<
       dataState: dataState,
     );
     //
-    print(
+    printLog(
         "${getClassName(this)} ~~~~~~~~~~~~> postQueryBehavior: ${postQueryBehavior}");
-    print(
+    printLog(
         "${getClassName(this)} ~~~~~~~~~~~~> suggestedSelection: ${suggestedSelection}");
     //
     switch (postQueryBehavior) {
@@ -980,13 +982,14 @@ abstract class Block<
             : data.findItemSameIdWith(item: suggestedCurrentItem);
 
         //
-        print(
+        printLog(
             "${getClassName(this)} ~~~~~~~~~~~~> itemWithSameId: ${itemWithSameId}");
 
         if (itemWithSameId == null) {
           // Find first Item...
           ITEM? firstItem = data.findFirstItem();
-          print("${getClassName(this)} ~~~~~~~~~~~~> firstItem: ${firstItem}");
+          printLog(
+              "${getClassName(this)} ~~~~~~~~~~~~> firstItem: ${firstItem}");
           if (firstItem != null) {
             bool success = await __prepareToShowOrEdit(
               thisXBlock: thisXBlock,
@@ -1011,7 +1014,7 @@ abstract class Block<
           //
           return true;
         } else {
-          print(
+          printLog(
               "${getClassName(this)} ~~~~~~~~~~~~> __prepareToShowOrEdit($itemWithSameId)");
           bool success = await __prepareToShowOrEdit(
             thisXBlock: thisXBlock,
@@ -2263,14 +2266,15 @@ abstract class Block<
       }
     }
     //
-    print("${getClassName(this)} ~~~~~~~~~~~~> refreshedItem: $refreshedItem");
+    printLog(
+        "${getClassName(this)} ~~~~~~~~~~~~> refreshedItem: $refreshedItem");
     //
     bool success = await __insertOrReplaceItemInListAndRefreshChildren(
       thisXBlock: thisXBlock,
       refreshedItemDetail: refreshedItem,
       forceForm: forceForm,
     );
-    print("${getClassName(this)} ~~~~~~~~~~~~> success: $success");
+    printLog("${getClassName(this)} ~~~~~~~~~~~~> success: $success");
     if (!success) {
       return false;
     }
@@ -3210,7 +3214,13 @@ abstract class Block<
         break; // Do nothing.
     }
     //
-    return checkAllow ? _isAllowCreate() && __isAllowEditCurrentItem() : true;
+    bool allowEdit =
+        checkAllow ? _isAllowCreate() && __isAllowEditCurrentItem() : true;
+    //
+    if (allowEdit && blockForm!.isDirty()) {
+      return true;
+    }
+    return false;
   }
 
   bool __canEditItemOnForm({

@@ -234,9 +234,7 @@ class _BlockControlBarState extends _WidgetState<BlockControlBar> {
             tooltip: "Save",
             iconData: _formSaveIconData,
             onAction: widget.block.__isSaving,
-            onPressed: widget.showSaveButton &&
-                    widget.block.blockForm != null &&
-                    widget.block.blockForm!.isDirty()
+            onPressed: widget.showSaveButton && widget.block.canSave()
                 ? () {
                     _saveForm(widget.block);
                   }

@@ -1,7 +1,5 @@
 part of '../flutter_artist.dart';
 
-typedef ShelfCreator<S> = S Function();
-
 final FlutterArtist = _FlutterArtist();
 
 const _isOverlayMode = false;
