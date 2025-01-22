@@ -138,8 +138,6 @@ abstract class Scalar<
   }
 
   void updateFragmentWidgets() {
-    _removeUnmountedWidgetStates(_scalarFragmentWidgetStateListeners);
-
     for (_WidgetState state in _scalarFragmentWidgetStateListeners.keys) {
       if (state.mounted) {
         state.refreshState();
@@ -241,8 +239,6 @@ abstract class Scalar<
   }
 
   bool hasActiveScalarFragmentWidget() {
-    _removeUnmountedWidgetStates(_scalarFragmentWidgetStateListeners);
-
     var map = {..._scalarFragmentWidgetStateListeners};
     for (State widgetState in map.keys) {
       if (widgetState.mounted) {
