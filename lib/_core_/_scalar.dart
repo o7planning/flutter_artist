@@ -85,7 +85,7 @@ abstract class Scalar<
 
   final ScalarHiddenBehavior hiddenBehavior;
 
-  final Map<_WidgetState, bool> _scalarFragmentWidgetStateListeners = {};
+  final Map<_WidgetState, bool> _scalarFragmentWidgetStates = {};
 
   Scalar({
     required this.name,
@@ -138,7 +138,7 @@ abstract class Scalar<
   }
 
   void updateFragmentWidgets() {
-    for (_WidgetState state in _scalarFragmentWidgetStateListeners.keys) {
+    for (_WidgetState state in _scalarFragmentWidgetStates.keys) {
       if (state.mounted) {
         state.refreshState();
       }
@@ -238,8 +238,8 @@ abstract class Scalar<
     return true;
   }
 
-  bool hasActiveScalarFragmentWidget() {
-    var map = {..._scalarFragmentWidgetStateListeners};
+  bool hasActiveUIComponent() {
+    var map = {..._scalarFragmentWidgetStates};
     for (State widgetState in map.keys) {
       if (widgetState.mounted) {
         bool isShowing = map[widgetState] ?? false;
@@ -251,17 +251,13 @@ abstract class Scalar<
     return false;
   }
 
-  bool hasActiveUiComponent() {
-    return hasActiveScalarFragmentWidget();
-  }
-
   void _addWidgetStateListener({
     required _WidgetState widgetState,
     required bool isShowing,
   }) {
-    bool activeOLD = hasActiveUiComponent();
-    _scalarFragmentWidgetStateListeners[widgetState] = isShowing;
-    bool activeCURRENT = hasActiveUiComponent();
+    bool activeOLD = hasActiveUIComponent();
+    _scalarFragmentWidgetStates[widgetState] = isShowing;
+    bool activeCURRENT = hasActiveUIComponent();
     //
     if (isShowing) {
       FlutterArtist.storage._addRecentShelf(shelf);
@@ -276,9 +272,9 @@ abstract class Scalar<
   }
 
   void _removeWidgetStateListener({required State widgetState}) {
-    bool activeOLD = hasActiveUiComponent();
-    _scalarFragmentWidgetStateListeners.remove(widgetState);
-    bool activeCURRENT = hasActiveUiComponent();
+    bool activeOLD = hasActiveUIComponent();
+    _scalarFragmentWidgetStates.remove(widgetState);
+    bool activeCURRENT = hasActiveUIComponent();
     //
     if (activeOLD && !activeCURRENT) {
       FlutterArtist.storage._checkToRemoveShelf(shelf);

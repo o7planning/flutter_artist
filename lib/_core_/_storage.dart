@@ -425,7 +425,7 @@ class _Storage {
       eventBlock: eventBlock,
     );
     for (Scalar listenerScalar in listenerScalars) {
-      if (!listenerScalar.hasActiveScalarFragmentWidget()) {
+      if (!listenerScalar.hasActiveUIComponent()) {
         listenerScalar.data.setToPending();
       }
     }
@@ -433,7 +433,7 @@ class _Storage {
     Map<String, _ScalarAndBlockList> queryMap = {};
 
     for (Scalar listenerScalar in listenerScalars) {
-      if (listenerScalar.hasActiveScalarFragmentWidget()) {
+      if (listenerScalar.hasActiveUIComponent()) {
         String shelfName = listenerScalar.shelf.name;
         _ScalarAndBlockList sbList =
             queryMap[shelfName] ?? _ScalarAndBlockList();

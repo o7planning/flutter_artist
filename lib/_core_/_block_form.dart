@@ -32,7 +32,7 @@ abstract class BlockForm<
 
   ITEM_DETAIL? item;
 
-  final Map<_WidgetState, bool> _formWidgetStateListeners = {};
+  final Map<_WidgetState, bool> _formWidgetStates = {};
 
   BlockForm();
 
@@ -41,8 +41,8 @@ abstract class BlockForm<
     required _WidgetState formWidgetState,
     required final bool isShowing,
   }) {
-    bool isShowingOLD = _formWidgetStateListeners[formWidgetState] ?? false;
-    _formWidgetStateListeners[formWidgetState] = isShowing;
+    bool isShowingOLD = _formWidgetStates[formWidgetState] ?? false;
+    _formWidgetStates[formWidgetState] = isShowing;
     if (!isShowingOLD && isShowing) {
       block.shelf._startNewLazyQueryTransactionIfNeed();
     }
@@ -54,7 +54,7 @@ abstract class BlockForm<
   void _removeWidgetStateListener({
     required _WidgetState formWidgetState,
   }) {
-    _formWidgetStateListeners.remove(formWidgetState);
+    _formWidgetStates.remove(formWidgetState);
     FlutterArtist.storage._checkToRemoveShelf(shelf);
   }
 
@@ -76,7 +76,7 @@ abstract class BlockForm<
 
   List<_WidgetState> _getMountedFormWidgetStates() {
     List<_WidgetState> ret = [];
-    for (_WidgetState widgetState in [..._formWidgetStateListeners.keys]) {
+    for (_WidgetState widgetState in [..._formWidgetStates.keys]) {
       if (widgetState.mounted) {
         ret.add(widgetState);
       }
@@ -84,10 +84,10 @@ abstract class BlockForm<
     return ret;
   }
 
-  bool hasActiveFormWidget() {
-    for (State formWidgetState in _formWidgetStateListeners.keys) {
-      bool isShowing = _formWidgetStateListeners[formWidgetState] ?? false;
-      if (isShowing && formWidgetState.mounted) {
+  bool hasActiveUIComponent() {
+    for (State formWidgetState in _formWidgetStates.keys) {
+      bool visible = _formWidgetStates[formWidgetState] ?? false;
+      if (visible && formWidgetState.mounted) {
         return true;
       }
     }
@@ -343,7 +343,7 @@ abstract class BlockForm<
       },
     );
     //
-    bool needToLoad = forceForm || hasActiveFormWidget();
+    bool needToLoad = forceForm || hasActiveUIComponent();
     //
     // Init Extra data for Edit Form:
     //

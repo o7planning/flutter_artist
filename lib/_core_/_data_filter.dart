@@ -38,7 +38,7 @@ abstract class DataFilter<
 
   List<Restorable> get restorableCriteria;
 
-  final Map<_WidgetState, bool> _widgetStateListeners = {};
+  final Map<_WidgetState, bool> _filterFragmentWidgetStates = {};
 
   String get _classDefinition {
     return "${getClassName(this)}$_classParametersDefinition";
@@ -175,9 +175,9 @@ abstract class DataFilter<
   // *** UI COMPONENTS ***
   // ***************************************************************************
 
-  bool hasActiveFilterFragmentWidget() {
-    for (State widgetState in _widgetStateListeners.keys) {
-      bool isShowing = _widgetStateListeners[widgetState] ?? false;
+  bool hasActiveUIComponent() {
+    for (State widgetState in _filterFragmentWidgetStates.keys) {
+      bool isShowing = _filterFragmentWidgetStates[widgetState] ?? false;
       if (isShowing && widgetState.mounted) {
         return true;
       }
@@ -185,27 +185,23 @@ abstract class DataFilter<
     return false;
   }
 
-  void _addWidgetStateListener({
+  void _addFilterFragmentWidgetState({
     required _WidgetState widgetState,
     required bool isShowing,
   }) {
-    _widgetStateListeners[widgetState] = isShowing;
+    _filterFragmentWidgetStates[widgetState] = isShowing;
     if (isShowing) {
       FlutterArtist.storage._addRecentShelf(shelf);
     }
   }
 
-  void _removeWidgetStateListener({required State widgetState}) {
-    _widgetStateListeners.remove(widgetState);
+  void _removeFilterFragmentWidgetState({required State widgetState}) {
+    _filterFragmentWidgetStates.remove(widgetState);
     FlutterArtist.storage._checkToRemoveShelf(shelf);
   }
 
   void updateAllUIComponents() {
-    _updateWidgets();
-  }
-
-  void _updateWidgets() {
-    for (_WidgetState widgetState in [..._widgetStateListeners.keys]) {
+    for (_WidgetState widgetState in [..._filterFragmentWidgetStates.keys]) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }

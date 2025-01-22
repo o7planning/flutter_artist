@@ -124,11 +124,11 @@ class _BlockOrScalar extends Equatable {
 
   const _BlockOrScalar.scalar(this.scalar) : block = null;
 
-  bool hasActiveUiComponent() {
+  bool hasActiveUIComponent() {
     if (block != null) {
-      return block!.hasActiveUiComponent();
+      return block!.hasActiveUIComponent();
     } else {
-      return scalar!.hasActiveUiComponent();
+      return scalar!.hasActiveUIComponent();
     }
   }
 

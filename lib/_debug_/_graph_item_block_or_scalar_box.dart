@@ -35,7 +35,7 @@ class _GraphItemBlockOrScalarBoxState
 
   @override
   Widget build(BuildContext context) {
-    bool hasActiveWidget = widget.blockOrScalar.hasActiveUiComponent();
+    bool hasActiveWidget = widget.blockOrScalar.hasActiveUIComponent();
     //
     double boxWidth = _calculateBoxWidth();
 
@@ -382,7 +382,7 @@ class _GraphItemBlockOrScalarBoxState
   ) {
     String className = getClassName(blockForm);
     final DataState dataState = blockForm.dataState;
-    final bool active = blockForm.hasActiveFormWidget();
+    final bool active = blockForm.hasActiveUIComponent();
     //
     return "FORM: $className \n"
         "Data State: ${dataState.name.toUpperCase()} "
@@ -432,7 +432,7 @@ class _GraphItemBlockOrScalarBoxState
 
   Widget _buildBlockDataState(_BlockOrScalar blockOrScalar) {
     final DataState dataState = blockOrScalar.dataState;
-    bool active = blockOrScalar.hasActiveUiComponent();
+    bool active = blockOrScalar.hasActiveUIComponent();
     //
     return Container(
       padding: const EdgeInsets.all(3),

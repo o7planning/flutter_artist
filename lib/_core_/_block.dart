@@ -189,10 +189,10 @@ abstract class Block<
 
   DataState get dataState => data._dataState;
 
-  final Map<_WidgetState, bool> _controlButtonWidgetStateListeners = {};
-  final Map<_WidgetState, bool> _blockFragmentWidgetStateListeners = {};
-  final Map<_WidgetState, bool> _controlBarWidgetStateListeners = {};
-  final Map<_WidgetState, bool> _paginationWidgetStateListeners = {};
+  final Map<_WidgetState, bool> _blockFragmentWidgetStates = {};
+  final Map<_WidgetState, bool> _controlBarWidgetStates = {};
+  final Map<_WidgetState, bool> _controlWidgetStates = {};
+  final Map<_WidgetState, bool> _paginationWidgetStates = {};
 
   Block({
     required this.name,
@@ -304,7 +304,7 @@ abstract class Block<
     required _WidgetState formWidgetState,
     required bool isShowing,
   }) {
-    _paginationWidgetStateListeners[formWidgetState] = isShowing;
+    _paginationWidgetStates[formWidgetState] = isShowing;
     if (isShowing) {
       FlutterArtist.storage._addRecentShelf(shelf);
     }
@@ -313,7 +313,7 @@ abstract class Block<
   void _removePaginationWidgetStateListener({
     required _WidgetState formWidgetState,
   }) {
-    _paginationWidgetStateListeners.remove(formWidgetState);
+    _paginationWidgetStates.remove(formWidgetState);
     FlutterArtist.storage._checkToRemoveShelf(shelf);
   }
 
@@ -321,7 +321,7 @@ abstract class Block<
     required _WidgetState formWidgetState,
     required bool isShowing,
   }) {
-    _controlBarWidgetStateListeners[formWidgetState] = isShowing;
+    _controlBarWidgetStates[formWidgetState] = isShowing;
     if (isShowing) {
       FlutterArtist.storage._addRecentShelf(shelf);
     }
@@ -330,7 +330,7 @@ abstract class Block<
   void _removeControlBarWidgetStateListener({
     required _WidgetState formWidgetState,
   }) {
-    _controlBarWidgetStateListeners.remove(formWidgetState);
+    _controlBarWidgetStates.remove(formWidgetState);
     FlutterArtist.storage._checkToRemoveShelf(shelf);
   }
 
@@ -338,7 +338,7 @@ abstract class Block<
     required _WidgetState formWidgetState,
     required bool isShowing,
   }) {
-    _controlButtonWidgetStateListeners[formWidgetState] = isShowing;
+    _controlWidgetStates[formWidgetState] = isShowing;
     if (isShowing) {
       FlutterArtist.storage._addRecentShelf(shelf);
     }
@@ -347,17 +347,17 @@ abstract class Block<
   void _removeControlButtonWidgetStateListener({
     required _WidgetState formWidgetState,
   }) {
-    _controlButtonWidgetStateListeners.remove(formWidgetState);
+    _controlWidgetStates.remove(formWidgetState);
     FlutterArtist.storage._checkToRemoveShelf(shelf);
   }
 
-  void _addWidgetStateListener({
+  void _addBlockFragmentWidgetState({
     required _WidgetState widgetState,
     required bool isShowing,
   }) {
-    bool activeOLD = hasActiveUiComponent();
-    _blockFragmentWidgetStateListeners[widgetState] = isShowing;
-    bool activeCURRENT = hasActiveUiComponent();
+    bool activeOLD = hasActiveUIComponent();
+    _blockFragmentWidgetStates[widgetState] = isShowing;
+    bool activeCURRENT = hasActiveUIComponent();
     //
     if (isShowing) {
       FlutterArtist.storage._addRecentShelf(shelf);
@@ -371,10 +371,10 @@ abstract class Block<
     }
   }
 
-  void _removeWidgetStateListener({required State widgetState}) {
-    bool activeOLD = hasActiveUiComponent();
-    _blockFragmentWidgetStateListeners.remove(widgetState);
-    bool activeCURRENT = hasActiveUiComponent();
+  void _removeBlockFragmentWidgetState({required State widgetState}) {
+    bool activeOLD = hasActiveUIComponent();
+    _blockFragmentWidgetStates.remove(widgetState);
+    bool activeCURRENT = hasActiveUIComponent();
     //
     if (activeOLD && !activeCURRENT) {
       FlutterArtist.storage._checkToRemoveShelf(shelf);
@@ -408,46 +408,69 @@ abstract class Block<
     required bool activeOnly,
   }) {
     Map<_WidgetState, bool> ret = {};
+    //
     if (withFilter) {
-      ret.addAll(_registeredOrDefaultDataFilter._widgetStateListeners);
+      ret.addAll(_registeredOrDefaultDataFilter._filterFragmentWidgetStates);
     }
     //
     if (withBlockFragment) {
-      ret.addAll(_blockFragmentWidgetStateListeners);
+      ret.addAll(_blockFragmentWidgetStates);
     }
     //
     if (withPagination) {
-      ret.addAll(_paginationWidgetStateListeners);
+      ret.addAll(_paginationWidgetStates);
     }
     //
     if (withControlBar) {
-      ret.addAll(_controlBarWidgetStateListeners);
+      ret.addAll(_controlBarWidgetStates);
     }
     if (withControl) {
-      ret.addAll(_controlButtonWidgetStateListeners);
+      ret.addAll(_controlWidgetStates);
     }
     //
     if (withForm && blockForm != null) {
-      ret.addAll(blockForm!._formWidgetStateListeners);
+      ret.addAll(blockForm!._formWidgetStates);
     }
     return ret;
   }
 
-  bool hasActiveUiComponent() {
-    bool active = hasActiveBlockFragmentWidget(alsoCheckChildren: false);
+  bool hasActiveUIComponent() {
+    bool active = false;
+    // Filter
+    if (dataFilter != null) {
+      active = dataFilter!.hasActiveUIComponent();
+      if (active) {
+        return true;
+      }
+    }
+    // Form
+    active = blockForm != null && blockForm!.hasActiveUIComponent();
     if (active) {
       return true;
     }
+    // Block Fragment:
+    active = hasActiveBlockFragmentWidget(alsoCheckChildren: false);
+    if (active) {
+      return true;
+    }
+    // ControlBar:
     active = hasActiveControlBarWidget();
     if (active) {
       return true;
     }
-    active = blockForm != null && blockForm!.hasActiveFormWidget();
+    // Control
+    active = hasActiveControlWidget();
+    if (active) {
+      return true;
+    }
+    // Pagination
+    active = hasActivePaginationWidget();
+    //
     return active;
   }
 
   bool hasActiveBlockFragmentWidget({required bool alsoCheckChildren}) {
-    var map = {..._blockFragmentWidgetStateListeners};
+    var map = {..._blockFragmentWidgetStates};
     for (State widgetState in map.keys) {
       if (widgetState.mounted) {
         bool isShowing = map[widgetState] ?? false;
@@ -469,10 +492,19 @@ abstract class Block<
   }
 
   bool hasActiveControlBarWidget() {
-    for (_WidgetState controlBarState in _controlBarWidgetStateListeners.keys) {
-      bool visibility =
-          _controlBarWidgetStateListeners[controlBarState] ?? false;
-      if (visibility && controlBarState.mounted) {
+    for (_WidgetState controlBarState in _controlBarWidgetStates.keys) {
+      bool visible = _controlBarWidgetStates[controlBarState] ?? false;
+      if (visible && controlBarState.mounted) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool hasActiveControlWidget() {
+    for (_WidgetState controlState in _controlWidgetStates.keys) {
+      bool visible = _controlWidgetStates[controlState] ?? false;
+      if (visible && controlState.mounted) {
         return true;
       }
     }
@@ -480,10 +512,9 @@ abstract class Block<
   }
 
   bool hasActivePaginationWidget() {
-    for (_WidgetState paginationState in _paginationWidgetStateListeners.keys) {
-      bool visibility =
-          _paginationWidgetStateListeners[paginationState] ?? false;
-      if (visibility && paginationState.mounted) {
+    for (_WidgetState paginationState in _paginationWidgetStates.keys) {
+      bool visible = _paginationWidgetStates[paginationState] ?? false;
+      if (visible && paginationState.mounted) {
         return true;
       }
     }
@@ -748,7 +779,7 @@ abstract class Block<
         }
       case QueryType.queryIfNeed:
         {
-          bool guiActive = hasActiveUiComponent();
+          bool guiActive = hasActiveUIComponent();
           if (guiActive) {
             needRealQuery = true;
           } else {
@@ -2838,7 +2869,7 @@ abstract class Block<
   }
 
   void updateBlockFragmentWidgets() {
-    for (_WidgetState widgetState in _blockFragmentWidgetStateListeners.keys) {
+    for (_WidgetState widgetState in _blockFragmentWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }
@@ -2846,7 +2877,7 @@ abstract class Block<
   }
 
   void updateControlBarWidgets() {
-    for (_WidgetState widgetState in _controlBarWidgetStateListeners.keys) {
+    for (_WidgetState widgetState in _controlBarWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }
@@ -2854,7 +2885,7 @@ abstract class Block<
   }
 
   void updateControlWidgets() {
-    for (_WidgetState widgetState in _controlButtonWidgetStateListeners.keys) {
+    for (_WidgetState widgetState in _controlWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }
@@ -2862,7 +2893,7 @@ abstract class Block<
   }
 
   void updatePaginationWidgets() {
-    for (_WidgetState widgetState in _paginationWidgetStateListeners.keys) {
+    for (_WidgetState widgetState in _paginationWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }

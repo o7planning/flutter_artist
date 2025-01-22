@@ -543,7 +543,7 @@ abstract class Shelf extends _XBase {
 
   void __findLazyScalars(List<_ScalarOrBlockOrFormWrapper> founds) {
     for (Scalar scalar in __scalars) {
-      if (scalar.hasActiveUiComponent() &&
+      if (scalar.hasActiveUIComponent() &&
           scalar.data.dataState == DataState.pending) {
         founds.add(_ScalarOrBlockOrFormWrapper.scalar(scalar));
       }
@@ -558,7 +558,7 @@ abstract class Shelf extends _XBase {
           block.dataState == DataState.pending) {
         founds.add(_ScalarOrBlockOrFormWrapper.block(block));
       } else if (block.blockForm != null &&
-          block.blockForm!.hasActiveFormWidget() &&
+          block.blockForm!.hasActiveUIComponent() &&
           block.blockForm!.dataState == DataState.pending) {
         founds.add(_ScalarOrBlockOrFormWrapper.blockForm(block.blockForm!));
       } else {
