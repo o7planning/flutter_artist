@@ -300,54 +300,54 @@ abstract class Block<
     } catch (e) {}
   }
 
-  void _addPaginationWidgetStateListener({
-    required _WidgetState formWidgetState,
+  void _addPaginationWidgetState({
+    required _WidgetState widgetState,
     required bool isShowing,
   }) {
-    _paginationWidgetStates[formWidgetState] = isShowing;
+    _paginationWidgetStates[widgetState] = isShowing;
     if (isShowing) {
       FlutterArtist.storage._addRecentShelf(shelf);
     }
   }
 
-  void _removePaginationWidgetStateListener({
-    required _WidgetState formWidgetState,
+  void _removePaginationWidgetState({
+    required _WidgetState widgetState,
   }) {
-    _paginationWidgetStates.remove(formWidgetState);
+    _paginationWidgetStates.remove(widgetState);
     FlutterArtist.storage._checkToRemoveShelf(shelf);
   }
 
-  void _addControlBarWidgetStateListener({
-    required _WidgetState formWidgetState,
+  void _addControlBarWidgetState({
+    required _WidgetState widgetState,
     required bool isShowing,
   }) {
-    _controlBarWidgetStates[formWidgetState] = isShowing;
+    _controlBarWidgetStates[widgetState] = isShowing;
     if (isShowing) {
       FlutterArtist.storage._addRecentShelf(shelf);
     }
   }
 
-  void _removeControlBarWidgetStateListener({
-    required _WidgetState formWidgetState,
+  void _removeControlBarWidgetState({
+    required _WidgetState widgetState,
   }) {
-    _controlBarWidgetStates.remove(formWidgetState);
+    _controlBarWidgetStates.remove(widgetState);
     FlutterArtist.storage._checkToRemoveShelf(shelf);
   }
 
-  void _addControlButtonWidgetStateListener({
-    required _WidgetState formWidgetState,
+  void _addControlWidgetState({
+    required _WidgetState widgetState,
     required bool isShowing,
   }) {
-    _controlWidgetStates[formWidgetState] = isShowing;
+    _controlWidgetStates[widgetState] = isShowing;
     if (isShowing) {
       FlutterArtist.storage._addRecentShelf(shelf);
     }
   }
 
-  void _removeControlButtonWidgetStateListener({
-    required _WidgetState formWidgetState,
+  void _removeControlWidgetState({
+    required _WidgetState widgetState,
   }) {
-    _controlWidgetStates.remove(formWidgetState);
+    _controlWidgetStates.remove(widgetState);
     FlutterArtist.storage._checkToRemoveShelf(shelf);
   }
 

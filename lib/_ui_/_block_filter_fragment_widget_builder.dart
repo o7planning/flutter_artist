@@ -30,7 +30,7 @@ class _DataFilterFragmentWidgetBuilderState
   WidgetStateType get type => WidgetStateType.filter;
 
   @override
-  void addWidgetStateListener({required bool isShowing}) {
+  void addFilterFragmentWidgetState({required bool isShowing}) {
     widget.dataFilter._addFilterFragmentWidgetState(
       widgetState: this,
       isShowing: isShowing,
@@ -38,7 +38,7 @@ class _DataFilterFragmentWidgetBuilderState
   }
 
   @override
-  void removeWidgetStateListener() {
+  void removeFilterFragmentWidgetState() {
     widget.dataFilter._removeFilterFragmentWidgetState(widgetState: this);
   }
 

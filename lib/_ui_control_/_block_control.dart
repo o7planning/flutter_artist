@@ -7,7 +7,7 @@ abstract class BlockControl extends _StatefulWidget {
   final StackTrace? currentStackTrace;
   final Widget Function(VoidCallback? onPressed) build;
   final VoidCallback? navigate;
-  final ControlButtonType controlButtonType;
+  final BlockControlType type;
 
   const BlockControl({
     super.key,
@@ -16,17 +16,17 @@ abstract class BlockControl extends _StatefulWidget {
     super.description,
     required this.block,
     required this.build,
-    required this.controlButtonType,
+    required this.type,
     required this.navigate,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _ControlButtonState();
+    return _BlockControlButtonState();
   }
 }
 
-class _ControlButtonState extends _WidgetState<BlockControl> {
+class _BlockControlButtonState extends _WidgetState<BlockControl> {
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);
@@ -54,14 +54,14 @@ class _ControlButtonState extends _WidgetState<BlockControl> {
   }
 
   ControlPressedAsyncFunction? _getOnPressedFunction() {
-    switch (widget.controlButtonType) {
-      case ControlButtonType.create:
+    switch (widget.type) {
+      case BlockControlType.create:
         bool canCreate = widget.block.canCreateItem();
         return canCreate ? __prepareToCreate : null;
-      case ControlButtonType.query:
+      case BlockControlType.query:
         bool canQuery = widget.block.canQuery();
         return canQuery ? __queryBlock : null;
-      case ControlButtonType.save:
+      case BlockControlType.save:
         bool canSave = widget.block.canSave();
         return canSave ? __saveForm : null;
     }
@@ -122,17 +122,17 @@ class _ControlButtonState extends _WidgetState<BlockControl> {
   }
 
   @override
-  void addWidgetStateListener({required bool isShowing}) {
-    widget.block._addControlButtonWidgetStateListener(
-      formWidgetState: this,
+  void addFilterFragmentWidgetState({required bool isShowing}) {
+    widget.block._addControlWidgetState(
+      widgetState: this,
       isShowing: isShowing,
     );
   }
 
   @override
-  void removeWidgetStateListener() {
-    widget.block._removeControlButtonWidgetStateListener(
-      formWidgetState: this,
+  void removeFilterFragmentWidgetState() {
+    widget.block._removeControlWidgetState(
+      widgetState: this,
     );
   }
 }

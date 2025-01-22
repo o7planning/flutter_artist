@@ -6,7 +6,7 @@ class BlockControlInkWell extends BlockControl {
     required super.currentStackTrace,
     required super.ownerClassInstance,
     required super.block,
-    required super.controlButtonType,
+    required super.type,
     super.navigate,
     //
     Widget? child,

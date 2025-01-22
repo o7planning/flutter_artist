@@ -33,9 +33,9 @@ class _ShelvesSafeLayoutAreaState extends _WidgetState<ShelvesSafeLayoutArea> {
   }
 
   @override
-  void addWidgetStateListener({required bool isShowing}) {
+  void addFilterFragmentWidgetState({required bool isShowing}) {
     for (Shelf shelf in widget.shelves) {
-      shelf._addWidgetStateListener(
+      shelf._addShelfWidgetState(
         widgetState: this,
         isShowing: isShowing,
       );
@@ -43,9 +43,9 @@ class _ShelvesSafeLayoutAreaState extends _WidgetState<ShelvesSafeLayoutArea> {
   }
 
   @override
-  void removeWidgetStateListener() {
+  void removeFilterFragmentWidgetState() {
     for (Shelf shelf in widget.shelves) {
-      shelf._removeWidgetStateListener(
+      shelf._removeShelfWidgetState(
         widgetState: this,
       );
     }

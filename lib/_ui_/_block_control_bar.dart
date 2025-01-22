@@ -45,17 +45,17 @@ class _BlockControlBarState extends _WidgetState<BlockControlBar> {
   }
 
   @override
-  void addWidgetStateListener({required bool isShowing}) {
-    widget.block._addControlBarWidgetStateListener(
-      formWidgetState: this,
+  void addFilterFragmentWidgetState({required bool isShowing}) {
+    widget.block._addControlBarWidgetState(
+      widgetState: this,
       isShowing: isShowing,
     );
   }
 
   @override
-  void removeWidgetStateListener() {
-    widget.block._removeControlBarWidgetStateListener(
-      formWidgetState: this,
+  void removeFilterFragmentWidgetState() {
+    widget.block._removeControlBarWidgetState(
+      widgetState: this,
     );
   }
 

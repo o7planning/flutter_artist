@@ -37,8 +37,8 @@ class _CustomControlBarState extends _WidgetState<CustomControlBar> {
   WidgetStateType get type => WidgetStateType.customControlBar;
 
   @override
-  void addWidgetStateListener({required bool isShowing}) {
-    // TODO: implement addWidgetStateListener
+  void addFilterFragmentWidgetState({required bool isShowing}) {
+    // TODO: implement addWidgetState
   }
 
   @override
@@ -47,7 +47,7 @@ class _CustomControlBarState extends _WidgetState<CustomControlBar> {
   }
 
   @override
-  void removeWidgetStateListener() {
-    // TODO: implement removeWidgetStateListener
+  void removeFilterFragmentWidgetState() {
+    // TODO: implement removeWidgetState
   }
 }

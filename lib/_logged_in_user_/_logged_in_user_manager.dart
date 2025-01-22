@@ -7,7 +7,7 @@ class _LoggedInUserManager {
 
   ILoggedInUser? get loggedInUser => _loggedInUser;
 
-  final Map<_WidgetState, bool> _widgetStateListeners = {};
+  final Map<_WidgetState, bool> _loggedInUserWidgetStates = {};
 
   Future<void> _logout() async {
     _loggedInUser = null;
@@ -67,21 +67,21 @@ class _LoggedInUserManager {
   }
 
   void updateWidgets() {
-    for (_WidgetState widgetState in _widgetStateListeners.keys) {
+    for (_WidgetState widgetState in _loggedInUserWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }
     }
   }
 
-  void _addWidgetStateListener({
+  void _addLoggedInUserWidgetState({
     required _WidgetState widgetState,
     required bool isShowing,
   }) {
-    _widgetStateListeners[widgetState] = isShowing;
+    _loggedInUserWidgetStates[widgetState] = isShowing;
   }
 
-  void _removeWidgetStateListener({required State widgetState}) {
-    _widgetStateListeners.remove(widgetState);
+  void _removeLoggedInUserWidgetState({required State widgetState}) {
+    _loggedInUserWidgetStates.remove(widgetState);
   }
 }

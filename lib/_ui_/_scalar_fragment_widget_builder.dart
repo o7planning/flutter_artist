@@ -34,16 +34,16 @@ class _ScalarFragmentWidgetBuilderState
   }
 
   @override
-  void addWidgetStateListener({required bool isShowing}) {
-    widget.scalar._addWidgetStateListener(
+  void addFilterFragmentWidgetState({required bool isShowing}) {
+    widget.scalar._addScalarFragmentWidgetState(
       widgetState: this,
       isShowing: isShowing,
     );
   }
 
   @override
-  void removeWidgetStateListener() {
-    widget.scalar._removeWidgetStateListener(
+  void removeFilterFragmentWidgetState() {
+    widget.scalar._removeScalarFragmentWidgetState(
       widgetState: this,
     );
   }

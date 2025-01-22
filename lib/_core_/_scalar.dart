@@ -86,6 +86,7 @@ abstract class Scalar<
   final ScalarHiddenBehavior hiddenBehavior;
 
   final Map<_WidgetState, bool> _scalarFragmentWidgetStates = {};
+  final Map<_WidgetState, bool> _scalarControlWidgetStates = {};
 
   Scalar({
     required this.name,
@@ -129,12 +130,16 @@ abstract class Scalar<
   // ***************************************************************************
 
   void updateAllUIComponents() {
-    updateControlBarWidgets();
+    updateControlWidgets();
     updateFragmentWidgets();
   }
 
-  void updateControlBarWidgets() {
-    // TODO: .......
+  void updateControlWidgets() {
+    for (_WidgetState state in _scalarControlWidgetStates.keys) {
+      if (state.mounted) {
+        state.refreshState();
+      }
+    }
   }
 
   void updateFragmentWidgets() {
@@ -182,7 +187,7 @@ abstract class Scalar<
   void __refreshQueryingState({required bool isQuerying}) {
     try {
       __isQuerying = isQuerying;
-      this.updateControlBarWidgets();
+      this.updateControlWidgets();
     } catch (e) {}
   }
 
@@ -239,10 +244,14 @@ abstract class Scalar<
   }
 
   bool hasActiveUIComponent() {
-    var map = {..._scalarFragmentWidgetStates};
-    for (State widgetState in map.keys) {
+    return _hasActiveScalarFragmentWidgetState() ||
+        _hasActiveControlWidgetState();
+  }
+
+  bool _hasActiveScalarFragmentWidgetState() {
+    for (State widgetState in _scalarFragmentWidgetStates.keys) {
       if (widgetState.mounted) {
-        bool isShowing = map[widgetState] ?? false;
+        bool isShowing = _scalarFragmentWidgetStates[widgetState] ?? false;
         if (isShowing) {
           return true;
         }
@@ -251,7 +260,50 @@ abstract class Scalar<
     return false;
   }
 
-  void _addWidgetStateListener({
+  bool _hasActiveControlWidgetState() {
+    for (State widgetState in _scalarControlWidgetStates.keys) {
+      if (widgetState.mounted) {
+        bool isShowing = _scalarControlWidgetStates[widgetState] ?? false;
+        if (isShowing) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  void _addControlWidgetState({
+    required _WidgetState widgetState,
+    required bool isShowing,
+  }) {
+    bool activeOLD = hasActiveUIComponent();
+    _scalarControlWidgetStates[widgetState] = isShowing;
+    bool activeCURRENT = hasActiveUIComponent();
+    //
+    if (isShowing) {
+      FlutterArtist.storage._addRecentShelf(shelf);
+    }
+    //
+    if (!activeOLD && activeCURRENT) {
+      // Fire event:
+      shelf._startNewLazyQueryTransactionIfNeed();
+    } else if (activeOLD && !activeCURRENT) {
+      _fireScalarHidden();
+    }
+  }
+
+  void _removeControlWidgetState({required State widgetState}) {
+    bool activeOLD = hasActiveUIComponent();
+    _scalarControlWidgetStates.remove(widgetState);
+    bool activeCURRENT = hasActiveUIComponent();
+    //
+    if (activeOLD && !activeCURRENT) {
+      FlutterArtist.storage._checkToRemoveShelf(shelf);
+      _fireScalarHidden();
+    }
+  }
+
+  void _addScalarFragmentWidgetState({
     required _WidgetState widgetState,
     required bool isShowing,
   }) {
@@ -271,7 +323,7 @@ abstract class Scalar<
     }
   }
 
-  void _removeWidgetStateListener({required State widgetState}) {
+  void _removeScalarFragmentWidgetState({required State widgetState}) {
     bool activeOLD = hasActiveUIComponent();
     _scalarFragmentWidgetStates.remove(widgetState);
     bool activeCURRENT = hasActiveUIComponent();
@@ -297,5 +349,16 @@ abstract class Scalar<
         },
       );
     }
+  }
+
+  bool isAllowQuery() {
+    return true;
+  }
+
+  ///
+  /// Do not override
+  ///
+  bool canQuery() {
+    return isAllowQuery();
   }
 }

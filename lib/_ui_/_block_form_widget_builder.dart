@@ -36,17 +36,17 @@ class _BlockFormWidgetBuilderState
   WidgetStateType get type => WidgetStateType.form;
 
   @override
-  void addWidgetStateListener({required bool isShowing}) {
-    widget.blockForm._addWidgetStateListener(
-      formWidgetState: this,
+  void addFilterFragmentWidgetState({required bool isShowing}) {
+    widget.blockForm._addFormWidgetState(
+      widgetState: this,
       isShowing: true,
     );
   }
 
   @override
-  void removeWidgetStateListener() {
-    widget.blockForm._removeWidgetStateListener(
-      formWidgetState: this,
+  void removeFilterFragmentWidgetState() {
+    widget.blockForm._removeFormWidgetState(
+      widgetState: this,
     );
   }
 

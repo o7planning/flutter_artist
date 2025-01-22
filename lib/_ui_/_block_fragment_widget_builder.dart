@@ -29,7 +29,7 @@ class _BlockFragmentWidgetBuilderState
   WidgetStateType get type => WidgetStateType.blockFragment;
 
   @override
-  void addWidgetStateListener({required bool isShowing}) {
+  void addFilterFragmentWidgetState({required bool isShowing}) {
     widget.block._addBlockFragmentWidgetState(
       widgetState: this,
       isShowing: isShowing,
@@ -37,7 +37,7 @@ class _BlockFragmentWidgetBuilderState
   }
 
   @override
-  void removeWidgetStateListener() {
+  void removeFilterFragmentWidgetState() {
     widget.block._removeBlockFragmentWidgetState(
       widgetState: this,
     );

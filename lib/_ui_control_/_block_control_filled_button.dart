@@ -6,7 +6,7 @@ class BlockControlFilledButton extends BlockControl {
     required super.currentStackTrace,
     required super.ownerClassInstance,
     required super.block,
-    required super.controlButtonType,
+    required super.type,
     super.navigate,
     //
     ValueChanged<bool>? onHover,
@@ -40,7 +40,7 @@ class BlockControlFilledButton extends BlockControl {
     required super.currentStackTrace,
     required super.ownerClassInstance,
     required super.block,
-    required super.controlButtonType,
+    required super.type,
     super.navigate,
     //
     ValueChanged<bool>? onHover,
@@ -76,7 +76,7 @@ class BlockControlFilledButton extends BlockControl {
     required super.currentStackTrace,
     required super.ownerClassInstance,
     required super.block,
-    required super.controlButtonType,
+    required super.type,
     super.navigate,
     //
     ValueChanged<bool>? onHover,
@@ -109,7 +109,7 @@ class BlockControlFilledButton extends BlockControl {
     required super.currentStackTrace,
     required super.ownerClassInstance,
     required super.block,
-    required super.controlButtonType,
+    required super.type,
     super.navigate,
     //
     ValueChanged<bool>? onHover,

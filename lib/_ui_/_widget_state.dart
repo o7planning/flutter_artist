@@ -7,9 +7,9 @@ abstract class _WidgetState<W extends _StatefulWidget> extends State<W> {
 
   WidgetStateType get type;
 
-  void addWidgetStateListener({required bool isShowing});
+  void addFilterFragmentWidgetState({required bool isShowing});
 
-  void removeWidgetStateListener();
+  void removeFilterFragmentWidgetState();
 
   Widget buildContent(BuildContext context);
 
@@ -37,7 +37,7 @@ abstract class _WidgetState<W extends _StatefulWidget> extends State<W> {
       key: Key(keyId),
       onVisibilityChanged: (visibilityInfo) {
         var visiblePercentage = visibilityInfo.visibleFraction * 100;
-        addWidgetStateListener(isShowing: visiblePercentage > 0);
+        addFilterFragmentWidgetState(isShowing: visiblePercentage > 0);
       },
       child: showMode == ShowMode.production
           ? buildContent(context)
@@ -54,13 +54,13 @@ abstract class _WidgetState<W extends _StatefulWidget> extends State<W> {
     keyId = _generateVisibilityDetectorId(
         prefix:
             "${type.toString()}-${getClassName(widget)}"); // widget= widget.block
-    addWidgetStateListener(isShowing: true);
+    addFilterFragmentWidgetState(isShowing: true);
   }
 
   @override
   void dispose() {
     super.dispose();
     //
-    removeWidgetStateListener();
+    removeFilterFragmentWidgetState();
   }
 }

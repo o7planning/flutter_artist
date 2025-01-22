@@ -33,16 +33,16 @@ class _LoggedInUserBuilderState extends _WidgetState<LoggedInUserBuilder> {
   }
 
   @override
-  void addWidgetStateListener({required bool isShowing}) {
-    FlutterArtist._loggedInUserManager._addWidgetStateListener(
+  void addFilterFragmentWidgetState({required bool isShowing}) {
+    FlutterArtist._loggedInUserManager._addLoggedInUserWidgetState(
       widgetState: this,
       isShowing: isShowing,
     );
   }
 
   @override
-  void removeWidgetStateListener() {
-    FlutterArtist._loggedInUserManager._removeWidgetStateListener(
+  void removeFilterFragmentWidgetState() {
+    FlutterArtist._loggedInUserManager._removeLoggedInUserWidgetState(
       widgetState: this,
     );
   }

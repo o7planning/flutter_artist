@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-enum ControlButtonType {
+enum BlockControlType {
   create,
   query,
   save,

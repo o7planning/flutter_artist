@@ -37,12 +37,12 @@ abstract class BlockForm<
   BlockForm();
 
   //
-  void _addWidgetStateListener({
-    required _WidgetState formWidgetState,
+  void _addFormWidgetState({
+    required _WidgetState widgetState,
     required final bool isShowing,
   }) {
-    bool isShowingOLD = _formWidgetStates[formWidgetState] ?? false;
-    _formWidgetStates[formWidgetState] = isShowing;
+    bool isShowingOLD = _formWidgetStates[widgetState] ?? false;
+    _formWidgetStates[widgetState] = isShowing;
     if (!isShowingOLD && isShowing) {
       block.shelf._startNewLazyQueryTransactionIfNeed();
     }
@@ -51,10 +51,10 @@ abstract class BlockForm<
     }
   }
 
-  void _removeWidgetStateListener({
-    required _WidgetState formWidgetState,
+  void _removeFormWidgetState({
+    required _WidgetState widgetState,
   }) {
-    _formWidgetStates.remove(formWidgetState);
+    _formWidgetStates.remove(widgetState);
     FlutterArtist.storage._checkToRemoveShelf(shelf);
   }
 

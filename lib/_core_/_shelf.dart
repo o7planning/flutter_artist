@@ -41,7 +41,7 @@ abstract class Shelf extends _XBase {
 
   String get name => FlutterArtist.storage._getShelfName(runtimeType);
 
-  final Map<_WidgetState, bool> _shelfWidgetStateListeners = {};
+  final Map<_WidgetState, bool> _shelfWidgetStates = {};
 
   Shelf() {
     __onInit();
@@ -420,7 +420,7 @@ abstract class Shelf extends _XBase {
   }
 
   void __updateShelfWidgets() {
-    for (_WidgetState state in _shelfWidgetStateListeners.keys) {
+    for (_WidgetState state in _shelfWidgetStates.keys) {
       if (state.mounted) {
         state.refreshState();
       }
@@ -431,15 +431,15 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _addWidgetStateListener({
+  void _addShelfWidgetState({
     required _WidgetState widgetState,
     required bool isShowing,
   }) {
-    _shelfWidgetStateListeners[widgetState] = isShowing;
+    _shelfWidgetStates[widgetState] = isShowing;
   }
 
-  void _removeWidgetStateListener({required State widgetState}) {
-    _shelfWidgetStateListeners.remove(widgetState);
+  void _removeShelfWidgetState({required State widgetState}) {
+    _shelfWidgetStates.remove(widgetState);
   }
 
   // ***************************************************************************

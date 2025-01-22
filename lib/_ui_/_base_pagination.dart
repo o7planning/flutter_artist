@@ -25,17 +25,17 @@ class _BasePaginationState extends _WidgetState<BasePagination> {
   }
 
   @override
-  void addWidgetStateListener({required bool isShowing}) {
-    widget.block._addPaginationWidgetStateListener(
-      formWidgetState: this,
+  void addFilterFragmentWidgetState({required bool isShowing}) {
+    widget.block._addPaginationWidgetState(
+      widgetState: this,
       isShowing: isShowing,
     );
   }
 
   @override
-  void removeWidgetStateListener() {
-    widget.block._removePaginationWidgetStateListener(
-      formWidgetState: this,
+  void removeFilterFragmentWidgetState() {
+    widget.block._removePaginationWidgetState(
+      widgetState: this,
     );
   }
 
