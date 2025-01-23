@@ -67,8 +67,8 @@ class _BlockControlButtonState extends _WidgetState<BlockControl> {
     }
   }
 
-  Future<bool> __back() async {
-    FlutterArtist.adapter.navigationBack();
+  Future<bool> __back(BuildContext context) async {
+    Navigator.of(context).maybePop();
     return true;
   }
 

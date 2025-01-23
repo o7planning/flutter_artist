@@ -58,20 +58,28 @@ class _BlockFormWidgetBuilderState
 
   Future<void> _onPopInvokedWithResult(bool canPop, dynamic result) async {
     if (!canPop) {
-      bool confirm = await showConfirmDialog(
+      dialogs.YesNoCancel selection = await dialogs.showYesNoCancelDialog(
         context: context,
         message: "Do you want to save changes before closing?",
         details: "",
       );
-      if (confirm) {
-        bool success = await widget.blockForm.saveForm();
-        if (!success) {
+      switch (selection) {
+        case dialogs.YesNoCancel.yes:
+          bool success = await widget.blockForm.saveForm();
+          if (!success) {
+            return;
+          }
+          if (mounted) {
+            Navigator.of(context).pop();
+          }
+        case dialogs.YesNoCancel.no:
+          widget.blockForm.resetForm();
+          if (mounted) {
+            Navigator.of(context).pop();
+          }
+        case dialogs.YesNoCancel.cancel:
+          // Do Nothing
           return;
-        }
-        if (mounted) {
-          Navigator.of(context).pop();
-        }
-        return;
       }
     }
     print("onPopInvokedWithResult: value: $canPop, result: $result");

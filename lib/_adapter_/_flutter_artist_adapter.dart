@@ -26,8 +26,4 @@ interface class FlutterArtistAdapter {
   BuildContext getCurrentContext() {
     throw UnimplementedError();
   }
-
-  void navigationBack() {
-    throw UnimplementedError();
-  }
 }

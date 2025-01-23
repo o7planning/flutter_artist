@@ -147,7 +147,11 @@ class _BlockControlBarState extends _WidgetState<BlockControlBar> {
                 tooltip: "Back",
                 iconData: _formBackIconData,
                 onAction: false,
-                onPressed: widget.showBackButton ? _back : null,
+                onPressed: widget.showBackButton
+                    ? () {
+                        _back(context);
+                      }
+                    : null,
               ),
             if (loggedInUser?.isSystemUser ?? false)
               Tooltip(
@@ -299,8 +303,8 @@ class _BlockControlBarState extends _WidgetState<BlockControlBar> {
     return const SizedBox(width: 5);
   }
 
-  void _back() {
-    FlutterArtist.adapter.navigationBack();
+  void _back(BuildContext context) {
+    Navigator.of(context).maybePop();
   }
 
   void _saveForm(Block block) {
