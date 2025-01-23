@@ -5,7 +5,7 @@ class BlockFormWidgetBuilder extends _StatefulWidget {
 
   final Widget Function() build;
 
-  @Deprecated("Chua su dung")
+  @Deprecated("Not use")
   final Function()? onAfterBuild;
 
   const BlockFormWidgetBuilder({
