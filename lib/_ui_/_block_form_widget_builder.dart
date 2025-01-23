@@ -56,8 +56,10 @@ class _BlockFormWidgetBuilderState
     widget.blockForm._formKey = formKey;
   }
 
-  Future<void> _onPopInvokedWithResult(bool canPop, dynamic result) async {
-    if (!canPop) {
+  Future<void> _onPopInvokedWithResult(bool didPop, dynamic result) async {
+    print(
+        ">>>>>>>>>>>>>> _onPopInvokedWithResult didPop: $didPop, result = $result");
+    if (!didPop) {
       dialogs.YesNoCancel selection = await dialogs.showYesNoCancelDialog(
         context: context,
         message: "Do you want to save changes before closing?",
@@ -73,17 +75,18 @@ class _BlockFormWidgetBuilderState
           if (mounted) {
             Navigator.of(context).pop();
           }
+          break;
         case dialogs.YesNoCancel.no:
           widget.blockForm.resetForm();
           if (mounted) {
             Navigator.of(context).pop();
           }
+          break;
         case dialogs.YesNoCancel.cancel:
           // Do Nothing
-          return;
+          break;
       }
     }
-    print("onPopInvokedWithResult: value: $canPop, result: $result");
   }
 
   @override
@@ -100,8 +103,7 @@ class _BlockFormWidgetBuilderState
           widget.blockForm._onChangeFromFormWidget();
           if (mounted) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              widget.blockForm.block.updateControlBarWidgets();
-              widget.blockForm.updateAllUIComponents();
+              widget.blockForm.shelf.updateAllUIComponents();
             });
           }
         },

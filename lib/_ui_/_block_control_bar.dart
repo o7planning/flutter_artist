@@ -304,32 +304,32 @@ class _BlockControlBarState extends _WidgetState<BlockControlBar> {
     return const SizedBox(width: 5);
   }
 
-  void _back(BuildContext context) {
-    Navigator.of(context).maybePop();
+  Future<void> _back(BuildContext context) async {
+    bool canPop = await Navigator.of(context).maybePop();
   }
 
-  void _saveForm(Block block) {
-    widget.block.blockForm?.saveForm();
+  Future<void> _saveForm(Block block) async {
+    await widget.block.blockForm?.saveForm();
   }
 
-  void _doDelete(Block block) {
-    widget.block.deleteCurrentItem();
+  Future<void> _doDelete(Block block) async {
+    await widget.block.deleteCurrentItem();
   }
 
-  void _prepareToCreate(Block block) {
-    widget.block.prepareToCreate(navigate: null);
+  Future<void> _prepareToCreate(Block block) async {
+    await widget.block.prepareToCreate(navigate: null);
   }
 
   void _resetForm(Block block) {
     widget.block.blockForm?.resetForm();
   }
 
-  void _refreshCurrentItem(Block block) {
-    widget.block.refreshCurrentItem();
+  Future<void> _refreshCurrentItem(Block block) async {
+    await widget.block.refreshCurrentItem();
   }
 
-  void _queryBlock(Block block) {
-    widget.block.query();
+  Future<void> _queryBlock(Block block) async {
+    await widget.block.query();
   }
 
   void _showFormDataInfo(BuildContext context, Block block) {
