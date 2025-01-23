@@ -62,6 +62,7 @@ class _BlockFormWidgetBuilderState
         context: context,
         message: "Do you want to save changes before closing?",
         details: "",
+        defaultOption: YesNoCancel.yes,
       );
       switch (selection) {
         case dialogs.YesNoCancel.yes:
