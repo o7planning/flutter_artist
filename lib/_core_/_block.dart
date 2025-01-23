@@ -708,7 +708,7 @@ abstract class Block<
 
   // Cascade query:
   // Private method (Only for use in this class)
-  Future<bool> __queryThisAndChildren({
+  Future<bool> _queryThisAndChildren({
     required _XBlock thisXBlock,
   }) async {
     __assertThisXBlock(thisXBlock);
@@ -716,7 +716,7 @@ abstract class Block<
     if (!thisXBlock.needQuery) {
       // Query child blocks:
       for (_XBlock childXBlock in thisXBlock.childXBlocks) {
-        bool success = await childXBlock.block.__queryThisAndChildren(
+        bool success = await childXBlock.block._queryThisAndChildren(
           thisXBlock: childXBlock,
         );
         if (!success) {
@@ -743,7 +743,7 @@ abstract class Block<
       //
       // May throw _TransactionError:
       //
-      _FilterCriteriaWrapper result = await dataFilter.__prepareData(
+      _FilterCriteriaWrapper result = await dataFilter._prepareData(
         filterInput: filterInput,
       );
       filterCriteria = result.filterCriteria as FILTER_CRITERIA;
@@ -1220,7 +1220,7 @@ abstract class Block<
           ?.findChildDirective(childXBlock.block.name);
       childXBlock.suggestedSelection = childSelectionDirective;
       //
-      bool success = await childXBlock.block.__queryThisAndChildren(
+      bool success = await childXBlock.block._queryThisAndChildren(
         thisXBlock: childXBlock,
       );
       if (!success) {
@@ -1663,7 +1663,7 @@ abstract class Block<
             methodName = "query";
             thisXBlock.needQuery = true;
             //
-            success = await __queryThisAndChildren(
+            success = await _queryThisAndChildren(
               thisXBlock: thisXBlock,
             );
         }
@@ -1972,7 +1972,7 @@ abstract class Block<
       },
     );
     //
-    bool success = await _prepareToShowOrEditWithOverlayAndRestorable(
+    bool success = await __prepareToShowOrEditWithOverlayAndRestorable(
       item: item,
       justQueried: false,
       suggestedSelection: null,
@@ -1999,7 +1999,7 @@ abstract class Block<
       },
     );
     //
-    bool success = await _prepareToShowOrEditWithOverlayAndRestorable(
+    bool success = await __prepareToShowOrEditWithOverlayAndRestorable(
       item: item,
       justQueried: false,
       suggestedSelection: null,
@@ -2012,7 +2012,7 @@ abstract class Block<
     return false;
   }
 
-  Future<bool> _prepareToShowOrEditWithOverlayAndRestorable({
+  Future<bool> __prepareToShowOrEditWithOverlayAndRestorable({
     required SuggestedSelection? suggestedSelection,
     required ITEM item,
     required bool forceForm,
@@ -2020,7 +2020,7 @@ abstract class Block<
   }) async {
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
-        return await _prepareToShowOrEditWithRestorable(
+        return await __prepareToShowOrEditWithRestorable(
           suggestedSelection: suggestedSelection,
           item: item,
           forceForm: forceForm,
@@ -2030,7 +2030,7 @@ abstract class Block<
     );
   }
 
-  Future<bool> _prepareToShowOrEditWithRestorable({
+  Future<bool> __prepareToShowOrEditWithRestorable({
     required SuggestedSelection? suggestedSelection,
     required ITEM item,
     required bool forceForm,
@@ -2682,7 +2682,7 @@ abstract class Block<
     if (!canRefreshCurrentItem()) {
       return false;
     }
-    bool success = await _prepareToShowOrEditWithOverlayAndRestorable(
+    bool success = await __prepareToShowOrEditWithOverlayAndRestorable(
       item: data.currentItem!,
       justQueried: false,
       suggestedSelection: null,
@@ -2908,6 +2908,13 @@ abstract class Block<
   // ***************************************************************************
 
   ///
+  /// Allows reset the Form or not according to the application logic.
+  ///
+  bool isAllowResetForm() {
+    return true;
+  }
+
+  ///
   /// Allows querying the block or not according to the application logic.
   ///
   bool isAllowQuery() {
@@ -2955,6 +2962,13 @@ abstract class Block<
       );
       return false;
     }
+  }
+
+  ///
+  /// Allows edit current item or not according to the application logic.
+  ///
+  bool __isAllowResetForm() {
+    return isAllowResetForm();
   }
 
   ///
@@ -3159,7 +3173,28 @@ abstract class Block<
     return checkAllow ? _isAllowCreate() : true;
   }
 
-  bool __canSave({required bool checkAllow}) {
+  bool __canResetForm({required bool checkAllow}) {
+    if (blockForm == null || !blockForm!.isDirty() || this.__isSaving) {
+      return false;
+    }
+    switch (blockForm!.data._formMode) {
+      case FormMode.none:
+        return false;
+      case FormMode.creation:
+        break; // Do nothing.
+      case FormMode.edit:
+        break; // Do nothing.
+    }
+    //
+    bool allowReset = checkAllow ? __isAllowResetForm() : true;
+    //
+    if (allowReset) {
+      return true;
+    }
+    return false;
+  }
+
+  bool __canSaveForm({required bool checkAllow}) {
     if (blockForm == null || this.__isSaving) {
       return false;
     }
@@ -3251,8 +3286,12 @@ abstract class Block<
     return __canCreateItem(checkAllow: true);
   }
 
-  bool canSave() {
-    return __canSave(checkAllow: true);
+  bool canResetForm() {
+    return __canResetForm(checkAllow: true);
+  }
+
+  bool canSaveForm() {
+    return __canSaveForm(checkAllow: true);
   }
 
   bool canDeleteCurrentItem() {

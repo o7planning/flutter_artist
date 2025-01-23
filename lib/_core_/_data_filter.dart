@@ -78,7 +78,7 @@ abstract class DataFilter<
     FILTER_INPUT? filterInput,
   });
 
-  Future<_FilterCriteriaWrapper<FILTER_CRITERIA>> __prepareData({
+  Future<_FilterCriteriaWrapper<FILTER_CRITERIA>> _prepareData({
     required FILTER_INPUT? filterInput,
   }) async {
     __currentTryingCriteriaId + 1;

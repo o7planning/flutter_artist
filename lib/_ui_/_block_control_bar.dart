@@ -201,7 +201,7 @@ class _BlockControlBarState extends _WidgetState<BlockControlBar> {
             onPressed:
                 widget.showRefreshButton && widget.block.canRefreshCurrentItem()
                     ? () {
-                        _refreshForm(widget.block);
+                        _refreshCurrentItem(widget.block);
                       }
                     : null,
           ),
@@ -234,7 +234,7 @@ class _BlockControlBarState extends _WidgetState<BlockControlBar> {
             tooltip: "Save",
             iconData: _formSaveIconData,
             onAction: widget.block.__isSaving,
-            onPressed: widget.showSaveButton && widget.block.canSave()
+            onPressed: widget.showSaveButton && widget.block.canSaveForm()
                 ? () {
                     _saveForm(widget.block);
                   }
@@ -245,9 +245,7 @@ class _BlockControlBarState extends _WidgetState<BlockControlBar> {
             tooltip: "Reset",
             iconData: _formCleanIconData,
             onAction: false,
-            onPressed: widget.showSaveButton &&
-                    widget.block.blockForm != null &&
-                    widget.block.blockForm!.isDirty()
+            onPressed: widget.showSaveButton && widget.block.canResetForm()
                 ? () {
                     _resetForm(widget.block);
                   }
@@ -321,7 +319,7 @@ class _BlockControlBarState extends _WidgetState<BlockControlBar> {
     widget.block.blockForm?.resetForm();
   }
 
-  void _refreshForm(Block block) {
+  void _refreshCurrentItem(Block block) {
     widget.block.refreshCurrentItem();
   }
 

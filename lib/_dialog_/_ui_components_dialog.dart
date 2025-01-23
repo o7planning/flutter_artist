@@ -67,13 +67,10 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
 
   @override
   Widget build(BuildContext context) {
-    AlertDialog alert = CustomAlertDialog(
+    CustomAlertDialog alert = CustomAlertDialog(
       titleText: _title(),
       contentPadding: const EdgeInsets.all(5),
       content: _buildMainContent(context),
-      closeDialog: () {
-        Navigator.of(context).pop();
-      },
     );
     return alert;
   }

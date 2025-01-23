@@ -27,7 +27,7 @@ class _FormDataInfoDialogState extends State<_FormDataInfoDialog> {
     Size size = _calculateDebugDialogSize(context);
 
     // Set up the AlertDialog
-    AlertDialog alert = CustomAlertDialog(
+    CustomAlertDialog alert = CustomAlertDialog(
       titleText: showFormData
           ? "${getClassName(widget.blockForm)} - Form Data"
           : "${getClassName(widget.blockForm.block.shelf)} - Structure",
@@ -37,9 +37,6 @@ class _FormDataInfoDialogState extends State<_FormDataInfoDialog> {
         size.width,
         size.height,
       ),
-      closeDialog: () {
-        Navigator.of(context).pop();
-      },
       clipBehavior: Clip.hardEdge,
     );
     return alert;

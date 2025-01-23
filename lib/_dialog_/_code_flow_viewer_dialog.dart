@@ -31,13 +31,10 @@ class _CodeFlowViewerDialogState extends State<_CodeFlowViewerDialog> {
       child: _buildMainWidget(),
     );
 
-    AlertDialog alert = CustomAlertDialog(
+    CustomAlertDialog alert = CustomAlertDialog(
       titleText: "Code Flow Viewer",
       content: contentWidget,
       contentPadding: EdgeInsets.zero,
-      closeDialog: () {
-        Navigator.of(context).pop();
-      },
     );
     return alert;
   }

@@ -690,7 +690,7 @@ abstract class Shelf extends _XBase {
         final FilterCriteria filterCriteria;
         if (!xDataFilter.queried) {
           // May throw _TransactionError:
-          _FilterCriteriaWrapper result = await dataFilter.__prepareData(
+          _FilterCriteriaWrapper result = await dataFilter._prepareData(
             filterInput: xDataFilter.filterInput,
           );
           filterCriteria = result.filterCriteria;
@@ -709,7 +709,7 @@ abstract class Shelf extends _XBase {
       }
       //
       for (_XBlock xBlock in xShelf.allRootXBlocks) {
-        bool success = await xBlock.block.__queryThisAndChildren(
+        bool success = await xBlock.block._queryThisAndChildren(
           thisXBlock: xBlock,
         );
         //

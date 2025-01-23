@@ -56,25 +56,50 @@ class _BlockFormWidgetBuilderState
     widget.blockForm._formKey = formKey;
   }
 
+  Future<void> _onPopInvokedWithResult(bool canPop, dynamic result) async {
+    if (!canPop) {
+      bool confirm = await showConfirmDialog(
+        context: context,
+        message: "Do you want to save changes before closing?",
+        details: "",
+      );
+      if (confirm) {
+        bool success = await widget.blockForm.saveForm();
+        if (!success) {
+          return;
+        }
+        if (mounted) {
+          Navigator.of(context).pop();
+        }
+        return;
+      }
+    }
+    print("onPopInvokedWithResult: value: $canPop, result: $result");
+  }
+
   @override
   Widget buildContent(BuildContext context) {
     __executeAfterBuild();
     //
-    return FormBuilder(
-      key: formKey,
-      initialValue: widget.blockForm.initFormValue(),
-      onChanged: () {
-        widget.blockForm._onChangeFromFormWidget();
-        if (mounted) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            widget.blockForm.block.updateControlBarWidgets();
-            widget.blockForm.updateAllUIComponents();
-          });
-        }
-      },
-      child: AbsorbPointer(
-        absorbing: !widget.blockForm.isEnabled(),
-        child: widget.build(),
+    return PopScope(
+      canPop: !widget.blockForm.isDirty(),
+      onPopInvokedWithResult: _onPopInvokedWithResult,
+      child: FormBuilder(
+        key: formKey,
+        initialValue: widget.blockForm.initFormValue(),
+        onChanged: () {
+          widget.blockForm._onChangeFromFormWidget();
+          if (mounted) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              widget.blockForm.block.updateControlBarWidgets();
+              widget.blockForm.updateAllUIComponents();
+            });
+          }
+        },
+        child: AbsorbPointer(
+          absorbing: !widget.blockForm.isEnabled(),
+          child: widget.build(),
+        ),
       ),
     );
   }

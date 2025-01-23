@@ -16,13 +16,10 @@ class _LocationInfoDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Set up the AlertDialog
-    AlertDialog alert = CustomAlertDialog(
+    CustomAlertDialog alert = CustomAlertDialog(
       titleText: title,
       contentPadding: const EdgeInsets.all(5),
       content: _buildMainContent(context),
-      closeDialog: () {
-        Navigator.of(context).pop();
-      },
       actions: [
         ElevatedButton(
           child: const Text(

@@ -62,7 +62,7 @@ class _BlockControlButtonState extends _WidgetState<BlockControl> {
         bool canQuery = widget.block.canQuery();
         return canQuery ? __queryBlock : null;
       case BlockControlType.save:
-        bool canSave = widget.block.canSave();
+        bool canSave = widget.block.canSaveForm();
         return canSave ? __saveForm : null;
     }
   }

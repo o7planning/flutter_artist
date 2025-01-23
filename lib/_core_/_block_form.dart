@@ -111,9 +111,10 @@ abstract class BlockForm<
     }
     _formKey.currentState?.patchValue(initData);
     //
-    updateAllUIComponents();
-    block.updateControlBarWidgets();
-    block.updateControlWidgets();
+    // updateAllUIComponents();
+    // block.updateControlBarWidgets();
+    // block.updateControlWidgets();
+    shelf.updateAllUIComponents();
   }
 
   // TODO: Change name!
