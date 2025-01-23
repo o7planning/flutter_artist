@@ -93,24 +93,42 @@ class _BlockFormWidgetBuilderState
   Widget buildContent(BuildContext context) {
     __executeAfterBuild();
     //
-    return PopScope(
-      canPop: !widget.blockForm.isDirty(),
-      onPopInvokedWithResult: _onPopInvokedWithResult,
-      child: FormBuilder(
-        key: formKey,
-        initialValue: widget.blockForm.initFormValue(),
-        onChanged: () {
-          widget.blockForm._onChangeFromFormWidget();
-          if (mounted) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              widget.blockForm.shelf.updateAllUIComponents();
-            });
-          }
-        },
-        child: AbsorbPointer(
-          absorbing: !widget.blockForm.isEnabled(),
-          child: widget.build(),
-        ),
+    // return PopScope(
+    //   // TODO: In Error, check again late.
+    //   canPop: !widget.blockForm.isDirty(),
+    //   onPopInvokedWithResult: _onPopInvokedWithResult,
+    //   child: FormBuilder(
+    //     key: formKey,
+    //     initialValue: widget.blockForm.initFormValue(),
+    //     onChanged: () {
+    //       widget.blockForm._onChangeFromFormWidget();
+    //       if (mounted) {
+    //         WidgetsBinding.instance.addPostFrameCallback((_) {
+    //           widget.blockForm.shelf.updateAllUIComponents();
+    //         });
+    //       }
+    //     },
+    //     child: AbsorbPointer(
+    //       absorbing: !widget.blockForm.isEnabled(),
+    //       child: widget.build(),
+    //     ),
+    //   ),
+    // );
+    //
+    return FormBuilder(
+      key: formKey,
+      initialValue: widget.blockForm.initFormValue(),
+      onChanged: () {
+        widget.blockForm._onChangeFromFormWidget();
+        if (mounted) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            widget.blockForm.shelf.updateAllUIComponents();
+          });
+        }
+      },
+      child: AbsorbPointer(
+        absorbing: !widget.blockForm.isEnabled(),
+        child: widget.build(),
       ),
     );
   }

@@ -111,9 +111,6 @@ abstract class BlockForm<
     }
     _formKey.currentState?.patchValue(initData);
     //
-    // updateAllUIComponents();
-    // block.updateControlBarWidgets();
-    // block.updateControlWidgets();
     shelf.updateAllUIComponents();
   }
 
@@ -179,6 +176,7 @@ abstract class BlockForm<
   });
 
   // TODO: Co ca trong Block.
+  @override
   void showErrorSnackBar({
     required String message,
     required List<String>? errorDetails,
