@@ -10,7 +10,7 @@ part of '../flutter_artist.dart';
 ///     String name;
 /// }
 /// ```
-/// [D]: Item Detail. For example:
+/// [ITEM_DETAIL]: Item Detail. For example:
 /// ```dart
 ///  class EmployeeData  {
 ///     int id;
@@ -51,6 +51,20 @@ abstract class SingleItemBlock<
     return result.toPageDataResult();
   }
 
+  ///
+  /// The query return zero or single Item. For Example:
+  ///
+  /// ```dart
+  /// Future<ApiResult<DepartmentData>> callApiQuerySingleItem({
+  ///     required DepartmentIdCriteria filterCriteria,
+  /// }) {
+  ///    if(filterCriteria.id == null) {
+  ///       return ApiResult<DepartmentData>.data(null);
+  ///    }
+  ///    return departmentApi.findDepartment(filterCriteria.id!);
+  /// }
+  /// ```
+  ///
   Future<ApiResult<ITEM_DETAIL>> callApiQuerySingleItem({
     required FILTER_CRITERIA filterCriteria,
   });
