@@ -45,13 +45,13 @@ abstract class SingleItemBlock<
     required FILTER_CRITERIA filterCriteria,
     required PageableData? pageable,
   }) async {
-    ApiResult<ITEM_DETAIL>? result = await callApiSingleItemQuery(
+    ApiResult<ITEM_DETAIL>? result = await callApiQuerySingleItem(
       filterCriteria: filterCriteria,
     );
     return result.toPageDataResult();
   }
 
-  Future<ApiResult<ITEM_DETAIL>> callApiSingleItemQuery({
+  Future<ApiResult<ITEM_DETAIL>> callApiQuerySingleItem({
     required FILTER_CRITERIA filterCriteria,
   });
 }
