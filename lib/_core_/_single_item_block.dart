@@ -22,12 +22,11 @@ part of '../flutter_artist.dart';
 ///
 abstract class SingleItemBlock<
         ID extends Object,
-        ITEM extends Object,
         ITEM_DETAIL extends Object,
         FILTER_INPUT extends FilterInput,
         FILTER_CRITERIA extends FilterCriteria,
         EXTRA_INPUT extends ExtraInput>
-    extends Block<ID, ITEM, ITEM_DETAIL, FILTER_INPUT, FILTER_CRITERIA,
+    extends Block<ID, ITEM_DETAIL, ITEM_DETAIL, FILTER_INPUT, FILTER_CRITERIA,
         EXTRA_INPUT> {
   SingleItemBlock({
     required super.name,
@@ -42,17 +41,17 @@ abstract class SingleItemBlock<
 
   @override
   @nonVirtual
-  Future<ApiResult<PageData<ITEM>?>> callApiQuery({
+  Future<ApiResult<PageData<ITEM_DETAIL>?>> callApiQuery({
     required FILTER_CRITERIA filterCriteria,
     required PageableData? pageable,
   }) async {
-    ApiResult<ITEM>? result = await callApiSingleItemQuery(
+    ApiResult<ITEM_DETAIL>? result = await callApiSingleItemQuery(
       filterCriteria: filterCriteria,
     );
     return result.toPageDataResult();
   }
 
-  Future<ApiResult<ITEM>> callApiSingleItemQuery({
+  Future<ApiResult<ITEM_DETAIL>> callApiSingleItemQuery({
     required FILTER_CRITERIA filterCriteria,
   });
 }
