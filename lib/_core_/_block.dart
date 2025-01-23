@@ -521,7 +521,7 @@ abstract class Block<
     return false;
   }
 
-  void _executeRoute({Function()? navigate}) {
+  void _executeNavigation({Function()? navigate}) {
     try {
       if (navigate != null) {
         printLog("  ~~~~~~~~~~~~~~~~~~> navigate");
@@ -561,7 +561,7 @@ abstract class Block<
     );
     //
     if (success) {
-      _executeRoute(navigate: navigate);
+      _executeNavigation(navigate: navigate);
     }
     return success;
   }
@@ -609,7 +609,7 @@ abstract class Block<
     );
     //
     if (success) {
-      _executeRoute(navigate: navigate);
+      _executeNavigation(navigate: navigate);
     }
     return success;
   }
@@ -660,7 +660,7 @@ abstract class Block<
     //
     printLog("Success: $success");
     if (success) {
-      _executeRoute(navigate: navigate);
+      _executeNavigation(navigate: navigate);
     }
     return success;
   }
@@ -701,7 +701,7 @@ abstract class Block<
     );
     //
     if (success) {
-      _executeRoute(navigate: navigate);
+      _executeNavigation(navigate: navigate);
     }
     return success;
   }
@@ -1979,7 +1979,7 @@ abstract class Block<
       forceForm: true,
     );
     if (success) {
-      _executeRoute(navigate: navigate);
+      _executeNavigation(navigate: navigate);
       return true;
     }
     return false;
@@ -2006,7 +2006,7 @@ abstract class Block<
       forceForm: false,
     );
     if (success) {
-      _executeRoute(navigate: navigate);
+      _executeNavigation(navigate: navigate);
       return true;
     }
     return false;
@@ -2227,7 +2227,7 @@ abstract class Block<
     );
     //
     if (success) {
-      _executeRoute(navigate: navigate);
+      _executeNavigation(navigate: navigate);
     }
     return success;
   }
