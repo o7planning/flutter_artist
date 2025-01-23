@@ -13,7 +13,7 @@ class BlockFormData<
   final BlockForm<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA, EXTRA_INPUT>
       blockForm;
 
-  bool _justInited = false;
+  bool _justInitialized = false;
 
   final Map<String, dynamic> __initial0FormData = {};
 
@@ -71,7 +71,7 @@ class BlockFormData<
   }
 
   void _updateFormData(Map<String, dynamic> formData) {
-    _justInited = true;
+    _justInitialized = true;
     //
     __initial0FormData
       ..clear()

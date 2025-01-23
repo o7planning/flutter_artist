@@ -93,6 +93,23 @@ class _BlockFormWidgetBuilderState
   Widget buildContent(BuildContext context) {
     __executeAfterBuild();
     //
+    return FormBuilder(
+      key: formKey,
+      initialValue: widget.blockForm.initFormValue(),
+      onChanged: () {
+        widget.blockForm._onChangeFromFormWidget();
+        if (mounted) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            widget.blockForm.shelf.updateAllUIComponents();
+          });
+        }
+      },
+      child: AbsorbPointer(
+        absorbing: !widget.blockForm.isEnabled(),
+        child: widget.build(),
+      ),
+    );
+    //
     // return PopScope(
     //   // TODO: In Error, check again late.
     //   canPop: !widget.blockForm.isDirty(),
@@ -115,26 +132,12 @@ class _BlockFormWidgetBuilderState
     //   ),
     // );
     //
-    return FormBuilder(
-      key: formKey,
-      initialValue: widget.blockForm.initFormValue(),
-      onChanged: () {
-        widget.blockForm._onChangeFromFormWidget();
-        if (mounted) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            widget.blockForm.shelf.updateAllUIComponents();
-          });
-        }
-      },
-      child: AbsorbPointer(
-        absorbing: !widget.blockForm.isEnabled(),
-        child: widget.build(),
-      ),
-    );
   }
 
   Future<void> __executeAfterBuild() async {
+    // IMPORTANT: Do not remove below line:
     await Future.delayed(Duration.zero);
+    //
     widget.blockForm._afterBuildFormWidget();
   }
 }

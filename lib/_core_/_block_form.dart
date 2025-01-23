@@ -124,14 +124,14 @@ abstract class BlockForm<
   void _onChangeFromFormWidget() {
     if (_formKey.currentState?.instantValue != null) {
       data._currentFormData.addAll(_formKey.currentState!.instantValue);
-      if (data._justInited) {
+      if (data._justInitialized) {
         data._initialFormData.addAll(_formKey.currentState!.instantValue);
       }
     }
   }
 
   void _afterBuildFormWidget() {
-    data._justInited = false;
+    data._justInitialized = false;
   }
 
   dynamic getFormInstantValue(String propertyName) {
