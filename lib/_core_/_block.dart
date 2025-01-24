@@ -116,7 +116,7 @@ abstract class Block<
     return "${shelf.name} > $name";
   }
 
-  String get id  {
+  String get id {
     return "block > ${shelf.name} > $name";
   }
 
