@@ -250,6 +250,11 @@ abstract class Scalar<
     return true;
   }
 
+  bool hasMountedUIComponent() {
+    return _scalarFragmentWidgetStates.isNotEmpty ||
+        _scalarControlWidgetStates.isNotEmpty;
+  }
+
   bool hasActiveUIComponent() {
     return _hasActiveScalarFragmentWidgetState() ||
         _hasActiveControlWidgetState();

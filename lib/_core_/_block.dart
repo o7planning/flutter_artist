@@ -437,6 +437,15 @@ abstract class Block<
     return ret;
   }
 
+  bool hasMountedUIComponent() {
+    return (dataFilter?.hasMountedUIComponent() ?? false) ||
+        _blockFragmentWidgetStates.isNotEmpty ||
+        _controlBarWidgetStates.isNotEmpty ||
+        _controlWidgetStates.isNotEmpty ||
+        _paginationWidgetStates.isNotEmpty ||
+        (blockForm?.hasMountedUIComponent() ?? false);
+  }
+
   bool hasActiveUIComponent() {
     bool active = false;
     // Filter

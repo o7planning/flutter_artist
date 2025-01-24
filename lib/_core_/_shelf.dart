@@ -585,6 +585,48 @@ abstract class Shelf extends _XBase {
   }
 
   // ***************************************************************************
+  // ********** ACTIVE/MOUNTED COMPONENT ***************************************
+  // ***************************************************************************
+
+  bool _hasMountedScalarUIComponent() {
+    for (Scalar scalar in scalars) {
+      if (scalar.hasMountedUIComponent()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool _hasMountedBlockUIComponentCascade(List<Block> blocks) {
+    for (Block block in blocks) {
+      if (block.hasMountedUIComponent()) {
+        return true;
+      }
+      bool hasMounted = _hasMountedBlockUIComponentCascade(block._childBlocks);
+      if (hasMounted) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool hasMountedUIComponent() {
+    bool hasMounted = _shelfWidgetStates.isNotEmpty;
+    if (hasMounted) {
+      return true;
+    }
+    hasMounted = _hasMountedBlockUIComponentCascade(__rootBlocks);
+    if (hasMounted) {
+      return true;
+    }
+    hasMounted = _hasMountedScalarUIComponent();
+    if (hasMounted) {
+      return true;
+    }
+    return false;
+  }
+
+  // ***************************************************************************
   // ********** BACKUP & RESTORE & APPLY ***************************************
   // ***************************************************************************
 

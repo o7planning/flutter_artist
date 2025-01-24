@@ -179,6 +179,10 @@ abstract class DataFilter<
   // *** UI COMPONENTS ***
   // ***************************************************************************
 
+  bool hasMountedUIComponent() {
+    return _filterFragmentWidgetStates.isNotEmpty;
+  }
+
   bool hasActiveUIComponent() {
     for (State widgetState in _filterFragmentWidgetStates.keys) {
       bool isShowing = _filterFragmentWidgetStates[widgetState] ?? false;

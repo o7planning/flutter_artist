@@ -54,16 +54,14 @@ abstract class _WidgetState<W extends _StatefulWidget> extends State<W> {
     super.initState();
     //
     keyId = _generateVisibilityDetectorId(
-        prefix:
-            "${type.toString()}-${getClassName(widget)}"); // widget= widget.block
+        prefix: "${type.toString()}-${getWidgetOwnerClassName()}");
+    //
     addFilterFragmentWidgetState(isShowing: true);
   }
 
   @override
   void dispose() {
     super.dispose();
-    //
-    print("@@@@@@@@@@@ >>>>>>>>>>>>>> DISPOSE: ${getClassName(widget)}");
     //
     removeFilterFragmentWidgetState();
     //

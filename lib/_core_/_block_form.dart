@@ -87,6 +87,10 @@ abstract class BlockForm<
     return ret;
   }
 
+  bool hasMountedUIComponent() {
+    return _formWidgetStates.isNotEmpty;
+  }
+
   bool hasActiveUIComponent() {
     for (State formWidgetState in _formWidgetStates.keys) {
       bool visible = _formWidgetStates[formWidgetState] ?? false;
