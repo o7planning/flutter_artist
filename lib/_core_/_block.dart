@@ -116,6 +116,10 @@ abstract class Block<
     return "${shelf.name} > $name";
   }
 
+  String get id  {
+    return "block > ${shelf.name} > $name";
+  }
+
   String get _classDefinition {
     return "${getClassName(this)}$_classParametersDefinition";
   }

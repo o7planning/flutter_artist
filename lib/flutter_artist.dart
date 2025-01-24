@@ -24,6 +24,7 @@ import 'package:tabbed_view/tabbed_view.dart';
 import 'package:uuid/uuid.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
+part '_core_/_block_form_leave_safely.dart';
 part '_adapter_/_flutter_artist_adapter.dart';
 part '_adapter_/_logged_in_user_adapter.dart';
 part '_adapter_/_notification_adapter.dart';

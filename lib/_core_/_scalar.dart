@@ -36,6 +36,10 @@ abstract class Scalar<
     return "${shelf.name} >> $name";
   }
 
+  String get id {
+    return "scalar > ${shelf.name} > $name";
+  }
+
   String get _classDefinition {
     return "${getClassName(this)}$_classParametersDefinition";
   }

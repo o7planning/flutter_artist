@@ -10,6 +10,10 @@ abstract class BlockForm<
 
   late QueryMode _tempQueryMode = _queryMode;
 
+  String get id {
+    return "block-form > ${shelf.name} > ${block.name}";
+  }
+
   late final BlockFormData data = BlockFormData(blockForm: this);
 
   Shelf get shelf => block.shelf;

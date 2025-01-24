@@ -8,6 +8,10 @@ abstract class DataFilter<
 
   late final String name;
 
+  String get id {
+    return "data-filter > ${shelf.name} > $name";
+  }
+
   final List<Block> _blocks = [];
 
   List<Block> get blocks => [..._blocks];

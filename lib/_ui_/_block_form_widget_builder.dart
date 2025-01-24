@@ -56,39 +56,41 @@ class _BlockFormWidgetBuilderState
     widget.blockForm._formKey = formKey;
   }
 
-Future<void> _onPopInvokedWithResult(bool didPop, dynamic result) async {
-  if (didPop || !widget.blockForm.isDirty()) {
-    return;
+  Future<void> _onPopInvokedWithResult(bool didPop, dynamic result) async {
+    if (didPop || !widget.blockForm.isDirty()) {
+      return;
+    }
+    _leavingDirtyForms[widget.blockForm.id] = widget.blockForm;
+    //
+    dialogs.YesNoCancel selection = await dialogs.showYesNoCancelDialog(
+      context: context,
+      message:
+          "Do you want to save changes the [${getClassName(widget.blockForm)}] before closing?",
+      details: "",
+      defaultOption: YesNoCancel.yes,
+    );
+    _leavingDirtyForms.remove(widget.blockForm.id);
+    switch (selection) {
+      case dialogs.YesNoCancel.yes:
+        bool success = await widget.blockForm.saveForm();
+        if (!success) {
+          return;
+        }
+        if (mounted && _leavingDirtyForms.isEmpty) {
+          Navigator.of(context).pop();
+        }
+        break;
+      case dialogs.YesNoCancel.no:
+        widget.blockForm.resetForm();
+        if (mounted && _leavingDirtyForms.isEmpty) {
+          Navigator.of(context).pop();
+        }
+        break;
+      case dialogs.YesNoCancel.cancel:
+        // Do Nothing
+        break;
+    }
   }
-  //
-  dialogs.YesNoCancel selection = await dialogs.showYesNoCancelDialog(
-    context: context,
-    message:
-        "Do you want to save changes the ${getClassName(widget.blockForm)} before closing?",
-    details: "",
-    defaultOption: YesNoCancel.yes,
-  );
-  switch (selection) {
-    case dialogs.YesNoCancel.yes:
-      bool success = await widget.blockForm.saveForm();
-      if (!success) {
-        return;
-      }
-      if (mounted) {
-        Navigator.of(context).pop();
-      }
-      break;
-    case dialogs.YesNoCancel.no:
-      widget.blockForm.resetForm();
-      if (mounted) {
-        Navigator.of(context).pop();
-      }
-      break;
-    case dialogs.YesNoCancel.cancel:
-      // Do Nothing
-      break;
-  }
-}
 
   @override
   Widget buildContent(BuildContext context) {
