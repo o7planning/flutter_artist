@@ -1392,7 +1392,7 @@ abstract class Block<
   }) async {
     ApiResult<ITEM_DETAIL> result;
     try {
-      result = await callApiQuickCreate(data: data);
+      result = await callApiQuickCreateItem(data: data);
       FlutterArtist.storage.fireSourceChanged(
         eventBlock: this,
         itemIdString: null,
@@ -1400,7 +1400,7 @@ abstract class Block<
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: 'callApiQuickCreate',
+        methodName: 'callApiQuickCreateItem',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -1412,7 +1412,7 @@ abstract class Block<
     try {
       return await _processSaveActionRestResult(
         thisXBlock: thisXBlock,
-        calledMethodName: "callApiQuickCreate",
+        calledMethodName: "callApiQuickCreateItem",
         result: result,
       );
     } catch (e, stackTrace) {
@@ -1504,7 +1504,7 @@ abstract class Block<
     //
     ApiResult<ITEM_DETAIL> result;
     try {
-      result = await callApiQuickUpdate(item: item, data: data);
+      result = await callApiQuickUpdateItem(item: item, data: data);
       FlutterArtist.storage.fireSourceChanged(
         eventBlock: this,
         itemIdString: null,
@@ -1512,7 +1512,7 @@ abstract class Block<
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: 'callApiQuickUpdate',
+        methodName: 'callApiQuickUpdateItem',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -1523,7 +1523,7 @@ abstract class Block<
     try {
       return await _processSaveActionRestResult(
         thisXBlock: thisXBlock,
-        calledMethodName: "callApiQuickUpdate",
+        calledMethodName: "callApiQuickUpdateItem",
         result: result,
       );
     } catch (e, stackTrace) {
@@ -1922,8 +1922,8 @@ abstract class Block<
   }
 
   ///
-  /// This method will call [callApiQuickUpdate] method.
-  /// So you need to implement [callApiQuickUpdate] method.
+  /// This method will call [callApiQuickUpdateItem] method.
+  /// So you need to implement [callApiQuickUpdateItem] method.
   ///
   Future<bool> executeQuickActionUpdate<A extends QuickActionData>({
     required ITEM item,
@@ -2599,7 +2599,7 @@ abstract class Block<
           isLibCode: false,
           navigate: null,
           ownerClassInstance: this,
-          methodName: "callApiDelete",
+          methodName: "callApiDeleteItem",
           parameters: {
             "item": item,
           },
@@ -2607,7 +2607,7 @@ abstract class Block<
         //
         __refreshDeletingState(isDeleting: true);
         //
-        result = await callApiDelete(item: item);
+        result = await callApiDeleteItem(item: item);
         FlutterArtist.storage.fireSourceChanged(
           eventBlock: this,
           itemIdString: null,
@@ -2619,7 +2619,7 @@ abstract class Block<
         //
         _handleError(
           shelf: shelf,
-          methodName: "callApiDelete",
+          methodName: "callApiDeleteItem",
           error: e,
           stackTrace: stackTrace,
           showSnackBar: true,
@@ -2630,7 +2630,7 @@ abstract class Block<
       if (result.errorMessage != null) {
         _handleRestError(
           shelf: shelf,
-          methodName: "callApiDelete",
+          methodName: "callApiDeleteItem",
           message: result.errorMessage!,
           errorDetails: result.errorDetails,
           showSnackBar: true,
@@ -2810,7 +2810,7 @@ abstract class Block<
   /// This method is called when you can [executeQuickActionUpdate] method.
   ///
   /// ```dart
-  /// Future<ApiResult<D>> callApiQuickUpdate({
+  /// Future<ApiResult<D>> callApiQuickUpdateItem({
   ///     required I item,
   ///     required QuickActionData data,
   /// }) {
@@ -2822,7 +2822,7 @@ abstract class Block<
   /// }
   /// ```
   ///
-  Future<ApiResult<ITEM_DETAIL>> callApiQuickUpdate({
+  Future<ApiResult<ITEM_DETAIL>> callApiQuickUpdateItem({
     required ITEM item,
     required QuickActionData data,
   }) async {
@@ -2832,7 +2832,7 @@ abstract class Block<
   ///
   /// This method is called when you can [executeQuickActionCreate] method.
   /// ```dart
-  /// Future<ApiResult<D>> callApiQuickCreate({
+  /// Future<ApiResult<D>> callApiQuickCreateItem({
   ///     required QuickActionData data,
   /// }) {
   ///     if(data is SomeAction1) {
@@ -2843,7 +2843,7 @@ abstract class Block<
   /// }
   /// ```
   ///
-  Future<ApiResult<ITEM_DETAIL>> callApiQuickCreate({
+  Future<ApiResult<ITEM_DETAIL>> callApiQuickCreateItem({
     required QuickActionData data,
   }) async {
     throw UnimplementedError("Override me!");
@@ -2862,7 +2862,7 @@ abstract class Block<
 
   // Developer do not call this method!
   // Call delete instead of
-  Future<ApiResult<void>> callApiDelete({required ITEM item});
+  Future<ApiResult<void>> callApiDeleteItem({required ITEM item});
 
   Future<ApiResult<ITEM_DETAIL>> callApiRefreshItem({required ITEM item});
 

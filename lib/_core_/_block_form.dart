@@ -151,11 +151,11 @@ abstract class BlockForm<
     this.updateAllUIComponents();
   }
 
-  Future<ApiResult<ITEM_DETAIL>> callApiCreate({
+  Future<ApiResult<ITEM_DETAIL>> callApiCreateItem({
     required Map<String, dynamic> formMapData,
   });
 
-  Future<ApiResult<ITEM_DETAIL>> callApiUpdate({
+  Future<ApiResult<ITEM_DETAIL>> callApiUpdateItem({
     required Map<String, dynamic> formMapData,
   });
 
@@ -279,7 +279,8 @@ abstract class BlockForm<
   }) async {
     Map<String, dynamic> formMapData = data.currentFormData;
     //
-    String calledMethodName = data.isNew ? 'callApiCreate' : 'callApiUpdate';
+    String calledMethodName =
+        data.isNew ? 'callApiCreateItem' : 'callApiUpdateItem';
     //
     ApiResult<ITEM_DETAIL> result;
     try {
@@ -296,8 +297,8 @@ abstract class BlockForm<
       block._refreshSavingState(isSaving: true);
       //
       result = data.isNew
-          ? await callApiCreate(formMapData: formMapData)
-          : await callApiUpdate(formMapData: formMapData);
+          ? await callApiCreateItem(formMapData: formMapData)
+          : await callApiUpdateItem(formMapData: formMapData);
       //
       block._refreshSavingState(isSaving: false);
     } catch (e, stackTrace) {

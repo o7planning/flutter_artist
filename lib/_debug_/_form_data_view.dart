@@ -138,8 +138,8 @@ class _FormDataViewState extends State<_FormDataView> {
         ),
         content: _buildTabContent(
           info: "The current values of the form (Will be passed to the "
-              "${getClassName(widget.blockForm)}.callApiCreate() "
-              "or ${getClassName(widget.blockForm)}.callApiUpdate() method).",
+              "${getClassName(widget.blockForm)}.callApiCreateItem() "
+              "or ${getClassName(widget.blockForm)}.callApiUpdateItem() method).",
           json: instantJson,
         ),
       ),
