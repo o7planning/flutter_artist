@@ -13,11 +13,12 @@ Future<bool> executeQuickActionUpdateItem<A extends QuickActionData>({
 
 // -------------------------------------------------------------------------------------------------
 
-Future<bool> executeQuickAction({
+Future<bool> executeQuickAction<A extends QuickActionData>({
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
-    required ActionConfirmation? actionConfirmation,
-    required QuickActionData actionData,
+    required ActionConfirmationType actionConfirmationType,
+    required CustomConfirmation<A>? customConfirmation,
+    required A actionData,
     required AfterQuickAction? afterQuickAction,
     required Function(BuildContext context)? navigate,
 })
