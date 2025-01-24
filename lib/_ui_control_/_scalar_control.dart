@@ -5,7 +5,7 @@ abstract class ScalarControl extends _StatefulWidget {
   final StackTrace? currentStackTrace;
   final Widget Function(VoidCallback? onPressed) build;
   final VoidCallback? navigate;
-  final ScalarControlType type;
+  final ScalarControlActionType actionType;
 
   const ScalarControl({
     super.key,
@@ -14,7 +14,7 @@ abstract class ScalarControl extends _StatefulWidget {
     super.description,
     required this.scalar,
     required this.build,
-    required this.type,
+    required this.actionType,
     required this.navigate,
   });
 
@@ -31,7 +31,7 @@ class _ControlButtonState extends _WidgetState<ScalarControl> {
   }
 
   @override
-  WidgetStateType get type => WidgetStateType.customControlBar;
+  WidgetStateType get type => WidgetStateType.scalarControlButton;
 
   @override
   Widget buildContent(BuildContext context) {
@@ -52,8 +52,8 @@ class _ControlButtonState extends _WidgetState<ScalarControl> {
   }
 
   ControlPressedAsyncFunction? _getOnPressedFunction() {
-    switch (widget.type) {
-      case ScalarControlType.query:
+    switch (widget.actionType) {
+      case ScalarControlActionType.query:
         bool canQuery = widget.scalar.canQuery();
         return canQuery ? __queryScalar : null;
     }

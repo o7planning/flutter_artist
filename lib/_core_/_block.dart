@@ -3336,6 +3336,13 @@ abstract class Block<
     return __canRefreshCurrentItem();
   }
 
+  bool canShowFormInfo() {
+    ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
+    return loggedInUser != null &&
+        loggedInUser.isSystemUser &&
+        blockForm != null;
+  }
+
   bool __canQuery({required bool checkAllow}) {
     if (__isQuerying) {
       return false;

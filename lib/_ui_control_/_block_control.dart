@@ -7,7 +7,7 @@ abstract class BlockControl extends _StatefulWidget {
   final StackTrace? currentStackTrace;
   final Widget Function(VoidCallback? onPressed) build;
   final VoidCallback? navigate;
-  final BlockControlType type;
+  final BlockControlActionType actionType;
 
   const BlockControl({
     super.key,
@@ -16,7 +16,7 @@ abstract class BlockControl extends _StatefulWidget {
     super.description,
     required this.block,
     required this.build,
-    required this.type,
+    required this.actionType,
     required this.navigate,
   });
 
@@ -33,7 +33,7 @@ class _BlockControlButtonState extends _WidgetState<BlockControl> {
   }
 
   @override
-  WidgetStateType get type => WidgetStateType.customControlBar;
+  WidgetStateType get type => WidgetStateType.blockControlButton;
 
   @override
   Widget buildContent(BuildContext context) {
@@ -54,16 +54,28 @@ class _BlockControlButtonState extends _WidgetState<BlockControl> {
   }
 
   ControlPressedAsyncFunction? _getOnPressedFunction() {
-    switch (widget.type) {
-      case BlockControlType.create:
+    switch (widget.actionType) {
+      case BlockControlActionType.createItem:
         bool canCreate = widget.block.canCreateItem();
         return canCreate ? __prepareToCreate : null;
-      case BlockControlType.query:
+      case BlockControlActionType.query:
         bool canQuery = widget.block.canQuery();
         return canQuery ? __queryBlock : null;
-      case BlockControlType.save:
-        bool canSave = widget.block.canSaveForm();
-        return canSave ? __saveForm : null;
+      case BlockControlActionType.saveForm:
+        bool canSaveForm = widget.block.canSaveForm();
+        return canSaveForm ? __saveForm : null;
+      case BlockControlActionType.refreshCurrentItem:
+        bool canRefreshCurrentItem = widget.block.canRefreshCurrentItem();
+        return canRefreshCurrentItem ? __refreshCurrentItem : null;
+      case BlockControlActionType.resetForm:
+        bool canResetForm = widget.block.canResetForm();
+        return canResetForm ? __resetForm : null;
+      case BlockControlActionType.deleteCurrentItem:
+        bool canDeleteCurrentItem = widget.block.canDeleteCurrentItem();
+        return canDeleteCurrentItem ? __deleteCurrentItem : null;
+      case BlockControlActionType.showFormInfo:
+        bool canShowFormInfo = widget.block.canShowFormInfo();
+        return canShowFormInfo ? __showFormInfo : null;
     }
   }
 
@@ -84,7 +96,7 @@ class _BlockControlButtonState extends _WidgetState<BlockControl> {
     return await widget.block.blockForm!.saveForm();
   }
 
-  Future<bool> __doDelete() async {
+  Future<bool> __deleteCurrentItem() async {
     return await widget.block.deleteCurrentItem();
   }
 
@@ -105,8 +117,17 @@ class _BlockControlButtonState extends _WidgetState<BlockControl> {
     return true;
   }
 
-  Future<bool> __refreshForm() async {
+  Future<bool> __refreshCurrentItem() async {
     return await widget.block.refreshCurrentItem();
+  }
+
+  Future<bool> __showFormInfo() async {
+    _showFromDataInfoDialog(
+      context: context,
+      locationInfo: getClassName(widget.ownerClassInstance),
+      blockForm: widget.block.blockForm!,
+    );
+    return true;
   }
 
   Future<bool> __queryBlock() async {

@@ -6,7 +6,7 @@ class ScalarControlTextButton extends ScalarControl {
     required super.currentStackTrace,
     required super.ownerClassInstance,
     required super.scalar,
-    required super.type,
+    required super.actionType,
     super.navigate,
     //
     ValueChanged<bool>? onHover,
@@ -42,7 +42,7 @@ class ScalarControlTextButton extends ScalarControl {
     required super.currentStackTrace,
     required super.ownerClassInstance,
     required super.scalar,
-    required super.type,
+    required super.actionType,
     super.navigate,
     //
     ValueChanged<bool>? onHover,

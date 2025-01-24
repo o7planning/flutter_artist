@@ -6,7 +6,7 @@ class ScalarControlFAB extends ScalarControl {
     required super.currentStackTrace,
     required super.ownerClassInstance,
     required super.scalar,
-    required super.type,
+    required super.actionType,
     super.navigate,
     //
     String? tooltip,
@@ -65,7 +65,7 @@ class ScalarControlFAB extends ScalarControl {
     required super.currentStackTrace,
     required super.ownerClassInstance,
     required super.scalar,
-    required super.type,
+    required super.actionType,
     super.navigate,
     //
     Widget? icon,
@@ -130,7 +130,7 @@ class ScalarControlFAB extends ScalarControl {
     required super.currentStackTrace,
     required super.ownerClassInstance,
     required super.scalar,
-    required super.type,
+    required super.actionType,
     super.navigate,
     //
     String? tooltip,
@@ -187,7 +187,7 @@ class ScalarControlFAB extends ScalarControl {
     required super.currentStackTrace,
     required super.ownerClassInstance,
     required super.scalar,
-    required super.type,
+    required super.actionType,
     super.navigate,
     //
     String? tooltip,

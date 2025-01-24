@@ -267,19 +267,16 @@ class _BlockControlBarState extends _WidgetState<BlockControlBar> {
   }
 
   Widget? _buildRight3Buttons(BuildContext context) {
-    ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
     return _buildBreadCrumb(
       children: [
-        if (widget.block.blockForm != null &&
-            widget.showFormInfoButton &&
-            (loggedInUser?.isSystemUser ?? false))
+        if (widget.showFormInfoButton && widget.block.canShowFormInfo())
           _ControlBarButton(
             tooltip: "Form Data",
             iconData: _blockIconData,
             onAction: false,
             onPressed: widget.showFormInfoButton
                 ? () {
-                    _showFormDataInfo(context, widget.block);
+                    _showFormInfo(context, widget.block);
                   }
                 : null,
           ),
@@ -332,7 +329,7 @@ class _BlockControlBarState extends _WidgetState<BlockControlBar> {
     await widget.block.query();
   }
 
-  void _showFormDataInfo(BuildContext context, Block block) {
+  void _showFormInfo(BuildContext context, Block block) {
     _showFromDataInfoDialog(
       context: context,
       locationInfo: getClassName(widget.ownerClassInstance),

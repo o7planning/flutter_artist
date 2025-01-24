@@ -1,7 +1,5 @@
 part of '../flutter_artist.dart';
 
-enum BlockControlType {
-  create,
+enum ScalarControlActionType {
   query,
-  save,
 }
