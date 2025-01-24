@@ -1360,7 +1360,7 @@ abstract class Block<
     try {
       shelf._backupAll();
       //
-      bool success = await __executeQuickActionCreate(
+      bool success = await __executeQuickActionCreateItem(
         thisXBlock: thisXBlock,
         actionData: data,
       );
@@ -1376,7 +1376,7 @@ abstract class Block<
       //
       _handleError(
         shelf: shelf,
-        methodName: "__executeQuickActionCreate",
+        methodName: "__executeQuickActionCreateItem",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -1386,7 +1386,7 @@ abstract class Block<
   }
 
   // Private Method. Only for use in this class.
-  Future<bool> __executeQuickActionCreate({
+  Future<bool> __executeQuickActionCreateItem({
     required _XBlock thisXBlock,
     required QuickActionData actionData,
   }) async {
@@ -1434,7 +1434,7 @@ abstract class Block<
   }) async {
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
-        return await __executeQuickActionUpdateWithRestorable(
+        return await __executeQuickActionUpdateItemWithRestorable(
           item: item,
           data: data,
         );
@@ -1442,7 +1442,7 @@ abstract class Block<
     );
   }
 
-  Future<bool> __executeQuickActionUpdateWithRestorable({
+  Future<bool> __executeQuickActionUpdateItemWithRestorable({
     required ITEM item,
     required QuickActionData data,
   }) async {
@@ -1469,7 +1469,7 @@ abstract class Block<
     //
     try {
       shelf._backupAll();
-      bool success = await __executeQuickActionUpdate(
+      bool success = await __executeQuickActionUpdateItem(
         thisXBlock: thisXBlock,
         item: item,
         actionData: data,
@@ -1485,7 +1485,7 @@ abstract class Block<
       //
       _handleError(
         shelf: shelf,
-        methodName: "__executeQuickActionUpdateWithRestorable",
+        methodName: "__executeQuickActionUpdateItemWithRestorable",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -1495,7 +1495,7 @@ abstract class Block<
     }
   }
 
-  Future<bool> __executeQuickActionUpdate({
+  Future<bool> __executeQuickActionUpdateItem({
     required _XBlock thisXBlock,
     required ITEM item,
     required QuickActionData actionData,
@@ -1859,7 +1859,7 @@ abstract class Block<
     }
   }
 
-  Future<bool> executeQuickActionCreate<A extends QuickActionData>({
+  Future<bool> executeQuickActionCreateItem<A extends QuickActionData>({
     required CustomConfirmation<A>? customConfirmation,
     required A action,
   }) async {
@@ -1882,7 +1882,7 @@ abstract class Block<
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: 'executeQuickActionCreate',
+        methodName: 'executeQuickActionCreateItem',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -1930,7 +1930,7 @@ abstract class Block<
   /// This method will call [callApiQuickUpdateItem] method.
   /// So you need to implement [callApiQuickUpdateItem] method.
   ///
-  Future<bool> executeQuickActionUpdate<A extends QuickActionData>({
+  Future<bool> executeQuickActionUpdateItem<A extends QuickActionData>({
     required ITEM item,
     required CustomConfirmation<A>? customConfirmation,
     required A actionData,
@@ -1939,7 +1939,7 @@ abstract class Block<
       isLibCode: true,
       navigate: null,
       ownerClassInstance: this,
-      methodName: "executeQuickActionUpdate",
+      methodName: "executeQuickActionUpdateItem",
       parameters: {
         "item": item,
         "actionData": actionData,
@@ -2812,7 +2812,7 @@ abstract class Block<
   // ***************************************************************************
 
   ///
-  /// This method is called when you can [executeQuickActionUpdate] method.
+  /// This method is called when you can [executeQuickActionUpdateItem] method.
   ///
   /// ```dart
   /// Future<ApiResult<D>> callApiQuickUpdateItem({
@@ -2835,7 +2835,7 @@ abstract class Block<
   }
 
   ///
-  /// This method is called when you can [executeQuickActionCreate] method.
+  /// This method is called when you can [executeQuickActionCreateItem] method.
   /// ```dart
   /// Future<ApiResult<D>> callApiQuickCreateItem({
   ///     required QuickActionData data,
