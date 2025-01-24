@@ -34,7 +34,7 @@ class _CustomControlBarState extends _RefreshableWidgetState<CustomControlBar> {
   }
 
   @override
-  WidgetStateType get type => WidgetStateType.customControlBar;
+  RefreshableWidgetType get type => RefreshableWidgetType.customControlBar;
 
   @override
   void addFilterFragmentWidgetState({required bool isShowing}) {

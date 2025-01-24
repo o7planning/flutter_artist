@@ -5,7 +5,7 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget> extends Sta
 
   late final String keyId;
 
-  WidgetStateType get type;
+  RefreshableWidgetType get type;
 
   void addFilterFragmentWidgetState({required bool isShowing});
 

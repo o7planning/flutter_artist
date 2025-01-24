@@ -33,7 +33,7 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
   }
 
   @override
-  WidgetStateType get type => WidgetStateType.blockControlButton;
+  RefreshableWidgetType get type => RefreshableWidgetType.blockControlButton;
 
   @override
   Widget buildContent(BuildContext context) {

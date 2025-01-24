@@ -25,7 +25,7 @@ class _ShelvesSafeLayoutAreaState extends _RefreshableWidgetState<ShelvesSafeLay
   }
 
   @override
-  WidgetStateType get type => WidgetStateType.shelfFragment;
+  RefreshableWidgetType get type => RefreshableWidgetType.shelfFragment;
 
   @override
   Widget buildContent(BuildContext context) {

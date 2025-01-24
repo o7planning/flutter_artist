@@ -23,7 +23,7 @@ class _LoggedInUserBuilderState extends _RefreshableWidgetState<LoggedInUserBuil
   }
 
   @override
-  WidgetStateType get type => WidgetStateType.loggedInUser;
+  RefreshableWidgetType get type => RefreshableWidgetType.loggedInUser;
 
   @override
   Widget buildContent(BuildContext context) {
