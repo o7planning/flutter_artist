@@ -1,19 +1,26 @@
 part of '../flutter_artist.dart';
 
-abstract class QuickActionData {
+abstract class BaseActionData {
   final bool needToConfirm;
   final String? actionInfo;
 
-  QuickActionData({
+  const BaseActionData({
     required this.needToConfirm,
     required this.actionInfo,
   });
 }
 
-class SimpleQuickActionData extends QuickActionData {
-  dynamic data;
+abstract class QuickActionData extends BaseActionData {
+  const QuickActionData({
+    required super.needToConfirm,
+    required super.actionInfo,
+  });
+}
 
-  SimpleQuickActionData({
+class SimpleQuickActionData extends QuickActionData {
+  final dynamic data;
+
+  const SimpleQuickActionData({
     required this.data,
     required super.needToConfirm,
     required super.actionInfo,

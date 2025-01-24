@@ -4,7 +4,7 @@ Block.callApiQuickCreateItem()
 Block.callApiQuickUpdateItem()
 
 
-Future<bool> executeQuickActionUpdateItem<A extends QuickActionData>({
+Future<bool> executeQuickActionUpdateItem<A extends QuickCRUDActionData>({
     required ITEM item,
     required CustomConfirmation<A>? customConfirmation,
     required A actionData,

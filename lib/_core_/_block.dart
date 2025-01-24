@@ -1324,17 +1324,19 @@ abstract class Block<
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
   Future<bool> _executeQuickCreateWithOverlayAndRestorable({
-    required QuickActionData data,
+    required QuickCRUDActionData actionData,
   }) async {
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
-        return await _executeQuickCreateWithRestorable(data: data);
+        return await _executeQuickCreateWithRestorable(
+          actionData: actionData,
+        );
       },
     );
   }
 
   Future<bool> _executeQuickCreateWithRestorable({
-    required QuickActionData data,
+    required QuickCRUDActionData actionData,
   }) async {
     _XShelf xShelf = _XShelf(
       shelf: shelf,
@@ -1362,7 +1364,7 @@ abstract class Block<
       //
       bool success = await __executeQuickActionCreateItem(
         thisXBlock: thisXBlock,
-        actionData: data,
+        actionData: actionData,
       );
       if (success) {
         shelf._applyNewStateAll();
@@ -1388,7 +1390,7 @@ abstract class Block<
   // Private Method. Only for use in this class.
   Future<bool> __executeQuickActionCreateItem({
     required _XBlock thisXBlock,
-    required QuickActionData actionData,
+    required QuickCRUDActionData actionData,
   }) async {
     ApiResult<ITEM_DETAIL> result;
     try {
@@ -1430,13 +1432,13 @@ abstract class Block<
 
   Future<bool> _executeQuickUpdateWithOverlayAndRestorable({
     required ITEM item,
-    required QuickActionData data,
+    required QuickCRUDActionData actionData,
   }) async {
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
         return await __executeQuickActionUpdateItemWithRestorable(
           item: item,
-          data: data,
+          actionData: actionData,
         );
       },
     );
@@ -1444,7 +1446,7 @@ abstract class Block<
 
   Future<bool> __executeQuickActionUpdateItemWithRestorable({
     required ITEM item,
-    required QuickActionData data,
+    required QuickCRUDActionData actionData,
   }) async {
     _XShelf xShelf = _XShelf(
       shelf: shelf,
@@ -1472,7 +1474,7 @@ abstract class Block<
       bool success = await __executeQuickActionUpdateItem(
         thisXBlock: thisXBlock,
         item: item,
-        actionData: data,
+        actionData: actionData,
       );
       if (success) {
         shelf._applyNewStateAll();
@@ -1498,13 +1500,16 @@ abstract class Block<
   Future<bool> __executeQuickActionUpdateItem({
     required _XBlock thisXBlock,
     required ITEM item,
-    required QuickActionData actionData,
+    required QuickCRUDActionData actionData,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
     ApiResult<ITEM_DETAIL> result;
     try {
-      result = await callApiQuickUpdateItem(item: item, actionData: actionData);
+      result = await callApiQuickUpdateItem(
+        item: item,
+        actionData: actionData,
+      );
       FlutterArtist.storage.fireSourceChanged(
         eventBlock: this,
         itemIdString: null,
@@ -1817,7 +1822,7 @@ abstract class Block<
     //
     // Confirmation:
     //
-    bool confirm = await __showConfirmDialogForAction<A>(
+    bool confirm = await __showConfirmDialogForQuickAction<A>(
       customConfirmation: customConfirmation,
       action: actionData,
     );
@@ -1871,24 +1876,24 @@ abstract class Block<
     }
   }
 
-  Future<bool> executeQuickActionCreateItem<A extends QuickActionData>({
+  Future<bool> executeQuickActionCreateItem<A extends QuickCRUDActionData>({
     required CustomConfirmation<A>? customConfirmation,
-    required A action,
+    required A actionData,
   }) async {
     //
     // Confirmation:
     //
-    bool confirm = await __showConfirmDialogForAction<A>(
+    bool confirm = await __showConfirmDialogForQuickAction<A>(
       customConfirmation: customConfirmation,
-      action: action,
+      action: actionData,
     );
     if (!confirm) {
       return false;
     }
     //
     try {
-      bool success =
-          await _executeQuickCreateWithOverlayAndRestorable(data: action);
+      bool success = await _executeQuickCreateWithOverlayAndRestorable(
+          actionData: actionData);
       shelf.updateAllUIComponents();
       return success;
     } catch (e, stackTrace) {
@@ -1906,7 +1911,7 @@ abstract class Block<
   }
 
   Future<bool> __showDefaultConfirmDialogForAction(
-    QuickActionData action,
+    BaseActionData action,
   ) async {
     return await showConfirmDialog(
       message: 'Are you sure you want to perform this action?',
@@ -1914,7 +1919,7 @@ abstract class Block<
     );
   }
 
-  Future<bool> __showConfirmDialogForAction<A extends QuickActionData>({
+  Future<bool> __showConfirmDialogForQuickAction<A extends BaseActionData>({
     required A action,
     required CustomConfirmation<A>? customConfirmation,
   }) async {
@@ -1942,7 +1947,7 @@ abstract class Block<
   /// This method will call [callApiQuickUpdateItem] method.
   /// So you need to implement [callApiQuickUpdateItem] method.
   ///
-  Future<bool> executeQuickActionUpdateItem<A extends QuickActionData>({
+  Future<bool> executeQuickActionUpdateItem<A extends QuickCRUDActionData>({
     required ITEM item,
     required CustomConfirmation<A>? customConfirmation,
     required A actionData,
@@ -1960,7 +1965,7 @@ abstract class Block<
     //
     // Confirmation:
     //
-    bool confirm = await __showConfirmDialogForAction<A>(
+    bool confirm = await __showConfirmDialogForQuickAction<A>(
       customConfirmation: customConfirmation,
       action: actionData,
     );
@@ -1971,7 +1976,7 @@ abstract class Block<
     try {
       bool success = await _executeQuickUpdateWithOverlayAndRestorable(
         item: item,
-        data: actionData,
+        actionData: actionData,
       );
       shelf.updateAllUIComponents();
       return success;
@@ -2841,7 +2846,7 @@ abstract class Block<
   ///
   Future<ApiResult<ITEM_DETAIL>> callApiQuickUpdateItem({
     required ITEM item,
-    required QuickActionData actionData,
+    required QuickCRUDActionData actionData,
   }) async {
     throw UnimplementedError("Override me!");
   }
@@ -2861,7 +2866,7 @@ abstract class Block<
   /// ```
   ///
   Future<ApiResult<ITEM_DETAIL>> callApiQuickCreateItem({
-    required QuickActionData actionData,
+    required QuickCRUDActionData actionData,
   }) async {
     throw UnimplementedError("Override me!");
   }
