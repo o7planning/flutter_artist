@@ -11,9 +11,3 @@ Block.callApiDeleteItem()
 Block.callApiRefreshItem()
 
 Block.callApiFindItemById()
-
-Block.callApiQuickCreateItem()
-Block.callApiQuickUpdateItem()
-
-Block.callApiQuickAction()
-
