@@ -210,7 +210,9 @@ abstract class DataFilter<
   }
 
   void updateAllUIComponents() {
-    for (_RefreshableWidgetState widgetState in [..._filterFragmentWidgetStates.keys]) {
+    for (_RefreshableWidgetState widgetState in [
+      ..._filterFragmentWidgetStates.keys
+    ]) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }

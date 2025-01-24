@@ -67,7 +67,8 @@ class _LoggedInUserManager {
   }
 
   void updateWidgets() {
-    for (_RefreshableWidgetState widgetState in _loggedInUserWidgetStates.keys) {
+    for (_RefreshableWidgetState widgetState
+        in _loggedInUserWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }

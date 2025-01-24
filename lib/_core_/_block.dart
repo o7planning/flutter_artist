@@ -504,7 +504,8 @@ abstract class Block<
   }
 
   bool hasActiveControlBarWidget() {
-    for (_RefreshableWidgetState controlBarState in _controlBarWidgetStates.keys) {
+    for (_RefreshableWidgetState controlBarState
+        in _controlBarWidgetStates.keys) {
       bool visible = _controlBarWidgetStates[controlBarState] ?? false;
       if (visible && controlBarState.mounted) {
         return true;
@@ -524,7 +525,8 @@ abstract class Block<
   }
 
   bool hasActivePaginationWidget() {
-    for (_RefreshableWidgetState paginationState in _paginationWidgetStates.keys) {
+    for (_RefreshableWidgetState paginationState
+        in _paginationWidgetStates.keys) {
       bool visible = _paginationWidgetStates[paginationState] ?? false;
       if (visible && paginationState.mounted) {
         return true;
@@ -1358,7 +1360,7 @@ abstract class Block<
     try {
       shelf._backupAll();
       //
-      bool success = await __executeQuickCreateAction(
+      bool success = await __executeQuickActionCreate(
         thisXBlock: thisXBlock,
         data: data,
       );
@@ -1374,7 +1376,7 @@ abstract class Block<
       //
       _handleError(
         shelf: shelf,
-        methodName: "__executeQuickCreateAction",
+        methodName: "__executeQuickActionCreate",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -1384,7 +1386,7 @@ abstract class Block<
   }
 
   // Private Method. Only for use in this class.
-  Future<bool> __executeQuickCreateAction({
+  Future<bool> __executeQuickActionCreate({
     required _XBlock thisXBlock,
     required QuickActionData data,
   }) async {
@@ -1432,7 +1434,7 @@ abstract class Block<
   }) async {
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
-        return await __executeQuickUpdateActionWithRestorable(
+        return await __executeQuickActionUpdateWithRestorable(
           item: item,
           data: data,
         );
@@ -1440,7 +1442,7 @@ abstract class Block<
     );
   }
 
-  Future<bool> __executeQuickUpdateActionWithRestorable({
+  Future<bool> __executeQuickActionUpdateWithRestorable({
     required ITEM item,
     required QuickActionData data,
   }) async {
@@ -1467,7 +1469,7 @@ abstract class Block<
     //
     try {
       shelf._backupAll();
-      bool success = await __executeQuickUpdateAction(
+      bool success = await __executeQuickActionUpdate(
         thisXBlock: thisXBlock,
         item: item,
         data: data,
@@ -1483,7 +1485,7 @@ abstract class Block<
       //
       _handleError(
         shelf: shelf,
-        methodName: "__executeQuickUpdateActionWithRestorable",
+        methodName: "__executeQuickActionUpdateWithRestorable",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -1493,7 +1495,7 @@ abstract class Block<
     }
   }
 
-  Future<bool> __executeQuickUpdateAction({
+  Future<bool> __executeQuickActionUpdate({
     required _XBlock thisXBlock,
     required ITEM item,
     required QuickActionData data,
@@ -1852,7 +1854,7 @@ abstract class Block<
     }
   }
 
-  Future<bool> executeQuickCreateAction<A extends QuickActionData>({
+  Future<bool> executeQuickActionCreate<A extends QuickActionData>({
     required CustomConfirmation<A>? customConfirmation,
     required A action,
   }) async {
@@ -1875,7 +1877,7 @@ abstract class Block<
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: 'executeQuickCreateAction',
+        methodName: 'executeQuickActionCreate',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -1923,7 +1925,7 @@ abstract class Block<
   /// This method will call [callApiQuickUpdate] method.
   /// So you need to implement [callApiQuickUpdate] method.
   ///
-  Future<bool> executeQuickUpdateAction<A extends QuickActionData>({
+  Future<bool> executeQuickActionUpdate<A extends QuickActionData>({
     required ITEM item,
     required CustomConfirmation<A>? customConfirmation,
     required A action,
@@ -1932,7 +1934,7 @@ abstract class Block<
       isLibCode: true,
       navigate: null,
       ownerClassInstance: this,
-      methodName: "executeQuickUpdateAction",
+      methodName: "executeQuickActionUpdate",
       parameters: {
         "item": item,
         "data": action,
@@ -2805,7 +2807,7 @@ abstract class Block<
   // ***************************************************************************
 
   ///
-  /// This method is called when you can [executeQuickUpdateAction] method.
+  /// This method is called when you can [executeQuickActionUpdate] method.
   ///
   /// ```dart
   /// Future<ApiResult<D>> callApiQuickUpdate({
@@ -2828,7 +2830,7 @@ abstract class Block<
   }
 
   ///
-  /// This method is called when you can [executeQuickCreateAction] method.
+  /// This method is called when you can [executeQuickActionCreate] method.
   /// ```dart
   /// Future<ApiResult<D>> callApiQuickCreate({
   ///     required QuickActionData data,
@@ -2884,7 +2886,8 @@ abstract class Block<
   }
 
   void updateBlockFragmentWidgets() {
-    for (_RefreshableWidgetState widgetState in _blockFragmentWidgetStates.keys) {
+    for (_RefreshableWidgetState widgetState
+        in _blockFragmentWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }
