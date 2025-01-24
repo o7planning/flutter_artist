@@ -3018,7 +3018,7 @@ abstract class Block<
   ///
   /// Allows creating a new Item or not according to the application logic.
   ///
-  bool _isAllowCreateItem() {
+  bool __isAllowCreateItem() {
     try {
       return isAllowCreateItem();
     } catch (e, stackTrace) {
@@ -3185,7 +3185,7 @@ abstract class Block<
     if (!ancestorSafe) {
       return false;
     }
-    return checkAllow ? _isAllowCreateItem() : true;
+    return checkAllow ? __isAllowCreateItem() : true;
   }
 
   bool __canResetForm({required bool checkAllow}) {
@@ -3213,20 +3213,19 @@ abstract class Block<
     if (blockForm == null || this.__isSaving) {
       return false;
     }
+    bool isAllow = false;
     switch (blockForm!.data._formMode) {
       case FormMode.none:
         return false;
       case FormMode.creation:
-        break; // Do nothing.
+        isAllow = checkAllow ? __isAllowCreateItem() : true;
+        break;
       case FormMode.edit:
-        break; // Do nothing.
+        isAllow = checkAllow ? __isAllowUpdateItemCurrentItem() : true;
+        break;
     }
     //
-    bool allowEdit = checkAllow
-        ? _isAllowCreateItem() && __isAllowUpdateItemCurrentItem()
-        : true;
-    //
-    if (allowEdit && blockForm!.isDirty()) {
+    if (isAllow && blockForm!.isDirty()) {
       return true;
     }
     return false;
