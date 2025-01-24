@@ -136,7 +136,7 @@ enum ShowMode {
   production;
 }
 
-enum WidgetStateType {
+enum RefreshableWidgetType {
   pagination,
   filter,
   controlBar,
@@ -151,57 +151,57 @@ enum WidgetStateType {
   loggedInUser;
 }
 
-extension WidgetStateTypeE on WidgetStateType {
+extension WidgetStateTypeE on RefreshableWidgetType {
   String get name {
     switch (this) {
-      case WidgetStateType.pagination:
+      case RefreshableWidgetType.pagination:
         return "Pagination";
-      case WidgetStateType.filter:
+      case RefreshableWidgetType.filter:
         return "DataFilter";
-      case WidgetStateType.controlBar:
+      case RefreshableWidgetType.controlBar:
         return "ControlBar";
-      case WidgetStateType.customControlBar:
+      case RefreshableWidgetType.customControlBar:
         return "CustomControlBar";
-      case WidgetStateType.form:
+      case RefreshableWidgetType.form:
         return "BlockForm";
-      case WidgetStateType.blockFragment:
+      case RefreshableWidgetType.blockFragment:
         return "BlockFragment";
-      case WidgetStateType.shelfFragment:
+      case RefreshableWidgetType.shelfFragment:
         return "ShelfFragment";
-      case WidgetStateType.scalarFragment:
+      case RefreshableWidgetType.scalarFragment:
         return "ScalarFragment";
-      case WidgetStateType.loggedInUser:
+      case RefreshableWidgetType.loggedInUser:
         return "LoggedInUser";
-      case WidgetStateType.blockControlButton:
+      case RefreshableWidgetType.blockControlButton:
         return "ControlButton";
-      case WidgetStateType.scalarControlButton:
+      case RefreshableWidgetType.scalarControlButton:
         return "Scalar Control Button";
     }
   }
 
   IconData get iconData {
     switch (this) {
-      case WidgetStateType.filter:
+      case RefreshableWidgetType.filter:
         return _dataFilterIconData;
-      case WidgetStateType.controlBar:
+      case RefreshableWidgetType.controlBar:
         return _blockControlBarIconData;
-      case WidgetStateType.customControlBar:
+      case RefreshableWidgetType.customControlBar:
         return _blockCustomControlBarIconData;
-      case WidgetStateType.form:
+      case RefreshableWidgetType.form:
         return _blockFormIconData;
-      case WidgetStateType.blockFragment:
+      case RefreshableWidgetType.blockFragment:
         return _blockFragmentIconData;
-      case WidgetStateType.pagination:
+      case RefreshableWidgetType.pagination:
         return _paginationIconData;
-      case WidgetStateType.loggedInUser:
+      case RefreshableWidgetType.loggedInUser:
         return _loggedUserIconData;
-      case WidgetStateType.scalarFragment:
+      case RefreshableWidgetType.scalarFragment:
         return _scalarFragmentIconData;
-      case WidgetStateType.shelfFragment:
+      case RefreshableWidgetType.shelfFragment:
         return _shelfFragmentIconData;
-      case WidgetStateType.blockControlButton:
+      case RefreshableWidgetType.blockControlButton:
         return _blockControlButtonIconData;
-      case WidgetStateType.scalarControlButton:
+      case RefreshableWidgetType.scalarControlButton:
         return _scalarControlButtonIconData;
     }
   }

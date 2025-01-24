@@ -33,7 +33,7 @@ class _BlockFormWidgetBuilderState
   }
 
   @override
-  WidgetStateType get type => WidgetStateType.form;
+  RefreshableWidgetType get type => RefreshableWidgetType.form;
 
   @override
   void addFilterFragmentWidgetState({required bool isShowing}) {

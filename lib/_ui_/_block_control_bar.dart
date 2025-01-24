@@ -37,7 +37,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   final Color _dividerColor = Colors.indigo.withAlpha(80);
 
   @override
-  WidgetStateType get type => WidgetStateType.controlBar;
+  RefreshableWidgetType get type => RefreshableWidgetType.controlBar;
 
   @override
   String getWidgetOwnerClassName() {

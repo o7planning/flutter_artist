@@ -40,7 +40,7 @@ class _BasePaginationState extends _RefreshableWidgetState<BasePagination> {
   }
 
   @override
-  WidgetStateType get type => WidgetStateType.pagination;
+  RefreshableWidgetType get type => RefreshableWidgetType.pagination;
 
   @override
   String getWidgetOwnerClassName() {

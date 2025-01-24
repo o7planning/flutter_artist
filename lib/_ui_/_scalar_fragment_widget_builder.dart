@@ -26,7 +26,7 @@ class _ScalarFragmentWidgetBuilderState
   }
 
   @override
-  WidgetStateType get type => WidgetStateType.scalarFragment;
+  RefreshableWidgetType get type => RefreshableWidgetType.scalarFragment;
 
   @override
   Widget buildContent(BuildContext context) {

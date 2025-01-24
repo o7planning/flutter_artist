@@ -31,7 +31,7 @@ class _ControlButtonState extends _RefreshableWidgetState<ScalarControl> {
   }
 
   @override
-  WidgetStateType get type => WidgetStateType.scalarControlButton;
+  RefreshableWidgetType get type => RefreshableWidgetType.scalarControlButton;
 
   @override
   Widget buildContent(BuildContext context) {

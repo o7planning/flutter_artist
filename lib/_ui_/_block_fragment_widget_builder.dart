@@ -26,7 +26,7 @@ class _BlockFragmentWidgetBuilderState
   }
 
   @override
-  WidgetStateType get type => WidgetStateType.blockFragment;
+  RefreshableWidgetType get type => RefreshableWidgetType.blockFragment;
 
   @override
   void addFilterFragmentWidgetState({required bool isShowing}) {
