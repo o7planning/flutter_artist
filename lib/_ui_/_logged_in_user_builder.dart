@@ -16,7 +16,7 @@ class LoggedInUserBuilder extends _RefreshableWidget {
   }
 }
 
-class _LoggedInUserBuilderState extends _WidgetState<LoggedInUserBuilder> {
+class _LoggedInUserBuilderState extends _RefreshableWidgetState<LoggedInUserBuilder> {
   @override
   String getWidgetOwnerClassName() {
     return "LoggedInUserBuilder";

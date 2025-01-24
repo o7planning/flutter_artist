@@ -89,8 +89,8 @@ abstract class Scalar<
 
   final ScalarHiddenBehavior hiddenBehavior;
 
-  final Map<_WidgetState, bool> _scalarFragmentWidgetStates = {};
-  final Map<_WidgetState, bool> _scalarControlWidgetStates = {};
+  final Map<_RefreshableWidgetState, bool> _scalarFragmentWidgetStates = {};
+  final Map<_RefreshableWidgetState, bool> _scalarControlWidgetStates = {};
 
   Scalar({
     required this.name,
@@ -142,7 +142,7 @@ abstract class Scalar<
   }
 
   void updateControlWidgets() {
-    for (_WidgetState state in _scalarControlWidgetStates.keys) {
+    for (_RefreshableWidgetState state in _scalarControlWidgetStates.keys) {
       if (state.mounted) {
         state.refreshState();
       }
@@ -150,7 +150,7 @@ abstract class Scalar<
   }
 
   void updateFragmentWidgets() {
-    for (_WidgetState state in _scalarFragmentWidgetStates.keys) {
+    for (_RefreshableWidgetState state in _scalarFragmentWidgetStates.keys) {
       if (state.mounted) {
         state.refreshState();
       }
@@ -285,7 +285,7 @@ abstract class Scalar<
   }
 
   void _addControlWidgetState({
-    required _WidgetState widgetState,
+    required _RefreshableWidgetState widgetState,
     required bool isShowing,
   }) {
     bool activeOLD = hasActiveUIComponent();
@@ -315,7 +315,7 @@ abstract class Scalar<
   }
 
   void _addScalarFragmentWidgetState({
-    required _WidgetState widgetState,
+    required _RefreshableWidgetState widgetState,
     required bool isShowing,
   }) {
     bool activeOLD = hasActiveUIComponent();

@@ -24,7 +24,7 @@ abstract class ScalarControl extends _RefreshableWidget {
   }
 }
 
-class _ControlButtonState extends _WidgetState<ScalarControl> {
+class _ControlButtonState extends _RefreshableWidgetState<ScalarControl> {
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.scalar);

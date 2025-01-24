@@ -42,7 +42,7 @@ abstract class DataFilter<
 
   List<Restorable> get restorableCriteria;
 
-  final Map<_WidgetState, bool> _filterFragmentWidgetStates = {};
+  final Map<_RefreshableWidgetState, bool> _filterFragmentWidgetStates = {};
 
   String get _classDefinition {
     return "${getClassName(this)}$_classParametersDefinition";
@@ -194,7 +194,7 @@ abstract class DataFilter<
   }
 
   void _addFilterFragmentWidgetState({
-    required _WidgetState widgetState,
+    required _RefreshableWidgetState widgetState,
     required bool isShowing,
   }) {
     _filterFragmentWidgetStates[widgetState] = isShowing;
@@ -210,7 +210,7 @@ abstract class DataFilter<
   }
 
   void updateAllUIComponents() {
-    for (_WidgetState widgetState in [..._filterFragmentWidgetStates.keys]) {
+    for (_RefreshableWidgetState widgetState in [..._filterFragmentWidgetStates.keys]) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }

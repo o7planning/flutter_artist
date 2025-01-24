@@ -26,7 +26,7 @@ abstract class BlockControl extends _RefreshableWidget {
   }
 }
 
-class _BlockControlButtonState extends _WidgetState<BlockControl> {
+class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);

@@ -19,7 +19,7 @@ class ScalarFragmentWidgetBuilder extends _RefreshableWidget {
 }
 
 class _ScalarFragmentWidgetBuilderState
-    extends _WidgetState<ScalarFragmentWidgetBuilder> {
+    extends _RefreshableWidgetState<ScalarFragmentWidgetBuilder> {
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.scalar);

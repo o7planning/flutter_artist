@@ -27,7 +27,7 @@ class CustomControlBar extends _RefreshableWidget {
   }
 }
 
-class _CustomControlBarState extends _WidgetState<CustomControlBar> {
+class _CustomControlBarState extends _RefreshableWidgetState<CustomControlBar> {
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);

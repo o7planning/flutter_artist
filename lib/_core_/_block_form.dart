@@ -36,13 +36,13 @@ abstract class BlockForm<
 
   ITEM_DETAIL? item;
 
-  final Map<_WidgetState, bool> _formWidgetStates = {};
+  final Map<_RefreshableWidgetState, bool> _formWidgetStates = {};
 
   BlockForm();
 
   //
   void _addFormWidgetState({
-    required _WidgetState widgetState,
+    required _RefreshableWidgetState widgetState,
     required final bool isShowing,
   }) {
     bool isShowingOLD = _formWidgetStates[widgetState] ?? false;
@@ -56,7 +56,7 @@ abstract class BlockForm<
   }
 
   void _removeFormWidgetState({
-    required _WidgetState widgetState,
+    required _RefreshableWidgetState widgetState,
   }) {
     _formWidgetStates.remove(widgetState);
   }
@@ -69,17 +69,17 @@ abstract class BlockForm<
   /// Call this method to refresh Widgets..
   ///
   void __updateFormWidgets() {
-    List<_WidgetState> list = _getMountedFormWidgetStates();
-    for (_WidgetState formWidgetState in list) {
+    List<_RefreshableWidgetState> list = _getMountedFormWidgetStates();
+    for (_RefreshableWidgetState formWidgetState in list) {
       if (formWidgetState.mounted) {
         formWidgetState.refreshState();
       }
     }
   }
 
-  List<_WidgetState> _getMountedFormWidgetStates() {
-    List<_WidgetState> ret = [];
-    for (_WidgetState widgetState in [..._formWidgetStates.keys]) {
+  List<_RefreshableWidgetState> _getMountedFormWidgetStates() {
+    List<_RefreshableWidgetState> ret = [];
+    for (_RefreshableWidgetState widgetState in [..._formWidgetStates.keys]) {
       if (widgetState.mounted) {
         ret.add(widgetState);
       }

@@ -41,7 +41,7 @@ abstract class Shelf extends _XBase {
 
   String get name => FlutterArtist.storage._getShelfName(runtimeType);
 
-  final Map<_WidgetState, bool> _shelfWidgetStates = {};
+  final Map<_RefreshableWidgetState, bool> _shelfWidgetStates = {};
 
   Shelf() {
     __onInit();
@@ -337,10 +337,10 @@ abstract class Shelf extends _XBase {
     required bool withControl,
     required bool activeOnly,
     required bool withPagination,
-    required Map<_WidgetState, bool> founds,
+    required Map<_RefreshableWidgetState, bool> founds,
   }) {
     for (Block block in blocks) {
-      Map<_WidgetState, bool> m = block._findMountedWidgetStates(
+      Map<_RefreshableWidgetState, bool> m = block._findMountedWidgetStates(
         activeOnly: activeOnly,
         withPagination: withPagination,
         withBlockFragment: withBlockFragment,
@@ -365,7 +365,7 @@ abstract class Shelf extends _XBase {
     }
   }
 
-  Map<_WidgetState, bool> _findMountedWidgetStates({
+  Map<_RefreshableWidgetState, bool> _findMountedWidgetStates({
     required bool withBlockFragment,
     required bool withPagination,
     required bool withFilter,
@@ -374,7 +374,7 @@ abstract class Shelf extends _XBase {
     required bool withControl,
     required bool activeOnly,
   }) {
-    Map<_WidgetState, bool> founds = {};
+    Map<_RefreshableWidgetState, bool> founds = {};
     __findMountedWidgetStates(
       withPagination: withPagination,
       withBlockFragment: withBlockFragment,
@@ -430,7 +430,7 @@ abstract class Shelf extends _XBase {
   }
 
   void __updateShelfWidgets() {
-    for (_WidgetState state in _shelfWidgetStates.keys) {
+    for (_RefreshableWidgetState state in _shelfWidgetStates.keys) {
       if (state.mounted) {
         state.refreshState();
       }
@@ -442,7 +442,7 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
 
   void _addShelfWidgetState({
-    required _WidgetState widgetState,
+    required _RefreshableWidgetState widgetState,
     required bool isShowing,
   }) {
     _shelfWidgetStates[widgetState] = isShowing;

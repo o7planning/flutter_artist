@@ -20,7 +20,7 @@ class DataFilterFragmentWidgetBuilder extends _RefreshableWidget {
 }
 
 class _DataFilterFragmentWidgetBuilderState
-    extends _WidgetState<DataFilterFragmentWidgetBuilder> {
+    extends _RefreshableWidgetState<DataFilterFragmentWidgetBuilder> {
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.dataFilter);

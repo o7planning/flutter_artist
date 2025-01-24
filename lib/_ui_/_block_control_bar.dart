@@ -32,7 +32,7 @@ class BlockControlBar extends _RefreshableWidget {
   }
 }
 
-class _BlockControlBarState extends _WidgetState<BlockControlBar> {
+class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   static const double _dividerHeight = 20;
   final Color _dividerColor = Colors.indigo.withAlpha(80);
 

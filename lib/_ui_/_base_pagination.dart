@@ -18,7 +18,7 @@ abstract class BasePagination extends _RefreshableWidget {
   }
 }
 
-class _BasePaginationState extends _WidgetState<BasePagination> {
+class _BasePaginationState extends _RefreshableWidgetState<BasePagination> {
   @override
   Widget buildContent(BuildContext context) {
     return widget.build();

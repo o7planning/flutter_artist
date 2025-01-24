@@ -19,7 +19,7 @@ class BlockFragmentWidgetBuilder extends _RefreshableWidget {
 }
 
 class _BlockFragmentWidgetBuilderState
-    extends _WidgetState<BlockFragmentWidgetBuilder> {
+    extends _RefreshableWidgetState<BlockFragmentWidgetBuilder> {
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);
