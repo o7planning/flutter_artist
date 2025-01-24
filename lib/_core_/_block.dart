@@ -1558,7 +1558,7 @@ abstract class Block<
           try {
             BuildContext context = FlutterArtist.adapter.getCurrentContext();
             if (navigate != null && context.mounted) {
-              navigate!(context);
+              navigate(context);
             }
           } catch (e, stackTrace) {
             print("Error: $e");

@@ -4,11 +4,13 @@ typedef CustomConfirmation<A extends QuickActionData> = Future<bool> Function(
   A action,
 );
 
+@Deprecated("Khong su dung nua")
 enum ActionConfirmationType {
   delete,
   custom;
 }
 
+@Deprecated("Khong su dung nua")
 class ActionConfirmation {
   final ActionConfirmationType type;
   final String message;
