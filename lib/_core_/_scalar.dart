@@ -305,7 +305,6 @@ abstract class Scalar<
     bool activeCURRENT = hasActiveUIComponent();
     //
     if (activeOLD && !activeCURRENT) {
-      FlutterArtist.storage._checkToRemoveShelf(shelf);
       _fireScalarHidden();
     }
   }
@@ -336,7 +335,6 @@ abstract class Scalar<
     bool activeCURRENT = hasActiveUIComponent();
     //
     if (activeOLD && !activeCURRENT) {
-      FlutterArtist.storage._checkToRemoveShelf(shelf);
       _fireScalarHidden();
     }
   }

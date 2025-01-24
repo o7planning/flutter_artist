@@ -59,7 +59,6 @@ abstract class BlockForm<
     required _WidgetState widgetState,
   }) {
     _formWidgetStates.remove(widgetState);
-    FlutterArtist.storage._checkToRemoveShelf(shelf);
   }
 
   void updateAllUIComponents() {

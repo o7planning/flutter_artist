@@ -203,7 +203,6 @@ abstract class DataFilter<
     required State widgetState,
   }) {
     _filterFragmentWidgetStates.remove(widgetState);
-    FlutterArtist.storage._checkToRemoveShelf(shelf);
   }
 
   void updateAllUIComponents() {
