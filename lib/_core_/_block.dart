@@ -1610,7 +1610,7 @@ abstract class Block<
       //
       bool success = await __executeQuickAction(
         thisXBlock: thisXBlock,
-        data: actionData,
+        actionData: actionData,
         afterQuickAction: afterQuickAction,
       );
       if (!success) {
@@ -1635,14 +1635,14 @@ abstract class Block<
 
   Future<bool> __executeQuickAction({
     required _XBlock thisXBlock,
-    required QuickActionData data,
+    required QuickActionData actionData,
     required AfterQuickAction? afterQuickAction,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
     ApiResult<void> result;
     try {
-      result = await callApiQuickAction(data: data);
+      result = await callApiQuickAction(actionData: actionData);
       if (result.errorMessage != null) {
         _handleRestError(
           shelf: shelf,
@@ -1830,28 +1830,6 @@ abstract class Block<
       return false;
     }
     //
-    // if (actionConfirmation != null) {
-    //   bool confirm = false;
-    //   BuildContext context = FlutterArtist.adapter.getCurrentContext();
-    //   //
-    //   switch (actionConfirmation.type) {
-    //     case ActionConfirmationType.delete:
-    //       confirm = await dialogs.showConfirmDeleteDialog(
-    //         context: context,
-    //         details: actionConfirmation.details ?? "",
-    //       );
-    //     case ActionConfirmationType.custom:
-    //       confirm = await dialogs.showConfirmDialog(
-    //         context: context,
-    //         message: actionConfirmation.message,
-    //         details: actionConfirmation.details ?? "",
-    //       );
-    //   }
-    //   //
-    //   if (!confirm) {
-    //     return false;
-    //   }
-    // }
     try {
       bool success = await _executeQuickActionWithOverlayAndRestorable(
         filterInput: filterInput,
@@ -2872,7 +2850,7 @@ abstract class Block<
   }
 
   Future<ApiResult<void>> callApiQuickAction({
-    required QuickActionData data,
+    required QuickActionData actionData,
   }) async {
     throw UnimplementedError("Override me!");
   }
