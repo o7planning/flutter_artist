@@ -1793,11 +1793,12 @@ abstract class Block<
   /// This method will call [callApiQuickAction],
   /// so you need to override [callApiQuickAction] method.
   ///
-  Future<bool> executeQuickAction({
+  Future<bool> executeQuickAction<A extends QuickActionData>({
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
-    required ActionConfirmation? actionConfirmation,
-    required QuickActionData actionData,
+    required ActionConfirmationType actionConfirmationType,
+    required CustomConfirmation<A>? customConfirmation,
+    required A actionData,
     required AfterQuickAction? afterQuickAction,
     required Function(BuildContext context)? navigate,
   }) async {
@@ -1813,28 +1814,39 @@ abstract class Block<
         "afterQuickAction": afterQuickAction,
       },
     );
-    if (actionConfirmation != null) {
-      bool confirm = false;
-      BuildContext context = FlutterArtist.adapter.getCurrentContext();
-      //
-      switch (actionConfirmation.type) {
-        case ActionConfirmationType.delete:
-          confirm = await dialogs.showConfirmDeleteDialog(
-            context: context,
-            details: actionConfirmation.details ?? "",
-          );
-        case ActionConfirmationType.custom:
-          confirm = await dialogs.showConfirmDialog(
-            context: context,
-            message: actionConfirmation.message,
-            details: actionConfirmation.details ?? "",
-          );
-      }
-      //
-      if (!confirm) {
-        return false;
-      }
+    //
+    // Confirmation:
+    //
+    bool confirm = await __showConfirmDialogForAction<A>(
+      customConfirmation: customConfirmation,
+      action: actionData,
+    );
+    if (!confirm) {
+      return false;
     }
+    //
+    // if (actionConfirmation != null) {
+    //   bool confirm = false;
+    //   BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    //   //
+    //   switch (actionConfirmation.type) {
+    //     case ActionConfirmationType.delete:
+    //       confirm = await dialogs.showConfirmDeleteDialog(
+    //         context: context,
+    //         details: actionConfirmation.details ?? "",
+    //       );
+    //     case ActionConfirmationType.custom:
+    //       confirm = await dialogs.showConfirmDialog(
+    //         context: context,
+    //         message: actionConfirmation.message,
+    //         details: actionConfirmation.details ?? "",
+    //       );
+    //   }
+    //   //
+    //   if (!confirm) {
+    //     return false;
+    //   }
+    // }
     try {
       bool success = await _executeQuickActionWithOverlayAndRestorable(
         filterInput: filterInput,
@@ -1866,7 +1878,7 @@ abstract class Block<
     //
     // Confirmation:
     //
-    bool confirm = await __showConfirmDialogForAction(
+    bool confirm = await __showConfirmDialogForAction<A>(
       customConfirmation: customConfirmation,
       action: action,
     );
@@ -1948,7 +1960,7 @@ abstract class Block<
     //
     // Confirmation:
     //
-    bool confirm = await __showConfirmDialogForAction(
+    bool confirm = await __showConfirmDialogForAction<A>(
       customConfirmation: customConfirmation,
       action: actionData,
     );
