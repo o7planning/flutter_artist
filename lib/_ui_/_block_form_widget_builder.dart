@@ -62,14 +62,18 @@ class _BlockFormWidgetBuilderState
     }
     _leavingDirtyForms[widget.blockForm.id] = widget.blockForm;
     //
-    dialogs.YesNoCancel selection = await dialogs.showYesNoCancelDialog(
-      context: context,
-      message:
-          "Do you want to save changes the [${getClassName(widget.blockForm)}] before closing?",
-      details: "",
-      defaultOption: YesNoCancel.yes,
-    );
-    _leavingDirtyForms.remove(widget.blockForm.id);
+    dialogs.YesNoCancel selection = dialogs.YesNoCancel.cancel;
+    try {
+      selection = await dialogs.showYesNoCancelDialog(
+        context: context,
+        message:
+            "Do you want to save changes the [${getClassName(widget.blockForm)}] before closing?",
+        details: "",
+        defaultOption: YesNoCancel.yes,
+      );
+    } finally {
+      _leavingDirtyForms.remove(widget.blockForm.id);
+    }
     switch (selection) {
       case dialogs.YesNoCancel.yes:
         bool success = await widget.blockForm.saveForm();
