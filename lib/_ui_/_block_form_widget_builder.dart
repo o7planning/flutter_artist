@@ -93,6 +93,19 @@ class _BlockFormWidgetBuilderState
   Widget buildContent(BuildContext context) {
     __executeAfterBuild();
     //
+    if (widget.blockForm.block.leaveTheFormSafely) {
+      return PopScope(
+        // TODO: In Error, check again late.
+        canPop: !widget.blockForm.isDirty(),
+        onPopInvokedWithResult: _onPopInvokedWithResult,
+        child: _buildFormBuilder(),
+      );
+    } else {
+      return _buildFormBuilder();
+    }
+  }
+
+  FormBuilder _buildFormBuilder() {
     return FormBuilder(
       key: formKey,
       initialValue: widget.blockForm.initFormValue(),
@@ -109,29 +122,6 @@ class _BlockFormWidgetBuilderState
         child: widget.build(),
       ),
     );
-    //
-    // return PopScope(
-    //   // TODO: In Error, check again late.
-    //   canPop: !widget.blockForm.isDirty(),
-    //   onPopInvokedWithResult: _onPopInvokedWithResult,
-    //   child: FormBuilder(
-    //     key: formKey,
-    //     initialValue: widget.blockForm.initFormValue(),
-    //     onChanged: () {
-    //       widget.blockForm._onChangeFromFormWidget();
-    //       if (mounted) {
-    //         WidgetsBinding.instance.addPostFrameCallback((_) {
-    //           widget.blockForm.shelf.updateAllUIComponents();
-    //         });
-    //       }
-    //     },
-    //     child: AbsorbPointer(
-    //       absorbing: !widget.blockForm.isEnabled(),
-    //       child: widget.build(),
-    //     ),
-    //   ),
-    // );
-    //
   }
 
   Future<void> __executeAfterBuild() async {

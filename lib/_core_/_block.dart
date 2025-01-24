@@ -105,6 +105,8 @@ abstract class Block<
 
   bool get isPreparingFormCreation => __isPreparingFormCreation;
 
+  final bool leaveTheFormSafely;
+
   ///
   /// Block name. It is unique in a Shelf.
   ///
@@ -199,6 +201,7 @@ abstract class Block<
     required this.description,
     int pageSize = 20,
     this.hiddenBehavior = BlockHiddenBehavior.none,
+    this.leaveTheFormSafely = true,
     required String? dataFilterName,
     required this.blockForm,
     required this.fireEvent,
