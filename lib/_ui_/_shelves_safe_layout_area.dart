@@ -18,7 +18,8 @@ class ShelvesSafeLayoutArea extends _RefreshableWidget {
   }
 }
 
-class _ShelvesSafeLayoutAreaState extends _RefreshableWidgetState<ShelvesSafeLayoutArea> {
+class _ShelvesSafeLayoutAreaState
+    extends _RefreshableWidgetState<ShelvesSafeLayoutArea> {
   @override
   String getWidgetOwnerClassName() {
     return "ShelvesSafeLayoutArea";
