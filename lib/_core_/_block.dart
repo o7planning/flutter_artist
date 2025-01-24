@@ -1544,19 +1544,22 @@ abstract class Block<
     required SuggestedSelection? suggestedSelection,
     required QuickActionData action,
     required AfterQuickAction? afterQuickAction,
+    required Function(BuildContext context)? navigate,
   }) async {
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
         bool success = await __executeQuickActionWithRestorable(
           filterInput: filterInput,
           suggestedSelection: suggestedSelection,
-          data: action,
+          actionData: action,
           afterQuickAction: afterQuickAction,
         );
         if (success) {
           try {
             BuildContext context = FlutterArtist.adapter.getCurrentContext();
-            action.navigate(context);
+            if (navigate != null && context.mounted) {
+              navigate!(context);
+            }
           } catch (e, stackTrace) {
             print("Error: $e");
             print(stackTrace);
@@ -1570,7 +1573,7 @@ abstract class Block<
   Future<bool> __executeQuickActionWithRestorable({
     required FILTER_INPUT? filterInput,
     required SuggestedSelection? suggestedSelection,
-    required QuickActionData data,
+    required QuickActionData actionData,
     required AfterQuickAction? afterQuickAction,
   }) async {
     _XShelf xShelf = _XShelf(
@@ -1602,7 +1605,7 @@ abstract class Block<
       //
       bool success = await __executeQuickAction(
         thisXBlock: thisXBlock,
-        data: data,
+        data: actionData,
         afterQuickAction: afterQuickAction,
       );
       if (!success) {
@@ -1796,6 +1799,7 @@ abstract class Block<
     required ActionConfirmation? actionConfirmation,
     required QuickActionData actionData,
     required AfterQuickAction? afterQuickAction,
+    required Function(BuildContext context)? navigate,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -1837,6 +1841,7 @@ abstract class Block<
         suggestedSelection: suggestedSelection,
         action: actionData,
         afterQuickAction: afterQuickAction,
+        navigate: navigate,
       );
       return success;
     } catch (e, stackTrace) {
@@ -1904,11 +1909,11 @@ abstract class Block<
     if (!action.needToConfirm) {
       return true;
     }
-    final CustomConfirmation<A> _confirmForAction =
+    final CustomConfirmation<A> confirmForAction =
         customConfirmation ?? __showDefaultConfirmDialogForAction;
     //
     try {
-      return await _confirmForAction(action);
+      return await confirmForAction(action);
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
