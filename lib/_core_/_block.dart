@@ -1701,9 +1701,9 @@ abstract class Block<
   }
 
   // TODO: Xem lai phuong thuc nay. No da duoc goi o dau.
-  bool hasCurrentItemAndAllowEdit() {
+  bool hasCurrentItemAndAllowUpdate() {
     return data.currentItemDetail != null &&
-        _isAllowEdit(
+        _isAllowUpdateItem(
           refreshedItem: data.currentItemDetail!,
         );
   }
@@ -1711,7 +1711,7 @@ abstract class Block<
   // TODO: Xem lai phuong thuc nay. No da duoc goi o dau.
   bool hasCurrentItemAndAllowDelete() {
     return data.currentItemDetail != null &&
-        __isAllowDelete(
+        __isAllowDeleteItem(
           refreshedItem: data.currentItemDetail!,
         );
   }
@@ -2939,21 +2939,21 @@ abstract class Block<
   ///
   /// Allows creating a new Item or not according to the application logic.
   ///
-  bool isAllowCreate() {
+  bool isAllowCreateItem() {
     return true;
   }
 
   ///
   /// Allows edit an Item or not according to the application logic.
   ///
-  bool isAllowEdit({required ITEM_DETAIL refreshedItem}) {
+  bool isAllowUpdateItem({required ITEM_DETAIL refreshedItem}) {
     return true;
   }
 
   ///
   /// Allows deleting an Item or not according to the application logic.
   ///
-  bool isAllowDelete({required ITEM_DETAIL refreshedItem}) {
+  bool isAllowDeleteItem({required ITEM_DETAIL refreshedItem}) {
     return true;
   }
 
@@ -2970,7 +2970,7 @@ abstract class Block<
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: "isAllowEdit",
+        methodName: "isAllowUpdateItem",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: false,
@@ -2989,24 +2989,24 @@ abstract class Block<
   ///
   /// Allows edit current item or not according to the application logic.
   ///
-  bool __isAllowEditCurrentItem() {
+  bool __isAllowUpdateItemCurrentItem() {
     ITEM_DETAIL? currentItem = data.currentItemDetail;
     if (currentItem == null) {
       return false;
     }
-    return _isAllowEdit(refreshedItem: currentItem);
+    return _isAllowUpdateItem(refreshedItem: currentItem);
   }
 
   ///
   /// Allows deleting an Item or not according to the application logic.
   ///
-  bool _isAllowEdit({required ITEM_DETAIL refreshedItem}) {
+  bool _isAllowUpdateItem({required ITEM_DETAIL refreshedItem}) {
     try {
-      return isAllowEdit(refreshedItem: refreshedItem);
+      return isAllowUpdateItem(refreshedItem: refreshedItem);
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: "isAllowEdit",
+        methodName: "isAllowUpdateItem",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: false,
@@ -3018,13 +3018,13 @@ abstract class Block<
   ///
   /// Allows creating a new Item or not according to the application logic.
   ///
-  bool _isAllowCreate() {
+  bool _isAllowCreateItem() {
     try {
-      return isAllowCreate();
+      return isAllowCreateItem();
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: "isAllowCreate",
+        methodName: "isAllowCreateItem",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: false,
@@ -3036,13 +3036,13 @@ abstract class Block<
   ///
   /// Allows deleting an Item or not according to the application logic.
   ///
-  bool __isAllowDelete({required ITEM_DETAIL refreshedItem}) {
+  bool __isAllowDeleteItem({required ITEM_DETAIL refreshedItem}) {
     try {
-      return isAllowDelete(refreshedItem: refreshedItem);
+      return isAllowDeleteItem(refreshedItem: refreshedItem);
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: "isAllowDelete",
+        methodName: "isAllowDeleteItem",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: false,
@@ -3057,14 +3057,14 @@ abstract class Block<
   bool _isAllowDeleteItem({required ITEM item}) {
     final bool isCurrent = data.isCurrentItem(item: item);
     if (!isCurrent) {
-      // TODO: Xem lại chỗ này. cần kiểm tra với phương thức isAllowDelete().
+      // TODO: Xem lại chỗ này. cần kiểm tra với phương thức isAllowDeleteItem().
       return true;
     } else {
       ITEM_DETAIL? currentItem = data.currentItemDetail;
       if (currentItem == null) {
         return false;
       }
-      return __isAllowDelete(refreshedItem: currentItem);
+      return __isAllowDeleteItem(refreshedItem: currentItem);
     }
   }
 
@@ -3185,7 +3185,7 @@ abstract class Block<
     if (!ancestorSafe) {
       return false;
     }
-    return checkAllow ? _isAllowCreate() : true;
+    return checkAllow ? _isAllowCreateItem() : true;
   }
 
   bool __canResetForm({required bool checkAllow}) {
@@ -3222,8 +3222,9 @@ abstract class Block<
         break; // Do nothing.
     }
     //
-    bool allowEdit =
-        checkAllow ? _isAllowCreate() && __isAllowEditCurrentItem() : true;
+    bool allowEdit = checkAllow
+        ? _isAllowCreateItem() && __isAllowUpdateItemCurrentItem()
+        : true;
     //
     if (allowEdit && blockForm!.isDirty()) {
       return true;
@@ -3251,7 +3252,7 @@ abstract class Block<
       case FormMode.edit:
         break; // Do nothing.
     }
-    return checkAllow ? _isAllowEdit(refreshedItem: item) : true;
+    return checkAllow ? _isAllowUpdateItem(refreshedItem: item) : true;
   }
 
   bool __canEditCurrentItemOnForm({required bool checkAllow}) {

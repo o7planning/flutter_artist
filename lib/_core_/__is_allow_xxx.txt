@@ -1,0 +1,9 @@
+
+Scalar.isAllowQuery()
+
+Block.isAllowResetForm()
+Block.isAllowQuery()
+
+Block.isAllowCreateItem()
+Block.isAllowUpdateItem()
+Block.isAllowDeleteItem()
