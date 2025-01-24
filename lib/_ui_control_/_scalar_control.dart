@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-abstract class ScalarControl extends _StatefulWidget {
+abstract class ScalarControl extends _RefreshableWidget {
   final Scalar scalar;
   final StackTrace? currentStackTrace;
   final Widget Function(VoidCallback? onPressed) build;

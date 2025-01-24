@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-class ShelvesSafeLayoutArea extends _StatefulWidget {
+class ShelvesSafeLayoutArea extends _RefreshableWidget {
   final List<Shelf> shelves;
   final Widget Function() build;
 

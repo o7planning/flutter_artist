@@ -2,7 +2,7 @@ part of '../flutter_artist.dart';
 
 typedef ControlPressedAsyncFunction = Future<bool> Function();
 
-abstract class BlockControl extends _StatefulWidget {
+abstract class BlockControl extends _RefreshableWidget {
   final Block block;
   final StackTrace? currentStackTrace;
   final Widget Function(VoidCallback? onPressed) build;

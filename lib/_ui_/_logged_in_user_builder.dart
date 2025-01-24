@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-class LoggedInUserBuilder extends _StatefulWidget {
+class LoggedInUserBuilder extends _RefreshableWidget {
   final Widget Function(ILoggedInUser? user) build;
 
   const LoggedInUserBuilder({

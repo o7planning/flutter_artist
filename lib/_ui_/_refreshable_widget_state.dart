@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-abstract class _WidgetState<W extends _StatefulWidget> extends State<W> {
+abstract class _WidgetState<W extends _RefreshableWidget> extends State<W> {
   ShowMode showMode = ShowMode.production;
 
   late final String keyId;

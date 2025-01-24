@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-abstract class _StatefulWidget extends StatefulWidget {
+abstract class _RefreshableWidget extends StatefulWidget {
   ///
   /// The owner class instance.
   ///
@@ -8,7 +8,7 @@ abstract class _StatefulWidget extends StatefulWidget {
 
   final String? description;
 
-  const _StatefulWidget({
+  const _RefreshableWidget({
     required super.key,
     required this.ownerClassInstance,
     required this.description,

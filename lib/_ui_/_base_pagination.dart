@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-abstract class BasePagination extends _StatefulWidget {
+abstract class BasePagination extends _RefreshableWidget {
   final Block block;
 
   const BasePagination({

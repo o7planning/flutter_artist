@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-class BlockFormWidgetBuilder extends _StatefulWidget {
+class BlockFormWidgetBuilder extends _RefreshableWidget {
   final BlockForm blockForm;
 
   final Widget Function() build;

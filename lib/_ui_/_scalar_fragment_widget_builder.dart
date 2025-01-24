@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-class ScalarFragmentWidgetBuilder extends _StatefulWidget {
+class ScalarFragmentWidgetBuilder extends _RefreshableWidget {
   final Scalar scalar;
   final Widget Function() build;
 

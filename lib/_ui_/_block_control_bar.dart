@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-class BlockControlBar extends _StatefulWidget {
+class BlockControlBar extends _RefreshableWidget {
   final EdgeInsets padding;
   final Block block;
   final bool showRefreshButton;

@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-class CustomControlBar extends _StatefulWidget {
+class CustomControlBar extends _RefreshableWidget {
   final EdgeInsets margin;
   final EdgeInsets padding;
   final Decoration? decoration;

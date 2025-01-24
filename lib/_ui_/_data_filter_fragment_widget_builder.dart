@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-class DataFilterFragmentWidgetBuilder extends _StatefulWidget {
+class DataFilterFragmentWidgetBuilder extends _RefreshableWidget {
   final DataFilter dataFilter;
 
   final Widget Function() build;
