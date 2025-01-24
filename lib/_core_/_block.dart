@@ -195,10 +195,10 @@ abstract class Block<
 
   DataState get dataState => data._dataState;
 
-  final Map<_WidgetState, bool> _blockFragmentWidgetStates = {};
-  final Map<_WidgetState, bool> _controlBarWidgetStates = {};
-  final Map<_WidgetState, bool> _controlWidgetStates = {};
-  final Map<_WidgetState, bool> _paginationWidgetStates = {};
+  final Map<_RefreshableWidgetState, bool> _blockFragmentWidgetStates = {};
+  final Map<_RefreshableWidgetState, bool> _controlBarWidgetStates = {};
+  final Map<_RefreshableWidgetState, bool> _controlWidgetStates = {};
+  final Map<_RefreshableWidgetState, bool> _paginationWidgetStates = {};
 
   Block({
     required this.name,
@@ -308,7 +308,7 @@ abstract class Block<
   }
 
   void _addPaginationWidgetState({
-    required _WidgetState widgetState,
+    required _RefreshableWidgetState widgetState,
     required bool isShowing,
   }) {
     _paginationWidgetStates[widgetState] = isShowing;
@@ -318,13 +318,13 @@ abstract class Block<
   }
 
   void _removePaginationWidgetState({
-    required _WidgetState widgetState,
+    required _RefreshableWidgetState widgetState,
   }) {
     _paginationWidgetStates.remove(widgetState);
   }
 
   void _addControlBarWidgetState({
-    required _WidgetState widgetState,
+    required _RefreshableWidgetState widgetState,
     required bool isShowing,
   }) {
     _controlBarWidgetStates[widgetState] = isShowing;
@@ -334,13 +334,13 @@ abstract class Block<
   }
 
   void _removeControlBarWidgetState({
-    required _WidgetState widgetState,
+    required _RefreshableWidgetState widgetState,
   }) {
     _controlBarWidgetStates.remove(widgetState);
   }
 
   void _addControlWidgetState({
-    required _WidgetState widgetState,
+    required _RefreshableWidgetState widgetState,
     required bool isShowing,
   }) {
     _controlWidgetStates[widgetState] = isShowing;
@@ -350,13 +350,13 @@ abstract class Block<
   }
 
   void _removeControlWidgetState({
-    required _WidgetState widgetState,
+    required _RefreshableWidgetState widgetState,
   }) {
     _controlWidgetStates.remove(widgetState);
   }
 
   void _addBlockFragmentWidgetState({
-    required _WidgetState widgetState,
+    required _RefreshableWidgetState widgetState,
     required bool isShowing,
   }) {
     bool activeOLD = hasActiveUIComponent();
@@ -401,7 +401,7 @@ abstract class Block<
     }
   }
 
-  Map<_WidgetState, bool> _findMountedWidgetStates({
+  Map<_RefreshableWidgetState, bool> _findMountedWidgetStates({
     required bool withPagination,
     required bool withBlockFragment,
     required bool withFilter,
@@ -410,7 +410,7 @@ abstract class Block<
     required bool withControlBar,
     required bool activeOnly,
   }) {
-    Map<_WidgetState, bool> ret = {};
+    Map<_RefreshableWidgetState, bool> ret = {};
     //
     if (withFilter) {
       ret.addAll(_registeredOrDefaultDataFilter._filterFragmentWidgetStates);
@@ -504,7 +504,7 @@ abstract class Block<
   }
 
   bool hasActiveControlBarWidget() {
-    for (_WidgetState controlBarState in _controlBarWidgetStates.keys) {
+    for (_RefreshableWidgetState controlBarState in _controlBarWidgetStates.keys) {
       bool visible = _controlBarWidgetStates[controlBarState] ?? false;
       if (visible && controlBarState.mounted) {
         return true;
@@ -514,7 +514,7 @@ abstract class Block<
   }
 
   bool hasActiveControlWidget() {
-    for (_WidgetState controlState in _controlWidgetStates.keys) {
+    for (_RefreshableWidgetState controlState in _controlWidgetStates.keys) {
       bool visible = _controlWidgetStates[controlState] ?? false;
       if (visible && controlState.mounted) {
         return true;
@@ -524,7 +524,7 @@ abstract class Block<
   }
 
   bool hasActivePaginationWidget() {
-    for (_WidgetState paginationState in _paginationWidgetStates.keys) {
+    for (_RefreshableWidgetState paginationState in _paginationWidgetStates.keys) {
       bool visible = _paginationWidgetStates[paginationState] ?? false;
       if (visible && paginationState.mounted) {
         return true;
@@ -2884,7 +2884,7 @@ abstract class Block<
   }
 
   void updateBlockFragmentWidgets() {
-    for (_WidgetState widgetState in _blockFragmentWidgetStates.keys) {
+    for (_RefreshableWidgetState widgetState in _blockFragmentWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }
@@ -2892,7 +2892,7 @@ abstract class Block<
   }
 
   void updateControlBarWidgets() {
-    for (_WidgetState widgetState in _controlBarWidgetStates.keys) {
+    for (_RefreshableWidgetState widgetState in _controlBarWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }
@@ -2900,7 +2900,7 @@ abstract class Block<
   }
 
   void updateControlWidgets() {
-    for (_WidgetState widgetState in _controlWidgetStates.keys) {
+    for (_RefreshableWidgetState widgetState in _controlWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }
@@ -2908,7 +2908,7 @@ abstract class Block<
   }
 
   void updatePaginationWidgets() {
-    for (_WidgetState widgetState in _paginationWidgetStates.keys) {
+    for (_RefreshableWidgetState widgetState in _paginationWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }

@@ -24,7 +24,7 @@ class BlockFormWidgetBuilder extends _RefreshableWidget {
 }
 
 class _BlockFormWidgetBuilderState
-    extends _WidgetState<BlockFormWidgetBuilder> {
+    extends _RefreshableWidgetState<BlockFormWidgetBuilder> {
   GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
 
   @override
