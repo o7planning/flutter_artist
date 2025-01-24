@@ -21,6 +21,8 @@ abstract class _WidgetState<W extends _StatefulWidget> extends State<W> {
   ///
   String getWidgetOwnerClassName();
 
+  void checkAndFreeMemory();
+
   String get description {
     return widget.description == null || widget.description!.trim().isEmpty
         ? "${getWidgetOwnerClassName()} (${type.name})"
@@ -61,6 +63,10 @@ abstract class _WidgetState<W extends _StatefulWidget> extends State<W> {
   void dispose() {
     super.dispose();
     //
+    print("@@@@@@@@@@@ >>>>>>>>>>>>>> DISPOSE: ${getClassName(widget)}");
+    //
     removeFilterFragmentWidgetState();
+    //
+    checkAndFreeMemory();
   }
 }

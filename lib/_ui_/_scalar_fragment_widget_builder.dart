@@ -47,4 +47,9 @@ class _ScalarFragmentWidgetBuilderState
       widgetState: this,
     );
   }
+
+  @override
+  void checkAndFreeMemory() {
+    FlutterArtist.storage._checkToRemoveShelf(widget.scalar.shelf);
+  }
 }

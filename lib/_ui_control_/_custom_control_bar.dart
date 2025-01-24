@@ -50,4 +50,9 @@ class _CustomControlBarState extends _WidgetState<CustomControlBar> {
   void removeFilterFragmentWidgetState() {
     // TODO: implement removeWidgetState
   }
+
+  @override
+  void checkAndFreeMemory() {
+    FlutterArtist.storage._checkToRemoveShelf(widget.block.shelf);
+  }
 }

@@ -85,4 +85,9 @@ class _ControlButtonState extends _WidgetState<ScalarControl> {
       widgetState: this,
     );
   }
+
+  @override
+  void checkAndFreeMemory() {
+    FlutterArtist.storage._checkToRemoveShelf(widget.scalar.shelf);
+  }
 }

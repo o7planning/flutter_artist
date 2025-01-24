@@ -46,4 +46,9 @@ class _BasePaginationState extends _WidgetState<BasePagination> {
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);
   }
+
+  @override
+  void checkAndFreeMemory() {
+    FlutterArtist.storage._checkToRemoveShelf(widget.block.shelf);
+  }
 }

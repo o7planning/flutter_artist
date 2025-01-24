@@ -321,7 +321,6 @@ abstract class Block<
     required _WidgetState widgetState,
   }) {
     _paginationWidgetStates.remove(widgetState);
-    FlutterArtist.storage._checkToRemoveShelf(shelf);
   }
 
   void _addControlBarWidgetState({
@@ -338,7 +337,6 @@ abstract class Block<
     required _WidgetState widgetState,
   }) {
     _controlBarWidgetStates.remove(widgetState);
-    FlutterArtist.storage._checkToRemoveShelf(shelf);
   }
 
   void _addControlWidgetState({
@@ -355,7 +353,6 @@ abstract class Block<
     required _WidgetState widgetState,
   }) {
     _controlWidgetStates.remove(widgetState);
-    FlutterArtist.storage._checkToRemoveShelf(shelf);
   }
 
   void _addBlockFragmentWidgetState({
@@ -384,7 +381,6 @@ abstract class Block<
     bool activeCURRENT = hasActiveUIComponent();
     //
     if (activeOLD && !activeCURRENT) {
-      FlutterArtist.storage._checkToRemoveShelf(shelf);
       _fireBlockHidden();
     }
   }

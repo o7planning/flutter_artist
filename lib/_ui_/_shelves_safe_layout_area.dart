@@ -50,4 +50,11 @@ class _ShelvesSafeLayoutAreaState extends _WidgetState<ShelvesSafeLayoutArea> {
       );
     }
   }
+
+  @override
+  void checkAndFreeMemory() {
+    for (Shelf shelf in widget.shelves) {
+      FlutterArtist.storage._checkToRemoveShelf(shelf);
+    }
+  }
 }

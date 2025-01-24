@@ -47,4 +47,9 @@ class _BlockFragmentWidgetBuilderState
   Widget buildContent(BuildContext context) {
     return widget.build();
   }
+
+  @override
+  void checkAndFreeMemory() {
+    FlutterArtist.storage._checkToRemoveShelf(widget.block.shelf);
+  }
 }

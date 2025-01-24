@@ -46,4 +46,9 @@ class _LoggedInUserBuilderState extends _WidgetState<LoggedInUserBuilder> {
       widgetState: this,
     );
   }
+
+  @override
+  void checkAndFreeMemory() {
+    // Do nothing.
+  }
 }

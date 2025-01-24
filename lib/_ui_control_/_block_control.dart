@@ -135,4 +135,9 @@ class _BlockControlButtonState extends _WidgetState<BlockControl> {
       widgetState: this,
     );
   }
+
+  @override
+  void checkAndFreeMemory() {
+    FlutterArtist.storage._checkToRemoveShelf(widget.block.shelf);
+  }
 }

@@ -46,4 +46,9 @@ class _DataFilterFragmentWidgetBuilderState
   Widget buildContent(BuildContext context) {
     return widget.build();
   }
+
+  @override
+  void checkAndFreeMemory() {
+    FlutterArtist.storage._checkToRemoveShelf(widget.dataFilter.shelf);
+  }
 }

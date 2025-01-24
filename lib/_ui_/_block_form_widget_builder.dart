@@ -137,4 +137,9 @@ class _BlockFormWidgetBuilderState
     //
     widget.blockForm._afterBuildFormWidget();
   }
+
+  @override
+  void checkAndFreeMemory() {
+    FlutterArtist.storage._checkToRemoveShelf(widget.blockForm.shelf);
+  }
 }
