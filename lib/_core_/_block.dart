@@ -1362,7 +1362,7 @@ abstract class Block<
       //
       bool success = await __executeQuickActionCreate(
         thisXBlock: thisXBlock,
-        data: data,
+        actionData: data,
       );
       if (success) {
         shelf._applyNewStateAll();
@@ -1388,11 +1388,11 @@ abstract class Block<
   // Private Method. Only for use in this class.
   Future<bool> __executeQuickActionCreate({
     required _XBlock thisXBlock,
-    required QuickActionData data,
+    required QuickActionData actionData,
   }) async {
     ApiResult<ITEM_DETAIL> result;
     try {
-      result = await callApiQuickCreateItem(data: data);
+      result = await callApiQuickCreateItem(actionData: actionData);
       FlutterArtist.storage.fireSourceChanged(
         eventBlock: this,
         itemIdString: null,
@@ -1472,7 +1472,7 @@ abstract class Block<
       bool success = await __executeQuickActionUpdate(
         thisXBlock: thisXBlock,
         item: item,
-        data: data,
+        actionData: data,
       );
       if (success) {
         shelf._applyNewStateAll();
@@ -1498,13 +1498,13 @@ abstract class Block<
   Future<bool> __executeQuickActionUpdate({
     required _XBlock thisXBlock,
     required ITEM item,
-    required QuickActionData data,
+    required QuickActionData actionData,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
     ApiResult<ITEM_DETAIL> result;
     try {
-      result = await callApiQuickUpdateItem(item: item, data: data);
+      result = await callApiQuickUpdateItem(item: item, actionData: actionData);
       FlutterArtist.storage.fireSourceChanged(
         eventBlock: this,
         itemIdString: null,
@@ -1794,7 +1794,7 @@ abstract class Block<
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
     required ActionConfirmation? actionConfirmation,
-    required QuickActionData action,
+    required QuickActionData actionData,
     required AfterQuickAction? afterQuickAction,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -1805,7 +1805,7 @@ abstract class Block<
       parameters: {
         "filterInput": filterInput,
         "suggestedSelection": suggestedSelection,
-        "action": action,
+        "actionData": actionData,
         "afterQuickAction": afterQuickAction,
       },
     );
@@ -1835,7 +1835,7 @@ abstract class Block<
       bool success = await _executeQuickActionWithOverlayAndRestorable(
         filterInput: filterInput,
         suggestedSelection: suggestedSelection,
-        action: action,
+        action: actionData,
         afterQuickAction: afterQuickAction,
       );
       return success;
@@ -1928,7 +1928,7 @@ abstract class Block<
   Future<bool> executeQuickActionUpdate<A extends QuickActionData>({
     required ITEM item,
     required CustomConfirmation<A>? customConfirmation,
-    required A action,
+    required A actionData,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -1937,7 +1937,7 @@ abstract class Block<
       methodName: "executeQuickActionUpdate",
       parameters: {
         "item": item,
-        "data": action,
+        "actionData": actionData,
       },
     );
     //
@@ -1945,7 +1945,7 @@ abstract class Block<
     //
     bool confirm = await __showConfirmDialogForAction(
       customConfirmation: customConfirmation,
-      action: action,
+      action: actionData,
     );
     if (!confirm) {
       return false;
@@ -1954,7 +1954,7 @@ abstract class Block<
     try {
       bool success = await _executeQuickUpdateWithOverlayAndRestorable(
         item: item,
-        data: action,
+        data: actionData,
       );
       shelf.updateAllUIComponents();
       return success;
@@ -2824,7 +2824,7 @@ abstract class Block<
   ///
   Future<ApiResult<ITEM_DETAIL>> callApiQuickUpdateItem({
     required ITEM item,
-    required QuickActionData data,
+    required QuickActionData actionData,
   }) async {
     throw UnimplementedError("Override me!");
   }
@@ -2844,7 +2844,7 @@ abstract class Block<
   /// ```
   ///
   Future<ApiResult<ITEM_DETAIL>> callApiQuickCreateItem({
-    required QuickActionData data,
+    required QuickActionData actionData,
   }) async {
     throw UnimplementedError("Override me!");
   }
