@@ -2825,9 +2825,7 @@ abstract class Block<
   Future<ApiResult<ITEM_DETAIL>> callApiQuickUpdateItem({
     required ITEM item,
     required QuickCRUDActionData actionData,
-  }) async {
-    throw UnimplementedError("Override me!");
-  }
+  });
 
   ///
   /// This method is called when you can [executeQuickActionCreateItem] method.
@@ -2845,15 +2843,11 @@ abstract class Block<
   ///
   Future<ApiResult<ITEM_DETAIL>> callApiQuickCreateItem({
     required QuickCRUDActionData actionData,
-  }) async {
-    throw UnimplementedError("Override me!");
-  }
+  });
 
   Future<ApiResult<void>> callApiQuickAction({
     required QuickActionData actionData,
-  }) async {
-    throw UnimplementedError("Override me!");
-  }
+  });
 
   Future<ApiResult<PageData<ITEM>?>> callApiQuery({
     required FILTER_CRITERIA filterCriteria,
