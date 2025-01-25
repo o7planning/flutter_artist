@@ -1,9 +1,6 @@
 part of '../flutter_artist.dart';
 
 abstract class _XBase {
-
-
-
   Future<bool> showConfirmDialog({
     required String message,
     String? details,
@@ -38,6 +35,43 @@ abstract class _XBase {
     );
   }
 
+  Future<bool> __showDefaultConfirmDialogForAction(
+    BaseActionData action,
+  ) async {
+    return await showConfirmDialog(
+      message: 'Are you sure you want to perform this action?',
+      details: action.actionInfo,
+    );
+  }
+
+  Future<bool> __showConfirmDialogForQuickAction<A extends BaseActionData>({
+    required Shelf shelf,
+    required A actionData,
+    required CustomConfirmation<A>? customConfirmation,
+  }) async {
+    if (!actionData.needToConfirm) {
+      return true;
+    }
+    final CustomConfirmation<A> confirmForAction =
+        customConfirmation ?? __showDefaultConfirmDialogForAction;
+    //
+    try {
+      return await confirmForAction(actionData);
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: "confirmForAction",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      return false;
+    }
+  }
+
+  // ***************************************************************************
+  // *********** HANDLE ERROR **************************************************
+  // ***************************************************************************
 
   void _handleError({
     required Shelf shelf,
@@ -111,40 +145,9 @@ abstract class _XBase {
     }
   }
 
-
-  Future<bool> __showDefaultConfirmDialogForAction(
-      BaseActionData action,
-      ) async {
-    return await showConfirmDialog(
-      message: 'Are you sure you want to perform this action?',
-      details: action.actionInfo,
-    );
-  }
-
-  Future<bool> __showConfirmDialogForQuickAction<A extends BaseActionData>({
-    required  Shelf shelf,
-    required A actionData,
-    required CustomConfirmation<A>? customConfirmation,
-  }) async {
-    if (!actionData.needToConfirm) {
-      return true;
-    }
-    final CustomConfirmation<A> confirmForAction =
-        customConfirmation ?? __showDefaultConfirmDialogForAction;
-    //
-    try {
-      return await confirmForAction(actionData);
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "confirmForAction",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      return false;
-    }
-  }
+  // ***************************************************************************
+  // *********** HANDLE ERROR **************************************************
+  // ***************************************************************************
 
   void showErrorSnackBar({
     required String message,

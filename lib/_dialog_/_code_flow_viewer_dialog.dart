@@ -31,7 +31,7 @@ class _CodeFlowViewerDialogState extends State<_CodeFlowViewerDialog> {
       child: _buildMainWidget(),
     );
 
-    CustomAlertDialog alert = CustomAlertDialog(
+    dialogs.CustomAlertDialog alert = dialogs.CustomAlertDialog(
       titleText: "Code Flow Viewer",
       content: contentWidget,
       contentPadding: EdgeInsets.zero,

@@ -182,18 +182,6 @@ abstract class BlockForm<
     required bool isNew,
   });
 
-  // TODO: Co ca trong Block.
-  @override
-  void showErrorSnackBar({
-    required String message,
-    required List<String>? errorDetails,
-  }) {
-    FlutterArtist.adapter.showErrorSnackBar(
-      message: message,
-      errorDetails: errorDetails,
-    );
-  }
-
   // Private method. Only for use in this class.
   bool __checkValidBeforeSave() {
     return !block.__isSaving && (_formKey.currentState?.validate() ?? false);

@@ -41,7 +41,7 @@ class _ErrorViewerDialogState extends State<ErrorViewerDialog> {
       height = height - 100;
     }
 
-    CustomAlertDialog alert = CustomAlertDialog(
+    dialogs.CustomAlertDialog alert = dialogs.CustomAlertDialog(
       titleText: widget.title,
       content: _buildContent(width, height),
     );

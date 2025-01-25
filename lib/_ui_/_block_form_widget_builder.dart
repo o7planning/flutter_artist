@@ -69,7 +69,7 @@ class _BlockFormWidgetBuilderState
         message:
             "Do you want to save changes the [${getClassName(widget.blockForm)}] before closing?",
         details: "",
-        defaultOption: YesNoCancel.yes,
+        defaultOption: dialogs.YesNoCancel.yes,
       );
     } finally {
       _leavingDirtyForms.remove(widget.blockForm.id);

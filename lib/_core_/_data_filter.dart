@@ -218,17 +218,4 @@ abstract class DataFilter<
       }
     }
   }
-
-  @override
-  void showErrorSnackBar({
-    required String message,
-    List<String>? errorDetails,
-  }) {
-    if (_blocks.isNotEmpty) {
-      FlutterArtist.adapter.showErrorSnackBar(
-        message: message,
-        errorDetails: errorDetails,
-      );
-    }
-  }
 }

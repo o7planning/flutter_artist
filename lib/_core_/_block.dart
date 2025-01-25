@@ -2364,7 +2364,6 @@ abstract class Block<
     return false;
   }
 
-
   Future<bool> deleteItemById({required ID itemId}) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
