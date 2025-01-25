@@ -34,8 +34,6 @@ abstract class BlockForm<
 
   late AutovalidateMode autovalidateMode = _defaultAutovalidateMode;
 
-  ITEM_DETAIL? item;
-
   final Map<_RefreshableWidgetState, bool> _formWidgetStates = {};
 
   BlockForm();
