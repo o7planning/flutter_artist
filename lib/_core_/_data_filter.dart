@@ -197,9 +197,20 @@ abstract class DataFilter<
     required _RefreshableWidgetState widgetState,
     required bool isShowing,
   }) {
+    bool activeOLD = hasActiveUIComponent();
     _filterFragmentWidgetStates[widgetState] = isShowing;
+    bool activeCURRENT = hasActiveUIComponent();
+
     if (isShowing) {
       FlutterArtist.storage._addRecentShelf(shelf);
+    }
+    //
+    if (!activeOLD && activeCURRENT) {
+      // Fire event:
+      shelf._startNewLazyQueryTransactionIfNeed();
+    } else if (activeOLD && !activeCURRENT) {
+      // TODO: (Kiem tra phuong thuc cung ten trong Block).
+      // block._fireBlockHidden();
     }
   }
 

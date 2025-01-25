@@ -362,6 +362,7 @@ abstract class Block<
     bool activeOLD = hasActiveUIComponent();
     _blockFragmentWidgetStates[widgetState] = isShowing;
     bool activeCURRENT = hasActiveUIComponent();
+    
     //
     if (isShowing) {
       FlutterArtist.storage._addRecentShelf(shelf);
