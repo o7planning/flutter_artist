@@ -1823,8 +1823,9 @@ abstract class Block<
     // Confirmation:
     //
     bool confirm = await __showConfirmDialogForQuickAction<A>(
+      shelf: shelf,
       customConfirmation: customConfirmation,
-      action: actionData,
+      actionData: actionData,
     );
     if (!confirm) {
       return false;
@@ -1862,8 +1863,9 @@ abstract class Block<
     // Confirmation:
     //
     bool confirm = await __showConfirmDialogForQuickAction<A>(
+      shelf: shelf,
       customConfirmation: customConfirmation,
-      action: actionData,
+      actionData: actionData,
     );
     if (!confirm) {
       return false;
@@ -1884,39 +1886,6 @@ abstract class Block<
       );
       //
       shelf.updateAllUIComponents();
-      return false;
-    }
-  }
-
-  Future<bool> __showDefaultConfirmDialogForAction(
-    BaseActionData action,
-  ) async {
-    return await showConfirmDialog(
-      message: 'Are you sure you want to perform this action?',
-      details: action.actionInfo,
-    );
-  }
-
-  Future<bool> __showConfirmDialogForQuickAction<A extends BaseActionData>({
-    required A action,
-    required CustomConfirmation<A>? customConfirmation,
-  }) async {
-    if (!action.needToConfirm) {
-      return true;
-    }
-    final CustomConfirmation<A> confirmForAction =
-        customConfirmation ?? __showDefaultConfirmDialogForAction;
-    //
-    try {
-      return await confirmForAction(action);
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "confirmForAction",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
       return false;
     }
   }
@@ -1944,8 +1913,9 @@ abstract class Block<
     // Confirmation:
     //
     bool confirm = await __showConfirmDialogForQuickAction<A>(
+      shelf: shelf,
       customConfirmation: customConfirmation,
-      action: actionData,
+      actionData: actionData,
     );
     if (!confirm) {
       return false;
@@ -2394,37 +2364,6 @@ abstract class Block<
     return false;
   }
 
-  Future<bool> showConfirmDialog(
-      {required String message, String? details}) async {
-    BuildContext context = FlutterArtist.adapter.getCurrentContext();
-    bool confirm = await dialogs.showConfirmDialog(
-      context: context,
-      message: message,
-      details: details ?? "",
-    );
-    return confirm;
-  }
-
-  Future<bool> showConfirmDeleteDialog({String? details}) async {
-    BuildContext context = FlutterArtist.adapter.getCurrentContext();
-    bool confirm = await dialogs.showConfirmDeleteDialog(
-      context: context,
-      details: details ?? "",
-    );
-    return confirm;
-  }
-
-  Future<void> showMessageDialog({
-    required String message,
-    String? detals,
-  }) async {
-    BuildContext context = FlutterArtist.adapter.getCurrentContext();
-    await dialogs.showMessageDialog(
-      context: context,
-      message: message,
-      details: detals ?? "",
-    );
-  }
 
   Future<bool> deleteItemById({required ID itemId}) async {
     FlutterArtist.codeFlowLogger._addMethodCall(

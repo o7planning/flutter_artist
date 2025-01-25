@@ -284,17 +284,6 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> showMessageDialog({
-    required String message,
-    String? details,
-  }) async {
-    BuildContext context = FlutterArtist.adapter.getCurrentContext();
-    await dialogs.showMessageDialog(
-      context: context,
-      message: message,
-      details: details,
-    );
-  }
 
   Future<void> showShelfStructureDialog() async {
     BuildContext context = FlutterArtist.adapter.getCurrentContext();

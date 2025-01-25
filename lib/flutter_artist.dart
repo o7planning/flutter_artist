@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_artist/restorable/restorable.dart';
 import 'package:flutter_artist_dialogs/flutter_artist_dialogs.dart' as dialogs;
-import 'package:flutter_artist_dialogs/flutter_artist_dialogs.dart';
 import 'package:flutter_artist_rest_core/flutter_artist_rest_core.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
