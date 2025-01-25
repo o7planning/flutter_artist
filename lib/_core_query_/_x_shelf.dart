@@ -80,6 +80,10 @@ class _XShelf {
     return allXBlockMap[name];
   }
 
+  _XScalar? findXScalarByName(String name) {
+    return allXScalarMap[name];
+  }
+
   // ***************************************************************************
   // SET FORCE QUERY:
   // ***************************************************************************

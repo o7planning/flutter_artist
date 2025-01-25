@@ -1,6 +1,10 @@
 part of '../flutter_artist.dart';
 
-enum AfterQuickAction {
+enum AfterBlockQuickAction {
   refreshCurrentItem,
+  query;
+}
+
+enum AfterScalarQuickAction {
   query;
 }

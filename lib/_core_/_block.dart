@@ -1547,8 +1547,8 @@ abstract class Block<
   Future<bool> _executeQuickActionWithOverlayAndRestorable({
     required FILTER_INPUT? filterInput,
     required SuggestedSelection? suggestedSelection,
-    required QuickActionData action,
-    required AfterQuickAction? afterQuickAction,
+    required QuickActionData actionData,
+    required AfterBlockQuickAction? afterQuickAction,
     required Function(BuildContext context)? navigate,
   }) async {
     return await FlutterArtist.executeTask(
@@ -1556,7 +1556,7 @@ abstract class Block<
         bool success = await __executeQuickActionWithRestorable(
           filterInput: filterInput,
           suggestedSelection: suggestedSelection,
-          actionData: action,
+          actionData: actionData,
           afterQuickAction: afterQuickAction,
         );
         if (success) {
@@ -1579,8 +1579,25 @@ abstract class Block<
     required FILTER_INPUT? filterInput,
     required SuggestedSelection? suggestedSelection,
     required QuickActionData actionData,
-    required AfterQuickAction? afterQuickAction,
+    required AfterBlockQuickAction? afterQuickAction,
   }) async {
+    List<_BlockOpt> forceQueryBlockOpts = [];
+    switch (afterQuickAction) {
+      case null:
+      case AfterBlockQuickAction.refreshCurrentItem:
+        break;
+      case AfterBlockQuickAction.query:
+        forceQueryBlockOpts = [
+          _BlockOpt(
+            block: this,
+            queryType: null,
+            pageable: null,
+            listBehavior: null,
+            suggestedSelection: null,
+            postQueryBehavior: null,
+          ),
+        ];
+    }
     _XShelf xShelf = _XShelf(
       shelf: shelf,
       forceDataFilterOpt: _DataFilterOpt(
@@ -1588,18 +1605,7 @@ abstract class Block<
         filterInput: filterInput,
       ),
       forceQueryScalarOpts: [],
-      forceQueryBlockOpts: _childBlocks
-          .map(
-            (b) => _BlockOpt(
-              block: b,
-              queryType: null,
-              pageable: null,
-              listBehavior: null,
-              suggestedSelection: null,
-              postQueryBehavior: null,
-            ),
-          )
-          .toList(),
+      forceQueryBlockOpts: forceQueryBlockOpts,
       forceQueryBlockFormOpts: [],
     );
     //
@@ -1636,7 +1642,7 @@ abstract class Block<
   Future<bool> __executeQuickAction({
     required _XBlock thisXBlock,
     required QuickActionData actionData,
-    required AfterQuickAction? afterQuickAction,
+    required AfterBlockQuickAction? afterQuickAction,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -1644,8 +1650,7 @@ abstract class Block<
     try {
       result = await callApiQuickAction(actionData: actionData);
       //
-      FlutterArtist.storage._fireEventForAffectedItemTypes(
-        eventBlock: this,
+      FlutterArtist.storage._fireEventToAffectedItemTypes(
         affectedItemTypes: actionData.affectedItemTypes,
       );
     } catch (e, stackTrace) {
@@ -1677,7 +1682,7 @@ abstract class Block<
       try {
         bool success = false;
         switch (afterQuickAction) {
-          case AfterQuickAction.refreshCurrentItem:
+          case AfterBlockQuickAction.refreshCurrentItem:
             methodName = "refreshCurrentItem";
             if (!canRefreshCurrentItem()) {
               return true;
@@ -1688,7 +1693,7 @@ abstract class Block<
               justQueried: false,
               forceForm: false,
             );
-          case AfterQuickAction.query:
+          case AfterBlockQuickAction.query:
             methodName = "query";
             thisXBlock.needQuery = true;
             //
@@ -1811,7 +1816,7 @@ abstract class Block<
     required ActionConfirmationType actionConfirmationType,
     required CustomConfirmation<A>? customConfirmation,
     required A actionData,
-    required AfterQuickAction? afterQuickAction,
+    required AfterBlockQuickAction? afterQuickAction,
     required Function(BuildContext context)? navigate,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -1842,7 +1847,7 @@ abstract class Block<
       bool success = await _executeQuickActionWithOverlayAndRestorable(
         filterInput: filterInput,
         suggestedSelection: suggestedSelection,
-        action: actionData,
+        actionData: actionData,
         afterQuickAction: afterQuickAction,
         navigate: navigate,
       );

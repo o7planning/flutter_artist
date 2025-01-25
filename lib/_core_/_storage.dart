@@ -15,8 +15,7 @@ class _Storage {
     return m;
   }
 
-  void _fireEventForAffectedItemTypes({
-    required Block eventBlock,
+  void _fireEventToAffectedItemTypes({
     required List<Type> affectedItemTypes,
   }) {
     final List<Scalar> listenerScalars =
