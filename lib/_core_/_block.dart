@@ -1200,7 +1200,7 @@ abstract class Block<
       itemDetail: refreshedItemDetail,
     );
     //
-    bool editable = canEditItemOnForm(item: refreshedItemDetail);
+    bool editable = canEditItemOnForm(item: refreshedItem);
     //
     FlutterArtist.codeFlowLogger._addInfo(
       ownerClassInstance: this,
@@ -1724,17 +1724,17 @@ abstract class Block<
 
   // TODO: Xem lai phuong thuc nay. No da duoc goi o dau.
   bool hasCurrentItemAndAllowUpdate() {
-    return data.currentItemDetail != null &&
-        _isAllowUpdateItem(
-          refreshedItem: data.currentItemDetail!,
+    return data.currentItem != null &&
+        __isAllowDeleteItem(
+          item: data.currentItem!,
         );
   }
 
   // TODO: Xem lai phuong thuc nay. No da duoc goi o dau.
   bool hasCurrentItemAndAllowDelete() {
-    return data.currentItemDetail != null &&
+    return data.currentItem != null &&
         __isAllowDeleteItem(
-          refreshedItem: data.currentItemDetail!,
+          item: data.currentItem!,
         );
   }
 
@@ -2892,14 +2892,14 @@ abstract class Block<
   ///
   /// Allows edit an Item or not according to the application logic.
   ///
-  bool isAllowUpdateItem({required ITEM_DETAIL refreshedItem}) {
+  bool isAllowUpdateItem({required ITEM item}) {
     return true;
   }
 
   ///
   /// Allows deleting an Item or not according to the application logic.
   ///
-  bool isAllowDeleteItem({required ITEM_DETAIL refreshedItem}) {
+  bool isAllowDeleteItem({required ITEM item}) {
     return true;
   }
 
@@ -2936,19 +2936,19 @@ abstract class Block<
   /// Allows edit current item or not according to the application logic.
   ///
   bool __isAllowUpdateItemCurrentItem() {
-    ITEM_DETAIL? currentItem = data.currentItemDetail;
+    ITEM? currentItem = data.currentItem;
     if (currentItem == null) {
       return false;
     }
-    return _isAllowUpdateItem(refreshedItem: currentItem);
+    return _isAllowUpdateItem(item: currentItem);
   }
 
   ///
   /// Allows deleting an Item or not according to the application logic.
   ///
-  bool _isAllowUpdateItem({required ITEM_DETAIL refreshedItem}) {
+  bool _isAllowUpdateItem({required ITEM item}) {
     try {
-      return isAllowUpdateItem(refreshedItem: refreshedItem);
+      return isAllowUpdateItem(item: item);
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
@@ -2982,9 +2982,9 @@ abstract class Block<
   ///
   /// Allows deleting an Item or not according to the application logic.
   ///
-  bool __isAllowDeleteItem({required ITEM_DETAIL refreshedItem}) {
+  bool __isAllowDeleteItem({required ITEM item}) {
     try {
-      return isAllowDeleteItem(refreshedItem: refreshedItem);
+      return isAllowDeleteItem(item: item);
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
@@ -3000,19 +3000,18 @@ abstract class Block<
   ///
   /// Allows deleting an Item or not according to the application logic.
   ///
-  bool _isAllowDeleteItem({required ITEM item}) {
-    final bool isCurrent = data.isCurrentItem(item: item);
-    if (!isCurrent) {
-      // TODO: Xem lại chỗ này. cần kiểm tra với phương thức isAllowDeleteItem().
-      return true;
-    } else {
-      ITEM_DETAIL? currentItem = data.currentItemDetail;
-      if (currentItem == null) {
-        return false;
-      }
-      return __isAllowDeleteItem(refreshedItem: currentItem);
-    }
-  }
+  // bool _isAllowDeleteItem({required ITEM item}) {
+  //   final bool isCurrent = data.isCurrentItem(item: item);
+  //   if (!isCurrent) {
+  //      return isAllowDeleteItem(refreshedItem: item);
+  //   } else {
+  //     ITEM_DETAIL? currentItem = data.currentItemDetail;
+  //     if (currentItem == null) {
+  //       return false;
+  //     }
+  //     return __isAllowDeleteItem(refreshedItem: currentItem);
+  //   }
+  // }
 
   // ***************************************************************************
   // *********** __checkAncestorsSafeXXX() method ******************************
@@ -3090,7 +3089,7 @@ abstract class Block<
   ///
   /// Check if Ancestor Blocks in Safe State to Edit item in current Block.
   ///
-  bool __checkAncestorsSafeToEditItem({required ITEM_DETAIL? itemDetail}) {
+  bool __checkAncestorsSafeToEditItem({required ITEM? item}) {
     if (parent == null) {
       return true;
     }
@@ -3103,7 +3102,7 @@ abstract class Block<
           break; // Do nothing
       }
     }
-    return parent!.__checkAncestorsSafeToEditItem(itemDetail: null);
+    return parent!.__checkAncestorsSafeToEditItem(item: null);
   }
 
   // ***************************************************************************
@@ -3120,7 +3119,7 @@ abstract class Block<
       return false;
     }
     //
-    return checkAllow ? _isAllowDeleteItem(item: item) : true;
+    return checkAllow ? __isAllowDeleteItem(item: item) : true;
   }
 
   bool __canCreateItem({required bool checkAllow}) {
@@ -3178,14 +3177,14 @@ abstract class Block<
   }
 
   bool __canEditItemOnForm({
-    required ITEM_DETAIL item,
+    required ITEM item,
     required bool checkAllow,
   }) {
     if (blockForm == null || __isSaving) {
       return false;
     }
     //
-    bool ancestorsSafe = __checkAncestorsSafeToEditItem(itemDetail: item);
+    bool ancestorsSafe = __checkAncestorsSafeToEditItem(item: item);
     if (!ancestorsSafe) {
       return false;
     }
@@ -3197,7 +3196,7 @@ abstract class Block<
       case FormMode.edit:
         break; // Do nothing.
     }
-    return checkAllow ? _isAllowUpdateItem(refreshedItem: item) : true;
+    return checkAllow ? _isAllowUpdateItem(item: item) : true;
   }
 
   bool __canEditCurrentItemOnForm({required bool checkAllow}) {
@@ -3216,7 +3215,7 @@ abstract class Block<
     }
     //
     return __canEditItemOnForm(
-      item: data.currentItemDetail!,
+      item: data.currentItem!,
       checkAllow: checkAllow,
     );
   }
@@ -3268,7 +3267,7 @@ abstract class Block<
     return __canDeleteItem(item: item, checkAllow: true);
   }
 
-  bool canEditItemOnForm({required ITEM_DETAIL item}) {
+  bool canEditItemOnForm({required ITEM item}) {
     return __canEditItemOnForm(item: item, checkAllow: true);
   }
 
