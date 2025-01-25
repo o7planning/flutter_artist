@@ -8,18 +8,52 @@ class _Storage {
   final Map<String, ShelfCreator> __shelfCreatorMap = {};
   final Map<String, Shelf> __shelfMap = {};
 
-  void fireSourceChanged({
-    required Block eventBlock,
-    required String? itemIdString,
-  }) {
-    _notifyChange(eventBlock, itemIdString);
-  }
-
   Map<String, Shelf?> get shelfMap {
     Map<String, Shelf?> m = __shelfCreatorMap
         .map((k, v) => MapEntry<String, Shelf?>(k, null))
       ..addAll(__shelfMap);
     return m;
+  }
+
+  void _fireEventForAffectedItemTypes({
+    required Block eventBlock,
+    required List<Type> affectedItemTypes,
+  }) {
+    final List<Scalar> listenerScalars =
+        __getListenerScalarsByAffectedItemTypes(
+      affectedItemTypes: affectedItemTypes,
+    );
+    //
+    final List<Block> listenerBlocks = __getListenerBlocksByAffectedItemTypes(
+      affectedItemTypes: affectedItemTypes,
+    );
+    //
+    //
+    __executeListeners(
+      listenerScalars: listenerScalars,
+      listenerBlocks: listenerBlocks,
+    );
+  }
+
+  void _fireEventSourceChanged({
+    required Block eventBlock,
+    required String? itemIdString,
+  }) {
+    Type eventItemType = eventBlock.getItemType();
+    print("~~~~~~~~~> Event Item Type: $eventItemType");
+    //
+    final List<Scalar> listenerScalars = __getListenerScalarsByBlock(
+      eventBlock: eventBlock,
+    );
+    //
+    final List<Block> listenerBlocks = __getListenerBlocksByBlock(
+      eventBlock: eventBlock,
+    );
+    //
+    __executeListeners(
+      listenerScalars: listenerScalars,
+      listenerBlocks: listenerBlocks,
+    );
   }
 
   String _getShelfName(Type type) {
@@ -209,7 +243,7 @@ class _Storage {
     Map<String, Block> foundMap = {};
     //
     for (Block eventBlock in eventShelf.blocks) {
-      List<Block> listenerBlocks = _getListenerBlocksByBlock(
+      List<Block> listenerBlocks = __getListenerBlocksByBlock(
         eventBlock: eventBlock,
       );
       for (var lb in listenerBlocks) {
@@ -224,7 +258,7 @@ class _Storage {
     Map<String, Scalar> foundMap = {};
     //
     for (Block eventBlock in eventShelf.blocks) {
-      List<Scalar> listenerScalars = _getListenerScalarsByBlock(
+      List<Scalar> listenerScalars = __getListenerScalarsByBlock(
         eventBlock: eventBlock,
       );
       for (var scalar in listenerScalars) {
@@ -235,10 +269,9 @@ class _Storage {
   }
 
   // Callable.
-  List<Block> _getListenerBlocksByBlock({required Block eventBlock}) {
-    if (!eventBlock.fireEvent) {
-      return [];
-    }
+  List<Block> __getListenerBlocksByAffectedItemTypes({
+    required List<Type> affectedItemTypes,
+  }) {
     // FullName, Block
     Map<String, Block> foundMap = {};
 
@@ -248,19 +281,30 @@ class _Storage {
         continue;
       }
       for (Block blockToCheck in shelf.blocks) {
-        final Type eventItemType = eventBlock.getItemType();
-        if (_contains(blockToCheck.listenItemTypes, eventItemType)) {
-          foundMap[blockToCheck._shortPathName] = blockToCheck;
+        for (Type affectedItemType in affectedItemTypes) {
+          if (_contains(blockToCheck.listenItemTypes, affectedItemType)) {
+            foundMap[blockToCheck._shortPathName] = blockToCheck;
+            break;
+          }
         }
       }
     }
     return foundMap.values.toList();
   }
 
-  List<Scalar> _getListenerScalarsByBlock({required Block eventBlock}) {
+  // Callable.
+  List<Block> __getListenerBlocksByBlock({required Block eventBlock}) {
     if (!eventBlock.fireEvent) {
       return [];
     }
+    return __getListenerBlocksByAffectedItemTypes(
+      affectedItemTypes: [eventBlock.getItemType()],
+    );
+  }
+
+  List<Scalar> __getListenerScalarsByAffectedItemTypes({
+    required List<Type> affectedItemTypes,
+  }) {
     // FullName, Scalar
     Map<String, Scalar> foundMap = {};
 
@@ -270,12 +314,24 @@ class _Storage {
         continue;
       }
       for (Scalar scalar in shelf.scalars) {
-        if (_contains(scalar.listenItemTypes, eventBlock.getItemType())) {
-          foundMap[scalar._shortPathName] = scalar;
+        for (Type affectedItemType in affectedItemTypes) {
+          if (_contains(scalar.listenItemTypes, affectedItemType)) {
+            foundMap[scalar._shortPathName] = scalar;
+            break;
+          }
         }
       }
     }
     return foundMap.values.toList();
+  }
+
+  List<Scalar> __getListenerScalarsByBlock({required Block eventBlock}) {
+    if (!eventBlock.fireEvent) {
+      return [];
+    }
+    return __getListenerScalarsByAffectedItemTypes(
+      affectedItemTypes: [eventBlock.getItemType()],
+    );
   }
 
   // Callable.
@@ -283,10 +339,10 @@ class _Storage {
     required _BlockOrScalar eventBlockOrScalar,
   }) {
     if (eventBlockOrScalar.block != null) {
-      List<Block> listenerBlocks = _getListenerBlocksByBlock(
+      List<Block> listenerBlocks = __getListenerBlocksByBlock(
         eventBlock: eventBlockOrScalar.block!,
       );
-      List<Scalar> listenerScalars = _getListenerScalarsByBlock(
+      List<Scalar> listenerScalars = __getListenerScalarsByBlock(
         eventBlock: eventBlockOrScalar.block!,
       );
       //
@@ -424,13 +480,10 @@ class _Storage {
   // ===========================================================================
   // ===========================================================================
 
-  Future<void> _notifyChange(Block eventBlock, String? itemIdString) async {
-    Type eventItemType = eventBlock.getItemType();
-    print("~~~~~~~~~> Event Item Type: $eventItemType");
-    //
-    final List<Scalar> listenerScalars = _getListenerScalarsByBlock(
-      eventBlock: eventBlock,
-    );
+  Future<void> __executeListeners({
+    required List<Scalar> listenerScalars,
+    required List<Block> listenerBlocks,
+  }) async {
     for (Scalar listenerScalar in listenerScalars) {
       if (!listenerScalar.hasActiveUIComponent()) {
         listenerScalar.data.setToPending();
@@ -448,9 +501,7 @@ class _Storage {
         sbList.queryScalars.add(listenerScalar);
       }
     }
-    //
-    final List<Block> listenerBlocks =
-        _getListenerBlocksByBlock(eventBlock: eventBlock);
+
     for (Block listenerBlock in listenerBlocks) {
       // TODO: Doi thanh hasActiveUiComponents()??
       final bool active = listenerBlock.hasActiveBlockFragmentWidget(

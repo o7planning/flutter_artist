@@ -1395,7 +1395,7 @@ abstract class Block<
     ApiResult<ITEM_DETAIL> result;
     try {
       result = await callApiQuickCreateItem(actionData: actionData);
-      FlutterArtist.storage.fireSourceChanged(
+      FlutterArtist.storage._fireEventSourceChanged(
         eventBlock: this,
         itemIdString: null,
       );
@@ -1510,7 +1510,7 @@ abstract class Block<
         item: item,
         actionData: actionData,
       );
-      FlutterArtist.storage.fireSourceChanged(
+      FlutterArtist.storage._fireEventSourceChanged(
         eventBlock: this,
         itemIdString: null,
       );
@@ -1643,18 +1643,11 @@ abstract class Block<
     ApiResult<void> result;
     try {
       result = await callApiQuickAction(actionData: actionData);
-      if (result.errorMessage != null) {
-        _handleRestError(
-          shelf: shelf,
-          methodName: "callApiQuickAction",
-          message: result.errorMessage!,
-          errorDetails: result.errorDetails,
-          showSnackBar: true,
-        );
-        return false;
-      } else {
-        // Do nothing.
-      }
+      //
+      FlutterArtist.storage._fireEventForAffectedItemTypes(
+        eventBlock: this,
+        affectedItemTypes: actionData.affectedItemTypes,
+      );
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
@@ -1665,6 +1658,20 @@ abstract class Block<
       );
       return false;
     }
+
+    if (result.errorMessage != null) {
+      _handleRestError(
+        shelf: shelf,
+        methodName: "callApiQuickAction",
+        message: result.errorMessage!,
+        errorDetails: result.errorDetails,
+        showSnackBar: true,
+      );
+      return false;
+    } else {
+      // Do nothing.
+    }
+
     if (afterQuickAction != null) {
       String methodName = "";
       try {
@@ -1745,7 +1752,7 @@ abstract class Block<
       return false;
     }
     //
-    FlutterArtist.storage.fireSourceChanged(
+    FlutterArtist.storage._fireEventSourceChanged(
       eventBlock: this,
       itemIdString: null,
     );
@@ -2546,7 +2553,7 @@ abstract class Block<
         __refreshDeletingState(isDeleting: true);
         //
         result = await callApiDeleteItem(item: item);
-        FlutterArtist.storage.fireSourceChanged(
+        FlutterArtist.storage._fireEventSourceChanged(
           eventBlock: this,
           itemIdString: null,
         );
