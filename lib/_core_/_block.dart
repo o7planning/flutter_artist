@@ -1191,8 +1191,9 @@ abstract class Block<
       },
     );
     //
-    ITEM refreshedItem =
-        convertItemDetailToItem(itemDetail: refreshedItemDetail);
+    ITEM refreshedItem = convertItemDetailToItem(
+      itemDetail: refreshedItemDetail,
+    );
     data._insertOrReplaceItem(
       item: refreshedItem,
       itemDetail: refreshedItemDetail,
@@ -2112,9 +2113,9 @@ abstract class Block<
       },
     );
     //
-    ITEM_DETAIL refreshedItem;
+    ITEM_DETAIL refreshedItemDetail;
     if (item is ITEM_DETAIL && justQueried) {
-      refreshedItem = item;
+      refreshedItemDetail = item;
     } else {
       ApiResult<ITEM_DETAIL> result;
       try {
@@ -2166,17 +2167,17 @@ abstract class Block<
           }
           return true;
         } else {
-          refreshedItem = result.data!;
+          refreshedItemDetail = result.data!;
         }
       }
     }
     //
     printLog(
-        "${getClassName(this)} ~~~~~~~~~~~~> refreshedItem: $refreshedItem");
+        "${getClassName(this)} ~~~~~~~~~~~~> refreshedItem: $refreshedItemDetail");
     //
     bool success = await __insertOrReplaceItemInListAndRefreshChildren(
       thisXBlock: thisXBlock,
-      refreshedItemDetail: refreshedItem,
+      refreshedItemDetail: refreshedItemDetail,
       forceForm: forceForm,
     );
     printLog("${getClassName(this)} ~~~~~~~~~~~~> success: $success");
