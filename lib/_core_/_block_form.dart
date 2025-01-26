@@ -16,6 +16,8 @@ abstract class BlockForm<
 
   late final BlockFormData data = BlockFormData(blockForm: this);
 
+  FormMode get formMode => data.formMode;
+
   Shelf get shelf => block.shelf;
 
   late final Block<ID, ITEM, ITEM_DETAIL, FilterInput, FILTER_CRITERIA,

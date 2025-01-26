@@ -3039,7 +3039,7 @@ abstract class Block<
     }
     //
     if (parent!.blockForm != null) {
-      switch (parent!.blockForm!.data.formMode) {
+      switch (parent!.blockForm!.formMode) {
         case FormMode.none:
         case FormMode.creation:
           return false;
@@ -3061,7 +3061,7 @@ abstract class Block<
     }
     // TODO: Kiểm tra nếu item là current thì mới cần đk này:
     if (parent!.blockForm != null) {
-      switch (parent!.blockForm!.data.formMode) {
+      switch (parent!.blockForm!.formMode) {
         case FormMode.none:
         case FormMode.creation:
           return false;
@@ -3083,7 +3083,7 @@ abstract class Block<
     }
     //
     if (parent!.blockForm != null) {
-      switch (parent!.blockForm!.data.formMode) {
+      switch (parent!.blockForm!.formMode) {
         case FormMode.none:
         case FormMode.creation:
           return false;
@@ -3104,7 +3104,7 @@ abstract class Block<
       return true;
     }
     if (parent!.blockForm != null) {
-      switch (parent!.blockForm!.data.formMode) {
+      switch (parent!.blockForm!.formMode) {
         case FormMode.none:
         case FormMode.creation:
           return false;
