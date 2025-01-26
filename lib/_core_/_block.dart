@@ -3040,12 +3040,14 @@ abstract class Block<
       return false;
     }
     //
-    switch (parent!.formMode) {
-      case FormMode.none:
-      case FormMode.creation:
-        return false;
-      case FormMode.edit:
-        break; // Do nothing
+    if (parent!.blockForm != null) {
+      switch (parent!.formMode) {
+        case FormMode.none:
+        case FormMode.creation:
+          return false;
+        case FormMode.edit:
+          break; // Do nothing
+      }
     }
     //
     return parent!.__checkAncestorsSafeToQuery();

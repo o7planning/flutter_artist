@@ -94,7 +94,7 @@ abstract class _XBase {
     String msg =
         "Call ${getClassName(this)}.$methodName() error: ${apiError.errorMessage}";
     print(msg);
-    if(!FlutterArtist.testCaseMode) {
+    if (!FlutterArtist.testCaseMode) {
       print(stackTrace);
     }
     //
@@ -155,7 +155,7 @@ abstract class _XBase {
     required String message,
     required List<String>? errorDetails,
   }) {
-    if(FlutterArtist.testCaseMode)  {
+    if (FlutterArtist.testCaseMode) {
       return;
     }
     FlutterArtist.adapter.showErrorSnackBar(

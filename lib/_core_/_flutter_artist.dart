@@ -5,7 +5,6 @@ final FlutterArtist = _FlutterArtist();
 const _isOverlayMode = false;
 
 class _FlutterArtist {
-
   bool testCaseMode = false;
 
   _Storage storage = _Storage();
