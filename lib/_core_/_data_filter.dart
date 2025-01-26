@@ -40,6 +40,8 @@ abstract class DataFilter<
 
   FILTER_CRITERIA? _filterCriteria;
 
+  FILTER_CRITERIA? get filterCriteria => _filterCriteria;
+
   List<Restorable> get restorableCriteria;
 
   final Map<_RefreshableWidgetState, bool> _filterFragmentWidgetStates = {};
@@ -104,7 +106,7 @@ abstract class DataFilter<
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: "callApiQuery",
+        methodName: "prepareData",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,

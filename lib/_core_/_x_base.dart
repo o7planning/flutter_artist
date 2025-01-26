@@ -94,7 +94,9 @@ abstract class _XBase {
     String msg =
         "Call ${getClassName(this)}.$methodName() error: ${apiError.errorMessage}";
     print(msg);
-    print(stackTrace);
+    if(!FlutterArtist.testCaseMode) {
+      print(stackTrace);
+    }
     //
     FlutterArtist.codeFlowLogger._addError(
       isLibCode: true,
@@ -153,6 +155,9 @@ abstract class _XBase {
     required String message,
     required List<String>? errorDetails,
   }) {
+    if(FlutterArtist.testCaseMode)  {
+      return;
+    }
     FlutterArtist.adapter.showErrorSnackBar(
       message: message,
       errorDetails: errorDetails,
