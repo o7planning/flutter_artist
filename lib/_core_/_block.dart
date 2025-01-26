@@ -191,8 +191,6 @@ abstract class Block<
     __pageable,
   );
 
-  FormMode get formMode => blockForm?.data._formMode ?? FormMode.none;
-
   DataState get dataState => data._dataState;
 
   final Map<_RefreshableWidgetState, bool> _blockFragmentWidgetStates = {};
@@ -3041,7 +3039,7 @@ abstract class Block<
     }
     //
     if (parent!.blockForm != null) {
-      switch (parent!.formMode) {
+      switch (parent!.blockForm!.data.formMode) {
         case FormMode.none:
         case FormMode.creation:
           return false;
@@ -3063,7 +3061,7 @@ abstract class Block<
     }
     // TODO: Kiểm tra nếu item là current thì mới cần đk này:
     if (parent!.blockForm != null) {
-      switch (parent!.formMode) {
+      switch (parent!.blockForm!.data.formMode) {
         case FormMode.none:
         case FormMode.creation:
           return false;
@@ -3085,7 +3083,7 @@ abstract class Block<
     }
     //
     if (parent!.blockForm != null) {
-      switch (parent!.formMode) {
+      switch (parent!.blockForm!.data.formMode) {
         case FormMode.none:
         case FormMode.creation:
           return false;
@@ -3106,7 +3104,7 @@ abstract class Block<
       return true;
     }
     if (parent!.blockForm != null) {
-      switch (parent!.formMode) {
+      switch (parent!.blockForm!.data.formMode) {
         case FormMode.none:
         case FormMode.creation:
           return false;
