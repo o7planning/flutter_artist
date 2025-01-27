@@ -25,7 +25,7 @@ class _XBlock {
     required this.xBlockForm,
   });
 
-  bool get needQuery  {
+  bool get needQuery {
     return _suggestedQuery;
   }
 
