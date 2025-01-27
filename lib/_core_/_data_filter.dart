@@ -84,7 +84,10 @@ abstract class DataFilter<
     FILTER_INPUT? filterInput,
   });
 
-  Future<_FilterCriteriaWrapper<FILTER_CRITERIA>> _prepareData({
+  ///
+  /// Return null is error.
+  ///
+  Future<FILTER_CRITERIA?> _prepareData({
     required FILTER_INPUT? filterInput,
   }) async {
     __currentTryingCriteriaId + 1;
@@ -95,14 +98,6 @@ abstract class DataFilter<
       await prepareData(
         filterInput: filterInput,
       );
-      // If no error:
-      FILTER_CRITERIA tryingCriteria = createFilterCriteria();
-      __filterCriteriasMap[tryingCriteriaId] = tryingCriteria;
-      //
-      return _FilterCriteriaWrapper(
-        filterCriteriaId: tryingCriteriaId,
-        filterCriteria: tryingCriteria,
-      );
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
@@ -112,7 +107,25 @@ abstract class DataFilter<
         showSnackBar: true,
       );
       //
-      throw _TransactionError();
+      return null;
+    }
+    try {
+      // If no error:
+      FILTER_CRITERIA newCriteria = createFilterCriteria();
+      _filterCriteria = newCriteria;
+      __filterCriteriasMap[tryingCriteriaId] = newCriteria;
+      //
+      return newCriteria;
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: "createFilterCriteria",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      //
+      return null;
     }
   }
 

@@ -780,6 +780,7 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
+
     final bool needToQry = thisXBlock.forceQuery;
 
     if (!needToQry) {
@@ -810,19 +811,18 @@ abstract class Block<
       printLog(
           "${getClassName(this)} ~~~~~~~~~~~~> filterInput: ${filterInput}");
       //
-      // May throw _TransactionError:
-      //
-      _FilterCriteriaWrapper result = await dataFilter._prepareData(
+      FILTER_CRITERIA? newCriteria = await dataFilter._prepareData(
         filterInput: filterInput,
-      );
-      filterCriteria = result.filterCriteria as FILTER_CRITERIA;
-      dataFilter._filterCriteria = filterCriteria;
+      ) as FILTER_CRITERIA?;
+
+      if (newCriteria == null) {
+        return false;
+      }
+      filterCriteria = newCriteria;
       xDataFilter.queried = true;
     } else {
       filterCriteria = dataFilter._filterCriteria! as FILTER_CRITERIA;
     }
-    printLog(
-        "${getClassName(this)} ~~~~~~~~~~~~> filterCriteria: ${filterCriteria}");
     //
     final QueryType queryType = thisXBlock.queryType;
     final ListBehavior listBehavior = thisXBlock.listBehavior;
@@ -1285,6 +1285,7 @@ abstract class Block<
       }
     }
     //
+
     for (_XBlock childXBlock in thisXBlock.childXBlocks) {
       SuggestedSelection? childSelectionDirective = childXBlock
           .suggestedSelection
@@ -1317,8 +1318,6 @@ abstract class Block<
         "dataState": dataState,
       },
     );
-    print(
-        "********************** 5.1: ${thisXBlock} clearListForThis: ${clearListForThis}");
     //
     if (clearListForThis) {
       //

@@ -36,7 +36,8 @@ abstract class _XBase {
   }
 
   Future<bool> __showDefaultConfirmDialogForAction(
-      BaseActionData action,) async {
+    BaseActionData action,
+  ) async {
     return await showConfirmDialog(
       message: 'Are you sure you want to perform this action?',
       details: action.actionInfo,
@@ -91,8 +92,7 @@ abstract class _XBase {
     }
     //
     String msg =
-        "Call ${getClassName(this)}.$methodName() error: ${apiError
-        .errorMessage}";
+        "Call ${getClassName(this)}.$methodName() error: ${apiError.errorMessage}";
     print(msg);
     if (!FlutterArtist.testCaseMode) {
       print(stackTrace);

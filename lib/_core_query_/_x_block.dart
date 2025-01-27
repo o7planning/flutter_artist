@@ -28,11 +28,7 @@ class _XBlock {
   });
 
   bool get forceQuery {
-    if (__forceQuery) {
-      return true;
-    }
-    bool needQry = block._needToQuery();
-    return needQry;
+    return __forceQuery;
   }
 
   void setForceQuery() {
