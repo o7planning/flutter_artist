@@ -70,10 +70,10 @@ class _XShelf {
       );
     }
     //
-    __setForceDataFilter(forceDataFilterOpt);
-    __setForceQueryScalars(forceQueryScalarOpts);
-    __setForceQueryBlocks(forceQueryBlockOpts);
-    __setForceQueryBlockForms(forceQueryBlockFormOpts);
+    __setForceDataFilterOpt(forceDataFilterOpt);
+    __setForceQueryScalarOpts(forceQueryScalarOpts);
+    __setForceQueryBlockOpts(forceQueryBlockOpts);
+    __setForceQueryBlockFormOpts(forceQueryBlockFormOpts);
   }
 
   _XBlock? findXBlockByName(String name) {
@@ -88,93 +88,80 @@ class _XShelf {
   // SET FORCE QUERY:
   // ***************************************************************************
 
-  void __setForceDataFilter(_DataFilterOpt? forceDataFilter) {
-    if (forceDataFilter != null && forceDataFilter.filterInput != null) {
+  void __setForceDataFilterOpt(_DataFilterOpt? forceDataFilterOpt) {
+    if (forceDataFilterOpt != null && forceDataFilterOpt.filterInput != null) {
       _XDataFilter xDataFilter =
-          allXDataFilterMap[forceDataFilter.dataFilter.name]!;
-      xDataFilter.filterInput = forceDataFilter.filterInput;
+          allXDataFilterMap[forceDataFilterOpt.dataFilter.name]!;
+      xDataFilter.filterInput = forceDataFilterOpt.filterInput;
     }
   }
 
-  void __setForceQueryScalars(List<_ScalarOpt> forceQueryScalars) {
+  void __setForceQueryScalarOpts(List<_ScalarOpt> forceQueryScalarOpts) {
     // Force query:
-    for (_ScalarOpt scalarOpt in forceQueryScalars) {
+    for (_ScalarOpt scalarOpt in forceQueryScalarOpts) {
       Scalar scalar = scalarOpt.scalar;
       _XScalar xScalar = allXScalarMap[scalar.name]!;
-      xScalar._suggestedQuery = true;
+      xScalar.setForceQuery();
     }
-    // Optional Query:
-    for (_XScalar xScalar in allXScalarMap.values) {
-      if (xScalar.needQuery) {
-        continue;
+  }
+
+  void __setForceQueryForAncestorBlocks({
+    required List<Block> descendingAncestorBlocks,
+  }) {
+    List<_XBlock> descendingAncestorXBlocks = descendingAncestorBlocks.map((b) {
+      return allXBlockMap[b.name]!;
+    }).toList();
+
+    bool found = false;
+
+    // ---> Descending --->
+    for (_XBlock ancestorXBlock in descendingAncestorXBlocks) {
+      if (!found) {
+        bool needToQuery = ancestorXBlock.block._needToQuery();
+        if (needToQuery) {
+          found = true;
+        }
       }
-      final Scalar scalar = xScalar.scalar;
-      final bool active = scalar.hasActiveUIComponent();
-      final bool lazyOrError = scalar.dataState != DataState.ready;
-      // TODO: Cần so sánh FilterCriteria của Scalar và DataFilter.
-      if (active && lazyOrError) {
-        xScalar._suggestedQuery = true;
+      //
+      if (found) {
+        ancestorXBlock.setForceQuery();
       }
     }
   }
 
-  // Up to Root Block.
-  void __setForceQueryIfNeedCascade(_XBlock xBlock) {
-    if (!xBlock.needQuery) {
-      final Block block = xBlock.block;
-      final bool active = block.hasActiveUIComponent();
-      final bool lazyOrError = block.dataState != DataState.ready;
-      // TODO: Cần so sánh FilterCriteria của Block và DataFilter.
-      if (active && lazyOrError) {
-        xBlock._suggestedQuery = true;
-      }
-    }
-    if (xBlock.xBlockParent != null) {
-      __setForceQueryIfNeedCascade(xBlock.xBlockParent!);
-    }
+  void __setForceQueryBlockOpt(_BlockOpt forceQueryBlockOpt) {
+    Block block = forceQueryBlockOpt.block;
+    _XBlock xBlock = allXBlockMap[block.name]!;
+    xBlock.setForceQuery();
+    //
+    List<Block> descendingAncestorBlocks = block.descendingAncestorBlocks;
+    //
+    __setForceQueryForAncestorBlocks(
+      descendingAncestorBlocks: descendingAncestorBlocks,
+    );
   }
 
-  void __setForceQueryBlocks(List<_BlockOpt> forceQueryBlocks) {
+  void __setForceQueryBlockOpts(List<_BlockOpt> forceQueryBlockOpts) {
     // Force query:
-    for (_BlockOpt blockOpt in forceQueryBlocks) {
-      Block block = blockOpt.block;
-      _XBlock xBlock = allXBlockMap[block.name]!;
-      xBlock._suggestedQuery = true;
-      xBlock.setOptions(
-        queryType: blockOpt.queryType,
-        listBehavior: blockOpt.listBehavior,
-        suggestedSelection: blockOpt.suggestedSelection,
-        postQueryBehavior: blockOpt.postQueryBehavior,
-        pageable: blockOpt.pageable,
-      );
-    }
-    // Optional Query:
-    for (_XBlock xBlock in allXBlockMap.values) {
-      __setForceQueryIfNeedCascade(xBlock);
+    for (_BlockOpt blockOpt in forceQueryBlockOpts) {
+      __setForceQueryBlockOpt(blockOpt);
     }
   }
 
-  void __setForceQueryBlockForms(List<_BlockFormOpt> forceQueryBlockForms) {
+  void __setForceQueryBlockFormOpts(List<_BlockFormOpt> forceQueryBlockForms) {
     // Force query:
     for (_BlockFormOpt blockFormOpt in forceQueryBlockForms) {
       BlockForm blockForm = blockFormOpt.blockForm;
       _XBlockForm xBlockForm = allXBlockFormMap[blockForm.block.name]!;
       xBlockForm.needQuery = true;
-    }
-    // Optional Query:
-    for (_XBlockForm xBlockForm in allXBlockFormMap.values) {
-      if (!xBlockForm.needQuery) {
-        final BlockForm blockForm = xBlockForm.blockForm;
-        final bool active = blockForm.hasActiveUIComponent();
-        final bool lazyOrError = blockForm.dataState != DataState.ready;
-        // TODO: Cần so sánh FilterCriteria ???
-        if (active && lazyOrError) {
-          xBlockForm.needQuery = true;
-        }
-      }
-      if (xBlockForm.needQuery) {
-        __setForceQueryIfNeedCascade(xBlockForm.xBlock);
-      }
+      // Set Force query to Ascending Ancestor Blocks:
+      List<Block> descendingAncestorBlocks = [
+        ...blockForm.block.descendingAncestorBlocks,
+        blockForm.block
+      ];
+      __setForceQueryForAncestorBlocks(
+        descendingAncestorBlocks: descendingAncestorBlocks,
+      );
     }
   }
 

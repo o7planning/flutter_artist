@@ -168,6 +168,43 @@ abstract class Block<
 
   List<Block> get childBlocks => [..._childBlocks];
 
+  List<Block> get descendantBlocks {
+    List<Block> ret = [];
+    for (Block childBlock in _childBlocks) {
+      ret.add(childBlock);
+      ret.addAll(childBlock.descendantBlocks);
+    }
+    return ret;
+  }
+
+  List<Block> get ancestorBlocks {
+    return ascendingAncestorBlocks.reversed.toList();
+  }
+
+  ///
+  /// Ascending ancestor blocks.
+  ///
+  List<Block> get ascendingAncestorBlocks {
+    List<Block> list = [];
+    Block blk = this;
+    while (true) {
+      Block? p = blk.parent;
+      if (p == null) {
+        break;
+      }
+      list.add(p);
+      blk = p;
+    }
+    return list;
+  }
+
+  ///
+  /// Descending ancestor blocks.
+  ///
+  List<Block> get descendingAncestorBlocks {
+    return ascendingAncestorBlocks.reversed.toList();
+  }
+
   final int? __pageSize;
 
   final bool fireEvent;
@@ -257,13 +294,30 @@ abstract class Block<
     return EXTRA_INPUT.toString();
   }
 
-  List<Block> get descendantBlocks {
-    List<Block> ret = [];
-    for (Block childBlock in _childBlocks) {
-      ret.add(childBlock);
-      ret.addAll(childBlock.descendantBlocks);
+  // ***************************************************************************
+  // ************ Need to Query State ******************************************
+  // ***************************************************************************
+
+  bool _needToQuery() {
+    if (dataState != DataState.ready) {
+      return true;
     }
-    return ret;
+    //
+    Object? parentInData = data._currentParentItemId;
+    Object? parentInBlock = parentItemId;
+    if (parentInData != parentInBlock) {
+      return true;
+    }
+    //
+    if (dataFilter != null) {
+      FilterCriteria? criteriaInFilter = dataFilter!.filterCriteria;
+      FilterCriteria? criteriaInData = data.filterCriteria;
+      if (criteriaInFilter != criteriaInData) {
+        return true;
+      }
+    }
+    //
+    return false;
   }
 
   void __refreshQueryingState({required bool isQuerying}) {
@@ -726,7 +780,9 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    if (!thisXBlock.needQuery) {
+    final bool needToQry = thisXBlock.forceQuery;
+
+    if (!needToQry) {
       // Query child blocks:
       for (_XBlock childXBlock in thisXBlock.childXBlocks) {
         bool success = await childXBlock.block._queryThisAndChildren(
@@ -776,7 +832,7 @@ abstract class Block<
     final PageableData? pageable = thisXBlock.pageable;
     //
     printLog(
-        "${getClassName(this)} ~~~~~~~~~~~~> needQuery: ${thisXBlock.needQuery} - queryType: ${queryType}");
+        "${getClassName(this)} ~~~~~~~~~~~~> needQuery: ${thisXBlock.forceQuery} - queryType: ${queryType}");
     //
     bool needRealQuery = false;
     ListBehavior forceListBehavior = listBehavior;
@@ -1695,7 +1751,7 @@ abstract class Block<
             );
           case AfterBlockQuickAction.query:
             methodName = "query";
-            thisXBlock._suggestedQuery = true;
+            thisXBlock.setForceQuery();
             //
             success = await _queryThisAndChildren(
               thisXBlock: thisXBlock,

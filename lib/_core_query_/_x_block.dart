@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
 class _XBlock {
-  bool _suggestedQuery = false;
+  bool __forceQuery = false;
   final Block block;
 
   final _XDataFilter xDataFilter;
@@ -25,46 +25,28 @@ class _XBlock {
     required this.xBlockForm,
   });
 
-  bool get needQuery {
-    if (_suggestedQuery) {
+  bool get forceQuery {
+    if (__forceQuery) {
       return true;
     }
+    bool needQry = block._needToQuery();
+    return needQry;
+  }
 
-    bool needQry = false;
-    //
-    if (block.dataState != DataState.ready) {
-      needQry = true;
-    }
-    Object? parentInData = block.data._currentParentItemId;
-    Object? parentInBlock = block.parentItemId;
-    if (parentInData != parentInBlock) {
-      needQry = true;
-    }
-    //
-    if (needQry) {
-      final bool active = block.hasActiveUIComponent();
-      if (active) {
-        return true;
-      } else {
-        if (block.dataState == DataState.ready) {
-          block.data._dataState = DataState.pending;
-        }
-        return false;
-      }
-    }
-    return false;
+  void setForceQuery() {
+    __forceQuery = true;
   }
 
   QueryType get queryType {
     switch (__queryType) {
       case null:
-        return needQuery ? QueryType.forceQuery : QueryType.queryIfNeed;
+        return forceQuery ? QueryType.forceQuery : QueryType.queryIfNeed;
       case QueryType.clear:
         return QueryType.clear;
       case QueryType.forceQuery:
         return QueryType.forceQuery;
       case QueryType.queryIfNeed:
-        return needQuery ? QueryType.forceQuery : QueryType.queryIfNeed;
+        return forceQuery ? QueryType.forceQuery : QueryType.queryIfNeed;
     }
   }
 
@@ -108,6 +90,6 @@ class _XBlock {
 
   @override
   String toString() {
-    return "${getClassName(this)}(${getClassName(block)} - needQuery: $needQuery)";
+    return "${getClassName(this)}(${getClassName(block)} - needQuery: $forceQuery)";
   }
 }
