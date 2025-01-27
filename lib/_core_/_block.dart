@@ -1316,6 +1316,8 @@ abstract class Block<
         "dataState": dataState,
       },
     );
+    print(
+        "********************** 5.1: ${thisXBlock} clearListForThis: ${clearListForThis}");
     //
     if (clearListForThis) {
       //
@@ -2337,17 +2339,18 @@ abstract class Block<
     _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
     try {
-      _backupAllFromRoot();
+      shelf._backupAll();
       //
       bool success = await __prepareToCreate(
         thisXBlock: thisXBlock,
         extraInput: extraInput,
       );
       if (!success) {
+        shelf._restoreAll();
         _restoreAllFromRoot();
         return false;
       } else {
-        _applyNewStateAllFromRoot();
+        shelf._applyNewStateAll();
         return true;
       }
     } catch (e, stackTrace) {
@@ -2359,7 +2362,7 @@ abstract class Block<
         showSnackBar: true,
       );
       //
-      _restoreAllFromRoot();
+      shelf._restoreAll();
       return false;
     }
   }
