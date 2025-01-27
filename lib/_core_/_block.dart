@@ -2012,6 +2012,24 @@ abstract class Block<
     }
   }
 
+  bool __checkBeforeEditItem({
+    required ITEM item,
+    required bool showErrorMessage,
+  }) {
+    bool canEdit = canEditItemOnForm(item: item);
+    if (!canEdit) {
+      if (showErrorMessage) {
+        showErrorSnackBar(
+          message:
+              "This item cannot be edited on the Form because some conditions are not met.",
+          errorDetails: ["Block: ${getClassName(this)}"],
+        );
+      }
+      return false;
+    }
+    return true;
+  }
+
   Future<bool> prepareToEdit({
     required ITEM item,
     Function()? navigate,
@@ -2025,6 +2043,11 @@ abstract class Block<
         "item": item,
       },
     );
+    //
+    bool canEdit = __checkBeforeEditItem(item: item, showErrorMessage: true);
+    if (!canEdit) {
+      return false;
+    }
     //
     bool success = await __prepareToShowOrEditWithOverlayAndRestorable(
       item: item,
@@ -2255,10 +2278,14 @@ abstract class Block<
   }
 
   bool __checkBeforeFormCreation({required bool showErrorMessage}) {
-    if (blockForm == null) {
+    bool canCrete = canCreateItem();
+    if (!canCrete) {
       if (showErrorMessage) {
-        String msg = "${getClassName(this)} has no BlockForm";
-        showErrorSnackBar(message: msg, errorDetails: null);
+        showErrorSnackBar(
+          message:
+              "Cannot create new Item on form because some conditions are not met.",
+          errorDetails: ["Block: ${getClassName(this)}"],
+        );
       }
       return false;
     }
