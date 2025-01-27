@@ -2118,28 +2118,7 @@ abstract class Block<
       shelf: shelf,
       forceDataFilterOpt: null,
       forceQueryScalarOpts: [],
-      // forceQueryBlockOpts: _childBlocks
-      //     .map(
-      //       (b) => _BlockOpt(
-      //         block: b,
-      //         queryType: null,
-      //         pageable: null,
-      //         listBehavior: null,
-      //         suggestedSelection: null,
-      //         postQueryBehavior: null,
-      //       ),
-      //     )
-      //     .toList(),
-      forceQueryBlockOpts: [
-        // _BlockOpt(
-        //   block: this,
-        //   queryType: null,
-        //   pageable: null,
-        //   listBehavior: null,
-        //   suggestedSelection: null,
-        //   postQueryBehavior: null,
-        // ),
-      ],
+      forceQueryBlockOpts: [],
       forceQueryBlockFormOpts: [],
     );
     //
