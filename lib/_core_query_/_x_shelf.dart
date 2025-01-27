@@ -101,7 +101,7 @@ class _XShelf {
     for (_ScalarOpt scalarOpt in forceQueryScalars) {
       Scalar scalar = scalarOpt.scalar;
       _XScalar xScalar = allXScalarMap[scalar.name]!;
-      xScalar.needQuery = true;
+      xScalar._suggestedQuery = true;
     }
     // Optional Query:
     for (_XScalar xScalar in allXScalarMap.values) {
@@ -113,7 +113,7 @@ class _XShelf {
       final bool lazyOrError = scalar.dataState != DataState.ready;
       // TODO: Cần so sánh FilterCriteria của Scalar và DataFilter.
       if (active && lazyOrError) {
-        xScalar.needQuery = true;
+        xScalar._suggestedQuery = true;
       }
     }
   }
@@ -126,7 +126,7 @@ class _XShelf {
       final bool lazyOrError = block.dataState != DataState.ready;
       // TODO: Cần so sánh FilterCriteria của Block và DataFilter.
       if (active && lazyOrError) {
-        xBlock.needQuery = true;
+        xBlock._suggestedQuery = true;
       }
     }
     if (xBlock.xBlockParent != null) {
@@ -139,7 +139,7 @@ class _XShelf {
     for (_BlockOpt blockOpt in forceQueryBlocks) {
       Block block = blockOpt.block;
       _XBlock xBlock = allXBlockMap[block.name]!;
-      xBlock.needQuery = true;
+      xBlock._suggestedQuery = true;
       xBlock.setOptions(
         queryType: blockOpt.queryType,
         listBehavior: blockOpt.listBehavior,

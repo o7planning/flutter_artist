@@ -1232,7 +1232,7 @@ abstract class Block<
       SuggestedSelection? childSelectionDirective = childXBlock
           .suggestedSelection
           ?.findChildDirective(childXBlock.block.name);
-      childXBlock.suggestedSelection = childSelectionDirective;
+      childXBlock.suggestedSelection = childSelectionDirective;//(@@@)
       //
       bool success = await childXBlock.block._queryThisAndChildren(
         thisXBlock: childXBlock,
@@ -1695,7 +1695,7 @@ abstract class Block<
             );
           case AfterBlockQuickAction.query:
             methodName = "query";
-            thisXBlock.needQuery = true;
+            thisXBlock._suggestedQuery = true;
             //
             success = await _queryThisAndChildren(
               thisXBlock: thisXBlock,

@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
 class _XScalar {
-  bool needQuery = false;
+  bool _suggestedQuery = false;
   final Scalar scalar;
   final _XDataFilter xDataFilter;
 
@@ -11,6 +11,10 @@ class _XScalar {
   });
 
   String get name => scalar.name;
+
+  bool get needQuery {
+    return _suggestedQuery;
+  }
 
   @override
   String toString() {

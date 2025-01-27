@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
 class _XBlock {
-  bool needQuery = false;
+  bool _suggestedQuery = false;
   final Block block;
 
   final _XDataFilter xDataFilter;
@@ -24,6 +24,10 @@ class _XBlock {
     required this.xDataFilter,
     required this.xBlockForm,
   });
+
+  bool get needQuery  {
+    return _suggestedQuery;
+  }
 
   QueryType get queryType {
     switch (__queryType) {
