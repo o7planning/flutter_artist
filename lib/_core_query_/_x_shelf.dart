@@ -93,6 +93,22 @@ class _XShelf {
       _XDataFilter xDataFilter =
           allXDataFilterMap[forceDataFilterOpt.dataFilter.name]!;
       xDataFilter.filterInput = forceDataFilterOpt.filterInput;
+
+      DataFilter dataFilter = forceDataFilterOpt.dataFilter;
+
+      //
+      // TODO: Đang kiểm tra các Block hoặc Scalar nào bị ảnh hưởng bởi FilterInput trên.
+      //
+      for (Scalar scalar in dataFilter.scalars) {
+        _XScalar xScalar = allXScalarMap[scalar.name]!;
+        // TODO: Chưa sử dụng thuộc tính này.
+        xScalar.affectByFilterInput = true;
+      }
+      for (Block block in dataFilter.blocks) {
+        _XBlock xBlock = allXBlockMap[block.name]!;
+        // TODO: Chưa sử dụng thuộc tính này.
+        xBlock.affectByFilterInput = true;
+      }
     }
   }
 

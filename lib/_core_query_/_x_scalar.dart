@@ -2,6 +2,7 @@ part of '../flutter_artist.dart';
 
 class _XScalar {
   bool __forceQuery = false;
+  bool affectByFilterInput = false;
   final Scalar scalar;
   final _XDataFilter xDataFilter;
 

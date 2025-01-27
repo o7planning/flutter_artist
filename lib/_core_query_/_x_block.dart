@@ -2,6 +2,8 @@ part of '../flutter_artist.dart';
 
 class _XBlock {
   bool __forceQuery = false;
+
+  bool affectByFilterInput = false;
   final Block block;
 
   final _XDataFilter xDataFilter;
