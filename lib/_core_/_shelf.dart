@@ -734,7 +734,7 @@ abstract class Shelf extends _XBase {
           filterCriteria: filterCriteria,
         );
         if (!success) {
-          throw _TransactionError();
+          return false;
         }
       }
       //
@@ -744,7 +744,7 @@ abstract class Shelf extends _XBase {
         );
         //
         if (!success) {
-          throw _TransactionError();
+          return false;
         }
       }
       //
@@ -770,7 +770,7 @@ abstract class Shelf extends _XBase {
         );
         //
         if (!success) {
-          throw _TransactionError();
+          return false;
         }
       }
       //

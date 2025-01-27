@@ -830,7 +830,6 @@ abstract class Block<
     final SuggestedSelection? suggestedSelection =
         thisXBlock.suggestedSelection;
 
-
     final PageableData? pageable = thisXBlock.pageable;
     //
     printLog(
