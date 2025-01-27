@@ -725,4 +725,101 @@ abstract class Shelf extends _XBase {
       return false;
     }
   }
+
+  Future<bool> _queryAll({
+    required _DataFilterOpt? forceDataFilterOpt,
+    required List<_ScalarOpt> forceQueryScalarOpts,
+    required List<_BlockOpt> forceQueryBlockOpts,
+    required List<_BlockFormOpt> forceQueryBlockFormOpts,
+  }) async {
+    _XShelf xShelf = _XShelf(
+      shelf: this,
+      forceDataFilterOpt: forceDataFilterOpt,
+      forceQueryScalarOpts: forceQueryScalarOpts,
+      forceQueryBlockOpts: forceQueryBlockOpts,
+      forceQueryBlockFormOpts: forceQueryBlockFormOpts,
+    );
+    //
+    xShelf.printMe();
+    //
+    try {
+      for (_XScalar xScalar in xShelf.allXScalars) {
+        if (!xScalar.needQuery) {
+          continue;
+        }
+        final _XDataFilter xDataFilter = xScalar.xDataFilter;
+        final DataFilter dataFilter = xDataFilter.dataFilter;
+        final Scalar scalar = xScalar.scalar;
+        //
+        final FilterCriteria filterCriteria;
+        if (!xDataFilter.queried) {
+          //
+          FilterCriteria? newCriteria = await dataFilter._prepareData(
+            filterInput: xDataFilter.filterInput,
+          );
+          if (newCriteria == null) {
+            return false;
+          }
+          filterCriteria = newCriteria;
+          xDataFilter.queried = true;
+        } else {
+          filterCriteria = dataFilter._filterCriteria!;
+        }
+        //
+        bool success = await scalar.__queryThis(
+          filterCriteria: filterCriteria,
+        );
+        if (!success) {
+          return false;
+        }
+      }
+      //
+      for (_XBlock xBlock in xShelf.allRootXBlocks) {
+        bool success = await xBlock.block._queryThisAndChildren(
+          thisXBlock: xBlock,
+        );
+        //
+        if (!success) {
+          return false;
+        }
+      }
+      //
+      for (_XBlockForm xBlockForm in xShelf.allXBlockForms) {
+        if (!xBlockForm.needQuery) {
+          continue;
+        }
+        Object? currentItemDetail =
+            xBlockForm.blockForm.block.data.currentItemDetail;
+
+        // TODO: Co can cai nay khong?
+        // xBlockForm.blockForm.data._setCurrentItem(
+        //   refreshedItemDetail: currentItemDetail,
+        //   formMode: FormMode.edit,
+        //   dataState: DataState.pending,
+        // );
+
+        bool success = await xBlockForm.blockForm._prepareForm(
+          extraInput: xBlockForm.extraInput,
+          refreshedItem: currentItemDetail,
+          isNew: currentItemDetail == null, // TODO: Can kiem tra lai.
+          forceForm: true,
+        );
+        //
+        if (!success) {
+          return false;
+        }
+      }
+      //
+      return true;
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: this,
+        methodName: "_queryAll",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      return false;
+    }
+  }
 }
