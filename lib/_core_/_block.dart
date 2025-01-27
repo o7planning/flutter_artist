@@ -2348,7 +2348,6 @@ abstract class Block<
       );
       if (!success) {
         shelf._restoreAll();
-        _restoreAllFromRoot();
         return false;
       } else {
         shelf._applyNewStateAll();
