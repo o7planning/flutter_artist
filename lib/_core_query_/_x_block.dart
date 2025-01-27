@@ -26,7 +26,33 @@ class _XBlock {
   });
 
   bool get needQuery {
-    return _suggestedQuery;
+    if (_suggestedQuery) {
+      return true;
+    }
+
+    bool needQry = false;
+    //
+    if (block.dataState != DataState.ready) {
+      needQry = true;
+    }
+    Object? parentInData = block.data._currentParentItemId;
+    Object? parentInBlock = block.parentItemId;
+    if (parentInData != parentInBlock) {
+      needQry = true;
+    }
+    //
+    if (needQry) {
+      final bool active = block.hasActiveUIComponent();
+      if (active) {
+        return true;
+      } else {
+        if (block.dataState == DataState.ready) {
+          block.data._dataState = DataState.pending;
+        }
+        return false;
+      }
+    }
+    return false;
   }
 
   QueryType get queryType {
