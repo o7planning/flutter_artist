@@ -150,6 +150,14 @@ class _XShelf {
     _XBlock xBlock = allXBlockMap[block.name]!;
     xBlock.setForceQuery();
     //
+    xBlock.setOptions(
+      queryType: forceQueryBlockOpt.queryType,
+      listBehavior: forceQueryBlockOpt.listBehavior,
+      suggestedSelection: forceQueryBlockOpt.suggestedSelection,
+      postQueryBehavior: forceQueryBlockOpt.postQueryBehavior,
+      pageable: forceQueryBlockOpt.pageable,
+    );
+    //
     List<Block> descendingAncestorBlocks = block.descendingAncestorBlocks;
     //
     __setForceQueryForAncestorBlocks(
