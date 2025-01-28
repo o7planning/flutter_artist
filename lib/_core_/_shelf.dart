@@ -456,10 +456,13 @@ abstract class Shelf extends _XBase {
       __transactionId++;
       __lazyBlocksToQuery.clear();
       //
-      Timer(
-        const Duration(milliseconds: 0), // 200
-        __queryLazyList,
-      );
+      // Timer(
+      //   const Duration(milliseconds: 0), // 200
+      //   __queryLazyList,
+      // );
+      Future.delayed(const Duration(milliseconds: 0), () {
+        __queryLazyList();
+      });
     }
   }
 
