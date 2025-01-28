@@ -780,16 +780,10 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 4.3.1");
     bool needToQry = thisXBlock.forceQuery;
-    print(
-        "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 4.3.1 forceQuery: ${thisXBlock.forceQuery}");
     if (!needToQry) {
       needToQry = thisXBlock.block._needToQuery();
     }
-    print(
-        "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 4.3.2 needToQry: ${needToQry}");
     if (!needToQry) {
       // Query child blocks:
       for (_XBlock childXBlock in thisXBlock.childXBlocks) {
@@ -1254,7 +1248,6 @@ abstract class Block<
       },
     );
     //
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 4.1");
     ITEM refreshedItem = convertItemDetailToItem(
       itemDetail: refreshedItemDetail,
     );
@@ -1293,14 +1286,12 @@ abstract class Block<
       }
     }
     //
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 4.2");
     for (_XBlock childXBlock in thisXBlock.childXBlocks) {
       SuggestedSelection? childSelectionDirective = childXBlock
           .suggestedSelection
           ?.findChildDirective(childXBlock.block.name);
       childXBlock.suggestedSelection = childSelectionDirective; //(@@@)
       //
-      print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 4.3");
       bool success = await childXBlock.block._queryThisAndChildren(
         thisXBlock: childXBlock,
       );
@@ -2191,7 +2182,6 @@ abstract class Block<
       },
     );
     //
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 1");
     ITEM_DETAIL refreshedItemDetail;
     if (item is ITEM_DETAIL && justQueried) {
       refreshedItemDetail = item;
@@ -2208,12 +2198,10 @@ abstract class Block<
           },
         );
         //
-        print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 2");
         __refreshRefreshingCurrentItemState(isRefreshingCurrentItem: true);
         //
         result = await callApiRefreshItem(item: item);
         //
-        print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 3");
         __refreshRefreshingCurrentItemState(isRefreshingCurrentItem: false);
       } catch (e, stackTrace) {
         __refreshRefreshingCurrentItemState(isRefreshingCurrentItem: false);
@@ -2228,7 +2216,6 @@ abstract class Block<
         //
         return false;
       }
-      print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 4");
       if (result.errorMessage != null) {
         _handleRestError(
           shelf: shelf,
@@ -2257,7 +2244,6 @@ abstract class Block<
     printLog(
         "${getClassName(this)} ~~~~~~~~~~~~> refreshedItem: $refreshedItemDetail");
     //
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 4");
     bool success = await __insertOrReplaceItemInListAndRefreshChildren(
       thisXBlock: thisXBlock,
       refreshedItemDetail: refreshedItemDetail,
