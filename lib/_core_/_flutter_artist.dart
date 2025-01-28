@@ -34,7 +34,7 @@ class _FlutterArtist {
 
   @Deprecated("Do Not Use")
   void resetForTestOnly() {
-    storage = _Storage();
+    storage._resetForTestOnly();
   }
 
   ///

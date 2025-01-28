@@ -15,6 +15,10 @@ class _Storage {
     return m;
   }
 
+  void _resetForTestOnly() {
+    __shelfMap.clear();
+  }
+
   void _fireEventToAffectedItemTypes({
     required List<Type> affectedItemTypes,
   }) {
