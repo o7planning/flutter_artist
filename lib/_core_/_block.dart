@@ -1165,6 +1165,7 @@ abstract class Block<
     data._removeItem(
       removeItem: removeItem,
     );
+    this.updateBlockFragmentWidgets();
   }
 
   // Private Method. Only for use in this class.
@@ -1184,49 +1185,45 @@ abstract class Block<
       },
     );
     //
-    final bool isCurrent = data.isCurrentItem(
-      item: notFoundItem,
-    );
     final ITEM? siblingItem = data.findSiblingItem(
       item: notFoundItem,
     );
     //
     __removeItemFromList(removeItem: notFoundItem);
     //
-    if (isCurrent) {
-      if (siblingItem != null) {
-        FlutterArtist.codeFlowLogger._addInfo(
-          isLibCode: true,
-          ownerClassInstance: this,
-          info: "Selecting sibling item",
-        );
-        //
-        bool success = await __prepareToShowOrEdit(
-          thisXBlock: thisXBlock,
-          justQueried: false,
-          item: siblingItem,
-          forceForm: false,
-        );
-        if (!success) {
-          return false;
-        }
-      } else {
-        FlutterArtist.codeFlowLogger._addInfo(
-          isLibCode: true,
-          ownerClassInstance: this,
-          info: "Switching block to none-mode",
-        );
-        //
-        bool success = await _switchThisAndChildrenToNoneMode(
-          thisXBlock: thisXBlock,
-          clearListForThis: false,
-          dataState: DataState.ready,
-        );
-        if (!success) {
-          return false;
-        }
+    if (siblingItem != null) {
+      FlutterArtist.codeFlowLogger._addInfo(
+        isLibCode: true,
+        ownerClassInstance: this,
+        info: "Selecting sibling item",
+      );
+      //
+      bool success = await __prepareToShowOrEdit(
+        thisXBlock: thisXBlock,
+        justQueried: false,
+        item: siblingItem,
+        forceForm: false,
+      );
+      if (!success) {
+        return false;
+      }
+    } else {
+      FlutterArtist.codeFlowLogger._addInfo(
+        isLibCode: true,
+        ownerClassInstance: this,
+        info: "Switching block to none-mode",
+      );
+      //
+      bool success = await _switchThisAndChildrenToNoneMode(
+        thisXBlock: thisXBlock,
+        clearListForThis: false,
+        dataState: DataState.ready,
+      );
+      if (!success) {
+        return false;
       }
     }
+    //
     return true;
   }
 
@@ -2169,6 +2166,7 @@ abstract class Block<
     required bool justQueried,
   }) async {
     __assertThisXBlock(thisXBlock);
+
     //
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
