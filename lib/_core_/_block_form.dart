@@ -10,6 +10,10 @@ abstract class BlockForm<
 
   late QueryMode _tempQueryMode = _queryMode;
 
+  int __loadCount = 0;
+
+  int get loadCount => __loadCount;
+
   String get id {
     return "block-form > ${shelf.name} > ${block.name}";
   }
@@ -344,6 +348,7 @@ abstract class BlockForm<
     // Init Extra data for Edit Form:
     //
     if (needToLoad) {
+      __loadCount++;
       FILTER_CRITERIA? filterCriteria = block.data.filterCriteria;
       //
       bool success = await __prepareFormMasterData(
