@@ -83,6 +83,10 @@ abstract class Block<
   @Deprecated("Xoa di, khong su dung")
   late QueryMode _tempQueryMode = _queryMode;
 
+  int _lazyLoadCount = 0;
+
+  int get lazyLoadCount => _lazyLoadCount;
+
   QueryMode get queryMode => _queryMode;
 
   bool __isQuerying = false;

@@ -27,6 +27,10 @@ abstract class Scalar<
     > extends _XBase {
   late final Shelf shelf;
 
+  int _lazyLoadCount = 0;
+
+  int get lazyLoadCount => _lazyLoadCount;
+
   ///
   /// Scalar name. It is unique in a Shelf.
   ///

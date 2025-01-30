@@ -14,6 +14,10 @@ abstract class BlockForm<
 
   int get loadCount => __loadCount;
 
+  int _lazyLoadCount = 0;
+
+  int get lazyLoadCount => _lazyLoadCount;
+
   String get id {
     return "block-form > ${shelf.name} > ${block.name}";
   }

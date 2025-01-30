@@ -456,13 +456,12 @@ abstract class Shelf extends _XBase {
       __transactionId++;
       __lazyBlocksToQuery.clear();
       //
-      // Timer(
-      //   const Duration(milliseconds: 0), // 200
-      //   __queryLazyList,
-      // );
-      Future.delayed(const Duration(milliseconds: 0), () {
-        __queryLazyList();
-      });
+      Future.delayed(
+        const Duration(milliseconds: 0),
+        () {
+          __queryLazyList();
+        },
+      );
     }
   }
 
@@ -503,10 +502,14 @@ abstract class Shelf extends _XBase {
     //
     for (_ScalarOrBlockOrFormWrapper wrapper in scalarOrBlockOrFormWrappers) {
       if (wrapper.scalar != null) {
+        wrapper.scalar!._lazyLoadCount++;
+        //
         scalarOpts.add(
           _ScalarOpt(scalar: wrapper.scalar!),
         );
       } else if (wrapper.block != null) {
+        wrapper.block!._lazyLoadCount++;
+        //
         blockOpts.add(
           _BlockOpt(
             block: wrapper.block!,
@@ -518,6 +521,8 @@ abstract class Shelf extends _XBase {
           ),
         );
       } else if (wrapper.blockForm != null) {
+        wrapper.blockForm!._lazyLoadCount++;
+        //
         blockFormOpts.add(
           _BlockFormOpt(blockForm: wrapper.blockForm!),
         );
