@@ -35,16 +35,6 @@ abstract class _XBase {
     );
   }
 
-  @Deprecated("Da chuyen vao cac lop Action")
-  Future<bool> __showDefaultConfirmDialogForAction(
-    BaseAction action,
-  ) async {
-    return await showConfirmDialog(
-      message: 'Are you sure you want to perform this action?',
-      details: action.actionInfo,
-    );
-  }
-
   Future<bool> __showActionConfirmation<A extends BaseAction>({
     required Shelf shelf,
     required DefaultConfirmation defaultConfirmation,
