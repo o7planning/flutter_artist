@@ -173,7 +173,29 @@ abstract class BlockForm<
   ///
   /// This method is called before [prepareFormData] method.
   ///
-  Future<ApiResult<void>?>? prepareFormMasterData({
+  /// Example:
+  /// ```dart
+  /// Future<void> prepareFormMasterData({
+  ///     required EmptyFilterCriteria? filterCriteria,
+  ///     required EmptyExtraInput? extraInput,
+  ///     required EmployeeData? refreshedItem,
+  ///     required bool isNew,
+  /// }) {
+  ///   ApiResult<CompanyPage> result1 = await deptApi.getCompanyPage();
+  ///   // Throw ApiError
+  ///   result1.throwIfError();
+  ///   this.companyPage = result1.data;
+  ///   CompanyInfo? company = this.companyPage.getSelectedCompany()
+  ///
+  ///   ApiResult<DepartmentPage> result2 = await deptApi.getDepartmentPage(company);
+  ///   // Throw ApiError
+  ///   result2.throwIfError();
+  ///   this.departmentPage = result2.data;
+  ///   ...
+  /// }
+  /// ```
+  ///
+  Future<void> prepareFormMasterData({
     required FILTER_CRITERIA? filterCriteria,
     required EXTRA_INPUT? extraInput,
     required ITEM_DETAIL? refreshedItem,
@@ -403,26 +425,14 @@ abstract class BlockForm<
         },
       );
       //
-      Future<ApiResult<void>?>? future = prepareFormMasterData(
+      // May throw ApiError.
+      //
+      await prepareFormMasterData(
         filterCriteria: filterCriteria,
         extraInput: extraInput,
         refreshedItem: refreshedItem,
         isNew: isNew,
       );
-      if (future != null) {
-        ApiResult<void>? result = await future;
-
-        if (result != null && result.isError()) {
-          _handleRestError(
-            shelf: shelf,
-            methodName: "prepareFormMasterData",
-            message: result.errorMessage!,
-            errorDetails: result.errorDetails,
-            showSnackBar: true,
-          );
-          return false;
-        }
-      }
       return true;
     } catch (e, stackTrace) {
       _handleError(
