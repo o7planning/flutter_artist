@@ -35,6 +35,7 @@ abstract class _XBase {
     );
   }
 
+  @Deprecated("Da chuyen vao cac lop Action")
   Future<bool> __showDefaultConfirmDialogForAction(
     BaseAction action,
   ) async {
@@ -44,28 +45,29 @@ abstract class _XBase {
     );
   }
 
-  Future<bool> __showConfirmDialogForQuickAction<A extends BaseAction>({
+  Future<bool> __showActionConfirmation<A extends BaseAction>({
     required Shelf shelf,
-    required A action,
-    required CustomConfirmation<A>? customConfirmation,
+    required DefaultConfirmation defaultConfirmation,
+    required CustomConfirmation? customConfirmation,
   }) async {
-    if (!action.needToConfirm) {
-      return true;
-    }
-    final CustomConfirmation<A> confirmForAction =
-        customConfirmation ?? __showDefaultConfirmDialogForAction;
+    BuildContext context = FlutterArtist.adapter.getCurrentContext();
     //
-    try {
-      return await confirmForAction(action);
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "confirmForAction",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      return false;
+    if (customConfirmation != null) {
+      try {
+        return await customConfirmation(context);
+      } catch (e, stackTrace) {
+        _handleError(
+          shelf: shelf,
+          // TODO truyen ten phuong thuc tu tham so ???????????
+          methodName: "customConfirmation",
+          error: e,
+          stackTrace: stackTrace,
+          showSnackBar: true,
+        );
+        return false;
+      }
+    } else {
+      return await defaultConfirmation(context);
     }
   }
 

@@ -1886,7 +1886,6 @@ abstract class Block<
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
     required ActionConfirmationType actionConfirmationType,
-    required CustomConfirmation<A>? customConfirmation,
     required A action,
     required AfterBlockQuickAction? afterQuickAction,
     required Function(BuildContext context)? navigate,
@@ -1906,11 +1905,15 @@ abstract class Block<
     //
     // Confirmation:
     //
-    bool confirm = await __showConfirmDialogForQuickAction<A>(
-      shelf: shelf,
-      customConfirmation: customConfirmation,
-      action: action,
-    );
+    bool confirm = true;
+    if (action.needToConfirm) {
+      confirm = await __showActionConfirmation(
+        shelf: shelf,
+        defaultConfirmation: action._defaultConfirmation,
+        customConfirmation: action.createCustomConfirmation(),
+      );
+    }
+    //
     if (!confirm) {
       return false;
     }
@@ -1941,17 +1944,30 @@ abstract class Block<
 
   Future<bool> executeQuickActionCreateItem<
       A extends QuickCreateItemAction<ITEM_DETAIL>>({
-    required CustomConfirmation<A>? customConfirmation,
     required A action,
   }) async {
+    FlutterArtist.codeFlowLogger._addMethodCall(
+      isLibCode: true,
+      navigate: null,
+      ownerClassInstance: this,
+      methodName: "executeQuickActionCreateItem",
+      parameters: {
+        "action": action,
+      },
+    );
+    //
+    BuildContext context = FlutterArtist.adapter.getCurrentContext();
     //
     // Confirmation:
     //
-    bool confirm = await __showConfirmDialogForQuickAction<A>(
-      shelf: shelf,
-      customConfirmation: customConfirmation,
-      action: action,
-    );
+    bool confirm = true;
+    if (action.needToConfirm) {
+      confirm = await __showActionConfirmation(
+        shelf: shelf,
+        defaultConfirmation: action._defaultConfirmation,
+        customConfirmation: action.createCustomConfirmation(),
+      );
+    }
     if (!confirm) {
       return false;
     }
@@ -1979,7 +1995,6 @@ abstract class Block<
   Future<bool> executeQuickActionUpdateItem<
       A extends QuickUpdateItemAction<ITEM, ITEM_DETAIL>>({
     required ITEM item,
-    required CustomConfirmation<A>? customConfirmation,
     required A action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -1993,13 +2008,18 @@ abstract class Block<
       },
     );
     //
+    BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    //
     // Confirmation:
     //
-    bool confirm = await __showConfirmDialogForQuickAction<A>(
-      shelf: shelf,
-      customConfirmation: customConfirmation,
-      action: action,
-    );
+    bool confirm = true;
+    if (action.needToConfirm) {
+      confirm = await __showActionConfirmation(
+        shelf: shelf,
+        defaultConfirmation: action._defaultConfirmation,
+        customConfirmation: action.createCustomConfirmation(item: item),
+      );
+    }
     if (!confirm) {
       return false;
     }

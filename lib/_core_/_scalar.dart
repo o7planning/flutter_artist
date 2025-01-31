@@ -168,7 +168,6 @@ abstract class Scalar<
   Future<bool> executeQuickAction<A extends QuickAction>({
     FILTER_INPUT? filterInput,
     required ActionConfirmationType actionConfirmationType,
-    required CustomConfirmation<A>? customConfirmation,
     required A action,
     required AfterScalarQuickAction? afterQuickAction,
     required Function(BuildContext context)? navigate,
@@ -187,11 +186,15 @@ abstract class Scalar<
     //
     // Confirmation:
     //
-    bool confirm = await __showConfirmDialogForQuickAction<A>(
-      shelf: shelf,
-      customConfirmation: customConfirmation,
-      action: action,
-    );
+    bool confirm = true;
+    if (action.needToConfirm) {
+      confirm = await __showActionConfirmation(
+        shelf: shelf,
+        defaultConfirmation: action._defaultConfirmation,
+        customConfirmation: action.createCustomConfirmation(),
+      );
+    }
+    //
     if (!confirm) {
       return false;
     }
