@@ -3,6 +3,9 @@
 Block.callApiQuickCreateItem()
 Block.callApiQuickUpdateItem()
 
+ callApiQuickUpdateItem ==> Deprecated.
+ callApiQuickCreateItem ==> Deprecated.
+
 
 Future<bool> executeQuickActionUpdateItem<A extends QuickCRUDActionData>({
     required ITEM item,

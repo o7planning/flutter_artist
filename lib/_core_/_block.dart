@@ -1383,7 +1383,7 @@ abstract class Block<
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
   Future<bool> _executeQuickCreateWithOverlayAndRestorable({
-    required QuickCRUDActionData actionData,
+    required QuickCreateAction<ITEM_DETAIL> actionData,
   }) async {
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
@@ -1395,7 +1395,7 @@ abstract class Block<
   }
 
   Future<bool> _executeQuickCreateWithRestorable({
-    required QuickCRUDActionData actionData,
+    required QuickCreateAction<ITEM_DETAIL> actionData,
   }) async {
     _XShelf xShelf = _XShelf(
       shelf: shelf,
@@ -1449,11 +1449,11 @@ abstract class Block<
   // Private Method. Only for use in this class.
   Future<bool> __executeQuickActionCreateItem({
     required _XBlock thisXBlock,
-    required QuickCRUDActionData actionData,
+    required QuickCreateAction<ITEM_DETAIL> actionData,
   }) async {
     ApiResult<ITEM_DETAIL> result;
     try {
-      result = await callApiQuickCreateItem(actionData: actionData);
+      result = await actionData.callApiQuickCreate();
       FlutterArtist.storage._fireEventSourceChanged(
         eventBlock: this,
         itemIdString: null,
@@ -1491,7 +1491,7 @@ abstract class Block<
 
   Future<bool> _executeQuickUpdateWithOverlayAndRestorable({
     required ITEM item,
-    required QuickCRUDActionData actionData,
+    required QuickUpdateAction<ITEM, ITEM_DETAIL> actionData,
   }) async {
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
@@ -1505,7 +1505,7 @@ abstract class Block<
 
   Future<bool> __executeQuickActionUpdateItemWithRestorable({
     required ITEM item,
-    required QuickCRUDActionData actionData,
+    required QuickUpdateAction<ITEM, ITEM_DETAIL> actionData,
   }) async {
     _XShelf xShelf = _XShelf(
       shelf: shelf,
@@ -1559,16 +1559,14 @@ abstract class Block<
   Future<bool> __executeQuickActionUpdateItem({
     required _XBlock thisXBlock,
     required ITEM item,
-    required QuickCRUDActionData actionData,
+    required QuickUpdateAction<ITEM, ITEM_DETAIL> actionData,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
     ApiResult<ITEM_DETAIL> result;
     try {
-      result = await callApiQuickUpdateItem(
-        item: item,
-        actionData: actionData,
-      );
+      result = await actionData.callApiQuickUpdate(item: item);
+      //
       FlutterArtist.storage._fireEventSourceChanged(
         eventBlock: this,
         itemIdString: null,
@@ -1926,7 +1924,8 @@ abstract class Block<
     }
   }
 
-  Future<bool> executeQuickActionCreateItem<A extends QuickCRUDActionData>({
+  Future<bool>
+      executeQuickActionCreateItem<A extends QuickCreateAction<ITEM_DETAIL>>({
     required CustomConfirmation<A>? customConfirmation,
     required A actionData,
   }) async {
@@ -1944,7 +1943,8 @@ abstract class Block<
     //
     try {
       bool success = await _executeQuickCreateWithOverlayAndRestorable(
-          actionData: actionData);
+        actionData: actionData,
+      );
       shelf.updateAllUIComponents();
       return success;
     } catch (e, stackTrace) {
@@ -1965,7 +1965,8 @@ abstract class Block<
   /// This method will call [callApiQuickUpdateItem] method.
   /// So you need to implement [callApiQuickUpdateItem] method.
   ///
-  Future<bool> executeQuickActionUpdateItem<A extends QuickCRUDActionData>({
+  Future<bool> executeQuickActionUpdateItem<
+      A extends QuickUpdateAction<ITEM, ITEM_DETAIL>>({
     required ITEM item,
     required CustomConfirmation<A>? customConfirmation,
     required A actionData,
@@ -2832,45 +2833,6 @@ abstract class Block<
   // ***************************************************************************
   // ************* API METHOD **************************************************
   // ***************************************************************************
-
-  ///
-  /// This method is called when you can [executeQuickActionUpdateItem] method.
-  ///
-  /// ```dart
-  /// Future<ApiResult<D>> callApiQuickUpdateItem({
-  ///     required I item,
-  ///     required QuickActionData data,
-  /// }) {
-  ///     if(data is SomeAction1) {
-  ///        // Do stuff
-  ///     } else if(data is SomeAction2) {
-  ///        // Do stuff
-  ///     }
-  /// }
-  /// ```
-  ///
-  Future<ApiResult<ITEM_DETAIL>> callApiQuickUpdateItem({
-    required ITEM item,
-    required QuickCRUDActionData actionData,
-  });
-
-  ///
-  /// This method is called when you can [executeQuickActionCreateItem] method.
-  /// ```dart
-  /// Future<ApiResult<D>> callApiQuickCreateItem({
-  ///     required QuickActionData data,
-  /// }) {
-  ///     if(data is SomeAction1) {
-  ///        // Do stuff
-  ///     } else if(data is SomeAction2) {
-  ///        // Do stuff
-  ///     }
-  /// }
-  /// ```
-  ///
-  Future<ApiResult<ITEM_DETAIL>> callApiQuickCreateItem({
-    required QuickCRUDActionData actionData,
-  });
 
   Future<ApiResult<void>> callApiQuickAction({
     required QuickActionData actionData,

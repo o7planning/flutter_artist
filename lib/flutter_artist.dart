@@ -27,7 +27,6 @@ part '_action_/_action_confirmation_type.dart';
 part '_action_/_base_action_data.dart';
 part '_action_/_quick_action_data.dart';
 part '_action_/_quick_create_action.dart';
-part '_action_/_quick_crud_action_data.dart';
 part '_action_/_quick_update_action.dart';
 part '_adapter_/_flutter_artist_adapter.dart';
 part '_adapter_/_logged_in_user_adapter.dart';
