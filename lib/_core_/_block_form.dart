@@ -181,7 +181,7 @@ abstract class BlockForm<
   ///     required EmployeeData? refreshedItem,
   ///     required bool isNew,
   /// }) {
-  ///   ApiResult<CompanyPage> result1 = await deptApi.getCompanyPage();
+  ///   ApiResult<CompanyPage> result1 = await companyApi.getCompanyPage();
   ///   // Throw ApiError
   ///   result1.throwIfError();
   ///   this.companyPage = result1.data;
