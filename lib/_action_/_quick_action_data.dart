@@ -8,9 +8,11 @@ abstract class QuickActionData extends BaseActionData {
     required super.actionInfo,
     required this.affectedItemTypes,
   });
+
+  Future<ApiResult<void>> callApi();
 }
 
-class SimpleQuickActionData extends QuickActionData {
+abstract class SimpleQuickActionData extends QuickActionData {
   final dynamic data;
 
   const SimpleQuickActionData({

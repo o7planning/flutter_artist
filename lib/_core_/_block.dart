@@ -1705,7 +1705,7 @@ abstract class Block<
     //
     ApiResult<void> result;
     try {
-      result = await callApiQuickAction(actionData: actionData);
+      result = await actionData.callApi();
       //
       FlutterArtist.storage._fireEventToAffectedItemTypes(
         affectedItemTypes: actionData.affectedItemTypes,
@@ -2833,10 +2833,6 @@ abstract class Block<
   // ***************************************************************************
   // ************* API METHOD **************************************************
   // ***************************************************************************
-
-  Future<ApiResult<void>> callApiQuickAction({
-    required QuickActionData actionData,
-  });
 
   Future<ApiResult<PageData<ITEM>?>> callApiQuery({
     required FILTER_CRITERIA filterCriteria,

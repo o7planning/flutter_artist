@@ -5,6 +5,7 @@ Block.callApiQuickUpdateItem()
 
  callApiQuickUpdateItem ==> Deprecated.
  callApiQuickCreateItem ==> Deprecated.
+ callApiQuickAction ==> Deprecated.
 
 
 Future<bool> executeQuickActionUpdateItem<A extends QuickCRUDActionData>({
