@@ -77,17 +77,9 @@ abstract class Block<
     > extends _XBase {
   late final Shelf shelf;
 
-  @Deprecated("Xoa di, khong su dung")
-  QueryMode _queryMode = QueryMode.lazy;
-
-  @Deprecated("Xoa di, khong su dung")
-  late QueryMode _tempQueryMode = _queryMode;
-
   int _lazyLoadCount = 0;
 
   int get lazyLoadCount => _lazyLoadCount;
-
-  QueryMode get queryMode => _queryMode;
 
   bool __isQuerying = false;
 
