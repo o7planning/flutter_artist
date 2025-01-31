@@ -1453,7 +1453,16 @@ abstract class Block<
   }) async {
     ApiResult<ITEM_DETAIL> result;
     try {
-      result = await actionData.callApiQuickCreate();
+      FlutterArtist.codeFlowLogger._addMethodCall(
+        isLibCode: false,
+        navigate: null,
+        ownerClassInstance: actionData,
+        methodName: "callApiQuickCreateItem",
+        parameters: {},
+      );
+      //
+      result = await actionData.callApiQuickCreateItem();
+      //
       FlutterArtist.storage._fireEventSourceChanged(
         eventBlock: this,
         itemIdString: null,
@@ -1461,7 +1470,7 @@ abstract class Block<
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: 'callApiQuickCreateItem',
+        methodName: '${getClassName(actionData)}.callApiQuickCreateItem',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -1473,7 +1482,7 @@ abstract class Block<
     try {
       return await _processSaveActionRestResult(
         thisXBlock: thisXBlock,
-        calledMethodName: "callApiQuickCreateItem",
+        calledMethodName: "${getClassName(actionData)}.callApiQuickCreateItem",
         result: result,
       );
     } catch (e, stackTrace) {
@@ -1565,7 +1574,17 @@ abstract class Block<
     //
     ApiResult<ITEM_DETAIL> result;
     try {
-      result = await actionData.callApiQuickUpdate(item: item);
+      FlutterArtist.codeFlowLogger._addMethodCall(
+        isLibCode: false,
+        navigate: null,
+        ownerClassInstance: actionData,
+        methodName: "callApiQuickUpdateItem",
+        parameters: {
+          "item": item,
+        },
+      );
+      //
+      result = await actionData.callApiQuickUpdateItem(item: item);
       //
       FlutterArtist.storage._fireEventSourceChanged(
         eventBlock: this,
@@ -1574,7 +1593,7 @@ abstract class Block<
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: 'callApiQuickUpdateItem',
+        methodName: '${getClassName(actionData)}.callApiQuickUpdateItem',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -1585,7 +1604,7 @@ abstract class Block<
     try {
       return await _processSaveActionRestResult(
         thisXBlock: thisXBlock,
-        calledMethodName: "callApiQuickUpdateItem",
+        calledMethodName: "${getClassName(actionData)}.callApiQuickUpdateItem",
         result: result,
       );
     } catch (e, stackTrace) {
@@ -1705,6 +1724,14 @@ abstract class Block<
     //
     ApiResult<void> result;
     try {
+      FlutterArtist.codeFlowLogger._addMethodCall(
+        ownerClassInstance: actionData,
+        methodName: "callApi",
+        parameters: null,
+        navigate: null,
+        isLibCode: false,
+      );
+      //
       result = await actionData.callApi();
       //
       FlutterArtist.storage._fireEventToAffectedItemTypes(
@@ -1713,7 +1740,7 @@ abstract class Block<
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: 'callApiQuickAction',
+        methodName: '${getClassName(actionData)}.callApi',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -1724,7 +1751,7 @@ abstract class Block<
     if (result.errorMessage != null) {
       _handleRestError(
         shelf: shelf,
-        methodName: "callApiQuickAction",
+        methodName: "${getClassName(actionData)}.callApi",
         message: result.errorMessage!,
         errorDetails: result.errorDetails,
         showSnackBar: true,
@@ -1863,10 +1890,6 @@ abstract class Block<
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
-  ///
-  /// This method will call [callApiQuickAction],
-  /// so you need to override [callApiQuickAction] method.
-  ///
   Future<bool> executeQuickAction<A extends QuickActionData>({
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
@@ -1961,10 +1984,6 @@ abstract class Block<
     }
   }
 
-  ///
-  /// This method will call [callApiQuickUpdateItem] method.
-  /// So you need to implement [callApiQuickUpdateItem] method.
-  ///
   Future<bool> executeQuickActionUpdateItem<
       A extends QuickUpdateAction<ITEM, ITEM_DETAIL>>({
     required ITEM item,

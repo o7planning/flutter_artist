@@ -165,10 +165,6 @@ abstract class Scalar<
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
-  ///
-  /// This method will call [callApiQuickAction],
-  /// so you need to override [callApiQuickAction] method.
-  ///
   Future<bool> executeQuickAction<A extends QuickActionData>({
     FILTER_INPUT? filterInput,
     required ActionConfirmationType actionConfirmationType,
@@ -317,7 +313,15 @@ abstract class Scalar<
     //
     ApiResult<void> result;
     try {
-      result = await callApiQuickAction(actionData: actionData);
+      FlutterArtist.codeFlowLogger._addMethodCall(
+        ownerClassInstance: actionData,
+        methodName: "callApi",
+        parameters: null,
+        navigate: null,
+        isLibCode: false,
+      );
+      //
+      result = await actionData.callApi();
       //
       FlutterArtist.storage._fireEventToAffectedItemTypes(
         affectedItemTypes: actionData.affectedItemTypes,
@@ -325,7 +329,7 @@ abstract class Scalar<
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: 'callApiQuickAction',
+        methodName: '${getClassName(actionData)}.callApi',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -336,7 +340,7 @@ abstract class Scalar<
     if (result.errorMessage != null) {
       _handleRestError(
         shelf: shelf,
-        methodName: "callApiQuickAction",
+        methodName: "${getClassName(actionData)}.callApi",
         message: result.errorMessage!,
         errorDetails: result.errorDetails,
         showSnackBar: true,
@@ -376,10 +380,6 @@ abstract class Scalar<
 
   Future<ApiResult<VALUE>> callApiQuery({
     required FILTER_CRITERIA? filterCriteria,
-  });
-
-  Future<ApiResult<void>> callApiQuickAction({
-    required QuickActionData actionData,
   });
 
   // ***************************************************************************

@@ -7,5 +7,5 @@ abstract class QuickUpdateAction<ITEM extends Object,
     required super.actionInfo,
   });
 
-  Future<ApiResult<ITEM_DETAIL>> callApiQuickUpdate({required ITEM item});
+  Future<ApiResult<ITEM_DETAIL>> callApiQuickUpdateItem({required ITEM item});
 }

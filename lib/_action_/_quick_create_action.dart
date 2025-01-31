@@ -7,5 +7,5 @@ abstract class QuickCreateAction<ITEM_DETAIL extends Object>
     required super.actionInfo,
   });
 
-  Future<ApiResult<ITEM_DETAIL>> callApiQuickCreate();
+  Future<ApiResult<ITEM_DETAIL>> callApiQuickCreateItem();
 }
