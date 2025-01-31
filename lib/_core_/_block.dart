@@ -2063,6 +2063,34 @@ abstract class Block<
     return true;
   }
 
+  Future<bool> prepareToEditNext({
+    required ITEM item,
+    Function()? navigate,
+  }) async {
+    ITEM? nextItem = data.nextSiblingItem;
+    if (nextItem == null) {
+      return false;
+    }
+    return await prepareToEdit(
+      item: nextItem,
+      navigate: navigate,
+    );
+  }
+
+  Future<bool> prepareToEditPrevious({
+    required ITEM item,
+    Function()? navigate,
+  }) async {
+    ITEM? previousItem = data.previousSiblingItem;
+    if (previousItem == null) {
+      return false;
+    }
+    return await prepareToEdit(
+      item: previousItem,
+      navigate: navigate,
+    );
+  }
+
   Future<bool> prepareToEdit({
     required ITEM item,
     Function()? navigate,
@@ -2093,6 +2121,34 @@ abstract class Block<
       return true;
     }
     return false;
+  }
+
+  Future<bool> prepareToShowNext({
+    required ITEM item,
+    Function()? navigate,
+  }) async {
+    ITEM? nextItem = data.nextSiblingItem;
+    if (nextItem == null) {
+      return false;
+    }
+    return await prepareToShow(
+      item: nextItem,
+      navigate: navigate,
+    );
+  }
+
+  Future<bool> prepareToShowPrevious({
+    required ITEM item,
+    Function()? navigate,
+  }) async {
+    ITEM? previousItem = data.previousSiblingItem;
+    if (previousItem == null) {
+      return false;
+    }
+    return await prepareToShow(
+      item: previousItem,
+      navigate: navigate,
+    );
   }
 
   Future<bool> prepareToShow({

@@ -215,6 +215,24 @@ abstract class BlockData<
   }
 
   // ***************************************************************************
+  // ******* PUBLIC ITEM PROPERTIES ********************************************
+  // ***************************************************************************
+
+  ITEM? get nextSiblingItem {
+    if (currentItem == null) {
+      return null;
+    }
+    return findNextSiblingItem(item: currentItem!);
+  }
+
+  ITEM? get previousSiblingItem {
+    if (currentItem == null) {
+      return null;
+    }
+    return findPreviousSiblingItem(item: currentItem!);
+  }
+
+  // ***************************************************************************
   // ******* PUBLIC ITEM METHODS ***********************************************
   // ***************************************************************************
 
@@ -269,6 +287,26 @@ abstract class BlockData<
 
   ITEM? findFirstItem() {
     return _items.isEmpty ? null : _items[0];
+  }
+
+  ITEM? findNextSiblingItem({
+    required ITEM item,
+  }) {
+    return FormUtils.findNextSiblingItemInList(
+      item: item,
+      targetList: _items,
+      getItemId: block.getItemId,
+    );
+  }
+
+  ITEM? findPreviousSiblingItem({
+    required ITEM item,
+  }) {
+    return FormUtils.findPreviousSiblingItemInList(
+      item: item,
+      targetList: _items,
+      getItemId: block.getItemId,
+    );
   }
 
   ITEM? findSiblingItem({

@@ -97,6 +97,42 @@ class FormUtils {
     }
   }
 
+  static ITEM? findNextSiblingItemInList<ITEM, ID>({
+    required List<ITEM> targetList,
+    required ITEM item,
+    required ID Function(ITEM item) getItemId,
+  }) {
+    int idx = targetList.indexWhere((e) {
+      return getItemId(e) == getItemId(item);
+    });
+    if (idx == -1) {
+      return null;
+    } else {
+      if (idx + 1 < targetList.length) {
+        return targetList[idx + 1];
+      }
+      return null;
+    }
+  }
+
+  static ITEM? findPreviousSiblingItemInList<ITEM, ID>({
+    required List<ITEM> targetList,
+    required ITEM item,
+    required ID Function(ITEM item) getItemId,
+  }) {
+    int idx = targetList.indexWhere((e) {
+      return getItemId(e) == getItemId(item);
+    });
+    if (idx == -1) {
+      return null;
+    } else {
+      if (idx - 1 >= 0) {
+        return targetList[idx - 1];
+      }
+      return null;
+    }
+  }
+
   static ITEM? findSiblingItemInList<ITEM, ID>({
     required List<ITEM> targetList,
     required ITEM item,
