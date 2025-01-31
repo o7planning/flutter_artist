@@ -36,7 +36,7 @@ abstract class _XBase {
   }
 
   Future<bool> __showDefaultConfirmDialogForAction(
-    BaseActionData action,
+    BaseAction action,
   ) async {
     return await showConfirmDialog(
       message: 'Are you sure you want to perform this action?',
@@ -44,19 +44,19 @@ abstract class _XBase {
     );
   }
 
-  Future<bool> __showConfirmDialogForQuickAction<A extends BaseActionData>({
+  Future<bool> __showConfirmDialogForQuickAction<A extends BaseAction>({
     required Shelf shelf,
-    required A actionData,
+    required A action,
     required CustomConfirmation<A>? customConfirmation,
   }) async {
-    if (!actionData.needToConfirm) {
+    if (!action.needToConfirm) {
       return true;
     }
     final CustomConfirmation<A> confirmForAction =
         customConfirmation ?? __showDefaultConfirmDialogForAction;
     //
     try {
-      return await confirmForAction(actionData);
+      return await confirmForAction(action);
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,

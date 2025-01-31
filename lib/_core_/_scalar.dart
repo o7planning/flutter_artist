@@ -165,11 +165,11 @@ abstract class Scalar<
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
-  Future<bool> executeQuickAction<A extends QuickActionData>({
+  Future<bool> executeQuickAction<A extends QuickAction>({
     FILTER_INPUT? filterInput,
     required ActionConfirmationType actionConfirmationType,
     required CustomConfirmation<A>? customConfirmation,
-    required A actionData,
+    required A action,
     required AfterScalarQuickAction? afterQuickAction,
     required Function(BuildContext context)? navigate,
   }) async {
@@ -180,7 +180,7 @@ abstract class Scalar<
       methodName: "executeQuickAction",
       parameters: {
         "filterInput": filterInput,
-        "actionData": actionData,
+        "action": action,
         "afterQuickAction": afterQuickAction,
       },
     );
@@ -190,7 +190,7 @@ abstract class Scalar<
     bool confirm = await __showConfirmDialogForQuickAction<A>(
       shelf: shelf,
       customConfirmation: customConfirmation,
-      actionData: actionData,
+      action: action,
     );
     if (!confirm) {
       return false;
@@ -199,7 +199,7 @@ abstract class Scalar<
     try {
       bool success = await _executeQuickActionWithOverlayAndRestorable(
         filterInput: filterInput,
-        action: actionData,
+        action: action,
         afterQuickAction: afterQuickAction,
         navigate: navigate,
       );
@@ -221,7 +221,7 @@ abstract class Scalar<
 
   Future<bool> _executeQuickActionWithOverlayAndRestorable({
     required FILTER_INPUT? filterInput,
-    required QuickActionData action,
+    required QuickAction action,
     required AfterScalarQuickAction? afterQuickAction,
     required Function(BuildContext context)? navigate,
   }) async {
@@ -229,7 +229,7 @@ abstract class Scalar<
       asyncFunction: () async {
         bool success = await __executeQuickActionWithRestorable(
           filterInput: filterInput,
-          actionData: action,
+          action: action,
           afterQuickAction: afterQuickAction,
         );
         if (success) {
@@ -250,7 +250,7 @@ abstract class Scalar<
 
   Future<bool> __executeQuickActionWithRestorable({
     required FILTER_INPUT? filterInput,
-    required QuickActionData actionData,
+    required QuickAction action,
     required AfterScalarQuickAction? afterQuickAction,
   }) async {
     List<_ScalarOpt> forceQueryScalarOpts = [];
@@ -281,7 +281,7 @@ abstract class Scalar<
       //
       bool success = await __executeQuickAction(
         thisXScalar: thisXScalar,
-        actionData: actionData,
+        action: action,
         afterQuickAction: afterQuickAction,
       );
       if (!success) {
@@ -306,7 +306,7 @@ abstract class Scalar<
 
   Future<bool> __executeQuickAction({
     required _XScalar thisXScalar,
-    required QuickActionData actionData,
+    required QuickAction action,
     required AfterScalarQuickAction? afterQuickAction,
   }) async {
     __assertThisXScalar(thisXScalar);
@@ -314,22 +314,22 @@ abstract class Scalar<
     ApiResult<void> result;
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
-        ownerClassInstance: actionData,
+        ownerClassInstance: action,
         methodName: "callApi",
         parameters: null,
         navigate: null,
         isLibCode: false,
       );
       //
-      result = await actionData.callApi();
+      result = await action.callApi();
       //
       FlutterArtist.storage._fireEventToAffectedItemTypes(
-        affectedItemTypes: actionData.affectedItemTypes,
+        affectedItemTypes: action.affectedItemTypes,
       );
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: '${getClassName(actionData)}.callApi',
+        methodName: '${getClassName(action)}.callApi',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -340,7 +340,7 @@ abstract class Scalar<
     if (result.errorMessage != null) {
       _handleRestError(
         shelf: shelf,
-        methodName: "${getClassName(actionData)}.callApi",
+        methodName: "${getClassName(action)}.callApi",
         message: result.errorMessage!,
         errorDetails: result.errorDetails,
         showSnackBar: true,

@@ -1,10 +1,10 @@
 part of '../flutter_artist.dart';
 
-abstract class BaseActionData {
+abstract class BaseAction {
   final bool needToConfirm;
   final String? actionInfo;
 
-  const BaseActionData({
+  const BaseAction({
     required this.needToConfirm,
     required this.actionInfo,
   });

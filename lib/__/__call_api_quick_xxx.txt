@@ -8,24 +8,6 @@ callApiQuickCreateItem ==> Deprecated.
 callApiQuickAction ==> Deprecated.
 
 
-Future<bool> executeQuickActionUpdateItem<A extends QuickCRUDActionData>({
-    required ITEM item,
-    required CustomConfirmation<A>? customConfirmation,
-    required A actionData,
-})
-
-
-// -------------------------------------------------------------------------------------------------
-
-Future<bool> executeQuickAction<A extends QuickActionData>({
-    FILTER_INPUT? filterInput,
-    SuggestedSelection? suggestedSelection,
-    required ActionConfirmationType actionConfirmationType,
-    required CustomConfirmation<A>? customConfirmation,
-    required A actionData,
-    required AfterQuickAction? afterQuickAction,
-    required Function(BuildContext context)? navigate,
-})
 
 
 Block.callApiQuickAction()

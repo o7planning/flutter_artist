@@ -24,7 +24,7 @@ import 'package:uuid/uuid.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 part '_action_/_action_confirmation_type.dart';
-part '_action_/_base_action_data.dart';
+part '_action_/_base_action.dart';
 part '_action_/_quick_action_data.dart';
 part '_action_/_quick_create_action.dart';
 part '_action_/_quick_update_action.dart';

@@ -1383,19 +1383,19 @@ abstract class Block<
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
   Future<bool> _executeQuickCreateWithOverlayAndRestorable({
-    required QuickCreateAction<ITEM_DETAIL> actionData,
+    required QuickCreateAction<ITEM_DETAIL> action,
   }) async {
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
         return await _executeQuickCreateWithRestorable(
-          actionData: actionData,
+          action: action,
         );
       },
     );
   }
 
   Future<bool> _executeQuickCreateWithRestorable({
-    required QuickCreateAction<ITEM_DETAIL> actionData,
+    required QuickCreateAction<ITEM_DETAIL> action,
   }) async {
     _XShelf xShelf = _XShelf(
       shelf: shelf,
@@ -1423,7 +1423,7 @@ abstract class Block<
       //
       bool success = await __executeQuickActionCreateItem(
         thisXBlock: thisXBlock,
-        actionData: actionData,
+        action: action,
       );
       if (success) {
         shelf._applyNewStateAll();
@@ -1449,19 +1449,19 @@ abstract class Block<
   // Private Method. Only for use in this class.
   Future<bool> __executeQuickActionCreateItem({
     required _XBlock thisXBlock,
-    required QuickCreateAction<ITEM_DETAIL> actionData,
+    required QuickCreateAction<ITEM_DETAIL> action,
   }) async {
     ApiResult<ITEM_DETAIL> result;
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
         navigate: null,
-        ownerClassInstance: actionData,
+        ownerClassInstance: action,
         methodName: "callApiQuickCreateItem",
         parameters: {},
       );
       //
-      result = await actionData.callApiQuickCreateItem();
+      result = await action.callApiQuickCreateItem();
       //
       FlutterArtist.storage._fireEventSourceChanged(
         eventBlock: this,
@@ -1470,7 +1470,7 @@ abstract class Block<
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: '${getClassName(actionData)}.callApiQuickCreateItem',
+        methodName: '${getClassName(action)}.callApiQuickCreateItem',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -1482,7 +1482,7 @@ abstract class Block<
     try {
       return await _processSaveActionRestResult(
         thisXBlock: thisXBlock,
-        calledMethodName: "${getClassName(actionData)}.callApiQuickCreateItem",
+        calledMethodName: "${getClassName(action)}.callApiQuickCreateItem",
         result: result,
       );
     } catch (e, stackTrace) {
@@ -1500,13 +1500,13 @@ abstract class Block<
 
   Future<bool> _executeQuickUpdateWithOverlayAndRestorable({
     required ITEM item,
-    required QuickUpdateAction<ITEM, ITEM_DETAIL> actionData,
+    required QuickUpdateAction<ITEM, ITEM_DETAIL> action,
   }) async {
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
         return await __executeQuickActionUpdateItemWithRestorable(
           item: item,
-          actionData: actionData,
+          action: action,
         );
       },
     );
@@ -1514,7 +1514,7 @@ abstract class Block<
 
   Future<bool> __executeQuickActionUpdateItemWithRestorable({
     required ITEM item,
-    required QuickUpdateAction<ITEM, ITEM_DETAIL> actionData,
+    required QuickUpdateAction<ITEM, ITEM_DETAIL> action,
   }) async {
     _XShelf xShelf = _XShelf(
       shelf: shelf,
@@ -1542,7 +1542,7 @@ abstract class Block<
       bool success = await __executeQuickActionUpdateItem(
         thisXBlock: thisXBlock,
         item: item,
-        actionData: actionData,
+        action: action,
       );
       if (success) {
         shelf._applyNewStateAll();
@@ -1568,7 +1568,7 @@ abstract class Block<
   Future<bool> __executeQuickActionUpdateItem({
     required _XBlock thisXBlock,
     required ITEM item,
-    required QuickUpdateAction<ITEM, ITEM_DETAIL> actionData,
+    required QuickUpdateAction<ITEM, ITEM_DETAIL> action,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -1577,14 +1577,14 @@ abstract class Block<
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
         navigate: null,
-        ownerClassInstance: actionData,
+        ownerClassInstance: action,
         methodName: "callApiQuickUpdateItem",
         parameters: {
           "item": item,
         },
       );
       //
-      result = await actionData.callApiQuickUpdateItem(item: item);
+      result = await action.callApiQuickUpdateItem(item: item);
       //
       FlutterArtist.storage._fireEventSourceChanged(
         eventBlock: this,
@@ -1593,7 +1593,7 @@ abstract class Block<
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: '${getClassName(actionData)}.callApiQuickUpdateItem',
+        methodName: '${getClassName(action)}.callApiQuickUpdateItem',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -1604,7 +1604,7 @@ abstract class Block<
     try {
       return await _processSaveActionRestResult(
         thisXBlock: thisXBlock,
-        calledMethodName: "${getClassName(actionData)}.callApiQuickUpdateItem",
+        calledMethodName: "${getClassName(action)}.callApiQuickUpdateItem",
         result: result,
       );
     } catch (e, stackTrace) {
@@ -1623,7 +1623,7 @@ abstract class Block<
   Future<bool> _executeQuickActionWithOverlayAndRestorable({
     required FILTER_INPUT? filterInput,
     required SuggestedSelection? suggestedSelection,
-    required QuickActionData actionData,
+    required QuickAction action,
     required AfterBlockQuickAction? afterQuickAction,
     required Function(BuildContext context)? navigate,
   }) async {
@@ -1632,7 +1632,7 @@ abstract class Block<
         bool success = await __executeQuickActionWithRestorable(
           filterInput: filterInput,
           suggestedSelection: suggestedSelection,
-          actionData: actionData,
+          action: action,
           afterQuickAction: afterQuickAction,
         );
         if (success) {
@@ -1654,7 +1654,7 @@ abstract class Block<
   Future<bool> __executeQuickActionWithRestorable({
     required FILTER_INPUT? filterInput,
     required SuggestedSelection? suggestedSelection,
-    required QuickActionData actionData,
+    required QuickAction action,
     required AfterBlockQuickAction? afterQuickAction,
   }) async {
     List<_BlockOpt> forceQueryBlockOpts = [];
@@ -1692,7 +1692,7 @@ abstract class Block<
       //
       bool success = await __executeQuickAction(
         thisXBlock: thisXBlock,
-        actionData: actionData,
+        action: action,
         afterQuickAction: afterQuickAction,
       );
       if (!success) {
@@ -1717,7 +1717,7 @@ abstract class Block<
 
   Future<bool> __executeQuickAction({
     required _XBlock thisXBlock,
-    required QuickActionData actionData,
+    required QuickAction action,
     required AfterBlockQuickAction? afterQuickAction,
   }) async {
     __assertThisXBlock(thisXBlock);
@@ -1725,22 +1725,22 @@ abstract class Block<
     ApiResult<void> result;
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
-        ownerClassInstance: actionData,
+        ownerClassInstance: action,
         methodName: "callApi",
         parameters: null,
         navigate: null,
         isLibCode: false,
       );
       //
-      result = await actionData.callApi();
+      result = await action.callApi();
       //
       FlutterArtist.storage._fireEventToAffectedItemTypes(
-        affectedItemTypes: actionData.affectedItemTypes,
+        affectedItemTypes: action.affectedItemTypes,
       );
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: '${getClassName(actionData)}.callApi',
+        methodName: '${getClassName(action)}.callApi',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -1751,7 +1751,7 @@ abstract class Block<
     if (result.errorMessage != null) {
       _handleRestError(
         shelf: shelf,
-        methodName: "${getClassName(actionData)}.callApi",
+        methodName: "${getClassName(action)}.callApi",
         message: result.errorMessage!,
         errorDetails: result.errorDetails,
         showSnackBar: true,
@@ -1890,12 +1890,12 @@ abstract class Block<
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
-  Future<bool> executeQuickAction<A extends QuickActionData>({
+  Future<bool> executeQuickAction<A extends QuickAction>({
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
     required ActionConfirmationType actionConfirmationType,
     required CustomConfirmation<A>? customConfirmation,
-    required A actionData,
+    required A action,
     required AfterBlockQuickAction? afterQuickAction,
     required Function(BuildContext context)? navigate,
   }) async {
@@ -1907,7 +1907,7 @@ abstract class Block<
       parameters: {
         "filterInput": filterInput,
         "suggestedSelection": suggestedSelection,
-        "actionData": actionData,
+        "action": action,
         "afterQuickAction": afterQuickAction,
       },
     );
@@ -1917,7 +1917,7 @@ abstract class Block<
     bool confirm = await __showConfirmDialogForQuickAction<A>(
       shelf: shelf,
       customConfirmation: customConfirmation,
-      actionData: actionData,
+      action: action,
     );
     if (!confirm) {
       return false;
@@ -1927,7 +1927,7 @@ abstract class Block<
       bool success = await _executeQuickActionWithOverlayAndRestorable(
         filterInput: filterInput,
         suggestedSelection: suggestedSelection,
-        actionData: actionData,
+        action: action,
         afterQuickAction: afterQuickAction,
         navigate: navigate,
       );
@@ -1950,7 +1950,7 @@ abstract class Block<
   Future<bool>
       executeQuickActionCreateItem<A extends QuickCreateAction<ITEM_DETAIL>>({
     required CustomConfirmation<A>? customConfirmation,
-    required A actionData,
+    required A action,
   }) async {
     //
     // Confirmation:
@@ -1958,7 +1958,7 @@ abstract class Block<
     bool confirm = await __showConfirmDialogForQuickAction<A>(
       shelf: shelf,
       customConfirmation: customConfirmation,
-      actionData: actionData,
+      action: action,
     );
     if (!confirm) {
       return false;
@@ -1966,7 +1966,7 @@ abstract class Block<
     //
     try {
       bool success = await _executeQuickCreateWithOverlayAndRestorable(
-        actionData: actionData,
+        action: action,
       );
       shelf.updateAllUIComponents();
       return success;
@@ -1988,7 +1988,7 @@ abstract class Block<
       A extends QuickUpdateAction<ITEM, ITEM_DETAIL>>({
     required ITEM item,
     required CustomConfirmation<A>? customConfirmation,
-    required A actionData,
+    required A action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -1997,7 +1997,7 @@ abstract class Block<
       methodName: "executeQuickActionUpdateItem",
       parameters: {
         "item": item,
-        "actionData": actionData,
+        "action": action,
       },
     );
     //
@@ -2006,7 +2006,7 @@ abstract class Block<
     bool confirm = await __showConfirmDialogForQuickAction<A>(
       shelf: shelf,
       customConfirmation: customConfirmation,
-      actionData: actionData,
+      action: action,
     );
     if (!confirm) {
       return false;
@@ -2015,7 +2015,7 @@ abstract class Block<
     try {
       bool success = await _executeQuickUpdateWithOverlayAndRestorable(
         item: item,
-        actionData: actionData,
+        action: action,
       );
       shelf.updateAllUIComponents();
       return success;
