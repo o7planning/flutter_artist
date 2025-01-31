@@ -1382,19 +1382,19 @@ abstract class Block<
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
-  Future<bool> _executeQuickCreateWithOverlayAndRestorable({
+  Future<bool> _executeQuickCreateItemWithOverlayAndRestorable({
     required QuickCreateItemAction<ITEM_DETAIL> action,
   }) async {
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
-        return await _executeQuickCreateWithRestorable(
+        return await _executeQuickCreateItemWithRestorable(
           action: action,
         );
       },
     );
   }
 
-  Future<bool> _executeQuickCreateWithRestorable({
+  Future<bool> _executeQuickCreateItemWithRestorable({
     required QuickCreateItemAction<ITEM_DETAIL> action,
   }) async {
     _XShelf xShelf = _XShelf(
@@ -1498,7 +1498,7 @@ abstract class Block<
     }
   }
 
-  Future<bool> _executeQuickUpdateWithOverlayAndRestorable({
+  Future<bool> _executeQuickUpdateItemWithOverlayAndRestorable({
     required ITEM item,
     required QuickUpdateItemAction<ITEM, ITEM_DETAIL> action,
   }) async {
@@ -1965,7 +1965,7 @@ abstract class Block<
     }
     //
     try {
-      bool success = await _executeQuickCreateWithOverlayAndRestorable(
+      bool success = await _executeQuickCreateItemWithOverlayAndRestorable(
         action: action,
       );
       shelf.updateAllUIComponents();
@@ -2013,7 +2013,7 @@ abstract class Block<
     }
     //
     try {
-      bool success = await _executeQuickUpdateWithOverlayAndRestorable(
+      bool success = await _executeQuickUpdateItemWithOverlayAndRestorable(
         item: item,
         action: action,
       );
