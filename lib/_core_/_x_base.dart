@@ -1,6 +1,7 @@
 part of '../flutter_artist.dart';
 
 abstract class _XBase {
+  // TODO: Them tham so BuildContext?
   Future<bool> showConfirmDialog({
     required String message,
     String? details,
@@ -14,6 +15,7 @@ abstract class _XBase {
     return confirm;
   }
 
+  // TODO: Them tham so BuildContext?
   Future<bool> showConfirmDeleteDialog({String? details}) async {
     BuildContext context = FlutterArtist.adapter.getCurrentContext();
     bool confirm = await dialogs.showConfirmDeleteDialog(
@@ -23,6 +25,7 @@ abstract class _XBase {
     return confirm;
   }
 
+  // TODO: Them tham so BuildContext?
   Future<void> showMessageDialog({
     required String message,
     String? details,
