@@ -1,8 +1,8 @@
 part of '../flutter_artist.dart';
 
-abstract class QuickCreateAction<ITEM_DETAIL extends Object>
+abstract class QuickCreateItemAction<ITEM_DETAIL extends Object>
     extends BaseAction {
-  const QuickCreateAction({
+  const QuickCreateItemAction({
     required super.needToConfirm,
     required super.actionInfo,
   });

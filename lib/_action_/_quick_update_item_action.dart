@@ -1,8 +1,8 @@
 part of '../flutter_artist.dart';
 
-abstract class QuickUpdateAction<ITEM extends Object,
+abstract class QuickUpdateItemAction<ITEM extends Object,
     ITEM_DETAIL extends Object> extends BaseAction {
-  const QuickUpdateAction({
+  const QuickUpdateItemAction({
     required super.needToConfirm,
     required super.actionInfo,
   });

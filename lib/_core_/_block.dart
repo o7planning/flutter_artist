@@ -1383,7 +1383,7 @@ abstract class Block<
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
   Future<bool> _executeQuickCreateWithOverlayAndRestorable({
-    required QuickCreateAction<ITEM_DETAIL> action,
+    required QuickCreateItemAction<ITEM_DETAIL> action,
   }) async {
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
@@ -1395,7 +1395,7 @@ abstract class Block<
   }
 
   Future<bool> _executeQuickCreateWithRestorable({
-    required QuickCreateAction<ITEM_DETAIL> action,
+    required QuickCreateItemAction<ITEM_DETAIL> action,
   }) async {
     _XShelf xShelf = _XShelf(
       shelf: shelf,
@@ -1449,7 +1449,7 @@ abstract class Block<
   // Private Method. Only for use in this class.
   Future<bool> __executeQuickActionCreateItem({
     required _XBlock thisXBlock,
-    required QuickCreateAction<ITEM_DETAIL> action,
+    required QuickCreateItemAction<ITEM_DETAIL> action,
   }) async {
     ApiResult<ITEM_DETAIL> result;
     try {
@@ -1500,7 +1500,7 @@ abstract class Block<
 
   Future<bool> _executeQuickUpdateWithOverlayAndRestorable({
     required ITEM item,
-    required QuickUpdateAction<ITEM, ITEM_DETAIL> action,
+    required QuickUpdateItemAction<ITEM, ITEM_DETAIL> action,
   }) async {
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
@@ -1514,7 +1514,7 @@ abstract class Block<
 
   Future<bool> __executeQuickActionUpdateItemWithRestorable({
     required ITEM item,
-    required QuickUpdateAction<ITEM, ITEM_DETAIL> action,
+    required QuickUpdateItemAction<ITEM, ITEM_DETAIL> action,
   }) async {
     _XShelf xShelf = _XShelf(
       shelf: shelf,
@@ -1568,7 +1568,7 @@ abstract class Block<
   Future<bool> __executeQuickActionUpdateItem({
     required _XBlock thisXBlock,
     required ITEM item,
-    required QuickUpdateAction<ITEM, ITEM_DETAIL> action,
+    required QuickUpdateItemAction<ITEM, ITEM_DETAIL> action,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -1947,8 +1947,8 @@ abstract class Block<
     }
   }
 
-  Future<bool>
-      executeQuickActionCreateItem<A extends QuickCreateAction<ITEM_DETAIL>>({
+  Future<bool> executeQuickActionCreateItem<
+      A extends QuickCreateItemAction<ITEM_DETAIL>>({
     required CustomConfirmation<A>? customConfirmation,
     required A action,
   }) async {
@@ -1985,7 +1985,7 @@ abstract class Block<
   }
 
   Future<bool> executeQuickActionUpdateItem<
-      A extends QuickUpdateAction<ITEM, ITEM_DETAIL>>({
+      A extends QuickUpdateItemAction<ITEM, ITEM_DETAIL>>({
     required ITEM item,
     required CustomConfirmation<A>? customConfirmation,
     required A action,
