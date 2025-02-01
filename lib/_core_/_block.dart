@@ -2648,19 +2648,18 @@ abstract class Block<
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
+    _DeleteResult<ITEM> deleteResult = _DeleteResult.fail();
     try {
       shelf._backupAll();
-      bool success = await __deleteItem(
+      deleteResult = await __deleteItem(
         thisXBlock: thisXBlock,
         item: item,
       );
-
-      if (!success) {
+      if (!deleteResult.success) {
         shelf._restoreAll();
       } else {
         shelf._applyNewStateAll();
       }
-      return success;
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
@@ -2671,19 +2670,46 @@ abstract class Block<
       );
       //
       shelf._restoreAll();
+      deleteResult = _DeleteResult.fail();
+    }
+
+    if (!deleteResult.success) {
       return false;
+    } else {
+      if (deleteResult.sibling != null) {
+        // bool success = await __prepareToShowOrEdit (
+        //   thisXBlock: thisXBlock,
+        //   item: deleteResult.sibling!,
+        //   justQueried: false,
+        //   forceForm: false,
+        // );
+
+        //   required SuggestedSelection? suggestedSelection,
+        // required ITEM item,
+        // required bool forceForm,
+        // required bool justQueried,
+
+        await __prepareToShowOrEditWithRestorable(
+          suggestedSelection: null,
+          item: deleteResult.sibling!,
+          justQueried: false,
+          forceForm: false,
+        );
+        return true;
+      }
+      return true;
     }
   }
 
   // Private method. Only for use in this class only.
-  Future<bool> __deleteItem({
+  Future<_DeleteResult<ITEM>> __deleteItem({
     required _XBlock thisXBlock,
     required ITEM item,
   }) async {
     try {
       bool canDelete = canDeleteItem(item: item);
       if (!canDelete) {
-        return false;
+        return _DeleteResult.fail();
       }
       final bool isCurrent = data.isCurrentItem(item: item);
       //
@@ -2719,8 +2745,9 @@ abstract class Block<
           showSnackBar: true,
         );
         //
-        return false;
+        return _DeleteResult.fail();
       }
+      //
       if (result.errorMessage != null) {
         _handleRestError(
           shelf: shelf,
@@ -2729,40 +2756,50 @@ abstract class Block<
           errorDetails: result.errorDetails,
           showSnackBar: true,
         );
-        return false;
+        return _DeleteResult.fail();
       } else {
+        final ITEM? sibling;
         if (!isCurrent) {
           __removeItemFromList(removeItem: item);
+          sibling = null;
         } else {
           // Deleted current item ==> find sibling.
-          final ITEM? sibling = data.findSiblingItem(item: item);
+          sibling = data.findSiblingItem(item: item);
           // Remove Item
           __removeItemFromList(removeItem: item);
-
           //
-          if (sibling != null) {
-            bool success = await __prepareToShowOrEdit(
-              thisXBlock: thisXBlock,
-              item: sibling,
-              justQueried: false,
-              forceForm: false,
-            );
-            if (!success) {
-              return false;
-            }
-          } else {
-            bool success = await _switchThisAndChildrenToNoneMode(
-              thisXBlock: thisXBlock,
-              clearListForThis: false,
-              dataState: DataState.ready,
-            );
-            if (!success) {
-              return false;
-            }
+          bool success = await _switchThisAndChildrenToNoneMode(
+            thisXBlock: thisXBlock,
+            clearListForThis: false,
+            dataState: DataState.ready,
+          );
+          if (!success) {
+            return _DeleteResult.fail();
           }
+          //
+          // if (sibling != null) {
+          //   bool success = await __prepareToShowOrEdit(
+          //     thisXBlock: thisXBlock,
+          //     item: sibling,
+          //     justQueried: false,
+          //     forceForm: false,
+          //   );
+          //   if (!success) {
+          //     return false;
+          //   }
+          // } else {
+          //   bool success = await _switchThisAndChildrenToNoneMode(
+          //     thisXBlock: thisXBlock,
+          //     clearListForThis: false,
+          //     dataState: DataState.ready,
+          //   );
+          //   if (!success) {
+          //     return false;
+          //   }
+          // }
         }
+        return _DeleteResult.success(sibling: sibling);
       }
-      return true;
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
@@ -2771,7 +2808,7 @@ abstract class Block<
         stackTrace: stackTrace,
         showSnackBar: true,
       );
-      return false;
+      return _DeleteResult.fail();
     }
   }
 
