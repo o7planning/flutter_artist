@@ -2528,7 +2528,7 @@ abstract class Block<
 
     ITEM? currentItem = data.currentItem;
     if (currentItem != null) {
-      return delete(currentItem);
+      return deleteItem(currentItem);
     }
     return false;
   }
@@ -2607,7 +2607,7 @@ abstract class Block<
     return success;
   }
 
-  Future<bool> delete(ITEM item) async {
+  Future<bool> deleteItem(ITEM item) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: null,
@@ -2642,18 +2642,7 @@ abstract class Block<
       shelf: shelf,
       forceDataFilterOpt: null,
       forceQueryScalarOpts: [],
-      forceQueryBlockOpts: _childBlocks
-          .map(
-            (b) => _BlockOpt(
-              block: b,
-              queryType: null,
-              pageable: null,
-              listBehavior: null,
-              suggestedSelection: null,
-              postQueryBehavior: null,
-            ),
-          )
-          .toList(),
+      forceQueryBlockOpts: [],
       forceQueryBlockFormOpts: [],
     );
     //
@@ -2692,14 +2681,18 @@ abstract class Block<
     required ITEM item,
   }) async {
     try {
-      final bool isCurrent = data.isCurrentItem(item: item);
-
-      if (isCurrent && blockForm?.data._formMode == FormMode.creation) {
+      bool canDelete = canDeleteItem(item: item);
+      if (!canDelete) {
         return false;
       }
-      if (blockForm?.data._formMode == FormMode.none) {
-        // return false;
-      }
+      final bool isCurrent = data.isCurrentItem(item: item);
+      //
+      // if (isCurrent && blockForm?.data._formMode == FormMode.creation) {
+      //   return false;
+      // }
+      // if (blockForm?.data._formMode == FormMode.none) {
+      //
+      // }
       ApiResult<void> result;
       try {
         FlutterArtist.codeFlowLogger._addMethodCall(
