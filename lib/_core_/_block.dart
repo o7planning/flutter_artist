@@ -68,13 +68,13 @@ part of '../flutter_artist.dart';
 /// ```
 ///
 abstract class Block<
-    ID extends Object,
-    ITEM extends Object,
-    ITEM_DETAIL extends Object,
-    FILTER_INPUT extends FilterInput, // EmptyFilterInput
-    FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
-    EXTRA_INPUT extends ExtraInput // EmptyExtraInput
-    > extends _XBase {
+ID extends Object,
+ITEM extends Object,
+ITEM_DETAIL extends Object,
+FILTER_INPUT extends FilterInput, // EmptyFilterInput
+FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
+EXTRA_INPUT extends ExtraInput // EmptyExtraInput
+> extends _XBase {
   late final Shelf shelf;
 
   int _lazyLoadCount = 0;
@@ -139,7 +139,7 @@ abstract class Block<
   /// If this block does not declare a [DataFilter], it will have the default [DataFilter].
   ///
   late final DataFilter<FILTER_INPUT, FILTER_CRITERIA>
-      _registeredOrDefaultDataFilter;
+  _registeredOrDefaultDataFilter;
 
   ///
   /// Returns a DataFilter declared in the [Shelf.registerStructure()] method.
@@ -158,7 +158,7 @@ abstract class Block<
   String? get parentBlockName => parent?.name;
 
   final BlockForm<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA, EXTRA_INPUT>?
-      blockForm;
+  blockForm;
 
   final List<Block> _childBlocks;
 
@@ -212,14 +212,14 @@ abstract class Block<
   PageableData? get __pageable => __pageSize == null
       ? null
       : PageableData(
-          page: 1,
-          pageSize: __pageSize,
-        );
+    page: 1,
+    pageSize: __pageSize,
+  );
 
   late final BlockData<ID, ITEM, ITEM_DETAIL, FILTER_INPUT, FILTER_CRITERIA,
-          EXTRA_INPUT> data =
-      _InternalBlockData<ID, ITEM, ITEM_DETAIL, FILTER_INPUT, FILTER_CRITERIA,
-          EXTRA_INPUT>.empty(
+      EXTRA_INPUT> data =
+  _InternalBlockData<ID, ITEM, ITEM_DETAIL, FILTER_INPUT, FILTER_CRITERIA,
+      EXTRA_INPUT>.empty(
     this,
     __pageable,
   );
@@ -443,7 +443,7 @@ abstract class Block<
     if (hiddenBehavior == BlockHiddenBehavior.clear) {
       Future.delayed(
         const Duration(seconds: 0),
-        () {
+            () {
           this.clear();
         },
       );
@@ -543,7 +543,7 @@ abstract class Block<
     if (alsoCheckChildren) {
       for (Block childBlock in _childBlocks) {
         bool active =
-            childBlock.hasActiveBlockFragmentWidget(alsoCheckChildren: true);
+        childBlock.hasActiveBlockFragmentWidget(alsoCheckChildren: true);
         if (active) {
           return true;
         }
@@ -554,7 +554,7 @@ abstract class Block<
 
   bool hasActiveControlBarWidget() {
     for (_RefreshableWidgetState controlBarState
-        in _controlBarWidgetStates.keys) {
+    in _controlBarWidgetStates.keys) {
       bool visible = _controlBarWidgetStates[controlBarState] ?? false;
       if (visible && controlBarState.mounted) {
         return true;
@@ -575,7 +575,7 @@ abstract class Block<
 
   bool hasActivePaginationWidget() {
     for (_RefreshableWidgetState paginationState
-        in _paginationWidgetStates.keys) {
+    in _paginationWidgetStates.keys) {
       bool visible = _paginationWidgetStates[paginationState] ?? false;
       if (visible && paginationState.mounted) {
         return true;
@@ -944,7 +944,7 @@ abstract class Block<
     switch (postQueryBehavior) {
       case PostQueryBehavior.selectAvailableItem:
       case PostQueryBehavior.selectAvailableItemToEdit:
-        // OLD Current Item
+      // OLD Current Item
         ITEM? suggestedCurrentItem = data.currentItem;
         if (suggestedSelection != null &&
             suggestedSelection.itemIdToSetAsCurrent != null) {
@@ -1396,14 +1396,14 @@ abstract class Block<
       forceQueryBlockOpts: _childBlocks
           .map(
             (b) => _BlockOpt(
-              block: b,
-              queryType: null,
-              pageable: null,
-              listBehavior: null,
-              suggestedSelection: null,
-              postQueryBehavior: null,
-            ),
-          )
+          block: b,
+          queryType: null,
+          pageable: null,
+          listBehavior: null,
+          suggestedSelection: null,
+          postQueryBehavior: null,
+        ),
+      )
           .toList(),
       forceQueryBlockFormOpts: [],
     );
@@ -1923,7 +1923,7 @@ abstract class Block<
   }
 
   Future<bool> executeQuickActionCreateItem<
-      A extends QuickCreateItemAction<ITEM_DETAIL>>({
+  A extends QuickCreateItemAction<ITEM_DETAIL>>({
     required A action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -1970,7 +1970,7 @@ abstract class Block<
   }
 
   Future<bool> executeQuickActionUpdateItem<
-      A extends QuickUpdateItemAction<ITEM, ITEM_DETAIL>>({
+  A extends QuickUpdateItemAction<ITEM, ITEM_DETAIL>>({
     required ITEM item,
     required A action,
   }) async {
@@ -2028,7 +2028,7 @@ abstract class Block<
       if (showErrorMessage) {
         showErrorSnackBar(
           message:
-              "This item cannot be edited on the Form because some conditions are not met.",
+          "This item cannot be edited on the Form because some conditions are not met.",
           errorDetails: ["Block: ${getClassName(this)}"],
         );
       }
@@ -2344,7 +2344,7 @@ abstract class Block<
       if (showErrorMessage) {
         showErrorSnackBar(
           message:
-              "Cannot create new Item on form because some conditions are not met.",
+          "Cannot create new Item on form because some conditions are not met.",
           errorDetails: ["Block: ${getClassName(this)}"],
         );
       }
@@ -2648,18 +2648,19 @@ abstract class Block<
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
-    _DeleteResult<ITEM> deleteResult = _DeleteResult.fail();
     try {
       shelf._backupAll();
-      deleteResult = await __deleteItem(
+      bool success = await __deleteItem(
         thisXBlock: thisXBlock,
         item: item,
       );
-      if (!deleteResult.success) {
+
+      if (!success) {
         shelf._restoreAll();
       } else {
         shelf._applyNewStateAll();
       }
+      return success;
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
@@ -2670,34 +2671,19 @@ abstract class Block<
       );
       //
       shelf._restoreAll();
-      deleteResult = _DeleteResult.fail();
-    }
-
-    if (!deleteResult.success) {
       return false;
-    } else {
-      if (deleteResult.sibling != null) {
-        await __prepareToShowOrEditWithRestorable(
-          suggestedSelection: null,
-          item: deleteResult.sibling!,
-          justQueried: false,
-          forceForm: false,
-        );
-        return true;
-      }
-      return true;
     }
   }
 
   // Private method. Only for use in this class only.
-  Future<_DeleteResult<ITEM>> __deleteItem({
+  Future<bool> __deleteItem({
     required _XBlock thisXBlock,
     required ITEM item,
   }) async {
     try {
       bool canDelete = canDeleteItem(item: item);
       if (!canDelete) {
-        return _DeleteResult.fail();
+        return false;
       }
       final bool isCurrent = data.isCurrentItem(item: item);
       //
@@ -2733,9 +2719,8 @@ abstract class Block<
           showSnackBar: true,
         );
         //
-        return _DeleteResult.fail();
+        return false;
       }
-      //
       if (result.errorMessage != null) {
         _handleRestError(
           shelf: shelf,
@@ -2744,29 +2729,40 @@ abstract class Block<
           errorDetails: result.errorDetails,
           showSnackBar: true,
         );
-        return _DeleteResult.fail();
+        return false;
       } else {
-        final ITEM? sibling;
         if (!isCurrent) {
           __removeItemFromList(removeItem: item);
-          sibling = null;
         } else {
           // Deleted current item ==> find sibling.
-          sibling = data.findSiblingItem(item: item);
+          final ITEM? sibling = data.findSiblingItem(item: item);
           // Remove Item
           __removeItemFromList(removeItem: item);
+
           //
-          bool success = await _switchThisAndChildrenToNoneMode(
-            thisXBlock: thisXBlock,
-            clearListForThis: false,
-            dataState: DataState.ready,
-          );
-          if (!success) {
-            return _DeleteResult.fail();
+          if (sibling != null) {
+            bool success = await __prepareToShowOrEdit(
+              thisXBlock: thisXBlock,
+              item: sibling,
+              justQueried: false,
+              forceForm: false,
+            );
+            if (!success) {
+              return false;
+            }
+          } else {
+            bool success = await _switchThisAndChildrenToNoneMode(
+              thisXBlock: thisXBlock,
+              clearListForThis: false,
+              dataState: DataState.ready,
+            );
+            if (!success) {
+              return false;
+            }
           }
         }
-        return _DeleteResult.success(sibling: sibling);
       }
+      return true;
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
@@ -2775,7 +2771,7 @@ abstract class Block<
         stackTrace: stackTrace,
         showSnackBar: true,
       );
-      return _DeleteResult.fail();
+      return false;
     }
   }
 
@@ -2936,7 +2932,7 @@ abstract class Block<
 
   void updateBlockFragmentWidgets() {
     for (_RefreshableWidgetState widgetState
-        in _blockFragmentWidgetStates.keys) {
+    in _blockFragmentWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }
