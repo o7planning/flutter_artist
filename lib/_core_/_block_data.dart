@@ -218,6 +218,18 @@ abstract class BlockData<
   // ******* PUBLIC ITEM PROPERTIES ********************************************
   // ***************************************************************************
 
+  ITEM? get firstItem {
+    return _items.firstOrNull;
+  }
+
+  ITEM? get lastItem {
+    return _items.lastOrNull;
+  }
+
+  ///
+  /// The next item of the current item.
+  /// Return null if no current item or the current item is the last item.
+  ///
   ITEM? get nextSiblingItem {
     if (currentItem == null) {
       return null;
@@ -225,11 +237,39 @@ abstract class BlockData<
     return findNextSiblingItem(item: currentItem!);
   }
 
+  ///
+  /// The previous item of the current item.
+  /// Return null if no current item or the current item is the first item.
+  ///
   ITEM? get previousSiblingItem {
     if (currentItem == null) {
       return null;
     }
     return findPreviousSiblingItem(item: currentItem!);
+  }
+
+  ///
+  /// Check if the first item is current item.
+  ///
+  bool get isFirstItemCurrent {
+    ITEM? first = firstItem;
+    ITEM? current = currentItem;
+    if (first == null || current == null) {
+      return false;
+    }
+    return block.getItemId(first) == block.getItemId(current);
+  }
+
+  ///
+  /// Check if the last item is current item.
+  ///
+  bool get isLastItemCurrent {
+    ITEM? last = lastItem;
+    ITEM? current = currentItem;
+    if (last == null || current == null) {
+      return false;
+    }
+    return block.getItemId(last) == block.getItemId(current);
   }
 
   // ***************************************************************************
@@ -283,10 +323,6 @@ abstract class BlockData<
       item: item,
       getItemId: block.getItemId,
     );
-  }
-
-  ITEM? findFirstItem() {
-    return _items.isEmpty ? null : _items[0];
   }
 
   ITEM? findNextSiblingItem({

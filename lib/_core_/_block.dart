@@ -963,7 +963,7 @@ abstract class Block<
 
         if (itemWithSameId == null) {
           // Find first Item...
-          ITEM? firstItem = data.findFirstItem();
+          ITEM? firstItem = data.firstItem;
           printLog(
               "${getClassName(this)} ~~~~~~~~~~~~> firstItem: ${firstItem}");
           if (firstItem != null) {
@@ -2063,6 +2063,19 @@ abstract class Block<
     return true;
   }
 
+  Future<bool> prepareToEditFirstItem({
+    Function()? navigate,
+  }) async {
+    ITEM? nextItem = data.firstItem;
+    if (nextItem == null) {
+      return false;
+    }
+    return await prepareToEditItem(
+      item: nextItem,
+      navigate: navigate,
+    );
+  }
+
   Future<bool> prepareToEditNextItem({
     Function()? navigate,
   }) async {
@@ -2119,6 +2132,19 @@ abstract class Block<
       return true;
     }
     return false;
+  }
+
+  Future<bool> prepareToShowFirstItem({
+    Function()? navigate,
+  }) async {
+    ITEM? nextItem = data.firstItem;
+    if (nextItem == null) {
+      return false;
+    }
+    return await prepareToShowItem(
+      item: nextItem,
+      navigate: navigate,
+    );
   }
 
   Future<bool> prepareToShowNextItem({
