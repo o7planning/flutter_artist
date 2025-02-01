@@ -1165,7 +1165,7 @@ EXTRA_INPUT extends ExtraInput // EmptyExtraInput
   }
 
   // Private Method. Only for use in this class.
-  Future<bool> __removeNotFoundItemAndRefreshChildren({
+  Future<bool> __removeNotFoundItemAndSelectSibling({
     required _XBlock thisXBlock,
     SuggestedSelection? suggestedSelection,
     required ITEM notFoundItem,
@@ -1848,7 +1848,7 @@ EXTRA_INPUT extends ExtraInput // EmptyExtraInput
       final ITEM? removeItem = savedItem ?? data.currentItem;
 
       if (removeItem != null) {
-        bool success = await __removeNotFoundItemAndRefreshChildren(
+        bool success = await __removeNotFoundItemAndSelectSibling(
           thisXBlock: thisXBlock,
           notFoundItem: removeItem,
         );
@@ -2310,7 +2310,7 @@ EXTRA_INPUT extends ExtraInput // EmptyExtraInput
         return false;
       } else {
         if (result.data == null) {
-          bool success = await __removeNotFoundItemAndRefreshChildren(
+          bool success = await __removeNotFoundItemAndSelectSibling(
             thisXBlock: thisXBlock,
             notFoundItem: item,
           );
