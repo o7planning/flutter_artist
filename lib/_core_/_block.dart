@@ -2687,12 +2687,6 @@ abstract class Block<
       }
       final bool isCurrent = data.isCurrentItem(item: item);
       //
-      // if (isCurrent && blockForm?.data._formMode == FormMode.creation) {
-      //   return false;
-      // }
-      // if (blockForm?.data._formMode == FormMode.none) {
-      //
-      // }
       ApiResult<void> result;
       try {
         FlutterArtist.codeFlowLogger._addMethodCall(
