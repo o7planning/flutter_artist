@@ -216,9 +216,8 @@ abstract class Scalar<
         showSnackBar: true,
       );
       //
-      return false;
-    } finally {
       shelf.updateAllUIComponents();
+      return false;
     }
   }
 

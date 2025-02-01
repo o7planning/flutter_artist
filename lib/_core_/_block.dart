@@ -1455,10 +1455,6 @@ abstract class Block<
       //
       result = await action.callApiQuickCreateItem();
       //
-      FlutterArtist.storage._fireEventSourceChanged(
-        eventBlock: this,
-        itemIdString: null,
-      );
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
@@ -1512,18 +1508,7 @@ abstract class Block<
       shelf: shelf,
       forceDataFilterOpt: null,
       forceQueryScalarOpts: [],
-      forceQueryBlockOpts: _childBlocks
-          .map(
-            (b) => _BlockOpt(
-              block: b,
-              queryType: null,
-              pageable: null,
-              listBehavior: null,
-              suggestedSelection: null,
-              postQueryBehavior: null,
-            ),
-          )
-          .toList(),
+      forceQueryBlockOpts: [],
       forceQueryBlockFormOpts: [],
     );
     //
@@ -1578,10 +1563,6 @@ abstract class Block<
       //
       result = await action.callApiQuickUpdateItem(item: item);
       //
-      FlutterArtist.storage._fireEventSourceChanged(
-        eventBlock: this,
-        itemIdString: null,
-      );
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
@@ -1837,7 +1818,7 @@ abstract class Block<
       eventBlock: this,
       itemIdString: null,
     );
-    //
+
     final ITEM_DETAIL? savedItemDetail = result.data;
     final bool keepInList;
     if (savedItemDetail == null) {
@@ -1936,9 +1917,8 @@ abstract class Block<
         showSnackBar: true,
       );
       //
-      return false;
-    } finally {
       shelf.updateAllUIComponents();
+      return false;
     }
   }
 
@@ -1955,8 +1935,6 @@ abstract class Block<
         "action": action,
       },
     );
-    //
-    BuildContext context = FlutterArtist.adapter.getCurrentContext();
     //
     // Confirmation:
     //
@@ -1976,7 +1954,6 @@ abstract class Block<
       bool success = await _executeQuickCreateItemWithOverlayAndRestorable(
         action: action,
       );
-      shelf.updateAllUIComponents();
       return success;
     } catch (e, stackTrace) {
       _handleError(
@@ -2008,8 +1985,6 @@ abstract class Block<
       },
     );
     //
-    BuildContext context = FlutterArtist.adapter.getCurrentContext();
-    //
     // Confirmation:
     //
     bool confirm = true;
@@ -2029,7 +2004,6 @@ abstract class Block<
         item: item,
         action: action,
       );
-      shelf.updateAllUIComponents();
       return success;
     } catch (e, stackTrace) {
       _handleError(
