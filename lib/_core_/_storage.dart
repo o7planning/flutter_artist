@@ -529,6 +529,9 @@ class _Storage {
       }
     }
     //
+    if (queryMap.isNotEmpty) {
+      print("|~~~~~~~~~~~~~~~~~~~~~~> Event Listeners: ${queryMap}");
+    }
     for (String shelfName in queryMap.keys) {
       Shelf shelf = __shelfMap[shelfName]!;
       _ScalarAndBlockList sbList = queryMap[shelfName]!;
