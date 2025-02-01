@@ -2,7 +2,6 @@ part of '../flutter_artist.dart';
 
 class _DeleteResult<ITEM> {
   final bool success;
- // final bool nextAction;
   final ITEM? sibling;
 
   _DeleteResult.fail()

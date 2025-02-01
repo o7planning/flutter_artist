@@ -2677,18 +2677,6 @@ abstract class Block<
       return false;
     } else {
       if (deleteResult.sibling != null) {
-        // bool success = await __prepareToShowOrEdit (
-        //   thisXBlock: thisXBlock,
-        //   item: deleteResult.sibling!,
-        //   justQueried: false,
-        //   forceForm: false,
-        // );
-
-        //   required SuggestedSelection? suggestedSelection,
-        // required ITEM item,
-        // required bool forceForm,
-        // required bool justQueried,
-
         await __prepareToShowOrEditWithRestorable(
           suggestedSelection: null,
           item: deleteResult.sibling!,
@@ -2776,27 +2764,6 @@ abstract class Block<
           if (!success) {
             return _DeleteResult.fail();
           }
-          //
-          // if (sibling != null) {
-          //   bool success = await __prepareToShowOrEdit(
-          //     thisXBlock: thisXBlock,
-          //     item: sibling,
-          //     justQueried: false,
-          //     forceForm: false,
-          //   );
-          //   if (!success) {
-          //     return false;
-          //   }
-          // } else {
-          //   bool success = await _switchThisAndChildrenToNoneMode(
-          //     thisXBlock: thisXBlock,
-          //     clearListForThis: false,
-          //     dataState: DataState.ready,
-          //   );
-          //   if (!success) {
-          //     return false;
-          //   }
-          // }
         }
         return _DeleteResult.success(sibling: sibling);
       }
