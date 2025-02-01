@@ -2063,35 +2063,33 @@ abstract class Block<
     return true;
   }
 
-  Future<bool> prepareToEditNext({
-    required ITEM item,
+  Future<bool> prepareToEditNextItem({
     Function()? navigate,
   }) async {
     ITEM? nextItem = data.nextSiblingItem;
     if (nextItem == null) {
       return false;
     }
-    return await prepareToEdit(
+    return await prepareToEditItem(
       item: nextItem,
       navigate: navigate,
     );
   }
 
-  Future<bool> prepareToEditPrevious({
-    required ITEM item,
+  Future<bool> prepareToEditPreviousItem({
     Function()? navigate,
   }) async {
     ITEM? previousItem = data.previousSiblingItem;
     if (previousItem == null) {
       return false;
     }
-    return await prepareToEdit(
+    return await prepareToEditItem(
       item: previousItem,
       navigate: navigate,
     );
   }
 
-  Future<bool> prepareToEdit({
+  Future<bool> prepareToEditItem({
     required ITEM item,
     Function()? navigate,
   }) async {
@@ -2099,7 +2097,7 @@ abstract class Block<
       isLibCode: true,
       navigate: navigate,
       ownerClassInstance: this,
-      methodName: "prepareToEdit",
+      methodName: "prepareToEditItem",
       parameters: {
         "item": item,
       },
@@ -2123,35 +2121,33 @@ abstract class Block<
     return false;
   }
 
-  Future<bool> prepareToShowNext({
-    required ITEM item,
+  Future<bool> prepareToShowNextItem({
     Function()? navigate,
   }) async {
     ITEM? nextItem = data.nextSiblingItem;
     if (nextItem == null) {
       return false;
     }
-    return await prepareToShow(
+    return await prepareToShowItem(
       item: nextItem,
       navigate: navigate,
     );
   }
 
-  Future<bool> prepareToShowPrevious({
-    required ITEM item,
+  Future<bool> prepareToShowPreviousItem({
     Function()? navigate,
   }) async {
     ITEM? previousItem = data.previousSiblingItem;
     if (previousItem == null) {
       return false;
     }
-    return await prepareToShow(
+    return await prepareToShowItem(
       item: previousItem,
       navigate: navigate,
     );
   }
 
-  Future<bool> prepareToShow({
+  Future<bool> prepareToShowItem({
     required ITEM item,
     Function()? navigate,
   }) async {
@@ -2159,7 +2155,7 @@ abstract class Block<
       isLibCode: true,
       navigate: navigate,
       ownerClassInstance: this,
-      methodName: "prepareToShow",
+      methodName: "prepareToShowItem",
       parameters: {
         "item": item,
       },
@@ -2235,7 +2231,7 @@ abstract class Block<
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: "prepareToEdit",
+        methodName: "prepareToEditItem",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -2246,10 +2242,6 @@ abstract class Block<
     }
   }
 
-  ///
-  /// Kiểm tra xem phần tử này có thực sự tồn tại không trước khi hiển thị nó trên giao diện.
-  /// Trả về false nếu phần tử này không còn tồn tại trên máy chủ hoặc lỗi.
-  ///
   // Private method (Only for use in this class)
   Future<bool> __prepareToShowOrEdit({
     required _XBlock thisXBlock,
