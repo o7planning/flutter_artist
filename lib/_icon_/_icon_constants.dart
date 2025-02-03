@@ -117,3 +117,5 @@ const IconData _formNoneModeIconData = cupertino.CupertinoIcons.lock;
 const IconData _formCreationModeIconData = cupertino.CupertinoIcons.doc;
 const IconData _formEditModeIconData = cupertino.CupertinoIcons.doc_text;
 const IconData _formBackIconData = cupertino.CupertinoIcons.arrow_left_circle;
+
+const IconData _filterCriteriaDebugIconData = cupertino.CupertinoIcons.ant;

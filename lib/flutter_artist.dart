@@ -146,6 +146,7 @@ part '_ui_/_custom_app_container.dart';
 part '_ui_/_data_filter_fragment_widget_builder.dart';
 part '_ui_/_debug_menu.dart';
 part '_ui_/_dev_container.dart';
+part '_ui_/_filter_criteria_debug_view.dart';
 part '_ui_/_floating_button.dart';
 part '_ui_/_icon_label_text.dart';
 part '_ui_/_labeled_checkbox.dart';

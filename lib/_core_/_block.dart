@@ -68,13 +68,13 @@ part of '../flutter_artist.dart';
 /// ```
 ///
 abstract class Block<
-ID extends Object,
-ITEM extends Object,
-ITEM_DETAIL extends Object,
-FILTER_INPUT extends FilterInput, // EmptyFilterInput
-FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
-EXTRA_INPUT extends ExtraInput // EmptyExtraInput
-> extends _XBase {
+    ID extends Object,
+    ITEM extends Object,
+    ITEM_DETAIL extends Object,
+    FILTER_INPUT extends FilterInput, // EmptyFilterInput
+    FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
+    EXTRA_INPUT extends ExtraInput // EmptyExtraInput
+    > extends _XBase {
   late final Shelf shelf;
 
   int _lazyLoadCount = 0;
@@ -139,7 +139,7 @@ EXTRA_INPUT extends ExtraInput // EmptyExtraInput
   /// If this block does not declare a [DataFilter], it will have the default [DataFilter].
   ///
   late final DataFilter<FILTER_INPUT, FILTER_CRITERIA>
-  _registeredOrDefaultDataFilter;
+      _registeredOrDefaultDataFilter;
 
   ///
   /// Returns a DataFilter declared in the [Shelf.registerStructure()] method.
@@ -158,7 +158,7 @@ EXTRA_INPUT extends ExtraInput // EmptyExtraInput
   String? get parentBlockName => parent?.name;
 
   final BlockForm<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA, EXTRA_INPUT>?
-  blockForm;
+      blockForm;
 
   final List<Block> _childBlocks;
 
@@ -212,14 +212,14 @@ EXTRA_INPUT extends ExtraInput // EmptyExtraInput
   PageableData? get __pageable => __pageSize == null
       ? null
       : PageableData(
-    page: 1,
-    pageSize: __pageSize,
-  );
+          page: 1,
+          pageSize: __pageSize,
+        );
 
   late final BlockData<ID, ITEM, ITEM_DETAIL, FILTER_INPUT, FILTER_CRITERIA,
-      EXTRA_INPUT> data =
-  _InternalBlockData<ID, ITEM, ITEM_DETAIL, FILTER_INPUT, FILTER_CRITERIA,
-      EXTRA_INPUT>.empty(
+          EXTRA_INPUT> data =
+      _InternalBlockData<ID, ITEM, ITEM_DETAIL, FILTER_INPUT, FILTER_CRITERIA,
+          EXTRA_INPUT>.empty(
     this,
     __pageable,
   );
@@ -443,7 +443,7 @@ EXTRA_INPUT extends ExtraInput // EmptyExtraInput
     if (hiddenBehavior == BlockHiddenBehavior.clear) {
       Future.delayed(
         const Duration(seconds: 0),
-            () {
+        () {
           this.clear();
         },
       );
@@ -543,7 +543,7 @@ EXTRA_INPUT extends ExtraInput // EmptyExtraInput
     if (alsoCheckChildren) {
       for (Block childBlock in _childBlocks) {
         bool active =
-        childBlock.hasActiveBlockFragmentWidget(alsoCheckChildren: true);
+            childBlock.hasActiveBlockFragmentWidget(alsoCheckChildren: true);
         if (active) {
           return true;
         }
@@ -554,7 +554,7 @@ EXTRA_INPUT extends ExtraInput // EmptyExtraInput
 
   bool hasActiveControlBarWidget() {
     for (_RefreshableWidgetState controlBarState
-    in _controlBarWidgetStates.keys) {
+        in _controlBarWidgetStates.keys) {
       bool visible = _controlBarWidgetStates[controlBarState] ?? false;
       if (visible && controlBarState.mounted) {
         return true;
@@ -575,7 +575,7 @@ EXTRA_INPUT extends ExtraInput // EmptyExtraInput
 
   bool hasActivePaginationWidget() {
     for (_RefreshableWidgetState paginationState
-    in _paginationWidgetStates.keys) {
+        in _paginationWidgetStates.keys) {
       bool visible = _paginationWidgetStates[paginationState] ?? false;
       if (visible && paginationState.mounted) {
         return true;
@@ -944,7 +944,7 @@ EXTRA_INPUT extends ExtraInput // EmptyExtraInput
     switch (postQueryBehavior) {
       case PostQueryBehavior.selectAvailableItem:
       case PostQueryBehavior.selectAvailableItemToEdit:
-      // OLD Current Item
+        // OLD Current Item
         ITEM? suggestedCurrentItem = data.currentItem;
         if (suggestedSelection != null &&
             suggestedSelection.itemIdToSetAsCurrent != null) {
@@ -1924,7 +1924,7 @@ EXTRA_INPUT extends ExtraInput // EmptyExtraInput
   }
 
   Future<bool> executeQuickActionCreateItem<
-  A extends QuickCreateItemAction<ITEM_DETAIL>>({
+      A extends QuickCreateItemAction<ITEM_DETAIL>>({
     required A action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -1971,7 +1971,7 @@ EXTRA_INPUT extends ExtraInput // EmptyExtraInput
   }
 
   Future<bool> executeQuickActionUpdateItem<
-  A extends QuickUpdateItemAction<ITEM, ITEM_DETAIL>>({
+      A extends QuickUpdateItemAction<ITEM, ITEM_DETAIL>>({
     required ITEM item,
     required A action,
   }) async {
@@ -2029,7 +2029,7 @@ EXTRA_INPUT extends ExtraInput // EmptyExtraInput
       if (showErrorMessage) {
         showErrorSnackBar(
           message:
-          "This item cannot be edited on the Form because some conditions are not met.",
+              "This item cannot be edited on the Form because some conditions are not met.",
           errorDetails: ["Block: ${getClassName(this)}"],
         );
       }
@@ -2345,7 +2345,7 @@ EXTRA_INPUT extends ExtraInput // EmptyExtraInput
       if (showErrorMessage) {
         showErrorSnackBar(
           message:
-          "Cannot create new Item on form because some conditions are not met.",
+              "Cannot create new Item on form because some conditions are not met.",
           errorDetails: ["Block: ${getClassName(this)}"],
         );
       }
@@ -2933,7 +2933,7 @@ EXTRA_INPUT extends ExtraInput // EmptyExtraInput
 
   void updateBlockFragmentWidgets() {
     for (_RefreshableWidgetState widgetState
-    in _blockFragmentWidgetStates.keys) {
+        in _blockFragmentWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }
