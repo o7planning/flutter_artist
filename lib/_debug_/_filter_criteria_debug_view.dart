@@ -1,15 +1,15 @@
 part of '../flutter_artist.dart';
 
-class FilterCriteriaDebugView extends StatelessWidget {
+class _FilterCriteriaDebugView extends StatelessWidget {
   final Block? block;
   final Scalar? scalar;
 
-  const FilterCriteriaDebugView.block({
+  const _FilterCriteriaDebugView.block({
     super.key,
     required Block this.block,
   }) : scalar = null;
 
-  const FilterCriteriaDebugView.scalar({
+  const _FilterCriteriaDebugView.scalar({
     super.key,
     required Scalar this.scalar,
   }) : block = null;
