@@ -46,7 +46,7 @@ class _FilterCriteriaDebugView extends StatelessWidget {
           if (dataFilterOfBlockOrScalar == null && dataFilter == null)
             _showNoDataFilterInfo_forBlockOrScalar(),
           if (dataFilterOfBlockOrScalar != null)
-            _getFilterCriteriaShortInfo_ofBlockOrScalar(
+            _buildCriteriaShortDocument_ofBlockOrScalar(
               dataFilterOfBlockOrScalar: dataFilterOfBlockOrScalar,
               filterCriteria: filterCriteria,
             ),
@@ -158,7 +158,7 @@ class _FilterCriteriaDebugView extends StatelessWidget {
   ///
   /// If 'block' or 'scalar' is not null.
   ///
-  Widget _getFilterCriteriaShortInfo_ofBlockOrScalar({
+  Widget _buildCriteriaShortDocument_ofBlockOrScalar({
     required DataFilter dataFilterOfBlockOrScalar,
     required FilterCriteria? filterCriteria,
   }) {
