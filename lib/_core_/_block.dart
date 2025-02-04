@@ -375,9 +375,19 @@ abstract class Block<
     required _RefreshableWidgetState widgetState,
     required bool isShowing,
   }) {
+    bool activeOLD = hasActiveUIComponent();
     _controlBarWidgetStates[widgetState] = isShowing;
+    bool activeCURRENT = hasActiveUIComponent();
+    //
     if (isShowing) {
       FlutterArtist.storage._addRecentShelf(shelf);
+    }
+    //
+    if (!activeOLD && activeCURRENT) {
+      // Fire event:
+      shelf._startNewLazyQueryTransactionIfNeed();
+    } else if (activeOLD && !activeCURRENT) {
+      _fireBlockHidden();
     }
   }
 
@@ -391,9 +401,19 @@ abstract class Block<
     required _RefreshableWidgetState widgetState,
     required bool isShowing,
   }) {
+    bool activeOLD = hasActiveUIComponent();
     _controlWidgetStates[widgetState] = isShowing;
+    bool activeCURRENT = hasActiveUIComponent();
+    //
     if (isShowing) {
       FlutterArtist.storage._addRecentShelf(shelf);
+    }
+    //
+    if (!activeOLD && activeCURRENT) {
+      // Fire event:
+      shelf._startNewLazyQueryTransactionIfNeed();
+    } else if (activeOLD && !activeCURRENT) {
+      _fireBlockHidden();
     }
   }
 
@@ -410,7 +430,6 @@ abstract class Block<
     bool activeOLD = hasActiveUIComponent();
     _blockFragmentWidgetStates[widgetState] = isShowing;
     bool activeCURRENT = hasActiveUIComponent();
-
     //
     if (isShowing) {
       FlutterArtist.storage._addRecentShelf(shelf);
