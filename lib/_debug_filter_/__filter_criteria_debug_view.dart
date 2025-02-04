@@ -35,7 +35,7 @@ class _FilterCriteriaDebugView extends StatelessWidget {
           text: getClassName(block!),
           closable: false,
           leading: (context, status) => Icon(
-            _blockIconData ,
+            _blockIconData,
             color: Colors.indigo,
             size: 16,
           ),
@@ -53,7 +53,7 @@ class _FilterCriteriaDebugView extends StatelessWidget {
           text: getClassName(scalar!),
           closable: false,
           leading: (context, status) => Icon(
-            _scalarIconData ,
+            _scalarIconData,
             color: Colors.indigo,
             size: 16,
           ),
@@ -69,7 +69,7 @@ class _FilterCriteriaDebugView extends StatelessWidget {
           text: getClassName(_dataFilter),
           closable: false,
           leading: (context, status) => Icon(
-            _dataFilterIconData ,
+            _dataFilterIconData,
             color: Colors.indigo,
             size: 16,
           ),

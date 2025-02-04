@@ -16,7 +16,7 @@ abstract class _BlkOrScrCriteriaView extends StatelessWidget {
     List<String> criteriaDebugInfos = getFilterCriteriaDebugInfo();
     //
     return Padding(
-       padding: EdgeInsets.all(5),
+      padding: EdgeInsets.all(5),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,7 +31,8 @@ abstract class _BlkOrScrCriteriaView extends StatelessWidget {
           if (criteriaClassName != null)
             Expanded(
               child: _CriteriaValuesView(
-                filterCriteriaPath: "${getBlockOrScalarClassName()}.data.filterCriteria",
+                filterCriteriaPath:
+                    "${getBlockOrScalarClassName()}.data.filterCriteria",
                 criteriaValueInfos: criteriaDebugInfos,
               ),
             ),
