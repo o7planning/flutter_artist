@@ -63,6 +63,7 @@ abstract class _BlkOrScrCriteriaView extends StatelessWidget {
       return Text("filterCriteria is null");
     } else {
       return SelectableText.rich(
+        style: TextStyle(fontSize: _debugFontSize),
         TextSpan(
           children: [
             TextSpan(

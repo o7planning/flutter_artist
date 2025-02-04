@@ -16,6 +16,7 @@ class _CriteriaValuesView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SelectableText.rich(
+          style: TextStyle(fontSize: _graphBoxFontSizeRootBox),
           TextSpan(
             children: [
               TextSpan(text: "Data of "),
@@ -63,7 +64,7 @@ class _CriteriaValuesView extends StatelessWidget {
             ),
             title: Text(
               line,
-              style: TextStyle(fontSize: 13),
+              style: TextStyle(fontSize: _debugFontSize),
             ),
           ),
         ),

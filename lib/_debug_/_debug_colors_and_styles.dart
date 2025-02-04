@@ -33,6 +33,8 @@ const double _graphBoxImageHeight = 24;
 
 const double _graphBoxFontSizeRootBox = 13;
 
+const double _debugFontSize = 13;
+
 const double _graphBoxFontSizeChildBox = 11.5;
 
 const double _blockOrScalaInfoFontSize = 12;

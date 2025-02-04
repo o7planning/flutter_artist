@@ -24,7 +24,7 @@ class _BlocksScalarsView extends StatelessWidget {
         ),
         title: Text(
           blockOrScalarClassName,
-          style: TextStyle(fontSize: 13),
+          style: TextStyle(fontSize: _debugFontSize),
         ),
         trailing: Tooltip(
           message: "Data State: ${dataState.name}",

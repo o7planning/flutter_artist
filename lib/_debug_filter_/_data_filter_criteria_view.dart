@@ -41,6 +41,7 @@ class _DataFilterCriteriaView extends StatelessWidget {
     required String criteriaClassName,
   }) {
     return SelectableText.rich(
+      style: TextStyle(fontSize: _debugFontSize),
       TextSpan(
         children: [
           TextSpan(text: "The "),
