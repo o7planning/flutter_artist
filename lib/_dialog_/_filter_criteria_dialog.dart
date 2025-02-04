@@ -4,18 +4,27 @@ part of '../flutter_artist.dart';
 // -----------------------------------------------------------------------------
 
 class _FilterCriteriaDialog extends StatefulWidget {
+  final DataFilter? dataFilter;
   final Scalar? scalar;
   final Block? block;
 
   const _FilterCriteriaDialog.block({
     required Block this.block,
     super.key,
-  }) : scalar = null;
+  })  : scalar = null,
+        dataFilter = null;
 
   const _FilterCriteriaDialog.scalar({
     required Scalar this.scalar,
     super.key,
-  }) : block = null;
+  })  : block = null,
+        dataFilter = null;
+
+  const _FilterCriteriaDialog.dataFilter({
+    required DataFilter this.dataFilter,
+    super.key,
+  })  : block = null,
+        scalar = null;
 
   @override
   State<StatefulWidget> createState() {
@@ -28,9 +37,11 @@ class _FilterCriteriaDialogState extends State<_FilterCriteriaDialog> {
 
   String _title() {
     if (widget.scalar != null) {
-      return "Current FilterCriteria of Scalar";
+      return "Current FilterCriteria of ${getClassName(widget.scalar!)}";
     } else if (widget.block != null) {
-      return "Current FilterCriteria of Block";
+      return "Current FilterCriteria of ${getClassName(widget.block!)}";
+    } else if (widget.dataFilter != null) {
+      return "Current FilterCriteria of ${getClassName(widget.dataFilter!)}";
     } else {
       throw UnimplementedError();
     }
@@ -39,6 +50,10 @@ class _FilterCriteriaDialogState extends State<_FilterCriteriaDialog> {
   @override
   Widget build(BuildContext context) {
     dialogs.CustomAlertDialog alert = dialogs.CustomAlertDialog(
+      icon: Icon(
+        _filterCriteriaDebugIconData,
+        size: 16,
+      ),
       titleText: _title(),
       contentPadding: const EdgeInsets.all(5),
       content: _buildMainContent(context),
@@ -49,8 +64,8 @@ class _FilterCriteriaDialogState extends State<_FilterCriteriaDialog> {
   Widget _buildMainContent(BuildContext context) {
     double width = MediaQuery.sizeOf(context).width;
     double height = MediaQuery.sizeOf(context).height;
-    if (width > 520) {
-      width = 500;
+    if (width > 620) {
+      width = 600;
     } else {
       width = 0.9 * width;
     }
@@ -60,16 +75,40 @@ class _FilterCriteriaDialogState extends State<_FilterCriteriaDialog> {
       height = height - 60;
     }
     //
+    Widget child;
     if (widget.block != null) {
-      return _FilterCriteriaDebugView.block(block: widget.block!);
+      child = _FilterCriteriaDebugView.block(block: widget.block!);
     } else if (widget.scalar != null) {
-      return _FilterCriteriaDebugView.scalar(scalar: widget.scalar!);
+      child = _FilterCriteriaDebugView.scalar(scalar: widget.scalar!);
+    } else if (widget.dataFilter != null) {
+      child = _FilterCriteriaDebugView.dataFilter(
+        dataFilter: widget.dataFilter!,
+      );
     } else {
-      return Center(
+      child = Center(
         child: Text("TODO"),
       );
     }
+    return SizedBox(
+      width: width,
+      height: height,
+      child: child,
+    );
   }
+}
+
+Future<void> showFilterCriteriaDialog({
+  required BuildContext context,
+  required DataFilter dataFilter,
+}) async {
+  await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return _FilterCriteriaDialog.dataFilter(
+        dataFilter: dataFilter,
+      );
+    },
+  );
 }
 
 Future<void> showBlockFilterCriteriaDialog({
