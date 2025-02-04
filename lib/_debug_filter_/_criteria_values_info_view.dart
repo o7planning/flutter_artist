@@ -1,11 +1,11 @@
 part of '../flutter_artist.dart';
 
 class _CriteriaValuesView extends StatelessWidget {
-  final String filterCriteriaClassName;
+  final String filterCriteriaPath;
   final List<String> criteriaValueInfos;
 
   const _CriteriaValuesView({
-    required this.filterCriteriaClassName,
+    required this.filterCriteriaPath,
     required this.criteriaValueInfos,
   });
 
@@ -20,7 +20,7 @@ class _CriteriaValuesView extends StatelessWidget {
             children: [
               TextSpan(text: "Data of "),
               TextSpan(
-                text: filterCriteriaClassName,
+                text: filterCriteriaPath,
                 style: TextStyle(
                   color: Colors.indigo,
                   fontWeight: FontWeight.bold,

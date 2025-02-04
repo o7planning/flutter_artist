@@ -12,7 +12,8 @@ class _DataFilterCriteriaView extends StatelessWidget {
     FilterCriteria? filterCriteria = dataFilter.filterCriteria;
     List<String> criteriaDebugInfos = filterCriteria?.getDebugInfos() ?? [];
     //
-    return _CustomAppContainer(
+    return Padding(
+      padding: EdgeInsets.all(5),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -21,11 +22,14 @@ class _DataFilterCriteriaView extends StatelessWidget {
             dataFilterClassName: dataFilterClassName,
             criteriaClassName: criteriaClassName,
           ),
+          _BlocksScalarsView(
+            dataFilter: dataFilter,
+          ),
           if (criteriaClassName != null) Divider(),
           if (criteriaClassName != null)
             Expanded(
               child: _CriteriaValuesView(
-                filterCriteriaClassName: criteriaClassName,
+                filterCriteriaPath: "$dataFilterClassName.filterCriteria",
                 criteriaValueInfos: criteriaDebugInfos,
               ),
             ),
@@ -49,14 +53,14 @@ class _DataFilterCriteriaView extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          TextSpan(text: " is created by the "),
+          TextSpan(text: " object is created by the "),
           TextSpan(
             text: "$dataFilterClassName.createFilterCriteria()",
             style: TextStyle(
               fontWeight: FontWeight.bold,
             ),
           ),
-          TextSpan(text: "method, and can be retrieved via the "),
+          TextSpan(text: " method, and can be retrieved via the "),
           TextSpan(
             text: "$dataFilterClassName.filterCriteria",
             style: TextStyle(
@@ -66,12 +70,6 @@ class _DataFilterCriteriaView extends StatelessWidget {
           TextSpan(
               text:
                   " property. It is used to query the following blocks and scales:"),
-          // TextSpan(
-          //   text: "${getBlockOrScalarClassName()}.data.filterCriteria",
-          //   style: TextStyle(
-          //     fontWeight: FontWeight.bold,
-          //   ),
-          // ),
         ],
       ),
     );
