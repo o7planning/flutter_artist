@@ -68,7 +68,7 @@ class _DataFilterCriteriaView extends StatelessWidget {
           ),
           TextSpan(
               text:
-                  " property. It is used to query the following blocks and scales:"),
+                  " property. It is used as criteria to query data on the following blocks and scales:"),
         ],
       ),
     );
