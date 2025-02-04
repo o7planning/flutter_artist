@@ -12,25 +12,27 @@ class _BlocksScalarsView extends StatelessWidget {
     required String blockOrScalarClassName,
     required DataState dataState,
   }) {
-    return ListTile(
-      minLeadingWidth: 0,
-      dense: true,
-      visualDensity: VisualDensity(vertical: -3, horizontal: -3),
-      contentPadding: EdgeInsets.zero,
-      leading: Icon(
-        iconData,
-        size: 16,
-      ),
-      title: Text(
-        blockOrScalarClassName,
-        style: TextStyle(fontSize: 13),
-      ),
-      trailing: Tooltip(
-        message: "Data State: ${dataState.name}",
-        child: Icon(
-          dataState.iconData,
-          color: dataState.color,
+    return Card(
+      child: ListTile(
+        minLeadingWidth: 0,
+        dense: true,
+        visualDensity: VisualDensity(vertical: -3, horizontal: -3),
+        contentPadding: EdgeInsets.zero,
+        leading: Icon(
+          iconData,
           size: 16,
+        ),
+        title: Text(
+          blockOrScalarClassName,
+          style: TextStyle(fontSize: 13),
+        ),
+        trailing: Tooltip(
+          message: "Data State: ${dataState.name}",
+          child: Icon(
+            dataState.iconData,
+            color: dataState.color,
+            size: 16,
+          ),
         ),
       ),
     );

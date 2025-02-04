@@ -51,26 +51,20 @@ class _CriteriaValuesView extends StatelessWidget {
           ),
         ),
         SizedBox(height: 10),
-        Expanded(
-          child: ListView(
-            children: criteriaValueInfos
-                .map(
-                  (line) => ListTile(
-                    minLeadingWidth: 0,
-                    dense: true,
-                    visualDensity: VisualDensity(vertical: -3, horizontal: -3),
-                    contentPadding: EdgeInsets.zero,
-                    leading: Icon(
-                      Icons.arrow_circle_right_outlined,
-                      size: 14,
-                    ),
-                    title: Text(
-                      line,
-                      style: TextStyle(fontSize: 13),
-                    ),
-                  ),
-                )
-                .toList(),
+        ...criteriaValueInfos.map(
+          (line) => ListTile(
+            minLeadingWidth: 0,
+            dense: true,
+            visualDensity: VisualDensity(vertical: -3, horizontal: -3),
+            contentPadding: EdgeInsets.zero,
+            leading: Icon(
+              Icons.arrow_circle_right_outlined,
+              size: 14,
+            ),
+            title: Text(
+              line,
+              style: TextStyle(fontSize: 13),
+            ),
           ),
         ),
       ],

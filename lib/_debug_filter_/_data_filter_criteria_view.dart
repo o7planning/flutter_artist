@@ -27,11 +27,9 @@ class _DataFilterCriteriaView extends StatelessWidget {
           ),
           if (criteriaClassName != null) Divider(),
           if (criteriaClassName != null)
-            Expanded(
-              child: _CriteriaValuesView(
-                filterCriteriaPath: "$dataFilterClassName.filterCriteria",
-                criteriaValueInfos: criteriaDebugInfos,
-              ),
+            _CriteriaValuesView(
+              filterCriteriaPath: "$dataFilterClassName.filterCriteria",
+              criteriaValueInfos: criteriaDebugInfos,
             ),
         ],
       ),

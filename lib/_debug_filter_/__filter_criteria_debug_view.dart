@@ -39,8 +39,10 @@ class _FilterCriteriaDebugView extends StatelessWidget {
             color: Colors.indigo,
             size: 16,
           ),
-          content: _BlockCriteriaView(
-            block: block!,
+          content: SingleChildScrollView(
+            child: _BlockCriteriaView(
+              block: block!,
+            ),
           ),
         ),
       );
@@ -57,8 +59,10 @@ class _FilterCriteriaDebugView extends StatelessWidget {
             color: Colors.indigo,
             size: 16,
           ),
-          content: _ScalarCriteriaView(
-            scalar: scalar!,
+          content: SingleChildScrollView(
+            child: _ScalarCriteriaView(
+              scalar: scalar!,
+            ),
           ),
         ),
       );
@@ -73,8 +77,10 @@ class _FilterCriteriaDebugView extends StatelessWidget {
             color: Colors.indigo,
             size: 16,
           ),
-          content: _DataFilterCriteriaView(
-            dataFilter: _dataFilter,
+          content: SingleChildScrollView(
+            child: _DataFilterCriteriaView(
+              dataFilter: _dataFilter,
+            ),
           ),
         ),
       );

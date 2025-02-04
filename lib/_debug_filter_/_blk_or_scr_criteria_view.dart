@@ -29,12 +29,10 @@ abstract class _BlkOrScrCriteriaView extends StatelessWidget {
           ),
           if (criteriaClassName != null) Divider(),
           if (criteriaClassName != null)
-            Expanded(
-              child: _CriteriaValuesView(
-                filterCriteriaPath:
-                    "${getBlockOrScalarClassName()}.data.filterCriteria",
-                criteriaValueInfos: criteriaDebugInfos,
-              ),
+            _CriteriaValuesView(
+              filterCriteriaPath:
+                  "${getBlockOrScalarClassName()}.data.filterCriteria",
+              criteriaValueInfos: criteriaDebugInfos,
             ),
         ],
       ),
