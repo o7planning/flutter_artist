@@ -3022,6 +3022,22 @@ abstract class Block<
     return true;
   }
 
+  bool isAllowUpdateCurrentItem() {
+    ITEM? currentItem = data.currentItem;
+    if (currentItem == null) {
+      return false;
+    }
+    return isAllowUpdateItem(item: currentItem);
+  }
+
+  bool isAllowDeleteCurrentItem() {
+    ITEM? currentItem = data.currentItem;
+    if (currentItem == null) {
+      return false;
+    }
+    return isAllowDeleteItem(item: currentItem);
+  }
+
   // ***************************************************************************
   // *********** __isAllowXXX() method *****************************************
   // ***************************************************************************
@@ -3399,7 +3415,6 @@ abstract class Block<
   bool _isEnableFormToModify() {
     return __isEnableFormToModify(checkAllow: true);
   }
-
 
   bool canEditCurrentItemOnForm() {
     return __isEnableFormToModify(checkAllow: true);
