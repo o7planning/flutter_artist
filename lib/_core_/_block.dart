@@ -3320,7 +3320,11 @@ abstract class Block<
     return checkAllow ? _isAllowUpdateItem(item: item) : true;
   }
 
-  bool __canEditCurrentItemOnForm({required bool checkAllow}) {
+  ///
+  /// Edit on edit-mode
+  /// Edit on creation-mode
+  ///
+  bool __isEnableFormToModify({required bool checkAllow}) {
     if (blockForm != null) {
       switch (blockForm!.data._formMode) {
         case FormMode.creation:
@@ -3392,8 +3396,13 @@ abstract class Block<
     return __canEditItemOnForm(item: item, checkAllow: true);
   }
 
+  bool _isEnableFormToModify() {
+    return __isEnableFormToModify(checkAllow: true);
+  }
+
+
   bool canEditCurrentItemOnForm() {
-    return __canEditCurrentItemOnForm(checkAllow: true);
+    return __isEnableFormToModify(checkAllow: true);
   }
 
   ///
