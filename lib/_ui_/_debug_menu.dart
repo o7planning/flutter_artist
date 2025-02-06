@@ -29,9 +29,7 @@ class _DebugMenuState extends State<DebugMenu> implements IErrorListener {
 
   @override
   void onError() {
-    Future.delayed(Duration.zero, () async {
-      setState(() {});
-    });
+    setState(() {});
   }
 
   @override

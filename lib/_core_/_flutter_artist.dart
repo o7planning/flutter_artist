@@ -239,16 +239,21 @@ class _FlutterArtist {
   }
 
   void _notifyError() {
-    for (IErrorListener listener in [..._errorListeners]) {
-      if (listener is State) {
-        State state = listener as State;
-        if (!state.mounted) {
-          _errorListeners.remove(listener);
-          continue;
+    Future.delayed(
+      Duration.zero,
+      () {
+        for (IErrorListener listener in [..._errorListeners]) {
+          if (listener is State) {
+            State state = listener as State;
+            if (!state.mounted) {
+              _errorListeners.remove(listener);
+              continue;
+            }
+          }
+          listener.onError();
         }
-      }
-      listener.onError();
-    }
+      },
+    );
   }
 
   void _notifyNotification(INotificationSummary notificationSummary) {
