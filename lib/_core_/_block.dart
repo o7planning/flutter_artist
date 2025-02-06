@@ -2039,6 +2039,7 @@ abstract class Block<
     }
   }
 
+  @Deprecated("Khong su dung nua, xoa di")
   bool __checkBeforeEditItem({
     required ITEM item,
     required bool showErrorMessage,
@@ -2109,11 +2110,11 @@ abstract class Block<
         "item": item,
       },
     );
-    //
-    bool canEdit = __checkBeforeEditItem(item: item, showErrorMessage: true);
-    if (!canEdit) {
-      return false;
-    }
+    // Allow to prepareForm but disable Form.
+    // bool canEdit = __checkBeforeEditItem(item: item, showErrorMessage: true);
+    // if (!canEdit) {
+    //   return false;
+    // }
     //
     bool success = await __prepareToShowOrEditWithOverlayAndRestorable(
       item: item,
