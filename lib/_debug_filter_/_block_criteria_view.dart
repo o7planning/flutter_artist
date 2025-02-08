@@ -17,13 +17,9 @@ class _BlockCriteriaView extends _BlkOrScrCriteriaView {
   }
 
   @override
-  String? getFilterCriteriaClassName() {
-    return block.getFilterCriteriaTypeAsString();
+  FilterCriteria? getFilterCriteria() {
+     return block.data.filterCriteria;
   }
 
-  @override
-  List<String> getFilterCriteriaDebugInfo() {
-    FilterCriteria? criteria = block.data.filterCriteria;
-    return criteria?.getDebugInfos() ?? [];
-  }
+
 }

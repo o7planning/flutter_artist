@@ -10,7 +10,6 @@ class _DataFilterCriteriaView extends StatelessWidget {
     String dataFilterClassName = getClassName(dataFilter);
     String criteriaClassName = dataFilter.getFilterCriteriaTypeAsString();
     FilterCriteria? filterCriteria = dataFilter.filterCriteria;
-    List<String> criteriaDebugInfos = filterCriteria?.getDebugInfos() ?? [];
     //
     return Padding(
       padding: EdgeInsets.all(5),
@@ -28,8 +27,8 @@ class _DataFilterCriteriaView extends StatelessWidget {
           if (criteriaClassName != null) Divider(),
           if (criteriaClassName != null)
             _CriteriaValuesView(
+              filterCriteria: filterCriteria,
               filterCriteriaPath: "$dataFilterClassName.filterCriteria",
-              criteriaValueInfos: criteriaDebugInfos,
             ),
         ],
       ),

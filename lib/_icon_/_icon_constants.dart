@@ -94,8 +94,9 @@ const IconData _scalarControlButtonIconData = Icons.smart_button;
 const IconData _loggedUserIconData =
     cupertino.CupertinoIcons.person_crop_circle;
 
-// const IconData _fluIconData = cupertino.CupertinoIcons.;
+// const IconData _shelfIconData = cupertino.CupertinoIcons.;
 
+const IconData _filterCriteriaIconData = Icons.filter_alt_outlined;
 const IconData _blockIconData = cupertino.CupertinoIcons.calendar;
 const IconData _scalarIconData = cupertino.CupertinoIcons.smallcircle_circle;
 

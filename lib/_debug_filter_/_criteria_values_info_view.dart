@@ -2,15 +2,19 @@ part of '../flutter_artist.dart';
 
 class _CriteriaValuesView extends StatelessWidget {
   final String filterCriteriaPath;
-  final List<String> criteriaValueInfos;
+  final FilterCriteria? filterCriteria;
+
+  static const double fontSize = 11;
 
   const _CriteriaValuesView({
+    required this.filterCriteria,
     required this.filterCriteriaPath,
-    required this.criteriaValueInfos,
   });
 
   @override
   Widget build(BuildContext context) {
+    List<String> criteriaValueInfos = filterCriteria?.getDebugInfos() ?? [];
+    //
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,25 +36,26 @@ class _CriteriaValuesView extends StatelessWidget {
           ),
         ),
         SizedBox(height: 5),
-        SelectableText.rich(
-          TextSpan(
-            style: TextStyle(
-              fontSize: 11,
-              fontStyle: FontStyle.normal,
-            ),
-            children: [
-              TextSpan(text: "(This debug information is returned from the "),
-              TextSpan(
-                text: "getDebugInfos()",
-                style: TextStyle(
-                  color: Colors.indigo,
-                  fontWeight: FontWeight.bold,
-                ),
+        if (filterCriteria != null)
+          SelectableText.rich(
+            TextSpan(
+              style: TextStyle(
+                fontSize: 11,
+                fontStyle: FontStyle.normal,
               ),
-              TextSpan(text: " method)."),
-            ],
+              children: [
+                TextSpan(text: "(This debug information is returned from the "),
+                TextSpan(
+                  text: "${getClassName(filterCriteria)}.getDebugInfos()",
+                  style: TextStyle(
+                    color: Colors.indigo,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                TextSpan(text: " method)."),
+              ],
+            ),
           ),
-        ),
         SizedBox(height: 10),
         ...criteriaValueInfos.map(
           (line) => ListTile(
@@ -68,6 +73,14 @@ class _CriteriaValuesView extends StatelessWidget {
             ),
           ),
         ),
+        if (filterCriteria == null)
+          Text(
+            "Filter Criteria is null",
+            style: TextStyle(
+              fontSize: _debugFontSize,
+              fontStyle: FontStyle.normal,
+            ),
+          ),
       ],
     );
   }

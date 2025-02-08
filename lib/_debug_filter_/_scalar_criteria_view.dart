@@ -17,13 +17,8 @@ class _ScalarCriteriaView extends _BlkOrScrCriteriaView {
   }
 
   @override
-  String? getFilterCriteriaClassName() {
-    return scalar.getFilterCriteriaTypeAsString();
+  FilterCriteria? getFilterCriteria() {
+     return scalar.data.filterCriteria;
   }
 
-  @override
-  List<String> getFilterCriteriaDebugInfo() {
-    FilterCriteria? criteria = scalar.data.filterCriteria;
-    return criteria?.getDebugInfos() ?? [];
-  }
 }

@@ -5,15 +5,18 @@ abstract class _BlkOrScrCriteriaView extends StatelessWidget {
 
   String? getDataFilterClassName();
 
-  String? getFilterCriteriaClassName();
+  FilterCriteria? getFilterCriteria();
 
-  List<String> getFilterCriteriaDebugInfo();
+  // String? getFilterCriteriaClassName();
+  //
+  // List<String> getFilterCriteriaDebugInfo();
 
   @override
   Widget build(BuildContext context) {
     String? dataFilterClassName = getDataFilterClassName();
-    String? criteriaClassName = getFilterCriteriaClassName();
-    List<String> criteriaDebugInfos = getFilterCriteriaDebugInfo();
+    FilterCriteria? filterCriteria = getFilterCriteria();
+    String? criteriaClassName =
+        filterCriteria == null ? null : getClassName(filterCriteria);
     //
     return Padding(
       padding: EdgeInsets.all(5),
@@ -28,11 +31,11 @@ abstract class _BlkOrScrCriteriaView extends StatelessWidget {
             criteriaClassName: criteriaClassName,
           ),
           if (criteriaClassName != null) Divider(),
-          if (criteriaClassName != null)
+          if (filterCriteria != null)
             _CriteriaValuesView(
+              filterCriteria: filterCriteria,
               filterCriteriaPath:
                   "${getBlockOrScalarClassName()}.data.filterCriteria",
-              criteriaValueInfos: criteriaDebugInfos,
             ),
         ],
       ),

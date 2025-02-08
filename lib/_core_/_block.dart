@@ -1813,6 +1813,7 @@ abstract class Block<
         );
   }
 
+  // TODO: Them tham so ITEM.
   bool needToKeepItemInList({
     required FILTER_CRITERIA? filterCriteria,
     required ITEM_DETAIL savedItem,
@@ -3430,11 +3431,18 @@ abstract class Block<
     return __canRefreshCurrentItem();
   }
 
+  bool canShowFilterCriteria() {
+    ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
+    return dataFilter != null &&
+        loggedInUser != null &&
+        loggedInUser.isSystemUser;
+  }
+
   bool canShowFormInfo() {
     ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
-    return loggedInUser != null &&
-        loggedInUser.isSystemUser &&
-        blockForm != null;
+    return blockForm != null &&
+        loggedInUser != null &&
+        loggedInUser.isSystemUser;
   }
 
   bool __canQuery({required bool checkAllow}) {

@@ -10,6 +10,7 @@ class BlockControlBar extends _RefreshableWidget {
   final bool showDeleteButton;
   final bool showFormInfoButton;
   final bool showBackButton;
+  final bool showFilterCriteriaButton;
 
   const BlockControlBar({
     super.key,
@@ -24,6 +25,7 @@ class BlockControlBar extends _RefreshableWidget {
     required this.showDeleteButton,
     required this.showBackButton,
     required this.showFormInfoButton,
+    this.showFilterCriteriaButton = false,
   });
 
   @override
@@ -271,6 +273,21 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   Widget? _buildRight3Buttons(BuildContext context) {
     return _buildBreadCrumb(
       children: [
+        if (widget.showFilterCriteriaButton &&
+            widget.block.canShowFilterCriteria())
+          _ControlBarButton(
+            tooltip: "Current Filter Criteria of ${getClassName(widget.block)}",
+            iconData: _filterCriteriaIconData,
+            onAction: false,
+            onPressed: widget.showFilterCriteriaButton
+                ? () {
+                    showBlockFilterCriteriaDialog(
+                      context: context,
+                      block: widget.block,
+                    );
+                  }
+                : null,
+          ),
         if (widget.showFormInfoButton && widget.block.canShowFormInfo())
           _ControlBarButton(
             tooltip: "Form Data",
