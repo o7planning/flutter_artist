@@ -496,6 +496,7 @@ abstract class Shelf extends _XBase {
     if (scalarOrBlockOrFormWrappers.isEmpty) {
       return true;
     }
+    //
     final List<_ScalarOpt> scalarOpts = [];
     final List<_BlockOpt> blockOpts = [];
     final List<_BlockFormOpt> blockFormOpts = [];
@@ -695,6 +696,44 @@ abstract class Shelf extends _XBase {
     );
   }
 
+  String _toString({
+    required List<_ScalarOpt> forceQueryScalarOpts,
+    required List<_BlockOpt> forceQueryBlockOpts,
+    required List<_BlockFormOpt> forceQueryBlockFormOpts,
+  }) {
+    String info = "";
+    if (forceQueryScalarOpts.isNotEmpty) {
+      String s = forceQueryScalarOpts
+          .map((opt) => getClassName(opt.scalar))
+          .join(", ");
+      if (info.isEmpty) {
+        info = s;
+      } else {
+        info = "$info, $s";
+      }
+    }
+    if (forceQueryBlockOpts.isNotEmpty) {
+      String s =
+          forceQueryBlockOpts.map((opt) => getClassName(opt.block)).join(", ");
+      if (info.isEmpty) {
+        info = s;
+      } else {
+        info = "$info, $s";
+      }
+    }
+    if (forceQueryBlockFormOpts.isNotEmpty) {
+      String s = forceQueryBlockFormOpts
+          .map((opt) => getClassName(opt.blockForm))
+          .join(", ");
+      if (info.isEmpty) {
+        info = s;
+      } else {
+        info = "$info, $s";
+      }
+    }
+    return info;
+  }
+
   ///
   /// VERY IMPORTANT METHOD:
   ///
@@ -704,6 +743,17 @@ abstract class Shelf extends _XBase {
     required List<_BlockOpt> forceQueryBlockOpts,
     required List<_BlockFormOpt> forceQueryBlockFormOpts,
   }) async {
+    String info = _toString(
+      forceQueryScalarOpts: forceQueryScalarOpts,
+      forceQueryBlockOpts: forceQueryBlockOpts,
+      forceQueryBlockFormOpts: forceQueryBlockFormOpts,
+    );
+    FlutterArtist.codeFlowLogger._addInfo(
+      ownerClassInstance: this,
+      info: 'Execute Lazy Query: $info',
+      isLibCode: true,
+    );
+    //
     try {
       _backupAll();
       //

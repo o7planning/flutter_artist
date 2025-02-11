@@ -530,6 +530,11 @@ class _Storage {
     }
     //
     if (queryMap.isNotEmpty) {
+      FlutterArtist.codeFlowLogger._addInfo(
+        ownerClassInstance: this,
+        info: "Query Listeners: ${queryMap.keys}",
+        isLibCode: true,
+      );
       print("|~~~~~~~~~~~~~~~~~~~~~~> Event Listeners: ${queryMap}");
     }
     for (String shelfName in queryMap.keys) {
