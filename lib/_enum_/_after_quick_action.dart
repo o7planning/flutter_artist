@@ -6,5 +6,6 @@ enum AfterBlockQuickAction {
 }
 
 enum AfterScalarQuickAction {
+  none,
   query;
 }

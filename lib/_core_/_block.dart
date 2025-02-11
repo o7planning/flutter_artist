@@ -2156,6 +2156,9 @@ abstract class Block<
   Future<bool> prepareToEditNextItem({
     Function()? navigate,
   }) async {
+    if (!canNavigateToNextItem()) {
+      return false;
+    }
     ITEM? nextItem = data.nextSiblingItem;
     if (nextItem == null) {
       return false;
@@ -2169,6 +2172,9 @@ abstract class Block<
   Future<bool> prepareToEditPreviousItem({
     Function()? navigate,
   }) async {
+    if (!canNavigateToPreviousItem()) {
+      return false;
+    }
     ITEM? previousItem = data.previousSiblingItem;
     if (previousItem == null) {
       return false;
@@ -2227,6 +2233,9 @@ abstract class Block<
   Future<bool> prepareToShowNextItem({
     Function()? navigate,
   }) async {
+    if (!canNavigateToNextItem()) {
+      return false;
+    }
     ITEM? nextItem = data.nextSiblingItem;
     if (nextItem == null) {
       return false;
@@ -2240,6 +2249,9 @@ abstract class Block<
   Future<bool> prepareToShowPreviousItem({
     Function()? navigate,
   }) async {
+    if (!canNavigateToPreviousItem()) {
+      return false;
+    }
     ITEM? previousItem = data.previousSiblingItem;
     if (previousItem == null) {
       return false;
@@ -3466,6 +3478,38 @@ abstract class Block<
   // *********** canXXX() method ***********************************************
   // ***************************************************************************
 
+  bool isValidState() {
+    switch (dataState) {
+      case DataState.pending:
+        return false;
+      case DataState.error:
+        return false;
+      case DataState.ready:
+        break; // Continue checking.
+    }
+    return true;
+  }
+
+  @Deprecated("Co can cai nay ko")
+  bool canNavigateToNextItem() {
+    bool valid = isValidState();
+    if (!valid) {
+      return false;
+    }
+    ITEM? nextItem = data.nextSiblingItem;
+    return nextItem != null;
+  }
+
+  @Deprecated("Co can cai nay ko")
+  bool canNavigateToPreviousItem() {
+    bool valid = isValidState();
+    if (!valid) {
+      return false;
+    }
+    ITEM? previousItem = data.previousSiblingItem;
+    return previousItem != null;
+  }
+
   bool canCreateItem() {
     return __canCreateItem(checkAllow: true);
   }
@@ -3486,7 +3530,6 @@ abstract class Block<
     return canDeleteItem(item: currentItem);
   }
 
-  // TODO: Đổi sang kiểu ITEM_DETAIL?
   bool canDeleteItem({required ITEM item}) {
     return __canDeleteItem(item: item, checkAllow: true);
   }

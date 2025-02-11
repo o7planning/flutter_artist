@@ -259,6 +259,8 @@ abstract class Scalar<
     switch (afterQuickAction) {
       case null:
         break;
+      case AfterScalarQuickAction.none:
+        break;
       case AfterScalarQuickAction.query:
         forceQueryScalarOpts = [
           _ScalarOpt(scalar: this),
@@ -357,6 +359,9 @@ abstract class Scalar<
       try {
         bool success = false;
         switch (afterQuickAction) {
+          case AfterScalarQuickAction.none:
+            success = true;
+            break;
           case AfterScalarQuickAction.query:
             success = true;
             break;
