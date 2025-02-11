@@ -25,7 +25,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 part '_action_/_action_confirmation_type.dart';
 part '_action_/_base_action.dart';
-part '_action_/_quick_action_data.dart';
+part '_action_/_quick_action.dart';
 part '_action_/_quick_create_item_action.dart';
 part '_action_/_quick_update_item_action.dart';
 part '_adapter_/_flutter_artist_adapter.dart';

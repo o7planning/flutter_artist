@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-abstract class QuickAction extends BaseAction {
+abstract class QuickAction<DATA extends Object> extends BaseAction {
   final List<Type> affectedItemTypes;
 
   const QuickAction({
@@ -9,7 +9,12 @@ abstract class QuickAction extends BaseAction {
     required this.affectedItemTypes,
   });
 
-  Future<ApiResult<void>> callApi();
+  Future<ApiResult<DATA>?> callApi();
+
+  Future<void> doAfterCallApi({
+    required bool success,
+    required DATA? apiData,
+  });
 
   ///
   /// Example:
