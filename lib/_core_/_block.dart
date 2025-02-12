@@ -2661,12 +2661,15 @@ abstract class Block<
 
     ITEM? currentItem = data.currentItem;
     if (currentItem != null) {
-      return deleteItem(currentItem);
+      return deleteItem(item: currentItem);
     }
     return false;
   }
 
-  Future<bool> deleteItemById({required ID itemId}) async {
+  Future<bool> deleteItemById({
+    required ID itemId,
+    bool ignoreIfItemNotInList = true,
+  }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: null,
@@ -2678,9 +2681,15 @@ abstract class Block<
     );
     //
     ITEM? item = data.findItemById(itemId);
-    final bool inList = item != null;
     //
     if (item == null) {
+      if (ignoreIfItemNotInList) {
+        showErrorSnackBar(
+          message: "Ignore deletion because this item is not in the list.",
+          errorDetails: ["ignoreIfItemNotInList: true"],
+        );
+        return false;
+      }
       ApiResult<ITEM_DETAIL> result;
       try {
         result = await FlutterArtist.executeTask(
@@ -2740,7 +2749,10 @@ abstract class Block<
     return success;
   }
 
-  Future<bool> deleteItem(ITEM item) async {
+  Future<bool> deleteItem({
+    required ITEM item,
+    bool ignoreIfItemNotInList = true,
+  }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: null,
@@ -2753,6 +2765,16 @@ abstract class Block<
     //
     if (!canDeleteItem(item: item)) {
       return false;
+    }
+    if (ignoreIfItemNotInList) {
+      ITEM? it = data.findItemSameIdWith(item: item);
+      if (it != null) {
+        showErrorSnackBar(
+          message: "Ignore deletion because this item is not in the list.",
+          errorDetails: ["ignoreIfItemNotInList: true"],
+        );
+        return false;
+      }
     }
     bool confirm = await showConfirmDeleteDialog(details: getClassName(item));
     if (!confirm) {
