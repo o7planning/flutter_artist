@@ -13,7 +13,7 @@ class EmptyFilterInput extends FilterInput {
 // -----------------------------------------------------------------------------
 
 class StringIdFilterInput extends FilterInput {
-  String idValue;
+  final String? idValue;
 
   StringIdFilterInput({required this.idValue});
 }
@@ -21,7 +21,7 @@ class StringIdFilterInput extends FilterInput {
 // -----------------------------------------------------------------------------
 
 class StringValueFilterInput extends FilterInput {
-  String stringValue;
+  final String? stringValue;
 
   StringValueFilterInput({required this.stringValue});
 }
@@ -29,7 +29,7 @@ class StringValueFilterInput extends FilterInput {
 // -----------------------------------------------------------------------------
 
 class SearchTextFilterInput extends FilterInput {
-  String? searchText;
+  final String? searchText;
 
   SearchTextFilterInput({required this.searchText});
 }
@@ -37,7 +37,9 @@ class SearchTextFilterInput extends FilterInput {
 // -----------------------------------------------------------------------------
 
 class IntIdFilterInput extends FilterInput {
-  int idValue;
+  final int? idValue;
 
   IntIdFilterInput({required this.idValue});
 }
+
+// -----------------------------------------------------------------------------

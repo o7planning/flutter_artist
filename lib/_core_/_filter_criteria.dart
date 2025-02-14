@@ -25,7 +25,7 @@ class EmptyFilterCriteria extends FilterCriteria {
 // -----------------------------------------------------------------------------
 
 class StringIdFilterCriteria extends FilterCriteria {
-  final String idValue;
+  final String? idValue;
 
   const StringIdFilterCriteria({required this.idValue});
 
@@ -41,7 +41,7 @@ class StringIdFilterCriteria extends FilterCriteria {
 // -----------------------------------------------------------------------------
 
 class StringValueFilterCriteria extends FilterCriteria {
-  final String stringValue;
+  final String? stringValue;
 
   const StringValueFilterCriteria({required this.stringValue});
 
@@ -75,6 +75,23 @@ class SearchTextFilterCriteria extends FilterCriteria {
 }
 
 // -----------------------------------------------------------------------------
+
+class IntIdFilterCriteria extends FilterCriteria {
+  final int? idValue;
+
+  const IntIdFilterCriteria({required this.idValue});
+
+  @override
+  List<String> getDebugInfos() {
+    return ["idValue: $idValue"];
+  }
+
+  @override
+  List<Object?> get props => [idValue];
+}
+
+// -----------------------------------------------------------------------------
+
 //
 // TODO:: Need It??
 //
@@ -95,17 +112,3 @@ class _SearchTextIgnoreCaseFilterCriteria extends FilterCriteria {
 }
 
 // -----------------------------------------------------------------------------
-
-class IntIdFilterCriteria extends FilterCriteria {
-  final int idValue;
-
-  const IntIdFilterCriteria({required this.idValue});
-
-  @override
-  List<String> getDebugInfos() {
-    return ["idValue: $idValue"];
-  }
-
-  @override
-  List<Object?> get props => [idValue];
-}

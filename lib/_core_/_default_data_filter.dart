@@ -30,7 +30,7 @@ class _DefaultDataFilter
 
 class StringIdDataFilter
     extends DataFilter<StringIdFilterInput, StringIdFilterCriteria> {
-  String idValue;
+  String? idValue;
 
   StringIdDataFilter({required this.idValue});
 
@@ -54,7 +54,7 @@ class StringIdDataFilter
 
 class StringValueDataFilter
     extends DataFilter<StringValueFilterInput, StringValueFilterCriteria> {
-  String stringValue;
+  String? stringValue;
 
   StringValueDataFilter({required this.stringValue});
 
@@ -102,7 +102,7 @@ class SearchTextDataFilter
 
 class IntIdDataFilter
     extends DataFilter<IntIdFilterInput, IntIdFilterCriteria> {
-  int idValue;
+  int? idValue;
 
   IntIdDataFilter({required this.idValue});
 
@@ -121,3 +121,5 @@ class IntIdDataFilter
   @override
   List<Restorable> get restorableCriteria => [];
 }
+
+// -----------------------------------------------------------------------------
