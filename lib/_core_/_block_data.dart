@@ -248,6 +248,10 @@ abstract class BlockData<
     return findPreviousSiblingItem(item: currentItem!);
   }
 
+  bool get hasPreviousItem => previousSiblingItem != null;
+
+  bool get hasNextItem => nextSiblingItem != null;
+
   ///
   /// Check if the first item is current item.
   ///

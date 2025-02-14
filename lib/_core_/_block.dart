@@ -2174,7 +2174,7 @@ abstract class Block<
   Future<bool> prepareToEditNextItem({
     Function()? navigate,
   }) async {
-    if (!canNavigateToNextItem()) {
+    if (!data.hasNextItem) {
       return false;
     }
     ITEM? nextItem = data.nextSiblingItem;
@@ -2190,7 +2190,7 @@ abstract class Block<
   Future<bool> prepareToEditPreviousItem({
     Function()? navigate,
   }) async {
-    if (!canNavigateToPreviousItem()) {
+    if (!data.hasPreviousItem) {
       return false;
     }
     ITEM? previousItem = data.previousSiblingItem;
@@ -2251,7 +2251,7 @@ abstract class Block<
   Future<bool> prepareToShowNextItem({
     Function()? navigate,
   }) async {
-    if (!canNavigateToNextItem()) {
+    if (!data.hasNextItem) {
       return false;
     }
     ITEM? nextItem = data.nextSiblingItem;
@@ -2267,7 +2267,7 @@ abstract class Block<
   Future<bool> prepareToShowPreviousItem({
     Function()? navigate,
   }) async {
-    if (!canNavigateToPreviousItem()) {
+    if (!data.hasPreviousItem) {
       return false;
     }
     ITEM? previousItem = data.previousSiblingItem;
@@ -3528,26 +3528,6 @@ abstract class Block<
         break; // Continue checking.
     }
     return true;
-  }
-
-  @Deprecated("Co can cai nay ko")
-  bool canNavigateToNextItem() {
-    bool valid = isValidState();
-    if (!valid) {
-      return false;
-    }
-    ITEM? nextItem = data.nextSiblingItem;
-    return nextItem != null;
-  }
-
-  @Deprecated("Co can cai nay ko")
-  bool canNavigateToPreviousItem() {
-    bool valid = isValidState();
-    if (!valid) {
-      return false;
-    }
-    ITEM? previousItem = data.previousSiblingItem;
-    return previousItem != null;
   }
 
   bool canCreateItem() {
