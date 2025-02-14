@@ -6,12 +6,12 @@ abstract class BlockData<
     ITEM_DETAIL extends Object,
     FILTER_INPUT extends FilterInput,
     FILTER_CRITERIA extends FilterCriteria,
-    EXTRA_INPUT extends ExtraInput> implements PageData<ITEM> {
+    EXTRA_FORM_INPUT extends ExtraInput> implements PageData<ITEM> {
   ///
   /// Owner block
   ///
-  final Block<ID, ITEM, ITEM_DETAIL, FILTER_INPUT, FILTER_CRITERIA, EXTRA_INPUT>
-      block;
+  final Block<ID, ITEM, ITEM_DETAIL, FILTER_INPUT, FILTER_CRITERIA,
+      EXTRA_FORM_INPUT> block;
 
   late final List<ITEM> _items;
   final List<ITEM> _selectedItems = [];

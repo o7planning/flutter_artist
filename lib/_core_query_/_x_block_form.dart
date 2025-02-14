@@ -4,13 +4,13 @@ class _XBlockForm {
   bool needQuery = false;
   bool queried = false;
   final BlockForm blockForm;
-  final ExtraInput? extraInput;
+  final ExtraInput? extraFormInput;
 
   late final _XBlock xBlock;
 
   _XBlockForm({
     required this.blockForm,
-    required this.extraInput,
+    required this.extraFormInput,
   });
 
   @override

@@ -8,7 +8,7 @@ abstract class ExtraInput {
 
 // -----------------------------------------------------------------------------
 
-class EmptyExtraInput extends ExtraInput {
+class EmptyExtraFormInput extends ExtraInput {
   //
 }
 

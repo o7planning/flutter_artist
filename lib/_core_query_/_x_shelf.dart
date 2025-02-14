@@ -229,7 +229,7 @@ class _XShelf {
         ? null
         : _XBlockForm(
             blockForm: block.blockForm!,
-            extraInput: null,
+            extraFormInput: null,
           );
     //
     _XBlock xBlock = _XBlock(

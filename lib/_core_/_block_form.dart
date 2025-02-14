@@ -5,7 +5,7 @@ abstract class BlockForm<
     ITEM extends Object,
     ITEM_DETAIL extends Object,
     FILTER_CRITERIA extends FilterCriteria,
-    EXTRA_INPUT extends ExtraInput> extends _XBase {
+    EXTRA_FORM_INPUT extends ExtraInput> extends _XBase {
   QueryMode _queryMode = QueryMode.lazy;
 
   late QueryMode _tempQueryMode = _queryMode;
@@ -29,7 +29,7 @@ abstract class BlockForm<
   Shelf get shelf => block.shelf;
 
   late final Block<ID, ITEM, ITEM_DETAIL, FilterInput, FILTER_CRITERIA,
-      EXTRA_INPUT> block;
+      EXTRA_FORM_INPUT> block;
 
   DataState get dataState => data._dataState;
 
@@ -177,7 +177,7 @@ abstract class BlockForm<
   /// ```dart
   /// Future<void> prepareFormMasterData({
   ///     required EmptyFilterCriteria? filterCriteria,
-  ///     required EmptyExtraInput? extraInput,
+  ///     required EmptyExtraFormInput? extraFormInput,
   ///     required EmployeeData? refreshedItem,
   ///     required bool isNew,
   /// }) {
@@ -197,7 +197,7 @@ abstract class BlockForm<
   ///
   Future<void> prepareFormMasterData({
     required FILTER_CRITERIA? filterCriteria,
-    required EXTRA_INPUT? extraInput,
+    required EXTRA_FORM_INPUT? extraFormInput,
     required ITEM_DETAIL? refreshedItem,
     required bool isNew,
   });
@@ -207,7 +207,7 @@ abstract class BlockForm<
   ///
   Map<String, dynamic> prepareFormData({
     required FILTER_CRITERIA? filterCriteria,
-    required EXTRA_INPUT? extraInput,
+    required EXTRA_FORM_INPUT? extraFormInput,
     required ITEM_DETAIL? refreshedItem,
     required bool isNew,
   });
@@ -351,7 +351,7 @@ abstract class BlockForm<
   }
 
   Future<bool> _prepareForm({
-    required EXTRA_INPUT? extraInput,
+    required EXTRA_FORM_INPUT? extraFormInput,
     required ITEM_DETAIL? refreshedItem,
     required final bool isNew,
     required bool forceForm,
@@ -362,7 +362,7 @@ abstract class BlockForm<
       ownerClassInstance: this,
       methodName: "_prepareForm",
       parameters: {
-        "extraInput": extraInput,
+        "extraFormInput": extraFormInput,
         "refreshedItem": refreshedItem,
         "isNew": isNew,
         "forceForm": forceForm,
@@ -379,7 +379,7 @@ abstract class BlockForm<
       //
       bool success = await __prepareFormMasterData(
         filterCriteria: filterCriteria,
-        extraInput: extraInput,
+        extraFormInput: extraFormInput,
         refreshedItem: refreshedItem,
         isNew: isNew,
       );
@@ -394,7 +394,7 @@ abstract class BlockForm<
     }
     //
     bool success = __copyItemDataToFormKeyState(
-      extraInput: extraInput,
+      extraFormInput: extraFormInput,
       refreshedItem: refreshedItem,
       isNew: isNew,
     );
@@ -407,7 +407,7 @@ abstract class BlockForm<
   // Private method in this class.
   Future<bool> __prepareFormMasterData({
     required FILTER_CRITERIA? filterCriteria,
-    required EXTRA_INPUT? extraInput,
+    required EXTRA_FORM_INPUT? extraFormInput,
     required ITEM_DETAIL? refreshedItem,
     required bool isNew,
   }) async {
@@ -419,7 +419,7 @@ abstract class BlockForm<
         methodName: "prepareFormMasterData",
         parameters: {
           "filterCriteria": filterCriteria,
-          "extraInput": extraInput,
+          "extraFormInput": extraFormInput,
           "refreshedItem": refreshedItem,
           "isNew": isNew,
         },
@@ -429,7 +429,7 @@ abstract class BlockForm<
       //
       await prepareFormMasterData(
         filterCriteria: filterCriteria,
-        extraInput: extraInput,
+        extraFormInput: extraFormInput,
         refreshedItem: refreshedItem,
         isNew: isNew,
       );
@@ -449,7 +449,7 @@ abstract class BlockForm<
 
   // Private method. Only for use in this class.
   bool __copyItemDataToFormKeyState({
-    required EXTRA_INPUT? extraInput,
+    required EXTRA_FORM_INPUT? extraFormInput,
     required ITEM_DETAIL? refreshedItem,
     required bool isNew,
   }) {
@@ -475,7 +475,7 @@ abstract class BlockForm<
           methodName: "prepareFormData",
           parameters: {
             "filterCriteria": filterCriteria,
-            "extraInput": extraInput,
+            "extraFormInput": extraFormInput,
             "refreshedItem": refreshedItem,
             "isNew": isNew,
           },
@@ -484,7 +484,7 @@ abstract class BlockForm<
         //
         newFormData = prepareFormData(
           filterCriteria: filterCriteria,
-          extraInput: extraInput,
+          extraFormInput: extraFormInput,
           refreshedItem: refreshedItem,
           isNew: isNew,
         );

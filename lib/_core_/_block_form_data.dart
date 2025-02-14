@@ -6,11 +6,11 @@ class BlockFormData<
     ITEM_DETAIL extends Object,
     FILTER_INPUT extends FilterInput,
     FILTER_CRITERIA extends FilterCriteria, //
-    EXTRA_INPUT extends ExtraInput> {
+    EXTRA_FORM_INPUT extends ExtraInput> {
   ///
   /// Owner BlockForm.
   ///
-  final BlockForm<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA, EXTRA_INPUT>
+  final BlockForm<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA, EXTRA_FORM_INPUT>
       blockForm;
 
   bool _justInitialized = false;

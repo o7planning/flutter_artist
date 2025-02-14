@@ -5,7 +5,7 @@ part of '../flutter_artist.dart';
 /// ```dart
 /// class EmployeeBlock
 ///       extends Block<int, EmployeeInfo, EmployeeData,
-///                     EmptyFilerInput, EmptyFilterCriteria, EmptyExtraInput> {
+///                     EmptyFilerInput, EmptyFilterCriteria, EmptyExtraFormInput> {
 ///
 /// }
 /// ```
@@ -59,7 +59,7 @@ part of '../flutter_artist.dart';
 /// }
 /// ```
 ///
-/// [EXTRA_INPUT]: Additional form data are used to create a record in the Form.
+/// [EXTRA_FORM_INPUT]: Additional form data are used to create a record in the Form.
 /// For example: Create an employee with the specified department.
 /// ```
 /// class EmployeeExtraInput extends ExtraInput {
@@ -73,7 +73,7 @@ abstract class Block<
     ITEM_DETAIL extends Object,
     FILTER_INPUT extends FilterInput, // EmptyFilterInput
     FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
-    EXTRA_INPUT extends ExtraInput // EmptyExtraInput
+    EXTRA_FORM_INPUT extends ExtraInput // EmptyExtraFormInput
     > extends _XBase {
   late final Shelf shelf;
 
@@ -157,7 +157,7 @@ abstract class Block<
 
   String? get parentBlockName => parent?.name;
 
-  final BlockForm<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA, EXTRA_INPUT>?
+  final BlockForm<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA, EXTRA_FORM_INPUT>?
       blockForm;
 
   final List<Block> _childBlocks;
@@ -217,9 +217,9 @@ abstract class Block<
         );
 
   late final BlockData<ID, ITEM, ITEM_DETAIL, FILTER_INPUT, FILTER_CRITERIA,
-          EXTRA_INPUT> data =
+          EXTRA_FORM_INPUT> data =
       _InternalBlockData<ID, ITEM, ITEM_DETAIL, FILTER_INPUT, FILTER_CRITERIA,
-          EXTRA_INPUT>.empty(
+          EXTRA_FORM_INPUT>.empty(
     this,
     __pageable,
   );
@@ -287,7 +287,7 @@ abstract class Block<
   }
 
   String getExtraInputTypeAsString() {
-    return EXTRA_INPUT.toString();
+    return EXTRA_FORM_INPUT.toString();
   }
 
   // ***************************************************************************
@@ -1109,7 +1109,7 @@ abstract class Block<
         // Create New Item
         bool success = await __prepareToCreate(
           thisXBlock: thisXBlock,
-          extraInput: null,
+          extraFormInput: null,
         );
         if (!success) {
           return false;
@@ -1369,7 +1369,7 @@ abstract class Block<
         dataState: DataState.pending,
       );
       bool success = await blockForm!._prepareForm(
-        extraInput: null,
+        extraFormInput: null,
         refreshedItem: refreshedItemDetail,
         isNew: false,
         forceForm: forceForm,
@@ -1446,7 +1446,7 @@ abstract class Block<
         dataState: DataState.ready,
       );
       bool success = await blockForm!._prepareForm(
-        extraInput: null,
+        extraFormInput: null,
         refreshedItem: nullItemDetail,
         isNew: false,
         forceForm: false,
@@ -2490,7 +2490,7 @@ abstract class Block<
   /// Prepare to create an item in a Form.
   ///
   Future<bool> prepareToCreate({
-    EXTRA_INPUT? extraInput,
+    EXTRA_FORM_INPUT? extraFormInput,
     required Function()? navigate,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -2498,17 +2498,17 @@ abstract class Block<
       navigate: navigate,
       ownerClassInstance: this,
       methodName: "prepareToCreate",
-      parameters: {"extraInput": extraInput},
+      parameters: {"extraFormInput": extraFormInput},
     );
     //
     if (!__checkBeforeFormCreation(showErrorMessage: true)) {
       return false;
     }
     //
-    extraInput?.formAction = FormAction.create;
+    extraFormInput?.formAction = FormAction.create;
     //
     bool success = await _prepareToCreateWithOverlayAndRestorable(
-      extraInput: extraInput,
+      extraFormInput: extraFormInput,
     );
     //
     if (success) {
@@ -2518,7 +2518,7 @@ abstract class Block<
   }
 
   Future<bool> _prepareToCreateWithOverlayAndRestorable({
-    required EXTRA_INPUT? extraInput,
+    required EXTRA_FORM_INPUT? extraFormInput,
   }) async {
     if (!__checkBeforeFormCreation(showErrorMessage: false)) {
       return false;
@@ -2526,14 +2526,14 @@ abstract class Block<
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
         return await _prepareToCreateWithRestorable(
-          extraInput: extraInput,
+          extraFormInput: extraFormInput,
         );
       },
     );
   }
 
   Future<bool> _prepareToCreateWithRestorable({
-    required EXTRA_INPUT? extraInput,
+    required EXTRA_FORM_INPUT? extraFormInput,
   }) async {
     if (!__checkBeforeFormCreation(showErrorMessage: false)) {
       return false;
@@ -2565,7 +2565,7 @@ abstract class Block<
       //
       bool success = await __prepareToCreate(
         thisXBlock: thisXBlock,
-        extraInput: extraInput,
+        extraFormInput: extraFormInput,
       );
       if (!success) {
         shelf._restoreAll();
@@ -2591,14 +2591,14 @@ abstract class Block<
   // Private method. Only for use in this class.
   Future<bool> __prepareToCreate({
     required _XBlock thisXBlock,
-    required EXTRA_INPUT? extraInput,
+    required EXTRA_FORM_INPUT? extraFormInput,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: null,
       ownerClassInstance: this,
       methodName: "__prepareToCreate",
-      parameters: {"extraInput": extraInput},
+      parameters: {"extraFormInput": extraFormInput},
     );
     //
     if (!__checkBeforeFormCreation(showErrorMessage: false)) {
@@ -2622,7 +2622,7 @@ abstract class Block<
       __refreshPreparingFormCreationState(isPreparingFormCreation: true);
       //
       success = await blockForm!._prepareForm(
-        extraInput: extraInput,
+        extraFormInput: extraFormInput,
         refreshedItem: nullItemDetail,
         isNew: true,
         forceForm: true,

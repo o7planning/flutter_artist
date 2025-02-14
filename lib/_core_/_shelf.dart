@@ -251,15 +251,15 @@ abstract class Shelf extends _XBase {
       }
     }
     //
-    Type extraInputB = ExtraInput;
-    String extraInputTypeB = extraInputB.toString();
-    String extraInputTypeStr = block.getExtraInputTypeAsString();
+    Type extraFormInputB = ExtraInput;
+    String extraFormInputTypeB = extraFormInputB.toString();
+    String extraFormInputTypeStr = block.getExtraInputTypeAsString();
 
-    if (extraInputTypeStr == extraInputTypeB) {
+    if (extraFormInputTypeStr == extraFormInputTypeB) {
       throw ___registerError(
-          "You need to create your own class that extends the '$extraInputTypeB' class \n"
-          "or use the 'EmptyExtraInput' class to use in the '${getClassName(block)}' declaration \n\n"
-          " >> Currently, ${getClassName(block)}<EXTRA_INPUT> = <$extraInputTypeStr>");
+          "You need to create your own class that extends the '$extraFormInputTypeB' class \n"
+          "or use the 'EmptyExtraFormInput' class to use in the '${getClassName(block)}' declaration \n\n"
+          " >> Currently, ${getClassName(block)}<EXTRA_FORM_INPUT> = <$extraFormInputTypeStr>");
     }
     //
     for (Block childBlock in block.childBlocks) {
@@ -857,7 +857,7 @@ abstract class Shelf extends _XBase {
         // );
 
         bool success = await xBlockForm.blockForm._prepareForm(
-          extraInput: xBlockForm.extraInput,
+          extraFormInput: xBlockForm.extraFormInput,
           refreshedItem: currentItemDetail,
           isNew: currentItemDetail == null, // TODO: Can kiem tra lai.
           forceForm: true,
