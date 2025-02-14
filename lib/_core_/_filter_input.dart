@@ -26,7 +26,6 @@ class StringValueFilterInput extends FilterInput {
   StringValueFilterInput({required this.stringValue});
 }
 
-
 // -----------------------------------------------------------------------------
 
 class SearchTextFilterInput extends FilterInput {

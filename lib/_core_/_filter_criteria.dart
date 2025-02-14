@@ -55,28 +55,43 @@ class StringValueFilterCriteria extends FilterCriteria {
 }
 
 // -----------------------------------------------------------------------------
-
-String? _toNullValueIfCan(String? s) {
-  if (s == null) {
-    return null;
-  }
-  String s1 = s.trim();
-  return s1.isEmpty ? null : s1;
-}
-
+///
+/// An empty or null searchText is considered the same.
+///
 class SearchTextFilterCriteria extends FilterCriteria {
-  final String? _searchText;
+  final String? searchText;
 
-  SearchTextFilterCriteria({required String? searchText})
-      : _searchText = _toNullValueIfCan(searchText);
+  const SearchTextFilterCriteria({required this.searchText});
 
   @override
   List<String> getDebugInfos() {
-    return ["searchText: $_searchText"];
+    return ["searchText: $searchText"];
   }
 
   @override
-  List<Object?> get props => [_searchText];
+  List<Object?> get props => [
+        _stringToNullIfEmpty(searchText),
+      ];
+}
+
+// -----------------------------------------------------------------------------
+//
+// TODO:: Need It??
+//
+class _SearchTextIgnoreCaseFilterCriteria extends FilterCriteria {
+  final String? searchText;
+
+  const _SearchTextIgnoreCaseFilterCriteria({required this.searchText});
+
+  @override
+  List<String> getDebugInfos() {
+    return ["searchText: $searchText"];
+  }
+
+  @override
+  List<Object?> get props => [
+        _trimStringToNullIfEmpty(searchText?.toLowerCase()),
+      ];
 }
 
 // -----------------------------------------------------------------------------

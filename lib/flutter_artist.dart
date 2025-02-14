@@ -191,6 +191,7 @@ part '_utils_/_form_utils.dart';
 part '_utils_/_items_utils.dart';
 part '_utils_/_json_utils.dart';
 part '_utils_/_register_error_utils.dart';
+part '_utils_/_string_utils.dart';
 part '_utils_/_tab_theme_utils.dart';
 part '_utils_/_text_size_utils.dart';
 part '_utils_/_tooltip_utils.dart';
