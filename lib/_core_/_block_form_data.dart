@@ -2,7 +2,6 @@ part of '../flutter_artist.dart';
 
 class BlockFormData<
     ID extends Object,
-    ITEM extends Object,
     ITEM_DETAIL extends Object,
     FILTER_INPUT extends FilterInput,
     FILTER_CRITERIA extends FilterCriteria, //
@@ -10,8 +9,7 @@ class BlockFormData<
   ///
   /// Owner BlockForm.
   ///
-  final BlockForm<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA, EXTRA_FORM_INPUT>
-      blockForm;
+  final BlockForm<ID, ITEM_DETAIL, FILTER_CRITERIA, EXTRA_FORM_INPUT> blockForm;
 
   bool _justInitialized = false;
 

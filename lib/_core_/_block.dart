@@ -157,7 +157,7 @@ abstract class Block<
 
   String? get parentBlockName => parent?.name;
 
-  final BlockForm<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA, EXTRA_FORM_INPUT>?
+  final BlockForm<ID, ITEM_DETAIL, FILTER_CRITERIA, EXTRA_FORM_INPUT>?
       blockForm;
 
   final List<Block> _childBlocks;

@@ -2,7 +2,6 @@ part of '../flutter_artist.dart';
 
 abstract class BlockForm<
     ID extends Object,
-    ITEM extends Object,
     ITEM_DETAIL extends Object,
     FILTER_CRITERIA extends FilterCriteria,
     EXTRA_FORM_INPUT extends ExtraInput> extends _XBase {
@@ -28,7 +27,7 @@ abstract class BlockForm<
 
   Shelf get shelf => block.shelf;
 
-  late final Block<ID, ITEM, ITEM_DETAIL, FilterInput, FILTER_CRITERIA,
+  late final Block<ID, Object, ITEM_DETAIL, FilterInput, FILTER_CRITERIA,
       EXTRA_FORM_INPUT> block;
 
   DataState get dataState => data._dataState;
