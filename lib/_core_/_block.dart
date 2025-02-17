@@ -2768,7 +2768,7 @@ abstract class Block<
     }
     if (ignoreIfItemNotInList) {
       ITEM? it = data.findItemSameIdWith(item: item);
-      if (it != null) {
+      if (it == null) {
         showErrorSnackBar(
           message: "Ignore deletion because this item is not in the list.",
           errorDetails: ["ignoreIfItemNotInList: true"],
