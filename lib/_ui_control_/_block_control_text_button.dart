@@ -18,7 +18,6 @@ class BlockControlTextButton extends BlockControl {
     Clip? clipBehavior = Clip.none,
     WidgetStatesController? statesController,
     required Widget child,
-    IconAlignment iconAlignment = IconAlignment.start,
   }) : super(
           build: (VoidCallback? onPressed) {
             return TextButton(
@@ -31,7 +30,6 @@ class BlockControlTextButton extends BlockControl {
               clipBehavior: clipBehavior,
               isSemanticButton: isSemanticButton,
               statesController: statesController,
-              iconAlignment: iconAlignment,
               child: child,
             );
           },

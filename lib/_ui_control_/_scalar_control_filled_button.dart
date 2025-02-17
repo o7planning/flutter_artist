@@ -17,7 +17,6 @@ class ScalarControlFilledButton extends ScalarControl {
     Clip? clipBehavior = Clip.none,
     WidgetStatesController? statesController,
     Widget? child,
-    IconAlignment iconAlignment = IconAlignment.start,
   }) : super(
           build: (VoidCallback? onPressed) {
             return FilledButton(
@@ -29,7 +28,6 @@ class ScalarControlFilledButton extends ScalarControl {
               autofocus: autofocus,
               clipBehavior: clipBehavior,
               statesController: statesController,
-              iconAlignment: iconAlignment,
               child: child,
             );
           },

@@ -17,7 +17,6 @@ class BlockControlOutlinedButton extends BlockControl {
     Clip? clipBehavior,
     WidgetStatesController? statesController,
     Widget? child,
-    IconAlignment iconAlignment = IconAlignment.start,
   }) : super(
           build: (VoidCallback? onPressed) {
             return OutlinedButton(
@@ -29,7 +28,6 @@ class BlockControlOutlinedButton extends BlockControl {
               autofocus: autofocus,
               clipBehavior: clipBehavior,
               statesController: statesController,
-              iconAlignment: iconAlignment,
               child: child,
             );
           },

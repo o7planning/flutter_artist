@@ -18,7 +18,6 @@ class ScalarControlTextButton extends ScalarControl {
     Clip? clipBehavior = Clip.none,
     WidgetStatesController? statesController,
     required Widget child,
-    IconAlignment iconAlignment = IconAlignment.start,
   }) : super(
           build: (VoidCallback? onPressed) {
             return TextButton(
@@ -31,7 +30,6 @@ class ScalarControlTextButton extends ScalarControl {
               clipBehavior: clipBehavior,
               isSemanticButton: isSemanticButton,
               statesController: statesController,
-              iconAlignment: iconAlignment,
               child: child,
             );
           },
