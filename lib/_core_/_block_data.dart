@@ -102,15 +102,12 @@ abstract class BlockData<
   // ***************************************************************************
 
   void sort() {
-    print(">>> Sort: ${_items.map((a) => a.toString()).toList()}");
     try {
       if (block._blockComparator != null) {
         _items.sort((a, b) => block._blockComparator!._compare(a, b));
       }
-
-      print(">>> Sort: ${_items.map((a) => a.toString()).toList()}");
     } catch (e) {
-      print("Error: $e");
+      print("Sort Error: $e");
     }
   }
 
