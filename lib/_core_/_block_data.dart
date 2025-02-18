@@ -13,8 +13,6 @@ abstract class BlockData<
   final Block<ID, ITEM, ITEM_DETAIL, FILTER_INPUT, FILTER_CRITERIA,
       EXTRA_FORM_INPUT> block;
 
-
-
   late final List<ITEM> _items;
   final List<ITEM> _selectedItems = [];
   final List<ITEM> _checkedItems = [];

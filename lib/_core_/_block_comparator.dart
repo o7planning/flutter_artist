@@ -97,7 +97,6 @@ abstract class BlockComparator<ITEM extends Object> {
       }
       dynamic aValue = getValue(item: a, propName: sapn.propName);
       dynamic bValue = getValue(item: b, propName: sapn.propName);
-      print("${sapn.propName} --> aValue: $aValue, bValue: $bValue");
       //
       if (aValue == null && bValue == null) {
         continue;
@@ -108,8 +107,8 @@ abstract class BlockComparator<ITEM extends Object> {
       }
       // int value
       if (aValue is int) {
-        print("---> int");
         bValue as int;
+        //
         int x = aValue - bValue;
         if (x == 0) {
           continue;
@@ -119,14 +118,17 @@ abstract class BlockComparator<ITEM extends Object> {
       // double value
       else if (aValue is double) {
         bValue as double;
-        print("---> double");
+        //
         int x = aValue - bValue > 0 ? 1 : -1;
         if (x == 0) {
           continue;
         }
         return sapn.isAsc() ? x : -x;
-      } else if (aValue is bool) {
+      }
+      // bool value
+      else if (aValue is bool) {
         bValue as bool;
+        //
         int va = aValue ? 1 : 0;
         int vb = bValue ? 1 : 0;
         int x = va - vb;
@@ -134,7 +136,9 @@ abstract class BlockComparator<ITEM extends Object> {
           continue;
         }
         return sapn.isAsc() ? x : -x;
-      } else if (aValue is String) {
+      }
+      // String value
+      else if (aValue is String) {
         bValue as String;
         int x = aValue.compareTo(bValue);
         if (x == 0) {
@@ -146,7 +150,6 @@ abstract class BlockComparator<ITEM extends Object> {
             "Method BlockComparator.getValue(item,propName) must be return int, double, bool, null or String");
       }
     }
-    print("---> ???");
     return 0;
   }
 
