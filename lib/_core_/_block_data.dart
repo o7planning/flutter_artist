@@ -280,6 +280,22 @@ abstract class BlockData<
   // ******* PUBLIC ITEM METHODS ***********************************************
   // ***************************************************************************
 
+  bool isSelectedIndex({required int index}) {
+    ITEM? item = findItemByIndex(index);
+    if (item == null) {
+      return false;
+    }
+    return isSelectedItem(item);
+  }
+
+  bool isCurrentIndex({required int index}) {
+    ITEM? item = findItemByIndex(index);
+    if (item == null) {
+      return false;
+    }
+    return isCurrentItem(item: item);
+  }
+
   bool isCurrentItem({
     required ITEM item,
   }) {
@@ -356,6 +372,13 @@ abstract class BlockData<
       targetList: _items,
       getItemId: block.getItemId,
     );
+  }
+
+  ITEM? findItemByIndex(int index) {
+    if (index < 0 || index >= _items.length) {
+      return null;
+    }
+    return _items[index];
   }
 
   // ***************************************************************************
