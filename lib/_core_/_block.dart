@@ -226,6 +226,10 @@ abstract class Block<
 
   DataState get dataState => data._dataState;
 
+  final BlockComparator? _blockComparator;
+
+  BlockComparator? get blockComparator => _blockComparator;
+
   final Map<_RefreshableWidgetState, bool> _blockFragmentWidgetStates = {};
   final Map<_RefreshableWidgetState, bool> _controlBarWidgetStates = {};
   final Map<_RefreshableWidgetState, bool> _controlWidgetStates = {};
@@ -242,8 +246,10 @@ abstract class Block<
     required this.fireEvent,
     required List<Type> listenItemTypes,
     required List<Block>? childBlocks,
+    BlockComparator<ITEM>? comparator,
   })  : registerDataFilterName = dataFilterName,
         __pageSize = pageSize,
+        _blockComparator = comparator,
         __listenItemTypes = listenItemTypes,
         _childBlocks = childBlocks ?? [] {
     for (Block childBlock in _childBlocks) {
@@ -292,15 +298,6 @@ abstract class Block<
 
   String getExtraInputTypeAsString() {
     return EXTRA_FORM_INPUT.toString();
-  }
-
-  // ***************************************************************************
-  // ************ COMPARATOR ***************************************************
-  // ***************************************************************************
-
-  void setComparator(BlockComparator<ITEM> comparator) {
-    data._blockComparator = comparator;
-    data.sort();
   }
 
   // ***************************************************************************

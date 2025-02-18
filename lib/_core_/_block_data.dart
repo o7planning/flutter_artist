@@ -13,9 +13,7 @@ abstract class BlockData<
   final Block<ID, ITEM, ITEM_DETAIL, FILTER_INPUT, FILTER_CRITERIA,
       EXTRA_FORM_INPUT> block;
 
-  BlockComparator? _blockComparator;
 
-  BlockComparator? get blockComparator => _blockComparator;
 
   late final List<ITEM> _items;
   final List<ITEM> _selectedItems = [];
@@ -106,10 +104,13 @@ abstract class BlockData<
   // ***************************************************************************
 
   void sort() {
+    print(">>> Sort: ${_items.map((a) => a.toString()).toList()}");
     try {
-      if (_blockComparator != null) {
-        _items.sort((a, b) => _blockComparator!._compare(a, b));
+      if (block._blockComparator != null) {
+        _items.sort((a, b) => block._blockComparator!._compare(a, b));
       }
+
+      print(">>> Sort: ${_items.map((a) => a.toString()).toList()}");
     } catch (e) {
       print("Error: $e");
     }

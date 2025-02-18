@@ -2,16 +2,24 @@ part of '../flutter_artist.dart';
 
 class ComparisonBar extends StatelessWidget {
   final Block block;
+  final double itemSpacing;
+  final double iconSpacing;
 
   final Color _dividerColor = Colors.indigo.withAlpha(80);
+  static const double _iconSize = 16;
   static const double _dividerHeight = 20;
   static const TextStyle _textStyle = TextStyle(fontSize: 13);
 
-  ComparisonBar({super.key, required this.block});
+  ComparisonBar({
+    super.key,
+    required this.block,
+    this.itemSpacing = 5,
+    this.iconSpacing = 3,
+  });
 
   @override
   Widget build(BuildContext context) {
-    BlockComparator? blockComparator = block.data.blockComparator;
+    BlockComparator? blockComparator = block.blockComparator;
     if (blockComparator == null) {
       return Text("[Sorting not supported]", style: _textStyle);
     }
@@ -38,19 +46,29 @@ class ComparisonBar extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(sapn.propName, style: _textStyle),
+          SizedBox(width: iconSpacing),
           _getSortIcon(sapn),
         ],
       ),
     );
   }
 
-  Icon _getSortIcon(_SignAndPropName sapn) {
+  Widget _getSortIcon(_SignAndPropName sapn) {
     if (sapn.isAsc()) {
-      return Icon(cupertino.CupertinoIcons.sort_up);
+      return Icon(
+        cupertino.CupertinoIcons.sort_up,
+        size: _iconSize,
+      );
     } else if (sapn.isDesc()) {
-      return Icon(cupertino.CupertinoIcons.sort_down);
+      return Icon(
+        cupertino.CupertinoIcons.sort_down,
+        size: _iconSize,
+      );
     } else {
-      return Icon(cupertino.CupertinoIcons.line_horizontal_3);
+      return Icon(
+        cupertino.CupertinoIcons.line_horizontal_3,
+        size: _iconSize,
+      );
     }
   }
 
