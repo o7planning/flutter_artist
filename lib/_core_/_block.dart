@@ -2962,66 +2962,45 @@ abstract class Block<
     updateAllUIComponents(withoutFilters: false);
   }
 
-  void setCheckedItem(ITEM item) {
-    data._setCheckedItem(item);
+  void toggleCheckItem({
+    required ITEM item,
+  }) {
+    data._toggleCheckItem(item: item);
     __updateUIComponentAfterCheckedOrSelected();
   }
 
-  // TODO: Kiểm tra nếu chưa có current thì sét thành current.
-  void setSelectedItem(ITEM item) {
-    data._setSelectedItem(item);
+  void toggleSelectItem({
+    required ITEM item,
+  }) {
+    data._toggleSelectItem(item: item);
     __updateUIComponentAfterCheckedOrSelected();
   }
 
-  // -------
-
-  void setCheckedItems(List<ITEM> items) {
-    data._setCheckedItems(items);
+  void setCheckedItem({
+    required ITEM item,
+    required bool checked,
+  }) {
+    data._setCheckedItem(item: item, checked: checked);
     __updateUIComponentAfterCheckedOrSelected();
   }
 
-  // TODO: Kiểm tra nếu chưa có current thì sét thành current.
-  void setSelectedItems(List<ITEM> items) {
-    data._setSelectedItems(items);
-    __updateUIComponentAfterCheckedOrSelected();
-  }
-
-  // -------
-
-  void addCheckedItem(ITEM item) {
-    data._addCheckedItem(item);
-    __updateUIComponentAfterCheckedOrSelected();
-  }
-
-  // TODO: Kiểm tra nếu chưa có current thì sét thành current.
-  void addSelectedItem(ITEM item) {
-    data._addSelectedItem(item);
+  void setSelectedItem({
+    required ITEM item,
+    required bool selected,
+  }) {
+    data._setSelectedItem(item: item, selected: selected);
     __updateUIComponentAfterCheckedOrSelected();
   }
 
   // -------
 
-  void addCheckedItems(List<ITEM> items) {
-    data._addCheckedItems(items);
+  void setCheckedItems({required List<ITEM> items}) {
+    data._setCheckedItems(items: items);
     __updateUIComponentAfterCheckedOrSelected();
   }
 
-  // TODO: Kiểm tra nếu chưa có current thì sét thành current.
-  void addSelectedItems(List<ITEM> items) {
-    data._addSelectedItems(items);
-    __updateUIComponentAfterCheckedOrSelected();
-  }
-
-  // -------
-
-  void uncheckItem(ITEM item) {
-    data._uncheckItem(item);
-    __updateUIComponentAfterCheckedOrSelected();
-  }
-
-  // TODO: Kiểm tra nếu nếu đang là currentItem thì setCurrent null.
-  void deselectItem(ITEM item) {
-    data._deselectItemItems(item);
+  void setSelectedItems({required List<ITEM> items}) {
+    data._setSelectedItems(items: items);
     __updateUIComponentAfterCheckedOrSelected();
   }
 
@@ -3032,22 +3011,20 @@ abstract class Block<
     __updateUIComponentAfterCheckedOrSelected();
   }
 
-  // TODO: Kiểm tra nếu có current thì set current null.
-  void deselectAllItems() {
-    data._deselectAll();
-    __updateUIComponentAfterCheckedOrSelected();
-  }
-
-  // -------
-
   void checkAllItems() {
     data._checkAllItems();
     __updateUIComponentAfterCheckedOrSelected();
   }
 
-  // TODO: Kiểm tra nếu chưa có current thì sét thành current.
+  // -------
+
   void selectAllItems() {
     data._selectAllItems();
+    __updateUIComponentAfterCheckedOrSelected();
+  }
+
+  void deselectAllItems() {
+    data._deselectAllItems();
     __updateUIComponentAfterCheckedOrSelected();
   }
 

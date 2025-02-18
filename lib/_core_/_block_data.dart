@@ -152,14 +152,14 @@ abstract class BlockData<
       item: item,
       getItemId: block.getItemId,
     );
-    FormUtils.insertOrReplaceItemInList(
+    FormUtils.replaceItemInList(
       targetList: _checkedItems,
-      item: item,
+      replacementItem: item,
       getItemId: block.getItemId,
     );
-    FormUtils.insertOrReplaceItemInList(
+    FormUtils.replaceItemInList(
       targetList: _selectedItems,
-      item: item,
+      replacementItem: item,
       getItemId: block.getItemId,
     );
   }
@@ -303,22 +303,6 @@ abstract class BlockData<
     );
   }
 
-  // bool containsSelectedItems(List<ITEM> items) {
-  //   return FormUtils.isListContainItems(
-  //     targetList: _selectedItems,
-  //     items: items,
-  //     getItemId: block.getItemId,
-  //   );
-  // }
-  //
-  // bool containsCheckedItems(List<ITEM> items) {
-  //   return FormUtils.isListContainItems(
-  //     targetList: _checkedItems,
-  //     items: items,
-  //     getItemId: block.getItemId,
-  //   );
-  // }
-
   bool containsItem({
     required ITEM item,
   }) {
@@ -378,49 +362,35 @@ abstract class BlockData<
   // ******* PRIVATE ITEM METHODS **********************************************
   // ***************************************************************************
 
-  void _setCheckedItem(ITEM item) {
-    _uncheckAllItems();
-    _addCheckedItem(item);
+  void _toggleCheckItem({required ITEM item}) {
+    bool checked = isCheckedItem(item);
+    _setCheckedItem(item: item, checked: !checked);
   }
 
-  void _setSelectedItem(ITEM item) {
-    _uncheckAllItems();
-    _addSelectedItem(item);
+  void _toggleSelectItem({required ITEM item}) {
+    bool selected = isSelectedItem(item);
+    _setSelectedItem(item: item, selected: !selected);
   }
 
-  // ---------------------------------------------------------------------------
-
-  void _setCheckedItems(List<ITEM> items) {
-    _uncheckAllItems();
-    _addCheckedItems(items);
+  void _setCheckedItem({required ITEM item, required bool checked}) {
+    if (checked) {
+      __checkItem(item);
+    } else {
+      __uncheckItem(item);
+    }
   }
 
-  void _setSelectedItems(List<ITEM> items) {
-    _uncheckAllItems();
-    _addSelectedItems(items);
-  }
-
-  // ---------------------------------------------------------------------------
-
-  void _addCheckedItem(ITEM item) {
-    FormUtils.insertOrReplaceItemInList(
-      item: item,
-      targetList: _checkedItems,
-      getItemId: block.getItemId,
-    );
-  }
-
-  void _addSelectedItem(ITEM item) {
-    FormUtils.insertOrReplaceItemInList(
-      item: item,
-      targetList: _selectedItems,
-      getItemId: block.getItemId,
-    );
+  void _setSelectedItem({required ITEM item, required bool selected}) {
+    if (selected) {
+      __selectItem(item);
+    } else {
+      __deselectItem(item);
+    }
   }
 
   // ---------------------------------------------------------------------------
 
-  void _addCheckedItems(List<ITEM> items) {
+  void _setCheckedItems({required List<ITEM> items}) {
     FormUtils.insertOrReplaceItemsInList(
       items: items,
       targetList: _checkedItems,
@@ -428,7 +398,7 @@ abstract class BlockData<
     );
   }
 
-  void _addSelectedItems(List<ITEM> items) {
+  void _setSelectedItems({required List<ITEM> items}) {
     FormUtils.insertOrReplaceItemsInList(
       items: items,
       targetList: _selectedItems,
@@ -438,7 +408,25 @@ abstract class BlockData<
 
   // ---------------------------------------------------------------------------
 
-  void _uncheckItem(ITEM item) {
+  void __checkItem(ITEM item) {
+    FormUtils.insertOrReplaceItemInList(
+      item: item,
+      targetList: _checkedItems,
+      getItemId: block.getItemId,
+    );
+  }
+
+  void __selectItem(ITEM item) {
+    FormUtils.insertOrReplaceItemInList(
+      item: item,
+      targetList: _selectedItems,
+      getItemId: block.getItemId,
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+
+  void __uncheckItem(ITEM item) {
     FormUtils.removeItemFromList(
       removeItem: item,
       targetList: _checkedItems,
@@ -446,7 +434,7 @@ abstract class BlockData<
     );
   }
 
-  void _deselectItemItems(ITEM item) {
+  void __deselectItem(ITEM item) {
     FormUtils.removeItemFromList(
       removeItem: item,
       targetList: _selectedItems,
@@ -460,17 +448,17 @@ abstract class BlockData<
     _checkedItems.clear();
   }
 
-  void _deselectAll() {
+  void _deselectAllItems() {
     _selectedItems.clear();
   }
 
   // ---------------------------------------------------------------------------
 
   void _checkAllItems() {
-    _setCheckedItems(_items);
+    _setCheckedItems(items: _items);
   }
 
   void _selectAllItems() {
-    _setSelectedItems(_items);
+    _setSelectedItems(items: _items);
   }
 }
