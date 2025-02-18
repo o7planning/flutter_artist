@@ -13,6 +13,10 @@ abstract class BlockData<
   final Block<ID, ITEM, ITEM_DETAIL, FILTER_INPUT, FILTER_CRITERIA,
       EXTRA_FORM_INPUT> block;
 
+  BlockComparator? _blockComparator;
+
+  BlockComparator? get blockComparator => _blockComparator;
+
   late final List<ITEM> _items;
   final List<ITEM> _selectedItems = [];
   final List<ITEM> _checkedItems = [];
@@ -99,6 +103,20 @@ abstract class BlockData<
         _pageable = pageable,
         _pagination = pagination;
 
+  // ***************************************************************************
+
+  void sort() {
+    try {
+      if (_blockComparator != null) {
+        _items.sort((a, b) => _blockComparator!._compare(a, b));
+      }
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
+
+  // ***************************************************************************
+
   void _backup();
 
   void _restore();
@@ -152,6 +170,9 @@ abstract class BlockData<
       item: item,
       getItemId: block.getItemId,
     );
+    //
+    sort();
+    //
     FormUtils.replaceItemInList(
       targetList: _checkedItems,
       replacementItem: item,
@@ -170,6 +191,9 @@ abstract class BlockData<
       targetList: _items,
       getItemId: block.getItemId,
     );
+    //
+    sort();
+    //
     FormUtils.replaceItemsInList(
       replacementItems: appendItems,
       targetList: _selectedItems,
