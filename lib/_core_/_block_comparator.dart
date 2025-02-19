@@ -29,29 +29,32 @@ extension SortSignExt on SortSign {
 }
 
 class _SignAndPropName {
-  SortSign sign;
+  SortSign sortSign;
   String propName;
 
-  _SignAndPropName({required this.sign, required this.propName});
+  _SignAndPropName({
+    required this.sortSign,
+    required this.propName,
+  });
 
   void _setToNone() {
-    sign = SortSign.none;
+    sortSign = SortSign.none;
   }
 
   bool isAsc() {
-    return sign == SortSign.plus;
+    return sortSign == SortSign.plus;
   }
 
   bool isDesc() {
-    return sign == SortSign.minus;
+    return sortSign == SortSign.minus;
   }
 
   _SignAndPropName copyWith(SortSign sign) {
-    return _SignAndPropName(sign: sign, propName: propName);
+    return _SignAndPropName(sortSign: sign, propName: propName);
   }
 
   SortSign getNextSign() {
-    switch (sign) {
+    switch (sortSign) {
       case SortSign.plus:
         return SortSign.minus;
       case SortSign.minus:
@@ -78,7 +81,12 @@ class _SignAndPropName {
     }
     //
     SortSign sortSign = SortSign.fromSign(sign);
-    return _SignAndPropName(sign: sortSign, propName: propName);
+    return _SignAndPropName(sortSign: sortSign, propName: propName);
+  }
+
+  @override
+  String toString() {
+    return "${sortSign.sign}$propName";
   }
 }
 
@@ -108,7 +116,7 @@ abstract class BlockComparator<ITEM extends Object> {
     for (String sortablePropName in sortablePropNames) {
       _SignAndPropName sapn = _SignAndPropName.parse(sortablePropName);
       //
-      if (sapn != SortSign.none) {
+      if (sapn.sortSign != SortSign.none) {
         optCount++;
         if (optCount > 1 && !multiOptions) {
           sapn._setToNone();
@@ -143,18 +151,18 @@ abstract class BlockComparator<ITEM extends Object> {
         continue;
       }
       //
-      if (updateSapn.sign != SortSign.none) {
+      if (updateSapn.sortSign != SortSign.none) {
         optCount++;
         if (optCount > 1 && !multiOptions) {
           currentSapn._setToNone();
         } else {
-          currentSapn.sign = updateSapn.sign;
+          currentSapn.sortSign = updateSapn.sortSign;
         }
       } else {
-        currentSapn.sign = updateSapn.sign;
+        currentSapn.sortSign = updateSapn.sortSign;
       }
       //
-      if (optCount > 1 && !multiOptions) {
+      if (optCount >= 1 && !multiOptions) {
         for (_SignAndPropName sapn in copyMap.values) {
           sapn._setToNone();
         }
@@ -194,7 +202,7 @@ abstract class BlockComparator<ITEM extends Object> {
 
   int _compare(ITEM a, ITEM b) {
     for (_SignAndPropName sapn in _signAndPropNames) {
-      if (sapn.sign == SortSign.none) {
+      if (sapn.sortSign == SortSign.none) {
         continue;
       }
       dynamic aValue = getValue(item: a, propName: sapn.propName);
@@ -256,7 +264,12 @@ abstract class BlockComparator<ITEM extends Object> {
   }
 
   ///
-  /// Return type must be int, double, bool, null or String.
+  /// The return type must be int, double, bool, null or String.
   ///
   dynamic getValue({required ITEM item, required String propName});
+
+  @override
+  String toString() {
+    return "multiOptions: $multiOptions ${_signAndPropNames.toString()}";
+  }
 }

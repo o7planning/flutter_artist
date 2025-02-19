@@ -5,16 +5,43 @@ class SortOptionsBar extends StatelessWidget {
   final double itemSpacing;
   final double iconSpacing;
 
+  //
+  final TextStyle textStyle;
+  final AlignmentGeometry? alignment;
+  final EdgeInsetsGeometry? padding;
+  Decoration? decoration;
+  final Decoration? foregroundDecoration;
+  final double? width;
+  double? height;
+  final BoxConstraints? constraints;
+  final EdgeInsetsGeometry? margin;
+  final Matrix4? transform;
+  final AlignmentGeometry? transformAlignment;
+  final Clip clipBehavior;
+
+  //
   final Color _dividerColor = Colors.indigo.withAlpha(80);
   static const double _iconSize = 16;
   static const double _dividerHeight = 20;
-  static const TextStyle _textStyle = TextStyle(fontSize: 13);
 
   SortOptionsBar({
     super.key,
     required this.block,
     this.itemSpacing = 5,
     this.iconSpacing = 3,
+    this.textStyle = const TextStyle(fontSize: 13),
+    //
+    this.alignment,
+    this.padding,
+    this.decoration,
+    this.foregroundDecoration,
+    this.width,
+    this.height,
+    this.constraints,
+    this.margin,
+    this.transform,
+    this.transformAlignment,
+    this.clipBehavior = Clip.none,
   });
 
   @override
@@ -27,22 +54,35 @@ class SortOptionsBar extends StatelessWidget {
       block: block,
       build: () {
         if (blockComparator == null) {
-          return Text("[Sorting not supported]", style: _textStyle);
+          return Text("[Sorting not supported]", style: textStyle);
         }
         List<_SignAndPropName> sapnList = blockComparator._signAndPropNames;
         //
-        return BreadCrumb(
-          divider: _buildVerticalSeparator(),
-          overflow: ScrollableOverflow(
-            keepLastDivider: false,
-            reverse: false,
-            direction: Axis.horizontal,
+        return Container(
+          alignment: alignment,
+          padding: padding,
+          decoration: decoration,
+          foregroundDecoration: foregroundDecoration,
+          width: width,
+          height: height,
+          constraints: constraints,
+          margin: margin,
+          transform: transform,
+          transformAlignment: transformAlignment,
+          clipBehavior: clipBehavior,
+          child: BreadCrumb(
+            divider: _buildVerticalSeparator(),
+            overflow: ScrollableOverflow(
+              keepLastDivider: false,
+              reverse: false,
+              direction: Axis.horizontal,
+            ),
+            items: sapnList
+                .map(
+                  (sapn) => _buildSortCriterion(blockComparator, sapn),
+                )
+                .toList(),
           ),
-          items: sapnList
-              .map(
-                (sapn) => _buildSortCriterion(blockComparator, sapn),
-              )
-              .toList(),
         );
       },
     );
@@ -54,7 +94,7 @@ class SortOptionsBar extends StatelessWidget {
       content: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(sapn.propName, style: _textStyle),
+          Text(sapn.propName, style: textStyle),
           SizedBox(width: iconSpacing),
           _buildSortBtn(blockComparator, sapn),
         ],
