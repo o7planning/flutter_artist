@@ -67,6 +67,8 @@ class SortOptionsBar extends StatelessWidget {
       child: _getSortIcon(sapn),
       onTap: () {
         SortSign nextSign = sapn.getNextSign();
+        _SignAndPropName updateSapn = sapn.copyWith(nextSign);
+        blockComparator._updateSignAndPropName(updateSapn);
         block.data.sort();
         block.updateAllUIComponents(withoutFilters: true);
       },

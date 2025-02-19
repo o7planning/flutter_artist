@@ -46,6 +46,10 @@ class _SignAndPropName {
     return sign == SortSign.minus;
   }
 
+  _SignAndPropName copyWith(SortSign sign) {
+    return _SignAndPropName(sign: sign, propName: propName);
+  }
+
   SortSign getNextSign() {
     switch (sign) {
       case SortSign.plus:
@@ -123,14 +127,50 @@ abstract class BlockComparator<ITEM extends Object> {
     }
   }
 
+  void _updateSignAndPropName(_SignAndPropName updateSapn) {
+    var updateSapns = [updateSapn];
+    __updateSignAndPropNames(updateSapns);
+  }
+
+  void __updateSignAndPropNames(List<_SignAndPropName> updateSapns) {
+    final Map<String, _SignAndPropName> copyMap = {..._signAndPropNamesMap};
+    //
+    int optCount = 0;
+    for (_SignAndPropName updateSapn in updateSapns) {
+      String propName = updateSapn.propName;
+      _SignAndPropName? currentSapn = copyMap.remove(propName);
+      if (currentSapn == null) {
+        continue;
+      }
+      //
+      if (updateSapn.sign != SortSign.none) {
+        optCount++;
+        if (optCount > 1 && !multiOptions) {
+          currentSapn._setToNone();
+        } else {
+          currentSapn.sign = updateSapn.sign;
+        }
+      } else {
+        currentSapn.sign = updateSapn.sign;
+      }
+      //
+      if (optCount > 1 && !multiOptions) {
+        for (_SignAndPropName sapn in copyMap.values) {
+          sapn._setToNone();
+        }
+      }
+    }
+    //
+  }
+
   ///
   /// ```dart
-  /// myBlockComparator.setSortCriteria(
+  /// myBlockComparator.updateSortCriteria(
   ///   shuffledSortablePropNames: ['email', '+userName','-fullName'],
   /// );
   /// ```
   ///
-  void setSortCriteria({
+  void updateSortCriteria({
     required List<String> shuffledSortablePropNames,
   }) {
     if (shuffledSortablePropNames.length != _nonSignedPropNames.length) {
@@ -138,7 +178,7 @@ abstract class BlockComparator<ITEM extends Object> {
           "Invalid shuffledSignedPropNames. Length must be ${_nonSignedPropNames.length}");
     }
     //
-    final List<_SignAndPropName> newSignAndPropNames = [];
+    final List<_SignAndPropName> updateSignAndPropNames = [];
     for (String sortablePropName in shuffledSortablePropNames) {
       _SignAndPropName sapn = _SignAndPropName.parse(sortablePropName);
       //
@@ -146,25 +186,10 @@ abstract class BlockComparator<ITEM extends Object> {
         throw Exception(
             "Invalid propName '${sapn.propName}' (Must be in $_nonSignedPropNames)");
       }
-      newSignAndPropNames.add(sapn);
+      updateSignAndPropNames.add(sapn);
     }
     //
-    this.clearOptions();
-    //
-    int optCount = 0;
-    for (var newSignAndPropName in newSignAndPropNames) {
-      String propName = newSignAndPropName.propName;
-      _SignAndPropName sapn = _signAndPropNamesMap[propName]!;
-      //
-      if (newSignAndPropName.sign != SortSign.none) {
-        optCount++;
-        if (optCount > 1 && !multiOptions) {
-          newSignAndPropName._setToNone();
-        }
-      }
-      //
-      sapn.sign = newSignAndPropName.sign;
-    }
+    __updateSignAndPropNames(updateSignAndPropNames);
   }
 
   int _compare(ITEM a, ITEM b) {
