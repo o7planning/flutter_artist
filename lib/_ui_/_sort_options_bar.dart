@@ -4,7 +4,6 @@ class SortOptionsBar extends StatelessWidget {
   final Block block;
   final double itemSpacing;
   final double iconSpacing;
-
   //
   final TextStyle textStyle;
   final AlignmentGeometry? alignment;
@@ -79,6 +78,7 @@ class SortOptionsBar extends StatelessWidget {
         }
         List<_SignAndPropName> sapnList = blockComparator._signAndPropNames;
         //
+
         return Container(
           alignment: alignment,
           padding: padding,
@@ -113,17 +113,14 @@ class SortOptionsBar extends StatelessWidget {
       BlockComparator blockComparator, _SignAndPropName sapn) {
     return BreadCrumbItem(
       content: DragTarget<_SignAndPropName>(
+        hitTestBehavior: HitTestBehavior.deferToChild,
         onWillAcceptWithDetails: (DragTargetDetails<_SignAndPropName> details) {
-          print(">>>> onWillAcceptWithDetails");
           if (details.data.propName == sapn.propName) {
-            print(">>>> false");
             return false;
           }
           return true;
         },
         onAcceptWithDetails: (DragTargetDetails<_SignAndPropName> dragTarget) {
-          print(
-              ">>>> movingPropName: ${dragTarget.data.propName} --> ${sapn.propName}");
           blockComparator.movePropName(
             movingPropName: dragTarget.data.propName,
             destPropName: sapn.propName,
@@ -135,32 +132,35 @@ class SortOptionsBar extends StatelessWidget {
           List<_SignAndPropName?> candidateData,
           List<dynamic> rejectedData,
         ) {
-          print("Chay vao day: $candidateData - rejectedData: $rejectedData");
           return Draggable<_SignAndPropName>(
-            feedback: _buildFeedback(blockComparator, sapn),
-            childWhenDragging: Container(),
+            data: sapn,
+            feedback: _buildFeedback(
+              blockComparator: blockComparator,
+              signAndPropName: sapn,
+            ),
+            childWhenDragging: _builSortCriterionView(
+              blockComparator: blockComparator,
+              signAndPropName: sapn,
+              isDragging: true,
+            ),
             onDragCompleted: () {
-              // onDragInitiativeCompleted(
-              //   initiative: initiative,
-              //   newStatusCode: initiative.status.code,
-              // );
-              // blockComparator.movePropName(
-              //   movingPropName: dragTarget.data.propName,
-              //   destPropName: sapn.propName,
-              // );
-              // block.updateAllUIComponents(withoutFilters: true);
-
-              print("candidateData: ${candidateData}");
+              // Do nothing.
             },
-            child: _builSortCriterionView(blockComparator, sapn),
+            child: _builSortCriterionView(
+              blockComparator: blockComparator,
+              signAndPropName: sapn,
+              isDragging: false,
+            ),
           );
         },
       ),
     );
   }
 
-  Widget _buildFeedback(
-      BlockComparator blockComparator, _SignAndPropName sapn) {
+  Widget _buildFeedback({
+    required BlockComparator blockComparator,
+    required _SignAndPropName signAndPropName,
+  }) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(4)),
@@ -168,31 +168,47 @@ class SortOptionsBar extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.all(5),
         child: _builSortCriterionView(
-          blockComparator,
-          sapn,
+          blockComparator: blockComparator,
+          signAndPropName: signAndPropName,
+          isDragging: false,
         ),
       ),
     );
   }
 
-  Widget _builSortCriterionView(
-      BlockComparator blockComparator, _SignAndPropName sapn) {
+  Widget _builSortCriterionView({
+    required BlockComparator blockComparator,
+    required _SignAndPropName signAndPropName,
+    required bool isDragging,
+  }) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(sapn.propName, style: textStyle),
+        Text(
+          signAndPropName.propName,
+          style:
+              isDragging ? textStyle.copyWith(color: Colors.grey) : textStyle,
+        ),
         SizedBox(width: iconSpacing),
-        _buildSortBtn(blockComparator, sapn),
+        _buildSortBtn(
+          blockComparator: blockComparator,
+          signAndPropName: signAndPropName,
+          isDragging: isDragging,
+        ),
       ],
     );
   }
 
-  Widget _buildSortBtn(BlockComparator blockComparator, _SignAndPropName sapn) {
+  Widget _buildSortBtn({
+    required BlockComparator blockComparator,
+    required _SignAndPropName signAndPropName,
+    required bool isDragging,
+  }) {
     return InkWell(
-      child: _getSortIcon(sapn),
+      child: _getSortIcon(signAndPropName, isDragging),
       onTap: () {
-        SortSign nextSign = sapn.getNextSign();
-        _SignAndPropName updateSapn = sapn.copyWith(nextSign);
+        SortSign nextSign = signAndPropName.getNextSign();
+        _SignAndPropName updateSapn = signAndPropName.copyWith(nextSign);
         blockComparator._updateSignAndPropName(updateSapn);
         block.data.sort();
         block.updateAllUIComponents(withoutFilters: true);
@@ -200,21 +216,25 @@ class SortOptionsBar extends StatelessWidget {
     );
   }
 
-  Widget _getSortIcon(_SignAndPropName sapn) {
+  Widget _getSortIcon(_SignAndPropName sapn, bool isDragging) {
+    Color? color = isDragging ? Colors.grey : null;
     if (sapn.isAsc()) {
       return Icon(
         cupertino.CupertinoIcons.sort_up,
         size: _iconSize,
+        color: color,
       );
     } else if (sapn.isDesc()) {
       return Icon(
         cupertino.CupertinoIcons.sort_down,
         size: _iconSize,
+        color: color,
       );
     } else {
       return Icon(
         cupertino.CupertinoIcons.line_horizontal_3,
         size: _iconSize,
+        color: color,
       );
     }
   }
