@@ -44,6 +44,27 @@ class SortOptionsBar extends StatelessWidget {
     this.clipBehavior = Clip.none,
   });
 
+  SortOptionsBar.simple({
+    super.key,
+    required this.block,
+    this.itemSpacing = 5,
+    this.iconSpacing = 3,
+    this.textStyle = const TextStyle(fontSize: 13),
+    //
+    this.alignment,
+    this.padding = const EdgeInsets.all(5),
+    this.foregroundDecoration,
+    this.width,
+    this.height,
+    this.constraints,
+    this.margin,
+    this.transform,
+    this.transformAlignment,
+    this.clipBehavior = Clip.none,
+  }) : decoration = BoxDecoration(
+          border: Border.all(color: Colors.grey, width: 0.4),
+        );
+
   @override
   Widget build(BuildContext context) {
     BlockComparator? blockComparator = block.blockComparator;
