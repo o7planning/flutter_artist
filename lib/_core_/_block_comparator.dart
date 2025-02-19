@@ -135,6 +135,27 @@ abstract class BlockComparator<ITEM extends Object> {
     }
   }
 
+  void movePropName({
+    required String movingPropName,
+    required String destPropName,
+  }) {
+    print(">>> movingPropName: $movingPropName, destPropName: $destPropName");
+    _SignAndPropName? moving = _signAndPropNamesMap[movingPropName];
+    _SignAndPropName? dest = _signAndPropNamesMap[destPropName];
+    if (moving == null || dest == null) {
+      return;
+    }
+    int movingIdx = _signAndPropNames.indexOf(moving);
+    int destIdx = _signAndPropNames.indexOf(dest);
+    if (movingIdx > destIdx) {
+      _signAndPropNames.remove(moving);
+      _signAndPropNames.insert(destIdx, moving);
+    } else {
+      _signAndPropNames.remove(moving);
+      _signAndPropNames.insert(destIdx, moving);
+    }
+  }
+
   void _updateSignAndPropName(_SignAndPropName updateSapn) {
     var updateSapns = [updateSapn];
     __updateSignAndPropNames(updateSapns);

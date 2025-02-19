@@ -100,7 +100,7 @@ class SortOptionsBar extends StatelessWidget {
             ),
             items: sapnList
                 .map(
-                  (sapn) => _buildSortCriterion(blockComparator, sapn),
+                  (sapn) => _buildBreadCrumbItem(blockComparator, sapn),
                 )
                 .toList(),
           ),
@@ -109,17 +109,81 @@ class SortOptionsBar extends StatelessWidget {
     );
   }
 
-  BreadCrumbItem _buildSortCriterion(
+  BreadCrumbItem _buildBreadCrumbItem(
       BlockComparator blockComparator, _SignAndPropName sapn) {
     return BreadCrumbItem(
-      content: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(sapn.propName, style: textStyle),
-          SizedBox(width: iconSpacing),
-          _buildSortBtn(blockComparator, sapn),
-        ],
+      content: DragTarget<_SignAndPropName>(
+        onWillAcceptWithDetails: (DragTargetDetails<_SignAndPropName> details) {
+          print(">>>> onWillAcceptWithDetails");
+          if (details.data.propName == sapn.propName) {
+            print(">>>> false");
+            return false;
+          }
+          return true;
+        },
+        onAcceptWithDetails: (DragTargetDetails<_SignAndPropName> dragTarget) {
+          print(
+              ">>>> movingPropName: ${dragTarget.data.propName} --> ${sapn.propName}");
+          blockComparator.movePropName(
+            movingPropName: dragTarget.data.propName,
+            destPropName: sapn.propName,
+          );
+          block.updateAllUIComponents(withoutFilters: true);
+        },
+        builder: (
+          BuildContext context,
+          List<_SignAndPropName?> candidateData,
+          List<dynamic> rejectedData,
+        ) {
+          print("Chay vao day: $candidateData - rejectedData: $rejectedData");
+          return Draggable<_SignAndPropName>(
+            feedback: _buildFeedback(blockComparator, sapn),
+            childWhenDragging: Container(),
+            onDragCompleted: () {
+              // onDragInitiativeCompleted(
+              //   initiative: initiative,
+              //   newStatusCode: initiative.status.code,
+              // );
+              // blockComparator.movePropName(
+              //   movingPropName: dragTarget.data.propName,
+              //   destPropName: sapn.propName,
+              // );
+              // block.updateAllUIComponents(withoutFilters: true);
+
+              print("candidateData: ${candidateData}");
+            },
+            child: _builSortCriterionView(blockComparator, sapn),
+          );
+        },
       ),
+    );
+  }
+
+  Widget _buildFeedback(
+      BlockComparator blockComparator, _SignAndPropName sapn) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(4)),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(5),
+        child: _builSortCriterionView(
+          blockComparator,
+          sapn,
+        ),
+      ),
+    );
+  }
+
+  Widget _builSortCriterionView(
+      BlockComparator blockComparator, _SignAndPropName sapn) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(sapn.propName, style: textStyle),
+        SizedBox(width: iconSpacing),
+        _buildSortBtn(blockComparator, sapn),
+      ],
     );
   }
 
