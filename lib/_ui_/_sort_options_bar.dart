@@ -4,6 +4,7 @@ class SortOptionsBar extends StatelessWidget {
   final Block block;
   final double itemSpacing;
   final double iconSpacing;
+
   //
   final TextStyle textStyle;
   final AlignmentGeometry? alignment;
@@ -20,7 +21,6 @@ class SortOptionsBar extends StatelessWidget {
 
   //
   final Color _dividerColor = Colors.indigo.withAlpha(80);
-  static const double _iconSize = 16;
   static const double _dividerHeight = 20;
 
   SortOptionsBar({
@@ -28,7 +28,7 @@ class SortOptionsBar extends StatelessWidget {
     required this.block,
     this.itemSpacing = 5,
     this.iconSpacing = 3,
-    this.textStyle = const TextStyle(fontSize: 13),
+    this.textStyle = const TextStyle(fontSize: 14),
     //
     this.alignment,
     this.padding,
@@ -134,7 +134,7 @@ class SortOptionsBar extends StatelessWidget {
         ) {
           return Draggable<_SignAndPropName>(
             data: sapn,
-            feedback: _buildFeedback(
+            feedback: _buildDragFeedback(
               blockComparator: blockComparator,
               signAndPropName: sapn,
             ),
@@ -157,22 +157,14 @@ class SortOptionsBar extends StatelessWidget {
     );
   }
 
-  Widget _buildFeedback({
+  Widget _buildDragFeedback({
     required BlockComparator blockComparator,
     required _SignAndPropName signAndPropName,
   }) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(4)),
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(5),
-        child: _builSortCriterionView(
-          blockComparator: blockComparator,
-          signAndPropName: signAndPropName,
-          isDragging: false,
-        ),
-      ),
+    return Icon(
+      Icons.video_file,
+      size: 16,
+      color: Colors.indigo,
     );
   }
 
@@ -191,52 +183,13 @@ class SortOptionsBar extends StatelessWidget {
         ),
         SizedBox(width: iconSpacing),
         _buildSortBtn(
+          block: block,
           blockComparator: blockComparator,
           signAndPropName: signAndPropName,
           isDragging: isDragging,
         ),
       ],
     );
-  }
-
-  Widget _buildSortBtn({
-    required BlockComparator blockComparator,
-    required _SignAndPropName signAndPropName,
-    required bool isDragging,
-  }) {
-    return InkWell(
-      child: _getSortIcon(signAndPropName, isDragging),
-      onTap: () {
-        SortSign nextSign = signAndPropName.getNextSign();
-        _SignAndPropName updateSapn = signAndPropName.copyWith(nextSign);
-        blockComparator._updateSignAndPropName(updateSapn);
-        block.data.sort();
-        block.updateAllUIComponents(withoutFilters: true);
-      },
-    );
-  }
-
-  Widget _getSortIcon(_SignAndPropName sapn, bool isDragging) {
-    Color? color = isDragging ? Colors.grey : null;
-    if (sapn.isAsc()) {
-      return Icon(
-        cupertino.CupertinoIcons.sort_up,
-        size: _iconSize,
-        color: color,
-      );
-    } else if (sapn.isDesc()) {
-      return Icon(
-        cupertino.CupertinoIcons.sort_down,
-        size: _iconSize,
-        color: color,
-      );
-    } else {
-      return Icon(
-        cupertino.CupertinoIcons.line_horizontal_3,
-        size: _iconSize,
-        color: color,
-      );
-    }
   }
 
   Widget _buildVerticalSeparator() {

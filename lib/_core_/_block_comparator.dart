@@ -139,7 +139,6 @@ abstract class BlockComparator<ITEM extends Object> {
     required String movingPropName,
     required String destPropName,
   }) {
-    print(">>> movingPropName: $movingPropName, destPropName: $destPropName");
     _SignAndPropName? moving = _signAndPropNamesMap[movingPropName];
     _SignAndPropName? dest = _signAndPropNamesMap[destPropName];
     if (moving == null || dest == null) {
