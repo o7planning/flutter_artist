@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-class ComparisonBar extends StatelessWidget {
+class SortOptionsBar extends StatelessWidget {
   final Block block;
   final double itemSpacing;
   final double iconSpacing;
@@ -10,7 +10,7 @@ class ComparisonBar extends StatelessWidget {
   static const double _dividerHeight = 20;
   static const TextStyle _textStyle = TextStyle(fontSize: 13);
 
-  ComparisonBar({
+  SortOptionsBar({
     super.key,
     required this.block,
     this.itemSpacing = 5,
@@ -20,36 +20,56 @@ class ComparisonBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BlockComparator? blockComparator = block.blockComparator;
-    if (blockComparator == null) {
-      return Text("[Sorting not supported]", style: _textStyle);
-    }
-    List<_SignAndPropName> sapnList = blockComparator._signAndPropNames;
     //
-    return BreadCrumb(
-      divider: _buildVerticalSeparator(),
-      overflow: ScrollableOverflow(
-        keepLastDivider: false,
-        reverse: false,
-        direction: Axis.horizontal,
-      ),
-      items: sapnList
-          .map(
-            (sapn) => _buildSortCriterion(sapn),
-          )
-          .toList(),
+    return BlockFragmentWidgetBuilder(
+      ownerClassInstance: this,
+      description: null,
+      block: block,
+      build: () {
+        if (blockComparator == null) {
+          return Text("[Sorting not supported]", style: _textStyle);
+        }
+        List<_SignAndPropName> sapnList = blockComparator._signAndPropNames;
+        //
+        return BreadCrumb(
+          divider: _buildVerticalSeparator(),
+          overflow: ScrollableOverflow(
+            keepLastDivider: false,
+            reverse: false,
+            direction: Axis.horizontal,
+          ),
+          items: sapnList
+              .map(
+                (sapn) => _buildSortCriterion(blockComparator, sapn),
+              )
+              .toList(),
+        );
+      },
     );
   }
 
-  BreadCrumbItem _buildSortCriterion(_SignAndPropName sapn) {
+  BreadCrumbItem _buildSortCriterion(
+      BlockComparator blockComparator, _SignAndPropName sapn) {
     return BreadCrumbItem(
       content: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(sapn.propName, style: _textStyle),
           SizedBox(width: iconSpacing),
-          _getSortIcon(sapn),
+          _buildSortBtn(blockComparator, sapn),
         ],
       ),
+    );
+  }
+
+  Widget _buildSortBtn(BlockComparator blockComparator, _SignAndPropName sapn) {
+    return InkWell(
+      child: _getSortIcon(sapn),
+      onTap: () {
+        SortSign nextSign = sapn.getNextSign();
+        block.data.sort();
+        block.updateAllUIComponents(withoutFilters: true);
+      },
     );
   }
 

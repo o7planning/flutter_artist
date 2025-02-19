@@ -1,17 +1,60 @@
 part of '../flutter_artist.dart';
 
+enum SortSign {
+  plus,
+  minus,
+  none;
+
+  static SortSign fromSign(String sign) {
+    for (SortSign ss in SortSign.values) {
+      if (ss.sign == sign) {
+        return ss;
+      }
+    }
+    return SortSign.none;
+  }
+}
+
+extension SortSignExt on SortSign {
+  String get sign {
+    switch (this) {
+      case SortSign.plus:
+        return "+";
+      case SortSign.minus:
+        return "-";
+      case SortSign.none:
+        return "";
+    }
+  }
+}
+
 class _SignAndPropName {
-  String sign;
+  SortSign sign;
   String propName;
 
   _SignAndPropName({required this.sign, required this.propName});
 
+  void _setToNone() {
+    sign = SortSign.none;
+  }
+
   bool isAsc() {
-    return sign == "+";
+    return sign == SortSign.plus;
   }
 
   bool isDesc() {
-    return sign == "-";
+    return sign == SortSign.minus;
+  }
+
+  SortSign getNextSign() {
+    switch (sign) {
+      case SortSign.plus:
+        return SortSign.minus;
+      case SortSign.minus:
+        return SortSign.none;
+      case SortSign.none:
+        return SortSign.plus;
+    }
   }
 
   static _SignAndPropName parse(String sortablePropName) {
@@ -29,13 +72,17 @@ class _SignAndPropName {
       throw Exception("Invalid sortablePropName. '$sortablePropName'. "
           "Valid example: 'email', '+email' or '-email'");
     }
-    return _SignAndPropName(sign: sign, propName: propName);
+    //
+    SortSign sortSign = SortSign.fromSign(sign);
+    return _SignAndPropName(sign: sortSign, propName: propName);
   }
 }
 
 abstract class BlockComparator<ITEM extends Object> {
+  final bool multiOptions;
   final List<String> _nonSignedPropNames = [];
   final List<_SignAndPropName> _signAndPropNames = [];
+  final Map<String, _SignAndPropName> _signAndPropNamesMap = {};
 
   ///
   /// ```dart
@@ -47,16 +94,32 @@ abstract class BlockComparator<ITEM extends Object> {
   /// ```
   ///
   BlockComparator({
+    this.multiOptions = false,
     required List<String> sortablePropNames,
   }) {
     if (sortablePropNames.isEmpty) {
       throw Exception("Invalid sortablePropNames. Not Allow Empty");
     }
+    int optCount = 0;
     for (String sortablePropName in sortablePropNames) {
       _SignAndPropName sapn = _SignAndPropName.parse(sortablePropName);
       //
+      if (sapn != SortSign.none) {
+        optCount++;
+        if (optCount > 1 && !multiOptions) {
+          sapn._setToNone();
+        }
+      }
+      //
       _nonSignedPropNames.add(sapn.propName);
       _signAndPropNames.add(sapn);
+      _signAndPropNamesMap[sapn.propName] = sapn;
+    }
+  }
+
+  void clearOptions() {
+    for (var sapn in _signAndPropNames) {
+      sapn._setToNone();
     }
   }
 
@@ -85,14 +148,28 @@ abstract class BlockComparator<ITEM extends Object> {
       }
       newSignAndPropNames.add(sapn);
     }
-    _signAndPropNames
-      ..clear()
-      ..addAll(newSignAndPropNames);
+    //
+    this.clearOptions();
+    //
+    int optCount = 0;
+    for (var newSignAndPropName in newSignAndPropNames) {
+      String propName = newSignAndPropName.propName;
+      _SignAndPropName sapn = _signAndPropNamesMap[propName]!;
+      //
+      if (newSignAndPropName.sign != SortSign.none) {
+        optCount++;
+        if (optCount > 1 && !multiOptions) {
+          newSignAndPropName._setToNone();
+        }
+      }
+      //
+      sapn.sign = newSignAndPropName.sign;
+    }
   }
 
   int _compare(ITEM a, ITEM b) {
     for (_SignAndPropName sapn in _signAndPropNames) {
-      if (!sapn.isAsc() && !sapn.isDesc()) {
+      if (sapn.sign == SortSign.none) {
         continue;
       }
       dynamic aValue = getValue(item: a, propName: sapn.propName);
