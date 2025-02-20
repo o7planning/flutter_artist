@@ -74,6 +74,8 @@ abstract class ItemSortCriteria<ITEM extends Object> {
       _criteria.remove(moving);
       _criteria.insert(destIdx, moving);
     }
+    block.data.sort();
+    block.updateAllUIComponents(withoutFilters: false);
   }
 
   SortCriterion? getFirstSortCriterion() {
