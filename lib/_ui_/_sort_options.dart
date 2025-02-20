@@ -7,14 +7,14 @@ const double _sortIconSize = 16;
 Widget _buildSortBtn({
   required Block block,
   required BlockItemComparator blockComparator,
-  required _SignAndPropName signAndPropName,
+  required _SortSignAndPropName signAndPropName,
   required bool isDragging,
 }) {
   return InkWell(
     child: _getSortIcon(signAndPropName, isDragging),
     onTap: () {
       SortSign nextSign = signAndPropName.getNextSign();
-      _SignAndPropName updateSapn = signAndPropName.copyWith(nextSign);
+      _SortSignAndPropName updateSapn = signAndPropName.copyWith(nextSign);
       blockComparator._updateSignAndPropName(updateSapn);
       block.data.sort();
       block.updateAllUIComponents(withoutFilters: true);
@@ -24,15 +24,15 @@ Widget _buildSortBtn({
 
 // ---------------------------------------------------------------------------
 
-Widget _getSortIcon(_SignAndPropName sapn, bool isDragging) {
+Widget _getSortIcon(_SortSignAndPropName sapn, bool isDragging) {
   Color? color = isDragging ? Colors.grey : null;
-  if (sapn.isAsc()) {
+  if (sapn.isAscending()) {
     return Icon(
       cupertino.CupertinoIcons.sort_up,
       size: _sortIconSize,
       color: color,
     );
-  } else if (sapn.isDesc()) {
+  } else if (sapn.isDescending()) {
     return Icon(
       cupertino.CupertinoIcons.sort_down,
       size: _sortIconSize,

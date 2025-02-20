@@ -28,11 +28,11 @@ class SortOptionsDropdown extends StatelessWidget {
       description: null,
       block: block,
       build: () {
-        List<_SignAndPropName> sapnList =
+        List<_SortSignAndPropName> sapnList =
             blockComparator?._signAndPropNames ?? [];
-        _SignAndPropName? selected = sapnList.firstOrNull;
+        _SortSignAndPropName? selected = sapnList.firstOrNull;
         //
-        return DropdownButton<_SignAndPropName>(
+        return DropdownButton<_SortSignAndPropName>(
           isDense: true,
           value: selected,
           icon: const Icon(Icons.keyboard_arrow_down),
@@ -47,7 +47,7 @@ class SortOptionsDropdown extends StatelessWidget {
               );
             },
           ).toList(),
-          onChanged: (_SignAndPropName? newValue) {
+          onChanged: (_SortSignAndPropName? newValue) {
             // setState(() {
             //   dropdownvalue = newValue!;
             // });
@@ -59,7 +59,7 @@ class SortOptionsDropdown extends StatelessWidget {
 
   Widget _builSortCriterionView({
     required BlockItemComparator blockComparator,
-    required _SignAndPropName signAndPropName,
+    required _SortSignAndPropName signAndPropName,
   }) {
     return Row(
       mainAxisSize: MainAxisSize.min,

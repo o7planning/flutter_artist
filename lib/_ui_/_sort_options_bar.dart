@@ -76,7 +76,7 @@ class SortOptionsBar extends StatelessWidget {
         if (blockComparator == null) {
           return Text("[Sorting not supported]", style: textStyle);
         }
-        List<_SignAndPropName> sapnList = blockComparator._signAndPropNames;
+        List<_SortSignAndPropName> sapnList = blockComparator._signAndPropNames;
         //
 
         return Container(
@@ -110,17 +110,19 @@ class SortOptionsBar extends StatelessWidget {
   }
 
   BreadCrumbItem _buildBreadCrumbItem(
-      BlockItemComparator blockComparator, _SignAndPropName sapn) {
+      BlockItemComparator blockComparator, _SortSignAndPropName sapn) {
     return BreadCrumbItem(
-      content: DragTarget<_SignAndPropName>(
+      content: DragTarget<_SortSignAndPropName>(
         hitTestBehavior: HitTestBehavior.deferToChild,
-        onWillAcceptWithDetails: (DragTargetDetails<_SignAndPropName> details) {
+        onWillAcceptWithDetails:
+            (DragTargetDetails<_SortSignAndPropName> details) {
           if (details.data.propName == sapn.propName) {
             return false;
           }
           return true;
         },
-        onAcceptWithDetails: (DragTargetDetails<_SignAndPropName> dragTarget) {
+        onAcceptWithDetails:
+            (DragTargetDetails<_SortSignAndPropName> dragTarget) {
           blockComparator.movePropName(
             movingPropName: dragTarget.data.propName,
             destPropName: sapn.propName,
@@ -129,10 +131,10 @@ class SortOptionsBar extends StatelessWidget {
         },
         builder: (
           BuildContext context,
-          List<_SignAndPropName?> candidateData,
+          List<_SortSignAndPropName?> candidateData,
           List<dynamic> rejectedData,
         ) {
-          return Draggable<_SignAndPropName>(
+          return Draggable<_SortSignAndPropName>(
             data: sapn,
             feedback: _buildDragFeedback(
               blockComparator: blockComparator,
@@ -159,7 +161,7 @@ class SortOptionsBar extends StatelessWidget {
 
   Widget _buildDragFeedback({
     required BlockItemComparator blockComparator,
-    required _SignAndPropName signAndPropName,
+    required _SortSignAndPropName signAndPropName,
   }) {
     return Icon(
       Icons.video_file,
@@ -170,7 +172,7 @@ class SortOptionsBar extends StatelessWidget {
 
   Widget _builSortCriterionView({
     required BlockItemComparator blockComparator,
-    required _SignAndPropName signAndPropName,
+    required _SortSignAndPropName signAndPropName,
     required bool isDragging,
   }) {
     return Row(

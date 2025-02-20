@@ -252,6 +252,7 @@ abstract class Block<
         __listenItemTypes = listenItemTypes,
         _itemComparator = itemComparator,
         _childBlocks = childBlocks ?? [] {
+    itemComparator?.block = this;
     for (Block childBlock in _childBlocks) {
       childBlock.parent = this;
     }
