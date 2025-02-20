@@ -226,9 +226,9 @@ abstract class Block<
 
   DataState get dataState => data._dataState;
 
-  final BlockComparator? _blockComparator;
+  final BlockItemComparator? _itemComparator;
 
-  BlockComparator? get blockComparator => _blockComparator;
+  BlockItemComparator? get itemComparator => _itemComparator;
 
   final Map<_RefreshableWidgetState, bool> _blockFragmentWidgetStates = {};
   final Map<_RefreshableWidgetState, bool> _controlBarWidgetStates = {};
@@ -246,11 +246,11 @@ abstract class Block<
     required this.fireEvent,
     required List<Type> listenItemTypes,
     required List<Block>? childBlocks,
-    BlockComparator<ITEM>? comparator,
+    BlockItemComparator<ITEM>? itemComparator,
   })  : registerDataFilterName = dataFilterName,
         __pageSize = pageSize,
-        _blockComparator = comparator,
         __listenItemTypes = listenItemTypes,
+        _itemComparator = itemComparator,
         _childBlocks = childBlocks ?? [] {
     for (Block childBlock in _childBlocks) {
       childBlock.parent = this;

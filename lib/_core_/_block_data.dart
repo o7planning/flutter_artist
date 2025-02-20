@@ -103,8 +103,8 @@ abstract class BlockData<
 
   void sort() {
     try {
-      if (block._blockComparator != null) {
-        _items.sort((a, b) => block._blockComparator!._compare(a, b));
+      if (block._itemComparator != null) {
+        _items.sort((a, b) => block._itemComparator!._compare(a, b));
       }
     } catch (e) {
       print("Sort Error: $e");

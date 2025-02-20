@@ -21,7 +21,7 @@ class SortOptionsDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlockComparator? blockComparator = block.blockComparator;
+    BlockItemComparator? blockComparator = block.itemComparator;
     //
     return BlockFragmentWidgetBuilder(
       ownerClassInstance: this,
@@ -58,7 +58,7 @@ class SortOptionsDropdown extends StatelessWidget {
   }
 
   Widget _builSortCriterionView({
-    required BlockComparator blockComparator,
+    required BlockItemComparator blockComparator,
     required _SignAndPropName signAndPropName,
   }) {
     return Row(

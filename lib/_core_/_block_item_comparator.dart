@@ -90,7 +90,7 @@ class _SignAndPropName {
   }
 }
 
-abstract class BlockComparator<ITEM extends Object> {
+abstract class BlockItemComparator<ITEM extends Object> {
   final bool multiOptions;
   final List<String> _nonSignedPropNames = [];
   final List<_SignAndPropName> _signAndPropNames = [];
@@ -105,7 +105,7 @@ abstract class BlockComparator<ITEM extends Object> {
   /// );
   /// ```
   ///
-  BlockComparator({
+  BlockItemComparator({
     this.multiOptions = false,
     required List<String> sortablePropNames,
   }) {

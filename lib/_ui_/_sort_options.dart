@@ -6,7 +6,7 @@ const double _sortIconSize = 16;
 
 Widget _buildSortBtn({
   required Block block,
-  required BlockComparator blockComparator,
+  required BlockItemComparator blockComparator,
   required _SignAndPropName signAndPropName,
   required bool isDragging,
 }) {

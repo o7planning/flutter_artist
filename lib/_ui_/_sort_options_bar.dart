@@ -66,7 +66,7 @@ class SortOptionsBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlockComparator? blockComparator = block.blockComparator;
+    BlockItemComparator? blockComparator = block.itemComparator;
     //
     return BlockFragmentWidgetBuilder(
       ownerClassInstance: this,
@@ -110,7 +110,7 @@ class SortOptionsBar extends StatelessWidget {
   }
 
   BreadCrumbItem _buildBreadCrumbItem(
-      BlockComparator blockComparator, _SignAndPropName sapn) {
+      BlockItemComparator blockComparator, _SignAndPropName sapn) {
     return BreadCrumbItem(
       content: DragTarget<_SignAndPropName>(
         hitTestBehavior: HitTestBehavior.deferToChild,
@@ -158,7 +158,7 @@ class SortOptionsBar extends StatelessWidget {
   }
 
   Widget _buildDragFeedback({
-    required BlockComparator blockComparator,
+    required BlockItemComparator blockComparator,
     required _SignAndPropName signAndPropName,
   }) {
     return Icon(
@@ -169,7 +169,7 @@ class SortOptionsBar extends StatelessWidget {
   }
 
   Widget _builSortCriterionView({
-    required BlockComparator blockComparator,
+    required BlockItemComparator blockComparator,
     required _SignAndPropName signAndPropName,
     required bool isDragging,
   }) {
