@@ -66,17 +66,17 @@ class SortOptionsBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlockItemComparator? blockComparator = block.itemComparator;
+    ItemSortCriteria? itemSortCriteria = block.itemSortCriteria;
     //
     return BlockFragmentWidgetBuilder(
       ownerClassInstance: this,
       description: null,
       block: block,
       build: () {
-        if (blockComparator == null) {
+        if (itemSortCriteria == null) {
           return Text("[Sorting not supported]", style: textStyle);
         }
-        List<_SortSignAndPropName> sapnList = blockComparator._signAndPropNames;
+        List<SortCriterion> criteria = itemSortCriteria._sortCriteria;
         //
 
         return Container(
@@ -98,9 +98,12 @@ class SortOptionsBar extends StatelessWidget {
               reverse: false,
               direction: Axis.horizontal,
             ),
-            items: sapnList
+            items: criteria
                 .map(
-                  (sapn) => _buildBreadCrumbItem(blockComparator, sapn),
+                  (criterion) => _buildBreadCrumbItem(
+                    itemSortCriteria,
+                    criterion,
+                  ),
                 )
                 .toList(),
           ),
@@ -110,47 +113,45 @@ class SortOptionsBar extends StatelessWidget {
   }
 
   BreadCrumbItem _buildBreadCrumbItem(
-      BlockItemComparator blockComparator, _SortSignAndPropName sapn) {
+      ItemSortCriteria itemSortCriteria, SortCriterion criterion,) {
     return BreadCrumbItem(
-      content: DragTarget<_SortSignAndPropName>(
+      content: DragTarget<SortCriterion>(
         hitTestBehavior: HitTestBehavior.deferToChild,
-        onWillAcceptWithDetails:
-            (DragTargetDetails<_SortSignAndPropName> details) {
-          if (details.data.propName == sapn.propName) {
+        onWillAcceptWithDetails: (DragTargetDetails<SortCriterion> details) {
+          if (details.data.propName == criterion.propName) {
             return false;
           }
           return true;
         },
-        onAcceptWithDetails:
-            (DragTargetDetails<_SortSignAndPropName> dragTarget) {
-          blockComparator.movePropName(
+        onAcceptWithDetails: (DragTargetDetails<SortCriterion> dragTarget) {
+          itemSortCriteria.movePropName(
             movingPropName: dragTarget.data.propName,
-            destPropName: sapn.propName,
+            destPropName: criterion.propName,
           );
           block.updateAllUIComponents(withoutFilters: true);
         },
         builder: (
           BuildContext context,
-          List<_SortSignAndPropName?> candidateData,
+          List<SortCriterion?> candidateData,
           List<dynamic> rejectedData,
         ) {
-          return Draggable<_SortSignAndPropName>(
-            data: sapn,
+          return Draggable<SortCriterion>(
+            data: criterion,
             feedback: _buildDragFeedback(
-              blockComparator: blockComparator,
-              signAndPropName: sapn,
+              itemSortCriteria: itemSortCriteria,
+              sortCriterion: criterion,
             ),
             childWhenDragging: _builSortCriterionView(
-              blockComparator: blockComparator,
-              signAndPropName: sapn,
+              itemSortCriteria: itemSortCriteria,
+              sortCriterion: criterion,
               isDragging: true,
             ),
             onDragCompleted: () {
               // Do nothing.
             },
             child: _builSortCriterionView(
-              blockComparator: blockComparator,
-              signAndPropName: sapn,
+              itemSortCriteria: itemSortCriteria,
+              sortCriterion: criterion,
               isDragging: false,
             ),
           );
@@ -160,8 +161,8 @@ class SortOptionsBar extends StatelessWidget {
   }
 
   Widget _buildDragFeedback({
-    required BlockItemComparator blockComparator,
-    required _SortSignAndPropName signAndPropName,
+    required ItemSortCriteria itemSortCriteria,
+    required SortCriterion sortCriterion,
   }) {
     return Icon(
       Icons.video_file,
@@ -171,23 +172,22 @@ class SortOptionsBar extends StatelessWidget {
   }
 
   Widget _builSortCriterionView({
-    required BlockItemComparator blockComparator,
-    required _SortSignAndPropName signAndPropName,
+    required ItemSortCriteria itemSortCriteria,
+    required SortCriterion sortCriterion,
     required bool isDragging,
   }) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          signAndPropName.propName,
+          sortCriterion.propName,
           style:
               isDragging ? textStyle.copyWith(color: Colors.grey) : textStyle,
         ),
         SizedBox(width: iconSpacing),
         _buildSortBtn(
-          block: block,
-          blockComparator: blockComparator,
-          signAndPropName: signAndPropName,
+          itemSortCriteria: itemSortCriteria,
+          sortCriterion: sortCriterion,
           isDragging: isDragging,
         ),
       ],

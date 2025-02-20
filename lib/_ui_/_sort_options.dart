@@ -5,34 +5,33 @@ const double _sortIconSize = 16;
 // ---------------------------------------------------------------------------
 
 Widget _buildSortBtn({
-  required Block block,
-  required BlockItemComparator blockComparator,
-  required _SortSignAndPropName signAndPropName,
+  required ItemSortCriteria itemSortCriteria,
+  required SortCriterion sortCriterion,
   required bool isDragging,
 }) {
   return InkWell(
-    child: _getSortIcon(signAndPropName, isDragging),
+    child: _getSortIcon(sortCriterion, isDragging),
     onTap: () {
-      SortSign nextSign = signAndPropName.getNextSign();
-      _SortSignAndPropName updateSapn = signAndPropName.copyWith(nextSign);
-      blockComparator._updateSignAndPropName(updateSapn);
-      block.data.sort();
-      block.updateAllUIComponents(withoutFilters: true);
+      SortingDirection nextSign = sortCriterion.getNextDirection();
+      itemSortCriteria.updateSortCriterion(
+        propName: sortCriterion.propName,
+        direction: nextSign,
+      );
     },
   );
 }
 
 // ---------------------------------------------------------------------------
 
-Widget _getSortIcon(_SortSignAndPropName sapn, bool isDragging) {
+Widget _getSortIcon(SortCriterion criterion, bool isDragging) {
   Color? color = isDragging ? Colors.grey : null;
-  if (sapn.isAscending()) {
+  if (criterion.isAscending()) {
     return Icon(
       cupertino.CupertinoIcons.sort_up,
       size: _sortIconSize,
       color: color,
     );
-  } else if (sapn.isDescending()) {
+  } else if (criterion.isDescending()) {
     return Icon(
       cupertino.CupertinoIcons.sort_down,
       size: _sortIconSize,

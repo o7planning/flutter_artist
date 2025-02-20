@@ -21,33 +21,32 @@ class SortOptionsDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlockItemComparator? blockComparator = block.itemComparator;
+    ItemSortCriteria? itemSortCriteria = block.itemSortCriteria;
     //
     return BlockFragmentWidgetBuilder(
       ownerClassInstance: this,
       description: null,
       block: block,
       build: () {
-        List<_SortSignAndPropName> sapnList =
-            blockComparator?._signAndPropNames ?? [];
-        _SortSignAndPropName? selected = sapnList.firstOrNull;
+        List<SortCriterion> criteria = itemSortCriteria?._sortCriteria ?? [];
+        SortCriterion? selected = criteria.firstOrNull;
         //
-        return DropdownButton<_SortSignAndPropName>(
+        return DropdownButton<SortCriterion>(
           isDense: true,
           value: selected,
           icon: const Icon(Icons.keyboard_arrow_down),
-          items: sapnList.map(
-            (sapn) {
+          items: criteria.map(
+            (criterion) {
               return DropdownMenuItem(
-                value: sapn,
+                value: criterion,
                 child: _builSortCriterionView(
-                  blockComparator: blockComparator!,
-                  signAndPropName: sapn,
+                  itemSortCriteria: itemSortCriteria!,
+                  sortCriterion: criterion,
                 ),
               );
             },
           ).toList(),
-          onChanged: (_SortSignAndPropName? newValue) {
+          onChanged: (SortCriterion? newValue) {
             // setState(() {
             //   dropdownvalue = newValue!;
             // });
@@ -58,22 +57,21 @@ class SortOptionsDropdown extends StatelessWidget {
   }
 
   Widget _builSortCriterionView({
-    required BlockItemComparator blockComparator,
-    required _SortSignAndPropName signAndPropName,
+    required ItemSortCriteria itemSortCriteria,
+    required SortCriterion sortCriterion,
   }) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          signAndPropName.propName,
+          sortCriterion.propName,
           style: textStyle,
         ),
         SizedBox(width: iconSpacing),
         _buildSortBtn(
-          block: block,
-          blockComparator: blockComparator,
-          signAndPropName: signAndPropName,
+          itemSortCriteria: itemSortCriteria,
+          sortCriterion: sortCriterion,
           isDragging: false,
         ),
       ],
