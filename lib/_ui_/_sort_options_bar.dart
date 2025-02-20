@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
 class SortOptionsBar extends StatelessWidget {
-  final Block block;
+  final Block _block;
   final double itemSpacing;
   final double iconSpacing;
 
@@ -9,10 +9,10 @@ class SortOptionsBar extends StatelessWidget {
   final TextStyle textStyle;
   final AlignmentGeometry? alignment;
   final EdgeInsetsGeometry? padding;
-  Decoration? decoration;
+  final Decoration? decoration;
   final Decoration? foregroundDecoration;
   final double? width;
-  double? height;
+  final double? height;
   final BoxConstraints? constraints;
   final EdgeInsetsGeometry? margin;
   final Matrix4? transform;
@@ -25,7 +25,7 @@ class SortOptionsBar extends StatelessWidget {
 
   SortOptionsBar({
     super.key,
-    required this.block,
+    required Block block,
     this.itemSpacing = 5,
     this.iconSpacing = 3,
     this.textStyle = const TextStyle(fontSize: 14),
@@ -41,14 +41,14 @@ class SortOptionsBar extends StatelessWidget {
     this.transform,
     this.transformAlignment,
     this.clipBehavior = Clip.none,
-  });
+  }) : _block = block;
 
   SortOptionsBar.simple({
     super.key,
-    required this.block,
+    required Block block,
     this.itemSpacing = 5,
     this.iconSpacing = 3,
-    this.textStyle = const TextStyle(fontSize: 13),
+    this.textStyle = const TextStyle(fontSize: 14),
     //
     this.alignment,
     this.padding = const EdgeInsets.all(5),
@@ -60,25 +60,25 @@ class SortOptionsBar extends StatelessWidget {
     this.transform,
     this.transformAlignment,
     this.clipBehavior = Clip.none,
-  }) : decoration = BoxDecoration(
+  })  : _block = block,
+        decoration = BoxDecoration(
           border: Border.all(color: Colors.grey, width: 0.4),
         );
 
   @override
   Widget build(BuildContext context) {
-    ItemSortCriteria? itemSortCriteria = block.itemSortCriteria;
+    ItemSortCriteria? itemSortCriteria = _block.itemSortCriteria;
     //
     return BlockFragmentWidgetBuilder(
       ownerClassInstance: this,
       description: null,
-      block: block,
+      block: _block,
       build: () {
         if (itemSortCriteria == null) {
           return Text("[Sorting not supported]", style: textStyle);
         }
-        List<SortCriterion> criteria = itemSortCriteria._sortCriteria;
+        List<SortCriterion> criteria = itemSortCriteria._criteria;
         //
-
         return Container(
           alignment: alignment,
           padding: padding,
@@ -130,7 +130,7 @@ class SortOptionsBar extends StatelessWidget {
             movingCriterion: details.data,
             destCriterion: criterion,
           );
-          block.updateAllUIComponents(withoutFilters: true);
+          _block.updateAllUIComponents(withoutFilters: true);
         },
         builder: (
           BuildContext context,
@@ -182,7 +182,7 @@ class SortOptionsBar extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          sortCriterion.propName,
+          sortCriterion.text,
           style:
               isDragging ? textStyle.copyWith(color: Colors.grey) : textStyle,
         ),

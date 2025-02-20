@@ -1,35 +1,36 @@
 part of '../flutter_artist.dart';
 
 class SortOptionsDropdown extends StatelessWidget {
-  final Block block;
+  final Block _block;
   final TextStyle textStyle;
   final double iconSpacing;
 
   const SortOptionsDropdown({
     super.key,
-    required this.block,
+    required Block block,
     this.iconSpacing = 3,
     this.textStyle = const TextStyle(fontSize: 14),
-  });
+  }) : _block = block;
 
   const SortOptionsDropdown.simple({
     super.key,
-    required this.block,
+    required Block block,
     this.iconSpacing = 3,
     this.textStyle = const TextStyle(fontSize: 14),
-  });
+  }) : _block = block;
 
   @override
   Widget build(BuildContext context) {
-    ItemSortCriteria? itemSortCriteria = block.itemSortCriteria;
-    //
     return BlockFragmentWidgetBuilder(
       ownerClassInstance: this,
       description: null,
-      block: block,
+      block: _block,
       build: () {
-        List<SortCriterion> criteria = itemSortCriteria?._sortCriteria ?? [];
-        SortCriterion? selected = criteria.firstOrNull;
+        ItemSortCriteria? itemSortCriteria = _block.itemSortCriteria;
+        //
+        List<SortCriterion> criteria = itemSortCriteria?.criteria ?? [];
+        SortCriterion? selected = itemSortCriteria?.selectedCriterion ??
+            itemSortCriteria?.getFirstSortCriterion();
         //
         return DropdownButton<SortCriterion>(
           isDense: true,
@@ -46,13 +47,34 @@ class SortOptionsDropdown extends StatelessWidget {
               );
             },
           ).toList(),
-          onChanged: (SortCriterion? newValue) {
-            // setState(() {
-            //   dropdownvalue = newValue!;
-            // });
-          },
+          onChanged: _onChanged,
         );
       },
+    );
+  }
+
+  void _onChanged(SortCriterion? newValue) {
+    if (newValue == null) {
+      return;
+    }
+    ItemSortCriteria? itemSortCriteria = _block.itemSortCriteria;
+    if (itemSortCriteria == null) {
+      return;
+    }
+    if (newValue.isNonDirection()) {
+      newValue = newValue.copyWith(
+        direction: SortingDirection.ascending,
+      );
+    }
+    List<SortCriterion> updateCriteria = itemSortCriteria.getCopyOfSortCriteria(
+      clearAllDirections: true,
+      appliedCriterion: newValue,
+    );
+    //
+    itemSortCriteria.setSelectedCriterion(newValue);
+    itemSortCriteria.updateSortCriteria(
+      updateCriteria: updateCriteria,
+      rearrangeCriteria: false,
     );
   }
 
@@ -65,7 +87,7 @@ class SortOptionsDropdown extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          sortCriterion.propName,
+          sortCriterion.text,
           style: textStyle,
         ),
         SizedBox(width: iconSpacing),

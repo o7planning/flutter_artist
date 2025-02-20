@@ -13,10 +13,12 @@ Widget _buildSortBtn({
     child: _getSortIcon(sortCriterion, isDragging),
     onTap: () {
       SortingDirection nextDirection = sortCriterion.getNextDirection();
-      sortCriterion.direction = nextDirection;
+      SortCriterion updateCriterion = sortCriterion.copyWith(
+        direction: nextDirection,
+      );
       //
       itemSortCriteria.updateSortCriterion(
-        updateCriterion: sortCriterion,
+        updateCriterion: updateCriterion,
         moveToFirst: false,
       );
     },

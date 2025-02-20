@@ -4,8 +4,14 @@ abstract class ItemSortCriteria<ITEM extends Object> {
   late final Block block;
   final bool multiOptions;
   final List<String> _nonSignedPropNames = [];
-  final List<SortCriterion> _sortCriteria = [];
-  final Map<String, SortCriterion> _sortCriteriaMap = {};
+  final List<SortCriterion> _criteria = [];
+  final Map<String, SortCriterion> _criteriaMap = {};
+
+  List<SortCriterion> get criteria => [..._criteria];
+
+  SortCriterion? _selectedCriterion;
+
+  SortCriterion? get selectedCriterion => _selectedCriterion;
 
   ///
   /// ```dart
@@ -26,55 +32,73 @@ abstract class ItemSortCriteria<ITEM extends Object> {
     int optCount = 0;
     for (String sortablePropName in sortablePropNames) {
       SortCriterion criterion = SortCriterion._parse(sortablePropName);
+      criterion._text = _getText(propName:criterion.propName);
       //
       if (criterion.direction != SortingDirection.none) {
         optCount++;
         if (optCount > 1 && !multiOptions) {
-          criterion._setToNone();
+          criterion._direction = SortingDirection.none;
         }
+        _selectedCriterion ??= criterion;
       }
       //
-      _nonSignedPropNames.add(criterion.propName);
-      _sortCriteria.add(criterion);
-      _sortCriteriaMap[criterion.propName] = criterion;
+      if (!_criteriaMap.containsKey(criterion.propName)) {
+        _nonSignedPropNames.add(criterion.propName);
+        _criteria.add(criterion);
+        _criteriaMap[criterion.propName] = criterion;
+      }
     }
   }
 
-  void clearOptions() {
-    for (var criterion in _sortCriteria) {
-      criterion._setToNone();
-    }
+  void setSelectedCriterion(SortCriterion? value) {
+    _selectedCriterion = value == null ? null : _criteriaMap[value.propName];
   }
 
   void moveCriterion({
     required SortCriterion movingCriterion,
     required SortCriterion destCriterion,
   }) {
-    SortCriterion? moving = _sortCriteriaMap[movingCriterion.propName];
-    SortCriterion? dest = _sortCriteriaMap[destCriterion.propName];
+    SortCriterion? moving = _criteriaMap[movingCriterion.propName];
+    SortCriterion? dest = _criteriaMap[destCriterion.propName];
     if (moving == null || dest == null) {
       return;
     } else if (moving.propName == dest.propName) {
       return;
     }
-    int movingIdx = _sortCriteria.indexOf(moving);
-    int destIdx = _sortCriteria.indexOf(dest);
+    int movingIdx = _criteria.indexOf(moving);
+    int destIdx = _criteria.indexOf(dest);
     if (movingIdx > destIdx) {
-      _sortCriteria.remove(moving);
-      _sortCriteria.insert(destIdx, moving);
+      _criteria.remove(moving);
+      _criteria.insert(destIdx, moving);
     } else {
-      _sortCriteria.remove(moving);
-      _sortCriteria.insert(destIdx, moving);
+      _criteria.remove(moving);
+      _criteria.insert(destIdx, moving);
     }
   }
 
+  SortCriterion? getFirstSortCriterion() {
+    return _criteria.firstOrNull;
+  }
+
   SortCriterion? getCopyOfSortCriterion({required String propName}) {
-    SortCriterion? criterion = _sortCriteriaMap[propName];
+    SortCriterion? criterion = _criteriaMap[propName];
     return criterion?.copy();
   }
 
-  List<SortCriterion> getCopyOfSortCriteria() {
-    return _sortCriteria.map((criterion) => criterion.copy()).toList();
+  List<SortCriterion> getCopyOfSortCriteria({
+    required bool clearAllDirections,
+    required SortCriterion? appliedCriterion,
+  }) {
+    return _criteria.map((criterion) {
+      SortCriterion copy = criterion.copy();
+      if (clearAllDirections) {
+        copy._direction = SortingDirection.none;
+      }
+      if (copy.propName == appliedCriterion?.propName) {
+        copy._direction = appliedCriterion!.direction;
+      }
+      return copy;
+    }).toList();
   }
 
   void updateSortCriterionByPropName({
@@ -82,11 +106,11 @@ abstract class ItemSortCriteria<ITEM extends Object> {
     required SortingDirection direction,
     required bool moveToFirst,
   }) {
-    SortCriterion? criterion = _sortCriteriaMap[propName];
+    SortCriterion? criterion = _criteriaMap[propName];
     if (criterion == null) {
       return;
     }
-    SortCriterion updateCriterion = criterion.copyWith(direction);
+    SortCriterion updateCriterion = criterion.copyWith(direction: direction);
     updateSortCriterion(
       updateCriterion: updateCriterion,
       moveToFirst: moveToFirst,
@@ -108,7 +132,7 @@ abstract class ItemSortCriteria<ITEM extends Object> {
     required List<SortCriterion> updateCriteria,
     required bool rearrangeCriteria,
   }) {
-    final Map<String, SortCriterion> copyMap = {..._sortCriteriaMap};
+    final Map<String, SortCriterion> copyMap = {..._criteriaMap};
     //
     int optCount = 0;
     List<SortCriterion> newArrangedCriteria = [];
@@ -125,24 +149,24 @@ abstract class ItemSortCriteria<ITEM extends Object> {
       if (updateCriterion.direction != SortingDirection.none) {
         optCount++;
         if (optCount > 1 && !multiOptions) {
-          currentCriterion._setToNone();
+          currentCriterion._direction = SortingDirection.none;
         } else {
-          currentCriterion.direction = updateCriterion.direction;
+          currentCriterion._direction = updateCriterion.direction;
         }
       } else {
-        currentCriterion.direction = updateCriterion.direction;
+        currentCriterion._direction = updateCriterion.direction;
       }
     }
     //
     for (SortCriterion criterion in copyMap.values) {
       if (optCount >= 1 && !multiOptions) {
-        criterion._setToNone();
+        criterion._direction = SortingDirection.none;
       }
       newArrangedCriteria.add(criterion);
     }
     //
     if (rearrangeCriteria) {
-      _sortCriteria
+      _criteria
         ..clear()
         ..addAll(newArrangedCriteria);
     }
@@ -169,6 +193,7 @@ abstract class ItemSortCriteria<ITEM extends Object> {
     final List<SortCriterion> updateCriteria = [];
     for (String sortablePropName in shuffledSortablePropNames) {
       SortCriterion criterion = SortCriterion._parse(sortablePropName);
+      criterion._text = _getText(propName:criterion.propName);
       //
       if (!_nonSignedPropNames.contains(criterion.propName)) {
         throw Exception(
@@ -184,7 +209,7 @@ abstract class ItemSortCriteria<ITEM extends Object> {
   }
 
   int _compare(ITEM a, ITEM b) {
-    for (SortCriterion criterion in _sortCriteria) {
+    for (SortCriterion criterion in _criteria) {
       if (criterion.direction == SortingDirection.none) {
         continue;
       }
@@ -246,13 +271,19 @@ abstract class ItemSortCriteria<ITEM extends Object> {
     return 0;
   }
 
+  String _getText({required String propName}) {
+    return getText(propName: propName) ?? propName;
+  }
+
   ///
   /// The return type must be int, double, bool, null or String.
   ///
   dynamic getValue({required ITEM item, required String propName});
 
+  String? getText({required String propName});
+
   @override
   String toString() {
-    return "multiOptions: $multiOptions ${_sortCriteria.toString()}";
+    return "multiOptions: $multiOptions ${_criteria.toString()}";
   }
 }

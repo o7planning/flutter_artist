@@ -1,36 +1,50 @@
 part of '../flutter_artist.dart';
 
 class SortCriterion {
-  SortingDirection direction;
-  String propName;
+  final String propName;
+  String _text;
+  SortingDirection _direction;
+
+  String get text => _text;
+  SortingDirection get direction => _direction;
 
   SortCriterion._({
-    required this.direction,
+    required SortingDirection direction,
     required this.propName,
-  });
-
-  void _setToNone() {
-    direction = SortingDirection.none;
-  }
+    required String text,
+  })  : _text = text,
+        _direction = direction;
 
   bool isAscending() {
-    return direction == SortingDirection.ascending;
+    return _direction == SortingDirection.ascending;
   }
 
   bool isDescending() {
-    return direction == SortingDirection.descending;
+    return _direction == SortingDirection.descending;
   }
 
-  SortCriterion copyWith(SortingDirection direction) {
-    return SortCriterion._(direction: direction, propName: propName);
+  bool isNonDirection() {
+    return _direction == SortingDirection.none;
+  }
+
+  SortCriterion copyWith({required SortingDirection direction}) {
+    return SortCriterion._(
+      propName: propName,
+      text: text,
+      direction: direction,
+    );
   }
 
   SortCriterion copy() {
-    return SortCriterion._(direction: direction, propName: propName);
+    return SortCriterion._(
+      propName: propName,
+      text: text,
+      direction: _direction,
+    );
   }
 
   SortingDirection getNextDirection() {
-    switch (direction) {
+    switch (_direction) {
       case SortingDirection.ascending:
         return SortingDirection.descending;
       case SortingDirection.descending:
@@ -38,10 +52,6 @@ class SortCriterion {
       case SortingDirection.none:
         return SortingDirection.ascending;
     }
-  }
-
-  void setNextDirection() {
-    direction = getNextDirection();
   }
 
   static SortCriterion _parse(String sortablePropName) {
@@ -64,6 +74,7 @@ class SortCriterion {
     return SortCriterion._(
       direction: direction,
       propName: propName,
+      text: propName,
     );
   }
 
