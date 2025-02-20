@@ -40,7 +40,7 @@ class SortOptionsDropdown extends StatelessWidget {
             (criterion) {
               return DropdownMenuItem(
                 value: criterion,
-                child: _builSortCriterionView(
+                child: _buildSortCriterionView(
                   itemSortCriteria: itemSortCriteria!,
                   sortCriterion: criterion,
                 ),
@@ -78,7 +78,7 @@ class SortOptionsDropdown extends StatelessWidget {
     );
   }
 
-  Widget _builSortCriterionView({
+  Widget _buildSortCriterionView({
     required ItemSortCriteria itemSortCriteria,
     required SortCriterion sortCriterion,
   }) {
