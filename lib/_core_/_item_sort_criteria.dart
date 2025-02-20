@@ -46,13 +46,15 @@ abstract class ItemSortCriteria<ITEM extends Object> {
     }
   }
 
-  void movePropName({
-    required String movingPropName,
-    required String destPropName,
+  void moveCriterion({
+    required SortCriterion movingCriterion,
+    required SortCriterion destCriterion,
   }) {
-    SortCriterion? moving = _sortCriteriaMap[movingPropName];
-    SortCriterion? dest = _sortCriteriaMap[destPropName];
+    SortCriterion? moving = _sortCriteriaMap[movingCriterion.propName];
+    SortCriterion? dest = _sortCriteriaMap[destCriterion.propName];
     if (moving == null || dest == null) {
+      return;
+    } else if (moving.propName == dest.propName) {
       return;
     }
     int movingIdx = _sortCriteria.indexOf(moving);
@@ -75,33 +77,50 @@ abstract class ItemSortCriteria<ITEM extends Object> {
     return _sortCriteria.map((criterion) => criterion.copy()).toList();
   }
 
-  void updateSortCriterion({
+  void updateSortCriterionByPropName({
     required String propName,
     required SortingDirection direction,
+    required bool moveToFirst,
   }) {
     SortCriterion? criterion = _sortCriteriaMap[propName];
     if (criterion == null) {
       return;
     }
     SortCriterion updateCriterion = criterion.copyWith(direction);
-    __updateSortCriterion(updateCriterion: updateCriterion);
+    updateSortCriterion(
+      updateCriterion: updateCriterion,
+      moveToFirst: moveToFirst,
+    );
   }
 
-  void __updateSortCriterion({required SortCriterion updateCriterion}) {
+  void updateSortCriterion({
+    required SortCriterion updateCriterion,
+    required bool moveToFirst,
+  }) {
     var updateCriteria = [updateCriterion];
-    __updateSortCriteria(updateCriteria: updateCriteria);
+    updateSortCriteria(
+      updateCriteria: updateCriteria,
+      rearrangeCriteria: false,
+    );
   }
 
-  void __updateSortCriteria({required List<SortCriterion> updateCriteria}) {
+  void updateSortCriteria({
+    required List<SortCriterion> updateCriteria,
+    required bool rearrangeCriteria,
+  }) {
     final Map<String, SortCriterion> copyMap = {..._sortCriteriaMap};
     //
     int optCount = 0;
+    List<SortCriterion> newArrangedCriteria = [];
+    //
     for (SortCriterion updateCriterion in updateCriteria) {
       String propName = updateCriterion.propName;
       SortCriterion? currentCriterion = copyMap.remove(propName);
       if (currentCriterion == null) {
         continue;
       }
+      //
+      newArrangedCriteria.add(currentCriterion);
       //
       if (updateCriterion.direction != SortingDirection.none) {
         optCount++;
@@ -113,12 +132,19 @@ abstract class ItemSortCriteria<ITEM extends Object> {
       } else {
         currentCriterion.direction = updateCriterion.direction;
       }
-      //
+    }
+    //
+    for (SortCriterion criterion in copyMap.values) {
       if (optCount >= 1 && !multiOptions) {
-        for (SortCriterion criterion in copyMap.values) {
-          criterion._setToNone();
-        }
+        criterion._setToNone();
       }
+      newArrangedCriteria.add(criterion);
+    }
+    //
+    if (rearrangeCriteria) {
+      _sortCriteria
+        ..clear()
+        ..addAll(newArrangedCriteria);
     }
     //
     block.data.sort();
@@ -129,10 +155,10 @@ abstract class ItemSortCriteria<ITEM extends Object> {
   /// ```dart
   /// myItemSortCriteria.updateSortCriteria(
   ///   shuffledSortablePropNames: ['email', '+userName','-fullName'],
-  /// );
-  /// ```
+  /// );string
   ///
-  void updateSortCriteria({
+  @Deprecated("Delete It?")
+  void __updateSortCriteriaString({
     required List<String> shuffledSortablePropNames,
   }) {
     if (shuffledSortablePropNames.length != _nonSignedPropNames.length) {
@@ -151,7 +177,10 @@ abstract class ItemSortCriteria<ITEM extends Object> {
       updateCriteria.add(criterion);
     }
     //
-    __updateSortCriteria(updateCriteria: updateCriteria);
+    updateSortCriteria(
+      updateCriteria: updateCriteria,
+      rearrangeCriteria: false,
+    );
   }
 
   int _compare(ITEM a, ITEM b) {

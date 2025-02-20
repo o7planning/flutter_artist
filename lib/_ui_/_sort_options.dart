@@ -12,10 +12,12 @@ Widget _buildSortBtn({
   return InkWell(
     child: _getSortIcon(sortCriterion, isDragging),
     onTap: () {
-      SortingDirection nextSign = sortCriterion.getNextDirection();
+      SortingDirection nextDirection = sortCriterion.getNextDirection();
+      sortCriterion.direction = nextDirection;
+      //
       itemSortCriteria.updateSortCriterion(
-        propName: sortCriterion.propName,
-        direction: nextSign,
+        updateCriterion: sortCriterion,
+        moveToFirst: false,
       );
     },
   );

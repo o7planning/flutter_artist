@@ -113,7 +113,9 @@ class SortOptionsBar extends StatelessWidget {
   }
 
   BreadCrumbItem _buildBreadCrumbItem(
-      ItemSortCriteria itemSortCriteria, SortCriterion criterion,) {
+    ItemSortCriteria itemSortCriteria,
+    SortCriterion criterion,
+  ) {
     return BreadCrumbItem(
       content: DragTarget<SortCriterion>(
         hitTestBehavior: HitTestBehavior.deferToChild,
@@ -123,10 +125,10 @@ class SortOptionsBar extends StatelessWidget {
           }
           return true;
         },
-        onAcceptWithDetails: (DragTargetDetails<SortCriterion> dragTarget) {
-          itemSortCriteria.movePropName(
-            movingPropName: dragTarget.data.propName,
-            destPropName: criterion.propName,
+        onAcceptWithDetails: (DragTargetDetails<SortCriterion> details) {
+          itemSortCriteria.moveCriterion(
+            movingCriterion: details.data,
+            destCriterion: criterion,
           );
           block.updateAllUIComponents(withoutFilters: true);
         },
