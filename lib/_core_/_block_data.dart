@@ -6,7 +6,7 @@ abstract class BlockData<
     ITEM_DETAIL extends Object,
     FILTER_INPUT extends FilterInput,
     FILTER_CRITERIA extends FilterCriteria,
-    EXTRA_FORM_INPUT extends ExtraInput> implements PageData<ITEM> {
+    EXTRA_FORM_INPUT extends ExtraInput> {
   ///
   /// Owner block
   ///
@@ -51,7 +51,7 @@ abstract class BlockData<
 
   FILTER_CRITERIA? get filterCriteria => _filterCriteria;
 
-  PageData<ITEM>? _lastQueryResult;
+  PageData<ID, ITEM>? _lastQueryResult;
 
   ///
   /// ```dart
@@ -66,7 +66,7 @@ abstract class BlockData<
   /// }
   /// ```
   ///
-  PageData<ITEM>? get lastQueryResult => _lastQueryResult;
+  PageData<ID, ITEM>? get lastQueryResult => _lastQueryResult;
 
   late PageableData? _pageable;
 
@@ -207,7 +207,7 @@ abstract class BlockData<
     required Object? currentParentItemId,
     required FILTER_CRITERIA? filterCriteria,
     required PageableData? pageable,
-    required PageData<ITEM>? pageData,
+    required PageData<ID, ITEM>? pageData,
     required DataState dataState,
   }) {
     // Check if filterCriteria changed.
@@ -217,7 +217,10 @@ abstract class BlockData<
       _items.clear();
     }
     //
-    PageData<ITEM> ap = pageData ?? PageData<ITEM>.empty();
+    PageData<ID, ITEM> ap = pageData ??
+        DefaultPageData<ID, ITEM>.empty(
+          getItemId: block.getItemId,
+        );
     //
     _currentParentItemId = currentParentItemId;
     _filterCriteria = filterCriteria;

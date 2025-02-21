@@ -28,7 +28,7 @@ class _InternalBlockData<
 
   FILTER_CRITERIA? __filterCriteriaBk;
 
-  PageData<ITEM>? __lastQueryResultBk;
+  PageData<ID, ITEM>? __lastQueryResultBk;
 
   PaginationData? __paginationBk;
 
