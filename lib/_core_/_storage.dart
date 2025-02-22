@@ -43,7 +43,10 @@ class _Storage {
     required String? itemIdString,
   }) {
     Type eventItemType = eventBlock.getItemType();
-    print("~~~~~~~~~> Event Item Type: $eventItemType");
+    Type eventItemDetailType = eventBlock.getItemDetailType();
+    print("~~~~~~~~~> ${eventBlock.fireEvent ? 'FIRE EVENT' : 'NOT FIRE EVENT'}"
+        " --> Event Item Type: ($eventItemType, $eventItemDetailType)"
+        " - ${getClassName(eventBlock)}");
     //
     final List<Scalar> listenerScalars = __getListenerScalarsByBlock(
       eventBlock: eventBlock,
