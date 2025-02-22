@@ -2679,7 +2679,7 @@ abstract class Block<
 
   Future<bool> deleteItemById({
     required ID itemId,
-    bool ignoreIfItemNotInList = true,
+    required bool ignoreIfItemNotInList,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
