@@ -4,7 +4,7 @@ abstract class BlockForm<
     ID extends Object,
     ITEM_DETAIL extends Object,
     FILTER_CRITERIA extends FilterCriteria,
-    EXTRA_FORM_INPUT extends ExtraInput> extends _XBase {
+    EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
   QueryMode _queryMode = QueryMode.lazy;
 
   late QueryMode _tempQueryMode = _queryMode;

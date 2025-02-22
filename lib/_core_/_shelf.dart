@@ -251,9 +251,9 @@ abstract class Shelf extends _XBase {
       }
     }
     //
-    Type extraFormInputB = ExtraInput;
+    Type extraFormInputB = ExtraFormInput;
     String extraFormInputTypeB = extraFormInputB.toString();
-    String extraFormInputTypeStr = block.getExtraInputTypeAsString();
+    String extraFormInputTypeStr = block.getExtraFormInputTypeAsString();
 
     if (extraFormInputTypeStr == extraFormInputTypeB) {
       throw ___registerError(

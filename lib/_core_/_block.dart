@@ -62,7 +62,7 @@ part of '../flutter_artist.dart';
 /// [EXTRA_FORM_INPUT]: Additional form data are used to create a record in the Form.
 /// For example: Create an employee with the specified department.
 /// ```
-/// class EmployeeExtraInput extends ExtraInput {
+/// class EmployeeExtraFormInput extends ExtraFormInput {
 ///    DepartmentInfo? department;
 /// }
 /// ```
@@ -73,7 +73,7 @@ abstract class Block<
     ITEM_DETAIL extends Object,
     FILTER_INPUT extends FilterInput, // EmptyFilterInput
     FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
-    EXTRA_FORM_INPUT extends ExtraInput // EmptyExtraFormInput
+    EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
     > extends _XBase {
   late final Shelf shelf;
 
@@ -122,7 +122,7 @@ abstract class Block<
 
   String get _classParametersDefinition {
     return "<${getItemIdTypeAsString()}, ${getItemTypeAsString()}, ${getItemDetailTypeAsString()}, "
-        "${getFilterInputTypeAsString()}, ${getFilterCriteriaTypeAsString()}, ${getExtraInputTypeAsString()}>";
+        "${getFilterInputTypeAsString()}, ${getFilterCriteriaTypeAsString()}, ${getExtraFormInputTypeAsString()}>";
   }
 
   final String? description;
@@ -297,7 +297,7 @@ abstract class Block<
     return FILTER_CRITERIA.toString();
   }
 
-  String getExtraInputTypeAsString() {
+  String getExtraFormInputTypeAsString() {
     return EXTRA_FORM_INPUT.toString();
   }
 

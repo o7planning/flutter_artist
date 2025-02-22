@@ -1,14 +1,14 @@
 part of '../flutter_artist.dart';
 
-abstract class ExtraInput {
+abstract class ExtraFormInput {
   FormAction formAction = FormAction.create;
 
-  ExtraInput();
+  ExtraFormInput();
 }
 
 // -----------------------------------------------------------------------------
 
-class EmptyExtraFormInput extends ExtraInput {
+class EmptyExtraFormInput extends ExtraFormInput {
   //
 }
 

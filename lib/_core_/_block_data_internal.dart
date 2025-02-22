@@ -6,7 +6,7 @@ class _InternalBlockData<
         ITEM_DETAIL extends Object,
         FILTER_INPUT extends FilterInput,
         FILTER_CRITERIA extends FilterCriteria,
-        EXTRA_FORM_INPUT extends ExtraInput>
+        EXTRA_FORM_INPUT extends ExtraFormInput>
     extends BlockData<ID, ITEM, ITEM_DETAIL, FILTER_INPUT, FILTER_CRITERIA,
         EXTRA_FORM_INPUT> {
   bool __isTemporaryMode = false;

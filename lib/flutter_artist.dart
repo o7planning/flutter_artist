@@ -89,7 +89,7 @@ part '_core_/_default_data_filter.dart';
 
 part '_core_/_error_listener.dart';
 
-part '_core_/_extra_input.dart';
+part '_core_/_extra_form_input.dart';
 
 part '_core_/_filter_criteria.dart';
 

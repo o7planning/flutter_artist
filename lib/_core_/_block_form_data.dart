@@ -5,7 +5,7 @@ class BlockFormData<
     ITEM_DETAIL extends Object,
     FILTER_INPUT extends FilterInput,
     FILTER_CRITERIA extends FilterCriteria, //
-    EXTRA_FORM_INPUT extends ExtraInput> {
+    EXTRA_FORM_INPUT extends ExtraFormInput> {
   ///
   /// Owner BlockForm.
   ///

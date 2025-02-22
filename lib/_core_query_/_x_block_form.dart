@@ -4,7 +4,7 @@ class _XBlockForm {
   bool needQuery = false;
   bool queried = false;
   final BlockForm blockForm;
-  final ExtraInput? extraFormInput;
+  final ExtraFormInput? extraFormInput;
 
   late final _XBlock xBlock;
 
