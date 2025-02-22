@@ -349,6 +349,39 @@ abstract class BlockForm<
     }
   }
 
+  Future<bool> _prepareFormNull() async {
+    FlutterArtist.codeFlowLogger._addMethodCall(
+      isLibCode: true,
+      navigate: null,
+      ownerClassInstance: this,
+      methodName: "_prepareFormNull",
+      parameters: {},
+    );
+    //
+    try {
+      final Map<String, dynamic> newFormData = {};
+      data._dataState = DataState.ready;
+      data._updateFormData(newFormData);
+      //
+      _formKey.currentState?.patchValue(newFormData);
+      //
+      updateAllUIComponents(); // TODO: Xu ly loi?
+      block.updateControlBarWidgets();
+      //
+      return true;
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: "prepareFormData",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      //
+      return false;
+    }
+  }
+
   Future<bool> _prepareForm({
     required EXTRA_FORM_INPUT? extraFormInput,
     required ITEM_DETAIL? refreshedItem,
@@ -367,6 +400,20 @@ abstract class BlockForm<
         "forceForm": forceForm,
       },
     );
+    //
+    if (isNew && refreshedItem != null) {
+      showErrorSnackBar(
+        message: "Library Error",
+        errorDetails: ["refreshedItem is not null in a new form"],
+      );
+      return false;
+    } else if (!isNew && refreshedItem == null) {
+      showErrorSnackBar(
+        message: "Library Error",
+        errorDetails: ["refreshedItem is null in a edit form"],
+      );
+      return false;
+    }
     //
     bool needToLoad = forceForm || hasActiveUIComponent();
     //

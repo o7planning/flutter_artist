@@ -1424,6 +1424,8 @@ abstract class Block<
         "dataState": dataState,
       },
     );
+    printLog(
+        "${getClassName(this)} ~~~~~~~~~~~~> _switchThisAndChildrenToNoneMode");
     //
     if (clearListForThis) {
       //
@@ -1432,7 +1434,8 @@ abstract class Block<
       final FILTER_CRITERIA? criteriaOfThisDataFilter =
           this._registeredOrDefaultDataFilter._filterCriteria;
       //
-      PageData<ID, ITEM> emptyAppPage = DefaultPageData.empty( getItemId: getItemId);
+      PageData<ID, ITEM> emptyAppPage =
+          DefaultPageData.empty(getItemId: getItemId);
       Object? currentParentItem = parentItemId;
 
       data._updateFrom(
@@ -1458,12 +1461,7 @@ abstract class Block<
         formMode: FormMode.none,
         dataState: DataState.ready,
       );
-      bool success = await blockForm!._prepareForm(
-        extraFormInput: null,
-        refreshedItem: nullItemDetail,
-        isNew: false,
-        forceForm: false,
-      );
+      bool success = await blockForm!._prepareFormNull();
       if (!success) {
         return false;
       }

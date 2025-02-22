@@ -32,7 +32,7 @@ abstract class ItemSortCriteria<ITEM extends Object> {
     int optCount = 0;
     for (String sortablePropName in sortablePropNames) {
       SortCriterion criterion = SortCriterion._parse(sortablePropName);
-      criterion._text = _getText(propName:criterion.propName);
+      criterion._text = _getText(propName: criterion.propName);
       //
       if (criterion.direction != SortingDirection.none) {
         optCount++;
@@ -195,7 +195,7 @@ abstract class ItemSortCriteria<ITEM extends Object> {
     final List<SortCriterion> updateCriteria = [];
     for (String sortablePropName in shuffledSortablePropNames) {
       SortCriterion criterion = SortCriterion._parse(sortablePropName);
-      criterion._text = _getText(propName:criterion.propName);
+      criterion._text = _getText(propName: criterion.propName);
       //
       if (!_nonSignedPropNames.contains(criterion.propName)) {
         throw Exception(

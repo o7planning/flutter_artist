@@ -6,6 +6,7 @@ class SortCriterion {
   SortingDirection _direction;
 
   String get text => _text;
+
   SortingDirection get direction => _direction;
 
   SortCriterion._({

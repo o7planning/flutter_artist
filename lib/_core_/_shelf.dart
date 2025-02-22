@@ -799,6 +799,7 @@ abstract class Shelf extends _XBase {
     );
     //
     xShelf.printMe();
+
     //
     try {
       for (_XScalar xScalar in xShelf.allXScalars) {
@@ -849,23 +850,30 @@ abstract class Shelf extends _XBase {
         Object? currentItemDetail =
             xBlockForm.blockForm.block.data.currentItemDetail;
 
-        // TODO: Co can cai nay khong?
-        // xBlockForm.blockForm.data._setCurrentItem(
-        //   refreshedItemDetail: currentItemDetail,
-        //   formMode: FormMode.edit,
-        //   dataState: DataState.pending,
-        // );
+        if (currentItemDetail != null) {
+          Object currentItem = xBlockForm.blockForm.block.data.currentItem!;
+          bool editable = xBlockForm.blockForm.block.canEditItemOnForm(
+            item: currentItem,
+          );
+          // TODO: Co can cai nay khong?
+          // xBlockForm.blockForm.data._setCurrentItem(
+          //   refreshedItemDetail: currentItemDetail,
+          //   formMode: FormMode.edit,
+          //   dataState: DataState.pending,
+          // );
 
-        bool success = await xBlockForm.blockForm._prepareForm(
-          extraFormInput: xBlockForm.extraFormInput,
-          refreshedItem: currentItemDetail,
-          isNew: currentItemDetail == null, // TODO: Can kiem tra lai.
-          forceForm: true,
-        );
-        //
-        if (!success) {
-          return false;
+          bool success = await xBlockForm.blockForm._prepareForm(
+            extraFormInput: xBlockForm.extraFormInput,
+            refreshedItem: currentItemDetail,
+            isNew: currentItemDetail == null, // TODO: Can kiem tra lai.
+            forceForm: true,
+          );
+          //
+          if (!success) {
+            return false;
+          }
         }
+        return true;
       }
       //
       return true;
