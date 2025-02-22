@@ -301,7 +301,10 @@ class _Storage {
       return [];
     }
     return __getListenerBlocksByAffectedItemTypes(
-      affectedItemTypes: [eventBlock.getItemType()],
+      affectedItemTypes: [
+        eventBlock.getItemType(),
+        eventBlock.getItemDetailType()
+      ],
     );
   }
 
@@ -487,6 +490,12 @@ class _Storage {
     required List<Scalar> listenerScalars,
     required List<Block> listenerBlocks,
   }) async {
+    if (listenerScalars.isNotEmpty) {
+      print(">> ~~~~~~~~~~~~~~~~~~~~~~~~> listenerScalars: $listenerScalars");
+    }
+    if (listenerBlocks.isNotEmpty) {
+      print(">> ~~~~~~~~~~~~~~~~~~~~~~~~> listenerScalars: $listenerBlocks");
+    }
     for (Scalar listenerScalar in listenerScalars) {
       if (!listenerScalar.hasActiveUIComponent()) {
         listenerScalar.data.setToPending();

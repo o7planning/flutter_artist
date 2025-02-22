@@ -269,7 +269,7 @@ abstract class Block<
     return ITEM;
   }
 
-  Type itemDetailType() {
+  Type getItemDetailType() {
     return ITEM_DETAIL;
   }
 
