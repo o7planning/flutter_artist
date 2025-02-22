@@ -746,6 +746,7 @@ abstract class Block<
   @nonVirtual
   Future<bool> query({
     ListBehavior listBehavior = ListBehavior.replace,
+    PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAvailableItem,
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
     PageableData? pageable,
@@ -757,6 +758,8 @@ abstract class Block<
       ownerClassInstance: this,
       methodName: "query",
       parameters: {
+        "listBehavior": listBehavior,
+        "postQueryBehavior": postQueryBehavior,
         "filterInput": filterInput,
         "suggestedSelection": suggestedSelection,
         "pageable": pageable,
@@ -776,7 +779,7 @@ abstract class Block<
           pageable: pageable,
           listBehavior: listBehavior,
           suggestedSelection: suggestedSelection,
-          postQueryBehavior: PostQueryBehavior.selectAvailableItem,
+          postQueryBehavior: postQueryBehavior,
         ),
       ],
       forceQueryBlockFormOpts: [],
