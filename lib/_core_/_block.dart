@@ -662,13 +662,15 @@ abstract class Block<
   ///
   /// Query the next page and replace the current items in the list.
   ///
-  Future<bool> queryNextPage() async {
+  Future<bool> queryNextPage({
+    PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAvailableItem,
+  }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: null,
       ownerClassInstance: this,
       methodName: "queryNextPage",
-      parameters: {},
+      parameters: {"postQueryBehavior": postQueryBehavior},
     );
     //
     PageableData? currentPageable = this.data.pageable;
@@ -679,6 +681,7 @@ abstract class Block<
     //
     return await query(
       listBehavior: ListBehavior.replace,
+      postQueryBehavior: postQueryBehavior,
       suggestedSelection: null,
       pageable: pageable,
       navigate: null,
@@ -688,13 +691,15 @@ abstract class Block<
   ///
   /// Query the previous page and replace the current items in the list.
   ///
-  Future<bool> queryPreviousPage() async {
+  Future<bool> queryPreviousPage({
+    PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAvailableItem,
+  }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: null,
       ownerClassInstance: this,
       methodName: "queryPreviousPage",
-      parameters: {},
+      parameters: {"postQueryBehavior": postQueryBehavior},
     );
     //
     PageableData? currentPageable = this.data.pageable;
@@ -708,6 +713,7 @@ abstract class Block<
     //
     return await query(
       listBehavior: ListBehavior.replace,
+      postQueryBehavior: postQueryBehavior,
       suggestedSelection: null,
       pageable: pageable,
       navigate: null,
@@ -717,13 +723,15 @@ abstract class Block<
   ///
   /// Query the next page and append to the current list of items.
   ///
-  Future<bool> queryMore() async {
+  Future<bool> queryMore({
+    PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAvailableItem,
+  }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: null,
       ownerClassInstance: this,
       methodName: "queryMore",
-      parameters: {},
+      parameters: {"postQueryBehavior": postQueryBehavior},
     );
     //
     PageableData? currentPageable = this.data.pageable;
@@ -734,6 +742,7 @@ abstract class Block<
     //
     return await query(
       listBehavior: ListBehavior.append,
+      postQueryBehavior: postQueryBehavior,
       suggestedSelection: null,
       pageable: pageable,
       navigate: null,
@@ -778,8 +787,8 @@ abstract class Block<
           block: this,
           pageable: pageable,
           listBehavior: listBehavior,
-          suggestedSelection: suggestedSelection,
           postQueryBehavior: postQueryBehavior,
+          suggestedSelection: suggestedSelection,
         ),
       ],
       forceQueryBlockFormOpts: [],

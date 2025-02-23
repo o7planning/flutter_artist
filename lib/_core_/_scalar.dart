@@ -21,10 +21,10 @@ part of '../flutter_artist.dart';
 /// ```
 ///
 abstract class Scalar<
-VALUE extends Object,
-FILTER_INPUT extends FilterInput, // EmptyFilterInput
-FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
-> extends _XBase {
+    VALUE extends Object,
+    FILTER_INPUT extends FilterInput, // EmptyFilterInput
+    FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
+    > extends _XBase {
   late final Shelf shelf;
 
   int _lazyLoadCount = 0;
@@ -72,7 +72,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   /// If this scalar does not declare a DataFilter, it will have the default DataFilter.
   ///
   late final DataFilter<FILTER_INPUT, FILTER_CRITERIA>
-  _registeredOrDefaultDataFilter;
+      _registeredOrDefaultDataFilter;
 
   ///
   /// Returns a DataFilter declared in the [Shelf.registerStructure()] method.
@@ -87,7 +87,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   }
 
   late final ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA> data =
-  ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
+      ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
 
   DataState get dataState => data._dataState;
 
@@ -102,8 +102,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     required String? dataFilterName,
     required this.hiddenBehavior,
     required List<Type> listenTypes,
-  })
-      : registerDataFilterName = dataFilterName,
+  })  : registerDataFilterName = dataFilterName,
         __listenItemTypes = listenTypes;
 
   String getValueTypeAsString() {
@@ -223,7 +222,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   }
 
   Future<bool>
-  _executeQuickActionWithOverlayAndRestorable<DATA extends Object>({
+      _executeQuickActionWithOverlayAndRestorable<DATA extends Object>({
     required FILTER_INPUT? filterInput,
     required QuickAction<DATA> action,
     required AfterScalarQuickAction? afterQuickAction,
@@ -600,7 +599,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     if (hiddenBehavior == ScalarHiddenBehavior.clear) {
       Future.delayed(
         const Duration(seconds: 0),
-            () {
+        () {
           // TODO: ???????????????
           // this.emptyQuery();
         },
