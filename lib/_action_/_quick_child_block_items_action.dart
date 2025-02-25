@@ -1,17 +1,14 @@
 part of '../flutter_artist.dart';
 
-abstract class QuickUpdateItemAction<
+abstract class QuickChildBlockItemsAction<
     ITEM extends Object, //
     ITEM_DETAIL extends Object> extends BaseAction {
-  final ITEM item;
-
-  const QuickUpdateItemAction({
-    required this.item,
+  const QuickChildBlockItemsAction({
     required super.needToConfirm,
     required super.actionInfo,
   });
 
-  Future<ApiResult<ITEM_DETAIL>> callApiQuickUpdateItem();
+  Future<ApiResult<ITEM_DETAIL>> callApiChildBlockItems({required ITEM item});
 
   ///
   /// Example:

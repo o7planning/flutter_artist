@@ -1610,6 +1610,20 @@ abstract class Block<
     }
   }
 
+  Future<bool> _executeQuickChildBlockItemsWithOverlayAndRestorable({
+    required ITEM item,
+    required QuickChildBlockItemsAction<ITEM, ITEM_DETAIL> action,
+  }) async {
+    return await FlutterArtist.executeTask(
+      asyncFunction: () async {
+        return await __executeQuickChildBlockItemsActionWithRestorable(
+          item: item,
+          action: action,
+        );
+      },
+    );
+  }
+
   Future<bool> _executeQuickUpdateItemWithOverlayAndRestorable({
     required ITEM item,
     required QuickUpdateItemAction<ITEM, ITEM_DETAIL> action,
@@ -1622,6 +1636,48 @@ abstract class Block<
         );
       },
     );
+  }
+
+  Future<bool> __executeQuickChildBlockItemsActionWithRestorable({
+    required ITEM item,
+    required QuickChildBlockItemsAction<ITEM, ITEM_DETAIL> action,
+  }) async {
+    _XShelf xShelf = _XShelf(
+      shelf: shelf,
+      forceDataFilterOpt: null,
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: [],
+      forceQueryBlockFormOpts: [],
+    );
+    //
+    _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
+    //
+    try {
+      shelf._backupAll();
+      bool success = await __executeQuickChildBlockItemsAction(
+        thisXBlock: thisXBlock,
+        item: item,
+        action: action,
+      );
+      if (success) {
+        shelf._applyNewStateAll();
+      } else {
+        shelf._restoreAll();
+      }
+      return success;
+    } catch (e, stackTrace) {
+      shelf._restoreAll();
+      //
+      _handleError(
+        shelf: shelf,
+        methodName: "__executeQuickActionUpdateItemWithRestorable",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      //
+      return false;
+    }
   }
 
   Future<bool> __executeQuickActionUpdateItemWithRestorable({
@@ -1666,6 +1722,57 @@ abstract class Block<
     }
   }
 
+  Future<bool> __executeQuickChildBlockItemsAction({
+    required _XBlock thisXBlock,
+    required ITEM item,
+    required QuickChildBlockItemsAction<ITEM, ITEM_DETAIL> action,
+  }) async {
+    __assertThisXBlock(thisXBlock);
+    //
+    ApiResult<ITEM_DETAIL> result;
+    try {
+      FlutterArtist.codeFlowLogger._addMethodCall(
+        isLibCode: false,
+        navigate: null,
+        ownerClassInstance: action,
+        methodName: "callApiChildBlockItems",
+        parameters: {
+          "item": item,
+        },
+      );
+      //
+      result = await action.callApiChildBlockItems(item: item);
+      //
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: '${getClassName(action)}.callApiChildBlockItems',
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      return false;
+    }
+    //
+    try {
+      return await _processSaveActionRestResult(
+        thisXBlock: thisXBlock,
+        calledMethodName: "${getClassName(action)}.callApiQuickUpdateItem",
+        result: result,
+      );
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: '_processSaveActionRestResult',
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      //
+      return false;
+    }
+  }
+
   Future<bool> __executeQuickActionUpdateItem({
     required _XBlock thisXBlock,
     required ITEM item,
@@ -1685,7 +1792,7 @@ abstract class Block<
         },
       );
       //
-      result = await action.callApiQuickUpdateItem(item: item);
+      result = await action.callApiQuickUpdateItem();
       //
     } catch (e, stackTrace) {
       _handleError(
@@ -1756,15 +1863,17 @@ abstract class Block<
     required AfterBlockQuickAction? afterQuickAction,
   }) async {
     List<_BlockOpt> forceQueryBlockOpts = [];
+    print("Chay vao daay 1");
     switch (afterQuickAction) {
       case null:
       case AfterBlockQuickAction.refreshCurrentItem:
         break;
       case AfterBlockQuickAction.query:
+        print("Chay vao daay 2");
         forceQueryBlockOpts = [
           _BlockOpt(
             block: this,
-            queryType: null,
+            queryType: QueryType.forceQuery,
             pageable: null,
             listBehavior: null,
             suggestedSelection: null,
@@ -1875,6 +1984,7 @@ abstract class Block<
       );
       success = false;
     }
+    print("Chay vao day 3 - afterQuickAction: $afterQuickAction");
     //
     if (afterQuickAction != null) {
       String methodName = "";
@@ -1896,6 +2006,7 @@ abstract class Block<
             methodName = "query";
             thisXBlock.setForceQuery();
             //
+            print("Chay vao day 4: $thisXBlock");
             success = await _queryThisAndChildren(
               thisXBlock: thisXBlock,
             );
@@ -2151,7 +2262,7 @@ abstract class Block<
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: "quickUpdate",
+        methodName: "executeQuickActionUpdateItem",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -2162,23 +2273,54 @@ abstract class Block<
     }
   }
 
-  @Deprecated("Khong su dung nua, xoa di")
-  bool __checkBeforeEditItem({
+  Future<bool> executeQuickChildBlockItems<
+      A extends QuickChildBlockItemsAction<ITEM, ITEM_DETAIL>>({
     required ITEM item,
-    required bool showErrorMessage,
-  }) {
-    bool canEdit = canEditItemOnForm(item: item);
-    if (!canEdit) {
-      if (showErrorMessage) {
-        showErrorSnackBar(
-          message:
-              "This item cannot be edited on the Form because some conditions are not met.",
-          errorDetails: ["Block: ${getClassName(this)}"],
-        );
-      }
+    required A action,
+  }) async {
+    FlutterArtist.codeFlowLogger._addMethodCall(
+      isLibCode: true,
+      navigate: null,
+      ownerClassInstance: this,
+      methodName: "executeQuickChildBlockItems",
+      parameters: {
+        "item": item,
+        "action": action,
+      },
+    );
+    //
+    // Confirmation:
+    //
+    bool confirm = true;
+    if (action.needToConfirm) {
+      confirm = await __showActionConfirmation(
+        shelf: shelf,
+        defaultConfirmation: action._defaultConfirmation,
+        customConfirmation: action.createCustomConfirmation(item: item),
+      );
+    }
+    if (!confirm) {
       return false;
     }
-    return true;
+    //
+    try {
+      bool success = await _executeQuickChildBlockItemsWithOverlayAndRestorable(
+        item: item,
+        action: action,
+      );
+      return success;
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: "executeQuickChildBlockItems",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      //
+      shelf.updateAllUIComponents();
+      return false;
+    }
   }
 
   Future<bool> prepareToEditFirstItem({
