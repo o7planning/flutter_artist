@@ -8,4 +8,17 @@ abstract class BaseAction {
     required this.needToConfirm,
     required this.actionInfo,
   });
+
+  ///
+  /// Example:
+  /// ```dart
+  /// CustomConfirmation? createCustomConfirmation({required Employee item}) {
+  ///   return (BuildContext context) async {
+  ///      bool confirm = await showDeleteEmpConfirmationDialog();
+  ///      return confirm;
+  ///   };
+  /// }
+  /// ```
+  ///
+  CustomConfirmation? createCustomConfirmation();
 }

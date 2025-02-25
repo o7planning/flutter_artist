@@ -10,19 +10,6 @@ abstract class QuickChildBlockItemsAction<
 
   Future<ApiResult<ITEM_DETAIL>> callApiChildBlockItems();
 
-  ///
-  /// Example:
-  /// ```dart
-  /// CustomConfirmation? createCustomConfirmation({required Employee item}) {
-  ///   return (BuildContext context) async {
-  ///      bool confirm = await showDeleteEmpConfirmationDialog();
-  ///      return confirm;
-  ///   };
-  /// }
-  /// ```
-  ///
-  CustomConfirmation? createCustomConfirmation();
-
   Future<bool> _defaultConfirmation(BuildContext context) async {
     return await dialogs.showConfirmDialog(
       context: context,
