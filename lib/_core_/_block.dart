@@ -2058,7 +2058,6 @@ abstract class Block<
       eventBlock: this,
       itemIdString: null,
     );
-
     final ITEM_DETAIL? savedItemDetail = result.data;
     final bool keepInList;
     if (savedItemDetail == null) {

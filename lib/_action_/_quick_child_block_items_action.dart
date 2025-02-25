@@ -3,7 +3,10 @@ part of '../flutter_artist.dart';
 abstract class QuickChildBlockItemsAction<
     ITEM extends Object, //
     ITEM_DETAIL extends Object> extends BaseAction {
+  final ITEM item;
+
   const QuickChildBlockItemsAction({
+    required this.item,
     required super.needToConfirm,
     required super.actionInfo,
   });
