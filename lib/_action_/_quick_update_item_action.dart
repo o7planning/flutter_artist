@@ -24,7 +24,7 @@ abstract class QuickUpdateItemAction<
   /// }
   /// ```
   ///
-  CustomConfirmation? createCustomConfirmation({required ITEM item});
+  CustomConfirmation? createCustomConfirmation();
 
   Future<bool> _defaultConfirmation(BuildContext context) async {
     return await dialogs.showConfirmDialog(

@@ -1611,13 +1611,11 @@ abstract class Block<
   }
 
   Future<bool> _executeQuickChildBlockItemsWithOverlayAndRestorable({
-    required ITEM item,
     required QuickChildBlockItemsAction<ITEM, ITEM_DETAIL> action,
   }) async {
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
         return await __executeQuickChildBlockItemsActionWithRestorable(
-          item: item,
           action: action,
         );
       },
@@ -1625,13 +1623,11 @@ abstract class Block<
   }
 
   Future<bool> _executeQuickUpdateItemWithOverlayAndRestorable({
-    required ITEM item,
     required QuickUpdateItemAction<ITEM, ITEM_DETAIL> action,
   }) async {
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
         return await __executeQuickActionUpdateItemWithRestorable(
-          item: item,
           action: action,
         );
       },
@@ -1639,7 +1635,6 @@ abstract class Block<
   }
 
   Future<bool> __executeQuickChildBlockItemsActionWithRestorable({
-    required ITEM item,
     required QuickChildBlockItemsAction<ITEM, ITEM_DETAIL> action,
   }) async {
     _XShelf xShelf = _XShelf(
@@ -1656,7 +1651,6 @@ abstract class Block<
       shelf._backupAll();
       bool success = await __executeQuickChildBlockItemsAction(
         thisXBlock: thisXBlock,
-        item: item,
         action: action,
       );
       if (success) {
@@ -1681,7 +1675,6 @@ abstract class Block<
   }
 
   Future<bool> __executeQuickActionUpdateItemWithRestorable({
-    required ITEM item,
     required QuickUpdateItemAction<ITEM, ITEM_DETAIL> action,
   }) async {
     _XShelf xShelf = _XShelf(
@@ -1698,7 +1691,6 @@ abstract class Block<
       shelf._backupAll();
       bool success = await __executeQuickActionUpdateItem(
         thisXBlock: thisXBlock,
-        item: item,
         action: action,
       );
       if (success) {
@@ -1724,7 +1716,6 @@ abstract class Block<
 
   Future<bool> __executeQuickChildBlockItemsAction({
     required _XBlock thisXBlock,
-    required ITEM item,
     required QuickChildBlockItemsAction<ITEM, ITEM_DETAIL> action,
   }) async {
     __assertThisXBlock(thisXBlock);
@@ -1736,12 +1727,10 @@ abstract class Block<
         navigate: null,
         ownerClassInstance: action,
         methodName: "callApiChildBlockItems",
-        parameters: {
-          "item": item,
-        },
+        parameters: {},
       );
       //
-      result = await action.callApiChildBlockItems(item: item);
+      result = await action.callApiChildBlockItems();
       //
     } catch (e, stackTrace) {
       _handleError(
@@ -1775,7 +1764,6 @@ abstract class Block<
 
   Future<bool> __executeQuickActionUpdateItem({
     required _XBlock thisXBlock,
-    required ITEM item,
     required QuickUpdateItemAction<ITEM, ITEM_DETAIL> action,
   }) async {
     __assertThisXBlock(thisXBlock);
@@ -1787,9 +1775,7 @@ abstract class Block<
         navigate: null,
         ownerClassInstance: action,
         methodName: "callApiQuickUpdateItem",
-        parameters: {
-          "item": item,
-        },
+        parameters: {},
       );
       //
       result = await action.callApiQuickUpdateItem();
@@ -2225,7 +2211,6 @@ abstract class Block<
 
   Future<bool> executeQuickActionUpdateItem<
       A extends QuickUpdateItemAction<ITEM, ITEM_DETAIL>>({
-    required ITEM item,
     required A action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -2234,7 +2219,6 @@ abstract class Block<
       ownerClassInstance: this,
       methodName: "executeQuickActionUpdateItem",
       parameters: {
-        "item": item,
         "action": action,
       },
     );
@@ -2246,7 +2230,7 @@ abstract class Block<
       confirm = await __showActionConfirmation(
         shelf: shelf,
         defaultConfirmation: action._defaultConfirmation,
-        customConfirmation: action.createCustomConfirmation(item: item),
+        customConfirmation: action.createCustomConfirmation(),
       );
     }
     if (!confirm) {
@@ -2255,7 +2239,6 @@ abstract class Block<
     //
     try {
       bool success = await _executeQuickUpdateItemWithOverlayAndRestorable(
-        item: item,
         action: action,
       );
       return success;
@@ -2275,7 +2258,6 @@ abstract class Block<
 
   Future<bool> executeQuickChildBlockItems<
       A extends QuickChildBlockItemsAction<ITEM, ITEM_DETAIL>>({
-    required ITEM item,
     required A action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -2284,7 +2266,6 @@ abstract class Block<
       ownerClassInstance: this,
       methodName: "executeQuickChildBlockItems",
       parameters: {
-        "item": item,
         "action": action,
       },
     );
@@ -2296,7 +2277,7 @@ abstract class Block<
       confirm = await __showActionConfirmation(
         shelf: shelf,
         defaultConfirmation: action._defaultConfirmation,
-        customConfirmation: action.createCustomConfirmation(item: item),
+        customConfirmation: action.createCustomConfirmation(),
       );
     }
     if (!confirm) {
@@ -2305,7 +2286,6 @@ abstract class Block<
     //
     try {
       bool success = await _executeQuickChildBlockItemsWithOverlayAndRestorable(
-        item: item,
         action: action,
       );
       return success;
