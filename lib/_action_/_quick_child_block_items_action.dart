@@ -8,7 +8,7 @@ abstract class QuickChildBlockItemsAction<
     required super.actionInfo,
   });
 
-  Future<ApiResult<ITEM_DETAIL>> callApiChildBlockItems({required ITEM item});
+  Future<ApiResult<ITEM_DETAIL>> callApiChildBlockItems();
 
   ///
   /// Example:
@@ -21,7 +21,7 @@ abstract class QuickChildBlockItemsAction<
   /// }
   /// ```
   ///
-  CustomConfirmation? createCustomConfirmation({required ITEM item});
+  CustomConfirmation? createCustomConfirmation();
 
   Future<bool> _defaultConfirmation(BuildContext context) async {
     return await dialogs.showConfirmDialog(
