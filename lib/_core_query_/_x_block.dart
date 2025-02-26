@@ -22,7 +22,7 @@ class _XBlock {
 
   //
   Object? _candidateCurrentItem;
-   _CurrentCoupleItem _stateCurrent = _CurrentCoupleItem(
+  _CurrentCoupleItem _stateCurrent = _CurrentCoupleItem(
     item: null,
     itemDetail: null,
   );

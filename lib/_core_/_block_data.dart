@@ -94,7 +94,6 @@ abstract class BlockData<
 
   DataState get selectionDataState => _selectionDataState;
 
-
   BlockData({
     required this.block,
     required List<ITEM> items,
