@@ -921,11 +921,8 @@ abstract class Block<
     if (this.queryDataState == DataState.error) {
       return;
     }
-    print(">>>>>>>>>>>> _unitPrepareToShow     1");
     ITEM? candidateCurrentItem = thisXBlock._candidateCurrentItem as ITEM?;
-
-    print(
-        ">>>>>>>>>>>> _unitPrepareToShow     2: candidateCurrentItem: $candidateCurrentItem");
+ 
     bool newCurrent = false;
     ITEM? stateCurrentItem = thisXBlock._stateCurrent._item as ITEM?;
     //
