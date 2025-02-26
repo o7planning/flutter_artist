@@ -1166,6 +1166,7 @@ abstract class Block<
 
   // Cascade query:
   // Private method (Only for use in this class)
+  @Deprecated("Khong su dung nua, xoa di")
   Future<bool> _queryThisAndChildren({
     required _XBlock thisXBlock,
   }) async {

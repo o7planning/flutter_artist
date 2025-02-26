@@ -834,13 +834,23 @@ abstract class Shelf extends _XBase {
       }
       //
       for (_XBlock xBlock in xShelf.allRootXBlocks) {
-        bool success = await xBlock.block._queryThisAndChildren(
-          thisXBlock: xBlock,
-        );
+        // bool success = await xBlock.block._queryThisAndChildren(
+        //   thisXBlock: xBlock,
+        // );
+        // //
+        // if (!success) {
+        //   return false;
+        // }
+
         //
-        if (!success) {
-          return false;
-        }
+        // Add to Queue:
+        //
+        _unitQueue.addTaskUnit(
+          _TaskUnit(
+            xBlock: xBlock,
+            taskUnitName: TaskUnitName.query,
+          ),
+        );
       }
       //
       for (_XBlockForm xBlockForm in xShelf.allXBlockForms) {
@@ -874,6 +884,12 @@ abstract class Shelf extends _XBase {
           }
         }
         return true;
+      }
+      //
+      while (_unitQueue.hasNext()) {
+        _TaskUnit taskUnit = _unitQueue.getNextTaskUnit()!;
+        _XBlock xBlock = taskUnit.xBlock;
+        await xBlock.block._executeTaskUnit(taskUnit);
       }
       //
       return true;
