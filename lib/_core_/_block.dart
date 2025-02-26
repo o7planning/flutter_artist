@@ -1849,13 +1849,11 @@ abstract class Block<
     required AfterBlockQuickAction? afterQuickAction,
   }) async {
     List<_BlockOpt> forceQueryBlockOpts = [];
-    print("Chay vao daay 1");
     switch (afterQuickAction) {
       case null:
       case AfterBlockQuickAction.refreshCurrentItem:
         break;
       case AfterBlockQuickAction.query:
-        print("Chay vao daay 2");
         forceQueryBlockOpts = [
           _BlockOpt(
             block: this,
