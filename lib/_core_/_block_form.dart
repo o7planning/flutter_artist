@@ -27,7 +27,12 @@ abstract class BlockForm<
 
   Shelf get shelf => block.shelf;
 
-  late final Block<ID, Object, ITEM_DETAIL, FilterInput, FILTER_CRITERIA,
+  late final Block<
+      ID, //
+      Object,
+      ITEM_DETAIL,
+      FilterInput,
+      FILTER_CRITERIA,
       EXTRA_FORM_INPUT> block;
 
   DataState get dataState => data._dataState;
@@ -38,8 +43,7 @@ abstract class BlockForm<
 
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
-  final AutovalidateMode _defaultAutovalidateMode =
-      AutovalidateMode.onUserInteraction;
+  final _defaultAutovalidateMode = AutovalidateMode.onUserInteraction;
 
   late AutovalidateMode autovalidateMode = _defaultAutovalidateMode;
 
@@ -47,7 +51,14 @@ abstract class BlockForm<
 
   BlockForm();
 
-  //
+  // ***************************************************************************
+
+  void _clearWithDataState({required DataState dataState}) {
+    data._clearWithDataState(dataState: dataState);
+  }
+
+  // ***************************************************************************
+
   void _addFormWidgetState({
     required _RefreshableWidgetState widgetState,
     required final bool isShowing,

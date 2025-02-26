@@ -52,6 +52,20 @@ class BlockFormData<
 
   BlockFormData({required this.blockForm});
 
+  // ***************************************************************************
+
+  void _clearWithDataState({required DataState dataState}) {
+    _dataState = dataState;
+    _formMode = FormMode.none;
+    //
+    _justInitialized =false;
+    __initial0FormData.clear();
+    _initialFormData.clear();
+    _currentFormData.clear();
+  }
+
+  // ***************************************************************************
+
   bool _isDirty() {
     Set<String> keySet = {}
       ..addAll(_initialFormData.keys)

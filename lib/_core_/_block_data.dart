@@ -101,6 +101,31 @@ abstract class BlockData<
 
   // ***************************************************************************
 
+  void _clearWithDataState({required DataState dataState}) {
+    _items.clear();
+    _selectedItems.clear();
+    _checkedItems.clear();
+    _setCurrentItemOnly(refreshedItem: null, refreshedItemDetail: null);
+    _lastQueryResult = null;
+  }
+
+  // ***************************************************************************
+
+  bool _isXCriteriaChanged({
+    required Object? newCurrentParentItemId,
+    required FILTER_CRITERIA newFilterCriteria,
+  }) {
+    if (newCurrentParentItemId != _currentParentItemId) {
+      return true;
+    }
+    if (newFilterCriteria != _filterCriteria) {
+      return true;
+    }
+    return false;
+  }
+
+  // ***************************************************************************
+
   void sort() {
     try {
       if (block._itemSortCriteria != null) {

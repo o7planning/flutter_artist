@@ -157,8 +157,11 @@ abstract class Block<
 
   String? get parentBlockName => parent?.name;
 
-  final BlockForm<ID, ITEM_DETAIL, FILTER_CRITERIA, EXTRA_FORM_INPUT>?
-      blockForm;
+  final BlockForm<
+      ID, //
+      ITEM_DETAIL,
+      FILTER_CRITERIA,
+      EXTRA_FORM_INPUT>? blockForm;
 
   final List<Block> _childBlocks;
 
@@ -216,9 +219,19 @@ abstract class Block<
           pageSize: __pageSize,
         );
 
-  late final BlockData<ID, ITEM, ITEM_DETAIL, FILTER_INPUT, FILTER_CRITERIA,
-          EXTRA_FORM_INPUT> data =
-      _InternalBlockData<ID, ITEM, ITEM_DETAIL, FILTER_INPUT, FILTER_CRITERIA,
+  late final BlockData<
+          ID, //
+          ITEM,
+          ITEM_DETAIL,
+          FILTER_INPUT,
+          FILTER_CRITERIA,
+          EXTRA_FORM_INPUT> data //
+      = _InternalBlockData<
+          ID, //
+          ITEM,
+          ITEM_DETAIL,
+          FILTER_INPUT,
+          FILTER_CRITERIA,
           EXTRA_FORM_INPUT>.empty(
     this,
     __pageable,
@@ -258,6 +271,97 @@ abstract class Block<
     }
     if (blockForm != null) {
       blockForm!.block = this;
+    }
+  }
+  // ***************************************************************************
+
+  void __clearWithDataState({
+    required _XBlock thisXBlock,
+    required DataState dataState,
+    required DataState formDataState,
+  }) {
+    __assertThisXBlock(thisXBlock);
+    //
+    data._clearWithDataState(dataState: dataState);
+    if (blockForm != null) {
+      blockForm!._clearWithDataState(dataState: formDataState);
+    }
+  }
+
+  void __clearWithDataStateCascade({
+    required _XBlock thisXBlock,
+    required DataState dataState,
+    required DataState formDataState,
+  }) {
+    __assertThisXBlock(thisXBlock);
+    //
+    __clearWithDataState(
+      thisXBlock: thisXBlock,
+      dataState: dataState,
+      formDataState: formDataState,
+    );
+    //
+    for (var childXBlock in thisXBlock.childXBlocks) {
+      childXBlock.block.__clearWithDataStateCascade(
+        thisXBlock: childXBlock,
+        dataState: dataState,
+        formDataState: formDataState,
+      );
+    }
+  }
+
+  //
+  void __setQueryDataWithStateCascade({
+    required _XBlock thisXBlock,
+    required FILTER_CRITERIA? filterCriteria,
+    required ListBehavior listBehavior,
+    required PageableData? pageable,
+    required PageData<ID, ITEM>? pageData,
+    required ITEM? candidateCurrentItem,
+    required DataState dataState,
+    required DataState formDataState,
+  }) {
+    __assertThisXBlock(thisXBlock);
+    //
+    data._updateFrom(
+      forceListBehavior: listBehavior,
+      currentParentItemId: this.parentItemId,
+      filterCriteria: filterCriteria,
+      pageable: pageable,
+      pageData: pageData,
+      dataState: dataState,
+    );
+    if (blockForm != null) {
+      // TODO: ??????????????????????????????????????????????????????
+      // Update formDataState ???????
+      // blockForm!.data._updateFormData(formData);
+    }
+    //
+    // TODO: Tạm thời cứ clear all Child Block ITEMS:
+    for (_XBlock childXBlock in thisXBlock.childXBlocks) {
+      switch (dataState) {
+        case DataState.ready:
+          // TODO: Tạm thời cứ clear all Child Block ITEMS:
+          childXBlock.block.__clearWithDataStateCascade(
+            thisXBlock: childXBlock,
+            dataState: DataState.pending,
+            formDataState: DataState.pending,
+          );
+        case DataState.pending:
+          // TODO: Tạm thời cứ clear all Child Block ITEMS:
+          childXBlock.block.__clearWithDataStateCascade(
+            thisXBlock: childXBlock,
+            dataState: DataState.pending,
+            formDataState: DataState.pending,
+          );
+        case DataState.error:
+          // TODO: Tạm thời cứ clear all Child Block ITEMS:
+          childXBlock.block.__clearWithDataStateCascade(
+            thisXBlock: childXBlock,
+            dataState: DataState.error,
+            formDataState: DataState.error,
+          );
+      }
     }
   }
 
@@ -624,6 +728,171 @@ abstract class Block<
       print(stackTrace);
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<void> _executeTaskUnit(_TaskUnit taskUnit) async {
+    switch (taskUnit.taskUnitName) {
+      case TaskUnitName.query:
+        await taskUnit.xBlock.block._unitQuery(taskUnit.xBlock);
+      case TaskUnitName.select:
+        await taskUnit.xBlock.block._unitPrepareToShow(taskUnit.xBlock);
+      case TaskUnitName.delete:
+        await taskUnit.xBlock.block._unitDeleteItem(taskUnit.xBlock);
+    }
+  }
+
+  Future<bool> _unitQuery(_XBlock thisXBlock) async {
+    __assertThisXBlock(thisXBlock);
+    //
+    FlutterArtist.codeFlowLogger._addMethodCall(
+      isLibCode: false,
+      navigate: null,
+      ownerClassInstance: this,
+      methodName: "callApiQuery",
+      parameters: {},
+    );
+    //
+    FILTER_CRITERIA? filterCriteria;
+    try {
+      final _XDataFilter xDataFilter = thisXBlock.xDataFilter;
+      final DataFilter dataFilter = xDataFilter.dataFilter;
+      //
+      if (!xDataFilter.queried) {
+        FILTER_INPUT? filterInput = xDataFilter.filterInput as FILTER_INPUT?;
+        //
+        filterCriteria = await dataFilter._prepareData(
+          filterInput: filterInput,
+        ) as FILTER_CRITERIA?;
+        //
+        xDataFilter.queried = true;
+      } else {
+        filterCriteria = dataFilter._filterCriteria! as FILTER_CRITERIA;
+      }
+    } catch (e, stackTrace) {/* Never Error */}
+    //
+    // Has Error in DataFilter.
+    //
+    if (filterCriteria == null) {
+      // Set Block to error cascade.
+      __clearWithDataStateCascade(
+        thisXBlock: thisXBlock,
+        dataState: DataState.error,
+        formDataState: DataState.error,
+      );
+      return false;
+    }
+    //
+    // Ready FilterCriteria:
+    //
+    bool xCriteriaChanged = data._isXCriteriaChanged(
+      newCurrentParentItemId: parentItemId,
+      newFilterCriteria: filterCriteria,
+    );
+    //
+    final PageableData callingPageable = thisXBlock.pageable ??
+        __pageable ??
+        const PageableData(page: 1, pageSize: null);
+    //
+    final ITEM? candidateCurrentItem;
+    final ListBehavior newListBehavior;
+    final int currentItemCount = data.itemCount;
+    //
+    if (xCriteriaChanged) {
+      newListBehavior = ListBehavior.replace;
+      candidateCurrentItem = null;
+    } else {
+      newListBehavior = thisXBlock.listBehavior;
+      candidateCurrentItem = data.currentItem;
+    }
+    //
+    bool isQueryError = false;
+    PageData<ID, ITEM>? pageData;
+    try {
+      __refreshQueryingState(isQuerying: true);
+      //
+      ApiResult<PageData<ID, ITEM>?> result = await callApiQuery(
+        filterCriteria: filterCriteria,
+        pageable: callingPageable,
+      );
+      //
+      if (result.isError()) {
+        _handleRestError(
+          shelf: shelf,
+          methodName: "callApiQuery",
+          message: result.errorMessage!,
+          errorDetails: result.errorDetails,
+          showSnackBar: true,
+        );
+        isQueryError = true;
+      } else {
+        pageData = result.data;
+      }
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: 'callApiQuery',
+        error: "Error callApiQuery: $e",
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      isQueryError = true;
+    } finally {
+      __refreshQueryingState(isQuerying: false);
+    }
+    //
+    final DataState dataState;
+    if (isQueryError) {
+      switch (newListBehavior) {
+        case ListBehavior.replace:
+          dataState = DataState.error;
+        case ListBehavior.append:
+          if (currentItemCount > 0) {
+            dataState = DataState.ready;
+          } else {
+            dataState = DataState.error;
+          }
+      }
+    } else {
+      dataState = DataState.ready;
+    }
+    //
+    __setQueryDataWithStateCascade(
+      thisXBlock: thisXBlock,
+      filterCriteria: filterCriteria,
+      listBehavior: newListBehavior,
+      pageable: callingPageable,
+      pageData: pageData,
+      candidateCurrentItem: candidateCurrentItem,
+      dataState: dataState,
+      formDataState: dataState, // TODO XEM LAI ?????????????????????????????
+    );
+    //
+    // Add TaskUnit
+    //
+
+    //
+    // Next TaskUnit.
+    //
+    return true;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<void> _unitPrepareToShow(_XBlock thisXBlock) async {
+    __assertThisXBlock(thisXBlock);
+    //
+  }
+
+  Future<void> _unitDeleteItem(_XBlock thisXBlock) async {
+    __assertThisXBlock(thisXBlock);
+    //
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   /// Clear and set block to "Pending State".

@@ -32,6 +32,7 @@ part '_action_/_quick_update_item_action.dart';
 part '_adapter_/_flutter_artist_adapter.dart';
 part '_adapter_/_logged_in_user_adapter.dart';
 part '_adapter_/_notification_adapter.dart';
+part '_core_/_block__unit_queue.dart';
 part '_code_flow_/__code_flow_const.dart';
 part '_code_flow_/_code_flow_filter.dart';
 part '_code_flow_/_code_flow_func_trace_info_view.dart';
