@@ -2777,7 +2777,7 @@ abstract class Block<
     if (nextItem == null) {
       return false;
     }
-    return await prepareToShowItem(
+    return await prepareToShowItem_OLD(
       item: nextItem,
       navigate: navigate,
     );
@@ -2793,7 +2793,7 @@ abstract class Block<
     if (nextItem == null) {
       return false;
     }
-    return await prepareToShowItem(
+    return await prepareToShowItem_OLD(
       item: nextItem,
       navigate: navigate,
     );
@@ -2809,13 +2809,14 @@ abstract class Block<
     if (previousItem == null) {
       return false;
     }
-    return await prepareToShowItem(
+    return await prepareToShowItem_OLD(
       item: previousItem,
       navigate: navigate,
     );
   }
 
-  Future<bool> prepareToShowItem({
+  @Deprecated("Khong su dung nua, xoa di")
+  Future<bool> prepareToShowItem_OLD({
     required ITEM item,
     Function()? navigate,
   }) async {
