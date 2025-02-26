@@ -2,6 +2,7 @@ part of '../flutter_artist.dart';
 
 class _XBlock {
   bool __forceQuery = false;
+  bool __forceReloadItem = false;
 
   bool affectByFilterInput = false;
   final Block block;
@@ -56,8 +57,16 @@ class _XBlock {
     return __forceQuery;
   }
 
+  bool get forceReloadItem {
+    return __forceReloadItem;
+  }
+
   void setForceQuery() {
     __forceQuery = true;
+  }
+
+  void setForceReloadItem() {
+    __forceReloadItem = true;
   }
 
   QueryType get queryType {

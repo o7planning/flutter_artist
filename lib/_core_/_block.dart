@@ -922,7 +922,7 @@ abstract class Block<
       return;
     }
     ITEM? candidateCurrentItem = thisXBlock._candidateCurrentItem as ITEM?;
- 
+
     bool newCurrent = false;
     ITEM? stateCurrentItem = thisXBlock._stateCurrent._item as ITEM?;
     //
@@ -936,8 +936,7 @@ abstract class Block<
         stateCurrentItem = null;
       }
     }
-    // candidateCurrentItem = candidateCurrentItem?? stateCurrentItem;
-
+    //
     if (stateCurrentItem == null) {
       newCurrent = true;
       candidateCurrentItem = candidateCurrentItem ?? this.data.firstItem;
@@ -951,7 +950,7 @@ abstract class Block<
       }
     }
     //
-    if (newCurrent && candidateCurrentItem != null) {
+    if ((thisXBlock.forceReloadItem  || newCurrent) && candidateCurrentItem != null) {
       bool isRefreshError = false;
       ITEM_DETAIL? candidateCurrentItemDetail;
       try {
@@ -1008,6 +1007,9 @@ abstract class Block<
             );
         // Remove item from List.
         this.data._removeItem(removeItem: candidateCurrentItem);
+        // TODO: Update List only??
+        this.updateAllUIComponents(withoutFilters: true);
+        await Future.delayed(Duration(seconds: 1));
         //
         if (siblingItem != null) {
           thisXBlock._candidateCurrentItem = siblingItem;
@@ -1059,6 +1061,7 @@ abstract class Block<
       stateSelectedItems: this.data.selectedItems,
       stateCheckedItems: this.data.checkedItems,
     );
+    thisXBlock.setForceReloadItem();
     //
     await shelf._queryXShelf(xShelf: xShelf);
     return true;
