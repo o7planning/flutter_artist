@@ -562,7 +562,7 @@ abstract class Shelf extends _XBase {
     for (Block block in blocks) {
       // _hasActiveWidgetAndNeedToQuery()
       if (block.hasActiveBlockFragmentWidget(alsoCheckChildren: true) &&
-          block.dataState == DataState.pending) {
+          block.queryDataState == DataState.pending) {
         founds.add(_ScalarOrBlockOrFormWrapper.block(block));
       } else if (block.blockForm != null &&
           block.blockForm!.hasActiveUIComponent() &&
@@ -888,6 +888,8 @@ abstract class Shelf extends _XBase {
       //
       while (_unitQueue.hasNext()) {
         _TaskUnit taskUnit = _unitQueue.getNextTaskUnit()!;
+        taskUnit.printInfo();
+        //
         _XBlock xBlock = taskUnit.xBlock;
         await xBlock.block._executeTaskUnit(taskUnit);
       }

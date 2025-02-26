@@ -48,7 +48,7 @@ class _InternalBlockData<
   void _backup() {
     if (!__isTemporaryMode) {
       __isTemporaryMode = true;
-      __dataStateBk = _dataState;
+      __dataStateBk = _queryDataState;
       __currentBk = __current;
       __itemsBk
         ..clear()
@@ -90,7 +90,7 @@ class _InternalBlockData<
   void _restore() {
     if (__isTemporaryMode) {
       __current = __currentBk;
-      _dataState = __dataStateBk;
+      _queryDataState = __dataStateBk;
       _items
         ..clear()
         ..addAll(__itemsBk);

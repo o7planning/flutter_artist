@@ -86,9 +86,14 @@ abstract class BlockData<
 
   ITEM_DETAIL? get currentItemDetail => __current._itemDetail;
 
-  DataState _dataState = DataState.pending;
+  DataState _queryDataState = DataState.pending;
 
-  DataState get dataState => _dataState;
+  DataState get queryDataState => _queryDataState;
+
+  DataState _selectionDataState = DataState.pending;
+
+  DataState get selectionDataState => _selectionDataState;
+
 
   BlockData({
     required this.block,
@@ -146,7 +151,7 @@ abstract class BlockData<
 
   void setToPending() {
     print(" --> ${getClassName(block)} --> Set To Pending");
-    _dataState = DataState.pending;
+    _queryDataState = DataState.pending;
   }
 
   ///
@@ -250,7 +255,7 @@ abstract class BlockData<
     _currentParentItemId = currentParentItemId;
     _filterCriteria = filterCriteria;
     _lastQueryResult = pageData;
-    _dataState = dataState;
+    _queryDataState = dataState;
     //
     // Append to _items:
     //

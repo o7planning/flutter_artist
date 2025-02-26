@@ -16,6 +16,11 @@ class _TaskUnit {
     required this.xBlock,
     required this.taskUnitName,
   });
+
+  void printInfo() {
+    print(
+        ">>>>> EXECUTE TaskUnit: $taskUnitName - Block: ${xBlock.block.name}");
+  }
 }
 
 class _BlockUnitQueue {

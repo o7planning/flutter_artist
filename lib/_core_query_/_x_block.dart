@@ -20,12 +20,37 @@ class _XBlock {
   final _XBlockForm? xBlockForm;
   final List<_XBlock> childXBlocks = [];
 
+  //
+  Object? _candidateCurrentItem;
+   _CurrentCoupleItem _stateCurrent = _CurrentCoupleItem(
+    item: null,
+    itemDetail: null,
+  );
+  List<Object> _stateSelectedItems = [];
+  List<Object> _stateCheckedItems = [];
+
   _XBlock({
     required this.block,
     required this.xBlockParent,
     required this.xDataFilter,
     required this.xBlockForm,
   });
+
+  void setState({
+    required Object? candidateCurrentItem,
+    required Object? stateCurrentItem,
+    required Object? stateCurrentItemDetail,
+    required List<Object> stateSelectedItems,
+    required List<Object> stateCheckedItems,
+  }) {
+    _candidateCurrentItem = candidateCurrentItem;
+    _stateCurrent = _CurrentCoupleItem(
+      item: stateCurrentItem,
+      itemDetail: stateCurrentItemDetail,
+    );
+    _stateSelectedItems.addAll(stateSelectedItems);
+    _stateCheckedItems.addAll(stateCheckedItems);
+  }
 
   bool get forceQuery {
     return __forceQuery;

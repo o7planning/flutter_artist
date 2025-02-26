@@ -237,7 +237,9 @@ abstract class Block<
     __pageable,
   );
 
-  DataState get dataState => data._dataState;
+  DataState get queryDataState => data._queryDataState;
+
+  DataState get selectionDataState => data._selectionDataState;
 
   final ItemSortCriteria? _itemSortCriteria;
 
@@ -411,7 +413,7 @@ abstract class Block<
   // ***************************************************************************
 
   bool _needToQuery() {
-    if (dataState != DataState.ready) {
+    if (queryDataState != DataState.ready) {
       return true;
     }
     //
@@ -736,15 +738,22 @@ abstract class Block<
   Future<void> _executeTaskUnit(_TaskUnit taskUnit) async {
     switch (taskUnit.taskUnitName) {
       case TaskUnitName.query:
-        await taskUnit.xBlock.block._unitQuery(taskUnit.xBlock);
+        await taskUnit.xBlock.block._unitQuery(
+          thisXBlock: taskUnit.xBlock,
+        );
       case TaskUnitName.select:
-        await taskUnit.xBlock.block._unitPrepareToShow(taskUnit.xBlock);
+        await taskUnit.xBlock.block._unitPrepareToShow(
+          thisXBlock: taskUnit.xBlock,
+        );
       case TaskUnitName.delete:
-        await taskUnit.xBlock.block._unitDeleteItem(taskUnit.xBlock);
+        await taskUnit.xBlock.block
+            ._unitDeleteItem(thisXBlock: taskUnit.xBlock);
     }
   }
 
-  Future<bool> _unitQuery(_XBlock thisXBlock) async {
+  // ---------------------------------------------------------------------------
+
+  Future<bool> _unitQuery({required _XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
     //
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -810,6 +819,7 @@ abstract class Block<
       candidateCurrentItem = data.currentItem;
     }
     //
+    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1");
     bool isQueryError = false;
     PageData<ID, ITEM>? pageData;
     try {
@@ -845,6 +855,7 @@ abstract class Block<
       __refreshQueryingState(isQuerying: false);
     }
     //
+    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 2");
     final DataState dataState;
     if (isQueryError) {
       switch (newListBehavior) {
@@ -861,6 +872,15 @@ abstract class Block<
       dataState = DataState.ready;
     }
     //
+    thisXBlock.setState(
+      candidateCurrentItem: candidateCurrentItem,
+      stateCurrentItem: data.currentItem,
+      stateCurrentItemDetail: data.currentItemDetail,
+      stateSelectedItems: data._selectedItems,
+      stateCheckedItems: data._checkedItems,
+    );
+    //
+    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3");
     __setQueryDataWithStateCascade(
       thisXBlock: thisXBlock,
       filterCriteria: filterCriteria,
@@ -872,8 +892,19 @@ abstract class Block<
       formDataState: dataState, // TODO XEM LAI ?????????????????????????????
     );
     //
+
+    //
     // Add TaskUnit
     //
+    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 4");
+    if (dataState == DataState.ready) {
+      _unitQueue.addTaskUnit(
+        _TaskUnit(
+          xBlock: thisXBlock,
+          taskUnitName: TaskUnitName.select,
+        ),
+      );
+    }
 
     //
     // Next TaskUnit.
@@ -884,12 +915,101 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> _unitPrepareToShow(_XBlock thisXBlock) async {
+  Future<void> _unitPrepareToShow({required _XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
     //
+    if (this.queryDataState == DataState.error) {
+      return;
+    }
+    print(">>>>>>>>>>>> _unitPrepareToShow");
+    ITEM? candidateCurrentItem = thisXBlock._candidateCurrentItem as ITEM?;
+    bool newCurrent = false;
+    ITEM? stateCurrentItem = thisXBlock._stateCurrent._item as ITEM?;
+    //
+    if (stateCurrentItem == null) {
+      newCurrent = true;
+      candidateCurrentItem = candidateCurrentItem ?? this.data.firstItem;
+    } else {
+      bool contains = this.data.containsItem(item: stateCurrentItem);
+      if (!contains) {
+        newCurrent = true;
+        candidateCurrentItem = candidateCurrentItem ?? this.data.firstItem;
+      } else {
+        candidateCurrentItem = candidateCurrentItem ?? stateCurrentItem;
+      }
+    }
+    //
+    if (newCurrent && candidateCurrentItem != null) {
+      bool isRefreshError = false;
+      ITEM_DETAIL? candidateCurrentItemDetail;
+      try {
+        ApiResult<ITEM_DETAIL> result = await callApiRefreshItem(
+          item: candidateCurrentItem,
+        );
+        //
+        if (result.isError()) {
+          isRefreshError = true;
+          //
+          _handleRestError(
+            shelf: shelf,
+            methodName: "callApiRefreshItem",
+            message: result.errorMessage!,
+            errorDetails: result.errorDetails,
+            showSnackBar: true,
+          );
+        } else {
+          candidateCurrentItemDetail = result.data;
+        }
+      } catch (e, stackTrace) {
+        isRefreshError = true;
+        //
+        _handleError(
+          shelf: shelf,
+          methodName: "callApiRefreshItem",
+          error: "Error callApiRefreshItem: $e",
+          stackTrace: stackTrace,
+          showSnackBar: true,
+        );
+      }
+      //
+      if (isRefreshError) {
+        this.data._selectionDataState = DataState.error;
+        return;
+      } else {
+        this.data._selectionDataState = DataState.pending;
+      }
+      //
+      if (candidateCurrentItemDetail != null) {
+        this.data._selectionDataState = DataState.ready;
+        // TODO: Xu ly loi. ??????????????????????????????????????????????????
+        candidateCurrentItem = this.__convertItemDetailToItem(
+          itemDetail: candidateCurrentItemDetail,
+        );
+        //
+        this.data._setCurrentItemOnly(
+              refreshedItem: candidateCurrentItem,
+              refreshedItemDetail: candidateCurrentItemDetail,
+            );
+      } else {
+        ITEM? siblingItem = this.data.findSiblingItem(
+              item: candidateCurrentItem,
+            );
+        // Remove item from List.
+        this.data._removeItem(removeItem: candidateCurrentItem);
+        //
+        if (siblingItem != null) {
+          thisXBlock._candidateCurrentItem = siblingItem;
+          await _unitPrepareToShow(thisXBlock: thisXBlock);
+        } else {
+          this.data._selectionDataState = DataState.ready;
+        }
+      }
+    } else {
+      // Do nothing.
+    }
   }
 
-  Future<void> _unitDeleteItem(_XBlock thisXBlock) async {
+  Future<void> _unitDeleteItem({required _XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
     //
   }
@@ -1403,7 +1523,7 @@ abstract class Block<
           return true;
         }
       case PostQueryBehavior.createNewItem:
-        data._dataState = DataState.ready;
+        data._queryDataState = DataState.ready;
         // Create New Item
         bool success = await __prepareToCreate(
           thisXBlock: thisXBlock,
@@ -1506,7 +1626,7 @@ abstract class Block<
   void __setChildrenForParent() {
     try {
       Object? itemParent = parent?.data.currentItemDetail;
-      if (itemParent != null && data.dataState == DataState.ready) {
+      if (itemParent != null && data.queryDataState == DataState.ready) {
         setChildrenForParent(
           currentItemOfParentBlock: itemParent,
           items: data.items,
@@ -3895,7 +4015,7 @@ abstract class Block<
   // ***************************************************************************
 
   bool isValidState() {
-    switch (dataState) {
+    switch (queryDataState) {
       case DataState.pending:
         return false;
       case DataState.error:
