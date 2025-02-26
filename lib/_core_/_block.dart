@@ -3386,22 +3386,6 @@ abstract class Block<
     }
   }
 
-  ///
-  /// Allows deleting an Item or not according to the application logic.
-  ///
-  // bool _isAllowDeleteItem({required ITEM item}) {
-  //   final bool isCurrent = data.isCurrentItem(item: item);
-  //   if (!isCurrent) {
-  //      return isAllowDeleteItem(refreshedItem: item);
-  //   } else {
-  //     ITEM_DETAIL? currentItem = data.currentItemDetail;
-  //     if (currentItem == null) {
-  //       return false;
-  //     }
-  //     return __isAllowDeleteItem(refreshedItem: currentItem);
-  //   }
-  // }
-
   // ***************************************************************************
   // *********** __checkAncestorsSafeXXX() method ******************************
   // ***************************************************************************
