@@ -756,148 +756,152 @@ abstract class Block<
   Future<bool> _unitQuery({required _XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
     //
-    FlutterArtist.codeFlowLogger._addMethodCall(
-      isLibCode: false,
-      navigate: null,
-      ownerClassInstance: this,
-      methodName: "callApiQuery",
-      parameters: {},
-    );
+    DataState newQueryDataState = this.queryDataState;
     //
-    FILTER_CRITERIA? filterCriteria;
-    try {
-      final _XDataFilter xDataFilter = thisXBlock.xDataFilter;
-      final DataFilter dataFilter = xDataFilter.dataFilter;
+    if (thisXBlock.forceQuery || this.queryDataState != DataState.ready) {
+      FlutterArtist.codeFlowLogger._addMethodCall(
+        isLibCode: false,
+        navigate: null,
+        ownerClassInstance: this,
+        methodName: "callApiQuery",
+        parameters: {},
+      );
       //
-      if (!xDataFilter.queried) {
-        FILTER_INPUT? filterInput = xDataFilter.filterInput as FILTER_INPUT?;
+      FILTER_CRITERIA? filterCriteria;
+      try {
+        final _XDataFilter xDataFilter = thisXBlock.xDataFilter;
+        final DataFilter dataFilter = xDataFilter.dataFilter;
         //
-        filterCriteria = await dataFilter._prepareData(
-          filterInput: filterInput,
-        ) as FILTER_CRITERIA?;
-        //
-        xDataFilter.queried = true;
-      } else {
-        filterCriteria = dataFilter._filterCriteria! as FILTER_CRITERIA;
+        if (!xDataFilter.queried) {
+          FILTER_INPUT? filterInput = xDataFilter.filterInput as FILTER_INPUT?;
+          //
+          filterCriteria = await dataFilter._prepareData(
+            filterInput: filterInput,
+          ) as FILTER_CRITERIA?;
+          //
+          xDataFilter.queried = true;
+        } else {
+          filterCriteria = dataFilter._filterCriteria! as FILTER_CRITERIA;
+        }
+      } catch (e, stackTrace) {
+        /* Never Error */
       }
-    } catch (e, stackTrace) {
-      /* Never Error */
-    }
-    //
-    // Has Error in DataFilter.
-    //
-    if (filterCriteria == null) {
-      // Set Block to error cascade.
-      __clearWithDataStateCascade(
-        thisXBlock: thisXBlock,
-        dataState: DataState.error,
-        formDataState: DataState.error,
-      );
-      return false;
-    }
-    //
-    // Ready FilterCriteria:
-    //
-    bool xCriteriaChanged = data._isXCriteriaChanged(
-      newCurrentParentItemId: parentItemId,
-      newFilterCriteria: filterCriteria,
-    );
-    //
-    final PageableData callingPageable = thisXBlock.pageable ??
-        __pageable ??
-        const PageableData(page: 1, pageSize: null);
-    //
-    final ITEM? candidateCurrentItem;
-    final ListBehavior newListBehavior;
-    final int currentItemCount = data.itemCount;
-    //
-    if (xCriteriaChanged) {
-      newListBehavior = ListBehavior.replace;
-      candidateCurrentItem = null;
-    } else {
-      newListBehavior = thisXBlock.listBehavior;
-      candidateCurrentItem = data.currentItem;
-    }
-    //
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1");
-    bool isQueryError = false;
-    PageData<ID, ITEM>? pageData;
-    try {
-      __refreshQueryingState(isQuerying: true);
       //
-      ApiResult<PageData<ID, ITEM>?> result = await callApiQuery(
-        filterCriteria: filterCriteria,
-        pageable: callingPageable,
+      // Has Error in DataFilter.
+      //
+      if (filterCriteria == null) {
+        // Set Block to error cascade.
+        __clearWithDataStateCascade(
+          thisXBlock: thisXBlock,
+          dataState: DataState.error,
+          formDataState: DataState.error,
+        );
+        return false;
+      }
+      //
+      // Ready FilterCriteria:
+      //
+      bool xCriteriaChanged = data._isXCriteriaChanged(
+        newCurrentParentItemId: parentItemId,
+        newFilterCriteria: filterCriteria,
       );
       //
-      if (result.isError()) {
-        _handleRestError(
+      final PageableData callingPageable = thisXBlock.pageable ??
+          __pageable ??
+          const PageableData(page: 1, pageSize: null);
+      //
+      final ITEM? candidateCurrentItem;
+      final ListBehavior newListBehavior;
+      final int currentItemCount = data.itemCount;
+      //
+      if (xCriteriaChanged) {
+        newListBehavior = ListBehavior.replace;
+        candidateCurrentItem = null;
+      } else {
+        newListBehavior = thisXBlock.listBehavior;
+        candidateCurrentItem = data.currentItem;
+      }
+      print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1");
+      bool isQueryError = false;
+      PageData<ID, ITEM>? pageData;
+      try {
+        __refreshQueryingState(isQuerying: true);
+        //
+        ApiResult<PageData<ID, ITEM>?> result = await callApiQuery(
+          filterCriteria: filterCriteria,
+          pageable: callingPageable,
+        );
+        //
+        if (result.isError()) {
+          _handleRestError(
+            shelf: shelf,
+            methodName: "callApiQuery",
+            message: result.errorMessage!,
+            errorDetails: result.errorDetails,
+            showSnackBar: true,
+          );
+          isQueryError = true;
+        } else {
+          pageData = result.data;
+        }
+      } catch (e, stackTrace) {
+        _handleError(
           shelf: shelf,
-          methodName: "callApiQuery",
-          message: result.errorMessage!,
-          errorDetails: result.errorDetails,
+          methodName: 'callApiQuery',
+          error: "Error callApiQuery: $e",
+          stackTrace: stackTrace,
           showSnackBar: true,
         );
         isQueryError = true;
+      } finally {
+        __refreshQueryingState(isQuerying: false);
+      }
+      //
+      print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 2");
+      if (isQueryError) {
+        switch (newListBehavior) {
+          case ListBehavior.replace:
+            newQueryDataState = DataState.error;
+          case ListBehavior.append:
+            if (currentItemCount > 0) {
+              newQueryDataState = DataState.ready;
+            } else {
+              newQueryDataState = DataState.error;
+            }
+        }
       } else {
-        pageData = result.data;
+        newQueryDataState = DataState.ready;
       }
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: 'callApiQuery',
-        error: "Error callApiQuery: $e",
-        stackTrace: stackTrace,
-        showSnackBar: true,
+      //
+      thisXBlock.setState(
+        candidateCurrentItem: candidateCurrentItem,
+        stateCurrentItem: data.currentItem,
+        stateCurrentItemDetail: data.currentItemDetail,
+        stateSelectedItems: data._selectedItems,
+        stateCheckedItems: data._checkedItems,
       );
-      isQueryError = true;
-    } finally {
-      __refreshQueryingState(isQuerying: false);
-    }
-    //
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 2");
-    final DataState dataState;
-    if (isQueryError) {
-      switch (newListBehavior) {
-        case ListBehavior.replace:
-          dataState = DataState.error;
-        case ListBehavior.append:
-          if (currentItemCount > 0) {
-            dataState = DataState.ready;
-          } else {
-            dataState = DataState.error;
-          }
-      }
+      //
+      print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3");
+      __setQueryDataWithStateCascade(
+        thisXBlock: thisXBlock,
+        filterCriteria: filterCriteria,
+        listBehavior: newListBehavior,
+        pageable: callingPageable,
+        pageData: pageData,
+        candidateCurrentItem: candidateCurrentItem,
+        dataState: newQueryDataState,
+        formDataState:
+            DataState.pending, // TODO XEM LAI ?????????????????????????????
+      );
+      //
     } else {
-      dataState = DataState.ready;
+      // !thisXBlock.forceQuery && this.queryDataState == DataState.ready
     }
-    //
-    thisXBlock.setState(
-      candidateCurrentItem: candidateCurrentItem,
-      stateCurrentItem: data.currentItem,
-      stateCurrentItemDetail: data.currentItemDetail,
-      stateSelectedItems: data._selectedItems,
-      stateCheckedItems: data._checkedItems,
-    );
-    //
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3");
-    __setQueryDataWithStateCascade(
-      thisXBlock: thisXBlock,
-      filterCriteria: filterCriteria,
-      listBehavior: newListBehavior,
-      pageable: callingPageable,
-      pageData: pageData,
-      candidateCurrentItem: candidateCurrentItem,
-      dataState: dataState,
-      formDataState: dataState, // TODO XEM LAI ?????????????????????????????
-    );
-    //
-
     //
     // Add TaskUnit
     //
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 4");
-    if (dataState == DataState.ready) {
+    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 4: _candidateCurrentItem: ${thisXBlock._candidateCurrentItem}");
+    if (newQueryDataState == DataState.ready) {
       _unitQueue.addTaskUnit(
         _TaskUnit(
           xBlock: thisXBlock,
@@ -1012,6 +1016,44 @@ abstract class Block<
   Future<void> _unitDeleteItem({required _XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
     //
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<bool> prepareToShowItem({
+    required ITEM item,
+    Function()? navigate,
+  }) async {
+    FlutterArtist.codeFlowLogger._addMethodCall(
+      isLibCode: true,
+      navigate: navigate,
+      ownerClassInstance: this,
+      methodName: "prepareToShowItem",
+      parameters: {
+        "item": item,
+      },
+    );
+    //
+    _XShelf xShelf = _XShelf(
+      shelf: shelf,
+      forceDataFilterOpt: null,
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: [],
+      forceQueryBlockFormOpts: [],
+    );
+    //
+    _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    thisXBlock.setState(
+      candidateCurrentItem: item,
+      stateCurrentItem: this.data.currentItem,
+      stateCurrentItemDetail: this.data.currentItemDetail,
+      stateSelectedItems: this.data.selectedItems,
+      stateCheckedItems: this.data.checkedItems,
+    );
+    //
+    await shelf._queryXShelf(xShelf: xShelf);
+    return true;
   }
 
   // ***************************************************************************

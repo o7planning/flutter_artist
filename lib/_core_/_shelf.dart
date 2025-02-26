@@ -798,9 +798,12 @@ abstract class Shelf extends _XBase {
       forceQueryBlockFormOpts: forceQueryBlockFormOpts,
     );
     //
-    xShelf.printMe();
+    return await _queryXShelf(xShelf: xShelf);
+  }
 
-    //
+  Future<bool> _queryXShelf({
+    required _XShelf xShelf,
+  }) async {
     try {
       for (_XScalar xScalar in xShelf.allXScalars) {
         if (!xScalar.needQuery) {
@@ -834,14 +837,6 @@ abstract class Shelf extends _XBase {
       }
       //
       for (_XBlock xBlock in xShelf.allRootXBlocks) {
-        // bool success = await xBlock.block._queryThisAndChildren(
-        //   thisXBlock: xBlock,
-        // );
-        // //
-        // if (!success) {
-        //   return false;
-        // }
-
         //
         // Add to Queue:
         //
