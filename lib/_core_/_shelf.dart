@@ -754,34 +754,41 @@ abstract class Shelf extends _XBase {
       isLibCode: true,
     );
     //
-    try {
-      _backupAll();
-      //
-      bool success = await _queryAll(
-        forceDataFilterOpt: forceDataFilterOpt,
-        forceQueryScalarOpts: forceQueryScalarOpts,
-        forceQueryBlockOpts: forceQueryBlockOpts,
-        forceQueryBlockFormOpts: forceQueryBlockFormOpts,
-      );
-      if (!success) {
-        _restoreAll();
-        return false;
-      } else {
-        _applyNewStateAll();
-        return true;
-      }
-    } catch (e, stackTrace) {
-      _restoreAll();
-      //
-      _handleError(
-        shelf: this,
-        methodName: "_queryAllWithRestorable",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      return false;
-    }
+    // try {
+    //   _backupAll();
+    //   //
+    //   bool success = await _queryAll(
+    //     forceDataFilterOpt: forceDataFilterOpt,
+    //     forceQueryScalarOpts: forceQueryScalarOpts,
+    //     forceQueryBlockOpts: forceQueryBlockOpts,
+    //     forceQueryBlockFormOpts: forceQueryBlockFormOpts,
+    //   );
+    //   if (!success) {
+    //     _restoreAll();
+    //     return false;
+    //   } else {
+    //     _applyNewStateAll();
+    //     return true;
+    //   }
+    // } catch (e, stackTrace) {
+    //   _restoreAll();
+    //   //
+    //   _handleError(
+    //     shelf: this,
+    //     methodName: "_queryAllWithRestorable",
+    //     error: e,
+    //     stackTrace: stackTrace,
+    //     showSnackBar: true,
+    //   );
+    //   return false;
+    // }
+    bool success = await _queryAll(
+      forceDataFilterOpt: forceDataFilterOpt,
+      forceQueryScalarOpts: forceQueryScalarOpts,
+      forceQueryBlockOpts: forceQueryBlockOpts,
+      forceQueryBlockFormOpts: forceQueryBlockFormOpts,
+    );
+    return success;
   }
 
   Future<bool> _queryAll({
@@ -888,6 +895,8 @@ abstract class Shelf extends _XBase {
         _XBlock xBlock = taskUnit.xBlock;
         await xBlock.block._executeTaskUnit(taskUnit);
       }
+
+      this.updateAllUIComponents();
       //
       return true;
     } catch (e, stackTrace) {

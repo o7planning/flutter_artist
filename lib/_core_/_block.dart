@@ -821,7 +821,6 @@ abstract class Block<
         newListBehavior = thisXBlock.listBehavior;
         candidateCurrentItem = data.currentItem;
       }
-      print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1");
       bool isQueryError = false;
       PageData<ID, ITEM>? pageData;
       try {
@@ -857,7 +856,6 @@ abstract class Block<
         __refreshQueryingState(isQuerying: false);
       }
       //
-      print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 2");
       if (isQueryError) {
         switch (newListBehavior) {
           case ListBehavior.replace:
@@ -881,7 +879,6 @@ abstract class Block<
         stateCheckedItems: data._checkedItems,
       );
       //
-      print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3");
       __setQueryDataWithStateCascade(
         thisXBlock: thisXBlock,
         filterCriteria: filterCriteria,
@@ -900,7 +897,6 @@ abstract class Block<
     //
     // Add TaskUnit
     //
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 4: _candidateCurrentItem: ${thisXBlock._candidateCurrentItem}");
     if (newQueryDataState == DataState.ready) {
       _unitQueue.addTaskUnit(
         _TaskUnit(
@@ -925,21 +921,36 @@ abstract class Block<
     if (this.queryDataState == DataState.error) {
       return;
     }
-    print(">>>>>>>>>>>> _unitPrepareToShow");
+    print(">>>>>>>>>>>> _unitPrepareToShow     1");
     ITEM? candidateCurrentItem = thisXBlock._candidateCurrentItem as ITEM?;
+
+    print(
+        ">>>>>>>>>>>> _unitPrepareToShow     2: candidateCurrentItem: $candidateCurrentItem");
     bool newCurrent = false;
     ITEM? stateCurrentItem = thisXBlock._stateCurrent._item as ITEM?;
     //
+    if (candidateCurrentItem != null) {
+      if (!this.data.containsItem(item: candidateCurrentItem)) {
+        candidateCurrentItem = null;
+      }
+    }
+    if (stateCurrentItem != null) {
+      if (!this.data.containsItem(item: stateCurrentItem)) {
+        stateCurrentItem = null;
+      }
+    }
+    // candidateCurrentItem = candidateCurrentItem?? stateCurrentItem;
+
     if (stateCurrentItem == null) {
       newCurrent = true;
       candidateCurrentItem = candidateCurrentItem ?? this.data.firstItem;
     } else {
-      bool contains = this.data.containsItem(item: stateCurrentItem);
-      if (!contains) {
+      if (candidateCurrentItem != null &&
+          getItemId(candidateCurrentItem) == getItemId(stateCurrentItem)) {
+        newCurrent = false;
+      } else {
         newCurrent = true;
         candidateCurrentItem = candidateCurrentItem ?? this.data.firstItem;
-      } else {
-        candidateCurrentItem = candidateCurrentItem ?? stateCurrentItem;
       }
     }
     //
@@ -962,7 +973,7 @@ abstract class Block<
             showSnackBar: true,
           );
         } else {
-          candidateCurrentItemDetail = result.data;
+          candidateCurrentItemDetail = result.data as ITEM_DETAIL?;
         }
       } catch (e, stackTrace) {
         isRefreshError = true;
