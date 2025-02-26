@@ -273,6 +273,7 @@ abstract class Block<
       blockForm!.block = this;
     }
   }
+
   // ***************************************************************************
 
   void __clearWithDataState({
@@ -770,7 +771,9 @@ abstract class Block<
       } else {
         filterCriteria = dataFilter._filterCriteria! as FILTER_CRITERIA;
       }
-    } catch (e, stackTrace) {/* Never Error */}
+    } catch (e, stackTrace) {
+      /* Never Error */
+    }
     //
     // Has Error in DataFilter.
     //

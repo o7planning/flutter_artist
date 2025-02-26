@@ -58,7 +58,7 @@ class BlockFormData<
     _dataState = dataState;
     _formMode = FormMode.none;
     //
-    _justInitialized =false;
+    _justInitialized = false;
     __initial0FormData.clear();
     _initialFormData.clear();
     _currentFormData.clear();
