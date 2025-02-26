@@ -9,6 +9,4 @@ class _CurrentCoupleItem<ITEM, ITEM_DETAIL> {
         _itemDetail = itemDetail,
         assert((item == null && itemDetail == null) ||
             (item != null && itemDetail != null));
-
-
 }
