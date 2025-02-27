@@ -9,8 +9,5 @@ class _ScalarTaskUnit extends _TaskUnit {
     required this.taskUnitName,
   });
 
-  void printInfo() {
-    print(
-        ">>>>> EXECUTE TaskUnit: $taskUnitName - Scalar: ${xScalar.scalar.name}");
-  }
+  void printInfo() {}
 }

@@ -9,8 +9,5 @@ class _BlockFormTaskUnit extends _TaskUnit {
     required this.taskUnitName,
   });
 
-  void printInfo() {
-    print(
-        ">>>>> EXECUTE TaskUnit: $taskUnitName - BlockForm: ${xBlockForm.blockForm.block.name}");
-  }
+  void printInfo() {}
 }

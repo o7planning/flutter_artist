@@ -768,6 +768,8 @@ abstract class Block<
   Future<bool> _unitQuery({required _XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
     //
+    print(
+        ">> ${getClassName(this)}._unitQuery - queryState: $queryDataState, forceQuery: ${thisXBlock.forceQuery}");
     if (this.queryDataState == DataState.ready && !thisXBlock.forceQuery) {
       _unitQueue.addTaskUnit(
         _BlockTaskUnit(
@@ -781,9 +783,6 @@ abstract class Block<
     // this.queryDataState != DataState.ready || thisXBlock.forceQuery
     //
     DataState newQueryDataState = this.queryDataState;
-
-    print(
-        "$name._unitQuery() ~~~~~~~~~~~~~> forceQuery: ${thisXBlock.forceQuery}, queryDataState= $queryDataState");
     //
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: false,
@@ -913,8 +912,8 @@ abstract class Block<
       pageData: pageData,
       candidateCurrentItem: candidateCurrentItem,
       dataState: newQueryDataState,
-      formDataState:
-          DataState.pending, // TODO XEM LAI ?????????????????????????????
+      // TODO XEM LAI ?????????????????????????????
+      formDataState: DataState.pending,
     );
 
     //
@@ -941,33 +940,45 @@ abstract class Block<
     if (this.queryDataState == DataState.error) {
       return;
     }
+    if (this.queryDataState == DataState.pending) {
+      throw Exception("Illegal Query State");
+    }
+    //
+    if (this.data.itemCount == 0) {
+      return;
+    }
+    print(
+        ">>>>>>>>>>> ${getClassName(this)}._unitPrepareToShow - forceReloadItem: ${thisXBlock.forceReloadItem}");
+    if (!thisXBlock.forceQuery || !thisXBlock.forceReloadItem) {
+      // return;
+    }
     //
     ITEM? candidateCurrentItem = thisXBlock._candidateCurrentItem as ITEM?;
-    ITEM? stateCurrentItem = thisXBlock._stateCurrent._item as ITEM?;
+    ITEM? currentItem = this.data.currentItem;
     //
     if (candidateCurrentItem != null) {
       if (!this.data.containsItem(item: candidateCurrentItem)) {
         candidateCurrentItem = null;
       }
     }
-    if (stateCurrentItem != null) {
-      if (!this.data.containsItem(item: stateCurrentItem)) {
-        stateCurrentItem = null;
+    if (currentItem != null) {
+      if (!this.data.containsItem(item: currentItem)) {
+        currentItem = null;
       }
     }
     //
     final bool newCurrent;
-    if (stateCurrentItem == null) {
+    if (currentItem == null) {
       candidateCurrentItem = candidateCurrentItem ?? this.data.firstItem;
       newCurrent = candidateCurrentItem != null;
     } else {
-      // stateCurrentItem != null
+      // currentItem != null
       if (candidateCurrentItem == null) {
-        candidateCurrentItem = stateCurrentItem;
+        candidateCurrentItem = currentItem;
         newCurrent = false;
       } else {
-        // candidateCurrentItem != null && stateCurrentItem != null
-        if (getItemId(candidateCurrentItem) == getItemId(stateCurrentItem)) {
+        // candidateCurrentItem != null && currentItem != null
+        if (getItemId(candidateCurrentItem) == getItemId(currentItem)) {
           newCurrent = false;
         } else {
           newCurrent = true;

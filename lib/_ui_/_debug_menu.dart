@@ -42,73 +42,73 @@ class _DebugMenuState extends State<DebugMenu> implements IErrorListener {
       onTapDown: !isSystemUser && !hasRecentErrors
           ? null
           : (TapDownDetails details) {
-        // Getting the tap position
-        final RelativeRect position =
-        widget.calculatePopupPosition != null
-            ? widget.calculatePopupPosition!(details)
-            : RelativeRect.fromLTRB(
-          details.globalPosition.dx,
-          details.globalPosition.dy + 22,
-          details.globalPosition.dx,
-          details.globalPosition.dy,
-        );
+              // Getting the tap position
+              final RelativeRect position =
+                  widget.calculatePopupPosition != null
+                      ? widget.calculatePopupPosition!(details)
+                      : RelativeRect.fromLTRB(
+                          details.globalPosition.dx,
+                          details.globalPosition.dy + 22,
+                          details.globalPosition.dx,
+                          details.globalPosition.dy,
+                        );
 
-        // Showing the menu
-        showMenu(
-          context: context,
-          position: position,
-          items: [
-            if (hasRecentErrors)
-              _buildPopupMenuItem(
-                iconData: _errorIconData,
-                title: 'Recent Errors',
-                onTab: _showRecentErrors,
-              ),
-            if (isSystemUser && hasRecentErrors) _divider(),
-            if (isSystemUser && FlutterArtist.canShowShelfStructure())
-              _buildPopupMenuItem(
-                iconData: _shelfStructureIconData,
-                title: 'Shelf Structure',
-                onTab: _showFluStructure,
-              ),
-            if (isSystemUser && FlutterArtist._canShowUiComponentDialog())
-              _buildPopupMenuItem(
-                iconData: _uiComponentsIconData,
-                title: 'UI Components',
-                onTab: _showUiComponentsDialog,
-              ),
-            if (isSystemUser)
-              _buildPopupMenuItem(
-                iconData: _storageIconData,
-                title: 'Storage Viewer',
-                onTab: _showStorage,
-              ),
-            if (isSystemUser) _divider(),
-            if (isSystemUser)
-              _buildPopupMenuItem(
-                iconData: _clearCodeFlowIconData,
-                title: 'Clear Code Flow',
-                onTab: _clearCodeFlow,
-              ),
-            if (isSystemUser)
-              _buildPopupMenuItem(
-                iconData: _flowLogIconData,
-                title: 'Code Flow Viewer',
-                onTab: _showFlowLogStructure,
-              ),
-            if (isSystemUser) _divider(),
-            if (isSystemUser &&
-                FlutterArtist._showRestDebugDialog != null)
-              _buildPopupMenuItem(
-                iconData: _restDebugIconData,
-                title: 'Rest Debug Viewer',
-                onTab: () {
-                  _showRestDebugDialog();
-                },
-              ),
-          ],
-        );
-      },
+              // Showing the menu
+              showMenu(
+                context: context,
+                position: position,
+                items: [
+                  if (hasRecentErrors)
+                    _buildPopupMenuItem(
+                      iconData: _errorIconData,
+                      title: 'Recent Errors',
+                      onTab: _showRecentErrors,
+                    ),
+                  if (isSystemUser && hasRecentErrors) _divider(),
+                  if (isSystemUser && FlutterArtist.canShowShelfStructure())
+                    _buildPopupMenuItem(
+                      iconData: _shelfStructureIconData,
+                      title: 'Shelf Structure',
+                      onTab: _showFluStructure,
+                    ),
+                  if (isSystemUser && FlutterArtist._canShowUiComponentDialog())
+                    _buildPopupMenuItem(
+                      iconData: _uiComponentsIconData,
+                      title: 'UI Components',
+                      onTab: _showUiComponentsDialog,
+                    ),
+                  if (isSystemUser)
+                    _buildPopupMenuItem(
+                      iconData: _storageIconData,
+                      title: 'Storage Viewer',
+                      onTab: _showStorage,
+                    ),
+                  if (isSystemUser) _divider(),
+                  if (isSystemUser)
+                    _buildPopupMenuItem(
+                      iconData: _clearCodeFlowIconData,
+                      title: 'Clear Code Flow',
+                      onTab: _clearCodeFlow,
+                    ),
+                  if (isSystemUser)
+                    _buildPopupMenuItem(
+                      iconData: _flowLogIconData,
+                      title: 'Code Flow Viewer',
+                      onTab: _showFlowLogStructure,
+                    ),
+                  if (isSystemUser) _divider(),
+                  if (isSystemUser &&
+                      FlutterArtist._showRestDebugDialog != null)
+                    _buildPopupMenuItem(
+                      iconData: _restDebugIconData,
+                      title: 'Rest Debug Viewer',
+                      onTab: () {
+                        _showRestDebugDialog();
+                      },
+                    ),
+                ],
+              );
+            },
       child: widget.menuButtonBuilder(
         errorCount: FlutterArtist._totalErrorCount,
       ),
