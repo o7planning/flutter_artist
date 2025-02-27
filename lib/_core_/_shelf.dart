@@ -816,31 +816,41 @@ abstract class Shelf extends _XBase {
         if (!xScalar.needQuery) {
           continue;
         }
-        final _XDataFilter xDataFilter = xScalar.xDataFilter;
-        final DataFilter dataFilter = xDataFilter.dataFilter;
-        final Scalar scalar = xScalar.scalar;
+        // final _XDataFilter xDataFilter = xScalar.xDataFilter;
+        // final DataFilter dataFilter = xDataFilter.dataFilter;
+        // final Scalar scalar = xScalar.scalar;
+        // //
+        // final FilterCriteria filterCriteria;
+        // if (!xDataFilter.queried) {
+        //   //
+        //   FilterCriteria? newCriteria = await dataFilter._prepareData(
+        //     filterInput: xDataFilter.filterInput,
+        //   );
+        //   if (newCriteria == null) {
+        //     return false;
+        //   }
+        //   filterCriteria = newCriteria;
+        //   xDataFilter.queried = true;
+        // } else {
+        //   filterCriteria = dataFilter._filterCriteria!;
+        // }
+        // //
+        // bool success = await scalar.__queryThis(
+        //   filterCriteria: filterCriteria,
+        // );
+        // if (!success) {
+        //   return false;
+        // }
+
         //
-        final FilterCriteria filterCriteria;
-        if (!xDataFilter.queried) {
-          //
-          FilterCriteria? newCriteria = await dataFilter._prepareData(
-            filterInput: xDataFilter.filterInput,
-          );
-          if (newCriteria == null) {
-            return false;
-          }
-          filterCriteria = newCriteria;
-          xDataFilter.queried = true;
-        } else {
-          filterCriteria = dataFilter._filterCriteria!;
-        }
+        // Add to Queue:
         //
-        bool success = await scalar.__queryThis(
-          filterCriteria: filterCriteria,
+        _unitQueue.addTaskUnit(
+          _ScalarTaskUnit(
+            xScalar: xScalar,
+            taskUnitName: ScalarTaskUnitName.query,
+          ),
         );
-        if (!success) {
-          return false;
-        }
       }
       //
       for (_XBlock xBlock in xShelf.allRootXBlocks) {
@@ -859,33 +869,41 @@ abstract class Shelf extends _XBase {
         if (!xBlockForm.needQuery) {
           continue;
         }
-        Object? currentItemDetail =
-            xBlockForm.blockForm.block.data.currentItemDetail;
-
-        if (currentItemDetail != null) {
-          Object currentItem = xBlockForm.blockForm.block.data.currentItem!;
-          bool editable = xBlockForm.blockForm.block.canEditItemOnForm(
-            item: currentItem,
-          );
-          // TODO: Co can cai nay khong?
-          // xBlockForm.blockForm.data._setCurrentItem(
-          //   refreshedItemDetail: currentItemDetail,
-          //   formMode: FormMode.edit,
-          //   dataState: DataState.pending,
-          // );
-
-          bool success = await xBlockForm.blockForm._prepareForm(
-            extraFormInput: xBlockForm.extraFormInput,
-            refreshedItem: currentItemDetail,
-            isNew: currentItemDetail == null, // TODO: Can kiem tra lai.
-            forceForm: true,
-          );
-          //
-          if (!success) {
-            return false;
-          }
-        }
-        return true;
+        // Object? currentItemDetail =
+        //     xBlockForm.blockForm.block.data.currentItemDetail;
+        //
+        // if (currentItemDetail != null) {
+        //   Object currentItem = xBlockForm.blockForm.block.data.currentItem!;
+        //   bool editable = xBlockForm.blockForm.block.canEditItemOnForm(
+        //     item: currentItem,
+        //   );
+        //   // TODO: Co can cai nay khong?
+        //   // xBlockForm.blockForm.data._setCurrentItem(
+        //   //   refreshedItemDetail: currentItemDetail,
+        //   //   formMode: FormMode.edit,
+        //   //   dataState: DataState.pending,
+        //   // );
+        //
+        //   bool success = await xBlockForm.blockForm._prepareForm(
+        //     extraFormInput: xBlockForm.extraFormInput,
+        //     refreshedItem: currentItemDetail,
+        //     isNew: currentItemDetail == null, // TODO: Can kiem tra lai.
+        //     forceForm: true,
+        //   );
+        //   //
+        //   if (!success) {
+        //     return false;
+        //   }
+        // }
+        //
+        // Add to Queue:
+        //
+        _unitQueue.addTaskUnit(
+          _BlockFormTaskUnit(
+            xBlockForm: xBlockForm,
+            taskUnitName: BlockFormTaskUnitName.loadForm,
+          ),
+        );
       }
       //
       while (_unitQueue.hasNext()) {
@@ -895,6 +913,9 @@ abstract class Shelf extends _XBase {
         if (taskUnit is _BlockTaskUnit) {
           _XBlock xBlock = taskUnit.xBlock;
           await xBlock.block._executeTaskUnit(taskUnit);
+        } else if (taskUnit is _BlockFormTaskUnit) {
+          _XBlockForm xBlockForm = taskUnit.xBlockForm;
+          await xBlockForm.blockForm._executeTaskUnit(taskUnit);
         } else if (taskUnit is _ScalarTaskUnit) {
           _XScalar xScalar = taskUnit.xScalar;
           await xScalar.scalar._executeTaskUnit(taskUnit);
