@@ -16,7 +16,7 @@ class _NotificationEngine {
     await __getNotificationSummary();
     Timer.periodic(
       Duration(seconds: FlutterArtist.notificationFetchPeriodInSeconds),
-          (Timer timer) {
+      (Timer timer) {
         __getNotificationSummary();
       },
     );
@@ -40,16 +40,16 @@ class _NotificationEngine {
 
     //
     final String lastFetchKey =
-    __keyForLastFetchNotificationSummary(loggedInUserName);
+        __keyForLastFetchNotificationSummary(loggedInUserName);
     final String notificationSummaryKey =
-    __keyForNotificationSummary(loggedInUserName);
+        __keyForNotificationSummary(loggedInUserName);
 
     try {
       final DateTime? lastFetch = hiveBoxDateTime.get(lastFetchKey);
       await hiveBoxDateTime.put(lastFetchKey, DateTime.now());
       //
       final String? notificationSummaryJsonLocal =
-      notificationSummaryBox.get(notificationSummaryKey);
+          notificationSummaryBox.get(notificationSummaryKey);
       INotificationSummary? notificationSummaryLocal;
       try {
         if (notificationSummaryJsonLocal != null) {
@@ -70,7 +70,7 @@ class _NotificationEngine {
         DateTime now = DateTime.now();
         Duration diff = now.difference(lastFetch);
         if (diff.inSeconds <
-            FlutterArtist.notificationFetchPeriodInSeconds - 1 &&
+                FlutterArtist.notificationFetchPeriodInSeconds - 1 &&
             notificationSummaryLocal != null) {
           print("Ignore to fetch notification..");
           FlutterArtist._notifyNotification(notificationSummaryLocal);
@@ -82,7 +82,7 @@ class _NotificationEngine {
       try {
         // Fetch from Server:
         ApiResult<INotificationSummary> result =
-        await adapter.callApiGetNotificationSummary();
+            await adapter.callApiGetNotificationSummary();
         if (result.isError()) {
           FlutterArtist.errorLogger.addError(
             shelfName: null,

@@ -757,6 +757,9 @@ abstract class Block<
     __assertThisXBlock(thisXBlock);
     //
     DataState newQueryDataState = this.queryDataState;
+
+    print(
+        "${name} ~~~~~~~~~~~~~~~~~~~~~~~~~~> Chay vao day 1: forceQuery: ${thisXBlock.forceQuery}, this.queryDataState= ${queryDataState} ");
     //
     if (thisXBlock.forceQuery || this.queryDataState != DataState.ready) {
       FlutterArtist.codeFlowLogger._addMethodCall(
@@ -918,9 +921,8 @@ abstract class Block<
     if (this.queryDataState == DataState.error) {
       return;
     }
+    //
     ITEM? candidateCurrentItem = thisXBlock._candidateCurrentItem as ITEM?;
-
-    bool newCurrent = false;
     ITEM? stateCurrentItem = thisXBlock._stateCurrent._item as ITEM?;
     //
     if (candidateCurrentItem != null) {
@@ -934,93 +936,148 @@ abstract class Block<
       }
     }
     //
+    final bool newCurrent;
     if (stateCurrentItem == null) {
-      newCurrent = true;
       candidateCurrentItem = candidateCurrentItem ?? this.data.firstItem;
+      newCurrent = candidateCurrentItem != null;
     } else {
-      if (candidateCurrentItem != null &&
-          getItemId(candidateCurrentItem) == getItemId(stateCurrentItem)) {
+      // stateCurrentItem != null
+      if (candidateCurrentItem == null) {
+        candidateCurrentItem = stateCurrentItem;
         newCurrent = false;
       } else {
-        newCurrent = true;
-        candidateCurrentItem = candidateCurrentItem ?? this.data.firstItem;
+        // candidateCurrentItem != null && stateCurrentItem != null
+        if (getItemId(candidateCurrentItem) == getItemId(stateCurrentItem)) {
+          newCurrent = false;
+        } else {
+          newCurrent = true;
+        }
       }
     }
     //
-    if ((thisXBlock.forceReloadItem || newCurrent) &&
-        candidateCurrentItem != null) {
-      bool isRefreshError = false;
-      ITEM_DETAIL? candidateCurrentItemDetail;
-      try {
-        ApiResult<ITEM_DETAIL> result = await callApiRefreshItem(
-          item: candidateCurrentItem,
+    if (!newCurrent && !thisXBlock.forceReloadItem) {
+      for (_XBlock childXBlock in thisXBlock.childXBlocks) {
+        _unitQueue.addTaskUnit(
+          _BlockTaskUnit(
+            xBlock: childXBlock,
+            taskUnitName: BlockTaskUnitName.query,
+          ),
         );
+      }
+      return;
+    }
+    // No item can be current.
+    if (candidateCurrentItem == null) {
+      this.__clearWithDataState(
+        thisXBlock: thisXBlock,
+        dataState: DataState.ready,
+        formDataState: DataState.ready, // TODO: Xem lai...
+      );
+      return;
+    }
+    //
+    // (newCurrent || forceReloadItem) && candidateCurrentItem !=null
+    //
+    bool isLoadItemError = false;
+    //
+    ITEM_DETAIL? candidateCurrentItemDetail;
+    try {
+      ApiResult<ITEM_DETAIL> result = await callApiRefreshItem(
+        item: candidateCurrentItem,
+      );
+      //
+      if (result.isError()) {
+        isLoadItemError = true;
         //
-        if (result.isError()) {
-          isRefreshError = true;
-          //
-          _handleRestError(
-            shelf: shelf,
-            methodName: "callApiRefreshItem",
-            message: result.errorMessage!,
-            errorDetails: result.errorDetails,
-            showSnackBar: true,
-          );
-        } else {
-          candidateCurrentItemDetail = result.data as ITEM_DETAIL?;
-        }
-      } catch (e, stackTrace) {
-        isRefreshError = true;
-        //
-        _handleError(
+        _handleRestError(
           shelf: shelf,
           methodName: "callApiRefreshItem",
-          error: "Error callApiRefreshItem: $e",
-          stackTrace: stackTrace,
+          message: result.errorMessage!,
+          errorDetails: result.errorDetails,
           showSnackBar: true,
         );
-      }
-      //
-      if (isRefreshError) {
-        this.data._selectionDataState = DataState.error;
-        return;
       } else {
-        this.data._selectionDataState = DataState.pending;
+        isLoadItemError = false;
+        //
+        candidateCurrentItemDetail = result.data as ITEM_DETAIL?;
       }
+    } catch (e, stackTrace) {
+      isLoadItemError = true;
       //
-      if (candidateCurrentItemDetail != null) {
-        this.data._selectionDataState = DataState.ready;
-        // TODO: Xu ly loi. ??????????????????????????????????????????????????
-        candidateCurrentItem = this.__convertItemDetailToItem(
-          itemDetail: candidateCurrentItemDetail,
-        );
-        //
-        this.data._setCurrentItemOnly(
-              refreshedItem: candidateCurrentItem,
-              refreshedItemDetail: candidateCurrentItemDetail,
-            );
-      } else {
-        ITEM? siblingItem = this.data.findSiblingItem(
-              item: candidateCurrentItem,
-            );
-        // Remove item from List.
-        this.data._removeItem(removeItem: candidateCurrentItem);
-        // TODO: Update List only??
-        // TODO: Them hieu ung trong qua trinh lua chon va xoa.
-        this.updateAllUIComponents(withoutFilters: true);
-        await Future.delayed(Duration(seconds: 1));
-        //
-        if (siblingItem != null) {
-          thisXBlock._candidateCurrentItem = siblingItem;
-          await _unitPrepareToShow(thisXBlock: thisXBlock);
-        } else {
-          this.data._selectionDataState = DataState.ready;
-        }
-      }
-    } else {
-      // candidateCurrentItem == null
-      //  || !thisXBlock.forceReloadItem && !newCurrent
+      _handleError(
+        shelf: shelf,
+        methodName: "callApiRefreshItem",
+        error: "Error callApiRefreshItem: $e",
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
     }
+    //
+    if (isLoadItemError) {
+      if (newCurrent) {
+        return;
+      }
+      return;
+    }
+    //
+    this.data._selectionDataState = DataState.pending;
+
+    // Item not found in database --> remove.
+    if (candidateCurrentItemDetail == null) {
+      ITEM? siblingItem = this.data.findSiblingItem(
+            item: candidateCurrentItem,
+          );
+      // Remove item from List.
+      this.data._removeItem(removeItem: candidateCurrentItem);
+      if (!newCurrent) {
+        this.data._setCurrentItemOnly(
+              refreshedItem: null,
+              refreshedItemDetail: null,
+            );
+      }
+      // TODO: Update List only??
+      // TODO: Them hieu ung trong qua trinh lua chon va xoa.
+      this.updateAllUIComponents(withoutFilters: true);
+      await Future.delayed(Duration(seconds: 1));
+      //
+      if (siblingItem != null) {
+        thisXBlock._candidateCurrentItem = siblingItem;
+        await _unitPrepareToShow(thisXBlock: thisXBlock);
+      } else {
+        this.data._selectionDataState = DataState.ready;
+      }
+      return;
+    }
+    //
+    // candidateCurrentItemDetail != null
+    //
+    this.data._selectionDataState = DataState.ready;
+    bool convertItemError = false;
+    try {
+      candidateCurrentItem = this.__convertItemDetailToItem(
+        itemDetail: candidateCurrentItemDetail,
+      );
+      convertItemError = false;
+    } catch (e, stackTrace) {
+      convertItemError = true;
+      _handleError(
+        shelf: shelf,
+        methodName: "convertItemDetailToItem",
+        error: "Error convertItemDetailToItem: $e",
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+    }
+    //
+    if (convertItemError) {
+      // TODO
+      return;
+    }
+    //
+    this.data._setCurrentItemOnly(
+          refreshedItem: candidateCurrentItem,
+          refreshedItemDetail: candidateCurrentItemDetail,
+        );
     //
     for (_XBlock childXBlock in thisXBlock.childXBlocks) {
       _unitQueue.addTaskUnit(
