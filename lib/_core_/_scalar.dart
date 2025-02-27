@@ -105,6 +105,27 @@ abstract class Scalar<
   })  : registerDataFilterName = dataFilterName,
         __listenItemTypes = listenTypes;
 
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<void> _executeTaskUnit(_ScalarTaskUnit taskUnit) async {
+    switch (taskUnit.taskUnitName) {
+      case ScalarTaskUnitName.query:
+        await taskUnit.xScalar.scalar._unitQuery();
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<bool> _unitQuery() async {
+    // TODO:
+    throw UnimplementedError();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   String getValueTypeAsString() {
     return VALUE.toString();
   }

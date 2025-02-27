@@ -2,27 +2,6 @@ part of '../flutter_artist.dart';
 
 final _unitQueue = _BlockUnitQueue();
 
-enum TaskUnitName {
-  query,
-  select,
-  delete;
-}
-
-class _TaskUnit {
-  TaskUnitName taskUnitName;
-  _XBlock xBlock;
-
-  _TaskUnit({
-    required this.xBlock,
-    required this.taskUnitName,
-  });
-
-  void printInfo() {
-    print(
-        ">>>>> EXECUTE TaskUnit: $taskUnitName - Block: ${xBlock.block.name}");
-  }
-}
-
 class _BlockUnitQueue {
   final List<_TaskUnit> _taskUnits = [];
 

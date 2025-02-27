@@ -735,17 +735,17 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> _executeTaskUnit(_TaskUnit taskUnit) async {
+  Future<void> _executeTaskUnit(_BlockTaskUnit taskUnit) async {
     switch (taskUnit.taskUnitName) {
-      case TaskUnitName.query:
+      case BlockTaskUnitName.query:
         await taskUnit.xBlock.block._unitQuery(
           thisXBlock: taskUnit.xBlock,
         );
-      case TaskUnitName.select:
+      case BlockTaskUnitName.select:
         await taskUnit.xBlock.block._unitPrepareToShow(
           thisXBlock: taskUnit.xBlock,
         );
-      case TaskUnitName.delete:
+      case BlockTaskUnitName.delete:
         await taskUnit.xBlock.block
             ._unitDeleteItem(thisXBlock: taskUnit.xBlock);
     }
@@ -899,9 +899,9 @@ abstract class Block<
     //
     if (newQueryDataState == DataState.ready) {
       _unitQueue.addTaskUnit(
-        _TaskUnit(
+        _BlockTaskUnit(
           xBlock: thisXBlock,
-          taskUnitName: TaskUnitName.select,
+          taskUnitName: BlockTaskUnitName.select,
         ),
       );
     }
@@ -950,7 +950,8 @@ abstract class Block<
       }
     }
     //
-    if ((thisXBlock.forceReloadItem  || newCurrent) && candidateCurrentItem != null) {
+    if ((thisXBlock.forceReloadItem || newCurrent) &&
+        candidateCurrentItem != null) {
       bool isRefreshError = false;
       ITEM_DETAIL? candidateCurrentItemDetail;
       try {

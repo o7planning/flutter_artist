@@ -848,9 +848,9 @@ abstract class Shelf extends _XBase {
         // Add to Queue:
         //
         _unitQueue.addTaskUnit(
-          _TaskUnit(
+          _BlockTaskUnit(
             xBlock: xBlock,
-            taskUnitName: TaskUnitName.query,
+            taskUnitName: BlockTaskUnitName.query,
           ),
         );
       }
@@ -892,8 +892,13 @@ abstract class Shelf extends _XBase {
         _TaskUnit taskUnit = _unitQueue.getNextTaskUnit()!;
         taskUnit.printInfo();
         //
-        _XBlock xBlock = taskUnit.xBlock;
-        await xBlock.block._executeTaskUnit(taskUnit);
+        if (taskUnit is _BlockTaskUnit) {
+          _XBlock xBlock = taskUnit.xBlock;
+          await xBlock.block._executeTaskUnit(taskUnit);
+        } else if (taskUnit is _ScalarTaskUnit) {
+          _XScalar xScalar = taskUnit.xScalar;
+          await xScalar.scalar._executeTaskUnit(taskUnit);
+        }
       }
 
       this.updateAllUIComponents();
