@@ -905,9 +905,6 @@ abstract class Block<
         ),
       );
     }
-
-    //
-    // Next TaskUnit.
     //
     return true;
   }
@@ -1009,6 +1006,7 @@ abstract class Block<
         // Remove item from List.
         this.data._removeItem(removeItem: candidateCurrentItem);
         // TODO: Update List only??
+        // TODO: Them hieu ung trong qua trinh lua chon va xoa.
         this.updateAllUIComponents(withoutFilters: true);
         await Future.delayed(Duration(seconds: 1));
         //
@@ -1020,7 +1018,17 @@ abstract class Block<
         }
       }
     } else {
-      // Do nothing.
+      // candidateCurrentItem == null
+      //  || !thisXBlock.forceReloadItem && !newCurrent
+    }
+    //
+    for (_XBlock childXBlock in thisXBlock.childXBlocks) {
+      _unitQueue.addTaskUnit(
+        _BlockTaskUnit(
+          xBlock: childXBlock,
+          taskUnitName: BlockTaskUnitName.query,
+        ),
+      );
     }
   }
 
