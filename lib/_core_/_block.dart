@@ -297,7 +297,7 @@ abstract class Block<
     required DataState formDataState,
   }) {
     __assertThisXBlock(thisXBlock);
-    // 
+    //
     __clearWithDataState(
       thisXBlock: thisXBlock,
       queryDataState: queryDataState,
