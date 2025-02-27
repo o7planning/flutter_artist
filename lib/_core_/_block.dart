@@ -280,12 +280,12 @@ abstract class Block<
 
   void __clearWithDataState({
     required _XBlock thisXBlock,
-    required DataState dataState,
+    required DataState queryDataState,
     required DataState formDataState,
   }) {
     __assertThisXBlock(thisXBlock);
     //
-    data._clearWithDataState(dataState: dataState);
+    data._clearWithDataState(queryDataState: queryDataState);
     if (blockForm != null) {
       blockForm!._clearWithDataState(dataState: formDataState);
     }
@@ -293,21 +293,37 @@ abstract class Block<
 
   void __clearWithDataStateCascade({
     required _XBlock thisXBlock,
-    required DataState dataState,
+    required DataState queryDataState,
     required DataState formDataState,
   }) {
     __assertThisXBlock(thisXBlock);
-    //
+    // 
     __clearWithDataState(
       thisXBlock: thisXBlock,
-      dataState: dataState,
+      queryDataState: queryDataState,
       formDataState: formDataState,
     );
     //
     for (var childXBlock in thisXBlock.childXBlocks) {
       childXBlock.block.__clearWithDataStateCascade(
         thisXBlock: childXBlock,
-        dataState: dataState,
+        queryDataState: queryDataState,
+        formDataState: formDataState,
+      );
+    }
+  }
+
+  void __clearChildrenWithDataStateCascade({
+    required _XBlock thisXBlock,
+    required DataState queryDataState,
+    required DataState formDataState,
+  }) {
+    __assertThisXBlock(thisXBlock);
+    //
+    for (var childXBlock in thisXBlock.childXBlocks) {
+      childXBlock.block.__clearWithDataStateCascade(
+        thisXBlock: childXBlock,
+        queryDataState: queryDataState,
         formDataState: formDataState,
       );
     }
@@ -339,32 +355,28 @@ abstract class Block<
       // Update formDataState ???????
       // blockForm!.data._updateFormData(formData);
     }
-    //
-    // TODO: Tạm thời cứ clear all Child Block ITEMS:
-    for (_XBlock childXBlock in thisXBlock.childXBlocks) {
-      switch (dataState) {
-        case DataState.ready:
-          // TODO: Tạm thời cứ clear all Child Block ITEMS:
-          childXBlock.block.__clearWithDataStateCascade(
-            thisXBlock: childXBlock,
-            dataState: DataState.pending,
-            formDataState: DataState.pending,
-          );
-        case DataState.pending:
-          // TODO: Tạm thời cứ clear all Child Block ITEMS:
-          childXBlock.block.__clearWithDataStateCascade(
-            thisXBlock: childXBlock,
-            dataState: DataState.pending,
-            formDataState: DataState.pending,
-          );
-        case DataState.error:
-          // TODO: Tạm thời cứ clear all Child Block ITEMS:
-          childXBlock.block.__clearWithDataStateCascade(
-            thisXBlock: childXBlock,
-            dataState: DataState.error,
-            formDataState: DataState.error,
-          );
-      }
+    switch (dataState) {
+      case DataState.ready:
+        // TODO: Tạm thời cứ clear all Child Block ITEMS:
+        this.__clearChildrenWithDataStateCascade(
+          thisXBlock: thisXBlock,
+          queryDataState: DataState.pending,
+          formDataState: DataState.pending,
+        );
+      case DataState.pending:
+        // TODO: Tạm thời cứ clear all Child Block ITEMS:
+        this.__clearChildrenWithDataStateCascade(
+          thisXBlock: thisXBlock,
+          queryDataState: DataState.pending,
+          formDataState: DataState.pending,
+        );
+      case DataState.error:
+        // TODO: Tạm thời cứ clear all Child Block ITEMS:
+        this.__clearChildrenWithDataStateCascade(
+          thisXBlock: thisXBlock,
+          queryDataState: DataState.error,
+          formDataState: DataState.error,
+        );
     }
   }
 
@@ -796,7 +808,7 @@ abstract class Block<
         // Set Block to error cascade.
         __clearWithDataStateCascade(
           thisXBlock: thisXBlock,
-          dataState: DataState.error,
+          queryDataState: DataState.error,
           formDataState: DataState.error,
         );
         return false;
@@ -970,7 +982,7 @@ abstract class Block<
     if (candidateCurrentItem == null) {
       this.__clearWithDataState(
         thisXBlock: thisXBlock,
-        dataState: DataState.ready,
+        queryDataState: DataState.ready,
         formDataState: DataState.ready, // TODO: Xem lai...
       );
       return;
@@ -1051,7 +1063,6 @@ abstract class Block<
     //
     // candidateCurrentItemDetail != null
     //
-    this.data._selectionDataState = DataState.ready;
     bool convertItemError = false;
     try {
       candidateCurrentItem = this.__convertItemDetailToItem(
@@ -1074,10 +1085,18 @@ abstract class Block<
       return;
     }
     //
+    this.data._selectionDataState = DataState.ready;
     this.data._setCurrentItemOnly(
           refreshedItem: candidateCurrentItem,
           refreshedItemDetail: candidateCurrentItemDetail,
         );
+    if (newCurrent) {
+      this.__clearChildrenWithDataStateCascade(
+        thisXBlock: thisXBlock,
+        queryDataState: DataState.pending,
+        formDataState: DataState.pending,
+      );
+    }
     //
     for (_XBlock childXBlock in thisXBlock.childXBlocks) {
       _unitQueue.addTaskUnit(

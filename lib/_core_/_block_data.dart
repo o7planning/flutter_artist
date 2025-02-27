@@ -105,7 +105,8 @@ abstract class BlockData<
 
   // ***************************************************************************
 
-  void _clearWithDataState({required DataState dataState}) {
+  void _clearWithDataState({required DataState queryDataState}) {
+    _queryDataState = queryDataState;
     _items.clear();
     _selectedItems.clear();
     _checkedItems.clear();
