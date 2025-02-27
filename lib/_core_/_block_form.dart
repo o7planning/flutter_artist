@@ -58,6 +58,14 @@ abstract class BlockForm<
   }
 
   // ***************************************************************************
+  // ***************************************************************************
+
+  Future<bool> _executeTaskUnit(_BlockFormTaskUnit taskUnit) async {
+    return true;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _addFormWidgetState({
     required _RefreshableWidgetState widgetState,
