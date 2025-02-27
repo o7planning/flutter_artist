@@ -54,14 +54,111 @@ abstract class BlockForm<
   // ***************************************************************************
 
   void _clearWithDataState({required DataState dataState}) {
-    data._clearWithDataState(dataState: dataState);
+    this.data._clearWithDataState(dataState: dataState);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<bool> _executeTaskUnit(_BlockFormTaskUnit taskUnit) async {
-    return true;
+  Future<void> _executeTaskUnit(_BlockFormTaskUnit taskUnit) async {
+    switch (taskUnit.taskUnitName) {
+      case BlockFormTaskUnitName.loadForm:
+        await taskUnit.xBlockForm.blockForm._unitLoadForm(
+          thisXBlockForm: taskUnit.xBlockForm,
+        );
+    }
+  }
+
+  // ***************************************************************************
+
+  Future<bool> _unitLoadForm({required _XBlockForm thisXBlockForm}) async {
+    __assertThisXBlockForm(thisXBlockForm);
+    //
+    ITEM_DETAIL? refreshedItemDetail = this.block.data.currentItemDetail;
+    FILTER_CRITERIA? filterCriteria = this.block.data.filterCriteria;
+    EXTRA_FORM_INPUT? extraFormInput =
+        thisXBlockForm.extraFormInput as EXTRA_FORM_INPUT?;
+    bool isNew = refreshedItemDetail == null;
+
+    //
+    bool hasError = false;
+    try {
+      //
+      // May throw ApiError.
+      //
+      await prepareFormMasterData(
+        filterCriteria: filterCriteria,
+        extraFormInput: extraFormInput,
+        refreshedItem: refreshedItemDetail,
+        isNew: isNew,
+      );
+      hasError = false;
+    } catch (e, stackTrace) {
+      hasError = true;
+      //
+      _handleError(
+        shelf: shelf,
+        methodName: "prepareFormMasterData",
+        error: "Error prepareFormMasterData: $e",
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+    }
+    if (hasError) {
+      this._clearWithDataState(dataState: DataState.error);
+      return false;
+    }
+    //
+    Map<String, dynamic> newFormData = {};
+    try {
+      newFormData = prepareFormData(
+        filterCriteria: filterCriteria,
+        extraFormInput: extraFormInput,
+        refreshedItem: refreshedItemDetail,
+        isNew: isNew,
+      );
+    } catch (e, stackTrace) {
+      hasError = true;
+      //
+      _handleError(
+        shelf: shelf,
+        methodName: "prepareFormData",
+        error: "Error prepareFormData: $e",
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+    }
+    //
+    if (hasError) {
+      this._clearWithDataState(dataState: DataState.error);
+      return false;
+    }
+    try {
+      this.data._updateFormData(newFormData);
+      updateAllUIComponents(); // TODO: Xu ly loi?
+      this.block.updateControlBarWidgets();
+      //
+      _formKey.currentState?.patchValue(newFormData);
+      this.data._setCurrentItem(
+            refreshedItemDetail: refreshedItemDetail,
+            formMode:
+                refreshedItemDetail == null ? FormMode.creation : FormMode.edit,
+            dataState: DataState.ready,
+          );
+
+      print("@@@@@@@@ formMode: ${this.data._formMode}");
+      return true;
+    } catch (e, stackTrace) {
+      _handleError( 
+        shelf: shelf,
+        methodName: "prepareFormData",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      //
+      return false;
+    }
   }
 
   // ***************************************************************************
@@ -401,7 +498,7 @@ abstract class BlockForm<
     }
   }
 
-  Future<bool> _prepareForm({
+  Future<bool> _prepareForm_OLD({
     required EXTRA_FORM_INPUT? extraFormInput,
     required ITEM_DETAIL? refreshedItem,
     required final bool isNew,
@@ -584,6 +681,19 @@ abstract class BlockForm<
       );
       //
       return false;
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __assertThisXBlockForm(_XBlockForm thisXBlockForm) {
+    if (thisXBlockForm.blockForm != this) {
+      String message =
+          "Error Assets block form: ${thisXBlockForm.blockForm} - $this";
+      print("FATAL ERROR: $message");
+      throw message;
     }
   }
 }

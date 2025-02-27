@@ -1043,7 +1043,7 @@ abstract class Block<
         showSnackBar: true,
       );
     }
-    //
+    // TODO: ???????????????????
     if (isLoadItemError) {
       if (newCurrent) {
         return;
@@ -1114,6 +1114,17 @@ abstract class Block<
         thisXBlock: thisXBlock,
         queryDataState: DataState.pending,
         formDataState: DataState.pending,
+      );
+    }
+    //
+    // BlockForm:
+    //
+    if (thisXBlock.xBlockForm != null) {
+      _unitQueue.addTaskUnit(
+        _BlockFormTaskUnit(
+          xBlockForm: thisXBlock.xBlockForm!,
+          taskUnitName: BlockFormTaskUnitName.loadForm,
+        ),
       );
     }
     //
@@ -1943,7 +1954,7 @@ abstract class Block<
         formMode: FormMode.edit,
         dataState: DataState.pending,
       );
-      bool success = await blockForm!._prepareForm(
+      bool success = await blockForm!._prepareForm_OLD(
         extraFormInput: null,
         refreshedItem: refreshedItemDetail,
         isNew: false,
@@ -3314,7 +3325,7 @@ abstract class Block<
     try {
       __refreshPreparingFormCreationState(isPreparingFormCreation: true);
       //
-      success = await blockForm!._prepareForm(
+      success = await blockForm!._prepareForm_OLD(
         extraFormInput: extraFormInput,
         refreshedItem: nullItemDetail,
         isNew: true,
