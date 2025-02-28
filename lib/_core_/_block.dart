@@ -1143,9 +1143,8 @@ abstract class Block<
     //
     if (thisXBlock.xBlockForm != null) {
       _taskUnitQueue.addTaskUnit(
-        _BlockFormTaskUnit(
+        _BlockFormLoadFormTaskUnit(
           xBlockForm: thisXBlock.xBlockForm!,
-          taskUnitName: BlockFormTaskUnitName.loadForm,
         ),
       );
     }

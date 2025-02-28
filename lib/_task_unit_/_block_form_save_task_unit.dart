@@ -1,9 +1,9 @@
 part of '../flutter_artist.dart';
 
-class _BlockFormLoadFormTaskUnit extends _TaskUnit {
+class _SaveFormSaveTaskUnit extends _TaskUnit {
   _XBlockForm xBlockForm;
 
-  _BlockFormLoadFormTaskUnit({
+  _SaveFormSaveTaskUnit({
     required this.xBlockForm,
   });
 

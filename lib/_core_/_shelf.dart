@@ -869,39 +869,12 @@ abstract class Shelf extends _XBase {
         if (!xBlockForm.needQuery) {
           continue;
         }
-        // Object? currentItemDetail =
-        //     xBlockForm.blockForm.block.data.currentItemDetail;
-        //
-        // if (currentItemDetail != null) {
-        //   Object currentItem = xBlockForm.blockForm.block.data.currentItem!;
-        //   bool editable = xBlockForm.blockForm.block.canEditItemOnForm(
-        //     item: currentItem,
-        //   );
-        //   // TODO: Co can cai nay khong?
-        //   // xBlockForm.blockForm.data._setCurrentItem(
-        //   //   refreshedItemDetail: currentItemDetail,
-        //   //   formMode: FormMode.edit,
-        //   //   dataState: DataState.pending,
-        //   // );
-        //
-        //   bool success = await xBlockForm.blockForm._prepareForm(
-        //     extraFormInput: xBlockForm.extraFormInput,
-        //     refreshedItem: currentItemDetail,
-        //     isNew: currentItemDetail == null, // TODO: Can kiem tra lai.
-        //     forceForm: true,
-        //   );
-        //   //
-        //   if (!success) {
-        //     return false;
-        //   }
-        // }
         //
         // Add to Queue:
         //
         _taskUnitQueue.addTaskUnit(
-          _BlockFormTaskUnit(
+          _BlockFormLoadFormTaskUnit(
             xBlockForm: xBlockForm,
-            taskUnitName: BlockFormTaskUnitName.loadForm,
           ),
         );
       }
@@ -945,10 +918,19 @@ abstract class Shelf extends _XBase {
         _XBlock xBlock = taskUnit.xBlock;
         await xBlock.block._executeQuickUpdateItemTaskUnit(taskUnit);
       }
-      // BlockForm:
-      else if (taskUnit is _BlockFormTaskUnit) {
+      // BlockForm LoadForm:
+      else if (taskUnit is _BlockFormLoadFormTaskUnit) {
         _XBlockForm xBlockForm = taskUnit.xBlockForm;
-        await xBlockForm.blockForm._executeTaskUnit(taskUnit);
+        await xBlockForm.blockForm._unitLoadForm(
+          thisXBlockForm: xBlockForm,
+        );
+      }
+      // BlockForm Save:
+      else if (taskUnit is _SaveFormSaveTaskUnit) {
+        _XBlockForm xBlockForm = taskUnit.xBlockForm;
+        await xBlockForm.blockForm._unitSaveForm(
+          thisXBlockForm: xBlockForm,
+        );
       }
       // Scalar:
       else if (taskUnit is _ScalarTaskUnit) {
