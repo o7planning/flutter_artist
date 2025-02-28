@@ -8,5 +8,6 @@ class _BlockSelectAsCurrentTaskUnit<ITEM extends Object> extends _TaskUnit {
     required ITEM? candidateItem,
   }) {
     xBlock._candidateCurrentItem = candidateItem;
+    xBlock.setForceReloadItem();
   }
 }

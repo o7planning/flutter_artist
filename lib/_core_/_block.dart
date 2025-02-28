@@ -1046,6 +1046,9 @@ abstract class Block<
       }
     }
     //
+    print(
+        "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 5: candidateCurrentItem: $candidateCurrentItem");
+    //
     if (!newCurrent && !thisXBlock.forceReloadItem) {
       for (_XBlock childXBlock in thisXBlock.childXBlocks) {
         _taskUnitQueue.addTaskUnit(
@@ -1056,18 +1059,25 @@ abstract class Block<
       }
       return;
     }
-    // No item can be current.
+    //
+    // If no item can be current.
+    //
     if (candidateCurrentItem == null) {
-      this.__clearWithDataState(
+      this.__clearWithDataStateCascade(
         thisXBlock: thisXBlock,
         queryDataState: DataState.ready,
         formDataState: DataState.ready, // TODO: Xem lai...
       );
       return;
     }
+    print(
+        "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 6: candidateCurrentItem: $candidateCurrentItem");
     //
     // (newCurrent || forceReloadItem) && candidateCurrentItem !=null
     //
+    bool isCandidateIsCurrent = this.data.isCurrentItem(
+          item: candidateCurrentItem,
+        );
     bool isLoadItemError = false;
     //
     ITEM_DETAIL? candidateCurrentItemDetail;
@@ -1110,31 +1120,65 @@ abstract class Block<
       return;
     }
     //
-    this.data._selectionDataState = DataState.pending;
-
-    // Item not found in database --> remove.
+    // If candidate not found in database --> remove.
+    //
     if (candidateCurrentItemDetail == null) {
-      ITEM? siblingItem = this.data.findSiblingItem(
+      final ITEM? siblingItem = this.data.findSiblingItem(
             item: candidateCurrentItem,
           );
-      // Remove item from List.
-      this.data._removeItem(removeItem: candidateCurrentItem);
-      if (!newCurrent) {
-        this.data._setCurrentItemOnly(
-              refreshedItem: null,
-              refreshedItemDetail: null,
+      print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 7: Candidate not found");
+      // #SAME-CODE-001
+      if (!isCandidateIsCurrent) {
+        await __removeItemFromList(removeItem: candidateCurrentItem);
+
+        print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 8: Candidate not current");
+        //
+        if (currentItem != null) {
+          return;
+        }
+        if (siblingItem == null) {
+          return;
+        }
+        print(
+            "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 9: new Candidate: $siblingItem");
+        var taskUnit = _BlockSelectAsCurrentTaskUnit(
+          xBlock: thisXBlock,
+          candidateItem: siblingItem,
+        );
+        _taskUnitQueue.addTaskUnit(taskUnit);
+        return;
+      }
+      //
+      // Candidate is current but not found in database.
+      // Remove Item (Current Item)
+      //
+      await __removeItemFromList(removeItem: candidateCurrentItem);
+      //
+      this.data._setCurrentItemOnly(
+            refreshedItem: null,
+            refreshedItemDetail: null,
+          );
+      //
+      if (this.blockForm != null) {
+        // Clear Form:
+        this.blockForm!._clearWithDataState(
+              formDataState: DataState.ready,
             );
       }
-      // TODO: Update List only??
-      // TODO: Them hieu ung trong qua trinh lua chon va xoa.
-      this.updateAllUIComponents(withoutFilters: true);
-      await Future.delayed(Duration(seconds: 1));
+      //
+      __clearChildrenWithDataStateCascade(
+        thisXBlock: thisXBlock,
+        queryDataState: DataState.ready,
+        formDataState: DataState.ready,
+      );
       //
       if (siblingItem != null) {
-        thisXBlock._candidateCurrentItem = siblingItem;
-        await _unitSelectItemAsCurrent(thisXBlock: thisXBlock);
-      } else {
-        this.data._selectionDataState = DataState.ready;
+        var taskUnit = _BlockSelectAsCurrentTaskUnit(
+          xBlock: thisXBlock,
+          candidateItem: siblingItem,
+        );
+        _taskUnitQueue.addTaskUnit(taskUnit);
+        return;
       }
       return;
     }
@@ -1257,9 +1301,9 @@ abstract class Block<
       );
       return false;
     }
-    //
+    // #SAME-CODE-001
     if (!isCurrent) {
-      __removeItemFromList(removeItem: item);
+      await __removeItemFromList(removeItem: item);
       return true;
     }
     //
@@ -1267,7 +1311,7 @@ abstract class Block<
     //
     final ITEM? siblingItem = this.data.findSiblingItem(item: item);
     // Remove Item (Current Item)
-    __removeItemFromList(removeItem: item);
+    await __removeItemFromList(removeItem: item);
     this.data._setCurrentItemOnly(
           refreshedItem: null,
           refreshedItemDetail: null,
@@ -1285,7 +1329,7 @@ abstract class Block<
       queryDataState: DataState.ready,
       formDataState: DataState.ready,
     );
-    // TODO: Select specified Item????
+    //
     _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit(
       xBlock: thisXBlock,
       candidateItem: siblingItem,
@@ -2178,7 +2222,7 @@ abstract class Block<
   ///
   /// Remove this item from Interface because it no longer exists on the server
   ///
-  void __removeItemFromList({required ITEM removeItem}) {
+  Future<void> __removeItemFromList({required ITEM removeItem}) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: null,
@@ -2193,6 +2237,7 @@ abstract class Block<
           removeItem: removeItem,
         );
     this.updateItemsView();
+    await Future.delayed(Duration(seconds: 1));
   }
 
   // ***************************************************************************
@@ -2220,7 +2265,7 @@ abstract class Block<
           item: notFoundItem,
         );
     //
-    __removeItemFromList(removeItem: notFoundItem);
+    await __removeItemFromList(removeItem: notFoundItem);
     //
     if (siblingItem != null) {
       FlutterArtist.codeFlowLogger._addInfo(
