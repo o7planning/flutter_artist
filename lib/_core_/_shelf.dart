@@ -806,32 +806,6 @@ abstract class Shelf extends _XBase {
         if (!xScalar.needQuery) {
           continue;
         }
-        // final _XDataFilter xDataFilter = xScalar.xDataFilter;
-        // final DataFilter dataFilter = xDataFilter.dataFilter;
-        // final Scalar scalar = xScalar.scalar;
-        // //
-        // final FilterCriteria filterCriteria;
-        // if (!xDataFilter.queried) {
-        //   //
-        //   FilterCriteria? newCriteria = await dataFilter._prepareData(
-        //     filterInput: xDataFilter.filterInput,
-        //   );
-        //   if (newCriteria == null) {
-        //     return false;
-        //   }
-        //   filterCriteria = newCriteria;
-        //   xDataFilter.queried = true;
-        // } else {
-        //   filterCriteria = dataFilter._filterCriteria!;
-        // }
-        // //
-        // bool success = await scalar.__queryThis(
-        //   filterCriteria: filterCriteria,
-        // );
-        // if (!success) {
-        //   return false;
-        // }
-
         //
         // Add to Queue:
         //
@@ -886,58 +860,60 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
 
   Future<void> _executeTaskUnitQueue() async {
-    while (_taskUnitQueue.hasNext()) {
-      _TaskUnit taskUnit = _taskUnitQueue.getNextTaskUnit()!;
-      // Block Query:
-      if (taskUnit is _BlockQueryTaskUnit) {
-        await taskUnit.xBlock.block._unitQuery(
-          thisXBlock: taskUnit.xBlock,
-        );
+    await FlutterArtist.executeTask(asyncFunction: () async {
+      while (_taskUnitQueue.hasNext()) {
+        _TaskUnit taskUnit = _taskUnitQueue.getNextTaskUnit()!;
+        // Block Query:
+        if (taskUnit is _BlockQueryTaskUnit) {
+          await taskUnit.xBlock.block._unitQuery(
+            thisXBlock: taskUnit.xBlock,
+          );
+        }
+        // Block Select Item as Current:
+        else if (taskUnit is _BlockSelectAsCurrentTaskUnit) {
+          await taskUnit.xBlock.block._unitSelectItemAsCurrent(
+            thisXBlock: taskUnit.xBlock,
+          );
+        }
+        // Block Delete Item:
+        else if (taskUnit is _BlockDeleteItemTaskUnit) {
+          await taskUnit.xBlock.block._unitDeleteItem(
+            thisXBlock: taskUnit.xBlock,
+            item: taskUnit.item,
+          );
+        }
+        // Block QuickCreateItem:
+        else if (taskUnit is _BlockQuickCreateItemTaskUnit) {
+          await taskUnit.xBlock.block._unitQuickCreateItem(
+            thisXBlock: taskUnit.xBlock,
+            action: taskUnit.action,
+          );
+        }
+        // Block QuickUpdateItem:
+        else if (taskUnit is _BlockQuickUpdateItemTaskUnit) {
+          await taskUnit.xBlock.block._unitQuickUpdateItem(
+            thisXBlock: taskUnit.xBlock,
+            action: taskUnit.action,
+          );
+        }
+        // BlockForm LoadForm:
+        else if (taskUnit is _BlockFormLoadFormTaskUnit) {
+          await taskUnit.xBlockForm.blockForm._unitLoadForm(
+            thisXBlockForm: taskUnit.xBlockForm,
+          );
+        }
+        // BlockForm Save:
+        else if (taskUnit is _SaveFormSaveTaskUnit) {
+          await taskUnit.xBlockForm.blockForm._unitSaveForm(
+            thisXBlockForm: taskUnit.xBlockForm,
+          );
+        }
+        // Scalar:
+        else if (taskUnit is _ScalarQueryTaskUnit) {
+          await taskUnit.xScalar.scalar._unitQuery();
+        }
       }
-      // Block Select Item as Current:
-      else if (taskUnit is _BlockSelectAsCurrentTaskUnit) {
-        await taskUnit.xBlock.block._unitSelectItemAsCurrent(
-          thisXBlock: taskUnit.xBlock,
-        );
-      }
-      // Block Delete Item:
-      else if (taskUnit is _BlockDeleteItemTaskUnit) {
-        await taskUnit.xBlock.block._unitDeleteItem(
-          thisXBlock: taskUnit.xBlock,
-          item: taskUnit.item,
-        );
-      }
-      // Block QuickCreateItem:
-      else if (taskUnit is _BlockQuickCreateItemTaskUnit) {
-        await taskUnit.xBlock.block._unitQuickCreateItem(
-          thisXBlock: taskUnit.xBlock,
-          action: taskUnit.action,
-        );
-      }
-      // Block QuickUpdateItem:
-      else if (taskUnit is _BlockQuickUpdateItemTaskUnit) {
-        await taskUnit.xBlock.block._unitQuickUpdateItem(
-          thisXBlock: taskUnit.xBlock,
-          action: taskUnit.action,
-        );
-      }
-      // BlockForm LoadForm:
-      else if (taskUnit is _BlockFormLoadFormTaskUnit) {
-        await taskUnit.xBlockForm.blockForm._unitLoadForm(
-          thisXBlockForm: taskUnit.xBlockForm,
-        );
-      }
-      // BlockForm Save:
-      else if (taskUnit is _SaveFormSaveTaskUnit) {
-        await taskUnit.xBlockForm.blockForm._unitSaveForm(
-          thisXBlockForm: taskUnit.xBlockForm,
-        );
-      }
-      // Scalar:
-      else if (taskUnit is _ScalarQueryTaskUnit) {
-        await taskUnit.xScalar.scalar._unitQuery();
-      }
-    }
-    updateAllUIComponents();
+      updateAllUIComponents();
+    });
   }
 }
