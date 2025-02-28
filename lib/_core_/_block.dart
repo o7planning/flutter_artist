@@ -758,12 +758,22 @@ abstract class Block<
           thisXBlock: taskUnit.xBlock,
         );
       case BlockTaskUnitName.delete:
-        await taskUnit.xBlock.block
-            ._unitDeleteItem(thisXBlock: taskUnit.xBlock);
+        await taskUnit.xBlock.block._unitDeleteItem(
+          thisXBlock: taskUnit.xBlock,
+        );
     }
   }
 
-  // ---------------------------------------------------------------------------
+  Future<void> _executeQuickCreateItemTaskUnit(
+      _BlockQuickCreateItemTaskUnit taskUnit) async {
+    await taskUnit.xBlock.block._unitQuickCreateItem(
+      thisXBlock: taskUnit.xBlock,
+      action: taskUnit.action,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<bool> _unitQuery({required _XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
@@ -1138,10 +1148,66 @@ abstract class Block<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<void> _unitDeleteItem({required _XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
     //
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<bool> _unitQuickCreateItem({
+    required _XBlock thisXBlock,
+    required QuickCreateItemAction<ITEM_DETAIL> action,
+  }) async {
+    ApiResult<ITEM_DETAIL> result;
+    try {
+      FlutterArtist.codeFlowLogger._addMethodCall(
+        isLibCode: false,
+        navigate: null,
+        ownerClassInstance: action,
+        methodName: "callApiQuickCreateItem",
+        parameters: {},
+      );
+      //
+      result = await action.callApiQuickCreateItem();
+      //
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: '${getClassName(action)}.callApiQuickCreateItem',
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      //
+      return false;
+    }
+    //
+    try {
+      return await _processSaveActionRestResult(
+        thisXBlock: thisXBlock,
+        calledMethodName: "${getClassName(action)}.callApiQuickCreateItem",
+        result: result,
+      );
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: "_processSaveActionRestResult",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      //
+      return false;
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<bool> _processSaveActionRestResult({
     required _XBlock thisXBlock,
@@ -2652,6 +2718,9 @@ abstract class Block<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<bool> executeQuickActionCreateItem<
       A extends QuickCreateItemAction<ITEM_DETAIL>>({
     required A action,
@@ -2690,48 +2759,19 @@ abstract class Block<
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    ApiResult<ITEM_DETAIL> result;
-    try {
-      FlutterArtist.codeFlowLogger._addMethodCall(
-        isLibCode: false,
-        navigate: null,
-        ownerClassInstance: action,
-        methodName: "callApiQuickCreateItem",
-        parameters: {},
-      );
-      //
-      result = await action.callApiQuickCreateItem();
-      //
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: '${getClassName(action)}.callApiQuickCreateItem',
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      //
-      return false;
-    }
+    _TaskUnit taskUnit = _BlockQuickCreateItemTaskUnit(
+      xBlock: thisXBlock,
+      action: action,
+    );
     //
-    try {
-      return await _processSaveActionRestResult(
-        thisXBlock: thisXBlock,
-        calledMethodName: "${getClassName(action)}.callApiQuickCreateItem",
-        result: result,
-      );
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "_processSaveActionRestResult",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      //
-      return false;
-    }
+    _taskUnitQueue.addTaskUnit(taskUnit);
+    //
+    await this.shelf._executeTaskUnitQueue();
+    return true;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<bool> executeQuickActionUpdateItem<
       A extends QuickUpdateItemAction<ITEM, ITEM_DETAIL>>({
@@ -2813,6 +2853,9 @@ abstract class Block<
       return false;
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<bool> executeQuickChildBlockItems<
       A extends QuickChildBlockItemsAction<ITEM, ITEM_DETAIL>>({
