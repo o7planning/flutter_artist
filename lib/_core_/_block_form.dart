@@ -104,16 +104,6 @@ abstract class BlockForm<
     if (!__checkValidBeforeSave()) {
       return false;
     }
-    //
-    _XShelf xShelf = _XShelf(
-      shelf: shelf,
-      forceDataFilterOpt: null,
-      forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [],
-      forceQueryBlockFormOpts: [],
-    );
-    //
-    _XBlock thisXBlock = xShelf.findXBlockByName(block.name)!;
     Map<String, dynamic> formMapData = data.currentFormData;
     //
     String calledMethodName = data.isNew //
@@ -156,7 +146,7 @@ abstract class BlockForm<
     //
     try {
       return await block._processSaveActionRestResult(
-        thisXBlock: thisXBlock,
+        thisXBlock: thisXBlockForm.xBlock,
         calledMethodName: calledMethodName,
         result: result,
       );
@@ -467,6 +457,10 @@ abstract class BlockForm<
       navigate: null,
     );
     //
+    if (!__checkValidBeforeSave()) {
+      return false;
+    }
+    //
     _XShelf xShelf = _XShelf(
       shelf: shelf,
       forceDataFilterOpt: null,
@@ -483,6 +477,7 @@ abstract class BlockForm<
     );
     //
     _taskUnitQueue.addTaskUnit(taskUnit);
+    //
     await this.block.shelf._executeTaskUnitQueue();
     //
     return true;
