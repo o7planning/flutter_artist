@@ -1179,10 +1179,10 @@ abstract class Block<
       ITEM refreshedItem = convertItemDetailToItem(
         itemDetail: savedItemDetail,
       );
-      data._insertOrReplaceItem(
-        item: refreshedItem,
-        itemDetail: savedItemDetail,
-      );
+      this.data._insertOrReplaceItem(
+            item: refreshedItem,
+            itemDetail: savedItemDetail,
+          );
       //
       bool editable = canEditItemOnForm(item: refreshedItem);
       //
@@ -1198,11 +1198,11 @@ abstract class Block<
       );
       //
       if (blockForm != null) {
-        // blockForm!.data._setCurrentItem(
-        //   refreshedItemDetail: savedItemDetail,
-        //   formMode: FormMode.edit,
-        //   dataState: DataState.pending,
-        // );
+        blockForm!.data._setCurrentItem(
+          refreshedItemDetail: savedItemDetail,
+          formMode: FormMode.edit,
+          dataState: DataState.pending,
+        );
         bool success = await blockForm!._prepareMasterDataAndFormData(
           extraFormInput: null,
           filterCriteria: data.filterCriteria,
@@ -1213,20 +1213,13 @@ abstract class Block<
           return false;
         }
       }
-      // ????????????
-      // bool success = await __insertOrReplaceItemInListAndRefreshChildren(
-      //   thisXBlock: thisXBlock,
-      //   refreshedItemDetail: savedItemDetail,
-      //   forceForm: false,
-      // );
-      // if (!success) {
-      //   return false;
-      // }
       return true;
     }
     // savedItem = null or !keepInList
     else {
-      ITEM? savedItem = __convertItemDetailToItem(itemDetail: savedItemDetail);
+      ITEM? savedItem = __convertItemDetailToItem(
+        itemDetail: savedItemDetail,
+      );
       final ITEM? removeItem = savedItem ?? data.currentItem;
 
       if (removeItem != null) {
@@ -1950,6 +1943,7 @@ abstract class Block<
   }
 
   // Private Method. Only for use in this class.
+  @Deprecated("Xoa di, khong su dung nua")
   Future<bool> __removeNotFoundItemAndSelectSibling({
     required _XBlock thisXBlock,
     SuggestedSelection? suggestedSelection,
