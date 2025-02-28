@@ -757,11 +757,15 @@ abstract class Block<
         await taskUnit.xBlock.block._unitPrepareToShow(
           thisXBlock: taskUnit.xBlock,
         );
-      case BlockTaskUnitName.delete:
-        await taskUnit.xBlock.block._unitDeleteItem(
-          thisXBlock: taskUnit.xBlock,
-        );
     }
+  }
+
+  Future<void> _executeDeleteItemTaskUnit(
+      _BlockDeleteItemTaskUnit taskUnit) async {
+    await taskUnit.xBlock.block._unitDeleteItem(
+      thisXBlock: taskUnit.xBlock,
+      item: taskUnit.item,
+    );
   }
 
   Future<void> _executeQuickCreateItemTaskUnit(
@@ -1048,7 +1052,7 @@ abstract class Block<
       } else {
         isLoadItemError = false;
         //
-        candidateCurrentItemDetail = result.data as ITEM_DETAIL?;
+        candidateCurrentItemDetail = result.data;
       }
     } catch (e, stackTrace) {
       isLoadItemError = true;
@@ -1159,9 +1163,106 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> _unitDeleteItem({required _XBlock thisXBlock}) async {
+  Future<bool> _unitDeleteItem({
+    required _XBlock thisXBlock,
+    required ITEM item,
+  }) async {
     __assertThisXBlock(thisXBlock);
     //
+    try {
+      // No need check again?
+      bool canDelete = canDeleteItem(item: item);
+      if (!canDelete) {
+        return false;
+      }
+      final bool isCurrent = data.isCurrentItem(item: item);
+      //
+      ApiResult<void> result;
+      try {
+        FlutterArtist.codeFlowLogger._addMethodCall(
+          isLibCode: false,
+          navigate: null,
+          ownerClassInstance: this,
+          methodName: "callApiDeleteItem",
+          parameters: {
+            "item": item,
+          },
+        );
+        //
+        __refreshDeletingState(isDeleting: true);
+        //
+        result = await callApiDeleteItem(item: item);
+        FlutterArtist.storage._fireEventSourceChanged(
+          eventBlock: this,
+          itemIdString: null,
+        );
+        //
+        __refreshDeletingState(isDeleting: false);
+      } catch (e, stackTrace) {
+        __refreshDeletingState(isDeleting: false);
+        //
+        _handleError(
+          shelf: shelf,
+          methodName: "callApiDeleteItem",
+          error: e,
+          stackTrace: stackTrace,
+          showSnackBar: true,
+        );
+        //
+        return false;
+      }
+      if (result.errorMessage != null) {
+        _handleRestError(
+          shelf: shelf,
+          methodName: "callApiDeleteItem",
+          message: result.errorMessage!,
+          errorDetails: result.errorDetails,
+          showSnackBar: true,
+        );
+        return false;
+      } else {
+        if (!isCurrent) {
+          __removeItemFromList(removeItem: item);
+        } else {
+          // Deleted current item ==> find sibling.
+          final ITEM? sibling = data.findSiblingItem(item: item);
+          // Remove Item
+          __removeItemFromList(removeItem: item);
+
+          //
+          if (sibling != null) {
+            bool success = await __prepareToShowOrEdit(
+              thisXBlock: thisXBlock,
+              item: sibling,
+              justQueried: false,
+              forceForm: false,
+            );
+            if (!success) {
+              return false;
+            }
+          } else {
+            bool success = await _switchThisAndChildrenToNoneMode(
+              thisXBlock: thisXBlock,
+              clearListForThis: false,
+              dataState: DataState.ready,
+            );
+            if (!success) {
+              return false;
+            }
+          }
+        }
+      }
+      return true;
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: "__delete",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      return false;
+    }
   }
 
   // ***************************************************************************
@@ -2377,55 +2478,6 @@ abstract class Block<
     }
   }
 
-  @Deprecated("Xoa di, khong su dung nua")
-  Future<bool> __executeQuickActionUpdateItem({
-    required _XBlock thisXBlock,
-    required QuickUpdateItemAction<ITEM, ITEM_DETAIL> action,
-  }) async {
-    __assertThisXBlock(thisXBlock);
-    //
-    ApiResult<ITEM_DETAIL> result;
-    try {
-      FlutterArtist.codeFlowLogger._addMethodCall(
-        isLibCode: false,
-        navigate: null,
-        ownerClassInstance: action,
-        methodName: "callApiQuickUpdateItem",
-        parameters: {},
-      );
-      //
-      result = await action.callApiQuickUpdateItem();
-      //
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: '${getClassName(action)}.callApiQuickUpdateItem',
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      return false;
-    }
-    //
-    try {
-      return await _processSaveActionRestResult_OLD(
-        thisXBlock: thisXBlock,
-        calledMethodName: "${getClassName(action)}.callApiQuickUpdateItem",
-        result: result,
-      );
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: '_processSaveActionRestResult',
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      //
-      return false;
-    }
-  }
-
   Future<bool>
       _executeQuickActionWithOverlayAndRestorable<DATA extends Object>({
     required FILTER_INPUT? filterInput,
@@ -3532,101 +3584,16 @@ abstract class Block<
     );
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
+    _TaskUnit taskUnit = _BlockDeleteItemTaskUnit(
+      xBlock: thisXBlock,
+      item: item,
+    );
     //
+    _taskUnitQueue.addTaskUnit(taskUnit);
+    //
+    await this.shelf._executeTaskUnitQueue();
 
-    try {
-      bool canDelete = canDeleteItem(item: item);
-      if (!canDelete) {
-        return false;
-      }
-      final bool isCurrent = data.isCurrentItem(item: item);
-      //
-      ApiResult<void> result;
-      try {
-        FlutterArtist.codeFlowLogger._addMethodCall(
-          isLibCode: false,
-          navigate: null,
-          ownerClassInstance: this,
-          methodName: "callApiDeleteItem",
-          parameters: {
-            "item": item,
-          },
-        );
-        //
-        __refreshDeletingState(isDeleting: true);
-        //
-        result = await callApiDeleteItem(item: item);
-        FlutterArtist.storage._fireEventSourceChanged(
-          eventBlock: this,
-          itemIdString: null,
-        );
-        //
-        __refreshDeletingState(isDeleting: false);
-      } catch (e, stackTrace) {
-        __refreshDeletingState(isDeleting: false);
-        //
-        _handleError(
-          shelf: shelf,
-          methodName: "callApiDeleteItem",
-          error: e,
-          stackTrace: stackTrace,
-          showSnackBar: true,
-        );
-        //
-        return false;
-      }
-      if (result.errorMessage != null) {
-        _handleRestError(
-          shelf: shelf,
-          methodName: "callApiDeleteItem",
-          message: result.errorMessage!,
-          errorDetails: result.errorDetails,
-          showSnackBar: true,
-        );
-        return false;
-      } else {
-        if (!isCurrent) {
-          __removeItemFromList(removeItem: item);
-        } else {
-          // Deleted current item ==> find sibling.
-          final ITEM? sibling = data.findSiblingItem(item: item);
-          // Remove Item
-          __removeItemFromList(removeItem: item);
-
-          //
-          if (sibling != null) {
-            bool success = await __prepareToShowOrEdit(
-              thisXBlock: thisXBlock,
-              item: sibling,
-              justQueried: false,
-              forceForm: false,
-            );
-            if (!success) {
-              return false;
-            }
-          } else {
-            bool success = await _switchThisAndChildrenToNoneMode(
-              thisXBlock: thisXBlock,
-              clearListForThis: false,
-              dataState: DataState.ready,
-            );
-            if (!success) {
-              return false;
-            }
-          }
-        }
-      }
-      return true;
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "__delete",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      return false;
-    }
+    return true;
   }
 
   @Deprecated("Xoa di, khong su dung nua")

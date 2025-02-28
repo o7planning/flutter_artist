@@ -236,9 +236,7 @@ abstract class BlockForm<
             formMode: isNew //
                 ? FormMode.creation
                 : FormMode.edit,
-            dataState: newFormData == null //
-                ? DataState.error
-                : DataState.ready,
+            dataState: DataState.ready,
           );
       //
       updateAllUIComponents(); // TODO: Xu ly loi?

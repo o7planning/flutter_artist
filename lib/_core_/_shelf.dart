@@ -930,6 +930,11 @@ abstract class Shelf extends _XBase {
         _XBlock xBlock = taskUnit.xBlock;
         await xBlock.block._executeTaskUnit(taskUnit);
       }
+      // Block Delete Item:
+      else if (taskUnit is _BlockDeleteItemTaskUnit) {
+        _XBlock xBlock = taskUnit.xBlock;
+        await xBlock.block._executeDeleteItemTaskUnit(taskUnit);
+      }
       // Block QuickCreateItem:
       else if (taskUnit is _BlockQuickCreateItemTaskUnit) {
         _XBlock xBlock = taskUnit.xBlock;

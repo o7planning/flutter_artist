@@ -20,7 +20,6 @@ abstract class BlockData<
   ///
   /// return a copied list of items.
   ///
-  @override
   List<ITEM> get items {
     return [..._items];
   }
@@ -74,7 +73,6 @@ abstract class BlockData<
 
   late PaginationData? _pagination;
 
-  @override
   PaginationData? get pagination => PaginationData.copy(_pagination);
 
   _CurrentCoupleItem<ITEM, ITEM_DETAIL> __current = _CurrentCoupleItem(
