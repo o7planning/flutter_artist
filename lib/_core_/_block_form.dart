@@ -193,81 +193,6 @@ abstract class BlockForm<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<bool> _saveForm() async {
-    if (!__checkValidBeforeSave()) {
-      return false;
-    }
-    _XShelf xShelf = _XShelf(
-      shelf: shelf,
-      forceDataFilterOpt: null,
-      forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [],
-      forceQueryBlockFormOpts: [],
-    );
-    //
-    _XBlock thisXBlock = xShelf.findXBlockByName(block.name)!;
-    Map<String, dynamic> formMapData = data.currentFormData;
-    //
-    String calledMethodName = data.isNew //
-        ? 'callApiCreateItem'
-        : 'callApiUpdateItem';
-    //
-    ApiResult<ITEM_DETAIL> result;
-    bool saveError = false;
-    try {
-      FlutterArtist.codeFlowLogger._addMethodCall(
-        isLibCode: false,
-        ownerClassInstance: this,
-        methodName: calledMethodName,
-        parameters: {
-          "formMapData": formMapData,
-        },
-        navigate: null,
-      );
-      //
-      block._refreshSavingState(isSaving: true);
-      //
-      result = data.isNew
-          ? await callApiCreateItem(formMapData: formMapData)
-          : await callApiUpdateItem(formMapData: formMapData);
-      //
-      block._refreshSavingState(isSaving: false);
-    } catch (e, stackTrace) {
-      saveError = true;
-      block._refreshSavingState(isSaving: false);
-      //
-      _handleError(
-        shelf: shelf,
-        methodName: calledMethodName,
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      return false;
-    }
-    //
-    try {
-      return await block._processSaveActionRestResult(
-        thisXBlock: thisXBlock,
-        calledMethodName: calledMethodName,
-        result: result,
-      );
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: '_processSaveActionRestResult',
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      //
-      return false;
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   void _addFormWidgetState({
     required _RefreshableWidgetState widgetState,
     required final bool isShowing,
@@ -448,79 +373,24 @@ abstract class BlockForm<
     if (!__checkValidBeforeSave()) {
       return false;
     }
-    bool success = await _saveForm();
-    return success;
-  }
-
-  Future<bool> _saveFormWithOverlayAndRestorable() async {
-    return await FlutterArtist.executeTask(
-      asyncFunction: () async {
-        return await _saveFormWithRestorable();
-      },
-    );
-  }
-
-  Future<bool> _saveFormWithRestorable() async {
-    if (!__checkValidBeforeSave()) {
-      return false;
-    }
+    //
     _XShelf xShelf = _XShelf(
       shelf: shelf,
       forceDataFilterOpt: null,
       forceQueryScalarOpts: [],
-      forceQueryBlockOpts: block._childBlocks
-          .map(
-            (b) => _BlockOpt(
-              block: b,
-              queryType: null,
-              pageable: null,
-              listBehavior: null,
-              suggestedSelection: null,
-              postQueryBehavior: null,
-            ),
-          )
-          .toList(),
+      forceQueryBlockOpts: [],
       forceQueryBlockFormOpts: [],
     );
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(block.name)!;
-    try {
-      shelf._backupAll();
-      bool success = await __saveForm(
-        thisXBlock: thisXBlock,
-      );
-
-      if (!success) {
-        shelf._restoreAll();
-      } else {
-        shelf._applyNewStateAll();
-      }
-      return success;
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "saveForm",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      //
-      block._restoreAllFromRoot();
-      return false;
-    }
-  }
-
-  // Private method. Only for use in this class.
-  @Deprecated("Xoa di, khong su dung nua.")
-  Future<bool> __saveForm({
-    required _XBlock thisXBlock,
-  }) async {
     Map<String, dynamic> formMapData = data.currentFormData;
     //
-    String calledMethodName =
-        data.isNew ? 'callApiCreateItem' : 'callApiUpdateItem';
+    String calledMethodName = data.isNew //
+        ? 'callApiCreateItem'
+        : 'callApiUpdateItem';
     //
     ApiResult<ITEM_DETAIL> result;
+    bool saveError = false;
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
@@ -540,6 +410,7 @@ abstract class BlockForm<
       //
       block._refreshSavingState(isSaving: false);
     } catch (e, stackTrace) {
+      saveError = true;
       block._refreshSavingState(isSaving: false);
       //
       _handleError(
@@ -551,8 +422,9 @@ abstract class BlockForm<
       );
       return false;
     }
+    //
     try {
-      return await block._processSaveActionRestResult_OLD(
+      return await block._processSaveActionRestResult(
         thisXBlock: thisXBlock,
         calledMethodName: calledMethodName,
         result: result,
