@@ -1264,6 +1264,11 @@ abstract class Block<
     final ITEM? sibling = this.data.findSiblingItem(item: item);
     // Remove Item (Current Item)
     __removeItemFromList(removeItem: item);
+    this.data._setCurrentItemOnly(
+          refreshedItem: null,
+          refreshedItemDetail: null,
+        );
+    //
     if (this.blockForm != null) {
       // Clear Form:
       this.blockForm!._clearWithDataState(
