@@ -36,15 +36,19 @@ abstract class DataFilter<
         : __filterCriteriasMap[__currentSuccessCriteriaId];
   }
 
-  FILTER_CRITERIA? __filterCriteriaBk;
-
   FILTER_CRITERIA? _filterCriteria;
 
   FILTER_CRITERIA? get filterCriteria => _filterCriteria;
 
   List<Restorable> get restorableCriteria;
 
+// ***************************************************************************
+  // ***************************************************************************
+
   final Map<_RefreshableWidgetState, bool> _filterFragmentWidgetStates = {};
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   String get _classDefinition {
     return "${getClassName(this)}$_classParametersDefinition";

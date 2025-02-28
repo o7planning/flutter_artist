@@ -43,6 +43,9 @@ abstract class Shelf extends _XBase {
 
   final Map<_RefreshableWidgetState, bool> _shelfWidgetStates = {};
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   Shelf() {
     __onInit();
   }
