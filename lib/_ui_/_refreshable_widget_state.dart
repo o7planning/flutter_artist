@@ -14,7 +14,6 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
 
   Widget buildContent(BuildContext context);
 
-  @override
   String get locationInfo => getClassName(widget.ownerClassInstance);
 
   ///

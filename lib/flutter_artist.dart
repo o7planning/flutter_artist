@@ -75,7 +75,6 @@ part '_core_/_storage.dart';
 part '_core_/_suggested_selection.dart';
 part '_core_/_typedef.dart';
 part '_core_/_x_base.dart';
-part '_core_act_result_/_delete_result.dart';
 part '_core_query_/_block_form_opt.dart';
 part '_core_query_/_block_opt.dart';
 part '_core_query_/_data_filter_opt.dart';
