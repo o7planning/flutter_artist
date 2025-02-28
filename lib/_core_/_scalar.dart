@@ -108,16 +108,6 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> _executeTaskUnit(_ScalarTaskUnit taskUnit) async {
-    switch (taskUnit.taskUnitName) {
-      case ScalarTaskUnitName.query:
-        await taskUnit.xScalar.scalar._unitQuery();
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   Future<bool> _unitQuery() async {
     // TODO:
     throw UnimplementedError();

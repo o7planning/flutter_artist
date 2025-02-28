@@ -817,39 +817,6 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> _executeDeleteItemTaskUnit(
-      _BlockDeleteItemTaskUnit taskUnit) async {
-    await taskUnit.xBlock.block._unitDeleteItem(
-      thisXBlock: taskUnit.xBlock,
-      item: taskUnit.item,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Future<void> _executeQuickCreateItemTaskUnit(
-      _BlockQuickCreateItemTaskUnit taskUnit) async {
-    await taskUnit.xBlock.block._unitQuickCreateItem(
-      thisXBlock: taskUnit.xBlock,
-      action: taskUnit.action,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Future<void> _executeQuickUpdateItemTaskUnit(
-      _BlockQuickUpdateItemTaskUnit taskUnit) async {
-    await taskUnit.xBlock.block._unitQuickUpdateItem(
-      thisXBlock: taskUnit.xBlock,
-      action: taskUnit.action,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   Future<bool> _unitQuery({required _XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
     //

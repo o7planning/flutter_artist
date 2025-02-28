@@ -836,9 +836,8 @@ abstract class Shelf extends _XBase {
         // Add to Queue:
         //
         _taskUnitQueue.addTaskUnit(
-          _ScalarTaskUnit(
+          _ScalarQueryTaskUnit(
             xScalar: xScalar,
-            taskUnitName: ScalarTaskUnitName.query,
           ),
         );
       }
@@ -891,47 +890,52 @@ abstract class Shelf extends _XBase {
       _TaskUnit taskUnit = _taskUnitQueue.getNextTaskUnit()!;
       // Block Query:
       if (taskUnit is _BlockQueryTaskUnit) {
-        _XBlock xBlock = taskUnit.xBlock;
-        await xBlock.block._unitQuery(thisXBlock: xBlock);
+        await taskUnit.xBlock.block._unitQuery(
+          thisXBlock: taskUnit.xBlock,
+        );
       }
       // Block Select Item as Current:
       else if (taskUnit is _BlockSelectAsCurrentTaskUnit) {
-        _XBlock xBlock = taskUnit.xBlock;
-        await xBlock.block._unitPrepareToShow(thisXBlock: xBlock);
+        await taskUnit.xBlock.block._unitPrepareToShow(
+          thisXBlock: taskUnit.xBlock,
+        );
       }
       // Block Delete Item:
       else if (taskUnit is _BlockDeleteItemTaskUnit) {
-        _XBlock xBlock = taskUnit.xBlock;
-        await xBlock.block._executeDeleteItemTaskUnit(taskUnit);
+        await taskUnit.xBlock.block._unitDeleteItem(
+          thisXBlock: taskUnit.xBlock,
+          item: taskUnit.item,
+        );
       }
       // Block QuickCreateItem:
       else if (taskUnit is _BlockQuickCreateItemTaskUnit) {
-        _XBlock xBlock = taskUnit.xBlock;
-        await xBlock.block._executeQuickCreateItemTaskUnit(taskUnit);
+        await taskUnit.xBlock.block._unitQuickCreateItem(
+          thisXBlock: taskUnit.xBlock,
+          action: taskUnit.action,
+        );
       }
       // Block QuickUpdateItem:
       else if (taskUnit is _BlockQuickUpdateItemTaskUnit) {
-        _XBlock xBlock = taskUnit.xBlock;
-        await xBlock.block._executeQuickUpdateItemTaskUnit(taskUnit);
+        await taskUnit.xBlock.block._unitQuickUpdateItem(
+          thisXBlock: taskUnit.xBlock,
+          action: taskUnit.action,
+        );
       }
       // BlockForm LoadForm:
       else if (taskUnit is _BlockFormLoadFormTaskUnit) {
-        _XBlockForm xBlockForm = taskUnit.xBlockForm;
-        await xBlockForm.blockForm._unitLoadForm(
-          thisXBlockForm: xBlockForm,
+        await taskUnit.xBlockForm.blockForm._unitLoadForm(
+          thisXBlockForm: taskUnit.xBlockForm,
         );
       }
       // BlockForm Save:
       else if (taskUnit is _SaveFormSaveTaskUnit) {
-        _XBlockForm xBlockForm = taskUnit.xBlockForm;
-        await xBlockForm.blockForm._unitSaveForm(
-          thisXBlockForm: xBlockForm,
+        await taskUnit.xBlockForm.blockForm._unitSaveForm(
+          thisXBlockForm: taskUnit.xBlockForm,
         );
       }
       // Scalar:
-      else if (taskUnit is _ScalarTaskUnit) {
-        _XScalar xScalar = taskUnit.xScalar;
-        await xScalar.scalar._executeTaskUnit(taskUnit);
+      else if (taskUnit is _ScalarQueryTaskUnit) {
+        await taskUnit.xScalar.scalar._unitQuery();
       }
     }
     updateAllUIComponents();
