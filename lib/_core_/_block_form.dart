@@ -68,8 +68,8 @@ abstract class BlockForm<
           thisXBlockForm: taskUnit.xBlockForm,
         );
       case BlockFormTaskUnitName.saveForm:
-        await taskUnit.xBlockForm.blockForm.saveForm(
-         // thisXBlockForm: taskUnit.xBlockForm,
+        await taskUnit.xBlockForm.blockForm._unitSaveForm(
+          thisXBlockForm: taskUnit.xBlockForm,
         );
     }
   }
@@ -95,6 +95,82 @@ abstract class BlockForm<
     );
     //
     return error;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<bool> _unitSaveForm({required _XBlockForm thisXBlockForm}) async {
+    if (!__checkValidBeforeSave()) {
+      return false;
+    }
+    //
+    _XShelf xShelf = _XShelf(
+      shelf: shelf,
+      forceDataFilterOpt: null,
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: [],
+      forceQueryBlockFormOpts: [],
+    );
+    //
+    _XBlock thisXBlock = xShelf.findXBlockByName(block.name)!;
+    Map<String, dynamic> formMapData = data.currentFormData;
+    //
+    String calledMethodName = data.isNew //
+        ? 'callApiCreateItem'
+        : 'callApiUpdateItem';
+    //
+    ApiResult<ITEM_DETAIL> result;
+    bool saveError = false;
+    try {
+      FlutterArtist.codeFlowLogger._addMethodCall(
+        isLibCode: false,
+        ownerClassInstance: this,
+        methodName: calledMethodName,
+        parameters: {
+          "formMapData": formMapData,
+        },
+        navigate: null,
+      );
+      //
+      block._refreshSavingState(isSaving: true);
+      //
+      result = data.isNew
+          ? await callApiCreateItem(formMapData: formMapData)
+          : await callApiUpdateItem(formMapData: formMapData);
+      //
+      block._refreshSavingState(isSaving: false);
+    } catch (e, stackTrace) {
+      saveError = true;
+      block._refreshSavingState(isSaving: false);
+      //
+      _handleError(
+        shelf: shelf,
+        methodName: calledMethodName,
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      return false;
+    }
+    //
+    try {
+      return await block._processSaveActionRestResult(
+        thisXBlock: thisXBlock,
+        calledMethodName: calledMethodName,
+        result: result,
+      );
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: '_processSaveActionRestResult',
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      //
+      return false;
+    }
   }
 
   // ***************************************************************************
@@ -406,83 +482,10 @@ abstract class BlockForm<
       taskUnitName: BlockFormTaskUnitName.saveForm,
     );
     //
+    _taskUnitQueue.addTaskUnit(taskUnit);
+    await this.block.shelf._executeTaskUnitQueue();
+    //
     return true;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Future<bool> _saveForm() async {
-    if (!__checkValidBeforeSave()) {
-      return false;
-    }
-    //
-    _XShelf xShelf = _XShelf(
-      shelf: shelf,
-      forceDataFilterOpt: null,
-      forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [],
-      forceQueryBlockFormOpts: [],
-    );
-    //
-    _XBlock thisXBlock = xShelf.findXBlockByName(block.name)!;
-    Map<String, dynamic> formMapData = data.currentFormData;
-    //
-    String calledMethodName = data.isNew //
-        ? 'callApiCreateItem'
-        : 'callApiUpdateItem';
-    //
-    ApiResult<ITEM_DETAIL> result;
-    bool saveError = false;
-    try {
-      FlutterArtist.codeFlowLogger._addMethodCall(
-        isLibCode: false,
-        ownerClassInstance: this,
-        methodName: calledMethodName,
-        parameters: {
-          "formMapData": formMapData,
-        },
-        navigate: null,
-      );
-      //
-      block._refreshSavingState(isSaving: true);
-      //
-      result = data.isNew
-          ? await callApiCreateItem(formMapData: formMapData)
-          : await callApiUpdateItem(formMapData: formMapData);
-      //
-      block._refreshSavingState(isSaving: false);
-    } catch (e, stackTrace) {
-      saveError = true;
-      block._refreshSavingState(isSaving: false);
-      //
-      _handleError(
-        shelf: shelf,
-        methodName: calledMethodName,
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      return false;
-    }
-    //
-    try {
-      return await block._processSaveActionRestResult(
-        thisXBlock: thisXBlock,
-        calledMethodName: calledMethodName,
-        result: result,
-      );
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: '_processSaveActionRestResult',
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      //
-      return false;
-    }
   }
 
   // ***************************************************************************

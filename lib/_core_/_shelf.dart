@@ -805,10 +805,10 @@ abstract class Shelf extends _XBase {
       forceQueryBlockFormOpts: forceQueryBlockFormOpts,
     );
     //
-    return await _queryXShelf(xShelf: xShelf);
+    return await _executeQueryXShelf(xShelf: xShelf);
   }
 
-  Future<bool> _queryXShelf({
+  Future<bool> _executeQueryXShelf({
     required _XShelf xShelf,
   }) async {
     try {
@@ -906,23 +906,7 @@ abstract class Shelf extends _XBase {
         );
       }
       //
-      while (_taskUnitQueue.hasNext()) {
-        _TaskUnit taskUnit = _taskUnitQueue.getNextTaskUnit()!;
-        taskUnit.printInfo();
-        //
-        if (taskUnit is _BlockTaskUnit) {
-          _XBlock xBlock = taskUnit.xBlock;
-          await xBlock.block._executeTaskUnit(taskUnit);
-        } else if (taskUnit is _BlockFormTaskUnit) {
-          _XBlockForm xBlockForm = taskUnit.xBlockForm;
-          await xBlockForm.blockForm._executeTaskUnit(taskUnit);
-        } else if (taskUnit is _ScalarTaskUnit) {
-          _XScalar xScalar = taskUnit.xScalar;
-          await xScalar.scalar._executeTaskUnit(taskUnit);
-        }
-      }
-
-      this.updateAllUIComponents();
+      await _executeTaskUnitQueue();
       //
       return true;
     } catch (e, stackTrace) {
@@ -935,5 +919,24 @@ abstract class Shelf extends _XBase {
       );
       return false;
     }
+  }
+
+  Future<void> _executeTaskUnitQueue() async {
+    while (_taskUnitQueue.hasNext()) {
+      _TaskUnit taskUnit = _taskUnitQueue.getNextTaskUnit()!;
+      taskUnit.printInfo();
+      //
+      if (taskUnit is _BlockTaskUnit) {
+        _XBlock xBlock = taskUnit.xBlock;
+        await xBlock.block._executeTaskUnit(taskUnit);
+      } else if (taskUnit is _BlockFormTaskUnit) {
+        _XBlockForm xBlockForm = taskUnit.xBlockForm;
+        await xBlockForm.blockForm._executeTaskUnit(taskUnit);
+      } else if (taskUnit is _ScalarTaskUnit) {
+        _XScalar xScalar = taskUnit.xScalar;
+        await xScalar.scalar._executeTaskUnit(taskUnit);
+      }
+    }
+    updateAllUIComponents();
   }
 }

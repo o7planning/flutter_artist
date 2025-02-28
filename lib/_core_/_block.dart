@@ -1270,7 +1270,7 @@ abstract class Block<
     );
     thisXBlock.setForceReloadItem();
     //
-    await shelf._queryXShelf(xShelf: xShelf);
+    await shelf._executeQueryXShelf(xShelf: xShelf);
     return true;
   }
 
