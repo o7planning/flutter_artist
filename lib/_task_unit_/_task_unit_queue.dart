@@ -1,8 +1,8 @@
 part of '../flutter_artist.dart';
 
-final _unitQueue = _BlockUnitQueue();
+final _taskUnitQueue = _TaskUnitQueue();
 
-class _BlockUnitQueue {
+class _TaskUnitQueue {
   final List<_TaskUnit> _taskUnits = [];
 
   bool hasNext() {

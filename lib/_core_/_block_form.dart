@@ -67,6 +67,10 @@ abstract class BlockForm<
         await taskUnit.xBlockForm.blockForm._unitLoadForm(
           thisXBlockForm: taskUnit.xBlockForm,
         );
+      case BlockFormTaskUnitName.saveForm:
+        await taskUnit.xBlockForm.blockForm.saveForm(
+         // thisXBlockForm: taskUnit.xBlockForm,
+        );
     }
   }
 
@@ -387,6 +391,28 @@ abstract class BlockForm<
       navigate: null,
     );
     //
+    _XShelf xShelf = _XShelf(
+      shelf: shelf,
+      forceDataFilterOpt: null,
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: [],
+      forceQueryBlockFormOpts: [],
+    );
+    //
+    _XBlock xBlock = xShelf.findXBlockByName(this.block.name)!;
+    _XBlockForm xBlockForm = xBlock.xBlockForm!;
+    _TaskUnit taskUnit = _BlockFormTaskUnit(
+      xBlockForm: xBlockForm,
+      taskUnitName: BlockFormTaskUnitName.saveForm,
+    );
+    //
+    return true;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<bool> _saveForm() async {
     if (!__checkValidBeforeSave()) {
       return false;
     }

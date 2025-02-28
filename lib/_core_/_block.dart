@@ -771,7 +771,7 @@ abstract class Block<
     print(
         ">> ${getClassName(this)}._unitQuery - queryState: $queryDataState, forceQuery: ${thisXBlock.forceQuery}");
     if (this.queryDataState == DataState.ready && !thisXBlock.forceQuery) {
-      _unitQueue.addTaskUnit(
+      _taskUnitQueue.addTaskUnit(
         _BlockTaskUnit(
           xBlock: thisXBlock,
           taskUnitName: BlockTaskUnitName.select,
@@ -920,7 +920,7 @@ abstract class Block<
     // Add TaskUnit
     //
     if (newQueryDataState == DataState.ready) {
-      _unitQueue.addTaskUnit(
+      _taskUnitQueue.addTaskUnit(
         _BlockTaskUnit(
           xBlock: thisXBlock,
           taskUnitName: BlockTaskUnitName.select,
@@ -988,7 +988,7 @@ abstract class Block<
     //
     if (!newCurrent && !thisXBlock.forceReloadItem) {
       for (_XBlock childXBlock in thisXBlock.childXBlocks) {
-        _unitQueue.addTaskUnit(
+        _taskUnitQueue.addTaskUnit(
           _BlockTaskUnit(
             xBlock: childXBlock,
             taskUnitName: BlockTaskUnitName.query,
@@ -1120,7 +1120,7 @@ abstract class Block<
     // BlockForm:
     //
     if (thisXBlock.xBlockForm != null) {
-      _unitQueue.addTaskUnit(
+      _taskUnitQueue.addTaskUnit(
         _BlockFormTaskUnit(
           xBlockForm: thisXBlock.xBlockForm!,
           taskUnitName: BlockFormTaskUnitName.loadForm,
@@ -1129,7 +1129,7 @@ abstract class Block<
     }
     //
     for (_XBlock childXBlock in thisXBlock.childXBlocks) {
-      _unitQueue.addTaskUnit(
+      _taskUnitQueue.addTaskUnit(
         _BlockTaskUnit(
           xBlock: childXBlock,
           taskUnitName: BlockTaskUnitName.query,
