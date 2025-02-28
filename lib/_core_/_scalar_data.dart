@@ -7,8 +7,6 @@ class ScalarData<VALUE extends Object, FILTER_INPUT extends FilterInput,
   ///
   final Scalar<VALUE, FILTER_INPUT, FILTER_CRITERIA> scalar;
 
-  bool __isTemporaryMode = false;
-
   FILTER_CRITERIA? _filterCriteria;
 
   FILTER_CRITERIA? get filterCriteria => _filterCriteria;
@@ -17,13 +15,9 @@ class ScalarData<VALUE extends Object, FILTER_INPUT extends FilterInput,
 
   VALUE? get value => _value;
 
-  VALUE? __valueBk;
-
   DataState _dataState = DataState.pending;
 
   DataState get dataState => _dataState;
-
-  DataState __dataStateBk = DataState.pending;
 
   ScalarData(this.scalar);
 
@@ -40,29 +34,5 @@ class ScalarData<VALUE extends Object, FILTER_INPUT extends FilterInput,
     _filterCriteria = filterCriteria;
     _value = data;
     _dataState = dataState;
-  }
-
-  void _backup() {
-    if (!__isTemporaryMode) {
-      __isTemporaryMode = true;
-      __dataStateBk = _dataState;
-      __valueBk = _value;
-    }
-  }
-
-  void _applyNewState() {
-    if (__isTemporaryMode) {
-      __isTemporaryMode = false;
-      __dataStateBk = DataState.pending;
-      __valueBk = null;
-    }
-  }
-
-  void _restore() {
-    if (__isTemporaryMode) {
-      __isTemporaryMode = false;
-      _dataState = __dataStateBk;
-      _value = __valueBk;
-    }
   }
 }
