@@ -1263,7 +1263,16 @@ abstract class Block<
     final ITEM? sibling = this.data.findSiblingItem(item: item);
     // Remove Item
     __removeItemFromList(removeItem: item);
-
+    if (this.blockForm != null) {
+      this.blockForm!._clearWithDataState(
+            dataState: DataState.ready,
+          );
+    }
+    __clearChildrenWithDataStateCascade(
+      thisXBlock: thisXBlock,
+      queryDataState: DataState.ready,
+      formDataState: DataState.ready,
+    );
     //
     if (sibling != null) {
       bool success = await __prepareToShowOrEdit(
@@ -2382,10 +2391,11 @@ abstract class Block<
         formMode: FormMode.none,
         dataState: DataState.ready,
       );
-      bool success = await blockForm!._prepareFormNull();
-      if (!success) {
-        return false;
-      }
+      // bool success = await blockForm!._prepareFormNull();
+      // if (!success) {
+      //   return false;
+      // }
+      return true;
     }
     //
     for (_XBlock childXBlock in thisXBlock.childXBlocks) {

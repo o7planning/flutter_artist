@@ -54,10 +54,24 @@ class BlockFormData<
     _dataState = dataState;
     _formMode = FormMode.none;
     //
-    _justInitialized = false;
-    __initial0FormData.clear();
-    _initialFormData.clear();
-    _currentFormData.clear();
+    _updateFormData({});
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _updateFormData(Map<String, dynamic> formData) {
+    _justInitialized = true;
+    //
+    __initial0FormData
+      ..clear()
+      ..addAll(formData);
+    _initialFormData
+      ..clear()
+      ..addAll(formData);
+    _currentFormData
+      ..clear()
+      ..addAll(formData);
   }
 
   // ***************************************************************************
@@ -77,23 +91,6 @@ class BlockFormData<
       }
     }
     return false;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _updateFormData(Map<String, dynamic> formData) {
-    _justInitialized = true;
-    //
-    __initial0FormData
-      ..clear()
-      ..addAll(formData);
-    _initialFormData
-      ..clear()
-      ..addAll(formData);
-    _currentFormData
-      ..clear()
-      ..addAll(formData);
   }
 
   // ***************************************************************************

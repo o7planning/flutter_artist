@@ -58,7 +58,23 @@ abstract class BlockForm<
   // ***************************************************************************
 
   void _clearWithDataState({required DataState dataState}) {
-    this.data._clearWithDataState(dataState: dataState);
+    try {
+      this.data._clearWithDataState(dataState: dataState);
+      final Map<String, dynamic> newFormData = {};
+      _formKey.currentState?.patchValue(newFormData);
+      print(">>>>>>>>>> patchValue");
+      //
+      updateAllUIComponents(); // TODO: Xu ly loi?
+      block.updateControlBarWidgets();
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: "_clearWithDataState",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+    }
   }
 
   // ***************************************************************************
@@ -513,42 +529,6 @@ abstract class BlockForm<
     await this.block.shelf._executeTaskUnitQueue();
     //
     return true;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Future<bool> _prepareFormNull() async {
-    FlutterArtist.codeFlowLogger._addMethodCall(
-      isLibCode: true,
-      navigate: null,
-      ownerClassInstance: this,
-      methodName: "_prepareFormNull",
-      parameters: {},
-    );
-    //
-    try {
-      final Map<String, dynamic> newFormData = {};
-      data._dataState = DataState.ready;
-      data._updateFormData(newFormData);
-      //
-      _formKey.currentState?.patchValue(newFormData);
-      //
-      updateAllUIComponents(); // TODO: Xu ly loi?
-      block.updateControlBarWidgets();
-      //
-      return true;
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "prepareFormData",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      //
-      return false;
-    }
   }
 
   // ***************************************************************************
