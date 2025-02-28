@@ -1518,6 +1518,9 @@ abstract class Block<
     return success;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   ///
   /// Query the next page and replace the current items in the list.
   ///
@@ -1546,6 +1549,9 @@ abstract class Block<
       navigate: null,
     );
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   /// Query the previous page and replace the current items in the list.
@@ -1579,6 +1585,9 @@ abstract class Block<
     );
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   ///
   /// Query the next page and append to the current list of items.
   ///
@@ -1607,6 +1616,9 @@ abstract class Block<
       navigate: null,
     );
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   ///
@@ -1659,6 +1671,9 @@ abstract class Block<
     return success;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   ///
   ///
   ///
@@ -1710,6 +1725,9 @@ abstract class Block<
     return success;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   ///
   /// Clear and prepare Form to create new record.
   /// If this block has a BlockForm its data state set to "Ready", else its data state set to "Pending".
@@ -1750,6 +1768,9 @@ abstract class Block<
     }
     return success;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   // Cascade query:
   // Private method (Only for use in this class)
@@ -2003,9 +2024,9 @@ abstract class Block<
     }
   }
 
-  // ---------------------------------------------------------------------------
-  // ---------------------------------------------------------------------------
-  // ---------------------------------------------------------------------------
+  // ***************************************************************************
+  // ***************************************************************************
+  // ***************************************************************************
 
   ID getItemId(ITEM item);
 
@@ -2039,51 +2060,6 @@ abstract class Block<
       return this;
     }
     return parent!.getRootBlock();
-  }
-
-  // =============== @@@@@@@@@@@@@@@@@@ ========================================
-  // =============== @@@@@@@@@@@@@@@@@@ ========================================
-  // =============== @@@@@@@@@@@@@@@@@@ ========================================
-
-  void _backupAllFromRoot() {
-    Block rootBlock = getRootBlock();
-    rootBlock.__backupThisAndChildren();
-  }
-
-  void _restoreAllFromRoot() {
-    Block rootBlock = getRootBlock();
-    rootBlock.__restoreThisAndChildren();
-  }
-
-  void _applyNewStateAllFromRoot() {
-    Block rootBlock = getRootBlock();
-    rootBlock.__applyNewStateThisAndChildren();
-    rootBlock.__setChildrenForParent();
-  }
-
-  void __backupThisAndChildren() {
-    this.data._backup();
-    for (var childBlock in _childBlocks) {
-      childBlock.__backupThisAndChildren();
-    }
-  }
-
-  void __restoreThisAndChildren() {
-    this.data._restore();
-    this._registeredOrDefaultDataFilter._restore();
-    for (var childBlock in _childBlocks) {
-      childBlock.__restoreThisAndChildren();
-      childBlock._registeredOrDefaultDataFilter._restore();
-    }
-  }
-
-  void __applyNewStateThisAndChildren() {
-    this.data._applyNewState();
-    this._registeredOrDefaultDataFilter._applyNewState();
-    for (var childBlock in _childBlocks) {
-      childBlock.__applyNewStateThisAndChildren();
-      childBlock._registeredOrDefaultDataFilter._applyNewState();
-    }
   }
 
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
@@ -2386,20 +2362,12 @@ abstract class Block<
     _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
     try {
-      shelf._backupAll();
       bool success = await __executeQuickChildBlockItemsAction(
         thisXBlock: thisXBlock,
         action: action,
       );
-      if (success) {
-        shelf._applyNewStateAll();
-      } else {
-        shelf._restoreAll();
-      }
       return success;
     } catch (e, stackTrace) {
-      shelf._restoreAll();
-      //
       _handleError(
         shelf: shelf,
         methodName: "__executeQuickActionUpdateItemWithRestorable",
@@ -2527,8 +2495,6 @@ abstract class Block<
     );
     //
     try {
-      shelf._backupAll();
-      //
       _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
       //
       bool success = await __executeQuickAction(
@@ -2536,15 +2502,8 @@ abstract class Block<
         action: action,
         afterQuickAction: afterQuickAction,
       );
-      if (!success) {
-        shelf._restoreAll();
-      } else {
-        shelf._applyNewStateAll();
-      }
       return success;
     } catch (e, stackTrace) {
-      shelf._restoreAll();
-      //
       _handleError(
         shelf: shelf,
         methodName: "__executeQuickAction",
@@ -3150,8 +3109,6 @@ abstract class Block<
     thisXBlock.suggestedSelection = suggestedSelection;
     //
     try {
-      shelf._backupAll();
-      //
       _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
       bool success = await __prepareToShowOrEdit(
         thisXBlock: thisXBlock,
@@ -3159,15 +3116,7 @@ abstract class Block<
         justQueried: justQueried,
         forceForm: forceForm,
       );
-
-      if (!success) {
-        shelf._restoreAll();
-        return false;
-      } else {
-        shelf._applyNewStateAll();
-        //
-        return true;
-      }
+      return true;
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
@@ -3177,7 +3126,6 @@ abstract class Block<
         showSnackBar: true,
       );
       //
-      shelf._restoreAll();
       return false;
     }
   }
