@@ -3312,85 +3312,54 @@ abstract class Block<
     //
     extraFormInput?.formAction = FormAction.create;
     //
-    bool success = await _prepareToCreateWithOverlayAndRestorable(
-      extraFormInput: extraFormInput,
-    );
-    //
-    if (success) {
-      _executeNavigation(navigate: navigate);
-    }
-    return success;
-  }
-
-  Future<bool> _prepareToCreateWithOverlayAndRestorable({
-    required EXTRA_FORM_INPUT? extraFormInput,
-  }) async {
-    if (!__checkBeforeFormCreation(showErrorMessage: false)) {
-      return false;
-    }
-    return await FlutterArtist.executeTask(
-      asyncFunction: () async {
-        return await _prepareToCreateWithRestorable(
-          extraFormInput: extraFormInput,
-        );
-      },
-    );
-  }
-
-  Future<bool> _prepareToCreateWithRestorable({
-    required EXTRA_FORM_INPUT? extraFormInput,
-  }) async {
-    if (!__checkBeforeFormCreation(showErrorMessage: false)) {
-      return false;
-    }
     _XShelf xShelf = _XShelf(
       shelf: shelf,
       forceDataFilterOpt: null,
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [],
-      // forceQueryBlockOpts: _childBlocks
-      //     .map(
-      //       (b) => _BlockOpt(
-      //         block: b,
-      //         queryType: null,
-      //         pageable: null,
-      //         listBehavior: null,
-      //         suggestedSelection: null,
-      //         postQueryBehavior: null,
-      //       ),
-      //     )
-      //     .toList(),
       forceQueryBlockFormOpts: [],
     );
+    _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
+    const ITEM? nullItem = null;
+    const ITEM_DETAIL? nullItemDetail = null;
+    __setCurrentItem(
+      itemDetail: nullItemDetail,
+      item: nullItem,
+    );
     //
+    this.__clearChildrenWithDataStateCascade(
+      thisXBlock: thisXBlock,
+      queryDataState: DataState.ready,
+      formDataState: DataState.pending, // ?????
+    );
+    blockForm!.data._setCurrentItem(
+      refreshedItemDetail: nullItemDetail,
+      formMode: FormMode.creation,
+      dataState: DataState.pending,
+    );
+    //
+    bool success = false;
     try {
-      shelf._backupAll();
+      __refreshPreparingFormCreationState(isPreparingFormCreation: true);
       //
-      bool success = await __prepareToCreate(
-        thisXBlock: thisXBlock,
+      success = await blockForm!._prepareMasterDataAndFormData(
         extraFormInput: extraFormInput,
+        filterCriteria: this.data.filterCriteria,
+        refreshedItemDetail: nullItemDetail,
+        isNew: true,
       );
-      if (!success) {
-        shelf._restoreAll();
-        return false;
-      } else {
-        shelf._applyNewStateAll();
-        return true;
-      }
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "prepareToCreate",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      //
-      shelf._restoreAll();
+    } finally {
+      __refreshPreparingFormCreationState(isPreparingFormCreation: false);
+    }
+    if (!success) {
       return false;
     }
+    //
+    if (success) {
+      _executeNavigation(navigate: navigate);
+    }
+    return success;
   }
 
   // Private method. Only for use in this class.
