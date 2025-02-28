@@ -107,13 +107,11 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
           Expanded(
             child: ListView(
               children: [
-                ...widgetStates.entries
-                    .map(
-                      (entry) => _buildRowInfo(
-                        widgetStateEntry: entry,
-                      ),
-                    )
-                    .toList(),
+                ...widgetStates.entries.map(
+                  (entry) => _buildRowInfo(
+                    widgetStateEntry: entry,
+                  ),
+                ),
               ],
             ),
           ),
