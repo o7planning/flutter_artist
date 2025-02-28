@@ -289,6 +289,9 @@ abstract class Shelf extends _XBase {
     await _showStorageDialog(context: context, shelf: this);
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<void> showActiveUiComponentsDialog() async {
     BuildContext context = FlutterArtist.adapter.getCurrentContext();
     await _showActiveUIComponentsDialog(context: context, shelf: this);
@@ -302,9 +305,15 @@ abstract class Shelf extends _XBase {
     return __scalarMap[scalarName];
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   Block? findBlock(String blockName) {
     return __blockMap[blockName];
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   DataFilter? findDataFilter(String dataFilterName) {
     return _shelfStruct.dataFilters[dataFilterName];
@@ -352,6 +361,9 @@ abstract class Shelf extends _XBase {
       );
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Map<_RefreshableWidgetState, bool> _findMountedWidgetStates({
     required bool withBlockFragment,
@@ -403,6 +415,9 @@ abstract class Shelf extends _XBase {
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void __updateAllBlockUIComponentsCascade(
     Block block, {
     required bool withoutFilters,
@@ -416,6 +431,9 @@ abstract class Shelf extends _XBase {
       );
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void __updateShelfWidgets() {
     for (_RefreshableWidgetState state in _shelfWidgetStates.keys) {
@@ -435,6 +453,9 @@ abstract class Shelf extends _XBase {
   }) {
     _shelfWidgetStates[widgetState] = isShowing;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _removeShelfWidgetState({required State widgetState}) {
     _shelfWidgetStates.remove(widgetState);
@@ -465,6 +486,9 @@ abstract class Shelf extends _XBase {
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<void> __queryLazyList() async {
     _queryLocked = true;
     //
@@ -488,6 +512,9 @@ abstract class Shelf extends _XBase {
       _queryLocked = false;
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<bool> _queryLazyScalarOrBlockOrForms({
     required QueryType queryType,
