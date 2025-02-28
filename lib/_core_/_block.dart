@@ -243,6 +243,9 @@ abstract class Block<
   final Map<_RefreshableWidgetState, bool> _controlWidgetStates = {};
   final Map<_RefreshableWidgetState, bool> _paginationWidgetStates = {};
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   Block({
     required this.name,
     required this.description,
@@ -270,6 +273,7 @@ abstract class Block<
   }
 
   // ***************************************************************************
+  // ***************************************************************************
 
   void __clearWithDataState({
     required _XBlock thisXBlock,
@@ -283,6 +287,9 @@ abstract class Block<
       blockForm!._clearWithDataState(dataState: formDataState);
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void __clearWithDataStateCascade({
     required _XBlock thisXBlock,
@@ -306,6 +313,9 @@ abstract class Block<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void __clearChildrenWithDataStateCascade({
     required _XBlock thisXBlock,
     required DataState queryDataState,
@@ -322,7 +332,9 @@ abstract class Block<
     }
   }
 
-  //
+  // ***************************************************************************
+  // ***************************************************************************
+
   void __setQueryDataWithStateCascade({
     required _XBlock thisXBlock,
     required FILTER_CRITERIA? filterCriteria,
@@ -439,12 +451,18 @@ abstract class Block<
     return false;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void __refreshQueryingState({required bool isQuerying}) {
     try {
       __isQuerying = isQuerying;
       this.updateControlBarWidgets();
     } catch (e) {}
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void __refreshDeletingState({required bool isDeleting}) {
     try {
@@ -453,12 +471,18 @@ abstract class Block<
     } catch (e) {}
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _refreshSavingState({required bool isSaving}) {
     try {
       __isSaving = isSaving;
       this.updateControlBarWidgets();
     } catch (e) {}
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void __refreshRefreshingCurrentItemState({
     required bool isRefreshingCurrentItem,
@@ -469,6 +493,9 @@ abstract class Block<
     } catch (e) {}
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void __refreshPreparingFormCreationState({
     required bool isPreparingFormCreation,
   }) {
@@ -477,6 +504,9 @@ abstract class Block<
       this.updateControlBarWidgets();
     } catch (e) {}
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _addPaginationWidgetState({
     required _RefreshableWidgetState widgetState,
@@ -488,11 +518,17 @@ abstract class Block<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _removePaginationWidgetState({
     required _RefreshableWidgetState widgetState,
   }) {
     _paginationWidgetStates.remove(widgetState);
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _addControlBarWidgetState({
     required _RefreshableWidgetState widgetState,
@@ -514,11 +550,17 @@ abstract class Block<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _removeControlBarWidgetState({
     required _RefreshableWidgetState widgetState,
   }) {
     _controlBarWidgetStates.remove(widgetState);
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _addControlWidgetState({
     required _RefreshableWidgetState widgetState,
@@ -540,11 +582,17 @@ abstract class Block<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _removeControlWidgetState({
     required _RefreshableWidgetState widgetState,
   }) {
     _controlWidgetStates.remove(widgetState);
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _addBlockFragmentWidgetState({
     required _RefreshableWidgetState widgetState,
@@ -566,6 +614,9 @@ abstract class Block<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _removeBlockFragmentWidgetState({required State widgetState}) {
     bool activeOLD = hasActiveUIComponent();
     _blockFragmentWidgetStates.remove(widgetState);
@@ -575,6 +626,9 @@ abstract class Block<
       _fireBlockHidden();
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _fireBlockHidden() {
     FlutterArtist.codeFlowLogger._addEvent(
@@ -591,6 +645,9 @@ abstract class Block<
       );
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Map<_RefreshableWidgetState, bool> _findMountedWidgetStates({
     required bool withPagination,
@@ -628,6 +685,9 @@ abstract class Block<
     return ret;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool hasMountedUIComponent() {
     return (dataFilter?.hasMountedUIComponent() ?? false) ||
         _blockFragmentWidgetStates.isNotEmpty ||
@@ -636,6 +696,9 @@ abstract class Block<
         _paginationWidgetStates.isNotEmpty ||
         (blockForm?.hasMountedUIComponent() ?? false);
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   bool hasActiveUIComponent() {
     bool active = false;
@@ -672,6 +735,9 @@ abstract class Block<
     return active;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool hasActiveBlockFragmentWidget({required bool alsoCheckChildren}) {
     var map = {..._blockFragmentWidgetStates};
     for (State widgetState in map.keys) {
@@ -694,6 +760,9 @@ abstract class Block<
     return false;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool hasActiveControlBarWidget() {
     for (_RefreshableWidgetState controlBarState
         in _controlBarWidgetStates.keys) {
@@ -705,6 +774,9 @@ abstract class Block<
     return false;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool hasActiveControlWidget() {
     for (_RefreshableWidgetState controlState in _controlWidgetStates.keys) {
       bool visible = _controlWidgetStates[controlState] ?? false;
@@ -714,6 +786,9 @@ abstract class Block<
     }
     return false;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   bool hasActivePaginationWidget() {
     for (_RefreshableWidgetState paginationState
@@ -726,10 +801,12 @@ abstract class Block<
     return false;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _executeNavigation({Function()? navigate}) {
     try {
       if (navigate != null) {
-        printLog("  ~~~~~~~~~~~~~~~~~~> navigate");
         navigate();
       }
     } catch (e, stackTrace) {
@@ -748,6 +825,9 @@ abstract class Block<
     );
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<void> _executeQuickCreateItemTaskUnit(
       _BlockQuickCreateItemTaskUnit taskUnit) async {
     await taskUnit.xBlock.block._unitQuickCreateItem(
@@ -755,6 +835,9 @@ abstract class Block<
       action: taskUnit.action,
     );
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<void> _executeQuickUpdateItemTaskUnit(
       _BlockQuickUpdateItemTaskUnit taskUnit) async {
@@ -2023,7 +2106,13 @@ abstract class Block<
 
   ID getItemId(ITEM item);
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   ITEM convertItemDetailToItem({required ITEM_DETAIL itemDetail});
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ID? getCurrentItemId() {
     if (data.currentItemDetail == null) {
@@ -2033,11 +2122,17 @@ abstract class Block<
     return getItemId(item);
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   ITEM? __convertItemDetailToItem({required ITEM_DETAIL? itemDetail}) {
     return itemDetail == null
         ? null
         : convertItemDetailToItem(itemDetail: itemDetail);
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Object? get parentItemId {
     if (parent == null) {
@@ -2047,6 +2142,9 @@ abstract class Block<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   @nonVirtual
   Block getRootBlock() {
     if (parent == null) {
@@ -2055,9 +2153,8 @@ abstract class Block<
     return parent!.getRootBlock();
   }
 
-  // =============== @@@@@@@@@@@@@@@@@@ ========================================
-  // =============== @@@@@@@@@@@@@@@@@@ ========================================
-  // =============== @@@@@@@@@@@@@@@@@@ ========================================
+  // ***************************************************************************
+  // ***************************************************************************
 
   void __setChildrenForParent() {
     try {
@@ -2076,6 +2173,9 @@ abstract class Block<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   // @canOverride
   void setChildrenForParent({
     required Object currentItemOfParentBlock,
@@ -2084,9 +2184,8 @@ abstract class Block<
     // Override if need.
   }
 
-// =============== @@@@@@@@@@@@@@@@@@ ========================================
-// =============== @@@@@@@@@@@@@@@@@@ ========================================
-// =============== @@@@@@@@@@@@@@@@@@ ========================================
+  // ***************************************************************************
+  // ***************************************************************************
 
   void __setCurrentItem({
     required ITEM? item,
@@ -2336,9 +2435,8 @@ abstract class Block<
     return true;
   }
 
-  // =============== @@@@@@@@@@@@@@@@@@ ========================================
-  // =============== @@@@@@@@@@@@@@@@@@ ========================================
-  // =============== @@@@@@@@@@@@@@@@@@ ========================================
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<bool> _executeQuickChildBlockItemsWithOverlayAndRestorable({
     required QuickChildBlockItemsAction<ITEM, ITEM_DETAIL> action,
@@ -3556,6 +3654,9 @@ abstract class Block<
     updateAllUIComponents(withoutFilters: false);
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void toggleCheckItem({
     required ITEM item,
   }) {
@@ -3563,12 +3664,18 @@ abstract class Block<
     __updateUIComponentAfterCheckedOrSelected();
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void toggleSelectItem({
     required ITEM item,
   }) {
     data._toggleSelectItem(item: item);
     __updateUIComponentAfterCheckedOrSelected();
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void setCheckedItem({
     required ITEM item,
@@ -3578,6 +3685,9 @@ abstract class Block<
     __updateUIComponentAfterCheckedOrSelected();
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void setSelectedItem({
     required ITEM item,
     required bool selected,
@@ -3586,36 +3696,48 @@ abstract class Block<
     __updateUIComponentAfterCheckedOrSelected();
   }
 
-  // -------
+  // ***************************************************************************
+  // ***************************************************************************
 
   void setCheckedItems({required List<ITEM> items}) {
     data._setCheckedItems(items: items);
     __updateUIComponentAfterCheckedOrSelected();
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void setSelectedItems({required List<ITEM> items}) {
     data._setSelectedItems(items: items);
     __updateUIComponentAfterCheckedOrSelected();
   }
 
-  // -------
+  // ***************************************************************************
+  // ***************************************************************************
 
   void uncheckAllItems() {
     data._uncheckAllItems();
     __updateUIComponentAfterCheckedOrSelected();
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void checkAllItems() {
     data._checkAllItems();
     __updateUIComponentAfterCheckedOrSelected();
   }
 
-  // -------
+  // ***************************************************************************
+  // ***************************************************************************
 
   void selectAllItems() {
     data._selectAllItems();
     __updateUIComponentAfterCheckedOrSelected();
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void deselectAllItems() {
     data._deselectAllItems();
@@ -3631,8 +3753,9 @@ abstract class Block<
     required PageableData pageable,
   });
 
-  // Developer do not call this method!
-  // Call delete instead of
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<ApiResult<void>> callApiDeleteItem({required ITEM item});
 
   Future<ApiResult<ITEM_DETAIL>> callApiRefreshItem({required ITEM item});
