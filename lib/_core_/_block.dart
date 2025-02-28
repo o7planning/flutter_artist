@@ -3444,23 +3444,6 @@ abstract class Block<
     return true;
   }
 
-  Future<bool> deleteCurrentItem() async {
-    FlutterArtist.codeFlowLogger._addMethodCall(
-      isLibCode: true,
-      navigate: null,
-      ownerClassInstance: this,
-      methodName: "deleteCurrentItem",
-      parameters: {},
-    );
-    //
-
-    ITEM? currentItem = data.currentItem;
-    if (currentItem != null) {
-      return deleteItem(item: currentItem);
-    }
-    return false;
-  }
-
   Future<bool> deleteItemById({
     required ID itemId,
     required bool ignoreIfItemNotInList,
@@ -3540,9 +3523,33 @@ abstract class Block<
     if (!confirm) {
       return false;
     }
-    bool success = await _deleteWithOverlayAndRestorable(item);
-    return success;
+    // bool success = await _deleteWithOverlayAndRestorable(item);
+    // return success;
+    return true;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<bool> deleteCurrentItem() async {
+    FlutterArtist.codeFlowLogger._addMethodCall(
+      isLibCode: true,
+      navigate: null,
+      ownerClassInstance: this,
+      methodName: "deleteCurrentItem",
+      parameters: {},
+    );
+    //
+
+    ITEM? currentItem = data.currentItem;
+    if (currentItem != null) {
+      return deleteItem(item: currentItem);
+    }
+    return false;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<bool> deleteItem({
     required ITEM item,
@@ -3552,7 +3559,7 @@ abstract class Block<
       isLibCode: true,
       navigate: null,
       ownerClassInstance: this,
-      methodName: "delete",
+      methodName: "deleteItem",
       parameters: {
         "item": item,
       },
@@ -3596,14 +3603,8 @@ abstract class Block<
     return true;
   }
 
-  @Deprecated("Xoa di, khong su dung nua")
-  Future<bool> _deleteWithOverlayAndRestorable(ITEM item) async {
-    return await FlutterArtist.executeTask(
-      asyncFunction: () async {
-        // return await _deleteWithRestorable(item);
-      },
-    );
-  }
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   /// Phương thức này được gọi để refresh "currentItem".
