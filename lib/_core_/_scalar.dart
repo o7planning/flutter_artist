@@ -139,22 +139,6 @@ abstract class Scalar<
   }
 
   // ***************************************************************************
-  // ****** BACKUP & RESTORE & APPLY *******************************************
-  // ***************************************************************************
-
-  void _backup() {
-    this.data._backup();
-  }
-
-  void _restore() {
-    this.data._restore();
-  }
-
-  void _applyNewState() {
-    this.data._applyNewState();
-  }
-
-  // ***************************************************************************
   // ****** UPDATE UI COMPONENTS ***********************************************
   // ***************************************************************************
 
@@ -166,6 +150,9 @@ abstract class Scalar<
     updateFragmentWidgets();
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void updateControlWidgets() {
     for (_RefreshableWidgetState state in _scalarControlWidgetStates.keys) {
       if (state.mounted) {
@@ -173,6 +160,9 @@ abstract class Scalar<
       }
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void updateFragmentWidgets() {
     for (_RefreshableWidgetState state in _scalarFragmentWidgetStates.keys) {
@@ -242,6 +232,9 @@ abstract class Scalar<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<bool>
       _executeQuickActionWithOverlayAndRestorable<DATA extends Object>({
     required FILTER_INPUT? filterInput,
@@ -271,6 +264,9 @@ abstract class Scalar<
       },
     );
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<bool> __executeQuickActionWithRestorable<DATA extends Object>({
     required FILTER_INPUT? filterInput,
@@ -322,6 +318,9 @@ abstract class Scalar<
       return false;
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<bool> __executeQuickAction<DATA extends Object>({
     required _XScalar thisXScalar,
@@ -458,6 +457,10 @@ abstract class Scalar<
     } catch (e) {}
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @Deprecated("Xoa di, khong su dung nua")
   Future<bool> __queryThis({
     required FILTER_CRITERIA filterCriteria,
   }) async {
@@ -510,15 +513,24 @@ abstract class Scalar<
     return true;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool hasMountedUIComponent() {
     return _scalarFragmentWidgetStates.isNotEmpty ||
         _scalarControlWidgetStates.isNotEmpty;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool hasActiveUIComponent() {
     return _hasActiveScalarFragmentWidgetState() ||
         _hasActiveControlWidgetState();
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   bool _hasActiveScalarFragmentWidgetState() {
     for (State widgetState in _scalarFragmentWidgetStates.keys) {
@@ -532,6 +544,9 @@ abstract class Scalar<
     return false;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool _hasActiveControlWidgetState() {
     for (State widgetState in _scalarControlWidgetStates.keys) {
       if (widgetState.mounted) {
@@ -543,6 +558,9 @@ abstract class Scalar<
     }
     return false;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _addControlWidgetState({
     required _RefreshableWidgetState widgetState,
@@ -564,6 +582,9 @@ abstract class Scalar<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _removeControlWidgetState({required State widgetState}) {
     bool activeOLD = hasActiveUIComponent();
     _scalarControlWidgetStates.remove(widgetState);
@@ -573,6 +594,9 @@ abstract class Scalar<
       _fireScalarHidden();
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _addScalarFragmentWidgetState({
     required _RefreshableWidgetState widgetState,
@@ -594,6 +618,9 @@ abstract class Scalar<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _removeScalarFragmentWidgetState({required State widgetState}) {
     bool activeOLD = hasActiveUIComponent();
     _scalarFragmentWidgetStates.remove(widgetState);
@@ -603,6 +630,9 @@ abstract class Scalar<
       _fireScalarHidden();
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _fireScalarHidden() {
     FlutterArtist.codeFlowLogger._addEvent(
@@ -621,9 +651,15 @@ abstract class Scalar<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool isAllowQuery() {
     return true;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   /// Do not override

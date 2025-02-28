@@ -264,15 +264,24 @@ abstract class BlockForm<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _removeFormWidgetState({
     required _RefreshableWidgetState widgetState,
   }) {
     _formWidgetStates.remove(widgetState);
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void updateAllUIComponents() {
     __updateFormWidgets();
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   /// Call this method to refresh Widgets..
@@ -286,6 +295,9 @@ abstract class BlockForm<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   List<_RefreshableWidgetState> _getMountedFormWidgetStates() {
     List<_RefreshableWidgetState> ret = [];
     for (_RefreshableWidgetState widgetState in [..._formWidgetStates.keys]) {
@@ -296,9 +308,15 @@ abstract class BlockForm<
     return ret;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool hasMountedUIComponent() {
     return _formWidgetStates.isNotEmpty;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   bool hasActiveUIComponent() {
     for (State formWidgetState in _formWidgetStates.keys) {
@@ -317,9 +335,15 @@ abstract class BlockForm<
     return data._isDirty();
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool isEnabled() {
     return block._isEnableFormToModify();
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void resetForm() {
     Map<String, dynamic> initData = {...data._initialFormData};
@@ -332,6 +356,9 @@ abstract class BlockForm<
     //
     shelf.updateAllUIComponents();
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   // Change Event from GUI.
   void _onChangeFromFormWidget() {
@@ -350,15 +377,24 @@ abstract class BlockForm<
     data._justInitialized = false;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   // TODO: Change name!
   // Do not call this method in library.
   Map<String, dynamic> initFormValue() {
     return data._currentFormData;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   dynamic getFormInstantValue(String propertyName) {
     return data._currentFormData[propertyName];
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void setFormInstantValue(String propertyName, dynamic value) {
     _formKey.currentState?.patchValue({propertyName: value});
@@ -366,13 +402,22 @@ abstract class BlockForm<
     this.updateAllUIComponents();
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<ApiResult<ITEM_DETAIL>> callApiCreateItem({
     required Map<String, dynamic> formMapData,
   });
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<ApiResult<ITEM_DETAIL>> callApiUpdateItem({
     required Map<String, dynamic> formMapData,
   });
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   /// Call this method to initialize the necessary data for the Form.
@@ -408,6 +453,9 @@ abstract class BlockForm<
     required ITEM_DETAIL? refreshedItem,
     required bool isNew,
   });
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   /// This method is called after [prepareFormMasterData].
@@ -503,6 +551,7 @@ abstract class BlockForm<
   // ***************************************************************************
   // ***************************************************************************
 
+  @Deprecated("Xoa di, khong su dung nua")
   Future<bool> _prepareForm_OLD({
     required EXTRA_FORM_INPUT? extraFormInput,
     required ITEM_DETAIL? refreshedItem,

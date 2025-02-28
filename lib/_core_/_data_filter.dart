@@ -62,10 +62,16 @@ abstract class DataFilter<
     return FILTER_INPUT.toString();
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   ///
   /// This method is called immediately after calling [prepareData()] method if there are no errors.
   ///
   FILTER_CRITERIA createFilterCriteria();
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   /// ```Dart
@@ -83,6 +89,9 @@ abstract class DataFilter<
   Future<void> prepareData({
     FILTER_INPUT? filterInput,
   });
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   /// Return null is error.
@@ -129,6 +138,9 @@ abstract class DataFilter<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   ///
   /// Query all Scalars and Blocks of this DataFilter if they are visible on the UI.
   ///
@@ -168,35 +180,15 @@ abstract class DataFilter<
   }
 
   // ***************************************************************************
-  // *** BACKUP, RESTORE, APPLY ***
-  // ***************************************************************************
-
-  void _backup() {
-    __filterCriteriaBk = _filterCriteria;
-  }
-
-  void _restore() {
-    _filterCriteria = __filterCriteriaBk;
-    //
-    for (Restorable bk in restorableCriteria) {
-      bk.restore();
-    }
-  }
-
-  void _applyNewState() {
-    __filterCriteriaBk = null;
-    for (Restorable bk in restorableCriteria) {
-      bk.applyNewState();
-    }
-  }
-
-  // ***************************************************************************
   // *** UI COMPONENTS ***
   // ***************************************************************************
 
   bool hasMountedUIComponent() {
     return _filterFragmentWidgetStates.isNotEmpty;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   bool hasActiveUIComponent() {
     for (State widgetState in _filterFragmentWidgetStates.keys) {
@@ -207,6 +199,9 @@ abstract class DataFilter<
     }
     return false;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _addFilterFragmentWidgetState({
     required _RefreshableWidgetState widgetState,
@@ -229,11 +224,17 @@ abstract class DataFilter<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _removeFilterFragmentWidgetState({
     required State widgetState,
   }) {
     _filterFragmentWidgetStates.remove(widgetState);
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void updateAllUIComponents() {
     for (_RefreshableWidgetState widgetState in [

@@ -47,6 +47,9 @@ abstract class Shelf extends _XBase {
     __onInit();
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   ///
   /// Very Dangerous Method. Call Internal only.
   ///
@@ -58,6 +61,9 @@ abstract class Shelf extends _XBase {
         "\n\n  *** You may need to restart the application after editing the code. ***"
         "\n*********************************************************************************************\n";
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void __onInit() {
     _shelfStruct = registerStructure();
@@ -165,6 +171,9 @@ abstract class Shelf extends _XBase {
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void __registerBlockCascade(Block block) {
     if (__blockMap.containsKey(block.name)) {
       throw ___registerError(
@@ -266,6 +275,9 @@ abstract class Shelf extends _XBase {
       __registerBlockCascade(childBlock);
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   List<Block> get blocks {
     List<Block> ret = [];
@@ -584,6 +596,9 @@ abstract class Shelf extends _XBase {
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void __findTopLazyBlocksCascade(
       List<Block> blocks, List<_ScalarOrBlockOrFormWrapper> founds) {
     for (Block block in blocks) {
@@ -600,6 +615,9 @@ abstract class Shelf extends _XBase {
       }
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   List<_ScalarOrBlockOrFormWrapper> __findTopLazyScalarOrBlockOrForms() {
     final List<_ScalarOrBlockOrFormWrapper> founds = [];
@@ -621,6 +639,9 @@ abstract class Shelf extends _XBase {
     return false;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool _hasMountedBlockUIComponentCascade(List<Block> blocks) {
     for (Block block in blocks) {
       if (block.hasMountedUIComponent()) {
@@ -633,6 +654,9 @@ abstract class Shelf extends _XBase {
     }
     return false;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   bool hasMountedUIComponent() {
     bool hasMounted = _shelfWidgetStates.isNotEmpty;
@@ -675,6 +699,9 @@ abstract class Shelf extends _XBase {
     );
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   String _toString({
     required List<_ScalarOpt> forceQueryScalarOpts,
     required List<_BlockOpt> forceQueryBlockOpts,
@@ -712,6 +739,9 @@ abstract class Shelf extends _XBase {
     }
     return info;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   /// VERY IMPORTANT METHOD:
@@ -770,6 +800,9 @@ abstract class Shelf extends _XBase {
     return success;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<bool> _queryAll({
     required _DataFilterOpt? forceDataFilterOpt,
     required List<_ScalarOpt> forceQueryScalarOpts,
@@ -786,6 +819,9 @@ abstract class Shelf extends _XBase {
     //
     return await _executeQueryXShelf(xShelf: xShelf);
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<bool> _executeQueryXShelf({
     required _XShelf xShelf,
@@ -871,6 +907,9 @@ abstract class Shelf extends _XBase {
       return false;
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<void> _executeTaskUnitQueue() async {
     while (_taskUnitQueue.hasNext()) {
