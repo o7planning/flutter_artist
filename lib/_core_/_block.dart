@@ -824,8 +824,9 @@ abstract class Block<
         ">> ${getClassName(this)}._unitQuery - queryState: $queryDataState, forceQuery: ${thisXBlock.forceQuery}");
     if (this.queryDataState == DataState.ready && !thisXBlock.forceQuery) {
       _taskUnitQueue.addTaskUnit(
-        _BlockSelectAsCurrentTaskUnit(
+        _BlockSelectAsCurrentTaskUnit<ITEM>(
           xBlock: thisXBlock,
+          candidateItem: null,
         ),
       );
       return true;
@@ -972,8 +973,9 @@ abstract class Block<
     //
     if (newQueryDataState == DataState.ready) {
       _taskUnitQueue.addTaskUnit(
-        _BlockSelectAsCurrentTaskUnit(
+        _BlockSelectAsCurrentTaskUnit<ITEM>(
           xBlock: thisXBlock,
+          candidateItem: null,
         ),
       );
     }
@@ -984,7 +986,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> _unitPrepareToShow({required _XBlock thisXBlock}) async {
+  Future<void> _unitSelectItemAsCurrent({required _XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
     //
     if (this.queryDataState == DataState.error) {
@@ -1002,9 +1004,16 @@ abstract class Block<
     if (!thisXBlock.forceQuery || !thisXBlock.forceReloadItem) {
       // return;
     }
+    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1");
     //
     ITEM? candidateCurrentItem = thisXBlock._candidateCurrentItem as ITEM?;
+
+    print(
+        "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 2: candidateCurrentItem: $candidateCurrentItem");
     ITEM? currentItem = this.data.currentItem;
+
+    print(
+        "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3: currentItem: ${this.data.currentItem}");
     //
     if (candidateCurrentItem != null) {
       if (!this.data.containsItem(item: candidateCurrentItem)) {
@@ -1016,6 +1025,7 @@ abstract class Block<
         currentItem = null;
       }
     }
+    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 4");
     //
     final bool newCurrent;
     if (currentItem == null) {
@@ -1122,7 +1132,7 @@ abstract class Block<
       //
       if (siblingItem != null) {
         thisXBlock._candidateCurrentItem = siblingItem;
-        await _unitPrepareToShow(thisXBlock: thisXBlock);
+        await _unitSelectItemAsCurrent(thisXBlock: thisXBlock);
       } else {
         this.data._selectionDataState = DataState.ready;
       }
@@ -1194,7 +1204,6 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1");
 
     // No need check again?
     bool canDelete = canDeleteItem(item: item);
@@ -1215,7 +1224,6 @@ abstract class Block<
         },
       );
       //
-      print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 2");
       __refreshDeletingState(isDeleting: true);
       //
       result = await callApiDeleteItem(item: item);
@@ -1239,7 +1247,6 @@ abstract class Block<
       //
       return false;
     }
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3");
     if (result.errorMessage != null) {
       _handleRestError(
         shelf: shelf,
@@ -1251,17 +1258,14 @@ abstract class Block<
       return false;
     }
     //
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 4");
-
     if (!isCurrent) {
       __removeItemFromList(removeItem: item);
       return true;
     }
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 5");
     //
     // Deleted current item ==> find sibling.
     //
-    final ITEM? sibling = this.data.findSiblingItem(item: item);
+    final ITEM? siblingItem = this.data.findSiblingItem(item: item);
     // Remove Item (Current Item)
     __removeItemFromList(removeItem: item);
     this.data._setCurrentItemOnly(
@@ -1284,6 +1288,7 @@ abstract class Block<
     // TODO: Select specified Item????
     _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit(
       xBlock: thisXBlock,
+      candidateItem: siblingItem,
     );
     _taskUnitQueue.addTaskUnit(taskUnit);
     //
@@ -1502,6 +1507,10 @@ abstract class Block<
       },
     );
     //
+    if (!this.canSelectItem()) {
+      return false;
+    }
+    //
     _XShelf xShelf = _XShelf(
       shelf: shelf,
       forceDataFilterOpt: null,
@@ -1511,16 +1520,14 @@ abstract class Block<
     );
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
-    thisXBlock.setState(
-      candidateCurrentItem: item,
-      stateCurrentItem: this.data.currentItem,
-      stateCurrentItemDetail: this.data.currentItemDetail,
-      stateSelectedItems: this.data.selectedItems,
-      stateCheckedItems: this.data.checkedItems,
-    );
-    thisXBlock.setForceReloadItem();
     //
-    await shelf._executeQueryXShelf(xShelf: xShelf);
+    _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit(
+      xBlock: thisXBlock,
+      candidateItem: item,
+    );
+    _taskUnitQueue.addTaskUnit(taskUnit);
+    //
+    this.shelf._executeTaskUnitQueue();
     return true;
   }
 
@@ -4282,6 +4289,13 @@ abstract class Block<
 
   bool canSaveForm() {
     return __canSaveForm(checkAllow: true);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool canSelectItem() {
+    return this.queryDataState == DataState.ready;
   }
 
   // ***************************************************************************
