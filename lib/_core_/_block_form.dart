@@ -52,6 +52,7 @@ abstract class BlockForm<
   BlockForm();
 
   // ***************************************************************************
+  // ***************************************************************************
 
   void _clearWithDataState({required DataState dataState}) {
     this.data._clearWithDataState(dataState: dataState);
@@ -69,6 +70,7 @@ abstract class BlockForm<
     }
   }
 
+  // ***************************************************************************
   // ***************************************************************************
 
   Future<bool> _unitLoadForm({required _XBlockForm thisXBlockForm}) async {
@@ -90,6 +92,9 @@ abstract class BlockForm<
     //
     return error;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<bool> _prepareMasterDataAndFormData({
     required EXTRA_FORM_INPUT? extraFormInput,
@@ -253,6 +258,9 @@ abstract class BlockForm<
     return false;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool isDirty() {
     return data._isDirty();
   }
@@ -273,12 +281,6 @@ abstract class BlockForm<
     shelf.updateAllUIComponents();
   }
 
-  // TODO: Change name!
-  // Do not call this method in library.
-  Map<String, dynamic> initFormValue() {
-    return data._currentFormData;
-  }
-
   // Change Event from GUI.
   void _onChangeFromFormWidget() {
     if (_formKey.currentState?.instantValue != null) {
@@ -289,8 +291,17 @@ abstract class BlockForm<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _afterBuildFormWidget() {
     data._justInitialized = false;
+  }
+
+  // TODO: Change name!
+  // Do not call this method in library.
+  Map<String, dynamic> initFormValue() {
+    return data._currentFormData;
   }
 
   dynamic getFormInstantValue(String propertyName) {
@@ -356,10 +367,16 @@ abstract class BlockForm<
     required bool isNew,
   });
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   // Private method. Only for use in this class.
   bool __checkValidBeforeSave() {
     return !block.__isSaving && (_formKey.currentState?.validate() ?? false);
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<bool> saveForm() async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -442,6 +459,9 @@ abstract class BlockForm<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<bool> _prepareFormNull() async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -474,6 +494,9 @@ abstract class BlockForm<
       return false;
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<bool> _prepareForm_OLD({
     required EXTRA_FORM_INPUT? extraFormInput,
@@ -516,12 +539,13 @@ abstract class BlockForm<
       __loadCount++;
       FILTER_CRITERIA? filterCriteria = block.data.filterCriteria;
       //
-      bool success = await __prepareFormMasterData(
-        filterCriteria: filterCriteria,
-        extraFormInput: extraFormInput,
-        refreshedItem: refreshedItem,
-        isNew: isNew,
-      );
+      // bool success = await __prepareFormMasterData(
+      //   filterCriteria: filterCriteria,
+      //   extraFormInput: extraFormInput,
+      //   refreshedItem: refreshedItem,
+      //   isNew: isNew,
+      // );
+      bool success = false;
       if (!success) {
         data._dataState = DataState.pending;
         return false;
@@ -532,133 +556,16 @@ abstract class BlockForm<
       data._dataState = DataState.pending;
     }
     //
-    bool success = __copyItemDataToFormKeyState(
-      extraFormInput: extraFormInput,
-      refreshedItem: refreshedItem,
-      isNew: isNew,
-    );
+    // bool success = __copyItemDataToFormKeyState(
+    //   extraFormInput: extraFormInput,
+    //   refreshedItem: refreshedItem,
+    //   isNew: isNew,
+    // );
+    bool success = false;
     if (!success) {
       return false;
     }
     return true;
-  }
-
-  // Private method in this class.
-  Future<bool> __prepareFormMasterData({
-    required FILTER_CRITERIA? filterCriteria,
-    required EXTRA_FORM_INPUT? extraFormInput,
-    required ITEM_DETAIL? refreshedItem,
-    required bool isNew,
-  }) async {
-    try {
-      FlutterArtist.codeFlowLogger._addMethodCall(
-        isLibCode: false,
-        navigate: null,
-        ownerClassInstance: this,
-        methodName: "prepareFormMasterData",
-        parameters: {
-          "filterCriteria": filterCriteria,
-          "extraFormInput": extraFormInput,
-          "refreshedItem": refreshedItem,
-          "isNew": isNew,
-        },
-      );
-      //
-      // May throw ApiError.
-      //
-      await prepareFormMasterData(
-        filterCriteria: filterCriteria,
-        extraFormInput: extraFormInput,
-        refreshedItem: refreshedItem,
-        isNew: isNew,
-      );
-      return true;
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "prepareFormMasterData",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      //
-      return false;
-    }
-  }
-
-  // Private method. Only for use in this class.
-  bool __copyItemDataToFormKeyState({
-    required EXTRA_FORM_INPUT? extraFormInput,
-    required ITEM_DETAIL? refreshedItem,
-    required bool isNew,
-  }) {
-    FlutterArtist.codeFlowLogger._addMethodCall(
-      isLibCode: true,
-      navigate: null,
-      ownerClassInstance: this,
-      methodName: "__copyItemDataToFormKeyState",
-      parameters: {
-        "refreshedItem": refreshedItem,
-        "isNew": isNew,
-      },
-    );
-    //
-    Map<String, dynamic> newFormData;
-    if (data._dataState == DataState.ready) {
-      try {
-        FILTER_CRITERIA? filterCriteria = block.data.filterCriteria;
-        //
-        FlutterArtist.codeFlowLogger._addMethodCall(
-          isLibCode: false,
-          ownerClassInstance: this,
-          methodName: "prepareFormData",
-          parameters: {
-            "filterCriteria": filterCriteria,
-            "extraFormInput": extraFormInput,
-            "refreshedItem": refreshedItem,
-            "isNew": isNew,
-          },
-          navigate: null,
-        );
-        //
-        newFormData = prepareFormData(
-          filterCriteria: filterCriteria,
-          extraFormInput: extraFormInput,
-          refreshedItem: refreshedItem,
-          isNew: isNew,
-        );
-      } catch (e, stackTrace) {
-        _handleError(
-          shelf: shelf,
-          methodName: "prepareFormData",
-          error: e,
-          stackTrace: stackTrace,
-          showSnackBar: true,
-        );
-        //
-        return false;
-      }
-    } else {
-      newFormData = {};
-    }
-    try {
-      data._updateFormData(newFormData);
-      updateAllUIComponents(); // TODO: Xu ly loi?
-      block.updateControlBarWidgets();
-      //
-      _formKey.currentState?.patchValue(newFormData);
-      return true;
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "prepareFormData",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      //
-      return false;
-    }
   }
 
   // ***************************************************************************

@@ -3426,6 +3426,7 @@ abstract class Block<
   }
 
   // Private method. Only for use in this class.
+  @Deprecated("Xoa di, khong su dung nua")
   Future<bool> __prepareToCreate({
     required _XBlock thisXBlock,
     required EXTRA_FORM_INPUT? extraFormInput,
