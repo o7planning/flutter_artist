@@ -2152,129 +2152,12 @@ abstract class Block<
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
-  @Deprecated("Xoa di khong su dung nua")
-  Future<bool> _executeQuickCreateItemWithOverlayAndRestorable({
-    required QuickCreateItemAction<ITEM_DETAIL> action,
-  }) async {
-    return await FlutterArtist.executeTask(
-      asyncFunction: () async {
-        return await _executeQuickCreateItemWithRestorable(
-          action: action,
-        );
-      },
-    );
-  }
-
-  @Deprecated("Xoa di khong su dung nua")
-  Future<bool> _executeQuickCreateItemWithRestorable({
-    required QuickCreateItemAction<ITEM_DETAIL> action,
-  }) async {
-    _XShelf xShelf = _XShelf(
-      shelf: shelf,
-      forceDataFilterOpt: null,
-      forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [],
-      forceQueryBlockFormOpts: [],
-    );
-    //
-    _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
-    //
-    try {
-      shelf._backupAll();
-      //
-      bool success = await __executeQuickActionCreateItem(
-        thisXBlock: thisXBlock,
-        action: action,
-      );
-      if (success) {
-        shelf._applyNewStateAll();
-      } else {
-        shelf._restoreAll();
-      }
-
-      return success;
-    } catch (e, stackTrace) {
-      shelf._restoreAll();
-      //
-      _handleError(
-        shelf: shelf,
-        methodName: "__executeQuickActionCreateItem",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      return false;
-    }
-  }
-
-  // Private Method. Only for use in this class.
-  @Deprecated("Xoa di khong su dung nua")
-  Future<bool> __executeQuickActionCreateItem({
-    required _XBlock thisXBlock,
-    required QuickCreateItemAction<ITEM_DETAIL> action,
-  }) async {
-    ApiResult<ITEM_DETAIL> result;
-    try {
-      FlutterArtist.codeFlowLogger._addMethodCall(
-        isLibCode: false,
-        navigate: null,
-        ownerClassInstance: action,
-        methodName: "callApiQuickCreateItem",
-        parameters: {},
-      );
-      //
-      result = await action.callApiQuickCreateItem();
-      //
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: '${getClassName(action)}.callApiQuickCreateItem',
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      //
-      return false;
-    }
-    //
-    try {
-      return await _processSaveActionRestResult_OLD(
-        thisXBlock: thisXBlock,
-        calledMethodName: "${getClassName(action)}.callApiQuickCreateItem",
-        result: result,
-      );
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "_processSaveActionRestResult",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      //
-      return false;
-    }
-  }
-
   Future<bool> _executeQuickChildBlockItemsWithOverlayAndRestorable({
     required QuickChildBlockItemsAction<ITEM, ITEM_DETAIL> action,
   }) async {
     return await FlutterArtist.executeTask(
       asyncFunction: () async {
         return await __executeQuickChildBlockItemsActionWithRestorable(
-          action: action,
-        );
-      },
-    );
-  }
-
-  @Deprecated("Xoa di, khong su dung nua")
-  Future<bool> _executeQuickUpdateItemWithOverlayAndRestorable({
-    required QuickUpdateItemAction<ITEM, ITEM_DETAIL> action,
-  }) async {
-    return await FlutterArtist.executeTask(
-      asyncFunction: () async {
-        return await __executeQuickActionUpdateItemWithRestorable(
           action: action,
         );
       },
@@ -2298,47 +2181,6 @@ abstract class Block<
     try {
       shelf._backupAll();
       bool success = await __executeQuickChildBlockItemsAction(
-        thisXBlock: thisXBlock,
-        action: action,
-      );
-      if (success) {
-        shelf._applyNewStateAll();
-      } else {
-        shelf._restoreAll();
-      }
-      return success;
-    } catch (e, stackTrace) {
-      shelf._restoreAll();
-      //
-      _handleError(
-        shelf: shelf,
-        methodName: "__executeQuickActionUpdateItemWithRestorable",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      //
-      return false;
-    }
-  }
-
-  @Deprecated("Xoa di, khong su dung nua")
-  Future<bool> __executeQuickActionUpdateItemWithRestorable({
-    required QuickUpdateItemAction<ITEM, ITEM_DETAIL> action,
-  }) async {
-    _XShelf xShelf = _XShelf(
-      shelf: shelf,
-      forceDataFilterOpt: null,
-      forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [],
-      forceQueryBlockFormOpts: [],
-    );
-    //
-    _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
-    //
-    try {
-      shelf._backupAll();
-      bool success = await __executeQuickActionUpdateItem(
         thisXBlock: thisXBlock,
         action: action,
       );
