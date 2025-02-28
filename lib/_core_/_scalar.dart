@@ -301,7 +301,6 @@ abstract class Scalar<
     );
     //
     try {
-      shelf._backupAll();
       //
       _XScalar thisXScalar = xShelf.findXScalarByName(name)!;
       //
@@ -310,14 +309,8 @@ abstract class Scalar<
         action: action,
         afterQuickAction: afterQuickAction,
       );
-      if (!success) {
-        shelf._restoreAll();
-      } else {
-        shelf._applyNewStateAll();
-      }
       return success;
     } catch (e, stackTrace) {
-      shelf._restoreAll();
       //
       _handleError(
         shelf: shelf,

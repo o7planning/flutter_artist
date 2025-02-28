@@ -624,54 +624,6 @@ abstract class Shelf extends _XBase {
   }
 
   // ***************************************************************************
-  // ********** BACKUP & RESTORE & APPLY ***************************************
-  // ***************************************************************************
-
-  void _backupAll() {
-    for (DataFilter dataFilter in _allDataFilters) {
-      dataFilter._backup();
-    }
-    //
-    for (Scalar scalar in __scalars) {
-      scalar._backup();
-    }
-    //
-    for (Block rootBlock in __rootBlocks) {
-      rootBlock._backupAllFromRoot();
-    }
-  }
-
-  void _restoreAll() {
-    for (DataFilter dataFilter in _allDataFilters) {
-      dataFilter._restore();
-    }
-    //
-    for (Scalar scalar in scalars) {
-      scalar._restore();
-    }
-    for (Block block in __rootBlocks) {
-      block._restoreAllFromRoot();
-    }
-    //
-    updateAllUIComponents();
-  }
-
-  void _applyNewStateAll() {
-    for (DataFilter dataFilter in _allDataFilters) {
-      dataFilter._applyNewState();
-    }
-    //
-    for (Scalar scalar in scalars) {
-      scalar._applyNewState();
-    }
-    for (Block block in __rootBlocks) {
-      block._applyNewStateAllFromRoot();
-    }
-    //
-    updateAllUIComponents();
-  }
-
-  // ***************************************************************************
   // ********** QUERY **********************************************************
   // ***************************************************************************
 
