@@ -65,6 +65,8 @@ class _Storage {
       eventBlock: eventBlock,
     );
     //
+    // TODO: Add to QUEUE lazy.
+    //
     __executeListeners(
       listenerScalars: listenerScalars,
       listenerBlocks: listenerBlocks,

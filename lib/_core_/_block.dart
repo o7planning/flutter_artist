@@ -1194,100 +1194,98 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    try {
-      // No need check again?
-      bool canDelete = canDeleteItem(item: item);
-      if (!canDelete) {
-        return false;
-      }
-      final bool isCurrent = data.isCurrentItem(item: item);
-      //
-      ApiResult<void> result;
-      try {
-        FlutterArtist.codeFlowLogger._addMethodCall(
-          isLibCode: false,
-          navigate: null,
-          ownerClassInstance: this,
-          methodName: "callApiDeleteItem",
-          parameters: {
-            "item": item,
-          },
-        );
-        //
-        __refreshDeletingState(isDeleting: true);
-        //
-        result = await callApiDeleteItem(item: item);
-        FlutterArtist.storage._fireEventSourceChanged(
-          eventBlock: this,
-          itemIdString: null,
-        );
-        //
-        __refreshDeletingState(isDeleting: false);
-      } catch (e, stackTrace) {
-        __refreshDeletingState(isDeleting: false);
-        //
-        _handleError(
-          shelf: shelf,
-          methodName: "callApiDeleteItem",
-          error: e,
-          stackTrace: stackTrace,
-          showSnackBar: true,
-        );
-        //
-        return false;
-      }
-      if (result.errorMessage != null) {
-        _handleRestError(
-          shelf: shelf,
-          methodName: "callApiDeleteItem",
-          message: result.errorMessage!,
-          errorDetails: result.errorDetails,
-          showSnackBar: true,
-        );
-        return false;
-      } else {
-        if (!isCurrent) {
-          __removeItemFromList(removeItem: item);
-        } else {
-          // Deleted current item ==> find sibling.
-          final ITEM? sibling = data.findSiblingItem(item: item);
-          // Remove Item
-          __removeItemFromList(removeItem: item);
+    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1");
 
-          //
-          if (sibling != null) {
-            bool success = await __prepareToShowOrEdit(
-              thisXBlock: thisXBlock,
-              item: sibling,
-              justQueried: false,
-              forceForm: false,
-            );
-            if (!success) {
-              return false;
-            }
-          } else {
-            bool success = await _switchThisAndChildrenToNoneMode(
-              thisXBlock: thisXBlock,
-              clearListForThis: false,
-              dataState: DataState.ready,
-            );
-            if (!success) {
-              return false;
-            }
-          }
-        }
-      }
-      return true;
+    // No need check again?
+    bool canDelete = canDeleteItem(item: item);
+    if (!canDelete) {
+      return false;
+    }
+    final bool isCurrent = data.isCurrentItem(item: item);
+    //
+    ApiResult<void> result;
+    try {
+      FlutterArtist.codeFlowLogger._addMethodCall(
+        isLibCode: false,
+        navigate: null,
+        ownerClassInstance: this,
+        methodName: "callApiDeleteItem",
+        parameters: {
+          "item": item,
+        },
+      );
+      //
+      print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 2");
+      __refreshDeletingState(isDeleting: true);
+      //
+      result = await callApiDeleteItem(item: item);
+      // TODO: Chuyen di noi khac?
+      FlutterArtist.storage._fireEventSourceChanged(
+        eventBlock: this,
+        itemIdString: null,
+      );
+      //
+      __refreshDeletingState(isDeleting: false);
     } catch (e, stackTrace) {
+      __refreshDeletingState(isDeleting: false);
+      //
       _handleError(
         shelf: shelf,
-        methodName: "__delete",
+        methodName: "callApiDeleteItem",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
       );
+      //
       return false;
     }
+    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3");
+    if (result.errorMessage != null) {
+      _handleRestError(
+        shelf: shelf,
+        methodName: "callApiDeleteItem",
+        message: result.errorMessage!,
+        errorDetails: result.errorDetails,
+        showSnackBar: true,
+      );
+      return false;
+    }
+    //
+    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 4");
+
+    if (!isCurrent) {
+      __removeItemFromList(removeItem: item);
+      return true;
+    }
+    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 5");
+
+    // Deleted current item ==> find sibling.
+    final ITEM? sibling = data.findSiblingItem(item: item);
+    // Remove Item
+    __removeItemFromList(removeItem: item);
+
+    //
+    if (sibling != null) {
+      bool success = await __prepareToShowOrEdit(
+        thisXBlock: thisXBlock,
+        item: sibling,
+        justQueried: false,
+        forceForm: false,
+      );
+      if (!success) {
+        return false;
+      }
+    } else {
+      bool success = await _switchThisAndChildrenToNoneMode(
+        thisXBlock: thisXBlock,
+        clearListForThis: false,
+        dataState: DataState.ready,
+      );
+      if (!success) {
+        return false;
+      }
+    }
+    return true;
   }
 
   // ***************************************************************************
@@ -2330,6 +2328,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @Deprecated("Xoa di, khong su dung nua")
   Future<bool> _switchThisAndChildrenToNoneMode({
     required _XBlock thisXBlock,
     required bool clearListForThis,
