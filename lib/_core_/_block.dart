@@ -2105,6 +2105,9 @@ abstract class Block<
     );
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   ///
   /// Remove this item from Interface because it no longer exists on the server
   ///
@@ -2124,6 +2127,9 @@ abstract class Block<
     );
     this.updateBlockFragmentWidgets();
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   // Private Method. Only for use in this class.
   @Deprecated("Xoa di, khong su dung nua")
@@ -2184,6 +2190,9 @@ abstract class Block<
     //
     return true;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   @Deprecated("Khong su dung nua")
   Future<bool> __insertOrReplaceItemInListAndRefreshChildren({
@@ -2258,6 +2267,9 @@ abstract class Block<
     //
     return true;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<bool> _switchThisAndChildrenToNoneMode({
     required _XBlock thisXBlock,
@@ -2347,6 +2359,9 @@ abstract class Block<
     );
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   @Deprecated("Xoa di, khong su dung nua")
   Future<bool> __executeQuickChildBlockItemsActionWithRestorable({
     required QuickChildBlockItemsAction<ITEM, ITEM_DETAIL> action,
@@ -2380,6 +2395,9 @@ abstract class Block<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<bool> __executeQuickChildBlockItemsAction({
     required _XBlock thisXBlock,
     required QuickChildBlockItemsAction<ITEM, ITEM_DETAIL> action,
@@ -2410,11 +2428,12 @@ abstract class Block<
     }
     //
     try {
-      return await _processSaveActionRestResult_OLD(
-        thisXBlock: thisXBlock,
-        calledMethodName: "${getClassName(action)}.callApiQuickUpdateItem",
-        result: result,
-      );
+      // return await _processSaveActionRestResult_OLD(
+      //   thisXBlock: thisXBlock,
+      //   calledMethodName: "${getClassName(action)}.callApiQuickUpdateItem",
+      //   result: result,
+      // );
+      return true;
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
@@ -2427,6 +2446,9 @@ abstract class Block<
       return false;
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<bool>
       _executeQuickActionWithOverlayAndRestorable<DATA extends Object>({
@@ -2459,6 +2481,9 @@ abstract class Block<
       },
     );
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<bool> __executeQuickActionWithRestorable<DATA extends Object>({
     required FILTER_INPUT? filterInput,
@@ -2514,6 +2539,9 @@ abstract class Block<
       return false;
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<bool> __executeQuickAction<DATA extends Object>({
     required _XBlock thisXBlock,
@@ -2619,9 +2647,15 @@ abstract class Block<
     return true;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool hasCurrentItem() {
     return data.currentItemDetail != null;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   // TODO: Xem lai phuong thuc nay. No da duoc goi o dau.
   bool hasCurrentItemAndAllowUpdate() {
@@ -2631,6 +2665,9 @@ abstract class Block<
         );
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   // TODO: Xem lai phuong thuc nay. No da duoc goi o dau.
   bool hasCurrentItemAndAllowDelete() {
     return data.currentItem != null &&
@@ -2639,76 +2676,17 @@ abstract class Block<
         );
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   // TODO: Them tham so ITEM.
   bool needToKeepItemInList({
     required FILTER_CRITERIA? filterCriteria,
     required ITEM_DETAIL savedItem,
   });
 
-  @Deprecated("Khong su dung nua")
-  Future<bool> _processSaveActionRestResult_OLD({
-    required _XBlock thisXBlock,
-    required String calledMethodName,
-    required ApiResult<ITEM_DETAIL> result,
-  }) async {
-    if (result.errorMessage != null) {
-      _handleRestError(
-        shelf: shelf,
-        methodName: calledMethodName,
-        message: result.errorMessage!,
-        errorDetails: result.errorDetails,
-        showSnackBar: true,
-      );
-      return false;
-    }
-    //
-    FlutterArtist.storage._fireEventSourceChanged(
-      eventBlock: this,
-      itemIdString: null,
-    );
-    final ITEM_DETAIL? savedItemDetail = result.data;
-    final bool keepInList;
-    if (savedItemDetail == null) {
-      keepInList = false;
-    } else {
-      keepInList = needToKeepItemInList(
-        filterCriteria: data.filterCriteria,
-        savedItem: savedItemDetail,
-      );
-    }
-    //
-    if (savedItemDetail != null && keepInList) {
-      bool success = await __insertOrReplaceItemInListAndRefreshChildren(
-        thisXBlock: thisXBlock,
-        refreshedItemDetail: savedItemDetail,
-        forceForm: false,
-      );
-      if (!success) {
-        return false;
-      }
-      return true;
-    }
-    // savedItem = null or !keepInList
-    else {
-      ITEM? savedItem = __convertItemDetailToItem(itemDetail: savedItemDetail);
-      final ITEM? removeItem = savedItem ?? data.currentItem;
-
-      if (removeItem != null) {
-        bool success = await __removeNotFoundItemAndSelectSibling(
-          thisXBlock: thisXBlock,
-          notFoundItem: removeItem,
-        );
-        if (!success) {
-          return false;
-        }
-      }
-      return true;
-    }
-  }
-
-  // =============== @@@@@@@@@@@@@@@@@@ ========================================
-  // =============== @@@@@@@@@@@@@@@@@@ ========================================
-  // =============== @@@@@@@@@@@@@@@@@@ ========================================
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<bool> executeQuickAction<DATA extends Object>({
     FILTER_INPUT? filterInput,
@@ -2923,6 +2901,9 @@ abstract class Block<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<bool> prepareToEditFirstItem({
     Function()? navigate,
   }) async {
@@ -2935,6 +2916,9 @@ abstract class Block<
       navigate: navigate,
     );
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<bool> prepareToEditNextItem({
     Function()? navigate,
@@ -2952,6 +2936,9 @@ abstract class Block<
     );
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<bool> prepareToEditPreviousItem({
     Function()? navigate,
   }) async {
@@ -2967,6 +2954,9 @@ abstract class Block<
       navigate: navigate,
     );
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<bool> prepareToEditItem({
     required ITEM item,
@@ -3000,6 +2990,9 @@ abstract class Block<
     return false;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<bool> prepareToShowFirstItem({
     Function()? navigate,
   }) async {
@@ -3007,11 +3000,14 @@ abstract class Block<
     if (nextItem == null) {
       return false;
     }
-    return await prepareToShowItem_OLD(
+    return await prepareToShowItem(
       item: nextItem,
       navigate: navigate,
     );
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<bool> prepareToShowNextItem({
     Function()? navigate,
@@ -3023,11 +3019,14 @@ abstract class Block<
     if (nextItem == null) {
       return false;
     }
-    return await prepareToShowItem_OLD(
+    return await prepareToShowItem(
       item: nextItem,
       navigate: navigate,
     );
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<bool> prepareToShowPreviousItem({
     Function()? navigate,
@@ -3039,40 +3038,16 @@ abstract class Block<
     if (previousItem == null) {
       return false;
     }
-    return await prepareToShowItem_OLD(
+    return await prepareToShowItem(
       item: previousItem,
       navigate: navigate,
     );
   }
 
-  @Deprecated("Khong su dung nua, xoa di")
-  Future<bool> prepareToShowItem_OLD({
-    required ITEM item,
-    Function()? navigate,
-  }) async {
-    FlutterArtist.codeFlowLogger._addMethodCall(
-      isLibCode: true,
-      navigate: navigate,
-      ownerClassInstance: this,
-      methodName: "prepareToShowItem",
-      parameters: {
-        "item": item,
-      },
-    );
-    //
-    bool success = await __prepareToShowOrEditWithOverlayAndRestorable(
-      item: item,
-      justQueried: false,
-      suggestedSelection: null,
-      forceForm: false,
-    );
-    if (success) {
-      _executeNavigation(navigate: navigate);
-      return true;
-    }
-    return false;
-  }
+  // ***************************************************************************
+  // ***************************************************************************
 
+  @Deprecated("Xoa di, khong su dung nua")
   Future<bool> __prepareToShowOrEditWithOverlayAndRestorable({
     required SuggestedSelection? suggestedSelection,
     required ITEM item,
@@ -3091,6 +3066,10 @@ abstract class Block<
     );
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @Deprecated("Xoa di, khong su dung nua")
   Future<bool> __prepareToShowOrEditWithRestorable({
     required SuggestedSelection? suggestedSelection,
     required ITEM item,
@@ -3130,7 +3109,11 @@ abstract class Block<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   // Private method (Only for use in this class)
+  @Deprecated("Xoa di, khong su dung nua")
   Future<bool> __prepareToShowOrEdit({
     required _XBlock thisXBlock,
     required ITEM item,
@@ -3226,6 +3209,9 @@ abstract class Block<
     return true;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool __checkBeforeFormCreation({required bool showErrorMessage}) {
     bool canCrete = canCreateItem();
     if (!canCrete) {
@@ -3240,6 +3226,9 @@ abstract class Block<
     }
     return true;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   /// Prepare to create an item in a Form.
@@ -3312,6 +3301,9 @@ abstract class Block<
     return success;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   // Private method. Only for use in this class.
   @Deprecated("Xoa di, khong su dung nua")
   Future<bool> __prepareToCreate({
@@ -3373,6 +3365,9 @@ abstract class Block<
     //
     return true;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<bool> deleteItemById({
     required ID itemId,
@@ -3668,6 +3663,9 @@ abstract class Block<
     blockForm?.updateAllUIComponents();
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void updateBlockFragmentWidgets() {
     for (_RefreshableWidgetState widgetState
         in _blockFragmentWidgetStates.keys) {
@@ -3677,6 +3675,9 @@ abstract class Block<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void updateControlBarWidgets() {
     for (_RefreshableWidgetState widgetState in _controlBarWidgetStates.keys) {
       if (widgetState.mounted) {
@@ -3685,6 +3686,9 @@ abstract class Block<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void updateControlWidgets() {
     for (_RefreshableWidgetState widgetState in _controlWidgetStates.keys) {
       if (widgetState.mounted) {
@@ -3692,6 +3696,9 @@ abstract class Block<
       }
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void updatePaginationWidgets() {
     for (_RefreshableWidgetState widgetState in _paginationWidgetStates.keys) {
@@ -3712,12 +3719,18 @@ abstract class Block<
     return true;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   ///
   /// Allows querying the block or not according to the application logic.
   ///
   bool isAllowQuery() {
     return true;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   /// Allows creating a new Item or not according to the application logic.
@@ -3726,12 +3739,18 @@ abstract class Block<
     return true;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   ///
   /// Allows edit an Item or not according to the application logic.
   ///
   bool isAllowUpdateItem({required ITEM item}) {
     return true;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   /// Allows deleting an Item or not according to the application logic.
@@ -3740,6 +3759,9 @@ abstract class Block<
     return true;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool isAllowUpdateCurrentItem() {
     ITEM? currentItem = data.currentItem;
     if (currentItem == null) {
@@ -3747,6 +3769,9 @@ abstract class Block<
     }
     return isAllowUpdateItem(item: currentItem);
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   bool isAllowDeleteCurrentItem() {
     ITEM? currentItem = data.currentItem;
@@ -3778,12 +3803,18 @@ abstract class Block<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   ///
   /// Allows edit current item or not according to the application logic.
   ///
   bool __isAllowResetForm() {
     return isAllowResetForm();
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   /// Allows edit current item or not according to the application logic.
@@ -3795,6 +3826,9 @@ abstract class Block<
     }
     return _isAllowUpdateItem(item: currentItem);
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   /// Allows deleting an Item or not according to the application logic.
@@ -3814,6 +3848,9 @@ abstract class Block<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   ///
   /// Allows creating a new Item or not according to the application logic.
   ///
@@ -3831,6 +3868,9 @@ abstract class Block<
       return false;
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   /// Allows deleting an Item or not according to the application logic.
@@ -3880,6 +3920,9 @@ abstract class Block<
     return parent!.__checkAncestorsSafeToQuery();
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   // TODO: Viet chi tiet hon:
   ///
   /// Check if Ancestor Blocks in Safe State to Delete item in current Block.
@@ -3902,6 +3945,9 @@ abstract class Block<
     return parent!.__checkAncestorsSafeToDelete(null);
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   // TODO: Viet chi tiet hon:
   ///
   /// Check if Ancestor Blocks in Safe State to Create item in current Block.
@@ -3923,6 +3969,9 @@ abstract class Block<
     //
     return parent!.__checkAncestorsSafeToCreate();
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   // TODO: Viet chi tiet hon:
   ///
@@ -3961,6 +4010,9 @@ abstract class Block<
     return checkAllow ? __isAllowDeleteItem(item: item) : true;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool __canCreateItem({required bool checkAllow}) {
     if (blockForm == null || this.__isPreparingFormCreation) {
       return false;
@@ -3971,6 +4023,9 @@ abstract class Block<
     }
     return checkAllow ? __isAllowCreateItem() : true;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   bool __canResetForm({required bool checkAllow}) {
     if (blockForm == null || !blockForm!.isDirty() || this.__isSaving) {
@@ -3992,6 +4047,9 @@ abstract class Block<
     }
     return false;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   bool __canSaveForm({required bool checkAllow}) {
     if (blockForm == null || this.__isSaving) {
@@ -4015,6 +4073,9 @@ abstract class Block<
     return false;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool __canEditItemOnForm({
     required ITEM item,
     required bool checkAllow,
@@ -4037,6 +4098,9 @@ abstract class Block<
     }
     return checkAllow ? _isAllowUpdateItem(item: item) : true;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   /// Edit on edit-mode
@@ -4062,6 +4126,9 @@ abstract class Block<
       checkAllow: checkAllow,
     );
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   bool __canRefreshCurrentItem() {
     if (data.currentItemDetail == null || __isRefreshingCurrentItem) {
@@ -4097,17 +4164,29 @@ abstract class Block<
     return true;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool canCreateItem() {
     return __canCreateItem(checkAllow: true);
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   bool canResetForm() {
     return __canResetForm(checkAllow: true);
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool canSaveForm() {
     return __canSaveForm(checkAllow: true);
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   bool canDeleteCurrentItem() {
     ITEM? currentItem = data.currentItem;
@@ -4117,21 +4196,36 @@ abstract class Block<
     return canDeleteItem(item: currentItem);
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool canDeleteItem({required ITEM item}) {
     return __canDeleteItem(item: item, checkAllow: true);
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   bool canEditItemOnForm({required ITEM item}) {
     return __canEditItemOnForm(item: item, checkAllow: true);
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool _isEnableFormToModify() {
     return __isEnableFormToModify(checkAllow: true);
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool canEditCurrentItemOnForm() {
     return __isEnableFormToModify(checkAllow: true);
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   /// Checks whether the current item can be refreshed.
@@ -4142,6 +4236,9 @@ abstract class Block<
     return __canRefreshCurrentItem();
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool canShowFilterCriteria() {
     ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
     return dataFilter != null &&
@@ -4149,12 +4246,18 @@ abstract class Block<
         loggedInUser.isSystemUser;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool canShowFormInfo() {
     ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
     return blockForm != null &&
         loggedInUser != null &&
         loggedInUser.isSystemUser;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   bool __canQuery({required bool checkAllow}) {
     if (__isQuerying) {
@@ -4166,6 +4269,9 @@ abstract class Block<
     }
     return checkAllow ? __isAllowQuery() : true;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   bool canQuery() {
     return __canQuery(checkAllow: true);
