@@ -747,19 +747,6 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> _executeTaskUnit(_BlockTaskUnit taskUnit) async {
-    switch (taskUnit.taskUnitName) {
-      case BlockTaskUnitName.query:
-        await taskUnit.xBlock.block._unitQuery(
-          thisXBlock: taskUnit.xBlock,
-        );
-      case BlockTaskUnitName.select:
-        await taskUnit.xBlock.block._unitPrepareToShow(
-          thisXBlock: taskUnit.xBlock,
-        );
-    }
-  }
-
   Future<void> _executeDeleteItemTaskUnit(
       _BlockDeleteItemTaskUnit taskUnit) async {
     await taskUnit.xBlock.block._unitDeleteItem(
@@ -794,9 +781,8 @@ abstract class Block<
         ">> ${getClassName(this)}._unitQuery - queryState: $queryDataState, forceQuery: ${thisXBlock.forceQuery}");
     if (this.queryDataState == DataState.ready && !thisXBlock.forceQuery) {
       _taskUnitQueue.addTaskUnit(
-        _BlockTaskUnit(
+        _BlockSelectAsCurrentTaskUnit(
           xBlock: thisXBlock,
-          taskUnitName: BlockTaskUnitName.select,
         ),
       );
       return true;
@@ -943,9 +929,8 @@ abstract class Block<
     //
     if (newQueryDataState == DataState.ready) {
       _taskUnitQueue.addTaskUnit(
-        _BlockTaskUnit(
+        _BlockSelectAsCurrentTaskUnit(
           xBlock: thisXBlock,
-          taskUnitName: BlockTaskUnitName.select,
         ),
       );
     }
@@ -1011,9 +996,8 @@ abstract class Block<
     if (!newCurrent && !thisXBlock.forceReloadItem) {
       for (_XBlock childXBlock in thisXBlock.childXBlocks) {
         _taskUnitQueue.addTaskUnit(
-          _BlockTaskUnit(
+          _BlockQueryTaskUnit(
             xBlock: childXBlock,
-            taskUnitName: BlockTaskUnitName.query,
           ),
         );
       }
@@ -1151,9 +1135,8 @@ abstract class Block<
     //
     for (_XBlock childXBlock in thisXBlock.childXBlocks) {
       _taskUnitQueue.addTaskUnit(
-        _BlockTaskUnit(
+        _BlockQueryTaskUnit(
           xBlock: childXBlock,
-          taskUnitName: BlockTaskUnitName.query,
         ),
       );
     }

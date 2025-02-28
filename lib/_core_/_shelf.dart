@@ -858,9 +858,8 @@ abstract class Shelf extends _XBase {
         // Add to Queue:
         //
         _taskUnitQueue.addTaskUnit(
-          _BlockTaskUnit(
+          _BlockQueryTaskUnit(
             xBlock: xBlock,
-            taskUnitName: BlockTaskUnitName.query,
           ),
         );
       }
@@ -897,11 +896,15 @@ abstract class Shelf extends _XBase {
   Future<void> _executeTaskUnitQueue() async {
     while (_taskUnitQueue.hasNext()) {
       _TaskUnit taskUnit = _taskUnitQueue.getNextTaskUnit()!;
-      taskUnit.printInfo();
-      // Block:
-      if (taskUnit is _BlockTaskUnit) {
+      // Block Query:
+      if (taskUnit is _BlockQueryTaskUnit) {
         _XBlock xBlock = taskUnit.xBlock;
-        await xBlock.block._executeTaskUnit(taskUnit);
+        await xBlock.block._unitQuery(thisXBlock: xBlock);
+      }
+      // Block Select Item as Current:
+      else if (taskUnit is _BlockSelectAsCurrentTaskUnit) {
+        _XBlock xBlock = taskUnit.xBlock;
+        await xBlock.block._unitPrepareToShow(thisXBlock: xBlock);
       }
       // Block Delete Item:
       else if (taskUnit is _BlockDeleteItemTaskUnit) {

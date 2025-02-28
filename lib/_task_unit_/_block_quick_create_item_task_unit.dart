@@ -8,6 +8,4 @@ class _BlockQuickCreateItemTaskUnit extends _TaskUnit {
     required this.xBlock,
     required this.action,
   });
-
-  void printInfo() {}
 }

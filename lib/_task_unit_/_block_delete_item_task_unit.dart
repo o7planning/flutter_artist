@@ -8,6 +8,4 @@ class _BlockDeleteItemTaskUnit extends _TaskUnit {
     required this.xBlock,
     required this.item,
   });
-
-  void printInfo() {}
 }

@@ -6,6 +6,4 @@ class _SaveFormSaveTaskUnit extends _TaskUnit {
   _SaveFormSaveTaskUnit({
     required this.xBlockForm,
   });
-
-  void printInfo() {}
 }

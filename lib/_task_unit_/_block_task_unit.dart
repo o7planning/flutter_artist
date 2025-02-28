@@ -1,13 +1,9 @@
 part of '../flutter_artist.dart';
 
-class _BlockTaskUnit extends _TaskUnit {
-  BlockTaskUnitName taskUnitName;
+class _BlockQueryTaskUnit extends _TaskUnit {
   _XBlock xBlock;
 
-  _BlockTaskUnit({
+  _BlockQueryTaskUnit({
     required this.xBlock,
-    required this.taskUnitName,
   });
-
-  void printInfo() {}
 }

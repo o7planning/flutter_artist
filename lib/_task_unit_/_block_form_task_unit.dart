@@ -6,6 +6,4 @@ class _BlockFormLoadFormTaskUnit extends _TaskUnit {
   _BlockFormLoadFormTaskUnit({
     required this.xBlockForm,
   });
-
-  void printInfo() {}
 }

@@ -8,6 +8,4 @@ class _ScalarTaskUnit extends _TaskUnit {
     required this.xScalar,
     required this.taskUnitName,
   });
-
-  void printInfo() {}
 }
