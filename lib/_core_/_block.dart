@@ -2158,6 +2158,7 @@ abstract class Block<
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
+  @Deprecated("Xoa di khong su dung nua")
   Future<bool> _executeQuickCreateItemWithOverlayAndRestorable({
     required QuickCreateItemAction<ITEM_DETAIL> action,
   }) async {
@@ -2170,6 +2171,7 @@ abstract class Block<
     );
   }
 
+  @Deprecated("Xoa di khong su dung nua")
   Future<bool> _executeQuickCreateItemWithRestorable({
     required QuickCreateItemAction<ITEM_DETAIL> action,
   }) async {
@@ -2178,18 +2180,6 @@ abstract class Block<
       forceDataFilterOpt: null,
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [],
-      // forceQueryBlockOpts: _childBlocks
-      //     .map(
-      //       (b) => _BlockOpt(
-      //     block: b,
-      //     queryType: null,
-      //     pageable: null,
-      //     listBehavior: null,
-      //     suggestedSelection: null,
-      //     postQueryBehavior: null,
-      //   ),
-      // )
-      //     .toList(),
       forceQueryBlockFormOpts: [],
     );
     //
@@ -2224,6 +2214,7 @@ abstract class Block<
   }
 
   // Private Method. Only for use in this class.
+  @Deprecated("Xoa di khong su dung nua")
   Future<bool> __executeQuickActionCreateItem({
     required _XBlock thisXBlock,
     required QuickCreateItemAction<ITEM_DETAIL> action,
@@ -2283,6 +2274,7 @@ abstract class Block<
     );
   }
 
+  @Deprecated("Xoa di, khong su dung nua")
   Future<bool> _executeQuickUpdateItemWithOverlayAndRestorable({
     required QuickUpdateItemAction<ITEM, ITEM_DETAIL> action,
   }) async {
@@ -2295,6 +2287,7 @@ abstract class Block<
     );
   }
 
+  @Deprecated("Xoa di, khong su dung nua")
   Future<bool> __executeQuickChildBlockItemsActionWithRestorable({
     required QuickChildBlockItemsAction<ITEM, ITEM_DETAIL> action,
   }) async {
@@ -2335,6 +2328,7 @@ abstract class Block<
     }
   }
 
+  @Deprecated("Xoa di, khong su dung nua")
   Future<bool> __executeQuickActionUpdateItemWithRestorable({
     required QuickUpdateItemAction<ITEM, ITEM_DETAIL> action,
   }) async {
@@ -2423,6 +2417,7 @@ abstract class Block<
     }
   }
 
+  @Deprecated("Xoa di, khong su dung nua")
   Future<bool> __executeQuickActionUpdateItem({
     required _XBlock thisXBlock,
     required QuickUpdateItemAction<ITEM, ITEM_DETAIL> action,
@@ -2849,21 +2844,55 @@ abstract class Block<
       return false;
     }
     //
+    _XShelf xShelf = _XShelf(
+      shelf: shelf,
+      forceDataFilterOpt: null,
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: [],
+      forceQueryBlockFormOpts: [],
+    );
+    //
+    _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    //
+    ApiResult<ITEM_DETAIL> result;
     try {
-      bool success = await _executeQuickCreateItemWithOverlayAndRestorable(
-        action: action,
+      FlutterArtist.codeFlowLogger._addMethodCall(
+        isLibCode: false,
+        navigate: null,
+        ownerClassInstance: action,
+        methodName: "callApiQuickCreateItem",
+        parameters: {},
       );
-      return success;
+      //
+      result = await action.callApiQuickCreateItem();
+      //
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: 'executeQuickActionCreateItem',
+        methodName: '${getClassName(action)}.callApiQuickCreateItem',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
       );
       //
-      shelf.updateAllUIComponents();
+      return false;
+    }
+    //
+    try {
+      return await _processSaveActionRestResult(
+        thisXBlock: thisXBlock,
+        calledMethodName: "${getClassName(action)}.callApiQuickCreateItem",
+        result: result,
+      );
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: "_processSaveActionRestResult",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      //
       return false;
     }
   }
@@ -2896,21 +2925,55 @@ abstract class Block<
       return false;
     }
     //
+
+    _XShelf xShelf = _XShelf(
+      shelf: shelf,
+      forceDataFilterOpt: null,
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: [],
+      forceQueryBlockFormOpts: [],
+    );
+    //
+    _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
+    //
+    ApiResult<ITEM_DETAIL> result;
     try {
-      bool success = await _executeQuickUpdateItemWithOverlayAndRestorable(
-        action: action,
+      FlutterArtist.codeFlowLogger._addMethodCall(
+        isLibCode: false,
+        navigate: null,
+        ownerClassInstance: action,
+        methodName: "callApiQuickUpdateItem",
+        parameters: {},
       );
-      return success;
+      //
+      result = await action.callApiQuickUpdateItem();
+      //
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: "executeQuickActionUpdateItem",
+        methodName: '${getClassName(action)}.callApiQuickUpdateItem',
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      return false;
+    }
+    //
+    try {
+      return await _processSaveActionRestResult(
+        thisXBlock: thisXBlock,
+        calledMethodName: "${getClassName(action)}.callApiQuickUpdateItem",
+        result: result,
+      );
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: '_processSaveActionRestResult',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
       );
       //
-      shelf.updateAllUIComponents();
       return false;
     }
   }

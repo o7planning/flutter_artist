@@ -208,8 +208,9 @@ abstract class BlockForm<
     _XBlock thisXBlock = xShelf.findXBlockByName(block.name)!;
     Map<String, dynamic> formMapData = data.currentFormData;
     //
-    String calledMethodName =
-        data.isNew ? 'callApiCreateItem' : 'callApiUpdateItem';
+    String calledMethodName = data.isNew //
+        ? 'callApiCreateItem'
+        : 'callApiUpdateItem';
     //
     ApiResult<ITEM_DETAIL> result;
     bool saveError = false;
