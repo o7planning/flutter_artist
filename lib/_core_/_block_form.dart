@@ -78,10 +78,26 @@ abstract class BlockForm<
     FILTER_CRITERIA? filterCriteria = this.block.data.filterCriteria;
     EXTRA_FORM_INPUT? extraFormInput =
         thisXBlockForm.extraFormInput as EXTRA_FORM_INPUT?;
-    bool isNew = refreshedItemDetail == null;
+    bool isNew = this.data.isNew;
 
     //
-    bool hasError = false;
+    bool error = await _prepareMasterDataAndFormData(
+      extraFormInput: extraFormInput,
+      filterCriteria: filterCriteria,
+      refreshedItemDetail: refreshedItemDetail,
+      isNew: isNew,
+    );
+    //
+    return error;
+  }
+
+  Future<bool> _prepareMasterDataAndFormData({
+    required EXTRA_FORM_INPUT? extraFormInput,
+    required FILTER_CRITERIA? filterCriteria,
+    required ITEM_DETAIL? refreshedItemDetail,
+    required bool isNew,
+  }) async {
+    bool error = false;
     try {
       //
       // May throw ApiError.
@@ -92,10 +108,7 @@ abstract class BlockForm<
         refreshedItem: refreshedItemDetail,
         isNew: isNew,
       );
-      hasError = false;
     } catch (e, stackTrace) {
-      hasError = true;
-      //
       _handleError(
         shelf: shelf,
         methodName: "prepareFormMasterData",
@@ -103,9 +116,13 @@ abstract class BlockForm<
         stackTrace: stackTrace,
         showSnackBar: true,
       );
+      error = true;
     }
-    if (hasError) {
-      this._clearWithDataState(dataState: DataState.error);
+    //
+    if (error) {
+      this.data._clearWithDataState(
+            dataState: DataState.error,
+          );
       return false;
     }
     //
@@ -118,8 +135,6 @@ abstract class BlockForm<
         isNew: isNew,
       );
     } catch (e, stackTrace) {
-      hasError = true;
-      //
       _handleError(
         shelf: shelf,
         methodName: "prepareFormData",
@@ -127,31 +142,119 @@ abstract class BlockForm<
         stackTrace: stackTrace,
         showSnackBar: true,
       );
+      error = true;
     }
     //
-    if (hasError) {
-      this._clearWithDataState(dataState: DataState.error);
+    if (error) {
+      this.data._clearWithDataState(
+            dataState: DataState.error,
+          );
       return false;
     }
+    //
     try {
       this.data._updateFormData(newFormData);
-      updateAllUIComponents(); // TODO: Xu ly loi?
-      this.block.updateControlBarWidgets();
+      this._formKey.currentState?.patchValue(newFormData);
       //
-      _formKey.currentState?.patchValue(newFormData);
       this.data._setCurrentItem(
             refreshedItemDetail: refreshedItemDetail,
-            formMode:
-                refreshedItemDetail == null ? FormMode.creation : FormMode.edit,
-            dataState: DataState.ready,
+            formMode: isNew //
+                ? FormMode.creation
+                : FormMode.edit,
+            dataState: newFormData == null //
+                ? DataState.error
+                : DataState.ready,
           );
-
-      print("@@@@@@@@ formMode: ${this.data._formMode}");
+      //
+      updateAllUIComponents(); // TODO: Xu ly loi?
+      this.block.updateControlBarWidgets();
       return true;
     } catch (e, stackTrace) {
-      _handleError( 
+      error = true;
+      //
+      _handleError(
         shelf: shelf,
-        methodName: "prepareFormData",
+        methodName: "_showFormData",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+    }
+    //
+    if (error) {
+      this.data._clearWithDataState(
+            dataState: DataState.error,
+          );
+      return false;
+    }
+    return true;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<bool> _saveForm() async {
+    if (!__checkValidBeforeSave()) {
+      return false;
+    }
+    _XShelf xShelf = _XShelf(
+      shelf: shelf,
+      forceDataFilterOpt: null,
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: [],
+      forceQueryBlockFormOpts: [],
+    );
+    //
+    _XBlock thisXBlock = xShelf.findXBlockByName(block.name)!;
+    Map<String, dynamic> formMapData = data.currentFormData;
+    //
+    String calledMethodName =
+        data.isNew ? 'callApiCreateItem' : 'callApiUpdateItem';
+    //
+    ApiResult<ITEM_DETAIL> result;
+    bool saveError = false;
+    try {
+      FlutterArtist.codeFlowLogger._addMethodCall(
+        isLibCode: false,
+        ownerClassInstance: this,
+        methodName: calledMethodName,
+        parameters: {
+          "formMapData": formMapData,
+        },
+        navigate: null,
+      );
+      //
+      block._refreshSavingState(isSaving: true);
+      //
+      result = data.isNew
+          ? await callApiCreateItem(formMapData: formMapData)
+          : await callApiUpdateItem(formMapData: formMapData);
+      //
+      block._refreshSavingState(isSaving: false);
+    } catch (e, stackTrace) {
+      saveError = true;
+      block._refreshSavingState(isSaving: false);
+      //
+      _handleError(
+        shelf: shelf,
+        methodName: calledMethodName,
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      return false;
+    }
+    //
+    try {
+      return await block._processSaveActionRestResult(
+        thisXBlock: thisXBlock,
+        calledMethodName: calledMethodName,
+        result: result,
+      );
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: '_processSaveActionRestResult',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -344,7 +447,7 @@ abstract class BlockForm<
     if (!__checkValidBeforeSave()) {
       return false;
     }
-    bool success = await _saveFormWithOverlayAndRestorable();
+    bool success = await _saveForm();
     return success;
   }
 
@@ -407,6 +510,7 @@ abstract class BlockForm<
   }
 
   // Private method. Only for use in this class.
+  @Deprecated("Xoa di, khong su dung nua.")
   Future<bool> __saveForm({
     required _XBlock thisXBlock,
   }) async {
@@ -447,7 +551,7 @@ abstract class BlockForm<
       return false;
     }
     try {
-      return await block._processSaveActionRestResult(
+      return await block._processSaveActionRestResult_OLD(
         thisXBlock: thisXBlock,
         calledMethodName: calledMethodName,
         result: result,

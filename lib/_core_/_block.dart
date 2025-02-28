@@ -1143,6 +1143,105 @@ abstract class Block<
     //
   }
 
+  Future<bool> _processSaveActionRestResult({
+    required _XBlock thisXBlock,
+    required String calledMethodName,
+    required ApiResult<ITEM_DETAIL> result,
+  }) async {
+    if (result.errorMessage != null) {
+      _handleRestError(
+        shelf: shelf,
+        methodName: calledMethodName,
+        message: result.errorMessage!,
+        errorDetails: result.errorDetails,
+        showSnackBar: true,
+      );
+      return false;
+    }
+    // TODO: Chuyen di noi khac.
+    FlutterArtist.storage._fireEventSourceChanged(
+      eventBlock: this,
+      itemIdString: null,
+    );
+    final ITEM_DETAIL? savedItemDetail = result.data;
+    final bool keepInList;
+    if (savedItemDetail == null) {
+      keepInList = false;
+    } else {
+      keepInList = needToKeepItemInList(
+        filterCriteria: data.filterCriteria,
+        savedItem: savedItemDetail,
+      );
+    }
+    //
+    if (savedItemDetail != null && keepInList) {
+      bool forceForm = false;
+      ITEM refreshedItem = convertItemDetailToItem(
+        itemDetail: savedItemDetail,
+      );
+      data._insertOrReplaceItem(
+        item: refreshedItem,
+        itemDetail: savedItemDetail,
+      );
+      //
+      bool editable = canEditItemOnForm(item: refreshedItem);
+      //
+      FlutterArtist.codeFlowLogger._addInfo(
+        ownerClassInstance: this,
+        info: 'Allow Edit? $editable',
+        isLibCode: true,
+      );
+      //
+      this.__setCurrentItem(
+        itemDetail: savedItemDetail,
+        item: refreshedItem,
+      );
+      //
+      if (blockForm != null) {
+        // blockForm!.data._setCurrentItem(
+        //   refreshedItemDetail: savedItemDetail,
+        //   formMode: FormMode.edit,
+        //   dataState: DataState.pending,
+        // );
+        bool success = await blockForm!._prepareMasterDataAndFormData(
+          extraFormInput: null,
+          filterCriteria: data.filterCriteria,
+          refreshedItemDetail: savedItemDetail,
+          isNew: false,
+        );
+        if (!success) {
+          return false;
+        }
+      }
+      // ????????????
+      // bool success = await __insertOrReplaceItemInListAndRefreshChildren(
+      //   thisXBlock: thisXBlock,
+      //   refreshedItemDetail: savedItemDetail,
+      //   forceForm: false,
+      // );
+      // if (!success) {
+      //   return false;
+      // }
+      return true;
+    }
+    // savedItem = null or !keepInList
+    else {
+      ITEM? savedItem = __convertItemDetailToItem(itemDetail: savedItemDetail);
+      final ITEM? removeItem = savedItem ?? data.currentItem;
+
+      if (removeItem != null) {
+        bool success = await __removeNotFoundItemAndSelectSibling(
+          thisXBlock: thisXBlock,
+          notFoundItem: removeItem,
+        );
+        if (!success) {
+          return false;
+        }
+      }
+      return true;
+    }
+  }
+
   // ***************************************************************************
   // ***************************************************************************
 
@@ -1909,6 +2008,7 @@ abstract class Block<
     return true;
   }
 
+  @Deprecated("Khong su dung nua")
   Future<bool> __insertOrReplaceItemInListAndRefreshChildren({
     required _XBlock thisXBlock,
     required ITEM_DETAIL refreshedItemDetail,
@@ -2153,7 +2253,7 @@ abstract class Block<
     }
     //
     try {
-      return await _processSaveActionRestResult(
+      return await _processSaveActionRestResult_OLD(
         thisXBlock: thisXBlock,
         calledMethodName: "${getClassName(action)}.callApiQuickCreateItem",
         result: result,
@@ -2305,7 +2405,7 @@ abstract class Block<
     }
     //
     try {
-      return await _processSaveActionRestResult(
+      return await _processSaveActionRestResult_OLD(
         thisXBlock: thisXBlock,
         calledMethodName: "${getClassName(action)}.callApiQuickUpdateItem",
         result: result,
@@ -2353,7 +2453,7 @@ abstract class Block<
     }
     //
     try {
-      return await _processSaveActionRestResult(
+      return await _processSaveActionRestResult_OLD(
         thisXBlock: thisXBlock,
         calledMethodName: "${getClassName(action)}.callApiQuickUpdateItem",
         result: result,
@@ -2597,7 +2697,8 @@ abstract class Block<
     required ITEM_DETAIL savedItem,
   });
 
-  Future<bool> _processSaveActionRestResult({
+  @Deprecated("Khong su dung nua")
+  Future<bool> _processSaveActionRestResult_OLD({
     required _XBlock thisXBlock,
     required String calledMethodName,
     required ApiResult<ITEM_DETAIL> result,
