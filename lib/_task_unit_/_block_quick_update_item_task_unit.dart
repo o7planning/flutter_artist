@@ -1,10 +1,10 @@
 part of '../flutter_artist.dart';
 
-class _BlockQuickCreateItemTaskUnit extends _TaskUnit {
+class _BlockQuickUpdateItemTaskUnit extends _TaskUnit {
   _XBlock xBlock;
-  QuickCreateItemAction action;
+  QuickUpdateItemAction action;
 
-  _BlockQuickCreateItemTaskUnit({
+  _BlockQuickUpdateItemTaskUnit({
     required this.xBlock,
     required this.action,
   });

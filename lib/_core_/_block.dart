@@ -772,6 +772,14 @@ abstract class Block<
     );
   }
 
+  Future<void> _executeQuickUpdateItemTaskUnit(
+      _BlockQuickUpdateItemTaskUnit taskUnit) async {
+    await taskUnit.xBlock.block._unitQuickUpdateItem(
+      thisXBlock: taskUnit.xBlock,
+      action: taskUnit.action,
+    );
+  }
+
   // ***************************************************************************
   // ***************************************************************************
 
@@ -1191,6 +1199,56 @@ abstract class Block<
       return await _processSaveActionRestResult(
         thisXBlock: thisXBlock,
         calledMethodName: "${getClassName(action)}.callApiQuickCreateItem",
+        result: result,
+      );
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: "_processSaveActionRestResult",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      //
+      return false;
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<bool> _unitQuickUpdateItem({
+    required _XBlock thisXBlock,
+    required QuickUpdateItemAction<ITEM, ITEM_DETAIL> action,
+  }) async {
+    ApiResult<ITEM_DETAIL> result;
+    try {
+      FlutterArtist.codeFlowLogger._addMethodCall(
+        isLibCode: false,
+        navigate: null,
+        ownerClassInstance: action,
+        methodName: "callApiQuickUpdateItem",
+        parameters: {},
+      );
+      //
+      result = await action.callApiQuickUpdateItem();
+      //
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: '${getClassName(action)}.callApiQuickUpdateItem',
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      //
+      return false;
+    }
+    //
+    try {
+      return await _processSaveActionRestResult(
+        thisXBlock: thisXBlock,
+        calledMethodName: "${getClassName(action)}.callApiQuickUpdateItem",
         result: result,
       );
     } catch (e, stackTrace) {
@@ -2801,7 +2859,6 @@ abstract class Block<
       return false;
     }
     //
-
     _XShelf xShelf = _XShelf(
       shelf: shelf,
       forceDataFilterOpt: null,
@@ -2810,48 +2867,17 @@ abstract class Block<
       forceQueryBlockFormOpts: [],
     );
     //
-    _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
+    _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    ApiResult<ITEM_DETAIL> result;
-    try {
-      FlutterArtist.codeFlowLogger._addMethodCall(
-        isLibCode: false,
-        navigate: null,
-        ownerClassInstance: action,
-        methodName: "callApiQuickUpdateItem",
-        parameters: {},
-      );
-      //
-      result = await action.callApiQuickUpdateItem();
-      //
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: '${getClassName(action)}.callApiQuickUpdateItem',
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      return false;
-    }
+    _TaskUnit taskUnit = _BlockQuickUpdateItemTaskUnit(
+      xBlock: thisXBlock,
+      action: action,
+    );
     //
-    try {
-      return await _processSaveActionRestResult(
-        thisXBlock: thisXBlock,
-        calledMethodName: "${getClassName(action)}.callApiQuickUpdateItem",
-        result: result,
-      );
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: '_processSaveActionRestResult',
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      //
-      return false;
-    }
+    _taskUnitQueue.addTaskUnit(taskUnit);
+    //
+    await this.shelf._executeTaskUnitQueue();
+    return true;
   }
 
   // ***************************************************************************

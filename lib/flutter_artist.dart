@@ -285,6 +285,8 @@ part '_task_unit_/_block_form_task_unit.dart';
 
 part '_task_unit_/_block_quick_create_item_task_unit.dart';
 
+part '_task_unit_/_block_quick_update_item_task_unit.dart';
+
 part '_task_unit_/_block_task_unit.dart';
 
 part '_task_unit_/_save_form_task_unit.dart';
