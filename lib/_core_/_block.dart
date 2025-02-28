@@ -219,20 +219,13 @@ abstract class Block<
           pageSize: __pageSize,
         );
 
-  late final BlockData<
-          ID, //
-          ITEM,
-          ITEM_DETAIL,
-          FILTER_INPUT,
-          FILTER_CRITERIA,
-          EXTRA_FORM_INPUT> data //
-      = _InternalBlockData<
-          ID, //
-          ITEM,
-          ITEM_DETAIL,
-          FILTER_INPUT,
-          FILTER_CRITERIA,
-          EXTRA_FORM_INPUT>.empty(
+  late final data = BlockData<
+      ID, //
+      ITEM,
+      ITEM_DETAIL,
+      FILTER_INPUT,
+      FILTER_CRITERIA,
+      EXTRA_FORM_INPUT>.empty(
     this,
     __pageable,
   );

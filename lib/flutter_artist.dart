@@ -71,8 +71,6 @@ part '_core_/_block.dart';
 
 part '_core_/_block_data.dart';
 
-part '_core_/_block_data_internal.dart';
-
 part '_core_/_block_form.dart';
 
 part '_core_/_block_form_data.dart';

@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-abstract class BlockData<
+class BlockData<
     ID extends Object,
     ITEM extends Object,
     ITEM_DETAIL extends Object,
@@ -92,6 +92,9 @@ abstract class BlockData<
 
   DataState get selectionDataState => _selectionDataState;
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   BlockData({
     required this.block,
     required List<ITEM> items,
@@ -101,6 +104,14 @@ abstract class BlockData<
         _pageable = pageable,
         _pagination = pagination;
 
+  BlockData.empty(
+    this.block,
+    PageableData? pageable,
+  )   : _items = [],
+        _pageable = pageable,
+        _pagination = PaginationData.empty();
+
+  // ***************************************************************************
   // ***************************************************************************
 
   void _clearWithDataState({required DataState queryDataState}) {
@@ -140,17 +151,15 @@ abstract class BlockData<
   }
 
   // ***************************************************************************
-
-  void _backup();
-
-  void _restore();
-
-  void _applyNewState();
+  // ***************************************************************************
 
   void setToPending() {
     print(" --> ${getClassName(block)} --> Set To Pending");
     _queryDataState = DataState.pending;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   /// Set item as current, and no more other actions (Insert, Update list).
@@ -164,6 +173,9 @@ abstract class BlockData<
       itemDetail: refreshedItemDetail,
     );
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _removeItem({
     required ITEM removeItem,
@@ -184,6 +196,9 @@ abstract class BlockData<
       getItemId: block.getItemId,
     );
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _insertOrReplaceItem({
     required ITEM_DETAIL itemDetail,
@@ -209,6 +224,9 @@ abstract class BlockData<
     );
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void __appendItems({required List<ITEM> appendItems}) {
     FormUtils.appendItemsToList(
       appendItems: appendItems,
@@ -229,6 +247,9 @@ abstract class BlockData<
       getItemId: block.getItemId,
     );
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _updateFrom({
     required ListBehavior forceListBehavior,
@@ -273,9 +294,15 @@ abstract class BlockData<
     return _items.firstOrNull;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   ITEM? get lastItem {
     return _items.lastOrNull;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   /// The next item of the current item.
@@ -288,6 +315,9 @@ abstract class BlockData<
     return findNextSiblingItem(item: currentItem!);
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   ///
   /// The previous item of the current item.
   /// Return null if no current item or the current item is the first item.
@@ -299,9 +329,18 @@ abstract class BlockData<
     return findPreviousSiblingItem(item: currentItem!);
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool get hasPreviousItem => previousSiblingItem != null;
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool get hasNextItem => nextSiblingItem != null;
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   /// Check if the first item is current item.
@@ -314,6 +353,9 @@ abstract class BlockData<
     }
     return block.getItemId(first) == block.getItemId(current);
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   /// Check if the last item is current item.
@@ -339,6 +381,9 @@ abstract class BlockData<
     return isSelectedItem(item);
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool isCurrentIndex({required int index}) {
     ITEM? item = findItemByIndex(index);
     if (item == null) {
@@ -347,12 +392,18 @@ abstract class BlockData<
     return isCurrentItem(item: item);
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool isCurrentItem({
     required ITEM item,
   }) {
     ITEM? currIt = __current._item;
     return currIt != null && block.getItemId(item) == block.getItemId(currIt);
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   bool isSelectedItem(ITEM item) {
     return FormUtils.isListContainItem(
@@ -362,6 +413,9 @@ abstract class BlockData<
     );
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool isCheckedItem(ITEM item) {
     return FormUtils.isListContainItem(
       targetList: _checkedItems,
@@ -369,6 +423,9 @@ abstract class BlockData<
       getItemId: block.getItemId,
     );
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   bool containsItem({
     required ITEM item,
@@ -380,6 +437,9 @@ abstract class BlockData<
     );
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   ITEM? findNextSiblingItem({
     required ITEM item,
   }) {
@@ -389,6 +449,9 @@ abstract class BlockData<
       getItemId: block.getItemId,
     );
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ITEM? findPreviousSiblingItem({
     required ITEM item,
@@ -400,6 +463,9 @@ abstract class BlockData<
     );
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   ITEM? findSiblingItem({
     required ITEM item,
   }) {
@@ -410,12 +476,18 @@ abstract class BlockData<
     );
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   ITEM? findItemSameIdWith({
     required ITEM item,
   }) {
     ID id = block.getItemId(item);
     return findItemById(id);
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ITEM? findItemById(ID itemId) {
     return FormUtils.findItemById(
@@ -424,6 +496,9 @@ abstract class BlockData<
       getItemId: block.getItemId,
     );
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ITEM? findItemByIndex(int index) {
     if (index < 0 || index >= _items.length) {
@@ -441,10 +516,16 @@ abstract class BlockData<
     _setCheckedItem(item: item, checked: !checked);
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _toggleSelectItem({required ITEM item}) {
     bool selected = isSelectedItem(item);
     _setSelectedItem(item: item, selected: !selected);
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _setCheckedItem({required ITEM item, required bool checked}) {
     if (checked) {
@@ -454,6 +535,9 @@ abstract class BlockData<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _setSelectedItem({required ITEM item, required bool selected}) {
     if (selected) {
       __selectItem(item);
@@ -462,7 +546,8 @@ abstract class BlockData<
     }
   }
 
-  // ---------------------------------------------------------------------------
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _setCheckedItems({required List<ITEM> items}) {
     FormUtils.insertOrReplaceItemsInList(
@@ -472,6 +557,9 @@ abstract class BlockData<
     );
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _setSelectedItems({required List<ITEM> items}) {
     FormUtils.insertOrReplaceItemsInList(
       items: items,
@@ -480,7 +568,8 @@ abstract class BlockData<
     );
   }
 
-  // ---------------------------------------------------------------------------
+  // ***************************************************************************
+  // ***************************************************************************
 
   void __checkItem(ITEM item) {
     FormUtils.insertOrReplaceItemInList(
@@ -490,6 +579,9 @@ abstract class BlockData<
     );
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void __selectItem(ITEM item) {
     FormUtils.insertOrReplaceItemInList(
       item: item,
@@ -498,7 +590,8 @@ abstract class BlockData<
     );
   }
 
-  // ---------------------------------------------------------------------------
+  // ***************************************************************************
+  // ***************************************************************************
 
   void __uncheckItem(ITEM item) {
     FormUtils.removeItemFromList(
@@ -508,6 +601,9 @@ abstract class BlockData<
     );
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void __deselectItem(ITEM item) {
     FormUtils.removeItemFromList(
       removeItem: item,
@@ -516,21 +612,29 @@ abstract class BlockData<
     );
   }
 
-  // ---------------------------------------------------------------------------
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _uncheckAllItems() {
     _checkedItems.clear();
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _deselectAllItems() {
     _selectedItems.clear();
   }
 
-  // ---------------------------------------------------------------------------
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _checkAllItems() {
     _setCheckedItems(items: _items);
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _selectAllItems() {
     _setSelectedItems(items: _items);
