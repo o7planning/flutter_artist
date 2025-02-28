@@ -50,8 +50,8 @@ class BlockFormData<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _clearWithDataState({required DataState dataState}) {
-    _dataState = dataState;
+  void _clearWithDataState({required DataState formDataState}) {
+    _dataState = formDataState;
     _formMode = FormMode.none;
     //
     _updateFormData({});

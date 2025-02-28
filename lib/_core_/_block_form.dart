@@ -57,12 +57,13 @@ abstract class BlockForm<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _clearWithDataState({required DataState dataState}) {
+  void _clearWithDataState({required DataState formDataState}) {
     try {
-      this.data._clearWithDataState(dataState: dataState);
-      final Map<String, dynamic> newFormData = {};
-      _formKey.currentState?.patchValue(newFormData);
-      print(">>>>>>>>>> patchValue");
+      this.data._clearWithDataState(
+            formDataState: formDataState,
+          );
+      //
+      this.__clearFormKey();
       //
       updateAllUIComponents(); // TODO: Xu ly loi?
       block.updateControlBarWidgets();
@@ -75,6 +76,18 @@ abstract class BlockForm<
         showSnackBar: true,
       );
     }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __clearFormKey() {
+    final Map<String, dynamic> instantValues =
+        this._formKey.currentState?.instantValue ?? {};
+    //
+    final Map<String, dynamic> newFormData = {...instantValues}
+      ..updateAll((k, v) => null);
+    this._formKey.currentState?.patchValue(newFormData);
   }
 
   // ***************************************************************************
@@ -199,7 +212,7 @@ abstract class BlockForm<
     //
     if (error) {
       this.data._clearWithDataState(
-            dataState: DataState.error,
+            formDataState: DataState.error,
           );
       return false;
     }
@@ -225,7 +238,7 @@ abstract class BlockForm<
     //
     if (error) {
       this.data._clearWithDataState(
-            dataState: DataState.error,
+            formDataState: DataState.error,
           );
       return false;
     }
@@ -259,7 +272,7 @@ abstract class BlockForm<
     //
     if (error) {
       this.data._clearWithDataState(
-            dataState: DataState.error,
+            formDataState: DataState.error,
           );
       return false;
     }

@@ -284,7 +284,7 @@ abstract class Block<
     //
     this.data._clearWithDataState(queryDataState: queryDataState);
     if (blockForm != null) {
-      blockForm!._clearWithDataState(dataState: formDataState);
+      blockForm!._clearWithDataState(formDataState: formDataState);
     }
   }
 
@@ -1258,42 +1258,30 @@ abstract class Block<
       return true;
     }
     print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 5");
-
+    //
     // Deleted current item ==> find sibling.
+    //
     final ITEM? sibling = this.data.findSiblingItem(item: item);
-    // Remove Item
+    // Remove Item (Current Item)
     __removeItemFromList(removeItem: item);
     if (this.blockForm != null) {
+      // Clear Form:
       this.blockForm!._clearWithDataState(
-            dataState: DataState.ready,
+            formDataState: DataState.ready,
           );
     }
+    //
     __clearChildrenWithDataStateCascade(
       thisXBlock: thisXBlock,
       queryDataState: DataState.ready,
       formDataState: DataState.ready,
     );
+    // TODO: Select specified Item????
+    _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit(
+      xBlock: thisXBlock,
+    );
+    _taskUnitQueue.addTaskUnit(taskUnit);
     //
-    if (sibling != null) {
-      bool success = await __prepareToShowOrEdit(
-        thisXBlock: thisXBlock,
-        item: sibling,
-        justQueried: false,
-        forceForm: false,
-      );
-      if (!success) {
-        return false;
-      }
-    } else {
-      bool success = await _switchThisAndChildrenToNoneMode(
-        thisXBlock: thisXBlock,
-        clearListForThis: false,
-        dataState: DataState.ready,
-      );
-      if (!success) {
-        return false;
-      }
-    }
     return true;
   }
 
