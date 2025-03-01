@@ -86,8 +86,7 @@ abstract class Scalar<
     }
   }
 
-  late final ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA> data =
-      ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
+  late final data = ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
 
   DataState get dataState => data._dataState;
 
@@ -95,6 +94,9 @@ abstract class Scalar<
 
   final Map<_RefreshableWidgetState, bool> _scalarFragmentWidgetStates = {};
   final Map<_RefreshableWidgetState, bool> _scalarControlWidgetStates = {};
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Scalar({
     required this.name,
@@ -225,6 +227,7 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
+  @Deprecated("Xoa di, khong su dung nua")
   Future<bool>
       _executeQuickActionWithOverlayAndRestorable<DATA extends Object>({
     required FILTER_INPUT? filterInput,
@@ -258,6 +261,7 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
+  @Deprecated("Xoa di, khong su dung nua")
   Future<bool> __executeQuickActionWithRestorable<DATA extends Object>({
     required FILTER_INPUT? filterInput,
     required QuickAction<DATA> action,
@@ -287,7 +291,6 @@ abstract class Scalar<
     );
     //
     try {
-      //
       _XScalar thisXScalar = xShelf.findXScalarByName(name)!;
       //
       bool success = await __executeQuickAction(
@@ -312,6 +315,7 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
+  @Deprecated("Xoa di, khong su dung nua")
   Future<bool> __executeQuickAction<DATA extends Object>({
     required _XScalar thisXScalar,
     required QuickAction<DATA> action,
@@ -439,6 +443,9 @@ abstract class Scalar<
       forceQueryBlockFormOpts: [],
     );
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void __refreshQueryingState({required bool isQuerying}) {
     try {
