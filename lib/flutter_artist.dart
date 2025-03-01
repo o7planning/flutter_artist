@@ -261,6 +261,8 @@ part '_enum_/_sorting_direction.dart';
 
 part '_enum_/_task_unit_result.dart';
 
+part '_enum_/_select_item_as_current_result.dart';
+
 part '_hive_/_hive_utils.dart';
 
 part '_icon_/_icon_constants.dart';
@@ -408,3 +410,10 @@ part '_utils_/_tooltip_utils.dart';
 part '_utils_/_utils.dart';
 
 part '_utils_/_visibility_detector_utils.dart';
+
+// *****************************************************************************
+// *****************************************************************************
+
+class RootMethod {
+  const RootMethod();
+}
