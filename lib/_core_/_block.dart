@@ -1055,6 +1055,9 @@ abstract class Block<
       return;
     }
     //
+    // newCurrent || forceReloadItem
+    //
+    //
     // If no item can be current.
     //
     if (candidateCurrentItem == null) {
@@ -1068,7 +1071,7 @@ abstract class Block<
     //
     // (newCurrent || forceReloadItem) && candidateCurrentItem !=null
     //
-    bool isCandidateIsCurrent = this.data.isCurrentItem(
+    final bool isCandidateIsCurrent = this.data.isCurrentItem(
           item: candidateCurrentItem,
         );
     bool isLoadItemError = false;
@@ -1177,6 +1180,8 @@ abstract class Block<
     //
     // candidateCurrentItemDetail != null
     //
+    print(
+        "@~~~~~~~~~~~~~~~~~~~~~~~~~> 9: candidateCurrentItemDetail: $candidateCurrentItemDetail");
     bool convertItemError = false;
     try {
       candidateCurrentItem = this.__convertItemDetailToItem(
@@ -1199,6 +1204,8 @@ abstract class Block<
       return;
     }
     //
+    print(
+        "@~~~~~~~~~~~~~~~~~~~~~~~~~> 10: candidateCurrentItemDetail: $candidateCurrentItemDetail");
     this.data._selectionDataState = DataState.ready;
     this.data._setCurrentItemOnly(
           refreshedItem: candidateCurrentItem,
@@ -1221,8 +1228,10 @@ abstract class Block<
         ),
       );
     }
+    print("@~~~~~~~~~~~~~~~~~~~~~~~~~> 11: queryChild!!");
     //
     for (_XBlock childXBlock in thisXBlock.childXBlocks) {
+      print("@~~~~~~~~~~~~~~~~~~~~~~~~~> 12: queryChild: $childXBlock");
       _taskUnitQueue.addTaskUnit(
         _BlockQueryTaskUnit(
           xBlock: childXBlock,
@@ -1744,7 +1753,7 @@ abstract class Block<
     );
     _taskUnitQueue.addTaskUnit(taskUnit);
     //
-    this.shelf._executeTaskUnitQueue();
+    await this.shelf._executeTaskUnitQueue();
     return true;
   }
 
@@ -2840,7 +2849,6 @@ abstract class Block<
     _taskUnitQueue.addTaskUnit(taskUnit);
     //
     await this.shelf._executeTaskUnitQueue();
-
     return true;
   }
 
