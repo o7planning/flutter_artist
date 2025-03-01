@@ -207,8 +207,8 @@ class BlockData<
   // ***************************************************************************
 
   void _insertOrReplaceItem({
-    required ITEM_DETAIL itemDetail,
     required ITEM item,
+    required ITEM_DETAIL itemDetail,
   }) {
     FormUtils.insertOrReplaceItemInList(
       targetList: _items,
