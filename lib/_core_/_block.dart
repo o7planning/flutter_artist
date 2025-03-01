@@ -823,7 +823,13 @@ abstract class Block<
     print(
         ">> ${getClassName(this)}._unitQuery - queryState: $queryDataState, forceQuery: ${thisXBlock.forceQuery}");
     //
-    if (this.queryDataState == DataState.ready && !thisXBlock.forceQuery) {
+    bool hasActiveUI = this.hasActiveUIComponent();
+
+    if (!hasActiveUI && !thisXBlock.forceQuery) {
+      return true;
+    }
+
+    if (this.queryDataState == DataState.ready) {
       _taskUnitQueue.addTaskUnit(
         _BlockSelectAsCurrentTaskUnit<ITEM>(
           xBlock: thisXBlock,
@@ -834,7 +840,7 @@ abstract class Block<
       return true;
     }
     //
-    // this.queryDataState != DataState.ready || thisXBlock.forceQuery
+    // this.queryDataState != DataState.ready || forceQuery
     //
     DataState newQueryDataState = this.queryDataState;
     //
@@ -1180,8 +1186,6 @@ abstract class Block<
     //
     // candidateCurrentItemDetail != null
     //
-    print(
-        "@~~~~~~~~~~~~~~~~~~~~~~~~~> 9: candidateCurrentItemDetail: $candidateCurrentItemDetail");
     bool convertItemError = false;
     try {
       candidateCurrentItem = this.__convertItemDetailToItem(
@@ -1204,8 +1208,6 @@ abstract class Block<
       return;
     }
     //
-    print(
-        "@~~~~~~~~~~~~~~~~~~~~~~~~~> 10: candidateCurrentItemDetail: $candidateCurrentItemDetail");
     this.data._selectionDataState = DataState.ready;
     this.data._setCurrentItemOnly(
           refreshedItem: candidateCurrentItem,
@@ -1228,10 +1230,8 @@ abstract class Block<
         ),
       );
     }
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~> 11: queryChild!!");
     //
     for (_XBlock childXBlock in thisXBlock.childXBlocks) {
-      print("@~~~~~~~~~~~~~~~~~~~~~~~~~> 12: queryChild: $childXBlock");
       _taskUnitQueue.addTaskUnit(
         _BlockQueryTaskUnit(
           xBlock: childXBlock,
