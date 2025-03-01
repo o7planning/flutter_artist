@@ -6,8 +6,9 @@ class _XBlock {
 
   bool affectByFilterInput = false;
   final Block block;
-
   final _XDataFilter xDataFilter;
+
+  String get name => block.name;
 
   // Query Options:
   QueryType? __queryType;
@@ -120,7 +121,14 @@ class _XBlock {
     __pageable = pageable;
   }
 
-  String get name => block.name;
+  void printParameters() {
+    print("  - queryType: $__queryType");
+    print("  - forceQuery: $__forceQuery");
+    print("  - forceReloadItem: $__forceReloadItem");
+    print("  - listBehavior: $__listBehavior");
+    print("  - postQueryBehavior: $__postQueryBehavior");
+    print("  - pageable: $__pageable");
+  }
 
   @override
   String toString() {
