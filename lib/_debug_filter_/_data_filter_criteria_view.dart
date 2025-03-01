@@ -24,12 +24,11 @@ class _DataFilterCriteriaView extends StatelessWidget {
           _BlocksScalarsView(
             dataFilter: dataFilter,
           ),
-          if (criteriaClassName != null) Divider(),
-          if (criteriaClassName != null)
-            _CriteriaValuesView(
-              filterCriteria: filterCriteria,
-              filterCriteriaPath: "$dataFilterClassName.filterCriteria",
-            ),
+          Divider(),
+          _CriteriaValuesView(
+            filterCriteria: filterCriteria,
+            filterCriteriaPath: "$dataFilterClassName.filterCriteria",
+          ),
         ],
       ),
     );
