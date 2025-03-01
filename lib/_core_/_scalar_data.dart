@@ -29,6 +29,29 @@ class ScalarData<
   // ***************************************************************************
   // ***************************************************************************
 
+  void _clearWithDataState({required DataState queryDataState}) {
+    _queryDataState = queryDataState;
+    _value = null;
+    _filterCriteria = null; // ???
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool _isXCriteriaChanged({
+    required FILTER_CRITERIA newFilterCriteria,
+  }) {
+    if (newFilterCriteria != _filterCriteria) {
+      return true;
+    }
+    return false;
+  }
+
+
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void setToPending() {
     _queryDataState = DataState.pending;
   }
@@ -38,11 +61,11 @@ class ScalarData<
 
   void _updateFrom({
     required FILTER_CRITERIA? filterCriteria,
-    required VALUE? data,
+    required VALUE? value,
     required DataState dataState,
   }) {
     _filterCriteria = filterCriteria;
-    _value = data;
+    _value = value;
     _queryDataState = dataState;
   }
 }

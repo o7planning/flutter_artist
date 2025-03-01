@@ -119,8 +119,134 @@ abstract class Scalar<
     if (this.queryDataState == DataState.ready && !thisXScalar.needQuery) {
       return true;
     }
-
+    //
+    // this.queryDataState != DataState.ready || thisXScalar.forceQuery
+    //
+    DataState newQueryDataState = this.queryDataState;
+    //
+    FlutterArtist.codeFlowLogger._addMethodCall(
+      isLibCode: false,
+      navigate: null,
+      ownerClassInstance: this,
+      methodName: "callApiQuery",
+      parameters: {},
+    );
+    //
+    FILTER_CRITERIA? filterCriteria;
+    try {
+      final _XDataFilter xDataFilter = thisXScalar.xDataFilter;
+      final DataFilter dataFilter = xDataFilter.dataFilter;
+      //
+      if (!xDataFilter.queried) {
+        FILTER_INPUT? filterInput = xDataFilter.filterInput as FILTER_INPUT?;
+        //
+        filterCriteria = await dataFilter._prepareData(
+          filterInput: filterInput,
+        ) as FILTER_CRITERIA?;
+        //
+        xDataFilter.queried = true;
+      } else {
+        filterCriteria = dataFilter._filterCriteria! as FILTER_CRITERIA;
+      }
+    } catch (e, stackTrace) {
+      /* Never Error */
+    }
+    //
+    // Has Error in DataFilter.
+    //
+    if (filterCriteria == null) {
+      // Set Block to error cascade.
+      __clearWithDataState(
+        thisXScalar: thisXScalar,
+        queryDataState: DataState.error,
+      );
+      return false;
+    }
+    //
+    // Ready FilterCriteria:
+    //
+    bool xCriteriaChanged = this.data._isXCriteriaChanged(
+          newFilterCriteria: filterCriteria,
+        );
+    //
+    bool isQueryError = false;
+    VALUE? value;
+    try {
+      __refreshQueryingState(isQuerying: true);
+      //
+      ApiResult<VALUE> result = await callApiQuery(
+        filterCriteria: filterCriteria,
+      );
+      //
+      if (result.isError()) {
+        _handleRestError(
+          shelf: shelf,
+          methodName: "callApiQuery",
+          message: result.errorMessage!,
+          errorDetails: result.errorDetails,
+          showSnackBar: true,
+        );
+        isQueryError = true;
+      } else {
+        value = result.data;
+      }
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: 'callApiQuery',
+        error: "Error callApiQuery: $e",
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      isQueryError = true;
+    } finally {
+      __refreshQueryingState(isQuerying: false);
+    }
+    //
+    if (isQueryError) {
+      newQueryDataState = DataState.error;
+    } else {
+      newQueryDataState = DataState.ready;
+    }
+    //
+    __setQueryDataWithState(
+      thisXScalar: thisXScalar,
+      filterCriteria: filterCriteria,
+      dataState: newQueryDataState,
+      value: value,
+    );
+    //
     return true;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __setQueryDataWithState({
+    required _XScalar thisXScalar,
+    required FILTER_CRITERIA? filterCriteria,
+    required DataState dataState,
+    required VALUE? value,
+  }) {
+    __assertThisXScalar(thisXScalar);
+    //
+    this.data._updateFrom(
+          filterCriteria: filterCriteria,
+          dataState: dataState,
+          value: value,
+        );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __clearWithDataState({
+    required _XScalar thisXScalar,
+    required DataState queryDataState,
+  }) {
+    __assertThisXScalar(thisXScalar);
+    //
+    this.data._clearWithDataState(queryDataState: queryDataState);
   }
 
   // ***************************************************************************

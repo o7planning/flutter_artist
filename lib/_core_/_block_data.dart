@@ -100,14 +100,14 @@ class BlockData<
   // ***************************************************************************
   // ***************************************************************************
 
-  BlockData({
-    required this.block,
-    required List<ITEM> items,
-    required PaginationData? pagination,
-    required PageableData? pageable,
-  })  : _items = items,
-        _pageable = pageable,
-        _pagination = pagination;
+  // BlockData({
+  //   required this.block,
+  //   required List<ITEM> items,
+  //   required PaginationData? pagination,
+  //   required PageableData? pageable,
+  // })  : _items = items,
+  //       _pageable = pageable,
+  //       _pagination = pagination;
 
   BlockData.empty(
     this.block,
@@ -126,6 +126,7 @@ class BlockData<
     _checkedItems.clear();
     _setCurrentItemOnly(refreshedItem: null, refreshedItemDetail: null);
     _lastQueryResult = null;
+    _filterCriteria = null; // ??
   }
 
   // ***************************************************************************

@@ -950,14 +950,6 @@ abstract class Block<
       newQueryDataState = DataState.ready;
     }
     //
-    thisXBlock.setState(
-      candidateCurrentItem: candidateCurrentItem,
-      stateCurrentItem: this.data.currentItem,
-      stateCurrentItemDetail: this.data.currentItemDetail,
-      stateSelectedItems: this.data._selectedItems,
-      stateCheckedItems: this.data._checkedItems,
-    );
-    //
     __setQueryDataWithStateCascade(
       thisXBlock: thisXBlock,
       filterCriteria: filterCriteria,
@@ -969,11 +961,19 @@ abstract class Block<
       // TODO XEM LAI ?????????????????????????????
       formDataState: DataState.pending,
     );
-
     //
-    // Add TaskUnit
+    // Add TaskUnit:
+    // - Find Item to Select as Current:
     //
     if (newQueryDataState == DataState.ready) {
+      thisXBlock.setState(
+        candidateCurrentItem: candidateCurrentItem,
+        stateCurrentItem: this.data.currentItem,
+        stateCurrentItemDetail: this.data.currentItemDetail,
+        stateSelectedItems: this.data._selectedItems,
+        stateCheckedItems: this.data._checkedItems,
+      );
+      //
       _taskUnitQueue.addTaskUnit(
         _BlockSelectAsCurrentTaskUnit<ITEM>(
           xBlock: thisXBlock,
