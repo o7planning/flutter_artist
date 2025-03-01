@@ -1668,16 +1668,49 @@ abstract class Block<
         itemDetail: savedItemDetail,
       );
       final ITEM? removeItem = savedItem ?? this.data.currentItem;
-
-      if (removeItem != null) {
-        bool success = await __removeNotFoundItemAndSelectSibling(
-          thisXBlock: thisXBlock,
-          notFoundItem: removeItem,
-        );
-        if (!success) {
-          return false;
-        }
+      if (removeItem == null) {
+        // TODO: Xem lai.
+        return false;
       }
+      //
+      // removeItem != null
+      //
+      bool isCurrent = this.data.isCurrentItem(item: removeItem);
+      if (!isCurrent) {
+        await __removeItemFromList(removeItem: removeItem);
+        return true;
+      }
+      //
+      // Deleted current item ==> find sibling.
+      //
+      final ITEM? siblingItem = this.data.findSiblingItem(item: removeItem);
+      // Remove Item (Current Item)
+      await __removeItemFromList(removeItem: removeItem);
+      this.data._setCurrentItemOnly(
+            refreshedItem: null,
+            refreshedItemDetail: null,
+          );
+      //
+      if (this.blockForm != null) {
+        // Clear Form:
+        this.blockForm!._clearWithDataState(
+              formDataState: DataState.ready,
+            );
+      }
+      //
+      __clearChildrenWithDataStateCascade(
+        thisXBlock: thisXBlock,
+        queryDataState: DataState.ready,
+        formDataState: DataState.ready,
+      );
+      //
+      _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit(
+        xBlock: thisXBlock,
+        candidateItem: siblingItem,
+        forceForm: null,
+      );
+      _taskUnitQueue.addTaskUnit(taskUnit);
+      //
       return true;
     }
   }
@@ -2043,255 +2076,255 @@ abstract class Block<
 
   // Cascade query:
   // Private method (Only for use in this class)
-  @Deprecated("Khong su dung nua, xoa di")
-  Future<bool> _queryThisAndChildren({
-    required _XBlock thisXBlock,
-  }) async {
-    __assertThisXBlock(thisXBlock);
-    //
-    bool needToQry = thisXBlock.forceQuery;
-    if (!needToQry) {
-      needToQry = thisXBlock.block._needToQuery();
-    }
-    if (!needToQry) {
-      // Query child blocks:
-      for (_XBlock childXBlock in thisXBlock.childXBlocks) {
-        bool success = await childXBlock.block._queryThisAndChildren(
-          thisXBlock: childXBlock,
-        );
-        if (!success) {
-          return false;
-        }
-      }
-      return true;
-    }
-    // Force Query this Block:
-    final _XDataFilter xDataFilter = thisXBlock.xDataFilter;
-    final DataFilter dataFilter = xDataFilter.dataFilter;
-    //
-    final FILTER_CRITERIA filterCriteria;
-    //
-    printLog(
-        "\n${getClassName(this)} ~~~~~~~~~~~~> dataFilter: ${xDataFilter}");
-    if (!xDataFilter.queried) {
-      printLog(
-          "${getClassName(this)} ~~~~~~~~~~~~> execute dataFilter: ${getClassName(xDataFilter.dataFilter)}");
-
-      FILTER_INPUT? filterInput = xDataFilter.filterInput as FILTER_INPUT?;
-      printLog(
-          "${getClassName(this)} ~~~~~~~~~~~~> filterInput: ${filterInput}");
-      //
-      FILTER_CRITERIA? newCriteria = await dataFilter._prepareData(
-        filterInput: filterInput,
-      ) as FILTER_CRITERIA?;
-
-      if (newCriteria == null) {
-        return false;
-      }
-      filterCriteria = newCriteria;
-      xDataFilter.queried = true;
-    } else {
-      filterCriteria = dataFilter._filterCriteria! as FILTER_CRITERIA;
-    }
-    //
-    final QueryType queryType = thisXBlock.queryType;
-    final ListBehavior listBehavior = thisXBlock.listBehavior;
-    final PostQueryBehavior postQueryBehavior = thisXBlock.postQueryBehavior;
-    final SuggestedSelection? suggestedSelection =
-        thisXBlock.suggestedSelection;
-
-    final PageableData? pageable = thisXBlock.pageable;
-    //
-    printLog(
-        "${getClassName(this)} ~~~~~~~~~~~~> needQuery: ${thisXBlock.forceQuery} - queryType: ${queryType}");
-    //
-    bool needRealQuery = false;
-    ListBehavior forceListBehavior = listBehavior;
-    switch (queryType) {
-      case QueryType.clear:
-        {
-          needRealQuery = false;
-          forceListBehavior = ListBehavior.replace;
-        }
-      case QueryType.forceQuery:
-        {
-          needRealQuery = true;
-        }
-      case QueryType.queryIfNeed:
-        {
-          bool guiActive = hasActiveUIComponent();
-          if (guiActive) {
-            needRealQuery = true;
-          } else {
-            needRealQuery = false;
-          }
-        }
-    }
-    //
-    printLog(
-        "${getClassName(this)} ~~~~~~~~~~~~> needRealQuery: ${needRealQuery}");
-    //
-    PageData<ID, ITEM>? pageData;
-    DataState dataState = DataState.pending;
-    //
-    PageableData callingPageable;
-    if (needRealQuery) {
-      callingPageable =
-          pageable ?? __pageable ?? const PageableData(page: 1, pageSize: null);
-      //
-      ApiResult<PageData<ID, ITEM>?> result;
-      try {
-        FlutterArtist.codeFlowLogger._addMethodCall(
-          isLibCode: false,
-          navigate: null,
-          ownerClassInstance: this,
-          methodName: "callApiQuery",
-          parameters: {},
-        );
-        //
-        __refreshQueryingState(isQuerying: true);
-        //
-        printLog("${getClassName(this)} ~~~~~~~~~~~~> callApiQuery");
-        result = await callApiQuery(
-          filterCriteria: filterCriteria,
-          pageable: callingPageable,
-        );
-        //
-        __refreshQueryingState(isQuerying: false);
-      } catch (e, stackTrace) {
-        __refreshQueryingState(isQuerying: false);
-        //
-        _handleError(
-          shelf: shelf,
-          methodName: "callApiQuery",
-          error: e,
-          stackTrace: stackTrace,
-          showSnackBar: true,
-        );
-        //
-        return false;
-      }
-      if (result.errorMessage != null) {
-        _handleRestError(
-          shelf: shelf,
-          methodName: "callApiQuery",
-          message: result.errorMessage!,
-          errorDetails: result.errorDetails,
-          showSnackBar: true,
-        );
-        return false;
-      }
-      pageData = result.data;
-      dataState = DataState.ready;
-
-      printLog(
-          "${getClassName(this)} ~~~~~~~~~~~~> callApiQuery/itemCount = ${pageData?.items.length}");
-    }
-    // needRealQuery = false
-    else {
-      forceListBehavior = ListBehavior.replace;
-      callingPageable = __pageable ??
-          const PageableData(
-            page: 1,
-            pageSize: null,
-          );
-      pageData = DefaultPageData<ID, ITEM>.empty(
-        getItemId: getItemId,
-      );
-      dataState = DataState.pending;
-    }
-    //
-    Object? currentParentItem = parentItemId;
-    this.data._updateFrom(
-          forceListBehavior: forceListBehavior,
-          currentParentItemId: currentParentItem,
-          filterCriteria: filterCriteria,
-          pageable: callingPageable,
-          pageData: pageData,
-          dataState: dataState,
-        );
-    //
-    printLog(
-        "${getClassName(this)} ~~~~~~~~~~~~> postQueryBehavior: ${postQueryBehavior}");
-    printLog(
-        "${getClassName(this)} ~~~~~~~~~~~~> suggestedSelection: ${suggestedSelection}");
-    //
-    switch (postQueryBehavior) {
-      case PostQueryBehavior.selectAvailableItem:
-      case PostQueryBehavior.selectAvailableItemToEdit:
-        // OLD Current Item
-        ITEM? suggestedCurrentItem = this.data.currentItem;
-        if (suggestedSelection != null &&
-            suggestedSelection.itemIdToSetAsCurrent != null) {
-          suggestedCurrentItem = this.data.findItemById(
-                suggestedSelection.itemIdToSetAsCurrent!,
-              );
-        }
-
-        ITEM? itemWithSameId = suggestedCurrentItem == null
-            ? null
-            : this.data.findItemSameIdWith(item: suggestedCurrentItem);
-
-        //
-        printLog(
-            "${getClassName(this)} ~~~~~~~~~~~~> itemWithSameId: ${itemWithSameId}");
-
-        if (itemWithSameId == null) {
-          // Find first Item...
-          ITEM? firstItem = this.data.firstItem;
-          printLog(
-              "${getClassName(this)} ~~~~~~~~~~~~> firstItem: ${firstItem}");
-          if (firstItem != null) {
-            bool success = await __prepareToShowOrEdit(
-              thisXBlock: thisXBlock,
-              item: firstItem,
-              justQueried: true,
-              forceForm: postQueryBehavior ==
-                  PostQueryBehavior.selectAvailableItemToEdit,
-            );
-            if (!success) {
-              return false;
-            }
-          } else {
-            bool success = await _switchThisAndChildrenToNoneMode(
-              thisXBlock: thisXBlock,
-              clearListForThis: false,
-              dataState: dataState,
-            );
-            if (!success) {
-              return false;
-            }
-          }
-          //
-          return true;
-        } else {
-          printLog(
-              "${getClassName(this)} ~~~~~~~~~~~~> __prepareToShowOrEdit($itemWithSameId)");
-          bool success = await __prepareToShowOrEdit(
-            thisXBlock: thisXBlock,
-            item: itemWithSameId,
-            justQueried: true,
-            forceForm: postQueryBehavior ==
-                PostQueryBehavior.selectAvailableItemToEdit,
-          );
-          if (!success) {
-            return false;
-          }
-          return true;
-        }
-      case PostQueryBehavior.createNewItem:
-        this.data._queryDataState = DataState.ready;
-        // Create New Item
-        bool success = await __prepareToCreate(
-          thisXBlock: thisXBlock,
-          extraFormInput: null,
-        );
-        if (!success) {
-          return false;
-        }
-        return true;
-    }
-  }
+  // @Deprecated("Khong su dung nua, xoa di")
+  // Future<bool> _queryThisAndChildren({
+  //   required _XBlock thisXBlock,
+  // }) async {
+  //   __assertThisXBlock(thisXBlock);
+  //   //
+  //   bool needToQry = thisXBlock.forceQuery;
+  //   if (!needToQry) {
+  //     needToQry = thisXBlock.block._needToQuery();
+  //   }
+  //   if (!needToQry) {
+  //     // Query child blocks:
+  //     for (_XBlock childXBlock in thisXBlock.childXBlocks) {
+  //       bool success = await childXBlock.block._queryThisAndChildren(
+  //         thisXBlock: childXBlock,
+  //       );
+  //       if (!success) {
+  //         return false;
+  //       }
+  //     }
+  //     return true;
+  //   }
+  //   // Force Query this Block:
+  //   final _XDataFilter xDataFilter = thisXBlock.xDataFilter;
+  //   final DataFilter dataFilter = xDataFilter.dataFilter;
+  //   //
+  //   final FILTER_CRITERIA filterCriteria;
+  //   //
+  //   printLog(
+  //       "\n${getClassName(this)} ~~~~~~~~~~~~> dataFilter: ${xDataFilter}");
+  //   if (!xDataFilter.queried) {
+  //     printLog(
+  //         "${getClassName(this)} ~~~~~~~~~~~~> execute dataFilter: ${getClassName(xDataFilter.dataFilter)}");
+  //
+  //     FILTER_INPUT? filterInput = xDataFilter.filterInput as FILTER_INPUT?;
+  //     printLog(
+  //         "${getClassName(this)} ~~~~~~~~~~~~> filterInput: ${filterInput}");
+  //     //
+  //     FILTER_CRITERIA? newCriteria = await dataFilter._prepareData(
+  //       filterInput: filterInput,
+  //     ) as FILTER_CRITERIA?;
+  //
+  //     if (newCriteria == null) {
+  //       return false;
+  //     }
+  //     filterCriteria = newCriteria;
+  //     xDataFilter.queried = true;
+  //   } else {
+  //     filterCriteria = dataFilter._filterCriteria! as FILTER_CRITERIA;
+  //   }
+  //   //
+  //   final QueryType queryType = thisXBlock.queryType;
+  //   final ListBehavior listBehavior = thisXBlock.listBehavior;
+  //   final PostQueryBehavior postQueryBehavior = thisXBlock.postQueryBehavior;
+  //   final SuggestedSelection? suggestedSelection =
+  //       thisXBlock.suggestedSelection;
+  //
+  //   final PageableData? pageable = thisXBlock.pageable;
+  //   //
+  //   printLog(
+  //       "${getClassName(this)} ~~~~~~~~~~~~> needQuery: ${thisXBlock.forceQuery} - queryType: ${queryType}");
+  //   //
+  //   bool needRealQuery = false;
+  //   ListBehavior forceListBehavior = listBehavior;
+  //   switch (queryType) {
+  //     case QueryType.clear:
+  //       {
+  //         needRealQuery = false;
+  //         forceListBehavior = ListBehavior.replace;
+  //       }
+  //     case QueryType.forceQuery:
+  //       {
+  //         needRealQuery = true;
+  //       }
+  //     case QueryType.queryIfNeed:
+  //       {
+  //         bool guiActive = hasActiveUIComponent();
+  //         if (guiActive) {
+  //           needRealQuery = true;
+  //         } else {
+  //           needRealQuery = false;
+  //         }
+  //       }
+  //   }
+  //   //
+  //   printLog(
+  //       "${getClassName(this)} ~~~~~~~~~~~~> needRealQuery: ${needRealQuery}");
+  //   //
+  //   PageData<ID, ITEM>? pageData;
+  //   DataState dataState = DataState.pending;
+  //   //
+  //   PageableData callingPageable;
+  //   if (needRealQuery) {
+  //     callingPageable =
+  //         pageable ?? __pageable ?? const PageableData(page: 1, pageSize: null);
+  //     //
+  //     ApiResult<PageData<ID, ITEM>?> result;
+  //     try {
+  //       FlutterArtist.codeFlowLogger._addMethodCall(
+  //         isLibCode: false,
+  //         navigate: null,
+  //         ownerClassInstance: this,
+  //         methodName: "callApiQuery",
+  //         parameters: {},
+  //       );
+  //       //
+  //       __refreshQueryingState(isQuerying: true);
+  //       //
+  //       printLog("${getClassName(this)} ~~~~~~~~~~~~> callApiQuery");
+  //       result = await callApiQuery(
+  //         filterCriteria: filterCriteria,
+  //         pageable: callingPageable,
+  //       );
+  //       //
+  //       __refreshQueryingState(isQuerying: false);
+  //     } catch (e, stackTrace) {
+  //       __refreshQueryingState(isQuerying: false);
+  //       //
+  //       _handleError(
+  //         shelf: shelf,
+  //         methodName: "callApiQuery",
+  //         error: e,
+  //         stackTrace: stackTrace,
+  //         showSnackBar: true,
+  //       );
+  //       //
+  //       return false;
+  //     }
+  //     if (result.errorMessage != null) {
+  //       _handleRestError(
+  //         shelf: shelf,
+  //         methodName: "callApiQuery",
+  //         message: result.errorMessage!,
+  //         errorDetails: result.errorDetails,
+  //         showSnackBar: true,
+  //       );
+  //       return false;
+  //     }
+  //     pageData = result.data;
+  //     dataState = DataState.ready;
+  //
+  //     printLog(
+  //         "${getClassName(this)} ~~~~~~~~~~~~> callApiQuery/itemCount = ${pageData?.items.length}");
+  //   }
+  //   // needRealQuery = false
+  //   else {
+  //     forceListBehavior = ListBehavior.replace;
+  //     callingPageable = __pageable ??
+  //         const PageableData(
+  //           page: 1,
+  //           pageSize: null,
+  //         );
+  //     pageData = DefaultPageData<ID, ITEM>.empty(
+  //       getItemId: getItemId,
+  //     );
+  //     dataState = DataState.pending;
+  //   }
+  //   //
+  //   Object? currentParentItem = parentItemId;
+  //   this.data._updateFrom(
+  //         forceListBehavior: forceListBehavior,
+  //         currentParentItemId: currentParentItem,
+  //         filterCriteria: filterCriteria,
+  //         pageable: callingPageable,
+  //         pageData: pageData,
+  //         dataState: dataState,
+  //       );
+  //   //
+  //   printLog(
+  //       "${getClassName(this)} ~~~~~~~~~~~~> postQueryBehavior: ${postQueryBehavior}");
+  //   printLog(
+  //       "${getClassName(this)} ~~~~~~~~~~~~> suggestedSelection: ${suggestedSelection}");
+  //   //
+  //   switch (postQueryBehavior) {
+  //     case PostQueryBehavior.selectAvailableItem:
+  //     case PostQueryBehavior.selectAvailableItemToEdit:
+  //       // OLD Current Item
+  //       ITEM? suggestedCurrentItem = this.data.currentItem;
+  //       if (suggestedSelection != null &&
+  //           suggestedSelection.itemIdToSetAsCurrent != null) {
+  //         suggestedCurrentItem = this.data.findItemById(
+  //               suggestedSelection.itemIdToSetAsCurrent!,
+  //             );
+  //       }
+  //
+  //       ITEM? itemWithSameId = suggestedCurrentItem == null
+  //           ? null
+  //           : this.data.findItemSameIdWith(item: suggestedCurrentItem);
+  //
+  //       //
+  //       printLog(
+  //           "${getClassName(this)} ~~~~~~~~~~~~> itemWithSameId: ${itemWithSameId}");
+  //
+  //       if (itemWithSameId == null) {
+  //         // Find first Item...
+  //         ITEM? firstItem = this.data.firstItem;
+  //         printLog(
+  //             "${getClassName(this)} ~~~~~~~~~~~~> firstItem: ${firstItem}");
+  //         if (firstItem != null) {
+  //           bool success = await __prepareToShowOrEdit(
+  //             thisXBlock: thisXBlock,
+  //             item: firstItem,
+  //             justQueried: true,
+  //             forceForm: postQueryBehavior ==
+  //                 PostQueryBehavior.selectAvailableItemToEdit,
+  //           );
+  //           if (!success) {
+  //             return false;
+  //           }
+  //         } else {
+  //           bool success = await _switchThisAndChildrenToNoneMode(
+  //             thisXBlock: thisXBlock,
+  //             clearListForThis: false,
+  //             dataState: dataState,
+  //           );
+  //           if (!success) {
+  //             return false;
+  //           }
+  //         }
+  //         //
+  //         return true;
+  //       } else {
+  //         printLog(
+  //             "${getClassName(this)} ~~~~~~~~~~~~> __prepareToShowOrEdit($itemWithSameId)");
+  //         bool success = await __prepareToShowOrEdit(
+  //           thisXBlock: thisXBlock,
+  //           item: itemWithSameId,
+  //           justQueried: true,
+  //           forceForm: postQueryBehavior ==
+  //               PostQueryBehavior.selectAvailableItemToEdit,
+  //         );
+  //         if (!success) {
+  //           return false;
+  //         }
+  //         return true;
+  //       }
+  //     case PostQueryBehavior.createNewItem:
+  //       this.data._queryDataState = DataState.ready;
+  //       // Create New Item
+  //       bool success = await __prepareToCreate(
+  //         thisXBlock: thisXBlock,
+  //         extraFormInput: null,
+  //       );
+  //       if (!success) {
+  //         return false;
+  //       }
+  //       return true;
+  //   }
+  // }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -2408,9 +2441,7 @@ abstract class Block<
       },
     );
     //
-    this.data._removeItem(
-          removeItem: removeItem,
-        );
+    this.data._removeItem(removeItem: removeItem);
     this.updateItemsView();
     await Future.delayed(Duration(seconds: 1));
   }
@@ -2419,141 +2450,141 @@ abstract class Block<
   // ***************************************************************************
 
   // Private Method. Only for use in this class.
-  @Deprecated("Xoa di, khong su dung nua")
-  Future<bool> __removeNotFoundItemAndSelectSibling({
-    required _XBlock thisXBlock,
-    SuggestedSelection? suggestedSelection,
-    required ITEM notFoundItem,
-  }) async {
-    FlutterArtist.codeFlowLogger._addMethodCall(
-      isLibCode: true,
-      navigate: null,
-      ownerClassInstance: this,
-      methodName: "__removeNotFoundItemAndRefreshChildren",
-      parameters: {
-        "suggestedSelection": suggestedSelection,
-        "notFoundItem": notFoundItem,
-      },
-    );
-    //
-    final ITEM? siblingItem = this.data.findSiblingItem(
-          item: notFoundItem,
-        );
-    //
-    await __removeItemFromList(removeItem: notFoundItem);
-    //
-    if (siblingItem != null) {
-      FlutterArtist.codeFlowLogger._addInfo(
-        isLibCode: true,
-        ownerClassInstance: this,
-        info: "Selecting sibling item",
-      );
-      //
-      bool success = await __prepareToShowOrEdit(
-        thisXBlock: thisXBlock,
-        justQueried: false,
-        item: siblingItem,
-        forceForm: false,
-      );
-      if (!success) {
-        return false;
-      }
-    } else {
-      FlutterArtist.codeFlowLogger._addInfo(
-        isLibCode: true,
-        ownerClassInstance: this,
-        info: "Switching block to none-mode",
-      );
-      //
-      bool success = await _switchThisAndChildrenToNoneMode(
-        thisXBlock: thisXBlock,
-        clearListForThis: false,
-        dataState: DataState.ready,
-      );
-      if (!success) {
-        return false;
-      }
-    }
-    //
-    return true;
-  }
+  // @Deprecated("Xoa di, khong su dung nua")
+  // Future<bool> __removeNotFoundItemAndSelectSibling({
+  //   required _XBlock thisXBlock,
+  //   SuggestedSelection? suggestedSelection,
+  //   required ITEM notFoundItem,
+  // }) async {
+  //   FlutterArtist.codeFlowLogger._addMethodCall(
+  //     isLibCode: true,
+  //     navigate: null,
+  //     ownerClassInstance: this,
+  //     methodName: "__removeNotFoundItemAndRefreshChildren",
+  //     parameters: {
+  //       "suggestedSelection": suggestedSelection,
+  //       "notFoundItem": notFoundItem,
+  //     },
+  //   );
+  //   //
+  //   final ITEM? siblingItem = this.data.findSiblingItem(
+  //         item: notFoundItem,
+  //       );
+  //   //
+  //   await __removeItemFromList(removeItem: notFoundItem);
+  //   //
+  //   if (siblingItem != null) {
+  //     FlutterArtist.codeFlowLogger._addInfo(
+  //       isLibCode: true,
+  //       ownerClassInstance: this,
+  //       info: "Selecting sibling item",
+  //     );
+  //     //
+  //     bool success = await __prepareToShowOrEdit(
+  //       thisXBlock: thisXBlock,
+  //       justQueried: false,
+  //       item: siblingItem,
+  //       forceForm: false,
+  //     );
+  //     if (!success) {
+  //       return false;
+  //     }
+  //   } else {
+  //     FlutterArtist.codeFlowLogger._addInfo(
+  //       isLibCode: true,
+  //       ownerClassInstance: this,
+  //       info: "Switching block to none-mode",
+  //     );
+  //     //
+  //     bool success = await _switchThisAndChildrenToNoneMode(
+  //       thisXBlock: thisXBlock,
+  //       clearListForThis: false,
+  //       dataState: DataState.ready,
+  //     );
+  //     if (!success) {
+  //       return false;
+  //     }
+  //   }
+  //   //
+  //   return true;
+  // }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  @Deprecated("Khong su dung nua")
-  Future<bool> __insertOrReplaceItemInListAndRefreshChildren({
-    required _XBlock thisXBlock,
-    required ITEM_DETAIL refreshedItemDetail,
-    required bool forceForm,
-  }) async {
-    __assertThisXBlock(thisXBlock);
-    //
-    FlutterArtist.codeFlowLogger._addMethodCall(
-      isLibCode: true,
-      navigate: null,
-      ownerClassInstance: this,
-      methodName: "__insertOrReplaceItemInListAndRefreshChildren",
-      parameters: {
-        "refreshedItemDetail": refreshedItemDetail,
-        "forceForm": forceForm,
-      },
-    );
-    //
-    ITEM refreshedItem = convertItemDetailToItem(
-      itemDetail: refreshedItemDetail,
-    );
-    this.data._insertOrReplaceItem(
-          item: refreshedItem,
-          itemDetail: refreshedItemDetail,
-        );
-    //
-    bool editable = canEditItemOnForm(item: refreshedItem);
-    //
-    FlutterArtist.codeFlowLogger._addInfo(
-      ownerClassInstance: this,
-      info: 'Allow Edit? $editable',
-      isLibCode: true,
-    );
-    //
-    this.__setCurrentItem(
-      itemDetail: refreshedItemDetail,
-      item: refreshedItem,
-    );
-    //
-    if (blockForm != null) {
-      blockForm!.data._setCurrentItem(
-        refreshedItemDetail: refreshedItemDetail,
-        formMode: FormMode.edit,
-        dataState: DataState.pending,
-      );
-      bool success = await blockForm!._prepareForm_OLD(
-        extraFormInput: null,
-        refreshedItem: refreshedItemDetail,
-        isNew: false,
-        forceForm: forceForm,
-      );
-      if (!success) {
-        return false;
-      }
-    }
-    //
-    for (_XBlock childXBlock in thisXBlock.childXBlocks) {
-      SuggestedSelection? childSelectionDirective = childXBlock
-          .suggestedSelection
-          ?.findChildDirective(childXBlock.block.name);
-      childXBlock.suggestedSelection = childSelectionDirective; //(@@@)
-      //
-      bool success = await childXBlock.block._queryThisAndChildren(
-        thisXBlock: childXBlock,
-      );
-      if (!success) {
-        return false;
-      }
-    }
-    //
-    return true;
-  }
+  // @Deprecated("Khong su dung nua")
+  // Future<bool> __insertOrReplaceItemInListAndRefreshChildren({
+  //   required _XBlock thisXBlock,
+  //   required ITEM_DETAIL refreshedItemDetail,
+  //   required bool forceForm,
+  // }) async {
+  //   __assertThisXBlock(thisXBlock);
+  //   //
+  //   FlutterArtist.codeFlowLogger._addMethodCall(
+  //     isLibCode: true,
+  //     navigate: null,
+  //     ownerClassInstance: this,
+  //     methodName: "__insertOrReplaceItemInListAndRefreshChildren",
+  //     parameters: {
+  //       "refreshedItemDetail": refreshedItemDetail,
+  //       "forceForm": forceForm,
+  //     },
+  //   );
+  //   //
+  //   ITEM refreshedItem = convertItemDetailToItem(
+  //     itemDetail: refreshedItemDetail,
+  //   );
+  //   this.data._insertOrReplaceItem(
+  //         item: refreshedItem,
+  //         itemDetail: refreshedItemDetail,
+  //       );
+  //   //
+  //   bool editable = canEditItemOnForm(item: refreshedItem);
+  //   //
+  //   FlutterArtist.codeFlowLogger._addInfo(
+  //     ownerClassInstance: this,
+  //     info: 'Allow Edit? $editable',
+  //     isLibCode: true,
+  //   );
+  //   //
+  //   this.__setCurrentItem(
+  //     itemDetail: refreshedItemDetail,
+  //     item: refreshedItem,
+  //   );
+  //   //
+  //   if (blockForm != null) {
+  //     blockForm!.data._setCurrentItem(
+  //       refreshedItemDetail: refreshedItemDetail,
+  //       formMode: FormMode.edit,
+  //       dataState: DataState.pending,
+  //     );
+  //     bool success = await blockForm!._prepareForm_OLD(
+  //       extraFormInput: null,
+  //       refreshedItem: refreshedItemDetail,
+  //       isNew: false,
+  //       forceForm: forceForm,
+  //     );
+  //     if (!success) {
+  //       return false;
+  //     }
+  //   }
+  //   //
+  //   for (_XBlock childXBlock in thisXBlock.childXBlocks) {
+  //     SuggestedSelection? childSelectionDirective = childXBlock
+  //         .suggestedSelection
+  //         ?.findChildDirective(childXBlock.block.name);
+  //     childXBlock.suggestedSelection = childSelectionDirective; //(@@@)
+  //     //
+  //     bool success = await childXBlock.block._queryThisAndChildren(
+  //       thisXBlock: childXBlock,
+  //     );
+  //     if (!success) {
+  //       return false;
+  //     }
+  //   }
+  //   //
+  //   return true;
+  // }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -3043,101 +3074,101 @@ abstract class Block<
   // ***************************************************************************
 
   // Private method (Only for use in this class)
-  @Deprecated("Xoa di, khong su dung nua")
-  Future<bool> __prepareToShowOrEdit({
-    required _XBlock thisXBlock,
-    required ITEM item,
-    required bool forceForm,
-    required bool justQueried,
-  }) async {
-    __assertThisXBlock(thisXBlock);
-
-    //
-    FlutterArtist.codeFlowLogger._addMethodCall(
-      isLibCode: true,
-      navigate: null,
-      ownerClassInstance: this,
-      methodName: "__prepareToShowOrEdit",
-      parameters: {
-        "item": item,
-        "forceForm": forceForm,
-        "justQueried": justQueried,
-      },
-    );
-    //
-    ITEM_DETAIL refreshedItemDetail;
-    if (item is ITEM_DETAIL && justQueried) {
-      refreshedItemDetail = item;
-    } else {
-      ApiResult<ITEM_DETAIL> result;
-      try {
-        FlutterArtist.codeFlowLogger._addMethodCall(
-          isLibCode: false,
-          navigate: null,
-          ownerClassInstance: this,
-          methodName: "callApiRefreshItem",
-          parameters: {
-            "item": item,
-          },
-        );
-        //
-        __refreshRefreshingCurrentItemState(isRefreshingCurrentItem: true);
-        //
-        result = await callApiRefreshItem(item: item);
-        //
-        __refreshRefreshingCurrentItemState(isRefreshingCurrentItem: false);
-      } catch (e, stackTrace) {
-        __refreshRefreshingCurrentItemState(isRefreshingCurrentItem: false);
-        //
-        _handleError(
-          shelf: shelf,
-          methodName: "callApiRefreshItem",
-          error: e,
-          stackTrace: stackTrace,
-          showSnackBar: true,
-        );
-        //
-        return false;
-      }
-      if (result.errorMessage != null) {
-        _handleRestError(
-          shelf: shelf,
-          methodName: "callApiRefreshItem",
-          message: result.errorMessage!,
-          errorDetails: result.errorDetails,
-          showSnackBar: true,
-        );
-        return false;
-      } else {
-        if (result.data == null) {
-          bool success = await __removeNotFoundItemAndSelectSibling(
-            thisXBlock: thisXBlock,
-            notFoundItem: item,
-          );
-          if (!success) {
-            return false;
-          }
-          return true;
-        } else {
-          refreshedItemDetail = result.data!;
-        }
-      }
-    }
-    //
-    printLog(
-        "${getClassName(this)} ~~~~~~~~~~~~> refreshedItem: $refreshedItemDetail");
-    //
-    bool success = await __insertOrReplaceItemInListAndRefreshChildren(
-      thisXBlock: thisXBlock,
-      refreshedItemDetail: refreshedItemDetail,
-      forceForm: forceForm,
-    );
-    printLog("${getClassName(this)} ~~~~~~~~~~~~> success: $success");
-    if (!success) {
-      return false;
-    }
-    return true;
-  }
+  // @Deprecated("Xoa di, khong su dung nua")
+  // Future<bool> __prepareToShowOrEdit({
+  //   required _XBlock thisXBlock,
+  //   required ITEM item,
+  //   required bool forceForm,
+  //   required bool justQueried,
+  // }) async {
+  //   __assertThisXBlock(thisXBlock);
+  //
+  //   //
+  //   FlutterArtist.codeFlowLogger._addMethodCall(
+  //     isLibCode: true,
+  //     navigate: null,
+  //     ownerClassInstance: this,
+  //     methodName: "__prepareToShowOrEdit",
+  //     parameters: {
+  //       "item": item,
+  //       "forceForm": forceForm,
+  //       "justQueried": justQueried,
+  //     },
+  //   );
+  //   //
+  //   ITEM_DETAIL refreshedItemDetail;
+  //   if (item is ITEM_DETAIL && justQueried) {
+  //     refreshedItemDetail = item;
+  //   } else {
+  //     ApiResult<ITEM_DETAIL> result;
+  //     try {
+  //       FlutterArtist.codeFlowLogger._addMethodCall(
+  //         isLibCode: false,
+  //         navigate: null,
+  //         ownerClassInstance: this,
+  //         methodName: "callApiRefreshItem",
+  //         parameters: {
+  //           "item": item,
+  //         },
+  //       );
+  //       //
+  //       __refreshRefreshingCurrentItemState(isRefreshingCurrentItem: true);
+  //       //
+  //       result = await callApiRefreshItem(item: item);
+  //       //
+  //       __refreshRefreshingCurrentItemState(isRefreshingCurrentItem: false);
+  //     } catch (e, stackTrace) {
+  //       __refreshRefreshingCurrentItemState(isRefreshingCurrentItem: false);
+  //       //
+  //       _handleError(
+  //         shelf: shelf,
+  //         methodName: "callApiRefreshItem",
+  //         error: e,
+  //         stackTrace: stackTrace,
+  //         showSnackBar: true,
+  //       );
+  //       //
+  //       return false;
+  //     }
+  //     if (result.errorMessage != null) {
+  //       _handleRestError(
+  //         shelf: shelf,
+  //         methodName: "callApiRefreshItem",
+  //         message: result.errorMessage!,
+  //         errorDetails: result.errorDetails,
+  //         showSnackBar: true,
+  //       );
+  //       return false;
+  //     } else {
+  //       if (result.data == null) {
+  //         bool success = await __removeNotFoundItemAndSelectSibling(
+  //           thisXBlock: thisXBlock,
+  //           notFoundItem: item,
+  //         );
+  //         if (!success) {
+  //           return false;
+  //         }
+  //         return true;
+  //       } else {
+  //         refreshedItemDetail = result.data!;
+  //       }
+  //     }
+  //   }
+  //   //
+  //   printLog(
+  //       "${getClassName(this)} ~~~~~~~~~~~~> refreshedItem: $refreshedItemDetail");
+  //   //
+  //   bool success = await __insertOrReplaceItemInListAndRefreshChildren(
+  //     thisXBlock: thisXBlock,
+  //     refreshedItemDetail: refreshedItemDetail,
+  //     forceForm: forceForm,
+  //   );
+  //   printLog("${getClassName(this)} ~~~~~~~~~~~~> success: $success");
+  //   if (!success) {
+  //     return false;
+  //   }
+  //   return true;
+  // }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -3235,66 +3266,66 @@ abstract class Block<
   // ***************************************************************************
 
   // Private method. Only for use in this class.
-  @Deprecated("Xoa di, khong su dung nua")
-  Future<bool> __prepareToCreate({
-    required _XBlock thisXBlock,
-    required EXTRA_FORM_INPUT? extraFormInput,
-  }) async {
-    FlutterArtist.codeFlowLogger._addMethodCall(
-      isLibCode: true,
-      navigate: null,
-      ownerClassInstance: this,
-      methodName: "__prepareToCreate",
-      parameters: {"extraFormInput": extraFormInput},
-    );
-    //
-    if (!__checkBeforeFormCreation(showErrorMessage: false)) {
-      return false;
-    }
-    const ITEM? nullItem = null;
-    const ITEM_DETAIL? nullItemDetail = null;
-    __setCurrentItem(
-      itemDetail: nullItemDetail,
-      item: nullItem,
-    );
-    //
-    blockForm!.data._setCurrentItem(
-      refreshedItemDetail: nullItemDetail,
-      formMode: FormMode.creation,
-      dataState: DataState.pending,
-    );
-    //
-    bool success = false;
-    try {
-      __refreshPreparingFormCreationState(isPreparingFormCreation: true);
-      //
-      success = await blockForm!._prepareForm_OLD(
-        extraFormInput: extraFormInput,
-        refreshedItem: nullItemDetail,
-        isNew: true,
-        forceForm: true,
-      );
-    } finally {
-      __refreshPreparingFormCreationState(isPreparingFormCreation: false);
-    }
-    if (!success) {
-      return false;
-    }
-    //
-    for (_XBlock childXBlock in thisXBlock.childXBlocks) {
-      final Block childBlock = childXBlock.block;
-      bool success = await childBlock._switchThisAndChildrenToNoneMode(
-        thisXBlock: childXBlock,
-        clearListForThis: true,
-        dataState: DataState.ready,
-      );
-      if (!success) {
-        return false;
-      }
-    }
-    //
-    return true;
-  }
+  // @Deprecated("Xoa di, khong su dung nua")
+  // Future<bool> __prepareToCreate({
+  //   required _XBlock thisXBlock,
+  //   required EXTRA_FORM_INPUT? extraFormInput,
+  // }) async {
+  //   FlutterArtist.codeFlowLogger._addMethodCall(
+  //     isLibCode: true,
+  //     navigate: null,
+  //     ownerClassInstance: this,
+  //     methodName: "__prepareToCreate",
+  //     parameters: {"extraFormInput": extraFormInput},
+  //   );
+  //   //
+  //   if (!__checkBeforeFormCreation(showErrorMessage: false)) {
+  //     return false;
+  //   }
+  //   const ITEM? nullItem = null;
+  //   const ITEM_DETAIL? nullItemDetail = null;
+  //   __setCurrentItem(
+  //     itemDetail: nullItemDetail,
+  //     item: nullItem,
+  //   );
+  //   //
+  //   blockForm!.data._setCurrentItem(
+  //     refreshedItemDetail: nullItemDetail,
+  //     formMode: FormMode.creation,
+  //     dataState: DataState.pending,
+  //   );
+  //   //
+  //   bool success = false;
+  //   try {
+  //     __refreshPreparingFormCreationState(isPreparingFormCreation: true);
+  //     //
+  //     success = await blockForm!._prepareForm_OLD(
+  //       extraFormInput: extraFormInput,
+  //       refreshedItem: nullItemDetail,
+  //       isNew: true,
+  //       forceForm: true,
+  //     );
+  //   } finally {
+  //     __refreshPreparingFormCreationState(isPreparingFormCreation: false);
+  //   }
+  //   if (!success) {
+  //     return false;
+  //   }
+  //   //
+  //   for (_XBlock childXBlock in thisXBlock.childXBlocks) {
+  //     final Block childBlock = childXBlock.block;
+  //     bool success = await childBlock._switchThisAndChildrenToNoneMode(
+  //       thisXBlock: childXBlock,
+  //       clearListForThis: true,
+  //       dataState: DataState.ready,
+  //     );
+  //     if (!success) {
+  //       return false;
+  //     }
+  //   }
+  //   //
+  //   return true;
+  // }
 
   // ***************************************************************************
   // ***************************************************************************
