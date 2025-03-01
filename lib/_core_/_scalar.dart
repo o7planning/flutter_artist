@@ -88,7 +88,7 @@ abstract class Scalar<
 
   late final data = ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
 
-  DataState get dataState => data._dataState;
+  DataState get queryDataState => data._queryDataState;
 
   final ScalarHiddenBehavior hiddenBehavior;
 
@@ -110,9 +110,17 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<bool> _unitQuery() async {
-    // TODO:
-    throw UnimplementedError();
+  Future<bool> _unitQuery({required _XScalar thisXScalar}) async {
+    __assertThisXScalar(thisXScalar);
+    //
+    print(
+        ">> ${getClassName(this)}._unitQuery - queryState: $queryDataState, forceQuery: ${thisXScalar.needQuery}");
+    //
+    if (this.queryDataState == DataState.ready && !thisXScalar.needQuery) {
+      return true;
+    }
+
+    return true;
   }
 
   // ***************************************************************************
@@ -438,7 +446,9 @@ abstract class Scalar<
         dataFilter: _registeredOrDefaultDataFilter,
         filterInput: filterInput,
       ),
-      forceQueryScalarOpts: [_ScalarOpt(scalar: this)],
+      forceQueryScalarOpts: [
+        _ScalarOpt(scalar: this),
+      ],
       forceQueryBlockOpts: [],
       forceQueryBlockFormOpts: [],
     );

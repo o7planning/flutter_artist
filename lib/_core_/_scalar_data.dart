@@ -1,6 +1,8 @@
 part of '../flutter_artist.dart';
 
-class ScalarData<VALUE extends Object, FILTER_INPUT extends FilterInput,
+class ScalarData<
+    VALUE extends Object, //
+    FILTER_INPUT extends FilterInput,
     FILTER_CRITERIA extends FilterCriteria> {
   ///
   /// Owner Scalar.
@@ -15,16 +17,24 @@ class ScalarData<VALUE extends Object, FILTER_INPUT extends FilterInput,
 
   VALUE? get value => _value;
 
-  DataState _dataState = DataState.pending;
+  DataState _queryDataState = DataState.pending;
 
-  DataState get dataState => _dataState;
+  DataState get queryDataState => _queryDataState;
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ScalarData(this.scalar);
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void setToPending() {
-    print(" --> ${getClassName(scalar)} --> Set To Pending");
-    _dataState = DataState.pending;
+    _queryDataState = DataState.pending;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _updateFrom({
     required FILTER_CRITERIA? filterCriteria,
@@ -33,6 +43,6 @@ class ScalarData<VALUE extends Object, FILTER_INPUT extends FilterInput,
   }) {
     _filterCriteria = filterCriteria;
     _value = data;
-    _dataState = dataState;
+    _queryDataState = dataState;
   }
 }

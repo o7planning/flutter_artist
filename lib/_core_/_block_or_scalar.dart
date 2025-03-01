@@ -100,7 +100,7 @@ class _BlockOrScalar extends Equatable {
     if (block != null) {
       return block!.queryDataState;
     } else {
-      return scalar!.dataState;
+      return scalar!.queryDataState;
     }
   }
 

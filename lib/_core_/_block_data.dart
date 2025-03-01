@@ -10,7 +10,12 @@ class BlockData<
   ///
   /// Owner block
   ///
-  final Block<ID, ITEM, ITEM_DETAIL, FILTER_INPUT, FILTER_CRITERIA,
+  final Block<
+      ID, //
+      ITEM,
+      ITEM_DETAIL,
+      FILTER_INPUT,
+      FILTER_CRITERIA,
       EXTRA_FORM_INPUT> block;
 
   late final List<ITEM> _items;
@@ -156,7 +161,6 @@ class BlockData<
   // ***************************************************************************
 
   void setToPending() {
-    print(" --> ${getClassName(block)} --> Set To Pending");
     _queryDataState = DataState.pending;
   }
 

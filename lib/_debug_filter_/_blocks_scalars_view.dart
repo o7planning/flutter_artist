@@ -55,7 +55,7 @@ class _BlocksScalarsView extends StatelessWidget {
           (scalar) => _buildItem(
             iconData: _scalarIconData,
             blockOrScalarClassName: getClassName(scalar),
-            dataState: scalar.data.dataState,
+            dataState: scalar.data.queryDataState,
           ),
         ),
       ],
