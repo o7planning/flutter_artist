@@ -295,6 +295,8 @@ part '_task_unit_/_block_quick_update_item_task_unit.dart';
 
 part '_task_unit_/_block_select_as_current_task_unit.dart';
 
+part '_task_unit_/_scalar_quick_action_task_unit.dart';
+
 part '_ui_/_base_pagination.dart';
 
 part '_ui_/_block_control_bar.dart';

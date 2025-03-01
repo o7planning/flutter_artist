@@ -791,6 +791,7 @@ abstract class Shelf extends _XBase {
           await taskUnit.xBlock.block._unitQuickAction(
             thisXBlock: taskUnit.xBlock,
             action: taskUnit.action,
+            afterQuickAction: taskUnit.afterQuickAction,
           );
         }
         // Block QuickChildBlockItemsAction:
@@ -816,6 +817,14 @@ abstract class Shelf extends _XBase {
         else if (taskUnit is _ScalarQueryTaskUnit) {
           await taskUnit.xScalar.scalar._unitQuery(
             thisXScalar: taskUnit.xScalar,
+          );
+        }
+        // Scalar QuickAction:
+        else if (taskUnit is _ScalarQuickActionTaskUnit) {
+          await taskUnit.xScalar.scalar._unitQuickAction(
+            thisXScalar: taskUnit.xScalar,
+            action: taskUnit.action,
+            afterQuickAction: taskUnit.afterQuickAction,
           );
         }
       }

@@ -1440,6 +1440,7 @@ abstract class Block<
   Future<bool> _unitQuickAction<DATA extends Object>({
     required _XBlock thisXBlock,
     required QuickAction<DATA> action,
+    required AfterBlockQuickAction afterQuickAction,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -1498,7 +1499,7 @@ abstract class Block<
       return false;
     }
     //
-    switch (action.afterQuickAction) {
+    switch (afterQuickAction) {
       case AfterBlockQuickAction.none:
         break;
       case AfterBlockQuickAction.refreshCurrentItem:
@@ -2300,6 +2301,7 @@ abstract class Block<
     SuggestedSelection? suggestedSelection,
     required ActionConfirmationType actionConfirmationType,
     required QuickAction<DATA> action,
+    required AfterBlockQuickAction afterQuickAction,
     required Function(BuildContext context)? navigate,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -2330,7 +2332,7 @@ abstract class Block<
     }
     //
     List<_BlockOpt> forceQueryBlockOpts = [];
-    switch (action.afterQuickAction) {
+    switch (afterQuickAction) {
       case AfterBlockQuickAction.none:
         forceQueryBlockOpts = [];
       case AfterBlockQuickAction.refreshCurrentItem:
@@ -2364,6 +2366,7 @@ abstract class Block<
     _TaskUnit taskUnit = _BlockQuickActionTaskUnit(
       xBlock: thisXBlock,
       action: action,
+      afterQuickAction: afterQuickAction,
     );
     //
     _taskUnitQueue.addTaskUnit(taskUnit);

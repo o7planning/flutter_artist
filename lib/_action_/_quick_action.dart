@@ -2,12 +2,10 @@ part of '../flutter_artist.dart';
 
 abstract class QuickAction<DATA extends Object> extends BaseAction {
   final List<Type> affectedItemTypes;
-  final AfterBlockQuickAction afterQuickAction;
 
   const QuickAction({
     required super.needToConfirm,
     required super.actionInfo,
-    required this.afterQuickAction,
     required this.affectedItemTypes,
   });
 
@@ -48,7 +46,6 @@ abstract class SimpleQuickAction extends QuickAction {
     required this.data,
     required super.needToConfirm,
     required super.actionInfo,
-    required super.afterQuickAction,
     required super.affectedItemTypes,
   });
 }
