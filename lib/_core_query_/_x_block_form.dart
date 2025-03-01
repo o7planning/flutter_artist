@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
 class _XBlockForm {
-  bool needQuery = false;
+  bool needQuery = false; // ForceForm.
   bool queried = false;
   final BlockForm blockForm;
   final ExtraFormInput? extraFormInput;

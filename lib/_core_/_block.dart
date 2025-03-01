@@ -827,6 +827,7 @@ abstract class Block<
         _BlockSelectAsCurrentTaskUnit<ITEM>(
           xBlock: thisXBlock,
           candidateItem: null,
+          forceForm: null,
         ),
       );
       return true;
@@ -976,6 +977,7 @@ abstract class Block<
         _BlockSelectAsCurrentTaskUnit<ITEM>(
           xBlock: thisXBlock,
           candidateItem: null,
+          forceForm: null,
         ),
       );
     }
@@ -1144,6 +1146,7 @@ abstract class Block<
         var taskUnit = _BlockSelectAsCurrentTaskUnit(
           xBlock: thisXBlock,
           candidateItem: siblingItem,
+          forceForm: null,
         );
         _taskUnitQueue.addTaskUnit(taskUnit);
         return;
@@ -1176,6 +1179,7 @@ abstract class Block<
         var taskUnit = _BlockSelectAsCurrentTaskUnit(
           xBlock: thisXBlock,
           candidateItem: siblingItem,
+          forceForm: null,
         );
         _taskUnitQueue.addTaskUnit(taskUnit);
         return;
@@ -1333,6 +1337,7 @@ abstract class Block<
     _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit(
       xBlock: thisXBlock,
       candidateItem: siblingItem,
+      forceForm: null,
     );
     _taskUnitQueue.addTaskUnit(taskUnit);
     //
@@ -1519,6 +1524,7 @@ abstract class Block<
           var taskUnit = _BlockSelectAsCurrentTaskUnit(
             xBlock: thisXBlock,
             candidateItem: currentItem,
+            forceForm: null,
           );
           _taskUnitQueue.addTaskUnit(taskUnit);
         }
@@ -1629,17 +1635,19 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<bool> prepareToShowItem({
+  Future<bool> _prepareToShowOrEditItem({
     required ITEM item,
-    Function()? navigate,
+    required bool forceForm,
+    required Function()? navigate,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: navigate,
       ownerClassInstance: this,
-      methodName: "prepareToShowItem",
+      methodName: "_prepareToShowOrEditItem",
       parameters: {
         "item": item,
+        "forceForm": forceForm,
       },
     );
     //
@@ -1660,11 +1668,36 @@ abstract class Block<
     _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit(
       xBlock: thisXBlock,
       candidateItem: item,
+      forceForm: forceForm,
     );
     _taskUnitQueue.addTaskUnit(taskUnit);
     //
     this.shelf._executeTaskUnitQueue();
     return true;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<bool> prepareToShowItem({
+    required ITEM item,
+    Function()? navigate,
+  }) async {
+    FlutterArtist.codeFlowLogger._addMethodCall(
+      isLibCode: true,
+      navigate: navigate,
+      ownerClassInstance: this,
+      methodName: "prepareToShowItem",
+      parameters: {
+        "item": item,
+      },
+    );
+    //
+    return await _prepareToShowOrEditItem(
+      item: item,
+      forceForm: false,
+      navigate: navigate,
+    );
   }
 
   // ***************************************************************************
@@ -2655,209 +2688,6 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<bool>
-      _executeQuickActionWithOverlayAndRestorable<DATA extends Object>({
-    required FILTER_INPUT? filterInput,
-    required SuggestedSelection? suggestedSelection,
-    required QuickAction<DATA> action,
-    required AfterBlockQuickAction? afterQuickAction,
-    required Function(BuildContext context)? navigate,
-  }) async {
-    return await FlutterArtist.executeTask(
-      asyncFunction: () async {
-        bool success = await __executeQuickActionWithRestorable(
-          filterInput: filterInput,
-          suggestedSelection: suggestedSelection,
-          action: action,
-          afterQuickAction: afterQuickAction,
-        );
-        if (success) {
-          try {
-            BuildContext context = FlutterArtist.adapter.getCurrentContext();
-            if (navigate != null && context.mounted) {
-              navigate(context);
-            }
-          } catch (e, stackTrace) {
-            print("Error: $e");
-            print(stackTrace);
-          }
-        }
-        return success;
-      },
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Future<bool> __executeQuickActionWithRestorable<DATA extends Object>({
-    required FILTER_INPUT? filterInput,
-    required SuggestedSelection? suggestedSelection,
-    required QuickAction<DATA> action,
-    required AfterBlockQuickAction? afterQuickAction,
-  }) async {
-    List<_BlockOpt> forceQueryBlockOpts = [];
-    switch (afterQuickAction) {
-      case null:
-      case AfterBlockQuickAction.none:
-      case AfterBlockQuickAction.refreshCurrentItem:
-        break;
-      case AfterBlockQuickAction.query:
-        forceQueryBlockOpts = [
-          _BlockOpt(
-            block: this,
-            queryType: QueryType.forceQuery,
-            pageable: null,
-            listBehavior: null,
-            suggestedSelection: null,
-            postQueryBehavior: null,
-          ),
-        ];
-    }
-    _XShelf xShelf = _XShelf(
-      shelf: shelf,
-      forceDataFilterOpt: _DataFilterOpt(
-        dataFilter: _registeredOrDefaultDataFilter,
-        filterInput: filterInput,
-      ),
-      forceQueryScalarOpts: [],
-      forceQueryBlockOpts: forceQueryBlockOpts,
-      forceQueryBlockFormOpts: [],
-    );
-    //
-    try {
-      _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
-      //
-      bool success = await __executeQuickAction(
-        thisXBlock: thisXBlock,
-        action: action,
-        afterQuickAction: afterQuickAction,
-      );
-      return success;
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "__executeQuickAction",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      return false;
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Future<bool> __executeQuickAction<DATA extends Object>({
-    required _XBlock thisXBlock,
-    required QuickAction<DATA> action,
-    required AfterBlockQuickAction? afterQuickAction,
-  }) async {
-    __assertThisXBlock(thisXBlock);
-    //
-    ApiResult<DATA>? result;
-    bool success = false;
-    try {
-      FlutterArtist.codeFlowLogger._addMethodCall(
-        ownerClassInstance: action,
-        methodName: "callApi",
-        parameters: null,
-        navigate: null,
-        isLibCode: false,
-      );
-      //
-      result = await action.callApi();
-      //
-      if (result != null && result.errorMessage != null) {
-        _handleRestError(
-          shelf: shelf,
-          methodName: "${getClassName(action)}.callApi",
-          message: result.errorMessage!,
-          errorDetails: result.errorDetails,
-          showSnackBar: true,
-        );
-        success = false;
-      } else {
-        success = true;
-      }
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: '${getClassName(action)}.callApi',
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      success = false;
-    }
-    //
-    try {
-      DATA? apiData = result?.data;
-      await action.doAfterCallApi(success: success, apiData: apiData);
-      //
-      if (success) {
-        FlutterArtist.storage._fireEventToAffectedItemTypes(
-          affectedItemTypes: action.affectedItemTypes,
-        );
-      }
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: '${getClassName(action)}.callApi',
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      success = false;
-    }
-    print("Chay vao day 3 - afterQuickAction: $afterQuickAction");
-    //
-    if (afterQuickAction != null) {
-      String methodName = "";
-      try {
-        bool success = false;
-        switch (afterQuickAction) {
-          case AfterBlockQuickAction.none:
-            return true;
-          case AfterBlockQuickAction.refreshCurrentItem:
-            methodName = "refreshCurrentItem";
-            if (!canRefreshCurrentItem()) {
-              return true;
-            }
-            success = await __prepareToShowOrEdit(
-              thisXBlock: thisXBlock,
-              item: this.data.currentItem!,
-              justQueried: false,
-              forceForm: false,
-            );
-          case AfterBlockQuickAction.query:
-            methodName = "query";
-            thisXBlock.setForceQuery();
-            //
-            print("Chay vao day 4: $thisXBlock");
-            success = await _queryThisAndChildren(
-              thisXBlock: thisXBlock,
-            );
-        }
-        return success;
-      } catch (e, stackTrace) {
-        _handleError(
-          shelf: shelf,
-          methodName: methodName,
-          error: e,
-          stackTrace: stackTrace,
-          showSnackBar: true,
-        );
-        return false;
-      }
-    }
-    return true;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   bool hasCurrentItem() {
     return this.data.currentItemDetail != null;
   }
@@ -3197,23 +3027,12 @@ abstract class Block<
         "item": item,
       },
     );
-    // Allow to prepareForm but disable Form.
-    // bool canEdit = __checkBeforeEditItem(item: item, showErrorMessage: true);
-    // if (!canEdit) {
-    //   return false;
-    // }
     //
-    bool success = await __prepareToShowOrEditWithOverlayAndRestorable(
+    return await _prepareToShowOrEditItem(
       item: item,
-      justQueried: false,
-      suggestedSelection: null,
       forceForm: true,
+      navigate: navigate,
     );
-    if (success) {
-      _executeNavigation(navigate: navigate);
-      return true;
-    }
-    return false;
   }
 
   // ***************************************************************************
@@ -3268,71 +3087,6 @@ abstract class Block<
       item: previousItem,
       navigate: navigate,
     );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @Deprecated("Xoa di, khong su dung nua")
-  Future<bool> __prepareToShowOrEditWithOverlayAndRestorable({
-    required SuggestedSelection? suggestedSelection,
-    required ITEM item,
-    required bool forceForm,
-    required bool justQueried,
-  }) async {
-    return await FlutterArtist.executeTask(
-      asyncFunction: () async {
-        return await __prepareToShowOrEditWithRestorable(
-          suggestedSelection: suggestedSelection,
-          item: item,
-          forceForm: forceForm,
-          justQueried: justQueried,
-        );
-      },
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @Deprecated("Xoa di, khong su dung nua")
-  Future<bool> __prepareToShowOrEditWithRestorable({
-    required SuggestedSelection? suggestedSelection,
-    required ITEM item,
-    required bool forceForm,
-    required bool justQueried,
-  }) async {
-    _XShelf xShelf = _XShelf(
-      shelf: shelf,
-      forceDataFilterOpt: null,
-      forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [],
-      forceQueryBlockFormOpts: [],
-    );
-    //
-    _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
-    thisXBlock.suggestedSelection = suggestedSelection;
-    //
-    try {
-      _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
-      bool success = await __prepareToShowOrEdit(
-        thisXBlock: thisXBlock,
-        item: item,
-        justQueried: justQueried,
-        forceForm: forceForm,
-      );
-      return true;
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "prepareToEditItem",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      //
-      return false;
-    }
   }
 
   // ***************************************************************************
@@ -3772,13 +3526,10 @@ abstract class Block<
     if (!canRefreshCurrentItem()) {
       return false;
     }
-    bool success = await __prepareToShowOrEditWithOverlayAndRestorable(
+    //
+    return await prepareToShowItem(
       item: this.data.currentItem!,
-      justQueried: false,
-      suggestedSelection: null,
-      forceForm: false,
     );
-    return success;
   }
 
   // ***************************************************************************
