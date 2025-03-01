@@ -605,7 +605,6 @@ abstract class Shelf extends _XBase {
   void __findTopLazyBlocksCascade(
       List<Block> blocks, List<_ScalarOrBlockOrFormWrapper> founds) {
     for (Block block in blocks) {
-      // _hasActiveWidgetAndNeedToQuery()
       if (block.hasActiveBlockFragmentWidget(alsoCheckChildren: true) &&
           block.queryDataState == DataState.pending) {
         founds.add(_ScalarOrBlockOrFormWrapper.block(block));
@@ -675,47 +674,6 @@ abstract class Shelf extends _XBase {
       return true;
     }
     return false;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  String _toString({
-    required List<_ScalarOpt> forceQueryScalarOpts,
-    required List<_BlockOpt> forceQueryBlockOpts,
-    required List<_BlockFormOpt> forceQueryBlockFormOpts,
-  }) {
-    String info = "";
-    if (forceQueryScalarOpts.isNotEmpty) {
-      String s = forceQueryScalarOpts
-          .map((opt) => getClassName(opt.scalar))
-          .join(", ");
-      if (info.isEmpty) {
-        info = s;
-      } else {
-        info = "$info, $s";
-      }
-    }
-    if (forceQueryBlockOpts.isNotEmpty) {
-      String s =
-          forceQueryBlockOpts.map((opt) => getClassName(opt.block)).join(", ");
-      if (info.isEmpty) {
-        info = s;
-      } else {
-        info = "$info, $s";
-      }
-    }
-    if (forceQueryBlockFormOpts.isNotEmpty) {
-      String s = forceQueryBlockFormOpts
-          .map((opt) => getClassName(opt.blockForm))
-          .join(", ");
-      if (info.isEmpty) {
-        info = s;
-      } else {
-        info = "$info, $s";
-      }
-    }
-    return info;
   }
 
   // ***************************************************************************
@@ -861,5 +819,46 @@ abstract class Shelf extends _XBase {
       }
       updateAllUIComponents();
     });
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  String _toString({
+    required List<_ScalarOpt> forceQueryScalarOpts,
+    required List<_BlockOpt> forceQueryBlockOpts,
+    required List<_BlockFormOpt> forceQueryBlockFormOpts,
+  }) {
+    String info = "";
+    if (forceQueryScalarOpts.isNotEmpty) {
+      String s = forceQueryScalarOpts
+          .map((opt) => getClassName(opt.scalar))
+          .join(", ");
+      if (info.isEmpty) {
+        info = s;
+      } else {
+        info = "$info, $s";
+      }
+    }
+    if (forceQueryBlockOpts.isNotEmpty) {
+      String s =
+          forceQueryBlockOpts.map((opt) => getClassName(opt.block)).join(", ");
+      if (info.isEmpty) {
+        info = s;
+      } else {
+        info = "$info, $s";
+      }
+    }
+    if (forceQueryBlockFormOpts.isNotEmpty) {
+      String s = forceQueryBlockFormOpts
+          .map((opt) => getClassName(opt.blockForm))
+          .join(", ");
+      if (info.isEmpty) {
+        info = s;
+      } else {
+        info = "$info, $s";
+      }
+    }
+    return info;
   }
 }
