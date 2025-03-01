@@ -8,6 +8,8 @@ abstract class Shelf extends _XBase {
   // All dataFilters including the default dataFilter.
   final List<DataFilter> _allDataFilters = [];
 
+  List<String> get filterNames => [..._shelfStruct.dataFilters.keys];
+
   // All blockForms.
   final List<BlockForm> _allBlockForms = [];
 
@@ -333,8 +335,6 @@ abstract class Shelf extends _XBase {
   DataFilter? findDataFilter(String dataFilterName) {
     return _shelfStruct.dataFilters[dataFilterName];
   }
-
-  List<String> get filterNames => [..._shelfStruct.dataFilters.keys];
 
   // ***************************************************************************
   // ******** UI COMPONENTS ****************************************************
@@ -860,5 +860,13 @@ abstract class Shelf extends _XBase {
       }
     }
     return info;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @override
+  String toString() {
+    return "${getClassName(this)}($name)";
   }
 }
