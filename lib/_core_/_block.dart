@@ -821,7 +821,9 @@ abstract class Block<
     __assertThisXBlock(thisXBlock);
     //
     print(
-        ">> ${getClassName(this)}._unitQuery - queryState: $queryDataState, forceQuery: ${thisXBlock.forceQuery}");
+        "\n\n>> ${getClassName(this)}._unitQuery - queryState: $queryDataState, forceQuery: ${thisXBlock.forceQuery}");
+
+    thisXBlock.printParameters();
     //
     bool hasActiveUI = this.hasActiveUIComponent();
 
@@ -829,7 +831,7 @@ abstract class Block<
       return true;
     }
 
-    if (this.queryDataState == DataState.ready) {
+    if (this.queryDataState == DataState.ready && !thisXBlock.forceQuery) {
       _taskUnitQueue.addTaskUnit(
         _BlockSelectAsCurrentTaskUnit<ITEM>(
           xBlock: thisXBlock,
@@ -840,17 +842,9 @@ abstract class Block<
       return true;
     }
     //
-    // this.queryDataState != DataState.ready || forceQuery
+    // this.queryDataState != DataState.ready || forceQuery || hasActiveUI
     //
     DataState newQueryDataState = this.queryDataState;
-    //
-    FlutterArtist.codeFlowLogger._addMethodCall(
-      isLibCode: false,
-      navigate: null,
-      ownerClassInstance: this,
-      methodName: "callApiQuery",
-      parameters: {},
-    );
     //
     FILTER_CRITERIA? filterCriteria;
     try {
@@ -910,6 +904,14 @@ abstract class Block<
     PageData<ID, ITEM>? pageData;
     try {
       __refreshQueryingState(isQuerying: true);
+      //
+      FlutterArtist.codeFlowLogger._addMethodCall(
+        isLibCode: false,
+        navigate: null,
+        ownerClassInstance: this,
+        methodName: "callApiQuery",
+        parameters: {},
+      );
       //
       ApiResult<PageData<ID, ITEM>?> result = await callApiQuery(
         filterCriteria: filterCriteria,

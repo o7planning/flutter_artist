@@ -122,13 +122,13 @@ class _XBlock {
   }
 
   void printParameters() {
-    print("  - candidateCurrentItem: $_candidateCurrentItem");
-    print("  - queryType: $__queryType  --------> $queryType");
-    print("  - forceQuery: $__forceQuery  --------> $forceQuery");
-    print("  - forceReloadItem: $__forceReloadItem  --------> $forceReloadItem");
-    print("  - listBehavior: $__listBehavior  --------> $listBehavior");
-    print("  - postQueryBehavior: $__postQueryBehavior  --------> $postQueryBehavior");
-    print("  - pageable: $__pageable  --------> $pageable");
+    print("  ----> candidateCurrentItem: $_candidateCurrentItem");
+    print("  ----> queryType: $__queryType  --------> $queryType");
+    print("  ----> forceQuery: $__forceQuery  --------> $forceQuery");
+    print("  ----> forceReloadItem: $__forceReloadItem  --------> $forceReloadItem");
+    print("  ----> listBehavior: $__listBehavior  --------> $listBehavior");
+    print("  ----> postQueryBehavior: $__postQueryBehavior  --------> $postQueryBehavior");
+    print("  ----> pageable: $__pageable  --------> $pageable");
   }
 
   @override
