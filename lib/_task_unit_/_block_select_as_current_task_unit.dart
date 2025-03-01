@@ -11,9 +11,8 @@ class _BlockSelectAsCurrentTaskUnit<ITEM extends Object> extends _TaskUnit {
   }) {
     xBlock._candidateCurrentItem = candidateItem;
     xBlock.setForceReloadItem();
-    if(forceForm!= null)  {
+    if (forceForm != null) {
       xBlock.xBlockForm?.needQuery = forceForm!;
     }
-
   }
 }

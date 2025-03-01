@@ -903,6 +903,13 @@ abstract class Shelf extends _XBase {
             action: taskUnit.action,
           );
         }
+        // Block QuickChildBlockItemsAction:
+        else if (taskUnit is _BlockQuickChildBlockItemsTaskUnit) {
+          await taskUnit.xBlock.block._unitQuickChildBlockItemsAction(
+            thisXBlock: taskUnit.xBlock,
+            action: taskUnit.action,
+          );
+        }
         // BlockForm LoadForm:
         else if (taskUnit is _BlockFormLoadFormTaskUnit) {
           await taskUnit.xBlockForm.blockForm._unitLoadForm(

@@ -1540,6 +1540,56 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  Future<bool> _unitQuickChildBlockItemsAction<DATA extends Object>({
+    required _XBlock thisXBlock,
+    required QuickChildBlockItemsAction<ITEM, ITEM_DETAIL> action,
+  }) async {
+    __assertThisXBlock(thisXBlock);
+    //
+    ApiResult<ITEM_DETAIL> result;
+    try {
+      FlutterArtist.codeFlowLogger._addMethodCall(
+        isLibCode: false,
+        navigate: null,
+        ownerClassInstance: action,
+        methodName: "callApiChildBlockItems",
+        parameters: {},
+      );
+      //
+      result = await action.callApiChildBlockItems();
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: '${getClassName(action)}.callApiChildBlockItems',
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      return false;
+    }
+    //
+    if (result.isError()) {
+      _handleRestError(
+        shelf: shelf,
+        methodName: "callApiChildBlockItems",
+        message: result.errorMessage!,
+        errorDetails: result.errorDetails,
+        showSnackBar: true,
+      );
+      // TODO: Xem lai (Hanh dong neu Error).
+      return false;
+    }
+    //
+    return await _processSaveActionRestResult(
+      thisXBlock: thisXBlock,
+      calledMethodName: "${getClassName(action)}.callApiChildBlockItems",
+      result: result,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<bool> _processSaveActionRestResult({
     required _XBlock thisXBlock,
     required String calledMethodName,
@@ -2585,109 +2635,6 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<bool> _executeQuickChildBlockItemsWithOverlayAndRestorable({
-    required QuickChildBlockItemsAction<ITEM, ITEM_DETAIL> action,
-  }) async {
-    return await FlutterArtist.executeTask(
-      asyncFunction: () async {
-        return await __executeQuickChildBlockItemsActionWithRestorable(
-          action: action,
-        );
-      },
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @Deprecated("Xoa di, khong su dung nua")
-  Future<bool> __executeQuickChildBlockItemsActionWithRestorable({
-    required QuickChildBlockItemsAction<ITEM, ITEM_DETAIL> action,
-  }) async {
-    _XShelf xShelf = _XShelf(
-      shelf: shelf,
-      forceDataFilterOpt: null,
-      forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [],
-      forceQueryBlockFormOpts: [],
-    );
-    //
-    _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
-    //
-    try {
-      bool success = await __executeQuickChildBlockItemsAction(
-        thisXBlock: thisXBlock,
-        action: action,
-      );
-      return success;
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "__executeQuickActionUpdateItemWithRestorable",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      //
-      return false;
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Future<bool> __executeQuickChildBlockItemsAction({
-    required _XBlock thisXBlock,
-    required QuickChildBlockItemsAction<ITEM, ITEM_DETAIL> action,
-  }) async {
-    __assertThisXBlock(thisXBlock);
-    //
-    ApiResult<ITEM_DETAIL> result;
-    try {
-      FlutterArtist.codeFlowLogger._addMethodCall(
-        isLibCode: false,
-        navigate: null,
-        ownerClassInstance: action,
-        methodName: "callApiChildBlockItems",
-        parameters: {},
-      );
-      //
-      result = await action.callApiChildBlockItems();
-      //
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: '${getClassName(action)}.callApiChildBlockItems',
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      return false;
-    }
-    //
-    try {
-      // return await _processSaveActionRestResult_OLD(
-      //   thisXBlock: thisXBlock,
-      //   calledMethodName: "${getClassName(action)}.callApiQuickUpdateItem",
-      //   result: result,
-      // );
-      return true;
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: '_processSaveActionRestResult',
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      //
-      return false;
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   bool hasCurrentItem() {
     return this.data.currentItemDetail != null;
   }
@@ -2938,23 +2885,26 @@ abstract class Block<
       return false;
     }
     //
-    try {
-      bool success = await _executeQuickChildBlockItemsWithOverlayAndRestorable(
-        action: action,
-      );
-      return success;
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "executeQuickChildBlockItems",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      //
-      shelf.updateAllUIComponents();
-      return false;
-    }
+    _XShelf xShelf = _XShelf(
+      shelf: shelf,
+      forceDataFilterOpt: null,
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: [],
+      forceQueryBlockFormOpts: [],
+    );
+    //
+    _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    //
+    _TaskUnit taskUnit = _BlockQuickChildBlockItemsTaskUnit(
+      xBlock: thisXBlock,
+      action: action,
+    );
+    //
+    _taskUnitQueue.addTaskUnit(taskUnit);
+    //
+    await this.shelf._executeTaskUnitQueue();
+    //
+    return true;
   }
 
   // ***************************************************************************
