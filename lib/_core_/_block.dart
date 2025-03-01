@@ -828,6 +828,10 @@ abstract class Block<
     bool hasActiveUI = this.hasActiveUIComponent();
 
     if (!hasActiveUI && !thisXBlock.forceQuery) {
+      for (_XBlock childXBlock in thisXBlock.childXBlocks) {
+        _TaskUnit taskUnit = _BlockQueryTaskUnit(xBlock: childXBlock);
+        _taskUnitQueue.addTaskUnit(taskUnit);
+      }
       return true;
     }
 
