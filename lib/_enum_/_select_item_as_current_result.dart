@@ -13,17 +13,17 @@ class CurrentItemSelectionResult<ITEM> {
     required this.currentItem,
   });
 
-  // bool hasCandidateItemAndSelected() {
-  //   return candidateItem != null && candidateItem == currentItem;
-  // }
-  //
-  // bool hasNewCurrentItem() {
-  //   return currentItem != null && currentItem != oldCurrentItem;
-  // }
-  //
-  // bool currentItemChanged() {
-  //   return currentItem != oldCurrentItem;
-  // }
+// bool hasCandidateItemAndSelected() {
+//   return candidateItem != null && candidateItem == currentItem;
+// }
+//
+// bool hasNewCurrentItem() {
+//   return currentItem != null && currentItem != oldCurrentItem;
+// }
+//
+// bool currentItemChanged() {
+//   return currentItem != oldCurrentItem;
+// }
 }
 
 class ItemDeletionResult {

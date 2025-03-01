@@ -125,9 +125,11 @@ class _XBlock {
     print("  ----> candidateCurrentItem: $_candidateCurrentItem");
     print("  ----> queryType: $__queryType  --------> $queryType");
     print("  ----> forceQuery: $__forceQuery  --------> $forceQuery");
-    print("  ----> forceReloadItem: $__forceReloadItem  --------> $forceReloadItem");
+    print(
+        "  ----> forceReloadItem: $__forceReloadItem  --------> $forceReloadItem");
     print("  ----> listBehavior: $__listBehavior  --------> $listBehavior");
-    print("  ----> postQueryBehavior: $__postQueryBehavior  --------> $postQueryBehavior");
+    print(
+        "  ----> postQueryBehavior: $__postQueryBehavior  --------> $postQueryBehavior");
     print("  ----> pageable: $__pageable  --------> $pageable");
   }
 
