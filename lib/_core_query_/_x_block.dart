@@ -72,13 +72,15 @@ class _XBlock {
   QueryType get queryType {
     switch (__queryType) {
       case null:
-        return forceQuery ? QueryType.forceQuery : QueryType.queryIfNeed;
-      case QueryType.clear:
-        return QueryType.clear;
+        return forceQuery //
+            ? QueryType.forceQuery
+            : QueryType.queryIfNeed;
       case QueryType.forceQuery:
         return QueryType.forceQuery;
       case QueryType.queryIfNeed:
-        return forceQuery ? QueryType.forceQuery : QueryType.queryIfNeed;
+        return forceQuery //
+            ? QueryType.forceQuery
+            : QueryType.queryIfNeed;
     }
   }
 

@@ -1784,27 +1784,30 @@ abstract class Block<
       methodName: "clear",
       parameters: {},
     );
+    bool hasActive = this.hasActiveUIComponent();
+    if (hasActive) {
+      return false;
+    }
     //
-    bool success = await shelf._queryAll(
+    _XShelf xShelf = _XShelf(
+      shelf: shelf,
       forceDataFilterOpt: null,
       forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [
-        _BlockOpt(
-          queryType: QueryType.clear,
-          block: this,
-          pageable: null,
-          listBehavior: ListBehavior.replace,
-          suggestedSelection: null,
-          postQueryBehavior: PostQueryBehavior.selectAvailableItem,
-        ),
-      ],
+      forceQueryBlockOpts: [],
       forceQueryBlockFormOpts: [],
     );
     //
-    if (success) {
-      _executeNavigation(navigate: navigate);
-    }
-    return success;
+    _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    //
+    this.__clearWithDataStateCascade(
+      thisXBlock: thisXBlock,
+      queryDataState: DataState.pending,
+      formDataState: DataState.pending,
+    );
+    //
+    _executeNavigation(navigate: navigate);
+    //
+    return true;
   }
 
   // ***************************************************************************
@@ -2021,7 +2024,7 @@ abstract class Block<
   /// Clear and prepare Form to create new record.
   /// If this block has a BlockForm its data state set to "Ready", else its data state set to "Pending".
   ///
-  Future<bool> clearAndPrepareToCreate({
+  Future<bool> queryAndPrepareToCreate({
     FILTER_INPUT? filterInput,
     Function()? navigate,
   }) async {
@@ -2029,7 +2032,7 @@ abstract class Block<
       isLibCode: true,
       navigate: navigate,
       ownerClassInstance: this,
-      methodName: "clearAndPrepareToCreate",
+      methodName: "queryAndPrepareToCreate",
       parameters: {},
     );
     //
@@ -2041,7 +2044,7 @@ abstract class Block<
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [
         _BlockOpt(
-          queryType: QueryType.clear,
+          queryType: QueryType.forceQuery,
           block: this,
           pageable: null,
           listBehavior: ListBehavior.replace,
