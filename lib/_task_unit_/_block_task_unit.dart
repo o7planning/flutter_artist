@@ -5,5 +5,7 @@ class _BlockQueryTaskUnit extends _TaskUnit {
 
   _BlockQueryTaskUnit({
     required this.xBlock,
-  });
+  }) {
+    xBlock.setForceQuery();
+  }
 }

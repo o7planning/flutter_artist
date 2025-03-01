@@ -1248,8 +1248,8 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-
     // No need check again?
+    //
     bool canDelete = canDeleteItem(item: item);
     if (!canDelete) {
       return false;
@@ -1346,6 +1346,8 @@ abstract class Block<
     required _XBlock thisXBlock,
     required QuickCreateItemAction<ITEM_DETAIL> action,
   }) async {
+    __assertThisXBlock(thisXBlock);
+    //
     ApiResult<ITEM_DETAIL> result;
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
@@ -1396,6 +1398,8 @@ abstract class Block<
     required _XBlock thisXBlock,
     required QuickUpdateItemAction<ITEM, ITEM_DETAIL> action,
   }) async {
+    __assertThisXBlock(thisXBlock);
+    //
     ApiResult<ITEM_DETAIL> result;
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
@@ -1437,6 +1441,94 @@ abstract class Block<
       //
       return false;
     }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<bool> _unitQuickAction<DATA extends Object>({
+    required _XBlock thisXBlock,
+    required QuickAction<DATA> action,
+  }) async {
+    __assertThisXBlock(thisXBlock);
+    //
+    ApiResult<DATA>? result;
+    try {
+      FlutterArtist.codeFlowLogger._addMethodCall(
+        ownerClassInstance: action,
+        methodName: "callApi",
+        parameters: null,
+        navigate: null,
+        isLibCode: false,
+      );
+      //
+      result = await action.callApi();
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: '${getClassName(action)}.callApi',
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      return false;
+    }
+    //
+    bool success = true;
+    if (result != null && result.errorMessage != null) {
+      success = false;
+      //
+      _handleRestError(
+        shelf: shelf,
+        methodName: "${getClassName(action)}.callApi",
+        message: result.errorMessage!,
+        errorDetails: result.errorDetails,
+        showSnackBar: true,
+      );
+    }
+    //
+    try {
+      DATA? apiData = result?.data;
+      await action.doAfterCallApi(success: success, apiData: apiData);
+      //
+      if (success) {
+        FlutterArtist.storage._fireEventToAffectedItemTypes(
+          affectedItemTypes: action.affectedItemTypes,
+        );
+      }
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: '${getClassName(action)}.callApi',
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      return false;
+    }
+    //
+    switch (action.afterQuickAction) {
+      case AfterBlockQuickAction.none:
+        break;
+      case AfterBlockQuickAction.refreshCurrentItem:
+        if (!canRefreshCurrentItem()) {
+          return true;
+        }
+        ITEM? currentItem = this.data.currentItem;
+        if (currentItem != null) {
+          var taskUnit = _BlockSelectAsCurrentTaskUnit(
+            xBlock: thisXBlock,
+            candidateItem: currentItem,
+          );
+          _taskUnitQueue.addTaskUnit(taskUnit);
+        }
+      case AfterBlockQuickAction.query:
+        var taskUnit = _BlockQueryTaskUnit(
+          xBlock: thisXBlock,
+        );
+        _taskUnitQueue.addTaskUnit(taskUnit);
+    }
+    return true;
   }
 
   // ***************************************************************************
@@ -2607,6 +2699,7 @@ abstract class Block<
     List<_BlockOpt> forceQueryBlockOpts = [];
     switch (afterQuickAction) {
       case null:
+      case AfterBlockQuickAction.none:
       case AfterBlockQuickAction.refreshCurrentItem:
         break;
       case AfterBlockQuickAction.query:
@@ -2725,6 +2818,8 @@ abstract class Block<
       try {
         bool success = false;
         switch (afterQuickAction) {
+          case AfterBlockQuickAction.none:
+            return true;
           case AfterBlockQuickAction.refreshCurrentItem:
             methodName = "refreshCurrentItem";
             if (!canRefreshCurrentItem()) {
@@ -2806,7 +2901,6 @@ abstract class Block<
     SuggestedSelection? suggestedSelection,
     required ActionConfirmationType actionConfirmationType,
     required QuickAction<DATA> action,
-    required AfterBlockQuickAction? afterQuickAction,
     required Function(BuildContext context)? navigate,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -2818,7 +2912,6 @@ abstract class Block<
         "filterInput": filterInput,
         "suggestedSelection": suggestedSelection,
         "action": action,
-        "afterQuickAction": afterQuickAction,
       },
     );
     //
@@ -2837,27 +2930,47 @@ abstract class Block<
       return false;
     }
     //
-    try {
-      bool success = await _executeQuickActionWithOverlayAndRestorable(
-        filterInput: filterInput,
-        suggestedSelection: suggestedSelection,
-        action: action,
-        afterQuickAction: afterQuickAction,
-        navigate: navigate,
-      );
-      return success;
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "executeQuickAction",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      //
-      shelf.updateAllUIComponents();
-      return false;
+    List<_BlockOpt> forceQueryBlockOpts = [];
+    switch (action.afterQuickAction) {
+      case AfterBlockQuickAction.none:
+        forceQueryBlockOpts = [];
+      case AfterBlockQuickAction.refreshCurrentItem:
+        forceQueryBlockOpts = [];
+      case AfterBlockQuickAction.query:
+        forceQueryBlockOpts = [
+          _BlockOpt(
+            block: this,
+            queryType: QueryType.forceQuery,
+            pageable: null,
+            listBehavior: null,
+            suggestedSelection: null,
+            postQueryBehavior: null,
+          ),
+        ];
     }
+    //
+    _XShelf xShelf = _XShelf(
+      shelf: shelf,
+      forceDataFilterOpt: _DataFilterOpt(
+        dataFilter: _registeredOrDefaultDataFilter,
+        filterInput: filterInput,
+      ),
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: forceQueryBlockOpts,
+      forceQueryBlockFormOpts: [],
+    );
+    //
+    _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    //
+    _TaskUnit taskUnit = _BlockQuickActionTaskUnit(
+      xBlock: thisXBlock,
+      action: action,
+    );
+    //
+    _taskUnitQueue.addTaskUnit(taskUnit);
+    //
+    await this.shelf._executeTaskUnitQueue();
+    return true;
   }
 
   // ***************************************************************************

@@ -281,6 +281,8 @@ part '_task_unit_/_block_quick_create_item_task_unit.dart';
 
 part '_task_unit_/_block_quick_update_item_task_unit.dart';
 
+part '_task_unit_/_block_quick_action_task_unit.dart';
+
 part '_task_unit_/_block_select_as_current_task_unit.dart';
 
 part '_task_unit_/_block_task_unit.dart';
