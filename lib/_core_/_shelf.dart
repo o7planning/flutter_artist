@@ -684,6 +684,7 @@ abstract class Shelf extends _XBase {
   ///
   /// VERY IMPORTANT METHOD:
   ///
+  @Deprecated("Xoa di, khong su dung nua")
   Future<bool> _queryAllWithOverlayAndRestorable({
     required _DataFilterOpt? forceDataFilterOpt,
     required List<_ScalarOpt> forceQueryScalarOpts,
@@ -749,6 +750,7 @@ abstract class Shelf extends _XBase {
   ///
   /// VERY IMPORTANT METHOD:
   ///
+  @Deprecated("Xoa di, khong su dung nua")
   Future<bool> _queryAllWithRestorable({
     required _DataFilterOpt? forceDataFilterOpt,
     required List<_ScalarOpt> forceQueryScalarOpts,

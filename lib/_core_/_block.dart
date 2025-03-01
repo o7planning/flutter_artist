@@ -822,6 +822,7 @@ abstract class Block<
     //
     print(
         ">> ${getClassName(this)}._unitQuery - queryState: $queryDataState, forceQuery: ${thisXBlock.forceQuery}");
+    //
     if (this.queryDataState == DataState.ready && !thisXBlock.forceQuery) {
       _taskUnitQueue.addTaskUnit(
         _BlockSelectAsCurrentTaskUnit<ITEM>(
@@ -1006,16 +1007,10 @@ abstract class Block<
     if (!thisXBlock.forceQuery || !thisXBlock.forceReloadItem) {
       // return;
     }
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1");
     //
     ITEM? candidateCurrentItem = thisXBlock._candidateCurrentItem as ITEM?;
 
-    print(
-        "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 2: candidateCurrentItem: $candidateCurrentItem");
     ITEM? currentItem = this.data.currentItem;
-
-    print(
-        "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3: currentItem: ${this.data.currentItem}");
     //
     if (candidateCurrentItem != null) {
       if (!this.data.containsItem(item: candidateCurrentItem)) {
@@ -1027,7 +1022,6 @@ abstract class Block<
         currentItem = null;
       }
     }
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 4");
     //
     final bool newCurrent;
     if (currentItem == null) {
@@ -1047,9 +1041,6 @@ abstract class Block<
         }
       }
     }
-    //
-    print(
-        "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 5: candidateCurrentItem: $candidateCurrentItem");
     //
     if (!newCurrent && !thisXBlock.forceReloadItem) {
       for (_XBlock childXBlock in thisXBlock.childXBlocks) {
@@ -1072,8 +1063,6 @@ abstract class Block<
       );
       return;
     }
-    print(
-        "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 6: candidateCurrentItem: $candidateCurrentItem");
     //
     // (newCurrent || forceReloadItem) && candidateCurrentItem !=null
     //
@@ -1128,21 +1117,18 @@ abstract class Block<
       final ITEM? siblingItem = this.data.findSiblingItem(
             item: candidateCurrentItem,
           );
-      print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 7: Candidate not found");
       // #SAME-CODE-001
       if (!isCandidateIsCurrent) {
         await __removeItemFromList(removeItem: candidateCurrentItem);
-
-        print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 8: Candidate not current");
         //
         if (currentItem != null) {
           return;
         }
+        //
         if (siblingItem == null) {
           return;
         }
-        print(
-            "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 9: new Candidate: $siblingItem");
+        //
         var taskUnit = _BlockSelectAsCurrentTaskUnit(
           xBlock: thisXBlock,
           candidateItem: siblingItem,
