@@ -285,6 +285,8 @@ part '_task_unit_/_block_quick_action_task_unit.dart';
 
 part '_task_unit_/_block_select_as_current_task_unit.dart';
 
+part '_enum_/_task_unit_result.dart';
+
 part '_task_unit_/_block_query_task_unit.dart';
 
 part '_task_unit_/_block_quick_child_block_items_task_unit.dart';
