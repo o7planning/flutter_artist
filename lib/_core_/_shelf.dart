@@ -576,7 +576,7 @@ abstract class Shelf extends _XBase {
     print("@@@@@@@@@@@@ Query Lazy List: blockOpts: $blockOpts");
     print("@@@@@@@@@@@@ Query Lazy List: blockFormOpts: $blockFormOpts");
     //
-    return await _queryAllWithOverlayAndRestorable(
+    return await _queryAll(
       forceDataFilterOpt: null,
       forceQueryScalarOpts: scalarOpts,
       forceQueryBlockOpts: blockOpts,
@@ -678,32 +678,6 @@ abstract class Shelf extends _XBase {
   }
 
   // ***************************************************************************
-  // ********** QUERY **********************************************************
-  // ***************************************************************************
-
-  ///
-  /// VERY IMPORTANT METHOD:
-  ///
-  @Deprecated("Xoa di, khong su dung nua")
-  Future<bool> _queryAllWithOverlayAndRestorable({
-    required _DataFilterOpt? forceDataFilterOpt,
-    required List<_ScalarOpt> forceQueryScalarOpts,
-    required List<_BlockOpt> forceQueryBlockOpts,
-    required List<_BlockFormOpt> forceQueryBlockFormOpts,
-  }) async {
-    return await FlutterArtist.executeTask(
-      asyncFunction: () async {
-        return await _queryAllWithRestorable(
-          forceDataFilterOpt: forceDataFilterOpt,
-          forceQueryScalarOpts: forceQueryScalarOpts,
-          forceQueryBlockOpts: forceQueryBlockOpts,
-          forceQueryBlockFormOpts: forceQueryBlockFormOpts,
-        );
-      },
-    );
-  }
-
-  // ***************************************************************************
   // ***************************************************************************
 
   String _toString({
@@ -747,39 +721,6 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
   // ***************************************************************************
 
-  ///
-  /// VERY IMPORTANT METHOD:
-  ///
-  @Deprecated("Xoa di, khong su dung nua")
-  Future<bool> _queryAllWithRestorable({
-    required _DataFilterOpt? forceDataFilterOpt,
-    required List<_ScalarOpt> forceQueryScalarOpts,
-    required List<_BlockOpt> forceQueryBlockOpts,
-    required List<_BlockFormOpt> forceQueryBlockFormOpts,
-  }) async {
-    String info = _toString(
-      forceQueryScalarOpts: forceQueryScalarOpts,
-      forceQueryBlockOpts: forceQueryBlockOpts,
-      forceQueryBlockFormOpts: forceQueryBlockFormOpts,
-    );
-    FlutterArtist.codeFlowLogger._addInfo(
-      ownerClassInstance: this,
-      info: 'Execute Lazy Query: $info',
-      isLibCode: true,
-    );
-    //
-    bool success = await _queryAll(
-      forceDataFilterOpt: forceDataFilterOpt,
-      forceQueryScalarOpts: forceQueryScalarOpts,
-      forceQueryBlockOpts: forceQueryBlockOpts,
-      forceQueryBlockFormOpts: forceQueryBlockFormOpts,
-    );
-    return success;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   Future<bool> _queryAll({
     required _DataFilterOpt? forceDataFilterOpt,
     required List<_ScalarOpt> forceQueryScalarOpts,
@@ -803,59 +744,48 @@ abstract class Shelf extends _XBase {
   Future<bool> _executeQueryXShelf({
     required _XShelf xShelf,
   }) async {
-    try {
-      for (_XScalar xScalar in xShelf.allXScalars) {
-        if (!xScalar.needQuery) {
-          continue;
-        }
-        //
-        // Add to Queue:
-        //
-        _taskUnitQueue.addTaskUnit(
-          _ScalarQueryTaskUnit(
-            xScalar: xScalar,
-          ),
-        );
+    for (_XScalar xScalar in xShelf.allXScalars) {
+      if (!xScalar.needQuery) {
+        continue;
       }
       //
-      for (_XBlock xBlock in xShelf.allRootXBlocks) {
-        //
-        // Add to Queue:
-        //
-        _taskUnitQueue.addTaskUnit(
-          _BlockQueryTaskUnit(
-            xBlock: xBlock,
-          ),
-        );
-      }
+      // Add to Queue:
       //
-      for (_XBlockForm xBlockForm in xShelf.allXBlockForms) {
-        if (!xBlockForm.needQuery) {
-          continue;
-        }
-        //
-        // Add to Queue:
-        //
-        _taskUnitQueue.addTaskUnit(
-          _BlockFormLoadFormTaskUnit(
-            xBlockForm: xBlockForm,
-          ),
-        );
-      }
-      //
-      await _executeTaskUnitQueue();
-      //
-      return true;
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: this,
-        methodName: "_queryAll",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
+      _taskUnitQueue.addTaskUnit(
+        _ScalarQueryTaskUnit(
+          xScalar: xScalar,
+        ),
       );
-      return false;
     }
+    //
+    for (_XBlock xBlock in xShelf.allRootXBlocks) {
+      //
+      // Add to Queue:
+      //
+      _taskUnitQueue.addTaskUnit(
+        _BlockQueryTaskUnit(
+          xBlock: xBlock,
+        ),
+      );
+    }
+    //
+    for (_XBlockForm xBlockForm in xShelf.allXBlockForms) {
+      if (!xBlockForm.needQuery) {
+        continue;
+      }
+      //
+      // Add to Queue:
+      //
+      _taskUnitQueue.addTaskUnit(
+        _BlockFormLoadFormTaskUnit(
+          xBlockForm: xBlockForm,
+        ),
+      );
+    }
+    //
+    await _executeTaskUnitQueue();
+    //
+    return true;
   }
 
   // ***************************************************************************

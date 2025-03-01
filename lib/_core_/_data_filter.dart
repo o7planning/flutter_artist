@@ -162,7 +162,7 @@ abstract class DataFilter<
       },
       navigate: null,
     );
-    return await shelf._queryAllWithOverlayAndRestorable(
+    return await shelf._queryAll(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: this,
         filterInput: filterInput,

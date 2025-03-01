@@ -429,7 +429,7 @@ abstract class Scalar<
       parameters: {"filterInput": filterInput},
     );
     //
-    return await shelf._queryAllWithOverlayAndRestorable(
+    return await shelf._queryAll(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: _registeredOrDefaultDataFilter,
         filterInput: filterInput,
@@ -445,62 +445,6 @@ abstract class Scalar<
       __isQuerying = isQuerying;
       this.updateControlWidgets();
     } catch (e) {}
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @Deprecated("Xoa di, khong su dung nua")
-  Future<bool> __queryThis({
-    required FILTER_CRITERIA filterCriteria,
-  }) async {
-    ApiResult<VALUE> result;
-    try {
-      FlutterArtist.codeFlowLogger._addMethodCall(
-        isLibCode: false,
-        navigate: null,
-        ownerClassInstance: this,
-        methodName: "callApiQuery",
-        parameters: {},
-      );
-      //
-      __refreshQueryingState(isQuerying: true);
-      //
-      result = await callApiQuery(
-        filterCriteria: filterCriteria,
-      );
-      //
-      __refreshQueryingState(isQuerying: false);
-    } catch (e, stackTrace) {
-      __refreshQueryingState(isQuerying: false);
-      //
-      _handleError(
-        shelf: shelf,
-        methodName: "callApiQuery",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      //
-      return false;
-    }
-    if (result.errorMessage != null) {
-      _handleRestError(
-        shelf: shelf,
-        methodName: "callApiQuery",
-        message: result.errorMessage!,
-        errorDetails: result.errorDetails,
-        showSnackBar: true,
-      );
-      return false;
-    }
-    // TODO: Xu ly cac tinh huong loi???
-    data._updateFrom(
-      filterCriteria: filterCriteria,
-      data: result.data,
-      dataState: DataState.ready,
-    );
-    return true;
   }
 
   // ***************************************************************************

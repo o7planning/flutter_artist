@@ -634,7 +634,7 @@ class _Storage {
       Shelf shelf = __shelfMap[shelfName]!;
       _ScalarAndBlockList sbList = queryMap[shelfName]!;
       //
-      await shelf._queryAllWithOverlayAndRestorable(
+      await shelf._queryAll(
         forceDataFilterOpt: null,
         forceQueryScalarOpts: sbList.queryScalars
             .map(

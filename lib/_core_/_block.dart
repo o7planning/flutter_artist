@@ -1784,7 +1784,7 @@ abstract class Block<
       parameters: {},
     );
     //
-    bool success = await shelf._queryAllWithOverlayAndRestorable(
+    bool success = await shelf._queryAll(
       forceDataFilterOpt: null,
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [
@@ -1934,7 +1934,7 @@ abstract class Block<
       },
     );
     //
-    bool success = await shelf._queryAllWithOverlayAndRestorable(
+    bool success = await shelf._queryAll(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: _registeredOrDefaultDataFilter,
         filterInput: filterInput,
@@ -1987,7 +1987,7 @@ abstract class Block<
 
     printLog("\n\n${getClassName(this)} ~~~~~~~~~~~~> queryAndPrepareToEdit()");
     //
-    bool success = await shelf._queryAllWithOverlayAndRestorable(
+    bool success = await shelf._queryAll(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: _registeredOrDefaultDataFilter,
         filterInput: filterInput,
@@ -2032,7 +2032,7 @@ abstract class Block<
       parameters: {},
     );
     //
-    bool success = await shelf._queryAllWithOverlayAndRestorable(
+    bool success = await shelf._queryAll(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: this._registeredOrDefaultDataFilter,
         filterInput: filterInput,
