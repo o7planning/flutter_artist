@@ -1004,6 +1004,8 @@ abstract class Block<
     }
     print(
         ">>>>>>>>>>> ${getClassName(this)}._unitPrepareToShow - forceReloadItem: ${thisXBlock.forceReloadItem}");
+    thisXBlock.printParameters(); // ---> Debug
+
     if (!thisXBlock.forceQuery || !thisXBlock.forceReloadItem) {
       // return;
     }
