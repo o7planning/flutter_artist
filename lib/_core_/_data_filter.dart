@@ -162,7 +162,7 @@ abstract class DataFilter<
       },
       navigate: null,
     );
-    _XShelf xShelf= await shelf._queryAll(
+    _XShelf xShelf = await shelf._queryAll(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: this,
         filterInput: filterInput,

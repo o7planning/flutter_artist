@@ -531,12 +531,12 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<bool> _queryLazyScalarOrBlockOrForms({
+  Future<void> _queryLazyScalarOrBlockOrForms({
     required QueryType queryType,
     required List<_ScalarOrBlockOrFormWrapper> scalarOrBlockOrFormWrappers,
   }) async {
     if (scalarOrBlockOrFormWrappers.isEmpty) {
-      return true;
+      return;
     }
     //
     final List<_ScalarOpt> scalarOpts = [];
@@ -576,7 +576,7 @@ abstract class Shelf extends _XBase {
     print("@@@@@@@@@@@@ Query Lazy List: blockOpts: $blockOpts");
     print("@@@@@@@@@@@@ Query Lazy List: blockFormOpts: $blockFormOpts");
     //
-    return await _queryAll(
+    _XShelf xShelf = await _queryAll(
       forceDataFilterOpt: null,
       forceQueryScalarOpts: scalarOpts,
       forceQueryBlockOpts: blockOpts,

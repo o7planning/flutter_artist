@@ -139,7 +139,8 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
       );
     }
     //
-    return await widget.block.query();
+    BlockQueryResult? queryResult = await widget.block.query();
+    return queryResult != null && queryResult.success;
   }
 
   @override

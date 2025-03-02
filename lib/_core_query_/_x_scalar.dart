@@ -6,15 +6,24 @@ class _XScalar {
   final Scalar scalar;
   final _XDataFilter xDataFilter;
 
+  String get name => scalar.name;
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   _XScalar({
     required this.scalar,
     required this.xDataFilter,
   });
 
-  String get name => scalar.name;
+  // ***************************************************************************
+  // ***************************************************************************
 
+  var queryResult = ScalarQueryResult();
 
-  var ScalarQueryResult
+  // ***************************************************************************
+  // ***************************************************************************
+
   // TODO: Doi ten?
   bool get needQuery {
     return __forceQuery;

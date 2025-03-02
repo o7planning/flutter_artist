@@ -46,11 +46,9 @@ class CurrentItemSelectionResult<ITEM> {
 }
 
 class ItemDeletionResult<ITEM> {
-
-  List<ITEM> candidateItems =[];
-  List<ITEM> deletedItems =[];
+  List<ITEM> candidateItems = [];
+  List<ITEM> deletedItems = [];
   List<ITEM> failedItems = [];
-
 
   void addCandidateItem(ITEM item) {
     candidateItems.add(item);
@@ -65,10 +63,9 @@ class ItemDeletionResult<ITEM> {
   }
 }
 
-class QueryResult {
+class BlockQueryResult {
   bool success = true;
 }
-
 
 class ScalarQueryResult {
   bool success = true;

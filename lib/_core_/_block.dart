@@ -1868,7 +1868,7 @@ abstract class Block<
   /// Query the next page and replace the current items in the list.
   ///
   @RootMethod()
-  Future<QueryResult?> queryNextPage({
+  Future<BlockQueryResult?> queryNextPage({
     PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAvailableItem,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -1901,7 +1901,7 @@ abstract class Block<
   /// Query the previous page and replace the current items in the list.
   ///
   @RootMethod()
-  Future<QueryResult?> queryPreviousPage({
+  Future<BlockQueryResult?> queryPreviousPage({
     PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAvailableItem,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -1937,7 +1937,7 @@ abstract class Block<
   /// Query the next page and append to the current list of items.
   ///
   @RootMethod()
-  Future<QueryResult?> queryMore({
+  Future<BlockQueryResult?> queryMore({
     PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAvailableItem,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -1971,7 +1971,7 @@ abstract class Block<
   ///
   @nonVirtual
   @RootMethod()
-  Future<QueryResult?> query({
+  Future<BlockQueryResult?> query({
     ListBehavior listBehavior = ListBehavior.replace,
     PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAvailableItem,
     FILTER_INPUT? filterInput,
@@ -2013,7 +2013,7 @@ abstract class Block<
     );
     //
     _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
-    QueryResult queryResult = xBlock.queryResult;
+    BlockQueryResult queryResult = xBlock.queryResult;
     if (queryResult.success) {
       _executeNavigation(navigate: navigate);
     }
@@ -2028,7 +2028,7 @@ abstract class Block<
   ///
   @nonVirtual
   @RootMethod()
-  Future<QueryResult?> queryAndPrepareToEdit({
+  Future<BlockQueryResult?> queryAndPrepareToEdit({
     FILTER_INPUT? filterInput,
     ListBehavior listBehavior = ListBehavior.replace,
     SuggestedSelection<ID>? suggestedSelection,
@@ -2068,7 +2068,7 @@ abstract class Block<
     );
     //
     _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
-    QueryResult queryResult = xBlock.queryResult;
+    BlockQueryResult queryResult = xBlock.queryResult;
     if (queryResult.success) {
       _executeNavigation(navigate: navigate);
     }
@@ -2083,7 +2083,7 @@ abstract class Block<
   /// If this block has a BlockForm its data state set to "Ready", else its data state set to "Pending".
   ///
   @RootMethod()
-  Future<QueryResult?> queryAndPrepareToCreate({
+  Future<BlockQueryResult?> queryAndPrepareToCreate({
     FILTER_INPUT? filterInput,
     Function()? navigate,
   }) async {
@@ -2115,7 +2115,7 @@ abstract class Block<
     );
     //
     _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
-    QueryResult queryResult = xBlock.queryResult;
+    BlockQueryResult queryResult = xBlock.queryResult;
     if (queryResult.success) {
       _executeNavigation(navigate: navigate);
     }
