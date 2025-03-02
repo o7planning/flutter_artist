@@ -297,6 +297,22 @@ class BlockData<
   // ******* PUBLIC ITEM PROPERTIES ********************************************
   // ***************************************************************************
 
+  bool isSame({
+    required ITEM? item1,
+    required ITEM? item2,
+  }) {
+    if (item1 == null && item2 == null) {
+      return true;
+    }
+    if (item1 != null && item2 != null) {
+      return block.getItemId(item1) == block.getItemId(item2);
+    }
+    return false;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   ITEM? get firstItem {
     return _items.firstOrNull;
   }

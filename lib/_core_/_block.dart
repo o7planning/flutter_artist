@@ -978,18 +978,10 @@ abstract class Block<
     // - Find Item to Select as Current:
     //
     if (newQueryDataState == DataState.ready) {
-      thisXBlock.setState(
-        candidateCurrentItem: candidateCurrentItem,
-        stateCurrentItem: this.data.currentItem,
-        stateCurrentItemDetail: this.data.currentItemDetail,
-        stateSelectedItems: this.data._selectedItems,
-        stateCheckedItems: this.data._checkedItems,
-      );
-      //
       _taskUnitQueue.addTaskUnit(
         _BlockSelectAsCurrentTaskUnit<ITEM>(
           xBlock: thisXBlock,
-          candidateItem: null,
+          candidateItem: candidateCurrentItem,
           forceForm: null,
         ),
       );
@@ -1004,10 +996,19 @@ abstract class Block<
   Future<void> _unitSelectItemAsCurrent({required _XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
     //
+    thisXBlock.currentItemSelectionResult._initState(
+      success: true,
+      candidateItem: thisXBlock._candidateCurrentItem,
+      oldCurrentItem: this.data.currentItem,
+      currentItem: this.data.currentItem,
+    );
+    //
     if (this.queryDataState == DataState.error) {
+      thisXBlock.currentItemSelectionResult.success = false;
       return;
     }
     if (this.queryDataState == DataState.pending) {
+      thisXBlock.currentItemSelectionResult.success = false;
       throw Exception("Illegal Query State");
     }
     //
@@ -1054,6 +1055,14 @@ abstract class Block<
           newCurrent = true;
         }
       }
+    }
+    //
+    if (!this.data.isSame(
+          item1: thisXBlock._candidateCurrentItem as ITEM?,
+          item2: candidateCurrentItem,
+        )) {
+      thisXBlock.currentItemSelectionResult
+          ._addCandidateItem(candidateCurrentItem);
     }
     //
     if (!newCurrent && !thisXBlock.forceReloadItem) {
@@ -1136,7 +1145,9 @@ abstract class Block<
           );
       // #SAME-CODE-001
       if (!isCandidateIsCurrent) {
-        await __removeItemFromList(removeItem: candidateCurrentItem);
+        await __removeItemFromList(
+          removeItem: candidateCurrentItem,
+        );
         //
         if (currentItem != null) {
           return;
@@ -1158,7 +1169,9 @@ abstract class Block<
       // Candidate is current but not found in database.
       // Remove Item (Current Item)
       //
-      await __removeItemFromList(removeItem: candidateCurrentItem);
+      await __removeItemFromList(
+        removeItem: candidateCurrentItem,
+      );
       //
       this.data._setCurrentItemOnly(
             refreshedItem: null,
@@ -1220,6 +1233,8 @@ abstract class Block<
           refreshedItemDetail: candidateCurrentItemDetail,
         );
     if (newCurrent) {
+      thisXBlock.currentItemSelectionResult.currentItem = candidateCurrentItem;
+      //
       this.__clearChildrenWithDataStateCascade(
         thisXBlock: thisXBlock,
         queryDataState: DataState.pending,
@@ -1761,6 +1776,9 @@ abstract class Block<
     _taskUnitQueue.addTaskUnit(taskUnit);
     //
     await this.shelf._executeTaskUnitQueue();
+    if (navigate != null) {
+      navigate!();
+    }
     return true;
   }
 

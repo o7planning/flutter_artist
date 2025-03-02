@@ -1,17 +1,36 @@
 part of '../flutter_artist.dart';
 
 class CurrentItemSelectionResult<ITEM> {
-  final bool success;
-  final ITEM? candidateItem;
-  final ITEM? oldCurrentItem;
-  final ITEM? currentItem;
+  bool success = true;
+  final List<ITEM?> candidateItems = [];
+  ITEM? oldCurrentItem;
+  ITEM? currentItem;
 
-  CurrentItemSelectionResult({
-    required this.success,
-    required this.candidateItem,
-    required this.oldCurrentItem,
-    required this.currentItem,
-  });
+  CurrentItemSelectionResult();
+
+  void _initState({
+    required bool success,
+    required ITEM? candidateItem,
+    required ITEM? oldCurrentItem,
+    required ITEM? currentItem,
+  }) {
+    this.success = success;
+    this.candidateItems.add(candidateItem);
+    this.oldCurrentItem = oldCurrentItem;
+    this.currentItem = currentItem;
+  }
+
+  void _addCandidateItem(ITEM? candidateItem) {
+    candidateItems.add(candidateItem);
+  }
+
+  ITEM? get firstCandidateItem {
+    return candidateItems.firstOrNull;
+  }
+
+  ITEM? get lastCandidateItem {
+    return candidateItems.lastOrNull;
+  }
 
 // bool hasCandidateItemAndSelected() {
 //   return candidateItem != null && candidateItem == currentItem;

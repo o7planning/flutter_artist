@@ -1,35 +1,44 @@
 part of '../flutter_artist.dart';
 
 class _XBlock {
-  bool __forceQuery = false;
-  bool __forceReloadItem = false;
-
-  bool affectByFilterInput = false;
-  final Block block;
   final _XDataFilter xDataFilter;
+  final Block block;
 
   String get name => block.name;
 
+  bool affectByFilterInput = false;
+
+  // ***************************************************************************
   // Query Options:
+  // ***************************************************************************
+
+  bool __forceQuery = false;
+  bool __forceReloadItem = false;
+
   QueryType? __queryType;
   ListBehavior? __listBehavior;
   SuggestedSelection? __suggestedSelection;
   PostQueryBehavior? __postQueryBehavior;
   PageableData? __pageable;
 
-  //
+  // Candidate for current selection.
+  Object? _candidateCurrentItem;
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   final _XBlock? xBlockParent;
   final _XBlockForm? xBlockForm;
   final List<_XBlock> childXBlocks = [];
 
-  //
-  Object? _candidateCurrentItem;
-  _CurrentCoupleItem _stateCurrent = _CurrentCoupleItem(
-    item: null,
-    itemDetail: null,
-  );
-  List<Object> _stateSelectedItems = [];
-  List<Object> _stateCheckedItems = [];
+  // ***************************************************************************
+  // Return Data:
+  // ***************************************************************************
+
+  final currentItemSelectionResult = CurrentItemSelectionResult();
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   _XBlock({
     required this.block,
@@ -38,21 +47,8 @@ class _XBlock {
     required this.xBlockForm,
   });
 
-  void setState({
-    required Object? candidateCurrentItem,
-    required Object? stateCurrentItem,
-    required Object? stateCurrentItemDetail,
-    required List<Object> stateSelectedItems,
-    required List<Object> stateCheckedItems,
-  }) {
-    _candidateCurrentItem = candidateCurrentItem;
-    _stateCurrent = _CurrentCoupleItem(
-      item: stateCurrentItem,
-      itemDetail: stateCurrentItemDetail,
-    );
-    _stateSelectedItems.addAll(stateSelectedItems);
-    _stateCheckedItems.addAll(stateCheckedItems);
-  }
+  // ***************************************************************************
+  // ***************************************************************************
 
   bool get forceQuery {
     return __forceQuery;
