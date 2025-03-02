@@ -1868,7 +1868,7 @@ abstract class Block<
   /// Query the next page and replace the current items in the list.
   ///
   @RootMethod()
-  Future<BlockQueryResult?> queryNextPage({
+  Future<bool> queryNextPage({
     PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAvailableItem,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -1881,7 +1881,7 @@ abstract class Block<
     //
     PageableData? currentPageable = this.data.pageable;
     if (currentPageable == null) {
-      return null;
+      return false;
     }
     PageableData pageable = currentPageable.next();
     //
@@ -1901,7 +1901,7 @@ abstract class Block<
   /// Query the previous page and replace the current items in the list.
   ///
   @RootMethod()
-  Future<BlockQueryResult?> queryPreviousPage({
+  Future<bool> queryPreviousPage({
     PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAvailableItem,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -1914,11 +1914,11 @@ abstract class Block<
     //
     PageableData? currentPageable = this.data.pageable;
     if (currentPageable == null) {
-      return null;
+      return false;
     }
     PageableData? pageable = currentPageable.previous();
     if (pageable == null) {
-      return null;
+      return false;
     }
     //
     return await query(
@@ -1937,7 +1937,7 @@ abstract class Block<
   /// Query the next page and append to the current list of items.
   ///
   @RootMethod()
-  Future<BlockQueryResult?> queryMore({
+  Future<bool> queryMore({
     PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAvailableItem,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -1950,7 +1950,7 @@ abstract class Block<
     //
     PageableData? currentPageable = this.data.pageable;
     if (currentPageable == null) {
-      return null;
+      return false;
     }
     PageableData pageable = currentPageable.next();
     //
@@ -1971,7 +1971,7 @@ abstract class Block<
   ///
   @nonVirtual
   @RootMethod()
-  Future<BlockQueryResult?> query({
+  Future<bool> query({
     ListBehavior listBehavior = ListBehavior.replace,
     PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAvailableItem,
     FILTER_INPUT? filterInput,
@@ -2017,7 +2017,7 @@ abstract class Block<
     if (queryResult.success) {
       _executeNavigation(navigate: navigate);
     }
-    return queryResult;
+    return queryResult.success;
   }
 
   // ***************************************************************************

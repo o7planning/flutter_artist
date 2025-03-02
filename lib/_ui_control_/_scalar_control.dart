@@ -68,8 +68,7 @@ class _ControlButtonState extends _RefreshableWidgetState<ScalarControl> {
       );
     }
     //
-    ScalarQueryResult? queryResult = await widget.scalar.query();
-    return queryResult != null && queryResult.success;
+    return await widget.scalar.query();
   }
 
   @override

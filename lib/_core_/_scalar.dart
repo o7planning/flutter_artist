@@ -464,7 +464,7 @@ abstract class Scalar<
   ///
   @nonVirtual
   @RootMethod()
-  Future<ScalarQueryResult> query({
+  Future<bool> query({
     FILTER_INPUT? filterInput,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -489,7 +489,7 @@ abstract class Scalar<
     //
     _XScalar xScalar = xShelf.findXScalarByName(this.name)!;
     ScalarQueryResult result = xScalar.queryResult;
-    return result;
+    return result.success;
   }
 
   // ***************************************************************************
