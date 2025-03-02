@@ -817,7 +817,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<bool> _unitQuery({required _XBlock thisXBlock}) async {
+  Future<void> _unitQuery({required _XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
     //
     print(
@@ -832,7 +832,8 @@ abstract class Block<
         _TaskUnit taskUnit = _BlockQueryTaskUnit(xBlock: childXBlock);
         _taskUnitQueue.addTaskUnit(taskUnit);
       }
-      return true;
+      thisXBlock.queryResult.success = true;
+      return;
     }
 
     if (this.queryDataState == DataState.ready && !thisXBlock.forceQuery) {
@@ -843,7 +844,8 @@ abstract class Block<
           forceForm: null,
         ),
       );
-      return true;
+      thisXBlock.queryResult.success = true;
+      return;
     }
     //
     // this.queryDataState != DataState.ready || forceQuery || hasActiveUI
@@ -879,7 +881,8 @@ abstract class Block<
         queryDataState: DataState.error,
         formDataState: DataState.error,
       );
-      return false;
+      thisXBlock.queryResult.success = false;
+      return;
     }
     //
     // Ready FilterCriteria:
@@ -948,6 +951,8 @@ abstract class Block<
     }
     //
     if (isQueryError) {
+      thisXBlock.queryResult.success = false;
+      //
       switch (newListBehavior) {
         case ListBehavior.replace:
           newQueryDataState = DataState.error;
@@ -959,6 +964,8 @@ abstract class Block<
           }
       }
     } else {
+      thisXBlock.queryResult.success = true;
+      //
       newQueryDataState = DataState.ready;
     }
     //
@@ -986,8 +993,6 @@ abstract class Block<
         ),
       );
     }
-    //
-    return true;
   }
 
   // ***************************************************************************
@@ -996,19 +1001,23 @@ abstract class Block<
   Future<void> _unitSelectItemAsCurrent({required _XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
     //
-    thisXBlock.currentItemSelectionResult._initState(
+    CurrentItemSelectionResult<ITEM> result =
+        CurrentItemSelectionResult<ITEM>();
+    thisXBlock.currentItemSelectionResult = result;
+
+    result._initState(
       success: true,
-      candidateItem: thisXBlock._candidateCurrentItem,
+      candidateItem: thisXBlock._candidateCurrentItem as ITEM?,
       oldCurrentItem: this.data.currentItem,
       currentItem: this.data.currentItem,
     );
     //
     if (this.queryDataState == DataState.error) {
-      thisXBlock.currentItemSelectionResult.success = false;
+      result.success = false;
       return;
     }
     if (this.queryDataState == DataState.pending) {
-      thisXBlock.currentItemSelectionResult.success = false;
+      result.success = false;
       throw Exception("Illegal Query State");
     }
     //
@@ -1061,8 +1070,7 @@ abstract class Block<
           item1: thisXBlock._candidateCurrentItem as ITEM?,
           item2: candidateCurrentItem,
         )) {
-      thisXBlock.currentItemSelectionResult
-          ._addCandidateItem(candidateCurrentItem);
+      result._addCandidateItem(candidateCurrentItem);
     }
     //
     if (!newCurrent && !thisXBlock.forceReloadItem) {
@@ -1233,7 +1241,7 @@ abstract class Block<
           refreshedItemDetail: candidateCurrentItemDetail,
         );
     if (newCurrent) {
-      thisXBlock.currentItemSelectionResult.currentItem = candidateCurrentItem;
+      result.currentItem = candidateCurrentItem;
       //
       this.__clearChildrenWithDataStateCascade(
         thisXBlock: thisXBlock,
