@@ -46,12 +46,30 @@ class CurrentItemSelectionResult<ITEM> {
 }
 
 class ItemDeletionResult<ITEM> {
-  bool success = false;
-  ITEM? candidateItem;
 
-  void _initState({
-    required ITEM? candidateItem,
-  }) {
-    this.candidateItem = candidateItem;
+  List<ITEM> candidateItems =[];
+  List<ITEM> deletedItems =[];
+  List<ITEM> failedItems = [];
+
+
+  void addCandidateItem(ITEM item) {
+    candidateItems.add(item);
   }
+
+  void addDeletedItem(ITEM item) {
+    deletedItems.add(item);
+  }
+
+  void addDFailedItem(ITEM item) {
+    failedItems.add(item);
+  }
+}
+
+class QueryResult {
+  bool success = true;
+}
+
+
+class ScalarQueryResult {
+  bool success = true;
 }

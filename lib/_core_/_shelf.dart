@@ -679,7 +679,7 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<bool> _queryAll({
+  Future<_XShelf> _queryAll({
     required _DataFilterOpt? forceDataFilterOpt,
     required List<_ScalarOpt> forceQueryScalarOpts,
     required List<_BlockOpt> forceQueryBlockOpts,
@@ -693,13 +693,14 @@ abstract class Shelf extends _XBase {
       forceQueryBlockFormOpts: forceQueryBlockFormOpts,
     );
     //
-    return await _executeQueryXShelf(xShelf: xShelf);
+    await _executeQueryXShelf(xShelf: xShelf);
+    return xShelf;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<bool> _executeQueryXShelf({
+  Future<void> _executeQueryXShelf({
     required _XShelf xShelf,
   }) async {
     for (_XScalar xScalar in xShelf.allXScalars) {
@@ -742,8 +743,6 @@ abstract class Shelf extends _XBase {
     }
     //
     await _executeTaskUnitQueue();
-    //
-    return true;
   }
 
   // ***************************************************************************

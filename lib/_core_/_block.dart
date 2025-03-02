@@ -1270,7 +1270,7 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    // No need check again?
+    // No need to check again?
     //
     bool canDelete = canDeleteItem(item: item);
     if (!canDelete) {
@@ -1279,7 +1279,7 @@ abstract class Block<
     //
     // Candidate Item to delete.
     //
-    thisXBlock.itemDeletionResult._initState(candidateItem: item);
+    thisXBlock.itemDeletionResult.addCandidateItem(item);
     //
     final bool isCurrent = this.data.isCurrentItem(item: item);
     //
@@ -1316,7 +1316,7 @@ abstract class Block<
         showSnackBar: true,
       );
       //
-      thisXBlock.itemDeletionResult.success = false;
+      thisXBlock.itemDeletionResult.addDFailedItem(item);
       //
       return;
     }
@@ -1329,14 +1329,18 @@ abstract class Block<
         showSnackBar: true,
       );
       //
-      thisXBlock.itemDeletionResult.success = false;
+      thisXBlock.itemDeletionResult.addDFailedItem(item);
       //
       return;
     }
+    //
+    // Delete Successful.
+    //
+    thisXBlock.itemDeletionResult.addDeletedItem(item);
+    //
     // #SAME-CODE-001
     if (!isCurrent) {
       await __removeItemFromList(removeItem: item);
-      thisXBlock.itemDeletionResult.success = true;
       return;
     }
     //
@@ -1864,7 +1868,7 @@ abstract class Block<
   /// Query the next page and replace the current items in the list.
   ///
   @RootMethod()
-  Future<bool> queryNextPage({
+  Future<QueryResult?> queryNextPage({
     PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAvailableItem,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -1877,7 +1881,7 @@ abstract class Block<
     //
     PageableData? currentPageable = this.data.pageable;
     if (currentPageable == null) {
-      return false;
+      return null;
     }
     PageableData pageable = currentPageable.next();
     //
@@ -1897,7 +1901,7 @@ abstract class Block<
   /// Query the previous page and replace the current items in the list.
   ///
   @RootMethod()
-  Future<bool> queryPreviousPage({
+  Future<QueryResult?> queryPreviousPage({
     PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAvailableItem,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -1910,11 +1914,11 @@ abstract class Block<
     //
     PageableData? currentPageable = this.data.pageable;
     if (currentPageable == null) {
-      return false;
+      return null;
     }
     PageableData? pageable = currentPageable.previous();
     if (pageable == null) {
-      return false;
+      return null;
     }
     //
     return await query(
@@ -1933,7 +1937,7 @@ abstract class Block<
   /// Query the next page and append to the current list of items.
   ///
   @RootMethod()
-  Future<bool> queryMore({
+  Future<QueryResult?> queryMore({
     PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAvailableItem,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -1946,7 +1950,7 @@ abstract class Block<
     //
     PageableData? currentPageable = this.data.pageable;
     if (currentPageable == null) {
-      return false;
+      return null;
     }
     PageableData pageable = currentPageable.next();
     //
@@ -1967,7 +1971,7 @@ abstract class Block<
   ///
   @nonVirtual
   @RootMethod()
-  Future<bool> query({
+  Future<QueryResult?> query({
     ListBehavior listBehavior = ListBehavior.replace,
     PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAvailableItem,
     FILTER_INPUT? filterInput,
@@ -1989,7 +1993,7 @@ abstract class Block<
       },
     );
     //
-    bool success = await shelf._queryAll(
+    _XShelf xShelf = await shelf._queryAll(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: _registeredOrDefaultDataFilter,
         filterInput: filterInput,
@@ -2008,10 +2012,12 @@ abstract class Block<
       forceQueryBlockFormOpts: [],
     );
     //
-    if (success) {
+    _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
+    QueryResult queryResult = xBlock.queryResult;
+    if (queryResult.success) {
       _executeNavigation(navigate: navigate);
     }
-    return success;
+    return queryResult;
   }
 
   // ***************************************************************************
@@ -2022,7 +2028,7 @@ abstract class Block<
   ///
   @nonVirtual
   @RootMethod()
-  Future<bool> queryAndPrepareToEdit({
+  Future<QueryResult?> queryAndPrepareToEdit({
     FILTER_INPUT? filterInput,
     ListBehavior listBehavior = ListBehavior.replace,
     SuggestedSelection<ID>? suggestedSelection,
@@ -2040,10 +2046,9 @@ abstract class Block<
         "pageable": pageable,
       },
     );
-
     printLog("\n\n${getClassName(this)} ~~~~~~~~~~~~> queryAndPrepareToEdit()");
     //
-    bool success = await shelf._queryAll(
+    _XShelf xShelf = await shelf._queryAll(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: _registeredOrDefaultDataFilter,
         filterInput: filterInput,
@@ -2062,11 +2067,12 @@ abstract class Block<
       forceQueryBlockFormOpts: [],
     );
     //
-    printLog("Success: $success");
-    if (success) {
+    _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
+    QueryResult queryResult = xBlock.queryResult;
+    if (queryResult.success) {
       _executeNavigation(navigate: navigate);
     }
-    return success;
+    return queryResult;
   }
 
   // ***************************************************************************
@@ -2077,7 +2083,7 @@ abstract class Block<
   /// If this block has a BlockForm its data state set to "Ready", else its data state set to "Pending".
   ///
   @RootMethod()
-  Future<bool> queryAndPrepareToCreate({
+  Future<QueryResult?> queryAndPrepareToCreate({
     FILTER_INPUT? filterInput,
     Function()? navigate,
   }) async {
@@ -2089,7 +2095,7 @@ abstract class Block<
       parameters: {},
     );
     //
-    bool success = await shelf._queryAll(
+    _XShelf xShelf = await shelf._queryAll(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: this._registeredOrDefaultDataFilter,
         filterInput: filterInput,
@@ -2108,10 +2114,12 @@ abstract class Block<
       forceQueryBlockFormOpts: [],
     );
     //
-    if (success) {
+    _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
+    QueryResult queryResult = xBlock.queryResult;
+    if (queryResult.success) {
       _executeNavigation(navigate: navigate);
     }
-    return success;
+    return queryResult;
   }
 
   // ***************************************************************************

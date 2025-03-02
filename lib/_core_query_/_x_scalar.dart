@@ -13,6 +13,8 @@ class _XScalar {
 
   String get name => scalar.name;
 
+
+  var ScalarQueryResult
   // TODO: Doi ten?
   bool get needQuery {
     return __forceQuery;

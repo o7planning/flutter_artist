@@ -475,7 +475,7 @@ abstract class Scalar<
       parameters: {"filterInput": filterInput},
     );
     //
-    return await shelf._queryAll(
+    _XShelf xShelf= await shelf._queryAll(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: _registeredOrDefaultDataFilter,
         filterInput: filterInput,
@@ -486,6 +486,10 @@ abstract class Scalar<
       forceQueryBlockOpts: [],
       forceQueryBlockFormOpts: [],
     );
+    //
+    _XScalar xScalar = xShelf.findXScalarByName(this.name)!;
+    ScalarQueryResult result = xScalar.queryResult;
+
   }
 
   // ***************************************************************************

@@ -162,7 +162,7 @@ abstract class DataFilter<
       },
       navigate: null,
     );
-    return await shelf._queryAll(
+    _XShelf xShelf= await shelf._queryAll(
       forceDataFilterOpt: _DataFilterOpt(
         dataFilter: this,
         filterInput: filterInput,
@@ -181,6 +181,8 @@ abstract class DataFilter<
           .toList(),
       forceQueryBlockFormOpts: [],
     );
+    // TODO: Xem lai.
+    return true;
   }
 
   // ***************************************************************************

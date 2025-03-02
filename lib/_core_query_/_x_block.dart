@@ -39,6 +39,8 @@ class _XBlock {
 
   final itemDeletionResult = ItemDeletionResult();
 
+  final queryResult = QueryResult();
+
   // ***************************************************************************
   // ***************************************************************************
 
