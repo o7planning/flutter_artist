@@ -37,6 +37,8 @@ class _XBlock {
 
   final currentItemSelectionResult = CurrentItemSelectionResult();
 
+  final itemDeletionResult = ItemDeletionResult();
+
   // ***************************************************************************
   // ***************************************************************************
 

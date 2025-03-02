@@ -45,6 +45,13 @@ class CurrentItemSelectionResult<ITEM> {
 // }
 }
 
-class ItemDeletionResult {
-  //
+class ItemDeletionResult<ITEM> {
+  bool success = false;
+  ITEM? candidateItem;
+
+  void _initState({
+    required ITEM? candidateItem,
+  }) {
+    this.candidateItem = candidateItem;
+  }
 }

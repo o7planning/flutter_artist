@@ -1264,7 +1264,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<bool> _unitDeleteItem({
+  Future<void> _unitDeleteItem({
     required _XBlock thisXBlock,
     required ITEM item,
   }) async {
@@ -1274,8 +1274,13 @@ abstract class Block<
     //
     bool canDelete = canDeleteItem(item: item);
     if (!canDelete) {
-      return false;
+      return;
     }
+    //
+    // Candidate Item to delete.
+    //
+    thisXBlock.itemDeletionResult._initState(candidateItem: item);
+    //
     final bool isCurrent = this.data.isCurrentItem(item: item);
     //
     ApiResult<void> result;
@@ -1311,7 +1316,9 @@ abstract class Block<
         showSnackBar: true,
       );
       //
-      return false;
+      thisXBlock.itemDeletionResult.success = false;
+      //
+      return;
     }
     if (result.errorMessage != null) {
       _handleRestError(
@@ -1321,12 +1328,16 @@ abstract class Block<
         errorDetails: result.errorDetails,
         showSnackBar: true,
       );
-      return false;
+      //
+      thisXBlock.itemDeletionResult.success = false;
+      //
+      return;
     }
     // #SAME-CODE-001
     if (!isCurrent) {
       await __removeItemFromList(removeItem: item);
-      return true;
+      thisXBlock.itemDeletionResult.success = true;
+      return;
     }
     //
     // Deleted current item ==> find sibling.
@@ -1358,8 +1369,6 @@ abstract class Block<
       forceForm: null,
     );
     _taskUnitQueue.addTaskUnit(taskUnit);
-    //
-    return true;
   }
 
   // ***************************************************************************
@@ -1738,7 +1747,7 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
-  Future<bool> _prepareToShowOrEditItem({
+  Future<CurrentItemSelectionResult?> _prepareToShowOrEditItem({
     required ITEM item,
     required bool forceForm,
     required Function()? navigate,
@@ -1755,7 +1764,7 @@ abstract class Block<
     );
     //
     if (!this.canSelectItem()) {
-      return false;
+      return null;
     }
     //
     _XShelf xShelf = _XShelf(
@@ -1779,14 +1788,14 @@ abstract class Block<
     if (navigate != null) {
       navigate!();
     }
-    return true;
+    return thisXBlock.currentItemSelectionResult;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   @RootMethod()
-  Future<bool> prepareToShowItem({
+  Future<CurrentItemSelectionResult?> prepareToShowItem({
     required ITEM item,
     Function()? navigate,
   }) async {
@@ -2510,12 +2519,12 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
-  Future<bool> prepareToEditFirstItem({
+  Future<CurrentItemSelectionResult?> prepareToEditFirstItem({
     Function()? navigate,
   }) async {
     ITEM? nextItem = this.data.firstItem;
     if (nextItem == null) {
-      return false;
+      return null;
     }
     return await prepareToEditItem(
       item: nextItem,
@@ -2527,15 +2536,15 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
-  Future<bool> prepareToEditNextItem({
+  Future<CurrentItemSelectionResult?> prepareToEditNextItem({
     Function()? navigate,
   }) async {
     if (!this.data.hasNextItem) {
-      return false;
+      return null;
     }
     ITEM? nextItem = this.data.nextSiblingItem;
     if (nextItem == null) {
-      return false;
+      return null;
     }
     return await prepareToEditItem(
       item: nextItem,
@@ -2547,15 +2556,15 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
-  Future<bool> prepareToEditPreviousItem({
+  Future<CurrentItemSelectionResult?> prepareToEditPreviousItem({
     Function()? navigate,
   }) async {
     if (!this.data.hasPreviousItem) {
-      return false;
+      return null;
     }
     ITEM? previousItem = this.data.previousSiblingItem;
     if (previousItem == null) {
-      return false;
+      return null;
     }
     return await prepareToEditItem(
       item: previousItem,
@@ -2567,7 +2576,7 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
-  Future<bool> prepareToEditItem({
+  Future<CurrentItemSelectionResult?> prepareToEditItem({
     required ITEM item,
     Function()? navigate,
   }) async {
@@ -2592,12 +2601,12 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
-  Future<bool> prepareToShowFirstItem({
+  Future<CurrentItemSelectionResult?> prepareToShowFirstItem({
     Function()? navigate,
   }) async {
     ITEM? nextItem = this.data.firstItem;
     if (nextItem == null) {
-      return false;
+      return null;
     }
     return await prepareToShowItem(
       item: nextItem,
@@ -2609,15 +2618,15 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
-  Future<bool> prepareToShowNextItem({
+  Future<CurrentItemSelectionResult?> prepareToShowNextItem({
     Function()? navigate,
   }) async {
     if (!this.data.hasNextItem) {
-      return false;
+      return null;
     }
     ITEM? nextItem = this.data.nextSiblingItem;
     if (nextItem == null) {
-      return false;
+      return null;
     }
     return await prepareToShowItem(
       item: nextItem,
@@ -2629,15 +2638,15 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
-  Future<bool> prepareToShowPreviousItem({
+  Future<CurrentItemSelectionResult?> prepareToShowPreviousItem({
     Function()? navigate,
   }) async {
     if (!this.data.hasPreviousItem) {
-      return false;
+      return null;
     }
     ITEM? previousItem = this.data.previousSiblingItem;
     if (previousItem == null) {
-      return false;
+      return null;
     }
     return await prepareToShowItem(
       item: previousItem,
@@ -2828,7 +2837,7 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
-  Future<bool> deleteCurrentItem() async {
+  Future<ItemDeletionResult?> deleteCurrentItem() async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: null,
@@ -2842,14 +2851,14 @@ abstract class Block<
     if (currentItem != null) {
       return deleteItem(item: currentItem);
     }
-    return false;
+    return null;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   @RootMethod()
-  Future<bool> deleteItem({
+  Future<ItemDeletionResult?> deleteItem({
     required ITEM item,
     bool ignoreIfItemNotInList = true,
   }) async {
@@ -2864,7 +2873,7 @@ abstract class Block<
     );
     //
     if (!canDeleteItem(item: item)) {
-      return false;
+      return null;
     }
     if (ignoreIfItemNotInList) {
       ITEM? it = this.data.findItemSameIdWith(item: item);
@@ -2873,12 +2882,12 @@ abstract class Block<
           message: "Ignore deletion because this item is not in the list.",
           errorDetails: ["ignoreIfItemNotInList: true"],
         );
-        return false;
+        return null;
       }
     }
     bool confirm = await showConfirmDeleteDialog(details: getClassName(item));
     if (!confirm) {
-      return false;
+      return null;
     }
     _XShelf xShelf = _XShelf(
       shelf: shelf,
@@ -2897,7 +2906,7 @@ abstract class Block<
     _taskUnitQueue.addTaskUnit(taskUnit);
     //
     await this.shelf._executeTaskUnitQueue();
-    return true;
+    return thisXBlock.itemDeletionResult;
   }
 
   // ***************************************************************************
@@ -2907,7 +2916,7 @@ abstract class Block<
   ///
   ///
   @RootMethod()
-  Future<bool> refreshCurrentItem() async {
+  Future<CurrentItemSelectionResult?> refreshCurrentItem() async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: null,
@@ -2917,7 +2926,7 @@ abstract class Block<
     );
     //
     if (!canRefreshCurrentItem()) {
-      return false;
+      return null;
     }
     //
     return await prepareToShowItem(

@@ -97,7 +97,7 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
   }
 
   Future<bool> __deleteCurrentItem() async {
-    return await widget.block.deleteCurrentItem();
+    return await widget.block.deleteCurrentItem() != null;
   }
 
   Future<bool> __prepareToCreate() async {
@@ -118,7 +118,7 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
   }
 
   Future<bool> __refreshCurrentItem() async {
-    return await widget.block.refreshCurrentItem();
+    return await widget.block.refreshCurrentItem() != null;
   }
 
   Future<bool> __showFormInfo() async {
