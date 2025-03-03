@@ -84,14 +84,21 @@ abstract class DataFilter<
           );
       return null;
     }
+    print(
+        "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1: _formKey.currentState: ${_formKey.currentState}");
     //
     // Apply Default FilterCriteria:
     //
-    if (_formKey.currentState != null) {
-      try {
-        Map<String, dynamic> defaultFilterCriteria =
-            this.initDefaultFilterCriteria();
-        //
+
+    print(
+        "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 2: _formKey.currentState: ${_formKey.currentState}");
+    try {
+      Map<String, dynamic> defaultFilterCriteria =
+          this.initDefaultFilterCriteria();
+
+      if (_formKey.currentState == null) {
+        this.data._updateFilterData(defaultFilterCriteria);
+      } else {
         for (String key in defaultFilterCriteria.keys) {
           if (!_formKey.currentState!.instantValue.containsKey(key)) {
             _formKey.currentState!.patchValue(
@@ -99,24 +106,25 @@ abstract class DataFilter<
             );
           }
         }
-      } catch (e, stackTrace) {
-        _handleError(
-          shelf: shelf,
-          methodName: "toInputFilterCriteria",
-          error: "Error toInputFilterCriteria: $e",
-          stackTrace: stackTrace,
-          showSnackBar: true,
-        );
-        error = true;
       }
-      //
-      if (error) {
-        this.data._clearWithDataState(
-              filterDataState: DataState.error,
-            );
-        return null;
-      }
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: "toInputFilterCriteria",
+        error: "Error toInputFilterCriteria: $e",
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      error = true;
     }
+    //
+    if (error) {
+      this.data._clearWithDataState(
+            filterDataState: DataState.error,
+          );
+      return null;
+    }
+
     //
     // Apply FilterInput:
     //
@@ -146,6 +154,8 @@ abstract class DataFilter<
         return null;
       }
     }
+    //
+    print("@@@~~~~~~~~~~~~~~~~~~~~~> ${this.data._initialFormData}");
     //
     Map<String, dynamic> instantValue =
         _formKey.currentState?.instantValue ?? {};
@@ -265,7 +275,7 @@ abstract class DataFilter<
 
   // Change Event from GUI.
   void _onChangeFromFilterView() {
-    print("_onChangeFromFilterView: ${_formKey.currentState?.instantValue}");
+    print(">>>>>>>>>>> ??????????????????? _onChangeFromFilterView: ${_formKey.currentState?.instantValue}");
     if (_formKey.currentState?.instantValue != null) {
       data._currentFormData.addAll(_formKey.currentState!.instantValue);
       if (data._justInitialized) {

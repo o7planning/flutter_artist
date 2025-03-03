@@ -64,7 +64,6 @@ class _FilterViewBuilderState
       key: formKey,
       initialValue: widget.dataFilter.initFilterValue(),
       onChanged: () {
-        print("Change From FilterViewBuilder");
         widget.dataFilter._onChangeFromFilterView();
         if (mounted) {
           WidgetsBinding.instance.addPostFrameCallback((_) {

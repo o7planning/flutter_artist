@@ -317,8 +317,6 @@ part '_ui_/_control_bar_button.dart';
 
 part '_ui_/_custom_app_container.dart';
 
-part '_ui_/_data_filter_fragment_widget_builder.dart';
-
 part '_ui_/_debug_menu.dart';
 
 part '_ui_/_dev_container.dart';
