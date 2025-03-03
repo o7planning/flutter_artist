@@ -81,7 +81,7 @@ const IconData _otherClassIconData =
 
 const IconData _blockFragmentIconData = cupertino.CupertinoIcons.pano;
 
-const IconData _blockItemsViewIconData = cupertino.CupertinoIcons.table; 
+const IconData _blockItemsViewIconData = cupertino.CupertinoIcons.table;
 
 const IconData _scalarFragmentIconData = cupertino.CupertinoIcons.pano_fill;
 

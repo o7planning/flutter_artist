@@ -88,14 +88,14 @@ abstract class DataFilter<
     if (filterInput != null) {
       Map<String, dynamic> newFilterData = {};
       try {
-        newFilterData = prepareFilterData(
+        newFilterData = convertFromFilterInput(
           filterInput: filterInput,
         );
       } catch (e, stackTrace) {
         _handleError(
           shelf: shelf,
-          methodName: "prepareFilterData",
-          error: "Error prepareFilterData: $e",
+          methodName: "convertFromFilterInput",
+          error: "Error convertFromFilterInput: $e",
           stackTrace: stackTrace,
           showSnackBar: true,
         );
@@ -162,7 +162,7 @@ abstract class DataFilter<
   /// Call this method to initialize the necessary data for the DataFilter.
   /// For example, the list of items of the [Dropdown].
   ///
-  /// This method is called before [prepareFilterData] method.
+  /// This method is called before [convertFromFilterInput] method.
   ///
   /// Example:
   /// ```dart
@@ -193,8 +193,8 @@ abstract class DataFilter<
   ///
   /// This method is called after [prepareMasterFilterData].
   ///
-  Map<String, dynamic> prepareFilterData({
-    required FILTER_INPUT? filterInput,
+  Map<String, dynamic> convertFromFilterInput({
+    required FILTER_INPUT filterInput,
   });
 
   // ***************************************************************************

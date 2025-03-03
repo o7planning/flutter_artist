@@ -29,8 +29,8 @@ class _DefaultDataFilter
   }
 
   @override
-  Map<String, dynamic> prepareFilterData({
-    required EmptyFilterInput? filterInput,
+  Map<String, dynamic> convertFromFilterInput({
+    required EmptyFilterInput filterInput,
   }) {
     return {};
   }
@@ -70,8 +70,8 @@ class StringIdDataFilter
   List<Restorable> get restorableCriteria => [];
 
   @override
-  Map<String, dynamic> prepareFilterData({
-    required StringIdFilterInput? filterInput,
+  Map<String, dynamic> convertFromFilterInput({
+    required StringIdFilterInput filterInput,
   }) {
     return {"idValue": idValue};
   }
@@ -113,8 +113,8 @@ class StringValueDataFilter
   List<Restorable> get restorableCriteria => [];
 
   @override
-  Map<String, dynamic> prepareFilterData({
-    required StringValueFilterInput? filterInput,
+  Map<String, dynamic> convertFromFilterInput({
+    required StringValueFilterInput filterInput,
   }) {
     return {"stringValue": stringValue};
   }
@@ -156,8 +156,8 @@ class SearchTextDataFilter
   List<Restorable> get restorableCriteria => [];
 
   @override
-  Map<String, dynamic> prepareFilterData({
-    required SearchTextFilterInput? filterInput,
+  Map<String, dynamic> convertFromFilterInput({
+    required SearchTextFilterInput filterInput,
   }) {
     return {"searchText": searchText};
   }
@@ -199,8 +199,8 @@ class IntIdDataFilter
   List<Restorable> get restorableCriteria => [];
 
   @override
-  Map<String, dynamic> prepareFilterData({
-    required IntIdFilterInput? filterInput,
+  Map<String, dynamic> convertFromFilterInput({
+    required IntIdFilterInput filterInput,
   }) {
     return {"idValue": idValue};
   }
