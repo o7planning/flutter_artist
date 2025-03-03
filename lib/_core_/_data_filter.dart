@@ -84,14 +84,9 @@ abstract class DataFilter<
           );
       return null;
     }
-    print(
-        "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1: _formKey.currentState: ${_formKey.currentState}");
     //
     // Apply Default FilterCriteria:
     //
-
-    print(
-        "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 2: _formKey.currentState: ${_formKey.currentState}");
     try {
       Map<String, dynamic> defaultFilterCriteria =
           this.initDefaultFilterCriteria();
@@ -99,6 +94,9 @@ abstract class DataFilter<
       if (_formKey.currentState == null) {
         this.data._updateFilterData(defaultFilterCriteria);
       } else {
+        if (data._initialFormData.isEmpty) {
+          this.data._updateFilterData(defaultFilterCriteria);
+        }
         for (String key in defaultFilterCriteria.keys) {
           if (!_formKey.currentState!.instantValue.containsKey(key)) {
             _formKey.currentState!.patchValue(
@@ -155,13 +153,10 @@ abstract class DataFilter<
       }
     }
     //
-    print("@@@~~~~~~~~~~~~~~~~~~~~~> ${this.data._initialFormData}");
-    //
-    Map<String, dynamic> instantValue =
-        _formKey.currentState?.instantValue ?? {};
     try {
       // If no error:
-      FILTER_CRITERIA newCriteria = createFilterCriteria(dataMap: instantValue);
+      FILTER_CRITERIA newCriteria =
+          createFilterCriteria(dataMap: data.currentFormData);
       _filterCriteria = newCriteria;
       //
       return newCriteria;
@@ -275,7 +270,6 @@ abstract class DataFilter<
 
   // Change Event from GUI.
   void _onChangeFromFilterView() {
-    print(">>>>>>>>>>> ??????????????????? _onChangeFromFilterView: ${_formKey.currentState?.instantValue}");
     if (_formKey.currentState?.instantValue != null) {
       data._currentFormData.addAll(_formKey.currentState!.instantValue);
       if (data._justInitialized) {
@@ -429,7 +423,6 @@ abstract class DataFilter<
     for (_RefreshableWidgetState widgetState in [
       ..._filterFragmentWidgetStates.keys
     ]) {
-      print("Chay vao day@: ${_filterFragmentWidgetStates.length}");
       if (widgetState.mounted) {
         widgetState.refreshState();
       }
