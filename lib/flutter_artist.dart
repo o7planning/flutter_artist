@@ -152,6 +152,7 @@ part '_ui_/_base_pagination.dart';
 part '_ui_/_block_control_bar.dart';
 part '_ui_/_block_form_widget_builder.dart';
 part '_ui_/_block_fragment_widget_builder.dart';
+part '_ui_/_block_items_view_builder.dart';
 part '_ui_/_block_or_scalar_info_view.dart';
 part '_ui_/_control_bar_button.dart';
 part '_ui_/_custom_app_container.dart';

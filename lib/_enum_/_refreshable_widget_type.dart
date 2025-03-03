@@ -7,6 +7,7 @@ enum RefreshableWidgetType {
   customControlBar,
   form,
   blockFragment,
+  blockItemsView,
   shelfFragment,
   blockControlButton,
   scalarControlButton,
@@ -30,6 +31,8 @@ extension WidgetStateTypeE on RefreshableWidgetType {
         return "BlockForm";
       case RefreshableWidgetType.blockFragment:
         return "BlockFragment";
+      case RefreshableWidgetType.blockItemsView:
+        return "BlockItemsView";
       case RefreshableWidgetType.shelfFragment:
         return "ShelfFragment";
       case RefreshableWidgetType.scalarFragment:
@@ -55,6 +58,8 @@ extension WidgetStateTypeE on RefreshableWidgetType {
         return _blockFormIconData;
       case RefreshableWidgetType.blockFragment:
         return _blockFragmentIconData;
+      case RefreshableWidgetType.blockItemsView:
+        return _blockItemsViewIconData;
       case RefreshableWidgetType.pagination:
         return _paginationIconData;
       case RefreshableWidgetType.loggedInUser:
