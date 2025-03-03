@@ -80,22 +80,30 @@ abstract class DataFilter<
     //
     if (error) {
       this.data._clearWithDataState(
-            formDataState: DataState.error,
+            filterDataState: DataState.error,
           );
       return null;
     }
     //
-    if (filterInput != null) {
-      Map<String, dynamic> newFilterData = {};
+    // Apply Default FilterCriteria:
+    //
+    if (_formKey.currentState != null) {
       try {
-        newFilterData = convertFilterInputToPatchData(
-          filterInput: filterInput,
-        );
+        Map<String, dynamic> defaultFilterCriteria =
+            this.initDefaultFilterCriteria();
+        //
+        for (String key in defaultFilterCriteria.keys) {
+          if (!_formKey.currentState!.instantValue.containsKey(key)) {
+            _formKey.currentState!.patchValue(
+              {key: defaultFilterCriteria[key]},
+            );
+          }
+        }
       } catch (e, stackTrace) {
         _handleError(
           shelf: shelf,
-          methodName: "convertFilterInputToPatchData",
-          error: "Error convertFilterInputToPatchData: $e",
+          methodName: "toInputFilterCriteria",
+          error: "Error toInputFilterCriteria: $e",
           stackTrace: stackTrace,
           showSnackBar: true,
         );
@@ -104,31 +112,36 @@ abstract class DataFilter<
       //
       if (error) {
         this.data._clearWithDataState(
-              formDataState: DataState.error,
+              filterDataState: DataState.error,
             );
         return null;
       }
-      //
+    }
+    //
+    // Apply FilterInput:
+    //
+    if (filterInput != null) {
       try {
-        this.data._updateFilterData(newFilterData);
-        this._formKey.currentState?.patchValue(newFilterData);
+        Map<String, dynamic> inputFilterCriteria = toInputFilterCriteria(
+          filterInput: filterInput,
+        );
         //
-        updateAllUIComponents();
+        this.data._updateFilterData(inputFilterCriteria);
+        this._formKey.currentState?.patchValue(inputFilterCriteria);
       } catch (e, stackTrace) {
-        error = true;
-        //
         _handleError(
           shelf: shelf,
-          methodName: "_updateFilterData",
-          error: e,
+          methodName: "toInputFilterCriteria",
+          error: "Error toInputFilterCriteria: $e",
           stackTrace: stackTrace,
           showSnackBar: true,
         );
+        error = true;
       }
       //
       if (error) {
         this.data._clearWithDataState(
-              formDataState: DataState.error,
+              filterDataState: DataState.error,
             );
         return null;
       }
@@ -162,7 +175,7 @@ abstract class DataFilter<
   /// Call this method to initialize the necessary data for the DataFilter.
   /// For example, the list of items of the [Dropdown].
   ///
-  /// This method is called before [convertFilterInputToPatchData] method.
+  /// This method is called before [toInputFilterCriteria] method.
   ///
   /// Example:
   /// ```dart
@@ -193,7 +206,48 @@ abstract class DataFilter<
   ///
   /// This method is called after [prepareMasterFilterData].
   ///
-  Map<String, dynamic> convertFilterInputToPatchData({
+  /// Use the data obtained from the [prepareMasterFilterData] method to specify default search criteria.
+  ///
+  /// For example, after getting the list of companies.
+  /// Use a certain company in the list as the default criteria for the filter.
+  ///
+  /// ```dart
+  /// @override
+  /// Map<String, dynamic> initDefaultFilterCriteria() {
+  ///      var defaultCompany = companyPage.getItemById(123);
+  ///
+  ///      return {
+  ///         "company": defaultCompany,
+  ///      };
+  /// }
+  /// ```
+  ///
+  Map<String, dynamic> initDefaultFilterCriteria();
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ///
+  /// This method is called after [prepareMasterFilterData] and [initDefaultFilterCriteria] methods.
+  ///
+  /// For example, after getting a list of companies from the [prepareMasterFilterData] method.
+  /// Use [FilterInput] to identify a company that will be used as a criterion for the filter.
+  ///
+  /// ```dart
+  /// @override
+  /// Map<String, dynamic> toInputFilterCriteria({
+  ///    required CompanyIdFilterInput filterInput,
+  /// }) {
+  ///    int inputCompanyId = filterInput.filterInput;
+  ///
+  ///    Company inputCompany = companyPage?.getItemById(inputCompanyId);
+  ///    return {
+  ///       "company": inputCompany,
+  ///    };
+  /// }
+  /// ```
+  ///
+  Map<String, dynamic> toInputFilterCriteria({
     required FILTER_INPUT filterInput,
   });
 
@@ -259,27 +313,6 @@ abstract class DataFilter<
   ///
   FILTER_CRITERIA createFilterCriteria({
     required Map<String, dynamic> dataMap,
-  });
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ///
-  /// ```Dart
-  /// Future<void> prepareData({MyFilterInput? filterInput}) {
-  ///     ApiResult<dynamic>? r1 = await callYourApi1();
-  ///     // Throws ApiError if r1.isError()
-  ///     r1?.throwIfError();
-  ///
-  ///     ApiResult<dynamic>? r2 = await callYourApi2();
-  ///     // Throws ApiError if r2.isError()
-  ///     r2?.throwIfError();
-  /// }
-  /// ```
-  ///
-  @Deprecated("Xoa di, khong su dung nua")
-  Future<void> prepareData({
-    FILTER_INPUT? filterInput,
   });
 
   // ***************************************************************************

@@ -29,7 +29,7 @@ class _DefaultDataFilter
   }
 
   @override
-  Map<String, dynamic> convertFilterInputToPatchData({
+  Map<String, dynamic> toInputFilterCriteria({
     required EmptyFilterInput filterInput,
   }) {
     return {};
@@ -40,6 +40,11 @@ class _DefaultDataFilter
     required EmptyFilterInput? filterInput,
   }) async {
     // Do nothing.
+  }
+
+  @override
+  Map<String, dynamic> initDefaultFilterCriteria() {
+    return {};
   }
 }
 
@@ -59,18 +64,10 @@ class StringIdDataFilter
   }
 
   @override
-  @Deprecated("Xoa di, khong su dung nua")
-  Future<void> prepareData({StringIdFilterInput? filterInput}) async {
-    if (filterInput != null) {
-      idValue = filterInput.idValue;
-    }
-  }
-
-  @override
   List<Restorable> get restorableCriteria => [];
 
   @override
-  Map<String, dynamic> convertFilterInputToPatchData({
+  Map<String, dynamic> toInputFilterCriteria({
     required StringIdFilterInput filterInput,
   }) {
     return {"idValue": idValue};
@@ -83,6 +80,11 @@ class StringIdDataFilter
     if (filterInput != null) {
       idValue = filterInput.idValue;
     }
+  }
+
+  @override
+  Map<String, dynamic> initDefaultFilterCriteria() {
+    return {};
   }
 }
 
@@ -102,18 +104,10 @@ class StringValueDataFilter
   }
 
   @override
-  @Deprecated("Xoa di, khong su dung nua")
-  Future<void> prepareData({StringValueFilterInput? filterInput}) async {
-    if (filterInput != null) {
-      stringValue = filterInput.stringValue;
-    }
-  }
-
-  @override
   List<Restorable> get restorableCriteria => [];
 
   @override
-  Map<String, dynamic> convertFilterInputToPatchData({
+  Map<String, dynamic> toInputFilterCriteria({
     required StringValueFilterInput filterInput,
   }) {
     return {"stringValue": stringValue};
@@ -126,6 +120,11 @@ class StringValueDataFilter
     if (filterInput != null) {
       stringValue = filterInput.stringValue;
     }
+  }
+
+  @override
+  Map<String, dynamic> initDefaultFilterCriteria() {
+    return {};
   }
 }
 
@@ -145,18 +144,10 @@ class SearchTextDataFilter
   }
 
   @override
-  @Deprecated("Xoa di, khong su dung nua")
-  Future<void> prepareData({SearchTextFilterInput? filterInput}) async {
-    if (filterInput != null) {
-      searchText = filterInput.searchText;
-    }
-  }
-
-  @override
   List<Restorable> get restorableCriteria => [];
 
   @override
-  Map<String, dynamic> convertFilterInputToPatchData({
+  Map<String, dynamic> toInputFilterCriteria({
     required SearchTextFilterInput filterInput,
   }) {
     return {"searchText": searchText};
@@ -169,6 +160,11 @@ class SearchTextDataFilter
     if (filterInput != null) {
       searchText = filterInput.searchText;
     }
+  }
+
+  @override
+  Map<String, dynamic> initDefaultFilterCriteria() {
+    return {};
   }
 }
 
@@ -188,18 +184,10 @@ class IntIdDataFilter
   }
 
   @override
-  @Deprecated("Xoa di, khong su dung nua")
-  Future<void> prepareData({IntIdFilterInput? filterInput}) async {
-    if (filterInput != null) {
-      idValue = filterInput.idValue;
-    }
-  }
-
-  @override
   List<Restorable> get restorableCriteria => [];
 
   @override
-  Map<String, dynamic> convertFilterInputToPatchData({
+  Map<String, dynamic> toInputFilterCriteria({
     required IntIdFilterInput filterInput,
   }) {
     return {"idValue": idValue};
@@ -212,6 +200,11 @@ class IntIdDataFilter
     if (filterInput != null) {
       idValue = filterInput.idValue;
     }
+  }
+
+  @override
+  Map<String, dynamic> initDefaultFilterCriteria() {
+    return {};
   }
 }
 

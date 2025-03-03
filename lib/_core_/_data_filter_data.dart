@@ -27,13 +27,7 @@ class DataFilterData<
   Map<String, dynamic> get currentFormData => {..._currentFormData};
 
   //
-  DataState _dataState = DataState.pending;
-
-  FormMode _formMode = FormMode.none;
-
-  FormMode get formMode => _formMode;
-
-  bool get isNew => _formMode == FormMode.creation;
+  DataState _filterDataState = DataState.pending;
 
   // ***************************************************************************
   // ***************************************************************************
@@ -43,9 +37,8 @@ class DataFilterData<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _clearWithDataState({required DataState formDataState}) {
-    _dataState = formDataState;
-    _formMode = FormMode.none;
+  void _clearWithDataState({required DataState filterDataState}) {
+    _filterDataState = filterDataState;
     //
     _updateFilterData({});
   }
