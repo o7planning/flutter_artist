@@ -36,7 +36,7 @@ class _DefaultDataFilter
   }
 
   @override
-  Future<void> prepareMasterFilterData({
+  Future<void> prepareMasterData({
     required EmptyFilterInput? filterInput,
   }) async {
     // Do nothing.
@@ -74,7 +74,7 @@ class StringIdDataFilter
   }
 
   @override
-  Future<void> prepareMasterFilterData({
+  Future<void> prepareMasterData({
     required StringIdFilterInput? filterInput,
   }) async {
     if (filterInput != null) {
@@ -114,7 +114,7 @@ class StringValueDataFilter
   }
 
   @override
-  Future<void> prepareMasterFilterData({
+  Future<void> prepareMasterData({
     required StringValueFilterInput? filterInput,
   }) async {
     if (filterInput != null) {
@@ -154,7 +154,7 @@ class SearchTextDataFilter
   }
 
   @override
-  Future<void> prepareMasterFilterData({
+  Future<void> prepareMasterData({
     required SearchTextFilterInput? filterInput,
   }) async {
     if (filterInput != null) {
@@ -194,7 +194,7 @@ class IntIdDataFilter
   }
 
   @override
-  Future<void> prepareMasterFilterData({
+  Future<void> prepareMasterData({
     required IntIdFilterInput? filterInput,
   }) async {
     if (filterInput != null) {

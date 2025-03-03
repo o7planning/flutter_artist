@@ -66,14 +66,14 @@ abstract class DataFilter<
       //
       // May throw ApiError.
       //
-      await prepareMasterFilterData(
+      await prepareMasterData(
         filterInput: filterInput,
       );
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: "prepareMasterFilterData",
-        error: "Error prepareMasterFilterData: $e",
+        methodName: "prepareMasterData",
+        error: "Error prepareMasterData: $e",
         stackTrace: stackTrace,
         showSnackBar: true,
       );
@@ -193,7 +193,7 @@ abstract class DataFilter<
   ///
   /// Example:
   /// ```dart
-  /// Future<void> prepareMasterFilterData({
+  /// Future<void> prepareMasterData({
   ///     required EmptyFilterInput? filterInput,
   /// }) {
   ///   ApiResult<CompanyPage> result1 = await companyApi.getCompanyPage();
@@ -210,7 +210,7 @@ abstract class DataFilter<
   /// }
   /// ```
   ///
-  Future<void> prepareMasterFilterData({
+  Future<void> prepareMasterData({
     required FILTER_INPUT? filterInput,
   });
 
@@ -218,9 +218,9 @@ abstract class DataFilter<
   // ***************************************************************************
 
   ///
-  /// This method is called after [prepareMasterFilterData].
+  /// This method is called after [prepareMasterData].
   ///
-  /// Use the data obtained from the [prepareMasterFilterData] method to specify default search criteria.
+  /// Use the data obtained from the [prepareMasterData] method to specify default search criteria.
   ///
   /// For example, after getting the list of companies.
   /// Use a certain company in the list as the default criteria for the filter.
@@ -242,9 +242,9 @@ abstract class DataFilter<
   // ***************************************************************************
 
   ///
-  /// This method is called after [prepareMasterFilterData] and [initialCriteriaDataMap] methods.
+  /// This method is called after [prepareMasterData] and [initialCriteriaDataMap] methods.
   ///
-  /// For example, after getting a list of companies from the [prepareMasterFilterData] method.
+  /// For example, after getting a list of companies from the [prepareMasterData] method.
   /// Use [FilterInput] to identify a company that will be used as a criterion for the filter.
   ///
   /// ```dart
