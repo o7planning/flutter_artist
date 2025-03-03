@@ -56,10 +56,6 @@ class _FilterViewBuilderState
   Widget buildContent(BuildContext context) {
     __executeAfterBuild();
     //
-    return _buildFormBuilder();
-  }
-
-  FormBuilder _buildFormBuilder() {
     return FormBuilder(
       key: formKey,
       initialValue: widget.dataFilter.initFilterValue(),

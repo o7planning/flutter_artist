@@ -20,7 +20,6 @@ abstract class DataFilter<
 
   List<Scalar> get scalars => [..._scalars];
 
-  int __currentTryingCriteriaId = 0;
   int? __currentSuccessCriteriaId;
 
   int? get currentSuccessCriteriaId => __currentSuccessCriteriaId;
@@ -44,6 +43,9 @@ abstract class DataFilter<
   FILTER_CRITERIA? get filterCriteria => _filterCriteria;
 
   List<Restorable> get restorableCriteria;
+
+  bool _firstQueryDone = false;
+  bool _applyDefaultFilterCriteria = false;
 
   // ***************************************************************************
   // ***************************************************************************
@@ -90,6 +92,10 @@ abstract class DataFilter<
     try {
       Map<String, dynamic> defaultFilterCriteria =
           this.initDefaultFilterCriteria();
+      print(
+          ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> defaultFilterCriteria: $defaultFilterCriteria ");
+      print(
+          ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> data._initialFormData: ${data._initialFormData} ");
 
       if (_formKey.currentState == null) {
         this.data._updateFilterData(defaultFilterCriteria);
@@ -105,6 +111,8 @@ abstract class DataFilter<
           }
         }
       }
+      print(
+          ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> data._currentFormData: ${data._currentFormData} ");
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
@@ -159,6 +167,7 @@ abstract class DataFilter<
           createFilterCriteria(dataMap: data.currentFormData);
       _filterCriteria = newCriteria;
       //
+      _firstQueryDone = true;
       return newCriteria;
     } catch (e, stackTrace) {
       _handleError(
@@ -245,7 +254,7 @@ abstract class DataFilter<
   /// }) {
   ///    int inputCompanyId = filterInput.filterInput;
   ///
-  ///    Company inputCompany = companyPage?.getItemById(inputCompanyId);
+  ///    CompanyInfo inputCompany = companyPage?.getItemById(inputCompanyId);
   ///    return {
   ///       "company": inputCompany,
   ///    };
@@ -270,10 +279,23 @@ abstract class DataFilter<
 
   // Change Event from GUI.
   void _onChangeFromFilterView() {
+    // print("@??????~~~~~~~~~~~~~~~> _onChangeFromFilterView: _formKey.currentState: ${_formKey.currentState}");
     if (_formKey.currentState?.instantValue != null) {
       data._currentFormData.addAll(_formKey.currentState!.instantValue);
       if (data._justInitialized) {
-        data._initialFormData.addAll(_formKey.currentState!.instantValue);
+        Map<String, dynamic> map = {..._formKey.currentState!.instantValue};
+        map.removeWhere((k, v) => data._initialFormData.containsKey(k));
+        //
+        data._initialFormData.addAll(map);
+      }
+    }
+    //
+    if (_firstQueryDone && !_applyDefaultFilterCriteria) {
+      if (_formKey.currentState != null) {
+        _applyDefaultFilterCriteria = true;
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
+          _formKey.currentState!.patchValue(data.initialFormData);
+        });
       }
     }
   }
