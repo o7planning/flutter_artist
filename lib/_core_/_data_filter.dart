@@ -116,8 +116,8 @@ abstract class DataFilter<
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: "toInputFilterCriteria",
-        error: "Error toInputFilterCriteria: $e",
+        methodName: "filterInputToCriteriaDataMap",
+        error: "Error filterInputToCriteriaDataMap: $e",
         stackTrace: stackTrace,
         showSnackBar: true,
       );
@@ -136,7 +136,7 @@ abstract class DataFilter<
     //
     if (filterInput != null) {
       try {
-        Map<String, dynamic> inputFilterCriteria = toInputFilterCriteria(
+        Map<String, dynamic> inputFilterCriteria = filterInputToCriteriaDataMap(
           filterInput: filterInput,
         );
         //
@@ -145,8 +145,8 @@ abstract class DataFilter<
       } catch (e, stackTrace) {
         _handleError(
           shelf: shelf,
-          methodName: "toInputFilterCriteria",
-          error: "Error toInputFilterCriteria: $e",
+          methodName: "filterInputToCriteriaDataMap",
+          error: "Error filterInputToCriteriaDataMap: $e",
           stackTrace: stackTrace,
           showSnackBar: true,
         );
@@ -189,7 +189,7 @@ abstract class DataFilter<
   /// Call this method to initialize the necessary data for the DataFilter.
   /// For example, the list of items of the [Dropdown].
   ///
-  /// This method is called before [toInputFilterCriteria] method.
+  /// This method is called before [filterInputToCriteriaDataMap] method.
   ///
   /// Example:
   /// ```dart
@@ -249,7 +249,7 @@ abstract class DataFilter<
   ///
   /// ```dart
   /// @override
-  /// Map<String, dynamic> toInputFilterCriteria({
+  /// Map<String, dynamic> filterInputToCriteriaDataMap({
   ///    required CompanyIdFilterInput filterInput,
   /// }) {
   ///    int inputCompanyId = filterInput.filterInput;
@@ -261,7 +261,7 @@ abstract class DataFilter<
   /// }
   /// ```
   ///
-  Map<String, dynamic> toInputFilterCriteria({
+  Map<String, dynamic> filterInputToCriteriaDataMap({
     required FILTER_INPUT filterInput,
   });
 
