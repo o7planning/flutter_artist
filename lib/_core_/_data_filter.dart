@@ -42,8 +42,6 @@ abstract class DataFilter<
 
   FILTER_CRITERIA? get filterCriteria => _filterCriteria;
 
-  List<Restorable> get restorableCriteria;
-
   bool _firstQueryDone = false;
   bool _applyDefaultFilterCriteria = false;
 
@@ -92,11 +90,7 @@ abstract class DataFilter<
     try {
       Map<String, dynamic> defaultFilterCriteria =
           this.initialCriteriaDataMap();
-      print(
-          ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> defaultFilterCriteria: $defaultFilterCriteria ");
-      print(
-          ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> data._initialFormData: ${data._initialFormData} ");
-
+      //
       if (_formKey.currentState == null) {
         this.data._updateFilterData(defaultFilterCriteria);
       } else {
@@ -111,8 +105,6 @@ abstract class DataFilter<
           }
         }
       }
-      print(
-          ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> data._currentFormData: ${data._currentFormData} ");
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,

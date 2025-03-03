@@ -19,9 +19,6 @@ class _DefaultDataFilter
   }
 
   @override
-  List<Restorable> get restorableCriteria => [];
-
-  @override
   EmptyFilterCriteria createFilterCriteria({
     required Map<String, dynamic> dataMap,
   }) {
@@ -64,9 +61,6 @@ class StringIdDataFilter
   }
 
   @override
-  List<Restorable> get restorableCriteria => [];
-
-  @override
   Map<String, dynamic> filterInputToCriteriaDataMap({
     required StringIdFilterInput filterInput,
   }) {
@@ -102,9 +96,6 @@ class StringValueDataFilter
   }) {
     return StringValueFilterCriteria(stringValue: stringValue);
   }
-
-  @override
-  List<Restorable> get restorableCriteria => [];
 
   @override
   Map<String, dynamic> filterInputToCriteriaDataMap({
@@ -144,9 +135,6 @@ class SearchTextDataFilter
   }
 
   @override
-  List<Restorable> get restorableCriteria => [];
-
-  @override
   Map<String, dynamic> filterInputToCriteriaDataMap({
     required SearchTextFilterInput filterInput,
   }) {
@@ -182,9 +170,6 @@ class IntIdDataFilter
   }) {
     return IntIdFilterCriteria(idValue: idValue);
   }
-
-  @override
-  List<Restorable> get restorableCriteria => [];
 
   @override
   Map<String, dynamic> filterInputToCriteriaDataMap({
