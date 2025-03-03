@@ -91,7 +91,7 @@ abstract class DataFilter<
     //
     try {
       Map<String, dynamic> defaultFilterCriteria =
-          this.initDefaultFilterCriteria();
+          this.initialCriteriaDataMap();
       print(
           ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> defaultFilterCriteria: $defaultFilterCriteria ");
       print(
@@ -227,7 +227,7 @@ abstract class DataFilter<
   ///
   /// ```dart
   /// @override
-  /// Map<String, dynamic> initDefaultFilterCriteria() {
+  /// Map<String, dynamic> initialCriteriaDataMap() {
   ///      var defaultCompany = companyPage.getItemById(123);
   ///
   ///      return {
@@ -236,13 +236,13 @@ abstract class DataFilter<
   /// }
   /// ```
   ///
-  Map<String, dynamic> initDefaultFilterCriteria();
+  Map<String, dynamic> initialCriteriaDataMap();
 
   // ***************************************************************************
   // ***************************************************************************
 
   ///
-  /// This method is called after [prepareMasterFilterData] and [initDefaultFilterCriteria] methods.
+  /// This method is called after [prepareMasterFilterData] and [initialCriteriaDataMap] methods.
   ///
   /// For example, after getting a list of companies from the [prepareMasterFilterData] method.
   /// Use [FilterInput] to identify a company that will be used as a criterion for the filter.

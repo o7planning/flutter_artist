@@ -43,7 +43,7 @@ class _DefaultDataFilter
   }
 
   @override
-  Map<String, dynamic> initDefaultFilterCriteria() {
+  Map<String, dynamic> initialCriteriaDataMap() {
     return {};
   }
 }
@@ -83,7 +83,7 @@ class StringIdDataFilter
   }
 
   @override
-  Map<String, dynamic> initDefaultFilterCriteria() {
+  Map<String, dynamic> initialCriteriaDataMap() {
     return {};
   }
 }
@@ -123,7 +123,7 @@ class StringValueDataFilter
   }
 
   @override
-  Map<String, dynamic> initDefaultFilterCriteria() {
+  Map<String, dynamic> initialCriteriaDataMap() {
     return {};
   }
 }
@@ -163,7 +163,7 @@ class SearchTextDataFilter
   }
 
   @override
-  Map<String, dynamic> initDefaultFilterCriteria() {
+  Map<String, dynamic> initialCriteriaDataMap() {
     return {};
   }
 }
@@ -203,7 +203,7 @@ class IntIdDataFilter
   }
 
   @override
-  Map<String, dynamic> initDefaultFilterCriteria() {
+  Map<String, dynamic> initialCriteriaDataMap() {
     return {};
   }
 }
