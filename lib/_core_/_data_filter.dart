@@ -38,11 +38,196 @@ abstract class DataFilter<
 
   FILTER_CRITERIA? _filterCriteria;
 
+  late final DataFilterData data = DataFilterData(dataFilter: this);
+  GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+
   FILTER_CRITERIA? get filterCriteria => _filterCriteria;
 
   List<Restorable> get restorableCriteria;
 
-// ***************************************************************************
+  // ***************************************************************************
+  // ***************************************************************************
+
+  DataFilter();
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ///
+  /// Return null is error.
+  ///
+  Future<FILTER_CRITERIA?> _prepareMasterDataAndFilterData({
+    required FILTER_INPUT? filterInput,
+  }) async {
+    bool error = false;
+    try {
+      //
+      // May throw ApiError.
+      //
+      await prepareMasterFilterData(
+        filterInput: filterInput,
+      );
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: "prepareMasterFilterData",
+        error: "Error prepareMasterFilterData: $e",
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      error = true;
+    }
+    //
+    if (error) {
+      this.data._clearWithDataState(
+            formDataState: DataState.error,
+          );
+      return null;
+    }
+    //
+    if (filterInput != null) {
+      Map<String, dynamic> newFilterData = {};
+      try {
+        newFilterData = prepareFilterData(
+          filterInput: filterInput,
+        );
+      } catch (e, stackTrace) {
+        _handleError(
+          shelf: shelf,
+          methodName: "prepareFilterData",
+          error: "Error prepareFilterData: $e",
+          stackTrace: stackTrace,
+          showSnackBar: true,
+        );
+        error = true;
+      }
+      //
+      if (error) {
+        this.data._clearWithDataState(
+              formDataState: DataState.error,
+            );
+        return null;
+      }
+      //
+      try {
+        this.data._updateFilterData(newFilterData);
+        this._formKey.currentState?.patchValue(newFilterData);
+        //
+        updateAllUIComponents();
+      } catch (e, stackTrace) {
+        error = true;
+        //
+        _handleError(
+          shelf: shelf,
+          methodName: "_updateFilterData",
+          error: e,
+          stackTrace: stackTrace,
+          showSnackBar: true,
+        );
+      }
+      //
+      if (error) {
+        this.data._clearWithDataState(
+              formDataState: DataState.error,
+            );
+        return null;
+      }
+    }
+    //
+    Map<String, dynamic> instantValue =
+        _formKey.currentState?.instantValue ?? {};
+    try {
+      // If no error:
+      FILTER_CRITERIA newCriteria = createFilterCriteria(dataMap: instantValue);
+      _filterCriteria = newCriteria;
+      //
+      return newCriteria;
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: "createFilterCriteria",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      //
+      return null;
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ///
+  /// Call this method to initialize the necessary data for the DataFilter.
+  /// For example, the list of items of the [Dropdown].
+  ///
+  /// This method is called before [prepareFilterData] method.
+  ///
+  /// Example:
+  /// ```dart
+  /// Future<void> prepareMasterFilterData({
+  ///     required EmptyFilterInput? filterInput,
+  /// }) {
+  ///   ApiResult<CompanyPage> result1 = await companyApi.getCompanyPage();
+  ///   // Throw ApiError
+  ///   result1.throwIfError();
+  ///   this.companyPage = result1.data;
+  ///   CompanyInfo? company = this.companyPage.getSelectedCompany()
+  ///
+  ///   ApiResult<DepartmentPage> result2 = await deptApi.getDepartmentPage(company);
+  ///   // Throw ApiError
+  ///   result2.throwIfError();
+  ///   this.departmentPage = result2.data;
+  ///   ...
+  /// }
+  /// ```
+  ///
+  Future<void> prepareMasterFilterData({
+    required FILTER_INPUT? filterInput,
+  });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ///
+  /// This method is called after [prepareMasterFilterData].
+  ///
+  Map<String, dynamic> prepareFilterData({
+    required FILTER_INPUT? filterInput,
+  });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  // TODO: Change name!
+  // Do not call this method in library.
+  Map<String, dynamic> initFilterValue() {
+    return data._currentFormData;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  // Change Event from GUI.
+  void _onChangeFromFilterView() {
+    print("_onChangeFromFilterView: ${_formKey.currentState?.instantValue}");
+    if (_formKey.currentState?.instantValue != null) {
+      data._currentFormData.addAll(_formKey.currentState!.instantValue);
+      if (data._justInitialized) {
+        data._initialFormData.addAll(_formKey.currentState!.instantValue);
+      }
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool isEnabled() {
+    return true;
+  }
+
+  // ***************************************************************************
   // ***************************************************************************
 
   final Map<_RefreshableWidgetState, bool> _filterFragmentWidgetStates = {};
@@ -72,7 +257,9 @@ abstract class DataFilter<
   ///
   /// This method is called immediately after calling [prepareData()] method if there are no errors.
   ///
-  FILTER_CRITERIA createFilterCriteria();
+  FILTER_CRITERIA createFilterCriteria({
+    required Map<String, dynamic> dataMap,
+  });
 
   // ***************************************************************************
   // ***************************************************************************
@@ -90,57 +277,10 @@ abstract class DataFilter<
   /// }
   /// ```
   ///
+  @Deprecated("Xoa di, khong su dung nua")
   Future<void> prepareData({
     FILTER_INPUT? filterInput,
   });
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ///
-  /// Return null is error.
-  ///
-  Future<FILTER_CRITERIA?> _prepareData({
-    required FILTER_INPUT? filterInput,
-  }) async {
-    __currentTryingCriteriaId + 1;
-    final int tryingCriteriaId = __currentTryingCriteriaId;
-    //
-    try {
-      // This method may throw ApiError.
-      await prepareData(
-        filterInput: filterInput,
-      );
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "prepareData",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      //
-      return null;
-    }
-    try {
-      // If no error:
-      FILTER_CRITERIA newCriteria = createFilterCriteria();
-      _filterCriteria = newCriteria;
-      __filterCriteriasMap[tryingCriteriaId] = newCriteria;
-      //
-      return newCriteria;
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "createFilterCriteria",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      //
-      return null;
-    }
-  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -246,6 +386,7 @@ abstract class DataFilter<
     for (_RefreshableWidgetState widgetState in [
       ..._filterFragmentWidgetStates.keys
     ]) {
+      print("Chay vao day@: ${_filterFragmentWidgetStates.length}");
       if (widgetState.mounted) {
         widgetState.refreshState();
       }

@@ -83,6 +83,8 @@ part '_core_/_custom_confirmation.dart';
 
 part '_core_/_data_filter.dart';
 
+part '_core_/_data_filter_data.dart';
+
 part '_core_/_default_data_filter.dart';
 
 part '_core_/_error_listener.dart';
@@ -302,6 +304,8 @@ part '_ui_/_base_pagination.dart';
 part '_ui_/_block_control_bar.dart';
 
 part '_ui_/_block_form_widget_builder.dart';
+
+part '_ui_/_filter_view_builder.dart';
 
 part '_ui_/_block_fragment_widget_builder.dart';
 

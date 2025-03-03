@@ -263,7 +263,7 @@ abstract class BlockForm<
       //
       _handleError(
         shelf: shelf,
-        methodName: "_showFormData",
+        methodName: "_updateFormData",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,

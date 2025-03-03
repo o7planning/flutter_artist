@@ -140,7 +140,7 @@ abstract class Scalar<
       if (!xDataFilter.queried) {
         FILTER_INPUT? filterInput = xDataFilter.filterInput as FILTER_INPUT?;
         //
-        filterCriteria = await dataFilter._prepareData(
+        filterCriteria = await dataFilter._prepareMasterDataAndFilterData(
           filterInput: filterInput,
         ) as FILTER_CRITERIA?;
         //
