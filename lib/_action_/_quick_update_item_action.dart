@@ -11,7 +11,7 @@ abstract class QuickUpdateItemAction<
     required super.actionInfo,
   });
 
-  Future<ApiResultOLD<ITEM_DETAIL>> callApiQuickUpdateItem();
+  Future<ApiResult<ITEM_DETAIL>> callApiQuickUpdateItem();
 
   Future<bool> _defaultConfirmation(BuildContext context) async {
     return await dialogs.showConfirmDialog(

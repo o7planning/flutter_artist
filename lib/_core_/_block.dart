@@ -989,7 +989,7 @@ abstract class Block<
       callingPageable =
           pageable ?? __pageable ?? const PageableData(page: 1, pageSize: null);
       //
-      ApiResultOLD<PageDataOLD<ID, ITEM>?> result;
+      ApiResult<PageDataOLD<ID, ITEM>?> result;
       try {
         FlutterArtist.codeFlowLogger._addMethodCall(
           isLibCode: false,
@@ -1567,7 +1567,7 @@ abstract class Block<
     required _XBlock thisXBlock,
     required QuickCreateItemAction<ITEM_DETAIL> action,
   }) async {
-    ApiResultOLD<ITEM_DETAIL> result;
+    ApiResult<ITEM_DETAIL> result;
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
@@ -1720,7 +1720,7 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    ApiResultOLD<ITEM_DETAIL> result;
+    ApiResult<ITEM_DETAIL> result;
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
@@ -1768,7 +1768,7 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    ApiResultOLD<ITEM_DETAIL> result;
+    ApiResult<ITEM_DETAIL> result;
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
@@ -1913,7 +1913,7 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    ApiResultOLD<DATA>? result;
+    ApiResult<DATA>? result;
     bool success = false;
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
@@ -2039,7 +2039,7 @@ abstract class Block<
   Future<bool> _processSaveActionRestResult({
     required _XBlock thisXBlock,
     required String calledMethodName,
-    required ApiResultOLD<ITEM_DETAIL> result,
+    required ApiResult<ITEM_DETAIL> result,
   }) async {
     if (result.errorMessage != null) {
       _handleRestError(
@@ -2543,7 +2543,7 @@ abstract class Block<
     if (item is ITEM_DETAIL && justQueried) {
       refreshedItemDetail = item;
     } else {
-      ApiResultOLD<ITEM_DETAIL> result;
+      ApiResult<ITEM_DETAIL> result;
       try {
         FlutterArtist.codeFlowLogger._addMethodCall(
           isLibCode: false,
@@ -2832,7 +2832,7 @@ abstract class Block<
         );
         return false;
       }
-      ApiResultOLD<ITEM_DETAIL> result;
+      ApiResult<ITEM_DETAIL> result;
       try {
         result = await FlutterArtist.executeTask(
           asyncFunction: () async {
@@ -2984,7 +2984,7 @@ abstract class Block<
       }
       final bool isCurrent = data.isCurrentItem(item: item);
       //
-      ApiResultOLD<void> result;
+      ApiResult<void> result;
       try {
         FlutterArtist.codeFlowLogger._addMethodCall(
           isLibCode: false,
@@ -3174,18 +3174,18 @@ abstract class Block<
   // ************* API METHOD **************************************************
   // ***************************************************************************
 
-  Future<ApiResultOLD<PageDataOLD<ID, ITEM>?>> callApiQuery({
+  Future<ApiResult<PageDataOLD<ID, ITEM>?>> callApiQuery({
     required FILTER_CRITERIA filterCriteria,
     required PageableData pageable,
   });
 
   // Developer do not call this method!
   // Call delete instead of
-  Future<ApiResultOLD<void>> callApiDeleteItem({required ITEM item});
+  Future<ApiResult<void>> callApiDeleteItem({required ITEM item});
 
-  Future<ApiResultOLD<ITEM_DETAIL>> callApiRefreshItem({required ITEM item});
+  Future<ApiResult<ITEM_DETAIL>> callApiRefreshItem({required ITEM item});
 
-  Future<ApiResultOLD<ITEM_DETAIL>> callApiFindItemById({required ID itemId});
+  Future<ApiResult<ITEM_DETAIL>> callApiFindItemById({required ID itemId});
 
   // ***************************************************************************
   // ****** UPDATE UI COMPONENTS ***********************************************

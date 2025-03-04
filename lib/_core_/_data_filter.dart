@@ -70,11 +70,11 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   ///
   /// ```Dart
   /// Future<void> prepareData({MyFilterInput? filterInput}) {
-  ///     ApiResultOLD<dynamic>? r1 = await callYourApi1();
+  ///     ApiResult<dynamic>? r1 = await callYourApi1();
   ///     // Throws ApiError if r1.isError()
   ///     r1?.throwIfError();
   ///
-  ///     ApiResultOLD<dynamic>? r2 = await callYourApi2();
+  ///     ApiResult<dynamic>? r2 = await callYourApi2();
   ///     // Throws ApiError if r2.isError()
   ///     r2?.throwIfError();
   /// }

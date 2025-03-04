@@ -316,7 +316,7 @@ abstract class Scalar<
   }) async {
     __assertThisXScalar(thisXScalar);
     //
-    ApiResultOLD<DATA>? result;
+    ApiResult<DATA>? result;
     bool success = false;
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
@@ -403,7 +403,7 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<ApiResultOLD<VALUE>> callApiQuery({
+  Future<ApiResult<VALUE>> callApiQuery({
     required FILTER_CRITERIA? filterCriteria,
   });
 
@@ -447,7 +447,7 @@ abstract class Scalar<
   Future<bool> __queryThis({
     required FILTER_CRITERIA filterCriteria,
   }) async {
-    ApiResultOLD<VALUE> result;
+    ApiResult<VALUE> result;
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,

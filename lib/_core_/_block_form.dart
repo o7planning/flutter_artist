@@ -158,11 +158,11 @@ abstract class BlockForm<
     this.updateAllUIComponents();
   }
 
-  Future<ApiResultOLD<ITEM_DETAIL>> callApiCreateItem({
+  Future<ApiResult<ITEM_DETAIL>> callApiCreateItem({
     required Map<String, dynamic> formMapData,
   });
 
-  Future<ApiResultOLD<ITEM_DETAIL>> callApiUpdateItem({
+  Future<ApiResult<ITEM_DETAIL>> callApiUpdateItem({
     required Map<String, dynamic> formMapData,
   });
 
@@ -180,13 +180,13 @@ abstract class BlockForm<
   ///     required EmployeeData? refreshedItem,
   ///     required bool isNew,
   /// }) {
-  ///   ApiResultOLD<CompanyPage> result1 = await companyApi.getCompanyPage();
+  ///   ApiResult<CompanyPage> result1 = await companyApi.getCompanyPage();
   ///   // Throw ApiError
   ///   result1.throwIfError();
   ///   this.companyPage = result1.data;
   ///   CompanyInfo? company = this.companyPage.getSelectedCompany()
   ///
-  ///   ApiResultOLD<DepartmentPage> result2 = await deptApi.getDepartmentPage(company);
+  ///   ApiResult<DepartmentPage> result2 = await deptApi.getDepartmentPage(company);
   ///   // Throw ApiError
   ///   result2.throwIfError();
   ///   this.departmentPage = result2.data;
@@ -299,7 +299,7 @@ abstract class BlockForm<
     String calledMethodName =
         data.isNew ? 'callApiCreateItem' : 'callApiUpdateItem';
     //
-    ApiResultOLD<ITEM_DETAIL> result;
+    ApiResult<ITEM_DETAIL> result;
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,

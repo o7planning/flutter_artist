@@ -3,11 +3,11 @@ part of '../flutter_artist.dart';
 ///
 ///
 interface class NotificationAdapter {
-  Future<ApiResultOLD<INotificationSummary>> callApiGetNotificationSummary() {
+  Future<ApiResult<INotificationSummary>> callApiGetNotificationSummary() {
     throw UnimplementedError();
   }
 
-  Future<ApiResultOLD<INotification>> callApiGetNotifications() {
+  Future<ApiResult<INotification>> callApiGetNotifications() {
     throw UnimplementedError();
   }
 

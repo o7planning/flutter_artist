@@ -81,7 +81,7 @@ class _NotificationEngine {
       INotificationSummary? fetchedData;
       try {
         // Fetch from Server:
-        ApiResultOLD<INotificationSummary> result =
+        ApiResult<INotificationSummary> result =
             await adapter.callApiGetNotificationSummary();
         if (result.isError()) {
           FlutterArtist.errorLogger.addError(
