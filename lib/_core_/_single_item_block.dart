@@ -42,11 +42,11 @@ abstract class SingleItemBlock<
 
   @override
   @nonVirtual
-  Future<ApiResult<PageData<ID, ITEM_DETAIL>?>> callApiQuery({
+  Future<ApiResultOLD<PageDataOLD<ID, ITEM_DETAIL>?>> callApiQuery({
     required FILTER_CRITERIA filterCriteria,
     required PageableData? pageable,
   }) async {
-    ApiResult<ITEM_DETAIL>? result = await callApiQuerySingleItem(
+    ApiResultOLD<ITEM_DETAIL>? result = await callApiQuerySingleItem(
       filterCriteria: filterCriteria,
     );
     return result.toPageDataResult(
@@ -60,17 +60,17 @@ abstract class SingleItemBlock<
   /// The query return zero or single Item. For Example:
   ///
   /// ```dart
-  /// Future<ApiResult<DepartmentData>> callApiQuerySingleItem({
+  /// Future<ApiResultOLD<DepartmentData>> callApiQuerySingleItem({
   ///     required DepartmentIdCriteria filterCriteria,
   /// }) {
   ///    if(filterCriteria.id == null) {
-  ///       return ApiResult<DepartmentData>.data(null);
+  ///       return ApiResultOLD<DepartmentData>.data(null);
   ///    }
   ///    return departmentApi.findDepartment(filterCriteria.id!);
   /// }
   /// ```
   ///
-  Future<ApiResult<ITEM_DETAIL>> callApiQuerySingleItem({
+  Future<ApiResultOLD<ITEM_DETAIL>> callApiQuerySingleItem({
     required FILTER_CRITERIA filterCriteria,
   });
 }

@@ -7,7 +7,7 @@ abstract class QuickCreateItemAction<ITEM_DETAIL extends Object>
     required super.actionInfo,
   });
 
-  Future<ApiResult<ITEM_DETAIL>> callApiQuickCreateItem();
+  Future<ApiResultOLD<ITEM_DETAIL>> callApiQuickCreateItem();
 
   Future<bool> _defaultConfirmation(BuildContext context) async {
     return await dialogs.showConfirmDialog(

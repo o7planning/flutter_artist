@@ -51,7 +51,7 @@ abstract class BlockData<
 
   FILTER_CRITERIA? get filterCriteria => _filterCriteria;
 
-  PageData<ID, ITEM>? _lastQueryResult;
+  PageDataOLD<ID, ITEM>? _lastQueryResult;
 
   ///
   /// ```dart
@@ -60,13 +60,13 @@ abstract class BlockData<
   /// } else if(thisBlock.data.lastQueryResult is YourType) {
   ///   ...
   /// } else {
-  ///   // Empty PageData<I>.
+  ///   // Empty PageDataOLD<I>.
   ///   // Occurs if there is no "Item" currently selected on the parent Block
   ///   // or this Block was previously in Lazy Query State.
   /// }
   /// ```
   ///
-  PageData<ID, ITEM>? get lastQueryResult => _lastQueryResult;
+  PageDataOLD<ID, ITEM>? get lastQueryResult => _lastQueryResult;
 
   late PageableData? _pageable;
 
@@ -207,7 +207,7 @@ abstract class BlockData<
     required Object? currentParentItemId,
     required FILTER_CRITERIA? filterCriteria,
     required PageableData? pageable,
-    required PageData<ID, ITEM>? pageData,
+    required PageDataOLD<ID, ITEM>? pageData,
     required DataState dataState,
   }) {
     // Check if filterCriteria changed.
@@ -217,8 +217,8 @@ abstract class BlockData<
       _items.clear();
     }
     //
-    PageData<ID, ITEM> ap = pageData ??
-        DefaultPageData<ID, ITEM>.empty(
+    PageDataOLD<ID, ITEM> ap = pageData ??
+        DefaultPageDataOLD<ID, ITEM>.empty(
           getItemId: block.getItemId,
         );
     //

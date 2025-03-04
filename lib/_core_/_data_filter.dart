@@ -1,9 +1,9 @@
 part of '../flutter_artist.dart';
 
 abstract class DataFilter<
-    FILTER_INPUT extends FilterInput, // EmptyFilterInput
-    FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
-    > extends _XBase {
+FILTER_INPUT extends FilterInput, // EmptyFilterInput
+FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
+> extends _XBase {
   late final Shelf shelf;
 
   late final String name;
@@ -70,11 +70,11 @@ abstract class DataFilter<
   ///
   /// ```Dart
   /// Future<void> prepareData({MyFilterInput? filterInput}) {
-  ///     ApiResult<dynamic>? r1 = await callYourApi1();
+  ///     ApiResultOLD<dynamic>? r1 = await callYourApi1();
   ///     // Throws ApiError if r1.isError()
   ///     r1?.throwIfError();
   ///
-  ///     ApiResult<dynamic>? r2 = await callYourApi2();
+  ///     ApiResultOLD<dynamic>? r2 = await callYourApi2();
   ///     // Throws ApiError if r2.isError()
   ///     r2?.throwIfError();
   /// }
@@ -154,14 +154,15 @@ abstract class DataFilter<
       forceQueryScalarOpts: _scalars.map((s) => _ScalarOpt(scalar: s)).toList(),
       forceQueryBlockOpts: _blocks
           .map(
-            (b) => _BlockOpt(
+            (b) =>
+            _BlockOpt(
                 block: b,
                 queryType: null,
                 pageable: null,
                 listBehavior: null,
                 suggestedSelection: null,
                 postQueryBehavior: null),
-          )
+      )
           .toList(),
       forceQueryBlockFormOpts: [],
     );

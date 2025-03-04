@@ -9,7 +9,7 @@ abstract class QuickAction<DATA extends Object> extends BaseAction {
     required this.affectedItemTypes,
   });
 
-  Future<ApiResult<DATA>?> callApi();
+  Future<ApiResultOLD<DATA>?> callApi();
 
   // TODO: Add document.
   Future<void> doAfterCallApi({
