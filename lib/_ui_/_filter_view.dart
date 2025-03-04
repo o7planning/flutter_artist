@@ -12,7 +12,7 @@ abstract class FilterView<DATA_FILTER extends DataFilter>
   @override
   @nonVirtual
   Widget build(BuildContext context) {
-    return FilterViewBuilder(
+    return _FilterViewBuilder(
       ownerClassInstance: this,
       description: '',
       dataFilter: dataFilter,

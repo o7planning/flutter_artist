@@ -1,11 +1,11 @@
 part of '../flutter_artist.dart';
 
-class FilterViewBuilder extends _RefreshableWidget {
+class _FilterViewBuilder extends _RefreshableWidget {
   final DataFilter dataFilter;
 
   final Widget Function() build;
 
-  const FilterViewBuilder({
+  const _FilterViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
@@ -20,7 +20,7 @@ class FilterViewBuilder extends _RefreshableWidget {
 }
 
 class _FilterViewBuilderState
-    extends _RefreshableWidgetState<FilterViewBuilder> {
+    extends _RefreshableWidgetState<_FilterViewBuilder> {
   GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
 
   @override
