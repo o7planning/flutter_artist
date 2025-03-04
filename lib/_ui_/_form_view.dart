@@ -11,7 +11,7 @@ abstract class FormView<BLOCK_FORM extends BlockForm> extends StatelessWidget {
   @override
   @nonVirtual
   Widget build(BuildContext context) {
-    return BlockFormWidgetBuilder(
+    return _FormViewBuilder(
       ownerClassInstance: this,
       description: '',
       blockForm: blockForm,

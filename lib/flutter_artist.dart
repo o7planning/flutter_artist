@@ -308,7 +308,7 @@ part '_ui_/_base_pagination.dart';
 
 part '_ui_/_block_control_bar.dart';
 
-part '_ui_/_block_form_widget_builder.dart';
+part '_ui_/_form_view_builder.dart';
 
 part '_ui_/_filter_view_builder.dart';
 

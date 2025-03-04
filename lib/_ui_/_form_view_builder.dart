@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-class BlockFormWidgetBuilder extends _RefreshableWidget {
+class _FormViewBuilder extends _RefreshableWidget {
   final BlockForm blockForm;
 
   final Widget Function() build;
@@ -8,7 +8,7 @@ class BlockFormWidgetBuilder extends _RefreshableWidget {
   @Deprecated("Not use")
   final Function()? onAfterBuild;
 
-  const BlockFormWidgetBuilder({
+  const _FormViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
@@ -19,12 +19,11 @@ class BlockFormWidgetBuilder extends _RefreshableWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _BlockFormWidgetBuilderState();
+    return _FormViewBuilderState();
   }
 }
 
-class _BlockFormWidgetBuilderState
-    extends _RefreshableWidgetState<BlockFormWidgetBuilder> {
+class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
   GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
 
   @override
