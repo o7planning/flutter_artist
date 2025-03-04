@@ -55,7 +55,7 @@ class BlockData<
 
   FILTER_CRITERIA? get filterCriteria => _filterCriteria;
 
-  PageData<ID, ITEM>? _lastQueryResult;
+  PageData<ITEM>? _lastQueryResult;
 
   ///
   /// ```dart
@@ -70,7 +70,7 @@ class BlockData<
   /// }
   /// ```
   ///
-  PageData<ID, ITEM>? get lastQueryResult => _lastQueryResult;
+  PageData<ITEM>? get lastQueryResult => _lastQueryResult;
 
   late PageableData? _pageable;
 
@@ -263,7 +263,7 @@ class BlockData<
     required Object? currentParentItemId,
     required FILTER_CRITERIA? filterCriteria,
     required PageableData? pageable,
-    required PageData<ID, ITEM>? pageData,
+    required PageData<ITEM>? pageData,
     required DataState dataState,
   }) {
     // Check if filterCriteria changed.
@@ -273,10 +273,7 @@ class BlockData<
       _items.clear();
     }
     //
-    PageData<ID, ITEM> ap = pageData ??
-        DefaultPageData<ID, ITEM>.empty(
-          getItemId: block.getItemId,
-        );
+    PageData<ITEM> ap = pageData ?? DefaultPageData<ITEM>.empty();
     //
     _currentParentItemId = currentParentItemId;
     _filterCriteria = filterCriteria;

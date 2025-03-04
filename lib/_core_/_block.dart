@@ -340,7 +340,7 @@ abstract class Block<
     required FILTER_CRITERIA? filterCriteria,
     required ListBehavior listBehavior,
     required PageableData? pageable,
-    required PageData<ID, ITEM>? pageData,
+    required PageData<ITEM>? pageData,
     required ITEM? candidateCurrentItem,
     required DataState dataState,
     required DataState formDataState,
@@ -908,7 +908,7 @@ abstract class Block<
       candidateCurrentItem = this.data.currentItem;
     }
     bool isQueryError = false;
-    PageData<ID, ITEM>? pageData;
+    PageData<ITEM>? pageData;
     try {
       __refreshQueryingState(isQuerying: true);
       //
@@ -920,7 +920,7 @@ abstract class Block<
         parameters: {},
       );
       //
-      ApiResult<PageData<ID, ITEM>?> result = await callApiQuery(
+      ApiResult<PageData<ITEM>?> result = await callApiQuery(
         filterCriteria: filterCriteria,
         pageable: callingPageable,
       );
@@ -3053,7 +3053,7 @@ abstract class Block<
   // ************* API METHOD **************************************************
   // ***************************************************************************
 
-  Future<ApiResult<PageData<ID, ITEM>?>> callApiQuery({
+  Future<ApiResult<PageData<ITEM>?>> callApiQuery({
     required FILTER_CRITERIA filterCriteria,
     required PageableData pageable,
   });
