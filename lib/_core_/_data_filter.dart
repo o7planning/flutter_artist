@@ -257,6 +257,19 @@ abstract class DataFilter<
     required FILTER_INPUT filterInput,
   });
 
+
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ///
+  /// This method is called immediately after calling [prepareData()] method if there are no errors.
+  ///
+  FILTER_CRITERIA createFilterCriteria({
+    required Map<String, dynamic> dataMap,
+  });
+
+
   // ***************************************************************************
   // ***************************************************************************
 
@@ -322,16 +335,6 @@ abstract class DataFilter<
   String getFilterInputTypeAsString() {
     return FILTER_INPUT.toString();
   }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ///
-  /// This method is called immediately after calling [prepareData()] method if there are no errors.
-  ///
-  FILTER_CRITERIA createFilterCriteria({
-    required Map<String, dynamic> dataMap,
-  });
 
   // ***************************************************************************
   // ***************************************************************************
