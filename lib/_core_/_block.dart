@@ -981,7 +981,7 @@ abstract class Block<
     printLog(
         "${getClassName(this)} ~~~~~~~~~~~~> needRealQuery: ${needRealQuery}");
     //
-    PageDataOLD<ID, ITEM>? pageData;
+    PageData<ITEM>? pageData;
     DataState dataState = DataState.pending;
     //
     PageableData callingPageable;
@@ -989,7 +989,7 @@ abstract class Block<
       callingPageable =
           pageable ?? __pageable ?? const PageableData(page: 1, pageSize: null);
       //
-      ApiResult<PageDataOLD<ID, ITEM>?> result;
+      ApiResult<PageData<ITEM>?> result;
       try {
         FlutterArtist.codeFlowLogger._addMethodCall(
           isLibCode: false,
@@ -1045,9 +1045,7 @@ abstract class Block<
             page: 1,
             pageSize: null,
           );
-      pageData = DefaultPageDataOLD<ID, ITEM>.empty(
-        getItemId: getItemId,
-      );
+      pageData = DefaultPageData<ITEM>.empty();
       dataState = DataState.pending;
     }
     //
@@ -1446,8 +1444,7 @@ abstract class Block<
       final FILTER_CRITERIA? criteriaOfThisDataFilter =
           this._registeredOrDefaultDataFilter._filterCriteria;
       //
-      PageDataOLD<ID, ITEM> emptyAppPage =
-          DefaultPageDataOLD.empty(getItemId: getItemId);
+      PageData<ITEM> emptyAppPage = DefaultPageData.empty();
       Object? currentParentItem = parentItemId;
 
       data._updateFrom(
@@ -3174,7 +3171,7 @@ abstract class Block<
   // ************* API METHOD **************************************************
   // ***************************************************************************
 
-  Future<ApiResult<PageDataOLD<ID, ITEM>?>> callApiQuery({
+  Future<ApiResult<PageData<ITEM>?>> callApiQuery({
     required FILTER_CRITERIA filterCriteria,
     required PageableData pageable,
   });

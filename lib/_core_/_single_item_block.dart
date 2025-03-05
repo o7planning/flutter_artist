@@ -42,18 +42,14 @@ abstract class SingleItemBlock<
 
   @override
   @nonVirtual
-  Future<ApiResult<PageDataOLD<ID, ITEM_DETAIL>?>> callApiQuery({
+  Future<ApiResult<PageData<ITEM_DETAIL>?>> callApiQuery({
     required FILTER_CRITERIA filterCriteria,
     required PageableData? pageable,
   }) async {
     ApiResult<ITEM_DETAIL>? result = await callApiQuerySingleItem(
       filterCriteria: filterCriteria,
     );
-    return result.toPageDataResultOLD(
-      getItemId: (ITEM_DETAIL itemDetail) {
-        return getItemId(itemDetail);
-      },
-    );
+    return result.toPageDataResult();
   }
 
   ///

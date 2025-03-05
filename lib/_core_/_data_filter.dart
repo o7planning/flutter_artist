@@ -1,9 +1,9 @@
 part of '../flutter_artist.dart';
 
 abstract class DataFilter<
-FILTER_INPUT extends FilterInput, // EmptyFilterInput
-FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
-> extends _XBase {
+    FILTER_INPUT extends FilterInput, // EmptyFilterInput
+    FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
+    > extends _XBase {
   late final Shelf shelf;
 
   late final String name;
@@ -154,15 +154,14 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
       forceQueryScalarOpts: _scalars.map((s) => _ScalarOpt(scalar: s)).toList(),
       forceQueryBlockOpts: _blocks
           .map(
-            (b) =>
-            _BlockOpt(
+            (b) => _BlockOpt(
                 block: b,
                 queryType: null,
                 pageable: null,
                 listBehavior: null,
                 suggestedSelection: null,
                 postQueryBehavior: null),
-      )
+          )
           .toList(),
       forceQueryBlockFormOpts: [],
     );
