@@ -50,6 +50,11 @@ class ItemDeletionResult<ITEM> {
   List<ITEM> deletedItems = [];
   List<ITEM> failedItems = [];
 
+  bool get success {
+    // TODO: Xem lai.
+    return deletedItems.isNotEmpty;
+  }
+
   void addCandidateItem(ITEM item) {
     candidateItems.add(item);
   }

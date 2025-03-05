@@ -37,6 +37,13 @@ class DataFilterData<
   // ***************************************************************************
   // ***************************************************************************
 
+   dynamic getProperty(String propName)  {
+     return _currentFormData[propName];
+   }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _clearWithDataState({required DataState filterDataState}) {
     _filterDataState = filterDataState;
     //
