@@ -1013,13 +1013,24 @@ abstract class Block<
       currentItem: this.data.currentItem,
     );
     //
-    if (this.queryDataState == DataState.error) {
-      result.success = false;
-      return;
-    }
     if (this.queryDataState == DataState.pending) {
       result.success = false;
+      this.__clearWithDataStateCascade(
+        thisXBlock: thisXBlock,
+        queryDataState: queryDataState,
+        formDataState: DataState.pending,
+      );
       throw Exception("Illegal Query State");
+    }
+    //
+    if (this.queryDataState == DataState.error) {
+      result.success = false;
+      this.__clearWithDataStateCascade(
+        thisXBlock: thisXBlock,
+        queryDataState: DataState.error,
+        formDataState: DataState.error,
+      );
+      return;
     }
     //
     if (this.data.itemCount == 0) {
