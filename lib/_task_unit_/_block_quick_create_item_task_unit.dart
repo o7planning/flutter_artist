@@ -8,4 +8,9 @@ class _BlockQuickCreateItemTaskUnit extends _TaskUnit {
     required this.xBlock,
     required this.action,
   });
+
+  @override
+  String getObjectName() {
+    return xBlock.block.name;
+  }
 }

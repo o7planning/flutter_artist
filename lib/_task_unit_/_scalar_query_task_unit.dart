@@ -6,4 +6,9 @@ class _ScalarQueryTaskUnit extends _TaskUnit {
   _ScalarQueryTaskUnit({
     required this.xScalar,
   });
+
+  @override
+  String getObjectName() {
+    return xScalar.scalar.name;
+  }
 }

@@ -10,4 +10,9 @@ class _ScalarQuickActionTaskUnit<DATA extends Object> extends _TaskUnit {
     required this.action,
     required this.afterQuickAction,
   });
+
+  @override
+  String getObjectName() {
+    return xScalar.scalar.name;
+  }
 }

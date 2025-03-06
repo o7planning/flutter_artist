@@ -8,4 +8,9 @@ class _BlockQueryTaskUnit extends _TaskUnit {
   }) {
     // xBlock.setForceQuery();
   }
+
+  @override
+  String getObjectName() {
+    return xBlock.block.name;
+  }
 }

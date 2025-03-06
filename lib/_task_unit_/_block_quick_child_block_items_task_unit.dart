@@ -10,4 +10,9 @@ class _BlockQuickChildBlockItemsTaskUnit<
     required this.xBlock,
     required this.action,
   });
+
+  @override
+  String getObjectName() {
+    return xBlock.block.name;
+  }
 }

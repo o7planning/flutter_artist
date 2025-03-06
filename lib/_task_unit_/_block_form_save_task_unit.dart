@@ -6,4 +6,9 @@ class _SaveFormSaveTaskUnit extends _TaskUnit {
   _SaveFormSaveTaskUnit({
     required this.xBlockForm,
   });
+
+  @override
+  String getObjectName() {
+    return xBlockForm.blockForm.block.name;
+  }
 }

@@ -15,4 +15,9 @@ class _BlockSelectAsCurrentTaskUnit<ITEM extends Object> extends _TaskUnit {
       xBlock.xBlockForm?.forceForm = forceForm!;
     }
   }
+
+  @override
+  String getObjectName() {
+    return xBlock.block.name;
+  }
 }

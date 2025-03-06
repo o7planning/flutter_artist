@@ -8,4 +8,9 @@ class _BlockDeleteItemTaskUnit extends _TaskUnit {
     required this.xBlock,
     required this.item,
   });
+
+  @override
+  String getObjectName() {
+    return xBlock.block.name;
+  }
 }

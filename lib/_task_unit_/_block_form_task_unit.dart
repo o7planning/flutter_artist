@@ -6,4 +6,9 @@ class _BlockFormLoadFormTaskUnit extends _TaskUnit {
   _BlockFormLoadFormTaskUnit({
     required this.xBlockForm,
   });
+
+  @override
+  String getObjectName() {
+    return xBlockForm.blockForm.block.name;
+  }
 }

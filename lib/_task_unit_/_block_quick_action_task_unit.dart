@@ -10,4 +10,9 @@ class _BlockQuickActionTaskUnit<DATA extends Object> extends _TaskUnit {
     required this.action,
     required this.afterQuickAction,
   });
+
+  @override
+  String getObjectName() {
+    return xBlock.block.name;
+  }
 }
