@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
 class _XBlockForm {
-  bool needQuery = false; // ForceForm.
+  bool forceForm = false; // ForceForm.
   bool queried = false;
   final BlockForm blockForm;
   final ExtraFormInput? extraFormInput;
@@ -15,6 +15,6 @@ class _XBlockForm {
 
   @override
   String toString() {
-    return "${getClassName(this)}(${getClassName(blockForm)} - needQuery: $needQuery)";
+    return "${getClassName(this)}(${getClassName(blockForm)} - needQuery: $forceForm)";
   }
 }

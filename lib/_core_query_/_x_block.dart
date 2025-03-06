@@ -121,10 +121,11 @@ class _XBlock {
     __pageable = pageable;
   }
 
-  void printParameters() {
-    print("  ----> candidateCurrentItem: $_candidateCurrentItem");
+  void _printParameters({required bool hasActiveUI}) {
+    print("  ----> hasActiveUI **: $hasActiveUI");
     print("  ----> queryType: $__queryType  --------> $queryType");
     print("  ----> forceQuery: $__forceQuery  --------> $forceQuery");
+    print("  ----> candidateCurrentItem: $_candidateCurrentItem");
     print(
         "  ----> forceReloadItem: $__forceReloadItem  --------> $forceReloadItem");
     print("  ----> listBehavior: $__listBehavior  --------> $listBehavior");

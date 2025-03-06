@@ -177,7 +177,7 @@ class _XShelf {
     for (_BlockFormOpt blockFormOpt in forceQueryBlockForms) {
       BlockForm blockForm = blockFormOpt.blockForm;
       _XBlockForm xBlockForm = allXBlockFormMap[blockForm.block.name]!;
-      xBlockForm.needQuery = true;
+      xBlockForm.forceForm = true;
       // Set Force query to Ascending Ancestor Blocks:
       List<Block> descendingAncestorBlocks = [
         ...blockForm.block.descendingAncestorBlocks,

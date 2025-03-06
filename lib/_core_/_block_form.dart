@@ -101,7 +101,15 @@ abstract class BlockForm<
     EXTRA_FORM_INPUT? extraFormInput =
         thisXBlockForm.extraFormInput as EXTRA_FORM_INPUT?;
     bool isNew = this.data.isNew;
-
+    //
+    bool active = this.hasActiveUIComponent();
+    print("  ----> **** form forceForm: ${thisXBlockForm.forceForm}");
+    print("  ----> **** form active: $active");
+    print("  ----> **** form isNew: $isNew");
+    if (!thisXBlockForm.forceForm && !active) {
+      this._clearWithDataState(formDataState: DataState.pending);
+      return true;
+    }
     //
     bool error = await _prepareMasterDataAndFormData(
       extraFormInput: extraFormInput,

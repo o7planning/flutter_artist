@@ -729,7 +729,7 @@ abstract class Shelf extends _XBase {
     }
     //
     for (_XBlockForm xBlockForm in xShelf.allXBlockForms) {
-      if (!xBlockForm.needQuery) {
+      if (!xBlockForm.forceForm) {
         continue;
       }
       //

@@ -820,13 +820,12 @@ abstract class Block<
   Future<void> _unitQuery({required _XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
     //
-    print(
-        "\n\n>> ${getClassName(this)}._unitQuery - queryState: $queryDataState, forceQuery: ${thisXBlock.forceQuery}");
-
-    thisXBlock.printParameters();
-    //
     bool hasActiveUI = this.hasActiveUIComponent();
-
+    print(
+        "\n\n>> ${getClassName(this)}._unitQuery - queryState: $queryDataState, REAL QUERY --> ${hasActiveUI || thisXBlock.forceQuery}");
+    //
+    thisXBlock._printParameters(hasActiveUI: hasActiveUI);
+    //
     if (!hasActiveUI && !thisXBlock.forceQuery) {
       for (_XBlock childXBlock in thisXBlock.childXBlocks) {
         _TaskUnit taskUnit = _BlockQueryTaskUnit(xBlock: childXBlock);
@@ -1026,7 +1025,9 @@ abstract class Block<
     }
     print(
         ">>>>>>>>>>> ${getClassName(this)}._unitPrepareToShow - forceReloadItem: ${thisXBlock.forceReloadItem}");
-    thisXBlock.printParameters(); // ---> Debug
+
+    bool hasActiveUI = hasActiveUIComponent();
+    thisXBlock._printParameters(hasActiveUI: hasActiveUI); // ---> Debug
 
     if (!thisXBlock.forceQuery || !thisXBlock.forceReloadItem) {
       // return;
