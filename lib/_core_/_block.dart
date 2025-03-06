@@ -2249,7 +2249,8 @@ abstract class Block<
     //
     this.data._removeItem(removeItem: removeItem);
     this.updateItemsView();
-    await Future.delayed(Duration(seconds: 1));
+    // TODO: Disable delay in test mode:
+    // await Future.delayed(Duration(seconds: 1));
   }
 
   // ***************************************************************************

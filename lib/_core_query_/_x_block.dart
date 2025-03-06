@@ -122,6 +122,7 @@ class _XBlock {
   }
 
   void _printParameters({required bool hasActiveUI}) {
+    if(true) return;
     print("  ----> hasActiveUI **: $hasActiveUI");
     print("  ----> queryType: $__queryType  --------> $queryType");
     print("  ----> forceQuery: $__forceQuery  --------> $forceQuery");

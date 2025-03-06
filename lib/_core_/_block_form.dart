@@ -103,9 +103,7 @@ abstract class BlockForm<
     bool isNew = this.data.isNew;
     //
     bool active = this.hasActiveUIComponent();
-    print("  ----> **** form forceForm: ${thisXBlockForm.forceForm}");
-    print("  ----> **** form active: $active");
-    print("  ----> **** form isNew: $isNew");
+    //
     if (!thisXBlockForm.forceForm && !active) {
       this._clearWithDataState(formDataState: DataState.pending);
       return true;
