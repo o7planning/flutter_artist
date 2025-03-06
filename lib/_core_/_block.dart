@@ -825,6 +825,7 @@ abstract class Block<
         "\n\n>> ${getClassName(this)}._unitQuery - queryState: $queryDataState, REAL QUERY --> ${hasActiveUI || thisXBlock.forceQuery}");
     //
     thisXBlock._printParameters(hasActiveUI: hasActiveUI);
+
     //
     if (!hasActiveUI && !thisXBlock.forceQuery) {
       for (_XBlock childXBlock in thisXBlock.childXBlocks) {
@@ -846,6 +847,7 @@ abstract class Block<
       thisXBlock.queryResult.success = true;
       return;
     }
+
     //
     // this.queryDataState != DataState.ready || forceQuery || hasActiveUI
     //
@@ -870,6 +872,7 @@ abstract class Block<
     } catch (e, stackTrace) {
       /* Never Error */
     }
+
     //
     // Has Error in DataFilter.
     //
@@ -890,6 +893,7 @@ abstract class Block<
           newCurrentParentItemId: parentItemId,
           newFilterCriteria: filterCriteria,
         );
+
     //
     final PageableData callingPageable = thisXBlock.pageable ??
         __pageable ??
@@ -1000,6 +1004,7 @@ abstract class Block<
   Future<void> _unitSelectItemAsCurrent({required _XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
     //
+    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1");
     CurrentItemSelectionResult<ITEM> result =
         CurrentItemSelectionResult<ITEM>();
     thisXBlock.currentItemSelectionResult = result;
@@ -1021,6 +1026,11 @@ abstract class Block<
     }
     //
     if (this.data.itemCount == 0) {
+      this.__clearWithDataStateCascade(
+        thisXBlock: thisXBlock,
+        queryDataState: DataState.ready,
+        formDataState: DataState.ready,
+      );
       return;
     }
     print(
