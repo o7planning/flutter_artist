@@ -832,7 +832,6 @@ abstract class Block<
         "\n\n>> ${getClassName(this)}._unitQuery - queryState: $queryDataState, REAL QUERY --> $forceQuery");
     //
     thisXBlock._printParameters(hasActiveUI: hasActiveUI);
-
     //
     if (!forceQuery) {
       thisXBlock.queryResult.success = true;
@@ -870,7 +869,6 @@ abstract class Block<
     } catch (e, stackTrace) {
       /* Never Error */
     }
-
     //
     // Has Error in DataFilter.
     //
@@ -891,7 +889,6 @@ abstract class Block<
           newCurrentParentItemId: parentItemId,
           newFilterCriteria: filterCriteria,
         );
-
     //
     final PageableData callingPageable = thisXBlock.pageable ??
         __pageable ??
