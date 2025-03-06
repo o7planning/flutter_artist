@@ -96,18 +96,23 @@ abstract class BlockForm<
   Future<bool> _unitLoadForm({required _XBlockForm thisXBlockForm}) async {
     __assertThisXBlockForm(thisXBlockForm);
     //
+    bool active = this.hasActiveUIComponent();
+    //
+    if (!thisXBlockForm.forceForm && !active) {
+      print(
+          "@ ~~~~~~~~~~~~~~~~> ${getClassName(this)}._unitLoadForm - IGNORED - $__loadCount");
+      this._clearWithDataState(formDataState: DataState.pending);
+      return true;
+    }
+    __loadCount++;
+    print(
+        "@ ~~~~~~~~~~~~~~~~> ${getClassName(this)}._unitLoadForm - LOAD - $__loadCount");
+    //
     ITEM_DETAIL? refreshedItemDetail = this.block.data.currentItemDetail;
     FILTER_CRITERIA? filterCriteria = this.block.data.filterCriteria;
     EXTRA_FORM_INPUT? extraFormInput =
         thisXBlockForm.extraFormInput as EXTRA_FORM_INPUT?;
     bool isNew = this.data.isNew;
-    //
-    bool active = this.hasActiveUIComponent();
-    //
-    if (!thisXBlockForm.forceForm && !active) {
-      this._clearWithDataState(formDataState: DataState.pending);
-      return true;
-    }
     //
     bool error = await _prepareMasterDataAndFormData(
       extraFormInput: extraFormInput,

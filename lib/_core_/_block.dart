@@ -821,22 +821,22 @@ abstract class Block<
     __assertThisXBlock(thisXBlock);
     //
     bool hasActiveUI = this.hasActiveUIComponent();
+    bool forceQuery = thisXBlock.forceQuery;
+    if (!forceQuery) {
+      if (this.queryDataState != DataState.ready && hasActiveUI) {
+        forceQuery = true;
+      }
+    }
+    //
     print(
-        "\n\n>> ${getClassName(this)}._unitQuery - queryState: $queryDataState, REAL QUERY --> ${hasActiveUI || thisXBlock.forceQuery}");
+        "\n\n>> ${getClassName(this)}._unitQuery - queryState: $queryDataState, REAL QUERY --> $forceQuery");
     //
     thisXBlock._printParameters(hasActiveUI: hasActiveUI);
 
     //
-    if (!hasActiveUI && !thisXBlock.forceQuery) {
-      for (_XBlock childXBlock in thisXBlock.childXBlocks) {
-        _TaskUnit taskUnit = _BlockQueryTaskUnit(xBlock: childXBlock);
-        _taskUnitQueue.addTaskUnit(taskUnit);
-      }
+    if (!forceQuery) {
       thisXBlock.queryResult.success = true;
-      return;
-    }
-
-    if (this.queryDataState == DataState.ready && !thisXBlock.forceQuery) {
+      //
       _taskUnitQueue.addTaskUnit(
         _BlockSelectAsCurrentTaskUnit<ITEM>(
           xBlock: thisXBlock,
@@ -844,12 +844,10 @@ abstract class Block<
           forceForm: null,
         ),
       );
-      thisXBlock.queryResult.success = true;
       return;
     }
-
     //
-    // this.queryDataState != DataState.ready || forceQuery || hasActiveUI
+    // thisXBlock.forceQuery || (hasActiveUI && this.queryDataState != DataState.ready)
     //
     DataState newQueryDataState = this.queryDataState;
     //
@@ -1004,7 +1002,6 @@ abstract class Block<
   Future<void> _unitSelectItemAsCurrent({required _XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
     //
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1");
     CurrentItemSelectionResult<ITEM> result =
         CurrentItemSelectionResult<ITEM>();
     thisXBlock.currentItemSelectionResult = result;
