@@ -22,8 +22,8 @@ class _XBlock {
   PageableData? __pageable;
 
   // Candidate for current selection.
-  @Deprecated("Xoa di, chuyen sang _TaskUnit")
-  Object? _candidateCurrentItem;
+  // @Deprecated("Xoa di, chuyen sang _TaskUnit")
+  // Object? _candidateCurrentItem;
 
   // ***************************************************************************
   // ***************************************************************************
@@ -128,7 +128,6 @@ class _XBlock {
     print("  ----> hasActiveUI **: $hasActiveUI");
     print("  ----> queryType: $__queryType  --------> $queryType");
     print("  ----> forceQuery: $__forceQuery  --------> $forceQuery");
-    print("  ----> candidateCurrentItem: $_candidateCurrentItem");
     print(
         "  ----> forceReloadItem: $__forceReloadItem  --------> $forceReloadItem");
     print("  ----> listBehavior: $__listBehavior  --------> $listBehavior");

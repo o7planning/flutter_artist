@@ -1003,6 +1003,7 @@ abstract class Block<
   Future<void> _unitSelectItemAsCurrent({
     required _XBlock thisXBlock,
     required CurrentItemSelectionType currentItemSelectionType,
+    required ITEM? candidateItem,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -1011,13 +1012,13 @@ abstract class Block<
           CurrentItemSelectionResult<ID, ITEM>(
         currentItemSelectionType: currentItemSelectionType,
         getItemId: getItemId,
-        candidateItem: thisXBlock._candidateCurrentItem as ITEM?,
+        candidateItem: candidateItem,
         oldCurrentItem: this.data.currentItem,
         currentItem: this.data.currentItem,
       );
     } else {
       thisXBlock.currentItemSelectionResult!._addCandidateItem(
-        thisXBlock._candidateCurrentItem,
+        candidateItem,
       );
     }
     var result = thisXBlock.currentItemSelectionResult!;
@@ -1056,7 +1057,7 @@ abstract class Block<
       // return;
     }
     //
-    ITEM? candidateCurrentItem = thisXBlock._candidateCurrentItem as ITEM?;
+    ITEM? candidateCurrentItem = candidateItem;
     ITEM? currentItem = this.data.currentItem;
     //
     if (candidateCurrentItem != null) {
@@ -1090,7 +1091,7 @@ abstract class Block<
     }
     //
     if (!this.data.isSame(
-          item1: thisXBlock._candidateCurrentItem as ITEM?,
+          item1: candidateItem,
           item2: candidateCurrentItem,
         )) {
       result._addCandidateItem(candidateCurrentItem);
