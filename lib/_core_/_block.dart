@@ -832,7 +832,7 @@ abstract class Block<
     //
     // Ready FilterCriteria:
     //
-    bool xCriteriaChanged = this.data._isXCriteriaChanged(
+    final bool xCriteriaChanged = this.data._isXCriteriaChanged(
           newCurrentParentItemId: parentItemId,
           newFilterCriteria: filterCriteria,
         );
@@ -841,13 +841,16 @@ abstract class Block<
         __pageable ??
         const PageableData(page: 1, pageSize: null);
     //
-    final ListBehavior newListBehavior;
+    final ListBehavior realListBehavior;
     final int currentItemCount = this.data.itemCount;
     //
     if (xCriteriaChanged) {
-      newListBehavior = ListBehavior.replace;
+      //
+      // IMPORTANT:
+      //
+      realListBehavior = ListBehavior.replace;
     } else {
-      newListBehavior = thisXBlock.listBehavior;
+      realListBehavior = thisXBlock.listBehavior;
     }
     bool isQueryError = false;
     PageData<ITEM>? pageData;
@@ -898,15 +901,18 @@ abstract class Block<
     if (isQueryError) {
       thisXBlock.queryResult._apiError = true;
       //
-      switch (newListBehavior) {
+      switch (realListBehavior) {
         case ListBehavior.replace:
-          newQueryDataState = DataState.error;
+          newQueryDataState = xCriteriaChanged //
+              ? DataState.error
+              : DataState.ready;
         case ListBehavior.append:
-          if (currentItemCount > 0) {
-            newQueryDataState = DataState.ready;
-          } else {
-            newQueryDataState = DataState.error;
-          }
+          //
+          // (For Sure: xCriteriaChanged = false)
+          //
+          newQueryDataState = currentItemCount > 0 //
+              ? DataState.ready
+              : DataState.error;
       }
     } else {
       thisXBlock.queryResult._apiError = false;
@@ -919,7 +925,7 @@ abstract class Block<
     // Update queried items to the List:
     //
     this.data._updateFrom(
-          forceListBehavior: newListBehavior,
+          forceListBehavior: realListBehavior,
           currentParentItemId: this.parentItemId,
           filterCriteria: filterCriteria,
           pageable: callingPageable,
