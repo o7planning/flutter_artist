@@ -97,13 +97,30 @@ abstract class BlockForm<
     __assertThisXBlockForm(thisXBlockForm);
     //
     bool active = this.hasActiveUIComponent();
+    bool forceForm = thisXBlockForm.forceForm;
     //
-    if (!thisXBlockForm.forceForm && !active) {
-      print(
-          "@ ~~~~~~~~~~~~~~~~> ${getClassName(this)}._unitLoadForm - IGNORED - $__loadCount");
-      this._clearWithDataState(formDataState: DataState.pending);
-      return true;
+
+    if (!forceForm) {
+      if (!active) {
+        if (this.dataState == DataState.error ||
+            this.dataState == DataState.pending) {
+          _clearWithDataState(formDataState: this.dataState);
+          return true;
+        } else {
+          return true;
+        }
+      } else {
+        if (this.dataState == DataState.error ||
+            this.dataState == DataState.pending) {
+          forceForm = true;
+        } else {
+          return true;
+        }
+      }
     }
+    //
+    // forceForm = true
+    //
     __loadCount++;
     print(
         "@ ~~~~~~~~~~~~~~~~> ${getClassName(this)}._unitLoadForm - LOAD - $__loadCount");
