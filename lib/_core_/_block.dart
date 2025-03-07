@@ -987,8 +987,7 @@ abstract class Block<
     __assertThisXBlock(thisXBlock);
     //
     if (thisXBlock.currentItemSelectionResult == null) {
-      thisXBlock.currentItemSelectionResult =
-          CurrentItemSelectionResult<ID, ITEM>(
+      thisXBlock.currentItemSelectionResult = CurrentItemSelectionResult<ITEM>(
         currentItemSelectionType: currentItemSelectionType,
         getItemId: getItemId,
         candidateItem: candidateItem,
@@ -1766,7 +1765,7 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
-  Future<CurrentItemSelectionResult<ID, ITEM>?> _prepareToShowOrEditItem({
+  Future<CurrentItemSelectionResult<ITEM>?> _prepareToShowOrEditItem({
     required ITEM item,
     required bool forceForm,
     required Function()? navigate,
@@ -1809,7 +1808,7 @@ abstract class Block<
     //
     await this.shelf._executeTaskUnitQueue();
     var result = thisXBlock.currentItemSelectionResult
-        as CurrentItemSelectionResult<ID, ITEM>?;
+        as CurrentItemSelectionResult<ITEM>?;
     if (result != null && result.success) {
       if (navigate != null) {
         navigate();
@@ -1822,7 +1821,7 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
-  Future<CurrentItemSelectionResult<ID, ITEM>?> prepareToShowItem({
+  Future<CurrentItemSelectionResult<ITEM>?> prepareToShowItem({
     required ITEM item,
     Function()? navigate,
   }) async {
@@ -2551,7 +2550,7 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
-  Future<CurrentItemSelectionResult<ID, ITEM>?> prepareToEditFirstItem({
+  Future<CurrentItemSelectionResult<ITEM>?> prepareToEditFirstItem({
     Function()? navigate,
   }) async {
     ITEM? nextItem = this.data.firstItem;
@@ -2568,7 +2567,7 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
-  Future<CurrentItemSelectionResult<ID, ITEM>?> prepareToEditNextItem({
+  Future<CurrentItemSelectionResult<ITEM>?> prepareToEditNextItem({
     Function()? navigate,
   }) async {
     if (!this.data.hasNextItem) {
@@ -2588,7 +2587,7 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
-  Future<CurrentItemSelectionResult<ID, ITEM>?> prepareToEditPreviousItem({
+  Future<CurrentItemSelectionResult<ITEM>?> prepareToEditPreviousItem({
     Function()? navigate,
   }) async {
     if (!this.data.hasPreviousItem) {
@@ -2608,7 +2607,7 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
-  Future<CurrentItemSelectionResult<ID, ITEM>?> prepareToEditItem({
+  Future<CurrentItemSelectionResult<ITEM>?> prepareToEditItem({
     required ITEM item,
     Function()? navigate,
   }) async {
@@ -2633,7 +2632,7 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
-  Future<CurrentItemSelectionResult<ID, ITEM>?> prepareToShowFirstItem({
+  Future<CurrentItemSelectionResult<ITEM>?> prepareToShowFirstItem({
     Function()? navigate,
   }) async {
     ITEM? nextItem = this.data.firstItem;
@@ -2650,7 +2649,7 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
-  Future<CurrentItemSelectionResult<ID, ITEM>?> prepareToShowNextItem({
+  Future<CurrentItemSelectionResult<ITEM>?> prepareToShowNextItem({
     Function()? navigate,
   }) async {
     if (!this.data.hasNextItem) {
@@ -2670,7 +2669,7 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
-  Future<CurrentItemSelectionResult<ID, ITEM>?> prepareToShowPreviousItem({
+  Future<CurrentItemSelectionResult<ITEM>?> prepareToShowPreviousItem({
     Function()? navigate,
   }) async {
     if (!this.data.hasPreviousItem) {
@@ -2948,7 +2947,7 @@ abstract class Block<
   ///
   ///
   @RootMethod()
-  Future<CurrentItemSelectionResult<ID, ITEM>?> refreshCurrentItem() async {
+  Future<CurrentItemSelectionResult<ITEM>?> refreshCurrentItem() async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: null,

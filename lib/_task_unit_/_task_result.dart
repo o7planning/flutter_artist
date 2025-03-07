@@ -1,22 +1,22 @@
 part of '../flutter_artist.dart';
 
-class CurrentItemSelectionResult<ID, ITEM> {
+class CurrentItemSelectionResult<ITEM> {
   final CurrentItemSelectionType currentItemSelectionType;
   final List<ITEM?> candidateItems = [];
   ITEM? oldCurrentItem;
   ITEM? currentItem;
-  ID Function(ITEM item) getItemId;
+  Object Function(ITEM item) _getItemId;
   bool _apiError = false;
   bool _convertError = false;
 
   CurrentItemSelectionResult({
     required this.currentItemSelectionType,
-    required this.getItemId,
+    required Object Function(ITEM item) getItemId,
     //
     required ITEM? candidateItem,
     required this.oldCurrentItem,
     required this.currentItem,
-  }) {
+  }) : _getItemId = getItemId {
     if (candidateItem != null) {
       candidateItems.add(candidateItem);
     }
@@ -38,7 +38,7 @@ class CurrentItemSelectionResult<ID, ITEM> {
     if (candidateItems.isEmpty || currentItem == null) {
       return false;
     }
-    if (getItemId(candidateItems[0]!) != getItemId(currentItem!)) {
+    if (_getItemId(candidateItems[0]!) != _getItemId(currentItem!)) {
       return false;
     }
     return true;
@@ -48,7 +48,7 @@ class CurrentItemSelectionResult<ID, ITEM> {
     if (candidateItems.isEmpty || currentItem == null) {
       return false;
     }
-    if (getItemId(candidateItems[0]!) != getItemId(currentItem!)) {
+    if (_getItemId(candidateItems[0]!) != _getItemId(currentItem!)) {
       return false;
     }
     return true;
@@ -58,7 +58,7 @@ class CurrentItemSelectionResult<ID, ITEM> {
     if (candidateItems.isEmpty || currentItem == null) {
       return false;
     }
-    if (getItemId(candidateItems[0]!) != getItemId(currentItem!)) {
+    if (_getItemId(candidateItems[0]!) != _getItemId(currentItem!)) {
       return false;
     }
     return true;
