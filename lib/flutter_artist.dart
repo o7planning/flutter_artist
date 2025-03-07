@@ -268,7 +268,7 @@ part '_enum_/_show_mode.dart';
 
 part '_enum_/_sorting_direction.dart';
 
-part '_enum_/_task_result.dart';
+part '_task_unit_/_task_result.dart';
 
 part '_hive_/_hive_utils.dart';
 

@@ -1,23 +1,13 @@
 part of '../flutter_artist.dart';
 
-class PrepareToEditResult<ID, ITEM>
-    extends CurrentItemSelectionResult<ID, ITEM> {
-  PrepareToEditResult({
-    required super.getItemId,
-    required super.currentItemSelectionType,
-    required super.candidateItem,
-    required super.oldCurrentItem,
-    required super.currentItem,
-  });
-}
-
 class CurrentItemSelectionResult<ID, ITEM> {
   final CurrentItemSelectionType currentItemSelectionType;
   final List<ITEM?> candidateItems = [];
   ITEM? oldCurrentItem;
   ITEM? currentItem;
-
   ID Function(ITEM item) getItemId;
+  bool _apiError = false;
+  bool _convertError = false;
 
   CurrentItemSelectionResult({
     required this.currentItemSelectionType,
@@ -75,8 +65,7 @@ class CurrentItemSelectionResult<ID, ITEM> {
   }
 
   bool _successfullySelectedDefault() {
-    // TODO: Xem lai
-    return true;
+    return _apiError || _convertError;
   }
 
   bool get success {

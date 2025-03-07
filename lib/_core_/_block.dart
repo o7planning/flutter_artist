@@ -1163,10 +1163,10 @@ abstract class Block<
     }
     //
     if (isLoadItemError) {
+      result._apiError = true;
       // TODO: Alway return?
-      if (newCurrent) {
-        return;
-      }
+      // If newCurrent or not newCurrent
+      // Always return. Nothing to do if has error!!
       return;
     }
     //
@@ -1246,7 +1246,10 @@ abstract class Block<
     }
     //
     if (convertItemError) {
-      // TODO
+      result._convertError = true;
+      // TODO Always return??
+      // If newCurrent or not newCurrent
+      // Always return. Nothing to do if has error!!
       return;
     }
     //
@@ -1812,6 +1815,7 @@ abstract class Block<
       forceQueryBlockFormOpts: [],
     );
     //
+
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
     _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit(
