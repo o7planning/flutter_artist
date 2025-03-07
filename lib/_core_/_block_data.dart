@@ -119,14 +119,16 @@ class BlockData<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _clearWithDataState({required DataState queryDataState}) {
+  void _clearWithDataState({
+    required DataState queryDataState,
+  }) {
     _queryDataState = queryDataState;
     _items.clear();
     _selectedItems.clear();
     _checkedItems.clear();
     _setCurrentItemOnly(refreshedItem: null, refreshedItemDetail: null);
     _lastQueryResult = null;
-    _filterCriteria = null; // ??
+    // _filterCriteria = filterCriteria;
   }
 
   // ***************************************************************************
