@@ -1038,9 +1038,7 @@ abstract class Block<
       );
       return;
     }
-    print(
-        ">>>>>>>>>>> ${getClassName(this)}._unitPrepareToShow - forceReloadItem: ${thisXBlock.forceReloadItem}");
-
+    //
     bool hasActiveUI = hasActiveUIComponent();
     thisXBlock._printParameters(hasActiveUI: hasActiveUI); // ---> Debug
 
@@ -1049,7 +1047,6 @@ abstract class Block<
     }
     //
     ITEM? candidateCurrentItem = thisXBlock._candidateCurrentItem as ITEM?;
-
     ITEM? currentItem = this.data.currentItem;
     //
     if (candidateCurrentItem != null) {
@@ -1153,8 +1150,9 @@ abstract class Block<
         showSnackBar: true,
       );
     }
-    // TODO: ???????????????????
+    //
     if (isLoadItemError) {
+      // TODO: Alway return?
       if (newCurrent) {
         return;
       }
@@ -1197,19 +1195,7 @@ abstract class Block<
         removeItem: candidateCurrentItem,
       );
       //
-      this.data._setCurrentItemOnly(
-            refreshedItem: null,
-            refreshedItemDetail: null,
-          );
-      //
-      if (this.blockForm != null) {
-        // Clear Form:
-        this.blockForm!._clearWithDataState(
-              formDataState: DataState.ready,
-            );
-      }
-      //
-      __clearChildrenWithDataStateCascade(
+      this.__clearWithDataStateCascade(
         thisXBlock: thisXBlock,
         queryDataState: DataState.ready,
         formDataState: DataState.ready,
@@ -1256,6 +1242,7 @@ abstract class Block<
           refreshedItem: candidateCurrentItem,
           refreshedItemDetail: candidateCurrentItemDetail,
         );
+    //
     if (newCurrent) {
       result.currentItem = candidateCurrentItem;
       //
@@ -1269,6 +1256,10 @@ abstract class Block<
     // BlockForm:
     //
     if (thisXBlock.xBlockForm != null) {
+      // (newCurrent)
+      thisXBlock.xBlockForm!.blockForm._clearWithDataState(
+        formDataState: DataState.pending,
+      );
       _taskUnitQueue.addTaskUnit(
         _BlockFormLoadFormTaskUnit(
           xBlockForm: thisXBlock.xBlockForm!,
