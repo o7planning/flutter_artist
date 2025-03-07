@@ -264,7 +264,7 @@ class BlockData<
     required FILTER_CRITERIA? filterCriteria,
     required PageableData? pageable,
     required PageData<ITEM>? pageData,
-    required DataState dataState,
+    required DataState queryDataState,
   }) {
     // Check if filterCriteria changed.
     if (forceListBehavior == ListBehavior.replace ||
@@ -278,7 +278,7 @@ class BlockData<
     _currentParentItemId = currentParentItemId;
     _filterCriteria = filterCriteria;
     _lastQueryResult = pageData;
-    _queryDataState = dataState;
+    _queryDataState = queryDataState;
     //
     // Append to _items:
     //

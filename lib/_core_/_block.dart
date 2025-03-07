@@ -333,59 +333,6 @@ abstract class Block<
   }
 
   // ***************************************************************************
-  // ***************************************************************************
-
-  void __setQueryDataWithStateCascade({
-    required _XBlock thisXBlock,
-    required FILTER_CRITERIA? filterCriteria,
-    required ListBehavior listBehavior,
-    required PageableData? pageable,
-    required PageData<ITEM>? pageData,
-    required ITEM? candidateCurrentItem,
-    required DataState dataState,
-    required DataState formDataState,
-  }) {
-    __assertThisXBlock(thisXBlock);
-    //
-    this.data._updateFrom(
-          forceListBehavior: listBehavior,
-          currentParentItemId: this.parentItemId,
-          filterCriteria: filterCriteria,
-          pageable: pageable,
-          pageData: pageData,
-          dataState: dataState,
-        );
-    if (blockForm != null) {
-      // TODO: ??????????????????????????????????????????????????????
-      // Update formDataState ???????
-      // blockForm!.data._updateFormData(formData);
-    }
-    switch (dataState) {
-      case DataState.ready:
-        // TODO: Tạm thời cứ clear all Child Block ITEMS:
-        this.__clearChildrenWithDataStateCascade(
-          thisXBlock: thisXBlock,
-          queryDataState: DataState.pending,
-          formDataState: DataState.pending,
-        );
-      case DataState.pending:
-        // TODO: Tạm thời cứ clear all Child Block ITEMS:
-        this.__clearChildrenWithDataStateCascade(
-          thisXBlock: thisXBlock,
-          queryDataState: DataState.pending,
-          formDataState: DataState.pending,
-        );
-      case DataState.error:
-        // TODO: Tạm thời cứ clear all Child Block ITEMS:
-        this.__clearChildrenWithDataStateCascade(
-          thisXBlock: thisXBlock,
-          queryDataState: DataState.error,
-          formDataState: DataState.error,
-        );
-    }
-  }
-
-  // ***************************************************************************
   // ************ TYPES ********************************************************
   // ***************************************************************************
 
@@ -817,7 +764,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> _unitQuery({required _XBlock thisXBlock}) async {
+  Future<BlockQueryResult> _unitQuery({required _XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
     //
     bool hasActiveUI = this.hasActiveUIComponent();
@@ -834,8 +781,6 @@ abstract class Block<
     thisXBlock._printParameters(hasActiveUI: hasActiveUI);
     //
     if (!forceQuery) {
-      thisXBlock.queryResult.success = true;
-      //
       _taskUnitQueue.addTaskUnit(
         _BlockSelectAsCurrentTaskUnit<ITEM>(
           currentItemSelectionType:
@@ -845,7 +790,7 @@ abstract class Block<
           forceForm: null,
         ),
       );
-      return;
+      return thisXBlock.queryResult;
     }
     //
     // thisXBlock.forceQuery || (hasActiveUI && this.queryDataState != DataState.ready)
@@ -881,8 +826,8 @@ abstract class Block<
         queryDataState: DataState.error,
         formDataState: DataState.error,
       );
-      thisXBlock.queryResult.success = false;
-      return;
+      thisXBlock.queryResult._filterError = true;
+      return thisXBlock.queryResult;
     }
     //
     // Ready FilterCriteria:
@@ -896,19 +841,19 @@ abstract class Block<
         __pageable ??
         const PageableData(page: 1, pageSize: null);
     //
-    final ITEM? candidateCurrentItem;
     final ListBehavior newListBehavior;
     final int currentItemCount = this.data.itemCount;
     //
     if (xCriteriaChanged) {
       newListBehavior = ListBehavior.replace;
-      candidateCurrentItem = null;
     } else {
       newListBehavior = thisXBlock.listBehavior;
-      candidateCurrentItem = this.data.currentItem;
     }
     bool isQueryError = false;
     PageData<ITEM>? pageData;
+    //
+    // Call Query API:
+    //
     try {
       __refreshQueryingState(isQuerying: true);
       //
@@ -951,7 +896,7 @@ abstract class Block<
     }
     //
     if (isQueryError) {
-      thisXBlock.queryResult.success = false;
+      thisXBlock.queryResult._apiError = true;
       //
       switch (newListBehavior) {
         case ListBehavior.replace:
@@ -964,22 +909,55 @@ abstract class Block<
           }
       }
     } else {
-      thisXBlock.queryResult.success = true;
+      thisXBlock.queryResult._apiError = false;
       //
       newQueryDataState = DataState.ready;
     }
     //
-    __setQueryDataWithStateCascade(
-      thisXBlock: thisXBlock,
-      filterCriteria: filterCriteria,
-      listBehavior: newListBehavior,
-      pageable: callingPageable,
-      pageData: pageData,
-      candidateCurrentItem: candidateCurrentItem,
-      dataState: newQueryDataState,
-      // TODO XEM LAI ?????????????????????????????
-      formDataState: DataState.pending,
-    );
+    final ITEM? currentItem = this.data.currentItem;
+    //
+    // Update queried items to the List:
+    //
+    this.data._updateFrom(
+          forceListBehavior: newListBehavior,
+          currentParentItemId: this.parentItemId,
+          filterCriteria: filterCriteria,
+          pageable: callingPageable,
+          pageData: pageData,
+          queryDataState: newQueryDataState,
+        );
+    //
+    final bool currentItemInList =
+        currentItem != null && this.data.containsItem(item: currentItem!);
+    final ITEM? candidateCurrentItem = currentItemInList ? currentItem : null;
+    //
+    if (blockForm != null) {
+      if (!currentItemInList) {
+        blockForm!._clearWithDataState(formDataState: DataState.ready);
+      }
+    }
+    switch (queryDataState) {
+      case DataState.ready:
+        if (!currentItemInList) {
+          this.__clearChildrenWithDataStateCascade(
+            thisXBlock: thisXBlock,
+            queryDataState: DataState.pending,
+            formDataState: DataState.pending,
+          );
+        }
+      case DataState.pending:
+        this.__clearChildrenWithDataStateCascade(
+          thisXBlock: thisXBlock,
+          queryDataState: DataState.pending,
+          formDataState: DataState.pending,
+        );
+      case DataState.error:
+        this.__clearChildrenWithDataStateCascade(
+          thisXBlock: thisXBlock,
+          queryDataState: DataState.error,
+          formDataState: DataState.error,
+        );
+    }
     //
     // Add TaskUnit:
     // - Find Item to Select as Current:
@@ -995,6 +973,7 @@ abstract class Block<
         ),
       );
     }
+    return thisXBlock.queryResult;
   }
 
   // ***************************************************************************
