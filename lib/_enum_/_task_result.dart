@@ -1,23 +1,35 @@
 part of '../flutter_artist.dart';
 
-class CurrentItemSelectionResult<ITEM> {
-  bool success = true;
+class PrepareToEditResult<ID, ITEM>
+    extends CurrentItemSelectionResult<ID, ITEM> {
+  PrepareToEditResult({
+    required super.getItemId,
+    required super.currentItemSelectionType,
+    required super.candidateItem,
+    required super.oldCurrentItem,
+    required super.currentItem,
+  });
+}
+
+class CurrentItemSelectionResult<ID, ITEM> {
+  final CurrentItemSelectionType currentItemSelectionType;
   final List<ITEM?> candidateItems = [];
   ITEM? oldCurrentItem;
   ITEM? currentItem;
 
-  CurrentItemSelectionResult();
+  ID Function(ITEM item) getItemId;
 
-  void _initState({
-    required bool success,
+  CurrentItemSelectionResult({
+    required this.currentItemSelectionType,
+    required this.getItemId,
+    //
     required ITEM? candidateItem,
-    required ITEM? oldCurrentItem,
-    required ITEM? currentItem,
+    required this.oldCurrentItem,
+    required this.currentItem,
   }) {
-    this.success = success;
-    this.candidateItems.add(candidateItem);
-    this.oldCurrentItem = oldCurrentItem;
-    this.currentItem = currentItem;
+    if (candidateItem != null) {
+      candidateItems.add(candidateItem);
+    }
   }
 
   void _addCandidateItem(ITEM? candidateItem) {
@@ -32,17 +44,53 @@ class CurrentItemSelectionResult<ITEM> {
     return candidateItems.lastOrNull;
   }
 
-// bool hasCandidateItemAndSelected() {
-//   return candidateItem != null && candidateItem == currentItem;
-// }
-//
-// bool hasNewCurrentItem() {
-//   return currentItem != null && currentItem != oldCurrentItem;
-// }
-//
-// bool currentItemChanged() {
-//   return currentItem != oldCurrentItem;
-// }
+  bool _successfullySelectedToEdit() {
+    if (candidateItems.isEmpty || currentItem == null) {
+      return false;
+    }
+    if (getItemId(candidateItems[0]!) != getItemId(currentItem!)) {
+      return false;
+    }
+    return true;
+  }
+
+  bool _successfullySelectedToShow() {
+    if (candidateItems.isEmpty || currentItem == null) {
+      return false;
+    }
+    if (getItemId(candidateItems[0]!) != getItemId(currentItem!)) {
+      return false;
+    }
+    return true;
+  }
+
+  bool _successfullySelectedToRefresh() {
+    if (candidateItems.isEmpty || currentItem == null) {
+      return false;
+    }
+    if (getItemId(candidateItems[0]!) != getItemId(currentItem!)) {
+      return false;
+    }
+    return true;
+  }
+
+  bool _successfullySelectedDefault() {
+    // TODO: Xem lai
+    return true;
+  }
+
+  bool get success {
+    switch (currentItemSelectionType) {
+      case CurrentItemSelectionType.selectAsCurrentToEdit:
+        return _successfullySelectedToEdit();
+      case CurrentItemSelectionType.selectAsCurrentToShow:
+        return _successfullySelectedToShow();
+      case CurrentItemSelectionType.selectAsCurrentForDefault:
+        return _successfullySelectedDefault();
+      case CurrentItemSelectionType.refresh:
+        return _successfullySelectedToRefresh();
+    }
+  }
 }
 
 class ItemDeletionResult<ITEM> {

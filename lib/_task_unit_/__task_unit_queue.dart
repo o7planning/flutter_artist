@@ -38,7 +38,7 @@ class _TaskUnitQueue {
   }
 
   @override
-  String toString()  {
+  String toString() {
     return _taskUnits.toString();
   }
 }

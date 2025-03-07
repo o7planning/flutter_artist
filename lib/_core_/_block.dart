@@ -838,6 +838,8 @@ abstract class Block<
       //
       _taskUnitQueue.addTaskUnit(
         _BlockSelectAsCurrentTaskUnit<ITEM>(
+          currentItemSelectionType:
+              CurrentItemSelectionType.selectAsCurrentForDefault,
           xBlock: thisXBlock,
           candidateItem: null,
           forceForm: null,
@@ -985,6 +987,8 @@ abstract class Block<
     if (newQueryDataState == DataState.ready) {
       _taskUnitQueue.addTaskUnit(
         _BlockSelectAsCurrentTaskUnit<ITEM>(
+          currentItemSelectionType:
+              CurrentItemSelectionType.selectAsCurrentForDefault,
           xBlock: thisXBlock,
           candidateItem: candidateCurrentItem,
           forceForm: null,
@@ -996,32 +1000,38 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> _unitSelectItemAsCurrent({required _XBlock thisXBlock}) async {
+  Future<void> _unitSelectItemAsCurrent({
+    required _XBlock thisXBlock,
+    required CurrentItemSelectionType currentItemSelectionType,
+  }) async {
     __assertThisXBlock(thisXBlock);
     //
-    CurrentItemSelectionResult<ITEM> result =
-        CurrentItemSelectionResult<ITEM>();
-    thisXBlock.currentItemSelectionResult = result;
-
-    result._initState(
-      success: true,
-      candidateItem: thisXBlock._candidateCurrentItem as ITEM?,
-      oldCurrentItem: this.data.currentItem,
-      currentItem: this.data.currentItem,
-    );
+    if (thisXBlock.currentItemSelectionResult == null) {
+      thisXBlock.currentItemSelectionResult =
+          CurrentItemSelectionResult<ID, ITEM>(
+        currentItemSelectionType: currentItemSelectionType,
+        getItemId: getItemId,
+        candidateItem: thisXBlock._candidateCurrentItem as ITEM?,
+        oldCurrentItem: this.data.currentItem,
+        currentItem: this.data.currentItem,
+      );
+    } else {
+      thisXBlock.currentItemSelectionResult!._addCandidateItem(
+        thisXBlock._candidateCurrentItem,
+      );
+    }
+    var result = thisXBlock.currentItemSelectionResult!;
     //
     if (this.queryDataState == DataState.pending) {
-      result.success = false;
       this.__clearWithDataStateCascade(
         thisXBlock: thisXBlock,
         queryDataState: queryDataState,
         formDataState: DataState.pending,
       );
-      throw Exception("Illegal Query State");
+      return;
     }
     //
     if (this.queryDataState == DataState.error) {
-      result.success = false;
       this.__clearWithDataStateCascade(
         thisXBlock: thisXBlock,
         queryDataState: DataState.error,
@@ -1180,6 +1190,7 @@ abstract class Block<
         }
         //
         var taskUnit = _BlockSelectAsCurrentTaskUnit(
+          currentItemSelectionType: currentItemSelectionType,
           xBlock: thisXBlock,
           candidateItem: siblingItem,
           forceForm: null,
@@ -1203,6 +1214,7 @@ abstract class Block<
       //
       if (siblingItem != null) {
         var taskUnit = _BlockSelectAsCurrentTaskUnit(
+          currentItemSelectionType: currentItemSelectionType,
           xBlock: thisXBlock,
           candidateItem: siblingItem,
           forceForm: null,
@@ -1383,6 +1395,8 @@ abstract class Block<
     );
     //
     _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit(
+      currentItemSelectionType:
+          CurrentItemSelectionType.selectAsCurrentForDefault,
       xBlock: thisXBlock,
       candidateItem: siblingItem,
       forceForm: null,
@@ -1569,6 +1583,7 @@ abstract class Block<
         ITEM? currentItem = this.data.currentItem;
         if (currentItem != null) {
           var taskUnit = _BlockSelectAsCurrentTaskUnit(
+            currentItemSelectionType: CurrentItemSelectionType.refresh,
             xBlock: thisXBlock,
             candidateItem: currentItem,
             forceForm: null,
@@ -1752,6 +1767,8 @@ abstract class Block<
       );
       //
       _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit(
+        currentItemSelectionType:
+            CurrentItemSelectionType.selectAsCurrentForDefault,
         xBlock: thisXBlock,
         candidateItem: siblingItem,
         forceForm: null,
@@ -1766,7 +1783,7 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
-  Future<CurrentItemSelectionResult<ITEM>?> _prepareToShowOrEditItem({
+  Future<CurrentItemSelectionResult<ID, ITEM>?> _prepareToShowOrEditItem({
     required ITEM item,
     required bool forceForm,
     required Function()? navigate,
@@ -1797,6 +1814,9 @@ abstract class Block<
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
     _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit(
+      currentItemSelectionType: forceForm
+          ? CurrentItemSelectionType.selectAsCurrentToEdit
+          : CurrentItemSelectionType.selectAsCurrentToShow,
       xBlock: thisXBlock,
       candidateItem: item,
       forceForm: forceForm,
@@ -1804,18 +1824,21 @@ abstract class Block<
     _taskUnitQueue.addTaskUnit(taskUnit);
     //
     await this.shelf._executeTaskUnitQueue();
-    if (navigate != null) {
-      navigate();
+    var result = thisXBlock.currentItemSelectionResult
+        as CurrentItemSelectionResult<ID, ITEM>?;
+    if (result != null && result.success) {
+      if (navigate != null) {
+        navigate();
+      }
     }
-    return thisXBlock.currentItemSelectionResult
-        as CurrentItemSelectionResult<ITEM>?;
+    return result;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   @RootMethod()
-  Future<CurrentItemSelectionResult<ITEM>?> prepareToShowItem({
+  Future<CurrentItemSelectionResult<ID, ITEM>?> prepareToShowItem({
     required ITEM item,
     Function()? navigate,
   }) async {
@@ -2544,7 +2567,7 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
-  Future<CurrentItemSelectionResult<ITEM>?> prepareToEditFirstItem({
+  Future<CurrentItemSelectionResult<ID, ITEM>?> prepareToEditFirstItem({
     Function()? navigate,
   }) async {
     ITEM? nextItem = this.data.firstItem;
@@ -2561,7 +2584,7 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
-  Future<CurrentItemSelectionResult<ITEM>?> prepareToEditNextItem({
+  Future<CurrentItemSelectionResult<ID, ITEM>?> prepareToEditNextItem({
     Function()? navigate,
   }) async {
     if (!this.data.hasNextItem) {
@@ -2581,7 +2604,7 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
-  Future<CurrentItemSelectionResult<ITEM>?> prepareToEditPreviousItem({
+  Future<CurrentItemSelectionResult<ID, ITEM>?> prepareToEditPreviousItem({
     Function()? navigate,
   }) async {
     if (!this.data.hasPreviousItem) {
@@ -2601,7 +2624,7 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
-  Future<CurrentItemSelectionResult<ITEM>?> prepareToEditItem({
+  Future<CurrentItemSelectionResult<ID, ITEM>?> prepareToEditItem({
     required ITEM item,
     Function()? navigate,
   }) async {
@@ -2626,7 +2649,7 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
-  Future<CurrentItemSelectionResult<ITEM>?> prepareToShowFirstItem({
+  Future<CurrentItemSelectionResult<ID, ITEM>?> prepareToShowFirstItem({
     Function()? navigate,
   }) async {
     ITEM? nextItem = this.data.firstItem;
@@ -2643,7 +2666,7 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
-  Future<CurrentItemSelectionResult<ITEM>?> prepareToShowNextItem({
+  Future<CurrentItemSelectionResult<ID, ITEM>?> prepareToShowNextItem({
     Function()? navigate,
   }) async {
     if (!this.data.hasNextItem) {
@@ -2663,7 +2686,7 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
-  Future<CurrentItemSelectionResult<ITEM>?> prepareToShowPreviousItem({
+  Future<CurrentItemSelectionResult<ID, ITEM>?> prepareToShowPreviousItem({
     Function()? navigate,
   }) async {
     if (!this.data.hasPreviousItem) {
@@ -2941,7 +2964,7 @@ abstract class Block<
   ///
   ///
   @RootMethod()
-  Future<CurrentItemSelectionResult<ITEM>?> refreshCurrentItem() async {
+  Future<CurrentItemSelectionResult<ID, ITEM>?> refreshCurrentItem() async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: null,

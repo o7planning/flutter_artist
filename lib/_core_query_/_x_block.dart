@@ -22,6 +22,7 @@ class _XBlock {
   PageableData? __pageable;
 
   // Candidate for current selection.
+  @Deprecated("Xoa di, chuyen sang _TaskUnit")
   Object? _candidateCurrentItem;
 
   // ***************************************************************************
@@ -35,6 +36,7 @@ class _XBlock {
   // Return Data:
   // ***************************************************************************
 
+  // This property must have a null value initially.
   CurrentItemSelectionResult? currentItemSelectionResult;
 
   final itemDeletionResult = ItemDeletionResult();
@@ -122,7 +124,7 @@ class _XBlock {
   }
 
   void _printParameters({required bool hasActiveUI}) {
-    if(true) return;
+    if (true) return;
     print("  ----> hasActiveUI **: $hasActiveUI");
     print("  ----> queryType: $__queryType  --------> $queryType");
     print("  ----> forceQuery: $__forceQuery  --------> $forceQuery");

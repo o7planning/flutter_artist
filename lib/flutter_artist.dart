@@ -30,6 +30,8 @@ part '_ui_/_form_view.dart';
 
 part '_ui_/_block_items_view.dart';
 
+part '_enum_/_current_item_selection_type.dart';
+
 part '_ui_/_filter_view.dart';
 
 part '_action_/_quick_child_block_items_action.dart';

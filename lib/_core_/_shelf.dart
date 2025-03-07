@@ -761,6 +761,7 @@ abstract class Shelf extends _XBase {
         // Block Select Item as Current:
         else if (taskUnit is _BlockSelectAsCurrentTaskUnit) {
           await taskUnit.xBlock.block._unitSelectItemAsCurrent(
+            currentItemSelectionType: taskUnit.currentItemSelectionType,
             thisXBlock: taskUnit.xBlock,
           );
         }
