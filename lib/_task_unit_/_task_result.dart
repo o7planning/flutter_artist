@@ -108,14 +108,17 @@ class ItemDeletionResult<ITEM> {
 class BlockQueryResult {
   bool _filterError = false;
   bool _apiError = false;
-  bool _convertError = false;
 
   bool get success {
-    return !_filterError && !_apiError && !_convertError;
+    return !_filterError && !_apiError;
   }
 }
 
 class ScalarQueryResult {
-  // TODO
-  bool success = true;
+  bool _filterError = false;
+  bool _apiError = false;
+
+  bool get success {
+    return !_filterError && !_apiError;
+  }
 }

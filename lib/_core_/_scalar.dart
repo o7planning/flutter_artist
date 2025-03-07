@@ -110,14 +110,23 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<bool> _unitQuery({required _XScalar thisXScalar}) async {
+  Future<ScalarQueryResult> _unitQuery({required _XScalar thisXScalar}) async {
     __assertThisXScalar(thisXScalar);
     //
+    bool hasActiveUI = this.hasActiveUIComponent();
+    bool forceQuery = thisXScalar.needQuery;
+    if (!forceQuery) {
+      if (this.queryDataState != DataState.ready && hasActiveUI) {
+        forceQuery = true;
+      }
+    }
+    //
+
     print(
         ">> ${getClassName(this)}._unitQuery - queryState: $queryDataState, forceQuery: ${thisXScalar.needQuery}");
     //
-    if (this.queryDataState == DataState.ready && !thisXScalar.needQuery) {
-      return true;
+    if (!forceQuery) {
+      return thisXScalar.queryResult;
     }
     //
     // this.queryDataState != DataState.ready || thisXScalar.forceQuery
@@ -160,7 +169,8 @@ abstract class Scalar<
         thisXScalar: thisXScalar,
         queryDataState: DataState.error,
       );
-      return false;
+      thisXScalar.queryResult._filterError = true;
+      return thisXScalar.queryResult;
     }
     //
     // Ready FilterCriteria:
@@ -204,6 +214,7 @@ abstract class Scalar<
     }
     //
     if (isQueryError) {
+      thisXScalar.queryResult._apiError = true;
       newQueryDataState = DataState.error;
     } else {
       newQueryDataState = DataState.ready;
@@ -216,7 +227,7 @@ abstract class Scalar<
       value: value,
     );
     //
-    return true;
+    return thisXScalar.queryResult;
   }
 
   // ***************************************************************************
