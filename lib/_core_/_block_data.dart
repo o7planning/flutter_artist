@@ -29,6 +29,113 @@ class BlockData<
     return [..._items];
   }
 
+  // ***************************************************************************
+
+  List<ITEM> moveCurrentItemToEndOfList({
+    required List<ITEM> itemList,
+  }) {
+    ITEM? currItem = this.currentItem;
+    if (currItem == null) {
+      return itemList;
+    }
+    //
+    List<ITEM> newList = [...itemList];
+    final itemCount = newList.length;
+    newList.removeWhere(
+      (it) => block.getItemId(it) == block.getItemId(currItem),
+    );
+    if (itemCount > newList.length) {
+      newList.add(currItem);
+    }
+    return newList;
+  }
+
+  // ***************************************************************************
+
+  List<ITEM> getCheckedItems({
+    required CurrentItemChkInclusion currentItemInclusion,
+  }) {
+    ITEM? currItem = this.currentItem;
+    bool contains = this.isCurrentItemChecked;
+    //
+    //
+    if (currItem != null) {
+      List<ITEM> chkItems =
+          _checkedItems.where((it) => it != currItem).toList();
+      switch (currentItemInclusion) {
+        case CurrentItemChkInclusion.withoutCurrentItem:
+          break;
+        case CurrentItemChkInclusion.withCurrentIfChecked:
+          if (contains) {
+            chkItems.add(currItem);
+          }
+        case CurrentItemChkInclusion.withCurrentItem:
+          chkItems.add(currItem);
+      }
+      return chkItems;
+    } else {
+      return [..._checkedItems];
+    }
+  }
+
+  //
+  // ***************************************************************************
+
+  List<ITEM> getSelectedItems({
+    required CurrentItemSelInclusion currentItemInclusion,
+  }) {
+    ITEM? currItem = this.currentItem;
+    bool contains = this.isCurrentItemSelected;
+    //
+    if (currItem != null) {
+      List<ITEM> selItems =
+          _selectedItems.where((it) => it != currItem).toList();
+      switch (currentItemInclusion) {
+        case CurrentItemSelInclusion.withoutCurrentItem:
+          break;
+        case CurrentItemSelInclusion.withCurrentIfSelected:
+          if (contains) {
+            selItems.add(currItem);
+          }
+        case CurrentItemSelInclusion.withCurrentItem:
+          selItems.add(currItem);
+      }
+      return selItems;
+    } else {
+      return [..._checkedItems];
+    }
+  }
+
+  // ***************************************************************************
+
+  bool get isCurrentItemChecked {
+    ITEM? currentItem = this.currentItem;
+    if (currentItem == null) {
+      return false;
+    }
+    return FormUtils.isListContainItem(
+      item: currentItem,
+      targetList: _checkedItems,
+      getItemId: block.getItemId,
+    );
+  }
+
+  // ***************************************************************************
+
+  bool get isCurrentItemSelected {
+    ITEM? currentItem = this.currentItem;
+    if (currentItem == null) {
+      return false;
+    }
+    return FormUtils.isListContainItem(
+      item: currentItem,
+      targetList: _selectedItems,
+      getItemId: block.getItemId,
+    );
+  }
+
+  // ***************************************************************************
+
   ///
   /// return a copied list of checked items.
   ///

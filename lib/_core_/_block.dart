@@ -2788,6 +2788,96 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethod()
+  Future<ItemDeletionResult?> deleteSelectedItems({
+    required CurrentItemSelInclusion currentItemInclusion,
+    required bool stopIfError,
+  }) async {
+    FlutterArtist.codeFlowLogger._addMethodCall(
+      isLibCode: true,
+      navigate: null,
+      ownerClassInstance: this,
+      methodName: "deleteSelectedItems",
+      parameters: null,
+    );
+    //
+    List<ITEM> selItems = this.data.getSelectedItems(
+          currentItemInclusion: currentItemInclusion,
+        );
+    if (selItems.isEmpty) {
+      return null;
+    }
+    return await deleteItems(
+      items: selItems,
+      stopIfError: stopIfError,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @RootMethod()
+  Future<ItemDeletionResult?> deleteCheckedItems({
+    required CurrentItemChkInclusion currentItemInclusion,
+    required bool stopIfError,
+  }) async {
+    FlutterArtist.codeFlowLogger._addMethodCall(
+      isLibCode: true,
+      navigate: null,
+      ownerClassInstance: this,
+      methodName: "deleteCheckedItems",
+      parameters: null,
+    );
+    //
+    List<ITEM> chkItems = this.data.getCheckedItems(
+          currentItemInclusion: currentItemInclusion,
+        );
+    if (chkItems.isEmpty) {
+      return null;
+    }
+    return await deleteItems(
+      items: chkItems,
+      stopIfError: stopIfError,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<ItemDeletionResult?> deleteItems({
+    required List<ITEM> items,
+    required bool stopIfError,
+  }) async {
+    _XShelf xShelf = _XShelf(
+        shelf: shelf,
+        forceDataFilterOpt: null,
+        forceQueryScalarOpts: [],
+        forceQueryBlockOpts: [],
+        forceQueryBlockFormOpts: []);
+    _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
+    List<ITEM> deleteItems = this.data.moveCurrentItemToEndOfList(
+          itemList: items,
+        );
+    //
+    xBlock.itemDeletionResult.candidateItems = deleteItems;
+    //
+    for (ITEM item in deleteItems) {
+      var taskUnit = _BlockDeleteItemTaskUnit(xBlock: xBlock, item: item);
+      _taskUnitQueue.addTaskUnit(taskUnit);
+      await shelf._executeTaskUnitQueue();
+      if (stopIfError) {
+        ItemDeletionResult? result = xBlock.itemDeletionResult;
+        if (result != null && !result.success) {
+          return result;
+        }
+      }
+    }
+    return xBlock.itemDeletionResult;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @RootMethod()
   Future<bool> deleteItemById({
     required ID itemId,
     required bool ignoreIfItemNotInList,
