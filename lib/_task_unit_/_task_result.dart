@@ -56,6 +56,7 @@ class CurrentItemSelectionResult<ITEM> {
     return true;
   }
 
+  // TODO: Rename??
   bool _successfullySelectedToRefresh() {
     if (_candidateItems.isEmpty || _currentItem == null) {
       return false;
