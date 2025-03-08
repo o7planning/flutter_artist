@@ -2,12 +2,10 @@ part of '../flutter_artist.dart';
 
 class _DataFilterDebugView extends StatefulWidget {
   final DataFilter dataFilter;
-  final String locationInfo;
   final Function() onPressedShelf;
 
   const _DataFilterDebugView({
     required this.dataFilter,
-    required this.locationInfo,
     required this.onPressedShelf,
     super.key,
   });
@@ -314,17 +312,6 @@ class __DataFilterDebugViewState extends State<_DataFilterDebugView> {
                 content: _IconLabelText(
                   style: const TextStyle(fontSize: fontSize),
                   icon: const Icon(
-                    _blockIconData,
-                    size: iconSize,
-                  ),
-                  label: '',
-                  text: "getClassName(widget.dataFilter.block)",
-                ),
-              ),
-              BreadCrumbItem(
-                content: _IconLabelText(
-                  style: const TextStyle(fontSize: fontSize),
-                  icon: const Icon(
                     _dataFilterIconData,
                     size: iconSize,
                   ),
@@ -333,27 +320,6 @@ class __DataFilterDebugViewState extends State<_DataFilterDebugView> {
                 ),
               ),
             ],
-          ),
-          const Divider(),
-          _IconLabelText(
-            style: const TextStyle(fontSize: fontSize),
-            icon: const Icon(
-              _locationIconData,
-              size: iconSize,
-              color: Colors.black54,
-            ),
-            label: "Location: ",
-            text: widget.locationInfo,
-            suffixIcon: _SimpleSmallIconButton(
-              iconData: _copyToClipboardIconData,
-              iconSize: 14,
-              iconColor: Colors.black54,
-              onPressed: () {
-                Clipboard.setData(ClipboardData(text: widget.locationInfo));
-                var snackBar = const SnackBar(content: Text("Copied!"));
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              },
-            ),
           ),
         ],
       ),

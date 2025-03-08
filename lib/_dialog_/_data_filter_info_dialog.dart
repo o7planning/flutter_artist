@@ -49,7 +49,6 @@ class __DataFilterInfoDialogState extends State<_DataFilterInfoDialog> {
       child: showFormData
           ? _DataFilterDebugView(
               dataFilter: widget.dataFilter,
-              locationInfo: widget.locationInfo,
               onPressedShelf: () {
                 setState(() {
                   showFormData = false;

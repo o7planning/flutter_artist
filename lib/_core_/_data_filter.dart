@@ -442,4 +442,17 @@ abstract class DataFilter<
       }
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<void> showDataFilterDebugDialog() async {
+    BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    //
+    await _showDataFilterInfoDialog(
+      context: context,
+      locationInfo: "locationInfo",
+      dataFilter: this,
+    );
+  }
 }

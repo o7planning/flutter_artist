@@ -22,5 +22,15 @@ abstract class FilterView<DATA_FILTER extends DataFilter>
     );
   }
 
+  Future<void> showDataFilterDebugDialog() async {
+    BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    //
+    await _showDataFilterInfoDialog(
+      context: context,
+      locationInfo: getClassName(this),
+      dataFilter: dataFilter,
+    );
+  }
+
   Widget buildContent(BuildContext context);
 }
