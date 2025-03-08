@@ -934,7 +934,7 @@ abstract class Block<
         );
     //
     final bool currentItemInList =
-        currentItem != null && this.data.containsItem(item: currentItem!);
+        currentItem != null && this.data.containsItem(item: currentItem);
     final ITEM? candidateCurrentItem = currentItemInList ? currentItem : null;
     //
     if (blockForm != null) {

@@ -295,7 +295,7 @@ abstract class DataFilter<
     if (_firstQueryDone && !_applyDefaultFilterCriteria) {
       if (_formKey.currentState != null) {
         _applyDefaultFilterCriteria = true;
-        WidgetsBinding.instance!.addPostFrameCallback((_) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
           _formKey.currentState!.patchValue(data.initialFormData);
         });
       }
