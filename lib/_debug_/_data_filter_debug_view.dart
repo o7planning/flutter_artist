@@ -1,22 +1,22 @@
 part of '../flutter_artist.dart';
 
-class _FormDataView extends StatefulWidget {
-  final BlockForm blockForm;
+class _DataFilterDebugView extends StatefulWidget {
+  final DataFilter dataFilter;
   final String locationInfo;
   final Function() onPressedShelf;
 
-  const _FormDataView({
-    required this.blockForm,
+  const _DataFilterDebugView({
+    required this.dataFilter,
     required this.locationInfo,
     required this.onPressedShelf,
     super.key,
   });
 
   @override
-  State<_FormDataView> createState() => _FormDataViewState();
+  State<_DataFilterDebugView> createState() => __DataFilterDebugViewState();
 }
 
-class _FormDataViewState extends State<_FormDataView> {
+class __DataFilterDebugViewState extends State<_DataFilterDebugView> {
   static const double iconSize = 18;
   static const double fontSize = 13;
 
@@ -35,9 +35,10 @@ class _FormDataViewState extends State<_FormDataView> {
   void initState() {
     super.initState();
     //
-    listeners = FlutterArtist.storage._getListenerShelfBlockScalarTypes(
-      eventBlockOrScalar: _BlockOrScalar.block(widget.blockForm.block),
-    );
+    // listeners = FlutterArtist.storage._getListenerShelfBlockScalarTypes(
+    //   eventBlockOrScalar: _BlockOrScalar.block(widget.dataFilter.block),
+    // );
+    listeners = [];
   }
 
   @override
@@ -47,7 +48,7 @@ class _FormDataViewState extends State<_FormDataView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        _buildBlockFormInfo(context),
+        _buildDataFilterInfo(context),
         const SizedBox(height: 5),
         Expanded(
           child: _buildTabContainer(),
@@ -83,10 +84,10 @@ class _FormDataViewState extends State<_FormDataView> {
   }
 
   Widget _buildTabContainer() {
-    BlockFormData blockFormData = widget.blockForm.data;
-    Map<String, dynamic> initial0Value = blockFormData.initial0FormData;
-    Map<String, dynamic> initial1Value = blockFormData.initialFormData;
-    Map<String, dynamic> instantValue = blockFormData.currentFormData;
+    DataFilterData dataFilterData = widget.dataFilter.data;
+    Map<String, dynamic> initial0Value = dataFilterData.initial0FormData;
+    Map<String, dynamic> initial1Value = dataFilterData.initialFormData;
+    Map<String, dynamic> instantValue = dataFilterData.currentFormData;
 
     String initial0Json = toJson(initial0Value);
     String initial1Json = toJson(initial1Value);
@@ -107,7 +108,7 @@ class _FormDataViewState extends State<_FormDataView> {
         ),
         content: _buildTabContent(
           info:
-              "The values returned by ${getClassName(widget.blockForm)}.prepareFormData() method.",
+              "The values returned by ${getClassName(widget.dataFilter)}.prepareFormData() method.",
           json: initial0Json,
         ),
       ),
@@ -138,8 +139,8 @@ class _FormDataViewState extends State<_FormDataView> {
         ),
         content: _buildTabContent(
           info: "The current values of the form (Will be passed to the "
-              "${getClassName(widget.blockForm)}.callApiCreateItem() "
-              "or ${getClassName(widget.blockForm)}.callApiUpdateItem() method).",
+              "${getClassName(widget.dataFilter)}.callApiCreateItem() "
+              "or ${getClassName(widget.dataFilter)}.callApiUpdateItem() method).",
           json: instantJson,
         ),
       ),
@@ -255,7 +256,7 @@ class _FormDataViewState extends State<_FormDataView> {
           children: [
             _buildInfo(
                 info:
-                    "When you successfully add or modify a record on the '${getClassName(widget.blockForm.block)}' block, "
+                    "When you successfully add or modify a record on the '${getClassName(widget.dataFilter)}' block, "
                     "the listening blocks will be switched to the 'pending' state, "
                     "they will be lazily queried again when they are visible on the screen.\n"
                     "Here is a list of affected blocks or scalars:"),
@@ -274,7 +275,7 @@ class _FormDataViewState extends State<_FormDataView> {
     );
   }
 
-  Widget _buildBlockFormInfo(BuildContext context) {
+  Widget _buildDataFilterInfo(BuildContext context) {
     return _CustomAppContainer(
       width: double.maxFinite,
       child: Column(
@@ -305,7 +306,7 @@ class _FormDataViewState extends State<_FormDataView> {
                       height: 20,
                     ),
                     label: '',
-                    text: getClassName(widget.blockForm.block.shelf),
+                    text: getClassName(widget.dataFilter.shelf),
                   ),
                 ),
               ),
@@ -317,18 +318,18 @@ class _FormDataViewState extends State<_FormDataView> {
                     size: iconSize,
                   ),
                   label: '',
-                  text: getClassName(widget.blockForm.block),
+                  text: "getClassName(widget.dataFilter.block)",
                 ),
               ),
               BreadCrumbItem(
                 content: _IconLabelText(
                   style: const TextStyle(fontSize: fontSize),
                   icon: const Icon(
-                    _blockFormIconData,
+                    _dataFilterIconData,
                     size: iconSize,
                   ),
                   label: '',
-                  text: getClassName(widget.blockForm),
+                  text: getClassName(widget.dataFilter),
                 ),
               ),
             ],

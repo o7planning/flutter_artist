@@ -3,23 +3,23 @@ part of '../flutter_artist.dart';
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-class _FormDataInfoDialog extends StatefulWidget {
-  final BlockForm blockForm;
+class _DataFilterInfoDialog extends StatefulWidget {
+  final DataFilter dataFilter;
   final String locationInfo;
 
-  const _FormDataInfoDialog({
-    required this.blockForm,
+  const _DataFilterInfoDialog({
+    required this.dataFilter,
     required this.locationInfo,
     super.key,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return __FormDataInfoDialogState();
+    return __DataFilterInfoDialogState();
   }
 }
 
-class __FormDataInfoDialogState extends State<_FormDataInfoDialog> {
+class __DataFilterInfoDialogState extends State<_DataFilterInfoDialog> {
   bool showFormData = true;
 
   @override
@@ -29,8 +29,8 @@ class __FormDataInfoDialogState extends State<_FormDataInfoDialog> {
     // Set up the AlertDialog
     dialogs.CustomAlertDialog alert = dialogs.CustomAlertDialog(
       titleText: showFormData
-          ? "${getClassName(widget.blockForm)} - Form Data"
-          : "${getClassName(widget.blockForm.block.shelf)} - Structure",
+          ? "${getClassName(widget.dataFilter)} - Data Filter"
+          : "${getClassName(widget.dataFilter.shelf)} - Structure",
       contentPadding: const EdgeInsets.all(5),
       content: _buildMainContent(
         context,
@@ -47,8 +47,8 @@ class __FormDataInfoDialogState extends State<_FormDataInfoDialog> {
       width: width,
       height: height,
       child: showFormData
-          ? _FormDataView(
-              blockForm: widget.blockForm,
+          ? _DataFilterDebugView(
+              dataFilter: widget.dataFilter,
               locationInfo: widget.locationInfo,
               onPressedShelf: () {
                 setState(() {
@@ -57,7 +57,7 @@ class __FormDataInfoDialogState extends State<_FormDataInfoDialog> {
               },
             )
           : _ShelfStructureGraphView(
-              shelf: widget.blockForm.block.shelf,
+              shelf: widget.dataFilter.shelf,
               onPressedBack: () {
                 setState(() {
                   showFormData = true;
@@ -68,16 +68,16 @@ class __FormDataInfoDialogState extends State<_FormDataInfoDialog> {
   }
 }
 
-Future<void> _showFormInfoDialog({
+Future<void> _showDataFilterInfoDialog({
   required BuildContext context,
   required String locationInfo,
-  required BlockForm blockForm,
+  required DataFilter dataFilter,
 }) async {
   await showDialog(
     context: context,
     builder: (BuildContext context) {
-      return _FormDataInfoDialog(
-        blockForm: blockForm,
+      return _DataFilterInfoDialog(
+        dataFilter: dataFilter,
         locationInfo: locationInfo,
       );
     },

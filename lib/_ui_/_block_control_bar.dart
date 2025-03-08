@@ -349,7 +349,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   }
 
   void _showFormInfo(BuildContext context, Block block) {
-    _showFromDataInfoDialog(
+    _showFormInfoDialog(
       context: context,
       locationInfo: getClassName(widget.ownerClassInstance),
       blockForm: block.blockForm!,

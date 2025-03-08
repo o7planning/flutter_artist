@@ -166,7 +166,9 @@ part '_debug_/_error_info.dart';
 
 part '_debug_/_error_logger.dart';
 
-part '_debug_/_form_data_view.dart';
+part '_debug_/_form_data_debug_view.dart';
+
+part '_debug_/_data_filter_debug_view.dart';
 
 part '_debug_/_graph_item.dart';
 
@@ -219,6 +221,8 @@ part '_dialog_/_error_viewer_dialog.dart';
 part '_dialog_/_filter_criteria_dialog.dart';
 
 part '_dialog_/_form_data_info_dialog.dart';
+
+part '_dialog_/_data_filter_info_dialog.dart';
 
 part '_dialog_/_location_info_dialog.dart';
 
