@@ -11,6 +11,10 @@ class _BlockQuickChildBlockItemsTaskUnit<
     required this.action,
   });
 
+
+  @override
+  Shelf get shelf =>xBlock.block.shelf;
+
   @override
   String getObjectName() {
     return xBlock.block.name;

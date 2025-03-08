@@ -18,6 +18,10 @@ class _BlockSelectAsCurrentTaskUnit<ITEM extends Object> extends _TaskUnit {
     }
   }
 
+
+  @override
+  Shelf get shelf =>xBlock.block.shelf;
+
   @override
   String getObjectName() {
     return xBlock.block.name;

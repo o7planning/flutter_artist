@@ -6,4 +6,6 @@ abstract class _TaskUnit {
   }
 
   String getObjectName();
+
+  Shelf get shelf;
 }

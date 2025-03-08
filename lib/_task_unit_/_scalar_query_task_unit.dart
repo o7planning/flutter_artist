@@ -7,6 +7,10 @@ class _ScalarQueryTaskUnit extends _TaskUnit {
     required this.xScalar,
   });
 
+
+  @override
+  Shelf get shelf =>xScalar.scalar.shelf;
+
   @override
   String getObjectName() {
     return xScalar.scalar.name;

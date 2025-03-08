@@ -9,6 +9,10 @@ class _BlockDeleteItemTaskUnit extends _TaskUnit {
     required this.item,
   });
 
+
+  @override
+  Shelf get shelf =>xBlock.block.shelf;
+
   @override
   String getObjectName() {
     return xBlock.block.name;

@@ -5,6 +5,10 @@ final _taskUnitQueue = _TaskUnitQueue();
 class _TaskUnitQueue {
   final List<_TaskUnit> _taskUnits = [];
 
+  bool get isEmpty {
+    return _taskUnits.isEmpty;
+  }
+
   bool hasNext() {
     return _taskUnits.isNotEmpty;
   }

@@ -18,6 +18,30 @@ class _Storage {
   // ***************************************************************************
   // ***************************************************************************
 
+  _Storage();
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _logout() {
+    __shelfMap.clear();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ///
+  /// Very Dangerous!!! Only call on startup.
+  ///
+  void __clear() {
+    _rencentShelves.clear();
+    __shelfCreatorMap.clear();
+    __shelfMap.clear();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _resetForTestOnly() {
     __shelfMap.clear();
   }
@@ -67,10 +91,12 @@ class _Storage {
     //
     // TODO: Add to QUEUE lazy.
     //
-    __executeListeners(
-      listenerScalars: listenerScalars,
-      listenerBlocks: listenerBlocks,
-    );
+    if (listenerScalars.isNotEmpty || listenerBlocks.isNotEmpty) {
+      __executeListeners(
+        listenerScalars: listenerScalars,
+        listenerBlocks: listenerBlocks,
+      );
+    }
   }
 
   // ***************************************************************************
@@ -660,19 +686,93 @@ class _Storage {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _logout() {
-    __shelfMap.clear();
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ///
-  /// Very Dangerous!!! Only call on startup.
-  ///
-  void __clear() {
-    _rencentShelves.clear();
-    __shelfCreatorMap.clear();
-    __shelfMap.clear();
+  Future<void> _executeTaskUnitQueue() async {
+    await FlutterArtist.executeTask(asyncFunction: () async {
+      Map<String, Shelf> shelfMap = {};
+      while (_taskUnitQueue.hasNext()) {
+        _TaskUnit taskUnit = _taskUnitQueue.getNextTaskUnit()!;
+        shelfMap[taskUnit.shelf.name] = taskUnit.shelf;
+        //
+        // Block Query:
+        if (taskUnit is _BlockQueryTaskUnit) {
+          await taskUnit.xBlock.block._unitQuery(
+            thisXBlock: taskUnit.xBlock,
+          );
+        }
+        // Block Select Item as Current:
+        else if (taskUnit is _BlockSelectAsCurrentTaskUnit) {
+          await taskUnit.xBlock.block._unitSelectItemAsCurrent(
+            currentItemSelectionType: taskUnit.currentItemSelectionType,
+            candidateItem: taskUnit.candidateItem,
+            thisXBlock: taskUnit.xBlock,
+          );
+        }
+        // Block Delete Item:
+        else if (taskUnit is _BlockDeleteItemTaskUnit) {
+          await taskUnit.xBlock.block._unitDeleteItem(
+            thisXBlock: taskUnit.xBlock,
+            item: taskUnit.item,
+          );
+        }
+        // Block QuickCreateItem:
+        else if (taskUnit is _BlockQuickCreateItemTaskUnit) {
+          await taskUnit.xBlock.block._unitQuickCreateItem(
+            thisXBlock: taskUnit.xBlock,
+            action: taskUnit.action,
+          );
+        }
+        // Block QuickUpdateItem:
+        else if (taskUnit is _BlockQuickUpdateItemTaskUnit) {
+          await taskUnit.xBlock.block._unitQuickUpdateItem(
+            thisXBlock: taskUnit.xBlock,
+            action: taskUnit.action,
+          );
+        }
+        // Block QuickAction:
+        else if (taskUnit is _BlockQuickActionTaskUnit) {
+          await taskUnit.xBlock.block._unitQuickAction(
+            thisXBlock: taskUnit.xBlock,
+            action: taskUnit.action,
+            afterQuickAction: taskUnit.afterQuickAction,
+          );
+        }
+        // Block QuickChildBlockItemsAction:
+        else if (taskUnit is _BlockQuickChildBlockItemsTaskUnit) {
+          await taskUnit.xBlock.block._unitQuickChildBlockItemsAction(
+            thisXBlock: taskUnit.xBlock,
+            action: taskUnit.action,
+          );
+        }
+        // BlockForm LoadForm:
+        else if (taskUnit is _BlockFormLoadFormTaskUnit) {
+          await taskUnit.xBlockForm.blockForm._unitLoadForm(
+            thisXBlockForm: taskUnit.xBlockForm,
+          );
+        }
+        // BlockForm Save:
+        else if (taskUnit is _SaveFormSaveTaskUnit) {
+          await taskUnit.xBlockForm.blockForm._unitSaveForm(
+            thisXBlockForm: taskUnit.xBlockForm,
+          );
+        }
+        // Scalar:
+        else if (taskUnit is _ScalarQueryTaskUnit) {
+          await taskUnit.xScalar.scalar._unitQuery(
+            thisXScalar: taskUnit.xScalar,
+          );
+        }
+        // Scalar QuickAction:
+        else if (taskUnit is _ScalarQuickActionTaskUnit) {
+          await taskUnit.xScalar.scalar._unitQuickAction(
+            thisXScalar: taskUnit.xScalar,
+            action: taskUnit.action,
+            afterQuickAction: taskUnit.afterQuickAction,
+          );
+        }
+      }
+      for (Shelf shelf in shelfMap.values) {
+        shelf.updateAllUIComponents();
+      }
+    });
   }
 }
