@@ -2871,8 +2871,8 @@ abstract class Block<
       _taskUnitQueue.addTaskUnit(taskUnit);
       await FlutterArtist.storage._executeTaskUnitQueue();
       if (stopIfError) {
-        ItemDeletionResult? result = xBlock.itemDeletionResult;
-        if (result != null && !result.success) {
+        ItemDeletionResult result = xBlock.itemDeletionResult;
+        if (!result.success) {
           return result;
         }
       }
