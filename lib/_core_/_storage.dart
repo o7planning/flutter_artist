@@ -700,7 +700,6 @@ class _Storage {
       while (_taskUnitQueue.hasNext()) {
         _TaskUnit taskUnit = _taskUnitQueue.getNextTaskUnit()!;
         shelfMap[taskUnit.shelf.name] = taskUnit.shelf;
-        print("@@@@: _taskUnitQueue: $_taskUnitQueue");
         //
         // Block Query:
         if (taskUnit is _BlockQueryTaskUnit) {

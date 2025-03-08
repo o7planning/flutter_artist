@@ -30,10 +30,14 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
         : widget.description!;
   }
 
-  void refreshState() {
-    if (_refreshCount < FlutterArtist.storage._taskUnitCount) {
-      _refreshCount = FlutterArtist.storage._taskUnitCount;
+  void refreshState({bool force = false}) {
+    if (force) {
       setState(() {});
+    } else {
+      if (_refreshCount < FlutterArtist.storage._taskUnitCount) {
+        _refreshCount = FlutterArtist.storage._taskUnitCount;
+        setState(() {});
+      }
     }
   }
 

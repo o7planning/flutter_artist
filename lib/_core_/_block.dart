@@ -404,7 +404,7 @@ abstract class Block<
   void __refreshQueryingState({required bool isQuerying}) {
     try {
       __isQuerying = isQuerying;
-      this.updateControlBarWidgets();
+      this.updateControlBarWidgets(force: true);
     } catch (e) {}
   }
 
@@ -3184,7 +3184,7 @@ abstract class Block<
   // ****** UPDATE UI COMPONENTS ***********************************************
   // ***************************************************************************
 
-  void updateAllUIComponents({required bool withoutFilters}) {
+  void updateAllUIComponents({required bool withoutFilters,bool force=falsea}) {
     if (!withoutFilters) {
       dataFilter?.updateAllUIComponents();
     }
@@ -3225,10 +3225,10 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateControlBarWidgets() {
+  void updateControlBarWidgets({bool force = false}) {
     for (_RefreshableWidgetState widgetState in _controlBarWidgetStates.keys) {
       if (widgetState.mounted) {
-        widgetState.refreshState();
+        widgetState.refreshState(force: force);
       }
     }
   }
@@ -3236,10 +3236,10 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateControlWidgets() {
+  void updateControlWidgets({bool force = false}) {
     for (_RefreshableWidgetState widgetState in _controlWidgetStates.keys) {
       if (widgetState.mounted) {
-        widgetState.refreshState();
+        widgetState.refreshState(force: force);
       }
     }
   }
