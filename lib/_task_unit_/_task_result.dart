@@ -2,9 +2,9 @@ part of '../flutter_artist.dart';
 
 class CurrentItemSelectionResult<ITEM> {
   final CurrentItemSelectionType currentItemSelectionType;
-  final List<ITEM?> candidateItems = [];
-  ITEM? oldCurrentItem;
-  ITEM? currentItem;
+  final List<ITEM?> _candidateItems = [];
+  ITEM? _oldCurrentItem;
+  ITEM? _currentItem;
   Object Function(ITEM item) _getItemId;
   bool _apiError = false;
   bool _convertError = false;
@@ -14,51 +14,53 @@ class CurrentItemSelectionResult<ITEM> {
     required Object Function(ITEM item) getItemId,
     //
     required ITEM? candidateItem,
-    required this.oldCurrentItem,
-    required this.currentItem,
-  }) : _getItemId = getItemId {
+    required ITEM? oldCurrentItem,
+    required ITEM? currentItem,
+  })  : _oldCurrentItem = oldCurrentItem,
+        _currentItem = currentItem,
+        _getItemId = getItemId {
     if (candidateItem != null) {
-      candidateItems.add(candidateItem);
+      _candidateItems.add(candidateItem);
     }
   }
 
   void _addCandidateItem(ITEM? candidateItem) {
-    candidateItems.add(candidateItem);
+    _candidateItems.add(candidateItem);
   }
 
   ITEM? get firstCandidateItem {
-    return candidateItems.firstOrNull;
+    return _candidateItems.firstOrNull;
   }
 
   ITEM? get lastCandidateItem {
-    return candidateItems.lastOrNull;
+    return _candidateItems.lastOrNull;
   }
 
   bool _successfullySelectedToEdit() {
-    if (candidateItems.isEmpty || currentItem == null) {
+    if (_candidateItems.isEmpty || _currentItem == null) {
       return false;
     }
-    if (_getItemId(candidateItems[0]!) != _getItemId(currentItem!)) {
+    if (_getItemId(_candidateItems[0]!) != _getItemId(_currentItem!)) {
       return false;
     }
     return true;
   }
 
   bool _successfullySelectedToShow() {
-    if (candidateItems.isEmpty || currentItem == null) {
+    if (_candidateItems.isEmpty || _currentItem == null) {
       return false;
     }
-    if (_getItemId(candidateItems[0]!) != _getItemId(currentItem!)) {
+    if (_getItemId(_candidateItems[0]!) != _getItemId(_currentItem!)) {
       return false;
     }
     return true;
   }
 
   bool _successfullySelectedToRefresh() {
-    if (candidateItems.isEmpty || currentItem == null) {
+    if (_candidateItems.isEmpty || _currentItem == null) {
       return false;
     }
-    if (_getItemId(candidateItems[0]!) != _getItemId(currentItem!)) {
+    if (_getItemId(_candidateItems[0]!) != _getItemId(_currentItem!)) {
       return false;
     }
     return true;
@@ -83,25 +85,25 @@ class CurrentItemSelectionResult<ITEM> {
 }
 
 class ItemDeletionResult<ITEM> {
-  List<ITEM> candidateItems = [];
-  List<ITEM> deletedItems = [];
-  List<ITEM> failedItems = [];
+  List<ITEM> _candidateItems = [];
+  List<ITEM> _deletedItems = [];
+  List<ITEM> _failedItems = [];
 
   bool get success {
     // TODO: Xem lai.
-    return deletedItems.isNotEmpty;
+    return _deletedItems.isNotEmpty;
   }
 
   void addCandidateItem(ITEM item) {
-    candidateItems.add(item);
+    _candidateItems.add(item);
   }
 
   void addDeletedItem(ITEM item) {
-    deletedItems.add(item);
+    _deletedItems.add(item);
   }
 
   void addDFailedItem(ITEM item) {
-    failedItems.add(item);
+    _failedItems.add(item);
   }
 }
 

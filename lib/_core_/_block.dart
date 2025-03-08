@@ -1252,7 +1252,7 @@ abstract class Block<
         );
     //
     if (newCurrent) {
-      result.currentItem = candidateCurrentItem;
+      result._currentItem = candidateCurrentItem;
       //
       this.__clearChildrenWithDataStateCascade(
         thisXBlock: thisXBlock,
