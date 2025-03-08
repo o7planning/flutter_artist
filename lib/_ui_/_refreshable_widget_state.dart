@@ -2,6 +2,7 @@ part of '../flutter_artist.dart';
 
 abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
     extends State<W> {
+  int _refreshCount = 0;
   ShowMode showMode = ShowMode.production;
 
   late final String keyId;
@@ -30,7 +31,10 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
   }
 
   void refreshState() {
-    setState(() {});
+    if (_refreshCount < FlutterArtist.storage._taskUnitCount) {
+      _refreshCount = FlutterArtist.storage._taskUnitCount;
+      setState(() {});
+    }
   }
 
   @override

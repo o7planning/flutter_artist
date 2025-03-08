@@ -3,6 +3,8 @@ part of '../flutter_artist.dart';
 typedef ShelfCreator<S> = S Function();
 
 class _Storage {
+  int _taskUnitCount = 0;
+
   final List<Shelf> _rencentShelves = [];
 
   final Map<String, ShelfCreator> __shelfCreatorMap = {};
@@ -80,6 +82,9 @@ class _Storage {
     print("~~~~~~~~~> ${eventBlock.fireEvent ? 'FIRE EVENT' : 'NOT FIRE EVENT'}"
         " --> Event Item Type: ($eventItemType, $eventItemDetailType)"
         " - ${getClassName(eventBlock)}");
+    if (!eventBlock.fireEvent) {
+      return;
+    }
     //
     final List<Scalar> listenerScalars = __getListenerScalarsByBlock(
       eventBlock: eventBlock,
@@ -88,6 +93,7 @@ class _Storage {
     final List<Block> listenerBlocks = __getListenerBlocksByBlock(
       eventBlock: eventBlock,
     );
+    print("~~~~~~~~~> listenerBlocks: ${listenerBlocks}, listenerScalars: $listenerScalars");
     //
     // TODO: Add to QUEUE lazy.
     //
@@ -688,10 +694,13 @@ class _Storage {
 
   Future<void> _executeTaskUnitQueue() async {
     await FlutterArtist.executeTask(asyncFunction: () async {
+      _taskUnitCount++;
+      //
       Map<String, Shelf> shelfMap = {};
       while (_taskUnitQueue.hasNext()) {
         _TaskUnit taskUnit = _taskUnitQueue.getNextTaskUnit()!;
         shelfMap[taskUnit.shelf.name] = taskUnit.shelf;
+        print("@@@@: _taskUnitQueue: $_taskUnitQueue");
         //
         // Block Query:
         if (taskUnit is _BlockQueryTaskUnit) {

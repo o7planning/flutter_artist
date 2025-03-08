@@ -2858,7 +2858,7 @@ abstract class Block<
           itemList: items,
         );
     //
-    xBlock.itemDeletionResult.candidateItems = deleteItems;
+    // xBlock.itemDeletionResult.candidateItems = deleteItems;
     //
     for (ITEM item in deleteItems) {
       var taskUnit = _BlockDeleteItemTaskUnit(xBlock: xBlock, item: item);
