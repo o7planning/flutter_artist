@@ -22,6 +22,34 @@ abstract class FilterView<DATA_FILTER extends DataFilter>
     );
   }
 
+  Widget buildDebugBar({
+    Decoration? decoration,
+    EdgeInsetsGeometry? padding,
+  }) {
+    return Container(
+      padding: padding ?? EdgeInsets.all(5),
+      decoration: decoration ??
+          BoxDecoration(
+            color: Colors.black12,
+          ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          TextButton(
+            style: TextButton.styleFrom(
+              minimumSize: Size.zero,
+              padding: EdgeInsets.zero,
+            ),
+            onPressed: () {
+              showDataFilterDebugDialog();
+            },
+            child: Icon(_dataFilterDebugIconData),
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<void> showDataFilterDebugDialog() async {
     BuildContext context = FlutterArtist.adapter.getCurrentContext();
     //
