@@ -75,7 +75,10 @@ abstract class ItemSortCriteria<ITEM extends Object> {
       _criteria.insert(destIdx, moving);
     }
     block.data.sort();
-    block.updateAllUIComponents(withoutFilters: false);
+    block.updateAllUIComponents(
+      withoutFilters: false,
+      force: true,
+    );
   }
 
   SortCriterion? getFirstSortCriterion() {
@@ -174,7 +177,10 @@ abstract class ItemSortCriteria<ITEM extends Object> {
     }
     //
     block.data.sort();
-    block.updateAllUIComponents(withoutFilters: true);
+    block.updateAllUIComponents(
+      withoutFilters: true,
+      force: true,
+    );
   }
 
   ///

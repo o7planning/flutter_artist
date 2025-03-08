@@ -93,7 +93,8 @@ class _Storage {
     final List<Block> listenerBlocks = __getListenerBlocksByBlock(
       eventBlock: eventBlock,
     );
-    print("~~~~~~~~~> listenerBlocks: ${listenerBlocks}, listenerScalars: $listenerScalars");
+    print(
+        "~~~~~~~~~> listenerBlocks: ${listenerBlocks}, listenerScalars: $listenerScalars");
     //
     // TODO: Add to QUEUE lazy.
     //
@@ -694,12 +695,11 @@ class _Storage {
 
   Future<void> _executeTaskUnitQueue() async {
     await FlutterArtist.executeTask(asyncFunction: () async {
-      _taskUnitCount++;
-      //
       Map<String, Shelf> shelfMap = {};
       while (_taskUnitQueue.hasNext()) {
         _TaskUnit taskUnit = _taskUnitQueue.getNextTaskUnit()!;
         shelfMap[taskUnit.shelf.name] = taskUnit.shelf;
+        print("~~~~~~~~~~~~~~~> Execute Task Unit: $taskUnit");
         //
         // Block Query:
         if (taskUnit is _BlockQueryTaskUnit) {
@@ -778,6 +778,9 @@ class _Storage {
           );
         }
       }
+      //
+      _taskUnitCount++;
+      //
       for (Shelf shelf in shelfMap.values) {
         shelf.updateAllUIComponents();
       }

@@ -11,9 +11,8 @@ class _ScalarQuickActionTaskUnit<DATA extends Object> extends _TaskUnit {
     required this.afterQuickAction,
   });
 
-
   @override
-  Shelf get shelf =>xScalar.scalar.shelf;
+  Shelf get shelf => xScalar.scalar.shelf;
 
   @override
   String getObjectName() {

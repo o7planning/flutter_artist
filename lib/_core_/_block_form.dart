@@ -335,8 +335,8 @@ abstract class BlockForm<
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateAllUIComponents() {
-    __updateFormWidgets();
+  void updateAllUIComponents({bool force = false}) {
+    __updateFormWidgets(force: force);
   }
 
   // ***************************************************************************
@@ -345,11 +345,11 @@ abstract class BlockForm<
   ///
   /// Call this method to refresh Widgets..
   ///
-  void __updateFormWidgets() {
+  void __updateFormWidgets({bool force = false}) {
     List<_RefreshableWidgetState> list = _getMountedFormWidgetStates();
     for (_RefreshableWidgetState formWidgetState in list) {
       if (formWidgetState.mounted) {
-        formWidgetState.refreshState();
+        formWidgetState.refreshState(force: force);
       }
     }
   }

@@ -9,9 +9,8 @@ class _BlockQuickCreateItemTaskUnit extends _TaskUnit {
     required this.action,
   });
 
-
   @override
-  Shelf get shelf =>xBlock.block.shelf;
+  Shelf get shelf => xBlock.block.shelf;
 
   @override
   String getObjectName() {

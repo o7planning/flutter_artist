@@ -7,9 +7,8 @@ class _BlockFormLoadFormTaskUnit extends _TaskUnit {
     required this.xBlockForm,
   });
 
-
   @override
-  Shelf get shelf =>xBlockForm.blockForm.block.shelf;
+  Shelf get shelf => xBlockForm.blockForm.block.shelf;
 
   @override
   String getObjectName() {

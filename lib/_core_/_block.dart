@@ -414,7 +414,7 @@ abstract class Block<
   void __refreshDeletingState({required bool isDeleting}) {
     try {
       __isDeleting = isDeleting;
-      this.updateControlBarWidgets();
+      this.updateControlBarWidgets(force: true);
     } catch (e) {}
   }
 
@@ -424,7 +424,7 @@ abstract class Block<
   void _refreshSavingState({required bool isSaving}) {
     try {
       __isSaving = isSaving;
-      this.updateControlBarWidgets();
+      this.updateControlBarWidgets(force: true);
     } catch (e) {}
   }
 
@@ -436,7 +436,7 @@ abstract class Block<
   }) {
     try {
       __isRefreshingCurrentItem = isRefreshingCurrentItem;
-      this.updateControlBarWidgets();
+      this.updateControlBarWidgets(force: true);
     } catch (e) {}
   }
 
@@ -448,7 +448,7 @@ abstract class Block<
   }) {
     try {
       __isPreparingFormCreation = isPreparingFormCreation;
-      this.updateControlBarWidgets();
+      this.updateControlBarWidgets(force: true);
     } catch (e) {}
   }
 
@@ -1115,6 +1115,10 @@ abstract class Block<
     //
     ITEM_DETAIL? candidateCurrentItemDetail;
     try {
+      __refreshRefreshingCurrentItemState(
+        isRefreshingCurrentItem: true,
+      );
+      //
       ApiResult<ITEM_DETAIL> result = await callApiRefreshItem(
         item: candidateCurrentItem,
       );
@@ -1143,6 +1147,10 @@ abstract class Block<
         error: "Error callApiRefreshItem: $e",
         stackTrace: stackTrace,
         showSnackBar: true,
+      );
+    } finally {
+      __refreshRefreshingCurrentItemState(
+        isRefreshingCurrentItem: false,
       );
     }
     //
@@ -1318,11 +1326,7 @@ abstract class Block<
         eventBlock: this,
         itemIdString: null,
       );
-      //
-      __refreshDeletingState(isDeleting: false);
     } catch (e, stackTrace) {
-      __refreshDeletingState(isDeleting: false);
-      //
       _handleError(
         shelf: shelf,
         methodName: "callApiDeleteItem",
@@ -1334,6 +1338,8 @@ abstract class Block<
       thisXBlock.itemDeletionResult.addDFailedItem(item);
       //
       return;
+    } finally {
+      __refreshDeletingState(isDeleting: false);
     }
     if (result.errorMessage != null) {
       _handleRestError(
@@ -3066,7 +3072,10 @@ abstract class Block<
   // ***************************************************************************
 
   void __updateUIComponentAfterCheckedOrSelected() {
-    updateAllUIComponents(withoutFilters: false);
+    updateAllUIComponents(
+      withoutFilters: false,
+      force: true,
+    );
   }
 
   // ***************************************************************************
@@ -3184,17 +3193,20 @@ abstract class Block<
   // ****** UPDATE UI COMPONENTS ***********************************************
   // ***************************************************************************
 
-  void updateAllUIComponents({required bool withoutFilters,bool force=falsea}) {
+  void updateAllUIComponents({
+    required bool withoutFilters,
+    bool force = false,
+  }) {
     if (!withoutFilters) {
       dataFilter?.updateAllUIComponents();
     }
     //
-    updateBlockFragmentWidgets();
-    updatePaginationWidgets();
-    updateControlBarWidgets();
-    updateControlWidgets();
+    updateBlockFragmentWidgets(force: force);
+    updatePaginationWidgets(force: force);
+    updateControlBarWidgets(force: force);
+    updateControlWidgets(force: force);
     //
-    blockForm?.updateAllUIComponents();
+    blockForm?.updateAllUIComponents(force: force);
   }
 
   // ***************************************************************************
@@ -3213,11 +3225,11 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateBlockFragmentWidgets() {
+  void updateBlockFragmentWidgets({bool force = false}) {
     for (_RefreshableWidgetState widgetState
         in _blockFragmentWidgetStates.keys) {
       if (widgetState.mounted) {
-        widgetState.refreshState();
+        widgetState.refreshState(force: force);
       }
     }
   }
@@ -3247,10 +3259,10 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void updatePaginationWidgets() {
+  void updatePaginationWidgets({bool force = false}) {
     for (_RefreshableWidgetState widgetState in _paginationWidgetStates.keys) {
       if (widgetState.mounted) {
-        widgetState.refreshState();
+        widgetState.refreshState(force: force);
       }
     }
   }
