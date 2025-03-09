@@ -1,10 +1,10 @@
 part of '../flutter_artist.dart';
 
 class FormModelData<
-    ID extends Object,
+    ID extends Object, //
     ITEM_DETAIL extends Object,
     FILTER_INPUT extends FilterInput,
-    FILTER_CRITERIA extends FilterCriteria, //
+    FILTER_CRITERIA extends FilterCriteria,
     EXTRA_FORM_INPUT extends ExtraFormInput> {
   ///
   /// Owner FormModel.
