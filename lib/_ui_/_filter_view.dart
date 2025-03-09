@@ -1,8 +1,8 @@
 part of '../flutter_artist.dart';
 
-abstract class FilterView<DATA_FILTER extends FilterModel>
+abstract class FilterView<FILTER_MODEL extends FilterModel>
     extends StatelessWidget {
-  final DATA_FILTER filterModel;
+  final FILTER_MODEL filterModel;
 
   const FilterView({
     required this.filterModel,

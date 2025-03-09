@@ -162,7 +162,7 @@ abstract class Shelf extends _XBase {
         if (filterCriteriaB != filterCriteriaEmpty) {
           throw ___registerError(
               "FILTER_CRITERIA of '${getClassName(scalar)}' scalar must be '$filterCriteriaEmpty' "
-              "because this scalar does not have a DATA_FILTER. \n\n"
+              "because this scalar does not have a FILTER_MODEL. \n\n"
               " >> Currently, ${getClassName(scalar)}<FILTER_CRITERIA> = <$filterCriteriaB>");
         }
       }
@@ -260,7 +260,7 @@ abstract class Shelf extends _XBase {
       if (filterCriteriaB != filterCriteriaEmpty) {
         throw ___registerError(
             "Filter-Criteria of '${getClassName(block)}' block must be '$filterCriteriaEmpty' "
-            "because this block does not have a DATA_FILTER.\n\n"
+            "because this block does not have a FILTER_MODEL.\n\n"
             " >> Currently, ${getClassName(block)}<FILTER_CRITERIA> = <$filterCriteriaB>");
       }
     }
