@@ -88,11 +88,11 @@ part '_core_/_current_couple_item.dart';
 
 part '_core_/_custom_confirmation.dart';
 
-part '_core_/_data_filter.dart';
+part '_core_/_filter_model.dart';
 
-part '_core_/_data_filter_data.dart';
+part '_core_/_filter_model_data.dart';
 
-part '_core_/_default_data_filter.dart';
+part '_core_/_default_filter_model.dart';
 
 part '_core_/_error_listener.dart';
 
@@ -136,7 +136,7 @@ part '_core_query_/_block_form_opt.dart';
 
 part '_core_query_/_block_opt.dart';
 
-part '_core_query_/_data_filter_opt.dart';
+part '_core_query_/_filter_model_opt.dart';
 
 part '_core_query_/_scalar_and_block_list.dart';
 
@@ -150,7 +150,7 @@ part '_core_query_/_x_block.dart';
 
 part '_core_query_/_x_block_form.dart';
 
-part '_core_query_/_x_data_filter.dart';
+part '_core_query_/_x_filter_model.dart';
 
 part '_core_query_/_x_scalar.dart';
 
@@ -168,7 +168,7 @@ part '_debug_/_error_logger.dart';
 
 part '_debug_/_form_data_debug_view.dart';
 
-part '_debug_/_data_filter_debug_view.dart';
+part '_debug_/_filter_model_debug_view.dart';
 
 part '_debug_/_graph_item.dart';
 
@@ -204,7 +204,7 @@ part '_debug_filter_/_blocks_scalars_view.dart';
 
 part '_debug_filter_/_criteria_values_info_view.dart';
 
-part '_debug_filter_/_data_filter_criteria_view.dart';
+part '_debug_filter_/_filter_model_criteria_view.dart';
 
 part '_debug_filter_/_scalar_criteria_view.dart';
 
@@ -222,7 +222,7 @@ part '_dialog_/_filter_criteria_dialog.dart';
 
 part '_dialog_/_form_data_info_dialog.dart';
 
-part '_dialog_/_data_filter_info_dialog.dart';
+part '_dialog_/_filter_model_info_dialog.dart';
 
 part '_dialog_/_location_info_dialog.dart';
 

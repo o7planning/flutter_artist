@@ -3,11 +3,11 @@ part of '../flutter_artist.dart';
 ///
 /// DataFilter with Query Options
 ///
-class _DataFilterOpt {
-  final DataFilter dataFilter;
+class _FilterModelOpt {
+  final FilterModel dataFilter;
   final FilterInput? filterInput;
 
-  _DataFilterOpt({
+  _FilterModelOpt({
     required this.dataFilter,
     required this.filterInput,
   }) {

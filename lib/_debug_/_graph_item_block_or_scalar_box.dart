@@ -2,7 +2,7 @@ part of '../flutter_artist.dart';
 
 class _GraphItemBlockOrScalarBox extends StatefulWidget {
   final _BlockOrScalar blockOrScalar;
-  final String? highlighDataFilterName;
+  final String? highlighFilterModelName;
 
   final bool showClassParameters;
 
@@ -12,7 +12,7 @@ class _GraphItemBlockOrScalarBox extends StatefulWidget {
     required super.key,
     required this.blockOrScalar,
     required this.refreshGraph,
-    required this.highlighDataFilterName,
+    required this.highlighFilterModelName,
     required this.showClassParameters,
   });
 
@@ -217,7 +217,7 @@ class _GraphItemBlockOrScalarBoxState
   }
 
   Widget _buildFilterColor() {
-    DataFilter? dataFilter = widget.blockOrScalar.dataFilter;
+    FilterModel? dataFilter = widget.blockOrScalar.dataFilter;
     Color color = Colors.white;
     if (dataFilter != null) {
       List<String> filterNames = widget.blockOrScalar.shelf.filterNames
@@ -283,19 +283,19 @@ class _GraphItemBlockOrScalarBoxState
   }
 
   String _getFilterTextRow1() {
-    DataFilter? dataFilter = widget.blockOrScalar.dataFilter;
+    FilterModel? dataFilter = widget.blockOrScalar.dataFilter;
     return dataFilter == null ? "[No Filter]" : dataFilter.name;
   }
 
   String _getFilterTextRow2() {
-    DataFilter? dataFilter = widget.blockOrScalar.dataFilter;
+    FilterModel? dataFilter = widget.blockOrScalar.dataFilter;
 
     return "${dataFilter == null ? '' : getClassName(dataFilter)} "
         "${widget.showClassParameters ? widget.blockOrScalar.filterClassParametersDefinition : ''}";
   }
 
   Widget _buildFilterInfo() {
-    DataFilter? dataFilter = widget.blockOrScalar.dataFilter;
+    FilterModel? dataFilter = widget.blockOrScalar.dataFilter;
     //
     Widget row = MouseRegion(
       onEnter: dataFilter == null
@@ -342,13 +342,13 @@ class _GraphItemBlockOrScalarBoxState
       decoration: BoxDecoration(
         border: Border.all(
           width: 0.5,
-          color: widget.highlighDataFilterName != null &&
-                  dataFilter?.name == widget.highlighDataFilterName
+          color: widget.highlighFilterModelName != null &&
+                  dataFilter?.name == widget.highlighFilterModelName
               ? _graphBoxHighlighFilterColor
               : Colors.grey,
         ),
-        color: widget.highlighDataFilterName != null &&
-                dataFilter?.name == widget.highlighDataFilterName
+        color: widget.highlighFilterModelName != null &&
+                dataFilter?.name == widget.highlighFilterModelName
             ? _graphBoxHighlighFilterColor
             : Colors.transparent,
       ),

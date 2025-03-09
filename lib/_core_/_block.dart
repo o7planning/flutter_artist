@@ -38,7 +38,7 @@ part of '../flutter_artist.dart';
 /// }
 /// ```
 ///
-/// [FILTER_INPUT]: Additional data to create or modify [DataFilter].
+/// [FILTER_INPUT]: Additional data to create or modify [FilterModel].
 /// ```
 /// class EmployeeFilterInput extends FilterInput {
 ///    String? searchText,
@@ -49,8 +49,8 @@ part of '../flutter_artist.dart';
 /// [FILTER_CRITERIA]: These are the criteria for filtering the this.data.
 ///
 /// When the [Block.query] or [Scalar.query] method is called,
-/// this [FilterCriteria] is created automatically by the [DataFilter]
-/// via the [DataFilter.createFilterCriteria] method
+/// this [FilterCriteria] is created automatically by the [FilterModel]
+/// via the [FilterModel.createFilterCriteria] method
 /// and passed to the [Block.callApiQuery] or [Scalar.callApiQuery] method.
 /// ```
 /// class EmployeeFilterCriteria extends FilterCriteria {
@@ -132,24 +132,24 @@ abstract class Block<
   ///
   /// DataFilter Name registered in [Shelf.registerStructure()] method.
   ///
-  final String? registerDataFilterName;
+  final String? registerFilterModelName;
 
   ///
   /// This field is not null.
-  /// If this block does not declare a [DataFilter], it will have the default [DataFilter].
+  /// If this block does not declare a [FilterModel], it will have the default [FilterModel].
   ///
-  late final DataFilter<FILTER_INPUT, FILTER_CRITERIA>
-      _registeredOrDefaultDataFilter;
+  late final FilterModel<FILTER_INPUT, FILTER_CRITERIA>
+      _registeredOrDefaultFilterModel;
 
   ///
   /// Returns a DataFilter declared in the [Shelf.registerStructure()] method.
   /// The return value may be null.
   ///
-  DataFilter<FILTER_INPUT, FILTER_CRITERIA>? get dataFilter {
-    if (_registeredOrDefaultDataFilter is _DefaultDataFilter) {
+  FilterModel<FILTER_INPUT, FILTER_CRITERIA>? get dataFilter {
+    if (_registeredOrDefaultFilterModel is _DefaultFilterModel) {
       return null;
     } else {
-      return _registeredOrDefaultDataFilter;
+      return _registeredOrDefaultFilterModel;
     }
   }
 
@@ -258,7 +258,7 @@ abstract class Block<
     required List<Type> listenItemTypes,
     required List<Block>? childBlocks,
     ItemSortCriteria<ITEM>? itemSortCriteria,
-  })  : registerDataFilterName = dataFilterName,
+  })  : registerFilterModelName = dataFilterName,
         __pageSize = pageSize,
         __listenItemTypes = listenItemTypes,
         _itemSortCriteria = itemSortCriteria,
@@ -608,7 +608,7 @@ abstract class Block<
     Map<_RefreshableWidgetState, bool> ret = {};
     //
     if (withFilter) {
-      ret.addAll(_registeredOrDefaultDataFilter._filterFragmentWidgetStates);
+      ret.addAll(_registeredOrDefaultFilterModel._filterFragmentWidgetStates);
     }
     //
     if (withBlockFragment) {
@@ -799,17 +799,17 @@ abstract class Block<
     //
     FILTER_CRITERIA? filterCriteria;
     try {
-      final _XDataFilter xDataFilter = thisXBlock.xDataFilter;
-      final DataFilter dataFilter = xDataFilter.dataFilter;
+      final _XFilterModel xFilterModel = thisXBlock.xFilterModel;
+      final FilterModel dataFilter = xFilterModel.dataFilter;
       //
-      if (!xDataFilter.queried) {
-        FILTER_INPUT? filterInput = xDataFilter.filterInput as FILTER_INPUT?;
+      if (!xFilterModel.queried) {
+        FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
         //
         filterCriteria = await dataFilter._prepareMasterDataAndFilterData(
           filterInput: filterInput,
         ) as FILTER_CRITERIA?;
         //
-        xDataFilter.queried = true;
+        xFilterModel.queried = true;
       } else {
         filterCriteria = dataFilter._filterCriteria! as FILTER_CRITERIA;
       }
@@ -1799,7 +1799,7 @@ abstract class Block<
     //
     _XShelf xShelf = _XShelf(
       shelf: shelf,
-      forceDataFilterOpt: null,
+      forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [],
       forceQueryBlockFormOpts: [],
@@ -1876,7 +1876,7 @@ abstract class Block<
     //
     _XShelf xShelf = _XShelf(
       shelf: shelf,
-      forceDataFilterOpt: null,
+      forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [],
       forceQueryBlockFormOpts: [],
@@ -2028,8 +2028,8 @@ abstract class Block<
     );
     //
     _XShelf xShelf = await shelf._queryAll(
-      forceDataFilterOpt: _DataFilterOpt(
-        dataFilter: _registeredOrDefaultDataFilter,
+      forceFilterModelOpt: _FilterModelOpt(
+        dataFilter: _registeredOrDefaultFilterModel,
         filterInput: filterInput,
       ),
       forceQueryScalarOpts: [],
@@ -2083,8 +2083,8 @@ abstract class Block<
     printLog("\n\n${getClassName(this)} ~~~~~~~~~~~~> queryAndPrepareToEdit()");
     //
     _XShelf xShelf = await shelf._queryAll(
-      forceDataFilterOpt: _DataFilterOpt(
-        dataFilter: _registeredOrDefaultDataFilter,
+      forceFilterModelOpt: _FilterModelOpt(
+        dataFilter: _registeredOrDefaultFilterModel,
         filterInput: filterInput,
       ),
       forceQueryScalarOpts: [],
@@ -2130,8 +2130,8 @@ abstract class Block<
     );
     //
     _XShelf xShelf = await shelf._queryAll(
-      forceDataFilterOpt: _DataFilterOpt(
-        dataFilter: this._registeredOrDefaultDataFilter,
+      forceFilterModelOpt: _FilterModelOpt(
+        dataFilter: this._registeredOrDefaultFilterModel,
         filterInput: filterInput,
       ),
       forceQueryScalarOpts: [],
@@ -2375,8 +2375,8 @@ abstract class Block<
     //
     _XShelf xShelf = _XShelf(
       shelf: shelf,
-      forceDataFilterOpt: _DataFilterOpt(
-        dataFilter: _registeredOrDefaultDataFilter,
+      forceFilterModelOpt: _FilterModelOpt(
+        dataFilter: _registeredOrDefaultFilterModel,
         filterInput: filterInput,
       ),
       forceQueryScalarOpts: [],
@@ -2432,7 +2432,7 @@ abstract class Block<
     //
     _XShelf xShelf = _XShelf(
       shelf: shelf,
-      forceDataFilterOpt: null,
+      forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [],
       forceQueryBlockFormOpts: [],
@@ -2485,7 +2485,7 @@ abstract class Block<
     //
     _XShelf xShelf = _XShelf(
       shelf: shelf,
-      forceDataFilterOpt: null,
+      forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [],
       forceQueryBlockFormOpts: [],
@@ -2538,7 +2538,7 @@ abstract class Block<
     //
     _XShelf xShelf = _XShelf(
       shelf: shelf,
-      forceDataFilterOpt: null,
+      forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [],
       forceQueryBlockFormOpts: [],
@@ -2742,7 +2742,7 @@ abstract class Block<
     //
     _XShelf xShelf = _XShelf(
       shelf: shelf,
-      forceDataFilterOpt: null,
+      forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [],
       forceQueryBlockFormOpts: [],
@@ -2855,7 +2855,7 @@ abstract class Block<
   }) async {
     _XShelf xShelf = _XShelf(
         shelf: shelf,
-        forceDataFilterOpt: null,
+        forceFilterModelOpt: null,
         forceQueryScalarOpts: [],
         forceQueryBlockOpts: [],
         forceQueryBlockFormOpts: []);
@@ -3024,7 +3024,7 @@ abstract class Block<
     }
     _XShelf xShelf = _XShelf(
       shelf: shelf,
-      forceDataFilterOpt: null,
+      forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [],
       forceQueryBlockFormOpts: [],

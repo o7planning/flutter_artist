@@ -1,9 +1,9 @@
 part of '../flutter_artist.dart';
 
-class _DataFilterCriteriaView extends StatelessWidget {
-  final DataFilter dataFilter;
+class _FilterModelCriteriaView extends StatelessWidget {
+  final FilterModel dataFilter;
 
-  const _DataFilterCriteriaView({required this.dataFilter});
+  const _FilterModelCriteriaView({required this.dataFilter});
 
   @override
   Widget build(BuildContext context) {

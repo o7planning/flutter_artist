@@ -22,7 +22,7 @@ extension WidgetStateTypeE on RefreshableWidgetType {
       case RefreshableWidgetType.pagination:
         return "Pagination";
       case RefreshableWidgetType.filter:
-        return "DataFilter";
+        return "FilterModel";
       case RefreshableWidgetType.controlBar:
         return "ControlBar";
       case RefreshableWidgetType.customControlBar:

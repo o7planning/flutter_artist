@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
 class _FilterViewBuilder extends _RefreshableWidget {
-  final DataFilter dataFilter;
+  final FilterModel dataFilter;
 
   final Widget Function() build;
 

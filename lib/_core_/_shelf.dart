@@ -6,7 +6,7 @@ abstract class Shelf extends _XBase {
   String? get description => _shelfStruct.description;
 
   // All dataFilters including the default dataFilter.
-  final List<DataFilter> _allDataFilters = [];
+  final List<FilterModel> _allFilterModels = [];
 
   List<String> get filterNames => [..._shelfStruct.dataFilters.keys];
 
@@ -74,11 +74,11 @@ abstract class Shelf extends _XBase {
     _shelfStruct = registerStructure();
 
     for (String dataFilterName in _shelfStruct.dataFilters.keys) {
-      DataFilter dataFilter = _shelfStruct.dataFilters[dataFilterName]!;
+      FilterModel dataFilter = _shelfStruct.dataFilters[dataFilterName]!;
       dataFilter.name = dataFilterName;
       dataFilter.shelf = this;
       //
-      _allDataFilters.add(dataFilter);
+      _allFilterModels.add(dataFilter);
     }
 
     List<Scalar> scalars = _shelfStruct.scalars;
@@ -94,12 +94,12 @@ abstract class Shelf extends _XBase {
       scalar.shelf = this;
       __scalars.add(scalar);
       //
-      if (scalar.registerDataFilterName != null) {
-        DataFilter? dataFilter =
-            _shelfStruct.dataFilters[scalar.registerDataFilterName!];
+      if (scalar.registerFilterModelName != null) {
+        FilterModel? dataFilter =
+            _shelfStruct.dataFilters[scalar.registerFilterModelName!];
         if (dataFilter == null) {
           throw ___registerError(
-              "DataFilter not found '${scalar.registerDataFilterName}' in '${getClassName(this)}'\n"
+              "FilterModel not found '${scalar.registerFilterModelName}' in '${getClassName(this)}'\n"
               "Double-check ${getClassName(this)}.registerStructure() method");
         }
         //
@@ -143,17 +143,17 @@ abstract class Shelf extends _XBase {
         }
         //
         dataFilter._scalars.add(scalar);
-        scalar._registeredOrDefaultDataFilter = dataFilter;
+        scalar._registeredOrDefaultFilterModel = dataFilter;
       } else {
         // Default DataFilter.
-        DataFilter defaultDataFilter = _DefaultDataFilter(
+        FilterModel defaultFilterModel = _DefaultFilterModel(
           name: "${scalar.name}-@-default-scalar-data-filter",
           shelf: this,
         );
-        defaultDataFilter._scalars.add(scalar);
-        scalar._registeredOrDefaultDataFilter = defaultDataFilter;
+        defaultFilterModel._scalars.add(scalar);
+        scalar._registeredOrDefaultFilterModel = defaultFilterModel;
         //
-        _allDataFilters.add(defaultDataFilter);
+        _allFilterModels.add(defaultFilterModel);
         //
         const Type emptyFilterCriteriaType = EmptyFilterCriteria;
         final String filterCriteriaEmpty = emptyFilterCriteriaType.toString();
@@ -192,12 +192,12 @@ abstract class Shelf extends _XBase {
     }
     //
     block.shelf = this;
-    if (block.registerDataFilterName != null) {
-      DataFilter? dataFilter =
-          _shelfStruct.dataFilters[block.registerDataFilterName!];
+    if (block.registerFilterModelName != null) {
+      FilterModel? dataFilter =
+          _shelfStruct.dataFilters[block.registerFilterModelName!];
       if (dataFilter == null) {
         throw ___registerError(
-            "DataFilter not found '${block.registerDataFilterName}' in '${getClassName(this)}'\n"
+            "FilterModel not found '${block.registerFilterModelName}' in '${getClassName(this)}'\n"
             "Double-check ${getClassName(this)}.registerStructure() method");
       }
       //
@@ -242,16 +242,16 @@ abstract class Shelf extends _XBase {
       }
       //
       dataFilter._blocks.add(block);
-      block._registeredOrDefaultDataFilter = dataFilter;
+      block._registeredOrDefaultFilterModel = dataFilter;
     } else {
-      DataFilter defaultDataFilter = _DefaultDataFilter(
+      FilterModel defaultFilterModel = _DefaultFilterModel(
         name: "${block.name}-@-default-block-data-filter",
         shelf: this,
       );
-      defaultDataFilter._blocks.add(block);
-      block._registeredOrDefaultDataFilter = defaultDataFilter;
+      defaultFilterModel._blocks.add(block);
+      block._registeredOrDefaultFilterModel = defaultFilterModel;
       //
-      _allDataFilters.add(defaultDataFilter);
+      _allFilterModels.add(defaultFilterModel);
       //
       const Type emptyFilterCriteriaType = EmptyFilterCriteria;
       final String filterCriteriaEmpty = emptyFilterCriteriaType.toString();
@@ -332,7 +332,7 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
   // ***************************************************************************
 
-  DataFilter? findDataFilter(String dataFilterName) {
+  FilterModel? findFilterModel(String dataFilterName) {
     return _shelfStruct.dataFilters[dataFilterName];
   }
 
@@ -413,7 +413,7 @@ abstract class Shelf extends _XBase {
       print("|----> ${getClassName(this)}.updateAllUIComponents()");
       __updateShelfWidgets();
       //
-      for (DataFilter dataFilter in _allDataFilters) {
+      for (FilterModel dataFilter in _allFilterModels) {
         dataFilter.updateAllUIComponents();
       }
       //
@@ -577,7 +577,7 @@ abstract class Shelf extends _XBase {
     print("@@@@@@@@@@@@ Query Lazy List: blockFormOpts: $blockFormOpts");
     //
     _XShelf xShelf = await _queryAll(
-      forceDataFilterOpt: null,
+      forceFilterModelOpt: null,
       forceQueryScalarOpts: scalarOpts,
       forceQueryBlockOpts: blockOpts,
       forceQueryBlockFormOpts: blockFormOpts,
@@ -680,14 +680,14 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
 
   Future<_XShelf> _queryAll({
-    required _DataFilterOpt? forceDataFilterOpt,
+    required _FilterModelOpt? forceFilterModelOpt,
     required List<_ScalarOpt> forceQueryScalarOpts,
     required List<_BlockOpt> forceQueryBlockOpts,
     required List<_BlockFormOpt> forceQueryBlockFormOpts,
   }) async {
     _XShelf xShelf = _XShelf(
       shelf: this,
-      forceDataFilterOpt: forceDataFilterOpt,
+      forceFilterModelOpt: forceFilterModelOpt,
       forceQueryScalarOpts: forceQueryScalarOpts,
       forceQueryBlockOpts: forceQueryBlockOpts,
       forceQueryBlockFormOpts: forceQueryBlockFormOpts,

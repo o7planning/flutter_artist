@@ -1,11 +1,11 @@
 part of '../flutter_artist.dart';
 
-class _XDataFilter {
+class _XFilterModel {
   bool queried = false;
-  final DataFilter dataFilter;
+  final FilterModel dataFilter;
   FilterInput? filterInput;
 
-  _XDataFilter({
+  _XFilterModel({
     required this.dataFilter,
   });
 

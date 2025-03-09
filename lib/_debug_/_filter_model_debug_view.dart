@@ -1,20 +1,20 @@
 part of '../flutter_artist.dart';
 
-class _DataFilterDebugView extends StatefulWidget {
-  final DataFilter dataFilter;
+class _FilterModelDebugView extends StatefulWidget {
+  final FilterModel dataFilter;
   final Function() onPressedShelf;
 
-  const _DataFilterDebugView({
+  const _FilterModelDebugView({
     required this.dataFilter,
     required this.onPressedShelf,
     super.key,
   });
 
   @override
-  State<_DataFilterDebugView> createState() => __DataFilterDebugViewState();
+  State<_FilterModelDebugView> createState() => _FilterModelDebugViewState();
 }
 
-class __DataFilterDebugViewState extends State<_DataFilterDebugView> {
+class _FilterModelDebugViewState extends State<_FilterModelDebugView> {
   static const double iconSize = 18;
   static const double fontSize = 13;
 
@@ -46,7 +46,7 @@ class __DataFilterDebugViewState extends State<_DataFilterDebugView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        _buildDataFilterInfo(context),
+        _buildFilterModelInfo(context),
         const SizedBox(height: 5),
         Expanded(
           child: _buildTabContainer(),
@@ -82,7 +82,7 @@ class __DataFilterDebugViewState extends State<_DataFilterDebugView> {
   }
 
   Widget _buildTabContainer() {
-    DataFilterData dataFilterData = widget.dataFilter.data;
+    FilterModelData dataFilterData = widget.dataFilter.data;
     Map<String, dynamic> initial0Value = dataFilterData.initial0FormData;
     Map<String, dynamic> initial1Value = dataFilterData.initialFormData;
     Map<String, dynamic> instantValue = dataFilterData.currentFormData;
@@ -273,7 +273,7 @@ class __DataFilterDebugViewState extends State<_DataFilterDebugView> {
     );
   }
 
-  Widget _buildDataFilterInfo(BuildContext context) {
+  Widget _buildFilterModelInfo(BuildContext context) {
     return _CustomAppContainer(
       width: double.maxFinite,
       child: Column(

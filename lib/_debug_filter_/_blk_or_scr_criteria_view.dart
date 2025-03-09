@@ -3,7 +3,7 @@ part of '../flutter_artist.dart';
 abstract class _BlkOrScrCriteriaView extends StatelessWidget {
   String getBlockOrScalarClassName();
 
-  String? getDataFilterClassName();
+  String? getFilterModelClassName();
 
   FilterCriteria? getFilterCriteria();
 
@@ -13,7 +13,7 @@ abstract class _BlkOrScrCriteriaView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? dataFilterClassName = getDataFilterClassName();
+    String? dataFilterClassName = getFilterModelClassName();
     FilterCriteria? filterCriteria = getFilterCriteria();
     String? criteriaClassName =
         filterCriteria == null ? null : getClassName(filterCriteria);
@@ -25,7 +25,7 @@ abstract class _BlkOrScrCriteriaView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (dataFilterClassName == null) //
-            _showNoDataFilterInfo(),
+            _showNoFilterModelInfo(),
           _buildCriteriaShortDocument(
             dataFilterClassName: dataFilterClassName,
             criteriaClassName: criteriaClassName,
@@ -42,7 +42,7 @@ abstract class _BlkOrScrCriteriaView extends StatelessWidget {
     );
   }
 
-  Widget _showNoDataFilterInfo() {
+  Widget _showNoFilterModelInfo() {
     return SelectableText.rich(
       TextSpan(
         children: [

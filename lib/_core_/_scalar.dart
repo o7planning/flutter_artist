@@ -55,7 +55,7 @@ abstract class Scalar<
   ///
   /// DataFilter Name registered in [Shelf.registerStructure()] method.
   ///
-  final String? registerDataFilterName;
+  final String? registerFilterModelName;
 
   final String? description;
 
@@ -71,18 +71,18 @@ abstract class Scalar<
   /// This field is not null.
   /// If this scalar does not declare a DataFilter, it will have the default DataFilter.
   ///
-  late final DataFilter<FILTER_INPUT, FILTER_CRITERIA>
-      _registeredOrDefaultDataFilter;
+  late final FilterModel<FILTER_INPUT, FILTER_CRITERIA>
+      _registeredOrDefaultFilterModel;
 
   ///
   /// Returns a DataFilter declared in the [Shelf.registerStructure()] method.
   /// The return value may be null.
   ///
-  DataFilter<FILTER_INPUT, FILTER_CRITERIA>? get dataFilter {
-    if (_registeredOrDefaultDataFilter is _DefaultDataFilter) {
+  FilterModel<FILTER_INPUT, FILTER_CRITERIA>? get dataFilter {
+    if (_registeredOrDefaultFilterModel is _DefaultFilterModel) {
       return null;
     } else {
-      return _registeredOrDefaultDataFilter;
+      return _registeredOrDefaultFilterModel;
     }
   }
 
@@ -104,7 +104,7 @@ abstract class Scalar<
     required String? dataFilterName,
     required this.hiddenBehavior,
     required List<Type> listenTypes,
-  })  : registerDataFilterName = dataFilterName,
+  })  : registerFilterModelName = dataFilterName,
         __listenItemTypes = listenTypes;
 
   // ***************************************************************************
@@ -143,17 +143,17 @@ abstract class Scalar<
     //
     FILTER_CRITERIA? filterCriteria;
     try {
-      final _XDataFilter xDataFilter = thisXScalar.xDataFilter;
-      final DataFilter dataFilter = xDataFilter.dataFilter;
+      final _XFilterModel xFilterModel = thisXScalar.xFilterModel;
+      final FilterModel dataFilter = xFilterModel.dataFilter;
       //
-      if (!xDataFilter.queried) {
-        FILTER_INPUT? filterInput = xDataFilter.filterInput as FILTER_INPUT?;
+      if (!xFilterModel.queried) {
+        FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
         //
         filterCriteria = await dataFilter._prepareMasterDataAndFilterData(
           filterInput: filterInput,
         ) as FILTER_CRITERIA?;
         //
-        xDataFilter.queried = true;
+        xFilterModel.queried = true;
       } else {
         filterCriteria = dataFilter._filterCriteria! as FILTER_CRITERIA;
       }
@@ -444,8 +444,8 @@ abstract class Scalar<
     //
     _XShelf xShelf = _XShelf(
       shelf: shelf,
-      forceDataFilterOpt: _DataFilterOpt(
-        dataFilter: _registeredOrDefaultDataFilter,
+      forceFilterModelOpt: _FilterModelOpt(
+        dataFilter: _registeredOrDefaultFilterModel,
         filterInput: filterInput,
       ),
       forceQueryScalarOpts: forceQueryScalarOpts,
@@ -487,8 +487,8 @@ abstract class Scalar<
     );
     //
     _XShelf xShelf = await shelf._queryAll(
-      forceDataFilterOpt: _DataFilterOpt(
-        dataFilter: _registeredOrDefaultDataFilter,
+      forceFilterModelOpt: _FilterModelOpt(
+        dataFilter: _registeredOrDefaultFilterModel,
         filterInput: filterInput,
       ),
       forceQueryScalarOpts: [

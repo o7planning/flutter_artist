@@ -3,7 +3,7 @@ part of '../flutter_artist.dart';
 class _FilterCriteriaDebugView extends StatelessWidget {
   final Block? block;
   final Scalar? scalar;
-  final DataFilter? dataFilter;
+  final FilterModel? dataFilter;
 
   const _FilterCriteriaDebugView.block({
     super.key,
@@ -19,14 +19,14 @@ class _FilterCriteriaDebugView extends StatelessWidget {
 
   const _FilterCriteriaDebugView.dataFilter({
     super.key,
-    required DataFilter this.dataFilter,
+    required FilterModel this.dataFilter,
   })  : block = null,
         scalar = null;
 
   @override
   Widget build(BuildContext context) {
     List<TabData> tabs = [];
-    DataFilter? _dataFilter = dataFilter;
+    FilterModel? _dataFilter = dataFilter;
     if (block != null) {
       _dataFilter = block!.dataFilter;
       //
@@ -78,7 +78,7 @@ class _FilterCriteriaDebugView extends StatelessWidget {
             size: 16,
           ),
           content: SingleChildScrollView(
-            child: _DataFilterCriteriaView(
+            child: _FilterModelCriteriaView(
               dataFilter: _dataFilter,
             ),
           ),

@@ -1,8 +1,8 @@
 part of '../flutter_artist.dart';
 
-class _DefaultDataFilter
-    extends DataFilter<EmptyFilterInput, EmptyFilterCriteria> {
-  _DefaultDataFilter({
+class _DefaultFilterModel
+    extends FilterModel<EmptyFilterInput, EmptyFilterCriteria> {
+  _DefaultFilterModel({
     required String name,
     required Shelf shelf,
   }) {
@@ -47,11 +47,11 @@ class _DefaultDataFilter
 
 // -----------------------------------------------------------------------------
 
-class StringIdDataFilter
-    extends DataFilter<StringIdFilterInput, StringIdFilterCriteria> {
+class StringIdFilterModel
+    extends FilterModel<StringIdFilterInput, StringIdFilterCriteria> {
   String? idValue;
 
-  StringIdDataFilter({required this.idValue});
+  StringIdFilterModel({required this.idValue});
 
   @override
   StringIdFilterCriteria createFilterCriteria({
@@ -84,11 +84,11 @@ class StringIdDataFilter
 
 // -----------------------------------------------------------------------------
 
-class StringValueDataFilter
-    extends DataFilter<StringValueFilterInput, StringValueFilterCriteria> {
+class StringValueFilterModel
+    extends FilterModel<StringValueFilterInput, StringValueFilterCriteria> {
   String? stringValue;
 
-  StringValueDataFilter({required this.stringValue});
+  StringValueFilterModel({required this.stringValue});
 
   @override
   StringValueFilterCriteria createFilterCriteria({
@@ -121,11 +121,11 @@ class StringValueDataFilter
 
 // -----------------------------------------------------------------------------
 
-class SearchTextDataFilter
-    extends DataFilter<SearchTextFilterInput, SearchTextFilterCriteria> {
+class SearchTextFilterModel
+    extends FilterModel<SearchTextFilterInput, SearchTextFilterCriteria> {
   String? searchText;
 
-  SearchTextDataFilter({required this.searchText});
+  SearchTextFilterModel({required this.searchText});
 
   @override
   SearchTextFilterCriteria createFilterCriteria({
@@ -158,11 +158,11 @@ class SearchTextDataFilter
 
 // -----------------------------------------------------------------------------
 
-class IntIdDataFilter
-    extends DataFilter<IntIdFilterInput, IntIdFilterCriteria> {
+class IntIdFilterModel
+    extends FilterModel<IntIdFilterInput, IntIdFilterCriteria> {
   int? idValue;
 
-  IntIdDataFilter({required this.idValue});
+  IntIdFilterModel({required this.idValue});
 
   @override
   IntIdFilterCriteria createFilterCriteria({

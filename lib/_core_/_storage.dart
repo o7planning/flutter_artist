@@ -668,7 +668,7 @@ class _Storage {
       _ScalarAndBlockList sbList = queryMap[shelfName]!;
       //
       await shelf._queryAll(
-        forceDataFilterOpt: null,
+        forceFilterModelOpt: null,
         forceQueryScalarOpts: sbList.queryScalars
             .map(
               (s) => _ScalarOpt(scalar: s),

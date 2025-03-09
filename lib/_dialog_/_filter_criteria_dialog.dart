@@ -4,7 +4,7 @@ part of '../flutter_artist.dart';
 // -----------------------------------------------------------------------------
 
 class _FilterCriteriaDialog extends StatefulWidget {
-  final DataFilter? dataFilter;
+  final FilterModel? dataFilter;
   final Scalar? scalar;
   final Block? block;
 
@@ -21,7 +21,7 @@ class _FilterCriteriaDialog extends StatefulWidget {
         dataFilter = null;
 
   const _FilterCriteriaDialog.dataFilter({
-    required DataFilter this.dataFilter,
+    required FilterModel this.dataFilter,
     super.key,
   })  : block = null,
         scalar = null;
@@ -99,7 +99,7 @@ class _FilterCriteriaDialogState extends State<_FilterCriteriaDialog> {
 
 Future<void> showFilterCriteriaDialog({
   required BuildContext context,
-  required DataFilter dataFilter,
+  required FilterModel dataFilter,
 }) async {
   await showDialog(
     context: context,

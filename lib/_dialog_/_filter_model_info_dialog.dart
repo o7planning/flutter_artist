@@ -3,11 +3,11 @@ part of '../flutter_artist.dart';
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-class _DataFilterInfoDialog extends StatefulWidget {
-  final DataFilter dataFilter;
+class _FilterModelInfoDialog extends StatefulWidget {
+  final FilterModel dataFilter;
   final String locationInfo;
 
-  const _DataFilterInfoDialog({
+  const _FilterModelInfoDialog({
     required this.dataFilter,
     required this.locationInfo,
     super.key,
@@ -15,11 +15,11 @@ class _DataFilterInfoDialog extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return __DataFilterInfoDialogState();
+    return _FilterModelInfoDialogState();
   }
 }
 
-class __DataFilterInfoDialogState extends State<_DataFilterInfoDialog> {
+class _FilterModelInfoDialogState extends State<_FilterModelInfoDialog> {
   bool showFormData = true;
 
   @override
@@ -47,7 +47,7 @@ class __DataFilterInfoDialogState extends State<_DataFilterInfoDialog> {
       width: width,
       height: height,
       child: showFormData
-          ? _DataFilterDebugView(
+          ? _FilterModelDebugView(
               dataFilter: widget.dataFilter,
               onPressedShelf: () {
                 setState(() {
@@ -67,15 +67,15 @@ class __DataFilterInfoDialogState extends State<_DataFilterInfoDialog> {
   }
 }
 
-Future<void> _showDataFilterInfoDialog({
+Future<void> _showFilterModelInfoDialog({
   required BuildContext context,
   required String locationInfo,
-  required DataFilter dataFilter,
+  required FilterModel dataFilter,
 }) async {
   await showDialog(
     context: context,
     builder: (BuildContext context) {
-      return _DataFilterInfoDialog(
+      return _FilterModelInfoDialog(
         dataFilter: dataFilter,
         locationInfo: locationInfo,
       );

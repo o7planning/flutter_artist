@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-abstract class DataFilter<
+abstract class FilterModel<
     FILTER_INPUT extends FilterInput, // EmptyFilterInput
     FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     > extends _XBase {
@@ -37,7 +37,7 @@ abstract class DataFilter<
 
   FILTER_CRITERIA? _filterCriteria;
 
-  late final DataFilterData data = DataFilterData(dataFilter: this);
+  late final FilterModelData data = FilterModelData(dataFilter: this);
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
   FILTER_CRITERIA? get filterCriteria => _filterCriteria;
@@ -48,7 +48,7 @@ abstract class DataFilter<
   // ***************************************************************************
   // ***************************************************************************
 
-  DataFilter();
+  FilterModel();
 
   // ***************************************************************************
   // ***************************************************************************
@@ -354,7 +354,7 @@ abstract class DataFilter<
       navigate: null,
     );
     _XShelf xShelf = await shelf._queryAll(
-      forceDataFilterOpt: _DataFilterOpt(
+      forceFilterModelOpt: _FilterModelOpt(
         dataFilter: this,
         filterInput: filterInput,
       ),
@@ -446,10 +446,10 @@ abstract class DataFilter<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> showDataFilterDebugDialog() async {
+  Future<void> showFilterModelDebugDialog() async {
     BuildContext context = FlutterArtist.adapter.getCurrentContext();
     //
-    await _showDataFilterInfoDialog(
+    await _showFilterModelInfoDialog(
       context: context,
       locationInfo: "locationInfo",
       dataFilter: this,

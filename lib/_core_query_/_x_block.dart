@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
 class _XBlock {
-  final _XDataFilter xDataFilter;
+  final _XFilterModel xFilterModel;
   final Block block;
 
   String get name => block.name;
@@ -49,7 +49,7 @@ class _XBlock {
   _XBlock({
     required this.block,
     required this.xBlockParent,
-    required this.xDataFilter,
+    required this.xFilterModel,
     required this.xBlockForm,
   });
 

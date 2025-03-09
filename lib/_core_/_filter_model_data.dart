@@ -1,12 +1,12 @@
 part of '../flutter_artist.dart';
 
-class DataFilterData<
+class FilterModelData<
     FILTER_INPUT extends FilterInput, //
     FILTER_CRITERIA extends FilterCriteria> {
   ///
   /// Owner DataFilter.
   ///
-  final DataFilter<FILTER_INPUT, FILTER_CRITERIA> dataFilter;
+  final FilterModel<FILTER_INPUT, FILTER_CRITERIA> dataFilter;
 
   bool _justInitialized = false;
 
@@ -32,7 +32,7 @@ class DataFilterData<
   // ***************************************************************************
   // ***************************************************************************
 
-  DataFilterData({required this.dataFilter});
+  FilterModelData({required this.dataFilter});
 
   // ***************************************************************************
   // ***************************************************************************

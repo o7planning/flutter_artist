@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
 class _BlocksScalarsView extends StatelessWidget {
-  final DataFilter dataFilter;
+  final FilterModel dataFilter;
 
   const _BlocksScalarsView({
     required this.dataFilter,
