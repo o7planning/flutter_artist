@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-abstract class BlockForm<
+abstract class FormModel<
     ID extends Object,
     ITEM_DETAIL extends Object,
     FILTER_CRITERIA extends FilterCriteria,
@@ -21,7 +21,7 @@ abstract class BlockForm<
     return "block-form > ${shelf.name} > ${block.name}";
   }
 
-  late final BlockFormData data = BlockFormData(blockForm: this);
+  late final FormModelData data = FormModelData(formModel: this);
 
   FormMode get formMode => data.formMode;
 
@@ -52,7 +52,7 @@ abstract class BlockForm<
   // ***************************************************************************
   // ***************************************************************************
 
-  BlockForm();
+  FormModel();
 
   // ***************************************************************************
   // ***************************************************************************
@@ -93,11 +93,11 @@ abstract class BlockForm<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<bool> _unitLoadForm({required _XBlockForm thisXBlockForm}) async {
-    __assertThisXBlockForm(thisXBlockForm);
+  Future<bool> _unitLoadForm({required _XFormModel thisXFormModel}) async {
+    __assertThisXFormModel(thisXFormModel);
     //
     bool active = this.hasActiveUIComponent();
-    bool forceForm = thisXBlockForm.forceForm;
+    bool forceForm = thisXFormModel.forceForm;
     //
 
     if (!forceForm) {
@@ -128,7 +128,7 @@ abstract class BlockForm<
     ITEM_DETAIL? refreshedItemDetail = this.block.data.currentItemDetail;
     FILTER_CRITERIA? filterCriteria = this.block.data.filterCriteria;
     EXTRA_FORM_INPUT? extraFormInput =
-        thisXBlockForm.extraFormInput as EXTRA_FORM_INPUT?;
+        thisXFormModel.extraFormInput as EXTRA_FORM_INPUT?;
     bool isNew = this.data.isNew;
     //
     bool error = await _prepareMasterDataAndFormData(
@@ -144,7 +144,7 @@ abstract class BlockForm<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<bool> _unitSaveForm({required _XBlockForm thisXBlockForm}) async {
+  Future<bool> _unitSaveForm({required _XFormModel thisXFormModel}) async {
     if (!__checkValidBeforeSave()) {
       return false;
     }
@@ -190,7 +190,7 @@ abstract class BlockForm<
     //
     try {
       return await block._processSaveActionRestResult(
-        thisXBlock: thisXBlockForm.xBlock,
+        thisXBlock: thisXFormModel.xBlock,
         calledMethodName: calledMethodName,
         result: result,
       );
@@ -555,13 +555,13 @@ abstract class BlockForm<
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [],
-      forceQueryBlockFormOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
     _XBlock xBlock = xShelf.findXBlockByName(this.block.name)!;
-    _XBlockForm xBlockForm = xBlock.xBlockForm!;
+    _XFormModel xFormModel = xBlock.xFormModel!;
     _TaskUnit taskUnit = _SaveFormSaveTaskUnit(
-      xBlockForm: xBlockForm,
+      xFormModel: xFormModel,
     );
     //
     _taskUnitQueue.addTaskUnit(taskUnit);
@@ -575,10 +575,10 @@ abstract class BlockForm<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __assertThisXBlockForm(_XBlockForm thisXBlockForm) {
-    if (thisXBlockForm.blockForm != this) {
+  void __assertThisXFormModel(_XFormModel thisXFormModel) {
+    if (thisXFormModel.formModel != this) {
       String message =
-          "Error Assets block form: ${thisXBlockForm.blockForm} - $this";
+          "Error Assets block form: ${thisXFormModel.formModel} - $this";
       print("FATAL ERROR: $message");
       throw message;
     }

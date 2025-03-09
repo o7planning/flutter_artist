@@ -97,7 +97,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   Widget? _buildLeft2Buttons() {
     return _buildBreadCrumb(
       children: [
-        if (widget.block.blockForm != null && widget.showCreateButton)
+        if (widget.block.formModel != null && widget.showCreateButton)
           _ControlBarButton(
             tooltip: "Create",
             iconData: _formCreateIconData,
@@ -156,15 +156,15 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
                           }
                         : null,
               ),
-            if (widget.block.blockForm != null &&
+            if (widget.block.formModel != null &&
                 (loggedInUser?.isSystemUser ?? false))
               Tooltip(
                 message:
-                    "${widget.block.blockForm!.data.formMode.tooltip} [${getClassName(widget.block)}]",
+                    "${widget.block.formModel!.data.formMode.tooltip} [${getClassName(widget.block)}]",
                 child: Icon(
-                  widget.block.blockForm!.data.formMode == FormMode.none
+                  widget.block.formModel!.data.formMode == FormMode.none
                       ? _formNoneModeIconData
-                      : widget.block.blockForm!.data.formMode ==
+                      : widget.block.formModel!.data.formMode ==
                               FormMode.creation
                           ? _formCreationModeIconData
                           : _formEditModeIconData,
@@ -238,7 +238,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   Widget? _buildRight2Buttons(BuildContext context) {
     return _buildBreadCrumb(
       children: [
-        if (widget.block.blockForm != null && widget.showSaveButton)
+        if (widget.block.formModel != null && widget.showSaveButton)
           _ControlBarButton(
             tooltip: "Save",
             iconData: _formSaveIconData,
@@ -249,7 +249,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
                   }
                 : null,
           ),
-        if (widget.block.blockForm != null && widget.showSaveButton)
+        if (widget.block.formModel != null && widget.showSaveButton)
           _ControlBarButton(
             tooltip: "Reset",
             iconData: _formCleanIconData,
@@ -325,7 +325,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   }
 
   Future<void> _saveForm(Block block) async {
-    await widget.block.blockForm?.saveForm();
+    await widget.block.formModel?.saveForm();
   }
 
   Future<void> _doDelete(Block block) async {
@@ -337,7 +337,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   }
 
   void _resetForm(Block block) {
-    widget.block.blockForm?.resetForm();
+    widget.block.formModel?.resetForm();
   }
 
   Future<void> _refreshCurrentItem(Block block) async {
@@ -352,7 +352,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
     _showFormInfoDialog(
       context: context,
       locationInfo: getClassName(widget.ownerClassInstance),
-      blockForm: block.blockForm!,
+      formModel: block.formModel!,
     );
   }
 

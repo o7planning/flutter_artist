@@ -13,7 +13,7 @@ class _XShelf {
   final List<_XScalar> allXScalars = [];
 
   // All Scalars
-  final List<_XBlockForm> allXBlockForms = [];
+  final List<_XFormModel> allXFormModels = [];
 
   // All FilterModels of Shelf
   // <String filterModelName, _XScalar>
@@ -27,16 +27,16 @@ class _XShelf {
   // <String blockName, _XBlock>
   final Map<String, _XBlock> allXBlockMap = {};
 
-  // All BlockForm of Shelf
-  // <String blockName, _XBlockForm>
-  final Map<String, _XBlockForm> allXBlockFormMap = {};
+  // All FormModels of Shelf
+  // <String blockName, _XFormModel>
+  final Map<String, _XFormModel> allXFormModelMap = {};
 
   _XShelf({
     required this.shelf,
     required _FilterModelOpt? forceFilterModelOpt,
     required List<_ScalarOpt> forceQueryScalarOpts,
     required List<_BlockOpt> forceQueryBlockOpts,
-    required List<_BlockFormOpt> forceQueryBlockFormOpts,
+    required List<_FormModelOpt> forceQueryFormModelOpts,
   }) {
     if (forceFilterModelOpt != null) {
       assert(forceFilterModelOpt.filterModel.shelf == shelf);
@@ -47,8 +47,8 @@ class _XShelf {
     for (_BlockOpt blockOpt in forceQueryBlockOpts) {
       assert(blockOpt.block.shelf == shelf);
     }
-    for (_BlockFormOpt blockFormOpt in forceQueryBlockFormOpts) {
-      assert(blockFormOpt.blockForm.shelf == shelf);
+    for (_FormModelOpt formModelOpt in forceQueryFormModelOpts) {
+      assert(formModelOpt.formModel.shelf == shelf);
     }
     //
     for (FilterModel filterModel in shelf._allFilterModels) {
@@ -73,7 +73,7 @@ class _XShelf {
     __setForceFilterModelOpt(forceFilterModelOpt);
     __setForceQueryScalarOpts(forceQueryScalarOpts);
     __setForceQueryBlockOpts(forceQueryBlockOpts);
-    __setForceQueryBlockFormOpts(forceQueryBlockFormOpts);
+    __setForceQueryFormModelOpts(forceQueryFormModelOpts);
   }
 
   _XBlock? findXBlockByName(String name) {
@@ -173,16 +173,16 @@ class _XShelf {
     }
   }
 
-  void __setForceQueryBlockFormOpts(List<_BlockFormOpt> forceQueryBlockForms) {
+  void __setForceQueryFormModelOpts(List<_FormModelOpt> forceQueryFormModels) {
     // Force query:
-    for (_BlockFormOpt blockFormOpt in forceQueryBlockForms) {
-      BlockForm blockForm = blockFormOpt.blockForm;
-      _XBlockForm xBlockForm = allXBlockFormMap[blockForm.block.name]!;
-      xBlockForm.forceForm = true;
+    for (_FormModelOpt formModelOpt in forceQueryFormModels) {
+      FormModel formModel = formModelOpt.formModel;
+      _XFormModel xFormModel = allXFormModelMap[formModel.block.name]!;
+      xFormModel.forceForm = true;
       // Set Force query to Ascending Ancestor Blocks:
       List<Block> descendingAncestorBlocks = [
-        ...blockForm.block.descendingAncestorBlocks,
-        blockForm.block
+        ...formModel.block.descendingAncestorBlocks,
+        formModel.block
       ];
       __setForceQueryForAncestorBlocks(
         descendingAncestorBlocks: descendingAncestorBlocks,
@@ -226,10 +226,10 @@ class _XShelf {
     _XFilterModel xFilterModel =
         allXFilterModelMap[block._registeredOrDefaultFilterModel.name]!;
     //
-    _XBlockForm? xBlockForm = block.blockForm == null //
+    _XFormModel? xFormModel = block.formModel == null //
         ? null
-        : _XBlockForm(
-            blockForm: block.blockForm!,
+        : _XFormModel(
+            formModel: block.formModel!,
             extraFormInput: null,
           );
     //
@@ -237,15 +237,15 @@ class _XShelf {
       block: block,
       xBlockParent: xBlockParent,
       xFilterModel: xFilterModel,
-      xBlockForm: xBlockForm,
+      xFormModel: xFormModel,
     );
-    xBlockForm?.xBlock = xBlock;
+    xFormModel?.xBlock = xBlock;
     siblingXBlocks.add(xBlock);
     //
     allXBlockMap[block.name] = xBlock;
-    if (xBlockForm != null) {
-      allXBlockForms.add(xBlockForm);
-      allXBlockFormMap[block.name] = xBlockForm;
+    if (xFormModel != null) {
+      allXFormModels.add(xFormModel);
+      allXFormModelMap[block.name] = xFormModel;
     }
     //
     for (Block childBlock in block._childBlocks) {

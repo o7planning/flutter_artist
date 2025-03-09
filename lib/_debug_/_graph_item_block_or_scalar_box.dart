@@ -205,7 +205,7 @@ class _GraphItemBlockOrScalarBoxState
               "${widget.blockOrScalar.isBlock ? 'BLOCK' : 'SCALAR'}     ${widget.blockOrScalar.itemCount.toString()}",
           style: _getSummaryTextStyle(),
         ).width;
-    if (widget.blockOrScalar.block?.blockForm != null) {
+    if (widget.blockOrScalar.block?.formModel != null) {
       width += spacing +
           iconSize +
           _calculateTextSize(
@@ -369,25 +369,25 @@ class _GraphItemBlockOrScalarBoxState
         Expanded(
           child: _buildBlockDataState(widget.blockOrScalar),
         ),
-        if (widget.blockOrScalar.block?.blockForm != null)
+        if (widget.blockOrScalar.block?.formModel != null)
           const SizedBox(width: 5),
-        if (widget.blockOrScalar.block?.blockForm != null)
-          _buildFormDataState(widget.blockOrScalar.block!.blockForm!),
+        if (widget.blockOrScalar.block?.formModel != null)
+          _buildFormDataState(widget.blockOrScalar.block!.formModel!),
       ],
     );
   }
 
   String _formTooltipMessage(
-    BlockForm blockForm,
+    FormModel formModel,
   ) {
-    String className = getClassName(blockForm);
-    final DataState dataState = blockForm.dataState;
-    final bool active = blockForm.hasActiveUIComponent();
+    String className = getClassName(formModel);
+    final DataState dataState = formModel.dataState;
+    final bool active = formModel.hasActiveUIComponent();
     //
-    return "FORM: $className \n"
+    return "FORM MODEL: $className \n"
         "Data State: ${dataState.name.toUpperCase()} "
         "| Visibility: ${active ? 'VISIBLE' : 'HIDDEN'} "
-        "| Mode: ${blockForm.data.formMode.name.toUpperCase()}";
+        "| Mode: ${formModel.data.formMode.name.toUpperCase()}";
   }
 
   String _blockOrScalarTooltipMessage(
@@ -469,19 +469,19 @@ class _GraphItemBlockOrScalarBoxState
     );
   }
 
-  Widget _buildFormDataState(BlockForm blockForm) {
+  Widget _buildFormDataState(FormModel formModel) {
     return Container(
       padding: const EdgeInsets.all(3),
-      color: _dataStateBgColor(blockForm.dataState),
+      color: _dataStateBgColor(formModel.dataState),
       child: _buildCustomTooltip(
         message: _formTooltipMessage(
-          blockForm,
+          formModel,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Icon(
-              _dataStateIconData(blockForm.dataState),
+              _dataStateIconData(formModel.dataState),
               size: 16,
               color: _graphBoxTextColor,
             ),

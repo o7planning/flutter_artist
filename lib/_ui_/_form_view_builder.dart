@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
 class _FormViewBuilder extends _RefreshableWidget {
-  final BlockForm blockForm;
+  final FormModel formModel;
 
   final Widget Function() build;
 
@@ -12,7 +12,7 @@ class _FormViewBuilder extends _RefreshableWidget {
     super.key,
     required super.ownerClassInstance,
     required super.description,
-    required this.blockForm,
+    required this.formModel,
     required this.build,
     this.onAfterBuild,
   });
@@ -28,7 +28,7 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
 
   @override
   String getWidgetOwnerClassName() {
-    return getClassName(widget.blockForm);
+    return getClassName(widget.formModel);
   }
 
   @override
@@ -36,7 +36,7 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
 
   @override
   void addFilterFragmentWidgetState({required bool isShowing}) {
-    widget.blockForm._addFormWidgetState(
+    widget.formModel._addFormWidgetState(
       widgetState: this,
       isShowing: true,
     );
@@ -44,7 +44,7 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
 
   @override
   void removeFilterFragmentWidgetState() {
-    widget.blockForm._removeFormWidgetState(
+    widget.formModel._removeFormWidgetState(
       widgetState: this,
     );
   }
@@ -52,30 +52,30 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    widget.blockForm._formKey = formKey;
+    widget.formModel._formKey = formKey;
   }
 
   Future<void> _onPopInvokedWithResult(bool didPop, dynamic result) async {
-    if (didPop || !widget.blockForm.isDirty()) {
+    if (didPop || !widget.formModel.isDirty()) {
       return;
     }
-    _leavingDirtyForms[widget.blockForm.id] = widget.blockForm;
+    _leavingDirtyForms[widget.formModel.id] = widget.formModel;
     //
     dialogs.YesNoCancel selection = dialogs.YesNoCancel.cancel;
     try {
       selection = await dialogs.showYesNoCancelDialog(
         context: context,
         message:
-            "Do you want to save changes the [${getClassName(widget.blockForm)}] before closing?",
+            "Do you want to save changes the [${getClassName(widget.formModel)}] before closing?",
         details: "",
         defaultOption: dialogs.YesNoCancel.yes,
       );
     } finally {
-      _leavingDirtyForms.remove(widget.blockForm.id);
+      _leavingDirtyForms.remove(widget.formModel.id);
     }
     switch (selection) {
       case dialogs.YesNoCancel.yes:
-        bool success = await widget.blockForm.saveForm();
+        bool success = await widget.formModel.saveForm();
         if (!success) {
           return;
         }
@@ -84,7 +84,7 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
         }
         break;
       case dialogs.YesNoCancel.no:
-        widget.blockForm.resetForm();
+        widget.formModel.resetForm();
         if (mounted && _leavingDirtyForms.isEmpty) {
           Navigator.of(context).pop();
         }
@@ -99,10 +99,10 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
   Widget buildContent(BuildContext context) {
     __executeAfterBuild();
     //
-    if (widget.blockForm.block.leaveTheFormSafely) {
+    if (widget.formModel.block.leaveTheFormSafely) {
       return PopScope(
         // TODO: In Error, check again late.
-        canPop: !widget.blockForm.isDirty(),
+        canPop: !widget.formModel.isDirty(),
         onPopInvokedWithResult: _onPopInvokedWithResult,
         child: _buildFormBuilder(),
       );
@@ -114,17 +114,17 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
   FormBuilder _buildFormBuilder() {
     return FormBuilder(
       key: formKey,
-      initialValue: widget.blockForm.initFormValue(),
+      initialValue: widget.formModel.initFormValue(),
       onChanged: () {
-        widget.blockForm._onChangeFromFormWidget();
+        widget.formModel._onChangeFromFormWidget();
         if (mounted) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            widget.blockForm.shelf.updateAllUIComponents();
+            widget.formModel.shelf.updateAllUIComponents();
           });
         }
       },
       child: AbsorbPointer(
-        absorbing: !widget.blockForm.isEnabled(),
+        absorbing: !widget.formModel.isEnabled(),
         child: widget.build(),
       ),
     );
@@ -134,11 +134,11 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
     // IMPORTANT: Do not remove below line:
     await Future.delayed(Duration.zero);
     //
-    widget.blockForm._afterBuildFormWidget();
+    widget.formModel._afterBuildFormWidget();
   }
 
   @override
   void checkAndFreeMemory() {
-    FlutterArtist.storage._checkToRemoveShelf(widget.blockForm.shelf);
+    FlutterArtist.storage._checkToRemoveShelf(widget.formModel.shelf);
   }
 }

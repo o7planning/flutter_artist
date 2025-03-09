@@ -74,12 +74,12 @@ class _CodeFlowItem {
     return ownerClassInstance is FilterModel;
   }
 
-  bool isBlockForm() {
-    return ownerClassInstance is BlockForm;
+  bool isFormModel() {
+    return ownerClassInstance is FormModel;
   }
 
   bool isOtherClass() {
-    return !isBlock() && !isFilterModel() && !isBlockForm();
+    return !isBlock() && !isFilterModel() && !isFormModel();
   }
 
   bool isPrivateMethodCall() {
@@ -114,8 +114,8 @@ class _CodeFlowItem {
       return (ownerClassInstance as Block).shelf;
     } else if (ownerClassInstance is FilterModel) {
       return (ownerClassInstance as FilterModel).shelf;
-    } else if (ownerClassInstance is BlockForm) {
-      return (ownerClassInstance as BlockForm).block.shelf;
+    } else if (ownerClassInstance is FormModel) {
+      return (ownerClassInstance as FormModel).block.shelf;
     }
     return null;
   }

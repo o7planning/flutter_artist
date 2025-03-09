@@ -18,7 +18,7 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
   String get locationInfo => getClassName(widget.ownerClassInstance);
 
   ///
-  /// Class name of Owner (Block, BlockForm, FilterModel).
+  /// Class name of Owner (Block, FormModel, FilterModel).
   ///
   String getWidgetOwnerClassName();
 

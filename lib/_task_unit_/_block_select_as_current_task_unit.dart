@@ -14,7 +14,7 @@ class _BlockSelectAsCurrentTaskUnit<ITEM extends Object> extends _TaskUnit {
   }) {
     xBlock.setForceReloadItem();
     if (forceForm != null) {
-      xBlock.xBlockForm?.forceForm = forceForm!;
+      xBlock.xFormModel?.forceForm = forceForm!;
     }
   }
 

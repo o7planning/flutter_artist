@@ -29,7 +29,7 @@ class _XBlock {
   // ***************************************************************************
 
   final _XBlock? xBlockParent;
-  final _XBlockForm? xBlockForm;
+  final _XFormModel? xFormModel;
   final List<_XBlock> childXBlocks = [];
 
   // ***************************************************************************
@@ -50,7 +50,7 @@ class _XBlock {
     required this.block,
     required this.xBlockParent,
     required this.xFilterModel,
-    required this.xBlockForm,
+    required this.xFormModel,
   });
 
   // ***************************************************************************

@@ -370,7 +370,7 @@ abstract class FilterModel<
                 postQueryBehavior: null),
           )
           .toList(),
-      forceQueryBlockFormOpts: [],
+      forceQueryFormModelOpts: [],
     );
     // TODO: Xem lai.
     return true;

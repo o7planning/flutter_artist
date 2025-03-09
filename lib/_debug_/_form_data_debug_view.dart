@@ -1,12 +1,12 @@
 part of '../flutter_artist.dart';
 
 class _FormDataView extends StatefulWidget {
-  final BlockForm blockForm;
+  final FormModel formModel;
   final String locationInfo;
   final Function() onPressedShelf;
 
   const _FormDataView({
-    required this.blockForm,
+    required this.formModel,
     required this.locationInfo,
     required this.onPressedShelf,
     super.key,
@@ -36,7 +36,7 @@ class __FormDataViewState extends State<_FormDataView> {
     super.initState();
     //
     listeners = FlutterArtist.storage._getListenerShelfBlockScalarTypes(
-      eventBlockOrScalar: _BlockOrScalar.block(widget.blockForm.block),
+      eventBlockOrScalar: _BlockOrScalar.block(widget.formModel.block),
     );
   }
 
@@ -47,7 +47,7 @@ class __FormDataViewState extends State<_FormDataView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        _buildBlockFormInfo(context),
+        _buildFormModelInfo(context),
         const SizedBox(height: 5),
         Expanded(
           child: _buildTabContainer(),
@@ -83,10 +83,10 @@ class __FormDataViewState extends State<_FormDataView> {
   }
 
   Widget _buildTabContainer() {
-    BlockFormData blockFormData = widget.blockForm.data;
-    Map<String, dynamic> initial0Value = blockFormData.initial0FormData;
-    Map<String, dynamic> initial1Value = blockFormData.initialFormData;
-    Map<String, dynamic> instantValue = blockFormData.currentFormData;
+    FormModelData formModelData = widget.formModel.data;
+    Map<String, dynamic> initial0Value = formModelData.initial0FormData;
+    Map<String, dynamic> initial1Value = formModelData.initialFormData;
+    Map<String, dynamic> instantValue = formModelData.currentFormData;
 
     String initial0Json = toJson(initial0Value);
     String initial1Json = toJson(initial1Value);
@@ -107,7 +107,7 @@ class __FormDataViewState extends State<_FormDataView> {
         ),
         content: _buildTabContent(
           info:
-              "The values returned by ${getClassName(widget.blockForm)}.prepareFormData() method.",
+              "The values returned by ${getClassName(widget.formModel)}.prepareFormData() method.",
           json: initial0Json,
         ),
       ),
@@ -138,8 +138,8 @@ class __FormDataViewState extends State<_FormDataView> {
         ),
         content: _buildTabContent(
           info: "The current values of the form (Will be passed to the "
-              "${getClassName(widget.blockForm)}.callApiCreateItem() "
-              "or ${getClassName(widget.blockForm)}.callApiUpdateItem() method).",
+              "${getClassName(widget.formModel)}.callApiCreateItem() "
+              "or ${getClassName(widget.formModel)}.callApiUpdateItem() method).",
           json: instantJson,
         ),
       ),
@@ -255,7 +255,7 @@ class __FormDataViewState extends State<_FormDataView> {
           children: [
             _buildInfo(
                 info:
-                    "When you successfully add or modify a record on the '${getClassName(widget.blockForm.block)}' block, "
+                    "When you successfully add or modify a record on the '${getClassName(widget.formModel.block)}' block, "
                     "the listening blocks will be switched to the 'pending' state, "
                     "they will be lazily queried again when they are visible on the screen.\n"
                     "Here is a list of affected blocks or scalars:"),
@@ -274,7 +274,7 @@ class __FormDataViewState extends State<_FormDataView> {
     );
   }
 
-  Widget _buildBlockFormInfo(BuildContext context) {
+  Widget _buildFormModelInfo(BuildContext context) {
     return _CustomAppContainer(
       width: double.maxFinite,
       child: Column(
@@ -305,7 +305,7 @@ class __FormDataViewState extends State<_FormDataView> {
                       height: 20,
                     ),
                     label: '',
-                    text: getClassName(widget.blockForm.block.shelf),
+                    text: getClassName(widget.formModel.block.shelf),
                   ),
                 ),
               ),
@@ -317,18 +317,18 @@ class __FormDataViewState extends State<_FormDataView> {
                     size: iconSize,
                   ),
                   label: '',
-                  text: getClassName(widget.blockForm.block),
+                  text: getClassName(widget.formModel.block),
                 ),
               ),
               BreadCrumbItem(
                 content: _IconLabelText(
                   style: const TextStyle(fontSize: fontSize),
                   icon: const Icon(
-                    _blockFormIconData,
+                    _formModelIconData,
                     size: iconSize,
                   ),
                   label: '',
-                  text: getClassName(widget.blockForm),
+                  text: getClassName(widget.formModel),
                 ),
               ),
             ],

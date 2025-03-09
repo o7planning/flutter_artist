@@ -1,20 +1,20 @@
 part of '../flutter_artist.dart';
 
-class _XBlockForm {
+class _XFormModel {
   bool forceForm = false; // ForceForm.
   bool queried = false;
-  final BlockForm blockForm;
+  final FormModel formModel;
   final ExtraFormInput? extraFormInput;
 
   late final _XBlock xBlock;
 
-  _XBlockForm({
-    required this.blockForm,
+  _XFormModel({
+    required this.formModel,
     required this.extraFormInput,
   });
 
   @override
   String toString() {
-    return "${getClassName(this)}(${getClassName(blockForm)} - needQuery: $forceForm)";
+    return "${getClassName(this)}(${getClassName(formModel)} - needQuery: $forceForm)";
   }
 }

@@ -396,7 +396,7 @@ class BlockData<
     _pageable = pageable?.copy();
     _pagination = PaginationData.copy(ap.pagination);
     //
-    block.blockForm?.data._formMode = FormMode.none;
+    block.formModel?.data._formMode = FormMode.none;
   }
 
   // ***************************************************************************

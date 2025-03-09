@@ -10,8 +10,8 @@ abstract class Shelf extends _XBase {
 
   List<String> get filterNames => [..._shelfStruct.filterModels.keys];
 
-  // All blockForms.
-  final List<BlockForm> _allBlockForms = [];
+  // All formModels.
+  final List<FormModel> _allFormModels = [];
 
   final Map<String, Scalar> __scalarMap = {};
 
@@ -186,8 +186,8 @@ abstract class Shelf extends _XBase {
           "Double-check ${getClassName(this)}.registerStructure() method");
     } else {
       __blockMap[block.name] = block;
-      if (block.blockForm != null) {
-        _allBlockForms.add(block.blockForm!);
+      if (block.formModel != null) {
+        _allFormModels.add(block.formModel!);
       }
     }
     //
@@ -541,7 +541,7 @@ abstract class Shelf extends _XBase {
     //
     final List<_ScalarOpt> scalarOpts = [];
     final List<_BlockOpt> blockOpts = [];
-    final List<_BlockFormOpt> blockFormOpts = [];
+    final List<_FormModelOpt> formModelOpts = [];
     //
     for (_ScalarOrBlockOrFormWrapper wrapper in scalarOrBlockOrFormWrappers) {
       if (wrapper.scalar != null) {
@@ -563,24 +563,24 @@ abstract class Shelf extends _XBase {
             postQueryBehavior: null,
           ),
         );
-      } else if (wrapper.blockForm != null) {
-        wrapper.blockForm!._lazyLoadCount++;
+      } else if (wrapper.formModel != null) {
+        wrapper.formModel!._lazyLoadCount++;
         //
-        blockFormOpts.add(
-          _BlockFormOpt(blockForm: wrapper.blockForm!),
+        formModelOpts.add(
+          _FormModelOpt(formModel: wrapper.formModel!),
         );
       }
     }
     //
     print("@@@@@@@@@@@@ Query Lazy List: scalarOpts: $scalarOpts");
     print("@@@@@@@@@@@@ Query Lazy List: blockOpts: $blockOpts");
-    print("@@@@@@@@@@@@ Query Lazy List: blockFormOpts: $blockFormOpts");
+    print("@@@@@@@@@@@@ Query Lazy List: formModelOpts: $formModelOpts");
     //
     _XShelf xShelf = await _queryAll(
       forceFilterModelOpt: null,
       forceQueryScalarOpts: scalarOpts,
       forceQueryBlockOpts: blockOpts,
-      forceQueryBlockFormOpts: blockFormOpts,
+      forceQueryFormModelOpts: formModelOpts,
     );
   }
 
@@ -608,10 +608,10 @@ abstract class Shelf extends _XBase {
       if (block.hasActiveBlockFragmentWidget(alsoCheckChildren: true) &&
           block.queryDataState == DataState.pending) {
         founds.add(_ScalarOrBlockOrFormWrapper.block(block));
-      } else if (block.blockForm != null &&
-          block.blockForm!.hasActiveUIComponent() &&
-          block.blockForm!.dataState == DataState.pending) {
-        founds.add(_ScalarOrBlockOrFormWrapper.blockForm(block.blockForm!));
+      } else if (block.formModel != null &&
+          block.formModel!.hasActiveUIComponent() &&
+          block.formModel!.dataState == DataState.pending) {
+        founds.add(_ScalarOrBlockOrFormWrapper.formModel(block.formModel!));
       } else {
         __findTopLazyBlocksCascade(block._childBlocks, founds);
       }
@@ -683,14 +683,14 @@ abstract class Shelf extends _XBase {
     required _FilterModelOpt? forceFilterModelOpt,
     required List<_ScalarOpt> forceQueryScalarOpts,
     required List<_BlockOpt> forceQueryBlockOpts,
-    required List<_BlockFormOpt> forceQueryBlockFormOpts,
+    required List<_FormModelOpt> forceQueryFormModelOpts,
   }) async {
     _XShelf xShelf = _XShelf(
       shelf: this,
       forceFilterModelOpt: forceFilterModelOpt,
       forceQueryScalarOpts: forceQueryScalarOpts,
       forceQueryBlockOpts: forceQueryBlockOpts,
-      forceQueryBlockFormOpts: forceQueryBlockFormOpts,
+      forceQueryFormModelOpts: forceQueryFormModelOpts,
     );
     //
     await _executeQueryXShelf(xShelf: xShelf);
@@ -728,16 +728,16 @@ abstract class Shelf extends _XBase {
       );
     }
     //
-    // for (_XBlockForm xBlockForm in xShelf.allXBlockForms) {
-    //   if (!xBlockForm.forceForm) {
+    // for (_XFormModel xFormModel in xShelf.allXFormModels) {
+    //   if (!xFormModel.forceForm) {
     //     continue;
     //   }
     //   //
     //   // Add to Queue:
     //   //
     //   _taskUnitQueue.addTaskUnit(
-    //     _BlockFormLoadFormTaskUnit(
-    //       xBlockForm: xBlockForm,
+    //     _FormModelLoadFormTaskUnit(
+    //       xFormModel: xFormModel,
     //     ),
     //   );
     // }
@@ -751,7 +751,7 @@ abstract class Shelf extends _XBase {
   String _toString({
     required List<_ScalarOpt> forceQueryScalarOpts,
     required List<_BlockOpt> forceQueryBlockOpts,
-    required List<_BlockFormOpt> forceQueryBlockFormOpts,
+    required List<_FormModelOpt> forceQueryFormModelOpts,
   }) {
     String info = "";
     if (forceQueryScalarOpts.isNotEmpty) {
@@ -773,9 +773,9 @@ abstract class Shelf extends _XBase {
         info = "$info, $s";
       }
     }
-    if (forceQueryBlockFormOpts.isNotEmpty) {
-      String s = forceQueryBlockFormOpts
-          .map((opt) => getClassName(opt.blockForm))
+    if (forceQueryFormModelOpts.isNotEmpty) {
+      String s = forceQueryFormModelOpts
+          .map((opt) => getClassName(opt.formModel))
           .join(", ");
       if (info.isEmpty) {
         info = s;

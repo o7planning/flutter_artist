@@ -1,19 +1,19 @@
 part of '../flutter_artist.dart';
 
-class BlockFormData<
+class FormModelData<
     ID extends Object,
     ITEM_DETAIL extends Object,
     FILTER_INPUT extends FilterInput,
     FILTER_CRITERIA extends FilterCriteria, //
     EXTRA_FORM_INPUT extends ExtraFormInput> {
   ///
-  /// Owner BlockForm.
+  /// Owner FormModel.
   ///
-  final BlockForm<
+  final FormModel<
       ID, //
       ITEM_DETAIL,
       FILTER_CRITERIA,
-      EXTRA_FORM_INPUT> blockForm;
+      EXTRA_FORM_INPUT> formModel;
 
   bool _justInitialized = false;
 
@@ -45,7 +45,7 @@ class BlockFormData<
   // ***************************************************************************
   // ***************************************************************************
 
-  BlockFormData({required this.blockForm});
+  FormModelData({required this.formModel});
 
   // ***************************************************************************
   // ***************************************************************************

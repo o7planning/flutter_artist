@@ -75,8 +75,8 @@ const IconData _blockCustomControlBarIconData =
     cupertino.CupertinoIcons.gamecontroller_fill;
 
 const IconData _filterModelIconData = Icons.filter_alt_outlined;
-const IconData _blockFormIconData = cupertino.CupertinoIcons.film_fill;
-const IconData _blockFormNoneIconData = cupertino.CupertinoIcons.capsule;
+const IconData _formModelIconData = cupertino.CupertinoIcons.film_fill;
+const IconData _formModelNoneIconData = cupertino.CupertinoIcons.capsule;
 
 const IconData _otherClassIconData =
     cupertino.CupertinoIcons.person_crop_circle;

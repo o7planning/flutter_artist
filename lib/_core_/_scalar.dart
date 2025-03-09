@@ -450,7 +450,7 @@ abstract class Scalar<
       ),
       forceQueryScalarOpts: forceQueryScalarOpts,
       forceQueryBlockOpts: [],
-      forceQueryBlockFormOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
     _XScalar thisXScalar = xShelf.findXScalarByName(this.name)!;
@@ -495,7 +495,7 @@ abstract class Scalar<
         _ScalarOpt(scalar: this),
       ],
       forceQueryBlockOpts: [],
-      forceQueryBlockFormOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
     _XScalar xScalar = xShelf.findXScalarByName(this.name)!;

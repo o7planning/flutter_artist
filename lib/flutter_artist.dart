@@ -76,11 +76,11 @@ part '_core_/_block.dart';
 
 part '_core_/_block_data.dart';
 
-part '_core_/_block_form.dart';
+part '_core_/_form_model.dart';
 
-part '_core_/_block_form_data.dart';
+part '_core_/_form_model_data.dart';
 
-part '_core_/_block_form_leave_safely.dart';
+part '_core_/_form_leave_safely.dart';
 
 part '_core_/_block_or_scalar.dart';
 
@@ -132,7 +132,7 @@ part '_core_/_typedef.dart';
 
 part '_core_/_x_base.dart';
 
-part '_core_query_/_block_form_opt.dart';
+part '_core_query_/_form_model_opt.dart';
 
 part '_core_query_/_block_opt.dart';
 
@@ -148,7 +148,7 @@ part '_task_unit_/_scalar_query_task_unit.dart';
 
 part '_core_query_/_x_block.dart';
 
-part '_core_query_/_x_block_form.dart';
+part '_core_query_/_x_form_model.dart';
 
 part '_core_query_/_x_filter_model.dart';
 
@@ -292,9 +292,9 @@ part '_task_unit_/__task_unit_queue.dart';
 
 part '_task_unit_/_block_delete_item_task_unit.dart';
 
-part '_task_unit_/_block_form_save_task_unit.dart';
+part '_task_unit_/_form_model_save_task_unit.dart';
 
-part '_task_unit_/_block_form_load_form_task_unit.dart';
+part '_task_unit_/_form_model_load_form_task_unit.dart';
 
 part '_task_unit_/_block_query_task_unit.dart';
 

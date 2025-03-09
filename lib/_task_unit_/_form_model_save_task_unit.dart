@@ -1,17 +1,17 @@
 part of '../flutter_artist.dart';
 
 class _SaveFormSaveTaskUnit extends _TaskUnit {
-  _XBlockForm xBlockForm;
+  _XFormModel xFormModel;
 
   _SaveFormSaveTaskUnit({
-    required this.xBlockForm,
+    required this.xFormModel,
   });
 
   @override
-  Shelf get shelf => xBlockForm.blockForm.block.shelf;
+  Shelf get shelf => xFormModel.formModel.block.shelf;
 
   @override
   String getObjectName() {
-    return xBlockForm.blockForm.block.name;
+    return xFormModel.formModel.block.name;
   }
 }

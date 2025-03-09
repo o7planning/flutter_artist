@@ -1,10 +1,10 @@
 part of '../flutter_artist.dart';
 
-abstract class FormView<BLOCK_FORM extends BlockForm> extends StatelessWidget {
-  final BLOCK_FORM blockForm;
+abstract class FormView<FORM_MODEL extends FormModel> extends StatelessWidget {
+  final FORM_MODEL formModel;
 
   const FormView({
-    required this.blockForm,
+    required this.formModel,
     super.key,
   });
 
@@ -14,7 +14,7 @@ abstract class FormView<BLOCK_FORM extends BlockForm> extends StatelessWidget {
     return _FormViewBuilder(
       ownerClassInstance: this,
       description: '',
-      blockForm: blockForm,
+      formModel: formModel,
       build: () {
         return buildContent(context);
       },

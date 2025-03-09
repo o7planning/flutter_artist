@@ -157,11 +157,11 @@ abstract class Block<
 
   String? get parentBlockName => parent?.name;
 
-  final BlockForm<
+  final FormModel<
       ID, //
       ITEM_DETAIL,
       FILTER_CRITERIA,
-      EXTRA_FORM_INPUT>? blockForm;
+      EXTRA_FORM_INPUT>? formModel;
 
   final List<Block> _childBlocks;
 
@@ -253,7 +253,7 @@ abstract class Block<
     this.hiddenBehavior = BlockHiddenBehavior.none,
     this.leaveTheFormSafely = true,
     required String? filterModelName,
-    required this.blockForm,
+    required this.formModel,
     required this.fireEvent,
     required List<Type> listenItemTypes,
     required List<Block>? childBlocks,
@@ -267,8 +267,8 @@ abstract class Block<
     for (Block childBlock in _childBlocks) {
       childBlock.parent = this;
     }
-    if (blockForm != null) {
-      blockForm!.block = this;
+    if (formModel != null) {
+      formModel!.block = this;
     }
   }
 
@@ -283,8 +283,8 @@ abstract class Block<
     __assertThisXBlock(thisXBlock);
     //
     this.data._clearWithDataState(queryDataState: queryDataState);
-    if (blockForm != null) {
-      blockForm!._clearWithDataState(formDataState: formDataState);
+    if (formModel != null) {
+      formModel!._clearWithDataState(formDataState: formDataState);
     }
   }
 
@@ -626,8 +626,8 @@ abstract class Block<
       ret.addAll(_controlWidgetStates);
     }
     //
-    if (withForm && blockForm != null) {
-      ret.addAll(blockForm!._formWidgetStates);
+    if (withForm && formModel != null) {
+      ret.addAll(formModel!._formWidgetStates);
     }
     return ret;
   }
@@ -641,7 +641,7 @@ abstract class Block<
         _controlBarWidgetStates.isNotEmpty ||
         _controlWidgetStates.isNotEmpty ||
         _paginationWidgetStates.isNotEmpty ||
-        (blockForm?.hasMountedUIComponent() ?? false);
+        (formModel?.hasMountedUIComponent() ?? false);
   }
 
   // ***************************************************************************
@@ -657,7 +657,7 @@ abstract class Block<
       }
     }
     // Form
-    active = blockForm != null && blockForm!.hasActiveUIComponent();
+    active = formModel != null && formModel!.hasActiveUIComponent();
     if (active) {
       return true;
     }
@@ -937,9 +937,9 @@ abstract class Block<
         currentItem != null && this.data.containsItem(item: currentItem);
     final ITEM? candidateCurrentItem = currentItemInList ? currentItem : null;
     //
-    if (blockForm != null) {
+    if (formModel != null) {
       if (!currentItemInList) {
-        blockForm!._clearWithDataState(formDataState: DataState.ready);
+        formModel!._clearWithDataState(formDataState: DataState.ready);
       }
     }
     switch (queryDataState) {
@@ -1261,16 +1261,16 @@ abstract class Block<
       );
     }
     //
-    // BlockForm:
+    // FormModel:
     //
-    if (thisXBlock.xBlockForm != null) {
+    if (thisXBlock.xFormModel != null) {
       // (newCurrent)
-      thisXBlock.xBlockForm!.blockForm._clearWithDataState(
+      thisXBlock.xFormModel!.formModel._clearWithDataState(
         formDataState: DataState.pending,
       );
       _taskUnitQueue.addTaskUnit(
-        _BlockFormLoadFormTaskUnit(
-          xBlockForm: thisXBlock.xBlockForm!,
+        _FormModelLoadFormTaskUnit(
+          xFormModel: thisXBlock.xFormModel!,
         ),
       );
     }
@@ -1375,9 +1375,9 @@ abstract class Block<
           refreshedItemDetail: null,
         );
     //
-    if (this.blockForm != null) {
+    if (this.formModel != null) {
       // Clear Form:
-      this.blockForm!._clearWithDataState(
+      this.formModel!._clearWithDataState(
             formDataState: DataState.ready,
           );
     }
@@ -1700,13 +1700,13 @@ abstract class Block<
         item: refreshedItem,
       );
       //
-      if (blockForm != null) {
-        blockForm!.data._setCurrentItem(
+      if (formModel != null) {
+        formModel!.data._setCurrentItem(
           refreshedItemDetail: savedItemDetail,
           formMode: FormMode.edit,
           dataState: DataState.pending,
         );
-        bool success = await blockForm!._prepareMasterDataAndFormData(
+        bool success = await formModel!._prepareMasterDataAndFormData(
           extraFormInput: null,
           filterCriteria: this.data.filterCriteria,
           refreshedItemDetail: savedItemDetail,
@@ -1747,9 +1747,9 @@ abstract class Block<
             refreshedItemDetail: null,
           );
       //
-      if (this.blockForm != null) {
+      if (this.formModel != null) {
         // Clear Form:
-        this.blockForm!._clearWithDataState(
+        this.formModel!._clearWithDataState(
               formDataState: DataState.ready,
             );
       }
@@ -1802,7 +1802,7 @@ abstract class Block<
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [],
-      forceQueryBlockFormOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
 
@@ -1879,7 +1879,7 @@ abstract class Block<
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [],
-      forceQueryBlockFormOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
@@ -2043,7 +2043,7 @@ abstract class Block<
           suggestedSelection: suggestedSelection,
         ),
       ],
-      forceQueryBlockFormOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
     _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
@@ -2098,7 +2098,7 @@ abstract class Block<
           postQueryBehavior: PostQueryBehavior.selectAvailableItemToEdit,
         ),
       ],
-      forceQueryBlockFormOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
     _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
@@ -2114,7 +2114,7 @@ abstract class Block<
 
   ///
   /// Clear and prepare Form to create new record.
-  /// If this block has a BlockForm its data state set to "Ready", else its data state set to "Pending".
+  /// If this block has a FormModel its data state set to "Ready", else its data state set to "Pending".
   ///
   @RootMethod()
   Future<BlockQueryResult?> queryAndPrepareToCreate({
@@ -2145,7 +2145,7 @@ abstract class Block<
           postQueryBehavior: PostQueryBehavior.createNewItem,
         ),
       ],
-      forceQueryBlockFormOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
     _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
@@ -2381,7 +2381,7 @@ abstract class Block<
       ),
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: forceQueryBlockOpts,
-      forceQueryBlockFormOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
@@ -2435,7 +2435,7 @@ abstract class Block<
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [],
-      forceQueryBlockFormOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
@@ -2488,7 +2488,7 @@ abstract class Block<
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [],
-      forceQueryBlockFormOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
@@ -2541,7 +2541,7 @@ abstract class Block<
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [],
-      forceQueryBlockFormOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
@@ -2745,7 +2745,7 @@ abstract class Block<
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [],
-      forceQueryBlockFormOpts: [],
+      forceQueryFormModelOpts: [],
     );
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
@@ -2761,7 +2761,7 @@ abstract class Block<
       queryDataState: DataState.ready,
       formDataState: DataState.pending, // ?????
     );
-    blockForm!.data._setCurrentItem(
+    formModel!.data._setCurrentItem(
       refreshedItemDetail: nullItemDetail,
       formMode: FormMode.creation,
       dataState: DataState.pending,
@@ -2771,7 +2771,7 @@ abstract class Block<
     try {
       __refreshPreparingFormCreationState(isPreparingFormCreation: true);
       //
-      success = await blockForm!._prepareMasterDataAndFormData(
+      success = await formModel!._prepareMasterDataAndFormData(
         extraFormInput: extraFormInput,
         filterCriteria: this.data.filterCriteria,
         refreshedItemDetail: nullItemDetail,
@@ -2858,7 +2858,7 @@ abstract class Block<
         forceFilterModelOpt: null,
         forceQueryScalarOpts: [],
         forceQueryBlockOpts: [],
-        forceQueryBlockFormOpts: []);
+        forceQueryFormModelOpts: []);
     _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
     List<ITEM> deleteItems = this.data.moveCurrentItemToEndOfList(
           itemList: items,
@@ -3027,7 +3027,7 @@ abstract class Block<
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [],
-      forceQueryBlockFormOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
@@ -3206,7 +3206,7 @@ abstract class Block<
     updateControlBarWidgets(force: force);
     updateControlWidgets(force: force);
     //
-    blockForm?.updateAllUIComponents(force: force);
+    formModel?.updateAllUIComponents(force: force);
   }
 
   // ***************************************************************************
@@ -3466,8 +3466,8 @@ abstract class Block<
       return false;
     }
     //
-    if (parent!.blockForm != null) {
-      switch (parent!.blockForm!.formMode) {
+    if (parent!.formModel != null) {
+      switch (parent!.formModel!.formMode) {
         case FormMode.none:
         case FormMode.creation:
           return false;
@@ -3491,8 +3491,8 @@ abstract class Block<
       return true;
     }
     // TODO: Kiểm tra nếu item là current thì mới cần đk này:
-    if (parent!.blockForm != null) {
-      switch (parent!.blockForm!.formMode) {
+    if (parent!.formModel != null) {
+      switch (parent!.formModel!.formMode) {
         case FormMode.none:
         case FormMode.creation:
           return false;
@@ -3516,8 +3516,8 @@ abstract class Block<
       return true;
     }
     //
-    if (parent!.blockForm != null) {
-      switch (parent!.blockForm!.formMode) {
+    if (parent!.formModel != null) {
+      switch (parent!.formModel!.formMode) {
         case FormMode.none:
         case FormMode.creation:
           return false;
@@ -3540,8 +3540,8 @@ abstract class Block<
     if (parent == null) {
       return true;
     }
-    if (parent!.blockForm != null) {
-      switch (parent!.blockForm!.formMode) {
+    if (parent!.formModel != null) {
+      switch (parent!.formModel!.formMode) {
         case FormMode.none:
         case FormMode.creation:
           return false;
@@ -3573,7 +3573,7 @@ abstract class Block<
   // ***************************************************************************
 
   bool __canCreateItem({required bool checkAllow}) {
-    if (blockForm == null || this.__isPreparingFormCreation) {
+    if (formModel == null || this.__isPreparingFormCreation) {
       return false;
     }
     bool ancestorSafe = __checkAncestorsSafeToCreate();
@@ -3587,10 +3587,10 @@ abstract class Block<
   // ***************************************************************************
 
   bool __canResetForm({required bool checkAllow}) {
-    if (blockForm == null || !blockForm!.isDirty() || this.__isSaving) {
+    if (formModel == null || !formModel!.isDirty() || this.__isSaving) {
       return false;
     }
-    switch (blockForm!.data._formMode) {
+    switch (formModel!.data._formMode) {
       case FormMode.none:
         return false;
       case FormMode.creation:
@@ -3611,11 +3611,11 @@ abstract class Block<
   // ***************************************************************************
 
   bool __canSaveForm({required bool checkAllow}) {
-    if (blockForm == null || this.__isSaving) {
+    if (formModel == null || this.__isSaving) {
       return false;
     }
     bool isAllow = false;
-    switch (blockForm!.data._formMode) {
+    switch (formModel!.data._formMode) {
       case FormMode.none:
         return false;
       case FormMode.creation:
@@ -3626,7 +3626,7 @@ abstract class Block<
         break;
     }
     //
-    if (isAllow && blockForm!.isDirty()) {
+    if (isAllow && formModel!.isDirty()) {
       return true;
     }
     return false;
@@ -3639,7 +3639,7 @@ abstract class Block<
     required ITEM item,
     required bool checkAllow,
   }) {
-    if (blockForm == null || __isSaving) {
+    if (formModel == null || __isSaving) {
       return false;
     }
     //
@@ -3647,7 +3647,7 @@ abstract class Block<
     if (!ancestorsSafe) {
       return false;
     }
-    switch (blockForm!.data._formMode) {
+    switch (formModel!.data._formMode) {
       case FormMode.none:
         return false;
       case FormMode.creation:
@@ -3666,8 +3666,8 @@ abstract class Block<
   /// Edit on creation-mode
   ///
   bool __isEnableFormToModify({required bool checkAllow}) {
-    if (blockForm != null) {
-      switch (blockForm!.data._formMode) {
+    if (formModel != null) {
+      switch (formModel!.data._formMode) {
         case FormMode.creation:
           return true;
         case FormMode.edit:
@@ -3694,8 +3694,8 @@ abstract class Block<
       return false;
     }
     //
-    if (blockForm != null) {
-      switch (blockForm!.data._formMode) {
+    if (formModel != null) {
+      switch (formModel!.data._formMode) {
         case FormMode.none:
         case FormMode.creation:
           return false;
@@ -3817,7 +3817,7 @@ abstract class Block<
 
   bool canShowFormInfo() {
     ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
-    return blockForm != null &&
+    return formModel != null &&
         loggedInUser != null &&
         loggedInUser.isSystemUser;
   }
