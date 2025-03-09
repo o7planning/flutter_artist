@@ -3195,7 +3195,7 @@ abstract class Block<
 
   void updateAllUIComponents({
     required bool withoutFilters,
-    bool force = false,
+    bool force = true,
   }) {
     if (!withoutFilters) {
       dataFilter?.updateAllUIComponents();

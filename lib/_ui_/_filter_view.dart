@@ -35,17 +35,31 @@ abstract class FilterView<DATA_FILTER extends DataFilter>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          TextButton(
-            style: TextButton.styleFrom(
-              minimumSize: Size.zero,
-              padding: EdgeInsets.zero,
-            ),
-            onPressed: () {
-              showDataFilterDebugDialog();
-            },
-            child: Icon(_dataFilterDebugIconData),
-          ),
+          buildDebugButton(),
         ],
+      ),
+    );
+  }
+
+  Widget buildDebugButton({
+    ButtonStyle? style,
+    IconData? iconData,
+    double? iconSize,
+    Color? iconColor,
+  }) {
+    return TextButton(
+      style: style ??
+          TextButton.styleFrom(
+            minimumSize: Size.zero,
+            padding: EdgeInsets.zero,
+          ),
+      onPressed: () {
+        showDataFilterDebugDialog();
+      },
+      child: Icon(
+        _dataFilterDebugIconData,
+        size: iconSize ?? 16,
+        color: iconColor ?? null,
       ),
     );
   }
