@@ -56,9 +56,7 @@ const IconData _clearCodeFlowIconData = cupertino.CupertinoIcons.paintbrush;
 
 const IconData _uiComponentsIconData = cupertino.CupertinoIcons.color_filter;
 
-
 const IconData _filterModelDebugIconData = cupertino.CupertinoIcons.ant_circle;
-
 
 const IconData _restDebugIconData = cupertino.CupertinoIcons.ant;
 

@@ -89,7 +89,8 @@ class _XShelf {
   // ***************************************************************************
 
   void __setForceFilterModelOpt(_FilterModelOpt? forceFilterModelOpt) {
-    if (forceFilterModelOpt != null && forceFilterModelOpt.filterInput != null) {
+    if (forceFilterModelOpt != null &&
+        forceFilterModelOpt.filterInput != null) {
       _XFilterModel xFilterModel =
           allXFilterModelMap[forceFilterModelOpt.filterModel.name]!;
       xFilterModel.filterInput = forceFilterModelOpt.filterInput;
