@@ -9,7 +9,7 @@ abstract class FilterModel<
   late final String name;
 
   String get id {
-    return "data-filter > ${shelf.name} > $name";
+    return "filter-model > ${shelf.name} > $name";
   }
 
   final List<Block> _blocks = [];
@@ -37,7 +37,7 @@ abstract class FilterModel<
 
   FILTER_CRITERIA? _filterCriteria;
 
-  late final FilterModelData data = FilterModelData(dataFilter: this);
+  late final FilterModelData data = FilterModelData(filterModel: this);
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
   FILTER_CRITERIA? get filterCriteria => _filterCriteria;
@@ -178,7 +178,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   ///
-  /// Call this method to initialize the necessary data for the DataFilter.
+  /// Call this method to initialize the necessary data for the FilterModel.
   /// For example, the list of items of the [Dropdown].
   ///
   /// This method is called before [filterInputToCriteriaDataMap] method.
@@ -337,7 +337,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   ///
-  /// Query all Scalars and Blocks of this DataFilter if they are visible on the UI.
+  /// Query all Scalars and Blocks of this FilterModel if they are visible on the UI.
   ///
   /// Any Scalar or Block that is not queried will be set to LAZY state.
   ///
@@ -355,7 +355,7 @@ abstract class FilterModel<
     );
     _XShelf xShelf = await shelf._queryAll(
       forceFilterModelOpt: _FilterModelOpt(
-        dataFilter: this,
+        filterModel: this,
         filterInput: filterInput,
       ),
       forceQueryScalarOpts: _scalars.map((s) => _ScalarOpt(scalar: s)).toList(),
@@ -452,7 +452,7 @@ abstract class FilterModel<
     await _showFilterModelInfoDialog(
       context: context,
       locationInfo: "locationInfo",
-      dataFilter: this,
+      filterModel: this,
     );
   }
 }

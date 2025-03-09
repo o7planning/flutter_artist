@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
 class _FilterViewBuilder extends _RefreshableWidget {
-  final FilterModel dataFilter;
+  final FilterModel filterModel;
 
   final Widget Function() build;
 
@@ -9,7 +9,7 @@ class _FilterViewBuilder extends _RefreshableWidget {
     super.key,
     required super.ownerClassInstance,
     required super.description,
-    required this.dataFilter,
+    required this.filterModel,
     required this.build,
   });
 
@@ -25,7 +25,7 @@ class _FilterViewBuilderState
 
   @override
   String getWidgetOwnerClassName() {
-    return getClassName(widget.dataFilter);
+    return getClassName(widget.filterModel);
   }
 
   @override
@@ -33,7 +33,7 @@ class _FilterViewBuilderState
 
   @override
   void addFilterFragmentWidgetState({required bool isShowing}) {
-    widget.dataFilter._addFilterFragmentWidgetState(
+    widget.filterModel._addFilterFragmentWidgetState(
       widgetState: this,
       isShowing: true,
     );
@@ -41,7 +41,7 @@ class _FilterViewBuilderState
 
   @override
   void removeFilterFragmentWidgetState() {
-    widget.dataFilter._removeFilterFragmentWidgetState(
+    widget.filterModel._removeFilterFragmentWidgetState(
       widgetState: this,
     );
   }
@@ -49,7 +49,7 @@ class _FilterViewBuilderState
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    widget.dataFilter._formKey = formKey;
+    widget.filterModel._formKey = formKey;
   }
 
   @override
@@ -58,17 +58,17 @@ class _FilterViewBuilderState
     //
     return FormBuilder(
       key: formKey,
-      initialValue: widget.dataFilter.initFilterValue(),
+      initialValue: widget.filterModel.initFilterValue(),
       onChanged: () {
-        widget.dataFilter._onChangeFromFilterView();
+        widget.filterModel._onChangeFromFilterView();
         if (mounted) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            widget.dataFilter.updateAllUIComponents();
+            widget.filterModel.updateAllUIComponents();
           });
         }
       },
       child: AbsorbPointer(
-        absorbing: !widget.dataFilter.isEnabled(),
+        absorbing: !widget.filterModel.isEnabled(),
         child: widget.build(),
       ),
     );
@@ -78,11 +78,11 @@ class _FilterViewBuilderState
     // IMPORTANT: Do not remove below line:
     await Future.delayed(Duration.zero);
     //
-    widget.dataFilter._onChangeFromFilterView();
+    widget.filterModel._onChangeFromFilterView();
   }
 
   @override
   void checkAndFreeMemory() {
-    FlutterArtist.storage._checkToRemoveShelf(widget.dataFilter.shelf);
+    FlutterArtist.storage._checkToRemoveShelf(widget.filterModel.shelf);
   }
 }

@@ -1,15 +1,15 @@
 part of '../flutter_artist.dart';
 
 class _FilterModelCriteriaView extends StatelessWidget {
-  final FilterModel dataFilter;
+  final FilterModel filterModel;
 
-  const _FilterModelCriteriaView({required this.dataFilter});
+  const _FilterModelCriteriaView({required this.filterModel});
 
   @override
   Widget build(BuildContext context) {
-    String dataFilterClassName = getClassName(dataFilter);
-    String criteriaClassName = dataFilter.getFilterCriteriaTypeAsString();
-    FilterCriteria? filterCriteria = dataFilter.filterCriteria;
+    String filterModelClassName = getClassName(filterModel);
+    String criteriaClassName = filterModel.getFilterCriteriaTypeAsString();
+    FilterCriteria? filterCriteria = filterModel.filterCriteria;
     //
     return Padding(
       padding: EdgeInsets.all(5),
@@ -18,16 +18,16 @@ class _FilterModelCriteriaView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildCriteriaShortDocument(
-            dataFilterClassName: dataFilterClassName,
+            filterModelClassName: filterModelClassName,
             criteriaClassName: criteriaClassName,
           ),
           _BlocksScalarsView(
-            dataFilter: dataFilter,
+            filterModel: filterModel,
           ),
           Divider(),
           _CriteriaValuesView(
             filterCriteria: filterCriteria,
-            filterCriteriaPath: "$dataFilterClassName.filterCriteria",
+            filterCriteriaPath: "$filterModelClassName.filterCriteria",
           ),
         ],
       ),
@@ -35,7 +35,7 @@ class _FilterModelCriteriaView extends StatelessWidget {
   }
 
   Widget _buildCriteriaShortDocument({
-    required String dataFilterClassName,
+    required String filterModelClassName,
     required String criteriaClassName,
   }) {
     return SelectableText.rich(
@@ -52,14 +52,14 @@ class _FilterModelCriteriaView extends StatelessWidget {
           ),
           TextSpan(text: " object is created by the "),
           TextSpan(
-            text: "$dataFilterClassName.createFilterCriteria()",
+            text: "$filterModelClassName.createFilterCriteria()",
             style: TextStyle(
               fontWeight: FontWeight.bold,
             ),
           ),
           TextSpan(text: " method, and can be retrieved via the "),
           TextSpan(
-            text: "$dataFilterClassName.filterCriteria",
+            text: "$filterModelClassName.filterCriteria",
             style: TextStyle(
               fontWeight: FontWeight.bold,
             ),

@@ -13,7 +13,7 @@ abstract class _BlkOrScrCriteriaView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? dataFilterClassName = getFilterModelClassName();
+    String? filterModelClassName = getFilterModelClassName();
     FilterCriteria? filterCriteria = getFilterCriteria();
     String? criteriaClassName =
         filterCriteria == null ? null : getClassName(filterCriteria);
@@ -24,10 +24,10 @@ abstract class _BlkOrScrCriteriaView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (dataFilterClassName == null) //
+          if (filterModelClassName == null) //
             _showNoFilterModelInfo(),
           _buildCriteriaShortDocument(
-            dataFilterClassName: dataFilterClassName,
+            filterModelClassName: filterModelClassName,
             criteriaClassName: criteriaClassName,
           ),
           if (criteriaClassName != null) Divider(),
@@ -59,7 +59,7 @@ abstract class _BlkOrScrCriteriaView extends StatelessWidget {
   }
 
   Widget _buildCriteriaShortDocument({
-    required String? dataFilterClassName,
+    required String? filterModelClassName,
     required String? criteriaClassName,
   }) {
     if (criteriaClassName == null) {
@@ -85,7 +85,7 @@ abstract class _BlkOrScrCriteriaView extends StatelessWidget {
             ),
             TextSpan(text: ". It is created by "),
             TextSpan(
-              text: "$dataFilterClassName.createFilterCriteria()",
+              text: "$filterModelClassName.createFilterCriteria()",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),

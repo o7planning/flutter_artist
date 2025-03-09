@@ -4,9 +4,9 @@ class FilterModelData<
     FILTER_INPUT extends FilterInput, //
     FILTER_CRITERIA extends FilterCriteria> {
   ///
-  /// Owner DataFilter.
+  /// Owner FilterModel.
   ///
-  final FilterModel<FILTER_INPUT, FILTER_CRITERIA> dataFilter;
+  final FilterModel<FILTER_INPUT, FILTER_CRITERIA> filterModel;
 
   bool _justInitialized = false;
 
@@ -32,7 +32,7 @@ class FilterModelData<
   // ***************************************************************************
   // ***************************************************************************
 
-  FilterModelData({required this.dataFilter});
+  FilterModelData({required this.filterModel});
 
   // ***************************************************************************
   // ***************************************************************************

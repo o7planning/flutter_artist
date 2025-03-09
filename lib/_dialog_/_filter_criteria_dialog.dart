@@ -4,7 +4,7 @@ part of '../flutter_artist.dart';
 // -----------------------------------------------------------------------------
 
 class _FilterCriteriaDialog extends StatefulWidget {
-  final FilterModel? dataFilter;
+  final FilterModel? filterModel;
   final Scalar? scalar;
   final Block? block;
 
@@ -12,16 +12,16 @@ class _FilterCriteriaDialog extends StatefulWidget {
     required Block this.block,
     super.key,
   })  : scalar = null,
-        dataFilter = null;
+        filterModel = null;
 
   const _FilterCriteriaDialog.scalar({
     required Scalar this.scalar,
     super.key,
   })  : block = null,
-        dataFilter = null;
+        filterModel = null;
 
-  const _FilterCriteriaDialog.dataFilter({
-    required FilterModel this.dataFilter,
+  const _FilterCriteriaDialog.filterModel({
+    required FilterModel this.filterModel,
     super.key,
   })  : block = null,
         scalar = null;
@@ -40,8 +40,8 @@ class _FilterCriteriaDialogState extends State<_FilterCriteriaDialog> {
       return "Current FilterCriteria of ${getClassName(widget.scalar!)}";
     } else if (widget.block != null) {
       return "Current FilterCriteria of ${getClassName(widget.block!)}";
-    } else if (widget.dataFilter != null) {
-      return "Current FilterCriteria of ${getClassName(widget.dataFilter!)}";
+    } else if (widget.filterModel != null) {
+      return "Current FilterCriteria of ${getClassName(widget.filterModel!)}";
     } else {
       throw UnimplementedError();
     }
@@ -80,9 +80,9 @@ class _FilterCriteriaDialogState extends State<_FilterCriteriaDialog> {
       child = _FilterCriteriaDebugView.block(block: widget.block!);
     } else if (widget.scalar != null) {
       child = _FilterCriteriaDebugView.scalar(scalar: widget.scalar!);
-    } else if (widget.dataFilter != null) {
-      child = _FilterCriteriaDebugView.dataFilter(
-        dataFilter: widget.dataFilter!,
+    } else if (widget.filterModel != null) {
+      child = _FilterCriteriaDebugView.filterModel(
+        filterModel: widget.filterModel!,
       );
     } else {
       child = Center(
@@ -99,13 +99,13 @@ class _FilterCriteriaDialogState extends State<_FilterCriteriaDialog> {
 
 Future<void> showFilterCriteriaDialog({
   required BuildContext context,
-  required FilterModel dataFilter,
+  required FilterModel filterModel,
 }) async {
   await showDialog(
     context: context,
     builder: (BuildContext context) {
-      return _FilterCriteriaDialog.dataFilter(
-        dataFilter: dataFilter,
+      return _FilterCriteriaDialog.filterModel(
+        filterModel: filterModel,
       );
     },
   );

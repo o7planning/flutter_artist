@@ -3,7 +3,7 @@ part of '../flutter_artist.dart';
 class _XShelf {
   final Shelf shelf;
 
-  // All DataFilters
+  // All FilterModels
   final List<_XFilterModel> allXFilterModels = [];
 
   // All Root Blocks
@@ -15,8 +15,8 @@ class _XShelf {
   // All Scalars
   final List<_XBlockForm> allXBlockForms = [];
 
-  // All DataFilters of Shelf
-  // <String dataFilterName, _XScalar>
+  // All FilterModels of Shelf
+  // <String filterModelName, _XScalar>
   final Map<String, _XFilterModel> allXFilterModelMap = {};
 
   // All Scalars of Shelf
@@ -39,7 +39,7 @@ class _XShelf {
     required List<_BlockFormOpt> forceQueryBlockFormOpts,
   }) {
     if (forceFilterModelOpt != null) {
-      assert(forceFilterModelOpt.dataFilter.shelf == shelf);
+      assert(forceFilterModelOpt.filterModel.shelf == shelf);
     }
     for (_ScalarOpt scalarOpt in forceQueryScalarOpts) {
       assert(scalarOpt.scalar.shelf == shelf);
@@ -91,20 +91,20 @@ class _XShelf {
   void __setForceFilterModelOpt(_FilterModelOpt? forceFilterModelOpt) {
     if (forceFilterModelOpt != null && forceFilterModelOpt.filterInput != null) {
       _XFilterModel xFilterModel =
-          allXFilterModelMap[forceFilterModelOpt.dataFilter.name]!;
+          allXFilterModelMap[forceFilterModelOpt.filterModel.name]!;
       xFilterModel.filterInput = forceFilterModelOpt.filterInput;
 
-      FilterModel dataFilter = forceFilterModelOpt.dataFilter;
+      FilterModel filterModel = forceFilterModelOpt.filterModel;
 
       //
       // TODO: Đang kiểm tra các Block hoặc Scalar nào bị ảnh hưởng bởi FilterInput trên.
       //
-      for (Scalar scalar in dataFilter.scalars) {
+      for (Scalar scalar in filterModel.scalars) {
         _XScalar xScalar = allXScalarMap[scalar.name]!;
         // TODO: Chưa sử dụng thuộc tính này.
         xScalar.affectByFilterInput = true;
       }
-      for (Block block in dataFilter.blocks) {
+      for (Block block in filterModel.blocks) {
         _XBlock xBlock = allXBlockMap[block.name]!;
         // TODO: Chưa sử dụng thuộc tính này.
         xBlock.affectByFilterInput = true;
@@ -196,7 +196,7 @@ class _XShelf {
   void __addXFilterModel({
     required FilterModel filterModel,
   }) {
-    _XFilterModel xFilterModel = _XFilterModel(dataFilter: filterModel);
+    _XFilterModel xFilterModel = _XFilterModel(filterModel: filterModel);
     //
     allXFilterModels.add(xFilterModel);
     allXFilterModelMap[xFilterModel.name] = xFilterModel;

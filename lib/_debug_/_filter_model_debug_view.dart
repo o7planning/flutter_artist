@@ -1,11 +1,11 @@
 part of '../flutter_artist.dart';
 
 class _FilterModelDebugView extends StatefulWidget {
-  final FilterModel dataFilter;
+  final FilterModel filterModel;
   final Function() onPressedShelf;
 
   const _FilterModelDebugView({
-    required this.dataFilter,
+    required this.filterModel,
     required this.onPressedShelf,
     super.key,
   });
@@ -34,7 +34,7 @@ class _FilterModelDebugViewState extends State<_FilterModelDebugView> {
     super.initState();
     //
     // listeners = FlutterArtist.storage._getListenerShelfBlockScalarTypes(
-    //   eventBlockOrScalar: _BlockOrScalar.block(widget.dataFilter.block),
+    //   eventBlockOrScalar: _BlockOrScalar.block(widget.filterModel.block),
     // );
     listeners = [];
   }
@@ -82,10 +82,10 @@ class _FilterModelDebugViewState extends State<_FilterModelDebugView> {
   }
 
   Widget _buildTabContainer() {
-    FilterModelData dataFilterData = widget.dataFilter.data;
-    Map<String, dynamic> initial0Value = dataFilterData.initial0FormData;
-    Map<String, dynamic> initial1Value = dataFilterData.initialFormData;
-    Map<String, dynamic> instantValue = dataFilterData.currentFormData;
+    FilterModelData filterModelData = widget.filterModel.data;
+    Map<String, dynamic> initial0Value = filterModelData.initial0FormData;
+    Map<String, dynamic> initial1Value = filterModelData.initialFormData;
+    Map<String, dynamic> instantValue = filterModelData.currentFormData;
 
     String initial0Json = toJson(initial0Value);
     String initial1Json = toJson(initial1Value);
@@ -106,7 +106,7 @@ class _FilterModelDebugViewState extends State<_FilterModelDebugView> {
         ),
         content: _buildTabContent(
           info:
-              "The values returned by ${getClassName(widget.dataFilter)}.prepareFormData() method.",
+              "The values returned by ${getClassName(widget.filterModel)}.prepareFormData() method.",
           json: initial0Json,
         ),
       ),
@@ -137,8 +137,8 @@ class _FilterModelDebugViewState extends State<_FilterModelDebugView> {
         ),
         content: _buildTabContent(
           info: "The current values of the form (Will be passed to the "
-              "${getClassName(widget.dataFilter)}.callApiCreateItem() "
-              "or ${getClassName(widget.dataFilter)}.callApiUpdateItem() method).",
+              "${getClassName(widget.filterModel)}.callApiCreateItem() "
+              "or ${getClassName(widget.filterModel)}.callApiUpdateItem() method).",
           json: instantJson,
         ),
       ),
@@ -254,7 +254,7 @@ class _FilterModelDebugViewState extends State<_FilterModelDebugView> {
           children: [
             _buildInfo(
                 info:
-                    "When you successfully add or modify a record on the '${getClassName(widget.dataFilter)}' block, "
+                    "When you successfully add or modify a record on the '${getClassName(widget.filterModel)}' block, "
                     "the listening blocks will be switched to the 'pending' state, "
                     "they will be lazily queried again when they are visible on the screen.\n"
                     "Here is a list of affected blocks or scalars:"),
@@ -304,7 +304,7 @@ class _FilterModelDebugViewState extends State<_FilterModelDebugView> {
                       height: 20,
                     ),
                     label: '',
-                    text: getClassName(widget.dataFilter.shelf),
+                    text: getClassName(widget.filterModel.shelf),
                   ),
                 ),
               ),
@@ -312,11 +312,11 @@ class _FilterModelDebugViewState extends State<_FilterModelDebugView> {
                 content: _IconLabelText(
                   style: const TextStyle(fontSize: fontSize),
                   icon: const Icon(
-                    _dataFilterIconData,
+                    _filterModelIconData,
                     size: iconSize,
                   ),
                   label: '',
-                  text: getClassName(widget.dataFilter),
+                  text: getClassName(widget.filterModel),
                 ),
               ),
             ],

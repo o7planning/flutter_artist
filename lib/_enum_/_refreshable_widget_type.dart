@@ -49,7 +49,7 @@ extension WidgetStateTypeE on RefreshableWidgetType {
   IconData get iconData {
     switch (this) {
       case RefreshableWidgetType.filter:
-        return _dataFilterIconData;
+        return _filterModelIconData;
       case RefreshableWidgetType.controlBar:
         return _blockControlBarIconData;
       case RefreshableWidgetType.customControlBar:

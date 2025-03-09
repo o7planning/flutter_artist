@@ -2,10 +2,10 @@ part of '../flutter_artist.dart';
 
 abstract class FilterView<DATA_FILTER extends FilterModel>
     extends StatelessWidget {
-  final DATA_FILTER dataFilter;
+  final DATA_FILTER filterModel;
 
   const FilterView({
-    required this.dataFilter,
+    required this.filterModel,
     super.key,
   });
 
@@ -15,7 +15,7 @@ abstract class FilterView<DATA_FILTER extends FilterModel>
     return _FilterViewBuilder(
       ownerClassInstance: this,
       description: '',
-      dataFilter: dataFilter,
+      filterModel: filterModel,
       build: () {
         return buildContent(context);
       },
@@ -57,7 +57,7 @@ abstract class FilterView<DATA_FILTER extends FilterModel>
         showFilterModelDebugDialog();
       },
       child: Icon(
-        _dataFilterDebugIconData,
+        _filterModelDebugIconData,
         size: iconSize ?? 16,
         color: iconColor ?? null,
       ),
@@ -70,7 +70,7 @@ abstract class FilterView<DATA_FILTER extends FilterModel>
     await _showFilterModelInfoDialog(
       context: context,
       locationInfo: getClassName(this),
-      dataFilter: dataFilter,
+      filterModel: filterModel,
     );
   }
 

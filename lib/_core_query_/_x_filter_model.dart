@@ -2,17 +2,17 @@ part of '../flutter_artist.dart';
 
 class _XFilterModel {
   bool queried = false;
-  final FilterModel dataFilter;
+  final FilterModel filterModel;
   FilterInput? filterInput;
 
   _XFilterModel({
-    required this.dataFilter,
+    required this.filterModel,
   });
 
-  String get name => dataFilter.name;
+  String get name => filterModel.name;
 
   @override
   String toString() {
-    return "${getClassName(dataFilter)} - queried: $queried >>> FILTER_INPUT: $filterInput";
+    return "${getClassName(filterModel)} - queried: $queried >>> FILTER_INPUT: $filterInput";
   }
 }

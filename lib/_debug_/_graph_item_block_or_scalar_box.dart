@@ -217,13 +217,13 @@ class _GraphItemBlockOrScalarBoxState
   }
 
   Widget _buildFilterColor() {
-    FilterModel? dataFilter = widget.blockOrScalar.dataFilter;
+    FilterModel? filterModel = widget.blockOrScalar.filterModel;
     Color color = Colors.white;
-    if (dataFilter != null) {
+    if (filterModel != null) {
       List<String> filterNames = widget.blockOrScalar.shelf.filterNames
         ..sort((a, b) => a.compareTo(b));
       //
-      int idx = filterNames.indexOf(dataFilter.name);
+      int idx = filterNames.indexOf(filterModel.name);
       color = _filterColors.length > idx //
           ? _filterColors[idx]
           : Colors.transparent;
@@ -283,27 +283,27 @@ class _GraphItemBlockOrScalarBoxState
   }
 
   String _getFilterTextRow1() {
-    FilterModel? dataFilter = widget.blockOrScalar.dataFilter;
-    return dataFilter == null ? "[No Filter]" : dataFilter.name;
+    FilterModel? filterModel = widget.blockOrScalar.filterModel;
+    return filterModel == null ? "[No Filter]" : filterModel.name;
   }
 
   String _getFilterTextRow2() {
-    FilterModel? dataFilter = widget.blockOrScalar.dataFilter;
+    FilterModel? filterModel = widget.blockOrScalar.filterModel;
 
-    return "${dataFilter == null ? '' : getClassName(dataFilter)} "
+    return "${filterModel == null ? '' : getClassName(filterModel)} "
         "${widget.showClassParameters ? widget.blockOrScalar.filterClassParametersDefinition : ''}";
   }
 
   Widget _buildFilterInfo() {
-    FilterModel? dataFilter = widget.blockOrScalar.dataFilter;
+    FilterModel? filterModel = widget.blockOrScalar.filterModel;
     //
     Widget row = MouseRegion(
-      onEnter: dataFilter == null
+      onEnter: filterModel == null
           ? null
           : (_) {
-              widget.refreshGraph(dataFilter.name);
+              widget.refreshGraph(filterModel.name);
             },
-      onExit: dataFilter == null
+      onExit: filterModel == null
           ? null
           : (_) {
               widget.refreshGraph(null);
@@ -316,7 +316,7 @@ class _GraphItemBlockOrScalarBoxState
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const Icon(
-                _dataFilterIconData,
+                _filterModelIconData,
                 size: 16,
               ),
               const SizedBox(width: 5),
@@ -343,20 +343,20 @@ class _GraphItemBlockOrScalarBoxState
         border: Border.all(
           width: 0.5,
           color: widget.highlighFilterModelName != null &&
-                  dataFilter?.name == widget.highlighFilterModelName
+                  filterModel?.name == widget.highlighFilterModelName
               ? _graphBoxHighlighFilterColor
               : Colors.grey,
         ),
         color: widget.highlighFilterModelName != null &&
-                dataFilter?.name == widget.highlighFilterModelName
+                filterModel?.name == widget.highlighFilterModelName
             ? _graphBoxHighlighFilterColor
             : Colors.transparent,
       ),
-      child: dataFilter == null
+      child: filterModel == null
           ? row
           : _buildCustomTooltip(
               verticalOffset: -85,
-              message: "FILTER: ${getClassName(dataFilter)} \n"
+              message: "FILTER: ${getClassName(filterModel)} \n"
                   "${widget.blockOrScalar.filterClassParametersDefinition}",
               child: row,
             ),

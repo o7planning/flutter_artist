@@ -4,11 +4,11 @@ part of '../flutter_artist.dart';
 // -----------------------------------------------------------------------------
 
 class _FilterModelInfoDialog extends StatefulWidget {
-  final FilterModel dataFilter;
+  final FilterModel filterModel;
   final String locationInfo;
 
   const _FilterModelInfoDialog({
-    required this.dataFilter,
+    required this.filterModel,
     required this.locationInfo,
     super.key,
   });
@@ -29,8 +29,8 @@ class _FilterModelInfoDialogState extends State<_FilterModelInfoDialog> {
     // Set up the AlertDialog
     dialogs.CustomAlertDialog alert = dialogs.CustomAlertDialog(
       titleText: showFormData
-          ? "${getClassName(widget.dataFilter)} - Data Filter"
-          : "${getClassName(widget.dataFilter.shelf)} - Structure",
+          ? "${getClassName(widget.filterModel)} - Data Filter"
+          : "${getClassName(widget.filterModel.shelf)} - Structure",
       contentPadding: const EdgeInsets.all(5),
       content: _buildMainContent(
         context,
@@ -48,7 +48,7 @@ class _FilterModelInfoDialogState extends State<_FilterModelInfoDialog> {
       height: height,
       child: showFormData
           ? _FilterModelDebugView(
-              dataFilter: widget.dataFilter,
+              filterModel: widget.filterModel,
               onPressedShelf: () {
                 setState(() {
                   showFormData = false;
@@ -56,7 +56,7 @@ class _FilterModelInfoDialogState extends State<_FilterModelInfoDialog> {
               },
             )
           : _ShelfStructureGraphView(
-              shelf: widget.dataFilter.shelf,
+              shelf: widget.filterModel.shelf,
               onPressedBack: () {
                 setState(() {
                   showFormData = true;
@@ -70,13 +70,13 @@ class _FilterModelInfoDialogState extends State<_FilterModelInfoDialog> {
 Future<void> _showFilterModelInfoDialog({
   required BuildContext context,
   required String locationInfo,
-  required FilterModel dataFilter,
+  required FilterModel filterModel,
 }) async {
   await showDialog(
     context: context,
     builder: (BuildContext context) {
       return _FilterModelInfoDialog(
-        dataFilter: dataFilter,
+        filterModel: filterModel,
         locationInfo: locationInfo,
       );
     },

@@ -82,7 +82,7 @@ class _CodeFlowMethodView extends StatelessWidget {
     if (codeFlowItem.isBlock()) {
       return _blockIconData;
     } else if (codeFlowItem.isFilterModel()) {
-      return _dataFilterIconData;
+      return _filterModelIconData;
     } else if (codeFlowItem.isBlockForm()) {
       return _blockFormIconData;
     } else {

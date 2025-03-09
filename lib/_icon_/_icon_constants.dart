@@ -57,7 +57,7 @@ const IconData _clearCodeFlowIconData = cupertino.CupertinoIcons.paintbrush;
 const IconData _uiComponentsIconData = cupertino.CupertinoIcons.color_filter;
 
 
-const IconData _dataFilterDebugIconData = cupertino.CupertinoIcons.ant_circle;
+const IconData _filterModelDebugIconData = cupertino.CupertinoIcons.ant_circle;
 
 
 const IconData _restDebugIconData = cupertino.CupertinoIcons.ant;
@@ -76,7 +76,7 @@ const IconData _blockControlBarIconData =
 const IconData _blockCustomControlBarIconData =
     cupertino.CupertinoIcons.gamecontroller_fill;
 
-const IconData _dataFilterIconData = Icons.filter_alt_outlined;
+const IconData _filterModelIconData = Icons.filter_alt_outlined;
 const IconData _blockFormIconData = cupertino.CupertinoIcons.film_fill;
 const IconData _blockFormNoneIconData = cupertino.CupertinoIcons.capsule;
 

@@ -5,10 +5,10 @@ abstract class Shelf extends _XBase {
 
   String? get description => _shelfStruct.description;
 
-  // All dataFilters including the default dataFilter.
+  // All filterModels including the default filterModel.
   final List<FilterModel> _allFilterModels = [];
 
-  List<String> get filterNames => [..._shelfStruct.dataFilters.keys];
+  List<String> get filterNames => [..._shelfStruct.filterModels.keys];
 
   // All blockForms.
   final List<BlockForm> _allBlockForms = [];
@@ -73,12 +73,12 @@ abstract class Shelf extends _XBase {
   void __onInit() {
     _shelfStruct = registerStructure();
 
-    for (String dataFilterName in _shelfStruct.dataFilters.keys) {
-      FilterModel dataFilter = _shelfStruct.dataFilters[dataFilterName]!;
-      dataFilter.name = dataFilterName;
-      dataFilter.shelf = this;
+    for (String filterModelName in _shelfStruct.filterModels.keys) {
+      FilterModel filterModel = _shelfStruct.filterModels[filterModelName]!;
+      filterModel.name = filterModelName;
+      filterModel.shelf = this;
       //
-      _allFilterModels.add(dataFilter);
+      _allFilterModels.add(filterModel);
     }
 
     List<Scalar> scalars = _shelfStruct.scalars;
@@ -95,9 +95,9 @@ abstract class Shelf extends _XBase {
       __scalars.add(scalar);
       //
       if (scalar.registerFilterModelName != null) {
-        FilterModel? dataFilter =
-            _shelfStruct.dataFilters[scalar.registerFilterModelName!];
-        if (dataFilter == null) {
+        FilterModel? filterModel =
+            _shelfStruct.filterModels[scalar.registerFilterModelName!];
+        if (filterModel == null) {
           throw ___registerError(
               "FilterModel not found '${scalar.registerFilterModelName}' in '${getClassName(this)}'\n"
               "Double-check ${getClassName(this)}.registerStructure() method");
@@ -105,49 +105,49 @@ abstract class Shelf extends _XBase {
         //
         const Type filterInputType = FilterInput;
         final String filterInputBase = filterInputType.toString();
-        final String filterInputBF = dataFilter.getFilterInputTypeAsString();
+        final String filterInputBF = filterModel.getFilterInputTypeAsString();
         final String filterInputB = scalar.getFilterInputTypeAsString();
         //
         if (filterInputBF == filterInputBase) {
           throw ___registerError(
               "You need to create your own class that extends the '$filterInputBase' class \n"
-              "or use the 'EmptyFilterInput' class to use in the '${getClassName(dataFilter)}' declaration \n\n"
-              " >> Currently, ${getClassName(dataFilter)}<FILTER_INPUT> = <$filterInputBF>");
+              "or use the 'EmptyFilterInput' class to use in the '${getClassName(filterModel)}' declaration \n\n"
+              " >> Currently, ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
         }
         //
         if (filterInputBF != filterInputB) {
           throw ___registerError(
               "The Scalar and its Filter-Input must have the same FILTER_INPUT type. \n\n"
               " >> ${getClassName(scalar)}<FILTER_INPUT> = <$filterInputB> \n"
-              " >> ${getClassName(dataFilter)}<FILTER_INPUT> = <$filterInputBF>");
+              " >> ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
         }
         // ----------------
         const Type filterCriteriaType = FilterCriteria;
         final String filterCriteriaBase = filterCriteriaType.toString();
         final String filterCriteriaBF =
-            dataFilter.getFilterCriteriaTypeAsString();
+            filterModel.getFilterCriteriaTypeAsString();
         final String filterCriteriaB = scalar.getFilterCriteriaTypeAsString();
         //
         if (filterCriteriaBF == filterCriteriaBase) {
           throw ___registerError(
               "You need to create your own class that extends the '$filterCriteriaBase' class \n"
-              "or use the 'EmptyFilterCriteria' class to use in the '${getClassName(dataFilter)}' declaration \n\n"
-              " >> Currently, ${getClassName(dataFilter)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
+              "or use the 'EmptyFilterCriteria' class to use in the '${getClassName(filterModel)}' declaration \n\n"
+              " >> Currently, ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
         }
         //
         if (filterCriteriaBF != filterCriteriaB) {
           throw ___registerError(
-              "The Scalar and its Data-Filter must have the same FILTER_CRITERIA type. \n\n"
+              "The Scalar and its Filter-Model must have the same FILTER_CRITERIA type. \n\n"
               " >> ${getClassName(scalar)}<FILTER_CRITERIA> = <$filterCriteriaB> \n"
-              " >> ${getClassName(dataFilter)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
+              " >> ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
         }
         //
-        dataFilter._scalars.add(scalar);
-        scalar._registeredOrDefaultFilterModel = dataFilter;
+        filterModel._scalars.add(scalar);
+        scalar._registeredOrDefaultFilterModel = filterModel;
       } else {
-        // Default DataFilter.
+        // Default FilterModel.
         FilterModel defaultFilterModel = _DefaultFilterModel(
-          name: "${scalar.name}-@-default-scalar-data-filter",
+          name: "${scalar.name}-@-default-scalar-filter-model",
           shelf: this,
         );
         defaultFilterModel._scalars.add(scalar);
@@ -193,9 +193,9 @@ abstract class Shelf extends _XBase {
     //
     block.shelf = this;
     if (block.registerFilterModelName != null) {
-      FilterModel? dataFilter =
-          _shelfStruct.dataFilters[block.registerFilterModelName!];
-      if (dataFilter == null) {
+      FilterModel? filterModel =
+          _shelfStruct.filterModels[block.registerFilterModelName!];
+      if (filterModel == null) {
         throw ___registerError(
             "FilterModel not found '${block.registerFilterModelName}' in '${getClassName(this)}'\n"
             "Double-check ${getClassName(this)}.registerStructure() method");
@@ -204,48 +204,48 @@ abstract class Shelf extends _XBase {
       //
       const Type filterInputType = FilterInput;
       final String filterInputBase = filterInputType.toString();
-      final String filterInputBF = dataFilter.getFilterInputTypeAsString();
+      final String filterInputBF = filterModel.getFilterInputTypeAsString();
       final String filterInputB = block.getFilterInputTypeAsString();
       //
       if (filterInputBF == filterInputBase) {
         throw ___registerError(
             "You need to create your own class that extends the '$filterInputBase' class \n"
-            "or use the 'EmptyFilterInput' class to use in the '${getClassName(dataFilter)}' declaration \n\n"
-            " >> Currently, ${getClassName(dataFilter)}<FILTER_INPUT> = <$filterInputBF>");
+            "or use the 'EmptyFilterInput' class to use in the '${getClassName(filterModel)}' declaration \n\n"
+            " >> Currently, ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
       }
       //
       if (filterInputBF != filterInputB) {
         throw ___registerError(
             "The Scalar and its Filter-Input must have the same FILTER_INPUT type.\n\n"
             " >> ${getClassName(block)}<FILTER_INPUT> = <$filterInputB> \n"
-            " >> ${getClassName(dataFilter)}<FILTER_INPUT> = <$filterInputBF>");
+            " >> ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
       }
       // -----------------
       const Type filterCriteriaType = FilterCriteria;
       final String filterCriteriaBase = filterCriteriaType.toString();
       final String filterCriteriaBF =
-          dataFilter.getFilterCriteriaTypeAsString();
+          filterModel.getFilterCriteriaTypeAsString();
       final String filterCriteriaB = block.getFilterCriteriaTypeAsString();
       //
       if (filterCriteriaBF == filterCriteriaBase) {
         throw ___registerError(
             "You need to create your own class that extends from '$filterCriteriaBase' "
-            "as FILTER_CRITERIA for '${getClassName(dataFilter)}'\n\n"
-            " >> Currently, ${getClassName(dataFilter)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
+            "as FILTER_CRITERIA for '${getClassName(filterModel)}'\n\n"
+            " >> Currently, ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
       }
       //
       if (filterCriteriaBF != filterCriteriaB) {
         throw ___registerError(
-            "The Block and its Data-Filter must have the same FILTER_CRITERIA type. \n"
+            "The Block and its Filter-Model must have the same FILTER_CRITERIA type. \n"
             " >> ${getClassName(block)}<FILTER_CRITERIA> = <$filterCriteriaB> \n"
-            " >> ${getClassName(dataFilter)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
+            " >> ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
       }
       //
-      dataFilter._blocks.add(block);
-      block._registeredOrDefaultFilterModel = dataFilter;
+      filterModel._blocks.add(block);
+      block._registeredOrDefaultFilterModel = filterModel;
     } else {
       FilterModel defaultFilterModel = _DefaultFilterModel(
-        name: "${block.name}-@-default-block-data-filter",
+        name: "${block.name}-@-default-block-filter-model",
         shelf: this,
       );
       defaultFilterModel._blocks.add(block);
@@ -332,8 +332,8 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
   // ***************************************************************************
 
-  FilterModel? findFilterModel(String dataFilterName) {
-    return _shelfStruct.dataFilters[dataFilterName];
+  FilterModel? findFilterModel(String filterModelName) {
+    return _shelfStruct.filterModels[filterModelName];
   }
 
   // ***************************************************************************
@@ -413,8 +413,8 @@ abstract class Shelf extends _XBase {
       print("|----> ${getClassName(this)}.updateAllUIComponents()");
       __updateShelfWidgets();
       //
-      for (FilterModel dataFilter in _allFilterModels) {
-        dataFilter.updateAllUIComponents();
+      for (FilterModel filterModel in _allFilterModels) {
+        filterModel.updateAllUIComponents();
       }
       //
       for (Scalar scalar in __scalars) {
