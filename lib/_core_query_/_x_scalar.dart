@@ -4,7 +4,7 @@ class _XScalar {
   bool __forceQuery = false;
   bool affectByFilterInput = false;
   final Scalar scalar;
-  final _XDataFilter xDataFilter;
+  final _XFilterModel xFilterModel;
 
   String get name => scalar.name;
 
@@ -13,7 +13,7 @@ class _XScalar {
 
   _XScalar({
     required this.scalar,
-    required this.xDataFilter,
+    required this.xFilterModel,
   });
 
   // ***************************************************************************

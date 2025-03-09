@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-abstract class FilterView<DATA_FILTER extends DataFilter>
+abstract class FilterView<DATA_FILTER extends FilterModel>
     extends StatelessWidget {
   final DATA_FILTER dataFilter;
 
@@ -54,7 +54,7 @@ abstract class FilterView<DATA_FILTER extends DataFilter>
             padding: EdgeInsets.zero,
           ),
       onPressed: () {
-        showDataFilterDebugDialog();
+        showFilterModelDebugDialog();
       },
       child: Icon(
         _dataFilterDebugIconData,
@@ -64,10 +64,10 @@ abstract class FilterView<DATA_FILTER extends DataFilter>
     );
   }
 
-  Future<void> showDataFilterDebugDialog() async {
+  Future<void> showFilterModelDebugDialog() async {
     BuildContext context = FlutterArtist.adapter.getCurrentContext();
     //
-    await _showDataFilterInfoDialog(
+    await _showFilterModelInfoDialog(
       context: context,
       locationInfo: getClassName(this),
       dataFilter: dataFilter,

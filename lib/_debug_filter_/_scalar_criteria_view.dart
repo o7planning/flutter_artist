@@ -11,8 +11,8 @@ class _ScalarCriteriaView extends _BlkOrScrCriteriaView {
   }
 
   @override
-  String? getDataFilterClassName() {
-    DataFilter? dataFilter = scalar.dataFilter;
+  String? getFilterModelClassName() {
+    FilterModel? dataFilter = scalar.dataFilter;
     return dataFilter == null ? null : getClassName(dataFilter);
   }
 

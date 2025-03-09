@@ -20,7 +20,7 @@ class _BlockOrScalar extends Equatable {
     }
   }
 
-  DataFilter? get dataFilter {
+  FilterModel? get dataFilter {
     if (block != null) {
       return block!.dataFilter;
     } else {
@@ -74,9 +74,9 @@ class _BlockOrScalar extends Equatable {
 
   String get filterClassParametersDefinition {
     if (block != null) {
-      return block!._registeredOrDefaultDataFilter._classParametersDefinition;
+      return block!._registeredOrDefaultFilterModel._classParametersDefinition;
     } else {
-      return scalar!._registeredOrDefaultDataFilter._classParametersDefinition;
+      return scalar!._registeredOrDefaultFilterModel._classParametersDefinition;
     }
   }
 

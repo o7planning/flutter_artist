@@ -552,7 +552,7 @@ abstract class BlockForm<
     //
     _XShelf xShelf = _XShelf(
       shelf: shelf,
-      forceDataFilterOpt: null,
+      forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [],
       forceQueryBlockFormOpts: [],

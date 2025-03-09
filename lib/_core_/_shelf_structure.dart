@@ -2,7 +2,7 @@ part of '../flutter_artist.dart';
 
 class ShelfStructure {
   final String? description;
-  final Map<String, DataFilter> dataFilters;
+  final Map<String, FilterModel> dataFilters;
   final List<Block> blocks;
   final List<Scalar> scalars;
 
