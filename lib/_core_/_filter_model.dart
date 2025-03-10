@@ -191,13 +191,13 @@ abstract class FilterModel<
   ///   ApiResult<CompanyPage> result1 = await companyApi.getCompanyPage();
   ///   // Throw ApiError
   ///   result1.throwIfError();
-  ///   this.companyPage = result1.data;
-  ///   CompanyInfo? company = this.companyPage.getSelectedCompany()
+  ///   this.companyXList = result1.data?.toXList();
+  ///   CompanyInfo? company = this.companyXList.getItemById(123)
   ///
   ///   ApiResult<DepartmentPage> result2 = await deptApi.getDepartmentPage(company);
   ///   // Throw ApiError
   ///   result2.throwIfError();
-  ///   this.departmentPage = result2.data;
+  ///   this.departmentXList = result2.data?.toXList();
   ///   ...
   /// }
   /// ```
@@ -220,7 +220,7 @@ abstract class FilterModel<
   /// ```dart
   /// @override
   /// Map<String, dynamic> initialCriteriaDataMap() {
-  ///      var defaultCompany = companyPage.getItemById(123);
+  ///      var defaultCompany = companyXList.getItemById(123);
   ///
   ///      return {
   ///         "company": defaultCompany,
@@ -246,7 +246,7 @@ abstract class FilterModel<
   /// }) {
   ///    int inputCompanyId = filterInput.filterInput;
   ///
-  ///    CompanyInfo inputCompany = companyPage?.getItemById(inputCompanyId);
+  ///    CompanyInfo inputCompany = companyXList?.getItemById(inputCompanyId);
   ///    return {
   ///       "company": inputCompany,
   ///    };
@@ -281,7 +281,6 @@ abstract class FilterModel<
 
   // Change Event from GUI.
   void _onChangeFromFilterView() {
-    // print("@??????~~~~~~~~~~~~~~~> _onChangeFromFilterView: _formKey.currentState: ${_formKey.currentState}");
     if (_formKey.currentState?.instantValue != null) {
       data._currentFormData.addAll(_formKey.currentState!.instantValue);
       if (data._justInitialized) {
