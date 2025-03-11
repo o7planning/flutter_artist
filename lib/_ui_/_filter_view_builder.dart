@@ -32,7 +32,7 @@ class _FilterViewBuilderState
   RefreshableWidgetType get type => RefreshableWidgetType.filter;
 
   @override
-  void addFilterFragmentWidgetState({required bool isShowing}) {
+  void addWidgetState({required bool isShowing}) {
     widget.filterModel._addFilterFragmentWidgetState(
       widgetState: this,
       isShowing: true,
@@ -40,7 +40,7 @@ class _FilterViewBuilderState
   }
 
   @override
-  void removeFilterFragmentWidgetState() {
+  void removeWidgetState() {
     widget.filterModel._removeFilterFragmentWidgetState(
       widgetState: this,
     );
@@ -54,8 +54,6 @@ class _FilterViewBuilderState
 
   @override
   Widget buildContent(BuildContext context) {
-    __executeAfterBuild();
-    //
     return FormBuilder(
       key: formKey,
       initialValue: widget.filterModel.initFilterValue(),
@@ -74,11 +72,14 @@ class _FilterViewBuilderState
     );
   }
 
-  Future<void> __executeAfterBuild() async {
-    // IMPORTANT: Do not remove below line:
-    await Future.delayed(Duration.zero);
-    //
+  @override
+  void executeAfterBuild() {
     widget.filterModel._afterBuildFilterView();
+  }
+
+  @override
+  void setBuildingState({required bool isBuilding}) {
+    //
   }
 
   @override

@@ -47,7 +47,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   }
 
   @override
-  void addFilterFragmentWidgetState({required bool isShowing}) {
+  void addWidgetState({required bool isShowing}) {
     widget.block._addControlBarWidgetState(
       widgetState: this,
       isShowing: isShowing,
@@ -55,7 +55,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   }
 
   @override
-  void removeFilterFragmentWidgetState() {
+  void removeWidgetState() {
     widget.block._removeControlBarWidgetState(
       widgetState: this,
     );
@@ -359,5 +359,15 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   @override
   void checkAndFreeMemory() {
     FlutterArtist.storage._checkToRemoveShelf(widget.block.shelf);
+  }
+
+  @override
+  void executeAfterBuild() {
+    // Do nothing.
+  }
+
+  @override
+  void setBuildingState({required bool isBuilding}) {
+    //
   }
 }

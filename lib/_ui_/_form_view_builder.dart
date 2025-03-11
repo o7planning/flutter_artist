@@ -35,7 +35,7 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
   RefreshableWidgetType get type => RefreshableWidgetType.form;
 
   @override
-  void addFilterFragmentWidgetState({required bool isShowing}) {
+  void addWidgetState({required bool isShowing}) {
     widget.formModel._addFormWidgetState(
       widgetState: this,
       isShowing: true,
@@ -43,7 +43,7 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
   }
 
   @override
-  void removeFilterFragmentWidgetState() {
+  void removeWidgetState() {
     widget.formModel._removeFormWidgetState(
       widgetState: this,
     );
@@ -97,8 +97,6 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
 
   @override
   Widget buildContent(BuildContext context) {
-    __executeAfterBuild();
-    //
     if (widget.formModel.block.leaveTheFormSafely) {
       return PopScope(
         // TODO: In Error, check again late.
@@ -130,11 +128,14 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
     );
   }
 
-  Future<void> __executeAfterBuild() async {
-    // IMPORTANT: Do not remove below line:
-    await Future.delayed(Duration.zero);
-    //
+  @override
+  void executeAfterBuild() {
     widget.formModel._afterBuildFormView();
+  }
+
+  @override
+  void setBuildingState({required bool isBuilding}) {
+    //
   }
 
   @override

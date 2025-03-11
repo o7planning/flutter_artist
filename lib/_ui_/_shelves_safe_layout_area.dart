@@ -34,7 +34,7 @@ class _ShelvesSafeLayoutAreaState
   }
 
   @override
-  void addFilterFragmentWidgetState({required bool isShowing}) {
+  void addWidgetState({required bool isShowing}) {
     for (Shelf shelf in widget.shelves) {
       shelf._addShelfWidgetState(
         widgetState: this,
@@ -44,7 +44,7 @@ class _ShelvesSafeLayoutAreaState
   }
 
   @override
-  void removeFilterFragmentWidgetState() {
+  void removeWidgetState() {
     for (Shelf shelf in widget.shelves) {
       shelf._removeShelfWidgetState(
         widgetState: this,
@@ -57,5 +57,15 @@ class _ShelvesSafeLayoutAreaState
     for (Shelf shelf in widget.shelves) {
       FlutterArtist.storage._checkToRemoveShelf(shelf);
     }
+  }
+
+  @override
+  void executeAfterBuild() {
+    // Do nothing.
+  }
+
+  @override
+  void setBuildingState({required bool isBuilding}) {
+    //
   }
 }
