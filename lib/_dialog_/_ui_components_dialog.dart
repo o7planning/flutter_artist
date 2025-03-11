@@ -39,7 +39,7 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
     }
   }
 
-  Map<_RefreshableWidgetState, bool> _findWidgetStates() {
+  Map<_RefreshableWidgetState, _XState> _findWidgetStates() {
     if (widget.shelf != null) {
       return widget.shelf!._findMountedWidgetStates(
         activeOnly: true,
@@ -89,7 +89,7 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
       height = height - 60;
     }
     //
-    Map<_RefreshableWidgetState, bool> widgetStates = _findWidgetStates();
+    Map<_RefreshableWidgetState, _XState> widgetStates = _findWidgetStates();
     return SizedBox(
       width: width,
       height: height,
@@ -121,7 +121,7 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
   }
 
   Widget _buildRowInfo({
-    required MapEntry<_RefreshableWidgetState, bool> widgetStateEntry,
+    required MapEntry<_RefreshableWidgetState, _XState> widgetStateEntry,
   }) {
     return Card(
       shape: const RoundedRectangleBorder(
@@ -139,7 +139,7 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
           padding: const EdgeInsets.all(2),
           decoration: BoxDecoration(
             border: Border.all(width: 0.5),
-            color: widgetStateEntry.value
+            color: widgetStateEntry.value.isShowing
                 ? Colors.green.withAlpha(30)
                 : Colors.grey[200],
           ),

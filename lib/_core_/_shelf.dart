@@ -349,10 +349,10 @@ abstract class Shelf extends _XBase {
     required bool withControl,
     required bool activeOnly,
     required bool withPagination,
-    required Map<_RefreshableWidgetState, bool> founds,
+    required Map<_RefreshableWidgetState, _XState> founds,
   }) {
     for (Block block in blocks) {
-      Map<_RefreshableWidgetState, bool> m = block._findMountedWidgetStates(
+      Map<_RefreshableWidgetState, _XState> m = block._findMountedWidgetStates(
         activeOnly: activeOnly,
         withPagination: withPagination,
         withBlockFragment: withBlockFragment,
@@ -380,7 +380,7 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_RefreshableWidgetState, bool> _findMountedWidgetStates({
+  Map<_RefreshableWidgetState, _XState> _findMountedWidgetStates({
     required bool withBlockFragment,
     required bool withPagination,
     required bool withFilter,
@@ -389,7 +389,7 @@ abstract class Shelf extends _XBase {
     required bool withControl,
     required bool activeOnly,
   }) {
-    Map<_RefreshableWidgetState, bool> founds = {};
+    Map<_RefreshableWidgetState, _XState> founds = {};
     __findMountedWidgetStates(
       withPagination: withPagination,
       withBlockFragment: withBlockFragment,

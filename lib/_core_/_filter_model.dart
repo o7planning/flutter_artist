@@ -420,7 +420,11 @@ abstract class FilterModel<
     required bool isShowing,
   }) {
     bool activeOLD = hasActiveUIComponent();
-    _filterFragmentWidgetStates[widgetState] = _XState()..isShowing = isShowing;
+    _filterFragmentWidgetStates.update(
+      widgetState,
+      (xState) => xState..isShowing = isShowing,
+      ifAbsent: () => _XState()..isShowing = isShowing,
+    );
     bool activeCURRENT = hasActiveUIComponent();
 
     if (isShowing) {

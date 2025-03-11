@@ -47,7 +47,7 @@ abstract class FormModel<
 
   late AutovalidateMode autovalidateMode = _defaultAutovalidateMode;
 
-  final Map<_RefreshableWidgetState, bool> _formWidgetStates = {};
+  final Map<_RefreshableWidgetState, _XState> _formWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -314,8 +314,12 @@ abstract class FormModel<
     required _RefreshableWidgetState widgetState,
     required final bool isShowing,
   }) {
-    bool isShowingOLD = _formWidgetStates[widgetState] ?? false;
-    _formWidgetStates[widgetState] = isShowing;
+    bool isShowingOLD = _formWidgetStates[widgetState]?.isShowing ?? false;
+    _formWidgetStates.update(
+      widgetState,
+      (xState) => xState..isShowing = isShowing,
+      ifAbsent: () => _XState()..isShowing = isShowing,
+    );
     if (!isShowingOLD && isShowing) {
       block.shelf._startNewLazyQueryTransactionIfNeed();
     }
@@ -380,7 +384,7 @@ abstract class FormModel<
 
   bool hasActiveUIComponent() {
     for (State formWidgetState in _formWidgetStates.keys) {
-      bool visible = _formWidgetStates[formWidgetState] ?? false;
+      bool visible = _formWidgetStates[formWidgetState]?.isShowing ?? false;
       if (visible && formWidgetState.mounted) {
         return true;
       }
