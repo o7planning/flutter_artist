@@ -459,7 +459,12 @@ abstract class Block<
     required _RefreshableWidgetState widgetState,
     required bool isShowing,
   }) {
-    _paginationWidgetStates[widgetState] = _XState()..isShowing = isShowing;
+    _paginationWidgetStates.update(
+      widgetState,
+      (xState) => xState..isShowing = isShowing,
+      ifAbsent: () => _XState()..isShowing = isShowing,
+    );
+    //
     if (isShowing) {
       FlutterArtist.storage._addRecentShelf(shelf);
     }
@@ -482,7 +487,11 @@ abstract class Block<
     required bool isShowing,
   }) {
     bool activeOLD = hasActiveUIComponent();
-    _controlBarWidgetStates[widgetState] = _XState()..isShowing = isShowing;
+    _controlBarWidgetStates.update(
+      widgetState,
+      (xState) => xState..isShowing = isShowing,
+      ifAbsent: () => _XState()..isShowing = isShowing,
+    );
     bool activeCURRENT = hasActiveUIComponent();
     //
     if (isShowing) {
@@ -514,7 +523,11 @@ abstract class Block<
     required bool isShowing,
   }) {
     bool activeOLD = hasActiveUIComponent();
-    _controlWidgetStates[widgetState] = _XState()..isShowing = isShowing;
+    _controlWidgetStates.update(
+      widgetState,
+      (xState) => xState..isShowing = isShowing,
+      ifAbsent: () => _XState()..isShowing = isShowing,
+    );
     bool activeCURRENT = hasActiveUIComponent();
     //
     if (isShowing) {
@@ -546,7 +559,11 @@ abstract class Block<
     required bool isShowing,
   }) {
     bool activeOLD = hasActiveUIComponent();
-    _blockFragmentWidgetStates[widgetState] = _XState()..isShowing = isShowing;
+    _blockFragmentWidgetStates.update(
+      widgetState,
+      (xState) => xState..isShowing = isShowing,
+      ifAbsent: () => _XState()..isShowing = isShowing,
+    );
     bool activeCURRENT = hasActiveUIComponent();
     //
     if (isShowing) {
@@ -596,7 +613,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_RefreshableWidgetState, bool> _findMountedWidgetStates({
+  Map<_RefreshableWidgetState, _XState> _findMountedWidgetStates({
     required bool withPagination,
     required bool withBlockFragment,
     required bool withFilter,
@@ -689,7 +706,7 @@ abstract class Block<
     var map = {..._blockFragmentWidgetStates};
     for (State widgetState in map.keys) {
       if (widgetState.mounted) {
-        bool isShowing = map[widgetState] ?? false;
+        bool isShowing = map[widgetState]?.isShowing ?? false;
         if (isShowing) {
           return true;
         }
@@ -713,7 +730,8 @@ abstract class Block<
   bool hasActiveControlBarWidget() {
     for (_RefreshableWidgetState controlBarState
         in _controlBarWidgetStates.keys) {
-      bool visible = _controlBarWidgetStates[controlBarState] ?? false;
+      bool visible =
+          _controlBarWidgetStates[controlBarState]?.isShowing ?? false;
       if (visible && controlBarState.mounted) {
         return true;
       }
@@ -726,7 +744,7 @@ abstract class Block<
 
   bool hasActiveControlWidget() {
     for (_RefreshableWidgetState controlState in _controlWidgetStates.keys) {
-      bool visible = _controlWidgetStates[controlState] ?? false;
+      bool visible = _controlWidgetStates[controlState]?.isShowing ?? false;
       if (visible && controlState.mounted) {
         return true;
       }
@@ -740,7 +758,8 @@ abstract class Block<
   bool hasActivePaginationWidget() {
     for (_RefreshableWidgetState paginationState
         in _paginationWidgetStates.keys) {
-      bool visible = _paginationWidgetStates[paginationState] ?? false;
+      bool visible =
+          _paginationWidgetStates[paginationState]?.isShowing ?? false;
       if (visible && paginationState.mounted) {
         return true;
       }
