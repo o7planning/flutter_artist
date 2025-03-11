@@ -43,8 +43,6 @@ abstract class FormModel<
 
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
-
-
   final _defaultAutovalidateMode = AutovalidateMode.onUserInteraction;
 
   late AutovalidateMode autovalidateMode = _defaultAutovalidateMode;
