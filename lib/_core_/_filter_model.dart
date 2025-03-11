@@ -452,13 +452,6 @@ abstract class FilterModel<
     for (_RefreshableWidgetState widgetState in [
       ..._filterFragmentWidgetStates.keys
     ]) {
-      if (widgetState.__lockRefresh) {
-        return;
-      }
-    }
-    for (_RefreshableWidgetState widgetState in [
-      ..._filterFragmentWidgetStates.keys
-    ]) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
