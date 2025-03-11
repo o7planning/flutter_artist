@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-typedef GetXList = XList Function();
+typedef GetXList = XList? Function();
 
 abstract class FilterModel<
     FILTER_INPUT extends FilterInput, // EmptyFilterInput
@@ -55,14 +55,6 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _patchValue(Map<String, dynamic> value) {
-    this.data._updateFilterData(value);
-    this._formKey.currentState?.patchValue(value);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   ///
   /// Return null is error.
   ///
@@ -102,10 +94,10 @@ abstract class FilterModel<
           this.initialCriteriaDataMap();
       //
       if (_formKey.currentState == null) {
-        this.data._updateFilterData(defaultFilterCriteria);
+        this.data._initialFilterData(defaultFilterCriteria);
       } else {
         if (data._initialFormData.isEmpty) {
-          this.data._updateFilterData(defaultFilterCriteria);
+          this.data._initialFilterData(defaultFilterCriteria);
         }
         for (String key in defaultFilterCriteria.keys) {
           if (!_formKey.currentState!.instantValue.containsKey(key)) {
@@ -142,7 +134,7 @@ abstract class FilterModel<
           filterInput: filterInput,
         );
         //
-        this.data._updateFilterData(inputFilterCriteria);
+        this.data._initialFilterData(inputFilterCriteria);
         this._formKey.currentState?.patchValue(inputFilterCriteria);
       } catch (e, stackTrace) {
         _handleError(
@@ -305,8 +297,8 @@ abstract class FilterModel<
       if (childGetXList == null) {
         continue;
       }
-      XList childXList = childGetXList();
-      childXList.clear();
+      XList? childXList = childGetXList();
+      childXList?.clear();
     }
   }
 

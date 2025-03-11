@@ -47,13 +47,17 @@ class FilterModelData<
   void _clearWithDataState({required DataState filterDataState}) {
     _filterDataState = filterDataState;
     //
-    _updateFilterData({});
+    _justInitialized = false;
+    //
+    __initial0FormData.clear();
+    _initialFormData.clear();
+    _currentFormData.clear();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void _updateFilterData(Map<String, dynamic> formData) {
+  void _initialFilterData(Map<String, dynamic> formData) {
     _justInitialized = true;
     //
     __initial0FormData
@@ -65,6 +69,31 @@ class FilterModelData<
     _currentFormData
       ..clear()
       ..addAll(formData);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _updateFilterData(Map<String, dynamic> updateData) {
+    for (String property in updateData.keys) {
+      final dynamic oldValue = _currentFormData[property];
+      final dynamic newValue = updateData[property];
+      //
+      _currentFormData[property] = newValue;
+      //
+      final GetXList? getXList = this.filterModel._xListMap[property];
+      if (getXList == null) {
+        continue;
+      }
+      final XList? xList = getXList();
+      if (xList == null) {
+        continue;
+      }
+      bool isSame = xList.isSame(item1: oldValue, item2: newValue);
+      if (!isSame) {
+        this.filterModel._firePropertyChange(property: property);
+      }
+    }
   }
 
   // ***************************************************************************
