@@ -78,7 +78,7 @@ class _FilterViewBuilderState
     // IMPORTANT: Do not remove below line:
     await Future.delayed(Duration.zero);
     //
-    widget.filterModel._onChangeFromFilterView();
+    widget.filterModel._afterBuildFilterView();
   }
 
   @override

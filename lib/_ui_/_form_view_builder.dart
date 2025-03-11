@@ -134,7 +134,7 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
     // IMPORTANT: Do not remove below line:
     await Future.delayed(Duration.zero);
     //
-    widget.formModel._afterBuildFormWidget();
+    widget.formModel._afterBuildFormView();
   }
 
   @override

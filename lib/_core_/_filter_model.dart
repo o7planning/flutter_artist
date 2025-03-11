@@ -280,7 +280,8 @@ abstract class FilterModel<
   // ***************************************************************************
 
   // Change Event from GUI.
-  void _onChangeFromFilterView() {
+  Future<void> _onChangeFromFilterView() async {
+    print(">>> ${getClassName(this)}._onChangeFromFilterView");
     if (_formKey.currentState?.instantValue != null) {
       data._currentFormData.addAll(_formKey.currentState!.instantValue);
       if (data._justInitialized) {
@@ -291,14 +292,28 @@ abstract class FilterModel<
       }
     }
     //
-    if (_firstQueryDone && !_applyDefaultFilterCriteria) {
-      if (_formKey.currentState != null) {
-        _applyDefaultFilterCriteria = true;
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _formKey.currentState!.patchValue(data.initialFormData);
-        });
+    if (_firstQueryDone) {
+      if (!_applyDefaultFilterCriteria) {
+        if (_formKey.currentState != null) {
+          _applyDefaultFilterCriteria = true;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _formKey.currentState!.patchValue(data.initialFormData);
+          });
+        }
       }
+      //
+      await _prepareMasterDataAndFilterData(
+        filterInput: null, // TODO: Xem lai tham so filterInput.
+      );
     }
+    // this.updateAllUIComponents(force: true);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _afterBuildFilterView() {
+    data._justInitialized = false;
   }
 
   // ***************************************************************************
@@ -432,12 +447,20 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateAllUIComponents() {
+  void updateAllUIComponents({bool force = true}) {
+    print(">>> ${getClassName(this)}.updateAllUIComponents()");
+    for (_RefreshableWidgetState widgetState in [
+      ..._filterFragmentWidgetStates.keys
+    ]) {
+      if (widgetState.__lockRefresh) {
+        return;
+      }
+    }
     for (_RefreshableWidgetState widgetState in [
       ..._filterFragmentWidgetStates.keys
     ]) {
       if (widgetState.mounted) {
-        widgetState.refreshState();
+        widgetState.refreshState(force: force);
       }
     }
   }

@@ -216,6 +216,7 @@ abstract class FormModel<
     required ITEM_DETAIL? refreshedItemDetail,
     required bool isNew,
   }) async {
+    print(">>> ${getClassName(this)}._prepareMasterDataAndFormData()");
     bool error = false;
     try {
       //
@@ -432,7 +433,7 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _afterBuildFormWidget() {
+  void _afterBuildFormView() {
     data._justInitialized = false;
   }
 
