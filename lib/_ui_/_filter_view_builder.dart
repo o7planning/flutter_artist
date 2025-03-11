@@ -33,7 +33,10 @@ class _FilterViewBuilderState
 
   @override
   void setBuildingState({required bool isBuilding}) {
-    //
+    widget.filterModel._setFilterViewBuildingState(
+      widgetState: this,
+      isBuilding: isBuilding,
+    );
   }
 
   @override

@@ -1,5 +1,7 @@
 part of '../flutter_artist.dart';
 
+typedef GetXList = XList Function();
+
 abstract class FilterModel<
     FILTER_INPUT extends FilterInput, // EmptyFilterInput
     FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
@@ -49,6 +51,14 @@ abstract class FilterModel<
   // ***************************************************************************
 
   FilterModel();
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _patchValue(Map<String, dynamic> value) {
+    this.data._updateFilterData(value);
+    this._formKey.currentState?.patchValue(value);
+  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -279,6 +289,84 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  final Map<String, GetXList> _xListMap = {};
+  final Map<String, List<String>> _parentChildrenPropMap = {};
+
+  void _firePropertyChange({required String property}) {
+    List<String>? childProperties = _parentChildrenPropMap[property];
+    if (childProperties == null || childProperties.isEmpty) {
+      return;
+    }
+    for (String childProperty in childProperties) {
+      this.data._updateFilterData({childProperty: null});
+      this._formKey.currentState?.patchValue({childProperty: null});
+      //
+      GetXList? childGetXList = _xListMap[childProperty];
+      if (childGetXList == null) {
+        continue;
+      }
+      XList childXList = childGetXList();
+      childXList.clear();
+    }
+  }
+
+  void setupPropertyConstraint({
+    required String? parentProperty,
+    required String property,
+    required GetXList getXList,
+  }) {
+    _xListMap[property] = getXList;
+    if (parentProperty != null) {
+      _parentChildrenPropMap.update(
+        parentProperty,
+        (value) => value..add(property),
+        ifAbsent: () => [property],
+      );
+    }
+  }
+
+  ///
+  /// Example:
+  ///
+  /// ```dart
+  ///  void setupPropertyConstraints() {
+  ///     this.setupPropertyConstraint(
+  ///       parentProperty: null,
+  ///       property: "company",
+  ///       getXList: () {
+  ///         return companyXList;
+  ///       },
+  ///     );
+  ///     this.setupPropertyConstraint(
+  ///       parentXListProperty: "company",
+  ///       property: "department",
+  ///       getXList: () {
+  ///        return departmentXList;
+  ///       },
+  ///     );
+  ///   }
+  /// ```
+  ///
+  void setupPropertyConstraints() {
+    // this.setupPropertyConstraint(
+    //   parentProperty: null,
+    //   property: "company",
+    //   getXList: () {
+    //     return companyXList;
+    //   },
+    // );
+    // this.setupPropertyConstraint(
+    //   parentXListProperty: "company",
+    //   property: "department",
+    //   getXList: () {
+    //     return departmentXList;
+    //   },
+    // );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   // Change Event from GUI.
   Future<void> _onChangeFromFilterView() async {
     print(">>> ${getClassName(this)}._onChangeFromFilterView");
@@ -303,10 +391,25 @@ abstract class FilterModel<
       }
       //
       await _prepareMasterDataAndFilterData(
+        // ?????????????????????????????????????????????????????????????????????????????????????????
         filterInput: null, // TODO: Xem lai tham so filterInput.
       );
     }
-    // this.updateAllUIComponents(force: true);
+    if (!_isBuilding()) {
+      // this.updateAllUIComponents(force: true);
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool _isBuilding() {
+    for (_XState xState in _filterFragmentWidgetStates.values) {
+      if (xState.isBuilding) {
+        return true;
+      }
+    }
+    return false;
   }
 
   // ***************************************************************************
@@ -372,7 +475,11 @@ abstract class FilterModel<
         filterModel: this,
         filterInput: filterInput,
       ),
-      forceQueryScalarOpts: _scalars.map((s) => _ScalarOpt(scalar: s)).toList(),
+      forceQueryScalarOpts: _scalars
+          .map(
+            (s) => _ScalarOpt(scalar: s),
+          )
+          .toList(),
       forceQueryBlockOpts: _blocks
           .map(
             (b) => _BlockOpt(
@@ -410,6 +517,20 @@ abstract class FilterModel<
       }
     }
     return false;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _setFilterViewBuildingState({
+    required _RefreshableWidgetState widgetState,
+    required bool isBuilding,
+  }) {
+    _filterFragmentWidgetStates.update(
+      widgetState,
+      (xState) => xState..isBuilding = isBuilding,
+      ifAbsent: () => _XState()..isBuilding = isBuilding,
+    );
   }
 
   // ***************************************************************************
@@ -471,7 +592,7 @@ abstract class FilterModel<
     //
     await _showFilterModelInfoDialog(
       context: context,
-      locationInfo: "locationInfo",
+      locationInfo: "locationInfo", // TODO: Remove.
       filterModel: this,
     );
   }
