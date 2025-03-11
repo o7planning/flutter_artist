@@ -32,6 +32,11 @@ class _FilterViewBuilderState
   RefreshableWidgetType get type => RefreshableWidgetType.filter;
 
   @override
+  void setBuildingState({required bool isBuilding}) {
+    //
+  }
+
+  @override
   void addWidgetState({required bool isShowing}) {
     widget.filterModel._addFilterFragmentWidgetState(
       widgetState: this,
@@ -44,6 +49,11 @@ class _FilterViewBuilderState
     widget.filterModel._removeFilterFragmentWidgetState(
       widgetState: this,
     );
+  }
+
+  @override
+  void executeAfterBuild() {
+    widget.filterModel._afterBuildFilterView();
   }
 
   @override
@@ -70,16 +80,6 @@ class _FilterViewBuilderState
         child: widget.build(),
       ),
     );
-  }
-
-  @override
-  void executeAfterBuild() {
-    widget.filterModel._afterBuildFilterView();
-  }
-
-  @override
-  void setBuildingState({required bool isBuilding}) {
-    //
   }
 
   @override

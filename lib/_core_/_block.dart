@@ -238,10 +238,10 @@ abstract class Block<
 
   ItemSortCriteria? get itemSortCriteria => _itemSortCriteria;
 
-  final Map<_RefreshableWidgetState, bool> _blockFragmentWidgetStates = {};
-  final Map<_RefreshableWidgetState, bool> _controlBarWidgetStates = {};
-  final Map<_RefreshableWidgetState, bool> _controlWidgetStates = {};
-  final Map<_RefreshableWidgetState, bool> _paginationWidgetStates = {};
+  final Map<_RefreshableWidgetState, _XState> _blockFragmentWidgetStates = {};
+  final Map<_RefreshableWidgetState, _XState> _controlBarWidgetStates = {};
+  final Map<_RefreshableWidgetState, _XState> _controlWidgetStates = {};
+  final Map<_RefreshableWidgetState, _XState> _paginationWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -459,7 +459,7 @@ abstract class Block<
     required _RefreshableWidgetState widgetState,
     required bool isShowing,
   }) {
-    _paginationWidgetStates[widgetState] = isShowing;
+    _paginationWidgetStates[widgetState] = _XState()..isShowing = isShowing;
     if (isShowing) {
       FlutterArtist.storage._addRecentShelf(shelf);
     }
@@ -482,7 +482,7 @@ abstract class Block<
     required bool isShowing,
   }) {
     bool activeOLD = hasActiveUIComponent();
-    _controlBarWidgetStates[widgetState] = isShowing;
+    _controlBarWidgetStates[widgetState] = _XState()..isShowing = isShowing;
     bool activeCURRENT = hasActiveUIComponent();
     //
     if (isShowing) {
@@ -514,7 +514,7 @@ abstract class Block<
     required bool isShowing,
   }) {
     bool activeOLD = hasActiveUIComponent();
-    _controlWidgetStates[widgetState] = isShowing;
+    _controlWidgetStates[widgetState] = _XState()..isShowing = isShowing;
     bool activeCURRENT = hasActiveUIComponent();
     //
     if (isShowing) {
@@ -546,7 +546,7 @@ abstract class Block<
     required bool isShowing,
   }) {
     bool activeOLD = hasActiveUIComponent();
-    _blockFragmentWidgetStates[widgetState] = isShowing;
+    _blockFragmentWidgetStates[widgetState] = _XState()..isShowing = isShowing;
     bool activeCURRENT = hasActiveUIComponent();
     //
     if (isShowing) {
@@ -605,7 +605,7 @@ abstract class Block<
     required bool withControlBar,
     required bool activeOnly,
   }) {
-    Map<_RefreshableWidgetState, bool> ret = {};
+    Map<_RefreshableWidgetState, _XState> ret = {};
     //
     if (withFilter) {
       ret.addAll(_registeredOrDefaultFilterModel._filterFragmentWidgetStates);

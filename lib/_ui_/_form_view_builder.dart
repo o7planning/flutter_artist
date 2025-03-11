@@ -35,6 +35,11 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
   RefreshableWidgetType get type => RefreshableWidgetType.form;
 
   @override
+  void setBuildingState({required bool isBuilding}) {
+    //
+  }
+
+  @override
   void addWidgetState({required bool isShowing}) {
     widget.formModel._addFormWidgetState(
       widgetState: this,
@@ -47,6 +52,11 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
     widget.formModel._removeFormWidgetState(
       widgetState: this,
     );
+  }
+
+  @override
+  void executeAfterBuild() {
+    widget.formModel._afterBuildFormView();
   }
 
   @override
@@ -126,16 +136,6 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
         child: widget.build(),
       ),
     );
-  }
-
-  @override
-  void executeAfterBuild() {
-    widget.formModel._afterBuildFormView();
-  }
-
-  @override
-  void setBuildingState({required bool isBuilding}) {
-    //
   }
 
   @override

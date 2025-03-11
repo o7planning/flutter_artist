@@ -326,7 +326,7 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  final Map<_RefreshableWidgetState, bool> _filterFragmentWidgetStates = {};
+  final Map<_RefreshableWidgetState, _XState> _filterFragmentWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -403,7 +403,8 @@ abstract class FilterModel<
 
   bool hasActiveUIComponent() {
     for (State widgetState in _filterFragmentWidgetStates.keys) {
-      bool isShowing = _filterFragmentWidgetStates[widgetState] ?? false;
+      bool isShowing =
+          _filterFragmentWidgetStates[widgetState]?.isShowing ?? false;
       if (isShowing && widgetState.mounted) {
         return true;
       }
@@ -419,7 +420,7 @@ abstract class FilterModel<
     required bool isShowing,
   }) {
     bool activeOLD = hasActiveUIComponent();
-    _filterFragmentWidgetStates[widgetState] = isShowing;
+    _filterFragmentWidgetStates[widgetState] = _XState()..isShowing = isShowing;
     bool activeCURRENT = hasActiveUIComponent();
 
     if (isShowing) {
