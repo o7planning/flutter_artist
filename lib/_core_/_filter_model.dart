@@ -81,6 +81,7 @@ abstract class FilterModel<
       );
       error = true;
     }
+    print("Chay vao day 3.1: data._currentFormData= ${data._currentFormData}");
     //
     if (error) {
       this.data._clearWithDataState(
@@ -88,18 +89,21 @@ abstract class FilterModel<
           );
       return null;
     }
+    print("Chay vao day 3.2: data._currentFormData= ${data._currentFormData}");
     //
     // Apply Default FilterCriteria:
     //
     try {
       Map<String, dynamic> defaultFilterCriteria =
           this.initialCriteriaDataMap();
+
+      print("Chay vao day 3.3: defaultFilterCriteria= ${defaultFilterCriteria}");
       //
       if (_formKey.currentState == null) {
-        this.data._initialFilterData(defaultFilterCriteria);
+        this.data._updateFilterData(defaultFilterCriteria);
       } else {
         if (data._initialFormData.isEmpty) {
-          this.data._initialFilterData(defaultFilterCriteria);
+          this.data._updateFilterData(defaultFilterCriteria);
         }
         for (String key in defaultFilterCriteria.keys) {
           if (!_formKey.currentState!.instantValue.containsKey(key)) {
@@ -119,6 +123,7 @@ abstract class FilterModel<
       );
       error = true;
     }
+    print("Chay vao day 3.4: data._currentFormData= ${data._currentFormData}");
     //
     if (error) {
       this.data._clearWithDataState(
@@ -373,7 +378,7 @@ abstract class FilterModel<
       // return;
     }
     print(
-        ">>> @@@@@@@@@@@@@@@@@ >>>>>>> ${getClassName(this)}._onChangeFromFilterView");
+        ">>> @@@@@@@@@@@@@@@@@ >>>>>>> ${getClassName(this)}._onChangeFromFilterView: ${_formKey.currentState!.instantValue}");
     //
     // IMPORTANT:
     // Update data from GlobalKey(_formKey) --> to FilterModelData.
@@ -381,13 +386,19 @@ abstract class FilterModel<
     //  ---> data._initialFormData
     //
     if (_formKey.currentState?.instantValue != null) {
-      data._currentFormData.addAll(_formKey.currentState!.instantValue);
+      print("Chay vao day 1: data._currentFormData= ${data._currentFormData}");
       if (data._justInitialized) {
         Map<String, dynamic> map = {..._formKey.currentState!.instantValue};
         map.removeWhere((k, v) => data._initialFormData.containsKey(k));
         //
         data._initialFormData.addAll(map);
       }
+
+      print("Chay vao day 2: data._currentFormData= ${data._currentFormData}");
+      //
+      // IMPORTANT: Will execute XList Event.
+      //
+      data._updateFilterData(_formKey.currentState!.instantValue);
     }
     //
     if (_firstQueryDone) {
@@ -400,6 +411,7 @@ abstract class FilterModel<
         }
       }
       //
+      print("Chay vao day 3: data._currentFormData= ${data._currentFormData}");
       print(
           ">>> @@@@@@@@@@@@@@@@@ >>>>>>> ${getClassName(this)}._onChangeFromFilterView --> _prepareMasterDataAndFilterData");
       await _prepareMasterDataAndFilterData(
@@ -407,6 +419,7 @@ abstract class FilterModel<
         filterInput: null, // TODO: Xem lai tham so filterInput.
       );
     }
+    print("Chay vao day 4: data._currentFormData= ${data._currentFormData}");
     this.updateAllUIComponents(force: true);
   }
 
