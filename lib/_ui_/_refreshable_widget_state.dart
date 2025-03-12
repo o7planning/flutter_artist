@@ -7,6 +7,8 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
 
   late final String keyId;
 
+  bool _lockChangeEvent = false;
+
   RefreshableWidgetType get type;
 
   void setBuildingState({required bool isBuilding});
@@ -47,7 +49,9 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
 
   @override
   Widget build(BuildContext context) {
-    __executeAfterBuild();
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      __executeAfterBuild();
+    });
     this.setBuildingState(isBuilding: true);
     //
     return VisibilityDetector(
@@ -65,8 +69,11 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
   }
 
   Future<void> __executeAfterBuild() async {
+    setBuildingState(isBuilding: false);
+    print("#### __executeAfterBuild: setBuildingState: false");
     // IMPORTANT: Do not remove below line:
     await Future.delayed(Duration.zero);
+    this.setBuildingState(isBuilding: false);
     //
     executeAfterBuild();
   }

@@ -10,6 +10,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart' as cupertino;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_artist_dialogs/flutter_artist_dialogs.dart' as dialogs;
 import 'package:flutter_artist_rest_core/flutter_artist_rest_core.dart';

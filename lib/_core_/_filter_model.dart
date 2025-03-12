@@ -50,7 +50,9 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  FilterModel();
+  FilterModel() {
+    setupPropertyConstraints();
+  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -134,7 +136,7 @@ abstract class FilterModel<
           filterInput: filterInput,
         );
         //
-        this.data._initialFilterData(inputFilterCriteria);
+        this.data._updateFilterData(inputFilterCriteria);
         this._formKey.currentState?.patchValue(inputFilterCriteria);
       } catch (e, stackTrace) {
         _handleError(
@@ -161,6 +163,7 @@ abstract class FilterModel<
           createFilterCriteria(dataMap: data.currentFormData);
       _filterCriteria = newCriteria;
       //
+      this.data._filterDataState = DataState.ready;
       _firstQueryDone = true;
       return newCriteria;
     } catch (e, stackTrace) {
@@ -171,6 +174,7 @@ abstract class FilterModel<
         stackTrace: stackTrace,
         showSnackBar: true,
       );
+      this.data._filterDataState = DataState.error;
       //
       return null;
     }
@@ -273,8 +277,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   // TODO: Change name!
-  // Do not call this method in library.
-  Map<String, dynamic> initFilterValue() {
+  Map<String, dynamic> _initFilterValue() {
     return data._currentFormData;
   }
 
@@ -285,6 +288,8 @@ abstract class FilterModel<
   final Map<String, List<String>> _parentChildrenPropMap = {};
 
   void _firePropertyChange({required String property}) {
+    print(
+        ">>>>>>>>>: ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _firePropertyChange: $property");
     List<String>? childProperties = _parentChildrenPropMap[property];
     if (childProperties == null || childProperties.isEmpty) {
       return;
@@ -298,6 +303,7 @@ abstract class FilterModel<
         continue;
       }
       XList? childXList = childGetXList();
+      print(">>>>>>>>>: clearXList: ${getClassName(childXList)}");
       childXList?.clear();
     }
   }
@@ -361,7 +367,19 @@ abstract class FilterModel<
 
   // Change Event from GUI.
   Future<void> _onChangeFromFilterView() async {
-    print(">>> ${getClassName(this)}._onChangeFromFilterView");
+    if (this._isBuilding()) {
+      print(
+          ">>> @@@@@@@@@@@@@@@@@ >>>>>>> ${getClassName(this)}._onChangeFromFilterView --> _isBuilding");
+      // return;
+    }
+    print(
+        ">>> @@@@@@@@@@@@@@@@@ >>>>>>> ${getClassName(this)}._onChangeFromFilterView");
+    //
+    // IMPORTANT:
+    // Update data from GlobalKey(_formKey) --> to FilterModelData.
+    //  ---> data._currentFormData
+    //  ---> data._initialFormData
+    //
     if (_formKey.currentState?.instantValue != null) {
       data._currentFormData.addAll(_formKey.currentState!.instantValue);
       if (data._justInitialized) {
@@ -382,14 +400,21 @@ abstract class FilterModel<
         }
       }
       //
+      print(
+          ">>> @@@@@@@@@@@@@@@@@ >>>>>>> ${getClassName(this)}._onChangeFromFilterView --> _prepareMasterDataAndFilterData");
       await _prepareMasterDataAndFilterData(
         // ?????????????????????????????????????????????????????????????????????????????????????????
         filterInput: null, // TODO: Xem lai tham so filterInput.
       );
     }
-    if (!_isBuilding()) {
-      // this.updateAllUIComponents(force: true);
-    }
+    this.updateAllUIComponents(force: true);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool _isWidgetStateBuilding({required _RefreshableWidgetState widgetState}) {
+    return _filterFragmentWidgetStates[widgetState]?.isBuilding ?? false;
   }
 
   // ***************************************************************************
@@ -566,11 +591,12 @@ abstract class FilterModel<
   // ***************************************************************************
 
   void updateAllUIComponents({bool force = true}) {
-    print(">>> ${getClassName(this)}.updateAllUIComponents()");
+    print(">>> ${getClassName(this)}.updateAllUIComponents() force: $force");
     for (_RefreshableWidgetState widgetState in [
       ..._filterFragmentWidgetStates.keys
     ]) {
       if (widgetState.mounted) {
+        widgetState._lockChangeEvent = true;
         widgetState.refreshState(force: force);
       }
     }

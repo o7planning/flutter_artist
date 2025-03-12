@@ -75,6 +75,7 @@ class FilterModelData<
   // ***************************************************************************
 
   void _updateFilterData(Map<String, dynamic> updateData) {
+    print("~~~~~~~~~~~~~> _updateFilterData: $updateData");
     for (String property in updateData.keys) {
       final dynamic oldValue = _currentFormData[property];
       final dynamic newValue = updateData[property];

@@ -1,5 +1,7 @@
 part of '../flutter_artist.dart';
 
+// bool _lockChangeEvent1 = false;
+
 class _FilterViewBuilder extends _RefreshableWidget {
   final FilterModel filterModel;
 
@@ -65,19 +67,42 @@ class _FilterViewBuilderState
     widget.filterModel._formKey = formKey;
   }
 
+  bool _getLockChangeEven() {
+    return _lockChangeEvent;
+  }
+
+  Future<void> _onChange() async {
+    bool isBuilding = widget.filterModel._isWidgetStateBuilding(
+      widgetState: this,
+    );
+    print("#### onChanged: isBuilding: $isBuilding");
+    if (!isBuilding) {
+      print("#### onChanged: --> filterModel._onChangeFromFilterView");
+      await widget.filterModel._onChangeFromFilterView();
+    }
+    // if (mounted) {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     widget.filterModel.updateAllUIComponents();
+    //   });
+    // }
+  }
+
   @override
   Widget buildContent(BuildContext context) {
+    bool isBuilding = widget.filterModel._isWidgetStateBuilding(
+      widgetState: this,
+    );
+    print("%%%%%%%% 1 buildContent: isBuilding: $isBuilding");
+    widget.filterModel
+        ._setFilterViewBuildingState(widgetState: this, isBuilding: true);
+    isBuilding = widget.filterModel._isWidgetStateBuilding(
+      widgetState: this,
+    );
+    print("%%%%%%%% 2 buildContent: isBuilding: $isBuilding");
     return FormBuilder(
       key: formKey,
-      initialValue: widget.filterModel.initFilterValue(),
-      onChanged: () {
-        widget.filterModel._onChangeFromFilterView();
-        if (mounted) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            widget.filterModel.updateAllUIComponents();
-          });
-        }
-      },
+      initialValue: widget.filterModel._initFilterValue(),
+      onChanged: _onChange,
       child: AbsorbPointer(
         absorbing: !widget.filterModel.isEnabled(),
         child: widget.build(),
