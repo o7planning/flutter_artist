@@ -301,8 +301,6 @@ part '_ui_/_x_state.dart';
 
 part '_core_/_master_property.dart';
 
-part '_core_/_prop_tree.dart';
-
 part '_task_unit_/_block_query_task_unit.dart';
 
 part '_task_unit_/_block_quick_action_task_unit.dart';
