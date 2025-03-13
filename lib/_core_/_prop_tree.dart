@@ -3,6 +3,7 @@ part of '../flutter_artist.dart';
 class _PropTreeBuilder {
   final Map<String, FindXList> __xListMap = {};
   final Map<String, String> __childAndParentPropMap = {};
+
   //
 
   _PropTreeBuilder();
@@ -49,7 +50,7 @@ class _PropTreeBuilder {
 
 class _PropTree {
   final Map<String, _PropTreeItem> _itemMap = {};
-  List<_PropTreeItem> rootItems = [];
+  final List<_PropTreeItem> rootItems = [];
 
   _PropTree._({
     required Map<String, _PropTreeItem> itemMap,
@@ -62,32 +63,39 @@ class _PropTree {
     return _itemMap[prop];
   }
 
-  void clearValues() {
+  void updateValues({
+    required Map<String, dynamic> currentValues,
+    required Map<String, dynamic> updateValues,
+  }) {
     for (_PropTreeItem item in _itemMap.values) {
-      item.value = null;
-      item.valueChecked = false;
+      item.updateValue = null;
+      item.valueUpdated = false;
       item.dirty = false;
     }
-  }
-
-  void updateValues(Map<String, dynamic> values) {
-    clearValues();
-    for (String prop in values.keys) {
+    //
+    for (String prop in updateValues.keys) {
       _PropTreeItem? item = _itemMap[prop];
       if (item != null) {
-        item.value = values[prop];
         item.dirty = true;
       }
+    }
+    //
+    for (_PropTreeItem rootItem in rootItems) {
+      rootItem.updateValueCascase(
+        currentValues: currentValues,
+        updateValues: updateValues,
+      );
     }
   }
 }
 
 class _PropTreeItem {
   final String propName;
-  final FindXList findXList;
-  dynamic value;
-  bool valueChecked = false;
+  final FindXList? findXList;
+  dynamic updateValue;
+  bool valueUpdated = false;
   bool dirty = false;
+
   //
   _PropTreeItem? parent;
   final List<_PropTreeItem> children = [];
@@ -114,6 +122,48 @@ class _PropTreeItem {
         ''';
         throw message;
       }
+    }
+  }
+
+  void updateValueCascase({
+    required Map<String, dynamic> currentValues,
+    required Map<String, dynamic> updateValues,
+  }) {
+    if (!valueUpdated && dirty) {
+      final dynamic oldValue = currentValues[propName];
+      final dynamic newValue = updateValues[propName];
+      //
+      updateValue = newValue;
+      valueUpdated = true;
+      //
+      if (findXList == null) {
+        return;
+      }
+      XList? xList = findXList!();
+      if (xList == null) {
+        return;
+      }
+      bool isSame = xList.isSame(item1: oldValue, item2: newValue);
+      if (!isSame) {
+        for (_PropTreeItem childItem in children) {
+          FindXList? childFindXList = childItem.findXList;
+          if (childFindXList != null) {
+            XList? childXList = childFindXList();
+            if (childXList != null) {
+              childXList.valid = false;
+              updateValues[childItem.propName] = null;
+              childItem.dirty = true;
+            }
+          }
+        }
+      }
+    }
+    //
+    for (_PropTreeItem childItem in children) {
+      childItem.updateValueCascase(
+        currentValues: currentValues,
+        updateValues: updateValues,
+      );
     }
   }
 }

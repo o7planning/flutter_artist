@@ -48,7 +48,7 @@ abstract class FilterModel<
   bool _applyDefaultFilterCriteria = false;
 
   final _PropTreeBuilder __propTreeBuilder = _PropTreeBuilder();
-  _PropTree? _propTree;
+  late final _PropTree _propTree;
 
   // ***************************************************************************
   // ***************************************************************************
@@ -332,42 +332,42 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _firePropertyChange({required String property}) {
-    print(
-        "\n@ ~~~~~~~~~~~~~~~> 2.2.1 _firePropertyChange[$property]: ${data._currentFormData}");
-    List<String>? childProperties = []; // _parentChildrenPropMap[property];
-    if (childProperties == null || childProperties.isEmpty) {
-      return;
-    }
-
-    for (String childProperty in childProperties) {
-      this.data._updateFilterData({childProperty: null});
-      // this._formKey.currentState?.patchValue({childProperty: null});
-      //
-      // _formKey.currentState?.removeInternalFieldValue(childProperty);
-      // _formKey.currentState?.setInternalFieldValue(childProperty,null);
-      FormBuilderFieldState? fieldState =
-          _formKey.currentState?.fields[childProperty];
-
-      fieldState?.setValue(null, populateForm: false);
-      // fieldState?.didChange(null);
-      // fieldState?.formState?.patchValue({childProperty: null});
-      // fieldState?.formState?.patchValue({childProperty: null});
-      // fieldState?.didChange(null);
-
-      //
-      FindXList? childFindXList = _xListMap[childProperty];
-      if (childFindXList == null) {
-        continue;
-      }
-      XList? childXList = childFindXList();
-
-      childXList?.clear();
-      childXList?.valid = false;
-    }
-    print(
-        "@ ~~~~~~~~~~~~~~~> 2.2.2 _firePropertyChange: ${data._currentFormData}");
-  }
+  // void _firePropertyChange({required String property}) {
+  //   print(
+  //       "\n@ ~~~~~~~~~~~~~~~> 2.2.1 _firePropertyChange[$property]: ${data._currentFormData}");
+  //   List<String>? childProperties = []; // _parentChildrenPropMap[property];
+  //   if (childProperties == null || childProperties.isEmpty) {
+  //     return;
+  //   }
+  //
+  //   for (String childProperty in childProperties) {
+  //     this.data._updateFilterData({childProperty: null});
+  //     // this._formKey.currentState?.patchValue({childProperty: null});
+  //     //
+  //     // _formKey.currentState?.removeInternalFieldValue(childProperty);
+  //     // _formKey.currentState?.setInternalFieldValue(childProperty,null);
+  //     FormBuilderFieldState? fieldState =
+  //         _formKey.currentState?.fields[childProperty];
+  //
+  //     fieldState?.setValue(null, populateForm: false);
+  //     // fieldState?.didChange(null);
+  //     // fieldState?.formState?.patchValue({childProperty: null});
+  //     // fieldState?.formState?.patchValue({childProperty: null});
+  //     // fieldState?.didChange(null);
+  //
+  //     //
+  //     FindXList? childFindXList = _xListMap[childProperty];
+  //     if (childFindXList == null) {
+  //       continue;
+  //     }
+  //     XList? childXList = childFindXList();
+  //
+  //     childXList?.clear();
+  //     childXList?.valid = false;
+  //   }
+  //   print(
+  //       "@ ~~~~~~~~~~~~~~~> 2.2.2 _firePropertyChange: ${data._currentFormData}");
+  // }
 
   // ***************************************************************************
   // ***************************************************************************
