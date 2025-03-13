@@ -47,13 +47,20 @@ abstract class FilterModel<
   bool _firstQueryDone = false;
   bool _applyDefaultFilterCriteria = false;
 
+  @Deprecated("Xoa di, khong su dung nua")
   final _PropTreeBuilder __propTreeBuilder = _PropTreeBuilder();
+  @Deprecated("Xoa di, khong su dung nua")
   late final _PropTree _propTree;
+
+  final Map<String, XList> _xListMap = {};
+
+  late final MasterProperties _masterProperties;
 
   // ***************************************************************************
   // ***************************************************************************
 
   FilterModel() {
+    __initMasterProperties();
     setupPropertyConstraints();
     _propTree = __propTreeBuilder.build();
   }
@@ -61,6 +68,33 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  void __initMasterProperties() {
+    List<MasterProperty> materProperties = registerMasterProperties();
+    this._masterProperties = MasterProperties(
+      masterProperties: materProperties,
+    );
+  }
+
+  ///
+  /// ```dart
+  /// List<MasterProperty> registerMasterProperties() {
+  ///     return [
+  ///        MasterProperty(
+  ///           propName: "company",
+  ///           children: [
+  ///              MasterProperty(
+  ///                 propName: "department",
+  ///              ),
+  ///           ],
+  ///        ),
+  ///     ];
+  ///   }
+  /// ```
+  List<MasterProperty> registerMasterProperties() {
+    return [];
+  }
+
+  @Deprecated("Xoa di, khong su dung nua")
   void setupPropertyConstraint({
     required String? parentProperty,
     required String property,
@@ -95,6 +129,7 @@ abstract class FilterModel<
   ///   }
   /// ```
   ///
+  @Deprecated("Xoa di, khong su dung nua")
   void setupPropertyConstraints() {
     // ???????????
   }

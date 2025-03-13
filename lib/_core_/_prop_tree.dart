@@ -1,5 +1,6 @@
 part of '../flutter_artist.dart';
 
+@Deprecated("Xoa di, khong su dung nua")
 class _PropTreeBuilder {
   final Map<String, FindXList> __xListMap = {};
   final Map<String, String> __childAndParentPropMap = {};
@@ -48,6 +49,7 @@ class _PropTreeBuilder {
   }
 }
 
+@Deprecated("Xoa di, khong su dung nua")
 class _PropTree {
   final Map<String, _PropTreeItem> _itemMap = {};
   final List<_PropTreeItem> rootItems = [];

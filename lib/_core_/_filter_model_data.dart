@@ -85,7 +85,8 @@ class FilterModelData<
       }
     }
     print("@after _updateFilterData _currentFormData: $_currentFormData");
-    print("@after _updateFilterData filterModel._currentFormData: ${filterModel._formKey?.currentState?.instantValue}");
+    print(
+        "@after _updateFilterData filterModel._currentFormData: ${filterModel._formKey?.currentState?.instantValue}");
   }
 
   // ***************************************************************************
