@@ -85,15 +85,12 @@ class _FilterViewBuilderState
     bool isBuilding = widget.filterModel._isWidgetStateBuilding(
       widgetState: this,
     );
-    print("%%%%%%%% 1 buildContent: isBuilding: $isBuilding");
     widget.filterModel
         ._setFilterViewBuildingState(widgetState: this, isBuilding: true);
     isBuilding = widget.filterModel._isWidgetStateBuilding(
       widgetState: this,
     );
-    print("%%%%%%%% 2 buildContent: isBuilding: $isBuilding");
-    print(
-        "%%%%%%%% ???????? 2 initialValue: ${widget.filterModel._initFilterValue()}");
+    //
     return FormBuilder(
       key: formKey,
       initialValue: widget.filterModel._initFilterValue(),

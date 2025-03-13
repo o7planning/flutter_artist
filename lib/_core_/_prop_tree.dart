@@ -146,6 +146,8 @@ class _PropTreeItem {
       if (xList == null) {
         return;
       }
+      print(">>>>>>>> oldValue: $oldValue");
+      print(">>>>>>>> newValue: $newValue");
       bool isSame = xList.isSame(item1: oldValue, item2: newValue);
       if (!isSame) {
         for (_PropTreeItem childItem in children) {
