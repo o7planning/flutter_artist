@@ -70,7 +70,6 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
 
   Future<void> __executeAfterBuild() async {
     setBuildingState(isBuilding: false);
-    print("#### __executeAfterBuild: setBuildingState: false");
     // IMPORTANT: Do not remove below line:
     await Future.delayed(Duration.zero);
     this.setBuildingState(isBuilding: false);
