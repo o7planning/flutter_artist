@@ -112,7 +112,7 @@ class _PropTreeItem {
       if (p == null) {
         return;
       }
-      if (propNames.contains(p.propName) ){
+      if (propNames.contains(p.propName)) {
         String message = '''
           The parent-child relationship of several properties forms a cycle.
           ┌─────┐
@@ -124,7 +124,7 @@ class _PropTreeItem {
         throw message;
       }
       propNames.add(p.propName);
-      p= p.parent;
+      p = p.parent;
     }
   }
 
@@ -146,16 +146,15 @@ class _PropTreeItem {
       if (xList == null) {
         return;
       }
-      print(">>>>>>>> oldValue: $oldValue");
-      print(">>>>>>>> newValue: $newValue");
       bool isSame = xList.isSame(item1: oldValue, item2: newValue);
-      if (!isSame) {
+      if (!isSame || newValue == null) {
         for (_PropTreeItem childItem in children) {
           FindXList? childFindXList = childItem.findXList;
           if (childFindXList != null) {
             XList? childXList = childFindXList();
             if (childXList != null) {
               childXList.valid = false;
+              childXList.clear();
               updateValues[childItem.propName] = null;
               childItem.dirty = true;
             }
