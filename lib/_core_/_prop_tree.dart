@@ -67,6 +67,7 @@ class _PropTree {
     required Map<String, dynamic> currentValues,
     required Map<String, dynamic> updateValues,
   }) {
+    // Clean all TreeItem in Tree.
     for (_PropTreeItem item in _itemMap.values) {
       item.updateValue = null;
       item.valueUpdated = false;
@@ -77,6 +78,14 @@ class _PropTree {
       _PropTreeItem? item = _itemMap[prop];
       if (item != null) {
         item.dirty = true;
+      } else {
+        _PropTreeItem? newTreeItem = _PropTreeItem(
+          propName: prop,
+          findXList: null,
+        );
+        newTreeItem.dirty = true;
+        _itemMap[prop] = newTreeItem;
+        rootItems.add(newTreeItem);
       }
     }
     //
