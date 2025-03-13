@@ -47,12 +47,12 @@ abstract class FilterModel<
   bool _firstQueryDone = false;
   bool _applyDefaultFilterCriteria = false;
 
-  @Deprecated("Xoa di, khong su dung nua")
-  final _PropTreeBuilder __propTreeBuilder = _PropTreeBuilder();
-  @Deprecated("Xoa di, khong su dung nua")
-  late final _PropTree _propTree;
+  // @Deprecated("Xoa di, khong su dung nua")
+  // final _PropTreeBuilder __propTreeBuilder = _PropTreeBuilder();
+  // @Deprecated("Xoa di, khong su dung nua")
+  // late final _PropTree _propTree;
 
-  final Map<String, XList> _xListMap = {};
+  // final Map<String, XList> _xListMap = {};
 
   late final MasterProperties _masterProperties;
 
@@ -61,8 +61,8 @@ abstract class FilterModel<
 
   FilterModel() {
     __initMasterProperties();
-    setupPropertyConstraints();
-    _propTree = __propTreeBuilder.build();
+    // setupPropertyConstraints();
+    // _propTree = __propTreeBuilder.build();
   }
 
   // ***************************************************************************
@@ -94,44 +94,11 @@ abstract class FilterModel<
     return [];
   }
 
-  @Deprecated("Xoa di, khong su dung nua")
-  void setupPropertyConstraint({
-    required String? parentProperty,
-    required String property,
-    required FindXList findXList,
-  }) {
-    __propTreeBuilder.addConstraint(
-      parentProperty: parentProperty,
-      property: property,
-      findXList: findXList,
-    );
-  }
+  // ***************************************************************************
+  // ***************************************************************************
 
-  ///
-  /// Example:
-  ///
-  /// ```dart
-  ///  void setupPropertyConstraints() {
-  ///     this.setupPropertyConstraint(
-  ///       parentProperty: null,
-  ///       property: "company",
-  ///       findXList: () {
-  ///         return companyXList;
-  ///       },
-  ///     );
-  ///     this.setupPropertyConstraint(
-  ///       parentXListProperty: "company",
-  ///       property: "department",
-  ///       findXList: () {
-  ///        return departmentXList;
-  ///       },
-  ///     );
-  ///   }
-  /// ```
-  ///
-  @Deprecated("Xoa di, khong su dung nua")
-  void setupPropertyConstraints() {
-    // ???????????
+  XList? getXList(String propertyName) {
+    return _masterProperties.getXList(propertyName);
   }
 
   // ***************************************************************************
