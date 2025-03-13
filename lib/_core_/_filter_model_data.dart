@@ -81,12 +81,13 @@ class FilterModelData<
       final dynamic newValue = updateData[property];
       //
       _currentFormData[property] = newValue;
+      _initialFormData[property] = newValue;
       //
-      final GetXList? getXList = this.filterModel._xListMap[property];
-      if (getXList == null) {
+      final FindXList? findXList = this.filterModel._xListMap[property];
+      if (findXList == null) {
         continue;
       }
-      final XList? xList = getXList();
+      final XList? xList = findXList();
       if (xList == null) {
         continue;
       }

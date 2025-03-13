@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-typedef GetXList = XList? Function();
+typedef FindXList = XList? Function();
 
 abstract class FilterModel<
     FILTER_INPUT extends FilterInput, // EmptyFilterInput
@@ -63,6 +63,8 @@ abstract class FilterModel<
   Future<FILTER_CRITERIA?> _prepareMasterDataAndFilterData({
     required FILTER_INPUT? filterInput,
   }) async {
+    print(
+        "######################### Chay vao day 3.0: data._currentFormData= ${data._currentFormData}");
     bool error = false;
     try {
       //
@@ -97,7 +99,8 @@ abstract class FilterModel<
       Map<String, dynamic> defaultFilterCriteria =
           this.initialCriteriaDataMap();
 
-      print("Chay vao day 3.3: defaultFilterCriteria= ${defaultFilterCriteria}");
+      print(
+          "Chay vao day 3.3: defaultFilterCriteria= ${defaultFilterCriteria}");
       //
       if (_formKey.currentState == null) {
         this.data._updateFilterData(defaultFilterCriteria);
@@ -289,7 +292,7 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  final Map<String, GetXList> _xListMap = {};
+  final Map<String, FindXList> _xListMap = {};
   final Map<String, List<String>> _parentChildrenPropMap = {};
 
   void _firePropertyChange({required String property}) {
@@ -303,22 +306,37 @@ abstract class FilterModel<
       this.data._updateFilterData({childProperty: null});
       this._formKey.currentState?.patchValue({childProperty: null});
       //
-      GetXList? childGetXList = _xListMap[childProperty];
-      if (childGetXList == null) {
+      // _formKey.currentState?.removeInternalFieldValue(childProperty);
+      // _formKey.currentState?.setInternalFieldValue(childProperty,null);
+      // FormBuilderFieldState? fieldState =
+      //     _formKey.currentState?.fields[childProperty];
+      // fieldState?.setValue(null,populateForm: false) ;
+      // fieldState?.didChange(null);
+      // fieldState?.formState?.patchValue({childProperty: null});
+      // fieldState?.formState?.patchValue({childProperty: null});
+      // fieldState?.didChange(null);
+      //
+      FindXList? childFindXList = _xListMap[childProperty];
+      if (childFindXList == null) {
         continue;
       }
-      XList? childXList = childGetXList();
-      print(">>>>>>>>>: clearXList: ${getClassName(childXList)}");
+      XList? childXList = childFindXList();
+      print(
+          ">>>>>>>>>: clearXList: ${getClassName(childXList)} - childProperty: $childProperty");
+
       childXList?.clear();
+      childXList?.valid = false;
+      print(
+          "^^^^^^^^^^ @@@@@@@@@@@@@@@@@@: _formKey.currentState: ${_formKey.currentState?.instantValue}");
     }
   }
 
   void setupPropertyConstraint({
     required String? parentProperty,
     required String property,
-    required GetXList getXList,
+    required FindXList findXList,
   }) {
-    _xListMap[property] = getXList;
+    _xListMap[property] = findXList;
     if (parentProperty != null) {
       _parentChildrenPropMap.update(
         parentProperty,
@@ -336,14 +354,14 @@ abstract class FilterModel<
   ///     this.setupPropertyConstraint(
   ///       parentProperty: null,
   ///       property: "company",
-  ///       getXList: () {
+  ///       findXList: () {
   ///         return companyXList;
   ///       },
   ///     );
   ///     this.setupPropertyConstraint(
   ///       parentXListProperty: "company",
   ///       property: "department",
-  ///       getXList: () {
+  ///       findXList: () {
   ///        return departmentXList;
   ///       },
   ///     );
@@ -351,20 +369,7 @@ abstract class FilterModel<
   /// ```
   ///
   void setupPropertyConstraints() {
-    // this.setupPropertyConstraint(
-    //   parentProperty: null,
-    //   property: "company",
-    //   getXList: () {
-    //     return companyXList;
-    //   },
-    // );
-    // this.setupPropertyConstraint(
-    //   parentXListProperty: "company",
-    //   property: "department",
-    //   getXList: () {
-    //     return departmentXList;
-    //   },
-    // );
+    // ???????????
   }
 
   // ***************************************************************************
@@ -372,11 +377,6 @@ abstract class FilterModel<
 
   // Change Event from GUI.
   Future<void> _onChangeFromFilterView() async {
-    if (this._isBuilding()) {
-      print(
-          ">>> @@@@@@@@@@@@@@@@@ >>>>>>> ${getClassName(this)}._onChangeFromFilterView --> _isBuilding");
-      // return;
-    }
     print(
         ">>> @@@@@@@@@@@@@@@@@ >>>>>>> ${getClassName(this)}._onChangeFromFilterView: ${_formKey.currentState!.instantValue}");
     //
