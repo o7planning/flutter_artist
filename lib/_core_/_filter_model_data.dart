@@ -74,14 +74,21 @@ class FilterModelData<
   // ***************************************************************************
   // ***************************************************************************
 
+
   void _updateFilterData(Map<String, dynamic> updateData) {
-    print("~~~~~~~~~~~~~> _updateFilterData: $updateData");
-    for (String property in updateData.keys) {
+    print("\n\n@ ~~~~~~~~~~~~~~~> 2.0 _updateFilterData/updateData: ${updateData}");
+    print("@ ~~~~~~~~~~~~~~~> 2.1 _updateFilterData: ${_currentFormData}");
+
+
+   List<String> props = [...updateData.keys];
+   //
+    for (String property in props) {
+
+      print("@ ~~~~~~~~~~~~~~~> 2.1.1@@@ property: ${property}");
       final dynamic oldValue = _currentFormData[property];
       final dynamic newValue = updateData[property];
       //
       _currentFormData[property] = newValue;
-      _initialFormData[property] = newValue;
       //
       final FindXList? findXList = this.filterModel._xListMap[property];
       if (findXList == null) {
@@ -93,6 +100,7 @@ class FilterModelData<
       }
       bool isSame = xList.isSame(item1: oldValue, item2: newValue);
       if (!isSame) {
+        print("@ ~~~~~~~~~~~~~~~> 2.2 _updateFilterData: ${_currentFormData}");
         this.filterModel._firePropertyChange(property: property);
       }
     }

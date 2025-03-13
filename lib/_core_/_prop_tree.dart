@@ -1,0 +1,119 @@
+part of '../flutter_artist.dart';
+
+class _PropTreeBuilder {
+  final Map<String, FindXList> __xListMap = {};
+  final Map<String, String> __childAndParentPropMap = {};
+  //
+
+  _PropTreeBuilder();
+
+  void addConstraint({
+    required String? parentProperty,
+    required String property,
+    required FindXList findXList,
+  }) {
+    __xListMap[property] = findXList;
+    if (parentProperty != null) {
+      __childAndParentPropMap[property] = parentProperty;
+    }
+  }
+
+  _PropTree build() {
+    final Map<String, _PropTreeItem> itemMap = __xListMap.map(
+      (k, v) => MapEntry(
+        k,
+        _PropTreeItem(propName: k, findXList: v),
+      ),
+    );
+    //
+    for (String prop in __childAndParentPropMap.keys) {
+      String parentProp = __childAndParentPropMap[prop]!;
+      _PropTreeItem? child = itemMap[prop];
+      _PropTreeItem? parent = itemMap[parentProp];
+      if (child == null) {
+        throw "No XList '$prop'";
+      } else if (parent == null) {
+        throw "No XList '$parentProp'";
+      }
+      child.parent = parent;
+      parent.children.add(child);
+    }
+    //
+    for (_PropTreeItem item in itemMap.values) {
+      item._checkCycleError();
+    }
+    //
+    return _PropTree._(itemMap: itemMap);
+  }
+}
+
+class _PropTree {
+  final Map<String, _PropTreeItem> _itemMap = {};
+  List<_PropTreeItem> rootItems = [];
+
+  _PropTree._({
+    required Map<String, _PropTreeItem> itemMap,
+  }) {
+    _itemMap.addAll(itemMap);
+    rootItems.addAll(itemMap.values.where((item) => item.parent == null));
+  }
+
+  _PropTreeItem? getItemByProp(String prop) {
+    return _itemMap[prop];
+  }
+
+  void clearValues() {
+    for (_PropTreeItem item in _itemMap.values) {
+      item.value = null;
+      item.valueChecked = false;
+      item.dirty = false;
+    }
+  }
+
+  void updateValues(Map<String, dynamic> values) {
+    clearValues();
+    for (String prop in values.keys) {
+      _PropTreeItem? item = _itemMap[prop];
+      if (item != null) {
+        item.value = values[prop];
+        item.dirty = true;
+      }
+    }
+  }
+}
+
+class _PropTreeItem {
+  final String propName;
+  final FindXList findXList;
+  dynamic value;
+  bool valueChecked = false;
+  bool dirty = false;
+  //
+  _PropTreeItem? parent;
+  final List<_PropTreeItem> children = [];
+
+  _PropTreeItem({
+    required this.propName,
+    required this.findXList,
+  });
+
+  void _checkCycleError() {
+    _PropTreeItem? p = parent;
+    while (true) {
+      if (p == null) {
+        return;
+      }
+      if (p.propName == propName) {
+        String message = '''
+          The parent-child relationship of several properties forms a cycle.
+          ┌─────┐
+          |  $propName
+          ↑     ↓
+          |  ${parent!.propName}
+          └─────┘
+        ''';
+        throw message;
+      }
+    }
+  }
+}
