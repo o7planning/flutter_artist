@@ -75,16 +75,9 @@ class _FilterViewBuilderState
     bool isBuilding = widget.filterModel._isWidgetStateBuilding(
       widgetState: this,
     );
-    print("#### onChanged: isBuilding: $isBuilding");
     if (!isBuilding) {
-      print("#### onChanged: --> filterModel._onChangeFromFilterView");
       await widget.filterModel._onChangeFromFilterView();
     }
-    // if (mounted) {
-    //   WidgetsBinding.instance.addPostFrameCallback((_) {
-    //     widget.filterModel.updateAllUIComponents();
-    //   });
-    // }
   }
 
   @override
@@ -99,6 +92,8 @@ class _FilterViewBuilderState
       widgetState: this,
     );
     print("%%%%%%%% 2 buildContent: isBuilding: $isBuilding");
+    print(
+        "%%%%%%%% ???????? 2 initialValue: ${widget.filterModel._initFilterValue()}");
     return FormBuilder(
       key: formKey,
       initialValue: widget.filterModel._initFilterValue(),

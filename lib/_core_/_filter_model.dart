@@ -63,8 +63,6 @@ abstract class FilterModel<
   Future<FILTER_CRITERIA?> _prepareMasterDataAndFilterData({
     required FILTER_INPUT? filterInput,
   }) async {
-    print(
-        "######################### Chay vao day 3.0: data._currentFormData= ${data._currentFormData}");
     bool error = false;
     try {
       //
@@ -83,7 +81,6 @@ abstract class FilterModel<
       );
       error = true;
     }
-    print("Chay vao day 3.1: data._currentFormData= ${data._currentFormData}");
     //
     if (error) {
       this.data._clearWithDataState(
@@ -91,7 +88,6 @@ abstract class FilterModel<
           );
       return null;
     }
-    print("Chay vao day 3.2: data._currentFormData= ${data._currentFormData}");
     //
     // Apply Default FilterCriteria:
     //
@@ -99,8 +95,6 @@ abstract class FilterModel<
       Map<String, dynamic> defaultFilterCriteria =
           this.initialCriteriaDataMap();
 
-      print(
-          "Chay vao day 3.3: defaultFilterCriteria= ${defaultFilterCriteria}");
       //
       if (_formKey.currentState == null) {
         this.data._updateFilterData(defaultFilterCriteria);
@@ -126,7 +120,6 @@ abstract class FilterModel<
       );
       error = true;
     }
-    print("Chay vao day 3.4: data._currentFormData= ${data._currentFormData}");
     //
     if (error) {
       this.data._clearWithDataState(
@@ -296,8 +289,6 @@ abstract class FilterModel<
   final Map<String, List<String>> _parentChildrenPropMap = {};
 
   void _firePropertyChange({required String property}) {
-    print(
-        ">>>>>>>>>: ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _firePropertyChange: $property");
     List<String>? childProperties = _parentChildrenPropMap[property];
     if (childProperties == null || childProperties.isEmpty) {
       return;
@@ -308,26 +299,24 @@ abstract class FilterModel<
       //
       // _formKey.currentState?.removeInternalFieldValue(childProperty);
       // _formKey.currentState?.setInternalFieldValue(childProperty,null);
-      // FormBuilderFieldState? fieldState =
-      //     _formKey.currentState?.fields[childProperty];
-      // fieldState?.setValue(null,populateForm: false) ;
-      // fieldState?.didChange(null);
-      // fieldState?.formState?.patchValue({childProperty: null});
-      // fieldState?.formState?.patchValue({childProperty: null});
-      // fieldState?.didChange(null);
+      FormBuilderFieldState? fieldState =
+          _formKey.currentState?.fields[childProperty];
+
+      fieldState?.setValue(null, populateForm: false);
+      fieldState?.didChange(null);
+      fieldState?.formState?.patchValue({childProperty: null});
+      fieldState?.formState?.patchValue({childProperty: null});
+      fieldState?.didChange(null);
+
       //
       FindXList? childFindXList = _xListMap[childProperty];
       if (childFindXList == null) {
         continue;
       }
       XList? childXList = childFindXList();
-      print(
-          ">>>>>>>>>: clearXList: ${getClassName(childXList)} - childProperty: $childProperty");
 
       childXList?.clear();
       childXList?.valid = false;
-      print(
-          "^^^^^^^^^^ @@@@@@@@@@@@@@@@@@: _formKey.currentState: ${_formKey.currentState?.instantValue}");
     }
   }
 
@@ -377,8 +366,6 @@ abstract class FilterModel<
 
   // Change Event from GUI.
   Future<void> _onChangeFromFilterView() async {
-    print(
-        ">>> @@@@@@@@@@@@@@@@@ >>>>>>> ${getClassName(this)}._onChangeFromFilterView: ${_formKey.currentState!.instantValue}");
     //
     // IMPORTANT:
     // Update data from GlobalKey(_formKey) --> to FilterModelData.
@@ -386,15 +373,12 @@ abstract class FilterModel<
     //  ---> data._initialFormData
     //
     if (_formKey.currentState?.instantValue != null) {
-      print("Chay vao day 1: data._currentFormData= ${data._currentFormData}");
       if (data._justInitialized) {
         Map<String, dynamic> map = {..._formKey.currentState!.instantValue};
         map.removeWhere((k, v) => data._initialFormData.containsKey(k));
         //
         data._initialFormData.addAll(map);
       }
-
-      print("Chay vao day 2: data._currentFormData= ${data._currentFormData}");
       //
       // IMPORTANT: Will execute XList Event.
       //
@@ -411,15 +395,11 @@ abstract class FilterModel<
         }
       }
       //
-      print("Chay vao day 3: data._currentFormData= ${data._currentFormData}");
-      print(
-          ">>> @@@@@@@@@@@@@@@@@ >>>>>>> ${getClassName(this)}._onChangeFromFilterView --> _prepareMasterDataAndFilterData");
       await _prepareMasterDataAndFilterData(
         // ?????????????????????????????????????????????????????????????????????????????????????????
         filterInput: null, // TODO: Xem lai tham so filterInput.
       );
     }
-    print("Chay vao day 4: data._currentFormData= ${data._currentFormData}");
     this.updateAllUIComponents(force: true);
   }
 
@@ -604,7 +584,6 @@ abstract class FilterModel<
   // ***************************************************************************
 
   void updateAllUIComponents({bool force = true}) {
-    print(">>> ${getClassName(this)}.updateAllUIComponents() force: $force");
     for (_RefreshableWidgetState widgetState in [
       ..._filterFragmentWidgetStates.keys
     ]) {
