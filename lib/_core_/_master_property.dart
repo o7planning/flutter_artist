@@ -40,7 +40,7 @@ class MasterProperties {
     return null;
   }
 
-  void setXList({required String property, required XList xList}) {
+  void setXList({required String property, required XList? xList}) {
     XProperty? xProperty = _xPropMap[property];
     if (xProperty == null) {
       throw AppException(message: 'No Master Property $property');

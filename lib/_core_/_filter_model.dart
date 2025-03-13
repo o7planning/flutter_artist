@@ -104,7 +104,7 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void setXList({required String property, required XList xList}) {
+  void setXList({required String property, required XList? xList}) {
     _masterProperties.setXList(property: property, xList: xList);
   }
 
