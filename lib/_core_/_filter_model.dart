@@ -108,8 +108,6 @@ abstract class FilterModel<
   Future<FILTER_CRITERIA?> _prepareMasterDataAndFilterData({
     required FILTER_INPUT? filterInput,
   }) async {
-    print(
-        "@ ~~~~~~~~~~~~~~~> 4.1 _prepareMasterDataAndFilterData: ${data._currentFormData}");
     bool error = false;
     try {
       //
@@ -332,46 +330,6 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  // void _firePropertyChange({required String property}) {
-  //   print(
-  //       "\n@ ~~~~~~~~~~~~~~~> 2.2.1 _firePropertyChange[$property]: ${data._currentFormData}");
-  //   List<String>? childProperties = []; // _parentChildrenPropMap[property];
-  //   if (childProperties == null || childProperties.isEmpty) {
-  //     return;
-  //   }
-  //
-  //   for (String childProperty in childProperties) {
-  //     this.data._updateFilterData({childProperty: null});
-  //     // this._formKey.currentState?.patchValue({childProperty: null});
-  //     //
-  //     // _formKey.currentState?.removeInternalFieldValue(childProperty);
-  //     // _formKey.currentState?.setInternalFieldValue(childProperty,null);
-  //     FormBuilderFieldState? fieldState =
-  //         _formKey.currentState?.fields[childProperty];
-  //
-  //     fieldState?.setValue(null, populateForm: false);
-  //     // fieldState?.didChange(null);
-  //     // fieldState?.formState?.patchValue({childProperty: null});
-  //     // fieldState?.formState?.patchValue({childProperty: null});
-  //     // fieldState?.didChange(null);
-  //
-  //     //
-  //     FindXList? childFindXList = _xListMap[childProperty];
-  //     if (childFindXList == null) {
-  //       continue;
-  //     }
-  //     XList? childXList = childFindXList();
-  //
-  //     childXList?.clear();
-  //     childXList?.valid = false;
-  //   }
-  //   print(
-  //       "@ ~~~~~~~~~~~~~~~> 2.2.2 _firePropertyChange: ${data._currentFormData}");
-  // }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   // Change Event from GUI.
   Future<void> _onChangeFromFilterView() async {
     //
@@ -380,8 +338,6 @@ abstract class FilterModel<
     //  ---> data._currentFormData
     //  ---> data._initialFormData
     //
-    print(
-        "@ ~~~~~~~~~~~~~~~> 1 _onChangeFromFilterView: ${data._currentFormData}");
     if (_formKey.currentState?.instantValue != null) {
       if (data._justInitialized) {
         Map<String, dynamic> map = {..._formKey.currentState!.instantValue};
@@ -389,15 +345,11 @@ abstract class FilterModel<
         //
         data._initialFormData.addAll(map);
       }
-      print(
-          "@ ~~~~~~~~~~~~~~~> 2 _onChangeFromFilterView: ${data._currentFormData}");
       //
       // IMPORTANT: Will execute XList Event.
       //
       data._updateFilterData(_formKey.currentState!.instantValue);
     }
-    print(
-        "@ ~~~~~~~~~~~~~~~> 3 _onChangeFromFilterView: ${data._currentFormData}");
     //
     if (_firstQueryDone) {
       if (!_applyDefaultFilterCriteria) {
@@ -409,16 +361,12 @@ abstract class FilterModel<
           });
         }
       }
-      print(
-          "@ ~~~~~~~~~~~~~~~> 4 _onChangeFromFilterView: ${data._currentFormData}");
       //
       await _prepareMasterDataAndFilterData(
         // ?????????????????????????????????????????????????????????????????????????????????????????
         filterInput: null, // TODO: Xem lai tham so filterInput.
       );
     }
-    print(
-        "@ ~~~~~~~~~~~~~~~> 5 _onChangeFromFilterView: ${data._currentFormData}");
     this.updateAllUIComponents(force: true);
   }
 

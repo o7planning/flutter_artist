@@ -107,21 +107,24 @@ class _PropTreeItem {
 
   void _checkCycleError() {
     _PropTreeItem? p = parent;
+    List<String> propNames = [propName];
     while (true) {
       if (p == null) {
         return;
       }
-      if (p.propName == propName) {
+      if (propNames.contains(p.propName) ){
         String message = '''
           The parent-child relationship of several properties forms a cycle.
           ┌─────┐
-          |  $propName
+          |  ${propNames.last}
           ↑     ↓
-          |  ${parent!.propName}
+          |  ${p.propName}
           └─────┘
         ''';
         throw message;
       }
+      propNames.add(p.propName);
+      p= p.parent;
     }
   }
 

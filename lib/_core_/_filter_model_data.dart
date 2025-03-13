@@ -77,7 +77,7 @@ class FilterModelData<
   void _updateFilterData(Map<String, dynamic> updateData) {
     filterModel._propTree.updateValues(
       currentValues: _currentFormData,
-      updateValues: updateData,
+      updateValues: {...updateData},
     );
     for (_PropTreeItem treeItem in filterModel._propTree._itemMap.values) {
       if (treeItem.dirty) {
