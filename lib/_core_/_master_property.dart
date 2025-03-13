@@ -40,6 +40,18 @@ class MasterProperties {
     return null;
   }
 
+  void setXList({required String property, required XList xList}) {
+    XProperty? xProperty = _xPropMap[property];
+    if (xProperty == null) {
+      throw AppException(message: 'No Master Property $property');
+    }
+    if (xProperty is MasterProperty) {
+      xProperty.xList = xList;
+    } else {
+      throw AppException(message: 'Invalid Master Property $property');
+    }
+  }
+
   void addOptProperty(OptProperty property) {
     if (!_xPropMap.containsKey(property.propName)) {
       _xPropMap[property.propName] = property;
