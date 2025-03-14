@@ -619,7 +619,7 @@ class BlockData<
   // ***************************************************************************
 
   ITEM? findItemById(ID itemId) {
-    return ItemsUtils.findItemById(
+    return ItemsUtils.findItemInListById(
       id: itemId,
       targetList: _items,
       getItemId: block.getItemId,
