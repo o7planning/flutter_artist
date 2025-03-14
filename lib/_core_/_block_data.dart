@@ -113,7 +113,7 @@ class BlockData<
     if (currentItem == null) {
       return false;
     }
-    return FormUtils.isListContainItem(
+    return ItemsUtils.isListContainItem(
       item: currentItem,
       targetList: _checkedItems,
       getItemId: block.getItemId,
@@ -127,7 +127,7 @@ class BlockData<
     if (currentItem == null) {
       return false;
     }
-    return FormUtils.isListContainItem(
+    return ItemsUtils.isListContainItem(
       item: currentItem,
       targetList: _selectedItems,
       getItemId: block.getItemId,
@@ -296,17 +296,17 @@ class BlockData<
   void _removeItem({
     required ITEM removeItem,
   }) {
-    FormUtils.removeItemFromList(
+    ItemsUtils.removeItemFromList(
       targetList: _items,
       removeItem: removeItem,
       getItemId: block.getItemId,
     );
-    FormUtils.removeItemFromList(
+    ItemsUtils.removeItemFromList(
       targetList: _checkedItems,
       removeItem: removeItem,
       getItemId: block.getItemId,
     );
-    FormUtils.removeItemFromList(
+    ItemsUtils.removeItemFromList(
       targetList: _selectedItems,
       removeItem: removeItem,
       getItemId: block.getItemId,
@@ -320,7 +320,7 @@ class BlockData<
     required ITEM item,
     required ITEM_DETAIL itemDetail,
   }) {
-    FormUtils.insertOrReplaceItemInList(
+    ItemsUtils.insertOrReplaceItemInList(
       targetList: _items,
       item: item,
       getItemId: block.getItemId,
@@ -328,12 +328,12 @@ class BlockData<
     //
     sort();
     //
-    FormUtils.replaceItemInList(
+    ItemsUtils.replaceItemInList(
       targetList: _checkedItems,
       replacementItem: item,
       getItemId: block.getItemId,
     );
-    FormUtils.replaceItemInList(
+    ItemsUtils.replaceItemInList(
       targetList: _selectedItems,
       replacementItem: item,
       getItemId: block.getItemId,
@@ -344,7 +344,7 @@ class BlockData<
   // ***************************************************************************
 
   void __appendItems({required List<ITEM> appendItems}) {
-    FormUtils.appendItemsToList(
+    ItemsUtils.appendItemsToList(
       appendItems: appendItems,
       targetList: _items,
       getItemId: block.getItemId,
@@ -352,12 +352,12 @@ class BlockData<
     //
     sort();
     //
-    FormUtils.replaceItemsInList(
+    ItemsUtils.replaceItemsInList(
       replacementItems: appendItems,
       targetList: _selectedItems,
       getItemId: block.getItemId,
     );
-    FormUtils.replaceItemsInList(
+    ItemsUtils.replaceItemsInList(
       replacementItems: appendItems,
       targetList: _checkedItems,
       getItemId: block.getItemId,
@@ -535,7 +535,7 @@ class BlockData<
   // ***************************************************************************
 
   bool isSelectedItem(ITEM item) {
-    return FormUtils.isListContainItem(
+    return ItemsUtils.isListContainItem(
       targetList: _selectedItems,
       item: item,
       getItemId: block.getItemId,
@@ -546,7 +546,7 @@ class BlockData<
   // ***************************************************************************
 
   bool isCheckedItem(ITEM item) {
-    return FormUtils.isListContainItem(
+    return ItemsUtils.isListContainItem(
       targetList: _checkedItems,
       item: item,
       getItemId: block.getItemId,
@@ -559,7 +559,7 @@ class BlockData<
   bool containsItem({
     required ITEM item,
   }) {
-    return FormUtils.isListContainItem(
+    return ItemsUtils.isListContainItem(
       targetList: _items,
       item: item,
       getItemId: block.getItemId,
@@ -572,7 +572,7 @@ class BlockData<
   ITEM? findNextSiblingItem({
     required ITEM item,
   }) {
-    return FormUtils.findNextSiblingItemInList(
+    return ItemsUtils.findNextSiblingItemInList(
       item: item,
       targetList: _items,
       getItemId: block.getItemId,
@@ -585,7 +585,7 @@ class BlockData<
   ITEM? findPreviousSiblingItem({
     required ITEM item,
   }) {
-    return FormUtils.findPreviousSiblingItemInList(
+    return ItemsUtils.findPreviousSiblingItemInList(
       item: item,
       targetList: _items,
       getItemId: block.getItemId,
@@ -598,7 +598,7 @@ class BlockData<
   ITEM? findSiblingItem({
     required ITEM item,
   }) {
-    return FormUtils.findSiblingItemInList(
+    return ItemsUtils.findSiblingItemInList(
       item: item,
       targetList: _items,
       getItemId: block.getItemId,
@@ -619,7 +619,7 @@ class BlockData<
   // ***************************************************************************
 
   ITEM? findItemById(ID itemId) {
-    return FormUtils.findItemById(
+    return ItemsUtils.findItemById(
       id: itemId,
       targetList: _items,
       getItemId: block.getItemId,
@@ -679,7 +679,7 @@ class BlockData<
   // ***************************************************************************
 
   void _setCheckedItems({required List<ITEM> items}) {
-    FormUtils.insertOrReplaceItemsInList(
+    ItemsUtils.insertOrReplaceItemsInList(
       items: items,
       targetList: _checkedItems,
       getItemId: block.getItemId,
@@ -690,7 +690,7 @@ class BlockData<
   // ***************************************************************************
 
   void _setSelectedItems({required List<ITEM> items}) {
-    FormUtils.insertOrReplaceItemsInList(
+    ItemsUtils.insertOrReplaceItemsInList(
       items: items,
       targetList: _selectedItems,
       getItemId: block.getItemId,
@@ -701,7 +701,7 @@ class BlockData<
   // ***************************************************************************
 
   void __checkItem(ITEM item) {
-    FormUtils.insertOrReplaceItemInList(
+    ItemsUtils.insertOrReplaceItemInList(
       item: item,
       targetList: _checkedItems,
       getItemId: block.getItemId,
@@ -712,7 +712,7 @@ class BlockData<
   // ***************************************************************************
 
   void __selectItem(ITEM item) {
-    FormUtils.insertOrReplaceItemInList(
+    ItemsUtils.insertOrReplaceItemInList(
       item: item,
       targetList: _selectedItems,
       getItemId: block.getItemId,
@@ -723,7 +723,7 @@ class BlockData<
   // ***************************************************************************
 
   void __uncheckItem(ITEM item) {
-    FormUtils.removeItemFromList(
+    ItemsUtils.removeItemFromList(
       removeItem: item,
       targetList: _checkedItems,
       getItemId: block.getItemId,
@@ -734,7 +734,7 @@ class BlockData<
   // ***************************************************************************
 
   void __deselectItem(ITEM item) {
-    FormUtils.removeItemFromList(
+    ItemsUtils.removeItemFromList(
       removeItem: item,
       targetList: _selectedItems,
       getItemId: block.getItemId,

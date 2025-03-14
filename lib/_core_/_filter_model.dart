@@ -47,13 +47,6 @@ abstract class FilterModel<
   bool _firstQueryDone = false;
   bool _applyDefaultFilterCriteria = false;
 
-  // @Deprecated("Xoa di, khong su dung nua")
-  // final _PropTreeBuilder __propTreeBuilder = _PropTreeBuilder();
-  // @Deprecated("Xoa di, khong su dung nua")
-  // late final _PropTree _propTree;
-
-  // final Map<String, XList> _xListMap = {};
-
   late final MasterProperties _masterProperties;
 
   // ***************************************************************************
@@ -61,8 +54,6 @@ abstract class FilterModel<
 
   FilterModel() {
     __initMasterProperties();
-    // setupPropertyConstraints();
-    // _propTree = __propTreeBuilder.build();
   }
 
   // ***************************************************************************
@@ -267,11 +258,36 @@ abstract class FilterModel<
     required FILTER_INPUT? filterInput,
   });
 
-  XList prepareMasterDataNew({
+  Future<XList<dynamic, dynamic>> prepareMasterOptionsData({
     required FILTER_INPUT? filterInput,
     required String property,
-  }) { 
+  }) {
+    // TODO
+    throw UnimplementedError();
+  }
 
+  Future<void> _prepareMasterOptionsDataCascade({
+    required FILTER_INPUT? filterInput,
+    required MasterProperty masterProperty,
+  }) async {
+    final String property = masterProperty.propName;
+    XList<dynamic, dynamic>? xList = this.getXList(property);
+    if (xList == null) {
+      xList = await prepareMasterOptionsData(
+        filterInput: filterInput,
+        property: property,
+      );
+      Object? candidateSelectedItems = this.filterInputToCriterionValue(
+        filterInput: filterInput,
+        property: property,
+      );
+    }
+  }
+
+  void _prepareMasterOptionsDatas() {
+    for (XProperty xProperty in _masterProperties.rootXProperties) {
+      if (xProperty is MasterProperty) {}
+    }
   }
 
   // ***************************************************************************
@@ -321,9 +337,39 @@ abstract class FilterModel<
   /// }
   /// ```
   ///
+  @Deprecated("Khong su dung nua")
   Map<String, dynamic> filterInputToCriteriaDataMap({
     required FILTER_INPUT filterInput,
   });
+
+  ///
+  /// This method is called after [prepareMasterData] and [initialCriteriaDataMap] methods.
+  ///
+  /// For example, after getting a list of companies from the [prepareMasterData] method.
+  /// Use [FilterInput] to identify a company that will be used as a criterion for the filter.
+  ///
+  /// ```dart
+  /// @override
+  /// List<Object>? filterInputToCriterionValue({
+  ///    required CompanyIdFilterInput filterInput,
+  /// }) {
+  ///    int inputCompanyId = filterInput.filterInput;
+  ///
+  ///    TODO: Viet tiep...
+  ///
+  ///    CompanyInfo inputCompany = companyXList?.getItemById(inputCompanyId);
+  ///    return {
+  ///       "company": inputCompany,
+  ///    };
+  /// }
+  /// ```
+  ///
+  List<Object>? filterInputToCriterionValue({
+    required FILTER_INPUT? filterInput,
+    required String property,
+  }) {
+    return null;
+  }
 
   // ***************************************************************************
   // ***************************************************************************

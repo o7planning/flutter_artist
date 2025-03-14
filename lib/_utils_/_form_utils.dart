@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-class FormUtils {
+class ItemsUtils {
   static ITEM? findItemById<ITEM, ID>({
     required ID id,
     required List<ITEM> targetList,
