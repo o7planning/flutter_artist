@@ -63,8 +63,8 @@ abstract class FilterModel<
   /// ```dart
   /// MasterDataStructure registerMasterDataStructure() {
   ///     return MasterDataStructure(
-  ///        masterProperties: [
-  ///            MasterProperty(
+  ///        relatedMasterProps: [
+  ///            RelatedMasterProp(
   ///              propName: "company",
   ///              children: [
   ///                 MasterProperty(
@@ -77,7 +77,7 @@ abstract class FilterModel<
   /// }
   /// ```
   MasterDataStructure registerMasterDataStructure() {
-    return MasterDataStructure(relatedMasterProp: []);
+    return MasterDataStructure(relatedMasterProps: []);
   }
 
   // ***************************************************************************
@@ -90,15 +90,15 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  XList? getXListMasterData(String propertyName) {
-    return _masterDataStructure.getXList(propertyName);
+  XList? getXListMasterData(String propName) {
+    return _masterDataStructure._getXListMasterData(propName);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void setXListMasterData({required String property, required XList? xList}) {
-    _masterDataStructure.setXList(propName: property, xList: xList);
+  void setXListMasterData({required String propName, required XList? xList}) {
+    _masterDataStructure._setXListMasterData(propName: propName, xList: xList);
   }
 
   // ***************************************************************************

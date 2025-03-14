@@ -2,13 +2,13 @@ part of '../flutter_artist.dart';
 
 class MasterDataStructure {
   final Map<String, MasterProp> _masterPropMap = {};
-  final List<CommonMasterProp> commonProperties = [];
-  final List<RelatedMasterProp> rootRelatedMasterProps;
+  final List<RelatedMasterProp> _rootRelatedMasterProps;
+  final List<CommonMasterProp> _commonProperties = [];
 
   MasterDataStructure({
-    required List<RelatedMasterProp> relatedMasterProp,
-  }) : rootRelatedMasterProps = [...relatedMasterProp] {
-    for (RelatedMasterProp rootMasterProperty in relatedMasterProp) {
+    required List<RelatedMasterProp> relatedMasterProps,
+  }) : _rootRelatedMasterProps = [...relatedMasterProps] {
+    for (RelatedMasterProp rootMasterProperty in relatedMasterProps) {
       __standardizeCascade(rootMasterProperty, null);
     }
     for (MasterProp xProperty in _masterPropMap.values) {
@@ -30,7 +30,7 @@ class MasterDataStructure {
     }
   }
 
-  XList? getXList(String propName) {
+  XList? _getXListMasterData(String propName) {
     MasterProp? xProperty = _masterPropMap[propName];
     if (xProperty == null) {
       return null;
@@ -41,7 +41,7 @@ class MasterDataStructure {
     return null;
   }
 
-  void setXList({required String propName, required XList? xList}) {
+  void _setXListMasterData({required String propName, required XList? xList}) {
     MasterProp? masterProp = _masterPropMap[propName];
     if (masterProp == null) {
       throw AppException(message: 'No MasterProp $propName');
@@ -56,7 +56,7 @@ class MasterDataStructure {
   void _addCommonMasterProp(CommonMasterProp masterProp) {
     if (!_masterPropMap.containsKey(masterProp.propName)) {
       _masterPropMap[masterProp.propName] = masterProp;
-      commonProperties.add(masterProp);
+      _commonProperties.add(masterProp);
     }
   }
 
@@ -81,18 +81,18 @@ class MasterDataStructure {
         );
         newCommonProperty._dirty = true;
         _masterPropMap[prop] = newCommonProperty;
-        commonProperties.add(newCommonProperty);
+        _commonProperties.add(newCommonProperty);
       }
     }
     //
-    for (RelatedMasterProp rootItem in rootRelatedMasterProps) {
-      rootItem.updateValueCascase(
+    for (RelatedMasterProp rootItem in _rootRelatedMasterProps) {
+      rootItem._updateValueCascase(
         currentValues: currentValues,
         updateValues: updateValues,
       );
     }
-    for (CommonMasterProp commonItem in commonProperties) {
-      commonItem.updateValueCascade(
+    for (CommonMasterProp commonItem in _commonProperties) {
+      commonItem._updateValue(
         currentValues: currentValues,
         updateValues: updateValues,
       );
@@ -114,7 +114,7 @@ class CommonMasterProp extends MasterProp {
     required super.propName,
   });
 
-  void updateValueCascade({
+  void _updateValue({
     required Map<String, dynamic> currentValues,
     required Map<String, dynamic> updateValues,
   }) {
@@ -161,7 +161,7 @@ class RelatedMasterProp extends MasterProp {
     }
   }
 
-  void updateValueCascase({
+  void _updateValueCascase({
     required Map<String, dynamic> currentValues,
     required Map<String, dynamic> updateValues,
   }) {
@@ -189,7 +189,7 @@ class RelatedMasterProp extends MasterProp {
     }
     //
     for (RelatedMasterProp childItem in children) {
-      childItem.updateValueCascase(
+      childItem._updateValueCascase(
         currentValues: currentValues,
         updateValues: updateValues,
       );
