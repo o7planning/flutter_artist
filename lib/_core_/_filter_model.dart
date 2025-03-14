@@ -260,37 +260,82 @@ abstract class FilterModel<
     required FILTER_INPUT? filterInput,
   });
 
-  Future<XList<dynamic, dynamic>> prepareMasterOptionsData({
+  ///
+  /// Abstract method:
+  ///
+  Future<XList<dynamic, dynamic>> prepareMasterPropData({
     required FILTER_INPUT? filterInput,
-    required String property,
+    required String propName,
   }) {
     // TODO
     throw UnimplementedError();
   }
 
-  Future<void> _prepareMasterOptionsDataCascade({
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<void> _prepareRelatedMasterDataCascade({
     required FILTER_INPUT? filterInput,
-    required RelatedMasterProp masterProperty,
+    required RelatedMasterProp relatedMasterProp,
   }) async {
-    final String property = masterProperty.propName;
-    XList<dynamic, dynamic>? xList = this.getXListMasterData(property);
+    final String propName = relatedMasterProp.propName;
+    XList<dynamic, dynamic>? xList = this.getXListMasterData(propName);
     if (xList == null) {
-      xList = await prepareMasterOptionsData(
+      xList = await prepareMasterPropData(
         filterInput: filterInput,
-        property: property,
+        propName: propName,
       );
-      Object? candidateSelectedItems = this.filterInputToCriterionValue(
-        filterInput: filterInput,
-        property: property,
-      );
+      // Current value:
+      final dynamic currentValue = this.data.getProperty(propName);
+
+      // Candidate Selected Items:
+      List<dynamic>? candidateSelectedItems = xList.candidateSelectedItems;
+
+      //
+      // TODO: Double check this code:
+      //
+      if (candidateSelectedItems != null && candidateSelectedItems.isNotEmpty) {
+        try {
+          this.data._updateFilterData({propName: candidateSelectedItems});
+        } catch (e) {
+          Object? candidateSelectedItem = candidateSelectedItems.first;
+          this.data._updateFilterData({propName: candidateSelectedItem});
+        }
+      }
+
+      // if (relatedMasterProp.singleSelection) {
+      //   Object? candidateSelectedItem =
+      //       candidateSelectedItems == null || candidateSelectedItems.isEmpty
+      //           ? null
+      //           : candidateSelectedItems.first;
+      //   //
+      //   if (candidateSelectedItem != null) {
+      //     this.data._updateFilterData({propName: candidateSelectedItem});
+      //   }
+      // } else {
+      //   if (candidateSelectedItems != null) {
+      //     this.data._updateFilterData({propName: candidateSelectedItems});
+      //   }
+      // }
     }
   }
 
-  // void _prepareMasterOptionsDatas() {
-  //   for (XProperty xProperty in _masterDataStructure.rootXProperties) {
-  //     if (xProperty is MasterProperty) {}
-  //   }
-  // }
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _prepareAllMasterDatas({required FILTER_INPUT? filterInput}) {
+    for (RelatedMasterProp rootRelatedMasterProp
+        in _masterDataStructure._rootRelatedMasterProps) {
+      _prepareRelatedMasterDataCascade(
+        filterInput: filterInput,
+        relatedMasterProp: rootRelatedMasterProp,
+      );
+    }
+    for (CommonMasterProp commonMasterProp
+        in _masterDataStructure._commonMasterProps) {
+      // TODO: Can xu ly them.
+    }
+  }
 
   // ***************************************************************************
   // ***************************************************************************

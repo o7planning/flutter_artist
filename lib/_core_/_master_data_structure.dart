@@ -3,7 +3,7 @@ part of '../flutter_artist.dart';
 class MasterDataStructure {
   final Map<String, MasterProp> _masterPropMap = {};
   final List<RelatedMasterProp> _rootRelatedMasterProps;
-  final List<CommonMasterProp> _commonProperties = [];
+  final List<CommonMasterProp> _commonMasterProps = [];
 
   MasterDataStructure({
     required List<RelatedMasterProp> relatedMasterProps,
@@ -56,7 +56,7 @@ class MasterDataStructure {
   void _addCommonMasterProp(CommonMasterProp masterProp) {
     if (!_masterPropMap.containsKey(masterProp.propName)) {
       _masterPropMap[masterProp.propName] = masterProp;
-      _commonProperties.add(masterProp);
+      _commonMasterProps.add(masterProp);
     }
   }
 
@@ -81,7 +81,7 @@ class MasterDataStructure {
         );
         newCommonProperty._dirty = true;
         _masterPropMap[prop] = newCommonProperty;
-        _commonProperties.add(newCommonProperty);
+        _commonMasterProps.add(newCommonProperty);
       }
     }
     //
@@ -91,7 +91,7 @@ class MasterDataStructure {
         updateValues: updateValues,
       );
     }
-    for (CommonMasterProp commonItem in _commonProperties) {
+    for (CommonMasterProp commonItem in _commonMasterProps) {
       commonItem._updateValue(
         currentValues: currentValues,
         updateValues: updateValues,
@@ -130,11 +130,23 @@ class CommonMasterProp extends MasterProp {
 
 class RelatedMasterProp extends MasterProp {
   late final RelatedMasterProp? parent;
+
+  ///
+  /// In most cases this value is [true].
+  /// For example a Dropdown that only allows selection of one element.
+  ///
+  /// IMPORTANT:
+  ///
+  /// Make sure you set the appropriate value for this property, otherwise an error will occur.
+  /// For example: An error occurs when the library tries to set multiple selection values for the Dropdown.
+  ///
+  final bool singleSelection;
   final List<RelatedMasterProp> children;
   XList? _xList;
 
   RelatedMasterProp({
     required super.propName,
+    this.singleSelection = true,
     this.children = const [],
   });
 
