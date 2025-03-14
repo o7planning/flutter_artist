@@ -152,7 +152,7 @@ class RelatedMasterProp extends MasterProp {
 
   void _checkCycleError() {
     RelatedMasterProp? p = parent;
-    List<String> propNames = [propName];
+    final List<String> propNames = [propName];
     while (true) {
       if (p == null) {
         return;
