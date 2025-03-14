@@ -115,7 +115,14 @@ abstract class FilterModel<
       //
       // May throw ApiError.
       //
-      await prepareMasterData(
+      // await prepareMasterData(
+      //   filterInput: filterInput,
+      // );
+
+      //
+      // May throw ApiError.
+      //
+      _prepareAllMasterDatas(
         filterInput: filterInput,
       );
     } catch (e, stackTrace) {
@@ -256,6 +263,7 @@ abstract class FilterModel<
   /// }
   /// ```
   ///
+  @Deprecated("Xoa di, khong su dung nua")
   Future<void> prepareMasterData({
     required FILTER_INPUT? filterInput,
   });
@@ -263,7 +271,7 @@ abstract class FilterModel<
   ///
   /// Abstract method:
   ///
-  Future<XList<dynamic, dynamic>> prepareMasterPropData({
+  Future<XList<dynamic, dynamic>?> prepareMasterPropData({
     required FILTER_INPUT? filterInput,
     required String propName,
   }) {
@@ -289,7 +297,7 @@ abstract class FilterModel<
       final dynamic currentValue = this.data.getProperty(propName);
 
       // Candidate Selected Items:
-      List<dynamic>? candidateSelectedItems = xList.candidateSelectedItems;
+      List<dynamic>? candidateSelectedItems = xList?.candidateSelectedItems;
 
       //
       // TODO: Double check this code:
