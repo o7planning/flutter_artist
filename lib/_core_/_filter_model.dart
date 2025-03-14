@@ -62,18 +62,18 @@ abstract class FilterModel<
   ///
   /// ```dart
   /// MasterDataStructure registerMasterDataStructure() {
-  ///     return MasterDataStructure(
-  ///        relatedMasterProps: [
-  ///            RelatedMasterProp(
-  ///              propName: "company",
-  ///              children: [
-  ///                 MasterProperty(
-  ///                    propName: "department",
-  ///                 ),
-  ///              ],
+  ///   return MasterDataStructure(
+  ///     relatedMasterProps: [
+  ///       RelatedMasterProp(
+  ///         propName: "company",
+  ///         children: [
+  ///           MasterProperty(
+  ///              propName: "department",
   ///           ),
   ///         ],
-  ///     );
+  ///       ),
+  ///     ],
+  ///   );
   /// }
   /// ```
   MasterDataStructure registerMasterDataStructure() {
