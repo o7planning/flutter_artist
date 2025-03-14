@@ -96,8 +96,14 @@ abstract class FilterModel<
     return _masterDataStructure._getXListMasterData(propName);
   }
 
-  List<dynamic> getMasterPropDataList(String propName) {
-    return _masterDataStructure._getXListMasterData(propName)?.items ?? [];
+  List<DATA> getMasterPropDataList<DATA>(String propName) {
+    if (DATA == dynamic) {
+      throw Exception(
+          "You need to call this method with a specific generics parameter type.");
+    }
+    return (_masterDataStructure._getXListMasterData(propName)?.items
+            as List<DATA>?) ??
+        <DATA>[];
   }
 
   // ***************************************************************************
@@ -517,8 +523,7 @@ abstract class FilterModel<
       }
       //
       await _prepareMasterDataAndFilterData(
-        // ?????????????????????????????????????????????????????????????????????????????????????????
-        filterInput: null, // TODO: Xem lai tham so filterInput.
+        filterInput: null,
       );
     }
     print("@@@@@@@@@@ --> ${getClassName(this)}.updateAllUIComponents");
