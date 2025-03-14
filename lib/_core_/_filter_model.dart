@@ -276,10 +276,7 @@ abstract class FilterModel<
     required FILTER_INPUT? filterInput,
     required Object? parentMasterPropValue,
     required String propName,
-  }) {
-    // TODO
-    throw UnimplementedError();
-  }
+  });
 
   // ***************************************************************************
   // ***************************************************************************

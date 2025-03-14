@@ -43,6 +43,15 @@ class _DefaultFilterModel
   Map<String, dynamic> initialCriteriaDataMap() {
     return {};
   }
+
+  @override
+  Future<XList?> prepareOptionedMasterPropData({
+    required EmptyFilterInput? filterInput,
+    required Object? parentMasterPropValue,
+    required String propName,
+  }) async {
+    return null;
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -79,6 +88,15 @@ class StringIdFilterModel
   @override
   Map<String, dynamic> initialCriteriaDataMap() {
     return {};
+  }
+
+  @override
+  Future<XList?> prepareOptionedMasterPropData({
+    required StringIdFilterInput? filterInput,
+    required Object? parentMasterPropValue,
+    required String propName,
+  }) async {
+    return null;
   }
 }
 
@@ -117,6 +135,15 @@ class StringValueFilterModel
   Map<String, dynamic> initialCriteriaDataMap() {
     return {};
   }
+
+  @override
+  Future<XList?> prepareOptionedMasterPropData({
+    required StringValueFilterInput? filterInput,
+    required Object? parentMasterPropValue,
+    required String propName,
+  }) async {
+    return null;
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -154,6 +181,15 @@ class SearchTextFilterModel
   Map<String, dynamic> initialCriteriaDataMap() {
     return {};
   }
+
+  @override
+  Future<XList?> prepareOptionedMasterPropData({
+    required SearchTextFilterInput? filterInput,
+    required Object? parentMasterPropValue,
+    required String propName,
+  }) async {
+    return null;
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -190,6 +226,15 @@ class IntIdFilterModel
   @override
   Map<String, dynamic> initialCriteriaDataMap() {
     return {};
+  }
+
+  @override
+  Future<XList?> prepareOptionedMasterPropData({
+    required IntIdFilterInput? filterInput,
+    required Object? parentMasterPropValue,
+    required String propName,
+  }) async {
+    return null;
   }
 }
 
