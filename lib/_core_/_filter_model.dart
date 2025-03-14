@@ -274,6 +274,7 @@ abstract class FilterModel<
   ///
   Future<XList<dynamic, dynamic>?> prepareMasterPropData({
     required FILTER_INPUT? filterInput,
+    required Object? parentMasterPropValue,
     required String propName,
   }) {
     // TODO
@@ -285,6 +286,7 @@ abstract class FilterModel<
 
   Future<void> _prepareRelatedMasterDataCascade({
     required FILTER_INPUT? filterInput,
+    required Object? parentMasterPropValue,
     required RelatedMasterProp relatedMasterProp,
   }) async {
     final String propName = relatedMasterProp.propName;
@@ -297,6 +299,7 @@ abstract class FilterModel<
       print("@ $propName ~~~~~~~~~~~> 6 xList: $xList");
       xList = await prepareMasterPropData(
         filterInput: filterInput,
+        parentMasterPropValue: parentMasterPropValue,
         propName: propName,
       );
       print("@ $propName ~~~~~~~~~~~> 7 xList: ${xList?.items}");
@@ -340,11 +343,17 @@ abstract class FilterModel<
       // }
     }
     //
-    for (RelatedMasterProp child in relatedMasterProp.children) {
-      await _prepareRelatedMasterDataCascade(
-        filterInput: filterInput,
-        relatedMasterProp: child,
-      );
+    Object? selectedMasterPropValue = this.data.getProperty(propName);
+    if (selectedMasterPropValue != null) {
+      for (RelatedMasterProp child in relatedMasterProp.children) {
+        await _prepareRelatedMasterDataCascade(
+          filterInput: filterInput,
+          parentMasterPropValue: selectedMasterPropValue,
+          relatedMasterProp: child,
+        );
+      }
+    } else {
+      // TODO: ....
     }
   }
 
@@ -360,6 +369,7 @@ abstract class FilterModel<
       print("@~~~~~~~~~~~> 3 _prepareAllMasterDatas");
       await _prepareRelatedMasterDataCascade(
         filterInput: filterInput,
+        parentMasterPropValue: null,
         relatedMasterProp: masterProp,
       );
     }
