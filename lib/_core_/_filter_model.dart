@@ -95,6 +95,10 @@ abstract class FilterModel<
     return _masterDataStructure._getXListMasterData(propName);
   }
 
+  List<dynamic> getMasterPropDataList(String propName) {
+    return _masterDataStructure._getXListMasterData(propName)?.items ?? [];
+  }
+
   // ***************************************************************************
   // ***************************************************************************
 
