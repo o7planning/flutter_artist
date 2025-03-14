@@ -11,6 +11,11 @@ class _DefaultFilterModel
   }
 
   @override
+  MasterDataStructure? registerMasterDataStructure() {
+    return null;
+  }
+
+  @override
   @Deprecated("Xoa di, khong su dung nua")
   Future<void> prepareData({
     EmptyFilterInput? filterInput,
@@ -63,6 +68,11 @@ class StringIdFilterModel
   StringIdFilterModel({required this.idValue});
 
   @override
+  MasterDataStructure? registerMasterDataStructure() {
+    return null;
+  }
+
+  @override
   StringIdFilterCriteria createFilterCriteria({
     required Map<String, dynamic> dataMap,
   }) {
@@ -107,6 +117,11 @@ class StringValueFilterModel
   String? stringValue;
 
   StringValueFilterModel({required this.stringValue});
+
+  @override
+  MasterDataStructure? registerMasterDataStructure() {
+    return null;
+  }
 
   @override
   StringValueFilterCriteria createFilterCriteria({
@@ -155,6 +170,11 @@ class SearchTextFilterModel
   SearchTextFilterModel({required this.searchText});
 
   @override
+  MasterDataStructure? registerMasterDataStructure() {
+    return null;
+  }
+
+  @override
   SearchTextFilterCriteria createFilterCriteria({
     required Map<String, dynamic> dataMap,
   }) {
@@ -199,6 +219,11 @@ class IntIdFilterModel
   int? idValue;
 
   IntIdFilterModel({required this.idValue});
+
+  @override
+  MasterDataStructure? registerMasterDataStructure() {
+    return null;
+  }
 
   @override
   IntIdFilterCriteria createFilterCriteria({

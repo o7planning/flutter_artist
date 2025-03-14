@@ -76,15 +76,16 @@ abstract class FilterModel<
   ///   );
   /// }
   /// ```
-  MasterDataStructure registerMasterDataStructure() {
-    return MasterDataStructure(relatedMasterProps: []);
-  }
+  MasterDataStructure? registerMasterDataStructure();
 
   // ***************************************************************************
   // ***************************************************************************
 
   void __registerMasterDataStructure() {
-    _masterDataStructure = registerMasterDataStructure();
+    _masterDataStructure = registerMasterDataStructure() ??
+        MasterDataStructure(
+          relatedMasterProps: [],
+        );
   }
 
   // ***************************************************************************
