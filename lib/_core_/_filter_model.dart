@@ -63,8 +63,8 @@ abstract class FilterModel<
   /// ```dart
   /// MasterDataStructure registerMasterDataStructure() {
   ///   return MasterDataStructure(
-  ///     relatedMasterProps: [
-  ///       RelatedMasterProp(
+  ///     optionedMasterProps: [
+  ///       OptionedMasterProp(
   ///         propName: "company",
   ///         children: [
   ///           MasterProperty(
@@ -84,7 +84,7 @@ abstract class FilterModel<
   void __registerMasterDataStructure() {
     _masterDataStructure = registerMasterDataStructure() ??
         MasterDataStructure(
-          relatedMasterProps: [],
+          optionedMasterProps: [],
         );
   }
 
@@ -97,10 +97,6 @@ abstract class FilterModel<
   }
 
   List<DATA> getMasterPropDataList<DATA>(String propName) {
-    if (DATA == dynamic) {
-      throw Exception(
-          "You need to call this method with a specific generics parameter type.");
-    }
     return (_masterDataStructure._getXListMasterData(propName)?.items
             as List<DATA>?) ??
         <DATA>[];
@@ -296,9 +292,9 @@ abstract class FilterModel<
   Future<void> _prepareRelatedMasterDataCascade({
     required FILTER_INPUT? filterInput,
     required Object? parentMasterPropValue,
-    required RelatedMasterProp relatedMasterProp,
+    required OptionedMasterProp optionedMasterProp,
   }) async {
-    final String propName = relatedMasterProp.propName;
+    final String propName = optionedMasterProp.propName;
     print(
         "@ $propName ~~~~~~~~~~~> 4 _prepareRelatedMasterDataCascade: propName: $propName");
 
@@ -336,7 +332,7 @@ abstract class FilterModel<
         }
       }
 
-      // if (relatedMasterProp.singleSelection) {
+      // if (optionedMasterProp.singleSelection) {
       //   Object? candidateSelectedItem =
       //       candidateSelectedItems == null || candidateSelectedItems.isEmpty
       //           ? null
@@ -354,11 +350,11 @@ abstract class FilterModel<
     //
     Object? selectedMasterPropValue = this.data.getProperty(propName);
     if (selectedMasterPropValue != null) {
-      for (RelatedMasterProp child in relatedMasterProp.children) {
+      for (OptionedMasterProp child in optionedMasterProp.children) {
         await _prepareRelatedMasterDataCascade(
           filterInput: filterInput,
           parentMasterPropValue: selectedMasterPropValue,
-          relatedMasterProp: child,
+          optionedMasterProp: child,
         );
       }
     } else {
@@ -373,13 +369,13 @@ abstract class FilterModel<
     required FILTER_INPUT? filterInput,
   }) async {
     print("@~~~~~~~~~~~> 2 _prepareAllMasterDatas");
-    for (RelatedMasterProp masterProp
-        in _masterDataStructure._rootRelatedMasterProps) {
+    for (OptionedMasterProp masterProp
+        in _masterDataStructure._rootOptionedMasterProps) {
       print("@~~~~~~~~~~~> 3 _prepareAllMasterDatas");
       await _prepareRelatedMasterDataCascade(
         filterInput: filterInput,
         parentMasterPropValue: null,
-        relatedMasterProp: masterProp,
+        optionedMasterProp: masterProp,
       );
     }
     for (CommonMasterProp commonMasterProp

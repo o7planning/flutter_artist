@@ -2,31 +2,31 @@ part of '../flutter_artist.dart';
 
 class MasterDataStructure {
   final Map<String, MasterProp> _masterPropMap = {};
-  final List<RelatedMasterProp> _rootRelatedMasterProps;
+  final List<OptionedMasterProp> _rootOptionedMasterProps;
   final List<CommonMasterProp> _commonMasterProps = [];
 
   MasterDataStructure({
-    required List<RelatedMasterProp> relatedMasterProps,
-  }) : _rootRelatedMasterProps = [...relatedMasterProps] {
-    for (RelatedMasterProp rootMasterProperty in relatedMasterProps) {
+    required List<OptionedMasterProp> optionedMasterProps,
+  }) : _rootOptionedMasterProps = [...optionedMasterProps] {
+    for (OptionedMasterProp rootMasterProperty in optionedMasterProps) {
       __standardizeCascade(rootMasterProperty, null);
     }
     for (MasterProp xProperty in _masterPropMap.values) {
-      if (xProperty is RelatedMasterProp) {
+      if (xProperty is OptionedMasterProp) {
         xProperty._checkCycleError();
       }
     }
   }
 
   void __standardizeCascade(
-    RelatedMasterProp relatedMasterProp,
-    RelatedMasterProp? parent,
+    OptionedMasterProp optionedMasterProp,
+    OptionedMasterProp? parent,
   ) {
-    relatedMasterProp.parent = parent;
-    _masterPropMap[relatedMasterProp.propName] = relatedMasterProp;
+    optionedMasterProp.parent = parent;
+    _masterPropMap[optionedMasterProp.propName] = optionedMasterProp;
     //
-    for (RelatedMasterProp child in relatedMasterProp.children) {
-      __standardizeCascade(child, relatedMasterProp);
+    for (OptionedMasterProp child in optionedMasterProp.children) {
+      __standardizeCascade(child, optionedMasterProp);
     }
   }
 
@@ -35,7 +35,7 @@ class MasterDataStructure {
     if (xProperty == null) {
       return null;
     }
-    if (xProperty is RelatedMasterProp) {
+    if (xProperty is OptionedMasterProp) {
       return xProperty._xList;
     }
     return null;
@@ -46,7 +46,7 @@ class MasterDataStructure {
     if (masterProp == null) {
       throw AppException(message: 'No MasterProp $propName');
     }
-    if (masterProp is RelatedMasterProp) {
+    if (masterProp is OptionedMasterProp) {
       masterProp._xList = xList;
     } else {
       throw AppException(message: 'Invalid MasterProp $propName');
@@ -85,7 +85,7 @@ class MasterDataStructure {
       }
     }
     //
-    for (RelatedMasterProp rootItem in _rootRelatedMasterProps) {
+    for (OptionedMasterProp rootItem in _rootOptionedMasterProps) {
       rootItem._updateValueCascase(
         currentValues: currentValues,
         updateValues: updateValues,
@@ -128,8 +128,8 @@ class CommonMasterProp extends MasterProp {
   }
 }
 
-class RelatedMasterProp extends MasterProp {
-  late final RelatedMasterProp? parent;
+class OptionedMasterProp extends MasterProp {
+  late final OptionedMasterProp? parent;
 
   ///
   /// In most cases this value is [true].
@@ -141,17 +141,17 @@ class RelatedMasterProp extends MasterProp {
   /// For example: An error occurs when the library tries to set multiple selection values for the Dropdown.
   ///
   final bool singleSelection;
-  final List<RelatedMasterProp> children;
+  final List<OptionedMasterProp> children;
   XList? _xList;
 
-  RelatedMasterProp({
+  OptionedMasterProp({
     required super.propName,
     this.singleSelection = true,
     this.children = const [],
   });
 
   void _checkCycleError() {
-    RelatedMasterProp? p = parent;
+    OptionedMasterProp? p = parent;
     final List<String> propNames = [propName];
     while (true) {
       if (p == null) {
@@ -189,7 +189,7 @@ class RelatedMasterProp extends MasterProp {
       }
       bool isSame = _xList!.isSame(item1: oldValue, item2: newValue);
       if (!isSame || newValue == null) {
-        for (RelatedMasterProp childItem in children) {
+        for (OptionedMasterProp childItem in children) {
           if (childItem._xList != null) {
             childItem._xList!.clear();
             childItem._xList = null;
@@ -200,7 +200,7 @@ class RelatedMasterProp extends MasterProp {
       }
     }
     //
-    for (RelatedMasterProp childItem in children) {
+    for (OptionedMasterProp childItem in children) {
       childItem._updateValueCascase(
         currentValues: currentValues,
         updateValues: updateValues,
