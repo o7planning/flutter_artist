@@ -91,14 +91,14 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  XList? getXList(String propertyName) {
+  XList? getXListMasterData(String propertyName) {
     return _masterProperties.getXList(propertyName);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void setXList({required String property, required XList? xList}) {
+  void setXListMasterData({required String property, required XList? xList}) {
     _masterProperties.setXList(property: property, xList: xList);
   }
 
@@ -274,7 +274,7 @@ abstract class FilterModel<
     required MasterProperty masterProperty,
   }) async {
     final String property = masterProperty.propName;
-    XList<dynamic, dynamic>? xList = this.getXList(property);
+    XList<dynamic, dynamic>? xList = this.getXListMasterData(property);
     if (xList == null) {
       xList = await prepareMasterOptionsData(
         filterInput: filterInput,
