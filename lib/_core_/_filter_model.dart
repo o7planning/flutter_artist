@@ -91,6 +91,7 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  // TODO: Rename to getMasterPropDataXList()?
   XList? getXListMasterData(String propName) {
     return _masterDataStructure._getXListMasterData(propName);
   }
