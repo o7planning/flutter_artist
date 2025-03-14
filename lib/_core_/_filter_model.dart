@@ -267,6 +267,13 @@ abstract class FilterModel<
     required FILTER_INPUT? filterInput,
   });
 
+  XList prepareMasterDataNew({
+    required FILTER_INPUT? filterInput,
+    required String property,
+  }) { 
+
+  }
+
   // ***************************************************************************
   // ***************************************************************************
 
