@@ -47,13 +47,13 @@ abstract class FilterModel<
   bool _firstQueryDone = false;
   bool _applyDefaultFilterCriteria = false;
 
-  late final MasterProperties _masterProperties;
+  late final MasterDataStructure _masterDataStructure;
 
   // ***************************************************************************
   // ***************************************************************************
 
   FilterModel() {
-    __initMasterProperties();
+    __registerMasterDataStructure();
   }
 
   // ***************************************************************************
@@ -61,45 +61,44 @@ abstract class FilterModel<
 
   ///
   /// ```dart
-  /// List<MasterProperty> registerMasterProperties() {
-  ///     return [
-  ///        MasterProperty(
-  ///           propName: "company",
-  ///           children: [
-  ///              MasterProperty(
-  ///                 propName: "department",
-  ///              ),
-  ///           ],
-  ///        ),
-  ///     ];
-  ///   }
+  /// MasterDataStructure registerMasterDataStructure() {
+  ///     return MasterDataStructure(
+  ///        masterProperties: [
+  ///            MasterProperty(
+  ///              propName: "company",
+  ///              children: [
+  ///                 MasterProperty(
+  ///                    propName: "department",
+  ///                 ),
+  ///              ],
+  ///           ),
+  ///         ],
+  ///     );
+  /// }
   /// ```
-  List<MasterProperty> registerMasterProperties() {
-    return [];
+  MasterDataStructure registerMasterDataStructure() {
+    return MasterDataStructure(relatedMasterProp: []);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void __initMasterProperties() {
-    List<MasterProperty> materProperties = registerMasterProperties();
-    this._masterProperties = MasterProperties(
-      masterProperties: materProperties,
-    );
+  void __registerMasterDataStructure() {
+    _masterDataStructure = registerMasterDataStructure();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   XList? getXListMasterData(String propertyName) {
-    return _masterProperties.getXList(propertyName);
+    return _masterDataStructure.getXList(propertyName);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   void setXListMasterData({required String property, required XList? xList}) {
-    _masterProperties.setXList(property: property, xList: xList);
+    _masterDataStructure.setXList(propName: property, xList: xList);
   }
 
   // ***************************************************************************
@@ -271,7 +270,7 @@ abstract class FilterModel<
 
   Future<void> _prepareMasterOptionsDataCascade({
     required FILTER_INPUT? filterInput,
-    required MasterProperty masterProperty,
+    required RelatedMasterProp masterProperty,
   }) async {
     final String property = masterProperty.propName;
     XList<dynamic, dynamic>? xList = this.getXListMasterData(property);
@@ -287,11 +286,11 @@ abstract class FilterModel<
     }
   }
 
-  void _prepareMasterOptionsDatas() {
-    for (XProperty xProperty in _masterProperties.rootXProperties) {
-      if (xProperty is MasterProperty) {}
-    }
-  }
+  // void _prepareMasterOptionsDatas() {
+  //   for (XProperty xProperty in _masterDataStructure.rootXProperties) {
+  //     if (xProperty is MasterProperty) {}
+  //   }
+  // }
 
   // ***************************************************************************
   // ***************************************************************************

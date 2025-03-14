@@ -75,13 +75,13 @@ class FilterModelData<
   // ***************************************************************************
 
   void _updateFilterData(Map<String, dynamic> updateData) {
-    filterModel._masterProperties.updateValues(
+    filterModel._masterDataStructure.updateValues(
       currentValues: _currentFormData,
       updateValues: {...updateData},
     );
-    for (XProperty xProperty
-        in filterModel._masterProperties._xPropMap.values) {
-      if (xProperty.dirty) {
+    for (MasterProp xProperty
+        in filterModel._masterDataStructure._masterPropMap.values) {
+      if (xProperty._dirty) {
         _currentFormData[xProperty.propName] = xProperty.updateValue;
       }
     }
