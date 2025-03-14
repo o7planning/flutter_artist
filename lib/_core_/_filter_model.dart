@@ -110,6 +110,7 @@ abstract class FilterModel<
   Future<FILTER_CRITERIA?> _prepareMasterDataAndFilterData({
     required FILTER_INPUT? filterInput,
   }) async {
+    print("@~~~~~~~~~~~> 1 _prepareMasterDataAndFilterData");
     bool error = false;
     try {
       //
@@ -122,7 +123,7 @@ abstract class FilterModel<
       //
       // May throw ApiError.
       //
-      _prepareAllMasterDatas(
+      await _prepareAllMasterDatas(
         filterInput: filterInput,
       );
     } catch (e, stackTrace) {
@@ -287,14 +288,26 @@ abstract class FilterModel<
     required RelatedMasterProp relatedMasterProp,
   }) async {
     final String propName = relatedMasterProp.propName;
+    print(
+        "@ $propName ~~~~~~~~~~~> 4 _prepareRelatedMasterDataCascade: propName: $propName");
+
     XList<dynamic, dynamic>? xList = this.getXListMasterData(propName);
+    print("@ $propName ~~~~~~~~~~~> 5 xList: $xList");
     if (xList == null) {
+      print("@ $propName ~~~~~~~~~~~> 6 xList: $xList");
       xList = await prepareMasterPropData(
         filterInput: filterInput,
         propName: propName,
       );
+      print("@ $propName ~~~~~~~~~~~> 7 xList: ${xList?.items}");
+      this.setXListMasterData(
+        propName: propName,
+        xList: xList,
+      );
       // Current value:
       final dynamic currentValue = this.data.getProperty(propName);
+
+      print("@ $propName ~~~~~~~~~~~> 8 currentValue: $currentValue");
 
       // Candidate Selected Items:
       List<dynamic>? candidateSelectedItems = xList?.candidateSelectedItems;
@@ -326,17 +339,28 @@ abstract class FilterModel<
       //   }
       // }
     }
+    //
+    for (RelatedMasterProp child in relatedMasterProp.children) {
+      await _prepareRelatedMasterDataCascade(
+        filterInput: filterInput,
+        relatedMasterProp: child,
+      );
+    }
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void _prepareAllMasterDatas({required FILTER_INPUT? filterInput}) {
-    for (RelatedMasterProp rootRelatedMasterProp
+  Future<void> _prepareAllMasterDatas({
+    required FILTER_INPUT? filterInput,
+  }) async {
+    print("@~~~~~~~~~~~> 2 _prepareAllMasterDatas");
+    for (RelatedMasterProp masterProp
         in _masterDataStructure._rootRelatedMasterProps) {
-      _prepareRelatedMasterDataCascade(
+      print("@~~~~~~~~~~~> 3 _prepareAllMasterDatas");
+      await _prepareRelatedMasterDataCascade(
         filterInput: filterInput,
-        relatedMasterProp: rootRelatedMasterProp,
+        relatedMasterProp: masterProp,
       );
     }
     for (CommonMasterProp commonMasterProp
@@ -484,6 +508,7 @@ abstract class FilterModel<
         filterInput: null, // TODO: Xem lai tham so filterInput.
       );
     }
+    print("@@@@@@@@@@ --> ${getClassName(this)}.updateAllUIComponents");
     this.updateAllUIComponents(force: true);
   }
 
