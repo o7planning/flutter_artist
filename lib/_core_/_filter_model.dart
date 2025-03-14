@@ -59,13 +59,6 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __initMasterProperties() {
-    List<MasterProperty> materProperties = registerMasterProperties();
-    this._masterProperties = MasterProperties(
-      masterProperties: materProperties,
-    );
-  }
-
   ///
   /// ```dart
   /// List<MasterProperty> registerMasterProperties() {
@@ -83,6 +76,16 @@ abstract class FilterModel<
   /// ```
   List<MasterProperty> registerMasterProperties() {
     return [];
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __initMasterProperties() {
+    List<MasterProperty> materProperties = registerMasterProperties();
+    this._masterProperties = MasterProperties(
+      masterProperties: materProperties,
+    );
   }
 
   // ***************************************************************************
