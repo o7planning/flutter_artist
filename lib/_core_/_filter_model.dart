@@ -102,8 +102,8 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  Object? getMasterPropDataCustom(String propName) {
-    return _masterDataStructure._getMasterPropDataCustom(propName);
+  DATA? getMasterPropDataCustom<DATA>(String propName) {
+    return _masterDataStructure._getMasterPropDataCustom(propName) as DATA?;
   }
 
   // ***************************************************************************
