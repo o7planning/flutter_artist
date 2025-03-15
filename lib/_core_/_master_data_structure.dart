@@ -109,33 +109,33 @@ class MasterDataStructure {
     }
   }
 
-  void updateValues({
+  void updateMasterPropValuesToLeaves({
     required Map<String, dynamic> currentValues,
     required Map<String, dynamic> updateValues,
   }) {
-    // Clean all TreeItem in Tree.
+    //
     for (MasterProp masterProp in _allMasterPropMap.values) {
       masterProp.updateValue = null;
       masterProp._valueUpdated = false;
       masterProp._dirty = false;
     }
     //
-    for (String prop in updateValues.keys) {
-      MasterProp? item = _allMasterPropMap[prop];
-      if (item != null) {
-        item._dirty = true;
+    for (String propName in updateValues.keys) {
+      MasterProp? masterProp = _allMasterPropMap[propName];
+      if (masterProp != null) {
+        masterProp._dirty = true;
       } else {
         CommonMasterProp? newCommonProperty = CommonMasterProp(
-          propName: prop,
+          propName: propName,
         );
         newCommonProperty._dirty = true;
-        _allMasterPropMap[prop] = newCommonProperty;
+        _allMasterPropMap[propName] = newCommonProperty;
         _commonMasterProps.add(newCommonProperty);
       }
     }
     //
     for (OptionedMasterProp rootItem in _rootOptionedMasterProps) {
-      rootItem._updateValueCascase(
+      rootItem._updateValueCascade(
         currentValues: currentValues,
         updateValues: updateValues,
       );
@@ -225,7 +225,7 @@ class OptionedMasterProp extends MasterProp {
     }
   }
 
-  void _updateValueCascase({
+  void _updateValueCascade({
     required Map<String, dynamic> currentValues,
     required Map<String, dynamic> updateValues,
   }) {
@@ -253,7 +253,7 @@ class OptionedMasterProp extends MasterProp {
     }
     //
     for (OptionedMasterProp childItem in children) {
-      childItem._updateValueCascase(
+      childItem._updateValueCascade(
         currentValues: currentValues,
         updateValues: updateValues,
       );
