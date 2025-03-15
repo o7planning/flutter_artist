@@ -138,16 +138,16 @@ abstract class FilterModel<
   ///
   /// Return null is error.
   ///
-  Future<FILTER_CRITERIA?> _prepareMasterDataAndFilterData({
+  Future<FILTER_CRITERIA?> _prepareAllMasterPropDataAndFilterData({
     required FILTER_INPUT? filterInput,
   }) async {
-    print("@~~~~~~~~~~~> 1 _prepareMasterDataAndFilterData");
+    print("@~~~~~~~~~~~> 1 _prepareAllMasterPropDataAndFilterData");
     bool error = false;
     try {
       //
       // May throw ApiError.
       //
-      await _prepareAllMasterDatas(
+      await _prepareAllMasterPropData(
         filterInput: filterInput,
       );
     } catch (e, stackTrace) {
@@ -330,6 +330,7 @@ abstract class FilterModel<
             }
           }
 
+          // TODO: Try this code:
           // if (optionedMasterProp.singleSelection) {
           //   Object? candidateSelectedItem =
           //       candidateSelectedItems == null || candidateSelectedItems.isEmpty
@@ -401,7 +402,7 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> _prepareAllMasterDatas({
+  Future<void> _prepareAllMasterPropData({
     required FILTER_INPUT? filterInput,
   }) async {
     print("@~~~~~~~~~~~> 2 _prepareAllMasterDatas");
@@ -424,9 +425,10 @@ abstract class FilterModel<
   // ***************************************************************************
 
   ///
-  /// This method is called after [prepareMasterData].
+  /// This method is called after [prepareMasterPropDataForListType] and [prepareMasterPropDataForCustomType].
   ///
-  /// Use the data obtained from the [prepareMasterData] method to specify default search criteria.
+  /// Use the data obtained from the [prepareMasterPropDataForListType]
+  /// and [prepareMasterPropDataForCustomType] methods to specify default search criteria.
   ///
   /// For example, after getting the list of companies.
   /// Use a certain company in the list as the default criteria for the filter.
@@ -496,7 +498,7 @@ abstract class FilterModel<
   ///
   List<Object>? filterInputToCriterionValue({
     required FILTER_INPUT? filterInput,
-    required String property,
+    required String propName,
   }) {
     return null;
   }
@@ -505,7 +507,9 @@ abstract class FilterModel<
   // ***************************************************************************
 
   ///
-  /// This method is called immediately after calling [prepareData()] method if there are no errors.
+  /// This method is called immediately after
+  /// calling [prepareMasterPropDataForListType] and [prepareMasterPropDataForCustomType]
+  /// methods if there are no errors.
   ///
   FILTER_CRITERIA createFilterCriteria({
     required Map<String, dynamic> dataMap,
@@ -548,13 +552,12 @@ abstract class FilterModel<
         if (_formKey.currentState != null) {
           _applyDefaultFilterCriteria = true;
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            // ????????????????????????????
             // _formKey.currentState!.patchValue(data.initialFormData);
           });
         }
       }
       //
-      await _prepareMasterDataAndFilterData(
+      await _prepareAllMasterPropDataAndFilterData(
         filterInput: null,
       );
     }

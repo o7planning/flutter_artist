@@ -824,7 +824,8 @@ abstract class Block<
       if (!xFilterModel.queried) {
         FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
         //
-        filterCriteria = await filterModel._prepareMasterDataAndFilterData(
+        filterCriteria =
+            await filterModel._prepareAllMasterPropDataAndFilterData(
           filterInput: filterInput,
         ) as FILTER_CRITERIA?;
         //
