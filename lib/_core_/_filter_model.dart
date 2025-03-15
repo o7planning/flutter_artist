@@ -89,7 +89,6 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  // TODO: Rename to getMasterPropDataXList()?
   XList? getMasterPropDataXList(String propName) {
     return _masterDataStructure._getMasterDataXList(propName);
   }
@@ -103,8 +102,34 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void setXListMasterData({required String propName, required XList? xList}) {
-    _masterDataStructure._setXListMasterData(propName: propName, xList: xList);
+  Object? getMasterPropDataCustom(String propName) {
+    return _masterDataStructure._getMasterPropDataCustom(propName);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void setMasterPropDataXList({
+    required String propName,
+    required XList? xList,
+  }) {
+    _masterDataStructure._setMasterPropDataXList(
+      propName: propName,
+      xList: xList,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void setMasterPropDataCustom({
+    required String propName,
+    required Object? object,
+  }) {
+    _masterDataStructure._setMasterPropDataCustom(
+      propName: propName,
+      object: object,
+    );
   }
 
   // ***************************************************************************
@@ -301,7 +326,7 @@ abstract class FilterModel<
             propName: propName,
           );
           print("@ $propName ~~~~~~~~~~~> 7 xList: ${xList?.items}");
-          this.setXListMasterData(
+          this.setMasterPropDataXList(
             propName: propName,
             xList: xList,
           );
@@ -342,9 +367,42 @@ abstract class FilterModel<
           // }
         }
       case OptionedMasterPropType.custom:
-        // TODO: Handle this case.
-        throw UnimplementedError();
-    }
+        Object? dataObject = this.getMasterPropDataCustom(propName);
+        print("@ $propName ~~~~~~~~~~~> 5b dataObject: $dataObject");
+        if (dataObject == null) {
+          print("@ $propName ~~~~~~~~~~~> 6b dataObject: $dataObject");
+          dataObject = await prepareOptionedMasterPropData(
+            filterInput: filterInput,
+            parentMasterPropValue: parentMasterPropValue,
+            propName: propName,
+          );
+          print("@ $propName ~~~~~~~~~~~> 7b dataObject: ${dataObject}");
+          this.setMasterPropDataCustom(
+            propName: propName,
+            object: dataObject,
+          );
+          // Current value:
+          final dynamic currentValue = this.data.getProperty(propName);
+
+          print("@ $propName ~~~~~~~~~~~> 8b currentValue: $currentValue");
+
+          // // Candidate Selected Items:
+          // List<dynamic>? candidateSelectedItems = xList?.candidateSelectedItems;
+          //
+          // //
+          // // TODO: Double check this code:
+          // //
+          // if (candidateSelectedItems != null &&
+          //     candidateSelectedItems.isNotEmpty) {
+          //   try {
+          //     this.data._updateFilterData({propName: candidateSelectedItems});
+          //   } catch (e) {
+          //     Object? candidateSelectedItem = candidateSelectedItems.first;
+          //     this.data._updateFilterData({propName: candidateSelectedItem});
+          //   }
+          // }
+        }
+    } // End switch
 
     //
     Object? selectedMasterPropValue = this.data.getProperty(propName);

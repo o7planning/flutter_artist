@@ -30,26 +30,75 @@ class MasterDataStructure {
     }
   }
 
-  XList? _getMasterDataXList(String propName) {
-    MasterProp? xProperty = _masterPropMap[propName];
-    if (xProperty == null) {
+  Object? _getMasterPropDataCustom(String propName) {
+    MasterProp? masterProp = _masterPropMap[propName];
+    if (masterProp == null) {
       return null;
     }
-    if (xProperty is OptionedMasterProp) {
-      return xProperty._xList;
+    if (masterProp is OptionedMasterProp) {
+      if (masterProp.type == OptionedMasterPropType.custom) {
+        return masterProp._object;
+      } else {
+        return null;
+      }
     }
     return null;
   }
 
-  void _setXListMasterData({required String propName, required XList? xList}) {
+  XList? _getMasterDataXList(String propName) {
+    MasterProp? masterProp = _masterPropMap[propName];
+    if (masterProp == null) {
+      return null;
+    }
+    if (masterProp is OptionedMasterProp) {
+      if (masterProp.type == OptionedMasterPropType.listable) {
+        return masterProp._xList;
+      } else {
+        return null;
+      }
+    }
+    return null;
+  }
+
+  void _setMasterPropDataXList({
+    required String propName,
+    required XList? xList,
+  }) {
     MasterProp? masterProp = _masterPropMap[propName];
     if (masterProp == null) {
       throw AppException(message: 'No MasterProp $propName');
     }
     if (masterProp is OptionedMasterProp) {
+      if (masterProp.type != OptionedMasterPropType.listable) {
+        throw AppException(
+            message: 'Invalid MasterProp Data for type ${masterProp.type}');
+      }
       masterProp._xList = xList;
     } else {
-      throw AppException(message: 'Invalid MasterProp $propName');
+      throw AppException(
+          message:
+              'Invalid MasterProp $propName, it must be $OptionedMasterProp');
+    }
+  }
+
+  void _setMasterPropDataCustom({
+    required String propName,
+    required Object? object,
+  }) {
+    MasterProp? masterProp = _masterPropMap[propName];
+    if (masterProp == null) {
+      throw AppException(message: 'No MasterProp $propName');
+    }
+    if (masterProp is OptionedMasterProp) {
+      if (masterProp.type != OptionedMasterPropType.custom) {
+        throw AppException(
+            message: 'Invalid MasterProp Data for type ${masterProp.type}');
+      }
+      masterProp._object = object;
+    } else {
+      throw AppException(
+          message:
+              'Invalid MasterProp $propName, it must be $OptionedMasterProp');
     }
   }
 
