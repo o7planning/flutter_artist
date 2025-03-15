@@ -1,7 +1,5 @@
 part of '../flutter_artist.dart';
 
-typedef FindXList = XList? Function();
-
 abstract class FilterModel<
     FILTER_INPUT extends FilterInput, // EmptyFilterInput
     FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria

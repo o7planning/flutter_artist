@@ -142,10 +142,13 @@ class OptionedMasterProp extends MasterProp {
   ///
   final bool singleSelection;
   final List<OptionedMasterProp> children;
+  final OptionedMasterPropType type;
   XList? _xList;
+  Object? _object;
 
   OptionedMasterProp({
     required super.propName,
+    required this.type,
     this.singleSelection = true,
     this.children = const [],
   });
