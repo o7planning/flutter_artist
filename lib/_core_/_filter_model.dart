@@ -264,36 +264,6 @@ abstract class FilterModel<
   // ***************************************************************************
 
   ///
-  /// Call this method to initialize the necessary data for the FilterModel.
-  /// For example, the list of items of the [Dropdown].
-  ///
-  /// This method is called before [filterInputToCriteriaDataMap] method.
-  ///
-  /// Example:
-  /// ```dart
-  /// Future<void> prepareMasterData({
-  ///     required EmptyFilterInput? filterInput,
-  /// }) {
-  ///   ApiResult<CompanyPage> result1 = await companyApi.getCompanyPage();
-  ///   // Throw ApiError
-  ///   result1.throwIfError();
-  ///   this.companyXList = result1.data?.toXList();
-  ///   CompanyInfo? company = this.companyXList.getItemById(123)
-  ///
-  ///   ApiResult<DepartmentPage> result2 = await deptApi.getDepartmentPage(company);
-  ///   // Throw ApiError
-  ///   result2.throwIfError();
-  ///   this.departmentXList = result2.data?.toXList();
-  ///   ...
-  /// }
-  /// ```
-  ///
-  @Deprecated("Xoa di, khong su dung nua")
-  Future<void> prepareMasterData({
-    required FILTER_INPUT? filterInput,
-  });
-
-  ///
   /// Abstract method:
   ///
   Future<XList<dynamic, dynamic>?> prepareMasterPropDataForListType({
