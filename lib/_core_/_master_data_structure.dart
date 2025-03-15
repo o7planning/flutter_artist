@@ -30,7 +30,7 @@ class MasterDataStructure {
     }
   }
 
-  XList? _getXListMasterData(String propName) {
+  XList? _getMasterDataXList(String propName) {
     MasterProp? xProperty = _masterPropMap[propName];
     if (xProperty == null) {
       return null;

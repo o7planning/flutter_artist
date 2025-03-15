@@ -90,12 +90,12 @@ abstract class FilterModel<
   // ***************************************************************************
 
   // TODO: Rename to getMasterPropDataXList()?
-  XList? getXListMasterData(String propName) {
-    return _masterDataStructure._getXListMasterData(propName);
+  XList? getMasterPropDataXList(String propName) {
+    return _masterDataStructure._getMasterDataXList(propName);
   }
 
   List<DATA> getMasterPropDataList<DATA>(String propName) {
-    return (_masterDataStructure._getXListMasterData(propName)?.items
+    return (_masterDataStructure._getMasterDataXList(propName)?.items
             as List<DATA>?) ??
         <DATA>[];
   }
@@ -122,21 +122,14 @@ abstract class FilterModel<
       //
       // May throw ApiError.
       //
-      // await prepareMasterData(
-      //   filterInput: filterInput,
-      // );
-
-      //
-      // May throw ApiError.
-      //
       await _prepareAllMasterDatas(
         filterInput: filterInput,
       );
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: "prepareMasterData",
-        error: "Error prepareMasterData: $e",
+        methodName: "_prepareAllMasterDatas",
+        error: "Error _prepareAllMasterDatas: $e",
         stackTrace: stackTrace,
         showSnackBar: true,
       );
@@ -287,69 +280,77 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> _prepareRelatedMasterDataCascade({
+  Future<void> _prepareOptionedMasterDataCascade({
     required FILTER_INPUT? filterInput,
     required Object? parentMasterPropValue,
     required OptionedMasterProp optionedMasterProp,
   }) async {
     final String propName = optionedMasterProp.propName;
     print(
-        "@ $propName ~~~~~~~~~~~> 4 _prepareRelatedMasterDataCascade: propName: $propName");
+        "@ $propName ~~~~~~~~~~~> 4 _prepareOptionedMasterDataCascade: propName: $propName");
 
-    XList<dynamic, dynamic>? xList = this.getXListMasterData(propName);
-    print("@ $propName ~~~~~~~~~~~> 5 xList: $xList");
-    if (xList == null) {
-      print("@ $propName ~~~~~~~~~~~> 6 xList: $xList");
-      xList = await prepareOptionedMasterPropData(
-        filterInput: filterInput,
-        parentMasterPropValue: parentMasterPropValue,
-        propName: propName,
-      );
-      print("@ $propName ~~~~~~~~~~~> 7 xList: ${xList?.items}");
-      this.setXListMasterData(
-        propName: propName,
-        xList: xList,
-      );
-      // Current value:
-      final dynamic currentValue = this.data.getProperty(propName);
+    switch (optionedMasterProp.type) {
+      case OptionedMasterPropType.listable:
+        XList<dynamic, dynamic>? xList = this.getMasterPropDataXList(propName);
+        print("@ $propName ~~~~~~~~~~~> 5 xList: $xList");
+        if (xList == null) {
+          print("@ $propName ~~~~~~~~~~~> 6 xList: $xList");
+          xList = await prepareOptionedMasterPropData(
+            filterInput: filterInput,
+            parentMasterPropValue: parentMasterPropValue,
+            propName: propName,
+          );
+          print("@ $propName ~~~~~~~~~~~> 7 xList: ${xList?.items}");
+          this.setXListMasterData(
+            propName: propName,
+            xList: xList,
+          );
+          // Current value:
+          final dynamic currentValue = this.data.getProperty(propName);
 
-      print("@ $propName ~~~~~~~~~~~> 8 currentValue: $currentValue");
+          print("@ $propName ~~~~~~~~~~~> 8 currentValue: $currentValue");
 
-      // Candidate Selected Items:
-      List<dynamic>? candidateSelectedItems = xList?.candidateSelectedItems;
+          // Candidate Selected Items:
+          List<dynamic>? candidateSelectedItems = xList?.candidateSelectedItems;
 
-      //
-      // TODO: Double check this code:
-      //
-      if (candidateSelectedItems != null && candidateSelectedItems.isNotEmpty) {
-        try {
-          this.data._updateFilterData({propName: candidateSelectedItems});
-        } catch (e) {
-          Object? candidateSelectedItem = candidateSelectedItems.first;
-          this.data._updateFilterData({propName: candidateSelectedItem});
+          //
+          // TODO: Double check this code:
+          //
+          if (candidateSelectedItems != null &&
+              candidateSelectedItems.isNotEmpty) {
+            try {
+              this.data._updateFilterData({propName: candidateSelectedItems});
+            } catch (e) {
+              Object? candidateSelectedItem = candidateSelectedItems.first;
+              this.data._updateFilterData({propName: candidateSelectedItem});
+            }
+          }
+
+          // if (optionedMasterProp.singleSelection) {
+          //   Object? candidateSelectedItem =
+          //       candidateSelectedItems == null || candidateSelectedItems.isEmpty
+          //           ? null
+          //           : candidateSelectedItems.first;
+          //   //
+          //   if (candidateSelectedItem != null) {
+          //     this.data._updateFilterData({propName: candidateSelectedItem});
+          //   }
+          // } else {
+          //   if (candidateSelectedItems != null) {
+          //     this.data._updateFilterData({propName: candidateSelectedItems});
+          //   }
+          // }
         }
-      }
-
-      // if (optionedMasterProp.singleSelection) {
-      //   Object? candidateSelectedItem =
-      //       candidateSelectedItems == null || candidateSelectedItems.isEmpty
-      //           ? null
-      //           : candidateSelectedItems.first;
-      //   //
-      //   if (candidateSelectedItem != null) {
-      //     this.data._updateFilterData({propName: candidateSelectedItem});
-      //   }
-      // } else {
-      //   if (candidateSelectedItems != null) {
-      //     this.data._updateFilterData({propName: candidateSelectedItems});
-      //   }
-      // }
+      case OptionedMasterPropType.custom:
+        // TODO: Handle this case.
+        throw UnimplementedError();
     }
+
     //
     Object? selectedMasterPropValue = this.data.getProperty(propName);
     if (selectedMasterPropValue != null) {
       for (OptionedMasterProp child in optionedMasterProp.children) {
-        await _prepareRelatedMasterDataCascade(
+        await _prepareOptionedMasterDataCascade(
           filterInput: filterInput,
           parentMasterPropValue: selectedMasterPropValue,
           optionedMasterProp: child,
@@ -370,7 +371,7 @@ abstract class FilterModel<
     for (OptionedMasterProp masterProp
         in _masterDataStructure._rootOptionedMasterProps) {
       print("@~~~~~~~~~~~> 3 _prepareAllMasterDatas");
-      await _prepareRelatedMasterDataCascade(
+      await _prepareOptionedMasterDataCascade(
         filterInput: filterInput,
         parentMasterPropValue: null,
         optionedMasterProp: masterProp,
