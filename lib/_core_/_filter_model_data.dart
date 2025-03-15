@@ -37,8 +37,8 @@ class FilterModelData<
   // ***************************************************************************
   // ***************************************************************************
 
-  dynamic getProperty(String propName) {
-    return _currentFormData[propName];
+  X? getProperty<X>(String propName) {
+    return _currentFormData[propName] as X?;
   }
 
   // ***************************************************************************
