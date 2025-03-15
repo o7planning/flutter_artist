@@ -99,7 +99,7 @@ class MasterDataStructure {
       throw AppException(
           message:
               'Invalid MasterProp $propName, it must be $OptionedMasterProp');
-    } 
+    }
   }
 
   void _addCommonMasterProp(CommonMasterProp masterProp) {

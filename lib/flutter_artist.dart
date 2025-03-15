@@ -430,6 +430,10 @@ part '_utils_/_visibility_detector_utils.dart';
 // *****************************************************************************
 // *****************************************************************************
 
-class RootMethod {
-  const RootMethod();
+class RootMethodAnnotation {
+  const RootMethodAnnotation();
+}
+
+class ImportantMethodAnnotation {
+  const ImportantMethodAnnotation();
 }

@@ -138,6 +138,7 @@ abstract class FilterModel<
   ///
   /// Return null is error.
   ///
+  @ImportantMethodAnnotation()
   Future<FILTER_CRITERIA?> _prepareAllMasterPropDataAndFilterData({
     required FILTER_INPUT? filterInput,
   }) async {

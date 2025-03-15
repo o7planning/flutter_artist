@@ -398,7 +398,7 @@ abstract class Scalar<
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
-  @RootMethod()
+  @RootMethodAnnotation()
   Future<bool> executeQuickAction<DATA extends Object>({
     FILTER_INPUT? filterInput,
     required ActionConfirmationType actionConfirmationType,
@@ -475,7 +475,7 @@ abstract class Scalar<
   ///
   ///
   @nonVirtual
-  @RootMethod()
+  @RootMethodAnnotation()
   Future<bool> query({
     FILTER_INPUT? filterInput,
   }) async {
