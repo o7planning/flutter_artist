@@ -80,7 +80,7 @@ class FilterModelData<
       updateValues: {...updateData},
     );
     for (MasterProp xProperty
-        in filterModel._masterDataStructure._masterPropMap.values) {
+        in filterModel._masterDataStructure._allMasterPropMap.values) {
       if (xProperty._dirty) {
         _currentFormData[xProperty.propName] = xProperty.updateValue;
       }

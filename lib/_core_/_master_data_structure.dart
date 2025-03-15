@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
 class MasterDataStructure {
-  final Map<String, MasterProp> _masterPropMap = {};
+  final Map<String, MasterProp> _allMasterPropMap = {};
   final List<OptionedMasterProp> _rootOptionedMasterProps;
   final List<CommonMasterProp> _commonMasterProps = [];
 
@@ -11,7 +11,7 @@ class MasterDataStructure {
     for (OptionedMasterProp rootMasterProperty in optionedMasterProps) {
       __standardizeCascade(rootMasterProperty, null);
     }
-    for (MasterProp xProperty in _masterPropMap.values) {
+    for (MasterProp xProperty in _allMasterPropMap.values) {
       if (xProperty is OptionedMasterProp) {
         xProperty._checkCycleError();
       }
@@ -23,7 +23,7 @@ class MasterDataStructure {
     OptionedMasterProp? parent,
   ) {
     optionedMasterProp.parent = parent;
-    _masterPropMap[optionedMasterProp.propName] = optionedMasterProp;
+    _allMasterPropMap[optionedMasterProp.propName] = optionedMasterProp;
     //
     for (OptionedMasterProp child in optionedMasterProp.children) {
       __standardizeCascade(child, optionedMasterProp);
@@ -31,7 +31,7 @@ class MasterDataStructure {
   }
 
   Object? _getMasterPropDataCustom(String propName) {
-    MasterProp? masterProp = _masterPropMap[propName];
+    MasterProp? masterProp = _allMasterPropMap[propName];
     if (masterProp == null) {
       return null;
     }
@@ -46,7 +46,7 @@ class MasterDataStructure {
   }
 
   XList? _getMasterDataXList(String propName) {
-    MasterProp? masterProp = _masterPropMap[propName];
+    MasterProp? masterProp = _allMasterPropMap[propName];
     if (masterProp == null) {
       return null;
     }
@@ -64,7 +64,7 @@ class MasterDataStructure {
     required String propName,
     required XList? xList,
   }) {
-    MasterProp? masterProp = _masterPropMap[propName];
+    MasterProp? masterProp = _allMasterPropMap[propName];
     if (masterProp == null) {
       throw AppException(message: 'No MasterProp $propName');
     }
@@ -85,7 +85,7 @@ class MasterDataStructure {
     required String propName,
     required Object? object,
   }) {
-    MasterProp? masterProp = _masterPropMap[propName];
+    MasterProp? masterProp = _allMasterPropMap[propName];
     if (masterProp == null) {
       throw AppException(message: 'No MasterProp $propName');
     }
@@ -99,12 +99,12 @@ class MasterDataStructure {
       throw AppException(
           message:
               'Invalid MasterProp $propName, it must be $OptionedMasterProp');
-    }
+    } 
   }
 
   void _addCommonMasterProp(CommonMasterProp masterProp) {
-    if (!_masterPropMap.containsKey(masterProp.propName)) {
-      _masterPropMap[masterProp.propName] = masterProp;
+    if (!_allMasterPropMap.containsKey(masterProp.propName)) {
+      _allMasterPropMap[masterProp.propName] = masterProp;
       _commonMasterProps.add(masterProp);
     }
   }
@@ -114,14 +114,14 @@ class MasterDataStructure {
     required Map<String, dynamic> updateValues,
   }) {
     // Clean all TreeItem in Tree.
-    for (MasterProp masterProp in _masterPropMap.values) {
+    for (MasterProp masterProp in _allMasterPropMap.values) {
       masterProp.updateValue = null;
       masterProp._valueUpdated = false;
       masterProp._dirty = false;
     }
     //
     for (String prop in updateValues.keys) {
-      MasterProp? item = _masterPropMap[prop];
+      MasterProp? item = _allMasterPropMap[prop];
       if (item != null) {
         item._dirty = true;
       } else {
@@ -129,7 +129,7 @@ class MasterDataStructure {
           propName: prop,
         );
         newCommonProperty._dirty = true;
-        _masterPropMap[prop] = newCommonProperty;
+        _allMasterPropMap[prop] = newCommonProperty;
         _commonMasterProps.add(newCommonProperty);
       }
     }
