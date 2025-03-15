@@ -296,7 +296,16 @@ abstract class FilterModel<
   ///
   /// Abstract method:
   ///
-  Future<XList<dynamic, dynamic>?> prepareOptionedMasterPropData({
+  Future<XList<dynamic, dynamic>?> prepareMasterPropDataForListType({
+    required FILTER_INPUT? filterInput,
+    required Object? parentMasterPropValue,
+    required String propName,
+  });
+
+  ///
+  /// Abstract method:
+  ///
+  Future<Object?> prepareMasterPropDataForCustomType({
     required FILTER_INPUT? filterInput,
     required Object? parentMasterPropValue,
     required String propName,
@@ -320,7 +329,7 @@ abstract class FilterModel<
         print("@ $propName ~~~~~~~~~~~> 5 xList: $xList");
         if (xList == null) {
           print("@ $propName ~~~~~~~~~~~> 6 xList: $xList");
-          xList = await prepareOptionedMasterPropData(
+          xList = await prepareMasterPropDataForListType(
             filterInput: filterInput,
             parentMasterPropValue: parentMasterPropValue,
             propName: propName,
@@ -371,7 +380,7 @@ abstract class FilterModel<
         print("@ $propName ~~~~~~~~~~~> 5b dataObject: $dataObject");
         if (dataObject == null) {
           print("@ $propName ~~~~~~~~~~~> 6b dataObject: $dataObject");
-          dataObject = await prepareOptionedMasterPropData(
+          dataObject = await prepareMasterPropDataForCustomType(
             filterInput: filterInput,
             parentMasterPropValue: parentMasterPropValue,
             propName: propName,
