@@ -40,7 +40,7 @@ class CurrentItemSelectionResult<ITEM> {
     if (_candidateItems.isEmpty || _currentItem == null) {
       return false;
     }
-    if (_getItemId(_candidateItems[0]!) != _getItemId(_currentItem!)) {
+    if (_getItemId(_candidateItems[0] as ITEM) != _getItemId(_currentItem!)) {
       return false;
     }
     return true;

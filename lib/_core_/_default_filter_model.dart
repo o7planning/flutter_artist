@@ -16,14 +16,6 @@ class _DefaultFilterModel
   }
 
   @override
-  @Deprecated("Xoa di, khong su dung nua")
-  Future<void> prepareData({
-    EmptyFilterInput? filterInput,
-  }) async {
-    // Do nothing
-  }
-
-  @override
   EmptyFilterCriteria createFilterCriteria({
     required Map<String, dynamic> dataMap,
   }) {
@@ -35,13 +27,6 @@ class _DefaultFilterModel
     required EmptyFilterInput filterInput,
   }) {
     return {};
-  }
-
-  @override
-  Future<void> prepareMasterData({
-    required EmptyFilterInput? filterInput,
-  }) async {
-    // Do nothing.
   }
 
   @override
@@ -104,14 +89,6 @@ class StringIdFilterModel
     return {"idValue": idValue};
   }
 
-  @override
-  Future<void> prepareMasterData({
-    required StringIdFilterInput? filterInput,
-  }) async {
-    if (filterInput != null) {
-      idValue = filterInput.idValue;
-    }
-  }
 
   @override
   Map<String, dynamic> initialCriteriaDataMap() {
@@ -171,15 +148,6 @@ class StringValueFilterModel
     required StringValueFilterInput filterInput,
   }) {
     return {"stringValue": stringValue};
-  }
-
-  @override
-  Future<void> prepareMasterData({
-    required StringValueFilterInput? filterInput,
-  }) async {
-    if (filterInput != null) {
-      stringValue = filterInput.stringValue;
-    }
   }
 
   @override
@@ -243,15 +211,6 @@ class SearchTextFilterModel
   }
 
   @override
-  Future<void> prepareMasterData({
-    required SearchTextFilterInput? filterInput,
-  }) async {
-    if (filterInput != null) {
-      searchText = filterInput.searchText;
-    }
-  }
-
-  @override
   Map<String, dynamic> initialCriteriaDataMap() {
     return {};
   }
@@ -309,15 +268,6 @@ class IntIdFilterModel
     required IntIdFilterInput filterInput,
   }) {
     return {"idValue": idValue};
-  }
-
-  @override
-  Future<void> prepareMasterData({
-    required IntIdFilterInput? filterInput,
-  }) async {
-    if (filterInput != null) {
-      idValue = filterInput.idValue;
-    }
   }
 
   @override

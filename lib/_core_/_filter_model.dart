@@ -374,7 +374,7 @@ abstract class FilterModel<
           candidateSelectedItems = inputValueWrap?.value;
 
           if (candidateSelectedItems == null ||
-              candidateSelectedItems!.isEmpty) {
+              candidateSelectedItems.isEmpty) {
             candidateSelectedItems = currentSelectedItems;
           }
         } else {
