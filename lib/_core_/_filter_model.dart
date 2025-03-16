@@ -142,7 +142,6 @@ abstract class FilterModel<
   Future<FILTER_CRITERIA?> _prepareAllMasterPropDataAndFilterData({
     required FILTER_INPUT? filterInput,
   }) async {
-    print("@~~~~~~~~~~~> 1 _prepareAllMasterPropDataAndFilterData");
     bool error = false;
     try {
       //
@@ -161,8 +160,6 @@ abstract class FilterModel<
       );
       error = true;
     }
-    print("@ OK ----------------------------------------");
-    print("_currentFormData: ${data._currentFormData}");
     _masterDataStructure.printInfo();
     //
     if (error) {
@@ -203,8 +200,6 @@ abstract class FilterModel<
       );
       error = true;
     }
-    print("@ OK2 ----------------------------------------");
-    print("_currentFormData: ${data._currentFormData}");
     //
     if (error) {
       this.data._clearWithDataState(
@@ -234,8 +229,6 @@ abstract class FilterModel<
         );
         error = true;
       }
-      print("@ OK3 ----------------------------------------");
-      print("_currentFormData: ${data._currentFormData}");
       //
       if (error) {
         this.data._clearWithDataState(
@@ -429,10 +422,8 @@ abstract class FilterModel<
   Future<void> _prepareAllMasterPropData({
     required FILTER_INPUT? filterInput,
   }) async {
-    print("@~~~~~~~~~~~> 2 _prepareAllMasterDatas");
     for (OptionedMasterProp masterProp
         in _masterDataStructure._rootOptionedMasterProps) {
-      print("@~~~~~~~~~~~> 3 _prepareAllMasterDatas");
       await _prepareOptionedMasterDataCascade(
         filterInput: filterInput,
         parentMasterPropValue: null,
