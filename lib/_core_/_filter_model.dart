@@ -298,16 +298,12 @@ abstract class FilterModel<
     required OptionedMasterProp optionedMasterProp,
   }) async {
     final String propName = optionedMasterProp.propName;
-    print(
-        "@ $propName ~~~~~~~~~~~> 4 _prepareOptionedMasterDataCascade: propName: $propName");
 
     switch (optionedMasterProp.type) {
       case OptionedMasterPropType.listable:
         // Get current MasterProp data:
         XList? xList = this.getMasterPropDataXList(propName);
-        print("@ $propName ~~~~~~~~~~~> 5 xList: $xList");
         if (xList == null) {
-          print("@ $propName ~~~~~~~~~~~> 6 xList: $xList");
           //
           // Load OptionedMasterPro data from Rest API.
           // May throw ApiError.
@@ -317,7 +313,6 @@ abstract class FilterModel<
             parentMasterPropValue: parentMasterPropValue,
             propName: propName,
           );
-          print("@ $propName ~~~~~~~~~~~> 7 xList: ${xList?.items}");
           this.setMasterPropDataXList(
             propName: propName,
             xList: xList,
@@ -335,15 +330,10 @@ abstract class FilterModel<
             }
           }
           //
-          print("@ $propName ~~~~~~~~~~~> 8 currentValue: $currentValue");
-          print(
-              "@ $propName ~~~~~~~~~~~> 8.1 currentSelectedItems: $currentSelectedItems");
 
           // Candidate Selected Items:
           List? candidateSelectedItems =
               xList?.candidateSelectedItems ?? currentSelectedItems;
-
-          print("@@@@@@@ candidateSelectedItems: $candidateSelectedItems");
 
           //
           // TODO: Double check this code:
@@ -387,23 +377,18 @@ abstract class FilterModel<
         }
       case OptionedMasterPropType.custom:
         Object? dataObject = this.getMasterPropDataCustom(propName);
-        print("@ $propName ~~~~~~~~~~~> 5b dataObject: $dataObject");
         if (dataObject == null) {
-          print("@ $propName ~~~~~~~~~~~> 6b dataObject: $dataObject");
           dataObject = await prepareMasterPropDataForCustomType(
             filterInput: filterInput,
             parentMasterPropValue: parentMasterPropValue,
             propName: propName,
           );
-          print("@ $propName ~~~~~~~~~~~> 7b dataObject: ${dataObject}");
           this.setMasterPropDataCustom(
             propName: propName,
             object: dataObject,
           );
           // Current value:
           final dynamic currentValue = this.data.getProperty(propName);
-
-          print("@ $propName ~~~~~~~~~~~> 8b currentValue: $currentValue");
 
           // // Candidate Selected Items:
           // List<dynamic>? candidateSelectedItems = xList?.candidateSelectedItems;
