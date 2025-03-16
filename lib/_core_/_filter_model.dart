@@ -135,6 +135,16 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  void _prinStructureAndData() {
+    _masterDataStructure.printInfo();
+    print("currentFromData: ${data.currentFormData}");
+    print("instantData: ${_formKey.currentState?.instantValue}");
+    print("\n\n");
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   ///
   /// Return null is error.
   ///
@@ -142,6 +152,7 @@ abstract class FilterModel<
   Future<FILTER_CRITERIA?> _prepareAllMasterPropDataAndFilterData({
     required FILTER_INPUT? filterInput,
   }) async {
+    print("@~~~~~~~~~~~> 1 _prepareAllMasterPropDataAndFilterData");
     bool error = false;
     try {
       //
@@ -160,7 +171,7 @@ abstract class FilterModel<
       );
       error = true;
     }
-    _masterDataStructure.printInfo();
+    _prinStructureAndData();
     //
     if (error) {
       this.data._clearWithDataState(
@@ -543,6 +554,7 @@ abstract class FilterModel<
 
   // Change Event from GUI.
   Future<void> _onChangeFromFilterView() async {
+    print("@~~~~~~~~~~~~~~~> ## _onChangeFromFilterView");
     //
     // IMPORTANT:
     // Update data from GlobalKey(_formKey) --> to FilterModelData.

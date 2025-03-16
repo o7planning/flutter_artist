@@ -153,7 +153,7 @@ class MasterDataStructure {
     for (OptionedMasterProp rootItem in _rootOptionedMasterProps) {
       rootItem._printInfoCascade(indentFactor: 1);
     }
-    print("--------------------------------------------------------------\n");
+    print("--------------------------------------------------------------");
   }
 }
 
