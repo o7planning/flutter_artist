@@ -222,8 +222,8 @@ abstract class FilterModel<
     // } catch (e, stackTrace) {
     //   _handleError(
     //     shelf: shelf,
-    //     methodName: "filterInputToCriteriaDataMap",
-    //     error: "Error filterInputToCriteriaDataMap: $e",
+    //     methodName: "initialCriteriaDataMap",
+    //     error: "Error initialCriteriaDataMap: $e",
     //     stackTrace: stackTrace,
     //     showSnackBar: true,
     //   );
@@ -237,36 +237,6 @@ abstract class FilterModel<
       return null;
     }
 
-    //
-    // Apply FilterInput:
-    //
-    // if (filterInput != null) {
-    //   try {
-    //     Map<String, dynamic> inputFilterCriteria = filterInputToCriteriaDataMap(
-    //       filterInput: filterInput,
-    //     );
-    //     //
-    //     this.data._updateFilterData(inputFilterCriteria);
-    //     this._formKey.currentState?.patchValue(inputFilterCriteria);
-    //   } catch (e, stackTrace) {
-    //     _handleError(
-    //       shelf: shelf,
-    //       methodName: "filterInputToCriteriaDataMap",
-    //       error: "Error filterInputToCriteriaDataMap: $e",
-    //       stackTrace: stackTrace,
-    //       showSnackBar: true,
-    //     );
-    //     error = true;
-    //   }
-    //   //
-    //   if (error) {
-    //     this.data._clearWithDataState(
-    //           filterDataState: DataState.error,
-    //         );
-    //     return null;
-    //   }
-    // }
-    //
     try {
       // If no error:
       FILTER_CRITERIA newCriteria =
@@ -494,23 +464,20 @@ abstract class FilterModel<
   ///
   /// ```dart
   /// @override
-  /// Map<String, dynamic> filterInputToCriteriaDataMap({
-  ///    required CompanyIdFilterInput filterInput,
+  /// MasterPropValueWrap? filterInputToMasterPropValue({
+  ///     required ExampleFilterInput filterInput,
+  ///     required XList materPropData,
+  ///     required String propName,
   /// }) {
-  ///    int inputCompanyId = filterInput.filterInput;
-  ///
-  ///    CompanyInfo inputCompany = companyXList?.getItemById(inputCompanyId);
-  ///    return {
-  ///       "company": inputCompany,
-  ///    };
+  ///    if(propName == "company") {
+  ///       int inputCompanyId = filterInput.filterInput;
+  ///       CompanyInfo? inputCompany = materPropData?.getItemById(inputCompanyId);
+  ///       return MasterPropValueWrap([inputCompany])
+  ///    }
+  ///    return null;
   /// }
   /// ```
   ///
-  @Deprecated("Khong su dung nua")
-  Map<String, dynamic> filterInputToCriteriaDataMap({
-    required FILTER_INPUT filterInput,
-  });
-
   MasterPropValueWrap? filterInputToMasterPropValue({
     required FILTER_INPUT filterInput,
     required XList materPropData,
