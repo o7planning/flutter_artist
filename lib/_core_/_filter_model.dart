@@ -155,12 +155,21 @@ abstract class FilterModel<
     print("@~~~~~~~~~~~> 1 _prepareAllMasterPropDataAndFilterData");
     bool error = false;
     try {
-      //
-      // May throw ApiError.
-      //
-      await _prepareAllMasterPropData(
-        filterInput: filterInput,
-      );
+      for (OptionedMasterProp masterProp
+          in _masterDataStructure._rootOptionedMasterProps) {
+        //
+        // May throw ApiError.
+        //
+        await _prepareOptionedMasterDataCascade(
+          filterInput: filterInput,
+          parentMasterPropValue: null,
+          optionedMasterProp: masterProp,
+        );
+      }
+      for (CommonMasterProp commonMasterProp
+          in _masterDataStructure._commonMasterProps) {
+        // TODO: Can xu ly them.
+      }
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
@@ -324,8 +333,13 @@ abstract class FilterModel<
           //
           // Current selected value:
           // It can be a single value or a List.
+          //
           final dynamic currentValue = this.data.getProperty(propName);
-          List? currentSelectedItems;
+          //
+          // IMPORTANT: Do not use empty list here
+          // to avoid cast Error (List<dynamic> to List<ITEM>)
+          //
+          List? currentSelectedItems; // will be null or not empty.
           if (currentValue != null) {
             if (currentValue is List) {
               currentSelectedItems = currentValue.isEmpty ? null : currentValue;
@@ -333,8 +347,6 @@ abstract class FilterModel<
               currentSelectedItems = [currentValue];
             }
           }
-          //
-
           // Candidate Selected Items:
           List? candidateSelectedItems =
               xList?.candidateSelectedItems ?? currentSelectedItems;
@@ -424,26 +436,6 @@ abstract class FilterModel<
       }
     } else {
       // Do nothing.
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Future<void> _prepareAllMasterPropData({
-    required FILTER_INPUT? filterInput,
-  }) async {
-    for (OptionedMasterProp masterProp
-        in _masterDataStructure._rootOptionedMasterProps) {
-      await _prepareOptionedMasterDataCascade(
-        filterInput: filterInput,
-        parentMasterPropValue: null,
-        optionedMasterProp: masterProp,
-      );
-    }
-    for (CommonMasterProp commonMasterProp
-        in _masterDataStructure._commonMasterProps) {
-      // TODO: Can xu ly them.
     }
   }
 
