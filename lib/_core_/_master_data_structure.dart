@@ -149,9 +149,11 @@ class MasterDataStructure {
   }
 
   void printInfo() {
+    print("\n\n--------------------------------------------------------------");
     for (OptionedMasterProp rootItem in _rootOptionedMasterProps) {
       rootItem._printInfoCascade(indentFactor: 1);
     }
+    print("--------------------------------------------------------------\n");
   }
 }
 
