@@ -7,8 +7,6 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
 
   late final String keyId;
 
-  bool _lockChangeEvent = false;
-
   RefreshableWidgetType get type;
 
   void setBuildingState({required bool isBuilding});

@@ -67,24 +67,22 @@ class _FilterViewBuilderState
     widget.filterModel._formKey = formKey;
   }
 
-  bool _getLockChangeEven() {
-    return _lockChangeEvent;
-  }
-
   Future<void> _onChange() async {
-    bool lockChange = widget.filterModel._lockChange;
+    bool lockFireChange = widget.filterModel._lockFireChange;
     bool isBuilding = widget.filterModel._isWidgetStateBuilding(
       widgetState: this,
     );
-    if (!lockChange && !isBuilding) {
+    if (!lockFireChange && !isBuilding) {
       await widget.filterModel._onChangeFromFilterView();
     }
   }
 
   @override
   Widget buildContent(BuildContext context) {
-    widget.filterModel
-        ._setFilterViewBuildingState(widgetState: this, isBuilding: true,);
+    widget.filterModel._setFilterViewBuildingState(
+      widgetState: this,
+      isBuilding: true,
+    );
     //
     return FormBuilder(
       key: formKey,

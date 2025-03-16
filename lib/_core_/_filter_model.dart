@@ -42,6 +42,7 @@ abstract class FilterModel<
 
   FILTER_CRITERIA? get filterCriteria => _filterCriteria;
 
+  bool _lockFireChange = false;
   bool _firstQueryDone = false;
   bool _applyDefaultFilterCriteria = false;
 
@@ -145,8 +146,6 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _lockChange = false;
-
   ///
   /// Return null is error.
   ///
@@ -185,10 +184,10 @@ abstract class FilterModel<
     _prinStructureAndData();
 
     try {
-      _lockChange = true;
+      _lockFireChange = true;
       _formKey.currentState?.patchValue(data.currentFormData);
     } finally {
-      _lockChange = false;
+      _lockFireChange = false;
     }
     //
     if (error) {
@@ -815,9 +814,7 @@ abstract class FilterModel<
       ..._filterFragmentWidgetStates.keys
     ]) {
       if (widgetState.mounted) {
-        widgetState._lockChangeEvent = true;
         widgetState.refreshState(force: force);
-        print("Refresh!");
       }
     }
   }
