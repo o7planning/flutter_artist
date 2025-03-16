@@ -315,64 +315,61 @@ abstract class FilterModel<
             propName: propName,
             xList: xList,
           );
-
-          if (xList != null) {
-            final Type itemType = xList.itemType;
-            // Current selected value:
-            // It can be a single value or a List.
-            final dynamic currentValue = this.data.getProperty(propName);
-            List<dynamic>? dynamicList;
-            // var currentItems=null;
-            if (currentValue == null) {
-              dynamicList = null;
-            } else if (currentValue is List) {
-              dynamicList = currentValue.isEmpty ? null : currentValue;
+          //
+          // Current selected value:
+          // It can be a single value or a List.
+          final dynamic currentValue = this.data.getProperty(propName);
+          List? currentSelectedItems;
+          if (currentValue != null) {
+            if (currentValue is List) {
+              currentSelectedItems = currentValue.isEmpty ? null : currentValue;
             } else {
-              dynamicList = [currentValue];
+              currentSelectedItems = [currentValue];
             }
-           var currentItems = xList?.findItemsInListByDynamics(dynamicValues: dynamicList);
-            //
-            print("@ $propName ~~~~~~~~~~~> 8 currentValue: $currentValue");
-
-            // Candidate Selected Items:
-            List<dynamic>? candidateSelectedItems =
-                xList?.candidateSelectedItems;
-
-            //
-            // TODO: Double check this code:
-            //
-            if (candidateSelectedItems != null &&
-                candidateSelectedItems.isNotEmpty) {
-              try {
-                // IMPORTANT:
-                //  - Update from ROOTs to LEAVES
-                //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
-                this.data._updateFilterData({propName: candidateSelectedItems});
-              } catch (e) {
-                // IMPORTANT:
-                //  - Update from ROOTs to LEAVES
-                //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
-                Object? candidateSelectedItem = candidateSelectedItems.first;
-                this.data._updateFilterData({propName: candidateSelectedItem});
-              }
-            } else {}
-
-            // TODO: Try this code:
-            // if (optionedMasterProp.singleSelection) {
-            //   Object? candidateSelectedItem =
-            //       candidateSelectedItems == null || candidateSelectedItems.isEmpty
-            //           ? null
-            //           : candidateSelectedItems.first;
-            //   //
-            //   if (candidateSelectedItem != null) {
-            //     this.data._updateFilterData({propName: candidateSelectedItem});
-            //   }
-            // } else {
-            //   if (candidateSelectedItems != null) {
-            //     this.data._updateFilterData({propName: candidateSelectedItems});
-            //   }
-            // }
           }
+          //
+          print("@ $propName ~~~~~~~~~~~> 8 currentValue: $currentValue");
+          print(
+              "@ $propName ~~~~~~~~~~~> 8.1 currentSelectedItems: $currentSelectedItems");
+
+          // Candidate Selected Items:
+          List? candidateSelectedItems =
+              xList?.candidateSelectedItems ?? currentSelectedItems;
+
+          //
+          // TODO: Double check this code:
+          //
+          if (candidateSelectedItems != null &&
+              candidateSelectedItems.isNotEmpty) {
+            try {
+              // IMPORTANT:
+              //  - Update from ROOTs to LEAVES
+              //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
+              this.data._updateFilterData({propName: candidateSelectedItems});
+            } catch (e) {
+              // IMPORTANT:
+              //  - Update from ROOTs to LEAVES
+              //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
+              Object? candidateSelectedItem = candidateSelectedItems.first;
+              this.data._updateFilterData({propName: candidateSelectedItem});
+            }
+          } else {}
+
+          // TODO: Try this code:
+          // if (optionedMasterProp.singleSelection) {
+          //   Object? candidateSelectedItem =
+          //       candidateSelectedItems == null || candidateSelectedItems.isEmpty
+          //           ? null
+          //           : candidateSelectedItems.first;
+          //   //
+          //   if (candidateSelectedItem != null) {
+          //     this.data._updateFilterData({propName: candidateSelectedItem});
+          //   }
+          // } else {
+          //   if (candidateSelectedItems != null) {
+          //     this.data._updateFilterData({propName: candidateSelectedItems});
+          //   }
+          // }
         }
       case OptionedMasterPropType.custom:
         Object? dataObject = this.getMasterPropDataCustom(propName);
