@@ -148,13 +148,11 @@ class MasterDataStructure {
     }
   }
 
-
   void printInfo() {
     for (OptionedMasterProp rootItem in _rootOptionedMasterProps) {
       rootItem._printInfoCascade(indentFactor: 1);
     }
   }
-
 }
 
 abstract class MasterProp {
@@ -244,18 +242,18 @@ class OptionedMasterProp extends MasterProp {
       updateValue = newValue;
       _valueUpdated = true;
       //
-      if (_xList == null) {
-        return;
+      bool isSame;
+      if (_xList != null) {
+        isSame = _xList!.isSame(item1: oldValue, item2: newValue);
+      } else {
+        isSame = false;
       }
-      bool isSame = _xList!.isSame(item1: oldValue, item2: newValue);
-      if (!isSame || newValue == null) {
+      //
+      if (_xList == null || newValue == null || !isSame) {
         for (OptionedMasterProp childItem in children) {
-          if (childItem._xList != null) {
-            childItem._xList!.clear();
-            childItem._xList = null;
-            updateValues[childItem.propName] = null;
-            childItem._dirty = true;
-          }
+          childItem._xList = null;
+          updateValues[childItem.propName] = null;
+          childItem._dirty = true;
         }
       }
     }
@@ -269,9 +267,10 @@ class OptionedMasterProp extends MasterProp {
   }
 
   void _printInfoCascade({required int indentFactor}) {
-    print("${("- - - " * indentFactor)} $propName >>> $updateValue >>> ${_xList?.items}");
-    for(var child in children) {
-      child._printInfoCascade(indentFactor:indentFactor+1);
+    print(
+        "${("- - - " * indentFactor)} $propName >>> $updateValue >>> ${_xList?.items}");
+    for (var child in children) {
+      child._printInfoCascade(indentFactor: indentFactor + 1);
     }
   }
 }

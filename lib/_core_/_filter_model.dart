@@ -343,6 +343,8 @@ abstract class FilterModel<
           List? candidateSelectedItems =
               xList?.candidateSelectedItems ?? currentSelectedItems;
 
+          print("@@@@@@@ candidateSelectedItems: $candidateSelectedItems");
+
           //
           // TODO: Double check this code:
           //
@@ -360,7 +362,12 @@ abstract class FilterModel<
               Object? candidateSelectedItem = candidateSelectedItems.first;
               this.data._updateFilterData({propName: candidateSelectedItem});
             }
-          } else {}
+          } else {
+            // IMPORTANT:
+            //  - Update from ROOTs to LEAVES
+            //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
+            this.data._updateFilterData({propName: null});
+          }
 
           // TODO: Try this code:
           // if (optionedMasterProp.singleSelection) {
