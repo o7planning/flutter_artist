@@ -67,7 +67,7 @@ class _FilterViewBuilderState
     widget.filterModel._formKey = formKey;
   }
 
-  Future<void> _onChange() async {
+  Future<void> _onChanged() async {
     bool lockFireChange = widget.filterModel._lockFireChange;
     bool isBuilding = widget.filterModel._isWidgetStateBuilding(
       widgetState: this,
@@ -87,7 +87,7 @@ class _FilterViewBuilderState
     return FormBuilder(
       key: formKey,
       initialValue: widget.filterModel._initFilterValue(),
-      onChanged: _onChange,
+      onChanged: _onChanged,
       child: AbsorbPointer(
         absorbing: !widget.filterModel.isEnabled(),
         child: widget.build(),
