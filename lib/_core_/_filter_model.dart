@@ -145,6 +145,8 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  bool _lockChange = false;
+
   ///
   /// Return null is error.
   ///
@@ -181,6 +183,13 @@ abstract class FilterModel<
       error = true;
     }
     _prinStructureAndData();
+
+    try {
+      _lockChange = true;
+      _formKey.currentState?.patchValue(data.currentFormData);
+    } finally {
+      _lockChange = false;
+    }
     //
     if (error) {
       this.data._clearWithDataState(
@@ -188,38 +197,39 @@ abstract class FilterModel<
           );
       return null;
     }
+
     //
     // Apply Default FilterCriteria:
     //
-    try {
-      Map<String, dynamic> defaultFilterCriteria =
-          this.initialCriteriaDataMap();
-
-      //
-      if (_formKey.currentState == null) {
-        this.data._updateFilterData(defaultFilterCriteria);
-      } else {
-        if (data._initialFormData.isEmpty) {
-          this.data._updateFilterData(defaultFilterCriteria);
-        }
-        for (String key in defaultFilterCriteria.keys) {
-          if (!_formKey.currentState!.instantValue.containsKey(key)) {
-            _formKey.currentState!.patchValue(
-              {key: defaultFilterCriteria[key]},
-            );
-          }
-        }
-      }
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "filterInputToCriteriaDataMap",
-        error: "Error filterInputToCriteriaDataMap: $e",
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      error = true;
-    }
+    // try {
+    //   Map<String, dynamic> defaultFilterCriteria =
+    //       this.initialCriteriaDataMap();
+    //
+    //   //
+    //   if (_formKey.currentState == null) {
+    //     this.data._updateFilterData(defaultFilterCriteria);
+    //   } else {
+    //     if (data._initialFormData.isEmpty) {
+    //       this.data._updateFilterData(defaultFilterCriteria);
+    //     }
+    //     for (String key in defaultFilterCriteria.keys) {
+    //       if (!_formKey.currentState!.instantValue.containsKey(key)) {
+    //         _formKey.currentState!.patchValue(
+    //           {key: defaultFilterCriteria[key]},
+    //         );
+    //       }
+    //     }
+    //   }
+    // } catch (e, stackTrace) {
+    //   _handleError(
+    //     shelf: shelf,
+    //     methodName: "filterInputToCriteriaDataMap",
+    //     error: "Error filterInputToCriteriaDataMap: $e",
+    //     stackTrace: stackTrace,
+    //     showSnackBar: true,
+    //   );
+    //   error = true;
+    // }
     //
     if (error) {
       this.data._clearWithDataState(
@@ -231,32 +241,32 @@ abstract class FilterModel<
     //
     // Apply FilterInput:
     //
-    if (filterInput != null) {
-      try {
-        Map<String, dynamic> inputFilterCriteria = filterInputToCriteriaDataMap(
-          filterInput: filterInput,
-        );
-        //
-        this.data._updateFilterData(inputFilterCriteria);
-        this._formKey.currentState?.patchValue(inputFilterCriteria);
-      } catch (e, stackTrace) {
-        _handleError(
-          shelf: shelf,
-          methodName: "filterInputToCriteriaDataMap",
-          error: "Error filterInputToCriteriaDataMap: $e",
-          stackTrace: stackTrace,
-          showSnackBar: true,
-        );
-        error = true;
-      }
-      //
-      if (error) {
-        this.data._clearWithDataState(
-              filterDataState: DataState.error,
-            );
-        return null;
-      }
-    }
+    // if (filterInput != null) {
+    //   try {
+    //     Map<String, dynamic> inputFilterCriteria = filterInputToCriteriaDataMap(
+    //       filterInput: filterInput,
+    //     );
+    //     //
+    //     this.data._updateFilterData(inputFilterCriteria);
+    //     this._formKey.currentState?.patchValue(inputFilterCriteria);
+    //   } catch (e, stackTrace) {
+    //     _handleError(
+    //       shelf: shelf,
+    //       methodName: "filterInputToCriteriaDataMap",
+    //       error: "Error filterInputToCriteriaDataMap: $e",
+    //       stackTrace: stackTrace,
+    //       showSnackBar: true,
+    //     );
+    //     error = true;
+    //   }
+    //   //
+    //   if (error) {
+    //     this.data._clearWithDataState(
+    //           filterDataState: DataState.error,
+    //         );
+    //     return null;
+    //   }
+    // }
     //
     try {
       // If no error:
@@ -336,12 +346,19 @@ abstract class FilterModel<
         // Candidate Selected Items:
         List? candidateSelectedItems;
         if (xList != null) {
+          MasterPropValueWrap? inputValueWrap;
+          if (filterInput != null) {
+            inputValueWrap = _filterInputToMasterPropValue(
+              filterInput: filterInput,
+              materPropData: xList,
+              propName: propName,
+            );
+          }
           //
           // Current selected value:
           // It can be a single value or a List.
           //
           final dynamic currentValue = this.data.getProperty(propName);
-          print("???????? currentValue: $currentValue");
           if (currentValue != null) {
             if (currentValue is List) {
               currentSelectedItems = currentValue.isEmpty ? null : currentValue;
@@ -354,15 +371,12 @@ abstract class FilterModel<
               dynamicValues: currentSelectedItems,
             );
           }
-          print("???????? currentSelectedItems: $currentSelectedItems");
-          print(
-              "???????? xList.candidateSelectedItems: ${xList.candidateSelectedItems}");
           // Candidate Selected Items:
-          if (xList.candidateSelectedItems == null ||
-              xList.candidateSelectedItems!.isEmpty) {
+          candidateSelectedItems = inputValueWrap?.value;
+
+          if (candidateSelectedItems == null ||
+              candidateSelectedItems!.isEmpty) {
             candidateSelectedItems = currentSelectedItems;
-          } else {
-            candidateSelectedItems = xList.candidateSelectedItems;
           }
         } else {
           currentSelectedItems = null;
@@ -373,8 +387,6 @@ abstract class FilterModel<
           propName: propName,
           xList: xList,
         );
-        print("-----> Filter Input: ${filterInput}");
-
         //
         // TODO: Double check this code:
         //
@@ -500,6 +512,33 @@ abstract class FilterModel<
     required FILTER_INPUT filterInput,
   });
 
+  MasterPropValueWrap? filterInputToMasterPropValue({
+    required FILTER_INPUT filterInput,
+    required XList materPropData,
+    required String propName,
+  });
+
+  MasterPropValueWrap? _filterInputToMasterPropValue({
+    required FILTER_INPUT filterInput,
+    required XList materPropData,
+    required String propName,
+  }) {
+    MasterPropValueWrap? wrap = filterInputToMasterPropValue(
+      filterInput: filterInput,
+      materPropData: materPropData,
+      propName: propName,
+    );
+    if (wrap == null) {
+      return null;
+    }
+    List? value = wrap.value;
+    return MasterPropValueWrap(
+      materPropData.findItemsInListByDynamics(
+        dynamicValues: value,
+      ),
+    );
+  }
+
   ///
   /// This method is called after [prepareMasterData] and [initialCriteriaDataMap] methods.
   ///
@@ -588,7 +627,6 @@ abstract class FilterModel<
         filterInput: null,
       );
     }
-    print("@@@@@@@@@@ --> ${getClassName(this)}.updateAllUIComponents");
     this.updateAllUIComponents(force: true);
   }
 
@@ -779,6 +817,7 @@ abstract class FilterModel<
       if (widgetState.mounted) {
         widgetState._lockChangeEvent = true;
         widgetState.refreshState(force: force);
+        print("Refresh!");
       }
     }
   }

@@ -72,24 +72,19 @@ class _FilterViewBuilderState
   }
 
   Future<void> _onChange() async {
+    bool lockChange = widget.filterModel._lockChange;
     bool isBuilding = widget.filterModel._isWidgetStateBuilding(
       widgetState: this,
     );
-    if (!isBuilding) {
+    if (!lockChange && !isBuilding) {
       await widget.filterModel._onChangeFromFilterView();
     }
   }
 
   @override
   Widget buildContent(BuildContext context) {
-    bool isBuilding = widget.filterModel._isWidgetStateBuilding(
-      widgetState: this,
-    );
     widget.filterModel
-        ._setFilterViewBuildingState(widgetState: this, isBuilding: true);
-    isBuilding = widget.filterModel._isWidgetStateBuilding(
-      widgetState: this,
-    );
+        ._setFilterViewBuildingState(widgetState: this, isBuilding: true,);
     //
     return FormBuilder(
       key: formKey,

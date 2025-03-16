@@ -66,6 +66,15 @@ class _DefaultFilterModel
   }) async {
     return null;
   }
+
+  @override
+  MasterPropValueWrap? filterInputToMasterPropValue({
+    required EmptyFilterInput filterInput,
+    required XList materPropData,
+    required String propName,
+  }) {
+    return null;
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -124,6 +133,15 @@ class StringIdFilterModel
     required Object? parentMasterPropValue,
     required String propName,
   }) async {
+    return null;
+  }
+
+  @override
+  MasterPropValueWrap? filterInputToMasterPropValue({
+    required StringIdFilterInput filterInput,
+    required XList materPropData,
+    required String propName,
+  }) {
     return null;
   }
 }
@@ -186,6 +204,15 @@ class StringValueFilterModel
   }) async {
     return null;
   }
+
+  @override
+  MasterPropValueWrap? filterInputToMasterPropValue({
+    required StringValueFilterInput filterInput,
+    required XList materPropData,
+    required String propName,
+  }) {
+    return null;
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -246,6 +273,15 @@ class SearchTextFilterModel
   }) async {
     return null;
   }
+
+  @override
+  MasterPropValueWrap? filterInputToMasterPropValue({
+    required SearchTextFilterInput filterInput,
+    required XList materPropData,
+    required String propName,
+  }) {
+    return null;
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -304,6 +340,15 @@ class IntIdFilterModel
     required Object? parentMasterPropValue,
     required String propName,
   }) async {
+    return null;
+  }
+
+  @override
+  MasterPropValueWrap? filterInputToMasterPropValue({
+    required IntIdFilterInput filterInput,
+    required XList materPropData,
+    required String propName,
+  }) {
     return null;
   }
 }

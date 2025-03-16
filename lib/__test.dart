@@ -1,13 +1,12 @@
-
-Type getStringType()  {
+Type getStringType() {
   var s = "A String";
   return s.runtimeType;
 }
 
-void main()  {
+void main() {
   Type stringType = getStringType();
 
-    List<dynamic> aList = ["1", "2"];
+  List<dynamic> aList = ["1", "2"];
 
-   var s= "";
+  var s = "";
 }
