@@ -161,6 +161,9 @@ abstract class FilterModel<
       );
       error = true;
     }
+    print("@ OK ----------------------------------------");
+    print("_currentFormData: ${data._currentFormData}");
+    _masterDataStructure.printInfo();
     //
     if (error) {
       this.data._clearWithDataState(
@@ -200,6 +203,8 @@ abstract class FilterModel<
       );
       error = true;
     }
+    print("@ OK2 ----------------------------------------");
+    print("_currentFormData: ${data._currentFormData}");
     //
     if (error) {
       this.data._clearWithDataState(
@@ -229,6 +234,8 @@ abstract class FilterModel<
         );
         error = true;
       }
+      print("@ OK3 ----------------------------------------");
+      print("_currentFormData: ${data._currentFormData}");
       //
       if (error) {
         this.data._clearWithDataState(

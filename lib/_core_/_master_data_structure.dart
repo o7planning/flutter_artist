@@ -147,6 +147,14 @@ class MasterDataStructure {
       );
     }
   }
+
+
+  void printInfo() {
+    for (OptionedMasterProp rootItem in _rootOptionedMasterProps) {
+      rootItem._printInfoCascade(indentFactor: 1);
+    }
+  }
+
 }
 
 abstract class MasterProp {
@@ -257,6 +265,13 @@ class OptionedMasterProp extends MasterProp {
         currentValues: currentValues,
         updateValues: updateValues,
       );
+    }
+  }
+
+  void _printInfoCascade({required int indentFactor}) {
+    print("${("- - - " * indentFactor)} $propName >>> $updateValue >>> ${_xList?.items}");
+    for(var child in children) {
+      child._printInfoCascade(indentFactor:indentFactor+1);
     }
   }
 }

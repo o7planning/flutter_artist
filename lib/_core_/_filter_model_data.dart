@@ -92,9 +92,10 @@ class FilterModelData<
         _currentFormData[masterProp.propName] = masterProp.updateValue;
       }
     }
-    print("@after _updateFilterData _currentFormData: $_currentFormData");
-    print(
-        "@after _updateFilterData filterModel._currentFormData: ${filterModel._formKey?.currentState?.instantValue}");
+    // print("@after _updateFilterData ---------------------------");
+    // filterModel._masterDataStructure.printInfo();
+    // print(
+    //     "@after _updateFilterData currentState?.instantValue: ${filterModel._formKey?.currentState?.instantValue}");
   }
 
   // ***************************************************************************
