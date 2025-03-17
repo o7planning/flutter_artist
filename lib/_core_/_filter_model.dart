@@ -181,7 +181,13 @@ abstract class FilterModel<
     //
     _prinStructureAndTempData();
 
+    //
     // Apply Temporary data to real data:
+    //
+    this.data._currentFormData
+      ..clear()
+      ..addAll(_masterDataStructure._tempCurrentFormData);
+    this._masterDataStructure._applyAllTempDataToReal();
 
     try {
       // IMPORTANT: To avoid infinite loops.

@@ -63,15 +63,15 @@ class OptionedMasterProp extends MasterProp {
       _valueUpdated = true;
       //
       bool isSame;
-      if (_xList != null) {
-        isSame = _xList!.isSame(item1: oldValue, item2: newValue);
+      if (_tempXList != null) {
+        isSame = _tempXList!.isSame(item1: oldValue, item2: newValue);
       } else {
         isSame = false;
       }
       //
-      if (_xList == null || newValue == null || !isSame) {
+      if (_tempXList == null || newValue == null || !isSame) {
         for (OptionedMasterProp childItem in children) {
-          childItem._xList = null;
+          childItem._tempXList = null;
           updateValues[childItem.propName] = null;
           childItem._dirty = true;
         }
@@ -92,5 +92,17 @@ class OptionedMasterProp extends MasterProp {
     for (var child in children) {
       child._printTempInfoCascade(indentFactor: indentFactor + 1);
     }
+  }
+
+  @override
+  void _resetForNewTransaction() {
+    _tempXList = null;
+    _tempXObject = null;
+  }
+
+  @override
+  void _applyTempDataToReal() {
+    _xList = _tempXList;
+    _xObject = _tempXObject;
   }
 }

@@ -42,6 +42,19 @@ class MasterDataStructure {
     _tempCurrentFormData
       ..clear()
       ..addAll(currentFormData);
+    //
+    for(MasterProp masterProp in _allMasterPropMap.values)  {
+      masterProp._resetForNewTransaction();
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _applyAllTempDataToReal()  {
+    for(MasterProp masterProp in _allMasterPropMap.values)  {
+      masterProp._applyTempDataToReal();
+    }
   }
 
   // ***************************************************************************
@@ -125,7 +138,7 @@ class MasterDataStructure {
       );
     }
     for (CommonMasterProp commonItem in _commonMasterProps) {
-      commonItem._updateValue(
+      commonItem._updateTempValue(
         tempCurrentFormData: _tempCurrentFormData,
         updateValues: candidateUpdateValues,
       );

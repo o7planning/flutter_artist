@@ -7,4 +7,8 @@ abstract class MasterProp {
   bool _dirty = false;
 
   MasterProp({required this.propName});
+
+  void _resetForNewTransaction();
+
+  void _applyTempDataToReal();
 }

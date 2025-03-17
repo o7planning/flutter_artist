@@ -5,7 +5,7 @@ class CommonMasterProp extends MasterProp {
     required super.propName,
   });
 
-  void _updateValue({
+  void _updateTempValue({
     required Map<String, dynamic> tempCurrentFormData,
     required Map<String, dynamic> updateValues,
   }) {
@@ -16,5 +16,15 @@ class CommonMasterProp extends MasterProp {
       candidateUpdateValue = newValue;
       _valueUpdated = true;
     }
+  }
+
+  @override
+  void _resetForNewTransaction() {
+    // TODO: implement _resetForNewTransaction
+  }
+
+  @override
+  void _applyTempDataToReal() {
+    // TODO: implement _applyTempDataToReal
   }
 }
