@@ -361,7 +361,7 @@ abstract class FilterModel<
         //
         _masterDataStructure._setTempMasterPropDataXList(
           propName: propName,
-          xList: tempXList,
+          tempXList: tempXList,
         );
         //
         // TODO: Double check this code:
