@@ -114,7 +114,7 @@ abstract class FilterModel<
     required String propName,
     required Object? object,
   }) {
-    _masterDataStructure._setMasterPropDataCustom(
+    _masterDataStructure._setTempMasterPropDataCustom(
       propName: propName,
       object: object,
     );
@@ -124,7 +124,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   void _prinStructureAndTempData() {
-    _masterDataStructure.printTemporaryInfo();
+    _masterDataStructure._printTemporaryInfo();
     print("instantData: ${_formKey.currentState?.instantValue}");
     print("\n\n");
   }
@@ -182,8 +182,6 @@ abstract class FilterModel<
     _prinStructureAndTempData();
 
     // Apply Temporary data to real data:
-
-
 
     try {
       // IMPORTANT: To avoid infinite loops.

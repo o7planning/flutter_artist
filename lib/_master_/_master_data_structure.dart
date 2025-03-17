@@ -50,6 +50,7 @@ class MasterDataStructure {
   dynamic _getTempCurrentPropValue({required String propName}) {
     return _tempCurrentFormData[propName];
   }
+
   // ***************************************************************************
   // ***************************************************************************
 
@@ -118,18 +119,17 @@ class MasterDataStructure {
     }
     //
     for (OptionedMasterProp rootItem in _rootOptionedMasterProps) {
-      rootItem._updateValueCascade(
-        currentValues: _tempCurrentFormData,
+      rootItem._updateTempValueCascade(
+        tempCurrentFormData: _tempCurrentFormData,
         updateValues: candidateUpdateValues,
       );
     }
     for (CommonMasterProp commonItem in _commonMasterProps) {
       commonItem._updateValue(
-        currentValues: _tempCurrentFormData,
+        tempCurrentFormData: _tempCurrentFormData,
         updateValues: candidateUpdateValues,
       );
     }
-
     // Apply to all dirty MasterProp:
     for (MasterProp masterProp in _allMasterPropMap.values) {
       if (masterProp._dirty) {
@@ -155,7 +155,7 @@ class MasterDataStructure {
         throw AppException(
             message: 'Invalid MasterProp Data for type ${masterProp.type}');
       }
-      masterProp._xList = xList;
+      masterProp._tempXList = xList;
     } else {
       throw AppException(
           message:
@@ -166,7 +166,7 @@ class MasterDataStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _setMasterPropDataCustom({
+  void _setTempMasterPropDataCustom({
     required String propName,
     required Object? object,
   }) {
@@ -179,7 +179,7 @@ class MasterDataStructure {
         throw AppException(
             message: 'Invalid MasterProp Data for type ${masterProp.type}');
       }
-      masterProp._xObject = object;
+      masterProp._tempXObject = object;
     } else {
       throw AppException(
           message:
@@ -200,10 +200,10 @@ class MasterDataStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void printTemporaryInfo() {
+  void _printTemporaryInfo() {
     print("\n\n--------------------------------------------------------------");
     for (OptionedMasterProp rootItem in _rootOptionedMasterProps) {
-      rootItem._printInfoCascade(indentFactor: 1);
+      rootItem._printTempInfoCascade(indentFactor: 1);
     }
     print("tempCurrentFromData: $_tempCurrentFormData");
     print("--------------------------------------------------------------");

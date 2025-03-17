@@ -6,11 +6,11 @@ class CommonMasterProp extends MasterProp {
   });
 
   void _updateValue({
-    required Map<String, dynamic> currentValues,
+    required Map<String, dynamic> tempCurrentFormData,
     required Map<String, dynamic> updateValues,
   }) {
     if (!_valueUpdated && _dirty) {
-      final dynamic oldValue = currentValues[propName];
+      final dynamic oldValue = tempCurrentFormData[propName];
       final dynamic newValue = updateValues[propName];
       //
       candidateUpdateValue = newValue;

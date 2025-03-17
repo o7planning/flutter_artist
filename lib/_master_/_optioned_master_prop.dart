@@ -51,12 +51,12 @@ class OptionedMasterProp extends MasterProp {
     }
   }
 
-  void _updateValueCascade({
-    required Map<String, dynamic> currentValues,
+  void _updateTempValueCascade({
+    required Map<String, dynamic> tempCurrentFormData,
     required Map<String, dynamic> updateValues,
   }) {
     if (!_valueUpdated && _dirty) {
-      final dynamic oldValue = currentValues[propName];
+      final dynamic oldValue = tempCurrentFormData[propName];
       final dynamic newValue = updateValues[propName];
       //
       candidateUpdateValue = newValue;
@@ -79,18 +79,18 @@ class OptionedMasterProp extends MasterProp {
     }
     //
     for (OptionedMasterProp childItem in children) {
-      childItem._updateValueCascade(
-        currentValues: currentValues,
+      childItem._updateTempValueCascade(
+        tempCurrentFormData: tempCurrentFormData,
         updateValues: updateValues,
       );
     }
   }
 
-  void _printInfoCascade({required int indentFactor}) {
+  void _printTempInfoCascade({required int indentFactor}) {
     print(
-        "${("- - - " * indentFactor)} $propName >>> $candidateUpdateValue >>> ${_xList?.items}");
+        "${("- - - " * indentFactor)} $propName >>> $candidateUpdateValue >>> ${_tempXList?.items}");
     for (var child in children) {
-      child._printInfoCascade(indentFactor: indentFactor + 1);
+      child._printTempInfoCascade(indentFactor: indentFactor + 1);
     }
   }
 }
