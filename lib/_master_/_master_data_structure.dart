@@ -39,6 +39,7 @@ class MasterDataStructure {
   void _resetTemporaryForNewTransaction({
     required Map<String, dynamic> currentFormData,
   }) {
+    print("Reset>>> currentFormData: $currentFormData");
     _tempCurrentFormData
       ..clear()
       ..addAll(currentFormData);
@@ -84,6 +85,21 @@ class MasterDataStructure {
 
   // ***************************************************************************
   // ***************************************************************************
+
+  XList? _getTempMasterDataXList(String propName) {
+    MasterProp? masterProp = _allMasterPropMap[propName];
+    if (masterProp == null) {
+      return null;
+    }
+    if (masterProp is OptionedMasterProp) {
+      if (masterProp.type == OptionedMasterPropType.listable) {
+        return masterProp._tempXList;
+      } else {
+        return null;
+      }
+    }
+    return null;
+  }
 
   XList? _getMasterDataXList(String propName) {
     MasterProp? masterProp = _allMasterPropMap[propName];
@@ -157,7 +173,7 @@ class MasterDataStructure {
 
   void _setTempMasterPropDataXList({
     required String propName,
-    required XList? xList,
+    required XList? tempXList,
   }) {
     MasterProp? masterProp = _allMasterPropMap[propName];
     if (masterProp == null) {
@@ -168,7 +184,7 @@ class MasterDataStructure {
         throw AppException(
             message: 'Invalid MasterProp Data for type ${masterProp.type}');
       }
-      masterProp._tempXList = xList;
+      masterProp._tempXList = tempXList;
     } else {
       throw AppException(
           message:

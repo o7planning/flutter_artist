@@ -145,6 +145,8 @@ abstract class FilterModel<
       _masterDataStructure._resetTemporaryForNewTransaction(
         currentFormData: data._currentFormData,
       );
+
+      _masterDataStructure._printTemporaryInfo();
       //
       for (OptionedMasterProp masterProp
           in _masterDataStructure._rootOptionedMasterProps) {
@@ -294,13 +296,14 @@ abstract class FilterModel<
     switch (optionedMasterProp.type) {
       case OptionedMasterPropType.listable:
         // Get current MasterProp data:
-        XList? xList = this.getMasterPropDataXList(propName);
-        if (xList == null) {
+        XList? tempXList =
+            _masterDataStructure._getTempMasterDataXList(propName);
+        if (tempXList == null) {
           //
           // Load OptionedMasterPro data from Rest API.
           // May throw ApiError.
           //
-          xList = await prepareMasterPropDataForListType(
+          tempXList = await prepareMasterPropDataForListType(
             filterInput: filterInput,
             parentMasterPropValue: parentMasterPropValue,
             propName: propName,
@@ -313,12 +316,12 @@ abstract class FilterModel<
         List? currentSelectedItems; // will be null or not empty.
         // Candidate Selected Items:
         List? candidateSelectedItems;
-        if (xList != null) {
+        if (tempXList != null) {
           MasterPropValueWrap? inputValueWrap;
           if (filterInput != null) {
             inputValueWrap = _filterInputToMasterPropValue(
               filterInput: filterInput,
-              materPropData: xList,
+              materPropData: tempXList,
               propName: propName,
             );
           }
@@ -340,7 +343,7 @@ abstract class FilterModel<
             }
           }
           if (currentSelectedItems != null) {
-            currentSelectedItems = xList.findItemsInListByDynamics(
+            currentSelectedItems = tempXList.findItemsInListByDynamics(
               dynamicValues: currentSelectedItems,
             );
           }
@@ -358,7 +361,7 @@ abstract class FilterModel<
         //
         _masterDataStructure._setTempMasterPropDataXList(
           propName: propName,
-          xList: xList,
+          xList: tempXList,
         );
         //
         // TODO: Double check this code:
@@ -420,12 +423,13 @@ abstract class FilterModel<
     } // End switch
 
     //
-    Object? selectedMasterPropValue = this.data.getProperty(propName);
-    if (selectedMasterPropValue != null) {
+    Object? tempSelectedMasterPropValue =
+        this._masterDataStructure._getTempCurrentPropValue(propName: propName);
+    if (tempSelectedMasterPropValue != null) {
       for (OptionedMasterProp child in optionedMasterProp.children) {
         await _prepareOptionedMasterDataCascade(
           filterInput: filterInput,
-          parentMasterPropValue: selectedMasterPropValue,
+          parentMasterPropValue: tempSelectedMasterPropValue,
           optionedMasterProp: child,
         );
       }
