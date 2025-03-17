@@ -110,19 +110,6 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void setMasterPropDataXList({
-    required String propName,
-    required XList? xList,
-  }) {
-    _masterDataStructure._setMasterPropDataXList(
-      propName: propName,
-      xList: xList,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   void setMasterPropDataCustom({
     required String propName,
     required Object? object,
@@ -156,6 +143,10 @@ abstract class FilterModel<
     print("@~~~~~~~~~~~> 1 _prepareAllMasterPropDataAndFilterData");
     bool error = false;
     try {
+      _masterDataStructure._resetTemporaryForNewTransaction(
+        currentFormData: data._currentFormData,
+      );
+      //
       for (OptionedMasterProp masterProp
           in _masterDataStructure._rootOptionedMasterProps) {
         //
@@ -328,12 +319,17 @@ abstract class FilterModel<
           // Current selected value:
           // It can be a single value or a List.
           //
-          final dynamic currentValue = this.data.getProperty(propName);
-          if (currentValue != null) {
-            if (currentValue is List) {
-              currentSelectedItems = currentValue.isEmpty ? null : currentValue;
+          final dynamic tempCurrentValue =
+              _masterDataStructure._getTempCurrentPropValue(
+            propName: propName,
+          );
+          //
+          if (tempCurrentValue != null) {
+            if (tempCurrentValue is List) {
+              currentSelectedItems =
+                  tempCurrentValue.isEmpty ? null : tempCurrentValue;
             } else {
-              currentSelectedItems = [currentValue];
+              currentSelectedItems = [tempCurrentValue];
             }
           }
           if (currentSelectedItems != null) {
@@ -353,7 +349,7 @@ abstract class FilterModel<
           candidateSelectedItems = null;
         }
         //
-        this.setMasterPropDataXList(
+        _masterDataStructure._setTempMasterPropDataXList(
           propName: propName,
           xList: xList,
         );
@@ -367,19 +363,21 @@ abstract class FilterModel<
             //  - Update from ROOTs to LEAVES
             //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
             // Try MULTI SELECTED ITEMS:
-            this.data._updateFilterData({propName: candidateSelectedItems});
+            _masterDataStructure
+                ._updateTempData({propName: candidateSelectedItems});
           } catch (e) {
             // IMPORTANT:
             //  - Update from ROOTs to LEAVES
             //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
             Object? candidateSelectedItem = candidateSelectedItems.first;
-            this.data._updateFilterData({propName: candidateSelectedItem});
+            _masterDataStructure
+                ._updateTempData({propName: candidateSelectedItem});
           }
         } else {
           // IMPORTANT:
           //  - Update from ROOTs to LEAVES
           //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
-          this.data._updateFilterData({propName: null});
+          _masterDataStructure._updateTempData({propName: null});
         }
       case OptionedMasterPropType.custom:
         Object? dataObject = this.getMasterPropDataCustom(propName);
@@ -577,7 +575,8 @@ abstract class FilterModel<
       //
       // IMPORTANT: Will execute XList Event.
       //
-      data._updateFilterData(_formKey.currentState!.instantValue);
+      // TODO Xem lai: ??????????????????????????????????????????????????????
+      // data._updateFilterData(_formKey.currentState!.instantValue);
     }
     //
     if (_firstQueryDone) {
