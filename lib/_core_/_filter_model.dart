@@ -181,7 +181,10 @@ abstract class FilterModel<
       return null;
     }
     //
+    print("XXX");
     _prinStructureAndTempData();
+
+    print(">>>>> Temp Current:>> ${_masterDataStructure._tempCurrentFormData}");
 
     //
     // Apply Temporary data to real data:
@@ -190,6 +193,8 @@ abstract class FilterModel<
       ..clear()
       ..addAll(_masterDataStructure._tempCurrentFormData);
     this._masterDataStructure._applyAllTempDataToReal();
+
+    print(">>>>> Current:>> ${data.currentFormData}");
 
     try {
       // IMPORTANT: To avoid infinite loops.
@@ -570,6 +575,7 @@ abstract class FilterModel<
   // Change Event from GUI.
   Future<void> _onChangeFromFilterView() async {
     print("@~~~~~~~~~~~~~~~> ## _onChangeFromFilterView");
+    print(">>> ${_formKey.currentState?.instantValue}");
     //
     // IMPORTANT:
     // Update data from GlobalKey(_formKey) --> to FilterModelData.
@@ -586,8 +592,8 @@ abstract class FilterModel<
       //
       // IMPORTANT: Will execute XList Event.
       //
-      // TODO Xem lai: ??????????????????????????????????????????????????????
-      // data._updateFilterData(_formKey.currentState!.instantValue);
+      // TODO Xem lai:
+      data._updateFilterData(_formKey.currentState!.instantValue);
     }
     //
     if (_firstQueryDone) {

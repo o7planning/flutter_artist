@@ -44,6 +44,30 @@ class FilterModelData<
   // ***************************************************************************
   // ***************************************************************************
 
+
+  void _updateFilterData(Map<String, dynamic> updateData) {
+    //
+    // IMPORTANT:
+    // Update data for MasterDataStructure. From ROOTs to LEAVES.
+    // (***):
+    // And Update children-OptionedMasterProp data to null if parent-Value is null or not selected.
+    //
+    filterModel._masterDataStructure.updateMasterPropValuesToLeaves(
+      currentValues: _currentFormData,
+      updateValues: {...updateData},
+    );
+    // Apply to all dirty MasterProp:
+    for (MasterProp masterProp
+    in filterModel._masterDataStructure._allMasterPropMap.values) {
+      if (masterProp._dirty) {
+        _currentFormData[masterProp.propName] = masterProp.updateValue;
+      }
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _clearWithDataState({required DataState filterDataState}) {
     _filterDataState = filterDataState;
     //
