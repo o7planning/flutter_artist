@@ -9,15 +9,25 @@ class MasterDataStructure {
   final Map<String, dynamic> _tempCurrentFormData = {};
 
   MasterDataStructure({
+    required List<String> allPropNames,
     required List<OptionedMasterProp> optionedMasterProps,
   }) : _rootOptionedMasterProps = [...optionedMasterProps] {
+    final List<String> commonPropNames = {...allPropNames}.toList();
+    //
     for (OptionedMasterProp rootMasterProperty in optionedMasterProps) {
       __standardizeCascade(rootMasterProperty, null);
     }
-    for (MasterProp xProperty in _allMasterPropMap.values) {
-      if (xProperty is OptionedMasterProp) {
-        xProperty._checkCycleError();
+    for (MasterProp masterProp in _allMasterPropMap.values) {
+      commonPropNames.remove(masterProp.propName);
+      if (masterProp is OptionedMasterProp) {
+        masterProp._checkCycleError();
       }
+    }
+    for (String propName in commonPropNames) {
+      _createAndAddNewCommomMasterProp(
+        propName: propName,
+        dirty: false,
+      );
     }
   }
 
@@ -137,12 +147,10 @@ class MasterDataStructure {
       if (masterProp != null) {
         masterProp._dirty = true;
       } else {
-        CommonMasterProp? newCommonProperty = CommonMasterProp(
+        _createAndAddNewCommomMasterProp(
           propName: propName,
+          dirty: true,
         );
-        newCommonProperty._dirty = true;
-        _allMasterPropMap[propName] = newCommonProperty;
-        _commonMasterProps.add(newCommonProperty);
       }
     }
     //
@@ -165,6 +173,24 @@ class MasterDataStructure {
             masterProp.candidateUpdateValue;
       }
     }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _createAndAddNewCommomMasterProp({
+    required String propName,
+    required bool dirty,
+  }) {
+    if (_allMasterPropMap.containsKey(propName)) {
+      return;
+    }
+    CommonMasterProp? newCommonProperty = CommonMasterProp(
+      propName: propName,
+    );
+    newCommonProperty._dirty = dirty;
+    _allMasterPropMap[propName] = newCommonProperty;
+    _commonMasterProps.add(newCommonProperty);
   }
 
   // ***************************************************************************
