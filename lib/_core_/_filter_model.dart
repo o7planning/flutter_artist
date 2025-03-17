@@ -181,20 +181,22 @@ abstract class FilterModel<
       );
       error = true;
     }
-    _prinStructureAndData();
-
-    try {
-      _lockFireChange = true;
-      _formKey.currentState?.patchValue(data.currentFormData);
-    } finally {
-      _lockFireChange = false;
-    }
     //
     if (error) {
       this.data._clearWithDataState(
             filterDataState: DataState.error,
           );
       return null;
+    }
+    //
+    _prinStructureAndData();
+
+    try {
+      // IMPORTANT: To avoid infinite loops.
+      _lockFireChange = true;
+      _formKey.currentState?.patchValue(data.currentFormData);
+    } finally {
+      _lockFireChange = false;
     }
 
     //
@@ -296,7 +298,6 @@ abstract class FilterModel<
         // Get current MasterProp data:
         XList? xList = this.getMasterPropDataXList(propName);
         if (xList == null) {
-          print("");
           //
           // Load OptionedMasterPro data from Rest API.
           // May throw ApiError.

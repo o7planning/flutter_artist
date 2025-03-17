@@ -301,7 +301,15 @@ part '_ui_/_x_state.dart';
 
 part '_enum_/_optioned_master_prop_type.dart';
 
-part '_core_/_master_data_structure.dart';
+part '_master_/_master_data_structure.dart';
+
+part '_master_/_master_prop.dart';
+
+part '_master_/_common_master_prop.dart';
+
+part '_master_/_optioned_master_prop.dart';
+
+part '_master_/_master_prop_value_wrap.dart';
 
 part '_task_unit_/_block_query_task_unit.dart';
 

@@ -89,7 +89,7 @@ class FilterModelData<
     for (MasterProp masterProp
         in filterModel._masterDataStructure._allMasterPropMap.values) {
       if (masterProp._dirty) {
-        _currentFormData[masterProp.propName] = masterProp.updateValue;
+        _currentFormData[masterProp.propName] = masterProp.candidateUpdateValue;
       }
     }
   }

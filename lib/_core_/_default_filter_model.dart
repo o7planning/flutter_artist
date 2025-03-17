@@ -89,7 +89,6 @@ class StringIdFilterModel
     return {"idValue": idValue};
   }
 
-
   @override
   Map<String, dynamic> initialCriteriaDataMap() {
     return {};
