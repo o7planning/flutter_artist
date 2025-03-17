@@ -200,7 +200,7 @@ abstract class FilterModel<
       ..addAll(_masterDataStructure._tempCurrentFormData);
     this._masterDataStructure._applyAllTempDataToReal();
     //
-    // Add filterInput != null to eliminate flickering??
+    // TODO: Add filterInput != null to eliminate flickering but DANGEROUS!!
     //
     if (_formKey.currentState != null && filterInput != null) {
       try {
@@ -211,9 +211,9 @@ abstract class FilterModel<
           currentValues: _formKey.currentState!.instantValue,
           patchValues: data._currentFormData,
         );
-        // TODO: Eliminate flickering.
+        // TODO: Eliminate flickering. (Test in song1a)
         // This line of code causes flickering on FilterView
-        // _formKey.currentState?.patchValue(data.currentFormData);
+        // _formKey.currentState?.patchValue(data._currentFormData);
         _formKey.currentState?.patchValue(minPatch);
       } finally {
         _lockFireChange = false;
