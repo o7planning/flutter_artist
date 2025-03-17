@@ -194,6 +194,13 @@ class MasterDataStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  void _setTempMasterPropDataCommon({
+    required String propName,
+    required Object? value,
+  }) {
+    _tempCurrentFormData[propName] = value;
+  }
+
   void _setTempMasterPropDataCustom({
     required String propName,
     required Object? object,

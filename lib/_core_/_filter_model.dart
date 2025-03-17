@@ -148,7 +148,6 @@ abstract class FilterModel<
       _masterDataStructure._resetTemporaryForNewTransaction(
         currentFormData: formViewInstantValue,
       );
-
       _masterDataStructure._printTemporaryInfo();
       //
       for (OptionedMasterProp masterProp
@@ -156,21 +155,30 @@ abstract class FilterModel<
         //
         // May throw ApiError.
         //
-        await _prepareOptionedMasterDataCascade(
+        await _loadOptionedMasterDataCascade(
           filterInput: filterInput,
           parentMasterPropValue: null,
           optionedMasterProp: masterProp,
         );
       }
-      for (CommonMasterProp commonMasterProp
-          in _masterDataStructure._commonMasterProps) {
-        // TODO: Can xu ly them.
+      if (filterInput != null) {
+        for (CommonMasterProp commonMasterProp
+            in _masterDataStructure._commonMasterProps) {
+          Object? value = filterInputToCommonMasterPropValue(
+            filterInput: filterInput,
+            propName: commonMasterProp.propName,
+          );
+          _masterDataStructure._setTempMasterPropDataCommon(
+            propName: commonMasterProp.propName,
+            value: value,
+          );
+        }
       }
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: "_prepareAllMasterDatas",
-        error: "Error _prepareAllMasterDatas: $e",
+        methodName: "_startNewFilterTransaction",
+        error: "Error _startNewFilterTransaction: $e",
         stackTrace: stackTrace,
         showSnackBar: true,
       );
@@ -269,7 +277,7 @@ abstract class FilterModel<
   ///
   /// Abstract method:
   ///
-  Future<XList<dynamic, dynamic>?> prepareMasterPropDataForListType({
+  Future<XList?> prepareMasterPropDataForListType({
     required FILTER_INPUT? filterInput,
     required Object? parentMasterPropValue,
     required String propName,
@@ -287,7 +295,7 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> _prepareOptionedMasterDataCascade({
+  Future<void> _loadOptionedMasterDataCascade({
     required FILTER_INPUT? filterInput,
     required Object? parentMasterPropValue,
     required OptionedMasterProp optionedMasterProp,
@@ -299,17 +307,15 @@ abstract class FilterModel<
         // Get current MasterProp data:
         XList? tempXList =
             _masterDataStructure._getTempMasterDataXList(propName);
-        if (tempXList == null) {
-          //
-          // Load OptionedMasterPro data from Rest API.
-          // May throw ApiError.
-          //
-          tempXList = await prepareMasterPropDataForListType(
-            filterInput: filterInput,
-            parentMasterPropValue: parentMasterPropValue,
-            propName: propName,
-          );
-        }
+        //
+        // Load OptionedMasterProp data from Rest API.
+        // May throw ApiError.
+        //
+        tempXList ??= await prepareMasterPropDataForListType(
+          filterInput: filterInput,
+          parentMasterPropValue: parentMasterPropValue,
+          propName: propName,
+        );
         //
         // IMPORTANT: Do not use empty list here
         // to avoid cast Error (List<dynamic> to List<ITEM>)
@@ -320,7 +326,7 @@ abstract class FilterModel<
         if (tempXList != null) {
           MasterPropValueWrap? inputValueWrap;
           if (filterInput != null) {
-            inputValueWrap = _filterInputToMasterPropValue(
+            inputValueWrap = _filterInputToOptionedMasterPropValue(
               filterInput: filterInput,
               materPropData: tempXList,
               propName: propName,
@@ -428,7 +434,7 @@ abstract class FilterModel<
         this._masterDataStructure._getTempCurrentPropValue(propName: propName);
     if (tempSelectedMasterPropValue != null) {
       for (OptionedMasterProp child in optionedMasterProp.children) {
-        await _prepareOptionedMasterDataCascade(
+        await _loadOptionedMasterDataCascade(
           filterInput: filterInput,
           parentMasterPropValue: tempSelectedMasterPropValue,
           optionedMasterProp: child,
@@ -467,6 +473,11 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  Object? filterInputToCommonMasterPropValue({
+    required FILTER_INPUT filterInput,
+    required String propName,
+  });
+
   ///
   /// This method is called after [prepareMasterData] and [initialCriteriaDataMap] methods.
   ///
@@ -489,18 +500,18 @@ abstract class FilterModel<
   /// }
   /// ```
   ///
-  MasterPropValueWrap? filterInputToMasterPropValue({
+  MasterPropValueWrap? filterInputToOptionedMasterPropValue({
     required FILTER_INPUT filterInput,
     required XList materPropData,
     required String propName,
   });
 
-  MasterPropValueWrap? _filterInputToMasterPropValue({
+  MasterPropValueWrap? _filterInputToOptionedMasterPropValue({
     required FILTER_INPUT filterInput,
     required XList materPropData,
     required String propName,
   }) {
-    MasterPropValueWrap? wrap = filterInputToMasterPropValue(
+    MasterPropValueWrap? wrap = filterInputToOptionedMasterPropValue(
       filterInput: filterInput,
       materPropData: materPropData,
       propName: propName,

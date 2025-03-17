@@ -53,9 +53,17 @@ class _DefaultFilterModel
   }
 
   @override
-  MasterPropValueWrap? filterInputToMasterPropValue({
+  MasterPropValueWrap? filterInputToOptionedMasterPropValue({
     required EmptyFilterInput filterInput,
     required XList materPropData,
+    required String propName,
+  }) {
+    return null;
+  }
+
+  @override
+  Object? filterInputToCommonMasterPropValue({
+    required EmptyFilterInput filterInput,
     required String propName,
   }) {
     return null;
@@ -113,9 +121,17 @@ class StringIdFilterModel
   }
 
   @override
-  MasterPropValueWrap? filterInputToMasterPropValue({
+  MasterPropValueWrap? filterInputToOptionedMasterPropValue({
     required StringIdFilterInput filterInput,
     required XList materPropData,
+    required String propName,
+  }) {
+    return null;
+  }
+
+  @override
+  Object? filterInputToCommonMasterPropValue({
+    required StringIdFilterInput filterInput,
     required String propName,
   }) {
     return null;
@@ -173,9 +189,17 @@ class StringValueFilterModel
   }
 
   @override
-  MasterPropValueWrap? filterInputToMasterPropValue({
+  MasterPropValueWrap? filterInputToOptionedMasterPropValue({
     required StringValueFilterInput filterInput,
     required XList materPropData,
+    required String propName,
+  }) {
+    return null;
+  }
+
+  @override
+  Object? filterInputToCommonMasterPropValue({
+    required StringValueFilterInput filterInput,
     required String propName,
   }) {
     return null;
@@ -233,9 +257,17 @@ class SearchTextFilterModel
   }
 
   @override
-  MasterPropValueWrap? filterInputToMasterPropValue({
+  MasterPropValueWrap? filterInputToOptionedMasterPropValue({
     required SearchTextFilterInput filterInput,
     required XList materPropData,
+    required String propName,
+  }) {
+    return null;
+  }
+
+  @override
+  Object? filterInputToCommonMasterPropValue({
+    required SearchTextFilterInput filterInput,
     required String propName,
   }) {
     return null;
@@ -293,9 +325,17 @@ class IntIdFilterModel
   }
 
   @override
-  MasterPropValueWrap? filterInputToMasterPropValue({
+  MasterPropValueWrap? filterInputToOptionedMasterPropValue({
     required IntIdFilterInput filterInput,
     required XList materPropData,
+    required String propName,
+  }) {
+    return null;
+  }
+
+  @override
+  Object? filterInputToCommonMasterPropValue({
+    required IntIdFilterInput filterInput,
     required String propName,
   }) {
     return null;
