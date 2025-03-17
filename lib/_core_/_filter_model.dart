@@ -147,7 +147,9 @@ abstract class FilterModel<
     bool error = false;
     try {
       _masterDataStructure._resetTemporaryForNewTransaction(
-        currentFormData: formViewInstantValue,
+        currentFormData: filterInput != null
+            ? {} // Clear All.
+            : formViewInstantValue ?? data._currentFormData,
       );
       _masterDataStructure._printTemporaryInfo();
       //
@@ -165,8 +167,6 @@ abstract class FilterModel<
       if (filterInput != null) {
         for (CommonMasterProp commonMasterProp
             in _masterDataStructure._commonMasterProps) {
-          print(
-              "@filterInputToCommonMasterPropValue ${commonMasterProp.propName}");
           Object? value = filterInputToCommonMasterPropValue(
             filterInput: filterInput,
             propName: commonMasterProp.propName,
