@@ -135,15 +135,21 @@ abstract class FilterModel<
   ///
   /// Return null is error.
   ///
+  ///
   @ImportantMethodAnnotation()
   Future<FILTER_CRITERIA?> _startNewFilterTransaction({
     required FILTER_INPUT? filterInput,
-  })  async {
+    required Map<String, dynamic>? formViewInstantValue,
+  }) async {
+    if (filterInput != null && formViewInstantValue != null) {
+      throw "Invalid Call";
+    }
     print("@~~~~~~~~~~~> 1 _startNewFilterTransaction");
+    print("@~~~~~~~~~~~> 1 formViewInstantValue: ${formViewInstantValue}");
     bool error = false;
     try {
       _masterDataStructure._resetTemporaryForNewTransaction(
-        currentFormData: data._currentFormData,
+        currentFormData: formViewInstantValue,
       );
 
       _masterDataStructure._printTemporaryInfo();
@@ -609,6 +615,7 @@ abstract class FilterModel<
     }
     await _startNewFilterTransaction(
       filterInput: null,
+      formViewInstantValue: _formKey.currentState?.instantValue,
     );
     this.updateAllUIComponents(force: true);
   }

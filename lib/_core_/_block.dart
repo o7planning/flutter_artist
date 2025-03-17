@@ -824,9 +824,9 @@ abstract class Block<
       if (!xFilterModel.queried) {
         FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
         //
-        filterCriteria =
-            await filterModel._startNewFilterTransaction(
+        filterCriteria = await filterModel._startNewFilterTransaction(
           filterInput: filterInput,
+          formViewInstantValue: null,
         ) as FILTER_CRITERIA?;
         //
         xFilterModel.queried = true;

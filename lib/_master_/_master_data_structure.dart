@@ -37,14 +37,14 @@ class MasterDataStructure {
   // ***************************************************************************
 
   void _resetTemporaryForNewTransaction({
-    required Map<String, dynamic> currentFormData,
+    required Map<String, dynamic>? currentFormData,
   }) {
     print("Reset>>> currentFormData: $currentFormData");
     _tempCurrentFormData
       ..clear()
-      ..addAll(currentFormData);
+      ..addAll(currentFormData ?? {});
     //
-    for(MasterProp masterProp in _allMasterPropMap.values)  {
+    for (MasterProp masterProp in _allMasterPropMap.values) {
       masterProp._resetForNewTransaction();
     }
   }
@@ -52,8 +52,8 @@ class MasterDataStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _applyAllTempDataToReal()  {
-    for(MasterProp masterProp in _allMasterPropMap.values)  {
+  void _applyAllTempDataToReal() {
+    for (MasterProp masterProp in _allMasterPropMap.values) {
       masterProp._applyTempDataToReal();
     }
   }
