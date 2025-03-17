@@ -43,7 +43,6 @@ abstract class FilterModel<
   FILTER_CRITERIA? get filterCriteria => _filterCriteria;
 
   bool _lockFireChange = false;
-  bool _firstQueryDone = false;
   bool _applyDefaultFilterCriteria = false;
 
   late final MasterDataStructure _masterDataStructure;
@@ -249,7 +248,6 @@ abstract class FilterModel<
       _filterCriteria = newCriteria;
       //
       this.data._filterDataState = DataState.ready;
-      _firstQueryDone = true;
       return newCriteria;
     } catch (e, stackTrace) {
       _handleError(
@@ -574,11 +572,6 @@ abstract class FilterModel<
   Future<void> _onChangeFromFilterView() async {
     print("#~~~~~~~~~~~~~~~> _onChangeFromFilterView");
     //
-    // IMPORTANT:
-    // Update data from GlobalKey(_formKey) --> to FilterModelData.
-    //  ---> data._currentFormData
-    //  ---> data._initialFormData
-    //
     if (_formKey.currentState?.instantValue != null) {
       if (data._justInitialized) {
         Map<String, dynamic> map = {..._formKey.currentState!.instantValue};
@@ -586,28 +579,19 @@ abstract class FilterModel<
         //
         data._initialFormData.addAll(map);
       }
-      //
-      // IMPORTANT: Will execute XList Event.
-      //
-      // TODO Xem lai:
-      // data._updateFilterData(_formKey.currentState!.instantValue);
     }
     //
-    if (_firstQueryDone) {
-      if (!_applyDefaultFilterCriteria) {
-        if (_formKey.currentState != null) {
-          _applyDefaultFilterCriteria = true;
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            // _formKey.currentState!.patchValue(data.initialFormData);
-          });
-        }
-      }
-      //
-    }
+    // IMPORTANT:
+    // Update data from GlobalKey(_formKey) --> to FilterModelData.
+    //  ---> data._currentFormData
+    //  ---> data._initialFormData
+    //
+    // TODO: Add to TaskUnit?
     await _startNewFilterTransaction(
       filterInput: null,
       formViewInstantValue: _formKey.currentState?.instantValue,
     );
+    //
     this.updateAllUIComponents(force: true);
   }
 
