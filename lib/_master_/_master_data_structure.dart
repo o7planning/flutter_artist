@@ -6,7 +6,6 @@ class MasterDataStructure {
   final List<CommonMasterProp> _commonMasterProps = [];
 
   //
-  final Map<String, MasterProp> _tempAllMasterPropMap = {};
   final Map<String, dynamic> _tempCurrentFormData = {};
 
   MasterDataStructure({
@@ -40,10 +39,6 @@ class MasterDataStructure {
   void _resetTemporaryForNewTransaction({
     required Map<String, dynamic> currentFormData,
   }) {
-    _tempAllMasterPropMap
-      ..clear()
-      ..addAll(_allMasterPropMap);
-    //
     _tempCurrentFormData
       ..clear()
       ..addAll(currentFormData);
@@ -65,7 +60,7 @@ class MasterDataStructure {
     }
     if (masterProp is OptionedMasterProp) {
       if (masterProp.type == OptionedMasterPropType.custom) {
-        return masterProp._object;
+        return masterProp._xObject;
       } else {
         return null;
       }
@@ -95,18 +90,48 @@ class MasterDataStructure {
   // ***************************************************************************
 
   void _updateTempData(Map<String, dynamic> updateData) {
+    final candidateUpdateValues = {...updateData};
     //
     // IMPORTANT:
     // Update data for MasterDataStructure. From ROOTs to LEAVES.
     // (***):
     // And Update children-OptionedMasterProp data to null if parent-Value is null or not selected.
     //
-    updateMasterPropValuesToLeaves(
-      currentValues: _tempCurrentFormData,
-      candidateUpdateValues: {...updateData},
-    );
+    for (MasterProp masterProp in _allMasterPropMap.values) {
+      masterProp.candidateUpdateValue = null;
+      masterProp._valueUpdated = false;
+      masterProp._dirty = false;
+    }
+    //
+    for (String propName in candidateUpdateValues.keys) {
+      MasterProp? masterProp = _allMasterPropMap[propName];
+      if (masterProp != null) {
+        masterProp._dirty = true;
+      } else {
+        CommonMasterProp? newCommonProperty = CommonMasterProp(
+          propName: propName,
+        );
+        newCommonProperty._dirty = true;
+        _allMasterPropMap[propName] = newCommonProperty;
+        _commonMasterProps.add(newCommonProperty);
+      }
+    }
+    //
+    for (OptionedMasterProp rootItem in _rootOptionedMasterProps) {
+      rootItem._updateValueCascade(
+        currentValues: _tempCurrentFormData,
+        updateValues: candidateUpdateValues,
+      );
+    }
+    for (CommonMasterProp commonItem in _commonMasterProps) {
+      commonItem._updateValue(
+        currentValues: _tempCurrentFormData,
+        updateValues: candidateUpdateValues,
+      );
+    }
+
     // Apply to all dirty MasterProp:
-    for (MasterProp masterProp in _tempAllMasterPropMap.values) {
+    for (MasterProp masterProp in _allMasterPropMap.values) {
       if (masterProp._dirty) {
         _tempCurrentFormData[masterProp.propName] =
             masterProp.candidateUpdateValue;
@@ -121,7 +146,7 @@ class MasterDataStructure {
     required String propName,
     required XList? xList,
   }) {
-    MasterProp? masterProp = _tempAllMasterPropMap[propName];
+    MasterProp? masterProp = _allMasterPropMap[propName];
     if (masterProp == null) {
       throw AppException(message: 'No MasterProp $propName');
     }
@@ -154,7 +179,7 @@ class MasterDataStructure {
         throw AppException(
             message: 'Invalid MasterProp Data for type ${masterProp.type}');
       }
-      masterProp._object = object;
+      masterProp._xObject = object;
     } else {
       throw AppException(
           message:
@@ -172,53 +197,15 @@ class MasterDataStructure {
     }
   }
 
-  void updateMasterPropValuesToLeaves({
-    required Map<String, dynamic> currentValues,
-    required Map<String, dynamic> candidateUpdateValues,
-  }) {
-    //
-    for (MasterProp masterProp in _allMasterPropMap.values) {
-      masterProp.candidateUpdateValue = null;
-      masterProp._valueUpdated = false;
-      masterProp._dirty = false;
-    }
-    //
-    for (String propName in candidateUpdateValues.keys) {
-      MasterProp? masterProp = _allMasterPropMap[propName];
-      if (masterProp != null) {
-        masterProp._dirty = true;
-      } else {
-        CommonMasterProp? newCommonProperty = CommonMasterProp(
-          propName: propName,
-        );
-        newCommonProperty._dirty = true;
-        _allMasterPropMap[propName] = newCommonProperty;
-        _commonMasterProps.add(newCommonProperty);
-      }
-    }
-    //
-    for (OptionedMasterProp rootItem in _rootOptionedMasterProps) {
-      rootItem._updateValueCascade(
-        currentValues: currentValues,
-        updateValues: candidateUpdateValues,
-      );
-    }
-    for (CommonMasterProp commonItem in _commonMasterProps) {
-      commonItem._updateValue(
-        currentValues: currentValues,
-        updateValues: candidateUpdateValues,
-      );
-    }
-  }
-
   // ***************************************************************************
   // ***************************************************************************
 
-  void printInfo() {
+  void printTemporaryInfo() {
     print("\n\n--------------------------------------------------------------");
     for (OptionedMasterProp rootItem in _rootOptionedMasterProps) {
       rootItem._printInfoCascade(indentFactor: 1);
     }
+    print("tempCurrentFromData: $_tempCurrentFormData");
     print("--------------------------------------------------------------");
   }
 }

@@ -123,9 +123,8 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _prinStructureAndData() {
-    _masterDataStructure.printInfo();
-    print("currentFromData: ${data.currentFormData}");
+  void _prinStructureAndTempData() {
+    _masterDataStructure.printTemporaryInfo();
     print("instantData: ${_formKey.currentState?.instantValue}");
     print("\n\n");
   }
@@ -180,7 +179,11 @@ abstract class FilterModel<
       return null;
     }
     //
-    _prinStructureAndData();
+    _prinStructureAndTempData();
+
+    // Apply Temporary data to real data:
+
+
 
     try {
       // IMPORTANT: To avoid infinite loops.

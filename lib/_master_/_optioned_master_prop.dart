@@ -16,7 +16,10 @@ class OptionedMasterProp extends MasterProp {
   final List<OptionedMasterProp> children;
   final OptionedMasterPropType type;
   XList? _xList;
-  Object? _object;
+  Object? _xObject;
+
+  XList? _tempXList;
+  Object? _tempXObject;
 
   OptionedMasterProp({
     required super.propName,
