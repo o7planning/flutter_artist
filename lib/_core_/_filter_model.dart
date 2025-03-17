@@ -125,8 +125,7 @@ abstract class FilterModel<
 
   void _prinStructureAndTempData() {
     _masterDataStructure._printTemporaryInfo();
-    print("instantData: ${_formKey.currentState?.instantValue}");
-    print("\n\n");
+    print("instantData: ${_formKey.currentState?.instantValue}\n\n");
   }
 
   // ***************************************************************************
@@ -144,8 +143,7 @@ abstract class FilterModel<
     if (filterInput != null && formViewInstantValue != null) {
       throw "Invalid Call";
     }
-    print("@~~~~~~~~~~~> 1 _startNewFilterTransaction");
-    print("@~~~~~~~~~~~> 1 formViewInstantValue: ${formViewInstantValue}");
+    print("#~~~~~~~~~~~> _startNewFilterTransaction");
     bool error = false;
     try {
       _masterDataStructure._resetTemporaryForNewTransaction(
@@ -187,11 +185,7 @@ abstract class FilterModel<
       return null;
     }
     //
-    print("XXX");
     _prinStructureAndTempData();
-
-    print(">>>>> Temp Current:>> ${_masterDataStructure._tempCurrentFormData}");
-
     //
     // Apply Temporary data to real data:
     //
@@ -199,9 +193,7 @@ abstract class FilterModel<
       ..clear()
       ..addAll(_masterDataStructure._tempCurrentFormData);
     this._masterDataStructure._applyAllTempDataToReal();
-
-    print(">>>>> Current:>> ${data.currentFormData}");
-
+    //
     try {
       // IMPORTANT: To avoid infinite loops.
       _lockFireChange = true;
@@ -580,8 +572,7 @@ abstract class FilterModel<
 
   // Change Event from GUI.
   Future<void> _onChangeFromFilterView() async {
-    print("@~~~~~~~~~~~~~~~> ## _onChangeFromFilterView");
-    print(">>> ${_formKey.currentState?.instantValue}");
+    print("#~~~~~~~~~~~~~~~> _onChangeFromFilterView");
     //
     // IMPORTANT:
     // Update data from GlobalKey(_formKey) --> to FilterModelData.
