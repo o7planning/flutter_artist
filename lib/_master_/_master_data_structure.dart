@@ -39,7 +39,6 @@ class MasterDataStructure {
   void _resetTemporaryForNewTransaction({
     required Map<String, dynamic>? currentFormData,
   }) {
-    print("Reset>>> currentFormData: $currentFormData");
     _tempCurrentFormData
       ..clear()
       ..addAll(currentFormData ?? {});
