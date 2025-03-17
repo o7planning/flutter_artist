@@ -144,7 +144,6 @@ abstract class FilterModel<
       throw "Invalid Call";
     }
     print("#~~~~~~~~~~~> _startNewFilterTransaction");
-    print("#~~~~~~~~~~~> formViewInstantValue: ${formViewInstantValue}");
     bool error = false;
     try {
       _masterDataStructure._resetTemporaryForNewTransaction(
@@ -163,12 +162,11 @@ abstract class FilterModel<
           optionedMasterProp: masterProp,
         );
       }
-      print("@ 222222222222222: ${_masterDataStructure._commonMasterProps}");
-      print("@ 222222222222222: ${data._initialFormData}");
       if (filterInput != null) {
         for (CommonMasterProp commonMasterProp
             in _masterDataStructure._commonMasterProps) {
-          print("@filterInputToCommonMasterPropValue ${commonMasterProp.propName}");
+          print(
+              "@filterInputToCommonMasterPropValue ${commonMasterProp.propName}");
           Object? value = filterInputToCommonMasterPropValue(
             filterInput: filterInput,
             propName: commonMasterProp.propName,
@@ -191,9 +189,6 @@ abstract class FilterModel<
     }
     //
     if (error) {
-      this.data._clearWithDataState(
-            filterDataState: DataState.error,
-          );
       return null;
     }
     //
@@ -247,13 +242,6 @@ abstract class FilterModel<
     //   error = true;
     // }
     //
-    if (error) {
-      this.data._clearWithDataState(
-            filterDataState: DataState.error,
-          );
-      return null;
-    }
-
     try {
       // If no error:
       FILTER_CRITERIA newCriteria =
