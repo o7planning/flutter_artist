@@ -301,6 +301,8 @@ part '_ui_/_x_state.dart';
 
 part '_enum_/_optioned_master_prop_type.dart';
 
+part '_utils_/_patch_utils.dart';
+
 part '_master_/_master_data_structure.dart';
 
 part '_master_/_master_prop.dart';

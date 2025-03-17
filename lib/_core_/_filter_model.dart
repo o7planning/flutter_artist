@@ -134,7 +134,6 @@ abstract class FilterModel<
   ///
   /// Return null is error.
   ///
-  ///
   @ImportantMethodAnnotation()
   Future<FILTER_CRITERIA?> _startNewFilterTransaction({
     required FILTER_INPUT? filterInput,
@@ -201,12 +200,22 @@ abstract class FilterModel<
       ..addAll(_masterDataStructure._tempCurrentFormData);
     this._masterDataStructure._applyAllTempDataToReal();
     //
-    try {
-      // IMPORTANT: To avoid infinite loops.
-      _lockFireChange = true;
-      _formKey.currentState?.patchValue(data.currentFormData);
-    } finally {
-      _lockFireChange = false;
+    if (_formKey.currentState != null && filterInput != null) {
+      try {
+        // IMPORTANT: To avoid infinite loops.
+        _lockFireChange = true;
+        //
+        Map<String, dynamic> minPatch = PatchUtils.getMinPatchValues(
+          currentValues: _formKey.currentState!.instantValue,
+          patchValues: data.currentFormData,
+        );
+        // TODO: Eliminate flickering.
+        // This line of code causes flickering on FilterView
+        // _formKey.currentState?.patchValue(data.currentFormData);
+        _formKey.currentState?.patchValue(minPatch);
+      } finally {
+        _lockFireChange = false;
+      }
     }
 
     //
