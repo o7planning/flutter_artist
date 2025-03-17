@@ -136,10 +136,10 @@ abstract class FilterModel<
   /// Return null is error.
   ///
   @ImportantMethodAnnotation()
-  Future<FILTER_CRITERIA?> _prepareAllMasterPropDataAndFilterData({
+  Future<FILTER_CRITERIA?> _startNewFilterTransaction({
     required FILTER_INPUT? filterInput,
-  }) async {
-    print("@~~~~~~~~~~~> 1 _prepareAllMasterPropDataAndFilterData");
+  })  async {
+    print("@~~~~~~~~~~~> 1 _startNewFilterTransaction");
     bool error = false;
     try {
       _masterDataStructure._resetTemporaryForNewTransaction(
@@ -593,7 +593,7 @@ abstract class FilterModel<
       // IMPORTANT: Will execute XList Event.
       //
       // TODO Xem lai:
-      data._updateFilterData(_formKey.currentState!.instantValue);
+      // data._updateFilterData(_formKey.currentState!.instantValue);
     }
     //
     if (_firstQueryDone) {
@@ -606,10 +606,10 @@ abstract class FilterModel<
         }
       }
       //
-      await _prepareAllMasterPropDataAndFilterData(
-        filterInput: null,
-      );
     }
+    await _startNewFilterTransaction(
+      filterInput: null,
+    );
     this.updateAllUIComponents(force: true);
   }
 

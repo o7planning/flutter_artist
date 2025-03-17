@@ -825,7 +825,7 @@ abstract class Block<
         FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
         //
         filterCriteria =
-            await filterModel._prepareAllMasterPropDataAndFilterData(
+            await filterModel._startNewFilterTransaction(
           filterInput: filterInput,
         ) as FILTER_CRITERIA?;
         //
