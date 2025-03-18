@@ -23,13 +23,6 @@ class _DefaultFilterModel
   }
 
   @override
-  Map<String, dynamic> filterInputToCriteriaDataMap({
-    required EmptyFilterInput filterInput,
-  }) {
-    return {};
-  }
-
-  @override
   Map<String, dynamic> initialCriteriaDataMap() {
     return {};
   }
@@ -88,13 +81,6 @@ class StringIdFilterModel
     required Map<String, dynamic> dataMap,
   }) {
     return StringIdFilterCriteria(idValue: idValue);
-  }
-
-  @override
-  Map<String, dynamic> filterInputToCriteriaDataMap({
-    required StringIdFilterInput filterInput,
-  }) {
-    return {"idValue": idValue};
   }
 
   @override
@@ -159,13 +145,6 @@ class StringValueFilterModel
   }
 
   @override
-  Map<String, dynamic> filterInputToCriteriaDataMap({
-    required StringValueFilterInput filterInput,
-  }) {
-    return {"stringValue": stringValue};
-  }
-
-  @override
   Map<String, dynamic> initialCriteriaDataMap() {
     return {};
   }
@@ -227,13 +206,6 @@ class SearchTextFilterModel
   }
 
   @override
-  Map<String, dynamic> filterInputToCriteriaDataMap({
-    required SearchTextFilterInput filterInput,
-  }) {
-    return {"searchText": searchText};
-  }
-
-  @override
   Map<String, dynamic> initialCriteriaDataMap() {
     return {};
   }
@@ -292,13 +264,6 @@ class IntIdFilterModel
     required Map<String, dynamic> dataMap,
   }) {
     return IntIdFilterCriteria(idValue: idValue);
-  }
-
-  @override
-  Map<String, dynamic> filterInputToCriteriaDataMap({
-    required IntIdFilterInput filterInput,
-  }) {
-    return {"idValue": idValue};
   }
 
   @override
