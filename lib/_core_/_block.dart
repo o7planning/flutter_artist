@@ -1838,7 +1838,7 @@ abstract class Block<
     );
     _taskUnitQueue.addTaskUnit(taskUnit);
     //
-    await FlutterArtist.storage._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeTaskUnitQueue();
     var result = thisXBlock.currentItemSelectionResult
         as CurrentItemSelectionResult<ITEM>?;
     if (result != null && result.success) {
@@ -2414,7 +2414,7 @@ abstract class Block<
     //
     _taskUnitQueue.addTaskUnit(taskUnit);
     //
-    await FlutterArtist.storage._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeTaskUnitQueue();
     return true;
   }
 
@@ -2467,7 +2467,7 @@ abstract class Block<
     //
     _taskUnitQueue.addTaskUnit(taskUnit);
     //
-    await FlutterArtist.storage._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeTaskUnitQueue();
     return true;
   }
 
@@ -2520,7 +2520,7 @@ abstract class Block<
     //
     _taskUnitQueue.addTaskUnit(taskUnit);
     //
-    await FlutterArtist.storage._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeTaskUnitQueue();
     return true;
   }
 
@@ -2573,7 +2573,7 @@ abstract class Block<
     //
     _taskUnitQueue.addTaskUnit(taskUnit);
     //
-    await FlutterArtist.storage._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeTaskUnitQueue();
     //
     return true;
   }
@@ -2889,7 +2889,7 @@ abstract class Block<
     for (ITEM item in deleteItems) {
       var taskUnit = _BlockDeleteItemTaskUnit(xBlock: xBlock, item: item);
       _taskUnitQueue.addTaskUnit(taskUnit);
-      await FlutterArtist.storage._executeTaskUnitQueue();
+      await FlutterArtist.executor._executeTaskUnitQueue();
       if (stopIfError) {
         ItemDeletionResult result = xBlock.itemDeletionResult;
         if (!result.success) {
@@ -3058,7 +3058,7 @@ abstract class Block<
     //
     _taskUnitQueue.addTaskUnit(taskUnit);
     //
-    await FlutterArtist.storage._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeTaskUnitQueue();
     return thisXBlock.itemDeletionResult;
   }
 

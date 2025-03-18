@@ -588,7 +588,7 @@ abstract class FilterModel<
     _FilterViewChangeTaskUnit taskUnit =
         _FilterViewChangeTaskUnit(xFilterModel: xFilterModel);
     _taskUnitQueue.addTaskUnit(taskUnit);
-    await FlutterArtist.storage._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeTaskUnitQueue();
   }
 
   // ***************************************************************************
