@@ -224,39 +224,6 @@ abstract class FilterModel<
         _lockFireChange = false;
       }
     }
-
-    //
-    // Apply Default FilterCriteria:
-    //
-    // try {
-    //   Map<String, dynamic> defaultFilterCriteria =
-    //       this.initialCriteriaDataMap();
-    //
-    //   //
-    //   if (_formKey.currentState == null) {
-    //     this.data._updateFilterData(defaultFilterCriteria);
-    //   } else {
-    //     if (data._initialFormData.isEmpty) {
-    //       this.data._updateFilterData(defaultFilterCriteria);
-    //     }
-    //     for (String key in defaultFilterCriteria.keys) {
-    //       if (!_formKey.currentState!.instantValue.containsKey(key)) {
-    //         _formKey.currentState!.patchValue(
-    //           {key: defaultFilterCriteria[key]},
-    //         );
-    //       }
-    //     }
-    //   }
-    // } catch (e, stackTrace) {
-    //   _handleError(
-    //     shelf: shelf,
-    //     methodName: "initialCriteriaDataMap",
-    //     error: "Error initialCriteriaDataMap: $e",
-    //     stackTrace: stackTrace,
-    //     showSnackBar: true,
-    //   );
-    //   error = true;
-    // }
     //
     try {
       // If no error:
