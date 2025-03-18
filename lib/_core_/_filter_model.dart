@@ -147,12 +147,7 @@ abstract class FilterModel<
     print("#~~~~~~~~~~~> _startNewFilterTransaction");
     if (!_initiated && _formKey.currentState != null) {
       _initiated = true;
-      data._initialFormData
-        ..clear()
-        ..addAll(_formKey.currentState!.instantValue);
-      data._currentFormData
-        ..clear()
-        ..addAll(_formKey.currentState!.instantValue);
+      data._initialFilterData(_formKey.currentState!.instantValue);
     }
 
     try {
@@ -203,7 +198,7 @@ abstract class FilterModel<
     // Apply Temporary data to real data:
     //
     this.data._currentFormData
-      ..clear()
+      ..updateAll((k, v) => null)
       ..addAll(_masterDataStructure._tempCurrentFormData);
     this._masterDataStructure._applyAllTempDataToReal();
     //
