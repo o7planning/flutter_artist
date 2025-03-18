@@ -149,13 +149,14 @@ abstract class FilterModel<
       _initiated = true;
       data._initialFilterData(_formKey.currentState!.instantValue);
     }
-
+    print("@~~~~~~~~~~~~~~~~~~~~~~~> 1");
     try {
       _masterDataStructure._resetTemporaryForNewTransaction(
         currentFormData: filterInput != null
             ? {} // Clear All.
             : formViewInstantValue ?? data._currentFormData,
       );
+      print("@~~~~~~~~~~~~~~~~~~~~~~~> 2");
       _masterDataStructure._printTemporaryInfo();
       //
       for (OptionedMasterProp masterProp
@@ -169,6 +170,7 @@ abstract class FilterModel<
           optionedMasterProp: masterProp,
         );
       }
+      print("@~~~~~~~~~~~~~~~~~~~~~~~> 3");
       if (filterInput != null) {
         for (CommonMasterProp commonMasterProp
             in _masterDataStructure._commonMasterProps) {
@@ -182,6 +184,7 @@ abstract class FilterModel<
           );
         }
       }
+      print("@~~~~~~~~~~~~~~~~~~~~~~~> 4");
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
@@ -192,6 +195,7 @@ abstract class FilterModel<
       );
       return null;
     }
+    print("@~~~~~~~~~~~~~~~~~~~~~~~> 5");
     //
     _printStructureAndTempData();
     //
@@ -219,6 +223,7 @@ abstract class FilterModel<
         _lockFireChange = false;
       }
     }
+    print("@~~~~~~~~~~~~~~~~~~~~~~~> 6");
     //
     try {
       // If no error:
@@ -227,6 +232,7 @@ abstract class FilterModel<
       _filterCriteria = newCriteria;
       //
       this.data._filterDataState = DataState.ready;
+      print("@~~~~~~~~~~~~~~~~~~~~~~~> 7");
       return newCriteria;
     } catch (e, stackTrace) {
       _handleError(
@@ -240,6 +246,7 @@ abstract class FilterModel<
       //
       return null;
     }
+    print("FINISH: _startNewFilterTransaction");
   }
 
   // ***************************************************************************
