@@ -1,6 +1,7 @@
 part of '../flutter_artist.dart';
 
 class _XScalar {
+  final _XShelf xShelf;
   bool __forceQuery = false;
   bool affectByFilterInput = false;
   final Scalar scalar;
@@ -8,10 +9,13 @@ class _XScalar {
 
   String get name => scalar.name;
 
+  int get xShelfId => xShelf.xShelfId;
+
   // ***************************************************************************
   // ***************************************************************************
 
   _XScalar({
+    required this.xShelf,
     required this.scalar,
     required this.xFilterModel,
   });

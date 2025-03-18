@@ -701,7 +701,7 @@ class _Storage {
         shelfMap[taskUnit.shelf.name] = taskUnit.shelf;
         print("~~~~~~~~~~~~~~~> Execute Task Unit: $taskUnit");
         //
-        if(taskUnit is _FilterViewChangeTaskUnit)  {
+        if (taskUnit is _FilterViewChangeTaskUnit) {
           await taskUnit.xFilterModel.filterModel._unitFilterViewChanged(
             xFilterModel: taskUnit.xFilterModel,
           );

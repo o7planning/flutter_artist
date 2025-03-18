@@ -573,6 +573,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   // Change Event from GUI.
+  @ImportantMethodAnnotation()
   Future<void> _onChangeFromFilterView() async {
     print("#~~~~~~~~~~~~~~~> _onChangeFromFilterView");
     //
@@ -589,15 +590,6 @@ abstract class FilterModel<
         _FilterViewChangeTaskUnit(xFilterModel: xFilterModel);
     _taskUnitQueue.addTaskUnit(taskUnit);
     await FlutterArtist.storage._executeTaskUnitQueue();
-    //
-    // TODO: Add to TaskUnit?
-    //
-    // await _startNewFilterTransaction(
-    //   filterInput: null,
-    //   formViewInstantValue: _formKey.currentState?.instantValue,
-    // );
-    // //
-    // this.updateAllUIComponents(force: true);
   }
 
   // ***************************************************************************

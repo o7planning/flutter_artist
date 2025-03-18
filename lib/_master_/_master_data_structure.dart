@@ -50,7 +50,7 @@ class MasterDataStructure {
     required Map<String, dynamic>? currentFormData,
   }) {
     _tempCurrentFormData
-      ..updateAll((k,v)=> null)
+      ..updateAll((k, v) => null)
       ..addAll(currentFormData ?? {});
     //
     for (MasterProp masterProp in _allMasterPropMap.values) {

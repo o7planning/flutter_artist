@@ -1,6 +1,7 @@
 part of '../flutter_artist.dart';
 
 class _XFormModel {
+  final _XShelf xShelf;
   bool forceForm = false; // ForceForm.
   bool queried = false;
   final FormModel formModel;
@@ -8,7 +9,10 @@ class _XFormModel {
 
   late final _XBlock xBlock;
 
+  int get xShelfId => xShelf.xShelfId;
+
   _XFormModel({
+    required this.xShelf,
     required this.formModel,
     required this.extraFormInput,
   });

@@ -1,6 +1,10 @@
 part of '../flutter_artist.dart';
 
+int __xShelfIdSequence = 0;
+
 class _XShelf {
+  late final int xShelfId;
+
   final Shelf shelf;
 
   // All FilterModels
@@ -38,6 +42,8 @@ class _XShelf {
     required List<_BlockOpt> forceQueryBlockOpts,
     required List<_FormModelOpt> forceQueryFormModelOpts,
   }) {
+    xShelfId = __xShelfIdSequence++;
+    //
     if (forceFilterModelOpt != null) {
       assert(forceFilterModelOpt.filterModel.shelf == shelf);
     }
@@ -76,7 +82,7 @@ class _XShelf {
     __setForceQueryFormModelOpts(forceQueryFormModelOpts);
   }
 
-  _XFilterModel? findXFilterModelByName(String name)  {
+  _XFilterModel? findXFilterModelByName(String name) {
     return allXFilterModelMap[name];
   }
 
@@ -201,7 +207,10 @@ class _XShelf {
   void __addXFilterModel({
     required FilterModel filterModel,
   }) {
-    _XFilterModel xFilterModel = _XFilterModel(filterModel: filterModel);
+    _XFilterModel xFilterModel = _XFilterModel(
+      xShelf: this,
+      filterModel: filterModel,
+    );
     //
     allXFilterModels.add(xFilterModel);
     allXFilterModelMap[xFilterModel.name] = xFilterModel;
@@ -214,6 +223,7 @@ class _XShelf {
         allXFilterModelMap[scalar._registeredOrDefaultFilterModel.name]!;
     //
     _XScalar xScalar = _XScalar(
+      xShelf: this,
       scalar: scalar,
       xFilterModel: xFilterModel,
     );
@@ -233,11 +243,13 @@ class _XShelf {
     _XFormModel? xFormModel = block.formModel == null //
         ? null
         : _XFormModel(
+            xShelf: this,
             formModel: block.formModel!,
             extraFormInput: null,
           );
     //
     _XBlock xBlock = _XBlock(
+      xShelf: this,
       block: block,
       xBlockParent: xBlockParent,
       xFilterModel: xFilterModel,
