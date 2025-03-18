@@ -59,6 +59,21 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  Future<bool> _unitFilterViewChanged({
+    required _XFilterModel xFilterModel,
+  }) async {
+    __assertThisXFilterModel(xFilterModel);
+    //
+    FILTER_CRITERIA? filterCriteria = await _startNewFilterTransaction(
+      filterInput: null,
+      formViewInstantValue: _formKey.currentState?.instantValue,
+    );
+    return filterCriteria != null;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   ///
   /// ```dart
   /// MasterDataStructure registerMasterDataStructure() {
@@ -561,14 +576,28 @@ abstract class FilterModel<
   Future<void> _onChangeFromFilterView() async {
     print("#~~~~~~~~~~~~~~~> _onChangeFromFilterView");
     //
-    // TODO: Add to TaskUnit?
-    //
-    await _startNewFilterTransaction(
-      filterInput: null,
-      formViewInstantValue: _formKey.currentState?.instantValue,
+    _XShelf xShelf = _XShelf(
+      shelf: shelf,
+      forceFilterModelOpt: null,
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
-    this.updateAllUIComponents(force: true);
+    _XFilterModel xFilterModel = xShelf.findXFilterModelByName(name)!;
+    _FilterViewChangeTaskUnit taskUnit =
+        _FilterViewChangeTaskUnit(xFilterModel: xFilterModel);
+    _taskUnitQueue.addTaskUnit(taskUnit);
+    await FlutterArtist.storage._executeTaskUnitQueue();
+    //
+    // TODO: Add to TaskUnit?
+    //
+    // await _startNewFilterTransaction(
+    //   filterInput: null,
+    //   formViewInstantValue: _formKey.currentState?.instantValue,
+    // );
+    // //
+    // this.updateAllUIComponents(force: true);
   }
 
   // ***************************************************************************
@@ -772,5 +801,18 @@ abstract class FilterModel<
       locationInfo: "locationInfo", // TODO: Remove.
       filterModel: this,
     );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __assertThisXFilterModel(_XFilterModel thisXFilterModel) {
+    if (!identical(thisXFilterModel.filterModel, this)) {
+      String message =
+          "Error Assets filter model: ${thisXFilterModel.filterModel} - $this";
+      print("FATAL ERROR: $message");
+      throw message;
+    }
   }
 }

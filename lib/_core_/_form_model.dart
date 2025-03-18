@@ -581,9 +581,9 @@ abstract class FormModel<
   // ***************************************************************************
 
   void __assertThisXFormModel(_XFormModel thisXFormModel) {
-    if (thisXFormModel.formModel != this) {
+    if (!identical(thisXFormModel.formModel, this)) {
       String message =
-          "Error Assets block form: ${thisXFormModel.formModel} - $this";
+          "Error Assets form model: ${thisXFormModel.formModel} - $this";
       print("FATAL ERROR: $message");
       throw message;
     }

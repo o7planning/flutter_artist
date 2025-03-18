@@ -76,6 +76,10 @@ class _XShelf {
     __setForceQueryFormModelOpts(forceQueryFormModelOpts);
   }
 
+  _XFilterModel? findXFilterModelByName(String name)  {
+    return allXFilterModelMap[name];
+  }
+
   _XBlock? findXBlockByName(String name) {
     return allXBlockMap[name];
   }
