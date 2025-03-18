@@ -19,6 +19,9 @@ class _BlockSelectAsCurrentTaskUnit<ITEM extends Object> extends _TaskUnit {
   }
 
   @override
+  int get xShelfId => xBlock.xShelfId;
+
+  @override
   Shelf get shelf => xBlock.block.shelf;
 
   @override

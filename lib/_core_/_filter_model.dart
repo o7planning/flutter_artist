@@ -168,7 +168,7 @@ abstract class FilterModel<
     try {
       _masterDataStructure._resetTemporaryForNewTransaction(
         currentFormData: filterInput != null
-            ? {} // Clear All.
+            ? {} // To Clear All.
             : formViewInstantValue ?? data._currentFormData,
       );
       print("@~~~~~~~~~~~~~~~~~~~~~~~> 2");

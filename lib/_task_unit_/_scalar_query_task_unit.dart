@@ -8,6 +8,9 @@ class _ScalarQueryTaskUnit extends _TaskUnit {
   });
 
   @override
+  int get xShelfId => xScalar.xShelfId;
+
+  @override
   Shelf get shelf => xScalar.scalar.shelf;
 
   @override

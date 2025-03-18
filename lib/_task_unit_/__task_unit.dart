@@ -5,6 +5,8 @@ abstract class _TaskUnit {
     return "${getClassName(this)}/${getObjectName()}";
   }
 
+  int get xShelfId;
+
   String getObjectName();
 
   Shelf get shelf;
