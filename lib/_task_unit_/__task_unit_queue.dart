@@ -1,7 +1,5 @@
 part of '../flutter_artist.dart';
 
-final _taskUnitQueue = _TaskUnitQueue();
-
 class _TaskUnitQueue {
   final List<_TaskUnit> _taskUnits = [];
 

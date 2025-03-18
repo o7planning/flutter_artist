@@ -11,6 +11,8 @@ class _FlutterArtist {
 
   final _Executor executor = _Executor();
 
+  final _TaskUnitQueue taskUnitQueue = _TaskUnitQueue();
+
   int notificationFetchPeriodInSeconds = 60;
 
   FlutterArtistAdapter? __adapter;

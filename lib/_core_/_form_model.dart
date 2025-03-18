@@ -569,7 +569,7 @@ abstract class FormModel<
       xFormModel: xFormModel,
     );
     //
-    _taskUnitQueue.addTaskUnit(taskUnit);
+    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //
     await FlutterArtist.executor._executeTaskUnitQueue();
     //

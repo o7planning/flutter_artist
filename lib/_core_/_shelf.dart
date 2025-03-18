@@ -710,7 +710,7 @@ abstract class Shelf extends _XBase {
       //
       // Add to Queue:
       //
-      _taskUnitQueue.addTaskUnit(
+      FlutterArtist.taskUnitQueue.addTaskUnit(
         _ScalarQueryTaskUnit(
           xScalar: xScalar,
         ),
@@ -721,7 +721,7 @@ abstract class Shelf extends _XBase {
       //
       // Add to Queue:
       //
-      _taskUnitQueue.addTaskUnit(
+      FlutterArtist.taskUnitQueue.addTaskUnit(
         _BlockQueryTaskUnit(
           xBlock: xBlock,
         ),
@@ -735,7 +735,7 @@ abstract class Shelf extends _XBase {
     //   //
     //   // Add to Queue:
     //   //
-    //   _taskUnitQueue.addTaskUnit(
+    //   FlutterArtist.taskUnitQueue.addTaskUnit(
     //     _FormModelLoadFormTaskUnit(
     //       xFormModel: xFormModel,
     //     ),

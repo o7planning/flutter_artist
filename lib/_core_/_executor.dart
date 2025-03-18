@@ -2,6 +2,7 @@ part of '../flutter_artist.dart';
 
 class _Executor {
   int _taskUnitCount = 0;
+  int? _executingXShelfId;
 
   // ***************************************************************************
   // ***************************************************************************
@@ -12,12 +13,18 @@ class _Executor {
   // ***************************************************************************
 
   Future<void> _executeTaskUnitQueue() async {
+    if (_executingXShelfId != null) {
+      throw "Executor is busy";
+    }
+
     await FlutterArtist.executeTask(asyncFunction: () async {
       Map<String, Shelf> shelfMap = {};
-      while (_taskUnitQueue.hasNext()) {
-        _TaskUnit taskUnit = _taskUnitQueue.getNextTaskUnit()!;
+      while (FlutterArtist.taskUnitQueue.hasNext()) {
+        _TaskUnit taskUnit = FlutterArtist.taskUnitQueue.getNextTaskUnit()!;
+        _executingXShelfId = taskUnit.xShelfId;
+        //
         shelfMap[taskUnit.shelf.name] = taskUnit.shelf;
-        print("~~~~~~~~~~~~~~~> Execute Task Unit: $taskUnit");
+        print("~~~~~~~~~~~~> xSid:$_executingXShelfId - Task Unit: $taskUnit");
         //
         if (taskUnit is _FilterViewChangeTaskUnit) {
           await taskUnit.xFilterModel.filterModel._unitFilterViewChanged(
@@ -107,6 +114,8 @@ class _Executor {
       for (Shelf shelf in shelfMap.values) {
         shelf.updateAllUIComponents();
       }
+      //
+      _executingXShelfId = null;
     });
   }
 }

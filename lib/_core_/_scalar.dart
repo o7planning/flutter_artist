@@ -303,7 +303,7 @@ abstract class Scalar<
         var taskUnit = _ScalarQueryTaskUnit(
           xScalar: thisXScalar,
         );
-        _taskUnitQueue.addTaskUnit(taskUnit);
+        FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     }
     return true;
   }
@@ -462,7 +462,7 @@ abstract class Scalar<
       afterQuickAction: afterQuickAction,
     );
     //
-    _taskUnitQueue.addTaskUnit(taskUnit);
+    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //
     await FlutterArtist.executor._executeTaskUnitQueue();
     return true;
