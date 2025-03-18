@@ -5,6 +5,7 @@ class _Executor {
   int? __executingXShelfId;
 
   int get taskUnitCount => __taskUnitCount;
+
   int? get executingXShelfId => __executingXShelfId;
 
   // ***************************************************************************
@@ -17,9 +18,8 @@ class _Executor {
 
   Future<void> _executeTaskUnitQueue() async {
     if (__executingXShelfId != null) {
-      throw "Executor is busy";
+      return;
     }
-
     await FlutterArtist.executeTask(asyncFunction: () async {
       Map<String, Shelf> shelfMap = {};
       while (FlutterArtist.taskUnitQueue.hasNext()) {
@@ -36,7 +36,6 @@ class _Executor {
         }
         //
         shelfMap[taskUnit.shelf.name] = taskUnit.shelf;
-        print("~~~~~~~~~~~~> xSid:$__executingXShelfId - Task Unit: $taskUnit");
         //
         if (taskUnit is _FilterViewChangeTaskUnit) {
           await taskUnit.xFilterModel.filterModel._unitFilterViewChanged(

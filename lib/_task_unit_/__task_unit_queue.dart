@@ -9,7 +9,7 @@ class _TaskUnitQueue {
   }
 
   bool hasNext() {
-    return _taskUnits.isNotEmpty && _secondaryQueue.isNotEmpty;
+    return _taskUnits.isNotEmpty || _secondaryQueue.isNotEmpty;
   }
 
   _TaskUnit? getNextTaskUnit() {
@@ -41,6 +41,7 @@ class _TaskUnitQueue {
       } else if (taskUnit.xShelfId == executingXShelfId) {
         _taskUnits.add(taskUnit);
       } else {
+        print("Ignore TaskUnit: $taskUnit");
         // Ignore this TaskUnit.
       }
     } else {
