@@ -47,6 +47,8 @@ abstract class FilterModel<
 
   late final MasterDataStructure _masterDataStructure;
 
+  bool _initiated = false;
+
   // ***************************************************************************
   // ***************************************************************************
 
@@ -123,7 +125,7 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _prinStructureAndTempData() {
+  void _printStructureAndTempData() {
     _masterDataStructure._printTemporaryInfo();
     print("instantData: ${_formKey.currentState?.instantValue}\n\n");
   }
@@ -143,7 +145,16 @@ abstract class FilterModel<
       throw "Invalid Call";
     }
     print("#~~~~~~~~~~~> _startNewFilterTransaction");
-    bool error = false;
+    if (!_initiated && _formKey.currentState != null) {
+      _initiated = true;
+      data._initialFormData
+        ..clear()
+        ..addAll(_formKey.currentState!.instantValue);
+      data._currentFormData
+        ..clear()
+        ..addAll(_formKey.currentState!.instantValue);
+    }
+
     try {
       _masterDataStructure._resetTemporaryForNewTransaction(
         currentFormData: filterInput != null
@@ -184,14 +195,10 @@ abstract class FilterModel<
         stackTrace: stackTrace,
         showSnackBar: true,
       );
-      error = true;
-    }
-    //
-    if (error) {
       return null;
     }
     //
-    _prinStructureAndTempData();
+    _printStructureAndTempData();
     //
     // Apply Temporary data to real data:
     //
@@ -587,21 +594,8 @@ abstract class FilterModel<
   Future<void> _onChangeFromFilterView() async {
     print("#~~~~~~~~~~~~~~~> _onChangeFromFilterView");
     //
-    if (_formKey.currentState?.instantValue != null) {
-      if (data._justInitialized) {
-        Map<String, dynamic> map = {..._formKey.currentState!.instantValue};
-        map.removeWhere((k, v) => data._initialFormData.containsKey(k));
-        //
-        data._initialFormData.addAll(map);
-      }
-    }
-    //
-    // IMPORTANT:
-    // Update data from GlobalKey(_formKey) --> to FilterModelData.
-    //  ---> data._currentFormData
-    //  ---> data._initialFormData
-    //
     // TODO: Add to TaskUnit?
+    //
     await _startNewFilterTransaction(
       filterInput: null,
       formViewInstantValue: _formKey.currentState?.instantValue,
@@ -633,7 +627,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   void _afterBuildFilterView() {
-    data._justInitialized = false;
+    //
   }
 
   // ***************************************************************************

@@ -8,8 +8,6 @@ class FilterModelData<
   ///
   final FilterModel<FILTER_INPUT, FILTER_CRITERIA> filterModel;
 
-  bool _justInitialized = false;
-
   final Map<String, dynamic> __initial0FormData = {};
 
   Map<String, dynamic> get initial0FormData => {...__initial0FormData};
@@ -70,8 +68,6 @@ class FilterModelData<
   void _clearWithDataState({required DataState filterDataState}) {
     _filterDataState = filterDataState;
     //
-    _justInitialized = false;
-    //
     __initial0FormData.clear();
     _initialFormData.clear();
     _currentFormData.clear();
@@ -81,8 +77,6 @@ class FilterModelData<
   // ***************************************************************************
 
   void _initialFilterData(Map<String, dynamic> formData) {
-    _justInitialized = true;
-    //
     __initial0FormData
       ..clear()
       ..addAll(formData);
