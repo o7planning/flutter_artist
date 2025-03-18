@@ -207,9 +207,7 @@ abstract class FilterModel<
       ..addAll(_masterDataStructure._tempCurrentFormData);
     this._masterDataStructure._applyAllTempDataToReal();
     //
-    // TODO: Add filterInput != null to eliminate flickering but DANGEROUS!!
-    //
-    if (_formKey.currentState != null && filterInput != null) {
+    if (_formKey.currentState != null) {
       try {
         // IMPORTANT: To avoid infinite loops.
         _lockFireChange = true;
