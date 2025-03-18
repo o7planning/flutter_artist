@@ -103,7 +103,7 @@ part '_core_/_filter_criteria.dart';
 
 part '_core_/_filter_input.dart';
 
-part '_flutter_artist.dart';
+part '_fa_.dart';
 
 part '_core_/_item_sort_criteria.dart';
 
