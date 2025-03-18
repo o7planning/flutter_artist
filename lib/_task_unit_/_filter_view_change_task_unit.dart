@@ -8,6 +8,9 @@ class _FilterViewChangeTaskUnit extends _TaskUnit {
   });
 
   @override
+  int get xShelfId => xFilterModel.xShelfId;
+
+  @override
   Shelf get shelf => xFilterModel.filterModel.shelf;
 
   @override
