@@ -103,7 +103,7 @@ part '_core_/_filter_criteria.dart';
 
 part '_core_/_filter_input.dart';
 
-part '_core_/_flutter_artist.dart';
+part '_flutter_artist.dart';
 
 part '_core_/_item_sort_criteria.dart';
 
@@ -304,6 +304,8 @@ part '_ui_/_x_state.dart';
 part '_enum_/_optioned_master_prop_type.dart';
 
 part '_utils_/_patch_utils.dart';
+
+part '_core_/_executor.dart';
 
 part '_master_/_master_data_structure.dart';
 

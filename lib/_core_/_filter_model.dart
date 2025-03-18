@@ -261,7 +261,6 @@ abstract class FilterModel<
       //
       return null;
     }
-    print("FINISH: _startNewFilterTransaction");
   }
 
   // ***************************************************************************

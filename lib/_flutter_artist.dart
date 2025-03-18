@@ -1,4 +1,4 @@
-part of '../flutter_artist.dart';
+part of 'flutter_artist.dart';
 
 final FlutterArtist = _FlutterArtist();
 
@@ -7,7 +7,9 @@ const _isOverlayMode = false;
 class _FlutterArtist {
   bool testCaseMode = false;
 
-  _Storage storage = _Storage();
+  final _Storage storage = _Storage();
+
+  final _Executor executor = _Executor();
 
   int notificationFetchPeriodInSeconds = 60;
 
