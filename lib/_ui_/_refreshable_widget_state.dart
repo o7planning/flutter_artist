@@ -38,8 +38,8 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
     if (force) {
       setState(() {});
     } else {
-      if (_refreshCount < FlutterArtist.executor._taskUnitCount) {
-        _refreshCount = FlutterArtist.executor._taskUnitCount;
+      if (_refreshCount < FlutterArtist.executor.taskUnitCount) {
+        _refreshCount = FlutterArtist.executor.taskUnitCount;
         setState(() {});
       }
     }

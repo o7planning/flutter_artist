@@ -1,8 +1,11 @@
 part of '../flutter_artist.dart';
 
 class _Executor {
-  int _taskUnitCount = 0;
-  int? _executingXShelfId;
+  int __taskUnitCount = 0;
+  int? __executingXShelfId;
+
+  int get taskUnitCount => __taskUnitCount;
+  int? get executingXShelfId => __executingXShelfId;
 
   // ***************************************************************************
   // ***************************************************************************
@@ -13,7 +16,7 @@ class _Executor {
   // ***************************************************************************
 
   Future<void> _executeTaskUnitQueue() async {
-    if (_executingXShelfId != null) {
+    if (__executingXShelfId != null) {
       throw "Executor is busy";
     }
 
@@ -21,10 +24,19 @@ class _Executor {
       Map<String, Shelf> shelfMap = {};
       while (FlutterArtist.taskUnitQueue.hasNext()) {
         _TaskUnit taskUnit = FlutterArtist.taskUnitQueue.getNextTaskUnit()!;
-        _executingXShelfId = taskUnit.xShelfId;
+        if (__executingXShelfId == null) {
+          __executingXShelfId = taskUnit.xShelfId;
+        } else {
+          if (__executingXShelfId! > taskUnit.xShelfId) {
+            // Ignore taskUnit.
+            continue;
+          } else {
+            __executingXShelfId = taskUnit.xShelfId;
+          }
+        }
         //
         shelfMap[taskUnit.shelf.name] = taskUnit.shelf;
-        print("~~~~~~~~~~~~> xSid:$_executingXShelfId - Task Unit: $taskUnit");
+        print("~~~~~~~~~~~~> xSid:$__executingXShelfId - Task Unit: $taskUnit");
         //
         if (taskUnit is _FilterViewChangeTaskUnit) {
           await taskUnit.xFilterModel.filterModel._unitFilterViewChanged(
@@ -109,13 +121,13 @@ class _Executor {
         }
       }
       //
-      _taskUnitCount++;
+      __taskUnitCount++;
       //
       for (Shelf shelf in shelfMap.values) {
         shelf.updateAllUIComponents();
       }
       //
-      _executingXShelfId = null;
+      __executingXShelfId = null;
     });
   }
 }
