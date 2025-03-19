@@ -194,7 +194,7 @@ abstract class FilterModel<
       _masterDataStructure._printTemporaryInfo();
       if (filterInput != null) {
         for (CommonProp commonMasterProp in _masterDataStructure._commonProps) {
-          Object? value = filterInputToCommonMasterPropValue(
+          Object? value = filterInputToCommonPropValue(
             filterInput: filterInput,
             propName: commonMasterProp.propName,
           );
@@ -317,9 +317,9 @@ abstract class FilterModel<
     if (tempXList != null) {
       PropValue? inputValueWrap;
       if (filterInput != null) {
-        inputValueWrap = _filterInputToOptionedMasterPropValue(
+        inputValueWrap = _filterInputToOptPropValue(
           filterInput: filterInput,
-          materPropData: tempXList,
+          optPropData: tempXList,
           propName: propName,
         );
       }
@@ -429,7 +429,7 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  Object? filterInputToCommonMasterPropValue({
+  Object? filterInputToCommonPropValue({
     required FILTER_INPUT filterInput,
     required String propName,
   });
@@ -442,9 +442,9 @@ abstract class FilterModel<
   ///
   /// ```dart
   /// @override
-  /// MasterPropValueWrap? filterInputToMasterPropValue({
+  /// MasterPropValueWrap? filterInputToOptPropValue({
   ///     required ExampleFilterInput filterInput,
-  ///     required XList materPropData,
+  ///     required XOptionedData optPropData,
   ///     required String propName,
   /// }) {
   ///    if(propName == "company") {
@@ -456,20 +456,20 @@ abstract class FilterModel<
   /// }
   /// ```
   ///
-  PropValue? filterInputToOptionedMasterPropValue({
+  PropValue? filterInputToOptPropValue({
     required FILTER_INPUT filterInput,
-    required XOptionedData materPropData,
+    required XOptionedData optPropData,
     required String propName,
   });
 
-  PropValue? _filterInputToOptionedMasterPropValue({
+  PropValue? _filterInputToOptPropValue({
     required FILTER_INPUT filterInput,
-    required XOptionedData materPropData,
+    required XOptionedData optPropData,
     required String propName,
   }) {
-    PropValue? wrap = filterInputToOptionedMasterPropValue(
+    PropValue? wrap = filterInputToOptPropValue(
       filterInput: filterInput,
-      materPropData: materPropData,
+      optPropData: optPropData,
       propName: propName,
     );
     if (wrap == null) {
@@ -477,7 +477,7 @@ abstract class FilterModel<
     }
     List? value = wrap.value;
     return PropValue(
-      materPropData.findItemsInListByDynamics(
+      optPropData.findItemsInListByDynamics(
         dynamicValues: value,
       ),
     );

@@ -46,16 +46,16 @@ class _DefaultFilterModel
   }
 
   @override
-  PropValue? filterInputToOptionedMasterPropValue({
+  PropValue? filterInputToOptPropValue({
     required EmptyFilterInput filterInput,
-    required XOptionedData materPropData,
+    required XOptionedData optPropData,
     required String propName,
   }) {
     return null;
   }
 
   @override
-  Object? filterInputToCommonMasterPropValue({
+  Object? filterInputToCommonPropValue({
     required EmptyFilterInput filterInput,
     required String propName,
   }) {
@@ -107,16 +107,16 @@ class StringIdFilterModel
   }
 
   @override
-  PropValue? filterInputToOptionedMasterPropValue({
+  PropValue? filterInputToOptPropValue({
     required StringIdFilterInput filterInput,
-    required XOptionedData materPropData,
+    required XOptionedData optPropData,
     required String propName,
   }) {
     return null;
   }
 
   @override
-  Object? filterInputToCommonMasterPropValue({
+  Object? filterInputToCommonPropValue({
     required StringIdFilterInput filterInput,
     required String propName,
   }) {
@@ -168,16 +168,16 @@ class StringValueFilterModel
   }
 
   @override
-  PropValue? filterInputToOptionedMasterPropValue({
+  PropValue? filterInputToOptPropValue({
     required StringValueFilterInput filterInput,
-    required XOptionedData materPropData,
+    required XOptionedData optPropData,
     required String propName,
   }) {
     return null;
   }
 
   @override
-  Object? filterInputToCommonMasterPropValue({
+  Object? filterInputToCommonPropValue({
     required StringValueFilterInput filterInput,
     required String propName,
   }) {
@@ -229,16 +229,16 @@ class SearchTextFilterModel
   }
 
   @override
-  PropValue? filterInputToOptionedMasterPropValue({
+  PropValue? filterInputToOptPropValue({
     required SearchTextFilterInput filterInput,
-    required XOptionedData materPropData,
+    required XOptionedData optPropData,
     required String propName,
   }) {
     return null;
   }
 
   @override
-  Object? filterInputToCommonMasterPropValue({
+  Object? filterInputToCommonPropValue({
     required SearchTextFilterInput filterInput,
     required String propName,
   }) {
@@ -290,16 +290,16 @@ class IntIdFilterModel
   }
 
   @override
-  PropValue? filterInputToOptionedMasterPropValue({
+  PropValue? filterInputToOptPropValue({
     required IntIdFilterInput filterInput,
-    required XOptionedData materPropData,
+    required XOptionedData optPropData,
     required String propName,
   }) {
     return null;
   }
 
   @override
-  Object? filterInputToCommonMasterPropValue({
+  Object? filterInputToCommonPropValue({
     required IntIdFilterInput filterInput,
     required String propName,
   }) {
