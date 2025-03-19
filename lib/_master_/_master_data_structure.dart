@@ -99,6 +99,17 @@ class MasterDataStructure {
     return null;
   }
 
+  OptionedMasterPropType? _getOptionedPropType(String propName) {
+    MasterProp? masterProp = _allMasterPropMap[propName];
+    if (masterProp == null) {
+      return null;
+    }
+    if (masterProp is OptionedMasterProp) {
+      return masterProp.type;
+    }
+    return null;
+  }
+
   // ***************************************************************************
   // ***************************************************************************
 
@@ -196,8 +207,6 @@ class MasterDataStructure {
   }) {
     _tempCurrentFormData[propName] = value;
   }
-
-
 
   // ***************************************************************************
   // ***************************************************************************

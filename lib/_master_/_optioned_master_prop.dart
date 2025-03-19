@@ -1,6 +1,7 @@
 part of '../flutter_artist.dart';
 
 class OptionedMasterProp extends MasterProp {
+    OptionedMasterPropType? type;
   late final OptionedMasterProp? parent;
 
   ///
@@ -21,6 +22,7 @@ class OptionedMasterProp extends MasterProp {
 
   OptionedMasterProp({
     required super.propName,
+     this.type,
     this.singleSelection = true,
     this.children = const [],
   });

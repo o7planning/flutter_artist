@@ -121,7 +121,24 @@ abstract class FilterModel<
   // TODO: Rename
   dynamic getMasterPropDataList(String propName) {
     XOptionedData? xOptionedData = getMasterPropDataXList(propName);
-    return xOptionedData?.getOptionedData();
+    dynamic data = xOptionedData?.getOptionedData();
+    if (data != null) {
+      return data;
+    } else {
+      OptionedMasterPropType? type = getOptionedPropType(propName);
+      switch (type) {
+        case null:
+          return data;
+        case OptionedMasterPropType.list:
+          return [];
+        case OptionedMasterPropType.custom:
+          return data;
+      }
+    }
+  }
+
+  OptionedMasterPropType? getOptionedPropType(String propName) {
+    return _masterDataStructure._getOptionedPropType(propName);
   }
 
   // ***************************************************************************
