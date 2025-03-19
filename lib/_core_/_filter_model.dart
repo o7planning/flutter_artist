@@ -100,7 +100,7 @@ abstract class FilterModel<
     _masterDataStructure = registerMasterDataStructure() ??
         MasterDataStructure(
           allPropNames: [],
-          optionedMasterProps: [],
+          optProps: [],
         );
   }
 
@@ -109,7 +109,7 @@ abstract class FilterModel<
 
   // TODO: Rename
   XOptionedData? getMasterPropDataXList(String propName) {
-    return _masterDataStructure._getMasterDataXList(propName);
+    return _masterDataStructure._getOptPropData(propName);
   }
 
   // dynamic getMasterPropDataList<DATA>(String propName) {
@@ -125,20 +125,20 @@ abstract class FilterModel<
     if (data != null) {
       return data;
     } else {
-      OptionedMasterPropType? type = getOptionedPropType(propName);
+      OptPropType? type = getOptionedPropType(propName);
       switch (type) {
         case null:
           return data;
-        case OptionedMasterPropType.list:
+        case OptPropType.list:
           return [];
-        case OptionedMasterPropType.custom:
+        case OptPropType.custom:
           return data;
       }
     }
   }
 
-  OptionedMasterPropType? getOptionedPropType(String propName) {
-    return _masterDataStructure._getOptionedPropType(propName);
+  OptPropType? getOptionedPropType(String propName) {
+    return _masterDataStructure._getOptPropType(propName);
   }
 
   // ***************************************************************************
@@ -180,8 +180,7 @@ abstract class FilterModel<
       print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3");
       _masterDataStructure._printTemporaryInfo();
       //
-      for (OptionedMasterProp masterProp
-          in _masterDataStructure._rootOptionedMasterProps) {
+      for (OptProp masterProp in _masterDataStructure._rootOptProps) {
         //
         // May throw ApiError.
         //
@@ -194,13 +193,12 @@ abstract class FilterModel<
       print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~> 4");
       _masterDataStructure._printTemporaryInfo();
       if (filterInput != null) {
-        for (CommonMasterProp commonMasterProp
-            in _masterDataStructure._commonMasterProps) {
+        for (CommonProp commonMasterProp in _masterDataStructure._commonProps) {
           Object? value = filterInputToCommonMasterPropValue(
             filterInput: filterInput,
             propName: commonMasterProp.propName,
           );
-          _masterDataStructure._setTempMasterPropDataCommon(
+          _masterDataStructure._setTempPropDataCommon(
             propName: commonMasterProp.propName,
             value: value,
           );
@@ -293,13 +291,13 @@ abstract class FilterModel<
   Future<void> _loadOptionedMasterDataCascade({
     required FILTER_INPUT? filterInput,
     required Object? parentMasterPropValue,
-    required OptionedMasterProp optionedMasterProp,
+    required OptProp optionedMasterProp,
   }) async {
     final String propName = optionedMasterProp.propName;
 
     // Get current MasterProp data:
     XOptionedData? tempXList =
-        _masterDataStructure._getTempMasterDataXList(propName);
+        _masterDataStructure._getTempOptPropData(propName);
     //
     // Load OptionedMasterProp data from Rest API.
     // May throw ApiError.
@@ -317,7 +315,7 @@ abstract class FilterModel<
     // Candidate Selected Items:
     List? candidateSelectedItems;
     if (tempXList != null) {
-      MasterPropValueWrap? inputValueWrap;
+      PropValue? inputValueWrap;
       if (filterInput != null) {
         inputValueWrap = _filterInputToOptionedMasterPropValue(
           filterInput: filterInput,
@@ -358,7 +356,7 @@ abstract class FilterModel<
       candidateSelectedItems = null;
     }
     //
-    _masterDataStructure._setTempMasterPropDataXList(
+    _masterDataStructure._setTempOptPropData(
       propName: propName,
       tempXList: tempXList,
     );
@@ -391,7 +389,7 @@ abstract class FilterModel<
     Object? tempSelectedMasterPropValue =
         this._masterDataStructure._getTempCurrentPropValue(propName: propName);
     if (tempSelectedMasterPropValue != null) {
-      for (OptionedMasterProp child in optionedMasterProp.children) {
+      for (OptProp child in optionedMasterProp.children) {
         await _loadOptionedMasterDataCascade(
           filterInput: filterInput,
           parentMasterPropValue: tempSelectedMasterPropValue,
@@ -458,18 +456,18 @@ abstract class FilterModel<
   /// }
   /// ```
   ///
-  MasterPropValueWrap? filterInputToOptionedMasterPropValue({
+  PropValue? filterInputToOptionedMasterPropValue({
     required FILTER_INPUT filterInput,
     required XOptionedData materPropData,
     required String propName,
   });
 
-  MasterPropValueWrap? _filterInputToOptionedMasterPropValue({
+  PropValue? _filterInputToOptionedMasterPropValue({
     required FILTER_INPUT filterInput,
     required XOptionedData materPropData,
     required String propName,
   }) {
-    MasterPropValueWrap? wrap = filterInputToOptionedMasterPropValue(
+    PropValue? wrap = filterInputToOptionedMasterPropValue(
       filterInput: filterInput,
       materPropData: materPropData,
       propName: propName,
@@ -478,7 +476,7 @@ abstract class FilterModel<
       return null;
     }
     List? value = wrap.value;
-    return MasterPropValueWrap(
+    return PropValue(
       materPropData.findItemsInListByDynamics(
         dynamicValues: value,
       ),

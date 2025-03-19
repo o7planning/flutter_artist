@@ -307,15 +307,15 @@ part '_utils_/_patch_utils.dart';
 
 part '_core_/_executor.dart';
 
-part '_master_/_master_data_structure.dart';
+part '_prop/_master_data_structure.dart';
 
-part '_master_/_master_prop.dart';
+part '_prop/_prop.dart';
 
-part '_master_/_common_master_prop.dart';
+part '_prop/_common_prop.dart';
 
-part '_master_/_optioned_master_prop.dart';
+part '_prop/_opt_prop.dart';
 
-part '_master_/_master_prop_value_wrap.dart';
+part '_prop/_prop_value.dart';
 
 part '_task_unit_/_block_query_task_unit.dart';
 

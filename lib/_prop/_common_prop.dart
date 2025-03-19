@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
-class CommonMasterProp extends MasterProp {
-  CommonMasterProp({
+class CommonProp extends Prop {
+  CommonProp({
     required super.propName,
   });
 

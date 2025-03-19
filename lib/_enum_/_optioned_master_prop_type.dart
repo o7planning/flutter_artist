@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-enum OptionedMasterPropType {
+enum OptPropType {
   list,
   custom;
 }

@@ -1,30 +1,30 @@
 part of '../flutter_artist.dart';
 
 class MasterDataStructure {
-  final Map<String, MasterProp> _allMasterPropMap = {};
-  final List<OptionedMasterProp> _rootOptionedMasterProps;
-  final List<CommonMasterProp> _commonMasterProps = [];
+  final Map<String, Prop> _allPropMap = {};
+  final List<OptProp> _rootOptProps;
+  final List<CommonProp> _commonProps = [];
 
   //
   final Map<String, dynamic> _tempCurrentFormData = {};
 
   MasterDataStructure({
     required List<String> allPropNames,
-    required List<OptionedMasterProp> optionedMasterProps,
-  }) : _rootOptionedMasterProps = [...optionedMasterProps] {
+    required List<OptProp> optProps,
+  }) : _rootOptProps = [...optProps] {
     final List<String> commonPropNames = {...allPropNames}.toList();
     //
-    for (OptionedMasterProp rootMasterProperty in optionedMasterProps) {
-      __standardizeCascade(rootMasterProperty, null);
+    for (OptProp rootOptProp in optProps) {
+      __standardizeCascade(rootOptProp, null);
     }
-    for (MasterProp masterProp in _allMasterPropMap.values) {
+    for (Prop masterProp in _allPropMap.values) {
       commonPropNames.remove(masterProp.propName);
-      if (masterProp is OptionedMasterProp) {
+      if (masterProp is OptProp) {
         masterProp._checkCycleError();
       }
     }
     for (String propName in commonPropNames) {
-      _createAndAddNewCommomMasterProp(
+      _createAndAddNewCommomProp(
         propName: propName,
         dirty: false,
       );
@@ -32,14 +32,14 @@ class MasterDataStructure {
   }
 
   void __standardizeCascade(
-    OptionedMasterProp optionedMasterProp,
-    OptionedMasterProp? parent,
+    OptProp optProp,
+    OptProp? parent,
   ) {
-    optionedMasterProp.parent = parent;
-    _allMasterPropMap[optionedMasterProp.propName] = optionedMasterProp;
+    optProp.parent = parent;
+    _allPropMap[optProp.propName] = optProp;
     //
-    for (OptionedMasterProp child in optionedMasterProp.children) {
-      __standardizeCascade(child, optionedMasterProp);
+    for (OptProp child in optProp.children) {
+      __standardizeCascade(child, optProp);
     }
   }
 
@@ -53,7 +53,7 @@ class MasterDataStructure {
       ..updateAll((k, v) => null)
       ..addAll(currentFormData ?? {});
     //
-    for (MasterProp masterProp in _allMasterPropMap.values) {
+    for (Prop masterProp in _allPropMap.values) {
       masterProp._resetForNewTransaction();
     }
   }
@@ -62,7 +62,7 @@ class MasterDataStructure {
   // ***************************************************************************
 
   void _applyAllTempDataToReal() {
-    for (MasterProp masterProp in _allMasterPropMap.values) {
+    for (Prop masterProp in _allPropMap.values) {
       masterProp._applyTempDataToReal();
     }
   }
@@ -77,34 +77,34 @@ class MasterDataStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  XOptionedData? _getTempMasterDataXList(String propName) {
-    MasterProp? masterProp = _allMasterPropMap[propName];
+  XOptionedData? _getTempOptPropData(String propName) {
+    Prop? masterProp = _allPropMap[propName];
     if (masterProp == null) {
       return null;
     }
-    if (masterProp is OptionedMasterProp) {
+    if (masterProp is OptProp) {
       return masterProp._tempXOptionedData;
     }
     return null;
   }
 
-  XOptionedData? _getMasterDataXList(String propName) {
-    MasterProp? masterProp = _allMasterPropMap[propName];
+  XOptionedData? _getOptPropData(String propName) {
+    Prop? masterProp = _allPropMap[propName];
     if (masterProp == null) {
       return null;
     }
-    if (masterProp is OptionedMasterProp) {
+    if (masterProp is OptProp) {
       return masterProp._xOptionedData;
     }
     return null;
   }
 
-  OptionedMasterPropType? _getOptionedPropType(String propName) {
-    MasterProp? masterProp = _allMasterPropMap[propName];
+  OptPropType? _getOptPropType(String propName) {
+    Prop? masterProp = _allPropMap[propName];
     if (masterProp == null) {
       return null;
     }
-    if (masterProp is OptionedMasterProp) {
+    if (masterProp is OptProp) {
       return masterProp.type;
     }
     return null;
@@ -119,43 +119,42 @@ class MasterDataStructure {
     // IMPORTANT:
     // Update data for MasterDataStructure. From ROOTs to LEAVES.
     // (***):
-    // And Update children-OptionedMasterProp data to null if parent-Value is null or not selected.
+    // And Update children-OptProp data to null if parent-Value is null or not selected.
     //
-    for (MasterProp masterProp in _allMasterPropMap.values) {
+    for (Prop masterProp in _allPropMap.values) {
       masterProp.candidateUpdateValue = null;
       masterProp._valueUpdated = false;
       masterProp._dirty = false;
     }
     //
     for (String propName in candidateUpdateValues.keys) {
-      MasterProp? masterProp = _allMasterPropMap[propName];
+      Prop? masterProp = _allPropMap[propName];
       if (masterProp != null) {
         masterProp._dirty = true;
       } else {
-        _createAndAddNewCommomMasterProp(
+        _createAndAddNewCommomProp(
           propName: propName,
           dirty: true,
         );
       }
     }
     //
-    for (OptionedMasterProp rootItem in _rootOptionedMasterProps) {
-      rootItem._updateTempValueCascade(
+    for (OptProp rootProp in _rootOptProps) {
+      rootProp._updateTempValueCascade(
         tempCurrentFormData: _tempCurrentFormData,
         updateValues: candidateUpdateValues,
       );
     }
-    for (CommonMasterProp commonItem in _commonMasterProps) {
+    for (CommonProp commonItem in _commonProps) {
       commonItem._updateTempValue(
         tempCurrentFormData: _tempCurrentFormData,
         updateValues: candidateUpdateValues,
       );
     }
-    // Apply to all dirty MasterProp:
-    for (MasterProp masterProp in _allMasterPropMap.values) {
-      if (masterProp._dirty) {
-        _tempCurrentFormData[masterProp.propName] =
-            masterProp.candidateUpdateValue;
+    // Apply to all dirty Prop:
+    for (Prop prop in _allPropMap.values) {
+      if (prop._dirty) {
+        _tempCurrentFormData[prop.propName] = prop.candidateUpdateValue;
       }
     }
   }
@@ -163,45 +162,44 @@ class MasterDataStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _createAndAddNewCommomMasterProp({
+  void _createAndAddNewCommomProp({
     required String propName,
     required bool dirty,
   }) {
-    if (_allMasterPropMap.containsKey(propName)) {
+    if (_allPropMap.containsKey(propName)) {
       return;
     }
-    CommonMasterProp? newCommonProperty = CommonMasterProp(
+    CommonProp? newCommonProp = CommonProp(
       propName: propName,
     );
-    newCommonProperty._dirty = dirty;
-    _allMasterPropMap[propName] = newCommonProperty;
-    _commonMasterProps.add(newCommonProperty);
+    newCommonProp._dirty = dirty;
+    _allPropMap[propName] = newCommonProp;
+    _commonProps.add(newCommonProp);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void _setTempMasterPropDataXList({
+  void _setTempOptPropData({
     required String propName,
     required XOptionedData? tempXList,
   }) {
-    MasterProp? masterProp = _allMasterPropMap[propName];
+    Prop? masterProp = _allPropMap[propName];
     if (masterProp == null) {
-      throw AppException(message: 'No MasterProp $propName');
+      throw AppException(message: 'No Prop $propName');
     }
-    if (masterProp is OptionedMasterProp) {
+    if (masterProp is OptProp) {
       masterProp._tempXOptionedData = tempXList;
     } else {
       throw AppException(
-          message:
-              'Invalid MasterProp $propName, it must be $OptionedMasterProp');
+          message: 'Invalid Prop $propName, it must be $OptProp');
     }
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void _setTempMasterPropDataCommon({
+  void _setTempPropDataCommon({
     required String propName,
     required Object? value,
   }) {
@@ -211,10 +209,10 @@ class MasterDataStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _addCommonMasterProp(CommonMasterProp masterProp) {
-    if (!_allMasterPropMap.containsKey(masterProp.propName)) {
-      _allMasterPropMap[masterProp.propName] = masterProp;
-      _commonMasterProps.add(masterProp);
+  void _addCommonProp(CommonProp prop) {
+    if (!_allPropMap.containsKey(prop.propName)) {
+      _allPropMap[prop.propName] = prop;
+      _commonProps.add(prop);
     }
   }
 
@@ -223,7 +221,7 @@ class MasterDataStructure {
 
   void _printTemporaryInfo() {
     print("\n\n--------------------------------------------------------------");
-    for (OptionedMasterProp rootItem in _rootOptionedMasterProps) {
+    for (OptProp rootItem in _rootOptProps) {
       rootItem._printTempInfoCascade(indentFactor: 1);
     }
     print("tempCurrentFromData: $_tempCurrentFormData");

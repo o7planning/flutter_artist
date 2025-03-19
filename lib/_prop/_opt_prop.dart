@@ -1,8 +1,8 @@
 part of '../flutter_artist.dart';
 
-class OptionedMasterProp extends MasterProp {
-    OptionedMasterPropType? type;
-  late final OptionedMasterProp? parent;
+class OptProp extends Prop {
+  OptPropType? type;
+  late final OptProp? parent;
 
   ///
   /// In most cases this value is [true].
@@ -14,21 +14,21 @@ class OptionedMasterProp extends MasterProp {
   /// For example: An error occurs when the library tries to set multiple selection values for the Dropdown.
   ///
   final bool singleSelection;
-  final List<OptionedMasterProp> children;
+  final List<OptProp> children;
 
   XOptionedData? _xOptionedData;
 
   XOptionedData? _tempXOptionedData;
 
-  OptionedMasterProp({
+  OptProp({
     required super.propName,
-     this.type,
+    this.type,
     this.singleSelection = true,
     this.children = const [],
   });
 
   void _checkCycleError() {
-    OptionedMasterProp? p = parent;
+    OptProp? p = parent;
     final List<String> propNames = [propName];
     while (true) {
       if (p == null) {
@@ -69,7 +69,7 @@ class OptionedMasterProp extends MasterProp {
       }
       //
       if (_tempXOptionedData == null || newValue == null || !isSame) {
-        for (OptionedMasterProp childItem in children) {
+        for (OptProp childItem in children) {
           childItem._tempXOptionedData = null;
           updateValues[childItem.propName] = null;
           childItem._dirty = true;
@@ -77,7 +77,7 @@ class OptionedMasterProp extends MasterProp {
       }
     }
     //
-    for (OptionedMasterProp childItem in children) {
+    for (OptProp childItem in children) {
       childItem._updateTempValueCascade(
         tempCurrentFormData: tempCurrentFormData,
         updateValues: updateValues,

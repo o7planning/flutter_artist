@@ -1,12 +1,12 @@
 part of '../flutter_artist.dart';
 
-abstract class MasterProp {
+abstract class Prop {
   final String propName;
   dynamic candidateUpdateValue;
   bool _valueUpdated = false;
   bool _dirty = false;
 
-  MasterProp({required this.propName});
+  Prop({required this.propName});
 
   void _resetForNewTransaction();
 

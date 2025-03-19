@@ -1,9 +1,9 @@
 part of '../flutter_artist.dart';
 
-class MasterPropValueWrap<VALUE> {
+class PropValue<VALUE> {
   List<VALUE>? value;
 
-  MasterPropValueWrap(List<VALUE>? value) {
+  PropValue(List<VALUE>? value) {
     this.value = value?.where((v) => v != null).toList();
   }
 
