@@ -14,16 +14,13 @@ class OptionedMasterProp extends MasterProp {
   ///
   final bool singleSelection;
   final List<OptionedMasterProp> children;
-  final OptionedMasterPropType type;
-  XList? _xList;
-  Object? _xObject;
 
-  XList? _tempXList;
-  Object? _tempXObject;
+  XOptionedData? _xOptionedData;
+
+  XOptionedData? _tempXOptionedData;
 
   OptionedMasterProp({
     required super.propName,
-    required this.type,
     this.singleSelection = true,
     this.children = const [],
   });
@@ -63,15 +60,15 @@ class OptionedMasterProp extends MasterProp {
       _valueUpdated = true;
       //
       bool isSame;
-      if (_tempXList != null) {
-        isSame = _tempXList!.isSame(item1: oldValue, item2: newValue);
+      if (_tempXOptionedData != null) {
+        isSame = _tempXOptionedData!.isSame(item1: oldValue, item2: newValue);
       } else {
         isSame = false;
       }
       //
-      if (_tempXList == null || newValue == null || !isSame) {
+      if (_tempXOptionedData == null || newValue == null || !isSame) {
         for (OptionedMasterProp childItem in children) {
-          childItem._tempXList = null;
+          childItem._tempXOptionedData = null;
           updateValues[childItem.propName] = null;
           childItem._dirty = true;
         }
@@ -88,7 +85,7 @@ class OptionedMasterProp extends MasterProp {
 
   void _printTempInfoCascade({required int indentFactor}) {
     print(
-        "${("- - - " * indentFactor)} $propName >>> $candidateUpdateValue >>> ${_tempXList?.items}");
+        "${("- - - " * indentFactor)} $propName >>> UpdateV: $candidateUpdateValue >>> tempXOptionedData: $_tempXOptionedData");
     for (var child in children) {
       child._printTempInfoCascade(indentFactor: indentFactor + 1);
     }
@@ -96,13 +93,11 @@ class OptionedMasterProp extends MasterProp {
 
   @override
   void _resetForNewTransaction() {
-    _tempXList = null;
-    _tempXObject = null;
+    _tempXOptionedData = null;
   }
 
   @override
   void _applyTempDataToReal() {
-    _xList = _tempXList;
-    _xObject = _tempXObject;
+    _xOptionedData = _tempXOptionedData;
   }
 }

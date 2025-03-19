@@ -77,50 +77,24 @@ class MasterDataStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  Object? _getMasterPropDataCustom(String propName) {
+  XOptionedData? _getTempMasterDataXList(String propName) {
     MasterProp? masterProp = _allMasterPropMap[propName];
     if (masterProp == null) {
       return null;
     }
     if (masterProp is OptionedMasterProp) {
-      if (masterProp.type == OptionedMasterPropType.custom) {
-        return masterProp._xObject;
-      } else {
-        return null;
-      }
+      return masterProp._tempXOptionedData;
     }
     return null;
   }
 
-  // ***************************************************************************
-  // ***************************************************************************
-
-  XList? _getTempMasterDataXList(String propName) {
+  XOptionedData? _getMasterDataXList(String propName) {
     MasterProp? masterProp = _allMasterPropMap[propName];
     if (masterProp == null) {
       return null;
     }
     if (masterProp is OptionedMasterProp) {
-      if (masterProp.type == OptionedMasterPropType.listable) {
-        return masterProp._tempXList;
-      } else {
-        return null;
-      }
-    }
-    return null;
-  }
-
-  XList? _getMasterDataXList(String propName) {
-    MasterProp? masterProp = _allMasterPropMap[propName];
-    if (masterProp == null) {
-      return null;
-    }
-    if (masterProp is OptionedMasterProp) {
-      if (masterProp.type == OptionedMasterPropType.listable) {
-        return masterProp._xList;
-      } else {
-        return null;
-      }
+      return masterProp._xOptionedData;
     }
     return null;
   }
@@ -198,18 +172,14 @@ class MasterDataStructure {
 
   void _setTempMasterPropDataXList({
     required String propName,
-    required XList? tempXList,
+    required XOptionedData? tempXList,
   }) {
     MasterProp? masterProp = _allMasterPropMap[propName];
     if (masterProp == null) {
       throw AppException(message: 'No MasterProp $propName');
     }
     if (masterProp is OptionedMasterProp) {
-      if (masterProp.type != OptionedMasterPropType.listable) {
-        throw AppException(
-            message: 'Invalid MasterProp Data for type ${masterProp.type}');
-      }
-      masterProp._tempXList = tempXList;
+      masterProp._tempXOptionedData = tempXList;
     } else {
       throw AppException(
           message:
@@ -227,26 +197,7 @@ class MasterDataStructure {
     _tempCurrentFormData[propName] = value;
   }
 
-  void _setTempMasterPropDataCustom({
-    required String propName,
-    required Object? object,
-  }) {
-    MasterProp? masterProp = _allMasterPropMap[propName];
-    if (masterProp == null) {
-      throw AppException(message: 'No MasterProp $propName');
-    }
-    if (masterProp is OptionedMasterProp) {
-      if (masterProp.type != OptionedMasterPropType.custom) {
-        throw AppException(
-            message: 'Invalid MasterProp Data for type ${masterProp.type}');
-      }
-      masterProp._tempXObject = object;
-    } else {
-      throw AppException(
-          message:
-              'Invalid MasterProp $propName, it must be $OptionedMasterProp');
-    }
-  }
+
 
   // ***************************************************************************
   // ***************************************************************************

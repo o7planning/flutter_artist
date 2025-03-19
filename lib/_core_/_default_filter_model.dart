@@ -48,7 +48,7 @@ class _DefaultFilterModel
   @override
   MasterPropValueWrap? filterInputToOptionedMasterPropValue({
     required EmptyFilterInput filterInput,
-    required XList materPropData,
+    required XOptionedData materPropData,
     required String propName,
   }) {
     return null;
@@ -109,7 +109,7 @@ class StringIdFilterModel
   @override
   MasterPropValueWrap? filterInputToOptionedMasterPropValue({
     required StringIdFilterInput filterInput,
-    required XList materPropData,
+    required XOptionedData materPropData,
     required String propName,
   }) {
     return null;
@@ -170,7 +170,7 @@ class StringValueFilterModel
   @override
   MasterPropValueWrap? filterInputToOptionedMasterPropValue({
     required StringValueFilterInput filterInput,
-    required XList materPropData,
+    required XOptionedData materPropData,
     required String propName,
   }) {
     return null;
@@ -231,7 +231,7 @@ class SearchTextFilterModel
   @override
   MasterPropValueWrap? filterInputToOptionedMasterPropValue({
     required SearchTextFilterInput filterInput,
-    required XList materPropData,
+    required XOptionedData materPropData,
     required String propName,
   }) {
     return null;
@@ -292,7 +292,7 @@ class IntIdFilterModel
   @override
   MasterPropValueWrap? filterInputToOptionedMasterPropValue({
     required IntIdFilterInput filterInput,
-    required XList materPropData,
+    required XOptionedData materPropData,
     required String propName,
   }) {
     return null;

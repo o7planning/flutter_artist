@@ -107,34 +107,21 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  XList? getMasterPropDataXList(String propName) {
+  // TODO: Rename
+  XOptionedData? getMasterPropDataXList(String propName) {
     return _masterDataStructure._getMasterDataXList(propName);
   }
 
-  List<DATA> getMasterPropDataList<DATA>(String propName) {
-    return (_masterDataStructure._getMasterDataXList(propName)?.items
-            as List<DATA>?) ??
-        <DATA>[];
-  }
+  // dynamic getMasterPropDataList<DATA>(String propName) {
+  //   return (_masterDataStructure._getMasterDataXList(propName)?.items
+  //           as List<DATA>?) ??
+  //       <DATA>[];
+  // }
 
-  // ***************************************************************************
-  // ***************************************************************************
-
-  DATA? getMasterPropDataCustom<DATA>(String propName) {
-    return _masterDataStructure._getMasterPropDataCustom(propName) as DATA?;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void setMasterPropDataCustom({
-    required String propName,
-    required Object? object,
-  }) {
-    _masterDataStructure._setTempMasterPropDataCustom(
-      propName: propName,
-      object: object,
-    );
+  // TODO: Rename
+  dynamic getMasterPropDataList(String propName) {
+    XOptionedData? xOptionedData = getMasterPropDataXList(propName);
+    return xOptionedData?.getOptionedData();
   }
 
   // ***************************************************************************
@@ -160,16 +147,20 @@ abstract class FilterModel<
       throw "Invalid Call";
     }
     print("#~~~~~~~~~~~> _startNewFilterTransaction");
+    print(
+        "@~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1 - ${_formKey.currentState?.instantValue}");
     if (!_initiated && _formKey.currentState != null) {
       _initiated = true;
       data._initialFilterData(_formKey.currentState!.instantValue);
     }
+    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~> 2 - $formViewInstantValue");
     try {
       _masterDataStructure._resetTemporaryForNewTransaction(
         currentFormData: filterInput != null
             ? {} // To Clear All.
             : formViewInstantValue ?? data._currentFormData,
       );
+      print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3");
       _masterDataStructure._printTemporaryInfo();
       //
       for (OptionedMasterProp masterProp
@@ -183,6 +174,8 @@ abstract class FilterModel<
           optionedMasterProp: masterProp,
         );
       }
+      print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~> 4");
+      _masterDataStructure._printTemporaryInfo();
       if (filterInput != null) {
         for (CommonMasterProp commonMasterProp
             in _masterDataStructure._commonMasterProps) {
@@ -287,132 +280,95 @@ abstract class FilterModel<
   }) async {
     final String propName = optionedMasterProp.propName;
 
-    switch (optionedMasterProp.type) {
-      case OptionedMasterPropType.listable:
-        // Get current MasterProp data:
-        XList? tempXList =
-            _masterDataStructure._getTempMasterDataXList(propName);
-        //
-        // Load OptionedMasterProp data from Rest API.
-        // May throw ApiError.
-        //
-        tempXList ??= await prepareMasterPropDataForListType(
+    // Get current MasterProp data:
+    XOptionedData? tempXList =
+        _masterDataStructure._getTempMasterDataXList(propName);
+    //
+    // Load OptionedMasterProp data from Rest API.
+    // May throw ApiError.
+    //
+    tempXList ??= await prepareMasterPropDataForListType(
+      filterInput: filterInput,
+      parentMasterPropValue: parentMasterPropValue,
+      propName: propName,
+    );
+    //
+    // IMPORTANT: Do not use empty list here
+    // to avoid cast Error (List<dynamic> to List<ITEM>)
+    //
+    List? currentSelectedItems; // will be null or not empty.
+    // Candidate Selected Items:
+    List? candidateSelectedItems;
+    if (tempXList != null) {
+      MasterPropValueWrap? inputValueWrap;
+      if (filterInput != null) {
+        inputValueWrap = _filterInputToOptionedMasterPropValue(
           filterInput: filterInput,
-          parentMasterPropValue: parentMasterPropValue,
+          materPropData: tempXList,
           propName: propName,
         );
-        //
-        // IMPORTANT: Do not use empty list here
-        // to avoid cast Error (List<dynamic> to List<ITEM>)
-        //
-        List? currentSelectedItems; // will be null or not empty.
-        // Candidate Selected Items:
-        List? candidateSelectedItems;
-        if (tempXList != null) {
-          MasterPropValueWrap? inputValueWrap;
-          if (filterInput != null) {
-            inputValueWrap = _filterInputToOptionedMasterPropValue(
-              filterInput: filterInput,
-              materPropData: tempXList,
-              propName: propName,
-            );
-          }
-          //
-          // Current selected value:
-          // It can be a single value or a List.
-          //
-          final dynamic tempCurrentValue =
-              _masterDataStructure._getTempCurrentPropValue(
-            propName: propName,
-          );
-          //
-          if (tempCurrentValue != null) {
-            if (tempCurrentValue is List) {
-              currentSelectedItems =
-                  tempCurrentValue.isEmpty ? null : tempCurrentValue;
-            } else {
-              currentSelectedItems = [tempCurrentValue];
-            }
-          }
-          if (currentSelectedItems != null) {
-            currentSelectedItems = tempXList.findItemsInListByDynamics(
-              dynamicValues: currentSelectedItems,
-            );
-          }
-          // Candidate Selected Items:
-          candidateSelectedItems = inputValueWrap?.value;
-
-          if (candidateSelectedItems == null ||
-              candidateSelectedItems.isEmpty) {
-            candidateSelectedItems = currentSelectedItems;
-          }
+      }
+      //
+      // Current selected value:
+      // It can be a single value or a List.
+      //
+      final dynamic tempCurrentValue =
+          _masterDataStructure._getTempCurrentPropValue(
+        propName: propName,
+      );
+      //
+      if (tempCurrentValue != null) {
+        if (tempCurrentValue is List) {
+          currentSelectedItems =
+              tempCurrentValue.isEmpty ? null : tempCurrentValue;
         } else {
-          currentSelectedItems = null;
-          candidateSelectedItems = null;
+          currentSelectedItems = [tempCurrentValue];
         }
-        //
-        _masterDataStructure._setTempMasterPropDataXList(
-          propName: propName,
-          tempXList: tempXList,
+      }
+      if (currentSelectedItems != null) {
+        currentSelectedItems = tempXList.findItemsInListByDynamics(
+          dynamicValues: currentSelectedItems,
         );
-        //
-        // TODO: Double check this code:
-        //
-        if (candidateSelectedItems != null &&
-            candidateSelectedItems.isNotEmpty) {
-          try {
-            // IMPORTANT:
-            //  - Update from ROOTs to LEAVES
-            //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
-            // Try MULTI SELECTED ITEMS:
-            _masterDataStructure
-                ._updateTempData({propName: candidateSelectedItems});
-          } catch (e) {
-            // IMPORTANT:
-            //  - Update from ROOTs to LEAVES
-            //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
-            Object? candidateSelectedItem = candidateSelectedItems.first;
-            _masterDataStructure
-                ._updateTempData({propName: candidateSelectedItem});
-          }
-        } else {
-          // IMPORTANT:
-          //  - Update from ROOTs to LEAVES
-          //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
-          _masterDataStructure._updateTempData({propName: null});
-        }
-      case OptionedMasterPropType.custom:
-        Object? dataObject = this.getMasterPropDataCustom(propName);
-        if (dataObject == null) {
-          dataObject = await prepareMasterPropDataForCustomType(
-            filterInput: filterInput,
-            parentMasterPropValue: parentMasterPropValue,
-            propName: propName,
-          );
-          this.setMasterPropDataCustom(
-            propName: propName,
-            object: dataObject,
-          );
-          // Current value:
-          final dynamic currentValue = this.data.getProperty(propName);
+      }
+      // Candidate Selected Items:
+      candidateSelectedItems = inputValueWrap?.value;
 
-          // // Candidate Selected Items:
-          // List<dynamic>? candidateSelectedItems = xList?.candidateSelectedItems;
-          //
-          // //
-          // // TODO: Double check this code:
-          // //
-          // if (candidateSelectedItems != null &&
-          //     candidateSelectedItems.isNotEmpty) {
-          //   try {
-          //     this.data._updateFilterData({propName: candidateSelectedItems});
-          //   } catch (e) {
-          //     Object? candidateSelectedItem = candidateSelectedItems.first;
-          //     this.data._updateFilterData({propName: candidateSelectedItem});
-          //   }
-          // }
-        }
-    } // End switch
+      if (candidateSelectedItems == null || candidateSelectedItems.isEmpty) {
+        candidateSelectedItems = currentSelectedItems;
+      }
+    } else {
+      currentSelectedItems = null;
+      candidateSelectedItems = null;
+    }
+    //
+    _masterDataStructure._setTempMasterPropDataXList(
+      propName: propName,
+      tempXList: tempXList,
+    );
+    //
+    // TODO: Double check this code:
+    //
+    if (candidateSelectedItems != null && candidateSelectedItems.isNotEmpty) {
+      try {
+        // IMPORTANT:
+        //  - Update from ROOTs to LEAVES
+        //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
+        // Try MULTI SELECTED ITEMS:
+        _masterDataStructure
+            ._updateTempData({propName: candidateSelectedItems});
+      } catch (e) {
+        // IMPORTANT:
+        //  - Update from ROOTs to LEAVES
+        //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
+        Object? candidateSelectedItem = candidateSelectedItems.first;
+        _masterDataStructure._updateTempData({propName: candidateSelectedItem});
+      }
+    } else {
+      // IMPORTANT:
+      //  - Update from ROOTs to LEAVES
+      //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
+      _masterDataStructure._updateTempData({propName: null});
+    }
 
     //
     Object? tempSelectedMasterPropValue =
@@ -487,13 +443,13 @@ abstract class FilterModel<
   ///
   MasterPropValueWrap? filterInputToOptionedMasterPropValue({
     required FILTER_INPUT filterInput,
-    required XList materPropData,
+    required XOptionedData materPropData,
     required String propName,
   });
 
   MasterPropValueWrap? _filterInputToOptionedMasterPropValue({
     required FILTER_INPUT filterInput,
-    required XList materPropData,
+    required XOptionedData materPropData,
     required String propName,
   }) {
     MasterPropValueWrap? wrap = filterInputToOptionedMasterPropValue(
