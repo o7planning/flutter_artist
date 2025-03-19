@@ -20,11 +20,11 @@ class CommonProp extends Prop {
 
   @override
   void _resetForNewTransaction() {
-    // TODO: implement _resetForNewTransaction
+    // Do nothing.
   }
 
   @override
   void _applyTempDataToReal() {
-    // TODO: implement _applyTempDataToReal
+    // Do nothing.
   }
 }
