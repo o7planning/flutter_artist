@@ -184,9 +184,9 @@ abstract class FilterModel<
         //
         // May throw ApiError.
         //
-        await _loadOptionedMasterDataCascade(
+        await _loadOptPropDataCascade(
           filterInput: filterInput,
-          parentMasterPropValue: null,
+          parentOptPropValue: null,
           optionedMasterProp: masterProp,
         );
       }
@@ -270,41 +270,32 @@ abstract class FilterModel<
   ///
   /// Abstract method:
   ///
-  Future<XList?> prepareMasterPropDataForListType({
+  Future<XOptionedData?> callApiLoadOptPropData({
     required FILTER_INPUT? filterInput,
-    required Object? parentMasterPropValue,
-    required String propName,
-  });
-
-  ///
-  /// Abstract method:
-  ///
-  Future<Object?> prepareMasterPropDataForCustomType({
-    required FILTER_INPUT? filterInput,
-    required Object? parentMasterPropValue,
+    required Object? parentOptPropValue,
     required String propName,
   });
 
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> _loadOptionedMasterDataCascade({
+  Future<void> _loadOptPropDataCascade({
     required FILTER_INPUT? filterInput,
-    required Object? parentMasterPropValue,
+    required Object? parentOptPropValue,
     required OptProp optionedMasterProp,
   }) async {
     final String propName = optionedMasterProp.propName;
 
     // Get current MasterProp data:
-    XOptionedData? tempXList =
+    XOptionedData? optPropData =
         _masterDataStructure._getTempOptPropData(propName);
     //
-    // Load OptionedMasterProp data from Rest API.
+    // Load OptProp data from Rest API.
     // May throw ApiError.
     //
-    tempXList ??= await prepareMasterPropDataForListType(
+    optPropData ??= await callApiLoadOptPropData(
       filterInput: filterInput,
-      parentMasterPropValue: parentMasterPropValue,
+      parentOptPropValue: parentOptPropValue,
       propName: propName,
     );
     //
@@ -314,12 +305,12 @@ abstract class FilterModel<
     List? currentSelectedItems; // will be null or not empty.
     // Candidate Selected Items:
     List? candidateSelectedItems;
-    if (tempXList != null) {
+    if (optPropData != null) {
       PropValue? inputValueWrap;
       if (filterInput != null) {
         inputValueWrap = _filterInputToOptPropValue(
           filterInput: filterInput,
-          optPropData: tempXList,
+          optPropData: optPropData,
           propName: propName,
         );
       }
@@ -341,7 +332,7 @@ abstract class FilterModel<
         }
       }
       if (currentSelectedItems != null) {
-        currentSelectedItems = tempXList.findItemsInListByDynamics(
+        currentSelectedItems = optPropData.findItemsInListByDynamics(
           dynamicValues: currentSelectedItems,
         );
       }
@@ -358,7 +349,7 @@ abstract class FilterModel<
     //
     _masterDataStructure._setTempOptPropData(
       propName: propName,
-      tempXList: tempXList,
+      tempXList: optPropData,
     );
     //
     // TODO: Double check this code:
@@ -386,13 +377,15 @@ abstract class FilterModel<
     }
 
     //
-    Object? tempSelectedMasterPropValue =
-        this._masterDataStructure._getTempCurrentPropValue(propName: propName);
-    if (tempSelectedMasterPropValue != null) {
+    Object? tempSelectedPropValue =
+        this._masterDataStructure._getTempCurrentPropValue(
+              propName: propName,
+            );
+    if (tempSelectedPropValue != null) {
       for (OptProp child in optionedMasterProp.children) {
-        await _loadOptionedMasterDataCascade(
+        await _loadOptPropDataCascade(
           filterInput: filterInput,
-          parentMasterPropValue: tempSelectedMasterPropValue,
+          parentOptPropValue: tempSelectedPropValue,
           optionedMasterProp: child,
         );
       }
@@ -405,10 +398,10 @@ abstract class FilterModel<
   // ***************************************************************************
 
   ///
-  /// This method is called after [prepareMasterPropDataForListType] and [prepareMasterPropDataForCustomType].
+  /// This method is called after [callApiLoadOptPropData].
   ///
-  /// Use the data obtained from the [prepareMasterPropDataForListType]
-  /// and [prepareMasterPropDataForCustomType] methods to specify default search criteria.
+  /// Use the data obtained from the [callApiLoadOptPropData]
+  /// method to specify default search criteria.
   ///
   /// For example, after getting the list of companies.
   /// Use a certain company in the list as the default criteria for the filter.
@@ -517,7 +510,7 @@ abstract class FilterModel<
 
   ///
   /// This method is called immediately after
-  /// calling [prepareMasterPropDataForListType] and [prepareMasterPropDataForCustomType]
+  /// calling [callApiLoadOptPropData]
   /// methods if there are no errors.
   ///
   FILTER_CRITERIA createFilterCriteria({

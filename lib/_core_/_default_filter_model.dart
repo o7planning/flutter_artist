@@ -28,18 +28,9 @@ class _DefaultFilterModel
   }
 
   @override
-  Future<XList?> prepareMasterPropDataForListType({
+  Future<XList?> callApiLoadOptPropData({
     required EmptyFilterInput? filterInput,
-    required Object? parentMasterPropValue,
-    required String propName,
-  }) async {
-    return null;
-  }
-
-  @override
-  Future<Object?> prepareMasterPropDataForCustomType({
-    required EmptyFilterInput? filterInput,
-    required Object? parentMasterPropValue,
+    required Object? parentOptPropValue,
     required String propName,
   }) async {
     return null;
@@ -89,18 +80,9 @@ class StringIdFilterModel
   }
 
   @override
-  Future<XList?> prepareMasterPropDataForListType({
+  Future<XList?> callApiLoadOptPropData({
     required StringIdFilterInput? filterInput,
-    required Object? parentMasterPropValue,
-    required String propName,
-  }) async {
-    return null;
-  }
-
-  @override
-  Future<Object?> prepareMasterPropDataForCustomType({
-    required StringIdFilterInput? filterInput,
-    required Object? parentMasterPropValue,
+    required Object? parentOptPropValue,
     required String propName,
   }) async {
     return null;
@@ -150,18 +132,9 @@ class StringValueFilterModel
   }
 
   @override
-  Future<XList?> prepareMasterPropDataForListType({
+  Future<XList?> callApiLoadOptPropData({
     required StringValueFilterInput? filterInput,
-    required Object? parentMasterPropValue,
-    required String propName,
-  }) async {
-    return null;
-  }
-
-  @override
-  Future<Object?> prepareMasterPropDataForCustomType({
-    required StringValueFilterInput? filterInput,
-    required Object? parentMasterPropValue,
+    required Object? parentOptPropValue,
     required String propName,
   }) async {
     return null;
@@ -211,18 +184,9 @@ class SearchTextFilterModel
   }
 
   @override
-  Future<XList?> prepareMasterPropDataForListType({
+  Future<XList?> callApiLoadOptPropData({
     required SearchTextFilterInput? filterInput,
-    required Object? parentMasterPropValue,
-    required String propName,
-  }) async {
-    return null;
-  }
-
-  @override
-  Future<Object?> prepareMasterPropDataForCustomType({
-    required SearchTextFilterInput? filterInput,
-    required Object? parentMasterPropValue,
+    required Object? parentOptPropValue,
     required String propName,
   }) async {
     return null;
@@ -272,18 +236,9 @@ class IntIdFilterModel
   }
 
   @override
-  Future<XList?> prepareMasterPropDataForListType({
+  Future<XList?> callApiLoadOptPropData({
     required IntIdFilterInput? filterInput,
-    required Object? parentMasterPropValue,
-    required String propName,
-  }) async {
-    return null;
-  }
-
-  @override
-  Future<Object?> prepareMasterPropDataForCustomType({
-    required IntIdFilterInput? filterInput,
-    required Object? parentMasterPropValue,
+    required Object? parentOptPropValue,
     required String propName,
   }) async {
     return null;
