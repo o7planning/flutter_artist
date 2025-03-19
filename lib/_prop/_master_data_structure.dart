@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-class MasterDataStructure {
+class PropsStructure {
   final Map<String, Prop> _allPropMap = {};
   final List<OptProp> _rootOptProps;
   final List<CommonProp> _commonProps = [];
@@ -8,7 +8,7 @@ class MasterDataStructure {
   //
   final Map<String, dynamic> _tempCurrentFormData = {};
 
-  MasterDataStructure({
+  PropsStructure({
     required List<String> allPropNames,
     required List<OptProp> optProps,
   }) : _rootOptProps = [...optProps] {
@@ -17,10 +17,10 @@ class MasterDataStructure {
     for (OptProp rootOptProp in optProps) {
       __standardizeCascade(rootOptProp, null);
     }
-    for (Prop masterProp in _allPropMap.values) {
-      commonPropNames.remove(masterProp.propName);
-      if (masterProp is OptProp) {
-        masterProp._checkCycleError();
+    for (Prop prop in _allPropMap.values) {
+      commonPropNames.remove(prop.propName);
+      if (prop is OptProp) {
+        prop._checkCycleError();
       }
     }
     for (String propName in commonPropNames) {
@@ -53,8 +53,8 @@ class MasterDataStructure {
       ..updateAll((k, v) => null)
       ..addAll(currentFormData ?? {});
     //
-    for (Prop masterProp in _allPropMap.values) {
-      masterProp._resetForNewTransaction();
+    for (Prop prop in _allPropMap.values) {
+      prop._resetForNewTransaction();
     }
   }
 
@@ -62,8 +62,8 @@ class MasterDataStructure {
   // ***************************************************************************
 
   void _applyAllTempDataToReal() {
-    for (Prop masterProp in _allPropMap.values) {
-      masterProp._applyTempDataToReal();
+    for (Prop prop in _allPropMap.values) {
+      prop._applyTempDataToReal();
     }
   }
 
@@ -78,34 +78,34 @@ class MasterDataStructure {
   // ***************************************************************************
 
   XOptionedData? _getTempOptPropData(String propName) {
-    Prop? masterProp = _allPropMap[propName];
-    if (masterProp == null) {
+    Prop? prop = _allPropMap[propName];
+    if (prop == null) {
       return null;
     }
-    if (masterProp is OptProp) {
-      return masterProp._tempXOptionedData;
+    if (prop is OptProp) {
+      return prop._tempXOptionedData;
     }
     return null;
   }
 
   XOptionedData? _getOptPropData(String propName) {
-    Prop? masterProp = _allPropMap[propName];
-    if (masterProp == null) {
+    Prop? prop = _allPropMap[propName];
+    if (prop == null) {
       return null;
     }
-    if (masterProp is OptProp) {
-      return masterProp._xOptionedData;
+    if (prop is OptProp) {
+      return prop._xOptionedData;
     }
     return null;
   }
 
   OptPropType? _getOptPropType(String propName) {
-    Prop? masterProp = _allPropMap[propName];
-    if (masterProp == null) {
+    Prop? prop = _allPropMap[propName];
+    if (prop == null) {
       return null;
     }
-    if (masterProp is OptProp) {
-      return masterProp.type;
+    if (prop is OptProp) {
+      return prop.type;
     }
     return null;
   }
@@ -121,16 +121,16 @@ class MasterDataStructure {
     // (***):
     // And Update children-OptProp data to null if parent-Value is null or not selected.
     //
-    for (Prop masterProp in _allPropMap.values) {
-      masterProp.candidateUpdateValue = null;
-      masterProp._valueUpdated = false;
-      masterProp._dirty = false;
+    for (Prop prop in _allPropMap.values) {
+      prop.candidateUpdateValue = null;
+      prop._valueUpdated = false;
+      prop._dirty = false;
     }
     //
     for (String propName in candidateUpdateValues.keys) {
-      Prop? masterProp = _allPropMap[propName];
-      if (masterProp != null) {
-        masterProp._dirty = true;
+      Prop? prop = _allPropMap[propName];
+      if (prop != null) {
+        prop._dirty = true;
       } else {
         _createAndAddNewCommomProp(
           propName: propName,
@@ -184,12 +184,12 @@ class MasterDataStructure {
     required String propName,
     required XOptionedData? tempXList,
   }) {
-    Prop? masterProp = _allPropMap[propName];
-    if (masterProp == null) {
+    Prop? prop = _allPropMap[propName];
+    if (prop == null) {
       throw AppException(message: 'No Prop $propName');
     }
-    if (masterProp is OptProp) {
-      masterProp._tempXOptionedData = tempXList;
+    if (prop is OptProp) {
+      prop._tempXOptionedData = tempXList;
     } else {
       throw AppException(
           message: 'Invalid Prop $propName, it must be $OptProp');

@@ -11,7 +11,7 @@ class _DefaultFilterModel
   }
 
   @override
-  MasterDataStructure? registerMasterDataStructure() {
+  PropsStructure? registerPropsStructure() {
     return null;
   }
 
@@ -63,7 +63,7 @@ class StringIdFilterModel
   StringIdFilterModel({required this.idValue});
 
   @override
-  MasterDataStructure? registerMasterDataStructure() {
+  PropsStructure? registerPropsStructure() {
     return null;
   }
 
@@ -115,7 +115,7 @@ class StringValueFilterModel
   StringValueFilterModel({required this.stringValue});
 
   @override
-  MasterDataStructure? registerMasterDataStructure() {
+  PropsStructure? registerPropsStructure() {
     return null;
   }
 
@@ -167,7 +167,7 @@ class SearchTextFilterModel
   SearchTextFilterModel({required this.searchText});
 
   @override
-  MasterDataStructure? registerMasterDataStructure() {
+  PropsStructure? registerPropsStructure() {
     return null;
   }
 
@@ -219,7 +219,7 @@ class IntIdFilterModel
   IntIdFilterModel({required this.idValue});
 
   @override
-  MasterDataStructure? registerMasterDataStructure() {
+  PropsStructure? registerPropsStructure() {
     return null;
   }
 
