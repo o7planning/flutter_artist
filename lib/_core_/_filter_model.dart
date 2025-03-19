@@ -107,19 +107,17 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  // TODO: Rename
-  XOptionedData? getOptPropData(String propName) {
+  XOptionedData? getOptPropXData(String propName) {
     return _masterDataStructure._getOptPropData(propName);
   }
 
-  // TODO: Rename
-  dynamic getMasterPropDataList(String propName) {
-    XOptionedData? optPropData = getOptPropData(propName);
-    dynamic data = optPropData?.getOptionedData();
+  dynamic getOptPropData(String propName) {
+    XOptionedData? optPropData = getOptPropXData(propName);
+    dynamic data = optPropData?.data;
     if (data != null) {
       return data;
     } else {
-      OptPropType? type = getOptionedPropType(propName);
+      OptPropType? type = getOptPropType(propName);
       switch (type) {
         case null:
           return data;
@@ -131,7 +129,7 @@ abstract class FilterModel<
     }
   }
 
-  OptPropType? getOptionedPropType(String propName) {
+  OptPropType? getOptPropType(String propName) {
     return _masterDataStructure._getOptPropType(propName);
   }
 
