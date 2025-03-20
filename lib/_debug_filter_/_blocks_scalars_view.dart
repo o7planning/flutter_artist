@@ -1,10 +1,10 @@
 part of '../flutter_artist.dart';
 
 class _BlocksScalarsView extends StatelessWidget {
-  final DataFilter dataFilter;
+  final FilterModel filterModel;
 
   const _BlocksScalarsView({
-    required this.dataFilter,
+    required this.filterModel,
   });
 
   Widget _buildItem({
@@ -44,18 +44,18 @@ class _BlocksScalarsView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ...dataFilter.blocks.map(
+        ...filterModel.blocks.map(
           (block) => _buildItem(
             iconData: _blockIconData,
             blockOrScalarClassName: getClassName(block),
-            dataState: block.data.dataState,
+            dataState: block.data.queryDataState,
           ),
         ),
-        ...dataFilter.scalars.map(
+        ...filterModel.scalars.map(
           (scalar) => _buildItem(
             iconData: _scalarIconData,
             blockOrScalarClassName: getClassName(scalar),
-            dataState: scalar.data.dataState,
+            dataState: scalar.data.queryDataState,
           ),
         ),
       ],

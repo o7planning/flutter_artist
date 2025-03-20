@@ -20,11 +20,11 @@ class _BlockOrScalar extends Equatable {
     }
   }
 
-  DataFilter? get dataFilter {
+  FilterModel? get filterModel {
     if (block != null) {
-      return block!.dataFilter;
+      return block!.filterModel;
     } else {
-      return scalar!.dataFilter;
+      return scalar!.filterModel;
     }
   }
 
@@ -74,9 +74,9 @@ class _BlockOrScalar extends Equatable {
 
   String get filterClassParametersDefinition {
     if (block != null) {
-      return block!._registeredOrDefaultDataFilter._classParametersDefinition;
+      return block!._registeredOrDefaultFilterModel._classParametersDefinition;
     } else {
-      return scalar!._registeredOrDefaultDataFilter._classParametersDefinition;
+      return scalar!._registeredOrDefaultFilterModel._classParametersDefinition;
     }
   }
 
@@ -98,9 +98,9 @@ class _BlockOrScalar extends Equatable {
 
   DataState get dataState {
     if (block != null) {
-      return block!.dataState;
+      return block!.queryDataState;
     } else {
-      return scalar!.dataState;
+      return scalar!.queryDataState;
     }
   }
 

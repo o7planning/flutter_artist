@@ -53,9 +53,9 @@ abstract class Scalar<
   }
 
   ///
-  /// DataFilter Name registered in [Shelf.registerStructure()] method.
+  /// FilterModel Name registered in [Shelf.registerStructure()] method.
   ///
-  final String? registerDataFilterName;
+  final String? registerFilterModelName;
 
   final String? description;
 
@@ -69,41 +69,276 @@ abstract class Scalar<
 
   ///
   /// This field is not null.
-  /// If this scalar does not declare a DataFilter, it will have the default DataFilter.
+  /// If this scalar does not declare a FilterModel, it will have the default FilterModel.
   ///
-  late final DataFilter<FILTER_INPUT, FILTER_CRITERIA>
-      _registeredOrDefaultDataFilter;
+  late final FilterModel<FILTER_INPUT, FILTER_CRITERIA>
+      _registeredOrDefaultFilterModel;
 
   ///
-  /// Returns a DataFilter declared in the [Shelf.registerStructure()] method.
+  /// Returns a FilterModel declared in the [Shelf.registerStructure()] method.
   /// The return value may be null.
   ///
-  DataFilter<FILTER_INPUT, FILTER_CRITERIA>? get dataFilter {
-    if (_registeredOrDefaultDataFilter is _DefaultDataFilter) {
+  FilterModel<FILTER_INPUT, FILTER_CRITERIA>? get filterModel {
+    if (_registeredOrDefaultFilterModel is _DefaultFilterModel) {
       return null;
     } else {
-      return _registeredOrDefaultDataFilter;
+      return _registeredOrDefaultFilterModel;
     }
   }
 
-  late final ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA> data =
-      ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
+  late final data = ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
 
-  DataState get dataState => data._dataState;
+  DataState get queryDataState => data._queryDataState;
 
   final ScalarHiddenBehavior hiddenBehavior;
 
   final Map<_RefreshableWidgetState, bool> _scalarFragmentWidgetStates = {};
   final Map<_RefreshableWidgetState, bool> _scalarControlWidgetStates = {};
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   Scalar({
     required this.name,
     required this.description,
-    required String? dataFilterName,
+    required String? filterModelName,
     required this.hiddenBehavior,
     required List<Type> listenTypes,
-  })  : registerDataFilterName = dataFilterName,
+  })  : registerFilterModelName = filterModelName,
         __listenItemTypes = listenTypes;
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<ScalarQueryResult> _unitQuery({required _XScalar thisXScalar}) async {
+    __assertThisXScalar(thisXScalar);
+    //
+    bool hasActiveUI = this.hasActiveUIComponent();
+    bool forceQuery = thisXScalar.needQuery;
+    if (!forceQuery) {
+      if (this.queryDataState != DataState.ready && hasActiveUI) {
+        forceQuery = true;
+      }
+    }
+    //
+
+    print(
+        ">> ${getClassName(this)}._unitQuery - queryState: $queryDataState, forceQuery: ${thisXScalar.needQuery}");
+    //
+    if (!forceQuery) {
+      return thisXScalar.queryResult;
+    }
+    //
+    // this.queryDataState != DataState.ready || thisXScalar.forceQuery
+    //
+    DataState newQueryDataState = this.queryDataState;
+    //
+    FlutterArtist.codeFlowLogger._addMethodCall(
+      isLibCode: false,
+      navigate: null,
+      ownerClassInstance: this,
+      methodName: "callApiQuery",
+      parameters: {},
+    );
+    //
+    FILTER_CRITERIA? filterCriteria;
+    try {
+      final _XFilterModel xFilterModel = thisXScalar.xFilterModel;
+      final FilterModel filterModel = xFilterModel.filterModel;
+      //
+      if (!xFilterModel.queried) {
+        FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
+        //
+        filterCriteria = await filterModel._prepareMasterDataAndFilterData(
+          filterInput: filterInput,
+        ) as FILTER_CRITERIA?;
+        //
+        xFilterModel.queried = true;
+      } else {
+        filterCriteria = filterModel._filterCriteria! as FILTER_CRITERIA;
+      }
+    } catch (e, stackTrace) {
+      /* Never Error */
+    }
+    //
+    // Has Error in FilterModel.
+    //
+    if (filterCriteria == null) {
+      // Set Block to error cascade.
+      __clearWithDataState(
+        thisXScalar: thisXScalar,
+        queryDataState: DataState.error,
+      );
+      thisXScalar.queryResult._filterError = true;
+      return thisXScalar.queryResult;
+    }
+    //
+    // Ready FilterCriteria:
+    //
+    bool xCriteriaChanged = this.data._isXCriteriaChanged(
+          newFilterCriteria: filterCriteria,
+        );
+    //
+    bool isQueryError = false;
+    VALUE? value;
+    try {
+      __refreshQueryingState(isQuerying: true);
+      //
+      ApiResult<VALUE> result = await callApiQuery(
+        filterCriteria: filterCriteria,
+      );
+      //
+      if (result.isError()) {
+        _handleRestError(
+          shelf: shelf,
+          methodName: "callApiQuery",
+          message: result.errorMessage!,
+          errorDetails: result.errorDetails,
+          showSnackBar: true,
+        );
+        isQueryError = true;
+      } else {
+        value = result.data;
+      }
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: 'callApiQuery',
+        error: "Error callApiQuery: $e",
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      isQueryError = true;
+    } finally {
+      __refreshQueryingState(isQuerying: false);
+    }
+    //
+    if (isQueryError) {
+      thisXScalar.queryResult._apiError = true;
+      newQueryDataState = DataState.error;
+    } else {
+      newQueryDataState = DataState.ready;
+    }
+    //
+    __setQueryDataWithState(
+      thisXScalar: thisXScalar,
+      filterCriteria: filterCriteria,
+      dataState: newQueryDataState,
+      value: value,
+    );
+    //
+    return thisXScalar.queryResult;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<bool> _unitQuickAction<DATA extends Object>({
+    required _XScalar thisXScalar,
+    required QuickAction<DATA> action,
+    required AfterScalarQuickAction afterQuickAction,
+  }) async {
+    __assertThisXScalar(thisXScalar);
+    //
+    ApiResult<DATA>? result;
+    try {
+      FlutterArtist.codeFlowLogger._addMethodCall(
+        ownerClassInstance: action,
+        methodName: "callApi",
+        parameters: null,
+        navigate: null,
+        isLibCode: false,
+      );
+      //
+      result = await action.callApi();
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: '${getClassName(action)}.callApi',
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      return false;
+    }
+    //
+    bool success = true;
+    if (result != null && result.errorMessage != null) {
+      success = false;
+      //
+      _handleRestError(
+        shelf: shelf,
+        methodName: "${getClassName(action)}.callApi",
+        message: result.errorMessage!,
+        errorDetails: result.errorDetails,
+        showSnackBar: true,
+      );
+    }
+    //
+    try {
+      DATA? apiData = result?.data;
+      await action.doAfterCallApi(success: success, apiData: apiData);
+      //
+      if (success) {
+        FlutterArtist.storage._fireEventToAffectedItemTypes(
+          affectedItemTypes: action.affectedItemTypes,
+        );
+      }
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: '${getClassName(action)}.callApi',
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      return false;
+    }
+    //
+    switch (afterQuickAction) {
+      case AfterScalarQuickAction.none:
+        break;
+      case AfterScalarQuickAction.query:
+        var taskUnit = _ScalarQueryTaskUnit(
+          xScalar: thisXScalar,
+        );
+        _taskUnitQueue.addTaskUnit(taskUnit);
+    }
+    return true;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __setQueryDataWithState({
+    required _XScalar thisXScalar,
+    required FILTER_CRITERIA? filterCriteria,
+    required DataState dataState,
+    required VALUE? value,
+  }) {
+    __assertThisXScalar(thisXScalar);
+    //
+    this.data._updateFrom(
+          filterCriteria: filterCriteria,
+          dataState: dataState,
+          value: value,
+        );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __clearWithDataState({
+    required _XScalar thisXScalar,
+    required DataState queryDataState,
+  }) {
+    __assertThisXScalar(thisXScalar);
+    //
+    this.data._clearWithDataState(queryDataState: queryDataState);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   String getValueTypeAsString() {
     return VALUE.toString();
@@ -118,32 +353,19 @@ abstract class Scalar<
   }
 
   // ***************************************************************************
-  // ****** BACKUP & RESTORE & APPLY *******************************************
-  // ***************************************************************************
-
-  void _backup() {
-    this.data._backup();
-  }
-
-  void _restore() {
-    this.data._restore();
-  }
-
-  void _applyNewState() {
-    this.data._applyNewState();
-  }
-
-  // ***************************************************************************
   // ****** UPDATE UI COMPONENTS ***********************************************
   // ***************************************************************************
 
   void updateAllUIComponents({required bool withoutFilters}) {
     if (!withoutFilters) {
-      dataFilter?.updateAllUIComponents();
+      filterModel?.updateAllUIComponents();
     }
     updateControlWidgets();
     updateFragmentWidgets();
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void updateControlWidgets() {
     for (_RefreshableWidgetState state in _scalarControlWidgetStates.keys) {
@@ -153,6 +375,9 @@ abstract class Scalar<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void updateFragmentWidgets() {
     for (_RefreshableWidgetState state in _scalarFragmentWidgetStates.keys) {
       if (state.mounted) {
@@ -161,15 +386,23 @@ abstract class Scalar<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<ApiResult<VALUE>> callApiQuery({
+    required FILTER_CRITERIA? filterCriteria,
+  });
+
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
+  @RootMethod()
   Future<bool> executeQuickAction<DATA extends Object>({
     FILTER_INPUT? filterInput,
     required ActionConfirmationType actionConfirmationType,
     required QuickAction<DATA> action,
-    required AfterScalarQuickAction? afterQuickAction,
+    required AfterScalarQuickAction afterQuickAction,
     required Function(BuildContext context)? navigate,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -199,67 +432,8 @@ abstract class Scalar<
       return false;
     }
     //
-    try {
-      bool success = await _executeQuickActionWithOverlayAndRestorable(
-        filterInput: filterInput,
-        action: action,
-        afterQuickAction: afterQuickAction,
-        navigate: navigate,
-      );
-      return success;
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "executeQuickAction",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      //
-      shelf.updateAllUIComponents();
-      return false;
-    }
-  }
-
-  Future<bool>
-      _executeQuickActionWithOverlayAndRestorable<DATA extends Object>({
-    required FILTER_INPUT? filterInput,
-    required QuickAction<DATA> action,
-    required AfterScalarQuickAction? afterQuickAction,
-    required Function(BuildContext context)? navigate,
-  }) async {
-    return await FlutterArtist.executeTask(
-      asyncFunction: () async {
-        bool success = await __executeQuickActionWithRestorable(
-          filterInput: filterInput,
-          action: action,
-          afterQuickAction: afterQuickAction,
-        );
-        if (success) {
-          try {
-            BuildContext context = FlutterArtist.adapter.getCurrentContext();
-            if (navigate != null && context.mounted) {
-              navigate(context);
-            }
-          } catch (e, stackTrace) {
-            print("Error: $e");
-            print(stackTrace);
-          }
-        }
-        return success;
-      },
-    );
-  }
-
-  Future<bool> __executeQuickActionWithRestorable<DATA extends Object>({
-    required FILTER_INPUT? filterInput,
-    required QuickAction<DATA> action,
-    required AfterScalarQuickAction? afterQuickAction,
-  }) async {
     List<_ScalarOpt> forceQueryScalarOpts = [];
     switch (afterQuickAction) {
-      case null:
-        break;
       case AfterScalarQuickAction.none:
         break;
       case AfterScalarQuickAction.query:
@@ -270,144 +444,29 @@ abstract class Scalar<
     //
     _XShelf xShelf = _XShelf(
       shelf: shelf,
-      forceDataFilterOpt: _DataFilterOpt(
-        dataFilter: _registeredOrDefaultDataFilter,
+      forceFilterModelOpt: _FilterModelOpt(
+        filterModel: _registeredOrDefaultFilterModel,
         filterInput: filterInput,
       ),
       forceQueryScalarOpts: forceQueryScalarOpts,
       forceQueryBlockOpts: [],
-      forceQueryBlockFormOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
-    try {
-      shelf._backupAll();
-      //
-      _XScalar thisXScalar = xShelf.findXScalarByName(name)!;
-      //
-      bool success = await __executeQuickAction(
-        thisXScalar: thisXScalar,
-        action: action,
-        afterQuickAction: afterQuickAction,
-      );
-      if (!success) {
-        shelf._restoreAll();
-      } else {
-        shelf._applyNewStateAll();
-      }
-      return success;
-    } catch (e, stackTrace) {
-      shelf._restoreAll();
-      //
-      _handleError(
-        shelf: shelf,
-        methodName: "__executeQuickAction",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      return false;
-    }
-  }
-
-  Future<bool> __executeQuickAction<DATA extends Object>({
-    required _XScalar thisXScalar,
-    required QuickAction<DATA> action,
-    required AfterScalarQuickAction? afterQuickAction,
-  }) async {
-    __assertThisXScalar(thisXScalar);
+    _XScalar thisXScalar = xShelf.findXScalarByName(this.name)!;
     //
-    ApiResult<DATA>? result;
-    bool success = false;
-    try {
-      FlutterArtist.codeFlowLogger._addMethodCall(
-        ownerClassInstance: action,
-        methodName: "callApi",
-        parameters: null,
-        navigate: null,
-        isLibCode: false,
-      );
-      //
-      result = await action.callApi();
-      //
-      if (result != null && result.errorMessage != null) {
-        _handleRestError(
-          shelf: shelf,
-          methodName: "${getClassName(action)}.callApi",
-          message: result.errorMessage!,
-          errorDetails: result.errorDetails,
-          showSnackBar: true,
-        );
-        success = false;
-      } else {
-        success = true;
-      }
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: '${getClassName(action)}.callApi',
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      success = false;
-    }
+    _TaskUnit taskUnit = _ScalarQuickActionTaskUnit(
+      xScalar: thisXScalar,
+      action: action,
+      afterQuickAction: afterQuickAction,
+    );
     //
-    try {
-      DATA? apiData = result?.data;
-      await action.doAfterCallApi(success: success, apiData: apiData);
-      //
-      if (success) {
-        FlutterArtist.storage._fireEventToAffectedItemTypes(
-          affectedItemTypes: action.affectedItemTypes,
-        );
-      }
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: '${getClassName(action)}.callApi',
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      success = false;
-    }
+    _taskUnitQueue.addTaskUnit(taskUnit);
     //
-    if (afterQuickAction != null) {
-      String methodName = "";
-      try {
-        bool success = false;
-        switch (afterQuickAction) {
-          case AfterScalarQuickAction.none:
-            success = true;
-            break;
-          case AfterScalarQuickAction.query:
-            success = true;
-            break;
-        }
-        return success;
-      } catch (e, stackTrace) {
-        _handleError(
-          shelf: shelf,
-          methodName: methodName,
-          error: e,
-          stackTrace: stackTrace,
-          showSnackBar: true,
-        );
-        return false;
-      }
-    }
+    await FlutterArtist.storage._executeTaskUnitQueue();
     return true;
   }
 
-  // ***************************************************************************
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Future<ApiResult<VALUE>> callApiQuery({
-    required FILTER_CRITERIA? filterCriteria,
-  });
-
-  // ***************************************************************************
   // ***************************************************************************
   // ***************************************************************************
 
@@ -415,6 +474,7 @@ abstract class Scalar<
   ///
   ///
   @nonVirtual
+  @RootMethod()
   Future<bool> query({
     FILTER_INPUT? filterInput,
   }) async {
@@ -426,16 +486,25 @@ abstract class Scalar<
       parameters: {"filterInput": filterInput},
     );
     //
-    return await shelf._queryAllWithOverlayAndRestorable(
-      forceDataFilterOpt: _DataFilterOpt(
-        dataFilter: _registeredOrDefaultDataFilter,
+    _XShelf xShelf = await shelf._queryAll(
+      forceFilterModelOpt: _FilterModelOpt(
+        filterModel: _registeredOrDefaultFilterModel,
         filterInput: filterInput,
       ),
-      forceQueryScalarOpts: [_ScalarOpt(scalar: this)],
+      forceQueryScalarOpts: [
+        _ScalarOpt(scalar: this),
+      ],
       forceQueryBlockOpts: [],
-      forceQueryBlockFormOpts: [],
+      forceQueryFormModelOpts: [],
     );
+    //
+    _XScalar xScalar = xShelf.findXScalarByName(this.name)!;
+    ScalarQueryResult result = xScalar.queryResult;
+    return result.success;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void __refreshQueryingState({required bool isQuerying}) {
     try {
@@ -444,67 +513,24 @@ abstract class Scalar<
     } catch (e) {}
   }
 
-  Future<bool> __queryThis({
-    required FILTER_CRITERIA filterCriteria,
-  }) async {
-    ApiResult<VALUE> result;
-    try {
-      FlutterArtist.codeFlowLogger._addMethodCall(
-        isLibCode: false,
-        navigate: null,
-        ownerClassInstance: this,
-        methodName: "callApiQuery",
-        parameters: {},
-      );
-      //
-      __refreshQueryingState(isQuerying: true);
-      //
-      result = await callApiQuery(
-        filterCriteria: filterCriteria,
-      );
-      //
-      __refreshQueryingState(isQuerying: false);
-    } catch (e, stackTrace) {
-      __refreshQueryingState(isQuerying: false);
-      //
-      _handleError(
-        shelf: shelf,
-        methodName: "callApiQuery",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      //
-      return false;
-    }
-    if (result.errorMessage != null) {
-      _handleRestError(
-        shelf: shelf,
-        methodName: "callApiQuery",
-        message: result.errorMessage!,
-        errorDetails: result.errorDetails,
-        showSnackBar: true,
-      );
-      return false;
-    }
-    // TODO: Xu ly cac tinh huong loi???
-    data._updateFrom(
-      filterCriteria: filterCriteria,
-      data: result.data,
-      dataState: DataState.ready,
-    );
-    return true;
-  }
+  // ***************************************************************************
+  // ***************************************************************************
 
   bool hasMountedUIComponent() {
     return _scalarFragmentWidgetStates.isNotEmpty ||
         _scalarControlWidgetStates.isNotEmpty;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool hasActiveUIComponent() {
     return _hasActiveScalarFragmentWidgetState() ||
         _hasActiveControlWidgetState();
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   bool _hasActiveScalarFragmentWidgetState() {
     for (State widgetState in _scalarFragmentWidgetStates.keys) {
@@ -518,6 +544,9 @@ abstract class Scalar<
     return false;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool _hasActiveControlWidgetState() {
     for (State widgetState in _scalarControlWidgetStates.keys) {
       if (widgetState.mounted) {
@@ -529,6 +558,9 @@ abstract class Scalar<
     }
     return false;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _addControlWidgetState({
     required _RefreshableWidgetState widgetState,
@@ -550,6 +582,9 @@ abstract class Scalar<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _removeControlWidgetState({required State widgetState}) {
     bool activeOLD = hasActiveUIComponent();
     _scalarControlWidgetStates.remove(widgetState);
@@ -559,6 +594,9 @@ abstract class Scalar<
       _fireScalarHidden();
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _addScalarFragmentWidgetState({
     required _RefreshableWidgetState widgetState,
@@ -580,6 +618,9 @@ abstract class Scalar<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _removeScalarFragmentWidgetState({required State widgetState}) {
     bool activeOLD = hasActiveUIComponent();
     _scalarFragmentWidgetStates.remove(widgetState);
@@ -589,6 +630,9 @@ abstract class Scalar<
       _fireScalarHidden();
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _fireScalarHidden() {
     FlutterArtist.codeFlowLogger._addEvent(
@@ -607,9 +651,15 @@ abstract class Scalar<
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool isAllowQuery() {
     return true;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   /// Do not override

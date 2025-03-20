@@ -3,13 +3,13 @@ part of '../flutter_artist.dart';
 class _ScalarOrBlockOrFormWrapper {
   Scalar? scalar;
   Block? block;
-  BlockForm? blockForm;
+  FormModel? formModel;
 
   _ScalarOrBlockOrFormWrapper.scalar(Scalar this.scalar);
 
   _ScalarOrBlockOrFormWrapper.block(Block this.block);
 
-  _ScalarOrBlockOrFormWrapper.blockForm(BlockForm this.blockForm);
+  _ScalarOrBlockOrFormWrapper.formModel(FormModel this.formModel);
 
   @override
   String toString() {
@@ -17,8 +17,8 @@ class _ScalarOrBlockOrFormWrapper {
       return getClassName(scalar);
     } else if (block != null) {
       return getClassName(block);
-    } else if (blockForm != null) {
-      return getClassName(blockForm);
+    } else if (formModel != null) {
+      return getClassName(formModel);
     }
     return super.toString();
   }

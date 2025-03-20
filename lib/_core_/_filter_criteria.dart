@@ -91,24 +91,3 @@ class IntIdFilterCriteria extends FilterCriteria {
 }
 
 // -----------------------------------------------------------------------------
-
-//
-// TODO:: Need It??
-//
-class _SearchTextIgnoreCaseFilterCriteria extends FilterCriteria {
-  final String? searchText;
-
-  const _SearchTextIgnoreCaseFilterCriteria({required this.searchText});
-
-  @override
-  List<String> getDebugInfos() {
-    return ["searchText: $searchText"];
-  }
-
-  @override
-  List<Object?> get props => [
-        _trimStringToNullIfEmpty(searchText?.toLowerCase()),
-      ];
-}
-
-// -----------------------------------------------------------------------------

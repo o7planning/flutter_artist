@@ -4,22 +4,22 @@ part of '../flutter_artist.dart';
 // -----------------------------------------------------------------------------
 
 class _FormDataInfoDialog extends StatefulWidget {
-  final BlockForm blockForm;
+  final FormModel formModel;
   final String locationInfo;
 
   const _FormDataInfoDialog({
-    required this.blockForm,
+    required this.formModel,
     required this.locationInfo,
     super.key,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _FormDataInfoDialogState();
+    return __FormDataInfoDialogState();
   }
 }
 
-class _FormDataInfoDialogState extends State<_FormDataInfoDialog> {
+class __FormDataInfoDialogState extends State<_FormDataInfoDialog> {
   bool showFormData = true;
 
   @override
@@ -29,8 +29,8 @@ class _FormDataInfoDialogState extends State<_FormDataInfoDialog> {
     // Set up the AlertDialog
     dialogs.CustomAlertDialog alert = dialogs.CustomAlertDialog(
       titleText: showFormData
-          ? "${getClassName(widget.blockForm)} - Form Data"
-          : "${getClassName(widget.blockForm.block.shelf)} - Structure",
+          ? "${getClassName(widget.formModel)} - Form Data"
+          : "${getClassName(widget.formModel.block.shelf)} - Structure",
       contentPadding: const EdgeInsets.all(5),
       content: _buildMainContent(
         context,
@@ -48,7 +48,7 @@ class _FormDataInfoDialogState extends State<_FormDataInfoDialog> {
       height: height,
       child: showFormData
           ? _FormDataView(
-              blockForm: widget.blockForm,
+              formModel: widget.formModel,
               locationInfo: widget.locationInfo,
               onPressedShelf: () {
                 setState(() {
@@ -57,7 +57,7 @@ class _FormDataInfoDialogState extends State<_FormDataInfoDialog> {
               },
             )
           : _ShelfStructureGraphView(
-              shelf: widget.blockForm.block.shelf,
+              shelf: widget.formModel.block.shelf,
               onPressedBack: () {
                 setState(() {
                   showFormData = true;
@@ -68,16 +68,16 @@ class _FormDataInfoDialogState extends State<_FormDataInfoDialog> {
   }
 }
 
-Future<void> _showFromDataInfoDialog({
+Future<void> _showFormInfoDialog({
   required BuildContext context,
   required String locationInfo,
-  required BlockForm blockForm,
+  required FormModel formModel,
 }) async {
   await showDialog(
     context: context,
     builder: (BuildContext context) {
       return _FormDataInfoDialog(
-        blockForm: blockForm,
+        formModel: formModel,
         locationInfo: locationInfo,
       );
     },

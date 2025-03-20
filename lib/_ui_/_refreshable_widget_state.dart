@@ -2,6 +2,7 @@ part of '../flutter_artist.dart';
 
 abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
     extends State<W> {
+  int _refreshCount = 0;
   ShowMode showMode = ShowMode.production;
 
   late final String keyId;
@@ -14,11 +15,10 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
 
   Widget buildContent(BuildContext context);
 
-  @override
   String get locationInfo => getClassName(widget.ownerClassInstance);
 
   ///
-  /// Class name of Owner (Block, BlockForm, DataFilter).
+  /// Class name of Owner (Block, FormModel, FilterModel).
   ///
   String getWidgetOwnerClassName();
 
@@ -30,8 +30,15 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
         : widget.description!;
   }
 
-  void refreshState() {
-    setState(() {});
+  void refreshState({bool force = false}) {
+    if (force) {
+      setState(() {});
+    } else {
+      if (_refreshCount < FlutterArtist.storage._taskUnitCount) {
+        _refreshCount = FlutterArtist.storage._taskUnitCount;
+        setState(() {});
+      }
+    }
   }
 
   @override

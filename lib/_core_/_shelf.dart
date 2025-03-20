@@ -5,11 +5,13 @@ abstract class Shelf extends _XBase {
 
   String? get description => _shelfStruct.description;
 
-  // All dataFilters including the default dataFilter.
-  final List<DataFilter> _allDataFilters = [];
+  // All filterModels including the default filterModel.
+  final List<FilterModel> _allFilterModels = [];
 
-  // All blockForms.
-  final List<BlockForm> _allBlockForms = [];
+  List<String> get filterNames => [..._shelfStruct.filterModels.keys];
+
+  // All formModels.
+  final List<FormModel> _allFormModels = [];
 
   final Map<String, Scalar> __scalarMap = {};
 
@@ -43,9 +45,15 @@ abstract class Shelf extends _XBase {
 
   final Map<_RefreshableWidgetState, bool> _shelfWidgetStates = {};
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   Shelf() {
     __onInit();
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   /// Very Dangerous Method. Call Internal only.
@@ -59,15 +67,18 @@ abstract class Shelf extends _XBase {
         "\n*********************************************************************************************\n";
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void __onInit() {
     _shelfStruct = registerStructure();
 
-    for (String dataFilterName in _shelfStruct.dataFilters.keys) {
-      DataFilter dataFilter = _shelfStruct.dataFilters[dataFilterName]!;
-      dataFilter.name = dataFilterName;
-      dataFilter.shelf = this;
+    for (String filterModelName in _shelfStruct.filterModels.keys) {
+      FilterModel filterModel = _shelfStruct.filterModels[filterModelName]!;
+      filterModel.name = filterModelName;
+      filterModel.shelf = this;
       //
-      _allDataFilters.add(dataFilter);
+      _allFilterModels.add(filterModel);
     }
 
     List<Scalar> scalars = _shelfStruct.scalars;
@@ -83,66 +94,66 @@ abstract class Shelf extends _XBase {
       scalar.shelf = this;
       __scalars.add(scalar);
       //
-      if (scalar.registerDataFilterName != null) {
-        DataFilter? dataFilter =
-            _shelfStruct.dataFilters[scalar.registerDataFilterName!];
-        if (dataFilter == null) {
+      if (scalar.registerFilterModelName != null) {
+        FilterModel? filterModel =
+            _shelfStruct.filterModels[scalar.registerFilterModelName!];
+        if (filterModel == null) {
           throw ___registerError(
-              "DataFilter not found '${scalar.registerDataFilterName}' in '${getClassName(this)}'\n"
+              "FilterModel not found '${scalar.registerFilterModelName}' in '${getClassName(this)}'\n"
               "Double-check ${getClassName(this)}.registerStructure() method");
         }
         //
         const Type filterInputType = FilterInput;
         final String filterInputBase = filterInputType.toString();
-        final String filterInputBF = dataFilter.getFilterInputTypeAsString();
+        final String filterInputBF = filterModel.getFilterInputTypeAsString();
         final String filterInputB = scalar.getFilterInputTypeAsString();
         //
         if (filterInputBF == filterInputBase) {
           throw ___registerError(
               "You need to create your own class that extends the '$filterInputBase' class \n"
-              "or use the 'EmptyFilterInput' class to use in the '${getClassName(dataFilter)}' declaration \n\n"
-              " >> Currently, ${getClassName(dataFilter)}<FILTER_INPUT> = <$filterInputBF>");
+              "or use the 'EmptyFilterInput' class to use in the '${getClassName(filterModel)}' declaration \n\n"
+              " >> Currently, ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
         }
         //
         if (filterInputBF != filterInputB) {
           throw ___registerError(
               "The Scalar and its Filter-Input must have the same FILTER_INPUT type. \n\n"
               " >> ${getClassName(scalar)}<FILTER_INPUT> = <$filterInputB> \n"
-              " >> ${getClassName(dataFilter)}<FILTER_INPUT> = <$filterInputBF>");
+              " >> ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
         }
         // ----------------
         const Type filterCriteriaType = FilterCriteria;
         final String filterCriteriaBase = filterCriteriaType.toString();
         final String filterCriteriaBF =
-            dataFilter.getFilterCriteriaTypeAsString();
+            filterModel.getFilterCriteriaTypeAsString();
         final String filterCriteriaB = scalar.getFilterCriteriaTypeAsString();
         //
         if (filterCriteriaBF == filterCriteriaBase) {
           throw ___registerError(
               "You need to create your own class that extends the '$filterCriteriaBase' class \n"
-              "or use the 'EmptyFilterCriteria' class to use in the '${getClassName(dataFilter)}' declaration \n\n"
-              " >> Currently, ${getClassName(dataFilter)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
+              "or use the 'EmptyFilterCriteria' class to use in the '${getClassName(filterModel)}' declaration \n\n"
+              " >> Currently, ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
         }
         //
         if (filterCriteriaBF != filterCriteriaB) {
           throw ___registerError(
-              "The Scalar and its Data-Filter must have the same FILTER_CRITERIA type. \n\n"
+              "The Scalar and its Filter-Model must have the same FILTER_CRITERIA type. \n\n"
               " >> ${getClassName(scalar)}<FILTER_CRITERIA> = <$filterCriteriaB> \n"
-              " >> ${getClassName(dataFilter)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
+              " >> ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
         }
         //
-        dataFilter._scalars.add(scalar);
-        scalar._registeredOrDefaultDataFilter = dataFilter;
+        filterModel._scalars.add(scalar);
+        scalar._registeredOrDefaultFilterModel = filterModel;
       } else {
-        // Default DataFilter.
-        DataFilter defaultDataFilter = _DefaultDataFilter(
-          name: "${scalar.name}-@-default-scalar-data-filter",
+        // Default FilterModel.
+        FilterModel defaultFilterModel = _DefaultFilterModel(
+          name: "${scalar.name}-@-default-scalar-filter-model",
           shelf: this,
         );
-        defaultDataFilter._scalars.add(scalar);
-        scalar._registeredOrDefaultDataFilter = defaultDataFilter;
+        defaultFilterModel._scalars.add(scalar);
+        scalar._registeredOrDefaultFilterModel = defaultFilterModel;
         //
-        _allDataFilters.add(defaultDataFilter);
+        _allFilterModels.add(defaultFilterModel);
         //
         const Type emptyFilterCriteriaType = EmptyFilterCriteria;
         final String filterCriteriaEmpty = emptyFilterCriteriaType.toString();
@@ -151,7 +162,7 @@ abstract class Shelf extends _XBase {
         if (filterCriteriaB != filterCriteriaEmpty) {
           throw ___registerError(
               "FILTER_CRITERIA of '${getClassName(scalar)}' scalar must be '$filterCriteriaEmpty' "
-              "because this scalar does not have a DATA_FILTER. \n\n"
+              "because this scalar does not have a FILTER_MODEL. \n\n"
               " >> Currently, ${getClassName(scalar)}<FILTER_CRITERIA> = <$filterCriteriaB>");
         }
       }
@@ -165,6 +176,9 @@ abstract class Shelf extends _XBase {
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void __registerBlockCascade(Block block) {
     if (__blockMap.containsKey(block.name)) {
       throw ___registerError(
@@ -172,72 +186,72 @@ abstract class Shelf extends _XBase {
           "Double-check ${getClassName(this)}.registerStructure() method");
     } else {
       __blockMap[block.name] = block;
-      if (block.blockForm != null) {
-        _allBlockForms.add(block.blockForm!);
+      if (block.formModel != null) {
+        _allFormModels.add(block.formModel!);
       }
     }
     //
     block.shelf = this;
-    if (block.registerDataFilterName != null) {
-      DataFilter? dataFilter =
-          _shelfStruct.dataFilters[block.registerDataFilterName!];
-      if (dataFilter == null) {
+    if (block.registerFilterModelName != null) {
+      FilterModel? filterModel =
+          _shelfStruct.filterModels[block.registerFilterModelName!];
+      if (filterModel == null) {
         throw ___registerError(
-            "DataFilter not found '${block.registerDataFilterName}' in '${getClassName(this)}'\n"
+            "FilterModel not found '${block.registerFilterModelName}' in '${getClassName(this)}'\n"
             "Double-check ${getClassName(this)}.registerStructure() method");
       }
       //
       //
       const Type filterInputType = FilterInput;
       final String filterInputBase = filterInputType.toString();
-      final String filterInputBF = dataFilter.getFilterInputTypeAsString();
+      final String filterInputBF = filterModel.getFilterInputTypeAsString();
       final String filterInputB = block.getFilterInputTypeAsString();
       //
       if (filterInputBF == filterInputBase) {
         throw ___registerError(
             "You need to create your own class that extends the '$filterInputBase' class \n"
-            "or use the 'EmptyFilterInput' class to use in the '${getClassName(dataFilter)}' declaration \n\n"
-            " >> Currently, ${getClassName(dataFilter)}<FILTER_INPUT> = <$filterInputBF>");
+            "or use the 'EmptyFilterInput' class to use in the '${getClassName(filterModel)}' declaration \n\n"
+            " >> Currently, ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
       }
       //
       if (filterInputBF != filterInputB) {
         throw ___registerError(
             "The Scalar and its Filter-Input must have the same FILTER_INPUT type.\n\n"
             " >> ${getClassName(block)}<FILTER_INPUT> = <$filterInputB> \n"
-            " >> ${getClassName(dataFilter)}<FILTER_INPUT> = <$filterInputBF>");
+            " >> ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
       }
       // -----------------
       const Type filterCriteriaType = FilterCriteria;
       final String filterCriteriaBase = filterCriteriaType.toString();
       final String filterCriteriaBF =
-          dataFilter.getFilterCriteriaTypeAsString();
+          filterModel.getFilterCriteriaTypeAsString();
       final String filterCriteriaB = block.getFilterCriteriaTypeAsString();
       //
       if (filterCriteriaBF == filterCriteriaBase) {
         throw ___registerError(
             "You need to create your own class that extends from '$filterCriteriaBase' "
-            "as FILTER_CRITERIA for '${getClassName(dataFilter)}'\n\n"
-            " >> Currently, ${getClassName(dataFilter)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
+            "as FILTER_CRITERIA for '${getClassName(filterModel)}'\n\n"
+            " >> Currently, ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
       }
       //
       if (filterCriteriaBF != filterCriteriaB) {
         throw ___registerError(
-            "The Block and its Data-Filter must have the same FILTER_CRITERIA type. \n"
+            "The Block and its Filter-Model must have the same FILTER_CRITERIA type. \n"
             " >> ${getClassName(block)}<FILTER_CRITERIA> = <$filterCriteriaB> \n"
-            " >> ${getClassName(dataFilter)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
+            " >> ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
       }
       //
-      dataFilter._blocks.add(block);
-      block._registeredOrDefaultDataFilter = dataFilter;
+      filterModel._blocks.add(block);
+      block._registeredOrDefaultFilterModel = filterModel;
     } else {
-      DataFilter defaultDataFilter = _DefaultDataFilter(
-        name: "${block.name}-@-default-block-data-filter",
+      FilterModel defaultFilterModel = _DefaultFilterModel(
+        name: "${block.name}-@-default-block-filter-model",
         shelf: this,
       );
-      defaultDataFilter._blocks.add(block);
-      block._registeredOrDefaultDataFilter = defaultDataFilter;
+      defaultFilterModel._blocks.add(block);
+      block._registeredOrDefaultFilterModel = defaultFilterModel;
       //
-      _allDataFilters.add(defaultDataFilter);
+      _allFilterModels.add(defaultFilterModel);
       //
       const Type emptyFilterCriteriaType = EmptyFilterCriteria;
       final String filterCriteriaEmpty = emptyFilterCriteriaType.toString();
@@ -246,7 +260,7 @@ abstract class Shelf extends _XBase {
       if (filterCriteriaB != filterCriteriaEmpty) {
         throw ___registerError(
             "Filter-Criteria of '${getClassName(block)}' block must be '$filterCriteriaEmpty' "
-            "because this block does not have a DATA_FILTER.\n\n"
+            "because this block does not have a FILTER_MODEL.\n\n"
             " >> Currently, ${getClassName(block)}<FILTER_CRITERIA> = <$filterCriteriaB>");
       }
     }
@@ -266,6 +280,9 @@ abstract class Shelf extends _XBase {
       __registerBlockCascade(childBlock);
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   List<Block> get blocks {
     List<Block> ret = [];
@@ -289,6 +306,9 @@ abstract class Shelf extends _XBase {
     await _showStorageDialog(context: context, shelf: this);
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<void> showActiveUiComponentsDialog() async {
     BuildContext context = FlutterArtist.adapter.getCurrentContext();
     await _showActiveUIComponentsDialog(context: context, shelf: this);
@@ -302,15 +322,19 @@ abstract class Shelf extends _XBase {
     return __scalarMap[scalarName];
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   Block? findBlock(String blockName) {
     return __blockMap[blockName];
   }
 
-  DataFilter? findDataFilter(String dataFilterName) {
-    return _shelfStruct.dataFilters[dataFilterName];
-  }
+  // ***************************************************************************
+  // ***************************************************************************
 
-  List<String> get filterNames => [..._shelfStruct.dataFilters.keys];
+  FilterModel? findFilterModel(String filterModelName) {
+    return _shelfStruct.filterModels[filterModelName];
+  }
 
   // ***************************************************************************
   // ******** UI COMPONENTS ****************************************************
@@ -353,6 +377,9 @@ abstract class Shelf extends _XBase {
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   Map<_RefreshableWidgetState, bool> _findMountedWidgetStates({
     required bool withBlockFragment,
     required bool withPagination,
@@ -386,8 +413,8 @@ abstract class Shelf extends _XBase {
       print("|----> ${getClassName(this)}.updateAllUIComponents()");
       __updateShelfWidgets();
       //
-      for (DataFilter dataFilter in _allDataFilters) {
-        dataFilter.updateAllUIComponents();
+      for (FilterModel filterModel in _allFilterModels) {
+        filterModel.updateAllUIComponents();
       }
       //
       for (Scalar scalar in __scalars) {
@@ -403,6 +430,9 @@ abstract class Shelf extends _XBase {
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void __updateAllBlockUIComponentsCascade(
     Block block, {
     required bool withoutFilters,
@@ -416,6 +446,9 @@ abstract class Shelf extends _XBase {
       );
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void __updateShelfWidgets() {
     for (_RefreshableWidgetState state in _shelfWidgetStates.keys) {
@@ -435,6 +468,9 @@ abstract class Shelf extends _XBase {
   }) {
     _shelfWidgetStates[widgetState] = isShowing;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _removeShelfWidgetState({required State widgetState}) {
     _shelfWidgetStates.remove(widgetState);
@@ -465,6 +501,9 @@ abstract class Shelf extends _XBase {
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<void> __queryLazyList() async {
     _queryLocked = true;
     //
@@ -489,17 +528,20 @@ abstract class Shelf extends _XBase {
     }
   }
 
-  Future<bool> _queryLazyScalarOrBlockOrForms({
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<void> _queryLazyScalarOrBlockOrForms({
     required QueryType queryType,
     required List<_ScalarOrBlockOrFormWrapper> scalarOrBlockOrFormWrappers,
   }) async {
     if (scalarOrBlockOrFormWrappers.isEmpty) {
-      return true;
+      return;
     }
     //
     final List<_ScalarOpt> scalarOpts = [];
     final List<_BlockOpt> blockOpts = [];
-    final List<_BlockFormOpt> blockFormOpts = [];
+    final List<_FormModelOpt> formModelOpts = [];
     //
     for (_ScalarOrBlockOrFormWrapper wrapper in scalarOrBlockOrFormWrappers) {
       if (wrapper.scalar != null) {
@@ -521,24 +563,24 @@ abstract class Shelf extends _XBase {
             postQueryBehavior: null,
           ),
         );
-      } else if (wrapper.blockForm != null) {
-        wrapper.blockForm!._lazyLoadCount++;
+      } else if (wrapper.formModel != null) {
+        wrapper.formModel!._lazyLoadCount++;
         //
-        blockFormOpts.add(
-          _BlockFormOpt(blockForm: wrapper.blockForm!),
+        formModelOpts.add(
+          _FormModelOpt(formModel: wrapper.formModel!),
         );
       }
     }
     //
     print("@@@@@@@@@@@@ Query Lazy List: scalarOpts: $scalarOpts");
     print("@@@@@@@@@@@@ Query Lazy List: blockOpts: $blockOpts");
-    print("@@@@@@@@@@@@ Query Lazy List: blockFormOpts: $blockFormOpts");
+    print("@@@@@@@@@@@@ Query Lazy List: formModelOpts: $formModelOpts");
     //
-    return await _queryAllWithOverlayAndRestorable(
-      forceDataFilterOpt: null,
+    _XShelf xShelf = await _queryAll(
+      forceFilterModelOpt: null,
       forceQueryScalarOpts: scalarOpts,
       forceQueryBlockOpts: blockOpts,
-      forceQueryBlockFormOpts: blockFormOpts,
+      forceQueryFormModelOpts: formModelOpts,
     );
   }
 
@@ -551,28 +593,33 @@ abstract class Shelf extends _XBase {
   void __findLazyScalars(List<_ScalarOrBlockOrFormWrapper> founds) {
     for (Scalar scalar in __scalars) {
       if (scalar.hasActiveUIComponent() &&
-          scalar.data.dataState == DataState.pending) {
+          scalar.data.queryDataState == DataState.pending) {
         founds.add(_ScalarOrBlockOrFormWrapper.scalar(scalar));
       }
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void __findTopLazyBlocksCascade(
       List<Block> blocks, List<_ScalarOrBlockOrFormWrapper> founds) {
     for (Block block in blocks) {
-      // _hasActiveWidgetAndNeedToQuery()
       if (block.hasActiveBlockFragmentWidget(alsoCheckChildren: true) &&
-          block.dataState == DataState.pending) {
+          block.queryDataState == DataState.pending) {
         founds.add(_ScalarOrBlockOrFormWrapper.block(block));
-      } else if (block.blockForm != null &&
-          block.blockForm!.hasActiveUIComponent() &&
-          block.blockForm!.dataState == DataState.pending) {
-        founds.add(_ScalarOrBlockOrFormWrapper.blockForm(block.blockForm!));
+      } else if (block.formModel != null &&
+          block.formModel!.hasActiveUIComponent() &&
+          block.formModel!.dataState == DataState.pending) {
+        founds.add(_ScalarOrBlockOrFormWrapper.formModel(block.formModel!));
       } else {
         __findTopLazyBlocksCascade(block._childBlocks, founds);
       }
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   List<_ScalarOrBlockOrFormWrapper> __findTopLazyScalarOrBlockOrForms() {
     final List<_ScalarOrBlockOrFormWrapper> founds = [];
@@ -594,6 +641,9 @@ abstract class Shelf extends _XBase {
     return false;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool _hasMountedBlockUIComponentCascade(List<Block> blocks) {
     for (Block block in blocks) {
       if (block.hasMountedUIComponent()) {
@@ -606,6 +656,9 @@ abstract class Shelf extends _XBase {
     }
     return false;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   bool hasMountedUIComponent() {
     bool hasMounted = _shelfWidgetStates.isNotEmpty;
@@ -624,82 +677,81 @@ abstract class Shelf extends _XBase {
   }
 
   // ***************************************************************************
-  // ********** BACKUP & RESTORE & APPLY ***************************************
   // ***************************************************************************
 
-  void _backupAll() {
-    for (DataFilter dataFilter in _allDataFilters) {
-      dataFilter._backup();
-    }
-    //
-    for (Scalar scalar in __scalars) {
-      scalar._backup();
-    }
-    //
-    for (Block rootBlock in __rootBlocks) {
-      rootBlock._backupAllFromRoot();
-    }
-  }
-
-  void _restoreAll() {
-    for (DataFilter dataFilter in _allDataFilters) {
-      dataFilter._restore();
-    }
-    //
-    for (Scalar scalar in scalars) {
-      scalar._restore();
-    }
-    for (Block block in __rootBlocks) {
-      block._restoreAllFromRoot();
-    }
-    //
-    updateAllUIComponents();
-  }
-
-  void _applyNewStateAll() {
-    for (DataFilter dataFilter in _allDataFilters) {
-      dataFilter._applyNewState();
-    }
-    //
-    for (Scalar scalar in scalars) {
-      scalar._applyNewState();
-    }
-    for (Block block in __rootBlocks) {
-      block._applyNewStateAllFromRoot();
-    }
-    //
-    updateAllUIComponents();
-  }
-
-  // ***************************************************************************
-  // ********** QUERY **********************************************************
-  // ***************************************************************************
-
-  ///
-  /// VERY IMPORTANT METHOD:
-  ///
-  Future<bool> _queryAllWithOverlayAndRestorable({
-    required _DataFilterOpt? forceDataFilterOpt,
+  Future<_XShelf> _queryAll({
+    required _FilterModelOpt? forceFilterModelOpt,
     required List<_ScalarOpt> forceQueryScalarOpts,
     required List<_BlockOpt> forceQueryBlockOpts,
-    required List<_BlockFormOpt> forceQueryBlockFormOpts,
+    required List<_FormModelOpt> forceQueryFormModelOpts,
   }) async {
-    return await FlutterArtist.executeTask(
-      asyncFunction: () async {
-        return await _queryAllWithRestorable(
-          forceDataFilterOpt: forceDataFilterOpt,
-          forceQueryScalarOpts: forceQueryScalarOpts,
-          forceQueryBlockOpts: forceQueryBlockOpts,
-          forceQueryBlockFormOpts: forceQueryBlockFormOpts,
-        );
-      },
+    _XShelf xShelf = _XShelf(
+      shelf: this,
+      forceFilterModelOpt: forceFilterModelOpt,
+      forceQueryScalarOpts: forceQueryScalarOpts,
+      forceQueryBlockOpts: forceQueryBlockOpts,
+      forceQueryFormModelOpts: forceQueryFormModelOpts,
     );
+    //
+    await _executeQueryXShelf(xShelf: xShelf);
+    return xShelf;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<void> _executeQueryXShelf({
+    required _XShelf xShelf,
+  }) async {
+    for (_XScalar xScalar in xShelf.allXScalars) {
+      if (!xScalar.needQuery) {
+        continue;
+      }
+      //
+      // Add to Queue:
+      //
+      _taskUnitQueue.addTaskUnit(
+        _ScalarQueryTaskUnit(
+          xScalar: xScalar,
+        ),
+      );
+    }
+    //
+    for (_XBlock xBlock in xShelf.allRootXBlocks) {
+      //
+      // Add to Queue:
+      //
+      _taskUnitQueue.addTaskUnit(
+        _BlockQueryTaskUnit(
+          xBlock: xBlock,
+        ),
+      );
+    }
+    //
+    // for (_XFormModel xFormModel in xShelf.allXFormModels) {
+    //   if (!xFormModel.forceForm) {
+    //     continue;
+    //   }
+    //   //
+    //   // Add to Queue:
+    //   //
+    //   _taskUnitQueue.addTaskUnit(
+    //     _FormModelLoadFormTaskUnit(
+    //       xFormModel: xFormModel,
+    //     ),
+    //   );
+    // }
+    //
+    await FlutterArtist.storage._executeTaskUnitQueue();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   String _toString({
     required List<_ScalarOpt> forceQueryScalarOpts,
     required List<_BlockOpt> forceQueryBlockOpts,
-    required List<_BlockFormOpt> forceQueryBlockFormOpts,
+    required List<_FormModelOpt> forceQueryFormModelOpts,
   }) {
     String info = "";
     if (forceQueryScalarOpts.isNotEmpty) {
@@ -721,9 +773,9 @@ abstract class Shelf extends _XBase {
         info = "$info, $s";
       }
     }
-    if (forceQueryBlockFormOpts.isNotEmpty) {
-      String s = forceQueryBlockFormOpts
-          .map((opt) => getClassName(opt.blockForm))
+    if (forceQueryFormModelOpts.isNotEmpty) {
+      String s = forceQueryFormModelOpts
+          .map((opt) => getClassName(opt.formModel))
           .join(", ");
       if (info.isEmpty) {
         info = s;
@@ -734,158 +786,11 @@ abstract class Shelf extends _XBase {
     return info;
   }
 
-  ///
-  /// VERY IMPORTANT METHOD:
-  ///
-  Future<bool> _queryAllWithRestorable({
-    required _DataFilterOpt? forceDataFilterOpt,
-    required List<_ScalarOpt> forceQueryScalarOpts,
-    required List<_BlockOpt> forceQueryBlockOpts,
-    required List<_BlockFormOpt> forceQueryBlockFormOpts,
-  }) async {
-    String info = _toString(
-      forceQueryScalarOpts: forceQueryScalarOpts,
-      forceQueryBlockOpts: forceQueryBlockOpts,
-      forceQueryBlockFormOpts: forceQueryBlockFormOpts,
-    );
-    FlutterArtist.codeFlowLogger._addInfo(
-      ownerClassInstance: this,
-      info: 'Execute Lazy Query: $info',
-      isLibCode: true,
-    );
-    //
-    try {
-      _backupAll();
-      //
-      bool success = await _queryAll(
-        forceDataFilterOpt: forceDataFilterOpt,
-        forceQueryScalarOpts: forceQueryScalarOpts,
-        forceQueryBlockOpts: forceQueryBlockOpts,
-        forceQueryBlockFormOpts: forceQueryBlockFormOpts,
-      );
-      if (!success) {
-        _restoreAll();
-        return false;
-      } else {
-        _applyNewStateAll();
-        return true;
-      }
-    } catch (e, stackTrace) {
-      _restoreAll();
-      //
-      _handleError(
-        shelf: this,
-        methodName: "_queryAllWithRestorable",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      return false;
-    }
-  }
+  // ***************************************************************************
+  // ***************************************************************************
 
-  Future<bool> _queryAll({
-    required _DataFilterOpt? forceDataFilterOpt,
-    required List<_ScalarOpt> forceQueryScalarOpts,
-    required List<_BlockOpt> forceQueryBlockOpts,
-    required List<_BlockFormOpt> forceQueryBlockFormOpts,
-  }) async {
-    _XShelf xShelf = _XShelf(
-      shelf: this,
-      forceDataFilterOpt: forceDataFilterOpt,
-      forceQueryScalarOpts: forceQueryScalarOpts,
-      forceQueryBlockOpts: forceQueryBlockOpts,
-      forceQueryBlockFormOpts: forceQueryBlockFormOpts,
-    );
-    //
-    xShelf.printMe();
-
-    //
-    try {
-      for (_XScalar xScalar in xShelf.allXScalars) {
-        if (!xScalar.needQuery) {
-          continue;
-        }
-        final _XDataFilter xDataFilter = xScalar.xDataFilter;
-        final DataFilter dataFilter = xDataFilter.dataFilter;
-        final Scalar scalar = xScalar.scalar;
-        //
-        final FilterCriteria filterCriteria;
-        if (!xDataFilter.queried) {
-          //
-          FilterCriteria? newCriteria = await dataFilter._prepareData(
-            filterInput: xDataFilter.filterInput,
-          );
-          if (newCriteria == null) {
-            return false;
-          }
-          filterCriteria = newCriteria;
-          xDataFilter.queried = true;
-        } else {
-          filterCriteria = dataFilter._filterCriteria!;
-        }
-        //
-        bool success = await scalar.__queryThis(
-          filterCriteria: filterCriteria,
-        );
-        if (!success) {
-          return false;
-        }
-      }
-      //
-      for (_XBlock xBlock in xShelf.allRootXBlocks) {
-        bool success = await xBlock.block._queryThisAndChildren(
-          thisXBlock: xBlock,
-        );
-        //
-        if (!success) {
-          return false;
-        }
-      }
-      //
-      for (_XBlockForm xBlockForm in xShelf.allXBlockForms) {
-        if (!xBlockForm.needQuery) {
-          continue;
-        }
-        Object? currentItemDetail =
-            xBlockForm.blockForm.block.data.currentItemDetail;
-
-        if (currentItemDetail != null) {
-          Object currentItem = xBlockForm.blockForm.block.data.currentItem!;
-          bool editable = xBlockForm.blockForm.block.canEditItemOnForm(
-            item: currentItem,
-          );
-          // TODO: Co can cai nay khong?
-          // xBlockForm.blockForm.data._setCurrentItem(
-          //   refreshedItemDetail: currentItemDetail,
-          //   formMode: FormMode.edit,
-          //   dataState: DataState.pending,
-          // );
-
-          bool success = await xBlockForm.blockForm._prepareForm(
-            extraFormInput: xBlockForm.extraFormInput,
-            refreshedItem: currentItemDetail,
-            isNew: currentItemDetail == null, // TODO: Can kiem tra lai.
-            forceForm: true,
-          );
-          //
-          if (!success) {
-            return false;
-          }
-        }
-        return true;
-      }
-      //
-      return true;
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: this,
-        methodName: "_queryAll",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      return false;
-    }
+  @override
+  String toString() {
+    return "${getClassName(this)}($name)";
   }
 }

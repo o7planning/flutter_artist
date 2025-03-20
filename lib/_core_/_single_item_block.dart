@@ -35,8 +35,8 @@ abstract class SingleItemBlock<
     super.leaveTheFormSafely,
     required super.fireEvent,
     required super.listenItemTypes,
-    required super.dataFilterName,
-    required super.blockForm,
+    required super.filterModelName,
+    required super.formModel,
     required super.childBlocks,
   });
 

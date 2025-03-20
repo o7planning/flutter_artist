@@ -93,11 +93,11 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
       );
     }
     //
-    return await widget.block.blockForm!.saveForm();
+    return await widget.block.formModel!.saveForm();
   }
 
   Future<bool> __deleteCurrentItem() async {
-    return await widget.block.deleteCurrentItem();
+    return await widget.block.deleteCurrentItem() != null;
   }
 
   Future<bool> __prepareToCreate() async {
@@ -113,19 +113,19 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
   }
 
   Future<bool> __resetForm() async {
-    widget.block.blockForm?.resetForm();
+    widget.block.formModel?.resetForm();
     return true;
   }
 
   Future<bool> __refreshCurrentItem() async {
-    return await widget.block.refreshCurrentItem();
+    return await widget.block.refreshCurrentItem() != null;
   }
 
   Future<bool> __showFormInfo() async {
-    _showFromDataInfoDialog(
+    _showFormInfoDialog(
       context: context,
       locationInfo: getClassName(widget.ownerClassInstance),
-      blockForm: widget.block.blockForm!,
+      formModel: widget.block.formModel!,
     );
     return true;
   }

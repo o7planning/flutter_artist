@@ -1,50 +1,89 @@
 part of '../flutter_artist.dart';
 
 class _XBlock {
-  bool __forceQuery = false;
-
-  bool affectByFilterInput = false;
+  final _XFilterModel xFilterModel;
   final Block block;
 
-  final _XDataFilter xDataFilter;
+  String get name => block.name;
 
+  bool affectByFilterInput = false;
+
+  // ***************************************************************************
   // Query Options:
+  // ***************************************************************************
+
+  bool __forceQuery = false;
+  bool __forceReloadItem = false;
+
   QueryType? __queryType;
   ListBehavior? __listBehavior;
   SuggestedSelection? __suggestedSelection;
   PostQueryBehavior? __postQueryBehavior;
   PageableData? __pageable;
 
-  //
+  // Candidate for current selection.
+  // @Deprecated("Xoa di, chuyen sang _TaskUnit")
+  // Object? _candidateCurrentItem;
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   final _XBlock? xBlockParent;
-  final _XBlockForm? xBlockForm;
+  final _XFormModel? xFormModel;
   final List<_XBlock> childXBlocks = [];
+
+  // ***************************************************************************
+  // Return Data:
+  // ***************************************************************************
+
+  // This property must have a null value initially.
+  CurrentItemSelectionResult? currentItemSelectionResult;
+
+  final itemDeletionResult = ItemDeletionResult();
+
+  final queryResult = BlockQueryResult();
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   _XBlock({
     required this.block,
     required this.xBlockParent,
-    required this.xDataFilter,
-    required this.xBlockForm,
+    required this.xFilterModel,
+    required this.xFormModel,
   });
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   bool get forceQuery {
     return __forceQuery;
+  }
+
+  bool get forceReloadItem {
+    return __forceReloadItem;
   }
 
   void setForceQuery() {
     __forceQuery = true;
   }
 
+  void setForceReloadItem() {
+    __forceReloadItem = true;
+  }
+
   QueryType get queryType {
     switch (__queryType) {
       case null:
-        return forceQuery ? QueryType.forceQuery : QueryType.queryIfNeed;
-      case QueryType.clear:
-        return QueryType.clear;
+        return forceQuery //
+            ? QueryType.forceQuery
+            : QueryType.queryIfNeed;
       case QueryType.forceQuery:
         return QueryType.forceQuery;
       case QueryType.queryIfNeed:
-        return forceQuery ? QueryType.forceQuery : QueryType.queryIfNeed;
+        return forceQuery //
+            ? QueryType.forceQuery
+            : QueryType.queryIfNeed;
     }
   }
 
@@ -84,7 +123,18 @@ class _XBlock {
     __pageable = pageable;
   }
 
-  String get name => block.name;
+  void _printParameters({required bool hasActiveUI}) {
+    if (true) return;
+    print("  ----> hasActiveUI **: $hasActiveUI");
+    print("  ----> queryType: $__queryType  --------> $queryType");
+    print("  ----> forceQuery: $__forceQuery  --------> $forceQuery");
+    print(
+        "  ----> forceReloadItem: $__forceReloadItem  --------> $forceReloadItem");
+    print("  ----> listBehavior: $__listBehavior  --------> $listBehavior");
+    print(
+        "  ----> postQueryBehavior: $__postQueryBehavior  --------> $postQueryBehavior");
+    print("  ----> pageable: $__pageable  --------> $pageable");
+  }
 
   @override
   String toString() {

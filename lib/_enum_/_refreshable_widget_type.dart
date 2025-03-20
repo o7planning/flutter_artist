@@ -22,13 +22,13 @@ extension WidgetStateTypeE on RefreshableWidgetType {
       case RefreshableWidgetType.pagination:
         return "Pagination";
       case RefreshableWidgetType.filter:
-        return "DataFilter";
+        return "FilterModel";
       case RefreshableWidgetType.controlBar:
         return "ControlBar";
       case RefreshableWidgetType.customControlBar:
         return "CustomControlBar";
       case RefreshableWidgetType.form:
-        return "BlockForm";
+        return "FormModel";
       case RefreshableWidgetType.blockFragment:
         return "BlockFragment";
       case RefreshableWidgetType.blockItemsView:
@@ -49,13 +49,13 @@ extension WidgetStateTypeE on RefreshableWidgetType {
   IconData get iconData {
     switch (this) {
       case RefreshableWidgetType.filter:
-        return _dataFilterIconData;
+        return _filterModelIconData;
       case RefreshableWidgetType.controlBar:
         return _blockControlBarIconData;
       case RefreshableWidgetType.customControlBar:
         return _blockCustomControlBarIconData;
       case RefreshableWidgetType.form:
-        return _blockFormIconData;
+        return _formModelIconData;
       case RefreshableWidgetType.blockFragment:
         return _blockFragmentIconData;
       case RefreshableWidgetType.blockItemsView:

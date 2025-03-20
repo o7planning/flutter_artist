@@ -3,6 +3,8 @@ part of '../flutter_artist.dart';
 typedef ShelfCreator<S> = S Function();
 
 class _Storage {
+  int _taskUnitCount = 0;
+
   final List<Shelf> _rencentShelves = [];
 
   final Map<String, ShelfCreator> __shelfCreatorMap = {};
@@ -15,9 +17,39 @@ class _Storage {
     return m;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
+  _Storage();
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _logout() {
+    __shelfMap.clear();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ///
+  /// Very Dangerous!!! Only call on startup.
+  ///
+  void __clear() {
+    _rencentShelves.clear();
+    __shelfCreatorMap.clear();
+    __shelfMap.clear();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _resetForTestOnly() {
     __shelfMap.clear();
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _fireEventToAffectedItemTypes({
     required List<Type> affectedItemTypes,
@@ -38,6 +70,9 @@ class _Storage {
     );
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _fireEventSourceChanged({
     required Block eventBlock,
     required String? itemIdString,
@@ -47,6 +82,9 @@ class _Storage {
     print("~~~~~~~~~> ${eventBlock.fireEvent ? 'FIRE EVENT' : 'NOT FIRE EVENT'}"
         " --> Event Item Type: ($eventItemType, $eventItemDetailType)"
         " - ${getClassName(eventBlock)}");
+    if (!eventBlock.fireEvent) {
+      return;
+    }
     //
     final List<Scalar> listenerScalars = __getListenerScalarsByBlock(
       eventBlock: eventBlock,
@@ -55,16 +93,28 @@ class _Storage {
     final List<Block> listenerBlocks = __getListenerBlocksByBlock(
       eventBlock: eventBlock,
     );
+    print(
+        "~~~~~~~~~> listenerBlocks: ${listenerBlocks}, listenerScalars: $listenerScalars");
     //
-    __executeListeners(
-      listenerScalars: listenerScalars,
-      listenerBlocks: listenerBlocks,
-    );
+    // TODO: Add to QUEUE lazy.
+    //
+    if (listenerScalars.isNotEmpty || listenerBlocks.isNotEmpty) {
+      __executeListeners(
+        listenerScalars: listenerScalars,
+        listenerBlocks: listenerBlocks,
+      );
+    }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   String _getShelfName(Type type) {
     return type.toString();
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void registerShelf<F extends Shelf>(ShelfCreator<F> builder) {
     final String shelfName = _getShelfName(F);
@@ -74,6 +124,9 @@ class _Storage {
     }
     _createShelf(shelfName);
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   F _createShelf<F extends Shelf>(String shelfName) {
     F? shelf = __shelfMap[shelfName] as F?;
@@ -94,11 +147,17 @@ class _Storage {
     return shelf;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _loadAll() {
     for (String shelfName in __shelfCreatorMap.keys) {
       _createShelf(shelfName);
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Shelf? _findShelf(Type shelfType) {
     final String shelfName = _getShelfName(shelfType);
@@ -107,6 +166,9 @@ class _Storage {
     return shelf;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   F findShelf<F extends Shelf>() {
     final String shelfName = _getShelfName(F);
     Shelf? shelf = __shelfMap[shelfName];
@@ -114,14 +176,17 @@ class _Storage {
     return shelf as F;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   F? findOrNullShelf<F extends Shelf>() {
     final String shelfName = _getShelfName(F);
     F? shelf = __shelfMap[shelfName] as F?;
     return shelf;
   }
 
-  // ===========================================================================
-  // ===========================================================================
+  // ***************************************************************************
+  // ***************************************************************************
 
   // @Callable
   Map<String, Shelf> _getIndependentShelves() {
@@ -133,6 +198,9 @@ class _Storage {
         listenerMap.keys.contains(shelfName));
     return map;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   // @Callable
   Map<String, Shelf> _getEventShelves() {
@@ -155,6 +223,9 @@ class _Storage {
     return foundEventShelfMap;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   // TODO: Xem lai
   bool _contains(List<Type> listenTypes, Type type) {
     for (Type t in listenTypes) {
@@ -164,6 +235,9 @@ class _Storage {
     }
     return false;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   // Private Method. Only for use in this class.
   void __findEventShelfCascade({
@@ -197,8 +271,8 @@ class _Storage {
     }
   }
 
-// ===========================================================================
-// ===========================================================================
+  // ***************************************************************************
+  // ***************************************************************************
 
   // @Callable
   Map<String, Shelf> _getListenerShelves() {
@@ -218,8 +292,8 @@ class _Storage {
     return foundShelfMap;
   }
 
-  // ===========================================================================
-  // ===========================================================================
+  // ***************************************************************************
+  // ***************************************************************************
 
   List<Block> _getEventBlocksByShelf({required Shelf listenerShelf}) {
     // FullName, Block
@@ -244,6 +318,9 @@ class _Storage {
     return foundMap.values.toList();
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   List<Block> _getListenerBlocksByShelf({required Shelf eventShelf}) {
     // FullName, Block
     Map<String, Block> foundMap = {};
@@ -259,6 +336,9 @@ class _Storage {
     return foundMap.values.toList();
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   List<Scalar> _getListenerScalarsByShelf({required Shelf eventShelf}) {
     // FullName, Scalar
     Map<String, Scalar> foundMap = {};
@@ -273,6 +353,9 @@ class _Storage {
     }
     return foundMap.values.toList();
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   // Callable.
   List<Block> __getListenerBlocksByAffectedItemTypes({
@@ -298,6 +381,9 @@ class _Storage {
     return foundMap.values.toList();
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   // Callable.
   List<Block> __getListenerBlocksByBlock({required Block eventBlock}) {
     if (!eventBlock.fireEvent) {
@@ -310,6 +396,9 @@ class _Storage {
       ],
     );
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   List<Scalar> __getListenerScalarsByAffectedItemTypes({
     required List<Type> affectedItemTypes,
@@ -334,6 +423,9 @@ class _Storage {
     return foundMap.values.toList();
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   List<Scalar> __getListenerScalarsByBlock({required Block eventBlock}) {
     if (!eventBlock.fireEvent) {
       return [];
@@ -342,6 +434,9 @@ class _Storage {
       affectedItemTypes: [eventBlock.getItemType()],
     );
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   // Callable.
   List<ShelfBlockScalarType> _getListenerShelfBlockScalarTypes({
@@ -382,6 +477,9 @@ class _Storage {
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   // Callable.
   List<Block> _getEventBlocksByBlock({
     required Block listenerBlock,
@@ -403,6 +501,9 @@ class _Storage {
     return foundMap.values.toList();
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   // Callable.
   List<Block> _getEventBlocksByScalar({
     required Scalar listenerScalar,
@@ -422,6 +523,9 @@ class _Storage {
     }
     return foundMap.values.toList();
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   // Callable.
   List<ShelfBlockScalarType> _getEventShelfBlockTypes({
@@ -452,6 +556,9 @@ class _Storage {
     return foundEventShelfBlockTypes;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _addRecentShelf(Shelf shelf) {
     if (_rencentShelves.isEmpty) {
       _rencentShelves.add(shelf);
@@ -471,6 +578,9 @@ class _Storage {
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _checkToRemoveShelf(Shelf shelf) {
     bool hasMountedUIComponent = shelf.hasMountedUIComponent();
     if (!hasMountedUIComponent) {
@@ -482,12 +592,15 @@ class _Storage {
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   Shelf? _recentShelf() {
     return _rencentShelves.isEmpty ? null : _rencentShelves.first;
   }
 
-  // ===========================================================================
-  // ===========================================================================
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<void> __executeListeners({
     required List<Scalar> listenerScalars,
@@ -554,8 +667,8 @@ class _Storage {
       Shelf shelf = __shelfMap[shelfName]!;
       _ScalarAndBlockList sbList = queryMap[shelfName]!;
       //
-      await shelf._queryAllWithOverlayAndRestorable(
-        forceDataFilterOpt: null,
+      await shelf._queryAll(
+        forceFilterModelOpt: null,
         forceQueryScalarOpts: sbList.queryScalars
             .map(
               (s) => _ScalarOpt(scalar: s),
@@ -572,24 +685,105 @@ class _Storage {
                   postQueryBehavior: null),
             )
             .toList(),
-        forceQueryBlockFormOpts: [],
+        forceQueryFormModelOpts: [],
       );
     }
   }
 
-  // ===========================================================================
-  // ===========================================================================
+  // ***************************************************************************
+  // ***************************************************************************
 
-  void _logout() {
-    __shelfMap.clear();
-  }
-
-  ///
-  /// Very Dangerous!!! Only call on startup.
-  ///
-  void __clear() {
-    _rencentShelves.clear();
-    __shelfCreatorMap.clear();
-    __shelfMap.clear();
+  Future<void> _executeTaskUnitQueue() async {
+    await FlutterArtist.executeTask(asyncFunction: () async {
+      Map<String, Shelf> shelfMap = {};
+      while (_taskUnitQueue.hasNext()) {
+        _TaskUnit taskUnit = _taskUnitQueue.getNextTaskUnit()!;
+        shelfMap[taskUnit.shelf.name] = taskUnit.shelf;
+        print("~~~~~~~~~~~~~~~> Execute Task Unit: $taskUnit");
+        //
+        // Block Query:
+        if (taskUnit is _BlockQueryTaskUnit) {
+          await taskUnit.xBlock.block._unitQuery(
+            thisXBlock: taskUnit.xBlock,
+          );
+        }
+        // Block Select Item as Current:
+        else if (taskUnit is _BlockSelectAsCurrentTaskUnit) {
+          await taskUnit.xBlock.block._unitSelectItemAsCurrent(
+            currentItemSelectionType: taskUnit.currentItemSelectionType,
+            candidateItem: taskUnit.candidateItem,
+            thisXBlock: taskUnit.xBlock,
+          );
+        }
+        // Block Delete Item:
+        else if (taskUnit is _BlockDeleteItemTaskUnit) {
+          await taskUnit.xBlock.block._unitDeleteItem(
+            thisXBlock: taskUnit.xBlock,
+            item: taskUnit.item,
+          );
+        }
+        // Block QuickCreateItem:
+        else if (taskUnit is _BlockQuickCreateItemTaskUnit) {
+          await taskUnit.xBlock.block._unitQuickCreateItem(
+            thisXBlock: taskUnit.xBlock,
+            action: taskUnit.action,
+          );
+        }
+        // Block QuickUpdateItem:
+        else if (taskUnit is _BlockQuickUpdateItemTaskUnit) {
+          await taskUnit.xBlock.block._unitQuickUpdateItem(
+            thisXBlock: taskUnit.xBlock,
+            action: taskUnit.action,
+          );
+        }
+        // Block QuickAction:
+        else if (taskUnit is _BlockQuickActionTaskUnit) {
+          await taskUnit.xBlock.block._unitQuickAction(
+            thisXBlock: taskUnit.xBlock,
+            action: taskUnit.action,
+            afterQuickAction: taskUnit.afterQuickAction,
+          );
+        }
+        // Block QuickChildBlockItemsAction:
+        else if (taskUnit is _BlockQuickChildBlockItemsTaskUnit) {
+          await taskUnit.xBlock.block._unitQuickChildBlockItemsAction(
+            thisXBlock: taskUnit.xBlock,
+            action: taskUnit.action,
+          );
+        }
+        // FormModel LoadForm:
+        else if (taskUnit is _FormModelLoadFormTaskUnit) {
+          await taskUnit.xFormModel.formModel._unitLoadForm(
+            thisXFormModel: taskUnit.xFormModel,
+          );
+        }
+        // FormModel Save:
+        else if (taskUnit is _SaveFormSaveTaskUnit) {
+          await taskUnit.xFormModel.formModel._unitSaveForm(
+            thisXFormModel: taskUnit.xFormModel,
+          );
+        }
+        // Scalar:
+        else if (taskUnit is _ScalarQueryTaskUnit) {
+          await taskUnit.xScalar.scalar._unitQuery(
+            thisXScalar: taskUnit.xScalar,
+          );
+        }
+        // Scalar QuickAction:
+        else if (taskUnit is _ScalarQuickActionTaskUnit) {
+          await taskUnit.xScalar.scalar._unitQuickAction(
+            thisXScalar: taskUnit.xScalar,
+            action: taskUnit.action,
+            afterQuickAction: taskUnit.afterQuickAction,
+          );
+        }
+      }
+      //
+      _taskUnitCount++;
+      //
+      for (Shelf shelf in shelfMap.values) {
+        shelf.updateAllUIComponents();
+      }
+    });
   }
 }

@@ -2,13 +2,13 @@ part of '../flutter_artist.dart';
 
 class ShelfStructure {
   final String? description;
-  final Map<String, DataFilter> dataFilters;
+  final Map<String, FilterModel> filterModels;
   final List<Block> blocks;
   final List<Scalar> scalars;
 
   ShelfStructure({
     this.description,
-    required this.dataFilters,
+    required this.filterModels,
     required this.blocks,
     this.scalars = const [],
   });

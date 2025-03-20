@@ -3,32 +3,32 @@ part of '../flutter_artist.dart';
 class _FilterCriteriaDebugView extends StatelessWidget {
   final Block? block;
   final Scalar? scalar;
-  final DataFilter? dataFilter;
+  final FilterModel? filterModel;
 
   const _FilterCriteriaDebugView.block({
     super.key,
     required Block this.block,
   })  : scalar = null,
-        dataFilter = null;
+        filterModel = null;
 
   const _FilterCriteriaDebugView.scalar({
     super.key,
     required Scalar this.scalar,
   })  : block = null,
-        dataFilter = null;
+        filterModel = null;
 
-  const _FilterCriteriaDebugView.dataFilter({
+  const _FilterCriteriaDebugView.filterModel({
     super.key,
-    required DataFilter this.dataFilter,
+    required FilterModel this.filterModel,
   })  : block = null,
         scalar = null;
 
   @override
   Widget build(BuildContext context) {
     List<TabData> tabs = [];
-    DataFilter? _dataFilter = dataFilter;
+    FilterModel? _filterModel = filterModel;
     if (block != null) {
-      _dataFilter = block!.dataFilter;
+      _filterModel = block!.filterModel;
       //
       tabs.add(
         TabData(
@@ -48,7 +48,7 @@ class _FilterCriteriaDebugView extends StatelessWidget {
       );
     }
     if (scalar != null) {
-      _dataFilter = scalar!.dataFilter;
+      _filterModel = scalar!.filterModel;
       //
       tabs.add(
         TabData(
@@ -67,19 +67,19 @@ class _FilterCriteriaDebugView extends StatelessWidget {
         ),
       );
     }
-    if (_dataFilter != null) {
+    if (_filterModel != null) {
       tabs.add(
         TabData(
-          text: getClassName(_dataFilter),
+          text: getClassName(_filterModel),
           closable: false,
           leading: (context, status) => Icon(
-            _dataFilterIconData,
+            _filterModelIconData,
             color: Colors.indigo,
             size: 16,
           ),
           content: SingleChildScrollView(
-            child: _DataFilterCriteriaView(
-              dataFilter: _dataFilter,
+            child: _FilterModelCriteriaView(
+              filterModel: _filterModel,
             ),
           ),
         ),

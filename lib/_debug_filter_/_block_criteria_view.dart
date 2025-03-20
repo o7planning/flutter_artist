@@ -11,9 +11,9 @@ class _BlockCriteriaView extends _BlkOrScrCriteriaView {
   }
 
   @override
-  String? getDataFilterClassName() {
-    DataFilter? dataFilter = block.dataFilter;
-    return dataFilter == null ? null : getClassName(dataFilter);
+  String? getFilterModelClassName() {
+    FilterModel? filterModel = block.filterModel;
+    return filterModel == null ? null : getClassName(filterModel);
   }
 
   @override

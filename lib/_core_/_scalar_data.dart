@@ -1,13 +1,13 @@
 part of '../flutter_artist.dart';
 
-class ScalarData<VALUE extends Object, FILTER_INPUT extends FilterInput,
+class ScalarData<
+    VALUE extends Object, //
+    FILTER_INPUT extends FilterInput,
     FILTER_CRITERIA extends FilterCriteria> {
   ///
   /// Owner Scalar.
   ///
   final Scalar<VALUE, FILTER_INPUT, FILTER_CRITERIA> scalar;
-
-  bool __isTemporaryMode = false;
 
   FILTER_CRITERIA? _filterCriteria;
 
@@ -17,52 +17,53 @@ class ScalarData<VALUE extends Object, FILTER_INPUT extends FilterInput,
 
   VALUE? get value => _value;
 
-  VALUE? __valueBk;
+  DataState _queryDataState = DataState.pending;
 
-  DataState _dataState = DataState.pending;
+  DataState get queryDataState => _queryDataState;
 
-  DataState get dataState => _dataState;
-
-  DataState __dataStateBk = DataState.pending;
+  // ***************************************************************************
+  // ***************************************************************************
 
   ScalarData(this.scalar);
 
-  void setToPending() {
-    print(" --> ${getClassName(scalar)} --> Set To Pending");
-    _dataState = DataState.pending;
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _clearWithDataState({required DataState queryDataState}) {
+    _queryDataState = queryDataState;
+    _value = null;
+    _filterCriteria = null; // ???
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool _isXCriteriaChanged({
+    required FILTER_CRITERIA newFilterCriteria,
+  }) {
+    if (newFilterCriteria != _filterCriteria) {
+      return true;
+    }
+    return false;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void setToPending() {
+    _queryDataState = DataState.pending;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _updateFrom({
     required FILTER_CRITERIA? filterCriteria,
-    required VALUE? data,
+    required VALUE? value,
     required DataState dataState,
   }) {
     _filterCriteria = filterCriteria;
-    _value = data;
-    _dataState = dataState;
-  }
-
-  void _backup() {
-    if (!__isTemporaryMode) {
-      __isTemporaryMode = true;
-      __dataStateBk = _dataState;
-      __valueBk = _value;
-    }
-  }
-
-  void _applyNewState() {
-    if (__isTemporaryMode) {
-      __isTemporaryMode = false;
-      __dataStateBk = DataState.pending;
-      __valueBk = null;
-    }
-  }
-
-  void _restore() {
-    if (__isTemporaryMode) {
-      __isTemporaryMode = false;
-      _dataState = __dataStateBk;
-      _value = __valueBk;
-    }
+    _value = value;
+    _queryDataState = dataState;
   }
 }
