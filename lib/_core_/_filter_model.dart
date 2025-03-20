@@ -66,7 +66,6 @@ abstract class FilterModel<
     //
     FILTER_CRITERIA? filterCriteria = await _startNewFilterTransaction(
       filterInput: null,
-      formViewInstantValue: _formKey.currentState?.instantValue,
     );
     return filterCriteria != null;
   }
@@ -150,12 +149,9 @@ abstract class FilterModel<
   @ImportantMethodAnnotation()
   Future<FILTER_CRITERIA?> _startNewFilterTransaction({
     required FILTER_INPUT? filterInput,
-    required Map<String, dynamic>? formViewInstantValue,
   }) async {
-    if (filterInput != null && formViewInstantValue != null) {
-      throw "Invalid Call";
-    }
     print("#~~~~~~~~~~~> _startNewFilterTransaction");
+    print("instantValue: ${_formKey.currentState?.instantValue}");
     if (!_initiated && _formKey.currentState != null) {
       _initiated = true;
       data._initialFilterData(_formKey.currentState!.instantValue);
@@ -164,7 +160,7 @@ abstract class FilterModel<
       _masterDataStructure._resetTemporaryForNewTransaction(
         currentFormData: filterInput != null
             ? {} // To Clear All.
-            : formViewInstantValue ?? data._currentFormData,
+            : _formKey.currentState?.instantValue ?? {}, // data._currentFormData,
       );
       _masterDataStructure._printTemporaryInfo();
       //
