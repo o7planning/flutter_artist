@@ -156,20 +156,16 @@ abstract class FilterModel<
       throw "Invalid Call";
     }
     print("#~~~~~~~~~~~> _startNewFilterTransaction");
-    print(
-        "@~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1 - ${_formKey.currentState?.instantValue}");
     if (!_initiated && _formKey.currentState != null) {
       _initiated = true;
       data._initialFilterData(_formKey.currentState!.instantValue);
     }
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~> 2 - $formViewInstantValue");
     try {
       _masterDataStructure._resetTemporaryForNewTransaction(
         currentFormData: filterInput != null
             ? {} // To Clear All.
             : formViewInstantValue ?? data._currentFormData,
       );
-      print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3");
       _masterDataStructure._printTemporaryInfo();
       //
       for (OptProp optProp in _masterDataStructure._rootOptProps) {
@@ -182,7 +178,6 @@ abstract class FilterModel<
           optProp: optProp,
         );
       }
-      print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~> 4");
       _masterDataStructure._printTemporaryInfo();
       if (filterInput != null) {
         for (CommonProp commonMasterProp in _masterDataStructure._commonProps) {
@@ -221,14 +216,14 @@ abstract class FilterModel<
         // IMPORTANT: To avoid infinite loops.
         _lockFireChange = true;
         //
-        Map<String, dynamic> minPatch = PatchUtils.getMinPatchValues(
-          currentValues: _formKey.currentState!.instantValue,
-          patchValues: data._currentFormData,
-        );
+        // Map<String, dynamic> minPatch = PatchUtils.getMinPatchValues(
+        //   currentValues: _formKey.currentState!.instantValue,
+        //   patchValues: data._currentFormData,
+        // );
         // TODO: Eliminate flickering. (Test in song1a)
         // This line of code causes flickering on FilterView
         // _formKey.currentState?.patchValue(data._currentFormData);
-        _formKey.currentState?.patchValue(minPatch);
+        // _formKey.currentState?.patchValue(minPatch);
       } finally {
         _lockFireChange = false;
       }

@@ -51,6 +51,6 @@ class _TaskUnitQueue {
 
   @override
   String toString() {
-    return _taskUnits.toString();
+    return "_taskUnits: $_taskUnits, _secondaryQueue: $_secondaryQueue";
   }
 }

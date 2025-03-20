@@ -68,6 +68,10 @@ class _FilterViewBuilderState
   }
 
   Future<void> _onChanged() async {
+    if (FlutterArtist.executor.executingXShelfId != null) {
+      return;
+    }
+    //
     bool lockFireChange = widget.filterModel._lockFireChange;
     bool isBuilding = widget.filterModel._isWidgetStateBuilding(
       widgetState: this,
