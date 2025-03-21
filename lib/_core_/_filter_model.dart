@@ -144,6 +144,26 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  //
+  // TODO: Need to catch error??
+  //
+  void _patchValueSilently({required Map<String, dynamic> newCurrentValue}) {
+    for (String key in newCurrentValue.keys) {
+      dynamic value = newCurrentValue[key];
+
+      _formKey.currentState?.fields[key]?.setValue(
+        value,
+        //
+        // This prevents changeEvent and avoids infinite loop.
+        //
+        populateForm: false,
+      );
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   ///
   /// Return null is error.
   ///
@@ -151,7 +171,7 @@ abstract class FilterModel<
   Future<FILTER_CRITERIA?> _startNewFilterTransaction({
     required FILTER_INPUT? filterInput,
   }) async {
-    print("#~~~~~~~~~~~> _startNewFilterTransaction");
+    print("#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFilterTransaction");
     print("instantValue: ${_formKey.currentState?.instantValue}");
     if (!_initiated && _formKey.currentState != null) {
       _initiated = true;
@@ -161,8 +181,7 @@ abstract class FilterModel<
       _masterDataStructure._resetTemporaryForNewTransaction(
         currentFormData: filterInput != null
             ? {} // To Clear All.
-            : _formKey.currentState?.instantValue ??
-                {},
+            : _formKey.currentState?.instantValue ?? {},
       );
       _masterDataStructure._printTemporaryInfo();
       //
@@ -218,8 +237,10 @@ abstract class FilterModel<
         ..updateAll((k, v) => null)
         ..addAll(_masterDataStructure._tempCurrentFormData);
       this._masterDataStructure._applyAllTempDataToReal();
+      //
       // IMPORTANT:
-      _formKey.currentState?.patchValue(this.data._currentFormData);
+      //
+      _patchValueSilently(newCurrentValue: data._currentFormData);
       //
       return newCriteria;
     } catch (e, stackTrace) {
@@ -233,9 +254,8 @@ abstract class FilterModel<
       this.data._filterDataState = DataState.error;
       //
       // IMPORTANT: Restore OLD State:
-      // TODO: Need to catch error??
       //
-      _formKey.currentState?.patchValue(this.data._currentFormData);
+      _patchValueSilently(newCurrentValue: data._currentFormData);
       //
       return null;
     }
