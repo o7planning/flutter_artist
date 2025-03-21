@@ -71,13 +71,11 @@ class _FilterViewBuilderState
     if (FlutterArtist.executor.executingXShelfId != null) {
       return;
     }
-    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ _onChanged");
     //
-    bool lockFireChange = widget.filterModel._lockFireChange;
     bool isBuilding = widget.filterModel._isWidgetStateBuilding(
       widgetState: this,
     );
-    if (!lockFireChange && !isBuilding) {
+    if (!isBuilding) {
       await widget.filterModel._onChangeFromFilterView();
     }
   }

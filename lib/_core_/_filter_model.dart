@@ -42,8 +42,6 @@ abstract class FilterModel<
 
   FILTER_CRITERIA? get filterCriteria => _filterCriteria;
 
-  @Deprecated("Remove")
-  bool _lockFireChange = false;
   bool _applyDefaultFilterCriteria = false;
 
   late final PropsStructure _masterDataStructure;
