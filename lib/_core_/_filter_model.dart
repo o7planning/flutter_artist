@@ -161,7 +161,8 @@ abstract class FilterModel<
       _masterDataStructure._resetTemporaryForNewTransaction(
         currentFormData: filterInput != null
             ? {} // To Clear All.
-            : _formKey.currentState?.instantValue ?? {}, // data._currentFormData,
+            : _formKey.currentState?.instantValue ??
+                {}, // data._currentFormData,
       );
       _masterDataStructure._printTemporaryInfo();
       //
@@ -203,8 +204,9 @@ abstract class FilterModel<
     //
     try {
       // Convert Map Data to FilterCriteria Object.
-      FILTER_CRITERIA newCriteria =
-          createFilterCriteria(dataMap: _masterDataStructure._tempCurrentFormData,);
+      FILTER_CRITERIA newCriteria = createFilterCriteria(
+        dataMap: _masterDataStructure._tempCurrentFormData,
+      );
       _filterCriteria = newCriteria;
       //
       this.data._filterDataState = DataState.ready;
@@ -235,7 +237,6 @@ abstract class FilterModel<
       //
       return null;
     }
-
   }
 
   // ***************************************************************************
