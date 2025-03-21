@@ -29,7 +29,7 @@ class _FilterModelInfoDialogState extends State<_FilterModelInfoDialog> {
     // Set up the AlertDialog
     dialogs.CustomAlertDialog alert = dialogs.CustomAlertDialog(
       titleText: showFormData
-          ? "${getClassName(widget.filterModel)} - Data Filter"
+          ? "${getClassName(widget.filterModel)} - Filter Model"
           : "${getClassName(widget.filterModel.shelf)} - Structure",
       contentPadding: const EdgeInsets.all(5),
       content: _buildMainContent(

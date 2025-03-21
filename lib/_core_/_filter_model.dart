@@ -42,6 +42,7 @@ abstract class FilterModel<
 
   FILTER_CRITERIA? get filterCriteria => _filterCriteria;
 
+  @Deprecated("Remove")
   bool _lockFireChange = false;
   bool _applyDefaultFilterCriteria = false;
 
@@ -200,38 +201,22 @@ abstract class FilterModel<
     //
     _printStructureAndTempData();
     //
-    // Apply Temporary data to real data:
-    //
-    this.data._currentFormData
-      ..updateAll((k, v) => null)
-      ..addAll(_masterDataStructure._tempCurrentFormData);
-    this._masterDataStructure._applyAllTempDataToReal();
-    //
-    if (_formKey.currentState != null) {
-      try {
-        // IMPORTANT: To avoid infinite loops.
-        _lockFireChange = true;
-        //
-        // Map<String, dynamic> minPatch = PatchUtils.getMinPatchValues(
-        //   currentValues: _formKey.currentState!.instantValue,
-        //   patchValues: data._currentFormData,
-        // );
-        // TODO: Eliminate flickering. (Test in song1a)
-        // This line of code causes flickering on FilterView
-        // _formKey.currentState?.patchValue(data._currentFormData);
-        // _formKey.currentState?.patchValue(minPatch);
-      } finally {
-        _lockFireChange = false;
-      }
-    }
-    //
     try {
-      // If no error:
+      // Convert Map Data to FilterCriteria Object.
       FILTER_CRITERIA newCriteria =
-          createFilterCriteria(dataMap: data.currentFormData);
+          createFilterCriteria(dataMap: _masterDataStructure._tempCurrentFormData,);
       _filterCriteria = newCriteria;
       //
       this.data._filterDataState = DataState.ready;
+
+      //
+      // Apply Temporary data to real data:
+      //
+      this.data._currentFormData
+        ..updateAll((k, v) => null)
+        ..addAll(_masterDataStructure._tempCurrentFormData);
+      this._masterDataStructure._applyAllTempDataToReal();
+      //
       return newCriteria;
     } catch (e, stackTrace) {
       _handleError(
@@ -243,8 +228,14 @@ abstract class FilterModel<
       );
       this.data._filterDataState = DataState.error;
       //
+      // IMPORTANT: Restore OLD State:
+      // TODO: Need to catch error??
+      //
+      _formKey.currentState?.patchValue(this.data._currentFormData);
+      //
       return null;
     }
+
   }
 
   // ***************************************************************************
