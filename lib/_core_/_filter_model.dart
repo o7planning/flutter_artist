@@ -162,7 +162,7 @@ abstract class FilterModel<
         currentFormData: filterInput != null
             ? {} // To Clear All.
             : _formKey.currentState?.instantValue ??
-                {}, // data._currentFormData,
+                {},
       );
       _masterDataStructure._printTemporaryInfo();
       //
@@ -218,6 +218,8 @@ abstract class FilterModel<
         ..updateAll((k, v) => null)
         ..addAll(_masterDataStructure._tempCurrentFormData);
       this._masterDataStructure._applyAllTempDataToReal();
+      // IMPORTANT:
+      _formKey.currentState?.patchValue(this.data._currentFormData);
       //
       return newCriteria;
     } catch (e, stackTrace) {
