@@ -4,6 +4,8 @@ class Actionable {
   final String? message;
   final bool yes;
 
+  bool get no => !yes;
+
   Actionable.yes()
       : message = null,
         yes = true;

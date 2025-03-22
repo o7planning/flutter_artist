@@ -313,6 +313,8 @@ part '_core_/_actionable.dart';
 
 part '_prop/_prop.dart';
 
+part '_actionable_/_cre_item_actionable.dart';
+
 part '_prop/_common_prop.dart';
 
 part '_prop/_opt_prop.dart';
