@@ -142,21 +142,43 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  //
-  // TODO: Need to catch error??
-  //
-  void _patchValueSilently({required Map<String, dynamic> newCurrentValue}) {
+  ///
+  /// Note: This method Patch value for [_formKey.currentState] silently,
+  /// it will not call [onChange] event of Fields.
+  ///
+  /// If call [_formKey.currentState?.patchValue] method, it will call [onChange] event.
+  ///
+  /// TODO: Need to catch error??
+  ///
+  void _formKeyPatchValueSilently({
+    required Map<String, dynamic> newCurrentValue,
+  }) {
     for (String key in newCurrentValue.keys) {
       dynamic value = newCurrentValue[key];
+      //
+      // IMPORTANT:
+      //  Update FormBuilder Model: _instantValue[key] = value;
+      //
+      //  _formKey.currentState?.setInternalFieldValue(key, value);
+      //
 
+      //
+      // IMPORTANT:
+      //  Update FormBuilder View State:
+      //
       _formKey.currentState?.fields[key]?.setValue(
         value,
         //
-        // This prevents changeEvent and avoids infinite loop.
+        // populateForm: true ---> _formKey.currentState?setInternalFieldValue(key,valuee)
+        // populateForm: false ---> [Do nothing]
         //
-        populateForm: false,
+        populateForm: true, // [Update FormBuilder Model]
       );
     }
+  }
+
+  void _formKeyPatchValue({required Map<String, dynamic> newCurrentValue}) {
+    _formKey.currentState?.patchValue(newCurrentValue);
   }
 
   // ***************************************************************************
@@ -176,7 +198,7 @@ abstract class FilterModel<
       data._initialFilterData(_formKey.currentState!.instantValue);
     }
     try {
-      _masterDataStructure._resetTemporaryForNewTransaction(
+      _masterDataStructure._initTemporaryForNewTransaction(
         currentFormData: filterInput != null
             ? {} // To Clear All.
             : _formKey.currentState?.instantValue ?? {},
@@ -229,16 +251,20 @@ abstract class FilterModel<
       this.data._filterDataState = DataState.ready;
 
       //
-      // Apply Temporary data to real data:
+      // Update Real FromData from Temporary FormData:
       //
       this.data._currentFormData
         ..updateAll((k, v) => null)
         ..addAll(_masterDataStructure._tempCurrentFormData);
+      //
+      // UPDATE OPT-DATA:
+      //  - optProp._xOptionedData = optProp._tempXOptionedData;
+      //
       this._masterDataStructure._applyAllTempDataToReal();
       //
       // IMPORTANT:
       //
-      _patchValueSilently(newCurrentValue: data._currentFormData);
+      _formKeyPatchValueSilently(newCurrentValue: data._currentFormData);
       //
       return newCriteria;
     } catch (e, stackTrace) {
@@ -252,8 +278,9 @@ abstract class FilterModel<
       this.data._filterDataState = DataState.error;
       //
       // IMPORTANT: Restore OLD State:
+      // Note [_formKeyPatchValueSilently] NOT WORK!.
       //
-      _patchValueSilently(newCurrentValue: data._currentFormData);
+      _formKeyPatchValueSilently(newCurrentValue: data._currentFormData);
       //
       return null;
     }

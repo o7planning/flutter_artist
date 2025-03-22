@@ -46,7 +46,7 @@ class PropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _resetTemporaryForNewTransaction({
+  void _initTemporaryForNewTransaction({
     required Map<String, dynamic>? currentFormData,
   }) {
     _tempCurrentFormData
