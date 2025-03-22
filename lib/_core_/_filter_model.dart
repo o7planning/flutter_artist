@@ -198,7 +198,9 @@ abstract class FilterModel<
       data._initialFilterData(_formKey.currentState!.instantValue);
     }
     try {
+      // All values including hidden values (not on the user interface).
       Map<String, dynamic> allNewValue = {...data._currentFormData};
+      // Update values from view (On the user Interface).
       allNewValue.addAll(_formKey.currentState?.instantValue ?? {});
       //
       _masterDataStructure._initTemporaryForNewTransaction(
