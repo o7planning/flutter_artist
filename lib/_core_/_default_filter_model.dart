@@ -52,6 +52,14 @@ class _DefaultFilterModel
   }) {
     return null;
   }
+
+  @override
+  PropValue? specifyDefaultOptPropValue({
+    required XOptionedData optPropData,
+    required String propName,
+  }) {
+    return null;
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -100,6 +108,14 @@ class StringIdFilterModel
   @override
   Object? filterInputToCommonPropValue({
     required StringIdFilterInput filterInput,
+    required String propName,
+  }) {
+    return null;
+  }
+
+  @override
+  PropValue? specifyDefaultOptPropValue({
+    required XOptionedData optPropData,
     required String propName,
   }) {
     return null;
@@ -156,6 +172,14 @@ class StringValueFilterModel
   }) {
     return null;
   }
+
+  @override
+  PropValue? specifyDefaultOptPropValue({
+    required XOptionedData optPropData,
+    required String propName,
+  }) {
+    return null;
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -208,6 +232,14 @@ class SearchTextFilterModel
   }) {
     return null;
   }
+
+  @override
+  PropValue? specifyDefaultOptPropValue({
+    required XOptionedData optPropData,
+    required String propName,
+  }) {
+    return null;
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -256,6 +288,14 @@ class IntIdFilterModel
   @override
   Object? filterInputToCommonPropValue({
     required IntIdFilterInput filterInput,
+    required String propName,
+  }) {
+    return null;
+  }
+
+  @override
+  PropValue? specifyDefaultOptPropValue({
+    required XOptionedData optPropData,
     required String propName,
   }) {
     return null;

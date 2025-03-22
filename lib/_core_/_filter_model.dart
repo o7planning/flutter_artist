@@ -42,7 +42,7 @@ abstract class FilterModel<
 
   FILTER_CRITERIA? get filterCriteria => _filterCriteria;
 
-  bool _applyDefaultFilterCriteria = false;
+  bool _defaultValueInitiated = false;
 
   late final PropsStructure _masterDataStructure;
 
@@ -115,15 +115,16 @@ abstract class FilterModel<
     if (data != null) {
       return data;
     } else {
-      OptPropType? type = getOptPropType(propName);
-      switch (type) {
-        case null:
-          return data;
-        case OptPropType.list:
-          return [];
-        case OptPropType.custom:
-          return data;
-      }
+      return data;
+      // OptPropType? type = getOptPropType(propName);
+      // switch (type) {
+      //   case null:
+      //     return data;
+      //   case OptPropType.list:
+      //     return [];
+      //   case OptPropType.custom:
+      //     return data;
+      // }
     }
   }
 
@@ -212,6 +213,8 @@ abstract class FilterModel<
       //
       for (OptProp optProp in _masterDataStructure._rootOptProps) {
         //
+        // Load OptProp Data and set default and selected.
+        //
         // May throw ApiError.
         //
         await _loadOptPropDataCascade(
@@ -271,6 +274,7 @@ abstract class FilterModel<
       //
       _formKeyPatchValueSilently(newCurrentValue: data._currentFormData);
       //
+      _defaultValueInitiated = true;
       return newCriteria;
     } catch (e, stackTrace) {
       _handleError(
@@ -340,6 +344,13 @@ abstract class FilterModel<
           optPropData: optPropData,
           propName: propName,
         );
+      } else {
+        if (!_defaultValueInitiated) {
+          inputValueWrap = __specifyDefaultOptPropValue(
+            optPropData: optPropData,
+            propName: propName,
+          );
+        }
       }
       //
       // Current selected value:
@@ -482,6 +493,11 @@ abstract class FilterModel<
     required String propName,
   });
 
+  PropValue? specifyDefaultOptPropValue({
+    required XOptionedData optPropData,
+    required String propName,
+  });
+
   PropValue? _filterInputToOptPropValue({
     required FILTER_INPUT filterInput,
     required XOptionedData optPropData,
@@ -489,6 +505,25 @@ abstract class FilterModel<
   }) {
     PropValue? wrap = filterInputToOptPropValue(
       filterInput: filterInput,
+      optPropData: optPropData,
+      propName: propName,
+    );
+    if (wrap == null) {
+      return null;
+    }
+    List? value = wrap.value;
+    return PropValue(
+      optPropData.findItemsInListByDynamics(
+        dynamicValues: value,
+      ),
+    );
+  }
+
+  PropValue? __specifyDefaultOptPropValue({
+    required XOptionedData optPropData,
+    required String propName,
+  }) {
+    PropValue? wrap = specifyDefaultOptPropValue(
       optPropData: optPropData,
       propName: propName,
     );
