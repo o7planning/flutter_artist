@@ -198,10 +198,13 @@ abstract class FilterModel<
       data._initialFilterData(_formKey.currentState!.instantValue);
     }
     try {
+      Map<String, dynamic> allNewValue = {...data._currentFormData};
+      allNewValue.addAll(_formKey.currentState?.instantValue ?? {});
+      //
       _masterDataStructure._initTemporaryForNewTransaction(
         currentFormData: filterInput != null
             ? {} // To Clear All.
-            : _formKey.currentState?.instantValue ?? {},
+            : allNewValue,
       );
       _masterDataStructure._printTemporaryInfo();
       //
