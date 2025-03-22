@@ -309,6 +309,8 @@ part '_core_/_executor.dart';
 
 part '_prop/_master_data_structure.dart';
 
+part '_core_/_actionable.dart';
+
 part '_prop/_prop.dart';
 
 part '_prop/_common_prop.dart';

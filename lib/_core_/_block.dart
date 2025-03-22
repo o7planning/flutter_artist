@@ -1314,8 +1314,8 @@ abstract class Block<
     //
     // No need to check again?
     //
-    bool canDelete = canDeleteItem(item: item);
-    if (!canDelete) {
+    Actionable actionable = canDeleteItem(item: item);
+    if (!actionable.yes) {
       return;
     }
     //
@@ -1590,7 +1590,8 @@ abstract class Block<
       case AfterBlockQuickAction.none:
         break;
       case AfterBlockQuickAction.refreshCurrentItem:
-        if (!canRefreshCurrentItem()) {
+        Actionable actionable = canRefreshCurrentItem();
+        if (!actionable.yes) {
           return true;
         }
         ITEM? currentItem = this.data.currentItem;
@@ -1706,11 +1707,11 @@ abstract class Block<
             itemDetail: savedItemDetail,
           );
       //
-      bool editable = canEditItemOnForm(item: refreshedItem);
+      Actionable actionable = canEditItemOnForm(item: refreshedItem);
       //
       FlutterArtist.codeFlowLogger._addInfo(
         ownerClassInstance: this,
-        info: 'Allow Edit? $editable',
+        info: 'Allow Edit? ${actionable.yes}',
         isLibCode: true,
       );
       //
@@ -2308,10 +2309,13 @@ abstract class Block<
 
   // TODO: Xem lai phuong thuc nay. No da duoc goi o dau.
   bool hasCurrentItemAndAllowUpdate() {
-    return this.data.currentItem != null &&
-        __isAllowDeleteItem(
-          item: this.data.currentItem!,
-        );
+    if (this.data.currentItem == null) {
+      return false;
+    }
+    Actionable actionable = __isAllowDeleteItem(
+      item: this.data.currentItem!,
+    );
+    return actionable.yes;
   }
 
   // ***************************************************************************
@@ -2319,10 +2323,13 @@ abstract class Block<
 
   // TODO: Xem lai phuong thuc nay. No da duoc goi o dau.
   bool hasCurrentItemAndAllowDelete() {
-    return this.data.currentItem != null &&
-        __isAllowDeleteItem(
-          item: this.data.currentItem!,
-        );
+    if (this.data.currentItem == null) {
+      return false;
+    }
+    Actionable actionable = __isAllowDeleteItem(
+      item: this.data.currentItem!,
+    );
+    return actionable.yes;
   }
 
   // ***************************************************************************
@@ -2720,12 +2727,11 @@ abstract class Block<
   // ***************************************************************************
 
   bool __checkBeforeFormCreation({required bool showErrorMessage}) {
-    bool canCrete = canCreateItem();
-    if (!canCrete) {
+    Actionable createActionable = canCreateItem();
+    if (!createActionable.yes) {
       if (showErrorMessage) {
         showErrorSnackBar(
-          message:
-              "Cannot create new Item on form because some conditions are not met.",
+          message: createActionable.message!,
           errorDetails: ["Block: ${getClassName(this)}"],
         );
       }
@@ -2975,7 +2981,8 @@ abstract class Block<
       }
     }
     //
-    if (!canDeleteItem(item: item)) {
+    Actionable actionable = canDeleteItem(item: item);
+    if (!actionable.yes) {
       return false;
     }
     bool confirm = await showConfirmDeleteDialog(details: getClassName(item));
@@ -3024,7 +3031,8 @@ abstract class Block<
       },
     );
     //
-    if (!canDeleteItem(item: item)) {
+    Actionable actionable = canDeleteItem(item: item);
+    if (!actionable.yes) {
       return null;
     }
     if (ignoreIfItemNotInList) {
@@ -3077,7 +3085,8 @@ abstract class Block<
       parameters: {},
     );
     //
-    if (!canRefreshCurrentItem()) {
+    Actionable actionable = canRefreshCurrentItem();
+    if (!actionable.yes) {
       return null;
     }
     //
@@ -3366,18 +3375,25 @@ abstract class Block<
   ///
   /// Allows deleting an Item or not according to the application logic.
   ///
-  bool __isAllowQuery() {
+  Actionable __isAllowQuery() {
     try {
-      return isAllowQuery();
+      bool allow = isAllowQuery();
+      return allow
+          ? Actionable.yes()
+          : Actionable.no(
+              message: "The application logic does not allow query this block.",
+            );
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: "isAllowUpdateItem",
+        methodName: "isAllowQuery",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: false,
       );
-      return false;
+      return Actionable.no(
+        message: "The ${getClassName(this)}.isAllowQuery() error.",
+      );
     }
   }
 
@@ -3387,8 +3403,12 @@ abstract class Block<
   ///
   /// Allows edit current item or not according to the application logic.
   ///
-  bool __isAllowResetForm() {
-    return isAllowResetForm();
+  Actionable __isAllowResetForm() {
+    bool allow = isAllowResetForm();
+    return allow
+        ? Actionable.yes()
+        : Actionable.no(
+            message: "The application logic does not allow to reset the form.");
   }
 
   // ***************************************************************************
@@ -3397,10 +3417,10 @@ abstract class Block<
   ///
   /// Allows edit current item or not according to the application logic.
   ///
-  bool __isAllowUpdateItemCurrentItem() {
+  Actionable __isAllowUpdateItemCurrentItem() {
     ITEM? currentItem = this.data.currentItem;
     if (currentItem == null) {
-      return false;
+      return Actionable.no(message: "The current item is not available.");
     }
     return _isAllowUpdateItem(item: currentItem);
   }
@@ -3411,9 +3431,14 @@ abstract class Block<
   ///
   /// Allows deleting an Item or not according to the application logic.
   ///
-  bool _isAllowUpdateItem({required ITEM item}) {
+  Actionable _isAllowUpdateItem({required ITEM item}) {
     try {
-      return isAllowUpdateItem(item: item);
+      bool allow = isAllowUpdateItem(item: item);
+      return allow
+          ? Actionable.yes()
+          : Actionable.no(
+              message:
+                  "The application logic does not allow this item to be updated.");
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
@@ -3422,7 +3447,8 @@ abstract class Block<
         stackTrace: stackTrace,
         showSnackBar: false,
       );
-      return false;
+      return Actionable.no(
+          message: "The ${getClassName(this)}.isAllowUpdateItem() error.");
     }
   }
 
@@ -3432,9 +3458,14 @@ abstract class Block<
   ///
   /// Allows creating a new Item or not according to the application logic.
   ///
-  bool __isAllowCreateItem() {
+  Actionable __isAllowCreateItem() {
     try {
-      return isAllowCreateItem();
+      bool allow = isAllowCreateItem();
+      return allow
+          ? Actionable.yes()
+          : Actionable.no(
+              message:
+                  "The application logic does not allow to create a new item.");
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
@@ -3443,7 +3474,8 @@ abstract class Block<
         stackTrace: stackTrace,
         showSnackBar: false,
       );
-      return false;
+      return Actionable.no(
+          message: "The ${getClassName(this)}.isAllowCreateItem() error.");
     }
   }
 
@@ -3453,9 +3485,14 @@ abstract class Block<
   ///
   /// Allows deleting an Item or not according to the application logic.
   ///
-  bool __isAllowDeleteItem({required ITEM item}) {
+  Actionable __isAllowDeleteItem({required ITEM item}) {
     try {
-      return isAllowDeleteItem(item: item);
+      bool allow = isAllowDeleteItem(item: item);
+      return allow
+          ? Actionable.yes()
+          : Actionable.no(
+              message:
+                  "The application logic does not allow this item to be deleted.");
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
@@ -3464,7 +3501,8 @@ abstract class Block<
         stackTrace: stackTrace,
         showSnackBar: false,
       );
-      return false;
+      return Actionable.no(
+          message: "The ${getClassName(this)}.isAllowDeleteItem() error.");
     }
   }
 
@@ -3476,20 +3514,30 @@ abstract class Block<
   ///
   /// Check if Ancestor Blocks in Safe State to Query in current Block.
   ///
-  bool __checkAncestorsSafeToQuery() {
+  Actionable __checkAncestorsSafeToQuery() {
     if (parent == null) {
-      return true;
+      return Actionable.yes();
     }
     //
     if (!parent!.hasCurrentItem()) {
-      return false;
+      return Actionable.no(
+        message:
+            "The query is disabled because the parent block has no current item.",
+      );
     }
     //
     if (parent!.formModel != null) {
       switch (parent!.formModel!.formMode) {
         case FormMode.none:
+          return Actionable.no(
+            message:
+                "Query is disabled because the parent block's form is in 'none' mode",
+          );
         case FormMode.creation:
-          return false;
+          return Actionable.no(
+            message:
+                "Query is disabled because the parent block's form is in 'creation' mode",
+          );
         case FormMode.edit:
           break; // Do nothing
       }
@@ -3505,16 +3553,23 @@ abstract class Block<
   ///
   /// Check if Ancestor Blocks in Safe State to Delete item in current Block.
   ///
-  bool __checkAncestorsSafeToDelete(ITEM? item) {
+  Actionable __checkAncestorsSafeToDelete(ITEM? item) {
     if (parent == null) {
-      return true;
+      return Actionable.yes();
     }
     // TODO: Kiểm tra nếu item là current thì mới cần đk này:
     if (parent!.formModel != null) {
       switch (parent!.formModel!.formMode) {
         case FormMode.none:
+          return Actionable.no(
+            message:
+                "Disallow deleting items when the ancestor block form is in 'none' mode.",
+          );
         case FormMode.creation:
-          return false;
+          return Actionable.no(
+            message:
+                "Disallow deleting items when the ancestor block form is in 'creation' mode.",
+          );
         case FormMode.edit:
           break; // Do nothing
       }
@@ -3530,16 +3585,23 @@ abstract class Block<
   ///
   /// Check if Ancestor Blocks in Safe State to Create item in current Block.
   ///
-  bool __checkAncestorsSafeToCreate() {
+  Actionable __checkAncestorsSafeToCreate() {
     if (parent == null) {
-      return true;
+      return Actionable.yes();
     }
     //
     if (parent!.formModel != null) {
       switch (parent!.formModel!.formMode) {
         case FormMode.none:
+          return Actionable.no(
+            message:
+                "Disallow creating items when the ancestor block form is in 'none' mode.",
+          );
         case FormMode.creation:
-          return false;
+          return Actionable.no(
+            message:
+                "Disallow creating items when the ancestor block form is in 'creation' mode.",
+          );
         case FormMode.edit:
           break; // Do nothing
       }
@@ -3555,15 +3617,22 @@ abstract class Block<
   ///
   /// Check if Ancestor Blocks in Safe State to Edit item in current Block.
   ///
-  bool __checkAncestorsSafeToEditItem({required ITEM? item}) {
+  Actionable __checkAncestorsSafeToEditItem({required ITEM? item}) {
     if (parent == null) {
-      return true;
+      return Actionable.yes();
     }
     if (parent!.formModel != null) {
       switch (parent!.formModel!.formMode) {
         case FormMode.none:
+          return Actionable.no(
+            message:
+                "Disallow editing items when the ancestor block form is in 'none' mode.",
+          );
         case FormMode.creation:
-          return false;
+          return Actionable.no(
+            message:
+                "Disallow editing items when the ancestor block form is in 'creation' mode.",
+          );
         case FormMode.edit:
           break; // Do nothing
       }
@@ -3575,106 +3644,150 @@ abstract class Block<
   // *********** __canXXX() method *********************************************
   // ***************************************************************************
 
-  bool __canDeleteItem({required ITEM item, required bool checkAllow}) {
+  Actionable __canDeleteItem({required ITEM item, required bool checkAllow}) {
     if (__isDeleting) {
-      return false;
+      return Actionable.no(
+        message:
+            "Cannot delete another item while the previous delete action is in progress",
+      );
     }
     //
-    bool ancestorsSafe = __checkAncestorsSafeToDelete(item);
-    if (!ancestorsSafe) {
-      return false;
+    Actionable ancestorsSafe = __checkAncestorsSafeToDelete(item);
+    if (!ancestorsSafe.yes) {
+      return ancestorsSafe;
     }
     //
-    return checkAllow ? __isAllowDeleteItem(item: item) : true;
+    return checkAllow ? __isAllowDeleteItem(item: item) : Actionable.yes();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool __canCreateItem({required bool checkAllow}) {
-    if (formModel == null || this.__isPreparingFormCreation) {
-      return false;
+  Actionable __canCreateItem({required bool checkAllow}) {
+    if (formModel == null) {
+      return Actionable.no(
+        message:
+            "Cannot create a new item on the form because this block does not have a form.",
+      );
     }
-    bool ancestorSafe = __checkAncestorsSafeToCreate();
-    if (!ancestorSafe) {
-      return false;
+    if (this.__isPreparingFormCreation) {
+      return Actionable.no(
+        message: "The form is in the state of creating a new item.",
+      );
     }
-    return checkAllow ? __isAllowCreateItem() : true;
+    Actionable ancestorSafe = __checkAncestorsSafeToCreate();
+    if (!ancestorSafe.yes) {
+      return ancestorSafe;
+    }
+    return checkAllow ? __isAllowCreateItem() : Actionable.yes();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool __canResetForm({required bool checkAllow}) {
-    if (formModel == null || !formModel!.isDirty() || this.__isSaving) {
-      return false;
+  Actionable __canResetForm({required bool checkAllow}) {
+    if (formModel == null) {
+      return Actionable.no(
+        message:
+            "Form reset is not allowed because this block does not have a form.",
+      );
+    }
+    if (!formModel!.isDirty()) {
+      return Actionable.no(
+        message:
+            "Form reset is not allowed because the form is not in dirty state.",
+      );
+    }
+    if (this.__isSaving) {
+      return Actionable.no(
+        message:
+            "Form reset is not allowed because the form is in saving state.",
+      );
     }
     switch (formModel!.data._formMode) {
       case FormMode.none:
-        return false;
+        return Actionable.no(
+          message:
+              "Form reset is not allowed because the form is in 'none' mode.",
+        );
       case FormMode.creation:
         break; // Do nothing.
       case FormMode.edit:
         break; // Do nothing.
     }
     //
-    bool allowReset = checkAllow ? __isAllowResetForm() : true;
-    //
-    if (allowReset) {
-      return true;
-    }
-    return false;
+    return checkAllow ? __isAllowResetForm() : Actionable.yes();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool __canSaveForm({required bool checkAllow}) {
-    if (formModel == null || this.__isSaving) {
-      return false;
+  Actionable __canSaveForm({required bool checkAllow}) {
+    if (formModel == null) {
+      return Actionable.no(
+        message: "Cannot save form because this block does not have a form.",
+      );
     }
-    bool isAllow = false;
-    switch (formModel!.data._formMode) {
-      case FormMode.none:
-        return false;
-      case FormMode.creation:
-        isAllow = checkAllow ? __isAllowCreateItem() : true;
-        break;
-      case FormMode.edit:
-        isAllow = checkAllow ? __isAllowUpdateItemCurrentItem() : true;
-        break;
+    if (this.__isSaving) {
+      return Actionable.no(
+        message: "Cannot save form because form is in saving state.",
+      );
     }
-    //
-    if (isAllow && formModel!.isDirty()) {
-      return true;
+    // Actionable actionable;
+    // switch (formModel!.data._formMode) {
+    //   case FormMode.none:
+    //     return Actionable.no(
+    //       message: "Cannot save form because form is in 'none' mode",
+    //     );
+    //   case FormMode.creation:
+    //     actionable = checkAllow ? __isAllowCreateItem() : Actionable.yes();
+    //     break;
+    //   case FormMode.edit:
+    //     actionable = checkAllow ? __isAllowUpdateItemCurrentItem() :  Actionable.yes();
+    //     break;
+    // }
+    if (!formModel!.isDirty()) {
+      return Actionable.no(
+        message: "Cannot save form because form is not dirty.",
+      );
     }
-    return false;
+    return Actionable.yes();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool __canEditItemOnForm({
+  Actionable __canEditItemOnForm({
     required ITEM item,
     required bool checkAllow,
   }) {
-    if (formModel == null || __isSaving) {
-      return false;
+    if (formModel == null) {
+      return Actionable.no(
+          message:
+              "This item cannot be edited on the form because this block does not have a form.");
+    }
+    if (__isSaving) {
+      return Actionable.no(
+          message:
+              "This item cannot be edited on the form because the block is in a data-saving state.");
     }
     //
-    bool ancestorsSafe = __checkAncestorsSafeToEditItem(item: item);
-    if (!ancestorsSafe) {
-      return false;
+    Actionable ancestorsSafe = __checkAncestorsSafeToEditItem(item: item);
+    if (!ancestorsSafe.yes) {
+      return ancestorsSafe;
     }
     switch (formModel!.data._formMode) {
       case FormMode.none:
-        return false;
+        return Actionable.no(
+          message:
+              "Disallow editing items when the block form is in 'none' mode.",
+        );
       case FormMode.creation:
         break; // Do nothing.
       case FormMode.edit:
         break; // Do nothing.
     }
-    return checkAllow ? _isAllowUpdateItem(item: item) : true;
+    return checkAllow ? _isAllowUpdateItem(item: item) : Actionable.yes();
   }
 
   // ***************************************************************************
@@ -3684,19 +3797,25 @@ abstract class Block<
   /// Edit on edit-mode
   /// Edit on creation-mode
   ///
-  bool __isEnableFormToModify({required bool checkAllow}) {
+  Actionable __isEnableFormToModify({required bool checkAllow}) {
     if (formModel != null) {
       switch (formModel!.data._formMode) {
         case FormMode.creation:
-          return true;
+          return Actionable.yes();
         case FormMode.edit:
           break; // Continue check below.
         case FormMode.none:
-          return false;
+          return Actionable.no(
+              message: "Form disabled because it in 'none' mode");
       }
     }
-    if (this.data.currentItemDetail == null || __isRefreshingCurrentItem) {
-      return false;
+    if (this.data.currentItemDetail == null) {
+      return Actionable.no(
+          message: "Form disabled because the block has no current item");
+    }
+    if (__isRefreshingCurrentItem) {
+      return Actionable.no(
+          message: "Form disabled because the block in refreshing state");
     }
     //
     return __canEditItemOnForm(
@@ -3708,22 +3827,36 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool __canRefreshCurrentItem() {
-    if (this.data.currentItemDetail == null || __isRefreshingCurrentItem) {
-      return false;
+  Actionable __canRefreshCurrentItem() {
+    if (this.data.currentItemDetail == null) {
+      return Actionable.no(
+        message: "Cannot refresh the current item because it is not available.",
+      );
+    }
+    if (__isRefreshingCurrentItem) {
+      return Actionable.no(
+        message: "The current item is being refreshed.",
+      );
     }
     //
     if (formModel != null) {
       switch (formModel!.data._formMode) {
         case FormMode.none:
+          return Actionable.no(
+            message:
+                "Cannot refresh current item because form is in 'none' mode.",
+          );
         case FormMode.creation:
-          return false;
+          return Actionable.no(
+            message:
+                "Cannot refresh current item because form is in 'creation' mode.",
+          );
         case FormMode.edit:
           break; // Do nothing
       }
     }
     //
-    return true;
+    return Actionable.yes();
   }
 
   // ***************************************************************************
@@ -3745,21 +3878,21 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool canCreateItem() {
+  Actionable canCreateItem() {
     return __canCreateItem(checkAllow: true);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool canResetForm() {
+  Actionable canResetForm() {
     return __canResetForm(checkAllow: true);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool canSaveForm() {
+  Actionable canSaveForm() {
     return __canSaveForm(checkAllow: true);
   }
 
@@ -3773,10 +3906,12 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool canDeleteCurrentItem() {
+  Actionable canDeleteCurrentItem() {
     ITEM? currentItem = this.data.currentItem;
     if (currentItem == null) {
-      return false;
+      return Actionable.no(
+        message: "Cannot delete the current item because it is not available.",
+      );
     }
     return canDeleteItem(item: currentItem);
   }
@@ -3784,28 +3919,28 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool canDeleteItem({required ITEM item}) {
+  Actionable canDeleteItem({required ITEM item}) {
     return __canDeleteItem(item: item, checkAllow: true);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool canEditItemOnForm({required ITEM item}) {
+  Actionable canEditItemOnForm({required ITEM item}) {
     return __canEditItemOnForm(item: item, checkAllow: true);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _isEnableFormToModify() {
+  Actionable _isEnableFormToModify() {
     return __isEnableFormToModify(checkAllow: true);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool canEditCurrentItemOnForm() {
+  Actionable canEditCurrentItemOnForm() {
     return __isEnableFormToModify(checkAllow: true);
   }
 
@@ -3817,7 +3952,7 @@ abstract class Block<
   ///
   /// This method will return [true] if all the usual conditions are met.
   ///
-  bool canRefreshCurrentItem() {
+  Actionable canRefreshCurrentItem() {
     return __canRefreshCurrentItem();
   }
 
@@ -3834,31 +3969,47 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool canShowFormInfo() {
+  Actionable canShowFormInfo() {
     ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
-    return formModel != null &&
-        loggedInUser != null &&
-        loggedInUser.isSystemUser;
+    if (formModel == null) {
+      return Actionable.no(
+        message:
+            "Cannot display 'FormInfoDialog' because this block does not have a form.",
+      );
+    }
+    if (loggedInUser == null) {
+      return Actionable.no(
+        message:
+            "Cannot display 'FormInfoDialog' because the user is not logged in.",
+      );
+    }
+    if (!loggedInUser.isSystemUser) {
+      return Actionable.no(
+        message:
+            "Cannot display 'FormInfoDialog' because the user is not a system user..",
+      );
+    }
+    return Actionable.yes();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool __canQuery({required bool checkAllow}) {
+  Actionable __canQuery({required bool checkAllow}) {
     if (__isQuerying) {
-      return false;
+      return Actionable.no(message: "The bock is in querying state");
     }
-    bool ancestorsSafe = __checkAncestorsSafeToQuery();
-    if (!ancestorsSafe) {
-      return false;
+    Actionable ancestorsSafe = __checkAncestorsSafeToQuery();
+    if (!ancestorsSafe.yes) {
+      return ancestorsSafe;
     }
-    return checkAllow ? __isAllowQuery() : true;
+    return checkAllow ? __isAllowQuery() : Actionable.yes();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool canQuery() {
+  Actionable canQuery() {
     return __canQuery(checkAllow: true);
   }
 

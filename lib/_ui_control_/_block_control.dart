@@ -56,26 +56,26 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
   ControlPressedAsyncFunction? _getOnPressedFunction() {
     switch (widget.actionType) {
       case BlockControlActionType.createItem:
-        bool canCreate = widget.block.canCreateItem();
-        return canCreate ? __prepareToCreate : null;
+        Actionable createActionable = widget.block.canCreateItem();
+        return createActionable.yes ? __prepareToCreate : null;
       case BlockControlActionType.query:
-        bool canQuery = widget.block.canQuery();
-        return canQuery ? __queryBlock : null;
+        Actionable queryActionable = widget.block.canQuery();
+        return queryActionable.yes ? __queryBlock : null;
       case BlockControlActionType.saveForm:
-        bool canSaveForm = widget.block.canSaveForm();
-        return canSaveForm ? __saveForm : null;
+        Actionable saveActionable = widget.block.canSaveForm();
+        return saveActionable.yes ? __saveForm : null;
       case BlockControlActionType.refreshCurrentItem:
-        bool canRefreshCurrentItem = widget.block.canRefreshCurrentItem();
-        return canRefreshCurrentItem ? __refreshCurrentItem : null;
+        Actionable refreshActionable = widget.block.canRefreshCurrentItem();
+        return refreshActionable.yes ? __refreshCurrentItem : null;
       case BlockControlActionType.resetForm:
-        bool canResetForm = widget.block.canResetForm();
-        return canResetForm ? __resetForm : null;
+        Actionable resetActionable = widget.block.canResetForm();
+        return resetActionable.yes ? __resetForm : null;
       case BlockControlActionType.deleteCurrentItem:
-        bool canDeleteCurrentItem = widget.block.canDeleteCurrentItem();
-        return canDeleteCurrentItem ? __deleteCurrentItem : null;
+        Actionable deleteActionable = widget.block.canDeleteCurrentItem();
+        return deleteActionable.yes ? __deleteCurrentItem : null;
       case BlockControlActionType.showFormInfo:
-        bool canShowFormInfo = widget.block.canShowFormInfo();
-        return canShowFormInfo ? __showFormInfo : null;
+        Actionable formInfoActionable = widget.block.canShowFormInfo();
+        return formInfoActionable.yes ? __showFormInfo : null;
     }
   }
 

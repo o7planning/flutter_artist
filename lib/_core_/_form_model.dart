@@ -403,7 +403,8 @@ abstract class FormModel<
   // ***************************************************************************
 
   bool isEnabled() {
-    return block._isEnableFormToModify();
+    Actionable actionable = block._isEnableFormToModify();
+    return actionable.yes;
   }
 
   // ***************************************************************************
