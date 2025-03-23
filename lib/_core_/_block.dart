@@ -157,7 +157,6 @@ abstract class Block<
 
   String? get parentBlockName => parent?.name;
 
-
   bool get isRoot => parent == null;
 
   final FormModel<
@@ -222,7 +221,6 @@ abstract class Block<
           pageSize: __pageSize,
         );
 
-
   late final data = BlockData<
       ID, //
       ITEM,
@@ -233,7 +231,6 @@ abstract class Block<
     this,
     __pageable,
   );
-
 
   DataState get queryDataState => this.data._queryDataState;
 
@@ -1448,6 +1445,57 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  Future<bool> _unitPrepareCreateItem({
+    required _XBlock thisXBlock,
+    required EXTRA_FORM_INPUT? extraFormInput,
+    required Function()? navigate,
+  }) async {
+    __assertThisXBlock(thisXBlock);
+    //
+    const ITEM? nullItem = null;
+    const ITEM_DETAIL? nullItemDetail = null;
+    __setCurrentItem(
+      itemDetail: nullItemDetail,
+      item: nullItem,
+    );
+    //
+    this.__clearChildrenWithDataStateCascade(
+      thisXBlock: thisXBlock,
+      queryDataState: DataState.none,
+      formDataState: DataState.none,
+    );
+    formModel!.data._setCurrentItem(
+      refreshedItemDetail: nullItemDetail,
+      formMode: FormMode.creation,
+      formDataState: DataState.ready,
+    );
+    //
+    bool success = false;
+    try {
+      __refreshPreparingFormCreationState(isPreparingFormCreation: true);
+      //
+      success = await formModel!._prepareMasterDataAndFormData(
+        extraFormInput: extraFormInput,
+        filterCriteria: this.data.filterCriteria,
+        refreshedItemDetail: nullItemDetail,
+        isNew: true,
+      );
+    } finally {
+      __refreshPreparingFormCreationState(isPreparingFormCreation: false);
+    }
+    if (!success) {
+      return false;
+    }
+    //
+    if (success) {
+      _executeNavigation(navigate: navigate);
+    }
+    return success;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<bool> _unitQuickCreateItem({
     required _XBlock thisXBlock,
     required QuickCreateItemAction<ITEM_DETAIL> action,
@@ -1887,7 +1935,6 @@ abstract class Block<
       forceQueryFormModelOpts: [],
     );
     //
-
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
     _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit(
@@ -2836,45 +2883,16 @@ abstract class Block<
     );
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    const ITEM? nullItem = null;
-    const ITEM_DETAIL? nullItemDetail = null;
-    __setCurrentItem(
-      itemDetail: nullItemDetail,
-      item: nullItem,
+    _TaskUnit taskUnit = _BlockPrepareCreateItemTaskUnit(
+      xBlock: thisXBlock,
+      extraFormInput: extraFormInput,
+      navigate: navigate,
     );
     //
-    this.__clearChildrenWithDataStateCascade(
-      thisXBlock: thisXBlock,
-      queryDataState: DataState.none,
-      formDataState: DataState.none,
-    );
-    formModel!.data._setCurrentItem(
-      refreshedItemDetail: nullItemDetail,
-      formMode: FormMode.creation,
-      formDataState: DataState.ready,
-    );
+    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //
-    bool success = false;
-    try {
-      __refreshPreparingFormCreationState(isPreparingFormCreation: true);
-      //
-      success = await formModel!._prepareMasterDataAndFormData(
-        extraFormInput: extraFormInput,
-        filterCriteria: this.data.filterCriteria,
-        refreshedItemDetail: nullItemDetail,
-        isNew: true,
-      );
-    } finally {
-      __refreshPreparingFormCreationState(isPreparingFormCreation: false);
-    }
-    if (!success) {
-      return false;
-    }
-    //
-    if (success) {
-      _executeNavigation(navigate: navigate);
-    }
-    return success;
+    await FlutterArtist.executor._executeTaskUnitQueue();
+    return true;
   }
 
   // ***************************************************************************

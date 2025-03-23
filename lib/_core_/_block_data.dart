@@ -196,7 +196,7 @@ class BlockData<
 
   ITEM_DETAIL? get currentItemDetail => __current._itemDetail;
 
-  late DataState _queryDataState  ;
+  late DataState _queryDataState;
 
   DataState get queryDataState => _queryDataState;
 
@@ -213,7 +213,7 @@ class BlockData<
   )   : _items = [],
         _pageable = pageable,
         _pagination = PaginationData.empty() {
-    _queryDataState = block.isRoot?  DataState.pending:DataState.none;
+    _queryDataState = block.isRoot ? DataState.pending : DataState.none;
   }
 
   // ***************************************************************************

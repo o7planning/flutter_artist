@@ -54,7 +54,7 @@ class _Executor {
           );
         }
         // Block Clear Current:
-        else if(taskUnit is _BlockClearCurrentTaskUnit) {
+        else if (taskUnit is _BlockClearCurrentTaskUnit) {
           await taskUnit.xBlock.block._unitClearCurrent(
             thisXBlock: taskUnit.xBlock,
           );
@@ -71,6 +71,14 @@ class _Executor {
             currentItemSelectionType: taskUnit.currentItemSelectionType,
             candidateItem: taskUnit.candidateItem,
             thisXBlock: taskUnit.xBlock,
+          );
+        }
+        // Block PrepareCreate:
+        else if (taskUnit is _BlockPrepareCreateItemTaskUnit) {
+          await taskUnit.xBlock.block._unitPrepareCreateItem(
+            thisXBlock: taskUnit.xBlock,
+            extraFormInput: taskUnit.extraFormInput,
+            navigate: taskUnit.navigate,
           );
         }
         // Block Delete Item:
