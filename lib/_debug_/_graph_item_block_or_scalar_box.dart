@@ -407,6 +407,8 @@ class _GraphItemBlockOrScalarBoxState
         return _dataStateReadyIconData;
       case DataState.error:
         return _dataStateErrorIconData;
+      case DataState.none:
+        return _dataStateNoneIconData;
     }
   }
 
@@ -427,6 +429,8 @@ class _GraphItemBlockOrScalarBoxState
         return _graphBoxDataStateReadyBgColor;
       case DataState.error:
         return _graphBoxDataStateErrorBgColor;
+      case DataState.none:
+        return _graphBoxDataStateNoneBgColor;
     }
   }
 

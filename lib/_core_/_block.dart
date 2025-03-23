@@ -966,10 +966,16 @@ abstract class Block<
         if (!currentItemInList) {
           this.__clearChildrenWithDataStateCascade(
             thisXBlock: thisXBlock,
-            queryDataState: DataState.pending,
-            formDataState: DataState.pending,
+            queryDataState: DataState.none,
+            formDataState: DataState.none,
           );
         }
+      case DataState.none:
+        this.__clearChildrenWithDataStateCascade(
+          thisXBlock: thisXBlock,
+          queryDataState: DataState.none,
+          formDataState: DataState.none,
+        );
       case DataState.pending:
         this.__clearChildrenWithDataStateCascade(
           thisXBlock: thisXBlock,
@@ -3677,19 +3683,39 @@ abstract class Block<
   }) {
     if (FlutterArtist.executor.isBusy) {
       return Actionable.no(
-        message: "Can not create new item now, executor is busy.",
+        message: "New item creation is disabled because the executor is busy.",
       );
     }
     if (creationType == ItemCreationType.form && formModel == null) {
       return Actionable.no(
         message:
-            "Cannot create a new item on the form because this block does not have a form.",
+            "New item creation is disabled because the block has no form.",
       );
     }
+    switch (queryDataState) {
+      case DataState.pending:
+        return Actionable.no(
+          message:
+              "New item creation is disabled because the block is in a 'pending' state.",
+        );
+      case DataState.error:
+        return Actionable.no(
+          message:
+              "New item creation is disabled because the block is in an 'error' state.",
+        );
+      case DataState.none:
+        return Actionable.no(
+          message:
+              "New item creation is disabled because the block is in a 'none' state.",
+        );
+      case DataState.ready:
+        break;
+    }
+    if (data.queryDataState == DataState.ready) {}
     Actionable ancestorSafe = __checkAncestorsSafeToCreate(
       creationType: creationType,
     );
-    if (!ancestorSafe.yes) {
+    if (ancestorSafe.no) {
       return ancestorSafe;
     }
     return checkAllow ? __isAllowCreateItem() : Actionable.yes();
@@ -3876,17 +3902,19 @@ abstract class Block<
   // *********** canXXX() method ***********************************************
   // ***************************************************************************
 
-  bool isValidState() {
-    switch (queryDataState) {
-      case DataState.pending:
-        return false;
-      case DataState.error:
-        return false;
-      case DataState.ready:
-        break; // Continue checking.
-    }
-    return true;
-  }
+  // bool isValidState() {
+  //   switch (queryDataState) {
+  //     case DataState.pending:
+  //       return false;
+  //     case DataState.error:
+  //       return false;
+  //     case DataState.none:
+  //       return false;
+  //     case DataState.ready:
+  //       break; // Continue checking.
+  //   }
+  //   return true;
+  // }
 
   // ***************************************************************************
   // ***************************************************************************

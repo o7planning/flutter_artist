@@ -11,4 +11,9 @@ class Actionable {
         yes = true;
 
   Actionable.no({required String this.message}) : yes = false;
+
+  @override
+  String toString() {
+    return "${getClassName(this)}.$yes";
+  }
 }
