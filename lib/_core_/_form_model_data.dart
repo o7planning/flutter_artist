@@ -34,7 +34,7 @@ class FormModelData<
   Map<String, dynamic> get currentFormData => {..._currentFormData};
 
   //
-  DataState _formDataState = DataState.pending;
+  DataState _formDataState = DataState.none;
 
   FormMode _formMode = FormMode.none;
 
