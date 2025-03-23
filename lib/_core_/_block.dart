@@ -3585,7 +3585,9 @@ abstract class Block<
   ///
   /// Check if Ancestor Blocks in Safe State to Create item in current Block.
   ///
-  Actionable __checkAncestorsSafeToCreate() {
+  Actionable __checkAncestorsSafeToCreate({
+    required ItemCreationType creationType,
+  }) {
     if (parent == null) {
       return Actionable.yes();
     }
@@ -3595,19 +3597,25 @@ abstract class Block<
         case FormMode.none:
           return Actionable.no(
             message:
-                "Disallow creating items when the ancestor block form is in 'none' mode.",
+                "New item creation is disabled because the ancestor block's form is in 'none' mode",
           );
         case FormMode.creation:
           return Actionable.no(
             message:
-                "Disallow creating items when the ancestor block form is in 'creation' mode.",
+                "New item creation is disabled because the ancestor block's form is in 'creation' mode",
           );
         case FormMode.edit:
           break; // Do nothing
       }
     }
+    if (parent!.data.currentItem == null) {
+      return Actionable.no(
+        message:
+            "New item creation is disabled because the parent block has no current element.",
+      );
+    }
     //
-    return parent!.__checkAncestorsSafeToCreate();
+    return parent!.__checkAncestorsSafeToCreate(creationType: creationType);
   }
 
   // ***************************************************************************
@@ -3663,19 +3671,24 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable __canCreateItem({required bool checkAllow}) {
-    if (formModel == null) {
+  Actionable __canCreateItem({
+    required ItemCreationType creationType,
+    required bool checkAllow,
+  }) {
+    if (FlutterArtist.executor.isBusy) {
+      return Actionable.no(
+        message: "Can not create new item now, executor is busy.",
+      );
+    }
+    if (creationType == ItemCreationType.form && formModel == null) {
       return Actionable.no(
         message:
             "Cannot create a new item on the form because this block does not have a form.",
       );
     }
-    if (this.__isPreparingFormCreation) {
-      return Actionable.no(
-        message: "The form is in the state of creating a new item.",
-      );
-    }
-    Actionable ancestorSafe = __checkAncestorsSafeToCreate();
+    Actionable ancestorSafe = __checkAncestorsSafeToCreate(
+      creationType: creationType,
+    );
     if (!ancestorSafe.yes) {
       return ancestorSafe;
     }
@@ -3879,7 +3892,10 @@ abstract class Block<
   // ***************************************************************************
 
   Actionable canCreateItem() {
-    return __canCreateItem(checkAllow: true);
+    return __canCreateItem(
+      checkAllow: true,
+      creationType: ItemCreationType.form,
+    );
   }
 
   // ***************************************************************************

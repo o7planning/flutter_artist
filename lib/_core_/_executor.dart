@@ -16,6 +16,16 @@ class _Executor {
   // ***************************************************************************
   // ***************************************************************************
 
+  bool get isBusy {
+    return __executingXShelfId != null &&
+        FlutterArtist.taskUnitQueue.isNotEmpty;
+  }
+
+  bool get isFree => !isBusy;
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<void> _executeTaskUnitQueue() async {
     if (__executingXShelfId != null) {
       return;

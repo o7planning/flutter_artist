@@ -5,11 +5,13 @@ class _TaskUnitQueue {
   final List<_TaskUnit> _taskUnits = [];
 
   bool get isEmpty {
-    return _taskUnits.isEmpty;
+    return _taskUnits.isEmpty && _secondaryQueue.isEmpty;
   }
 
+  bool get isNotEmpty => !isEmpty;
+
   bool hasNext() {
-    return _taskUnits.isNotEmpty || _secondaryQueue.isNotEmpty;
+    return isNotEmpty;
   }
 
   _TaskUnit? getNextTaskUnit() {
