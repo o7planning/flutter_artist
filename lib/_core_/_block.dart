@@ -157,6 +157,9 @@ abstract class Block<
 
   String? get parentBlockName => parent?.name;
 
+
+  bool get isRoot => parent == null;
+
   final FormModel<
       ID, //
       ITEM_DETAIL,
@@ -219,16 +222,18 @@ abstract class Block<
           pageSize: __pageSize,
         );
 
+
   late final data = BlockData<
       ID, //
       ITEM,
       ITEM_DETAIL,
       FILTER_INPUT,
       FILTER_CRITERIA,
-      EXTRA_FORM_INPUT>.empty(
+      EXTRA_FORM_INPUT>._(
     this,
     __pageable,
   );
+
 
   DataState get queryDataState => this.data._queryDataState;
 

@@ -34,7 +34,7 @@ class FormModelData<
   Map<String, dynamic> get currentFormData => {..._currentFormData};
 
   //
-  DataState _dataState = DataState.pending;
+  DataState _formDataState = DataState.pending;
 
   FormMode _formMode = FormMode.none;
 
@@ -51,7 +51,7 @@ class FormModelData<
   // ***************************************************************************
 
   void _clearWithDataState({required DataState formDataState}) {
-    _dataState = formDataState;
+    _formDataState = formDataState;
     _formMode = FormMode.none;
     //
     _updateFormData({});
@@ -102,6 +102,6 @@ class FormModelData<
     required DataState dataState,
   }) {
     _formMode = formMode;
-    _dataState = dataState;
+    _formDataState = dataState;
   }
 }

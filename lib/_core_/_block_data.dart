@@ -196,7 +196,7 @@ class BlockData<
 
   ITEM_DETAIL? get currentItemDetail => __current._itemDetail;
 
-  DataState _queryDataState = DataState.pending;
+  late DataState _queryDataState  ;
 
   DataState get queryDataState => _queryDataState;
 
@@ -207,21 +207,14 @@ class BlockData<
   // ***************************************************************************
   // ***************************************************************************
 
-  // BlockData({
-  //   required this.block,
-  //   required List<ITEM> items,
-  //   required PaginationData? pagination,
-  //   required PageableData? pageable,
-  // })  : _items = items,
-  //       _pageable = pageable,
-  //       _pagination = pagination;
-
-  BlockData.empty(
+  BlockData._(
     this.block,
     PageableData? pageable,
   )   : _items = [],
         _pageable = pageable,
-        _pagination = PaginationData.empty();
+        _pagination = PaginationData.empty() {
+    _queryDataState = block.isRoot?  DataState.pending:DataState.none;
+  }
 
   // ***************************************************************************
   // ***************************************************************************

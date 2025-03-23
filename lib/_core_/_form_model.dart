@@ -35,7 +35,7 @@ abstract class FormModel<
       FILTER_CRITERIA,
       EXTRA_FORM_INPUT> block;
 
-  DataState get dataState => data._dataState;
+  DataState get formDataState => data._formDataState;
 
   QueryMode get queryMode => _queryMode;
 
@@ -102,16 +102,16 @@ abstract class FormModel<
 
     if (!forceForm) {
       if (!active) {
-        if (this.dataState == DataState.error ||
-            this.dataState == DataState.pending) {
-          _clearWithDataState(formDataState: this.dataState);
+        if (this.formDataState == DataState.error ||
+            this.formDataState == DataState.pending) {
+          _clearWithDataState(formDataState: this.formDataState);
           return true;
         } else {
           return true;
         }
       } else {
-        if (this.dataState == DataState.error ||
-            this.dataState == DataState.pending) {
+        if (this.formDataState == DataState.error ||
+            this.formDataState == DataState.pending) {
           forceForm = true;
         } else {
           return true;

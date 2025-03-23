@@ -610,7 +610,7 @@ abstract class Shelf extends _XBase {
         founds.add(_ScalarOrBlockOrFormWrapper.block(block));
       } else if (block.formModel != null &&
           block.formModel!.hasActiveUIComponent() &&
-          block.formModel!.dataState == DataState.pending) {
+          block.formModel!.formDataState == DataState.pending) {
         founds.add(_ScalarOrBlockOrFormWrapper.formModel(block.formModel!));
       } else {
         __findTopLazyBlocksCascade(block._childBlocks, founds);
