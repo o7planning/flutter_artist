@@ -1,11 +1,11 @@
 part of '../flutter_artist.dart';
 
-class _BlockPrepareCreateItemTaskUnit extends _TaskUnit {
+class _BlockPrepareToCreateItemTaskUnit extends _TaskUnit {
   _XBlock xBlock;
   ExtraFormInput? extraFormInput;
   Function()? navigate;
 
-  _BlockPrepareCreateItemTaskUnit({
+  _BlockPrepareToCreateItemTaskUnit({
     required this.xBlock,
     required this.extraFormInput,
     required this.navigate,

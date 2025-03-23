@@ -65,20 +65,20 @@ class _Executor {
             thisXBlock: taskUnit.xBlock,
           );
         }
+        // Block PrepareCreate:
+        else if (taskUnit is _BlockPrepareToCreateItemTaskUnit) {
+          await taskUnit.xBlock.block._unitPrepareToCreateItem(
+            thisXBlock: taskUnit.xBlock,
+            extraFormInput: taskUnit.extraFormInput,
+            navigate: taskUnit.navigate,
+          );
+        }
         // Block Select Item as Current:
         else if (taskUnit is _BlockSelectAsCurrentTaskUnit) {
           await taskUnit.xBlock.block._unitSelectItemAsCurrent(
             currentItemSelectionType: taskUnit.currentItemSelectionType,
             candidateItem: taskUnit.candidateItem,
             thisXBlock: taskUnit.xBlock,
-          );
-        }
-        // Block PrepareCreate:
-        else if (taskUnit is _BlockPrepareCreateItemTaskUnit) {
-          await taskUnit.xBlock.block._unitPrepareCreateItem(
-            thisXBlock: taskUnit.xBlock,
-            extraFormInput: taskUnit.extraFormInput,
-            navigate: taskUnit.navigate,
           );
         }
         // Block Delete Item:
