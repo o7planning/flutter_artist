@@ -53,6 +53,12 @@ class _Executor {
             xFilterModel: taskUnit.xFilterModel,
           );
         }
+        // Block Clear Current:
+        else if(taskUnit is _BlockClearCurrentTaskUnit) {
+          await taskUnit.xBlock.block._unitClearCurrent(
+            thisXBlock: taskUnit.xBlock,
+          );
+        }
         // Block Query:
         else if (taskUnit is _BlockQueryTaskUnit) {
           await taskUnit.xBlock.block._unitQuery(

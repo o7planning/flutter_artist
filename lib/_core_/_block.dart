@@ -783,6 +783,23 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  Future<void> _unitClearCurrent({required _XBlock thisXBlock}) async {
+    __assertThisXBlock(thisXBlock);
+    //
+    this.__setCurrentItem(item: null, itemDetail: null);
+    this.__clearChildrenWithDataStateCascade(
+      thisXBlock: thisXBlock,
+      queryDataState: DataState.none,
+      formDataState: DataState.none,
+    );
+    if (formModel != null) {
+      formModel!._clearWithDataState(formDataState: DataState.none);
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<BlockQueryResult> _unitQuery({required _XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -1797,6 +1814,40 @@ abstract class Block<
       //
       return true;
     }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @RootMethodAnnotation()
+  Future<void> clearCurrent() async {
+    FlutterArtist.codeFlowLogger._addMethodCall(
+      isLibCode: true,
+      navigate: null,
+      ownerClassInstance: this,
+      methodName: "clearCurrent",
+      parameters: {},
+    );
+    if (data.currentItem == null) {
+      return;
+    }
+    //
+    _XShelf xShelf = _XShelf(
+      shelf: shelf,
+      forceFilterModelOpt: null,
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: [],
+      forceQueryFormModelOpts: [],
+    );
+    //
+    _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    //
+    _TaskUnit taskUnit = _BlockClearCurrentTaskUnit(
+      xBlock: thisXBlock,
+    );
+    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    //
+    await FlutterArtist.executor._executeTaskUnitQueue();
   }
 
   // ***************************************************************************
@@ -3688,8 +3739,7 @@ abstract class Block<
     }
     if (creationType == ItemCreationType.form && formModel == null) {
       return Actionable.no(
-        message:
-            "New item creation is disabled because the block has no form.",
+        message: "New item creation is disabled because the block has no form.",
       );
     }
     switch (queryDataState) {
