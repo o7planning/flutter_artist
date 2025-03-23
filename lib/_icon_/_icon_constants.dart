@@ -11,8 +11,7 @@ const IconData _dataStateReadyIconData =
 const IconData _dataStateErrorIconData =
     cupertino.CupertinoIcons.exclamationmark_octagon;
 
-const IconData _dataStateNoneIconData =
-    cupertino.CupertinoIcons.app;
+const IconData _dataStateNoneIconData = cupertino.CupertinoIcons.app;
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
