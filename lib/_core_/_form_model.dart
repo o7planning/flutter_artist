@@ -281,7 +281,7 @@ abstract class FormModel<
             formMode: isNew //
                 ? FormMode.creation
                 : FormMode.edit,
-            dataState: DataState.ready,
+            formDataState: DataState.ready,
           );
       //
       updateAllUIComponents(); // TODO: Xu ly loi?

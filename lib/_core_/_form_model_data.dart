@@ -99,9 +99,9 @@ class FormModelData<
   void _setCurrentItem({
     required ITEM_DETAIL? refreshedItemDetail,
     required FormMode formMode,
-    required DataState dataState,
+    required DataState formDataState,
   }) {
     _formMode = formMode;
-    _formDataState = dataState;
+    _formDataState = formDataState;
   }
 }

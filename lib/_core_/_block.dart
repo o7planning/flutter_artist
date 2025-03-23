@@ -1058,7 +1058,7 @@ abstract class Block<
       this.__clearWithDataStateCascade(
         thisXBlock: thisXBlock,
         queryDataState: queryDataState,
-        formDataState: DataState.pending,
+        formDataState: DataState.none,
       );
       return;
     }
@@ -1076,7 +1076,7 @@ abstract class Block<
       this.__clearWithDataStateCascade(
         thisXBlock: thisXBlock,
         queryDataState: DataState.ready,
-        formDataState: DataState.ready,
+        formDataState: DataState.none,
       );
       return;
     }
@@ -1148,7 +1148,7 @@ abstract class Block<
       this.__clearWithDataStateCascade(
         thisXBlock: thisXBlock,
         queryDataState: DataState.ready,
-        formDataState: DataState.ready, // TODO: Xem lai...
+        formDataState: DataState.none,
       );
       return;
     }
@@ -1249,7 +1249,7 @@ abstract class Block<
       this.__clearWithDataStateCascade(
         thisXBlock: thisXBlock,
         queryDataState: DataState.ready,
-        formDataState: DataState.ready,
+        formDataState: DataState.none,
       );
       //
       if (siblingItem != null) {
@@ -1752,7 +1752,7 @@ abstract class Block<
         formModel!.data._setCurrentItem(
           refreshedItemDetail: savedItemDetail,
           formMode: FormMode.edit,
-          dataState: DataState.pending,
+          formDataState: DataState.pending,
         );
         bool success = await formModel!._prepareMasterDataAndFormData(
           extraFormInput: null,
@@ -2845,13 +2845,13 @@ abstract class Block<
     //
     this.__clearChildrenWithDataStateCascade(
       thisXBlock: thisXBlock,
-      queryDataState: DataState.ready,
-      formDataState: DataState.pending, // ?????
+      queryDataState: DataState.none,
+      formDataState: DataState.none,
     );
     formModel!.data._setCurrentItem(
       refreshedItemDetail: nullItemDetail,
       formMode: FormMode.creation,
-      dataState: DataState.pending,
+      formDataState: DataState.ready,
     );
     //
     bool success = false;
