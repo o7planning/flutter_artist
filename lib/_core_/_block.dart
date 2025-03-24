@@ -206,7 +206,12 @@ abstract class Block<
     return ascendingAncestorBlocks.reversed.toList();
   }
 
+  int __callApiRefreshItemCount = 0;
+
+  int get callApiRefreshItemCount => __callApiRefreshItemCount;
+
   int __callApiQueryCount = 0;
+
   int get callApiQueryCount => __callApiQueryCount;
 
   final int? __pageSize;
@@ -827,6 +832,7 @@ abstract class Block<
           currentItemSelectionType:
               CurrentItemSelectionType.selectAsCurrentForDefault,
           xBlock: thisXBlock,
+          newQueriedList: [],
           candidateItem: null,
           forceForm: null,
         ),
@@ -894,6 +900,7 @@ abstract class Block<
       realListBehavior = thisXBlock.listBehavior;
     }
     bool isQueryError = false;
+    List<ITEM> newQueriedList = [];
     PageData<ITEM>? pageData;
     //
     // Call Query API:
@@ -926,6 +933,7 @@ abstract class Block<
         isQueryError = true;
       } else {
         pageData = result.data;
+        newQueriedList = pageData?.items ?? [];
       }
     } catch (e, stackTrace) {
       _handleError(
@@ -981,7 +989,9 @@ abstract class Block<
     //
     if (formModel != null) {
       if (!currentItemInList) {
-        formModel!._clearWithDataState(formDataState: DataState.ready);
+        formModel!._clearWithDataState(
+          formDataState: DataState.none,
+        );
       }
     }
     switch (queryDataState) {
@@ -1003,13 +1013,13 @@ abstract class Block<
         this.__clearChildrenWithDataStateCascade(
           thisXBlock: thisXBlock,
           queryDataState: DataState.pending,
-          formDataState: DataState.pending,
+          formDataState: DataState.none,
         );
       case DataState.error:
         this.__clearChildrenWithDataStateCascade(
           thisXBlock: thisXBlock,
-          queryDataState: DataState.error,
-          formDataState: DataState.error,
+          queryDataState: DataState.none,
+          formDataState: DataState.none,
         );
     }
     //
@@ -1022,6 +1032,7 @@ abstract class Block<
           currentItemSelectionType:
               CurrentItemSelectionType.selectAsCurrentForDefault,
           xBlock: thisXBlock,
+          newQueriedList: newQueriedList,
           candidateItem: candidateCurrentItem,
           forceForm: null,
         ),
@@ -1036,6 +1047,7 @@ abstract class Block<
   Future<void> _unitSelectItemAsCurrent({
     required _XBlock thisXBlock,
     required CurrentItemSelectionType currentItemSelectionType,
+    required List<ITEM> newQueriedList,
     required ITEM? candidateItem,
   }) async {
     __assertThisXBlock(thisXBlock);
@@ -1159,55 +1171,68 @@ abstract class Block<
     final bool isCandidateIsCurrent = this.data.isCurrentItem(
           item: candidateCurrentItem,
         );
-    bool isLoadItemError = false;
+    final ITEM? candidateCurrentItemInNewQueriedList =
+        ItemsUtils.findItemInList(
+      item: candidateCurrentItem,
+      targetList: newQueriedList,
+      getItemId: getItemId,
+    );
     //
     ITEM_DETAIL? candidateCurrentItemDetail;
-    try {
-      __refreshRefreshingCurrentItemState(
-        isRefreshingCurrentItem: true,
-      );
-      //
-      ApiResult<ITEM_DETAIL> result = await callApiRefreshItem(
-        item: candidateCurrentItem,
-      );
-      //
-      if (result.isError()) {
+
+    if (ITEM == ITEM_DETAIL && candidateCurrentItemInNewQueriedList != null) {
+      // No need to refresh Item.
+      candidateCurrentItemDetail =
+          candidateCurrentItemInNewQueriedList as ITEM_DETAIL;
+    } else {
+      bool isLoadItemError = false;
+      try {
+        __refreshRefreshingCurrentItemState(
+          isRefreshingCurrentItem: true,
+        );
+        //
+        __callApiRefreshItemCount++;
+        ApiResult<ITEM_DETAIL> result = await callApiRefreshItem(
+          item: candidateCurrentItem, // Not null.
+        );
+        //
+        if (result.isError()) {
+          isLoadItemError = true;
+          //
+          _handleRestError(
+            shelf: shelf,
+            methodName: "callApiRefreshItem",
+            message: result.errorMessage!,
+            errorDetails: result.errorDetails,
+            showSnackBar: true,
+          );
+        } else {
+          isLoadItemError = false;
+          //
+          candidateCurrentItemDetail = result.data;
+        }
+      } catch (e, stackTrace) {
         isLoadItemError = true;
         //
-        _handleRestError(
+        _handleError(
           shelf: shelf,
           methodName: "callApiRefreshItem",
-          message: result.errorMessage!,
-          errorDetails: result.errorDetails,
+          error: "Error callApiRefreshItem: $e",
+          stackTrace: stackTrace,
           showSnackBar: true,
         );
-      } else {
-        isLoadItemError = false;
-        //
-        candidateCurrentItemDetail = result.data;
+      } finally {
+        __refreshRefreshingCurrentItemState(
+          isRefreshingCurrentItem: false,
+        );
       }
-    } catch (e, stackTrace) {
-      isLoadItemError = true;
-      //
-      _handleError(
-        shelf: shelf,
-        methodName: "callApiRefreshItem",
-        error: "Error callApiRefreshItem: $e",
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-    } finally {
-      __refreshRefreshingCurrentItemState(
-        isRefreshingCurrentItem: false,
-      );
-    }
-    //
-    if (isLoadItemError) {
-      result._apiError = true;
-      // TODO: Alway return?
-      // If newCurrent or not newCurrent
-      // Always return. Nothing to do if has error!!
-      return;
+      if (isLoadItemError) {
+        result._apiError = true;
+        // TODO: Alway return?
+        // If newCurrent or not newCurrent
+        // Always return. Nothing to do if has error!!
+        return;
+      }
     }
     //
     // If candidate not found in database --> remove.
@@ -1233,6 +1258,7 @@ abstract class Block<
         var taskUnit = _BlockSelectAsCurrentTaskUnit(
           currentItemSelectionType: currentItemSelectionType,
           xBlock: thisXBlock,
+          newQueriedList: newQueriedList,
           candidateItem: siblingItem,
           forceForm: null,
         );
@@ -1257,6 +1283,7 @@ abstract class Block<
         var taskUnit = _BlockSelectAsCurrentTaskUnit(
           currentItemSelectionType: currentItemSelectionType,
           xBlock: thisXBlock,
+          newQueriedList: newQueriedList,
           candidateItem: siblingItem,
           forceForm: null,
         );
@@ -1436,10 +1463,11 @@ abstract class Block<
       formDataState: DataState.ready,
     );
     //
-    _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit(
+    _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
       currentItemSelectionType:
           CurrentItemSelectionType.selectAsCurrentForDefault,
       xBlock: thisXBlock,
+      newQueriedList: <ITEM>[],
       candidateItem: siblingItem,
       forceForm: null,
     );
@@ -1676,9 +1704,10 @@ abstract class Block<
         }
         ITEM? currentItem = this.data.currentItem;
         if (currentItem != null) {
-          var taskUnit = _BlockSelectAsCurrentTaskUnit(
+          var taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
             currentItemSelectionType: CurrentItemSelectionType.refresh,
             xBlock: thisXBlock,
+            newQueriedList: [],
             candidateItem: currentItem,
             forceForm: null,
           );
@@ -1860,10 +1889,11 @@ abstract class Block<
         formDataState: DataState.ready,
       );
       //
-      _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit(
+      _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
         currentItemSelectionType:
             CurrentItemSelectionType.selectAsCurrentForDefault,
         xBlock: thisXBlock,
+        newQueriedList: [],
         candidateItem: siblingItem,
         forceForm: null,
       );
@@ -1941,11 +1971,12 @@ abstract class Block<
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit(
+    _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
       currentItemSelectionType: forceForm
           ? CurrentItemSelectionType.selectAsCurrentToEdit
           : CurrentItemSelectionType.selectAsCurrentToShow,
       xBlock: thisXBlock,
+      newQueriedList: [],
       candidateItem: item,
       forceForm: forceForm,
     );

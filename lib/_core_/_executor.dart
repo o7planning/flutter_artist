@@ -77,6 +77,7 @@ class _Executor {
         else if (taskUnit is _BlockSelectAsCurrentTaskUnit) {
           await taskUnit.xBlock.block._unitSelectItemAsCurrent(
             currentItemSelectionType: taskUnit.currentItemSelectionType,
+            newQueriedList: taskUnit.newQueriedList,
             candidateItem: taskUnit.candidateItem,
             thisXBlock: taskUnit.xBlock,
           );

@@ -5,10 +5,12 @@ class _BlockSelectAsCurrentTaskUnit<ITEM extends Object> extends _TaskUnit {
   final bool? forceForm;
   final CurrentItemSelectionType currentItemSelectionType;
   final ITEM? candidateItem;
+  final List<ITEM> newQueriedList;
 
   _BlockSelectAsCurrentTaskUnit({
     required this.currentItemSelectionType,
     required this.xBlock,
+    required this.newQueriedList,
     required this.candidateItem,
     required this.forceForm,
   }) {
