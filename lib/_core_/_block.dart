@@ -206,6 +206,9 @@ abstract class Block<
     return ascendingAncestorBlocks.reversed.toList();
   }
 
+  int __callApiQueryCount = 0;
+  int get callApiQueryCount => __callApiQueryCount;
+
   final int? __pageSize;
 
   final bool fireEvent;
@@ -906,6 +909,7 @@ abstract class Block<
         parameters: {},
       );
       //
+      __callApiQueryCount++;
       ApiResult<PageData<ITEM>?> result = await callApiQuery(
         filterCriteria: filterCriteria,
         pageable: callingPageable,
@@ -3784,13 +3788,13 @@ abstract class Block<
       case DataState.ready:
         break;
     }
-    if (data.queryDataState == DataState.ready) {}
-    Actionable ancestorSafe = __checkAncestorsSafeToCreate(
-      creationType: creationType,
-    );
-    if (ancestorSafe.no) {
-      return ancestorSafe;
-    }
+    // if (data.queryDataState == DataState.ready) {}
+    // Actionable ancestorSafe = __checkAncestorsSafeToCreate(
+    //   creationType: creationType,
+    // );
+    // if (ancestorSafe.no) {
+    //   return ancestorSafe;
+    // }
     return checkAllow ? __isAllowCreateItem() : Actionable.yes();
   }
 

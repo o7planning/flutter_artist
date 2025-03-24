@@ -13,6 +13,10 @@ abstract class FormModel<
 
   int get loadCount => __loadCount;
 
+  int __prepareFormMasterDataCount = 0;
+
+  int get prepareFormMasterDataCount => __prepareFormMasterDataCount;
+
   int _lazyLoadCount = 0;
 
   int get lazyLoadCount => _lazyLoadCount;
@@ -222,6 +226,7 @@ abstract class FormModel<
       //
       // May throw ApiError.
       //
+      __prepareFormMasterDataCount++;
       await prepareFormMasterData(
         filterCriteria: filterCriteria,
         extraFormInput: extraFormInput,
