@@ -410,8 +410,6 @@ abstract class FilterModel<
       currentSelectedItems = null;
       candidateSelectedItems = null;
     }
-    print(
-        "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 7 $propName --> optPropData: $optPropData");
     //
     _masterDataStructure._setTempOptPropData(
       propName: propName,
@@ -447,8 +445,6 @@ abstract class FilterModel<
         this._masterDataStructure._getTempCurrentPropValue(
               propName: propName,
             );
-    print(
-        "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 8 $propName --> tempSelectedPropValue: $tempSelectedPropValue");
 
     if (tempSelectedPropValue != null) {
       for (OptProp child in optProp.children) {
