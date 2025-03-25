@@ -205,7 +205,7 @@ abstract class FilterModel<
   }) async {
     if (data._filterDataState == DataState.ready && filterInput == null) {
       print("Ready ---------------------> return");
-      return _filterCriteria;
+      // return _filterCriteria;
     }
     print("#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFilterTransaction");
     try {
