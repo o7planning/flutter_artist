@@ -236,6 +236,18 @@ abstract class FilterModel<
             value: value,
           );
         }
+      } else {
+        if(!_defaultValueInitiated) {
+          for (CommonProp commonMasterProp in _masterDataStructure._commonProps) {
+            Object? value = specifyDefaultCommonPropValue(
+              propName: commonMasterProp.propName,
+            );
+            _masterDataStructure._setTempPropDataCommon(
+              propName: commonMasterProp.propName,
+                value: value,
+            );
+          }
+        }
       }
     } catch (e, stackTrace) {
       _handleError(
@@ -461,30 +473,7 @@ abstract class FilterModel<
     }
   }
 
-  // ***************************************************************************
-  // ***************************************************************************
 
-  ///
-  /// This method is called after [callApiLoadOptPropData].
-  ///
-  /// Use the data obtained from the [callApiLoadOptPropData]
-  /// method to specify default search criteria.
-  ///
-  /// For example, after getting the list of companies.
-  /// Use a certain company in the list as the default criteria for the filter.
-  ///
-  /// ```dart
-  /// @override
-  /// Map<String, dynamic> initialCriteriaDataMap() {
-  ///      var defaultCompany = companyXList.getItemById(123);
-  ///
-  ///      return {
-  ///         "company": defaultCompany,
-  ///      };
-  /// }
-  /// ```
-  ///
-  Map<String, dynamic> initialCriteriaDataMap();
 
   // ***************************************************************************
   // ***************************************************************************
@@ -495,7 +484,7 @@ abstract class FilterModel<
   });
 
   ///
-  /// This method is called after [prepareMasterData] and [initialCriteriaDataMap] methods.
+  /// This method is called after [prepareMasterData] method.
   ///
   /// For example, after getting a list of companies from the [prepareMasterData] method.
   /// Use [FilterInput] to identify a company that will be used as a criterion for the filter.
@@ -524,6 +513,10 @@ abstract class FilterModel<
 
   PropValue? specifyDefaultOptPropValue({
     required XOptionedData optPropData,
+    required String propName,
+  });
+
+  Object? specifyDefaultCommonPropValue({
     required String propName,
   });
 
@@ -568,7 +561,7 @@ abstract class FilterModel<
   }
 
   ///
-  /// This method is called after [prepareMasterData] and [initialCriteriaDataMap] methods.
+  /// This method is called after [prepareMasterData] method.
   ///
   /// For example, after getting a list of companies from the [prepareMasterData] method.
   /// Use [FilterInput] to identify a company that will be used as a criterion for the filter.
