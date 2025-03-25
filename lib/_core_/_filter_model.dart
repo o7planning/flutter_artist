@@ -312,14 +312,38 @@ abstract class FilterModel<
 
   Future<void> _loadOptPropDataCascade({
     required FILTER_INPUT? filterInput,
-    required Object? parentOptPropValue,
+    required Object? parentOptPropValue, // May be new selected parent value.
     required OptProp optProp,
   }) async {
     final String propName = optProp.propName;
 
+    final OptProp? optPropParent = optProp?.parent;
+
     // Get current MasterProp data:
-    XOptionedData? optPropData =
-        _masterDataStructure._getTempOptPropData(propName);
+    XOptionedData? optPropData = _masterDataStructure._getOptPropData(propName);
+    if (optPropParent != null) {
+      XOptionedData? tempXOptionedParent =
+          _masterDataStructure._getTempOptPropData(
+        optPropParent.propName,
+      );
+      //
+      if (tempXOptionedParent != null) {
+        // Item or Item List (Multi Selection):
+        Object? parentOptPropValueOLD =
+            data._currentFormData[optPropParent.propName];
+        // Parent Value change?
+        bool isSame = tempXOptionedParent.isSameItemOrItemList(
+          itemOrItemList1: parentOptPropValueOLD,
+          itemOrItemList2: parentOptPropValue,
+        );
+        if (!isSame) {
+          optPropData = null;
+        }
+      } else {
+        optPropData = null;
+      }
+    }
+
     //
     // Load OptProp data from Rest API.
     // May throw ApiError.
@@ -387,7 +411,7 @@ abstract class FilterModel<
     //
     _masterDataStructure._setTempOptPropData(
       propName: propName,
-      tempXList: optPropData,
+      optionedData: optPropData,
     );
     //
     // TODO: Double check this code:

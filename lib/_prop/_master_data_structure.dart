@@ -182,14 +182,14 @@ class PropsStructure {
 
   void _setTempOptPropData({
     required String propName,
-    required XOptionedData? tempXList,
+    required XOptionedData? optionedData,
   }) {
     Prop? prop = _allPropMap[propName];
     if (prop == null) {
       throw AppException(message: 'No Prop $propName');
     }
     if (prop is OptProp) {
-      prop._tempXOptionedData = tempXList;
+      prop._tempXOptionedData = optionedData;
     } else {
       throw AppException(
           message: 'Invalid Prop $propName, it must be $OptProp');
