@@ -321,6 +321,7 @@ abstract class FilterModel<
 
     // Get current MasterProp data:
     XOptionedData? optPropData = _masterDataStructure._getOptPropData(propName);
+
     if (optPropParent != null) {
       XOptionedData? tempXOptionedParent =
           _masterDataStructure._getTempOptPropData(
@@ -331,6 +332,7 @@ abstract class FilterModel<
         // Item or Item List (Multi Selection):
         Object? parentOptPropValueOLD =
             data._currentFormData[optPropParent.propName];
+
         // Parent Value change?
         bool isSame = tempXOptionedParent.isSameItemOrItemList(
           itemOrItemList1: parentOptPropValueOLD,
@@ -408,6 +410,8 @@ abstract class FilterModel<
       currentSelectedItems = null;
       candidateSelectedItems = null;
     }
+    print(
+        "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 7 $propName --> optPropData: $optPropData");
     //
     _masterDataStructure._setTempOptPropData(
       propName: propName,
@@ -443,6 +447,9 @@ abstract class FilterModel<
         this._masterDataStructure._getTempCurrentPropValue(
               propName: propName,
             );
+    print(
+        "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 8 $propName --> tempSelectedPropValue: $tempSelectedPropValue");
+
     if (tempSelectedPropValue != null) {
       for (OptProp child in optProp.children) {
         await _loadOptPropDataCascade(
