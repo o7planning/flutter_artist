@@ -1,9 +1,9 @@
 part of '../flutter_artist.dart';
 
 abstract class FilterModel<
-    FILTER_INPUT extends FilterInput, // EmptyFilterInput
-    FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
-    > extends _XBase {
+FILTER_INPUT extends FilterInput, // EmptyFilterInput
+FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
+> extends _XBase {
   late final Shelf shelf;
 
   late final String name;
@@ -254,7 +254,7 @@ abstract class FilterModel<
       } else {
         if (!_defaultValueInitiated) {
           for (CommonProp commonMasterProp
-              in _masterDataStructure._commonProps) {
+          in _masterDataStructure._commonProps) {
             Object? value = specifyDefaultCommonPropValue(
               propName: commonMasterProp.propName,
             );
@@ -287,9 +287,6 @@ abstract class FilterModel<
       );
       _filterCriteria = newCriteria;
       //
-      this.data._filterDataState = DataState.ready;
-
-      //
       // Update Real FromData from Temporary FormData:
       //
       this.data._currentFormData
@@ -318,7 +315,6 @@ abstract class FilterModel<
         stackTrace: stackTrace,
         showSnackBar: true,
       );
-      this.data._filterDataState = DataState.error;
       //
       // IMPORTANT: Restore OLD State:
       // Note [_formKeyPatchValueSilently] NOT WORK!.
@@ -360,14 +356,14 @@ abstract class FilterModel<
 
     if (optPropParent != null) {
       XOptionedData? tempXOptionedParent =
-          _masterDataStructure._getTempOptPropData(
+      _masterDataStructure._getTempOptPropData(
         optPropParent.propName,
       );
       //
       if (tempXOptionedParent != null) {
         // Item or Item List (Multi Selection):
         Object? parentOptPropValueOLD =
-            data._currentFormData[optPropParent.propName];
+        data._currentFormData[optPropParent.propName];
 
         // Parent Value change?
         bool isSame = tempXOptionedParent.isSameItemOrItemList(
@@ -419,14 +415,14 @@ abstract class FilterModel<
       // It can be a single value or a List.
       //
       final dynamic tempCurrentValue =
-          _masterDataStructure._getTempCurrentPropValue(
+      _masterDataStructure._getTempCurrentPropValue(
         propName: propName,
       );
       //
       if (tempCurrentValue != null) {
         if (tempCurrentValue is List) {
           currentSelectedItems =
-              tempCurrentValue.isEmpty ? null : tempCurrentValue;
+          tempCurrentValue.isEmpty ? null : tempCurrentValue;
         } else {
           currentSelectedItems = [tempCurrentValue];
         }
@@ -478,9 +474,9 @@ abstract class FilterModel<
 
     //
     Object? tempSelectedPropValue =
-        this._masterDataStructure._getTempCurrentPropValue(
-              propName: propName,
-            );
+    this._masterDataStructure._getTempCurrentPropValue(
+      propName: propName,
+    );
 
     if (tempSelectedPropValue != null) {
       for (OptProp child in optProp.children) {
@@ -647,7 +643,7 @@ abstract class FilterModel<
     //
     _XFilterModel xFilterModel = xShelf.findXFilterModelByName(name)!;
     _FilterViewChangeTaskUnit taskUnit =
-        _FilterViewChangeTaskUnit(xFilterModel: xFilterModel);
+    _FilterViewChangeTaskUnit(xFilterModel: xFilterModel);
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     await FlutterArtist.executor._executeTaskUnitQueue();
   }
@@ -740,18 +736,19 @@ abstract class FilterModel<
       forceQueryScalarOpts: _scalars
           .map(
             (s) => _ScalarOpt(scalar: s),
-          )
+      )
           .toList(),
       forceQueryBlockOpts: _blocks
           .map(
-            (b) => _BlockOpt(
+            (b) =>
+            _BlockOpt(
                 block: b,
                 queryType: null,
                 pageable: null,
                 listBehavior: null,
                 suggestedSelection: null,
                 postQueryBehavior: null),
-          )
+      )
           .toList(),
       forceQueryFormModelOpts: [],
     );
@@ -790,8 +787,10 @@ abstract class FilterModel<
   }) {
     _filterFragmentWidgetStates.update(
       widgetState,
-      (xState) => xState..isBuilding = isBuilding,
-      ifAbsent: () => _XState()..isBuilding = isBuilding,
+          (xState) => xState..isBuilding = isBuilding,
+      ifAbsent: () =>
+      _XState()
+        ..isBuilding = isBuilding,
     );
   }
 
@@ -805,8 +804,10 @@ abstract class FilterModel<
     bool activeOLD = hasActiveUIComponent();
     _filterFragmentWidgetStates.update(
       widgetState,
-      (xState) => xState..isShowing = isShowing,
-      ifAbsent: () => _XState()..isShowing = isShowing,
+          (xState) => xState..isShowing = isShowing,
+      ifAbsent: () =>
+      _XState()
+        ..isShowing = isShowing,
     );
     bool activeCURRENT = hasActiveUIComponent();
 

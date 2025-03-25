@@ -119,18 +119,25 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
     }
   }
 
+
+  Future<void> _onChanged() async {
+    if (FlutterArtist.executor.executingXShelfId != null) {
+      return;
+    }
+    //
+    bool isBuilding = widget.formModel._isWidgetStateBuilding(
+      widgetState: this,
+    );
+    if (!isBuilding) {
+      await widget.formModel._onChangeFromFormView();
+    }
+  }
+
   FormBuilder _buildFormBuilder() {
     return FormBuilder(
       key: formKey,
       initialValue: widget.formModel.initFormValue(),
-      onChanged: () {
-        widget.formModel._onChangeFromFormWidget();
-        if (mounted) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            widget.formModel.shelf.updateAllUIComponents();
-          });
-        }
-      },
+      onChanged: _onChanged,
       child: AbsorbPointer(
         absorbing: !widget.formModel.isEnabled(),
         child: widget.build(),
