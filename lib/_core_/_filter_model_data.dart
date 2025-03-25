@@ -60,9 +60,6 @@ class FilterModelData<
     _initialFormData
       ..clear()
       ..addAll(formData);
-    _currentFormData
-      ..clear()
-      ..addAll(formData);
   }
 
   // ***************************************************************************

@@ -193,16 +193,17 @@ abstract class FilterModel<
     required FILTER_INPUT? filterInput,
   }) async {
     print("#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFilterTransaction");
-    print("instantValue: ${_formKey.currentState?.instantValue}");
-    if (!_initiated && _formKey.currentState != null) {
-      _initiated = true;
-      data._initialFilterData(_formKey.currentState!.instantValue);
-    }
     try {
       // All values including hidden values (not on the user interface).
       Map<String, dynamic> allNewValue = {...data._currentFormData};
+
       // Update values from view (On the user Interface).
       allNewValue.addAll(_formKey.currentState?.instantValue ?? {});
+      //
+      if (!_initiated && _formKey.currentState != null) {
+        _initiated = true;
+        data._initialFilterData(allNewValue);
+      }
       //
       _masterDataStructure._initTemporaryForNewTransaction(
         currentFormData: filterInput != null
@@ -264,6 +265,7 @@ abstract class FilterModel<
       this.data._currentFormData
         ..updateAll((k, v) => null)
         ..addAll(_masterDataStructure._tempCurrentFormData);
+
       //
       // UPDATE OPT-DATA:
       //  - optProp._xOptionedData = optProp._tempXOptionedData;
