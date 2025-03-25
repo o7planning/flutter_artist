@@ -2177,6 +2177,9 @@ abstract class Block<
     PageableData? pageable,
     Function()? navigate,
   }) async {
+    if (filterModel != null && filterModel!._lockAddMoreQuery) {
+      return false;
+    }
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: navigate,

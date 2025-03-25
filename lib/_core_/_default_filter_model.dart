@@ -23,11 +23,6 @@ class _DefaultFilterModel
   }
 
   @override
-  Map<String, dynamic> initialCriteriaDataMap() {
-    return {};
-  }
-
-  @override
   Future<XList?> callApiLoadOptPropData({
     required EmptyFilterInput? filterInput,
     required Object? parentOptPropValue,
@@ -87,11 +82,6 @@ class StringIdFilterModel
     required Map<String, dynamic> dataMap,
   }) {
     return StringIdFilterCriteria(idValue: idValue);
-  }
-
-  @override
-  Map<String, dynamic> initialCriteriaDataMap() {
-    return {};
   }
 
   @override
@@ -157,11 +147,6 @@ class StringValueFilterModel
   }
 
   @override
-  Map<String, dynamic> initialCriteriaDataMap() {
-    return {};
-  }
-
-  @override
   Future<XList?> callApiLoadOptPropData({
     required StringValueFilterInput? filterInput,
     required Object? parentOptPropValue,
@@ -224,11 +209,6 @@ class SearchTextFilterModel
   }
 
   @override
-  Map<String, dynamic> initialCriteriaDataMap() {
-    return {};
-  }
-
-  @override
   Future<XList?> callApiLoadOptPropData({
     required SearchTextFilterInput? filterInput,
     required Object? parentOptPropValue,
@@ -288,11 +268,6 @@ class IntIdFilterModel
     required Map<String, dynamic> dataMap,
   }) {
     return IntIdFilterCriteria(idValue: idValue);
-  }
-
-  @override
-  Map<String, dynamic> initialCriteriaDataMap() {
-    return {};
   }
 
   @override

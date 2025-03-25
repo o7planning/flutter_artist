@@ -19,4 +19,9 @@ class _BlockQueryTaskUnit extends _TaskUnit {
   String getObjectName() {
     return xBlock.block.name;
   }
+
+  @override
+  String toString() {
+    return "${getClassName(this)}(${getClassName(xBlock.block)})";
+  }
 }

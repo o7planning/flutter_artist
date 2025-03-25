@@ -48,6 +48,10 @@ abstract class FilterModel<
 
   bool _initiated = false;
 
+  bool _lockAddMoreQuery = false;
+
+  bool get lockAddMoreQuery => _lockAddMoreQuery;
+
   // ***************************************************************************
   // ***************************************************************************
 
@@ -62,6 +66,8 @@ abstract class FilterModel<
     required _XFilterModel xFilterModel,
   }) async {
     __assertThisXFilterModel(xFilterModel);
+    //
+    data._filterDataState = DataState.pending;
     //
     FILTER_CRITERIA? filterCriteria = await _startNewFilterTransaction(
       filterInput: null,
@@ -154,32 +160,37 @@ abstract class FilterModel<
   void _formKeyPatchValueSilently({
     required Map<String, dynamic> newCurrentValue,
   }) {
-    for (String key in newCurrentValue.keys) {
-      dynamic value = newCurrentValue[key];
+    try {
+      _lockAddMoreQuery = true;
       //
-      // IMPORTANT:
-      //  Update FormBuilder Model: _instantValue[key] = value;
-      //
-      //  _formKey.currentState?.setInternalFieldValue(key, value);
-      //
-
-      //
-      // IMPORTANT:
-      //  Update FormBuilder View State:
-      //
-      _formKey.currentState?.fields[key]?.setValue(
-        value,
+      for (String key in newCurrentValue.keys) {
+        dynamic value = newCurrentValue[key];
         //
-        // populateForm: true ---> _formKey.currentState?setInternalFieldValue(key,valuee)
-        // populateForm: false ---> [Do nothing]
         //
-        populateForm: true, // [Update FormBuilder Model]
-      );
+        // IMPORTANT:
+        //  Update FormBuilder View State:
+        //
+        _formKey.currentState?.fields[key]?.setValue(
+          value,
+          //
+          // populateForm: true ---> _formKey.currentState?setInternalFieldValue(key,value)
+          // populateForm: false ---> [Do nothing]
+          //
+          populateForm: true, // [Update FormBuilder Model]
+        );
+      }
+    } finally {
+      _lockAddMoreQuery = false;
     }
   }
 
   void _formKeyPatchValue({required Map<String, dynamic> newCurrentValue}) {
-    _formKey.currentState?.patchValue(newCurrentValue);
+    try {
+      _lockAddMoreQuery = true;
+      _formKey.currentState?.patchValue(newCurrentValue);
+    } finally {
+      _lockAddMoreQuery = false;
+    }
   }
 
   // ***************************************************************************
@@ -192,6 +203,10 @@ abstract class FilterModel<
   Future<FILTER_CRITERIA?> _startNewFilterTransaction({
     required FILTER_INPUT? filterInput,
   }) async {
+    if (data._filterDataState == DataState.ready && filterInput == null) {
+      print("Ready ---------------------> return");
+      return _filterCriteria;
+    }
     print("#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFilterTransaction");
     try {
       // All values including hidden values (not on the user interface).
@@ -237,14 +252,15 @@ abstract class FilterModel<
           );
         }
       } else {
-        if(!_defaultValueInitiated) {
-          for (CommonProp commonMasterProp in _masterDataStructure._commonProps) {
+        if (!_defaultValueInitiated) {
+          for (CommonProp commonMasterProp
+              in _masterDataStructure._commonProps) {
             Object? value = specifyDefaultCommonPropValue(
               propName: commonMasterProp.propName,
             );
             _masterDataStructure._setTempPropDataCommon(
               propName: commonMasterProp.propName,
-                value: value,
+              value: value,
             );
           }
         }
@@ -257,7 +273,9 @@ abstract class FilterModel<
         stackTrace: stackTrace,
         showSnackBar: true,
       );
-      return null;
+      data._filterDataState = DataState.error;
+      _filterCriteria = null;
+      return _filterCriteria;
     }
     //
     _printStructureAndTempData();
@@ -286,10 +304,12 @@ abstract class FilterModel<
       //
       // IMPORTANT:
       //
-      _formKeyPatchValueSilently(newCurrentValue: data._currentFormData);
+      _formKeyPatchValue(newCurrentValue: data._currentFormData);
       //
       _defaultValueInitiated = true;
-      return newCriteria;
+      _filterCriteria = newCriteria;
+      data._filterDataState = DataState.ready;
+      return _filterCriteria;
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
@@ -305,7 +325,9 @@ abstract class FilterModel<
       //
       _formKeyPatchValueSilently(newCurrentValue: data._currentFormData);
       //
-      return null;
+      _filterCriteria = null;
+      data._filterDataState = DataState.error;
+      return _filterCriteria;
     }
   }
 
@@ -472,8 +494,6 @@ abstract class FilterModel<
       // Do nothing.
     }
   }
-
-
 
   // ***************************************************************************
   // ***************************************************************************
@@ -700,6 +720,9 @@ abstract class FilterModel<
   Future<bool> queryAll({
     FILTER_INPUT? filterInput,
   }) async {
+    if (_lockAddMoreQuery) {
+      return false;
+    }
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       ownerClassInstance: this,

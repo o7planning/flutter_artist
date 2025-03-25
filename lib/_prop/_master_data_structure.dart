@@ -46,6 +46,20 @@ class PropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  bool _isOptProp(String propName) {
+    Prop? prop = _allPropMap[propName];
+    if (prop == null) {
+      return false;
+    }
+    if (prop is OptProp) {
+      return true;
+    }
+    return false;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _initTemporaryForNewTransaction({
     required Map<String, dynamic>? currentFormData,
   }) {
