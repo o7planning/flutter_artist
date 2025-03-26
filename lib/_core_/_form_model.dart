@@ -327,6 +327,12 @@ abstract class FormModel<
         commonPropValue = getCommonPropValuesFromItemDetail(
           itemDetail: itemDetail,
         );
+        for (String propName in commonPropValue.keys) {
+          _formPropsStructure._setTempPropDataCommon(
+            propName: propName,
+            value: commonPropValue[propName],
+          );
+        }
       } catch (e, stackTrace) {
         _handleError(
           shelf: shelf,
@@ -354,13 +360,18 @@ abstract class FormModel<
           commonPropValueDefault = specifyDefaultCommonPropValues();
         }
       }
-
-      // for (CommonProp commonOptProp in _filterPropsStructure._commonProps) {
-      //   _filterPropsStructure._setTempPropDataCommon(
-      //     propName: commonOptProp.propName,
-      //     value: value,
-      //   );
-      // }
+      for (String propName in commonPropValueDefault.keys) {
+        _formPropsStructure._setTempPropDataCommon(
+          propName: propName,
+          value: commonPropValueDefault[propName],
+        );
+      }
+      for (String propName in commonPropValueExtra.keys) {
+        _formPropsStructure._setTempPropDataCommon(
+          propName: propName,
+          value: commonPropValueExtra[propName],
+        );
+      }
     }
     //
 

@@ -217,6 +217,13 @@ class FormPropsStructure {
     required String propName,
     required Object? value,
   }) {
+    Prop? prop = _allPropMap[propName];
+    if (prop == null) {
+      throw AppException(message: "No propName $propName", details: null);
+    } else if (prop is! CommonProp) {
+      throw AppException(
+          message: "$propName is not Common prop", details: null);
+    }
     _tempCurrentFormData[propName] = value;
   }
 
