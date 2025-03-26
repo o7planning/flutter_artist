@@ -1,9 +1,9 @@
 part of '../flutter_artist.dart';
 
 abstract class FilterModel<
-FILTER_INPUT extends FilterInput, // EmptyFilterInput
-FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
-> extends _XBase {
+    FILTER_INPUT extends FilterInput, // EmptyFilterInput
+    FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
+    > extends _XBase {
   late final Shelf shelf;
 
   late final String name;
@@ -254,7 +254,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
       } else {
         if (!_defaultValueInitiated) {
           for (CommonProp commonMasterProp
-          in _masterDataStructure._commonProps) {
+              in _masterDataStructure._commonProps) {
             Object? value = specifyDefaultCommonPropValue(
               propName: commonMasterProp.propName,
             );
@@ -287,6 +287,9 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
       );
       _filterCriteria = newCriteria;
       //
+      this.data._filterDataState = DataState.ready;
+
+      //
       // Update Real FromData from Temporary FormData:
       //
       this.data._currentFormData
@@ -315,11 +318,12 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
         stackTrace: stackTrace,
         showSnackBar: true,
       );
+      this.data._filterDataState = DataState.error;
       //
       // IMPORTANT: Restore OLD State:
       // Note [_formKeyPatchValueSilently] NOT WORK!.
       //
-      _formKeyPatchValueSilently(newCurrentValue: data._currentFormData);
+      _formKeyPatchValue(newCurrentValue: data._currentFormData);
       //
       _filterCriteria = null;
       data._filterDataState = DataState.error;
@@ -356,14 +360,14 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
 
     if (optPropParent != null) {
       XOptionedData? tempXOptionedParent =
-      _masterDataStructure._getTempOptPropData(
+          _masterDataStructure._getTempOptPropData(
         optPropParent.propName,
       );
       //
       if (tempXOptionedParent != null) {
         // Item or Item List (Multi Selection):
         Object? parentOptPropValueOLD =
-        data._currentFormData[optPropParent.propName];
+            data._currentFormData[optPropParent.propName];
 
         // Parent Value change?
         bool isSame = tempXOptionedParent.isSameItemOrItemList(
@@ -415,14 +419,14 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
       // It can be a single value or a List.
       //
       final dynamic tempCurrentValue =
-      _masterDataStructure._getTempCurrentPropValue(
+          _masterDataStructure._getTempCurrentPropValue(
         propName: propName,
       );
       //
       if (tempCurrentValue != null) {
         if (tempCurrentValue is List) {
           currentSelectedItems =
-          tempCurrentValue.isEmpty ? null : tempCurrentValue;
+              tempCurrentValue.isEmpty ? null : tempCurrentValue;
         } else {
           currentSelectedItems = [tempCurrentValue];
         }
@@ -451,19 +455,19 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     // TODO: Double check this code:
     //
     if (candidateSelectedItems != null && candidateSelectedItems.isNotEmpty) {
-      try {
+      if (optProp.singleSelection) {
+        // IMPORTANT:
+        //  - Update from ROOTs to LEAVES
+        //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
+        Object? candidateSelectedItem = candidateSelectedItems.first;
+        _masterDataStructure._updateTempData({propName: candidateSelectedItem});
+      } else {
         // IMPORTANT:
         //  - Update from ROOTs to LEAVES
         //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
         // Try MULTI SELECTED ITEMS:
         _masterDataStructure
             ._updateTempData({propName: candidateSelectedItems});
-      } catch (e) {
-        // IMPORTANT:
-        //  - Update from ROOTs to LEAVES
-        //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
-        Object? candidateSelectedItem = candidateSelectedItems.first;
-        _masterDataStructure._updateTempData({propName: candidateSelectedItem});
       }
     } else {
       // IMPORTANT:
@@ -471,12 +475,11 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
       //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
       _masterDataStructure._updateTempData({propName: null});
     }
-
     //
     Object? tempSelectedPropValue =
-    this._masterDataStructure._getTempCurrentPropValue(
-      propName: propName,
-    );
+        this._masterDataStructure._getTempCurrentPropValue(
+              propName: propName,
+            );
 
     if (tempSelectedPropValue != null) {
       for (OptProp child in optProp.children) {
@@ -643,7 +646,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     //
     _XFilterModel xFilterModel = xShelf.findXFilterModelByName(name)!;
     _FilterViewChangeTaskUnit taskUnit =
-    _FilterViewChangeTaskUnit(xFilterModel: xFilterModel);
+        _FilterViewChangeTaskUnit(xFilterModel: xFilterModel);
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     await FlutterArtist.executor._executeTaskUnitQueue();
   }
@@ -736,19 +739,18 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
       forceQueryScalarOpts: _scalars
           .map(
             (s) => _ScalarOpt(scalar: s),
-      )
+          )
           .toList(),
       forceQueryBlockOpts: _blocks
           .map(
-            (b) =>
-            _BlockOpt(
+            (b) => _BlockOpt(
                 block: b,
                 queryType: null,
                 pageable: null,
                 listBehavior: null,
                 suggestedSelection: null,
                 postQueryBehavior: null),
-      )
+          )
           .toList(),
       forceQueryFormModelOpts: [],
     );
@@ -787,10 +789,8 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   }) {
     _filterFragmentWidgetStates.update(
       widgetState,
-          (xState) => xState..isBuilding = isBuilding,
-      ifAbsent: () =>
-      _XState()
-        ..isBuilding = isBuilding,
+      (xState) => xState..isBuilding = isBuilding,
+      ifAbsent: () => _XState()..isBuilding = isBuilding,
     );
   }
 
@@ -804,10 +804,8 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     bool activeOLD = hasActiveUIComponent();
     _filterFragmentWidgetStates.update(
       widgetState,
-          (xState) => xState..isShowing = isShowing,
-      ifAbsent: () =>
-      _XState()
-        ..isShowing = isShowing,
+      (xState) => xState..isShowing = isShowing,
+      ifAbsent: () => _XState()..isShowing = isShowing,
     );
     bool activeCURRENT = hasActiveUIComponent();
 
