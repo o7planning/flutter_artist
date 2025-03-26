@@ -43,7 +43,7 @@ abstract class FormModel<
 
   bool _defaultValueInitiated = false;
 
-  late final PropsStructure _masterDataStructure;
+  late final FormPropsStructure _formPropsStructure;
 
   DataState get formDataState => data._formDataState;
 
@@ -69,22 +69,6 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<bool> _unitFormViewChanged({
-    required _XFormModel xFormModel,
-  }) async {
-    __assertThisXFormModel(xFormModel);
-    //
-    // data._formDataState = DataState.pending;
-    //
-    await _startNewFormTransaction(
-      extraFormInput: null,
-    );
-    return true;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   ///
   /// ```dart
   /// PropsStructure registerPropsStructure() {
@@ -102,14 +86,14 @@ abstract class FormModel<
   ///   );
   /// }
   /// ```
-  PropsStructure? registerPropsStructure();
+  FormPropsStructure? registerPropsStructure();
 
   // ***************************************************************************
   // ***************************************************************************
 
   void __registerPropsStructure() {
-    _masterDataStructure = registerPropsStructure() ??
-        PropsStructure(
+    _formPropsStructure = registerPropsStructure() ??
+        FormPropsStructure(
           allPropNames: [],
           optProps: [],
         );
@@ -142,14 +126,12 @@ abstract class FormModel<
         data._initialFormData2(allNewValue);
       }
       //
-      _masterDataStructure._initTemporaryForNewTransaction(
-        currentFormData: extraFormInput != null
-            ? {} // To Clear All.
-            : allNewValue,
+      _formPropsStructure._initTemporaryForNewTransaction(
+        currentFormData:  allNewValue,
       );
-      _masterDataStructure._printTemporaryInfo();
+      _formPropsStructure._printTemporaryInfo("@1");
       //
-      for (OptProp optProp in _masterDataStructure._rootOptProps) {
+      for (OptProp optProp in _formPropsStructure._rootOptProps) {
         //
         // Load OptProp Data and set default and selected.
         //
@@ -161,14 +143,14 @@ abstract class FormModel<
           optProp: optProp,
         );
       }
-      _masterDataStructure._printTemporaryInfo();
+      _formPropsStructure._printTemporaryInfo("@2");
       if (extraFormInput != null) {
-        for (CommonProp commonMasterProp in _masterDataStructure._commonProps) {
+        for (CommonProp commonMasterProp in _formPropsStructure._commonProps) {
           Object? value = extraFormInputToCommonPropValue(
             extraFormInput: extraFormInput,
             propName: commonMasterProp.propName,
           );
-          _masterDataStructure._setTempPropDataCommon(
+          _formPropsStructure._setTempPropDataCommon(
             propName: commonMasterProp.propName,
             value: value,
           );
@@ -176,11 +158,11 @@ abstract class FormModel<
       } else {
         if (!_defaultValueInitiated) {
           for (CommonProp commonMasterProp
-              in _masterDataStructure._commonProps) {
+              in _formPropsStructure._commonProps) {
             Object? value = specifyDefaultCommonPropValue(
               propName: commonMasterProp.propName,
             );
-            _masterDataStructure._setTempPropDataCommon(
+            _formPropsStructure._setTempPropDataCommon(
               propName: commonMasterProp.propName,
               value: value,
             );
@@ -198,7 +180,7 @@ abstract class FormModel<
       data._formDataState = DataState.error;
     }
     //
-    _printStructureAndTempData();
+    _printStructureAndTempData("@3");
     //
     try {
       //
@@ -206,13 +188,13 @@ abstract class FormModel<
       //
       this.data._currentFormData
         ..updateAll((k, v) => null)
-        ..addAll(_masterDataStructure._tempCurrentFormData);
+        ..addAll(_formPropsStructure._tempCurrentFormData);
 
       //
       // UPDATE OPT-DATA:
       //  - optProp._xOptionedData = optProp._tempXOptionedData;
       //
-      this._masterDataStructure._applyAllTempDataToReal();
+      this._formPropsStructure._applyAllTempDataToReal();
       //
       // IMPORTANT:
       //
@@ -241,8 +223,8 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _printStructureAndTempData() {
-    _masterDataStructure._printTemporaryInfo();
+  void _printStructureAndTempData(String prefix) {
+    _formPropsStructure._printTemporaryInfo(prefix);
     print("instantData: ${_formKey.currentState?.instantValue}\n\n");
   }
 
@@ -303,11 +285,11 @@ abstract class FormModel<
     final OptProp? optPropParent = optProp?.parent;
 
     // Get current MasterProp data:
-    XOptionedData? optPropData = _masterDataStructure._getOptPropData(propName);
+    XOptionedData? optPropData = _formPropsStructure._getOptPropData(propName);
 
     if (optPropParent != null) {
       XOptionedData? tempXOptionedParent =
-          _masterDataStructure._getTempOptPropData(
+          _formPropsStructure._getTempOptPropData(
         optPropParent.propName,
       );
       //
@@ -366,7 +348,7 @@ abstract class FormModel<
       // It can be a single value or a List.
       //
       final dynamic tempCurrentValue =
-          _masterDataStructure._getTempCurrentPropValue(
+          _formPropsStructure._getTempCurrentPropValue(
         propName: propName,
       );
       //
@@ -394,7 +376,7 @@ abstract class FormModel<
       candidateSelectedItems = null;
     }
     //
-    _masterDataStructure._setTempOptPropData(
+    _formPropsStructure._setTempOptPropData(
       propName: propName,
       optionedData: optPropData,
     );
@@ -407,25 +389,25 @@ abstract class FormModel<
         //  - Update from ROOTs to LEAVES
         //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
         // Try MULTI SELECTED ITEMS:
-        _masterDataStructure
+        _formPropsStructure
             ._updateTempData({propName: candidateSelectedItems});
       } catch (e) {
         // IMPORTANT:
         //  - Update from ROOTs to LEAVES
         //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
         Object? candidateSelectedItem = candidateSelectedItems.first;
-        _masterDataStructure._updateTempData({propName: candidateSelectedItem});
+        _formPropsStructure._updateTempData({propName: candidateSelectedItem});
       }
     } else {
       // IMPORTANT:
       //  - Update from ROOTs to LEAVES
       //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
-      _masterDataStructure._updateTempData({propName: null});
+      _formPropsStructure._updateTempData({propName: null});
     }
 
     //
     Object? tempSelectedPropValue =
-        this._masterDataStructure._getTempCurrentPropValue(
+        this._formPropsStructure._getTempCurrentPropValue(
               propName: propName,
             );
 
@@ -566,6 +548,22 @@ abstract class FormModel<
     final Map<String, dynamic> newFormData = {...instantValues}
       ..updateAll((k, v) => null);
     this._formKey.currentState?.patchValue(newFormData);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<bool> _unitFormViewChanged({
+    required _XFormModel xFormModel,
+  }) async {
+    __assertThisXFormModel(xFormModel);
+    //
+    // data._formDataState = DataState.pending;
+    //
+    await _startNewFormTransaction(
+      extraFormInput: null,
+    );
+    return true;
   }
 
   // ***************************************************************************

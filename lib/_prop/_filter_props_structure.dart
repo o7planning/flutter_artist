@@ -233,8 +233,9 @@ class PropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _printTemporaryInfo() {
+  void _printTemporaryInfo(String prefix) {
     print("\n\n--------------------------------------------------------------");
+    print(" ---> $prefix");
     for (OptProp rootItem in _rootOptProps) {
       rootItem._printTempInfoCascade(indentFactor: 1);
     }

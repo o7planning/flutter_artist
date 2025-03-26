@@ -309,7 +309,9 @@ part '_utils_/_patch_utils.dart';
 
 part '_core_/_executor.dart';
 
-part '_prop/_master_data_structure.dart';
+part '_prop/_filter_props_structure.dart';
+
+part '_prop/_form_props_structure.dart';
 
 part '_core_/_actionable.dart';
 
