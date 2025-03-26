@@ -187,26 +187,7 @@ abstract class FilterModel<
   void _formKeyPatchValue({required Map<String, dynamic> newCurrentValue}) {
     try {
       _lockAddMoreQuery = true;
-      // _formKey.currentState?.patchValue(newCurrentValue);
-      for (String propName in newCurrentValue.keys) {
-        dynamic value = newCurrentValue[propName];
-        if (value == null) {
-          _formKey.currentState?.patchValue({propName: null});
-        } else {
-          if (value is! List) {
-            _formKey.currentState?.patchValue({propName: value});
-          } else {
-            try {
-              _formKey.currentState?.patchValue({propName: value});
-            } catch (e, stackTrace) {
-              print(stackTrace);
-              _formKey.currentState?.patchValue({
-                propName: value.isEmpty ? null : value.first,
-              });
-            }
-          }
-        }
-      }
+      _formKey.currentState?.patchValue(newCurrentValue);
     } finally {
       _lockAddMoreQuery = false;
     }
