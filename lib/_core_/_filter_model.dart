@@ -187,7 +187,25 @@ abstract class FilterModel<
   void _formKeyPatchValue({required Map<String, dynamic> newCurrentValue}) {
     try {
       _lockAddMoreQuery = true;
-      _formKey.currentState?.patchValue(newCurrentValue);
+      // _formKey.currentState?.patchValue(newCurrentValue);
+      for (String propName in newCurrentValue.keys) {
+        dynamic value = newCurrentValue[propName];
+        if (value == null) {
+          _formKey.currentState?.patchValue({propName: null});
+        } else {
+          if (value is! List) {
+            _formKey.currentState?.patchValue({propName: value});
+          } else {
+            try {
+              _formKey.currentState?.patchValue({propName: value});
+            } catch (e) {
+              _formKey.currentState?.patchValue({
+                propName: value.isEmpty ? null : value.first,
+              });
+            }
+          }
+        }
+      }
     } finally {
       _lockAddMoreQuery = false;
     }
@@ -323,7 +341,7 @@ abstract class FilterModel<
       // IMPORTANT: Restore OLD State:
       // Note [_formKeyPatchValueSilently] NOT WORK!.
       //
-      _formKeyPatchValueSilently(newCurrentValue: data._currentFormData);
+      _formKeyPatchValue(newCurrentValue: data._currentFormData);
       //
       _filterCriteria = null;
       data._filterDataState = DataState.error;
