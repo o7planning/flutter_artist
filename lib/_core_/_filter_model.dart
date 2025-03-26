@@ -458,13 +458,13 @@ abstract class FilterModel<
       if (optProp.singleSelection) {
         // IMPORTANT:
         //  - Update from ROOTs to LEAVES
-        //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
+        //  - And make sure children-OptProp to null if parent-Value is null or not selected.
         Object? candidateSelectedItem = candidateSelectedItems.first;
         _masterDataStructure._updateTempData({propName: candidateSelectedItem});
       } else {
         // IMPORTANT:
         //  - Update from ROOTs to LEAVES
-        //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
+        //  - And make sure children-OptProp to null if parent-Value is null or not selected.
         // Try MULTI SELECTED ITEMS:
         _masterDataStructure
             ._updateTempData({propName: candidateSelectedItems});
@@ -472,7 +472,7 @@ abstract class FilterModel<
     } else {
       // IMPORTANT:
       //  - Update from ROOTs to LEAVES
-      //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
+      //  - And make sure children-OptProp to null if parent-Value is null or not selected.
       _masterDataStructure._updateTempData({propName: null});
     }
     //
