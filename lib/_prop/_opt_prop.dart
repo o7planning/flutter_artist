@@ -13,7 +13,7 @@ class OptProp extends Prop {
   /// Make sure you set the appropriate value for this property, otherwise an error will occur.
   /// For example: An error occurs when the library tries to set multiple selection values for the Dropdown.
   ///
-  final bool singleSelection;
+  bool singleSelection = true;
   final List<OptProp> children;
 
   XOptionedData? _xOptionedData;
@@ -23,7 +23,6 @@ class OptProp extends Prop {
   OptProp({
     required super.propName,
     this.type,
-    this.singleSelection = true,
     this.children = const [],
   });
 

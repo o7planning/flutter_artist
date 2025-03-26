@@ -198,7 +198,8 @@ abstract class FilterModel<
           } else {
             try {
               _formKey.currentState?.patchValue({propName: value});
-            } catch (e) {
+            } catch (e, stackTrace) {
+              print(stackTrace);
               _formKey.currentState?.patchValue({
                 propName: value.isEmpty ? null : value.first,
               });
@@ -473,19 +474,19 @@ abstract class FilterModel<
     // TODO: Double check this code:
     //
     if (candidateSelectedItems != null && candidateSelectedItems.isNotEmpty) {
-      try {
+      if (optProp.singleSelection) {
+        // IMPORTANT:
+        //  - Update from ROOTs to LEAVES
+        //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
+        Object? candidateSelectedItem = candidateSelectedItems.first;
+        _masterDataStructure._updateTempData({propName: candidateSelectedItem});
+      } else {
         // IMPORTANT:
         //  - Update from ROOTs to LEAVES
         //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
         // Try MULTI SELECTED ITEMS:
         _masterDataStructure
             ._updateTempData({propName: candidateSelectedItems});
-      } catch (e) {
-        // IMPORTANT:
-        //  - Update from ROOTs to LEAVES
-        //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
-        Object? candidateSelectedItem = candidateSelectedItems.first;
-        _masterDataStructure._updateTempData({propName: candidateSelectedItem});
       }
     } else {
       // IMPORTANT:
@@ -493,7 +494,6 @@ abstract class FilterModel<
       //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
       _masterDataStructure._updateTempData({propName: null});
     }
-
     //
     Object? tempSelectedPropValue =
         this._masterDataStructure._getTempCurrentPropValue(
