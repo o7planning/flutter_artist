@@ -3,6 +3,7 @@ part of '../flutter_artist.dart';
 class OptProp extends Prop {
   OptPropType? type;
   late final OptProp? parent;
+  bool _multiSelection = false;
 
   ///
   /// In most cases this value is [true].
