@@ -241,7 +241,8 @@ abstract class FilterModel<
       }
       _filterPropsStructure._printTemporaryInfo("@2");
       if (filterInput != null) {
-        for (CommonProp commonMasterProp in _filterPropsStructure._commonProps) {
+        for (CommonProp commonMasterProp
+            in _filterPropsStructure._commonProps) {
           Object? value = filterInputToCommonPropValue(
             filterInput: filterInput,
             propName: commonMasterProp.propName,
@@ -356,7 +357,8 @@ abstract class FilterModel<
     final OptProp? optPropParent = optProp?.parent;
 
     // Get current MasterProp data:
-    XOptionedData? optPropData = _filterPropsStructure._getOptPropData(propName);
+    XOptionedData? optPropData =
+        _filterPropsStructure._getOptPropData(propName);
 
     if (optPropParent != null) {
       XOptionedData? tempXOptionedParent =
@@ -460,7 +462,8 @@ abstract class FilterModel<
         //  - Update from ROOTs to LEAVES
         //  - And make sure children-OptProp to null if parent-Value is null or not selected.
         Object? candidateSelectedItem = candidateSelectedItems.first;
-        _filterPropsStructure._updateTempData({propName: candidateSelectedItem});
+        _filterPropsStructure
+            ._updateTempData({propName: candidateSelectedItem});
       } else {
         // IMPORTANT:
         //  - Update from ROOTs to LEAVES

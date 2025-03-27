@@ -119,7 +119,6 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
     }
   }
 
-
   Future<void> _onChanged() async {
     if (FlutterArtist.executor.executingXShelfId != null) {
       return;

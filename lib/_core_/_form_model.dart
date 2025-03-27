@@ -248,12 +248,7 @@ abstract class FormModel<
     required FILTER_CRITERIA? filterCriteria,
     required EXTRA_FORM_INPUT? extraFormInput,
   }) async {
-    // if (data._filterDataState == DataState.ready && extraFormInput == null) {
-    //   print("Ready ---------------------> return");
-    //   // return _filterCriteria;
-    // }
     print("#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFormTransaction");
-
     final ITEM_DETAIL? itemDetail = block.data.currentItemDetail;
     try {
       // All values including hidden values (not on the user interface).
@@ -285,39 +280,17 @@ abstract class FormModel<
         );
       }
       _formPropsStructure._printTemporaryInfo("@2");
-      // if (extraFormInput != null) {
-      //   for (CommonProp commonOptProp in _formPropsStructure._commonProps) {
-      //     Object? value = extraFormInputToCommonPropValue(
-      //       extraFormInput: extraFormInput,
-      //       propName: commonOptProp.propName,
-      //     );
-      //     _formPropsStructure._setTempPropDataCommon(
-      //       propName: commonOptProp.propName,
-      //       value: value,
-      //     );
-      //   }
-      // } else {
-      //   if (!_defaultValueInitiated) {
-      //     for (CommonProp commonOptProp in _formPropsStructure._commonProps) {
-      //       Object? value = specifyDefaultCommonPropValue(
-      //         propName: commonOptProp.propName,
-      //       );
-      //       _formPropsStructure._setTempPropDataCommon(
-      //         propName: commonOptProp.propName,
-      //         value: value,
-      //       );
-      //     }
-      //   }
-      // }
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: "_startNewFormTransaction",
-        error: "Error _startNewFormTransaction: $e",
+        methodName: "callApiLoadOptPropData",
+        error: "Error callApiLoadOptPropData: $e",
         stackTrace: stackTrace,
         showSnackBar: true,
       );
-      data._formDataState = DataState.error;
+      //
+      __applyWithDataState(formDataState: DataState.error);
+      return;
     }
     //
     _printStructureAndTempData("@3");
@@ -341,41 +314,71 @@ abstract class FormModel<
           stackTrace: stackTrace,
           showSnackBar: true,
         );
-        this.data._clearWithDataState(
-              formDataState: DataState.error,
-            );
-        // return false;
+        //
+        __applyWithDataState(formDataState: DataState.error);
+        return;
       }
     }
     // itemDetail == null
     else {
       Map<String, dynamic> commonPropValueDefault = {};
       Map<String, dynamic> commonPropValueExtra = {};
-      if (extraFormInput != null) {
-        commonPropValueExtra = getCommonPropValuesFromExtraFormInput(
-          extraFormInput: extraFormInput,
-        );
-      } else {
-        if (!_defaultValueInitiated) {
-          commonPropValueDefault = specifyDefaultCommonPropValues();
+      if (!_defaultValueInitiated) {
+        try {
+          commonPropValueDefault = specifyDefaultCommonPropValues() ?? {};
+          for (String propName in commonPropValueDefault.keys) {
+            _formPropsStructure._setTempPropDataCommon(
+              propName: propName,
+              value: commonPropValueDefault[propName],
+            );
+          }
+        } catch (e, stackTrace) {
+          _handleError(
+            shelf: shelf,
+            methodName: "specifyDefaultCommonPropValues",
+            error: "Error specifyDefaultCommonPropValues: $e",
+            stackTrace: stackTrace,
+            showSnackBar: true,
+          );
+          //
+          __applyWithDataState(formDataState: DataState.error);
+          return;
         }
       }
-      for (String propName in commonPropValueDefault.keys) {
-        _formPropsStructure._setTempPropDataCommon(
-          propName: propName,
-          value: commonPropValueDefault[propName],
-        );
-      }
-      for (String propName in commonPropValueExtra.keys) {
-        _formPropsStructure._setTempPropDataCommon(
-          propName: propName,
-          value: commonPropValueExtra[propName],
-        );
+      if (extraFormInput != null) {
+        try {
+          commonPropValueExtra = getCommonPropValuesFromExtraFormInput(
+                extraFormInput: extraFormInput,
+              ) ??
+              {};
+          //
+          for (String propName in commonPropValueExtra.keys) {
+            _formPropsStructure._setTempPropDataCommon(
+              propName: propName,
+              value: commonPropValueExtra[propName],
+            );
+          }
+        } catch (e, stackTrace) {
+          _handleError(
+            shelf: shelf,
+            methodName: "getCommonPropValuesFromItemDetail",
+            error: "Error getCommonPropValuesFromItemDetail: $e",
+            stackTrace: stackTrace,
+            showSnackBar: true,
+          );
+          //
+          __applyWithDataState(formDataState: DataState.error);
+          return;
+        }
       }
     }
-    //
+    __applyWithDataState(formDataState: DataState.ready);
+  }
 
-    //
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __applyWithDataState({required DataState formDataState}) {
     try {
       //
       // Update Real FromData from Temporary FormData:
@@ -395,7 +398,7 @@ abstract class FormModel<
       _formKeyPatchValue(newCurrentValue: data._currentFormData);
       //
       _defaultValueInitiated = true;
-      data._formDataState = DataState.ready;
+      data._formDataState = formDataState;
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
@@ -677,21 +680,21 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<String, dynamic> getCommonPropValuesFromExtraFormInput({
-    EXTRA_FORM_INPUT extraFormInput,
+  Map<String, dynamic>? getCommonPropValuesFromExtraFormInput({
+    required EXTRA_FORM_INPUT extraFormInput,
   });
 
   // ***************************************************************************
   // ***************************************************************************
 
   Map<String, dynamic> getCommonPropValuesFromItemDetail({
-    ITEM_DETAIL itemDetail,
+    required ITEM_DETAIL itemDetail,
   });
 
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<String, dynamic> specifyDefaultCommonPropValues();
+  Map<String, dynamic>? specifyDefaultCommonPropValues();
 
   // ***************************************************************************
   // ***************************************************************************
