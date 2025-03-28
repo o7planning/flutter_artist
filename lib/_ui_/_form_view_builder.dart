@@ -5,16 +5,12 @@ class _FormViewBuilder extends _RefreshableWidget {
 
   final Widget Function() build;
 
-  @Deprecated("Not use")
-  final Function()? onAfterBuild;
-
   const _FormViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
     required this.formModel,
     required this.build,
-    this.onAfterBuild,
   });
 
   @override
