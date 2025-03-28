@@ -239,7 +239,7 @@ abstract class FormModel<
     required bool isItemFirstLoad,
   }) async {
     print(
-        "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFormTransaction, isItemLoad: $isItemFirstLoad");
+        "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFormTransaction, isItemFirstLoad: $isItemFirstLoad");
     print("@ current: ${data._currentFormData}");
     final ITEM_DETAIL? itemDetail = block.data.currentItemDetail;
     final FormMode currentFormMode = data._formDataState == DataState.none
@@ -424,7 +424,7 @@ abstract class FormModel<
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: "createFormCriteria",
+        methodName: "__applyWithDataState",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -556,13 +556,13 @@ abstract class FormModel<
           selectedValueWrap = _getOptPropValueFromExtraFormInput(
             extraFormInput: extraFormInput,
             optPropData: optPropData,
-            propName: optPropName,
+            optPropName: optPropName,
           );
         } else {
           if (!_defaultValueInitiated) {
             selectedValueWrap = __specifyDefaultOptPropValue(
               optPropData: optPropData,
-              propName: optPropName,
+              optPropName: optPropName,
             );
           }
         }
@@ -694,11 +694,11 @@ abstract class FormModel<
 
   PropValue? __specifyDefaultOptPropValue({
     required XOptionedData optPropData,
-    required String propName,
+    required String optPropName,
   }) {
     PropValue? wrap = specifyDefaultOptPropValue(
       optPropData: optPropData,
-      optPropName: propName,
+      optPropName: optPropName,
     );
     if (wrap == null) {
       return null;
@@ -718,12 +718,12 @@ abstract class FormModel<
   PropValue? _getOptPropValueFromExtraFormInput({
     required EXTRA_FORM_INPUT extraFormInput,
     required XOptionedData optPropData,
-    required String propName,
+    required String optPropName,
   }) {
     PropValue? wrap = getOptPropValueFromExtraFormInput(
       extraFormInput: extraFormInput,
       optPropData: optPropData,
-      optPropName: propName,
+      optPropName: optPropName,
     );
     if (wrap == null) {
       return null;
