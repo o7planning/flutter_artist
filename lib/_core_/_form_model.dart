@@ -93,7 +93,6 @@ abstract class FormModel<
     bool active = this.hasActiveUIComponent();
     bool forceForm = thisXFormModel.forceForm;
     //
-
     if (!forceForm) {
       if (!active) {
         if (this.formDataState == DataState.error ||
@@ -113,17 +112,11 @@ abstract class FormModel<
       }
     }
     //
-    // forceForm = true
-    //
     __loadCount++;
-    print(
-        "@ ~~~~~~~~~~~~~~~~> ${getClassName(this)}._unitLoadForm - LOAD - $__loadCount");
     //
-    ITEM_DETAIL? refreshedItemDetail = this.block.data.currentItemDetail;
     FILTER_CRITERIA? filterCriteria = this.block.data.filterCriteria;
     EXTRA_FORM_INPUT? extraFormInput =
         thisXFormModel.extraFormInput as EXTRA_FORM_INPUT?;
-    bool isNew = this.data.isNew;
     //
     await _startNewFormTransaction(
       extraFormInput: extraFormInput,
@@ -844,108 +837,6 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  @Deprecated("Xoa di khong su dung nua")
-  Future<bool> _prepareMasterDataAndFormData({
-    required EXTRA_FORM_INPUT? extraFormInput,
-    required FILTER_CRITERIA? filterCriteria,
-    required ITEM_DETAIL? refreshedItemDetail,
-    required bool isNew,
-  }) async {
-    print(">>> ${getClassName(this)}._prepareMasterDataAndFormData()");
-    bool error = false;
-    try {
-      //
-      // May throw ApiError.
-      //
-      __prepareFormMasterDataCount++;
-      await prepareFormMasterData(
-        filterCriteria: filterCriteria,
-        extraFormInput: extraFormInput,
-        refreshedItem: refreshedItemDetail,
-        isNew: isNew,
-      );
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "prepareFormMasterData",
-        error: "Error prepareFormMasterData: $e",
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      error = true;
-    }
-    //
-    if (error) {
-      this.data._clearWithDataState(
-            formDataState: DataState.error,
-          );
-      return false;
-    }
-    //
-    Map<String, dynamic> newFormData = {};
-    try {
-      newFormData = prepareFormData(
-        filterCriteria: filterCriteria,
-        extraFormInput: extraFormInput,
-        refreshedItem: refreshedItemDetail,
-        isNew: isNew,
-      );
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "prepareFormData",
-        error: "Error prepareFormData: $e",
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      error = true;
-    }
-    //
-    if (error) {
-      this.data._clearWithDataState(
-            formDataState: DataState.error,
-          );
-      return false;
-    }
-    //
-    try {
-      this.data._updateFormData(newFormData);
-      this._formKey.currentState?.patchValue(newFormData);
-      //
-      this.data._setCurrentItem(
-            refreshedItemDetail: refreshedItemDetail,
-            formMode: isNew //
-                ? FormMode.creation
-                : FormMode.edit,
-            formDataState: DataState.ready,
-          );
-      //
-      updateAllUIComponents(); // TODO: Xu ly loi?
-      this.block.updateControlBarWidgets();
-      return true;
-    } catch (e, stackTrace) {
-      error = true;
-      //
-      _handleError(
-        shelf: shelf,
-        methodName: "_updateFormData",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-    }
-    //
-    if (error) {
-      this.data._clearWithDataState(
-            formDataState: DataState.error,
-          );
-      return false;
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   void _setFormViewBuildingState({
     required _RefreshableWidgetState widgetState,
     required bool isBuilding,
@@ -1152,59 +1043,6 @@ abstract class FormModel<
 
   Future<ApiResult<ITEM_DETAIL>> callApiUpdateItem({
     required Map<String, dynamic> formMapData,
-  });
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ///
-  /// Call this method to initialize the necessary data for the Form.
-  /// For example, the list of items of the [Dropdown].
-  ///
-  /// This method is called before [prepareFormData] method.
-  ///
-  /// Example:
-  /// ```dart
-  /// Future<void> prepareFormMasterData({
-  ///     required EmptyFilterCriteria? filterCriteria,
-  ///     required EmptyExtraFormInput? extraFormInput,
-  ///     required EmployeeData? refreshedItem,
-  ///     required bool isNew,
-  /// }) {
-  ///   ApiResult<CompanyPage> result1 = await companyApi.getCompanyPage();
-  ///   // Throw ApiError
-  ///   result1.throwIfError();
-  ///   this.companyPage = result1.data;
-  ///   CompanyInfo? company = this.companyPage.getSelectedCompany()
-  ///
-  ///   ApiResult<DepartmentPage> result2 = await deptApi.getDepartmentPage(company);
-  ///   // Throw ApiError
-  ///   result2.throwIfError();
-  ///   this.departmentPage = result2.data;
-  ///   ...
-  /// }
-  /// ```
-  ///
-  @Deprecated("Xoa di khong su dung nua")
-  Future<void> prepareFormMasterData({
-    required FILTER_CRITERIA? filterCriteria,
-    required EXTRA_FORM_INPUT? extraFormInput,
-    required ITEM_DETAIL? refreshedItem,
-    required bool isNew,
-  });
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ///
-  /// This method is called after [prepareFormMasterData].
-  ///
-  @Deprecated("Xoa di, khong su dung nua.")
-  Map<String, dynamic> prepareFormData({
-    required FILTER_CRITERIA? filterCriteria,
-    required EXTRA_FORM_INPUT? extraFormInput,
-    required ITEM_DETAIL? refreshedItem,
-    required bool isNew,
   });
 
   // ***************************************************************************

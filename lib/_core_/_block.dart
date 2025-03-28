@@ -1504,21 +1504,19 @@ abstract class Block<
     //
     bool success = false;
     try {
-      __refreshPreparingFormCreationState(isPreparingFormCreation: true);
+      __refreshPreparingFormCreationState(
+        isPreparingFormCreation: true,
+      );
       //
-      // success = await formModel!._prepareMasterDataAndFormData(
-      //   extraFormInput: extraFormInput,
-      //   filterCriteria: this.data.filterCriteria,
-      //   refreshedItemDetail: nullItemDetail,
-      //   isNew: true,
-      // );
       success = await formModel!._startNewFormTransaction(
         filterCriteria: data.filterCriteria,
         extraFormInput: extraFormInput,
         isItemLoad: true,
       );
     } finally {
-      __refreshPreparingFormCreationState(isPreparingFormCreation: false);
+      __refreshPreparingFormCreationState(
+        isPreparingFormCreation: false,
+      );
     }
     if (!success) {
       return false;
@@ -1840,12 +1838,7 @@ abstract class Block<
           formMode: FormMode.edit,
           formDataState: DataState.pending,
         );
-        // bool success = await formModel!._prepareMasterDataAndFormData(
-        //   extraFormInput: null,
-        //   filterCriteria: this.data.filterCriteria,
-        //   refreshedItemDetail: savedItemDetail,
-        //   isNew: false,
-        // );
+        //
         bool success = await formModel!._startNewFormTransaction(
           filterCriteria: data.filterCriteria,
           extraFormInput: null,
