@@ -240,7 +240,7 @@ abstract class FormModel<
   /// Return null is error.
   ///
   @ImportantMethodAnnotation()
-  Future<void> _startNewFormTransaction({
+  Future<bool> _startNewFormTransaction({
     required FILTER_CRITERIA? filterCriteria,
     required EXTRA_FORM_INPUT? extraFormInput,
     required bool isItemLoad,
@@ -293,7 +293,7 @@ abstract class FormModel<
       );
       //
       __applyWithDataState(formDataState: DataState.error);
-      return;
+      return false;
     }
     //
     _printStructureAndTempData("@3");
@@ -320,7 +320,7 @@ abstract class FormModel<
           );
           //
           __applyWithDataState(formDataState: DataState.error);
-          return;
+          return false;
         }
       }
       // itemDetail == null
@@ -346,7 +346,7 @@ abstract class FormModel<
             );
             //
             __applyWithDataState(formDataState: DataState.error);
-            return;
+            return false;
           }
         }
         if (extraFormInput != null) {
@@ -372,19 +372,19 @@ abstract class FormModel<
             );
             //
             __applyWithDataState(formDataState: DataState.error);
-            return;
+            return false;
           }
         }
       }
     }
     _printStructureAndTempData("@4");
-    __applyWithDataState(formDataState: DataState.ready);
+    return __applyWithDataState(formDataState: DataState.ready);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void __applyWithDataState({required DataState formDataState}) {
+  bool __applyWithDataState({required DataState formDataState}) {
     print("@@@ __applyWithDataState: $formDataState");
     try {
       //
@@ -406,6 +406,7 @@ abstract class FormModel<
       //
       _defaultValueInitiated = true;
       data._formDataState = formDataState;
+      return true;
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
@@ -421,6 +422,7 @@ abstract class FormModel<
       _formKeyPatchValueSilently(newCurrentValue: data._currentFormData);
       //
       data._formDataState = DataState.error;
+      return false;
     }
   }
 

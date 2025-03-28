@@ -1835,11 +1835,16 @@ abstract class Block<
           formMode: FormMode.edit,
           formDataState: DataState.pending,
         );
-        bool success = await formModel!._prepareMasterDataAndFormData(
+        // bool success = await formModel!._prepareMasterDataAndFormData(
+        //   extraFormInput: null,
+        //   filterCriteria: this.data.filterCriteria,
+        //   refreshedItemDetail: savedItemDetail,
+        //   isNew: false,
+        // );
+        bool success = await formModel!._startNewFormTransaction(
+          filterCriteria: data.filterCriteria,
           extraFormInput: null,
-          filterCriteria: this.data.filterCriteria,
-          refreshedItemDetail: savedItemDetail,
-          isNew: false,
+          isItemLoad: true,
         );
         if (!success) {
           return false;
