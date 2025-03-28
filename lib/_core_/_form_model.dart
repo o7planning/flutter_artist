@@ -79,7 +79,7 @@ abstract class FormModel<
     await _startNewFormTransaction(
       extraFormInput: null,
       filterCriteria: block.data.filterCriteria,
-      isItemLoad: false,
+      isItemFirstLoad: false,
     );
     return true;
   }
@@ -121,7 +121,7 @@ abstract class FormModel<
     await _startNewFormTransaction(
       extraFormInput: extraFormInput,
       filterCriteria: filterCriteria,
-      isItemLoad: true,
+      isItemFirstLoad: true,
     );
     //
     return true;
@@ -236,10 +236,10 @@ abstract class FormModel<
   Future<bool> _startNewFormTransaction({
     required FILTER_CRITERIA? filterCriteria,
     required EXTRA_FORM_INPUT? extraFormInput,
-    required bool isItemLoad,
+    required bool isItemFirstLoad,
   }) async {
     print(
-        "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFormTransaction, isItemLoad: $isItemLoad");
+        "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFormTransaction, isItemLoad: $isItemFirstLoad");
     print("@ current: ${data._currentFormData}");
     final ITEM_DETAIL? itemDetail = block.data.currentItemDetail;
     final FormMode currentFormMode = data._formDataState == DataState.none
@@ -255,10 +255,11 @@ abstract class FormModel<
       // All values including hidden values (not on the user interface).
       Map<String, dynamic> allNewValue = {};
       //
-      // ItemLoad (Not from FormView)
+      // The First Load (Not from FormView)
       //
-      if (isItemLoad) {
+      if (isItemFirstLoad) {
         if (isNoneMode || isCreationMode) {
+          _defaultValueInitiated = false;
           allNewValue.addAll({});
         } else {
           allNewValue.addAll({});
@@ -311,7 +312,7 @@ abstract class FormModel<
     //
     _printStructureAndTempData("@3");
     Map<String, dynamic> commonPropValue = {};
-    if (isItemLoad) {
+    if (isItemFirstLoad) {
       if (itemDetail != null) {
         try {
           commonPropValue = getCommonPropValuesFromItemDetail(

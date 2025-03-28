@@ -1511,7 +1511,7 @@ abstract class Block<
       success = await formModel!._startNewFormTransaction(
         filterCriteria: data.filterCriteria,
         extraFormInput: extraFormInput,
-        isItemLoad: true,
+        isItemFirstLoad: true,
       );
     } finally {
       __refreshPreparingFormCreationState(
@@ -1842,7 +1842,7 @@ abstract class Block<
         bool success = await formModel!._startNewFormTransaction(
           filterCriteria: data.filterCriteria,
           extraFormInput: null,
-          isItemLoad: true,
+          isItemFirstLoad: true,
         );
         if (!success) {
           return false;
