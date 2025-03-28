@@ -74,11 +74,12 @@ abstract class FormModel<
   }) async {
     __assertThisXFormModel(xFormModel);
     //
-    // data._formDataState = DataState.pending;
+    // data._formDataState = DataState.pending.
     //
     await _startNewFormTransaction(
       extraFormInput: null,
       filterCriteria: block.data.filterCriteria,
+      isItemLoad: false,
     );
     return true;
   }
@@ -127,6 +128,7 @@ abstract class FormModel<
     await _startNewFormTransaction(
       extraFormInput: extraFormInput,
       filterCriteria: filterCriteria,
+      isItemLoad: true,
     );
     //
     return true;
@@ -241,8 +243,10 @@ abstract class FormModel<
   Future<void> _startNewFormTransaction({
     required FILTER_CRITERIA? filterCriteria,
     required EXTRA_FORM_INPUT? extraFormInput,
+    required bool isItemLoad,
   }) async {
     print("#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFormTransaction");
+    print("@ current: ${data._currentFormData}");
     final ITEM_DETAIL? itemDetail = block.data.currentItemDetail;
     data._formMode = data._formDataState == DataState.none
         ? FormMode.none
@@ -294,67 +298,16 @@ abstract class FormModel<
     //
     _printStructureAndTempData("@3");
     Map<String, dynamic> commonPropValue = {};
-    if (itemDetail != null) {
-      try {
-        commonPropValue = getCommonPropValuesFromItemDetail(
-          itemDetail: itemDetail,
-        );
-        for (String propName in commonPropValue.keys) {
-          _formPropsStructure._setTempPropDataCommon(
-            propName: propName,
-            value: commonPropValue[propName],
-          );
-        }
-      } catch (e, stackTrace) {
-        _handleError(
-          shelf: shelf,
-          methodName: "getCommonPropValuesFromItemDetail",
-          error: "Error getCommonPropValuesFromItemDetail: $e",
-          stackTrace: stackTrace,
-          showSnackBar: true,
-        );
-        //
-        __applyWithDataState(formDataState: DataState.error);
-        return;
-      }
-    }
-    // itemDetail == null
-    else {
-      Map<String, dynamic> commonPropValueDefault = {};
-      Map<String, dynamic> commonPropValueExtra = {};
-      if (!_defaultValueInitiated) {
+    if (isItemLoad) {
+      if (itemDetail != null) {
         try {
-          commonPropValueDefault = specifyDefaultCommonPropValues() ?? {};
-          for (String propName in commonPropValueDefault.keys) {
+          commonPropValue = getCommonPropValuesFromItemDetail(
+            itemDetail: itemDetail,
+          );
+          for (String propName in commonPropValue.keys) {
             _formPropsStructure._setTempPropDataCommon(
               propName: propName,
-              value: commonPropValueDefault[propName],
-            );
-          }
-        } catch (e, stackTrace) {
-          _handleError(
-            shelf: shelf,
-            methodName: "specifyDefaultCommonPropValues",
-            error: "Error specifyDefaultCommonPropValues: $e",
-            stackTrace: stackTrace,
-            showSnackBar: true,
-          );
-          //
-          __applyWithDataState(formDataState: DataState.error);
-          return;
-        }
-      }
-      if (extraFormInput != null) {
-        try {
-          commonPropValueExtra = getCommonPropValuesFromExtraFormInput(
-                extraFormInput: extraFormInput,
-              ) ??
-              {};
-          //
-          for (String propName in commonPropValueExtra.keys) {
-            _formPropsStructure._setTempPropDataCommon(
-              propName: propName,
-              value: commonPropValueExtra[propName],
+              value: commonPropValue[propName],
             );
           }
         } catch (e, stackTrace) {
@@ -370,7 +323,61 @@ abstract class FormModel<
           return;
         }
       }
+      // itemDetail == null
+      else {
+        Map<String, dynamic> commonPropValueDefault = {};
+        Map<String, dynamic> commonPropValueExtra = {};
+        if (!_defaultValueInitiated) {
+          try {
+            commonPropValueDefault = specifyDefaultCommonPropValues() ?? {};
+            for (String propName in commonPropValueDefault.keys) {
+              _formPropsStructure._setTempPropDataCommon(
+                propName: propName,
+                value: commonPropValueDefault[propName],
+              );
+            }
+          } catch (e, stackTrace) {
+            _handleError(
+              shelf: shelf,
+              methodName: "specifyDefaultCommonPropValues",
+              error: "Error specifyDefaultCommonPropValues: $e",
+              stackTrace: stackTrace,
+              showSnackBar: true,
+            );
+            //
+            __applyWithDataState(formDataState: DataState.error);
+            return;
+          }
+        }
+        if (extraFormInput != null) {
+          try {
+            commonPropValueExtra = getCommonPropValuesFromExtraFormInput(
+                  extraFormInput: extraFormInput,
+                ) ??
+                {};
+            //
+            for (String propName in commonPropValueExtra.keys) {
+              _formPropsStructure._setTempPropDataCommon(
+                propName: propName,
+                value: commonPropValueExtra[propName],
+              );
+            }
+          } catch (e, stackTrace) {
+            _handleError(
+              shelf: shelf,
+              methodName: "getCommonPropValuesFromItemDetail",
+              error: "Error getCommonPropValuesFromItemDetail: $e",
+              stackTrace: stackTrace,
+              showSnackBar: true,
+            );
+            //
+            __applyWithDataState(formDataState: DataState.error);
+            return;
+          }
+        }
+      }
     }
+    _printStructureAndTempData("@4");
     __applyWithDataState(formDataState: DataState.ready);
   }
 
@@ -378,6 +385,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   void __applyWithDataState({required DataState formDataState}) {
+    print("@@@ __applyWithDataState: $formDataState");
     try {
       //
       // Update Real FromData from Temporary FormData:
