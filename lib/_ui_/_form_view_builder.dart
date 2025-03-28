@@ -36,7 +36,10 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
 
   @override
   void setBuildingState({required bool isBuilding}) {
-    //
+    widget.formModel._setFormViewBuildingState(
+      widgetState: this,
+      isBuilding: isBuilding,
+    );
   }
 
   @override

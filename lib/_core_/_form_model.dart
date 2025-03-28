@@ -124,12 +124,6 @@ abstract class FormModel<
         thisXFormModel.extraFormInput as EXTRA_FORM_INPUT?;
     bool isNew = this.data.isNew;
     //
-    // bool error = await _prepareMasterDataAndFormData(
-    //   extraFormInput: extraFormInput,
-    //   filterCriteria: filterCriteria,
-    //   refreshedItemDetail: refreshedItemDetail,
-    //   isNew: isNew,
-    // );
     await _startNewFormTransaction(
       extraFormInput: extraFormInput,
       filterCriteria: filterCriteria,
@@ -250,6 +244,11 @@ abstract class FormModel<
   }) async {
     print("#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFormTransaction");
     final ITEM_DETAIL? itemDetail = block.data.currentItemDetail;
+    data._formMode = data._formDataState == DataState.none
+        ? FormMode.none
+        : itemDetail == null
+            ? FormMode.creation
+            : FormMode.edit;
     try {
       // All values including hidden values (not on the user interface).
       Map<String, dynamic> allNewValue = {...data._currentFormData};
@@ -552,8 +551,6 @@ abstract class FormModel<
           propName: optPropName,
         );
       }
-      print("@@@@@@@@@@@@@@@@@@@@:optPropData: ${optPropData.data} ");
-      print("@@@@@@@@@@@@@@@@@@@@:selectedValueWrap: $selectedValueWrap ");
       //
       // Current selected value:
       // It can be a single value or a List.
@@ -562,8 +559,6 @@ abstract class FormModel<
           _formPropsStructure._getTempCurrentPropValue(
         propName: optPropName,
       );
-
-      print("@@@@@@@@@@@@@@@@@@@@:tempCurrentValue: $tempCurrentValue ");
       //
       if (tempCurrentValue != null) {
         if (tempCurrentValue is List) {
@@ -588,9 +583,6 @@ abstract class FormModel<
       currentSelectedItems = null;
       candidateSelectedItems = null;
     }
-
-    print(
-        "@@@@@@@@@@@@@@@@@@@@:candidateSelectedItems: $candidateSelectedItems");
     //
     _formPropsStructure._setTempOptPropData(
       propName: optPropName,
@@ -601,8 +593,6 @@ abstract class FormModel<
       dynamicValues: candidateSelectedItems,
       addToInternalIfNotFound: true,
     );
-    print(
-        "@@@@@@@@@@@@@@@@@@@@:candidateSelectedItems2: $candidateSelectedItems");
     //
     // TODO: Double check this code:
     //
@@ -648,11 +638,8 @@ abstract class FormModel<
     }
   }
 
-
-
   // ***************************************************************************
   // ***************************************************************************
-
 
   XOptionedData? getOptPropXData(String propName) {
     return _formPropsStructure._getOptPropData(propName);
@@ -676,7 +663,6 @@ abstract class FormModel<
       // }
     }
   }
-
 
   // ***************************************************************************
   // ***************************************************************************
@@ -930,6 +916,20 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  void _setFormViewBuildingState({
+    required _RefreshableWidgetState widgetState,
+    required bool isBuilding,
+  }) {
+    _formWidgetStates.update(
+      widgetState,
+      (xState) => xState..isBuilding = isBuilding,
+      ifAbsent: () => _XState()..isBuilding = isBuilding,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _addFormWidgetState({
     required _RefreshableWidgetState widgetState,
     required final bool isShowing,
@@ -1023,7 +1023,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   bool isEnabled() {
-    Actionable actionable = block._isEnableFormToModify(); 
+    Actionable actionable = block._isEnableFormToModify();
     return actionable.yes;
   }
 
