@@ -245,24 +245,44 @@ abstract class FormModel<
     required EXTRA_FORM_INPUT? extraFormInput,
     required bool isItemLoad,
   }) async {
-    print("#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFormTransaction");
+    print(
+        "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFormTransaction, isItemLoad: $isItemLoad");
     print("@ current: ${data._currentFormData}");
     final ITEM_DETAIL? itemDetail = block.data.currentItemDetail;
-    data._formMode = data._formDataState == DataState.none
+    final FormMode currentFormMode = data._formDataState == DataState.none
         ? FormMode.none
         : itemDetail == null
             ? FormMode.creation
             : FormMode.edit;
+    data._formMode = currentFormMode;
+    bool isNoneMode = currentFormMode == FormMode.none;
+    bool isCreationMode = currentFormMode == FormMode.creation;
+    //
     try {
       // All values including hidden values (not on the user interface).
-      Map<String, dynamic> allNewValue = {...data._currentFormData};
-
-      // Update values from view (On the user Interface).
-      allNewValue.addAll(_formKey.currentState?.instantValue ?? {});
+      Map<String, dynamic> allNewValue = {};
       //
-      if (!_initiated && _formKey.currentState != null) {
-        _initiated = true;
-        data._initialFormData2(allNewValue);
+      // ItemLoad (Not from FormView)
+      //
+      if (isItemLoad) {
+        if (isNoneMode || isCreationMode) {
+          allNewValue.addAll({});
+        } else {
+          allNewValue.addAll({});
+        }
+        //
+        if (!_initiated && _formKey.currentState != null) {
+          _initiated = true;
+          data._initialFormData2(allNewValue);
+        }
+      }
+      //
+      // Update from FormView:
+      //
+      else {
+        allNewValue.addAll(data._currentFormData);
+        // Update values from view (On the user Interface).
+        allNewValue.addAll(_formKey.currentState?.instantValue ?? {});
       }
       //
       _formPropsStructure._initTemporaryForNewTransaction(

@@ -1506,11 +1506,16 @@ abstract class Block<
     try {
       __refreshPreparingFormCreationState(isPreparingFormCreation: true);
       //
-      success = await formModel!._prepareMasterDataAndFormData(
+      // success = await formModel!._prepareMasterDataAndFormData(
+      //   extraFormInput: extraFormInput,
+      //   filterCriteria: this.data.filterCriteria,
+      //   refreshedItemDetail: nullItemDetail,
+      //   isNew: true,
+      // );
+      success = await formModel!._startNewFormTransaction(
+        filterCriteria: data.filterCriteria,
         extraFormInput: extraFormInput,
-        filterCriteria: this.data.filterCriteria,
-        refreshedItemDetail: nullItemDetail,
-        isNew: true,
+        isItemLoad: true,
       );
     } finally {
       __refreshPreparingFormCreationState(isPreparingFormCreation: false);
