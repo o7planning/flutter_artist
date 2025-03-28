@@ -553,7 +553,7 @@ abstract class FormModel<
     if (optPropData != null) {
       if (currentItemDetail == null) {
         if (extraFormInput != null) {
-          selectedValueWrap = _extraFormInputToOptPropValue(
+          selectedValueWrap = _getOptPropValueFromExtraFormInput(
             extraFormInput: extraFormInput,
             optPropData: optPropData,
             propName: optPropName,
@@ -713,12 +713,12 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  PropValue? _extraFormInputToOptPropValue({
+  PropValue? _getOptPropValueFromExtraFormInput({
     required EXTRA_FORM_INPUT extraFormInput,
     required XOptionedData optPropData,
     required String propName,
   }) {
-    PropValue? wrap = extraFormInputToOptPropValue(
+    PropValue? wrap = getOptPropValueFromExtraFormInput(
       extraFormInput: extraFormInput,
       optPropData: optPropData,
       propName: propName,
@@ -773,7 +773,7 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  PropValue? extraFormInputToOptPropValue({
+  PropValue? getOptPropValueFromExtraFormInput({
     required EXTRA_FORM_INPUT extraFormInput,
     required XOptionedData optPropData,
     required String propName,
