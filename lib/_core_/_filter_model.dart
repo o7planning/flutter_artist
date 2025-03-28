@@ -247,7 +247,7 @@ abstract class FilterModel<
             filterInput: filterInput,
             propName: commonMasterProp.propName,
           );
-          _filterPropsStructure._setTempPropDataCommon(
+          _filterPropsStructure._setTempSimplePropData(
             propName: commonMasterProp.propName,
             value: value,
           );
@@ -259,7 +259,7 @@ abstract class FilterModel<
             Object? value = specifyDefaultCommonPropValue(
               propName: commonMasterProp.propName,
             );
-            _filterPropsStructure._setTempPropDataCommon(
+            _filterPropsStructure._setTempSimplePropData(
               propName: commonMasterProp.propName,
               value: value,
             );

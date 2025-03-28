@@ -311,24 +311,24 @@ abstract class FormModel<
     }
     //
     _printStructureAndTempData("@3");
-    Map<String, dynamic> commonPropValue = {};
+    Map<String, dynamic> simplePropValue = {};
     if (isItemFirstLoad) {
       if (itemDetail != null) {
         try {
-          commonPropValue = getCommonPropValuesFromItemDetail(
+          simplePropValue = getSimplePropValuesFromItemDetail(
             itemDetail: itemDetail,
           );
-          for (String propName in commonPropValue.keys) {
-            _formPropsStructure._setTempPropDataCommon(
+          for (String propName in simplePropValue.keys) {
+            _formPropsStructure._setTempSimplePropData(
               propName: propName,
-              value: commonPropValue[propName],
+              value: simplePropValue[propName],
             );
           }
         } catch (e, stackTrace) {
           _handleError(
             shelf: shelf,
-            methodName: "getCommonPropValuesFromItemDetail",
-            error: "Error getCommonPropValuesFromItemDetail: $e",
+            methodName: "getSimplePropValuesFromItemDetail",
+            error: "Error getSimplePropValuesFromItemDetail: $e",
             stackTrace: stackTrace,
             showSnackBar: true,
           );
@@ -339,22 +339,22 @@ abstract class FormModel<
       }
       // itemDetail == null
       else {
-        Map<String, dynamic> commonPropValueDefault = {};
-        Map<String, dynamic> commonPropValueExtra = {};
+        Map<String, dynamic> simplePropValueDefault = {};
+        Map<String, dynamic> simplePropValueExtra = {};
         if (!_defaultValueInitiated) {
           try {
-            commonPropValueDefault = specifyDefaultCommonPropValues() ?? {};
-            for (String propName in commonPropValueDefault.keys) {
-              _formPropsStructure._setTempPropDataCommon(
+            simplePropValueDefault = specifyDefaultSimplePropValues() ?? {};
+            for (String propName in simplePropValueDefault.keys) {
+              _formPropsStructure._setTempSimplePropData(
                 propName: propName,
-                value: commonPropValueDefault[propName],
+                value: simplePropValueDefault[propName],
               );
             }
           } catch (e, stackTrace) {
             _handleError(
               shelf: shelf,
-              methodName: "specifyDefaultCommonPropValues",
-              error: "Error specifyDefaultCommonPropValues: $e",
+              methodName: "specifyDefaultSimplePropValues",
+              error: "Error specifyDefaultSimplePropValues: $e",
               stackTrace: stackTrace,
               showSnackBar: true,
             );
@@ -365,22 +365,22 @@ abstract class FormModel<
         }
         if (extraFormInput != null) {
           try {
-            commonPropValueExtra = getCommonPropValuesFromExtraFormInput(
+            simplePropValueExtra = getSimplePropValuesFromExtraFormInput(
                   extraFormInput: extraFormInput,
                 ) ??
                 {};
             //
-            for (String propName in commonPropValueExtra.keys) {
-              _formPropsStructure._setTempPropDataCommon(
+            for (String propName in simplePropValueExtra.keys) {
+              _formPropsStructure._setTempSimplePropData(
                 propName: propName,
-                value: commonPropValueExtra[propName],
+                value: simplePropValueExtra[propName],
               );
             }
           } catch (e, stackTrace) {
             _handleError(
               shelf: shelf,
-              methodName: "getCommonPropValuesFromItemDetail",
-              error: "Error getCommonPropValuesFromItemDetail: $e",
+              methodName: "getSimplePropValuesFromItemDetail",
+              error: "Error getSimplePropValuesFromItemDetail: $e",
               stackTrace: stackTrace,
               showSnackBar: true,
             );
@@ -740,21 +740,21 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<String, dynamic>? getCommonPropValuesFromExtraFormInput({
+  Map<String, dynamic>? getSimplePropValuesFromExtraFormInput({
     required EXTRA_FORM_INPUT extraFormInput,
   });
 
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<String, dynamic> getCommonPropValuesFromItemDetail({
+  Map<String, dynamic> getSimplePropValuesFromItemDetail({
     required ITEM_DETAIL itemDetail,
   });
 
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<String, dynamic>? specifyDefaultCommonPropValues();
+  Map<String, dynamic>? specifyDefaultSimplePropValues();
 
   // ***************************************************************************
   // ***************************************************************************
