@@ -434,8 +434,9 @@ abstract class FilterModel<
         }
       }
       if (currentSelectedItems != null) {
-        currentSelectedItems = optPropData.findItemsInListByDynamics(
+        currentSelectedItems = optPropData.findInternalItemsByDynamics(
           dynamicValues: currentSelectedItems,
+          addToInternalIfNotFound: false,
         );
       }
       // Candidate Selected Items:
@@ -557,8 +558,9 @@ abstract class FilterModel<
     }
     List? value = wrap.value;
     return PropValue(
-      optPropData.findItemsInListByDynamics(
+      optPropData.findInternalItemsByDynamics(
         dynamicValues: value,
+        addToInternalIfNotFound: false,
       ),
     );
   }
@@ -576,8 +578,9 @@ abstract class FilterModel<
     }
     List? value = wrap.value;
     return PropValue(
-      optPropData.findItemsInListByDynamics(
+      optPropData.findInternalItemsByDynamics(
         dynamicValues: value,
+        addToInternalIfNotFound: false,
       ),
     );
   }

@@ -593,8 +593,9 @@ abstract class FormModel<
         }
       }
       if (currentSelectedItems != null) {
-        currentSelectedItems = optPropData.findItemsInListByDynamics(
+        currentSelectedItems = optPropData.findInternalItemsByDynamics(
           dynamicValues: currentSelectedItems,
+          addToInternalIfNotFound: true,
         );
       }
       // Candidate Selected Items:
@@ -704,8 +705,9 @@ abstract class FormModel<
     }
     List? value = wrap.value;
     return PropValue(
-      optPropData.findItemsInListByDynamics(
+      optPropData.findInternalItemsByDynamics(
         dynamicValues: value,
+        addToInternalIfNotFound: true,
       ),
     );
   }
@@ -728,8 +730,9 @@ abstract class FormModel<
     }
     List? value = wrap.value;
     return PropValue(
-      optPropData.findItemsInListByDynamics(
+      optPropData.findInternalItemsByDynamics(
         dynamicValues: value,
+        addToInternalIfNotFound: true,
       ),
     );
   }
