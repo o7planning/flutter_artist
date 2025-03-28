@@ -246,7 +246,7 @@ class FormPropsStructure {
     for (OptProp rootItem in _rootOptProps) {
       rootItem._printTempInfoCascade(indentFactor: 1);
     }
-    print("tempCurrentFromData: $_tempCurrentFormData");
+    print("tempCurrentFormData: $_tempCurrentFormData");
     print("--------------------------------------------------------------");
   }
 }

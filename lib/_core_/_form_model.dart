@@ -477,12 +477,13 @@ abstract class FormModel<
     required Object? parentOptPropValue, // May be new selected parent value.
     required OptProp optProp,
   }) async {
-    final String propName = optProp.propName;
+    final String optPropName = optProp.propName;
 
     final OptProp? optPropParent = optProp?.parent;
 
     // Get current OptProp data:
-    XOptionedData? optPropData = _formPropsStructure._getOptPropData(propName);
+    XOptionedData? optPropData =
+        _formPropsStructure._getOptPropData(optPropName);
 
     if (optPropParent != null) {
       XOptionedData? tempXOptionedParent =
@@ -515,7 +516,7 @@ abstract class FormModel<
     optPropData ??= await callApiLoadOptPropData(
       extraFormInput: extraFormInput,
       parentOptPropValue: parentOptPropValue,
-      propName: propName,
+      propName: optPropName,
     );
     //
     // IMPORTANT: Do not use empty list here
@@ -532,13 +533,13 @@ abstract class FormModel<
           selectedValueWrap = _extraFormInputToOptPropValue(
             extraFormInput: extraFormInput,
             optPropData: optPropData,
-            propName: propName,
+            propName: optPropName,
           );
         } else {
           if (!_defaultValueInitiated) {
             selectedValueWrap = __specifyDefaultOptPropValue(
               optPropData: optPropData,
-              propName: propName,
+              propName: optPropName,
             );
           }
         }
@@ -548,17 +549,21 @@ abstract class FormModel<
         selectedValueWrap = getOptPropValueFromItemDetail(
           itemDetail: currentItemDetail,
           optPropData: optPropData,
-          propName: propName,
+          propName: optPropName,
         );
       }
+      print("@@@@@@@@@@@@@@@@@@@@:optPropData: ${optPropData.data} ");
+      print("@@@@@@@@@@@@@@@@@@@@:selectedValueWrap: $selectedValueWrap ");
       //
       // Current selected value:
       // It can be a single value or a List.
       //
       final dynamic tempCurrentValue =
           _formPropsStructure._getTempCurrentPropValue(
-        propName: propName,
+        propName: optPropName,
       );
+
+      print("@@@@@@@@@@@@@@@@@@@@:tempCurrentValue: $tempCurrentValue ");
       //
       if (tempCurrentValue != null) {
         if (tempCurrentValue is List) {
@@ -583,11 +588,21 @@ abstract class FormModel<
       currentSelectedItems = null;
       candidateSelectedItems = null;
     }
+
+    print(
+        "@@@@@@@@@@@@@@@@@@@@:candidateSelectedItems: $candidateSelectedItems");
     //
     _formPropsStructure._setTempOptPropData(
-      propName: propName,
+      propName: optPropName,
       optionedData: optPropData,
     );
+    // TODO: Dangerous check not null:
+    candidateSelectedItems = optPropData!.findInternalItemsByDynamics(
+      dynamicValues: candidateSelectedItems,
+      addToInternalIfNotFound: true,
+    );
+    print(
+        "@@@@@@@@@@@@@@@@@@@@:candidateSelectedItems2: $candidateSelectedItems");
     //
     // TODO: Double check this code:
     //
@@ -597,25 +612,27 @@ abstract class FormModel<
         //  - Update from ROOTs to LEAVES
         //  - And make sure children-OptProp to null if parent-Value is null or not selected.
         Object? candidateSelectedItem = candidateSelectedItems.first;
-        _formPropsStructure._updateTempData({propName: candidateSelectedItem});
+        _formPropsStructure
+            ._updateTempData({optPropName: candidateSelectedItem});
       } else {
         // IMPORTANT:
         //  - Update from ROOTs to LEAVES
         //  - And make sure children-OptProp to null if parent-Value is null or not selected.
         // Try MULTI SELECTED ITEMS:
-        _formPropsStructure._updateTempData({propName: candidateSelectedItems});
+        _formPropsStructure
+            ._updateTempData({optPropName: candidateSelectedItems});
       }
     } else {
       // IMPORTANT:
       //  - Update from ROOTs to LEAVES
       //  - And make sure children-OptProp to null if parent-Value is null or not selected.
-      _formPropsStructure._updateTempData({propName: null});
+      _formPropsStructure._updateTempData({optPropName: null});
     }
 
     //
     Object? tempSelectedPropValue =
         this._formPropsStructure._getTempCurrentPropValue(
-              propName: propName,
+              propName: optPropName,
             );
 
     if (tempSelectedPropValue != null) {
@@ -630,6 +647,36 @@ abstract class FormModel<
       // Do nothing.
     }
   }
+
+
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+
+  XOptionedData? getOptPropXData(String propName) {
+    return _formPropsStructure._getOptPropData(propName);
+  }
+
+  dynamic getOptPropData(String propName) {
+    XOptionedData? optPropData = getOptPropXData(propName);
+    dynamic data = optPropData?.data;
+    if (data != null) {
+      return data;
+    } else {
+      return data;
+      // OptPropType? type = getOptPropType(propName);
+      // switch (type) {
+      //   case null:
+      //     return data;
+      //   case OptPropType.list:
+      //     return [];
+      //   case OptPropType.custom:
+      //     return data;
+      // }
+    }
+  }
+
 
   // ***************************************************************************
   // ***************************************************************************
