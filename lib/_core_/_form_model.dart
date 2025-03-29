@@ -25,6 +25,8 @@ abstract class FormModel<
     return "block-form > ${shelf.name} > ${block.name}";
   }
 
+  bool _changeEventLocked = false;
+
   late final FormModelData data = FormModelData(formModel: this);
 
   FormMode get formMode => data.formMode;
@@ -240,7 +242,7 @@ abstract class FormModel<
   }) async {
     print(
         "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFormTransaction, isItemFirstLoad: $isItemFirstLoad");
-    print("@ current: ${data._currentFormData}");
+    print("@data._currentFormData: ${data._currentFormData}");
     final ITEM_DETAIL? itemDetail = block.data.currentItemDetail;
     final FormMode currentFormMode = data._formDataState == DataState.none
         ? FormMode.none
@@ -294,6 +296,7 @@ abstract class FormModel<
           extraFormInput: extraFormInput,
           parentOptPropValue: null,
           optProp: optProp,
+          isItemFirstLoad: isItemFirstLoad,
         );
       }
       _formPropsStructure._printTemporaryInfo("@2");
@@ -306,7 +309,10 @@ abstract class FormModel<
         showSnackBar: true,
       );
       //
-      __applyWithDataState(formDataState: DataState.error);
+      __applyWithDataState(
+        formDataState: DataState.error,
+        isItemFirstLoad: isItemFirstLoad,
+      );
       return false;
     }
     //
@@ -333,7 +339,10 @@ abstract class FormModel<
             showSnackBar: true,
           );
           //
-          __applyWithDataState(formDataState: DataState.error);
+          __applyWithDataState(
+            formDataState: DataState.error,
+            isItemFirstLoad: isItemFirstLoad,
+          );
           return false;
         }
       }
@@ -359,7 +368,10 @@ abstract class FormModel<
               showSnackBar: true,
             );
             //
-            __applyWithDataState(formDataState: DataState.error);
+            __applyWithDataState(
+              formDataState: DataState.error,
+              isItemFirstLoad: isItemFirstLoad,
+            );
             return false;
           }
         }
@@ -385,20 +397,29 @@ abstract class FormModel<
               showSnackBar: true,
             );
             //
-            __applyWithDataState(formDataState: DataState.error);
+            __applyWithDataState(
+              formDataState: DataState.error,
+              isItemFirstLoad: isItemFirstLoad,
+            );
             return false;
           }
         }
       }
     }
     _printStructureAndTempData("@4");
-    return __applyWithDataState(formDataState: DataState.ready);
+    return __applyWithDataState(
+      formDataState: DataState.ready,
+      isItemFirstLoad: isItemFirstLoad,
+    );
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool __applyWithDataState({required DataState formDataState}) {
+  bool __applyWithDataState({
+    required DataState formDataState,
+    required bool isItemFirstLoad,
+  }) {
     print("@@@ __applyWithDataState: $formDataState");
     try {
       //
@@ -407,7 +428,11 @@ abstract class FormModel<
       this.data._currentFormData
         ..updateAll((k, v) => null)
         ..addAll(_formPropsStructure._tempCurrentFormData);
-
+      if (isItemFirstLoad) {
+        data._initialFormData
+          ..clear()
+          ..addAll(data._currentFormData);
+      }
       //
       // UPDATE OPT-DATA:
       //  - optProp._xOptionedData = optProp._tempXOptionedData;
@@ -499,6 +524,7 @@ abstract class FormModel<
     required EXTRA_FORM_INPUT? extraFormInput,
     required Object? parentOptPropValue, // May be new selected parent value.
     required OptProp optProp,
+    required bool isItemFirstLoad,
   }) async {
     final String optPropName = optProp.propName;
 
@@ -532,6 +558,8 @@ abstract class FormModel<
       }
     }
 
+    print(
+        "@data._tempCurrentFormData 1: ${_formPropsStructure._tempCurrentFormData}");
     //
     // Load OptProp data from Rest API.
     // May throw ApiError.
@@ -550,31 +578,37 @@ abstract class FormModel<
     List? candidateSelectedItems;
     PropValue? selectedValueWrap;
     final ITEM_DETAIL? currentItemDetail = block.data.currentItemDetail;
+    //
     if (optPropData != null) {
-      if (currentItemDetail == null) {
-        if (extraFormInput != null) {
-          selectedValueWrap = _getOptPropValueFromExtraFormInput(
-            extraFormInput: extraFormInput,
-            optPropData: optPropData,
-            optPropName: optPropName,
-          );
-        } else {
-          if (!_defaultValueInitiated) {
-            selectedValueWrap = __specifyDefaultOptPropValue(
+      if (isItemFirstLoad) {
+        if (currentItemDetail == null) {
+          if (extraFormInput != null) {
+            selectedValueWrap = _getOptPropValueFromExtraFormInput(
+              extraFormInput: extraFormInput,
               optPropData: optPropData,
               optPropName: optPropName,
             );
+          } else {
+            if (!_defaultValueInitiated) {
+              selectedValueWrap = __specifyDefaultOptPropValue(
+                optPropData: optPropData,
+                optPropName: optPropName,
+              );
+            }
           }
         }
+        // currentItemDetail != null
+        else {
+          selectedValueWrap = getOptPropValueFromItemDetail(
+            itemDetail: currentItemDetail,
+            optPropData: optPropData,
+            optPropName: optPropName,
+          );
+        }
       }
-      // currentItemDetail != null
-      else {
-        selectedValueWrap = getOptPropValueFromItemDetail(
-          itemDetail: currentItemDetail,
-          optPropData: optPropData,
-          optPropName: optPropName,
-        );
-      }
+
+      print(
+          "@data._tempCurrentFormData 2: ${_formPropsStructure._tempCurrentFormData}");
       //
       // Current selected value:
       // It can be a single value or a List.
@@ -583,6 +617,8 @@ abstract class FormModel<
           _formPropsStructure._getTempCurrentPropValue(
         propName: optPropName,
       );
+      print(
+          "isItemFirstLoad: $isItemFirstLoad, tempCurrentValue: $tempCurrentValue");
       //
       if (tempCurrentValue != null) {
         if (tempCurrentValue is List) {
@@ -604,10 +640,14 @@ abstract class FormModel<
       if (candidateSelectedItems == null || candidateSelectedItems.isEmpty) {
         candidateSelectedItems = currentSelectedItems;
       }
-    } else {
+    }
+    // optPropData == null
+    else {
       currentSelectedItems = null;
       candidateSelectedItems = null;
     }
+    print(
+        "@data._tempCurrentFormData 3: ${_formPropsStructure._tempCurrentFormData}");
     //
     _formPropsStructure._setTempOptPropData(
       propName: optPropName,
@@ -618,6 +658,8 @@ abstract class FormModel<
       dynamicValues: candidateSelectedItems,
       addToInternalIfNotFound: true,
     );
+    print(
+        "@data._tempCurrentFormData 3.1: ${_formPropsStructure._tempCurrentFormData}");
     //
     // TODO: Double check this code:
     //
@@ -643,7 +685,8 @@ abstract class FormModel<
       //  - And make sure children-OptProp to null if parent-Value is null or not selected.
       _formPropsStructure._updateTempData({optPropName: null});
     }
-
+    print(
+        "@data._tempCurrentFormData 4: ${_formPropsStructure._tempCurrentFormData}");
     //
     Object? tempSelectedPropValue =
         this._formPropsStructure._getTempCurrentPropValue(
@@ -656,6 +699,7 @@ abstract class FormModel<
           extraFormInput: extraFormInput,
           parentOptPropValue: tempSelectedPropValue,
           optProp: child,
+          isItemFirstLoad: isItemFirstLoad,
         );
       }
     } else {
@@ -948,15 +992,27 @@ abstract class FormModel<
   // ***************************************************************************
 
   void resetForm() {
-    Map<String, dynamic> initData = {...data._initialFormData};
-    for (String key in _formKey.currentState?.instantValue.keys ?? []) {
-      if (!initData.containsKey(key)) {
-        initData[key] = null;
-      }
+    Actionable canReset = block.canResetForm();
+    if (canReset.no) {
+      return;
     }
-    _formKey.currentState?.patchValue(initData);
-    //
-    shelf.updateAllUIComponents();
+    try {
+      _changeEventLocked = true;
+      Map<String, dynamic> initData = {...data._initialFormData};
+      for (String key in _formKey.currentState?.instantValue.keys ?? []) {
+        if (!initData.containsKey(key)) {
+          initData[key] = null;
+        }
+      }
+      _formKey.currentState?.patchValue(initData);
+      data._currentFormData
+        ..clear()
+        ..addAll(initData);
+      //
+      shelf.updateAllUIComponents();
+    } finally {
+      _changeEventLocked = false;
+    }
   }
 
   // ***************************************************************************

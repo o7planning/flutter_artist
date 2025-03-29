@@ -122,6 +122,9 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
     if (FlutterArtist.executor.executingXShelfId != null) {
       return;
     }
+    if (widget.formModel._changeEventLocked) {
+      return;
+    }
     //
     bool isBuilding = widget.formModel._isWidgetStateBuilding(
       widgetState: this,
