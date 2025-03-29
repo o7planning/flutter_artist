@@ -1832,12 +1832,19 @@ abstract class Block<
         item: refreshedItem,
       );
       //
+      print("@CHAY VAO DAAY 1: ${data.currentItem}");
       if (formModel != null) {
         formModel!.data._setCurrentItem(
           refreshedItemDetail: savedItemDetail,
           formMode: FormMode.edit,
-          formDataState: DataState.pending,
+          formDataState: DataState.ready,
         );
+        // To clear dirty:
+        formModel!.data._initialFormData
+          ..clear()
+          ..addAll(formModel!.data._currentFormData);
+        //
+        print("@CHAY VAO DAAY 2 isDirty: ${formModel!.isDirty()}");
         //
         bool success = await formModel!._startNewFormTransaction(
           filterCriteria: data.filterCriteria,

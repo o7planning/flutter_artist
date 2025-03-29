@@ -13,9 +13,9 @@ abstract class FormModel<
 
   int get loadCount => __loadCount;
 
-  int __prepareFormMasterDataCount = 0;
+  int __formTransactionCount = 0;
 
-  int get prepareFormMasterDataCount => __prepareFormMasterDataCount;
+  int get formTransactionCount => __formTransactionCount;
 
   int _lazyLoadCount = 0;
 
@@ -136,6 +136,7 @@ abstract class FormModel<
     if (!__checkValidBeforeSave()) {
       return false;
     }
+    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _unitSaveForm");
     Map<String, dynamic> formMapData = data.currentFormData;
     //
     String calledMethodName = data.isNew //
@@ -185,7 +186,7 @@ abstract class FormModel<
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: '_processSaveActionRestResult',
+        methodName: calledMethodName,
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -240,6 +241,7 @@ abstract class FormModel<
     required EXTRA_FORM_INPUT? extraFormInput,
     required bool isItemFirstLoad,
   }) async {
+    __formTransactionCount++;
     print(
         "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFormTransaction, isItemFirstLoad: $isItemFirstLoad");
     print("@data._currentFormData: ${data._currentFormData}");
@@ -253,39 +255,41 @@ abstract class FormModel<
     bool isNoneMode = currentFormMode == FormMode.none;
     bool isCreationMode = currentFormMode == FormMode.creation;
     //
+    // All values including hidden values (not on the user interface).
+    Map<String, dynamic> allNewValue = {};
+    //
+    // The First Load (Not from FormView)
+    //
+    if (isItemFirstLoad) {
+      if (isNoneMode || isCreationMode) {
+        _defaultValueInitiated = false;
+        allNewValue.addAll({});
+      } else {
+        allNewValue.addAll({});
+      }
+      //
+      // if (!_initiated && _formKey.currentState != null) {
+      //   _initiated = true;
+      //   data._initialFormData2(allNewValue);
+      // }
+    }
+    //
+    // Update from FormView:
+    //
+    else {
+      allNewValue.addAll(data._currentFormData);
+      // Update values from view (On the user Interface).
+      allNewValue.addAll(_formKey.currentState?.instantValue ?? {});
+    }
+    //
+    _formPropsStructure._initTemporaryForNewTransaction(
+      currentFormData: allNewValue,
+    );
+    _formPropsStructure._printTemporaryInfo("@1");
+    //
+    // Load OptProp Data:
+    //
     try {
-      // All values including hidden values (not on the user interface).
-      Map<String, dynamic> allNewValue = {};
-      //
-      // The First Load (Not from FormView)
-      //
-      if (isItemFirstLoad) {
-        if (isNoneMode || isCreationMode) {
-          _defaultValueInitiated = false;
-          allNewValue.addAll({});
-        } else {
-          allNewValue.addAll({});
-        }
-        //
-        if (!_initiated && _formKey.currentState != null) {
-          _initiated = true;
-          data._initialFormData2(allNewValue);
-        }
-      }
-      //
-      // Update from FormView:
-      //
-      else {
-        allNewValue.addAll(data._currentFormData);
-        // Update values from view (On the user Interface).
-        allNewValue.addAll(_formKey.currentState?.instantValue ?? {});
-      }
-      //
-      _formPropsStructure._initTemporaryForNewTransaction(
-        currentFormData: allNewValue,
-      );
-      _formPropsStructure._printTemporaryInfo("@1");
-      //
       for (OptProp optProp in _formPropsStructure._rootOptProps) {
         //
         // Load OptProp Data and set default and selected.
@@ -317,6 +321,9 @@ abstract class FormModel<
     }
     //
     _printStructureAndTempData("@3");
+    //
+    // Get SimpleProp Value:
+    //
     Map<String, dynamic> simplePropValue = {};
     if (isItemFirstLoad) {
       if (itemDetail != null) {
