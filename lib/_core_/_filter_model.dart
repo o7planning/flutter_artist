@@ -383,7 +383,17 @@ abstract class FilterModel<
         optPropData = null;
       }
     }
-
+    //
+    if (optPropData == null) {
+      _filterPropsStructure._setTempOptPropData(
+        propName: propName,
+        optionedData: null,
+      );
+      // IMPORTANT:
+      //  - Update from ROOTs to LEAVES
+      //  - And make sure children-OptProp to null if parent-Value is null or not selected.
+      _filterPropsStructure._updateTempData({propName: null});
+    }
     //
     // Load OptProp data from Rest API.
     // May throw ApiError.
@@ -481,9 +491,9 @@ abstract class FilterModel<
     }
     //
     Object? tempSelectedPropValue =
-        this._filterPropsStructure._getTempCurrentPropValue(
-              propName: propName,
-            );
+        _filterPropsStructure._getTempCurrentPropValue(
+      propName: propName,
+    );
 
     if (tempSelectedPropValue != null) {
       for (OptProp child in optProp.children) {
