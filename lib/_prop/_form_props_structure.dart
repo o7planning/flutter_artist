@@ -12,7 +12,7 @@ class FormPropsStructure {
     required List<String> simpleProps,
     required List<OptProp> optProps,
   }) : _rootOptProps = [...optProps] {
-    final List<String> simplePropList = [...simpleProps].toList();
+    final List<String> simplePropList = [...simpleProps];
     //
     for (OptProp rootOptProp in optProps) {
       __standardizeCascade(rootOptProp, null);

@@ -103,7 +103,7 @@ abstract class FilterModel<
   void __registerPropsStructure() {
     _filterPropsStructure = registerPropsStructure() ??
         PropsStructure(
-          allPropNames: [],
+          simpleProps: [],
           optProps: [],
         );
   }
@@ -242,7 +242,7 @@ abstract class FilterModel<
       _filterPropsStructure._printTemporaryInfo("@2");
       if (filterInput != null) {
         for (SimpleProp commonMasterProp
-            in _filterPropsStructure._commonProps) {
+            in _filterPropsStructure._simpleProps) {
           Object? value = filterInputToCommonPropValue(
             filterInput: filterInput,
             propName: commonMasterProp.propName,
@@ -255,7 +255,7 @@ abstract class FilterModel<
       } else {
         if (!_defaultValueInitiated) {
           for (SimpleProp commonMasterProp
-              in _filterPropsStructure._commonProps) {
+              in _filterPropsStructure._simpleProps) {
             Object? value = specifyDefaultCommonPropValue(
               propName: commonMasterProp.propName,
             );

@@ -3,27 +3,27 @@ part of '../flutter_artist.dart';
 class PropsStructure {
   final Map<String, Prop> _allPropMap = {};
   final List<OptProp> _rootOptProps;
-  final List<SimpleProp> _commonProps = [];
+  final List<SimpleProp> _simpleProps = [];
 
   //
   final Map<String, dynamic> _tempCurrentFormData = {};
 
   PropsStructure({
-    required List<String> allPropNames,
+    required List<String> simpleProps,
     required List<OptProp> optProps,
   }) : _rootOptProps = [...optProps] {
-    final List<String> commonPropNames = {...allPropNames}.toList();
+    final List<String> simplePropList = [...simpleProps];
     //
     for (OptProp rootOptProp in optProps) {
       __standardizeCascade(rootOptProp, null);
     }
     for (Prop prop in _allPropMap.values) {
-      commonPropNames.remove(prop.propName);
+      simplePropList.remove(prop.propName);
       if (prop is OptProp) {
         prop._checkCycleError();
       }
     }
-    for (String propName in commonPropNames) {
+    for (String propName in simplePropList) {
       _createAndAddNewCommomProp(
         propName: propName,
         dirty: false,
@@ -159,8 +159,8 @@ class PropsStructure {
         updateValues: candidateUpdateValues,
       );
     }
-    for (SimpleProp commonItem in _commonProps) {
-      commonItem._updateTempValue(
+    for (SimpleProp simpleProp in _simpleProps) {
+      simpleProp._updateTempValue(
         tempCurrentFormData: _tempCurrentFormData,
         updateValues: candidateUpdateValues,
       );
@@ -183,12 +183,12 @@ class PropsStructure {
     if (_allPropMap.containsKey(propName)) {
       return;
     }
-    SimpleProp? newCommonProp = SimpleProp(
+    SimpleProp? newSimpleProp = SimpleProp(
       propName: propName,
     );
-    newCommonProp._dirty = dirty;
-    _allPropMap[propName] = newCommonProp;
-    _commonProps.add(newCommonProp);
+    newSimpleProp._dirty = dirty;
+    _allPropMap[propName] = newSimpleProp;
+    _simpleProps.add(newSimpleProp);
   }
 
   // ***************************************************************************
@@ -223,10 +223,10 @@ class PropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _addCommonProp(SimpleProp prop) {
+  void _addSimpleProp(SimpleProp prop) {
     if (!_allPropMap.containsKey(prop.propName)) {
       _allPropMap[prop.propName] = prop;
-      _commonProps.add(prop);
+      _simpleProps.add(prop);
     }
   }
 
