@@ -44,7 +44,7 @@ abstract class FilterModel<
 
   bool _defaultValueInitiated = false;
 
-  late final PropsStructure _filterPropsStructure;
+  late final FilterPropsStructure _filterPropsStructure;
 
   bool _initiated = false;
 
@@ -95,14 +95,14 @@ abstract class FilterModel<
   ///   );
   /// }
   /// ```
-  PropsStructure? registerPropsStructure();
+  FilterPropsStructure? registerPropsStructure();
 
   // ***************************************************************************
   // ***************************************************************************
 
   void __registerPropsStructure() {
     _filterPropsStructure = registerPropsStructure() ??
-        PropsStructure(
+        FilterPropsStructure(
           simpleProps: [],
           optProps: [],
         );

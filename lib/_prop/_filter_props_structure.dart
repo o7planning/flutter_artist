@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-class PropsStructure {
+class FilterPropsStructure {
   final Map<String, Prop> _allPropMap = {};
   final List<OptProp> _rootOptProps;
   final List<SimpleProp> _simpleProps = [];
@@ -8,7 +8,7 @@ class PropsStructure {
   //
   final Map<String, dynamic> _tempCurrentFormData = {};
 
-  PropsStructure({
+  FilterPropsStructure({
     required List<String> simpleProps,
     required List<OptProp> optProps,
   }) : _rootOptProps = [...optProps] {
