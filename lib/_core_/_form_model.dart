@@ -639,6 +639,7 @@ abstract class FormModel<
         currentSelectedItems = optPropData.findInternalItemsByDynamics(
           dynamicValues: currentSelectedItems,
           addToInternalIfNotFound: true,
+          removeCurrentNotFoundItems: true,
         );
       }
       // Candidate Selected Items:
@@ -664,6 +665,7 @@ abstract class FormModel<
     candidateSelectedItems = optPropData!.findInternalItemsByDynamics(
       dynamicValues: candidateSelectedItems,
       addToInternalIfNotFound: true,
+      removeCurrentNotFoundItems: true,
     );
     print(
         "@data._tempCurrentFormData 3.1: ${_formPropsStructure._tempCurrentFormData}");
@@ -759,6 +761,7 @@ abstract class FormModel<
       optPropData.findInternalItemsByDynamics(
         dynamicValues: value,
         addToInternalIfNotFound: true,
+        removeCurrentNotFoundItems: true,
       ),
     );
   }
@@ -784,6 +787,7 @@ abstract class FormModel<
       optPropData.findInternalItemsByDynamics(
         dynamicValues: value,
         addToInternalIfNotFound: true,
+        removeCurrentNotFoundItems: true,
       ),
     );
   }
@@ -1073,6 +1077,15 @@ abstract class FormModel<
   Map<String, dynamic> initFormValue() {
     return data._currentFormData;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+
+  dynamic getFormInitialValue(String propertyName) {
+    return data._initialFormData[propertyName];
+  }
+
 
   // ***************************************************************************
   // ***************************************************************************

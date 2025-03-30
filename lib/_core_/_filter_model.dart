@@ -446,6 +446,7 @@ abstract class FilterModel<
       if (currentSelectedItems != null) {
         currentSelectedItems = optPropData.findInternalItemsByDynamics(
           dynamicValues: currentSelectedItems,
+          removeCurrentNotFoundItems: true,
           addToInternalIfNotFound: false,
         );
       }
@@ -571,6 +572,7 @@ abstract class FilterModel<
       optPropData.findInternalItemsByDynamics(
         dynamicValues: value,
         addToInternalIfNotFound: false,
+        removeCurrentNotFoundItems: true,
       ),
     );
   }
@@ -591,6 +593,7 @@ abstract class FilterModel<
       optPropData.findInternalItemsByDynamics(
         dynamicValues: value,
         addToInternalIfNotFound: false,
+        removeCurrentNotFoundItems: true,
       ),
     );
   }
