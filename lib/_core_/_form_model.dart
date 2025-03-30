@@ -201,8 +201,9 @@ abstract class FormModel<
 
   ///
   /// ```dart
-  /// PropsStructure registerPropsStructure() {
-  ///   return PropsStructure(
+  /// FormPropsStructure registerPropsStructure() {
+  ///   return FormPropsStructure(
+  ///     simpleProps: [],
   ///     optProps: [
   ///       OptProp(
   ///         propName: "company",
