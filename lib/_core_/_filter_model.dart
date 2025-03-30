@@ -241,7 +241,7 @@ abstract class FilterModel<
       }
       _filterPropsStructure._printTemporaryInfo("@2");
       if (filterInput != null) {
-        for (CommonProp commonMasterProp
+        for (SimpleProp commonMasterProp
             in _filterPropsStructure._commonProps) {
           Object? value = filterInputToCommonPropValue(
             filterInput: filterInput,
@@ -254,7 +254,7 @@ abstract class FilterModel<
         }
       } else {
         if (!_defaultValueInitiated) {
-          for (CommonProp commonMasterProp
+          for (SimpleProp commonMasterProp
               in _filterPropsStructure._commonProps) {
             Object? value = specifyDefaultCommonPropValue(
               propName: commonMasterProp.propName,

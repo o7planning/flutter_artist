@@ -3,7 +3,7 @@ part of '../flutter_artist.dart';
 class PropsStructure {
   final Map<String, Prop> _allPropMap = {};
   final List<OptProp> _rootOptProps;
-  final List<CommonProp> _commonProps = [];
+  final List<SimpleProp> _commonProps = [];
 
   //
   final Map<String, dynamic> _tempCurrentFormData = {};
@@ -159,7 +159,7 @@ class PropsStructure {
         updateValues: candidateUpdateValues,
       );
     }
-    for (CommonProp commonItem in _commonProps) {
+    for (SimpleProp commonItem in _commonProps) {
       commonItem._updateTempValue(
         tempCurrentFormData: _tempCurrentFormData,
         updateValues: candidateUpdateValues,
@@ -183,7 +183,7 @@ class PropsStructure {
     if (_allPropMap.containsKey(propName)) {
       return;
     }
-    CommonProp? newCommonProp = CommonProp(
+    SimpleProp? newCommonProp = SimpleProp(
       propName: propName,
     );
     newCommonProp._dirty = dirty;
@@ -223,7 +223,7 @@ class PropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _addCommonProp(CommonProp prop) {
+  void _addCommonProp(SimpleProp prop) {
     if (!_allPropMap.containsKey(prop.propName)) {
       _allPropMap[prop.propName] = prop;
       _commonProps.add(prop);

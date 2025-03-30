@@ -3,28 +3,28 @@ part of '../flutter_artist.dart';
 class FormPropsStructure {
   final Map<String, Prop> _allPropMap = {};
   final List<OptProp> _rootOptProps;
-  final List<CommonProp> _commonProps = [];
+  final List<SimpleProp> _simpleProps = [];
 
   //
   final Map<String, dynamic> _tempCurrentFormData = {};
 
   FormPropsStructure({
-    required List<String> allPropNames,
+    required List<String> simpleProps,
     required List<OptProp> optProps,
   }) : _rootOptProps = [...optProps] {
-    final List<String> commonPropNames = {...allPropNames}.toList();
+    final List<String> simplePropList = [...simpleProps].toList();
     //
     for (OptProp rootOptProp in optProps) {
       __standardizeCascade(rootOptProp, null);
     }
     for (Prop prop in _allPropMap.values) {
-      commonPropNames.remove(prop.propName);
+      simplePropList.remove(prop.propName);
       if (prop is OptProp) {
         prop._checkCycleError();
       }
     }
-    for (String propName in commonPropNames) {
-      _createAndAddNewCommomProp(
+    for (String propName in simplePropList) {
+      _createAndAddNewSimpleProp(
         propName: propName,
         dirty: false,
       );
@@ -146,7 +146,7 @@ class FormPropsStructure {
       if (prop != null) {
         prop._dirty = true;
       } else {
-        _createAndAddNewCommomProp(
+        _createAndAddNewSimpleProp(
           propName: propName,
           dirty: true,
         );
@@ -159,7 +159,7 @@ class FormPropsStructure {
         updateValues: candidateUpdateValues,
       );
     }
-    for (CommonProp commonItem in _commonProps) {
+    for (SimpleProp commonItem in _simpleProps) {
       commonItem._updateTempValue(
         tempCurrentFormData: _tempCurrentFormData,
         updateValues: candidateUpdateValues,
@@ -176,19 +176,19 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _createAndAddNewCommomProp({
+  void _createAndAddNewSimpleProp({
     required String propName,
     required bool dirty,
   }) {
     if (_allPropMap.containsKey(propName)) {
       return;
     }
-    CommonProp? newCommonProp = CommonProp(
+    SimpleProp? newSimpleProp = SimpleProp(
       propName: propName,
     );
-    newCommonProp._dirty = dirty;
-    _allPropMap[propName] = newCommonProp;
-    _commonProps.add(newCommonProp);
+    newSimpleProp._dirty = dirty;
+    _allPropMap[propName] = newSimpleProp;
+    _simpleProps.add(newSimpleProp);
   }
 
   // ***************************************************************************
@@ -220,9 +220,9 @@ class FormPropsStructure {
     Prop? prop = _allPropMap[propName];
     if (prop == null) {
       throw AppException(message: "No propName $propName", details: null);
-    } else if (prop is! CommonProp) {
+    } else if (prop is! SimpleProp) {
       throw AppException(
-          message: "$propName is not Common prop", details: null);
+          message: "$propName is not Simple prop", details: null);
     }
     _tempCurrentFormData[propName] = value;
   }
@@ -230,10 +230,10 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _addCommonProp(CommonProp prop) {
+  void _addSimpleProp(SimpleProp prop) {
     if (!_allPropMap.containsKey(prop.propName)) {
       _allPropMap[prop.propName] = prop;
-      _commonProps.add(prop);
+      _simpleProps.add(prop);
     }
   }
 

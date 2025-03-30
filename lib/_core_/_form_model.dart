@@ -224,7 +224,7 @@ abstract class FormModel<
   void __registerPropsStructure() {
     _formPropsStructure = registerPropsStructure() ??
         FormPropsStructure(
-          allPropNames: [],
+          simpleProps: [],
           optProps: [],
         );
   }
@@ -1081,11 +1081,9 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-
   dynamic getFormInitialValue(String propertyName) {
     return data._initialFormData[propertyName];
   }
-
 
   // ***************************************************************************
   // ***************************************************************************

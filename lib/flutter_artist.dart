@@ -325,7 +325,7 @@ part '_enum_/_item_creation_type.dart';
 
 part '_actionable_/_cre_item_actionable.dart';
 
-part '_prop/_common_prop.dart';
+part '_prop/_simple_prop.dart';
 
 part '_prop/_opt_prop.dart';
 
