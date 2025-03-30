@@ -80,8 +80,9 @@ abstract class FilterModel<
 
   ///
   /// ```dart
-  /// PropsStructure registerPropsStructure() {
-  ///   return PropsStructure(
+  /// FilterPropsStructure registerPropsStructure() {
+  ///   return FilterPropsStructure(
+  ///     simpleProps: [],
   ///     optProps: [
   ///       OptProp(
   ///         propName: "company",
