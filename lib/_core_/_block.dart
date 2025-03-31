@@ -3924,17 +3924,26 @@ abstract class Block<
   /// Edit on creation-mode
   ///
   Actionable __isEnableFormToModify({required bool checkAllow}) {
-    if (formModel != null) {
-      switch (formModel!.data._formMode) {
-        case FormMode.none:
-          return Actionable.no(
-            message: "Form disabled because it in 'none' mode",
-          );
-        case FormMode.creation:
-          return Actionable.yes();
-        case FormMode.edit:
-          break; // Continue check below.
-      }
+    if (formModel == null) {
+      return Actionable.no(
+          message:
+              "This item cannot be edited on the form because this block does not have a form.");
+    }
+    //
+    if (this.data.currentItem == null) {
+      return Actionable.no(
+          message: "Form disabled because the form has no current item");
+    }
+    //
+    switch (formModel!.data._formMode) {
+      case FormMode.none:
+        return Actionable.no(
+          message: "Form disabled because it in 'none' mode",
+        );
+      case FormMode.creation:
+        return Actionable.yes();
+      case FormMode.edit:
+        break; // Continue check below.
     }
     //
     return __canEditItemOnForm(
