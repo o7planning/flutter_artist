@@ -157,10 +157,17 @@ abstract class FormModel<
       );
       //
       block._refreshSavingState(isSaving: true);
+      Object? parentBlockItem = block.parent?.data.currentItem;
       //
       result = data.isNew
-          ? await callApiCreateItem(formMapData: formMapData)
-          : await callApiUpdateItem(formMapData: formMapData);
+          ? await callApiCreateItem(
+              parentBlockItem: parentBlockItem,
+              formMapData: formMapData,
+            )
+          : await callApiUpdateItem(
+              parentBlockItem: parentBlockItem,
+              formMapData: formMapData,
+            );
       //
       block._refreshSavingState(isSaving: false);
     } catch (e, stackTrace) {
@@ -1106,6 +1113,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   Future<ApiResult<ITEM_DETAIL>> callApiCreateItem({
+    required Object? parentBlockItem,
     required Map<String, dynamic> formMapData,
   });
 
@@ -1113,6 +1121,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   Future<ApiResult<ITEM_DETAIL>> callApiUpdateItem({
+    required Object? parentBlockItem,
     required Map<String, dynamic> formMapData,
   });
 
