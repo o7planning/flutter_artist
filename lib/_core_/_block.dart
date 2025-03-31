@@ -3677,30 +3677,12 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  // TODO: Viet chi tiet hon:
   ///
   /// Check if Ancestor Blocks in Safe State to Delete item in current Block.
   ///
   Actionable __checkAncestorsSafeToDelete(ITEM? item) {
     if (parent == null) {
       return Actionable.yes();
-    }
-    // TODO: Kiểm tra nếu item là current thì mới cần đk này:
-    if (parent!.formModel != null) {
-      switch (parent!.formModel!.formMode) {
-        case FormMode.none:
-          return Actionable.no(
-            message:
-                "Disallow deleting items when the ancestor block form is in 'none' mode.",
-          );
-        case FormMode.creation:
-          return Actionable.no(
-            message:
-                "Disallow deleting items when the ancestor block form is in 'creation' mode.",
-          );
-        case FormMode.edit:
-          break; // Do nothing
-      }
     }
     //
     return parent!.__checkAncestorsSafeToDelete(null);
@@ -3946,7 +3928,8 @@ abstract class Block<
       switch (formModel!.data._formMode) {
         case FormMode.none:
           return Actionable.no(
-              message: "Form disabled because it in 'none' mode",);
+            message: "Form disabled because it in 'none' mode",
+          );
         case FormMode.creation:
           return Actionable.yes();
         case FormMode.edit:
