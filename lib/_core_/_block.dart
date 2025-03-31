@@ -3749,29 +3749,12 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  // TODO: Viet chi tiet hon:
   ///
   /// Check if Ancestor Blocks in Safe State to Edit item in current Block.
   ///
   Actionable __checkAncestorsSafeToEditItem({required ITEM? item}) {
     if (parent == null) {
       return Actionable.yes();
-    }
-    if (parent!.formModel != null) {
-      switch (parent!.formModel!.formMode) {
-        case FormMode.none:
-          return Actionable.no(
-            message:
-                "Disallow editing items when the ancestor block form is in 'none' mode.",
-          );
-        case FormMode.creation:
-          return Actionable.no(
-            message:
-                "Disallow editing items when the ancestor block form is in 'creation' mode.",
-          );
-        case FormMode.edit:
-          break; // Do nothing
-      }
     }
     return parent!.__checkAncestorsSafeToEditItem(item: null);
   }
@@ -3926,21 +3909,22 @@ abstract class Block<
           message:
               "This item cannot be edited on the form because this block does not have a form.");
     }
-    if (__isSaving) {
+    if (FlutterArtist.executor.isBusy) {
       return Actionable.no(
-          message:
-              "This item cannot be edited on the form because the block is in a data-saving state.");
+        message: "Item edit is disabled because the executor is busy.",
+      );
     }
     //
     Actionable ancestorsSafe = __checkAncestorsSafeToEditItem(item: item);
     if (!ancestorsSafe.yes) {
       return ancestorsSafe;
     }
+    //
     switch (formModel!.data._formMode) {
       case FormMode.none:
         return Actionable.no(
           message:
-              "Disallow editing items when the block form is in 'none' mode.",
+              "Item edit is disabled because the block form is in 'none' mode.",
         );
       case FormMode.creation:
         break; // Do nothing.
@@ -3960,22 +3944,14 @@ abstract class Block<
   Actionable __isEnableFormToModify({required bool checkAllow}) {
     if (formModel != null) {
       switch (formModel!.data._formMode) {
+        case FormMode.none:
+          return Actionable.no(
+              message: "Form disabled because it in 'none' mode",);
         case FormMode.creation:
           return Actionable.yes();
         case FormMode.edit:
           break; // Continue check below.
-        case FormMode.none:
-          return Actionable.no(
-              message: "Form disabled because it in 'none' mode");
       }
-    }
-    if (this.data.currentItemDetail == null) {
-      return Actionable.no(
-          message: "Form disabled because the block has no current item");
-    }
-    if (__isRefreshingCurrentItem) {
-      return Actionable.no(
-          message: "Form disabled because the block in refreshing state");
     }
     //
     return __canEditItemOnForm(
