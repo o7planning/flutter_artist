@@ -670,11 +670,11 @@ abstract class FormModel<
       optionedData: optPropData,
     );
     // TODO: Dangerous check not null:
-    candidateSelectedItems = optPropData!.findInternalItemsByDynamics(
+    candidateSelectedItems = optPropData?.findInternalItemsByDynamics(
       dynamicValues: candidateSelectedItems,
       addToInternalIfNotFound: true,
       removeCurrentNotFoundItems: true,
-    );
+    )??[];
     print(
         "@data._tempCurrentFormData 3.1: ${_formPropsStructure._tempCurrentFormData}");
     //
