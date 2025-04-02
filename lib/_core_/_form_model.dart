@@ -621,9 +621,6 @@ abstract class FormModel<
           );
         }
       }
-
-      print(
-          "@data._tempCurrentFormData 2: ${_formPropsStructure._tempCurrentFormData}");
       //
       // Current selected value:
       // It can be a single value or a List.
@@ -662,8 +659,6 @@ abstract class FormModel<
       currentSelectedItems = null;
       candidateSelectedItems = null;
     }
-    print(
-        "@data._tempCurrentFormData 3: ${_formPropsStructure._tempCurrentFormData}");
     //
     _formPropsStructure._setTempOptPropData(
       propName: optPropName,
@@ -675,8 +670,6 @@ abstract class FormModel<
       addToInternalIfNotFound: true,
       removeCurrentNotFoundItems: true,
     )??[];
-    print(
-        "@data._tempCurrentFormData 3.1: ${_formPropsStructure._tempCurrentFormData}");
     //
     // TODO: Double check this code:
     //
@@ -702,8 +695,6 @@ abstract class FormModel<
       //  - And make sure children-OptProp to null if parent-Value is null or not selected.
       _formPropsStructure._updateTempData({optPropName: null});
     }
-    print(
-        "@data._tempCurrentFormData 4: ${_formPropsStructure._tempCurrentFormData}");
     //
     Object? tempSelectedPropValue =
         this._formPropsStructure._getTempCurrentPropValue(
@@ -1039,12 +1030,6 @@ abstract class FormModel<
 
   // Change Event from GUI.
   Future<void> _onChangeFromFormView() async {
-    // if (_formKey.currentState?.instantValue != null) {
-    //   data._currentFormData.addAll(_formKey.currentState!.instantValue);
-    //   if (data._justInitialized) {
-    //     data._initialFormData.addAll(_formKey.currentState!.instantValue);
-    //   }
-    // }
     print("#~~~~~~~~~~~~~~~> _onChangeFromFormView");
     //
     _XShelf xShelf = _XShelf(
