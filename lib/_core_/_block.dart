@@ -3778,10 +3778,10 @@ abstract class Block<
       );
     }
     //
-    Actionable ancestorsSafe = __checkAncestorsSafeToDelete(item);
-    if (!ancestorsSafe.yes) {
-      return ancestorsSafe;
-    }
+    // Actionable ancestorsSafe = __checkAncestorsSafeToDelete(item);
+    // if (!ancestorsSafe.yes) {
+    //   return ancestorsSafe;
+    // }
     //
     return checkAllow ? __isAllowDeleteItem(item: item) : Actionable.yes();
   }
@@ -3922,10 +3922,10 @@ abstract class Block<
               "This item cannot be edited on the form because the block is in a data-saving state.");
     }
     //
-    Actionable ancestorsSafe = __checkAncestorsSafeToEditItem(item: item);
-    if (!ancestorsSafe.yes) {
-      return ancestorsSafe;
-    }
+    // Actionable ancestorsSafe = __checkAncestorsSafeToEditItem(item: item);
+    // if (!ancestorsSafe.yes) {
+    //   return ancestorsSafe;
+    // }
     switch (formModel!.data._formMode) {
       case FormMode.none:
         return Actionable.no(

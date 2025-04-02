@@ -409,6 +409,7 @@ abstract class FormModel<
 
   bool isEnabled() {
     Actionable actionable = block._isEnableFormToModify();
+    print("Action >>>>>>>>>> ${actionable.message}");
     return actionable.yes;
   }
 
