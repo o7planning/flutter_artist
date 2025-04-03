@@ -1,14 +1,18 @@
 part of '../flutter_artist.dart';
 
-class PropValue<VALUE> {
-  List<VALUE>? values;
+class PropValue<VALUE extends Object> {
+  List<VALUE?> values = [];
 
-  PropValue.single(VALUE value) {
-    values = [value];
+  PropValue.single(VALUE? value) {
+    if (value == null) {
+      this.values = [];
+    } else {
+      this.values = [value];
+    }
   }
 
-  PropValue.multi(List<VALUE> values) {
-    values = values;
+  PropValue.multi(List<VALUE?> values) {
+    this.values = values.where((v) => v != null).toList();
   }
 
   // PropValue(List<VALUE>? value) {
