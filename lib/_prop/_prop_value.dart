@@ -15,10 +15,6 @@ class PropValue<VALUE extends Object> {
     this.values = values.where((v) => v != null).toList();
   }
 
-  // PropValue(List<VALUE>? value) {
-  //   this.values = value?.where((v) => v != null).toList();
-  // }
-
   @override
   String toString() {
     return values.toString();
