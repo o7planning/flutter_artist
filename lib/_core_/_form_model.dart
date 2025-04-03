@@ -648,7 +648,7 @@ abstract class FormModel<
         );
       }
       // Candidate Selected Items:
-      candidateSelectedItems = selectedValueWrap?.value;
+      candidateSelectedItems = selectedValueWrap?.values;
 
       if (candidateSelectedItems == null || candidateSelectedItems.isEmpty) {
         candidateSelectedItems = currentSelectedItems;
@@ -666,10 +666,11 @@ abstract class FormModel<
     );
     // TODO: Dangerous check not null:
     candidateSelectedItems = optPropData?.findInternalItemsByDynamics(
-      dynamicValues: candidateSelectedItems,
-      addToInternalIfNotFound: true,
-      removeCurrentNotFoundItems: true,
-    )??[];
+          dynamicValues: candidateSelectedItems,
+          addToInternalIfNotFound: true,
+          removeCurrentNotFoundItems: true,
+        ) ??
+        [];
     //
     // TODO: Double check this code:
     //
@@ -755,7 +756,7 @@ abstract class FormModel<
     if (wrap == null) {
       return null;
     }
-    List? value = wrap.value;
+    List? value = wrap.values;
     return PropValue(
       optPropData.findInternalItemsByDynamics(
         dynamicValues: value,
@@ -781,7 +782,7 @@ abstract class FormModel<
     if (wrap == null) {
       return null;
     }
-    List? value = wrap.value;
+    List? value = wrap.values;
     return PropValue(
       optPropData.findInternalItemsByDynamics(
         dynamicValues: value,

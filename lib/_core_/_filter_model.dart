@@ -452,7 +452,7 @@ abstract class FilterModel<
         );
       }
       // Candidate Selected Items:
-      candidateSelectedItems = inputValueWrap?.value;
+      candidateSelectedItems = inputValueWrap?.values;
 
       if (candidateSelectedItems == null || candidateSelectedItems.isEmpty) {
         candidateSelectedItems = currentSelectedItems;
@@ -568,7 +568,7 @@ abstract class FilterModel<
     if (wrap == null) {
       return null;
     }
-    List? value = wrap.value;
+    List? value = wrap.values;
     return PropValue(
       optPropData.findInternalItemsByDynamics(
         dynamicValues: value,
@@ -589,7 +589,7 @@ abstract class FilterModel<
     if (wrap == null) {
       return null;
     }
-    List? value = wrap.value;
+    List? value = wrap.values;
     return PropValue(
       optPropData.findInternalItemsByDynamics(
         dynamicValues: value,

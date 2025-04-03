@@ -63,12 +63,14 @@ class OptProp extends Prop {
       //
       bool isSame;
       if (_tempXOptionedData != null) {
-        if(singleSelection) {
+        if (singleSelection) {
           isSame = _tempXOptionedData!.isSame(item1: oldValue, item2: newValue);
-        }else {
-          isSame = _tempXOptionedData!.isSameItemOrItemList(itemOrItemList1: oldValue, itemOrItemList2: newValue,);
+        } else {
+          isSame = _tempXOptionedData!.isSameItemOrItemList(
+            itemOrItemList1: oldValue,
+            itemOrItemList2: newValue,
+          );
         }
-
       } else {
         isSame = false;
       }
