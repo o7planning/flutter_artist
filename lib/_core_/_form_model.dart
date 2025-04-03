@@ -757,7 +757,7 @@ abstract class FormModel<
       return null;
     }
     List? value = wrap.values;
-    return PropValue(
+    return PropValue.multi(
       optPropData.findInternalItemsByDynamics(
         dynamicValues: value,
         addToInternalIfNotFound: true,
@@ -783,7 +783,7 @@ abstract class FormModel<
       return null;
     }
     List? value = wrap.values;
-    return PropValue(
+    return PropValue.multi(
       optPropData.findInternalItemsByDynamics(
         dynamicValues: value,
         addToInternalIfNotFound: true,

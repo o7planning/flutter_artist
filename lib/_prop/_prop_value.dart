@@ -11,9 +11,9 @@ class PropValue<VALUE> {
     values = values;
   }
 
-  PropValue(List<VALUE>? value) {
-    this.values = value?.where((v) => v != null).toList();
-  }
+  // PropValue(List<VALUE>? value) {
+  //   this.values = value?.where((v) => v != null).toList();
+  // }
 
   @override
   String toString() {

@@ -355,7 +355,7 @@ abstract class FilterModel<
   }) async {
     final String propName = optProp.propName;
 
-    final OptProp? optPropParent = optProp?.parent;
+    final OptProp? optPropParent = optProp.parent;
 
     // Get current MasterProp data:
     XOptionedData? optPropData =
@@ -569,7 +569,7 @@ abstract class FilterModel<
       return null;
     }
     List? value = wrap.values;
-    return PropValue(
+    return PropValue.multi(
       optPropData.findInternalItemsByDynamics(
         dynamicValues: value,
         addToInternalIfNotFound: false,
@@ -590,7 +590,7 @@ abstract class FilterModel<
       return null;
     }
     List? value = wrap.values;
-    return PropValue(
+    return PropValue.multi(
       optPropData.findInternalItemsByDynamics(
         dynamicValues: value,
         addToInternalIfNotFound: false,
