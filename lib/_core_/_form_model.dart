@@ -161,10 +161,12 @@ abstract class FormModel<
       //
       result = data.isNew
           ? await callApiCreateItem(
+              filterCriteria: block.data.filterCriteria,
               parentBlockItem: parentBlockItem,
               formMapData: formMapData,
             )
           : await callApiUpdateItem(
+              filterCriteria: block.data.filterCriteria,
               parentBlockItem: parentBlockItem,
               formMapData: formMapData,
             );
@@ -252,7 +254,6 @@ abstract class FormModel<
     __formTransactionCount++;
     print(
         "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFormTransaction, isItemFirstLoad: $isItemFirstLoad");
-    print("@data._currentFormData: ${data._currentFormData}");
     final ITEM_DETAIL? itemDetail = block.data.currentItemDetail;
     final FormMode currentFormMode = data._formDataState == DataState.none
         ? FormMode.none
@@ -293,7 +294,6 @@ abstract class FormModel<
     _formPropsStructure._initTemporaryForNewTransaction(
       currentFormData: allNewValue,
     );
-    _formPropsStructure._printTemporaryInfo("@1");
     //
     // Load OptProp Data:
     //
@@ -311,7 +311,6 @@ abstract class FormModel<
           isItemFirstLoad: isItemFirstLoad,
         );
       }
-      _formPropsStructure._printTemporaryInfo("@2");
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
@@ -328,15 +327,14 @@ abstract class FormModel<
       return false;
     }
     //
-    _printStructureAndTempData("@3");
-    //
     // Get SimpleProp Value:
     //
     Map<String, dynamic> simplePropValue = {};
     if (isItemFirstLoad) {
       if (itemDetail != null) {
         try {
-          simplePropValue = getSimplePropValuesFromItemDetail(
+          simplePropValue = await getSimplePropValuesFromItemDetail(
+            filterCriteria: block.data.filterCriteria,
             itemDetail: itemDetail,
           );
           for (String propName in simplePropValue.keys) {
@@ -367,7 +365,10 @@ abstract class FormModel<
         Map<String, dynamic> simplePropValueExtra = {};
         if (!_defaultValueInitiated) {
           try {
-            simplePropValueDefault = specifyDefaultSimplePropValues() ?? {};
+            simplePropValueDefault = await specifyDefaultSimplePropValues(
+                  filterCriteria: block.data.filterCriteria,
+                ) ??
+                {};
             for (String propName in simplePropValueDefault.keys) {
               _formPropsStructure._setTempSimplePropData(
                 propName: propName,
@@ -421,7 +422,6 @@ abstract class FormModel<
         }
       }
     }
-    _printStructureAndTempData("@4");
     return __applyWithDataState(
       formDataState: DataState.ready,
       isItemFirstLoad: isItemFirstLoad,
@@ -435,7 +435,6 @@ abstract class FormModel<
     required DataState formDataState,
     required bool isItemFirstLoad,
   }) {
-    print("@@@ __applyWithDataState: $formDataState");
     try {
       //
       // Update Real FromData from Temporary FormData:
@@ -572,14 +571,12 @@ abstract class FormModel<
         optPropData = null;
       }
     }
-
-    print(
-        "@data._tempCurrentFormData 1: ${_formPropsStructure._tempCurrentFormData}");
     //
     // Load OptProp data from Rest API.
     // May throw ApiError.
     //
     optPropData ??= await callApiLoadOptPropData(
+      filterCriteria: block.data.filterCriteria,
       extraFormInput: extraFormInput,
       parentOptPropValue: parentOptPropValue,
       optPropName: optPropName,
@@ -629,8 +626,6 @@ abstract class FormModel<
           _formPropsStructure._getTempCurrentPropValue(
         propName: optPropName,
       );
-      print(
-          "isItemFirstLoad: $isItemFirstLoad, tempCurrentValue: $tempCurrentValue");
       //
       if (tempCurrentValue != null) {
         if (tempCurrentValue is List) {
@@ -802,14 +797,17 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<String, dynamic> getSimplePropValuesFromItemDetail({
+  Future<Map<String, dynamic>> getSimplePropValuesFromItemDetail({
+    required FILTER_CRITERIA? filterCriteria,
     required ITEM_DETAIL itemDetail,
   });
 
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<String, dynamic>? specifyDefaultSimplePropValues();
+  Future<Map<String, dynamic>?> specifyDefaultSimplePropValues({
+    required FILTER_CRITERIA? filterCriteria,
+  });
 
   // ***************************************************************************
   // ***************************************************************************
@@ -844,6 +842,7 @@ abstract class FormModel<
   /// Abstract method:
   ///
   Future<XOptionedData?> callApiLoadOptPropData({
+    required FILTER_CRITERIA? filterCriteria,
     required EXTRA_FORM_INPUT? extraFormInput,
     required Object? parentOptPropValue,
     required String optPropName,
@@ -1099,6 +1098,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   Future<ApiResult<ITEM_DETAIL>> callApiCreateItem({
+    required FILTER_CRITERIA? filterCriteria,
     required Object? parentBlockItem,
     required Map<String, dynamic> formMapData,
   });
@@ -1107,6 +1107,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   Future<ApiResult<ITEM_DETAIL>> callApiUpdateItem({
+    required FILTER_CRITERIA? filterCriteria,
     required Object? parentBlockItem,
     required Map<String, dynamic> formMapData,
   });

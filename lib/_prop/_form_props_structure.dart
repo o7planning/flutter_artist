@@ -241,6 +241,7 @@ class FormPropsStructure {
   // ***************************************************************************
 
   void _printTemporaryInfo(String prefix) {
+    if(true) return;
     print("\n\n--------------------------------------------------------------");
     print(" ---> $prefix");
     for (OptProp rootItem in _rootOptProps) {

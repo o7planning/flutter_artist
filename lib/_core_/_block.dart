@@ -821,9 +821,6 @@ abstract class Block<
       }
     }
     //
-    print(
-        "\n\n>> ${getClassName(this)}._unitQuery - queryState: $queryDataState, REAL QUERY --> $forceQuery");
-    //
     thisXBlock._printParameters(hasActiveUI: hasActiveUI);
     //
     if (!forceQuery) {
@@ -1832,7 +1829,6 @@ abstract class Block<
         item: refreshedItem,
       );
       //
-      print("@CHAY VAO DAAY 1: ${data.currentItem}");
       if (formModel != null) {
         formModel!.data._setCurrentItem(
           refreshedItemDetail: savedItemDetail,
@@ -1843,8 +1839,6 @@ abstract class Block<
         formModel!.data._initialFormData
           ..clear()
           ..addAll(formModel!.data._currentFormData);
-        //
-        print("@CHAY VAO DAAY 2 isDirty: ${formModel!.isDirty()}");
         //
         bool success = await formModel!._startNewFormTransaction(
           filterCriteria: data.filterCriteria,
@@ -2174,6 +2168,19 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  Future<bool> queryEmpty({
+    FILTER_INPUT? filterInput,
+    Function()? navigate,
+  }) async {
+    return await query(
+      filterInput: filterInput,
+      listBehavior: ListBehavior.replace,
+      postQueryBehavior: PostQueryBehavior.selectAvailableItem,
+      suggestedSelection: null,
+      navigate: navigate,
+    );
+  }
+
   ///
   ///
   ///
@@ -2257,7 +2264,6 @@ abstract class Block<
         "pageable": pageable,
       },
     );
-    printLog("\n\n${getClassName(this)} ~~~~~~~~~~~~> queryAndPrepareToEdit()");
     //
     _XShelf xShelf = await shelf._queryAll(
       forceFilterModelOpt: _FilterModelOpt(
@@ -3928,11 +3934,6 @@ abstract class Block<
       return Actionable.no(
           message:
               "This item cannot be edited on the form because this block does not have a form.");
-    }
-    //
-    if (this.data.currentItem == null) {
-      return Actionable.no(
-          message: "Form disabled because the form has no current item");
     }
     //
     switch (formModel!.data._formMode) {
