@@ -387,12 +387,15 @@ class _Storage {
     if (!eventBlock.fireEvent) {
       return [];
     }
-    return __getListenerBlocksByAffectedItemTypes(
+    List<Block> blockList = __getListenerBlocksByAffectedItemTypes(
       affectedItemTypes: [
         eventBlock.getItemType(),
         eventBlock.getItemDetailType()
       ],
     );
+    return blockList
+        .where((block) => !identical(block.shelf, eventBlock.shelf))
+        .toList();
   }
 
   // ***************************************************************************
@@ -428,9 +431,12 @@ class _Storage {
     if (!eventBlock.fireEvent) {
       return [];
     }
-    return __getListenerScalarsByAffectedItemTypes(
+    List<Scalar> scalarList = __getListenerScalarsByAffectedItemTypes(
       affectedItemTypes: [eventBlock.getItemType()],
     );
+    return scalarList
+        .where((scalar) => !identical(scalar.shelf, eventBlock.shelf))
+        .toList();
   }
 
   // ***************************************************************************
