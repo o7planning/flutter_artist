@@ -60,6 +60,18 @@ class FormModelData<
   // ***************************************************************************
   // ***************************************************************************
 
+  void _initialFormData2(Map<String, dynamic> formData) {
+    __initial0FormData
+      ..clear()
+      ..addAll(formData);
+    _initialFormData
+      ..clear()
+      ..addAll(formData);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _updateFormData(Map<String, dynamic> formData) {
     _justInitialized = true;
     //

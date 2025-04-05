@@ -13,7 +13,7 @@ class OptProp extends Prop {
   /// Make sure you set the appropriate value for this property, otherwise an error will occur.
   /// For example: An error occurs when the library tries to set multiple selection values for the Dropdown.
   ///
-  bool singleSelection = true; // TODO: Hardcode Temporarily.
+  bool singleSelection;
   final List<OptProp> children;
 
   XOptionedData? _xOptionedData;
@@ -24,6 +24,7 @@ class OptProp extends Prop {
     required super.propName,
     this.type,
     this.children = const [],
+    this.singleSelection = true,
   });
 
   void _checkCycleError() {
@@ -62,7 +63,14 @@ class OptProp extends Prop {
       //
       bool isSame;
       if (_tempXOptionedData != null) {
-        isSame = _tempXOptionedData!.isSame(item1: oldValue, item2: newValue);
+        if (singleSelection) {
+          isSame = _tempXOptionedData!.isSame(item1: oldValue, item2: newValue);
+        } else {
+          isSame = _tempXOptionedData!.isSameItemOrItemList(
+            itemOrItemList1: oldValue,
+            itemOrItemList2: newValue,
+          );
+        }
       } else {
         isSame = false;
       }

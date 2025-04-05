@@ -53,6 +53,12 @@ class _Executor {
             xFilterModel: taskUnit.xFilterModel,
           );
         }
+        //
+        if (taskUnit is _FormViewChangeTaskUnit) {
+          await taskUnit.xFormModel.formModel._unitFormViewChanged(
+            xFormModel: taskUnit.xFormModel,
+          );
+        }
         // Block Clear Current:
         else if (taskUnit is _BlockClearCurrentTaskUnit) {
           await taskUnit.xBlock.block._unitClearCurrent(

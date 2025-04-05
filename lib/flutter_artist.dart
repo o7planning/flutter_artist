@@ -291,6 +291,8 @@ part '_task_unit_/__task_unit.dart';
 
 part '_task_unit_/__task_unit_queue.dart';
 
+part '_task_unit_/_form_view_change_task_unit.dart';
+
 part '_task_unit_/_block_delete_item_task_unit.dart';
 
 part '_task_unit_/_form_model_save_task_unit.dart';
@@ -307,7 +309,9 @@ part '_utils_/_patch_utils.dart';
 
 part '_core_/_executor.dart';
 
-part '_prop/_master_data_structure.dart';
+part '_prop/_filter_props_structure.dart';
+
+part '_prop/_form_props_structure.dart';
 
 part '_core_/_actionable.dart';
 
@@ -321,7 +325,7 @@ part '_enum_/_item_creation_type.dart';
 
 part '_actionable_/_cre_item_actionable.dart';
 
-part '_prop/_common_prop.dart';
+part '_prop/_simple_prop.dart';
 
 part '_prop/_opt_prop.dart';
 

@@ -44,7 +44,7 @@ abstract class FilterModel<
 
   bool _defaultValueInitiated = false;
 
-  late final PropsStructure _masterDataStructure;
+  late final FilterPropsStructure _filterPropsStructure;
 
   bool _initiated = false;
 
@@ -80,8 +80,9 @@ abstract class FilterModel<
 
   ///
   /// ```dart
-  /// PropsStructure registerPropsStructure() {
-  ///   return PropsStructure(
+  /// FilterPropsStructure registerPropsStructure() {
+  ///   return FilterPropsStructure(
+  ///     simpleProps: [],
   ///     optProps: [
   ///       OptProp(
   ///         propName: "company",
@@ -95,15 +96,15 @@ abstract class FilterModel<
   ///   );
   /// }
   /// ```
-  PropsStructure? registerPropsStructure();
+  FilterPropsStructure? registerPropsStructure();
 
   // ***************************************************************************
   // ***************************************************************************
 
   void __registerPropsStructure() {
-    _masterDataStructure = registerPropsStructure() ??
-        PropsStructure(
-          allPropNames: [],
+    _filterPropsStructure = registerPropsStructure() ??
+        FilterPropsStructure(
+          simpleProps: [],
           optProps: [],
         );
   }
@@ -112,7 +113,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   XOptionedData? getOptPropXData(String propName) {
-    return _masterDataStructure._getOptPropData(propName);
+    return _filterPropsStructure._getOptPropData(propName);
   }
 
   dynamic getOptPropData(String propName) {
@@ -135,14 +136,14 @@ abstract class FilterModel<
   }
 
   OptPropType? getOptPropType(String propName) {
-    return _masterDataStructure._getOptPropType(propName);
+    return _filterPropsStructure._getOptPropType(propName);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void _printStructureAndTempData() {
-    _masterDataStructure._printTemporaryInfo();
+  void _printStructureAndTempData(String prefix) {
+    _filterPropsStructure._printTemporaryInfo(prefix);
     print("instantData: ${_formKey.currentState?.instantValue}\n\n");
   }
 
@@ -220,14 +221,14 @@ abstract class FilterModel<
         data._initialFilterData(allNewValue);
       }
       //
-      _masterDataStructure._initTemporaryForNewTransaction(
+      _filterPropsStructure._initTemporaryForNewTransaction(
         currentFormData: filterInput != null
             ? {} // To Clear All.
             : allNewValue,
       );
-      _masterDataStructure._printTemporaryInfo();
+      _filterPropsStructure._printTemporaryInfo("@1");
       //
-      for (OptProp optProp in _masterDataStructure._rootOptProps) {
+      for (OptProp optProp in _filterPropsStructure._rootOptProps) {
         //
         // Load OptProp Data and set default and selected.
         //
@@ -239,26 +240,27 @@ abstract class FilterModel<
           optProp: optProp,
         );
       }
-      _masterDataStructure._printTemporaryInfo();
+      _filterPropsStructure._printTemporaryInfo("@2");
       if (filterInput != null) {
-        for (CommonProp commonMasterProp in _masterDataStructure._commonProps) {
+        for (SimpleProp commonMasterProp
+            in _filterPropsStructure._simpleProps) {
           Object? value = filterInputToCommonPropValue(
             filterInput: filterInput,
             propName: commonMasterProp.propName,
           );
-          _masterDataStructure._setTempPropDataCommon(
+          _filterPropsStructure._setTempSimplePropData(
             propName: commonMasterProp.propName,
             value: value,
           );
         }
       } else {
         if (!_defaultValueInitiated) {
-          for (CommonProp commonMasterProp
-              in _masterDataStructure._commonProps) {
+          for (SimpleProp commonMasterProp
+              in _filterPropsStructure._simpleProps) {
             Object? value = specifyDefaultCommonPropValue(
               propName: commonMasterProp.propName,
             );
-            _masterDataStructure._setTempPropDataCommon(
+            _filterPropsStructure._setTempSimplePropData(
               propName: commonMasterProp.propName,
               value: value,
             );
@@ -278,12 +280,12 @@ abstract class FilterModel<
       return _filterCriteria;
     }
     //
-    _printStructureAndTempData();
+    _printStructureAndTempData("@3");
     //
     try {
       // Convert Map Data to FilterCriteria Object.
       FILTER_CRITERIA newCriteria = createFilterCriteria(
-        dataMap: _masterDataStructure._tempCurrentFormData,
+        dataMap: _filterPropsStructure._tempCurrentFormData,
       );
       _filterCriteria = newCriteria;
       //
@@ -294,13 +296,13 @@ abstract class FilterModel<
       //
       this.data._currentFormData
         ..updateAll((k, v) => null)
-        ..addAll(_masterDataStructure._tempCurrentFormData);
+        ..addAll(_filterPropsStructure._tempCurrentFormData);
 
       //
       // UPDATE OPT-DATA:
       //  - optProp._xOptionedData = optProp._tempXOptionedData;
       //
-      this._masterDataStructure._applyAllTempDataToReal();
+      this._filterPropsStructure._applyAllTempDataToReal();
       //
       // IMPORTANT:
       //
@@ -353,14 +355,15 @@ abstract class FilterModel<
   }) async {
     final String propName = optProp.propName;
 
-    final OptProp? optPropParent = optProp?.parent;
+    final OptProp? optPropParent = optProp.parent;
 
     // Get current MasterProp data:
-    XOptionedData? optPropData = _masterDataStructure._getOptPropData(propName);
+    XOptionedData? optPropData =
+        _filterPropsStructure._getOptPropData(propName);
 
     if (optPropParent != null) {
       XOptionedData? tempXOptionedParent =
-          _masterDataStructure._getTempOptPropData(
+          _filterPropsStructure._getTempOptPropData(
         optPropParent.propName,
       );
       //
@@ -381,7 +384,17 @@ abstract class FilterModel<
         optPropData = null;
       }
     }
-
+    //
+    if (optPropData == null) {
+      _filterPropsStructure._setTempOptPropData(
+        propName: propName,
+        optionedData: null,
+      );
+      // IMPORTANT:
+      //  - Update from ROOTs to LEAVES
+      //  - And make sure children-OptProp to null if parent-Value is null or not selected.
+      _filterPropsStructure._updateTempData({propName: null});
+    }
     //
     // Load OptProp data from Rest API.
     // May throw ApiError.
@@ -419,7 +432,7 @@ abstract class FilterModel<
       // It can be a single value or a List.
       //
       final dynamic tempCurrentValue =
-          _masterDataStructure._getTempCurrentPropValue(
+          _filterPropsStructure._getTempCurrentPropValue(
         propName: propName,
       );
       //
@@ -432,12 +445,14 @@ abstract class FilterModel<
         }
       }
       if (currentSelectedItems != null) {
-        currentSelectedItems = optPropData.findItemsInListByDynamics(
+        currentSelectedItems = optPropData.findInternalItemsByDynamics(
           dynamicValues: currentSelectedItems,
+          removeCurrentNotFoundItems: true,
+          addToInternalIfNotFound: false,
         );
       }
       // Candidate Selected Items:
-      candidateSelectedItems = inputValueWrap?.value;
+      candidateSelectedItems = inputValueWrap?.values;
 
       if (candidateSelectedItems == null || candidateSelectedItems.isEmpty) {
         candidateSelectedItems = currentSelectedItems;
@@ -447,7 +462,7 @@ abstract class FilterModel<
       candidateSelectedItems = null;
     }
     //
-    _masterDataStructure._setTempOptPropData(
+    _filterPropsStructure._setTempOptPropData(
       propName: propName,
       optionedData: optPropData,
     );
@@ -458,28 +473,29 @@ abstract class FilterModel<
       if (optProp.singleSelection) {
         // IMPORTANT:
         //  - Update from ROOTs to LEAVES
-        //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
+        //  - And make sure children-OptProp to null if parent-Value is null or not selected.
         Object? candidateSelectedItem = candidateSelectedItems.first;
-        _masterDataStructure._updateTempData({propName: candidateSelectedItem});
+        _filterPropsStructure
+            ._updateTempData({propName: candidateSelectedItem});
       } else {
         // IMPORTANT:
         //  - Update from ROOTs to LEAVES
-        //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
+        //  - And make sure children-OptProp to null if parent-Value is null or not selected.
         // Try MULTI SELECTED ITEMS:
-        _masterDataStructure
+        _filterPropsStructure
             ._updateTempData({propName: candidateSelectedItems});
       }
     } else {
       // IMPORTANT:
       //  - Update from ROOTs to LEAVES
-      //  - And make sure children-OptionedMasterProp to null if parent-Value is null or not selected.
-      _masterDataStructure._updateTempData({propName: null});
+      //  - And make sure children-OptProp to null if parent-Value is null or not selected.
+      _filterPropsStructure._updateTempData({propName: null});
     }
     //
     Object? tempSelectedPropValue =
-        this._masterDataStructure._getTempCurrentPropValue(
-              propName: propName,
-            );
+        _filterPropsStructure._getTempCurrentPropValue(
+      propName: propName,
+    );
 
     if (tempSelectedPropValue != null) {
       for (OptProp child in optProp.children) {
@@ -552,10 +568,12 @@ abstract class FilterModel<
     if (wrap == null) {
       return null;
     }
-    List? value = wrap.value;
-    return PropValue(
-      optPropData.findItemsInListByDynamics(
+    List? value = wrap.values;
+    return PropValue.multi(
+      optPropData.findInternalItemsByDynamics(
         dynamicValues: value,
+        addToInternalIfNotFound: false,
+        removeCurrentNotFoundItems: true,
       ),
     );
   }
@@ -571,10 +589,12 @@ abstract class FilterModel<
     if (wrap == null) {
       return null;
     }
-    List? value = wrap.value;
-    return PropValue(
-      optPropData.findItemsInListByDynamics(
+    List? value = wrap.values;
+    return PropValue.multi(
+      optPropData.findInternalItemsByDynamics(
         dynamicValues: value,
+        addToInternalIfNotFound: false,
+        removeCurrentNotFoundItems: true,
       ),
     );
   }

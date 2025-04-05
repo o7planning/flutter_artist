@@ -1,29 +1,29 @@
 part of '../flutter_artist.dart';
 
-class PropsStructure {
+class FilterPropsStructure {
   final Map<String, Prop> _allPropMap = {};
   final List<OptProp> _rootOptProps;
-  final List<CommonProp> _commonProps = [];
+  final List<SimpleProp> _simpleProps = [];
 
   //
   final Map<String, dynamic> _tempCurrentFormData = {};
 
-  PropsStructure({
-    required List<String> allPropNames,
+  FilterPropsStructure({
+    required List<String> simpleProps,
     required List<OptProp> optProps,
   }) : _rootOptProps = [...optProps] {
-    final List<String> commonPropNames = {...allPropNames}.toList();
+    final List<String> simplePropList = [...simpleProps];
     //
     for (OptProp rootOptProp in optProps) {
       __standardizeCascade(rootOptProp, null);
     }
     for (Prop prop in _allPropMap.values) {
-      commonPropNames.remove(prop.propName);
+      simplePropList.remove(prop.propName);
       if (prop is OptProp) {
         prop._checkCycleError();
       }
     }
-    for (String propName in commonPropNames) {
+    for (String propName in simplePropList) {
       _createAndAddNewCommomProp(
         propName: propName,
         dirty: false,
@@ -131,7 +131,7 @@ class PropsStructure {
     final candidateUpdateValues = {...updateData};
     //
     // IMPORTANT:
-    // Update data for MasterDataStructure. From ROOTs to LEAVES.
+    // Update data for FilterPropsStructure. From ROOTs to LEAVES.
     // (***):
     // And Update children-OptProp data to null if parent-Value is null or not selected.
     //
@@ -159,8 +159,8 @@ class PropsStructure {
         updateValues: candidateUpdateValues,
       );
     }
-    for (CommonProp commonItem in _commonProps) {
-      commonItem._updateTempValue(
+    for (SimpleProp simpleProp in _simpleProps) {
+      simpleProp._updateTempValue(
         tempCurrentFormData: _tempCurrentFormData,
         updateValues: candidateUpdateValues,
       );
@@ -183,12 +183,12 @@ class PropsStructure {
     if (_allPropMap.containsKey(propName)) {
       return;
     }
-    CommonProp? newCommonProp = CommonProp(
+    SimpleProp? newSimpleProp = SimpleProp(
       propName: propName,
     );
-    newCommonProp._dirty = dirty;
-    _allPropMap[propName] = newCommonProp;
-    _commonProps.add(newCommonProp);
+    newSimpleProp._dirty = dirty;
+    _allPropMap[propName] = newSimpleProp;
+    _simpleProps.add(newSimpleProp);
   }
 
   // ***************************************************************************
@@ -213,7 +213,7 @@ class PropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _setTempPropDataCommon({
+  void _setTempSimplePropData({
     required String propName,
     required Object? value,
   }) {
@@ -223,22 +223,23 @@ class PropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _addCommonProp(CommonProp prop) {
+  void _addSimpleProp(SimpleProp prop) {
     if (!_allPropMap.containsKey(prop.propName)) {
       _allPropMap[prop.propName] = prop;
-      _commonProps.add(prop);
+      _simpleProps.add(prop);
     }
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void _printTemporaryInfo() {
+  void _printTemporaryInfo(String prefix) {
     print("\n\n--------------------------------------------------------------");
+    print(" ---> $prefix");
     for (OptProp rootItem in _rootOptProps) {
       rootItem._printTempInfoCascade(indentFactor: 1);
     }
-    print("tempCurrentFromData: $_tempCurrentFormData");
+    print("tempCurrentFormData: $_tempCurrentFormData");
     print("--------------------------------------------------------------");
   }
 }

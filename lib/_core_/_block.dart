@@ -821,9 +821,6 @@ abstract class Block<
       }
     }
     //
-    print(
-        "\n\n>> ${getClassName(this)}._unitQuery - queryState: $queryDataState, REAL QUERY --> $forceQuery");
-    //
     thisXBlock._printParameters(hasActiveUI: hasActiveUI);
     //
     if (!forceQuery) {
@@ -1504,16 +1501,19 @@ abstract class Block<
     //
     bool success = false;
     try {
-      __refreshPreparingFormCreationState(isPreparingFormCreation: true);
+      __refreshPreparingFormCreationState(
+        isPreparingFormCreation: true,
+      );
       //
-      success = await formModel!._prepareMasterDataAndFormData(
+      success = await formModel!._startNewFormTransaction(
+        filterCriteria: data.filterCriteria,
         extraFormInput: extraFormInput,
-        filterCriteria: this.data.filterCriteria,
-        refreshedItemDetail: nullItemDetail,
-        isNew: true,
+        isItemFirstLoad: true,
       );
     } finally {
-      __refreshPreparingFormCreationState(isPreparingFormCreation: false);
+      __refreshPreparingFormCreationState(
+        isPreparingFormCreation: false,
+      );
     }
     if (!success) {
       return false;
@@ -1833,13 +1833,17 @@ abstract class Block<
         formModel!.data._setCurrentItem(
           refreshedItemDetail: savedItemDetail,
           formMode: FormMode.edit,
-          formDataState: DataState.pending,
+          formDataState: DataState.ready,
         );
-        bool success = await formModel!._prepareMasterDataAndFormData(
+        // To clear dirty:
+        formModel!.data._initialFormData
+          ..clear()
+          ..addAll(formModel!.data._currentFormData);
+        //
+        bool success = await formModel!._startNewFormTransaction(
+          filterCriteria: data.filterCriteria,
           extraFormInput: null,
-          filterCriteria: this.data.filterCriteria,
-          refreshedItemDetail: savedItemDetail,
-          isNew: false,
+          isItemFirstLoad: true,
         );
         if (!success) {
           return false;
@@ -2164,6 +2168,19 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  Future<bool> queryEmpty({
+    FILTER_INPUT? filterInput,
+    Function()? navigate,
+  }) async {
+    return await query(
+      filterInput: filterInput,
+      listBehavior: ListBehavior.replace,
+      postQueryBehavior: PostQueryBehavior.selectAvailableItem,
+      suggestedSelection: null,
+      navigate: navigate,
+    );
+  }
+
   ///
   ///
   ///
@@ -2247,7 +2264,6 @@ abstract class Block<
         "pageable": pageable,
       },
     );
-    printLog("\n\n${getClassName(this)} ~~~~~~~~~~~~> queryAndPrepareToEdit()");
     //
     _XShelf xShelf = await shelf._queryAll(
       forceFilterModelOpt: _FilterModelOpt(
@@ -3667,30 +3683,12 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  // TODO: Viet chi tiet hon:
   ///
   /// Check if Ancestor Blocks in Safe State to Delete item in current Block.
   ///
   Actionable __checkAncestorsSafeToDelete(ITEM? item) {
     if (parent == null) {
       return Actionable.yes();
-    }
-    // TODO: Kiểm tra nếu item là current thì mới cần đk này:
-    if (parent!.formModel != null) {
-      switch (parent!.formModel!.formMode) {
-        case FormMode.none:
-          return Actionable.no(
-            message:
-                "Disallow deleting items when the ancestor block form is in 'none' mode.",
-          );
-        case FormMode.creation:
-          return Actionable.no(
-            message:
-                "Disallow deleting items when the ancestor block form is in 'creation' mode.",
-          );
-        case FormMode.edit:
-          break; // Do nothing
-      }
     }
     //
     return parent!.__checkAncestorsSafeToDelete(null);
@@ -3739,29 +3737,12 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  // TODO: Viet chi tiet hon:
   ///
   /// Check if Ancestor Blocks in Safe State to Edit item in current Block.
   ///
   Actionable __checkAncestorsSafeToEditItem({required ITEM? item}) {
     if (parent == null) {
       return Actionable.yes();
-    }
-    if (parent!.formModel != null) {
-      switch (parent!.formModel!.formMode) {
-        case FormMode.none:
-          return Actionable.no(
-            message:
-                "Disallow editing items when the ancestor block form is in 'none' mode.",
-          );
-        case FormMode.creation:
-          return Actionable.no(
-            message:
-                "Disallow editing items when the ancestor block form is in 'creation' mode.",
-          );
-        case FormMode.edit:
-          break; // Do nothing
-      }
     }
     return parent!.__checkAncestorsSafeToEditItem(item: null);
   }
@@ -3778,10 +3759,10 @@ abstract class Block<
       );
     }
     //
-    // Actionable ancestorsSafe = __checkAncestorsSafeToDelete(item);
-    // if (!ancestorsSafe.yes) {
-    //   return ancestorsSafe;
-    // }
+    Actionable ancestorsSafe = __checkAncestorsSafeToDelete(item);
+    if (!ancestorsSafe.yes) {
+      return ancestorsSafe;
+    }
     //
     return checkAllow ? __isAllowDeleteItem(item: item) : Actionable.yes();
   }
@@ -3916,21 +3897,22 @@ abstract class Block<
           message:
               "This item cannot be edited on the form because this block does not have a form.");
     }
-    if (__isSaving) {
+    if (FlutterArtist.executor.isBusy) {
       return Actionable.no(
-          message:
-              "This item cannot be edited on the form because the block is in a data-saving state.");
+        message: "Item edit is disabled because the executor is busy.",
+      );
     }
     //
-    // Actionable ancestorsSafe = __checkAncestorsSafeToEditItem(item: item);
-    // if (!ancestorsSafe.yes) {
-    //   return ancestorsSafe;
-    // }
+    Actionable ancestorsSafe = __checkAncestorsSafeToEditItem(item: item);
+    if (!ancestorsSafe.yes) {
+      return ancestorsSafe;
+    }
+    //
     switch (formModel!.data._formMode) {
       case FormMode.none:
         return Actionable.no(
           message:
-              "Disallow editing items when the block form is in 'none' mode.",
+              "Item edit is disabled because the block form is in 'none' mode.",
         );
       case FormMode.creation:
         break; // Do nothing.
@@ -3948,24 +3930,21 @@ abstract class Block<
   /// Edit on creation-mode
   ///
   Actionable __isEnableFormToModify({required bool checkAllow}) {
-    if (formModel != null) {
-      switch (formModel!.data._formMode) {
-        case FormMode.creation:
-          return Actionable.yes();
-        case FormMode.edit:
-          break; // Continue check below.
-        case FormMode.none:
-          return Actionable.no(
-              message: "Form disabled because it in 'none' mode");
-      }
-    }
-    if (this.data.currentItemDetail == null) {
+    if (formModel == null) {
       return Actionable.no(
-          message: "Form disabled because the block has no current item");
+          message:
+              "This item cannot be edited on the form because this block does not have a form.");
     }
-    if (__isRefreshingCurrentItem) {
-      return Actionable.no(
-          message: "Form disabled because the block in refreshing state");
+    //
+    switch (formModel!.data._formMode) {
+      case FormMode.none:
+        return Actionable.no(
+          message: "Form disabled because it in 'none' mode",
+        );
+      case FormMode.creation:
+        return Actionable.yes();
+      case FormMode.edit:
+        break; // Continue check below.
     }
     //
     return __canEditItemOnForm(
