@@ -197,7 +197,7 @@ abstract class FilterModel<
       if (filterInput != null) {
         for (SimpleCriterion simpleCriterion
             in _filterCriteriaStructure._simpleCriteria) {
-          Object? value = filterInputToSimpleCriterionValue(
+          Object? value = getSimpleCriterionValueFromFilterInput(
             filterInput: filterInput,
             criterionName: simpleCriterion.criterionName,
           );
@@ -467,7 +467,7 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  Object? filterInputToSimpleCriterionValue({
+  Object? getSimpleCriterionValueFromFilterInput({
     required FILTER_INPUT filterInput,
     required String criterionName,
   });

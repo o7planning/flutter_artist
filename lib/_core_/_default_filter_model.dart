@@ -44,7 +44,7 @@ class _DefaultFilterModel
   }
 
   @override
-  Object? filterInputToSimpleCriterionValue({
+  Object? getSimpleCriterionValueFromFilterInput({
     required EmptyFilterInput filterInput,
     required String criterionName,
   }) {
@@ -109,7 +109,7 @@ class StringIdFilterModel
   }
 
   @override
-  Object? filterInputToSimpleCriterionValue({
+  Object? getSimpleCriterionValueFromFilterInput({
     required StringIdFilterInput filterInput,
     required String criterionName,
   }) {
@@ -174,7 +174,7 @@ class StringValueFilterModel
   }
 
   @override
-  Object? filterInputToSimpleCriterionValue({
+  Object? getSimpleCriterionValueFromFilterInput({
     required StringValueFilterInput filterInput,
     required String criterionName,
   }) {
@@ -239,7 +239,7 @@ class SearchTextFilterModel
   }
 
   @override
-  Object? filterInputToSimpleCriterionValue({
+  Object? getSimpleCriterionValueFromFilterInput({
     required SearchTextFilterInput filterInput,
     required String criterionName,
   }) {
@@ -304,7 +304,7 @@ class IntIdFilterModel
   }
 
   @override
-  Object? filterInputToSimpleCriterionValue({
+  Object? getSimpleCriterionValueFromFilterInput({
     required IntIdFilterInput filterInput,
     required String criterionName,
   }) {
