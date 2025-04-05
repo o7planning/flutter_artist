@@ -10,4 +10,9 @@ abstract class _TaskUnit {
   String getObjectName();
 
   Shelf get shelf;
+
+  @override
+  String toString() {
+    return "${getClassName(this)}(${getObjectName()})";
+  }
 }
