@@ -309,13 +309,13 @@ part '_utils_/_patch_utils.dart';
 
 part '_core_/_executor.dart';
 
-part '_prop/_filter_props_structure.dart';
+part '_filter_criterion/_filter_props_structure.dart';
 
-part '_prop/_form_props_structure.dart';
+part '_form_prop/_form_props_structure.dart';
 
 part '_core_/_actionable.dart';
 
-part '_prop/_prop.dart';
+part '_form_prop/_prop.dart';
 
 part '_task_unit_/_block_prepare_to_create_item_task_unit.dart';
 
@@ -325,11 +325,17 @@ part '_enum_/_item_creation_type.dart';
 
 part '_actionable_/_cre_item_actionable.dart';
 
-part '_prop/_simple_prop.dart';
+part '_filter_criterion/_simple_criterion.dart';
 
-part '_prop/_opt_prop.dart';
+part '_filter_criterion/_opt_criterion.dart';
 
-part '_prop/_prop_value.dart';
+part '_filter_criterion/_criterion.dart';
+
+part '_form_prop/_simple_prop.dart';
+
+part '_form_prop/_opt_prop.dart';
+
+part '_form_prop/_prop_value.dart';
 
 part '_task_unit_/_block_query_task_unit.dart';
 

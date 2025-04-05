@@ -44,7 +44,7 @@ abstract class FilterModel<
 
   bool _defaultValueInitiated = false;
 
-  late final FilterPropsStructure _filterPropsStructure;
+  late final FilterCriterionsStructure _filterPropsStructure;
 
   bool _initiated = false;
 
@@ -80,8 +80,8 @@ abstract class FilterModel<
 
   ///
   /// ```dart
-  /// FilterPropsStructure registerPropsStructure() {
-  ///   return FilterPropsStructure(
+  /// FilterCriterionsStructure registerPropsStructure() {
+  ///   return FilterCriterionsStructure(
   ///     simpleProps: [],
   ///     optProps: [
   ///       OptProp(
@@ -96,16 +96,16 @@ abstract class FilterModel<
   ///   );
   /// }
   /// ```
-  FilterPropsStructure? registerPropsStructure();
+  FilterCriterionsStructure? registerPropsStructure();
 
   // ***************************************************************************
   // ***************************************************************************
 
   void __registerPropsStructure() {
     _filterPropsStructure = registerPropsStructure() ??
-        FilterPropsStructure(
-          simpleProps: [],
-          optProps: [],
+        FilterCriterionsStructure(
+          simpleCriterions: [],
+          optCriterions: [],
         );
   }
 
@@ -113,7 +113,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   XOptionedData? getOptPropXData(String propName) {
-    return _filterPropsStructure._getOptPropData(propName);
+    return _filterPropsStructure._getOptCriterionData(propName);
   }
 
   dynamic getOptPropData(String propName) {
@@ -136,7 +136,7 @@ abstract class FilterModel<
   }
 
   OptPropType? getOptPropType(String propName) {
-    return _filterPropsStructure._getOptPropType(propName);
+    return _filterPropsStructure._getOptCriterionType(propName);
   }
 
   // ***************************************************************************
@@ -149,41 +149,6 @@ abstract class FilterModel<
 
   // ***************************************************************************
   // ***************************************************************************
-
-  ///
-  /// Note: This method Patch value for [_formKey.currentState] silently,
-  /// it will not call [onChange] event of Fields.
-  ///
-  /// If call [_formKey.currentState?.patchValue] method, it will call [onChange] event.
-  ///
-  /// TODO: Need to catch error??
-  ///
-  void _formKeyPatchValueSilently({
-    required Map<String, dynamic> newCurrentValue,
-  }) {
-    try {
-      _lockAddMoreQuery = true;
-      //
-      for (String key in newCurrentValue.keys) {
-        dynamic value = newCurrentValue[key];
-        //
-        //
-        // IMPORTANT:
-        //  Update FormBuilder View State:
-        //
-        _formKey.currentState?.fields[key]?.setValue(
-          value,
-          //
-          // populateForm: true ---> _formKey.currentState?setInternalFieldValue(key,value)
-          // populateForm: false ---> [Do nothing]
-          //
-          populateForm: true, // [Update FormBuilder Model]
-        );
-      }
-    } finally {
-      _lockAddMoreQuery = false;
-    }
-  }
 
   void _formKeyPatchValue({required Map<String, dynamic> newCurrentValue}) {
     try {
@@ -228,7 +193,7 @@ abstract class FilterModel<
       );
       _filterPropsStructure._printTemporaryInfo("@1");
       //
-      for (OptProp optProp in _filterPropsStructure._rootOptProps) {
+      for (OptCriterion optProp in _filterPropsStructure._rootOptCriterions) {
         //
         // Load OptProp Data and set default and selected.
         //
@@ -242,25 +207,25 @@ abstract class FilterModel<
       }
       _filterPropsStructure._printTemporaryInfo("@2");
       if (filterInput != null) {
-        for (SimpleProp commonMasterProp
-            in _filterPropsStructure._simpleProps) {
+        for (SimpleCriterion commonMasterProp
+            in _filterPropsStructure._simpleCriterions) {
           Object? value = filterInputToCommonPropValue(
             filterInput: filterInput,
             propName: commonMasterProp.propName,
           );
-          _filterPropsStructure._setTempSimplePropData(
+          _filterPropsStructure._setTempSimpleCriterionData(
             propName: commonMasterProp.propName,
             value: value,
           );
         }
       } else {
         if (!_defaultValueInitiated) {
-          for (SimpleProp commonMasterProp
-              in _filterPropsStructure._simpleProps) {
+          for (SimpleCriterion commonMasterProp
+              in _filterPropsStructure._simpleCriterions) {
             Object? value = specifyDefaultCommonPropValue(
               propName: commonMasterProp.propName,
             );
-            _filterPropsStructure._setTempSimplePropData(
+            _filterPropsStructure._setTempSimpleCriterionData(
               propName: commonMasterProp.propName,
               value: value,
             );
@@ -351,19 +316,19 @@ abstract class FilterModel<
   Future<void> _loadOptPropDataCascade({
     required FILTER_INPUT? filterInput,
     required Object? parentOptPropValue, // May be new selected parent value.
-    required OptProp optProp,
+    required OptCriterion optProp,
   }) async {
     final String propName = optProp.propName;
 
-    final OptProp? optPropParent = optProp.parent;
+    final OptCriterion? optPropParent = optProp.parent;
 
     // Get current MasterProp data:
     XOptionedData? optPropData =
-        _filterPropsStructure._getOptPropData(propName);
+        _filterPropsStructure._getOptCriterionData(propName);
 
     if (optPropParent != null) {
       XOptionedData? tempXOptionedParent =
-          _filterPropsStructure._getTempOptPropData(
+          _filterPropsStructure._getTempOptCriterionData(
         optPropParent.propName,
       );
       //
@@ -386,7 +351,7 @@ abstract class FilterModel<
     }
     //
     if (optPropData == null) {
-      _filterPropsStructure._setTempOptPropData(
+      _filterPropsStructure._setTempOptCriterionData(
         propName: propName,
         optionedData: null,
       );
@@ -432,7 +397,7 @@ abstract class FilterModel<
       // It can be a single value or a List.
       //
       final dynamic tempCurrentValue =
-          _filterPropsStructure._getTempCurrentPropValue(
+          _filterPropsStructure._getTempCurrentCriterionValue(
         propName: propName,
       );
       //
@@ -462,7 +427,7 @@ abstract class FilterModel<
       candidateSelectedItems = null;
     }
     //
-    _filterPropsStructure._setTempOptPropData(
+    _filterPropsStructure._setTempOptCriterionData(
       propName: propName,
       optionedData: optPropData,
     );
@@ -493,12 +458,12 @@ abstract class FilterModel<
     }
     //
     Object? tempSelectedPropValue =
-        _filterPropsStructure._getTempCurrentPropValue(
+        _filterPropsStructure._getTempCurrentCriterionValue(
       propName: propName,
     );
 
     if (tempSelectedPropValue != null) {
-      for (OptProp child in optProp.children) {
+      for (OptCriterion child in optProp.children) {
         await _loadOptPropDataCascade(
           filterInput: filterInput,
           parentOptPropValue: tempSelectedPropValue,

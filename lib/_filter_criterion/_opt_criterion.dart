@@ -1,0 +1,112 @@
+part of '../flutter_artist.dart';
+
+class OptCriterion extends Criterion {
+  OptPropType? type;
+  late final OptCriterion? parent;
+
+  ///
+  /// In most cases this value is [true].
+  /// For example a Dropdown that only allows selection of one element.
+  ///
+  /// IMPORTANT:
+  ///
+  /// Make sure you set the appropriate value for this property, otherwise an error will occur.
+  /// For example: An error occurs when the library tries to set multiple selection values for the Dropdown.
+  ///
+  bool singleSelection;
+  final List<OptCriterion> children;
+
+  XOptionedData? _xOptionedData;
+
+  XOptionedData? _tempXOptionedData;
+
+  OptCriterion({
+    required super.propName,
+    this.type,
+    this.children = const [],
+    this.singleSelection = true,
+  });
+
+  void _checkCycleError() {
+    OptCriterion? p = parent;
+    final List<String> propNames = [propName];
+    while (true) {
+      if (p == null) {
+        return;
+      }
+      if (propNames.contains(p.propName)) {
+        String message = '''
+          The parent-child relationship of several properties forms a cycle.
+          ┌─────┐
+          |  ${propNames.last}
+          ↑     ↓
+          |  ${p.propName}
+          └─────┘
+        ''';
+        throw message;
+      }
+      propNames.add(p.propName);
+      p = p.parent;
+    }
+  }
+
+  void _updateTempValueCascade({
+    required Map<String, dynamic> tempCurrentFormData,
+    required Map<String, dynamic> updateValues,
+  }) {
+    if (!_valueUpdated && _dirty) {
+      final dynamic oldValue = tempCurrentFormData[propName];
+      final dynamic newValue = updateValues[propName];
+      //
+      candidateUpdateValue = newValue;
+      _valueUpdated = true;
+      //
+      bool isSame;
+      if (_tempXOptionedData != null) {
+        if (singleSelection) {
+          isSame = _tempXOptionedData!.isSame(item1: oldValue, item2: newValue);
+        } else {
+          isSame = _tempXOptionedData!.isSameItemOrItemList(
+            itemOrItemList1: oldValue,
+            itemOrItemList2: newValue,
+          );
+        }
+      } else {
+        isSame = false;
+      }
+      //
+      if (_tempXOptionedData == null || newValue == null || !isSame) {
+        for (OptCriterion childItem in children) {
+          childItem._tempXOptionedData = null;
+          updateValues[childItem.propName] = null;
+          childItem._dirty = true;
+        }
+      }
+    }
+    //
+    for (OptCriterion childItem in children) {
+      childItem._updateTempValueCascade(
+        tempCurrentFormData: tempCurrentFormData,
+        updateValues: updateValues,
+      );
+    }
+  }
+
+  void _printTempInfoCascade({required int indentFactor}) {
+    print(
+        "${("- - - " * indentFactor)} $propName >>> UpdateV: $candidateUpdateValue >>> tempXOptionedData: $_tempXOptionedData");
+    for (var child in children) {
+      child._printTempInfoCascade(indentFactor: indentFactor + 1);
+    }
+  }
+
+  @override
+  void _resetForNewTransaction() {
+    _tempXOptionedData = null;
+  }
+
+  @override
+  void _applyTempDataToReal() {
+    _xOptionedData = _tempXOptionedData;
+  }
+}

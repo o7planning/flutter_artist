@@ -11,7 +11,7 @@ class _DefaultFilterModel
   }
 
   @override
-  FilterPropsStructure? registerPropsStructure() {
+  FilterCriterionsStructure? registerPropsStructure() {
     return null;
   }
 
@@ -73,7 +73,7 @@ class StringIdFilterModel
   StringIdFilterModel({required this.idValue});
 
   @override
-  FilterPropsStructure? registerPropsStructure() {
+  FilterCriterionsStructure? registerPropsStructure() {
     return null;
   }
 
@@ -135,7 +135,7 @@ class StringValueFilterModel
   StringValueFilterModel({required this.stringValue});
 
   @override
-  FilterPropsStructure? registerPropsStructure() {
+  FilterCriterionsStructure? registerPropsStructure() {
     return null;
   }
 
@@ -197,7 +197,7 @@ class SearchTextFilterModel
   SearchTextFilterModel({required this.searchText});
 
   @override
-  FilterPropsStructure? registerPropsStructure() {
+  FilterCriterionsStructure? registerPropsStructure() {
     return null;
   }
 
@@ -259,7 +259,7 @@ class IntIdFilterModel
   IntIdFilterModel({required this.idValue});
 
   @override
-  FilterPropsStructure? registerPropsStructure() {
+  FilterCriterionsStructure? registerPropsStructure() {
     return null;
   }
 

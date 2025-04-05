@@ -1,30 +1,30 @@
 part of '../flutter_artist.dart';
 
-class FilterPropsStructure {
-  final Map<String, Prop> _allPropMap = {};
-  final List<OptProp> _rootOptProps;
-  final List<SimpleProp> _simpleProps = [];
+class FilterCriterionsStructure {
+  final Map<String, Criterion> _allCriterionMap = {};
+  final List<OptCriterion> _rootOptCriterions;
+  final List<SimpleCriterion> _simpleCriterions = [];
 
   //
   final Map<String, dynamic> _tempCurrentFormData = {};
 
-  FilterPropsStructure({
-    required List<String> simpleProps,
-    required List<OptProp> optProps,
-  }) : _rootOptProps = [...optProps] {
-    final List<String> simplePropList = [...simpleProps];
+  FilterCriterionsStructure({
+    required List<String> simpleCriterions,
+    required List<OptCriterion> optCriterions,
+  }) : _rootOptCriterions = [...optCriterions] {
+    final List<String> simpleCriterionList = [...simpleCriterions];
     //
-    for (OptProp rootOptProp in optProps) {
-      __standardizeCascade(rootOptProp, null);
+    for (OptCriterion rootOptCriterion in optCriterions) {
+      __standardizeCascade(rootOptCriterion, null);
     }
-    for (Prop prop in _allPropMap.values) {
-      simplePropList.remove(prop.propName);
-      if (prop is OptProp) {
+    for (Criterion prop in _allCriterionMap.values) {
+      simpleCriterionList.remove(prop.propName);
+      if (prop is OptCriterion) {
         prop._checkCycleError();
       }
     }
-    for (String propName in simplePropList) {
-      _createAndAddNewCommomProp(
+    for (String propName in simpleCriterionList) {
+      _createAndAddNewCommomCriterion(
         propName: propName,
         dirty: false,
       );
@@ -32,26 +32,26 @@ class FilterPropsStructure {
   }
 
   void __standardizeCascade(
-    OptProp optProp,
-    OptProp? parent,
+    OptCriterion optCriterion,
+    OptCriterion? parent,
   ) {
-    optProp.parent = parent;
-    _allPropMap[optProp.propName] = optProp;
+    optCriterion.parent = parent;
+    _allCriterionMap[optCriterion.propName] = optCriterion;
     //
-    for (OptProp child in optProp.children) {
-      __standardizeCascade(child, optProp);
+    for (OptCriterion child in optCriterion.children) {
+      __standardizeCascade(child, optCriterion);
     }
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _isOptProp(String propName) {
-    Prop? prop = _allPropMap[propName];
+  bool _isOptCriterion(String propName) {
+    Criterion? prop = _allCriterionMap[propName];
     if (prop == null) {
       return false;
     }
-    if (prop is OptProp) {
+    if (prop is OptCriterion) {
       return true;
     }
     return false;
@@ -67,7 +67,7 @@ class FilterPropsStructure {
       ..updateAll((k, v) => null)
       ..addAll(currentFormData ?? {});
     //
-    for (Prop prop in _allPropMap.values) {
+    for (Criterion prop in _allCriterionMap.values) {
       prop._resetForNewTransaction();
     }
   }
@@ -76,7 +76,7 @@ class FilterPropsStructure {
   // ***************************************************************************
 
   void _applyAllTempDataToReal() {
-    for (Prop prop in _allPropMap.values) {
+    for (Criterion prop in _allCriterionMap.values) {
       prop._applyTempDataToReal();
     }
   }
@@ -84,41 +84,41 @@ class FilterPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  dynamic _getTempCurrentPropValue({required String propName}) {
+  dynamic _getTempCurrentCriterionValue({required String propName}) {
     return _tempCurrentFormData[propName];
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  XOptionedData? _getTempOptPropData(String propName) {
-    Prop? prop = _allPropMap[propName];
+  XOptionedData? _getTempOptCriterionData(String propName) {
+    Criterion? prop = _allCriterionMap[propName];
     if (prop == null) {
       return null;
     }
-    if (prop is OptProp) {
+    if (prop is OptCriterion) {
       return prop._tempXOptionedData;
     }
     return null;
   }
 
-  XOptionedData? _getOptPropData(String propName) {
-    Prop? prop = _allPropMap[propName];
+  XOptionedData? _getOptCriterionData(String propName) {
+    Criterion? prop = _allCriterionMap[propName];
     if (prop == null) {
       return null;
     }
-    if (prop is OptProp) {
+    if (prop is OptCriterion) {
       return prop._xOptionedData;
     }
     return null;
   }
 
-  OptPropType? _getOptPropType(String propName) {
-    Prop? prop = _allPropMap[propName];
+  OptPropType? _getOptCriterionType(String propName) {
+    Criterion? prop = _allCriterionMap[propName];
     if (prop == null) {
       return null;
     }
-    if (prop is OptProp) {
+    if (prop is OptCriterion) {
       return prop.type;
     }
     return null;
@@ -131,42 +131,42 @@ class FilterPropsStructure {
     final candidateUpdateValues = {...updateData};
     //
     // IMPORTANT:
-    // Update data for FilterPropsStructure. From ROOTs to LEAVES.
+    // Update data for FilterCriterionsStructure. From ROOTs to LEAVES.
     // (***):
-    // And Update children-OptProp data to null if parent-Value is null or not selected.
+    // And Update children-OptCriterion data to null if parent-Value is null or not selected.
     //
-    for (Prop prop in _allPropMap.values) {
+    for (Criterion prop in _allCriterionMap.values) {
       prop.candidateUpdateValue = null;
       prop._valueUpdated = false;
       prop._dirty = false;
     }
     //
     for (String propName in candidateUpdateValues.keys) {
-      Prop? prop = _allPropMap[propName];
+      Criterion? prop = _allCriterionMap[propName];
       if (prop != null) {
         prop._dirty = true;
       } else {
-        _createAndAddNewCommomProp(
+        _createAndAddNewCommomCriterion(
           propName: propName,
           dirty: true,
         );
       }
     }
     //
-    for (OptProp rootProp in _rootOptProps) {
-      rootProp._updateTempValueCascade(
+    for (OptCriterion rootCriterion in _rootOptCriterions) {
+      rootCriterion._updateTempValueCascade(
         tempCurrentFormData: _tempCurrentFormData,
         updateValues: candidateUpdateValues,
       );
     }
-    for (SimpleProp simpleProp in _simpleProps) {
-      simpleProp._updateTempValue(
+    for (SimpleCriterion simpleCriterion in _simpleCriterions) {
+      simpleCriterion._updateTempValue(
         tempCurrentFormData: _tempCurrentFormData,
         updateValues: candidateUpdateValues,
       );
     }
-    // Apply to all dirty Prop:
-    for (Prop prop in _allPropMap.values) {
+    // Apply to all dirty Criterion:
+    for (Criterion prop in _allCriterionMap.values) {
       if (prop._dirty) {
         _tempCurrentFormData[prop.propName] = prop.candidateUpdateValue;
       }
@@ -176,44 +176,44 @@ class FilterPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _createAndAddNewCommomProp({
+  void _createAndAddNewCommomCriterion({
     required String propName,
     required bool dirty,
   }) {
-    if (_allPropMap.containsKey(propName)) {
+    if (_allCriterionMap.containsKey(propName)) {
       return;
     }
-    SimpleProp? newSimpleProp = SimpleProp(
+    SimpleCriterion? newSimpleCriterion = SimpleCriterion(
       propName: propName,
     );
-    newSimpleProp._dirty = dirty;
-    _allPropMap[propName] = newSimpleProp;
-    _simpleProps.add(newSimpleProp);
+    newSimpleCriterion._dirty = dirty;
+    _allCriterionMap[propName] = newSimpleCriterion;
+    _simpleCriterions.add(newSimpleCriterion);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void _setTempOptPropData({
+  void _setTempOptCriterionData({
     required String propName,
     required XOptionedData? optionedData,
   }) {
-    Prop? prop = _allPropMap[propName];
+    Criterion? prop = _allCriterionMap[propName];
     if (prop == null) {
-      throw AppException(message: 'No Prop $propName');
+      throw AppException(message: 'No Criterion $propName');
     }
-    if (prop is OptProp) {
+    if (prop is OptCriterion) {
       prop._tempXOptionedData = optionedData;
     } else {
       throw AppException(
-          message: 'Invalid Prop $propName, it must be $OptProp');
+          message: 'Invalid Criterion $propName, it must be $OptCriterion');
     }
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void _setTempSimplePropData({
+  void _setTempSimpleCriterionData({
     required String propName,
     required Object? value,
   }) {
@@ -223,10 +223,10 @@ class FilterPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _addSimpleProp(SimpleProp prop) {
-    if (!_allPropMap.containsKey(prop.propName)) {
-      _allPropMap[prop.propName] = prop;
-      _simpleProps.add(prop);
+  void _addSimpleCriterion(SimpleCriterion prop) {
+    if (!_allCriterionMap.containsKey(prop.propName)) {
+      _allCriterionMap[prop.propName] = prop;
+      _simpleCriterions.add(prop);
     }
   }
 
@@ -236,7 +236,7 @@ class FilterPropsStructure {
   void _printTemporaryInfo(String prefix) {
     print("\n\n--------------------------------------------------------------");
     print(" ---> $prefix");
-    for (OptProp rootItem in _rootOptProps) {
+    for (OptCriterion rootItem in _rootOptCriterions) {
       rootItem._printTempInfoCascade(indentFactor: 1);
     }
     print("tempCurrentFormData: $_tempCurrentFormData");
