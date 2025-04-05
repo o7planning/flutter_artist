@@ -11,8 +11,11 @@ class _DefaultFilterModel
   }
 
   @override
-  FilterCriteriaStructure? registerPropsStructure() {
-    return null;
+  FilterCriteriaStructure registerCriteriaStructure() {
+    return FilterCriteriaStructure(
+      simpleCriteria: [],
+      optCriteria: [],
+    );
   }
 
   @override
@@ -32,7 +35,7 @@ class _DefaultFilterModel
   }
 
   @override
-  PropValue? filterInputToOptCriterionValue({
+  PropValue? getOptCriterionValueFromFilterInput({
     required EmptyFilterInput filterInput,
     required XOptionedData optCriterionData,
     required String propName,
@@ -73,8 +76,11 @@ class StringIdFilterModel
   StringIdFilterModel({required this.idValue});
 
   @override
-  FilterCriteriaStructure? registerPropsStructure() {
-    return null;
+  FilterCriteriaStructure registerCriteriaStructure() {
+    return FilterCriteriaStructure(
+      simpleCriteria: [],
+      optCriteria: [],
+    );
   }
 
   @override
@@ -94,7 +100,7 @@ class StringIdFilterModel
   }
 
   @override
-  PropValue? filterInputToOptCriterionValue({
+  PropValue? getOptCriterionValueFromFilterInput({
     required StringIdFilterInput filterInput,
     required XOptionedData optCriterionData,
     required String propName,
@@ -135,8 +141,11 @@ class StringValueFilterModel
   StringValueFilterModel({required this.stringValue});
 
   @override
-  FilterCriteriaStructure? registerPropsStructure() {
-    return null;
+  FilterCriteriaStructure registerCriteriaStructure() {
+    return FilterCriteriaStructure(
+      simpleCriteria: [],
+      optCriteria: [],
+    );
   }
 
   @override
@@ -156,7 +165,7 @@ class StringValueFilterModel
   }
 
   @override
-  PropValue? filterInputToOptCriterionValue({
+  PropValue? getOptCriterionValueFromFilterInput({
     required StringValueFilterInput filterInput,
     required XOptionedData optCriterionData,
     required String propName,
@@ -197,8 +206,11 @@ class SearchTextFilterModel
   SearchTextFilterModel({required this.searchText});
 
   @override
-  FilterCriteriaStructure? registerPropsStructure() {
-    return null;
+  FilterCriteriaStructure registerCriteriaStructure() {
+    return FilterCriteriaStructure(
+      simpleCriteria: [],
+      optCriteria: [],
+    );
   }
 
   @override
@@ -218,7 +230,7 @@ class SearchTextFilterModel
   }
 
   @override
-  PropValue? filterInputToOptCriterionValue({
+  PropValue? getOptCriterionValueFromFilterInput({
     required SearchTextFilterInput filterInput,
     required XOptionedData optCriterionData,
     required String propName,
@@ -259,8 +271,11 @@ class IntIdFilterModel
   IntIdFilterModel({required this.idValue});
 
   @override
-  FilterCriteriaStructure? registerPropsStructure() {
-    return null;
+  FilterCriteriaStructure registerCriteriaStructure() {
+    return FilterCriteriaStructure(
+      simpleCriteria: [],
+      optCriteria: [],
+    );
   }
 
   @override
@@ -280,7 +295,7 @@ class IntIdFilterModel
   }
 
   @override
-  PropValue? filterInputToOptCriterionValue({
+  PropValue? getOptCriterionValueFromFilterInput({
     required IntIdFilterInput filterInput,
     required XOptionedData optCriterionData,
     required String propName,

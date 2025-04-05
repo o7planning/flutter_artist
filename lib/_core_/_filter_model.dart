@@ -27,12 +27,12 @@ abstract class FilterModel<
   ///
   /// Map<CriteriaId, EmptyFilterCriteria>
   ///
-  final Map<int, FILTER_CRITERIA> __filterCriteriasMap = {};
+  final Map<int, FILTER_CRITERIA> __filterCriteriaMap = {};
 
   FILTER_CRITERIA? get currentSuccessFilterCriteria {
     return __currentSuccessCriteriaId == null
         ? null
-        : __filterCriteriasMap[__currentSuccessCriteriaId];
+        : __filterCriteriaMap[__currentSuccessCriteriaId];
   }
 
   FILTER_CRITERIA? _filterCriteria;
@@ -96,17 +96,13 @@ abstract class FilterModel<
   ///   );
   /// }
   /// ```
-  FilterCriteriaStructure? registerPropsStructure();
+  FilterCriteriaStructure registerCriteriaStructure();
 
   // ***************************************************************************
   // ***************************************************************************
 
   void __registerCriteriaStructure() {
-    _filterCriteriaStructure = registerPropsStructure() ??
-        FilterCriteriaStructure(
-          simpleCriteria: [],
-          optCriteria: [],
-        );
+    _filterCriteriaStructure = registerCriteriaStructure() ;
   }
 
   // ***************************************************************************
@@ -372,7 +368,7 @@ abstract class FilterModel<
     if (optCriterionData != null) {
       PropValue? inputValueWrap;
       if (filterInput != null) {
-        inputValueWrap = _filterInputToOptCriterionValue(
+        inputValueWrap = _getOptCriterionValueFromFilterInput(
           filterInput: filterInput,
           optCriterionData: optCriterionData,
           criterionName: criterionName,
@@ -484,7 +480,7 @@ abstract class FilterModel<
   ///
   /// ```dart
   /// @override
-  /// MasterPropValueWrap? filterInputToOptCriterionValue({
+  /// MasterPropValueWrap? getOptCriterionValueFromFilterInput({
   ///     required ExampleFilterInput filterInput,
   ///     required XOptionedData optPropData,
   ///     required String propName,
@@ -498,7 +494,8 @@ abstract class FilterModel<
   /// }
   /// ```
   ///
-  PropValue? filterInputToOptCriterionValue({
+  /// TODO: DELETE: filterInputToOptCriterionValue ***
+  PropValue? getOptCriterionValueFromFilterInput({
     required FILTER_INPUT filterInput,
     required XOptionedData optCriterionData,
     required String propName,
@@ -513,12 +510,12 @@ abstract class FilterModel<
     required String propName,
   });
 
-  PropValue? _filterInputToOptCriterionValue({
+  PropValue? _getOptCriterionValueFromFilterInput({
     required FILTER_INPUT filterInput,
     required XOptionedData optCriterionData,
     required String criterionName,
   }) {
-    PropValue? wrap = filterInputToOptCriterionValue(
+    PropValue? wrap = getOptCriterionValueFromFilterInput(
       filterInput: filterInput,
       optCriterionData: optCriterionData,
       propName: criterionName,
@@ -555,35 +552,6 @@ abstract class FilterModel<
         removeCurrentNotFoundItems: true,
       ),
     );
-  }
-
-  ///
-  /// This method is called after [prepareMasterData] method.
-  ///
-  /// For example, after getting a list of companies from the [prepareMasterData] method.
-  /// Use [FilterInput] to identify a company that will be used as a criterion for the filter.
-  ///
-  /// ```dart
-  /// @override
-  /// List<Object>? filterInputToCriterionValue({
-  ///    required CompanyIdFilterInput filterInput,
-  /// }) {
-  ///    int inputCompanyId = filterInput.filterInput;
-  ///
-  ///    TODO: Viet tiep...
-  ///
-  ///    CompanyInfo inputCompany = companyXList?.getItemById(inputCompanyId);
-  ///    return {
-  ///       "company": inputCompany,
-  ///    };
-  /// }
-  /// ```
-  ///
-  List<Object>? filterInputToCriterionValue({
-    required FILTER_INPUT? filterInput,
-    required String propName,
-  }) {
-    return null;
   }
 
   // ***************************************************************************
