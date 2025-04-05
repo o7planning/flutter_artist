@@ -1,31 +1,31 @@
 part of '../flutter_artist.dart';
 
-class FilterCriterionsStructure {
-  final Map<String, Criterion> _allCriterionMap = {};
-  final List<OptCriterion> _rootOptCriterions;
-  final List<SimpleCriterion> _simpleCriterions = [];
+class FilterCriteriaStructure {
+  final Map<String, Criterion> _allCriteriaMap = {};
+  final List<OptCriterion> _rootOptCriteria;
+  final List<SimpleCriterion> _simpleCriteria = [];
 
   //
   final Map<String, dynamic> _tempCurrentFormData = {};
 
-  FilterCriterionsStructure({
-    required List<String> simpleCriterions,
-    required List<OptCriterion> optCriterions,
-  }) : _rootOptCriterions = [...optCriterions] {
-    final List<String> simpleCriterionList = [...simpleCriterions];
+  FilterCriteriaStructure({
+    required List<String> simpleCriteria,
+    required List<OptCriterion> optCriteria,
+  }) : _rootOptCriteria = [...optCriteria] {
+    final List<String> simpleCriterionList = [...simpleCriteria];
     //
-    for (OptCriterion rootOptCriterion in optCriterions) {
+    for (OptCriterion rootOptCriterion in optCriteria) {
       __standardizeCascade(rootOptCriterion, null);
     }
-    for (Criterion prop in _allCriterionMap.values) {
-      simpleCriterionList.remove(prop.propName);
-      if (prop is OptCriterion) {
-        prop._checkCycleError();
+    for (Criterion criterion in _allCriteriaMap.values) {
+      simpleCriterionList.remove(criterion.criterionName);
+      if (criterion is OptCriterion) {
+        criterion._checkCycleError();
       }
     }
     for (String propName in simpleCriterionList) {
       _createAndAddNewCommomCriterion(
-        propName: propName,
+        criterionName: propName,
         dirty: false,
       );
     }
@@ -36,7 +36,7 @@ class FilterCriterionsStructure {
     OptCriterion? parent,
   ) {
     optCriterion.parent = parent;
-    _allCriterionMap[optCriterion.propName] = optCriterion;
+    _allCriteriaMap[optCriterion.criterionName] = optCriterion;
     //
     for (OptCriterion child in optCriterion.children) {
       __standardizeCascade(child, optCriterion);
@@ -47,7 +47,7 @@ class FilterCriterionsStructure {
   // ***************************************************************************
 
   bool _isOptCriterion(String propName) {
-    Criterion? prop = _allCriterionMap[propName];
+    Criterion? prop = _allCriteriaMap[propName];
     if (prop == null) {
       return false;
     }
@@ -67,7 +67,7 @@ class FilterCriterionsStructure {
       ..updateAll((k, v) => null)
       ..addAll(currentFormData ?? {});
     //
-    for (Criterion prop in _allCriterionMap.values) {
+    for (Criterion prop in _allCriteriaMap.values) {
       prop._resetForNewTransaction();
     }
   }
@@ -76,7 +76,7 @@ class FilterCriterionsStructure {
   // ***************************************************************************
 
   void _applyAllTempDataToReal() {
-    for (Criterion prop in _allCriterionMap.values) {
+    for (Criterion prop in _allCriteriaMap.values) {
       prop._applyTempDataToReal();
     }
   }
@@ -92,7 +92,7 @@ class FilterCriterionsStructure {
   // ***************************************************************************
 
   XOptionedData? _getTempOptCriterionData(String propName) {
-    Criterion? prop = _allCriterionMap[propName];
+    Criterion? prop = _allCriteriaMap[propName];
     if (prop == null) {
       return null;
     }
@@ -103,7 +103,7 @@ class FilterCriterionsStructure {
   }
 
   XOptionedData? _getOptCriterionData(String propName) {
-    Criterion? prop = _allCriterionMap[propName];
+    Criterion? prop = _allCriteriaMap[propName];
     if (prop == null) {
       return null;
     }
@@ -114,7 +114,7 @@ class FilterCriterionsStructure {
   }
 
   OptPropType? _getOptCriterionType(String propName) {
-    Criterion? prop = _allCriterionMap[propName];
+    Criterion? prop = _allCriteriaMap[propName];
     if (prop == null) {
       return null;
     }
@@ -135,40 +135,40 @@ class FilterCriterionsStructure {
     // (***):
     // And Update children-OptCriterion data to null if parent-Value is null or not selected.
     //
-    for (Criterion prop in _allCriterionMap.values) {
+    for (Criterion prop in _allCriteriaMap.values) {
       prop.candidateUpdateValue = null;
       prop._valueUpdated = false;
       prop._dirty = false;
     }
     //
     for (String propName in candidateUpdateValues.keys) {
-      Criterion? prop = _allCriterionMap[propName];
+      Criterion? prop = _allCriteriaMap[propName];
       if (prop != null) {
         prop._dirty = true;
       } else {
         _createAndAddNewCommomCriterion(
-          propName: propName,
+          criterionName: propName,
           dirty: true,
         );
       }
     }
     //
-    for (OptCriterion rootCriterion in _rootOptCriterions) {
+    for (OptCriterion rootCriterion in _rootOptCriteria) {
       rootCriterion._updateTempValueCascade(
         tempCurrentFormData: _tempCurrentFormData,
         updateValues: candidateUpdateValues,
       );
     }
-    for (SimpleCriterion simpleCriterion in _simpleCriterions) {
+    for (SimpleCriterion simpleCriterion in _simpleCriteria) {
       simpleCriterion._updateTempValue(
         tempCurrentFormData: _tempCurrentFormData,
         updateValues: candidateUpdateValues,
       );
     }
     // Apply to all dirty Criterion:
-    for (Criterion prop in _allCriterionMap.values) {
+    for (Criterion prop in _allCriteriaMap.values) {
       if (prop._dirty) {
-        _tempCurrentFormData[prop.propName] = prop.candidateUpdateValue;
+        _tempCurrentFormData[prop.criterionName] = prop.candidateUpdateValue;
       }
     }
   }
@@ -177,18 +177,18 @@ class FilterCriterionsStructure {
   // ***************************************************************************
 
   void _createAndAddNewCommomCriterion({
-    required String propName,
+    required String criterionName,
     required bool dirty,
   }) {
-    if (_allCriterionMap.containsKey(propName)) {
+    if (_allCriteriaMap.containsKey(criterionName)) {
       return;
     }
     SimpleCriterion? newSimpleCriterion = SimpleCriterion(
-      propName: propName,
+      criterionName: criterionName,
     );
     newSimpleCriterion._dirty = dirty;
-    _allCriterionMap[propName] = newSimpleCriterion;
-    _simpleCriterions.add(newSimpleCriterion);
+    _allCriteriaMap[criterionName] = newSimpleCriterion;
+    _simpleCriteria.add(newSimpleCriterion);
   }
 
   // ***************************************************************************
@@ -198,7 +198,7 @@ class FilterCriterionsStructure {
     required String propName,
     required XOptionedData? optionedData,
   }) {
-    Criterion? prop = _allCriterionMap[propName];
+    Criterion? prop = _allCriteriaMap[propName];
     if (prop == null) {
       throw AppException(message: 'No Criterion $propName');
     }
@@ -214,19 +214,19 @@ class FilterCriterionsStructure {
   // ***************************************************************************
 
   void _setTempSimpleCriterionData({
-    required String propName,
+    required String criterionName,
     required Object? value,
   }) {
-    _tempCurrentFormData[propName] = value;
+    _tempCurrentFormData[criterionName] = value;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   void _addSimpleCriterion(SimpleCriterion prop) {
-    if (!_allCriterionMap.containsKey(prop.propName)) {
-      _allCriterionMap[prop.propName] = prop;
-      _simpleCriterions.add(prop);
+    if (!_allCriteriaMap.containsKey(prop.criterionName)) {
+      _allCriteriaMap[prop.criterionName] = prop;
+      _simpleCriteria.add(prop);
     }
   }
 
@@ -236,7 +236,7 @@ class FilterCriterionsStructure {
   void _printTemporaryInfo(String prefix) {
     print("\n\n--------------------------------------------------------------");
     print(" ---> $prefix");
-    for (OptCriterion rootItem in _rootOptCriterions) {
+    for (OptCriterion rootItem in _rootOptCriteria) {
       rootItem._printTempInfoCascade(indentFactor: 1);
     }
     print("tempCurrentFormData: $_tempCurrentFormData");

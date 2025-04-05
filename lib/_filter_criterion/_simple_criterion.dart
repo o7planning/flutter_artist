@@ -2,7 +2,7 @@ part of '../flutter_artist.dart';
 
 class SimpleCriterion extends Criterion {
   SimpleCriterion({
-    required super.propName,
+    required super.criterionName,
   });
 
   void _updateTempValue({
@@ -10,8 +10,8 @@ class SimpleCriterion extends Criterion {
     required Map<String, dynamic> updateValues,
   }) {
     if (!_valueUpdated && _dirty) {
-      final dynamic oldValue = tempCurrentFormData[propName];
-      final dynamic newValue = updateValues[propName];
+      final dynamic oldValue = tempCurrentFormData[criterionName];
+      final dynamic newValue = updateValues[criterionName];
       //
       candidateUpdateValue = newValue;
       _valueUpdated = true;

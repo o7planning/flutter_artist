@@ -44,7 +44,7 @@ abstract class FilterModel<
 
   bool _defaultValueInitiated = false;
 
-  late final FilterCriterionsStructure _filterPropsStructure;
+  late final FilterCriteriaStructure _filterCriteriaStructure;
 
   bool _initiated = false;
 
@@ -56,7 +56,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   FilterModel() {
-    __registerPropsStructure();
+    __registerCriteriaStructure();
   }
 
   // ***************************************************************************
@@ -80,15 +80,15 @@ abstract class FilterModel<
 
   ///
   /// ```dart
-  /// FilterCriterionsStructure registerPropsStructure() {
-  ///   return FilterCriterionsStructure(
-  ///     simpleProps: [],
-  ///     optProps: [
-  ///       OptProp(
-  ///         propName: "company",
+  /// FilterCriteriaStructure registerCriteriaStructure() {
+  ///   return FilterCriteriaStructure(
+  ///     simpleCriteria: [],
+  ///     optCriteria: [
+  ///       OptCriterion(
+  ///         criterionName: "company",
   ///         children: [
-  ///           OptProp(
-  ///              propName: "department",
+  ///           OptCriterion(
+  ///              criterionName: "department",
   ///           ),
   ///         ],
   ///       ),
@@ -96,54 +96,45 @@ abstract class FilterModel<
   ///   );
   /// }
   /// ```
-  FilterCriterionsStructure? registerPropsStructure();
+  FilterCriteriaStructure? registerPropsStructure();
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void __registerPropsStructure() {
-    _filterPropsStructure = registerPropsStructure() ??
-        FilterCriterionsStructure(
-          simpleCriterions: [],
-          optCriterions: [],
+  void __registerCriteriaStructure() {
+    _filterCriteriaStructure = registerPropsStructure() ??
+        FilterCriteriaStructure(
+          simpleCriteria: [],
+          optCriteria: [],
         );
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  XOptionedData? getOptPropXData(String propName) {
-    return _filterPropsStructure._getOptCriterionData(propName);
+  XOptionedData? getOptCriterionXData(String propName) {
+    return _filterCriteriaStructure._getOptCriterionData(propName);
   }
 
-  dynamic getOptPropData(String propName) {
-    XOptionedData? optPropData = getOptPropXData(propName);
-    dynamic data = optPropData?.data;
+  dynamic getOptCriterionData(String propName) {
+    XOptionedData? optCriterionData = getOptCriterionXData(propName);
+    dynamic data = optCriterionData?.data;
     if (data != null) {
       return data;
     } else {
       return data;
-      // OptPropType? type = getOptPropType(propName);
-      // switch (type) {
-      //   case null:
-      //     return data;
-      //   case OptPropType.list:
-      //     return [];
-      //   case OptPropType.custom:
-      //     return data;
-      // }
     }
   }
 
   OptPropType? getOptPropType(String propName) {
-    return _filterPropsStructure._getOptCriterionType(propName);
+    return _filterCriteriaStructure._getOptCriterionType(propName);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   void _printStructureAndTempData(String prefix) {
-    _filterPropsStructure._printTemporaryInfo(prefix);
+    _filterCriteriaStructure._printTemporaryInfo(prefix);
     print("instantData: ${_formKey.currentState?.instantValue}\n\n");
   }
 
@@ -186,47 +177,48 @@ abstract class FilterModel<
         data._initialFilterData(allNewValue);
       }
       //
-      _filterPropsStructure._initTemporaryForNewTransaction(
+      _filterCriteriaStructure._initTemporaryForNewTransaction(
         currentFormData: filterInput != null
             ? {} // To Clear All.
             : allNewValue,
       );
-      _filterPropsStructure._printTemporaryInfo("@1");
+      _filterCriteriaStructure._printTemporaryInfo("@1");
       //
-      for (OptCriterion optProp in _filterPropsStructure._rootOptCriterions) {
+      for (OptCriterion optCriterion
+          in _filterCriteriaStructure._rootOptCriteria) {
         //
-        // Load OptProp Data and set default and selected.
+        // Load OptCriterion Data and set default and selected.
         //
         // May throw ApiError.
         //
-        await _loadOptPropDataCascade(
+        await _loadOptCriterionDataCascade(
           filterInput: filterInput,
-          parentOptPropValue: null,
-          optProp: optProp,
+          parentOptCriterionValue: null,
+          optCriterion: optCriterion,
         );
       }
-      _filterPropsStructure._printTemporaryInfo("@2");
+      _filterCriteriaStructure._printTemporaryInfo("@2");
       if (filterInput != null) {
-        for (SimpleCriterion commonMasterProp
-            in _filterPropsStructure._simpleCriterions) {
-          Object? value = filterInputToCommonPropValue(
+        for (SimpleCriterion simpleCriterion
+            in _filterCriteriaStructure._simpleCriteria) {
+          Object? value = filterInputToSimpleCriterionValue(
             filterInput: filterInput,
-            propName: commonMasterProp.propName,
+            criterionName: simpleCriterion.criterionName,
           );
-          _filterPropsStructure._setTempSimpleCriterionData(
-            propName: commonMasterProp.propName,
+          _filterCriteriaStructure._setTempSimpleCriterionData(
+            criterionName: simpleCriterion.criterionName,
             value: value,
           );
         }
       } else {
         if (!_defaultValueInitiated) {
-          for (SimpleCriterion commonMasterProp
-              in _filterPropsStructure._simpleCriterions) {
-            Object? value = specifyDefaultCommonPropValue(
-              propName: commonMasterProp.propName,
+          for (SimpleCriterion simpleCriterion
+              in _filterCriteriaStructure._simpleCriteria) {
+            Object? value = specifyDefaultSimpleCriterionValue(
+              propName: simpleCriterion.criterionName,
             );
-            _filterPropsStructure._setTempSimpleCriterionData(
-              propName: commonMasterProp.propName,
+            _filterCriteriaStructure._setTempSimpleCriterionData(
+              criterionName: simpleCriterion.criterionName,
               value: value,
             );
           }
@@ -250,7 +242,7 @@ abstract class FilterModel<
     try {
       // Convert Map Data to FilterCriteria Object.
       FILTER_CRITERIA newCriteria = createFilterCriteria(
-        dataMap: _filterPropsStructure._tempCurrentFormData,
+        dataMap: _filterCriteriaStructure._tempCurrentFormData,
       );
       _filterCriteria = newCriteria;
       //
@@ -261,13 +253,13 @@ abstract class FilterModel<
       //
       this.data._currentFormData
         ..updateAll((k, v) => null)
-        ..addAll(_filterPropsStructure._tempCurrentFormData);
+        ..addAll(_filterCriteriaStructure._tempCurrentFormData);
 
       //
       // UPDATE OPT-DATA:
       //  - optProp._xOptionedData = optProp._tempXOptionedData;
       //
-      this._filterPropsStructure._applyAllTempDataToReal();
+      this._filterCriteriaStructure._applyAllTempDataToReal();
       //
       // IMPORTANT:
       //
@@ -304,70 +296,71 @@ abstract class FilterModel<
   ///
   /// Abstract method:
   ///
-  Future<XOptionedData?> callApiLoadOptPropData({
+  Future<XOptionedData?> callApiLoadOptCriterionData({
     required FILTER_INPUT? filterInput,
-    required Object? parentOptPropValue,
-    required String propName,
+    required Object? parentOptCriterionValue,
+    required String criterionName,
   });
 
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> _loadOptPropDataCascade({
+  Future<void> _loadOptCriterionDataCascade({
     required FILTER_INPUT? filterInput,
-    required Object? parentOptPropValue, // May be new selected parent value.
-    required OptCriterion optProp,
+    required Object?
+        parentOptCriterionValue, // May be new selected parent value.
+    required OptCriterion optCriterion,
   }) async {
-    final String propName = optProp.propName;
+    final String criterionName = optCriterion.criterionName;
 
-    final OptCriterion? optPropParent = optProp.parent;
+    final OptCriterion? optCriterionParent = optCriterion.parent;
 
-    // Get current MasterProp data:
-    XOptionedData? optPropData =
-        _filterPropsStructure._getOptCriterionData(propName);
+    // Get current OptCriterion data:
+    XOptionedData? optCriterionData =
+        _filterCriteriaStructure._getOptCriterionData(criterionName);
 
-    if (optPropParent != null) {
+    if (optCriterionParent != null) {
       XOptionedData? tempXOptionedParent =
-          _filterPropsStructure._getTempOptCriterionData(
-        optPropParent.propName,
+          _filterCriteriaStructure._getTempOptCriterionData(
+        optCriterionParent.criterionName,
       );
       //
       if (tempXOptionedParent != null) {
         // Item or Item List (Multi Selection):
-        Object? parentOptPropValueOLD =
-            data._currentFormData[optPropParent.propName];
+        Object? parentOptCriterionValueOLD =
+            data._currentFormData[optCriterionParent.criterionName];
 
         // Parent Value change?
         bool isSame = tempXOptionedParent.isSameItemOrItemList(
-          itemOrItemList1: parentOptPropValueOLD,
-          itemOrItemList2: parentOptPropValue,
+          itemOrItemList1: parentOptCriterionValueOLD,
+          itemOrItemList2: parentOptCriterionValue,
         );
         if (!isSame) {
-          optPropData = null;
+          optCriterionData = null;
         }
       } else {
-        optPropData = null;
+        optCriterionData = null;
       }
     }
     //
-    if (optPropData == null) {
-      _filterPropsStructure._setTempOptCriterionData(
-        propName: propName,
+    if (optCriterionData == null) {
+      _filterCriteriaStructure._setTempOptCriterionData(
+        propName: criterionName,
         optionedData: null,
       );
       // IMPORTANT:
       //  - Update from ROOTs to LEAVES
-      //  - And make sure children-OptProp to null if parent-Value is null or not selected.
-      _filterPropsStructure._updateTempData({propName: null});
+      //  - And make sure children-OptCriterion to null if parent-Value is null or not selected.
+      _filterCriteriaStructure._updateTempData({criterionName: null});
     }
     //
-    // Load OptProp data from Rest API.
+    // Load OptCriterion data from Rest API.
     // May throw ApiError.
     //
-    optPropData ??= await callApiLoadOptPropData(
+    optCriterionData ??= await callApiLoadOptCriterionData(
       filterInput: filterInput,
-      parentOptPropValue: parentOptPropValue,
-      propName: propName,
+      parentOptCriterionValue: parentOptCriterionValue,
+      criterionName: criterionName,
     );
     //
     // IMPORTANT: Do not use empty list here
@@ -376,19 +369,19 @@ abstract class FilterModel<
     List? currentSelectedItems; // will be null or not empty.
     // Candidate Selected Items:
     List? candidateSelectedItems;
-    if (optPropData != null) {
+    if (optCriterionData != null) {
       PropValue? inputValueWrap;
       if (filterInput != null) {
-        inputValueWrap = _filterInputToOptPropValue(
+        inputValueWrap = _filterInputToOptCriterionValue(
           filterInput: filterInput,
-          optPropData: optPropData,
-          propName: propName,
+          optCriterionData: optCriterionData,
+          criterionName: criterionName,
         );
       } else {
         if (!_defaultValueInitiated) {
-          inputValueWrap = __specifyDefaultOptPropValue(
-            optPropData: optPropData,
-            propName: propName,
+          inputValueWrap = __specifyDefaultOptCriterionValue(
+            optCriterionData: optCriterionData,
+            criterionName: criterionName,
           );
         }
       }
@@ -397,8 +390,8 @@ abstract class FilterModel<
       // It can be a single value or a List.
       //
       final dynamic tempCurrentValue =
-          _filterPropsStructure._getTempCurrentCriterionValue(
-        propName: propName,
+          _filterCriteriaStructure._getTempCurrentCriterionValue(
+        propName: criterionName,
       );
       //
       if (tempCurrentValue != null) {
@@ -410,7 +403,7 @@ abstract class FilterModel<
         }
       }
       if (currentSelectedItems != null) {
-        currentSelectedItems = optPropData.findInternalItemsByDynamics(
+        currentSelectedItems = optCriterionData.findInternalItemsByDynamics(
           dynamicValues: currentSelectedItems,
           removeCurrentNotFoundItems: true,
           addToInternalIfNotFound: false,
@@ -427,47 +420,47 @@ abstract class FilterModel<
       candidateSelectedItems = null;
     }
     //
-    _filterPropsStructure._setTempOptCriterionData(
-      propName: propName,
-      optionedData: optPropData,
+    _filterCriteriaStructure._setTempOptCriterionData(
+      propName: criterionName,
+      optionedData: optCriterionData,
     );
     //
     // TODO: Double check this code:
     //
     if (candidateSelectedItems != null && candidateSelectedItems.isNotEmpty) {
-      if (optProp.singleSelection) {
+      if (optCriterion.singleSelection) {
         // IMPORTANT:
         //  - Update from ROOTs to LEAVES
-        //  - And make sure children-OptProp to null if parent-Value is null or not selected.
+        //  - And make sure children-OptCriterion to null if parent-Value is null or not selected.
         Object? candidateSelectedItem = candidateSelectedItems.first;
-        _filterPropsStructure
-            ._updateTempData({propName: candidateSelectedItem});
+        _filterCriteriaStructure
+            ._updateTempData({criterionName: candidateSelectedItem});
       } else {
         // IMPORTANT:
         //  - Update from ROOTs to LEAVES
-        //  - And make sure children-OptProp to null if parent-Value is null or not selected.
+        //  - And make sure children-OptCriterion to null if parent-Value is null or not selected.
         // Try MULTI SELECTED ITEMS:
-        _filterPropsStructure
-            ._updateTempData({propName: candidateSelectedItems});
+        _filterCriteriaStructure
+            ._updateTempData({criterionName: candidateSelectedItems});
       }
     } else {
       // IMPORTANT:
       //  - Update from ROOTs to LEAVES
-      //  - And make sure children-OptProp to null if parent-Value is null or not selected.
-      _filterPropsStructure._updateTempData({propName: null});
+      //  - And make sure children-OptCriterion to null if parent-Value is null or not selected.
+      _filterCriteriaStructure._updateTempData({criterionName: null});
     }
     //
-    Object? tempSelectedPropValue =
-        _filterPropsStructure._getTempCurrentCriterionValue(
-      propName: propName,
+    Object? tempSelectedCriterionValue =
+        _filterCriteriaStructure._getTempCurrentCriterionValue(
+      propName: criterionName,
     );
 
-    if (tempSelectedPropValue != null) {
-      for (OptCriterion child in optProp.children) {
-        await _loadOptPropDataCascade(
+    if (tempSelectedCriterionValue != null) {
+      for (OptCriterion child in optCriterion.children) {
+        await _loadOptCriterionDataCascade(
           filterInput: filterInput,
-          parentOptPropValue: tempSelectedPropValue,
-          optProp: child,
+          parentOptCriterionValue: tempSelectedCriterionValue,
+          optCriterion: child,
         );
       }
     } else {
@@ -478,9 +471,9 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  Object? filterInputToCommonPropValue({
+  Object? filterInputToSimpleCriterionValue({
     required FILTER_INPUT filterInput,
-    required String propName,
+    required String criterionName,
   });
 
   ///
@@ -491,7 +484,7 @@ abstract class FilterModel<
   ///
   /// ```dart
   /// @override
-  /// MasterPropValueWrap? filterInputToOptPropValue({
+  /// MasterPropValueWrap? filterInputToOptCriterionValue({
   ///     required ExampleFilterInput filterInput,
   ///     required XOptionedData optPropData,
   ///     required String propName,
@@ -505,37 +498,37 @@ abstract class FilterModel<
   /// }
   /// ```
   ///
-  PropValue? filterInputToOptPropValue({
+  PropValue? filterInputToOptCriterionValue({
     required FILTER_INPUT filterInput,
-    required XOptionedData optPropData,
+    required XOptionedData optCriterionData,
     required String propName,
   });
 
-  PropValue? specifyDefaultOptPropValue({
-    required XOptionedData optPropData,
+  PropValue? specifyDefaultOptCriterionValue({
+    required XOptionedData optCriterionData,
     required String propName,
   });
 
-  Object? specifyDefaultCommonPropValue({
+  Object? specifyDefaultSimpleCriterionValue({
     required String propName,
   });
 
-  PropValue? _filterInputToOptPropValue({
+  PropValue? _filterInputToOptCriterionValue({
     required FILTER_INPUT filterInput,
-    required XOptionedData optPropData,
-    required String propName,
+    required XOptionedData optCriterionData,
+    required String criterionName,
   }) {
-    PropValue? wrap = filterInputToOptPropValue(
+    PropValue? wrap = filterInputToOptCriterionValue(
       filterInput: filterInput,
-      optPropData: optPropData,
-      propName: propName,
+      optCriterionData: optCriterionData,
+      propName: criterionName,
     );
     if (wrap == null) {
       return null;
     }
     List? value = wrap.values;
     return PropValue.multi(
-      optPropData.findInternalItemsByDynamics(
+      optCriterionData.findInternalItemsByDynamics(
         dynamicValues: value,
         addToInternalIfNotFound: false,
         removeCurrentNotFoundItems: true,
@@ -543,20 +536,20 @@ abstract class FilterModel<
     );
   }
 
-  PropValue? __specifyDefaultOptPropValue({
-    required XOptionedData optPropData,
-    required String propName,
+  PropValue? __specifyDefaultOptCriterionValue({
+    required XOptionedData optCriterionData,
+    required String criterionName,
   }) {
-    PropValue? wrap = specifyDefaultOptPropValue(
-      optPropData: optPropData,
-      propName: propName,
+    PropValue? wrap = specifyDefaultOptCriterionValue(
+      optCriterionData: optCriterionData,
+      propName: criterionName,
     );
     if (wrap == null) {
       return null;
     }
     List? value = wrap.values;
     return PropValue.multi(
-      optPropData.findInternalItemsByDynamics(
+      optCriterionData.findInternalItemsByDynamics(
         dynamicValues: value,
         addToInternalIfNotFound: false,
         removeCurrentNotFoundItems: true,
@@ -598,7 +591,7 @@ abstract class FilterModel<
 
   ///
   /// This method is called immediately after
-  /// calling [callApiLoadOptPropData]
+  /// calling [callApiLoadOptCriterionData]
   /// methods if there are no errors.
   ///
   FILTER_CRITERIA createFilterCriteria({

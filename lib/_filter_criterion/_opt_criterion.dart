@@ -21,7 +21,7 @@ class OptCriterion extends Criterion {
   XOptionedData? _tempXOptionedData;
 
   OptCriterion({
-    required super.propName,
+    required super.criterionName,
     this.type,
     this.children = const [],
     this.singleSelection = true,
@@ -29,23 +29,23 @@ class OptCriterion extends Criterion {
 
   void _checkCycleError() {
     OptCriterion? p = parent;
-    final List<String> propNames = [propName];
+    final List<String> propNames = [criterionName];
     while (true) {
       if (p == null) {
         return;
       }
-      if (propNames.contains(p.propName)) {
+      if (propNames.contains(p.criterionName)) {
         String message = '''
           The parent-child relationship of several properties forms a cycle.
           ┌─────┐
           |  ${propNames.last}
           ↑     ↓
-          |  ${p.propName}
+          |  ${p.criterionName}
           └─────┘
         ''';
         throw message;
       }
-      propNames.add(p.propName);
+      propNames.add(p.criterionName);
       p = p.parent;
     }
   }
@@ -55,8 +55,8 @@ class OptCriterion extends Criterion {
     required Map<String, dynamic> updateValues,
   }) {
     if (!_valueUpdated && _dirty) {
-      final dynamic oldValue = tempCurrentFormData[propName];
-      final dynamic newValue = updateValues[propName];
+      final dynamic oldValue = tempCurrentFormData[criterionName];
+      final dynamic newValue = updateValues[criterionName];
       //
       candidateUpdateValue = newValue;
       _valueUpdated = true;
@@ -78,7 +78,7 @@ class OptCriterion extends Criterion {
       if (_tempXOptionedData == null || newValue == null || !isSame) {
         for (OptCriterion childItem in children) {
           childItem._tempXOptionedData = null;
-          updateValues[childItem.propName] = null;
+          updateValues[childItem.criterionName] = null;
           childItem._dirty = true;
         }
       }
@@ -94,7 +94,7 @@ class OptCriterion extends Criterion {
 
   void _printTempInfoCascade({required int indentFactor}) {
     print(
-        "${("- - - " * indentFactor)} $propName >>> UpdateV: $candidateUpdateValue >>> tempXOptionedData: $_tempXOptionedData");
+        "${("- - - " * indentFactor)} $criterionName >>> UpdateV: $candidateUpdateValue >>> tempXOptionedData: $_tempXOptionedData");
     for (var child in children) {
       child._printTempInfoCascade(indentFactor: indentFactor + 1);
     }

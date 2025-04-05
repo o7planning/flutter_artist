@@ -1,12 +1,12 @@
 part of '../flutter_artist.dart';
 
 abstract class Criterion {
-  final String propName;
+  final String criterionName;
   dynamic candidateUpdateValue;
   bool _valueUpdated = false;
   bool _dirty = false;
 
-  Criterion({required this.propName});
+  Criterion({required this.criterionName});
 
   void _resetForNewTransaction();
 

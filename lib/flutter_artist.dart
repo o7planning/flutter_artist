@@ -309,7 +309,7 @@ part '_utils_/_patch_utils.dart';
 
 part '_core_/_executor.dart';
 
-part '_filter_criterion/_filter_props_structure.dart';
+part '_filter_criterion/_filter_criteria_structure.dart';
 
 part '_form_prop/_form_props_structure.dart';
 

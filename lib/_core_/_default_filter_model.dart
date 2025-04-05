@@ -11,7 +11,7 @@ class _DefaultFilterModel
   }
 
   @override
-  FilterCriterionsStructure? registerPropsStructure() {
+  FilterCriteriaStructure? registerPropsStructure() {
     return null;
   }
 
@@ -23,41 +23,41 @@ class _DefaultFilterModel
   }
 
   @override
-  Future<XList?> callApiLoadOptPropData({
+  Future<XList?> callApiLoadOptCriterionData({
     required EmptyFilterInput? filterInput,
-    required Object? parentOptPropValue,
-    required String propName,
+    required Object? parentOptCriterionValue,
+    required String criterionName,
   }) async {
     return null;
   }
 
   @override
-  PropValue? filterInputToOptPropValue({
+  PropValue? filterInputToOptCriterionValue({
     required EmptyFilterInput filterInput,
-    required XOptionedData optPropData,
+    required XOptionedData optCriterionData,
     required String propName,
   }) {
     return null;
   }
 
   @override
-  Object? filterInputToCommonPropValue({
+  Object? filterInputToSimpleCriterionValue({
     required EmptyFilterInput filterInput,
+    required String criterionName,
+  }) {
+    return null;
+  }
+
+  @override
+  PropValue? specifyDefaultOptCriterionValue({
+    required XOptionedData optCriterionData,
     required String propName,
   }) {
     return null;
   }
 
   @override
-  PropValue? specifyDefaultOptPropValue({
-    required XOptionedData optPropData,
-    required String propName,
-  }) {
-    return null;
-  }
-
-  @override
-  Object? specifyDefaultCommonPropValue({
+  Object? specifyDefaultSimpleCriterionValue({
     required String propName,
   }) {
     return null;
@@ -73,7 +73,7 @@ class StringIdFilterModel
   StringIdFilterModel({required this.idValue});
 
   @override
-  FilterCriterionsStructure? registerPropsStructure() {
+  FilterCriteriaStructure? registerPropsStructure() {
     return null;
   }
 
@@ -85,41 +85,41 @@ class StringIdFilterModel
   }
 
   @override
-  Future<XList?> callApiLoadOptPropData({
+  Future<XList?> callApiLoadOptCriterionData({
     required StringIdFilterInput? filterInput,
-    required Object? parentOptPropValue,
-    required String propName,
+    required Object? parentOptCriterionValue,
+    required String criterionName,
   }) async {
     return null;
   }
 
   @override
-  PropValue? filterInputToOptPropValue({
+  PropValue? filterInputToOptCriterionValue({
     required StringIdFilterInput filterInput,
-    required XOptionedData optPropData,
+    required XOptionedData optCriterionData,
     required String propName,
   }) {
     return null;
   }
 
   @override
-  Object? filterInputToCommonPropValue({
+  Object? filterInputToSimpleCriterionValue({
     required StringIdFilterInput filterInput,
+    required String criterionName,
+  }) {
+    return null;
+  }
+
+  @override
+  PropValue? specifyDefaultOptCriterionValue({
+    required XOptionedData optCriterionData,
     required String propName,
   }) {
     return null;
   }
 
   @override
-  PropValue? specifyDefaultOptPropValue({
-    required XOptionedData optPropData,
-    required String propName,
-  }) {
-    return null;
-  }
-
-  @override
-  Object? specifyDefaultCommonPropValue({
+  Object? specifyDefaultSimpleCriterionValue({
     required String propName,
   }) {
     return null;
@@ -135,7 +135,7 @@ class StringValueFilterModel
   StringValueFilterModel({required this.stringValue});
 
   @override
-  FilterCriterionsStructure? registerPropsStructure() {
+  FilterCriteriaStructure? registerPropsStructure() {
     return null;
   }
 
@@ -147,41 +147,41 @@ class StringValueFilterModel
   }
 
   @override
-  Future<XList?> callApiLoadOptPropData({
+  Future<XList?> callApiLoadOptCriterionData({
     required StringValueFilterInput? filterInput,
-    required Object? parentOptPropValue,
-    required String propName,
+    required Object? parentOptCriterionValue,
+    required String criterionName,
   }) async {
     return null;
   }
 
   @override
-  PropValue? filterInputToOptPropValue({
+  PropValue? filterInputToOptCriterionValue({
     required StringValueFilterInput filterInput,
-    required XOptionedData optPropData,
+    required XOptionedData optCriterionData,
     required String propName,
   }) {
     return null;
   }
 
   @override
-  Object? filterInputToCommonPropValue({
+  Object? filterInputToSimpleCriterionValue({
     required StringValueFilterInput filterInput,
+    required String criterionName,
+  }) {
+    return null;
+  }
+
+  @override
+  PropValue? specifyDefaultOptCriterionValue({
+    required XOptionedData optCriterionData,
     required String propName,
   }) {
     return null;
   }
 
   @override
-  PropValue? specifyDefaultOptPropValue({
-    required XOptionedData optPropData,
-    required String propName,
-  }) {
-    return null;
-  }
-
-  @override
-  Object? specifyDefaultCommonPropValue({
+  Object? specifyDefaultSimpleCriterionValue({
     required String propName,
   }) {
     return null;
@@ -197,7 +197,7 @@ class SearchTextFilterModel
   SearchTextFilterModel({required this.searchText});
 
   @override
-  FilterCriterionsStructure? registerPropsStructure() {
+  FilterCriteriaStructure? registerPropsStructure() {
     return null;
   }
 
@@ -209,41 +209,41 @@ class SearchTextFilterModel
   }
 
   @override
-  Future<XList?> callApiLoadOptPropData({
+  Future<XList?> callApiLoadOptCriterionData({
     required SearchTextFilterInput? filterInput,
-    required Object? parentOptPropValue,
-    required String propName,
+    required Object? parentOptCriterionValue,
+    required String criterionName,
   }) async {
     return null;
   }
 
   @override
-  PropValue? filterInputToOptPropValue({
+  PropValue? filterInputToOptCriterionValue({
     required SearchTextFilterInput filterInput,
-    required XOptionedData optPropData,
+    required XOptionedData optCriterionData,
     required String propName,
   }) {
     return null;
   }
 
   @override
-  Object? filterInputToCommonPropValue({
+  Object? filterInputToSimpleCriterionValue({
     required SearchTextFilterInput filterInput,
+    required String criterionName,
+  }) {
+    return null;
+  }
+
+  @override
+  PropValue? specifyDefaultOptCriterionValue({
+    required XOptionedData optCriterionData,
     required String propName,
   }) {
     return null;
   }
 
   @override
-  PropValue? specifyDefaultOptPropValue({
-    required XOptionedData optPropData,
-    required String propName,
-  }) {
-    return null;
-  }
-
-  @override
-  Object? specifyDefaultCommonPropValue({
+  Object? specifyDefaultSimpleCriterionValue({
     required String propName,
   }) {
     return null;
@@ -259,7 +259,7 @@ class IntIdFilterModel
   IntIdFilterModel({required this.idValue});
 
   @override
-  FilterCriterionsStructure? registerPropsStructure() {
+  FilterCriteriaStructure? registerPropsStructure() {
     return null;
   }
 
@@ -271,41 +271,41 @@ class IntIdFilterModel
   }
 
   @override
-  Future<XList?> callApiLoadOptPropData({
+  Future<XList?> callApiLoadOptCriterionData({
     required IntIdFilterInput? filterInput,
-    required Object? parentOptPropValue,
-    required String propName,
+    required Object? parentOptCriterionValue,
+    required String criterionName,
   }) async {
     return null;
   }
 
   @override
-  PropValue? filterInputToOptPropValue({
+  PropValue? filterInputToOptCriterionValue({
     required IntIdFilterInput filterInput,
-    required XOptionedData optPropData,
+    required XOptionedData optCriterionData,
     required String propName,
   }) {
     return null;
   }
 
   @override
-  Object? filterInputToCommonPropValue({
+  Object? filterInputToSimpleCriterionValue({
     required IntIdFilterInput filterInput,
+    required String criterionName,
+  }) {
+    return null;
+  }
+
+  @override
+  PropValue? specifyDefaultOptCriterionValue({
+    required XOptionedData optCriterionData,
     required String propName,
   }) {
     return null;
   }
 
   @override
-  PropValue? specifyDefaultOptPropValue({
-    required XOptionedData optPropData,
-    required String propName,
-  }) {
-    return null;
-  }
-
-  @override
-  Object? specifyDefaultCommonPropValue({
+  Object? specifyDefaultSimpleCriterionValue({
     required String propName,
   }) {
     return null;
