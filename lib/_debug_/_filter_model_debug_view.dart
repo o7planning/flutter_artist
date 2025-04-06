@@ -82,12 +82,15 @@ class _FilterModelDebugViewState extends State<_FilterModelDebugView> {
   }
 
   Widget _buildTabContainer() {
-    FilterModelData filterModelData = widget.filterModel.data;
-    Map<String, dynamic> initial0Value = filterModelData.initial0FormData;
-    Map<String, dynamic> initial1Value = filterModelData.initialFormData;
+    FilterCriteriaStructure filterCriteriaStructure =
+        widget.filterModel._filterCriteriaStructure;
+    Map<String, dynamic> initial0Value =
+        filterCriteriaStructure.initial0FormData;
+    Map<String, dynamic> initial1Value =
+        filterCriteriaStructure.initialFormData;
     Map<String, dynamic> instantValue =
         widget.filterModel._formKey.currentState?.instantValue ?? {};
-    Map<String, dynamic> currentValue = filterModelData.currentFormData;
+    Map<String, dynamic> currentValue = filterCriteriaStructure.currentFormData;
 
     String initial0Json = toJson(initial0Value);
     String initial1Json = toJson(initial1Value);

@@ -20,9 +20,9 @@ class FilterModelData<
 
   //
 
-  final Map<String, dynamic> _currentFormData = {};
+  // final Map<String, dynamic> _currentFormData = {};
 
-  Map<String, dynamic> get currentFormData => {..._currentFormData};
+  // Map<String, dynamic> get currentFormData => {..._currentFormData};
 
   //
   DataState _filterDataState = DataState.pending;
@@ -35,9 +35,9 @@ class FilterModelData<
   // ***************************************************************************
   // ***************************************************************************
 
-  X? getProperty<X>(String propName) {
-    return _currentFormData[propName] as X?;
-  }
+  // X? getProperty<X>(String propName) {
+  //   return _currentFormData[propName] as X?;
+  // }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -47,7 +47,7 @@ class FilterModelData<
     //
     __initial0FormData.clear();
     _initialFormData.clear();
-    _currentFormData.clear();
+    // _currentFormData.clear();
   }
 
   // ***************************************************************************
@@ -62,22 +62,22 @@ class FilterModelData<
       ..addAll(formData);
   }
 
-  // ***************************************************************************
-  // ***************************************************************************
+// ***************************************************************************
+// ***************************************************************************
 
-  bool _isDirty() {
-    Set<String> keySet = {}
-      ..addAll(_initialFormData.keys)
-      ..addAll(_currentFormData.keys);
-    //
-    for (String key in keySet) {
-      dynamic currentValue = _currentFormData[key];
-      dynamic initialValue = _initialFormData[key];
-      bool eq = _compareDynamicAndDynamic(currentValue, initialValue);
-      if (!eq) {
-        return true;
-      }
-    }
-    return false;
-  }
+// bool _isDirty() {
+//   Set<String> keySet = {}
+//     ..addAll(_initialFormData.keys)
+//     ..addAll(_currentFormData.keys);
+//   //
+//   for (String key in keySet) {
+//     dynamic currentValue = _currentFormData[key];
+//     dynamic initialValue = _initialFormData[key];
+//     bool eq = _compareDynamicAndDynamic(currentValue, initialValue);
+//     if (!eq) {
+//       return true;
+//     }
+//   }
+//   return false;
+// }
 }

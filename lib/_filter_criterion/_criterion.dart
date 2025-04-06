@@ -5,9 +5,8 @@ abstract class Criterion {
   dynamic candidateUpdateValue;
   bool _valueUpdated = false;
   bool _markTempDirty = false;
-  
-  //
 
+  //
 
   dynamic _tempCurrentValue;
   XOptionedData? _tempCurrentXData;
@@ -19,9 +18,15 @@ abstract class Criterion {
   XOptionedData? _initialXData;
 
   //
-  
 
   Criterion({required this.criterionName});
+
+  bool isDirty() {
+    return !_compareDynamicAndDynamic(
+      _currentValue,
+      _initialValue,
+    );
+  }
 
   void _resetForNewTransaction();
 

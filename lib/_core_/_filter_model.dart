@@ -108,6 +108,24 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  Map<String, dynamic> get initialFormData {
+    return _filterCriteriaStructure.initialFormData;
+  }
+
+  Map<String, dynamic> get currentFormData {
+    return _filterCriteriaStructure.currentFormData;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool isDirty() {
+    return _filterCriteriaStructure._isFilterDirty();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   XOptionedData? getOptCriterionXData(String criterionName) {
     return _filterCriteriaStructure._getOptCriterionXData(criterionName);
   }
@@ -155,14 +173,12 @@ abstract class FilterModel<
   Future<FILTER_CRITERIA?> _startNewFilterTransaction({
     required FILTER_INPUT? filterInput,
   }) async {
-    if (data._filterDataState == DataState.ready && filterInput == null) {
-      print("Ready ---------------------> return");
-      // return _filterCriteria;
-    }
     print("#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFilterTransaction");
     try {
       // All values including hidden values (not on the user interface).
-      Map<String, dynamic> allNewValue = {...data._currentFormData};
+      Map<String, dynamic> allNewValue = {
+        ..._filterCriteriaStructure.currentFormData
+      };
 
       // Update values from view (On the user Interface).
       allNewValue.addAll(_formKey.currentState?.instantValue ?? {});
@@ -173,7 +189,7 @@ abstract class FilterModel<
       }
       //
       _filterCriteriaStructure._initTemporaryForNewTransaction(
-        currentFormData: filterInput != null
+        newCurrentFormData: filterInput != null
             ? {} // To Clear All.
             : allNewValue,
       );
@@ -246,23 +262,18 @@ abstract class FilterModel<
       //
       // Update Real FromData from Temporary FormData:
       //
-      this.data._currentFormData
-        ..updateAll((k, v) => null)
-        ..addAll(_filterCriteriaStructure._tempCurrentFormData);
-
-      //
-      // UPDATE OPT-DATA:
-      //  - optProp._xOptionedData = optProp._tempXOptionedData;
-      //
-      this._filterCriteriaStructure._applyAllTempDataToReal();
+      _filterCriteriaStructure._updateTempToReal();
       //
       // IMPORTANT:
       //
-      _formKeyPatchValue(newCurrentValue: data._currentFormData);
+      _formKeyPatchValue(
+        newCurrentValue: _filterCriteriaStructure.currentFormData,
+      );
       //
       _defaultValueInitiated = true;
+      _filterCriteriaStructure._setFilterDataState(DataState.ready);
+      //
       _filterCriteria = newCriteria;
-      data._filterDataState = DataState.ready;
       return _filterCriteria;
     } catch (e, stackTrace) {
       _handleError(
@@ -275,9 +286,11 @@ abstract class FilterModel<
       this.data._filterDataState = DataState.error;
       //
       // IMPORTANT: Restore OLD State:
-      // Note [_formKeyPatchValueSilently] NOT WORK!.
+      // Note [_formKeyPatchValue] NOT WORK!.
       //
-      _formKeyPatchValue(newCurrentValue: data._currentFormData);
+      _formKeyPatchValue(
+        newCurrentValue: _filterCriteriaStructure.currentFormData,
+      );
       //
       _filterCriteria = null;
       data._filterDataState = DataState.error;
@@ -323,7 +336,9 @@ abstract class FilterModel<
       if (tempXOptionedParent != null) {
         // Item or Item List (Multi Selection):
         Object? parentOptCriterionValueOLD =
-            data._currentFormData[optCriterionParent.criterionName];
+            _filterCriteriaStructure._getCurrentCriterionValue(
+          criterionName: optCriterionParent.criterionName,
+        );
 
         // Parent Value change?
         bool isSame = tempXOptionedParent.isSameItemOrItemList(
@@ -569,7 +584,7 @@ abstract class FilterModel<
 
   // TODO: Change name!
   Map<String, dynamic> _initFilterValue() {
-    return data._currentFormData;
+    return _filterCriteriaStructure.currentFormData;
   }
 
   // ***************************************************************************

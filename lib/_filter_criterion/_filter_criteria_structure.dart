@@ -8,6 +8,8 @@ class FilterCriteriaStructure {
   //
   final Map<String, dynamic> _tempCurrentFormData = {};
 
+  DataState _filterDataState = DataState.pending;
+
   FilterCriteriaStructure({
     required List<String> simpleCriteria,
     required List<OptCriterion> optCriteria,
@@ -46,6 +48,56 @@ class FilterCriteriaStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  dynamic _getCurrentCriterionValue({required String criterionName}) {
+    Criterion? criterion = _allCriteriaMap[criterionName];
+    if (criterion != null) {
+      return criterion?._currentValue;
+    }
+    return null;
+  }
+
+  // TODO-DELETE
+  @Deprecated("Xoa di")
+  X? getProperty<X>(String criterionName) {
+    return _getCurrentCriterionValue(criterionName: criterionName) as X?;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  // TODO: DELTE?
+  Map<String, dynamic> get initial0FormData {
+    return {};
+  }
+
+  Map<String, dynamic> get initialFormData {
+    return _allCriteriaMap.map((k, v) => MapEntry(k, v._initialValue));
+  }
+
+  Map<String, dynamic> get currentFormData {
+    return _allCriteriaMap.map((k, v) => MapEntry(k, v._currentValue));
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _setFilterDataState(DataState filterDataState) {
+    _filterDataState = filterDataState;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _updateTempToReal() {
+    for (Criterion criterion in _allCriteriaMap.values) {
+      criterion._currentValue = criterion._tempCurrentValue;
+      criterion._currentXData = criterion._tempCurrentXData;
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool _isOptCriterion(String criterionName) {
     Criterion? criterion = _allCriteriaMap[criterionName];
     if (criterion == null) {
@@ -61,25 +113,24 @@ class FilterCriteriaStructure {
   // ***************************************************************************
 
   void _initTemporaryForNewTransaction({
-    required Map<String, dynamic>? currentFormData,
+    required Map<String, dynamic>? newCurrentFormData,
   }) {
-    _tempCurrentFormData
-      ..updateAll((k, v) => null)
-      ..addAll(currentFormData ?? {});
-    //
     for (Criterion criterion in _allCriteriaMap.values) {
-      criterion._resetForNewTransaction();
+      dynamic newValue = newCurrentFormData?[criterion.criterionName];
+      criterion._tempCurrentValue = newValue;
+      criterion._tempCurrentXData = null;
     }
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void _applyAllTempDataToReal() {
-    for (Criterion criterion in _allCriteriaMap.values) {
-      criterion._applyTempDataToReal();
-    }
-  }
+  // @Deprecated("Xoa di, khong su dung nua")
+  // void _applyAllTempDataToReal() {
+  //   for (Criterion criterion in _allCriteriaMap.values) {
+  //     criterion._applyTempDataToReal();
+  //   }
+  // }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -101,7 +152,6 @@ class FilterCriteriaStructure {
     }
     return null;
   }
-
 
   XOptionedData? _getOptCriterionXData(String criterionName) {
     Criterion? criterion = _allCriteriaMap[criterionName];
@@ -231,6 +281,19 @@ class FilterCriteriaStructure {
       _allCriteriaMap[criterion.criterionName] = criterion;
       _simpleCriteria.add(criterion);
     }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool _isFilterDirty() {
+    for (Criterion criterion in _allCriteriaMap.values) {
+      bool dirty = criterion.isDirty();
+      if (dirty) {
+        return true;
+      }
+    }
+    return false;
   }
 
   // ***************************************************************************

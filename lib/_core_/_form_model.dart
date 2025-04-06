@@ -5,7 +5,6 @@ abstract class FormModel<
     ITEM_DETAIL extends Object,
     FILTER_CRITERIA extends FilterCriteria,
     EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
-
   int __loadCount = 0;
 
   int get loadCount => __loadCount;
@@ -266,11 +265,6 @@ abstract class FormModel<
       } else {
         allNewValue.addAll({});
       }
-      //
-      // if (!_initiated && _formKey.currentState != null) {
-      //   _initiated = true;
-      //   data._initialFormData2(allNewValue);
-      // }
     }
     //
     // Update from FormView:
@@ -430,9 +424,6 @@ abstract class FormModel<
       //
       // Update Real FromData from Temporary FormData:
       //
-      // this.data._currentFormData
-      //   ..updateAll((k, v) => null)
-      //   ..addAll(_formPropsStructure._tempCurrentFormData);
       _formPropsStructure._updateTempToReal();
 
       //

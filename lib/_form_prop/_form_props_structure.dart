@@ -102,13 +102,6 @@ class FormPropsStructure {
     }
   }
 
-  // @Deprecated("Xoa di, khong su dung nua.")
-  // void _applyAllTempDataToReal() {
-  //   for (Prop prop in _allPropMap.values) {
-  //     prop._applyTempDataToReal();
-  //   }
-  // }
-
   ///
   /// Reset Form Data:
   ///
