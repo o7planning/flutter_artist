@@ -54,12 +54,6 @@ class FilterCriteriaStructure {
     return null;
   }
 
-  // TODO-DELETE
-  // @Deprecated("Xoa di")
-  // X? getProperty<X>(String criterionName) {
-  //   return _getCurrentCriterionValue(criterionName: criterionName) as X?;
-  // }
-
   // ***************************************************************************
   // ***************************************************************************
 
