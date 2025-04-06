@@ -31,16 +31,16 @@ class FormModelData<
 
   final Map<String, dynamic> _currentFormData = {};
 
-  Map<String, dynamic> get currentFormData => {..._currentFormData};
+ // Map<String, dynamic> get currentFormData => {..._currentFormData};
 
   //
-  DataState _formDataState = DataState.none;
+  // DataState _formDataState = DataState.none;
 
-  FormMode _formMode = FormMode.none;
+  // FormMode _formMode = FormMode.none;
 
-  FormMode get formMode => _formMode;
+ // FormMode get formMode => _formMode;
 
-  bool get isNew => _formMode == FormMode.creation;
+  // bool get isNew => _formMode == FormMode.creation;
 
   // ***************************************************************************
   // ***************************************************************************
@@ -107,19 +107,19 @@ class FormModelData<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _updateFormData(Map<String, dynamic> formData) {
-    _justInitialized = true;
-    //
-    __initial0FormData
-      ..clear()
-      ..addAll(formData);
-    __initialFormData
-      ..clear()
-      ..addAll(formData);
-    _currentFormData
-      ..clear()
-      ..addAll(formData);
-  }
+  // void _updateFormData(Map<String, dynamic> formData) {
+  //   _justInitialized = true;
+  //   //
+  //   __initial0FormData
+  //     ..clear()
+  //     ..addAll(formData);
+  //   __initialFormData
+  //     ..clear()
+  //     ..addAll(formData);
+  //   _currentFormData
+  //     ..clear()
+  //     ..addAll(formData);
+  // }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -143,12 +143,12 @@ class FormModelData<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _setCurrentItem({
-    required ITEM_DETAIL? refreshedItemDetail,
-    required FormMode formMode,
-    required DataState formDataState,
-  }) {
-    _formMode = formMode;
-    _formDataState = formDataState;
-  }
+  // void _setCurrentItem({
+  //   required ITEM_DETAIL? refreshedItemDetail,
+  //   required FormMode formMode,
+  //   required DataState formDataState,
+  // }) {
+  //   _formMode = formMode;
+  //   _formDataState = formDataState;
+  // }
 }

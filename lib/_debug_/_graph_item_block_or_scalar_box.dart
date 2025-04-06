@@ -387,7 +387,7 @@ class _GraphItemBlockOrScalarBoxState
     return "FORM MODEL: $className \n"
         "Data State: ${dataState.name.toUpperCase()} "
         "| Visibility: ${active ? 'VISIBLE' : 'HIDDEN'} "
-        "| Mode: ${formModel.data.formMode.name.toUpperCase()}";
+        "| Mode: ${formModel.formMode.name.toUpperCase()}";
   }
 
   String _blockOrScalarTooltipMessage(

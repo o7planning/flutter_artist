@@ -42,6 +42,25 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  void _setFormMode(FormMode formMode) {
+    _formMode = formMode;
+  }
+
+  void _setFormDataState(DataState formDataState) {
+    _formDataState = formDataState;
+  }
+
+  void _setFormMode_TODO_DELETE({
+    required FormMode formMode,
+    required DataState formDataState,
+  }) {
+    _formMode = formMode;
+    _formDataState = formDataState;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   ///
   /// For the first load of an Item, update "Initial Form Data".
   /// IMPORTANT:

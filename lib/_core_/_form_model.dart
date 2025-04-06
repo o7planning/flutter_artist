@@ -29,7 +29,11 @@ abstract class FormModel<
 
   late final FormModelData data = FormModelData(formModel: this);
 
-  FormMode get formMode => data.formMode;
+  late final FormPropsStructure _formPropsStructure;
+
+  FormMode get formMode => _formPropsStructure.formMode;
+
+  DataState get formDataState => _formPropsStructure._formDataState;
 
   Shelf get shelf => block.shelf;
 
@@ -44,10 +48,6 @@ abstract class FormModel<
   bool _initiated = false;
 
   bool _defaultValueInitiated = false;
-
-  late final FormPropsStructure _formPropsStructure;
-
-  DataState get formDataState => data._formDataState;
 
   QueryMode get queryMode => _queryMode;
 
@@ -137,9 +137,10 @@ abstract class FormModel<
       return false;
     }
     print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _unitSaveForm");
-    Map<String, dynamic> formMapData = data.currentFormData;
+    final Map<String, dynamic> formMapData =
+        _formPropsStructure.currentFormData;
     //
-    String calledMethodName = data.isNew //
+    String calledMethodName = _formPropsStructure.isNew //
         ? 'callApiCreateItem'
         : 'callApiUpdateItem';
     //
@@ -159,7 +160,7 @@ abstract class FormModel<
       block._refreshSavingState(isSaving: true);
       Object? parentBlockItem = block.parent?.data.currentItem;
       //
-      result = data.isNew
+      result = _formPropsStructure.isNew
           ? await callApiCreateItem(
               filterCriteria: block.data.filterCriteria,
               parentBlockItem: parentBlockItem,
@@ -255,12 +256,12 @@ abstract class FormModel<
     print(
         "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFormTransaction, isItemFirstLoad: $isItemFirstLoad");
     final ITEM_DETAIL? itemDetail = block.data.currentItemDetail;
-    final FormMode currentFormMode = data._formDataState == DataState.none
+    final FormMode currentFormMode = formDataState == DataState.none
         ? FormMode.none
         : itemDetail == null
             ? FormMode.creation
             : FormMode.edit;
-    data._formMode = currentFormMode;
+    _formPropsStructure._setFormMode(currentFormMode);
     bool isNoneMode = currentFormMode == FormMode.none;
     bool isCreationMode = currentFormMode == FormMode.creation;
     //
@@ -456,7 +457,7 @@ abstract class FormModel<
       _formKeyPatchValue(newCurrentValue: data._currentFormData);
       //
       _defaultValueInitiated = true;
-      data._formDataState = formDataState;
+      _formPropsStructure._setFormDataState(formDataState);
       return true;
     } catch (e, stackTrace) {
       _handleError(
@@ -472,7 +473,7 @@ abstract class FormModel<
       //
       _formKeyPatchValue(newCurrentValue: data._currentFormData);
       //
-      data._formDataState = DataState.error;
+      _formPropsStructure._setFormDataState(DataState.error);
       return false;
     }
   }
