@@ -326,8 +326,8 @@ abstract class FilterModel<
 
   Future<void> _loadOptCriterionDataCascade({
     required FILTER_INPUT? filterInput,
-    required Object?
-        parentOptCriterionValue, // May be new selected parent value.
+    // May be new selected parent value.
+    required Object? parentOptCriterionValue,
     required OptCriterion optCriterion,
   }) async {
     final String criterionName = optCriterion.criterionName;
