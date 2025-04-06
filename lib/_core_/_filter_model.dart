@@ -188,21 +188,9 @@ abstract class FilterModel<
       Map<String, dynamic> allNewValue = {
         ..._filterCriteriaStructure.currentFormData
       };
-
-      print(
-          "@~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1: ${_formKey.currentState?.instantValue}");
-
       // Update values from view (On the user Interface).
       allNewValue.addAll(_formKey.currentState?.instantValue ?? {});
       //
-      // if (!_initiated && _formKey.currentState != null) {
-      //   _initiated = true;
-      //   data._initialFilterData(allNewValue);
-      // }
-      //
-      print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~> 2: filterInput: ${filterInput}");
-      print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3: allNewValue: ${allNewValue}");
-
       _filterCriteriaStructure._initTemporaryForNewTransaction(
         newCurrentFormData: filterInput != null
             ? {} // To Clear All.
@@ -223,7 +211,9 @@ abstract class FilterModel<
           optCriterion: optCriterion,
         );
       }
+      //
       _filterCriteriaStructure._printTemporaryInfo("@2");
+      //
       if (filterInput != null) {
         for (SimpleCriterion simpleCriterion
             in _filterCriteriaStructure._simpleCriteria) {
