@@ -262,7 +262,7 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _updateTempPropValues(Map<String, dynamic> propValues) {
+  void _updatePropsTempValues(Map<String, dynamic> propValues) {
     __addPropsIfNeed(
       propNames: propValues.keys.toList(),
     );

@@ -175,7 +175,7 @@ class FilterCriteriaStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _updateTempCriterionValues(Map<String, dynamic> criterionValues) {
+  void _updateCriteriaTempValues(Map<String, dynamic> criterionValues) {
     __addCriteriaIfNeed(
       criterionNames: criterionValues.keys.toList(),
     );

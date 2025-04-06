@@ -372,7 +372,7 @@ abstract class FilterModel<
       // IMPORTANT:
       //  - Update from ROOTs to LEAVES
       //  - And make sure children-OptCriterion to null if parent-Value is null or not selected.
-      _filterCriteriaStructure._updateTempCriterionValues({
+      _filterCriteriaStructure._updateCriteriaTempValues({
         criterionName: null,
       });
     }
@@ -456,7 +456,7 @@ abstract class FilterModel<
         //  - Update from ROOTs to LEAVES
         //  - And make sure children-OptCriterion to null if parent-Value is null or not selected.
         Object? candidateSelectedItem = candidateSelectedItems.first;
-        _filterCriteriaStructure._updateTempCriterionValues({
+        _filterCriteriaStructure._updateCriteriaTempValues({
           criterionName: candidateSelectedItem,
         });
       } else {
@@ -464,7 +464,7 @@ abstract class FilterModel<
         //  - Update from ROOTs to LEAVES
         //  - And make sure children-OptCriterion to null if parent-Value is null or not selected.
         // Try MULTI SELECTED ITEMS:
-        _filterCriteriaStructure._updateTempCriterionValues({
+        _filterCriteriaStructure._updateCriteriaTempValues({
           criterionName: candidateSelectedItems,
         });
       }
@@ -472,7 +472,7 @@ abstract class FilterModel<
       // IMPORTANT:
       //  - Update from ROOTs to LEAVES
       //  - And make sure children-OptCriterion to null if parent-Value is null or not selected.
-      _filterCriteriaStructure._updateTempCriterionValues({
+      _filterCriteriaStructure._updateCriteriaTempValues({
         criterionName: null,
       });
     }
