@@ -131,7 +131,7 @@ class FilterCriteriaStructure {
     final candidateUpdateValues = {...updateData};
     //
     // IMPORTANT:
-    // Update data for FilterCriterionsStructure. From ROOTs to LEAVES.
+    // Update data for FilterCriteriaStructure. From ROOTs to LEAVES.
     // (***):
     // And Update children-OptCriterion data to null if parent-Value is null or not selected.
     //

@@ -102,7 +102,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   void __registerCriteriaStructure() {
-    _filterCriteriaStructure = registerCriteriaStructure() ;
+    _filterCriteriaStructure = registerCriteriaStructure();
   }
 
   // ***************************************************************************

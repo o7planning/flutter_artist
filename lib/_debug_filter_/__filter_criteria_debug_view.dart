@@ -8,19 +8,22 @@ class _FilterCriteriaDebugView extends StatelessWidget {
   const _FilterCriteriaDebugView.block({
     super.key,
     required Block this.block,
-  })  : scalar = null,
+  })
+      : scalar = null,
         filterModel = null;
 
   const _FilterCriteriaDebugView.scalar({
     super.key,
     required Scalar this.scalar,
-  })  : block = null,
+  })
+      : block = null,
         filterModel = null;
 
   const _FilterCriteriaDebugView.filterModel({
     super.key,
     required FilterModel this.filterModel,
-  })  : block = null,
+  })
+      : block = null,
         scalar = null;
 
   @override
@@ -34,11 +37,12 @@ class _FilterCriteriaDebugView extends StatelessWidget {
         TabData(
           text: getClassName(block!),
           closable: false,
-          leading: (context, status) => Icon(
-            _blockIconData,
-            color: Colors.indigo,
-            size: 16,
-          ),
+          leading: (context, status) =>
+              Icon(
+                _blockIconData,
+                color: Colors.indigo,
+                size: 16,
+              ),
           content: SingleChildScrollView(
             child: _BlockCriteriaView(
               block: block!,
@@ -54,11 +58,12 @@ class _FilterCriteriaDebugView extends StatelessWidget {
         TabData(
           text: getClassName(scalar!),
           closable: false,
-          leading: (context, status) => Icon(
-            _scalarIconData,
-            color: Colors.indigo,
-            size: 16,
-          ),
+          leading: (context, status) =>
+              Icon(
+                _scalarIconData,
+                color: Colors.indigo,
+                size: 16,
+              ),
           content: SingleChildScrollView(
             child: _ScalarCriteriaView(
               scalar: scalar!,
@@ -72,11 +77,12 @@ class _FilterCriteriaDebugView extends StatelessWidget {
         TabData(
           text: getClassName(_filterModel),
           closable: false,
-          leading: (context, status) => Icon(
-            _filterModelIconData,
-            color: Colors.indigo,
-            size: 16,
-          ),
+          leading: (context, status) =>
+              Icon(
+                _filterModelIconData,
+                color: Colors.indigo,
+                size: 16,
+              ),
           content: SingleChildScrollView(
             child: _FilterModelCriteriaView(
               filterModel: _filterModel,

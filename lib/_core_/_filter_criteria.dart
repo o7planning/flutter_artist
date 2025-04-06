@@ -69,7 +69,8 @@ class SearchTextFilterCriteria extends FilterCriteria {
   }
 
   @override
-  List<Object?> get props => [
+  List<Object?> get props =>
+      [
         _stringToNullIfEmpty(searchText),
       ];
 }

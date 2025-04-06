@@ -13,7 +13,7 @@ abstract class Prop {
   XOptionedData? _currentXData;
 
   dynamic _initialValue;
-  XOptionedData? _initialData;
+  XOptionedData? _initialXData;
 
   Prop({
     required this.propName,
@@ -25,9 +25,4 @@ abstract class Prop {
       _initialValue,
     );
   }
-
-  // @Deprecated("Ko su dung nua")
-  // void _resetForNewTransaction() {
-  //   _tempCurrentXData = null;
-  // }
 }

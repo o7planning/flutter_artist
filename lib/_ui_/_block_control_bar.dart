@@ -165,8 +165,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
                 child: Icon(
                   widget.block.formModel!.formMode == FormMode.none
                       ? _formNoneModeIconData
-                      : widget.block.formModel!.formMode ==
-                              FormMode.creation
+                      : widget.block.formModel!.formMode == FormMode.creation
                           ? _formCreationModeIconData
                           : _formEditModeIconData,
                   size: _ControlBarButton.iconSize,

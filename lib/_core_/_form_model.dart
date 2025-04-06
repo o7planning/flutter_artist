@@ -359,7 +359,8 @@ abstract class FormModel<
           );
           return false;
         }
-        print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1 simplePropValue: $simplePropValue");
+        print(
+            "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1 simplePropValue: $simplePropValue");
       }
       // itemDetail == null
       else {
@@ -845,15 +846,15 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-   bool get isNew  {
-     return _formPropsStructure.isNew;
-   }
+  bool get isNew {
+    return _formPropsStructure.isNew;
+  }
 
-   Map<String,dynamic> get initialFormData  {
-     return _formPropsStructure.initialFormData;
-   }
+  Map<String, dynamic> get initialFormData {
+    return _formPropsStructure.initialFormData;
+  }
 
-  Map<String,dynamic> get currentFormData  {
+  Map<String, dynamic> get currentFormData {
     return _formPropsStructure.currentFormData;
   }
 

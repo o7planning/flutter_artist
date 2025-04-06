@@ -10,9 +10,11 @@ class FormPropsStructure {
   FormMode _formMode = FormMode.none;
 
   DataState get formDataState => _formDataState;
+
   FormMode get formMode => _formMode;
 
   bool get isNew => _formMode == FormMode.creation;
+
   //
   // final Map<String, dynamic> _tempCurrentFormData = {};
 
@@ -61,10 +63,10 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _isFormDirty()  {
-    for(Prop prop in _allPropMap.values)  {
+  bool _isFormDirty() {
+    for (Prop prop in _allPropMap.values) {
       bool dirty = prop.isDirty();
-      if(dirty) {
+      if (dirty) {
         return true;
       }
     }
@@ -74,7 +76,6 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-
   ///
   /// For the first load of an Item, update "Initial Form Data".
   /// IMPORTANT:
@@ -83,7 +84,7 @@ class FormPropsStructure {
   void _setInitialFormDataForItemFirstLoad() {
     for (Prop prop in _allPropMap.values) {
       prop._initialValue = prop._currentValue;
-      prop._initialData = prop._currentXData;
+      prop._initialXData = prop._currentXData;
     }
   }
 
@@ -93,11 +94,11 @@ class FormPropsStructure {
   void _updateInitialFormDataAfterSaveSuccess() {
     for (Prop prop in _allPropMap.values) {
       prop._initialValue = prop._currentValue;
-      prop._initialData = prop._currentXData;
+      prop._initialXData = prop._currentXData;
     }
   }
 
-  void _updateTempToReal()  {
+  void _updateTempToReal() {
     for (Prop prop in _allPropMap.values) {
       prop._currentValue = prop._tempCurrentValue;
       prop._currentXData = prop._tempCurrentXData;
@@ -117,7 +118,7 @@ class FormPropsStructure {
   void _resetFormData() {
     for (Prop prop in _allPropMap.values) {
       prop._currentValue = prop._initialValue;
-      prop._currentXData = prop._initialData;
+      prop._currentXData = prop._initialXData;
     }
   }
 
@@ -132,22 +133,22 @@ class FormPropsStructure {
     }
   }
 
-
-
   // ***************************************************************************
   // ***************************************************************************
 
-  void _setCurrentPropValue({required String propName,required dynamic value,}) {
+  void _setCurrentPropValue({
+    required String propName,
+    required dynamic value,
+  }) {
     Prop? prop = _allPropMap[propName];
-    if(prop!= null) {
+    if (prop != null) {
       prop._currentValue = value;
     }
   }
 
-
-  dynamic _getCurrentPropValue({required String propName})  {
+  dynamic _getCurrentPropValue({required String propName}) {
     Prop? prop = _allPropMap[propName];
-    if(prop!= null) {
+    if (prop != null) {
       return prop?._currentValue;
     }
     return null;
@@ -204,7 +205,7 @@ class FormPropsStructure {
   void _initTemporaryForNewTransaction({
     required Map<String, dynamic>? newCurrentFormData,
   }) {
-    for(Prop prop in _allPropMap.values) {
+    for (Prop prop in _allPropMap.values) {
       dynamic newValue = newCurrentFormData?[prop.propName];
       prop._tempCurrentValue = newValue;
       prop._tempCurrentXData = null;
@@ -215,7 +216,7 @@ class FormPropsStructure {
   // ***************************************************************************
 
   dynamic _getTempCurrentPropValue({required String propName}) {
-   // return _tempCurrentFormData[propName];
+    // return _tempCurrentFormData[propName];
     Prop? prop = _allPropMap[propName];
     if (prop == null) {
       return null;
@@ -293,20 +294,17 @@ class FormPropsStructure {
     //
     for (OptProp rootProp in _rootOptProps) {
       rootProp._updateTempValueCascade(
-        // tempCurrentFormData: _tempCurrentFormData,
         updateValues: candidateUpdateValues,
       );
     }
     for (SimpleProp commonItem in _simpleProps) {
       commonItem._updateTempValue(
-        // tempCurrentFormData: _tempCurrentFormData,
         updateValues: candidateUpdateValues,
       );
     }
     // Apply to all dirty Prop:
     for (Prop prop in _allPropMap.values) {
       if (prop._markTempDirty) {
-        // _tempCurrentFormData[prop.propName] = prop.candidateUpdateValue;
         prop._tempCurrentValue = prop.candidateUpdateValue;
       }
     }
@@ -364,29 +362,20 @@ class FormPropsStructure {
           message: "$propName is not Simple prop", details: null);
     }
     prop._tempCurrentValue = value;
-    // _tempCurrentFormData[propName] = value;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _addSimpleProp(SimpleProp prop) {
-    if (!_allPropMap.containsKey(prop.propName)) {
-      _allPropMap[prop.propName] = prop;
-      _simpleProps.add(prop);
-    }
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   void _printTemporaryInfo(String prefix) {
-    if (true) return;
-    print("\n\n--------------------------------------------------------------");
-    print(" ---> $prefix");
-    for (OptProp rootItem in _rootOptProps) {
-      rootItem._printTempInfoCascade(indentFactor: 1);
+    if (true) {
+      print(
+          "\n\n--------------------------------------------------------------");
+      print(" ---> $prefix");
+      for (OptProp rootItem in _rootOptProps) {
+        rootItem._printTempInfoCascade(indentFactor: 1);
+      }
+      print("--------------------------------------------------------------");
     }
-    print("--------------------------------------------------------------");
   }
 }

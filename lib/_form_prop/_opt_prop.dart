@@ -16,10 +16,6 @@ class OptProp extends Prop {
   bool singleSelection;
   final List<OptProp> children;
 
-//  XOptionedData? _xOptionedData;
-
-// XOptionedData? _tempXOptionedData;
-
   OptProp({
     required super.propName,
     this.type,
@@ -51,11 +47,9 @@ class OptProp extends Prop {
   }
 
   void _updateTempValueCascade({
-   // required Map<String, dynamic> tempCurrentFormData,
     required Map<String, dynamic> updateValues,
   }) {
     if (!_valueUpdated && _markTempDirty) {
-      // final dynamic oldValue = tempCurrentFormData[propName]; (TODO-DELTE)
       final dynamic oldValue = _tempCurrentValue;
       final dynamic newValue = updateValues[propName];
       //
@@ -87,7 +81,6 @@ class OptProp extends Prop {
     //
     for (OptProp childItem in children) {
       childItem._updateTempValueCascade(
-        // tempCurrentFormData: tempCurrentFormData,
         updateValues: updateValues,
       );
     }
