@@ -84,8 +84,8 @@ class FilterCriteriaStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  dynamic _getTempCurrentCriterionValue({required String propName}) {
-    return _tempCurrentFormData[propName];
+  dynamic _getTempCurrentCriterionValue({required String criterionName}) {
+    return _tempCurrentFormData[criterionName];
   }
 
   // ***************************************************************************
@@ -195,18 +195,18 @@ class FilterCriteriaStructure {
   // ***************************************************************************
 
   void _setTempOptCriterionData({
-    required String propName,
+    required String criterionName,
     required XOptionedData? optionedData,
   }) {
-    Criterion? prop = _allCriteriaMap[propName];
+    Criterion? prop = _allCriteriaMap[criterionName];
     if (prop == null) {
-      throw AppException(message: 'No Criterion $propName');
+      throw AppException(message: 'No Criterion $criterionName');
     }
     if (prop is OptCriterion) {
       prop._tempXOptionedData = optionedData;
     } else {
       throw AppException(
-          message: 'Invalid Criterion $propName, it must be $OptCriterion');
+          message: 'Invalid Criterion $criterionName, it must be $OptCriterion');
     }
   }
 

@@ -38,7 +38,7 @@ class _DefaultFilterModel
   PropValue? getOptCriterionValueFromFilterInput({
     required EmptyFilterInput filterInput,
     required XOptionedData optCriterionData,
-    required String propName,
+    required String criterionName,
   }) {
     return null;
   }
@@ -54,14 +54,14 @@ class _DefaultFilterModel
   @override
   PropValue? specifyDefaultOptCriterionValue({
     required XOptionedData optCriterionData,
-    required String propName,
+    required String criterionName,
   }) {
     return null;
   }
 
   @override
   Object? specifyDefaultSimpleCriterionValue({
-    required String propName,
+    required String criterionName,
   }) {
     return null;
   }
@@ -103,7 +103,7 @@ class StringIdFilterModel
   PropValue? getOptCriterionValueFromFilterInput({
     required StringIdFilterInput filterInput,
     required XOptionedData optCriterionData,
-    required String propName,
+    required String criterionName,
   }) {
     return null;
   }
@@ -119,14 +119,14 @@ class StringIdFilterModel
   @override
   PropValue? specifyDefaultOptCriterionValue({
     required XOptionedData optCriterionData,
-    required String propName,
+    required String criterionName,
   }) {
     return null;
   }
 
   @override
   Object? specifyDefaultSimpleCriterionValue({
-    required String propName,
+    required String criterionName,
   }) {
     return null;
   }
@@ -168,7 +168,7 @@ class StringValueFilterModel
   PropValue? getOptCriterionValueFromFilterInput({
     required StringValueFilterInput filterInput,
     required XOptionedData optCriterionData,
-    required String propName,
+    required String criterionName,
   }) {
     return null;
   }
@@ -184,14 +184,14 @@ class StringValueFilterModel
   @override
   PropValue? specifyDefaultOptCriterionValue({
     required XOptionedData optCriterionData,
-    required String propName,
+    required String criterionName,
   }) {
     return null;
   }
 
   @override
   Object? specifyDefaultSimpleCriterionValue({
-    required String propName,
+    required String criterionName,
   }) {
     return null;
   }
@@ -233,7 +233,7 @@ class SearchTextFilterModel
   PropValue? getOptCriterionValueFromFilterInput({
     required SearchTextFilterInput filterInput,
     required XOptionedData optCriterionData,
-    required String propName,
+    required String criterionName,
   }) {
     return null;
   }
@@ -249,14 +249,14 @@ class SearchTextFilterModel
   @override
   PropValue? specifyDefaultOptCriterionValue({
     required XOptionedData optCriterionData,
-    required String propName,
+    required String criterionName,
   }) {
     return null;
   }
 
   @override
   Object? specifyDefaultSimpleCriterionValue({
-    required String propName,
+    required String criterionName,
   }) {
     return null;
   }
@@ -298,7 +298,7 @@ class IntIdFilterModel
   PropValue? getOptCriterionValueFromFilterInput({
     required IntIdFilterInput filterInput,
     required XOptionedData optCriterionData,
-    required String propName,
+    required String criterionName,
   }) {
     return null;
   }
@@ -314,14 +314,14 @@ class IntIdFilterModel
   @override
   PropValue? specifyDefaultOptCriterionValue({
     required XOptionedData optCriterionData,
-    required String propName,
+    required String criterionName,
   }) {
     return null;
   }
 
   @override
   Object? specifyDefaultSimpleCriterionValue({
-    required String propName,
+    required String criterionName,
   }) {
     return null;
   }

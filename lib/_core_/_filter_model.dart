@@ -108,12 +108,12 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  XOptionedData? getOptCriterionXData(String propName) {
-    return _filterCriteriaStructure._getOptCriterionData(propName);
+  XOptionedData? getOptCriterionXData(String criterionName) {
+    return _filterCriteriaStructure._getOptCriterionData(criterionName);
   }
 
-  dynamic getOptCriterionData(String propName) {
-    XOptionedData? optCriterionData = getOptCriterionXData(propName);
+  dynamic getOptCriterionData(String criterionName) {
+    XOptionedData? optCriterionData = getOptCriterionXData(criterionName);
     dynamic data = optCriterionData?.data;
     if (data != null) {
       return data;
@@ -122,8 +122,8 @@ abstract class FilterModel<
     }
   }
 
-  OptPropType? getOptPropType(String propName) {
-    return _filterCriteriaStructure._getOptCriterionType(propName);
+  OptPropType? getOptPropType(String criterionName) {
+    return _filterCriteriaStructure._getOptCriterionType(criterionName);
   }
 
   // ***************************************************************************
@@ -211,7 +211,7 @@ abstract class FilterModel<
           for (SimpleCriterion simpleCriterion
               in _filterCriteriaStructure._simpleCriteria) {
             Object? value = specifyDefaultSimpleCriterionValue(
-              propName: simpleCriterion.criterionName,
+              criterionName: simpleCriterion.criterionName,
             );
             _filterCriteriaStructure._setTempSimpleCriterionData(
               criterionName: simpleCriterion.criterionName,
@@ -341,7 +341,7 @@ abstract class FilterModel<
     //
     if (optCriterionData == null) {
       _filterCriteriaStructure._setTempOptCriterionData(
-        propName: criterionName,
+        criterionName: criterionName,
         optionedData: null,
       );
       // IMPORTANT:
@@ -387,7 +387,7 @@ abstract class FilterModel<
       //
       final dynamic tempCurrentValue =
           _filterCriteriaStructure._getTempCurrentCriterionValue(
-        propName: criterionName,
+        criterionName: criterionName,
       );
       //
       if (tempCurrentValue != null) {
@@ -417,7 +417,7 @@ abstract class FilterModel<
     }
     //
     _filterCriteriaStructure._setTempOptCriterionData(
-      propName: criterionName,
+      criterionName: criterionName,
       optionedData: optCriterionData,
     );
     //
@@ -448,7 +448,7 @@ abstract class FilterModel<
     //
     Object? tempSelectedCriterionValue =
         _filterCriteriaStructure._getTempCurrentCriterionValue(
-      propName: criterionName,
+      criterionName: criterionName,
     );
 
     if (tempSelectedCriterionValue != null) {
@@ -482,10 +482,10 @@ abstract class FilterModel<
   /// @override
   /// MasterPropValueWrap? getOptCriterionValueFromFilterInput({
   ///     required ExampleFilterInput filterInput,
-  ///     required XOptionedData optPropData,
-  ///     required String propName,
+  ///     required XOptionedData optCriterionData,
+  ///     required String criterionName,
   /// }) {
-  ///    if(propName == "company") {
+  ///    if(criterionName == "company") {
   ///       int inputCompanyId = filterInput.filterInput;
   ///       CompanyInfo? inputCompany = materPropData?.getItemById(inputCompanyId);
   ///       return MasterPropValueWrap([inputCompany])
@@ -494,20 +494,19 @@ abstract class FilterModel<
   /// }
   /// ```
   ///
-  /// TODO: DELETE: filterInputToOptCriterionValue ***
   PropValue? getOptCriterionValueFromFilterInput({
     required FILTER_INPUT filterInput,
     required XOptionedData optCriterionData,
-    required String propName,
+    required String criterionName,
   });
 
   PropValue? specifyDefaultOptCriterionValue({
     required XOptionedData optCriterionData,
-    required String propName,
+    required String criterionName,
   });
 
   Object? specifyDefaultSimpleCriterionValue({
-    required String propName,
+    required String criterionName,
   });
 
   PropValue? _getOptCriterionValueFromFilterInput({
@@ -518,7 +517,7 @@ abstract class FilterModel<
     PropValue? wrap = getOptCriterionValueFromFilterInput(
       filterInput: filterInput,
       optCriterionData: optCriterionData,
-      propName: criterionName,
+      criterionName: criterionName,
     );
     if (wrap == null) {
       return null;
@@ -539,7 +538,7 @@ abstract class FilterModel<
   }) {
     PropValue? wrap = specifyDefaultOptCriterionValue(
       optCriterionData: optCriterionData,
-      propName: criterionName,
+      criterionName: criterionName,
     );
     if (wrap == null) {
       return null;
