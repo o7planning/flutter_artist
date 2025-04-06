@@ -521,7 +521,8 @@ abstract class FormModel<
 
   Future<void> _loadOptPropDataCascade({
     required EXTRA_FORM_INPUT? extraFormInput,
-    required Object? parentOptPropValue, // May be new selected parent value.
+    // May be new selected parent value.
+    required Object? parentOptPropValue,
     required OptProp optProp,
     required bool isItemFirstLoad,
   }) async {
@@ -726,15 +727,6 @@ abstract class FormModel<
       return data;
     } else {
       return data;
-      // OptPropType? type = getOptPropType(propName);
-      // switch (type) {
-      //   case null:
-      //     return data;
-      //   case OptPropType.list:
-      //     return [];
-      //   case OptPropType.custom:
-      //     return data;
-      // }
     }
   }
 
