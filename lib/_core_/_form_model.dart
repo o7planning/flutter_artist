@@ -572,6 +572,17 @@ abstract class FormModel<
       }
     }
     //
+    if (optPropData == null) {
+      _formPropsStructure._setTempOptPropData(
+        propName: optPropName,
+        optionedData: null,
+      );
+      // IMPORTANT:
+      //  - Update from ROOTs to LEAVES
+      //  - And make sure children-OptProp to null if parent-Value is null or not selected.
+      _formPropsStructure._updateTempData({optPropName: null});
+    }
+    //
     // Load OptProp data from Rest API.
     // May throw ApiError.
     //
@@ -659,9 +670,12 @@ abstract class FormModel<
       propName: optPropName,
       optionedData: optPropData,
     );
-    // TODO: Dangerous check not null:
+    // TODO: Dangerous, check not null:
     candidateSelectedItems = optPropData?.findInternalItemsByDynamics(
           dynamicValues: candidateSelectedItems,
+          //
+          // IMPORTANT: Add not found item to internal list.
+          //
           addToInternalIfNotFound: true,
           removeCurrentNotFoundItems: true,
         ) ??
