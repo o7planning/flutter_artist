@@ -67,7 +67,7 @@ abstract class FilterModel<
   }) async {
     __assertThisXFilterModel(xFilterModel);
     //
-    data._filterDataState = DataState.pending;
+    _filterCriteriaStructure._setFilterDataState(DataState.pending);
     //
     FILTER_CRITERIA? filterCriteria = await _startNewFilterTransaction(
       filterInput: null,
@@ -183,10 +183,10 @@ abstract class FilterModel<
       // Update values from view (On the user Interface).
       allNewValue.addAll(_formKey.currentState?.instantValue ?? {});
       //
-      if (!_initiated && _formKey.currentState != null) {
-        _initiated = true;
-        data._initialFilterData(allNewValue);
-      }
+      // if (!_initiated && _formKey.currentState != null) {
+      //   _initiated = true;
+      //   data._initialFilterData(allNewValue);
+      // }
       //
       _filterCriteriaStructure._initTemporaryForNewTransaction(
         newCurrentFormData: filterInput != null
@@ -243,7 +243,7 @@ abstract class FilterModel<
         stackTrace: stackTrace,
         showSnackBar: true,
       );
-      data._filterDataState = DataState.error;
+      _filterCriteriaStructure._setFilterDataState(DataState.error);
       _filterCriteria = null;
       return _filterCriteria;
     }
@@ -256,9 +256,6 @@ abstract class FilterModel<
         dataMap: _filterCriteriaStructure._tempCurrentFormData,
       );
       _filterCriteria = newCriteria;
-      //
-      this.data._filterDataState = DataState.ready;
-
       //
       // Update Real FromData from Temporary FormData:
       //
@@ -283,7 +280,7 @@ abstract class FilterModel<
         stackTrace: stackTrace,
         showSnackBar: true,
       );
-      this.data._filterDataState = DataState.error;
+      _filterCriteriaStructure._setFilterDataState(DataState.error);
       //
       // IMPORTANT: Restore OLD State:
       // Note [_formKeyPatchValue] NOT WORK!.
@@ -293,7 +290,6 @@ abstract class FilterModel<
       );
       //
       _filterCriteria = null;
-      data._filterDataState = DataState.error;
       return _filterCriteria;
     }
   }
