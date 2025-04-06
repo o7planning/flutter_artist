@@ -83,15 +83,16 @@ class __FormDataViewState extends State<_FormDataView> {
   }
 
   Widget _buildTabContainer() {
-    FormModelData formModelData = widget.formModel.data;
-    Map<String, dynamic> initial0Value = formModelData.initial0FormData;
-    Map<String, dynamic> initial1Value = formModelData.initialFormData;
-    Map<String, dynamic> instantValue = formModelData.currentFormData;
+    FormPropsStructure formPropsStructure =
+        widget.formModel._formPropsStructure;
+    Map<String, dynamic> initial0Value = formPropsStructure.initial0FormData;
+    Map<String, dynamic> initial1Value = formPropsStructure.initialFormData;
+    Map<String, dynamic> instantValue = formPropsStructure.currentFormData;
 
+    //
     String initial0Json = toJson(initial0Value);
     String initial1Json = toJson(initial1Value);
     String instantJson = toJson(instantValue);
-
     //
 
     List<TabData> tabs = [];

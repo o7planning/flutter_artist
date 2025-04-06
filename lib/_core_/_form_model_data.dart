@@ -25,7 +25,7 @@ class FormModelData<
 
   final Map<String, dynamic> __initialFormData = {};
 
-  Map<String, dynamic> get initialFormData => {...__initialFormData};
+ // Map<String, dynamic> get initialFormData => {...__initialFormData};
 
   //
 
@@ -50,59 +50,59 @@ class FormModelData<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _clearWithDataState({required DataState formDataState}) {
-    _formDataState = formDataState;
-    _formMode = FormMode.none;
-    //
-    _updateFormData({});
-  }
+  // void _clearWithDataState({required DataState formDataState}) {
+  //   _formDataState = formDataState;
+  //   _formMode = FormMode.none;
+  //   //
+  //   _updateFormData({});
+  // }
 
   // ***************************************************************************
   // ***************************************************************************
   ///
   /// After save successful, update [__initialFormData].
   ///
-  void _updateInitialFormDataAfterSaveSuccess() {
-    __initialFormData
-      ..clear()
-      ..addAll(_currentFormData);
-    // TODO: Update OptProp Data??
-  }
+  // void _updateInitialFormDataAfterSaveSuccess() {
+  //   __initialFormData
+  //     ..clear()
+  //     ..addAll(_currentFormData);
+  //   // TODO: Update OptProp Data??
+  // }
 
   ///
   /// For the first load of an Item, update [__initialFormData].
   /// Initial [OptProp] data will be update later...
   ///
-  void _setInitialFormDataForItemFirstLoad() {
-    __initialFormData
-      ..clear()
-      ..addAll(_currentFormData);
-    // TODO: OptProp data?
-  }
+  // void _setInitialFormDataForItemFirstLoad() {
+  //   __initialFormData
+  //     ..clear()
+  //     ..addAll(_currentFormData);
+  //   // TODO: OptProp data?
+  // }
 
   ///
   /// Reset FormData:
   ///
-  void _resetFormData() {
-    _currentFormData
-      ..clear()
-      ..addAll(__initialFormData);
-    // TODO: Reset [OptProp] data?
-  }
+  // void _resetFormData() {
+  //   _currentFormData
+  //     ..clear()
+  //     ..addAll(__initialFormData);
+  //   // TODO: Reset [OptProp] data?
+  // }
 
-  void _clearInititalFormData() {
-    __initial0FormData.clear();
-    __initialFormData.clear();
-  }
+  // void _clearInititalFormData() {
+  //   __initial0FormData.clear();
+  //   __initialFormData.clear();
+  // }
 
-  void _updateInitialFormData(Map<String, dynamic> formData) {
-    __initial0FormData
-      ..clear()
-      ..addAll(formData);
-    __initialFormData
-      ..clear()
-      ..addAll(formData);
-  }
+  // void _updateInitialFormData(Map<String, dynamic> formData) {
+  //   __initial0FormData
+  //     ..clear()
+  //     ..addAll(formData);
+  //   __initialFormData
+  //     ..clear()
+  //     ..addAll(formData);
+  // }
 
   // ***************************************************************************
   // ***************************************************************************

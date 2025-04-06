@@ -5,6 +5,14 @@ class FormPropsStructure {
   final List<OptProp> _rootOptProps;
   final List<SimpleProp> _simpleProps = [];
 
+  bool _justInitialized = false;
+  DataState _formDataState = DataState.none;
+  FormMode _formMode = FormMode.none;
+
+  DataState get formDataState => _formDataState;
+  FormMode get formMode => _formMode;
+
+  bool get isNew => _formMode == FormMode.creation;
   //
   final Map<String, dynamic> _tempCurrentFormData = {};
 
@@ -30,6 +38,71 @@ class FormPropsStructure {
       );
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ///
+  /// For the first load of an Item, update "Initial Form Data".
+  /// IMPORTANT:
+  /// - Other Initial [OptProp] data will be update later...
+  ///
+  void _setInitialFormDataForItemFirstLoad() {
+    for (Prop prop in _allPropMap.values) {
+      prop._initialValue = prop._currentValue;
+      prop._initialData = prop._currentData;
+    }
+  }
+
+  ///
+  /// After save successful, update "Initial Form Data".
+  ///
+  void _updateInitialFormDataAfterSaveSuccess() {
+    for (Prop prop in _allPropMap.values) {
+      prop._initialValue = prop._currentValue;
+      prop._initialData = prop._currentData;
+    }
+  }
+
+  ///
+  /// Reset Form Data:
+  ///
+  void _resetFormData() {
+    for (Prop prop in _allPropMap.values) {
+      prop._currentValue = prop._initialValue;
+      prop._currentData = prop._initialData;
+    }
+  }
+
+  void _clearFormDataWithState({required DataState formDataState}) {
+    _justInitialized = true;
+    _formDataState = formDataState;
+    _formMode = FormMode.none;
+    //
+    for (Prop prop in _allPropMap.values) {
+      prop._currentValue = null;
+      prop._currentData = null;
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  // TODO: DELTE?
+  Map<String, dynamic> get initial0FormData {
+    return {};
+  }
+
+  Map<String, dynamic> get initialFormData {
+    return _allPropMap.map((k, v) => MapEntry(k, v._initialValue));
+  }
+
+  Map<String, dynamic> get currentFormData {
+    return _allPropMap.map((k, v) => MapEntry(k, v._currentValue));
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void __standardizeCascade(
     OptProp optProp,

@@ -443,7 +443,7 @@ abstract class FormModel<
         ..updateAll((k, v) => null)
         ..addAll(_formPropsStructure._tempCurrentFormData);
       if (isItemFirstLoad) {
-        data._setInitialFormDataForItemFirstLoad();
+        _formPropsStructure._setInitialFormDataForItemFirstLoad();
       }
       //
       // UPDATE OPT-DATA:
@@ -865,9 +865,9 @@ abstract class FormModel<
 
   void _clearWithDataState({required DataState formDataState}) {
     try {
-      this.data._clearWithDataState(
-            formDataState: formDataState,
-          );
+      _formPropsStructure._clearFormDataWithState(
+        formDataState: formDataState,
+      );
       //
       this.__clearFormKey();
       //
@@ -1023,11 +1023,11 @@ abstract class FormModel<
       //
       // Reset FormData:
       //
-      data._resetFormData();
+      _formPropsStructure._resetFormData();
       //
       // Patch _formKey:
       //
-      Map<String, dynamic> initData = {...data.initialFormData};
+      Map<String, dynamic> initData = {..._formPropsStructure.initialFormData};
       for (String key in _formKey.currentState?.instantValue.keys ?? []) {
         if (!initData.containsKey(key)) {
           initData[key] = null;
@@ -1091,14 +1091,14 @@ abstract class FormModel<
   // ***************************************************************************
 
   dynamic getFormInitialValue(String propertyName) {
-    return data.initialFormData[propertyName];
+    return _formPropsStructure.initialFormData[propertyName];
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   dynamic getFormInstantValue(String propertyName) {
-    return data._currentFormData[propertyName];
+    return _formPropsStructure.currentFormData[propertyName];
   }
 
   // ***************************************************************************

@@ -7,7 +7,10 @@ abstract class Prop {
   bool _dirty = false;
 
   dynamic _currentValue;
+  dynamic _currentData;
+
   dynamic _initialValue;
+  dynamic _initialData;
 
   Prop({required this.propName,});
 

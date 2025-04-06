@@ -1839,7 +1839,7 @@ abstract class Block<
         // IMPORTANT:
         // After save successful, update [initialFormData].
         //
-        formModel!.data._updateInitialFormDataAfterSaveSuccess();
+        formModel!._formPropsStructure._updateInitialFormDataAfterSaveSuccess();
         //
         bool success = await formModel!._startNewFormTransaction(
           filterCriteria: data.filterCriteria,
