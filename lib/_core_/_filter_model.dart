@@ -45,8 +45,6 @@ abstract class FilterModel<
 
   late final FilterCriteriaStructure _filterCriteriaStructure;
 
-  bool _initiated = false;
-
   bool _lockAddMoreQuery = false;
 
   bool get lockAddMoreQuery => _lockAddMoreQuery;
