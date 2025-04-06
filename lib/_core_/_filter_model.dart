@@ -131,7 +131,6 @@ abstract class FilterModel<
 
   void _printStructureAndTempData(String prefix) {
     _filterCriteriaStructure._printTemporaryInfo(prefix);
-    print("instantData: ${_formKey.currentState?.instantValue}\n\n");
   }
 
   // ***************************************************************************

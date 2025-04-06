@@ -242,6 +242,6 @@ class FilterCriteriaStructure {
       rootItem._printTempInfoCascade(indentFactor: 1);
     }
     print("tempCurrentFormData: $_tempCurrentFormData");
-    print("--------------------------------------------------------------");
+    print("--------------------------------------------------------------\n\n");
   }
 }
