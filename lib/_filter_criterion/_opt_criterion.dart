@@ -51,11 +51,10 @@ class OptCriterion extends Criterion {
   }
 
   void _updateTempValueCascade({
-    required Map<String, dynamic> tempCurrentFormData,
     required Map<String, dynamic> updateValues,
   }) {
     if (!_valueUpdated && _markTempDirty) {
-      final dynamic oldValue = tempCurrentFormData[criterionName];
+      final dynamic oldValue = _tempCurrentValue;
       final dynamic newValue = updateValues[criterionName];
       //
       candidateUpdateValue = newValue;
@@ -89,7 +88,6 @@ class OptCriterion extends Criterion {
     //
     for (OptCriterion childItem in children) {
       childItem._updateTempValueCascade(
-        tempCurrentFormData: tempCurrentFormData,
         updateValues: updateValues,
       );
     }

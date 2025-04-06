@@ -206,7 +206,6 @@ class FormPropsStructure {
   // ***************************************************************************
 
   dynamic _getTempCurrentPropValue({required String propName}) {
-    // return _tempCurrentFormData[propName];
     Prop? prop = _allPropMap[propName];
     if (prop == null) {
       return null;

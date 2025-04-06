@@ -261,7 +261,7 @@ abstract class FilterModel<
     try {
       // Convert Map Data to FilterCriteria Object.
       FILTER_CRITERIA newCriteria = createFilterCriteria(
-        dataMap: _filterCriteriaStructure._tempCurrentFormData,
+        dataMap: _filterCriteriaStructure.tempCurrentFormData,
       );
       _filterCriteria = newCriteria;
       //

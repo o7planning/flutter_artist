@@ -5,9 +5,6 @@ class FilterCriteriaStructure {
   final List<OptCriterion> _rootOptCriteria;
   final List<SimpleCriterion> _simpleCriteria = [];
 
-  //
-  final Map<String, dynamic> _tempCurrentFormData = {};
-
   DataState _filterDataState = DataState.pending;
 
   FilterCriteriaStructure({
@@ -78,6 +75,10 @@ class FilterCriteriaStructure {
     return _allCriteriaMap.map((k, v) => MapEntry(k, v._currentValue));
   }
 
+  Map<String, dynamic> get tempCurrentFormData {
+    return _allCriteriaMap.map((k, v) => MapEntry(k, v._tempCurrentValue));
+  }
+
   // ***************************************************************************
   // ***************************************************************************
 
@@ -125,18 +126,15 @@ class FilterCriteriaStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  // @Deprecated("Xoa di, khong su dung nua")
-  // void _applyAllTempDataToReal() {
-  //   for (Criterion criterion in _allCriteriaMap.values) {
-  //     criterion._applyTempDataToReal();
-  //   }
-  // }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   dynamic _getTempCurrentCriterionValue({required String criterionName}) {
-    return _tempCurrentFormData[criterionName];
+    Criterion? criterion = _allCriteriaMap[criterionName];
+    if (criterion == null) {
+      return null;
+    }
+    if (criterion is OptCriterion) {
+      return criterion._tempCurrentValue;
+    }
+    return null;
   }
 
   // ***************************************************************************
@@ -206,21 +204,18 @@ class FilterCriteriaStructure {
     //
     for (OptCriterion rootCriterion in _rootOptCriteria) {
       rootCriterion._updateTempValueCascade(
-        tempCurrentFormData: _tempCurrentFormData,
         updateValues: candidateUpdateValues,
       );
     }
     for (SimpleCriterion simpleCriterion in _simpleCriteria) {
       simpleCriterion._updateTempValue(
-        tempCurrentFormData: _tempCurrentFormData,
         updateValues: candidateUpdateValues,
       );
     }
     // Apply to all dirty Criterion:
     for (Criterion criterion in _allCriteriaMap.values) {
       if (criterion._markTempDirty) {
-        _tempCurrentFormData[criterion.criterionName] =
-            criterion.candidateUpdateValue;
+        criterion._tempCurrentValue = criterion.candidateUpdateValue;
       }
     }
   }
@@ -270,7 +265,15 @@ class FilterCriteriaStructure {
     required String criterionName,
     required Object? value,
   }) {
-    _tempCurrentFormData[criterionName] = value;
+    Criterion? criterion = _allCriteriaMap[criterionName];
+    if (criterion == null) {
+      throw AppException(
+          message: "No criterionName $criterionName", details: null);
+    } else if (criterion is! SimpleCriterion) {
+      throw AppException(
+          message: "$criterionName is not $SimpleCriterion", details: null);
+    }
+    criterion._tempCurrentValue = value;
   }
 
   // ***************************************************************************
@@ -305,7 +308,6 @@ class FilterCriteriaStructure {
     for (OptCriterion rootItem in _rootOptCriteria) {
       rootItem._printTempInfoCascade(indentFactor: 1);
     }
-    print("tempCurrentFormData: $_tempCurrentFormData");
     print("--------------------------------------------------------------\n\n");
   }
 }

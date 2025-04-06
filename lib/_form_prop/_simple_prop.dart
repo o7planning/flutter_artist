@@ -9,7 +9,7 @@ class SimpleProp extends Prop {
     required Map<String, dynamic> updateValues,
   }) {
     if (!_valueUpdated && _markTempDirty) {
-      final dynamic oldValue = _tempCurrentValue;
+      // final dynamic oldValue = _tempCurrentValue;
       final dynamic newValue = updateValues[propName];
       //
       candidateUpdateValue = newValue;
