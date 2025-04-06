@@ -15,9 +15,6 @@ class FormPropsStructure {
 
   bool get isNew => _formMode == FormMode.creation;
 
-  //
-  // final Map<String, dynamic> _tempCurrentFormData = {};
-
   FormPropsStructure({
     required List<String> simpleProps,
     required List<OptProp> optProps,
