@@ -269,7 +269,7 @@ class FormPropsStructure {
     final candidateUpdateValues = {...updateData};
     //
     // IMPORTANT:
-    // Update data for MasterDataStructure. From ROOTs to LEAVES.
+    // Update data for FormPropsStructure. From ROOTs to LEAVES.
     // (***):
     // And Update children-OptProp data to null if parent-Value is null or not selected.
     //
