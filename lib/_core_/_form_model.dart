@@ -23,8 +23,6 @@ abstract class FormModel<
 
   bool _changeEventLocked = false;
 
-  late final FormPropsStructure _formPropsStructure;
-
   FormMode get formMode => _formPropsStructure.formMode;
 
   DataState get formDataState => _formPropsStructure._formDataState;
@@ -41,13 +39,17 @@ abstract class FormModel<
 
   bool _defaultValueInitiated = false;
 
-  GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
-
   final _defaultAutovalidateMode = AutovalidateMode.onUserInteraction;
 
   late AutovalidateMode autovalidateMode = _defaultAutovalidateMode;
 
   final Map<_RefreshableWidgetState, _XState> _formWidgetStates = {};
+
+  // ***************************************************************************
+
+  late final FormPropsStructure _formPropsStructure;
+
+  GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
   // ***************************************************************************
   // ***************************************************************************

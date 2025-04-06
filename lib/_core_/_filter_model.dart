@@ -20,34 +20,19 @@ abstract class FilterModel<
 
   List<Scalar> get scalars => [..._scalars];
 
-  int? __currentSuccessCriteriaId;
-
-  int? get currentSuccessCriteriaId => __currentSuccessCriteriaId;
-
-  ///
-  /// Map<CriteriaId, EmptyFilterCriteria>
-  ///
-  final Map<int, FILTER_CRITERIA> __filterCriteriaMap = {};
-
-  FILTER_CRITERIA? get currentSuccessFilterCriteria {
-    return __currentSuccessCriteriaId == null
-        ? null
-        : __filterCriteriaMap[__currentSuccessCriteriaId];
-  }
-
   FILTER_CRITERIA? _filterCriteria;
-
-  GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
   FILTER_CRITERIA? get filterCriteria => _filterCriteria;
 
   bool _defaultValueInitiated = false;
 
-  late final FilterCriteriaStructure _filterCriteriaStructure;
-
   bool _lockAddMoreQuery = false;
 
   bool get lockAddMoreQuery => _lockAddMoreQuery;
+
+  late final FilterCriteriaStructure _filterCriteriaStructure;
+
+  GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
   // ***************************************************************************
   // ***************************************************************************
