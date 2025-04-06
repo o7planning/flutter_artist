@@ -89,8 +89,6 @@ part '_core_/_custom_confirmation.dart';
 
 part '_core_/_filter_model.dart';
 
-part '_core_/_filter_model_data.dart';
-
 part '_core_/_default_filter_model.dart';
 
 part '_core_/_error_listener.dart';

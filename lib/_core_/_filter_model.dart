@@ -37,7 +37,6 @@ abstract class FilterModel<
 
   FILTER_CRITERIA? _filterCriteria;
 
-  late final FilterModelData data = FilterModelData(filterModel: this);
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
   FILTER_CRITERIA? get filterCriteria => _filterCriteria;
