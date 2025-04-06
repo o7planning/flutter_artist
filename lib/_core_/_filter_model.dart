@@ -102,6 +102,7 @@ abstract class FilterModel<
 
   void __registerCriteriaStructure() {
     _filterCriteriaStructure = registerCriteriaStructure();
+    _filterCriteriaStructure.filterModel = this;
   }
 
   // ***************************************************************************
@@ -188,6 +189,9 @@ abstract class FilterModel<
         ..._filterCriteriaStructure.currentFormData
       };
 
+      print(
+          "@~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1: ${_formKey.currentState?.instantValue}");
+
       // Update values from view (On the user Interface).
       allNewValue.addAll(_formKey.currentState?.instantValue ?? {});
       //
@@ -196,6 +200,9 @@ abstract class FilterModel<
       //   data._initialFilterData(allNewValue);
       // }
       //
+      print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~> 2: filterInput: ${filterInput}");
+      print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3: allNewValue: ${allNewValue}");
+
       _filterCriteriaStructure._initTemporaryForNewTransaction(
         newCurrentFormData: filterInput != null
             ? {} // To Clear All.

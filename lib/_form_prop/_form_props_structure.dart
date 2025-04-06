@@ -5,6 +5,8 @@ class FormPropsStructure {
   final List<OptProp> _rootOptProps;
   final List<SimpleProp> _simpleProps = [];
 
+  late final FormModel formModel;
+
   bool _justInitialized = false;
   DataState _formDataState = DataState.none;
   FormMode _formMode = FormMode.none;
@@ -195,6 +197,10 @@ class FormPropsStructure {
   void _initTemporaryForNewTransaction({
     required Map<String, dynamic>? newCurrentFormData,
   }) {
+    __addPropsIfNeed(
+      propNames: newCurrentFormData?.keys.toList() ?? [],
+    );
+    //
     for (Prop prop in _allPropMap.values) {
       dynamic newValue = newCurrentFormData?[prop.propName];
       prop._tempCurrentValue = newValue;
@@ -256,6 +262,10 @@ class FormPropsStructure {
   // ***************************************************************************
 
   void _updateTempData(Map<String, dynamic> updateData) {
+    __addPropsIfNeed(
+      propNames: updateData.keys.toList(),
+    );
+    //
     final candidateUpdateValues = {...updateData};
     //
     // IMPORTANT:
@@ -273,11 +283,6 @@ class FormPropsStructure {
       Prop? prop = _allPropMap[propName];
       if (prop != null) {
         prop._markTempDirty = true;
-      } else {
-        _createAndAddNewSimpleProp(
-          propName: propName,
-          markTempDirty: true,
-        );
       }
     }
     //
@@ -295,6 +300,27 @@ class FormPropsStructure {
     for (Prop prop in _allPropMap.values) {
       if (prop._markTempDirty) {
         prop._tempCurrentValue = prop.candidateUpdateValue;
+      }
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __addPropsIfNeed({required List<String> propNames}) {
+    for (String propName in propNames) {
+      Prop? prop = _allPropMap[propName];
+      if (prop == null) {
+        print("""\n
+            ****************************************************************************************************
+            *** WARNING ***: You should declare prop '$prop' explicitly in ${getClassName(formModel)}.
+            ****************************************************************************************************
+            """);
+        //
+        _createAndAddNewSimpleProp(
+          propName: propName,
+          markTempDirty: false,
+        );
       }
     }
   }

@@ -215,17 +215,14 @@ abstract class FormModel<
   ///   );
   /// }
   /// ```
-  FormPropsStructure? registerPropsStructure();
+  FormPropsStructure registerPropsStructure();
 
   // ***************************************************************************
   // ***************************************************************************
 
   void __registerPropsStructure() {
-    _formPropsStructure = registerPropsStructure() ??
-        FormPropsStructure(
-          simpleProps: [],
-          optProps: [],
-        );
+    _formPropsStructure = registerPropsStructure();
+    _formPropsStructure.formModel = this;
   }
 
   // ***************************************************************************

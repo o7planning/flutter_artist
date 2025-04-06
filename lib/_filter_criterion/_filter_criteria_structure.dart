@@ -5,6 +5,7 @@ class FilterCriteriaStructure {
   final List<OptCriterion> _rootOptCriteria;
   final List<SimpleCriterion> _simpleCriteria = [];
 
+  late final FilterModel filterModel;
   DataState _filterDataState = DataState.pending;
 
   FilterCriteriaStructure({
@@ -25,7 +26,7 @@ class FilterCriteriaStructure {
     for (String criterionName in simpleCriterionList) {
       _createAndAddNewSimpleCriterion(
         criterionName: criterionName,
-        dirty: false,
+        markTempDirty: false,
       );
     }
   }
@@ -116,6 +117,10 @@ class FilterCriteriaStructure {
   void _initTemporaryForNewTransaction({
     required Map<String, dynamic>? newCurrentFormData,
   }) {
+    __addCriteriaIfNeed(
+      criterionNames: newCurrentFormData?.keys.toList() ?? [],
+    );
+    //
     for (Criterion criterion in _allCriteriaMap.values) {
       dynamic newValue = newCurrentFormData?[criterion.criterionName];
       criterion._tempCurrentValue = newValue;
@@ -177,6 +182,10 @@ class FilterCriteriaStructure {
   // ***************************************************************************
 
   void _updateTempData(Map<String, dynamic> updateData) {
+    __addCriteriaIfNeed(
+      criterionNames: updateData.keys.toList(),
+    );
+    //
     final candidateUpdateValues = {...updateData};
     //
     // IMPORTANT:
@@ -194,11 +203,6 @@ class FilterCriteriaStructure {
       Criterion? criterion = _allCriteriaMap[criterionName];
       if (criterion != null) {
         criterion._markTempDirty = true;
-      } else {
-        _createAndAddNewSimpleCriterion(
-          criterionName: criterionName,
-          dirty: true,
-        );
       }
     }
     //
@@ -223,9 +227,30 @@ class FilterCriteriaStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  void __addCriteriaIfNeed({required List<String> criterionNames}) {
+    for (String criterionName in criterionNames) {
+      Criterion? criterion = _allCriteriaMap[criterionName];
+      if (criterion == null) {
+        print("""\n
+            ****************************************************************************************************
+            *** WARNING ***: You should declare criterion '$criterionName' explicitly in ${getClassName(filterModel)}.
+            ****************************************************************************************************
+            """);
+        //
+        _createAndAddNewSimpleCriterion(
+          criterionName: criterionName,
+          markTempDirty: false,
+        );
+      }
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _createAndAddNewSimpleCriterion({
     required String criterionName,
-    required bool dirty,
+    required bool markTempDirty,
   }) {
     if (_allCriteriaMap.containsKey(criterionName)) {
       return;
@@ -233,7 +258,7 @@ class FilterCriteriaStructure {
     SimpleCriterion? newSimpleCriterion = SimpleCriterion(
       criterionName: criterionName,
     );
-    newSimpleCriterion._markTempDirty = dirty;
+    newSimpleCriterion._markTempDirty = markTempDirty;
     _allCriteriaMap[criterionName] = newSimpleCriterion;
     _simpleCriteria.add(newSimpleCriterion);
   }
