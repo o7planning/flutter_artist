@@ -23,9 +23,9 @@ class FilterCriteriaStructure {
         criterion._checkCycleError();
       }
     }
-    for (String propName in simpleCriterionList) {
-      _createAndAddNewCommomCriterion(
-        criterionName: propName,
+    for (String criterionName in simpleCriterionList) {
+      _createAndAddNewSimpleCriterion(
+        criterionName: criterionName,
         dirty: false,
       );
     }
@@ -46,12 +46,12 @@ class FilterCriteriaStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _isOptCriterion(String propName) {
-    Criterion? prop = _allCriteriaMap[propName];
-    if (prop == null) {
+  bool _isOptCriterion(String criterionName) {
+    Criterion? criterion = _allCriteriaMap[criterionName];
+    if (criterion == null) {
       return false;
     }
-    if (prop is OptCriterion) {
+    if (criterion is OptCriterion) {
       return true;
     }
     return false;
@@ -67,8 +67,8 @@ class FilterCriteriaStructure {
       ..updateAll((k, v) => null)
       ..addAll(currentFormData ?? {});
     //
-    for (Criterion prop in _allCriteriaMap.values) {
-      prop._resetForNewTransaction();
+    for (Criterion criterion in _allCriteriaMap.values) {
+      criterion._resetForNewTransaction();
     }
   }
 
@@ -76,8 +76,8 @@ class FilterCriteriaStructure {
   // ***************************************************************************
 
   void _applyAllTempDataToReal() {
-    for (Criterion prop in _allCriteriaMap.values) {
-      prop._applyTempDataToReal();
+    for (Criterion criterion in _allCriteriaMap.values) {
+      criterion._applyTempDataToReal();
     }
   }
 
@@ -91,35 +91,35 @@ class FilterCriteriaStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  XOptionedData? _getTempOptCriterionData(String propName) {
-    Criterion? prop = _allCriteriaMap[propName];
-    if (prop == null) {
+  XOptionedData? _getTempOptCriterionData(String criterionName) {
+    Criterion? criterion = _allCriteriaMap[criterionName];
+    if (criterion == null) {
       return null;
     }
-    if (prop is OptCriterion) {
-      return prop._tempXOptionedData;
+    if (criterion is OptCriterion) {
+      return criterion._tempXOptionedData;
     }
     return null;
   }
 
-  XOptionedData? _getOptCriterionData(String propName) {
-    Criterion? prop = _allCriteriaMap[propName];
-    if (prop == null) {
+  XOptionedData? _getOptCriterionData(String criterionName) {
+    Criterion? criterion = _allCriteriaMap[criterionName];
+    if (criterion == null) {
       return null;
     }
-    if (prop is OptCriterion) {
-      return prop._xOptionedData;
+    if (criterion is OptCriterion) {
+      return criterion._xOptionedData;
     }
     return null;
   }
 
-  OptPropType? _getOptCriterionType(String propName) {
-    Criterion? prop = _allCriteriaMap[propName];
-    if (prop == null) {
+  OptPropType? _getOptCriterionType(String criterionName) {
+    Criterion? criterion = _allCriteriaMap[criterionName];
+    if (criterion == null) {
       return null;
     }
-    if (prop is OptCriterion) {
-      return prop.type;
+    if (criterion is OptCriterion) {
+      return criterion.type;
     }
     return null;
   }
@@ -135,19 +135,19 @@ class FilterCriteriaStructure {
     // (***):
     // And Update children-OptCriterion data to null if parent-Value is null or not selected.
     //
-    for (Criterion prop in _allCriteriaMap.values) {
-      prop.candidateUpdateValue = null;
-      prop._valueUpdated = false;
-      prop._dirty = false;
+    for (Criterion criterion in _allCriteriaMap.values) {
+      criterion.candidateUpdateValue = null;
+      criterion._valueUpdated = false;
+      criterion._dirty = false;
     }
     //
-    for (String propName in candidateUpdateValues.keys) {
-      Criterion? prop = _allCriteriaMap[propName];
-      if (prop != null) {
-        prop._dirty = true;
+    for (String criterionName in candidateUpdateValues.keys) {
+      Criterion? criterion = _allCriteriaMap[criterionName];
+      if (criterion != null) {
+        criterion._dirty = true;
       } else {
-        _createAndAddNewCommomCriterion(
-          criterionName: propName,
+        _createAndAddNewSimpleCriterion(
+          criterionName: criterionName,
           dirty: true,
         );
       }
@@ -166,9 +166,10 @@ class FilterCriteriaStructure {
       );
     }
     // Apply to all dirty Criterion:
-    for (Criterion prop in _allCriteriaMap.values) {
-      if (prop._dirty) {
-        _tempCurrentFormData[prop.criterionName] = prop.candidateUpdateValue;
+    for (Criterion criterion in _allCriteriaMap.values) {
+      if (criterion._dirty) {
+        _tempCurrentFormData[criterion.criterionName] =
+            criterion.candidateUpdateValue;
       }
     }
   }
@@ -176,7 +177,7 @@ class FilterCriteriaStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _createAndAddNewCommomCriterion({
+  void _createAndAddNewSimpleCriterion({
     required String criterionName,
     required bool dirty,
   }) {
@@ -198,15 +199,16 @@ class FilterCriteriaStructure {
     required String criterionName,
     required XOptionedData? optionedData,
   }) {
-    Criterion? prop = _allCriteriaMap[criterionName];
-    if (prop == null) {
+    Criterion? criterion = _allCriteriaMap[criterionName];
+    if (criterion == null) {
       throw AppException(message: 'No Criterion $criterionName');
     }
-    if (prop is OptCriterion) {
-      prop._tempXOptionedData = optionedData;
+    if (criterion is OptCriterion) {
+      criterion._tempXOptionedData = optionedData;
     } else {
       throw AppException(
-          message: 'Invalid Criterion $criterionName, it must be $OptCriterion');
+          message:
+              'Invalid Criterion $criterionName, it must be $OptCriterion');
     }
   }
 
@@ -223,10 +225,10 @@ class FilterCriteriaStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _addSimpleCriterion(SimpleCriterion prop) {
-    if (!_allCriteriaMap.containsKey(prop.criterionName)) {
-      _allCriteriaMap[prop.criterionName] = prop;
-      _simpleCriteria.add(prop);
+  void _addSimpleCriterion(SimpleCriterion criterion) {
+    if (!_allCriteriaMap.containsKey(criterion.criterionName)) {
+      _allCriteriaMap[criterion.criterionName] = criterion;
+      _simpleCriteria.add(criterion);
     }
   }
 

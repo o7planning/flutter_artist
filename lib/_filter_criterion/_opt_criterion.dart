@@ -29,23 +29,23 @@ class OptCriterion extends Criterion {
 
   void _checkCycleError() {
     OptCriterion? p = parent;
-    final List<String> propNames = [criterionName];
+    final List<String> criterionNames = [criterionName];
     while (true) {
       if (p == null) {
         return;
       }
-      if (propNames.contains(p.criterionName)) {
+      if (criterionNames.contains(p.criterionName)) {
         String message = '''
-          The parent-child relationship of several properties forms a cycle.
+          The parent-child relationship of several criteria forms a cycle.
           ┌─────┐
-          |  ${propNames.last}
+          |  ${criterionNames.last}
           ↑     ↓
           |  ${p.criterionName}
           └─────┘
         ''';
         throw message;
       }
-      propNames.add(p.criterionName);
+      criterionNames.add(p.criterionName);
       p = p.parent;
     }
   }
