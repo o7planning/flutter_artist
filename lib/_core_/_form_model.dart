@@ -359,8 +359,6 @@ abstract class FormModel<
           );
           return false;
         }
-        print(
-            "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1 simplePropValue: $simplePropValue");
       }
       // itemDetail == null
       else {
