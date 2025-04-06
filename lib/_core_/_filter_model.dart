@@ -91,10 +91,12 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  // TODO: Rename?
   Map<String, dynamic> get initialFormData {
     return _filterCriteriaStructure.initialFormData;
   }
 
+  // TODO: Rename?
   Map<String, dynamic> get currentFormData {
     return _filterCriteriaStructure.currentFormData;
   }
