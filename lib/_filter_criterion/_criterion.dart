@@ -4,7 +4,22 @@ abstract class Criterion {
   final String criterionName;
   dynamic candidateUpdateValue;
   bool _valueUpdated = false;
-  bool _dirty = false;
+  bool _markTempDirty = false;
+  
+  //
+
+
+  dynamic _tempCurrentValue;
+  XOptionedData? _tempCurrentXData;
+
+  dynamic _currentValue;
+  XOptionedData? _currentXData;
+
+  dynamic _initialValue;
+  XOptionedData? _initialXData;
+
+  //
+  
 
   Criterion({required this.criterionName});
 

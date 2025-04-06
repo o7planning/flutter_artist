@@ -109,7 +109,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   XOptionedData? getOptCriterionXData(String criterionName) {
-    return _filterCriteriaStructure._getOptCriterionData(criterionName);
+    return _filterCriteriaStructure._getOptCriterionXData(criterionName);
   }
 
   dynamic getOptCriterionData(String criterionName) {
@@ -312,11 +312,11 @@ abstract class FilterModel<
 
     // Get current OptCriterion data:
     XOptionedData? optCriterionData =
-        _filterCriteriaStructure._getOptCriterionData(criterionName);
+        _filterCriteriaStructure._getOptCriterionXData(criterionName);
 
     if (optCriterionParent != null) {
       XOptionedData? tempXOptionedParent =
-          _filterCriteriaStructure._getTempOptCriterionData(
+          _filterCriteriaStructure._getTempOptCriterionXData(
         optCriterionParent.criterionName,
       );
       //

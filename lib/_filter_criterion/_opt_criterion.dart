@@ -16,9 +16,9 @@ class OptCriterion extends Criterion {
   bool singleSelection;
   final List<OptCriterion> children;
 
-  XOptionedData? _xOptionedData;
+  // XOptionedData? _xOptionedData;
 
-  XOptionedData? _tempXOptionedData;
+  // XOptionedData? _tempXOptionedData;
 
   OptCriterion({
     required super.criterionName,
@@ -54,7 +54,7 @@ class OptCriterion extends Criterion {
     required Map<String, dynamic> tempCurrentFormData,
     required Map<String, dynamic> updateValues,
   }) {
-    if (!_valueUpdated && _dirty) {
+    if (!_valueUpdated && _markTempDirty) {
       final dynamic oldValue = tempCurrentFormData[criterionName];
       final dynamic newValue = updateValues[criterionName];
       //
@@ -62,11 +62,14 @@ class OptCriterion extends Criterion {
       _valueUpdated = true;
       //
       bool isSame;
-      if (_tempXOptionedData != null) {
+      if (_tempCurrentXData != null) {
         if (singleSelection) {
-          isSame = _tempXOptionedData!.isSame(item1: oldValue, item2: newValue);
+          isSame = _tempCurrentXData!.isSame(
+            item1: oldValue,
+            item2: newValue,
+          );
         } else {
-          isSame = _tempXOptionedData!.isSameItemOrItemList(
+          isSame = _tempCurrentXData!.isSameItemOrItemList(
             itemOrItemList1: oldValue,
             itemOrItemList2: newValue,
           );
@@ -75,11 +78,11 @@ class OptCriterion extends Criterion {
         isSame = false;
       }
       //
-      if (_tempXOptionedData == null || newValue == null || !isSame) {
+      if (_tempCurrentXData == null || newValue == null || !isSame) {
         for (OptCriterion childItem in children) {
-          childItem._tempXOptionedData = null;
+          childItem._tempCurrentXData = null;
           updateValues[childItem.criterionName] = null;
-          childItem._dirty = true;
+          childItem._markTempDirty = true;
         }
       }
     }
@@ -94,7 +97,7 @@ class OptCriterion extends Criterion {
 
   void _printTempInfoCascade({required int indentFactor}) {
     print(
-        "${("- - - " * indentFactor)} $criterionName >>> UpdateV: $candidateUpdateValue >>> tempXOptionedData: $_tempXOptionedData");
+        "${("- - - " * indentFactor)} $criterionName >>> UpdateVal: $candidateUpdateValue >>> tempCurrentXData: $_tempCurrentXData");
     for (var child in children) {
       child._printTempInfoCascade(indentFactor: indentFactor + 1);
     }
@@ -102,11 +105,11 @@ class OptCriterion extends Criterion {
 
   @override
   void _resetForNewTransaction() {
-    _tempXOptionedData = null;
+    // _tempCurrentXData = null;
   }
 
   @override
   void _applyTempDataToReal() {
-    _xOptionedData = _tempXOptionedData;
+    // _xOptionedData = _tempXOptionedData;
   }
 }

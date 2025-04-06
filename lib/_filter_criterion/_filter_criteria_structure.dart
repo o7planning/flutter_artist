@@ -91,24 +91,25 @@ class FilterCriteriaStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  XOptionedData? _getTempOptCriterionData(String criterionName) {
+  XOptionedData? _getTempOptCriterionXData(String criterionName) {
     Criterion? criterion = _allCriteriaMap[criterionName];
     if (criterion == null) {
       return null;
     }
     if (criterion is OptCriterion) {
-      return criterion._tempXOptionedData;
+      return criterion._tempCurrentXData;
     }
     return null;
   }
 
-  XOptionedData? _getOptCriterionData(String criterionName) {
+
+  XOptionedData? _getOptCriterionXData(String criterionName) {
     Criterion? criterion = _allCriteriaMap[criterionName];
     if (criterion == null) {
       return null;
     }
     if (criterion is OptCriterion) {
-      return criterion._xOptionedData;
+      return criterion._currentXData;
     }
     return null;
   }
@@ -138,13 +139,13 @@ class FilterCriteriaStructure {
     for (Criterion criterion in _allCriteriaMap.values) {
       criterion.candidateUpdateValue = null;
       criterion._valueUpdated = false;
-      criterion._dirty = false;
+      criterion._markTempDirty = false;
     }
     //
     for (String criterionName in candidateUpdateValues.keys) {
       Criterion? criterion = _allCriteriaMap[criterionName];
       if (criterion != null) {
-        criterion._dirty = true;
+        criterion._markTempDirty = true;
       } else {
         _createAndAddNewSimpleCriterion(
           criterionName: criterionName,
@@ -167,7 +168,7 @@ class FilterCriteriaStructure {
     }
     // Apply to all dirty Criterion:
     for (Criterion criterion in _allCriteriaMap.values) {
-      if (criterion._dirty) {
+      if (criterion._markTempDirty) {
         _tempCurrentFormData[criterion.criterionName] =
             criterion.candidateUpdateValue;
       }
@@ -187,7 +188,7 @@ class FilterCriteriaStructure {
     SimpleCriterion? newSimpleCriterion = SimpleCriterion(
       criterionName: criterionName,
     );
-    newSimpleCriterion._dirty = dirty;
+    newSimpleCriterion._markTempDirty = dirty;
     _allCriteriaMap[criterionName] = newSimpleCriterion;
     _simpleCriteria.add(newSimpleCriterion);
   }
@@ -204,7 +205,7 @@ class FilterCriteriaStructure {
       throw AppException(message: 'No Criterion $criterionName');
     }
     if (criterion is OptCriterion) {
-      criterion._tempXOptionedData = optionedData;
+      criterion._tempCurrentXData = optionedData;
     } else {
       throw AppException(
           message:

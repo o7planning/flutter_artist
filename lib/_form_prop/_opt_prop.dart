@@ -59,7 +59,10 @@ class OptProp extends Prop {
       bool isSame;
       if (_tempCurrentXData != null) {
         if (singleSelection) {
-          isSame = _tempCurrentXData!.isSame(item1: oldValue, item2: newValue);
+          isSame = _tempCurrentXData!.isSame(
+            item1: oldValue,
+            item2: newValue,
+          );
         } else {
           isSame = _tempCurrentXData!.isSameItemOrItemList(
             itemOrItemList1: oldValue,
@@ -88,7 +91,7 @@ class OptProp extends Prop {
 
   void _printTempInfoCascade({required int indentFactor}) {
     print(
-        "${("- - - " * indentFactor)} $propName >>> UpdateV: $candidateUpdateValue >>> tempXOptionedData: $_tempCurrentXData");
+        "${("- - - " * indentFactor)} $propName >>> UpdateVal: $candidateUpdateValue >>> tempCurrentXData: $_tempCurrentXData");
     for (var child in children) {
       child._printTempInfoCascade(indentFactor: indentFactor + 1);
     }

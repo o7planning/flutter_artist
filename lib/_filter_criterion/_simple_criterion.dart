@@ -9,7 +9,7 @@ class SimpleCriterion extends Criterion {
     required Map<String, dynamic> tempCurrentFormData,
     required Map<String, dynamic> updateValues,
   }) {
-    if (!_valueUpdated && _dirty) {
+    if (!_valueUpdated && _markTempDirty) {
       final dynamic oldValue = tempCurrentFormData[criterionName];
       final dynamic newValue = updateValues[criterionName];
       //
