@@ -470,9 +470,9 @@ abstract class FormModel<
       );
       //
       // IMPORTANT: Restore OLD State:
-      // Note [_formKeyPatchValueSilently] NOT WORK!.
+      // Note [_formKeyPatchValue] NOT WORK!.
       //
-      _formKeyPatchValueSilently(newCurrentValue: data._currentFormData);
+      _formKeyPatchValue(newCurrentValue: data._currentFormData);
       //
       data._formDataState = DataState.error;
       return false;
