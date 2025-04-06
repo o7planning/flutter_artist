@@ -266,14 +266,14 @@ class FilterCriteriaStructure {
   }) {
     Criterion? criterion = _allCriteriaMap[criterionName];
     if (criterion == null) {
-      throw AppException(message: 'No Criterion $criterionName');
+      throw AppException(message: 'No Criterion "$criterionName"');
     }
     if (criterion is OptCriterion) {
       criterion._tempCurrentXData = optionedData;
     } else {
       throw AppException(
           message:
-              'Invalid Criterion $criterionName, it must be $OptCriterion');
+              'Invalid Criterion "$criterionName", it must be $OptCriterion');
     }
   }
 
@@ -287,10 +287,14 @@ class FilterCriteriaStructure {
     Criterion? criterion = _allCriteriaMap[criterionName];
     if (criterion == null) {
       throw AppException(
-          message: "No criterionName $criterionName", details: null);
+        message: 'No criterionName "$criterionName"',
+        details: null,
+      );
     } else if (criterion is! SimpleCriterion) {
       throw AppException(
-          message: "$criterionName is not $SimpleCriterion", details: null);
+        message: '"$criterionName" is not $SimpleCriterion',
+        details: null,
+      );
     }
     criterion._tempCurrentValue = value;
   }

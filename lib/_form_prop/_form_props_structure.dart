@@ -352,13 +352,14 @@ class FormPropsStructure {
   }) {
     Prop? prop = _allPropMap[propName];
     if (prop == null) {
-      throw AppException(message: 'No Prop $propName');
+      throw AppException(message: 'No Prop "$propName"');
     }
     if (prop is OptProp) {
       prop._tempCurrentXData = optionedData;
     } else {
       throw AppException(
-          message: 'Invalid Prop $propName, it must be $OptProp');
+        message: 'Invalid Prop "$propName", it must be $OptProp',
+      );
     }
   }
 
@@ -371,10 +372,15 @@ class FormPropsStructure {
   }) {
     Prop? prop = _allPropMap[propName];
     if (prop == null) {
-      throw AppException(message: "No propName $propName", details: null);
+      throw AppException(
+        message: 'No propName "$propName"',
+        details: null,
+      );
     } else if (prop is! SimpleProp) {
       throw AppException(
-          message: "$propName is not Simple prop", details: null);
+        message: '"$propName" is not $SimpleProp',
+        details: null,
+      );
     }
     prop._tempCurrentValue = value;
   }
