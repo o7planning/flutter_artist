@@ -14,7 +14,7 @@ class FormPropsStructure {
 
   bool get isNew => _formMode == FormMode.creation;
   //
-  final Map<String, dynamic> _tempCurrentFormData = {};
+  // final Map<String, dynamic> _tempCurrentFormData = {};
 
   FormPropsStructure({
     required List<String> simpleProps,
@@ -202,14 +202,12 @@ class FormPropsStructure {
   // ***************************************************************************
 
   void _initTemporaryForNewTransaction({
-    required Map<String, dynamic>? currentFormData,
+    required Map<String, dynamic>? newCurrentFormData,
   }) {
-    _tempCurrentFormData
-      ..updateAll((k, v) => null)
-      ..addAll(currentFormData ?? {});
-    //
-    for (Prop prop in _allPropMap.values) {
-      prop._resetForNewTransaction();
+    for(Prop prop in _allPropMap.values) {
+      dynamic newValue = newCurrentFormData?[prop.propName];
+      prop._tempCurrentValue = newValue;
+      prop._tempCurrentXData = null;
     }
   }
 
@@ -217,7 +215,15 @@ class FormPropsStructure {
   // ***************************************************************************
 
   dynamic _getTempCurrentPropValue({required String propName}) {
-    return _tempCurrentFormData[propName];
+   // return _tempCurrentFormData[propName];
+    Prop? prop = _allPropMap[propName];
+    if (prop == null) {
+      return null;
+    }
+    if (prop is OptProp) {
+      return prop._tempCurrentValue;
+    }
+    return null;
   }
 
   // ***************************************************************************
@@ -287,20 +293,21 @@ class FormPropsStructure {
     //
     for (OptProp rootProp in _rootOptProps) {
       rootProp._updateTempValueCascade(
-        tempCurrentFormData: _tempCurrentFormData,
+        // tempCurrentFormData: _tempCurrentFormData,
         updateValues: candidateUpdateValues,
       );
     }
     for (SimpleProp commonItem in _simpleProps) {
       commonItem._updateTempValue(
-        tempCurrentFormData: _tempCurrentFormData,
+        // tempCurrentFormData: _tempCurrentFormData,
         updateValues: candidateUpdateValues,
       );
     }
     // Apply to all dirty Prop:
     for (Prop prop in _allPropMap.values) {
       if (prop._markTempDirty) {
-        _tempCurrentFormData[prop.propName] = prop.candidateUpdateValue;
+        // _tempCurrentFormData[prop.propName] = prop.candidateUpdateValue;
+        prop._tempCurrentValue = prop.candidateUpdateValue;
       }
     }
   }
@@ -356,7 +363,8 @@ class FormPropsStructure {
       throw AppException(
           message: "$propName is not Simple prop", details: null);
     }
-    _tempCurrentFormData[propName] = value;
+    prop._tempCurrentValue = value;
+    // _tempCurrentFormData[propName] = value;
   }
 
   // ***************************************************************************
@@ -379,7 +387,6 @@ class FormPropsStructure {
     for (OptProp rootItem in _rootOptProps) {
       rootItem._printTempInfoCascade(indentFactor: 1);
     }
-    print("tempCurrentFormData: $_tempCurrentFormData");
     print("--------------------------------------------------------------");
   }
 }

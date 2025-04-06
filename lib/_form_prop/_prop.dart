@@ -26,7 +26,8 @@ abstract class Prop {
     );
   }
 
-  void _resetForNewTransaction() {
-    _tempCurrentXData = null;
-  }
+  // @Deprecated("Ko su dung nua")
+  // void _resetForNewTransaction() {
+  //   _tempCurrentXData = null;
+  // }
 }

@@ -293,7 +293,7 @@ abstract class FormModel<
     }
     //
     _formPropsStructure._initTemporaryForNewTransaction(
-      currentFormData: allNewValue,
+      newCurrentFormData: allNewValue,
     );
     //
     // Load OptProp Data:
@@ -359,6 +359,7 @@ abstract class FormModel<
           );
           return false;
         }
+        print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1 simplePropValue: $simplePropValue");
       }
       // itemDetail == null
       else {
@@ -392,6 +393,7 @@ abstract class FormModel<
             return false;
           }
         }
+        //
         if (extraFormInput != null) {
           try {
             simplePropValueExtra = getSimplePropValuesFromExtraFormInput(

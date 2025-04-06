@@ -6,11 +6,11 @@ class SimpleProp extends Prop {
   });
 
   void _updateTempValue({
-    required Map<String, dynamic> tempCurrentFormData,
+    // required Map<String, dynamic> tempCurrentFormData,
     required Map<String, dynamic> updateValues,
   }) {
     if (!_valueUpdated && _markTempDirty) {
-      final dynamic oldValue = tempCurrentFormData[propName];
+      final dynamic oldValue = _tempCurrentValue; // tempCurrentFormData[propName];
       final dynamic newValue = updateValues[propName];
       //
       candidateUpdateValue = newValue;

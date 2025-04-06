@@ -51,11 +51,12 @@ class OptProp extends Prop {
   }
 
   void _updateTempValueCascade({
-    required Map<String, dynamic> tempCurrentFormData,
+   // required Map<String, dynamic> tempCurrentFormData,
     required Map<String, dynamic> updateValues,
   }) {
     if (!_valueUpdated && _markTempDirty) {
-      final dynamic oldValue = tempCurrentFormData[propName];
+      // final dynamic oldValue = tempCurrentFormData[propName]; (TODO-DELTE)
+      final dynamic oldValue = _tempCurrentValue;
       final dynamic newValue = updateValues[propName];
       //
       candidateUpdateValue = newValue;
@@ -86,7 +87,7 @@ class OptProp extends Prop {
     //
     for (OptProp childItem in children) {
       childItem._updateTempValueCascade(
-        tempCurrentFormData: tempCurrentFormData,
+        // tempCurrentFormData: tempCurrentFormData,
         updateValues: updateValues,
       );
     }
