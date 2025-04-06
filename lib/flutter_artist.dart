@@ -79,8 +79,6 @@ part '_core_/_block_data.dart';
 
 part '_core_/_form_model.dart';
 
-part '_core_/_form_model_data.dart';
-
 part '_core_/_form_leave_safely.dart';
 
 part '_core_/_block_or_scalar.dart';

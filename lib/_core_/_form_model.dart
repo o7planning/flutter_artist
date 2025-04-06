@@ -5,9 +5,6 @@ abstract class FormModel<
     ITEM_DETAIL extends Object,
     FILTER_CRITERIA extends FilterCriteria,
     EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
-  QueryMode _queryMode = QueryMode.lazy;
-
-  late QueryMode _tempQueryMode = _queryMode;
 
   int __loadCount = 0;
 
@@ -27,8 +24,6 @@ abstract class FormModel<
 
   bool _changeEventLocked = false;
 
-  late final FormModelData data = FormModelData(formModel: this);
-
   late final FormPropsStructure _formPropsStructure;
 
   FormMode get formMode => _formPropsStructure.formMode;
@@ -45,13 +40,7 @@ abstract class FormModel<
       FILTER_CRITERIA,
       EXTRA_FORM_INPUT> block;
 
-  bool _initiated = false;
-
   bool _defaultValueInitiated = false;
-
-  QueryMode get queryMode => _queryMode;
-
-  QueryMode get temporaryQueryMode => _tempQueryMode;
 
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
@@ -1102,7 +1091,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   void _afterBuildFormView() {
-    data._justInitialized = false;
+    _formPropsStructure._justInitialized = false;
   }
 
   // ***************************************************************************
