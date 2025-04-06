@@ -1835,10 +1835,11 @@ abstract class Block<
           formMode: FormMode.edit,
           formDataState: DataState.ready,
         );
-        // To clear dirty:
-        formModel!.data._initialFormData
-          ..clear()
-          ..addAll(formModel!.data._currentFormData);
+        //
+        // IMPORTANT:
+        // After save successful, update [initialFormData].
+        //
+        formModel!.data._updateInitialFormDataAfterSaveSuccess();
         //
         bool success = await formModel!._startNewFormTransaction(
           filterCriteria: data.filterCriteria,

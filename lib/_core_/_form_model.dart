@@ -443,9 +443,7 @@ abstract class FormModel<
         ..updateAll((k, v) => null)
         ..addAll(_formPropsStructure._tempCurrentFormData);
       if (isItemFirstLoad) {
-        data._initialFormData
-          ..clear()
-          ..addAll(data._currentFormData);
+        data._setInitialFormDataForItemFirstLoad();
       }
       //
       // UPDATE OPT-DATA:
@@ -1022,16 +1020,20 @@ abstract class FormModel<
     }
     try {
       _changeEventLocked = true;
-      Map<String, dynamic> initData = {...data._initialFormData};
+      //
+      // Reset FormData:
+      //
+      data._resetFormData();
+      //
+      // Patch _formKey:
+      //
+      Map<String, dynamic> initData = {...data.initialFormData};
       for (String key in _formKey.currentState?.instantValue.keys ?? []) {
         if (!initData.containsKey(key)) {
           initData[key] = null;
         }
       }
       _formKey.currentState?.patchValue(initData);
-      data._currentFormData
-        ..clear()
-        ..addAll(initData);
       //
       shelf.updateAllUIComponents();
     } finally {
@@ -1089,7 +1091,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   dynamic getFormInitialValue(String propertyName) {
-    return data._initialFormData[propertyName];
+    return data.initialFormData[propertyName];
   }
 
   // ***************************************************************************
