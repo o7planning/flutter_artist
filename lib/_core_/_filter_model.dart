@@ -372,7 +372,9 @@ abstract class FilterModel<
       // IMPORTANT:
       //  - Update from ROOTs to LEAVES
       //  - And make sure children-OptCriterion to null if parent-Value is null or not selected.
-      _filterCriteriaStructure._updateTempData({criterionName: null});
+      _filterCriteriaStructure._updateTempCriterionValues({
+        criterionName: null,
+      });
     }
     //
     // Load OptCriterion data from Rest API.
@@ -454,21 +456,25 @@ abstract class FilterModel<
         //  - Update from ROOTs to LEAVES
         //  - And make sure children-OptCriterion to null if parent-Value is null or not selected.
         Object? candidateSelectedItem = candidateSelectedItems.first;
-        _filterCriteriaStructure
-            ._updateTempData({criterionName: candidateSelectedItem});
+        _filterCriteriaStructure._updateTempCriterionValues({
+          criterionName: candidateSelectedItem,
+        });
       } else {
         // IMPORTANT:
         //  - Update from ROOTs to LEAVES
         //  - And make sure children-OptCriterion to null if parent-Value is null or not selected.
         // Try MULTI SELECTED ITEMS:
-        _filterCriteriaStructure
-            ._updateTempData({criterionName: candidateSelectedItems});
+        _filterCriteriaStructure._updateTempCriterionValues({
+          criterionName: candidateSelectedItems,
+        });
       }
     } else {
       // IMPORTANT:
       //  - Update from ROOTs to LEAVES
       //  - And make sure children-OptCriterion to null if parent-Value is null or not selected.
-      _filterCriteriaStructure._updateTempData({criterionName: null});
+      _filterCriteriaStructure._updateTempCriterionValues({
+        criterionName: null,
+      });
     }
     //
     Object? tempSelectedCriterionValue =

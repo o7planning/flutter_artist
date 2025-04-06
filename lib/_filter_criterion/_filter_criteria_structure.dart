@@ -175,12 +175,12 @@ class FilterCriteriaStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _updateTempData(Map<String, dynamic> updateData) {
+  void _updateTempCriterionValues(Map<String, dynamic> criterionValues) {
     __addCriteriaIfNeed(
-      criterionNames: updateData.keys.toList(),
+      criterionNames: criterionValues.keys.toList(),
     );
     //
-    final candidateUpdateValues = {...updateData};
+    final candidateUpdateValues = {...criterionValues};
     //
     // IMPORTANT:
     // Update data for FilterCriteriaStructure. From ROOTs to LEAVES.
