@@ -16,9 +16,9 @@ class OptProp extends Prop {
   bool singleSelection;
   final List<OptProp> children;
 
-  XOptionedData? _xOptionedData;
+//  XOptionedData? _xOptionedData;
 
-  XOptionedData? _tempXOptionedData;
+// XOptionedData? _tempXOptionedData;
 
   OptProp({
     required super.propName,
@@ -54,7 +54,7 @@ class OptProp extends Prop {
     required Map<String, dynamic> tempCurrentFormData,
     required Map<String, dynamic> updateValues,
   }) {
-    if (!_valueUpdated && _dirty) {
+    if (!_valueUpdated && _markTempDirty) {
       final dynamic oldValue = tempCurrentFormData[propName];
       final dynamic newValue = updateValues[propName];
       //
@@ -62,11 +62,11 @@ class OptProp extends Prop {
       _valueUpdated = true;
       //
       bool isSame;
-      if (_tempXOptionedData != null) {
+      if (_tempCurrentXData != null) {
         if (singleSelection) {
-          isSame = _tempXOptionedData!.isSame(item1: oldValue, item2: newValue);
+          isSame = _tempCurrentXData!.isSame(item1: oldValue, item2: newValue);
         } else {
-          isSame = _tempXOptionedData!.isSameItemOrItemList(
+          isSame = _tempCurrentXData!.isSameItemOrItemList(
             itemOrItemList1: oldValue,
             itemOrItemList2: newValue,
           );
@@ -75,11 +75,11 @@ class OptProp extends Prop {
         isSame = false;
       }
       //
-      if (_tempXOptionedData == null || newValue == null || !isSame) {
+      if (_tempCurrentXData == null || newValue == null || !isSame) {
         for (OptProp childItem in children) {
-          childItem._tempXOptionedData = null;
+          childItem._tempCurrentXData = null;
           updateValues[childItem.propName] = null;
-          childItem._dirty = true;
+          childItem._markTempDirty = true;
         }
       }
     }
@@ -94,19 +94,9 @@ class OptProp extends Prop {
 
   void _printTempInfoCascade({required int indentFactor}) {
     print(
-        "${("- - - " * indentFactor)} $propName >>> UpdateV: $candidateUpdateValue >>> tempXOptionedData: $_tempXOptionedData");
+        "${("- - - " * indentFactor)} $propName >>> UpdateV: $candidateUpdateValue >>> tempXOptionedData: $_tempCurrentXData");
     for (var child in children) {
       child._printTempInfoCascade(indentFactor: indentFactor + 1);
     }
-  }
-
-  @override
-  void _resetForNewTransaction() {
-    _tempXOptionedData = null;
-  }
-
-  @override
-  void _applyTempDataToReal() {
-    _xOptionedData = _tempXOptionedData;
   }
 }

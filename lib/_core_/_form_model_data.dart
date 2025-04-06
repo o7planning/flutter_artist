@@ -17,19 +17,19 @@ class FormModelData<
 
   bool _justInitialized = false;
 
-  final Map<String, dynamic> __initial0FormData = {};
+ // final Map<String, dynamic> __initial0FormData = {};
 
-  Map<String, dynamic> get initial0FormData => {...__initial0FormData};
+ // Map<String, dynamic> get initial0FormData => {...__initial0FormData};
 
   //
 
-  final Map<String, dynamic> __initialFormData = {};
+ // final Map<String, dynamic> __initialFormData = {};
 
  // Map<String, dynamic> get initialFormData => {...__initialFormData};
 
   //
 
-  final Map<String, dynamic> _currentFormData = {};
+ // final Map<String, dynamic> _currentFormData = {};
 
  // Map<String, dynamic> get currentFormData => {..._currentFormData};
 
@@ -124,21 +124,21 @@ class FormModelData<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _isDirty() {
-    Set<String> keySet = {}
-      ..addAll(__initialFormData.keys)
-      ..addAll(_currentFormData.keys);
-    //
-    for (String key in keySet) {
-      dynamic currentValue = _currentFormData[key];
-      dynamic initialValue = __initialFormData[key];
-      bool eq = _compareDynamicAndDynamic(currentValue, initialValue);
-      if (!eq) {
-        return true;
-      }
-    }
-    return false;
-  }
+  // bool _isDirty() {
+  //   Set<String> keySet = {}
+  //     ..addAll(__initialFormData.keys)
+  //     ..addAll(_currentFormData.keys);
+  //   //
+  //   for (String key in keySet) {
+  //     dynamic currentValue = _currentFormData[key];
+  //     dynamic initialValue = __initialFormData[key];
+  //     bool eq = _compareDynamicAndDynamic(currentValue, initialValue);
+  //     if (!eq) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
 
   // ***************************************************************************
   // ***************************************************************************

@@ -4,17 +4,29 @@ abstract class Prop {
   final String propName;
   dynamic candidateUpdateValue;
   bool _valueUpdated = false;
-  bool _dirty = false;
+  bool _markTempDirty = false;
+
+  dynamic _tempCurrentValue;
+  XOptionedData? _tempCurrentXData;
 
   dynamic _currentValue;
-  dynamic _currentData;
+  XOptionedData? _currentXData;
 
   dynamic _initialValue;
-  dynamic _initialData;
+  XOptionedData? _initialData;
 
-  Prop({required this.propName,});
+  Prop({
+    required this.propName,
+  });
 
-  void _resetForNewTransaction();
+  bool isDirty() {
+    return !_compareDynamicAndDynamic(
+      _currentValue,
+      _initialValue,
+    );
+  }
 
-  void _applyTempDataToReal();
+  void _resetForNewTransaction() {
+    _tempCurrentXData = null;
+  }
 }

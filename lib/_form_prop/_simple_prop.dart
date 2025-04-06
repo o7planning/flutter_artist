@@ -9,7 +9,7 @@ class SimpleProp extends Prop {
     required Map<String, dynamic> tempCurrentFormData,
     required Map<String, dynamic> updateValues,
   }) {
-    if (!_valueUpdated && _dirty) {
+    if (!_valueUpdated && _markTempDirty) {
       final dynamic oldValue = tempCurrentFormData[propName];
       final dynamic newValue = updateValues[propName];
       //
@@ -18,13 +18,4 @@ class SimpleProp extends Prop {
     }
   }
 
-  @override
-  void _resetForNewTransaction() {
-    // Do nothing.
-  }
-
-  @override
-  void _applyTempDataToReal() {
-    // Do nothing.
-  }
 }

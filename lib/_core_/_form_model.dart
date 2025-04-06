@@ -287,7 +287,7 @@ abstract class FormModel<
     // Update from FormView:
     //
     else {
-      allNewValue.addAll(data._currentFormData);
+      allNewValue.addAll(_formPropsStructure.currentFormData);
       // Update values from view (On the user Interface).
       allNewValue.addAll(_formKey.currentState?.instantValue ?? {});
     }
@@ -440,21 +440,27 @@ abstract class FormModel<
       //
       // Update Real FromData from Temporary FormData:
       //
-      this.data._currentFormData
-        ..updateAll((k, v) => null)
-        ..addAll(_formPropsStructure._tempCurrentFormData);
-      if (isItemFirstLoad) {
-        _formPropsStructure._setInitialFormDataForItemFirstLoad();
-      }
+      // this.data._currentFormData
+      //   ..updateAll((k, v) => null)
+      //   ..addAll(_formPropsStructure._tempCurrentFormData);
+      _formPropsStructure._updateTempToReal();
+
       //
       // UPDATE OPT-DATA:
       //  - optProp._xOptionedData = optProp._tempXOptionedData;
       //
-      this._formPropsStructure._applyAllTempDataToReal();
+      // _formPropsStructure._applyAllTempDataToReal();
+      //
+      if (isItemFirstLoad) {
+        _formPropsStructure._setInitialFormDataForItemFirstLoad();
+      }
+
       //
       // IMPORTANT:
       //
-      _formKeyPatchValue(newCurrentValue: data._currentFormData);
+      _formKeyPatchValue(
+        newCurrentValue: _formPropsStructure.currentFormData,
+      );
       //
       _defaultValueInitiated = true;
       _formPropsStructure._setFormDataState(formDataState);
@@ -471,7 +477,9 @@ abstract class FormModel<
       // IMPORTANT: Restore OLD State:
       // Note [_formKeyPatchValue] NOT WORK!.
       //
-      _formKeyPatchValue(newCurrentValue: data._currentFormData);
+      _formKeyPatchValue(
+        newCurrentValue: _formPropsStructure.currentFormData,
+      );
       //
       _formPropsStructure._setFormDataState(DataState.error);
       return false;
@@ -556,7 +564,9 @@ abstract class FormModel<
       if (tempXOptionedParent != null) {
         // Item or Item List (Multi Selection):
         Object? parentOptPropValueOLD =
-            data._currentFormData[optPropParent.propName];
+            _formPropsStructure._getCurrentPropValue(
+          propName: optPropParent.propName,
+        );
 
         // Parent Value change?
         bool isSame = tempXOptionedParent.isSameItemOrItemList(
@@ -833,6 +843,21 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+   bool get isNew  {
+     return _formPropsStructure.isNew;
+   }
+
+   Map<String,dynamic> get initialFormData  {
+     return _formPropsStructure.initialFormData;
+   }
+
+  Map<String,dynamic> get currentFormData  {
+    return _formPropsStructure.currentFormData;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   PropValue? getOptPropValueFromItemDetail({
     required ITEM_DETAIL itemDetail,
     required XOptionedData optPropData,
@@ -1000,7 +1025,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   bool isDirty() {
-    return data._isDirty();
+    return _formPropsStructure._isFormDirty();
   }
 
   // ***************************************************************************
@@ -1085,7 +1110,7 @@ abstract class FormModel<
   // TODO: Change name!
   // Do not call this method in library.
   Map<String, dynamic> initFormValue() {
-    return data._currentFormData;
+    return _formPropsStructure.currentFormData;
   }
 
   // ***************************************************************************
@@ -1105,9 +1130,13 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  @Deprecated("Xem lai, co can xoa di khong?")
   void setFormInstantValue(String propertyName, dynamic value) {
     _formKey.currentState?.patchValue({propertyName: value});
-    data._currentFormData[propertyName] = value;
+    _formPropsStructure._setCurrentPropValue(
+      propName: propertyName,
+      value: value,
+    );
     this.updateAllUIComponents();
   }
 

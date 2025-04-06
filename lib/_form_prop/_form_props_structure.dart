@@ -34,7 +34,7 @@ class FormPropsStructure {
     for (String propName in simplePropList) {
       _createAndAddNewSimpleProp(
         propName: propName,
-        dirty: false,
+        markTempDirty: false,
       );
     }
   }
@@ -61,6 +61,20 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  bool _isFormDirty()  {
+    for(Prop prop in _allPropMap.values)  {
+      bool dirty = prop.isDirty();
+      if(dirty) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+
   ///
   /// For the first load of an Item, update "Initial Form Data".
   /// IMPORTANT:
@@ -69,7 +83,7 @@ class FormPropsStructure {
   void _setInitialFormDataForItemFirstLoad() {
     for (Prop prop in _allPropMap.values) {
       prop._initialValue = prop._currentValue;
-      prop._initialData = prop._currentData;
+      prop._initialData = prop._currentXData;
     }
   }
 
@@ -79,9 +93,23 @@ class FormPropsStructure {
   void _updateInitialFormDataAfterSaveSuccess() {
     for (Prop prop in _allPropMap.values) {
       prop._initialValue = prop._currentValue;
-      prop._initialData = prop._currentData;
+      prop._initialData = prop._currentXData;
     }
   }
+
+  void _updateTempToReal()  {
+    for (Prop prop in _allPropMap.values) {
+      prop._currentValue = prop._tempCurrentValue;
+      prop._currentXData = prop._tempCurrentXData;
+    }
+  }
+
+  // @Deprecated("Xoa di, khong su dung nua.")
+  // void _applyAllTempDataToReal() {
+  //   for (Prop prop in _allPropMap.values) {
+  //     prop._applyTempDataToReal();
+  //   }
+  // }
 
   ///
   /// Reset Form Data:
@@ -89,7 +117,7 @@ class FormPropsStructure {
   void _resetFormData() {
     for (Prop prop in _allPropMap.values) {
       prop._currentValue = prop._initialValue;
-      prop._currentData = prop._initialData;
+      prop._currentXData = prop._initialData;
     }
   }
 
@@ -100,8 +128,29 @@ class FormPropsStructure {
     //
     for (Prop prop in _allPropMap.values) {
       prop._currentValue = null;
-      prop._currentData = null;
+      prop._currentXData = null;
     }
+  }
+
+
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _setCurrentPropValue({required String propName,required dynamic value,}) {
+    Prop? prop = _allPropMap[propName];
+    if(prop!= null) {
+      prop._currentValue = value;
+    }
+  }
+
+
+  dynamic _getCurrentPropValue({required String propName})  {
+    Prop? prop = _allPropMap[propName];
+    if(prop!= null) {
+      return prop?._currentValue;
+    }
+    return null;
   }
 
   // ***************************************************************************
@@ -167,15 +216,6 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _applyAllTempDataToReal() {
-    for (Prop prop in _allPropMap.values) {
-      prop._applyTempDataToReal();
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   dynamic _getTempCurrentPropValue({required String propName}) {
     return _tempCurrentFormData[propName];
   }
@@ -189,7 +229,7 @@ class FormPropsStructure {
       return null;
     }
     if (prop is OptProp) {
-      return prop._tempXOptionedData;
+      return prop._tempCurrentXData;
     }
     return null;
   }
@@ -200,7 +240,7 @@ class FormPropsStructure {
       return null;
     }
     if (prop is OptProp) {
-      return prop._xOptionedData;
+      return prop._currentXData;
     }
     return null;
   }
@@ -230,17 +270,17 @@ class FormPropsStructure {
     for (Prop prop in _allPropMap.values) {
       prop.candidateUpdateValue = null;
       prop._valueUpdated = false;
-      prop._dirty = false;
+      prop._markTempDirty = false;
     }
     //
     for (String propName in candidateUpdateValues.keys) {
       Prop? prop = _allPropMap[propName];
       if (prop != null) {
-        prop._dirty = true;
+        prop._markTempDirty = true;
       } else {
         _createAndAddNewSimpleProp(
           propName: propName,
-          dirty: true,
+          markTempDirty: true,
         );
       }
     }
@@ -259,7 +299,7 @@ class FormPropsStructure {
     }
     // Apply to all dirty Prop:
     for (Prop prop in _allPropMap.values) {
-      if (prop._dirty) {
+      if (prop._markTempDirty) {
         _tempCurrentFormData[prop.propName] = prop.candidateUpdateValue;
       }
     }
@@ -270,7 +310,7 @@ class FormPropsStructure {
 
   void _createAndAddNewSimpleProp({
     required String propName,
-    required bool dirty,
+    required bool markTempDirty,
   }) {
     if (_allPropMap.containsKey(propName)) {
       return;
@@ -278,7 +318,7 @@ class FormPropsStructure {
     SimpleProp? newSimpleProp = SimpleProp(
       propName: propName,
     );
-    newSimpleProp._dirty = dirty;
+    newSimpleProp._markTempDirty = markTempDirty;
     _allPropMap[propName] = newSimpleProp;
     _simpleProps.add(newSimpleProp);
   }
@@ -295,7 +335,7 @@ class FormPropsStructure {
       throw AppException(message: 'No Prop $propName');
     }
     if (prop is OptProp) {
-      prop._tempXOptionedData = optionedData;
+      prop._tempCurrentXData = optionedData;
     } else {
       throw AppException(
           message: 'Invalid Prop $propName, it must be $OptProp');
