@@ -296,7 +296,7 @@ class FormPropsStructure {
         updateValues: candidateUpdateValues,
       );
     }
-    // Apply to all dirty Prop:
+    // Apply to all _markTempDirty Prop:
     for (Prop prop in _allPropMap.values) {
       if (prop._markTempDirty) {
         prop._tempCurrentValue = prop.candidateUpdateValue;
