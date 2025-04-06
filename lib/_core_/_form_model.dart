@@ -319,7 +319,7 @@ abstract class FormModel<
             itemDetail: itemDetail,
           );
           for (String propName in simplePropValue.keys) {
-            _formPropsStructure._setTempSimplePropData(
+            _formPropsStructure._setTempSimplePropValue(
               propName: propName,
               value: simplePropValue[propName],
             );
@@ -351,7 +351,7 @@ abstract class FormModel<
                 ) ??
                 {};
             for (String propName in simplePropValueDefault.keys) {
-              _formPropsStructure._setTempSimplePropData(
+              _formPropsStructure._setTempSimplePropValue(
                 propName: propName,
                 value: simplePropValueDefault[propName],
               );
@@ -381,7 +381,7 @@ abstract class FormModel<
                 {};
             //
             for (String propName in simplePropValueExtra.keys) {
-              _formPropsStructure._setTempSimplePropData(
+              _formPropsStructure._setTempSimplePropValue(
                 propName: propName,
                 value: simplePropValueExtra[propName],
               );
@@ -532,7 +532,7 @@ abstract class FormModel<
 
     // Get current OptProp data:
     XOptionedData? optPropData =
-        _formPropsStructure._getOptPropData(optPropName);
+        _formPropsStructure._getOptPropXData(optPropName);
 
     if (optPropParent != null) {
       XOptionedData? tempXOptionedParent =
@@ -561,9 +561,9 @@ abstract class FormModel<
     }
     //
     if (optPropData == null) {
-      _formPropsStructure._setTempOptPropData(
+      _formPropsStructure._setTempOptPropXData(
         propName: optPropName,
-        optionedData: null,
+        optionedXData: null,
       );
       // IMPORTANT:
       //  - Update from ROOTs to LEAVES
@@ -654,9 +654,9 @@ abstract class FormModel<
       candidateSelectedItems = null;
     }
     //
-    _formPropsStructure._setTempOptPropData(
+    _formPropsStructure._setTempOptPropXData(
       propName: optPropName,
-      optionedData: optPropData,
+      optionedXData: optPropData,
     );
     // TODO: Dangerous, check not null:
     candidateSelectedItems = optPropData?.findInternalItemsByDynamics(
@@ -717,7 +717,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   XOptionedData? getOptPropXData(String propName) {
-    return _formPropsStructure._getOptPropData(propName);
+    return _formPropsStructure._getOptPropXData(propName);
   }
 
   dynamic getOptPropData(String propName) {

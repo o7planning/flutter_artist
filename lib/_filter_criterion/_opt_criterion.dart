@@ -1,7 +1,6 @@
 part of '../flutter_artist.dart';
 
 class OptCriterion extends Criterion {
-  OptPropType? type;
   late final OptCriterion? parent;
 
   ///
@@ -16,13 +15,8 @@ class OptCriterion extends Criterion {
   bool singleSelection;
   final List<OptCriterion> children;
 
-  // XOptionedData? _xOptionedData;
-
-  // XOptionedData? _tempXOptionedData;
-
   OptCriterion({
     required super.criterionName,
-    this.type,
     this.children = const [],
     this.singleSelection = true,
   });

@@ -161,17 +161,6 @@ class FilterCriteriaStructure {
     return null;
   }
 
-  OptPropType? _getOptCriterionType(String criterionName) {
-    Criterion? criterion = _allCriteriaMap[criterionName];
-    if (criterion == null) {
-      return null;
-    }
-    if (criterion is OptCriterion) {
-      return criterion.type;
-    }
-    return null;
-  }
-
   // ***************************************************************************
   // ***************************************************************************
 
@@ -260,16 +249,16 @@ class FilterCriteriaStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _setTempOptCriterionData({
+  void _setTempOptCriterionXData({
     required String criterionName,
-    required XOptionedData? optionedData,
+    required XOptionedData? optionedXData,
   }) {
     Criterion? criterion = _allCriteriaMap[criterionName];
     if (criterion == null) {
       throw AppException(message: 'No Criterion "$criterionName"');
     }
     if (criterion is OptCriterion) {
-      criterion._tempCurrentXData = optionedData;
+      criterion._tempCurrentXData = optionedXData;
     } else {
       throw AppException(
           message:
@@ -280,7 +269,7 @@ class FilterCriteriaStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _setTempSimpleCriterionData({
+  void _setTempSimpleCriterionValue({
     required String criterionName,
     required Object? value,
   }) {

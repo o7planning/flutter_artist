@@ -237,24 +237,13 @@ class FormPropsStructure {
     return null;
   }
 
-  XOptionedData? _getOptPropData(String propName) {
+  XOptionedData? _getOptPropXData(String propName) {
     Prop? prop = _allPropMap[propName];
     if (prop == null) {
       return null;
     }
     if (prop is OptProp) {
       return prop._currentXData;
-    }
-    return null;
-  }
-
-  OptPropType? _getOptPropType(String propName) {
-    Prop? prop = _allPropMap[propName];
-    if (prop == null) {
-      return null;
-    }
-    if (prop is OptProp) {
-      return prop.type;
     }
     return null;
   }
@@ -272,7 +261,7 @@ class FormPropsStructure {
     // IMPORTANT:
     // Update data for FormPropsStructure. From ROOTs to LEAVES.
     // (***):
-    // And Update children-OptProp data to null if parent-Value is null or not selected.
+    // And Update children-OptCriterion data to null if parent-Value is null or not selected.
     //
     for (Prop prop in _allPropMap.values) {
       prop.candidateUpdateValue = null;
@@ -347,16 +336,16 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _setTempOptPropData({
+  void _setTempOptPropXData({
     required String propName,
-    required XOptionedData? optionedData,
+    required XOptionedData? optionedXData,
   }) {
     Prop? prop = _allPropMap[propName];
     if (prop == null) {
       throw AppException(message: 'No Prop "$propName"');
     }
     if (prop is OptProp) {
-      prop._tempCurrentXData = optionedData;
+      prop._tempCurrentXData = optionedXData;
     } else {
       throw AppException(
         message: 'Invalid Prop "$propName", it must be $OptProp',
@@ -367,7 +356,7 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _setTempSimplePropData({
+  void _setTempSimplePropValue({
     required String propName,
     required Object? value,
   }) {

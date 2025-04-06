@@ -1,7 +1,6 @@
 part of '../flutter_artist.dart';
 
 class OptProp extends Prop {
-  OptPropType? type;
   late final OptProp? parent;
 
   ///
@@ -18,7 +17,6 @@ class OptProp extends Prop {
 
   OptProp({
     required super.propName,
-    this.type,
     this.children = const [],
     this.singleSelection = true,
   });

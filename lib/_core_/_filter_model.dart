@@ -147,10 +147,6 @@ abstract class FilterModel<
     }
   }
 
-  OptPropType? getOptPropType(String criterionName) {
-    return _filterCriteriaStructure._getOptCriterionType(criterionName);
-  }
-
   // ***************************************************************************
   // ***************************************************************************
 
@@ -219,7 +215,7 @@ abstract class FilterModel<
             filterInput: filterInput,
             criterionName: simpleCriterion.criterionName,
           );
-          _filterCriteriaStructure._setTempSimpleCriterionData(
+          _filterCriteriaStructure._setTempSimpleCriterionValue(
             criterionName: simpleCriterion.criterionName,
             value: value,
           );
@@ -231,7 +227,7 @@ abstract class FilterModel<
             Object? value = specifyDefaultSimpleCriterionValue(
               criterionName: simpleCriterion.criterionName,
             );
-            _filterCriteriaStructure._setTempSimpleCriterionData(
+            _filterCriteriaStructure._setTempSimpleCriterionValue(
               criterionName: simpleCriterion.criterionName,
               value: value,
             );
@@ -353,9 +349,9 @@ abstract class FilterModel<
     }
     //
     if (optCriterionData == null) {
-      _filterCriteriaStructure._setTempOptCriterionData(
+      _filterCriteriaStructure._setTempOptCriterionXData(
         criterionName: criterionName,
-        optionedData: null,
+        optionedXData: null,
       );
       // IMPORTANT:
       //  - Update from ROOTs to LEAVES
@@ -431,9 +427,9 @@ abstract class FilterModel<
       candidateSelectedItems = null;
     }
     //
-    _filterCriteriaStructure._setTempOptCriterionData(
+    _filterCriteriaStructure._setTempOptCriterionXData(
       criterionName: criterionName,
-      optionedData: optCriterionData,
+      optionedXData: optCriterionData,
     );
     //
     // TODO: Double check this code:
