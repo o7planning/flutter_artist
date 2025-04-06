@@ -120,7 +120,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   bool isDirty() {
-    return _filterCriteriaStructure._isFilterDirty();
+    return _filterCriteriaStructure._isDirty();
   }
 
   // ***************************************************************************

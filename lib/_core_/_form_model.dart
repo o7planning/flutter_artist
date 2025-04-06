@@ -1003,7 +1003,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   bool isDirty() {
-    return _formPropsStructure._isFormDirty();
+    return _formPropsStructure._isDirty();
   }
 
   // ***************************************************************************

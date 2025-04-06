@@ -27,8 +27,4 @@ abstract class Criterion {
       _initialValue,
     );
   }
-
-  void _resetForNewTransaction();
-
-  void _applyTempDataToReal();
 }

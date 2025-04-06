@@ -62,7 +62,7 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _isFormDirty() {
+  bool _isDirty() {
     for (Prop prop in _allPropMap.values) {
       bool dirty = prop.isDirty();
       if (dirty) {
@@ -149,7 +149,7 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  // TODO: DELTE?
+  // TODO: DELETE?
   Map<String, dynamic> get initial0FormData {
     return {};
   }

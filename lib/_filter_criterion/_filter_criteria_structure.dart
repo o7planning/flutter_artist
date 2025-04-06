@@ -55,15 +55,15 @@ class FilterCriteriaStructure {
   }
 
   // TODO-DELETE
-  @Deprecated("Xoa di")
-  X? getProperty<X>(String criterionName) {
-    return _getCurrentCriterionValue(criterionName: criterionName) as X?;
-  }
+  // @Deprecated("Xoa di")
+  // X? getProperty<X>(String criterionName) {
+  //   return _getCurrentCriterionValue(criterionName: criterionName) as X?;
+  // }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  // TODO: DELTE?
+  // TODO: DELETE?
   Map<String, dynamic> get initial0FormData {
     return {};
   }
@@ -216,7 +216,7 @@ class FilterCriteriaStructure {
         updateValues: candidateUpdateValues,
       );
     }
-    // Apply to all dirty Criterion:
+    // Apply to all _markTempDirty Criterion:
     for (Criterion criterion in _allCriteriaMap.values) {
       if (criterion._markTempDirty) {
         criterion._tempCurrentValue = criterion.candidateUpdateValue;
@@ -304,17 +304,7 @@ class FilterCriteriaStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _addSimpleCriterion(SimpleCriterion criterion) {
-    if (!_allCriteriaMap.containsKey(criterion.criterionName)) {
-      _allCriteriaMap[criterion.criterionName] = criterion;
-      _simpleCriteria.add(criterion);
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool _isFilterDirty() {
+  bool _isDirty() {
     for (Criterion criterion in _allCriteriaMap.values) {
       bool dirty = criterion.isDirty();
       if (dirty) {
