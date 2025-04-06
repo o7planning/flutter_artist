@@ -125,6 +125,15 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  dynamic getCurrentCriterionValue(String criterionName) {
+    return _filterCriteriaStructure._getCurrentCriterionValue(
+      criterionName: criterionName,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   XOptionedData? getOptCriterionXData(String criterionName) {
     return _filterCriteriaStructure._getOptCriterionXData(criterionName);
   }
