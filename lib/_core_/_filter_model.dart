@@ -289,7 +289,7 @@ abstract class FilterModel<
   Future<XOptionedData?> callApiLoadOptCriterionData({
     required FILTER_INPUT? filterInput,
     required Object? parentOptCriterionValue,
-    required String criterionName,
+    required String optCriterionName,
   });
 
   // ***************************************************************************
@@ -337,7 +337,7 @@ abstract class FilterModel<
     //
     if (optCriterionData == null) {
       _filterCriteriaStructure._setTempOptCriterionXData(
-        criterionName: criterionName,
+        optCriterionName: criterionName,
         optionedXData: null,
       );
       // IMPORTANT:
@@ -354,7 +354,7 @@ abstract class FilterModel<
     optCriterionData ??= await callApiLoadOptCriterionData(
       filterInput: filterInput,
       parentOptCriterionValue: parentOptCriterionValue,
-      criterionName: criterionName,
+      optCriterionName: criterionName,
     );
     //
     // IMPORTANT: Do not use empty list here
@@ -369,13 +369,13 @@ abstract class FilterModel<
         inputValueWrap = _getOptCriterionValueFromFilterInput(
           filterInput: filterInput,
           optCriterionData: optCriterionData,
-          criterionName: criterionName,
+          optCriterionName: criterionName,
         );
       } else {
         if (!_defaultValueInitiated) {
           inputValueWrap = __specifyDefaultOptCriterionValue(
             optCriterionData: optCriterionData,
-            criterionName: criterionName,
+            optCriterionName: criterionName,
           );
         }
       }
@@ -415,7 +415,7 @@ abstract class FilterModel<
     }
     //
     _filterCriteriaStructure._setTempOptCriterionXData(
-      criterionName: criterionName,
+      optCriterionName: criterionName,
       optionedXData: optCriterionData,
     );
     //
@@ -482,12 +482,12 @@ abstract class FilterModel<
   ///
   /// ```dart
   /// @override
-  /// MasterPropValueWrap? getOptCriterionValueFromFilterInput({
+  /// PropValue? getOptCriterionValueFromFilterInput({
   ///     required ExampleFilterInput filterInput,
   ///     required XOptionedData optCriterionData,
-  ///     required String criterionName,
+  ///     required String optCriterionName,
   /// }) {
-  ///    if(criterionName == "company") {
+  ///    if(optCriterionName == "company") {
   ///       int inputCompanyId = filterInput.filterInput;
   ///       CompanyInfo? inputCompany = materPropData?.getItemById(inputCompanyId);
   ///       return MasterPropValueWrap([inputCompany])
@@ -499,12 +499,12 @@ abstract class FilterModel<
   PropValue? getOptCriterionValueFromFilterInput({
     required FILTER_INPUT filterInput,
     required XOptionedData optCriterionData,
-    required String criterionName,
+    required String optCriterionName,
   });
 
   PropValue? specifyDefaultOptCriterionValue({
     required XOptionedData optCriterionData,
-    required String criterionName,
+    required String optCriterionName,
   });
 
   Object? specifyDefaultSimpleCriterionValue({
@@ -514,12 +514,12 @@ abstract class FilterModel<
   PropValue? _getOptCriterionValueFromFilterInput({
     required FILTER_INPUT filterInput,
     required XOptionedData optCriterionData,
-    required String criterionName,
+    required String optCriterionName,
   }) {
     PropValue? wrap = getOptCriterionValueFromFilterInput(
       filterInput: filterInput,
       optCriterionData: optCriterionData,
-      criterionName: criterionName,
+      optCriterionName: optCriterionName,
     );
     if (wrap == null) {
       return null;
@@ -536,11 +536,11 @@ abstract class FilterModel<
 
   PropValue? __specifyDefaultOptCriterionValue({
     required XOptionedData optCriterionData,
-    required String criterionName,
+    required String optCriterionName,
   }) {
     PropValue? wrap = specifyDefaultOptCriterionValue(
       optCriterionData: optCriterionData,
-      criterionName: criterionName,
+      optCriterionName: optCriterionName,
     );
     if (wrap == null) {
       return null;

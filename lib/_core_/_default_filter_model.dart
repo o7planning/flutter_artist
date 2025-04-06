@@ -29,7 +29,7 @@ class _DefaultFilterModel
   Future<XList?> callApiLoadOptCriterionData({
     required EmptyFilterInput? filterInput,
     required Object? parentOptCriterionValue,
-    required String criterionName,
+    required String optCriterionName,
   }) async {
     return null;
   }
@@ -38,7 +38,7 @@ class _DefaultFilterModel
   PropValue? getOptCriterionValueFromFilterInput({
     required EmptyFilterInput filterInput,
     required XOptionedData optCriterionData,
-    required String criterionName,
+    required String optCriterionName,
   }) {
     return null;
   }
@@ -54,7 +54,7 @@ class _DefaultFilterModel
   @override
   PropValue? specifyDefaultOptCriterionValue({
     required XOptionedData optCriterionData,
-    required String criterionName,
+    required String optCriterionName,
   }) {
     return null;
   }
@@ -94,7 +94,7 @@ class StringIdFilterModel
   Future<XList?> callApiLoadOptCriterionData({
     required StringIdFilterInput? filterInput,
     required Object? parentOptCriterionValue,
-    required String criterionName,
+    required String optCriterionName,
   }) async {
     return null;
   }
@@ -103,7 +103,7 @@ class StringIdFilterModel
   PropValue? getOptCriterionValueFromFilterInput({
     required StringIdFilterInput filterInput,
     required XOptionedData optCriterionData,
-    required String criterionName,
+    required String optCriterionName,
   }) {
     return null;
   }
@@ -119,7 +119,7 @@ class StringIdFilterModel
   @override
   PropValue? specifyDefaultOptCriterionValue({
     required XOptionedData optCriterionData,
-    required String criterionName,
+    required String optCriterionName,
   }) {
     return null;
   }
@@ -159,7 +159,7 @@ class StringValueFilterModel
   Future<XList?> callApiLoadOptCriterionData({
     required StringValueFilterInput? filterInput,
     required Object? parentOptCriterionValue,
-    required String criterionName,
+    required String optCriterionName,
   }) async {
     return null;
   }
@@ -168,7 +168,7 @@ class StringValueFilterModel
   PropValue? getOptCriterionValueFromFilterInput({
     required StringValueFilterInput filterInput,
     required XOptionedData optCriterionData,
-    required String criterionName,
+    required String optCriterionName,
   }) {
     return null;
   }
@@ -184,7 +184,7 @@ class StringValueFilterModel
   @override
   PropValue? specifyDefaultOptCriterionValue({
     required XOptionedData optCriterionData,
-    required String criterionName,
+    required String optCriterionName,
   }) {
     return null;
   }
@@ -224,7 +224,7 @@ class SearchTextFilterModel
   Future<XList?> callApiLoadOptCriterionData({
     required SearchTextFilterInput? filterInput,
     required Object? parentOptCriterionValue,
-    required String criterionName,
+    required String optCriterionName,
   }) async {
     return null;
   }
@@ -233,7 +233,7 @@ class SearchTextFilterModel
   PropValue? getOptCriterionValueFromFilterInput({
     required SearchTextFilterInput filterInput,
     required XOptionedData optCriterionData,
-    required String criterionName,
+    required String optCriterionName,
   }) {
     return null;
   }
@@ -249,7 +249,7 @@ class SearchTextFilterModel
   @override
   PropValue? specifyDefaultOptCriterionValue({
     required XOptionedData optCriterionData,
-    required String criterionName,
+    required String optCriterionName,
   }) {
     return null;
   }
@@ -289,7 +289,7 @@ class IntIdFilterModel
   Future<XList?> callApiLoadOptCriterionData({
     required IntIdFilterInput? filterInput,
     required Object? parentOptCriterionValue,
-    required String criterionName,
+    required String optCriterionName,
   }) async {
     return null;
   }
@@ -298,7 +298,7 @@ class IntIdFilterModel
   PropValue? getOptCriterionValueFromFilterInput({
     required IntIdFilterInput filterInput,
     required XOptionedData optCriterionData,
-    required String criterionName,
+    required String optCriterionName,
   }) {
     return null;
   }
@@ -314,7 +314,7 @@ class IntIdFilterModel
   @override
   PropValue? specifyDefaultOptCriterionValue({
     required XOptionedData optCriterionData,
-    required String criterionName,
+    required String optCriterionName,
   }) {
     return null;
   }

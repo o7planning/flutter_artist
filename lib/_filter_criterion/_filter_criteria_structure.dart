@@ -250,19 +250,19 @@ class FilterCriteriaStructure {
   // ***************************************************************************
 
   void _setTempOptCriterionXData({
-    required String criterionName,
+    required String optCriterionName,
     required XOptionedData? optionedXData,
   }) {
-    Criterion? criterion = _allCriteriaMap[criterionName];
+    Criterion? criterion = _allCriteriaMap[optCriterionName];
     if (criterion == null) {
-      throw AppException(message: 'No Criterion "$criterionName"');
+      throw AppException(message: 'No Criterion "$optCriterionName"');
     }
     if (criterion is OptCriterion) {
       criterion._tempCurrentXData = optionedXData;
     } else {
       throw AppException(
           message:
-              'Invalid Criterion "$criterionName", it must be $OptCriterion');
+              'Invalid Criterion "$optCriterionName", it must be $OptCriterion');
     }
   }
 
