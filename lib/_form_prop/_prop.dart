@@ -6,7 +6,10 @@ abstract class Prop {
   bool _valueUpdated = false;
   bool _dirty = false;
 
-  Prop({required this.propName});
+  dynamic _currentValue;
+  dynamic _initialValue;
+
+  Prop({required this.propName,});
 
   void _resetForNewTransaction();
 
