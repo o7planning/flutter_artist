@@ -528,13 +528,13 @@ abstract class FormModel<
     required MultiOptProp optProp,
     required bool isItemFirstLoad,
   }) async {
-    final String optPropName = optProp.propName;
+    final String multiOptPropName = optProp.propName;
 
     final MultiOptProp? optPropParent = optProp?.parent;
 
     // Get current OptProp data:
     XOptionedData? optPropData =
-        _formPropsStructure._getOptPropXData(optPropName);
+        _formPropsStructure._getOptPropXData(multiOptPropName);
 
     if (optPropParent != null) {
       XOptionedData? tempXOptionedParent =
@@ -564,13 +564,13 @@ abstract class FormModel<
     //
     if (optPropData == null) {
       _formPropsStructure._setTempOptPropXData(
-        optPropName: optPropName,
+        multiOptPropName: multiOptPropName,
         optionedXData: null,
       );
       // IMPORTANT:
       //  - Update from ROOTs to LEAVES
       //  - And make sure children-OptProp to null if parent-Value is null or not selected.
-      _formPropsStructure._updatePropsTempValues({optPropName: null});
+      _formPropsStructure._updatePropsTempValues({multiOptPropName: null});
     }
     //
     // Load OptProp data from Rest API.
@@ -580,7 +580,7 @@ abstract class FormModel<
       filterCriteria: block.data.filterCriteria,
       extraFormInput: extraFormInput,
       parentMultiOptPropValue: parentOptPropValue,
-      optPropName: optPropName,
+      multiOptPropName: multiOptPropName,
     );
     //
     // IMPORTANT: Do not use empty list here
@@ -599,13 +599,13 @@ abstract class FormModel<
             selectedValueWrap = _getOptPropValueFromExtraFormInput(
               extraFormInput: extraFormInput,
               optPropData: optPropData,
-              optPropName: optPropName,
+              multiOptPropName: multiOptPropName,
             );
           } else {
             if (!_defaultValueInitiated) {
               selectedValueWrap = __specifyDefaultMultiOptPropValue(
                 optPropData: optPropData,
-                optPropName: optPropName,
+                multiOptPropName: multiOptPropName,
               );
             }
           }
@@ -615,7 +615,7 @@ abstract class FormModel<
           selectedValueWrap = getMultiOptPropValueFromItemDetail(
             itemDetail: currentItemDetail,
             optPropData: optPropData,
-            optPropName: optPropName,
+            multiOptPropName: multiOptPropName,
           );
         }
       }
@@ -625,7 +625,7 @@ abstract class FormModel<
       //
       final dynamic tempCurrentValue =
           _formPropsStructure._getTempCurrentPropValue(
-        propName: optPropName,
+        propName: multiOptPropName,
       );
       //
       if (tempCurrentValue != null) {
@@ -657,7 +657,7 @@ abstract class FormModel<
     }
     //
     _formPropsStructure._setTempOptPropXData(
-      optPropName: optPropName,
+      multiOptPropName: multiOptPropName,
       optionedXData: optPropData,
     );
     // TODO: Dangerous, check not null:
@@ -680,25 +680,25 @@ abstract class FormModel<
         //  - And make sure children-OptProp to null if parent-Value is null or not selected.
         Object? candidateSelectedItem = candidateSelectedItems.first;
         _formPropsStructure
-            ._updatePropsTempValues({optPropName: candidateSelectedItem});
+            ._updatePropsTempValues({multiOptPropName: candidateSelectedItem});
       } else {
         // IMPORTANT:
         //  - Update from ROOTs to LEAVES
         //  - And make sure children-OptProp to null if parent-Value is null or not selected.
         // Try MULTI SELECTED ITEMS:
         _formPropsStructure
-            ._updatePropsTempValues({optPropName: candidateSelectedItems});
+            ._updatePropsTempValues({multiOptPropName: candidateSelectedItems});
       }
     } else {
       // IMPORTANT:
       //  - Update from ROOTs to LEAVES
       //  - And make sure children-OptProp to null if parent-Value is null or not selected.
-      _formPropsStructure._updatePropsTempValues({optPropName: null});
+      _formPropsStructure._updatePropsTempValues({multiOptPropName: null});
     }
     //
     Object? tempSelectedPropValue =
         this._formPropsStructure._getTempCurrentPropValue(
-              propName: optPropName,
+              propName: multiOptPropName,
             );
 
     if (tempSelectedPropValue != null) {
@@ -741,11 +741,11 @@ abstract class FormModel<
 
   PropValue? __specifyDefaultMultiOptPropValue({
     required XOptionedData optPropData,
-    required String optPropName,
+    required String multiOptPropName,
   }) {
     PropValue? wrap = specifyDefaultMultiOptPropValue(
       optPropData: optPropData,
-      optPropName: optPropName,
+      multiOptPropName: multiOptPropName,
     );
     if (wrap == null) {
       return null;
@@ -766,12 +766,12 @@ abstract class FormModel<
   PropValue? _getOptPropValueFromExtraFormInput({
     required EXTRA_FORM_INPUT extraFormInput,
     required XOptionedData optPropData,
-    required String optPropName,
+    required String multiOptPropName,
   }) {
     PropValue? wrap = getMultiOptPropValueFromExtraFormInput(
       extraFormInput: extraFormInput,
       optPropData: optPropData,
-      optPropName: optPropName,
+      multiOptPropName: multiOptPropName,
     );
     if (wrap == null) {
       return null;
@@ -813,7 +813,7 @@ abstract class FormModel<
 
   PropValue? specifyDefaultMultiOptPropValue({
     required XOptionedData optPropData,
-    required String optPropName,
+    required String multiOptPropName,
   });
 
   // ***************************************************************************
@@ -837,7 +837,7 @@ abstract class FormModel<
   PropValue? getMultiOptPropValueFromItemDetail({
     required ITEM_DETAIL itemDetail,
     required XOptionedData optPropData,
-    required String optPropName,
+    required String multiOptPropName,
   });
 
   // ***************************************************************************
@@ -846,7 +846,7 @@ abstract class FormModel<
   PropValue? getMultiOptPropValueFromExtraFormInput({
     required EXTRA_FORM_INPUT extraFormInput,
     required XOptionedData optPropData,
-    required String optPropName,
+    required String multiOptPropName,
   });
 
   // ***************************************************************************
@@ -859,7 +859,7 @@ abstract class FormModel<
     required FILTER_CRITERIA? filterCriteria,
     required EXTRA_FORM_INPUT? extraFormInput,
     required Object? parentMultiOptPropValue,
-    required String optPropName,
+    required String multiOptPropName,
   });
 
   // ***************************************************************************

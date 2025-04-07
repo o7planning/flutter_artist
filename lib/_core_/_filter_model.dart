@@ -289,7 +289,7 @@ abstract class FilterModel<
   Future<XOptionedData?> callApiLoadMultiOptCriterionData({
     required FILTER_INPUT? filterInput,
     required Object? parentMultiOptCriterionValue,
-    required String optCriterionName,
+    required String multiOptCriterionName,
   });
 
   // ***************************************************************************
@@ -337,7 +337,7 @@ abstract class FilterModel<
     //
     if (optCriterionData == null) {
       _filterCriteriaStructure._setTempOptCriterionXData(
-        optCriterionName: criterionName,
+        multiOptCriterionName: criterionName,
         optionedXData: null,
       );
       // IMPORTANT:
@@ -354,7 +354,7 @@ abstract class FilterModel<
     optCriterionData ??= await callApiLoadMultiOptCriterionData(
       filterInput: filterInput,
       parentMultiOptCriterionValue: parentOptCriterionValue,
-      optCriterionName: criterionName,
+      multiOptCriterionName: criterionName,
     );
     //
     // IMPORTANT: Do not use empty list here
@@ -369,7 +369,7 @@ abstract class FilterModel<
         inputValueWrap = _getMultiOptCriterionValueFromFilterInput(
           filterInput: filterInput,
           optCriterionData: optCriterionData,
-          optCriterionName: criterionName,
+          multiOptCriterionName: criterionName,
         );
       } else {
         if (!_defaultValueInitiated) {
@@ -415,7 +415,7 @@ abstract class FilterModel<
     }
     //
     _filterCriteriaStructure._setTempOptCriterionXData(
-      optCriterionName: criterionName,
+      multiOptCriterionName: criterionName,
       optionedXData: optCriterionData,
     );
     //
@@ -485,9 +485,9 @@ abstract class FilterModel<
   /// PropValue? getOptCriterionValueFromFilterInput({
   ///     required ExampleFilterInput filterInput,
   ///     required XOptionedData optCriterionData,
-  ///     required String optCriterionName,
+  ///     required String multiOptCriterionName,
   /// }) {
-  ///    if(optCriterionName == "company") {
+  ///    if(multiOptCriterionName == "company") {
   ///       int inputCompanyId = filterInput.filterInput;
   ///       CompanyInfo? inputCompany = materPropData?.getItemById(inputCompanyId);
   ///       return MasterPropValueWrap([inputCompany])
@@ -499,12 +499,12 @@ abstract class FilterModel<
   PropValue? getMultiOptCriterionValueFromFilterInput({
     required FILTER_INPUT filterInput,
     required XOptionedData optCriterionData,
-    required String optCriterionName,
+    required String multiOptCriterionName,
   });
 
   PropValue? specifyDefaultMultiOptCriterionValue({
     required XOptionedData optCriterionData,
-    required String optCriterionName,
+    required String multiOptCriterionName,
   });
 
   Object? specifyDefaultSimpleCriterionValue({
@@ -514,12 +514,12 @@ abstract class FilterModel<
   PropValue? _getMultiOptCriterionValueFromFilterInput({
     required FILTER_INPUT filterInput,
     required XOptionedData optCriterionData,
-    required String optCriterionName,
+    required String multiOptCriterionName,
   }) {
     PropValue? wrap = getMultiOptCriterionValueFromFilterInput(
       filterInput: filterInput,
       optCriterionData: optCriterionData,
-      optCriterionName: optCriterionName,
+      multiOptCriterionName: multiOptCriterionName,
     );
     if (wrap == null) {
       return null;
@@ -540,7 +540,7 @@ abstract class FilterModel<
   }) {
     PropValue? wrap = specifyDefaultMultiOptCriterionValue(
       optCriterionData: optCriterionData,
-      optCriterionName: multiOptCriterionName,
+      multiOptCriterionName: multiOptCriterionName,
     );
     if (wrap == null) {
       return null;
