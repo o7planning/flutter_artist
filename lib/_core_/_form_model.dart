@@ -589,7 +589,7 @@ abstract class FormModel<
     List? currentSelectedItems; // will be null or not empty.
     // Candidate Selected Items:
     List? candidateSelectedItems;
-    PropValue? selectedValueWrap;
+    ValueWrap? selectedValueWrap;
     final ITEM_DETAIL? currentItemDetail = block.data.currentItemDetail;
     //
     if (multiOptPropXData != null) {
@@ -739,11 +739,11 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  PropValue? __specifyDefaultMultiOptPropValue({
+  ValueWrap? __specifyDefaultMultiOptPropValue({
     required XOptionedData multiOptPropXData,
     required String multiOptPropName,
   }) {
-    PropValue? wrap = specifyDefaultMultiOptPropValue(
+    ValueWrap? wrap = specifyDefaultMultiOptPropValue(
       multiOptPropXData: multiOptPropXData,
       multiOptPropName: multiOptPropName,
     );
@@ -751,7 +751,7 @@ abstract class FormModel<
       return null;
     }
     List? value = wrap.values;
-    return PropValue.multi(
+    return ValueWrap.multi(
       multiOptPropXData.findInternalItemsByDynamics(
         dynamicValues: value,
         addToInternalIfNotFound: true,
@@ -763,12 +763,12 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  PropValue? _getOptPropValueFromExtraFormInput({
+  ValueWrap? _getOptPropValueFromExtraFormInput({
     required EXTRA_FORM_INPUT extraFormInput,
     required XOptionedData multiOptPropXData,
     required String multiOptPropName,
   }) {
-    PropValue? wrap = getMultiOptPropValueFromExtraFormInput(
+    ValueWrap? wrap = getMultiOptPropValueFromExtraFormInput(
       extraFormInput: extraFormInput,
       multiOptPropXData: multiOptPropXData,
       multiOptPropName: multiOptPropName,
@@ -777,7 +777,7 @@ abstract class FormModel<
       return null;
     }
     List? value = wrap.values;
-    return PropValue.multi(
+    return ValueWrap.multi(
       multiOptPropXData.findInternalItemsByDynamics(
         dynamicValues: value,
         addToInternalIfNotFound: true,
@@ -811,7 +811,7 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  PropValue? specifyDefaultMultiOptPropValue({
+  ValueWrap? specifyDefaultMultiOptPropValue({
     required XOptionedData multiOptPropXData,
     required String multiOptPropName,
   });
@@ -834,7 +834,7 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  PropValue? getMultiOptPropValueFromItemDetail({
+  ValueWrap? getMultiOptPropValueFromItemDetail({
     required ITEM_DETAIL itemDetail,
     required XOptionedData multiOptPropXData,
     required String multiOptPropName,
@@ -843,7 +843,7 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  PropValue? getMultiOptPropValueFromExtraFormInput({
+  ValueWrap? getMultiOptPropValueFromExtraFormInput({
     required EXTRA_FORM_INPUT extraFormInput,
     required XOptionedData multiOptPropXData,
     required String multiOptPropName,
