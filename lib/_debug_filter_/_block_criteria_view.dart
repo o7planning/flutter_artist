@@ -18,6 +18,6 @@ class _BlockCriteriaView extends _BlkOrScrCriteriaView {
 
   @override
   FilterCriteria? getFilterCriteria() {
-    return block._blockData.filterCriteria;
+    return block.filterCriteria;
   }
 }

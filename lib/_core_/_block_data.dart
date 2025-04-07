@@ -34,7 +34,7 @@ class BlockData<
   List<ITEM> moveCurrentItemToEndOfList({
     required List<ITEM> itemList,
   }) {
-    ITEM? currItem = this.currentItem;
+    ITEM? currItem = this.__currentItem;
     if (currItem == null) {
       return itemList;
     }
@@ -55,7 +55,7 @@ class BlockData<
   List<ITEM> getCheckedItems({
     required CurrentItemChkInclusion currentItemInclusion,
   }) {
-    ITEM? currItem = this.currentItem;
+    ITEM? currItem = this.__currentItem;
     bool contains = this.isCurrentItemChecked;
     //
     //
@@ -84,7 +84,7 @@ class BlockData<
   List<ITEM> getSelectedItems({
     required CurrentItemSelInclusion currentItemInclusion,
   }) {
-    ITEM? currItem = this.currentItem;
+    ITEM? currItem = this.__currentItem;
     bool contains = this.isCurrentItemSelected;
     //
     if (currItem != null) {
@@ -109,7 +109,7 @@ class BlockData<
   // ***************************************************************************
 
   bool get isCurrentItemChecked {
-    ITEM? currentItem = this.currentItem;
+    ITEM? currentItem = this.__currentItem;
     if (currentItem == null) {
       return false;
     }
@@ -123,7 +123,7 @@ class BlockData<
   // ***************************************************************************
 
   bool get isCurrentItemSelected {
-    ITEM? currentItem = this.currentItem;
+    ITEM? currentItem = this.__currentItem;
     if (currentItem == null) {
       return false;
     }
@@ -136,48 +136,11 @@ class BlockData<
 
   // ***************************************************************************
 
-  ///
-  /// return a copied list of checked items.
-  ///
-  List<ITEM> get checkedItems {
-    return [..._checkedItems];
-  }
-
-  ///
-  /// return a copied list of selected items.
-  ///
-  List<ITEM> get selectedItems {
-    return [..._selectedItems];
-  }
-
-  int get itemCount => _items.length;
-
-  bool get isEmpty => _items.isEmpty;
-
-  bool get isNotEmpty => _items.isNotEmpty;
-
   Object? _currentParentItemId;
 
   FILTER_CRITERIA? _filterCriteria;
 
-  FILTER_CRITERIA? get filterCriteria => _filterCriteria;
-
   PageData<ITEM>? _lastQueryResult;
-
-  ///
-  /// ```dart
-  /// if(thisBlock.data.lastQueryResult == null) {
-  ///   ...
-  /// } else if(thisBlock.data.lastQueryResult is YourType) {
-  ///   ...
-  /// } else {
-  ///   // Empty PageData<I>.
-  ///   // Occurs if there is no "Item" currently selected on the parent Block
-  ///   // or this Block was previously in Lazy Query State.
-  /// }
-  /// ```
-  ///
-  PageData<ITEM>? get lastQueryResult => _lastQueryResult;
 
   late PageableData? _pageable;
 
@@ -185,24 +148,18 @@ class BlockData<
 
   late PaginationData? _pagination;
 
-  PaginationData? get pagination => PaginationData.copy(_pagination);
-
   _CurrentCoupleItem<ITEM, ITEM_DETAIL> __current = _CurrentCoupleItem(
     item: null,
     itemDetail: null,
   );
 
-  ITEM? get currentItem => __current._item;
+  ITEM? get __currentItem => __current._item;
 
-  ITEM_DETAIL? get currentItemDetail => __current._itemDetail;
+  ITEM_DETAIL? get __currentItemDetail => __current._itemDetail;
 
   late DataState _queryDataState;
 
-  DataState get queryDataState => _queryDataState;
-
   DataState _selectionDataState = DataState.pending;
-
-  DataState get selectionDataState => _selectionDataState;
 
   // ***************************************************************************
   // ***************************************************************************
@@ -250,7 +207,7 @@ class BlockData<
   // ***************************************************************************
   // ***************************************************************************
 
-  void sort() {
+  void _sortItems() {
     try {
       if (block._itemSortCriteria != null) {
         _items.sort((a, b) => block._itemSortCriteria!._compare(a, b));
@@ -263,7 +220,7 @@ class BlockData<
   // ***************************************************************************
   // ***************************************************************************
 
-  void setToPending() {
+  void _setToPending() {
     _queryDataState = DataState.pending;
   }
 
@@ -319,7 +276,7 @@ class BlockData<
       getItemId: block.getItemId,
     );
     //
-    sort();
+    _sortItems();
     //
     ItemsUtils.replaceItemInList(
       targetList: _checkedItems,
@@ -343,7 +300,7 @@ class BlockData<
       getItemId: block.getItemId,
     );
     //
-    sort();
+    _sortItems();
     //
     ItemsUtils.replaceItemsInList(
       replacementItems: appendItems,
@@ -390,375 +347,5 @@ class BlockData<
     _pagination = PaginationData.copy(ap.pagination);
     //
     // block.formModel?.data._formMode = FormMode.none;
-  }
-
-  // ***************************************************************************
-  // ******* PUBLIC ITEM PROPERTIES ********************************************
-  // ***************************************************************************
-
-  bool isSame({
-    required ITEM? item1,
-    required ITEM? item2,
-  }) {
-    if (item1 == null && item2 == null) {
-      return true;
-    }
-    if (item1 != null && item2 != null) {
-      return block.getItemId(item1) == block.getItemId(item2);
-    }
-    return false;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ITEM? get firstItem {
-    return _items.firstOrNull;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ITEM? get lastItem {
-    return _items.lastOrNull;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ///
-  /// The next item of the current item.
-  /// Return null if no current item or the current item is the last item.
-  ///
-  ITEM? get nextSiblingItem {
-    if (currentItem == null) {
-      return null;
-    }
-    return findNextSiblingItem(item: currentItem!);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ///
-  /// The previous item of the current item.
-  /// Return null if no current item or the current item is the first item.
-  ///
-  ITEM? get previousSiblingItem {
-    if (currentItem == null) {
-      return null;
-    }
-    return findPreviousSiblingItem(item: currentItem!);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool get hasPreviousItem => previousSiblingItem != null;
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool get hasNextItem => nextSiblingItem != null;
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ///
-  /// Check if the first item is current item.
-  ///
-  bool get isFirstItemCurrent {
-    ITEM? first = firstItem;
-    ITEM? current = currentItem;
-    if (first == null || current == null) {
-      return false;
-    }
-    return block.getItemId(first) == block.getItemId(current);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ///
-  /// Check if the last item is current item.
-  ///
-  bool get isLastItemCurrent {
-    ITEM? last = lastItem;
-    ITEM? current = currentItem;
-    if (last == null || current == null) {
-      return false;
-    }
-    return block.getItemId(last) == block.getItemId(current);
-  }
-
-  // ***************************************************************************
-  // ******* PUBLIC ITEM METHODS ***********************************************
-  // ***************************************************************************
-
-  bool isSelectedIndex({required int index}) {
-    ITEM? item = findItemByIndex(index);
-    if (item == null) {
-      return false;
-    }
-    return isSelectedItem(item);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool isCurrentIndex({required int index}) {
-    ITEM? item = findItemByIndex(index);
-    if (item == null) {
-      return false;
-    }
-    return isCurrentItem(item: item);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool isCurrentItem({
-    required ITEM item,
-  }) {
-    ITEM? currIt = __current._item;
-    return currIt != null && block.getItemId(item) == block.getItemId(currIt);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool isSelectedItem(ITEM item) {
-    return ItemsUtils.isListContainItem(
-      targetList: _selectedItems,
-      item: item,
-      getItemId: block.getItemId,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool isCheckedItem(ITEM item) {
-    return ItemsUtils.isListContainItem(
-      targetList: _checkedItems,
-      item: item,
-      getItemId: block.getItemId,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool containsItem({
-    required ITEM item,
-  }) {
-    return ItemsUtils.isListContainItem(
-      targetList: _items,
-      item: item,
-      getItemId: block.getItemId,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ITEM? findNextSiblingItem({
-    required ITEM item,
-  }) {
-    return ItemsUtils.findNextSiblingItemInList(
-      item: item,
-      targetList: _items,
-      getItemId: block.getItemId,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ITEM? findPreviousSiblingItem({
-    required ITEM item,
-  }) {
-    return ItemsUtils.findPreviousSiblingItemInList(
-      item: item,
-      targetList: _items,
-      getItemId: block.getItemId,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ITEM? findSiblingItem({
-    required ITEM item,
-  }) {
-    return ItemsUtils.findSiblingItemInList(
-      item: item,
-      targetList: _items,
-      getItemId: block.getItemId,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ITEM? findItemSameIdWith({
-    required ITEM item,
-  }) {
-    ID id = block.getItemId(item);
-    return findItemById(id);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ITEM? findItemById(ID itemId) {
-    return ItemsUtils.findItemInListById(
-      id: itemId,
-      targetList: _items,
-      getItemId: block.getItemId,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ITEM? findItemByIndex(int index) {
-    if (index < 0 || index >= _items.length) {
-      return null;
-    }
-    return _items[index];
-  }
-
-  // ***************************************************************************
-  // ******* PRIVATE ITEM METHODS **********************************************
-  // ***************************************************************************
-
-  void _toggleCheckItem({required ITEM item}) {
-    bool checked = isCheckedItem(item);
-    _setCheckedItem(item: item, checked: !checked);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _toggleSelectItem({required ITEM item}) {
-    bool selected = isSelectedItem(item);
-    _setSelectedItem(item: item, selected: !selected);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _setCheckedItem({required ITEM item, required bool checked}) {
-    if (checked) {
-      __checkItem(item);
-    } else {
-      __uncheckItem(item);
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _setSelectedItem({required ITEM item, required bool selected}) {
-    if (selected) {
-      __selectItem(item);
-    } else {
-      __deselectItem(item);
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _setCheckedItems({required List<ITEM> items}) {
-    ItemsUtils.insertOrReplaceItemsInList(
-      items: items,
-      targetList: _checkedItems,
-      getItemId: block.getItemId,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _setSelectedItems({required List<ITEM> items}) {
-    ItemsUtils.insertOrReplaceItemsInList(
-      items: items,
-      targetList: _selectedItems,
-      getItemId: block.getItemId,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void __checkItem(ITEM item) {
-    ItemsUtils.insertOrReplaceItemInList(
-      item: item,
-      targetList: _checkedItems,
-      getItemId: block.getItemId,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void __selectItem(ITEM item) {
-    ItemsUtils.insertOrReplaceItemInList(
-      item: item,
-      targetList: _selectedItems,
-      getItemId: block.getItemId,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void __uncheckItem(ITEM item) {
-    ItemsUtils.removeItemFromList(
-      removeItem: item,
-      targetList: _checkedItems,
-      getItemId: block.getItemId,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void __deselectItem(ITEM item) {
-    ItemsUtils.removeItemFromList(
-      removeItem: item,
-      targetList: _selectedItems,
-      getItemId: block.getItemId,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _uncheckAllItems() {
-    _checkedItems.clear();
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _deselectAllItems() {
-    _selectedItems.clear();
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _checkAllItems() {
-    _setCheckedItems(items: _items);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _selectAllItems() {
-    _setSelectedItems(items: _items);
   }
 }

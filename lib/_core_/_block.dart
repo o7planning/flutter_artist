@@ -225,11 +225,11 @@ abstract class Block<
   PageableData? get __pageable => __pageSize == null
       ? null
       : PageableData(
-    page: 1,
-    pageSize: __pageSize,
-  );
+          page: 1,
+          pageSize: __pageSize,
+        );
 
-  late final _blockData = BlockData<
+  late final __blockData = BlockData<
       ID, //
       ITEM,
       ITEM_DETAIL,
@@ -249,13 +249,42 @@ abstract class Block<
   // *** DATA STATE ************************************************************
   // ***************************************************************************
 
-  DataState get queryDataState => this._blockData._queryDataState;
+  ///
+  /// ```dart
+  /// if(thisBlock.lastQueryResult == null) {
+  ///   ...
+  /// } else if(thisBlock.lastQueryResult is YourType) {
+  ///   ...
+  /// } else {
+  ///   // Empty PageData<I>.
+  ///   // Occurs if there is no "Item" currently selected on the parent Block
+  ///   // or this Block was previously in Lazy Query State.
+  /// }
+  /// ```
+  ///
+  PageData<ITEM>? get lastQueryResult => __blockData._lastQueryResult;
 
-  DataState get selectionDataState => this._blockData._selectionDataState;
+  DataState get queryDataState => __blockData._queryDataState;
+
+  DataState get selectionDataState => __blockData._selectionDataState;
 
   final ItemSortCriteria? _itemSortCriteria;
 
   ItemSortCriteria? get itemSortCriteria => _itemSortCriteria;
+
+  FILTER_CRITERIA? get filterCriteria => __blockData._filterCriteria;
+
+  int get itemCount => __blockData._items.length;
+
+  PageableData? get pageable => __blockData._pageable;
+
+  PaginationData? get pagination {
+    return PaginationData.copy(__blockData._pagination);
+  }
+
+  void setToPending() {
+    __blockData._setToPending();
+  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -296,7 +325,7 @@ abstract class Block<
   }) {
     __assertThisXBlock(thisXBlock);
     //
-    this._blockData._clearWithDataState(queryDataState: queryDataState);
+    this.__blockData._clearWithDataState(queryDataState: queryDataState);
     if (formModel != null) {
       formModel!._clearWithDataState(formDataState: formDataState);
     }
@@ -395,7 +424,7 @@ abstract class Block<
       return true;
     }
     //
-    Object? parentInData = this._blockData._currentParentItemId;
+    Object? parentInData = this.__blockData._currentParentItemId;
     Object? parentInBlock = parentItemId;
     if (parentInData != parentInBlock) {
       return true;
@@ -403,7 +432,7 @@ abstract class Block<
     //
     if (filterModel != null) {
       FilterCriteria? criteriaInFilter = filterModel!.filterCriteria;
-      FilterCriteria? criteriaInData = this._blockData.filterCriteria;
+      FilterCriteria? criteriaInData = this.filterCriteria;
       if (criteriaInFilter != criteriaInData) {
         return true;
       }
@@ -880,7 +909,7 @@ abstract class Block<
     //
     // Ready FilterCriteria:
     //
-    final bool xCriteriaChanged = this._blockData._isXCriteriaChanged(
+    final bool xCriteriaChanged = this.__blockData._isXCriteriaChanged(
           newCurrentParentItemId: parentItemId,
           newFilterCriteria: filterCriteria,
         );
@@ -890,7 +919,7 @@ abstract class Block<
         const PageableData(page: 1, pageSize: null);
     //
     final ListBehavior realListBehavior;
-    final int currentItemCount = this._blockData.itemCount;
+    final int currentItemCount = this.itemCount;
     //
     if (xCriteriaChanged) {
       //
@@ -971,11 +1000,11 @@ abstract class Block<
       newQueryDataState = DataState.ready;
     }
     //
-    final ITEM? currentItem = this._blockData.currentItem;
+    final ITEM? currentItem = this.currentItem;
     //
     // Update queried items to the List:
     //
-    this._blockData._updateFrom(
+    this.__blockData._updateFrom(
           forceListBehavior: realListBehavior,
           currentParentItemId: this.parentItemId,
           filterCriteria: filterCriteria,
@@ -985,7 +1014,7 @@ abstract class Block<
         );
     //
     final bool currentItemInList =
-        currentItem != null && this._blockData.containsItem(item: currentItem);
+        currentItem != null && containsItem(item: currentItem);
     final ITEM? candidateCurrentItem = currentItemInList ? currentItem : null;
     //
     if (formModel != null) {
@@ -1058,8 +1087,8 @@ abstract class Block<
         currentItemSelectionType: currentItemSelectionType,
         getItemId: getItemId,
         candidateItem: candidateItem,
-        oldCurrentItem: this._blockData.currentItem,
-        currentItem: this._blockData.currentItem,
+        oldCurrentItem: this.currentItem,
+        currentItem: this.currentItem,
       );
     } else {
       thisXBlock.currentItemSelectionResult!._addCandidateItem(
@@ -1086,7 +1115,7 @@ abstract class Block<
       return;
     }
     //
-    if (this._blockData.itemCount == 0) {
+    if (this.itemCount == 0) {
       this.__clearWithDataStateCascade(
         thisXBlock: thisXBlock,
         queryDataState: DataState.ready,
@@ -1103,22 +1132,22 @@ abstract class Block<
     }
     //
     ITEM? candidateCurrentItem = candidateItem;
-    ITEM? currentItem = this._blockData.currentItem;
+    ITEM? currentItem = this.currentItem;
     //
     if (candidateCurrentItem != null) {
-      if (!this._blockData.containsItem(item: candidateCurrentItem)) {
+      if (!containsItem(item: candidateCurrentItem)) {
         candidateCurrentItem = null;
       }
     }
     if (currentItem != null) {
-      if (!this._blockData.containsItem(item: currentItem)) {
+      if (!containsItem(item: currentItem)) {
         currentItem = null;
       }
     }
     //
     final bool newCurrent;
     if (currentItem == null) {
-      candidateCurrentItem = candidateCurrentItem ?? this._blockData.firstItem;
+      candidateCurrentItem = candidateCurrentItem ?? firstItem;
       newCurrent = candidateCurrentItem != null;
     } else {
       // currentItem != null
@@ -1135,10 +1164,10 @@ abstract class Block<
       }
     }
     //
-    if (!this._blockData.isSame(
-          item1: candidateItem,
-          item2: candidateCurrentItem,
-        )) {
+    if (!isSame(
+      item1: candidateItem,
+      item2: candidateCurrentItem,
+    )) {
       result._addCandidateItem(candidateCurrentItem);
     }
     //
@@ -1169,9 +1198,9 @@ abstract class Block<
     //
     // (newCurrent || forceReloadItem) && candidateCurrentItem !=null
     //
-    final bool isCandidateIsCurrent = this._blockData.isCurrentItem(
-          item: candidateCurrentItem,
-        );
+    final bool isCandidateIsCurrent = isCurrentItem(
+      item: candidateCurrentItem,
+    );
     final ITEM? candidateCurrentItemInNewQueriedList =
         ItemsUtils.findItemInList(
       item: candidateCurrentItem,
@@ -1239,9 +1268,9 @@ abstract class Block<
     // If candidate not found in database --> remove.
     //
     if (candidateCurrentItemDetail == null) {
-      final ITEM? siblingItem = this._blockData.findSiblingItem(
-            item: candidateCurrentItem,
-          );
+      final ITEM? siblingItem = findSiblingItem(
+        item: candidateCurrentItem,
+      );
       // #SAME-CODE-001
       if (!isCandidateIsCurrent) {
         await __removeItemFromList(
@@ -1321,8 +1350,8 @@ abstract class Block<
       return;
     }
     //
-    this._blockData._selectionDataState = DataState.ready;
-    this._blockData._setCurrentItemOnly(
+    this.__blockData._selectionDataState = DataState.ready;
+    this.__blockData._setCurrentItemOnly(
           refreshedItem: candidateCurrentItem,
           refreshedItemDetail: candidateCurrentItemDetail,
         );
@@ -1380,7 +1409,7 @@ abstract class Block<
     //
     thisXBlock.itemDeletionResult.addCandidateItem(item);
     //
-    final bool isCurrent = this._blockData.isCurrentItem(item: item);
+    final bool isCurrent = isCurrentItem(item: item);
     //
     ApiResult<void> result;
     try {
@@ -1443,10 +1472,10 @@ abstract class Block<
     //
     // Deleted current item ==> find sibling.
     //
-    final ITEM? siblingItem = this._blockData.findSiblingItem(item: item);
+    final ITEM? siblingItem = findSiblingItem(item: item);
     // Remove Item (Current Item)
     await __removeItemFromList(removeItem: item);
-    this._blockData._setCurrentItemOnly(
+    this.__blockData._setCurrentItemOnly(
           refreshedItem: null,
           refreshedItemDetail: null,
         );
@@ -1487,7 +1516,7 @@ abstract class Block<
     //
     const ITEM? nullItem = null;
     const ITEM_DETAIL? nullItemDetail = null;
-    __setCurrentItem(
+    this.__setCurrentItem(
       itemDetail: nullItemDetail,
       item: nullItem,
     );
@@ -1510,7 +1539,7 @@ abstract class Block<
       );
       //
       success = await formModel!._startNewFormTransaction(
-        filterCriteria: _blockData.filterCriteria,
+        filterCriteria: this.filterCriteria,
         extraFormInput: extraFormInput,
         isItemFirstLoad: true,
       );
@@ -1706,7 +1735,7 @@ abstract class Block<
         if (!actionable.yes) {
           return true;
         }
-        ITEM? currentItem = this._blockData.currentItem;
+        ITEM? currentItem = this.currentItem;
         if (currentItem != null) {
           var taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
             currentItemSelectionType: CurrentItemSelectionType.refresh,
@@ -1805,7 +1834,7 @@ abstract class Block<
       keepInList = false;
     } else {
       keepInList = needToKeepItemInList(
-        filterCriteria: this._blockData.filterCriteria,
+        filterCriteria: this.filterCriteria,
         savedItem: savedItemDetail,
       );
     }
@@ -1815,7 +1844,7 @@ abstract class Block<
       ITEM refreshedItem = convertItemDetailToItem(
         itemDetail: savedItemDetail,
       );
-      this._blockData._insertOrReplaceItem(
+      this.__blockData._insertOrReplaceItem(
             item: refreshedItem,
             itemDetail: savedItemDetail,
           );
@@ -1845,7 +1874,7 @@ abstract class Block<
         formModel!._formPropsStructure._updateInitialFormDataAfterSaveSuccess();
         //
         bool success = await formModel!._startNewFormTransaction(
-          filterCriteria: _blockData.filterCriteria,
+          filterCriteria: this.filterCriteria,
           extraFormInput: null,
           isItemFirstLoad: true,
         );
@@ -1860,7 +1889,7 @@ abstract class Block<
       ITEM? savedItem = __convertItemDetailToItem(
         itemDetail: savedItemDetail,
       );
-      final ITEM? removeItem = savedItem ?? this._blockData.currentItem;
+      final ITEM? removeItem = savedItem ?? this.currentItem;
       if (removeItem == null) {
         // TODO: Xem lai.
         return false;
@@ -1868,7 +1897,7 @@ abstract class Block<
       //
       // removeItem != null
       //
-      bool isCurrent = this._blockData.isCurrentItem(item: removeItem);
+      bool isCurrent = isCurrentItem(item: removeItem);
       if (!isCurrent) {
         await __removeItemFromList(removeItem: removeItem);
         return true;
@@ -1876,11 +1905,10 @@ abstract class Block<
       //
       // Deleted current item ==> find sibling.
       //
-      final ITEM? siblingItem =
-          this._blockData.findSiblingItem(item: removeItem);
+      final ITEM? siblingItem = findSiblingItem(item: removeItem);
       // Remove Item (Current Item)
       await __removeItemFromList(removeItem: removeItem);
-      this._blockData._setCurrentItemOnly(
+      this.__blockData._setCurrentItemOnly(
             refreshedItem: null,
             refreshedItemDetail: null,
           );
@@ -1924,7 +1952,7 @@ abstract class Block<
       methodName: "clearCurrent",
       parameters: {},
     );
-    if (_blockData.currentItem == null) {
+    if (this.currentItem == null) {
       return;
     }
     //
@@ -2086,7 +2114,7 @@ abstract class Block<
       parameters: {"postQueryBehavior": postQueryBehavior},
     );
     //
-    PageableData? currentPageable = this._blockData.pageable;
+    PageableData? currentPageable = this.__blockData.pageable;
     if (currentPageable == null) {
       return false;
     }
@@ -2119,7 +2147,7 @@ abstract class Block<
       parameters: {"postQueryBehavior": postQueryBehavior},
     );
     //
-    PageableData? currentPageable = this._blockData.pageable;
+    PageableData? currentPageable = this.__blockData.pageable;
     if (currentPageable == null) {
       return false;
     }
@@ -2155,7 +2183,7 @@ abstract class Block<
       parameters: {"postQueryBehavior": postQueryBehavior},
     );
     //
-    PageableData? currentPageable = this._blockData.pageable;
+    PageableData? currentPageable = this.__blockData.pageable;
     if (currentPageable == null) {
       return false;
     }
@@ -2359,11 +2387,12 @@ abstract class Block<
   // ***************************************************************************
 
   ID? getCurrentItemId() {
-    if (this._blockData.currentItemDetail == null) {
+    if (this.currentItemDetail == null) {
       return null;
     }
-    ITEM item =
-        convertItemDetailToItem(itemDetail: this._blockData.currentItemDetail!);
+    ITEM item = convertItemDetailToItem(
+      itemDetail: this.currentItemDetail!,
+    );
     return getItemId(item);
   }
 
@@ -2403,12 +2432,11 @@ abstract class Block<
 
   void __setChildrenForParent() {
     try {
-      Object? itemParent = parent?._blockData.currentItemDetail;
-      if (itemParent != null &&
-          this._blockData.queryDataState == DataState.ready) {
+      Object? itemParent = parent?.currentItemDetail;
+      if (itemParent != null && this.queryDataState == DataState.ready) {
         setChildrenForParent(
           currentItemOfParentBlock: itemParent,
-          items: this._blockData.items,
+          items: this.__blockData.items,
         );
       }
     } catch (e, stackTrace) {
@@ -2437,10 +2465,10 @@ abstract class Block<
     required ITEM? item,
     required ITEM_DETAIL? itemDetail,
   }) {
-    this._blockData._setCurrentItemOnly(
-          refreshedItemDetail: itemDetail,
-          refreshedItem: item,
-        );
+    __blockData._setCurrentItemOnly(
+      refreshedItemDetail: itemDetail,
+      refreshedItem: item,
+    );
   }
 
   // ***************************************************************************
@@ -2460,7 +2488,7 @@ abstract class Block<
       },
     );
     //
-    this._blockData._removeItem(removeItem: removeItem);
+    this.__blockData._removeItem(removeItem: removeItem);
     this.updateItemsView();
     // TODO: Disable delay in test mode:
     // await Future.delayed(Duration(seconds: 1));
@@ -2470,7 +2498,7 @@ abstract class Block<
   // ***************************************************************************
 
   bool hasCurrentItem() {
-    return this._blockData.currentItemDetail != null;
+    return this.currentItemDetail != null;
   }
 
   // ***************************************************************************
@@ -2478,11 +2506,11 @@ abstract class Block<
 
   // TODO: Xem lai phuong thuc nay. No da duoc goi o dau.
   bool hasCurrentItemAndAllowUpdate() {
-    if (this._blockData.currentItem == null) {
+    if (this.currentItem == null) {
       return false;
     }
     Actionable actionable = __isAllowDeleteItem(
-      item: this._blockData.currentItem!,
+      item: this.currentItem!,
     );
     return actionable.yes;
   }
@@ -2492,11 +2520,11 @@ abstract class Block<
 
   // TODO: Xem lai phuong thuc nay. No da duoc goi o dau.
   bool hasCurrentItemAndAllowDelete() {
-    if (this._blockData.currentItem == null) {
+    if (this.currentItem == null) {
       return false;
     }
     Actionable actionable = __isAllowDeleteItem(
-      item: this._blockData.currentItem!,
+      item: this.currentItem!,
     );
     return actionable.yes;
   }
@@ -2760,7 +2788,7 @@ abstract class Block<
   Future<CurrentItemSelectionResult<ITEM>?> prepareToEditFirstItem({
     Function()? navigate,
   }) async {
-    ITEM? nextItem = this._blockData.firstItem;
+    ITEM? nextItem = firstItem;
     if (nextItem == null) {
       return null;
     }
@@ -2777,10 +2805,10 @@ abstract class Block<
   Future<CurrentItemSelectionResult<ITEM>?> prepareToEditNextItem({
     Function()? navigate,
   }) async {
-    if (!this._blockData.hasNextItem) {
+    if (!hasNextItem) {
       return null;
     }
-    ITEM? nextItem = this._blockData.nextSiblingItem;
+    ITEM? nextItem = nextSiblingItem;
     if (nextItem == null) {
       return null;
     }
@@ -2797,10 +2825,10 @@ abstract class Block<
   Future<CurrentItemSelectionResult<ITEM>?> prepareToEditPreviousItem({
     Function()? navigate,
   }) async {
-    if (!this._blockData.hasPreviousItem) {
+    if (!hasPreviousItem) {
       return null;
     }
-    ITEM? previousItem = this._blockData.previousSiblingItem;
+    ITEM? previousItem = previousSiblingItem;
     if (previousItem == null) {
       return null;
     }
@@ -2842,7 +2870,7 @@ abstract class Block<
   Future<CurrentItemSelectionResult<ITEM>?> prepareToShowFirstItem({
     Function()? navigate,
   }) async {
-    ITEM? nextItem = this._blockData.firstItem;
+    ITEM? nextItem = firstItem;
     if (nextItem == null) {
       return null;
     }
@@ -2859,10 +2887,10 @@ abstract class Block<
   Future<CurrentItemSelectionResult<ITEM>?> prepareToShowNextItem({
     Function()? navigate,
   }) async {
-    if (!this._blockData.hasNextItem) {
+    if (!hasNextItem) {
       return null;
     }
-    ITEM? nextItem = this._blockData.nextSiblingItem;
+    ITEM? nextItem = nextSiblingItem;
     if (nextItem == null) {
       return null;
     }
@@ -2879,10 +2907,10 @@ abstract class Block<
   Future<CurrentItemSelectionResult<ITEM>?> prepareToShowPreviousItem({
     Function()? navigate,
   }) async {
-    if (!this._blockData.hasPreviousItem) {
+    if (!hasPreviousItem) {
       return null;
     }
-    ITEM? previousItem = this._blockData.previousSiblingItem;
+    ITEM? previousItem = previousSiblingItem;
     if (previousItem == null) {
       return null;
     }
@@ -2971,7 +2999,7 @@ abstract class Block<
       parameters: null,
     );
     //
-    List<ITEM> selItems = this._blockData.getSelectedItems(
+    List<ITEM> selItems = this.__blockData.getSelectedItems(
           currentItemInclusion: currentItemInclusion,
         );
     if (selItems.isEmpty) {
@@ -2999,7 +3027,7 @@ abstract class Block<
       parameters: null,
     );
     //
-    List<ITEM> chkItems = this._blockData.getCheckedItems(
+    List<ITEM> chkItems = this.__blockData.getCheckedItems(
           currentItemInclusion: currentItemInclusion,
         );
     if (chkItems.isEmpty) {
@@ -3025,7 +3053,7 @@ abstract class Block<
         forceQueryBlockOpts: [],
         forceQueryFormModelOpts: []);
     _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
-    List<ITEM> deleteItems = this._blockData.moveCurrentItemToEndOfList(
+    List<ITEM> deleteItems = this.__blockData.moveCurrentItemToEndOfList(
           itemList: items,
         );
     //
@@ -3063,7 +3091,7 @@ abstract class Block<
       },
     );
     //
-    ITEM? item = this._blockData.findItemById(itemId);
+    ITEM? item = findItemById(itemId);
     //
     if (item == null) {
       if (ignoreIfItemNotInList) {
@@ -3146,7 +3174,7 @@ abstract class Block<
     );
     //
 
-    ITEM? currentItem = this._blockData.currentItem;
+    ITEM? currentItem = this.currentItem;
     if (currentItem != null) {
       return deleteItem(item: currentItem);
     }
@@ -3176,7 +3204,7 @@ abstract class Block<
       return null;
     }
     if (ignoreIfItemNotInList) {
-      ITEM? it = this._blockData.findItemSameIdWith(item: item);
+      ITEM? it = findItemSameIdWith(item: item);
       if (it == null) {
         showErrorSnackBar(
           message: "Ignore deletion because this item is not in the list.",
@@ -3231,109 +3259,8 @@ abstract class Block<
     }
     //
     return await prepareToShowItem(
-      item: this._blockData.currentItem!,
+      item: this.currentItem!,
     );
-  }
-
-  // ***************************************************************************
-  // ************* ITEM SELECTION/CHECK METHOD *********************************
-  // ***************************************************************************
-
-  void __updateUIComponentAfterCheckedOrSelected() {
-    updateAllUIComponents(
-      withoutFilters: false,
-      force: true,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void toggleCheckItem({
-    required ITEM item,
-  }) {
-    this._blockData._toggleCheckItem(item: item);
-    __updateUIComponentAfterCheckedOrSelected();
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void toggleSelectItem({
-    required ITEM item,
-  }) {
-    this._blockData._toggleSelectItem(item: item);
-    __updateUIComponentAfterCheckedOrSelected();
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void setCheckedItem({
-    required ITEM item,
-    required bool checked,
-  }) {
-    this._blockData._setCheckedItem(item: item, checked: checked);
-    __updateUIComponentAfterCheckedOrSelected();
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void setSelectedItem({
-    required ITEM item,
-    required bool selected,
-  }) {
-    this._blockData._setSelectedItem(item: item, selected: selected);
-    __updateUIComponentAfterCheckedOrSelected();
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void setCheckedItems({required List<ITEM> items}) {
-    this._blockData._setCheckedItems(items: items);
-    __updateUIComponentAfterCheckedOrSelected();
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void setSelectedItems({required List<ITEM> items}) {
-    this._blockData._setSelectedItems(items: items);
-    __updateUIComponentAfterCheckedOrSelected();
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void uncheckAllItems() {
-    this._blockData._uncheckAllItems();
-    __updateUIComponentAfterCheckedOrSelected();
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void checkAllItems() {
-    this._blockData._checkAllItems();
-    __updateUIComponentAfterCheckedOrSelected();
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void selectAllItems() {
-    this._blockData._selectAllItems();
-    __updateUIComponentAfterCheckedOrSelected();
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void deselectAllItems() {
-    this._blockData._deselectAllItems();
-    __updateUIComponentAfterCheckedOrSelected();
   }
 
   // ***************************************************************************
@@ -3490,7 +3417,7 @@ abstract class Block<
   // ***************************************************************************
 
   bool isAllowUpdateCurrentItem() {
-    ITEM? currentItem = this._blockData.currentItem;
+    ITEM? currentItem = this.currentItem;
     if (currentItem == null) {
       return false;
     }
@@ -3501,7 +3428,7 @@ abstract class Block<
   // ***************************************************************************
 
   bool isAllowDeleteCurrentItem() {
-    ITEM? currentItem = this._blockData.currentItem;
+    ITEM? currentItem = this.currentItem;
     if (currentItem == null) {
       return false;
     }
@@ -3558,7 +3485,7 @@ abstract class Block<
   /// Allows edit current item or not according to the application logic.
   ///
   Actionable __isAllowUpdateItemCurrentItem() {
-    ITEM? currentItem = this._blockData.currentItem;
+    ITEM? currentItem = this.currentItem;
     if (currentItem == null) {
       return Actionable.no(message: "The current item is not available.");
     }
@@ -3730,7 +3657,7 @@ abstract class Block<
           break; // Do nothing
       }
     }
-    if (parent!._blockData.currentItem == null) {
+    if (parent!.currentItem == null) {
       return Actionable.no(
         message:
             "New item creation is disabled because the parent block has no current element.",
@@ -3809,13 +3736,7 @@ abstract class Block<
       case DataState.ready:
         break;
     }
-    // if (data.queryDataState == DataState.ready) {}
-    // Actionable ancestorSafe = __checkAncestorsSafeToCreate(
-    //   creationType: creationType,
-    // );
-    // if (ancestorSafe.no) {
-    //   return ancestorSafe;
-    // }
+    //
     return checkAllow ? __isAllowCreateItem() : Actionable.yes();
   }
 
@@ -3870,19 +3791,7 @@ abstract class Block<
         message: "Cannot save form because form is in saving state.",
       );
     }
-    // Actionable actionable;
-    // switch (formModel!.data._formMode) {
-    //   case FormMode.none:
-    //     return Actionable.no(
-    //       message: "Cannot save form because form is in 'none' mode",
-    //     );
-    //   case FormMode.creation:
-    //     actionable = checkAllow ? __isAllowCreateItem() : Actionable.yes();
-    //     break;
-    //   case FormMode.edit:
-    //     actionable = checkAllow ? __isAllowUpdateItemCurrentItem() :  Actionable.yes();
-    //     break;
-    // }
+    //
     if (!formModel!.isDirty()) {
       return Actionable.no(
         message: "Cannot save form because form is not dirty.",
@@ -3954,7 +3863,7 @@ abstract class Block<
     }
     //
     return __canEditItemOnForm(
-      item: this._blockData.currentItem!,
+      item: this.currentItem!,
       checkAllow: checkAllow,
     );
   }
@@ -3963,7 +3872,7 @@ abstract class Block<
   // ***************************************************************************
 
   Actionable __canRefreshCurrentItem() {
-    if (this._blockData.currentItemDetail == null) {
+    if (this.currentItemDetail == null) {
       return Actionable.no(
         message: "Cannot refresh the current item because it is not available.",
       );
@@ -3993,24 +3902,6 @@ abstract class Block<
     //
     return Actionable.yes();
   }
-
-  // ***************************************************************************
-  // *********** canXXX() method ***********************************************
-  // ***************************************************************************
-
-  // bool isValidState() {
-  //   switch (queryDataState) {
-  //     case DataState.pending:
-  //       return false;
-  //     case DataState.error:
-  //       return false;
-  //     case DataState.none:
-  //       return false;
-  //     case DataState.ready:
-  //       break; // Continue checking.
-  //   }
-  //   return true;
-  // }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -4047,7 +3938,7 @@ abstract class Block<
   // ***************************************************************************
 
   Actionable canDeleteCurrentItem() {
-    ITEM? currentItem = this._blockData.currentItem;
+    ITEM? currentItem = this.currentItem;
     if (currentItem == null) {
       return Actionable.no(
         message: "Cannot delete the current item because it is not available.",
@@ -4154,8 +4045,441 @@ abstract class Block<
   }
 
   // ***************************************************************************
+  // ************* ITEM SELECTION/CHECK METHOD *********************************
+  // ***************************************************************************
+
+  void __updateUIComponentAfterCheckedOrSelected() {
+    updateAllUIComponents(
+      withoutFilters: false,
+      force: true,
+    );
+  }
+
+  void sort({required bool refresh}) {
+    __blockData._sortItems();
+    if (refresh) {
+      shelf.updateAllUIComponents();
+    }
+  }
+
+  // ***************************************************************************
   // ***** BLOCK DATA **********************************************************
   // ***************************************************************************
+
+  ITEM? get currentItem => __blockData.__current._item;
+
+  ITEM_DETAIL? get currentItemDetail => __blockData.__current._itemDetail;
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool get isEmpty => __blockData._items.isEmpty;
+
+  bool get isNotEmpty => __blockData._items.isNotEmpty;
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ///
+  /// return a copied list of checked items.
+  ///
+  List<ITEM> get checkedItems {
+    return [...__blockData._checkedItems];
+  }
+
+  ///
+  /// return a copied list of selected items.
+  ///
+  List<ITEM> get selectedItems {
+    return [...__blockData._selectedItems];
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool isCurrentItem({
+    required ITEM item,
+  }) {
+    final ITEM? currIt = currentItem;
+    return currIt != null && getItemId(item) == getItemId(currIt);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool isCurrentIndex({required int index}) {
+    ITEM? item = findItemByIndex(index);
+    if (item == null) {
+      return false;
+    }
+    return isCurrentItem(item: item);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool isSelectedIndex({required int index}) {
+    ITEM? item = findItemByIndex(index);
+    if (item == null) {
+      return false;
+    }
+    return isSelectedItem(item);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool isSelectedItem(ITEM item) {
+    return ItemsUtils.isListContainItem(
+      targetList: __blockData._selectedItems,
+      item: item,
+      getItemId: getItemId,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __setSelectedItem({required ITEM item, required bool selected}) {
+    if (selected) {
+      ItemsUtils.insertOrReplaceItemInList(
+        item: item,
+        targetList: __blockData._selectedItems,
+        getItemId: getItemId,
+      );
+    } else {
+      ItemsUtils.removeItemFromList(
+        removeItem: item,
+        targetList: __blockData._selectedItems,
+        getItemId: getItemId,
+      );
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __toggleSelectItem({required ITEM item}) {
+    bool selected = isSelectedItem(item);
+    __setSelectedItem(item: item, selected: !selected);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void setSelectedItem({
+    required ITEM item,
+    required bool selected,
+  }) {
+    __setSelectedItem(item: item, selected: selected);
+    __updateUIComponentAfterCheckedOrSelected();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void toggleSelectItem({
+    required ITEM item,
+  }) {
+    __toggleSelectItem(item: item);
+    __updateUIComponentAfterCheckedOrSelected();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __setSelectedItems({required List<ITEM> items}) {
+    ItemsUtils.insertOrReplaceItemsInList(
+      items: items,
+      targetList: __blockData._selectedItems,
+      getItemId: getItemId,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ITEM? findItemByIndex(int index) {
+    if (index < 0 || index >= __blockData._items.length) {
+      return null;
+    }
+    return __blockData._items[index];
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool isSame({
+    required ITEM? item1,
+    required ITEM? item2,
+  }) {
+    if (item1 == null && item2 == null) {
+      return true;
+    }
+    if (item1 != null && item2 != null) {
+      return getItemId(item1) == getItemId(item2);
+    }
+    return false;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ITEM? get firstItem {
+    return __blockData._items.firstOrNull;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ITEM? get lastItem {
+    return __blockData._items.lastOrNull;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ///
+  /// Check if the first item is current item.
+  ///
+  bool get isFirstItemCurrent {
+    ITEM? first = firstItem;
+    ITEM? current = currentItem;
+    if (first == null || current == null) {
+      return false;
+    }
+    return getItemId(first) == getItemId(current);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ///
+  /// Check if the last item is current item.
+  ///
+  bool get isLastItemCurrent {
+    ITEM? last = lastItem;
+    ITEM? current = currentItem;
+    if (last == null || current == null) {
+      return false;
+    }
+    return getItemId(last) == getItemId(current);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ITEM? findNextSiblingItem({
+    required ITEM item,
+  }) {
+    return ItemsUtils.findNextSiblingItemInList(
+      item: item,
+      targetList: __blockData._items,
+      getItemId: getItemId,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ITEM? findPreviousSiblingItem({
+    required ITEM item,
+  }) {
+    return ItemsUtils.findPreviousSiblingItemInList(
+      item: item,
+      targetList: __blockData._items,
+      getItemId: getItemId,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ITEM? findSiblingItem({
+    required ITEM item,
+  }) {
+    return ItemsUtils.findSiblingItemInList(
+      item: item,
+      targetList: __blockData._items,
+      getItemId: getItemId,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ITEM? findItemSameIdWith({
+    required ITEM item,
+  }) {
+    ID id = getItemId(item);
+    return findItemById(id);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ITEM? findItemById(ID itemId) {
+    return ItemsUtils.findItemInListById(
+      id: itemId,
+      targetList: __blockData._items,
+      getItemId: getItemId,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ///
+  /// The next item of the current item.
+  /// Return null if no current item or the current item is the last item.
+  ///
+  ITEM? get nextSiblingItem {
+    if (currentItem == null) {
+      return null;
+    }
+    return findNextSiblingItem(item: currentItem!);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ///
+  /// The previous item of the current item.
+  /// Return null if no current item or the current item is the first item.
+  ///
+  ITEM? get previousSiblingItem {
+    if (currentItem == null) {
+      return null;
+    }
+    return findPreviousSiblingItem(item: currentItem!);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool containsItem({
+    required ITEM item,
+  }) {
+    return ItemsUtils.isListContainItem(
+      targetList: __blockData._items,
+      item: item,
+      getItemId: getItemId,
+    );
+  }
+
+  bool isCheckedItem(ITEM item) {
+    return ItemsUtils.isListContainItem(
+      targetList: __blockData._checkedItems,
+      item: item,
+      getItemId: getItemId,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __setCheckedItem({required ITEM item, required bool checked}) {
+    if (checked) {
+      ItemsUtils.insertOrReplaceItemInList(
+        item: item,
+        targetList: __blockData._checkedItems,
+        getItemId: getItemId,
+      );
+    } else {
+      ItemsUtils.removeItemFromList(
+        removeItem: item,
+        targetList: __blockData._checkedItems,
+        getItemId: getItemId,
+      );
+    }
+  }
+
+  void __toggleCheckItem({required ITEM item}) {
+    bool checked = isCheckedItem(item);
+    __setCheckedItem(item: item, checked: !checked);
+  }
+
+  void toggleCheckItem({
+    required ITEM item,
+  }) {
+    __toggleCheckItem(item: item);
+    __updateUIComponentAfterCheckedOrSelected();
+  }
+
+  void setCheckedItem({
+    required ITEM item,
+    required bool checked,
+  }) {
+    __setCheckedItem(item: item, checked: checked);
+    __updateUIComponentAfterCheckedOrSelected();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __setCheckedItems({required List<ITEM> items}) {
+    ItemsUtils.insertOrReplaceItemsInList(
+      items: items,
+      targetList: __blockData._checkedItems,
+      getItemId: getItemId,
+    );
+  }
+
+  void setCheckedItems({required List<ITEM> items}) {
+    __setCheckedItems(items: items);
+    __updateUIComponentAfterCheckedOrSelected();
+  }
+
+  void checkAllItems() {
+    __setCheckedItems(items: __blockData._items);
+    __updateUIComponentAfterCheckedOrSelected();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void setSelectedItems({required List<ITEM> items}) {
+    __setSelectedItems(items: items);
+    __updateUIComponentAfterCheckedOrSelected();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void uncheckAllItems() {
+    __blockData._checkedItems.clear();
+    __updateUIComponentAfterCheckedOrSelected();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __selectAllItems() {
+    __setSelectedItems(items: __blockData._items);
+  }
+
+  void selectAllItems() {
+    __selectAllItems();
+    __updateUIComponentAfterCheckedOrSelected();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void deselectAllItems() {
+    __blockData._selectedItems.clear();
+    __updateUIComponentAfterCheckedOrSelected();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool get hasPreviousItem => previousSiblingItem != null;
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool get hasNextItem => nextSiblingItem != null;
 
   // ***************************************************************************
   // ***************************************************************************
