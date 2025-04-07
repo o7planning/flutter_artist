@@ -14,7 +14,7 @@ class _DefaultFilterModel
   FilterCriteriaStructure registerCriteriaStructure() {
     return FilterCriteriaStructure(
       simpleCriteria: [],
-      optCriteria: [],
+      multiOptCriteria: [],
     );
   }
 
@@ -26,19 +26,19 @@ class _DefaultFilterModel
   }
 
   @override
-  Future<XList?> callApiLoadOptCriterionData({
+  Future<XList?> callApiLoadMultiOptCriterionData({
     required EmptyFilterInput? filterInput,
-    required Object? parentOptCriterionValue,
-    required String criterionName,
+    required Object? parentMultiOptCriterionValue,
+    required String multiOptCriterionName,
   }) async {
     return null;
   }
 
   @override
-  PropValue? getOptCriterionValueFromFilterInput({
+  PropValue? getMultiOptCriterionValueFromFilterInput({
     required EmptyFilterInput filterInput,
-    required XOptionedData optCriterionData,
-    required String criterionName,
+    required XOptionedData multiOptCriterionXData,
+    required String multiOptCriterionName,
   }) {
     return null;
   }
@@ -52,9 +52,9 @@ class _DefaultFilterModel
   }
 
   @override
-  PropValue? specifyDefaultOptCriterionValue({
-    required XOptionedData optCriterionData,
-    required String criterionName,
+  PropValue? specifyDefaultMultiOptCriterionValue({
+    required XOptionedData multiOptCriterionXData,
+    required String multiOptCriterionName,
   }) {
     return null;
   }
@@ -79,7 +79,7 @@ class StringIdFilterModel
   FilterCriteriaStructure registerCriteriaStructure() {
     return FilterCriteriaStructure(
       simpleCriteria: [],
-      optCriteria: [],
+      multiOptCriteria: [],
     );
   }
 
@@ -91,19 +91,19 @@ class StringIdFilterModel
   }
 
   @override
-  Future<XList?> callApiLoadOptCriterionData({
+  Future<XList?> callApiLoadMultiOptCriterionData({
     required StringIdFilterInput? filterInput,
-    required Object? parentOptCriterionValue,
-    required String criterionName,
+    required Object? parentMultiOptCriterionValue,
+    required String multiOptCriterionName,
   }) async {
     return null;
   }
 
   @override
-  PropValue? getOptCriterionValueFromFilterInput({
+  PropValue? getMultiOptCriterionValueFromFilterInput({
     required StringIdFilterInput filterInput,
-    required XOptionedData optCriterionData,
-    required String criterionName,
+    required XOptionedData multiOptCriterionXData,
+    required String multiOptCriterionName,
   }) {
     return null;
   }
@@ -117,9 +117,9 @@ class StringIdFilterModel
   }
 
   @override
-  PropValue? specifyDefaultOptCriterionValue({
-    required XOptionedData optCriterionData,
-    required String criterionName,
+  PropValue? specifyDefaultMultiOptCriterionValue({
+    required XOptionedData multiOptCriterionXData,
+    required String multiOptCriterionName,
   }) {
     return null;
   }
@@ -144,7 +144,7 @@ class StringValueFilterModel
   FilterCriteriaStructure registerCriteriaStructure() {
     return FilterCriteriaStructure(
       simpleCriteria: [],
-      optCriteria: [],
+      multiOptCriteria: [],
     );
   }
 
@@ -156,19 +156,19 @@ class StringValueFilterModel
   }
 
   @override
-  Future<XList?> callApiLoadOptCriterionData({
+  Future<XList?> callApiLoadMultiOptCriterionData({
     required StringValueFilterInput? filterInput,
-    required Object? parentOptCriterionValue,
-    required String criterionName,
+    required Object? parentMultiOptCriterionValue,
+    required String multiOptCriterionName,
   }) async {
     return null;
   }
 
   @override
-  PropValue? getOptCriterionValueFromFilterInput({
+  PropValue? getMultiOptCriterionValueFromFilterInput({
     required StringValueFilterInput filterInput,
-    required XOptionedData optCriterionData,
-    required String criterionName,
+    required XOptionedData multiOptCriterionXData,
+    required String multiOptCriterionName,
   }) {
     return null;
   }
@@ -182,9 +182,9 @@ class StringValueFilterModel
   }
 
   @override
-  PropValue? specifyDefaultOptCriterionValue({
-    required XOptionedData optCriterionData,
-    required String criterionName,
+  PropValue? specifyDefaultMultiOptCriterionValue({
+    required XOptionedData multiOptCriterionXData,
+    required String multiOptCriterionName,
   }) {
     return null;
   }
@@ -209,7 +209,7 @@ class SearchTextFilterModel
   FilterCriteriaStructure registerCriteriaStructure() {
     return FilterCriteriaStructure(
       simpleCriteria: [],
-      optCriteria: [],
+      multiOptCriteria: [],
     );
   }
 
@@ -221,19 +221,19 @@ class SearchTextFilterModel
   }
 
   @override
-  Future<XList?> callApiLoadOptCriterionData({
+  Future<XList?> callApiLoadMultiOptCriterionData({
     required SearchTextFilterInput? filterInput,
-    required Object? parentOptCriterionValue,
-    required String criterionName,
+    required Object? parentMultiOptCriterionValue,
+    required String multiOptCriterionName,
   }) async {
     return null;
   }
 
   @override
-  PropValue? getOptCriterionValueFromFilterInput({
+  PropValue? getMultiOptCriterionValueFromFilterInput({
     required SearchTextFilterInput filterInput,
-    required XOptionedData optCriterionData,
-    required String criterionName,
+    required XOptionedData multiOptCriterionXData,
+    required String multiOptCriterionName,
   }) {
     return null;
   }
@@ -247,9 +247,9 @@ class SearchTextFilterModel
   }
 
   @override
-  PropValue? specifyDefaultOptCriterionValue({
-    required XOptionedData optCriterionData,
-    required String criterionName,
+  PropValue? specifyDefaultMultiOptCriterionValue({
+    required XOptionedData multiOptCriterionXData,
+    required String multiOptCriterionName,
   }) {
     return null;
   }
@@ -274,7 +274,7 @@ class IntIdFilterModel
   FilterCriteriaStructure registerCriteriaStructure() {
     return FilterCriteriaStructure(
       simpleCriteria: [],
-      optCriteria: [],
+      multiOptCriteria: [],
     );
   }
 
@@ -286,19 +286,19 @@ class IntIdFilterModel
   }
 
   @override
-  Future<XList?> callApiLoadOptCriterionData({
+  Future<XList?> callApiLoadMultiOptCriterionData({
     required IntIdFilterInput? filterInput,
-    required Object? parentOptCriterionValue,
-    required String criterionName,
+    required Object? parentMultiOptCriterionValue,
+    required String multiOptCriterionName,
   }) async {
     return null;
   }
 
   @override
-  PropValue? getOptCriterionValueFromFilterInput({
+  PropValue? getMultiOptCriterionValueFromFilterInput({
     required IntIdFilterInput filterInput,
-    required XOptionedData optCriterionData,
-    required String criterionName,
+    required XOptionedData multiOptCriterionXData,
+    required String multiOptCriterionName,
   }) {
     return null;
   }
@@ -312,9 +312,9 @@ class IntIdFilterModel
   }
 
   @override
-  PropValue? specifyDefaultOptCriterionValue({
-    required XOptionedData optCriterionData,
-    required String criterionName,
+  PropValue? specifyDefaultMultiOptCriterionValue({
+    required XOptionedData multiOptCriterionXData,
+    required String multiOptCriterionName,
   }) {
     return null;
   }

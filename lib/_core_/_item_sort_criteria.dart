@@ -187,7 +187,8 @@ abstract class ItemSortCriteria<ITEM extends Object> {
   /// ```dart
   /// myItemSortCriteria.updateSortCriteria(
   ///   shuffledSortablePropNames: ['email', '+userName','-fullName'],
-  /// );string
+  /// );
+  /// ```
   ///
   @Deprecated("Delete It?")
   void __updateSortCriteriaString({

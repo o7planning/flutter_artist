@@ -1493,8 +1493,8 @@ abstract class Block<
       queryDataState: DataState.none,
       formDataState: DataState.none,
     );
-    formModel!.data._setCurrentItem(
-      refreshedItemDetail: nullItemDetail,
+    //
+    formModel!._formPropsStructure._setFormMode_TODO_DELETE(
       formMode: FormMode.creation,
       formDataState: DataState.ready,
     );
@@ -1830,15 +1830,15 @@ abstract class Block<
       );
       //
       if (formModel != null) {
-        formModel!.data._setCurrentItem(
-          refreshedItemDetail: savedItemDetail,
+        formModel!._formPropsStructure._setFormMode_TODO_DELETE(
           formMode: FormMode.edit,
           formDataState: DataState.ready,
         );
-        // To clear dirty:
-        formModel!.data._initialFormData
-          ..clear()
-          ..addAll(formModel!.data._currentFormData);
+        //
+        // IMPORTANT:
+        // After save successful, update [initialFormData].
+        //
+        formModel!._formPropsStructure._updateInitialFormDataAfterSaveSuccess();
         //
         bool success = await formModel!._startNewFormTransaction(
           filterCriteria: data.filterCriteria,
@@ -1882,9 +1882,9 @@ abstract class Block<
       //
       if (this.formModel != null) {
         // Clear Form:
-        this.formModel!._clearWithDataState(
-              formDataState: DataState.ready,
-            );
+        formModel!._clearWithDataState(
+          formDataState: DataState.ready,
+        );
       }
       //
       __clearChildrenWithDataStateCascade(
@@ -3835,7 +3835,7 @@ abstract class Block<
             "Form reset is not allowed because the form is in saving state.",
       );
     }
-    switch (formModel!.data._formMode) {
+    switch (formModel!.formMode) {
       case FormMode.none:
         return Actionable.no(
           message:
@@ -3908,7 +3908,7 @@ abstract class Block<
       return ancestorsSafe;
     }
     //
-    switch (formModel!.data._formMode) {
+    switch (formModel!.formMode) {
       case FormMode.none:
         return Actionable.no(
           message:
@@ -3936,7 +3936,7 @@ abstract class Block<
               "This item cannot be edited on the form because this block does not have a form.");
     }
     //
-    switch (formModel!.data._formMode) {
+    switch (formModel!.formMode) {
       case FormMode.none:
         return Actionable.no(
           message: "Form disabled because it in 'none' mode",
@@ -3969,7 +3969,7 @@ abstract class Block<
     }
     //
     if (formModel != null) {
-      switch (formModel!.data._formMode) {
+      switch (formModel!.formMode) {
         case FormMode.none:
           return Actionable.no(
             message:

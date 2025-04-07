@@ -79,8 +79,6 @@ part '_core_/_block_data.dart';
 
 part '_core_/_form_model.dart';
 
-part '_core_/_form_model_data.dart';
-
 part '_core_/_form_leave_safely.dart';
 
 part '_core_/_block_or_scalar.dart';
@@ -90,8 +88,6 @@ part '_core_/_current_couple_item.dart';
 part '_core_/_custom_confirmation.dart';
 
 part '_core_/_filter_model.dart';
-
-part '_core_/_filter_model_data.dart';
 
 part '_core_/_default_filter_model.dart';
 
@@ -309,13 +305,13 @@ part '_utils_/_patch_utils.dart';
 
 part '_core_/_executor.dart';
 
-part '_filter_criterion/_filter_criteria_structure.dart';
+part '_filter_criterion_/_filter_criteria_structure.dart';
 
-part '_form_prop/_form_props_structure.dart';
+part '_form_prop_/_form_props_structure.dart';
 
 part '_core_/_actionable.dart';
 
-part '_form_prop/_prop.dart';
+part '_form_prop_/_prop.dart';
 
 part '_task_unit_/_block_prepare_to_create_item_task_unit.dart';
 
@@ -325,17 +321,17 @@ part '_enum_/_item_creation_type.dart';
 
 part '_actionable_/_cre_item_actionable.dart';
 
-part '_filter_criterion/_simple_criterion.dart';
+part '_filter_criterion_/_simple_criterion.dart';
 
-part '_filter_criterion/_opt_criterion.dart';
+part '_filter_criterion_/_multi_opt_criterion.dart';
 
-part '_filter_criterion/_criterion.dart';
+part '_filter_criterion_/_criterion.dart';
 
-part '_form_prop/_simple_prop.dart';
+part '_form_prop_/_simple_prop.dart';
 
-part '_form_prop/_opt_prop.dart';
+part '_form_prop_/_multi_opt_prop.dart';
 
-part '_form_prop/_prop_value.dart';
+part '_form_prop_/_prop_value.dart';
 
 part '_task_unit_/_block_query_task_unit.dart';
 

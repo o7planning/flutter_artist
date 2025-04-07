@@ -161,12 +161,11 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
                 (loggedInUser?.isSystemUser ?? false))
               Tooltip(
                 message:
-                    "${widget.block.formModel!.data.formMode.tooltip} [${getClassName(widget.block)}]",
+                    "${widget.block.formModel!.formMode.tooltip} [${getClassName(widget.block)}]",
                 child: Icon(
-                  widget.block.formModel!.data.formMode == FormMode.none
+                  widget.block.formModel!.formMode == FormMode.none
                       ? _formNoneModeIconData
-                      : widget.block.formModel!.data.formMode ==
-                              FormMode.creation
+                      : widget.block.formModel!.formMode == FormMode.creation
                           ? _formCreationModeIconData
                           : _formEditModeIconData,
                   size: _ControlBarButton.iconSize,
