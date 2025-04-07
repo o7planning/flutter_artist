@@ -44,10 +44,9 @@ class _DefaultFilterModel
   }
 
   @override
-  Object? getSimpleCriterionValueFromFilterInput({
+  Future<Map<String, dynamic>?> getSimpleCriterionValuesFromFilterInput({
     required EmptyFilterInput filterInput,
-    required String criterionName,
-  }) {
+  }) async {
     return null;
   }
 
@@ -60,7 +59,7 @@ class _DefaultFilterModel
   }
 
   @override
-  Future<Map<String, dynamic>?> specifyDefaultSimpleCriterionValues( ) async {
+  Future<Map<String, dynamic>?> specifyDefaultSimpleCriterionValues() async {
     return null;
   }
 }
@@ -107,10 +106,9 @@ class StringIdFilterModel
   }
 
   @override
-  Object? getSimpleCriterionValueFromFilterInput({
+  Future<Map<String, dynamic>?> getSimpleCriterionValuesFromFilterInput({
     required StringIdFilterInput filterInput,
-    required String criterionName,
-  }) {
+  }) async {
     return null;
   }
 
@@ -123,7 +121,7 @@ class StringIdFilterModel
   }
 
   @override
-  Future<Map<String, dynamic>?> specifyDefaultSimpleCriterionValues( ) async {
+  Future<Map<String, dynamic>?> specifyDefaultSimpleCriterionValues() async {
     return null;
   }
 }
@@ -170,10 +168,9 @@ class StringValueFilterModel
   }
 
   @override
-  Object? getSimpleCriterionValueFromFilterInput({
+  Future<Map<String, dynamic>?> getSimpleCriterionValuesFromFilterInput({
     required StringValueFilterInput filterInput,
-    required String criterionName,
-  }) {
+  }) async {
     return null;
   }
 
@@ -186,7 +183,7 @@ class StringValueFilterModel
   }
 
   @override
-  Future<Map<String, dynamic>?> specifyDefaultSimpleCriterionValues( ) async {
+  Future<Map<String, dynamic>?> specifyDefaultSimpleCriterionValues() async {
     return null;
   }
 }
@@ -233,10 +230,9 @@ class SearchTextFilterModel
   }
 
   @override
-  Object? getSimpleCriterionValueFromFilterInput({
+  Future<Map<String, dynamic>?> getSimpleCriterionValuesFromFilterInput({
     required SearchTextFilterInput filterInput,
-    required String criterionName,
-  }) {
+  }) async {
     return null;
   }
 
@@ -249,7 +245,7 @@ class SearchTextFilterModel
   }
 
   @override
-  Future<Map<String, dynamic>?> specifyDefaultSimpleCriterionValues( ) async {
+  Future<Map<String, dynamic>?> specifyDefaultSimpleCriterionValues() async {
     return null;
   }
 }
@@ -296,10 +292,9 @@ class IntIdFilterModel
   }
 
   @override
-  Object? getSimpleCriterionValueFromFilterInput({
+  Future<Map<String, dynamic>?> getSimpleCriterionValuesFromFilterInput({
     required IntIdFilterInput filterInput,
-    required String criterionName,
-  }) {
+  }) async {
     return null;
   }
 
@@ -312,7 +307,7 @@ class IntIdFilterModel
   }
 
   @override
-  Future<Map<String, dynamic>?> specifyDefaultSimpleCriterionValues( ) async {
+  Future<Map<String, dynamic>?> specifyDefaultSimpleCriterionValues() async {
     return null;
   }
 }

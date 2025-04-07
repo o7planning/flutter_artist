@@ -196,14 +196,15 @@ abstract class FilterModel<
       _filterCriteriaStructure._printTemporaryInfo("@2");
       //
       if (filterInput != null) {
-        for (SimpleCriterion simpleCriterion
-            in _filterCriteriaStructure._simpleCriteria) {
-          Object? value = getSimpleCriterionValueFromFilterInput(
-            filterInput: filterInput,
-            criterionName: simpleCriterion.criterionName,
-          );
+        Map<String, dynamic> simpleValues =
+            await getSimpleCriterionValuesFromFilterInput(
+                  filterInput: filterInput,
+                ) ??
+                {};
+        for (String criterionName in simpleValues.keys) {
+          dynamic value = simpleValues[criterionName];
           _filterCriteriaStructure._setTempSimpleCriterionValue(
-            criterionName: simpleCriterion.criterionName,
+            criterionName: criterionName,
             value: value,
           );
         }
@@ -470,9 +471,8 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  Object? getSimpleCriterionValueFromFilterInput({
+  Future<Map<String, dynamic>?> getSimpleCriterionValuesFromFilterInput({
     required FILTER_INPUT filterInput,
-    required String criterionName,
   });
 
   ///
