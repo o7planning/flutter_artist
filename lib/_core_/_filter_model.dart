@@ -364,7 +364,7 @@ abstract class FilterModel<
     // Candidate Selected Items:
     List? candidateSelectedItems;
     if (multiOptCriterionXData != null) {
-      PropValue? inputValueWrap;
+      ValueWrap? inputValueWrap;
       if (filterInput != null) {
         inputValueWrap = _getMultiOptCriterionValueFromFilterInput(
           filterInput: filterInput,
@@ -497,13 +497,13 @@ abstract class FilterModel<
   /// }
   /// ```
   ///
-  PropValue? getMultiOptCriterionValueFromFilterInput({
+  ValueWrap? getMultiOptCriterionValueFromFilterInput({
     required FILTER_INPUT filterInput,
     required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   });
 
-  PropValue? specifyDefaultMultiOptCriterionValue({
+  ValueWrap? specifyDefaultMultiOptCriterionValue({
     required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   });
@@ -512,12 +512,12 @@ abstract class FilterModel<
     required String criterionName,
   });
 
-  PropValue? _getMultiOptCriterionValueFromFilterInput({
+  ValueWrap? _getMultiOptCriterionValueFromFilterInput({
     required FILTER_INPUT filterInput,
     required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   }) {
-    PropValue? wrap = getMultiOptCriterionValueFromFilterInput(
+    ValueWrap? wrap = getMultiOptCriterionValueFromFilterInput(
       filterInput: filterInput,
       multiOptCriterionXData: multiOptCriterionXData,
       multiOptCriterionName: multiOptCriterionName,
@@ -526,7 +526,7 @@ abstract class FilterModel<
       return null;
     }
     List? value = wrap.values;
-    return PropValue.multi(
+    return ValueWrap.multi(
       multiOptCriterionXData.findInternalItemsByDynamics(
         dynamicValues: value,
         addToInternalIfNotFound: false,
@@ -535,11 +535,11 @@ abstract class FilterModel<
     );
   }
 
-  PropValue? __specifyDefaultMultiOptCriterionValue({
+  ValueWrap? __specifyDefaultMultiOptCriterionValue({
     required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   }) {
-    PropValue? wrap = specifyDefaultMultiOptCriterionValue(
+    ValueWrap? wrap = specifyDefaultMultiOptCriterionValue(
       multiOptCriterionXData: multiOptCriterionXData,
       multiOptCriterionName: multiOptCriterionName,
     );
@@ -547,7 +547,7 @@ abstract class FilterModel<
       return null;
     }
     List? value = wrap.values;
-    return PropValue.multi(
+    return ValueWrap.multi(
       multiOptCriterionXData.findInternalItemsByDynamics(
         dynamicValues: value,
         addToInternalIfNotFound: false,

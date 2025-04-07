@@ -1,9 +1,9 @@
 part of '../flutter_artist.dart';
 
-class PropValue<VALUE extends Object> {
+class ValueWrap<VALUE extends Object> {
   List<VALUE?> values = [];
 
-  PropValue.single(VALUE? value) {
+  ValueWrap.single(VALUE? value) {
     if (value == null) {
       this.values = [];
     } else {
@@ -11,7 +11,7 @@ class PropValue<VALUE extends Object> {
     }
   }
 
-  PropValue.multi(List<VALUE?> values) {
+  ValueWrap.multi(List<VALUE?> values) {
     this.values = values.where((v) => v != null).toList();
   }
 
