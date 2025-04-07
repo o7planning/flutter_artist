@@ -718,6 +718,10 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  dynamic getCurrentPropValue(String propName) {
+    return _formPropsStructure._getCurrentPropValue(propName: propName);
+  }
+
   XOptionedData? getOptPropXData(String propName) {
     return _formPropsStructure._getOptPropXData(propName);
   }
