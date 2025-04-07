@@ -179,7 +179,7 @@ abstract class FilterModel<
       );
       _filterCriteriaStructure._printTemporaryInfo("@1");
       //
-      for (OptCriterion optCriterion
+      for (MultiOptCriterion optCriterion
           in _filterCriteriaStructure._rootOptCriteria) {
         //
         // Load OptCriterion Data and set default and selected.
@@ -299,11 +299,11 @@ abstract class FilterModel<
     required FILTER_INPUT? filterInput,
     // May be new selected parent value.
     required Object? parentOptCriterionValue,
-    required OptCriterion optCriterion,
+    required MultiOptCriterion optCriterion,
   }) async {
     final String criterionName = optCriterion.criterionName;
 
-    final OptCriterion? optCriterionParent = optCriterion.parent;
+    final MultiOptCriterion? optCriterionParent = optCriterion.parent;
 
     // Get current OptCriterion data:
     XOptionedData? optCriterionData =
@@ -454,7 +454,7 @@ abstract class FilterModel<
     );
 
     if (tempSelectedCriterionValue != null) {
-      for (OptCriterion child in optCriterion.children) {
+      for (MultiOptCriterion child in optCriterion.children) {
         await _loadOptCriterionDataCascade(
           filterInput: filterInput,
           parentOptCriterionValue: tempSelectedCriterionValue,

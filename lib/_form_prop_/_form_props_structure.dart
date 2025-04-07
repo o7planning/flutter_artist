@@ -2,7 +2,7 @@ part of '../flutter_artist.dart';
 
 class FormPropsStructure {
   final Map<String, Prop> _allPropMap = {};
-  final List<OptProp> _rootOptProps;
+  final List<MultiOptProp> _rootOptProps;
   final List<SimpleProp> _simpleProps = [];
 
   late final FormModel formModel;
@@ -19,16 +19,16 @@ class FormPropsStructure {
 
   FormPropsStructure({
     required List<String> simpleProps,
-    required List<OptProp> optProps,
-  }) : _rootOptProps = [...optProps] {
+    required List<MultiOptProp> multiOptProps,
+  }) : _rootOptProps = [...multiOptProps] {
     final List<String> simplePropList = [...simpleProps];
     //
-    for (OptProp rootOptProp in optProps) {
+    for (MultiOptProp rootOptProp in multiOptProps) {
       __standardizeCascade(rootOptProp, null);
     }
     for (Prop prop in _allPropMap.values) {
       simplePropList.remove(prop.propName);
-      if (prop is OptProp) {
+      if (prop is MultiOptProp) {
         prop._checkCycleError();
       }
     }
@@ -79,7 +79,7 @@ class FormPropsStructure {
   ///
   /// For the first load of an Item, update "Initial Form Data".
   /// IMPORTANT:
-  /// - Other Initial [OptProp] data will be update later...
+  /// - Other Initial [MultiOptProp] data will be update later...
   ///
   void _setInitialFormDataForItemFirstLoad() {
     for (Prop prop in _allPropMap.values) {
@@ -167,13 +167,13 @@ class FormPropsStructure {
   // ***************************************************************************
 
   void __standardizeCascade(
-    OptProp optProp,
-    OptProp? parent,
+    MultiOptProp optProp,
+    MultiOptProp? parent,
   ) {
     optProp.parent = parent;
     _allPropMap[optProp.propName] = optProp;
     //
-    for (OptProp child in optProp.children) {
+    for (MultiOptProp child in optProp.children) {
       __standardizeCascade(child, optProp);
     }
   }
@@ -186,7 +186,7 @@ class FormPropsStructure {
     if (prop == null) {
       return false;
     }
-    if (prop is OptProp) {
+    if (prop is MultiOptProp) {
       return true;
     }
     return false;
@@ -217,7 +217,7 @@ class FormPropsStructure {
     if (prop == null) {
       return null;
     }
-    if (prop is OptProp) {
+    if (prop is MultiOptProp) {
       return prop._tempCurrentValue;
     }
     return null;
@@ -231,7 +231,7 @@ class FormPropsStructure {
     if (prop == null) {
       return null;
     }
-    if (prop is OptProp) {
+    if (prop is MultiOptProp) {
       return prop._tempCurrentXData;
     }
     return null;
@@ -242,7 +242,7 @@ class FormPropsStructure {
     if (prop == null) {
       return null;
     }
-    if (prop is OptProp) {
+    if (prop is MultiOptProp) {
       return prop._currentXData;
     }
     return null;
@@ -276,7 +276,7 @@ class FormPropsStructure {
       }
     }
     //
-    for (OptProp rootProp in _rootOptProps) {
+    for (MultiOptProp rootProp in _rootOptProps) {
       rootProp._updateTempValueCascade(
         updateValues: candidateUpdateValues,
       );
@@ -344,11 +344,11 @@ class FormPropsStructure {
     if (prop == null) {
       throw AppException(message: 'No Prop "$optPropName"');
     }
-    if (prop is OptProp) {
+    if (prop is MultiOptProp) {
       prop._tempCurrentXData = optionedXData;
     } else {
       throw AppException(
-        message: 'Invalid Prop "$optPropName", it must be $OptProp',
+        message: 'Invalid Prop "$optPropName", it must be $MultiOptProp',
       );
     }
   }
@@ -383,7 +383,7 @@ class FormPropsStructure {
       print(
           "\n\n--------------------------------------------------------------");
       print(" ---> $prefix");
-      for (OptProp rootItem in _rootOptProps) {
+      for (MultiOptProp rootItem in _rootOptProps) {
         rootItem._printTempInfoCascade(indentFactor: 1);
       }
       print("--------------------------------------------------------------");

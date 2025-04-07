@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
-class OptCriterion extends Criterion {
-  late final OptCriterion? parent;
+class MultiOptCriterion extends Criterion {
+  late final MultiOptCriterion? parent;
 
   ///
   /// In most cases this value is [true].
@@ -13,16 +13,16 @@ class OptCriterion extends Criterion {
   /// For example: An error occurs when the library tries to set multiple selection values for the Dropdown.
   ///
   bool singleSelection;
-  final List<OptCriterion> children;
+  final List<MultiOptCriterion> children;
 
-  OptCriterion({
+  MultiOptCriterion({
     required super.criterionName,
     this.children = const [],
     this.singleSelection = true,
   });
 
   void _checkCycleError() {
-    OptCriterion? p = parent;
+    MultiOptCriterion? p = parent;
     final List<String> criterionNames = [criterionName];
     while (true) {
       if (p == null) {
@@ -72,7 +72,7 @@ class OptCriterion extends Criterion {
       }
       //
       if (_tempCurrentXData == null || newValue == null || !isSame) {
-        for (OptCriterion childItem in children) {
+        for (MultiOptCriterion childItem in children) {
           childItem._tempCurrentXData = null;
           updateValues[childItem.criterionName] = null;
           childItem._markTempDirty = true;
@@ -80,7 +80,7 @@ class OptCriterion extends Criterion {
       }
     }
     //
-    for (OptCriterion childItem in children) {
+    for (MultiOptCriterion childItem in children) {
       childItem._updateTempValueCascade(
         updateValues: updateValues,
       );

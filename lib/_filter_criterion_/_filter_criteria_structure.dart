@@ -2,7 +2,7 @@ part of '../flutter_artist.dart';
 
 class FilterCriteriaStructure {
   final Map<String, Criterion> _allCriteriaMap = {};
-  final List<OptCriterion> _rootOptCriteria;
+  final List<MultiOptCriterion> _rootOptCriteria;
   final List<SimpleCriterion> _simpleCriteria = [];
 
   late final FilterModel filterModel;
@@ -10,16 +10,16 @@ class FilterCriteriaStructure {
 
   FilterCriteriaStructure({
     required List<String> simpleCriteria,
-    required List<OptCriterion> optCriteria,
-  }) : _rootOptCriteria = [...optCriteria] {
+    required List<MultiOptCriterion> multiOptCriteria,
+  }) : _rootOptCriteria = [...multiOptCriteria] {
     final List<String> simpleCriterionList = [...simpleCriteria];
     //
-    for (OptCriterion rootOptCriterion in optCriteria) {
+    for (MultiOptCriterion rootOptCriterion in multiOptCriteria) {
       __standardizeCascade(rootOptCriterion, null);
     }
     for (Criterion criterion in _allCriteriaMap.values) {
       simpleCriterionList.remove(criterion.criterionName);
-      if (criterion is OptCriterion) {
+      if (criterion is MultiOptCriterion) {
         criterion._checkCycleError();
       }
     }
@@ -32,13 +32,13 @@ class FilterCriteriaStructure {
   }
 
   void __standardizeCascade(
-    OptCriterion optCriterion,
-    OptCriterion? parent,
+    MultiOptCriterion optCriterion,
+    MultiOptCriterion? parent,
   ) {
     optCriterion.parent = parent;
     _allCriteriaMap[optCriterion.criterionName] = optCriterion;
     //
-    for (OptCriterion child in optCriterion.children) {
+    for (MultiOptCriterion child in optCriterion.children) {
       __standardizeCascade(child, optCriterion);
     }
   }
@@ -99,7 +99,7 @@ class FilterCriteriaStructure {
     if (criterion == null) {
       return false;
     }
-    if (criterion is OptCriterion) {
+    if (criterion is MultiOptCriterion) {
       return true;
     }
     return false;
@@ -130,7 +130,7 @@ class FilterCriteriaStructure {
     if (criterion == null) {
       return null;
     }
-    if (criterion is OptCriterion) {
+    if (criterion is MultiOptCriterion) {
       return criterion._tempCurrentValue;
     }
     return null;
@@ -144,7 +144,7 @@ class FilterCriteriaStructure {
     if (criterion == null) {
       return null;
     }
-    if (criterion is OptCriterion) {
+    if (criterion is MultiOptCriterion) {
       return criterion._tempCurrentXData;
     }
     return null;
@@ -155,7 +155,7 @@ class FilterCriteriaStructure {
     if (criterion == null) {
       return null;
     }
-    if (criterion is OptCriterion) {
+    if (criterion is MultiOptCriterion) {
       return criterion._currentXData;
     }
     return null;
@@ -189,7 +189,7 @@ class FilterCriteriaStructure {
       }
     }
     //
-    for (OptCriterion rootCriterion in _rootOptCriteria) {
+    for (MultiOptCriterion rootCriterion in _rootOptCriteria) {
       rootCriterion._updateTempValueCascade(
         updateValues: candidateUpdateValues,
       );
@@ -257,12 +257,12 @@ class FilterCriteriaStructure {
     if (criterion == null) {
       throw AppException(message: 'No Criterion "$optCriterionName"');
     }
-    if (criterion is OptCriterion) {
+    if (criterion is MultiOptCriterion) {
       criterion._tempCurrentXData = optionedXData;
     } else {
       throw AppException(
           message:
-              'Invalid Criterion "$optCriterionName", it must be $OptCriterion');
+              'Invalid Criterion "$optCriterionName", it must be $MultiOptCriterion');
     }
   }
 
@@ -307,7 +307,7 @@ class FilterCriteriaStructure {
   void _printTemporaryInfo(String prefix) {
     print("\n\n--------------------------------------------------------------");
     print(" ---> $prefix");
-    for (OptCriterion rootItem in _rootOptCriteria) {
+    for (MultiOptCriterion rootItem in _rootOptCriteria) {
       rootItem._printTempInfoCascade(indentFactor: 1);
     }
     print("--------------------------------------------------------------\n\n");

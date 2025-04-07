@@ -14,7 +14,7 @@ class _DefaultFilterModel
   FilterCriteriaStructure registerCriteriaStructure() {
     return FilterCriteriaStructure(
       simpleCriteria: [],
-      optCriteria: [],
+      multiOptCriteria: [],
     );
   }
 
@@ -79,7 +79,7 @@ class StringIdFilterModel
   FilterCriteriaStructure registerCriteriaStructure() {
     return FilterCriteriaStructure(
       simpleCriteria: [],
-      optCriteria: [],
+      multiOptCriteria: [],
     );
   }
 
@@ -144,7 +144,7 @@ class StringValueFilterModel
   FilterCriteriaStructure registerCriteriaStructure() {
     return FilterCriteriaStructure(
       simpleCriteria: [],
-      optCriteria: [],
+      multiOptCriteria: [],
     );
   }
 
@@ -209,7 +209,7 @@ class SearchTextFilterModel
   FilterCriteriaStructure registerCriteriaStructure() {
     return FilterCriteriaStructure(
       simpleCriteria: [],
-      optCriteria: [],
+      multiOptCriteria: [],
     );
   }
 
@@ -274,7 +274,7 @@ class IntIdFilterModel
   FilterCriteriaStructure registerCriteriaStructure() {
     return FilterCriteriaStructure(
       simpleCriteria: [],
-      optCriteria: [],
+      multiOptCriteria: [],
     );
   }
 

@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
-class OptProp extends Prop {
-  late final OptProp? parent;
+class MultiOptProp extends Prop {
+  late final MultiOptProp? parent;
 
   ///
   /// In most cases this value is [true].
@@ -13,16 +13,16 @@ class OptProp extends Prop {
   /// For example: An error occurs when the library tries to set multiple selection values for the Dropdown.
   ///
   bool singleSelection;
-  final List<OptProp> children;
+  final List<MultiOptProp> children;
 
-  OptProp({
+  MultiOptProp({
     required super.propName,
     this.children = const [],
     this.singleSelection = true,
   });
 
   void _checkCycleError() {
-    OptProp? p = parent;
+    MultiOptProp? p = parent;
     final List<String> propNames = [propName];
     while (true) {
       if (p == null) {
@@ -72,7 +72,7 @@ class OptProp extends Prop {
       }
       //
       if (_tempCurrentXData == null || newValue == null || !isSame) {
-        for (OptProp childItem in children) {
+        for (MultiOptProp childItem in children) {
           childItem._tempCurrentXData = null;
           updateValues[childItem.propName] = null;
           childItem._markTempDirty = true;
@@ -80,7 +80,7 @@ class OptProp extends Prop {
       }
     }
     //
-    for (OptProp childItem in children) {
+    for (MultiOptProp childItem in children) {
       childItem._updateTempValueCascade(
         updateValues: updateValues,
       );

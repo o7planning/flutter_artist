@@ -323,13 +323,13 @@ part '_actionable_/_cre_item_actionable.dart';
 
 part '_filter_criterion_/_simple_criterion.dart';
 
-part '_filter_criterion_/_opt_criterion.dart';
+part '_filter_criterion_/_multi_opt_criterion.dart';
 
 part '_filter_criterion_/_criterion.dart';
 
 part '_form_prop_/_simple_prop.dart';
 
-part '_form_prop_/_opt_prop.dart';
+part '_form_prop_/_multi_opt_prop.dart';
 
 part '_form_prop_/_prop_value.dart';
 

@@ -281,7 +281,7 @@ abstract class FormModel<
     // Load OptProp Data:
     //
     try {
-      for (OptProp optProp in _formPropsStructure._rootOptProps) {
+      for (MultiOptProp optProp in _formPropsStructure._rootOptProps) {
         //
         // Load OptProp Data and set default and selected.
         //
@@ -525,12 +525,12 @@ abstract class FormModel<
     required EXTRA_FORM_INPUT? extraFormInput,
     // May be new selected parent value.
     required Object? parentOptPropValue,
-    required OptProp optProp,
+    required MultiOptProp optProp,
     required bool isItemFirstLoad,
   }) async {
     final String optPropName = optProp.propName;
 
-    final OptProp? optPropParent = optProp?.parent;
+    final MultiOptProp? optPropParent = optProp?.parent;
 
     // Get current OptProp data:
     XOptionedData? optPropData =
@@ -702,7 +702,7 @@ abstract class FormModel<
             );
 
     if (tempSelectedPropValue != null) {
-      for (OptProp child in optProp.children) {
+      for (MultiOptProp child in optProp.children) {
         await _loadOptPropDataCascade(
           extraFormInput: extraFormInput,
           parentOptPropValue: tempSelectedPropValue,
