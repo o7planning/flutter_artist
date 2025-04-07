@@ -1063,7 +1063,7 @@ abstract class FormModel<
     _FormViewChangeTaskUnit taskUnit =
         _FormViewChangeTaskUnit(xFormModel: xFormModel);
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeTaskUnitQueue(showOverlay: false);
   }
 
   // ***************************************************************************

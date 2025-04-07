@@ -154,6 +154,7 @@ class _FlutterArtist {
   }
 
   Future<dynamic> executeTask({
+    bool showOverlay = true,
     required Future<dynamic> Function() asyncFunction,
   }) {
     Future<dynamic> future = asyncFunction();
@@ -167,7 +168,9 @@ class _FlutterArtist {
         __futureTaskList.remove(future);
       }
     });
-    _showOverlayIfNeed();
+    if (showOverlay) {
+      _showOverlayIfNeed();
+    }
     return future;
   }
 
