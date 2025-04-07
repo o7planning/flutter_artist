@@ -94,14 +94,4 @@ class MultiOptCriterion extends Criterion {
       child._printTempInfoCascade(indentFactor: indentFactor + 1);
     }
   }
-
-  @override
-  void _resetForNewTransaction() {
-    // _tempCurrentXData = null;
-  }
-
-  @override
-  void _applyTempDataToReal() {
-    // _xOptionedData = _tempXOptionedData;
-  }
 }

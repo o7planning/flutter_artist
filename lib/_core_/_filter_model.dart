@@ -65,11 +65,11 @@ abstract class FilterModel<
   /// FilterCriteriaStructure registerCriteriaStructure() {
   ///   return FilterCriteriaStructure(
   ///     simpleCriteria: [],
-  ///     optCriteria: [
-  ///       OptCriterion(
+  ///     multiOptCriteria: [
+  ///       MultiOptCriterion(
   ///         criterionName: "company",
   ///         children: [
-  ///           OptCriterion(
+  ///           MultiOptCriterion(
   ///              criterionName: "department",
   ///           ),
   ///         ],
@@ -286,9 +286,9 @@ abstract class FilterModel<
   ///
   /// Abstract method:
   ///
-  Future<XOptionedData?> callApiLoadOptCriterionData({
+  Future<XOptionedData?> callApiLoadMultiOptCriterionData({
     required FILTER_INPUT? filterInput,
-    required Object? parentOptCriterionValue,
+    required Object? parentMultiOptCriterionValue,
     required String optCriterionName,
   });
 
@@ -351,9 +351,9 @@ abstract class FilterModel<
     // Load OptCriterion data from Rest API.
     // May throw ApiError.
     //
-    optCriterionData ??= await callApiLoadOptCriterionData(
+    optCriterionData ??= await callApiLoadMultiOptCriterionData(
       filterInput: filterInput,
-      parentOptCriterionValue: parentOptCriterionValue,
+      parentMultiOptCriterionValue: parentOptCriterionValue,
       optCriterionName: criterionName,
     );
     //
@@ -366,16 +366,16 @@ abstract class FilterModel<
     if (optCriterionData != null) {
       PropValue? inputValueWrap;
       if (filterInput != null) {
-        inputValueWrap = _getOptCriterionValueFromFilterInput(
+        inputValueWrap = _getMultiOptCriterionValueFromFilterInput(
           filterInput: filterInput,
           optCriterionData: optCriterionData,
           optCriterionName: criterionName,
         );
       } else {
         if (!_defaultValueInitiated) {
-          inputValueWrap = __specifyDefaultOptCriterionValue(
+          inputValueWrap = __specifyDefaultMultiOptCriterionValue(
             optCriterionData: optCriterionData,
-            optCriterionName: criterionName,
+            multiOptCriterionName: criterionName,
           );
         }
       }
@@ -496,13 +496,13 @@ abstract class FilterModel<
   /// }
   /// ```
   ///
-  PropValue? getOptCriterionValueFromFilterInput({
+  PropValue? getMultiOptCriterionValueFromFilterInput({
     required FILTER_INPUT filterInput,
     required XOptionedData optCriterionData,
     required String optCriterionName,
   });
 
-  PropValue? specifyDefaultOptCriterionValue({
+  PropValue? specifyDefaultMultiOptCriterionValue({
     required XOptionedData optCriterionData,
     required String optCriterionName,
   });
@@ -511,12 +511,12 @@ abstract class FilterModel<
     required String criterionName,
   });
 
-  PropValue? _getOptCriterionValueFromFilterInput({
+  PropValue? _getMultiOptCriterionValueFromFilterInput({
     required FILTER_INPUT filterInput,
     required XOptionedData optCriterionData,
     required String optCriterionName,
   }) {
-    PropValue? wrap = getOptCriterionValueFromFilterInput(
+    PropValue? wrap = getMultiOptCriterionValueFromFilterInput(
       filterInput: filterInput,
       optCriterionData: optCriterionData,
       optCriterionName: optCriterionName,
@@ -534,13 +534,13 @@ abstract class FilterModel<
     );
   }
 
-  PropValue? __specifyDefaultOptCriterionValue({
+  PropValue? __specifyDefaultMultiOptCriterionValue({
     required XOptionedData optCriterionData,
-    required String optCriterionName,
+    required String multiOptCriterionName,
   }) {
-    PropValue? wrap = specifyDefaultOptCriterionValue(
+    PropValue? wrap = specifyDefaultMultiOptCriterionValue(
       optCriterionData: optCriterionData,
-      optCriterionName: optCriterionName,
+      optCriterionName: multiOptCriterionName,
     );
     if (wrap == null) {
       return null;
@@ -560,7 +560,7 @@ abstract class FilterModel<
 
   ///
   /// This method is called immediately after
-  /// calling [callApiLoadOptCriterionData]
+  /// calling [callApiLoadMultiOptCriterionData]
   /// methods if there are no errors.
   ///
   FILTER_CRITERIA createFilterCriteria({
