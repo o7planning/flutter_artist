@@ -274,6 +274,13 @@ abstract class Block<
 
   FILTER_CRITERIA? get filterCriteria => __blockData._filterCriteria;
 
+  ///
+  /// return a copied list of items.
+  ///
+  List<ITEM> get items {
+    return [...__blockData._items];
+  }
+
   int get itemCount => __blockData._items.length;
 
   PageableData? get pageable => __blockData._pageable;
@@ -2436,7 +2443,7 @@ abstract class Block<
       if (itemParent != null && this.queryDataState == DataState.ready) {
         setChildrenForParent(
           currentItemOfParentBlock: itemParent,
-          items: this.__blockData.items,
+          items: this.items,
         );
       }
     } catch (e, stackTrace) {

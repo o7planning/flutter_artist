@@ -22,12 +22,6 @@ class BlockData<
   final List<ITEM> _selectedItems = [];
   final List<ITEM> _checkedItems = [];
 
-  ///
-  /// return a copied list of items.
-  ///
-  List<ITEM> get items {
-    return [..._items];
-  }
 
   // ***************************************************************************
 
