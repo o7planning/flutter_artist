@@ -86,14 +86,26 @@ abstract class Scalar<
     }
   }
 
-  late final data = ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
-
-  DataState get queryDataState => data._queryDataState;
+  late final __scalarData =
+      ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
 
   final ScalarHiddenBehavior hiddenBehavior;
 
   final Map<_RefreshableWidgetState, bool> _scalarFragmentWidgetStates = {};
   final Map<_RefreshableWidgetState, bool> _scalarControlWidgetStates = {};
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  DataState get queryDataState => __scalarData._queryDataState;
+
+  FILTER_CRITERIA? get filterCriteria => __scalarData._filterCriteria;
+
+  VALUE? get value => __scalarData._value;
+
+  void setToPending() {
+    __scalarData._setToPending();
+  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -175,7 +187,7 @@ abstract class Scalar<
     //
     // Ready FilterCriteria:
     //
-    bool xCriteriaChanged = this.data._isXCriteriaChanged(
+    bool xCriteriaChanged = this.__scalarData._isXCriteriaChanged(
           newFilterCriteria: filterCriteria,
         );
     //
@@ -318,7 +330,7 @@ abstract class Scalar<
   }) {
     __assertThisXScalar(thisXScalar);
     //
-    this.data._updateFrom(
+    this.__scalarData._updateFrom(
           filterCriteria: filterCriteria,
           dataState: dataState,
           value: value,
@@ -334,7 +346,7 @@ abstract class Scalar<
   }) {
     __assertThisXScalar(thisXScalar);
     //
-    this.data._clearWithDataState(queryDataState: queryDataState);
+    this.__scalarData._clearWithDataState(queryDataState: queryDataState);
   }
 
   // ***************************************************************************

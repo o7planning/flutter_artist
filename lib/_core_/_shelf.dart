@@ -618,7 +618,7 @@ abstract class Shelf extends _XBase {
   void __findLazyScalars(List<_ScalarOrBlockOrFormWrapper> founds) {
     for (Scalar scalar in __scalars) {
       if (scalar.hasActiveUIComponent() &&
-          scalar.data.queryDataState == DataState.pending) {
+          scalar.queryDataState == DataState.pending) {
         founds.add(_ScalarOrBlockOrFormWrapper.scalar(scalar));
       }
     }
