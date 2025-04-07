@@ -530,7 +530,7 @@ abstract class FormModel<
   }) async {
     final String multiOptPropName = multiOptProp.propName;
 
-    final MultiOptProp? optPropParent = multiOptProp?.parent;
+    final MultiOptProp? optPropParent = multiOptProp.parent;
 
     // Get current OptProp data:
     XOptionedData? multiOptPropXData =
