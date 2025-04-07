@@ -32,14 +32,14 @@ class FilterCriteriaStructure {
   }
 
   void __standardizeCascade(
-    MultiOptCriterion optCriterion,
+    MultiOptCriterion multiOptCriterion,
     MultiOptCriterion? parent,
   ) {
-    optCriterion.parent = parent;
-    _allCriteriaMap[optCriterion.criterionName] = optCriterion;
+    multiOptCriterion.parent = parent;
+    _allCriteriaMap[multiOptCriterion.criterionName] = multiOptCriterion;
     //
-    for (MultiOptCriterion child in optCriterion.children) {
-      __standardizeCascade(child, optCriterion);
+    for (MultiOptCriterion child in multiOptCriterion.children) {
+      __standardizeCascade(child, multiOptCriterion);
     }
   }
 
@@ -249,16 +249,16 @@ class FilterCriteriaStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _setTempOptCriterionXData({
+  void _setTempMultiOptCriterionXData({
     required String multiOptCriterionName,
-    required XOptionedData? optionedXData,
+    required XOptionedData? multiOptXData,
   }) {
     Criterion? criterion = _allCriteriaMap[multiOptCriterionName];
     if (criterion == null) {
       throw AppException(message: 'No Criterion "$multiOptCriterionName"');
     }
     if (criterion is MultiOptCriterion) {
-      criterion._tempCurrentXData = optionedXData;
+      criterion._tempCurrentXData = multiOptXData;
     } else {
       throw AppException(
           message:

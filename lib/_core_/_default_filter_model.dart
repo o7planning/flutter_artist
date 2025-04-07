@@ -37,7 +37,7 @@ class _DefaultFilterModel
   @override
   PropValue? getMultiOptCriterionValueFromFilterInput({
     required EmptyFilterInput filterInput,
-    required XOptionedData optCriterionData,
+    required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   }) {
     return null;
@@ -53,7 +53,7 @@ class _DefaultFilterModel
 
   @override
   PropValue? specifyDefaultMultiOptCriterionValue({
-    required XOptionedData optCriterionData,
+    required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   }) {
     return null;
@@ -102,7 +102,7 @@ class StringIdFilterModel
   @override
   PropValue? getMultiOptCriterionValueFromFilterInput({
     required StringIdFilterInput filterInput,
-    required XOptionedData optCriterionData,
+    required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   }) {
     return null;
@@ -118,7 +118,7 @@ class StringIdFilterModel
 
   @override
   PropValue? specifyDefaultMultiOptCriterionValue({
-    required XOptionedData optCriterionData,
+    required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   }) {
     return null;
@@ -167,7 +167,7 @@ class StringValueFilterModel
   @override
   PropValue? getMultiOptCriterionValueFromFilterInput({
     required StringValueFilterInput filterInput,
-    required XOptionedData optCriterionData,
+    required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   }) {
     return null;
@@ -183,7 +183,7 @@ class StringValueFilterModel
 
   @override
   PropValue? specifyDefaultMultiOptCriterionValue({
-    required XOptionedData optCriterionData,
+    required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   }) {
     return null;
@@ -232,7 +232,7 @@ class SearchTextFilterModel
   @override
   PropValue? getMultiOptCriterionValueFromFilterInput({
     required SearchTextFilterInput filterInput,
-    required XOptionedData optCriterionData,
+    required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   }) {
     return null;
@@ -248,7 +248,7 @@ class SearchTextFilterModel
 
   @override
   PropValue? specifyDefaultMultiOptCriterionValue({
-    required XOptionedData optCriterionData,
+    required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   }) {
     return null;
@@ -297,7 +297,7 @@ class IntIdFilterModel
   @override
   PropValue? getMultiOptCriterionValueFromFilterInput({
     required IntIdFilterInput filterInput,
-    required XOptionedData optCriterionData,
+    required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   }) {
     return null;
@@ -313,7 +313,7 @@ class IntIdFilterModel
 
   @override
   PropValue? specifyDefaultMultiOptCriterionValue({
-    required XOptionedData optCriterionData,
+    required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   }) {
     return null;
