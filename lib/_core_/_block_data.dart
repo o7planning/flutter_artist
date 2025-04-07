@@ -227,7 +227,8 @@ class BlockData<
     _selectedItems.clear();
     _checkedItems.clear();
     _setCurrentItemOnly(refreshedItem: null, refreshedItemDetail: null);
-    _lastQueryResult = null;
+    // TODO: set _lastQueryResult null khi FilterCriteria thay doi?
+    // _lastQueryResult = null;
     // _filterCriteria = filterCriteria;
   }
 
