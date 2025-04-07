@@ -225,11 +225,11 @@ abstract class Block<
   PageableData? get __pageable => __pageSize == null
       ? null
       : PageableData(
-          page: 1,
-          pageSize: __pageSize,
-        );
+    page: 1,
+    pageSize: __pageSize,
+  );
 
-  late final data = BlockData<
+  late final _blockData = BlockData<
       ID, //
       ITEM,
       ITEM_DETAIL,
@@ -240,18 +240,22 @@ abstract class Block<
     __pageable,
   );
 
-  DataState get queryDataState => this.data._queryDataState;
-
-  DataState get selectionDataState => this.data._selectionDataState;
-
-  final ItemSortCriteria? _itemSortCriteria;
-
-  ItemSortCriteria? get itemSortCriteria => _itemSortCriteria;
-
   final Map<_RefreshableWidgetState, _XState> _blockFragmentWidgetStates = {};
   final Map<_RefreshableWidgetState, _XState> _controlBarWidgetStates = {};
   final Map<_RefreshableWidgetState, _XState> _controlWidgetStates = {};
   final Map<_RefreshableWidgetState, _XState> _paginationWidgetStates = {};
+
+  // ***************************************************************************
+  // *** DATA STATE ************************************************************
+  // ***************************************************************************
+
+  DataState get queryDataState => this._blockData._queryDataState;
+
+  DataState get selectionDataState => this._blockData._selectionDataState;
+
+  final ItemSortCriteria? _itemSortCriteria;
+
+  ItemSortCriteria? get itemSortCriteria => _itemSortCriteria;
 
   // ***************************************************************************
   // ***************************************************************************
@@ -292,7 +296,7 @@ abstract class Block<
   }) {
     __assertThisXBlock(thisXBlock);
     //
-    this.data._clearWithDataState(queryDataState: queryDataState);
+    this._blockData._clearWithDataState(queryDataState: queryDataState);
     if (formModel != null) {
       formModel!._clearWithDataState(formDataState: formDataState);
     }
@@ -391,7 +395,7 @@ abstract class Block<
       return true;
     }
     //
-    Object? parentInData = this.data._currentParentItemId;
+    Object? parentInData = this._blockData._currentParentItemId;
     Object? parentInBlock = parentItemId;
     if (parentInData != parentInBlock) {
       return true;
@@ -399,7 +403,7 @@ abstract class Block<
     //
     if (filterModel != null) {
       FilterCriteria? criteriaInFilter = filterModel!.filterCriteria;
-      FilterCriteria? criteriaInData = this.data.filterCriteria;
+      FilterCriteria? criteriaInData = this._blockData.filterCriteria;
       if (criteriaInFilter != criteriaInData) {
         return true;
       }
@@ -876,7 +880,7 @@ abstract class Block<
     //
     // Ready FilterCriteria:
     //
-    final bool xCriteriaChanged = this.data._isXCriteriaChanged(
+    final bool xCriteriaChanged = this._blockData._isXCriteriaChanged(
           newCurrentParentItemId: parentItemId,
           newFilterCriteria: filterCriteria,
         );
@@ -886,7 +890,7 @@ abstract class Block<
         const PageableData(page: 1, pageSize: null);
     //
     final ListBehavior realListBehavior;
-    final int currentItemCount = this.data.itemCount;
+    final int currentItemCount = this._blockData.itemCount;
     //
     if (xCriteriaChanged) {
       //
@@ -967,11 +971,11 @@ abstract class Block<
       newQueryDataState = DataState.ready;
     }
     //
-    final ITEM? currentItem = this.data.currentItem;
+    final ITEM? currentItem = this._blockData.currentItem;
     //
     // Update queried items to the List:
     //
-    this.data._updateFrom(
+    this._blockData._updateFrom(
           forceListBehavior: realListBehavior,
           currentParentItemId: this.parentItemId,
           filterCriteria: filterCriteria,
@@ -981,7 +985,7 @@ abstract class Block<
         );
     //
     final bool currentItemInList =
-        currentItem != null && this.data.containsItem(item: currentItem);
+        currentItem != null && this._blockData.containsItem(item: currentItem);
     final ITEM? candidateCurrentItem = currentItemInList ? currentItem : null;
     //
     if (formModel != null) {
@@ -1054,8 +1058,8 @@ abstract class Block<
         currentItemSelectionType: currentItemSelectionType,
         getItemId: getItemId,
         candidateItem: candidateItem,
-        oldCurrentItem: this.data.currentItem,
-        currentItem: this.data.currentItem,
+        oldCurrentItem: this._blockData.currentItem,
+        currentItem: this._blockData.currentItem,
       );
     } else {
       thisXBlock.currentItemSelectionResult!._addCandidateItem(
@@ -1082,7 +1086,7 @@ abstract class Block<
       return;
     }
     //
-    if (this.data.itemCount == 0) {
+    if (this._blockData.itemCount == 0) {
       this.__clearWithDataStateCascade(
         thisXBlock: thisXBlock,
         queryDataState: DataState.ready,
@@ -1099,22 +1103,22 @@ abstract class Block<
     }
     //
     ITEM? candidateCurrentItem = candidateItem;
-    ITEM? currentItem = this.data.currentItem;
+    ITEM? currentItem = this._blockData.currentItem;
     //
     if (candidateCurrentItem != null) {
-      if (!this.data.containsItem(item: candidateCurrentItem)) {
+      if (!this._blockData.containsItem(item: candidateCurrentItem)) {
         candidateCurrentItem = null;
       }
     }
     if (currentItem != null) {
-      if (!this.data.containsItem(item: currentItem)) {
+      if (!this._blockData.containsItem(item: currentItem)) {
         currentItem = null;
       }
     }
     //
     final bool newCurrent;
     if (currentItem == null) {
-      candidateCurrentItem = candidateCurrentItem ?? this.data.firstItem;
+      candidateCurrentItem = candidateCurrentItem ?? this._blockData.firstItem;
       newCurrent = candidateCurrentItem != null;
     } else {
       // currentItem != null
@@ -1131,7 +1135,7 @@ abstract class Block<
       }
     }
     //
-    if (!this.data.isSame(
+    if (!this._blockData.isSame(
           item1: candidateItem,
           item2: candidateCurrentItem,
         )) {
@@ -1165,7 +1169,7 @@ abstract class Block<
     //
     // (newCurrent || forceReloadItem) && candidateCurrentItem !=null
     //
-    final bool isCandidateIsCurrent = this.data.isCurrentItem(
+    final bool isCandidateIsCurrent = this._blockData.isCurrentItem(
           item: candidateCurrentItem,
         );
     final ITEM? candidateCurrentItemInNewQueriedList =
@@ -1235,7 +1239,7 @@ abstract class Block<
     // If candidate not found in database --> remove.
     //
     if (candidateCurrentItemDetail == null) {
-      final ITEM? siblingItem = this.data.findSiblingItem(
+      final ITEM? siblingItem = this._blockData.findSiblingItem(
             item: candidateCurrentItem,
           );
       // #SAME-CODE-001
@@ -1317,8 +1321,8 @@ abstract class Block<
       return;
     }
     //
-    this.data._selectionDataState = DataState.ready;
-    this.data._setCurrentItemOnly(
+    this._blockData._selectionDataState = DataState.ready;
+    this._blockData._setCurrentItemOnly(
           refreshedItem: candidateCurrentItem,
           refreshedItemDetail: candidateCurrentItemDetail,
         );
@@ -1376,7 +1380,7 @@ abstract class Block<
     //
     thisXBlock.itemDeletionResult.addCandidateItem(item);
     //
-    final bool isCurrent = this.data.isCurrentItem(item: item);
+    final bool isCurrent = this._blockData.isCurrentItem(item: item);
     //
     ApiResult<void> result;
     try {
@@ -1439,10 +1443,10 @@ abstract class Block<
     //
     // Deleted current item ==> find sibling.
     //
-    final ITEM? siblingItem = this.data.findSiblingItem(item: item);
+    final ITEM? siblingItem = this._blockData.findSiblingItem(item: item);
     // Remove Item (Current Item)
     await __removeItemFromList(removeItem: item);
-    this.data._setCurrentItemOnly(
+    this._blockData._setCurrentItemOnly(
           refreshedItem: null,
           refreshedItemDetail: null,
         );
@@ -1506,7 +1510,7 @@ abstract class Block<
       );
       //
       success = await formModel!._startNewFormTransaction(
-        filterCriteria: data.filterCriteria,
+        filterCriteria: _blockData.filterCriteria,
         extraFormInput: extraFormInput,
         isItemFirstLoad: true,
       );
@@ -1702,7 +1706,7 @@ abstract class Block<
         if (!actionable.yes) {
           return true;
         }
-        ITEM? currentItem = this.data.currentItem;
+        ITEM? currentItem = this._blockData.currentItem;
         if (currentItem != null) {
           var taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
             currentItemSelectionType: CurrentItemSelectionType.refresh,
@@ -1801,7 +1805,7 @@ abstract class Block<
       keepInList = false;
     } else {
       keepInList = needToKeepItemInList(
-        filterCriteria: this.data.filterCriteria,
+        filterCriteria: this._blockData.filterCriteria,
         savedItem: savedItemDetail,
       );
     }
@@ -1811,7 +1815,7 @@ abstract class Block<
       ITEM refreshedItem = convertItemDetailToItem(
         itemDetail: savedItemDetail,
       );
-      this.data._insertOrReplaceItem(
+      this._blockData._insertOrReplaceItem(
             item: refreshedItem,
             itemDetail: savedItemDetail,
           );
@@ -1841,7 +1845,7 @@ abstract class Block<
         formModel!._formPropsStructure._updateInitialFormDataAfterSaveSuccess();
         //
         bool success = await formModel!._startNewFormTransaction(
-          filterCriteria: data.filterCriteria,
+          filterCriteria: _blockData.filterCriteria,
           extraFormInput: null,
           isItemFirstLoad: true,
         );
@@ -1856,7 +1860,7 @@ abstract class Block<
       ITEM? savedItem = __convertItemDetailToItem(
         itemDetail: savedItemDetail,
       );
-      final ITEM? removeItem = savedItem ?? this.data.currentItem;
+      final ITEM? removeItem = savedItem ?? this._blockData.currentItem;
       if (removeItem == null) {
         // TODO: Xem lai.
         return false;
@@ -1864,7 +1868,7 @@ abstract class Block<
       //
       // removeItem != null
       //
-      bool isCurrent = this.data.isCurrentItem(item: removeItem);
+      bool isCurrent = this._blockData.isCurrentItem(item: removeItem);
       if (!isCurrent) {
         await __removeItemFromList(removeItem: removeItem);
         return true;
@@ -1872,10 +1876,11 @@ abstract class Block<
       //
       // Deleted current item ==> find sibling.
       //
-      final ITEM? siblingItem = this.data.findSiblingItem(item: removeItem);
+      final ITEM? siblingItem =
+          this._blockData.findSiblingItem(item: removeItem);
       // Remove Item (Current Item)
       await __removeItemFromList(removeItem: removeItem);
-      this.data._setCurrentItemOnly(
+      this._blockData._setCurrentItemOnly(
             refreshedItem: null,
             refreshedItemDetail: null,
           );
@@ -1919,7 +1924,7 @@ abstract class Block<
       methodName: "clearCurrent",
       parameters: {},
     );
-    if (data.currentItem == null) {
+    if (_blockData.currentItem == null) {
       return;
     }
     //
@@ -2081,7 +2086,7 @@ abstract class Block<
       parameters: {"postQueryBehavior": postQueryBehavior},
     );
     //
-    PageableData? currentPageable = this.data.pageable;
+    PageableData? currentPageable = this._blockData.pageable;
     if (currentPageable == null) {
       return false;
     }
@@ -2114,7 +2119,7 @@ abstract class Block<
       parameters: {"postQueryBehavior": postQueryBehavior},
     );
     //
-    PageableData? currentPageable = this.data.pageable;
+    PageableData? currentPageable = this._blockData.pageable;
     if (currentPageable == null) {
       return false;
     }
@@ -2150,7 +2155,7 @@ abstract class Block<
       parameters: {"postQueryBehavior": postQueryBehavior},
     );
     //
-    PageableData? currentPageable = this.data.pageable;
+    PageableData? currentPageable = this._blockData.pageable;
     if (currentPageable == null) {
       return false;
     }
@@ -2354,11 +2359,11 @@ abstract class Block<
   // ***************************************************************************
 
   ID? getCurrentItemId() {
-    if (this.data.currentItemDetail == null) {
+    if (this._blockData.currentItemDetail == null) {
       return null;
     }
     ITEM item =
-        convertItemDetailToItem(itemDetail: this.data.currentItemDetail!);
+        convertItemDetailToItem(itemDetail: this._blockData.currentItemDetail!);
     return getItemId(item);
   }
 
@@ -2398,11 +2403,12 @@ abstract class Block<
 
   void __setChildrenForParent() {
     try {
-      Object? itemParent = parent?.data.currentItemDetail;
-      if (itemParent != null && this.data.queryDataState == DataState.ready) {
+      Object? itemParent = parent?._blockData.currentItemDetail;
+      if (itemParent != null &&
+          this._blockData.queryDataState == DataState.ready) {
         setChildrenForParent(
           currentItemOfParentBlock: itemParent,
-          items: this.data.items,
+          items: this._blockData.items,
         );
       }
     } catch (e, stackTrace) {
@@ -2431,7 +2437,7 @@ abstract class Block<
     required ITEM? item,
     required ITEM_DETAIL? itemDetail,
   }) {
-    this.data._setCurrentItemOnly(
+    this._blockData._setCurrentItemOnly(
           refreshedItemDetail: itemDetail,
           refreshedItem: item,
         );
@@ -2454,7 +2460,7 @@ abstract class Block<
       },
     );
     //
-    this.data._removeItem(removeItem: removeItem);
+    this._blockData._removeItem(removeItem: removeItem);
     this.updateItemsView();
     // TODO: Disable delay in test mode:
     // await Future.delayed(Duration(seconds: 1));
@@ -2464,7 +2470,7 @@ abstract class Block<
   // ***************************************************************************
 
   bool hasCurrentItem() {
-    return this.data.currentItemDetail != null;
+    return this._blockData.currentItemDetail != null;
   }
 
   // ***************************************************************************
@@ -2472,11 +2478,11 @@ abstract class Block<
 
   // TODO: Xem lai phuong thuc nay. No da duoc goi o dau.
   bool hasCurrentItemAndAllowUpdate() {
-    if (this.data.currentItem == null) {
+    if (this._blockData.currentItem == null) {
       return false;
     }
     Actionable actionable = __isAllowDeleteItem(
-      item: this.data.currentItem!,
+      item: this._blockData.currentItem!,
     );
     return actionable.yes;
   }
@@ -2486,11 +2492,11 @@ abstract class Block<
 
   // TODO: Xem lai phuong thuc nay. No da duoc goi o dau.
   bool hasCurrentItemAndAllowDelete() {
-    if (this.data.currentItem == null) {
+    if (this._blockData.currentItem == null) {
       return false;
     }
     Actionable actionable = __isAllowDeleteItem(
-      item: this.data.currentItem!,
+      item: this._blockData.currentItem!,
     );
     return actionable.yes;
   }
@@ -2754,7 +2760,7 @@ abstract class Block<
   Future<CurrentItemSelectionResult<ITEM>?> prepareToEditFirstItem({
     Function()? navigate,
   }) async {
-    ITEM? nextItem = this.data.firstItem;
+    ITEM? nextItem = this._blockData.firstItem;
     if (nextItem == null) {
       return null;
     }
@@ -2771,10 +2777,10 @@ abstract class Block<
   Future<CurrentItemSelectionResult<ITEM>?> prepareToEditNextItem({
     Function()? navigate,
   }) async {
-    if (!this.data.hasNextItem) {
+    if (!this._blockData.hasNextItem) {
       return null;
     }
-    ITEM? nextItem = this.data.nextSiblingItem;
+    ITEM? nextItem = this._blockData.nextSiblingItem;
     if (nextItem == null) {
       return null;
     }
@@ -2791,10 +2797,10 @@ abstract class Block<
   Future<CurrentItemSelectionResult<ITEM>?> prepareToEditPreviousItem({
     Function()? navigate,
   }) async {
-    if (!this.data.hasPreviousItem) {
+    if (!this._blockData.hasPreviousItem) {
       return null;
     }
-    ITEM? previousItem = this.data.previousSiblingItem;
+    ITEM? previousItem = this._blockData.previousSiblingItem;
     if (previousItem == null) {
       return null;
     }
@@ -2836,7 +2842,7 @@ abstract class Block<
   Future<CurrentItemSelectionResult<ITEM>?> prepareToShowFirstItem({
     Function()? navigate,
   }) async {
-    ITEM? nextItem = this.data.firstItem;
+    ITEM? nextItem = this._blockData.firstItem;
     if (nextItem == null) {
       return null;
     }
@@ -2853,10 +2859,10 @@ abstract class Block<
   Future<CurrentItemSelectionResult<ITEM>?> prepareToShowNextItem({
     Function()? navigate,
   }) async {
-    if (!this.data.hasNextItem) {
+    if (!this._blockData.hasNextItem) {
       return null;
     }
-    ITEM? nextItem = this.data.nextSiblingItem;
+    ITEM? nextItem = this._blockData.nextSiblingItem;
     if (nextItem == null) {
       return null;
     }
@@ -2873,10 +2879,10 @@ abstract class Block<
   Future<CurrentItemSelectionResult<ITEM>?> prepareToShowPreviousItem({
     Function()? navigate,
   }) async {
-    if (!this.data.hasPreviousItem) {
+    if (!this._blockData.hasPreviousItem) {
       return null;
     }
-    ITEM? previousItem = this.data.previousSiblingItem;
+    ITEM? previousItem = this._blockData.previousSiblingItem;
     if (previousItem == null) {
       return null;
     }
@@ -2965,7 +2971,7 @@ abstract class Block<
       parameters: null,
     );
     //
-    List<ITEM> selItems = this.data.getSelectedItems(
+    List<ITEM> selItems = this._blockData.getSelectedItems(
           currentItemInclusion: currentItemInclusion,
         );
     if (selItems.isEmpty) {
@@ -2993,7 +2999,7 @@ abstract class Block<
       parameters: null,
     );
     //
-    List<ITEM> chkItems = this.data.getCheckedItems(
+    List<ITEM> chkItems = this._blockData.getCheckedItems(
           currentItemInclusion: currentItemInclusion,
         );
     if (chkItems.isEmpty) {
@@ -3019,7 +3025,7 @@ abstract class Block<
         forceQueryBlockOpts: [],
         forceQueryFormModelOpts: []);
     _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
-    List<ITEM> deleteItems = this.data.moveCurrentItemToEndOfList(
+    List<ITEM> deleteItems = this._blockData.moveCurrentItemToEndOfList(
           itemList: items,
         );
     //
@@ -3057,7 +3063,7 @@ abstract class Block<
       },
     );
     //
-    ITEM? item = this.data.findItemById(itemId);
+    ITEM? item = this._blockData.findItemById(itemId);
     //
     if (item == null) {
       if (ignoreIfItemNotInList) {
@@ -3140,7 +3146,7 @@ abstract class Block<
     );
     //
 
-    ITEM? currentItem = this.data.currentItem;
+    ITEM? currentItem = this._blockData.currentItem;
     if (currentItem != null) {
       return deleteItem(item: currentItem);
     }
@@ -3170,7 +3176,7 @@ abstract class Block<
       return null;
     }
     if (ignoreIfItemNotInList) {
-      ITEM? it = this.data.findItemSameIdWith(item: item);
+      ITEM? it = this._blockData.findItemSameIdWith(item: item);
       if (it == null) {
         showErrorSnackBar(
           message: "Ignore deletion because this item is not in the list.",
@@ -3225,7 +3231,7 @@ abstract class Block<
     }
     //
     return await prepareToShowItem(
-      item: this.data.currentItem!,
+      item: this._blockData.currentItem!,
     );
   }
 
@@ -3246,7 +3252,7 @@ abstract class Block<
   void toggleCheckItem({
     required ITEM item,
   }) {
-    this.data._toggleCheckItem(item: item);
+    this._blockData._toggleCheckItem(item: item);
     __updateUIComponentAfterCheckedOrSelected();
   }
 
@@ -3256,7 +3262,7 @@ abstract class Block<
   void toggleSelectItem({
     required ITEM item,
   }) {
-    this.data._toggleSelectItem(item: item);
+    this._blockData._toggleSelectItem(item: item);
     __updateUIComponentAfterCheckedOrSelected();
   }
 
@@ -3267,7 +3273,7 @@ abstract class Block<
     required ITEM item,
     required bool checked,
   }) {
-    this.data._setCheckedItem(item: item, checked: checked);
+    this._blockData._setCheckedItem(item: item, checked: checked);
     __updateUIComponentAfterCheckedOrSelected();
   }
 
@@ -3278,7 +3284,7 @@ abstract class Block<
     required ITEM item,
     required bool selected,
   }) {
-    this.data._setSelectedItem(item: item, selected: selected);
+    this._blockData._setSelectedItem(item: item, selected: selected);
     __updateUIComponentAfterCheckedOrSelected();
   }
 
@@ -3286,7 +3292,7 @@ abstract class Block<
   // ***************************************************************************
 
   void setCheckedItems({required List<ITEM> items}) {
-    this.data._setCheckedItems(items: items);
+    this._blockData._setCheckedItems(items: items);
     __updateUIComponentAfterCheckedOrSelected();
   }
 
@@ -3294,7 +3300,7 @@ abstract class Block<
   // ***************************************************************************
 
   void setSelectedItems({required List<ITEM> items}) {
-    this.data._setSelectedItems(items: items);
+    this._blockData._setSelectedItems(items: items);
     __updateUIComponentAfterCheckedOrSelected();
   }
 
@@ -3302,7 +3308,7 @@ abstract class Block<
   // ***************************************************************************
 
   void uncheckAllItems() {
-    this.data._uncheckAllItems();
+    this._blockData._uncheckAllItems();
     __updateUIComponentAfterCheckedOrSelected();
   }
 
@@ -3310,7 +3316,7 @@ abstract class Block<
   // ***************************************************************************
 
   void checkAllItems() {
-    this.data._checkAllItems();
+    this._blockData._checkAllItems();
     __updateUIComponentAfterCheckedOrSelected();
   }
 
@@ -3318,7 +3324,7 @@ abstract class Block<
   // ***************************************************************************
 
   void selectAllItems() {
-    this.data._selectAllItems();
+    this._blockData._selectAllItems();
     __updateUIComponentAfterCheckedOrSelected();
   }
 
@@ -3326,7 +3332,7 @@ abstract class Block<
   // ***************************************************************************
 
   void deselectAllItems() {
-    this.data._deselectAllItems();
+    this._blockData._deselectAllItems();
     __updateUIComponentAfterCheckedOrSelected();
   }
 
@@ -3484,7 +3490,7 @@ abstract class Block<
   // ***************************************************************************
 
   bool isAllowUpdateCurrentItem() {
-    ITEM? currentItem = this.data.currentItem;
+    ITEM? currentItem = this._blockData.currentItem;
     if (currentItem == null) {
       return false;
     }
@@ -3495,7 +3501,7 @@ abstract class Block<
   // ***************************************************************************
 
   bool isAllowDeleteCurrentItem() {
-    ITEM? currentItem = this.data.currentItem;
+    ITEM? currentItem = this._blockData.currentItem;
     if (currentItem == null) {
       return false;
     }
@@ -3552,7 +3558,7 @@ abstract class Block<
   /// Allows edit current item or not according to the application logic.
   ///
   Actionable __isAllowUpdateItemCurrentItem() {
-    ITEM? currentItem = this.data.currentItem;
+    ITEM? currentItem = this._blockData.currentItem;
     if (currentItem == null) {
       return Actionable.no(message: "The current item is not available.");
     }
@@ -3724,7 +3730,7 @@ abstract class Block<
           break; // Do nothing
       }
     }
-    if (parent!.data.currentItem == null) {
+    if (parent!._blockData.currentItem == null) {
       return Actionable.no(
         message:
             "New item creation is disabled because the parent block has no current element.",
@@ -3948,7 +3954,7 @@ abstract class Block<
     }
     //
     return __canEditItemOnForm(
-      item: this.data.currentItem!,
+      item: this._blockData.currentItem!,
       checkAllow: checkAllow,
     );
   }
@@ -3957,7 +3963,7 @@ abstract class Block<
   // ***************************************************************************
 
   Actionable __canRefreshCurrentItem() {
-    if (this.data.currentItemDetail == null) {
+    if (this._blockData.currentItemDetail == null) {
       return Actionable.no(
         message: "Cannot refresh the current item because it is not available.",
       );
@@ -4041,7 +4047,7 @@ abstract class Block<
   // ***************************************************************************
 
   Actionable canDeleteCurrentItem() {
-    ITEM? currentItem = this.data.currentItem;
+    ITEM? currentItem = this._blockData.currentItem;
     if (currentItem == null) {
       return Actionable.no(
         message: "Cannot delete the current item because it is not available.",
@@ -4146,6 +4152,10 @@ abstract class Block<
   Actionable canQuery() {
     return __canQuery(checkAllow: true);
   }
+
+  // ***************************************************************************
+  // ***** BLOCK DATA **********************************************************
+  // ***************************************************************************
 
   // ***************************************************************************
   // ***************************************************************************

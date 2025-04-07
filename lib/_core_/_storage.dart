@@ -640,7 +640,7 @@ class _Storage {
         alsoCheckChildren: true,
       );
       if (!active) {
-        listenerBlock.data.setToPending();
+        listenerBlock._blockData.setToPending();
       }
     }
 

@@ -18,7 +18,7 @@ class BlockData<
       FILTER_CRITERIA,
       EXTRA_FORM_INPUT> block;
 
-  late final List<ITEM> _items;
+  final List<ITEM> _items = [];
   final List<ITEM> _selectedItems = [];
   final List<ITEM> _checkedItems = [];
 
@@ -210,8 +210,7 @@ class BlockData<
   BlockData._(
     this.block,
     PageableData? pageable,
-  )   : _items = [],
-        _pageable = pageable,
+  )   : _pageable = pageable,
         _pagination = PaginationData.empty() {
     _queryDataState = block.isRoot ? DataState.pending : DataState.none;
   }
