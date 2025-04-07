@@ -209,13 +209,13 @@ abstract class FilterModel<
         }
       } else {
         if (!_defaultValueInitiated) {
-          for (SimpleCriterion simpleCriterion
-              in _filterCriteriaStructure._simpleCriteria) {
-            Object? value = specifyDefaultSimpleCriterionValue(
-              criterionName: simpleCriterion.criterionName,
-            );
+          Map<String, dynamic> defaultValues =
+              await specifyDefaultSimpleCriterionValues() ?? {};
+
+          for (String criterionName in defaultValues.keys) {
+            dynamic value = defaultValues[criterionName];
             _filterCriteriaStructure._setTempSimpleCriterionValue(
-              criterionName: simpleCriterion.criterionName,
+              criterionName: criterionName,
               value: value,
             );
           }
@@ -508,9 +508,7 @@ abstract class FilterModel<
     required String multiOptCriterionName,
   });
 
-  Object? specifyDefaultSimpleCriterionValue({
-    required String criterionName,
-  });
+  Future<Map<String, dynamic>?> specifyDefaultSimpleCriterionValues();
 
   ValueWrap? _getMultiOptCriterionValueFromFilterInput({
     required FILTER_INPUT filterInput,
