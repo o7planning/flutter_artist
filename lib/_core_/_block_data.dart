@@ -22,7 +22,6 @@ class BlockData<
   final List<ITEM> _selectedItems = [];
   final List<ITEM> _checkedItems = [];
 
-
   // ***************************************************************************
 
   List<ITEM> moveCurrentItemToEndOfList({
