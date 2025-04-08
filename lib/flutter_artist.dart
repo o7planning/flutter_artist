@@ -49,6 +49,8 @@ part '_core_/_globals.dart';
 
 part '_adapter_/_notification_adapter.dart';
 
+part '_core_/_global_data_adapter.dart';
+
 part '_code_flow_/__code_flow_const.dart';
 
 part '_code_flow_/_code_flow_filter.dart';
@@ -277,7 +279,7 @@ part '_hive_/_hive_utils.dart';
 
 part '_icon_/_icon_constants.dart';
 
-part '_logged_in_user_/_logged_in_user_manager.dart';
+part '_globals_/_globals_manager.dart';
 
 part '_notification_/_notification.dart';
 

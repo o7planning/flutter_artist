@@ -9,7 +9,7 @@ class _FlutterArtist {
 
   final _Storage storage = _Storage();
 
-  final _Globals globals = _Globals();
+  late final GlobalData globals;
 
   final _Executor executor = _Executor();
 
@@ -19,9 +19,12 @@ class _FlutterArtist {
 
   FlutterArtistAdapter? __adapter;
 
-  final _LoggedInUserManager _loggedInUserManager = _LoggedInUserManager();
-  LoggedInUserAdapter? __loggedInUserAdapter;
-  NotificationAdapter? __notificationAdapter;
+  late final _GlobalsManager _globalsManager;
+
+  // late final _GlobalDataAdapterHandler _globalDataAdapterHandler;
+  // LoggedInUserAdapter? __loggedInUserAdapter;
+  // GlobalDataAdapter? __globalDataAdapter;
+  // NotificationAdapter? __notificationAdapter;
 
   Function(BuildContext context)? _showRestDebugDialog;
 
@@ -55,7 +58,7 @@ class _FlutterArtist {
     _totalErrorCount = 0;
     storage._logout();
     storage._rencentShelves.clear();
-    await _loggedInUserManager._logout();
+    await _globalsManager._logout();
     offAllAndGotoRoute();
   }
 
@@ -67,16 +70,12 @@ class _FlutterArtist {
     return __adapter!;
   }
 
-  NotificationAdapter? get notificationAdapter {
-    return __notificationAdapter;
-  }
-
-  LoggedInUserAdapter? get loggedInUserAdapter {
-    return __loggedInUserAdapter;
-  }
+  // NotificationAdapter? get notificationAdapter {
+  //   return __notificationAdapter;
+  // }
 
   ILoggedInUser? get loggedInUser {
-    return _loggedInUserManager.loggedInUser;
+    return _globalsManager.loggedInUser;
   }
 
   ///
@@ -92,13 +91,14 @@ class _FlutterArtist {
   /// ```
   ///
   Future<void> setOrUpdateLoggedInUser(ILoggedInUser loggedInUser) async {
-    await _loggedInUserManager.setOrUpdateLoggedInUser(loggedInUser);
+    await _globalsManager.setOrUpdateLoggedInUser(loggedInUser);
   }
 
   Future<void> config({
     required FlutterArtistAdapter flutterArtistAdapter,
     required NotificationAdapter? notificationAdapter,
-    required LoggedInUserAdapter? loggedInUserAdapter,
+    required LoggedInUserAdapter loggedInUserAdapter,
+    required GlobalDataAdapter globalDataAdapter,
     required Function(BuildContext context)? showRestDebugDialog,
     int notificationFetchPeriodInSeconds = 60,
   }) async {
@@ -107,18 +107,21 @@ class _FlutterArtist {
     }
     __adapter = flutterArtistAdapter;
     //
-    __loggedInUserAdapter = loggedInUserAdapter;
-    await _loggedInUserManager._initFromLocal();
+    _globalsManager = _GlobalsManager(
+      loggedInUserAdapter: loggedInUserAdapter,
+      globalDataAdapter: globalDataAdapter,
+    );
     //
     _showRestDebugDialog = showRestDebugDialog;
     //
-    __notificationAdapter = notificationAdapter;
-    //
     this.notificationFetchPeriodInSeconds = notificationFetchPeriodInSeconds;
     //
-    // FluNotificationAdapter ready, start Notification
+    __notificationEngine = _NotificationEngine(notificationAdapter);
     //
-    __notificationEngine = _NotificationEngine();
+    // START ALL:
+    //
+    await _globalsManager.start();
+    // IMPORTANT: No await:
     __notificationEngine.start();
   }
 

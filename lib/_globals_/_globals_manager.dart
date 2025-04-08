@@ -1,48 +1,75 @@
 part of '../flutter_artist.dart';
 
-class _LoggedInUserManager {
-  final String __hiveKeyLoggedInUser = "---flu-logged-in-user-hive-key---";
+class _GlobalsManager {
+  final String __hiveKeyLoggedInUser =
+      "---flutter-artist-hive-key-logged-in-user---";
+
+  GlobalData<dynamic>? _globalData;
 
   ILoggedInUser? _loggedInUser;
 
   ILoggedInUser? get loggedInUser => _loggedInUser;
 
+  GlobalData<dynamic>? get globalData => _globalData;
+
   final Map<_RefreshableWidgetState, bool> _loggedInUserWidgetStates = {};
 
-  Future<void> _logout() async {
-    _loggedInUser = null;
-    Box<String> hiveBox = await _openHiveBoxLoggedInUser();
-    await hiveBox.delete(__hiveKeyLoggedInUser);
-    await hiveBox.close();
-    updateWidgets();
-  }
+  final LoggedInUserAdapter loggedInUserAdapter;
+  final GlobalDataAdapter globalDataAdapter;
 
-  // Callable in this Library.
-  Future<void> _initFromLocal() async {
-    LoggedInUserAdapter? loggedInUserAdapter =
-        FlutterArtist.loggedInUserAdapter;
-    if (loggedInUserAdapter == null) {
-      return;
-    }
+  _GlobalsManager({
+    required this.loggedInUserAdapter,
+    required this.globalDataAdapter,
+  });
+
+  Future<void> start() async {
     Box<String> hiveBox = await _openHiveBoxLoggedInUser();
     String? loggedInUserJson = hiveBox.get(__hiveKeyLoggedInUser);
     if (loggedInUserJson == null) {
       return;
     }
+    ILoggedInUser? loggedInUser;
     try {
-      _loggedInUser = loggedInUserAdapter.fromJson(loggedInUserJson);
+      loggedInUser = loggedInUserAdapter.fromJson(loggedInUserJson);
     } catch (e, stackTrace) {
       print("****************************************************************");
-      print("Error ${getClassName(this)}._initFromLocal: $e");
+      print("Error ${getClassName(loggedInUserAdapter)}.fromJson(): $e");
       print("****************************************************************");
       print(stackTrace);
       return;
     }
+    if (loggedInUser == null) {
+      // This will open login screen.
+      return;
+    }
+    // Will not throw Error:
+    GlobalData<dynamic>? globalData =
+        await __loadGlobalDataFromServer(loggedInUser);
+    if (globalData == null) {
+      // This will open login screen.
+      return;
+    }
+    _loggedInUser = loggedInUser;
+    _globalData = globalData;
+  }
+
+  Future<GlobalData<dynamic>?> __loadGlobalDataFromServer(
+      ILoggedInUser loggedInUser) async {
+    try {
+      GlobalData<dynamic> globalData = await globalDataAdapter.loadFromServer(
+        loggedInUser: loggedInUser,
+      );
+      return globalData;
+    } catch (e, stackTrace) {
+      print("****************************************************************");
+      print("Error ${getClassName(globalDataAdapter)}.loadFromServer(): $e");
+      print("****************************************************************");
+      print(stackTrace);
+      return null;
+    }
   }
 
   Future<void> setOrUpdateLoggedInUser(ILoggedInUser loggedInUser) async {
-    LoggedInUserAdapter? loggedInUserAdapter =
-        FlutterArtist.loggedInUserAdapter;
     if (loggedInUserAdapter == null) {
       throw _printFatalError(
           " No LoggedInUserAdapter. You need to config it in FlutterArtist.config()");
@@ -84,5 +111,13 @@ class _LoggedInUserManager {
 
   void _removeLoggedInUserWidgetState({required State widgetState}) {
     _loggedInUserWidgetStates.remove(widgetState);
+  }
+
+  Future<void> _logout() async {
+    _loggedInUser = null;
+    Box<String> hiveBox = await _openHiveBoxLoggedInUser();
+    await hiveBox.delete(__hiveKeyLoggedInUser);
+    await hiveBox.close();
+    updateWidgets();
   }
 }
