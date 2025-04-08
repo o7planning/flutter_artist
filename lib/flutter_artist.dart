@@ -45,6 +45,8 @@ part '_adapter_/_flutter_artist_adapter.dart';
 
 part '_adapter_/_logged_in_user_adapter.dart';
 
+part '_core_/_globals.dart';
+
 part '_adapter_/_notification_adapter.dart';
 
 part '_code_flow_/__code_flow_const.dart';

@@ -9,6 +9,8 @@ class _FlutterArtist {
 
   final _Storage storage = _Storage();
 
+  final _Globals globals = _Globals();
+
   final _Executor executor = _Executor();
 
   final _TaskUnitQueue taskUnitQueue = _TaskUnitQueue();
