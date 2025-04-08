@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
 class _NotificationEngine {
-  final NotificationAdapter? adapter;
+  final INotificationAdapter? adapter;
 
   _NotificationEngine(this.adapter);
 

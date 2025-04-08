@@ -9,22 +9,15 @@ class _FlutterArtist {
 
   final _Storage storage = _Storage();
 
-  late final GlobalData globals;
-
   final _Executor executor = _Executor();
 
   final _TaskUnitQueue taskUnitQueue = _TaskUnitQueue();
 
   int notificationFetchPeriodInSeconds = 60;
 
-  FlutterArtistAdapter? __adapter;
+  IFlutterArtistAdapter? __adapter;
 
   late final _GlobalsManager _globalsManager;
-
-  // late final _GlobalDataAdapterHandler _globalDataAdapterHandler;
-  // LoggedInUserAdapter? __loggedInUserAdapter;
-  // GlobalDataAdapter? __globalDataAdapter;
-  // NotificationAdapter? __notificationAdapter;
 
   Function(BuildContext context)? _showRestDebugDialog;
 
@@ -62,20 +55,21 @@ class _FlutterArtist {
     offAllAndGotoRoute();
   }
 
-  FlutterArtistAdapter get adapter {
+  IFlutterArtistAdapter get adapter {
     if (__adapter == null) {
-      throw _printFatalError(" >>>>>> FlutterArtistAdapter is not registered!. "
-          "\n >>>>>> You need to call FlutterArtist.config() in main.dart");
+      throw _printFatalError(
+          " >>>>>> $IFlutterArtistAdapter is not registered!. "
+          "\n >>>>>> You need to call $FlutterArtist.config() in main.dart");
     }
     return __adapter!;
   }
 
-  // NotificationAdapter? get notificationAdapter {
-  //   return __notificationAdapter;
-  // }
-
   ILoggedInUser? get loggedInUser {
     return _globalsManager.loggedInUser;
+  }
+
+  IGlobalData? get globalData {
+    return _globalsManager.globalData;
   }
 
   ///
@@ -95,15 +89,15 @@ class _FlutterArtist {
   }
 
   Future<void> config({
-    required FlutterArtistAdapter flutterArtistAdapter,
-    required NotificationAdapter? notificationAdapter,
-    required LoggedInUserAdapter loggedInUserAdapter,
-    required GlobalDataAdapter globalDataAdapter,
+    required IFlutterArtistAdapter flutterArtistAdapter,
+    required INotificationAdapter? notificationAdapter,
+    required ILoggedInUserAdapter loggedInUserAdapter,
+    required IGlobalDataAdapter globalDataAdapter,
     required Function(BuildContext context)? showRestDebugDialog,
     int notificationFetchPeriodInSeconds = 60,
   }) async {
     if (__adapter != null) {
-      throw _printFatalError("FlutterArtistAdapter already registered!");
+      throw _printFatalError("${getClassName(__adapter)} already registered!");
     }
     __adapter = flutterArtistAdapter;
     //
