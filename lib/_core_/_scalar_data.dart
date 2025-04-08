@@ -11,15 +11,9 @@ class ScalarData<
 
   FILTER_CRITERIA? _filterCriteria;
 
-  FILTER_CRITERIA? get filterCriteria => _filterCriteria;
-
   VALUE? _value;
 
-  VALUE? get value => _value;
-
   DataState _queryDataState = DataState.pending;
-
-  DataState get queryDataState => _queryDataState;
 
   // ***************************************************************************
   // ***************************************************************************
@@ -50,7 +44,7 @@ class ScalarData<
   // ***************************************************************************
   // ***************************************************************************
 
-  void setToPending() {
+  void _setToPending() {
     _queryDataState = DataState.pending;
   }
 

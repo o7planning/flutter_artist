@@ -70,7 +70,7 @@ abstract class FormModel<
     //
     await _startNewFormTransaction(
       extraFormInput: null,
-      filterCriteria: block.data.filterCriteria,
+      filterCriteria: block.filterCriteria,
       isItemFirstLoad: false,
     );
     return true;
@@ -106,7 +106,7 @@ abstract class FormModel<
     //
     __loadCount++;
     //
-    FILTER_CRITERIA? filterCriteria = this.block.data.filterCriteria;
+    FILTER_CRITERIA? filterCriteria = this.block.filterCriteria;
     EXTRA_FORM_INPUT? extraFormInput =
         thisXFormModel.extraFormInput as EXTRA_FORM_INPUT?;
     //
@@ -148,16 +148,16 @@ abstract class FormModel<
       );
       //
       block._refreshSavingState(isSaving: true);
-      Object? parentBlockItem = block.parent?.data.currentItem;
+      Object? parentBlockItem = block.parent?.currentItem;
       //
       result = _formPropsStructure.isNew
           ? await callApiCreateItem(
-              filterCriteria: block.data.filterCriteria,
+              filterCriteria: block.filterCriteria,
               parentBlockItem: parentBlockItem,
               formMapData: formMapData,
             )
           : await callApiUpdateItem(
-              filterCriteria: block.data.filterCriteria,
+              filterCriteria: block.filterCriteria,
               parentBlockItem: parentBlockItem,
               formMapData: formMapData,
             );
@@ -242,7 +242,7 @@ abstract class FormModel<
     __formTransactionCount++;
     print(
         "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFormTransaction, isItemFirstLoad: $isItemFirstLoad");
-    final ITEM_DETAIL? itemDetail = block.data.currentItemDetail;
+    final ITEM_DETAIL? itemDetail = block.currentItemDetail;
     final FormMode currentFormMode = formDataState == DataState.none
         ? FormMode.none
         : itemDetail == null
@@ -317,7 +317,7 @@ abstract class FormModel<
       if (itemDetail != null) {
         try {
           simplePropValue = await getSimplePropValuesFromItemDetail(
-            filterCriteria: block.data.filterCriteria,
+            filterCriteria: block.filterCriteria,
             itemDetail: itemDetail,
           );
           for (String propName in simplePropValue.keys) {
@@ -349,7 +349,7 @@ abstract class FormModel<
         if (!_defaultValueInitiated) {
           try {
             simplePropValueDefault = await specifyDefaultSimplePropValues(
-                  filterCriteria: block.data.filterCriteria,
+                  filterCriteria: block.filterCriteria,
                 ) ??
                 {};
             for (String propName in simplePropValueDefault.keys) {
@@ -577,7 +577,7 @@ abstract class FormModel<
     // May throw ApiError.
     //
     multiOptPropXData ??= await callApiLoadMultiOptPropData(
-      filterCriteria: block.data.filterCriteria,
+      filterCriteria: block.filterCriteria,
       extraFormInput: extraFormInput,
       parentMultiOptPropValue: parentMultiOptPropValue,
       multiOptPropName: multiOptPropName,
@@ -590,7 +590,7 @@ abstract class FormModel<
     // Candidate Selected Items:
     List? candidateSelectedItems;
     ValueWrap? selectedValueWrap;
-    final ITEM_DETAIL? currentItemDetail = block.data.currentItemDetail;
+    final ITEM_DETAIL? currentItemDetail = block.currentItemDetail;
     //
     if (multiOptPropXData != null) {
       if (isItemFirstLoad) {

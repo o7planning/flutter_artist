@@ -618,7 +618,7 @@ class _Storage {
     }
     for (Scalar listenerScalar in listenerScalars) {
       if (!listenerScalar.hasActiveUIComponent()) {
-        listenerScalar.data.setToPending();
+        listenerScalar.setToPending();
       }
     }
     // <String shelfName>
@@ -640,7 +640,7 @@ class _Storage {
         alsoCheckChildren: true,
       );
       if (!active) {
-        listenerBlock.data.setToPending();
+        listenerBlock.setToPending();
       }
     }
 

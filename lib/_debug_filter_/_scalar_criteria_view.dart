@@ -18,6 +18,6 @@ class _ScalarCriteriaView extends _BlkOrScrCriteriaView {
 
   @override
   FilterCriteria? getFilterCriteria() {
-    return scalar.data.filterCriteria;
+    return scalar.filterCriteria;
   }
 }

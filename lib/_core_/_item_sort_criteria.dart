@@ -74,7 +74,7 @@ abstract class ItemSortCriteria<ITEM extends Object> {
       _criteria.remove(moving);
       _criteria.insert(destIdx, moving);
     }
-    block.data.sort();
+    block.sort(refresh: false);
     block.updateAllUIComponents(
       withoutFilters: false,
       force: true,
@@ -176,7 +176,7 @@ abstract class ItemSortCriteria<ITEM extends Object> {
         ..addAll(newArrangedCriteria);
     }
     //
-    block.data.sort();
+    block.sort(refresh: false);
     block.updateAllUIComponents(
       withoutFilters: true,
       force: true,

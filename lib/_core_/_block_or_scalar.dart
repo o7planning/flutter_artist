@@ -14,9 +14,9 @@ class _BlockOrScalar extends Equatable {
 
   int get itemCount {
     if (block != null) {
-      return block!.data.items.length;
+      return block!.itemCount;
     } else {
-      return scalar!.data.value == null ? 0 : 1;
+      return scalar!.value == null ? 0 : 1;
     }
   }
 
