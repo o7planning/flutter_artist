@@ -17,14 +17,14 @@ abstract class LoginActivityBase<USER extends ILoggedInUser> extends Activity {
           return await __doLogin();
         },
       );
-      if(success)  {
+      if (success) {
         print("Success");
         await navigateToSuccessScreen();
-      } else  {
+      } else {
         shelf.updateAllUIComponents();
       }
     } finally {
-       // shelf.updateAllUIComponents();
+      // shelf.updateAllUIComponents();
     }
   }
 
@@ -33,7 +33,8 @@ abstract class LoginActivityBase<USER extends ILoggedInUser> extends Activity {
     try {
       result = await callApiLogin();
       if (result.isError()) {
-        print(">>>>>>>> ERROR: ${result.errorMessage} - ${result.errorDetails}");
+        print(
+            ">>>>>>>> ERROR: ${result.errorMessage} - ${result.errorDetails}");
         showErrorSnackBar(
           message: result.errorMessage!,
           errorDetails: result.errorDetails,
@@ -72,5 +73,4 @@ abstract class LoginActivityBase<USER extends ILoggedInUser> extends Activity {
     }
     return true;
   }
-
 }
