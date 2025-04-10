@@ -1,5 +1,5 @@
 part of '../flutter_artist.dart';
 
-enum ZilchHiddenBehavior {
+enum ActivityHiddenBehavior {
   none,
 }

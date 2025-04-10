@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
-abstract class LoginZilchBase<USER extends ILoggedInUser> extends Zilch {
-  LoginZilchBase({required super.name});
+abstract class LoginActivityBase<USER extends ILoggedInUser> extends Activity {
+  LoginActivityBase({required super.name});
 
   Future<ApiResult<USER>> callApiLogin();
 

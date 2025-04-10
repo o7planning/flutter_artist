@@ -89,7 +89,7 @@ const IconData _blockItemsViewIconData = cupertino.CupertinoIcons.table;
 
 const IconData _scalarFragmentIconData = cupertino.CupertinoIcons.pano_fill;
 
-const IconData _zilchFragmentIconData = cupertino.CupertinoIcons.pencil_circle;
+const IconData _activityFragmentIconData = cupertino.CupertinoIcons.pencil_circle;
 
 const IconData _paginationIconData = cupertino.CupertinoIcons.ellipsis_circle;
 
