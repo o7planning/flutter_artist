@@ -37,6 +37,8 @@ part '_login_/_login_view.dart';
 
 part '_ui_/_zilch_fragment_widget_builder.dart';
 
+part '_enum_/_zilch_hidden_behavior.dart';
+
 part '_core_/_zilch.dart';
 
 part '_ui_/_block_items_view.dart';

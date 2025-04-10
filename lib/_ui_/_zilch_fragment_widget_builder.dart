@@ -14,11 +14,11 @@ class ZilchFragmentWidgetBuilder extends _RefreshableWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _VoidFragmentWidgetBuilderState();
+    return _ZilchFragmentWidgetBuilderState();
   }
 }
 
-class _VoidFragmentWidgetBuilderState
+class _ZilchFragmentWidgetBuilderState
     extends _RefreshableWidgetState<ZilchFragmentWidgetBuilder> {
   @override
   String getWidgetOwnerClassName() {
@@ -35,17 +35,17 @@ class _VoidFragmentWidgetBuilderState
 
   @override
   void addWidgetState({required bool isShowing}) {
-    // widget.zilch._addVoidFragmentWidgetState(
-    //   widgetState: this,
-    //   isShowing: isShowing,
-    // );
+    widget.zilch._addZilchFragmentWidgetState(
+      widgetState: this,
+      isShowing: isShowing,
+    );
   }
 
   @override
   void removeWidgetState() {
-    // widget.zilch._removeVoidFragmentWidgetState(
-    //   widgetState: this,
-    // );
+    widget.zilch._removeZilchFragmentWidgetState(
+      widgetState: this,
+    );
   }
 
   @override
