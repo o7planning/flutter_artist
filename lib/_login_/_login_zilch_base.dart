@@ -1,9 +1,7 @@
 part of '../flutter_artist.dart';
 
-abstract class LoginModel<USER extends ILoggedInUser> extends _XBase {
-  final Shelf shelf;
-
-  LoginModel({required this.shelf});
+abstract class LoginZilchBase<USER extends ILoggedInUser> extends Zilch {
+  LoginZilchBase({required super.name});
 
   Future<ApiResult<USER>> callApiLogin();
 
@@ -15,7 +13,11 @@ abstract class LoginModel<USER extends ILoggedInUser> extends _XBase {
   Future<void> doLogin() async {
     await FlutterArtist.adapter.showOverlay(
       asyncFunction: () async {
-        await __doLogin();
+        try {
+          await __doLogin();
+        } finally {
+          shelf.updateAllUIComponents();
+        }
       },
     );
   }

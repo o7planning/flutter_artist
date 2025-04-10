@@ -29,11 +29,9 @@ part '_action_/_quick_action.dart';
 
 part '_ui_/_form_view.dart';
 
-part '_login_/_login_model.dart';
+part '_login_/_login_zilch_base.dart';
 
-part '_login_/_login_zilch.dart';
-
-part '_login_/_login_view.dart';
+part '_login_/_simple_login_view.dart';
 
 part '_ui_/_zilch_fragment_widget_builder.dart';
 

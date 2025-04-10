@@ -1,19 +1,17 @@
 part of '../flutter_artist.dart';
 
-class LoginView extends StatelessWidget {
-  final LoginZilch loginZilch;
-  final LoginModel loginModel;
+class SimpleLoginView extends StatelessWidget {
+  final Zilch zilch;
 
-  const LoginView({
+  const SimpleLoginView({
     super.key,
-    required this.loginZilch,
-    required this.loginModel,
+    required this.zilch,
   });
 
   @override
   Widget build(BuildContext context) {
     return ZilchFragmentWidgetBuilder(
-      zilch: loginZilch,
+      zilch: zilch,
       ownerClassInstance: this,
       description: null,
       build: () {
