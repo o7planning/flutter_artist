@@ -99,16 +99,16 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
       );
       eventSources = FlutterArtist.storage._getEventShelfBlockTypes(
         listenerBlockOrScalar:
-        _BlockOrScalar.block(selectedBlockOrScalar!.block!),
+            _BlockOrScalar.block(selectedBlockOrScalar!.block!),
       );
     } else if (selectedBlockOrScalar?.scalar != null) {
       listeners = FlutterArtist.storage._getListenerShelfBlockScalarTypes(
         eventBlockOrScalar:
-        _BlockOrScalar.scalar(selectedBlockOrScalar!.scalar!),
+            _BlockOrScalar.scalar(selectedBlockOrScalar!.scalar!),
       );
       eventSources = FlutterArtist.storage._getEventShelfBlockTypes(
         listenerBlockOrScalar:
-        _BlockOrScalar.scalar(selectedBlockOrScalar!.scalar!),
+            _BlockOrScalar.scalar(selectedBlockOrScalar!.scalar!),
       );
     }
     //
@@ -116,33 +116,33 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
       height: double.maxFinite,
       child: selectedBlockOrScalar == null
           ? const Center(
-        child: Text(
-          "No Block or Scalar Selected",
-          style: TextStyle(
-            fontSize: 13,
-          ),
-        ),
-      )
-          : SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _ShelfInfoView(shelf: selectedBlockOrScalar?.shelf),
-            const Divider(),
-            if (selectedBlockOrScalar != null)
-              _BlockOrScalarInfoView(
-                blockOrScalar: selectedBlockOrScalar!,
+              child: Text(
+                "No Block or Scalar Selected",
+                style: TextStyle(
+                  fontSize: 13,
+                ),
               ),
-            if (selectedBlockOrScalar != null) const Divider(),
-            if (listeners.isNotEmpty)
-              _buildListeners(selectedBlockOrScalar!, listeners),
-            const SizedBox(height: 10),
-            if (eventSources.isNotEmpty)
-              _buildEventSources(selectedBlockOrScalar!, eventSources),
-          ],
-        ),
-      ),
+            )
+          : SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _ShelfInfoView(shelf: selectedBlockOrScalar?.shelf),
+                  const Divider(),
+                  if (selectedBlockOrScalar != null)
+                    _BlockOrScalarInfoView(
+                      blockOrScalar: selectedBlockOrScalar!,
+                    ),
+                  if (selectedBlockOrScalar != null) const Divider(),
+                  if (listeners.isNotEmpty)
+                    _buildListeners(selectedBlockOrScalar!, listeners),
+                  const SizedBox(height: 10),
+                  if (eventSources.isNotEmpty)
+                    _buildEventSources(selectedBlockOrScalar!, eventSources),
+                ],
+              ),
+            ),
     );
   }
 
@@ -155,8 +155,10 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
     widget.onSelectShelfBlockType(shelfBlockType);
   }
 
-  Widget _buildListeners(_BlockOrScalar blockOrScalar,
-      List<ShelfBlockScalarType> listeners,) {
+  Widget _buildListeners(
+    _BlockOrScalar blockOrScalar,
+    List<ShelfBlockScalarType> listeners,
+  ) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -207,21 +209,20 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
         ),
         const SizedBox(height: 10),
         ...listeners.map(
-              (listener) =>
-              _ShelfBlockScalarTypeWidget(
-                  shelfBlockScalarType: listener,
-                  isListener: true,
-                  isEventSource: false,
-                  onTap: () {
-                    _onSelectFluBlockType(listener);
-                  }),
+          (listener) => _ShelfBlockScalarTypeWidget(
+              shelfBlockScalarType: listener,
+              isListener: true,
+              isEventSource: false,
+              onTap: () {
+                _onSelectFluBlockType(listener);
+              }),
         ),
       ],
     );
   }
 
-  Widget _buildEventSources(_BlockOrScalar blockOrScalar,
-      List<ShelfBlockScalarType> notifiers) {
+  Widget _buildEventSources(
+      _BlockOrScalar blockOrScalar, List<ShelfBlockScalarType> notifiers) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -267,14 +268,13 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
         ),
         const SizedBox(height: 10),
         ...notifiers.map(
-              (notifier) =>
-              _ShelfBlockScalarTypeWidget(
-                  shelfBlockScalarType: notifier,
-                  isListener: false,
-                  isEventSource: true,
-                  onTap: () {
-                    _onSelectFluBlockType(notifier);
-                  }),
+          (notifier) => _ShelfBlockScalarTypeWidget(
+              shelfBlockScalarType: notifier,
+              isListener: false,
+              isEventSource: true,
+              onTap: () {
+                _onSelectFluBlockType(notifier);
+              }),
         ),
       ],
     );
