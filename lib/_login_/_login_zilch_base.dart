@@ -11,27 +11,34 @@ abstract class LoginZilchBase<USER extends ILoggedInUser> extends Zilch {
   /// Call this method when user click to Login/Submit button.
   ///
   Future<void> doLogin() async {
-    await FlutterArtist.adapter.showOverlay(
-      asyncFunction: () async {
-        try {
-          await __doLogin();
-        } finally {
-          shelf.updateAllUIComponents();
-        }
-      },
-    );
+    try {
+      bool success = await FlutterArtist.adapter.showOverlay(
+        asyncFunction: () async {
+          return await __doLogin();
+        },
+      );
+      if(success)  {
+        print("Success");
+        await navigateToSuccessScreen();
+      } else  {
+        shelf.updateAllUIComponents();
+      }
+    } finally {
+       // shelf.updateAllUIComponents();
+    }
   }
 
-  Future<void> __doLogin() async {
+  Future<bool> __doLogin() async {
     ApiResult<USER> result;
     try {
       result = await callApiLogin();
       if (result.isError()) {
+        print(">>>>>>>> ERROR: ${result.errorMessage} - ${result.errorDetails}");
         showErrorSnackBar(
           message: result.errorMessage!,
           errorDetails: result.errorDetails,
         );
-        return;
+        return false;
       }
     } catch (e, stackTrace) {
       _handleError(
@@ -41,7 +48,7 @@ abstract class LoginZilchBase<USER extends ILoggedInUser> extends Zilch {
         stackTrace: stackTrace,
         showSnackBar: true,
       );
-      return;
+      return false;
     }
     USER? user = result.data;
     if (user == null) {
@@ -49,7 +56,7 @@ abstract class LoginZilchBase<USER extends ILoggedInUser> extends Zilch {
         message: "No data from ${getClassName(this)}.callApiLogin()",
         errorDetails: null,
       );
-      return;
+      return false;
     }
     try {
       await FlutterArtist.setOrUpdateLoggedInUser(user);
@@ -61,10 +68,11 @@ abstract class LoginZilchBase<USER extends ILoggedInUser> extends Zilch {
         stackTrace: stackTrace,
         showSnackBar: true,
       );
-      return;
+      return false;
     }
+    return true;
     // Navigate (After login successful).
-    await navigateToSuccessScreen();
+    // await navigateToSuccessScreen();
   }
 
 // Future<void> processLoginResult(ApiResult<User> result) async {
