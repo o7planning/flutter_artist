@@ -1,7 +1,7 @@
 part of '../flutter_artist.dart';
 
-abstract class LoginZilchBase<USER extends ILoggedInUser> extends Zilch {
-  LoginZilchBase({required super.name});
+abstract class LoginActivityBase<USER extends ILoggedInUser> extends Activity {
+  LoginActivityBase({required super.name});
 
   Future<ApiResult<USER>> callApiLogin();
 
@@ -17,14 +17,14 @@ abstract class LoginZilchBase<USER extends ILoggedInUser> extends Zilch {
           return await __doLogin();
         },
       );
-      if(success)  {
+      if (success) {
         print("Success");
         await navigateToSuccessScreen();
-      } else  {
+      } else {
         shelf.updateAllUIComponents();
       }
     } finally {
-       // shelf.updateAllUIComponents();
+      // shelf.updateAllUIComponents();
     }
   }
 
@@ -33,7 +33,8 @@ abstract class LoginZilchBase<USER extends ILoggedInUser> extends Zilch {
     try {
       result = await callApiLogin();
       if (result.isError()) {
-        print(">>>>>>>> ERROR: ${result.errorMessage} - ${result.errorDetails}");
+        print(
+            ">>>>>>>> ERROR: ${result.errorMessage} - ${result.errorDetails}");
         showErrorSnackBar(
           message: result.errorMessage!,
           errorDetails: result.errorDetails,
@@ -72,5 +73,4 @@ abstract class LoginZilchBase<USER extends ILoggedInUser> extends Zilch {
     }
     return true;
   }
-
 }

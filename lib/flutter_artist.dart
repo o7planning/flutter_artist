@@ -29,15 +29,15 @@ part '_action_/_quick_action.dart';
 
 part '_ui_/_form_view.dart';
 
-part '_login_/_login_zilch_base.dart';
+part '_login_/_login_activity_base.dart';
 
 part '_login_/_simple_login_view.dart';
 
-part '_ui_/_zilch_fragment_widget_builder.dart';
+part '_ui_/_activity_fragment_widget_builder.dart';
 
-part '_enum_/_zilch_hidden_behavior.dart';
+part '_enum_/_activity_hidden_behavior.dart';
 
-part '_core_/_zilch.dart';
+part '_core_/_activity.dart';
 
 part '_ui_/_block_items_view.dart';
 

@@ -1,32 +1,32 @@
 part of '../flutter_artist.dart';
 
-class ZilchFragmentWidgetBuilder extends _RefreshableWidget {
-  final Zilch zilch;
+class ActivityFragmentWidgetBuilder extends _RefreshableWidget {
+  final Activity activity;
   final Widget Function() build;
 
-  const ZilchFragmentWidgetBuilder({
+  const ActivityFragmentWidgetBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
-    required this.zilch,
+    required this.activity,
     required this.build,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _ZilchFragmentWidgetBuilderState();
+    return _ActivityFragmentWidgetBuilderState();
   }
 }
 
-class _ZilchFragmentWidgetBuilderState
-    extends _RefreshableWidgetState<ZilchFragmentWidgetBuilder> {
+class _ActivityFragmentWidgetBuilderState
+    extends _RefreshableWidgetState<ActivityFragmentWidgetBuilder> {
   @override
   String getWidgetOwnerClassName() {
-    return getClassName(widget.zilch);
+    return getClassName(widget.activity);
   }
 
   @override
-  RefreshableWidgetType get type => RefreshableWidgetType.zilchFragment;
+  RefreshableWidgetType get type => RefreshableWidgetType.activityFragment;
 
   @override
   Widget buildContent(BuildContext context) {
@@ -35,7 +35,7 @@ class _ZilchFragmentWidgetBuilderState
 
   @override
   void addWidgetState({required bool isShowing}) {
-    widget.zilch._addZilchFragmentWidgetState(
+    widget.activity._addActivityFragmentWidgetState(
       widgetState: this,
       isShowing: isShowing,
     );
@@ -43,14 +43,14 @@ class _ZilchFragmentWidgetBuilderState
 
   @override
   void removeWidgetState() {
-    widget.zilch._removeZilchFragmentWidgetState(
+    widget.activity._removeActivityFragmentWidgetState(
       widgetState: this,
     );
   }
 
   @override
   void checkAndFreeMemory() {
-    FlutterArtist.storage._checkToRemoveShelf(widget.zilch.shelf);
+    FlutterArtist.storage._checkToRemoveShelf(widget.activity.shelf);
   }
 
   @override

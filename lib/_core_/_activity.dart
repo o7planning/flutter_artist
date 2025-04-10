@@ -1,25 +1,25 @@
 part of '../flutter_artist.dart';
 
-abstract class Zilch extends _XBase {
+abstract class Activity extends _XBase {
   late final Shelf shelf;
 
   final String name;
 
-  final ZilchHiddenBehavior hiddenBehavior;
+  final ActivityHiddenBehavior hiddenBehavior;
 
-  final Map<_RefreshableWidgetState, bool> _zilchFragmentWidgetStates = {};
-  final Map<_RefreshableWidgetState, bool> _zilchControlWidgetStates = {};
+  final Map<_RefreshableWidgetState, bool> _activityFragmentWidgetStates = {};
+  final Map<_RefreshableWidgetState, bool> _activityControlWidgetStates = {};
 
-  Zilch({
+  Activity({
     required this.name,
-    this.hiddenBehavior = ZilchHiddenBehavior.none,
+    this.hiddenBehavior = ActivityHiddenBehavior.none,
   });
 
   // ***************************************************************************
   // ***************************************************************************
 
   void updateFragmentWidgets() {
-    for (_RefreshableWidgetState state in _zilchFragmentWidgetStates.keys) {
+    for (_RefreshableWidgetState state in _activityFragmentWidgetStates.keys) {
       if (state.mounted) {
         state.refreshState();
       }
@@ -30,17 +30,17 @@ abstract class Zilch extends _XBase {
   // ***************************************************************************
 
   bool hasMountedUIComponent() {
-    return _zilchFragmentWidgetStates.isNotEmpty ||
-        _zilchControlWidgetStates.isNotEmpty;
+    return _activityFragmentWidgetStates.isNotEmpty ||
+        _activityControlWidgetStates.isNotEmpty;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _hasActiveZilchFragmentWidgetState() {
-    for (State widgetState in _zilchFragmentWidgetStates.keys) {
+  bool _hasActiveActivityFragmentWidgetState() {
+    for (State widgetState in _activityFragmentWidgetStates.keys) {
       if (widgetState.mounted) {
-        bool isShowing = _zilchFragmentWidgetStates[widgetState] ?? false;
+        bool isShowing = _activityFragmentWidgetStates[widgetState] ?? false;
         if (isShowing) {
           return true;
         }
@@ -52,12 +52,12 @@ abstract class Zilch extends _XBase {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _addZilchFragmentWidgetState({
+  void _addActivityFragmentWidgetState({
     required _RefreshableWidgetState widgetState,
     required bool isShowing,
   }) {
     bool activeOLD = hasActiveUIComponent();
-    _zilchFragmentWidgetStates[widgetState] = isShowing;
+    _activityFragmentWidgetStates[widgetState] = isShowing;
     bool activeCURRENT = hasActiveUIComponent();
     //
     if (isShowing) {
@@ -68,34 +68,34 @@ abstract class Zilch extends _XBase {
       // Fire event:
       shelf._startNewLazyQueryTransactionIfNeed();
     } else if (activeOLD && !activeCURRENT) {
-      _fireZilchHidden();
+      _fireActivityHidden();
     }
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void _removeZilchFragmentWidgetState({required State widgetState}) {
+  void _removeActivityFragmentWidgetState({required State widgetState}) {
     bool activeOLD = hasActiveUIComponent();
-    _zilchFragmentWidgetStates.remove(widgetState);
+    _activityFragmentWidgetStates.remove(widgetState);
     bool activeCURRENT = hasActiveUIComponent();
     //
     if (activeOLD && !activeCURRENT) {
-      _fireZilchHidden();
+      _fireActivityHidden();
     }
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void _fireZilchHidden() {
+  void _fireActivityHidden() {
     FlutterArtist.codeFlowLogger._addEvent(
       ownerClassInstance: this,
-      event: "Zilch '${getClassName(this)}' just hides all UI Components!",
+      event: "Activity '${getClassName(this)}' just hides all UI Components!",
       isLibCode: true,
     );
     switch (hiddenBehavior) {
-      case ZilchHiddenBehavior.none:
+      case ActivityHiddenBehavior.none:
         break;
     }
   }
@@ -104,7 +104,7 @@ abstract class Zilch extends _XBase {
   // ***************************************************************************
 
   bool hasActiveUIComponent() {
-    return _hasActiveZilchFragmentWidgetState() ||
+    return _hasActiveActivityFragmentWidgetState() ||
         _hasActiveControlWidgetState();
   }
 
@@ -112,9 +112,9 @@ abstract class Zilch extends _XBase {
   // ***************************************************************************
 
   bool _hasActiveControlWidgetState() {
-    for (State widgetState in _zilchControlWidgetStates.keys) {
+    for (State widgetState in _activityControlWidgetStates.keys) {
       if (widgetState.mounted) {
-        bool isShowing = _zilchControlWidgetStates[widgetState] ?? false;
+        bool isShowing = _activityControlWidgetStates[widgetState] ?? false;
         if (isShowing) {
           return true;
         }

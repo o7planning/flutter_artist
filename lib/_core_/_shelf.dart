@@ -13,11 +13,11 @@ abstract class Shelf extends _XBase {
   // All formModels.
   final List<FormModel> _allFormModels = [];
 
-  final Map<String, Zilch> __zilchMap = {};
+  final Map<String, Activity> __activityMap = {};
 
-  final List<Zilch> __zilches = [];
+  final List<Activity> __activities = [];
 
-  List<Zilch> get zilches => [...__zilches];
+  List<Activity> get activities => [...__activities];
 
   final Map<String, Scalar> __scalarMap = {};
 
@@ -87,18 +87,18 @@ abstract class Shelf extends _XBase {
       _allFilterModels.add(filterModel);
     }
     //
-    // Zilch:
+    // Activity:
     //
-    final List<Zilch> zilches = _shelfStruct.zilches;
-    for (Zilch zilch in zilches) {
-      if (__zilchMap.containsKey(zilch.name)) {
+    final List<Activity> activities = _shelfStruct.activities;
+    for (Activity activity in activities) {
+      if (__activityMap.containsKey(activity.name)) {
         throw ___registerError(
-            "Duplicated Zilch '${zilch.name}' in '${getClassName(this)}'\n"
+            "Duplicated Activity '${activity.name}' in '${getClassName(this)}'\n"
             "Double-check ${getClassName(this)}.registerStructure() method");
       } else {
-        __zilchMap[zilch.name] = zilch;
+        __activityMap[activity.name] = activity;
       }
-      zilch.shelf = this;
+      activity.shelf = this;
     }
     //
     // Scalar:
@@ -355,8 +355,8 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
   // ***************************************************************************
 
-  Zilch? findZilch(String zilchName) {
-    return __zilchMap[zilchName];
+  Activity? findActivity(String activityName) {
+    return __activityMap[activityName];
   }
 
   // ***************************************************************************

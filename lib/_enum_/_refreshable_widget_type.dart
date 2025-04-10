@@ -13,7 +13,7 @@ enum RefreshableWidgetType {
   scalarControlButton,
   //
   scalarFragment,
-  zilchFragment,
+  activityFragment,
   loggedInUser;
 }
 
@@ -38,8 +38,8 @@ extension WidgetStateTypeE on RefreshableWidgetType {
         return "ShelfFragment";
       case RefreshableWidgetType.scalarFragment:
         return "ScalarFragment";
-      case RefreshableWidgetType.zilchFragment:
-        return "ZilchFragment";
+      case RefreshableWidgetType.activityFragment:
+        return "ActivityFragment";
       case RefreshableWidgetType.loggedInUser:
         return "LoggedInUser";
       case RefreshableWidgetType.blockControlButton:
@@ -69,8 +69,8 @@ extension WidgetStateTypeE on RefreshableWidgetType {
         return _loggedUserIconData;
       case RefreshableWidgetType.scalarFragment:
         return _scalarFragmentIconData;
-      case RefreshableWidgetType.zilchFragment:
-        return _zilchFragmentIconData;
+      case RefreshableWidgetType.activityFragment:
+        return _activityFragmentIconData;
       case RefreshableWidgetType.shelfFragment:
         return _shelfFragmentIconData;
       case RefreshableWidgetType.blockControlButton:
