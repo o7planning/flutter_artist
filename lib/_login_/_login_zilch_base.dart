@@ -71,61 +71,6 @@ abstract class LoginZilchBase<USER extends ILoggedInUser> extends Zilch {
       return false;
     }
     return true;
-    // Navigate (After login successful).
-    // await navigateToSuccessScreen();
   }
 
-// Future<void> processLoginResult(ApiResult<User> result) async {
-//   if (result.errorMessage != null) {
-//     update();
-//     showErrorSnackBar(
-//       message: result.errorMessage!,
-//       errorDetails: result.errorDetails,
-//       duration: const Duration(seconds: 4),
-//     );
-//     return;
-//   }
-//   User? loginedInfo = result.data;
-//   if (loginedInfo == null) {
-//     update();
-//
-//     showErrorSnackBar(
-//       message: "No Login Data returned!",
-//       errorDetails: null,
-//       duration: const Duration(seconds: 10),
-//     );
-//     return;
-//   }
-//   ApiResult<CompanyPage> result2 =
-//       await companyProvider.query(token: loginedInfo.token);
-//   if (result2.errorMessage != null) {
-//     String errorMsg = "Get Company data error: ${result2.errorMessage!}";
-//     print(errorMsg);
-//     update();
-//
-//     showErrorSnackBar(
-//       message: errorMsg,
-//       errorDetails: result2.errorDetails,
-//       duration: const Duration(seconds: 10),
-//     );
-//     return;
-//   }
-//   CompanyPage companyPage = result2.data!;
-//   loginedInfo.companyPage = companyPage;
-//   //
-//   try {
-//     // TODO: Cần thư viện hoá chức năng login:
-//     await FlutterArtist.setOrUpdateLoggedInUser(loginedInfo);
-//   } catch (e, stackTrace) {
-//     print(stackTrace);
-//     showErrorSnackBar(
-//       message: "Error: $e",
-//       errorDetails: null,
-//       duration: const Duration(seconds: 4),
-//     );
-//     return;
-//   }
-//   //
-//   Get.offNamed(DashboardScreen.routeName);
-// }
 }
