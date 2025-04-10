@@ -225,7 +225,7 @@ abstract class FilterModel<
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: "_startNewFilterTransaction",
+        methodName: null,
         error: "Error _startNewFilterTransaction: $e",
         stackTrace: stackTrace,
         showSnackBar: true,
