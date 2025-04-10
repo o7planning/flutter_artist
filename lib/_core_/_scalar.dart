@@ -652,14 +652,11 @@ abstract class Scalar<
       event: "Scalar '${getClassName(this)}' just hides all UI Components!",
       isLibCode: true,
     );
-    if (hiddenBehavior == ScalarHiddenBehavior.clear) {
-      Future.delayed(
-        const Duration(seconds: 0),
-        () {
-          // TODO: ???????????????
-          // this.emptyQuery();
-        },
-      );
+    switch (hiddenBehavior) {
+      case ScalarHiddenBehavior.none:
+        break;
+      case ScalarHiddenBehavior.clear:
+        break;
     }
   }
 
