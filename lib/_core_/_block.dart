@@ -924,8 +924,6 @@ abstract class Block<
         __pageable ??
         const PageableData(page: 1, pageSize: null);
     //
-    final int itemCountBeforeQuery = this.itemCount;
-    //
     bool isQueryError = false;
     PageData<ITEM>? pageData;
     //
@@ -960,7 +958,6 @@ abstract class Block<
         pageData = null;
       } else {
         pageData = result.data;
-        // newQueriedList = pageData?.items ?? [];
       }
     } catch (e, stackTrace) {
       _handleError(
@@ -975,7 +972,6 @@ abstract class Block<
       __refreshQueryingState(isQuerying: false);
     }
     //
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1 - isQueryError: $isQueryError");
     final ListBehavior realListBehavior;
     DataState newQueryDataState = this.queryDataState;
     //
@@ -1050,7 +1046,6 @@ abstract class Block<
       }
       // Query Successful + Parent not changed + Criteria not changed.
       else {
-        print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> @1");
         switch (queryDataState) {
           case DataState.ready:
             // Replace or Append:
@@ -1071,15 +1066,6 @@ abstract class Block<
         }
       }
     }
-    print(
-        "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3 - newQueryDataState: $newQueryDataState");
-    print(
-        "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3.1 - realListBehavior: $realListBehavior");
-
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 4 - pageData: $pageData");
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 5 - pagination: ${pagination}");
-    print(
-        "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 5.1 - callingPageable: ${callingPageable}");
     //
     final ITEM? currentItem = this.currentItem;
     //
@@ -1093,7 +1079,6 @@ abstract class Block<
       pageData: pageData,
       queryDataState: newQueryDataState,
     );
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 6 - pagination: ${pagination}");
     //
     final bool currentItemInList =
         currentItem != null && containsItem(item: currentItem);
