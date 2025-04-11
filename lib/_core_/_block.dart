@@ -916,7 +916,7 @@ abstract class Block<
     //
     // Ready FilterCriteria:
     //
-    final bool xCriteriaChanged = __blockData._isParentOrFilterCriteriaChanged(
+    final bool parentOrCriteriaChanged = __blockData._isParentOrFilterCriteriaChanged(
       newCurrentParentItemId: parentItemId,
       newFilterCriteria: filterCriteria,
     );
@@ -928,7 +928,7 @@ abstract class Block<
     final ListBehavior realListBehavior;
     final int currentItemCount = this.itemCount;
     //
-    if (xCriteriaChanged) {
+    if (parentOrCriteriaChanged) {
       //
       // IMPORTANT:
       //
@@ -990,12 +990,12 @@ abstract class Block<
       //
       switch (realListBehavior) {
         case ListBehavior.replace:
-          newQueryDataState = xCriteriaChanged //
+          newQueryDataState = parentOrCriteriaChanged //
               ? DataState.error
               : DataState.ready;
         case ListBehavior.append:
           //
-          // (For Sure: xCriteriaChanged = false)
+          // (For Sure: parentOrCriteriaChanged = false)
           //
           newQueryDataState = currentItemCount > 0 //
               ? DataState.ready
