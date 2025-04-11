@@ -184,7 +184,7 @@ class BlockData<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _isXCriteriaChanged({
+  bool _isParentOrFilterCriteriaChanged({
     required Object? newCurrentParentItemId,
     required FILTER_CRITERIA newFilterCriteria,
   }) {

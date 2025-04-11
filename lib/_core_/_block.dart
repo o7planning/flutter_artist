@@ -916,7 +916,7 @@ abstract class Block<
     //
     // Ready FilterCriteria:
     //
-    final bool xCriteriaChanged = __blockData._isXCriteriaChanged(
+    final bool xCriteriaChanged = __blockData._isParentOrFilterCriteriaChanged(
       newCurrentParentItemId: parentItemId,
       newFilterCriteria: filterCriteria,
     );
