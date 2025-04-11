@@ -325,7 +325,19 @@ class BlockData<
       _items.clear();
     }
     //
-    PageData<ITEM> ap = pageData ?? DefaultPageData<ITEM>.empty();
+    final PageData<ITEM> ap = pageData ?? DefaultPageData<ITEM>.empty();
+    _pageable = pageable?.copy();
+    if (_currentParentItemId != currentParentItemId ||
+        _filterCriteria != filterCriteria) {
+      _pagination = PaginationData.copy(ap.pagination);
+    } else {
+      // pageData == null <--> Query error.
+      if (pageData == null) {
+        // No change _pagination:
+      } else {
+        _pagination = PaginationData.copy(ap.pagination);
+      }
+    }
     //
     _currentParentItemId = currentParentItemId;
     _filterCriteria = filterCriteria;
@@ -335,10 +347,6 @@ class BlockData<
     // Append to _items:
     //
     __appendItems(appendItems: ap.items);
-    //
-    _pageable = pageable?.copy();
-    _pagination = PaginationData.copy(ap.pagination);
-    //
     // block.formModel?.data._formMode = FormMode.none;
   }
 }
