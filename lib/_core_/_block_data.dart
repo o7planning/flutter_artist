@@ -174,6 +174,9 @@ class BlockData<
     required DataState queryDataState,
   }) {
     _queryDataState = queryDataState;
+    if (_queryDataState == DataState.error) {
+      _filterCriteria = null;
+    }
     _items.clear();
     _selectedItems.clear();
     _checkedItems.clear();
