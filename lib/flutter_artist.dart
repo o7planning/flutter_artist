@@ -39,6 +39,8 @@ part '_enum_/_activity_hidden_behavior.dart';
 
 part '_core_/_activity.dart';
 
+part '_enum_/_action_result_state.dart';
+
 part '_ui_/_block_items_view.dart';
 
 part '_enum_/_current_item_selection_type.dart';

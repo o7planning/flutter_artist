@@ -135,6 +135,8 @@ class BlockData<
 
   PageData<ITEM>? _lastQueryResult;
 
+  ActionResultState? _lastQueryResultState;
+
   late PageableData? _pageable;
 
   PageableData? get pageable => _pageable;
@@ -317,7 +319,9 @@ class BlockData<
     required PageableData? pageable,
     required PageData<ITEM>? pageData,
     required DataState queryDataState,
+    required ActionResultState queryResultState,
   }) {
+    _lastQueryResultState = queryResultState;
     // Check if filterCriteria changed.
     if (forceListBehavior == ListBehavior.replace ||
         _currentParentItemId != currentParentItemId ||
@@ -331,8 +335,8 @@ class BlockData<
         _filterCriteria != filterCriteria) {
       _pagination = PaginationData.copy(ap.pagination);
     } else {
-      // pageData == null <--> Query error.
-      if (pageData == null) {
+      // Query Error:
+      if (queryResultState == ActionResultState.fail) {
         // No change _pagination:
       } else {
         _pagination = PaginationData.copy(ap.pagination);

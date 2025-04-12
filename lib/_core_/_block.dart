@@ -264,6 +264,9 @@ abstract class Block<
   ///
   PageData<ITEM>? get lastQueryResult => __blockData._lastQueryResult;
 
+  ActionResultState? get lastQueryResultState =>
+      __blockData._lastQueryResultState;
+
   DataState get queryDataState => __blockData._queryDataState;
 
   DataState get selectionDataState => __blockData._selectionDataState;
@@ -924,7 +927,7 @@ abstract class Block<
         __pageable ??
         const PageableData(page: 1, pageSize: null);
     //
-    bool isQueryError = false;
+    ActionResultState queryResultState;
     PageData<ITEM>? pageData;
     //
     // Call Query API:
@@ -954,9 +957,10 @@ abstract class Block<
           errorDetails: result.errorDetails,
           showSnackBar: true,
         );
-        isQueryError = true;
+        queryResultState = ActionResultState.fail;
         pageData = null;
       } else {
+        queryResultState = ActionResultState.success;
         pageData = result.data;
       }
     } catch (e, stackTrace) {
@@ -967,7 +971,7 @@ abstract class Block<
         stackTrace: stackTrace,
         showSnackBar: true,
       );
-      isQueryError = true;
+      queryResultState = ActionResultState.fail;
     } finally {
       __refreshQueryingState(isQuerying: false);
     }
@@ -975,7 +979,7 @@ abstract class Block<
     final ListBehavior realListBehavior;
     DataState newQueryDataState = this.queryDataState;
     //
-    if (isQueryError) {
+    if (queryResultState == ActionResultState.fail) {
       thisXBlock.queryResult._apiError = true;
       // Query Error + Parent or Criteria changed.
       if (parentOrCriteriaChanged) {
@@ -1078,6 +1082,7 @@ abstract class Block<
       pageable: callingPageable,
       pageData: pageData,
       queryDataState: newQueryDataState,
+      queryResultState: queryResultState,
     );
     //
     final bool currentItemInList =
