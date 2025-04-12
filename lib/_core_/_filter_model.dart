@@ -32,6 +32,8 @@ abstract class FilterModel<
 
   late final FilterCriteriaStructure _filterCriteriaStructure;
 
+  DataState? get filterDataState => _filterCriteriaStructure._filterDataState;
+
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
   // ***************************************************************************
