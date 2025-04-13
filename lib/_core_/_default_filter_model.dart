@@ -37,6 +37,7 @@ class _DefaultFilterModel
   @override
   ValueWrap? getMultiOptCriterionValueFromFilterInput({
     required EmptyFilterInput filterInput,
+    required Object? parentMultiOptCriterionValue,
     required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   }) {
@@ -52,6 +53,7 @@ class _DefaultFilterModel
 
   @override
   ValueWrap? specifyDefaultMultiOptCriterionValue({
+    required Object? parentMultiOptCriterionValue,
     required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   }) {
@@ -99,6 +101,7 @@ class StringIdFilterModel
   @override
   ValueWrap? getMultiOptCriterionValueFromFilterInput({
     required StringIdFilterInput filterInput,
+    required Object? parentMultiOptCriterionValue,
     required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   }) {
@@ -114,6 +117,7 @@ class StringIdFilterModel
 
   @override
   ValueWrap? specifyDefaultMultiOptCriterionValue({
+    required Object? parentMultiOptCriterionValue,
     required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   }) {
@@ -161,6 +165,7 @@ class StringValueFilterModel
   @override
   ValueWrap? getMultiOptCriterionValueFromFilterInput({
     required StringValueFilterInput filterInput,
+    required Object? parentMultiOptCriterionValue,
     required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   }) {
@@ -176,6 +181,7 @@ class StringValueFilterModel
 
   @override
   ValueWrap? specifyDefaultMultiOptCriterionValue({
+    required Object? parentMultiOptCriterionValue,
     required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   }) {
@@ -223,6 +229,7 @@ class SearchTextFilterModel
   @override
   ValueWrap? getMultiOptCriterionValueFromFilterInput({
     required SearchTextFilterInput filterInput,
+    required Object? parentMultiOptCriterionValue,
     required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   }) {
@@ -238,6 +245,7 @@ class SearchTextFilterModel
 
   @override
   ValueWrap? specifyDefaultMultiOptCriterionValue({
+    required Object? parentMultiOptCriterionValue,
     required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   }) {
@@ -285,6 +293,7 @@ class IntIdFilterModel
   @override
   ValueWrap? getMultiOptCriterionValueFromFilterInput({
     required IntIdFilterInput filterInput,
+    required Object? parentMultiOptCriterionValue,
     required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   }) {
@@ -300,6 +309,7 @@ class IntIdFilterModel
 
   @override
   ValueWrap? specifyDefaultMultiOptCriterionValue({
+    required Object? parentMultiOptCriterionValue,
     required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   }) {

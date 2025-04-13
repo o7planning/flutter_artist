@@ -371,12 +371,14 @@ abstract class FilterModel<
       if (filterInput != null) {
         inputValueWrap = _getMultiOptCriterionValueFromFilterInput(
           filterInput: filterInput,
+          parentMultiOptCriterionValue: parentMultiOptCriterionValue,
           multiOptCriterionXData: multiOptCriterionXData,
           multiOptCriterionName: criterionName,
         );
       } else {
         if (!_defaultValueInitiated) {
           inputValueWrap = __specifyDefaultMultiOptCriterionValue(
+            parentMultiOptCriterionValue: parentMultiOptCriterionValue,
             multiOptCriterionXData: multiOptCriterionXData,
             multiOptCriterionName: criterionName,
           );
@@ -501,11 +503,13 @@ abstract class FilterModel<
   ///
   ValueWrap? getMultiOptCriterionValueFromFilterInput({
     required FILTER_INPUT filterInput,
+    required Object? parentMultiOptCriterionValue,
     required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   });
 
   ValueWrap? specifyDefaultMultiOptCriterionValue({
+    required Object? parentMultiOptCriterionValue,
     required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   });
@@ -514,11 +518,13 @@ abstract class FilterModel<
 
   ValueWrap? _getMultiOptCriterionValueFromFilterInput({
     required FILTER_INPUT filterInput,
+    required Object? parentMultiOptCriterionValue,
     required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   }) {
     ValueWrap? wrap = getMultiOptCriterionValueFromFilterInput(
       filterInput: filterInput,
+      parentMultiOptCriterionValue: parentMultiOptCriterionValue,
       multiOptCriterionXData: multiOptCriterionXData,
       multiOptCriterionName: multiOptCriterionName,
     );
@@ -536,10 +542,12 @@ abstract class FilterModel<
   }
 
   ValueWrap? __specifyDefaultMultiOptCriterionValue({
+    required Object? parentMultiOptCriterionValue,
     required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
   }) {
     ValueWrap? wrap = specifyDefaultMultiOptCriterionValue(
+      parentMultiOptCriterionValue: parentMultiOptCriterionValue,
       multiOptCriterionXData: multiOptCriterionXData,
       multiOptCriterionName: multiOptCriterionName,
     );
