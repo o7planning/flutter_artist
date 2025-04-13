@@ -70,7 +70,7 @@ abstract class FormModel<
     //
     await _startNewFormTransaction(
       extraFormInput: null,
-      filterCriteria: block.filterCriteria,
+      filterCriteria: block.filterCriteria!,
       isItemFirstLoad: false,
     );
     return true;
@@ -106,13 +106,12 @@ abstract class FormModel<
     //
     __loadCount++;
     //
-    FILTER_CRITERIA? filterCriteria = this.block.filterCriteria;
     EXTRA_FORM_INPUT? extraFormInput =
         thisXFormModel.extraFormInput as EXTRA_FORM_INPUT?;
     //
     await _startNewFormTransaction(
       extraFormInput: extraFormInput,
-      filterCriteria: filterCriteria,
+      filterCriteria: block.filterCriteria!,
       isItemFirstLoad: true,
     );
     //
@@ -235,7 +234,7 @@ abstract class FormModel<
   ///
   @ImportantMethodAnnotation()
   Future<bool> _startNewFormTransaction({
-    required FILTER_CRITERIA? filterCriteria,
+    required FILTER_CRITERIA filterCriteria,
     required EXTRA_FORM_INPUT? extraFormInput,
     required bool isItemFirstLoad,
   }) async {
