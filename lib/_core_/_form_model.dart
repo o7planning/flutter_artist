@@ -235,8 +235,8 @@ abstract class FormModel<
     required EXTRA_FORM_INPUT? extraFormInput,
     required bool isItemFirstLoad,
   }) async {
-    FILTER_CRITERIA? filterCriteria = block.filterCriteria;
-    if (filterCriteria == null) {
+    FILTER_CRITERIA? blockCurrentFilterCriteria = block.filterCriteria;
+    if (blockCurrentFilterCriteria == null) {
       throw AppException(message: "FilterCriteria is null");
     }
     __formTransactionCount++;
@@ -247,8 +247,8 @@ abstract class FormModel<
     final FormMode currentFormMode = formDataState == DataState.none
         ? FormMode.none
         : itemDetail == null
-        ? FormMode.creation
-        : FormMode.edit;
+            ? FormMode.creation
+            : FormMode.edit;
     _formPropsStructure._setFormMode(currentFormMode);
     bool isNoneMode = currentFormMode == FormMode.none;
     bool isCreationMode = currentFormMode == FormMode.creation;
@@ -289,6 +289,7 @@ abstract class FormModel<
         // May throw ApiError.
         //
         await _loadMultiOptPropDataCascade(
+          blockCurrentFilterCriteria: blockCurrentFilterCriteria,
           extraFormInput: extraFormInput,
           parentMultiOptPropValue: null,
           multiOptProp: multiOptProp,
@@ -318,7 +319,7 @@ abstract class FormModel<
       if (itemDetail != null) {
         try {
           simplePropValue = await getSimplePropValuesFromItemDetail(
-            filterCriteria: filterCriteria,
+            filterCriteria: blockCurrentFilterCriteria,
             itemDetail: itemDetail,
           );
           for (String propName in simplePropValue.keys) {
@@ -350,8 +351,8 @@ abstract class FormModel<
         if (!_defaultValueInitiated) {
           try {
             simplePropValueDefault = await specifyDefaultSimplePropValues(
-              filterCriteria: filterCriteria,
-            ) ??
+                  filterCriteria: blockCurrentFilterCriteria,
+                ) ??
                 {};
             for (String propName in simplePropValueDefault.keys) {
               _formPropsStructure._setTempSimplePropValue(
@@ -379,8 +380,8 @@ abstract class FormModel<
         if (extraFormInput != null) {
           try {
             simplePropValueExtra = getSimplePropValuesFromExtraFormInput(
-              extraFormInput: extraFormInput,
-            ) ??
+                  extraFormInput: extraFormInput,
+                ) ??
                 {};
             //
             for (String propName in simplePropValueExtra.keys) {
@@ -412,7 +413,6 @@ abstract class FormModel<
       isItemFirstLoad: isItemFirstLoad,
     );
   }
-
 
   // ***************************************************************************
   // ***************************************************************************
@@ -524,6 +524,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   Future<void> _loadMultiOptPropDataCascade({
+    required FILTER_CRITERIA blockCurrentFilterCriteria,
     required EXTRA_FORM_INPUT? extraFormInput,
     // May be new selected parent value.
     required Object? parentMultiOptPropValue,
@@ -579,7 +580,7 @@ abstract class FormModel<
     // May throw ApiError.
     //
     multiOptPropXData ??= await callApiLoadMultiOptPropData(
-      filterCriteria: block.filterCriteria,
+      filterCriteria: blockCurrentFilterCriteria,
       extraFormInput: extraFormInput,
       parentMultiOptPropValue: parentMultiOptPropValue,
       multiOptPropName: multiOptPropName,
@@ -706,6 +707,7 @@ abstract class FormModel<
     if (tempSelectedPropValue != null) {
       for (MultiOptProp child in multiOptProp.children) {
         await _loadMultiOptPropDataCascade(
+          blockCurrentFilterCriteria: blockCurrentFilterCriteria,
           extraFormInput: extraFormInput,
           parentMultiOptPropValue: tempSelectedPropValue,
           multiOptProp: child,
@@ -858,7 +860,7 @@ abstract class FormModel<
   /// Abstract method:
   ///
   Future<XOptionedData?> callApiLoadMultiOptPropData({
-    required FILTER_CRITERIA? filterCriteria,
+    required FILTER_CRITERIA filterCriteria,
     required EXTRA_FORM_INPUT? extraFormInput,
     required Object? parentMultiOptPropValue,
     required String multiOptPropName,
