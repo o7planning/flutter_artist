@@ -120,6 +120,10 @@ abstract class FormModel<
   // ***************************************************************************
 
   Future<bool> _unitSaveForm({required _XFormModel thisXFormModel}) async {
+    FILTER_CRITERIA? blockCurrentFilterCriteria = block.filterCriteria;
+    if (blockCurrentFilterCriteria == null) {
+      throw AppException(message: "FilterCriteria is null");
+    }
     if (!__checkValidBeforeSave()) {
       return false;
     }
@@ -149,12 +153,12 @@ abstract class FormModel<
       //
       result = _formPropsStructure.isNew
           ? await callApiCreateItem(
-              filterCriteria: block.filterCriteria,
+              filterCriteria: blockCurrentFilterCriteria,
               parentBlockItem: parentBlockItem,
               formMapData: formMapData,
             )
           : await callApiUpdateItem(
-              filterCriteria: block.filterCriteria,
+              filterCriteria: blockCurrentFilterCriteria,
               parentBlockItem: parentBlockItem,
               formMapData: formMapData,
             );
@@ -478,39 +482,6 @@ abstract class FormModel<
 
   // ***************************************************************************
   // ***************************************************************************
-
-  ///
-  /// Note: This method Patch value for [_formKey.currentState] silently,
-  /// it will not call [onChange] event of Fields.
-  ///
-  /// If call [_formKey.currentState?.patchValue] method, it will call [onChange] event.
-  ///
-  /// TODO: Need to catch error??
-  ///
-  void _formKeyPatchValueSilently({
-    required Map<String, dynamic> newCurrentValue,
-  }) {
-    try {
-      for (String key in newCurrentValue.keys) {
-        dynamic value = newCurrentValue[key];
-        //
-        //
-        // IMPORTANT:
-        //  Update FormBuilder View State:
-        //
-        _formKey.currentState?.fields[key]?.setValue(
-          value,
-          //
-          // populateForm: true ---> _formKey.currentState?setInternalFieldValue(key,value)
-          // populateForm: false ---> [Do nothing]
-          //
-          populateForm: true, // [Update FormBuilder Model]
-        );
-      }
-    } finally {
-      //
-    }
-  }
 
   void _formKeyPatchValue({required Map<String, dynamic> newCurrentValue}) {
     try {
@@ -1126,7 +1097,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   Future<ApiResult<ITEM_DETAIL>> callApiCreateItem({
-    required FILTER_CRITERIA? filterCriteria,
+    required FILTER_CRITERIA filterCriteria,
     required Object? parentBlockItem,
     required Map<String, dynamic> formMapData,
   });
@@ -1135,7 +1106,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   Future<ApiResult<ITEM_DETAIL>> callApiUpdateItem({
-    required FILTER_CRITERIA? filterCriteria,
+    required FILTER_CRITERIA filterCriteria,
     required Object? parentBlockItem,
     required Map<String, dynamic> formMapData,
   });
