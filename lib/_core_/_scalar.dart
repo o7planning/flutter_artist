@@ -153,7 +153,7 @@ abstract class Scalar<
       parameters: {},
     );
     //
-    FILTER_CRITERIA? filterCriteria;
+    FILTER_CRITERIA? filterCriteriaOfFilterModel;
     try {
       final _XFilterModel xFilterModel = thisXScalar.xFilterModel;
       final FilterModel filterModel = xFilterModel.filterModel;
@@ -161,13 +161,15 @@ abstract class Scalar<
       if (!xFilterModel.queried) {
         FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
         //
-        filterCriteria = await filterModel._startNewFilterTransaction(
+        filterCriteriaOfFilterModel =
+            await filterModel._startNewFilterTransaction(
           filterInput: filterInput,
         ) as FILTER_CRITERIA?;
         //
         xFilterModel.queried = true;
       } else {
-        filterCriteria = filterModel._filterCriteria! as FILTER_CRITERIA;
+        filterCriteriaOfFilterModel =
+            filterModel._filterCriteria! as FILTER_CRITERIA;
       }
     } catch (e, stackTrace) {
       /* Never Error */
@@ -175,7 +177,7 @@ abstract class Scalar<
     //
     // Has Error in FilterModel.
     //
-    if (filterCriteria == null) {
+    if (filterCriteriaOfFilterModel == null) {
       // Set Block to error cascade.
       __clearWithDataState(
         thisXScalar: thisXScalar,
@@ -188,7 +190,7 @@ abstract class Scalar<
     // Ready FilterCriteria:
     //
     bool xCriteriaChanged = this.__scalarData._isXCriteriaChanged(
-          newFilterCriteria: filterCriteria,
+          newFilterCriteria: filterCriteriaOfFilterModel,
         );
     //
     bool isQueryError = false;
@@ -197,7 +199,7 @@ abstract class Scalar<
       __refreshQueryingState(isQuerying: true);
       //
       ApiResult<VALUE> result = await callApiQuery(
-        filterCriteria: filterCriteria,
+        filterCriteria: filterCriteriaOfFilterModel,
       );
       //
       if (result.isError()) {
@@ -234,7 +236,7 @@ abstract class Scalar<
     //
     __setQueryDataWithState(
       thisXScalar: thisXScalar,
-      filterCriteria: filterCriteria,
+      filterCriteria: filterCriteriaOfFilterModel,
       dataState: newQueryDataState,
       value: value,
     );

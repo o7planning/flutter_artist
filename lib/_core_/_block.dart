@@ -882,7 +882,7 @@ abstract class Block<
     //
     // thisXBlock.forceQuery || (hasActiveUI && this.queryDataState != DataState.ready)
     //
-    FILTER_CRITERIA? filterCriteria;
+    FILTER_CRITERIA? filterCriteriaOfFilterModel;
     try {
       final _XFilterModel xFilterModel = thisXBlock.xFilterModel;
       final FilterModel filterModel = xFilterModel.filterModel;
@@ -890,13 +890,15 @@ abstract class Block<
       if (!xFilterModel.queried) {
         FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
         //
-        filterCriteria = await filterModel._startNewFilterTransaction(
+        filterCriteriaOfFilterModel =
+            await filterModel._startNewFilterTransaction(
           filterInput: filterInput,
         ) as FILTER_CRITERIA?;
         //
         xFilterModel.queried = true;
       } else {
-        filterCriteria = filterModel._filterCriteria! as FILTER_CRITERIA;
+        filterCriteriaOfFilterModel =
+            filterModel._filterCriteria! as FILTER_CRITERIA;
       }
     } catch (e, stackTrace) {
       /* Never Error */
@@ -904,7 +906,7 @@ abstract class Block<
     //
     // Has Error in FilterModel.
     //
-    if (filterCriteria == null) {
+    if (filterCriteriaOfFilterModel == null) {
       // Set Block to error cascade.
       __clearWithDataStateCascade(
         thisXBlock: thisXBlock,
@@ -920,7 +922,7 @@ abstract class Block<
     final bool parentOrCriteriaChanged =
         __blockData._isParentOrFilterCriteriaChanged(
       newCurrentParentItemId: parentItemId,
-      newFilterCriteria: filterCriteria,
+      newFilterCriteria: filterCriteriaOfFilterModel,
     );
     //
     final PageableData callingPageable = thisXBlock.pageable ??
@@ -945,7 +947,7 @@ abstract class Block<
       //
       __callApiQueryCount++;
       ApiResult<PageData<ITEM>?> result = await callApiQuery(
-        filterCriteria: filterCriteria,
+        filterCriteria: filterCriteriaOfFilterModel,
         pageable: callingPageable,
       );
       //
@@ -1078,7 +1080,7 @@ abstract class Block<
     __blockData._updateFrom(
       forceListBehavior: realListBehavior,
       currentParentItemId: this.parentItemId,
-      filterCriteria: filterCriteria,
+      filterCriteria: filterCriteriaOfFilterModel,
       pageable: callingPageable,
       pageData: pageData,
       queryDataState: newQueryDataState,
