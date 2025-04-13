@@ -176,6 +176,7 @@ class BlockData<
     _queryDataState = queryDataState;
     if (_queryDataState == DataState.error) {
       _filterCriteria = null;
+      _lastQueryResultState =ActionResultState.fail;
     }
     _items.clear();
     _selectedItems.clear();
