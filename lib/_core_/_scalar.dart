@@ -402,7 +402,7 @@ abstract class Scalar<
   // ***************************************************************************
 
   Future<ApiResult<VALUE>> callApiQuery({
-    required FILTER_CRITERIA? filterCriteria,
+    required FILTER_CRITERIA filterCriteria,
   });
 
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
