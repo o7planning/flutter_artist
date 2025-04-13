@@ -181,6 +181,7 @@ abstract class FormModel<
     try {
       return await block._processSaveActionRestResult(
         thisXBlock: thisXFormModel.xBlock,
+        blockCurrentFilterCriteria: blockCurrentFilterCriteria,
         calledMethodName: calledMethodName,
         result: result,
       );
