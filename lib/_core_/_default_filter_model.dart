@@ -27,19 +27,19 @@ class _DefaultFilterModel
 
   @override
   Future<XList?> callApiLoadMultiOptCriterionData({
-    required EmptyFilterInput? filterInput,
-    required Object? parentMultiOptCriterionValue,
     required String multiOptCriterionName,
+    required Object? parentMultiOptCriterionValue,
+    required EmptyFilterInput? filterInput,
   }) async {
     return null;
   }
 
   @override
   ValueWrap? getMultiOptCriterionValueFromFilterInput({
+    required String multiOptCriterionName,
+    required XOptionedData multiOptCriterionXData,
     required EmptyFilterInput filterInput,
     required Object? parentMultiOptCriterionValue,
-    required XOptionedData multiOptCriterionXData,
-    required String multiOptCriterionName,
   }) {
     return null;
   }
@@ -53,9 +53,9 @@ class _DefaultFilterModel
 
   @override
   ValueWrap? specifyDefaultMultiOptCriterionValue({
-    required Object? parentMultiOptCriterionValue,
-    required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
+    required XOptionedData multiOptCriterionXData,
+    required Object? parentMultiOptCriterionValue,
   }) {
     return null;
   }
@@ -91,19 +91,19 @@ class StringIdFilterModel
 
   @override
   Future<XList?> callApiLoadMultiOptCriterionData({
-    required StringIdFilterInput? filterInput,
-    required Object? parentMultiOptCriterionValue,
     required String multiOptCriterionName,
+    required Object? parentMultiOptCriterionValue,
+    required StringIdFilterInput? filterInput,
   }) async {
     return null;
   }
 
   @override
   ValueWrap? getMultiOptCriterionValueFromFilterInput({
+    required String multiOptCriterionName,
+    required XOptionedData multiOptCriterionXData,
     required StringIdFilterInput filterInput,
     required Object? parentMultiOptCriterionValue,
-    required XOptionedData multiOptCriterionXData,
-    required String multiOptCriterionName,
   }) {
     return null;
   }
@@ -117,9 +117,9 @@ class StringIdFilterModel
 
   @override
   ValueWrap? specifyDefaultMultiOptCriterionValue({
-    required Object? parentMultiOptCriterionValue,
-    required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
+    required XOptionedData multiOptCriterionXData,
+    required Object? parentMultiOptCriterionValue,
   }) {
     return null;
   }
@@ -155,19 +155,19 @@ class StringValueFilterModel
 
   @override
   Future<XList?> callApiLoadMultiOptCriterionData({
+    required String multiOptCriterionName,
     required StringValueFilterInput? filterInput,
     required Object? parentMultiOptCriterionValue,
-    required String multiOptCriterionName,
   }) async {
     return null;
   }
 
   @override
   ValueWrap? getMultiOptCriterionValueFromFilterInput({
+    required String multiOptCriterionName,
     required StringValueFilterInput filterInput,
     required Object? parentMultiOptCriterionValue,
     required XOptionedData multiOptCriterionXData,
-    required String multiOptCriterionName,
   }) {
     return null;
   }
@@ -181,9 +181,9 @@ class StringValueFilterModel
 
   @override
   ValueWrap? specifyDefaultMultiOptCriterionValue({
-    required Object? parentMultiOptCriterionValue,
-    required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
+    required XOptionedData multiOptCriterionXData,
+    required Object? parentMultiOptCriterionValue,
   }) {
     return null;
   }
@@ -219,19 +219,19 @@ class SearchTextFilterModel
 
   @override
   Future<XList?> callApiLoadMultiOptCriterionData({
+    required String multiOptCriterionName,
     required SearchTextFilterInput? filterInput,
     required Object? parentMultiOptCriterionValue,
-    required String multiOptCriterionName,
   }) async {
     return null;
   }
 
   @override
   ValueWrap? getMultiOptCriterionValueFromFilterInput({
+    required String multiOptCriterionName,
+    required XOptionedData multiOptCriterionXData,
     required SearchTextFilterInput filterInput,
     required Object? parentMultiOptCriterionValue,
-    required XOptionedData multiOptCriterionXData,
-    required String multiOptCriterionName,
   }) {
     return null;
   }
@@ -245,9 +245,9 @@ class SearchTextFilterModel
 
   @override
   ValueWrap? specifyDefaultMultiOptCriterionValue({
-    required Object? parentMultiOptCriterionValue,
-    required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
+    required XOptionedData multiOptCriterionXData,
+    required Object? parentMultiOptCriterionValue,
   }) {
     return null;
   }
@@ -283,19 +283,19 @@ class IntIdFilterModel
 
   @override
   Future<XList?> callApiLoadMultiOptCriterionData({
-    required IntIdFilterInput? filterInput,
-    required Object? parentMultiOptCriterionValue,
     required String multiOptCriterionName,
+    required Object? parentMultiOptCriterionValue,
+    required IntIdFilterInput? filterInput,
   }) async {
     return null;
   }
 
   @override
   ValueWrap? getMultiOptCriterionValueFromFilterInput({
+    required String multiOptCriterionName,
+    required XOptionedData multiOptCriterionXData,
     required IntIdFilterInput filterInput,
     required Object? parentMultiOptCriterionValue,
-    required XOptionedData multiOptCriterionXData,
-    required String multiOptCriterionName,
   }) {
     return null;
   }
@@ -309,9 +309,9 @@ class IntIdFilterModel
 
   @override
   ValueWrap? specifyDefaultMultiOptCriterionValue({
-    required Object? parentMultiOptCriterionValue,
-    required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
+    required XOptionedData multiOptCriterionXData,
+    required Object? parentMultiOptCriterionValue,
   }) {
     return null;
   }

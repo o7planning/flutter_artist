@@ -290,9 +290,9 @@ abstract class FilterModel<
   /// Abstract method:
   ///
   Future<XOptionedData?> callApiLoadMultiOptCriterionData({
+    required String multiOptCriterionName,
     required FILTER_INPUT? filterInput,
     required Object? parentMultiOptCriterionValue,
-    required String multiOptCriterionName,
   });
 
   // ***************************************************************************
@@ -488,9 +488,9 @@ abstract class FilterModel<
   /// ```dart
   /// @override
   /// PropValue? getOptCriterionValueFromFilterInput({
+  ///     required String multiOptCriterionName,
   ///     required ExampleFilterInput filterInput,
   ///     required XOptionedData multiOptCriterionXData,
-  ///     required String multiOptCriterionName,
   /// }) {
   ///    if(multiOptCriterionName == "company") {
   ///       int inputCompanyId = filterInput.filterInput;
@@ -502,25 +502,25 @@ abstract class FilterModel<
   /// ```
   ///
   ValueWrap? getMultiOptCriterionValueFromFilterInput({
+    required String multiOptCriterionName,
+    required XOptionedData multiOptCriterionXData,
     required FILTER_INPUT filterInput,
     required Object? parentMultiOptCriterionValue,
-    required XOptionedData multiOptCriterionXData,
-    required String multiOptCriterionName,
   });
 
   ValueWrap? specifyDefaultMultiOptCriterionValue({
-    required Object? parentMultiOptCriterionValue,
-    required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
+    required XOptionedData multiOptCriterionXData,
+    required Object? parentMultiOptCriterionValue,
   });
 
   Future<Map<String, dynamic>?> specifyDefaultSimpleCriterionValues();
 
   ValueWrap? _getMultiOptCriterionValueFromFilterInput({
+    required String multiOptCriterionName,
+    required XOptionedData multiOptCriterionXData,
     required FILTER_INPUT filterInput,
     required Object? parentMultiOptCriterionValue,
-    required XOptionedData multiOptCriterionXData,
-    required String multiOptCriterionName,
   }) {
     ValueWrap? wrap = getMultiOptCriterionValueFromFilterInput(
       filterInput: filterInput,
@@ -542,9 +542,9 @@ abstract class FilterModel<
   }
 
   ValueWrap? __specifyDefaultMultiOptCriterionValue({
-    required Object? parentMultiOptCriterionValue,
-    required XOptionedData multiOptCriterionXData,
     required String multiOptCriterionName,
+    required XOptionedData multiOptCriterionXData,
+    required Object? parentMultiOptCriterionValue,
   }) {
     ValueWrap? wrap = specifyDefaultMultiOptCriterionValue(
       parentMultiOptCriterionValue: parentMultiOptCriterionValue,
