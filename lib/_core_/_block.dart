@@ -1611,7 +1611,6 @@ abstract class Block<
       );
       //
       success = await formModel!._startNewFormTransaction(
-        filterCriteria: this.filterCriteria!,
         extraFormInput: extraFormInput,
         isItemFirstLoad: true,
       );
@@ -1946,7 +1945,6 @@ abstract class Block<
         formModel!._formPropsStructure._updateInitialFormDataAfterSaveSuccess();
         //
         bool success = await formModel!._startNewFormTransaction(
-          filterCriteria: this.filterCriteria!,
           extraFormInput: null,
           isItemFirstLoad: true,
         );

@@ -70,7 +70,6 @@ abstract class FormModel<
     //
     await _startNewFormTransaction(
       extraFormInput: null,
-      filterCriteria: block.filterCriteria!,
       isItemFirstLoad: false,
     );
     return true;
@@ -111,7 +110,6 @@ abstract class FormModel<
     //
     await _startNewFormTransaction(
       extraFormInput: extraFormInput,
-      filterCriteria: block.filterCriteria!,
       isItemFirstLoad: true,
     );
     //
@@ -234,19 +232,23 @@ abstract class FormModel<
   ///
   @ImportantMethodAnnotation()
   Future<bool> _startNewFormTransaction({
-    required FILTER_CRITERIA filterCriteria,
     required EXTRA_FORM_INPUT? extraFormInput,
     required bool isItemFirstLoad,
   }) async {
+    FILTER_CRITERIA? filterCriteria = block.filterCriteria;
+    if (filterCriteria == null) {
+      throw AppException(message: "FilterCriteria is null");
+    }
     __formTransactionCount++;
     print(
         "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFormTransaction, isItemFirstLoad: $isItemFirstLoad");
+
     final ITEM_DETAIL? itemDetail = block.currentItemDetail;
     final FormMode currentFormMode = formDataState == DataState.none
         ? FormMode.none
         : itemDetail == null
-            ? FormMode.creation
-            : FormMode.edit;
+        ? FormMode.creation
+        : FormMode.edit;
     _formPropsStructure._setFormMode(currentFormMode);
     bool isNoneMode = currentFormMode == FormMode.none;
     bool isCreationMode = currentFormMode == FormMode.creation;
@@ -316,7 +318,7 @@ abstract class FormModel<
       if (itemDetail != null) {
         try {
           simplePropValue = await getSimplePropValuesFromItemDetail(
-            filterCriteria: block.filterCriteria,
+            filterCriteria: filterCriteria,
             itemDetail: itemDetail,
           );
           for (String propName in simplePropValue.keys) {
@@ -348,8 +350,8 @@ abstract class FormModel<
         if (!_defaultValueInitiated) {
           try {
             simplePropValueDefault = await specifyDefaultSimplePropValues(
-                  filterCriteria: block.filterCriteria,
-                ) ??
+              filterCriteria: filterCriteria,
+            ) ??
                 {};
             for (String propName in simplePropValueDefault.keys) {
               _formPropsStructure._setTempSimplePropValue(
@@ -377,8 +379,8 @@ abstract class FormModel<
         if (extraFormInput != null) {
           try {
             simplePropValueExtra = getSimplePropValuesFromExtraFormInput(
-                  extraFormInput: extraFormInput,
-                ) ??
+              extraFormInput: extraFormInput,
+            ) ??
                 {};
             //
             for (String propName in simplePropValueExtra.keys) {
@@ -410,6 +412,7 @@ abstract class FormModel<
       isItemFirstLoad: isItemFirstLoad,
     );
   }
+
 
   // ***************************************************************************
   // ***************************************************************************
@@ -796,7 +799,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   Future<Map<String, dynamic>> getSimplePropValuesFromItemDetail({
-    required FILTER_CRITERIA? filterCriteria,
+    required FILTER_CRITERIA filterCriteria,
     required ITEM_DETAIL itemDetail,
   });
 
@@ -804,7 +807,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   Future<Map<String, dynamic>?> specifyDefaultSimplePropValues({
-    required FILTER_CRITERIA? filterCriteria,
+    required FILTER_CRITERIA filterCriteria,
   });
 
   // ***************************************************************************

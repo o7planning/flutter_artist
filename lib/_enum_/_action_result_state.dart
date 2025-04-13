@@ -4,4 +4,3 @@ enum ActionResultState {
   success,
   fail;
 }
-
