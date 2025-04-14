@@ -46,22 +46,6 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<bool> _unitFilterViewChanged({
-    required _XFilterModel xFilterModel,
-  }) async {
-    __assertThisXFilterModel(xFilterModel);
-    //
-    _filterCriteriaStructure._setFilterDataState(DataState.pending);
-    //
-    FILTER_CRITERIA? filterCriteria = await _startNewFilterTransaction(
-      filterInput: null,
-    );
-    return filterCriteria != null;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   ///
   /// ```dart
   /// FilterCriteriaStructure registerCriteriaStructure() {
@@ -81,6 +65,91 @@ abstract class FilterModel<
   /// }
   /// ```
   FilterCriteriaStructure registerCriteriaStructure();
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ///
+  /// Abstract method:
+  ///
+  Future<XOptionedData?> callApiLoadMultiOptCriterionData({
+    required String multiOptCriterionName,
+    required FILTER_INPUT? filterInput,
+    required Object? parentMultiOptCriterionValue,
+  });
+
+  // ***************************************************************************
+  // ABSTRACT METHOD:
+  // ***************************************************************************
+
+  ValueWrap? specifyDefaultMultiOptCriterionValue({
+    required String multiOptCriterionName,
+    required XOptionedData multiOptCriterionXData,
+    required Object? parentMultiOptCriterionValue,
+  });
+
+  // ***************************************************************************
+  // ABSTRACT METHOD:
+  // ***************************************************************************
+
+  Future<Map<String, dynamic>?> specifyDefaultSimpleCriterionValues();
+
+  // ***************************************************************************
+  // ABSTRACT METHOD:
+  // ***************************************************************************
+
+  ///
+  /// This method is called after [prepareMasterData] method.
+  ///
+  /// For example, after getting a list of companies from the [prepareMasterData] method.
+  /// Use [FilterInput] to identify a company that will be used as a criterion for the filter.
+  ///
+  /// ```dart
+  /// @override
+  /// PropValue? getOptCriterionValueFromFilterInput({
+  ///     required String multiOptCriterionName,
+  ///     required ExampleFilterInput filterInput,
+  ///     required XOptionedData multiOptCriterionXData,
+  /// }) {
+  ///    if(multiOptCriterionName == "company") {
+  ///       int inputCompanyId = filterInput.filterInput;
+  ///       CompanyInfo? inputCompany = materPropData?.getItemById(inputCompanyId);
+  ///       return MasterPropValueWrap([inputCompany])
+  ///    }
+  ///    return null;
+  /// }
+  /// ```
+  ///
+  ValueWrap? getMultiOptCriterionValueFromFilterInput({
+    required String multiOptCriterionName,
+    required XOptionedData multiOptCriterionXData,
+    required FILTER_INPUT filterInput,
+    required Object? parentMultiOptCriterionValue,
+  });
+
+  // ***************************************************************************
+  // ABSTRACT METHOD:
+  // ***************************************************************************
+
+  Future<Map<String, dynamic>?> getSimpleCriterionValuesFromFilterInput({
+    required FILTER_INPUT filterInput,
+  });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<bool> _unitFilterViewChanged({
+    required _XFilterModel xFilterModel,
+  }) async {
+    __assertThisXFilterModel(xFilterModel);
+    //
+    _filterCriteriaStructure._setFilterDataState(DataState.pending);
+    //
+    FILTER_CRITERIA? filterCriteria = await _startNewFilterTransaction(
+      filterInput: null,
+    );
+    return filterCriteria != null;
+  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -286,18 +355,6 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  ///
-  /// Abstract method:
-  ///
-  Future<XOptionedData?> callApiLoadMultiOptCriterionData({
-    required String multiOptCriterionName,
-    required FILTER_INPUT? filterInput,
-    required Object? parentMultiOptCriterionValue,
-  });
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   Future<void> _loadMultiOptCriterionDataCascade({
     required FILTER_INPUT? filterInput,
     // May be new selected parent value.
@@ -474,47 +531,6 @@ abstract class FilterModel<
 
   // ***************************************************************************
   // ***************************************************************************
-
-  Future<Map<String, dynamic>?> getSimpleCriterionValuesFromFilterInput({
-    required FILTER_INPUT filterInput,
-  });
-
-  ///
-  /// This method is called after [prepareMasterData] method.
-  ///
-  /// For example, after getting a list of companies from the [prepareMasterData] method.
-  /// Use [FilterInput] to identify a company that will be used as a criterion for the filter.
-  ///
-  /// ```dart
-  /// @override
-  /// PropValue? getOptCriterionValueFromFilterInput({
-  ///     required String multiOptCriterionName,
-  ///     required ExampleFilterInput filterInput,
-  ///     required XOptionedData multiOptCriterionXData,
-  /// }) {
-  ///    if(multiOptCriterionName == "company") {
-  ///       int inputCompanyId = filterInput.filterInput;
-  ///       CompanyInfo? inputCompany = materPropData?.getItemById(inputCompanyId);
-  ///       return MasterPropValueWrap([inputCompany])
-  ///    }
-  ///    return null;
-  /// }
-  /// ```
-  ///
-  ValueWrap? getMultiOptCriterionValueFromFilterInput({
-    required String multiOptCriterionName,
-    required XOptionedData multiOptCriterionXData,
-    required FILTER_INPUT filterInput,
-    required Object? parentMultiOptCriterionValue,
-  });
-
-  ValueWrap? specifyDefaultMultiOptCriterionValue({
-    required String multiOptCriterionName,
-    required XOptionedData multiOptCriterionXData,
-    required Object? parentMultiOptCriterionValue,
-  });
-
-  Future<Map<String, dynamic>?> specifyDefaultSimpleCriterionValues();
 
   ValueWrap? _getMultiOptCriterionValueFromFilterInput({
     required String multiOptCriterionName,

@@ -61,12 +61,97 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  ///
+  /// ```dart
+  /// FormPropsStructure registerPropsStructure() {
+  ///   return FormPropsStructure(
+  ///     simpleProps: [],
+  ///     multiOptProps: [
+  ///       MultiOptProp(
+  ///         propName: "company",
+  ///         children: [
+  ///           MultiOptProp(
+  ///              propName: "department",
+  ///           ),
+  ///         ],
+  ///       ),
+  ///     ],
+  ///   );
+  /// }
+  /// ```
+  FormPropsStructure registerPropsStructure();
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ///
+  /// Abstract method:
+  ///
+  Future<XOptionedData?> callApiLoadMultiOptPropData({
+    required String multiOptPropName,
+    required Object? parentMultiOptPropValue,
+    required FILTER_CRITERIA filterCriteria,
+    required EXTRA_FORM_INPUT? extraFormInput,
+  });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ValueWrap? specifyDefaultMultiOptPropValue({
+    required String multiOptPropName,
+    required XOptionedData multiOptPropXData,
+    required Object? parentMultiOptPropValue,
+  });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<Map<String, dynamic>?> specifyDefaultSimplePropValues({
+    required FILTER_CRITERIA filterCriteria,
+  });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ValueWrap? getMultiOptPropValueFromItemDetail({
+    required String multiOptPropName,
+    required XOptionedData multiOptPropXData,
+    required ITEM_DETAIL itemDetail,
+    required Object? parentMultiOptPropValue,
+  });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<Map<String, dynamic>> getSimplePropValuesFromItemDetail({
+    required FILTER_CRITERIA filterCriteria,
+    required ITEM_DETAIL itemDetail,
+  });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ValueWrap? getMultiOptPropValueFromExtraFormInput({
+    required String multiOptPropName,
+    required XOptionedData multiOptPropXData,
+    required EXTRA_FORM_INPUT extraFormInput,
+    required Object? parentMultiOptPropValue,
+  });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Map<String, dynamic>? getSimplePropValuesFromExtraFormInput({
+    required EXTRA_FORM_INPUT extraFormInput,
+  });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<bool> _unitFormViewChanged({
     required _XFormModel xFormModel,
   }) async {
     __assertThisXFormModel(xFormModel);
-    //
-    // data._formDataState = DataState.pending.
     //
     await _startNewFormTransaction(
       extraFormInput: null,
@@ -197,29 +282,6 @@ abstract class FormModel<
       return false;
     }
   }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ///
-  /// ```dart
-  /// FormPropsStructure registerPropsStructure() {
-  ///   return FormPropsStructure(
-  ///     simpleProps: [],
-  ///     multiOptProps: [
-  ///       MultiOptProp(
-  ///         propName: "company",
-  ///         children: [
-  ///           MultiOptProp(
-  ///              propName: "department",
-  ///           ),
-  ///         ],
-  ///       ),
-  ///     ],
-  ///   );
-  /// }
-  /// ```
-  FormPropsStructure registerPropsStructure();
 
   // ***************************************************************************
   // ***************************************************************************
@@ -772,37 +834,6 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<String, dynamic>? getSimplePropValuesFromExtraFormInput({
-    required EXTRA_FORM_INPUT extraFormInput,
-  });
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Future<Map<String, dynamic>> getSimplePropValuesFromItemDetail({
-    required FILTER_CRITERIA filterCriteria,
-    required ITEM_DETAIL itemDetail,
-  });
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Future<Map<String, dynamic>?> specifyDefaultSimplePropValues({
-    required FILTER_CRITERIA filterCriteria,
-  });
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ValueWrap? specifyDefaultMultiOptPropValue({
-    required String multiOptPropName,
-    required XOptionedData multiOptPropXData,
-    required Object? parentMultiOptPropValue,
-  });
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   bool get isNew {
     return _formPropsStructure.isNew;
   }
@@ -814,39 +845,6 @@ abstract class FormModel<
   Map<String, dynamic> get currentFormData {
     return _formPropsStructure.currentFormData;
   }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ValueWrap? getMultiOptPropValueFromItemDetail({
-    required String multiOptPropName,
-    required XOptionedData multiOptPropXData,
-    required ITEM_DETAIL itemDetail,
-    required Object? parentMultiOptPropValue,
-  });
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ValueWrap? getMultiOptPropValueFromExtraFormInput({
-    required String multiOptPropName,
-    required XOptionedData multiOptPropXData,
-    required EXTRA_FORM_INPUT extraFormInput,
-    required Object? parentMultiOptPropValue,
-  });
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ///
-  /// Abstract method:
-  ///
-  Future<XOptionedData?> callApiLoadMultiOptPropData({
-    required String multiOptPropName,
-    required Object? parentMultiOptPropValue,
-    required FILTER_CRITERIA filterCriteria,
-    required EXTRA_FORM_INPUT? extraFormInput,
-  });
 
   // ***************************************************************************
   // ***************************************************************************
