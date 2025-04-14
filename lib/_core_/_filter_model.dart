@@ -106,10 +106,11 @@ abstract class FilterModel<
   ///
   /// ```dart
   /// @override
-  /// PropValue? getOptCriterionValueFromFilterInput({
+  /// ValueWrap? getMultiOptCriterionValueFromFilterInput({
   ///     required String multiOptCriterionName,
   ///     required ExampleFilterInput filterInput,
   ///     required XOptionedData multiOptCriterionXData,
+  ///     required Object? parentMultiOptCriterionValue,
   /// }) {
   ///    if(multiOptCriterionName == "company") {
   ///       int inputCompanyId = filterInput.filterInput;
@@ -191,12 +192,17 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  XOptionedData? getOptCriterionXData(String criterionName) {
-    return _filterCriteriaStructure._getOptCriterionXData(criterionName);
+  XOptionedData? getMultiOptCriterionXData(String multiOptCriterionName) {
+    return _filterCriteriaStructure._getMultiOptCriterionXData(
+      multiOptCriterionName,
+    );
   }
 
-  dynamic getOptCriterionData(String criterionName) {
-    XOptionedData? multiOptCriterionXData = getOptCriterionXData(criterionName);
+  dynamic getMultiOptCriterionData(String multiOptCriterionName) {
+    XOptionedData? multiOptCriterionXData = getMultiOptCriterionXData(
+      multiOptCriterionName,
+    );
+    //
     dynamic data = multiOptCriterionXData?.data;
     if (data != null) {
       return data;
@@ -367,7 +373,9 @@ abstract class FilterModel<
 
     // Get current OptCriterion data:
     XOptionedData? multiOptCriterionXData =
-        _filterCriteriaStructure._getOptCriterionXData(criterionName);
+        _filterCriteriaStructure._getMultiOptCriterionXData(
+      criterionName,
+    );
 
     if (multiOptCriterionParent != null) {
       XOptionedData? tempMultiOptXDataParent =
@@ -381,7 +389,6 @@ abstract class FilterModel<
             _filterCriteriaStructure._getCurrentCriterionValue(
           criterionName: multiOptCriterionParent.criterionName,
         );
-
         // Parent Value change?
         bool isSame = tempMultiOptXDataParent.isSameItemOrItemList(
           itemOrItemList1: parentOptCriterionValueOLD,

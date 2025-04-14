@@ -237,7 +237,7 @@ class FormPropsStructure {
     return null;
   }
 
-  XOptionedData? _getOptPropXData(String propName) {
+  XOptionedData? _getMultiOptPropXData(String propName) {
     Prop? prop = _allPropMap[propName];
     if (prop == null) {
       return null;

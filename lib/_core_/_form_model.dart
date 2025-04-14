@@ -571,7 +571,7 @@ abstract class FormModel<
 
     // Get current OptProp data:
     XOptionedData? multiOptPropXData =
-        _formPropsStructure._getOptPropXData(multiOptPropName);
+        _formPropsStructure._getMultiOptPropXData(multiOptPropName);
 
     if (optPropParent != null) {
       XOptionedData? tempXOptionedParent =
@@ -633,7 +633,7 @@ abstract class FormModel<
       if (isItemFirstLoad) {
         if (currentItemDetail == null) {
           if (extraFormInput != null) {
-            selectedValueWrap = _getOptPropValueFromExtraFormInput(
+            selectedValueWrap = _getMultiOptPropValueFromExtraFormInput(
               extraFormInput: extraFormInput,
               multiOptPropXData: multiOptPropXData,
               multiOptPropName: multiOptPropName,
@@ -763,12 +763,12 @@ abstract class FormModel<
     return _formPropsStructure._getCurrentPropValue(propName: propName);
   }
 
-  XOptionedData? getOptPropXData(String propName) {
-    return _formPropsStructure._getOptPropXData(propName);
+  XOptionedData? getMultiOptPropXData(String multiOptPropName) {
+    return _formPropsStructure._getMultiOptPropXData(multiOptPropName);
   }
 
-  dynamic getOptPropData(String propName) {
-    XOptionedData? multiOptPropXData = getOptPropXData(propName);
+  dynamic getMultiOptPropData(String multiOptPropName) {
+    XOptionedData? multiOptPropXData = getMultiOptPropXData(multiOptPropName);
     dynamic data = multiOptPropXData?.data;
     if (data != null) {
       return data;
@@ -806,7 +806,7 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  ValueWrap? _getOptPropValueFromExtraFormInput({
+  ValueWrap? _getMultiOptPropValueFromExtraFormInput({
     required String multiOptPropName,
     required XOptionedData multiOptPropXData,
     required EXTRA_FORM_INPUT extraFormInput,

@@ -150,7 +150,7 @@ class FilterCriteriaStructure {
     return null;
   }
 
-  XOptionedData? _getOptCriterionXData(String criterionName) {
+  XOptionedData? _getMultiOptCriterionXData(String criterionName) {
     Criterion? criterion = _allCriteriaMap[criterionName];
     if (criterion == null) {
       return null;
