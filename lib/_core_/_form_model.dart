@@ -575,12 +575,14 @@ abstract class FormModel<
               extraFormInput: extraFormInput,
               multiOptPropXData: multiOptPropXData,
               multiOptPropName: multiOptPropName,
+              parentMultiOptPropValue: parentMultiOptPropValue,
             );
           } else {
             if (!_defaultValueInitiated) {
               selectedValueWrap = __specifyDefaultMultiOptPropValue(
-                multiOptPropXData: multiOptPropXData,
                 multiOptPropName: multiOptPropName,
+                multiOptPropXData: multiOptPropXData,
+                parentMultiOptPropValue: parentMultiOptPropValue,
               );
             }
           }
@@ -591,6 +593,7 @@ abstract class FormModel<
             itemDetail: currentItemDetail,
             multiOptPropXData: multiOptPropXData,
             multiOptPropName: multiOptPropName,
+            parentMultiOptPropValue: parentMultiOptPropValue,
           );
         }
       }
@@ -718,10 +721,12 @@ abstract class FormModel<
   ValueWrap? __specifyDefaultMultiOptPropValue({
     required String multiOptPropName,
     required XOptionedData multiOptPropXData,
+    required Object? parentMultiOptPropValue,
   }) {
     ValueWrap? wrap = specifyDefaultMultiOptPropValue(
       multiOptPropXData: multiOptPropXData,
       multiOptPropName: multiOptPropName,
+      parentMultiOptPropValue: parentMultiOptPropValue,
     );
     if (wrap == null) {
       return null;
@@ -743,11 +748,13 @@ abstract class FormModel<
     required String multiOptPropName,
     required XOptionedData multiOptPropXData,
     required EXTRA_FORM_INPUT extraFormInput,
+    required Object? parentMultiOptPropValue,
   }) {
     ValueWrap? wrap = getMultiOptPropValueFromExtraFormInput(
       extraFormInput: extraFormInput,
       multiOptPropXData: multiOptPropXData,
       multiOptPropName: multiOptPropName,
+      parentMultiOptPropValue: parentMultiOptPropValue,
     );
     if (wrap == null) {
       return null;
@@ -790,6 +797,7 @@ abstract class FormModel<
   ValueWrap? specifyDefaultMultiOptPropValue({
     required String multiOptPropName,
     required XOptionedData multiOptPropXData,
+    required Object? parentMultiOptPropValue,
   });
 
   // ***************************************************************************
@@ -814,6 +822,7 @@ abstract class FormModel<
     required String multiOptPropName,
     required XOptionedData multiOptPropXData,
     required ITEM_DETAIL itemDetail,
+    required Object? parentMultiOptPropValue,
   });
 
   // ***************************************************************************
@@ -823,6 +832,7 @@ abstract class FormModel<
     required String multiOptPropName,
     required XOptionedData multiOptPropXData,
     required EXTRA_FORM_INPUT extraFormInput,
+    required Object? parentMultiOptPropValue,
   });
 
   // ***************************************************************************
