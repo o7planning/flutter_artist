@@ -517,7 +517,7 @@ abstract class FormModel<
           formMode == FormMode.edit &&
           _formKey.currentState != null) {
         if (!_formKey.currentState!.isValid) {
-          _formKey.currentState!.validate();
+          _formKey.currentState!.validate(focusOnInvalid: false);
         }
       }
       return true;

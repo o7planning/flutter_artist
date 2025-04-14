@@ -1148,7 +1148,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> _unitSelectItemAsCurrent({
+  Future<void> _unitSelectItemAsCurrent({ 
     required _XBlock thisXBlock,
     required CurrentItemSelectionType currentItemSelectionType,
     required List<ITEM> newQueriedList,
