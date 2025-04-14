@@ -18,7 +18,7 @@ class MultiOptProp extends Prop {
   MultiOptProp({
     required super.propName,
     this.children = const [],
-  }): singleSelection = true;
+  }) : singleSelection = true;
 
   MultiOptProp.multiSelection({
     required super.propName,
