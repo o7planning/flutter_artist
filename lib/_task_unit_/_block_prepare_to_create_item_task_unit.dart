@@ -4,9 +4,11 @@ class _BlockPrepareToCreateItemTaskUnit extends _TaskUnit {
   _XBlock xBlock;
   ExtraFormInput? extraFormInput;
   Function()? navigate;
+  final bool initDirty;
 
   _BlockPrepareToCreateItemTaskUnit({
     required this.xBlock,
+    required this.initDirty,
     required this.extraFormInput,
     required this.navigate,
   });

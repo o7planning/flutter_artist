@@ -5,6 +5,8 @@ class FormPropsStructure {
   final List<MultiOptProp> _rootOptProps;
   final List<SimpleProp> _simpleProps = [];
 
+  bool __manualDirty = false;
+
   late final FormModel formModel;
 
   bool _justInitialized = false;
@@ -63,7 +65,17 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  void _setManualDirty(bool manualDirty) {
+    __manualDirty = manualDirty;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool _isDirty() {
+    if (__manualDirty) {
+      return true;
+    }
     for (Prop prop in _allPropMap.values) {
       bool dirty = prop.isDirty();
       if (dirty) {
@@ -109,6 +121,7 @@ class FormPropsStructure {
   /// Reset Form Data:
   ///
   void _resetFormData() {
+    __manualDirty = false;
     for (Prop prop in _allPropMap.values) {
       prop._currentValue = prop._initialValue;
       prop._currentXData = prop._initialXData;
@@ -119,6 +132,7 @@ class FormPropsStructure {
     _justInitialized = true;
     _formDataState = formDataState;
     _formMode = FormMode.none;
+    __manualDirty = false;
     //
     for (Prop prop in _allPropMap.values) {
       prop._currentValue = null;

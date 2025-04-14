@@ -78,6 +78,7 @@ class _Executor {
           else if (taskUnit is _BlockPrepareToCreateItemTaskUnit) {
             await taskUnit.xBlock.block._unitPrepareToCreateItem(
               thisXBlock: taskUnit.xBlock,
+              initDirty: taskUnit.initDirty,
               extraFormInput: taskUnit.extraFormInput,
               navigate: taskUnit.navigate,
             );

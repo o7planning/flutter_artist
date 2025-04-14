@@ -1156,6 +1156,8 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
+    formModel?._formPropsStructure._setManualDirty(false);
+    //
     if (thisXBlock.currentItemSelectionResult == null) {
       thisXBlock.currentItemSelectionResult = CurrentItemSelectionResult<ITEM>(
         currentItemSelectionType: currentItemSelectionType,
@@ -1583,6 +1585,7 @@ abstract class Block<
 
   Future<bool> _unitPrepareToCreateItem({
     required _XBlock thisXBlock,
+    required bool initDirty,
     required EXTRA_FORM_INPUT? extraFormInput,
     required Function()? navigate,
   }) async {
@@ -1616,6 +1619,9 @@ abstract class Block<
         extraFormInput: extraFormInput,
         isItemFirstLoad: true,
       );
+      if (success) {
+        formModel!._formPropsStructure._setManualDirty(initDirty);
+      }
     } finally {
       __refreshPreparingFormCreationState(
         isPreparingFormCreation: false,
@@ -3038,6 +3044,7 @@ abstract class Block<
   Future<bool> prepareToCreate({
     EXTRA_FORM_INPUT? extraFormInput,
     required Function()? navigate,
+    bool initDirty = false,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -3064,6 +3071,7 @@ abstract class Block<
     //
     _TaskUnit taskUnit = _BlockPrepareToCreateItemTaskUnit(
       xBlock: thisXBlock,
+      initDirty: initDirty,
       extraFormInput: extraFormInput,
       navigate: navigate,
     );

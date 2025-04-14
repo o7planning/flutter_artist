@@ -513,6 +513,13 @@ abstract class FormModel<
       //
       _defaultValueInitiated = true;
       _formPropsStructure._setFormDataState(formDataState);
+      if (isItemFirstLoad &&
+          formMode == FormMode.edit &&
+          _formKey.currentState != null) {
+        if (!_formKey.currentState!.isValid) {
+          _formKey.currentState!.validate();
+        }
+      }
       return true;
     } catch (e, stackTrace) {
       _handleError(
