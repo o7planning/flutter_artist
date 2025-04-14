@@ -18,8 +18,12 @@ class MultiOptCriterion extends Criterion {
   MultiOptCriterion({
     required super.criterionName,
     this.children = const [],
-    this.singleSelection = true,
-  });
+  }) : singleSelection = true;
+
+  MultiOptCriterion.multiSelection({
+    required super.criterionName,
+  })  : singleSelection = false,
+        children = [];
 
   void _checkCycleError() {
     MultiOptCriterion? p = parent;

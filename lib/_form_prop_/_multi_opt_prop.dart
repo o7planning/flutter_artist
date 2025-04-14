@@ -18,8 +18,12 @@ class MultiOptProp extends Prop {
   MultiOptProp({
     required super.propName,
     this.children = const [],
-    this.singleSelection = true,
-  });
+  }): singleSelection = true;
+
+  MultiOptProp.multiSelection({
+    required super.propName,
+  })  : singleSelection = false,
+        children = const [];
 
   void _checkCycleError() {
     MultiOptProp? p = parent;
