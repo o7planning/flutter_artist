@@ -338,14 +338,14 @@ class FormPropsStructure {
 
   void _setTempMultiOptPropXData({
     required String multiOptPropName,
-    required XData? multiOptXData,
+    required XData? multiOptPropXData,
   }) {
     Prop? prop = _allPropMap[multiOptPropName];
     if (prop == null) {
       throw AppException(message: 'No Prop "$multiOptPropName"');
     }
     if (prop is MultiOptProp) {
-      prop._tempCurrentXData = multiOptXData;
+      prop._tempCurrentXData = multiOptPropXData;
     } else {
       throw AppException(
         message: 'Invalid Prop "$multiOptPropName", it must be $MultiOptProp',

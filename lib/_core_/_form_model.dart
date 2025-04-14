@@ -602,7 +602,7 @@ abstract class FormModel<
     if (multiOptPropXData == null) {
       _formPropsStructure._setTempMultiOptPropXData(
         multiOptPropName: multiOptPropName,
-        multiOptXData: null,
+        multiOptPropXData: null,
       );
       // IMPORTANT:
       //  - Update from ROOTs to LEAVES
@@ -698,7 +698,7 @@ abstract class FormModel<
     //
     _formPropsStructure._setTempMultiOptPropXData(
       multiOptPropName: multiOptPropName,
-      multiOptXData: multiOptPropXData,
+      multiOptPropXData: multiOptPropXData,
     );
     // TODO: Dangerous, check not null:
     candidateSelectedItems = multiOptPropXData?.findInternalItemsByDynamics(
