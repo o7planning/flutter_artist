@@ -790,12 +790,12 @@ abstract class FormModel<
       parentMultiOptPropValue: parentMultiOptPropValue,
     );
     if (valueWrap == null) {
-      throw __createNullValueWrapAppException(
+      __createNullValueWrapAppException(
         methodName: "specifyDefaultMultiOptPropValue",
         multiOptPropName: multiOptPropName,
       );
     }
-    List? value = valueWrap.values;
+    List? value = valueWrap?.values ?? [];
     return ValueWrap.multi(
       multiOptPropXData.findInternalItemsByDynamics(
         dynamicValues: value,
@@ -808,7 +808,7 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  AppException __createNullValueWrapAppException({
+  void __createNullValueWrapAppException({
     required String methodName,
     required String multiOptPropName,
   }) {
@@ -824,8 +824,9 @@ abstract class FormModel<
     } else {
       message += "$ValueWrap.multi([null]) or $ValueWrap.multi([value]). ";
     }
-    message += "And return null for not $MultiOptProp. See the specification of this method for more information.";
-    return AppException(message: message);
+    message +=
+        "And return null for not $MultiOptProp. See the specification of this method for more information.";
+    // throw AppException(message: message);
   }
 
   // ***************************************************************************
@@ -844,7 +845,7 @@ abstract class FormModel<
       parentMultiOptPropValue: parentMultiOptPropValue,
     );
     if (valueWrap == null) {
-      throw __createNullValueWrapAppException(
+      __createNullValueWrapAppException(
         methodName: "getMultiOptPropValueFromItemDetail",
         multiOptPropName: multiOptPropName,
       );
@@ -871,12 +872,12 @@ abstract class FormModel<
       parentMultiOptPropValue: parentMultiOptPropValue,
     );
     if (valueWrap == null) {
-      throw __createNullValueWrapAppException(
+      __createNullValueWrapAppException(
         methodName: "getMultiOptPropValueFromExtraFormInput",
         multiOptPropName: multiOptPropName,
       );
     }
-    List? value = valueWrap.values;
+    List? value = valueWrap?.values ?? [];
     return ValueWrap.multi(
       multiOptPropXData.findInternalItemsByDynamics(
         dynamicValues: value,

@@ -539,7 +539,7 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  AppException __createNullValueWrapAppException({
+  void __createNullValueWrapAppException({
     required String methodName,
     required String multiOptCriterionName,
   }) {
@@ -557,7 +557,7 @@ abstract class FilterModel<
     }
     message +=
         "And return null for not $MultiOptCriterion. See the specification of this method for more information.";
-    return AppException(message: message);
+    // throw AppException(message: message);
   }
 
   // ***************************************************************************
@@ -576,12 +576,12 @@ abstract class FilterModel<
       multiOptCriterionName: multiOptCriterionName,
     );
     if (valueWrap == null) {
-      throw __createNullValueWrapAppException(
+      __createNullValueWrapAppException(
         methodName: "getMultiOptCriterionValueFromFilterInput",
         multiOptCriterionName: multiOptCriterionName,
       );
     }
-    List? value = valueWrap.values;
+    List? value = valueWrap?.values ?? [];
     return ValueWrap.multi(
       multiOptCriterionXData.findInternalItemsByDynamics(
         dynamicValues: value,
@@ -602,12 +602,12 @@ abstract class FilterModel<
       multiOptCriterionName: multiOptCriterionName,
     );
     if (valueWrap == null) {
-      throw __createNullValueWrapAppException(
+      __createNullValueWrapAppException(
         methodName: "specifyDefaultMultiOptCriterionValue",
         multiOptCriterionName: multiOptCriterionName,
       );
     }
-    List? value = valueWrap.values;
+    List? value = valueWrap?.values ?? [];
     return ValueWrap.multi(
       multiOptCriterionXData.findInternalItemsByDynamics(
         dynamicValues: value,

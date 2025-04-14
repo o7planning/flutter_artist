@@ -88,7 +88,8 @@ abstract class _XBase {
     //
     String msg = methodName == null
         ? "Error: ${apiError.errorMessage}"
-        : "Call ${getClassName(this)}.$methodName() error: ${apiError.errorMessage}";
+        : "Call ${getClassName(this)}.$methodName() error: ${apiError
+        .errorMessage}";
     print(msg);
     if (!FlutterArtist.testCaseMode) {
       print(stackTrace);
