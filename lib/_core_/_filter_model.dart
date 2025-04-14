@@ -433,7 +433,7 @@ abstract class FilterModel<
     if (multiOptCriterionXData != null) {
       ValueWrap? inputValueWrap;
       if (filterInput != null) {
-        inputValueWrap = _getMultiOptCriterionValueFromFilterInput(
+        inputValueWrap = __getMultiOptCriterionValueFromFilterInput(
           filterInput: filterInput,
           parentMultiOptCriterionValue: parentMultiOptCriterionValue,
           multiOptCriterionXData: multiOptCriterionXData,
@@ -539,22 +539,49 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  ValueWrap? _getMultiOptCriterionValueFromFilterInput({
+  AppException __createNullValueWrapAppException({
+    required String methodName,
+    required String multiOptCriterionName,
+  }) {
+    MultiOptCriterion? multiOptCriterion =
+        _filterCriteriaStructure._getMultiOptCriterion(multiOptCriterionName);
+    if (multiOptCriterion == null) {
+      throw "The '$multiOptCriterionName' is not $MultiOptCriterion";
+    }
+    String message =
+        "The ${getClassName(this)}.$methodName() method must return a non-null $ValueWrap for the multiOptCriterionName '$multiOptCriterionName'. ";
+    if (multiOptCriterion.singleSelection) {
+      message += "$ValueWrap.single(null) or $ValueWrap.single(value). ";
+    } else {
+      message += "$ValueWrap.multi([null]) or $ValueWrap.multi([value]). ";
+    }
+    message +=
+        "And return null for not $MultiOptCriterion. See the specification of this method for more information.";
+    return AppException(message: message);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ValueWrap? __getMultiOptCriterionValueFromFilterInput({
     required String multiOptCriterionName,
     required XData multiOptCriterionXData,
     required FILTER_INPUT filterInput,
     required Object? parentMultiOptCriterionValue,
   }) {
-    ValueWrap? wrap = getMultiOptCriterionValueFromFilterInput(
+    ValueWrap? valueWrap = getMultiOptCriterionValueFromFilterInput(
       filterInput: filterInput,
       parentMultiOptCriterionValue: parentMultiOptCriterionValue,
       multiOptCriterionXData: multiOptCriterionXData,
       multiOptCriterionName: multiOptCriterionName,
     );
-    if (wrap == null) {
-      return null;
+    if (valueWrap == null) {
+      throw __createNullValueWrapAppException(
+        methodName: "getMultiOptCriterionValueFromFilterInput",
+        multiOptCriterionName: multiOptCriterionName,
+      );
     }
-    List? value = wrap.values;
+    List? value = valueWrap.values;
     return ValueWrap.multi(
       multiOptCriterionXData.findInternalItemsByDynamics(
         dynamicValues: value,
@@ -569,15 +596,18 @@ abstract class FilterModel<
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,
   }) {
-    ValueWrap? wrap = specifyDefaultMultiOptCriterionValue(
+    ValueWrap? valueWrap = specifyDefaultMultiOptCriterionValue(
       parentMultiOptCriterionValue: parentMultiOptCriterionValue,
       multiOptCriterionXData: multiOptCriterionXData,
       multiOptCriterionName: multiOptCriterionName,
     );
-    if (wrap == null) {
-      return null;
+    if (valueWrap == null) {
+      throw __createNullValueWrapAppException(
+        methodName: "specifyDefaultMultiOptCriterionValue",
+        multiOptCriterionName: multiOptCriterionName,
+      );
     }
-    List? value = wrap.values;
+    List? value = valueWrap.values;
     return ValueWrap.multi(
       multiOptCriterionXData.findInternalItemsByDynamics(
         dynamicValues: value,

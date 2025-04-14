@@ -181,15 +181,30 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _isOptProp(String propName) {
-    Prop? prop = _allPropMap[propName];
-    if (prop == null) {
-      return false;
-    }
+  MultiOptProp? _getMultiOptProp(String multiOptPropName) {
+    Prop? prop = _allPropMap[multiOptPropName];
     if (prop is MultiOptProp) {
-      return true;
+      return prop;
     }
-    return false;
+    return null;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  SimpleProp? _getSimpleProp(String propName) {
+    Prop? prop = _allPropMap[propName];
+    if (prop is SimpleProp) {
+      return prop;
+    }
+    return null;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool _isOptProp(String propName) {
+    return _getMultiOptProp(propName) != null;
   }
 
   // ***************************************************************************

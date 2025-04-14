@@ -94,15 +94,30 @@ class FilterCriteriaStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _isOptCriterion(String criterionName) {
-    Criterion? criterion = _allCriteriaMap[criterionName];
-    if (criterion == null) {
-      return false;
-    }
+  MultiOptCriterion? _getMultiOptCriterion(String multiOptCriterionName) {
+    Criterion? criterion = _allCriteriaMap[multiOptCriterionName];
     if (criterion is MultiOptCriterion) {
-      return true;
+      return criterion;
     }
-    return false;
+    return null;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  SimpleCriterion? _getSimpleCriterion(String criterionName) {
+    Criterion? criterion = _allCriteriaMap[criterionName];
+    if (criterion is SimpleCriterion) {
+      return criterion;
+    }
+    return null;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool _isOptCriterion(String criterionName) {
+    return _getMultiOptCriterion(criterionName) != null;
   }
 
   // ***************************************************************************

@@ -574,8 +574,7 @@ abstract class FormModel<
         _formPropsStructure._getMultiOptPropXData(multiOptPropName);
 
     if (optPropParent != null) {
-      XData? tempXOptionedParent =
-          _formPropsStructure._getTempOptPropData(
+      XData? tempXOptionedParent = _formPropsStructure._getTempOptPropData(
         optPropParent.propName,
       );
       //
@@ -633,7 +632,7 @@ abstract class FormModel<
       if (isItemFirstLoad) {
         if (currentItemDetail == null) {
           if (extraFormInput != null) {
-            selectedValueWrap = _getMultiOptPropValueFromExtraFormInput(
+            selectedValueWrap = __getMultiOptPropValueFromExtraFormInput(
               extraFormInput: extraFormInput,
               multiOptPropXData: multiOptPropXData,
               multiOptPropName: multiOptPropName,
@@ -651,7 +650,7 @@ abstract class FormModel<
         }
         // currentItemDetail != null
         else {
-          selectedValueWrap = getMultiOptPropValueFromItemDetail(
+          selectedValueWrap = __getMultiOptPropValueFromItemDetail(
             itemDetail: currentItemDetail,
             multiOptPropXData: multiOptPropXData,
             multiOptPropName: multiOptPropName,
@@ -785,15 +784,18 @@ abstract class FormModel<
     required XData multiOptPropXData,
     required Object? parentMultiOptPropValue,
   }) {
-    ValueWrap? wrap = specifyDefaultMultiOptPropValue(
+    ValueWrap? valueWrap = specifyDefaultMultiOptPropValue(
       multiOptPropXData: multiOptPropXData,
       multiOptPropName: multiOptPropName,
       parentMultiOptPropValue: parentMultiOptPropValue,
     );
-    if (wrap == null) {
-      return null;
+    if (valueWrap == null) {
+      throw __createNullValueWrapAppException(
+        methodName: "specifyDefaultMultiOptPropValue",
+        multiOptPropName: multiOptPropName,
+      );
     }
-    List? value = wrap.values;
+    List? value = valueWrap.values;
     return ValueWrap.multi(
       multiOptPropXData.findInternalItemsByDynamics(
         dynamicValues: value,
@@ -806,22 +808,75 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  ValueWrap? _getMultiOptPropValueFromExtraFormInput({
+  AppException __createNullValueWrapAppException({
+    required String methodName,
+    required String multiOptPropName,
+  }) {
+    MultiOptProp? multiOptProp =
+        _formPropsStructure._getMultiOptProp(multiOptPropName);
+    if (multiOptProp == null) {
+      throw "The '$multiOptPropName' is not $MultiOptProp";
+    }
+    String message =
+        "The ${getClassName(this)}.$methodName() method must return a non-null $ValueWrap for the multiOptPropName '$multiOptPropName'. ";
+    if (multiOptProp.singleSelection) {
+      message += "$ValueWrap.single(null) or $ValueWrap.single(value). ";
+    } else {
+      message += "$ValueWrap.multi([null]) or $ValueWrap.multi([value]). ";
+    }
+    message += "And return null for not $MultiOptProp. See the specification of this method for more information.";
+    return AppException(message: message);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ValueWrap? __getMultiOptPropValueFromItemDetail({
+    required String multiOptPropName,
+    required XData multiOptPropXData,
+    required ITEM_DETAIL itemDetail,
+    required Object? parentMultiOptPropValue,
+  }) {
+    ValueWrap? valueWrap = getMultiOptPropValueFromItemDetail(
+      multiOptPropName: multiOptPropName,
+      multiOptPropXData: multiOptPropXData,
+      itemDetail: itemDetail,
+      parentMultiOptPropValue: parentMultiOptPropValue,
+    );
+    if (valueWrap == null) {
+      throw __createNullValueWrapAppException(
+        methodName: "getMultiOptPropValueFromItemDetail",
+        multiOptPropName: multiOptPropName,
+      );
+    }
+    return valueWrap;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ValueWrap? __getMultiOptPropValueFromExtraFormInput({
     required String multiOptPropName,
     required XData multiOptPropXData,
     required EXTRA_FORM_INPUT extraFormInput,
     required Object? parentMultiOptPropValue,
   }) {
-    ValueWrap? wrap = getMultiOptPropValueFromExtraFormInput(
+    if (extraFormInput is EmptyExtraFormInput) {
+      return null;
+    }
+    ValueWrap? valueWrap = getMultiOptPropValueFromExtraFormInput(
       extraFormInput: extraFormInput,
       multiOptPropXData: multiOptPropXData,
       multiOptPropName: multiOptPropName,
       parentMultiOptPropValue: parentMultiOptPropValue,
     );
-    if (wrap == null) {
-      return null;
+    if (valueWrap == null) {
+      throw __createNullValueWrapAppException(
+        methodName: "getMultiOptPropValueFromExtraFormInput",
+        multiOptPropName: multiOptPropName,
+      );
     }
-    List? value = wrap.values;
+    List? value = valueWrap.values;
     return ValueWrap.multi(
       multiOptPropXData.findInternalItemsByDynamics(
         dynamicValues: value,
