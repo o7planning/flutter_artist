@@ -226,7 +226,7 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  XOptionedData? _getTempOptPropData(String propName) {
+  XData? _getTempOptPropData(String propName) {
     Prop? prop = _allPropMap[propName];
     if (prop == null) {
       return null;
@@ -237,7 +237,7 @@ class FormPropsStructure {
     return null;
   }
 
-  XOptionedData? _getMultiOptPropXData(String propName) {
+  XData? _getMultiOptPropXData(String propName) {
     Prop? prop = _allPropMap[propName];
     if (prop == null) {
       return null;
@@ -338,7 +338,7 @@ class FormPropsStructure {
 
   void _setTempMultiOptPropXData({
     required String multiOptPropName,
-    required XOptionedData? multiOptXData,
+    required XData? multiOptXData,
   }) {
     Prop? prop = _allPropMap[multiOptPropName];
     if (prop == null) {

@@ -7,13 +7,13 @@ abstract class Prop {
   bool _markTempDirty = false;
 
   dynamic _tempCurrentValue;
-  XOptionedData? _tempCurrentXData;
+  XData? _tempCurrentXData;
 
   dynamic _currentValue;
-  XOptionedData? _currentXData;
+  XData? _currentXData;
 
   dynamic _initialValue;
-  XOptionedData? _initialXData;
+  XData? _initialXData;
 
   Prop({
     required this.propName,

@@ -72,7 +72,7 @@ abstract class FilterModel<
   ///
   /// Abstract method:
   ///
-  Future<XOptionedData?> callApiLoadMultiOptCriterionData({
+  Future<XData?> callApiLoadMultiOptCriterionData({
     required String multiOptCriterionName,
     required FILTER_INPUT? filterInput,
     required Object? parentMultiOptCriterionValue,
@@ -84,7 +84,7 @@ abstract class FilterModel<
 
   ValueWrap? specifyDefaultMultiOptCriterionValue({
     required String multiOptCriterionName,
-    required XOptionedData multiOptCriterionXData,
+    required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,
   });
 
@@ -109,7 +109,7 @@ abstract class FilterModel<
   /// ValueWrap? getMultiOptCriterionValueFromFilterInput({
   ///     required String multiOptCriterionName,
   ///     required ExampleFilterInput filterInput,
-  ///     required XOptionedData multiOptCriterionXData,
+  ///     required XData multiOptCriterionXData,
   ///     required Object? parentMultiOptCriterionValue,
   /// }) {
   ///    if(multiOptCriterionName == "company") {
@@ -123,7 +123,7 @@ abstract class FilterModel<
   ///
   ValueWrap? getMultiOptCriterionValueFromFilterInput({
     required String multiOptCriterionName,
-    required XOptionedData multiOptCriterionXData,
+    required XData multiOptCriterionXData,
     required FILTER_INPUT filterInput,
     required Object? parentMultiOptCriterionValue,
   });
@@ -192,14 +192,14 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  XOptionedData? getMultiOptCriterionXData(String multiOptCriterionName) {
+  XData? getMultiOptCriterionXData(String multiOptCriterionName) {
     return _filterCriteriaStructure._getMultiOptCriterionXData(
       multiOptCriterionName,
     );
   }
 
   dynamic getMultiOptCriterionData(String multiOptCriterionName) {
-    XOptionedData? multiOptCriterionXData = getMultiOptCriterionXData(
+    XData? multiOptCriterionXData = getMultiOptCriterionXData(
       multiOptCriterionName,
     );
     //
@@ -372,13 +372,13 @@ abstract class FilterModel<
     final MultiOptCriterion? multiOptCriterionParent = multiOptCriterion.parent;
 
     // Get current OptCriterion data:
-    XOptionedData? multiOptCriterionXData =
+    XData? multiOptCriterionXData =
         _filterCriteriaStructure._getMultiOptCriterionXData(
       criterionName,
     );
 
     if (multiOptCriterionParent != null) {
-      XOptionedData? tempMultiOptXDataParent =
+      XData? tempMultiOptXDataParent =
           _filterCriteriaStructure._getTempOptCriterionXData(
         multiOptCriterionParent.criterionName,
       );
@@ -541,7 +541,7 @@ abstract class FilterModel<
 
   ValueWrap? _getMultiOptCriterionValueFromFilterInput({
     required String multiOptCriterionName,
-    required XOptionedData multiOptCriterionXData,
+    required XData multiOptCriterionXData,
     required FILTER_INPUT filterInput,
     required Object? parentMultiOptCriterionValue,
   }) {
@@ -566,7 +566,7 @@ abstract class FilterModel<
 
   ValueWrap? __specifyDefaultMultiOptCriterionValue({
     required String multiOptCriterionName,
-    required XOptionedData multiOptCriterionXData,
+    required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,
   }) {
     ValueWrap? wrap = specifyDefaultMultiOptCriterionValue(

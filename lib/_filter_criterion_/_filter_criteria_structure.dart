@@ -139,7 +139,7 @@ class FilterCriteriaStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  XOptionedData? _getTempOptCriterionXData(String criterionName) {
+  XData? _getTempOptCriterionXData(String criterionName) {
     Criterion? criterion = _allCriteriaMap[criterionName];
     if (criterion == null) {
       return null;
@@ -150,7 +150,7 @@ class FilterCriteriaStructure {
     return null;
   }
 
-  XOptionedData? _getMultiOptCriterionXData(String criterionName) {
+  XData? _getMultiOptCriterionXData(String criterionName) {
     Criterion? criterion = _allCriteriaMap[criterionName];
     if (criterion == null) {
       return null;
@@ -251,7 +251,7 @@ class FilterCriteriaStructure {
 
   void _setTempMultiOptCriterionXData({
     required String multiOptCriterionName,
-    required XOptionedData? multiOptXData,
+    required XData? multiOptXData,
   }) {
     Criterion? criterion = _allCriteriaMap[multiOptCriterionName];
     if (criterion == null) {
