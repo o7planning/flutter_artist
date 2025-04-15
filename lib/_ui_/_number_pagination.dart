@@ -22,17 +22,14 @@ class NumberPagination extends BasePagination {
           block.query(
             pageable: PageableData(
               page: pageNumber,
-              pageSize: block.data.pageable?.pageSize,
+              pageSize: block.pageable?.pageSize,
             ),
           );
         },
         visiblePagesCount: visiblePagesCount,
-        totalPages: block.data.pagination == null
-            ? 0
-            : block.data.pagination!.totalPages,
-        currentPage: block.data.pagination == null
-            ? 1
-            : block.data.pagination!.currentPage,
+        totalPages: block.pagination == null ? 0 : block.pagination!.totalPages,
+        currentPage:
+            block.pagination == null ? 1 : block.pagination!.currentPage,
         fontSize: 13,
         controlButtonSize: const Size(22, 22),
         numberButtonSize: const Size(22, 22),

@@ -1,20 +1,24 @@
 part of '../flutter_artist.dart';
 
-final _taskUnitQueue = _TaskUnitQueue();
-
 class _TaskUnitQueue {
+  final List<_TaskUnit> _secondaryQueue = [];
   final List<_TaskUnit> _taskUnits = [];
 
   bool get isEmpty {
-    return _taskUnits.isEmpty;
+    return _taskUnits.isEmpty && _secondaryQueue.isEmpty;
   }
 
+  bool get isNotEmpty => !isEmpty;
+
   bool hasNext() {
-    return _taskUnits.isNotEmpty;
+    return isNotEmpty;
   }
 
   _TaskUnit? getNextTaskUnit() {
     if (_taskUnits.isEmpty) {
+      if (_secondaryQueue.isNotEmpty) {
+        return _secondaryQueue.removeAt(0);
+      }
       return null;
     } else {
       return _taskUnits.removeAt(0);
@@ -31,18 +35,24 @@ class _TaskUnitQueue {
   }
 
   void addTaskUnit(_TaskUnit taskUnit) {
-    // if (taskUnit is _FormModelLoadFormTaskUnit) {
-    //   if (!contains(taskUnit.getTaskUnitId())) {
-    //     _taskUnits.add(taskUnit);
-    //   }
-    // } else {
-    //   _taskUnits.add(taskUnit);
-    // }
-    _taskUnits.add(taskUnit);
+    final int? executingXShelfId = FlutterArtist.executor.executingXShelfId;
+    //
+    if (executingXShelfId != null) {
+      if (taskUnit.xShelfId > executingXShelfId) {
+        _secondaryQueue.add(taskUnit);
+      } else if (taskUnit.xShelfId == executingXShelfId) {
+        _taskUnits.add(taskUnit);
+      } else {
+        print("Ignore TaskUnit: $taskUnit");
+        // Ignore this TaskUnit.
+      }
+    } else {
+      _taskUnits.add(taskUnit);
+    }
   }
 
   @override
   String toString() {
-    return _taskUnits.toString();
+    return "_taskUnits: $_taskUnits, _secondaryQueue: $_secondaryQueue";
   }
 }

@@ -11,11 +11,11 @@ class _DefaultFilterModel
   }
 
   @override
-  @Deprecated("Xoa di, khong su dung nua")
-  Future<void> prepareData({
-    EmptyFilterInput? filterInput,
-  }) async {
-    // Do nothing
+  FilterCriteriaStructure registerCriteriaStructure() {
+    return FilterCriteriaStructure(
+      simpleCriteria: [],
+      multiOptCriteria: [],
+    );
   }
 
   @override
@@ -26,171 +26,42 @@ class _DefaultFilterModel
   }
 
   @override
-  Map<String, dynamic> filterInputToCriteriaDataMap({
-    required EmptyFilterInput filterInput,
-  }) {
-    return {};
-  }
-
-  @override
-  Future<void> prepareMasterData({
+  Future<XList?> callApiLoadMultiOptCriterionData({
+    required String multiOptCriterionName,
+    required Object? parentMultiOptCriterionValue,
     required EmptyFilterInput? filterInput,
   }) async {
-    // Do nothing.
+    return null;
   }
 
   @override
-  Map<String, dynamic> initialCriteriaDataMap() {
-    return {};
-  }
-}
-
-// -----------------------------------------------------------------------------
-
-class StringIdFilterModel
-    extends FilterModel<StringIdFilterInput, StringIdFilterCriteria> {
-  String? idValue;
-
-  StringIdFilterModel({required this.idValue});
-
-  @override
-  StringIdFilterCriteria createFilterCriteria({
-    required Map<String, dynamic> dataMap,
+  ValueWrap? getMultiOptCriterionValueFromFilterInput({
+    required String multiOptCriterionName,
+    required XData multiOptCriterionXData,
+    required EmptyFilterInput filterInput,
+    required Object? parentMultiOptCriterionValue,
   }) {
-    return StringIdFilterCriteria(idValue: idValue);
+    return null;
   }
 
   @override
-  Map<String, dynamic> filterInputToCriteriaDataMap({
-    required StringIdFilterInput filterInput,
-  }) {
-    return {"idValue": idValue};
-  }
-
-  @override
-  Future<void> prepareMasterData({
-    required StringIdFilterInput? filterInput,
+  Future<Map<String, dynamic>?> getSimpleCriterionValuesFromFilterInput({
+    required EmptyFilterInput filterInput,
   }) async {
-    if (filterInput != null) {
-      idValue = filterInput.idValue;
-    }
+    return null;
   }
 
   @override
-  Map<String, dynamic> initialCriteriaDataMap() {
-    return {};
+  ValueWrap? specifyDefaultMultiOptCriterionValue({
+    required String multiOptCriterionName,
+    required XData multiOptCriterionXData,
+    required Object? parentMultiOptCriterionValue,
+  }) {
+    return null;
+  }
+
+  @override
+  Future<Map<String, dynamic>?> specifyDefaultSimpleCriterionValues() async {
+    return null;
   }
 }
-
-// -----------------------------------------------------------------------------
-
-class StringValueFilterModel
-    extends FilterModel<StringValueFilterInput, StringValueFilterCriteria> {
-  String? stringValue;
-
-  StringValueFilterModel({required this.stringValue});
-
-  @override
-  StringValueFilterCriteria createFilterCriteria({
-    required Map<String, dynamic> dataMap,
-  }) {
-    return StringValueFilterCriteria(stringValue: stringValue);
-  }
-
-  @override
-  Map<String, dynamic> filterInputToCriteriaDataMap({
-    required StringValueFilterInput filterInput,
-  }) {
-    return {"stringValue": stringValue};
-  }
-
-  @override
-  Future<void> prepareMasterData({
-    required StringValueFilterInput? filterInput,
-  }) async {
-    if (filterInput != null) {
-      stringValue = filterInput.stringValue;
-    }
-  }
-
-  @override
-  Map<String, dynamic> initialCriteriaDataMap() {
-    return {};
-  }
-}
-
-// -----------------------------------------------------------------------------
-
-class SearchTextFilterModel
-    extends FilterModel<SearchTextFilterInput, SearchTextFilterCriteria> {
-  String? searchText;
-
-  SearchTextFilterModel({required this.searchText});
-
-  @override
-  SearchTextFilterCriteria createFilterCriteria({
-    required Map<String, dynamic> dataMap,
-  }) {
-    return SearchTextFilterCriteria(searchText: searchText);
-  }
-
-  @override
-  Map<String, dynamic> filterInputToCriteriaDataMap({
-    required SearchTextFilterInput filterInput,
-  }) {
-    return {"searchText": searchText};
-  }
-
-  @override
-  Future<void> prepareMasterData({
-    required SearchTextFilterInput? filterInput,
-  }) async {
-    if (filterInput != null) {
-      searchText = filterInput.searchText;
-    }
-  }
-
-  @override
-  Map<String, dynamic> initialCriteriaDataMap() {
-    return {};
-  }
-}
-
-// -----------------------------------------------------------------------------
-
-class IntIdFilterModel
-    extends FilterModel<IntIdFilterInput, IntIdFilterCriteria> {
-  int? idValue;
-
-  IntIdFilterModel({required this.idValue});
-
-  @override
-  IntIdFilterCriteria createFilterCriteria({
-    required Map<String, dynamic> dataMap,
-  }) {
-    return IntIdFilterCriteria(idValue: idValue);
-  }
-
-  @override
-  Map<String, dynamic> filterInputToCriteriaDataMap({
-    required IntIdFilterInput filterInput,
-  }) {
-    return {"idValue": idValue};
-  }
-
-  @override
-  Future<void> prepareMasterData({
-    required IntIdFilterInput? filterInput,
-  }) async {
-    if (filterInput != null) {
-      idValue = filterInput.idValue;
-    }
-  }
-
-  @override
-  Map<String, dynamic> initialCriteriaDataMap() {
-    return {};
-  }
-}
-
-// -----------------------------------------------------------------------------

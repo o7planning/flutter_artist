@@ -82,14 +82,20 @@ class _FilterModelDebugViewState extends State<_FilterModelDebugView> {
   }
 
   Widget _buildTabContainer() {
-    FilterModelData filterModelData = widget.filterModel.data;
-    Map<String, dynamic> initial0Value = filterModelData.initial0FormData;
-    Map<String, dynamic> initial1Value = filterModelData.initialFormData;
-    Map<String, dynamic> instantValue = filterModelData.currentFormData;
+    FilterCriteriaStructure filterCriteriaStructure =
+        widget.filterModel._filterCriteriaStructure;
+    Map<String, dynamic> initial0Value =
+        filterCriteriaStructure.initial0FormData;
+    Map<String, dynamic> initial1Value =
+        filterCriteriaStructure.initialFormData;
+    Map<String, dynamic> instantValue =
+        widget.filterModel._formKey.currentState?.instantValue ?? {};
+    Map<String, dynamic> currentValue = filterCriteriaStructure.currentFormData;
 
     String initial0Json = toJson(initial0Value);
     String initial1Json = toJson(initial1Value);
     String instantJson = toJson(instantValue);
+    String currentJson = toJson(currentValue);
 
     //
 
@@ -128,6 +134,21 @@ class _FilterModelDebugViewState extends State<_FilterModelDebugView> {
     );
     tabs.add(
       TabData(
+        text: ' Instant',
+        closable: false,
+        leading: (context, status) => Icon(
+          _formValueIconData,
+          color: _getTabIconColor(status),
+          size: iconSize,
+        ),
+        content: _buildTabContent(
+          info: "The Instant values of the form",
+          json: instantJson,
+        ),
+      ),
+    );
+    tabs.add(
+      TabData(
         text: ' Current',
         closable: false,
         leading: (context, status) => Icon(
@@ -139,7 +160,7 @@ class _FilterModelDebugViewState extends State<_FilterModelDebugView> {
           info: "The current values of the form (Will be passed to the "
               "${getClassName(widget.filterModel)}.callApiCreateItem() "
               "or ${getClassName(widget.filterModel)}.callApiUpdateItem() method).",
-          json: instantJson,
+          json: currentJson,
         ),
       ),
     );

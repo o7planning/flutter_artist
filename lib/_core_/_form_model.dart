@@ -5,13 +5,13 @@ abstract class FormModel<
     ITEM_DETAIL extends Object,
     FILTER_CRITERIA extends FilterCriteria,
     EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
-  QueryMode _queryMode = QueryMode.lazy;
-
-  late QueryMode _tempQueryMode = _queryMode;
-
   int __loadCount = 0;
 
   int get loadCount => __loadCount;
+
+  int __formTransactionCount = 0;
+
+  int get formTransactionCount => __formTransactionCount;
 
   int _lazyLoadCount = 0;
 
@@ -21,9 +21,11 @@ abstract class FormModel<
     return "block-form > ${shelf.name} > ${block.name}";
   }
 
-  late final FormModelData data = FormModelData(formModel: this);
+  bool _changeEventLocked = false;
 
-  FormMode get formMode => data.formMode;
+  FormMode get formMode => _formPropsStructure.formMode;
+
+  DataState get formDataState => _formPropsStructure._formDataState;
 
   Shelf get shelf => block.shelf;
 
@@ -35,33 +37,886 @@ abstract class FormModel<
       FILTER_CRITERIA,
       EXTRA_FORM_INPUT> block;
 
-  DataState get dataState => data._dataState;
-
-  QueryMode get queryMode => _queryMode;
-
-  QueryMode get temporaryQueryMode => _tempQueryMode;
-
-  GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+  bool _defaultValueInitiated = false;
 
   final _defaultAutovalidateMode = AutovalidateMode.onUserInteraction;
 
   late AutovalidateMode autovalidateMode = _defaultAutovalidateMode;
 
-  final Map<_RefreshableWidgetState, bool> _formWidgetStates = {};
+  final Map<_RefreshableWidgetState, _XState> _formWidgetStates = {};
+
+  // ***************************************************************************
+
+  late final FormPropsStructure _formPropsStructure;
+
+  GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
   // ***************************************************************************
   // ***************************************************************************
 
-  FormModel();
+  FormModel() {
+    __registerPropsStructure();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ///
+  /// ```dart
+  /// FormPropsStructure registerPropsStructure() {
+  ///   return FormPropsStructure(
+  ///     simpleProps: [],
+  ///     multiOptProps: [
+  ///       MultiOptProp(
+  ///         propName: "company",
+  ///         children: [
+  ///           MultiOptProp(
+  ///              propName: "department",
+  ///           ),
+  ///         ],
+  ///       ),
+  ///     ],
+  ///   );
+  /// }
+  /// ```
+  FormPropsStructure registerPropsStructure();
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ///
+  /// Abstract method:
+  ///
+  Future<XData?> callApiLoadMultiOptPropData({
+    required String multiOptPropName,
+    required Object? parentMultiOptPropValue,
+    required FILTER_CRITERIA filterCriteria,
+    required EXTRA_FORM_INPUT? extraFormInput,
+  });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ValueWrap? specifyDefaultMultiOptPropValue({
+    required String multiOptPropName,
+    required XData multiOptPropXData,
+    required Object? parentMultiOptPropValue,
+  });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<Map<String, dynamic>?> specifyDefaultSimplePropValues({
+    required FILTER_CRITERIA filterCriteria,
+  });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ValueWrap? getMultiOptPropValueFromItemDetail({
+    required String multiOptPropName,
+    required XData multiOptPropXData,
+    required ITEM_DETAIL itemDetail,
+    required Object? parentMultiOptPropValue,
+  });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<Map<String, dynamic>> getSimplePropValuesFromItemDetail({
+    required FILTER_CRITERIA filterCriteria,
+    required ITEM_DETAIL itemDetail,
+  });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ValueWrap? getMultiOptPropValueFromExtraFormInput({
+    required String multiOptPropName,
+    required XData multiOptPropXData,
+    required EXTRA_FORM_INPUT extraFormInput,
+    required Object? parentMultiOptPropValue,
+  });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Map<String, dynamic>? getSimplePropValuesFromExtraFormInput({
+    required EXTRA_FORM_INPUT extraFormInput,
+  });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<bool> _unitFormViewChanged({
+    required _XFormModel xFormModel,
+  }) async {
+    __assertThisXFormModel(xFormModel);
+    //
+    await _startNewFormTransaction(
+      extraFormInput: null,
+      isItemFirstLoad: false,
+    );
+    return true;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<bool> _unitLoadForm({required _XFormModel thisXFormModel}) async {
+    __assertThisXFormModel(thisXFormModel);
+    //
+    bool active = this.hasActiveUIComponent();
+    bool forceForm = thisXFormModel.forceForm;
+    //
+    if (!forceForm) {
+      if (!active) {
+        if (this.formDataState == DataState.error ||
+            this.formDataState == DataState.pending) {
+          _clearWithDataState(formDataState: this.formDataState);
+          return true;
+        } else {
+          return true;
+        }
+      } else {
+        if (this.formDataState == DataState.error ||
+            this.formDataState == DataState.pending) {
+          forceForm = true;
+        } else {
+          return true;
+        }
+      }
+    }
+    //
+    __loadCount++;
+    //
+    EXTRA_FORM_INPUT? extraFormInput =
+        thisXFormModel.extraFormInput as EXTRA_FORM_INPUT?;
+    //
+    await _startNewFormTransaction(
+      extraFormInput: extraFormInput,
+      isItemFirstLoad: true,
+    );
+    //
+    return true;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<bool> _unitSaveForm({required _XFormModel thisXFormModel}) async {
+    FILTER_CRITERIA? blockCurrentFilterCriteria = block.filterCriteria;
+    if (blockCurrentFilterCriteria == null) {
+      throw AppException(message: "FilterCriteria is null");
+    }
+    if (!__checkValidBeforeSave()) {
+      return false;
+    }
+    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _unitSaveForm");
+    final Map<String, dynamic> formMapData =
+        _formPropsStructure.currentFormData;
+    //
+    String calledMethodName = _formPropsStructure.isNew //
+        ? 'callApiCreateItem'
+        : 'callApiUpdateItem';
+    //
+    ApiResult<ITEM_DETAIL> result;
+    bool saveError = false;
+    try {
+      FlutterArtist.codeFlowLogger._addMethodCall(
+        isLibCode: false,
+        ownerClassInstance: this,
+        methodName: calledMethodName,
+        parameters: {
+          "formMapData": formMapData,
+        },
+        navigate: null,
+      );
+      //
+      block._refreshSavingState(isSaving: true);
+      Object? parentBlockItem = block.parent?.currentItem;
+      //
+      result = _formPropsStructure.isNew
+          ? await callApiCreateItem(
+              filterCriteria: blockCurrentFilterCriteria,
+              parentBlockItem: parentBlockItem,
+              formMapData: formMapData,
+            )
+          : await callApiUpdateItem(
+              filterCriteria: blockCurrentFilterCriteria,
+              parentBlockItem: parentBlockItem,
+              formMapData: formMapData,
+            );
+      //
+      block._refreshSavingState(isSaving: false);
+    } catch (e, stackTrace) {
+      saveError = true;
+      block._refreshSavingState(isSaving: false);
+      //
+      _handleError(
+        shelf: shelf,
+        methodName: calledMethodName,
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      return false;
+    }
+    //
+    try {
+      return await block._processSaveActionRestResult(
+        thisXBlock: thisXFormModel.xBlock,
+        blockCurrentFilterCriteria: blockCurrentFilterCriteria,
+        calledMethodName: calledMethodName,
+        result: result,
+      );
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: calledMethodName,
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      //
+      return false;
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __registerPropsStructure() {
+    _formPropsStructure = registerPropsStructure();
+    _formPropsStructure.formModel = this;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ///
+  /// Return null is error.
+  ///
+  @ImportantMethodAnnotation()
+  Future<bool> _startNewFormTransaction({
+    required EXTRA_FORM_INPUT? extraFormInput,
+    required bool isItemFirstLoad,
+  }) async {
+    FILTER_CRITERIA? blockCurrentFilterCriteria = block.filterCriteria;
+    if (blockCurrentFilterCriteria == null) {
+      throw AppException(message: "FilterCriteria is null");
+    }
+    __formTransactionCount++;
+    print(
+        "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFormTransaction, isItemFirstLoad: $isItemFirstLoad");
+
+    final ITEM_DETAIL? itemDetail = block.currentItemDetail;
+    final FormMode currentFormMode = formDataState == DataState.none
+        ? FormMode.none
+        : itemDetail == null
+            ? FormMode.creation
+            : FormMode.edit;
+    _formPropsStructure._setFormMode(currentFormMode);
+    bool isNoneMode = currentFormMode == FormMode.none;
+    bool isCreationMode = currentFormMode == FormMode.creation;
+    //
+    // All values including hidden values (not on the user interface).
+    Map<String, dynamic> allNewValue = {};
+    //
+    // The First Load (Not from FormView)
+    //
+    if (isItemFirstLoad) {
+      if (isNoneMode || isCreationMode) {
+        _defaultValueInitiated = false;
+        allNewValue.addAll({});
+      } else {
+        allNewValue.addAll({});
+      }
+    }
+    //
+    // Update from FormView:
+    //
+    else {
+      allNewValue.addAll(_formPropsStructure.currentFormData);
+      // Update values from view (On the user Interface).
+      allNewValue.addAll(_formKey.currentState?.instantValue ?? {});
+    }
+    //
+    _formPropsStructure._initTemporaryForNewTransaction(
+      newCurrentFormData: allNewValue,
+    );
+    //
+    // Load OptProp Data:
+    //
+    try {
+      for (MultiOptProp multiOptProp in _formPropsStructure._rootOptProps) {
+        //
+        // Load OptProp Data and set default and selected.
+        //
+        // May throw ApiError.
+        //
+        await _loadMultiOptPropDataCascade(
+          blockCurrentFilterCriteria: blockCurrentFilterCriteria,
+          extraFormInput: extraFormInput,
+          parentMultiOptPropValue: null,
+          multiOptProp: multiOptProp,
+          isItemFirstLoad: isItemFirstLoad,
+        );
+      }
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: "callApiLoadMultiOptPropData",
+        error: "Error callApiLoadMultiOptPropData: $e",
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      //
+      __applyWithDataState(
+        formDataState: DataState.error,
+        isItemFirstLoad: isItemFirstLoad,
+      );
+      return false;
+    }
+    //
+    // Get SimpleProp Value:
+    //
+    Map<String, dynamic> simplePropValue = {};
+    if (isItemFirstLoad) {
+      if (itemDetail != null) {
+        try {
+          simplePropValue = await getSimplePropValuesFromItemDetail(
+            filterCriteria: blockCurrentFilterCriteria,
+            itemDetail: itemDetail,
+          );
+          for (String propName in simplePropValue.keys) {
+            _formPropsStructure._setTempSimplePropValue(
+              propName: propName,
+              value: simplePropValue[propName],
+            );
+          }
+        } catch (e, stackTrace) {
+          _handleError(
+            shelf: shelf,
+            methodName: "getSimplePropValuesFromItemDetail",
+            error: "Error getSimplePropValuesFromItemDetail: $e",
+            stackTrace: stackTrace,
+            showSnackBar: true,
+          );
+          //
+          __applyWithDataState(
+            formDataState: DataState.error,
+            isItemFirstLoad: isItemFirstLoad,
+          );
+          return false;
+        }
+      }
+      // itemDetail == null
+      else {
+        Map<String, dynamic> simplePropValueDefault = {};
+        Map<String, dynamic> simplePropValueExtra = {};
+        if (!_defaultValueInitiated) {
+          try {
+            simplePropValueDefault = await specifyDefaultSimplePropValues(
+                  filterCriteria: blockCurrentFilterCriteria,
+                ) ??
+                {};
+            for (String propName in simplePropValueDefault.keys) {
+              _formPropsStructure._setTempSimplePropValue(
+                propName: propName,
+                value: simplePropValueDefault[propName],
+              );
+            }
+          } catch (e, stackTrace) {
+            _handleError(
+              shelf: shelf,
+              methodName: "specifyDefaultSimplePropValues",
+              error: "Error specifyDefaultSimplePropValues: $e",
+              stackTrace: stackTrace,
+              showSnackBar: true,
+            );
+            //
+            __applyWithDataState(
+              formDataState: DataState.error,
+              isItemFirstLoad: isItemFirstLoad,
+            );
+            return false;
+          }
+        }
+        //
+        if (extraFormInput != null) {
+          try {
+            simplePropValueExtra = getSimplePropValuesFromExtraFormInput(
+                  extraFormInput: extraFormInput,
+                ) ??
+                {};
+            //
+            for (String propName in simplePropValueExtra.keys) {
+              _formPropsStructure._setTempSimplePropValue(
+                propName: propName,
+                value: simplePropValueExtra[propName],
+              );
+            }
+          } catch (e, stackTrace) {
+            _handleError(
+              shelf: shelf,
+              methodName: "getSimplePropValuesFromItemDetail",
+              error: "Error getSimplePropValuesFromItemDetail: $e",
+              stackTrace: stackTrace,
+              showSnackBar: true,
+            );
+            //
+            __applyWithDataState(
+              formDataState: DataState.error,
+              isItemFirstLoad: isItemFirstLoad,
+            );
+            return false;
+          }
+        }
+      }
+    }
+    return __applyWithDataState(
+      formDataState: DataState.ready,
+      isItemFirstLoad: isItemFirstLoad,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool __applyWithDataState({
+    required DataState formDataState,
+    required bool isItemFirstLoad,
+  }) {
+    try {
+      //
+      // Update Real FromData from Temporary FormData:
+      //
+      _formPropsStructure._updateTempToReal();
+
+      //
+      // UPDATE OPT-DATA:
+      //  - optProp._xOptionedData = optProp._tempXData;
+      //
+      // _formPropsStructure._applyAllTempDataToReal();
+      //
+      if (isItemFirstLoad) {
+        _formPropsStructure._setInitialFormDataForItemFirstLoad();
+      }
+
+      //
+      // IMPORTANT:
+      //
+      _formKeyPatchValue(
+        newCurrentValue: _formPropsStructure.currentFormData,
+      );
+      //
+      _defaultValueInitiated = true;
+      _formPropsStructure._setFormDataState(formDataState);
+      if (isItemFirstLoad &&
+          formMode == FormMode.edit &&
+          _formKey.currentState != null) {
+        if (!_formKey.currentState!.isValid) {
+          _formKey.currentState!.validate(focusOnInvalid: false);
+        }
+      }
+      return true;
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: "__applyWithDataState",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      //
+      // IMPORTANT: Restore OLD State:
+      // Note [_formKeyPatchValue] NOT WORK!.
+      //
+      _formKeyPatchValue(
+        newCurrentValue: _formPropsStructure.currentFormData,
+      );
+      //
+      _formPropsStructure._setFormDataState(DataState.error);
+      return false;
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _printStructureAndTempData(String prefix) {
+    _formPropsStructure._printTemporaryInfo(prefix);
+    print("instantData: ${_formKey.currentState?.instantValue}\n\n");
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _formKeyPatchValue({required Map<String, dynamic> newCurrentValue}) {
+    try {
+      _formKey.currentState?.patchValue(newCurrentValue);
+    } finally {
+      //
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<void> _loadMultiOptPropDataCascade({
+    required FILTER_CRITERIA blockCurrentFilterCriteria,
+    required EXTRA_FORM_INPUT? extraFormInput,
+    // May be new selected parent value.
+    required Object? parentMultiOptPropValue,
+    required MultiOptProp multiOptProp,
+    required bool isItemFirstLoad,
+  }) async {
+    final String multiOptPropName = multiOptProp.propName;
+
+    final MultiOptProp? optPropParent = multiOptProp.parent;
+
+    // Get current OptProp data:
+    XData? multiOptPropXData =
+        _formPropsStructure._getMultiOptPropXData(multiOptPropName);
+
+    if (optPropParent != null) {
+      XData? tempXOptionedParent = _formPropsStructure._getTempOptPropData(
+        optPropParent.propName,
+      );
+      //
+      if (tempXOptionedParent != null) {
+        // Item or Item List (Multi Selection):
+        Object? parentOptPropValueOLD =
+            _formPropsStructure._getCurrentPropValue(
+          propName: optPropParent.propName,
+        );
+
+        // Parent Value change?
+        bool isSame = tempXOptionedParent.isSameItemOrItemList(
+          itemOrItemList1: parentOptPropValueOLD,
+          itemOrItemList2: parentMultiOptPropValue,
+        );
+        if (!isSame) {
+          multiOptPropXData = null;
+        }
+      } else {
+        multiOptPropXData = null;
+      }
+    }
+    //
+    if (multiOptPropXData == null) {
+      _formPropsStructure._setTempMultiOptPropXData(
+        multiOptPropName: multiOptPropName,
+        multiOptPropXData: null,
+      );
+      // IMPORTANT:
+      //  - Update from ROOTs to LEAVES
+      //  - And make sure children-OptProp to null if parent-Value is null or not selected.
+      _formPropsStructure._updatePropsTempValues({multiOptPropName: null});
+    }
+    //
+    // Load OptProp data from Rest API.
+    // May throw ApiError.
+    //
+    multiOptPropXData ??= await callApiLoadMultiOptPropData(
+      filterCriteria: blockCurrentFilterCriteria,
+      extraFormInput: extraFormInput,
+      parentMultiOptPropValue: parentMultiOptPropValue,
+      multiOptPropName: multiOptPropName,
+    );
+    //
+    // IMPORTANT: Do not use empty list here
+    // to avoid cast Error (List<dynamic> to List<ITEM>)
+    //
+    List? currentSelectedItems; // will be null or not empty.
+    // Candidate Selected Items:
+    List? candidateSelectedItems;
+    ValueWrap? selectedValueWrap;
+    final ITEM_DETAIL? currentItemDetail = block.currentItemDetail;
+    //
+    if (multiOptPropXData != null) {
+      if (isItemFirstLoad) {
+        if (currentItemDetail == null) {
+          if (extraFormInput != null) {
+            selectedValueWrap = __getMultiOptPropValueFromExtraFormInput(
+              extraFormInput: extraFormInput,
+              multiOptPropXData: multiOptPropXData,
+              multiOptPropName: multiOptPropName,
+              parentMultiOptPropValue: parentMultiOptPropValue,
+            );
+          } else {
+            if (!_defaultValueInitiated) {
+              selectedValueWrap = __specifyDefaultMultiOptPropValue(
+                multiOptPropName: multiOptPropName,
+                multiOptPropXData: multiOptPropXData,
+                parentMultiOptPropValue: parentMultiOptPropValue,
+              );
+            }
+          }
+        }
+        // currentItemDetail != null
+        else {
+          selectedValueWrap = __getMultiOptPropValueFromItemDetail(
+            itemDetail: currentItemDetail,
+            multiOptPropXData: multiOptPropXData,
+            multiOptPropName: multiOptPropName,
+            parentMultiOptPropValue: parentMultiOptPropValue,
+          );
+        }
+      }
+      //
+      // Current selected value:
+      // It can be a single value or a List.
+      //
+      final dynamic tempCurrentValue =
+          _formPropsStructure._getTempCurrentPropValue(
+        propName: multiOptPropName,
+      );
+      //
+      if (tempCurrentValue != null) {
+        if (tempCurrentValue is List) {
+          currentSelectedItems =
+              tempCurrentValue.isEmpty ? null : tempCurrentValue;
+        } else {
+          currentSelectedItems = [tempCurrentValue];
+        }
+      }
+      if (currentSelectedItems != null) {
+        currentSelectedItems = multiOptPropXData.findInternalItemsByDynamics(
+          dynamicValues: currentSelectedItems,
+          addToInternalIfNotFound: true,
+          removeCurrentNotFoundItems: true,
+        );
+      }
+      // Candidate Selected Items:
+      candidateSelectedItems = selectedValueWrap?.values;
+
+      if (candidateSelectedItems == null || candidateSelectedItems.isEmpty) {
+        candidateSelectedItems = currentSelectedItems;
+      }
+    }
+    // optPropData == null
+    else {
+      currentSelectedItems = null;
+      candidateSelectedItems = null;
+    }
+    //
+    _formPropsStructure._setTempMultiOptPropXData(
+      multiOptPropName: multiOptPropName,
+      multiOptPropXData: multiOptPropXData,
+    );
+    // TODO: Dangerous, check not null:
+    candidateSelectedItems = multiOptPropXData?.findInternalItemsByDynamics(
+          dynamicValues: candidateSelectedItems,
+          //
+          // IMPORTANT: Add not found item to internal list.
+          //
+          addToInternalIfNotFound: true,
+          removeCurrentNotFoundItems: true,
+        ) ??
+        [];
+    //
+    // TODO: Double check this code:
+    //
+    if (candidateSelectedItems != null && candidateSelectedItems.isNotEmpty) {
+      if (multiOptProp.singleSelection) {
+        // IMPORTANT:
+        //  - Update from ROOTs to LEAVES
+        //  - And make sure children-OptProp to null if parent-Value is null or not selected.
+        Object? candidateSelectedItem = candidateSelectedItems.first;
+        _formPropsStructure
+            ._updatePropsTempValues({multiOptPropName: candidateSelectedItem});
+      } else {
+        // IMPORTANT:
+        //  - Update from ROOTs to LEAVES
+        //  - And make sure children-OptProp to null if parent-Value is null or not selected.
+        // Try MULTI SELECTED ITEMS:
+        _formPropsStructure
+            ._updatePropsTempValues({multiOptPropName: candidateSelectedItems});
+      }
+    } else {
+      // IMPORTANT:
+      //  - Update from ROOTs to LEAVES
+      //  - And make sure children-OptProp to null if parent-Value is null or not selected.
+      _formPropsStructure._updatePropsTempValues({multiOptPropName: null});
+    }
+    //
+    Object? tempSelectedPropValue =
+        this._formPropsStructure._getTempCurrentPropValue(
+              propName: multiOptPropName,
+            );
+
+    if (tempSelectedPropValue != null) {
+      for (MultiOptProp child in multiOptProp.children) {
+        await _loadMultiOptPropDataCascade(
+          blockCurrentFilterCriteria: blockCurrentFilterCriteria,
+          extraFormInput: extraFormInput,
+          parentMultiOptPropValue: tempSelectedPropValue,
+          multiOptProp: child,
+          isItemFirstLoad: isItemFirstLoad,
+        );
+      }
+    } else {
+      // Do nothing.
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  dynamic getCurrentPropValue(String propName) {
+    return _formPropsStructure._getCurrentPropValue(propName: propName);
+  }
+
+  XData? getMultiOptPropXData(String multiOptPropName) {
+    return _formPropsStructure._getMultiOptPropXData(multiOptPropName);
+  }
+
+  dynamic getMultiOptPropData(String multiOptPropName) {
+    XData? multiOptPropXData = getMultiOptPropXData(multiOptPropName);
+    dynamic data = multiOptPropXData?.data;
+    if (data != null) {
+      return data;
+    } else {
+      return data;
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ValueWrap? __specifyDefaultMultiOptPropValue({
+    required String multiOptPropName,
+    required XData multiOptPropXData,
+    required Object? parentMultiOptPropValue,
+  }) {
+    ValueWrap? valueWrap = specifyDefaultMultiOptPropValue(
+      multiOptPropXData: multiOptPropXData,
+      multiOptPropName: multiOptPropName,
+      parentMultiOptPropValue: parentMultiOptPropValue,
+    );
+    if (valueWrap == null) {
+      __createNullValueWrapAppException(
+        methodName: "specifyDefaultMultiOptPropValue",
+        multiOptPropName: multiOptPropName,
+      );
+    }
+    List? value = valueWrap?.values ?? [];
+    return ValueWrap.multi(
+      multiOptPropXData.findInternalItemsByDynamics(
+        dynamicValues: value,
+        addToInternalIfNotFound: true,
+        removeCurrentNotFoundItems: true,
+      ),
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __createNullValueWrapAppException({
+    required String methodName,
+    required String multiOptPropName,
+  }) {
+    MultiOptProp? multiOptProp =
+        _formPropsStructure._getMultiOptProp(multiOptPropName);
+    if (multiOptProp == null) {
+      throw "The '$multiOptPropName' is not $MultiOptProp";
+    }
+    String message =
+        "The ${getClassName(this)}.$methodName() method must return a non-null $ValueWrap for the multiOptPropName '$multiOptPropName'. ";
+    if (multiOptProp.singleSelection) {
+      message += "$ValueWrap.single(null) or $ValueWrap.single(value). ";
+    } else {
+      message += "$ValueWrap.multi([null]) or $ValueWrap.multi([value]). ";
+    }
+    message +=
+        "And return null for not $MultiOptProp. See the specification of this method for more information.";
+    // throw AppException(message: message);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ValueWrap? __getMultiOptPropValueFromItemDetail({
+    required String multiOptPropName,
+    required XData multiOptPropXData,
+    required ITEM_DETAIL itemDetail,
+    required Object? parentMultiOptPropValue,
+  }) {
+    ValueWrap? valueWrap = getMultiOptPropValueFromItemDetail(
+      multiOptPropName: multiOptPropName,
+      multiOptPropXData: multiOptPropXData,
+      itemDetail: itemDetail,
+      parentMultiOptPropValue: parentMultiOptPropValue,
+    );
+    if (valueWrap == null) {
+      __createNullValueWrapAppException(
+        methodName: "getMultiOptPropValueFromItemDetail",
+        multiOptPropName: multiOptPropName,
+      );
+    }
+    return valueWrap;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ValueWrap? __getMultiOptPropValueFromExtraFormInput({
+    required String multiOptPropName,
+    required XData multiOptPropXData,
+    required EXTRA_FORM_INPUT extraFormInput,
+    required Object? parentMultiOptPropValue,
+  }) {
+    if (extraFormInput is EmptyExtraFormInput) {
+      return null;
+    }
+    ValueWrap? valueWrap = getMultiOptPropValueFromExtraFormInput(
+      extraFormInput: extraFormInput,
+      multiOptPropXData: multiOptPropXData,
+      multiOptPropName: multiOptPropName,
+      parentMultiOptPropValue: parentMultiOptPropValue,
+    );
+    if (valueWrap == null) {
+      __createNullValueWrapAppException(
+        methodName: "getMultiOptPropValueFromExtraFormInput",
+        multiOptPropName: multiOptPropName,
+      );
+    }
+    List? value = valueWrap?.values ?? [];
+    return ValueWrap.multi(
+      multiOptPropXData.findInternalItemsByDynamics(
+        dynamicValues: value,
+        addToInternalIfNotFound: true,
+        removeCurrentNotFoundItems: true,
+      ),
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool get isNew {
+    return _formPropsStructure.isNew;
+  }
+
+  Map<String, dynamic> get initialFormData {
+    return _formPropsStructure.initialFormData;
+  }
+
+  Map<String, dynamic> get currentFormData {
+    return _formPropsStructure.currentFormData;
+  }
 
   // ***************************************************************************
   // ***************************************************************************
 
   void _clearWithDataState({required DataState formDataState}) {
     try {
-      this.data._clearWithDataState(
-            formDataState: formDataState,
-          );
+      _formPropsStructure._clearFormDataWithState(
+        formDataState: formDataState,
+      );
       //
       this.__clearFormKey();
       //
@@ -93,217 +948,15 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<bool> _unitLoadForm({required _XFormModel thisXFormModel}) async {
-    __assertThisXFormModel(thisXFormModel);
-    //
-    bool active = this.hasActiveUIComponent();
-    bool forceForm = thisXFormModel.forceForm;
-    //
-
-    if (!forceForm) {
-      if (!active) {
-        if (this.dataState == DataState.error ||
-            this.dataState == DataState.pending) {
-          _clearWithDataState(formDataState: this.dataState);
-          return true;
-        } else {
-          return true;
-        }
-      } else {
-        if (this.dataState == DataState.error ||
-            this.dataState == DataState.pending) {
-          forceForm = true;
-        } else {
-          return true;
-        }
-      }
-    }
-    //
-    // forceForm = true
-    //
-    __loadCount++;
-    print(
-        "@ ~~~~~~~~~~~~~~~~> ${getClassName(this)}._unitLoadForm - LOAD - $__loadCount");
-    //
-    ITEM_DETAIL? refreshedItemDetail = this.block.data.currentItemDetail;
-    FILTER_CRITERIA? filterCriteria = this.block.data.filterCriteria;
-    EXTRA_FORM_INPUT? extraFormInput =
-        thisXFormModel.extraFormInput as EXTRA_FORM_INPUT?;
-    bool isNew = this.data.isNew;
-    //
-    bool error = await _prepareMasterDataAndFormData(
-      extraFormInput: extraFormInput,
-      filterCriteria: filterCriteria,
-      refreshedItemDetail: refreshedItemDetail,
-      isNew: isNew,
+  void _setFormViewBuildingState({
+    required _RefreshableWidgetState widgetState,
+    required bool isBuilding,
+  }) {
+    _formWidgetStates.update(
+      widgetState,
+      (xState) => xState..isBuilding = isBuilding,
+      ifAbsent: () => _XState()..isBuilding = isBuilding,
     );
-    //
-    return error;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Future<bool> _unitSaveForm({required _XFormModel thisXFormModel}) async {
-    if (!__checkValidBeforeSave()) {
-      return false;
-    }
-    Map<String, dynamic> formMapData = data.currentFormData;
-    //
-    String calledMethodName = data.isNew //
-        ? 'callApiCreateItem'
-        : 'callApiUpdateItem';
-    //
-    ApiResult<ITEM_DETAIL> result;
-    bool saveError = false;
-    try {
-      FlutterArtist.codeFlowLogger._addMethodCall(
-        isLibCode: false,
-        ownerClassInstance: this,
-        methodName: calledMethodName,
-        parameters: {
-          "formMapData": formMapData,
-        },
-        navigate: null,
-      );
-      //
-      block._refreshSavingState(isSaving: true);
-      //
-      result = data.isNew
-          ? await callApiCreateItem(formMapData: formMapData)
-          : await callApiUpdateItem(formMapData: formMapData);
-      //
-      block._refreshSavingState(isSaving: false);
-    } catch (e, stackTrace) {
-      saveError = true;
-      block._refreshSavingState(isSaving: false);
-      //
-      _handleError(
-        shelf: shelf,
-        methodName: calledMethodName,
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      return false;
-    }
-    //
-    try {
-      return await block._processSaveActionRestResult(
-        thisXBlock: thisXFormModel.xBlock,
-        calledMethodName: calledMethodName,
-        result: result,
-      );
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: '_processSaveActionRestResult',
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      //
-      return false;
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Future<bool> _prepareMasterDataAndFormData({
-    required EXTRA_FORM_INPUT? extraFormInput,
-    required FILTER_CRITERIA? filterCriteria,
-    required ITEM_DETAIL? refreshedItemDetail,
-    required bool isNew,
-  }) async {
-    bool error = false;
-    try {
-      //
-      // May throw ApiError.
-      //
-      await prepareFormMasterData(
-        filterCriteria: filterCriteria,
-        extraFormInput: extraFormInput,
-        refreshedItem: refreshedItemDetail,
-        isNew: isNew,
-      );
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "prepareFormMasterData",
-        error: "Error prepareFormMasterData: $e",
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      error = true;
-    }
-    //
-    if (error) {
-      this.data._clearWithDataState(
-            formDataState: DataState.error,
-          );
-      return false;
-    }
-    //
-    Map<String, dynamic> newFormData = {};
-    try {
-      newFormData = prepareFormData(
-        filterCriteria: filterCriteria,
-        extraFormInput: extraFormInput,
-        refreshedItem: refreshedItemDetail,
-        isNew: isNew,
-      );
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "prepareFormData",
-        error: "Error prepareFormData: $e",
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      error = true;
-    }
-    //
-    if (error) {
-      this.data._clearWithDataState(
-            formDataState: DataState.error,
-          );
-      return false;
-    }
-    //
-    try {
-      this.data._updateFormData(newFormData);
-      this._formKey.currentState?.patchValue(newFormData);
-      //
-      this.data._setCurrentItem(
-            refreshedItemDetail: refreshedItemDetail,
-            formMode: isNew //
-                ? FormMode.creation
-                : FormMode.edit,
-            dataState: DataState.ready,
-          );
-      //
-      updateAllUIComponents(); // TODO: Xu ly loi?
-      this.block.updateControlBarWidgets();
-      return true;
-    } catch (e, stackTrace) {
-      error = true;
-      //
-      _handleError(
-        shelf: shelf,
-        methodName: "_updateFormData",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-    }
-    //
-    if (error) {
-      this.data._clearWithDataState(
-            formDataState: DataState.error,
-          );
-      return false;
-    }
   }
 
   // ***************************************************************************
@@ -313,8 +966,12 @@ abstract class FormModel<
     required _RefreshableWidgetState widgetState,
     required final bool isShowing,
   }) {
-    bool isShowingOLD = _formWidgetStates[widgetState] ?? false;
-    _formWidgetStates[widgetState] = isShowing;
+    bool isShowingOLD = _formWidgetStates[widgetState]?.isShowing ?? false;
+    _formWidgetStates.update(
+      widgetState,
+      (xState) => xState..isShowing = isShowing,
+      ifAbsent: () => _XState()..isShowing = isShowing,
+    );
     if (!isShowingOLD && isShowing) {
       block.shelf._startNewLazyQueryTransactionIfNeed();
     }
@@ -379,7 +1036,7 @@ abstract class FormModel<
 
   bool hasActiveUIComponent() {
     for (State formWidgetState in _formWidgetStates.keys) {
-      bool visible = _formWidgetStates[formWidgetState] ?? false;
+      bool visible = _formWidgetStates[formWidgetState]?.isShowing ?? false;
       if (visible && formWidgetState.mounted) {
         return true;
       }
@@ -391,49 +1048,84 @@ abstract class FormModel<
   // ***************************************************************************
 
   bool isDirty() {
-    return data._isDirty();
+    return _formPropsStructure._isDirty();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   bool isEnabled() {
-    return block._isEnableFormToModify();
+    Actionable actionable = block._isEnableFormToModify();
+    print("Action >>>>>>>>>> ${actionable.message}");
+    return actionable.yes;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   void resetForm() {
-    Map<String, dynamic> initData = {...data._initialFormData};
-    for (String key in _formKey.currentState?.instantValue.keys ?? []) {
-      if (!initData.containsKey(key)) {
-        initData[key] = null;
-      }
+    Actionable canReset = block.canResetForm();
+    if (canReset.no) {
+      return;
     }
-    _formKey.currentState?.patchValue(initData);
-    //
-    shelf.updateAllUIComponents();
+    try {
+      _changeEventLocked = true;
+      //
+      // Reset FormData:
+      //
+      _formPropsStructure._resetFormData();
+      //
+      // Patch _formKey:
+      //
+      Map<String, dynamic> initData = {..._formPropsStructure.initialFormData};
+      for (String key in _formKey.currentState?.instantValue.keys ?? []) {
+        if (!initData.containsKey(key)) {
+          initData[key] = null;
+        }
+      }
+      _formKey.currentState?.patchValue(initData);
+      //
+      shelf.updateAllUIComponents();
+    } finally {
+      _changeEventLocked = false;
+    }
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   // Change Event from GUI.
-  void _onChangeFromFormWidget() {
-    if (_formKey.currentState?.instantValue != null) {
-      data._currentFormData.addAll(_formKey.currentState!.instantValue);
-      if (data._justInitialized) {
-        data._initialFormData.addAll(_formKey.currentState!.instantValue);
-      }
-    }
+  Future<void> _onChangeFromFormView() async {
+    print("#~~~~~~~~~~~~~~~> _onChangeFromFormView");
+    //
+    _XShelf xShelf = _XShelf(
+      shelf: shelf,
+      forceFilterModelOpt: null,
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: [],
+      forceQueryFormModelOpts: [],
+    );
+    //
+    _XBlock xBlock = xShelf.findXBlockByName(block.name)!;
+    _XFormModel xFormModel = xBlock.xFormModel!;
+    _FormViewChangeTaskUnit taskUnit =
+        _FormViewChangeTaskUnit(xFormModel: xFormModel);
+    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    await FlutterArtist.executor._executeTaskUnitQueue(showOverlay: false);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void _afterBuildFormWidget() {
-    data._justInitialized = false;
+  bool _isWidgetStateBuilding({required _RefreshableWidgetState widgetState}) {
+    return _formWidgetStates[widgetState]?.isBuilding ?? false;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _afterBuildFormView() {
+    _formPropsStructure._justInitialized = false;
   }
 
   // ***************************************************************************
@@ -442,22 +1134,34 @@ abstract class FormModel<
   // TODO: Change name!
   // Do not call this method in library.
   Map<String, dynamic> initFormValue() {
-    return data._currentFormData;
+    return _formPropsStructure.currentFormData;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  dynamic getFormInitialValue(String propertyName) {
+    return _formPropsStructure.initialFormData[propertyName];
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   dynamic getFormInstantValue(String propertyName) {
-    return data._currentFormData[propertyName];
+    return _formPropsStructure.currentFormData[propertyName];
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
+  // TODO: Add test case:
+  @Deprecated("Xem lai, co can xoa di khong?")
   void setFormInstantValue(String propertyName, dynamic value) {
     _formKey.currentState?.patchValue({propertyName: value});
-    data._currentFormData[propertyName] = value;
+    _formPropsStructure._setCurrentPropValue(
+      propName: propertyName,
+      value: value,
+    );
     this.updateAllUIComponents();
   }
 
@@ -465,6 +1169,8 @@ abstract class FormModel<
   // ***************************************************************************
 
   Future<ApiResult<ITEM_DETAIL>> callApiCreateItem({
+    required FILTER_CRITERIA filterCriteria,
+    required Object? parentBlockItem,
     required Map<String, dynamic> formMapData,
   });
 
@@ -472,58 +1178,9 @@ abstract class FormModel<
   // ***************************************************************************
 
   Future<ApiResult<ITEM_DETAIL>> callApiUpdateItem({
+    required FILTER_CRITERIA filterCriteria,
+    required Object? parentBlockItem,
     required Map<String, dynamic> formMapData,
-  });
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ///
-  /// Call this method to initialize the necessary data for the Form.
-  /// For example, the list of items of the [Dropdown].
-  ///
-  /// This method is called before [prepareFormData] method.
-  ///
-  /// Example:
-  /// ```dart
-  /// Future<void> prepareFormMasterData({
-  ///     required EmptyFilterCriteria? filterCriteria,
-  ///     required EmptyExtraFormInput? extraFormInput,
-  ///     required EmployeeData? refreshedItem,
-  ///     required bool isNew,
-  /// }) {
-  ///   ApiResult<CompanyPage> result1 = await companyApi.getCompanyPage();
-  ///   // Throw ApiError
-  ///   result1.throwIfError();
-  ///   this.companyPage = result1.data;
-  ///   CompanyInfo? company = this.companyPage.getSelectedCompany()
-  ///
-  ///   ApiResult<DepartmentPage> result2 = await deptApi.getDepartmentPage(company);
-  ///   // Throw ApiError
-  ///   result2.throwIfError();
-  ///   this.departmentPage = result2.data;
-  ///   ...
-  /// }
-  /// ```
-  ///
-  Future<void> prepareFormMasterData({
-    required FILTER_CRITERIA? filterCriteria,
-    required EXTRA_FORM_INPUT? extraFormInput,
-    required ITEM_DETAIL? refreshedItem,
-    required bool isNew,
-  });
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ///
-  /// This method is called after [prepareFormMasterData].
-  ///
-  Map<String, dynamic> prepareFormData({
-    required FILTER_CRITERIA? filterCriteria,
-    required EXTRA_FORM_INPUT? extraFormInput,
-    required ITEM_DETAIL? refreshedItem,
-    required bool isNew,
   });
 
   // ***************************************************************************
@@ -564,9 +1221,9 @@ abstract class FormModel<
       xFormModel: xFormModel,
     );
     //
-    _taskUnitQueue.addTaskUnit(taskUnit);
+    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //
-    await FlutterArtist.storage._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeTaskUnitQueue();
     //
     return true;
   }
@@ -576,9 +1233,9 @@ abstract class FormModel<
   // ***************************************************************************
 
   void __assertThisXFormModel(_XFormModel thisXFormModel) {
-    if (thisXFormModel.formModel != this) {
+    if (!identical(thisXFormModel.formModel, this)) {
       String message =
-          "Error Assets block form: ${thisXFormModel.formModel} - $this";
+          "Error Assets form model: ${thisXFormModel.formModel} - $this";
       print("FATAL ERROR: $message");
       throw message;
     }

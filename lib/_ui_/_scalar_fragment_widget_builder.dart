@@ -34,7 +34,7 @@ class _ScalarFragmentWidgetBuilderState
   }
 
   @override
-  void addFilterFragmentWidgetState({required bool isShowing}) {
+  void addWidgetState({required bool isShowing}) {
     widget.scalar._addScalarFragmentWidgetState(
       widgetState: this,
       isShowing: isShowing,
@@ -42,7 +42,7 @@ class _ScalarFragmentWidgetBuilderState
   }
 
   @override
-  void removeFilterFragmentWidgetState() {
+  void removeWidgetState() {
     widget.scalar._removeScalarFragmentWidgetState(
       widgetState: this,
     );
@@ -51,5 +51,15 @@ class _ScalarFragmentWidgetBuilderState
   @override
   void checkAndFreeMemory() {
     FlutterArtist.storage._checkToRemoveShelf(widget.scalar.shelf);
+  }
+
+  @override
+  void executeAfterBuild() {
+    // Do nothing.
+  }
+
+  @override
+  void setBuildingState({required bool isBuilding}) {
+    //
   }
 }

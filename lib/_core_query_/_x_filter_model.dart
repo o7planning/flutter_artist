@@ -1,15 +1,20 @@
 part of '../flutter_artist.dart';
 
 class _XFilterModel {
+  final _XShelf xShelf;
+
   bool queried = false;
   final FilterModel filterModel;
   FilterInput? filterInput;
 
+  String get name => filterModel.name;
+
+  int get xShelfId => xShelf.xShelfId;
+
   _XFilterModel({
+    required this.xShelf,
     required this.filterModel,
   });
-
-  String get name => filterModel.name;
 
   @override
   String toString() {

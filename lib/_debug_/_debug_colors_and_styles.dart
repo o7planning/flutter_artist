@@ -42,6 +42,7 @@ const double _blockOrScalaInfoFontSize = 12;
 const Color _graphBoxDataStateReadyBgColor = Colors.green;
 const Color _graphBoxDataStatePendingBgColor = Colors.black54;
 const Color _graphBoxDataStateErrorBgColor = Colors.deepOrangeAccent;
+const Color _graphBoxDataStateNoneBgColor = Colors.white;
 
 const Color _graphBoxTextColor = Colors.white;
 final Color _graphBoxHighlighFilterColor = Colors.amberAccent.withAlpha(80);

@@ -8,6 +8,9 @@ class _SaveFormSaveTaskUnit extends _TaskUnit {
   });
 
   @override
+  int get xShelfId => xFormModel.xShelfId;
+
+  @override
   Shelf get shelf => xFormModel.formModel.block.shelf;
 
   @override

@@ -1,7 +1,9 @@
 part of '../flutter_artist.dart';
 
 class _NotificationEngine {
-  _NotificationEngine();
+  final INotificationAdapter? adapter;
+
+  _NotificationEngine(this.adapter);
 
   String __keyForNotificationSummary(String loggedInUserName) {
     return "$loggedInUserName-short-notification-summary--";
@@ -23,7 +25,6 @@ class _NotificationEngine {
   }
 
   Future<void> __getNotificationSummary() async {
-    NotificationAdapter? adapter = FlutterArtist.notificationAdapter;
     if (adapter == null) {
       print("No NotificationAdapter");
       return;
@@ -54,7 +55,7 @@ class _NotificationEngine {
       try {
         if (notificationSummaryJsonLocal != null) {
           notificationSummaryLocal =
-              adapter.fromJson(notificationSummaryJsonLocal);
+              adapter!.fromJson(notificationSummaryJsonLocal);
         }
       } catch (e, stackTrace) {
         FlutterArtist.errorLogger.addError(
@@ -82,7 +83,7 @@ class _NotificationEngine {
       try {
         // Fetch from Server:
         ApiResult<INotificationSummary> result =
-            await adapter.callApiGetNotificationSummary();
+            await adapter!.callApiGetNotificationSummary();
         if (result.isError()) {
           FlutterArtist.errorLogger.addError(
             shelfName: null,
@@ -121,7 +122,7 @@ class _NotificationEngine {
       FlutterArtist._notifyNotification(fetchedData);
       //
       try {
-        String notificationSummaryJSON = adapter.toJson(fetchedData);
+        String notificationSummaryJSON = adapter!.toJson(fetchedData);
         notificationSummaryBox.put(
           notificationSummaryKey,
           notificationSummaryJSON,

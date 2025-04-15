@@ -29,7 +29,7 @@ class _BlockFragmentWidgetBuilderState
   RefreshableWidgetType get type => RefreshableWidgetType.blockFragment;
 
   @override
-  void addFilterFragmentWidgetState({required bool isShowing}) {
+  void addWidgetState({required bool isShowing}) {
     widget.block._addBlockFragmentWidgetState(
       widgetState: this,
       isShowing: isShowing,
@@ -37,7 +37,7 @@ class _BlockFragmentWidgetBuilderState
   }
 
   @override
-  void removeFilterFragmentWidgetState() {
+  void removeWidgetState() {
     widget.block._removeBlockFragmentWidgetState(
       widgetState: this,
     );
@@ -51,5 +51,15 @@ class _BlockFragmentWidgetBuilderState
   @override
   void checkAndFreeMemory() {
     FlutterArtist.storage._checkToRemoveShelf(widget.block.shelf);
+  }
+
+  @override
+  void executeAfterBuild() {
+    // Do nothing.
+  }
+
+  @override
+  void setBuildingState({required bool isBuilding}) {
+    //
   }
 }

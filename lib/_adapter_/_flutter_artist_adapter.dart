@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-interface class FlutterArtistAdapter {
+interface class IFlutterArtistAdapter {
   Future<dynamic> showOverlay({
     double opacity = 0,
     required Future<dynamic> Function() asyncFunction,

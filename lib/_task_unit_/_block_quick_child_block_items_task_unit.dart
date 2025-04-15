@@ -12,6 +12,9 @@ class _BlockQuickChildBlockItemsTaskUnit<
   });
 
   @override
+  int get xShelfId => xBlock.xShelfId;
+
+  @override
   Shelf get shelf => xBlock.block.shelf;
 
   @override

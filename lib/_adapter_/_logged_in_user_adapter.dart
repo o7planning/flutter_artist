@@ -2,8 +2,8 @@ part of '../flutter_artist.dart';
 
 ///
 ///
-interface class LoggedInUserAdapter {
-  String toJson(ILoggedInUser fluLoggedInUser) {
+interface class ILoggedInUserAdapter {
+  String toJson(ILoggedInUser loggedInUser) {
     throw UnimplementedError();
   }
 

@@ -5,16 +5,12 @@ class _FormViewBuilder extends _RefreshableWidget {
 
   final Widget Function() build;
 
-  @Deprecated("Not use")
-  final Function()? onAfterBuild;
-
   const _FormViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
     required this.formModel,
     required this.build,
-    this.onAfterBuild,
   });
 
   @override
@@ -35,7 +31,15 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
   RefreshableWidgetType get type => RefreshableWidgetType.form;
 
   @override
-  void addFilterFragmentWidgetState({required bool isShowing}) {
+  void setBuildingState({required bool isBuilding}) {
+    widget.formModel._setFormViewBuildingState(
+      widgetState: this,
+      isBuilding: isBuilding,
+    );
+  }
+
+  @override
+  void addWidgetState({required bool isShowing}) {
     widget.formModel._addFormWidgetState(
       widgetState: this,
       isShowing: true,
@@ -43,10 +47,15 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
   }
 
   @override
-  void removeFilterFragmentWidgetState() {
+  void removeWidgetState() {
     widget.formModel._removeFormWidgetState(
       widgetState: this,
     );
+  }
+
+  @override
+  void executeAfterBuild() {
+    widget.formModel._afterBuildFormView();
   }
 
   @override
@@ -97,8 +106,6 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
 
   @override
   Widget buildContent(BuildContext context) {
-    __executeAfterBuild();
-    //
     if (widget.formModel.block.leaveTheFormSafely) {
       return PopScope(
         // TODO: In Error, check again late.
@@ -111,30 +118,32 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
     }
   }
 
+  Future<void> _onChanged() async {
+    if (FlutterArtist.executor.executingXShelfId != null) {
+      return;
+    }
+    if (widget.formModel._changeEventLocked) {
+      return;
+    }
+    //
+    bool isBuilding = widget.formModel._isWidgetStateBuilding(
+      widgetState: this,
+    );
+    if (!isBuilding) {
+      await widget.formModel._onChangeFromFormView();
+    }
+  }
+
   FormBuilder _buildFormBuilder() {
     return FormBuilder(
       key: formKey,
       initialValue: widget.formModel.initFormValue(),
-      onChanged: () {
-        widget.formModel._onChangeFromFormWidget();
-        if (mounted) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            widget.formModel.shelf.updateAllUIComponents();
-          });
-        }
-      },
+      onChanged: _onChanged,
       child: AbsorbPointer(
         absorbing: !widget.formModel.isEnabled(),
         child: widget.build(),
       ),
     );
-  }
-
-  Future<void> __executeAfterBuild() async {
-    // IMPORTANT: Do not remove below line:
-    await Future.delayed(Duration.zero);
-    //
-    widget.formModel._afterBuildFormWidget();
   }
 
   @override

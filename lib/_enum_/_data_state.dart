@@ -3,7 +3,8 @@ part of '../flutter_artist.dart';
 enum DataState {
   ready,
   pending,
-  error;
+  error,
+  none;
 }
 
 extension DataStateExtension on DataState {
@@ -15,6 +16,8 @@ extension DataStateExtension on DataState {
         return _dataStatePendingIconData;
       case DataState.error:
         return _dataStateErrorIconData;
+      case DataState.none:
+        return _dataStateNoneIconData;
     }
   }
 
@@ -26,6 +29,8 @@ extension DataStateExtension on DataState {
         return "pending";
       case DataState.error:
         return "error";
+      case DataState.none:
+        return "none";
     }
   }
 
@@ -37,6 +42,8 @@ extension DataStateExtension on DataState {
         return Colors.green;
       case DataState.error:
         return Colors.red;
+      case DataState.none:
+        return Colors.black12;
     }
   }
 }

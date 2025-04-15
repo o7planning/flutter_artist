@@ -72,7 +72,7 @@ class _ControlButtonState extends _RefreshableWidgetState<ScalarControl> {
   }
 
   @override
-  void addFilterFragmentWidgetState({required bool isShowing}) {
+  void addWidgetState({required bool isShowing}) {
     widget.scalar._addControlWidgetState(
       widgetState: this,
       isShowing: isShowing,
@@ -80,7 +80,7 @@ class _ControlButtonState extends _RefreshableWidgetState<ScalarControl> {
   }
 
   @override
-  void removeFilterFragmentWidgetState() {
+  void removeWidgetState() {
     widget.scalar._removeControlWidgetState(
       widgetState: this,
     );
@@ -89,5 +89,15 @@ class _ControlButtonState extends _RefreshableWidgetState<ScalarControl> {
   @override
   void checkAndFreeMemory() {
     FlutterArtist.storage._checkToRemoveShelf(widget.scalar.shelf);
+  }
+
+  @override
+  void executeAfterBuild() {
+    // Do nothing.
+  }
+
+  @override
+  void setBuildingState({required bool isBuilding}) {
+    //
   }
 }

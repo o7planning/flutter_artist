@@ -381,13 +381,13 @@ class _GraphItemBlockOrScalarBoxState
     FormModel formModel,
   ) {
     String className = getClassName(formModel);
-    final DataState dataState = formModel.dataState;
+    final DataState dataState = formModel.formDataState;
     final bool active = formModel.hasActiveUIComponent();
     //
     return "FORM MODEL: $className \n"
         "Data State: ${dataState.name.toUpperCase()} "
         "| Visibility: ${active ? 'VISIBLE' : 'HIDDEN'} "
-        "| Mode: ${formModel.data.formMode.name.toUpperCase()}";
+        "| Mode: ${formModel.formMode.name.toUpperCase()}";
   }
 
   String _blockOrScalarTooltipMessage(
@@ -407,6 +407,8 @@ class _GraphItemBlockOrScalarBoxState
         return _dataStateReadyIconData;
       case DataState.error:
         return _dataStateErrorIconData;
+      case DataState.none:
+        return _dataStateNoneIconData;
     }
   }
 
@@ -427,6 +429,8 @@ class _GraphItemBlockOrScalarBoxState
         return _graphBoxDataStateReadyBgColor;
       case DataState.error:
         return _graphBoxDataStateErrorBgColor;
+      case DataState.none:
+        return _graphBoxDataStateNoneBgColor;
     }
   }
 
@@ -472,7 +476,7 @@ class _GraphItemBlockOrScalarBoxState
   Widget _buildFormDataState(FormModel formModel) {
     return Container(
       padding: const EdgeInsets.all(3),
-      color: _dataStateBgColor(formModel.dataState),
+      color: _dataStateBgColor(formModel.formDataState),
       child: _buildCustomTooltip(
         message: _formTooltipMessage(
           formModel,
@@ -481,7 +485,7 @@ class _GraphItemBlockOrScalarBoxState
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Icon(
-              _dataStateIconData(formModel.dataState),
+              _dataStateIconData(formModel.formDataState),
               size: 16,
               color: _graphBoxTextColor,
             ),

@@ -34,16 +34,16 @@ class _LoggedInUserBuilderState
   }
 
   @override
-  void addFilterFragmentWidgetState({required bool isShowing}) {
-    FlutterArtist._loggedInUserManager._addLoggedInUserWidgetState(
+  void addWidgetState({required bool isShowing}) {
+    FlutterArtist._globalsManager._addLoggedInUserWidgetState(
       widgetState: this,
       isShowing: isShowing,
     );
   }
 
   @override
-  void removeFilterFragmentWidgetState() {
-    FlutterArtist._loggedInUserManager._removeLoggedInUserWidgetState(
+  void removeWidgetState() {
+    FlutterArtist._globalsManager._removeLoggedInUserWidgetState(
       widgetState: this,
     );
   }
@@ -51,5 +51,15 @@ class _LoggedInUserBuilderState
   @override
   void checkAndFreeMemory() {
     // Do nothing.
+  }
+
+  @override
+  void executeAfterBuild() {
+    // Do nothing.
+  }
+
+  @override
+  void setBuildingState({required bool isBuilding}) {
+    //
   }
 }

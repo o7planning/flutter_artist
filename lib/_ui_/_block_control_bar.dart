@@ -47,7 +47,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   }
 
   @override
-  void addFilterFragmentWidgetState({required bool isShowing}) {
+  void addWidgetState({required bool isShowing}) {
     widget.block._addControlBarWidgetState(
       widgetState: this,
       isShowing: isShowing,
@@ -55,7 +55,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   }
 
   @override
-  void removeFilterFragmentWidgetState() {
+  void removeWidgetState() {
     widget.block._removeControlBarWidgetState(
       widgetState: this,
     );
@@ -95,6 +95,9 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   }
 
   Widget? _buildLeft2Buttons() {
+    Actionable deleteActionable = widget.block.canDeleteCurrentItem();
+    Actionable createActionable = widget.block.canCreateItem();
+    //
     return _buildBreadCrumb(
       children: [
         if (widget.block.formModel != null && widget.showCreateButton)
@@ -102,7 +105,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             tooltip: "Create",
             iconData: _formCreateIconData,
             onAction: widget.block.isPreparingFormCreation,
-            onPressed: widget.showCreateButton && widget.block.canCreateItem()
+            onPressed: widget.showCreateButton && createActionable.yes
                 ? () {
                     _prepareToCreate(widget.block);
                   }
@@ -112,17 +115,15 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
           _ControlBarButton(
             tooltip: "Delete",
             iconData: _formDeleteIconData,
-            iconColor:
-                widget.showDeleteButton && widget.block.canDeleteCurrentItem()
-                    ? Colors.red
-                    : Colors.black26,
+            iconColor: widget.showDeleteButton && deleteActionable.yes
+                ? Colors.red
+                : Colors.black26,
             onAction: widget.block.isDeleting,
-            onPressed:
-                widget.showDeleteButton && widget.block.canDeleteCurrentItem()
-                    ? () {
-                        _doDelete(widget.block);
-                      }
-                    : null,
+            onPressed: widget.showDeleteButton && deleteActionable.yes
+                ? () {
+                    _doDelete(widget.block);
+                  }
+                : null,
           ),
       ],
       divider: _buildSpaceSeparator(),
@@ -160,12 +161,11 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
                 (loggedInUser?.isSystemUser ?? false))
               Tooltip(
                 message:
-                    "${widget.block.formModel!.data.formMode.tooltip} [${getClassName(widget.block)}]",
+                    "${widget.block.formModel!.formMode.tooltip} [${getClassName(widget.block)}]",
                 child: Icon(
-                  widget.block.formModel!.data.formMode == FormMode.none
+                  widget.block.formModel!.formMode == FormMode.none
                       ? _formNoneModeIconData
-                      : widget.block.formModel!.data.formMode ==
-                              FormMode.creation
+                      : widget.block.formModel!.formMode == FormMode.creation
                           ? _formCreationModeIconData
                           : _formEditModeIconData,
                   size: _ControlBarButton.iconSize,
@@ -200,6 +200,9 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   }
 
   Widget? _buildRight1Buttons(BuildContext context) {
+    Actionable refreshActionable = widget.block.canRefreshCurrentItem();
+    Actionable queryActionable = widget.block.canQuery();
+    //
     return _buildBreadCrumb(
       children: [
         if (widget.showRefreshButton)
@@ -207,19 +210,18 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             tooltip: "Refresh Current Item",
             iconData: _formRefreshIconData,
             onAction: widget.block.isRefreshingCurrentItem,
-            onPressed:
-                widget.showRefreshButton && widget.block.canRefreshCurrentItem()
-                    ? () {
-                        _refreshCurrentItem(widget.block);
-                      }
-                    : null,
+            onPressed: widget.showRefreshButton && refreshActionable.yes
+                ? () {
+                    _refreshCurrentItem(widget.block);
+                  }
+                : null,
           ),
         if (widget.showQueryButton)
           _ControlBarButton(
             tooltip: "Re Query",
             iconData: _formQueryIconData,
             onAction: widget.block.isQuerying,
-            onPressed: widget.showQueryButton && widget.block.canQuery()
+            onPressed: widget.showQueryButton && queryActionable.yes
                 ? () {
                     _queryBlock(widget.block);
                   }
@@ -236,6 +238,9 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   }
 
   Widget? _buildRight2Buttons(BuildContext context) {
+    Actionable saveActionable = widget.block.canSaveForm();
+    Actionable resetActionable = widget.block.canResetForm();
+    //
     return _buildBreadCrumb(
       children: [
         if (widget.block.formModel != null && widget.showSaveButton)
@@ -243,7 +248,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             tooltip: "Save",
             iconData: _formSaveIconData,
             onAction: widget.block.__isSaving,
-            onPressed: widget.showSaveButton && widget.block.canSaveForm()
+            onPressed: widget.showSaveButton && saveActionable.yes
                 ? () {
                     _saveForm(widget.block);
                   }
@@ -254,7 +259,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             tooltip: "Reset",
             iconData: _formCleanIconData,
             onAction: false,
-            onPressed: widget.showSaveButton && widget.block.canResetForm()
+            onPressed: widget.showSaveButton && resetActionable.yes
                 ? () {
                     _resetForm(widget.block);
                   }
@@ -271,6 +276,8 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   }
 
   Widget? _buildRight3Buttons(BuildContext context) {
+    Actionable formInfoActionable = widget.block.canShowFormInfo();
+    //
     return _buildBreadCrumb(
       children: [
         if (widget.showFilterCriteriaButton &&
@@ -288,7 +295,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
                   }
                 : null,
           ),
-        if (widget.showFormInfoButton && widget.block.canShowFormInfo())
+        if (widget.showFormInfoButton && formInfoActionable.yes)
           _ControlBarButton(
             tooltip: "Form Data",
             iconData: _blockIconData,
@@ -359,5 +366,15 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   @override
   void checkAndFreeMemory() {
     FlutterArtist.storage._checkToRemoveShelf(widget.block.shelf);
+  }
+
+  @override
+  void executeAfterBuild() {
+    // Do nothing.
+  }
+
+  @override
+  void setBuildingState({required bool isBuilding}) {
+    //
   }
 }

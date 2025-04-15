@@ -18,23 +18,16 @@ class BlockData<
       FILTER_CRITERIA,
       EXTRA_FORM_INPUT> block;
 
-  late final List<ITEM> _items;
+  final List<ITEM> _items = [];
   final List<ITEM> _selectedItems = [];
   final List<ITEM> _checkedItems = [];
-
-  ///
-  /// return a copied list of items.
-  ///
-  List<ITEM> get items {
-    return [..._items];
-  }
 
   // ***************************************************************************
 
   List<ITEM> moveCurrentItemToEndOfList({
     required List<ITEM> itemList,
   }) {
-    ITEM? currItem = this.currentItem;
+    ITEM? currItem = this.__currentItem;
     if (currItem == null) {
       return itemList;
     }
@@ -55,7 +48,7 @@ class BlockData<
   List<ITEM> getCheckedItems({
     required CurrentItemChkInclusion currentItemInclusion,
   }) {
-    ITEM? currItem = this.currentItem;
+    ITEM? currItem = this.__currentItem;
     bool contains = this.isCurrentItemChecked;
     //
     //
@@ -84,7 +77,7 @@ class BlockData<
   List<ITEM> getSelectedItems({
     required CurrentItemSelInclusion currentItemInclusion,
   }) {
-    ITEM? currItem = this.currentItem;
+    ITEM? currItem = this.__currentItem;
     bool contains = this.isCurrentItemSelected;
     //
     if (currItem != null) {
@@ -109,11 +102,11 @@ class BlockData<
   // ***************************************************************************
 
   bool get isCurrentItemChecked {
-    ITEM? currentItem = this.currentItem;
+    ITEM? currentItem = this.__currentItem;
     if (currentItem == null) {
       return false;
     }
-    return FormUtils.isListContainItem(
+    return ItemsUtils.isListContainItem(
       item: currentItem,
       targetList: _checkedItems,
       getItemId: block.getItemId,
@@ -123,11 +116,11 @@ class BlockData<
   // ***************************************************************************
 
   bool get isCurrentItemSelected {
-    ITEM? currentItem = this.currentItem;
+    ITEM? currentItem = this.__currentItem;
     if (currentItem == null) {
       return false;
     }
-    return FormUtils.isListContainItem(
+    return ItemsUtils.isListContainItem(
       item: currentItem,
       targetList: _selectedItems,
       getItemId: block.getItemId,
@@ -136,48 +129,13 @@ class BlockData<
 
   // ***************************************************************************
 
-  ///
-  /// return a copied list of checked items.
-  ///
-  List<ITEM> get checkedItems {
-    return [..._checkedItems];
-  }
-
-  ///
-  /// return a copied list of selected items.
-  ///
-  List<ITEM> get selectedItems {
-    return [..._selectedItems];
-  }
-
-  int get itemCount => _items.length;
-
-  bool get isEmpty => _items.isEmpty;
-
-  bool get isNotEmpty => _items.isNotEmpty;
-
   Object? _currentParentItemId;
 
   FILTER_CRITERIA? _filterCriteria;
 
-  FILTER_CRITERIA? get filterCriteria => _filterCriteria;
-
   PageData<ITEM>? _lastQueryResult;
 
-  ///
-  /// ```dart
-  /// if(thisBlock.data.lastQueryResult == null) {
-  ///   ...
-  /// } else if(thisBlock.data.lastQueryResult is YourType) {
-  ///   ...
-  /// } else {
-  ///   // Empty PageData<I>.
-  ///   // Occurs if there is no "Item" currently selected on the parent Block
-  ///   // or this Block was previously in Lazy Query State.
-  /// }
-  /// ```
-  ///
-  PageData<ITEM>? get lastQueryResult => _lastQueryResult;
+  ActionResultState? _lastQueryResultState;
 
   late PageableData? _pageable;
 
@@ -185,43 +143,29 @@ class BlockData<
 
   late PaginationData? _pagination;
 
-  PaginationData? get pagination => PaginationData.copy(_pagination);
-
   _CurrentCoupleItem<ITEM, ITEM_DETAIL> __current = _CurrentCoupleItem(
     item: null,
     itemDetail: null,
   );
 
-  ITEM? get currentItem => __current._item;
+  ITEM? get __currentItem => __current._item;
 
-  ITEM_DETAIL? get currentItemDetail => __current._itemDetail;
+  ITEM_DETAIL? get __currentItemDetail => __current._itemDetail;
 
-  DataState _queryDataState = DataState.pending;
-
-  DataState get queryDataState => _queryDataState;
+  late DataState _queryDataState;
 
   DataState _selectionDataState = DataState.pending;
 
-  DataState get selectionDataState => _selectionDataState;
-
   // ***************************************************************************
   // ***************************************************************************
 
-  // BlockData({
-  //   required this.block,
-  //   required List<ITEM> items,
-  //   required PaginationData? pagination,
-  //   required PageableData? pageable,
-  // })  : _items = items,
-  //       _pageable = pageable,
-  //       _pagination = pagination;
-
-  BlockData.empty(
+  BlockData._(
     this.block,
     PageableData? pageable,
-  )   : _items = [],
-        _pageable = pageable,
-        _pagination = PaginationData.empty();
+  )   : _pageable = pageable,
+        _pagination = PaginationData.empty() {
+    _queryDataState = block.isRoot ? DataState.pending : DataState.none;
+  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -230,18 +174,23 @@ class BlockData<
     required DataState queryDataState,
   }) {
     _queryDataState = queryDataState;
+    if (_queryDataState == DataState.error) {
+      _filterCriteria = null;
+      _lastQueryResultState = ActionResultState.fail;
+    }
     _items.clear();
     _selectedItems.clear();
     _checkedItems.clear();
     _setCurrentItemOnly(refreshedItem: null, refreshedItemDetail: null);
-    _lastQueryResult = null;
+    // TODO: set _lastQueryResult null khi FilterCriteria thay doi?
+    // _lastQueryResult = null;
     // _filterCriteria = filterCriteria;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _isXCriteriaChanged({
+  bool _isParentOrFilterCriteriaChanged({
     required Object? newCurrentParentItemId,
     required FILTER_CRITERIA newFilterCriteria,
   }) {
@@ -257,7 +206,7 @@ class BlockData<
   // ***************************************************************************
   // ***************************************************************************
 
-  void sort() {
+  void _sortItems() {
     try {
       if (block._itemSortCriteria != null) {
         _items.sort((a, b) => block._itemSortCriteria!._compare(a, b));
@@ -270,7 +219,7 @@ class BlockData<
   // ***************************************************************************
   // ***************************************************************************
 
-  void setToPending() {
+  void _setToPending() {
     _queryDataState = DataState.pending;
   }
 
@@ -296,17 +245,17 @@ class BlockData<
   void _removeItem({
     required ITEM removeItem,
   }) {
-    FormUtils.removeItemFromList(
+    ItemsUtils.removeItemFromList(
       targetList: _items,
       removeItem: removeItem,
       getItemId: block.getItemId,
     );
-    FormUtils.removeItemFromList(
+    ItemsUtils.removeItemFromList(
       targetList: _checkedItems,
       removeItem: removeItem,
       getItemId: block.getItemId,
     );
-    FormUtils.removeItemFromList(
+    ItemsUtils.removeItemFromList(
       targetList: _selectedItems,
       removeItem: removeItem,
       getItemId: block.getItemId,
@@ -318,22 +267,22 @@ class BlockData<
 
   void _insertOrReplaceItem({
     required ITEM item,
-    required ITEM_DETAIL itemDetail,
+    // required ITEM_DETAIL itemDetail,
   }) {
-    FormUtils.insertOrReplaceItemInList(
+    ItemsUtils.insertOrReplaceItemInList(
       targetList: _items,
       item: item,
       getItemId: block.getItemId,
     );
     //
-    sort();
+    _sortItems();
     //
-    FormUtils.replaceItemInList(
+    ItemsUtils.replaceItemInList(
       targetList: _checkedItems,
       replacementItem: item,
       getItemId: block.getItemId,
     );
-    FormUtils.replaceItemInList(
+    ItemsUtils.replaceItemInList(
       targetList: _selectedItems,
       replacementItem: item,
       getItemId: block.getItemId,
@@ -344,20 +293,20 @@ class BlockData<
   // ***************************************************************************
 
   void __appendItems({required List<ITEM> appendItems}) {
-    FormUtils.appendItemsToList(
+    ItemsUtils.appendItemsToList(
       appendItems: appendItems,
       targetList: _items,
       getItemId: block.getItemId,
     );
     //
-    sort();
+    _sortItems();
     //
-    FormUtils.replaceItemsInList(
+    ItemsUtils.replaceItemsInList(
       replacementItems: appendItems,
       targetList: _selectedItems,
       getItemId: block.getItemId,
     );
-    FormUtils.replaceItemsInList(
+    ItemsUtils.replaceItemsInList(
       replacementItems: appendItems,
       targetList: _checkedItems,
       getItemId: block.getItemId,
@@ -374,7 +323,9 @@ class BlockData<
     required PageableData? pageable,
     required PageData<ITEM>? pageData,
     required DataState queryDataState,
+    required ActionResultState queryResultState,
   }) {
+    _lastQueryResultState = queryResultState;
     // Check if filterCriteria changed.
     if (forceListBehavior == ListBehavior.replace ||
         _currentParentItemId != currentParentItemId ||
@@ -382,7 +333,19 @@ class BlockData<
       _items.clear();
     }
     //
-    PageData<ITEM> ap = pageData ?? DefaultPageData<ITEM>.empty();
+    final PageData<ITEM> ap = pageData ?? DefaultPageData<ITEM>.empty();
+    _pageable = pageable?.copy();
+    if (_currentParentItemId != currentParentItemId ||
+        _filterCriteria != filterCriteria) {
+      _pagination = PaginationData.copy(ap.pagination);
+    } else {
+      // Query Error:
+      if (queryResultState == ActionResultState.fail) {
+        // No change _pagination:
+      } else {
+        _pagination = PaginationData.copy(ap.pagination);
+      }
+    }
     //
     _currentParentItemId = currentParentItemId;
     _filterCriteria = filterCriteria;
@@ -392,380 +355,6 @@ class BlockData<
     // Append to _items:
     //
     __appendItems(appendItems: ap.items);
-    //
-    _pageable = pageable?.copy();
-    _pagination = PaginationData.copy(ap.pagination);
-    //
-    block.formModel?.data._formMode = FormMode.none;
-  }
-
-  // ***************************************************************************
-  // ******* PUBLIC ITEM PROPERTIES ********************************************
-  // ***************************************************************************
-
-  bool isSame({
-    required ITEM? item1,
-    required ITEM? item2,
-  }) {
-    if (item1 == null && item2 == null) {
-      return true;
-    }
-    if (item1 != null && item2 != null) {
-      return block.getItemId(item1) == block.getItemId(item2);
-    }
-    return false;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ITEM? get firstItem {
-    return _items.firstOrNull;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ITEM? get lastItem {
-    return _items.lastOrNull;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ///
-  /// The next item of the current item.
-  /// Return null if no current item or the current item is the last item.
-  ///
-  ITEM? get nextSiblingItem {
-    if (currentItem == null) {
-      return null;
-    }
-    return findNextSiblingItem(item: currentItem!);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ///
-  /// The previous item of the current item.
-  /// Return null if no current item or the current item is the first item.
-  ///
-  ITEM? get previousSiblingItem {
-    if (currentItem == null) {
-      return null;
-    }
-    return findPreviousSiblingItem(item: currentItem!);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool get hasPreviousItem => previousSiblingItem != null;
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool get hasNextItem => nextSiblingItem != null;
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ///
-  /// Check if the first item is current item.
-  ///
-  bool get isFirstItemCurrent {
-    ITEM? first = firstItem;
-    ITEM? current = currentItem;
-    if (first == null || current == null) {
-      return false;
-    }
-    return block.getItemId(first) == block.getItemId(current);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ///
-  /// Check if the last item is current item.
-  ///
-  bool get isLastItemCurrent {
-    ITEM? last = lastItem;
-    ITEM? current = currentItem;
-    if (last == null || current == null) {
-      return false;
-    }
-    return block.getItemId(last) == block.getItemId(current);
-  }
-
-  // ***************************************************************************
-  // ******* PUBLIC ITEM METHODS ***********************************************
-  // ***************************************************************************
-
-  bool isSelectedIndex({required int index}) {
-    ITEM? item = findItemByIndex(index);
-    if (item == null) {
-      return false;
-    }
-    return isSelectedItem(item);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool isCurrentIndex({required int index}) {
-    ITEM? item = findItemByIndex(index);
-    if (item == null) {
-      return false;
-    }
-    return isCurrentItem(item: item);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool isCurrentItem({
-    required ITEM item,
-  }) {
-    ITEM? currIt = __current._item;
-    return currIt != null && block.getItemId(item) == block.getItemId(currIt);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool isSelectedItem(ITEM item) {
-    return FormUtils.isListContainItem(
-      targetList: _selectedItems,
-      item: item,
-      getItemId: block.getItemId,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool isCheckedItem(ITEM item) {
-    return FormUtils.isListContainItem(
-      targetList: _checkedItems,
-      item: item,
-      getItemId: block.getItemId,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool containsItem({
-    required ITEM item,
-  }) {
-    return FormUtils.isListContainItem(
-      targetList: _items,
-      item: item,
-      getItemId: block.getItemId,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ITEM? findNextSiblingItem({
-    required ITEM item,
-  }) {
-    return FormUtils.findNextSiblingItemInList(
-      item: item,
-      targetList: _items,
-      getItemId: block.getItemId,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ITEM? findPreviousSiblingItem({
-    required ITEM item,
-  }) {
-    return FormUtils.findPreviousSiblingItemInList(
-      item: item,
-      targetList: _items,
-      getItemId: block.getItemId,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ITEM? findSiblingItem({
-    required ITEM item,
-  }) {
-    return FormUtils.findSiblingItemInList(
-      item: item,
-      targetList: _items,
-      getItemId: block.getItemId,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ITEM? findItemSameIdWith({
-    required ITEM item,
-  }) {
-    ID id = block.getItemId(item);
-    return findItemById(id);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ITEM? findItemById(ID itemId) {
-    return FormUtils.findItemById(
-      id: itemId,
-      targetList: _items,
-      getItemId: block.getItemId,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ITEM? findItemByIndex(int index) {
-    if (index < 0 || index >= _items.length) {
-      return null;
-    }
-    return _items[index];
-  }
-
-  // ***************************************************************************
-  // ******* PRIVATE ITEM METHODS **********************************************
-  // ***************************************************************************
-
-  void _toggleCheckItem({required ITEM item}) {
-    bool checked = isCheckedItem(item);
-    _setCheckedItem(item: item, checked: !checked);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _toggleSelectItem({required ITEM item}) {
-    bool selected = isSelectedItem(item);
-    _setSelectedItem(item: item, selected: !selected);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _setCheckedItem({required ITEM item, required bool checked}) {
-    if (checked) {
-      __checkItem(item);
-    } else {
-      __uncheckItem(item);
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _setSelectedItem({required ITEM item, required bool selected}) {
-    if (selected) {
-      __selectItem(item);
-    } else {
-      __deselectItem(item);
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _setCheckedItems({required List<ITEM> items}) {
-    FormUtils.insertOrReplaceItemsInList(
-      items: items,
-      targetList: _checkedItems,
-      getItemId: block.getItemId,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _setSelectedItems({required List<ITEM> items}) {
-    FormUtils.insertOrReplaceItemsInList(
-      items: items,
-      targetList: _selectedItems,
-      getItemId: block.getItemId,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void __checkItem(ITEM item) {
-    FormUtils.insertOrReplaceItemInList(
-      item: item,
-      targetList: _checkedItems,
-      getItemId: block.getItemId,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void __selectItem(ITEM item) {
-    FormUtils.insertOrReplaceItemInList(
-      item: item,
-      targetList: _selectedItems,
-      getItemId: block.getItemId,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void __uncheckItem(ITEM item) {
-    FormUtils.removeItemFromList(
-      removeItem: item,
-      targetList: _checkedItems,
-      getItemId: block.getItemId,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void __deselectItem(ITEM item) {
-    FormUtils.removeItemFromList(
-      removeItem: item,
-      targetList: _selectedItems,
-      getItemId: block.getItemId,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _uncheckAllItems() {
-    _checkedItems.clear();
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _deselectAllItems() {
-    _selectedItems.clear();
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _checkAllItems() {
-    _setCheckedItems(items: _items);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _selectAllItems() {
-    _setSelectedItems(items: _items);
+    // block.formModel?.data._formMode = FormMode.none;
   }
 }

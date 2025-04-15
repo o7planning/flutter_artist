@@ -86,14 +86,26 @@ abstract class Scalar<
     }
   }
 
-  late final data = ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
-
-  DataState get queryDataState => data._queryDataState;
+  late final __scalarData =
+      ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
 
   final ScalarHiddenBehavior hiddenBehavior;
 
   final Map<_RefreshableWidgetState, bool> _scalarFragmentWidgetStates = {};
   final Map<_RefreshableWidgetState, bool> _scalarControlWidgetStates = {};
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  DataState get queryDataState => __scalarData._queryDataState;
+
+  FILTER_CRITERIA? get filterCriteria => __scalarData._filterCriteria;
+
+  VALUE? get value => __scalarData._value;
+
+  void setToPending() {
+    __scalarData._setToPending();
+  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -141,7 +153,7 @@ abstract class Scalar<
       parameters: {},
     );
     //
-    FILTER_CRITERIA? filterCriteria;
+    FILTER_CRITERIA? filterCriteriaOfFilterModel;
     try {
       final _XFilterModel xFilterModel = thisXScalar.xFilterModel;
       final FilterModel filterModel = xFilterModel.filterModel;
@@ -149,13 +161,15 @@ abstract class Scalar<
       if (!xFilterModel.queried) {
         FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
         //
-        filterCriteria = await filterModel._prepareMasterDataAndFilterData(
+        filterCriteriaOfFilterModel =
+            await filterModel._startNewFilterTransaction(
           filterInput: filterInput,
         ) as FILTER_CRITERIA?;
         //
         xFilterModel.queried = true;
       } else {
-        filterCriteria = filterModel._filterCriteria! as FILTER_CRITERIA;
+        filterCriteriaOfFilterModel =
+            filterModel._filterCriteria! as FILTER_CRITERIA;
       }
     } catch (e, stackTrace) {
       /* Never Error */
@@ -163,7 +177,7 @@ abstract class Scalar<
     //
     // Has Error in FilterModel.
     //
-    if (filterCriteria == null) {
+    if (filterCriteriaOfFilterModel == null) {
       // Set Block to error cascade.
       __clearWithDataState(
         thisXScalar: thisXScalar,
@@ -175,8 +189,8 @@ abstract class Scalar<
     //
     // Ready FilterCriteria:
     //
-    bool xCriteriaChanged = this.data._isXCriteriaChanged(
-          newFilterCriteria: filterCriteria,
+    bool xCriteriaChanged = this.__scalarData._isXCriteriaChanged(
+          newFilterCriteria: filterCriteriaOfFilterModel,
         );
     //
     bool isQueryError = false;
@@ -185,7 +199,7 @@ abstract class Scalar<
       __refreshQueryingState(isQuerying: true);
       //
       ApiResult<VALUE> result = await callApiQuery(
-        filterCriteria: filterCriteria,
+        filterCriteria: filterCriteriaOfFilterModel,
       );
       //
       if (result.isError()) {
@@ -222,7 +236,7 @@ abstract class Scalar<
     //
     __setQueryDataWithState(
       thisXScalar: thisXScalar,
-      filterCriteria: filterCriteria,
+      filterCriteria: filterCriteriaOfFilterModel,
       dataState: newQueryDataState,
       value: value,
     );
@@ -302,7 +316,7 @@ abstract class Scalar<
         var taskUnit = _ScalarQueryTaskUnit(
           xScalar: thisXScalar,
         );
-        _taskUnitQueue.addTaskUnit(taskUnit);
+        FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     }
     return true;
   }
@@ -318,7 +332,7 @@ abstract class Scalar<
   }) {
     __assertThisXScalar(thisXScalar);
     //
-    this.data._updateFrom(
+    this.__scalarData._updateFrom(
           filterCriteria: filterCriteria,
           dataState: dataState,
           value: value,
@@ -334,7 +348,7 @@ abstract class Scalar<
   }) {
     __assertThisXScalar(thisXScalar);
     //
-    this.data._clearWithDataState(queryDataState: queryDataState);
+    this.__scalarData._clearWithDataState(queryDataState: queryDataState);
   }
 
   // ***************************************************************************
@@ -390,14 +404,14 @@ abstract class Scalar<
   // ***************************************************************************
 
   Future<ApiResult<VALUE>> callApiQuery({
-    required FILTER_CRITERIA? filterCriteria,
+    required FILTER_CRITERIA filterCriteria,
   });
 
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
-  @RootMethod()
+  @RootMethodAnnotation()
   Future<bool> executeQuickAction<DATA extends Object>({
     FILTER_INPUT? filterInput,
     required ActionConfirmationType actionConfirmationType,
@@ -461,9 +475,9 @@ abstract class Scalar<
       afterQuickAction: afterQuickAction,
     );
     //
-    _taskUnitQueue.addTaskUnit(taskUnit);
+    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //
-    await FlutterArtist.storage._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeTaskUnitQueue();
     return true;
   }
 
@@ -474,7 +488,7 @@ abstract class Scalar<
   ///
   ///
   @nonVirtual
-  @RootMethod()
+  @RootMethodAnnotation()
   Future<bool> query({
     FILTER_INPUT? filterInput,
   }) async {
@@ -640,14 +654,11 @@ abstract class Scalar<
       event: "Scalar '${getClassName(this)}' just hides all UI Components!",
       isLibCode: true,
     );
-    if (hiddenBehavior == ScalarHiddenBehavior.clear) {
-      Future.delayed(
-        const Duration(seconds: 0),
-        () {
-          // TODO: ???????????????
-          // this.emptyQuery();
-        },
-      );
+    switch (hiddenBehavior) {
+      case ScalarHiddenBehavior.none:
+        break;
+      case ScalarHiddenBehavior.clear:
+        break;
     }
   }
 

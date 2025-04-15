@@ -1,10 +1,13 @@
 part of '../flutter_artist.dart';
 
 class _XBlock {
+  final _XShelf xShelf;
   final _XFilterModel xFilterModel;
   final Block block;
 
   String get name => block.name;
+
+  int get xShelfId => xShelf.xShelfId;
 
   bool affectByFilterInput = false;
 
@@ -20,10 +23,6 @@ class _XBlock {
   SuggestedSelection? __suggestedSelection;
   PostQueryBehavior? __postQueryBehavior;
   PageableData? __pageable;
-
-  // Candidate for current selection.
-  // @Deprecated("Xoa di, chuyen sang _TaskUnit")
-  // Object? _candidateCurrentItem;
 
   // ***************************************************************************
   // ***************************************************************************
@@ -47,6 +46,7 @@ class _XBlock {
   // ***************************************************************************
 
   _XBlock({
+    required this.xShelf,
     required this.block,
     required this.xBlockParent,
     required this.xFilterModel,

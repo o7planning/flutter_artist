@@ -37,7 +37,7 @@ class _CustomControlBarState extends _RefreshableWidgetState<CustomControlBar> {
   RefreshableWidgetType get type => RefreshableWidgetType.customControlBar;
 
   @override
-  void addFilterFragmentWidgetState({required bool isShowing}) {
+  void addWidgetState({required bool isShowing}) {
     // TODO: implement addWidgetState
   }
 
@@ -47,12 +47,22 @@ class _CustomControlBarState extends _RefreshableWidgetState<CustomControlBar> {
   }
 
   @override
-  void removeFilterFragmentWidgetState() {
+  void removeWidgetState() {
     // TODO: implement removeWidgetState
   }
 
   @override
   void checkAndFreeMemory() {
     FlutterArtist.storage._checkToRemoveShelf(widget.block.shelf);
+  }
+
+  @override
+  void executeAfterBuild() {
+    // Do nothing.
+  }
+
+  @override
+  void setBuildingState({required bool isBuilding}) {
+    //
   }
 }

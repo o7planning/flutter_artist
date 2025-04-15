@@ -70,7 +70,7 @@ abstract class _XBase {
 
   void _handleError({
     required Shelf shelf,
-    required String methodName,
+    required String? methodName,
     required dynamic error,
     required StackTrace stackTrace,
     required bool showSnackBar,
@@ -86,8 +86,9 @@ abstract class _XBase {
       );
     }
     //
-    String msg =
-        "Call ${getClassName(this)}.$methodName() error: ${apiError.errorMessage}";
+    String msg = methodName == null
+        ? "Error: ${apiError.errorMessage}"
+        : "Call ${getClassName(this)}.$methodName() error: ${apiError.errorMessage}";
     print(msg);
     if (!FlutterArtist.testCaseMode) {
       print(stackTrace);

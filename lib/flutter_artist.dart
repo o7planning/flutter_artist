@@ -10,6 +10,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart' as cupertino;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_artist_dialogs/flutter_artist_dialogs.dart' as dialogs;
 import 'package:flutter_artist_rest_core/flutter_artist_rest_core.dart';
@@ -28,6 +29,18 @@ part '_action_/_quick_action.dart';
 
 part '_ui_/_form_view.dart';
 
+part '_login_/_login_activity_base.dart';
+
+part '_login_/_simple_login_view.dart';
+
+part '_ui_/_activity_fragment_widget_builder.dart';
+
+part '_enum_/_activity_hidden_behavior.dart';
+
+part '_core_/_activity.dart';
+
+part '_enum_/_action_result_state.dart';
+
 part '_ui_/_block_items_view.dart';
 
 part '_enum_/_current_item_selection_type.dart';
@@ -44,7 +57,11 @@ part '_adapter_/_flutter_artist_adapter.dart';
 
 part '_adapter_/_logged_in_user_adapter.dart';
 
+part '_core_/_global_data.dart';
+
 part '_adapter_/_notification_adapter.dart';
+
+part '_adapter_/_global_data_adapter.dart';
 
 part '_code_flow_/__code_flow_const.dart';
 
@@ -78,8 +95,6 @@ part '_core_/_block_data.dart';
 
 part '_core_/_form_model.dart';
 
-part '_core_/_form_model_data.dart';
-
 part '_core_/_form_leave_safely.dart';
 
 part '_core_/_block_or_scalar.dart';
@@ -89,8 +104,6 @@ part '_core_/_current_couple_item.dart';
 part '_core_/_custom_confirmation.dart';
 
 part '_core_/_filter_model.dart';
-
-part '_core_/_filter_model_data.dart';
 
 part '_core_/_default_filter_model.dart';
 
@@ -102,7 +115,7 @@ part '_core_/_filter_criteria.dart';
 
 part '_core_/_filter_input.dart';
 
-part '_core_/_flutter_artist.dart';
+part '_fa_.dart';
 
 part '_core_/_item_sort_criteria.dart';
 
@@ -185,6 +198,8 @@ part '_debug_/_shelf_relationship_view.dart';
 part '_debug_/_shelf_structure_graph_view.dart';
 
 part '_debug_/_shelf_structure_tree_view.dart';
+
+part '_debug_/_form_structure_tree_view.dart';
 
 part '_debug_/_shelf_structure_view_config.dart';
 
@@ -278,7 +293,7 @@ part '_hive_/_hive_utils.dart';
 
 part '_icon_/_icon_constants.dart';
 
-part '_logged_in_user_/_logged_in_user_manager.dart';
+part '_globals_/_globals_manager.dart';
 
 part '_notification_/_notification.dart';
 
@@ -290,11 +305,51 @@ part '_task_unit_/__task_unit.dart';
 
 part '_task_unit_/__task_unit_queue.dart';
 
+part '_task_unit_/_form_view_change_task_unit.dart';
+
 part '_task_unit_/_block_delete_item_task_unit.dart';
 
 part '_task_unit_/_form_model_save_task_unit.dart';
 
 part '_task_unit_/_form_model_load_form_task_unit.dart';
+
+part '_task_unit_/_filter_view_change_task_unit.dart';
+
+part '_ui_/_x_state.dart';
+
+part '_enum_/_optioned_master_prop_type.dart';
+
+part '_utils_/_patch_utils.dart';
+
+part '_core_/_executor.dart';
+
+part '_filter_criterion_/_filter_criteria_structure.dart';
+
+part '_form_prop_/_form_props_structure.dart';
+
+part '_core_/_actionable.dart';
+
+part '_form_prop_/_prop.dart';
+
+part '_task_unit_/_block_prepare_to_create_item_task_unit.dart';
+
+part '_task_unit_/_block_clear_current_task_unit.dart';
+
+part '_enum_/_item_creation_type.dart';
+
+part '_actionable_/_cre_item_actionable.dart';
+
+part '_filter_criterion_/_simple_criterion.dart';
+
+part '_filter_criterion_/_multi_opt_criterion.dart';
+
+part '_filter_criterion_/_criterion.dart';
+
+part '_form_prop_/_simple_prop.dart';
+
+part '_form_prop_/_multi_opt_prop.dart';
+
+part '_form_prop_/_value_wrap.dart';
 
 part '_task_unit_/_block_query_task_unit.dart';
 
@@ -303,6 +358,10 @@ part '_task_unit_/_block_quick_action_task_unit.dart';
 part '_task_unit_/_block_quick_child_block_items_task_unit.dart';
 
 part '_task_unit_/_block_quick_create_item_task_unit.dart';
+
+part '_action_/_quick_create_multi_items_action.dart';
+
+part '_task_unit_/_block_quick_create_multi_items_task_unit.dart';
 
 part '_task_unit_/_block_quick_update_item_task_unit.dart';
 
@@ -404,10 +463,6 @@ part '_ui_control_/_scalar_control_text_button.dart';
 
 part '_utils_/_compare_utils.dart';
 
-part '_utils_/_form_utils.dart';
-
-part '_utils_/_items_utils.dart';
-
 part '_utils_/_json_utils.dart';
 
 part '_utils_/_register_error_utils.dart';
@@ -427,6 +482,10 @@ part '_utils_/_visibility_detector_utils.dart';
 // *****************************************************************************
 // *****************************************************************************
 
-class RootMethod {
-  const RootMethod();
+class RootMethodAnnotation {
+  const RootMethodAnnotation();
+}
+
+class ImportantMethodAnnotation {
+  const ImportantMethodAnnotation();
 }

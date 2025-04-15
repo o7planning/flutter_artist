@@ -25,7 +25,7 @@ class _BasePaginationState extends _RefreshableWidgetState<BasePagination> {
   }
 
   @override
-  void addFilterFragmentWidgetState({required bool isShowing}) {
+  void addWidgetState({required bool isShowing}) {
     widget.block._addPaginationWidgetState(
       widgetState: this,
       isShowing: isShowing,
@@ -33,7 +33,7 @@ class _BasePaginationState extends _RefreshableWidgetState<BasePagination> {
   }
 
   @override
-  void removeFilterFragmentWidgetState() {
+  void removeWidgetState() {
     widget.block._removePaginationWidgetState(
       widgetState: this,
     );
@@ -50,5 +50,15 @@ class _BasePaginationState extends _RefreshableWidgetState<BasePagination> {
   @override
   void checkAndFreeMemory() {
     FlutterArtist.storage._checkToRemoveShelf(widget.block.shelf);
+  }
+
+  @override
+  void executeAfterBuild() {
+    // Do nothing.
+  }
+
+  @override
+  void setBuildingState({required bool isBuilding}) {
+    //
   }
 }

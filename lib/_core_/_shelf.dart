@@ -13,6 +13,12 @@ abstract class Shelf extends _XBase {
   // All formModels.
   final List<FormModel> _allFormModels = [];
 
+  final Map<String, Activity> __activityMap = {};
+
+  final List<Activity> __activities = [];
+
+  List<Activity> get activities => [...__activities];
+
   final Map<String, Scalar> __scalarMap = {};
 
   final List<Scalar> __scalars = [];
@@ -80,9 +86,24 @@ abstract class Shelf extends _XBase {
       //
       _allFilterModels.add(filterModel);
     }
-
-    List<Scalar> scalars = _shelfStruct.scalars;
-
+    //
+    // Activity:
+    //
+    final List<Activity> activities = _shelfStruct.activities;
+    for (Activity activity in activities) {
+      if (__activityMap.containsKey(activity.name)) {
+        throw ___registerError(
+            "Duplicated Activity '${activity.name}' in '${getClassName(this)}'\n"
+            "Double-check ${getClassName(this)}.registerStructure() method");
+      } else {
+        __activityMap[activity.name] = activity;
+      }
+      activity.shelf = this;
+    }
+    //
+    // Scalar:
+    //
+    final List<Scalar> scalars = _shelfStruct.scalars;
     for (Scalar scalar in scalars) {
       if (__scalarMap.containsKey(scalar.name)) {
         throw ___registerError(
@@ -167,7 +188,9 @@ abstract class Shelf extends _XBase {
         }
       }
     }
-
+    //
+    // Block:
+    //
     List<Block> rootBlocks = _shelfStruct.blocks;
     for (Block rootBlock in rootBlocks) {
       rootBlock.parent = null;
@@ -332,6 +355,13 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
   // ***************************************************************************
 
+  Activity? findActivity(String activityName) {
+    return __activityMap[activityName];
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   FilterModel? findFilterModel(String filterModelName) {
     return _shelfStruct.filterModels[filterModelName];
   }
@@ -349,10 +379,10 @@ abstract class Shelf extends _XBase {
     required bool withControl,
     required bool activeOnly,
     required bool withPagination,
-    required Map<_RefreshableWidgetState, bool> founds,
+    required Map<_RefreshableWidgetState, _XState> founds,
   }) {
     for (Block block in blocks) {
-      Map<_RefreshableWidgetState, bool> m = block._findMountedWidgetStates(
+      Map<_RefreshableWidgetState, _XState> m = block._findMountedWidgetStates(
         activeOnly: activeOnly,
         withPagination: withPagination,
         withBlockFragment: withBlockFragment,
@@ -380,7 +410,7 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_RefreshableWidgetState, bool> _findMountedWidgetStates({
+  Map<_RefreshableWidgetState, _XState> _findMountedWidgetStates({
     required bool withBlockFragment,
     required bool withPagination,
     required bool withFilter,
@@ -389,7 +419,7 @@ abstract class Shelf extends _XBase {
     required bool withControl,
     required bool activeOnly,
   }) {
-    Map<_RefreshableWidgetState, bool> founds = {};
+    Map<_RefreshableWidgetState, _XState> founds = {};
     __findMountedWidgetStates(
       withPagination: withPagination,
       withBlockFragment: withBlockFragment,
@@ -593,7 +623,7 @@ abstract class Shelf extends _XBase {
   void __findLazyScalars(List<_ScalarOrBlockOrFormWrapper> founds) {
     for (Scalar scalar in __scalars) {
       if (scalar.hasActiveUIComponent() &&
-          scalar.data.queryDataState == DataState.pending) {
+          scalar.queryDataState == DataState.pending) {
         founds.add(_ScalarOrBlockOrFormWrapper.scalar(scalar));
       }
     }
@@ -610,7 +640,7 @@ abstract class Shelf extends _XBase {
         founds.add(_ScalarOrBlockOrFormWrapper.block(block));
       } else if (block.formModel != null &&
           block.formModel!.hasActiveUIComponent() &&
-          block.formModel!.dataState == DataState.pending) {
+          block.formModel!.formDataState == DataState.pending) {
         founds.add(_ScalarOrBlockOrFormWrapper.formModel(block.formModel!));
       } else {
         __findTopLazyBlocksCascade(block._childBlocks, founds);
@@ -710,7 +740,7 @@ abstract class Shelf extends _XBase {
       //
       // Add to Queue:
       //
-      _taskUnitQueue.addTaskUnit(
+      FlutterArtist.taskUnitQueue.addTaskUnit(
         _ScalarQueryTaskUnit(
           xScalar: xScalar,
         ),
@@ -721,7 +751,7 @@ abstract class Shelf extends _XBase {
       //
       // Add to Queue:
       //
-      _taskUnitQueue.addTaskUnit(
+      FlutterArtist.taskUnitQueue.addTaskUnit(
         _BlockQueryTaskUnit(
           xBlock: xBlock,
         ),
@@ -735,14 +765,14 @@ abstract class Shelf extends _XBase {
     //   //
     //   // Add to Queue:
     //   //
-    //   _taskUnitQueue.addTaskUnit(
+    //   FlutterArtist.taskUnitQueue.addTaskUnit(
     //     _FormModelLoadFormTaskUnit(
     //       xFormModel: xFormModel,
     //     ),
     //   );
     // }
     //
-    await FlutterArtist.storage._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeTaskUnitQueue();
   }
 
   // ***************************************************************************

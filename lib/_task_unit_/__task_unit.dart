@@ -5,7 +5,14 @@ abstract class _TaskUnit {
     return "${getClassName(this)}/${getObjectName()}";
   }
 
+  int get xShelfId;
+
   String getObjectName();
 
   Shelf get shelf;
+
+  @override
+  String toString() {
+    return "${getClassName(this)}(${getObjectName()})";
+  }
 }

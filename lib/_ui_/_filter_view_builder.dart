@@ -1,5 +1,7 @@
 part of '../flutter_artist.dart';
 
+// bool _lockChangeEvent1 = false;
+
 class _FilterViewBuilder extends _RefreshableWidget {
   final FilterModel filterModel;
 
@@ -32,7 +34,15 @@ class _FilterViewBuilderState
   RefreshableWidgetType get type => RefreshableWidgetType.filter;
 
   @override
-  void addFilterFragmentWidgetState({required bool isShowing}) {
+  void setBuildingState({required bool isBuilding}) {
+    widget.filterModel._setFilterViewBuildingState(
+      widgetState: this,
+      isBuilding: isBuilding,
+    );
+  }
+
+  @override
+  void addWidgetState({required bool isShowing}) {
     widget.filterModel._addFilterFragmentWidgetState(
       widgetState: this,
       isShowing: true,
@@ -40,10 +50,15 @@ class _FilterViewBuilderState
   }
 
   @override
-  void removeFilterFragmentWidgetState() {
+  void removeWidgetState() {
     widget.filterModel._removeFilterFragmentWidgetState(
       widgetState: this,
     );
+  }
+
+  @override
+  void executeAfterBuild() {
+    widget.filterModel._afterBuildFilterView();
   }
 
   @override
@@ -52,33 +67,35 @@ class _FilterViewBuilderState
     widget.filterModel._formKey = formKey;
   }
 
+  Future<void> _onChanged() async {
+    if (FlutterArtist.executor.executingXShelfId != null) {
+      return;
+    }
+    //
+    bool isBuilding = widget.filterModel._isWidgetStateBuilding(
+      widgetState: this,
+    );
+    if (!isBuilding) {
+      await widget.filterModel._onChangeFromFilterView();
+    }
+  }
+
   @override
   Widget buildContent(BuildContext context) {
-    __executeAfterBuild();
+    widget.filterModel._setFilterViewBuildingState(
+      widgetState: this,
+      isBuilding: true,
+    );
     //
     return FormBuilder(
       key: formKey,
-      initialValue: widget.filterModel.initFilterValue(),
-      onChanged: () {
-        widget.filterModel._onChangeFromFilterView();
-        if (mounted) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            widget.filterModel.updateAllUIComponents();
-          });
-        }
-      },
+      initialValue: widget.filterModel._initFilterValue(),
+      onChanged: _onChanged,
       child: AbsorbPointer(
         absorbing: !widget.filterModel.isEnabled(),
         child: widget.build(),
       ),
     );
-  }
-
-  Future<void> __executeAfterBuild() async {
-    // IMPORTANT: Do not remove below line:
-    await Future.delayed(Duration.zero);
-    //
-    widget.filterModel._onChangeFromFilterView();
   }
 
   @override

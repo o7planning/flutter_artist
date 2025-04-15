@@ -11,6 +11,8 @@ const IconData _dataStateReadyIconData =
 const IconData _dataStateErrorIconData =
     cupertino.CupertinoIcons.exclamationmark_octagon;
 
+const IconData _dataStateNoneIconData = cupertino.CupertinoIcons.app;
+
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
@@ -86,6 +88,9 @@ const IconData _blockFragmentIconData = cupertino.CupertinoIcons.pano;
 const IconData _blockItemsViewIconData = cupertino.CupertinoIcons.table;
 
 const IconData _scalarFragmentIconData = cupertino.CupertinoIcons.pano_fill;
+
+const IconData _activityFragmentIconData =
+    cupertino.CupertinoIcons.pencil_circle;
 
 const IconData _paginationIconData = cupertino.CupertinoIcons.ellipsis_circle;
 

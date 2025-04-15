@@ -9,9 +9,13 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
 
   RefreshableWidgetType get type;
 
-  void addFilterFragmentWidgetState({required bool isShowing});
+  void setBuildingState({required bool isBuilding});
 
-  void removeFilterFragmentWidgetState();
+  void executeAfterBuild();
+
+  void addWidgetState({required bool isShowing});
+
+  void removeWidgetState();
 
   Widget buildContent(BuildContext context);
 
@@ -34,8 +38,8 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
     if (force) {
       setState(() {});
     } else {
-      if (_refreshCount < FlutterArtist.storage._taskUnitCount) {
-        _refreshCount = FlutterArtist.storage._taskUnitCount;
+      if (_refreshCount < FlutterArtist.executor.taskUnitCount) {
+        _refreshCount = FlutterArtist.executor.taskUnitCount;
         setState(() {});
       }
     }
@@ -43,11 +47,16 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
 
   @override
   Widget build(BuildContext context) {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      __executeAfterBuild();
+    });
+    this.setBuildingState(isBuilding: true);
+    //
     return VisibilityDetector(
       key: Key(keyId),
       onVisibilityChanged: (visibilityInfo) {
         var visiblePercentage = visibilityInfo.visibleFraction * 100;
-        addFilterFragmentWidgetState(isShowing: visiblePercentage > 0);
+        addWidgetState(isShowing: visiblePercentage > 0);
       },
       child: showMode == ShowMode.production
           ? buildContent(context)
@@ -57,6 +66,15 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
     );
   }
 
+  Future<void> __executeAfterBuild() async {
+    setBuildingState(isBuilding: false);
+    // IMPORTANT: Do not remove below line:
+    await Future.delayed(Duration.zero);
+    this.setBuildingState(isBuilding: false);
+    //
+    executeAfterBuild();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -64,14 +82,14 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
     keyId = _generateVisibilityDetectorId(
         prefix: "${type.toString()}-${getWidgetOwnerClassName()}");
     //
-    addFilterFragmentWidgetState(isShowing: true);
+    addWidgetState(isShowing: true);
   }
 
   @override
   void dispose() {
     super.dispose();
     //
-    removeFilterFragmentWidgetState();
+    removeWidgetState();
     //
     checkAndFreeMemory();
   }
