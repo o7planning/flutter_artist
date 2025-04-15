@@ -359,6 +359,10 @@ part '_task_unit_/_block_quick_child_block_items_task_unit.dart';
 
 part '_task_unit_/_block_quick_create_item_task_unit.dart';
 
+part '_action_/_quick_create_multi_items_action.dart';
+
+part '_task_unit_/_block_quick_create_multi_items_task_unit.dart';
+
 part '_task_unit_/_block_quick_update_item_task_unit.dart';
 
 part '_task_unit_/_block_select_as_current_task_unit.dart';

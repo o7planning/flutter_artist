@@ -1698,6 +1698,65 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  Future<bool> _unitQuickCreateMultiItems({
+    required _XBlock thisXBlock,
+    required QuickCreateMultiItemsAction<ITEM> action,
+  }) async {
+    __assertThisXBlock(thisXBlock);
+    //
+    FILTER_CRITERIA? blockCurrentFilterCriteria = filterCriteria;
+    if (blockCurrentFilterCriteria == null) {
+      throw AppException(message: "FilterCriteria is null");
+    }
+    //
+    ApiResult<PageData<ITEM>> result;
+    try {
+      FlutterArtist.codeFlowLogger._addMethodCall(
+        isLibCode: false,
+        navigate: null,
+        ownerClassInstance: action,
+        methodName: "callApiQuickCreateMultiItems",
+        parameters: {},
+      );
+      //
+      result = await action.callApiQuickCreateMultiItems();
+      //
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: '${getClassName(action)}.callApiQuickCreateMultiItems',
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      //
+      return false;
+    }
+    //
+    try {
+      return await _processCreateMultiItemsActionResult(
+        thisXBlock: thisXBlock,
+        blockCurrentFilterCriteria: blockCurrentFilterCriteria,
+        calledMethodName:
+            "${getClassName(action)}.callApiQuickCreateMultiItems",
+        result: result,
+      );
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: "${getClassName(action)}.callApiQuickCreateMultiItems",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      //
+      return false;
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<bool> _unitQuickUpdateItem({
     required _XBlock thisXBlock,
     required QuickUpdateItemAction<ITEM, ITEM_DETAIL> action,
@@ -1938,13 +1997,12 @@ abstract class Block<
     }
     //
     if (savedItemDetail != null && keepInList) {
-      bool forceForm = false;
+      // bool forceForm = false;
       ITEM refreshedItem = convertItemDetailToItem(
         itemDetail: savedItemDetail,
       );
       __blockData._insertOrReplaceItem(
         item: refreshedItem,
-        itemDetail: savedItemDetail,
       );
       //
       Actionable actionable = canEditItemOnForm(item: refreshedItem);
@@ -2035,6 +2093,52 @@ abstract class Block<
       //
       return true;
     }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<bool> _processCreateMultiItemsActionResult({
+    required _XBlock thisXBlock,
+    required FILTER_CRITERIA blockCurrentFilterCriteria,
+    required String calledMethodName,
+    required ApiResult<PageData<ITEM>> result,
+  }) async {
+    if (result.errorMessage != null) {
+      _handleRestError(
+        shelf: shelf,
+        methodName: calledMethodName,
+        message: result.errorMessage!,
+        errorDetails: result.errorDetails,
+        showSnackBar: true,
+      );
+      return false;
+    }
+    // TODO: Chuyen di noi khac.
+    FlutterArtist.storage._fireEventSourceChanged(
+      eventBlock: this,
+      itemIdString: null,
+    );
+    final PageData<ITEM>? newItemsPage = result.data;
+
+    final List<ITEM> keepInListItems = [];
+    for (ITEM newItem in newItemsPage?.items ?? []) {
+      // TODO: Keep in List:
+      final bool keepInList = true;
+      // keepInList = needToKeepItemInList(
+      //   filterCriteria: blockCurrentFilterCriteria,
+      //   savedItem: savedItemDetail,
+      // );
+      if (!keepInList) {
+        continue;
+      }
+      keepInListItems.add(newItem);
+      //
+      __blockData._insertOrReplaceItem(
+        item: newItem,
+      );
+    }
+    return true;
   }
 
   // ***************************************************************************
@@ -2761,6 +2865,59 @@ abstract class Block<
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
     _TaskUnit taskUnit = _BlockQuickCreateItemTaskUnit(
+      xBlock: thisXBlock,
+      action: action,
+    );
+    //
+    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    //
+    await FlutterArtist.executor._executeTaskUnitQueue();
+    return true;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @RootMethodAnnotation()
+  Future<bool> executeQuickActionCreateMultiItems<
+      A extends QuickCreateMultiItemsAction<ITEM>>({
+    required A action,
+  }) async {
+    FlutterArtist.codeFlowLogger._addMethodCall(
+      isLibCode: true,
+      navigate: null,
+      ownerClassInstance: this,
+      methodName: "executeQuickActionCreateMultiItems",
+      parameters: {
+        "action": action,
+      },
+    );
+    //
+    // Confirmation:
+    //
+    bool confirm = true;
+    if (action.needToConfirm) {
+      confirm = await __showActionConfirmation(
+        shelf: shelf,
+        defaultConfirmation: action._defaultConfirmation,
+        customConfirmation: action.createCustomConfirmation(),
+      );
+    }
+    if (!confirm) {
+      return false;
+    }
+    //
+    _XShelf xShelf = _XShelf(
+      shelf: shelf,
+      forceFilterModelOpt: null,
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: [],
+      forceQueryFormModelOpts: [],
+    );
+    //
+    _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    //
+    _TaskUnit taskUnit = _BlockQuickCreateMultiItemsTaskUnit(
       xBlock: thisXBlock,
       action: action,
     );

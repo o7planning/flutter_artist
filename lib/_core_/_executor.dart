@@ -106,6 +106,13 @@ class _Executor {
               action: taskUnit.action,
             );
           }
+          // Block QuickCreateMultiItems:
+          else if (taskUnit is _BlockQuickCreateMultiItemsTaskUnit) {
+            await taskUnit.xBlock.block._unitQuickCreateMultiItems(
+              thisXBlock: taskUnit.xBlock,
+              action: taskUnit.action,
+            );
+          }
           // Block QuickUpdateItem:
           else if (taskUnit is _BlockQuickUpdateItemTaskUnit) {
             await taskUnit.xBlock.block._unitQuickUpdateItem(

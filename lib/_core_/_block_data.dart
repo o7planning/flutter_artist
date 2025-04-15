@@ -267,7 +267,7 @@ class BlockData<
 
   void _insertOrReplaceItem({
     required ITEM item,
-    required ITEM_DETAIL itemDetail,
+    // required ITEM_DETAIL itemDetail,
   }) {
     ItemsUtils.insertOrReplaceItemInList(
       targetList: _items,
