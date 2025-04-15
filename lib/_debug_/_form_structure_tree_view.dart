@@ -167,31 +167,31 @@ class _FormStructureTreeViewState extends State<_FormStructureTreeView> {
   }
 
   void _addChildBlockCascade(TreeNode currentNode, Block block) {
-    _BlockOrScalar blockOrScalar = _BlockOrScalar.block(block);
-    TreeNode childNode = TreeNode(
-      key: "Block-${block.name}",
-      data: blockOrScalar,
-      // parent: currentNode,
-    );
-    if (blockOrScalar == widget.selectedBlockOrScalar) {
-      _currentNode = childNode;
-    }
-    currentNode.add(childNode);
-    for (Block childBlock in block.childBlocks) {
-      _addChildBlockCascade(childNode, childBlock);
-    }
+    // _BlockOrScalar blockOrScalar = _BlockOrScalar.block(block);
+    // TreeNode childNode = TreeNode(
+    //   key: "Block-${block.name}",
+    //   data: blockOrScalar,
+    //   // parent: currentNode,
+    // );
+    // if (blockOrScalar == widget.selectedBlockOrScalar) {
+    //   _currentNode = childNode;
+    // }
+    // currentNode.add(childNode);
+    // for (Block childBlock in block.childBlocks) {
+    //   _addChildBlockCascade(childNode, childBlock);
+    // }
   }
 
   void _addChildScalar(TreeNode currentNode, Scalar scalar) {
-    _BlockOrScalar blockOrScalar = _BlockOrScalar.scalar(scalar);
-    TreeNode childNode = TreeNode(
-      key: "Scalar-${scalar.name}",
-      data: blockOrScalar,
-      // parent: currentNode,
-    );
-    if (blockOrScalar == widget.selectedBlockOrScalar) {
-      _currentNode = childNode;
-    }
-    currentNode.add(childNode);
+    // _BlockOrScalar blockOrScalar = _BlockOrScalar.scalar(scalar);
+    // TreeNode childNode = TreeNode(
+    //   key: "Scalar-${scalar.name}",
+    //   data: blockOrScalar,
+    //   // parent: currentNode,
+    // );
+    // if (blockOrScalar == widget.selectedBlockOrScalar) {
+    //   _currentNode = childNode;
+    // }
+    // currentNode.add(childNode);
   }
 }
