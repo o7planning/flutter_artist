@@ -204,6 +204,16 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  Future<bool> _unitQuickExtraFormInput({
+    required _XFormModel thisXFormModel,
+    required EXTRA_FORM_INPUT extraFormInput,
+  }) async {
+    return true;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<bool> _unitSaveForm({required _XFormModel thisXFormModel}) async {
     FILTER_CRITERIA? blockCurrentFilterCriteria = block.filterCriteria;
     if (blockCurrentFilterCriteria == null) {
@@ -1189,6 +1199,46 @@ abstract class FormModel<
   // Private method. Only for use in this class.
   bool __checkValidBeforeSave() {
     return !block.__isSaving && (_formKey.currentState?.validate() ?? false);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<bool> enterFormFields({
+    required EXTRA_FORM_INPUT extraFormInput,
+  }) async {
+    FlutterArtist.codeFlowLogger._addMethodCall(
+      isLibCode: true,
+      ownerClassInstance: this,
+      methodName: "enterFormFields",
+      parameters: {},
+      navigate: null,
+    );
+    //
+    if (formMode == FormMode.none) {
+      throw _FatalAppException(message: "Form in 'none' mode");
+    }
+    //
+    _XShelf xShelf = _XShelf(
+      shelf: shelf,
+      forceFilterModelOpt: null,
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: [],
+      forceQueryFormModelOpts: [],
+    );
+    //
+    _XBlock xBlock = xShelf.findXBlockByName(this.block.name)!;
+    _XFormModel xFormModel = xBlock.xFormModel!;
+    _TaskUnit taskUnit = _FormModelQuickExtraFormInputTaskUnit(
+      xFormModel: xFormModel,
+      extraFormInput: extraFormInput,
+    );
+    //
+    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    //
+    await FlutterArtist.executor._executeTaskUnitQueue();
+    //
+    return true;
   }
 
   // ***************************************************************************

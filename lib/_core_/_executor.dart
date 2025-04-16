@@ -147,6 +147,13 @@ class _Executor {
               thisXFormModel: taskUnit.xFormModel,
             );
           }
+          // FormModel QuickExtraFormInputAction:
+          else if (taskUnit is _FormModelQuickExtraFormInputTaskUnit) {
+            await taskUnit.xFormModel.formModel._unitQuickExtraFormInput(
+              thisXFormModel: taskUnit.xFormModel,
+              extraFormInput: taskUnit.extraFormInput,
+            );
+          }
           // Scalar:
           else if (taskUnit is _ScalarQueryTaskUnit) {
             await taskUnit.xScalar.scalar._unitQuery(
