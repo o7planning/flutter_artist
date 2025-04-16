@@ -1288,7 +1288,7 @@ abstract class FormModel<
     //
     _XBlock xBlock = xShelf.findXBlockByName(this.block.name)!;
     _XFormModel xFormModel = xBlock.xFormModel!;
-    _TaskUnit taskUnit = _FormModelQuickExtraFormInputTaskUnit(
+    _TaskUnit taskUnit = _FormModelAutoEnterFormFieldsTaskUnit(
       xFormModel: xFormModel,
       extraFormInput: extraFormInput,
     );

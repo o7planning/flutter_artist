@@ -1,11 +1,11 @@
 part of '../flutter_artist.dart';
 
-class _FormModelQuickExtraFormInputTaskUnit<
+class _FormModelAutoEnterFormFieldsTaskUnit<
     EXTRA_FORM_INPUT extends ExtraFormInput> extends _TaskUnit {
   _XFormModel xFormModel;
   EXTRA_FORM_INPUT extraFormInput;
 
-  _FormModelQuickExtraFormInputTaskUnit({
+  _FormModelAutoEnterFormFieldsTaskUnit({
     required this.xFormModel,
     required this.extraFormInput,
   });

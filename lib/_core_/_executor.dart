@@ -148,7 +148,7 @@ class _Executor {
             );
           }
           // FormModel QuickExtraFormInputAction:
-          else if (taskUnit is _FormModelQuickExtraFormInputTaskUnit) {
+          else if (taskUnit is _FormModelAutoEnterFormFieldsTaskUnit) {
             await taskUnit.xFormModel.formModel._unitQuickExtraFormInput(
               thisXFormModel: taskUnit.xFormModel,
               extraFormInput: taskUnit.extraFormInput,

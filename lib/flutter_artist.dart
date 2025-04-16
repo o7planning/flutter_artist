@@ -313,7 +313,7 @@ part '_task_unit_/_form_model_save_task_unit.dart';
 
 part '_exception_/_fatal_app_exception.dart';
 
-part '_task_unit_/_form_model_quick_extra_form_input_task_unit.dart';
+part '_task_unit_/_form_model_auto_enter_form_fields_task_unit.dart';
 
 part '_task_unit_/_form_model_load_form_task_unit.dart';
 
@@ -366,8 +366,6 @@ part '_task_unit_/_block_quick_child_block_items_task_unit.dart';
 part '_task_unit_/_block_quick_create_item_task_unit.dart';
 
 part '_action_/_quick_create_multi_items_action.dart';
-
-part '_action_/_quick_extra_form_input_action.dart';
 
 part '_task_unit_/_block_quick_create_multi_items_task_unit.dart';
 
