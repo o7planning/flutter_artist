@@ -361,6 +361,8 @@ part '_task_unit_/_block_quick_create_item_task_unit.dart';
 
 part '_action_/_quick_create_multi_items_action.dart';
 
+part '_action_/_quick_extra_form_input_action.dart';
+
 part '_task_unit_/_block_quick_create_multi_items_task_unit.dart';
 
 part '_task_unit_/_block_quick_update_item_task_unit.dart';
