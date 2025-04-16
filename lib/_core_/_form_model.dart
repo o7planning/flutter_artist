@@ -155,7 +155,7 @@ abstract class FormModel<
     //
     await _startNewFormTransaction(
       extraFormInput: null,
-      isItemFirstLoad: false,
+      formDataAction: _FormDataAction.updateFromFormView,
     );
     return true;
   }
@@ -195,9 +195,25 @@ abstract class FormModel<
     //
     await _startNewFormTransaction(
       extraFormInput: extraFormInput,
-      isItemFirstLoad: true,
+      formDataAction: _FormDataAction.itemFirstLoad,
     );
     //
+    return true;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<bool> _unitQuickExtraFormInput({
+    required _XFormModel thisXFormModel,
+    required EXTRA_FORM_INPUT extraFormInput,
+  }) async {
+    __assertThisXFormModel(thisXFormModel);
+    //
+    await _startNewFormTransaction(
+      extraFormInput: extraFormInput,
+      formDataAction: _FormDataAction.autoEnterFormFields,
+    );
     return true;
   }
 
@@ -207,12 +223,11 @@ abstract class FormModel<
   Future<bool> _unitSaveForm({required _XFormModel thisXFormModel}) async {
     FILTER_CRITERIA? blockCurrentFilterCriteria = block.filterCriteria;
     if (blockCurrentFilterCriteria == null) {
-      throw AppException(message: "FilterCriteria is null");
+      throw _FatalAppException(message: "FilterCriteria is null");
     }
     if (!__checkValidBeforeSave()) {
       return false;
     }
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _unitSaveForm");
     final Map<String, dynamic> formMapData =
         _formPropsStructure.currentFormData;
     //
@@ -300,7 +315,7 @@ abstract class FormModel<
   @ImportantMethodAnnotation()
   Future<bool> _startNewFormTransaction({
     required EXTRA_FORM_INPUT? extraFormInput,
-    required bool isItemFirstLoad,
+    required _FormDataAction formDataAction,
   }) async {
     FILTER_CRITERIA? blockCurrentFilterCriteria = block.filterCriteria;
     if (blockCurrentFilterCriteria == null) {
@@ -308,7 +323,7 @@ abstract class FormModel<
     }
     __formTransactionCount++;
     print(
-        "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFormTransaction, isItemFirstLoad: $isItemFirstLoad");
+        "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFormTransaction, formDataAction: $formDataAction");
 
     final ITEM_DETAIL? itemDetail = block.currentItemDetail;
     final FormMode currentFormMode = formDataState == DataState.none
@@ -323,23 +338,29 @@ abstract class FormModel<
     // All values including hidden values (not on the user interface).
     Map<String, dynamic> allNewValue = {};
     //
-    // The First Load (Not from FormView)
-    //
-    if (isItemFirstLoad) {
-      if (isNoneMode || isCreationMode) {
-        _defaultValueInitiated = false;
-        allNewValue.addAll({});
-      } else {
-        allNewValue.addAll({});
-      }
-    }
-    //
-    // Update from FormView:
-    //
-    else {
-      allNewValue.addAll(_formPropsStructure.currentFormData);
-      // Update values from view (On the user Interface).
-      allNewValue.addAll(_formKey.currentState?.instantValue ?? {});
+    switch (formDataAction) {
+      //
+      // The First Load (Not from FormView)
+      //
+      case _FormDataAction.itemFirstLoad:
+        if (isNoneMode || isCreationMode) {
+          _defaultValueInitiated = false;
+          allNewValue.addAll({});
+        } else {
+          allNewValue.addAll({});
+        }
+      //
+      // Update from FormView:
+      //
+      case _FormDataAction.updateFromFormView:
+        allNewValue.addAll(_formPropsStructure.currentFormData);
+        // Update values from view (On the user Interface).
+        allNewValue.addAll(_formKey.currentState?.instantValue ?? {});
+      //
+      // Auto Enter Values (From ExtraFormInput).
+      //
+      case _FormDataAction.autoEnterFormFields:
+        allNewValue.addAll(_formPropsStructure.currentFormData);
     }
     //
     _formPropsStructure._initTemporaryForNewTransaction(
@@ -360,7 +381,7 @@ abstract class FormModel<
           extraFormInput: extraFormInput,
           parentMultiOptPropValue: null,
           multiOptProp: multiOptProp,
-          isItemFirstLoad: isItemFirstLoad,
+          formDataAction: formDataAction,
         );
       }
     } catch (e, stackTrace) {
@@ -374,7 +395,7 @@ abstract class FormModel<
       //
       __applyWithDataState(
         formDataState: DataState.error,
-        isItemFirstLoad: isItemFirstLoad,
+        formDataAction: formDataAction,
       );
       return false;
     }
@@ -382,7 +403,7 @@ abstract class FormModel<
     // Get SimpleProp Value:
     //
     Map<String, dynamic> simplePropValue = {};
-    if (isItemFirstLoad) {
+    if (formDataAction == _FormDataAction.itemFirstLoad) {
       if (itemDetail != null) {
         try {
           simplePropValue = await getSimplePropValuesFromItemDetail(
@@ -406,7 +427,7 @@ abstract class FormModel<
           //
           __applyWithDataState(
             formDataState: DataState.error,
-            isItemFirstLoad: isItemFirstLoad,
+            formDataAction: formDataAction,
           );
           return false;
         }
@@ -438,7 +459,7 @@ abstract class FormModel<
             //
             __applyWithDataState(
               formDataState: DataState.error,
-              isItemFirstLoad: isItemFirstLoad,
+              formDataAction: formDataAction,
             );
             return false;
           }
@@ -468,16 +489,50 @@ abstract class FormModel<
             //
             __applyWithDataState(
               formDataState: DataState.error,
-              isItemFirstLoad: isItemFirstLoad,
+              formDataAction: formDataAction,
             );
             return false;
           }
         }
       }
     }
+    //
+    else if (formDataAction == _FormDataAction.autoEnterFormFields) {
+      if (extraFormInput != null) {
+        try {
+          Map<String, dynamic> simplePropValueExtra =
+              getSimplePropValuesFromExtraFormInput(
+                    extraFormInput: extraFormInput,
+                  ) ??
+                  {};
+          //
+          for (String propName in simplePropValueExtra.keys) {
+            _formPropsStructure._setTempSimplePropValue(
+              propName: propName,
+              value: simplePropValueExtra[propName],
+            );
+          }
+        } catch (e, stackTrace) {
+          _handleError(
+            shelf: shelf,
+            methodName: "getSimplePropValuesFromItemDetail",
+            error: "Error getSimplePropValuesFromItemDetail: $e",
+            stackTrace: stackTrace,
+            showSnackBar: true,
+          );
+          //
+          __applyWithDataState(
+            formDataState: DataState.error,
+            formDataAction: formDataAction,
+          );
+          return false;
+        }
+      }
+    }
+    //
     return __applyWithDataState(
       formDataState: DataState.ready,
-      isItemFirstLoad: isItemFirstLoad,
+      formDataAction: formDataAction,
     );
   }
 
@@ -486,7 +541,7 @@ abstract class FormModel<
 
   bool __applyWithDataState({
     required DataState formDataState,
-    required bool isItemFirstLoad,
+    required _FormDataAction formDataAction,
   }) {
     try {
       //
@@ -500,7 +555,7 @@ abstract class FormModel<
       //
       // _formPropsStructure._applyAllTempDataToReal();
       //
-      if (isItemFirstLoad) {
+      if (formDataAction == _FormDataAction.itemFirstLoad) {
         _formPropsStructure._setInitialFormDataForItemFirstLoad();
       }
 
@@ -513,7 +568,7 @@ abstract class FormModel<
       //
       _defaultValueInitiated = true;
       _formPropsStructure._setFormDataState(formDataState);
-      if (isItemFirstLoad &&
+      if (formDataAction == _FormDataAction.itemFirstLoad &&
           formMode == FormMode.edit &&
           _formKey.currentState != null) {
         if (!_formKey.currentState!.isValid) {
@@ -570,7 +625,7 @@ abstract class FormModel<
     // May be new selected parent value.
     required Object? parentMultiOptPropValue,
     required MultiOptProp multiOptProp,
-    required bool isItemFirstLoad,
+    required _FormDataAction formDataAction,
   }) async {
     final String multiOptPropName = multiOptProp.propName;
 
@@ -615,6 +670,7 @@ abstract class FormModel<
       //  - And make sure children-OptProp to null if parent-Value is null or not selected.
       _formPropsStructure._updatePropsTempValues({multiOptPropName: null});
     }
+
     //
     // Load OptProp data from Rest API.
     // May throw ApiError.
@@ -636,7 +692,8 @@ abstract class FormModel<
     final ITEM_DETAIL? currentItemDetail = block.currentItemDetail;
     //
     if (multiOptPropXData != null) {
-      if (isItemFirstLoad) {
+      // Item First Load:
+      if (formDataAction == _FormDataAction.itemFirstLoad) {
         if (currentItemDetail == null) {
           if (extraFormInput != null) {
             selectedValueWrap = __getMultiOptPropValueFromExtraFormInput(
@@ -659,6 +716,17 @@ abstract class FormModel<
         else {
           selectedValueWrap = __getMultiOptPropValueFromItemDetail(
             itemDetail: currentItemDetail,
+            multiOptPropXData: multiOptPropXData,
+            multiOptPropName: multiOptPropName,
+            parentMultiOptPropValue: parentMultiOptPropValue,
+          );
+        }
+      }
+      // Auto Enter Form Fields:
+      else if (formDataAction == _FormDataAction.autoEnterFormFields) {
+        if (extraFormInput != null) {
+          selectedValueWrap = __getMultiOptPropValueFromExtraFormInput(
+            extraFormInput: extraFormInput,
             multiOptPropXData: multiOptPropXData,
             multiOptPropName: multiOptPropName,
             parentMultiOptPropValue: parentMultiOptPropValue,
@@ -754,7 +822,7 @@ abstract class FormModel<
           extraFormInput: extraFormInput,
           parentMultiOptPropValue: tempSelectedPropValue,
           multiOptProp: child,
-          isItemFirstLoad: isItemFirstLoad,
+          formDataAction: formDataAction,
         );
       }
     } else {
@@ -1189,6 +1257,47 @@ abstract class FormModel<
   // Private method. Only for use in this class.
   bool __checkValidBeforeSave() {
     return !block.__isSaving && (_formKey.currentState?.validate() ?? false);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @RootMethodAnnotation()
+  Future<bool> enterFormFields({
+    required EXTRA_FORM_INPUT extraFormInput,
+  }) async {
+    FlutterArtist.codeFlowLogger._addMethodCall(
+      isLibCode: true,
+      ownerClassInstance: this,
+      methodName: "enterFormFields",
+      parameters: {"extraFormInput": extraFormInput},
+      navigate: null,
+    );
+    //
+    if (formMode == FormMode.none) {
+      throw _FatalAppException(message: "Form in 'none' mode");
+    }
+    //
+    _XShelf xShelf = _XShelf(
+      shelf: shelf,
+      forceFilterModelOpt: null,
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: [],
+      forceQueryFormModelOpts: [],
+    );
+    //
+    _XBlock xBlock = xShelf.findXBlockByName(this.block.name)!;
+    _XFormModel xFormModel = xBlock.xFormModel!;
+    _TaskUnit taskUnit = _FormModelAutoEnterFormFieldsTaskUnit(
+      xFormModel: xFormModel,
+      extraFormInput: extraFormInput,
+    );
+    //
+    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    //
+    await FlutterArtist.executor._executeTaskUnitQueue();
+    //
+    return true;
   }
 
   // ***************************************************************************

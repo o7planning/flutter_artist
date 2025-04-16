@@ -21,4 +21,12 @@ abstract class BaseAction {
   /// ```
   ///
   CustomConfirmation? createCustomConfirmation();
+
+  Future<bool> _defaultConfirmation(BuildContext context) async {
+    return await dialogs.showConfirmDialog(
+      context: context,
+      message: 'Are you sure you want to perform this action?',
+      details: actionInfo ?? "",
+    );
+  }
 }
