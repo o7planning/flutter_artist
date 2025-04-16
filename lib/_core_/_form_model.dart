@@ -228,7 +228,6 @@ abstract class FormModel<
     if (!__checkValidBeforeSave()) {
       return false;
     }
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _unitSaveForm");
     final Map<String, dynamic> formMapData =
         _formPropsStructure.currentFormData;
     //
@@ -497,6 +496,40 @@ abstract class FormModel<
         }
       }
     }
+    //
+    else if (formDataAction == _FormDataAction.autoEnterFormFields) {
+      if (extraFormInput != null) {
+        try {
+          Map<String, dynamic> simplePropValueExtra =
+              getSimplePropValuesFromExtraFormInput(
+                    extraFormInput: extraFormInput,
+                  ) ??
+                  {};
+          //
+          for (String propName in simplePropValueExtra.keys) {
+            _formPropsStructure._setTempSimplePropValue(
+              propName: propName,
+              value: simplePropValueExtra[propName],
+            );
+          }
+        } catch (e, stackTrace) {
+          _handleError(
+            shelf: shelf,
+            methodName: "getSimplePropValuesFromItemDetail",
+            error: "Error getSimplePropValuesFromItemDetail: $e",
+            stackTrace: stackTrace,
+            showSnackBar: true,
+          );
+          //
+          __applyWithDataState(
+            formDataState: DataState.error,
+            formDataAction: formDataAction,
+          );
+          return false;
+        }
+      }
+    }
+    //
     return __applyWithDataState(
       formDataState: DataState.ready,
       formDataAction: formDataAction,
@@ -637,6 +670,7 @@ abstract class FormModel<
       //  - And make sure children-OptProp to null if parent-Value is null or not selected.
       _formPropsStructure._updatePropsTempValues({multiOptPropName: null});
     }
+
     //
     // Load OptProp data from Rest API.
     // May throw ApiError.
@@ -658,6 +692,7 @@ abstract class FormModel<
     final ITEM_DETAIL? currentItemDetail = block.currentItemDetail;
     //
     if (multiOptPropXData != null) {
+      // Item First Load:
       if (formDataAction == _FormDataAction.itemFirstLoad) {
         if (currentItemDetail == null) {
           if (extraFormInput != null) {
@@ -681,6 +716,17 @@ abstract class FormModel<
         else {
           selectedValueWrap = __getMultiOptPropValueFromItemDetail(
             itemDetail: currentItemDetail,
+            multiOptPropXData: multiOptPropXData,
+            multiOptPropName: multiOptPropName,
+            parentMultiOptPropValue: parentMultiOptPropValue,
+          );
+        }
+      }
+      // Auto Enter Form Fields:
+      else if (formDataAction == _FormDataAction.autoEnterFormFields) {
+        if (extraFormInput != null) {
+          selectedValueWrap = __getMultiOptPropValueFromExtraFormInput(
+            extraFormInput: extraFormInput,
             multiOptPropXData: multiOptPropXData,
             multiOptPropName: multiOptPropName,
             parentMultiOptPropValue: parentMultiOptPropValue,
