@@ -199,7 +199,7 @@ part '_debug_/_shelf_structure_graph_view.dart';
 
 part '_debug_/_shelf_structure_tree_view.dart';
 
-part '_debug_/_form_structure_tree_view.dart';
+part '_debug_/_form_props_/_form_structure_tree_view.dart';
 
 part '_debug_/_shelf_structure_view_config.dart';
 

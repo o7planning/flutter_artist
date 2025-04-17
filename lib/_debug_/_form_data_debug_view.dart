@@ -99,18 +99,14 @@ class __FormDataViewState extends State<_FormDataView> {
 
     tabs.add(
       TabData(
-        text: ' Init',
+        text: ' Form Props Structure',
         closable: false,
         leading: (context, status) => Icon(
           _formValueIconData,
           color: _getTabIconColor(status),
           size: iconSize,
         ),
-        content: _buildTabContent(
-          info:
-              "The values returned by ${getClassName(widget.formModel)}.prepareFormData() method.",
-          json: initial0Json,
-        ),
+        content: _buildTabFormPropsStructure(),
       ),
     );
     tabs.add(
@@ -191,6 +187,13 @@ class __FormDataViewState extends State<_FormDataView> {
       style: TextStyle(
         color: Theme.of(context).tabBarTheme.labelColor,
       ),
+    );
+  }
+
+  Widget _buildTabFormPropsStructure() {
+    return _FormStructureTreeView(
+      key: Key("FormPropsStructureTreeView"),
+      formModel: widget.formModel,
     );
   }
 

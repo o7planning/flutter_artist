@@ -80,6 +80,12 @@ const IconData _filterModelIconData = Icons.filter_alt_outlined;
 const IconData _formModelIconData = cupertino.CupertinoIcons.film_fill;
 const IconData _formModelNoneIconData = cupertino.CupertinoIcons.capsule;
 
+const IconData _simplePropOrCriterionIconData =  Icons.adjust_rounded;
+const IconData _optPropOrCriterionIconData =  Icons.scatter_plot_outlined;
+const IconData _uknownIconData = Icons.question_mark;
+const IconData _multiSelectionIconData =  Icons.table_rows_outlined;
+
+
 const IconData _otherClassIconData =
     cupertino.CupertinoIcons.person_crop_circle;
 
