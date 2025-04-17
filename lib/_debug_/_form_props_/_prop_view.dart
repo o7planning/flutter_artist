@@ -32,11 +32,19 @@ class _FormPropView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Checkbox(
+                Radio(
+                  value: (prop as MultiOptProp).singleSelection,
+                  onChanged: null,
+                  groupValue: true,
+                ),
+                Text("Single Selection", style: TextStyle(fontSize: 13)),
+                SizedBox(width: 5),
+                Radio(
                   value: !(prop as MultiOptProp).singleSelection,
                   onChanged: null,
+                  groupValue: true,
                 ),
-                Text("Multi Selection?", style: TextStyle(fontSize: 13)),
+                Text("Multi Selection", style: TextStyle(fontSize: 13)),
               ],
             ),
           SizedBox(height: 10),
@@ -65,7 +73,7 @@ class _FormPropView extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              headerSubtitle: null, // Text("?"),
+              headerSubtitle: _headerSubtitle(prop._initialValue),
               content: _PropValueView(value: prop._initialValue),
             ),
             _SimpleAccordionSection(
@@ -76,7 +84,7 @@ class _FormPropView extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              headerSubtitle: null, // Text("?"),
+              headerSubtitle: _headerSubtitle(prop._currentValue),
               content: _PropValueView(value: prop._currentValue),
             ),
             if (prop is MultiOptProp)
@@ -88,7 +96,7 @@ class _FormPropView extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                headerSubtitle: null, // Text("?"),
+                headerSubtitle: _headerSubtitle(prop._initialXData),
                 content: _PropXDataView(xData: prop._initialXData),
               ),
             if (prop is MultiOptProp)
@@ -100,12 +108,23 @@ class _FormPropView extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                headerSubtitle: null, // Text("?"),
+                headerSubtitle: _headerSubtitle(prop._currentXData),
                 content: _PropXDataView(xData: prop._currentXData),
               ),
           ],
         ),
       ],
     );
+  }
+
+  Text? _headerSubtitle(dynamic value) {
+    return value == null
+        ? null
+        : Text(
+            " - ${value!.runtimeType?.toString()}" ?? "",
+            style: TextStyle(
+              fontSize: 12,
+            ),
+          );
   }
 }
