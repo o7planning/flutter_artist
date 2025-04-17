@@ -18,6 +18,7 @@ import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:graphview/GraphView.dart';
 import 'package:hive/hive.dart';
+import 'package:multi_split_view/multi_split_view.dart';
 import 'package:number_pagination/number_pagination.dart' as number_pagination;
 import 'package:tabbed_view/tabbed_view.dart';
 import 'package:uuid/uuid.dart';

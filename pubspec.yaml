@@ -22,6 +22,7 @@ dependencies:
   hive: ^2.2.3
   number_pagination: ^1.1.6
   flutter_svg:
+  multi_split_view: ^3.6.0
 
   flutter_artist_rest_core:
     path: ../flutter_artist_rest_core

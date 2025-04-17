@@ -17,6 +17,8 @@ class _FormStructureTreeView extends StatefulWidget {
 }
 
 class _FormStructureTreeViewState extends State<_FormStructureTreeView> {
+  final MultiSplitViewController _splitViewController =
+      MultiSplitViewController();
   TreeViewController<dynamic, TreeNode<dynamic>>? _treeViewController;
   late TreeNode<dynamic> rootTreeNode;
   TreeNode<dynamic>? _currentNode;
@@ -25,15 +27,41 @@ class _FormStructureTreeViewState extends State<_FormStructureTreeView> {
   void initState() {
     super.initState();
     rootTreeNode = _getRootWithChildren();
+    _splitViewController.areas = [
+      Area(
+        size: 320,
+        min: 100,
+        builder: (context, area) {
+          return buildTreeView(context);
+        },
+      ),
+      Area(flex: 1),
+    ];
+    _splitViewController.addListener(_refresh);
+  }
+
+  void _refresh() {
+    setState(() {});
   }
 
   @override
   void dispose() {
     super.dispose();
+    _splitViewController.removeListener(_refresh);
   }
 
   @override
   Widget build(BuildContext context) {
+    MultiSplitView multiSplitView = MultiSplitView(
+      controller: _splitViewController,
+    );
+    return multiSplitView;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Widget buildTreeView(BuildContext context) {
     FormPropsStructure formPropsStructure =
         widget.formModel._formPropsStructure;
     //
