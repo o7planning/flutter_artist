@@ -35,9 +35,30 @@ class _FormStructureTreeViewState extends State<_FormStructureTreeView> {
           return buildTreeView(context);
         },
       ),
-      Area(flex: 1),
+      Area(
+        flex: 1,
+        builder: (context, area) {
+          return _buildRight();
+        },
+      ),
     ];
     _splitViewController.addListener(_refresh);
+  }
+
+  Widget _buildRight() {
+    if (_currentNode == null) {
+      return Text("Null");
+    } else if (_currentNode!.data is FormModel) {
+      return _FormModelDebugView(
+        formModel: _currentNode!.data,
+      );
+    } else if (_currentNode!.data is Prop) {
+      return _FormPropView(
+        prop: _currentNode!.data,
+      );
+    } else {
+      return Text("TODO");
+    }
   }
 
   void _refresh() {
@@ -159,8 +180,8 @@ class _FormStructureTreeViewState extends State<_FormStructureTreeView> {
               onTap: () {
                 setState(() {
                   _currentNode = node;
-                  if (node.data is _BlockOrScalar) {
-                    // widget.onSelectBlockOrScalar(node.data);
+                  if (node.data is Prop) {
+                    _onPressProp(node.data);
                   }
                 });
               },
@@ -217,5 +238,9 @@ class _FormStructureTreeViewState extends State<_FormStructureTreeView> {
       _currentNode = childNode;
     }
     currentNode.add(childNode);
+  }
+
+  void _onPressProp(Prop prop) {
+    print("Prop: $prop");
   }
 }

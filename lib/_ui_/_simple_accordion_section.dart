@@ -3,7 +3,7 @@ part of '../flutter_artist.dart';
 class _SimpleAccordionSection extends StatelessWidget {
   final bool initiallyExpanded;
   final Widget headerTitle;
-  final Widget headerSubtitle;
+  final Widget? headerSubtitle;
   final Widget? content;
 
   const _SimpleAccordionSection({

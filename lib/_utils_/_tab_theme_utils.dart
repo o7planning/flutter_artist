@@ -50,7 +50,9 @@ TabbedViewThemeData _getTabbedViewThemeData() {
     ..middleGap = 5
     ..minimalFinalGap = 2;
   //
-  themeData.contentArea.decoration = boxDecoContent;
+  themeData.contentArea
+    ..decoration = boxDecoContent
+    ..padding = EdgeInsets.all(5);
   //
   return themeData;
 }
