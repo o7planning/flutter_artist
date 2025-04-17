@@ -1,22 +1,20 @@
 part of '../../flutter_artist.dart';
 
-class _FormStructureTreeView extends StatefulWidget {
+class _FormPropsStructureView extends StatefulWidget {
   final FormModel formModel;
-  final Prop? selectedProp;
 
-  const _FormStructureTreeView({
+  const _FormPropsStructureView({
     required super.key,
     required this.formModel,
-    this.selectedProp,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _FormStructureTreeViewState();
+    return _FormPropsStructureViewState();
   }
 }
 
-class _FormStructureTreeViewState extends State<_FormStructureTreeView> {
+class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
   final MultiSplitViewController _splitViewController =
       MultiSplitViewController();
   TreeViewController<dynamic, TreeNode<dynamic>>? _treeViewController;
@@ -30,13 +28,15 @@ class _FormStructureTreeViewState extends State<_FormStructureTreeView> {
     _splitViewController.areas = [
       Area(
         size: 320,
-        min: 100,
+        min: 120,
         builder: (context, area) {
           return buildTreeView(context);
         },
       ),
       Area(
-        flex: 1,
+        size: 320,
+        // flex: 1,
+        min: 240,
         builder: (context, area) {
           return _buildRight();
         },
@@ -220,9 +220,9 @@ class _FormStructureTreeViewState extends State<_FormStructureTreeView> {
       key: "MultiOptProp-${multiOptProp.propName}",
       data: multiOptProp,
     );
-    if (multiOptProp == widget.selectedProp) {
-      _currentNode = childNode;
-    }
+    // if (multiOptProp == widget.selectedProp) {
+    //   _currentNode = childNode;
+    // }
     currentNode.add(childNode);
     for (MultiOptProp childMultiOptProp in multiOptProp.children) {
       _addMultiOptPropCascade(childNode, childMultiOptProp);
@@ -234,9 +234,9 @@ class _FormStructureTreeViewState extends State<_FormStructureTreeView> {
       key: "SimpleProp-${simpleProp.propName}",
       data: simpleProp,
     );
-    if (simpleProp == widget.selectedProp) {
-      _currentNode = childNode;
-    }
+    // if (simpleProp == widget.selectedProp) {
+    //   _currentNode = childNode;
+    // }
     currentNode.add(childNode);
   }
 

@@ -37,14 +37,27 @@ class _FormPropView extends StatelessWidget {
                   onChanged: null,
                   groupValue: true,
                 ),
-                Text("Single Selection", style: TextStyle(fontSize: 13)),
+                Text(
+                  "Single Selection",
+                  style: TextStyle(
+                    fontSize: 13,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
                 SizedBox(width: 5),
                 Radio(
                   value: !(prop as MultiOptProp).singleSelection,
                   onChanged: null,
                   groupValue: true,
                 ),
-                Text("Multi Selection", style: TextStyle(fontSize: 13)),
+                Expanded(child:
+                Text(
+                  "Multi Selection",
+                  style: TextStyle(
+                    fontSize: 13,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),),
               ],
             ),
           SizedBox(height: 10),

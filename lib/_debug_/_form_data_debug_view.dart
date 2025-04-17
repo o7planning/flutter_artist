@@ -191,7 +191,7 @@ class __FormDataViewState extends State<_FormDataView> {
   }
 
   Widget _buildTabFormPropsStructure() {
-    return _FormStructureTreeView(
+    return _FormPropsStructureView(
       key: Key("FormPropsStructureTreeView"),
       formModel: widget.formModel,
     );
