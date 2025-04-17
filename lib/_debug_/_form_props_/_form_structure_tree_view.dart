@@ -3,13 +3,11 @@ part of '../../flutter_artist.dart';
 class _FormStructureTreeView extends StatefulWidget {
   final FormModel formModel;
   final Prop? selectedProp;
-  // final Function(_BlockOrScalar blockOrScalar) onSelectBlockOrScalar;
 
   const _FormStructureTreeView({
     required super.key,
     required this.formModel,
     this.selectedProp,
-    //  required this.onSelectBlockOrScalar,
   });
 
   @override
@@ -77,19 +75,19 @@ class _FormStructureTreeViewState extends State<_FormStructureTreeView> {
             title = getClassName(data);
             prefixIconData = _formModelIconData;
           } else if (data is SimpleProp) {
-            title =  data.propName ;
+            title = data.propName;
             prefixIconData = _simplePropOrCriterionIconData;
             //
             isMultiOpt = false;
             isMultiSelection = false;
           } else if (data is MultiOptProp) {
-            title = data.propName ;
+            title = data.propName;
             prefixIconData = _optPropOrCriterionIconData;
             //
             isMultiOpt = true;
             isMultiSelection = !data.singleSelection;
           } else {
-            prefixIconData = _uknownIconData ;
+            prefixIconData = _uknownIconData;
             title = "UKNOWN";
           }
           return Material(
@@ -106,9 +104,9 @@ class _FormStructureTreeViewState extends State<_FormStructureTreeView> {
                 children: [
                   Icon(
                     prefixIconData,
-                    size:16,
+                    size: 16,
                   ),
-                  SizedBox(width:5),
+                  SizedBox(width: 5),
                   Expanded(
                     child: Text(
                       title,
@@ -121,7 +119,7 @@ class _FormStructureTreeViewState extends State<_FormStructureTreeView> {
                       ),
                     ),
                   ),
-                    if (isMultiOpt && isMultiSelection) const SizedBox(width: 5),
+                  if (isMultiOpt && isMultiSelection) const SizedBox(width: 5),
                   if (isMultiOpt && isMultiSelection)
                     const Icon(
                       _multiSelectionIconData,
