@@ -18,6 +18,7 @@ import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:graphview/GraphView.dart';
 import 'package:hive/hive.dart';
+import 'package:multi_split_view/multi_split_view.dart';
 import 'package:number_pagination/number_pagination.dart' as number_pagination;
 import 'package:tabbed_view/tabbed_view.dart';
 import 'package:uuid/uuid.dart';
@@ -199,7 +200,21 @@ part '_debug_/_shelf_structure_graph_view.dart';
 
 part '_debug_/_shelf_structure_tree_view.dart';
 
-part '_debug_/_form_structure_tree_view.dart';
+part '_debug_/_form_props_/_form_props_structure_view.dart';
+
+part '_debug_/_form_props_/_form_model_debug_view.dart';
+
+part '_debug_/_form_props_/_prop_view.dart';
+
+part '_debug_/_form_props_/_prop_value_view.dart';
+
+part '_xdata_/_x_data.dart';
+
+part '_xdata_/_x_list.dart';
+
+part '_xdata_/_x_tree.dart';
+
+part '_debug_/_form_props_/_prop_xdata_view.dart';
 
 part '_debug_/_shelf_structure_view_config.dart';
 
