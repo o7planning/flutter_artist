@@ -42,12 +42,6 @@ class XList<ID, ITEM> extends XData<ID, ITEM, List<ITEM>> {
     return _items;
   }
 
-  void setFirstItemAsCandidateSelectedItem() {
-    if (_items.isNotEmpty) {
-      _candidateSelectedItems = [_items.first];
-    }
-  }
-
   @override
   ITEM? findInternalItemByItemId(ID? id) {
     return ItemsUtils.findItemInListById(
@@ -105,24 +99,6 @@ class XList<ID, ITEM> extends XData<ID, ITEM, List<ITEM>> {
     for (ITEM item in items) {
       addItemIfNotExists(item: item);
     }
-  }
-
-  void setCandidateSelectedItemsByIds({
-    required List<ID> candidateSelectedItemIds,
-  }) {
-    List<ITEM> candidates = findInternalItemsByItemIds(
-      itemIds: candidateSelectedItemIds,
-    );
-    this._candidateSelectedItems = candidates;
-  }
-
-  void setCandidateSelectedItems({
-    required List<ITEM> candidateSelectedItems,
-  }) {
-    List<ITEM> candidates = this.findInternalItems(
-      items: candidateSelectedItems,
-    );
-    this._candidateSelectedItems = candidates;
   }
 
   void clear() {
