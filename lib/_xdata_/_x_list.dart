@@ -18,7 +18,7 @@ class XList<ID, ITEM> extends XData<ID, ITEM, List<ITEM>> {
     required super.getItemId,
   }) : _items = items;
 
-  XList.ofPageData({
+  XList.fromPageData({
     required PageData<ITEM>? pageData,
     required super.getItemId,
   }) : _items = pageData?.items ?? [];
