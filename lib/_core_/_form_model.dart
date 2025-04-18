@@ -759,7 +759,7 @@ abstract class FormModel<
         }
       }
       if (currentSelectedItems != null) {
-        currentSelectedItems = multiOptPropXData.findInternalItemsByDynamics(
+        currentSelectedItems = multiOptPropXData._findInternalItemsByDynamics(
           dynamicValues: currentSelectedItems,
           addToInternalIfNotFound: true,
           removeCurrentNotFoundItems: true,
@@ -787,12 +787,12 @@ abstract class FormModel<
       propName: multiOptPropName,
     );
     //
-    multiOptPropXData?.addInitialValueIfNotFound(
+    multiOptPropXData?._addInitialValueIfNotFound(
       initialValue: initialValue,
       removeCurrentNotFoundItems: true,
     );
     // TODO: Dangerous, check not null:
-    candidateSelectedItems = multiOptPropXData?.findInternalItemsByDynamics(
+    candidateSelectedItems = multiOptPropXData?._findInternalItemsByDynamics(
           dynamicValues: candidateSelectedItems,
           //
           // IMPORTANT: Add not found item to internal list.
@@ -889,7 +889,7 @@ abstract class FormModel<
     }
     List? value = valueWrap?.values ?? [];
     return ValueWrap.multi(
-      multiOptPropXData.findInternalItemsByDynamics(
+      multiOptPropXData._findInternalItemsByDynamics(
         dynamicValues: value,
         addToInternalIfNotFound: true,
         removeCurrentNotFoundItems: true,
@@ -971,7 +971,7 @@ abstract class FormModel<
     }
     List? value = valueWrap?.values ?? [];
     return ValueWrap.multi(
-      multiOptPropXData.findInternalItemsByDynamics(
+      multiOptPropXData._findInternalItemsByDynamics(
         dynamicValues: value,
         addToInternalIfNotFound: true,
         removeCurrentNotFoundItems: true,

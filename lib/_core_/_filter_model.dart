@@ -467,7 +467,7 @@ abstract class FilterModel<
       }
       if (currentSelectedItems != null) {
         currentSelectedItems =
-            multiOptCriterionXData.findInternalItemsByDynamics(
+            multiOptCriterionXData._findInternalItemsByDynamics(
           dynamicValues: currentSelectedItems,
           removeCurrentNotFoundItems: true,
           addToInternalIfNotFound: false,
@@ -583,7 +583,7 @@ abstract class FilterModel<
     }
     List? value = valueWrap?.values ?? [];
     return ValueWrap.multi(
-      multiOptCriterionXData.findInternalItemsByDynamics(
+      multiOptCriterionXData._findInternalItemsByDynamics(
         dynamicValues: value,
         addToInternalIfNotFound: false,
         removeCurrentNotFoundItems: true,
@@ -609,7 +609,7 @@ abstract class FilterModel<
     }
     List? value = valueWrap?.values ?? [];
     return ValueWrap.multi(
-      multiOptCriterionXData.findInternalItemsByDynamics(
+      multiOptCriterionXData._findInternalItemsByDynamics(
         dynamicValues: value,
         addToInternalIfNotFound: false,
         removeCurrentNotFoundItems: true,

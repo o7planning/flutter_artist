@@ -35,8 +35,7 @@ abstract class XData<ID, ITEM, DATA> {
     return findInternalItem(item: item) != null;
   }
 
-  // TODO Private?
-  List<ITEM> findInternalItemsByDynamics({
+  List<ITEM> _findInternalItemsByDynamics({
     required List<dynamic>? dynamicValues,
     required bool removeCurrentNotFoundItems,
     required bool addToInternalIfNotFound,
@@ -59,8 +58,7 @@ abstract class XData<ID, ITEM, DATA> {
     );
   }
 
-  // TODO: Private?
-  void addInitialValueIfNotFound({
+  void _addInitialValueIfNotFound({
     required dynamic initialValue,
     required bool removeCurrentNotFoundItems,
   }) {
@@ -86,22 +84,6 @@ abstract class XData<ID, ITEM, DATA> {
       addToInternalIfNotFound: true,
     );
   }
-
-  // @Deprecated("Xoa di, khong su dung nua")
-  // List<ITEM> findItemsInListByDynamics({
-  //   required List<dynamic>? dynamicValues,
-  // }) {
-  //   if (dynamicValues == null) {
-  //     return [];
-  //   }
-  //   //
-  //   List<ITEM> items = dynamicValues
-  //       .where((item) => item != null && item is ITEM)
-  //       .cast<ITEM>()
-  //       .toList();
-  //   //
-  //   return findInternalItems(items: items);
-  // }
 
   List<ITEM> _findInternalItems({
     required List<ITEM?>? items,
