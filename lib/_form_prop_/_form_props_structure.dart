@@ -243,13 +243,15 @@ class FormPropsStructure {
 
   dynamic _getTempCurrentPropValue({required String propName}) {
     Prop? prop = _allPropMap[propName];
-    if (prop == null) {
-      return null;
-    }
-    if (prop is MultiOptProp) {
-      return prop._tempCurrentValue;
-    }
-    return null;
+    return prop?._tempCurrentValue;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  dynamic _getInitialPropValue({required String propName}) {
+    Prop? prop = _allPropMap[propName];
+    return prop?._initialValue;
   }
 
   // ***************************************************************************

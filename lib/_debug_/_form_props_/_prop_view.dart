@@ -50,14 +50,15 @@ class _FormPropView extends StatelessWidget {
                   onChanged: null,
                   groupValue: true,
                 ),
-                Expanded(child:
-                Text(
-                  "Multi Selection",
-                  style: TextStyle(
-                    fontSize: 13,
-                    overflow: TextOverflow.ellipsis,
+                Expanded(
+                  child: Text(
+                    "Multi Selection",
+                    style: TextStyle(
+                      fontSize: 13,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                ),),
+                ),
               ],
             ),
           SizedBox(height: 10),

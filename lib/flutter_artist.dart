@@ -208,6 +208,12 @@ part '_debug_/_form_props_/_prop_view.dart';
 
 part '_debug_/_form_props_/_prop_value_view.dart';
 
+part '_xdata_/_x_data.dart';
+
+part '_xdata_/_x_list.dart';
+
+part '_xdata_/_x_tree.dart';
+
 part '_debug_/_form_props_/_prop_xdata_view.dart';
 
 part '_debug_/_shelf_structure_view_config.dart';

@@ -741,6 +741,14 @@ abstract class FormModel<
           _formPropsStructure._getTempCurrentPropValue(
         propName: multiOptPropName,
       );
+      print(
+          "\n@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> tempCurrentValue: $tempCurrentValue");
+
+      final dynamic initialValue = _formPropsStructure._getInitialPropValue(
+        propName: multiOptPropName,
+      );
+      print(
+          "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> initialValue: $initialValue");
       //
       if (tempCurrentValue != null) {
         if (tempCurrentValue is List) {
@@ -774,6 +782,15 @@ abstract class FormModel<
       multiOptPropName: multiOptPropName,
       multiOptPropXData: multiOptPropXData,
     );
+    //
+    final dynamic initialValue = _formPropsStructure._getInitialPropValue(
+      propName: multiOptPropName,
+    );
+    //
+    multiOptPropXData?.addInitialValueIfNotFound(
+      initialValue: initialValue,
+      removeCurrentNotFoundItems: true,
+    );
     // TODO: Dangerous, check not null:
     candidateSelectedItems = multiOptPropXData?.findInternalItemsByDynamics(
           dynamicValues: candidateSelectedItems,
@@ -781,7 +798,7 @@ abstract class FormModel<
           // IMPORTANT: Add not found item to internal list.
           //
           addToInternalIfNotFound: true,
-          removeCurrentNotFoundItems: true,
+          removeCurrentNotFoundItems: false,
         ) ??
         [];
     //
@@ -811,9 +828,9 @@ abstract class FormModel<
     }
     //
     Object? tempSelectedPropValue =
-        this._formPropsStructure._getTempCurrentPropValue(
-              propName: multiOptPropName,
-            );
+        _formPropsStructure._getTempCurrentPropValue(
+      propName: multiOptPropName,
+    );
 
     if (tempSelectedPropValue != null) {
       for (MultiOptProp child in multiOptProp.children) {
