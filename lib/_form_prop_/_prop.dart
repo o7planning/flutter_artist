@@ -1,6 +1,8 @@
 part of '../flutter_artist.dart';
 
 abstract class Prop {
+  late final FormPropsStructure _structure;
+  //
   final String propName;
   dynamic candidateUpdateValue;
   bool _valueUpdated = false;

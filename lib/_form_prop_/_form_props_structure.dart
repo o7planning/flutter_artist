@@ -7,6 +7,10 @@ class FormPropsStructure {
 
   bool __manualDirty = false;
 
+  bool __isTempMode = false;
+
+  bool get isTempMode => __isTempMode;
+
   late final FormModel formModel;
 
   bool _justInitialized = false;
@@ -23,18 +27,18 @@ class FormPropsStructure {
     required List<String> simpleProps,
     required List<MultiOptProp> multiOptProps,
   }) : _rootOptProps = [...multiOptProps] {
-    final List<String> simplePropList = [...simpleProps];
+    final List<String> simplePropNameList = [...simpleProps];
     //
     for (MultiOptProp rootOptProp in multiOptProps) {
       __standardizeCascade(rootOptProp, null);
     }
     for (Prop prop in _allPropMap.values) {
-      simplePropList.remove(prop.propName);
+      simplePropNameList.remove(prop.propName);
       if (prop is MultiOptProp) {
         prop._checkCycleError();
       }
     }
-    for (String propName in simplePropList) {
+    for (String propName in simplePropNameList) {
       _createAndAddNewSimpleProp(
         propName: propName,
         markTempDirty: false,
@@ -185,6 +189,7 @@ class FormPropsStructure {
     MultiOptProp? parent,
   ) {
     optProp.parent = parent;
+    optProp._structure = this;
     _allPropMap[optProp.propName] = optProp;
     //
     for (MultiOptProp child in optProp.children) {
@@ -358,9 +363,10 @@ class FormPropsStructure {
     if (_allPropMap.containsKey(propName)) {
       return;
     }
-    SimpleProp? newSimpleProp = SimpleProp(
+    SimpleProp newSimpleProp = SimpleProp(
       propName: propName,
     );
+    newSimpleProp._structure = this;
     newSimpleProp._markTempDirty = markTempDirty;
     _allPropMap[propName] = newSimpleProp;
     _simpleProps.add(newSimpleProp);
