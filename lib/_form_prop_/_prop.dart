@@ -9,6 +9,9 @@ abstract class Prop {
   dynamic _tempCurrentValue;
   XData? _tempCurrentXData;
 
+  dynamic _tempInitialValue;
+  XData? _tempInitialXData;
+
   dynamic _currentValue;
   XData? _currentXData;
 

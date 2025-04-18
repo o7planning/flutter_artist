@@ -235,6 +235,8 @@ class FormPropsStructure {
       dynamic newValue = newCurrentFormData?[prop.propName];
       prop._tempCurrentValue = newValue;
       prop._tempCurrentXData = null;
+      prop._tempInitialValue = null;
+      prop._tempInitialXData = null;
     }
   }
 
@@ -257,7 +259,7 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  XData? _getTempOptPropData(String propName) {
+  XData? _getTempOptPropXData(String propName) {
     Prop? prop = _allPropMap[propName];
     if (prop == null) {
       return null;
@@ -390,6 +392,7 @@ class FormPropsStructure {
   void _setTempSimplePropValue({
     required String propName,
     required Object? value,
+    required bool setForInitial,
   }) {
     Prop? prop = _allPropMap[propName];
     if (prop == null) {
@@ -404,6 +407,9 @@ class FormPropsStructure {
       );
     }
     prop._tempCurrentValue = value;
+    if (setForInitial) {
+      prop._tempInitialValue = value;
+    }
   }
 
   // ***************************************************************************

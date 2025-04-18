@@ -411,9 +411,11 @@ abstract class FormModel<
             itemDetail: itemDetail,
           );
           for (String propName in simplePropValue.keys) {
+            // In (First load + itemDetail != null)
             _formPropsStructure._setTempSimplePropValue(
               propName: propName,
               value: simplePropValue[propName],
+              setForInitial: true,
             );
           }
         } catch (e, stackTrace) {
@@ -443,9 +445,11 @@ abstract class FormModel<
                 ) ??
                 {};
             for (String propName in simplePropValueDefault.keys) {
+              // In (Item First Load + itemDetail == null + !_defaultValueInitiated)
               _formPropsStructure._setTempSimplePropValue(
                 propName: propName,
                 value: simplePropValueDefault[propName],
+                setForInitial: true,
               );
             }
           } catch (e, stackTrace) {
@@ -473,9 +477,11 @@ abstract class FormModel<
                 {};
             //
             for (String propName in simplePropValueExtra.keys) {
+              // In (ItemFirstLoad + itemDetail == null + extraFormInput != null)
               _formPropsStructure._setTempSimplePropValue(
                 propName: propName,
                 value: simplePropValueExtra[propName],
+                setForInitial: true,
               );
             }
           } catch (e, stackTrace) {
@@ -507,9 +513,11 @@ abstract class FormModel<
                   {};
           //
           for (String propName in simplePropValueExtra.keys) {
+            // In (autoEnterFormFields + extraFormInput != null)
             _formPropsStructure._setTempSimplePropValue(
               propName: propName,
               value: simplePropValueExtra[propName],
+              setForInitial: false,
             );
           }
         } catch (e, stackTrace) {
@@ -635,26 +643,37 @@ abstract class FormModel<
     XData? multiOptPropXData =
         _formPropsStructure._getMultiOptPropXData(multiOptPropName);
 
+    bool parentValueChanged = false;
+    bool parentValueIsInitial = false;
     if (optPropParent != null) {
-      XData? tempXOptionedParent = _formPropsStructure._getTempOptPropData(
+      XData? tempXDataParent = _formPropsStructure._getTempOptPropXData(
         optPropParent.propName,
       );
       //
-      if (tempXOptionedParent != null) {
+      if (tempXDataParent != null) {
         // Item or Item List (Multi Selection):
         Object? parentOptPropValueOLD =
             _formPropsStructure._getCurrentPropValue(
           propName: optPropParent.propName,
         );
+        Object? parentOptPropValueInitial =
+            _formPropsStructure._getInitialPropValue(
+          propName: optPropParent.propName,
+        );
 
         // Parent Value change?
-        bool isSame = tempXOptionedParent.isSameItemOrItemList(
+        parentValueChanged = !tempXDataParent.isSameItemOrItemList(
           itemOrItemList1: parentOptPropValueOLD,
           itemOrItemList2: parentMultiOptPropValue,
         );
-        if (!isSame) {
+        if (parentValueChanged) {
           multiOptPropXData = null;
         }
+        //
+        parentValueIsInitial = tempXDataParent.isSameItemOrItemList(
+          itemOrItemList1: parentOptPropValueInitial,
+          itemOrItemList2: parentMultiOptPropValue,
+        );
       } else {
         multiOptPropXData = null;
       }
@@ -784,10 +803,13 @@ abstract class FormModel<
       );
     }
     //
-    multiOptPropXData?._addInitialValueIfNotFound(
-      initialValue: initialValue,
-      removeCurrentNotFoundItems: true,
-    );
+    if (formDataAction == _FormDataAction.itemFirstLoad ||
+        parentValueIsInitial) {
+      multiOptPropXData?._addInitialValueIfNotFound(
+        initialValue: initialValue,
+        removeCurrentNotFoundItems: true,
+      );
+    }
     // TODO: Dangerous, check not null:
     candidateSelectedItems = multiOptPropXData?._findInternalItemsByDynamics(
           dynamicValues: candidateSelectedItems,
