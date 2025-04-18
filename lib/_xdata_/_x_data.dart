@@ -3,7 +3,11 @@ part of '../flutter_artist.dart';
 abstract class XData<ID, ITEM, DATA> {
   final ID Function(ITEM item) _getItemId;
 
-  final List<ITEM> _notFoundItems = [];
+  // final List<ITEM> _notFoundItems = [];
+
+  final Map<ID, ITEM> _notFoundItemsMap = {};
+
+  List<ITEM> get notFoundItems => [..._notFoundItemsMap.values];
 
   XData({
     required ID Function(ITEM item) getItemId,
@@ -22,7 +26,7 @@ abstract class XData<ID, ITEM, DATA> {
   void removeNotFoundItem(ITEM item);
 
   void __removeAllNotFoundItems() {
-    for (ITEM item in _notFoundItems) {
+    for (ITEM item in _notFoundItemsMap.values) {
       removeNotFoundItem(item);
     }
   }
@@ -120,12 +124,18 @@ abstract class XData<ID, ITEM, DATA> {
     ITEM? found = findInternalItemByItemId(id);
     if (found == null) {
       if (addToInternalIfNotFound) {
-        _notFoundItems.add(item);
+        __addNotFoundItem(item);
         addNotFoundItem(item);
         return item;
       }
     }
     return found;
+  }
+
+  void __addNotFoundItem(ITEM item) {
+    bool found = false;
+    ID id = getItemId(item);
+    _notFoundItemsMap[id] = item;
   }
 
   ITEM? findInternalItem({required ITEM? item}) {
