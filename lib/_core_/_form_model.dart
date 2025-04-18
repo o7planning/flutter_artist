@@ -688,7 +688,7 @@ abstract class FormModel<
     List? currentSelectedItems; // will be null or not empty.
     // Candidate Selected Items:
     List? candidateSelectedItems;
-    ValueWrap? selectedValueWrap;
+    ValueWrap? initialValueWrap;
     final ITEM_DETAIL? currentItemDetail = block.currentItemDetail;
     //
     if (multiOptPropXData != null) {
@@ -696,7 +696,7 @@ abstract class FormModel<
       if (formDataAction == _FormDataAction.itemFirstLoad) {
         if (currentItemDetail == null) {
           if (extraFormInput != null) {
-            selectedValueWrap = __getMultiOptPropValueFromExtraFormInput(
+            initialValueWrap = __getMultiOptPropValueFromExtraFormInput(
               extraFormInput: extraFormInput,
               multiOptPropXData: multiOptPropXData,
               multiOptPropName: multiOptPropName,
@@ -704,7 +704,7 @@ abstract class FormModel<
             );
           } else {
             if (!_defaultValueInitiated) {
-              selectedValueWrap = __specifyDefaultMultiOptPropValue(
+              initialValueWrap = __specifyDefaultMultiOptPropValue(
                 multiOptPropName: multiOptPropName,
                 multiOptPropXData: multiOptPropXData,
                 parentMultiOptPropValue: parentMultiOptPropValue,
@@ -714,7 +714,7 @@ abstract class FormModel<
         }
         // currentItemDetail != null
         else {
-          selectedValueWrap = __getMultiOptPropValueFromItemDetail(
+          initialValueWrap = __getMultiOptPropValueFromItemDetail(
             itemDetail: currentItemDetail,
             multiOptPropXData: multiOptPropXData,
             multiOptPropName: multiOptPropName,
@@ -725,7 +725,7 @@ abstract class FormModel<
       // Auto Enter Form Fields:
       else if (formDataAction == _FormDataAction.autoEnterFormFields) {
         if (extraFormInput != null) {
-          selectedValueWrap = __getMultiOptPropValueFromExtraFormInput(
+          initialValueWrap = __getMultiOptPropValueFromExtraFormInput(
             extraFormInput: extraFormInput,
             multiOptPropXData: multiOptPropXData,
             multiOptPropName: multiOptPropName,
@@ -741,14 +741,6 @@ abstract class FormModel<
           _formPropsStructure._getTempCurrentPropValue(
         propName: multiOptPropName,
       );
-      print(
-          "\n@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> tempCurrentValue: $tempCurrentValue");
-
-      final dynamic initialValue = _formPropsStructure._getInitialPropValue(
-        propName: multiOptPropName,
-      );
-      print(
-          "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> initialValue: $initialValue");
       //
       if (tempCurrentValue != null) {
         if (tempCurrentValue is List) {
@@ -759,14 +751,14 @@ abstract class FormModel<
         }
       }
       if (currentSelectedItems != null) {
-        currentSelectedItems = multiOptPropXData.findInternalItemsByDynamics(
+        currentSelectedItems = multiOptPropXData._findInternalItemsByDynamics(
           dynamicValues: currentSelectedItems,
           addToInternalIfNotFound: true,
           removeCurrentNotFoundItems: true,
         );
       }
       // Candidate Selected Items:
-      candidateSelectedItems = selectedValueWrap?.values;
+      candidateSelectedItems = initialValueWrap?.values;
 
       if (candidateSelectedItems == null || candidateSelectedItems.isEmpty) {
         candidateSelectedItems = currentSelectedItems;
@@ -783,16 +775,21 @@ abstract class FormModel<
       multiOptPropXData: multiOptPropXData,
     );
     //
-    final dynamic initialValue = _formPropsStructure._getInitialPropValue(
-      propName: multiOptPropName,
-    );
+    final dynamic initialValue;
+    if (formDataAction == _FormDataAction.itemFirstLoad) {
+      initialValue = initialValueWrap?.values;
+    } else {
+      initialValue = _formPropsStructure._getInitialPropValue(
+        propName: multiOptPropName,
+      );
+    }
     //
-    multiOptPropXData?.addInitialValueIfNotFound(
+    multiOptPropXData?._addInitialValueIfNotFound(
       initialValue: initialValue,
       removeCurrentNotFoundItems: true,
     );
     // TODO: Dangerous, check not null:
-    candidateSelectedItems = multiOptPropXData?.findInternalItemsByDynamics(
+    candidateSelectedItems = multiOptPropXData?._findInternalItemsByDynamics(
           dynamicValues: candidateSelectedItems,
           //
           // IMPORTANT: Add not found item to internal list.
@@ -889,7 +886,7 @@ abstract class FormModel<
     }
     List? value = valueWrap?.values ?? [];
     return ValueWrap.multi(
-      multiOptPropXData.findInternalItemsByDynamics(
+      multiOptPropXData._findInternalItemsByDynamics(
         dynamicValues: value,
         addToInternalIfNotFound: true,
         removeCurrentNotFoundItems: true,
@@ -971,7 +968,7 @@ abstract class FormModel<
     }
     List? value = valueWrap?.values ?? [];
     return ValueWrap.multi(
-      multiOptPropXData.findInternalItemsByDynamics(
+      multiOptPropXData._findInternalItemsByDynamics(
         dynamicValues: value,
         addToInternalIfNotFound: true,
         removeCurrentNotFoundItems: true,
