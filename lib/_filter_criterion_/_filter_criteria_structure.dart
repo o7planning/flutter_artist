@@ -186,6 +186,20 @@ class FilterCriteriaStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  void _updateChildrenMultiOptValueToNullCascade({
+    required MultiOptCriterion multiOptCriterion,
+  }) {
+    for (MultiOptCriterion child in multiOptCriterion.children) {
+      child._tempCurrentValue = null;
+      child._tempCurrentXData = null;
+      //
+      _updateChildrenMultiOptValueToNullCascade(multiOptCriterion: child);
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   XData? _getTempOptCriterionXData(String criterionName) {
     Criterion? criterion = _allCriteriaMap[criterionName];
     if (criterion == null) {
@@ -197,10 +211,8 @@ class FilterCriteriaStructure {
     return null;
   }
 
-
   // ***************************************************************************
   // ***************************************************************************
-
 
   XData? _getTempMultiOptCriterionXData(String criterionName) {
     Criterion? criterion = _allCriteriaMap[criterionName];
@@ -213,10 +225,8 @@ class FilterCriteriaStructure {
     return null;
   }
 
-
   // ***************************************************************************
   // ***************************************************************************
-
 
   XData? _getMultiOptCriterionXData(String criterionName) {
     Criterion? criterion = _allCriteriaMap[criterionName];
