@@ -241,21 +241,23 @@ abstract class FilterModel<
     required FILTER_INPUT? filterInput,
   }) async {
     print("#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFilterTransaction");
+
+    // All values including hidden values (not on the user interface).
+    Map<String, dynamic> allNewValue = {
+      ..._filterCriteriaStructure.currentFormData
+    };
+    // Update values from view (On the user Interface).
+    allNewValue.addAll(_formKey.currentState?.instantValue ?? {});
+    //
+    _filterCriteriaStructure._initTemporaryForNewTransaction(
+      newCurrentFormData: filterInput != null
+          ? {} // To Clear All.
+          : allNewValue,
+    );
+    //
+    // Load OptProp Data:
+    //
     try {
-      // All values including hidden values (not on the user interface).
-      Map<String, dynamic> allNewValue = {
-        ..._filterCriteriaStructure.currentFormData
-      };
-      // Update values from view (On the user Interface).
-      allNewValue.addAll(_formKey.currentState?.instantValue ?? {});
-      //
-      _filterCriteriaStructure._initTemporaryForNewTransaction(
-        newCurrentFormData: filterInput != null
-            ? {} // To Clear All.
-            : allNewValue,
-      );
-      _filterCriteriaStructure._printTemporaryInfo("@1");
-      //
       for (MultiOptCriterion multiOptCriterion
           in _filterCriteriaStructure._rootOptCriteria) {
         //
@@ -269,10 +271,22 @@ abstract class FilterModel<
           multiOptCriterion: multiOptCriterion,
         );
       }
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: "callApiLoadMultiOptCriterionData",
+        error: "Error callApiLoadMultiOptCriterionData: $e",
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
       //
-      _filterCriteriaStructure._printTemporaryInfo("@2");
-      //
-      if (filterInput != null) {
+      _filterCriteriaStructure._setFilterDataState(DataState.error);
+      _filterCriteria = null;
+      return _filterCriteria;
+    }
+    //
+    if (filterInput != null) {
+      try {
         Map<String, dynamic> simpleValues =
             await getSimpleCriterionValuesFromFilterInput(
                   filterInput: filterInput,
@@ -285,7 +299,21 @@ abstract class FilterModel<
             value: value,
           );
         }
-      } else {
+      } catch (e, stackTrace) {
+        _handleError(
+          shelf: shelf,
+          methodName: "getSimpleCriterionValuesFromFilterInput",
+          error: "Error getSimpleCriterionValuesFromFilterInput: $e",
+          stackTrace: stackTrace,
+          showSnackBar: true,
+        );
+        //
+        _filterCriteriaStructure._setFilterDataState(DataState.error);
+        _filterCriteria = null;
+        return _filterCriteria;
+      }
+    } else {
+      try {
         if (!_defaultValueInitiated) {
           Map<String, dynamic> defaultValues =
               await specifyDefaultSimpleCriterionValues() ?? {};
@@ -298,21 +326,20 @@ abstract class FilterModel<
             );
           }
         }
+      } catch (e, stackTrace) {
+        _handleError(
+          shelf: shelf,
+          methodName: "specifyDefaultSimpleCriterionValues",
+          error: "Error specifyDefaultSimpleCriterionValues: $e",
+          stackTrace: stackTrace,
+          showSnackBar: true,
+        );
+        //
+        _filterCriteriaStructure._setFilterDataState(DataState.error);
+        _filterCriteria = null;
+        return _filterCriteria;
       }
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: null,
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      _filterCriteriaStructure._setFilterDataState(DataState.error);
-      _filterCriteria = null;
-      return _filterCriteria;
     }
-    //
-    _printStructureAndTempData("@3");
     //
     try {
       // Convert Map Data to FilterCriteria Object.
@@ -346,8 +373,7 @@ abstract class FilterModel<
       );
       _filterCriteriaStructure._setFilterDataState(DataState.error);
       //
-      // IMPORTANT: Restore OLD State:
-      // Note [_formKeyPatchValue] NOT WORK!.
+      // IMPORTANT:
       //
       _formKeyPatchValue(
         newCurrentValue: _filterCriteriaStructure.currentFormData,
