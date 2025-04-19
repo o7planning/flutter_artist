@@ -1,10 +1,10 @@
 part of '../../flutter_artist.dart';
 
-class _FormPropView extends StatelessWidget {
-  final Prop prop;
+class _FilterCriterionView extends StatelessWidget {
+  final Criterion criterion;
 
-  const _FormPropView({
-    required this.prop,
+  const _FilterCriterionView({
+    required this.criterion,
   });
 
   @override
@@ -18,16 +18,18 @@ class _FormPropView extends StatelessWidget {
         children: [
           _IconLabelText(
             icon: Icon(
-              prop is SimpleProp
+              criterion is SimpleCriterion
                   ? _simplePropOrCriterionIconData
                   : _optPropOrCriterionIconData,
               size: 18,
             ),
-            label: prop is SimpleProp ? 'Prop Name: ' : 'Multi Opt Prop Name: ',
-            text: prop.propName,
+            label: criterion is SimpleCriterion
+                ? 'Criterion Name: '
+                : 'Multi Opt Criterion Name: ',
+            text: criterion.criterionName,
           ),
-          if (prop is MultiOptProp) SizedBox(height: 5),
-          if (prop is MultiOptProp)
+          if (criterion is MultiOptCriterion) SizedBox(height: 5),
+          if (criterion is MultiOptCriterion)
             LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
                 return Row(
@@ -37,7 +39,7 @@ class _FormPropView extends StatelessWidget {
                     Tooltip(
                       message: "Single Selection",
                       child: Radio(
-                        value: (prop as MultiOptProp).singleSelection,
+                        value: (criterion as MultiOptCriterion).singleSelection,
                         onChanged: null,
                         groupValue: true,
                       ),
@@ -54,7 +56,8 @@ class _FormPropView extends StatelessWidget {
                     Tooltip(
                       message: "Multi Selection",
                       child: Radio(
-                        value: !(prop as MultiOptProp).singleSelection,
+                        value:
+                            !(criterion as MultiOptCriterion).singleSelection,
                         onChanged: null,
                         groupValue: true,
                       ),
@@ -99,8 +102,8 @@ class _FormPropView extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              headerSubtitle: _headerSubtitle(prop._initialValue),
-              content: _DynamicValueView(value: prop._initialValue),
+              headerSubtitle: _headerSubtitle(criterion._initialValue),
+              content: _CriterionValueView(value: criterion._initialValue),
             ),
             _SimpleAccordionSection(
               initiallyExpanded: true,
@@ -110,10 +113,10 @@ class _FormPropView extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              headerSubtitle: _headerSubtitle(prop._currentValue),
-              content: _DynamicValueView(value: prop._currentValue),
+              headerSubtitle: _headerSubtitle(criterion._currentValue),
+              content: _CriterionValueView(value: criterion._currentValue),
             ),
-            if (prop is MultiOptProp)
+            if (criterion is MultiOptCriterion)
               _SimpleAccordionSection(
                 initiallyExpanded: true,
                 headerTitle: Text(
@@ -122,10 +125,10 @@ class _FormPropView extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                headerSubtitle: _headerSubtitle(prop._initialXData),
-                content: _XDataView(xData: prop._initialXData),
+                headerSubtitle: _headerSubtitle(criterion._initialXData),
+                content: _XDataView(xData: criterion._initialXData),
               ),
-            if (prop is MultiOptProp)
+            if (criterion is MultiOptCriterion)
               _SimpleAccordionSection(
                 initiallyExpanded: true,
                 headerTitle: Text(
@@ -134,8 +137,8 @@ class _FormPropView extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                headerSubtitle: _headerSubtitle(prop._currentXData),
-                content: _XDataView(xData: prop._currentXData),
+                headerSubtitle: _headerSubtitle(criterion._currentXData),
+                content: _XDataView(xData: criterion._currentXData),
               ),
           ],
         ),

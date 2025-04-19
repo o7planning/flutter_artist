@@ -1,10 +1,10 @@
 part of '../../flutter_artist.dart';
 
-class _PropXDataView extends StatelessWidget {
-  final XData? xData;
+class _CriterionValueView extends StatelessWidget {
+  final dynamic value;
 
-  const _PropXDataView({
-    required this.xData,
+  const _CriterionValueView({
+    required this.value,
   });
 
   @override
@@ -17,7 +17,7 @@ class _PropXDataView extends StatelessWidget {
         color: Colors.white,
       ),
       child: Text(
-        xData == null ? "null" : xData!.data.toString(),
+        value.toString(),
         style: TextStyle(fontSize: 12),
       ),
     );
