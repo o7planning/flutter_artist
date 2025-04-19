@@ -21,11 +21,7 @@ class __FormDataViewState extends State<_FormDataView> {
   static const double fontSize = 13;
 
   static const int instantValueTab = 2;
-  static const int initial1ValueTab = 1;
-  static const int initial0ValueTab = 0;
   late int selectedTab = instantValueTab;
-
-  static const int tabLength = 4;
 
   late List<ShelfBlockScalarType> listeners;
 
@@ -74,12 +70,6 @@ class __FormDataViewState extends State<_FormDataView> {
 
   Color _getTabIconColor(TabStatus tabStatus) {
     return tabStatus == TabStatus.selected ? Colors.indigo : Colors.black;
-  }
-
-  EdgeInsets _getTabPadding(TabStatus tabStatus) {
-    return tabStatus == TabStatus.selected
-        ? EdgeInsets.all(5)
-        : EdgeInsets.fromLTRB(5, 10, 5, 5);
   }
 
   Widget _buildTabContainer() {
