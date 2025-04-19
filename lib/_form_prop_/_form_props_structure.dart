@@ -252,7 +252,7 @@ class FormPropsStructure {
           prop._tempInitialXData = prop._initialXData;
           //
           if (formKeyInstantValues.containsKey(prop.propName)) {
-            if(prop is SimpleProp) {
+            if (prop is SimpleProp) {
               prop._tempCurrentValue = formKeyInstantValues[prop.propName];
             }
           }
@@ -271,6 +271,14 @@ class FormPropsStructure {
   dynamic _getTempCurrentPropValue({required String propName}) {
     Prop? prop = _allPropMap[propName];
     return prop?._tempCurrentValue;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  dynamic _getTempInitialPropValue({required String propName}) {
+    Prop? prop = _allPropMap[propName];
+    return prop?._tempInitialValue;
   }
 
   // ***************************************************************************
@@ -304,6 +312,20 @@ class FormPropsStructure {
       return prop._currentXData;
     }
     return null;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _updateChildrenMultiOptValueToNullCascade({
+    required MultiOptProp multiOptProp,
+  }) {
+    for (MultiOptProp child in multiOptProp.children) {
+      child._tempCurrentValue = null;
+      child._tempCurrentXData = null;
+      //
+      _updateChildrenMultiOptValueToNullCascade(multiOptProp: child);
+    }
   }
 
   // ***************************************************************************

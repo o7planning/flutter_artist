@@ -354,15 +354,6 @@ abstract class FormModel<
     //
     try {
       for (MultiOptProp multiOptProp in _formPropsStructure._rootOptProps) {
-        final String multiOptPropName = multiOptProp.propName;
-        dynamic newSelectedValue = _formPropsStructure._getTempCurrentPropValue(
-          propName: multiOptPropName,
-        );
-        if (formDataAction == _FormDataAction.updateFromFormView) {
-          if (formKeyInstantValues.containsKey(multiOptPropName)) {
-            newSelectedValue = formKeyInstantValues[multiOptPropName];
-          }
-        }
         //
         // Load OptProp Data and set default and selected.
         //
@@ -372,8 +363,10 @@ abstract class FormModel<
           blockCurrentFilterCriteria: blockCurrentFilterCriteria,
           extraFormInput: extraFormInput,
           parentMultiOptPropValue: null,
+          parentValueIsInitialValue: true,
           multiOptProp: multiOptProp,
-          newSelectedValue: newSelectedValue,
+          // newSelectedValue: newSelectedValue,
+          formKeyInstantValues: formKeyInstantValues,
           formDataAction: formDataAction,
         );
       }
@@ -636,23 +629,37 @@ abstract class FormModel<
     // May be new selected parent value.
     required Object? parentMultiOptPropValue,
     required MultiOptProp multiOptProp,
-    required dynamic newSelectedValue,
+    required bool parentValueIsInitialValue,
+    required Map<String, dynamic> formKeyInstantValues,
     required _FormDataAction formDataAction,
   }) async {
     final String multiOptPropName = multiOptProp.propName;
-
-    final MultiOptProp? multiOptPropParent = multiOptProp.parent;
 
     // Get current OptProp data:
     XData? tempMultiOptPropXData =
         _formPropsStructure._getTempMultiOptPropXData(multiOptPropName);
     print(
+        "\n@@@@~~~~~~~~~~~~~~~~~~~~~> 0 - $multiOptPropName: parentValueIsInitialValue: $parentValueIsInitialValue");
+    print(
         "\n@@@@~~~~~~~~~~~~~~~~~~~~~> 1 - $multiOptPropName: tempMultiOptPropXData: ${tempMultiOptPropXData?.data}");
 
-    dynamic tempCurrentMultiOptValue = _formPropsStructure
+    final dynamic tempInitialMultiOptValue = _formPropsStructure
+        ._getTempInitialPropValue(propName: multiOptPropName);
+    final dynamic tempCurrentMultiOptValue = _formPropsStructure
         ._getTempCurrentPropValue(propName: multiOptPropName);
     print(
         "@@@@~~~~~~~~~~~~~~~~~~~~~> 3 - $multiOptPropName: tempOptValue: ${tempCurrentMultiOptValue}");
+
+    //
+    dynamic newSelectedValue = _formPropsStructure._getTempCurrentPropValue(
+      propName: multiOptPropName,
+    );
+    if (formDataAction == _FormDataAction.updateFromFormView) {
+      if (formKeyInstantValues.containsKey(multiOptPropName)) {
+        newSelectedValue = formKeyInstantValues[multiOptPropName];
+      }
+    }
+    //
 
     final bool valueChanged;
     if (tempMultiOptPropXData == null) {
@@ -663,47 +670,49 @@ abstract class FormModel<
         itemOrItemList2: newSelectedValue,
       );
     }
+    //
+    final bool multiOptValueIsInitialValue;
+    if (tempMultiOptPropXData == null) {
+      multiOptValueIsInitialValue = false;
+    } else {
+      multiOptValueIsInitialValue = tempMultiOptPropXData.isSameItemOrItemList(
+        itemOrItemList1: tempInitialMultiOptValue,
+        itemOrItemList2: newSelectedValue,
+      );
+    }
+    //
     multiOptProp._tempCurrentValue = newSelectedValue;
     //
-    if(valueChanged) {
-
-    }
-
-    bool parentValueChanged = false;
-    bool parentValueIsInitial = false;
-    if (multiOptPropParent != null) {
-      XData? tempXDataParent = _formPropsStructure._getTempMultiOptPropXData(
-        multiOptPropParent.propName,
+    if (valueChanged) {
+      _formPropsStructure._updateChildrenMultiOptValueToNullCascade(
+        multiOptProp: multiOptProp,
       );
-      //
-      if (tempXDataParent != null) {
-        // Item or Item List (Multi Selection):
-        Object? parentOptPropValueOLD =
-            _formPropsStructure._getCurrentPropValue(
-          propName: multiOptPropParent.propName,
-        );
-        Object? parentOptPropValueInitial =
-            _formPropsStructure._getInitialPropValue(
-          propName: multiOptPropParent.propName,
-        );
-
-        // Parent Value change?
-        parentValueChanged = !tempXDataParent.isSameItemOrItemList(
-          itemOrItemList1: parentOptPropValueOLD,
-          itemOrItemList2: parentMultiOptPropValue,
-        );
-        if (parentValueChanged) {
-          tempMultiOptPropXData = null;
-        }
-        //
-        parentValueIsInitial = tempXDataParent.isSameItemOrItemList(
-          itemOrItemList1: parentOptPropValueInitial,
-          itemOrItemList2: parentMultiOptPropValue,
-        );
-      } else {
-        tempMultiOptPropXData = null;
-      }
     }
+
+    // bool parentValueIsInitial = false;
+    // if (multiOptPropParent != null) {
+    //   XData? tempXDataParent = _formPropsStructure._getTempMultiOptPropXData(
+    //     multiOptPropParent.propName,
+    //   );
+    //   //
+    //   if (tempXDataParent != null) {
+    //     // Item or Item List (Multi Selection):
+    //     Object? parentOptPropValueOLD =
+    //         _formPropsStructure._getCurrentPropValue(
+    //       propName: multiOptPropParent.propName,
+    //     );
+    //     Object? parentOptPropValueInitial =
+    //         _formPropsStructure._getInitialPropValue(
+    //       propName: multiOptPropParent.propName,
+    //     );
+    //     parentValueIsInitial = tempXDataParent.isSameItemOrItemList(
+    //       itemOrItemList1: parentOptPropValueInitial,
+    //       itemOrItemList2: parentMultiOptPropValue,
+    //     );
+    //   } else {
+    //     tempMultiOptPropXData = null;
+    //   }
+    // }
     print(
         "@@@@~~~~~~~~~~~~~~~~~~~~~> 4 - $multiOptPropName: multiOptPropXData: ${tempMultiOptPropXData}");
     //
@@ -833,7 +842,7 @@ abstract class FormModel<
     }
     //
     if (formDataAction == _FormDataAction.itemFirstLoad ||
-        parentValueIsInitial) {
+        parentValueIsInitialValue) {
       tempMultiOptPropXData?._addInitialValueIfNotFound(
         initialValue: initialValue,
         removeCurrentNotFoundItems: true,
@@ -887,9 +896,10 @@ abstract class FormModel<
           blockCurrentFilterCriteria: blockCurrentFilterCriteria,
           extraFormInput: extraFormInput,
           parentMultiOptPropValue: tempSelectedPropValue,
+          parentValueIsInitialValue: multiOptValueIsInitialValue,
           multiOptProp: child,
+          formKeyInstantValues: formKeyInstantValues,
           formDataAction: formDataAction,
-          newSelectedValue: null, // ?????????????????????
         );
       }
     } else {
