@@ -335,6 +335,12 @@ abstract class FormModel<
     bool isNoneMode = currentFormMode == FormMode.none;
     bool isCreationMode = currentFormMode == FormMode.creation;
     //
+    if (formDataAction == _FormDataAction.itemFirstLoad) {
+      if (isNoneMode || isCreationMode) {
+        _defaultValueInitiated = false;
+      }
+    }
+    //
     // All values including hidden values (not on the user interface).
     //
     // Map<String, dynamic> allNewValue = {};
@@ -407,6 +413,7 @@ abstract class FormModel<
     //
     Map<String, dynamic> simplePropValue = {};
     if (formDataAction == _FormDataAction.itemFirstLoad) {
+      print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1");
       if (itemDetail != null) {
         try {
           simplePropValue = await getSimplePropValuesFromItemDetail(
@@ -439,14 +446,20 @@ abstract class FormModel<
       }
       // itemDetail == null
       else {
+        print(
+            "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 4: $_defaultValueInitiated");
         Map<String, dynamic> simplePropValueDefault = {};
         Map<String, dynamic> simplePropValueExtra = {};
         if (!_defaultValueInitiated) {
+          print(
+              "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 5: $_defaultValueInitiated");
           try {
             simplePropValueDefault = await specifyDefaultSimplePropValues(
                   filterCriteria: blockCurrentFilterCriteria,
                 ) ??
                 {};
+            print(
+                "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 5.1: simplePropValueDefault: $simplePropValueDefault");
             for (String propName in simplePropValueDefault.keys) {
               // In (Item First Load + itemDetail == null + !_defaultValueInitiated)
               _formPropsStructure._setTempSimplePropValue(
@@ -471,6 +484,8 @@ abstract class FormModel<
             return false;
           }
         }
+        print(
+            "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 6: $_defaultValueInitiated");
         //
         if (extraFormInput != null) {
           try {
