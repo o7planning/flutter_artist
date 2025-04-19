@@ -1,9 +1,9 @@
 part of '../../flutter_artist.dart';
 
-class _FilterModelDebugView2 extends StatelessWidget {
+class _FilterModelDebugView extends StatelessWidget {
   final FilterModel filterModel;
 
-  const _FilterModelDebugView2({
+  const _FilterModelDebugView({
     required this.filterModel,
   });
 

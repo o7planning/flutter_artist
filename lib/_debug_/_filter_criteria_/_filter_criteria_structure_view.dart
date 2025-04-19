@@ -50,7 +50,7 @@ class _FilterCriteriaStructureViewState
     if (_currentNode == null) {
       return Text("Null");
     } else if (_currentNode!.data is FilterModel) {
-      return _FilterModelDebugView2(
+      return _FilterModelDebugView(
         filterModel: _currentNode!.data,
       );
     } else if (_currentNode!.data is Criterion) {

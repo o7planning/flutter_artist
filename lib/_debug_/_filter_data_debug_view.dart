@@ -1,20 +1,20 @@
 part of '../flutter_artist.dart';
 
-class _FilterModelDebugView extends StatefulWidget {
+class _FilterDataDebugView extends StatefulWidget {
   final FilterModel filterModel;
   final Function() onPressedShelf;
 
-  const _FilterModelDebugView({
+  const _FilterDataDebugView({
     required this.filterModel,
     required this.onPressedShelf,
     super.key,
   });
 
   @override
-  State<_FilterModelDebugView> createState() => _FilterModelDebugViewState();
+  State<_FilterDataDebugView> createState() => _FilterDataDebugViewState();
 }
 
-class _FilterModelDebugViewState extends State<_FilterModelDebugView> {
+class _FilterDataDebugViewState extends State<_FilterDataDebugView> {
   static const double iconSize = 18;
   static const double fontSize = 13;
 
@@ -84,15 +84,12 @@ class _FilterModelDebugViewState extends State<_FilterModelDebugView> {
   Widget _buildTabContainer() {
     FilterCriteriaStructure filterCriteriaStructure =
         widget.filterModel._filterCriteriaStructure;
-    Map<String, dynamic> initial0Value =
-        filterCriteriaStructure.initial0FormData;
     Map<String, dynamic> initial1Value =
         filterCriteriaStructure.initialFormData;
     Map<String, dynamic> instantValue =
         widget.filterModel._formKey.currentState?.instantValue ?? {};
     Map<String, dynamic> currentValue = filterCriteriaStructure.currentFormData;
 
-    String initial0Json = toJson(initial0Value);
     String initial1Json = toJson(initial1Value);
     String instantJson = toJson(instantValue);
     String currentJson = toJson(currentValue);
@@ -103,18 +100,14 @@ class _FilterModelDebugViewState extends State<_FilterModelDebugView> {
 
     tabs.add(
       TabData(
-        text: ' Init',
+        text: ' Filter Criteria Structure',
         closable: false,
         leading: (context, status) => Icon(
           _formValueIconData,
           color: _getTabIconColor(status),
           size: iconSize,
         ),
-        content: _buildTabContent(
-          info:
-              "The values returned by ${getClassName(widget.filterModel)}.prepareFormData() method.",
-          json: initial0Json,
-        ),
+        content: _buildTabFilterCriteriaStructure(),
       ),
     );
     tabs.add(
@@ -157,9 +150,8 @@ class _FilterModelDebugViewState extends State<_FilterModelDebugView> {
           size: iconSize,
         ),
         content: _buildTabContent(
-          info: "The current values of the form (Will be passed to the "
-              "${getClassName(widget.filterModel)}.callApiCreateItem() "
-              "or ${getClassName(widget.filterModel)}.callApiUpdateItem() method).",
+          info: "The current values of the filter (Will be passed to the "
+              "${getClassName(widget.filterModel)}.toFilterCriteriaObject()).",
           json: currentJson,
         ),
       ),
@@ -192,24 +184,10 @@ class _FilterModelDebugViewState extends State<_FilterModelDebugView> {
     return tabbedViewTheme;
   }
 
-  Widget _buildTabTitle({
-    required IconData? iconData,
-    required Color? iconColor,
-    required String title,
-  }) {
-    return _IconLabelText(
-      icon: iconData == null
-          ? null
-          : Icon(
-              iconData,
-              size: 18,
-              color: iconColor,
-            ),
-      label: "",
-      text: title,
-      style: TextStyle(
-        color: Theme.of(context).tabBarTheme.labelColor,
-      ),
+  Widget _buildTabFilterCriteriaStructure() {
+    return _FilterCriteriaStructureView(
+      key: Key("FilterCriteriaStructureView"),
+      filterModel: widget.filterModel,
     );
   }
 
@@ -223,44 +201,12 @@ class _FilterModelDebugViewState extends State<_FilterModelDebugView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          _buildInfo(info: info),
+          _InfoView(info: info),
           const Divider(height: 10),
           Expanded(
-            child: Container(
-              constraints: const BoxConstraints(minHeight: 300),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: TextFormField(
-                  initialValue: json,
-                  maxLines: null,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                  ),
-                  style: const TextStyle(
-                    fontSize: fontSize,
-                  ),
-                ),
-              ),
-            ),
+            child: _JsonView(json: json),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildInfo({required String info}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-      child: _IconLabelText(
-        icon: const Icon(
-          _infoIconData,
-          size: 16,
-        ),
-        label: "",
-        text: info,
-        style: const TextStyle(
-          fontSize: 13,
-        ),
       ),
     );
   }
@@ -273,7 +219,7 @@ class _FilterModelDebugViewState extends State<_FilterModelDebugView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            _buildInfo(
+            _InfoView(
                 info:
                     "When you successfully add or modify a record on the '${getClassName(widget.filterModel)}' block, "
                     "the listening blocks will be switched to the 'pending' state, "

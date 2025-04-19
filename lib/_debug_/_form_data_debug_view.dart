@@ -85,12 +85,10 @@ class __FormDataViewState extends State<_FormDataView> {
   Widget _buildTabContainer() {
     FormPropsStructure formPropsStructure =
         widget.formModel._formPropsStructure;
-    Map<String, dynamic> initial0Value = formPropsStructure.initial0FormData;
     Map<String, dynamic> initial1Value = formPropsStructure.initialFormData;
     Map<String, dynamic> instantValue = formPropsStructure.currentFormData;
 
     //
-    String initial0Json = toJson(initial0Value);
     String initial1Json = toJson(initial1Value);
     String instantJson = toJson(instantValue);
     //
@@ -169,27 +167,6 @@ class __FormDataViewState extends State<_FormDataView> {
     return tabbedViewTheme;
   }
 
-  Widget _buildTabTitle({
-    required IconData? iconData,
-    required Color? iconColor,
-    required String title,
-  }) {
-    return _IconLabelText(
-      icon: iconData == null
-          ? null
-          : Icon(
-              iconData,
-              size: 18,
-              color: iconColor,
-            ),
-      label: "",
-      text: title,
-      style: TextStyle(
-        color: Theme.of(context).tabBarTheme.labelColor,
-      ),
-    );
-  }
-
   Widget _buildTabFormPropsStructure() {
     return _FormPropsStructureView(
       key: Key("FormPropsStructureTreeView"),
@@ -207,44 +184,12 @@ class __FormDataViewState extends State<_FormDataView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          _buildInfo(info: info),
+          _InfoView(info: info),
           const Divider(height: 10),
           Expanded(
-            child: Container(
-              constraints: const BoxConstraints(minHeight: 300),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: TextFormField(
-                  initialValue: json,
-                  maxLines: null,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                  ),
-                  style: const TextStyle(
-                    fontSize: fontSize,
-                  ),
-                ),
-              ),
-            ),
+            child: _JsonView(json: json),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildInfo({required String info}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-      child: _IconLabelText(
-        icon: const Icon(
-          _infoIconData,
-          size: 16,
-        ),
-        label: "",
-        text: info,
-        style: const TextStyle(
-          fontSize: 13,
-        ),
       ),
     );
   }
@@ -257,7 +202,7 @@ class __FormDataViewState extends State<_FormDataView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            _buildInfo(
+            _InfoView(
                 info:
                     "When you successfully add or modify a record on the '${getClassName(widget.formModel.block)}' block, "
                     "the listening blocks will be switched to the 'pending' state, "
