@@ -2,6 +2,7 @@ part of '../flutter_artist.dart';
 
 abstract class Criterion {
   final String criterionName;
+
   dynamic candidateUpdateValue;
   bool _valueUpdated = false;
   bool _markTempDirty = false;
@@ -10,6 +11,9 @@ abstract class Criterion {
 
   dynamic _tempCurrentValue;
   XData? _tempCurrentXData;
+
+  dynamic _tempInitialValue;
+  XData? _tempInitialXData;
 
   dynamic _currentValue;
   XData? _currentXData;
