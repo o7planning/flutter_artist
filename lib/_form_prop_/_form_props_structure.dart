@@ -49,6 +49,27 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  void _triggerFilterCriteriaChanged() {
+    for (var rootMultiOptProp in _rootOptProps) {
+      if (rootMultiOptProp.reloadCondition ==
+          MultiOptPropReload.ifCriteriaChanged) {
+        rootMultiOptProp._markToReload = true;
+      }
+    }
+  }
+
+  void _triggerItemIdChanged() {
+    for (var rootMultiOptProp in _rootOptProps) {
+      if (rootMultiOptProp.reloadCondition ==
+          MultiOptPropReload.ifItemIdChanged) {
+        rootMultiOptProp._markToReload = true;
+      }
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _setFormMode(FormMode formMode) {
     _formMode = formMode;
   }

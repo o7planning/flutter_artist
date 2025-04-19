@@ -148,6 +148,8 @@ class BlockData<
     itemDetail: null,
   );
 
+  _CurrentCoupleItem<ITEM, ITEM_DETAIL> get current => __current;
+
   ITEM? get __currentItem => __current._item;
 
   ITEM_DETAIL? get __currentItemDetail => __current._itemDetail;
@@ -175,8 +177,11 @@ class BlockData<
   }) {
     _queryDataState = queryDataState;
     if (_queryDataState == DataState.error) {
-      _filterCriteria = null;
       _lastQueryResultState = ActionResultState.fail;
+      //
+      // Update FilterCriteria:
+      //
+      __setNewFilterCriteria(null);
     }
     _items.clear();
     _selectedItems.clear();
@@ -233,10 +238,42 @@ class BlockData<
     required ITEM? refreshedItem,
     required ITEM_DETAIL? refreshedItemDetail,
   }) {
+    final ITEM? oldItem = __current._item;
+    final ITEM? newItem = refreshedItem;
+    //
     __current = _CurrentCoupleItem(
       item: refreshedItem,
       itemDetail: refreshedItemDetail,
     );
+    //
+    final bool changed;
+    if (oldItem == null && newItem == null) {
+      changed = false;
+    } else if (oldItem != null && newItem == null) {
+      changed = true;
+    } else if (oldItem == null && newItem != null) {
+      changed = true;
+    } else {
+      changed = block.getItemId(oldItem!) == block.getItemId(newItem!);
+    }
+    if (changed) {
+      if (block.formModel != null) {
+        block.formModel!._triggerFilterCriteriaChanged();
+      }
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __setNewFilterCriteria(FILTER_CRITERIA? newFilterCriteria) {
+    final bool changed = _filterCriteria != newFilterCriteria;
+    _filterCriteria = newFilterCriteria;
+    if (changed) {
+      if (block.formModel != null) {
+        block.formModel!._triggerFilterCriteriaChanged();
+      }
+    }
   }
 
   // ***************************************************************************
@@ -348,9 +385,12 @@ class BlockData<
     }
     //
     _currentParentItemId = currentParentItemId;
-    _filterCriteria = filterCriteria;
     _lastQueryResult = pageData;
     _queryDataState = queryDataState;
+    //
+    // Update FilterCriteria:
+    //
+    __setNewFilterCriteria(filterCriteria);
     //
     // Append to _items:
     //

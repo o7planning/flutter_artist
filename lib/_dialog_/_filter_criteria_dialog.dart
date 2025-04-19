@@ -11,19 +11,22 @@ class _FilterCriteriaDialog extends StatefulWidget {
   const _FilterCriteriaDialog.block({
     required Block this.block,
     super.key,
-  })  : scalar = null,
+  })
+      : scalar = null,
         filterModel = null;
 
   const _FilterCriteriaDialog.scalar({
     required Scalar this.scalar,
     super.key,
-  })  : block = null,
+  })
+      : block = null,
         filterModel = null;
 
   const _FilterCriteriaDialog.filterModel({
     required FilterModel this.filterModel,
     super.key,
-  })  : block = null,
+  })
+      : block = null,
         scalar = null;
 
   @override
@@ -62,8 +65,12 @@ class _FilterCriteriaDialogState extends State<_FilterCriteriaDialog> {
   }
 
   Widget _buildMainContent(BuildContext context) {
-    double width = MediaQuery.sizeOf(context).width;
-    double height = MediaQuery.sizeOf(context).height;
+    double width = MediaQuery
+        .sizeOf(context)
+        .width;
+    double height = MediaQuery
+        .sizeOf(context)
+        .height;
     if (width > 620) {
       width = 600;
     } else {

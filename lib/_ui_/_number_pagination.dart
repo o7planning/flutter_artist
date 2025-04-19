@@ -29,7 +29,7 @@ class NumberPagination extends BasePagination {
         visiblePagesCount: visiblePagesCount,
         totalPages: block.pagination == null ? 0 : block.pagination!.totalPages,
         currentPage:
-            block.pagination == null ? 1 : block.pagination!.currentPage,
+        block.pagination == null ? 1 : block.pagination!.currentPage,
         fontSize: 13,
         controlButtonSize: const Size(22, 22),
         numberButtonSize: const Size(22, 22),

@@ -2,6 +2,12 @@ part of '../flutter_artist.dart';
 
 class MultiOptProp extends Prop {
   late final MultiOptProp? parent;
+  final MultiOptPropReload reloadCondition;
+
+  bool _markToReload = false;
+  int _loadCount = 0;
+
+  int get loadCount => _loadCount;
 
   ///
   /// In most cases this value is [true].
@@ -17,11 +23,13 @@ class MultiOptProp extends Prop {
 
   MultiOptProp({
     required super.propName,
+    this.reloadCondition = MultiOptPropReload.ifCriteriaChanged,
     this.children = const [],
   }) : singleSelection = true;
 
   MultiOptProp.multiSelection({
     required super.propName,
+    this.reloadCondition = MultiOptPropReload.ifCriteriaChanged,
   })  : singleSelection = false,
         children = const [];
 

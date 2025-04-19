@@ -148,6 +148,17 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  void _triggerFilterCriteriaChanged() {
+    _formPropsStructure._triggerFilterCriteriaChanged();
+  }
+
+  void _triggerItemIdChanged() {
+    _formPropsStructure._triggerItemIdChanged();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<bool> _unitFormViewChanged({
     required _XFormModel xFormModel,
   }) async {
@@ -692,16 +703,24 @@ abstract class FormModel<
       _formPropsStructure._updatePropsTempValues({multiOptPropName: null});
     }
 
+    bool forceReload =
+        multiOptProp.parent == null && multiOptProp._markToReload;
+
     //
     // Load OptProp data from Rest API.
     // May throw ApiError.
     //
-    tempMultiOptPropXData ??= await callApiLoadMultiOptPropData(
-      filterCriteria: blockCurrentFilterCriteria,
-      extraFormInput: extraFormInput,
-      parentMultiOptPropValue: parentMultiOptPropValue,
-      multiOptPropName: multiOptPropName,
-    );
+    if (tempMultiOptPropXData == null || forceReload) {
+      tempMultiOptPropXData = await callApiLoadMultiOptPropData(
+        filterCriteria: blockCurrentFilterCriteria,
+        extraFormInput: extraFormInput,
+        parentMultiOptPropValue: parentMultiOptPropValue,
+        multiOptPropName: multiOptPropName,
+      );
+      multiOptProp._markToReload = false;
+      multiOptProp._loadCount++;
+    }
+
     //
     // IMPORTANT: Do not use empty list here
     // to avoid cast Error (List<dynamic> to List<ITEM>)

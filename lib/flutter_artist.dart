@@ -272,6 +272,8 @@ part '_dialog_/_storage_dialog.dart';
 
 part '_dialog_/_ui_components_dialog.dart';
 
+part '_enum_/_multi_opt_prop_reload.dart';
+
 part '_enum_/_action_confirmation_type.dart';
 
 part '_enum_/_after_quick_action.dart';
