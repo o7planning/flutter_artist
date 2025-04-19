@@ -354,7 +354,7 @@ abstract class FilterModel<
     //
     try {
       // Convert Map Data to FilterCriteria Object.
-      FILTER_CRITERIA newCriteria = createFilterCriteria(
+      FILTER_CRITERIA newCriteria = toFilterCriteriaObject(
         dataMap: _filterCriteriaStructure.tempCurrentFormData,
       );
       _filterCriteria = newCriteria;
@@ -377,7 +377,7 @@ abstract class FilterModel<
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: "createFilterCriteria",
+        methodName: "toFilterCriteriaObject",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -696,7 +696,7 @@ abstract class FilterModel<
   /// calling [callApiLoadMultiOptCriterionData]
   /// methods if there are no errors.
   ///
-  FILTER_CRITERIA createFilterCriteria({
+  FILTER_CRITERIA toFilterCriteriaObject({
     required Map<String, dynamic> dataMap,
   });
 

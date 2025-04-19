@@ -85,7 +85,7 @@ abstract class _BlkOrScrCriteriaView extends StatelessWidget {
             ),
             TextSpan(text: ". It is created by "),
             TextSpan(
-              text: "$filterModelClassName.createFilterCriteria()",
+              text: "$filterModelClassName.toFilterCriteriaObject()",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),

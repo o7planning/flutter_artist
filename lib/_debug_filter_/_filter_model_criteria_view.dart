@@ -52,7 +52,7 @@ class _FilterModelCriteriaView extends StatelessWidget {
           ),
           TextSpan(text: " object is created by the "),
           TextSpan(
-            text: "$filterModelClassName.createFilterCriteria()",
+            text: "$filterModelClassName.toFilterCriteriaObject()",
             style: TextStyle(
               fontWeight: FontWeight.bold,
             ),
