@@ -160,7 +160,8 @@ class _FlutterArtist {
     __futureTaskList.add(future);
     future.whenComplete(() {
       if (_isOverlayMode) {
-        Future.delayed(const Duration(milliseconds: 30), () {
+        // Default 30:
+        Future.delayed(const Duration(milliseconds: 0), () {
           __futureTaskList.remove(future);
         });
       } else {
@@ -181,7 +182,8 @@ class _FlutterArtist {
       asyncFunction: () async {
         await Future.doWhile(
           () => Future.delayed(
-            const Duration(milliseconds: 5),
+            // Default?
+            const Duration(milliseconds: 0),
           ).then(
             (_) {
               return __futureTaskList.isNotEmpty;

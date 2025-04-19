@@ -400,7 +400,6 @@ abstract class FormModel<
     //
     Map<String, dynamic> simplePropValue = {};
     if (formDataAction == _FormDataAction.itemFirstLoad) {
-      print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1");
       if (itemDetail != null) {
         try {
           simplePropValue = await getSimplePropValuesFromItemDetail(
