@@ -164,7 +164,7 @@ abstract class FormModel<
   }) async {
     __assertThisXFormModel(xFormModel);
     //
-    await _startNewFormTransaction(
+    await _startNewFormActivity(
       extraFormInput: null,
       formDataAction: _FormDataAction.updateFromFormView,
     );
@@ -204,7 +204,7 @@ abstract class FormModel<
     EXTRA_FORM_INPUT? extraFormInput =
         thisXFormModel.extraFormInput as EXTRA_FORM_INPUT?;
     //
-    await _startNewFormTransaction(
+    await _startNewFormActivity(
       extraFormInput: extraFormInput,
       formDataAction: _FormDataAction.itemFirstLoad,
     );
@@ -221,7 +221,7 @@ abstract class FormModel<
   }) async {
     __assertThisXFormModel(thisXFormModel);
     //
-    await _startNewFormTransaction(
+    await _startNewFormActivity(
       extraFormInput: extraFormInput,
       formDataAction: _FormDataAction.autoEnterFormFields,
     );
@@ -324,7 +324,7 @@ abstract class FormModel<
   /// Return null is error.
   ///
   @ImportantMethodAnnotation()
-  Future<bool> _startNewFormTransaction({
+  Future<bool> _startNewFormActivity({
     required EXTRA_FORM_INPUT? extraFormInput,
     required _FormDataAction formDataAction,
   }) async {
@@ -334,7 +334,7 @@ abstract class FormModel<
     }
     __formTransactionCount++;
     print(
-        "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFormTransaction, formDataAction: $formDataAction");
+        "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFormActivity, formDataAction: $formDataAction");
 
     final ITEM_DETAIL? itemDetail = block.currentItemDetail;
     final FormMode currentFormMode = formDataState == DataState.none

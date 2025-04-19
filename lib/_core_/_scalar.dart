@@ -162,7 +162,7 @@ abstract class Scalar<
         FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
         //
         filterCriteriaOfFilterModel =
-            await filterModel._startNewFilterTransaction(
+            await filterModel._startNewFilterActivity(
           filterDataAction: _FilterDataAction.newFilt,
           filterInput: filterInput,
         ) as FILTER_CRITERIA?;

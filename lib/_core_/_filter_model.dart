@@ -146,7 +146,7 @@ abstract class FilterModel<
     //
     _filterCriteriaStructure._setFilterDataState(DataState.pending);
     //
-    FILTER_CRITERIA? filterCriteria = await _startNewFilterTransaction(
+    FILTER_CRITERIA? filterCriteria = await _startNewFilterActivity(
       filterDataAction: _FilterDataAction.updateFromFilterView,
       filterInput: null,
     );
@@ -238,11 +238,11 @@ abstract class FilterModel<
   /// Return null is error.
   ///
   @ImportantMethodAnnotation()
-  Future<FILTER_CRITERIA?> _startNewFilterTransaction({
+  Future<FILTER_CRITERIA?> _startNewFilterActivity({
     required FILTER_INPUT? filterInput,
     required _FilterDataAction filterDataAction,
   }) async {
-    print("#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFilterTransaction");
+    print("#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFilterActivity");
 
     // if (filterDataAction == _FilterDataAction.newFilt) {
     //   _defaultValueInitiated = false;
