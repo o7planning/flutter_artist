@@ -28,38 +28,50 @@ class _FormPropView extends StatelessWidget {
           ),
           if (prop is MultiOptProp) SizedBox(height: 5),
           if (prop is MultiOptProp)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Radio(
-                  value: (prop as MultiOptProp).singleSelection,
-                  onChanged: null,
-                  groupValue: true,
-                ),
-                Text(
-                  "Single Selection",
-                  style: TextStyle(
-                    fontSize: 13,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                SizedBox(width: 5),
-                Radio(
-                  value: !(prop as MultiOptProp).singleSelection,
-                  onChanged: null,
-                  groupValue: true,
-                ),
-                Expanded(
-                  child: Text(
-                    "Multi Selection",
-                    style: TextStyle(
-                      fontSize: 13,
-                      overflow: TextOverflow.ellipsis,
+            LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Tooltip(
+                      message: "Single Selection",
+                      child: Radio(
+                        value: (prop as MultiOptProp).singleSelection,
+                        onChanged: null,
+                        groupValue: true,
+                      ),
                     ),
-                  ),
-                ),
-              ],
+                    if (constraints.constrainWidth() > 200)
+                      Text(
+                        "Single Selection",
+                        style: TextStyle(
+                          fontSize: 13,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    SizedBox(width: 5),
+                    Tooltip(
+                      message: "Multi Selection",
+                      child: Radio(
+                        value: !(prop as MultiOptProp).singleSelection,
+                        onChanged: null,
+                        groupValue: true,
+                      ),
+                    ),
+                    if (constraints.constrainWidth() > 200)
+                      Expanded(
+                        child: Text(
+                          "Multi Selection",
+                          style: TextStyle(
+                            fontSize: 13,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
+                  ],
+                );
+              },
             ),
           SizedBox(height: 10),
           Expanded(
