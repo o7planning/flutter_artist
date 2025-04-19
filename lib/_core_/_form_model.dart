@@ -638,17 +638,11 @@ abstract class FormModel<
     // Get current OptProp data:
     XData? tempMultiOptPropXData =
         _formPropsStructure._getTempMultiOptPropXData(multiOptPropName);
-    print(
-        "\n@@@@~~~~~~~~~~~~~~~~~~~~~> 0 - $multiOptPropName: parentValueIsInitialValue: $parentValueIsInitialValue");
-    print(
-        "\n@@@@~~~~~~~~~~~~~~~~~~~~~> 1 - $multiOptPropName: tempMultiOptPropXData: ${tempMultiOptPropXData?.data}");
 
     final dynamic tempInitialMultiOptValue = _formPropsStructure
         ._getTempInitialPropValue(propName: multiOptPropName);
     final dynamic tempCurrentMultiOptValue = _formPropsStructure
         ._getTempCurrentPropValue(propName: multiOptPropName);
-    print(
-        "@@@@~~~~~~~~~~~~~~~~~~~~~> 3 - $multiOptPropName: tempOptValue: ${tempCurrentMultiOptValue}");
 
     //
     dynamic newSelectedValue = _formPropsStructure._getTempCurrentPropValue(
@@ -688,33 +682,6 @@ abstract class FormModel<
         multiOptProp: multiOptProp,
       );
     }
-
-    // bool parentValueIsInitial = false;
-    // if (multiOptPropParent != null) {
-    //   XData? tempXDataParent = _formPropsStructure._getTempMultiOptPropXData(
-    //     multiOptPropParent.propName,
-    //   );
-    //   //
-    //   if (tempXDataParent != null) {
-    //     // Item or Item List (Multi Selection):
-    //     Object? parentOptPropValueOLD =
-    //         _formPropsStructure._getCurrentPropValue(
-    //       propName: multiOptPropParent.propName,
-    //     );
-    //     Object? parentOptPropValueInitial =
-    //         _formPropsStructure._getInitialPropValue(
-    //       propName: multiOptPropParent.propName,
-    //     );
-    //     parentValueIsInitial = tempXDataParent.isSameItemOrItemList(
-    //       itemOrItemList1: parentOptPropValueInitial,
-    //       itemOrItemList2: parentMultiOptPropValue,
-    //     );
-    //   } else {
-    //     tempMultiOptPropXData = null;
-    //   }
-    // }
-    print(
-        "@@@@~~~~~~~~~~~~~~~~~~~~~> 4 - $multiOptPropName: multiOptPropXData: ${tempMultiOptPropXData}");
     //
     if (tempMultiOptPropXData == null) {
       _formPropsStructure._setTempMultiOptPropXData(
