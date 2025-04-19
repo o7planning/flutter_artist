@@ -365,7 +365,6 @@ abstract class FormModel<
           parentMultiOptPropValue: null,
           parentValueIsInitialValue: true,
           multiOptProp: multiOptProp,
-          // newSelectedValue: newSelectedValue,
           formKeyInstantValues: formKeyInstantValues,
           formDataAction: formDataAction,
         );
@@ -626,7 +625,6 @@ abstract class FormModel<
   Future<void> _loadMultiOptPropDataCascade({
     required FILTER_CRITERIA blockCurrentFilterCriteria,
     required EXTRA_FORM_INPUT? extraFormInput,
-    // May be new selected parent value.
     required Object? parentMultiOptPropValue,
     required MultiOptProp multiOptProp,
     required bool parentValueIsInitialValue,

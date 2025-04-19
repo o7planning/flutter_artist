@@ -892,6 +892,7 @@ abstract class Block<
         //
         filterCriteriaOfFilterModel =
             await filterModel._startNewFilterTransaction(
+              filterDataAction: _FilterDataAction.newFilt,
           filterInput: filterInput,
         ) as FILTER_CRITERIA?;
         //

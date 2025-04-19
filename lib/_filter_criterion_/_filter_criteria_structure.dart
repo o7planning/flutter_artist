@@ -124,16 +124,48 @@ class FilterCriteriaStructure {
   // ***************************************************************************
 
   void _initTemporaryForNewTransaction({
-    required Map<String, dynamic>? newCurrentFormData,
+    required _FilterDataAction filterDataAction,
+    required Map<String, dynamic> formKeyInstantValues,
+    required FilterInput? filterInput,
   }) {
     __addCriteriaIfNeed(
-      criterionNames: newCurrentFormData?.keys.toList() ?? [],
+      criterionNames: formKeyInstantValues.keys.toList(),
     );
     //
     for (Criterion criterion in _allCriteriaMap.values) {
-      dynamic newValue = newCurrentFormData?[criterion.criterionName];
-      criterion._tempCurrentValue = newValue;
-      criterion._tempCurrentXData = null;
+      switch (filterDataAction) {
+        case _FilterDataAction.newFilt:
+          if (filterInput != null && filterInput is! EmptyFilterInput) {
+            criterion._tempCurrentValue = null;
+            criterion._tempCurrentXData = null;
+            criterion._tempInitialValue = null;
+            criterion._tempInitialXData = null;
+          } else {
+            criterion._tempCurrentValue = criterion._currentValue;
+            criterion._tempCurrentXData = criterion._currentXData;
+            criterion._tempInitialValue = criterion._initialValue;
+            criterion._tempInitialXData = criterion._initialXData;
+            //
+            if (formKeyInstantValues.containsKey(criterion.criterionName)) {
+              if (criterion is SimpleCriterion) {
+                criterion._tempCurrentValue =
+                    formKeyInstantValues[criterion.criterionName];
+              }
+            }
+          }
+        case _FilterDataAction.updateFromFilterView:
+          criterion._tempCurrentValue = criterion._currentValue;
+          criterion._tempCurrentXData = criterion._currentXData;
+          criterion._tempInitialValue = criterion._initialValue;
+          criterion._tempInitialXData = criterion._initialXData;
+          //
+          if (formKeyInstantValues.containsKey(criterion.criterionName)) {
+            if (criterion is SimpleCriterion) {
+              criterion._tempCurrentValue =
+                  formKeyInstantValues[criterion.criterionName];
+            }
+          }
+      }
     }
   }
 
@@ -165,13 +197,18 @@ class FilterCriteriaStructure {
     return null;
   }
 
-  XData? _getMultiOptCriterionXData(String criterionName) {
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+
+  XData? _getTempMultiOptCriterionXData(String criterionName) {
     Criterion? criterion = _allCriteriaMap[criterionName];
     if (criterion == null) {
       return null;
     }
     if (criterion is MultiOptCriterion) {
-      return criterion._currentXData;
+      return criterion._tempCurrentXData;
     }
     return null;
   }
