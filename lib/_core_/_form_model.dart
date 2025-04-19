@@ -332,8 +332,8 @@ abstract class FormModel<
             ? FormMode.creation
             : FormMode.edit;
     _formPropsStructure._setFormMode(currentFormMode);
-    bool isNoneMode = currentFormMode == FormMode.none;
-    bool isCreationMode = currentFormMode == FormMode.creation;
+    final bool isNoneMode = currentFormMode == FormMode.none;
+    final bool isCreationMode = currentFormMode == FormMode.creation;
     //
     if (formDataAction == _FormDataAction.itemFirstLoad) {
       if (isNoneMode || isCreationMode) {
@@ -341,45 +341,28 @@ abstract class FormModel<
       }
     }
     //
-    // All values including hidden values (not on the user interface).
-    //
-    // Map<String, dynamic> allNewValue = {};
-    // //
-    // switch (formDataAction) {
-    //   //
-    //   // The First Load (Not from FormView)
-    //   //
-    //   case _FormDataAction.itemFirstLoad:
-    //     if (isNoneMode || isCreationMode) {
-    //       _defaultValueInitiated = false;
-    //       allNewValue.addAll({});
-    //     } else {
-    //       allNewValue.addAll({});
-    //     }
-    //   //
-    //   // Update from FormView:
-    //   //
-    //   case _FormDataAction.updateFromFormView:
-    //     allNewValue.addAll(_formPropsStructure.currentFormData);
-    //     // Update values from view (On the user Interface).
-    //     allNewValue.addAll(_formKey.currentState?.instantValue ?? {});
-    //   //
-    //   // Auto Enter Values (From ExtraFormInput).
-    //   //
-    //   case _FormDataAction.autoEnterFormFields:
-    //     allNewValue.addAll(_formPropsStructure.currentFormData);
-    // }
+    final Map<String, dynamic> formKeyInstantValues =
+        _formKey.currentState?.instantValue ?? {};
     //
     _formPropsStructure._initTemporaryForNewTransaction(
       formDataAction: formDataAction,
       // Data from FormView:
-      formKeyInstantValues: _formKey.currentState?.instantValue ?? {},
+      formKeyInstantValues: formKeyInstantValues,
     );
     //
     // Load OptProp Data:
     //
     try {
       for (MultiOptProp multiOptProp in _formPropsStructure._rootOptProps) {
+        final String multiOptPropName = multiOptProp.propName;
+        dynamic newSelectedValue = _formPropsStructure._getTempCurrentPropValue(
+          propName: multiOptPropName,
+        );
+        if (formDataAction == _FormDataAction.updateFromFormView) {
+          if (formKeyInstantValues.containsKey(multiOptPropName)) {
+            newSelectedValue = formKeyInstantValues[multiOptPropName];
+          }
+        }
         //
         // Load OptProp Data and set default and selected.
         //
@@ -390,6 +373,7 @@ abstract class FormModel<
           extraFormInput: extraFormInput,
           parentMultiOptPropValue: null,
           multiOptProp: multiOptProp,
+          newSelectedValue: newSelectedValue,
           formDataAction: formDataAction,
         );
       }
@@ -652,32 +636,55 @@ abstract class FormModel<
     // May be new selected parent value.
     required Object? parentMultiOptPropValue,
     required MultiOptProp multiOptProp,
+    required dynamic newSelectedValue,
     required _FormDataAction formDataAction,
   }) async {
     final String multiOptPropName = multiOptProp.propName;
 
-    final MultiOptProp? optPropParent = multiOptProp.parent;
+    final MultiOptProp? multiOptPropParent = multiOptProp.parent;
 
     // Get current OptProp data:
-    XData? multiOptPropXData =
-        _formPropsStructure._getMultiOptPropXData(multiOptPropName);
+    XData? tempMultiOptPropXData =
+        _formPropsStructure._getTempMultiOptPropXData(multiOptPropName);
+    print(
+        "\n@@@@~~~~~~~~~~~~~~~~~~~~~> 1 - $multiOptPropName: tempMultiOptPropXData: ${tempMultiOptPropXData?.data}");
+
+    dynamic tempCurrentMultiOptValue = _formPropsStructure
+        ._getTempCurrentPropValue(propName: multiOptPropName);
+    print(
+        "@@@@~~~~~~~~~~~~~~~~~~~~~> 3 - $multiOptPropName: tempOptValue: ${tempCurrentMultiOptValue}");
+
+    final bool valueChanged;
+    if (tempMultiOptPropXData == null) {
+      valueChanged = false;
+    } else {
+      valueChanged = !tempMultiOptPropXData.isSameItemOrItemList(
+        itemOrItemList1: tempCurrentMultiOptValue,
+        itemOrItemList2: newSelectedValue,
+      );
+    }
+    multiOptProp._tempCurrentValue = newSelectedValue;
+    //
+    if(valueChanged) {
+
+    }
 
     bool parentValueChanged = false;
     bool parentValueIsInitial = false;
-    if (optPropParent != null) {
-      XData? tempXDataParent = _formPropsStructure._getTempOptPropXData(
-        optPropParent.propName,
+    if (multiOptPropParent != null) {
+      XData? tempXDataParent = _formPropsStructure._getTempMultiOptPropXData(
+        multiOptPropParent.propName,
       );
       //
       if (tempXDataParent != null) {
         // Item or Item List (Multi Selection):
         Object? parentOptPropValueOLD =
             _formPropsStructure._getCurrentPropValue(
-          propName: optPropParent.propName,
+          propName: multiOptPropParent.propName,
         );
         Object? parentOptPropValueInitial =
             _formPropsStructure._getInitialPropValue(
-          propName: optPropParent.propName,
+          propName: multiOptPropParent.propName,
         );
 
         // Parent Value change?
@@ -686,7 +693,7 @@ abstract class FormModel<
           itemOrItemList2: parentMultiOptPropValue,
         );
         if (parentValueChanged) {
-          multiOptPropXData = null;
+          tempMultiOptPropXData = null;
         }
         //
         parentValueIsInitial = tempXDataParent.isSameItemOrItemList(
@@ -694,11 +701,13 @@ abstract class FormModel<
           itemOrItemList2: parentMultiOptPropValue,
         );
       } else {
-        multiOptPropXData = null;
+        tempMultiOptPropXData = null;
       }
     }
+    print(
+        "@@@@~~~~~~~~~~~~~~~~~~~~~> 4 - $multiOptPropName: multiOptPropXData: ${tempMultiOptPropXData}");
     //
-    if (multiOptPropXData == null) {
+    if (tempMultiOptPropXData == null) {
       _formPropsStructure._setTempMultiOptPropXData(
         multiOptPropName: multiOptPropName,
         multiOptPropXData: null,
@@ -713,7 +722,7 @@ abstract class FormModel<
     // Load OptProp data from Rest API.
     // May throw ApiError.
     //
-    multiOptPropXData ??= await callApiLoadMultiOptPropData(
+    tempMultiOptPropXData ??= await callApiLoadMultiOptPropData(
       filterCriteria: blockCurrentFilterCriteria,
       extraFormInput: extraFormInput,
       parentMultiOptPropValue: parentMultiOptPropValue,
@@ -729,14 +738,14 @@ abstract class FormModel<
     ValueWrap? initialValueWrap;
     final ITEM_DETAIL? currentItemDetail = block.currentItemDetail;
     //
-    if (multiOptPropXData != null) {
+    if (tempMultiOptPropXData != null) {
       // Item First Load:
       if (formDataAction == _FormDataAction.itemFirstLoad) {
         if (currentItemDetail == null) {
           if (extraFormInput != null) {
             initialValueWrap = __getMultiOptPropValueFromExtraFormInput(
               extraFormInput: extraFormInput,
-              multiOptPropXData: multiOptPropXData,
+              multiOptPropXData: tempMultiOptPropXData,
               multiOptPropName: multiOptPropName,
               parentMultiOptPropValue: parentMultiOptPropValue,
             );
@@ -744,7 +753,7 @@ abstract class FormModel<
             if (!_defaultValueInitiated) {
               initialValueWrap = __specifyDefaultMultiOptPropValue(
                 multiOptPropName: multiOptPropName,
-                multiOptPropXData: multiOptPropXData,
+                multiOptPropXData: tempMultiOptPropXData,
                 parentMultiOptPropValue: parentMultiOptPropValue,
               );
             }
@@ -754,7 +763,7 @@ abstract class FormModel<
         else {
           initialValueWrap = __getMultiOptPropValueFromItemDetail(
             itemDetail: currentItemDetail,
-            multiOptPropXData: multiOptPropXData,
+            multiOptPropXData: tempMultiOptPropXData,
             multiOptPropName: multiOptPropName,
             parentMultiOptPropValue: parentMultiOptPropValue,
           );
@@ -765,7 +774,7 @@ abstract class FormModel<
         if (extraFormInput != null) {
           initialValueWrap = __getMultiOptPropValueFromExtraFormInput(
             extraFormInput: extraFormInput,
-            multiOptPropXData: multiOptPropXData,
+            multiOptPropXData: tempMultiOptPropXData,
             multiOptPropName: multiOptPropName,
             parentMultiOptPropValue: parentMultiOptPropValue,
           );
@@ -789,7 +798,8 @@ abstract class FormModel<
         }
       }
       if (currentSelectedItems != null) {
-        currentSelectedItems = multiOptPropXData._findInternalItemsByDynamics(
+        currentSelectedItems =
+            tempMultiOptPropXData._findInternalItemsByDynamics(
           dynamicValues: currentSelectedItems,
           addToInternalIfNotFound: true,
           removeCurrentNotFoundItems: true,
@@ -810,7 +820,7 @@ abstract class FormModel<
     //
     _formPropsStructure._setTempMultiOptPropXData(
       multiOptPropName: multiOptPropName,
-      multiOptPropXData: multiOptPropXData,
+      multiOptPropXData: tempMultiOptPropXData,
     );
     //
     final dynamic initialValue;
@@ -824,21 +834,22 @@ abstract class FormModel<
     //
     if (formDataAction == _FormDataAction.itemFirstLoad ||
         parentValueIsInitial) {
-      multiOptPropXData?._addInitialValueIfNotFound(
+      tempMultiOptPropXData?._addInitialValueIfNotFound(
         initialValue: initialValue,
         removeCurrentNotFoundItems: true,
       );
     }
     // TODO: Dangerous, check not null:
-    candidateSelectedItems = multiOptPropXData?._findInternalItemsByDynamics(
-          dynamicValues: candidateSelectedItems,
-          //
-          // IMPORTANT: Add not found item to internal list.
-          //
-          addToInternalIfNotFound: true,
-          removeCurrentNotFoundItems: false,
-        ) ??
-        [];
+    candidateSelectedItems =
+        tempMultiOptPropXData?._findInternalItemsByDynamics(
+              dynamicValues: candidateSelectedItems,
+              //
+              // IMPORTANT: Add not found item to internal list.
+              //
+              addToInternalIfNotFound: true,
+              removeCurrentNotFoundItems: false,
+            ) ??
+            [];
     //
     // TODO: Double check this code:
     //
@@ -878,6 +889,7 @@ abstract class FormModel<
           parentMultiOptPropValue: tempSelectedPropValue,
           multiOptProp: child,
           formDataAction: formDataAction,
+          newSelectedValue: null, // ?????????????????????
         );
       }
     } else {

@@ -183,6 +183,7 @@ abstract class XData<ID, ITEM, DATA> {
     );
   }
 
+  @Deprecated("TODO: Chuyen sang private.")
   bool isSameItemOrItemList({
     required dynamic itemOrItemList1,
     required dynamic itemOrItemList2,

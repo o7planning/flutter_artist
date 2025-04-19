@@ -252,7 +252,9 @@ class FormPropsStructure {
           prop._tempInitialXData = prop._initialXData;
           //
           if (formKeyInstantValues.containsKey(prop.propName)) {
-            prop._tempCurrentValue = formKeyInstantValues[prop.propName];
+            if(prop is SimpleProp) {
+              prop._tempCurrentValue = formKeyInstantValues[prop.propName];
+            }
           }
         case _FormDataAction.autoEnterFormFields:
           prop._tempCurrentValue = prop._currentValue;
@@ -282,7 +284,7 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  XData? _getTempOptPropXData(String propName) {
+  XData? _getTempMultiOptPropXData(String propName) {
     Prop? prop = _allPropMap[propName];
     if (prop == null) {
       return null;
