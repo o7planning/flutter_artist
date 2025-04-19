@@ -336,35 +336,38 @@ abstract class FormModel<
     bool isCreationMode = currentFormMode == FormMode.creation;
     //
     // All values including hidden values (not on the user interface).
-    Map<String, dynamic> allNewValue = {};
     //
-    switch (formDataAction) {
-      //
-      // The First Load (Not from FormView)
-      //
-      case _FormDataAction.itemFirstLoad:
-        if (isNoneMode || isCreationMode) {
-          _defaultValueInitiated = false;
-          allNewValue.addAll({});
-        } else {
-          allNewValue.addAll({});
-        }
-      //
-      // Update from FormView:
-      //
-      case _FormDataAction.updateFromFormView:
-        allNewValue.addAll(_formPropsStructure.currentFormData);
-        // Update values from view (On the user Interface).
-        allNewValue.addAll(_formKey.currentState?.instantValue ?? {});
-      //
-      // Auto Enter Values (From ExtraFormInput).
-      //
-      case _FormDataAction.autoEnterFormFields:
-        allNewValue.addAll(_formPropsStructure.currentFormData);
-    }
+    // Map<String, dynamic> allNewValue = {};
+    // //
+    // switch (formDataAction) {
+    //   //
+    //   // The First Load (Not from FormView)
+    //   //
+    //   case _FormDataAction.itemFirstLoad:
+    //     if (isNoneMode || isCreationMode) {
+    //       _defaultValueInitiated = false;
+    //       allNewValue.addAll({});
+    //     } else {
+    //       allNewValue.addAll({});
+    //     }
+    //   //
+    //   // Update from FormView:
+    //   //
+    //   case _FormDataAction.updateFromFormView:
+    //     allNewValue.addAll(_formPropsStructure.currentFormData);
+    //     // Update values from view (On the user Interface).
+    //     allNewValue.addAll(_formKey.currentState?.instantValue ?? {});
+    //   //
+    //   // Auto Enter Values (From ExtraFormInput).
+    //   //
+    //   case _FormDataAction.autoEnterFormFields:
+    //     allNewValue.addAll(_formPropsStructure.currentFormData);
+    // }
     //
     _formPropsStructure._initTemporaryForNewTransaction(
-      newCurrentFormData: allNewValue,
+      formDataAction: formDataAction,
+      // Data from FormView:
+      formKeyInstantValues: _formKey.currentState?.instantValue ?? {},
     );
     //
     // Load OptProp Data:
@@ -551,6 +554,7 @@ abstract class FormModel<
     required DataState formDataState,
     required _FormDataAction formDataAction,
   }) {
+    _formPropsStructure.__isTempMode = false;
     try {
       //
       // Update Real FromData from Temporary FormData:

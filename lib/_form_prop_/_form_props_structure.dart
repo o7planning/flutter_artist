@@ -230,18 +230,36 @@ class FormPropsStructure {
   // ***************************************************************************
 
   void _initTemporaryForNewTransaction({
-    required Map<String, dynamic>? newCurrentFormData,
+    required _FormDataAction formDataAction,
+    required Map<String, dynamic> formKeyInstantValues,
   }) {
+    __isTempMode = true;
     __addPropsIfNeed(
-      propNames: newCurrentFormData?.keys.toList() ?? [],
+      propNames: formKeyInstantValues.keys.toList(),
     );
     //
     for (Prop prop in _allPropMap.values) {
-      dynamic newValue = newCurrentFormData?[prop.propName];
-      prop._tempCurrentValue = newValue;
-      prop._tempCurrentXData = null;
-      prop._tempInitialValue = null;
-      prop._tempInitialXData = null;
+      switch (formDataAction) {
+        case _FormDataAction.itemFirstLoad:
+          prop._tempCurrentValue = null;
+          prop._tempCurrentXData = null;
+          prop._tempInitialValue = null;
+          prop._tempInitialXData = null;
+        case _FormDataAction.updateFromFormView:
+          prop._tempCurrentValue = prop._currentValue;
+          prop._tempCurrentXData = prop._currentXData;
+          prop._tempInitialValue = prop._initialValue;
+          prop._tempInitialXData = prop._initialXData;
+          //
+          if (formKeyInstantValues.containsKey(prop.propName)) {
+            prop._tempCurrentValue = formKeyInstantValues[prop.propName];
+          }
+        case _FormDataAction.autoEnterFormFields:
+          prop._tempCurrentValue = prop._currentValue;
+          prop._tempCurrentXData = prop._currentXData;
+          prop._tempInitialValue = prop._initialValue;
+          prop._tempInitialXData = prop._initialXData;
+      }
     }
   }
 
