@@ -213,6 +213,22 @@ class FilterCriteriaStructure {
     return null;
   }
 
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+
+  XData? _getMultiOptCriterionXData(String criterionName) {
+    Criterion? criterion = _allCriteriaMap[criterionName];
+    if (criterion == null) {
+      return null;
+    }
+    if (criterion is MultiOptCriterion) {
+      return criterion._currentXData;
+    }
+    return null;
+  }
+
   // ***************************************************************************
   // ***************************************************************************
 
