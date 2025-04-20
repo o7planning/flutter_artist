@@ -162,6 +162,8 @@ class FormPropsStructure {
     for (Prop prop in _allPropMap.values) {
       prop._currentValue = null;
       prop._currentXData = null;
+      prop._initialValue = null;
+      prop._initialXData = null;
     }
   }
 
