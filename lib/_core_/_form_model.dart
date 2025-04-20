@@ -905,10 +905,9 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  // @Deprecated("Replace by")
-  // dynamic getFormInitialValue(String propertyName) {
-  //   return _formPropsStructure.initialFormData[propertyName];
-  // }
+  dynamic getInitialPropValue(String propName) {
+    return _formPropsStructure._getInitialPropValue(propName: propName);
+  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -923,11 +922,6 @@ abstract class FormModel<
     );
     this.updateAllUIComponents();
   }
-
-  // @Deprecated("Replace by getCurrentPropValue")
-  // dynamic getFormInstantValue(String propName) {
-  //   return _formPropsStructure.currentFormData[propName];
-  // }
 
   dynamic getPropValue(String propName) {
     return _formPropsStructure._getCurrentPropValue(
