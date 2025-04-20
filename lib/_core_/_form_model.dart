@@ -893,8 +893,49 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  ///
+  /// Used for FormView.
+  ///
+  Map<String, dynamic> _initialValuesForFormView() {
+    return _formPropsStructure.currentFormData;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @Deprecated("Replace by")
+  dynamic getFormInitialValue(String propertyName) {
+    return _formPropsStructure.initialFormData[propertyName];
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  // TODO: Add test case:
+  @Deprecated("Xem lai, co can xoa di khong?")
+  void setFormInstantValue(String propertyName, dynamic value) {
+    _formKey.currentState?.patchValue({propertyName: value});
+    _formPropsStructure._setCurrentPropValue(
+      propName: propertyName,
+      value: value,
+    );
+    this.updateAllUIComponents();
+  }
+
+  @Deprecated("Replace by getCurrentPropValue")
+  dynamic getFormInstantValue(String propName) {
+    return _formPropsStructure.currentFormData[propName];
+  }
+
   dynamic getCurrentPropValue(String propName) {
     return _formPropsStructure._getCurrentPropValue(propName: propName);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  int getMultiOptPropLoadCount(String multiOptPropName) {
+    return _formPropsStructure._getMultiOptPropLoadCount(multiOptPropName);
   }
 
   XData? getMultiOptPropXData(String multiOptPropName) {
@@ -1254,43 +1295,6 @@ abstract class FormModel<
 
   void _afterBuildFormView() {
     _formPropsStructure._justInitialized = false;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  // TODO: Change name!
-  // Do not call this method in library.
-  Map<String, dynamic> initFormValue() {
-    return _formPropsStructure.currentFormData;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  dynamic getFormInitialValue(String propertyName) {
-    return _formPropsStructure.initialFormData[propertyName];
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  dynamic getFormInstantValue(String propertyName) {
-    return _formPropsStructure.currentFormData[propertyName];
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  // TODO: Add test case:
-  @Deprecated("Xem lai, co can xoa di khong?")
-  void setFormInstantValue(String propertyName, dynamic value) {
-    _formKey.currentState?.patchValue({propertyName: value});
-    _formPropsStructure._setCurrentPropValue(
-      propName: propertyName,
-      value: value,
-    );
-    this.updateAllUIComponents();
   }
 
   // ***************************************************************************

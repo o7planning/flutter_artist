@@ -697,8 +697,10 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  // TODO: Change name!
-  Map<String, dynamic> _initFilterValue() {
+  ///
+  /// Used for FilterView.
+  ///
+  Map<String, dynamic> _initialValuesForFilterView() {
     return _filterCriteriaStructure.currentFormData;
   }
 

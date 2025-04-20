@@ -137,7 +137,7 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
   FormBuilder _buildFormBuilder() {
     return FormBuilder(
       key: formKey,
-      initialValue: widget.formModel.initFormValue(),
+      initialValue: widget.formModel._initialValuesForFormView(),
       onChanged: _onChanged,
       child: AbsorbPointer(
         absorbing: !widget.formModel.isEnabled(),

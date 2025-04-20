@@ -337,6 +337,17 @@ class FormPropsStructure {
     return null;
   }
 
+  int _getMultiOptPropLoadCount(String propName) {
+    Prop? prop = _allPropMap[propName];
+    if (prop == null) {
+      return 0;
+    }
+    if (prop is MultiOptProp) {
+      return prop._loadCount;
+    }
+    return 0;
+  }
+
   // ***************************************************************************
   // ***************************************************************************
 

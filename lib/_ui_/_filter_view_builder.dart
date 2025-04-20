@@ -89,7 +89,7 @@ class _FilterViewBuilderState
     //
     return FormBuilder(
       key: formKey,
-      initialValue: widget.filterModel._initFilterValue(),
+      initialValue: widget.filterModel._initialValuesForFilterView(),
       onChanged: _onChanged,
       child: AbsorbPointer(
         absorbing: !widget.filterModel.isEnabled(),
