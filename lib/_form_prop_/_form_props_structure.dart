@@ -315,7 +315,7 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  XData? _getTempMultiOptPropXData(String propName) {
+  XData? _getTempMultiOptPropXData({required String propName}) {
     Prop? prop = _allPropMap[propName];
     if (prop == null) {
       return null;
@@ -326,7 +326,7 @@ class FormPropsStructure {
     return null;
   }
 
-  XData? _getMultiOptPropXData(String propName) {
+  XData? _getCurrentMultiOptPropXData({required String propName}) {
     Prop? prop = _allPropMap[propName];
     if (prop == null) {
       return null;
@@ -337,7 +337,12 @@ class FormPropsStructure {
     return null;
   }
 
-  int _getMultiOptPropLoadCount(String propName) {
+  dynamic _getCurrentMultiOptPropData({required String propName}) {
+    XData? multiOptPropXData = _getCurrentMultiOptPropXData(propName: propName);
+    return multiOptPropXData?.data;
+  }
+
+  int _getMultiOptPropLoadCount({required String propName}) {
     Prop? prop = _allPropMap[propName];
     if (prop == null) {
       return 0;

@@ -645,7 +645,9 @@ abstract class FormModel<
 
     // Get current OptProp data:
     XData? tempMultiOptPropXData =
-        _formPropsStructure._getTempMultiOptPropXData(multiOptPropName);
+        _formPropsStructure._getTempMultiOptPropXData(
+      propName: multiOptPropName,
+    );
 
     final dynamic tempInitialMultiOptValue = _formPropsStructure
         ._getTempInitialPropValue(propName: multiOptPropName);
@@ -928,28 +930,30 @@ abstract class FormModel<
   }
 
   dynamic getCurrentPropValue(String propName) {
-    return _formPropsStructure._getCurrentPropValue(propName: propName);
+    return _formPropsStructure._getCurrentPropValue(
+      propName: propName,
+    );
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   int getMultiOptPropLoadCount(String multiOptPropName) {
-    return _formPropsStructure._getMultiOptPropLoadCount(multiOptPropName);
+    return _formPropsStructure._getMultiOptPropLoadCount(
+      propName: multiOptPropName,
+    );
   }
 
   XData? getMultiOptPropXData(String multiOptPropName) {
-    return _formPropsStructure._getMultiOptPropXData(multiOptPropName);
+    return _formPropsStructure._getCurrentMultiOptPropXData(
+      propName: multiOptPropName,
+    );
   }
 
   dynamic getMultiOptPropData(String multiOptPropName) {
-    XData? multiOptPropXData = getMultiOptPropXData(multiOptPropName);
-    dynamic data = multiOptPropXData?.data;
-    if (data != null) {
-      return data;
-    } else {
-      return data;
-    }
+    return _formPropsStructure._getCurrentMultiOptPropData(
+      propName: multiOptPropName,
+    );
   }
 
   // ***************************************************************************
