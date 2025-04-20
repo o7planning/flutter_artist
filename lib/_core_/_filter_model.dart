@@ -147,7 +147,7 @@ abstract class FilterModel<
     _filterCriteriaStructure._setFilterDataState(DataState.pending);
     //
     FILTER_CRITERIA? filterCriteria = await _startNewFilterActivity(
-      filterDataAction: _FilterDataAction.updateFromFilterView,
+      activityType: _FilterActivityType.updateFromFilterView,
       filterInput: null,
     );
     return filterCriteria != null;
@@ -240,26 +240,20 @@ abstract class FilterModel<
   @ImportantMethodAnnotation()
   Future<FILTER_CRITERIA?> _startNewFilterActivity({
     required FILTER_INPUT? filterInput,
-    required _FilterDataAction filterDataAction,
+    required _FilterActivityType activityType,
   }) async {
     print("#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFilterActivity");
 
-    // if (filterDataAction == _FilterDataAction.newFilt) {
+    // if (activityType == _FilterDataAction.newFilt) {
     //   _defaultValueInitiated = false;
     // }
 
     final Map<String, dynamic> formKeyInstantValues =
         _formKey.currentState?.instantValue ?? {};
 
-    // // All values including hidden values (not on the user interface).
-    // Map<String, dynamic> allNewValue = {
-    //   ..._filterCriteriaStructure.currentFormData
-    // };
-    // // Update values from view (On the user Interface).
-    // allNewValue.addAll(_formKey.currentState?.instantValue ?? {});
     //
     _filterCriteriaStructure._initTemporaryForNewTransaction(
-      filterDataAction: filterDataAction,
+      activityType: activityType,
       formKeyInstantValues: formKeyInstantValues,
       filterInput: filterInput,
     );
@@ -279,7 +273,7 @@ abstract class FilterModel<
           parentMultiOptCriterionValue: null,
           multiOptCriterion: multiOptCriterion,
           formKeyInstantValues: formKeyInstantValues,
-          filterDataAction: filterDataAction,
+          activityType: activityType,
         );
       }
     } catch (e, stackTrace) {
@@ -403,7 +397,7 @@ abstract class FilterModel<
     required Object? parentMultiOptCriterionValue,
     required MultiOptCriterion multiOptCriterion,
     required Map<String, dynamic> formKeyInstantValues,
-    required _FilterDataAction filterDataAction,
+    required _FilterActivityType activityType,
   }) async {
     final String multiOptCriterionName = multiOptCriterion.criterionName;
 
@@ -422,7 +416,7 @@ abstract class FilterModel<
         _filterCriteriaStructure._getTempCurrentCriterionValue(
       criterionName: multiOptCriterionName,
     );
-    if (filterDataAction == _FilterDataAction.updateFromFilterView) {
+    if (activityType == _FilterActivityType.updateFromFilterView) {
       if (formKeyInstantValues.containsKey(multiOptCriterionName)) {
         newSelectedValue = formKeyInstantValues[multiOptCriterionName];
       }
@@ -598,7 +592,7 @@ abstract class FilterModel<
           filterInput: filterInput,
           parentMultiOptCriterionValue: tempSelectedCriterionValue,
           multiOptCriterion: child,
-          filterDataAction: filterDataAction,
+          activityType: activityType,
           formKeyInstantValues: formKeyInstantValues,
         );
       }

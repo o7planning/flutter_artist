@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-enum _FormDataAction {
+enum _FormActivityType {
   itemFirstLoad,
   updateFromFormView,
   autoEnterFormFields;

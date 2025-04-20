@@ -124,7 +124,7 @@ class FilterCriteriaStructure {
   // ***************************************************************************
 
   void _initTemporaryForNewTransaction({
-    required _FilterDataAction filterDataAction,
+    required _FilterActivityType activityType,
     required Map<String, dynamic> formKeyInstantValues,
     required FilterInput? filterInput,
   }) {
@@ -133,8 +133,8 @@ class FilterCriteriaStructure {
     );
     //
     for (Criterion criterion in _allCriteriaMap.values) {
-      switch (filterDataAction) {
-        case _FilterDataAction.newFilt:
+      switch (activityType) {
+        case _FilterActivityType.newFilt:
           if (filterInput != null && filterInput is! EmptyFilterInput) {
             criterion._tempCurrentValue = null;
             criterion._tempCurrentXData = null;
@@ -153,7 +153,7 @@ class FilterCriteriaStructure {
               }
             }
           }
-        case _FilterDataAction.updateFromFilterView:
+        case _FilterActivityType.updateFromFilterView:
           criterion._tempCurrentValue = criterion._currentValue;
           criterion._tempCurrentXData = criterion._currentXData;
           criterion._tempInitialValue = criterion._initialValue;

@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-enum _FilterDataAction {
+enum _FilterActivityType {
   newFilt,
   updateFromFilterView;
 }

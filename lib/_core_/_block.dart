@@ -890,9 +890,8 @@ abstract class Block<
       if (!xFilterModel.queried) {
         FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
         //
-        filterCriteriaOfFilterModel =
-            await filterModel._startNewFilterActivity(
-          filterDataAction: _FilterDataAction.newFilt,
+        filterCriteriaOfFilterModel = await filterModel._startNewFilterActivity(
+          activityType: _FilterActivityType.newFilt,
           filterInput: filterInput,
         ) as FILTER_CRITERIA?;
         //
@@ -1618,7 +1617,7 @@ abstract class Block<
       //
       success = await formModel!._startNewFormActivity(
         extraFormInput: extraFormInput,
-        formDataAction: _FormDataAction.itemFirstLoad,
+        activityType: _FormActivityType.itemFirstLoad,
       );
       if (success) {
         formModel!._formPropsStructure._setManualDirty(initDirty);
@@ -2032,7 +2031,7 @@ abstract class Block<
         //
         bool success = await formModel!._startNewFormActivity(
           extraFormInput: null,
-          formDataAction: _FormDataAction.itemFirstLoad,
+          activityType: _FormActivityType.itemFirstLoad,
         );
         if (!success) {
           return false;

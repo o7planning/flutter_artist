@@ -161,9 +161,8 @@ abstract class Scalar<
       if (!xFilterModel.queried) {
         FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
         //
-        filterCriteriaOfFilterModel =
-            await filterModel._startNewFilterActivity(
-          filterDataAction: _FilterDataAction.newFilt,
+        filterCriteriaOfFilterModel = await filterModel._startNewFilterActivity(
+          activityType: _FilterActivityType.newFilt,
           filterInput: filterInput,
         ) as FILTER_CRITERIA?;
         //

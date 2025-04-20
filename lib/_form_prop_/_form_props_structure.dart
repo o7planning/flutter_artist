@@ -251,7 +251,7 @@ class FormPropsStructure {
   // ***************************************************************************
 
   void _initTemporaryForNewTransaction({
-    required _FormDataAction formDataAction,
+    required _FormActivityType activityType,
     required Map<String, dynamic> formKeyInstantValues,
   }) {
     __isTempMode = true;
@@ -260,13 +260,13 @@ class FormPropsStructure {
     );
     //
     for (Prop prop in _allPropMap.values) {
-      switch (formDataAction) {
-        case _FormDataAction.itemFirstLoad:
+      switch (activityType) {
+        case _FormActivityType.itemFirstLoad:
           prop._tempCurrentValue = null;
           prop._tempCurrentXData = null;
           prop._tempInitialValue = null;
           prop._tempInitialXData = null;
-        case _FormDataAction.updateFromFormView:
+        case _FormActivityType.updateFromFormView:
           prop._tempCurrentValue = prop._currentValue;
           prop._tempCurrentXData = prop._currentXData;
           prop._tempInitialValue = prop._initialValue;
@@ -277,7 +277,7 @@ class FormPropsStructure {
               prop._tempCurrentValue = formKeyInstantValues[prop.propName];
             }
           }
-        case _FormDataAction.autoEnterFormFields:
+        case _FormActivityType.autoEnterFormFields:
           prop._tempCurrentValue = prop._currentValue;
           prop._tempCurrentXData = prop._currentXData;
           prop._tempInitialValue = prop._initialValue;
