@@ -57,20 +57,15 @@ class FilterCriteriaStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  // TODO: DELETE?
-  Map<String, dynamic> get initial0FormData {
-    return {};
-  }
-
-  Map<String, dynamic> get initialFormData {
+  Map<String, dynamic> get _initialCriteriaValues {
     return _allCriteriaMap.map((k, v) => MapEntry(k, v._initialValue));
   }
 
-  Map<String, dynamic> get currentFormData {
+  Map<String, dynamic> get _currentCriteriaValues {
     return _allCriteriaMap.map((k, v) => MapEntry(k, v._currentValue));
   }
 
-  Map<String, dynamic> get tempCurrentFormData {
+  Map<String, dynamic> get _tempCriteriaValues {
     return _allCriteriaMap.map((k, v) => MapEntry(k, v._tempCurrentValue));
   }
 

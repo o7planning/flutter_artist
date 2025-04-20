@@ -165,13 +165,13 @@ abstract class FilterModel<
   // ***************************************************************************
 
   // TODO: Rename?
-  Map<String, dynamic> get initialFormData {
-    return _filterCriteriaStructure.initialFormData;
+  Map<String, dynamic> get initialCriteriaValues {
+    return _filterCriteriaStructure._initialCriteriaValues;
   }
 
   // TODO: Rename?
-  Map<String, dynamic> get currentFormData {
-    return _filterCriteriaStructure.currentFormData;
+  Map<String, dynamic> get criteriaValues {
+    return _filterCriteriaStructure._currentCriteriaValues;
   }
 
   // ***************************************************************************
@@ -184,7 +184,7 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  dynamic getCurrentCriterionValue(String criterionName) {
+  dynamic getCriterionValue(String criterionName) {
     return _filterCriteriaStructure._getCurrentCriterionValue(
       criterionName: criterionName,
     );
@@ -349,7 +349,7 @@ abstract class FilterModel<
     try {
       // Convert Map Data to FilterCriteria Object.
       FILTER_CRITERIA newCriteria = toFilterCriteriaObject(
-        dataMap: _filterCriteriaStructure.tempCurrentFormData,
+        dataMap: _filterCriteriaStructure._tempCriteriaValues,
       );
       _filterCriteria = newCriteria;
       //
@@ -360,7 +360,7 @@ abstract class FilterModel<
       // IMPORTANT:
       //
       _formKeyPatchValue(
-        newCurrentValue: _filterCriteriaStructure.currentFormData,
+        newCurrentValue: _filterCriteriaStructure._currentCriteriaValues,
       );
       //
       _defaultValueInitiated = true;
@@ -381,7 +381,7 @@ abstract class FilterModel<
       // IMPORTANT:
       //
       _formKeyPatchValue(
-        newCurrentValue: _filterCriteriaStructure.currentFormData,
+        newCurrentValue: _filterCriteriaStructure._currentCriteriaValues,
       );
       //
       _filterCriteria = null;
@@ -701,7 +701,7 @@ abstract class FilterModel<
   /// Used for FilterView.
   ///
   Map<String, dynamic> _initialValuesForFilterView() {
-    return _filterCriteriaStructure.currentFormData;
+    return _filterCriteriaStructure._currentCriteriaValues;
   }
 
   // ***************************************************************************

@@ -75,10 +75,10 @@ class _FilterDataDebugViewState extends State<_FilterDataDebugView> {
     FilterCriteriaStructure filterCriteriaStructure =
         widget.filterModel._filterCriteriaStructure;
     Map<String, dynamic> initial1Value =
-        filterCriteriaStructure.initialFormData;
+        filterCriteriaStructure._initialCriteriaValues;
     Map<String, dynamic> instantValue =
         widget.filterModel._formKey.currentState?.instantValue ?? {};
-    Map<String, dynamic> currentValue = filterCriteriaStructure.currentFormData;
+    Map<String, dynamic> currentValue = filterCriteriaStructure._currentCriteriaValues;
 
     String initial1Json = toJson(initial1Value);
     String instantJson = toJson(instantValue);

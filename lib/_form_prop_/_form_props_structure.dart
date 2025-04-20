@@ -318,9 +318,6 @@ class FormPropsStructure {
 
   XData? _getTempMultiOptPropXData({required String propName}) {
     Prop? prop = _allPropMap[propName];
-    if (prop == null) {
-      return null;
-    }
     if (prop is MultiOptProp) {
       return prop._tempCurrentXData;
     }
@@ -329,9 +326,6 @@ class FormPropsStructure {
 
   XData? _getCurrentMultiOptPropXData({required String propName}) {
     Prop? prop = _allPropMap[propName];
-    if (prop == null) {
-      return null;
-    }
     if (prop is MultiOptProp) {
       return prop._currentXData;
     }
@@ -345,9 +339,6 @@ class FormPropsStructure {
 
   int _getMultiOptPropLoadCount({required String propName}) {
     Prop? prop = _allPropMap[propName];
-    if (prop == null) {
-      return 0;
-    }
     if (prop is MultiOptProp) {
       return prop._loadCount;
     }
