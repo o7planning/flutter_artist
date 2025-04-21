@@ -258,7 +258,7 @@ class BlockData<
     } else if (oldItem == null && newItem != null) {
       changed = true;
     } else {
-      changed = block.getItemId(oldItem!) == block.getItemId(newItem!);
+      changed = block.getItemId(oldItem!) != block.getItemId(newItem!);
     }
     if (changed) {
       _currentItemChangeCount++;
