@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-class BlockData<
+class _BlockData<
     ID extends Object,
     ITEM extends Object,
     ITEM_DETAIL extends Object,
@@ -165,7 +165,7 @@ class BlockData<
   // ***************************************************************************
   // ***************************************************************************
 
-  BlockData._(
+  _BlockData._(
     this.block,
     PageableData? pageable,
   )   : _pageable = pageable,

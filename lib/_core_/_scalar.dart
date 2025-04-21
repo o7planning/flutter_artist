@@ -87,7 +87,7 @@ abstract class Scalar<
   }
 
   late final __scalarData =
-      ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
+      _ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
 
   final ScalarHiddenBehavior hiddenBehavior;
 

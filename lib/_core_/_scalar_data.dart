@@ -1,6 +1,6 @@
 part of '../flutter_artist.dart';
 
-class ScalarData<
+class _ScalarData<
     VALUE extends Object, //
     FILTER_INPUT extends FilterInput,
     FILTER_CRITERIA extends FilterCriteria> {
@@ -18,7 +18,7 @@ class ScalarData<
   // ***************************************************************************
   // ***************************************************************************
 
-  ScalarData(this.scalar);
+  _ScalarData(this.scalar);
 
   // ***************************************************************************
   // ***************************************************************************

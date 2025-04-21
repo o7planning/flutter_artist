@@ -229,7 +229,7 @@ abstract class Block<
           pageSize: __pageSize,
         );
 
-  late final __blockData = BlockData<
+  late final __blockData = _BlockData<
       ID, //
       ITEM,
       ITEM_DETAIL,
