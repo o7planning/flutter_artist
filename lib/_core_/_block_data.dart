@@ -260,7 +260,7 @@ class BlockData<
     }
     if (changed) {
       if (block.formModel != null) {
-        block.formModel!._triggerFilterCriteriaChanged();
+        block.formModel!._triggerItemIdChanged();
       }
     }
   }

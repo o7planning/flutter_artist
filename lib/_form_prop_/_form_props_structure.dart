@@ -161,9 +161,13 @@ class FormPropsStructure {
     //
     for (Prop prop in _allPropMap.values) {
       prop._currentValue = null;
-      prop._currentXData = null;
       prop._initialValue = null;
-      prop._initialXData = null;
+      if (prop is MultiOptProp) {
+        if (prop._markToReload) {
+          prop._initialXData = null;
+          prop._currentXData = null;
+        }
+      }
     }
   }
 
@@ -187,7 +191,6 @@ class FormPropsStructure {
     }
     return null;
   }
-
 
   // ***************************************************************************
   // ***************************************************************************
@@ -263,13 +266,13 @@ class FormPropsStructure {
     );
     //
     for (Prop prop in _allPropMap.values) {
-      if(prop is MultiOptProp)  {
-         if(prop._markToReload && prop.parent == null) {
-           prop._tempCurrentValue = null;
-           prop._tempCurrentXData = null;
-           prop._tempInitialValue = null;
-           prop._tempInitialXData = null;
-         }
+      if (prop is MultiOptProp) {
+        if (prop._markToReload && prop.parent == null) {
+          prop._tempCurrentValue = null;
+          prop._tempCurrentXData = null;
+          prop._tempInitialValue = null;
+          prop._tempInitialXData = null;
+        }
       } else {
         switch (activityType) {
           case _FormActivityType.itemFirstLoad:

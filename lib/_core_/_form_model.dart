@@ -432,20 +432,15 @@ abstract class FormModel<
       }
       // itemDetail == null
       else {
-        print(
-            "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 4: $_defaultValueInitiated");
         Map<String, dynamic> simplePropValueDefault = {};
         Map<String, dynamic> simplePropValueExtra = {};
         if (!_defaultValueInitiated) {
-          print(
-              "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 5: $_defaultValueInitiated");
           try {
             simplePropValueDefault = await specifyDefaultSimplePropValues(
                   filterCriteria: blockCurrentFilterCriteria,
                 ) ??
                 {};
-            print(
-                "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 5.1: simplePropValueDefault: $simplePropValueDefault");
+            //
             for (String propName in simplePropValueDefault.keys) {
               // In (Item First Load + itemDetail == null + !_defaultValueInitiated)
               _formPropsStructure._setTempSimplePropValue(
@@ -470,8 +465,6 @@ abstract class FormModel<
             return false;
           }
         }
-        print(
-            "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 6: $_defaultValueInitiated");
         //
         if (extraFormInput != null) {
           try {
@@ -684,6 +677,7 @@ abstract class FormModel<
         itemOrItemList2: newSelectedValue,
       );
     }
+
     //
     multiOptProp._tempCurrentValue = newSelectedValue;
     //
@@ -1087,7 +1081,7 @@ abstract class FormModel<
       //
       this.__clearFormKey();
       //
-      updateAllUIComponents(); // TODO: Xu ly loi?
+      // updateAllUIComponents(); // TODO: Xu ly loi?
       block.updateControlBarWidgets();
     } catch (e, stackTrace) {
       _handleError(
