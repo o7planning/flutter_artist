@@ -133,6 +133,8 @@ class BlockData<
 
   FILTER_CRITERIA? _filterCriteria;
 
+  int _filterCriteriaChangeCount = 0;
+
   PageData<ITEM>? _lastQueryResult;
 
   ActionResultState? _lastQueryResultState;
@@ -270,6 +272,7 @@ class BlockData<
     final bool changed = _filterCriteria != newFilterCriteria;
     _filterCriteria = newFilterCriteria;
     if (changed) {
+      _filterCriteriaChangeCount++;
       if (block.formModel != null) {
         block.formModel!._triggerFilterCriteriaChanged();
       }

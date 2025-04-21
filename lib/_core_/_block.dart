@@ -277,6 +277,8 @@ abstract class Block<
 
   FILTER_CRITERIA? get filterCriteria => __blockData._filterCriteria;
 
+  int get filterCriteriaChangeCount => __blockData._filterCriteriaChangeCount;
+
   ///
   /// return a copied list of items.
   ///

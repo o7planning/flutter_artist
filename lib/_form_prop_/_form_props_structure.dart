@@ -263,28 +263,37 @@ class FormPropsStructure {
     );
     //
     for (Prop prop in _allPropMap.values) {
-      switch (activityType) {
-        case _FormActivityType.itemFirstLoad:
-          prop._tempCurrentValue = null;
-          prop._tempCurrentXData = null;
-          prop._tempInitialValue = null;
-          prop._tempInitialXData = null;
-        case _FormActivityType.updateFromFormView:
-          prop._tempCurrentValue = prop._currentValue;
-          prop._tempCurrentXData = prop._currentXData;
-          prop._tempInitialValue = prop._initialValue;
-          prop._tempInitialXData = prop._initialXData;
-          //
-          if (formKeyInstantValues.containsKey(prop.propName)) {
-            if (prop is SimpleProp) {
-              prop._tempCurrentValue = formKeyInstantValues[prop.propName];
+      if(prop is MultiOptProp)  {
+         if(prop._markToReload && prop.parent == null) {
+           prop._tempCurrentValue = null;
+           prop._tempCurrentXData = null;
+           prop._tempInitialValue = null;
+           prop._tempInitialXData = null;
+         }
+      } else {
+        switch (activityType) {
+          case _FormActivityType.itemFirstLoad:
+            prop._tempCurrentValue = null;
+            prop._tempCurrentXData = null;
+            prop._tempInitialValue = null;
+            prop._tempInitialXData = null;
+          case _FormActivityType.updateFromFormView:
+            prop._tempCurrentValue = prop._currentValue;
+            prop._tempCurrentXData = prop._currentXData;
+            prop._tempInitialValue = prop._initialValue;
+            prop._tempInitialXData = prop._initialXData;
+            //
+            if (formKeyInstantValues.containsKey(prop.propName)) {
+              if (prop is SimpleProp) {
+                prop._tempCurrentValue = formKeyInstantValues[prop.propName];
+              }
             }
-          }
-        case _FormActivityType.autoEnterFormFields:
-          prop._tempCurrentValue = prop._currentValue;
-          prop._tempCurrentXData = prop._currentXData;
-          prop._tempInitialValue = prop._initialValue;
-          prop._tempInitialXData = prop._initialXData;
+          case _FormActivityType.autoEnterFormFields:
+            prop._tempCurrentValue = prop._currentValue;
+            prop._tempCurrentXData = prop._currentXData;
+            prop._tempInitialValue = prop._initialValue;
+            prop._tempInitialXData = prop._initialXData;
+        }
       }
     }
   }
