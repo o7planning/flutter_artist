@@ -44,12 +44,12 @@ class _BlockOrScalarInfoView extends StatelessWidget {
       subtitle: blockOrScalar.description == null
           ? null
           : Text(
-        blockOrScalar.description!,
-        style: const TextStyle(
-          fontSize: 12,
-          color: Colors.grey,
-        ),
-      ),
+              blockOrScalar.description!,
+              style: const TextStyle(
+                fontSize: 12,
+                color: Colors.grey,
+              ),
+            ),
     );
   }
 }
