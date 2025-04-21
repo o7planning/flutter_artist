@@ -4324,6 +4324,8 @@ abstract class Block<
   // ***** BLOCK DATA **********************************************************
   // ***************************************************************************
 
+  int get currentItemChangeCount => __blockData._currentItemChangeCount;
+
   ITEM? get currentItem => __blockData.current._item;
 
   ITEM_DETAIL? get currentItemDetail => __blockData.current._itemDetail;

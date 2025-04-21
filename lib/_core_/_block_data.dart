@@ -145,6 +145,8 @@ class BlockData<
 
   late PaginationData? _pagination;
 
+  int _currentItemChangeCount = 0;
+
   _CurrentCoupleItem<ITEM, ITEM_DETAIL> __current = _CurrentCoupleItem(
     item: null,
     itemDetail: null,
@@ -259,6 +261,7 @@ class BlockData<
       changed = block.getItemId(oldItem!) == block.getItemId(newItem!);
     }
     if (changed) {
+      _currentItemChangeCount++;
       if (block.formModel != null) {
         block.formModel!._triggerItemIdChanged();
       }
