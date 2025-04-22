@@ -33,7 +33,7 @@ abstract class SingleItemBlock<
     required super.description,
     super.hiddenBehavior,
     super.leaveTheFormSafely,
-    required super.fireEvent,
+    required super.outsideBroadcast,
     required super.listenItemTypes,
     required super.filterModelName,
     required super.formModel,

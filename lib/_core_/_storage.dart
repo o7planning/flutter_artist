@@ -77,10 +77,15 @@ class _Storage {
   }) {
     Type eventItemType = eventBlock.getItemType();
     Type eventItemDetailType = eventBlock.getItemDetailType();
-    print("~~~~~~~~~> ${eventBlock.fireEvent ? 'FIRE EVENT' : 'NOT FIRE EVENT'}"
+    //
+    final OutsideBroadcast? outsideBroadcast = eventBlock.outsideBroadcast;
+    //
+    print(
+        "~~~~~~~~~> ${outsideBroadcast != null ? 'FIRE EVENT' : 'NOT FIRE EVENT'}"
         " --> Event Item Type: ($eventItemType, $eventItemDetailType)"
         " - ${getClassName(eventBlock)}");
-    if (!eventBlock.fireEvent) {
+    //
+    if (outsideBroadcast == null) {
       return;
     }
     //
@@ -250,11 +255,13 @@ class _Storage {
       }
       List<Block> allBlocks = shelf.blocks;
       for (Block blk in allBlocks) {
-        if (!blk.fireEvent) {
+        if (blk.outsideBroadcast == null) {
           continue;
         }
-        Type itemType = blk.getItemType();
-        if (_contains(listenTypes, itemType)) {
+        final Type itemType = blk.getItemType();
+        final Type itemDetailType = blk.getItemDetailType();
+        if (_contains(listenTypes, itemType) ||
+            _contains(listenTypes, itemDetailType)) {
           String shelfType = _getShelfName(shelf.runtimeType);
           foundShelfMap[shelfType] = shelf;
           continue;
@@ -384,14 +391,13 @@ class _Storage {
 
   // Callable.
   List<Block> __getListenerBlocksByBlock({required Block eventBlock}) {
-    if (!eventBlock.fireEvent) {
+    List<Type> itemTypes = eventBlock._getOutsideBroadcastItemTypes();
+    if (itemTypes.isEmpty) {
       return [];
     }
+    //
     List<Block> blockList = __getListenerBlocksByAffectedItemTypes(
-      affectedItemTypes: [
-        eventBlock.getItemType(),
-        eventBlock.getItemDetailType()
-      ],
+      affectedItemTypes: itemTypes,
     );
     return blockList
         .where((block) => !identical(block.shelf, eventBlock.shelf))
@@ -428,11 +434,13 @@ class _Storage {
   // ***************************************************************************
 
   List<Scalar> __getListenerScalarsByBlock({required Block eventBlock}) {
-    if (!eventBlock.fireEvent) {
+    List<Type> itemTypes = eventBlock._getOutsideBroadcastItemTypes();
+    if (itemTypes.isEmpty) {
       return [];
     }
+    //
     List<Scalar> scalarList = __getListenerScalarsByAffectedItemTypes(
-      affectedItemTypes: [eventBlock.getItemType()],
+      affectedItemTypes: itemTypes,
     );
     return scalarList
         .where((scalar) => !identical(scalar.shelf, eventBlock.shelf))
@@ -494,10 +502,13 @@ class _Storage {
     for (Shelf shelf in __shelfMap.values) {
       List<Block> allBlocks = shelf.blocks;
       for (Block blk in allBlocks) {
-        if (!blk.fireEvent) {
+        if (blk.outsideBroadcast == null) {
           continue;
         }
-        if (_contains(listenerBlock.listenItemTypes, blk.getItemType())) {
+        final Type itemType = blk.getItemType();
+        final Type itemDetailType = blk.getItemDetailType();
+        if (_contains(listenerBlock.listenItemTypes, itemType) ||
+            _contains(listenerBlock.listenItemTypes, itemDetailType)) {
           foundMap[blk._shortPathName] = blk;
         }
       }
@@ -517,10 +528,13 @@ class _Storage {
 
     for (Shelf shelf in __shelfMap.values) {
       for (Block blk in shelf.blocks) {
-        if (!blk.fireEvent) {
+        if (blk.outsideBroadcast == null) {
           continue;
         }
-        if (_contains(listenerScalar.listenItemTypes, blk.getItemType())) {
+        final Type itemType = blk.getItemType();
+        final Type itemDetailType = blk.getItemDetailType();
+        if (_contains(listenerScalar.listenItemTypes, itemType) ||
+            _contains(listenerScalar.listenItemTypes, itemDetailType)) {
           foundMap[blk._shortPathName] = blk;
         }
       }

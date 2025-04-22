@@ -216,8 +216,6 @@ abstract class Block<
 
   final OutsideBroadcast? outsideBroadcast;
 
-  final bool fireEvent;
-
   final List<Type> __listenItemTypes;
 
   List<Type> get listenItemTypes => [...__listenItemTypes];
@@ -307,7 +305,7 @@ abstract class Block<
     this.leaveTheFormSafely = true,
     required String? filterModelName,
     required this.formModel,
-    required this.fireEvent,
+    // required this.fireEvent,
     this.outsideBroadcast,
     required List<Type> listenItemTypes,
     required List<Block>? childBlocks,
@@ -324,6 +322,25 @@ abstract class Block<
     if (formModel != null) {
       formModel!.block = this;
     }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  List<Type> _getOutsideBroadcastItemTypes() {
+    if (outsideBroadcast == null) {
+      return [];
+    }
+    //
+    List<Type> itemTypes = [];
+    if (outsideBroadcast!.defaultEventMode) {
+      itemTypes = [getItemType(), getItemDetailType()];
+    } else {
+      for (Event event in outsideBroadcast!.events) {
+        itemTypes.add(event.itemType);
+      }
+    }
+    return itemTypes;
   }
 
   // ***************************************************************************
