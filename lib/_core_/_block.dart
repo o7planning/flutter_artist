@@ -214,20 +214,13 @@ abstract class Block<
 
   int get callApiQueryCount => __callApiQueryCount;
 
-  final int? __pageSize;
-
   final bool fireEvent;
 
   final List<Type> __listenItemTypes;
 
   List<Type> get listenItemTypes => [...__listenItemTypes];
 
-  PageableData? get __pageable => __pageSize == null
-      ? null
-      : PageableData(
-          page: 1,
-          pageSize: __pageSize,
-        );
+  final PageableData __pageable;
 
   late final __blockData = _BlockData<
       ID, //
@@ -304,7 +297,10 @@ abstract class Block<
   Block({
     required this.name,
     required this.description,
-    int pageSize = 20,
+    PageableData pageable = const PageableData(
+      page: 1,
+      pageSize: 20,
+    ),
     this.hiddenBehavior = BlockHiddenBehavior.none,
     this.leaveTheFormSafely = true,
     required String? filterModelName,
@@ -314,7 +310,7 @@ abstract class Block<
     required List<Block>? childBlocks,
     ItemSortCriteria<ITEM>? itemSortCriteria,
   })  : registerFilterModelName = filterModelName,
-        __pageSize = pageSize,
+        __pageable = pageable.copy(),
         __listenItemTypes = listenItemTypes,
         _itemSortCriteria = itemSortCriteria,
         _childBlocks = childBlocks ?? [] {
