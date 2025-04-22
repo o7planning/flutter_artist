@@ -214,6 +214,8 @@ abstract class Block<
 
   int get callApiQueryCount => __callApiQueryCount;
 
+  final OutsideBroadcast outsideBroadcast;
+
   final bool fireEvent;
 
   final List<Type> __listenItemTypes;
@@ -306,6 +308,7 @@ abstract class Block<
     required String? filterModelName,
     required this.formModel,
     required this.fireEvent,
+    this.outsideBroadcast = const OutsideBroadcast(),
     required List<Type> listenItemTypes,
     required List<Block>? childBlocks,
     ItemSortCriteria<ITEM>? itemSortCriteria,

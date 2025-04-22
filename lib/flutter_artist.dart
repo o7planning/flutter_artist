@@ -146,6 +146,8 @@ part '_core_/_typedef.dart';
 
 part '_core_/_x_base.dart';
 
+part '_core_/_outside_broadcast.dart';
+
 part '_core_query_/_form_model_opt.dart';
 
 part '_core_query_/_block_opt.dart';
