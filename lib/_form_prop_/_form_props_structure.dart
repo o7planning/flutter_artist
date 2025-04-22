@@ -266,37 +266,50 @@ class FormPropsStructure {
     );
     //
     for (Prop prop in _allPropMap.values) {
-      if (prop is MultiOptProp) {
-        if (prop._markToReload && prop.parent == null) {
-          prop._tempCurrentValue = null;
-          prop._tempCurrentXData = null;
-          prop._tempInitialValue = null;
-          prop._tempInitialXData = null;
-        }
-      } else {
-        switch (activityType) {
-          case _FormActivityType.itemFirstLoad:
+      switch (activityType) {
+        case _FormActivityType.itemFirstLoad:
+          if (prop is SimpleProp) {
             prop._tempCurrentValue = null;
             prop._tempCurrentXData = null;
             prop._tempInitialValue = null;
             prop._tempInitialXData = null;
-          case _FormActivityType.updateFromFormView:
-            prop._tempCurrentValue = prop._currentValue;
-            prop._tempCurrentXData = prop._currentXData;
-            prop._tempInitialValue = prop._initialValue;
-            prop._tempInitialXData = prop._initialXData;
-            //
-            if (formKeyInstantValues.containsKey(prop.propName)) {
-              if (prop is SimpleProp) {
-                prop._tempCurrentValue = formKeyInstantValues[prop.propName];
+          } else if (prop is MultiOptProp) {
+            if (prop._markToReload && prop.parent == null) {
+              prop._tempCurrentValue = null;
+              prop._tempCurrentXData = null;
+              prop._tempInitialValue = null;
+              prop._tempInitialXData = null;
+            } else {
+              prop._tempInitialXData = prop._initialXData;
+              prop._tempCurrentXData = prop._currentXData;
+              if (_formMode == FormMode.edit) {
+                prop._tempInitialValue = prop._initialValue;
+                prop._tempCurrentValue = prop._currentValue;
+              } else {
+                prop._tempInitialValue = null;
+                prop._tempCurrentValue = null;
               }
             }
-          case _FormActivityType.autoEnterFormFields:
-            prop._tempCurrentValue = prop._currentValue;
-            prop._tempCurrentXData = prop._currentXData;
-            prop._tempInitialValue = prop._initialValue;
-            prop._tempInitialXData = prop._initialXData;
-        }
+          } else {
+            // Never throw.
+            throw UnimplementedError();
+          }
+        case _FormActivityType.updateFromFormView:
+          prop._tempCurrentValue = prop._currentValue;
+          prop._tempCurrentXData = prop._currentXData;
+          prop._tempInitialValue = prop._initialValue;
+          prop._tempInitialXData = prop._initialXData;
+          //
+          if (formKeyInstantValues.containsKey(prop.propName)) {
+            if (prop is SimpleProp) {
+              prop._tempCurrentValue = formKeyInstantValues[prop.propName];
+            }
+          }
+        case _FormActivityType.autoEnterFormFields:
+          prop._tempCurrentValue = prop._currentValue;
+          prop._tempCurrentXData = prop._currentXData;
+          prop._tempInitialValue = prop._initialValue;
+          prop._tempInitialXData = prop._initialXData;
       }
     }
   }

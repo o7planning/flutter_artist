@@ -677,7 +677,6 @@ abstract class FormModel<
         itemOrItemList2: newSelectedValue,
       );
     }
-
     //
     multiOptProp._tempCurrentValue = newSelectedValue;
     //
