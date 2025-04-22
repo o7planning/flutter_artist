@@ -216,9 +216,9 @@ abstract class Block<
 
   final OutsideBroadcast? outsideBroadcast;
 
-  final List<Type> __listenItemTypes;
+  final List<Type> __listenToDataTypes;
 
-  List<Type> get listenItemTypes => [...__listenItemTypes];
+  List<Type> get listenToDataTypes => [...__listenToDataTypes];
 
   final PageableData __pageable;
 
@@ -305,14 +305,13 @@ abstract class Block<
     this.leaveTheFormSafely = true,
     required String? filterModelName,
     required this.formModel,
-    // required this.fireEvent,
     this.outsideBroadcast,
-    required List<Type> listenItemTypes,
+    required List<Type> listenToDataTypes,
     required List<Block>? childBlocks,
     ItemSortCriteria<ITEM>? itemSortCriteria,
   })  : registerFilterModelName = filterModelName,
         __pageable = pageable.copy(),
-        __listenItemTypes = listenItemTypes,
+        __listenToDataTypes = listenToDataTypes,
         _itemSortCriteria = itemSortCriteria,
         _childBlocks = childBlocks ?? [] {
     itemSortCriteria?.block = this;

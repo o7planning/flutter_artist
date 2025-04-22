@@ -247,7 +247,7 @@ class _Storage {
     required Block listenerBlock,
     required Map<String, Shelf> foundShelfMap,
   }) {
-    List<Type> listenTypes = listenerBlock.listenItemTypes;
+    List<Type> listenTypes = listenerBlock.listenToDataTypes;
 
     for (Shelf shelf in __shelfMap.values) {
       if (shelf == listenerBlock.shelf) {
@@ -376,7 +376,7 @@ class _Storage {
       }
       for (Block blockToCheck in shelf.blocks) {
         for (Type affectedItemType in affectedItemTypes) {
-          if (_contains(blockToCheck.listenItemTypes, affectedItemType)) {
+          if (_contains(blockToCheck.listenToDataTypes, affectedItemType)) {
             foundMap[blockToCheck._shortPathName] = blockToCheck;
             break;
           }
@@ -420,7 +420,7 @@ class _Storage {
       }
       for (Scalar scalar in shelf.scalars) {
         for (Type affectedItemType in affectedItemTypes) {
-          if (_contains(scalar.listenItemTypes, affectedItemType)) {
+          if (_contains(scalar.listenToDataTypes, affectedItemType)) {
             foundMap[scalar._shortPathName] = scalar;
             break;
           }
@@ -507,8 +507,8 @@ class _Storage {
         }
         final Type itemType = blk.getItemType();
         final Type itemDetailType = blk.getItemDetailType();
-        if (_contains(listenerBlock.listenItemTypes, itemType) ||
-            _contains(listenerBlock.listenItemTypes, itemDetailType)) {
+        if (_contains(listenerBlock.listenToDataTypes, itemType) ||
+            _contains(listenerBlock.listenToDataTypes, itemDetailType)) {
           foundMap[blk._shortPathName] = blk;
         }
       }
@@ -533,8 +533,8 @@ class _Storage {
         }
         final Type itemType = blk.getItemType();
         final Type itemDetailType = blk.getItemDetailType();
-        if (_contains(listenerScalar.listenItemTypes, itemType) ||
-            _contains(listenerScalar.listenItemTypes, itemDetailType)) {
+        if (_contains(listenerScalar.listenToDataTypes, itemType) ||
+            _contains(listenerScalar.listenToDataTypes, itemDetailType)) {
           foundMap[blk._shortPathName] = blk;
         }
       }

@@ -63,9 +63,9 @@ abstract class Scalar<
 
   bool get isQuerying => __isQuerying;
 
-  final List<Type> __listenItemTypes;
+  final List<Type> __listenToDataTypes;
 
-  List<Type> get listenItemTypes => [...__listenItemTypes];
+  List<Type> get listenToDataTypes => [...__listenToDataTypes];
 
   ///
   /// This field is not null.
@@ -115,9 +115,9 @@ abstract class Scalar<
     required this.description,
     required String? filterModelName,
     required this.hiddenBehavior,
-    required List<Type> listenTypes,
+    required List<Type> listenToDataTypes,
   })  : registerFilterModelName = filterModelName,
-        __listenItemTypes = listenTypes;
+        __listenToDataTypes = listenToDataTypes;
 
   // ***************************************************************************
   // ***************************************************************************

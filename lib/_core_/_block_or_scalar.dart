@@ -106,17 +106,17 @@ class _BlockOrScalar extends Equatable {
 
   List<Type> get listenItemTypes {
     if (block != null) {
-      return block!.listenItemTypes;
+      return block!.listenToDataTypes;
     } else {
-      return scalar!.listenItemTypes;
+      return scalar!.listenToDataTypes;
     }
   }
 
   List<String> get listenItemTypesAsStrings {
     if (block != null) {
-      return block!.listenItemTypes.map((type) => type.toString()).toList();
+      return block!.listenToDataTypes.map((type) => type.toString()).toList();
     } else {
-      return scalar!.listenItemTypes.map((type) => type.toString()).toList();
+      return scalar!.listenToDataTypes.map((type) => type.toString()).toList();
     }
   }
 
