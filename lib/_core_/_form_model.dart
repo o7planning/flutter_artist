@@ -617,8 +617,7 @@ abstract class FormModel<
         showSnackBar: true,
       );
       //
-      // IMPORTANT: Restore OLD State:
-      // Note [_formKeyPatchValue] NOT WORK!.
+      // IMPORTANT:
       //
       _formKeyPatchValue(
         newCurrentValue: _formPropsStructure.currentFormData,
