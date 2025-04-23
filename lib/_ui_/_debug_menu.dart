@@ -61,6 +61,7 @@ class _DebugMenuState extends State<DebugMenu> implements IErrorListener {
                   if (hasRecentErrors)
                     _buildPopupMenuItem(
                       iconData: _errorIconData,
+                      iconColor: Colors.red,
                       title: 'Recent Errors',
                       onTab: _showRecentErrors,
                     ),
@@ -69,7 +70,7 @@ class _DebugMenuState extends State<DebugMenu> implements IErrorListener {
                     _buildPopupMenuItem(
                       iconData: _shelfStructureIconData,
                       title: 'Shelf Structure',
-                      onTab: _showFluStructure,
+                      onTab: _showShelfStructure,
                     ),
                   if (isSystemUser && FlutterArtist._canShowUiComponentDialog())
                     _buildPopupMenuItem(
@@ -124,6 +125,7 @@ class _DebugMenuState extends State<DebugMenu> implements IErrorListener {
 
   PopupMenuItem _buildPopupMenuItem({
     required IconData iconData,
+    Color? iconColor,
     required String title,
     required Function() onTab,
   }) {
@@ -132,7 +134,7 @@ class _DebugMenuState extends State<DebugMenu> implements IErrorListener {
         leading: Icon(
           iconData,
           size: widget.menuItemIconSize,
-          color: widget.menuItemIconColor,
+          color: iconColor ?? widget.menuItemIconColor,
         ),
         title: Text(title),
         onTap: onTab,
@@ -165,7 +167,7 @@ class _DebugMenuState extends State<DebugMenu> implements IErrorListener {
     await FlutterArtist.showFlowLogDialog();
   }
 
-  Future<void> _showFluStructure() async {
+  Future<void> _showShelfStructure() async {
     Navigator.pop(context, null);
     await FlutterArtist.showShelfStructure();
   }
