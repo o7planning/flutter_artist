@@ -20,6 +20,6 @@ class BlockOutsideEventReaction {
 }
 
 enum BlockReaction {
-  query,
+  reQuery,
   refreshCurrentItem;
 }

@@ -22,5 +22,5 @@ class ScalarOutsideEventReaction {
 }
 
 enum ScalarReaction {
-  query,
+  reQuery,
 }
