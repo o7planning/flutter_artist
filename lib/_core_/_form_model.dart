@@ -27,6 +27,8 @@ abstract class FormModel<
 
   DataState get formDataState => _formPropsStructure._formDataState;
 
+  bool get formInitialDataReady => _formPropsStructure._formInitialDataReady;
+
   Shelf get shelf => block.shelf;
 
   late final Block<
@@ -389,7 +391,7 @@ abstract class FormModel<
         showSnackBar: true,
       );
       //
-      __applyWithDataState(
+      __endFormActivityWithDataState(
         formDataState: DataState.error,
         activityType: activityType,
       );
@@ -423,7 +425,7 @@ abstract class FormModel<
             showSnackBar: true,
           );
           //
-          __applyWithDataState(
+          __endFormActivityWithDataState(
             formDataState: DataState.error,
             activityType: activityType,
           );
@@ -458,7 +460,7 @@ abstract class FormModel<
               showSnackBar: true,
             );
             //
-            __applyWithDataState(
+            __endFormActivityWithDataState(
               formDataState: DataState.error,
               activityType: activityType,
             );
@@ -490,7 +492,7 @@ abstract class FormModel<
               showSnackBar: true,
             );
             //
-            __applyWithDataState(
+            __endFormActivityWithDataState(
               formDataState: DataState.error,
               activityType: activityType,
             );
@@ -526,7 +528,7 @@ abstract class FormModel<
             showSnackBar: true,
           );
           //
-          __applyWithDataState(
+          __endFormActivityWithDataState(
             formDataState: DataState.error,
             activityType: activityType,
           );
@@ -535,7 +537,7 @@ abstract class FormModel<
       }
     }
     //
-    return __applyWithDataState(
+    return __endFormActivityWithDataState(
       formDataState: DataState.ready,
       activityType: activityType,
     );
@@ -544,7 +546,7 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool __applyWithDataState({
+  bool __endFormActivityWithDataState({
     required DataState formDataState,
     required _FormActivityType activityType,
   }) {
@@ -574,11 +576,18 @@ abstract class FormModel<
       //
       _defaultValueInitiated = true;
       _formPropsStructure._setFormDataState(formDataState);
+      // Validate Form
       if (activityType == _FormActivityType.itemFirstLoad &&
           formMode == FormMode.edit &&
           _formKey.currentState != null) {
         if (!_formKey.currentState!.isValid) {
           _formKey.currentState!.validate(focusOnInvalid: false);
+        }
+      }
+      //
+      if (activityType == _FormActivityType.itemFirstLoad) {
+        if (formDataState == DataState.ready) {
+          _formPropsStructure._formInitialDataReady = true;
         }
       }
       return true;
@@ -705,6 +714,8 @@ abstract class FormModel<
     // May throw ApiError.
     //
     if (tempMultiOptPropXData == null || forceReload) {
+      // Always increase "__loadCount" value regardless of error.
+      multiOptProp._loadCount++;
       tempMultiOptPropXData = await callApiLoadMultiOptPropData(
         filterCriteria: blockCurrentFilterCriteria,
         extraFormInput: extraFormInput,
@@ -712,7 +723,7 @@ abstract class FormModel<
         multiOptPropName: multiOptPropName,
       );
       multiOptProp._markToReload = false;
-      multiOptProp._loadCount++;
+      multiOptProp._tempCurrentXData = tempMultiOptPropXData;
     }
 
     //
@@ -1216,7 +1227,6 @@ abstract class FormModel<
 
   bool isEnabled() {
     Actionable actionable = block._isEnableFormToModify();
-    print("Action >>>>>>>>>> ${actionable.message}");
     return actionable.yes;
   }
 
@@ -1311,7 +1321,13 @@ abstract class FormModel<
 
   // Private method. Only for use in this class.
   bool __checkValidBeforeSave() {
-    return !block.__isSaving && (_formKey.currentState?.validate() ?? false);
+    if (!block.__isSaving) {
+      return false;
+    }
+    if (formDataState == DataState.error) {
+      return false;
+    }
+    return _formKey.currentState?.validate() ?? false;
   }
 
   // ***************************************************************************

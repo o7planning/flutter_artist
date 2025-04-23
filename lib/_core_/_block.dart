@@ -218,10 +218,6 @@ abstract class Block<
 
   final BlockOutsideEventReaction? outsideEventReaction;
 
-  // final List<Type> __listenToDataTypes;
-
-  // List<Type> get listenToDataTypes => [...__listenToDataTypes];
-
   final PageableData __pageable;
 
   late final __blockData = _BlockData<
@@ -4047,6 +4043,11 @@ abstract class Block<
             "Form reset is not allowed because the form is not in dirty state.",
       );
     }
+    if (!formModel!.formInitialDataReady) {
+      return Actionable.no(
+        message: "Cannot reset form because formInitialData is not ready.",
+      );
+    }
     if (this.__isSaving) {
       return Actionable.no(
         message:
@@ -4077,6 +4078,11 @@ abstract class Block<
         message: "Cannot save form because this block does not have a form.",
       );
     }
+    if (!formModel!.formInitialDataReady) {
+      return Actionable.no(
+        message: "Cannot save form because formInitialData is not ready.",
+      );
+    }
     if (this.__isSaving) {
       return Actionable.no(
         message: "Cannot save form because form is in saving state.",
@@ -4102,6 +4108,9 @@ abstract class Block<
       return Actionable.no(
           message:
               "This item cannot be edited on the form because this block does not have a form.");
+    }
+    if (formModel!.formDataState == DataState.error) {
+      return Actionable.no(message: "Form data state is error.");
     }
     if (FlutterArtist.executor.isBusy) {
       return Actionable.no(
@@ -4148,6 +4157,9 @@ abstract class Block<
           message: "Form disabled because it in 'none' mode",
         );
       case FormMode.creation:
+        if (formModel!.formDataState == DataState.error) {
+          return Actionable.no(message: "Form data state is error.");
+        }
         return Actionable.yes();
       case FormMode.edit:
         break; // Continue check below.

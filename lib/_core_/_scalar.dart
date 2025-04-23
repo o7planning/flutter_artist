@@ -63,10 +63,6 @@ abstract class Scalar<
 
   bool get isQuerying => __isQuerying;
 
-  // final List<Type> __listenToDataTypes;
-
-  // List<Type> get listenToDataTypes => [...__listenToDataTypes];
-
   final ScalarOutsideEventReaction? outsideEventReaction;
 
   ///

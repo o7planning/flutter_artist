@@ -14,7 +14,11 @@ class FormPropsStructure {
   late final FormModel formModel;
 
   bool _justInitialized = false;
+
+  bool _formInitialDataReady = false;
+
   DataState _formDataState = DataState.none;
+
   FormMode _formMode = FormMode.none;
 
   DataState get formDataState => _formDataState;
@@ -268,6 +272,7 @@ class FormPropsStructure {
     for (Prop prop in _allPropMap.values) {
       switch (activityType) {
         case _FormActivityType.itemFirstLoad:
+          _formInitialDataReady = false;
           if (prop is SimpleProp) {
             prop._tempCurrentValue = null;
             prop._tempCurrentXData = null;
