@@ -230,7 +230,7 @@ abstract class Scalar<
       _handleError(
         shelf: shelf,
         methodName: 'callApiQuery',
-        error: "Error callApiQuery: $e",
+        error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
       );

@@ -64,7 +64,7 @@ abstract class LoginActivityBase<USER extends ILoggedInUser> extends Activity {
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: "setOrUpdateLoggedInUser",
+        methodName: "FlutterArtist.setOrUpdateLoggedInUser",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,

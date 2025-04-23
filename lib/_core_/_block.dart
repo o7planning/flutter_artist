@@ -1000,7 +1000,7 @@ abstract class Block<
       _handleError(
         shelf: shelf,
         methodName: 'callApiQuery',
-        error: "Error callApiQuery: $e",
+        error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
       );
@@ -1354,7 +1354,7 @@ abstract class Block<
         _handleError(
           shelf: shelf,
           methodName: "callApiRefreshItem",
-          error: "Error callApiRefreshItem: $e",
+          error: e,
           stackTrace: stackTrace,
           showSnackBar: true,
         );
@@ -1443,7 +1443,7 @@ abstract class Block<
       _handleError(
         shelf: shelf,
         methodName: "convertItemDetailToItem",
-        error: "Error convertItemDetailToItem: $e",
+        error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
       );

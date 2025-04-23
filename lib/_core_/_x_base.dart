@@ -51,7 +51,6 @@ abstract class _XBase {
       } catch (e, stackTrace) {
         _handleError(
           shelf: shelf,
-          // TODO truyen ten phuong thuc tu tham so ???????????
           methodName: "customConfirmation",
           error: e,
           stackTrace: stackTrace,
@@ -86,10 +85,19 @@ abstract class _XBase {
       );
     }
     //
-    String msg = methodName == null
-        ? "Error: ${apiError.errorMessage}"
-        : "Call ${getClassName(this)}.$methodName() error: ${apiError.errorMessage}";
+    final String msg;
+    if (methodName == null) {
+      msg = "Error: ${apiError.errorMessage}";
+    } else {
+      if (methodName.contains("\\.")) {
+        msg = "Call $methodName() error: ${apiError.errorMessage}";
+      } else {
+        msg =
+            "Call ${getClassName(this)}.$methodName() error: ${apiError.errorMessage}";
+      }
+    }
     print(msg);
+    //
     if (!FlutterArtist.testCaseMode) {
       print(stackTrace);
     }

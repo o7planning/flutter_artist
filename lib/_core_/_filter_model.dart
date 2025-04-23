@@ -280,7 +280,7 @@ abstract class FilterModel<
       _handleError(
         shelf: shelf,
         methodName: "callApiLoadMultiOptCriterionData",
-        error: "Error callApiLoadMultiOptCriterionData: $e",
+        error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
       );
@@ -308,7 +308,7 @@ abstract class FilterModel<
         _handleError(
           shelf: shelf,
           methodName: "getSimpleCriterionValuesFromFilterInput",
-          error: "Error getSimpleCriterionValuesFromFilterInput: $e",
+          error: e,
           stackTrace: stackTrace,
           showSnackBar: true,
         );
@@ -335,7 +335,7 @@ abstract class FilterModel<
         _handleError(
           shelf: shelf,
           methodName: "specifyDefaultSimpleCriterionValues",
-          error: "Error specifyDefaultSimpleCriterionValues: $e",
+          error: e,
           stackTrace: stackTrace,
           showSnackBar: true,
         );
