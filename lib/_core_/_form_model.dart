@@ -238,7 +238,7 @@ abstract class FormModel<
     if (blockCurrentFilterCriteria == null) {
       throw _FatalAppException(message: "FilterCriteria is null");
     }
-    if (!__checkValidBeforeSave()) {
+    if (!__checkWithFormValidationBeforeSave()) {
       return false;
     }
     final Map<String, dynamic> formMapData =
@@ -1320,11 +1320,9 @@ abstract class FormModel<
   // ***************************************************************************
 
   // Private method. Only for use in this class.
-  bool __checkValidBeforeSave() {
-    if (!block.__isSaving) {
-      return false;
-    }
-    if (formDataState == DataState.error) {
+  bool __checkWithFormValidationBeforeSave() {
+    Actionable actionable = block.canSaveForm();
+    if (!actionable.yes) {
       return false;
     }
     return _formKey.currentState?.validate() ?? false;
@@ -1383,7 +1381,7 @@ abstract class FormModel<
       navigate: null,
     );
     //
-    if (!__checkValidBeforeSave()) {
+    if (!__checkWithFormValidationBeforeSave()) {
       return false;
     }
     //

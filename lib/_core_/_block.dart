@@ -4226,6 +4226,9 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  ///
+  /// Without check Form validation.
+  ///
   Actionable canSaveForm() {
     return __canSaveForm(checkAllow: true);
   }
