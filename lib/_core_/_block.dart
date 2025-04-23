@@ -218,9 +218,9 @@ abstract class Block<
 
   final BlockOutsideEventReaction? outsideEventReaction;
 
-  final List<Type> __listenToDataTypes;
+  // final List<Type> __listenToDataTypes;
 
-  List<Type> get listenToDataTypes => [...__listenToDataTypes];
+  // List<Type> get listenToDataTypes => [...__listenToDataTypes];
 
   final PageableData __pageable;
 
@@ -309,12 +309,12 @@ abstract class Block<
     required this.formModel,
     this.outsideBroadcast,
     this.outsideEventReaction,
-    required List<Type> listenToDataTypes,
+    // required List<Type> listenToDataTypes,
     required List<Block>? childBlocks,
     ItemSortCriteria<ITEM>? itemSortCriteria,
   })  : registerFilterModelName = filterModelName,
         __pageable = pageable.copy(),
-        __listenToDataTypes = listenToDataTypes,
+        // __listenToDataTypes = listenToDataTypes,
         _itemSortCriteria = itemSortCriteria,
         _childBlocks = childBlocks ?? [] {
     itemSortCriteria?.block = this;
@@ -339,6 +339,21 @@ abstract class Block<
       itemTypes = [getItemType(), getItemDetailType()];
     } else {
       for (Event event in outsideBroadcast!.events) {
+        itemTypes.add(event.dataType);
+      }
+    }
+    return itemTypes;
+  }
+
+  List<Type> _getOutsideDataTypesToListen() {
+    if (outsideEventReaction == null) {
+      return [];
+    }
+    List<Type> itemTypes = [];
+    if (outsideEventReaction!.intrinsicMode) {
+      itemTypes = [getItemType(), getItemDetailType()];
+    } else {
+      for (Event event in outsideEventReaction!._events ?? []) {
         itemTypes.add(event.dataType);
       }
     }

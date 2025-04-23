@@ -34,7 +34,7 @@ abstract class SingleItemBlock<
     super.hiddenBehavior,
     super.leaveTheFormSafely,
     required super.outsideBroadcast,
-    required super.listenToDataTypes,
+    required super.outsideEventReaction,
     required super.filterModelName,
     required super.formModel,
     required super.childBlocks,

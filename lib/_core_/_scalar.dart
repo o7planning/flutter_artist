@@ -63,9 +63,11 @@ abstract class Scalar<
 
   bool get isQuerying => __isQuerying;
 
-  final List<Type> __listenToDataTypes;
+  // final List<Type> __listenToDataTypes;
 
-  List<Type> get listenToDataTypes => [...__listenToDataTypes];
+  // List<Type> get listenToDataTypes => [...__listenToDataTypes];
+
+  final ScalarOutsideEventReaction? outsideEventReaction;
 
   ///
   /// This field is not null.
@@ -115,9 +117,23 @@ abstract class Scalar<
     required this.description,
     required String? filterModelName,
     required this.hiddenBehavior,
-    required List<Type> listenToDataTypes,
-  })  : registerFilterModelName = filterModelName,
-        __listenToDataTypes = listenToDataTypes;
+    // required List<Type> listenToDataTypes,
+    this.outsideEventReaction,
+  }) : registerFilterModelName = filterModelName;
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  List<Type> _getOutsideDataTypesToListen() {
+    if (outsideEventReaction == null) {
+      return [];
+    }
+    List<Type> itemTypes = [];
+    for (Event event in outsideEventReaction!._events ?? []) {
+      itemTypes.add(event.dataType);
+    }
+    return itemTypes;
+  }
 
   // ***************************************************************************
   // ***************************************************************************
