@@ -41,9 +41,18 @@ abstract class FormModel<
 
   bool _defaultValueInitiated = false;
 
-  final _defaultAutovalidateMode = AutovalidateMode.onUserInteraction;
+  final AutovalidateMode _defaultAutovalidateMode;
 
-  late AutovalidateMode autovalidateMode = _defaultAutovalidateMode;
+  AutovalidateMode _autovalidateMode = AutovalidateMode.onUserInteraction;
+
+  AutovalidateMode get autovalidateMode => _autovalidateMode;
+
+  AutovalidateMode get _autovalidateModeForFormView {
+    if (_formPropsStructure._formMode == FormMode.none) {
+      return AutovalidateMode.disabled;
+    }
+    return _autovalidateMode;
+  }
 
   final Map<_RefreshableWidgetState, _XState> _formWidgetStates = {};
 
@@ -56,7 +65,10 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  FormModel() {
+  FormModel({
+    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
+  })  : _defaultAutovalidateMode = autovalidateMode,
+        _autovalidateMode = autovalidateMode {
     __registerPropsStructure();
   }
 
@@ -337,6 +349,11 @@ abstract class FormModel<
     __formTransactionCount++;
     print(
         "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFormActivity, activityType: $activityType");
+    if (activityType == _FormActivityType.itemFirstLoad) {
+      _autovalidateMode = AutovalidateMode.disabled;
+    } else {
+      _autovalidateMode = _defaultAutovalidateMode;
+    }
 
     final ITEM_DETAIL? itemDetail = block.currentItemDetail;
     final FormMode currentFormMode = formDataState == DataState.none
@@ -386,7 +403,7 @@ abstract class FormModel<
       _handleError(
         shelf: shelf,
         methodName: "callApiLoadMultiOptPropData",
-        error: "Error callApiLoadMultiOptPropData: $e",
+        error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
       );
@@ -420,7 +437,7 @@ abstract class FormModel<
           _handleError(
             shelf: shelf,
             methodName: "getSimplePropValuesFromItemDetail",
-            error: "Error getSimplePropValuesFromItemDetail: $e",
+            error: e,
             stackTrace: stackTrace,
             showSnackBar: true,
           );
@@ -455,7 +472,7 @@ abstract class FormModel<
             _handleError(
               shelf: shelf,
               methodName: "specifyDefaultSimplePropValues",
-              error: "Error specifyDefaultSimplePropValues: $e",
+              error: e,
               stackTrace: stackTrace,
               showSnackBar: true,
             );
@@ -487,7 +504,7 @@ abstract class FormModel<
             _handleError(
               shelf: shelf,
               methodName: "getSimplePropValuesFromItemDetail",
-              error: "Error getSimplePropValuesFromItemDetail: $e",
+              error: e,
               stackTrace: stackTrace,
               showSnackBar: true,
             );
@@ -523,7 +540,7 @@ abstract class FormModel<
           _handleError(
             shelf: shelf,
             methodName: "getSimplePropValuesFromItemDetail",
-            error: "Error getSimplePropValuesFromItemDetail: $e",
+            error: e,
             stackTrace: stackTrace,
             showSnackBar: true,
           );
@@ -550,23 +567,15 @@ abstract class FormModel<
     required DataState formDataState,
     required _FormActivityType activityType,
   }) {
-    _formPropsStructure.__isTempMode = false;
     try {
       //
       // Update Real FromData from Temporary FormData:
       //
       _formPropsStructure._updateTempToReal();
-
-      //
-      // UPDATE OPT-DATA:
-      //  - optProp._xOptionedData = optProp._tempXData;
-      //
-      // _formPropsStructure._applyAllTempDataToReal();
       //
       if (activityType == _FormActivityType.itemFirstLoad) {
         _formPropsStructure._setInitialFormDataForItemFirstLoad();
       }
-
       //
       // IMPORTANT:
       //
@@ -576,20 +585,28 @@ abstract class FormModel<
       //
       _defaultValueInitiated = true;
       _formPropsStructure._setFormDataState(formDataState);
-      // Validate Form
-      if (activityType == _FormActivityType.itemFirstLoad &&
-          formMode == FormMode.edit &&
-          _formKey.currentState != null) {
-        if (!_formKey.currentState!.isValid) {
-          _formKey.currentState!.validate(focusOnInvalid: false);
-        }
-      }
       //
       if (activityType == _FormActivityType.itemFirstLoad) {
         if (formDataState == DataState.ready) {
           _formPropsStructure._formInitialDataReady = true;
         }
       }
+      // Form Disabled:
+      if (!_formPropsStructure._formInitialDataReady) {
+        // Clear form validation error
+      }
+      // Form Initial Data Ready
+      else {
+        // Validate Form
+        if (activityType == _FormActivityType.itemFirstLoad) {
+          if (formMode == FormMode.edit && _formKey.currentState != null) {
+            if (_formPropsStructure._formInitialDataReady) {
+              _formKey.currentState!.validate(focusOnInvalid: false);
+            }
+          }
+        }
+      }
+      //
       return true;
     } catch (e, stackTrace) {
       _handleError(
@@ -609,6 +626,8 @@ abstract class FormModel<
       //
       _formPropsStructure._setFormDataState(DataState.error);
       return false;
+    } finally {
+      _formPropsStructure.__isTempMode = false;
     }
   }
 
