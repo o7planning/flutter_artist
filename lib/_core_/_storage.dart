@@ -78,7 +78,7 @@ class _Storage {
     Type eventItemType = eventBlock.getItemType();
     Type eventItemDetailType = eventBlock.getItemDetailType();
     //
-    final OutsideBroadcast? outsideBroadcast = eventBlock.outsideBroadcast;
+    final BlockOutsideBroadcast? outsideBroadcast = eventBlock.outsideBroadcast;
     //
     print(
         "~~~~~~~~~> ${outsideBroadcast != null ? 'FIRE EVENT' : 'NOT FIRE EVENT'}"

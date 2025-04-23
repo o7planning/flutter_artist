@@ -214,7 +214,9 @@ abstract class Block<
 
   int get callApiQueryCount => __callApiQueryCount;
 
-  final OutsideBroadcast? outsideBroadcast;
+  final BlockOutsideBroadcast? outsideBroadcast;
+
+  final BlockOutsideEventReaction? outsideEventReaction;
 
   final List<Type> __listenToDataTypes;
 
@@ -306,6 +308,7 @@ abstract class Block<
     required String? filterModelName,
     required this.formModel,
     this.outsideBroadcast,
+    this.outsideEventReaction,
     required List<Type> listenToDataTypes,
     required List<Block>? childBlocks,
     ItemSortCriteria<ITEM>? itemSortCriteria,
@@ -332,11 +335,11 @@ abstract class Block<
     }
     //
     List<Type> itemTypes = [];
-    if (outsideBroadcast!.defaultEventMode) {
+    if (outsideBroadcast!.intrinsicEventMode) {
       itemTypes = [getItemType(), getItemDetailType()];
     } else {
       for (Event event in outsideBroadcast!.events) {
-        itemTypes.add(event.itemType);
+        itemTypes.add(event.dataType);
       }
     }
     return itemTypes;

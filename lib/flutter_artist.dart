@@ -122,6 +122,8 @@ part '_core_/_item_sort_criteria.dart';
 
 part '_core_/_logging.dart';
 
+part '_core_/_block_outside_event_reaction.dart';
+
 part '_core_/_notification_listener.dart';
 
 part '_core_/_scalar.dart';
@@ -146,7 +148,7 @@ part '_core_/_typedef.dart';
 
 part '_core_/_x_base.dart';
 
-part '_core_/_outside_broadcast.dart';
+part '_core_/_block_outside_broadcast.dart';
 
 part '_core_query_/_form_model_opt.dart';
 
