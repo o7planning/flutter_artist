@@ -3880,23 +3880,6 @@ abstract class Block<
       );
     }
     //
-    if (parent!.formModel != null) {
-      switch (parent!.formModel!.formMode) {
-        case FormMode.none:
-          return Actionable.no(
-            message:
-                "Query is disabled because the parent block's form is in 'none' mode",
-          );
-        case FormMode.creation:
-          return Actionable.no(
-            message:
-                "Query is disabled because the parent block's form is in 'creation' mode",
-          );
-        case FormMode.edit:
-          break; // Do nothing
-      }
-    }
-    //
     return parent!.__checkAncestorsSafeToQuery();
   }
 
