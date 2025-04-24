@@ -10,9 +10,8 @@ class TaskProgressViewBuilder extends _RefreshableWidget {
   final List<Activity> activities;
 
   final Widget Function(
-    BuildContext context, {
-    required bool onProgress,
-  }) build;
+    bool onProgress,
+  ) build;
 
   const TaskProgressViewBuilder({
     super.key,
@@ -85,7 +84,7 @@ class _TaskProgressBuilderState
 
   @override
   Widget buildContent(BuildContext context) {
-    return widget.build(context, onProgress: onProgress);
+    return widget.build(onProgress);
   }
 
   @override
