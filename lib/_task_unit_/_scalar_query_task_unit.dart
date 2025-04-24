@@ -5,13 +5,16 @@ class _ScalarQueryTaskUnit extends _TaskUnit {
 
   _ScalarQueryTaskUnit({
     required this.xScalar,
-  });
+  }) : super(taskType: TaskType.scalarQuery);
 
   @override
   int get xShelfId => xScalar.xShelfId;
 
   @override
   Shelf get shelf => xScalar.scalar.shelf;
+
+  @override
+  Scalar get owner => xScalar.scalar;
 
   @override
   String getObjectName() {

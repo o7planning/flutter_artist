@@ -102,6 +102,8 @@ part '_core_/_filter_criteria.dart';
 
 part '_core_/_filter_input.dart';
 
+part '_ui_/_task_progress_view_builder.dart';
+
 part '_core_/_filter_model.dart';
 
 part '_core_/_form_leave_safely.dart';
@@ -257,6 +259,8 @@ part '_dialog_/_location_info_dialog.dart';
 part '_dialog_/_storage_dialog.dart';
 
 part '_dialog_/_ui_components_dialog.dart';
+
+part '_enum_/_task_type.dart';
 
 part '_enum_/_action_confirmation_type.dart';
 

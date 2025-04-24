@@ -1,6 +1,10 @@
 part of '../flutter_artist.dart';
 
 abstract class _TaskUnit {
+  final TaskType taskType;
+
+  _TaskUnit({required this.taskType});
+
   String getTaskUnitId() {
     return "${getClassName(this)}/${getObjectName()}";
   }
@@ -10,6 +14,8 @@ abstract class _TaskUnit {
   String getObjectName();
 
   Shelf get shelf;
+
+  Object get owner;
 
   @override
   String toString() {

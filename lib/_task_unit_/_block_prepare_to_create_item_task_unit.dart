@@ -11,13 +11,16 @@ class _BlockPrepareToCreateItemTaskUnit extends _TaskUnit {
     required this.initDirty,
     required this.extraFormInput,
     required this.navigate,
-  });
+  }) : super(taskType: TaskType.blockPrepareToCreateItem);
 
   @override
   int get xShelfId => xBlock.xShelfId;
 
   @override
   Shelf get shelf => xBlock.block.shelf;
+
+  @override
+  Block get owner => xBlock.block;
 
   @override
   String getObjectName() {

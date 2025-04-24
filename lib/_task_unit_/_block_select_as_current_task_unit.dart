@@ -13,7 +13,7 @@ class _BlockSelectAsCurrentTaskUnit<ITEM extends Object> extends _TaskUnit {
     required this.newQueriedList,
     required this.candidateItem,
     required this.forceForm,
-  }) {
+  }) : super(taskType: TaskType.blockSelectItemAsCurrent) {
     xBlock.setForceReloadItem();
     if (forceForm != null) {
       xBlock.xFormModel?.forceForm = forceForm!;
@@ -25,6 +25,9 @@ class _BlockSelectAsCurrentTaskUnit<ITEM extends Object> extends _TaskUnit {
 
   @override
   Shelf get shelf => xBlock.block.shelf;
+
+  @override
+  Block get owner => xBlock.block;
 
   @override
   String getObjectName() {

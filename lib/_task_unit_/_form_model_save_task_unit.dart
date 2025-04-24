@@ -5,13 +5,16 @@ class _SaveFormSaveTaskUnit extends _TaskUnit {
 
   _SaveFormSaveTaskUnit({
     required this.xFormModel,
-  });
+  }) : super(taskType: TaskType.formModelSaveForm);
 
   @override
   int get xShelfId => xFormModel.xShelfId;
 
   @override
   Shelf get shelf => xFormModel.formModel.block.shelf;
+
+  @override
+  FormModel get owner => xFormModel.formModel;
 
   @override
   String getObjectName() {

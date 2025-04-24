@@ -8,13 +8,16 @@ class _FormModelAutoEnterFormFieldsTaskUnit<
   _FormModelAutoEnterFormFieldsTaskUnit({
     required this.xFormModel,
     required this.extraFormInput,
-  });
+  }) : super(taskType: TaskType.formModelEnterFormFields);
 
   @override
   int get xShelfId => xFormModel.xShelfId;
 
   @override
   Shelf get shelf => xFormModel.formModel.block.shelf;
+
+  @override
+  FormModel get owner => xFormModel.formModel;
 
   @override
   String getObjectName() {

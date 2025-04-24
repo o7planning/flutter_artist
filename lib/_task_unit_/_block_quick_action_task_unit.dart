@@ -9,13 +9,16 @@ class _BlockQuickActionTaskUnit<DATA extends Object> extends _TaskUnit {
     required this.xBlock,
     required this.action,
     required this.afterQuickAction,
-  });
+  }) : super(taskType: TaskType.blockQuickAction);
 
   @override
   int get xShelfId => xBlock.xShelfId;
 
   @override
   Shelf get shelf => xBlock.block.shelf;
+
+  @override
+  Block get owner => xBlock.block;
 
   @override
   String getObjectName() {

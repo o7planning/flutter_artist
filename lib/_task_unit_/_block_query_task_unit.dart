@@ -5,15 +5,16 @@ class _BlockQueryTaskUnit extends _TaskUnit {
 
   _BlockQueryTaskUnit({
     required this.xBlock,
-  }) {
-    // xBlock.setForceQuery();
-  }
+  }) : super(taskType: TaskType.blockQuery);
 
   @override
   int get xShelfId => xBlock.xShelfId;
 
   @override
   Shelf get shelf => xBlock.block.shelf;
+
+  @override
+  Block get owner => xBlock.block;
 
   @override
   String getObjectName() {

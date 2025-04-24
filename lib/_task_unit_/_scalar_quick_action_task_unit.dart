@@ -9,13 +9,16 @@ class _ScalarQuickActionTaskUnit<DATA extends Object> extends _TaskUnit {
     required this.xScalar,
     required this.action,
     required this.afterQuickAction,
-  });
+  }) : super(taskType: TaskType.scalarQuickAction);
 
   @override
   int get xShelfId => xScalar.xShelfId;
 
   @override
   Shelf get shelf => xScalar.scalar.shelf;
+
+  @override
+  Scalar get owner => xScalar.scalar;
 
   @override
   String getObjectName() {
