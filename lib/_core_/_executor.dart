@@ -8,6 +8,8 @@ class _Executor {
 
   int? get executingXShelfId => __executingXShelfId;
 
+  final List<_TaskProgressBuilderState> _taskProgressViewWidgetStates = [];
+
   // ***************************************************************************
   // ***************************************************************************
 
@@ -36,6 +38,12 @@ class _Executor {
         Map<String, Shelf> shelfMap = {};
         while (FlutterArtist.taskUnitQueue.hasNext()) {
           _TaskUnit taskUnit = FlutterArtist.taskUnitQueue.getNextTaskUnit()!;
+          //
+          _updateProgressViews(
+            owner: taskUnit.owner,
+            taskType: taskUnit.taskType,
+          );
+          //
           if (__executingXShelfId == null) {
             __executingXShelfId = taskUnit.xShelfId;
           } else {
@@ -172,6 +180,10 @@ class _Executor {
         //
         __taskUnitCount++;
         //
+        _updateProgressViews(
+          owner: null,
+          taskType: null,
+        );
         for (Shelf shelf in shelfMap.values) {
           shelf.updateAllUIComponents();
         }
@@ -179,5 +191,35 @@ class _Executor {
         __executingXShelfId = null;
       },
     );
+  }
+
+  void _updateProgressViews({
+    required Object? owner,
+    required TaskType? taskType,
+  }) {
+    for (_TaskProgressBuilderState state in _taskProgressViewWidgetStates) {
+      bool onProgress = owner == null || taskType == null
+          ? false
+          : state.isMatches(
+              owner: owner,
+              taskType: taskType,
+            );
+      //
+      state.onProgress = onProgress;
+      state.refreshState(force: true);
+    }
+  }
+
+  void _addTaskProgressViewWidgetState({
+    required _TaskProgressBuilderState widgetState,
+    required bool isShowing,
+  }) {
+    _taskProgressViewWidgetStates.add(widgetState);
+  }
+
+  void _removeTaskProgressViewWidgetState({
+    required _TaskProgressBuilderState widgetState,
+  }) {
+    _taskProgressViewWidgetStates.remove(widgetState);
   }
 }

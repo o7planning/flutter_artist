@@ -1,18 +1,26 @@
 part of '../flutter_artist.dart';
 
 class TaskProgressViewBuilder extends _RefreshableWidget {
+  final EdgeInsets margin;
   final EdgeInsets padding;
+  //
+  final List<TaskType> taskTypes;
   final List<Block> blocks;
   final List<Scalar> scalars;
   final List<Activity> activities;
 
-  final Widget Function(BuildContext context) build;
+  final Widget Function(
+    BuildContext context, {
+    required bool onProgress,
+  }) build;
 
   const TaskProgressViewBuilder({
     super.key,
     this.padding = const EdgeInsets.all(0),
+    this.margin = const EdgeInsets.all(0),
     required super.ownerClassInstance,
     super.description,
+    required this.taskTypes,
     this.blocks = const [],
     this.scalars = const [],
     this.activities = const [],
@@ -27,8 +35,33 @@ class TaskProgressViewBuilder extends _RefreshableWidget {
 
 class _TaskProgressBuilderState
     extends _RefreshableWidgetState<TaskProgressViewBuilder> {
+  // Update from Executor:
+  bool onProgress = false;
+
+  bool isMatches({required Object owner, required TaskType taskType}) {
+    if (!widget.taskTypes.contains(taskType)) {
+      return false;
+    }
+    for (Block block in widget.blocks) {
+      if (identical(block, owner)) {
+        return true;
+      }
+    }
+    for (Scalar scalar in widget.scalars) {
+      if (identical(scalar, owner)) {
+        return true;
+      }
+    }
+    for (Activity activity in widget.activities) {
+      if (identical(activity, owner)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   @override
-  RefreshableWidgetType get type => RefreshableWidgetType.controlBar;
+  RefreshableWidgetType get type => RefreshableWidgetType.taskProgressView;
 
   @override
   String getWidgetOwnerClassName() {
@@ -37,22 +70,22 @@ class _TaskProgressBuilderState
 
   @override
   void addWidgetState({required bool isShowing}) {
-    // widget.block._addControlBarWidgetState(
-    //   widgetState: this,
-    //   isShowing: isShowing,
-    // );
+    FlutterArtist.executor._addTaskProgressViewWidgetState(
+      widgetState: this,
+      isShowing: isShowing,
+    );
   }
 
   @override
   void removeWidgetState() {
-    // widget.block._removeControlBarWidgetState(
-    //   widgetState: this,
-    // );
+    FlutterArtist.executor._removeTaskProgressViewWidgetState(
+      widgetState: this,
+    );
   }
 
   @override
   Widget buildContent(BuildContext context) {
-    return widget.build(context);
+    return widget.build(context, onProgress: onProgress);
   }
 
   @override

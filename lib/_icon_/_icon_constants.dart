@@ -105,6 +105,8 @@ const IconData _blockControlButtonIconData = Icons.smart_button;
 
 const IconData _scalarControlButtonIconData = Icons.smart_button;
 
+const IconData _taskProgressViewIconData = cupertino.CupertinoIcons.timelapse;
+
 const IconData _loggedUserIconData =
     cupertino.CupertinoIcons.person_crop_circle;
 
