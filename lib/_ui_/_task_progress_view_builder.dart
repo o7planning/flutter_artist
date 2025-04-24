@@ -1,8 +1,8 @@
 part of '../flutter_artist.dart';
 
 class TaskProgressViewBuilder extends _RefreshableWidget {
-  final EdgeInsets margin;
-  final EdgeInsets padding;
+  final EdgeInsets progressOnMargin;
+  final EdgeInsets progressOffMargin;
   //
   final List<TaskType> taskTypes;
   final List<Block> blocks;
@@ -15,14 +15,14 @@ class TaskProgressViewBuilder extends _RefreshableWidget {
 
   const TaskProgressViewBuilder({
     super.key,
-    this.padding = const EdgeInsets.all(0),
-    this.margin = const EdgeInsets.all(0),
+    this.progressOnMargin = const EdgeInsets.all(0),
+    this.progressOffMargin = const EdgeInsets.all(0),
     required super.ownerClassInstance,
     super.description,
     required this.taskTypes,
-    this.blocks = const [],
-    this.scalars = const [],
-    this.activities = const [],
+    required this.blocks,
+    required this.scalars,
+    required this.activities,
     required this.build,
   });
 
@@ -84,7 +84,10 @@ class _TaskProgressBuilderState
 
   @override
   Widget buildContent(BuildContext context) {
-    return widget.build(onProgress);
+    return Container(
+      margin: onProgress ? widget.progressOnMargin : widget.progressOffMargin,
+      child: widget.build(onProgress),
+    );
   }
 
   @override
