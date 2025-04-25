@@ -8,7 +8,7 @@ class _Executor {
 
   int? get executingXShelfId => __executingXShelfId;
 
-  final List<_TaskProgressBuilderState> _taskProgressViewWidgetStates = [];
+  final Map<_TaskProgressBuilderState, bool> _taskProgressViewWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -198,7 +198,7 @@ class _Executor {
     required TaskType? taskType,
   }) {
     for (_TaskProgressBuilderState state in [
-      ..._taskProgressViewWidgetStates
+      ..._taskProgressViewWidgetStates.keys
     ]) {
       if (!state.mounted) {
         _taskProgressViewWidgetStates.remove(state);
@@ -220,7 +220,7 @@ class _Executor {
     required _TaskProgressBuilderState widgetState,
     required bool isShowing,
   }) {
-    _taskProgressViewWidgetStates.add(widgetState);
+    _taskProgressViewWidgetStates[widgetState] = isShowing;
   }
 
   void _removeTaskProgressViewWidgetState({
