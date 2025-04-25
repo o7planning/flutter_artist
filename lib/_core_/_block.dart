@@ -655,6 +655,7 @@ abstract class Block<
     }
     //
     if (!activeOLD && activeCURRENT) {
+      print("@@@@@@@@@@@@ Active Block: ${getClassName(this)}");
       // Fire event:
       shelf._startNewLazyQueryTransactionIfNeed();
     } else if (activeOLD && !activeCURRENT) {
@@ -1316,7 +1317,6 @@ abstract class Block<
     );
     //
     ITEM_DETAIL? candidateCurrentItemDetail;
-
     if (ITEM == ITEM_DETAIL && candidateCurrentItemInNewQueriedList != null) {
       // No need to refresh Item.
       candidateCurrentItemDetail =
@@ -1476,16 +1476,37 @@ abstract class Block<
     // FormModel:
     //
     if (thisXBlock.xFormModel != null) {
-      // (newCurrent)
+      // Always clear form:
       thisXBlock.xFormModel!.formModel._clearWithDataState(
         formDataState: DataState.pending,
       );
-      FlutterArtist.taskUnitQueue.addTaskUnit(
-        _FormModelLoadFormTaskUnit(
-          xFormModel: thisXBlock.xFormModel!,
-        ),
-      );
+
+      ///
+      /// thisXBlock.__postQueryBehavior: May be null.
+      ///
+      final postQueryBehavior = thisXBlock.__postQueryBehavior;
+      if (postQueryBehavior != null) {
+        switch (postQueryBehavior) {
+          case PostQueryBehavior.selectAvailableItem:
+            // Do nothing (Ready SelectAvailableItem).
+            break;
+          case PostQueryBehavior.createNewItem:
+            // TODO: Remove PostQueryBehavior.createNewItem??
+            // TODO: Add PostQueryBehavior.none??
+            break;
+          case PostQueryBehavior.selectAvailableItemToEdit:
+            thisXBlock.xFormModel!.forceForm = true;
+        }
+      }
+      if (thisXBlock.xFormModel!.forceForm) {
+        FlutterArtist.taskUnitQueue.addTaskUnit(
+          _FormModelLoadFormTaskUnit(
+            xFormModel: thisXBlock.xFormModel!,
+          ),
+        );
+      }
     }
+
     //
     for (_XBlock childXBlock in thisXBlock.childXBlocks) {
       FlutterArtist.taskUnitQueue.addTaskUnit(

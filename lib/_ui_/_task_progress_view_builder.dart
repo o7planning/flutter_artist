@@ -3,6 +3,7 @@ part of '../flutter_artist.dart';
 class TaskProgressViewBuilder extends _RefreshableWidget {
   final EdgeInsets progressOnMargin;
   final EdgeInsets progressOffMargin;
+
   //
   final List<TaskType> taskTypes;
   final List<Block> blocks;

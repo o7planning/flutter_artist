@@ -16,9 +16,7 @@ enum RefreshableWidgetType {
   activityFragment,
   loggedInUser,
   //
-  taskProgressView
-  ;
-
+  taskProgressView;
 }
 
 extension WidgetStateTypeE on RefreshableWidgetType {
@@ -84,7 +82,7 @@ extension WidgetStateTypeE on RefreshableWidgetType {
       case RefreshableWidgetType.scalarControlButton:
         return _scalarControlButtonIconData;
       case RefreshableWidgetType.taskProgressView:
-         return _taskProgressViewIconData;
+        return _taskProgressViewIconData;
     }
   }
 }
