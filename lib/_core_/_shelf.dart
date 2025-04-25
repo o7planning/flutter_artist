@@ -513,7 +513,7 @@ abstract class Shelf extends _XBase {
   Future<void> _startNewLazyQueryTransactionIfNeed() async {
     if (_queryLocked) {
       await Future.doWhile(
-        () => Future.delayed(const Duration(milliseconds: 0))
+        () => Future.delayed(const Duration(milliseconds: 1))
             .then((_) => _queryLocked),
       );
     }
