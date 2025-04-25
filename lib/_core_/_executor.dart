@@ -197,7 +197,13 @@ class _Executor {
     required Object? owner,
     required TaskType? taskType,
   }) {
-    for (_TaskProgressBuilderState state in _taskProgressViewWidgetStates) {
+    for (_TaskProgressBuilderState state in [
+      ..._taskProgressViewWidgetStates
+    ]) {
+      if (!state.mounted) {
+        _taskProgressViewWidgetStates.remove(state);
+        continue;
+      }
       bool onProgress = owner == null || taskType == null
           ? false
           : state.isMatches(
