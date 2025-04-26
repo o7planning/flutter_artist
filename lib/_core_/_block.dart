@@ -957,12 +957,13 @@ abstract class Block<
       newFilterCriteria: filterCriteriaOfFilterModel,
     );
     //
-    final PageableData callingPageable = thisXBlock.pageable ??
-        __pageable ??
-        const PageableData(page: 1, pageSize: null);
+    final PageableData callingPageable = thisXBlock.pageable ?? __pageable;
     //
     ActionResultState queryResultState;
     PageData<ITEM>? pageData;
+    // if(thisXBlock.queryType == ){
+    //
+    // }
     //
     // Call Query API:
     //

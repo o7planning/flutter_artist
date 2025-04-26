@@ -6,4 +6,8 @@ enum QueryType {
 
   /// Query If need.
   queryIfNeed,
+
+  // realQuery,
+  // emptyQuery
+  ;
 }

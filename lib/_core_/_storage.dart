@@ -640,7 +640,7 @@ class _Storage {
       print(">> ~~~~~~~~~~~~~~~~~~~~~~~~> listenerScalars: $listenerScalars");
     }
     if (listenerBlocks.isNotEmpty) {
-      print(">> ~~~~~~~~~~~~~~~~~~~~~~~~> listenerScalars: $listenerBlocks");
+      print(">> ~~~~~~~~~~~~~~~~~~~~~~~~> listenerBlocks: $listenerBlocks");
     }
     for (Scalar listenerScalar in listenerScalars) {
       if (!listenerScalar.hasActiveUIComponent()) {
