@@ -708,7 +708,8 @@ class _Storage {
             .map(
               (b) => _BlockOpt(
                   block: b,
-                  queryType: null,
+                  // queryType: null,  (???)
+                  forceQuery : true,
                   pageable: null,
                   listBehavior: null,
                   suggestedSelection: null,

@@ -821,7 +821,8 @@ abstract class FilterModel<
           .map(
             (b) => _BlockOpt(
                 block: b,
-                queryType: null,
+                // queryType: null,  (???)
+                forceQuery: false,
                 pageable: null,
                 listBehavior: null,
                 suggestedSelection: null,

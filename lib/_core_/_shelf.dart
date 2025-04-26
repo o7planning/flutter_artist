@@ -551,7 +551,7 @@ abstract class Shelf extends _XBase {
       __lastTransactionNumber = __transactionId;
 
       await _queryLazyScalarOrBlockOrForms(
-        queryType: QueryType.forceQuery,
+        // queryType: QueryType.forceQuery,  (???)
         scalarOrBlockOrFormWrappers: lazyBlockOrForms,
       );
       _queryLocked = false;
@@ -562,7 +562,7 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
 
   Future<void> _queryLazyScalarOrBlockOrForms({
-    required QueryType queryType,
+    // required QueryType queryType,  (???)
     required List<_ScalarOrBlockOrFormWrapper> scalarOrBlockOrFormWrappers,
   }) async {
     if (scalarOrBlockOrFormWrappers.isEmpty) {
@@ -586,7 +586,8 @@ abstract class Shelf extends _XBase {
         blockOpts.add(
           _BlockOpt(
             block: wrapper.block!,
-            queryType: null,
+            // queryType: null,  (???)
+            forceQuery:  false,
             pageable: null,
             listBehavior: null,
             suggestedSelection: null,

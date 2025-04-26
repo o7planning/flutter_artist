@@ -18,7 +18,7 @@ class _XBlock {
   bool __forceQuery = false;
   bool __forceReloadItem = false;
 
-  QueryType? __queryType;
+  // QueryType? __queryType;
   ListBehavior? __listBehavior;
   SuggestedSelection? __suggestedSelection;
   PostQueryBehavior? __postQueryBehavior;
@@ -72,20 +72,20 @@ class _XBlock {
     __forceReloadItem = true;
   }
 
-  QueryType get queryType {
-    switch (__queryType) {
-      case null:
-        return forceQuery //
-            ? QueryType.forceQuery
-            : QueryType.queryIfNeed;
-      case QueryType.forceQuery:
-        return QueryType.forceQuery;
-      case QueryType.queryIfNeed:
-        return forceQuery //
-            ? QueryType.forceQuery
-            : QueryType.queryIfNeed;
-    }
-  }
+  // QueryType get queryType {
+  //   switch (__queryType) {
+  //     case null:
+  //       return forceQuery //
+  //           ? QueryType.forceQuery
+  //           : QueryType.queryIfNeed;
+  //     case QueryType.forceQuery:
+  //       return QueryType.forceQuery;
+  //     case QueryType.queryIfNeed:
+  //       return forceQuery //
+  //           ? QueryType.forceQuery
+  //           : QueryType.queryIfNeed;
+  //   }
+  // }
 
   ListBehavior get listBehavior {
     // TODO: Xem lai gia tri mac dinh
@@ -110,13 +110,13 @@ class _XBlock {
   }
 
   void setOptions({
-    required QueryType? queryType,
+    // required QueryType? queryType,  (???)
     required ListBehavior? listBehavior,
     required SuggestedSelection? suggestedSelection,
     required PostQueryBehavior? postQueryBehavior,
     required PageableData? pageable,
   }) {
-    __queryType = queryType;
+    // __queryType = queryType;  (???)
     __listBehavior = listBehavior;
     __suggestedSelection = suggestedSelection;
     __postQueryBehavior = postQueryBehavior;
@@ -126,7 +126,7 @@ class _XBlock {
   void _printParameters({required bool hasActiveUI}) {
     if (true) return;
     print("  ----> hasActiveUI **: $hasActiveUI");
-    print("  ----> queryType: $__queryType  --------> $queryType");
+    // print("  ----> queryType: $__queryType  --------> $queryType");
     print("  ----> forceQuery: $__forceQuery  --------> $forceQuery");
     print(
         "  ----> forceReloadItem: $__forceReloadItem  --------> $forceReloadItem");

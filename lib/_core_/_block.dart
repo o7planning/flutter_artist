@@ -2506,8 +2506,9 @@ abstract class Block<
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [
         _BlockOpt(
-          queryType: null,
+          // queryType: null, (???)
           block: this,
+          forceQuery: false,
           pageable: pageable,
           listBehavior: listBehavior,
           postQueryBehavior: postQueryBehavior,
@@ -2560,8 +2561,9 @@ abstract class Block<
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [
         _BlockOpt(
-          queryType: QueryType.forceQuery,
+          // queryType: QueryType.forceQuery,  (???)
           block: this,
+          forceQuery: true,
           pageable: pageable,
           listBehavior: listBehavior,
           suggestedSelection: suggestedSelection,
@@ -2607,8 +2609,9 @@ abstract class Block<
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [
         _BlockOpt(
-          queryType: QueryType.forceQuery,
+          // queryType: QueryType.forceQuery, // (???)
           block: this,
+          forceQuery: true,
           pageable: null,
           listBehavior: ListBehavior.replace,
           suggestedSelection: null,
@@ -2841,7 +2844,8 @@ abstract class Block<
         forceQueryBlockOpts = [
           _BlockOpt(
             block: this,
-            queryType: QueryType.forceQuery,
+            // queryType: QueryType.forceQuery,  (???)
+            forceQuery: true,
             pageable: null,
             listBehavior: null,
             suggestedSelection: null,

@@ -6,7 +6,8 @@ part of '../flutter_artist.dart';
 class _BlockOpt {
   final Block block;
 
-  final QueryType? queryType;
+  final bool forceQuery;
+  // final QueryType? queryType;
   final ListBehavior? listBehavior;
   final SuggestedSelection? suggestedSelection;
   final PostQueryBehavior? postQueryBehavior;
@@ -14,7 +15,8 @@ class _BlockOpt {
 
   _BlockOpt({
     required this.block,
-    required this.queryType,
+    required this.forceQuery,
+    // required this.queryType,
     required this.pageable,
     required this.listBehavior,
     required this.suggestedSelection,
