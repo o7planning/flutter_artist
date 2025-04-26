@@ -214,9 +214,9 @@ abstract class Block<
 
   int get callApiQueryCount => __callApiQueryCount;
 
-  DataMode __dataMode = DataMode.real;
+  QueryType __lastQueryType = QueryType.realQuery;
 
-  DataMode get dataMode => __dataMode;
+  QueryType get lastQueryType => __lastQueryType;
 
   final BlockOutsideBroadcast? outsideBroadcast;
 
@@ -968,9 +968,9 @@ abstract class Block<
     DataState newQueryDataState = this.queryDataState;
     //
     if (thisXBlock.queryType == QueryType.realQuery) {
-      final DataMode newDataMode = thisXBlock.queryType.toDataMode();
-      final dataModeChanged = __dataMode != newDataMode;
-      __dataMode = newDataMode;
+      final QueryType newQueryType = thisXBlock.queryType;
+      final queryTypeChanged = __lastQueryType != newQueryType;
+      __lastQueryType = newQueryType;
       //
       // Call Query API:
       //
@@ -1110,14 +1110,14 @@ abstract class Block<
           }
         }
       }
-      if (dataModeChanged) {
+      if (queryTypeChanged) {
         // Replace:
         realListBehavior = ListBehavior.replace;
       }
     }
     // Query Empty:
     else {
-      __dataMode = thisXBlock.queryType.toDataMode();
+      __lastQueryType = thisXBlock.queryType;
       realListBehavior = ListBehavior.replace;
       newQueryDataState = DataState.ready;
       pageData = PageData.empty<ITEM>();
