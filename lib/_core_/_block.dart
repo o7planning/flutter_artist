@@ -2515,6 +2515,7 @@ abstract class Block<
         _BlockOpt(
           block: this,
           forceQuery: false,
+          queryType: QueryType.emptyQuery,
           pageable: pageable,
           listBehavior: ListBehavior.replace,
           postQueryBehavior: prepareToCreate

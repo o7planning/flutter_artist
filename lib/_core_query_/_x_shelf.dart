@@ -162,7 +162,7 @@ class _XShelf {
     xBlock.setForceQuery();
     //
     xBlock.setOptions(
-      // queryType: forceQueryBlockOpt.queryType,  (???)
+      queryType: forceQueryBlockOpt.queryType,
       listBehavior: forceQueryBlockOpt.listBehavior,
       suggestedSelection: forceQueryBlockOpt.suggestedSelection,
       postQueryBehavior: forceQueryBlockOpt.postQueryBehavior,

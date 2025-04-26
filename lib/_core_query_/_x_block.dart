@@ -113,13 +113,13 @@ class _XBlock {
   }
 
   void setOptions({
-    // required QueryType? queryType,  (???)
+    required QueryType queryType,
     required ListBehavior? listBehavior,
     required SuggestedSelection? suggestedSelection,
     required PostQueryBehavior? postQueryBehavior,
     required PageableData? pageable,
   }) {
-    // __queryType = queryType;  (???)
+    __queryType = queryType;
     __listBehavior = listBehavior;
     __suggestedSelection = suggestedSelection;
     __postQueryBehavior = postQueryBehavior;
@@ -129,7 +129,7 @@ class _XBlock {
   void _printParameters({required bool hasActiveUI}) {
     if (true) return;
     print("  ----> hasActiveUI **: $hasActiveUI");
-    // print("  ----> queryType: $__queryType  --------> $queryType");
+    print("  ----> queryType: $__queryType  --------> $queryType");
     print("  ----> forceQuery: $__forceQuery  --------> $forceQuery");
     print(
         "  ----> forceReloadItem: $__forceReloadItem  --------> $forceReloadItem");
