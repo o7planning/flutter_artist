@@ -18,8 +18,8 @@ class _XBlock {
   bool __forceQuery = false;
   bool __forceReloadItem = false;
 
-  QueryType __queryType = QueryType.realQuery;
-  QueryType? get queryType => __queryType;
+  DataMode __queryType = DataMode.real;
+  DataMode? get queryType => __queryType;
 
   ListBehavior? __listBehavior;
   SuggestedSelection? __suggestedSelection;

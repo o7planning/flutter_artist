@@ -306,7 +306,7 @@ part '_enum_/_post_query_behavior.dart';
 
 part '_enum_/_query_mode.dart';
 
-part '_enum_/_query_type.dart';
+part '_enum_/_data_mode.dart';
 
 part '_enum_/_refreshable_widget_type.dart';
 

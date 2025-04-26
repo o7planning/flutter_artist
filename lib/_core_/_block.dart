@@ -214,6 +214,10 @@ abstract class Block<
 
   int get callApiQueryCount => __callApiQueryCount;
 
+  DataMode __queryMode = DataMode.real;
+
+  DataMode get queryMode => __queryMode;
+
   final BlockOutsideBroadcast? outsideBroadcast;
 
   final BlockOutsideEventReaction? outsideEventReaction;
@@ -305,12 +309,10 @@ abstract class Block<
     required this.formModel,
     this.outsideBroadcast,
     this.outsideEventReaction,
-    // required List<Type> listenToDataTypes,
     required List<Block>? childBlocks,
     ItemSortCriteria<ITEM>? itemSortCriteria,
   })  : registerFilterModelName = filterModelName,
         __pageable = pageable.copy(),
-        // __listenToDataTypes = listenToDataTypes,
         _itemSortCriteria = itemSortCriteria,
         _childBlocks = childBlocks ?? [] {
     itemSortCriteria?.block = this;
@@ -962,7 +964,7 @@ abstract class Block<
     ActionResultState queryResultState;
     PageData<ITEM>? pageData;
     //
-    if (thisXBlock.queryType == QueryType.realQuery) {
+    if (thisXBlock.queryType == DataMode.real) {
       //
       // Call Query API:
       //
