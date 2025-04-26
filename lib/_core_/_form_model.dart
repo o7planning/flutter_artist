@@ -213,17 +213,13 @@ abstract class FormModel<
       }
     }
     //
-    __loadCount++;
-    //
     EXTRA_FORM_INPUT? extraFormInput =
         thisXFormModel.extraFormInput as EXTRA_FORM_INPUT?;
     //
-    await _startNewFormActivity(
+    return await _startNewFormActivity(
       extraFormInput: extraFormInput,
       activityType: _FormActivityType.itemFirstLoad,
     );
-    //
-    return true;
   }
 
   // ***************************************************************************
@@ -350,6 +346,7 @@ abstract class FormModel<
     print(
         "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFormActivity, activityType: $activityType");
     if (activityType == _FormActivityType.itemFirstLoad) {
+      __loadCount++;
       _autovalidateMode = AutovalidateMode.disabled;
     } else {
       _autovalidateMode = _defaultAutovalidateMode;
