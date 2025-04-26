@@ -961,54 +961,59 @@ abstract class Block<
     //
     ActionResultState queryResultState;
     PageData<ITEM>? pageData;
-    if(thisXBlock.queryType == QueryType.realQuery ){
-
-    }
     //
-    // Call Query API:
-    //
-    try {
-      __refreshQueryingState(isQuerying: true);
+    if (thisXBlock.queryType == QueryType.realQuery) {
       //
-      FlutterArtist.codeFlowLogger._addMethodCall(
-        isLibCode: false,
-        navigate: null,
-        ownerClassInstance: this,
-        methodName: "callApiQuery",
-        parameters: {},
-      );
+      // Call Query API:
       //
-      __callApiQueryCount++;
-      ApiResult<PageData<ITEM>?> result = await callApiQuery(
-        filterCriteria: filterCriteriaOfFilterModel,
-        pageable: callingPageable,
-      );
-      //
-      if (result.isError()) {
-        _handleRestError(
-          shelf: shelf,
+      try {
+        __refreshQueryingState(isQuerying: true);
+        //
+        FlutterArtist.codeFlowLogger._addMethodCall(
+          isLibCode: false,
+          navigate: null,
+          ownerClassInstance: this,
           methodName: "callApiQuery",
-          message: result.errorMessage!,
-          errorDetails: result.errorDetails,
+          parameters: {},
+        );
+        //
+        __callApiQueryCount++;
+        ApiResult<PageData<ITEM>?> result = await callApiQuery(
+          filterCriteria: filterCriteriaOfFilterModel,
+          pageable: callingPageable,
+        );
+        //
+        if (result.isError()) {
+          _handleRestError(
+            shelf: shelf,
+            methodName: "callApiQuery",
+            message: result.errorMessage!,
+            errorDetails: result.errorDetails,
+            showSnackBar: true,
+          );
+          queryResultState = ActionResultState.fail;
+          pageData = null;
+        } else {
+          queryResultState = ActionResultState.success;
+          pageData = result.data;
+        }
+      } catch (e, stackTrace) {
+        _handleError(
+          shelf: shelf,
+          methodName: 'callApiQuery',
+          error: e,
+          stackTrace: stackTrace,
           showSnackBar: true,
         );
         queryResultState = ActionResultState.fail;
-        pageData = null;
-      } else {
-        queryResultState = ActionResultState.success;
-        pageData = result.data;
+      } finally {
+        __refreshQueryingState(isQuerying: false);
       }
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: 'callApiQuery',
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      queryResultState = ActionResultState.fail;
-    } finally {
-      __refreshQueryingState(isQuerying: false);
+    }
+    // Query Empty:
+    else {
+      pageData = PageData.empty<ITEM>();
+      queryResultState = ActionResultState.success;
     }
     //
     final ListBehavior realListBehavior;
