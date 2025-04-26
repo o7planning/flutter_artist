@@ -709,7 +709,7 @@ class _Storage {
               (b) => _BlockOpt(
                   block: b,
                   // queryType: null,  (???)
-                  forceQuery : true,
+                  forceQuery: true,
                   pageable: null,
                   listBehavior: null,
                   suggestedSelection: null,

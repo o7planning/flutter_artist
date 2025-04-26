@@ -7,7 +7,7 @@ class _BlockOpt {
   final Block block;
 
   final bool forceQuery;
-  // final QueryType? queryType;
+  final QueryType queryType;
   final ListBehavior? listBehavior;
   final SuggestedSelection? suggestedSelection;
   final PostQueryBehavior? postQueryBehavior;
@@ -16,7 +16,7 @@ class _BlockOpt {
   _BlockOpt({
     required this.block,
     required this.forceQuery,
-    // required this.queryType,
+    this.queryType = QueryType.realQuery,
     required this.pageable,
     required this.listBehavior,
     required this.suggestedSelection,

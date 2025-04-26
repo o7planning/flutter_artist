@@ -587,7 +587,7 @@ abstract class Shelf extends _XBase {
           _BlockOpt(
             block: wrapper.block!,
             // queryType: null,  (???)
-            forceQuery:  false,
+            forceQuery: false,
             pageable: null,
             listBehavior: null,
             suggestedSelection: null,

@@ -214,9 +214,9 @@ abstract class Block<
 
   int get callApiQueryCount => __callApiQueryCount;
 
-  DataMode __queryMode = DataMode.real;
+  DataMode __dataMode = DataMode.real;
 
-  DataMode get queryMode => __queryMode;
+  DataMode get dataMode => __dataMode;
 
   final BlockOutsideBroadcast? outsideBroadcast;
 
@@ -964,7 +964,13 @@ abstract class Block<
     ActionResultState queryResultState;
     PageData<ITEM>? pageData;
     //
-    if (thisXBlock.queryType == DataMode.real) {
+    ListBehavior realListBehavior;
+    DataState newQueryDataState = this.queryDataState;
+    //
+    if (thisXBlock.queryType == QueryType.realQuery) {
+      final DataMode newDataMode = thisXBlock.queryType.toDataMode();
+      final dataModeChanged = __dataMode != newDataMode;
+      __dataMode = newDataMode;
       //
       // Call Query API:
       //
@@ -979,6 +985,7 @@ abstract class Block<
           parameters: {},
         );
         //
+
         __callApiQueryCount++;
         ApiResult<PageData<ITEM>?> result = await callApiQuery(
           filterCriteria: filterCriteriaOfFilterModel,
@@ -1011,107 +1018,112 @@ abstract class Block<
       } finally {
         __refreshQueryingState(isQuerying: false);
       }
+      //
+      if (queryResultState == ActionResultState.fail) {
+        thisXBlock.queryResult._apiError = true;
+        // Query Error + Parent or Criteria changed.
+        if (parentOrCriteriaChanged) {
+          switch (queryDataState) {
+            case DataState.ready:
+              // Replace by empty items.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.error;
+            case DataState.pending:
+              // Replace by empty items.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.error;
+            case DataState.error:
+              // Replace by empty items.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.error;
+            case DataState.none:
+              // Replace by empty items.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.error;
+          }
+        }
+        // Query Error + Parent not changed + Criteria not changed.
+        else {
+          switch (queryDataState) {
+            case DataState.ready:
+              // Append empty items (No items got from Server).
+              realListBehavior = ListBehavior.append;
+              newQueryDataState = DataState.ready;
+            case DataState.pending:
+              // Replace by empty items.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.error;
+            case DataState.error:
+              // Replace by empty items.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.error;
+            case DataState.none:
+              // Replace by empty items.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.error;
+          }
+        }
+      }
+      // Query Successful:
+      else {
+        thisXBlock.queryResult._apiError = false;
+        // Query Successful + Parent or Criteria changed.
+        if (parentOrCriteriaChanged) {
+          switch (queryDataState) {
+            case DataState.ready:
+              // Replace.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.ready;
+            case DataState.pending:
+              // Replace.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.ready;
+            case DataState.error:
+              // Replace.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.ready;
+            case DataState.none:
+              // Replace.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.ready;
+          }
+        }
+        // Query Successful + Parent not changed + Criteria not changed.
+        else {
+          switch (queryDataState) {
+            case DataState.ready:
+              // Replace or Append:
+              realListBehavior = thisXBlock.listBehavior;
+              newQueryDataState = DataState.ready;
+            case DataState.pending:
+              // Replace.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.ready;
+            case DataState.error:
+              // Replace.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.ready;
+            case DataState.none:
+              // Replace.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.ready;
+          }
+        }
+      }
+      if (dataModeChanged) {
+        // Replace:
+        realListBehavior = ListBehavior.replace;
+      }
     }
     // Query Empty:
     else {
+      __dataMode = thisXBlock.queryType.toDataMode();
+      realListBehavior = ListBehavior.replace;
+      newQueryDataState = DataState.ready;
       pageData = PageData.empty<ITEM>();
       queryResultState = ActionResultState.success;
     }
     //
-    final ListBehavior realListBehavior;
-    DataState newQueryDataState = this.queryDataState;
-    //
-    if (queryResultState == ActionResultState.fail) {
-      thisXBlock.queryResult._apiError = true;
-      // Query Error + Parent or Criteria changed.
-      if (parentOrCriteriaChanged) {
-        switch (queryDataState) {
-          case DataState.ready:
-            // Replace by empty items.
-            realListBehavior = ListBehavior.replace;
-            newQueryDataState = DataState.error;
-          case DataState.pending:
-            // Replace by empty items.
-            realListBehavior = ListBehavior.replace;
-            newQueryDataState = DataState.error;
-          case DataState.error:
-            // Replace by empty items.
-            realListBehavior = ListBehavior.replace;
-            newQueryDataState = DataState.error;
-          case DataState.none:
-            // Replace by empty items.
-            realListBehavior = ListBehavior.replace;
-            newQueryDataState = DataState.error;
-        }
-      }
-      // Query Error + Parent not changed + Criteria not changed.
-      else {
-        switch (queryDataState) {
-          case DataState.ready:
-            // Append empty items (No items got from Server).
-            realListBehavior = ListBehavior.append;
-            newQueryDataState = DataState.ready;
-          case DataState.pending:
-            // Replace by empty items.
-            realListBehavior = ListBehavior.replace;
-            newQueryDataState = DataState.error;
-          case DataState.error:
-            // Replace by empty items.
-            realListBehavior = ListBehavior.replace;
-            newQueryDataState = DataState.error;
-          case DataState.none:
-            // Replace by empty items.
-            realListBehavior = ListBehavior.replace;
-            newQueryDataState = DataState.error;
-        }
-      }
-    }
-    // Query Successful:
-    else {
-      thisXBlock.queryResult._apiError = false;
-      // Query Successful + Parent or Criteria changed.
-      if (parentOrCriteriaChanged) {
-        switch (queryDataState) {
-          case DataState.ready:
-            // Replace.
-            realListBehavior = ListBehavior.replace;
-            newQueryDataState = DataState.ready;
-          case DataState.pending:
-            // Replace.
-            realListBehavior = ListBehavior.replace;
-            newQueryDataState = DataState.ready;
-          case DataState.error:
-            // Replace.
-            realListBehavior = ListBehavior.replace;
-            newQueryDataState = DataState.ready;
-          case DataState.none:
-            // Replace.
-            realListBehavior = ListBehavior.replace;
-            newQueryDataState = DataState.ready;
-        }
-      }
-      // Query Successful + Parent not changed + Criteria not changed.
-      else {
-        switch (queryDataState) {
-          case DataState.ready:
-            // Replace or Append:
-            realListBehavior = thisXBlock.listBehavior;
-            newQueryDataState = DataState.ready;
-          case DataState.pending:
-            // Replace.
-            realListBehavior = ListBehavior.replace;
-            newQueryDataState = DataState.ready;
-          case DataState.error:
-            // Replace.
-            realListBehavior = ListBehavior.replace;
-            newQueryDataState = DataState.ready;
-          case DataState.none:
-            // Replace.
-            realListBehavior = ListBehavior.replace;
-            newQueryDataState = DataState.ready;
-        }
-      }
-    }
     //
     final ITEM? currentItem = this.currentItem;
     //
@@ -2461,17 +2473,65 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<bool> queryEmpty({
+  Future<bool> queryEmptyAndPrepareToCreate({
     FILTER_INPUT? filterInput,
     Function()? navigate,
   }) async {
-    return await query(
+    return await queryEmpty(
       filterInput: filterInput,
-      listBehavior: ListBehavior.replace,
-      postQueryBehavior: PostQueryBehavior.selectAvailableItem,
-      suggestedSelection: null,
+      prepareToCreate: true,
       navigate: navigate,
     );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<bool> queryEmpty({
+    FILTER_INPUT? filterInput,
+    bool prepareToCreate = false,
+    Function()? navigate,
+  }) async {
+    if (filterModel != null && filterModel!._lockAddMoreQuery) {
+      return false;
+    }
+    FlutterArtist.codeFlowLogger._addMethodCall(
+      isLibCode: true,
+      navigate: navigate,
+      ownerClassInstance: this,
+      methodName: "queryEmpty",
+      parameters: {
+        "filterInput": filterInput,
+      },
+    );
+    //
+    _XShelf xShelf = await shelf._queryAll(
+      forceFilterModelOpt: _FilterModelOpt(
+        filterModel: _registeredOrDefaultFilterModel,
+        filterInput: filterInput,
+      ),
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: [
+        _BlockOpt(
+          block: this,
+          forceQuery: false,
+          pageable: pageable,
+          listBehavior: ListBehavior.replace,
+          postQueryBehavior: prepareToCreate
+              ? PostQueryBehavior.createNewItem
+              : PostQueryBehavior.selectAvailableItem,
+          suggestedSelection: null,
+        ),
+      ],
+      forceQueryFormModelOpts: [],
+    );
+    //
+    _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
+    BlockQueryResult queryResult = xBlock.queryResult;
+    if (queryResult.success) {
+      _executeNavigation(navigate: navigate);
+    }
+    return queryResult.success;
   }
 
   ///
@@ -2512,7 +2572,6 @@ abstract class Block<
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [
         _BlockOpt(
-          // queryType: null, (???)
           block: this,
           forceQuery: false,
           pageable: pageable,
@@ -2567,7 +2626,6 @@ abstract class Block<
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [
         _BlockOpt(
-          // queryType: QueryType.forceQuery,  (???)
           block: this,
           forceQuery: true,
           pageable: pageable,
@@ -2615,7 +2673,6 @@ abstract class Block<
       forceQueryScalarOpts: [],
       forceQueryBlockOpts: [
         _BlockOpt(
-          // queryType: QueryType.forceQuery, // (???)
           block: this,
           forceQuery: true,
           pageable: null,
