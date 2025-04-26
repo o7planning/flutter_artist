@@ -961,9 +961,9 @@ abstract class Block<
     //
     ActionResultState queryResultState;
     PageData<ITEM>? pageData;
-    // if(thisXBlock.queryType == ){
-    //
-    // }
+    if(thisXBlock.queryType == QueryType.realQuery ){
+
+    }
     //
     // Call Query API:
     //
