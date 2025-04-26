@@ -1499,13 +1499,12 @@ abstract class Block<
             thisXBlock.xFormModel!.forceForm = true;
         }
       }
-      if (thisXBlock.xFormModel!.forceForm) {
-        FlutterArtist.taskUnitQueue.addTaskUnit(
-          _FormModelLoadFormTaskUnit(
-            xFormModel: thisXBlock.xFormModel!,
-          ),
-        );
-      }
+      // May be cancelled if not need:
+      FlutterArtist.taskUnitQueue.addTaskUnit(
+        _FormModelLoadFormTaskUnit(
+          xFormModel: thisXBlock.xFormModel!,
+        ),
+      );
     }
 
     //
