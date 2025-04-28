@@ -368,7 +368,7 @@ abstract class Block<
   }) {
     __assertThisXBlock(thisXBlock);
     //
-    __blockData._clearWithDataState(queryDataState: queryDataState);
+    __blockData._clearWithDataState(qryDataState: queryDataState);
     if (formModel != null) {
       formModel!._clearWithDataState(formDataState: formDataState);
     }
@@ -379,22 +379,22 @@ abstract class Block<
 
   void __clearWithDataStateCascade({
     required _XBlock thisXBlock,
-    required DataState queryDataState,
-    required DataState formDataState,
+    required DataState qryDataState,
+    required DataState frmDataState,
   }) {
     __assertThisXBlock(thisXBlock);
     //
     __clearWithDataState(
       thisXBlock: thisXBlock,
-      queryDataState: queryDataState,
-      formDataState: formDataState,
+      queryDataState: qryDataState,
+      formDataState: frmDataState,
     );
     //
     for (var childXBlock in thisXBlock.childXBlocks) {
       childXBlock.block.__clearWithDataStateCascade(
         thisXBlock: childXBlock,
-        queryDataState: queryDataState,
-        formDataState: formDataState,
+        qryDataState: qryDataState,
+        frmDataState: frmDataState,
       );
     }
   }
@@ -404,16 +404,16 @@ abstract class Block<
 
   void __clearChildrenWithDataStateCascade({
     required _XBlock thisXBlock,
-    required DataState queryDataState,
-    required DataState formDataState,
+    required DataState qryDataState,
+    required DataState frmDataState,
   }) {
     __assertThisXBlock(thisXBlock);
     //
     for (var childXBlock in thisXBlock.childXBlocks) {
       childXBlock.block.__clearWithDataStateCascade(
         thisXBlock: childXBlock,
-        queryDataState: queryDataState,
-        formDataState: formDataState,
+        qryDataState: qryDataState,
+        frmDataState: frmDataState,
       );
     }
   }
@@ -876,8 +876,8 @@ abstract class Block<
     this.__setCurrentItem(item: null, itemDetail: null);
     this.__clearChildrenWithDataStateCascade(
       thisXBlock: thisXBlock,
-      queryDataState: DataState.none,
-      formDataState: DataState.none,
+      qryDataState: DataState.none,
+      frmDataState: DataState.none,
     );
     if (formModel != null) {
       formModel!._clearWithDataState(formDataState: DataState.none);
@@ -944,8 +944,8 @@ abstract class Block<
       // Set Block to error cascade.
       __clearWithDataStateCascade(
         thisXBlock: thisXBlock,
-        queryDataState: DataState.error,
-        formDataState: DataState.error,
+        qryDataState: DataState.error,
+        frmDataState: DataState.error,
       );
       thisXBlock.queryResult._filterError = true;
       return thisXBlock.queryResult;
@@ -1155,27 +1155,27 @@ abstract class Block<
         if (!currentItemInList) {
           this.__clearChildrenWithDataStateCascade(
             thisXBlock: thisXBlock,
-            queryDataState: DataState.none,
-            formDataState: DataState.none,
+            qryDataState: DataState.none,
+            frmDataState: DataState.none,
           );
         }
       case DataState.none:
         this.__clearChildrenWithDataStateCascade(
           thisXBlock: thisXBlock,
-          queryDataState: DataState.none,
-          formDataState: DataState.none,
+          qryDataState: DataState.none,
+          frmDataState: DataState.none,
         );
       case DataState.pending:
         this.__clearChildrenWithDataStateCascade(
           thisXBlock: thisXBlock,
-          queryDataState: DataState.pending,
-          formDataState: DataState.none,
+          qryDataState: DataState.pending,
+          frmDataState: DataState.none,
         );
       case DataState.error:
         this.__clearChildrenWithDataStateCascade(
           thisXBlock: thisXBlock,
-          queryDataState: DataState.none,
-          formDataState: DataState.none,
+          qryDataState: DataState.none,
+          frmDataState: DataState.none,
         );
     }
     //
@@ -1228,8 +1228,8 @@ abstract class Block<
     if (this.queryDataState == DataState.pending) {
       this.__clearWithDataStateCascade(
         thisXBlock: thisXBlock,
-        queryDataState: queryDataState,
-        formDataState: DataState.none,
+        qryDataState: queryDataState,
+        frmDataState: DataState.none,
       );
       return;
     }
@@ -1237,17 +1237,17 @@ abstract class Block<
     if (this.queryDataState == DataState.error) {
       this.__clearWithDataStateCascade(
         thisXBlock: thisXBlock,
-        queryDataState: DataState.error,
-        formDataState: DataState.error,
+        qryDataState: DataState.error,
+        frmDataState: DataState.error,
       );
       return;
     }
     //
     if (this.itemCount == 0) {
-      this.__clearWithDataStateCascade(
+      this.__clearChildrenWithDataStateCascade(
         thisXBlock: thisXBlock,
-        queryDataState: DataState.ready,
-        formDataState: DataState.none,
+        qryDataState: DataState.none,
+        frmDataState: DataState.none,
       );
       return;
     }
@@ -1318,8 +1318,8 @@ abstract class Block<
     if (candidateCurrentItem == null) {
       this.__clearWithDataStateCascade(
         thisXBlock: thisXBlock,
-        queryDataState: DataState.ready,
-        formDataState: DataState.none,
+        qryDataState: DataState.ready,
+        frmDataState: DataState.none,
       );
       return;
     }
@@ -1432,8 +1432,8 @@ abstract class Block<
       //
       this.__clearWithDataStateCascade(
         thisXBlock: thisXBlock,
-        queryDataState: DataState.ready,
-        formDataState: DataState.none,
+        qryDataState: DataState.ready,
+        frmDataState: DataState.none,
       );
       //
       if (siblingItem != null) {
@@ -1488,8 +1488,8 @@ abstract class Block<
       //
       this.__clearChildrenWithDataStateCascade(
         thisXBlock: thisXBlock,
-        queryDataState: DataState.pending,
-        formDataState: DataState.pending,
+        qryDataState: DataState.pending,
+        frmDataState: DataState.pending,
       );
     }
     //
@@ -1622,6 +1622,7 @@ abstract class Block<
     final ITEM? siblingItem = findSiblingItem(item: item);
     // Remove Item (Current Item)
     await __removeItemFromList(removeItem: item);
+    //
     __blockData._setCurrentItemOnly(
       refreshedItem: null,
       refreshedItemDetail: null,
@@ -1629,15 +1630,15 @@ abstract class Block<
     //
     if (this.formModel != null) {
       // Clear Form:
-      this.formModel!._clearWithDataState(
-            formDataState: DataState.ready,
-          );
+      formModel!._clearWithDataState(
+        formDataState: DataState.none,
+      );
     }
     //
     __clearChildrenWithDataStateCascade(
       thisXBlock: thisXBlock,
-      queryDataState: DataState.ready,
-      formDataState: DataState.ready,
+      qryDataState: DataState.none,
+      frmDataState: DataState.none,
     );
     //
     _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
@@ -1671,8 +1672,8 @@ abstract class Block<
     //
     this.__clearChildrenWithDataStateCascade(
       thisXBlock: thisXBlock,
-      queryDataState: DataState.none,
-      formDataState: DataState.none,
+      qryDataState: DataState.none,
+      frmDataState: DataState.none,
     );
     //
     formModel!._formPropsStructure._setFormMode_TODO_DELETE(
@@ -2148,8 +2149,8 @@ abstract class Block<
       //
       __clearChildrenWithDataStateCascade(
         thisXBlock: thisXBlock,
-        queryDataState: DataState.ready,
-        formDataState: DataState.ready,
+        qryDataState: DataState.ready,
+        frmDataState: DataState.ready,
       );
       //
       _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
@@ -2359,8 +2360,8 @@ abstract class Block<
     //
     this.__clearWithDataStateCascade(
       thisXBlock: thisXBlock,
-      queryDataState: DataState.pending,
-      formDataState: DataState.pending,
+      qryDataState: DataState.pending,
+      frmDataState: DataState.pending,
     );
     //
     _executeNavigation(navigate: navigate);

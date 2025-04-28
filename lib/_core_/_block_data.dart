@@ -177,9 +177,9 @@ class _BlockData<
   // ***************************************************************************
 
   void _clearWithDataState({
-    required DataState queryDataState,
+    required DataState qryDataState,
   }) {
-    _queryDataState = queryDataState;
+    _queryDataState = qryDataState;
     if (_queryDataState == DataState.error) {
       _lastQueryResultState = ActionResultState.fail;
       //
@@ -187,10 +187,15 @@ class _BlockData<
       //
       __setNewFilterCriteria(null);
     }
+    //
     _items.clear();
     _selectedItems.clear();
     _checkedItems.clear();
-    _setCurrentItemOnly(refreshedItem: null, refreshedItemDetail: null);
+    //
+    _setCurrentItemOnly(
+      refreshedItem: null,
+      refreshedItemDetail: null,
+    );
     // TODO: set _lastQueryResult null khi FilterCriteria thay doi?
     // _lastQueryResult = null;
     // _filterCriteria = filterCriteria;

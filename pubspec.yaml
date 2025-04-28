@@ -1,7 +1,8 @@
 name: flutter_artist
 description: "Flutter Artist"
 version: 0.0.1
-homepage:
+homepage: https://flutterartist.dev
+
 
 environment:
   sdk: ^3.6.1
