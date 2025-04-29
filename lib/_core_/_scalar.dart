@@ -477,8 +477,8 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
         filterInput: filterInput,
       ),
       forceQueryScalarOpts: forceQueryScalarOpts,
-      forceQueryBlockOpts: [],
-      forceQueryFormModelOpts: [],
+      forceQueryTopLazyBlockOpts: [],
+      forceQueryTopLazyFormModelOpts: [],
     );
     //
     _XScalar thisXScalar = xShelf.findXScalarByName(this.name)!;
@@ -522,8 +522,8 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
       forceQueryScalarOpts: [
         _ScalarOpt(scalar: this),
       ],
-      forceQueryBlockOpts: [],
-      forceQueryFormModelOpts: [],
+      forceQueryTopLazyBlockOpts: [],
+      forceQueryTopLazyFormModelOpts: [],
     );
     //
     _XScalar xScalar = xShelf.findXScalarByName(this.name)!;

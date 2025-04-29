@@ -1287,8 +1287,8 @@ abstract class FormModel<
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [],
-      forceQueryFormModelOpts: [],
+      forceQueryTopLazyBlockOpts: [],
+      forceQueryTopLazyFormModelOpts: [],
     );
     //
     _XBlock xBlock = xShelf.findXBlockByName(block.name)!;
@@ -1366,8 +1366,8 @@ abstract class FormModel<
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [],
-      forceQueryFormModelOpts: [],
+      forceQueryTopLazyBlockOpts: [],
+      forceQueryTopLazyFormModelOpts: [],
     );
     //
     _XBlock xBlock = xShelf.findXBlockByName(this.block.name)!;
@@ -1404,8 +1404,8 @@ abstract class FormModel<
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [],
-      forceQueryFormModelOpts: [],
+      forceQueryTopLazyBlockOpts: [],
+      forceQueryTopLazyFormModelOpts: [],
     );
     //
     _XBlock xBlock = xShelf.findXBlockByName(this.block.name)!;

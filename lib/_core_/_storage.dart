@@ -704,7 +704,7 @@ class _Storage {
               (s) => _ScalarOpt(scalar: s),
             )
             .toList(),
-        forceQueryBlockOpts: sbList.queryBlocks
+        forceQueryTopLazyBlockOpts: sbList.queryBlocks
             .map(
               (b) => _BlockOpt(
                   block: b,
@@ -716,7 +716,7 @@ class _Storage {
                   postQueryBehavior: null),
             )
             .toList(),
-        forceQueryFormModelOpts: [],
+        forceQueryTopLazyFormModelOpts: [],
       );
     }
   }

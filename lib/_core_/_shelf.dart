@@ -537,24 +537,24 @@ abstract class Shelf extends _XBase {
   Future<void> __queryLazyList() async {
     __lazyLoadLocked = true;
     //
-    final List<_ScalarOrBlockOrFormWrapper> lazyBlockOrForms =
+    final List<_ScalarOrBlockOrFormWrapper> topLazyBlockOrForms =
         __findTopLazyScalarOrBlockOrForms();
 
-    print(">>>> lazyBlockOrForms: $lazyBlockOrForms");
+    print(">>>> topLazyBlockOrForms: $topLazyBlockOrForms");
     //
-    if (lazyBlockOrForms.isEmpty) {
+    if (topLazyBlockOrForms.isEmpty) {
       __lastLazyLoadId = __lazyLoadId;
       __lazyLoadLocked = false;
       return;
     } else {
       print("@@@@@@@@@@@@ Lazy Load - ID: $__lazyLoadId");
-      print("@@@@@@@@@@@@ Lazy Load - Count: ${lazyBlockOrForms.length}");
+      print("@@@@@@@@@@@@ Lazy Load - Count: ${topLazyBlockOrForms.length}");
       //
       __lastLazyLoadId = __lazyLoadId;
 
-      await _queryLazyScalarOrBlockOrForms(
+      await __queryLazyScalarOrBlockOrForms(
         // required QueryType queryType,  (???)
-        scalarOrBlockOrFormWrappers: lazyBlockOrForms,
+        topScalarOrBlockOrFormWrappers: topLazyBlockOrForms,
       );
       __lazyLoadLocked = false;
     }
@@ -563,19 +563,19 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> _queryLazyScalarOrBlockOrForms({
+  Future<void> __queryLazyScalarOrBlockOrForms({
     // required QueryType queryType,  (???)
-    required List<_ScalarOrBlockOrFormWrapper> scalarOrBlockOrFormWrappers,
+    required List<_ScalarOrBlockOrFormWrapper> topScalarOrBlockOrFormWrappers,
   }) async {
-    if (scalarOrBlockOrFormWrappers.isEmpty) {
+    if (topScalarOrBlockOrFormWrappers.isEmpty) {
       return;
     }
     //
     final List<_ScalarOpt> scalarOpts = [];
-    final List<_BlockOpt> blockOpts = [];
-    final List<_FormModelOpt> formModelOpts = [];
+    final List<_BlockOpt> topLazyBlockOpts = [];
+    final List<_FormModelOpt> topLazyFormModelOpts = [];
     //
-    for (_ScalarOrBlockOrFormWrapper wrapper in scalarOrBlockOrFormWrappers) {
+    for (_ScalarOrBlockOrFormWrapper wrapper in topScalarOrBlockOrFormWrappers) {
       if (wrapper.scalar != null) {
         wrapper.scalar!._lazyLoadCount++;
         //
@@ -585,7 +585,7 @@ abstract class Shelf extends _XBase {
       } else if (wrapper.block != null) {
         wrapper.block!._lazyLoadCount++;
         //
-        blockOpts.add(
+        topLazyBlockOpts.add(
           _BlockOpt(
             block: wrapper.block!,
             // queryType: null,  (???)
@@ -599,21 +599,21 @@ abstract class Shelf extends _XBase {
       } else if (wrapper.formModel != null) {
         wrapper.formModel!._lazyLoadCount++;
         //
-        formModelOpts.add(
+        topLazyFormModelOpts.add(
           _FormModelOpt(formModel: wrapper.formModel!),
         );
       }
     }
     //
     print("@@@@@@@@@@@@ Query Lazy List: scalarOpts: $scalarOpts");
-    print("@@@@@@@@@@@@ Query Lazy List: blockOpts: $blockOpts");
-    print("@@@@@@@@@@@@ Query Lazy List: formModelOpts: $formModelOpts");
+    print("@@@@@@@@@@@@ Query Lazy List: topLazyBlockOpts: $topLazyBlockOpts");
+    print("@@@@@@@@@@@@ Query Lazy List: topLazyFormModelOpts: $topLazyFormModelOpts");
     //
     _XShelf xShelf = await _queryAll(
       forceFilterModelOpt: null,
       forceQueryScalarOpts: scalarOpts,
-      forceQueryBlockOpts: blockOpts,
-      forceQueryFormModelOpts: formModelOpts,
+      forceQueryTopLazyBlockOpts: topLazyBlockOpts,
+      forceQueryTopLazyFormModelOpts: topLazyFormModelOpts,
     );
   }
 
@@ -741,15 +741,15 @@ abstract class Shelf extends _XBase {
   Future<_XShelf> _queryAll({
     required _FilterModelOpt? forceFilterModelOpt,
     required List<_ScalarOpt> forceQueryScalarOpts,
-    required List<_BlockOpt> forceQueryBlockOpts,
-    required List<_FormModelOpt> forceQueryFormModelOpts,
+    required List<_BlockOpt> forceQueryTopLazyBlockOpts,
+    required List<_FormModelOpt> forceQueryTopLazyFormModelOpts,
   }) async {
     _XShelf xShelf = _XShelf(
       shelf: this,
       forceFilterModelOpt: forceFilterModelOpt,
       forceQueryScalarOpts: forceQueryScalarOpts,
-      forceQueryBlockOpts: forceQueryBlockOpts,
-      forceQueryFormModelOpts: forceQueryFormModelOpts,
+      forceQueryTopLazyBlockOpts: forceQueryTopLazyBlockOpts,
+      forceQueryTopLazyFormModelOpts: forceQueryTopLazyFormModelOpts,
     );
     //
     await _executeQueryXShelf(xShelf: xShelf);
