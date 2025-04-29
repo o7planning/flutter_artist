@@ -537,45 +537,30 @@ abstract class Shelf extends _XBase {
   Future<void> __queryLazyList() async {
     __lazyLoadLocked = true;
     //
-    final List<_ScalarOrBlockOrFormWrapper> topLazyBlockOrForms =
+    final List<_ScalarOrBlockOrFormWrapper> topScalarOrBlockOrFormWrappers =
         __findTopLazyScalarOrBlockOrForms();
 
-    print(">>>> topLazyBlockOrForms: $topLazyBlockOrForms");
+    print(
+        ">>>> topScalarOrBlockOrFormWrappers: $topScalarOrBlockOrFormWrappers");
     //
-    if (topLazyBlockOrForms.isEmpty) {
-      __lastLazyLoadId = __lazyLoadId;
-      __lazyLoadLocked = false;
-      return;
-    } else {
-      print("@@@@@@@@@@@@ Lazy Load - ID: $__lazyLoadId");
-      print("@@@@@@@@@@@@ Lazy Load - Count: ${topLazyBlockOrForms.length}");
-      //
-      __lastLazyLoadId = __lazyLoadId;
-
-      await __queryLazyScalarOrBlockOrForms(
-        // required QueryType queryType,  (???)
-        topScalarOrBlockOrFormWrappers: topLazyBlockOrForms,
-      );
-      __lazyLoadLocked = false;
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Future<void> __queryLazyScalarOrBlockOrForms({
-    // required QueryType queryType,  (???)
-    required List<_ScalarOrBlockOrFormWrapper> topScalarOrBlockOrFormWrappers,
-  }) async {
     if (topScalarOrBlockOrFormWrappers.isEmpty) {
+      __lastLazyLoadId = __lazyLoadId;
+      __lazyLoadLocked = false;
       return;
     }
+    print("@@@@@@@@@@@@ Lazy Load - ID: $__lazyLoadId");
+    print(
+        "@@@@@@@@@@@@ Lazy Load - Count: ${topScalarOrBlockOrFormWrappers.length}");
     //
+    __lastLazyLoadId = __lazyLoadId;
+    //
+
     final List<_ScalarOpt> scalarOpts = [];
     final List<_BlockOpt> topLazyBlockOpts = [];
     final List<_FormModelOpt> topLazyFormModelOpts = [];
     //
-    for (_ScalarOrBlockOrFormWrapper wrapper in topScalarOrBlockOrFormWrappers) {
+    for (_ScalarOrBlockOrFormWrapper wrapper
+        in topScalarOrBlockOrFormWrappers) {
       if (wrapper.scalar != null) {
         wrapper.scalar!._lazyLoadCount++;
         //
@@ -607,14 +592,22 @@ abstract class Shelf extends _XBase {
     //
     print("@@@@@@@@@@@@ Query Lazy List: scalarOpts: $scalarOpts");
     print("@@@@@@@@@@@@ Query Lazy List: topLazyBlockOpts: $topLazyBlockOpts");
-    print("@@@@@@@@@@@@ Query Lazy List: topLazyFormModelOpts: $topLazyFormModelOpts");
+    print(
+        "@@@@@@@@@@@@ Query Lazy List: topLazyFormModelOpts: $topLazyFormModelOpts");
     //
-    _XShelf xShelf = await _queryAll(
-      forceFilterModelOpt: null,
-      forceQueryScalarOpts: scalarOpts,
-      forceQueryTopLazyBlockOpts: topLazyBlockOpts,
-      forceQueryTopLazyFormModelOpts: topLazyFormModelOpts,
-    );
+    try {
+      //
+      // TODO: Handle Error:
+      //
+      await _queryAll(
+        forceFilterModelOpt: null,
+        forceQueryScalarOpts: scalarOpts,
+        forceQueryBlockOpts: topLazyBlockOpts,
+        forceQueryFormModelOpts: topLazyFormModelOpts,
+      );
+    } finally {
+      __lazyLoadLocked = false;
+    }
   }
 
   // ***************************************************************************
@@ -741,15 +734,15 @@ abstract class Shelf extends _XBase {
   Future<_XShelf> _queryAll({
     required _FilterModelOpt? forceFilterModelOpt,
     required List<_ScalarOpt> forceQueryScalarOpts,
-    required List<_BlockOpt> forceQueryTopLazyBlockOpts,
-    required List<_FormModelOpt> forceQueryTopLazyFormModelOpts,
+    required List<_BlockOpt> forceQueryBlockOpts,
+    required List<_FormModelOpt> forceQueryFormModelOpts,
   }) async {
     _XShelf xShelf = _XShelf(
       shelf: this,
       forceFilterModelOpt: forceFilterModelOpt,
       forceQueryScalarOpts: forceQueryScalarOpts,
-      forceQueryTopLazyBlockOpts: forceQueryTopLazyBlockOpts,
-      forceQueryTopLazyFormModelOpts: forceQueryTopLazyFormModelOpts,
+      forceQueryBlockOpts: forceQueryBlockOpts,
+      forceQueryFormModelOpts: forceQueryFormModelOpts,
     );
     //
     await _executeQueryXShelf(xShelf: xShelf);

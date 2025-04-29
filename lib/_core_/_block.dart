@@ -585,7 +585,8 @@ abstract class Block<
     }
     //
     if (!activeOLD && activeCURRENT) {
-      print("@@@@@@@@@@@@ Active Block **: ${getClassName(this)} - (ControlBar)");
+      print(
+          "@@@@@@@@@@@@ Active Block **: ${getClassName(this)} - (ControlBar)");
       // Fire event:
       shelf._startLoadDataForLazyUIComponentsIfNeed();
     } else if (activeOLD && !activeCURRENT) {
@@ -2236,8 +2237,8 @@ abstract class Block<
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
-      forceQueryTopLazyBlockOpts: [],
-      forceQueryTopLazyFormModelOpts: [],
+      forceQueryBlockOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
@@ -2278,8 +2279,8 @@ abstract class Block<
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
-      forceQueryTopLazyBlockOpts: [],
-      forceQueryTopLazyFormModelOpts: [],
+      forceQueryBlockOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
@@ -2355,8 +2356,8 @@ abstract class Block<
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
-      forceQueryTopLazyBlockOpts: [],
-      forceQueryTopLazyFormModelOpts: [],
+      forceQueryBlockOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
@@ -2515,7 +2516,7 @@ abstract class Block<
         filterInput: filterInput,
       ),
       forceQueryScalarOpts: [],
-      forceQueryTopLazyBlockOpts: [
+      forceQueryBlockOpts: [
         _BlockOpt(
           block: this,
           forceQuery: false,
@@ -2528,7 +2529,7 @@ abstract class Block<
           suggestedSelection: null,
         ),
       ],
-      forceQueryTopLazyFormModelOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
     _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
@@ -2575,7 +2576,7 @@ abstract class Block<
         filterInput: filterInput,
       ),
       forceQueryScalarOpts: [],
-      forceQueryTopLazyBlockOpts: [
+      forceQueryBlockOpts: [
         _BlockOpt(
           block: this,
           forceQuery: false,
@@ -2585,7 +2586,7 @@ abstract class Block<
           suggestedSelection: suggestedSelection,
         ),
       ],
-      forceQueryTopLazyFormModelOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
     _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
@@ -2629,7 +2630,7 @@ abstract class Block<
         filterInput: filterInput,
       ),
       forceQueryScalarOpts: [],
-      forceQueryTopLazyBlockOpts: [
+      forceQueryBlockOpts: [
         _BlockOpt(
           block: this,
           forceQuery: true,
@@ -2639,7 +2640,7 @@ abstract class Block<
           postQueryBehavior: PostQueryBehavior.selectAvailableItemToEdit,
         ),
       ],
-      forceQueryTopLazyFormModelOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
     _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
@@ -2676,7 +2677,7 @@ abstract class Block<
         filterInput: filterInput,
       ),
       forceQueryScalarOpts: [],
-      forceQueryTopLazyBlockOpts: [
+      forceQueryBlockOpts: [
         _BlockOpt(
           block: this,
           forceQuery: true,
@@ -2686,7 +2687,7 @@ abstract class Block<
           postQueryBehavior: PostQueryBehavior.createNewItem,
         ),
       ],
-      forceQueryTopLazyFormModelOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
     _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
@@ -2929,8 +2930,8 @@ abstract class Block<
         filterInput: filterInput,
       ),
       forceQueryScalarOpts: [],
-      forceQueryTopLazyBlockOpts: forceQueryBlockOpts,
-      forceQueryTopLazyFormModelOpts: [],
+      forceQueryBlockOpts: forceQueryBlockOpts,
+      forceQueryFormModelOpts: [],
     );
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
@@ -2983,8 +2984,8 @@ abstract class Block<
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
-      forceQueryTopLazyBlockOpts: [],
-      forceQueryTopLazyFormModelOpts: [],
+      forceQueryBlockOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
@@ -3036,8 +3037,8 @@ abstract class Block<
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
-      forceQueryTopLazyBlockOpts: [],
-      forceQueryTopLazyFormModelOpts: [],
+      forceQueryBlockOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
@@ -3089,8 +3090,8 @@ abstract class Block<
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
-      forceQueryTopLazyBlockOpts: [],
-      forceQueryTopLazyFormModelOpts: [],
+      forceQueryBlockOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
@@ -3142,8 +3143,8 @@ abstract class Block<
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
-      forceQueryTopLazyBlockOpts: [],
-      forceQueryTopLazyFormModelOpts: [],
+      forceQueryBlockOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
@@ -3346,8 +3347,8 @@ abstract class Block<
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
-      forceQueryTopLazyBlockOpts: [],
-      forceQueryTopLazyFormModelOpts: [],
+      forceQueryBlockOpts: [],
+      forceQueryFormModelOpts: [],
     );
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
@@ -3431,8 +3432,8 @@ abstract class Block<
         shelf: shelf,
         forceFilterModelOpt: null,
         forceQueryScalarOpts: [],
-        forceQueryTopLazyBlockOpts: [],
-        forceQueryTopLazyFormModelOpts: []);
+        forceQueryBlockOpts: [],
+        forceQueryFormModelOpts: []);
     _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
     List<ITEM> deleteItems = __blockData.moveCurrentItemToEndOfList(
       itemList: items,
@@ -3613,8 +3614,8 @@ abstract class Block<
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
-      forceQueryTopLazyBlockOpts: [],
-      forceQueryTopLazyFormModelOpts: [],
+      forceQueryBlockOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(name)!;

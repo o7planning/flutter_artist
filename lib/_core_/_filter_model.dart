@@ -716,8 +716,8 @@ abstract class FilterModel<
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
-      forceQueryTopLazyBlockOpts: [],
-      forceQueryTopLazyFormModelOpts: [],
+      forceQueryBlockOpts: [],
+      forceQueryFormModelOpts: [],
     );
     //
     _XFilterModel xFilterModel = xShelf.findXFilterModelByName(name)!;
@@ -817,7 +817,7 @@ abstract class FilterModel<
             (s) => _ScalarOpt(scalar: s),
           )
           .toList(),
-      forceQueryTopLazyBlockOpts: _blocks
+      forceQueryBlockOpts: _blocks
           .map(
             (b) => _BlockOpt(
                 block: b,
@@ -829,7 +829,7 @@ abstract class FilterModel<
                 postQueryBehavior: null),
           )
           .toList(),
-      forceQueryTopLazyFormModelOpts: [],
+      forceQueryFormModelOpts: [],
     );
     // TODO: Xem lai.
     return true;

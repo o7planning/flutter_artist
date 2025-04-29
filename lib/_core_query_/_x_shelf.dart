@@ -39,8 +39,8 @@ class _XShelf {
     required this.shelf,
     required _FilterModelOpt? forceFilterModelOpt,
     required List<_ScalarOpt> forceQueryScalarOpts,
-    required List<_BlockOpt> forceQueryTopLazyBlockOpts,
-    required List<_FormModelOpt> forceQueryTopLazyFormModelOpts,
+    required List<_BlockOpt> forceQueryBlockOpts,
+    required List<_FormModelOpt> forceQueryFormModelOpts,
   }) {
     xShelfId = __xShelfIdSequence++;
     //
@@ -50,10 +50,10 @@ class _XShelf {
     for (_ScalarOpt scalarOpt in forceQueryScalarOpts) {
       assert(scalarOpt.scalar.shelf == shelf);
     }
-    for (_BlockOpt blockOpt in forceQueryTopLazyBlockOpts) {
+    for (_BlockOpt blockOpt in forceQueryBlockOpts) {
       assert(blockOpt.block.shelf == shelf);
     }
-    for (_FormModelOpt formModelOpt in forceQueryTopLazyFormModelOpts) {
+    for (_FormModelOpt formModelOpt in forceQueryFormModelOpts) {
       assert(formModelOpt.formModel.shelf == shelf);
     }
     //
@@ -78,9 +78,9 @@ class _XShelf {
     //
     __setForceFilterModelOpt(forceFilterModelOpt);
     __setForceQueryScalarOpts(forceQueryScalarOpts);
-    print("@@@>>>>>>>>>>>>>> forceQueryTopLazyBlockOpts: $forceQueryTopLazyBlockOpts");
-    __setForceQueryBlockOpts(forceQueryTopLazyBlockOpts);
-    __setForceQueryFormModelOpts(forceQueryTopLazyFormModelOpts);
+    print("@@@>>>>>>>>>>>>>> forceQueryTopLazyBlockOpts: $forceQueryBlockOpts");
+   __setForceQueryBlockOpts(forceQueryBlockOpts);
+   __setForceQueryFormModelOpts(forceQueryFormModelOpts);
   }
 
   _XFilterModel? findXFilterModelByName(String name) {
