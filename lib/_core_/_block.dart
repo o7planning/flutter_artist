@@ -585,8 +585,9 @@ abstract class Block<
     }
     //
     if (!activeOLD && activeCURRENT) {
+      print("@@@@@@@@@@@@ Active Block **: ${getClassName(this)} - (ControlBar)");
       // Fire event:
-      shelf._startNewLazyQueryTransactionIfNeed();
+      shelf._startLoadDataForLazyUIComponentsIfNeed();
     } else if (activeOLD && !activeCURRENT) {
       _fireBlockHidden();
     }
@@ -621,8 +622,9 @@ abstract class Block<
     }
     //
     if (!activeOLD && activeCURRENT) {
+      print("@@@@@@@@@@@@ Active Block **: ${getClassName(this)} - (Control)");
       // Fire event:
-      shelf._startNewLazyQueryTransactionIfNeed();
+      shelf._startLoadDataForLazyUIComponentsIfNeed();
     } else if (activeOLD && !activeCURRENT) {
       _fireBlockHidden();
     }
@@ -657,9 +659,9 @@ abstract class Block<
     }
     //
     if (!activeOLD && activeCURRENT) {
-      print("@@@@@@@@@@@@ Active Block: ${getClassName(this)}");
+      print("@@@@@@@@@@@@ Active Block **: ${getClassName(this)} - (Fragment)");
       // Fire event:
-      shelf._startNewLazyQueryTransactionIfNeed();
+      shelf._startLoadDataForLazyUIComponentsIfNeed();
     } else if (activeOLD && !activeCURRENT) {
       _fireBlockHidden();
     }

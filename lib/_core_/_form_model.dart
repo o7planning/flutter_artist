@@ -1159,7 +1159,7 @@ abstract class FormModel<
       ifAbsent: () => _XState()..isShowing = isShowing,
     );
     if (!isShowingOLD && isShowing) {
-      block.shelf._startNewLazyQueryTransactionIfNeed();
+      block.shelf._startLoadDataForLazyUIComponentsIfNeed();
     }
     if (isShowing) {
       FlutterArtist.storage._addRecentShelf(block.shelf);

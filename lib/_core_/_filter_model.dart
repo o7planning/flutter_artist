@@ -892,7 +892,7 @@ abstract class FilterModel<
     //
     if (!activeOLD && activeCURRENT) {
       // Fire event:
-      shelf._startNewLazyQueryTransactionIfNeed();
+      shelf._startLoadDataForLazyUIComponentsIfNeed();
     } else if (activeOLD && !activeCURRENT) {
       // TODO: (Kiem tra phuong thuc cung ten trong Block).
       // block._fireBlockHidden();

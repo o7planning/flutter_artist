@@ -510,7 +510,7 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> _startNewLazyQueryTransactionIfNeed() async {
+  Future<void> _startLoadDataForLazyUIComponentsIfNeed() async {
     if (_queryLocked) {
       await Future.doWhile(
         () => Future.delayed(const Duration(milliseconds: 1))
@@ -734,6 +734,8 @@ abstract class Shelf extends _XBase {
   Future<void> _executeQueryXShelf({
     required _XShelf xShelf,
   }) async {
+    xShelf.printMe();
+    //
     for (_XScalar xScalar in xShelf.allXScalars) {
       if (!xScalar.needQuery) {
         continue;

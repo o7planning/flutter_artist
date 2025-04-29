@@ -66,7 +66,7 @@ abstract class Activity extends _XBase {
     //
     if (!activeOLD && activeCURRENT) {
       // Fire event:
-      shelf._startNewLazyQueryTransactionIfNeed();
+      shelf._startLoadDataForLazyUIComponentsIfNeed();
     } else if (activeOLD && !activeCURRENT) {
       _fireActivityHidden();
     }

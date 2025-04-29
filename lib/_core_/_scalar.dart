@@ -604,7 +604,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     //
     if (!activeOLD && activeCURRENT) {
       // Fire event:
-      shelf._startNewLazyQueryTransactionIfNeed();
+      shelf._startLoadDataForLazyUIComponentsIfNeed();
     } else if (activeOLD && !activeCURRENT) {
       _fireScalarHidden();
     }
@@ -640,7 +640,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     //
     if (!activeOLD && activeCURRENT) {
       // Fire event:
-      shelf._startNewLazyQueryTransactionIfNeed();
+      shelf._startLoadDataForLazyUIComponentsIfNeed();
     } else if (activeOLD && !activeCURRENT) {
       _fireScalarHidden();
     }
