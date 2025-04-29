@@ -988,6 +988,7 @@ abstract class Block<
 
         __callApiQueryCount++;
         ApiResult<PageData<ITEM>?> result = await callApiQuery(
+          parentCurrentItem: parent?.currentItem,
           filterCriteria: filterCriteriaOfFilterModel,
           pageable: callingPageable,
         );
@@ -3657,6 +3658,7 @@ abstract class Block<
   // ***************************************************************************
 
   Future<ApiResult<PageData<ITEM>?>> callApiQuery({
+    required Object? parentCurrentItem,
     required FILTER_CRITERIA filterCriteria,
     required PageableData pageable,
   });

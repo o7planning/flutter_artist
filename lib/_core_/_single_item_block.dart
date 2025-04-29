@@ -43,10 +43,12 @@ abstract class SingleItemBlock<
   @override
   @nonVirtual
   Future<ApiResult<PageData<ITEM_DETAIL>?>> callApiQuery({
+    required Object? parentCurrentItem,
     required FILTER_CRITERIA filterCriteria,
     required PageableData? pageable,
   }) async {
     ApiResult<ITEM_DETAIL>? result = await callApiQuerySingleItem(
+      parentCurrentItem: parentCurrentItem,
       filterCriteria: filterCriteria,
     );
     return result.toPageDataResult();
@@ -67,6 +69,7 @@ abstract class SingleItemBlock<
   /// ```
   ///
   Future<ApiResult<ITEM_DETAIL>> callApiQuerySingleItem({
+    required Object? parentCurrentItem,
     required FILTER_CRITERIA filterCriteria,
   });
 }
