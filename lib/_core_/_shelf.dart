@@ -539,6 +539,8 @@ abstract class Shelf extends _XBase {
     //
     final List<_ScalarOrBlockOrFormWrapper> lazyBlockOrForms =
         __findTopLazyScalarOrBlockOrForms();
+
+    print(">>>> lazyBlockOrForms: $lazyBlockOrForms");
     //
     if (lazyBlockOrForms.isEmpty) {
       __lastLazyLoadId = __lazyLoadId;
@@ -634,16 +636,38 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
 
   void __findTopLazyBlocksCascade(
-      List<Block> blocks, List<_ScalarOrBlockOrFormWrapper> founds) {
+    List<Block> blocks,
+    List<_ScalarOrBlockOrFormWrapper> founds,
+  ) {
     for (Block block in blocks) {
-      if (block.hasActiveBlockFragmentWidget(alsoCheckChildren: true) &&
-          block.queryDataState == DataState.pending) {
-        founds.add(_ScalarOrBlockOrFormWrapper.block(block));
+      // if (block.hasActiveBlockFragmentWidget(alsoCheckChildren: true) &&
+      //     block.queryDataState == DataState.pending) {
+      //   founds.add(_ScalarOrBlockOrFormWrapper.block(block));
+      // } else if (block.formModel != null &&
+      //     block.formModel!.hasActiveUIComponent() &&
+      //     block.formModel!.formDataState == DataState.pending) {
+      //   founds.add(_ScalarOrBlockOrFormWrapper.formModel(block.formModel!));
+      // } else {
+      //   __findTopLazyBlocksCascade(block._childBlocks, founds);
+      // }
+      //
+      bool found = false;
+      //
+      // TODO: Mới kt các fragment, còn các cái khác thì sao? ItemsView?
+      //
+      if (block.hasActiveBlockFragmentWidget(alsoCheckChildren: true)) {
+        if (block.queryDataState == DataState.pending) {
+          founds.add(_ScalarOrBlockOrFormWrapper.block(block));
+          found = true;
+        }
       } else if (block.formModel != null &&
-          block.formModel!.hasActiveUIComponent() &&
-          block.formModel!.formDataState == DataState.pending) {
-        founds.add(_ScalarOrBlockOrFormWrapper.formModel(block.formModel!));
-      } else {
+          block.formModel!.hasActiveUIComponent()) {
+        if (block.formModel!.formDataState == DataState.pending) {
+          founds.add(_ScalarOrBlockOrFormWrapper.formModel(block.formModel!));
+          found = true;
+        }
+      }
+      if (!found) {
         __findTopLazyBlocksCascade(block._childBlocks, founds);
       }
     }
