@@ -3529,6 +3529,10 @@ abstract class Block<
     //
     Actionable actionable = canDeleteItem(item: item);
     if (!actionable.yes) {
+      shelf.showErrorSnackBar(
+        message: actionable.message!,
+        errorDetails: null,
+      );
       return false;
     }
     ItemDeletionResult? result = await deleteItem(
