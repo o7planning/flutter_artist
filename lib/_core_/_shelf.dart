@@ -536,21 +536,22 @@ abstract class Shelf extends _XBase {
 
   Future<void> __queryLazyList() async {
     __lazyLoadLocked = true;
-    //
-    final List<_ScalarOrBlockOrFormWrapper> topScalarOrBlockOrFormWrappers =
-        __findTopLazyScalarOrBlockOrForms();
+    // Blocks or Scalars are x-visible (It or its children is visible).
+    final List<_ScalarOrBlockOrFormWrapper>
+        xVisibleScalarOrBlockOrFormWrappers =
+        __findXVisibleLazyScalarOrBlockOrForms();
 
     print(
-        ">>>> topScalarOrBlockOrFormWrappers: $topScalarOrBlockOrFormWrappers");
+        ">>>> xVisibleScalarOrBlockOrFormWrappers: $xVisibleScalarOrBlockOrFormWrappers");
     //
-    if (topScalarOrBlockOrFormWrappers.isEmpty) {
+    if (xVisibleScalarOrBlockOrFormWrappers.isEmpty) {
       __lastLazyLoadId = __lazyLoadId;
       __lazyLoadLocked = false;
       return;
     }
     print("@@@@@@@@@@@@ Lazy Load - ID: $__lazyLoadId");
     print(
-        "@@@@@@@@@@@@ Lazy Load - Count: ${topScalarOrBlockOrFormWrappers.length}");
+        "@@@@@@@@@@@@ Lazy Load - Count: ${xVisibleScalarOrBlockOrFormWrappers.length}");
     //
     __lastLazyLoadId = __lazyLoadId;
     //
@@ -560,7 +561,7 @@ abstract class Shelf extends _XBase {
     final List<_FormModelOpt> topLazyFormModelOpts = [];
     //
     for (_ScalarOrBlockOrFormWrapper wrapper
-        in topScalarOrBlockOrFormWrappers) {
+        in xVisibleScalarOrBlockOrFormWrappers) {
       if (wrapper.scalar != null) {
         wrapper.scalar!._lazyLoadCount++;
         //
@@ -573,7 +574,6 @@ abstract class Shelf extends _XBase {
         topLazyBlockOpts.add(
           _BlockOpt(
             block: wrapper.block!,
-            // queryType: null,  (???)
             forceQuery: false,
             pageable: null,
             listBehavior: null,
@@ -628,7 +628,7 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
   // ***************************************************************************
 
-  void __findTopLazyBlocksCascade(
+  void __findXVisibleLazyBlocksCascade(
     List<Block> blocks,
     List<_ScalarOrBlockOrFormWrapper> founds,
   ) {
@@ -649,34 +649,32 @@ abstract class Shelf extends _XBase {
       // TODO: Mới kt các fragment, còn các cái khác thì sao? ItemsView?
       //
       if (block.hasActiveBlockFragmentWidget(alsoCheckChildren: true)) {
-        if (block.queryDataState == DataState.pending) {
+        if (block.queryDataState == DataState.pending ||
+            block.queryDataState == DataState.error) {
           founds.add(_ScalarOrBlockOrFormWrapper.block(block));
           found = true;
         }
       }
       //
-      if (!found &&
-          block.formModel != null &&
-          block.formModel!.hasActiveUIComponent()) {
-        if (block.formModel!.formDataState == DataState.pending) {
+      if (block.formModel != null && block.formModel!.hasActiveUIComponent()) {
+        if (block.formModel!.formDataState == DataState.pending ||
+            block.formModel!.formDataState == DataState.error) {
           founds.add(_ScalarOrBlockOrFormWrapper.formModel(block.formModel!));
           found = true;
         }
       }
       //
-      if (!found) {
-        __findTopLazyBlocksCascade(block._childBlocks, founds);
-      }
+      __findXVisibleLazyBlocksCascade(block._childBlocks, founds);
     }
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  List<_ScalarOrBlockOrFormWrapper> __findTopLazyScalarOrBlockOrForms() {
+  List<_ScalarOrBlockOrFormWrapper> __findXVisibleLazyScalarOrBlockOrForms() {
     final List<_ScalarOrBlockOrFormWrapper> founds = [];
     __findLazyScalars(founds);
-    __findTopLazyBlocksCascade(__rootBlocks, founds);
+    __findXVisibleLazyBlocksCascade(__rootBlocks, founds);
     return founds;
   }
 
