@@ -3531,11 +3531,18 @@ abstract class Block<
     if (!actionable.yes) {
       return false;
     }
-    bool confirm = await showConfirmDeleteDialog(details: getClassName(item));
-    if (!confirm) {
-      return false;
-    }
-    return true;
+    ItemDeletionResult? result = await deleteItem(
+      item: item,
+      ignoreIfItemNotInList: ignoreIfItemNotInList,
+    );
+    return result == null ? false : result.success;
+
+    // bool confirm = await showConfirmDeleteDialog(details: getClassName(item));
+    // if (!confirm) {
+    //   return false;
+    // }
+    // return deleteIt
+    // return true;
   }
 
   // ***************************************************************************
