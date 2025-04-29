@@ -39,13 +39,13 @@ abstract class Shelf extends _XBase {
 
   List<Block> get rootBlocks => [...__rootBlocks];
 
-  int __lastTransactionNumber = 0;
+  int __lastLazyLoadId = 0;
 
-  int __transactionId = 0;
+  int __lazyLoadId = 0;
 
   final List<Block> __lazyBlocksToQuery = [];
 
-  bool _queryLocked = false;
+  bool __lazyLoadLocked = false;
 
   String get name => FlutterArtist.storage._getShelfName(runtimeType);
 
@@ -511,15 +511,15 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
 
   Future<void> _startLoadDataForLazyUIComponentsIfNeed() async {
-    if (_queryLocked) {
+    if (__lazyLoadLocked) {
       await Future.doWhile(
         () => Future.delayed(const Duration(milliseconds: 1))
-            .then((_) => _queryLocked),
+            .then((_) => __lazyLoadLocked),
       );
     }
 
-    if (__transactionId == __lastTransactionNumber) {
-      __transactionId++;
+    if (__lazyLoadId == __lastLazyLoadId) {
+      __lazyLoadId++;
       __lazyBlocksToQuery.clear();
       //
       Future.delayed(
@@ -535,26 +535,25 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
 
   Future<void> __queryLazyList() async {
-    _queryLocked = true;
+    __lazyLoadLocked = true;
     //
     final List<_ScalarOrBlockOrFormWrapper> lazyBlockOrForms =
         __findTopLazyScalarOrBlockOrForms();
     //
     if (lazyBlockOrForms.isEmpty) {
-      __lastTransactionNumber = __transactionId;
-      _queryLocked = false;
+      __lastLazyLoadId = __lazyLoadId;
+      __lazyLoadLocked = false;
       return;
     } else {
-      print("@@@@@@@@@@@@ Query Lazy List: ID: $__transactionId");
+      print("@@@@@@@@@@@@ Query Lazy List: ID: $__lazyLoadId");
       print("@@@@@@@@@@@@ Query Lazy List: Count: ${lazyBlockOrForms.length}");
       //
-      __lastTransactionNumber = __transactionId;
+      __lastLazyLoadId = __lazyLoadId;
 
       await _queryLazyScalarOrBlockOrForms(
-        // queryType: QueryType.forceQuery,  (???)
         scalarOrBlockOrFormWrappers: lazyBlockOrForms,
       );
-      _queryLocked = false;
+      __lazyLoadLocked = false;
     }
   }
 
