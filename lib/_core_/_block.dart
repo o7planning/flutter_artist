@@ -1323,12 +1323,19 @@ abstract class Block<
     )) {
       result._addCandidateItem(candidateCurrentItem);
     }
+    final bool forceReloadItem = thisXBlock.forceReloadItem;
+    final bool forceForm;
+    if (thisXBlock.xFormModel != null) {
+      forceForm = thisXBlock.xFormModel!.forceForm;
+    } else {
+      forceForm = false;
+    }
     print(
         "@@~~~~~~~~~~~~~~~~~~~~~~~> 3 currentItemChanged: $currentItemChanged");
     //
-    if (!currentItemChanged && !thisXBlock.forceReloadItem) {
-      print( 
-          "        ~~~~~~~> IGNORED --> !currentItemChanged && !forceReloadItem - [$name]");
+    if (!currentItemChanged && !forceReloadItem && !forceForm) {
+      print(
+          "        ~~~~~~~> IGNORED --> !currentItemChanged && !forceReloadItem && !forceForm - [$name]");
       for (_XBlock childXBlock in thisXBlock.childXBlocks) {
         FlutterArtist.taskUnitQueue.addTaskUnit(
           _BlockQueryTaskUnit(
