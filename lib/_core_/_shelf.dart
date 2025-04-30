@@ -536,22 +536,21 @@ abstract class Shelf extends _XBase {
 
   Future<void> __queryLazyList() async {
     __lazyLoadLocked = true;
-    // Blocks or Scalars are x-visible (It or its children is visible).
-    final List<_ScalarOrBlockOrFormWrapper>
-        xVisibleScalarOrBlockOrFormWrappers =
-        __findXVisibleLazyScalarOrBlockOrForms();
+    // Top Lazy (Scalar, Block or FormModel).
+    final List<_ScalarOrBlockOrFormWrapper> topLazyScalarOrBlockOrFormWrappers =
+        __findTopLazyScalarOrBlockOrForms();
 
     print(
-        ">>>> xVisibleScalarOrBlockOrFormWrappers: $xVisibleScalarOrBlockOrFormWrappers");
+        ">>>> topLazyScalarOrBlockOrFormWrappers: $topLazyScalarOrBlockOrFormWrappers");
     //
-    if (xVisibleScalarOrBlockOrFormWrappers.isEmpty) {
+    if (topLazyScalarOrBlockOrFormWrappers.isEmpty) {
       __lastLazyLoadId = __lazyLoadId;
       __lazyLoadLocked = false;
       return;
     }
     print("@@@@@@@@@@@@ Lazy Load - ID: $__lazyLoadId");
     print(
-        "@@@@@@@@@@@@ Lazy Load - Count: ${xVisibleScalarOrBlockOrFormWrappers.length}");
+        "@@@@@@@@@@@@ Lazy Load - Count: ${topLazyScalarOrBlockOrFormWrappers.length}");
     //
     __lastLazyLoadId = __lazyLoadId;
     //
@@ -561,7 +560,7 @@ abstract class Shelf extends _XBase {
     final List<_FormModelOpt> topLazyFormModelOpts = [];
     //
     for (_ScalarOrBlockOrFormWrapper wrapper
-        in xVisibleScalarOrBlockOrFormWrappers) {
+        in topLazyScalarOrBlockOrFormWrappers) {
       if (wrapper.scalar != null) {
         wrapper.scalar!._lazyLoadCount++;
         //
@@ -671,7 +670,7 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
   // ***************************************************************************
 
-  List<_ScalarOrBlockOrFormWrapper> __findXVisibleLazyScalarOrBlockOrForms() {
+  List<_ScalarOrBlockOrFormWrapper> __findTopLazyScalarOrBlockOrForms() {
     final List<_ScalarOrBlockOrFormWrapper> founds = [];
     __findLazyScalars(founds);
     __findXVisibleLazyBlocksCascade(__rootBlocks, founds);
