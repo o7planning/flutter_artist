@@ -1309,7 +1309,8 @@ abstract class Block<
         currentItemChanged = false;
       } else {
         // candidateCurrentItem != null && currentItem != null
-        if (getItemId(candidateCurrentItem) == getItemId(currentItem)) {
+        // if(getItemId(candidateCurrentItem) == getItemId(currentItem))
+        if (identical(candidateCurrentItem, currentItem)) {
           currentItemChanged = false;
         } else {
           currentItemChanged = true;
@@ -2559,6 +2560,7 @@ abstract class Block<
         _BlockOpt(
           block: this,
           forceQuery: false,
+          forceReloadItem: false,
           queryType: QueryType.emptyQuery,
           pageable: pageable,
           listBehavior: ListBehavior.replace,
@@ -2619,6 +2621,7 @@ abstract class Block<
         _BlockOpt(
           block: this,
           forceQuery: false,
+          forceReloadItem: false,
           pageable: pageable,
           listBehavior: listBehavior,
           postQueryBehavior: postQueryBehavior,
@@ -2673,6 +2676,7 @@ abstract class Block<
         _BlockOpt(
           block: this,
           forceQuery: true,
+          forceReloadItem: false,
           pageable: pageable,
           listBehavior: listBehavior,
           suggestedSelection: suggestedSelection,
@@ -2720,6 +2724,7 @@ abstract class Block<
         _BlockOpt(
           block: this,
           forceQuery: true,
+          forceReloadItem: false,
           pageable: null,
           listBehavior: ListBehavior.replace,
           suggestedSelection: null,
@@ -2952,8 +2957,8 @@ abstract class Block<
         forceQueryBlockOpts = [
           _BlockOpt(
             block: this,
-            // queryType: QueryType.forceQuery,  (???)
             forceQuery: true,
+            forceReloadItem: false,
             pageable: null,
             listBehavior: null,
             suggestedSelection: null,

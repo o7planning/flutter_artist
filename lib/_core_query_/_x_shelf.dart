@@ -78,9 +78,8 @@ class _XShelf {
     //
     __setForceFilterModelOpt(forceFilterModelOpt);
     __setForceQueryScalarOpts(forceQueryScalarOpts);
-    print("@@@>>>>>>>>>>>>>> forceQueryTopLazyBlockOpts: $forceQueryBlockOpts");
-   __setForceQueryBlockOpts(forceQueryBlockOpts);
-   __setForceQueryFormModelOpts(forceQueryFormModelOpts);
+    __setForceQueryBlockOpts(forceQueryBlockOpts);
+    __setForceQueryFormModelOpts(forceQueryFormModelOpts);
   }
 
   _XFilterModel? findXFilterModelByName(String name) {
@@ -161,6 +160,9 @@ class _XShelf {
     Block block = forceQueryBlockOpt.block;
     _XBlock xBlock = allXBlockMap[block.name]!;
     xBlock.setForceQuery();
+    if (forceQueryBlockOpt.forceReloadItem) {
+      xBlock.setForceReloadItem();
+    }
     //
     xBlock.setOptions(
       queryType: forceQueryBlockOpt.queryType,

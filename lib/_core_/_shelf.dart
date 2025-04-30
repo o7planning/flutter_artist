@@ -546,6 +546,8 @@ abstract class Shelf extends _XBase {
     if (topLazyScalarOrBlockOrFormWrappers.isEmpty) {
       __lastLazyLoadId = __lazyLoadId;
       __lazyLoadLocked = false;
+      // IMPORTANT: No Lazy entities, but need to refresh UIComponents:
+      updateAllUIComponents();
       return;
     }
     print("@@@@@@@@@@@@ Lazy Load - ID: $__lazyLoadId");
@@ -574,6 +576,7 @@ abstract class Shelf extends _XBase {
           _BlockOpt(
             block: wrapper.block!,
             forceQuery: false,
+            forceReloadItem: false,
             pageable: null,
             listBehavior: null,
             suggestedSelection: null,
@@ -631,7 +634,9 @@ abstract class Shelf extends _XBase {
     List<Block> blocks,
     List<_ScalarOrBlockOrFormWrapper> founds,
   ) {
+    print("@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1");
     for (Block block in blocks) {
+      print("@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 2: ${block}");
       // if (block.hasActiveBlockFragmentWidget(alsoCheckChildren: true) &&
       //     block.queryDataState == DataState.pending) {
       //   founds.add(_ScalarOrBlockOrFormWrapper.block(block));
@@ -654,10 +659,15 @@ abstract class Shelf extends _XBase {
           found = true;
         }
       }
+      print(
+          "@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3: hasActiveUIComponent: ${block.formModel?.hasActiveUIComponent()}");
+      print(
+          "@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3: formDataState: ${block.formModel?.formDataState}");
       //
       if (block.formModel != null && block.formModel!.hasActiveUIComponent()) {
         if (block.formModel!.formDataState == DataState.pending ||
-            block.formModel!.formDataState == DataState.error) {
+            block.formModel!.formDataState == DataState.error ||
+            block.formModel!.formDataState == DataState.none) {
           founds.add(_ScalarOrBlockOrFormWrapper.formModel(block.formModel!));
           found = true;
         }
