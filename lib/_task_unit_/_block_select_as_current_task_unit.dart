@@ -12,9 +12,13 @@ class _BlockSelectAsCurrentTaskUnit<ITEM extends Object> extends _TaskUnit {
     required this.xBlock,
     required this.newQueriedList,
     required this.candidateItem,
+    required bool forceReloadItem,
     required this.forceForm,
   }) : super(taskType: TaskType.blockSelectItemAsCurrent) {
-    xBlock.setForceReloadItem();
+    if (forceReloadItem) {
+      xBlock.setForceReloadItem();
+    }
+    //
     if (forceForm != null) {
       xBlock.xFormModel?.forceForm = forceForm!;
     }

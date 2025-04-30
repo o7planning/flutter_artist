@@ -917,7 +917,7 @@ abstract class Block<
     thisXBlock._printParameters(hasActiveUI: hasActiveUI);
     //
     if (!forceQuery) {
-      print("        ~~~~~~~> forceQuery: $forceQuery - [${name}]");
+      print("        ~~~~~~~> IGNORED --> forceQuery: $forceQuery - [$name]");
       FlutterArtist.taskUnitQueue.addTaskUnit(
         _BlockSelectAsCurrentTaskUnit<ITEM>(
           currentItemSelectionType:
@@ -925,6 +925,7 @@ abstract class Block<
           xBlock: thisXBlock,
           newQueriedList: [],
           candidateItem: null,
+          forceReloadItem: false,
           forceForm: null,
         ),
       );
@@ -1208,6 +1209,7 @@ abstract class Block<
           xBlock: thisXBlock,
           newQueriedList: pageData?.items ?? [],
           candidateItem: candidateCurrentItem,
+          forceReloadItem: false,
           forceForm: null,
         ),
       );
@@ -1254,7 +1256,7 @@ abstract class Block<
     //
     if (this.queryDataState == DataState.error) {
       print(
-          "        ~~~~~~~> this.queryDataState == DataState.error - [${name}]");
+          "        ~~~~~~~> IGNORED --> this.queryDataState == DataState.error - [$name]");
       this.__clearWithDataStateCascade(
         thisXBlock: thisXBlock,
         qryDataState: DataState.error,
@@ -1264,7 +1266,7 @@ abstract class Block<
     }
     //
     if (this.itemCount == 0) {
-      print("        ~~~~~~~> this.itemCount == 0 - [${name}]");
+      print("        ~~~~~~~> IGNORED --> this.itemCount == 0 - [$name]");
       this.__clearChildrenWithDataStateCascade(
         thisXBlock: thisXBlock,
         qryDataState: DataState.none,
@@ -1273,9 +1275,11 @@ abstract class Block<
       return;
     }
     //
-    bool hasActiveUI = hasActiveUIComponent();
-    thisXBlock._printParameters(hasActiveUI: hasActiveUI); // ---> Debug
-
+    bool hasXActiveUI = hasActiveUIComponent(alsoCheckChildren: true);
+    thisXBlock._printParameters(hasActiveUI: hasXActiveUI); // ---> Debug
+    print("@@~~~~~~~~~~~~~~~~~~~~~~~> 1 hasXActiveUI: $hasXActiveUI");
+    print(
+        "@@~~~~~~~~~~~~~~~~~~~~~~~> 2 forceQuery: ${thisXBlock.forceQuery}, forceReloadItem: ${thisXBlock.forceReloadItem}");
     if (!thisXBlock.forceQuery || !thisXBlock.forceReloadItem) {
       // return;
     }
@@ -1294,21 +1298,21 @@ abstract class Block<
       }
     }
     //
-    final bool newCurrent;
+    final bool currentItemChanged;
     if (currentItem == null) {
       candidateCurrentItem = candidateCurrentItem ?? firstItem;
-      newCurrent = candidateCurrentItem != null;
+      currentItemChanged = candidateCurrentItem != null;
     } else {
       // currentItem != null
       if (candidateCurrentItem == null) {
         candidateCurrentItem = currentItem;
-        newCurrent = false;
+        currentItemChanged = false;
       } else {
         // candidateCurrentItem != null && currentItem != null
         if (getItemId(candidateCurrentItem) == getItemId(currentItem)) {
-          newCurrent = false;
+          currentItemChanged = false;
         } else {
-          newCurrent = true;
+          currentItemChanged = true;
         }
       }
     }
@@ -1319,10 +1323,12 @@ abstract class Block<
     )) {
       result._addCandidateItem(candidateCurrentItem);
     }
+    print(
+        "@@~~~~~~~~~~~~~~~~~~~~~~~> 3 currentItemChanged: $currentItemChanged");
     //
-    if (!newCurrent && !thisXBlock.forceReloadItem) {
-      print(
-          "        ~~~~~~~> !newCurrent && !thisXBlock.forceReloadItem - [${name}]");
+    if (!currentItemChanged && !thisXBlock.forceReloadItem) {
+      print( 
+          "        ~~~~~~~> IGNORED --> !currentItemChanged && !forceReloadItem - [$name]");
       for (_XBlock childXBlock in thisXBlock.childXBlocks) {
         FlutterArtist.taskUnitQueue.addTaskUnit(
           _BlockQueryTaskUnit(
@@ -1333,7 +1339,7 @@ abstract class Block<
       return;
     }
     //
-    // newCurrent || forceReloadItem
+    // currentItemChanged || forceReloadItem
     //
     //
     // If no item can be current.
@@ -1348,7 +1354,7 @@ abstract class Block<
       return;
     }
     //
-    // (newCurrent || forceReloadItem) && candidateCurrentItem !=null
+    // (currentItemChanged || forceReloadItem) && candidateCurrentItem !=null
     //
     final bool isCandidateIsCurrent = isCurrentItem(
       item: candidateCurrentItem,
@@ -1410,7 +1416,7 @@ abstract class Block<
       if (isLoadItemError) {
         result._apiError = true;
         // TODO: Alway return?
-        // If newCurrent or not newCurrent
+        // If currentItemChanged or not currentItemChanged
         // Always return. Nothing to do if has error!!
         return;
       }
@@ -1441,6 +1447,7 @@ abstract class Block<
           xBlock: thisXBlock,
           newQueriedList: newQueriedList,
           candidateItem: siblingItem,
+          forceReloadItem: false,
           forceForm: null,
         );
         FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
@@ -1466,6 +1473,7 @@ abstract class Block<
           xBlock: thisXBlock,
           newQueriedList: newQueriedList,
           candidateItem: siblingItem,
+          forceReloadItem: false,
           forceForm: null,
         );
         FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
@@ -1496,7 +1504,7 @@ abstract class Block<
     if (convertItemError) {
       result._convertError = true;
       // TODO Always return??
-      // If newCurrent or not newCurrent
+      // If currentItemChanged or not currentItemChanged
       // Always return. Nothing to do if has error!!
       return;
     }
@@ -1507,7 +1515,7 @@ abstract class Block<
       refreshedItemDetail: candidateCurrentItemDetail,
     );
     //
-    if (newCurrent) {
+    if (currentItemChanged) {
       result._currentItem = candidateCurrentItem;
       //
       this.__clearChildrenWithDataStateCascade(
@@ -1671,6 +1679,7 @@ abstract class Block<
       xBlock: thisXBlock,
       newQueriedList: <ITEM>[],
       candidateItem: siblingItem,
+      forceReloadItem: false,
       forceForm: null,
     );
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
@@ -1988,6 +1997,7 @@ abstract class Block<
             xBlock: thisXBlock,
             newQueriedList: [],
             candidateItem: currentItem,
+            forceReloadItem: false,
             forceForm: null,
           );
           FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
@@ -2183,6 +2193,7 @@ abstract class Block<
         xBlock: thisXBlock,
         newQueriedList: [],
         candidateItem: siblingItem,
+        forceReloadItem: false,
         forceForm: null,
       );
       FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
@@ -2312,6 +2323,7 @@ abstract class Block<
       xBlock: thisXBlock,
       newQueriedList: [],
       candidateItem: item,
+      forceReloadItem: true,
       forceForm: forceForm,
     );
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
