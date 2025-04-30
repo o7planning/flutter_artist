@@ -904,6 +904,7 @@ abstract class Block<
     thisXBlock._printParameters(hasActiveUI: hasActiveUI);
     //
     if (!forceQuery) {
+      print("        ~~~~~~~> forceQuery: $forceQuery - [${name}]");
       FlutterArtist.taskUnitQueue.addTaskUnit(
         _BlockSelectAsCurrentTaskUnit<ITEM>(
           currentItemSelectionType:
@@ -1239,6 +1240,7 @@ abstract class Block<
     }
     //
     if (this.queryDataState == DataState.error) {
+      print("        ~~~~~~~> this.queryDataState == DataState.error - [${name}]");
       this.__clearWithDataStateCascade(
         thisXBlock: thisXBlock,
         qryDataState: DataState.error,
@@ -1248,6 +1250,7 @@ abstract class Block<
     }
     //
     if (this.itemCount == 0) {
+      print("        ~~~~~~~> this.itemCount == 0 - [${name}]");
       this.__clearChildrenWithDataStateCascade(
         thisXBlock: thisXBlock,
         qryDataState: DataState.none,
@@ -1304,6 +1307,7 @@ abstract class Block<
     }
     //
     if (!newCurrent && !thisXBlock.forceReloadItem) {
+      print("        ~~~~~~~> !newCurrent && !thisXBlock.forceReloadItem - [${name}]");
       for (_XBlock childXBlock in thisXBlock.childXBlocks) {
         FlutterArtist.taskUnitQueue.addTaskUnit(
           _BlockQueryTaskUnit(
@@ -1320,6 +1324,7 @@ abstract class Block<
     // If no item can be current.
     //
     if (candidateCurrentItem == null) {
+      print("        ~~~~~~~> candidateCurrentItem == null - [${name}]");
       this.__clearWithDataStateCascade(
         thisXBlock: thisXBlock,
         qryDataState: DataState.ready,
