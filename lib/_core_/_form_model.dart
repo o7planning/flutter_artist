@@ -9,9 +9,9 @@ abstract class FormModel<
 
   int get loadCount => __loadCount;
 
-  int __formTransactionCount = 0;
+  int __formActivityCount = 0;
 
-  int get formTransactionCount => __formTransactionCount;
+  int get formActivityCount => __formActivityCount;
 
   int _lazyLoadCount = 0;
 
@@ -342,7 +342,7 @@ abstract class FormModel<
     if (blockCurrentFilterCriteria == null) {
       throw AppException(message: "FilterCriteria is null");
     }
-    __formTransactionCount++;
+    __formActivityCount++;
     print(
         "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFormActivity, activityType: $activityType");
     if (activityType == _FormActivityType.itemFirstLoad) {
@@ -370,6 +370,7 @@ abstract class FormModel<
     //
     final Map<String, dynamic> formKeyInstantValues =
         _formKey.currentState?.instantValue ?? {};
+    print("@@@@@@@@ formKeyInstantValues: $formKeyInstantValues");
     //
     _formPropsStructure._initTemporaryForNewTransaction(
       activityType: activityType,
