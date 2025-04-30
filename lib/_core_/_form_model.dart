@@ -370,7 +370,6 @@ abstract class FormModel<
     //
     final Map<String, dynamic> formKeyInstantValues =
         _formKey.currentState?.instantValue ?? {};
-    print("@@@@@@@@ formKeyInstantValues: $formKeyInstantValues");
     //
     _formPropsStructure._initTemporaryForNewTransaction(
       activityType: activityType,

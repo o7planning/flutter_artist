@@ -634,9 +634,7 @@ abstract class Shelf extends _XBase {
     List<Block> blocks,
     List<_ScalarOrBlockOrFormWrapper> founds,
   ) {
-    print("@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1");
     for (Block block in blocks) {
-      print("@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 2: ${block}");
       // if (block.hasActiveBlockFragmentWidget(alsoCheckChildren: true) &&
       //     block.queryDataState == DataState.pending) {
       //   founds.add(_ScalarOrBlockOrFormWrapper.block(block));
@@ -659,10 +657,6 @@ abstract class Shelf extends _XBase {
           found = true;
         }
       }
-      print(
-          "@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3: hasActiveUIComponent: ${block.formModel?.hasActiveUIComponent()}");
-      print(
-          "@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3: formDataState: ${block.formModel?.formDataState}");
       //
       if (block.formModel != null && block.formModel!.hasActiveUIComponent()) {
         if (block.formModel!.formDataState == DataState.pending ||

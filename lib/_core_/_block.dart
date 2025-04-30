@@ -1277,9 +1277,6 @@ abstract class Block<
     //
     bool hasXActiveUI = hasActiveUIComponent(alsoCheckChildren: true);
     thisXBlock._printParameters(hasActiveUI: hasXActiveUI); // ---> Debug
-    print("@@~~~~~~~~~~~~~~~~~~~~~~~> 1 hasXActiveUI: $hasXActiveUI");
-    print(
-        "@@~~~~~~~~~~~~~~~~~~~~~~~> 2 forceQuery: ${thisXBlock.forceQuery}, forceReloadItem: ${thisXBlock.forceReloadItem}");
     if (!thisXBlock.forceQuery || !thisXBlock.forceReloadItem) {
       // return;
     }
@@ -1331,8 +1328,6 @@ abstract class Block<
     } else {
       forceForm = false;
     }
-    print(
-        "@@~~~~~~~~~~~~~~~~~~~~~~~> 3 currentItemChanged: $currentItemChanged");
     //
     if (!currentItemChanged && !forceReloadItem && !forceForm) {
       print(
@@ -2620,8 +2615,8 @@ abstract class Block<
       forceQueryBlockOpts: [
         _BlockOpt(
           block: this,
-          forceQuery: false,
-          forceReloadItem: false,
+          forceQuery: true, // Force Query.
+          forceReloadItem: true, // Must reload after query.
           pageable: pageable,
           listBehavior: listBehavior,
           postQueryBehavior: postQueryBehavior,
