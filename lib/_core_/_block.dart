@@ -754,7 +754,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveUIComponent() {
+  bool hasActiveUIComponent({bool alsoCheckChildren = false}) {
     bool active = false;
     // Filter
     if (filterModel != null) {
@@ -785,8 +785,21 @@ abstract class Block<
     }
     // Pagination
     active = hasActivePaginationWidget();
+    if (active) {
+      return true;
+    }
     //
-    return active;
+    if (alsoCheckChildren) {
+      for (Block childBlock in _childBlocks) {
+        active = childBlock.hasActiveUIComponent(
+          alsoCheckChildren: alsoCheckChildren,
+        );
+        if (active) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   // ***************************************************************************
@@ -893,7 +906,7 @@ abstract class Block<
   Future<BlockQueryResult> _unitQuery({required _XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
     //
-    bool hasActiveUI = this.hasActiveUIComponent();
+    bool hasActiveUI = this.hasActiveUIComponent(alsoCheckChildren: true);
     bool forceQuery = thisXBlock.forceQuery;
     if (!forceQuery) {
       if (this.queryDataState != DataState.ready && hasActiveUI) {
@@ -1240,7 +1253,8 @@ abstract class Block<
     }
     //
     if (this.queryDataState == DataState.error) {
-      print("        ~~~~~~~> this.queryDataState == DataState.error - [${name}]");
+      print(
+          "        ~~~~~~~> this.queryDataState == DataState.error - [${name}]");
       this.__clearWithDataStateCascade(
         thisXBlock: thisXBlock,
         qryDataState: DataState.error,
@@ -1307,7 +1321,8 @@ abstract class Block<
     }
     //
     if (!newCurrent && !thisXBlock.forceReloadItem) {
-      print("        ~~~~~~~> !newCurrent && !thisXBlock.forceReloadItem - [${name}]");
+      print(
+          "        ~~~~~~~> !newCurrent && !thisXBlock.forceReloadItem - [${name}]");
       for (_XBlock childXBlock in thisXBlock.childXBlocks) {
         FlutterArtist.taskUnitQueue.addTaskUnit(
           _BlockQueryTaskUnit(
