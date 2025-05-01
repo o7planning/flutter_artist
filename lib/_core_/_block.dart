@@ -1513,6 +1513,9 @@ abstract class Block<
     }
     //
     __blockData._selectionDataState = DataState.ready;
+    if (candidateCurrentItem != null) {
+      __blockData._insertOrReplaceItem(item: candidateCurrentItem);
+    }
     __blockData._setCurrentItemOnly(
       refreshedItem: candidateCurrentItem,
       refreshedItemDetail: candidateCurrentItemDetail,
