@@ -1554,6 +1554,8 @@ abstract class Block<
             break;
           case PostQueryBehavior.selectAvailableItemToEdit:
             thisXBlock.xFormModel!.forceForm = true;
+          case PostQueryBehavior.clearCurrentItem:
+            break;
         }
       }
       // May be cancelled if not need:
