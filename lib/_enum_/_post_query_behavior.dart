@@ -1,17 +1,18 @@
 part of '../flutter_artist.dart';
 
 enum PostQueryBehavior {
+  /// Clear Current Item.
   clearCurrentItem,
 
+  /// Create new Item.
+  createNewItem,
+
   /// Default behavior.
-  selectAvailableItemIfNeed,
+  selectAnItemAsCurrentIfNeed,
 
   /// Select an available item in the List or switch to non-selected if List is empty.
-  selectAvailableItem,
+  selectAnItemAsCurrent,
 
   /// Select an available item in the List and prepare form to edit.
-  selectAvailableItemToEdit,
-
-  // Create new item.
-  createNewItem,
+  selectAnItemAsCurrentAndLoadForm,
 }

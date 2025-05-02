@@ -1255,15 +1255,15 @@ abstract class Block<
     } else {
       final CurrentItemSelectionType currentItemSelectionType;
       switch (thisXBlock.postQueryBehavior) {
-        case PostQueryBehavior.selectAvailableItemIfNeed:
+        case PostQueryBehavior.selectAnItemAsCurrentIfNeed:
           currentItemSelectionType =
-              CurrentItemSelectionType.selectItemAsCurrentIfNeed;
-        case PostQueryBehavior.selectAvailableItem:
+              CurrentItemSelectionType.selectAnItemAsCurrentIfNeed;
+        case PostQueryBehavior.selectAnItemAsCurrent:
           currentItemSelectionType =
-              CurrentItemSelectionType.selectItemAsCurrent;
-        case PostQueryBehavior.selectAvailableItemToEdit:
+              CurrentItemSelectionType.selectAnItemAsCurrent;
+        case PostQueryBehavior.selectAnItemAsCurrentAndLoadForm:
           currentItemSelectionType =
-              CurrentItemSelectionType.selectItemAsCurrentAndLoadForm;
+              CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm;
         case PostQueryBehavior.clearCurrentItem:
           throw UnimplementedError("Never Run");
         case PostQueryBehavior.createNewItem:
@@ -1616,17 +1616,17 @@ abstract class Block<
       final postQueryBehavior = thisXBlock.__postQueryBehavior;
       if (postQueryBehavior != null) {
         switch (postQueryBehavior) {
-          case PostQueryBehavior.selectAvailableItemIfNeed:
+          case PostQueryBehavior.selectAnItemAsCurrentIfNeed:
             // Do nothing (Ready SelectAvailableItem).
             break;
-          case PostQueryBehavior.selectAvailableItem:
+          case PostQueryBehavior.selectAnItemAsCurrent:
             // Do nothing (Ready SelectAvailableItem).
             break;
           case PostQueryBehavior.createNewItem:
             // TODO: Remove PostQueryBehavior.createNewItem??
             // TODO: Add PostQueryBehavior.none??
             break;
-          case PostQueryBehavior.selectAvailableItemToEdit:
+          case PostQueryBehavior.selectAnItemAsCurrentAndLoadForm:
             thisXBlock.xFormModel!.forceForm = true;
           case PostQueryBehavior.clearCurrentItem:
             break;
@@ -1757,7 +1757,7 @@ abstract class Block<
     //
     _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
       currentItemSelectionType:
-          CurrentItemSelectionType.selectItemAsCurrentIfNeed,
+          CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
       xBlock: thisXBlock,
       newQueriedList: <ITEM>[],
       candidateItem: siblingItem,
@@ -2271,7 +2271,7 @@ abstract class Block<
       //
       _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
         currentItemSelectionType:
-            CurrentItemSelectionType.selectItemAsCurrentIfNeed,
+            CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
         xBlock: thisXBlock,
         newQueriedList: [],
         candidateItem: siblingItem,
@@ -2400,8 +2400,8 @@ abstract class Block<
     //
     _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
       currentItemSelectionType: forceForm
-          ? CurrentItemSelectionType.selectItemAsCurrentAndLoadForm
-          : CurrentItemSelectionType.selectItemAsCurrent,
+          ? CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm
+          : CurrentItemSelectionType.selectAnItemAsCurrent,
       xBlock: thisXBlock,
       newQueriedList: [],
       candidateItem: item,
@@ -2496,7 +2496,7 @@ abstract class Block<
   ///
   @RootMethodAnnotation()
   Future<bool> queryNextPage({
-    PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAvailableItem,
+    PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAnItemAsCurrent,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -2529,7 +2529,7 @@ abstract class Block<
   ///
   @RootMethodAnnotation()
   Future<bool> queryPreviousPage({
-    PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAvailableItem,
+    PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAnItemAsCurrent,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -2565,7 +2565,7 @@ abstract class Block<
   ///
   @RootMethodAnnotation()
   Future<bool> queryMore({
-    PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAvailableItem,
+    PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAnItemAsCurrent,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -2641,7 +2641,7 @@ abstract class Block<
           listBehavior: ListBehavior.replace,
           postQueryBehavior: prepareToCreate
               ? PostQueryBehavior.createNewItem
-              : PostQueryBehavior.selectAvailableItem,
+              : PostQueryBehavior.selectAnItemAsCurrent,
           suggestedSelection: null,
         ),
       ],
@@ -2663,7 +2663,7 @@ abstract class Block<
   @RootMethodAnnotation()
   Future<bool> query({
     ListBehavior listBehavior = ListBehavior.replace,
-    PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAvailableItem,
+    PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAnItemAsCurrent,
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
     PageableData? pageable,
@@ -2757,7 +2757,7 @@ abstract class Block<
           pageable: pageable,
           listBehavior: listBehavior,
           suggestedSelection: suggestedSelection,
-          postQueryBehavior: PostQueryBehavior.selectAvailableItemToEdit,
+          postQueryBehavior: PostQueryBehavior.selectAnItemAsCurrentAndLoadForm,
         ),
       ],
       forceQueryFormModelOpts: [],

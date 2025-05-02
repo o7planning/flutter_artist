@@ -1,9 +1,9 @@
 part of '../flutter_artist.dart';
 
 enum CurrentItemSelectionType {
-  selectItemAsCurrentIfNeed, // DEFAULT.
-  selectItemAsCurrent,
-  selectItemAsCurrentAndLoadForm,
+  selectAnItemAsCurrentIfNeed, // DEFAULT.
+  selectAnItemAsCurrent,
+  selectAnItemAsCurrentAndLoadForm,
   refresh;
 }
 

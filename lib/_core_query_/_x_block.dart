@@ -104,7 +104,7 @@ class _XBlock {
   }
 
   PostQueryBehavior get postQueryBehavior {
-    return __postQueryBehavior ?? PostQueryBehavior.selectAvailableItemIfNeed;
+    return __postQueryBehavior ?? PostQueryBehavior.selectAnItemAsCurrentIfNeed;
   }
 
   PageableData? get pageable {
