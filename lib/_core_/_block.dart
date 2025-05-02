@@ -2657,7 +2657,7 @@ abstract class Block<
   Future<bool> query({
     ListBehavior listBehavior = ListBehavior.replace,
     PostQueryBehavior postQueryBehavior =
-        PostQueryBehavior.selectAnItemAsCurrent,
+        PostQueryBehavior.selectAnItemAsCurrentIfNeed,
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
     PageableData? pageable,
