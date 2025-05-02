@@ -1257,13 +1257,13 @@ abstract class Block<
       switch (thisXBlock.postQueryBehavior) {
         case PostQueryBehavior.selectAvailableItemIfNeed:
           currentItemSelectionType =
-              CurrentItemSelectionType.selectAsCurrentForDefault;
+              CurrentItemSelectionType.selectItemAsCurrentIfNeed;
         case PostQueryBehavior.selectAvailableItem:
           currentItemSelectionType =
-              CurrentItemSelectionType.selectAsCurrentToShow;
+              CurrentItemSelectionType.selectItemAsCurrent;
         case PostQueryBehavior.selectAvailableItemToEdit:
           currentItemSelectionType =
-              CurrentItemSelectionType.selectAsCurrentToEdit;
+              CurrentItemSelectionType.selectItemAsCurrentAndLoadForm;
         case PostQueryBehavior.clearCurrentItem:
           throw UnimplementedError("Never Run");
         case PostQueryBehavior.createNewItem:
@@ -1757,7 +1757,7 @@ abstract class Block<
     //
     _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
       currentItemSelectionType:
-          CurrentItemSelectionType.selectAsCurrentForDefault,
+          CurrentItemSelectionType.selectItemAsCurrentIfNeed,
       xBlock: thisXBlock,
       newQueriedList: <ITEM>[],
       candidateItem: siblingItem,
@@ -2271,7 +2271,7 @@ abstract class Block<
       //
       _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
         currentItemSelectionType:
-            CurrentItemSelectionType.selectAsCurrentForDefault,
+            CurrentItemSelectionType.selectItemAsCurrentIfNeed,
         xBlock: thisXBlock,
         newQueriedList: [],
         candidateItem: siblingItem,
@@ -2400,8 +2400,8 @@ abstract class Block<
     //
     _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
       currentItemSelectionType: forceForm
-          ? CurrentItemSelectionType.selectAsCurrentToEdit
-          : CurrentItemSelectionType.selectAsCurrentToShow,
+          ? CurrentItemSelectionType.selectItemAsCurrentAndLoadForm
+          : CurrentItemSelectionType.selectItemAsCurrent,
       xBlock: thisXBlock,
       newQueriedList: [],
       candidateItem: item,

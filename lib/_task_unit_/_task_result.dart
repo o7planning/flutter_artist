@@ -73,11 +73,11 @@ class CurrentItemSelectionResult<ITEM> {
 
   bool get success {
     switch (currentItemSelectionType) {
-      case CurrentItemSelectionType.selectAsCurrentToEdit:
+      case CurrentItemSelectionType.selectItemAsCurrentAndLoadForm:
         return _successfullySelectedToEdit();
-      case CurrentItemSelectionType.selectAsCurrentToShow:
+      case CurrentItemSelectionType.selectItemAsCurrent:
         return _successfullySelectedToShow();
-      case CurrentItemSelectionType.selectAsCurrentForDefault:
+      case CurrentItemSelectionType.selectItemAsCurrentIfNeed:
         return _successfullySelectedDefault();
       case CurrentItemSelectionType.refresh:
         return _successfullySelectedToRefresh();
