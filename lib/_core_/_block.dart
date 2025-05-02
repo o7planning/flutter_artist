@@ -1283,6 +1283,7 @@ abstract class Block<
         candidateItem,
       );
     }
+
     var result = thisXBlock.currentItemSelectionResult!;
     //
     if (this.queryDataState == DataState.pending) {
@@ -1319,9 +1320,6 @@ abstract class Block<
     //
     bool hasXActiveUI = hasActiveUIComponent(alsoCheckChildren: true);
     thisXBlock._printParameters(hasActiveUI: hasXActiveUI); // ---> Debug
-    if (!thisXBlock.forceQuery || !thisXBlock.forceReloadItem) {
-      // return;
-    }
     //
     ITEM? candidateCurrentItem = candidateItem;
     ITEM? currentItem = this.currentItem;
@@ -1348,7 +1346,6 @@ abstract class Block<
         currentItemChanged = false;
       } else {
         // candidateCurrentItem != null && currentItem != null
-        // if(getItemId(candidateCurrentItem) == getItemId(currentItem))
         if (identical(candidateCurrentItem, currentItem)) {
           currentItemChanged = false;
         } else {
@@ -1357,13 +1354,14 @@ abstract class Block<
       }
     }
     //
-    if (!isSame(
+    final bool isSameCandidateItem = isSame(
       item1: candidateItem,
       item2: candidateCurrentItem,
-    )) {
+    );
+    if (!isSameCandidateItem) {
       result._addCandidateItem(candidateCurrentItem);
     }
-    final bool forceReloadItem = thisXBlock.forceReloadItem;
+    bool forceReloadItem = thisXBlock.forceReloadItem;
     final bool forceForm;
     if (thisXBlock.xFormModel != null) {
       forceForm = thisXBlock.xFormModel!.forceForm;
@@ -1398,6 +1396,25 @@ abstract class Block<
         errorInFilter: false,
       );
       return;
+    }
+    //
+    // IF Select An Item as current is not required.
+    // IMPORTANT:
+    // (This condition stronger than forceReloadItem).
+    //
+    if (currentItemSelectionType ==
+        CurrentItemSelectionType.selectAnItemAsCurrentIfNeed) {
+      //  && !isSameCandidateItem
+      if (!hasXActiveUI) {
+        __blockData._setCurrentItemOnly(
+          refreshedItem: null,
+          refreshedItemDetail: null,
+        );
+        if (formModel != null) {
+          formModel!._clearWithDataState(formDataState: DataState.none);
+        }
+        return;
+      }
     }
     //
     // (currentItemChanged || forceReloadItem) && candidateCurrentItem !=null
@@ -2673,7 +2690,7 @@ abstract class Block<
         _BlockOpt(
           block: this,
           forceQuery: true,
-          // Force Query.
+          // Force Reload Item.
           forceReloadItem: true,
           // Must reload after query.
           pageable: pageable,

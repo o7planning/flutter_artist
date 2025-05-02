@@ -19,17 +19,17 @@ class _CodeFlowListItem extends StatelessWidget {
       color: _backgroundColor(),
       child: flowLogItem.isMethodCall()
           ? _CodeFlowMethodView(
-        codeFlowItem: flowLogItem,
-        selected: selected,
-        textSelectable: false,
-        onTap: onTap,
-      )
+              codeFlowItem: flowLogItem,
+              selected: selected,
+              textSelectable: false,
+              onTap: onTap,
+            )
           : _CodeFlowInfoErrorView(
-        codeFlowItem: flowLogItem,
-        textOverflow: TextOverflow.ellipsis,
-        selected: selected,
-        onTap: onTap,
-      ),
+              codeFlowItem: flowLogItem,
+              textOverflow: TextOverflow.ellipsis,
+              selected: selected,
+              onTap: onTap,
+            ),
     );
   }
 
