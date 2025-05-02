@@ -1,9 +1,9 @@
 part of '../flutter_artist.dart';
 
 class _ScalarData<
-    VALUE extends Object, //
-    FILTER_INPUT extends FilterInput,
-    FILTER_CRITERIA extends FilterCriteria> {
+VALUE extends Object, //
+FILTER_INPUT extends FilterInput,
+FILTER_CRITERIA extends FilterCriteria> {
   ///
   /// Owner Scalar.
   ///

@@ -176,7 +176,7 @@ class _BlockData<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _clearWithDataState({
+  void _clearItemsWithDataState({
     required DataState qryDataState,
     required bool errorInFilter,
   }) {

@@ -361,7 +361,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __clearWithDataState({
+  void __clearItemsWithDataState({
     required _XBlock thisXBlock,
     required DataState queryDataState,
     required DataState formDataState,
@@ -369,7 +369,7 @@ abstract class Block<
   }) {
     __assertThisXBlock(thisXBlock);
     //
-    __blockData._clearWithDataState(
+    __blockData._clearItemsWithDataState(
       qryDataState: queryDataState,
       errorInFilter: errorInFilter,
     );
@@ -390,7 +390,7 @@ abstract class Block<
   }) {
     __assertThisXBlock(thisXBlock);
     //
-    __clearWithDataState(
+    __clearItemsWithDataState(
       thisXBlock: thisXBlock,
       queryDataState: qryDataState,
       formDataState: frmDataState,
@@ -410,7 +410,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __clearChildrenWithDataStateCascade({
+  void __clearChildBlocksItemsWithDataStateCascade({
     required _XBlock thisXBlock,
     required DataState qryDataState,
     required DataState frmDataState,
@@ -899,7 +899,7 @@ abstract class Block<
     __assertThisXBlock(thisXBlock);
     //
     this.__setCurrentItem(item: null, itemDetail: null);
-    this.__clearChildrenWithDataStateCascade(
+    this.__clearChildBlocksItemsWithDataStateCascade(
       thisXBlock: thisXBlock,
       qryDataState: DataState.none,
       frmDataState: DataState.none,
@@ -925,38 +925,6 @@ abstract class Block<
     //
     thisXBlock._printParameters(hasActiveUI: hasActiveUI);
     //
-    // if (!forceQuery) {
-    //   print("        ~~~~~~~> IGNORED --> forceQuery: $forceQuery - [$name]");
-    //
-    //   final CurrentItemSelectionType currentItemSelectionType;
-    //   switch (thisXBlock.postQueryBehavior) {
-    //     case PostQueryBehavior.selectAvailableItemIfNeed:
-    //       currentItemSelectionType =
-    //           CurrentItemSelectionType.selectAsCurrentForDefault;
-    //     case PostQueryBehavior.selectAvailableItem:
-    //       currentItemSelectionType =
-    //           CurrentItemSelectionType.selectAsCurrentToShow;
-    //     case PostQueryBehavior.selectAvailableItemToEdit:
-    //       currentItemSelectionType =
-    //           CurrentItemSelectionType.selectAsCurrentToEdit;
-    //     case PostQueryBehavior.clearCurrentItem:
-    //       throw UnimplementedError("Logic Error");
-    //     case PostQueryBehavior.createNewItem:
-    //       throw UnimplementedError("Logic Error");
-    //   }
-    //   //
-    //   FlutterArtist.taskUnitQueue.addTaskUnit(
-    //     _BlockSelectAsCurrentTaskUnit<ITEM>(
-    //       currentItemSelectionType: currentItemSelectionType,
-    //       xBlock: thisXBlock,
-    //       newQueriedList: [],
-    //       candidateItem: null,
-    //       forceReloadItem: false,
-    //       forceForm: null,
-    //     ),
-    //   );
-    //   return thisXBlock.queryResult;
-    // }
     DataState newQueryDataState = this.queryDataState;
     PageData<ITEM>? pageData;
     final ITEM? candidateCurrentItem;
@@ -1191,36 +1159,41 @@ abstract class Block<
           currentItem != null && containsItem(item: currentItem);
       candidateCurrentItem = currentItemInList ? currentItem : null;
       //
-      if (formModel != null) {
-        if (!currentItemInList) {
-          formModel!._clearWithDataState(
-            formDataState: DataState.none,
-          );
+      if (!currentItemInList) {
+        __blockData._setCurrentItemOnly(
+          refreshedItem: null,
+          refreshedItemDetail: null,
+        );
+        //
+        if (formModel != null) {
+          formModel!._clearWithDataState(formDataState: DataState.none);
         }
+        //
+        this.__clearChildBlocksItemsWithDataStateCascade(
+          thisXBlock: thisXBlock,
+          qryDataState: DataState.none,
+          frmDataState: DataState.none,
+        );
       }
+      //
+
       switch (queryDataState) {
         case DataState.ready:
-          if (!currentItemInList) {
-            this.__clearChildrenWithDataStateCascade(
-              thisXBlock: thisXBlock,
-              qryDataState: DataState.none,
-              frmDataState: DataState.none,
-            );
-          }
+          break;
         case DataState.none:
-          this.__clearChildrenWithDataStateCascade(
+          this.__clearChildBlocksItemsWithDataStateCascade(
             thisXBlock: thisXBlock,
             qryDataState: DataState.none,
             frmDataState: DataState.none,
           );
         case DataState.pending:
-          this.__clearChildrenWithDataStateCascade(
+          this.__clearChildBlocksItemsWithDataStateCascade(
             thisXBlock: thisXBlock,
             qryDataState: DataState.pending, // ?????????
             frmDataState: DataState.none,
           );
         case DataState.error:
-          this.__clearChildrenWithDataStateCascade(
+          this.__clearChildBlocksItemsWithDataStateCascade(
             thisXBlock: thisXBlock,
             qryDataState: DataState.none,
             frmDataState: DataState.none,
@@ -1336,7 +1309,7 @@ abstract class Block<
     //
     if (this.itemCount == 0) {
       print("        ~~~~~~~> IGNORED --> this.itemCount == 0 - [$name]");
-      this.__clearChildrenWithDataStateCascade(
+      this.__clearChildBlocksItemsWithDataStateCascade(
         thisXBlock: thisXBlock,
         qryDataState: DataState.none,
         frmDataState: DataState.none,
@@ -1595,7 +1568,7 @@ abstract class Block<
     if (currentItemChanged) {
       result._currentItem = candidateCurrentItem;
       //
-      this.__clearChildrenWithDataStateCascade(
+      this.__clearChildBlocksItemsWithDataStateCascade(
         thisXBlock: thisXBlock,
         qryDataState: DataState.pending,
         frmDataState: DataState.pending,
@@ -1749,7 +1722,7 @@ abstract class Block<
       );
     }
     //
-    __clearChildrenWithDataStateCascade(
+    __clearChildBlocksItemsWithDataStateCascade(
       thisXBlock: thisXBlock,
       qryDataState: DataState.none,
       frmDataState: DataState.none,
@@ -1785,7 +1758,7 @@ abstract class Block<
       item: nullItem,
     );
     //
-    this.__clearChildrenWithDataStateCascade(
+    this.__clearChildBlocksItemsWithDataStateCascade(
       thisXBlock: thisXBlock,
       qryDataState: DataState.none,
       frmDataState: DataState.none,
@@ -2263,7 +2236,7 @@ abstract class Block<
         );
       }
       //
-      __clearChildrenWithDataStateCascade(
+      __clearChildBlocksItemsWithDataStateCascade(
         thisXBlock: thisXBlock,
         qryDataState: DataState.ready,
         frmDataState: DataState.ready,
@@ -2496,7 +2469,8 @@ abstract class Block<
   ///
   @RootMethodAnnotation()
   Future<bool> queryNextPage({
-    PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAnItemAsCurrent,
+    PostQueryBehavior postQueryBehavior =
+        PostQueryBehavior.selectAnItemAsCurrent,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -2529,7 +2503,8 @@ abstract class Block<
   ///
   @RootMethodAnnotation()
   Future<bool> queryPreviousPage({
-    PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAnItemAsCurrent,
+    PostQueryBehavior postQueryBehavior =
+        PostQueryBehavior.selectAnItemAsCurrent,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -2565,7 +2540,8 @@ abstract class Block<
   ///
   @RootMethodAnnotation()
   Future<bool> queryMore({
-    PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAnItemAsCurrent,
+    PostQueryBehavior postQueryBehavior =
+        PostQueryBehavior.selectAnItemAsCurrent,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -2663,7 +2639,8 @@ abstract class Block<
   @RootMethodAnnotation()
   Future<bool> query({
     ListBehavior listBehavior = ListBehavior.replace,
-    PostQueryBehavior postQueryBehavior = PostQueryBehavior.selectAnItemAsCurrent,
+    PostQueryBehavior postQueryBehavior =
+        PostQueryBehavior.selectAnItemAsCurrent,
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
     PageableData? pageable,
@@ -4373,7 +4350,7 @@ abstract class Block<
         }
         return Actionable.yes();
       case FormMode.edit:
-        break; // Continue check below.
+        break; // Continue check below .
     }
     //
     return __canEditItemOnForm(
