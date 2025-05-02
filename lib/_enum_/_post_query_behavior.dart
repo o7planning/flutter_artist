@@ -3,6 +3,9 @@ part of '../flutter_artist.dart';
 enum PostQueryBehavior {
   clearCurrentItem,
 
+  /// Default behavior.
+  selectAvailableItemIfNeed,
+
   /// Select an available item in the List or switch to non-selected if List is empty.
   selectAvailableItem,
 

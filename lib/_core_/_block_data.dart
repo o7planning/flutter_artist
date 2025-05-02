@@ -178,6 +178,7 @@ class _BlockData<
 
   void _clearWithDataState({
     required DataState qryDataState,
+    required bool errorInFilter,
   }) {
     _queryDataState = qryDataState;
     if (_queryDataState == DataState.error) {
@@ -185,7 +186,9 @@ class _BlockData<
       //
       // Update FilterCriteria:
       //
-      __setNewFilterCriteria(null);
+      if (errorInFilter) {
+        __setNewFilterCriteria(null);
+      }
     }
     //
     _items.clear();

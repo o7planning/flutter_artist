@@ -104,7 +104,7 @@ class _XBlock {
   }
 
   PostQueryBehavior get postQueryBehavior {
-    // TODO: Xem lai gia tri mac dinh
+    // return __postQueryBehavior ?? PostQueryBehavior.selectAvailableItemIfNeed;
     return __postQueryBehavior ?? PostQueryBehavior.selectAvailableItem;
   }
 
