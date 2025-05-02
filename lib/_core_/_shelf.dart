@@ -93,8 +93,8 @@ abstract class Shelf extends _XBase {
     for (Activity activity in activities) {
       if (__activityMap.containsKey(activity.name)) {
         throw ___registerError(
-            "Duplicated Activity '${activity.name}' in '${getClassName(this)}'\n"
-            "Double-check ${getClassName(this)}.registerStructure() method");
+            "Duplicated Activity '${activity.name}' in '${getClassName(this)}'"
+            "\nDouble-check ${getClassName(this)}.registerStructure() method");
       } else {
         __activityMap[activity.name] = activity;
       }
