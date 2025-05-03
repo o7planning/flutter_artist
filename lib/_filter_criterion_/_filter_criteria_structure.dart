@@ -31,10 +31,8 @@ class FilterCriteriaStructure {
     }
   }
 
-  void __standardizeCascade(
-    MultiOptCriterion multiOptCriterion,
-    MultiOptCriterion? parent,
-  ) {
+  void __standardizeCascade(MultiOptCriterion multiOptCriterion,
+      MultiOptCriterion? parent,) {
     multiOptCriterion.parent = parent;
     _allCriteriaMap[multiOptCriterion.criterionName] = multiOptCriterion;
     //
@@ -144,7 +142,7 @@ class FilterCriteriaStructure {
             if (formKeyInstantValues.containsKey(criterion.criterionName)) {
               if (criterion is SimpleCriterion) {
                 criterion._tempCurrentValue =
-                    formKeyInstantValues[criterion.criterionName];
+                formKeyInstantValues[criterion.criterionName];
               }
             }
           }
@@ -157,7 +155,7 @@ class FilterCriteriaStructure {
           if (formKeyInstantValues.containsKey(criterion.criterionName)) {
             if (criterion is SimpleCriterion) {
               criterion._tempCurrentValue =
-                  formKeyInstantValues[criterion.criterionName];
+              formKeyInstantValues[criterion.criterionName];
             }
           }
       }
@@ -289,7 +287,8 @@ class FilterCriteriaStructure {
       if (criterion == null) {
         print("""\n
             ****************************************************************************************************
-            *** WARNING ***: You should declare criterion '$criterionName' explicitly in ${getClassName(filterModel)}.
+            *** WARNING ***: You should declare criterion '$criterionName' explicitly in ${getClassName(
+            filterModel)}.
             ****************************************************************************************************
             """);
         //
@@ -335,7 +334,7 @@ class FilterCriteriaStructure {
     } else {
       throw AppException(
           message:
-              'Invalid Criterion "$multiOptCriterionName", it must be $MultiOptCriterion');
+          'Invalid Criterion "$multiOptCriterionName", it must be $MultiOptCriterion');
     }
   }
 

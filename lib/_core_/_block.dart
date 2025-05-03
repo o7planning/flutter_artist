@@ -1258,33 +1258,40 @@ abstract class Block<
         ),
       );
     } else {
-      final CurrentItemSelectionType currentItemSelectionType;
-      switch (thisXBlock.postQueryBehavior) {
-        case PostQueryBehavior.selectAnItemAsCurrentIfNeed:
-          currentItemSelectionType =
-              CurrentItemSelectionType.selectAnItemAsCurrentIfNeed;
-        case PostQueryBehavior.selectAnItemAsCurrent:
-          currentItemSelectionType =
-              CurrentItemSelectionType.selectAnItemAsCurrent;
-        case PostQueryBehavior.selectAnItemAsCurrentAndLoadForm:
-          currentItemSelectionType =
-              CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm;
-        case PostQueryBehavior.clearCurrentItem:
-          throw UnimplementedError("Never Run");
-        case PostQueryBehavior.createNewItem:
-          throw UnimplementedError("Never Run");
+      // If naturalMode of "Lazy Load", and Form in "creation" mode
+      //  ==> Do not "select an item as current".
+      if (thisXBlock.xShelf.naturalMode && formMode == FormMode.creation) {
+        // Do nothing.
+        // Test Case: com-dept-emp38b.
+      } else {
+        final CurrentItemSelectionType currentItemSelectionType;
+        switch (thisXBlock.postQueryBehavior) {
+          case PostQueryBehavior.selectAnItemAsCurrentIfNeed:
+            currentItemSelectionType =
+                CurrentItemSelectionType.selectAnItemAsCurrentIfNeed;
+          case PostQueryBehavior.selectAnItemAsCurrent:
+            currentItemSelectionType =
+                CurrentItemSelectionType.selectAnItemAsCurrent;
+          case PostQueryBehavior.selectAnItemAsCurrentAndLoadForm:
+            currentItemSelectionType =
+                CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm;
+          case PostQueryBehavior.clearCurrentItem:
+            throw UnimplementedError("Never Run");
+          case PostQueryBehavior.createNewItem:
+            throw UnimplementedError("Never Run");
+        }
+        //
+        FlutterArtist.taskUnitQueue.addTaskUnit(
+          _BlockSelectAsCurrentTaskUnit<ITEM>(
+            currentItemSelectionType: currentItemSelectionType,
+            xBlock: thisXBlock,
+            newQueriedList: pageData?.items ?? [],
+            candidateItem: candidateCurrentItem,
+            forceReloadItem: false,
+            forceForm: null,
+          ),
+        );
       }
-      //
-      FlutterArtist.taskUnitQueue.addTaskUnit(
-        _BlockSelectAsCurrentTaskUnit<ITEM>(
-          currentItemSelectionType: currentItemSelectionType,
-          xBlock: thisXBlock,
-          newQueriedList: pageData?.items ?? [],
-          candidateItem: candidateCurrentItem,
-          forceReloadItem: false,
-          forceForm: null,
-        ),
-      );
     }
     return thisXBlock.queryResult;
   }
