@@ -266,6 +266,38 @@ abstract class Block<
 
   DataState get selectionDataState => __blockData._selectionDataState;
 
+  // nearestAncestorNonNoneQueryDataState?
+  DataState get ancestralNonNoneQueryDataState {
+    if (parent == null) {
+      return DataState.ready;
+    }
+    if (parent!.queryDataState != DataState.none) {
+      return parent!.queryDataState;
+    }
+    return parent!.ancestralNonNoneQueryDataState;
+  }
+
+  FormMode? get formMode {
+    if (formModel == null) {
+      return null;
+    }
+    return formModel!.formMode;
+  }
+
+  // FormMode? get nearestAncestorFormMode {
+  //   Block? p = parent;
+  //   while (true) {
+  //     if (p == null) {
+  //       return null;
+  //     }
+  //     FormMode? pfm = p.formMode;
+  //     if (pfm != null) {
+  //       return pfm;
+  //     }
+  //     p = p.parent;
+  //   }
+  // }
+
   final ItemSortCriteria? _itemSortCriteria;
 
   ItemSortCriteria? get itemSortCriteria => _itemSortCriteria;

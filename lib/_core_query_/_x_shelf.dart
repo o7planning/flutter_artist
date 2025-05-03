@@ -3,6 +3,8 @@ part of '../flutter_artist.dart';
 int __xShelfIdSequence = 0;
 
 class _XShelf {
+  final bool naturalMode;
+
   late final int xShelfId;
 
   final Shelf shelf;
@@ -36,6 +38,7 @@ class _XShelf {
   final Map<String, _XFormModel> allXFormModelMap = {};
 
   _XShelf({
+     this.naturalMode = false,
     required this.shelf,
     required _FilterModelOpt? forceFilterModelOpt,
     required List<_ScalarOpt> forceQueryScalarOpts,
