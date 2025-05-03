@@ -1258,7 +1258,7 @@ abstract class Block<
         ),
       );
     } else {
-      // If naturalMode of "Lazy Load", and Form in "creation" mode
+      // If "Lazy Load" is natural, and Form in "creation" mode
       //  ==> Do not "select an item as current".
       if (thisXBlock.xShelf.naturalMode && formMode == FormMode.creation) {
         // Do nothing.
