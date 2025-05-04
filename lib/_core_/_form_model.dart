@@ -191,9 +191,6 @@ abstract class FormModel<
   Future<bool> _unitLoadForm({required _XFormModel thisXFormModel}) async {
     __assertThisXFormModel(thisXFormModel);
     //
-
-    _ForceType forceForm = thisXFormModel.forceTypeForForm;
-
     final bool forceReloadForm;
     switch (thisXFormModel.forceTypeForForm) {
       case _ForceType.force:
