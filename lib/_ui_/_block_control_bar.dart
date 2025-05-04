@@ -84,14 +84,14 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
     return children.isEmpty
         ? null
         : BreadCrumb(
-            divider: divider,
-            overflow: overflow,
-            items: children
-                .map(
-                  (child) => BreadCrumbItem(content: child),
-                )
-                .toList(),
-          );
+      divider: divider,
+      overflow: overflow,
+      items: children
+          .map(
+            (child) => BreadCrumbItem(content: child),
+      )
+          .toList(),
+    );
   }
 
   Widget? _buildLeft2Buttons() {
@@ -107,8 +107,8 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             onAction: widget.block.isPreparingFormCreation,
             onPressed: widget.showCreateButton && createActionable.yes
                 ? () {
-                    _prepareToCreate(widget.block);
-                  }
+              _prepareToCreate(widget.block);
+            }
                 : null,
           ),
         if (widget.showDeleteButton)
@@ -121,8 +121,8 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             onAction: widget.block.isDeleting,
             onPressed: widget.showDeleteButton && deleteActionable.yes
                 ? () {
-                    _doDelete(widget.block);
-                  }
+              _doDelete(widget.block);
+            }
                 : null,
           ),
       ],
@@ -139,42 +139,43 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
     ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
     Widget? left2 = _buildLeft2Buttons();
     return _buildBreadCrumb(
-          overflow: ScrollableOverflow(
-            keepLastDivider: false,
-            reverse: false,
-            direction: Axis.horizontal,
+      overflow: ScrollableOverflow(
+        keepLastDivider: false,
+        reverse: false,
+        direction: Axis.horizontal,
+      ),
+      children: [
+        if (widget.showBackButton)
+          _ControlBarButton(
+            tooltip: "Back",
+            iconData: _formBackIconData,
+            onAction: false,
+            onPressed:
+            widget.showBackButton && Navigator.of(context).canPop()
+                ? () {
+              _back(context);
+            }
+                : null,
           ),
-          children: [
-            if (widget.showBackButton)
-              _ControlBarButton(
-                tooltip: "Back",
-                iconData: _formBackIconData,
-                onAction: false,
-                onPressed:
-                    widget.showBackButton && Navigator.of(context).canPop()
-                        ? () {
-                            _back(context);
-                          }
-                        : null,
-              ),
-            if (widget.block.formModel != null &&
-                (loggedInUser?.isSystemUser ?? false))
-              Tooltip(
-                message:
-                    "${widget.block.formModel!.formMode.tooltip} [${getClassName(widget.block)}]",
-                child: Icon(
-                  widget.block.formModel!.formMode == FormMode.none
-                      ? _formNoneModeIconData
-                      : widget.block.formModel!.formMode == FormMode.creation
-                          ? _formCreationModeIconData
-                          : _formEditModeIconData,
-                  size: _ControlBarButton.iconSize,
-                ),
-              ),
-            if (left2 != null) left2
-          ],
-          divider: _buildVerticalSeparator(),
-        ) ??
+        if (widget.block.formModel != null &&
+            (loggedInUser?.isSystemUser ?? false))
+          Tooltip(
+            message:
+            "${widget.block.formModel!.formMode.tooltip} [${getClassName(
+                widget.block)}]",
+            child: Icon(
+              widget.block.formModel!.formMode == FormMode.none
+                  ? _formNoneModeIconData
+                  : widget.block.formModel!.formMode == FormMode.creation
+                  ? _formCreationModeIconData
+                  : _formEditModeIconData,
+              size: _ControlBarButton.iconSize,
+            ),
+          ),
+        if (left2 != null) left2
+      ],
+      divider: _buildVerticalSeparator(),
+    ) ??
         const SizedBox();
   }
 
@@ -184,18 +185,18 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
     Widget? right3 = _buildRight3Buttons(context);
     //
     return _buildBreadCrumb(
-          overflow: ScrollableOverflow(
-            keepLastDivider: false,
-            reverse: false,
-            direction: Axis.horizontal,
-          ),
-          children: [
-            if (right1 != null) right1,
-            if (right2 != null) right2,
-            if (right3 != null) right3,
-          ],
-          divider: _buildVerticalSeparator(),
-        ) ??
+      overflow: ScrollableOverflow(
+        keepLastDivider: false,
+        reverse: false,
+        direction: Axis.horizontal,
+      ),
+      children: [
+        if (right1 != null) right1,
+        if (right2 != null) right2,
+        if (right3 != null) right3,
+      ],
+      divider: _buildVerticalSeparator(),
+    ) ??
         const SizedBox();
   }
 
@@ -212,8 +213,8 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             onAction: widget.block.isRefreshingCurrentItem,
             onPressed: widget.showRefreshButton && refreshActionable.yes
                 ? () {
-                    _refreshCurrentItem(widget.block);
-                  }
+              _refreshCurrentItem(widget.block);
+            }
                 : null,
           ),
         if (widget.showQueryButton)
@@ -223,8 +224,8 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             onAction: widget.block.isQuerying,
             onPressed: widget.showQueryButton && queryActionable.yes
                 ? () {
-                    _queryBlock(widget.block);
-                  }
+              _queryBlock(widget.block);
+            }
                 : null,
           ),
       ],
@@ -250,8 +251,8 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             onAction: widget.block.__isSaving,
             onPressed: widget.showSaveButton && saveActionable.yes
                 ? () {
-                    _saveForm(widget.block);
-                  }
+              _saveForm(widget.block);
+            }
                 : null,
           ),
         if (widget.block.formModel != null && widget.showSaveButton)
@@ -261,8 +262,8 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             onAction: false,
             onPressed: widget.showSaveButton && resetActionable.yes
                 ? () {
-                    _resetForm(widget.block);
-                  }
+              _resetForm(widget.block);
+            }
                 : null,
           ),
       ],
@@ -288,11 +289,11 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             onAction: false,
             onPressed: widget.showFilterCriteriaButton
                 ? () {
-                    showBlockFilterCriteriaDialog(
-                      context: context,
-                      block: widget.block,
-                    );
-                  }
+              showBlockFilterCriteriaDialog(
+                context: context,
+                block: widget.block,
+              );
+            }
                 : null,
           ),
         if (widget.showFormInfoButton && formInfoActionable.yes)
@@ -302,8 +303,8 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             onAction: false,
             onPressed: widget.showFormInfoButton
                 ? () {
-                    _showFormInfo(context, widget.block);
-                  }
+              _showFormInfo(context, widget.block);
+            }
                 : null,
           ),
       ],

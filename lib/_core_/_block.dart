@@ -1358,8 +1358,6 @@ abstract class Block<
     //
     bool hasXActiveUI = hasActiveUIComponent(alsoCheckChildren: true);
     thisXBlock._printParameters(hasActiveUI: hasXActiveUI); // ---> Debug
-    print(
-        "@@@ ${getClassName(this)} ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1 hasActiveUI: $hasXActiveUI");
     //
     final ITEM? currentItemOrigin = this.currentItem;
     ITEM? candidateCurrentItem = candidateItem;
@@ -1611,8 +1609,6 @@ abstract class Block<
         refreshedItem: candidateCurrentItem,
         refreshedItemDetail: candidateCurrentItemDetail,
       );
-      print(
-          "@@@ ${getClassName(this)} ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> -1 candidateCurrentItem: ${candidateCurrentItem}");
       //
       if (currentItemChanged) {
         result._currentItem = candidateCurrentItem;
@@ -1624,10 +1620,6 @@ abstract class Block<
         );
       }
     }
-
-    print(
-        "@@@ ${getClassName(this)} ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 0 currentItem: ${currentItem}");
-
     //
     // FormModel:
     //
@@ -1640,8 +1632,6 @@ abstract class Block<
       //
       bool formActive = thisXBlock.xFormModel!.formModel.hasActiveUIComponent();
       if (currentItemChanged && formActive) {
-        print(
-            "@@@ ${getClassName(this)} ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1 currentItemChanged: $currentItemChanged");
         thisXBlock.xFormModel!.forceTypeForForm = _ForceType.force;
       }
       // !currentItemChanged
@@ -1652,15 +1642,6 @@ abstract class Block<
         final postQueryBehavior = thisXBlock.postQueryBehavior;
         //
         _ForceType forceTypeForm = thisXBlock.xFormModel!.forceTypeForForm;
-
-        print(
-            "@@@ ${getClassName(this)} ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 2 currentItemChanged: $currentItemChanged");
-        print(
-            "@@@ ${getClassName(this)} ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3 forceReloadItem: $forceReloadItem");
-        print(
-            "@@@ ${getClassName(this)} ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 4 postQueryBehavior: $postQueryBehavior");
-        print(
-            "@@@ ${getClassName(this)} ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 5 forceTypeForm: $forceTypeForm");
 
         switch (postQueryBehavior) {
           case PostQueryBehavior.clearCurrentItem:
@@ -1679,8 +1660,6 @@ abstract class Block<
             thisXBlock.xFormModel!.forceTypeForForm = _ForceType.force;
         }
       }
-      print(
-          "@@@ ${getClassName(this)} ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 5 forceTypeForm: ${thisXBlock.xFormModel!.forceTypeForForm}");
 
       // May be cancelled if not need:
       FlutterArtist.taskUnitQueue.addTaskUnit(
