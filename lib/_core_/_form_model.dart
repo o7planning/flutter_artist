@@ -191,25 +191,27 @@ abstract class FormModel<
   Future<bool> _unitLoadForm({required _XFormModel thisXFormModel}) async {
     __assertThisXFormModel(thisXFormModel);
     //
-    bool active = this.hasActiveUIComponent();
+
     _Force forceForm = thisXFormModel.forceForm;
+
+    final bool forceReloadForm;
+    switch (thisXFormModel.forceForm) {
+      case _Force.none:
+        forceReloadForm = false;
+      case _Force.force:
+        forceReloadForm = true;
+      case _Force.forceIfVisible:
+        forceReloadForm = hasActiveUIComponent();
+    }
     //
-    if (forceForm != _Force.force) {
-      if (!active) {
-        if (this.formDataState == DataState.error ||
-            this.formDataState == DataState.pending) {
-          _clearWithDataState(formDataState: this.formDataState);
-          return true;
-        } else {
-          return true;
-        }
+    if (!forceReloadForm) {
+      if (this.formDataState == DataState.error ||
+          this.formDataState == DataState.pending) {
+        print("        ~~~~~~~> IGNORED --> form - [${block.name}]");
+        _clearWithDataState(formDataState: this.formDataState);
+        return true;
       } else {
-        if (this.formDataState == DataState.error ||
-            this.formDataState == DataState.pending) {
-          forceForm = _Force.force;
-        } else {
-          return true;
-        }
+        return true;
       }
     }
     //

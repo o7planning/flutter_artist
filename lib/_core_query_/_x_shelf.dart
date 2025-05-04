@@ -214,7 +214,11 @@ class _XShelf {
     for (_FormModelOpt formModelOpt in forceQueryFormModelOpts) {
       FormModel formModel = formModelOpt.formModel;
       _XFormModel xFormModel = allXFormModelMap[formModel.block.name]!;
-      xFormModel.forceForm = _Force.force; // naturalMode ? false : true;
+      if (naturalMode) {
+        xFormModel.forceForm = _Force.forceIfVisible;
+      } else {
+        xFormModel.forceForm = _Force.force;
+      }
       // Set Force query to Ascending Ancestor Blocks:
       List<Block> descendingAncestorBlocks = [
         ...formModel.block.descendingAncestorBlocks,

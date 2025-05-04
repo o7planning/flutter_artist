@@ -1630,6 +1630,7 @@ abstract class Block<
         frmDataState: DataState.pending,
       );
     }
+    print("@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1");
     //
     // FormModel:
     //
@@ -1646,22 +1647,25 @@ abstract class Block<
 
       if (postQueryBehavior != null) {
         switch (postQueryBehavior) {
+          case PostQueryBehavior.clearCurrentItem:
+            // Never run.
+            break;
+          case PostQueryBehavior.createNewItem:
+            // Never run.
+            break;
           case PostQueryBehavior.selectAnItemAsCurrentIfNeed:
             // Do nothing (Ready SelectAvailableItem).
             break;
           case PostQueryBehavior.selectAnItemAsCurrent:
             // Do nothing (Ready SelectAvailableItem).
             break;
-          case PostQueryBehavior.createNewItem:
-            // TODO: Remove PostQueryBehavior.createNewItem??
-            // TODO: Add PostQueryBehavior.none??
-            break;
           case PostQueryBehavior.selectAnItemAsCurrentAndLoadForm:
             thisXBlock.xFormModel!.forceForm = _Force.force;
-          case PostQueryBehavior.clearCurrentItem:
-            break;
         }
       }
+      print("@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 2 postQueryBehavior: $postQueryBehavior");
+      print("@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3 forceForm: ${thisXBlock.xFormModel!.forceForm}");
+
       // May be cancelled if not need:
       FlutterArtist.taskUnitQueue.addTaskUnit(
         _FormModelLoadFormTaskUnit(
