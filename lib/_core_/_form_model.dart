@@ -192,9 +192,9 @@ abstract class FormModel<
     __assertThisXFormModel(thisXFormModel);
     //
     bool active = this.hasActiveUIComponent();
-    bool forceForm = thisXFormModel.forceForm;
+    _Force forceForm = thisXFormModel.forceForm;
     //
-    if (!forceForm) {
+    if (forceForm != _Force.force) {
       if (!active) {
         if (this.formDataState == DataState.error ||
             this.formDataState == DataState.pending) {
@@ -206,7 +206,7 @@ abstract class FormModel<
       } else {
         if (this.formDataState == DataState.error ||
             this.formDataState == DataState.pending) {
-          forceForm = true;
+          forceForm = _Force.force;
         } else {
           return true;
         }

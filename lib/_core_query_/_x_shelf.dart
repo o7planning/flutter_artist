@@ -80,9 +80,19 @@ class _XShelf {
     }
     //
     __setForceFilterModelOpt(forceFilterModelOpt);
-    __setForceQueryScalarOpts(forceQueryScalarOpts);
-    __setForceQueryBlockOpts(forceQueryBlockOpts);
-    __setForceQueryFormModelOpts(forceQueryFormModelOpts);
+    //
+    __setForceQueryScalarOpts(
+      naturalMode: naturalMode,
+      forceQueryScalarOpts: forceQueryScalarOpts,
+    );
+    __setForceQueryBlockOpts(
+      naturalMode: naturalMode,
+      forceQueryBlockOpts: forceQueryBlockOpts,
+    );
+    __setForceQueryFormModelOpts(
+      naturalMode: naturalMode,
+      forceQueryFormModelOpts: forceQueryFormModelOpts,
+    );
   }
 
   _XFilterModel? findXFilterModelByName(String name) {
@@ -126,7 +136,10 @@ class _XShelf {
     }
   }
 
-  void __setForceQueryScalarOpts(List<_ScalarOpt> forceQueryScalarOpts) {
+  void __setForceQueryScalarOpts({
+    required bool naturalMode,
+    required List<_ScalarOpt> forceQueryScalarOpts,
+  }) {
     // Force query:
     for (_ScalarOpt scalarOpt in forceQueryScalarOpts) {
       Scalar scalar = scalarOpt.scalar;
@@ -183,19 +196,25 @@ class _XShelf {
     );
   }
 
-  void __setForceQueryBlockOpts(List<_BlockOpt> forceQueryBlockOpts) {
+  void __setForceQueryBlockOpts({
+    required bool naturalMode,
+    required List<_BlockOpt> forceQueryBlockOpts,
+  }) {
     // Force query:
     for (_BlockOpt blockOpt in forceQueryBlockOpts) {
       __setForceQueryBlockOpt(blockOpt);
     }
   }
 
-  void __setForceQueryFormModelOpts(List<_FormModelOpt> forceQueryFormModels) {
+  void __setForceQueryFormModelOpts({
+    required bool naturalMode,
+    required List<_FormModelOpt> forceQueryFormModelOpts,
+  }) {
     // Force query:
-    for (_FormModelOpt formModelOpt in forceQueryFormModels) {
+    for (_FormModelOpt formModelOpt in forceQueryFormModelOpts) {
       FormModel formModel = formModelOpt.formModel;
       _XFormModel xFormModel = allXFormModelMap[formModel.block.name]!;
-      xFormModel.forceForm = true;
+      xFormModel.forceForm = _Force.force; // naturalMode ? false : true;
       // Set Force query to Ascending Ancestor Blocks:
       List<Block> descendingAncestorBlocks = [
         ...formModel.block.descendingAncestorBlocks,

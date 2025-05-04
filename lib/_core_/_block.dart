@@ -1322,7 +1322,6 @@ abstract class Block<
         candidateItem,
       );
     }
-
     var result = thisXBlock.currentItemSelectionResult!;
     //
     if (this.queryDataState == DataState.pending) {
@@ -1403,7 +1402,8 @@ abstract class Block<
     bool forceReloadItem = thisXBlock.forceReloadItem;
     final bool forceForm;
     if (thisXBlock.xFormModel != null) {
-      forceForm = thisXBlock.xFormModel!.forceForm;
+      forceForm = (thisXBlock.xFormModel!.forceForm == _Force.force) ||
+          thisXBlock.xFormModel!.formModel.hasActiveUIComponent();
     } else {
       forceForm = false;
     }
@@ -1643,6 +1643,7 @@ abstract class Block<
       /// thisXBlock.__postQueryBehavior: May be null.
       ///
       final postQueryBehavior = thisXBlock.__postQueryBehavior;
+
       if (postQueryBehavior != null) {
         switch (postQueryBehavior) {
           case PostQueryBehavior.selectAnItemAsCurrentIfNeed:
@@ -1656,7 +1657,7 @@ abstract class Block<
             // TODO: Add PostQueryBehavior.none??
             break;
           case PostQueryBehavior.selectAnItemAsCurrentAndLoadForm:
-            thisXBlock.xFormModel!.forceForm = true;
+            thisXBlock.xFormModel!.forceForm = _Force.force;
           case PostQueryBehavior.clearCurrentItem:
             break;
         }
@@ -2435,7 +2436,7 @@ abstract class Block<
       newQueriedList: [],
       candidateItem: item,
       forceReloadItem: true,
-      forceForm: forceForm,
+      forceForm: forceForm ? _Force.force : _Force.none,
     );
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //
