@@ -2,7 +2,7 @@ part of '../flutter_artist.dart';
 
 class _XFormModel {
   final _XShelf xShelf;
-  _Force forceForm = _Force.none;
+  _Force forceForm = _Force.forceIfVisible;
   bool queried = false;
   final FormModel formModel;
   final ExtraFormInput? extraFormInput;
@@ -24,7 +24,6 @@ class _XFormModel {
 }
 
 enum _Force {
-  none,
   force,
   forceIfVisible,
 }

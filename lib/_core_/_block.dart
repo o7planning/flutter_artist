@@ -1630,7 +1630,6 @@ abstract class Block<
         frmDataState: DataState.pending,
       );
     }
-    print("@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1");
     //
     // FormModel:
     //
@@ -1663,9 +1662,6 @@ abstract class Block<
             thisXBlock.xFormModel!.forceForm = _Force.force;
         }
       }
-      print("@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 2 postQueryBehavior: $postQueryBehavior");
-      print("@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3 forceForm: ${thisXBlock.xFormModel!.forceForm}");
-
       // May be cancelled if not need:
       FlutterArtist.taskUnitQueue.addTaskUnit(
         _FormModelLoadFormTaskUnit(
@@ -2440,7 +2436,7 @@ abstract class Block<
       newQueriedList: [],
       candidateItem: item,
       forceReloadItem: true,
-      forceForm: forceForm ? _Force.force : _Force.none,
+      forceForm: forceForm ? _Force.force : _Force.forceIfVisible,
     );
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //

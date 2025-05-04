@@ -196,8 +196,6 @@ abstract class FormModel<
 
     final bool forceReloadForm;
     switch (thisXFormModel.forceForm) {
-      case _Force.none:
-        forceReloadForm = false;
       case _Force.force:
         forceReloadForm = true;
       case _Force.forceIfVisible:
