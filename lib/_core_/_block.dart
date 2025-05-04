@@ -1288,7 +1288,7 @@ abstract class Block<
             newQueriedList: pageData?.items ?? [],
             candidateItem: candidateCurrentItem,
             forceReloadItem: false,
-            forceForm: null,
+            forceTypeForForm: null,
           ),
         );
       }
@@ -1400,17 +1400,22 @@ abstract class Block<
       result._addCandidateItem(candidateCurrentItem);
     }
     bool forceReloadItem = thisXBlock.forceReloadItem;
-    final bool forceForm;
+    final bool forceLoadForm;
     if (thisXBlock.xFormModel != null) {
-      forceForm = (thisXBlock.xFormModel!.forceForm == _Force.force) ||
-          thisXBlock.xFormModel!.formModel.hasActiveUIComponent();
+      switch (thisXBlock.xFormModel!.forceTypeForForm) {
+        case _ForceType.force:
+          forceLoadForm = true;
+        case _ForceType.forceIfVisible:
+          forceLoadForm =
+              thisXBlock.xFormModel!.formModel.hasActiveUIComponent();
+      }
     } else {
-      forceForm = false;
+      forceLoadForm = false;
     }
     //
-    if (!currentItemChanged && !forceReloadItem && !forceForm) {
+    if (!currentItemChanged && !forceReloadItem && !forceLoadForm) {
       print(
-          "        ~~~~~~~> IGNORED --> !currentItemChanged && !forceReloadItem && !forceForm - [$name]");
+          "        ~~~~~~~> IGNORED --> !currentItemChanged && !forceReloadItem && !forceLoadForm - [$name]");
       for (_XBlock childXBlock in thisXBlock.childXBlocks) {
         FlutterArtist.taskUnitQueue.addTaskUnit(
           _BlockQueryTaskUnit(
@@ -1550,7 +1555,7 @@ abstract class Block<
           newQueriedList: newQueriedList,
           candidateItem: siblingItem,
           forceReloadItem: false,
-          forceForm: null,
+          forceTypeForForm: null,
         );
         FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
         return;
@@ -1577,7 +1582,7 @@ abstract class Block<
           newQueriedList: newQueriedList,
           candidateItem: siblingItem,
           forceReloadItem: false,
-          forceForm: null,
+          forceTypeForForm: null,
         );
         FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
         return;
@@ -1659,7 +1664,7 @@ abstract class Block<
             // Do nothing (Ready SelectAvailableItem).
             break;
           case PostQueryBehavior.selectAnItemAsCurrentAndLoadForm:
-            thisXBlock.xFormModel!.forceForm = _Force.force;
+            thisXBlock.xFormModel!.forceTypeForForm = _ForceType.force;
         }
       }
       // May be cancelled if not need:
@@ -1792,7 +1797,7 @@ abstract class Block<
       newQueriedList: <ITEM>[],
       candidateItem: siblingItem,
       forceReloadItem: false,
-      forceForm: null,
+      forceTypeForForm: null,
     );
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
   }
@@ -2110,7 +2115,7 @@ abstract class Block<
             newQueriedList: [],
             candidateItem: currentItem,
             forceReloadItem: false,
-            forceForm: null,
+            forceTypeForForm: null,
           );
           FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
         }
@@ -2306,7 +2311,7 @@ abstract class Block<
         newQueriedList: [],
         candidateItem: siblingItem,
         forceReloadItem: false,
-        forceForm: null,
+        forceTypeForForm: null,
       );
       FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
       //
@@ -2436,7 +2441,8 @@ abstract class Block<
       newQueriedList: [],
       candidateItem: item,
       forceReloadItem: true,
-      forceForm: forceForm ? _Force.force : _Force.forceIfVisible,
+      forceTypeForForm:
+          forceForm ? _ForceType.force : _ForceType.forceIfVisible,
     );
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //

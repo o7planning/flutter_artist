@@ -192,13 +192,13 @@ abstract class FormModel<
     __assertThisXFormModel(thisXFormModel);
     //
 
-    _Force forceForm = thisXFormModel.forceForm;
+    _ForceType forceForm = thisXFormModel.forceTypeForForm;
 
     final bool forceReloadForm;
-    switch (thisXFormModel.forceForm) {
-      case _Force.force:
+    switch (thisXFormModel.forceTypeForForm) {
+      case _ForceType.force:
         forceReloadForm = true;
-      case _Force.forceIfVisible:
+      case _ForceType.forceIfVisible:
         forceReloadForm = hasActiveUIComponent();
     }
     //

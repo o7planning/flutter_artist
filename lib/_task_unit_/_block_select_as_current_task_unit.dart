@@ -2,7 +2,7 @@ part of '../flutter_artist.dart';
 
 class _BlockSelectAsCurrentTaskUnit<ITEM extends Object> extends _TaskUnit {
   final _XBlock xBlock;
-  final _Force? forceForm;
+  final _ForceType? forceTypeForForm;
   final CurrentItemSelectionType currentItemSelectionType;
   final ITEM? candidateItem;
   final List<ITEM> newQueriedList;
@@ -13,14 +13,14 @@ class _BlockSelectAsCurrentTaskUnit<ITEM extends Object> extends _TaskUnit {
     required this.newQueriedList,
     required this.candidateItem,
     required bool forceReloadItem,
-    required this.forceForm,
+    required this.forceTypeForForm,
   }) : super(taskType: TaskType.blockSelectItemAsCurrent) {
     if (forceReloadItem) {
       xBlock.setForceReloadItem();
     }
     //
-    if (forceForm != null) {
-      xBlock.xFormModel?.forceForm = forceForm!;
+    if (forceTypeForForm != null) {
+      xBlock.xFormModel?.forceTypeForForm = forceTypeForForm!;
     }
   }
 
