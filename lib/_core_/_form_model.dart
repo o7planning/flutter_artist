@@ -190,13 +190,14 @@ abstract class FormModel<
 
   Future<bool> _unitLoadForm({required _XFormModel thisXFormModel}) async {
     __assertThisXFormModel(thisXFormModel);
+    print("@@@@@@@@@~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1 FORM: ${block.currentItem}");
     //
     final bool forceReloadForm;
     switch (thisXFormModel.forceTypeForForm) {
       case _ForceType.force:
         forceReloadForm = true;
       case _ForceType.forceIfVisible:
-        forceReloadForm = hasActiveUIComponent();
+        forceReloadForm = formDataState != DataState.ready && hasActiveUIComponent();
     }
     //
     if (!forceReloadForm) {
@@ -350,6 +351,8 @@ abstract class FormModel<
     }
 
     final ITEM_DETAIL? itemDetail = block.currentItemDetail;
+    print("@@@@@@@@@~~~~~~~~~~~~~~~~~~~~~~~~~~~> 2 FORM itemDetail: ${itemDetail}");
+    print("@@@@@@@@@~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3 FORM formDataState: ${formDataState}");
     final FormMode currentFormMode = formDataState == DataState.none
         ? FormMode.none
         : itemDetail == null
