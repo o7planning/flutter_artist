@@ -1403,12 +1403,58 @@ abstract class Block<
     }
     //
     bool forceReloadItem = thisXBlock.forceReloadItem;
-
-    // *************************************************************************
-
-    if (currentItemChanged || forceReloadItem) {
+    bool forceReloadForm = false;
+    //
+    if (formModel != null) {
+      forceReloadForm =
+          thisXBlock.xFormModel!.forceTypeForForm == _ForceType.force;
       //
-      // currentItemChanged || forceReloadItem
+      if (!forceReloadForm) {
+        final postQueryBehavior = thisXBlock.postQueryBehavior;
+        //
+        switch (postQueryBehavior) {
+          case PostQueryBehavior.clearCurrentItem:
+            // Never run.
+            break;
+          case PostQueryBehavior.createNewItem:
+            // Never run.
+            break;
+          case PostQueryBehavior.selectAnItemAsCurrentIfNeed:
+            // Do nothing (Ready SelectAvailableItem).
+            break;
+          case PostQueryBehavior.selectAnItemAsCurrent:
+            // Do nothing (Ready SelectAvailableItem).
+            break;
+          case PostQueryBehavior.selectAnItemAsCurrentAndLoadForm:
+            forceReloadForm = true;
+        }
+      }
+      //
+      final bool formActive = formModel!.hasActiveUIComponent();
+      final DataState formDataState = formModel!.formDataState;
+      //
+      if (formActive) {
+        //
+        if (formDataState != DataState.ready) {
+          forceReloadForm = true;
+        } else {}
+      }
+      // Form is NOT ACTIVE:
+      else {
+        //
+      }
+      if (forceReloadForm) {
+        thisXBlock.xFormModel!.forceTypeForForm = _ForceType.force;
+      }
+    }
+
+    //
+    // IMPORTNANT: Do not remove condition "forceReloadForm":
+    //   "forceReloadForm" condition to make sure if "forceReloadForm" ==> Must Refresh Item.
+    //
+    if (currentItemChanged || forceReloadItem || forceReloadForm) {
+      //
+      // currentItemChanged || forceReloadItem || forceReloadForm
       //
       //
       // If no item can be current.
@@ -1526,10 +1572,12 @@ abstract class Block<
           );
           //
           if (currentItem != null) {
+            // TODO: Test case.
             return;
           }
           //
           if (siblingItem == null) {
+            // TODO: Test case.
             return;
           }
           //
@@ -1624,43 +1672,6 @@ abstract class Block<
     // FormModel:
     //
     if (thisXBlock.xFormModel != null) {
-      // Check again:
-      currentItemChanged = !isSame(
-        item1: currentItemOrigin,
-        item2: this.currentItem,
-      );
-      //
-      bool formActive = thisXBlock.xFormModel!.formModel.hasActiveUIComponent();
-      if (currentItemChanged && formActive) {
-        thisXBlock.xFormModel!.forceTypeForForm = _ForceType.force;
-      }
-      // !currentItemChanged
-      else {
-        ///
-        /// thisXBlock.__postQueryBehavior: May be null.
-        ///
-        final postQueryBehavior = thisXBlock.postQueryBehavior;
-        //
-        _ForceType forceTypeForm = thisXBlock.xFormModel!.forceTypeForForm;
-
-        switch (postQueryBehavior) {
-          case PostQueryBehavior.clearCurrentItem:
-            // Never run.
-            break;
-          case PostQueryBehavior.createNewItem:
-            // Never run.
-            break;
-          case PostQueryBehavior.selectAnItemAsCurrentIfNeed:
-            // Do nothing (Ready SelectAvailableItem).
-            break;
-          case PostQueryBehavior.selectAnItemAsCurrent:
-            // Do nothing (Ready SelectAvailableItem).
-            break;
-          case PostQueryBehavior.selectAnItemAsCurrentAndLoadForm:
-            thisXBlock.xFormModel!.forceTypeForForm = _ForceType.force;
-        }
-      }
-
       // May be cancelled if not need:
       FlutterArtist.taskUnitQueue.addTaskUnit(
         _FormModelLoadFormTaskUnit(

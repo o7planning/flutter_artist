@@ -201,14 +201,11 @@ abstract class FormModel<
     }
     //
     if (!forceReloadForm) {
-      if (this.formDataState == DataState.error ||
-          this.formDataState == DataState.pending) {
-        print("        ~~~~~~~> IGNORED --> form - [${block.name}]");
-        _clearWithDataState(formDataState: this.formDataState);
-        return true;
-      } else {
-        return true;
+      print("        ~~~~~~~> IGNORED --> form - [${block.name}]");
+      if (formDataState != DataState.ready) {
+        _clearWithDataState(formDataState: DataState.pending);
       }
+      return true;
     }
     //
     EXTRA_FORM_INPUT? extraFormInput =
