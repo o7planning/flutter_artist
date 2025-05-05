@@ -195,7 +195,7 @@ abstract class FormModel<
     switch (thisXFormModel.forceTypeForForm) {
       case _ForceType.force:
         forceReloadForm = true;
-      case _ForceType.forceIfVisible:
+      case _ForceType.decidedAtRuntime:
         forceReloadForm =
             formDataState != DataState.ready && hasActiveUIComponent();
     }

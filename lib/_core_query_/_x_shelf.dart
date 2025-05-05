@@ -215,7 +215,7 @@ class _XShelf {
       FormModel formModel = formModelOpt.formModel;
       _XFormModel xFormModel = allXFormModelMap[formModel.block.name]!;
       if (naturalMode) {
-        xFormModel.forceTypeForForm = _ForceType.forceIfVisible;
+        xFormModel.forceTypeForForm = _ForceType.decidedAtRuntime;
       } else {
         xFormModel.forceTypeForForm = _ForceType.force;
       }

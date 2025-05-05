@@ -2,7 +2,7 @@ part of '../flutter_artist.dart';
 
 class _XFormModel {
   final _XShelf xShelf;
-  _ForceType forceTypeForForm = _ForceType.forceIfVisible;
+  _ForceType forceTypeForForm = _ForceType.decidedAtRuntime;
   bool queried = false;
   final FormModel formModel;
   final ExtraFormInput? extraFormInput;

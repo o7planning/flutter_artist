@@ -1356,9 +1356,6 @@ abstract class Block<
       return;
     }
     //
-    bool hasXActiveUI = hasActiveUIComponent(alsoCheckChildren: true);
-    thisXBlock._printParameters(hasActiveUI: hasXActiveUI); // ---> Debug
-    //
     final ITEM? currentItemOrigin = this.currentItem;
     ITEM? candidateCurrentItem = candidateItem;
     ITEM? currentItem = this.currentItem;
@@ -1374,7 +1371,7 @@ abstract class Block<
       }
     }
     //
-    bool currentItemChanged;
+    final bool currentItemChanged;
     if (currentItem == null) {
       candidateCurrentItem = candidateCurrentItem ?? firstItem;
       currentItemChanged = candidateCurrentItem != null;
@@ -1394,6 +1391,21 @@ abstract class Block<
       }
     }
     //
+    // If no item can be current.
+    //
+    if (candidateCurrentItem == null) {
+      print("        ~~~~~~~> candidateCurrentItem == null - [${name}]");
+      this.__clearWithDataStateCascade(
+        thisXBlock: thisXBlock,
+        qryDataState: DataState.ready,
+        frmDataState: DataState.none,
+        errorInFilter: false,
+      );
+      return;
+    }
+    //
+    // Now candidateCurrentItem != null.
+    //
     final bool isSameCandidateItem = isSame(
       item1: candidateItem,
       item2: candidateCurrentItem,
@@ -1402,13 +1414,45 @@ abstract class Block<
       result._addCandidateItem(candidateCurrentItem);
     }
     //
+    // This block has UI Active (Or child block has UI Active).
+    //
+    final bool hasXActiveUI = hasActiveUIComponent(alsoCheckChildren: true);
+    //
+    // IF "Select An Item as current" is not required.
+    // IMPORTANT:
+    // (This condition stronger than forceReloadItem).
+    //
+    if (currentItemSelectionType == //  && !isSameCandidateItem
+        CurrentItemSelectionType.selectAnItemAsCurrentIfNeed) {
+      if (!hasXActiveUI) {
+        __blockData._setCurrentItemOnly(
+          refreshedItem: null,
+          refreshedItemDetail: null,
+        );
+        if (formModel != null) {
+          formModel!._clearWithDataState(formDataState: DataState.none);
+        }
+        return;
+      }
+    }
+    thisXBlock._printParameters(hasActiveUI: hasXActiveUI); // ---> Debug
     bool forceReloadItem = thisXBlock.forceReloadItem;
+    if(currentItemChanged)  {
+      forceReloadItem = true;
+    }
+    //
     bool forceReloadForm = false;
+    print(
+        "@ ${getClassName(this)} ~~~~~~~~~~~~~~~~~~~~~> 4.0: forceReloadItem: $forceReloadItem");
+    print(
+        "@ ${getClassName(this)} ~~~~~~~~~~~~~~~~~~~~~> 4.1: forceReloadForm: $forceReloadForm");
     //
     if (formModel != null) {
-      forceReloadForm =
-          thisXBlock.xFormModel!.forceTypeForForm == _ForceType.force;
+      if(thisXBlock.xFormModel!.forceTypeForForm == _ForceType.force)  {
+        forceReloadForm = true;
+      }
       //
+      final bool formActive = formModel!.hasActiveUIComponent();
       if (!forceReloadForm) {
         final postQueryBehavior = thisXBlock.postQueryBehavior;
         //
@@ -1420,77 +1464,46 @@ abstract class Block<
             // Never run.
             break;
           case PostQueryBehavior.selectAnItemAsCurrentIfNeed:
-            // Do nothing (Ready SelectAvailableItem).
-            break;
+            if(formActive)  {
+              forceReloadForm = true;
+            }
           case PostQueryBehavior.selectAnItemAsCurrent:
-            // Do nothing (Ready SelectAvailableItem).
-            break;
+            if(formActive)  {
+              forceReloadForm = true;
+            }
           case PostQueryBehavior.selectAnItemAsCurrentAndLoadForm:
             forceReloadForm = true;
         }
       }
       //
-      final bool formActive = formModel!.hasActiveUIComponent();
-      final DataState formDataState = formModel!.formDataState;
+      if (!forceReloadForm) {
+        final DataState formDataState = formModel!.formDataState;
+        //
+        print(
+            "@ ${getClassName(this)} ~~~~~~~~~~~~~~~~~~~~~> 1: postQueryBehavior: ${thisXBlock.postQueryBehavior}");
+        print(
+            "@ ${getClassName(this)} ~~~~~~~~~~~~~~~~~~~~~> 2: currentItemChanged: $currentItemChanged");
+        print(
+            "@ ${getClassName(this)} ~~~~~~~~~~~~~~~~~~~~~> 3: formActive: $formActive");
+
+      }
       //
-      if (formActive) {
-        //
-        if (formDataState != DataState.ready) {
-          forceReloadForm = true;
-        } else {}
-      }
-      // Form is NOT ACTIVE:
-      else {
-        //
-      }
       if (forceReloadForm) {
         thisXBlock.xFormModel!.forceTypeForForm = _ForceType.force;
+        forceReloadItem = true;
       }
     }
+
+    print(
+        "@ ${getClassName(this)} ~~~~~~~~~~~~~~~~~~~~~> 4: forceReloadItem: $forceReloadItem");
+    print(
+        "@ ${getClassName(this)} ~~~~~~~~~~~~~~~~~~~~~> 5: forceReloadForm: $forceReloadForm");
 
     //
     // IMPORTNANT: Do not remove condition "forceReloadForm":
     //   "forceReloadForm" condition to make sure if "forceReloadForm" ==> Must Refresh Item.
     //
-    if (currentItemChanged || forceReloadItem || forceReloadForm) {
-      //
-      // currentItemChanged || forceReloadItem || forceReloadForm
-      //
-      //
-      // If no item can be current.
-      //
-      if (candidateCurrentItem == null) {
-        print("        ~~~~~~~> candidateCurrentItem == null - [${name}]");
-        this.__clearWithDataStateCascade(
-          thisXBlock: thisXBlock,
-          qryDataState: DataState.ready,
-          frmDataState: DataState.none,
-          errorInFilter: false,
-        );
-        return;
-      }
-      //
-      // IF "Select An Item as current" is not required.
-      // IMPORTANT:
-      // (This condition stronger than forceReloadItem).
-      //
-      if (currentItemSelectionType ==
-          CurrentItemSelectionType.selectAnItemAsCurrentIfNeed) {
-        //  && !isSameCandidateItem
-        if (!hasXActiveUI) {
-          __blockData._setCurrentItemOnly(
-            refreshedItem: null,
-            refreshedItemDetail: null,
-          );
-          if (formModel != null) {
-            formModel!._clearWithDataState(formDataState: DataState.none);
-          }
-          return;
-        }
-      }
-      //
-      // (currentItemChanged || forceReloadItem) && candidateCurrentItem !=null
-      //
+    if (forceReloadItem) {
       final bool isCandidateIsCurrent = isCurrentItem(
         item: candidateCurrentItem,
       );
@@ -1672,12 +1685,14 @@ abstract class Block<
     // FormModel:
     //
     if (thisXBlock.xFormModel != null) {
-      // May be cancelled if not need:
-      FlutterArtist.taskUnitQueue.addTaskUnit(
-        _FormModelLoadFormTaskUnit(
-          xFormModel: thisXBlock.xFormModel!,
-        ),
-      );
+      if(forceReloadItem)  {
+        FlutterArtist.taskUnitQueue.addTaskUnit(
+          _FormModelLoadFormTaskUnit(
+            xFormModel: thisXBlock.xFormModel!,
+          ),
+        );
+      }
+
     }
 
     //
@@ -2447,7 +2462,7 @@ abstract class Block<
       candidateItem: item,
       forceReloadItem: true,
       forceTypeForForm:
-          forceForm ? _ForceType.force : _ForceType.forceIfVisible,
+          forceForm ? _ForceType.force : _ForceType.decidedAtRuntime,
     );
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //
