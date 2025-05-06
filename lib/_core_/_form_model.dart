@@ -23,6 +23,10 @@ abstract class FormModel<
 
   bool _changeEventLocked = false;
 
+  bool _loadTimeUIActive = false;
+
+  bool get loadTimeUIActive => _loadTimeUIActive;
+
   FormMode get formMode => _formPropsStructure.formMode;
 
   DataState get formDataState => _formPropsStructure._formDataState;
@@ -196,8 +200,9 @@ abstract class FormModel<
       case _ForceType.force:
         forceReloadForm = true;
       case _ForceType.decidedAtRuntime:
-        forceReloadForm =
-            formDataState != DataState.ready && hasActiveUIComponent();
+        // forceReloadForm =
+        //     formDataState != DataState.ready && hasActiveUIComponent();
+        forceReloadForm = false;
     }
     //
     if (!forceReloadForm) {

@@ -518,6 +518,12 @@ abstract class Shelf extends _XBase {
       );
     }
 
+    // New Code:
+    // SchedulerBinding binding = SchedulerBinding.instance;
+    // await Future.doWhile(() {
+    //   return binding.hasScheduledFrame;
+    // });
+
     if (__lazyLoadId == __lastLazyLoadId) {
       __lazyLoadId++;
       __lazyBlocksToQuery.clear();

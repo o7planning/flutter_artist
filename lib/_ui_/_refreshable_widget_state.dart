@@ -87,9 +87,9 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
 
   @override
   void dispose() {
-    super.dispose();
-    //
     removeWidgetState();
+    //
+    super.dispose();
     //
     checkAndFreeMemory();
   }
