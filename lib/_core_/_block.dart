@@ -1487,12 +1487,12 @@ abstract class Block<
               if (hasXActiveUI) {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 1.2.1.1: hasXActiveUI: TRUE");
-                //
+                // [39a]
                 forceReloadItem = true;
               } else {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 1.2.1.2: hasXActiveUI: FALSE");
-                //
+                // [39b]
                 forceReloadItem = false;
               }
             }
@@ -1584,12 +1584,12 @@ abstract class Block<
               if (hasXActiveUI) {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 2.2.1.1: hasXActiveUI: TRUE");
-                //
+                // [39a]
                 forceReloadItem = true; // (selectAnItemAsCurrent - always)
               } else {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 2.2.1.2: hasXActiveUI: FALSE");
-                //
+                // [39b]
                 forceReloadItem = true; // (selectAnItemAsCurrent - always)
               }
             }
@@ -1664,11 +1664,15 @@ abstract class Block<
               if (hasXActiveUI) {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 3.2.1.1: hasXActiveUI: TRUE");
-                //
+                // [39a]
+                forceReloadItem = true;
+                forceReloadForm = true;
               } else {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 3.2.1.2: hasXActiveUI: FALSE");
-                //..
+                // [39a]
+                forceReloadItem = true;
+                forceReloadForm = true;
               }
             }
             // !isCandidateCurrentItemInNewQueriedList
@@ -1806,7 +1810,7 @@ abstract class Block<
                 if (formLoadTimeUIActive) {
                   _printDebugState(
                       "@~~~> ${getClassName(this)} ~~~~~> FRM 1.2.1.1: formLoadTimeUIActive: $formLoadTimeUIActive");
-                  //
+                  // [39a]
                   forceReloadForm = true;
                   forceReloadItem = true;
                 }
@@ -1949,7 +1953,7 @@ abstract class Block<
                 if (formLoadTimeUIActive) {
                   _printDebugState(
                       "@~~~> ${getClassName(this)} ~~~~~> FRM 2.2.1.1: formLoadTimeUIActive: TRUE");
-                  //
+                  // [39a]
                   forceReloadForm = true;
                   forceReloadItem = true;
                 }
@@ -1957,7 +1961,7 @@ abstract class Block<
                 else {
                   _printDebugState(
                       "@~~~> ${getClassName(this)} ~~~~~> FRM 2.2.1.2: formLoadTimeUIActive: FALSE");
-                  //
+                  // [39b]
                   forceReloadForm = false;
                 }
               }
@@ -2100,13 +2104,13 @@ abstract class Block<
                 if (formLoadTimeUIActive) {
                   _printDebugState(
                       "@~~~> ${getClassName(this)} ~~~~~> FRM 3.2.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
-                  //
+                  // [39a]
                   forceReloadForm = true;
                   forceReloadItem = true;
                 } else {
                   _printDebugState(
                       "@~~~> ${getClassName(this)} ~~~~~> FRM 3.2.1.2: isCandidateCurrentItemInNewQueriedList: TRUE");
-                  //
+                  // [39b]
                   forceReloadForm = true;
                   forceReloadItem = true;
                 }
