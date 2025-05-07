@@ -1473,11 +1473,75 @@ abstract class Block<
           if (ITEM == ITEM_DETAIL) {
             _printDebugState(
                 "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.1: ITEM == ITEM_DETAIL");
+            //
+            if (isCandidateCurrentItemInNewQueriedList) {
+              _printDebugState(
+                  "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
+              //
+              if (hasXActiveUI) {
+                _printDebugState(
+                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.1.1.1: hasXActiveUI: TRUE");
+                //
+              } else {
+                _printDebugState(
+                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.1.1.2: hasXActiveUI: FALSE");
+                //..
+              }
+            }
+            // !isCandidateCurrentItemInNewQueriedList
+            else {
+              _printDebugState(
+                  "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.1.2: isCandidateCurrentItemInNewQueriedList: TRUE");
+              //
+              if (currentItemChanged) {
+                _printDebugState(
+                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.1.2.1: currentItemChanged: TRUE");
+                //
+              }
+              // !currentItemChanged
+              else {
+                _printDebugState(
+                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.1.2.2: currentItemChanged: FALSE");
+              }
+            }
           }
           // ITEM != ITEM_DETAIL
           else {
             _printDebugState(
                 "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.2: ITEM != ITEM_DETAIL");
+            //
+            if (isCandidateCurrentItemInNewQueriedList) {
+              _printDebugState(
+                  "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.2.1: isCandidateCurrentItemInNewQueriedList: TRUE");
+              //
+              if (hasXActiveUI) {
+                _printDebugState(
+                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.2.1.1: hasXActiveUI: TRUE");
+                //
+                forceReloadItem = true;
+              } else {
+                _printDebugState(
+                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.2.1.2: hasXActiveUI: FALSE");
+                //
+                forceReloadItem = false;
+              }
+            }
+            // !isCandidateCurrentItemInNewQueriedList
+            else {
+              _printDebugState(
+                  "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.2.2: isCandidateCurrentItemInNewQueriedList: TRUE");
+              //
+              if (currentItemChanged) {
+                _printDebugState(
+                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.2.2.1: currentItemChanged: TRUE");
+                //
+              }
+              // !currentItemChanged
+              else {
+                _printDebugState(
+                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.2.2.2: currentItemChanged: FALSE");
+              }
+            }
           }
         //
         //
@@ -1596,6 +1660,7 @@ abstract class Block<
               }
             }
           }
+
         // if (isCandidateCurrentItemInNewQueriedList) {
         //   // Test case 39b: (Hidden and Empty Category) --> Query Category with "selectAnItemAsCurrent" ==> Force Reload ITEM.
         //   // Test case 36b: Query SingleBlock.
