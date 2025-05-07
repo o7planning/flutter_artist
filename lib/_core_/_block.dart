@@ -1383,7 +1383,7 @@ abstract class Block<
         currentItemChanged = false;
       } else {
         // candidateCurrentItem != null && currentItem != null
-        if (identical(candidateCurrentItem, currentItem)) {
+        if (getItemId(candidateCurrentItem) == getItemId(currentItem)) {
           currentItemChanged = false;
         } else {
           currentItemChanged = true;
@@ -1612,8 +1612,11 @@ abstract class Block<
                     // CASE: FORM Visible + Candidate not in new Queried + !forceReloadItem
                     print(
                         "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 5.11: forceReloadItem: $forceReloadItem");
-                    forceReloadForm = true;
-                    forceReloadItem = true;
+                    if(formModel!.formDataState != DataState.ready) {
+                      forceReloadForm = true;
+                      forceReloadItem = true;
+                    }
+
                   }
                 }
                 // !formLoadTimeUIActive
