@@ -1464,67 +1464,67 @@ abstract class Block<
     bool forceReloadForm = false;
 
     _printDebugState(
-        "@~~~> ${getClassName(this)} ~~~~~> ITEM - originForceReloadItem: $originForceReloadItem");
+        "@~~~> ${getClassName(this)} ~~~~~> ITM - originForceReloadItem: $originForceReloadItem");
     if (!forceReloadItem) {
-      _printDebugState("@~~~> ${getClassName(this)} ~~~~~> ITEM 0");
+      _printDebugState("@~~~> ${getClassName(this)} ~~~~~> ITM 0");
       //
       switch (currentItemSelectionType) {
         case CurrentItemSelectionType.selectAnItemAsCurrentIfNeed:
           _printDebugState(
-              "@~~~> ${getClassName(this)} ~~~~~> ITEM 1: currentItemSelectionType: ${currentItemSelectionType.name}");
+              "@~~~> ${getClassName(this)} ~~~~~> ITM 1: currentItemSelectionType: ${currentItemSelectionType.name}");
           //
           if (ITEM == ITEM_DETAIL) {
             _printDebugState(
-                "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.1: ITEM == ITEM_DETAIL");
+                "@~~~> ${getClassName(this)} ~~~~~> ITM 1.1: ITEM == ITEM_DETAIL");
             //
             if (isCandidateCurrentItemInNewQueriedList) {
               _printDebugState(
-                  "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
+                  "@~~~> ${getClassName(this)} ~~~~~> ITM 1.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
               //
               if (hasXActiveUI) {
                 _printDebugState(
-                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.1.1.1: hasXActiveUI: TRUE");
+                    "@~~~> ${getClassName(this)} ~~~~~> ITM 1.1.1.1: hasXActiveUI: TRUE");
                 //
               } else {
                 _printDebugState(
-                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.1.1.2: hasXActiveUI: FALSE");
+                    "@~~~> ${getClassName(this)} ~~~~~> ITM 1.1.1.2: hasXActiveUI: FALSE");
                 //..
               }
             }
             // !isCandidateCurrentItemInNewQueriedList
             else {
               _printDebugState(
-                  "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.1.2: isCandidateCurrentItemInNewQueriedList: TRUE");
+                  "@~~~> ${getClassName(this)} ~~~~~> ITM 1.1.2: isCandidateCurrentItemInNewQueriedList: TRUE");
               //
               if (currentItemChanged) {
                 _printDebugState(
-                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.1.2.1: currentItemChanged: TRUE");
+                    "@~~~> ${getClassName(this)} ~~~~~> ITM 1.1.2.1: currentItemChanged: TRUE");
                 //
               }
               // !currentItemChanged
               else {
                 _printDebugState(
-                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.1.2.2: currentItemChanged: FALSE");
+                    "@~~~> ${getClassName(this)} ~~~~~> ITM 1.1.2.2: currentItemChanged: FALSE");
               }
             }
           }
           // ITEM != ITEM_DETAIL
           else {
             _printDebugState(
-                "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.2: ITEM != ITEM_DETAIL");
+                "@~~~> ${getClassName(this)} ~~~~~> ITM 1.2: ITEM != ITEM_DETAIL");
             //
             if (isCandidateCurrentItemInNewQueriedList) {
               _printDebugState(
-                  "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.2.1: isCandidateCurrentItemInNewQueriedList: TRUE");
+                  "@~~~> ${getClassName(this)} ~~~~~> ITM 1.2.1: isCandidateCurrentItemInNewQueriedList: TRUE");
               //
               if (hasXActiveUI) {
                 _printDebugState(
-                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.2.1.1: hasXActiveUI: TRUE");
+                    "@~~~> ${getClassName(this)} ~~~~~> ITM 1.2.1.1: hasXActiveUI: TRUE");
                 //
                 forceReloadItem = true;
               } else {
                 _printDebugState(
-                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.2.1.2: hasXActiveUI: FALSE");
+                    "@~~~> ${getClassName(this)} ~~~~~> ITM 1.2.1.2: hasXActiveUI: FALSE");
                 //
                 forceReloadItem = false;
               }
@@ -1532,11 +1532,11 @@ abstract class Block<
             // !isCandidateCurrentItemInNewQueriedList
             else {
               _printDebugState(
-                  "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.2.2: isCandidateCurrentItemInNewQueriedList: TRUE");
+                  "@~~~> ${getClassName(this)} ~~~~~> ITM 1.2.2: isCandidateCurrentItemInNewQueriedList: TRUE");
               //
               if (currentItemChanged) {
                 _printDebugState(
-                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.2.2.1: currentItemChanged: TRUE");
+                    "@~~~> ${getClassName(this)} ~~~~~> ITM 1.2.2.1: currentItemChanged: TRUE");
                 //
                 if (hasXActiveUI) {
                   forceReloadItem = true;
@@ -1547,7 +1547,7 @@ abstract class Block<
               // !currentItemChanged
               else {
                 _printDebugState(
-                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.2.2.2: currentItemChanged: FALSE");
+                    "@~~~> ${getClassName(this)} ~~~~~> ITM 1.2.2.2: currentItemChanged: FALSE");
                 //
                 if (hasXActiveUI) {
                   forceReloadItem = false;
@@ -1559,41 +1559,41 @@ abstract class Block<
           }
         case CurrentItemSelectionType.selectAnItemAsCurrent:
           _printDebugState(
-              "@~~~> ${getClassName(this)} ~~~~~> ITEM 2: currentItemSelectionType: ${currentItemSelectionType.name}");
+              "@~~~> ${getClassName(this)} ~~~~~> ITM 2: currentItemSelectionType: ${currentItemSelectionType.name}");
           //
           if (ITEM == ITEM_DETAIL) {
             _printDebugState(
-                "@~~~> ${getClassName(this)} ~~~~~> ITEM 2.1: ITEM == ITEM_DETAIL");
+                "@~~~> ${getClassName(this)} ~~~~~> ITM 2.1: ITEM == ITEM_DETAIL");
             //
             if (isCandidateCurrentItemInNewQueriedList) {
               _printDebugState(
-                  "@~~~> ${getClassName(this)} ~~~~~> ITEM 2.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
+                  "@~~~> ${getClassName(this)} ~~~~~> ITM 2.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
               //
               if (hasXActiveUI) {
                 _printDebugState(
-                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 2.1.1.1: hasXActiveUI: TRUE");
+                    "@~~~> ${getClassName(this)} ~~~~~> ITM 2.1.1.1: hasXActiveUI: TRUE");
                 forceReloadItem = true; // (selectAnItemAsCurrent - always)
               } else {
                 _printDebugState(
-                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 2.1.1.2: hasXActiveUI: FALSE");
+                    "@~~~> ${getClassName(this)} ~~~~~> ITM 2.1.1.2: hasXActiveUI: FALSE");
                 forceReloadItem = true; // (selectAnItemAsCurrent - always)
               }
             }
             // !isCandidateCurrentItemInNewQueriedList
             else {
               _printDebugState(
-                  "@~~~> ${getClassName(this)} ~~~~~> ITEM 2.1.2: isCandidateCurrentItemInNewQueriedList: TRUE");
+                  "@~~~> ${getClassName(this)} ~~~~~> ITM 2.1.2: isCandidateCurrentItemInNewQueriedList: TRUE");
               //
               if (currentItemChanged) {
                 _printDebugState(
-                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 2.1.2.1: currentItemChanged: TRUE");
+                    "@~~~> ${getClassName(this)} ~~~~~> ITM 2.1.2.1: currentItemChanged: TRUE");
                 //
                 forceReloadItem = true; // (selectAnItemAsCurrent - always)
               }
               // !currentItemChanged
               else {
                 _printDebugState(
-                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 2.1.2.2: currentItemChanged: FALSE");
+                    "@~~~> ${getClassName(this)} ~~~~~> ITM 2.1.2.2: currentItemChanged: FALSE");
                 //
                 if (hasXActiveUI) {
                   // Ready selected as current (No need to refresh):
@@ -1608,20 +1608,20 @@ abstract class Block<
           // ITEM != ITEM_DETAIL
           else {
             _printDebugState(
-                "@~~~> ${getClassName(this)} ~~~~~> ITEM 2.2: ITEM != ITEM_DETAIL");
+                "@~~~> ${getClassName(this)} ~~~~~> ITM 2.2: ITEM != ITEM_DETAIL");
             //
             if (isCandidateCurrentItemInNewQueriedList) {
               _printDebugState(
-                  "@~~~> ${getClassName(this)} ~~~~~> ITEM 2.2.1: isCandidateCurrentItemInNewQueriedList: TRUE");
+                  "@~~~> ${getClassName(this)} ~~~~~> ITM 2.2.1: isCandidateCurrentItemInNewQueriedList: TRUE");
               //
               if (hasXActiveUI) {
                 _printDebugState(
-                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 2.2.1.1: hasXActiveUI: TRUE");
+                    "@~~~> ${getClassName(this)} ~~~~~> ITM 2.2.1.1: hasXActiveUI: TRUE");
                 //
                 forceReloadItem = true; // (selectAnItemAsCurrent - always)
               } else {
                 _printDebugState(
-                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 2.2.1.2: hasXActiveUI: FALSE");
+                    "@~~~> ${getClassName(this)} ~~~~~> ITM 2.2.1.2: hasXActiveUI: FALSE");
                 //
                 forceReloadItem = true; // (selectAnItemAsCurrent - always)
               }
@@ -1629,95 +1629,95 @@ abstract class Block<
             // !isCandidateCurrentItemInNewQueriedList
             else {
               _printDebugState(
-                  "@~~~> ${getClassName(this)} ~~~~~> ITEM 2.2.2: isCandidateCurrentItemInNewQueriedList: TRUE");
+                  "@~~~> ${getClassName(this)} ~~~~~> ITM 2.2.2: isCandidateCurrentItemInNewQueriedList: TRUE");
               //
               if (currentItemChanged) {
                 _printDebugState(
-                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 2.2.2.1: currentItemChanged: TRUE");
+                    "@~~~> ${getClassName(this)} ~~~~~> ITM 2.2.2.1: currentItemChanged: TRUE");
                 //
                 forceReloadItem = true; // (selectAnItemAsCurrent - always)
               }
               // !currentItemChanged
               else {
                 _printDebugState(
-                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 2.2.2.2: currentItemChanged: FALSE");
+                    "@~~~> ${getClassName(this)} ~~~~~> ITM 2.2.2.2: currentItemChanged: FALSE");
                 forceReloadItem = true; // (selectAnItemAsCurrent - always)
               }
             }
           }
         case CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm:
           _printDebugState(
-              "@~~~> ${getClassName(this)} ~~~~~> ITEM 3: currentItemSelectionType: ${currentItemSelectionType.name}");
+              "@~~~> ${getClassName(this)} ~~~~~> ITM 3: currentItemSelectionType: ${currentItemSelectionType.name}");
           //
           //
           if (ITEM == ITEM_DETAIL) {
             _printDebugState(
-                "@~~~> ${getClassName(this)} ~~~~~> ITEM 3.1: ITEM == ITEM_DETAIL");
+                "@~~~> ${getClassName(this)} ~~~~~> ITM 3.1: ITEM == ITEM_DETAIL");
             //
             if (isCandidateCurrentItemInNewQueriedList) {
               _printDebugState(
-                  "@~~~> ${getClassName(this)} ~~~~~> ITEM 3.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
+                  "@~~~> ${getClassName(this)} ~~~~~> ITM 3.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
               //
               if (hasXActiveUI) {
                 _printDebugState(
-                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 3.1.1.1: hasXActiveUI: TRUE");
+                    "@~~~> ${getClassName(this)} ~~~~~> ITM 3.1.1.1: hasXActiveUI: TRUE");
                 //
               } else {
                 _printDebugState(
-                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 3.1.1.2: hasXActiveUI: FALSE");
+                    "@~~~> ${getClassName(this)} ~~~~~> ITM 3.1.1.2: hasXActiveUI: FALSE");
                 //..
               }
             }
             // !isCandidateCurrentItemInNewQueriedList
             else {
               _printDebugState(
-                  "@~~~> ${getClassName(this)} ~~~~~> ITEM 3.1.2: isCandidateCurrentItemInNewQueriedList: TRUE");
+                  "@~~~> ${getClassName(this)} ~~~~~> ITM 3.1.2: isCandidateCurrentItemInNewQueriedList: TRUE");
               //
               if (currentItemChanged) {
                 _printDebugState(
-                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 3.1.2.1: currentItemChanged: TRUE");
+                    "@~~~> ${getClassName(this)} ~~~~~> ITM 3.1.2.1: currentItemChanged: TRUE");
                 //
               }
               // !currentItemChanged
               else {
                 _printDebugState(
-                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 3.1.2.2: currentItemChanged: FALSE");
+                    "@~~~> ${getClassName(this)} ~~~~~> ITM 3.1.2.2: currentItemChanged: FALSE");
               }
             }
           }
           // ITEM != ITEM_DETAIL
           else {
             _printDebugState(
-                "@~~~> ${getClassName(this)} ~~~~~> ITEM 3.2: ITEM != ITEM_DETAIL");
+                "@~~~> ${getClassName(this)} ~~~~~> ITM 3.2: ITEM != ITEM_DETAIL");
             //
             if (isCandidateCurrentItemInNewQueriedList) {
               _printDebugState(
-                  "@~~~> ${getClassName(this)} ~~~~~> ITEM 3.2.1: isCandidateCurrentItemInNewQueriedList: TRUE");
+                  "@~~~> ${getClassName(this)} ~~~~~> ITM 3.2.1: isCandidateCurrentItemInNewQueriedList: TRUE");
               //
               if (hasXActiveUI) {
                 _printDebugState(
-                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 3.2.1.1: hasXActiveUI: TRUE");
+                    "@~~~> ${getClassName(this)} ~~~~~> ITM 3.2.1.1: hasXActiveUI: TRUE");
                 //
               } else {
                 _printDebugState(
-                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 3.2.1.2: hasXActiveUI: FALSE");
+                    "@~~~> ${getClassName(this)} ~~~~~> ITM 3.2.1.2: hasXActiveUI: FALSE");
                 //..
               }
             }
             // !isCandidateCurrentItemInNewQueriedList
             else {
               _printDebugState(
-                  "@~~~> ${getClassName(this)} ~~~~~> ITEM 3.2.2: isCandidateCurrentItemInNewQueriedList: TRUE");
+                  "@~~~> ${getClassName(this)} ~~~~~> ITM 3.2.2: isCandidateCurrentItemInNewQueriedList: TRUE");
               //
               if (currentItemChanged) {
                 _printDebugState(
-                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 3.2.2.1: currentItemChanged: TRUE");
+                    "@~~~> ${getClassName(this)} ~~~~~> ITM 3.2.2.1: currentItemChanged: TRUE");
                 //
               }
               // !currentItemChanged
               else {
                 _printDebugState(
-                    "@~~~> ${getClassName(this)} ~~~~~> ITEM 3.2.2.2: currentItemChanged: FALSE");
+                    "@~~~> ${getClassName(this)} ~~~~~> ITM 3.2.2.2: currentItemChanged: FALSE");
                 //
                 if (hasXActiveUI) {
                   // Ready selected as current (No need to refresh):
@@ -1731,7 +1731,7 @@ abstract class Block<
           }
         case CurrentItemSelectionType.refresh:
           _printDebugState(
-              "@~~~> ${getClassName(this)} ~~~~~> ITEM 4: currentItemSelectionType: ${currentItemSelectionType.name}");
+              "@~~~> ${getClassName(this)} ~~~~~> ITM 4: currentItemSelectionType: ${currentItemSelectionType.name}");
           //
           break;
       }
@@ -2202,9 +2202,9 @@ abstract class Block<
       }
     }
     _printDebugState(
-        "\n@~~~> ${getClassName(this)} ~~~~~> ITEM/FRM: forceReloadItem: $forceReloadItem");
+        "\n@~~~> ${getClassName(this)} ~~~~~> ITM/FRM: forceReloadItem: $forceReloadItem");
     _printDebugState(
-        "@~~~> ${getClassName(this)} ~~~~~> ITEM/FRM: forceReloadForm: $forceReloadForm");
+        "@~~~> ${getClassName(this)} ~~~~~> ITM/FRM: forceReloadForm: $forceReloadForm");
     //
     final bool isCandidateIsCurrent = isCurrentItem(
       item: candidateCurrentItem,
