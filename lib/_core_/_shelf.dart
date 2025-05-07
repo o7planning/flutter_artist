@@ -94,8 +94,7 @@ abstract class Shelf extends _XBase {
       if (__activityMap.containsKey(activity.name)) {
         throw ___registerError(
             "Duplicated Activity '${activity.name}' in '${getClassName(this)}'"
-                "\nDouble-check ${getClassName(
-                this)}.registerStructure() method");
+            "\nDouble-check ${getClassName(this)}.registerStructure() method");
       } else {
         __activityMap[activity.name] = activity;
       }
@@ -109,8 +108,7 @@ abstract class Shelf extends _XBase {
       if (__scalarMap.containsKey(scalar.name)) {
         throw ___registerError(
             "Duplicated Scalar '${scalar.name}' in '${getClassName(this)}'\n"
-                "Double-check ${getClassName(
-                this)}.registerStructure() method");
+            "Double-check ${getClassName(this)}.registerStructure() method");
       } else {
         __scalarMap[scalar.name] = scalar;
       }
@@ -119,13 +117,11 @@ abstract class Shelf extends _XBase {
       //
       if (scalar.registerFilterModelName != null) {
         FilterModel? filterModel =
-        _shelfStruct.filterModels[scalar.registerFilterModelName!];
+            _shelfStruct.filterModels[scalar.registerFilterModelName!];
         if (filterModel == null) {
           throw ___registerError(
-              "FilterModel not found '${scalar
-                  .registerFilterModelName}' in '${getClassName(this)}'\n"
-                  "Double-check ${getClassName(
-                  this)}.registerStructure() method");
+              "FilterModel not found '${scalar.registerFilterModelName}' in '${getClassName(this)}'\n"
+              "Double-check ${getClassName(this)}.registerStructure() method");
         }
         //
         const Type filterInputType = FilterInput;
@@ -136,43 +132,35 @@ abstract class Shelf extends _XBase {
         if (filterInputBF == filterInputBase) {
           throw ___registerError(
               "You need to create your own class that extends the '$filterInputBase' class \n"
-                  "or use the 'EmptyFilterInput' class to use in the '${getClassName(
-                  filterModel)}' declaration \n\n"
-                  " >> Currently, ${getClassName(
-                  filterModel)}<FILTER_INPUT> = <$filterInputBF>");
+              "or use the 'EmptyFilterInput' class to use in the '${getClassName(filterModel)}' declaration \n\n"
+              " >> Currently, ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
         }
         //
         if (filterInputBF != filterInputB) {
           throw ___registerError(
               "The Scalar and its Filter-Input must have the same FILTER_INPUT type. \n\n"
-                  " >> ${getClassName(
-                  scalar)}<FILTER_INPUT> = <$filterInputB> \n"
-                  " >> ${getClassName(
-                  filterModel)}<FILTER_INPUT> = <$filterInputBF>");
+              " >> ${getClassName(scalar)}<FILTER_INPUT> = <$filterInputB> \n"
+              " >> ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
         }
         // ----------------
         const Type filterCriteriaType = FilterCriteria;
         final String filterCriteriaBase = filterCriteriaType.toString();
         final String filterCriteriaBF =
-        filterModel.getFilterCriteriaTypeAsString();
+            filterModel.getFilterCriteriaTypeAsString();
         final String filterCriteriaB = scalar.getFilterCriteriaTypeAsString();
         //
         if (filterCriteriaBF == filterCriteriaBase) {
           throw ___registerError(
               "You need to create your own class that extends the '$filterCriteriaBase' class \n"
-                  "or use the 'EmptyFilterCriteria' class to use in the '${getClassName(
-                  filterModel)}' declaration \n\n"
-                  " >> Currently, ${getClassName(
-                  filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
+              "or use the 'EmptyFilterCriteria' class to use in the '${getClassName(filterModel)}' declaration \n\n"
+              " >> Currently, ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
         }
         //
         if (filterCriteriaBF != filterCriteriaB) {
           throw ___registerError(
               "The Scalar and its Filter-Model must have the same FILTER_CRITERIA type. \n\n"
-                  " >> ${getClassName(
-                  scalar)}<FILTER_CRITERIA> = <$filterCriteriaB> \n"
-                  " >> ${getClassName(
-                  filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
+              " >> ${getClassName(scalar)}<FILTER_CRITERIA> = <$filterCriteriaB> \n"
+              " >> ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
         }
         //
         filterModel._scalars.add(scalar);
@@ -194,11 +182,9 @@ abstract class Shelf extends _XBase {
         //
         if (filterCriteriaB != filterCriteriaEmpty) {
           throw ___registerError(
-              "FILTER_CRITERIA of '${getClassName(
-                  scalar)}' scalar must be '$filterCriteriaEmpty' "
-                  "because this scalar does not have a FILTER_MODEL. \n\n"
-                  " >> Currently, ${getClassName(
-                  scalar)}<FILTER_CRITERIA> = <$filterCriteriaB>");
+              "FILTER_CRITERIA of '${getClassName(scalar)}' scalar must be '$filterCriteriaEmpty' "
+              "because this scalar does not have a FILTER_MODEL. \n\n"
+              " >> Currently, ${getClassName(scalar)}<FILTER_CRITERIA> = <$filterCriteriaB>");
         }
       }
     }
@@ -220,7 +206,7 @@ abstract class Shelf extends _XBase {
     if (__blockMap.containsKey(block.name)) {
       throw ___registerError(
           "Duplicated block '${block.name}' in '${getClassName(this)}'\n"
-              "Double-check ${getClassName(this)}.registerStructure() method");
+          "Double-check ${getClassName(this)}.registerStructure() method");
     } else {
       __blockMap[block.name] = block;
       if (block.formModel != null) {
@@ -231,13 +217,11 @@ abstract class Shelf extends _XBase {
     block.shelf = this;
     if (block.registerFilterModelName != null) {
       FilterModel? filterModel =
-      _shelfStruct.filterModels[block.registerFilterModelName!];
+          _shelfStruct.filterModels[block.registerFilterModelName!];
       if (filterModel == null) {
         throw ___registerError(
-            "FilterModel not found '${block
-                .registerFilterModelName}' in '${getClassName(this)}'\n"
-                "Double-check ${getClassName(
-                this)}.registerStructure() method");
+            "FilterModel not found '${block.registerFilterModelName}' in '${getClassName(this)}'\n"
+            "Double-check ${getClassName(this)}.registerStructure() method");
       }
       //
       //
@@ -249,41 +233,35 @@ abstract class Shelf extends _XBase {
       if (filterInputBF == filterInputBase) {
         throw ___registerError(
             "You need to create your own class that extends the '$filterInputBase' class \n"
-                "or use the 'EmptyFilterInput' class to use in the '${getClassName(
-                filterModel)}' declaration \n\n"
-                " >> Currently, ${getClassName(
-                filterModel)}<FILTER_INPUT> = <$filterInputBF>");
+            "or use the 'EmptyFilterInput' class to use in the '${getClassName(filterModel)}' declaration \n\n"
+            " >> Currently, ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
       }
       //
       if (filterInputBF != filterInputB) {
         throw ___registerError(
             "The Scalar and its Filter-Input must have the same FILTER_INPUT type.\n\n"
-                " >> ${getClassName(block)}<FILTER_INPUT> = <$filterInputB> \n"
-                " >> ${getClassName(
-                filterModel)}<FILTER_INPUT> = <$filterInputBF>");
+            " >> ${getClassName(block)}<FILTER_INPUT> = <$filterInputB> \n"
+            " >> ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
       }
       // -----------------
       const Type filterCriteriaType = FilterCriteria;
       final String filterCriteriaBase = filterCriteriaType.toString();
       final String filterCriteriaBF =
-      filterModel.getFilterCriteriaTypeAsString();
+          filterModel.getFilterCriteriaTypeAsString();
       final String filterCriteriaB = block.getFilterCriteriaTypeAsString();
       //
       if (filterCriteriaBF == filterCriteriaBase) {
         throw ___registerError(
             "You need to create your own class that extends from '$filterCriteriaBase' "
-                "as FILTER_CRITERIA for '${getClassName(filterModel)}'\n\n"
-                " >> Currently, ${getClassName(
-                filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
+            "as FILTER_CRITERIA for '${getClassName(filterModel)}'\n\n"
+            " >> Currently, ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
       }
       //
       if (filterCriteriaBF != filterCriteriaB) {
         throw ___registerError(
             "The Block and its Filter-Model must have the same FILTER_CRITERIA type. \n"
-                " >> ${getClassName(
-                block)}<FILTER_CRITERIA> = <$filterCriteriaB> \n"
-                " >> ${getClassName(
-                filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
+            " >> ${getClassName(block)}<FILTER_CRITERIA> = <$filterCriteriaB> \n"
+            " >> ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
       }
       //
       filterModel._blocks.add(block);
@@ -304,11 +282,9 @@ abstract class Shelf extends _XBase {
       //
       if (filterCriteriaB != filterCriteriaEmpty) {
         throw ___registerError(
-            "Filter-Criteria of '${getClassName(
-                block)}' block must be '$filterCriteriaEmpty' "
-                "because this block does not have a FILTER_MODEL.\n\n"
-                " >> Currently, ${getClassName(
-                block)}<FILTER_CRITERIA> = <$filterCriteriaB>");
+            "Filter-Criteria of '${getClassName(block)}' block must be '$filterCriteriaEmpty' "
+            "because this block does not have a FILTER_MODEL.\n\n"
+            " >> Currently, ${getClassName(block)}<FILTER_CRITERIA> = <$filterCriteriaB>");
       }
     }
     //
@@ -319,10 +295,8 @@ abstract class Shelf extends _XBase {
     if (extraFormInputTypeStr == extraFormInputTypeB) {
       throw ___registerError(
           "You need to create your own class that extends the '$extraFormInputTypeB' class \n"
-              "or use the 'EmptyExtraFormInput' class to use in the '${getClassName(
-              block)}' declaration \n\n"
-              " >> Currently, ${getClassName(
-              block)}<EXTRA_FORM_INPUT> = <$extraFormInputTypeStr>");
+          "or use the 'EmptyExtraFormInput' class to use in the '${getClassName(block)}' declaration \n\n"
+          " >> Currently, ${getClassName(block)}<EXTRA_FORM_INPUT> = <$extraFormInputTypeStr>");
     }
     //
     for (Block childBlock in block.childBlocks) {
@@ -489,7 +463,8 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
   // ***************************************************************************
 
-  void __updateAllBlockUIComponentsCascade(Block block, {
+  void __updateAllBlockUIComponentsCascade(
+    Block block, {
     required bool withoutFilters,
   }) {
     block.updateAllUIComponents(withoutFilters: withoutFilters);
@@ -538,19 +513,21 @@ abstract class Shelf extends _XBase {
   Future<void> _startLoadDataForLazyUIComponentsIfNeed() async {
     if (__lazyLoadLocked) {
       await Future.doWhile(
-            () =>
-            Future.delayed(const Duration(milliseconds: 1))
-                .then((_) => __lazyLoadLocked),
+        () => Future.delayed(const Duration(milliseconds: 1))
+            .then((_) => __lazyLoadLocked),
       );
     }
 
     // New Code:
     // SchedulerBinding binding = SchedulerBinding.instance;
-    // await Future.doWhile(() async {
-    //   bool hasScheduledFrame = binding.hasScheduledFrame;
-    //   await Future.delayed(Duration.zero);
-    //   return hasScheduledFrame;
-    // });
+    // bool hasScheduledFrame = binding.hasScheduledFrame;
+    // if (hasScheduledFrame) {
+    //   await Future.doWhile(() async {
+    //     await Future.delayed(Duration.zero);
+    //     bool hasScheduledFrame2 = binding.hasScheduledFrame;
+    //     return hasScheduledFrame2;
+    //   });
+    // }
 
     if (__lazyLoadId == __lastLazyLoadId) {
       __lazyLoadId++;
@@ -558,7 +535,7 @@ abstract class Shelf extends _XBase {
       //
       Future.delayed(
         const Duration(milliseconds: 0),
-            () {
+        () {
           __queryLazyList();
         },
       );
@@ -572,7 +549,7 @@ abstract class Shelf extends _XBase {
     __lazyLoadLocked = true;
     // Top Lazy (Scalar, Block or FormModel).
     final List<_ScalarOrBlockOrFormWrapper> topLazyScalarOrBlockOrFormWrappers =
-    __findTopLazyScalarOrBlockOrForms();
+        __findTopLazyScalarOrBlockOrForms();
 
     print(
         ">>>> topLazyScalarOrBlockOrFormWrappers: $topLazyScalarOrBlockOrFormWrappers");
@@ -586,8 +563,7 @@ abstract class Shelf extends _XBase {
     }
     print("@@@@@@@@@@@@ Lazy Load - ID: $__lazyLoadId");
     print(
-        "@@@@@@@@@@@@ Lazy Load - Count: ${topLazyScalarOrBlockOrFormWrappers
-            .length}");
+        "@@@@@@@@@@@@ Lazy Load - Count: ${topLazyScalarOrBlockOrFormWrappers.length}");
     //
     __lastLazyLoadId = __lazyLoadId;
     //
@@ -597,7 +573,7 @@ abstract class Shelf extends _XBase {
     final List<_FormModelOpt> topLazyFormModelOpts = [];
     //
     for (_ScalarOrBlockOrFormWrapper wrapper
-    in topLazyScalarOrBlockOrFormWrappers) {
+        in topLazyScalarOrBlockOrFormWrappers) {
       if (wrapper.scalar != null) {
         wrapper.scalar!._lazyLoadCount++;
         //
@@ -666,8 +642,10 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
   // ***************************************************************************
 
-  void __findXVisibleLazyBlocksCascade(List<Block> blocks,
-      List<_ScalarOrBlockOrFormWrapper> founds,) {
+  void __findXVisibleLazyBlocksCascade(
+    List<Block> blocks,
+    List<_ScalarOrBlockOrFormWrapper> founds,
+  ) {
     for (Block block in blocks) {
       // if (block.hasActiveBlockFragmentWidget(alsoCheckChildren: true) &&
       //     block.queryDataState == DataState.pending) {
@@ -857,7 +835,7 @@ abstract class Shelf extends _XBase {
     }
     if (forceQueryBlockOpts.isNotEmpty) {
       String s =
-      forceQueryBlockOpts.map((opt) => getClassName(opt.block)).join(", ");
+          forceQueryBlockOpts.map((opt) => getClassName(opt.block)).join(", ");
       if (info.isEmpty) {
         info = s;
       } else {
