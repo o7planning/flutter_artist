@@ -1,4 +1,4 @@
-part of '../flutter_artist.dart';
+part of '../../flutter_artist.dart';
 
 _DebugMsgType? _debugMsgType = _DebugMsgType.state;
 

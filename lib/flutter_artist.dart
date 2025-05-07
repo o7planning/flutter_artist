@@ -165,7 +165,7 @@ part '_core_query_/_x_shelf.dart';
 
 part '_debug_/_constants.dart';
 
-part '_debug_/_debug_print.dart';
+part '_debug_/_/_debug_print.dart';
 
 part '_debug_/_debug_colors_and_styles.dart';
 
