@@ -119,6 +119,7 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
           bool isMultiOpt = false;
           bool isMultiSelection = false;
           IconData prefixIconData;
+          bool isDirty = false;
 
           if (data is FormModel) {
             title = getClassName(data);
@@ -129,12 +130,14 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
             //
             isMultiOpt = false;
             isMultiSelection = false;
+            isDirty = data.isDirty();
           } else if (data is MultiOptProp) {
             title = data.propName;
             prefixIconData = _optPropOrCriterionIconData;
             //
             isMultiOpt = true;
             isMultiSelection = !data.singleSelection;
+            isDirty = data.isDirty();
           } else {
             prefixIconData = _uknownIconData;
             title = "UKNOWN";
@@ -154,6 +157,7 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
                   Icon(
                     prefixIconData,
                     size: 16,
+                    color: isDirty? Colors.red: Colors.black,
                   ),
                   SizedBox(width: 5),
                   Expanded(
