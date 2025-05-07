@@ -1424,40 +1424,7 @@ abstract class Block<
     // This block has UI Active (Or child block has UI Active).
     //
     final bool hasXActiveUI = hasActiveUIComponent(alsoCheckChildren: true);
-
     //
-    // IF "Select An Item as current" is not required.
-    // IMPORTANT:
-    // (This condition stronger than forceReloadItem).
-    //
-    // if (currentItemSelectionType ==
-    //     CurrentItemSelectionType.selectAnItemAsCurrentIfNeed) {
-    //   if (hasXActiveUI) {
-    //     // ???
-    //   } else {
-    //     if (!isSameCandidateItem) {
-    //       // __clearWithDataStateCascade(thisXBlock: thisXBlock,
-    //       //     qryDataState: qryDataState,
-    //       //     frmDataState: frmDataState,
-    //       //     errorInFilter: errorInFilter);
-    //       // if (!hasXActiveUI) {
-    //       //   __blockData._setCurrentItemOnly(
-    //       //     refreshedItem: null,
-    //       //     refreshedItemDetail: null,
-    //       //   );
-    //       //   if (formModel != null) {
-    //       //     formModel!._clearWithDataState(formDataState: DataState.none);
-    //       //   }
-    //       //   return;
-    //       // }
-    //     }
-    //     // isSameCandidateItem
-    //     else {
-    //       // Do nothing
-    //       return;
-    //     }
-    //   }
-    // }
     thisXBlock._printParameters(hasActiveUI: hasXActiveUI); // ---> Debug
     bool originForceReloadItem = thisXBlock.forceReloadItem;
     bool forceReloadItem = thisXBlock.forceReloadItem;
