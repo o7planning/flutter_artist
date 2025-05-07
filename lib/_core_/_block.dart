@@ -1535,54 +1535,25 @@ abstract class Block<
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.2.2.1: currentItemChanged: TRUE");
                 //
+                if (hasXActiveUI) {
+                  forceReloadItem = true;
+                } else {
+                  forceReloadItem = false;
+                }
               }
               // !currentItemChanged
               else {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITEM 1.2.2.2: currentItemChanged: FALSE");
+                //
+                if (hasXActiveUI) {
+                  forceReloadItem = false;
+                } else {
+                  forceReloadItem = false;
+                }
               }
             }
           }
-        //
-        //
-        // if (ITEM == ITEM_DETAIL) {
-        //   print(
-        //       "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3: isCandidateCurrentItemInNewQueriedList: $isCandidateCurrentItemInNewQueriedList");
-        //   // Just queried:
-        //   // Test case 13a:
-        //   // Test case 14a: In Category Screen (ITEM+) (Visible) ==> No need to Refresh Item.
-        //   if (isCandidateCurrentItemInNewQueriedList) {
-        //     forceReloadItem = false;
-        //   }
-        //   print(
-        //       "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 4: forceReloadItem: $forceReloadItem");
-        // } else {
-        //   print(
-        //       "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 4.1: forceReloadItem: $forceReloadItem");
-        //
-        //   // Test case 29a: First Load Block (Visible) ==> Must Select item as current.
-        //   // Test case 29a: Employee Screen (Visible) ==> Delete Item  ==> Must Select item as current (Condition: currentItemChanged).
-        //   // Test case 11a: From Category Screen + FORM (Visible) ==> Query Product (Hidden) ==> Do not Refresh Category Item.
-        //   if (hasXActiveUI) {
-        //     if (currentItemChanged ||
-        //         isCandidateCurrentItemInNewQueriedList) {
-        //       forceReloadItem = true;
-        //     }
-        //   } else {
-        //     //
-        //   }
-        // }
-
-        // Test case 29a: First Load Block (Visible) ==> Must Select item as current.
-        // Test case 29a: Employee Screen (Visible) ==> Delete Item  ==> Must Select item as current (Condition: currentItemChanged).
-        // Test case 11a: From Category Screen + FORM (Visible) ==> Query Product (Hidden) ==> Do not Refresh Category Item.
-        // if (hasXActiveUI) {
-        //   if (currentItemChanged || isCandidateCurrentItemInNewQueriedList) {
-        //     forceReloadItem = true;
-        //   }
-        // } else {
-        //   //
-        // }
         case CurrentItemSelectionType.selectAnItemAsCurrent:
           _printDebugState(
               "@~~~> ${getClassName(this)} ~~~~~> ITEM 2: currentItemSelectionType: ${currentItemSelectionType.name}");
@@ -1598,11 +1569,11 @@ abstract class Block<
               if (hasXActiveUI) {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITEM 2.1.1.1: hasXActiveUI: TRUE");
-                //
+                forceReloadItem = true; // (selectAnItemAsCurrent - always)
               } else {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITEM 2.1.1.2: hasXActiveUI: FALSE");
-                //..
+                forceReloadItem = true; // (selectAnItemAsCurrent - always)
               }
             }
             // !isCandidateCurrentItemInNewQueriedList
@@ -1614,11 +1585,20 @@ abstract class Block<
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITEM 2.1.2.1: currentItemChanged: TRUE");
                 //
+                forceReloadItem = true; // (selectAnItemAsCurrent - always)
               }
               // !currentItemChanged
               else {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITEM 2.1.2.2: currentItemChanged: FALSE");
+                //
+                if(hasXActiveUI) {
+                  // Ready selected as current (No need to refresh):
+                  forceReloadItem = false;
+                } else {
+                  // Ready selected as current (No need to refresh):
+                  forceReloadItem = false;
+                }
               }
             }
           }
@@ -1635,12 +1615,12 @@ abstract class Block<
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITEM 2.2.1.1: hasXActiveUI: TRUE");
                 //
-                forceReloadItem = true;
+                forceReloadItem = true; // (selectAnItemAsCurrent - always)
               } else {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITEM 2.2.1.2: hasXActiveUI: FALSE");
                 //
-                forceReloadItem = false;
+                forceReloadItem = true; // (selectAnItemAsCurrent - always)
               }
             }
             // !isCandidateCurrentItemInNewQueriedList
@@ -1652,22 +1632,16 @@ abstract class Block<
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITEM 2.2.2.1: currentItemChanged: TRUE");
                 //
+                forceReloadItem = true; // (selectAnItemAsCurrent - always)
               }
               // !currentItemChanged
               else {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITEM 2.2.2.2: currentItemChanged: FALSE");
+                forceReloadItem = true; // (selectAnItemAsCurrent - always)
               }
             }
           }
-
-        // if (isCandidateCurrentItemInNewQueriedList) {
-        //   // Test case 39b: (Hidden and Empty Category) --> Query Category with "selectAnItemAsCurrent" ==> Force Reload ITEM.
-        //   // Test case 36b: Query SingleBlock.
-        //   if (currentItemChanged) {
-        //     forceReloadItem = true;
-        //   }
-        // }
         case CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm:
           _printDebugState(
               "@~~~> ${getClassName(this)} ~~~~~> ITEM 3: currentItemSelectionType: ${currentItemSelectionType.name}");
@@ -1741,6 +1715,14 @@ abstract class Block<
               else {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITEM 3.2.2.2: currentItemChanged: FALSE");
+                //
+                if(hasXActiveUI) {
+                  // Ready selected as current (No need to refresh):
+                  forceReloadItem = false;
+                } else {
+                  // Ready selected as current (No need to refresh):
+                  forceReloadItem = false;
+                }
               }
             }
           }
@@ -1760,7 +1742,7 @@ abstract class Block<
         forceReloadForm = true;
       }
       _printDebugState(
-          "@~~~> ${getClassName(this)} ~~~~~> ITEM 0.1: forceReloadForm: $forceReloadForm");
+          "@~~~> ${getClassName(this)} ~~~~~> FRM 0.1: forceReloadForm: $forceReloadForm");
       //
       //
       final bool formLoadTimeUIActive = formModel!.hasActiveUIComponent();
