@@ -1425,6 +1425,7 @@ abstract class Block<
     //
     final bool hasXActiveUI = hasActiveUIComponent(alsoCheckChildren: true);
 
+    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 0: item: ${items}");
     print(
         "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1: currentItemSelectionType: $currentItemSelectionType");
 
@@ -1471,33 +1472,55 @@ abstract class Block<
     if (!forceReloadItem) {
       switch (currentItemSelectionType) {
         case CurrentItemSelectionType.selectAnItemAsCurrentIfNeed:
-          if (ITEM == ITEM_DETAIL) {
-            print(
-                "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3: isCandidateCurrentItemInNewQueriedList: $isCandidateCurrentItemInNewQueriedList");
-            // Just queried:
-            // Test case 13a:
-            // Test case 14a: In Category Screen (ITEM+) (Visible) ==> No need to Refresh Item.
-            if (isCandidateCurrentItemInNewQueriedList) {
-              forceReloadItem = false;
+          // if (ITEM == ITEM_DETAIL) {
+          //   print(
+          //       "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3: isCandidateCurrentItemInNewQueriedList: $isCandidateCurrentItemInNewQueriedList");
+          //   // Just queried:
+          //   // Test case 13a:
+          //   // Test case 14a: In Category Screen (ITEM+) (Visible) ==> No need to Refresh Item.
+          //   if (isCandidateCurrentItemInNewQueriedList) {
+          //     forceReloadItem = false;
+          //   }
+          //   print(
+          //       "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 4: forceReloadItem: $forceReloadItem");
+          // } else {
+          //   print(
+          //       "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 4.1: forceReloadItem: $forceReloadItem");
+          //
+          //   // Test case 29a: First Load Block (Visible) ==> Must Select item as current.
+          //   // Test case 29a: Employee Screen (Visible) ==> Delete Item  ==> Must Select item as current (Condition: currentItemChanged).
+          //   // Test case 11a: From Category Screen + FORM (Visible) ==> Query Product (Hidden) ==> Do not Refresh Category Item.
+          //   if (hasXActiveUI) {
+          //     if (currentItemChanged ||
+          //         isCandidateCurrentItemInNewQueriedList) {
+          //       forceReloadItem = true;
+          //     }
+          //   } else {
+          //     //
+          //   }
+          // }
+          print(
+              "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 4.1: forceReloadItem: $forceReloadItem");
+
+          // Test case 29a: First Load Block (Visible) ==> Must Select item as current.
+          // Test case 29a: Employee Screen (Visible) ==> Delete Item  ==> Must Select item as current (Condition: currentItemChanged).
+          // Test case 11a: From Category Screen + FORM (Visible) ==> Query Product (Hidden) ==> Do not Refresh Category Item.
+          if (hasXActiveUI) {
+            if (currentItemChanged || isCandidateCurrentItemInNewQueriedList) {
+              forceReloadItem = true;
             }
-            print(
-                "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 4: forceReloadItem: $forceReloadItem");
           } else {
-            // Test case 29a: First Load Block (Visible) ==> Must Select item as current.
-            // Test case 29a: Employee Screen (Visible) ==> Delete Item  ==> Must Select item as current (Condition: currentItemChanged).
-            // Test case 11a: From Category Screen + FORM (Visible) ==> Query Product (Hidden) ==> Do not Refresh Category Item.
-            if (hasXActiveUI) {
-              if (currentItemChanged ||
-                  isCandidateCurrentItemInNewQueriedList) {
-                forceReloadItem = true;
-              }
-            }
+            //
           }
-          break;
         case CurrentItemSelectionType.selectAnItemAsCurrent:
-          // Test case 39b: (Hidden and Empty Category) --> Query Category with "selectAnItemAsCurrent" ==> Force Reload ITEM.
-          if (currentItemChanged || isCandidateCurrentItemInNewQueriedList) {
-            forceReloadItem = true;
+          print(
+              "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 4.2: forceReloadItem: $forceReloadItem");
+          if (isCandidateCurrentItemInNewQueriedList) {
+            // Test case 39b: (Hidden and Empty Category) --> Query Category with "selectAnItemAsCurrent" ==> Force Reload ITEM.
+            // Test case 36b: Query SingleBlock.
+            if (currentItemChanged) {
+              forceReloadItem = true;
+            }
           }
         case CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm:
           break;
@@ -1528,33 +1551,52 @@ abstract class Block<
             print(
                 "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 5: forceReloadItem: $forceReloadItem");
             if (ITEM == ITEM_DETAIL) {
-              // Test case 14a: In Category Screen (ITEM+) (Form Visible) ==> No Refresh Item + Reload Form.
+              forceReloadItem = true; // ** (Always true)
               // Just Queried:
               if (isCandidateCurrentItemInNewQueriedList) {
-                forceReloadForm = true;
+                if (formLoadTimeUIActive) {
+                  if (currentItemChanged) {
+                    // CASE: FORM Visible + Candidate Item In New Queried + Current Item Changed ==> Force Load Form.
+                    forceReloadForm = true;
+                  }
+                } else {
+                  if (currentItemChanged) {
+                    // CASE: FORM Not Visible + Candidate Item In New Queried + Current Item Changed. [13a]
+                    forceReloadForm = false;
+                  }
+                }
               } else {
-                // Test case 14a: In Category Screen (ITEM+) (Form Visible) ==> Select Next Item ==> Force Reload FORM.
-                if (currentItemChanged) {
-                  forceReloadForm = true;
+                if (formLoadTimeUIActive) {
+                  if (currentItemChanged) {
+                    // CASE: No new query + FORM Visible + Next Item ==> Force Load Form.  [14a]
+                    forceReloadForm = true;
+                  }
+                } else {
+                  if (currentItemChanged) {
+                    // forceReloadForm = true;
+                  }
                 }
               }
-            } else {
+            }
+            // ITEM != ITEM_DETAIL:
+            else {
               if (formLoadTimeUIActive) {
                 if (forceReloadItem) {
                   // Test case 16a: In Edit Mode Supplier Form Screen (Visible) ==> Click Item AGAIN (* forceReloadItem = true).
                   forceReloadForm = true;
+                  forceReloadItem = true;
                 }
               }
             }
-            print(
-                "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 6: forceReloadItem: $forceReloadItem");
-            break;
           case PostQueryBehavior.selectAnItemAsCurrent:
+            // Test case 36b: Query SingleProduct
             if (formLoadTimeUIActive) {
               forceReloadForm = true;
+              forceReloadItem = true;
             }
           case PostQueryBehavior.selectAnItemAsCurrentAndLoadForm:
             forceReloadForm = true;
+            forceReloadItem = true;
         }
       }
       //
@@ -1572,7 +1614,6 @@ abstract class Block<
       //
       if (forceReloadForm) {
         thisXBlock.xFormModel!.forceTypeForForm = _ForceType.force;
-        forceReloadItem = true;
       }
     }
     //
@@ -1581,59 +1622,6 @@ abstract class Block<
     );
     ITEM_DETAIL? candidateCurrentItemDetail;
     if (forceReloadItem) {
-      bool isLoadItemError = false;
-      try {
-        __refreshRefreshingCurrentItemState(
-          isRefreshingCurrentItem: true,
-        );
-        //
-        __callApiRefreshItemCount++;
-        ApiResult<ITEM_DETAIL> result = await callApiRefreshItem(
-          item: candidateCurrentItem, // Not null.
-        );
-        //
-        if (result.isError()) {
-          isLoadItemError = true;
-          //
-          _handleRestError(
-            shelf: shelf,
-            methodName: "callApiRefreshItem",
-            message: result.errorMessage!,
-            errorDetails: result.errorDetails,
-            showSnackBar: true,
-          );
-        } else {
-          isLoadItemError = false;
-          //
-          candidateCurrentItemDetail = result.data;
-        }
-      } catch (e, stackTrace) {
-        isLoadItemError = true;
-        //
-        _handleError(
-          shelf: shelf,
-          methodName: "callApiRefreshItem",
-          error: e,
-          stackTrace: stackTrace,
-          showSnackBar: true,
-        );
-      } finally {
-        __refreshRefreshingCurrentItemState(
-          isRefreshingCurrentItem: false,
-        );
-      }
-      if (isLoadItemError) {
-        result._apiError = true;
-        // ????????????????????????????????????????????????????
-        // TODO: Them test case:
-        // TODO: Alway return? Load ITEM Error
-        //   ==> Chuyen Form sang trang thai NULL??
-        //
-        return;
-      }
-    }
-    // !forceReloadItem
-    else {
       if (ITEM == ITEM_DETAIL && isCandidateCurrentItemInNewQueriedList) {
         final ITEM? candidateCurrentItemInNewQueriedList =
             ItemsUtils.findItemInList(
@@ -1645,119 +1633,171 @@ abstract class Block<
         // No need to refresh Item.
         candidateCurrentItemDetail =
             candidateCurrentItemInNewQueriedList as ITEM_DETAIL;
-      }
-    }
+      } else {
+        bool isLoadItemError = false;
 
-    //
-    // If candidate not found in database --> remove.
-    //
-    if (candidateCurrentItemDetail == null) {
-      final ITEM? siblingItem = findSiblingItem(
-        item: candidateCurrentItem,
-      );
-      // #SAME-CODE-001
-      if (!isCandidateIsCurrent) {
+        try {
+          __refreshRefreshingCurrentItemState(
+            isRefreshingCurrentItem: true,
+          );
+          //
+
+          __callApiRefreshItemCount++;
+          ApiResult<ITEM_DETAIL> result = await callApiRefreshItem(
+            item: candidateCurrentItem, // Not null.
+          );
+          //  }
+          //
+          if (result.isError()) {
+            isLoadItemError = true;
+            //
+            _handleRestError(
+              shelf: shelf,
+              methodName: "callApiRefreshItem",
+              message: result.errorMessage!,
+              errorDetails: result.errorDetails,
+              showSnackBar: true,
+            );
+          } else {
+            isLoadItemError = false;
+            //
+            candidateCurrentItemDetail = result.data;
+          }
+        } catch (e, stackTrace) {
+          isLoadItemError = true;
+          //
+          _handleError(
+            shelf: shelf,
+            methodName: "callApiRefreshItem",
+            error: e,
+            stackTrace: stackTrace,
+            showSnackBar: true,
+          );
+        } finally {
+          __refreshRefreshingCurrentItemState(
+            isRefreshingCurrentItem: false,
+          );
+        }
+        if (isLoadItemError) {
+          result._apiError = true;
+          // ????????????????????????????????????????????????????
+          // TODO: Them test case:
+          // TODO: Alway return? Load ITEM Error
+          //   ==> Chuyen Form sang trang thai NULL??
+          //
+          return;
+        }
+      }
+      //
+      // If candidate not found in database --> remove.
+      //
+      if (candidateCurrentItemDetail == null) {
+        final ITEM? siblingItem = findSiblingItem(
+          item: candidateCurrentItem,
+        );
+        // #SAME-CODE-001
+        if (!isCandidateIsCurrent) {
+          await __removeItemFromList(
+            removeItem: candidateCurrentItem,
+          );
+          //
+          if (currentItem != null) {
+            // TODO: Test case.
+            return;
+          }
+          //
+          if (siblingItem == null) {
+            // TODO: Test case.
+            return;
+          }
+          //
+          var taskUnit = _BlockSelectAsCurrentTaskUnit(
+            currentItemSelectionType: currentItemSelectionType,
+            xBlock: thisXBlock,
+            newQueriedList: newQueriedList,
+            candidateItem: siblingItem,
+            forceReloadItem: false,
+            forceTypeForForm: null,
+          );
+          FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+          return;
+        }
+        //
+        // Candidate is current but not found in database.
+        // Remove Item (Current Item)
+        //
         await __removeItemFromList(
           removeItem: candidateCurrentItem,
         );
         //
-        if (currentItem != null) {
-          // TODO: Test case.
-          return;
-        }
-        //
-        if (siblingItem == null) {
-          // TODO: Test case.
-          return;
-        }
-        //
-        var taskUnit = _BlockSelectAsCurrentTaskUnit(
-          currentItemSelectionType: currentItemSelectionType,
-          xBlock: thisXBlock,
-          newQueriedList: newQueriedList,
-          candidateItem: siblingItem,
-          forceReloadItem: false,
-          forceTypeForForm: null,
+        this.__clearWithDataStateCascade(
+          thisXBlock: thisXBlock,
+          qryDataState: DataState.ready,
+          frmDataState: DataState.none,
+          errorInFilter: false,
         );
-        FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+        //
+        if (siblingItem != null) {
+          var taskUnit = _BlockSelectAsCurrentTaskUnit(
+            currentItemSelectionType: currentItemSelectionType,
+            xBlock: thisXBlock,
+            newQueriedList: newQueriedList,
+            candidateItem: siblingItem,
+            forceReloadItem: false,
+            forceTypeForForm: null,
+          );
+          FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+          return;
+        }
         return;
       }
       //
-      // Candidate is current but not found in database.
-      // Remove Item (Current Item)
+      // candidateCurrentItemDetail != null
       //
-      await __removeItemFromList(
-        removeItem: candidateCurrentItem,
-      );
-      //
-      this.__clearWithDataStateCascade(
-        thisXBlock: thisXBlock,
-        qryDataState: DataState.ready,
-        frmDataState: DataState.none,
-        errorInFilter: false,
-      );
-      //
-      if (siblingItem != null) {
-        var taskUnit = _BlockSelectAsCurrentTaskUnit(
-          currentItemSelectionType: currentItemSelectionType,
-          xBlock: thisXBlock,
-          newQueriedList: newQueriedList,
-          candidateItem: siblingItem,
-          forceReloadItem: false,
-          forceTypeForForm: null,
+      bool convertItemError = false;
+      try {
+        candidateCurrentItem = this.__convertItemDetailToItem(
+          itemDetail: candidateCurrentItemDetail,
         );
-        FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+        convertItemError = false;
+      } catch (e, stackTrace) {
+        convertItemError = true;
+        _handleError(
+          shelf: shelf,
+          methodName: "convertItemDetailToItem",
+          error: e,
+          stackTrace: stackTrace,
+          showSnackBar: true,
+        );
+      }
+      //
+      if (convertItemError) {
+        result._convertError = true;
+        // TODO Always return??
+        // If currentItemChanged or not currentItemChanged
+        // Always return. Nothing to do if has error!!
         return;
       }
-      return;
-    }
-    //
-    // candidateCurrentItemDetail != null
-    //
-    bool convertItemError = false;
-    try {
-      candidateCurrentItem = this.__convertItemDetailToItem(
-        itemDetail: candidateCurrentItemDetail,
-      );
-      convertItemError = false;
-    } catch (e, stackTrace) {
-      convertItemError = true;
-      _handleError(
-        shelf: shelf,
-        methodName: "convertItemDetailToItem",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-    }
-    //
-    if (convertItemError) {
-      result._convertError = true;
-      // TODO Always return??
-      // If currentItemChanged or not currentItemChanged
-      // Always return. Nothing to do if has error!!
-      return;
-    }
-    //
-    __blockData._selectionDataState = DataState.ready;
-    if (candidateCurrentItem != null) {
-      __blockData._insertOrReplaceItem(item: candidateCurrentItem);
-    }
-    __blockData._setCurrentItemOnly(
-      refreshedItem: candidateCurrentItem,
-      refreshedItemDetail: candidateCurrentItemDetail,
-    );
-    //
-    if (currentItemChanged) {
-      result._currentItem = candidateCurrentItem;
       //
-      this.__clearChildBlocksItemsWithDataStateCascade(
-        thisXBlock: thisXBlock,
-        qryDataState: DataState.pending,
-        frmDataState: DataState.pending,
+      __blockData._selectionDataState = DataState.ready;
+      if (candidateCurrentItem != null) {
+        __blockData._insertOrReplaceItem(item: candidateCurrentItem);
+      }
+      __blockData._setCurrentItemOnly(
+        refreshedItem: candidateCurrentItem,
+        refreshedItemDetail: candidateCurrentItemDetail,
       );
+      //
+      if (currentItemChanged) {
+        result._currentItem = candidateCurrentItem;
+        //
+        this.__clearChildBlocksItemsWithDataStateCascade(
+          thisXBlock: thisXBlock,
+          qryDataState: DataState.pending,
+          frmDataState: DataState.pending,
+        );
+      }
     }
-
     //
     // FormModel:
     //
