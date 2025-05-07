@@ -1431,7 +1431,7 @@ abstract class Block<
     bool forceReloadForm = false;
 
     _printDebugState(
-        "@~~~> ${getClassName(this)} ~~~~~> ITM - originForceReloadItem: $originForceReloadItem");
+        "\n@~~~> ${getClassName(this)} ~~~~~> ITM - originForceReloadItem: $originForceReloadItem.\n");
     if (!forceReloadItem) {
       _printDebugState("@~~~> ${getClassName(this)} ~~~~~> ITM 0");
       //
@@ -1863,10 +1863,12 @@ abstract class Block<
                         forceReloadItem = true;
                       }
                     }
-                  } else {
+                  }
+                  // !formLoadTimeUIActive
+                  else {
                     _printDebugState(
                         "@~~~> ${getClassName(this)} ~~~~~> FRM 1.2.2.2.2: formLoadTimeUIActive: FALSE");
-                    //
+                    // [39b]
                     forceReloadForm = false;
                   }
                 }
@@ -5142,10 +5144,13 @@ abstract class Block<
     if (formModel != null) {
       switch (formModel!.formMode) {
         case FormMode.none:
-          return Actionable.no(
-            message:
-                "Cannot refresh current item because form is in 'none' mode.",
-          );
+          // Has current item and Form in Lazy mode.
+          // Form State: pending.
+          break; // Do nothing
+          // return Actionable.no(
+          //   message:
+          //       "Cannot refresh current item because form is in 'none' mode.",
+          // );
         case FormMode.creation:
           return Actionable.no(
             message:
