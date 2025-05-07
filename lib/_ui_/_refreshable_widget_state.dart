@@ -70,7 +70,7 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
     setBuildingState(isBuilding: false);
     // IMPORTANT: Do not remove below line:
     await Future.delayed(Duration.zero);
-    this.setBuildingState(isBuilding: false);
+    setBuildingState(isBuilding: false);
     //
     executeAfterBuild();
   }
@@ -87,9 +87,9 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
 
   @override
   void dispose() {
-    removeWidgetState();
-    //
     super.dispose();
+    //
+    removeWidgetState();
     //
     checkAndFreeMemory();
   }
