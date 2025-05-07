@@ -1863,7 +1863,7 @@ abstract class Block<
                   _printDebugState(
                       "@~~~> ${getClassName(this)} ~~~~~> FRM 1.2.1.2: formLoadTimeUIActive: $formLoadTimeUIActive");
                   //
-                  forceReloadItem = false;
+                  forceReloadForm = false;
                 }
               }
               // !isCandidateCurrentItemInNewQueriedList
@@ -1876,9 +1876,15 @@ abstract class Block<
                       "@~~~> ${getClassName(this)} ~~~~~> FRM 1.2.2.1: currentItemChanged: TRUE");
                   //
                   if (formLoadTimeUIActive) {
+                    _printDebugState(
+                        "@~~~> ${getClassName(this)} ~~~~~> FRM 1.2.2.1.1: formLoadTimeUIActive: TRUE");
+                    //
                     forceReloadForm = true;
                     forceReloadItem = true;
                   } else {
+                    _printDebugState(
+                        "@~~~> ${getClassName(this)} ~~~~~> FRM 1.2.2.1.2: formLoadTimeUIActive: FALSE");
+                    //
                     forceReloadForm = false;
                   }
                 }
@@ -1888,45 +1894,20 @@ abstract class Block<
                       "@~~~> ${getClassName(this)} ~~~~~> FRM 1.2.2.2: currentItemChanged: FALSE");
                   //
                   if (formLoadTimeUIActive) {
+                    _printDebugState(
+                        "@~~~> ${getClassName(this)} ~~~~~> FRM 1.2.2.2.1: formLoadTimeUIActive: TRUE");
+                    //
                     if (formModel!.formDataState != DataState.ready) {
                       forceReloadForm = true;
                       forceReloadItem = true;
                     }
                   } else {
+                    _printDebugState(
+                        "@~~~> ${getClassName(this)} ~~~~~> FRM 1.2.2.2.2: formLoadTimeUIActive: FALSE");
+                    //
                     forceReloadForm = false;
                   }
                 }
-
-                // if (formLoadTimeUIActive) {
-                //   _printDebugState(
-                //       "@~~~> ${getClassName(this)} ~~~~~> FRM 1.2.2.1: formLoadTimeUIActive: $formLoadTimeUIActive");
-                //   //
-                //   if (forceReloadItem) {
-                //     _printDebugState(
-                //         "@~~~> ${getClassName(this)} ~~~~~> FRM 1.2.2.1.1: forceReloadItem: $forceReloadItem");
-                //     //
-                //     // Test case 16a: In Edit Mode Supplier Form Screen (Visible) ==> Click Item AGAIN (* forceReloadItem = true).
-                //     forceReloadForm = true;
-                //     forceReloadItem = true;
-                //   }
-                //   // !forceReloadItem
-                //   else {
-                //     _printDebugState(
-                //         "@~~~> ${getClassName(this)} ~~~~~> FRM 1.2.2.1.2: forceReloadItem: $forceReloadItem");
-                //     //
-                //     // CASE: FORM Visible + Candidate not in new Queried + !forceReloadItem
-                //     if (formModel!.formDataState != DataState.ready) {
-                //       forceReloadForm = true;
-                //       forceReloadItem = true;
-                //     }
-                //   }
-                // }
-                // // !formLoadTimeUIActive
-                // else {
-                //   _printDebugState(
-                //       "@~~~> ${getClassName(this)} ~~~~~> FRM 1.2.2.2: formLoadTimeUIActive: $formLoadTimeUIActive");
-                //   //
-                // }
               }
             }
           case PostQueryBehavior.selectAnItemAsCurrent:
@@ -2033,9 +2014,15 @@ abstract class Block<
                       "@~~~> ${getClassName(this)} ~~~~~> FRM 2.2.2.1: currentItemChanged: TRUE");
                   //
                   if (formLoadTimeUIActive) {
+                    _printDebugState(
+                        "@~~~> ${getClassName(this)} ~~~~~> FRM 2.2.2.1.1: formLoadTimeUIActive: TRUE");
+                    //
                     forceReloadForm = true;
                     forceReloadItem = true;
                   } else {
+                    _printDebugState(
+                        "@~~~> ${getClassName(this)} ~~~~~> FRM 2.2.2.1.2: formLoadTimeUIActive: FALSE");
+                    //
                     forceReloadForm = false;
                   }
                 }
@@ -2045,11 +2032,17 @@ abstract class Block<
                       "@~~~> ${getClassName(this)} ~~~~~> FRM 2.2.2.2: currentItemChanged: FALSE");
                   //
                   if (formLoadTimeUIActive) {
+                    _printDebugState(
+                        "@~~~> ${getClassName(this)} ~~~~~> FRM 2.2.2.2.1: formLoadTimeUIActive: TRUE");
+                    //
                     if (formModel!.formDataState != DataState.ready) {
                       forceReloadForm = true;
                       forceReloadItem = true;
                     }
                   } else {
+                    _printDebugState(
+                        "@~~~> ${getClassName(this)} ~~~~~> FRM 2.2.2.2.2: formLoadTimeUIActive: FALSE");
+                    //
                     forceReloadForm = false;
                   }
                 }
@@ -2071,9 +2064,15 @@ abstract class Block<
                 // IN Param: selectAnItemAsCurrentAndLoadForm
                 //
                 if (formLoadTimeUIActive) {
+                  _printDebugState(
+                      "@~~~> ${getClassName(this)} ~~~~~> FRM 3.1.1.1: formLoadTimeUIActive: TRUE");
+                  //
                   forceReloadForm = true;
                   forceReloadItem = true;
                 } else {
+                  _printDebugState(
+                      "@~~~> ${getClassName(this)} ~~~~~> FRM 3.1.1.2: formLoadTimeUIActive: FALSE");
+                  //
                   forceReloadForm = true;
                   forceReloadItem = true;
                 }
@@ -2085,14 +2084,20 @@ abstract class Block<
                 //
                 if (currentItemChanged) {
                   _printDebugState(
-                      "@~~~> ${getClassName(this)} ~~~~~> FRM 1.2.2.1: currentItemChanged: TRUE");
+                      "@~~~> ${getClassName(this)} ~~~~~> FRM 3.1.2.1: currentItemChanged: TRUE");
                   //
                   // IN Param: selectAnItemAsCurrentAndLoadForm
                   //
                   if (formLoadTimeUIActive) {
+                    _printDebugState(
+                        "@~~~> ${getClassName(this)} ~~~~~> FRM 3.1.2.1.1: formLoadTimeUIActive: TRUE");
+                    //
                     forceReloadForm = true;
                     forceReloadItem = true;
                   } else {
+                    _printDebugState(
+                        "@~~~> ${getClassName(this)} ~~~~~> FRM 3.1.2.1.2: formLoadTimeUIActive: FALSE");
+                    //
                     forceReloadForm = true;
                     forceReloadItem = true;
                   }
@@ -2100,14 +2105,22 @@ abstract class Block<
                 // !currentItemChanged
                 else {
                   _printDebugState(
-                      "@~~~> ${getClassName(this)} ~~~~~> FRM 1.2.2.2: currentItemChanged: FALSE");
+                      "@~~~> ${getClassName(this)} ~~~~~> FRM 3.1.2.2: currentItemChanged: FALSE");
                   //
                   if (formLoadTimeUIActive) {
+                    _printDebugState(
+                        "@~~~> ${getClassName(this)} ~~~~~> FRM 3.1.2.2.1: formLoadTimeUIActive: TRUE");
+                    //
                     if (formModel!.formDataState != DataState.ready) {
                       forceReloadForm = true;
                       forceReloadItem = true;
                     }
-                  } else {
+                  }
+                  // !formLoadTimeUIActive
+                  else {
+                    _printDebugState(
+                        "@~~~> ${getClassName(this)} ~~~~~> FRM 3.1.2.2.2: formLoadTimeUIActive: FALSE");
+                    //
                     if (formModel!.formDataState != DataState.ready) {
                       forceReloadForm = true;
                       forceReloadItem = true;
@@ -2150,9 +2163,17 @@ abstract class Block<
                       "@~~~> ${getClassName(this)} ~~~~~> FRM 3.2.2.1: currentItemChanged: TRUE");
                   // (*** IN Param: selectAnItemAsCurrentAndLoadForm)
                   if (formLoadTimeUIActive) {
+                    _printDebugState(
+                        "@~~~> ${getClassName(this)} ~~~~~> FRM 3.2.2.1.1: _printDebugState: TRUE");
+                    //
                     forceReloadForm = true;
                     forceReloadItem = true;
-                  } else {
+                  }
+                  // formLoadTimeUIActive
+                  else {
+                    _printDebugState(
+                        "@~~~> ${getClassName(this)} ~~~~~> FRM 3.2.2.1.2: _printDebugState: FALSE");
+                    //
                     forceReloadForm = true;
                     forceReloadItem = true;
                   }
@@ -2163,11 +2184,17 @@ abstract class Block<
                       "@~~~> ${getClassName(this)} ~~~~~> FRM 3.2.2.2: currentItemChanged: FALSE");
                   // (*** IN Param: selectAnItemAsCurrentAndLoadForm)
                   if (formLoadTimeUIActive) {
+                    _printDebugState(
+                        "@~~~> ${getClassName(this)} ~~~~~> FRM 3.2.2.2.1: formLoadTimeUIActive: TRUE");
+                    //
                     if (formModel!.formDataState != DataState.ready) {
                       forceReloadForm = true;
                       forceReloadItem = true;
                     }
                   } else {
+                    _printDebugState(
+                        "@~~~> ${getClassName(this)} ~~~~~> FRM 3.2.2.2.2: formLoadTimeUIActive: FALSE");
+                    //
                     if (formModel!.formDataState != DataState.ready) {
                       forceReloadForm = true;
                       forceReloadItem = true;
@@ -2183,6 +2210,10 @@ abstract class Block<
         thisXBlock.xFormModel!.forceTypeForForm = _ForceType.force;
       }
     }
+    _printDebugState(
+        "@~~~> ${getClassName(this)} ~~~~~> ITEM/FRM: forceReloadItem: $forceReloadItem");
+    _printDebugState(
+        "@~~~> ${getClassName(this)} ~~~~~> ITEM/FRM: forceReloadForm: $forceReloadForm");
     //
     final bool isCandidateIsCurrent = isCurrentItem(
       item: candidateCurrentItem,
