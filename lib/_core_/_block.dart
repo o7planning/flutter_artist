@@ -2211,7 +2211,7 @@ abstract class Block<
       }
     }
     _printDebugState(
-        "@~~~> ${getClassName(this)} ~~~~~> ITEM/FRM: forceReloadItem: $forceReloadItem");
+        "\n@~~~> ${getClassName(this)} ~~~~~> ITEM/FRM: forceReloadItem: $forceReloadItem");
     _printDebugState(
         "@~~~> ${getClassName(this)} ~~~~~> ITEM/FRM: forceReloadForm: $forceReloadForm");
     //
@@ -2229,6 +2229,7 @@ abstract class Block<
         );
         //
         // No need to refresh Item.
+        //
         candidateCurrentItemDetail =
             candidateCurrentItemInNewQueriedList as ITEM_DETAIL;
       } else {
@@ -2276,7 +2277,7 @@ abstract class Block<
         }
         if (isLoadItemError) {
           result._apiError = true;
-          // ????????????????????????????????????????????????????
+          // ???????????????????????????????
           // TODO: Them test case:
           // TODO: Alway return? Load ITEM Error
           //   ==> Chuyen Form sang trang thai NULL??
