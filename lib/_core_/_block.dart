@@ -1555,10 +1555,8 @@ abstract class Block<
               // Just Queried:
               if (isCandidateCurrentItemInNewQueriedList) {
                 if (formLoadTimeUIActive) {
-                  if (currentItemChanged) {
-                    // CASE: FORM Visible + Candidate Item In New Queried + Current Item Changed ==> Force Load Form.
-                    forceReloadForm = true;
-                  }
+                  // CASE: FORM Visible + Candidate Item In New Queried ==> Force Load Form.
+                  forceReloadForm = true;
                 } else {
                   if (currentItemChanged) {
                     // CASE: FORM Not Visible + Candidate Item In New Queried + Current Item Changed. [13a]
