@@ -1549,8 +1549,9 @@ abstract class Block<
             break;
           case PostQueryBehavior.selectAnItemAsCurrentIfNeed:
             print(
-                "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 5: forceReloadItem: $forceReloadItem");
+                "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 5: postQueryBehavior: $postQueryBehavior");
             if (ITEM == ITEM_DETAIL) {
+              print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 5.1 ");
               forceReloadItem = true; // ** (Always true)
               // Just Queried:
               if (isCandidateCurrentItemInNewQueriedList) {
@@ -1564,10 +1565,20 @@ abstract class Block<
                   }
                 }
               } else {
+                print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 5.1.2 ");
                 if (formLoadTimeUIActive) {
                   if (currentItemChanged) {
                     // CASE: No new query + FORM Visible + Next Item ==> Force Load Form.  [14a]
                     forceReloadForm = true;
+                  }
+                  // !currentItemChanged
+                  else {
+                    // CASE: Screen1 => Screen2.
+                    if (formModel!.formDataState != DataState.ready) {
+                      forceReloadForm = true;
+                    }
+                    print(
+                        "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 5.4: forceReloadItem: $forceReloadItem");
                   }
                 } else {
                   if (currentItemChanged) {
@@ -1578,15 +1589,40 @@ abstract class Block<
             }
             // ITEM != ITEM_DETAIL:
             else {
-              if (formLoadTimeUIActive) {
-                if (forceReloadItem) {
-                  // Test case 16a: In Edit Mode Supplier Form Screen (Visible) ==> Click Item AGAIN (* forceReloadItem = true).
+              print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 5.2 ");
+              // Just Queried:
+              if (isCandidateCurrentItemInNewQueriedList) {
+                if (formLoadTimeUIActive) {
                   forceReloadForm = true;
                   forceReloadItem = true;
                 }
+                // !formLoadTimeUIActive
+                else {}
+              }
+              // !isCandidateCurrentItemInNewQueriedList
+              else {
+                if (formLoadTimeUIActive) {
+                  if (forceReloadItem) {
+                    // Test case 16a: In Edit Mode Supplier Form Screen (Visible) ==> Click Item AGAIN (* forceReloadItem = true).
+                    forceReloadForm = true;
+                    forceReloadItem = true;
+                  }
+                  // !forceReloadItem
+                  else {
+                    // CASE: FORM Visible + Candidate not in new Queried + !forceReloadItem
+                    print(
+                        "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 5.11: forceReloadItem: $forceReloadItem");
+                    forceReloadForm = true;
+                    forceReloadItem = true;
+                  }
+                }
+                // !formLoadTimeUIActive
+                else {}
               }
             }
           case PostQueryBehavior.selectAnItemAsCurrent:
+            print(
+                "@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 6: postQueryBehavior: $postQueryBehavior");
             // Test case 36b: Query SingleProduct
             if (formLoadTimeUIActive) {
               forceReloadForm = true;
