@@ -1459,9 +1459,12 @@ abstract class Block<
     //   }
     // }
     thisXBlock._printParameters(hasActiveUI: hasXActiveUI); // ---> Debug
+    bool originForceReloadItem = thisXBlock.forceReloadItem;
     bool forceReloadItem = thisXBlock.forceReloadItem;
     bool forceReloadForm = false;
 
+    _printDebugState(
+        "@~~~> ${getClassName(this)} ~~~~~> ITEM - originForceReloadItem: $originForceReloadItem");
     if (!forceReloadItem) {
       _printDebugState("@~~~> ${getClassName(this)} ~~~~~> ITEM 0");
       //
@@ -1822,24 +1825,6 @@ abstract class Block<
                     forceReloadForm = false;
                   }
                 }
-
-                // if (formLoadTimeUIActive) {
-                //   if (currentItemChanged) {
-                //     // CASE: No new query + FORM Visible + Next Item ==> Force Load Form.  [14a]
-                //     forceReloadForm = true;
-                //   }
-                //   // !currentItemChanged
-                //   else {
-                //     // CASE: Screen1 => Screen2.
-                //     if (formModel!.formDataState != DataState.ready) {
-                //       forceReloadForm = true;
-                //     }
-                //   }
-                // } else {
-                //   if (currentItemChanged) {
-                //     // forceReloadForm = true;
-                //   }
-                // }
               }
             }
             // ITEM != ITEM_DETAIL:
@@ -1897,9 +1882,15 @@ abstract class Block<
                     _printDebugState(
                         "@~~~> ${getClassName(this)} ~~~~~> FRM 1.2.2.2.1: formLoadTimeUIActive: TRUE");
                     //
-                    if (formModel!.formDataState != DataState.ready) {
+                    if (forceReloadItem) {
+                      // [16a]
                       forceReloadForm = true;
                       forceReloadItem = true;
+                    } else {
+                      if (formModel!.formDataState != DataState.ready) {
+                        forceReloadForm = true;
+                        forceReloadItem = true;
+                      }
                     }
                   } else {
                     _printDebugState(
