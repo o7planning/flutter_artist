@@ -317,6 +317,14 @@ abstract class Block<
 
   PageableData? get pageable => __blockData._pageable;
 
+  PageableData? get nextPageable {
+    if(lastQueryType == QueryType.emptyQuery) {
+      return __blockData._initialPageable;
+    }
+    PageableData? p = __blockData._pageable;
+    return p?.next();
+  }
+
   PaginationData? get pagination {
     return PaginationData.copy(__blockData._pagination);
   }
@@ -1009,13 +1017,14 @@ abstract class Block<
         newFilterCriteria: filterCriteriaOfFilterModel,
       );
       //
-      final PageableData callingPageable = thisXBlock.pageable ?? __pageable;
-      //
       ActionResultState queryResultState;
       //
       ListBehavior realListBehavior;
       //
+      final PageableData? callingPageable;
+      //
       if (thisXBlock.queryType == QueryType.realQuery) {
+        callingPageable = thisXBlock.pageable ?? __pageable;
         final QueryType newQueryType = thisXBlock.queryType;
         final queryTypeChanged = __lastQueryType != newQueryType;
         __lastQueryType = newQueryType;
@@ -1165,6 +1174,7 @@ abstract class Block<
       }
       // Query Empty:
       else {
+        callingPageable = __blockData._emptyPageable;
         __lastQueryType = thisXBlock.queryType;
         realListBehavior = ListBehavior.replace;
         newQueryDataState = DataState.ready;
@@ -3326,17 +3336,16 @@ abstract class Block<
       parameters: {"postQueryBehavior": postQueryBehavior},
     );
     //
-    PageableData? currentPageable = __blockData.pageable;
-    if (currentPageable == null) {
+    PageableData? nxtPageable = nextPageable;
+    if (nxtPageable == null) {
       return false;
     }
-    PageableData pageable = currentPageable.next();
     //
     return await query(
       listBehavior: ListBehavior.append,
       postQueryBehavior: postQueryBehavior,
       suggestedSelection: null,
-      pageable: pageable,
+      pageable: nxtPageable,
       navigate: null,
     );
   }

@@ -139,9 +139,16 @@ class _BlockData<
 
   ActionResultState? _lastQueryResultState;
 
+  late final PageableData? _initialPageable;
+
   late PageableData? _pageable;
 
   PageableData? get pageable => _pageable;
+
+  ///
+  /// The PageableData will be set for [_pageable] when [Block.queryEmpty()] is called.
+  ///
+  PageableData? get _emptyPageable => _initialPageable;
 
   late PaginationData? _pagination;
 
@@ -169,6 +176,7 @@ class _BlockData<
     this.block,
     PageableData? pageable,
   )   : _pageable = pageable,
+        _initialPageable = pageable,
         _pagination = PaginationData.empty() {
     _queryDataState = block.isRoot ? DataState.pending : DataState.none;
   }
