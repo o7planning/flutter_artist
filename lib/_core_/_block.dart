@@ -1613,6 +1613,7 @@ abstract class Block<
               else {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 2.2.2.2: currentItemChanged: FALSE");
+                // [40b].
                 forceReloadItem = false;
               }
             }
@@ -2009,10 +2010,12 @@ abstract class Block<
                       forceReloadForm = true;
                       forceReloadItem = true;
                     }
-                  } else {
+                  }
+                  // !formLoadTimeUIActive
+                  else {
                     _printDebugState(
                         "@~~~> ${getClassName(this)} ~~~~~> FRM 2.2.2.2.2: formLoadTimeUIActive: FALSE");
-                    //
+                    // [40b]
                     forceReloadForm = false;
                   }
                 }
