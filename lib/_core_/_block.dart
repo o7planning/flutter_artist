@@ -1356,19 +1356,24 @@ abstract class Block<
       return;
     }
     //
-    final ITEM? currentItemOrigin = this.currentItem;
     ITEM? candidateCurrentItem = candidateItem;
-    ITEM? currentItem = this.currentItem;
     //
     if (candidateCurrentItem != null) {
       if (!containsItem(item: candidateCurrentItem)) {
         candidateCurrentItem = null;
       }
     }
-    if (currentItem != null) {
-      if (!containsItem(item: currentItem)) {
+    //
+    final ITEM? currentItemOrigin = this.currentItem;
+    final ITEM? currentItem;
+    if (currentItemOrigin != null) {
+      if (containsItem(item: currentItemOrigin)) {
+        currentItem = currentItemOrigin;
+      } else {
         currentItem = null;
       }
+    } else {
+      currentItem = null;
     }
     //
     final bool currentItemChanged;
@@ -1608,7 +1613,7 @@ abstract class Block<
               else {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 2.2.2.2: currentItemChanged: FALSE");
-                forceReloadItem = true; // (selectAnItemAsCurrent - always)
+                forceReloadItem = false;
               }
             }
           }
@@ -1689,7 +1694,8 @@ abstract class Block<
               else {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 3.2.2.2: currentItemChanged: FALSE");
-                //
+                // [40b]
+                forceReloadItem = false;
                 if (hasXActiveUI) {
                   // Ready selected as current (No need to refresh):
                   forceReloadItem = false;
@@ -5147,10 +5153,10 @@ abstract class Block<
           // Has current item and Form in Lazy mode.
           // Form State: pending.
           break; // Do nothing
-          // return Actionable.no(
-          //   message:
-          //       "Cannot refresh current item because form is in 'none' mode.",
-          // );
+        // return Actionable.no(
+        //   message:
+        //       "Cannot refresh current item because form is in 'none' mode.",
+        // );
         case FormMode.creation:
           return Actionable.no(
             message:
