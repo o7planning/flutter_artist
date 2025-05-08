@@ -318,7 +318,7 @@ abstract class Block<
   PageableData? get pageable => __blockData._pageable;
 
   PageableData? get nextPageable {
-    if(lastQueryType == QueryType.emptyQuery) {
+    if (lastQueryType == QueryType.emptyQuery) {
       return __blockData._initialPageable;
     }
     PageableData? p = __blockData._pageable;

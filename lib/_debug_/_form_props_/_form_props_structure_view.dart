@@ -157,7 +157,7 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
                   Icon(
                     prefixIconData,
                     size: 16,
-                    color: isDirty? Colors.red: Colors.black,
+                    color: isDirty ? Colors.red : Colors.black,
                   ),
                   SizedBox(width: 5),
                   Expanded(
