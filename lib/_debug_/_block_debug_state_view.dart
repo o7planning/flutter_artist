@@ -154,12 +154,12 @@ class BlockDebugStateView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: children.length <= 1
           ? children
-          : children
+          : (children
               .expand(
                 (w) => [w, SizedBox(height: 5)],
               )
               .toList()
-        ..removeLast(),
+            ..removeLast()),
     );
   }
 
@@ -233,6 +233,29 @@ class BlockDebugStateView extends StatelessWidget {
     );
   }
 
+  Widget _buildFilterInfo({
+    required FilterModel filterModel,
+    required TextStyle labelStyle0,
+    required TextStyle textStyle0,
+    required TextStyle labelStyle,
+    required TextStyle textStyle,
+  }) {
+    return _DebugBox(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _IconLabelText(
+            label: "UI Active?: ",
+            text: "${filterModel.hasActiveUIComponent()}",
+            labelStyle: labelStyle0,
+            textStyle: textStyle0,
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildBlockInfo({
     required Block block,
     required TextStyle labelStyle0,
@@ -268,6 +291,13 @@ class BlockDebugStateView extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           _IconLabelText(
+            label: "Last Query Result: ",
+            text: block.lastQueryResultState?.name?.toString() ?? "",
+            labelStyle: labelStyle,
+            textStyle: textStyle0,
+          ),
+          const SizedBox(height: 5),
+          _IconLabelText(
             label: "Query Count: ",
             text: block.callApiQueryCount.toString(),
             labelStyle: labelStyle,
@@ -287,6 +317,21 @@ class BlockDebugStateView extends StatelessWidget {
             labelStyle: labelStyle,
             textStyle: textStyle0,
           ),
+          const SizedBox(height: 5),
+          _IconLabelText(
+            label: "Current Item Change Count: ",
+            text: block.currentItemChangeCount.toString(),
+            labelStyle: labelStyle,
+            textStyle: textStyle0,
+          ),
+          if (block.filterModel != null) const SizedBox(height: 5),
+          if (block.filterModel != null)
+            _IconLabelText(
+              label: "Filter Criteria Change Count: ",
+              text: block.filterCriteriaChangeCount.toString(),
+              labelStyle: labelStyle,
+              textStyle: textStyle0,
+            ),
           const SizedBox(height: 5),
           _IconLabelText(
             label: "Has Current Item?: ",

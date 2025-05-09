@@ -11,8 +11,8 @@ class TaskProgressViewBuilder extends _RefreshableWidget {
   final List<Activity> activities;
 
   final Widget Function(
-    bool onProgress,
-  ) build;
+      bool onProgress,
+      ) build;
 
   const TaskProgressViewBuilder({
     super.key,
