@@ -44,7 +44,7 @@ class BlockDebugStateView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double fontSize = 12;
+    const double fontSize = 11.5;
     Block block = shelf.findBlock(blockName)!;
 
     var labelStyle0 = const TextStyle(
@@ -55,7 +55,6 @@ class BlockDebugStateView extends StatelessWidget {
 
     var textStyle0 = const TextStyle(
       color: Colors.deepOrange,
-      fontWeight: FontWeight.bold,
       fontSize: fontSize,
     );
 
@@ -67,7 +66,7 @@ class BlockDebugStateView extends StatelessWidget {
       fontWeight: FontWeight.bold,
       fontSize: fontSize,
     );
-    const double minBoxWidth = 180;
+    const double minBoxWidth = 200;
 
     return ShelvesSafeLayoutArea(
       ownerClassInstance: this,
@@ -247,7 +246,7 @@ class BlockDebugStateView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _IconLabelText(
-            label: "UI Active? *: ",
+            label: "UI Active?: ",
             text: "${block.hasActiveUIComponent()}",
             labelStyle: labelStyle0,
             textStyle: textStyle0,
@@ -313,7 +312,7 @@ class BlockDebugStateView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _IconLabelText(
-            label: "Form UI Active? *: ",
+            label: "Form UI Active?: ",
             text:
                 "${formModel.hasActiveUIComponent()}/${formModel.loadTimeUIActive}*",
             labelStyle: labelStyle0,
@@ -321,7 +320,7 @@ class BlockDebugStateView extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           _IconLabelText(
-            label: "Form Enable? *: ",
+            label: "Form Enable?: ",
             text: "${formModel.isEnabled()}",
             labelStyle: labelStyle0,
             textStyle: textStyle0,
