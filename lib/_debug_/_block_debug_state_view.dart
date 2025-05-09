@@ -3,12 +3,15 @@ part of '../flutter_artist.dart';
 class _DebugBox extends StatelessWidget {
   final Widget child;
 
-  const _DebugBox({required this.child});
+  const _DebugBox({
+    required this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(5),
+      width: double.maxFinite,
       decoration: BoxDecoration(
         border: Border.all(width: 0.3),
       ),
@@ -25,11 +28,13 @@ class BlockDebugStateView extends StatelessWidget {
   final bool showPaginationInfo;
   final bool showBlockInfo;
   final bool showFormInfo;
+  final bool vertical;
 
   const BlockDebugStateView({
     super.key,
     required this.shelf,
     required this.blockName,
+    required this.vertical,
     this.showLastQueryType = false,
     this.showForDirty = false,
     this.showPaginationInfo = false,
@@ -41,7 +46,6 @@ class BlockDebugStateView extends StatelessWidget {
   Widget build(BuildContext context) {
     const double fontSize = 12;
     Block block = shelf.findBlock(blockName)!;
-    FormModel? formModel = block.formModel;
 
     var labelStyle0 = const TextStyle(
       color: Colors.indigo,
@@ -63,15 +67,39 @@ class BlockDebugStateView extends StatelessWidget {
       fontWeight: FontWeight.bold,
       fontSize: fontSize,
     );
-    const double minBoxWidth = 120;
-    final int totalBox = formModel == null ? 2 : 3;
+    const double minBoxWidth = 180;
 
-    //
     return ShelvesSafeLayoutArea(
       ownerClassInstance: this,
       description: null,
       shelves: [shelf],
       build: () {
+        List<Widget> children = [];
+        if (showBlockInfo) {
+          children.add(_buildBlockInfo(
+              block: block,
+              labelStyle0: labelStyle0,
+              textStyle0: textStyle0,
+              labelStyle: labelStyle,
+              textStyle: textStyle));
+        }
+        if (showFormInfo && block.formModel != null) {
+          children.add(_buildFormInfo(
+              formModel: block.formModel!,
+              labelStyle0: labelStyle0,
+              textStyle0: textStyle0,
+              labelStyle: labelStyle,
+              textStyle: textStyle));
+        }
+        if (showPaginationInfo) {
+          children.add(_buildPaginationInfo(
+              block: block,
+              labelStyle0: labelStyle0,
+              textStyle0: textStyle0,
+              labelStyle: labelStyle,
+              textStyle: textStyle));
+        }
+        //
         return Container(
           padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
@@ -79,82 +107,86 @@ class BlockDebugStateView extends StatelessWidget {
               border: Border.all(width: 0.5)),
           child: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
-              if (constraints.constrainWidth() > totalBox * minBoxWidth) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: _buildBlockInfo(
-                        block: block,
-                        labelStyle0: labelStyle0,
-                        textStyle0: textStyle0,
-                        labelStyle: labelStyle,
-                        textStyle: textStyle,
-                      ),
-                    ),
-                    if (formModel != null) const SizedBox(width: 5),
-                    if (formModel != null)
-                      Expanded(
-                        child: _buildFormInfo(
-                          formModel: formModel,
-                          labelStyle0: labelStyle0,
-                          textStyle0: textStyle0,
-                          labelStyle: labelStyle,
-                          textStyle: textStyle,
-                        ),
-                      ),
-                    const SizedBox(width: 5),
-                    Expanded(
-                      child: _buildPaginationInfo(
-                        block: block,
-                        labelStyle0: labelStyle0,
-                        textStyle0: textStyle0,
-                        labelStyle: labelStyle,
-                        textStyle: textStyle,
-                      ),
-                    ),
-                  ],
-                );
+              final int boxCount = children.length;
+              //
+              Widget mainWidget;
+              if (vertical || boxCount <= 1) {
+                mainWidget = _buildWithColumn(children);
               } else {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (showBlockInfo)
-                      _buildBlockInfo(
-                        block: block,
-                        labelStyle0: labelStyle0,
-                        textStyle0: textStyle0,
-                        labelStyle: labelStyle,
-                        textStyle: textStyle,
-                      ),
-                    if (showFormInfo && formModel != null)
-                      const Divider(height: 5),
-                    if (showFormInfo && formModel != null)
-                      _buildFormInfo(
-                        formModel: formModel,
-                        labelStyle0: labelStyle0,
-                        textStyle0: textStyle0,
-                        labelStyle: labelStyle,
-                        textStyle: textStyle,
-                      ),
-                    if (showPaginationInfo) const Divider(height: 5),
-                    if (showPaginationInfo)
-                      _buildPaginationInfo(
-                        block: block,
-                        labelStyle0: labelStyle0,
-                        textStyle0: textStyle0,
-                        labelStyle: labelStyle,
-                        textStyle: textStyle,
-                      ),
-                  ],
-                );
+                if (boxCount == 3) {
+                  if (constraints.constrainWidth() > 3 * minBoxWidth) {
+                    mainWidget = _buildWithTableContainer(children);
+                  } else if (constraints.constrainWidth() > 2 * minBoxWidth) {
+                    mainWidget = _buildWithColumnAndTableContainer(children);
+                  } else {
+                    mainWidget = _buildWithColumn(children);
+                  }
+                } else if (boxCount == 2) {
+                  if (constraints.constrainWidth() > 2 * minBoxWidth) {
+                    mainWidget = _buildWithTableContainer(children);
+                  } else {
+                    mainWidget = _buildWithColumn(children);
+                  }
+                } else {
+                  // Never run:
+                  mainWidget = SizedBox();
+                }
               }
+              //
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(block.name),
+                  const Divider(height: 10),
+                  mainWidget,
+                ],
+              );
             },
           ),
         );
       },
+    );
+  }
+
+  Widget _buildWithColumn(List<Widget> children) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: children.length <= 1
+          ? children
+          : children
+              .expand(
+                (w) => [w, SizedBox(height: 5)],
+              )
+              .toList()
+        ..removeLast(),
+    );
+  }
+
+  Widget _buildWithTableContainer(List<Widget> children) {
+    return _TableContainer(
+      flexes: children.map((child) => 1.0).toList(),
+      padding: EdgeInsets.zero,
+      widgets: children,
+    );
+  }
+
+  Widget _buildWithColumnAndTableContainer(List<Widget> children) {
+    assert(children.length == 3);
+    //
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _TableContainer(
+          flexes: [1, 1],
+          padding: EdgeInsets.zero,
+          widgets: [children[0], children[1]],
+        ),
+        SizedBox(height: 5),
+        children[2],
+      ],
     );
   }
 

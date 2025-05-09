@@ -403,6 +403,8 @@ part '_task_unit_/_scalar_quick_action_task_unit.dart';
 
 part '_task_unit_/_task_result.dart';
 
+part '_ui_/_table_container.dart';
+
 part '_ui_/_activity_fragment_widget_builder.dart';
 
 part '_ui_/_base_pagination.dart';
