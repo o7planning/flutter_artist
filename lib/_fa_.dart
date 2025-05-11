@@ -19,7 +19,7 @@ class _FlutterArtist {
 
   late final _GlobalsManager _globalsManager;
 
-  Function(BuildContext context)? _showRestDebugDialog;
+  Function(BuildContext context)? showRestDebugViewerDialog;
 
   late final ErrorLogger errorLogger = ErrorLogger(
     maxDisplayErrorCount: 20,
@@ -64,6 +64,7 @@ class _FlutterArtist {
     return __adapter!;
   }
 
+  // docs: [14683].
   ILoggedInUser? get loggedInUser {
     return _globalsManager.loggedInUser;
   }
@@ -106,7 +107,7 @@ class _FlutterArtist {
       globalDataAdapter: globalDataAdapter,
     );
     //
-    _showRestDebugDialog = showRestDebugDialog;
+    showRestDebugViewerDialog = showRestDebugDialog;
     //
     this.notificationFetchPeriodInSeconds = notificationFetchPeriodInSeconds;
     //

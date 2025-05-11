@@ -21,7 +21,7 @@ class SortOptionsDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlockFragmentWidgetBuilder(
+    return BlockFragmentViewBuilder(
       ownerClassInstance: this,
       description: null,
       block: _block,

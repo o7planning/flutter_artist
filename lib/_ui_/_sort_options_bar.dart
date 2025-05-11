@@ -69,7 +69,7 @@ class SortOptionsBar extends StatelessWidget {
   Widget build(BuildContext context) {
     ItemSortCriteria? itemSortCriteria = _block.itemSortCriteria;
     //
-    return BlockFragmentWidgetBuilder(
+    return BlockFragmentViewBuilder(
       ownerClassInstance: this,
       description: null,
       block: _block,

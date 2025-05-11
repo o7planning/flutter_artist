@@ -118,21 +118,6 @@ class _FilterDataDebugViewState extends State<_FilterDataDebugView> {
     );
     tabs.add(
       TabData(
-        text: ' Instant',
-        closable: false,
-        leading: (context, status) => Icon(
-          _formValueIconData,
-          color: _getTabIconColor(status),
-          size: iconSize,
-        ),
-        content: _buildTabContent(
-          info: "The Instant values of the form",
-          json: instantJson,
-        ),
-      ),
-    );
-    tabs.add(
-      TabData(
         text: ' Current',
         closable: false,
         leading: (context, status) => Icon(

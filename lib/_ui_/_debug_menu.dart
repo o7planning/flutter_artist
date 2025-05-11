@@ -34,6 +34,7 @@ class _DebugMenuState extends State<DebugMenu> implements IErrorListener {
 
   @override
   Widget build(BuildContext context) {
+    // docs: [14683].
     ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
     bool hasRecentErrors = FlutterArtist.hasRecentErrors();
     bool isSystemUser = loggedInUser?.isSystemUser ?? false;
@@ -99,12 +100,12 @@ class _DebugMenuState extends State<DebugMenu> implements IErrorListener {
                     ),
                   if (isSystemUser) _divider(),
                   if (isSystemUser &&
-                      FlutterArtist._showRestDebugDialog != null)
+                      FlutterArtist.showRestDebugViewerDialog != null)
                     _buildPopupMenuItem(
                       iconData: _restDebugIconData,
                       title: 'Rest Debug Viewer',
                       onTab: () {
-                        _showRestDebugDialog();
+                        _showRestDebugViewerDialog();
                       },
                     ),
                 ],
@@ -147,9 +148,9 @@ class _DebugMenuState extends State<DebugMenu> implements IErrorListener {
     await FlutterArtist.showUiComponentsDialog();
   }
 
-  Future<void> _showRestDebugDialog() async {
+  Future<void> _showRestDebugViewerDialog() async {
     Navigator.pop(context, null);
-    FlutterArtist._showRestDebugDialog!(context);
+    FlutterArtist.showRestDebugViewerDialog!(context);
   }
 
   Future<void> _showStorage() async {
@@ -174,6 +175,7 @@ class _DebugMenuState extends State<DebugMenu> implements IErrorListener {
 
   Future<void> _showRecentErrors() async {
     Navigator.pop(context, null);
+    // docs: [14683].
     await FlutterArtist.showRecentErrors();
   }
 }
