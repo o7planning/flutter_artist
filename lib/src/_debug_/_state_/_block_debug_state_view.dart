@@ -21,28 +21,7 @@ class BlockDebugStateView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double fontSize = 11.5;
     Block block = shelf.findBlock(blockName)!;
-
-    var labelStyle0 = const TextStyle(
-      color: Colors.indigo,
-      fontWeight: FontWeight.bold,
-      fontSize: fontSize,
-    );
-
-    var textStyle0 = const TextStyle(
-      color: Colors.deepOrange,
-      fontSize: fontSize,
-    );
-
-    var labelStyle = const TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: fontSize,
-    );
-    var textStyle = const TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: fontSize,
-    );
     const double minBoxWidth = 200;
 
     return ShelvesSafeLayoutArea(
