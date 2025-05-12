@@ -1,0 +1,61 @@
+part of '../../flutter_artist.dart';
+
+class BlockControlInkWell extends BlockControl {
+  BlockControlInkWell({
+    super.key,
+    required super.currentStackTrace,
+    required super.ownerClassInstance,
+    required super.block,
+    required super.actionType,
+    super.navigate,
+    //
+    Widget? child,
+    void Function(bool)? onHighlightChanged,
+    void Function(bool)? onHover,
+    MouseCursor? mouseCursor,
+    Color? focusColor,
+    Color? hoverColor,
+    Color? highlightColor,
+    WidgetStateProperty<Color?>? overlayColor,
+    Color? splashColor,
+    InteractiveInkFeatureFactory? splashFactory,
+    double? radius,
+    BorderRadius? borderRadius,
+    ShapeBorder? customBorder,
+    bool enableFeedback = true,
+    bool excludeFromSemantics = false,
+    FocusNode? focusNode,
+    bool canRequestFocus = true,
+    void Function(bool)? onFocusChange,
+    bool autofocus = false,
+    WidgetStatesController? statesController,
+    Duration? hoverDuration,
+  }) : super(
+    build: (VoidCallback? onPressed) {
+      return InkWell(
+        onTap: onPressed,
+        onHighlightChanged: onHighlightChanged,
+        onHover: onHover,
+        mouseCursor: mouseCursor,
+        focusColor: focusColor,
+        hoverColor: hoverColor,
+        highlightColor: highlightColor,
+        overlayColor: overlayColor,
+        splashColor: splashColor,
+        splashFactory: splashFactory,
+        radius: radius,
+        borderRadius: borderRadius,
+        customBorder: customBorder,
+        enableFeedback: enableFeedback,
+        excludeFromSemantics: excludeFromSemantics,
+        focusNode: focusNode,
+        canRequestFocus: canRequestFocus,
+        onFocusChange: onFocusChange,
+        autofocus: autofocus,
+        statesController: statesController,
+        hoverDuration: hoverDuration,
+        child: child,
+      );
+    },
+  );
+}

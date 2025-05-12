@@ -25,10 +25,10 @@ dependencies:
   flutter_svg:
   multi_split_view: ^3.6.0
 
-  flutter_artist_rest_core:
-    path: ../flutter_artist_rest_core
-  flutter_artist_dialogs:
-    path: ../flutter_artist_dialogs
+  flutter_artist_core:
+    path: ../flutter_artist_core
+  flutter_artist_commons_ui:
+    path: ../flutter_artist_commons_ui
 
 dev_dependencies:
   flutter_test:
