@@ -13,8 +13,7 @@ class SortCriterion {
     required SortingDirection direction,
     required this.propName,
     required String text,
-  })
-      : _text = text,
+  })  : _text = text,
         _direction = direction;
 
   bool isAscending() {

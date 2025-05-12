@@ -166,7 +166,19 @@ part 'src/_core_query_/_x_shelf.dart';
 
 part 'src/_debug_/_constants.dart';
 
-part 'src/_debug_/_block_debug_state_view.dart';
+part 'src/_debug_/_state_/_block_debug_state_view.dart';
+
+part 'src/_debug_/_state_/_block_debug_box.dart';
+
+part 'src/_debug_/_state_/_block_debug_options.dart';
+
+part 'src/_debug_/_state_/_form_debug_options.dart';
+
+part 'src/_debug_/_state_/_form_debug_box.dart';
+
+part 'src/_debug_/_state_/_pagination_debug_box.dart';
+
+part 'src/_debug_/_state_/_pagination_debug_options.dart';
 
 part 'src/_debug_/_/_debug_print.dart';
 

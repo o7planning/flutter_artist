@@ -41,9 +41,7 @@ class _CustomAppContainer extends StatelessWidget {
   Color _color(BuildContext context) {
     switch (type) {
       case _typeDefaullt:
-        return Theme
-            .of(context)
-            .cardColor;
+        return Theme.of(context).cardColor;
       case _typeTransparent:
         return Colors.transparent;
       case _typeBar:

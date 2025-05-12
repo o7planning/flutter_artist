@@ -75,8 +75,7 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
       selection = await dialogs.showYesNoCancelDialog(
         context: context,
         message:
-        "Do you want to save changes the [${getClassName(
-            widget.formModel)}] before closing?",
+            "Do you want to save changes the [${getClassName(widget.formModel)}] before closing?",
         details: "",
         defaultOption: dialogs.YesNoCancel.yes,
       );
@@ -100,7 +99,7 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
         }
         break;
       case dialogs.YesNoCancel.cancel:
-      // Do Nothing
+        // Do Nothing
         break;
     }
   }

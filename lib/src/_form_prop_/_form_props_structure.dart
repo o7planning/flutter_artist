@@ -215,8 +215,10 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void __standardizeCascade(MultiOptProp optProp,
-      MultiOptProp? parent,) {
+  void __standardizeCascade(
+    MultiOptProp optProp,
+    MultiOptProp? parent,
+  ) {
     optProp.parent = parent;
     optProp._structure = this;
     _allPropMap[optProp.propName] = optProp;
@@ -442,8 +444,7 @@ class FormPropsStructure {
       if (prop == null) {
         print("""\n
             ****************************************************************************************************
-            *** WARNING ***: You should declare prop '$prop' explicitly in ${getClassName(
-            formModel)}.
+            *** WARNING ***: You should declare prop '$prop' explicitly in ${getClassName(formModel)}.
             ****************************************************************************************************
             """);
         //

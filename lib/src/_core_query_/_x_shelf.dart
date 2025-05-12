@@ -115,7 +115,7 @@ class _XShelf {
     if (forceFilterModelOpt != null &&
         forceFilterModelOpt.filterInput != null) {
       _XFilterModel xFilterModel =
-      allXFilterModelMap[forceFilterModelOpt.filterModel.name]!;
+          allXFilterModelMap[forceFilterModelOpt.filterModel.name]!;
       xFilterModel.filterInput = forceFilterModelOpt.filterInput;
 
       FilterModel filterModel = forceFilterModelOpt.filterModel;
@@ -250,7 +250,7 @@ class _XShelf {
     required Scalar scalar,
   }) {
     _XFilterModel xFilterModel =
-    allXFilterModelMap[scalar._registeredOrDefaultFilterModel.name]!;
+        allXFilterModelMap[scalar._registeredOrDefaultFilterModel.name]!;
     //
     _XScalar xScalar = _XScalar(
       xShelf: this,
@@ -268,15 +268,15 @@ class _XShelf {
     required List<_XBlock> siblingXBlocks,
   }) {
     _XFilterModel xFilterModel =
-    allXFilterModelMap[block._registeredOrDefaultFilterModel.name]!;
+        allXFilterModelMap[block._registeredOrDefaultFilterModel.name]!;
     //
     _XFormModel? xFormModel = block.formModel == null //
         ? null
         : _XFormModel(
-      xShelf: this,
-      formModel: block.formModel!,
-      extraFormInput: null,
-    );
+            xShelf: this,
+            formModel: block.formModel!,
+            extraFormInput: null,
+          );
     //
     _XBlock xBlock = _XBlock(
       xShelf: this,
