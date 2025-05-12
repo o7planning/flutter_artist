@@ -14,6 +14,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
     as dialogs;
+import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -437,8 +438,6 @@ part 'src/_ui_/_form_view.dart';
 
 part 'src/_ui_/_form_view_builder.dart';
 
-part 'src/_ui_/_icon_label_text.dart';
-
 part 'src/_ui_/_labeled_checkbox.dart';
 
 part 'src/_ui_/_labeled_radio.dart';
@@ -464,8 +463,6 @@ part 'src/_ui_/_shelves_safe_layout_area.dart';
 part 'src/_ui_/_simple_accordion.dart';
 
 part 'src/_ui_/_simple_accordion_section.dart';
-
-part 'src/_ui_/_simple_small_icon_button.dart';
 
 part 'src/_ui_/_sort_options.dart';
 

@@ -46,7 +46,7 @@ class _LocationInfoDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           const SizedBox(height: 10),
-          _IconLabelText(
+          IconLabelText(
             icon: const Icon(
               _locationIconData,
               size: 18,
@@ -54,7 +54,7 @@ class _LocationInfoDialog extends StatelessWidget {
             ),
             label: "Location: ",
             text: locationInfo,
-            suffixIcon: _SimpleSmallIconButton(
+            suffixIcon: SimpleSmallIconButton(
               iconData: _copyToClipboardIconData,
               iconSize: 14,
               iconColor: Colors.black54,

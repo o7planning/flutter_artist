@@ -245,7 +245,7 @@ class _FilterDataDebugViewState extends State<_FilterDataDebugView> {
               BreadCrumbItem(
                 content: InkWell(
                   onTap: widget.onPressedShelf,
-                  child: _IconLabelText(
+                  child: IconLabelText(
                     style: const TextStyle(fontSize: fontSize),
                     icon: Image.asset(
                       "packages/flutter_artist/static-rs/shelf.png",
@@ -258,7 +258,7 @@ class _FilterDataDebugViewState extends State<_FilterDataDebugView> {
                 ),
               ),
               BreadCrumbItem(
-                content: _IconLabelText(
+                content: IconLabelText(
                   style: const TextStyle(fontSize: fontSize),
                   icon: const Icon(
                     _filterModelIconData,

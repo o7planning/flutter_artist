@@ -25,7 +25,7 @@ class _ControlBarButton extends StatelessWidget {
       width: iconSize,
       child: onAction
           ? const CircularProgressIndicator()
-          : _SimpleSmallIconButton(
+          : SimpleSmallIconButton(
         tooltip: tooltip,
         iconData: iconData,
         // iconSize: iconSize,

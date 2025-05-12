@@ -103,7 +103,7 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (widget.block != null)
-            _IconLabelText(
+            IconLabelText(
               label: "Block: ",
               text: "${getClassName(widget.block)} (${widget.block!.name})",
             ),
@@ -153,7 +153,7 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
             size: 24,
           ),
         ),
-        title: _IconLabelText(
+        title: IconLabelText(
           icon: const Icon(
             _locationIconData,
             size: 16,
@@ -164,7 +164,7 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
             fontSize: fontSize,
           ),
         ),
-        subtitle: _IconLabelText(
+        subtitle: IconLabelText(
           label: '  ',
           text: widgetStateEntry.key.description,
           style: const TextStyle(

@@ -201,28 +201,28 @@ class BlockDebugStateView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _IconLabelText(
+          IconLabelText(
             label: "Current Page: ",
             text: "${block.pagination?.currentPage}",
             labelStyle: labelStyle,
             textStyle: textStyle,
           ),
           const SizedBox(height: 5),
-          _IconLabelText(
+          IconLabelText(
             label: "Page Size: ",
             text: "${block.pagination?.pageSize}",
             labelStyle: labelStyle,
             textStyle: textStyle,
           ),
           const SizedBox(height: 5),
-          _IconLabelText(
+          IconLabelText(
             label: "Total Items: ",
             text: "${block.pagination?.totalItems}",
             labelStyle: labelStyle,
             textStyle: textStyle,
           ),
           const SizedBox(height: 5),
-          _IconLabelText(
+          IconLabelText(
             label: "Total Page: ",
             text: "${block.pagination?.totalPages}",
             labelStyle: labelStyle,
@@ -245,7 +245,7 @@ class BlockDebugStateView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _IconLabelText(
+          IconLabelText(
             label: "UI Active?: ",
             text: "${filterModel.hasActiveUIComponent()}",
             labelStyle: labelStyle0,
@@ -268,7 +268,7 @@ class BlockDebugStateView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _IconLabelText(
+          IconLabelText(
             label: "UI Active?: ",
             text: "${block.hasActiveUIComponent()}",
             labelStyle: labelStyle0,
@@ -276,49 +276,49 @@ class BlockDebugStateView extends StatelessWidget {
           ),
           if (showLastQueryType) const SizedBox(height: 5),
           if (showLastQueryType)
-            _IconLabelText(
+            IconLabelText(
               label: "Last Query Type: ",
               text: block.lastQueryType.name.toString(),
               labelStyle: labelStyle,
               textStyle: textStyle,
             ),
           const SizedBox(height: 5),
-          _IconLabelText(
+          IconLabelText(
             label: "Query State: ",
             text: block.queryDataState.name.toString(),
             labelStyle: labelStyle,
             textStyle: textStyle,
           ),
           const SizedBox(height: 5),
-          _IconLabelText(
+          IconLabelText(
             label: "Last Query Result: ",
             text: block.lastQueryResultState?.name?.toString() ?? "",
             labelStyle: labelStyle,
             textStyle: textStyle0,
           ),
           const SizedBox(height: 5),
-          _IconLabelText(
+          IconLabelText(
             label: "Query Count: ",
             text: block.callApiQueryCount.toString(),
             labelStyle: labelStyle,
             textStyle: textStyle,
           ),
           const SizedBox(height: 5),
-          _IconLabelText(
+          IconLabelText(
             label: "Item Refresh Count: ",
             text: block.callApiRefreshItemCount.toString(),
             labelStyle: labelStyle,
             textStyle: textStyle,
           ),
           const SizedBox(height: 5),
-          _IconLabelText(
+          IconLabelText(
             label: "Item Count: ",
             text: block.itemCount.toString(),
             labelStyle: labelStyle,
             textStyle: textStyle0,
           ),
           const SizedBox(height: 5),
-          _IconLabelText(
+          IconLabelText(
             label: "Current Item Change Count: ",
             text: block.currentItemChangeCount.toString(),
             labelStyle: labelStyle,
@@ -326,14 +326,14 @@ class BlockDebugStateView extends StatelessWidget {
           ),
           if (block.filterModel != null) const SizedBox(height: 5),
           if (block.filterModel != null)
-            _IconLabelText(
+            IconLabelText(
               label: "Filter Criteria Change Count: ",
               text: block.filterCriteriaChangeCount.toString(),
               labelStyle: labelStyle,
               textStyle: textStyle0,
             ),
           const SizedBox(height: 5),
-          _IconLabelText(
+          IconLabelText(
             label: "Has Current Item?: ",
             text: (block.currentItem != null).toString(),
             labelStyle: labelStyle,
@@ -356,7 +356,7 @@ class BlockDebugStateView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _IconLabelText(
+          IconLabelText(
             label: "Form UI Active?: ",
             text:
             "${formModel.hasActiveUIComponent()}/${formModel
@@ -365,35 +365,35 @@ class BlockDebugStateView extends StatelessWidget {
             textStyle: textStyle0,
           ),
           const SizedBox(height: 5),
-          _IconLabelText(
+          IconLabelText(
             label: "Form Enable?: ",
             text: "${formModel.isEnabled()}",
             labelStyle: labelStyle0,
             textStyle: textStyle0,
           ),
           const SizedBox(height: 5),
-          _IconLabelText(
+          IconLabelText(
             label: "Form State: ",
             text: formModel.formDataState.name.toString(),
             labelStyle: labelStyle,
             textStyle: textStyle,
           ),
           const SizedBox(height: 5),
-          _IconLabelText(
+          IconLabelText(
             label: "Form Mode: ",
             text: formModel.formMode.name.toString(),
             labelStyle: labelStyle,
             textStyle: textStyle,
           ),
           const SizedBox(height: 5),
-          _IconLabelText(
+          IconLabelText(
             label: "Form Load Count: ",
             text: formModel.loadCount.toString(),
             labelStyle: labelStyle,
             textStyle: textStyle,
           ),
           const SizedBox(height: 5),
-          _IconLabelText(
+          IconLabelText(
             label: "Form Activity Count: ",
             text: formModel.formActivityCount.toString(),
             labelStyle: labelStyle,
@@ -401,7 +401,7 @@ class BlockDebugStateView extends StatelessWidget {
           ),
           if (showForDirty) const SizedBox(height: 5),
           if (showForDirty)
-            _IconLabelText(
+            IconLabelText(
               label: "Form Dirty: ",
               text: formModel.isDirty().toString(),
               labelStyle: labelStyle0,

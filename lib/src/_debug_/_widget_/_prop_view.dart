@@ -16,7 +16,7 @@ class _FormPropView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _IconLabelText(
+          IconLabelText(
             icon: Icon(
               prop is SimpleProp
                   ? _simplePropOrCriterionIconData

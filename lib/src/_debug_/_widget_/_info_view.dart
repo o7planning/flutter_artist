@@ -9,7 +9,7 @@ class _InfoView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-      child: _IconLabelText(
+      child: IconLabelText(
         icon: const Icon(
           _infoIconData,
           size: 16,

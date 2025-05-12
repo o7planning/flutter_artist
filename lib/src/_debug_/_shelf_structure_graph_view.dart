@@ -104,7 +104,7 @@ class _ShelfStructureGraphViewState extends State<_ShelfStructureGraphView> {
 
   Widget _buildFloatingButtonLayer(BuildContext context) {
     return _buildTooltip(
-      child: _SimpleSmallIconButton(
+      child: SimpleSmallIconButton(
         onPressed: () {
           _showClassParameters = !_showClassParameters;
           setState(() {});

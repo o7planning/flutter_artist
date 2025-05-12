@@ -117,7 +117,7 @@ class _GraphItemBlockOrScalarBoxState
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _IconLabelText(
+                IconLabelText(
                   style: _getBlockNameTextStyle(),
                   label: 'Name: ',
                   text: _getBlockOrScalarNameText(),
@@ -130,7 +130,7 @@ class _GraphItemBlockOrScalarBoxState
                       .blockOrScalarClassName}\n"
                       "${widget.blockOrScalar
                       .blockOrScalarClassParametersDefinition}",
-                  child: _IconLabelText(
+                  child: IconLabelText(
                     style: _getBlockNameTextStyle(),
                     label: 'Class: ',
                     text: _getBlockOrScalarClassNameText(),

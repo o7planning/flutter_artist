@@ -16,7 +16,7 @@ class _FilterCriterionView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _IconLabelText(
+          IconLabelText(
             icon: Icon(
               criterion is SimpleCriterion
                   ? _simplePropOrCriterionIconData

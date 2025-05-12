@@ -243,7 +243,7 @@ class __FormDataViewState extends State<_FormDataView> {
               BreadCrumbItem(
                 content: InkWell(
                   onTap: widget.onPressedShelf,
-                  child: _IconLabelText(
+                  child: IconLabelText(
                     style: const TextStyle(fontSize: fontSize),
                     icon: Image.asset(
                       "packages/flutter_artist/static-rs/shelf.png",
@@ -256,7 +256,7 @@ class __FormDataViewState extends State<_FormDataView> {
                 ),
               ),
               BreadCrumbItem(
-                content: _IconLabelText(
+                content: IconLabelText(
                   style: const TextStyle(fontSize: fontSize),
                   icon: const Icon(
                     _blockIconData,
@@ -267,7 +267,7 @@ class __FormDataViewState extends State<_FormDataView> {
                 ),
               ),
               BreadCrumbItem(
-                content: _IconLabelText(
+                content: IconLabelText(
                   style: const TextStyle(fontSize: fontSize),
                   icon: const Icon(
                     _formModelIconData,
@@ -280,7 +280,7 @@ class __FormDataViewState extends State<_FormDataView> {
             ],
           ),
           const Divider(),
-          _IconLabelText(
+          IconLabelText(
             style: const TextStyle(fontSize: fontSize),
             icon: const Icon(
               _locationIconData,
@@ -289,7 +289,7 @@ class __FormDataViewState extends State<_FormDataView> {
             ),
             label: "Location: ",
             text: widget.locationInfo,
-            suffixIcon: _SimpleSmallIconButton(
+            suffixIcon: SimpleSmallIconButton(
               iconData: _copyToClipboardIconData,
               iconSize: 14,
               iconColor: Colors.black54,
