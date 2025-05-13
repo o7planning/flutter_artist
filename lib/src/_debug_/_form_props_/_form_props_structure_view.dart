@@ -228,7 +228,7 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
     //   _currentNode = childNode;
     // }
     currentNode.add(childNode);
-    for (MultiOptProp childMultiOptProp in multiOptProp.children) {
+    for (MultiOptProp childMultiOptProp in multiOptProp._children) {
       _addMultiOptPropCascade(childNode, childMultiOptProp);
     }
   }

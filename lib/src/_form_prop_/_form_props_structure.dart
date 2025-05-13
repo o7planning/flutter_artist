@@ -223,7 +223,7 @@ class FormPropsStructure {
     optProp._structure = this;
     _allPropMap[optProp.propName] = optProp;
     //
-    for (MultiOptProp child in optProp.children) {
+    for (MultiOptProp child in optProp._children) {
       __standardizeCascade(child, optProp);
     }
   }
@@ -381,7 +381,7 @@ class FormPropsStructure {
   void _updateChildrenMultiOptValueToNullCascade({
     required MultiOptProp multiOptProp,
   }) {
-    for (MultiOptProp child in multiOptProp.children) {
+    for (MultiOptProp child in multiOptProp._children) {
       child._tempCurrentValue = null;
       child._tempCurrentXData = null;
       //
@@ -405,7 +405,7 @@ class FormPropsStructure {
     // And Update children-OptCriterion data to null if parent-Value is null or not selected.
     //
     for (Prop prop in _allPropMap.values) {
-      prop.candidateUpdateValue = null;
+      prop._candidateUpdateValue = null;
       prop._valueUpdated = false;
       prop._markTempDirty = false;
     }
@@ -430,7 +430,7 @@ class FormPropsStructure {
     // Apply to all _markTempDirty Prop:
     for (Prop prop in _allPropMap.values) {
       if (prop._markTempDirty) {
-        prop._tempCurrentValue = prop.candidateUpdateValue;
+        prop._tempCurrentValue = prop._candidateUpdateValue;
       }
     }
   }

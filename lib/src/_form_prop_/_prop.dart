@@ -5,7 +5,7 @@ abstract class Prop {
 
   //
   final String propName;
-  dynamic candidateUpdateValue;
+  dynamic _candidateUpdateValue;
   bool _valueUpdated = false;
   bool _markTempDirty = false;
 

@@ -12,7 +12,7 @@ class SimpleProp extends Prop {
       // final dynamic oldValue = _tempCurrentValue;
       final dynamic newValue = updateValues[propName];
       //
-      candidateUpdateValue = newValue;
+      _candidateUpdateValue = newValue;
       _valueUpdated = true;
     }
   }

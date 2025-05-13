@@ -19,19 +19,22 @@ class MultiOptProp extends Prop {
   /// For example: An error occurs when the library tries to set multiple selection values for the Dropdown.
   ///
   final bool singleSelection;
-  final List<MultiOptProp> children;
+  final List<MultiOptProp> _children;
+
+  List<MultiOptProp> get children => [..._children];
 
   MultiOptProp({
     required super.propName,
     this.reloadCondition = MultiOptPropReload.ifCriteriaChanged,
-    this.children = const [],
-  }) : singleSelection = true;
+    List<MultiOptProp> children = const [],
+  })  : singleSelection = true,
+        _children = children;
 
   MultiOptProp.multiSelection({
     required super.propName,
     this.reloadCondition = MultiOptPropReload.ifCriteriaChanged,
   })  : singleSelection = false,
-        children = const [];
+        _children = const [];
 
   void _checkCycleError() {
     MultiOptProp? p = parent;
@@ -63,7 +66,7 @@ class MultiOptProp extends Prop {
       final dynamic oldValue = _tempCurrentValue;
       final dynamic newValue = updateValues[propName];
       //
-      candidateUpdateValue = newValue;
+      _candidateUpdateValue = newValue;
       _valueUpdated = true;
       //
       bool isSame;
@@ -84,7 +87,7 @@ class MultiOptProp extends Prop {
       }
       //
       if (_tempCurrentXData == null || newValue == null || !isSame) {
-        for (MultiOptProp childItem in children) {
+        for (MultiOptProp childItem in _children) {
           childItem._tempCurrentXData = null;
           updateValues[childItem.propName] = null;
           childItem._markTempDirty = true;
@@ -92,7 +95,7 @@ class MultiOptProp extends Prop {
       }
     }
     //
-    for (MultiOptProp childItem in children) {
+    for (MultiOptProp childItem in _children) {
       childItem._updateTempValueCascade(
         updateValues: updateValues,
       );
@@ -101,8 +104,8 @@ class MultiOptProp extends Prop {
 
   void _printTempInfoCascade({required int indentFactor}) {
     print(
-        "${("- - - " * indentFactor)} $propName >>> UpdateVal: $candidateUpdateValue >>> tempCurrentXData: $_tempCurrentXData");
-    for (var child in children) {
+        "${("- - - " * indentFactor)} $propName >>> UpdateVal: $_candidateUpdateValue >>> tempCurrentXData: $_tempCurrentXData");
+    for (var child in _children) {
       child._printTempInfoCascade(indentFactor: indentFactor + 1);
     }
   }

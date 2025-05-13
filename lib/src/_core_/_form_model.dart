@@ -907,7 +907,7 @@ abstract class FormModel<
     );
 
     if (tempSelectedPropValue != null) {
-      for (MultiOptProp child in multiOptProp.children) {
+      for (MultiOptProp child in multiOptProp._children) {
         await _loadMultiOptPropDataCascade(
           blockCurrentFilterCriteria: blockCurrentFilterCriteria,
           extraFormInput: extraFormInput,
