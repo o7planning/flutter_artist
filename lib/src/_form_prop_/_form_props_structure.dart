@@ -53,6 +53,16 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  List<MultiOptProp> get allMultiOptProps {
+    return _allPropMap.values
+        .where((p) => p is MultiOptProp)
+        .cast<MultiOptProp>()
+        .toList();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _triggerFilterCriteriaChanged() {
     for (var rootMultiOptProp in _rootOptProps) {
       if (rootMultiOptProp.reloadCondition ==

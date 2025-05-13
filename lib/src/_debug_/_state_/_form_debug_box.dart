@@ -11,10 +11,11 @@ class _FormDebugBox extends _BaseDebugBox {
   });
 
   @override
-  List<dialogs.IconLabelText> getChildIconLabelTexts() {
+  List<Widget> getChildIconLabelTexts() {
     FormPropsStructure structure = formModel.formPropsStructure;
+    List<MultiOptProp> optProps = structure.allMultiOptProps;
     //
-    return [
+    List<Widget> list1 = [
       if (options.showFormUIActive)
         IconLabelText(
           label: "Form UI Active?: ",
@@ -65,6 +66,26 @@ class _FormDebugBox extends _BaseDebugBox {
           labelStyle: labelStyle0,
           textStyle: textStyle0,
         ),
+    ];
+
+    List<Widget> list2 = [
+      if (options.showFormProps && optProps.isNotEmpty)
+        ...optProps
+            .map(
+              (optProp) => IconLabelText(
+                label: "Load Count (${optProp.propName}): ",
+                text: optProp.loadCount.toString(),
+                labelStyle: labelStyle0,
+                textStyle: textStyle0,
+              ),
+            )
+            .toList(),
+    ];
+    return [
+      ...list1,
+      if (options.showFormProps && optProps.isNotEmpty && list1.isNotEmpty)
+        Divider(),
+      if (options.showFormProps && optProps.isNotEmpty) ...list2,
     ];
   }
 }

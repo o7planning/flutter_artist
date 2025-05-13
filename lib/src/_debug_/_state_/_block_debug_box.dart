@@ -26,11 +26,11 @@ abstract class _BaseDebugBox extends StatelessWidget {
 
   const _BaseDebugBox({super.key});
 
-  List<IconLabelText> getChildIconLabelTexts();
+  List<Widget> getChildIconLabelTexts();
 
   @override
   Widget build(BuildContext context) {
-    List<IconLabelText> children = getChildIconLabelTexts();
+    List<Widget> children = getChildIconLabelTexts();
     return Container(
       padding: EdgeInsets.all(5),
       width: double.maxFinite,

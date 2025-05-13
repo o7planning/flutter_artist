@@ -7,6 +7,7 @@ class BlockDebugStateView extends StatelessWidget {
   final FormDebugOptions? formDebugOptions;
   final PaginationDebugOptions? paginationDebugOptions;
 
+  final bool showTitle;
   final bool vertical;
 
   const BlockDebugStateView({
@@ -14,6 +15,7 @@ class BlockDebugStateView extends StatelessWidget {
     required this.shelf,
     required this.blockName,
     required this.vertical,
+    this.showTitle = true,
     required this.blockDebugOptions,
     required this.formDebugOptions,
     required this.paginationDebugOptions,
@@ -92,8 +94,8 @@ class BlockDebugStateView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(block.name),
-                  const Divider(height: 10),
+                  if (showTitle) Text(block.name),
+                  if (showTitle) const Divider(height: 10),
                   mainWidget,
                 ],
               );
