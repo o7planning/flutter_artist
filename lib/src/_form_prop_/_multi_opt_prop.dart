@@ -18,7 +18,7 @@ class MultiOptProp extends Prop {
   /// Make sure you set the appropriate value for this property, otherwise an error will occur.
   /// For example: An error occurs when the library tries to set multiple selection values for the Dropdown.
   ///
-  bool singleSelection;
+  final bool singleSelection;
   final List<MultiOptProp> children;
 
   MultiOptProp({

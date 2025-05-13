@@ -12,6 +12,8 @@ class _FormDebugBox extends _BaseDebugBox {
 
   @override
   List<dialogs.IconLabelText> getChildIconLabelTexts() {
+    FormPropsStructure structure= formModel.formPropsStructure;
+    //
     return [
       if (options.showFormUIActive)
         IconLabelText(
@@ -63,6 +65,7 @@ class _FormDebugBox extends _BaseDebugBox {
           labelStyle: labelStyle0,
           textStyle: textStyle0,
         ),
+
     ];
   }
 }
