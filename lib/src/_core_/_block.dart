@@ -3125,7 +3125,7 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethodAnnotation()
-  Future<CurrentItemSelectionResult<ITEM>?> _prepareToShowOrEditItem({
+  Future<CurrentItemSelectionResult<ITEM>?> _refreshToShowOrEditItemAsCurrent({
     required ITEM item,
     required bool forceForm,
     required Function()? navigate,
@@ -3134,7 +3134,7 @@ abstract class Block<
       isLibCode: true,
       navigate: navigate,
       ownerClassInstance: this,
-      methodName: "_prepareToShowOrEditItem",
+      methodName: "_refreshToShowOrEditItemAsCurrent",
       parameters: {
         "item": item,
         "forceForm": forceForm,
@@ -3183,23 +3183,25 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethodAnnotation()
-  Future<CurrentItemSelectionResult<ITEM>?> prepareToShowItem({
+  Future<CurrentItemSelectionResult<ITEM>?> refreshAndShowItemAsCurrent({
     required ITEM item,
+    bool forceLoadForm = false,
     Function()? navigate,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: navigate,
       ownerClassInstance: this,
-      methodName: "prepareToShowItem",
+      methodName: "refreshAndShowItemAsCurrent",
       parameters: {
         "item": item,
+        "forceLoadForm": forceLoadForm,
       },
     );
     //
-    return await _prepareToShowOrEditItem(
+    return await _refreshToShowOrEditItemAsCurrent(
       item: item,
-      forceForm: false,
+      forceForm: forceLoadForm,
       navigate: navigate,
     );
   }
@@ -4047,16 +4049,100 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  // @RootMethodAnnotation()
+  // Future<CurrentItemSelectionResult<ITEM>?> prepareToEditFirstItem({
+  //   Function()? navigate,
+  // }) async {
+  //   ITEM? nextItem = firstItem;
+  //   if (nextItem == null) {
+  //     return null;
+  //   }
+  //   return await prepareToEditItem(
+  //     item: nextItem,
+  //     navigate: navigate,
+  //   );
+  // }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  // @RootMethodAnnotation()
+  // Future<CurrentItemSelectionResult<ITEM>?> prepareToEditNextItem({
+  //   Function()? navigate,
+  // }) async {
+  //   if (!hasNextItem) {
+  //     return null;
+  //   }
+  //   ITEM? nextItem = nextSiblingItem;
+  //   if (nextItem == null) {
+  //     return null;
+  //   }
+  //   return await prepareToEditItem(
+  //     item: nextItem,
+  //     navigate: navigate,
+  //   );
+  // }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  // @RootMethodAnnotation()
+  // Future<CurrentItemSelectionResult<ITEM>?> prepareToEditPreviousItem({
+  //   Function()? navigate,
+  // }) async {
+  //   if (!hasPreviousItem) {
+  //     return null;
+  //   }
+  //   ITEM? previousItem = previousSiblingItem;
+  //   if (previousItem == null) {
+  //     return null;
+  //   }
+  //   return await prepareToEditItem(
+  //     item: previousItem,
+  //     navigate: navigate,
+  //   );
+  // }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  // @RootMethodAnnotation()
+  // Future<CurrentItemSelectionResult<ITEM>?> prepareToEditItem({
+  //   required ITEM item,
+  //   Function()? navigate,
+  // }) async {
+  //   FlutterArtist.codeFlowLogger._addMethodCall(
+  //     isLibCode: true,
+  //     navigate: navigate,
+  //     ownerClassInstance: this,
+  //     methodName: "prepareToEditItem",
+  //     parameters: {
+  //       "item": item,
+  //     },
+  //   );
+  //   //
+  //   return await _refreshToShowOrEditItemAsCurrent(
+  //     item: item,
+  //     forceForm: true,
+  //     navigate: navigate,
+  //   );
+  // }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   @RootMethodAnnotation()
-  Future<CurrentItemSelectionResult<ITEM>?> prepareToEditFirstItem({
+  Future<CurrentItemSelectionResult<ITEM>?> refreshAndShowFirstItemAsCurrent({
+    bool forceLoadForm = false,
     Function()? navigate,
   }) async {
-    ITEM? nextItem = firstItem;
-    if (nextItem == null) {
+    ITEM? firstItm = firstItem;
+    if (firstItm == null) {
       return null;
     }
-    return await prepareToEditItem(
-      item: nextItem,
+    return await refreshAndShowItemAsCurrent(
+      item: firstItm,
+      forceLoadForm: forceLoadForm,
       navigate: navigate,
     );
   }
@@ -4065,7 +4151,8 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethodAnnotation()
-  Future<CurrentItemSelectionResult<ITEM>?> prepareToEditNextItem({
+  Future<CurrentItemSelectionResult<ITEM>?> refreshAndShowNextItemAsCurrent({
+    bool forceLoadForm = false,
     Function()? navigate,
   }) async {
     if (!hasNextItem) {
@@ -4075,8 +4162,9 @@ abstract class Block<
     if (nextItem == null) {
       return null;
     }
-    return await prepareToEditItem(
+    return await refreshAndShowItemAsCurrent(
       item: nextItem,
+      forceLoadForm: forceLoadForm,
       navigate: navigate,
     );
   }
@@ -4085,7 +4173,9 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethodAnnotation()
-  Future<CurrentItemSelectionResult<ITEM>?> prepareToEditPreviousItem({
+  Future<CurrentItemSelectionResult<ITEM>?>
+      refreshAndShowPreviousItemAsCurrent({
+    bool forceLoadForm = false,
     Function()? navigate,
   }) async {
     if (!hasPreviousItem) {
@@ -4095,90 +4185,9 @@ abstract class Block<
     if (previousItem == null) {
       return null;
     }
-    return await prepareToEditItem(
+    return await refreshAndShowItemAsCurrent(
       item: previousItem,
-      navigate: navigate,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @RootMethodAnnotation()
-  Future<CurrentItemSelectionResult<ITEM>?> prepareToEditItem({
-    required ITEM item,
-    Function()? navigate,
-  }) async {
-    FlutterArtist.codeFlowLogger._addMethodCall(
-      isLibCode: true,
-      navigate: navigate,
-      ownerClassInstance: this,
-      methodName: "prepareToEditItem",
-      parameters: {
-        "item": item,
-      },
-    );
-    //
-    return await _prepareToShowOrEditItem(
-      item: item,
-      forceForm: true,
-      navigate: navigate,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @RootMethodAnnotation()
-  Future<CurrentItemSelectionResult<ITEM>?> prepareToShowFirstItem({
-    Function()? navigate,
-  }) async {
-    ITEM? nextItem = firstItem;
-    if (nextItem == null) {
-      return null;
-    }
-    return await prepareToShowItem(
-      item: nextItem,
-      navigate: navigate,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @RootMethodAnnotation()
-  Future<CurrentItemSelectionResult<ITEM>?> prepareToShowNextItem({
-    Function()? navigate,
-  }) async {
-    if (!hasNextItem) {
-      return null;
-    }
-    ITEM? nextItem = nextSiblingItem;
-    if (nextItem == null) {
-      return null;
-    }
-    return await prepareToShowItem(
-      item: nextItem,
-      navigate: navigate,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @RootMethodAnnotation()
-  Future<CurrentItemSelectionResult<ITEM>?> prepareToShowPreviousItem({
-    Function()? navigate,
-  }) async {
-    if (!hasPreviousItem) {
-      return null;
-    }
-    ITEM? previousItem = previousSiblingItem;
-    if (previousItem == null) {
-      return null;
-    }
-    return await prepareToShowItem(
-      item: previousItem,
+      forceLoadForm: forceLoadForm,
       navigate: navigate,
     );
   }
@@ -4524,7 +4533,9 @@ abstract class Block<
   ///
   ///
   @RootMethodAnnotation()
-  Future<CurrentItemSelectionResult<ITEM>?> refreshCurrentItem() async {
+  Future<CurrentItemSelectionResult<ITEM>?> refreshCurrentItem({
+    bool forceLoadForm = false,
+  }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: null,
@@ -4538,8 +4549,9 @@ abstract class Block<
       return null;
     }
     //
-    return await prepareToShowItem(
+    return await refreshAndShowItemAsCurrent(
       item: this.currentItem!,
+      forceLoadForm: forceLoadForm,
     );
   }
 
