@@ -3183,7 +3183,7 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethodAnnotation()
-  Future<CurrentItemSelectionResult<ITEM>?> refreshAndShowItemAsCurrent({
+  Future<CurrentItemSelectionResult<ITEM>?> refreshAndSelectItemAsCurrent({
     required ITEM item,
     bool forceLoadForm = false,
     Function()? navigate,
@@ -3192,7 +3192,7 @@ abstract class Block<
       isLibCode: true,
       navigate: navigate,
       ownerClassInstance: this,
-      methodName: "refreshAndShowItemAsCurrent",
+      methodName: "refreshAndSelectItemAsCurrent",
       parameters: {
         "item": item,
         "forceLoadForm": forceLoadForm,
@@ -4132,7 +4132,7 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethodAnnotation()
-  Future<CurrentItemSelectionResult<ITEM>?> refreshAndShowFirstItemAsCurrent({
+  Future<CurrentItemSelectionResult<ITEM>?> refreshAndSelectFirstItemAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
@@ -4140,7 +4140,7 @@ abstract class Block<
     if (firstItm == null) {
       return null;
     }
-    return await refreshAndShowItemAsCurrent(
+    return await refreshAndSelectItemAsCurrent(
       item: firstItm,
       forceLoadForm: forceLoadForm,
       navigate: navigate,
@@ -4151,7 +4151,7 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethodAnnotation()
-  Future<CurrentItemSelectionResult<ITEM>?> refreshAndShowNextItemAsCurrent({
+  Future<CurrentItemSelectionResult<ITEM>?> refreshAndSelectNextItemAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
@@ -4162,7 +4162,7 @@ abstract class Block<
     if (nextItem == null) {
       return null;
     }
-    return await refreshAndShowItemAsCurrent(
+    return await refreshAndSelectItemAsCurrent(
       item: nextItem,
       forceLoadForm: forceLoadForm,
       navigate: navigate,
@@ -4174,7 +4174,7 @@ abstract class Block<
 
   @RootMethodAnnotation()
   Future<CurrentItemSelectionResult<ITEM>?>
-      refreshAndShowPreviousItemAsCurrent({
+      refreshAndSelectPreviousItemAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
@@ -4185,7 +4185,7 @@ abstract class Block<
     if (previousItem == null) {
       return null;
     }
-    return await refreshAndShowItemAsCurrent(
+    return await refreshAndSelectItemAsCurrent(
       item: previousItem,
       forceLoadForm: forceLoadForm,
       navigate: navigate,
@@ -4549,7 +4549,7 @@ abstract class Block<
       return null;
     }
     //
-    return await refreshAndShowItemAsCurrent(
+    return await refreshAndSelectItemAsCurrent(
       item: this.currentItem!,
       forceLoadForm: forceLoadForm,
     );
