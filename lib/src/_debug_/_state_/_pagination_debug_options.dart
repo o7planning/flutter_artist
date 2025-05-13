@@ -12,4 +12,11 @@ class PaginationDebugOptions {
     this.showTotalItems = true,
     this.showTotalPages = true,
   });
+
+  const PaginationDebugOptions.custom({
+    this.showCurrentPage = false,
+    this.showPageSize = false,
+    this.showTotalItems = false,
+    this.showTotalPages = false,
+  });
 }

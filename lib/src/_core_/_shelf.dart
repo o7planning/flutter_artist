@@ -438,6 +438,10 @@ abstract class Shelf extends _XBase {
   // ****** UPDATE UI COMPONENTS ***********************************************
   // ***************************************************************************
 
+  void updateAllShelvesSafeLayoutAreas() {
+    __updateShelfWidgets(force: true);
+  }
+
   void updateAllUIComponents() {
     try {
       print("|----> ${getClassName(this)}.updateAllUIComponents()");
@@ -480,10 +484,10 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
   // ***************************************************************************
 
-  void __updateShelfWidgets() {
+  void __updateShelfWidgets({bool force = false}) {
     for (_RefreshableWidgetState state in _shelfWidgetStates.keys) {
       if (state.mounted) {
-        state.refreshState();
+        state.refreshState(force: force);
       }
     }
   }

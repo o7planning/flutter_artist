@@ -24,4 +24,17 @@ class BlockDebugOptions {
     this.showHasCurrentItem = true,
     this.showLastQueryResultState = true,
   });
+
+  const BlockDebugOptions.custom({
+    this.showLastQueryType = false,
+    this.showUIActive = false,
+    this.showQueryDataState = false,
+    this.showCallApiQueryCount = false,
+    this.showCallApiRefreshItemCount = false,
+    this.showItemCount = false,
+    this.showCurrentItemChangeCount = false,
+    this.showFilterCriteriaChangeCount = false,
+    this.showHasCurrentItem = false,
+    this.showLastQueryResultState = false,
+  });
 }
