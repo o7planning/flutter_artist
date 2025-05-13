@@ -14,9 +14,9 @@ class BlockDebugStateView extends StatelessWidget {
     required this.shelf,
     required this.blockName,
     required this.vertical,
-    this.blockDebugOptions = const BlockDebugOptions(),
-    this.formDebugOptions = const FormDebugOptions(),
-    this.paginationDebugOptions = const PaginationDebugOptions(),
+    required this.blockDebugOptions,
+    required this.formDebugOptions,
+    required this.paginationDebugOptions,
   });
 
   @override

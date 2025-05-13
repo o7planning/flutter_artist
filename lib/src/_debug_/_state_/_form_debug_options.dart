@@ -8,6 +8,7 @@ class FormDebugOptions {
   final bool showFormLoadCount;
   final bool showFormActivityCount;
   final bool showFormDirty;
+  final bool showFormProps;
 
   const FormDebugOptions({
     this.showFormUIActive = true,
@@ -17,6 +18,7 @@ class FormDebugOptions {
     this.showFormLoadCount = true,
     this.showFormActivityCount = true,
     this.showFormDirty = true,
+    this.showFormProps = true,
   });
 
   const FormDebugOptions.custom({
@@ -27,5 +29,6 @@ class FormDebugOptions {
     this.showFormLoadCount = false,
     this.showFormActivityCount = false,
     this.showFormDirty = false,
+    this.showFormProps = false,
   });
 }

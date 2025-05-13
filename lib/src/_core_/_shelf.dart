@@ -484,7 +484,7 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
   // ***************************************************************************
 
-  void __updateShelfWidgets({bool force = false}) {
+  void __updateShelfWidgets({bool force = true}) {
     for (_RefreshableWidgetState state in _shelfWidgetStates.keys) {
       if (state.mounted) {
         state.refreshState(force: force);
