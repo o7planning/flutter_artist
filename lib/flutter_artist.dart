@@ -152,7 +152,7 @@ part 'src/_core_query_/_scalar_and_block_list.dart';
 
 part 'src/_core_query_/_scalar_opt.dart';
 
-part 'src/_core_query_/_scalar_or_block_or_form_wraper.dart';
+part 'src/_core_query_/_lazy_objects.dart';
 
 part 'src/_core_query_/_x_block.dart';
 

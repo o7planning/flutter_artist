@@ -992,12 +992,15 @@ abstract class Block<
               filterModel._filterCriteria! as FILTER_CRITERIA;
         }
       } catch (e, stackTrace) {
+        // @@TODO@@ - Test.
+        print("ERROR _unitQuery: $stackTrace");
         /* Never Error */
       }
       //
       // Has Error in FilterModel.
       //
       if (filterCriteriaOfFilterModel == null) {
+        // @@TODO@@ - Test.
         // Set Block to error cascade.
         __clearWithDataStateCascade(
           thisXBlock: thisXBlock,
@@ -1466,27 +1469,32 @@ abstract class Block<
               if (hasXActiveUI) {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 1.1.1.1: hasXActiveUI: TRUE");
-                //
+                // TODO: Test.
+                forceReloadItem = true;
               } else {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 1.1.1.2: hasXActiveUI: FALSE");
-                //..
+                // TODO: Test.
+                forceReloadItem = false;
               }
             }
             // !isCandidateCurrentItemInNewQueriedList
             else {
               _printDebugState(
-                  "@~~~> ${getClassName(this)} ~~~~~> ITM 1.1.2: isCandidateCurrentItemInNewQueriedList: TRUE");
+                  "@~~~> ${getClassName(this)} ~~~~~> ITM 1.1.2: isCandidateCurrentItemInNewQueriedList: FALSE");
               //
               if (currentItemChanged) {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 1.1.2.1: currentItemChanged: TRUE");
-                //
+                // TODO: Test.
+                forceReloadItem = true;
               }
               // !currentItemChanged
               else {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 1.1.2.2: currentItemChanged: FALSE");
+                // TODO: Test.
+                forceReloadItem = false;
               }
             }
           }
@@ -2709,6 +2717,7 @@ abstract class Block<
     //
     FILTER_CRITERIA? blockCurrentFilterCriteria = filterCriteria;
     if (blockCurrentFilterCriteria == null) {
+      // @@TODO@@ Test.
       throw AppException(message: "FilterCriteria is null");
     }
     //
@@ -3396,7 +3405,7 @@ abstract class Block<
       forceQueryBlockOpts: [
         _BlockOpt(
           block: this,
-          forceQuery: false,
+          forceQuery: true,
           forceReloadItem: false,
           queryType: QueryType.emptyQuery,
           pageable: pageable,

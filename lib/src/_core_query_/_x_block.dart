@@ -75,21 +75,6 @@ class _XBlock {
     __forceReloadItem = true;
   }
 
-  // QueryType get queryType {
-  //   switch (__queryType) {
-  //     case null:
-  //       return forceQuery //
-  //           ? QueryType.forceQuery
-  //           : QueryType.queryIfNeed;
-  //     case QueryType.forceQuery:
-  //       return QueryType.forceQuery;
-  //     case QueryType.queryIfNeed:
-  //       return forceQuery //
-  //           ? QueryType.forceQuery
-  //           : QueryType.queryIfNeed;
-  //   }
-  // }
-
   ListBehavior get listBehavior {
     // TODO: Xem lai gia tri mac dinh
     return __listBehavior ?? ListBehavior.replace;
@@ -140,6 +125,6 @@ class _XBlock {
 
   @override
   String toString() {
-    return "${getClassName(this)}(${getClassName(block)} - needQuery: $forceQuery) forceReloadItem: $__forceReloadItem - $xFormModel";
+    return "${getClassName(this)}(${getClassName(block)} - forceQuery: $forceQuery) forceReloadItem: $__forceReloadItem - $xFormModel";
   }
 }

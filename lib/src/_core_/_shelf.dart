@@ -552,13 +552,12 @@ abstract class Shelf extends _XBase {
   Future<void> __queryLazyList() async {
     __lazyLoadLocked = true;
     // Top Lazy (Scalar, Block or FormModel).
-    final List<_ScalarOrBlockOrFormWrapper> topLazyScalarOrBlockOrFormWrappers =
-        __findTopLazyScalarOrBlockOrForms();
+    final _LazyObjects lazyObjects = __findLazyObjects();
 
-    print(
-        ">>>> topLazyScalarOrBlockOrFormWrappers: $topLazyScalarOrBlockOrFormWrappers");
+    print(">>>> lazyObjects: $lazyObjects");
+    lazyObjects.printInfo();
     //
-    if (topLazyScalarOrBlockOrFormWrappers.isEmpty) {
+    if (lazyObjects.isEmpty) {
       __lastLazyLoadId = __lazyLoadId;
       __lazyLoadLocked = false;
       // IMPORTANT: No Lazy entities, but need to refresh UIComponents:
@@ -566,8 +565,7 @@ abstract class Shelf extends _XBase {
       return;
     }
     print("@@@@@@@@@@@@ Lazy Load - ID: $__lazyLoadId");
-    print(
-        "@@@@@@@@@@@@ Lazy Load - Count: ${topLazyScalarOrBlockOrFormWrappers.length}");
+    print("@@@@@@@@@@@@ Lazy Load - Count: ${lazyObjects.count}");
     //
     __lastLazyLoadId = __lazyLoadId;
     //
@@ -576,35 +574,34 @@ abstract class Shelf extends _XBase {
     final List<_BlockOpt> topLazyBlockOpts = [];
     final List<_FormModelOpt> topLazyFormModelOpts = [];
     //
-    for (_ScalarOrBlockOrFormWrapper wrapper
-        in topLazyScalarOrBlockOrFormWrappers) {
-      if (wrapper.scalar != null) {
-        wrapper.scalar!._lazyLoadCount++;
-        //
-        scalarOpts.add(
-          _ScalarOpt(scalar: wrapper.scalar!),
-        );
-      } else if (wrapper.block != null) {
-        wrapper.block!._lazyLoadCount++;
-        //
-        topLazyBlockOpts.add(
-          _BlockOpt(
-            block: wrapper.block!,
-            forceQuery: false,
-            forceReloadItem: false,
-            pageable: null,
-            listBehavior: null,
-            suggestedSelection: null,
-            postQueryBehavior: null,
-          ),
-        );
-      } else if (wrapper.formModel != null) {
-        wrapper.formModel!._lazyLoadCount++;
-        //
-        topLazyFormModelOpts.add(
-          _FormModelOpt(formModel: wrapper.formModel!),
-        );
-      }
+    for (_LazyScalar lazyScalar in lazyObjects.lazyScalars) {
+      lazyScalar.scalar!._lazyLoadCount++;
+      //
+      scalarOpts.add(
+        _ScalarOpt(scalar: lazyScalar.scalar!),
+      );
+    }
+    for (_LazyBlock lazyBlock in lazyObjects.lazyBlocks) {
+      lazyBlock.block!._lazyLoadCount++;
+      //
+      topLazyBlockOpts.add(
+        _BlockOpt(
+          block: lazyBlock.block!,
+          forceQuery: lazyBlock.forceQuery,
+          forceReloadItem: false,
+          pageable: null,
+          listBehavior: null,
+          suggestedSelection: null,
+          postQueryBehavior: null,
+        ),
+      );
+    }
+    for (_LazyFormModel lazyFormModel in lazyObjects.lazyFormModels) {
+      lazyFormModel.formModel!._lazyLoadCount++;
+      //
+      topLazyFormModelOpts.add(
+        _FormModelOpt(formModel: lazyFormModel.formModel!),
+      );
     }
     //
     print("@@@@@@@@@@@@ Query Lazy List: scalarOpts: $scalarOpts");
@@ -634,11 +631,22 @@ abstract class Shelf extends _XBase {
   //
   // ***************************************************************************
 
-  void __findLazyScalars(List<_ScalarOrBlockOrFormWrapper> founds) {
+  // void __findLazyScalars(List<_ScalarOrBlockOrFormWrapper> founds) {
+  //   for (Scalar scalar in __scalars) {
+  //     if (scalar.hasActiveUIComponent() &&
+  //         scalar.queryDataState == DataState.pending) {
+  //       founds.add(_ScalarOrBlockOrFormWrapper.scalar(scalar));
+  //     }
+  //   }
+  // }
+
+  void __findLazyScalars(_LazyObjects founds) {
     for (Scalar scalar in __scalars) {
-      if (scalar.hasActiveUIComponent() &&
-          scalar.queryDataState == DataState.pending) {
-        founds.add(_ScalarOrBlockOrFormWrapper.scalar(scalar));
+      if (scalar.hasActiveUIComponent()) {
+        if (scalar.queryDataState == DataState.pending ||
+            scalar.queryDataState == DataState.error) {
+          founds.addLazyScalar(scalar: scalar);
+        }
       }
     }
   }
@@ -646,22 +654,52 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
   // ***************************************************************************
 
+  // void __findXVisibleLazyBlocksCascade(
+  //   List<Block> blocks,
+  //   List<_ScalarOrBlockOrFormWrapper> founds,
+  // ) {
+  //   for (Block block in blocks) {
+  //     // if (block.hasActiveBlockFragmentWidget(alsoCheckChildren: true) &&
+  //     //     block.queryDataState == DataState.pending) {
+  //     //   founds.add(_ScalarOrBlockOrFormWrapper.block(block));
+  //     // } else if (block.formModel != null &&
+  //     //     block.formModel!.hasActiveUIComponent() &&
+  //     //     block.formModel!.formDataState == DataState.pending) {
+  //     //   founds.add(_ScalarOrBlockOrFormWrapper.formModel(block.formModel!));
+  //     // } else {
+  //     //   __findTopLazyBlocksCascade(block._childBlocks, founds);
+  //     // }
+  //     //
+  //     bool found = false;
+  //     //
+  //     // TODO: Mới kt các fragment, còn các cái khác thì sao? ItemsView?
+  //     //
+  //     if (block.hasActiveBlockFragmentWidget(alsoCheckChildren: true)) {
+  //       if (block.queryDataState == DataState.pending ||
+  //           block.queryDataState == DataState.error) {
+  //         founds.add(_ScalarOrBlockOrFormWrapper.block(block));
+  //         found = true;
+  //       }
+  //     }
+  //     //
+  //     if (block.formModel != null && block.formModel!.hasActiveUIComponent()) {
+  //       if (block.formModel!.formDataState == DataState.pending ||
+  //           block.formModel!.formDataState == DataState.error ||
+  //           block.formModel!.formDataState == DataState.none) {
+  //         founds.add(_ScalarOrBlockOrFormWrapper.formModel(block.formModel!));
+  //         found = true;
+  //       }
+  //     }
+  //     //
+  //     __findXVisibleLazyBlocksCascade(block._childBlocks, founds);
+  //   }
+  // }
+
   void __findXVisibleLazyBlocksCascade(
     List<Block> blocks,
-    List<_ScalarOrBlockOrFormWrapper> founds,
+    _LazyObjects founds,
   ) {
     for (Block block in blocks) {
-      // if (block.hasActiveBlockFragmentWidget(alsoCheckChildren: true) &&
-      //     block.queryDataState == DataState.pending) {
-      //   founds.add(_ScalarOrBlockOrFormWrapper.block(block));
-      // } else if (block.formModel != null &&
-      //     block.formModel!.hasActiveUIComponent() &&
-      //     block.formModel!.formDataState == DataState.pending) {
-      //   founds.add(_ScalarOrBlockOrFormWrapper.formModel(block.formModel!));
-      // } else {
-      //   __findTopLazyBlocksCascade(block._childBlocks, founds);
-      // }
-      //
       bool found = false;
       //
       // TODO: Mới kt các fragment, còn các cái khác thì sao? ItemsView?
@@ -669,8 +707,13 @@ abstract class Shelf extends _XBase {
       if (block.hasActiveBlockFragmentWidget(alsoCheckChildren: true)) {
         if (block.queryDataState == DataState.pending ||
             block.queryDataState == DataState.error) {
-          founds.add(_ScalarOrBlockOrFormWrapper.block(block));
+          founds.addLazyBlock(block: block, forceQuery: true);
           found = true;
+        } else if (block.queryDataState == DataState.ready) {
+          if (block.itemCount > 0 && block.currentItem == null) {
+            founds.addLazyBlock(block: block, forceQuery: false);
+            found = true;
+          }
         }
       }
       //
@@ -678,7 +721,7 @@ abstract class Shelf extends _XBase {
         if (block.formModel!.formDataState == DataState.pending ||
             block.formModel!.formDataState == DataState.error ||
             block.formModel!.formDataState == DataState.none) {
-          founds.add(_ScalarOrBlockOrFormWrapper.formModel(block.formModel!));
+          founds.addLazyFormModel(formModel: block.formModel!);
           found = true;
         }
       }
@@ -690,8 +733,15 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
   // ***************************************************************************
 
-  List<_ScalarOrBlockOrFormWrapper> __findTopLazyScalarOrBlockOrForms() {
-    final List<_ScalarOrBlockOrFormWrapper> founds = [];
+  // List<_ScalarOrBlockOrFormWrapper> __findTopLazyScalarOrBlockOrForms() {
+  //   final List<_ScalarOrBlockOrFormWrapper> founds = [];
+  //   __findLazyScalars(founds);
+  //   __findXVisibleLazyBlocksCascade(__rootBlocks, founds);
+  //   return founds;
+  // }
+
+  _LazyObjects __findLazyObjects() {
+    final _LazyObjects founds = _LazyObjects();
     __findLazyScalars(founds);
     __findXVisibleLazyBlocksCascade(__rootBlocks, founds);
     return founds;
