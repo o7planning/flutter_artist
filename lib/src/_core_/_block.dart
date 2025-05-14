@@ -2598,11 +2598,6 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    FILTER_CRITERIA? blockCurrentFilterCriteria = filterCriteria;
-    if (blockCurrentFilterCriteria == null) {
-      throw AppException(message: "FilterCriteria is null");
-    }
-    //
     ApiResult<ITEM_DETAIL> result;
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
@@ -2630,7 +2625,6 @@ abstract class Block<
     try {
       return await _processSaveActionRestResult(
         thisXBlock: thisXBlock,
-        blockCurrentFilterCriteria: blockCurrentFilterCriteria,
         calledMethodName: "${getClassName(action)}.callApiQuickCreateItem",
         result: result,
       );
@@ -2715,12 +2709,6 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    FILTER_CRITERIA? blockCurrentFilterCriteria = filterCriteria;
-    if (blockCurrentFilterCriteria == null) {
-      // @@TODO@@ Test.
-      throw AppException(message: "FilterCriteria is null");
-    }
-    //
     ApiResult<ITEM_DETAIL> result;
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
@@ -2748,7 +2736,6 @@ abstract class Block<
     try {
       return await _processSaveActionRestResult(
         thisXBlock: thisXBlock,
-        blockCurrentFilterCriteria: blockCurrentFilterCriteria,
         calledMethodName: "${getClassName(action)}.callApiQuickUpdateItem",
         result: result,
       );
@@ -2868,11 +2855,6 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    FILTER_CRITERIA? blockCurrentFilterCriteria = filterCriteria;
-    if (blockCurrentFilterCriteria == null) {
-      throw AppException(message: "FilterCriteria is null");
-    }
-    //
     ApiResult<ITEM_DETAIL> result;
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
@@ -2909,7 +2891,6 @@ abstract class Block<
     //
     return await _processSaveActionRestResult(
       thisXBlock: thisXBlock,
-      blockCurrentFilterCriteria: blockCurrentFilterCriteria,
       calledMethodName: "${getClassName(action)}.callApiChildBlockItems",
       result: result,
     );
@@ -2920,7 +2901,7 @@ abstract class Block<
 
   Future<bool> _processSaveActionRestResult({
     required _XBlock thisXBlock,
-    required FILTER_CRITERIA blockCurrentFilterCriteria,
+    // required FILTER_CRITERIA blockCurrentFilterCriteria,
     required String calledMethodName,
     required ApiResult<ITEM_DETAIL> result,
   }) async {
@@ -2939,6 +2920,11 @@ abstract class Block<
       eventBlock: this,
       itemIdString: null,
     );
+    //
+    FILTER_CRITERIA? blockCurrentFilterCriteria = filterCriteria;
+    if (blockCurrentFilterCriteria == null) {
+      return true;
+    }
     final ITEM_DETAIL? savedItemDetail = result.data;
     final bool keepInList;
     if (savedItemDetail == null) {

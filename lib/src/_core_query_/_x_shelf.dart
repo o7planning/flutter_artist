@@ -314,7 +314,8 @@ class _XShelf {
       print(" --> XShelf/Scalar: $key - ${allXScalarMap[key]}");
     }
     for (_XFormModel xFormModel in allXFormModels) {
-      print(" --> XShelf/FormModel: ${xFormModel.formModel.block.name} - $xFormModel");
+      print(
+          " --> XShelf/FormModel: ${xFormModel.formModel.block.name} - $xFormModel");
     }
   }
 }
