@@ -424,7 +424,9 @@ part 'src/_ui_/_base_pagination.dart';
 
 part 'src/_ui_/_block_control_bar.dart';
 
-part 'src/_ui_/_block_fragment_widget_builder.dart';
+part 'src/_ui_/_block_fragment_view_builder.dart';
+
+part 'src/_ui_/_block_fragment_view.dart';
 
 part 'src/_ui_/_block_items_view.dart';
 

@@ -76,12 +76,8 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
   }
 
   Widget _buildMainContent(BuildContext context) {
-    double width = MediaQuery
-        .sizeOf(context)
-        .width;
-    double height = MediaQuery
-        .sizeOf(context)
-        .height;
+    double width = MediaQuery.sizeOf(context).width;
+    double height = MediaQuery.sizeOf(context).height;
     if (width > 520) {
       width = 500;
     } else {
@@ -112,10 +108,9 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
             child: ListView(
               children: [
                 ...widgetStates.entries.map(
-                      (entry) =>
-                      _buildRowInfo(
-                        widgetStateEntry: entry,
-                      ),
+                  (entry) => _buildRowInfo(
+                    widgetStateEntry: entry,
+                  ),
                 ),
               ],
             ),
@@ -173,7 +168,7 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
         ),
         onChanged: (bool? value) {
           widgetStateEntry.key.showMode =
-          (value ?? false) ? ShowMode.dev : ShowMode.production;
+              (value ?? false) ? ShowMode.dev : ShowMode.production;
           widgetStateEntry.key.setState(() {});
           setState(() {});
         },
