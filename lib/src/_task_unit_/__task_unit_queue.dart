@@ -10,6 +10,11 @@ class _TaskUnitQueue {
 
   bool get isNotEmpty => !isEmpty;
 
+  void clear() {
+    _taskUnits.clear();
+    _secondaryQueue.clear();
+  }
+
   bool hasNext() {
     return isNotEmpty;
   }

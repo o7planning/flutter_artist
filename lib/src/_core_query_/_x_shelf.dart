@@ -306,8 +306,15 @@ class _XShelf {
   }
 
   void printMe() {
+    print("\nXShelf BEFORE QUERY:");
     for (String key in allXBlockMap.keys) {
-      print("XShelf/block: $key - ${allXBlockMap[key]}");
+      print(" --> XShelf/Block: $key - ${allXBlockMap[key]}");
+    }
+    for (String key in allXScalarMap.keys) {
+      print(" --> XShelf/Scalar: $key - ${allXScalarMap[key]}");
+    }
+    for (_XFormModel xFormModel in allXFormModels) {
+      print(" --> XShelf/FormModel: ${xFormModel.formModel.block.name} - $xFormModel");
     }
   }
 }
