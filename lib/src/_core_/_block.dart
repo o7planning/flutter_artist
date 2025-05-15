@@ -450,6 +450,16 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  void __clearAllChildrenBlocksToNone({
+    required _XBlock thisXBlock,
+  }) {
+    __clearChildBlocksItemsWithDataStateCascade(
+      thisXBlock: thisXBlock,
+      qryDataState: DataState.none,
+      frmDataState: DataState.none,
+    );
+  }
+
   void __clearChildBlocksItemsWithDataStateCascade({
     required _XBlock thisXBlock,
     required DataState qryDataState,
@@ -940,10 +950,8 @@ abstract class Block<
     //
     this.__setCurrentItem(item: null, itemDetail: null);
     // @@TODO@@ 2.
-    this.__clearChildBlocksItemsWithDataStateCascade(
+    this.__clearAllChildrenBlocksToNone(
       thisXBlock: thisXBlock,
-      qryDataState: DataState.none,
-      frmDataState: DataState.none,
     );
     if (formModel != null) {
       formModel!._clearWithDataState(formDataState: DataState.none);
@@ -1215,10 +1223,8 @@ abstract class Block<
           formModel!._clearWithDataState(formDataState: DataState.none);
         }
         //  @@TODO@@ 3.
-        this.__clearChildBlocksItemsWithDataStateCascade(
+        this.__clearAllChildrenBlocksToNone(
           thisXBlock: thisXBlock,
-          qryDataState: DataState.none,
-          frmDataState: DataState.none,
         );
       }
       //
@@ -1228,24 +1234,18 @@ abstract class Block<
           break;
         case DataState.none:
           // @@TODO@@ 4.
-          this.__clearChildBlocksItemsWithDataStateCascade(
+          this.__clearAllChildrenBlocksToNone(
             thisXBlock: thisXBlock,
-            qryDataState: DataState.none,
-            frmDataState: DataState.none,
           );
         case DataState.pending:
           // @@TODO@@ 5.
-          this.__clearChildBlocksItemsWithDataStateCascade(
+          this.__clearAllChildrenBlocksToNone(
             thisXBlock: thisXBlock,
-            qryDataState: DataState.pending, // ?????????
-            frmDataState: DataState.none,
           );
         case DataState.error:
           // @@TODO@@ 6.
-          this.__clearChildBlocksItemsWithDataStateCascade(
+          this.__clearAllChildrenBlocksToNone(
             thisXBlock: thisXBlock,
-            qryDataState: DataState.none,
-            frmDataState: DataState.none,
           );
       }
     }
@@ -1366,10 +1366,8 @@ abstract class Block<
     if (this.itemCount == 0) {
       print("        ~~~~~~~> IGNORED --> this.itemCount == 0 - [$name]");
       // @@TODO@@ 7.
-      this.__clearChildBlocksItemsWithDataStateCascade(
+      this.__clearAllChildrenBlocksToNone(
         thisXBlock: thisXBlock,
-        qryDataState: DataState.none,
-        frmDataState: DataState.none,
       );
       return;
     }
@@ -2397,10 +2395,11 @@ abstract class Block<
       if (currentItemChanged) {
         result._currentItem = candidateCurrentItem;
         // @@TODO@@ 7.
+        // TODO: No need this code????
         this.__clearChildBlocksItemsWithDataStateCascade(
           thisXBlock: thisXBlock,
-          qryDataState: DataState.pending,
-          frmDataState: DataState.pending,
+          qryDataState: DataState.none, // OLD: pending
+          frmDataState: DataState.none, // OLD: pending
         );
       }
     }
@@ -2532,10 +2531,8 @@ abstract class Block<
       );
     }
     // @@TODO@@ 9.
-    __clearChildBlocksItemsWithDataStateCascade(
+    __clearAllChildrenBlocksToNone(
       thisXBlock: thisXBlock,
-      qryDataState: DataState.none,
-      frmDataState: DataState.none,
     );
     //
     _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
@@ -2568,10 +2565,8 @@ abstract class Block<
       item: nullItem,
     );
     // @@TODO@@ 1.
-    this.__clearChildBlocksItemsWithDataStateCascade(
+    this.__clearAllChildrenBlocksToNone(
       thisXBlock: thisXBlock,
-      qryDataState: DataState.none,
-      frmDataState: DataState.none,
     );
     //
     formModel!._formPropsStructure._setFormMode_TODO_DELETE(
@@ -2997,13 +2992,14 @@ abstract class Block<
       }
       return true;
     }
-    // savedItem = null or !keepInList
+    // savedItemDetail = null or !keepInList
     else {
       ITEM? savedItem = __convertItemDetailToItem(
         itemDetail: savedItemDetail,
       );
       final ITEM? removeItem = savedItem ?? this.currentItem;
       if (removeItem == null) {
+        // @@TODO@@
         // TODO: Xem lai.
         return false;
       }
@@ -3029,14 +3025,12 @@ abstract class Block<
       if (this.formModel != null) {
         // Clear Form:
         formModel!._clearWithDataState(
-          formDataState: DataState.ready,
+          formDataState: DataState.none,
         );
       }
       // @@TODO@@ 8.
-      __clearChildBlocksItemsWithDataStateCascade(
+      __clearAllChildrenBlocksToNone(
         thisXBlock: thisXBlock,
-        qryDataState: DataState.ready,
-        frmDataState: DataState.ready,
       );
       //
       _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
