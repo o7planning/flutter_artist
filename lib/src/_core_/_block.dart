@@ -1474,7 +1474,7 @@ abstract class Block<
               } else {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 1.1.1.2: hasXActiveUI: FALSE");
-                // TODO: Test.
+                // [36c]
                 forceReloadItem = false;
               }
             }
@@ -1786,7 +1786,16 @@ abstract class Block<
                       "@~~~> ${getClassName(this)} ~~~~~> FRM 1.1.1.2: formLoadTimeUIActive: FALSE");
                   //
                   if (currentItemChanged) {
-                    // CASE: FORM Not Visible + Candidate Item In New Queried + Current Item Changed. [13a]
+                    _printDebugState(
+                        "@~~~> ${getClassName(this)} ~~~~~> FRM 1.1.1.2.1: currentItemChanged: TRUE");
+                    // CASE: [13a], [36c].
+                    forceReloadForm = false;
+                  }
+                  // !currentItemChanged
+                  else {
+                    _printDebugState(
+                        "@~~~> ${getClassName(this)} ~~~~~> FRM 1.1.1.2.2: currentItemChanged: FALSE");
+                    // CASE: [36c].
                     forceReloadForm = false;
                   }
                 }
