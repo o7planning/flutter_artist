@@ -939,6 +939,7 @@ abstract class Block<
     __assertThisXBlock(thisXBlock);
     //
     this.__setCurrentItem(item: null, itemDetail: null);
+    // @@TODO@@ 2.
     this.__clearChildBlocksItemsWithDataStateCascade(
       thisXBlock: thisXBlock,
       qryDataState: DataState.none,
@@ -1000,7 +1001,7 @@ abstract class Block<
       // Has Error in FilterModel.
       //
       if (filterCriteriaOfFilterModel == null) {
-        // @@TODO@@ - Test.
+        // Test Cases: [23a].
         // Set Block to error cascade.
         __clearWithDataStateCascade(
           thisXBlock: thisXBlock,
@@ -1213,7 +1214,7 @@ abstract class Block<
         if (formModel != null) {
           formModel!._clearWithDataState(formDataState: DataState.none);
         }
-        //
+        //  @@TODO@@ 3.
         this.__clearChildBlocksItemsWithDataStateCascade(
           thisXBlock: thisXBlock,
           qryDataState: DataState.none,
@@ -1226,18 +1227,21 @@ abstract class Block<
         case DataState.ready:
           break;
         case DataState.none:
+          // @@TODO@@ 4.
           this.__clearChildBlocksItemsWithDataStateCascade(
             thisXBlock: thisXBlock,
             qryDataState: DataState.none,
             frmDataState: DataState.none,
           );
         case DataState.pending:
+          // @@TODO@@ 5.
           this.__clearChildBlocksItemsWithDataStateCascade(
             thisXBlock: thisXBlock,
             qryDataState: DataState.pending, // ?????????
             frmDataState: DataState.none,
           );
         case DataState.error:
+          // @@TODO@@ 6.
           this.__clearChildBlocksItemsWithDataStateCascade(
             thisXBlock: thisXBlock,
             qryDataState: DataState.none,
@@ -1361,6 +1365,7 @@ abstract class Block<
     //
     if (this.itemCount == 0) {
       print("        ~~~~~~~> IGNORED --> this.itemCount == 0 - [$name]");
+      // @@TODO@@ 7.
       this.__clearChildBlocksItemsWithDataStateCascade(
         thisXBlock: thisXBlock,
         qryDataState: DataState.none,
@@ -1469,13 +1474,13 @@ abstract class Block<
               if (hasXActiveUI) {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 1.1.1.1: hasXActiveUI: TRUE");
-                // TODO: Test.
+                // Test Cases: [36c] [41a].
                 forceReloadItem = true;
               } else {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 1.1.1.2: hasXActiveUI: FALSE");
-                // [36c]
-                forceReloadItem = false;
+                // Test Cases: [36c] [41a]
+                forceReloadItem = true;
               }
             }
             // !isCandidateCurrentItemInNewQueriedList
@@ -1562,10 +1567,12 @@ abstract class Block<
               if (hasXActiveUI) {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 2.1.1.1: hasXActiveUI: TRUE");
+                // Test Cases: [41a] [36b].
                 forceReloadItem = true; // (selectAnItemAsCurrent - always)
               } else {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 2.1.1.2: hasXActiveUI: FALSE");
+                // Test Cases: [41a]
                 forceReloadItem = true; // (selectAnItemAsCurrent - always)
               }
             }
@@ -1652,11 +1659,13 @@ abstract class Block<
               if (hasXActiveUI) {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 3.1.1.1: hasXActiveUI: TRUE");
-                //
+                // Test Cases: [41a] [36a].
+                forceReloadItem = true;
               } else {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 3.1.1.2: hasXActiveUI: FALSE");
-                //..
+                // Test Cases: [41a].
+                forceReloadItem = true;
               }
             }
             // !isCandidateCurrentItemInNewQueriedList
@@ -2387,7 +2396,7 @@ abstract class Block<
       //
       if (currentItemChanged) {
         result._currentItem = candidateCurrentItem;
-        //
+        // @@TODO@@ 7.
         this.__clearChildBlocksItemsWithDataStateCascade(
           thisXBlock: thisXBlock,
           qryDataState: DataState.pending,
@@ -2522,7 +2531,7 @@ abstract class Block<
         formDataState: DataState.none,
       );
     }
-    //
+    // @@TODO@@ 9.
     __clearChildBlocksItemsWithDataStateCascade(
       thisXBlock: thisXBlock,
       qryDataState: DataState.none,
@@ -2558,7 +2567,7 @@ abstract class Block<
       itemDetail: nullItemDetail,
       item: nullItem,
     );
-    //
+    // @@TODO@@ 1.
     this.__clearChildBlocksItemsWithDataStateCascade(
       thisXBlock: thisXBlock,
       qryDataState: DataState.none,
@@ -3023,7 +3032,7 @@ abstract class Block<
           formDataState: DataState.ready,
         );
       }
-      //
+      // @@TODO@@ 8.
       __clearChildBlocksItemsWithDataStateCascade(
         thisXBlock: thisXBlock,
         qryDataState: DataState.ready,

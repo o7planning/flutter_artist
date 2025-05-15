@@ -80,7 +80,7 @@ class _BlockDebugBox extends _BaseDebugBox {
           label: "Last Query Type: ",
           text: block.lastQueryType.name.toString(),
           labelStyle: labelStyle,
-          textStyle: textStyle,
+          textStyle: textStyle0,
         ),
       if (options.showQueryDataState)
         IconLabelText(
