@@ -422,7 +422,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __clearWithDataStateCascade({
+  void __clearWithDataStateAndChildrenToNonCascade({
     required _XBlock thisXBlock,
     required DataState qryDataState,
     required DataState frmDataState,
@@ -438,10 +438,10 @@ abstract class Block<
     );
     //
     for (var childXBlock in thisXBlock.childXBlocks) {
-      childXBlock.block.__clearWithDataStateCascade(
+      childXBlock.block.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: childXBlock,
-        qryDataState: qryDataState,
-        frmDataState: frmDataState,
+        qryDataState: DataState.none,
+        frmDataState: DataState.none,
         errorInFilter: false,
       );
     }
@@ -453,25 +453,28 @@ abstract class Block<
   void __clearAllChildrenBlocksToNone({
     required _XBlock thisXBlock,
   }) {
-    __clearChildBlocksItemsWithDataStateCascade(
-      thisXBlock: thisXBlock,
-      qryDataState: DataState.none,
-      frmDataState: DataState.none,
-    );
+    __assertThisXBlock(thisXBlock);
+    //
+    for (var childXBlock in thisXBlock.childXBlocks) {
+      childXBlock.block.__clearWithDataStateAndChildrenToNonCascade(
+        thisXBlock: childXBlock,
+        qryDataState: DataState.none,
+        frmDataState: DataState.none,
+        errorInFilter: false,
+      );
+    }
   }
 
-  void __clearChildBlocksItemsWithDataStateCascade({
+  void __clearAllChildrenBlocksToPending({
     required _XBlock thisXBlock,
-    required DataState qryDataState,
-    required DataState frmDataState,
   }) {
     __assertThisXBlock(thisXBlock);
     //
     for (var childXBlock in thisXBlock.childXBlocks) {
-      childXBlock.block.__clearWithDataStateCascade(
+      childXBlock.block.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: childXBlock,
-        qryDataState: qryDataState,
-        frmDataState: frmDataState,
+        qryDataState: DataState.pending,
+        frmDataState: DataState.pending,
         errorInFilter: false,
       );
     }
@@ -949,7 +952,7 @@ abstract class Block<
     __assertThisXBlock(thisXBlock);
     //
     this.__setCurrentItem(item: null, itemDetail: null);
-    // @@TODO@@ 2.
+    // @@TODO@@ 02.
     this.__clearAllChildrenBlocksToNone(
       thisXBlock: thisXBlock,
     );
@@ -1001,7 +1004,7 @@ abstract class Block<
               filterModel._filterCriteria! as FILTER_CRITERIA;
         }
       } catch (e, stackTrace) {
-        // @@TODO@@ - Test.
+        // @@TODO@@ 12 Test.
         print("ERROR _unitQuery: $stackTrace");
         /* Never Error */
       }
@@ -1011,10 +1014,10 @@ abstract class Block<
       if (filterCriteriaOfFilterModel == null) {
         // Test Cases: [23a].
         // Set Block to error cascade.
-        __clearWithDataStateCascade(
+        __clearWithDataStateAndChildrenToNonCascade(
           thisXBlock: thisXBlock,
           qryDataState: DataState.error,
-          frmDataState: DataState.error,
+          frmDataState: DataState.none,
           errorInFilter: true,
         );
         thisXBlock.queryResult._filterError = true;
@@ -1222,7 +1225,7 @@ abstract class Block<
         if (formModel != null) {
           formModel!._clearWithDataState(formDataState: DataState.none);
         }
-        //  @@TODO@@ 3.
+        //  @@TODO@@ 03.
         this.__clearAllChildrenBlocksToNone(
           thisXBlock: thisXBlock,
         );
@@ -1233,17 +1236,17 @@ abstract class Block<
         case DataState.ready:
           break;
         case DataState.none:
-          // @@TODO@@ 4.
+          // @@TODO@@ 04.
           this.__clearAllChildrenBlocksToNone(
             thisXBlock: thisXBlock,
           );
         case DataState.pending:
-          // @@TODO@@ 5.
+          // @@TODO@@ 05.
           this.__clearAllChildrenBlocksToNone(
             thisXBlock: thisXBlock,
           );
         case DataState.error:
-          // @@TODO@@ 6.
+          // @@TODO@@ 06.
           this.__clearAllChildrenBlocksToNone(
             thisXBlock: thisXBlock,
           );
@@ -1341,8 +1344,8 @@ abstract class Block<
     }
     var result = thisXBlock.currentItemSelectionResult!;
     //
-    if (this.queryDataState == DataState.pending) {
-      this.__clearWithDataStateCascade(
+    if (queryDataState == DataState.pending) {
+      this.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: thisXBlock,
         qryDataState: queryDataState,
         frmDataState: DataState.none,
@@ -1354,10 +1357,10 @@ abstract class Block<
     if (this.queryDataState == DataState.error) {
       print(
           "        ~~~~~~~> IGNORED --> this.queryDataState == DataState.error - [$name]");
-      this.__clearWithDataStateCascade(
+      this.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: thisXBlock,
         qryDataState: DataState.error,
-        frmDataState: DataState.error,
+        frmDataState: DataState.none,
         errorInFilter: false,
       );
       return;
@@ -1365,7 +1368,7 @@ abstract class Block<
     //
     if (this.itemCount == 0) {
       print("        ~~~~~~~> IGNORED --> this.itemCount == 0 - [$name]");
-      // @@TODO@@ 7.
+      // @@TODO@@ 07.
       this.__clearAllChildrenBlocksToNone(
         thisXBlock: thisXBlock,
       );
@@ -1416,7 +1419,7 @@ abstract class Block<
     //
     if (candidateCurrentItem == null) {
       print("        ~~~~~~~> candidateCurrentItem == null - [${name}]");
-      this.__clearWithDataStateCascade(
+      this.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: thisXBlock,
         qryDataState: DataState.ready,
         frmDataState: DataState.none,
@@ -2225,7 +2228,7 @@ abstract class Block<
     final bool isCandidateIsCurrent = isCurrentItem(
       item: candidateCurrentItem,
     );
-    ITEM_DETAIL? candidateCurrentItemDetail;
+    ITEM_DETAIL? refreshedCurrentItemDetail;
     if (forceReloadItem) {
       if (ITEM == ITEM_DETAIL && isCandidateCurrentItemInNewQueriedList) {
         final ITEM? candidateCurrentItemInNewQueriedList =
@@ -2237,7 +2240,7 @@ abstract class Block<
         //
         // No need to refresh Item.
         //
-        candidateCurrentItemDetail =
+        refreshedCurrentItemDetail =
             candidateCurrentItemInNewQueriedList as ITEM_DETAIL;
       } else {
         bool isLoadItemError = false;
@@ -2265,7 +2268,7 @@ abstract class Block<
           } else {
             isLoadItemError = false;
             //
-            candidateCurrentItemDetail = result.data;
+            refreshedCurrentItemDetail = result.data;
           }
         } catch (e, stackTrace) {
           isLoadItemError = true;
@@ -2295,7 +2298,7 @@ abstract class Block<
       //
       // If candidate not found in database --> remove.
       //
-      if (candidateCurrentItemDetail == null) {
+      if (refreshedCurrentItemDetail == null) {
         final ITEM? siblingItem = findSiblingItem(
           item: candidateCurrentItem,
         );
@@ -2334,7 +2337,7 @@ abstract class Block<
           removeItem: candidateCurrentItem,
         );
         //
-        this.__clearWithDataStateCascade(
+        this.__clearWithDataStateAndChildrenToNonCascade(
           thisXBlock: thisXBlock,
           qryDataState: DataState.ready,
           frmDataState: DataState.none,
@@ -2356,12 +2359,12 @@ abstract class Block<
         return;
       }
       //
-      // candidateCurrentItemDetail != null
+      // refreshedCurrentItemDetail != null
       //
       bool convertItemError = false;
       try {
         candidateCurrentItem = this.__convertItemDetailToItem(
-          itemDetail: candidateCurrentItemDetail,
+          itemDetail: refreshedCurrentItemDetail,
         );
         convertItemError = false;
       } catch (e, stackTrace) {
@@ -2389,17 +2392,15 @@ abstract class Block<
       }
       __blockData._setCurrentItemOnly(
         refreshedItem: candidateCurrentItem,
-        refreshedItemDetail: candidateCurrentItemDetail,
+        refreshedItemDetail: refreshedCurrentItemDetail,
       );
-      //
+      // (On _unitSelectItemAsCurrent method).
+      // candidateCurrentItem != null.
       if (currentItemChanged) {
         result._currentItem = candidateCurrentItem;
-        // @@TODO@@ 7.
-        // TODO: No need this code????
-        this.__clearChildBlocksItemsWithDataStateCascade(
+        // @@TODO@@ 10.
+        this.__clearAllChildrenBlocksToPending(
           thisXBlock: thisXBlock,
-          qryDataState: DataState.none, // OLD: pending
-          frmDataState: DataState.none, // OLD: pending
         );
       }
     }
@@ -2530,7 +2531,7 @@ abstract class Block<
         formDataState: DataState.none,
       );
     }
-    // @@TODO@@ 9.
+    // @@TODO@@ 09.
     __clearAllChildrenBlocksToNone(
       thisXBlock: thisXBlock,
     );
@@ -2564,7 +2565,7 @@ abstract class Block<
       itemDetail: nullItemDetail,
       item: nullItem,
     );
-    // @@TODO@@ 1.
+    // @@TODO@@ 01.
     this.__clearAllChildrenBlocksToNone(
       thisXBlock: thisXBlock,
     );
@@ -2999,7 +3000,7 @@ abstract class Block<
       );
       final ITEM? removeItem = savedItem ?? this.currentItem;
       if (removeItem == null) {
-        // @@TODO@@
+        // @@TODO@@ 11
         // TODO: Xem lai.
         return false;
       }
@@ -3028,7 +3029,7 @@ abstract class Block<
           formDataState: DataState.none,
         );
       }
-      // @@TODO@@ 8.
+      // @@TODO@@ 08.
       __clearAllChildrenBlocksToNone(
         thisXBlock: thisXBlock,
       );
@@ -3242,11 +3243,12 @@ abstract class Block<
     );
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
-    //
-    this.__clearWithDataStateCascade(
+    // @@TODO@@ 13
+    // TODO: Need to check, if current is ready then allow to do like this, else throw exception.
+    this.__clearWithDataStateAndChildrenToNonCascade(
       thisXBlock: thisXBlock,
       qryDataState: DataState.pending,
-      frmDataState: DataState.pending,
+      frmDataState: DataState.none,
       errorInFilter: false,
     );
     //
