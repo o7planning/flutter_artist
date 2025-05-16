@@ -952,13 +952,13 @@ abstract class Block<
     __assertThisXBlock(thisXBlock);
     //
     this.__setCurrentItem(item: null, itemDetail: null);
-    // @@TODO@@ 02.
-    this.__clearAllChildrenBlocksToNone(
-      thisXBlock: thisXBlock,
-    );
     if (formModel != null) {
       formModel!._clearWithDataState(formDataState: DataState.none);
     }
+    // Test Case: [38b].
+    this.__clearAllChildrenBlocksToNone(
+      thisXBlock: thisXBlock,
+    );
   }
 
   // ***************************************************************************
@@ -1225,31 +1225,36 @@ abstract class Block<
         if (formModel != null) {
           formModel!._clearWithDataState(formDataState: DataState.none);
         }
+        // (Currently, In _unitQuery && forceQuery).
         //  @@TODO@@ 03.
+        print("@@ ======================================> @@TODO@@ 03");
         this.__clearAllChildrenBlocksToNone(
           thisXBlock: thisXBlock,
         );
       }
-      //
-
-      switch (queryDataState) {
-        case DataState.ready:
-          break;
-        case DataState.none:
-          // @@TODO@@ 04.
-          this.__clearAllChildrenBlocksToNone(
-            thisXBlock: thisXBlock,
-          );
-        case DataState.pending:
-          // @@TODO@@ 05.
-          this.__clearAllChildrenBlocksToNone(
-            thisXBlock: thisXBlock,
-          );
-        case DataState.error:
-          // @@TODO@@ 06.
-          this.__clearAllChildrenBlocksToNone(
-            thisXBlock: thisXBlock,
-          );
+      // currentItemInList.
+      else {
+        switch (newQueryDataState) {
+          case DataState.none:
+            // @@TODO@@ 04.
+            // Never run:
+            this.__clearAllChildrenBlocksToNone(
+              thisXBlock: thisXBlock,
+            );
+          case DataState.pending:
+            // @@TODO@@ 05.
+            // Never run:
+            this.__clearAllChildrenBlocksToNone(
+              thisXBlock: thisXBlock,
+            );
+          case DataState.error:
+            // @@TODO@@ 06.
+            this.__clearAllChildrenBlocksToNone(
+              thisXBlock: thisXBlock,
+            );
+          case DataState.ready:
+            break;
+        }
       }
     }
     // forceQuery == false.
