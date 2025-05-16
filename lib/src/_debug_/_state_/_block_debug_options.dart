@@ -10,6 +10,7 @@ class BlockDebugOptions {
   final bool showItemCount;
   final bool showCurrentItemChangeCount;
   final bool showFilterCriteriaChangeCount;
+  final bool showFilterCriteria;
   final bool showHasCurrentItem;
 
   const BlockDebugOptions({
@@ -21,6 +22,7 @@ class BlockDebugOptions {
     this.showItemCount = true,
     this.showCurrentItemChangeCount = true,
     this.showFilterCriteriaChangeCount = true,
+    this.showFilterCriteria = true,
     this.showHasCurrentItem = true,
     this.showLastQueryResultState = true,
   });
@@ -33,6 +35,7 @@ class BlockDebugOptions {
     this.showCallApiRefreshItemCount = false,
     this.showItemCount = false,
     this.showCurrentItemChangeCount = false,
+    this.showFilterCriteria = false,
     this.showFilterCriteriaChangeCount = false,
     this.showHasCurrentItem = false,
     this.showLastQueryResultState = false,

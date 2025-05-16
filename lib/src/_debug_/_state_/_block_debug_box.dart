@@ -124,6 +124,13 @@ class _BlockDebugBox extends _BaseDebugBox {
           labelStyle: labelStyle,
           textStyle: textStyle0,
         ),
+      if (block.filterModel != null && options.showFilterCriteria)
+        IconLabelText(
+          label: "Filter Criteria: ",
+          text: block.filterCriteria == null ? "null" : "[Not Null]",
+          labelStyle: labelStyle,
+          textStyle: textStyle0,
+        ),
       if (block.filterModel != null && options.showFilterCriteriaChangeCount)
         IconLabelText(
           label: "Filter Criteria Change Count: ",
