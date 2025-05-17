@@ -89,7 +89,7 @@ class _XBlock {
   }
 
   PostQueryBehavior get postQueryBehavior {
-    return __postQueryBehavior ?? PostQueryBehavior.selectAnItemAsCurrentIfNeed;
+    return __postQueryBehavior ?? FlutterArtist.defaultPostQueryBehavior;
   }
 
   PageableData? get pageable {

@@ -19,6 +19,11 @@ class _FlutterArtist {
 
   late final _GlobalsManager _globalsManager;
 
+  PostQueryBehavior _defaultPostQueryBehavior =
+      PostQueryBehavior.selectAnItemAsCurrentIfNeed;
+
+  PostQueryBehavior get defaultPostQueryBehavior => _defaultPostQueryBehavior;
+
   Function(BuildContext context)? showRestDebugViewerDialog;
 
   late final ErrorLogger errorLogger = ErrorLogger(
@@ -34,9 +39,22 @@ class _FlutterArtist {
 
   final List<Future<dynamic>> __futureTaskList = [];
 
+  // ***************************************************************************
+  // ***************************************************************************
+
+  _FlutterArtist();
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   @Deprecated("Do Not Use")
   void resetForTestOnly() {
     storage._resetForTestOnly();
+  }
+
+  @Deprecated("Do Not Use, Test Only")
+  void setDefaultPostQueryBehavior(PostQueryBehavior defaultPostQueryBehavior) {
+    _defaultPostQueryBehavior = defaultPostQueryBehavior;
   }
 
   ///

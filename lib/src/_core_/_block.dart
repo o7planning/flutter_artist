@@ -1786,8 +1786,6 @@ abstract class Block<
             if (ITEM == ITEM_DETAIL) {
               _printDebugState(
                   "@~~~> ${getClassName(this)} ~~~~~> FRM 1.1: ITEM == ITEM_DETAIL");
-              // ?????????????????????????????????
-              // forceReloadItem = true; // ** (Always true)
               // Just Queried:
               if (isCandidateCurrentItemInNewQueriedList) {
                 _printDebugState(
@@ -1840,11 +1838,37 @@ abstract class Block<
                       "@~~~> ${getClassName(this)} ~~~~~> FRM 1.1.2.2: currentItemChanged: FALSE");
                   //
                   if (formLoadTimeUIActive) {
-                    if (formModel!.formDataState != DataState.ready) {
+                    _printDebugState(
+                        "@~~~> ${getClassName(this)} ~~~~~> FRM 1.1.2.2.1: formLoadTimeUIActive: TRUE");
+                    //
+                    if (forceReloadItem) {
+                      _printDebugState(
+                          "@~~~> ${getClassName(this)} ~~~~~> FRM 1.1.2.2.1.1: forceLoadItem: TRUE");
+                      // Test Case: [43a].
                       forceReloadForm = true;
-                      forceReloadItem = true;
                     }
-                  } else {
+                    // !forceLoadItem
+                    else {
+                      _printDebugState(
+                          "@~~~> ${getClassName(this)} ~~~~~> FRM 1.1.2.2.1.2: forceLoadItem: FALSE");
+                      //
+                      if (formModel!.formDataState != DataState.ready) {
+                        _printDebugState(
+                            "@~~~> ${getClassName(this)} ~~~~~> FRM 1.1.2.2.1.2.1: formDataState: NOT READY - ${formModel!.formDataState}");
+                        forceReloadForm = true;
+                        forceReloadItem = true;
+                      } else {
+                        _printDebugState(
+                            "@~~~> ${getClassName(this)} ~~~~~> FRM 1.1.2.2.1.2.2: formLoadTimeUIActive: READY");
+                        forceReloadForm = false;
+                      }
+                    }
+                  }
+                  // !formLoadTimeUIActive
+                  else {
+                    _printDebugState(
+                        "@~~~> ${getClassName(this)} ~~~~~> FRM 1.1.2.2.2: formLoadTimeUIActive: FALSE");
+                    //
                     forceReloadForm = false;
                   }
                 }
@@ -1906,13 +1930,22 @@ abstract class Block<
                         "@~~~> ${getClassName(this)} ~~~~~> FRM 1.2.2.2.1: formLoadTimeUIActive: TRUE");
                     //
                     if (forceReloadItem) {
+                      _printDebugState(
+                          "@~~~> ${getClassName(this)} ~~~~~> FRM 1.2.2.2.1.1: forceReloadItem: TRUE");
                       // [16a]
+
                       forceReloadForm = true;
                       forceReloadItem = true;
-                    } else {
+                    }
+                    // !forceReloadItem
+                    else {
+                      _printDebugState(
+                          "@~~~> ${getClassName(this)} ~~~~~> FRM 1.2.2.2.1.2: forceReloadItem: FALSE");
                       if (formModel!.formDataState != DataState.ready) {
                         forceReloadForm = true;
                         forceReloadItem = true;
+                      } else {
+                        forceReloadForm = false;
                       }
                     }
                   }
@@ -1979,9 +2012,29 @@ abstract class Block<
                     _printDebugState(
                         "@~~~> ${getClassName(this)} ~~~~~> FRM 2.1.2.2.1: formLoadTimeUIActive: TRUE");
                     //
-                    if (formModel!.formDataState != DataState.ready) {
+                    if (forceReloadItem) {
+                      _printDebugState(
+                          "@~~~> ${getClassName(this)} ~~~~~> FRM 2.1.2.2.1.1: forceReloadItem: TRUE");
+                      // Test Case: [43a].
                       forceReloadForm = true;
-                      forceReloadItem = true;
+                    }
+                    // !forceReloadItem
+                    else {
+                      _printDebugState(
+                          "@~~~> ${getClassName(this)} ~~~~~> FRM 2.1.2.2.1.2: forceReloadItem: FALSE");
+                      //
+                      if (formModel!.formDataState != DataState.ready) {
+                        _printDebugState(
+                            "@~~~> ${getClassName(this)} ~~~~~> FRM 2.1.2.2.1.2.1: formDataState: NOT READY - ${formModel!.formDataState}");
+                        //
+                        forceReloadForm = true;
+                        forceReloadItem = true;
+                      } else {
+                        _printDebugState(
+                            "@~~~> ${getClassName(this)} ~~~~~> FRM 2.1.2.2.1.2.2: formDataState: READY");
+                        //
+                        forceReloadForm = false;
+                      }
                     }
                   }
                   // !formLoadTimeUIActive
@@ -2035,7 +2088,9 @@ abstract class Block<
                     //
                     forceReloadForm = true;
                     forceReloadItem = true;
-                  } else {
+                  }
+                  // !formLoadTimeUIActive
+                  else {
                     _printDebugState(
                         "@~~~> ${getClassName(this)} ~~~~~> FRM 2.2.2.1.2: formLoadTimeUIActive: FALSE");
                     //
@@ -2051,9 +2106,23 @@ abstract class Block<
                     _printDebugState(
                         "@~~~> ${getClassName(this)} ~~~~~> FRM 2.2.2.2.1: formLoadTimeUIActive: TRUE");
                     //
-                    if (formModel!.formDataState != DataState.ready) {
+                    if (forceReloadItem) {
+                      _printDebugState(
+                          "@~~~> ${getClassName(this)} ~~~~~> FRM 2.2.2.2.1.1: forceReloadItem: TRUE");
+                      //
                       forceReloadForm = true;
-                      forceReloadItem = true;
+                    }
+                    // !forceReloadItem
+                    else {
+                      _printDebugState(
+                          "@~~~> ${getClassName(this)} ~~~~~> FRM 2.2.2.2.1.1: forceReloadItem: FALSE");
+                      //
+                      if (formModel!.formDataState != DataState.ready) {
+                        forceReloadForm = true;
+                        forceReloadItem = true;
+                      } else {
+                        forceReloadForm = false;
+                      }
                     }
                   }
                   // !formLoadTimeUIActive
@@ -2129,9 +2198,31 @@ abstract class Block<
                     _printDebugState(
                         "@~~~> ${getClassName(this)} ~~~~~> FRM 3.1.2.2.1: formLoadTimeUIActive: TRUE");
                     //
-                    if (formModel!.formDataState != DataState.ready) {
+                    if (forceReloadItem) {
+                      _printDebugState(
+                          "@~~~> ${getClassName(this)} ~~~~~> FRM 3.1.2.2.1.1: forceReloadItem: TRUE");
+                      // Test Case: [43a].
                       forceReloadForm = true;
-                      forceReloadItem = true;
+                    }
+                    // !forceReloadItem
+                    else {
+                      _printDebugState(
+                          "@~~~> ${getClassName(this)} ~~~~~> FRM 3.1.2.2.1.2: forceReloadItem: FALSE");
+                      //
+                      if (formModel!.formDataState != DataState.ready) {
+                        _printDebugState(
+                            "@~~~> ${getClassName(this)} ~~~~~> FRM 3.1.2.2.1.2.1: formDataState: NOT READY - ${formModel!.formDataState}");
+                        //
+                        forceReloadForm = true;
+                        forceReloadItem = true;
+                      }
+                      //
+                      else {
+                        _printDebugState(
+                            "@~~~> ${getClassName(this)} ~~~~~> FRM 3.1.2.2.1.2.2: formDataState: READY");
+                        //
+                        forceReloadForm = false;
+                      }
                     }
                   }
                   // !formLoadTimeUIActive
@@ -2140,8 +2231,18 @@ abstract class Block<
                         "@~~~> ${getClassName(this)} ~~~~~> FRM 3.1.2.2.2: formLoadTimeUIActive: FALSE");
                     //
                     if (formModel!.formDataState != DataState.ready) {
+                      _printDebugState(
+                          "@~~~> ${getClassName(this)} ~~~~~> FRM 3.1.2.2.2.1: formDataState: NOT READY - ${formModel!.formDataState}");
+                      //
                       forceReloadForm = true;
                       forceReloadItem = true;
+                    }
+                    // @@TODO@@ Test.
+                    else {
+                      _printDebugState(
+                          "@~~~> ${getClassName(this)} ~~~~~> FRM 3.1.2.2.2.2: formDataState: READY");
+                      //
+                      forceReloadForm = false;
                     }
                   }
                 }
@@ -2205,17 +2306,41 @@ abstract class Block<
                     _printDebugState(
                         "@~~~> ${getClassName(this)} ~~~~~> FRM 3.2.2.2.1: formLoadTimeUIActive: TRUE");
                     //
-                    if (formModel!.formDataState != DataState.ready) {
+                    if (forceReloadItem) {
+                      _printDebugState(
+                          "@~~~> ${getClassName(this)} ~~~~~> FRM 3.2.2.2.1.1: forceReloadItem: TRUE");
+                      //
                       forceReloadForm = true;
                       forceReloadItem = true;
                     }
-                  } else {
+                    // !forceReloadItem
+                    else {
+                      _printDebugState(
+                          "@~~~> ${getClassName(this)} ~~~~~> FRM 3.2.2.2.1.2: forceReloadItem: FALSE");
+                      //
+                      if (formModel!.formDataState != DataState.ready) {
+                        _printDebugState(
+                            "@~~~> ${getClassName(this)} ~~~~~> FRM 3.2.2.2.1.2.1: formDataState: NOT READY - ${formModel!.formDataState}");
+                        //
+                        forceReloadForm = true;
+                        forceReloadItem = true;
+                      }
+                      // formDataState == ready.
+                      else {
+                        forceReloadForm = false;
+                      }
+                    }
+                  }
+                  // !formLoadTimeUIActive
+                  else {
                     _printDebugState(
                         "@~~~> ${getClassName(this)} ~~~~~> FRM 3.2.2.2.2: formLoadTimeUIActive: FALSE");
-                    //
+                    // @@TODO@@ Test.
                     if (formModel!.formDataState != DataState.ready) {
                       forceReloadForm = true;
                       forceReloadItem = true;
+                    } else {
+                      forceReloadForm = false;
                     }
                   }
                 }
