@@ -1760,11 +1760,14 @@ abstract class Block<
           "@~~~> ${getClassName(this)} ~~~~~> FRM 0: currentItemSelectionType: ${currentItemSelectionType.name}");
       //
       if (thisXBlock.xFormModel!.forceTypeForForm == _ForceType.force) {
+        _printDebugState(
+            "@~~~> ${getClassName(this)} ~~~~~> FRM 0.1: forceTypeForForm: ${thisXBlock.xFormModel!.forceTypeForForm}");
+        // Test Case: [43a].
         forceReloadForm = true;
+      } else {
+        _printDebugState(
+            "@~~~> ${getClassName(this)} ~~~~~> FRM 0.2: forceTypeForForm: ${thisXBlock.xFormModel!.forceTypeForForm}");
       }
-      _printDebugState(
-          "@~~~> ${getClassName(this)} ~~~~~> FRM 0.1: forceReloadForm: $forceReloadForm");
-      //
       //
       final bool formLoadTimeUIActive = formModel!.hasActiveUIComponent();
       formModel!._loadTimeUIActive = formLoadTimeUIActive;
@@ -1860,6 +1863,7 @@ abstract class Block<
                       } else {
                         _printDebugState(
                             "@~~~> ${getClassName(this)} ~~~~~> FRM 1.1.2.2.1.2.2: formLoadTimeUIActive: READY");
+                        // Test Case:: [43a].
                         forceReloadForm = false;
                       }
                     }
@@ -1868,7 +1872,7 @@ abstract class Block<
                   else {
                     _printDebugState(
                         "@~~~> ${getClassName(this)} ~~~~~> FRM 1.1.2.2.2: formLoadTimeUIActive: FALSE");
-                    //
+                    // Test Case: [43a].
                     forceReloadForm = false;
                   }
                 }
@@ -2041,7 +2045,7 @@ abstract class Block<
                   else {
                     _printDebugState(
                         "@~~~> ${getClassName(this)} ~~~~~> FRM 2.1.2.2.3: formLoadTimeUIActive: FALSE");
-                    //
+                    // Test Case: [43a].
                     forceReloadForm = false;
                   }
                 }
@@ -2233,15 +2237,14 @@ abstract class Block<
                     if (formModel!.formDataState != DataState.ready) {
                       _printDebugState(
                           "@~~~> ${getClassName(this)} ~~~~~> FRM 3.1.2.2.2.1: formDataState: NOT READY - ${formModel!.formDataState}");
-                      //
-                      forceReloadForm = true;
-                      forceReloadItem = true;
+                      // Test Case: [43a]
+                      forceReloadForm = false;
                     }
-                    // @@TODO@@ Test.
+                    // formDataState = ready.
                     else {
                       _printDebugState(
                           "@~~~> ${getClassName(this)} ~~~~~> FRM 3.1.2.2.2.2: formDataState: READY");
-                      //
+                      // Test Case: [43a].
                       forceReloadForm = false;
                     }
                   }
