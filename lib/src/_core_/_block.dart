@@ -1651,7 +1651,7 @@ abstract class Block<
               else {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 2.2.2.2: currentItemChanged: FALSE");
-                // [40b].
+                // Test Case: [40b] [44a].
                 forceReloadItem = false;
               }
             }
@@ -1713,19 +1713,17 @@ abstract class Block<
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 3.2.1.1: hasXActiveUI: TRUE");
                 // [39a]
                 forceReloadItem = true;
-                // forceReloadForm = true; // (?????)
               } else {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 3.2.1.2: hasXActiveUI: FALSE");
-                // [39a]
+                // Test Case: [39a].
                 forceReloadItem = true;
-                // forceReloadForm = true; // (?????)
               }
             }
             // !isCandidateCurrentItemInNewQueriedList
             else {
               _printDebugState(
-                  "@~~~> ${getClassName(this)} ~~~~~> ITM 3.2.2: isCandidateCurrentItemInNewQueriedList: TRUE");
+                  "@~~~> ${getClassName(this)} ~~~~~> ITM 3.2.2: isCandidateCurrentItemInNewQueriedList: FALSE");
               //
               if (currentItemChanged) {
                 _printDebugState(
@@ -1922,10 +1920,12 @@ abstract class Block<
                     //
                     forceReloadForm = true;
                     forceReloadItem = true;
-                  } else {
+                  }
+                  // !formLoadTimeUIActive
+                  else {
                     _printDebugState(
                         "@~~~> ${getClassName(this)} ~~~~~> FRM 1.2.2.1.2: formLoadTimeUIActive: FALSE");
-                    //
+                    // Test Case: [44a].
                     forceReloadForm = false;
                   }
                 }
@@ -1941,8 +1941,7 @@ abstract class Block<
                     if (forceReloadItem) {
                       _printDebugState(
                           "@~~~> ${getClassName(this)} ~~~~~> FRM 1.2.2.2.1.1: forceReloadItem: TRUE");
-                      // [16a]
-
+                      // Test Case: [16a] [44a].
                       forceReloadForm = true;
                       forceReloadItem = true;
                     }
@@ -1951,9 +1950,17 @@ abstract class Block<
                       _printDebugState(
                           "@~~~> ${getClassName(this)} ~~~~~> FRM 1.2.2.2.1.2: forceReloadItem: FALSE");
                       if (formModel!.formDataState != DataState.ready) {
+                        _printDebugState(
+                            "@~~~> ${getClassName(this)} ~~~~~> FRM 1.2.2.2.1.2.1: formDataState: NOT READY - ${formModel!.formDataState}");
+                        // @@TODO@@ Test.
                         forceReloadForm = true;
                         forceReloadItem = true;
-                      } else {
+                      }
+                      // formDataState  == ready.
+                      else {
+                        _printDebugState(
+                            "@~~~> ${getClassName(this)} ~~~~~> FRM 1.2.2.2.1.2.2: formDataState: READY");
+                        // @@TODO@@ Test.
                         forceReloadForm = false;
                       }
                     }
@@ -2118,7 +2125,7 @@ abstract class Block<
                     if (forceReloadItem) {
                       _printDebugState(
                           "@~~~> ${getClassName(this)} ~~~~~> FRM 2.2.2.2.1.1: forceReloadItem: TRUE");
-                      //
+                      // Test Case: [44a].
                       forceReloadForm = true;
                     }
                     // !forceReloadItem
@@ -2127,9 +2134,17 @@ abstract class Block<
                           "@~~~> ${getClassName(this)} ~~~~~> FRM 2.2.2.2.1.1: forceReloadItem: FALSE");
                       //
                       if (formModel!.formDataState != DataState.ready) {
+                        _printDebugState(
+                            "@~~~> ${getClassName(this)} ~~~~~> FRM 2.2.2.2.1.1.1: formDataState: NOT READY - ${formModel!.formDataState}");
+                        //
                         forceReloadForm = true;
                         forceReloadItem = true;
-                      } else {
+                      }
+                      // formDataState == ready
+                      else {
+                        _printDebugState(
+                            "@~~~> ${getClassName(this)} ~~~~~> FRM 2.2.2.2.1.1.2: formDataState: READY");
+                        //
                         forceReloadForm = false;
                       }
                     }
@@ -2138,7 +2153,7 @@ abstract class Block<
                   else {
                     _printDebugState(
                         "@~~~> ${getClassName(this)} ~~~~~> FRM 2.2.2.2.2: formLoadTimeUIActive: FALSE");
-                    // [40b]
+                    // Tes Case: [40b] [44a].
                     forceReloadForm = false;
                   }
                 }
@@ -2319,7 +2334,7 @@ abstract class Block<
                     if (forceReloadItem) {
                       _printDebugState(
                           "@~~~> ${getClassName(this)} ~~~~~> FRM 3.2.2.2.1.1: forceReloadItem: TRUE");
-                      //
+                      // Test Case: [44a].
                       forceReloadForm = true;
                       forceReloadItem = true;
                     }
