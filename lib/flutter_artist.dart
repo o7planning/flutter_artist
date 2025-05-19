@@ -148,6 +148,10 @@ part 'src/_core_query_/_filter_model_opt.dart';
 
 part 'src/_core_query_/_form_model_opt.dart';
 
+part 'src/_core_state_/_block_state_calculator.dart';
+
+part 'src/_core_state_/_form_state_calculator.dart';
+
 part 'src/_core_query_/_scalar_and_block_list.dart';
 
 part 'src/_core_query_/_scalar_opt.dart';
