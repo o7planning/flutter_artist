@@ -1471,7 +1471,7 @@ abstract class Block<
 
     //
     if (!forceReloadItem) {
-      _BlockState blkState = _calculateBlockState(
+      _ForceReloadItemState blkState = _calculateBlockState(
         thisXBlock: thisXBlock,
         hasXActiveUI: hasXActiveUI,
         currentItemSelectionType: currentItemSelectionType,
@@ -1484,7 +1484,7 @@ abstract class Block<
     }
     //
     if (thisXBlock.xFormModel != null) {
-      _FormState frmState = _calculateFormState(
+      _ForceReloadFormState frmState = _calculateFormState(
         xFormModel: thisXBlock.xFormModel!,
         currentItemSelectionType: currentItemSelectionType,
         isCandidateCurrentItemInNewQueriedList:

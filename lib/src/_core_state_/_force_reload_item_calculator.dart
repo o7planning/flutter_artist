@@ -1,12 +1,6 @@
 part of '../../flutter_artist.dart';
 
-class _BlockState {
-  final bool forceReloadItem;
-
-  const _BlockState({required this.forceReloadItem});
-}
-
-_BlockState _calculateBlockState({
+_ForceReloadItemState _calculateBlockState({
   required _XBlock thisXBlock,
   required bool hasXActiveUI,
   required CurrentItemSelectionType currentItemSelectionType,
@@ -535,5 +529,5 @@ _BlockState _calculateBlockState({
       //
       break;
   }
-  return _BlockState(forceReloadItem: forceReloadItem);
+  return _ForceReloadItemState(forceReloadItem: forceReloadItem);
 }

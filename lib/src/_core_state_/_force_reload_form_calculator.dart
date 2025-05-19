@@ -1,16 +1,7 @@
 part of '../../flutter_artist.dart';
 
-class _FormState {
-  final bool forceReloadForm;
-  final bool forceReloadItem;
 
-  const _FormState({
-    required this.forceReloadItem,
-    required this.forceReloadForm,
-  });
-}
-
-_FormState _calculateFormState({
+_ForceReloadFormState _calculateFormState({
   required _XFormModel xFormModel,
   required CurrentItemSelectionType currentItemSelectionType,
   required bool isCandidateCurrentItemInNewQueriedList,
@@ -624,8 +615,9 @@ _FormState _calculateFormState({
     newForceReloadItem = true;
   }
 
-  return _FormState(
+  return _ForceReloadFormState(
     forceReloadItem: newForceReloadItem,
     forceReloadForm: forceReloadForm,
   );
 }
+
