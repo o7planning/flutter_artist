@@ -1,6 +1,5 @@
 part of '../../flutter_artist.dart';
 
-
 _ForceReloadFormState _calculateFormState({
   required _XFormModel xFormModel,
   required CurrentItemSelectionType currentItemSelectionType,
@@ -43,6 +42,8 @@ _ForceReloadFormState _calculateFormState({
       case PostQueryBehavior.selectAnItemAsCurrentIfNeed:
         _printDebugState(
             "@~~~> ${getClassName(block)} ~~~~~> FRM 1: postQueryBehavior: ${postQueryBehavior.name}");
+        //
+        // ITEM == ITEM_DETAIL.
         //
         if (block.getItemType() == block.getItemDetailType()) {
           _printDebugState(
@@ -232,6 +233,8 @@ _ForceReloadFormState _calculateFormState({
         _printDebugState(
             "@~~~> ${getClassName(block)} ~~~~~> FRM 2: postQueryBehavior: ${postQueryBehavior.name}");
         //
+        // ITEM == ITEM_DETAIL.
+        //
         if (block.getItemType() == block.getItemDetailType()) {
           _printDebugState(
               "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1: ITEM == ITEM_DETAIL");
@@ -409,6 +412,8 @@ _ForceReloadFormState _calculateFormState({
       case PostQueryBehavior.selectAnItemAsCurrentAndLoadForm:
         _printDebugState(
             "@~~~> ${getClassName(block)} ~~~~~> FRM 3: postQueryBehavior: ${postQueryBehavior.name}");
+        //
+        // ITEM == ITEM_DETAIL.
         //
         if (block.getItemType() == block.getItemDetailType()) {
           _printDebugState(
@@ -620,4 +625,3 @@ _ForceReloadFormState _calculateFormState({
     forceReloadForm: forceReloadForm,
   );
 }
-

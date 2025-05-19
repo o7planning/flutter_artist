@@ -16,7 +16,9 @@ _ForceReloadItemState _calculateBlockState({
     case CurrentItemSelectionType.selectAnItemAsCurrentIfNeed:
       _printDebugState(
           "@~~~> ${getClassName(block)} ~~~~~> ITM 1: currentItemSelectionType: ${currentItemSelectionType.name}");
+      //
       // ITEM == ITEM_DETAIL.
+      //
       if (block.getItemType() == block.getItemDetailType()) {
         _printDebugState(
             "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1: ITEM == ITEM_DETAIL");
@@ -32,11 +34,23 @@ _ForceReloadItemState _calculateBlockState({
             if (hasXActiveUI) {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.1.1.1: hasXActiveUI: TRUE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 1.1.1.1.1",
+                block: block,
+                testCodes: "",
+              );
               // Test Cases: @@TODO@@
               forceReloadItem = true;
             } else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.1.1.2: hasXActiveUI: FALSE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 1.1.1.1.2",
+                block: block,
+                testCodes: "",
+              );
               // Test Cases: @@TODO@@
               forceReloadItem = true;
             }
@@ -49,11 +63,23 @@ _ForceReloadItemState _calculateBlockState({
             if (hasXActiveUI) {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.1.2.1: hasXActiveUI: TRUE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 1.1.1.2.1",
+                block: block,
+                testCodes: "",
+              );
               // Test Cases: @@TODO@@
               forceReloadItem = true;
             } else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.1.2.2: hasXActiveUI: FALSE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 1.1.1.2.2",
+                block: block,
+                testCodes: "",
+              );
               // Test Cases: @@TODO@@
               forceReloadItem = true;
             }
@@ -71,7 +97,12 @@ _ForceReloadItemState _calculateBlockState({
             if (hasXActiveUI) {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.2.1.1: hasXActiveUI: TRUE");
-              //
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 1.1.2.1.1",
+                block: block,
+                testCodes: "",
+              );
               // TODO: Test.
               forceReloadItem = true;
             }
@@ -79,7 +110,12 @@ _ForceReloadItemState _calculateBlockState({
             else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.2.1.2: hasXActiveUI: FALSE");
-              //
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 1.1.2.1.2",
+                block: block,
+                testCodes: "",
+              );
               // TODO: Test.
               forceReloadItem = true;
             }
@@ -92,7 +128,12 @@ _ForceReloadItemState _calculateBlockState({
             if (hasXActiveUI) {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.2.2.1: hasXActiveUI: TRUE");
-              //
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 1.1.2.2.1",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@: Test.
               forceReloadItem = false;
             }
@@ -100,7 +141,12 @@ _ForceReloadItemState _calculateBlockState({
             else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.2.2.2: hasXActiveUI: FALSE");
-              //
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 1.1.2.2.2",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = false;
             }
@@ -123,6 +169,12 @@ _ForceReloadItemState _calculateBlockState({
             if (hasXActiveUI) {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.1.1.1: hasXActiveUI: TRUE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 1.2.1.1.1",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = true;
             }
@@ -130,6 +182,12 @@ _ForceReloadItemState _calculateBlockState({
             else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.1.1.2: hasXActiveUI: FALSE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 1.2.1.1.2",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = false;
             }
@@ -142,6 +200,12 @@ _ForceReloadItemState _calculateBlockState({
             if (hasXActiveUI) {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.1.2.1: hasXActiveUI: TRUE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 1.2.1.2.1",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = true;
             }
@@ -149,6 +213,12 @@ _ForceReloadItemState _calculateBlockState({
             else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.1.2.2: hasXActiveUI: FALSE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 1.2.1.2.2",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = true;
             }
@@ -166,6 +236,12 @@ _ForceReloadItemState _calculateBlockState({
             if (hasXActiveUI) {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.2.1.1: hasXActiveUI: TRUE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 1.2.2.1.1",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = true;
             }
@@ -173,6 +249,12 @@ _ForceReloadItemState _calculateBlockState({
             else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.2.1.2: hasXActiveUI: FALSE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 1.2.2.1.2",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = false;
             }
@@ -185,11 +267,23 @@ _ForceReloadItemState _calculateBlockState({
             if (hasXActiveUI) {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.2.2.1: hasXActiveUI: TRUE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 1.2.2.2.1",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = false;
             } else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.2.2.2: hasXActiveUI: FALSE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 1.2.2.2.2",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = false;
             }
@@ -200,6 +294,8 @@ _ForceReloadItemState _calculateBlockState({
       _printDebugState(
           "@~~~> ${getClassName(block)} ~~~~~> ITM 2: currentItemSelectionType: ${currentItemSelectionType.name}");
       //
+      // ITEM == ITEM_DETAIL.
+      //
       if (block.getItemType() == block.getItemDetailType()) {
         _printDebugState(
             "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1: ITEM == ITEM_DETAIL");
@@ -208,18 +304,66 @@ _ForceReloadItemState _calculateBlockState({
           _printDebugState(
               "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
           //
-          if (hasXActiveUI) {
+          if (currentItemChanged) {
             _printDebugState(
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.1.1: hasXActiveUI: TRUE");
-            // @@TODO@@ Test.
-            forceReloadItem = true;
+                "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.1.1: currentItemChanged: TRUE");
+            //
+            if (hasXActiveUI) {
+              _printDebugState(
+                  "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.1.1.1: hasXActiveUI: TRUE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 2.1.1.1.1",
+                block: block,
+                testCodes: "",
+              );
+              // @@TODO@@ Test.
+              forceReloadItem = true;
+            }
+            // !hasXActiveUI
+            else {
+              _printDebugState(
+                  "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.1.1.2: hasXActiveUI: FALSE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 2.1.1.1.2",
+                block: block,
+                testCodes: "",
+              );
+              // @@TODO@@ Test.
+              forceReloadItem = true;
+            }
           }
-          // !hasXActiveUI
+          // !currentItemChanged
           else {
             _printDebugState(
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.1.2: hasXActiveUI: FALSE");
-            // @@TODO@@ Test.
-            forceReloadItem = true;
+                "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.1.2: currentItemChanged: TRUE");
+            //
+            if (hasXActiveUI) {
+              _printDebugState(
+                  "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.1.2.1: hasXActiveUI: TRUE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 2.1.1.2.1",
+                block: block,
+                testCodes: "",
+              );
+              // @@TODO@@ Test.
+              forceReloadItem = true;
+            }
+            // !hasXActiveUI
+            else {
+              _printDebugState(
+                  "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.1.2.2: hasXActiveUI: FALSE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 2.1.1.2.2",
+                block: block,
+                testCodes: "",
+              );
+              // @@TODO@@ Test.
+              forceReloadItem = true;
+            }
           }
         }
         // !isCandidateCurrentItemInNewQueriedList
@@ -234,6 +378,12 @@ _ForceReloadItemState _calculateBlockState({
             if (hasXActiveUI) {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.2.1.1: hasXActiveUI: TRUE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 2.1.2.1.1",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = true;
             }
@@ -241,6 +391,12 @@ _ForceReloadItemState _calculateBlockState({
             else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.2.1.2: hasXActiveUI: FALSE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 2.1.2.1.2",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = true;
             }
@@ -253,12 +409,24 @@ _ForceReloadItemState _calculateBlockState({
             if (hasXActiveUI) {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.2.2.1: hasXActiveUI: TRUE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 2.1.2.2.1",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               // Ready selected as current (No need to refresh):
               forceReloadItem = false;
             } else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.2.2.2: hasXActiveUI: FALSE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 2.1.2.2.2",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               // Ready selected as current (No need to refresh):
               forceReloadItem = false;
@@ -279,15 +447,26 @@ _ForceReloadItemState _calculateBlockState({
             _printDebugState(
                 "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.1.1: currentItemChanged: TRUE");
             //
-
             if (hasXActiveUI) {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.1.1.1: hasXActiveUI: TRUE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 2.2.1.1.1",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = true;
             } else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.1.1.2: hasXActiveUI: FALSE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 2.2.1.1.2",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = true;
             }
@@ -300,11 +479,25 @@ _ForceReloadItemState _calculateBlockState({
             if (hasXActiveUI) {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.1.2.1: hasXActiveUI: TRUE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 2.2.1.2.1",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = true;
-            } else {
+            }
+            // !hasXActiveUI
+            else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.1.2.2: hasXActiveUI: FALSE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 2.2.1.2.2",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = true;
             }
@@ -322,11 +515,23 @@ _ForceReloadItemState _calculateBlockState({
             if (hasXActiveUI) {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.2.1.1: hasXActiveUI: TRUE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 2.2.2.1.1",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = true;
             } else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.2.1.2: hasXActiveUI: FALSE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 2.2.2.1.2",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = true;
             }
@@ -339,11 +544,23 @@ _ForceReloadItemState _calculateBlockState({
             if (hasXActiveUI) {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.2.2.1: hasXActiveUI: TRUE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 2.2.2.2.1",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = false;
             } else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.2.2.2: hasXActiveUI: FALSE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 2.2.2.2.2",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = false;
             }
@@ -354,6 +571,7 @@ _ForceReloadItemState _calculateBlockState({
       _printDebugState(
           "@~~~> ${getClassName(block)} ~~~~~> ITM 3: currentItemSelectionType: ${currentItemSelectionType.name}");
       //
+      // ITEM == ITEM_DETAIL.
       //
       if (block.getItemType() == block.getItemDetailType()) {
         _printDebugState(
@@ -370,11 +588,23 @@ _ForceReloadItemState _calculateBlockState({
             if (hasXActiveUI) {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.1.1.1: hasXActiveUI: TRUE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 3.1.1.1.1",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = true;
             } else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.1.1.2: hasXActiveUI: FALSE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 3.1.1.1.2",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = true;
             }
@@ -387,11 +617,23 @@ _ForceReloadItemState _calculateBlockState({
             if (hasXActiveUI) {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.1.2.1: hasXActiveUI: TRUE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 3.1.1.2.1",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = true;
             } else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.1.2.2: hasXActiveUI: FALSE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 3.1.1.2.2",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = true;
             }
@@ -409,11 +651,23 @@ _ForceReloadItemState _calculateBlockState({
             if (hasXActiveUI) {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.2.1.1: hasXActiveUI: TRUE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 3.1.2.1.1",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = true;
             } else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.2.1.2: hasXActiveUI: FALSE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 3.1.2.1.2",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = true;
             }
@@ -426,11 +680,23 @@ _ForceReloadItemState _calculateBlockState({
             if (hasXActiveUI) {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.2.2.1: hasXActiveUI: TRUE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 3.1.2.2.1",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = true;
             } else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.2.2.2: hasXActiveUI: FALSE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 3.1.2.2.2",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = true;
             }
@@ -453,11 +719,23 @@ _ForceReloadItemState _calculateBlockState({
             if (hasXActiveUI) {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.1.1.1: hasXActiveUI: TRUE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 3.2.1.1.1",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = true;
             } else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.1.1.2: hasXActiveUI: FALSE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 3.2.1.1.2",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = true;
             }
@@ -470,11 +748,23 @@ _ForceReloadItemState _calculateBlockState({
             if (hasXActiveUI) {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.1.2.1: hasXActiveUI: TRUE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 3.2.1.2.1",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = true;
             } else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.1.2.2: hasXActiveUI: FALSE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 3.2.1.2.2",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = true;
             }
@@ -492,11 +782,23 @@ _ForceReloadItemState _calculateBlockState({
             if (hasXActiveUI) {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.2.1.1: hasXActiveUI: TRUE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 3.2.2.1.1",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = true;
             } else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.2.1.2: hasXActiveUI: FALSE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 3.2.2.1.2",
+                block: block,
+                testCodes: "",
+              );
               // @@TODO@@ Test.
               forceReloadItem = true;
             }
@@ -510,12 +812,24 @@ _ForceReloadItemState _calculateBlockState({
             if (hasXActiveUI) {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.2.2.1: hasXActiveUI: TRUE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 3.2.2.2.1",
+                block: block,
+                testCodes: "",
+              );
               // Ready selected as current (No need to refresh):
               // @@TODO@@ Test.
               forceReloadItem = false;
             } else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.2.2.2: hasXActiveUI: FALSE");
+              // Debug:
+              _addDebugForceReload(
+                debugCode: "ITM 3.2.2.2.2",
+                block: block,
+                testCodes: "",
+              );
               // Ready selected as current (No need to refresh):
               // @@TODO@@ Test.
               forceReloadItem = false;
@@ -529,5 +843,8 @@ _ForceReloadItemState _calculateBlockState({
       //
       break;
   }
-  return _ForceReloadItemState(forceReloadItem: forceReloadItem);
+  //
+  return _ForceReloadItemState(
+    forceReloadItem: forceReloadItem,
+  );
 }
