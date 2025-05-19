@@ -101,7 +101,7 @@ void printDebugForceReloadMap() {
   for (String key in forceReloadMap.keys) {
     ForceReloadDebug debug = forceReloadMap[key]!;
     String newTestCodes = debug.toTestCodes();
-    if (newTestCodes.isNotEmpty) {
+    if (newTestCodes.isEmpty) {
       print("${k.toString().padLeft(2, '0')} EMPTY: $key");
       k++;
     }
