@@ -116,8 +116,8 @@ _ForceReloadItemState _calculateBlockState({
                 block: block,
                 testCodes: "",
               );
-              // TODO: Test.
-              forceReloadItem = true;
+              // (43a) !!
+              forceReloadItem = false;
             }
           }
           // !currentItemChanged
