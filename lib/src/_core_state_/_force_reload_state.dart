@@ -25,9 +25,21 @@ void printDebugForceReloadMap() {
     ForceReloadDebug debug = forceReloadMap[key]!;
     String newTestCodes = debug.toTestCodes();
     bool changed = debug.testCodes != newTestCodes;
-
-    print("KEY: $key - $newTestCodes ${changed ? '***' : ''}");
+    if (!changed) {
+      print("KEY: $key - $newTestCodes");
+    }
   }
+  //
+  for (String key in forceReloadMap.keys) {
+    ForceReloadDebug debug = forceReloadMap[key]!;
+    String newTestCodes = debug.toTestCodes();
+    bool changed = debug.testCodes != newTestCodes;
+    if (changed) {
+      print("KEY: $key - $newTestCodes ${changed ? '***' : ''}");
+    }
+  }
+  print(" **************************************************************** ");
+  print(" **************************************************************** ");
 }
 
 void _addDebugForceReload({
