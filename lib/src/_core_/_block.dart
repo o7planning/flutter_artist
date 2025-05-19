@@ -1689,12 +1689,13 @@ abstract class Block<
               if (currentItemChanged) {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 3.1.2.1: currentItemChanged: TRUE");
-                //
+                // @@TODO@@ Test.
               }
               // !currentItemChanged
               else {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 3.1.2.2: currentItemChanged: FALSE");
+                // @@TODO@@ Test.
               }
             }
           }
@@ -1712,13 +1713,13 @@ abstract class Block<
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 3.2.1.1: hasXActiveUI: TRUE");
                 // [39a]
                 forceReloadItem = true;
-                forceReloadForm = true;
+                // forceReloadForm = true; // (?????)
               } else {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 3.2.1.2: hasXActiveUI: FALSE");
                 // [39a]
                 forceReloadItem = true;
-                forceReloadForm = true;
+                // forceReloadForm = true; // (?????)
               }
             }
             // !isCandidateCurrentItemInNewQueriedList
@@ -1729,7 +1730,7 @@ abstract class Block<
               if (currentItemChanged) {
                 _printDebugState(
                     "@~~~> ${getClassName(this)} ~~~~~> ITM 3.2.2.1: currentItemChanged: TRUE");
-                //
+                // @@TODO@@ Test.
               }
               // !currentItemChanged
               else {
@@ -2267,13 +2268,15 @@ abstract class Block<
                 //
                 if (formLoadTimeUIActive) {
                   _printDebugState(
-                      "@~~~> ${getClassName(this)} ~~~~~> FRM 3.2.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
+                      "@~~~> ${getClassName(this)} ~~~~~> FRM 3.2.1.1: formLoadTimeUIActive: TRUE");
                   // [39a]
                   forceReloadForm = true;
                   forceReloadItem = true;
-                } else {
+                }
+                // !formLoadTimeUIActive
+                else {
                   _printDebugState(
-                      "@~~~> ${getClassName(this)} ~~~~~> FRM 3.2.1.2: isCandidateCurrentItemInNewQueriedList: TRUE");
+                      "@~~~> ${getClassName(this)} ~~~~~> FRM 3.2.1.2: formLoadTimeUIActive: TRUE");
                   // [39b]
                   forceReloadForm = true;
                   forceReloadItem = true;
