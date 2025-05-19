@@ -23,7 +23,10 @@ void printDebugForceReloadMap() {
   // key: 20a, 43a,..
   for (String key in forceReloadMap.keys) {
     ForceReloadDebug debug = forceReloadMap[key]!;
-    print("KEY: $key - ${debug.toTestCodes}");
+    String newTestCodes = debug.toTestCodes();
+    bool changed = debug.testCodes != newTestCodes;
+
+    print("KEY: $key - $newTestCodes ${changed ? '***' : ''}");
   }
 }
 
@@ -36,11 +39,12 @@ void _addDebugForceReload({
   if (!clsName.endsWith("Block")) {
     return;
   }
-  clsName = clsName.substring(clsName.length - "Block".length);
+  clsName = clsName.substring(0, clsName.length - "Block".length);
   if (clsName.length < 3) {
     return;
   }
   final String testCode = clsName.substring(clsName.length - 3);
+
   String noStr = testCode.substring(0, 2);
   int? no = int.tryParse(noStr);
   if (no != null) {
