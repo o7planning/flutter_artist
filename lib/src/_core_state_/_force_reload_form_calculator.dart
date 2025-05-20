@@ -354,6 +354,7 @@ _ForceReloadFormState _calculateFormState({
                 else {
                   _printDebugState(
                       "@~~~> ${getClassName(block)} ~~~~~> FRM 1.2.2.2.1.2: forceReloadItem: FALSE");
+                  //
                   if (formModel.formDataState != DataState.ready) {
                     _printDebugState(
                         "@~~~> ${getClassName(block)} ~~~~~> FRM 1.2.2.2.1.2.1: formDataState: NOT READY - ${formModel.formDataState}");
@@ -366,7 +367,7 @@ _ForceReloadFormState _calculateFormState({
                     //
                     forceReloadForm = true;
                   }
-                  // formDataState  == ready.
+                  // formModel.formDataState == ready.
                   else {
                     _printDebugState(
                         "@~~~> ${getClassName(block)} ~~~~~> FRM 1.2.2.2.1.2.2: formDataState: READY");
@@ -538,7 +539,7 @@ _ForceReloadFormState _calculateFormState({
                     );
                     forceReloadForm = true;
                   }
-                  // formModel.formDataState == DataState.ready
+                  // formModel.formDataState == ready.
                   else {
                     _printDebugState(
                         "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1.2.2.1.2.2: formDataState: READY");
@@ -886,7 +887,7 @@ _ForceReloadFormState _calculateFormState({
                     );
                     forceReloadForm = true;
                   }
-                  //
+                  // formModel.formDataState == ready.
                   else {
                     _printDebugState(
                         "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.2.2.1.2.2: formDataState: READY");
@@ -963,7 +964,7 @@ _ForceReloadFormState _calculateFormState({
               // !formLoadTimeUIActive
               else {
                 _printDebugState(
-                    "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.1.1.2: formLoadTimeUIActive: TRUE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.1.1.2: formLoadTimeUIActive: FALSE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 3.2.1.1.2",
@@ -994,7 +995,7 @@ _ForceReloadFormState _calculateFormState({
               // !formLoadTimeUIActive
               else {
                 _printDebugState(
-                    "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.1.2.2: formLoadTimeUIActive: TRUE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.1.2.2: formLoadTimeUIActive: FALSE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 3.2.1.2.2",
@@ -1027,7 +1028,7 @@ _ForceReloadFormState _calculateFormState({
                 forceReloadForm = true;
               }
               // (*** IN Param: selectAnItemAsCurrentAndLoadForm)
-              // formLoadTimeUIActive
+              // !formLoadTimeUIActive
               else {
                 _printDebugState(
                     "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2.1.2: formLoadTimeUIActive: FALSE");
@@ -1096,7 +1097,7 @@ _ForceReloadFormState _calculateFormState({
               else {
                 _printDebugState(
                     "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2.2.2: formLoadTimeUIActive: FALSE");
-
+                //
                 if (formModel.formDataState != DataState.ready) {
                   _printDebugState(
                       "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2.2.2.1: formDataState: NOT READY - ${formModel.formDataState}");

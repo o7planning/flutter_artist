@@ -22,7 +22,7 @@ _ForceReloadItemState _calculateBlockState({
       if (block.getItemType() == block.getItemDetailType()) {
         _printDebugState(
             "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1: ITEM == ITEM_DETAIL");
-        //
+        // Just Queried.
         if (isCandidateCurrentItemInNewQueriedList) {
           _printDebugState(
               "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
@@ -161,7 +161,7 @@ _ForceReloadItemState _calculateBlockState({
       else {
         _printDebugState(
             "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2: ITEM != ITEM_DETAIL");
-        //
+        // Just Queried.
         if (isCandidateCurrentItemInNewQueriedList) {
           _printDebugState(
               "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.1: isCandidateCurrentItemInNewQueriedList: TRUE");
@@ -232,7 +232,7 @@ _ForceReloadItemState _calculateBlockState({
         // !isCandidateCurrentItemInNewQueriedList
         else {
           _printDebugState(
-              "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.2: isCandidateCurrentItemInNewQueriedList: TRUE");
+              "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.2: isCandidateCurrentItemInNewQueriedList: FALSE");
           //
           if (currentItemChanged) {
             _printDebugState(
@@ -307,7 +307,7 @@ _ForceReloadItemState _calculateBlockState({
       if (block.getItemType() == block.getItemDetailType()) {
         _printDebugState(
             "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1: ITEM == ITEM_DETAIL");
-        //
+        // Just Queried.
         if (isCandidateCurrentItemInNewQueriedList) {
           _printDebugState(
               "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
@@ -345,7 +345,7 @@ _ForceReloadItemState _calculateBlockState({
           // !currentItemChanged
           else {
             _printDebugState(
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.1.2: currentItemChanged: TRUE");
+                "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.1.2: currentItemChanged: FALSE");
             //
             if (hasXActiveUI) {
               _printDebugState(
@@ -377,7 +377,7 @@ _ForceReloadItemState _calculateBlockState({
         // !isCandidateCurrentItemInNewQueriedList
         else {
           _printDebugState(
-              "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.2: isCandidateCurrentItemInNewQueriedList: TRUE");
+              "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.2: isCandidateCurrentItemInNewQueriedList: FALSE");
           //
           if (currentItemChanged) {
             _printDebugState(
@@ -448,7 +448,7 @@ _ForceReloadItemState _calculateBlockState({
       else {
         _printDebugState(
             "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2: ITEM != ITEM_DETAIL");
-        //
+        // Just Queried.
         if (isCandidateCurrentItemInNewQueriedList) {
           _printDebugState(
               "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.1: isCandidateCurrentItemInNewQueriedList: TRUE");
@@ -518,7 +518,7 @@ _ForceReloadItemState _calculateBlockState({
         // !isCandidateCurrentItemInNewQueriedList
         else {
           _printDebugState(
-              "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.2: isCandidateCurrentItemInNewQueriedList: TRUE");
+              "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.2: isCandidateCurrentItemInNewQueriedList: FALSE");
           //
           if (currentItemChanged) {
             _printDebugState(
@@ -592,7 +592,7 @@ _ForceReloadItemState _calculateBlockState({
       if (block.getItemType() == block.getItemDetailType()) {
         _printDebugState(
             "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1: ITEM == ITEM_DETAIL");
-        //
+        // Just Queried.
         if (isCandidateCurrentItemInNewQueriedList) {
           _printDebugState(
               "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
@@ -662,7 +662,7 @@ _ForceReloadItemState _calculateBlockState({
         // !isCandidateCurrentItemInNewQueriedList
         else {
           _printDebugState(
-              "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.2: isCandidateCurrentItemInNewQueriedList: TRUE");
+              "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.2: isCandidateCurrentItemInNewQueriedList: FALSE");
           //
           if (currentItemChanged) {
             _printDebugState(
@@ -731,7 +731,7 @@ _ForceReloadItemState _calculateBlockState({
       else {
         _printDebugState(
             "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2: ITEM != ITEM_DETAIL");
-        //
+        // Just Queried.
         if (isCandidateCurrentItemInNewQueriedList) {
           _printDebugState(
               "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.1: isCandidateCurrentItemInNewQueriedList: TRUE");
