@@ -21,7 +21,9 @@ _ForceReloadFormState _calculateFormState({
         "@~~~> ${getClassName(block)} ~~~~~> FRM 0.1: forceTypeForForm: ${thisXBlock.xFormModel!.forceTypeForForm}");
     // Test Case: [43a].
     forceReloadForm = true;
-  } else {
+  }
+  // forceTypeForForm != force
+  else {
     _printDebugState(
         "@~~~> ${getClassName(block)} ~~~~~> FRM 0.2: forceTypeForForm: ${thisXBlock.xFormModel!.forceTypeForForm}");
   }
@@ -187,7 +189,9 @@ _ForceReloadFormState _calculateFormState({
                     );
                     //
                     forceReloadForm = true;
-                  } else {
+                  }
+                  // formModel.formDataState == DataState.ready
+                  else {
                     _printDebugState(
                         "@~~~> ${getClassName(block)} ~~~~~> FRM 1.1.2.2.1.2.2: formLoadTimeUIActive: READY");
                     // Debug:
@@ -536,7 +540,9 @@ _ForceReloadFormState _calculateFormState({
                       currentShelfCodes: "",
                     );
                     forceReloadForm = true;
-                  } else {
+                  }
+                  // formModel.formDataState == DataState.ready
+                  else {
                     _printDebugState(
                         "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1.2.2.1.2.2: formDataState: READY");
                     // Debug:
@@ -767,7 +773,9 @@ _ForceReloadFormState _calculateFormState({
                   currentShelfCodes: "",
                 );
                 forceReloadForm = true;
-              } else {
+              }
+              // !formLoadTimeUIActive
+              else {
                 _printDebugState(
                     "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.1.1.2: formLoadTimeUIActive: FALSE");
                 // Debug:
@@ -796,7 +804,9 @@ _ForceReloadFormState _calculateFormState({
                   currentShelfCodes: "36a",
                 );
                 forceReloadForm = true;
-              } else {
+              }
+              // !formLoadTimeUIActive
+              else {
                 _printDebugState(
                     "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.1.2.2: formLoadTimeUIActive: FALSE");
                 // Debug:
@@ -830,7 +840,9 @@ _ForceReloadFormState _calculateFormState({
                   currentShelfCodes: "",
                 );
                 forceReloadForm = true;
-              } else {
+              }
+              // !formLoadTimeUIActive
+              else {
                 _printDebugState(
                     "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.2.1.2: formLoadTimeUIActive: FALSE");
                 // Debug:

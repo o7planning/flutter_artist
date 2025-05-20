@@ -42,7 +42,9 @@ _ForceReloadItemState _calculateBlockState({
               );
               //
               forceReloadItem = true;
-            } else {
+            }
+            // !hasXActiveUI
+            else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.1.1.2: hasXActiveUI: FALSE");
               // Debug:
@@ -71,7 +73,9 @@ _ForceReloadItemState _calculateBlockState({
               );
               //
               forceReloadItem = true;
-            } else {
+            }
+            // !hasXActiveUI
+            else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.1.2.2: hasXActiveUI: FALSE");
               // Debug:
@@ -147,7 +151,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "",
               );
-              // @@TODO@@ Test.
+              //
               forceReloadItem = false;
             }
           }
@@ -220,7 +224,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "",
               );
-              // @@TODO@@ Test.
+              //
               forceReloadItem = true;
             }
           }
@@ -256,7 +260,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "",
               );
-              // @@TODO@@ Test.
+              //
               forceReloadItem = false;
             }
           }
@@ -277,7 +281,9 @@ _ForceReloadItemState _calculateBlockState({
               );
               //
               forceReloadItem = false;
-            } else {
+            }
+            // !hasXActiveUI
+            else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.2.2.2: hasXActiveUI: FALSE");
               // Debug:
@@ -319,7 +325,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "",
               );
-              // @@TODO@@ Test.
+              //
               forceReloadItem = true;
             }
             // !hasXActiveUI
@@ -386,7 +392,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "",
               );
-              // @@TODO@@ Test.
+              //
               forceReloadItem = true;
             }
             // !hasXActiveUI
@@ -399,7 +405,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "",
               );
-              // @@TODO@@ Test.
+              //
               forceReloadItem = true;
             }
           }
@@ -417,10 +423,12 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "",
               );
-              // @@TODO@@ Test.
+              //
               // Ready selected as current (No need to refresh):
               forceReloadItem = false;
-            } else {
+            }
+            // !hasXActiveUI
+            else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.2.2.2: hasXActiveUI: FALSE");
               // Debug:
@@ -429,7 +437,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "",
               );
-              // @@TODO@@ Test.
+              //
               // Ready selected as current (No need to refresh):
               forceReloadItem = false;
             }
@@ -460,7 +468,9 @@ _ForceReloadItemState _calculateBlockState({
               );
               //
               forceReloadItem = true;
-            } else {
+            }
+            // !hasXActiveUI
+            else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.1.1.2: hasXActiveUI: FALSE");
               // Debug:
@@ -500,7 +510,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "",
               );
-              // @@TODO@@ Test.
+              //
               forceReloadItem = true;
             }
           }
@@ -525,7 +535,9 @@ _ForceReloadItemState _calculateBlockState({
               );
               //
               forceReloadItem = true;
-            } else {
+            }
+            // !hasXActiveUI
+            else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.2.1.2: hasXActiveUI: FALSE");
               // Debug:
@@ -554,7 +566,9 @@ _ForceReloadItemState _calculateBlockState({
               );
               //
               forceReloadItem = false;
-            } else {
+            }
+            // !hasXActiveUI
+            else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.2.2.2: hasXActiveUI: FALSE");
               // Debug:
@@ -596,9 +610,11 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "",
               );
-              // @@TODO@@ Test.
+              //
               forceReloadItem = true;
-            } else {
+            }
+            // !hasXActiveUI
+            else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.1.1.2: hasXActiveUI: FALSE");
               // Debug:
@@ -627,7 +643,9 @@ _ForceReloadItemState _calculateBlockState({
               );
               //
               forceReloadItem = true;
-            } else {
+            }
+            // !hasXActiveUI
+            else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.1.2.2: hasXActiveUI: FALSE");
               // Debug:
@@ -659,9 +677,11 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "",
               );
-              // @@TODO@@ Test.
+              //
               forceReloadItem = true;
-            } else {
+            }
+            // !hasXActiveUI
+            else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.2.1.2: hasXActiveUI: FALSE");
               // Debug:
@@ -670,7 +690,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "",
               );
-              // @@TODO@@ Test.
+              //
               forceReloadItem = true;
             }
           }
@@ -688,9 +708,11 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "",
               );
-              // @@TODO@@ Test.
+              //
               forceReloadItem = true;
-            } else {
+            }
+            // !hasXActiveUI
+            else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.2.2.2: hasXActiveUI: FALSE");
               // Debug:
@@ -699,7 +721,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "",
               );
-              // @@TODO@@ Test.
+              //
               forceReloadItem = true;
             }
           }
@@ -729,7 +751,9 @@ _ForceReloadItemState _calculateBlockState({
               );
               //
               forceReloadItem = true;
-            } else {
+            }
+            // !hasXActiveUI
+            else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.1.1.2: hasXActiveUI: FALSE");
               // Debug:
@@ -758,7 +782,9 @@ _ForceReloadItemState _calculateBlockState({
               );
               //
               forceReloadItem = true;
-            } else {
+            }
+            // !hasXActiveUI
+            else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.1.2.2: hasXActiveUI: FALSE");
               // Debug:
@@ -767,7 +793,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "",
               );
-              // @@TODO@@ Test.
+              //
               forceReloadItem = true;
             }
           }
@@ -792,7 +818,9 @@ _ForceReloadItemState _calculateBlockState({
               );
               //
               forceReloadItem = true;
-            } else {
+            }
+            // !hasXActiveUI
+            else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.2.1.2: hasXActiveUI: FALSE");
               // Debug:
@@ -823,7 +851,9 @@ _ForceReloadItemState _calculateBlockState({
               // Ready selected as current (No need to refresh):
               //
               forceReloadItem = false;
-            } else {
+            }
+            // !hasXActiveUI
+            else {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.2.2.2: hasXActiveUI: FALSE");
               // Debug:
