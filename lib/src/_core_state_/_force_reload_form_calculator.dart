@@ -64,7 +64,7 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 1.1.1.1.1",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "13a, 42a",
                 );
                 //
                 forceReloadForm = true;
@@ -77,7 +77,7 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 1.1.1.1.2",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "13a, 36c",
                 );
                 //
                 forceReloadForm = false;
@@ -95,7 +95,7 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 1.1.1.2.1",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "13a, 36c",
                 );
                 //
                 forceReloadForm = true;
@@ -108,7 +108,7 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 1.1.1.2.2",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "36c",
                 );
                 //
                 forceReloadForm = false;
@@ -131,7 +131,7 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 1.1.2.1.1",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "13a",
                 );
                 //
                 forceReloadForm = true;
@@ -183,7 +183,7 @@ _ForceReloadFormState _calculateFormState({
                     _addDebugForceReload(
                       debugCode: "FRM 1.1.2.2.1.2.1",
                       shelf: block.shelf,
-                      currentShelfCodes: "",
+                      currentShelfCodes: "36b, 36c",
                     );
                     //
                     forceReloadForm = true;
@@ -194,7 +194,7 @@ _ForceReloadFormState _calculateFormState({
                     _addDebugForceReload(
                       debugCode: "FRM 1.1.2.2.1.2.2",
                       shelf: block.shelf,
-                      currentShelfCodes: "",
+                      currentShelfCodes: "13a, 42a",
                     );
                     //
                     forceReloadForm = false;
@@ -237,7 +237,8 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 1.2.1.1.1",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes:
+                      "11a, 11b, 37a, 38a, 38b, 39a, 39b, 40a, 40b",
                 );
                 //
                 forceReloadForm = true;
@@ -250,7 +251,8 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 1.2.1.1.2",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes:
+                      "11a, 36a, 36b, 36c, 37a, 38a, 38b, 39b, 40b, 41a",
                 );
                 //
                 forceReloadForm = false;
@@ -268,7 +270,7 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 1.2.1.2.1",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "39a, 40a",
                 );
                 //
                 forceReloadForm = true;
@@ -304,7 +306,7 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 1.2.2.1.1",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "11a, 11b, 37a, 38a, 38b, 39b, 40a, 40b",
                 );
                 //
                 forceReloadForm = true;
@@ -317,7 +319,7 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 1.2.2.1.2",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "36a, 36b, 36c, 37a, 38a, 38b, 40b, 41a",
                 );
                 //
                 forceReloadForm = false;
@@ -339,7 +341,7 @@ _ForceReloadFormState _calculateFormState({
                   _addDebugForceReload(
                     debugCode: "FRM 1.2.2.2.1.1",
                     shelf: block.shelf,
-                    currentShelfCodes: "",
+                    currentShelfCodes: "11b, 39a, 40a",
                   );
                   //
                   forceReloadForm = true;
@@ -355,7 +357,7 @@ _ForceReloadFormState _calculateFormState({
                     _addDebugForceReload(
                       debugCode: "FRM 1.2.2.2.1.2.1",
                       shelf: block.shelf,
-                      currentShelfCodes: "",
+                      currentShelfCodes: "37a, 38a, 38b, 39b, 40b",
                     );
                     //
                     forceReloadForm = true;
@@ -368,7 +370,7 @@ _ForceReloadFormState _calculateFormState({
                     _addDebugForceReload(
                       debugCode: "FRM 1.2.2.2.1.2.2",
                       shelf: block.shelf,
-                      currentShelfCodes: "",
+                      currentShelfCodes: "11a, 37a, 38a, 40a, 40b",
                     );
                     //
                     forceReloadForm = false;
@@ -383,7 +385,7 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 1.2.2.2.2",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "36a, 36b, 36c, 38a, 38b, 40b",
                 );
                 forceReloadForm = false;
               }
@@ -428,7 +430,7 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 2.1.1.1.2",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "36b",
                 );
                 forceReloadForm = false;
               }
@@ -445,7 +447,7 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 2.1.1.2.1",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "36b",
                 );
                 forceReloadForm = true;
               }
@@ -457,7 +459,7 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 2.1.1.2.2",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "36b",
                 );
                 forceReloadForm = false;
               }
@@ -584,7 +586,7 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 2.2.1.1.1",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "39b, 40a, 40b",
                 );
                 // [39a]
                 forceReloadForm = true;
@@ -597,7 +599,7 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 2.2.1.1.2",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "39b",
                 );
                 // [39b]
                 forceReloadForm = false;
@@ -615,7 +617,7 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 2.2.1.2.1",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "39a",
                 );
                 // [39a]
                 forceReloadForm = true;
@@ -652,7 +654,7 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 2.2.2.1.1",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "40a",
                 );
                 forceReloadForm = true;
               }
@@ -664,7 +666,7 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 2.2.2.1.2",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "40b",
                 );
                 forceReloadForm = false;
               }
@@ -713,7 +715,7 @@ _ForceReloadFormState _calculateFormState({
                     _addDebugForceReload(
                       debugCode: "FRM 2.2.2.2.1.1.2",
                       shelf: block.shelf,
-                      currentShelfCodes: "",
+                      currentShelfCodes: "40a, 40b",
                     );
                     forceReloadForm = false;
                   }
@@ -727,9 +729,9 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 2.2.2.2.2",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "40b",
                 );
-                // Tes Case: [40b] [44a].
+                //
                 forceReloadForm = false;
               }
             }
@@ -772,7 +774,7 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 3.1.1.1.2",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "36a",
                 );
                 forceReloadForm = true;
               }
@@ -791,7 +793,7 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 3.1.1.2.1",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "36a",
                 );
                 forceReloadForm = true;
               } else {
@@ -801,7 +803,7 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 3.1.1.2.2",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "36a",
                 );
                 forceReloadForm = true;
               }
@@ -947,7 +949,7 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 3.2.1.1.1",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "39b, 40a, 40b",
                 );
                 // [39a]
                 forceReloadForm = true;
@@ -960,7 +962,7 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 3.2.1.1.2",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "39b, 40b",
                 );
                 // [39b]
                 forceReloadForm = true;
@@ -978,7 +980,7 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 3.2.1.2.1",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "39a",
                 );
                 // [39a]
                 forceReloadForm = true;
@@ -1014,7 +1016,7 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 3.2.2.1.1",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "40a",
                 );
                 forceReloadForm = true;
               }
@@ -1027,9 +1029,9 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 3.2.2.1.2",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "40b",
                 );
-                // Test Case: [44a].
+                //
                 forceReloadForm = true;
               }
             }
@@ -1079,7 +1081,7 @@ _ForceReloadFormState _calculateFormState({
                     _addDebugForceReload(
                       debugCode: "FRM 3.2.2.2.1.2.2",
                       shelf: block.shelf,
-                      currentShelfCodes: "",
+                      currentShelfCodes: "40a, 40b",
                     );
                     forceReloadForm = false;
                   }
@@ -1109,7 +1111,7 @@ _ForceReloadFormState _calculateFormState({
                   _addDebugForceReload(
                     debugCode: "FRM 3.2.2.2.2.2",
                     shelf: block.shelf,
-                    currentShelfCodes: "",
+                    currentShelfCodes: "40b",
                   );
                   forceReloadForm = false;
                 }
