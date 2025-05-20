@@ -405,7 +405,6 @@ _ForceReloadFormState _calculateFormState({
         if (block.getItemType() == block.getItemDetailType()) {
           _printDebugState(
               "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1: ITEM == ITEM_DETAIL");
-          //
           // Just Queried:
           if (isCandidateCurrentItemInNewQueriedList) {
             _printDebugState(
@@ -514,14 +513,12 @@ _ForceReloadFormState _calculateFormState({
                 if (forceReloadItem) {
                   _printDebugState(
                       "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1.2.2.1.1: forceReloadItem: TRUE");
-
                   // Debug:
                   _addDebugForceReload(
                     debugCode: "FRM 2.1.2.2.1.1",
                     shelf: block.shelf,
                     currentShelfCodes: "",
                   );
-
                   // Test Case: [43a].
                   forceReloadForm = true;
                 }
@@ -576,7 +573,6 @@ _ForceReloadFormState _calculateFormState({
         else {
           _printDebugState(
               "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2: ITEM != ITEM_DETAIL");
-          //
           // Just Queried:
           if (isCandidateCurrentItemInNewQueriedList) {
             _printDebugState(
@@ -648,7 +644,6 @@ _ForceReloadFormState _calculateFormState({
             _printDebugState(
                 "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2.2: isCandidateCurrentItemInNewQueriedList: FALSE");
             //
-            //
             if (currentItemChanged) {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2.2.1: currentItemChanged: TRUE");
@@ -713,7 +708,7 @@ _ForceReloadFormState _calculateFormState({
                     );
                     forceReloadForm = true;
                   }
-                  // formDataState == ready
+                  // formModel.formDataState == ready.
                   else {
                     _printDebugState(
                         "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2.2.2.1.1.2: formDataState: READY");
@@ -752,11 +747,11 @@ _ForceReloadFormState _calculateFormState({
         if (block.getItemType() == block.getItemDetailType()) {
           _printDebugState(
               "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1: ITEM == ITEM_DETAIL");
-          //
           // Just Queried:
           if (isCandidateCurrentItemInNewQueriedList) {
             _printDebugState(
                 "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
+            //
             if (currentItemChanged) {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.1.1: currentItemChanged: TRUE");
@@ -923,7 +918,7 @@ _ForceReloadFormState _calculateFormState({
                   // Test Case: [43a]
                   forceReloadForm = false;
                 }
-                // formDataState = ready.
+                // formModel.formDataState == ready.
                 else {
                   _printDebugState(
                       "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.2.2.2.2: formDataState: READY");
@@ -944,7 +939,6 @@ _ForceReloadFormState _calculateFormState({
         else {
           _printDebugState(
               "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2: ITEM != ITEM_DETAIL");
-          //
           // Just Queried:
           if (isCandidateCurrentItemInNewQueriedList) {
             _printDebugState(
@@ -1076,7 +1070,6 @@ _ForceReloadFormState _calculateFormState({
                   if (formModel.formDataState != DataState.ready) {
                     _printDebugState(
                         "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2.2.1.2.1: formDataState: NOT READY - ${formModel.formDataState}");
-
                     // Debug:
                     _addDebugForceReload(
                       debugCode: "FRM 3.2.2.2.1.2.1",
@@ -1085,7 +1078,7 @@ _ForceReloadFormState _calculateFormState({
                     );
                     forceReloadForm = true;
                   }
-                  // formDataState == ready.
+                  // formModel.formDataState == ready.
                   else {
                     _printDebugState(
                         "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2.2.1.2.2: formDataState: READY");
@@ -1115,7 +1108,7 @@ _ForceReloadFormState _calculateFormState({
                   );
                   forceReloadForm = true;
                 }
-                // formDataState == ready.
+                // formModel.formDataState == ready.
                 else {
                   _printDebugState(
                       "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2.2.2.2: formDataState: READY");
