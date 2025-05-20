@@ -837,8 +837,7 @@ _ForceReloadItemState _calculateBlockState({
           else {
             _printDebugState(
                 "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.2.2: currentItemChanged: FALSE");
-            // [40b]
-            forceReloadItem = false;
+            //
             if (hasXActiveUI) {
               _printDebugState(
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.2.2.1: hasXActiveUI: TRUE");
