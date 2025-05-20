@@ -37,8 +37,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 1.1.1.1.1",
-                block: block,
-                testCodes: "13a, 42a",
+                shelf: block.shelf,
+                currentShelfCodes: "13a, 42a",
               );
               //
               forceReloadItem = true;
@@ -48,8 +48,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 1.1.1.1.2",
-                block: block,
-                testCodes: "13a, 36c, 41a",
+                shelf: block.shelf,
+                currentShelfCodes: "13a, 36c, 41a",
               );
               //
               forceReloadItem = true;
@@ -66,8 +66,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 1.1.1.2.1",
-                block: block,
-                testCodes: "13a, 36c, 41a",
+                shelf: block.shelf,
+                currentShelfCodes: "13a, 36c, 41a",
               );
               //
               forceReloadItem = true;
@@ -77,8 +77,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 1.1.1.2.2",
-                block: block,
-                testCodes: "36c, 41a",
+                shelf: block.shelf,
+                currentShelfCodes: "36c, 41a",
               );
               //
               forceReloadItem = true;
@@ -100,10 +100,10 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 1.1.2.1.1",
-                block: block,
-                testCodes: "",
+                shelf: block.shelf,
+                currentShelfCodes: "",
               );
-              // TODO: Test.
+              //
               forceReloadItem = true;
             }
             // !hasXActiveUI
@@ -113,8 +113,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 1.1.2.1.2",
-                block: block,
-                testCodes: "",
+                shelf: block.shelf,
+                currentShelfCodes: "",
               );
               // (43a) !!
               forceReloadItem = false;
@@ -131,8 +131,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 1.1.2.2.1",
-                block: block,
-                testCodes: "13a, 36b, 36c, 42a",
+                shelf: block.shelf,
+                currentShelfCodes: "13a, 36b, 36c, 42a",
               );
               //
               forceReloadItem = false;
@@ -144,8 +144,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 1.1.2.2.2",
-                block: block,
-                testCodes: "",
+                shelf: block.shelf,
+                currentShelfCodes: "",
               );
               // @@TODO@@ Test.
               forceReloadItem = false;
@@ -172,8 +172,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 1.2.1.1.1",
-                block: block,
-                testCodes:
+                shelf: block.shelf,
+                currentShelfCodes:
                     "11a, 11b, 29a, 36a, 36b, 36c, 37a, 38a, 38b, 39a, 39b, 40a, 40b, 41a",
               );
               //
@@ -186,8 +186,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 1.2.1.1.2",
-                block: block,
-                testCodes: "11a, 39b, 40b",
+                shelf: block.shelf,
+                currentShelfCodes: "11a, 39b, 40b",
               );
               //
               forceReloadItem = false;
@@ -204,8 +204,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 1.2.1.2.1",
-                block: block,
-                testCodes: "29a, 39a, 40a",
+                shelf: block.shelf,
+                currentShelfCodes: "29a, 39a, 40a",
               );
               //
               forceReloadItem = true;
@@ -217,8 +217,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 1.2.1.2.2",
-                block: block,
-                testCodes: "",
+                shelf: block.shelf,
+                currentShelfCodes: "",
               );
               // @@TODO@@ Test.
               forceReloadItem = true;
@@ -240,8 +240,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 1.2.2.1.1",
-                block: block,
-                testCodes: "11a, 11b, 29a, 37a, 38b, 39b, 40a, 40b",
+                shelf: block.shelf,
+                currentShelfCodes: "11a, 11b, 29a, 37a, 38b, 39b, 40a, 40b",
               );
               //
               forceReloadItem = true;
@@ -253,8 +253,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 1.2.2.1.2",
-                block: block,
-                testCodes: "",
+                shelf: block.shelf,
+                currentShelfCodes: "",
               );
               // @@TODO@@ Test.
               forceReloadItem = false;
@@ -271,8 +271,9 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 1.2.2.2.1",
-                block: block,
-                testCodes: "11a, 36a, 36b, 36c, 37a, 38a, 38b, 39b, 40a, 40b",
+                shelf: block.shelf,
+                currentShelfCodes:
+                    "11a, 36a, 36b, 36c, 37a, 38a, 38b, 39b, 40a, 40b",
               );
               //
               forceReloadItem = false;
@@ -282,8 +283,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 1.2.2.2.2",
-                block: block,
-                testCodes: "38b, 40b",
+                shelf: block.shelf,
+                currentShelfCodes: "38b, 40b",
               );
               //
               forceReloadItem = false;
@@ -315,8 +316,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 2.1.1.1.1",
-                block: block,
-                testCodes: "",
+                shelf: block.shelf,
+                currentShelfCodes: "",
               );
               // @@TODO@@ Test.
               forceReloadItem = true;
@@ -328,8 +329,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 2.1.1.1.2",
-                block: block,
-                testCodes: "36b, 41a",
+                shelf: block.shelf,
+                currentShelfCodes: "36b, 41a",
               );
               //
               forceReloadItem = true;
@@ -346,8 +347,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 2.1.1.2.1",
-                block: block,
-                testCodes: "36b, 41a",
+                shelf: block.shelf,
+                currentShelfCodes: "36b, 41a",
               );
               //
               forceReloadItem = true;
@@ -359,8 +360,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 2.1.1.2.2",
-                block: block,
-                testCodes: "36b, 41a",
+                shelf: block.shelf,
+                currentShelfCodes: "36b, 41a",
               );
               //
               forceReloadItem = true;
@@ -382,8 +383,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 2.1.2.1.1",
-                block: block,
-                testCodes: "",
+                shelf: block.shelf,
+                currentShelfCodes: "",
               );
               // @@TODO@@ Test.
               forceReloadItem = true;
@@ -395,8 +396,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 2.1.2.1.2",
-                block: block,
-                testCodes: "",
+                shelf: block.shelf,
+                currentShelfCodes: "",
               );
               // @@TODO@@ Test.
               forceReloadItem = true;
@@ -413,8 +414,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 2.1.2.2.1",
-                block: block,
-                testCodes: "",
+                shelf: block.shelf,
+                currentShelfCodes: "",
               );
               // @@TODO@@ Test.
               // Ready selected as current (No need to refresh):
@@ -425,8 +426,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 2.1.2.2.2",
-                block: block,
-                testCodes: "",
+                shelf: block.shelf,
+                currentShelfCodes: "",
               );
               // @@TODO@@ Test.
               // Ready selected as current (No need to refresh):
@@ -454,8 +455,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 2.2.1.1.1",
-                block: block,
-                testCodes: "39b, 40a, 40b",
+                shelf: block.shelf,
+                currentShelfCodes: "39b, 40a, 40b",
               );
               //
               forceReloadItem = true;
@@ -465,8 +466,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 2.2.1.1.2",
-                block: block,
-                testCodes: "39b",
+                shelf: block.shelf,
+                currentShelfCodes: "39b",
               );
               //
               forceReloadItem = true;
@@ -483,8 +484,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 2.2.1.2.1",
-                block: block,
-                testCodes: "39a",
+                shelf: block.shelf,
+                currentShelfCodes: "39a",
               );
               //
               forceReloadItem = true;
@@ -496,8 +497,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 2.2.1.2.2",
-                block: block,
-                testCodes: "",
+                shelf: block.shelf,
+                currentShelfCodes: "",
               );
               // @@TODO@@ Test.
               forceReloadItem = true;
@@ -519,8 +520,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 2.2.2.1.1",
-                block: block,
-                testCodes: "40a",
+                shelf: block.shelf,
+                currentShelfCodes: "40a",
               );
               //
               forceReloadItem = true;
@@ -530,8 +531,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 2.2.2.1.2",
-                block: block,
-                testCodes: "40b",
+                shelf: block.shelf,
+                currentShelfCodes: "40b",
               );
               //
               forceReloadItem = true;
@@ -548,8 +549,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 2.2.2.2.1",
-                block: block,
-                testCodes: "40a, 40b",
+                shelf: block.shelf,
+                currentShelfCodes: "40a, 40b",
               );
               //
               forceReloadItem = false;
@@ -559,8 +560,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 2.2.2.2.2",
-                block: block,
-                testCodes: "40b",
+                shelf: block.shelf,
+                currentShelfCodes: "40b",
               );
               //
               forceReloadItem = false;
@@ -592,8 +593,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 3.1.1.1.1",
-                block: block,
-                testCodes: "",
+                shelf: block.shelf,
+                currentShelfCodes: "",
               );
               // @@TODO@@ Test.
               forceReloadItem = true;
@@ -603,8 +604,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 3.1.1.1.2",
-                block: block,
-                testCodes: "36a, 41a",
+                shelf: block.shelf,
+                currentShelfCodes: "36a, 41a",
               );
               //
               forceReloadItem = true;
@@ -621,8 +622,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 3.1.1.2.1",
-                block: block,
-                testCodes: "36a, 41a",
+                shelf: block.shelf,
+                currentShelfCodes: "36a, 41a",
               );
               //
               forceReloadItem = true;
@@ -632,8 +633,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 3.1.1.2.2",
-                block: block,
-                testCodes: "36a, 41a",
+                shelf: block.shelf,
+                currentShelfCodes: "36a, 41a",
               );
               //
               forceReloadItem = true;
@@ -655,8 +656,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 3.1.2.1.1",
-                block: block,
-                testCodes: "",
+                shelf: block.shelf,
+                currentShelfCodes: "",
               );
               // @@TODO@@ Test.
               forceReloadItem = true;
@@ -666,8 +667,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 3.1.2.1.2",
-                block: block,
-                testCodes: "",
+                shelf: block.shelf,
+                currentShelfCodes: "",
               );
               // @@TODO@@ Test.
               forceReloadItem = true;
@@ -684,8 +685,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 3.1.2.2.1",
-                block: block,
-                testCodes: "",
+                shelf: block.shelf,
+                currentShelfCodes: "",
               );
               // @@TODO@@ Test.
               forceReloadItem = true;
@@ -695,8 +696,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 3.1.2.2.2",
-                block: block,
-                testCodes: "",
+                shelf: block.shelf,
+                currentShelfCodes: "",
               );
               // @@TODO@@ Test.
               forceReloadItem = true;
@@ -723,8 +724,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 3.2.1.1.1",
-                block: block,
-                testCodes: "39b, 40a, 40b",
+                shelf: block.shelf,
+                currentShelfCodes: "39b, 40a, 40b",
               );
               //
               forceReloadItem = true;
@@ -734,8 +735,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 3.2.1.1.2",
-                block: block,
-                testCodes: "39b, 40b",
+                shelf: block.shelf,
+                currentShelfCodes: "39b, 40b",
               );
               //
               forceReloadItem = true;
@@ -752,8 +753,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 3.2.1.2.1",
-                block: block,
-                testCodes: "39a",
+                shelf: block.shelf,
+                currentShelfCodes: "39a",
               );
               //
               forceReloadItem = true;
@@ -763,8 +764,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 3.2.1.2.2",
-                block: block,
-                testCodes: "",
+                shelf: block.shelf,
+                currentShelfCodes: "",
               );
               // @@TODO@@ Test.
               forceReloadItem = true;
@@ -786,8 +787,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 3.2.2.1.1",
-                block: block,
-                testCodes: "40a",
+                shelf: block.shelf,
+                currentShelfCodes: "40a",
               );
               //
               forceReloadItem = true;
@@ -797,8 +798,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 3.2.2.1.2",
-                block: block,
-                testCodes: "40b",
+                shelf: block.shelf,
+                currentShelfCodes: "40b",
               );
               //
               forceReloadItem = true;
@@ -816,8 +817,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 3.2.2.2.1",
-                block: block,
-                testCodes: "40a, 40b",
+                shelf: block.shelf,
+                currentShelfCodes: "40a, 40b",
               );
               // Ready selected as current (No need to refresh):
               //
@@ -828,8 +829,8 @@ _ForceReloadItemState _calculateBlockState({
               // Debug:
               _addDebugForceReload(
                 debugCode: "ITM 3.2.2.2.2",
-                block: block,
-                testCodes: "40b",
+                shelf: block.shelf,
+                currentShelfCodes: "40b",
               );
               // Ready selected as current (No need to refresh):
               //

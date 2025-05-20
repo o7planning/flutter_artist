@@ -1,71 +1,30 @@
 part of '../../flutter_artist.dart';
 
 class ForceReloadDebug {
-  String testCodes;
-  final SplayTreeSet<String> testCodeSet = SplayTreeSet<String>();
+  String currentShelfCodes;
+  final SplayTreeSet<String> shelfCodeSet = SplayTreeSet<String>();
 
-  ForceReloadDebug(this.testCodes);
+  ForceReloadDebug(this.currentShelfCodes);
 
-  void addTestCode(String testCode) {
-    testCodeSet.add(testCode);
+  void addShelfCode(String shelfCode) {
+    shelfCodeSet.add(shelfCode);
   }
 
-  String toTestCodes() {
-    return testCodeSet.join(", ");
+  String toShelfCodes() {
+    return shelfCodeSet.join(", ");
   }
 }
 
 final Map<String, ForceReloadDebug> forceReloadMap = {};
 
 void initDebugForceReloadMap() {
-  forceReloadMap["ITM 1.1.1.1.1"] = ForceReloadDebug("");
-  forceReloadMap["ITM 1.1.1.1.2"] = ForceReloadDebug("");
-  forceReloadMap["ITM 1.1.1.2.1"] = ForceReloadDebug("");
-  forceReloadMap["ITM 1.1.1.2.2"] = ForceReloadDebug("");
-  forceReloadMap["ITM 1.1.2.1.1"] = ForceReloadDebug("");
-  forceReloadMap["ITM 1.1.2.1.2"] = ForceReloadDebug("");
-  forceReloadMap["ITM 1.1.2.2.1"] = ForceReloadDebug("");
-  forceReloadMap["ITM 1.1.2.2.2"] = ForceReloadDebug("");
-  forceReloadMap["ITM 1.2.1.1.1"] = ForceReloadDebug("");
-  forceReloadMap["ITM 1.2.1.1.2"] = ForceReloadDebug("");
-  forceReloadMap["ITM 1.2.1.2.1"] = ForceReloadDebug("");
-  forceReloadMap["ITM 1.2.1.2.2"] = ForceReloadDebug("");
-  forceReloadMap["ITM 1.2.2.1.1"] = ForceReloadDebug("");
-  forceReloadMap["ITM 1.2.2.1.2"] = ForceReloadDebug("");
-  forceReloadMap["ITM 1.2.2.2.1"] = ForceReloadDebug("");
-  forceReloadMap["ITM 1.2.2.2.2"] = ForceReloadDebug("");
-  forceReloadMap["ITM 2.1.1.1.1"] = ForceReloadDebug("");
-  forceReloadMap["ITM 2.1.1.1.2"] = ForceReloadDebug("");
-  forceReloadMap["ITM 2.1.1.2.1"] = ForceReloadDebug("");
-  forceReloadMap["ITM 2.1.1.2.2"] = ForceReloadDebug("");
-  forceReloadMap["ITM 2.1.2.1.1"] = ForceReloadDebug("");
-  forceReloadMap["ITM 2.1.2.1.2"] = ForceReloadDebug("");
-  forceReloadMap["ITM 2.1.2.2.1"] = ForceReloadDebug("");
-  forceReloadMap["ITM 2.1.2.2.2"] = ForceReloadDebug("");
-  forceReloadMap["ITM 2.2.1.1.1"] = ForceReloadDebug("");
-  forceReloadMap["ITM 2.2.1.1.2"] = ForceReloadDebug("");
-  forceReloadMap["ITM 2.2.1.2.1"] = ForceReloadDebug("");
-  forceReloadMap["ITM 2.2.1.2.2"] = ForceReloadDebug("");
-  forceReloadMap["ITM 2.2.2.1.1"] = ForceReloadDebug("");
-  forceReloadMap["ITM 2.2.2.1.2"] = ForceReloadDebug("");
-  forceReloadMap["ITM 2.2.2.2.1"] = ForceReloadDebug("");
-  forceReloadMap["ITM 2.2.2.2.2"] = ForceReloadDebug("");
-  forceReloadMap["ITM 3.1.1.1.1"] = ForceReloadDebug("");
-  forceReloadMap["ITM 3.1.1.1.2"] = ForceReloadDebug("");
-  forceReloadMap["ITM 3.1.1.2.1"] = ForceReloadDebug("");
-  forceReloadMap["ITM 3.1.1.2.2"] = ForceReloadDebug("");
-  forceReloadMap["ITM 3.1.2.1.1"] = ForceReloadDebug("");
-  forceReloadMap["ITM 3.1.2.1.2"] = ForceReloadDebug("");
-  forceReloadMap["ITM 3.1.2.2.1"] = ForceReloadDebug("");
-  forceReloadMap["ITM 3.1.2.2.2"] = ForceReloadDebug("");
-  forceReloadMap["ITM 3.2.1.1.1"] = ForceReloadDebug("");
-  forceReloadMap["ITM 3.2.1.1.2"] = ForceReloadDebug("");
-  forceReloadMap["ITM 3.2.1.2.1"] = ForceReloadDebug("");
-  forceReloadMap["ITM 3.2.1.2.2"] = ForceReloadDebug("");
-  forceReloadMap["ITM 3.2.2.1.1"] = ForceReloadDebug("");
-  forceReloadMap["ITM 3.2.2.1.2"] = ForceReloadDebug("");
-  forceReloadMap["ITM 3.2.2.2.1"] = ForceReloadDebug("");
-  forceReloadMap["ITM 3.2.2.2.2"] = ForceReloadDebug("");
+  List<String> testCodes = [
+
+  ];
+  //
+  for (String testCode in testCodes) {
+    forceReloadMap[testCode] = ForceReloadDebug("");
+  }
 }
 
 void printDebugForceReloadMap() {
@@ -75,8 +34,8 @@ void printDebugForceReloadMap() {
   int i = 1;
   for (String key in forceReloadMap.keys) {
     ForceReloadDebug debug = forceReloadMap[key]!;
-    String newTestCodes = debug.toTestCodes();
-    bool changed = debug.testCodes != newTestCodes;
+    String newTestCodes = debug.toShelfCodes();
+    bool changed = debug.currentShelfCodes != newTestCodes;
     if (!changed && newTestCodes.isNotEmpty) {
       print("${i.toString().padLeft(2, '0')} KEY: $key - $newTestCodes");
       i++;
@@ -87,39 +46,34 @@ void printDebugForceReloadMap() {
   int j = 1;
   for (String key in forceReloadMap.keys) {
     ForceReloadDebug debug = forceReloadMap[key]!;
-    String newTestCodes = debug.toTestCodes();
-    bool changed = debug.testCodes != newTestCodes;
+    String newTestCodes = debug.toShelfCodes();
+    bool changed = debug.currentShelfCodes != newTestCodes;
     if (changed && newTestCodes.isNotEmpty) {
       print(
           "${j.toString().padLeft(2, '0')} KEY: $key - $newTestCodes ${changed ? '***' : ''}");
       j++;
     }
   }
-  //
+  // ALL KEYS:
   print("\n");
   int k = 1;
-  for (String key in forceReloadMap.keys) {
-    ForceReloadDebug debug = forceReloadMap[key]!;
-    String newTestCodes = debug.toTestCodes();
-    if (newTestCodes.isEmpty) {
-      print("${k.toString().padLeft(2, '0')} EMPTY: $key");
-      k++;
-    }
-  }
+  Iterable<String> allKeys = forceReloadMap.keys;
+  String s = allKeys.map((key) => '"$key"').join(", ");
+  print(s);
   print(" **************************************************************** ");
   print(" **************************************************************** ");
 }
 
 void _addDebugForceReload({
   required String debugCode,
-  required String testCodes, // "20a, 30b"
-  required Block block,
+  required String currentShelfCodes, // "20a, 30b"
+  required Shelf shelf,
 }) {
-  String clsName = getClassName(block);
-  if (!clsName.endsWith("Block")) {
+  String clsName = getClassName(shelf);
+  if (!clsName.endsWith("Shelf")) {
     return;
   }
-  clsName = clsName.substring(0, clsName.length - "Block".length);
+  clsName = clsName.substring(0, clsName.length - "Shelf".length);
   if (clsName.length < 3) {
     return;
   }
@@ -132,9 +86,9 @@ void _addDebugForceReload({
     if (debug == null) {
       return;
     }
-    // testCodes = "20a, 30b".
-    debug.testCodes = testCodes;
-    debug.addTestCode(testCode);
+    // currentShelfCodes = "20a, 30b".
+    debug.currentShelfCodes = currentShelfCodes;
+    debug.addShelfCode(testCode);
   }
 }
 
