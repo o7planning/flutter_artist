@@ -848,7 +848,6 @@ _ForceReloadItemState _calculateBlockState({
                 currentShelfCodes: "40a, 40b",
               );
               // Ready selected as current (No need to refresh):
-              //
               forceReloadItem = false;
             }
             // !hasXActiveUI
@@ -862,7 +861,6 @@ _ForceReloadItemState _calculateBlockState({
                 currentShelfCodes: "40b",
               );
               // Ready selected as current (No need to refresh):
-              //
               forceReloadItem = false;
             }
           }
