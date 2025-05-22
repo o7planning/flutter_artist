@@ -1,10 +1,10 @@
 part of '../../flutter_artist.dart';
 
-class _BlockItemsViewBuilder extends _RefreshableWidget {
+class BlockItemsViewBuilder extends _RefreshableWidget {
   final Block block;
   final Widget Function() build;
 
-  const _BlockItemsViewBuilder({
+  const BlockItemsViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
@@ -19,7 +19,7 @@ class _BlockItemsViewBuilder extends _RefreshableWidget {
 }
 
 class _BlockItemsViewBuilderState
-    extends _RefreshableWidgetState<_BlockItemsViewBuilder> {
+    extends _RefreshableWidgetState<BlockItemsViewBuilder> {
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);

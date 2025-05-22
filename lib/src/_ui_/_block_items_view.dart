@@ -11,7 +11,7 @@ abstract class BlockItemsView<BLOCK extends Block> extends StatelessWidget {
   @override
   @nonVirtual
   Widget build(BuildContext context) {
-    return _BlockItemsViewBuilder(
+    return BlockItemsViewBuilder(
       ownerClassInstance: this,
       description: '',
       block: block,
