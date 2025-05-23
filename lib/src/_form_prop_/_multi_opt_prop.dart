@@ -1,6 +1,6 @@
 part of '../../flutter_artist.dart';
 
-class MultiOptProp extends Prop {
+class MultiOptProp<V> extends Prop<V> {
   late final MultiOptProp? parent;
   final MultiOptPropReload reloadCondition;
 

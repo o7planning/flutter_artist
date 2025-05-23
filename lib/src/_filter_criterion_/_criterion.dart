@@ -1,28 +1,28 @@
 part of '../../flutter_artist.dart';
 
-abstract class Criterion {
+abstract class Criterion<V> {
   late final FilterCriteriaStructure _structure;
 
   //
 
   final String criterionName;
 
-  dynamic candidateUpdateValue;
+  V? candidateUpdateValue;
   bool _valueUpdated = false;
   bool _markTempDirty = false;
 
   //
 
-  dynamic _tempCurrentValue;
+  V? _tempCurrentValue;
   XData? _tempCurrentXData;
 
-  dynamic _tempInitialValue;
+  V? _tempInitialValue;
   XData? _tempInitialXData;
 
-  dynamic _currentValue;
+  V? _currentValue;
   XData? _currentXData;
 
-  dynamic _initialValue;
+  V? _initialValue;
   XData? _initialXData;
 
   //

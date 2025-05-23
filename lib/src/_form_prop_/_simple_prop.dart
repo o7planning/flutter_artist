@@ -1,6 +1,6 @@
 part of '../../flutter_artist.dart';
 
-class SimpleProp extends Prop {
+class SimpleProp<V> extends Prop<V> {
   SimpleProp({
     required super.propName,
   });

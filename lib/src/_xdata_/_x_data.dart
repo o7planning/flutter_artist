@@ -3,8 +3,6 @@ part of '../../flutter_artist.dart';
 abstract class XData<ID, ITEM, DATA> {
   final ID Function(ITEM item) _getItemId;
 
-  // final List<ITEM> _notFoundItems = [];
-
   final Map<ID, ITEM> _notFoundItemsMap = {};
 
   List<ITEM> get notFoundItems => [..._notFoundItemsMap.values];

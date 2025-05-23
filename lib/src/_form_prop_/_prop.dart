@@ -1,26 +1,26 @@
 part of '../../flutter_artist.dart';
 
-abstract class Prop {
+abstract class Prop<V> {
   late final FormPropsStructure _structure;
 
   //
   final String propName;
-  dynamic _candidateUpdateValue;
+  V? _candidateUpdateValue;
   bool _valueUpdated = false;
   bool _markTempDirty = false;
 
   //
 
-  dynamic _tempCurrentValue;
+  V? _tempCurrentValue;
   XData? _tempCurrentXData;
 
-  dynamic _tempInitialValue;
+  V? _tempInitialValue;
   XData? _tempInitialXData;
 
-  dynamic _currentValue;
+  V? _currentValue;
   XData? _currentXData;
 
-  dynamic _initialValue;
+  V? _initialValue;
   XData? _initialXData;
 
   Prop({

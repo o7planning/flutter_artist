@@ -1,6 +1,6 @@
 part of '../../flutter_artist.dart';
 
-class SimpleCriterion extends Criterion {
+class SimpleCriterion<V> extends Criterion<V> {
   SimpleCriterion({
     required super.criterionName,
   });
@@ -24,14 +24,4 @@ class SimpleCriterion extends Criterion {
       _valueUpdated = true;
     }
   }
-
-  // @override
-  // void _resetForNewTransaction() {
-  //   // Do nothing.
-  // }
-  //
-  // @override
-  // void _applyTempDataToReal() {
-  //   // Do nothing.
-  // }
 }
