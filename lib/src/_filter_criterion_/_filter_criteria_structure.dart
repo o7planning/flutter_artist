@@ -4,30 +4,41 @@ class FilterCriteriaStructure {
   final Map<String, Criterion> _allCriteriaMap = {};
   final List<MultiOptCriterion> _rootOptCriteria;
   final List<SimpleCriterion> _simpleCriteria = [];
+  final List<CalculatedCriterion> _calculatedCriteria = [];
 
   late final FilterModel filterModel;
   DataState _filterDataState = DataState.pending;
 
   FilterCriteriaStructure({
-    required List<String> simpleCriteria,
+    required List<SimpleCriterion> simpleCriteria,
     required List<MultiOptCriterion> multiOptCriteria,
+    List<CalculatedCriterion> calculatedCriteria = const [],
   }) : _rootOptCriteria = [...multiOptCriteria] {
-    final List<String> simpleCriterionList = [...simpleCriteria];
-    //
     for (MultiOptCriterion rootOptCriterion in multiOptCriteria) {
       __standardizeCascade(rootOptCriterion, null);
     }
+    for (SimpleCriterion sc in simpleCriteria) {
+      if (_allCriteriaMap.containsKey(sc.criterionName)) {
+        throw _duplicateCriterionException(sc.criterionName);
+      }
+      __initSimpleCriterion(
+        newSimpleCriterion: sc,
+        markTempDirty: false,
+      );
+    }
+    for (CalculatedCriterion cc in calculatedCriteria) {
+      if (_allCriteriaMap.containsKey(cc.criterionName)) {
+        throw _duplicateCriterionException(cc.criterionName);
+      }
+      __initCalculatedCriterion(
+        newCalculatedCriterion: cc,
+        markTempDirty: false,
+      );
+    }
     for (Criterion criterion in _allCriteriaMap.values) {
-      simpleCriterionList.remove(criterion.criterionName);
       if (criterion is MultiOptCriterion) {
         criterion._checkCycleError();
       }
-    }
-    for (String criterionName in simpleCriterionList) {
-      _createAndAddNewSimpleCriterion(
-        criterionName: criterionName,
-        markTempDirty: false,
-      );
     }
   }
 
@@ -36,6 +47,11 @@ class FilterCriteriaStructure {
     MultiOptCriterion? parent,
   ) {
     multiOptCriterion.parent = parent;
+    _allCriteriaMap[multiOptCriterion.criterionName] = multiOptCriterion;
+    //
+    if (_allCriteriaMap.containsKey(multiOptCriterion.criterionName)) {
+      throw _duplicateCriterionException(multiOptCriterion.criterionName);
+    }
     _allCriteriaMap[multiOptCriterion.criterionName] = multiOptCriterion;
     //
     for (MultiOptCriterion child in multiOptCriterion.children) {
@@ -84,6 +100,13 @@ class FilterCriteriaStructure {
       criterion._currentValue = criterion._tempCurrentValue;
       criterion._currentXData = criterion._tempCurrentXData;
     }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  AppException _duplicateCriterionException(String name) {
+    throw AppException(message: "Duplicate Filter Criterion $name");
   }
 
   // ***************************************************************************
@@ -314,9 +337,34 @@ class FilterCriteriaStructure {
     SimpleCriterion? newSimpleCriterion = SimpleCriterion(
       criterionName: criterionName,
     );
+    __initSimpleCriterion(
+      newSimpleCriterion: newSimpleCriterion,
+      markTempDirty: markTempDirty,
+    );
+  }
+
+  void __initSimpleCriterion({
+    required SimpleCriterion newSimpleCriterion,
+    required bool markTempDirty,
+  }) {
+    newSimpleCriterion._structure = this;
     newSimpleCriterion._markTempDirty = markTempDirty;
-    _allCriteriaMap[criterionName] = newSimpleCriterion;
+    _allCriteriaMap[newSimpleCriterion.criterionName] = newSimpleCriterion;
     _simpleCriteria.add(newSimpleCriterion);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __initCalculatedCriterion({
+    required CalculatedCriterion newCalculatedCriterion,
+    required bool markTempDirty,
+  }) {
+    newCalculatedCriterion._structure = this;
+    newCalculatedCriterion._markTempDirty = markTempDirty;
+    _allCriteriaMap[newCalculatedCriterion.criterionName] =
+        newCalculatedCriterion;
+    _calculatedCriteria.add(newCalculatedCriterion);
   }
 
   // ***************************************************************************

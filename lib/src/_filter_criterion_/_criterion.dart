@@ -1,6 +1,10 @@
 part of '../../flutter_artist.dart';
 
 abstract class Criterion {
+  late final FilterCriteriaStructure _structure;
+
+  //
+
   final String criterionName;
 
   dynamic candidateUpdateValue;

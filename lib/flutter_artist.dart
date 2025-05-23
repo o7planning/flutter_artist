@@ -349,6 +349,8 @@ part 'src/_exception_/_fatal_app_exception.dart';
 
 part 'src/_fa_.dart';
 
+part 'src/_filter_criterion_/_calculated_criterion.dart';
+
 part 'src/_filter_criterion_/_criterion.dart';
 
 part 'src/_filter_criterion_/_filter_criteria_structure.dart';
@@ -362,6 +364,8 @@ part 'src/_form_prop_/_form_props_structure.dart';
 part 'src/_form_prop_/_multi_opt_prop.dart';
 
 part 'src/_form_prop_/_prop.dart';
+
+part 'src/_form_prop_/_calculated_prop.dart';
 
 part 'src/_form_prop_/_simple_prop.dart';
 

@@ -4,6 +4,7 @@ class FormPropsStructure {
   final Map<String, Prop> _allPropMap = {};
   final List<MultiOptProp> _rootOptProps;
   final List<SimpleProp> _simpleProps = [];
+  final List<CalculatedProp> _calculatedProps = [];
 
   bool __manualDirty = false;
 
@@ -28,25 +29,55 @@ class FormPropsStructure {
   bool get isNew => _formMode == FormMode.creation;
 
   FormPropsStructure({
-    required List<String> simpleProps,
+    required List<SimpleProp> simpleProps,
     required List<MultiOptProp> multiOptProps,
+    List<CalculatedProp> calculatedProps = const [],
   }) : _rootOptProps = [...multiOptProps] {
-    final List<String> simplePropNameList = [...simpleProps];
-    //
     for (MultiOptProp rootOptProp in multiOptProps) {
       __standardizeCascade(rootOptProp, null);
     }
+    for (SimpleProp sp in simpleProps) {
+      if (_allPropMap.containsKey(sp.propName)) {
+        throw _duplicatePropException(sp.propName);
+      }
+      __initSimpleProp(
+        newSimpleProp: sp,
+        markTempDirty: false,
+      );
+    }
+    for (CalculatedProp cp in calculatedProps) {
+      if (_allPropMap.containsKey(cp.propName)) {
+        throw _duplicatePropException(cp.propName);
+      }
+      __initCalculatedProp(
+        newCalculatedProp: cp,
+        markTempDirty: false,
+      );
+    }
     for (Prop prop in _allPropMap.values) {
-      simplePropNameList.remove(prop.propName);
       if (prop is MultiOptProp) {
         prop._checkCycleError();
       }
     }
-    for (String propName in simplePropNameList) {
-      _createAndAddNewSimpleProp(
-        propName: propName,
-        markTempDirty: false,
-      );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __standardizeCascade(
+    MultiOptProp optProp,
+    MultiOptProp? parent,
+  ) {
+    optProp.parent = parent;
+    optProp._structure = this;
+    //
+    if (_allPropMap.containsKey(optProp.propName)) {
+      throw _duplicatePropException(optProp.propName);
+    }
+    _allPropMap[optProp.propName] = optProp;
+    //
+    for (MultiOptProp child in optProp._children) {
+      __standardizeCascade(child, optProp);
     }
   }
 
@@ -225,17 +256,8 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void __standardizeCascade(
-    MultiOptProp optProp,
-    MultiOptProp? parent,
-  ) {
-    optProp.parent = parent;
-    optProp._structure = this;
-    _allPropMap[optProp.propName] = optProp;
-    //
-    for (MultiOptProp child in optProp._children) {
-      __standardizeCascade(child, optProp);
-    }
+  AppException _duplicatePropException(String name) {
+    throw AppException(message: "Duplicate Form Prop $name");
   }
 
   // ***************************************************************************
@@ -458,7 +480,7 @@ class FormPropsStructure {
             ****************************************************************************************************
             """);
         //
-        _createAndAddNewSimpleProp(
+        __createAndAddNewSimpleProp(
           propName: propName,
           markTempDirty: false,
         );
@@ -469,7 +491,7 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _createAndAddNewSimpleProp({
+  void __createAndAddNewSimpleProp({
     required String propName,
     required bool markTempDirty,
   }) {
@@ -479,10 +501,33 @@ class FormPropsStructure {
     SimpleProp newSimpleProp = SimpleProp(
       propName: propName,
     );
+    __initSimpleProp(
+      newSimpleProp: newSimpleProp,
+      markTempDirty: markTempDirty,
+    );
+  }
+
+  void __initSimpleProp({
+    required SimpleProp newSimpleProp,
+    required bool markTempDirty,
+  }) {
     newSimpleProp._structure = this;
     newSimpleProp._markTempDirty = markTempDirty;
-    _allPropMap[propName] = newSimpleProp;
+    _allPropMap[newSimpleProp.propName] = newSimpleProp;
     _simpleProps.add(newSimpleProp);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __initCalculatedProp({
+    required CalculatedProp newCalculatedProp,
+    required bool markTempDirty,
+  }) {
+    newCalculatedProp._structure = this;
+    newCalculatedProp._markTempDirty = markTempDirty;
+    _allPropMap[newCalculatedProp.propName] = newCalculatedProp;
+    _calculatedProps.add(newCalculatedProp);
   }
 
   // ***************************************************************************

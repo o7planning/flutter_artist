@@ -5,6 +5,14 @@ class SimpleProp extends Prop {
     required super.propName,
   });
 
+  static List<SimpleProp> listFromNames(List<String> propNames) {
+    return propNames
+        .map(
+          (name) => SimpleProp(propName: name),
+        )
+        .toList();
+  }
+
   void _updateTempValue({
     required Map<String, dynamic> updateValues,
   }) {

@@ -5,6 +5,14 @@ class SimpleCriterion extends Criterion {
     required super.criterionName,
   });
 
+  static List<SimpleCriterion> listFromNames(List<String> criterionNames) {
+    return criterionNames
+        .map(
+          (name) => SimpleCriterion(criterionName: name),
+        )
+        .toList();
+  }
+
   void _updateTempValue({
     required Map<String, dynamic> updateValues,
   }) {
@@ -17,13 +25,13 @@ class SimpleCriterion extends Criterion {
     }
   }
 
-  @override
-  void _resetForNewTransaction() {
-    // Do nothing.
-  }
-
-  @override
-  void _applyTempDataToReal() {
-    // Do nothing.
-  }
+  // @override
+  // void _resetForNewTransaction() {
+  //   // Do nothing.
+  // }
+  //
+  // @override
+  // void _applyTempDataToReal() {
+  //   // Do nothing.
+  // }
 }
