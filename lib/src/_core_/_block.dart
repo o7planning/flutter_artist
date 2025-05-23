@@ -3640,100 +3640,100 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @RootMethodAnnotation()
-  Future<bool> deleteItemById({
-    required ID itemId,
-    required bool ignoreIfItemNotInList,
-  }) async {
-    FlutterArtist.codeFlowLogger._addMethodCall(
-      isLibCode: true,
-      navigate: null,
-      ownerClassInstance: this,
-      methodName: "deleteItemById",
-      parameters: {
-        "itemId": itemId,
-      },
-    );
-    //
-    ITEM? item = findItemById(itemId);
-    //
-    if (item == null) {
-      if (ignoreIfItemNotInList) {
-        showErrorSnackBar(
-          message: "Ignore deletion because this item is not in the list.",
-          errorDetails: ["ignoreIfItemNotInList: true"],
-        );
-        return false;
-      }
-      ApiResult<ITEM_DETAIL> result;
-      try {
-        result = await FlutterArtist.executeTask(
-          asyncFunction: () async {
-            return await callApiFindItemById(itemId: itemId);
-          },
-        );
-      } catch (e, stackTrace) {
-        _handleError(
-          shelf: shelf,
-          methodName: "callApiFindItemById",
-          error: e,
-          stackTrace: stackTrace,
-          showSnackBar: true,
-        );
-        //
-        return false;
-      }
-      //
-      if (result.isError()) {
-        _handleRestError(
-          shelf: shelf,
-          methodName: "callApiFindItemById",
-          message: result.errorMessage!,
-          errorDetails: result.errorDetails,
-          showSnackBar: true,
-        );
-        return false;
-      }
-      ITEM_DETAIL? itemDetail = result.data;
-      if (itemDetail == null) {
-        return true;
-      }
-      try {
-        item = this.convertItemDetailToItem(itemDetail: itemDetail);
-      } catch (e, stackTrace) {
-        _handleError(
-          shelf: shelf,
-          methodName: "convertItemDetailToItem",
-          error: e,
-          stackTrace: stackTrace,
-          showSnackBar: true,
-        );
-        //
-        return false;
-      }
-    }
-    //
-    Actionable actionable = canDeleteItem(item: item);
-    if (!actionable.yes) {
-      shelf.showErrorSnackBar(
-        message: actionable.message!,
-        errorDetails: null,
-      );
-      return false;
-    }
-    ItemDeletionResult? result = await deleteItem(
-      item: item,
-      ignoreIfItemNotInList: ignoreIfItemNotInList,
-    );
-    return result == null ? false : result.success;
-
-    // bool confirm = await showConfirmDeleteDialog(details: getClassName(item));
-    // if (!confirm) {
-    //   return false;
-    // }
-    // return deleteIt
-    // return true;
-  }
+  // @RootMethodAnnotation()
+  // Future<bool> deleteItemById({
+  //   required ID itemId,
+  //   required bool ignoreIfItemNotInList,
+  // }) async {
+  //   FlutterArtist.codeFlowLogger._addMethodCall(
+  //     isLibCode: true,
+  //     navigate: null,
+  //     ownerClassInstance: this,
+  //     methodName: "deleteItemById",
+  //     parameters: {
+  //       "itemId": itemId,
+  //     },
+  //   );
+  //   //
+  //   ITEM? item = findItemById(itemId);
+  //   //
+  //   if (item == null) {
+  //     if (ignoreIfItemNotInList) {
+  //       showErrorSnackBar(
+  //         message: "Ignore deletion because this item is not in the list.",
+  //         errorDetails: ["ignoreIfItemNotInList: true"],
+  //       );
+  //       return false;
+  //     }
+  //     ApiResult<ITEM_DETAIL> result;
+  //     try {
+  //       result = await FlutterArtist.executeTask(
+  //         asyncFunction: () async {
+  //           return await callApiFindItemById(itemId: itemId);
+  //         },
+  //       );
+  //     } catch (e, stackTrace) {
+  //       _handleError(
+  //         shelf: shelf,
+  //         methodName: "callApiFindItemById",
+  //         error: e,
+  //         stackTrace: stackTrace,
+  //         showSnackBar: true,
+  //       );
+  //       //
+  //       return false;
+  //     }
+  //     //
+  //     if (result.isError()) {
+  //       _handleRestError(
+  //         shelf: shelf,
+  //         methodName: "callApiFindItemById",
+  //         message: result.errorMessage!,
+  //         errorDetails: result.errorDetails,
+  //         showSnackBar: true,
+  //       );
+  //       return false;
+  //     }
+  //     ITEM_DETAIL? itemDetail = result.data;
+  //     if (itemDetail == null) {
+  //       return true;
+  //     }
+  //     try {
+  //       item = this.convertItemDetailToItem(itemDetail: itemDetail);
+  //     } catch (e, stackTrace) {
+  //       _handleError(
+  //         shelf: shelf,
+  //         methodName: "convertItemDetailToItem",
+  //         error: e,
+  //         stackTrace: stackTrace,
+  //         showSnackBar: true,
+  //       );
+  //       //
+  //       return false;
+  //     }
+  //   }
+  //   //
+  //   Actionable actionable = canDeleteItem(item: item);
+  //   if (!actionable.yes) {
+  //     shelf.showErrorSnackBar(
+  //       message: actionable.message!,
+  //       errorDetails: null,
+  //     );
+  //     return false;
+  //   }
+  //   ItemDeletionResult? result = await deleteItem(
+  //     item: item,
+  //     ignoreIfItemNotInList: ignoreIfItemNotInList,
+  //   );
+  //   return result == null ? false : result.success;
+  //
+  //   // bool confirm = await showConfirmDeleteDialog(details: getClassName(item));
+  //   // if (!confirm) {
+  //   //   return false;
+  //   // }
+  //   // return deleteIt
+  //   // return true;
+  // }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -3862,10 +3862,6 @@ abstract class Block<
   // ---------------------------------------------------------------------------
 
   Future<ApiResult<ITEM_DETAIL>> callApiRefreshItem({required ITEM item});
-
-  // ---------------------------------------------------------------------------
-
-  Future<ApiResult<ITEM_DETAIL>> callApiFindItemById({required ID itemId});
 
   // ***************************************************************************
   // ****** UPDATE UI COMPONENTS ***********************************************
