@@ -157,8 +157,29 @@ abstract class FilterModel<
   // ***************************************************************************
 
   void __registerCriteriaStructure() {
-    _filterCriteriaStructure = registerCriteriaStructure();
-    _filterCriteriaStructure.filterModel = this;
+    try {
+      _filterCriteriaStructure = registerCriteriaStructure();
+      _filterCriteriaStructure.filterModel = this;
+    } on _DuplicateFilterCriterionException catch (e) {
+      String message =
+          "Duplicate criterion '${e.criterionName}' in ${getClassName(this)}";
+      throw _createFatalAppError(message);
+    } on _FilterCriterionCycleError catch (e) {
+      String message = '''
+         The parent-child relationship of several criteria forms a cycle.
+         ┌─────┐
+         |  ${e.criterionName1}
+         ↑     ↓
+         |  ${e.criterionName2}
+         └─────┘
+         Double check class ${getClassName(this)}.
+       ''';
+      throw _createFatalAppError(message);
+    } catch (e, stackTrace) {
+      print(stackTrace);
+      String message = "Unknown Error $e in ${getClassName(this)}";
+      throw _createFatalAppError(message);
+    }
   }
 
   // ***************************************************************************

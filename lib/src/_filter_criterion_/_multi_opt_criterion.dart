@@ -33,15 +33,10 @@ class MultiOptCriterion extends Criterion {
         return;
       }
       if (criterionNames.contains(p.criterionName)) {
-        String message = '''
-          The parent-child relationship of several criteria forms a cycle.
-          ┌─────┐
-          |  ${criterionNames.last}
-          ↑     ↓
-          |  ${p.criterionName}
-          └─────┘
-        ''';
-        throw message;
+        throw _FilterCriterionCycleError(
+          criterionName1: criterionNames.last,
+          criterionName2: p.criterionName,
+        );
       }
       criterionNames.add(p.criterionName);
       p = p.parent;

@@ -44,15 +44,10 @@ class MultiOptProp<V> extends Prop<V> {
         return;
       }
       if (propNames.contains(p.propName)) {
-        String message = '''
-          The parent-child relationship of several properties forms a cycle.
-          ┌─────┐
-          |  ${propNames.last}
-          ↑     ↓
-          |  ${p.propName}
-          └─────┘
-        ''';
-        throw message;
+        throw _FormPropCycleError(
+          propName1: propNames.last,
+          propName2: p.propName,
+        );
       }
       propNames.add(p.propName);
       p = p.parent;

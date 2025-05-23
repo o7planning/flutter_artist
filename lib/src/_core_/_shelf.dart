@@ -67,10 +67,7 @@ abstract class Shelf extends _XBase {
   String ___registerError(String message) {
     FlutterArtist.storage.__clear();
     //
-    return "\n*********************************************************************************************\n"
-        "$message"
-        "\n\n  *** You may need to restart the application after editing the code. ***"
-        "\n*********************************************************************************************\n";
+    return _createFatalAppError(message);
   }
 
   // ***************************************************************************

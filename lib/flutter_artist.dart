@@ -149,6 +149,8 @@ part 'src/_core_query_/_filter_model_opt.dart';
 
 part 'src/_core_query_/_form_model_opt.dart';
 
+part 'src/_core_/_app_utils.dart';
+
 part 'src/_core_state_/_force_reload_item_calculator.dart';
 
 part 'src/_core_state_/_force_reload_form_calculator.dart';

@@ -38,7 +38,9 @@ class FormPropsStructure {
     }
     for (SimpleProp sp in simpleProps) {
       if (_allPropMap.containsKey(sp.propName)) {
-        throw _duplicatePropException(sp.propName);
+        throw _DuplicateFormPropException(
+          propName: sp.propName,
+        );
       }
       __initSimpleProp(
         newSimpleProp: sp,
@@ -47,7 +49,9 @@ class FormPropsStructure {
     }
     for (CalculatedProp cp in calculatedProps) {
       if (_allPropMap.containsKey(cp.propName)) {
-        throw _duplicatePropException(cp.propName);
+        throw _DuplicateFormPropException(
+          propName: cp.propName,
+        );
       }
       __initCalculatedProp(
         newCalculatedProp: cp,
@@ -72,7 +76,9 @@ class FormPropsStructure {
     optProp._structure = this;
     //
     if (_allPropMap.containsKey(optProp.propName)) {
-      throw _duplicatePropException(optProp.propName);
+      throw _DuplicateFormPropException(
+        propName: optProp.propName,
+      );
     }
     _allPropMap[optProp.propName] = optProp;
     //
@@ -251,13 +257,6 @@ class FormPropsStructure {
 
   Map<String, dynamic> get currentFormData {
     return _allPropMap.map((k, v) => MapEntry(k, v._currentValue));
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  AppException _duplicatePropException(String name) {
-    throw AppException(message: "Duplicate Form Prop $name");
   }
 
   // ***************************************************************************

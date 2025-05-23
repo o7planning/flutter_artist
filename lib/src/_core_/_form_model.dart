@@ -324,8 +324,29 @@ abstract class FormModel<
   // ***************************************************************************
 
   void __registerPropsStructure() {
-    _formPropsStructure = registerPropsStructure();
-    _formPropsStructure.formModel = this;
+    try {
+      _formPropsStructure = registerPropsStructure();
+      _formPropsStructure.formModel = this;
+    } on _DuplicateFormPropException catch (e) {
+      String message =
+          "Duplicate prop '${e.propName}' in ${getClassName(this)}";
+      throw _createFatalAppError(message);
+    } on _FormPropCycleError catch (e) {
+      String message = '''
+         The parent-child relationship of several properties forms a cycle.
+         ┌─────┐
+         |  ${e.propName1}
+         ↑     ↓
+         |  ${e.propName2}
+         └─────┘
+         Double check class ${getClassName(this)}.
+       ''';
+      throw _createFatalAppError(message);
+    } catch (e, stackTrace) {
+      print(stackTrace);
+      String message = "Unknown Error $e in ${getClassName(this)}";
+      throw _createFatalAppError(message);
+    }
   }
 
   // ***************************************************************************
