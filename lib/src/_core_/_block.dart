@@ -1743,15 +1743,16 @@ abstract class Block<
         isLibCode: false,
         navigate: null,
         ownerClassInstance: this,
-        methodName: "callApiDeleteItem",
+        methodName: "callApiDeleteItemById",
         parameters: {
           "item": item,
         },
       );
       //
+      ID itemId = getItemId(item);
       __refreshDeletingState(isDeleting: true);
       //
-      result = await callApiDeleteItem(item: item);
+      result = await callApiDeleteItemById(itemId: itemId);
       // TODO: Chuyen di noi khac?
       FlutterArtist.storage._fireEventSourceChanged(
         eventBlock: this,
@@ -1760,7 +1761,7 @@ abstract class Block<
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: "callApiDeleteItem",
+        methodName: "callApiDeleteItemById",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -1775,7 +1776,7 @@ abstract class Block<
     if (result.errorMessage != null) {
       _handleRestError(
         shelf: shelf,
-        methodName: "callApiDeleteItem",
+        methodName: "callApiDeleteItemById",
         message: result.errorMessage!,
         errorDetails: result.errorDetails,
         showSnackBar: true,
@@ -3858,7 +3859,9 @@ abstract class Block<
 
   // ---------------------------------------------------------------------------
 
-  Future<ApiResult<void>> callApiDeleteItem({required ITEM item});
+  Future<ApiResult<void>> callApiDeleteItemById({
+    required ID itemId,
+  });
 
   // ---------------------------------------------------------------------------
 

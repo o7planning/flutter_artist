@@ -6,7 +6,7 @@ Block.callApiQuerySingleItem()
 
 Block.callApiCreateItem()
 Block.callApiUpdateItem()
-Block.callApiDeleteItem()
+Block.callApiDeleteItemById()
 
 Block.callApiLoadItemDetailById()
 
