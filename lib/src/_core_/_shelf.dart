@@ -49,7 +49,7 @@ abstract class Shelf extends _XBase {
 
   String get name => FlutterArtist.storage._getShelfName(runtimeType);
 
-  final Map<_RefreshableWidgetState, bool> _shelfWidgetStates = {};
+  final Map<_RefreshableWidgetState, bool> _refreshableNeutralViewStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -436,13 +436,13 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
 
   void updateAllRefreshableNeutralViews() {
-    __updateShelfWidgets(force: true);
+    __updateRefreshableNeutralViews(force: true);
   }
 
   void updateAllUIComponents() {
     try {
       print("|----> ${getClassName(this)}.updateAllUIComponents()");
-      __updateShelfWidgets();
+      __updateRefreshableNeutralViews();
       //
       for (FilterModel filterModel in _allFilterModels) {
         filterModel.updateAllUIComponents();
@@ -481,8 +481,8 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
   // ***************************************************************************
 
-  void __updateShelfWidgets({bool force = true}) {
-    for (_RefreshableWidgetState state in _shelfWidgetStates.keys) {
+  void __updateRefreshableNeutralViews({bool force = true}) {
+    for (_RefreshableWidgetState state in _refreshableNeutralViewStates.keys) {
       if (state.mounted) {
         state.refreshState(force: force);
       }
@@ -497,14 +497,14 @@ abstract class Shelf extends _XBase {
     required _RefreshableWidgetState widgetState,
     required bool isShowing,
   }) {
-    _shelfWidgetStates[widgetState] = isShowing;
+    _refreshableNeutralViewStates[widgetState] = isShowing;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   void _removeShelfWidgetState({required State widgetState}) {
-    _shelfWidgetStates.remove(widgetState);
+    _refreshableNeutralViewStates.remove(widgetState);
   }
 
   // ***************************************************************************
@@ -720,7 +720,7 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
 
   bool hasMountedUIComponent() {
-    bool hasMounted = _shelfWidgetStates.isNotEmpty;
+    bool hasMounted = _refreshableNeutralViewStates.isNotEmpty;
     if (hasMounted) {
       return true;
     }
