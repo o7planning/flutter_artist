@@ -1,7 +1,7 @@
 part of '../../flutter_artist.dart';
 
 class _FormModelAutoEnterFormFieldsTaskUnit<
-    EXTRA_FORM_INPUT extends ExtraFormInput> extends _TaskUnit {
+EXTRA_FORM_INPUT extends ExtraFormInput> extends _TaskUnit {
   _XFormModel xFormModel;
   EXTRA_FORM_INPUT extraFormInput;
 

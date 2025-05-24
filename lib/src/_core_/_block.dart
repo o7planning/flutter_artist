@@ -3861,6 +3861,7 @@ abstract class Block<
 
   // ---------------------------------------------------------------------------
 
+  // callApiLoadItemDetailById(ID id)
   Future<ApiResult<ITEM_DETAIL>> callApiRefreshItem({required ITEM item});
 
   // ***************************************************************************

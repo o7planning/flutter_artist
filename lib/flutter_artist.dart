@@ -485,7 +485,7 @@ part 'src/_ui_/_shelf_block_scalar_type_widget.dart';
 
 part 'src/_ui_/_shelf_info_view.dart';
 
-part 'src/_ui_/_shelves_safe_layout_area.dart';
+part 'src/_ui_/_refreshable_shelf_area.dart';
 
 part 'src/_ui_/_simple_accordion.dart';
 

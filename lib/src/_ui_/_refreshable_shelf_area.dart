@@ -1,10 +1,10 @@
 part of '../../flutter_artist.dart';
 
-class ShelvesSafeLayoutArea extends _RefreshableWidget {
+class RefreshableShelfArea extends _RefreshableWidget {
   final List<Shelf> shelves;
   final Widget Function() build;
 
-  const ShelvesSafeLayoutArea({
+  const RefreshableShelfArea({
     super.key,
     required super.ownerClassInstance,
     required super.description,
@@ -19,10 +19,10 @@ class ShelvesSafeLayoutArea extends _RefreshableWidget {
 }
 
 class _ShelvesSafeLayoutAreaState
-    extends _RefreshableWidgetState<ShelvesSafeLayoutArea> {
+    extends _RefreshableWidgetState<RefreshableShelfArea> {
   @override
   String getWidgetOwnerClassName() {
-    return "ShelvesSafeLayoutArea";
+    return "RefreshableShelfArea";
   }
 
   @override
