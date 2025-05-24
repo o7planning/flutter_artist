@@ -206,9 +206,9 @@ abstract class Block<
     return ascendingAncestorBlocks.reversed.toList();
   }
 
-  int __callApiRefreshItemCount = 0;
+  int __callApiLoadItemDetailByIdCount = 0;
 
-  int get callApiRefreshItemCount => __callApiRefreshItemCount;
+  int get callApiLoadItemDetailByIdCount => __callApiLoadItemDetailByIdCount;
 
   int __callApiQueryCount = 0;
 
@@ -1530,10 +1530,11 @@ abstract class Block<
           __refreshRefreshingCurrentItemState(
             isRefreshingCurrentItem: true,
           );
+          ID itemId = getItemId(candidateCurrentItem);
           //
-          __callApiRefreshItemCount++;
-          ApiResult<ITEM_DETAIL> result = await callApiRefreshItem(
-            item: candidateCurrentItem, // Not null.
+          __callApiLoadItemDetailByIdCount++;
+          ApiResult<ITEM_DETAIL> result = await callApiLoadItemDetailById(
+            itemId: itemId,
           );
           //
           if (result.isError()) {
@@ -1541,7 +1542,7 @@ abstract class Block<
             //
             _handleRestError(
               shelf: shelf,
-              methodName: "callApiRefreshItem",
+              methodName: "callApiLoadItemDetailById",
               message: result.errorMessage!,
               errorDetails: result.errorDetails,
               showSnackBar: true,
@@ -1556,7 +1557,7 @@ abstract class Block<
           //
           _handleError(
             shelf: shelf,
-            methodName: "callApiRefreshItem",
+            methodName: "callApiLoadItemDetailById",
             error: e,
             stackTrace: stackTrace,
             showSnackBar: true,
@@ -3861,8 +3862,9 @@ abstract class Block<
 
   // ---------------------------------------------------------------------------
 
-  // callApiLoadItemDetailById(ID id)
-  Future<ApiResult<ITEM_DETAIL>> callApiRefreshItem({required ITEM item});
+  Future<ApiResult<ITEM_DETAIL>> callApiLoadItemDetailById({
+    required ID itemId,
+  });
 
   // ***************************************************************************
   // ****** UPDATE UI COMPONENTS ***********************************************

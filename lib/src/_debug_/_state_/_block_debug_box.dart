@@ -106,7 +106,7 @@ class _BlockDebugBox extends _BaseDebugBox {
       if (options.showCallApiRefreshItemCount)
         IconLabelText(
           label: "Item Refresh Count: ",
-          text: block.callApiRefreshItemCount.toString(),
+          text: block.callApiLoadItemDetailByIdCount.toString(),
           labelStyle: labelStyle,
           textStyle: textStyle,
         ),

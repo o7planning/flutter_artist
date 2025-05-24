@@ -8,6 +8,6 @@ Block.callApiCreateItem()
 Block.callApiUpdateItem()
 Block.callApiDeleteItem()
 
-Block.callApiRefreshItem()
+Block.callApiLoadItemDetailById()
 
 Block.callApiFindItemById()
