@@ -435,7 +435,7 @@ abstract class Shelf extends _XBase {
   // ****** UPDATE UI COMPONENTS ***********************************************
   // ***************************************************************************
 
-  void updateAllRefreshableShelfAreas() { 
+  void updateAllRefreshableShelfAreas() {
     __updateShelfWidgets(force: true);
   }
 
