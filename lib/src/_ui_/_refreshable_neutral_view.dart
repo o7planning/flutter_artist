@@ -1,10 +1,10 @@
 part of '../../flutter_artist.dart';
 
-class RefreshableShelfArea extends _RefreshableWidget {
+class RefreshableNeutralView extends _RefreshableWidget {
   final List<Shelf> shelves;
   final Widget Function() build;
 
-  const RefreshableShelfArea({
+  const RefreshableNeutralView({
     super.key,
     required super.ownerClassInstance,
     required super.description,
@@ -14,15 +14,15 @@ class RefreshableShelfArea extends _RefreshableWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _ShelvesSafeLayoutAreaState();
+    return _RefreshableNeutralViewState();
   }
 }
 
-class _ShelvesSafeLayoutAreaState
-    extends _RefreshableWidgetState<RefreshableShelfArea> {
+class _RefreshableNeutralViewState
+    extends _RefreshableWidgetState<RefreshableNeutralView> {
   @override
   String getWidgetOwnerClassName() {
-    return "RefreshableShelfArea";
+    return "RefreshableNeutralView";
   }
 
   @override

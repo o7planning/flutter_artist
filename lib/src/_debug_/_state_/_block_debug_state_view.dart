@@ -26,7 +26,7 @@ class BlockDebugStateView extends StatelessWidget {
     Block block = shelf.findBlock(blockName)!;
     const double minBoxWidth = 200;
 
-    return RefreshableShelfArea(
+    return RefreshableNeutralView(
       ownerClassInstance: this,
       description: null,
       shelves: [shelf],
