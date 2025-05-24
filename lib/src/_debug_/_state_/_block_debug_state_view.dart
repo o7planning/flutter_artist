@@ -1,8 +1,7 @@
 part of '../../../flutter_artist.dart';
 
 class BlockDebugStateView extends StatelessWidget {
-  final String blockName;
-  final Shelf shelf;
+  final Block block;
   final BlockDebugOptions? blockDebugOptions;
   final FormDebugOptions? formDebugOptions;
   final PaginationDebugOptions? paginationDebugOptions;
@@ -12,8 +11,7 @@ class BlockDebugStateView extends StatelessWidget {
 
   const BlockDebugStateView({
     super.key,
-    required this.shelf,
-    required this.blockName,
+    required this.block,
     required this.vertical,
     this.showTitle = true,
     required this.blockDebugOptions,
@@ -23,13 +21,11 @@ class BlockDebugStateView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Block block = shelf.findBlock(blockName)!;
     const double minBoxWidth = 200;
-
     return RefreshableNeutralViewBuilder(
       ownerClassInstance: this,
       description: null,
-      shelves: [shelf],
+      shelves: [block.shelf],
       build: () {
         List<Widget> children = [];
         if (blockDebugOptions != null) {
