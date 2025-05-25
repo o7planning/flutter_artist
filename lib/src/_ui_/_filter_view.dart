@@ -22,7 +22,7 @@ abstract class FilterView<FILTER_MODEL extends FilterModel>
     );
   }
 
-  Widget buildDebugBar({
+  Widget buildFilterBar({
     Decoration? decoration,
     EdgeInsetsGeometry? padding,
   }) {
