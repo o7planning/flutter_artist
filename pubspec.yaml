@@ -6,7 +6,7 @@ homepage: https://flutterartist.dev
 
 environment:
   sdk: ^3.6.1
-  flutter: ">=3.27.2"
+  flutter: ">=3.32.0"
 
 dependencies:
   flutter:
