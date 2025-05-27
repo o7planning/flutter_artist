@@ -122,9 +122,9 @@ abstract class Shelf extends _XBase {
         }
         //
         const Type filterInputType = FilterInput;
-        final String filterInputBase = filterInputType.toString();
-        final String filterInputBF = filterModel.getFilterInputTypeAsString();
-        final String filterInputB = scalar.getFilterInputTypeAsString();
+        final filterInputBase = filterInputType.toString();
+        final filterInputBF = filterModel.getFilterInputType().toString();
+        final filterInputB = scalar.getFilterInputType().toString();
         //
         if (filterInputBF == filterInputBase) {
           throw ___registerError(
@@ -141,10 +141,9 @@ abstract class Shelf extends _XBase {
         }
         // ----------------
         const Type filterCriteriaType = FilterCriteria;
-        final String filterCriteriaBase = filterCriteriaType.toString();
-        final String filterCriteriaBF =
-            filterModel.getFilterCriteriaTypeAsString();
-        final String filterCriteriaB = scalar.getFilterCriteriaTypeAsString();
+        final filterCriteriaBase = filterCriteriaType.toString();
+        final filterCriteriaBF = filterModel.getFilterCriteriaType().toString();
+        final filterCriteriaB = scalar.getFilterCriteriaType().toString();
         //
         if (filterCriteriaBF == filterCriteriaBase) {
           throw ___registerError(
@@ -174,8 +173,8 @@ abstract class Shelf extends _XBase {
         _allFilterModels.add(defaultFilterModel);
         //
         const Type emptyFilterCriteriaType = EmptyFilterCriteria;
-        final String filterCriteriaEmpty = emptyFilterCriteriaType.toString();
-        final String filterCriteriaB = scalar.getFilterCriteriaTypeAsString();
+        final filterCriteriaEmpty = emptyFilterCriteriaType.toString();
+        final filterCriteriaB = scalar.getFilterCriteriaType().toString();
         //
         if (filterCriteriaB != filterCriteriaEmpty) {
           throw ___registerError(
@@ -223,9 +222,9 @@ abstract class Shelf extends _XBase {
       //
       //
       const Type filterInputType = FilterInput;
-      final String filterInputBase = filterInputType.toString();
-      final String filterInputBF = filterModel.getFilterInputTypeAsString();
-      final String filterInputB = block.getFilterInputTypeAsString();
+      final filterInputBase = filterInputType.toString();
+      final filterInputBF = filterModel.getFilterInputType().toString();
+      final filterInputB = block.getFilterInputType().toString();
       //
       if (filterInputBF == filterInputBase) {
         throw ___registerError(
@@ -242,10 +241,9 @@ abstract class Shelf extends _XBase {
       }
       // -----------------
       const Type filterCriteriaType = FilterCriteria;
-      final String filterCriteriaBase = filterCriteriaType.toString();
-      final String filterCriteriaBF =
-          filterModel.getFilterCriteriaTypeAsString();
-      final String filterCriteriaB = block.getFilterCriteriaTypeAsString();
+      final filterCriteriaBase = filterCriteriaType.toString();
+      final filterCriteriaBF = filterModel.getFilterCriteriaType().toString();
+      final String filterCriteriaB = block.getFilterCriteriaType().toString();
       //
       if (filterCriteriaBF == filterCriteriaBase) {
         throw ___registerError(
@@ -274,8 +272,8 @@ abstract class Shelf extends _XBase {
       _allFilterModels.add(defaultFilterModel);
       //
       const Type emptyFilterCriteriaType = EmptyFilterCriteria;
-      final String filterCriteriaEmpty = emptyFilterCriteriaType.toString();
-      final String filterCriteriaB = block.getFilterCriteriaTypeAsString();
+      final filterCriteriaEmpty = emptyFilterCriteriaType.toString();
+      final filterCriteriaB = block.getFilterCriteriaType().toString();
       //
       if (filterCriteriaB != filterCriteriaEmpty) {
         throw ___registerError(
@@ -287,7 +285,7 @@ abstract class Shelf extends _XBase {
     //
     Type extraFormInputB = ExtraFormInput;
     String extraFormInputTypeB = extraFormInputB.toString();
-    String extraFormInputTypeStr = block.getExtraFormInputTypeAsString();
+    String extraFormInputTypeStr = block.getExtraFormInputType().toString();
 
     if (extraFormInputTypeStr == extraFormInputTypeB) {
       throw ___registerError(

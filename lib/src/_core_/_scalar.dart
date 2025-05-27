@@ -49,7 +49,7 @@ abstract class Scalar<
   }
 
   String get _classParametersDefinition {
-    return "<${getFilterInputTypeAsString()}, ${getValueTypeAsString()}, ${getFilterCriteriaTypeAsString()}>";
+    return "<${getFilterInputType()}, ${getValueType()}, ${getFilterCriteriaType()}>";
   }
 
   ///
@@ -366,16 +366,16 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
-  String getValueTypeAsString() {
-    return VALUE.toString();
+  Type getValueType() {
+    return VALUE;
   }
 
-  String getFilterInputTypeAsString() {
-    return FILTER_INPUT.toString();
+  Type getFilterInputType() {
+    return FILTER_INPUT;
   }
 
-  String getFilterCriteriaTypeAsString() {
-    return FILTER_CRITERIA.toString();
+  Type getFilterCriteriaType() {
+    return FILTER_CRITERIA;
   }
 
   // ***************************************************************************

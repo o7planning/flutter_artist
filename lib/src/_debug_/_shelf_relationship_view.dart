@@ -194,7 +194,7 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
                 ),
               if (blockOrScalar.isBlock)
                 TextSpan(
-                  text: "(${blockOrScalar.block!.getItemTypeAsString()})",
+                  text: "(${blockOrScalar.block!.getItemType()})",
                   style: _listenerTextStyle,
                 ),
               if (blockOrScalar.isBlock)

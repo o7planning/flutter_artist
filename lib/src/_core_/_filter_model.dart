@@ -794,15 +794,15 @@ abstract class FilterModel<
   }
 
   String get _classParametersDefinition {
-    return "<${getFilterInputTypeAsString()}, ${getFilterCriteriaTypeAsString()}>";
+    return "<${getFilterInputType()}, ${getFilterCriteriaType()}>";
   }
 
-  String getFilterCriteriaTypeAsString() {
-    return FILTER_CRITERIA.toString();
+  Type getFilterCriteriaType() {
+    return FILTER_CRITERIA;
   }
 
-  String getFilterInputTypeAsString() {
-    return FILTER_INPUT.toString();
+  Type getFilterInputType() {
+    return FILTER_INPUT;
   }
 
   // ***************************************************************************

@@ -12,7 +12,7 @@ class _FilterModelOpt {
     required this.filterInput,
   }) {
     if (filterInput != null) {
-      assert(filterModel.getFilterInputTypeAsString() ==
+      assert(filterModel.getFilterInputType().toString() ==
           filterInput.runtimeType.toString());
     }
   }

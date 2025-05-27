@@ -30,17 +30,17 @@ class _BlockOrScalar extends Equatable {
 
   String getFilterInputTypeAsString() {
     if (block != null) {
-      return block!.getFilterInputTypeAsString();
+      return block!.getFilterInputType().toString();
     } else {
-      return scalar!.getFilterInputTypeAsString();
+      return scalar!.getFilterInputType().toString();
     }
   }
 
   String getFilterCriteriaTypeAsString() {
     if (block != null) {
-      return block!.getFilterCriteriaTypeAsString();
+      return block!.getFilterCriteriaType().toString();
     } else {
-      return scalar!.getFilterCriteriaTypeAsString();
+      return scalar!.getFilterCriteriaType().toString();
     }
   }
 

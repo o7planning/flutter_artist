@@ -8,7 +8,7 @@ class _FilterModelCriteriaView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String filterModelClassName = getClassName(filterModel);
-    String criteriaClassName = filterModel.getFilterCriteriaTypeAsString();
+    String criteriaClassName = filterModel.getFilterCriteriaType().toString();
     FilterCriteria? filterCriteria = filterModel.filterCriteria;
     //
     return Padding(

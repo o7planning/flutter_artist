@@ -121,8 +121,8 @@ abstract class Block<
   }
 
   String get _classParametersDefinition {
-    return "<${getItemIdTypeAsString()}, ${getItemTypeAsString()}, ${getItemDetailTypeAsString()}, "
-        "${getFilterInputTypeAsString()}, ${getFilterCriteriaTypeAsString()}, ${getExtraFormInputTypeAsString()}>";
+    return "<${getItemIdType()}, ${getItemType()}, ${getItemDetailType()}, "
+        "${getFilterInputType()}, ${getFilterCriteriaType()}, ${getExtraFormInputType()}>";
   }
 
   final String? description;
@@ -484,6 +484,10 @@ abstract class Block<
   // ************ TYPES ********************************************************
   // ***************************************************************************
 
+  Type getItemIdType() {
+    return ID;
+  }
+
   Type getItemType() {
     return ITEM;
   }
@@ -492,32 +496,16 @@ abstract class Block<
     return ITEM_DETAIL;
   }
 
+  Type getFilterInputType() {
+    return FILTER_INPUT;
+  }
+
   Type getFilterCriteriaType() {
     return FILTER_CRITERIA;
   }
 
-  String getItemIdTypeAsString() {
-    return ID.toString();
-  }
-
-  String getItemTypeAsString() {
-    return ITEM.toString();
-  }
-
-  String getItemDetailTypeAsString() {
-    return ITEM_DETAIL.toString();
-  }
-
-  String getFilterInputTypeAsString() {
-    return FILTER_INPUT.toString();
-  }
-
-  String getFilterCriteriaTypeAsString() {
-    return FILTER_CRITERIA.toString();
-  }
-
-  String getExtraFormInputTypeAsString() {
-    return EXTRA_FORM_INPUT.toString();
+  Type getExtraFormInputType() {
+    return EXTRA_FORM_INPUT;
   }
 
   // ***************************************************************************
