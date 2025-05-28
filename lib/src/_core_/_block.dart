@@ -2218,7 +2218,7 @@ abstract class Block<
       keepInList = needToKeepItemInList(
         parentBlockCurrentItem: parent?.currentItem,
         filterCriteria: blockCurrentFilterCriteria,
-        savedItem: savedItemDetail,
+        savedItemDetail: savedItemDetail,
       );
     }
     //
@@ -3028,7 +3028,7 @@ abstract class Block<
   bool needToKeepItemInList({
     required Object? parentBlockCurrentItem,
     required FILTER_CRITERIA filterCriteria,
-    required ITEM_DETAIL savedItem,
+    required ITEM_DETAIL savedItemDetail,
   });
 
   // ***************************************************************************
