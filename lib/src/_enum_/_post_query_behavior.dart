@@ -1,5 +1,6 @@
 part of '../../flutter_artist.dart';
 
+// TODO-XXX Change to PostQueryAction?
 enum PostQueryBehavior {
   /// Clear Current Item.
   clearCurrentItem,
