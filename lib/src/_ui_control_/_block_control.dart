@@ -57,7 +57,7 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
     switch (widget.actionType) {
       case BlockControlActionType.createItem:
         Actionable createActionable = widget.block.canCreateItem();
-        return createActionable.yes ? __prepareToCreate : null;
+        return createActionable.yes ? __prepareFormToCreateItem : null;
       case BlockControlActionType.query:
         Actionable queryActionable = widget.block.canQuery();
         return queryActionable.yes ? __queryBlock : null;
@@ -100,7 +100,7 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
     return await widget.block.deleteCurrentItem() != null;
   }
 
-  Future<bool> __prepareToCreate() async {
+  Future<bool> __prepareFormToCreateItem() async {
     if (widget.currentStackTrace != null) {
       FlutterArtist.codeFlowLogger.addMethodCall(
         ownerClassInstance: widget.ownerClassInstance,
@@ -109,7 +109,7 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
       );
     }
     //
-    return await widget.block.prepareToCreate(navigate: null);
+    return await widget.block.prepareFormToCreateItem(navigate: null);
   }
 
   Future<bool> __resetForm() async {

@@ -2642,7 +2642,7 @@ abstract class Block<
   }) async {
     return await queryEmpty(
       filterInput: filterInput,
-      prepareToCreate: true,
+      prepareFormToCreateItem: true,
       navigate: navigate,
     );
   }
@@ -2652,7 +2652,7 @@ abstract class Block<
 
   Future<bool> queryEmpty({
     FILTER_INPUT? filterInput,
-    bool prepareToCreate = false,
+    bool prepareFormToCreateItem = false,
     Function()? navigate,
   }) async {
     if (filterModel != null && filterModel!._lockAddMoreQuery) {
@@ -2682,7 +2682,7 @@ abstract class Block<
           queryType: QueryType.emptyQuery,
           pageable: pageable,
           listBehavior: ListBehavior.replace,
-          postQueryBehavior: prepareToCreate
+          postQueryBehavior: prepareFormToCreateItem
               ? PostQueryBehavior.createNewItem
               : PostQueryBehavior.selectAnItemAsCurrent,
           suggestedSelection: null,
@@ -3498,7 +3498,7 @@ abstract class Block<
   /// Prepare to create an item in a Form.
   ///
   @RootMethodAnnotation()
-  Future<bool> prepareToCreate({
+  Future<bool> prepareFormToCreateItem({
     EXTRA_FORM_INPUT? extraFormInput,
     required Function()? navigate,
     bool initDirty = false,
@@ -3507,7 +3507,7 @@ abstract class Block<
       isLibCode: true,
       navigate: navigate,
       ownerClassInstance: this,
-      methodName: "prepareToCreate",
+      methodName: "prepareFormToCreateItem",
       parameters: {"extraFormInput": extraFormInput},
     );
     //

@@ -107,7 +107,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             onAction: widget.block.isPreparingFormCreation,
             onPressed: widget.showCreateButton && createActionable.yes
                 ? () {
-                    _prepareToCreate(widget.block);
+                    _prepareFormToCreateItem(widget.block);
                   }
                 : null,
           ),
@@ -339,8 +339,8 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
     await widget.block.deleteCurrentItem();
   }
 
-  Future<void> _prepareToCreate(Block block) async {
-    await widget.block.prepareToCreate(navigate: null);
+  Future<void> _prepareFormToCreateItem(Block block) async {
+    await widget.block.prepareFormToCreateItem(navigate: null);
   }
 
   void _resetForm(Block block) {
