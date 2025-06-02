@@ -1,9 +1,9 @@
 part of '../../flutter_artist.dart';
 
-class _SaveFormSaveTaskUnit extends _TaskUnit {
+class _FormModelSaveFormTaskUnit extends _TaskUnit {
   _XFormModel xFormModel;
 
-  _SaveFormSaveTaskUnit({
+  _FormModelSaveFormTaskUnit({
     required this.xFormModel,
   }) : super(taskType: TaskType.formModelSaveForm);
 
