@@ -260,6 +260,7 @@ abstract class FormModel<
     //
     ApiResult<ITEM_DETAIL> result;
     bool saveError = false;
+    final bool isNew = _formPropsStructure.isNew;
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
@@ -274,7 +275,7 @@ abstract class FormModel<
       block._refreshSavingState(isSaving: true);
       Object? parentBlockItem = block.parent?.currentItem;
       //
-      result = _formPropsStructure.isNew
+      result = isNew
           ? await callApiCreateItem(
               filterCriteria: blockCurrentFilterCriteria,
               parentBlockItem: parentBlockItem,
@@ -304,6 +305,7 @@ abstract class FormModel<
     try {
       return await block._processSaveActionRestResult(
         thisXBlock: thisXFormModel.xBlock,
+        isNew: isNew,
         calledMethodName: calledMethodName,
         result: result,
       );

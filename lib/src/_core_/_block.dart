@@ -1910,6 +1910,7 @@ abstract class Block<
     try {
       return await _processSaveActionRestResult(
         thisXBlock: thisXBlock,
+        isNew: true,
         calledMethodName: "${getClassName(action)}.callApiQuickCreateItem",
         result: result,
       );
@@ -2021,6 +2022,7 @@ abstract class Block<
     try {
       return await _processSaveActionRestResult(
         thisXBlock: thisXBlock,
+        isNew: false,
         calledMethodName: "${getClassName(action)}.callApiQuickUpdateItem",
         result: result,
       );
@@ -2176,6 +2178,7 @@ abstract class Block<
     //
     return await _processSaveActionRestResult(
       thisXBlock: thisXBlock,
+      isNew: true,
       calledMethodName: "${getClassName(action)}.callApiChildBlockItems",
       result: result,
     );
@@ -2186,7 +2189,7 @@ abstract class Block<
 
   Future<bool> _processSaveActionRestResult({
     required _XBlock thisXBlock,
-    // required FILTER_CRITERIA blockCurrentFilterCriteria,
+    required bool isNew,
     required String calledMethodName,
     required ApiResult<ITEM_DETAIL> result,
   }) async {
@@ -2200,25 +2203,37 @@ abstract class Block<
       );
       return false;
     }
-    // TODO: Chuyen di noi khac.
-    FlutterArtist.storage._fireEventSourceChanged(
-      eventBlock: this,
-      itemIdString: null,
-    );
     //
     FILTER_CRITERIA? blockCurrentFilterCriteria = filterCriteria;
     if (blockCurrentFilterCriteria == null) {
+      // TODO-Review.
       return true;
     }
+    bool fireOutsideEvent = false;
     final ITEM_DETAIL? savedItemDetail = result.data;
     final bool keepInList;
     if (savedItemDetail == null) {
       keepInList = false;
+      if (isNew) {
+        fireOutsideEvent = false;
+      } else {
+        fireOutsideEvent = true;
+      }
     } else {
+      fireOutsideEvent = true;
+      //
       keepInList = needToKeepItemInList(
         parentBlockCurrentItem: parent?.currentItem,
         filterCriteria: blockCurrentFilterCriteria,
         itemDetail: savedItemDetail,
+      );
+    }
+    //
+    if (fireOutsideEvent) {
+      // TODO: Chuyen di noi khac.
+      FlutterArtist.storage._fireEventSourceChanged(
+        eventBlock: this,
+        itemIdString: null,
       );
     }
     //
