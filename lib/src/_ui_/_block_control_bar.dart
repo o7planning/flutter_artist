@@ -96,7 +96,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
 
   Widget? _buildLeft2Buttons() {
     Actionable deleteActionable = widget.block.canDeleteCurrentItem();
-    Actionable createActionable = widget.block.canCreateItem();
+    Actionable createActionable = widget.block.canCreateItemWithForm();
     //
     return _buildBreadCrumb(
       children: [

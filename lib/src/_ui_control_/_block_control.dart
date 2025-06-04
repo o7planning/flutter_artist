@@ -56,7 +56,7 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
   ControlPressedAsyncFunction? _getOnPressedFunction() {
     switch (widget.actionType) {
       case BlockControlActionType.createItem:
-        Actionable createActionable = widget.block.canCreateItem();
+        Actionable createActionable = widget.block.canCreateItemWithForm();
         return createActionable.yes ? __prepareFormToCreateItem : null;
       case BlockControlActionType.query:
         Actionable queryActionable = widget.block.canQuery();

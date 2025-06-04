@@ -1,8 +1,10 @@
 part of '../../flutter_artist.dart';
 
 abstract class QuickUpdateItemAction<
+    ID extends Object,
     ITEM extends Object, //
-    ITEM_DETAIL extends Object> extends BaseAction {
+    ITEM_DETAIL extends Object,
+    FILTER_CRITERIA extends FilterCriteria> extends BaseAction {
   final ITEM item;
 
   const QuickUpdateItemAction({
@@ -11,5 +13,8 @@ abstract class QuickUpdateItemAction<
     required super.actionInfo,
   });
 
-  Future<ApiResult<ITEM_DETAIL>> callApiQuickUpdateItem();
+  Future<ApiResult<ITEM_DETAIL>> callApiQuickUpdateItem({
+    required Object? parentBlockItem,
+    required FILTER_CRITERIA filterCriteria,
+  });
 }

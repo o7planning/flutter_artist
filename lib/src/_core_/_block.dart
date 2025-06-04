@@ -1879,9 +1879,18 @@ abstract class Block<
 
   Future<bool> _unitQuickCreateItem({
     required _XBlock thisXBlock,
-    required QuickCreateItemAction<ITEM_DETAIL> action,
+    required QuickCreateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
+        action,
   }) async {
     __assertThisXBlock(thisXBlock);
+    //
+    if (!__checkBeforeQuickCreation(
+      checkBusy: false,
+      showErrorMessage: true,
+    )) {
+      return false;
+    }
+    FILTER_CRITERIA blockCurrentFilterCriteria = filterCriteria!;
     //
     ApiResult<ITEM_DETAIL> result;
     try {
@@ -1893,7 +1902,10 @@ abstract class Block<
         parameters: {},
       );
       //
-      result = await action.callApiQuickCreateItem();
+      result = await action.callApiQuickCreateItem(
+        parentBlockItem: parent?.currentItem,
+        filterCriteria: blockCurrentFilterCriteria,
+      );
       //
     } catch (e, stackTrace) {
       _handleError(
@@ -1932,14 +1944,18 @@ abstract class Block<
 
   Future<bool> _unitQuickCreateMultiItems({
     required _XBlock thisXBlock,
-    required QuickCreateMultiItemsAction<ITEM> action,
+    required QuickCreateMultiItemsAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
+        action,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    FILTER_CRITERIA? blockCurrentFilterCriteria = filterCriteria;
-    if (blockCurrentFilterCriteria == null) {
-      throw AppException(message: "FilterCriteria is null");
+    if (!__checkBeforeQuickCreation(
+      checkBusy: false,
+      showErrorMessage: true,
+    )) {
+      return false;
     }
+    FILTER_CRITERIA blockCurrentFilterCriteria = filterCriteria!;
     //
     ApiResult<PageData<ITEM>> result;
     try {
@@ -1951,7 +1967,10 @@ abstract class Block<
         parameters: {},
       );
       //
-      result = await action.callApiQuickCreateMultiItems();
+      result = await action.callApiQuickCreateMultiItems(
+        parentBlockItem: parent?.currentItem,
+        filterCriteria: blockCurrentFilterCriteria,
+      );
       //
     } catch (e, stackTrace) {
       _handleError(
@@ -1991,9 +2010,19 @@ abstract class Block<
 
   Future<bool> _unitQuickUpdateItem({
     required _XBlock thisXBlock,
-    required QuickUpdateItemAction<ITEM, ITEM_DETAIL> action,
+    required QuickUpdateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
+        action,
   }) async {
     __assertThisXBlock(thisXBlock);
+    //
+    if (!__checkBeforeQuickUpdate(
+      checkBusy: false,
+      showErrorMessage: true,
+      item: action.item,
+    )) {
+      return false;
+    }
+    FILTER_CRITERIA blockCurrentFilterCriteria = filterCriteria!;
     //
     ApiResult<ITEM_DETAIL> result;
     try {
@@ -2005,7 +2034,10 @@ abstract class Block<
         parameters: {},
       );
       //
-      result = await action.callApiQuickUpdateItem();
+      result = await action.callApiQuickUpdateItem(
+        parentBlockItem: parent?.currentItem,
+        filterCriteria: blockCurrentFilterCriteria,
+      );
       //
     } catch (e, stackTrace) {
       _handleError(
@@ -3134,9 +3166,9 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethodAnnotation()
-  Future<bool> executeQuickActionCreateItem<
-      A extends QuickCreateItemAction<ITEM_DETAIL>>({
-    required A action,
+  Future<bool> executeQuickActionCreateItem({
+    required QuickCreateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
+        action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -3147,6 +3179,13 @@ abstract class Block<
         "action": action,
       },
     );
+    //
+    if (!__checkBeforeQuickCreation(
+      checkBusy: true,
+      showErrorMessage: true,
+    )) {
+      return false;
+    }
     //
     // Confirmation:
     //
@@ -3187,9 +3226,9 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethodAnnotation()
-  Future<bool> executeQuickActionCreateMultiItems<
-      A extends QuickCreateMultiItemsAction<ITEM>>({
-    required A action,
+  Future<bool> executeQuickActionCreateMultiItems({
+    required QuickCreateMultiItemsAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
+        action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -3200,6 +3239,13 @@ abstract class Block<
         "action": action,
       },
     );
+    //
+    if (!__checkBeforeQuickCreation(
+      checkBusy: true,
+      showErrorMessage: true,
+    )) {
+      return false;
+    }
     //
     // Confirmation:
     //
@@ -3240,9 +3286,9 @@ abstract class Block<
   // ***************************************************************************
 
   @RootMethodAnnotation()
-  Future<bool> executeQuickActionUpdateItem<
-      A extends QuickUpdateItemAction<ITEM, ITEM_DETAIL>>({
-    required A action,
+  Future<bool> executeQuickActionUpdateItem({
+    required QuickUpdateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
+        action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -3493,7 +3539,51 @@ abstract class Block<
   // ***************************************************************************
 
   bool __checkBeforeFormCreation({required bool showErrorMessage}) {
-    Actionable createActionable = canCreateItem();
+    Actionable createActionable = canCreateItemWithForm();
+    if (!createActionable.yes) {
+      if (showErrorMessage) {
+        showErrorSnackBar(
+          message: createActionable.message!,
+          errorDetails: ["Block: ${getClassName(this)}"],
+        );
+      }
+      return false;
+    }
+    return true;
+  }
+
+  bool __checkBeforeQuickCreation({
+    required bool checkBusy,
+    required bool showErrorMessage,
+  }) {
+    Actionable createActionable = __canCreateItem(
+      checkBusy: checkBusy,
+      creationType: ItemCreationType.quickCreate,
+      checkAllow: true,
+    );
+    if (!createActionable.yes) {
+      if (showErrorMessage) {
+        showErrorSnackBar(
+          message: createActionable.message!,
+          errorDetails: ["Block: ${getClassName(this)}"],
+        );
+      }
+      return false;
+    }
+    return true;
+  }
+
+  bool __checkBeforeQuickUpdate({
+    required bool checkBusy,
+    required ITEM item,
+    required bool showErrorMessage,
+  }) {
+    Actionable createActionable = __canUpdateItem(
+      checkBusy: checkBusy,
+      item: item,
+      updateType: ItemUpdateType.quickUpdate,
+      checkAllow: true,
+    );
     if (!createActionable.yes) {
       if (showErrorMessage) {
         showErrorSnackBar(
@@ -4277,18 +4367,22 @@ abstract class Block<
   // ***************************************************************************
 
   Actionable __canCreateItem({
+    required bool checkBusy,
     required ItemCreationType creationType,
     required bool checkAllow,
   }) {
-    if (FlutterArtist.executor.isBusy) {
+    if (checkBusy && FlutterArtist.executor.isBusy) {
       return Actionable.no(
         message: "New item creation is disabled because the executor is busy.",
       );
     }
-    if (creationType == ItemCreationType.form && formModel == null) {
-      return Actionable.no(
-        message: "New item creation is disabled because the block has no form.",
-      );
+    if (creationType == ItemCreationType.form) {
+      if (formModel == null) {
+        return Actionable.no(
+          message:
+              "New item creation is disabled because the block has no form.",
+        );
+      }
     }
     switch (queryDataState) {
       case DataState.pending:
@@ -4311,6 +4405,43 @@ abstract class Block<
     }
     //
     return checkAllow ? __isAllowCreateItem() : Actionable.yes();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Actionable __canUpdateItem({
+    required ITEM item,
+    required bool checkBusy,
+    required ItemUpdateType updateType,
+    required bool checkAllow,
+  }) {
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable.no(
+        message: "Item update is disabled because the executor is busy.",
+      );
+    }
+    switch (queryDataState) {
+      case DataState.pending:
+        return Actionable.no(
+          message:
+              "Item update is disabled because the block is in a 'pending' state.",
+        );
+      case DataState.error:
+        return Actionable.no(
+          message:
+              "Item update is disabled because the block is in an 'error' state.",
+        );
+      case DataState.none:
+        return Actionable.no(
+          message:
+              "Item update is disabled because the block is in a 'none' state.",
+        );
+      case DataState.ready:
+        break;
+    }
+    //
+    return checkAllow ? _isAllowUpdateItem(item: item) : Actionable.yes();
   }
 
   // ***************************************************************************
@@ -4498,8 +4629,9 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable canCreateItem() {
+  Actionable canCreateItemWithForm() {
     return __canCreateItem(
+      checkBusy: true,
       checkAllow: true,
       creationType: ItemCreationType.form,
     );

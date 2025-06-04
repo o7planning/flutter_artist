@@ -22,7 +22,8 @@ class MultiOptCriterion extends Criterion {
 
   MultiOptCriterion.multiSelection({
     required super.criterionName,
-  })  : singleSelection = false,
+  })
+      : singleSelection = false,
         children = [];
 
   void _checkCycleError() {
@@ -88,7 +89,8 @@ class MultiOptCriterion extends Criterion {
 
   void _printTempInfoCascade({required int indentFactor}) {
     print(
-        "${("- - - " * indentFactor)} $criterionName >>> UpdateVal: $candidateUpdateValue >>> tempCurrentXData: $_tempCurrentXData");
+        "${("- - - " *
+            indentFactor)} $criterionName >>> UpdateVal: $candidateUpdateValue >>> tempCurrentXData: $_tempCurrentXData");
     for (var child in children) {
       child._printTempInfoCascade(indentFactor: indentFactor + 1);
     }
