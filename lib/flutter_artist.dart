@@ -433,7 +433,7 @@ part 'src/_ui_/_table_container.dart';
 
 part 'src/_ui_/_activity_fragment_widget_builder.dart';
 
-part 'src/_ui_/_base_pagination.dart';
+part 'src/_ui_/_pagination_view.dart';
 
 part 'src/_ui_/_block_control_bar.dart';
 
@@ -475,7 +475,7 @@ part 'src/_ui_/_logged_in_user_builder.dart';
 
 part 'src/_ui_/_notification_button_builder.dart';
 
-part 'src/_ui_/_number_pagination.dart';
+part 'src/_ui_/_number_pagination_view.dart';
 
 part 'src/_ui_/_refreshable_widget.dart';
 

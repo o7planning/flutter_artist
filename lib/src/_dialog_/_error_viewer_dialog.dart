@@ -28,8 +28,12 @@ class _ErrorViewerDialogState extends State<ErrorViewerDialog> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.sizeOf(context).width;
-    double height = MediaQuery.sizeOf(context).height;
+    double width = MediaQuery
+        .sizeOf(context)
+        .width;
+    double height = MediaQuery
+        .sizeOf(context)
+        .height;
     if (width > 620) {
       width = 600;
     } else {
@@ -55,7 +59,8 @@ class _ErrorViewerDialogState extends State<ErrorViewerDialog> {
         spacing: 5,
         children: widget.errorLogger.errorInfos
             .map(
-              (errorInfo) => TextButton(
+              (errorInfo) =>
+              TextButton(
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.all(10),
                   minimumSize: Size.zero,
@@ -69,7 +74,7 @@ class _ErrorViewerDialogState extends State<ErrorViewerDialog> {
                 },
                 child: Text(errorInfo.id.toString()),
               ),
-            )
+        )
             .toList(),
       ),
     );
@@ -133,32 +138,33 @@ class _ErrorViewerDialogState extends State<ErrorViewerDialog> {
             children: _errorInfo!.errorDetails == null
                 ? []
                 : _errorInfo!.errorDetails!
-                    .map(
-                      (errorDetail) => Material(
-                        child: ListTile(
-                          tileColor: Colors.white,
-                          dense: true,
-                          visualDensity: const VisualDensity(
-                            vertical: -3,
-                            horizontal: -3,
-                          ),
-                          contentPadding: const EdgeInsets.all(0),
-                          leading: const Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: Icon(
-                              _listItemBulletIconData,
-                              color: Colors.black,
-                              size: 16,
-                            ),
-                          ),
-                          title: Text(
-                            errorDetail,
-                            style: const TextStyle(fontSize: 12),
-                          ),
+                .map(
+                  (errorDetail) =>
+                  Material(
+                    child: ListTile(
+                      tileColor: Colors.white,
+                      dense: true,
+                      visualDensity: const VisualDensity(
+                        vertical: -3,
+                        horizontal: -3,
+                      ),
+                      contentPadding: const EdgeInsets.all(0),
+                      leading: const Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Icon(
+                          _listItemBulletIconData,
+                          color: Colors.black,
+                          size: 16,
                         ),
                       ),
-                    )
-                    .toList(),
+                      title: Text(
+                        errorDetail,
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                    ),
+                  ),
+            )
+                .toList(),
           ),
         if (_errorInfo != null && _errorInfo!.stackTrace != null)
           const SizedBox(height: 5),

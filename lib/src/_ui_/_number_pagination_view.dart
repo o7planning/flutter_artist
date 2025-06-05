@@ -1,10 +1,10 @@
 part of '../../flutter_artist.dart';
 
-class NumberPagination extends BasePagination {
+class NumberPaginationView extends PaginationView {
   final EdgeInsets padding;
   final int visiblePagesCount;
 
-  const NumberPagination({
+  const NumberPaginationView({
     super.key,
     required super.block,
     required super.description,

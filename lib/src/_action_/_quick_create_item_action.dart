@@ -1,9 +1,9 @@
 part of '../../flutter_artist.dart';
 
 abstract class QuickCreateItemAction<
-    ID extends Object,
+    ID extends Object, //
     ITEM extends Object,
-    ITEM_DETAIL extends Object, //
+    ITEM_DETAIL extends Object,
     FILTER_CRITERIA extends FilterCriteria> extends BaseAction {
   const QuickCreateItemAction({
     required super.needToConfirm,

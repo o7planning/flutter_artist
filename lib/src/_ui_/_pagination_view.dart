@@ -1,9 +1,9 @@
 part of '../../flutter_artist.dart';
 
-abstract class BasePagination extends _RefreshableWidget {
+abstract class PaginationView extends _RefreshableWidget {
   final Block block;
 
-  const BasePagination({
+  const PaginationView({
     super.key,
     required this.block,
     required super.description,
@@ -14,11 +14,11 @@ abstract class BasePagination extends _RefreshableWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _BasePaginationState();
+    return _PaginationViewState();
   }
 }
 
-class _BasePaginationState extends _RefreshableWidgetState<BasePagination> {
+class _PaginationViewState extends _RefreshableWidgetState<PaginationView> {
   @override
   Widget buildContent(BuildContext context) {
     return widget.build();
