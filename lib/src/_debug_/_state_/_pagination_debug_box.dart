@@ -36,7 +36,7 @@ class _PaginationDebugBox extends _BaseDebugBox {
         ),
       if (options.showTotalPages)
         IconLabelText(
-          label: "Total Page: ",
+          label: "Total Pages: ",
           text: "${block.pagination?.totalPages}",
           labelStyle: labelStyle,
           textStyle: textStyle,
