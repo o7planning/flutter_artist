@@ -3392,88 +3392,6 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  // @RootMethodAnnotation()
-  // Future<CurrentItemSelectionResult<ITEM>?> prepareToEditFirstItem({
-  //   Function()? navigate,
-  // }) async {
-  //   ITEM? nextItem = firstItem;
-  //   if (nextItem == null) {
-  //     return null;
-  //   }
-  //   return await prepareToEditItem(
-  //     item: nextItem,
-  //     navigate: navigate,
-  //   );
-  // }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  // @RootMethodAnnotation()
-  // Future<CurrentItemSelectionResult<ITEM>?> prepareToEditNextItem({
-  //   Function()? navigate,
-  // }) async {
-  //   if (!hasNextItem) {
-  //     return null;
-  //   }
-  //   ITEM? nextItem = nextSiblingItem;
-  //   if (nextItem == null) {
-  //     return null;
-  //   }
-  //   return await prepareToEditItem(
-  //     item: nextItem,
-  //     navigate: navigate,
-  //   );
-  // }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  // @RootMethodAnnotation()
-  // Future<CurrentItemSelectionResult<ITEM>?> prepareToEditPreviousItem({
-  //   Function()? navigate,
-  // }) async {
-  //   if (!hasPreviousItem) {
-  //     return null;
-  //   }
-  //   ITEM? previousItem = previousSiblingItem;
-  //   if (previousItem == null) {
-  //     return null;
-  //   }
-  //   return await prepareToEditItem(
-  //     item: previousItem,
-  //     navigate: navigate,
-  //   );
-  // }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  // @RootMethodAnnotation()
-  // Future<CurrentItemSelectionResult<ITEM>?> prepareToEditItem({
-  //   required ITEM item,
-  //   Function()? navigate,
-  // }) async {
-  //   FlutterArtist.codeFlowLogger._addMethodCall(
-  //     isLibCode: true,
-  //     navigate: navigate,
-  //     ownerClassInstance: this,
-  //     methodName: "prepareToEditItem",
-  //     parameters: {
-  //       "item": item,
-  //     },
-  //   );
-  //   //
-  //   return await _refreshToShowOrEditItemAsCurrent(
-  //     item: item,
-  //     forceForm: true,
-  //     navigate: navigate,
-  //   );
-  // }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   @RootMethodAnnotation()
   Future<CurrentItemSelectionResult<ITEM>?> refreshAndSelectFirstItemAsCurrent({
     bool forceLoadForm = false,
@@ -5209,6 +5127,91 @@ abstract class Block<
   // ***************************************************************************
 
   bool get hasNextItem => nextSiblingItem != null;
+
+  // ***************************************************************************
+  // ***************************************************************************
+  // ***************************************************************************
+
+  // TODO: Allow change position??
+  bool _checkForChangeItemPosition() {
+    if (false) {
+      showErrorSnackBar(message: "Can not change position", errorDetails: null);
+      return false;
+    }
+    return true;
+  }
+
+  // bool swapItemsByIndexes({required int index1, required int index2}) {
+  //   if (!_checkForChangeItemPosition()) {
+  //     return false;
+  //   }
+  //   if (index1 >= 0 &&
+  //       index1 < itemCount &&
+  //       index2 >= 0 &&
+  //       index2 < itemCount) {
+  //     ITEM it1 = __blockData._items[index1];
+  //     ITEM it2 = __blockData._items[index2];
+  //     //
+  //     __blockData._items[index1] = it2;
+  //     __blockData._items[index2] = it1;
+  //     return true;
+  //   }
+  //   return false;
+  // }
+
+  bool swapPositions({required ITEM item1, required ITEM item2}) {
+    if (!_checkForChangeItemPosition()) {
+      return false;
+    }
+    bool success = ItemsUtils.swapPositionsByIds(
+      itemId1: getItemId(item1),
+      itemId2: getItemId(item2),
+      targetList: __blockData._items,
+      getItemId: getItemId,
+    );
+    if (success) {
+      updateAllUIComponents(withoutFilters: true);
+    }
+    return success;
+  }
+
+  bool moveItemToNewIndexPosition({
+    required ITEM item,
+    required int newIndexPosition,
+  }) {
+    if (!_checkForChangeItemPosition()) {
+      return false;
+    }
+    bool success = ItemsUtils.moveItemToNewIndexPosition(
+      item: item,
+      newIndexPosition: newIndexPosition,
+      targetList: __blockData._items,
+      getItemId: getItemId,
+    );
+    if (success) {
+      updateAllUIComponents(withoutFilters: true);
+    }
+    return success;
+  }
+
+  bool moveItemByIndexPosition({
+    required int oldIndexPosition,
+    required int newIndexPosition,
+  }) {
+    if (!_checkForChangeItemPosition()) {
+      return false;
+    }
+    bool success = ItemsUtils.moveItemByIndexPosition(
+      oldIndexPosition: oldIndexPosition,
+      newIndexPosition: newIndexPosition,
+      targetList: __blockData._items,
+      getItemId: getItemId,
+    );
+    if (success) {
+      updateAllUIComponents(withoutFilters: true);
+    }
+    return success;
+  }
 
   // ***************************************************************************
   // ***************************************************************************
