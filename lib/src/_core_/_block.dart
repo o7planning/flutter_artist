@@ -1195,18 +1195,30 @@ abstract class Block<
       //
       //
       final ITEM? currentItem = this.currentItem;
-      //
-      // Update queried items to the List:
-      //
-      __blockData._updateFrom(
-        forceListBehavior: realListBehavior,
-        currentParentItemId: this.parentItemId,
-        filterCriteria: filterCriteriaOfFilterModel,
-        pageable: callingPageable,
-        pageData: pageData,
-        queryDataState: newQueryDataState,
-        queryResultState: queryResultState,
-      );
+      try {
+        //
+        // Update queried items to the List:
+        //
+        __blockData._updateFrom(
+          forceListBehavior: realListBehavior,
+          currentParentItemId: this.parentItemId,
+          filterCriteria: filterCriteriaOfFilterModel,
+          pageable: callingPageable,
+          pageData: pageData,
+          queryDataState: newQueryDataState,
+          queryResultState: queryResultState,
+        );
+      } catch (e, stackTrace) {
+        _handleError(
+          shelf: shelf,
+          methodName: '__blockData._updateFrom()',
+          error: e,
+          stackTrace: stackTrace,
+          showSnackBar: true,
+        );
+        thisXBlock.queryResult._otherError = true;
+        return thisXBlock.queryResult;
+      }
       //
       final bool currentItemInList =
           currentItem != null && containsItem(item: currentItem);

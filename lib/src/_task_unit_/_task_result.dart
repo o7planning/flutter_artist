@@ -109,11 +109,12 @@ class ItemDeletionResult<ITEM> {
 }
 
 class BlockQueryResult {
+  bool _otherError = false;
   bool _filterError = false;
   bool _apiError = false;
 
   bool get success {
-    return !_filterError && !_apiError;
+    return !_filterError && !_apiError && !_otherError;
   }
 }
 
