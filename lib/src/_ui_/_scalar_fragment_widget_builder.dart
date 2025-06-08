@@ -1,10 +1,10 @@
 part of '../../flutter_artist.dart';
 
-class ScalarFragmentWidgetBuilder extends _RefreshableWidget {
+class ScalarFragmentViewBuilder extends _RefreshableWidget {
   final Scalar scalar;
   final Widget Function() build;
 
-  const ScalarFragmentWidgetBuilder({
+  const ScalarFragmentViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
@@ -14,12 +14,12 @@ class ScalarFragmentWidgetBuilder extends _RefreshableWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _ScalarFragmentWidgetBuilderState();
+    return _ScalarFragmentViewBuilderState();
   }
 }
 
-class _ScalarFragmentWidgetBuilderState
-    extends _RefreshableWidgetState<ScalarFragmentWidgetBuilder> {
+class _ScalarFragmentViewBuilderState
+    extends _RefreshableWidgetState<ScalarFragmentViewBuilder> {
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.scalar);

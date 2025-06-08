@@ -4799,6 +4799,50 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  bool isCurrentAndSelectedItem({required ITEM item}) {
+    bool c = isCurrentItem(item: item);
+    if (c) {
+      return isSelectedItem(item: item);
+    }
+    return false;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool isCurrentAndCheckedItem({required ITEM item}) {
+    bool c = isCurrentItem(item: item);
+    if (c) {
+      return isCheckedItem(item: item);
+    }
+    return false;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool isCurrentItemSelected() {
+    ITEM? c = currentItem;
+    if (c == null) {
+      return false;
+    }
+    return isSelectedItem(item: c);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool isCurrentItemChecked() {
+    ITEM? c = currentItem;
+    if (c == null) {
+      return false;
+    }
+    return isCheckedItem(item: c);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void __setSelectedItem({required ITEM item, required bool selected}) {
     if (selected) {
       ItemsUtils.insertOrReplaceItemInList(
@@ -5025,6 +5069,17 @@ abstract class Block<
       item: item,
       getItemId: getItemId,
     );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool isCheckedIndex({required int index}) {
+    ITEM? item = findItemByIndex(index);
+    if (item == null) {
+      return false;
+    }
+    return isCheckedItem(item: item);
   }
 
   // ***************************************************************************
