@@ -19,12 +19,12 @@ Future<Box<DateTime>> _openHiveBoxDateTime() async {
 
 Future<Box<String>> _openHiveBoxNotification() async {
   var box =
-      await Hive.openBox<String>('_flutter_artist_hive_notification_box_');
+  await Hive.openBox<String>('_flutter_artist_hive_notification_box_');
   return box;
 }
 
 Future<Box<String>> _openHiveBoxLoggedInUser() async {
   var box =
-      await Hive.openBox<String>('_flutter_artist_hive_logged_in_user_box_');
+  await Hive.openBox<String>('_flutter_artist_hive_logged_in_user_box_');
   return box;
 }

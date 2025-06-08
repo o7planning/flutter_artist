@@ -61,8 +61,8 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
       child: showMode == ShowMode.production
           ? buildContent(context)
           : _DevContainer(
-              child: buildContent(context),
-            ),
+        child: buildContent(context),
+      ),
     );
   }
 

@@ -9,7 +9,7 @@ class SimpleCriterion<V> extends Criterion<V> {
     return criterionNames
         .map(
           (name) => SimpleCriterion(criterionName: name),
-        )
+    )
         .toList();
   }
 

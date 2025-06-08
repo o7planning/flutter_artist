@@ -124,8 +124,12 @@ class _GraphItemBlockOrScalarBoxState
                 ),
                 _buildTooltip(
                   message:
-                      "${widget.blockOrScalar.isBlock ? 'BLOCK' : 'SCALAR'}: ${widget.blockOrScalar.blockOrScalarClassName}\n"
-                      "${widget.blockOrScalar.blockOrScalarClassParametersDefinition}",
+                  "${widget.blockOrScalar.isBlock
+                      ? 'BLOCK'
+                      : 'SCALAR'}: ${widget.blockOrScalar
+                      .blockOrScalarClassName}\n"
+                      "${widget.blockOrScalar
+                      .blockOrScalarClassParametersDefinition}",
                   child: IconLabelText(
                     style: _getBlockNameTextStyle(),
                     label: 'Class: ',
@@ -161,11 +165,11 @@ class _GraphItemBlockOrScalarBoxState
     //
     double blkLine3 = widget.showClassParameters
         ? extraWidth +
-            2 * padding +
-            _calculateTextSize(
-              text: _line3ClassParamsDefinition(),
-              style: _getBlockClassParameterTextStyle(),
-            ).width
+        2 * padding +
+        _calculateTextSize(
+          text: _line3ClassParamsDefinition(),
+          style: _getBlockClassParameterTextStyle(),
+        ).width
         : 0;
     //
     double filterLine1 = extraWidth +
@@ -202,7 +206,8 @@ class _GraphItemBlockOrScalarBoxState
         lastLineBlockSpacing +
         _calculateTextSize(
           text:
-              "${widget.blockOrScalar.isBlock ? 'BLOCK' : 'SCALAR'}     ${widget.blockOrScalar.itemCount.toString()}",
+          "${widget.blockOrScalar.isBlock ? 'BLOCK' : 'SCALAR'}     ${widget
+              .blockOrScalar.itemCount.toString()}",
           style: _getSummaryTextStyle(),
         ).width;
     if (widget.blockOrScalar.block?.formModel != null) {
@@ -291,7 +296,8 @@ class _GraphItemBlockOrScalarBoxState
     FilterModel? filterModel = widget.blockOrScalar.filterModel;
 
     return "${filterModel == null ? '' : getClassName(filterModel)} "
-        "${widget.showClassParameters ? widget.blockOrScalar.filterClassParametersDefinition : ''}";
+        "${widget.showClassParameters ? widget.blockOrScalar
+        .filterClassParametersDefinition : ''}";
   }
 
   Widget _buildFilterInfo() {
@@ -301,13 +307,13 @@ class _GraphItemBlockOrScalarBoxState
       onEnter: filterModel == null
           ? null
           : (_) {
-              widget.refreshGraph(filterModel.name);
-            },
+        widget.refreshGraph(filterModel.name);
+      },
       onExit: filterModel == null
           ? null
           : (_) {
-              widget.refreshGraph(null);
-            },
+        widget.refreshGraph(null);
+      },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -343,23 +349,23 @@ class _GraphItemBlockOrScalarBoxState
         border: Border.all(
           width: 0.5,
           color: widget.highlighFilterModelName != null &&
-                  filterModel?.name == widget.highlighFilterModelName
+              filterModel?.name == widget.highlighFilterModelName
               ? _graphBoxHighlighFilterColor
               : Colors.grey,
         ),
         color: widget.highlighFilterModelName != null &&
-                filterModel?.name == widget.highlighFilterModelName
+            filterModel?.name == widget.highlighFilterModelName
             ? _graphBoxHighlighFilterColor
             : Colors.transparent,
       ),
       child: filterModel == null
           ? row
           : _buildCustomTooltip(
-              verticalOffset: -85,
-              message: "FILTER: ${getClassName(filterModel)} \n"
-                  "${widget.blockOrScalar.filterClassParametersDefinition}",
-              child: row,
-            ),
+        verticalOffset: -85,
+        message: "FILTER: ${getClassName(filterModel)} \n"
+            "${widget.blockOrScalar.filterClassParametersDefinition}",
+        child: row,
+      ),
     );
   }
 
@@ -377,9 +383,7 @@ class _GraphItemBlockOrScalarBoxState
     );
   }
 
-  String _formTooltipMessage(
-    FormModel formModel,
-  ) {
+  String _formTooltipMessage(FormModel formModel,) {
     String className = getClassName(formModel);
     final DataState dataState = formModel.formDataState;
     final bool active = formModel.hasActiveUIComponent();
@@ -390,8 +394,8 @@ class _GraphItemBlockOrScalarBoxState
         "| Mode: ${formModel.formMode.name.toUpperCase()}";
   }
 
-  String _blockOrScalarTooltipMessage(
-      _BlockOrScalar blockOrScalar, DataState dataState, bool active) {
+  String _blockOrScalarTooltipMessage(_BlockOrScalar blockOrScalar,
+      DataState dataState, bool active) {
     String className = blockOrScalar.blockOrScalarClassName;
     return "${blockOrScalar.isBlock ? 'BLOCK' : 'SCALAR'}: $className \n"
         "Data State: ${dataState.name.toUpperCase()} "

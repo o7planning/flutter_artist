@@ -481,7 +481,9 @@ part 'src/_ui_/_refreshable_widget.dart';
 
 part 'src/_ui_/_refreshable_widget_state.dart';
 
-part 'src/_ui_/_scalar_fragment_widget_builder.dart';
+part 'src/_ui_/_scalar_fragment_view.dart';
+
+part 'src/_ui_/_scalar_fragment_view_builder.dart';
 
 part 'src/_ui_/_shelf_block_scalar_type_widget.dart';
 
