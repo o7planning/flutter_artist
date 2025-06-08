@@ -4782,13 +4782,13 @@ abstract class Block<
     if (item == null) {
       return false;
     }
-    return isSelectedItem(item);
+    return isSelectedItem(item: item);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool isSelectedItem(ITEM item) {
+  bool isSelectedItem({required ITEM item}) {
     return ItemsUtils.isListContainItem(
       targetList: __blockData._selectedItems,
       item: item,
@@ -4819,17 +4819,14 @@ abstract class Block<
   // ***************************************************************************
 
   void __toggleSelectItem({required ITEM item}) {
-    bool selected = isSelectedItem(item);
+    bool selected = isSelectedItem(item: item);
     __setSelectedItem(item: item, selected: !selected);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void setSelectedItem({
-    required ITEM item,
-    required bool selected,
-  }) {
+  void setSelectedItem({required ITEM item, required bool selected}) {
     __setSelectedItem(item: item, selected: selected);
     __updateUIComponentAfterCheckedOrSelected();
   }
@@ -4837,9 +4834,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void toggleSelectItem({
-    required ITEM item,
-  }) {
+  void toggleSelectItem({required ITEM item}) {
     __toggleSelectItem(item: item);
     __updateUIComponentAfterCheckedOrSelected();
   }
@@ -5016,9 +5011,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool containsItem({
-    required ITEM item,
-  }) {
+  bool containsItem({required ITEM item}) {
     return ItemsUtils.isListContainItem(
       targetList: __blockData._items,
       item: item,
@@ -5026,7 +5019,7 @@ abstract class Block<
     );
   }
 
-  bool isCheckedItem(ITEM item) {
+  bool isCheckedItem({required ITEM item}) {
     return ItemsUtils.isListContainItem(
       targetList: __blockData._checkedItems,
       item: item,
@@ -5054,21 +5047,16 @@ abstract class Block<
   }
 
   void __toggleCheckItem({required ITEM item}) {
-    bool checked = isCheckedItem(item);
+    bool checked = isCheckedItem(item: item);
     __setCheckedItem(item: item, checked: !checked);
   }
 
-  void toggleCheckItem({
-    required ITEM item,
-  }) {
+  void toggleCheckItem({required ITEM item}) {
     __toggleCheckItem(item: item);
     __updateUIComponentAfterCheckedOrSelected();
   }
 
-  void setCheckedItem({
-    required ITEM item,
-    required bool checked,
-  }) {
+  void setCheckedItem({required ITEM item, required bool checked}) {
     __setCheckedItem(item: item, checked: checked);
     __updateUIComponentAfterCheckedOrSelected();
   }
@@ -5171,6 +5159,9 @@ abstract class Block<
   //   return false;
   // }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool swapPositions({required ITEM item1, required ITEM item2}) {
     if (!_checkForChangeItemPosition()) {
       return false;
@@ -5186,6 +5177,9 @@ abstract class Block<
     }
     return success;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   bool moveItemToNewIndexPosition({
     required ITEM item,
@@ -5205,6 +5199,9 @@ abstract class Block<
     }
     return success;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   bool moveItemByIndexPosition({
     required int oldIndexPosition,
