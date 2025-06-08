@@ -141,7 +141,7 @@ abstract class Shelf extends _XBase {
         //
         if (filterInputBF != filterInputB) {
           throw ___registerError(
-              "The Scalar and its Filter-Input must have the same FILTER_INPUT type. \n\n"
+              "The Scalar and its FilterModel must have the same FILTER_INPUT type. \n\n"
                   " >> ${getClassName(
                   scalar)}<FILTER_INPUT> = <$filterInputB> \n"
                   " >> ${getClassName(
@@ -253,7 +253,7 @@ abstract class Shelf extends _XBase {
       //
       if (filterInputBF != filterInputB) {
         throw ___registerError(
-            "The Scalar and its Filter-Input must have the same FILTER_INPUT type.\n\n"
+            "The Scalar and its FilterModel must have the same FILTER_INPUT type.\n\n"
                 " >> ${getClassName(block)}<FILTER_INPUT> = <$filterInputB> \n"
                 " >> ${getClassName(
                 filterModel)}<FILTER_INPUT> = <$filterInputBF>");
