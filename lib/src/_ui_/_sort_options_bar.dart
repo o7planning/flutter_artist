@@ -186,8 +186,9 @@ class SortOptionsBar extends StatelessWidget {
       children: [
         Text(
           sortCriterion.text,
-          style:
-              isDragging ? textStyle.copyWith(color: Colors.grey) : textStyle,
+          style: isDragging //
+              ? textStyle.copyWith(color: Colors.grey)
+              : textStyle,
         ),
         SizedBox(width: iconSpacing),
         _buildSortBtn(
@@ -195,6 +196,7 @@ class SortOptionsBar extends StatelessWidget {
           sortCriterion: sortCriterion,
           isDragging: isDragging,
           acceptNoneDirection: true,
+          enabled: true,
         ),
       ],
     );

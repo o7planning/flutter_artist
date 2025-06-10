@@ -29,12 +29,13 @@ class SortOptionsDropdown extends StatelessWidget {
         ItemSortCriteria? itemSortCriteria = _block.itemSortCriteria;
         //
         List<SortCriterion> criteria = itemSortCriteria?.criteria ?? [];
-        SortCriterion? selected = itemSortCriteria?.selectedCriterion ??
-            itemSortCriteria?.getFirstSortCriterion();
+        SortCriterion? selectedSortCriterion =
+            itemSortCriteria?.selectedCriterion ??
+                itemSortCriteria?.getFirstSortCriterion();
         //
         return DropdownButton<SortCriterion>(
           isDense: true,
-          value: selected,
+          value: selectedSortCriterion,
           icon: const Icon(Icons.keyboard_arrow_down),
           items: criteria.map(
             (criterion) {
@@ -43,6 +44,7 @@ class SortOptionsDropdown extends StatelessWidget {
                 child: _buildSortCriterionView(
                   itemSortCriteria: itemSortCriteria!,
                   sortCriterion: criterion,
+                  selectedSortCriterion: selectedSortCriterion,
                 ),
               );
             },
@@ -81,6 +83,7 @@ class SortOptionsDropdown extends StatelessWidget {
   Widget _buildSortCriterionView({
     required ItemSortCriteria itemSortCriteria,
     required SortCriterion sortCriterion,
+    required SortCriterion? selectedSortCriterion,
   }) {
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -96,6 +99,7 @@ class SortOptionsDropdown extends StatelessWidget {
           sortCriterion: sortCriterion,
           isDragging: false,
           acceptNoneDirection: false,
+          enabled: sortCriterion.propName == selectedSortCriterion?.propName,
         ),
       ],
     );

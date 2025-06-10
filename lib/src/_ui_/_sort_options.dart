@@ -7,24 +7,27 @@ const double _sortIconSize = 16;
 Widget _buildSortBtn({
   required ItemSortCriteria itemSortCriteria,
   required SortCriterion sortCriterion,
+  required bool enabled,
   required bool isDragging,
   required bool acceptNoneDirection,
 }) {
   return InkWell(
+    onTap: enabled
+        ? () {
+            SortingDirection nextDirection = sortCriterion.getNextDirection(
+              acceptNoneDirection: acceptNoneDirection,
+            );
+            SortCriterion updateCriterion = sortCriterion.copyWith(
+              direction: nextDirection,
+            );
+            //
+            itemSortCriteria.updateSortCriterion(
+              updateCriterion: updateCriterion,
+              moveToFirst: false,
+            );
+          }
+        : null,
     child: _getSortIcon(sortCriterion, isDragging),
-    onTap: () {
-      SortingDirection nextDirection = sortCriterion.getNextDirection(
-        acceptNoneDirection: acceptNoneDirection,
-      );
-      SortCriterion updateCriterion = sortCriterion.copyWith(
-        direction: nextDirection,
-      );
-      //
-      itemSortCriteria.updateSortCriterion(
-        updateCriterion: updateCriterion,
-        moveToFirst: false,
-      );
-    },
   );
 }
 
