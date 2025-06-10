@@ -345,6 +345,8 @@ part 'src/_enum_/_show_mode.dart';
 
 part 'src/_enum_/_sorting_direction.dart';
 
+part 'src/_enum_/_sorting_rule.dart';
+
 part 'src/_enum_/_task_type.dart';
 
 part 'src/_exception_/_fatal_app_exception.dart';
