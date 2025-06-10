@@ -194,6 +194,7 @@ class SortOptionsBar extends StatelessWidget {
           itemSortCriteria: itemSortCriteria,
           sortCriterion: sortCriterion,
           isDragging: isDragging,
+          acceptNoneDirection: true,
         ),
       ],
     );

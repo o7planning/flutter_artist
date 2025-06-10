@@ -8,11 +8,14 @@ Widget _buildSortBtn({
   required ItemSortCriteria itemSortCriteria,
   required SortCriterion sortCriterion,
   required bool isDragging,
+  required bool acceptNoneDirection,
 }) {
   return InkWell(
     child: _getSortIcon(sortCriterion, isDragging),
     onTap: () {
-      SortingDirection nextDirection = sortCriterion.getNextDirection();
+      SortingDirection nextDirection = sortCriterion.getNextDirection(
+        acceptNoneDirection: acceptNoneDirection,
+      );
       SortCriterion updateCriterion = sortCriterion.copyWith(
         direction: nextDirection,
       );

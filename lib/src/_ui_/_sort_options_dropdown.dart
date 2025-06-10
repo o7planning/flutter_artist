@@ -95,6 +95,7 @@ class SortOptionsDropdown extends StatelessWidget {
           itemSortCriteria: itemSortCriteria,
           sortCriterion: sortCriterion,
           isDragging: false,
+          acceptNoneDirection: false,
         ),
       ],
     );

@@ -44,12 +44,14 @@ class SortCriterion {
     );
   }
 
-  SortingDirection getNextDirection() {
+  SortingDirection getNextDirection({bool acceptNoneDirection = true}) {
     switch (_direction) {
       case SortingDirection.ascending:
         return SortingDirection.descending;
       case SortingDirection.descending:
-        return SortingDirection.none;
+        return acceptNoneDirection
+            ? SortingDirection.none
+            : SortingDirection.ascending;
       case SortingDirection.none:
         return SortingDirection.ascending;
     }
