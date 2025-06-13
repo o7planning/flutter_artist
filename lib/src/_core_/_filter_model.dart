@@ -72,7 +72,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   ///
   /// Abstract method:
   ///
-  Future<XData?> callApiLoadMultiOptCriterionData({
+  Future<XData?> callApiLoadMultiOptCriterionXData({
     required String multiOptCriterionName,
     required FILTER_INPUT? filterInput,
     required Object? parentMultiOptCriterionValue,
@@ -300,7 +300,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: "callApiLoadMultiOptCriterionData",
+        methodName: "callApiLoadMultiOptCriterionXData",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -502,7 +502,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     // Load OptCriterion data from Rest API.
     // May throw ApiError.
     //
-    tempMultiOptCriterionXData ??= await callApiLoadMultiOptCriterionData(
+    tempMultiOptCriterionXData ??= await callApiLoadMultiOptCriterionXData(
       filterInput: filterInput,
       parentMultiOptCriterionValue: parentMultiOptCriterionValue,
       multiOptCriterionName: multiOptCriterionName,
@@ -709,7 +709,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
 
   ///
   /// This method is called immediately after
-  /// calling [callApiLoadMultiOptCriterionData]
+  /// calling [callApiLoadMultiOptCriterionXData]
   /// methods if there are no errors.
   ///
   FILTER_CRITERIA toFilterCriteriaObject({

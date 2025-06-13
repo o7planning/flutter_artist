@@ -107,7 +107,7 @@ abstract class FormModel<
   ///
   /// Abstract method:
   ///
-  Future<XData?> callApiLoadMultiOptPropData({
+  Future<XData?> callApiLoadMultiOptPropXData({
     required String multiOptPropName,
     required Object? parentMultiOptPropValue,
     required FILTER_CRITERIA filterCriteria,
@@ -433,7 +433,7 @@ abstract class FormModel<
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: "callApiLoadMultiOptPropData",
+        methodName: "callApiLoadMultiOptPropXData",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -765,7 +765,7 @@ abstract class FormModel<
     if (tempMultiOptPropXData == null || forceReload) {
       // Always increase "__loadCount" value regardless of error.
       multiOptProp._loadCount++;
-      tempMultiOptPropXData = await callApiLoadMultiOptPropData(
+      tempMultiOptPropXData = await callApiLoadMultiOptPropXData(
         filterCriteria: blockCurrentFilterCriteria,
         extraFormInput: extraFormInput,
         parentMultiOptPropValue: parentMultiOptPropValue,
