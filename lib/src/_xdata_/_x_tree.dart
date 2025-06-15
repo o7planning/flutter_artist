@@ -54,6 +54,6 @@ class XTree<ID, TREE_ITEM, TREE_DATA> extends XData<ID, TREE_ITEM, TREE_DATA> {
 
   @override
   void removeNotFoundItem(TREE_ITEM item) {
-    removeNotFoundItem(item);
+    removeNotFoundTreeItem(item);
   }
 }
