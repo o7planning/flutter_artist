@@ -110,6 +110,7 @@ abstract class FormModel<
   Future<XData?> callApiLoadMultiOptPropXData({
     required String multiOptPropName,
     required Object? parentMultiOptPropValue,
+    required Object? parentBlockItem,
     required FILTER_CRITERIA filterCriteria,
     required EXTRA_FORM_INPUT? extraFormInput,
   });
@@ -765,7 +766,9 @@ abstract class FormModel<
     if (tempMultiOptPropXData == null || forceReload) {
       // Always increase "__loadCount" value regardless of error.
       multiOptProp._loadCount++;
+      Object? parentBlockItem = this.block.parent?.currentItem;
       tempMultiOptPropXData = await callApiLoadMultiOptPropXData(
+        parentBlockItem: parentBlockItem,
         filterCriteria: blockCurrentFilterCriteria,
         extraFormInput: extraFormInput,
         parentMultiOptPropValue: parentMultiOptPropValue,
