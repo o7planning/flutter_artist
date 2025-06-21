@@ -2,6 +2,7 @@ part of '../../flutter_artist.dart';
 
 class _FormViewBuilder extends _RefreshableWidget {
   final FormModel formModel;
+  final bool showIconIfError;
 
   final Widget Function() build;
 
@@ -11,6 +12,7 @@ class _FormViewBuilder extends _RefreshableWidget {
     required super.description,
     required this.formModel,
     required this.build,
+    this.showIconIfError = true,
   });
 
   @override
@@ -140,9 +142,39 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
       initialValue: widget.formModel._initialValuesForFormView(),
       autovalidateMode: widget.formModel._autovalidateModeForFormView,
       onChanged: _onChanged,
-      child: AbsorbPointer(
-        absorbing: !widget.formModel.isEnabled(),
-        child: widget.build(),
+      child: _build(),
+    );
+  }
+
+  Widget _build() {
+    if (widget.showIconIfError) {
+      return Stack(
+        children: [
+          _buildAbsorbPointer(),
+          if (widget.formModel.formDataState == DataState.error)
+            Positioned(top: 5, right: 5, child: _buildErrorIcon()),
+        ],
+      );
+    } else {
+      return _buildAbsorbPointer();
+    }
+  }
+
+  Widget _buildAbsorbPointer() {
+    return AbsorbPointer(
+      absorbing: !widget.formModel.isEnabled(),
+      child: widget.build(),
+    );
+  }
+
+  Widget _buildErrorIcon() {
+    return CircleAvatar(
+      radius: 20,
+      backgroundColor: Colors.deepOrange[50],
+      child: Icon(
+        Icons.error,
+        size: 16,
+        color: Colors.red,
       ),
     );
   }

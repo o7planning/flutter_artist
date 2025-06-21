@@ -2,9 +2,11 @@ part of '../../flutter_artist.dart';
 
 abstract class FormView<FORM_MODEL extends FormModel> extends StatelessWidget {
   final FORM_MODEL formModel;
+  final bool showIconIfError;
 
   const FormView({
     required this.formModel,
+    this.showIconIfError = true,
     super.key,
   });
 
@@ -15,6 +17,7 @@ abstract class FormView<FORM_MODEL extends FormModel> extends StatelessWidget {
       ownerClassInstance: this,
       description: '',
       formModel: formModel,
+      showIconIfError: showIconIfError,
       build: () {
         return buildContent(context);
       },
