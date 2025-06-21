@@ -31,6 +31,12 @@ abstract class FormModel<
 
   DataState get formDataState => _formPropsStructure._formDataState;
 
+  dynamic get error => _formPropsStructure._error;
+
+  String? get errorMessage {
+    return _toErrorMessage(error);
+  }
+
   bool get formInitialDataReady => _formPropsStructure._formInitialDataReady;
 
   Shelf get shelf => block.shelf;
@@ -443,6 +449,7 @@ abstract class FormModel<
       __endFormActivityWithDataState(
         formDataState: DataState.error,
         activityType: activityType,
+        error: e,
       );
       return false;
     }
@@ -477,6 +484,7 @@ abstract class FormModel<
           __endFormActivityWithDataState(
             formDataState: DataState.error,
             activityType: activityType,
+            error: e,
           );
           return false;
         }
@@ -512,6 +520,7 @@ abstract class FormModel<
             __endFormActivityWithDataState(
               formDataState: DataState.error,
               activityType: activityType,
+              error: e,
             );
             return false;
           }
@@ -543,6 +552,7 @@ abstract class FormModel<
             //
             __endFormActivityWithDataState(
               formDataState: DataState.error,
+              error: e,
               activityType: activityType,
             );
             return false;
@@ -580,6 +590,7 @@ abstract class FormModel<
           __endFormActivityWithDataState(
             formDataState: DataState.error,
             activityType: activityType,
+            error: e,
           );
           return false;
         }
@@ -589,6 +600,7 @@ abstract class FormModel<
     return __endFormActivityWithDataState(
       formDataState: DataState.ready,
       activityType: activityType,
+      error: null,
     );
   }
 
@@ -598,6 +610,7 @@ abstract class FormModel<
   bool __endFormActivityWithDataState({
     required DataState formDataState,
     required _FormActivityType activityType,
+    required dynamic error,
   }) {
     try {
       //
@@ -616,7 +629,10 @@ abstract class FormModel<
       );
       //
       _defaultValueInitiated = true;
-      _formPropsStructure._setFormDataState(formDataState);
+      _formPropsStructure._setFormDataState(
+        formDataState: formDataState,
+        error: error,
+      );
       //
       if (activityType == _FormActivityType.itemFirstLoad) {
         if (formDataState == DataState.ready) {
@@ -655,7 +671,10 @@ abstract class FormModel<
         newCurrentValue: _formPropsStructure.currentFormData,
       );
       //
-      _formPropsStructure._setFormDataState(DataState.error);
+      _formPropsStructure._setFormDataState(
+        formDataState: DataState.error,
+        error: e,
+      );
       return false;
     } finally {
       _formPropsStructure.__isTempMode = false;
@@ -1279,6 +1298,7 @@ abstract class FormModel<
 
   bool isEnabled() {
     Actionable actionable = block._isEnableFormToModify();
+    print("Message: ${actionable.message}");
     return actionable.yes;
   }
 

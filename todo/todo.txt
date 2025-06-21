@@ -2,3 +2,4 @@
 
 
 Đổi tên emptyQuery() thành clear({newDataState: pending/ready})
+

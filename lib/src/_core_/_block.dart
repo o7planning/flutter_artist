@@ -4505,7 +4505,8 @@ abstract class Block<
         );
       case FormMode.creation:
         if (formModel!.formDataState == DataState.error) {
-          return Actionable.no(message: "Form data state is error.");
+          // TODO-XXX (Test case).
+          // return Actionable.no(message: "Form data state is error.");
         }
         return Actionable.yes();
       case FormMode.edit:
