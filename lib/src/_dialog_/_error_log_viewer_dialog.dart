@@ -1,10 +1,10 @@
 part of '../../flutter_artist.dart';
 
-class ErrorViewerDialog extends StatefulWidget {
+class ErrorLogViewerDialog extends StatefulWidget {
   final String title;
   final ErrorLogger errorLogger;
 
-  const ErrorViewerDialog({
+  const ErrorLogViewerDialog({
     this.title = 'Error Viewer',
     required this.errorLogger,
     super.key,
@@ -12,11 +12,11 @@ class ErrorViewerDialog extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _ErrorViewerDialogState();
+    return _ErrorLogViewerDialogState();
   }
 }
 
-class _ErrorViewerDialogState extends State<ErrorViewerDialog> {
+class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
   ErrorInfo? _errorInfo;
   int selectedIndex = 0;
 
@@ -196,14 +196,14 @@ class _ErrorViewerDialogState extends State<ErrorViewerDialog> {
   }
 }
 
-Future<void> _showErrorViewerDialog({
+Future<void> _showErrorLogViewerDialog({
   required BuildContext context,
   required ErrorLogger errorLogger,
 }) async {
   await showDialog(
     context: context,
     builder: (BuildContext context) {
-      return ErrorViewerDialog(
+      return ErrorLogViewerDialog(
         errorLogger: errorLogger,
       );
     },

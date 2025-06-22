@@ -255,7 +255,7 @@ class _FlutterArtist {
 
   Future<void> showErrorViewerDialog() async {
     BuildContext context = adapter.getCurrentContext();
-    await _showErrorViewerDialog(
+    await _showErrorLogViewerDialog(
       context: context,
       errorLogger: errorLogger,
     );
