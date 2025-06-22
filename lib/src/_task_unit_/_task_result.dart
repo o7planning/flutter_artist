@@ -16,7 +16,8 @@ class CurrentItemSelectionResult<ITEM> {
     required ITEM? candidateItem,
     required ITEM? oldCurrentItem,
     required ITEM? currentItem,
-  })  : _oldCurrentItem = oldCurrentItem,
+  })
+      : _oldCurrentItem = oldCurrentItem,
         _currentItem = currentItem,
         _getItemId = getItemId {
     if (candidateItem != null) {

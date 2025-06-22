@@ -20,8 +20,8 @@ class _LabeledCheckbox extends StatelessWidget {
       onTap: onChanged == null
           ? null
           : () {
-        onChanged!(!value);
-      },
+              onChanged!(!value);
+            },
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -31,8 +31,8 @@ class _LabeledCheckbox extends StatelessWidget {
             onChanged: onChanged == null
                 ? null
                 : (bool? newValue) {
-              onChanged!(newValue);
-            },
+                    onChanged!(newValue);
+                  },
           ),
           Text(
             label,

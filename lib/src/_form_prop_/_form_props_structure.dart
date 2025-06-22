@@ -22,7 +22,7 @@ class FormPropsStructure {
 
   dynamic _error;
 
-  dynamic get error  => _error;
+  dynamic get error => _error;
 
   FormMode _formMode = FormMode.none;
 
@@ -131,10 +131,10 @@ class FormPropsStructure {
 
   void _setFormDataState({
     required DataState formDataState,
-    required dynamic error ,
+    required dynamic error,
   }) {
     _formDataState = formDataState;
-    _error  = error;
+    _error = error;
   }
 
   // TODO: Xem lai, xoa di?
