@@ -1,8 +1,8 @@
 part of '../../flutter_artist.dart';
 
-class ErrorViewerDialog extends StatefulWidget {
+class ErrorViewerDialog extends StatelessWidget {
   final String title;
-  final dynamic error;
+  final Object error;
 
   const ErrorViewerDialog({
     required this.title,
@@ -11,32 +11,9 @@ class ErrorViewerDialog extends StatefulWidget {
   });
 
   @override
-  State<cupertino.StatefulWidget> createState() {
-    return _ErrorViewerDialog();
-  }
-}
-
-class _ErrorViewerDialog extends State<ErrorViewerDialog> {
-  final ScrollController _scrollController = ScrollController();
-
-  void _scrollToSelectedContent(
-      bool isExpanded, double previousOffset, int index, GlobalKey myKey) {
-    final keyContext = myKey.currentContext;
-
-    if (keyContext != null) {
-      // make sure that your widget is visible
-      final box = keyContext.findRenderObject() as RenderBox;
-      _scrollController.animateTo(
-          isExpanded ? (box.size.height * index) : previousOffset,
-          duration: Duration(milliseconds: 500),
-          curve: Curves.linear);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     dialogs.FaAlertDialog alert = dialogs.FaAlertDialog(
-      titleText: widget.title,
+      titleText: title,
       contentPadding: EdgeInsets.all(8),
       content: _buildContent(context),
     );
@@ -44,16 +21,13 @@ class _ErrorViewerDialog extends State<ErrorViewerDialog> {
   }
 
   Widget _buildContent(BuildContext context) {
-    AppException? exception = ErrorUtils.toAppException(widget.error);
+    AppException exception = ErrorUtils.toAppException(error);
     //
     final Size size = calculatePreferredDialogSize(
       context,
       preferredWidth: 440,
-      preferredHeight: exception == null ||
-              exception!.details == null ||
-              exception!.details!.isEmpty
-          ? 160
-          : 240,
+      preferredHeight:
+          exception.details == null || exception.details!.isEmpty ? 160 : 240,
     );
 
     return Container(

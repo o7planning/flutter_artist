@@ -70,30 +70,20 @@ abstract class _XBase {
   void _handleError({
     required Shelf shelf,
     required String? methodName,
-    required dynamic error,
+    required Object error,
     required StackTrace stackTrace,
     required bool showSnackBar,
   }) {
-    ApiError apiError;
-    if (error is ApiError) {
-      apiError = error;
-    } else {
-      apiError = ApiError(
-        errorMessage: error.toString(),
-        status: null,
-        errorDetails: null,
-      );
-    }
+    AppException err = ErrorUtils.toAppException(error);
     //
     final String msg;
     if (methodName == null) {
-      msg = "Error: ${apiError.errorMessage}";
+      msg = "Error: ${err.message}";
     } else {
       if (methodName.contains("\\.")) {
-        msg = "Call $methodName() error: ${apiError.errorMessage}";
+        msg = "Call $methodName() error: ${err.details}";
       } else {
-        msg =
-            "Call ${getClassName(this)}.$methodName() error: ${apiError.errorMessage}";
+        msg = "Call ${getClassName(this)}.$methodName() error: ${err.message}";
       }
     }
     print(msg);
@@ -111,14 +101,14 @@ abstract class _XBase {
     FlutterArtist.errorLogger.addError(
       shelfName: FlutterArtist.storage._getShelfName(shelf.runtimeType),
       message: msg,
-      errorDetails: apiError.errorDetails,
+      errorDetails: err.details,
       stackTrace: stackTrace,
     );
     //
     if (showSnackBar) {
       showErrorSnackBar(
         message: msg,
-        errorDetails: apiError.errorDetails,
+        errorDetails: err.details,
       );
     }
   }

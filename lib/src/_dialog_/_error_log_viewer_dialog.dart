@@ -28,8 +28,11 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
 
   @override
   Widget build(BuildContext context) {
-    Size preferredSize = calculatePreferredDialogSize(context,
-        preferredWidth: 620, preferredHeight: 400);
+    Size preferredSize = calculatePreferredDialogSize(
+      context,
+      preferredWidth: 620,
+      preferredHeight: 400,
+    );
 
     dialogs.FaAlertDialog alert = dialogs.FaAlertDialog(
       titleText: widget.title,
@@ -101,10 +104,6 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
         if (_errorInfo != null &&
             _errorInfo!.errorDetails != null &&
             _errorInfo!.errorDetails!.isNotEmpty)
-          Divider(),
-        if (_errorInfo != null &&
-            _errorInfo!.errorDetails != null &&
-            _errorInfo!.errorDetails!.isNotEmpty)
           Expanded(
             child: ListView(
               children: _errorInfo!.errorDetails!
@@ -133,13 +132,16 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
   Widget _buildErrorDetail(String errorDetail) {
     return Material(
       child: ListTile(
-        tileColor: Colors.white,
         dense: true,
         visualDensity: const VisualDensity(
           vertical: -3,
           horizontal: -3,
         ),
         contentPadding: const EdgeInsets.all(0),
+        horizontalTitleGap: 5,
+        minVerticalPadding: 5,
+        minLeadingWidth: 28,
+        minTileHeight: 0,
         leading: const Padding(
           padding: EdgeInsets.only(left: 10),
           child: Icon(
