@@ -37,7 +37,7 @@ class _ErrorViewerDialog extends State<ErrorViewerDialog> {
   Widget build(BuildContext context) {
     dialogs.FaAlertDialog alert = dialogs.FaAlertDialog(
       titleText: widget.title,
-      contentPadding: EdgeInsets.all(5),
+      contentPadding: EdgeInsets.all(8),
       content: _buildContent(context),
     );
     return alert;

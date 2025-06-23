@@ -28,22 +28,13 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.sizeOf(context).width;
-    double height = MediaQuery.sizeOf(context).height;
-    if (width > 620) {
-      width = 600;
-    } else {
-      width = 0.9 * width;
-    }
-    if (height > 420) {
-      height = 320;
-    } else {
-      height = height - 100;
-    }
+    Size preferredSize = calculatePreferredDialogSize(context,
+        preferredWidth: 620, preferredHeight: 400);
 
     dialogs.FaAlertDialog alert = dialogs.FaAlertDialog(
       titleText: widget.title,
-      content: _buildContent(width, height),
+      contentPadding: EdgeInsets.all(8),
+      content: _buildContent(preferredSize.width, preferredSize.height),
     );
     return alert;
   }
