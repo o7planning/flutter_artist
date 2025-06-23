@@ -130,7 +130,6 @@ const IconData _formQueryIconData = cupertino.CupertinoIcons.refresh;
 const IconData _formDeleteIconData = cupertino.CupertinoIcons.delete;
 const IconData _formCreateIconData = cupertino.CupertinoIcons.add_circled;
 
-
 const IconData _formErrorModeIconData = Icons.error_outlined;
 const IconData _formNoneModeIconData = cupertino.CupertinoIcons.lock;
 const IconData _formCreationModeIconData = cupertino.CupertinoIcons.doc;

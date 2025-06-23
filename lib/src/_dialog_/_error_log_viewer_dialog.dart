@@ -75,69 +75,54 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
     );
   }
 
-  Widget _buildExpansionTile({
-    required IconData iconData,
-    required String title,
-    required String subtitle,
-    required List<Widget> children,
-    required bool initiallyExpanded,
-    required int index,
-  }) {
-    return Theme(
-      data: ThemeData().copyWith(dividerColor: Colors.transparent),
-      child: ExpansionTile(
-        initiallyExpanded: initiallyExpanded,
-        expandedCrossAxisAlignment: CrossAxisAlignment.start,
-        tilePadding: const EdgeInsets.all(0),
-        dense: true,
-        visualDensity: const VisualDensity(
-          vertical: -3,
-          horizontal: -3,
-        ),
-        backgroundColor: Colors.black12,
-        collapsedBackgroundColor: Colors.black12,
-        leading: Icon(
-          iconData,
-          size: 18,
-        ),
-        title: Text(title),
-        subtitle: Text(
-          subtitle,
-          style: const TextStyle(
-            fontSize: 12,
-          ),
-        ),
-        children: children,
-        onExpansionChanged: (bool expanded) {
-          if (expanded) {
-            selectedIndex = index;
-          } else {
-            selectedIndex = -1;
-          }
-          setState(() {});
-        },
-      ),
-    );
-  }
-
   Widget _buildErrorDetails() {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (_errorInfo != null)
-          _buildExpansionTile(
-            iconData: _infoIconData,
-            title: _errorInfo!.message,
-            subtitle: "Shelf: ${_errorInfo!.shelfName}",
-            index: 0,
-            initiallyExpanded: true,
-            children: _errorInfo!.errorDetails == null
-                ? []
-                : _errorInfo!.errorDetails!
-                    .map((errorDetail) => _buildErrorDetail(errorDetail))
-                    .toList(),
+          ListTile(
+            dense: true,
+            visualDensity: const VisualDensity(
+              vertical: -3,
+              horizontal: -3,
+            ),
+            contentPadding: EdgeInsets.all(0),
+            horizontalTitleGap: 5,
+            minVerticalPadding: 5,
+            minLeadingWidth: 24,
+            minTileHeight: 0,
+            titleAlignment: ListTileTitleAlignment.top,
+            leading: Icon(
+              _dataStateErrorIconData,
+              size: 18,
+              color: Colors.red,
+            ),
+            title: Text(
+              _errorInfo!.message,
+              maxLines: 3,
+              style: const TextStyle(
+                fontSize: 13,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+        if (_errorInfo != null &&
+            _errorInfo!.errorDetails != null &&
+            _errorInfo!.errorDetails!.isNotEmpty)
+          Divider(),
+        if (_errorInfo != null &&
+            _errorInfo!.errorDetails != null &&
+            _errorInfo!.errorDetails!.isNotEmpty)
+          Expanded(
+            child: ListView(
+              children: _errorInfo!.errorDetails!
+                  .map((errorDetail) => _buildErrorDetail(errorDetail))
+                  .toList(),
+            ),
           ),
         if (_errorInfo != null && _errorInfo!.stackTrace != null)
-          const SizedBox(height: 5),
+          SizedBox(height: 5),
         if (_errorInfo != null && _errorInfo!.stackTrace != null)
           Expanded(
             child: _CustomAppContainer(
@@ -188,7 +173,6 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildErrorButtons(),
-          const Divider(),
           Expanded(
             child: _buildErrorDetails(),
           ),
