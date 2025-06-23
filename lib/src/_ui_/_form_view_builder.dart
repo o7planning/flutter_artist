@@ -113,10 +113,10 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
         // TODO: In Error, check again late.
         canPop: !widget.formModel.isDirty(),
         onPopInvokedWithResult: _onPopInvokedWithResult,
-        child: _buildFormBuilder(),
+        child: _buildFormBuilder(context),
       );
     } else {
-      return _buildFormBuilder();
+      return _buildFormBuilder(context);
     }
   }
 
@@ -136,23 +136,23 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
     }
   }
 
-  FormBuilder _buildFormBuilder() {
+  FormBuilder _buildFormBuilder(BuildContext context) {
     return FormBuilder(
       key: formKey,
       initialValue: widget.formModel._initialValuesForFormView(),
       autovalidateMode: widget.formModel._autovalidateModeForFormView,
       onChanged: _onChanged,
-      child: _build(),
+      child: _build(context),
     );
   }
 
-  Widget _build() {
+  Widget _build(BuildContext context) {
     if (widget.showIconIfError) {
       return Stack(
         children: [
           _buildAbsorbPointer(),
           if (widget.formModel.formDataState == DataState.error)
-            Positioned(top: 5, right: 5, child: _buildErrorIcon()),
+            Positioned(top: 5, right: 5, child: _buildErrorIcon(context)),
         ],
       );
     } else {
@@ -167,14 +167,23 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
     );
   }
 
-  Widget _buildErrorIcon() {
+  Widget _buildErrorIcon(BuildContext context) {
     return CircleAvatar(
       radius: 20,
       backgroundColor: Colors.deepOrange[50],
-      child: Icon(
-        Icons.error,
-        size: 16,
-        color: Colors.red,
+      child: IconButton(
+        icon: Icon(
+          Icons.error,
+          size: 16,
+          color: Colors.red,
+        ),
+        onPressed: () {
+          _showErrorViewerDialog(
+            context: context,
+            title: "Form Error",
+            error: widget.formModel.error,
+          );
+        },
       ),
     );
   }

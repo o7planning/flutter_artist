@@ -120,7 +120,7 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
     );
   }
 
-  Widget _buildErrorDetail() {
+  Widget _buildErrorDetails() {
     return Column(
       children: [
         if (_errorInfo != null)
@@ -133,31 +133,7 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
             children: _errorInfo!.errorDetails == null
                 ? []
                 : _errorInfo!.errorDetails!
-                    .map(
-                      (errorDetail) => Material(
-                        child: ListTile(
-                          tileColor: Colors.white,
-                          dense: true,
-                          visualDensity: const VisualDensity(
-                            vertical: -3,
-                            horizontal: -3,
-                          ),
-                          contentPadding: const EdgeInsets.all(0),
-                          leading: const Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: Icon(
-                              _listItemBulletIconData,
-                              color: Colors.black,
-                              size: 16,
-                            ),
-                          ),
-                          title: Text(
-                            errorDetail,
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                        ),
-                      ),
-                    )
+                    .map((errorDetail) => _buildErrorDetail(errorDetail))
                     .toList(),
           ),
         if (_errorInfo != null && _errorInfo!.stackTrace != null)
@@ -178,6 +154,32 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
     );
   }
 
+  Widget _buildErrorDetail(String errorDetail) {
+    return Material(
+      child: ListTile(
+        tileColor: Colors.white,
+        dense: true,
+        visualDensity: const VisualDensity(
+          vertical: -3,
+          horizontal: -3,
+        ),
+        contentPadding: const EdgeInsets.all(0),
+        leading: const Padding(
+          padding: EdgeInsets.only(left: 10),
+          child: Icon(
+            _listItemBulletIconData,
+            color: Colors.black,
+            size: 16,
+          ),
+        ),
+        title: Text(
+          errorDetail,
+          style: const TextStyle(fontSize: 12),
+        ),
+      ),
+    );
+  }
+
   Widget _buildContent(double width, double height) {
     return SizedBox(
       width: width,
@@ -188,7 +190,7 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
           _buildErrorButtons(),
           const Divider(),
           Expanded(
-            child: _buildErrorDetail(),
+            child: _buildErrorDetails(),
           ),
         ],
       ),

@@ -34,7 +34,8 @@ abstract class FormModel<
   dynamic get error => _formPropsStructure._error;
 
   String? get errorMessage {
-    return _toErrorMessage(error);
+    AppException? exception = ErrorUtils.toAppException(error);
+    return exception?.message;
   }
 
   bool get formInitialDataReady => _formPropsStructure._formInitialDataReady;
