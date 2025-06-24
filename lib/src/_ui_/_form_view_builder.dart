@@ -178,11 +178,7 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
           color: Colors.red,
         ),
         onPressed: () {
-          _showErrorViewerDialog(
-            context: context,
-            title: "Form Error",
-            error: widget.formModel.error,
-          );
+          widget.formModel.showFormErrorViewerDialog(context);
         },
       ),
     );

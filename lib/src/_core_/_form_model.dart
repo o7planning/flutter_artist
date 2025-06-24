@@ -31,7 +31,7 @@ abstract class FormModel<
 
   DataState get formDataState => _formPropsStructure._formDataState;
 
-  dynamic get error => _formPropsStructure._error;
+  Object? get error => _formPropsStructure._error;
 
   String? get errorMessage {
     if (error == null) {
@@ -110,6 +110,48 @@ abstract class FormModel<
   /// }
   /// ```
   FormPropsStructure registerPropsStructure();
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Type getIdType() {
+    return ID;
+  }
+
+  Type getItemDetailType() {
+    return ITEM_DETAIL;
+  }
+
+  Type getFilterCriteriaType() {
+    return FILTER_CRITERIA;
+  }
+
+  Type getExtraFormInputType() {
+    return EXTRA_FORM_INPUT;
+  }
+
+  String get _classDefinition {
+    return "${getClassName(this)}$_classParametersDefinition";
+  }
+
+  String get _classParametersDefinition {
+    return "<${getIdType()}, ${getItemDetailType()}, "
+        "${getFilterCriteriaType()}, ${getExtraFormInputType()}>";
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void showFormErrorViewerDialog(BuildContext context) {
+    if (formDataState != DataState.error) {
+      return;
+    }
+    _showFormErrorViewerDialog(
+      context: context,
+      error: error ?? "Unknown Error",
+      formInitialDataReady: formInitialDataReady,
+    );
+  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -1302,7 +1344,6 @@ abstract class FormModel<
 
   bool isEnabled() {
     Actionable actionable = block._isEnableFormToModify();
-    print("Message: ${actionable.message}");
     return actionable.yes;
   }
 

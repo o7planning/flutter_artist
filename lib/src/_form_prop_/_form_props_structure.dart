@@ -20,7 +20,7 @@ class FormPropsStructure {
 
   DataState _formDataState = DataState.none;
 
-  dynamic _error;
+  Object? _error;
 
   dynamic get error => _error;
 

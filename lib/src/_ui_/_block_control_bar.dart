@@ -161,10 +161,15 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
                 widget.block.formModel!.formDataState == DataState.error)
               Tooltip(
                 message: "Error: ${widget.block.formModel!.errorMessage}",
-                child: Icon(
-                  _formErrorModeIconData,
-                  color: Colors.red,
-                  size: _ControlBarButton.iconSize,
+                child: IconButton(
+                  onPressed: () {
+                    widget.block.formModel!.showFormErrorViewerDialog(context);
+                  },
+                  icon: Icon(
+                    _formErrorModeIconData,
+                    color: Colors.red,
+                    size: _ControlBarButton.iconSize,
+                  ),
                 ),
               ),
             if (widget.block.formModel != null &&

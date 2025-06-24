@@ -19,12 +19,31 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
       MultiSplitViewController();
   TreeViewController<dynamic, TreeNode<dynamic>>? _treeViewController;
   late TreeNode<dynamic> rootTreeNode;
-  TreeNode<dynamic>? _currentNode;
+  late TreeNode<dynamic> _currentNode;
 
   @override
   void initState() {
     super.initState();
-    rootTreeNode = _getRootWithChildren();
+    //
+    TreeNode formModelNode = TreeNode(
+      key: "FormModel-${getClassName(widget.formModel)}",
+      data: widget.formModel,
+      parent: null,
+    );
+    _currentNode= formModelNode;
+    rootTreeNode = TreeNode.root()..add(formModelNode);
+    //
+    FormPropsStructure structure = widget.formModel._formPropsStructure;
+
+    List<MultiOptProp> rootMultiOptProp = structure._rootOptProps;
+    for (MultiOptProp multiOptProp in rootMultiOptProp) {
+      _addMultiOptPropCascade(formModelNode, multiOptProp);
+    }
+    List<SimpleProp> simpleProps = structure._simpleProps;
+    for (SimpleProp simpleProp in simpleProps) {
+      _addSimpleProp(formModelNode, simpleProp);
+    }
+    //
     _splitViewController.areas = [
       Area(
         size: 320,
@@ -46,9 +65,7 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
   }
 
   Widget _buildRight() {
-    if (_currentNode == null) {
-      return Text("Null");
-    } else if (_currentNode!.data is FormModel) {
+    if (_currentNode!.data is FormModel) {
       return _FormModelDebugView(
         formModel: _currentNode!.data,
       );
@@ -196,27 +213,6 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
     );
   }
 
-  TreeNode _getRootWithChildren() {
-    TreeNode formModelNode = TreeNode(
-      key: "FormModel-${getClassName(widget.formModel)}",
-      data: widget.formModel,
-      parent: null,
-    );
-    rootTreeNode = TreeNode.root()..add(formModelNode);
-    //
-    FormPropsStructure structure = widget.formModel._formPropsStructure;
-
-    List<MultiOptProp> rootMultiOptProp = structure._rootOptProps;
-    for (MultiOptProp multiOptProp in rootMultiOptProp) {
-      _addMultiOptPropCascade(formModelNode, multiOptProp);
-    }
-    List<SimpleProp> simpleProps = structure._simpleProps;
-    for (SimpleProp simpleProp in simpleProps) {
-      _addSimpleProp(formModelNode, simpleProp);
-    }
-
-    return rootTreeNode;
-  }
 
   void _addMultiOptPropCascade(
       TreeNode currentNode, MultiOptProp multiOptProp) {
