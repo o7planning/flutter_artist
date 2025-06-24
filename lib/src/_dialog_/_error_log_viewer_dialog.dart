@@ -18,7 +18,8 @@ class ErrorLogViewerDialog extends StatefulWidget {
 
 class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
   ErrorInfo? _errorInfo;
-  int selectedIndex = 0;
+  bool showErrorDetail = true;
+
 
   @override
   void initState() {
@@ -70,6 +71,11 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
   }
 
   Widget _buildErrorDetails() {
+    bool hasErrorDetails = _errorInfo != null &&
+        _errorInfo!.errorDetails != null &&
+        _errorInfo!.errorDetails!.isNotEmpty;
+    bool hasStackTrace = _errorInfo != null && _errorInfo!.stackTrace != null;
+    //
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,28 +107,43 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
               ),
             ),
           ),
-        if (_errorInfo != null &&
-            _errorInfo!.errorDetails != null &&
-            _errorInfo!.errorDetails!.isNotEmpty)
+        if (hasErrorDetails || hasStackTrace)
           Expanded(
-            child: ListView(
-              children: _errorInfo!.errorDetails!
-                  .map((errorDetail) => _buildErrorDetail(errorDetail))
-                  .toList(),
-            ),
-          ),
-        if (_errorInfo != null && _errorInfo!.stackTrace != null)
-          SizedBox(height: 5),
-        if (_errorInfo != null && _errorInfo!.stackTrace != null)
-          Expanded(
-            child: _CustomAppContainer(
-              width: double.maxFinite,
-              child: SingleChildScrollView(
-                child: Text(
-                  _errorInfo!.stackTrace.toString(),
-                  style: const TextStyle(fontSize: 12),
-                ),
-              ),
+            child:  Stack(
+                children: [
+                  if (hasErrorDetails)
+                    _CustomAppContainer(
+                      width: double.maxFinite,
+                      height: double.maxFinite,
+                      child: ListView(
+                        children: _errorInfo!.errorDetails!
+                            .map(
+                                (errorDetail) => _buildErrorDetail(errorDetail))
+                            .toList(),
+                      ),
+                    ),
+                  if (hasStackTrace)
+                    _CustomAppContainer(
+                      width: double.maxFinite,
+                      height: double.maxFinite,
+                      child: SingleChildScrollView(
+                        child: Text(
+                          _errorInfo!.stackTrace.toString(),
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                      ),
+                    ),
+                  // if (hasStackTrace && hasErrorDetails)
+                  //   Positioned(
+                  //     top: 5,
+                  //     right: 5,
+                  //     child: Switch(
+                  //       value: null,
+                  //       onChanged: (bool value) {  },
+                  //       child: Text("Stack Trace"),
+                  //     ),
+                  //   ),
+                ],
             ),
           ),
       ],
