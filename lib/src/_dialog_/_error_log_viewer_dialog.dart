@@ -18,8 +18,8 @@ class ErrorLogViewerDialog extends StatefulWidget {
 
 class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
   ErrorInfo? _errorInfo;
-  bool showErrorDetail = true;
-
+  bool showErrorDetail0 = true;
+  bool showErrorDetail1 = true;
 
   @override
   void initState() {
@@ -76,6 +76,14 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
         _errorInfo!.errorDetails!.isNotEmpty;
     bool hasStackTrace = _errorInfo != null && _errorInfo!.stackTrace != null;
     //
+    if (hasErrorDetails && hasStackTrace) {
+      showErrorDetail1 = showErrorDetail0;
+    } else if (hasErrorDetails) {
+      showErrorDetail1 = true;
+    } else if (hasStackTrace) {
+      showErrorDetail1 = false;
+    }
+    //
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,41 +117,51 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
           ),
         if (hasErrorDetails || hasStackTrace)
           Expanded(
-            child:  Stack(
-                children: [
-                  if (hasErrorDetails)
-                    _CustomAppContainer(
-                      width: double.maxFinite,
-                      height: double.maxFinite,
-                      child: ListView(
-                        children: _errorInfo!.errorDetails!
-                            .map(
-                                (errorDetail) => _buildErrorDetail(errorDetail))
-                            .toList(),
+            child: Stack(
+              children: [
+                if (hasErrorDetails && showErrorDetail1)
+                  _CustomAppContainer(
+                    width: double.maxFinite,
+                    height: double.maxFinite,
+                    child: ListView(
+                      children: _errorInfo!.errorDetails!
+                          .map((errorDetail) => _buildErrorDetail(errorDetail))
+                          .toList(),
+                    ),
+                  ),
+                if (hasStackTrace && !showErrorDetail1)
+                  _CustomAppContainer(
+                    width: double.maxFinite,
+                    height: double.maxFinite,
+                    child: SingleChildScrollView(
+                      child: Text(
+                        _errorInfo!.stackTrace.toString(),
+                        style: const TextStyle(fontSize: 12),
                       ),
                     ),
-                  if (hasStackTrace)
-                    _CustomAppContainer(
-                      width: double.maxFinite,
-                      height: double.maxFinite,
-                      child: SingleChildScrollView(
-                        child: Text(
-                          _errorInfo!.stackTrace.toString(),
-                          style: const TextStyle(fontSize: 12),
-                        ),
-                      ),
+                  ),
+                if (hasStackTrace && hasErrorDetails)
+                  Positioned(
+                    top: 5,
+                    right: 5,
+                    child: AdvancedSwitch(
+                      initialValue: showErrorDetail1,
+                      activeColor: Colors.indigo,
+                      inactiveColor: Colors.grey,
+                      activeChild: const Text('Error Details'),
+                      inactiveChild: const Text('Stack Trace'),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      width: 130.0,
+                      height: 20.0,
+                      enabled: true,
+                      onChanged: (dynamic checked) {
+                        showErrorDetail0 = checked ?? false;
+                        showErrorDetail1 = checked ?? false;
+                        setState(() {});
+                      },
                     ),
-                  // if (hasStackTrace && hasErrorDetails)
-                  //   Positioned(
-                  //     top: 5,
-                  //     right: 5,
-                  //     child: Switch(
-                  //       value: null,
-                  //       onChanged: (bool value) {  },
-                  //       child: Text("Stack Trace"),
-                  //     ),
-                  //   ),
-                ],
+                  ),
+              ],
             ),
           ),
       ],
