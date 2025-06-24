@@ -33,10 +33,13 @@ class _FormModelDebugView extends StatelessWidget {
           IconLabelText(
             label: "Initial Form Data Ready?: ",
             text: "",
-            suffixIcon: Checkbox(
-              visualDensity: VisualDensity(vertical: -3, horizontal: -3),
-              value: formModel.formInitialDataReady,
-              onChanged: null,
+            suffixIcon: Icon(
+              formModel.formInitialDataReady
+                  ? _formInitialDataReadyTrueIconData
+                  : _formInitialDataReadyFalseIconData,
+              color:
+                  formModel.formInitialDataReady ? Colors.indigo : Colors.red,
+              size: 20,
             ),
           ),
           SizedBox(height: 5),
@@ -44,6 +47,7 @@ class _FormModelDebugView extends StatelessWidget {
             controlAffinity: ListTileControlAffinity.leading,
             value: actionable.yes,
             dense: true,
+            checkboxScaleFactor: actionable.yes ? 1.0 : 1.5,
             visualDensity: VisualDensity(vertical: -3, horizontal: -3),
             contentPadding: EdgeInsets.all(0),
             title: Text("Form Enabled?"),

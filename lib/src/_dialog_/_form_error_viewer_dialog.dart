@@ -39,11 +39,14 @@ class FormErrorViewerDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           IconLabelText(
-            label: "Initial FormData Ready? ",
+            label: "Initial Form Data Ready? ",
             text: "",
-            suffixIcon: Checkbox(
-              value: formInitialDataReady,
-              onChanged: null,
+            suffixIcon: Icon(
+              formInitialDataReady
+                  ? _formInitialDataReadyTrueIconData
+                  : _formInitialDataReadyFalseIconData,
+              color: formInitialDataReady ? Colors.indigo : Colors.red,
+              size: 20,
             ),
           ),
           Divider(),

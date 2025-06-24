@@ -8,10 +8,15 @@ const IconData _dataStatePendingIconData = cupertino.CupertinoIcons.slowmo;
 const IconData _dataStateReadyIconData =
     cupertino.CupertinoIcons.checkmark_alt_circle;
 
-const IconData _dataStateErrorIconData =
-    cupertino.CupertinoIcons.exclamationmark_octagon;
+const IconData _formErrorRollbackIconData = cupertino.CupertinoIcons.arrow_3_trianglepath;
+
+// Show in FormErrorViewerDialog:
+const IconData _dataStateErrorIconData = cupertino.CupertinoIcons.exclamationmark_triangle_fill;
 
 const IconData _dataStateNoneIconData = cupertino.CupertinoIcons.app;
+
+const IconData _formInitialDataReadyTrueIconData = Icons.check_box_outlined;
+const IconData _formInitialDataReadyFalseIconData = Icons.check_box_outline_blank;
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
@@ -130,7 +135,7 @@ const IconData _formQueryIconData = cupertino.CupertinoIcons.refresh;
 const IconData _formDeleteIconData = cupertino.CupertinoIcons.delete;
 const IconData _formCreateIconData = cupertino.CupertinoIcons.add_circled;
 
-const IconData _formErrorModeIconData = Icons.error_outlined;
+const IconData _formErrorModeIconData =cupertino.CupertinoIcons.exclamationmark_triangle_fill;
 const IconData _formNoneModeIconData = cupertino.CupertinoIcons.lock;
 const IconData _formCreationModeIconData = cupertino.CupertinoIcons.doc;
 const IconData _formEditModeIconData = cupertino.CupertinoIcons.doc_text;

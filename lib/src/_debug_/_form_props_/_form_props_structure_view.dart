@@ -30,7 +30,7 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
       data: widget.formModel,
       parent: null,
     );
-    _currentNode= formModelNode;
+    _currentNode = formModelNode;
     rootTreeNode = TreeNode.root()..add(formModelNode);
     //
     FormPropsStructure structure = widget.formModel._formPropsStructure;
@@ -212,7 +212,6 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
       ),
     );
   }
-
 
   void _addMultiOptPropCascade(
       TreeNode currentNode, MultiOptProp multiOptProp) {

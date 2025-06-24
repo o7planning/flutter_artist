@@ -152,7 +152,11 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
         children: [
           _buildAbsorbPointer(),
           if (widget.formModel.formDataState == DataState.error)
-            Positioned(top: 5, right: 5, child: _buildErrorIcon(context)),
+            Positioned(
+              top: 5,
+              right: 5,
+              child: _buildErrorIcon(context),
+            ),
         ],
       );
     } else {
@@ -168,19 +172,47 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
   }
 
   Widget _buildErrorIcon(BuildContext context) {
-    return CircleAvatar(
-      radius: 20,
-      backgroundColor: Colors.deepOrange[50],
-      child: IconButton(
-        icon: Icon(
-          Icons.error,
-          size: 16,
-          color: Colors.red,
+    Color circleAvatarBgColor = Colors.deepOrange[50]!;
+    //
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        CircleAvatar(
+          radius: 20,
+          backgroundColor: circleAvatarBgColor,
+          child: IconButton(
+            icon: Icon(
+              _dataStateErrorIconData,
+              size: 16,
+              color: Colors.red,
+            ),
+            onPressed: () {
+              widget.formModel.showFormErrorViewerDialog(context);
+            },
+          ),
         ),
-        onPressed: () {
-          widget.formModel.showFormErrorViewerDialog(context);
-        },
-      ),
+        SizedBox(width: 5),
+        CircleAvatar(
+          radius: 20,
+          backgroundColor: circleAvatarBgColor,
+          child: IconButton(
+            icon: Icon(
+              _formErrorRollbackIconData,
+              size: 16,
+              color: widget.formModel.formInitialDataReady
+                  ? Colors.indigo
+                  : Colors.grey,
+            ),
+            onPressed: widget.formModel.formInitialDataReady
+                ? () {
+                    widget.formModel.showFormErrorViewerDialog(context);
+                  }
+                : null,
+          ),
+        )
+      ],
     );
   }
 

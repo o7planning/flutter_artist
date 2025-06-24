@@ -159,18 +159,14 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
               ),
             if (widget.block.formModel != null &&
                 widget.block.formModel!.formDataState == DataState.error)
-              Tooltip(
-                message: "Error: ${widget.block.formModel!.errorMessage}",
-                child: IconButton(
-                  onPressed: () {
-                    widget.block.formModel!.showFormErrorViewerDialog(context);
-                  },
-                  icon: Icon(
-                    _formErrorModeIconData,
-                    color: Colors.red,
-                    size: _ControlBarButton.iconSize,
-                  ),
-                ),
+              _ControlBarButton(
+                tooltip: 'Error: ${widget.block.formModel!.errorMessage}',
+                iconData: _formErrorModeIconData,
+                iconColor: Colors.red,
+                onAction: false,
+                onPressed: () {
+                  widget.block.formModel!.showFormErrorViewerDialog(context);
+                },
               ),
             if (widget.block.formModel != null &&
                 (loggedInUser?.isSystemUser ?? false))
