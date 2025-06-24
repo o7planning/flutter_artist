@@ -274,8 +274,12 @@ part 'src/_dialog_/_dialog_size.dart';
 
 part 'src/_dialog_/_error_log_viewer_dialog.dart';
 
+part 'src/_enum_/_debug_cat.dart';
+
 part 'src/_dialog_/_error_viewer_dialog.dart';
+
 part 'src/_dialog_/_form_error_viewer_dialog.dart';
+
 part 'src/_dialog_/_filter_criteria_dialog.dart';
 
 part 'src/_dialog_/_filter_model_info_dialog.dart';

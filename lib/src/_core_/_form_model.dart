@@ -668,7 +668,7 @@ abstract class FormModel<
         _formPropsStructure._setInitialFormDataForItemFirstLoad();
       }
       //
-      // IMPORTANT:
+      // IMPORTANT: (Called on Field.onChanged).
       //
       _formKeyPatchValue(
         newCurrentValue: _formPropsStructure.currentFormData,
@@ -738,6 +738,7 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  // TestCase [16a]-changeSupplierType.
   void _formKeyPatchValue({required Map<String, dynamic> newCurrentValue}) {
     try {
       _formKey.currentState?.patchValue(newCurrentValue);

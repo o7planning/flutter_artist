@@ -1,18 +1,19 @@
 part of '../../../flutter_artist.dart';
 
-_DebugMsgType? _debugMsgType = _DebugMsgType.state;
+//
+// _DebugMsgType? _debugMsgType = _DebugMsgType.state;
+//
+// enum _DebugMsgType {
+//   state;
+// }
+//
 
-enum _DebugMsgType {
-  state;
-}
-
-void _debugPrint(_DebugMsgType type, String message) {
-  if (type != _debugMsgType) {
-    return;
-  }
+void _debugPrint(String message) {
   print(message);
 }
 
-void _printDebugState(String message) {
-  _debugPrint(_DebugMsgType.state, message);
+void _printDebugState(DebugCat debugCat, String message) {
+  if (FlutterArtist.isAllowDebugCat(debugCat)) {
+    _debugPrint(message);
+  }
 }

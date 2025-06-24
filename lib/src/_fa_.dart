@@ -39,10 +39,19 @@ class _FlutterArtist {
 
   final List<Future<dynamic>> __futureTaskList = [];
 
+  final List<DebugCat> __allowDebugCats = [];
+
   // ***************************************************************************
   // ***************************************************************************
 
   _FlutterArtist();
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool isAllowDebugCat(DebugCat debugCat) {
+    return __allowDebugCats.contains(debugCat);
+  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -114,11 +123,16 @@ class _FlutterArtist {
     required IGlobalDataAdapter globalDataAdapter,
     required Function(BuildContext context)? showRestDebugDialog,
     int notificationFetchPeriodInSeconds = 60,
+    List<DebugCat> allowDebugCats = const [],
   }) async {
     if (__adapter != null) {
       throw _printFatalError("${getClassName(__adapter)} already registered!");
     }
     __adapter = flutterArtistAdapter;
+    //
+    __allowDebugCats
+      ..clear()
+      ..addAll(allowDebugCats);
     //
     _globalsManager = _GlobalsManager(
       loggedInUserAdapter: loggedInUserAdapter,

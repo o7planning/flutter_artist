@@ -27,7 +27,7 @@ class FormErrorViewerDialog extends StatelessWidget {
       context,
       preferredWidth: 440,
       preferredHeight:
-          exception.details == null || exception.details!.isEmpty ? 200 : 280,
+      exception.details == null || exception.details!.isEmpty ? 200 : 280,
     );
     //
     return Container(
@@ -83,11 +83,11 @@ class FormErrorViewerDialog extends StatelessWidget {
           Expanded(
             child: ListView(
               children: exception != null &&
-                      exception!.details != null &&
-                      exception!.details!.isNotEmpty
+                  exception!.details != null &&
+                  exception!.details!.isNotEmpty
                   ? exception!.details!
-                      .map((errorDetail) => _buildErrorDetail(errorDetail))
-                      .toList()
+                  .map((errorDetail) => _buildErrorDetail(errorDetail))
+                  .toList()
                   : [],
             ),
           ),
