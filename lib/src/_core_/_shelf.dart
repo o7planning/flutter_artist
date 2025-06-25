@@ -1,6 +1,9 @@
 part of '../../flutter_artist.dart';
 
 abstract class Shelf extends _XBase {
+  @override
+  Shelf get shelf => this;
+
   late final ShelfStructure _shelfStruct;
 
   String? get description => _shelfStruct.description;

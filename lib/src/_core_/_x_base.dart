@@ -1,8 +1,6 @@
 part of '../../flutter_artist.dart';
 
 abstract class _XBase {
-  Shelf get shelf;
-
   // TODO: Them tham so BuildContext?
   Future<bool> showConfirmDialog({
     required String message,
@@ -159,6 +157,7 @@ abstract class _XBase {
   // ***************************************************************************
 
   void _addErrorLogActionable({
+    required Shelf shelf,
     required Actionable actionableFalse,
     required bool showErrSnackBar,
   }) {

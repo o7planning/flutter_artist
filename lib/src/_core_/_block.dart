@@ -75,7 +75,6 @@ abstract class Block<
     FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
     EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
     > extends _XBase {
-  @override
   late final Shelf shelf;
 
   int _lazyLoadCount = 0;
@@ -3487,6 +3486,7 @@ abstract class Block<
     if (!createActionable.yes) {
       if (addErrorLog) {
         _addErrorLogActionable(
+          shelf: shelf,
           actionableFalse: createActionable,
           showErrSnackBar: showErrSnackBar,
         );
@@ -3509,6 +3509,7 @@ abstract class Block<
     if (!createActionable.yes) {
       if (addErrorLog) {
         _addErrorLogActionable(
+          shelf: shelf,
           actionableFalse: createActionable,
           showErrSnackBar: showErrSnackBar,
         );
@@ -3533,6 +3534,7 @@ abstract class Block<
     if (!updateActionable.yes) {
       if (addErrorLog) {
         _addErrorLogActionable(
+          shelf: shelf,
           actionableFalse: updateActionable,
           showErrSnackBar: showErrSnackBar,
         );
