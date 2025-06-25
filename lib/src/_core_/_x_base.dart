@@ -1,6 +1,8 @@
 part of '../../flutter_artist.dart';
 
 abstract class _XBase {
+  Shelf get shelf;
+
   // TODO: Them tham so BuildContext?
   Future<bool> showConfirmDialog({
     required String message,
@@ -138,6 +140,42 @@ abstract class _XBase {
         message: msg,
         errorDetails: errorDetails,
       );
+    }
+  }
+
+
+  // ***************************************************************************
+  // ***************************************************************************
+  //
+  // Ac
+  //
+  //
+  // if (checkBusy && FlutterArtist.executor.isBusy) {
+  // return Actionable.no(
+  // message: "Item update is disabled because the executor is busy.",
+  // );
+  // }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _addErrorLogActionable({
+    required Actionable actionableFalse,
+    required bool showErrSnackBar,
+  }) {
+    if (!actionableFalse.yes) {
+      FlutterArtist.errorLogger.addError(
+        shelfName: shelf.name,
+        message: actionableFalse.message!,
+        errorDetails: null,
+        stackTrace: null,
+      );
+      if (showErrSnackBar) {
+        showErrorSnackBar(
+          message: actionableFalse.message!,
+          errorDetails: null,
+        );
+      }
     }
   }
 

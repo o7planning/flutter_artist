@@ -4,6 +4,7 @@ abstract class FilterModel<
     FILTER_INPUT extends FilterInput, // EmptyFilterInput
     FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     > extends _XBase {
+  @override
   late final Shelf shelf;
 
   late final String name;

@@ -43,6 +43,7 @@ abstract class FormModel<
 
   bool get formInitialDataReady => _formPropsStructure._formInitialDataReady;
 
+  @override
   Shelf get shelf => block.shelf;
 
   late final Block<
@@ -1464,6 +1465,12 @@ abstract class FormModel<
     //
     if (formMode == FormMode.none) {
       throw _FatalAppException(message: "Form in 'none' mode");
+    }
+    if (formDataState == DataState.error) {
+      if (!formInitialDataReady) {
+        throw _FatalAppException(
+            message: "The form initialization data is in an error state.");
+      }
     }
     //
     _XShelf xShelf = _XShelf(

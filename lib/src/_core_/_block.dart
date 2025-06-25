@@ -75,6 +75,7 @@ abstract class Block<
     FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
     EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
     > extends _XBase {
+  @override
   late final Shelf shelf;
 
   int _lazyLoadCount = 0;
@@ -1896,9 +1897,10 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    if (!__checkBeforeQuickCreation(
-      checkBusy: false,
-      showErrorMessage: true,
+    if (!__checkBeforeQuickActionCreateItem(
+      checkBusy: false, // (Task is running, busy!)
+      addErrorLog: true,
+      showErrSnackBar: true,
     )) {
       return false;
     }
@@ -1961,9 +1963,10 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    if (!__checkBeforeQuickCreation(
-      checkBusy: false,
-      showErrorMessage: true,
+    if (!__checkBeforeQuickActionCreateItem(
+      checkBusy: false, // (Task is running, busy!)
+      addErrorLog: true,
+      showErrSnackBar: true,
     )) {
       return false;
     }
@@ -2027,10 +2030,11 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    if (!__checkBeforeQuickUpdate(
-      checkBusy: false,
-      showErrorMessage: true,
+    if (!__checkBeforeQuickActionUpdateItem(
+      checkBusy: false, // (Task is running, busy!)
       item: action.item,
+      addErrorLog: true,
+      showErrSnackBar: true,
     )) {
       return false;
     }
@@ -3192,9 +3196,10 @@ abstract class Block<
       },
     );
     //
-    if (!__checkBeforeQuickCreation(
+    if (!__checkBeforeQuickActionCreateItem(
       checkBusy: true,
-      showErrorMessage: true,
+      addErrorLog: true,
+      showErrSnackBar: true,
     )) {
       return false;
     }
@@ -3252,9 +3257,10 @@ abstract class Block<
       },
     );
     //
-    if (!__checkBeforeQuickCreation(
+    if (!__checkBeforeQuickActionCreateItem(
       checkBusy: true,
-      showErrorMessage: true,
+      addErrorLog: true,
+      showErrSnackBar: true,
     )) {
       return false;
     }
@@ -3468,13 +3474,21 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool __checkBeforeFormCreation({required bool showErrorMessage}) {
-    Actionable createActionable = canCreateItemWithForm();
+  bool __checkBeforeFormCreation({
+    required bool checkBusy,
+    required bool addErrorLog,
+    required bool showErrSnackBar,
+  }) {
+    Actionable createActionable = __canCreateItem(
+      checkBusy: checkBusy,
+      checkAllow: true,
+      creationType: ItemCreationType.form,
+    );
     if (!createActionable.yes) {
-      if (showErrorMessage) {
-        showErrorSnackBar(
-          message: createActionable.message!,
-          errorDetails: ["Block: ${getClassName(this)}"],
+      if (addErrorLog) {
+        _addErrorLogActionable(
+          actionableFalse: createActionable,
+          showErrSnackBar: showErrSnackBar,
         );
       }
       return false;
@@ -3482,9 +3496,10 @@ abstract class Block<
     return true;
   }
 
-  bool __checkBeforeQuickCreation({
+  bool __checkBeforeQuickActionCreateItem({
     required bool checkBusy,
-    required bool showErrorMessage,
+    required bool addErrorLog,
+    required bool showErrSnackBar,
   }) {
     Actionable createActionable = __canCreateItem(
       checkBusy: checkBusy,
@@ -3492,10 +3507,10 @@ abstract class Block<
       checkAllow: true,
     );
     if (!createActionable.yes) {
-      if (showErrorMessage) {
-        showErrorSnackBar(
-          message: createActionable.message!,
-          errorDetails: ["Block: ${getClassName(this)}"],
+      if (addErrorLog) {
+        _addErrorLogActionable(
+          actionableFalse: createActionable,
+          showErrSnackBar: showErrSnackBar,
         );
       }
       return false;
@@ -3503,22 +3518,23 @@ abstract class Block<
     return true;
   }
 
-  bool __checkBeforeQuickUpdate({
+  bool __checkBeforeQuickActionUpdateItem({
     required bool checkBusy,
     required ITEM item,
-    required bool showErrorMessage,
+    required bool addErrorLog,
+    required bool showErrSnackBar,
   }) {
-    Actionable createActionable = __canUpdateItem(
+    Actionable updateActionable = __canUpdateItem(
       checkBusy: checkBusy,
       item: item,
       updateType: ItemUpdateType.quickUpdate,
       checkAllow: true,
     );
-    if (!createActionable.yes) {
-      if (showErrorMessage) {
-        showErrorSnackBar(
-          message: createActionable.message!,
-          errorDetails: ["Block: ${getClassName(this)}"],
+    if (!updateActionable.yes) {
+      if (addErrorLog) {
+        _addErrorLogActionable(
+          actionableFalse: updateActionable,
+          showErrSnackBar: showErrSnackBar,
         );
       }
       return false;
@@ -3546,7 +3562,11 @@ abstract class Block<
       parameters: {"extraFormInput": extraFormInput},
     );
     //
-    if (!__checkBeforeFormCreation(showErrorMessage: true)) {
+    if (!__checkBeforeFormCreation(
+      checkBusy: true,
+      addErrorLog: true,
+      showErrSnackBar: true,
+    )) {
       return false;
     }
     //

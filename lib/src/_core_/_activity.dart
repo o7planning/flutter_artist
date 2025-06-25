@@ -1,6 +1,7 @@
 part of '../../flutter_artist.dart';
 
 abstract class Activity extends _XBase {
+  @override
   late final Shelf shelf;
 
   final String name;
