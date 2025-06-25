@@ -161,7 +161,9 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
                 widget.block.formModel!.formDataState == DataState.error)
               _ControlBarButton(
                 tooltip: 'Error: ${widget.block.formModel!.errorMessage}',
-                iconData: _formErrorModeIconData,
+                iconData: widget.block.formModel!.formInitialDataReady
+                    ? _formErrorModeIconData
+                    : _formErrorDisabledIconData,
                 iconColor: Colors.red,
                 onAction: false,
                 onPressed: () {

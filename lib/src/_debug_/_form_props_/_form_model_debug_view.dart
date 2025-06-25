@@ -42,26 +42,34 @@ class _FormModelDebugView extends StatelessWidget {
               size: 20,
             ),
           ),
-          SizedBox(height: 5),
-          CheckboxListTile(
-            controlAffinity: ListTileControlAffinity.leading,
-            value: actionable.yes,
-            dense: true,
-            checkboxScaleFactor: actionable.yes ? 1.0 : 1.5,
-            visualDensity: VisualDensity(vertical: -3, horizontal: -3),
-            contentPadding: EdgeInsets.all(0),
-            title: Text("Form Enabled?"),
-            subtitle: actionable.yes
-                ? null
-                : Text(
-                    actionable.message ?? " - ",
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.red,
-                    ),
-                  ),
-            onChanged: null,
-          ),
+          if (formModel.formDataState == DataState.error &&
+              !formModel.formInitialDataReady)
+            SizedBox(height: 5),
+          if (formModel.formDataState == DataState.error &&
+              !formModel.formInitialDataReady)
+            ListTile(
+              dense: true,
+              visualDensity: VisualDensity(vertical: -3, horizontal: -3),
+              contentPadding: EdgeInsets.all(0),
+              leading: Icon(
+                _formErrorDisabledIconData2,
+                color: Colors.red,
+                size: 40,
+              ),
+              title: Text(
+                "Form Disabled.",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              subtitle: Text(
+                "Form is disabled due to data initialization error.",
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.red,
+                ),
+              ),
+            ),
           if (formModel.formDataState == DataState.error) SizedBox(height: 10),
           if (formModel.formDataState == DataState.error)
             Text(

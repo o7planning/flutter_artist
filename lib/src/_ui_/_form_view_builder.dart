@@ -184,7 +184,9 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
           backgroundColor: circleAvatarBgColor,
           child: IconButton(
             icon: Icon(
-              _dataStateErrorIconData,
+              widget.formModel.formInitialDataReady
+                  ? _formErrorModeIconData
+                  : _formErrorDisabledIconData,
               size: 16,
               color: Colors.red,
             ),
