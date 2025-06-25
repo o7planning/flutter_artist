@@ -4078,18 +4078,23 @@ abstract class Block<
       return allow
           ? Actionable.yes()
           : Actionable.no(
-              message: "The application logic does not allow query this block.",
+              message: "The Block querying is disabled.",
+              details: [
+                "The application logic does not allow query this block."
+              ],
             );
     } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "isAllowQuery",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: false,
-      );
+      // _handleError(
+      //   shelf: shelf,
+      //   methodName: "isAllowQuery",
+      //   error: e,
+      //   stackTrace: stackTrace,
+      //   showSnackBar: false,
+      // );
       return Actionable.no(
-        message: "The ${getClassName(this)}.isAllowQuery() error.",
+        message: "The Block querying is disabled.",
+        details: ["The ${getClassName(this)}.isAllowQuery() error."],
+        stackTrace: stackTrace,
       );
     }
   }
@@ -4105,7 +4110,11 @@ abstract class Block<
     return allow
         ? Actionable.yes()
         : Actionable.no(
-            message: "The application logic does not allow to reset the form.");
+            message: "Form Resetting is disabled.",
+            details: [
+              "The application logic does not allow to reset the form."
+            ],
+          );
   }
 
   // ***************************************************************************
@@ -4117,7 +4126,10 @@ abstract class Block<
   Actionable __isAllowUpdateItemCurrentItem() {
     ITEM? currentItem = this.currentItem;
     if (currentItem == null) {
-      return Actionable.no(message: "The current item is not available.");
+      return Actionable.no(
+        message: "Not allow to edit current item.",
+        details: ["The current item is not available."],
+      );
     }
     return _isAllowUpdateItem(item: currentItem);
   }
@@ -4134,18 +4146,24 @@ abstract class Block<
       return allow
           ? Actionable.yes()
           : Actionable.no(
-              message:
-                  "The application logic does not allow this item to be updated.");
+              message: "Not allow to edit the item.",
+              details: [
+                "The application logic does not allow this item to be updated."
+              ],
+            );
     } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "isAllowUpdateItem",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: false,
-      );
+      // _handleError(
+      //   shelf: shelf,
+      //   methodName: "isAllowUpdateItem",
+      //   error: e,
+      //   stackTrace: stackTrace,
+      //   showSnackBar: false,
+      // );
       return Actionable.no(
-          message: "The ${getClassName(this)}.isAllowUpdateItem() error.");
+        message: "Not allow to edit the item.",
+        details: ["The ${getClassName(this)}.isAllowUpdateItem() error."],
+        stackTrace: stackTrace,
+      );
     }
   }
 
@@ -4161,18 +4179,24 @@ abstract class Block<
       return allow
           ? Actionable.yes()
           : Actionable.no(
-              message:
-                  "The application logic does not allow to create a new item.");
+              message: "Not allow to create item.",
+              details: [
+                "The application logic does not allow to create a new item."
+              ],
+            );
     } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "isAllowCreateItem",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: false,
-      );
+      // _handleError(
+      //   shelf: shelf,
+      //   methodName: "isAllowCreateItem",
+      //   error: e,
+      //   stackTrace: stackTrace,
+      //   showSnackBar: false,
+      // );
       return Actionable.no(
-          message: "The ${getClassName(this)}.isAllowCreateItem() error.");
+        message: "Not allow to create item.",
+        details: ["The ${getClassName(this)}.isAllowCreateItem() error."],
+        stackTrace: stackTrace,
+      );
     }
   }
 
@@ -4188,126 +4212,59 @@ abstract class Block<
       return allow
           ? Actionable.yes()
           : Actionable.no(
-              message:
-                  "The application logic does not allow this item to be deleted.");
+              message: "Not allow to delete the item.",
+              details: [
+                "The application logic does not allow this item to be deleted."
+              ],
+            );
     } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: "isAllowDeleteItem",
-        error: e,
+      // _handleError(
+      //   shelf: shelf,
+      //   methodName: "isAllowDeleteItem",
+      //   error: e,
+      //   stackTrace: stackTrace,
+      //   showSnackBar: false,
+      // );
+      return Actionable.no(
+        message: "Not allow to delete the item.",
+        details: ["The ${getClassName(this)}.isAllowDeleteItem() error."],
         stackTrace: stackTrace,
-        showSnackBar: false,
-      );
-      return Actionable.no(
-          message: "The ${getClassName(this)}.isAllowDeleteItem() error.");
-    }
-  }
-
-  // ***************************************************************************
-  // *********** __checkAncestorsSafeXXX() method ******************************
-  // ***************************************************************************
-
-  // TODO: Viet chi tiet hon:
-  ///
-  /// Check if Ancestor Blocks in Safe State to Query in current Block.
-  ///
-  Actionable __checkAncestorsSafeToQuery() {
-    if (parent == null) {
-      return Actionable.yes();
-    }
-    //
-    if (!parent!.hasCurrentItem()) {
-      return Actionable.no(
-        message:
-            "The query is disabled because the parent block has no current item.",
       );
     }
-    //
-    return parent!.__checkAncestorsSafeToQuery();
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ///
-  /// Check if Ancestor Blocks in Safe State to Delete item in current Block.
-  ///
-  Actionable __checkAncestorsSafeToDelete(ITEM? item) {
-    if (parent == null) {
-      return Actionable.yes();
-    }
-    //
-    return parent!.__checkAncestorsSafeToDelete(null);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  // TODO: Viet chi tiet hon:
-  ///
-  /// Check if Ancestor Blocks in Safe State to Create item in current Block.
-  ///
-  Actionable __checkAncestorsSafeToCreate({
-    required ItemCreationType creationType,
-  }) {
-    if (parent == null) {
-      return Actionable.yes();
-    }
-    //
-    if (parent!.formModel != null) {
-      switch (parent!.formModel!.formMode) {
-        case FormMode.none:
-          return Actionable.no(
-            message:
-                "New item creation is disabled because the ancestor block's form is in 'none' mode",
-          );
-        case FormMode.creation:
-          return Actionable.no(
-            message:
-                "New item creation is disabled because the ancestor block's form is in 'creation' mode",
-          );
-        case FormMode.edit:
-          break; // Do nothing
-      }
-    }
-    if (parent!.currentItem == null) {
-      return Actionable.no(
-        message:
-            "New item creation is disabled because the parent block has no current element.",
-      );
-    }
-    //
-    return parent!.__checkAncestorsSafeToCreate(creationType: creationType);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ///
-  /// Check if Ancestor Blocks in Safe State to Edit item in current Block.
-  ///
-  Actionable __checkAncestorsSafeToEditItem({required ITEM? item}) {
-    if (parent == null) {
-      return Actionable.yes();
-    }
-    return parent!.__checkAncestorsSafeToEditItem(item: null);
   }
 
   // ***************************************************************************
   // *********** __canXXX() method *********************************************
   // ***************************************************************************
 
-  Actionable __canDeleteItem({required ITEM item, required bool checkAllow}) {
-    if (__isDeleting) {
+  Actionable __canDeleteCurrentItem({
+    required bool checkBusy,
+    required bool checkAllow,
+  }) {
+    if (currentItem == null) {
       return Actionable.no(
-        message:
-            "Cannot delete another item while the previous delete action is in progress",
+        message: "Can not delete the current item.",
+        details: ["The block has no current item."],
       );
     }
     //
-    Actionable ancestorsSafe = __checkAncestorsSafeToDelete(item);
-    if (!ancestorsSafe.yes) {
-      return ancestorsSafe;
+    return __canDeleteItem(
+      checkBusy: checkBusy,
+      item: currentItem!,
+      checkAllow: checkAllow,
+    );
+  }
+
+  Actionable __canDeleteItem({
+    required bool checkBusy,
+    required ITEM item,
+    required bool checkAllow,
+  }) {
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable.no(
+        message: "Can not delete the item.",
+        details: ["The executor is busy."],
+      );
     }
     //
     return checkAllow ? __isAllowDeleteItem(item: item) : Actionable.yes();
@@ -4323,32 +4280,33 @@ abstract class Block<
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
       return Actionable.no(
-        message: "New item creation is disabled because the executor is busy.",
+        message: "New item creation is disabled.",
+        details: ["The executor is busy."],
       );
     }
     if (creationType == ItemCreationType.form) {
       if (formModel == null) {
         return Actionable.no(
-          message:
-              "New item creation is disabled because the block has no form.",
+          message: "New item creation is disabled.",
+          details: ["The block has no form."],
         );
       }
     }
     switch (queryDataState) {
       case DataState.pending:
         return Actionable.no(
-          message:
-              "New item creation is disabled because the block is in a 'pending' state.",
+          message: "New item creation is disabled.",
+          details: ["The block is in a 'pending' state."],
         );
       case DataState.error:
         return Actionable.no(
-          message:
-              "New item creation is disabled because the block is in an 'error' state.",
+          message: "New item creation is disabled.",
+          details: ["The block is in an 'error' state."],
         );
       case DataState.none:
         return Actionable.no(
-          message:
-              "New item creation is disabled because the block is in a 'none' state.",
+          message: "New item creation is disabled.",
+          details: ["The block is in a 'none' state."],
         );
       case DataState.ready:
         break;
@@ -4368,24 +4326,25 @@ abstract class Block<
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
       return Actionable.no(
-        message: "Item update is disabled because the executor is busy.",
+        message: "Item update is disabled.",
+        details: ["The executor is busy."],
       );
     }
     switch (queryDataState) {
       case DataState.pending:
         return Actionable.no(
-          message:
-              "Item update is disabled because the block is in a 'pending' state.",
+          message: "Item update is disabled.",
+          details: ["The block is in a 'pending' state."],
         );
       case DataState.error:
         return Actionable.no(
-          message:
-              "Item update is disabled because the block is in an 'error' state.",
+          message: "Item update is disabled.",
+          details: ["The block is in an 'error' state."],
         );
       case DataState.none:
         return Actionable.no(
-          message:
-              "Item update is disabled because the block is in a 'none' state.",
+          message: "Item update is disabled.",
+          details: ["The block is in a 'none' state."],
         );
       case DataState.ready:
         break;
@@ -4397,35 +4356,39 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable __canResetForm({required bool checkAllow}) {
+  Actionable __canResetForm({
+    required bool checkBusy,
+    required bool checkAllow,
+  }) {
     if (formModel == null) {
       return Actionable.no(
-        message:
-            "Form reset is not allowed because this block does not have a form.",
+        message: "Form reset is disabled.",
+        details: ["The block has no form."],
+      );
+    }
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable.no(
+        message: "Form reset is disabled.",
+        details: ["The executor is busy."],
       );
     }
     if (!formModel!.isDirty()) {
       return Actionable.no(
-        message:
-            "Form reset is not allowed because the form is not in dirty state.",
+        message: "Form reset is disabled.",
+        details: ["The form is not in dirty state."],
       );
     }
     if (!formModel!.formInitialDataReady) {
       return Actionable.no(
-        message: "Cannot reset form because formInitialData is not ready.",
-      );
-    }
-    if (this.__isSaving) {
-      return Actionable.no(
-        message:
-            "Form reset is not allowed because the form is in saving state.",
+        message: "Form reset is disabled.",
+        details: ["The formInitialData is not ready."],
       );
     }
     switch (formModel!.formMode) {
       case FormMode.none:
         return Actionable.no(
-          message:
-              "Form reset is not allowed because the form is in 'none' mode.",
+          message: "Form reset is disabled.",
+          details: ["The form is in 'none' mode."],
         );
       case FormMode.creation:
         break; // Do nothing.
@@ -4439,26 +4402,33 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable __canSaveForm({required bool checkAllow}) {
+  Actionable __canSaveForm({
+    required bool checkBusy,
+    required bool checkAllow,
+  }) {
     if (formModel == null) {
       return Actionable.no(
-        message: "Cannot save form because this block does not have a form.",
+        message: "Form saving is disabled.",
+        details: ["The block has no form."],
+      );
+    }
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable.no(
+        message: "Form saving is disabled.",
+        details: ["The executor is busy."],
       );
     }
     if (!formModel!.formInitialDataReady) {
       return Actionable.no(
-        message: "Cannot save form because formInitialData is not ready.",
-      );
-    }
-    if (this.__isSaving) {
-      return Actionable.no(
-        message: "Cannot save form because form is in saving state.",
+        message: "Form saving is disabled.",
+        details: ["The formInitialData is not ready."],
       );
     }
     //
     if (!formModel!.isDirty()) {
       return Actionable.no(
-        message: "Cannot save form because form is not dirty.",
+        message: "Form saving is disabled.",
+        details: ["The form is not dirty."],
       );
     }
     return Actionable.yes();
@@ -4468,33 +4438,35 @@ abstract class Block<
   // ***************************************************************************
 
   Actionable __canEditItemOnForm({
+    required bool checkBusy,
     required ITEM item,
     required bool checkAllow,
   }) {
     if (formModel == null) {
       return Actionable.no(
-          message:
-              "This item cannot be edited on the form because this block does not have a form.");
-    }
-    if (formModel!.formDataState == DataState.error) {
-      return Actionable.no(message: "Form data state is error.");
-    }
-    if (FlutterArtist.executor.isBusy) {
-      return Actionable.no(
-        message: "Item edit is disabled because the executor is busy.",
+        message: "The item cannot be edited on the form.",
+        details: ["The block has no form."],
       );
     }
-    //
-    Actionable ancestorsSafe = __checkAncestorsSafeToEditItem(item: item);
-    if (!ancestorsSafe.yes) {
-      return ancestorsSafe;
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable.no(
+        message: "The item cannot be edited on the form.",
+        details: ["The executor is busy."],
+      );
+    }
+    if (formModel!.formDataState == DataState.error) {
+      // Test Case: TODO
+      return Actionable.no(
+        message: "The item cannot be edited on the form.",
+        details: ["Form data state is error."],
+      );
     }
     //
     switch (formModel!.formMode) {
       case FormMode.none:
         return Actionable.no(
-          message:
-              "Item edit is disabled because the block form is in 'none' mode.",
+          message: "The item cannot be edited on the form.",
+          details: ["The form is in 'none' mode."],
         );
       case FormMode.creation:
         break; // Do nothing.
@@ -4514,19 +4486,26 @@ abstract class Block<
   Actionable __isEnableFormToModify({required bool checkAllow}) {
     if (formModel == null) {
       return Actionable.no(
-          message:
-              "This item cannot be edited on the form because this block does not have a form.");
+        message: "Block has no Form",
+        details: [],
+      );
     }
     //
     switch (formModel!.formMode) {
       case FormMode.none:
         return Actionable.no(
-          message: "Form disabled because it in 'none' mode",
+          message: "The Form is disabled",
+          details: ["The form in 'none' mode"],
         );
       case FormMode.creation:
         if (formModel!.formDataState == DataState.error) {
           // TODO-XXX (Test case).
-          return Actionable.no(message: "Form data state is error.");
+          if (!formModel!.formInitialDataReady) {
+            return Actionable.no(
+              message: "The Form is disabled.",
+              details: ["The formInitialData is not ready."],
+            );
+          }
         }
         return Actionable.yes();
       case FormMode.edit:
@@ -4534,6 +4513,7 @@ abstract class Block<
     }
     //
     return __canEditItemOnForm(
+      checkBusy: false,
       item: this.currentItem!,
       checkAllow: checkAllow,
     );
@@ -4542,15 +4522,19 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable __canRefreshCurrentItem() {
+  Actionable __canRefreshCurrentItem({
+    required bool checkBusy,
+  }) {
     if (this.currentItemDetail == null) {
       return Actionable.no(
-        message: "Cannot refresh the current item because it is not available.",
+        message: "Cannot refresh the current item.",
+        details: ["The block has no current item."],
       );
     }
-    if (__isRefreshingCurrentItem) {
+    if (checkBusy && FlutterArtist.executor.isBusy) {
       return Actionable.no(
-        message: "The current item is being refreshed.",
+        message: "Cannot refresh the current item.",
+        details: ["The executor is busy."],
       );
     }
     //
@@ -4560,15 +4544,8 @@ abstract class Block<
           // Has current item and Form in Lazy mode.
           // Form State: pending.
           break; // Do nothing
-        // return Actionable.no(
-        //   message:
-        //       "Cannot refresh current item because form is in 'none' mode.",
-        // );
         case FormMode.creation:
-          return Actionable.no(
-            message:
-                "Cannot refresh current item because form is in 'creation' mode.",
-          );
+          break; // Do nothing
         case FormMode.edit:
           break; // Do nothing
       }
@@ -4592,7 +4569,10 @@ abstract class Block<
   // ***************************************************************************
 
   Actionable canResetForm() {
-    return __canResetForm(checkAllow: true);
+    return __canResetForm(
+      checkBusy: true,
+      checkAllow: true,
+    );
   }
 
   // ***************************************************************************
@@ -4602,7 +4582,10 @@ abstract class Block<
   /// Without check Form validation.
   ///
   Actionable canSaveForm() {
-    return __canSaveForm(checkAllow: true);
+    return __canSaveForm(
+      checkBusy: true,
+      checkAllow: true,
+    );
   }
 
   // ***************************************************************************
@@ -4616,27 +4599,32 @@ abstract class Block<
   // ***************************************************************************
 
   Actionable canDeleteCurrentItem() {
-    ITEM? currentItem = this.currentItem;
-    if (currentItem == null) {
-      return Actionable.no(
-        message: "Cannot delete the current item because it is not available.",
-      );
-    }
-    return canDeleteItem(item: currentItem);
+    return __canDeleteCurrentItem(
+      checkBusy: true,
+      checkAllow: true,
+    );
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   Actionable canDeleteItem({required ITEM item}) {
-    return __canDeleteItem(item: item, checkAllow: true);
+    return __canDeleteItem(
+      checkBusy: true,
+      item: item,
+      checkAllow: true,
+    );
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   Actionable canEditItemOnForm({required ITEM item}) {
-    return __canEditItemOnForm(item: item, checkAllow: true);
+    return __canEditItemOnForm(
+      checkBusy: true,
+      item: item,
+      checkAllow: true,
+    );
   }
 
   // ***************************************************************************
@@ -4662,7 +4650,9 @@ abstract class Block<
   /// This method will return [true] if all the usual conditions are met.
   ///
   Actionable canRefreshCurrentItem() {
-    return __canRefreshCurrentItem();
+    return __canRefreshCurrentItem(
+      checkBusy: true,
+    );
   }
 
   // ***************************************************************************
@@ -4682,20 +4672,20 @@ abstract class Block<
     ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
     if (formModel == null) {
       return Actionable.no(
-        message:
-            "Cannot display 'FormInfoDialog' because this block does not have a form.",
+        message: "Can not show Form Info.",
+        details: ["The block has no Form."],
       );
     }
     if (loggedInUser == null) {
       return Actionable.no(
-        message:
-            "Cannot display 'FormInfoDialog' because the user is not logged in.",
+        message: "Can not show Form Info.",
+        details: ["The user is not logged in."],
       );
     }
     if (!loggedInUser.isSystemUser) {
       return Actionable.no(
-        message:
-            "Cannot display 'FormInfoDialog' because the user is not a system user..",
+        message: "Can not show Form Info.",
+        details: ["The user is not a system user."],
       );
     }
     return Actionable.yes();
@@ -4704,14 +4694,17 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable __canQuery({required bool checkAllow}) {
-    if (__isQuerying) {
-      return Actionable.no(message: "The bock is in querying state");
+  Actionable __canQuery({
+    required bool checkBusy,
+    required bool checkAllow,
+  }) {
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable.no(
+        message: "Block Querying is disabled.",
+        details: ["The executor is busy."],
+      );
     }
-    Actionable ancestorsSafe = __checkAncestorsSafeToQuery();
-    if (!ancestorsSafe.yes) {
-      return ancestorsSafe;
-    }
+    //
     return checkAllow ? __isAllowQuery() : Actionable.yes();
   }
 
@@ -4719,7 +4712,7 @@ abstract class Block<
   // ***************************************************************************
 
   Actionable canQuery() {
-    return __canQuery(checkAllow: true);
+    return __canQuery(checkBusy: true, checkAllow: true);
   }
 
   // ***************************************************************************

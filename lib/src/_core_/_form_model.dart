@@ -1,10 +1,10 @@
 part of '../../flutter_artist.dart';
 
 abstract class FormModel<
-    ID extends Object,
-    ITEM_DETAIL extends Object,
-    FILTER_CRITERIA extends FilterCriteria,
-    EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
+ID extends Object,
+ITEM_DETAIL extends Object,
+FILTER_CRITERIA extends FilterCriteria,
+EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
   int __loadCount = 0;
 
   int get loadCount => __loadCount;
@@ -84,7 +84,8 @@ abstract class FormModel<
 
   FormModel({
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-  })  : _defaultAutovalidateMode = autovalidateMode,
+  })
+      : _defaultAutovalidateMode = autovalidateMode,
         _autovalidateMode = autovalidateMode {
     __registerPropsStructure();
   }
@@ -256,8 +257,8 @@ abstract class FormModel<
       case _ForceType.force:
         forceReloadForm = true;
       case _ForceType.decidedAtRuntime:
-        // forceReloadForm =
-        //     formDataState != DataState.ready && hasActiveUIComponent();
+      // forceReloadForm =
+      //     formDataState != DataState.ready && hasActiveUIComponent();
         forceReloadForm = false;
     }
     //
@@ -270,7 +271,7 @@ abstract class FormModel<
     }
     //
     EXTRA_FORM_INPUT? extraFormInput =
-        thisXFormModel.extraFormInput as EXTRA_FORM_INPUT?;
+    thisXFormModel.extraFormInput as EXTRA_FORM_INPUT?;
     //
     return await _startNewFormActivity(
       extraFormInput: extraFormInput,
@@ -331,15 +332,15 @@ abstract class FormModel<
       //
       result = isNew
           ? await callApiCreateItem(
-              filterCriteria: blockCurrentFilterCriteria,
-              parentBlockItem: parentBlockItem,
-              formMapData: formMapData,
-            )
+        filterCriteria: blockCurrentFilterCriteria,
+        parentBlockItem: parentBlockItem,
+        formMapData: formMapData,
+      )
           : await callApiUpdateItem(
-              filterCriteria: blockCurrentFilterCriteria,
-              parentBlockItem: parentBlockItem,
-              formMapData: formMapData,
-            );
+        filterCriteria: blockCurrentFilterCriteria,
+        parentBlockItem: parentBlockItem,
+        formMapData: formMapData,
+      );
       //
       block._refreshSavingState(isSaving: false);
     } catch (e, stackTrace) {
@@ -435,7 +436,7 @@ abstract class FormModel<
     switch (activityType) {
       case _FormActivityType.itemFirstLoad:
         currentFormMode =
-            itemDetail == null ? FormMode.creation : FormMode.edit;
+        itemDetail == null ? FormMode.creation : FormMode.edit;
       case _FormActivityType.updateFromFormView:
         currentFormMode = formMode;
       case _FormActivityType.autoEnterFormFields:
@@ -543,8 +544,8 @@ abstract class FormModel<
         if (!_defaultValueInitiated) {
           try {
             simplePropValueDefault = await specifyDefaultSimplePropValues(
-                  filterCriteria: blockCurrentFilterCriteria,
-                ) ??
+              filterCriteria: blockCurrentFilterCriteria,
+            ) ??
                 {};
             //
             for (String propName in simplePropValueDefault.keys) {
@@ -576,8 +577,8 @@ abstract class FormModel<
         if (extraFormInput != null) {
           try {
             simplePropValueExtra = getSimplePropValuesFromExtraFormInput(
-                  extraFormInput: extraFormInput,
-                ) ??
+              extraFormInput: extraFormInput,
+            ) ??
                 {};
             //
             for (String propName in simplePropValueExtra.keys) {
@@ -613,8 +614,8 @@ abstract class FormModel<
         try {
           Map<String, dynamic> simplePropValueExtra =
               getSimplePropValuesFromExtraFormInput(
-                    extraFormInput: extraFormInput,
-                  ) ??
+                extraFormInput: extraFormInput,
+              ) ??
                   {};
           //
           for (String propName in simplePropValueExtra.keys) {
@@ -764,7 +765,7 @@ abstract class FormModel<
 
     // Get current OptProp data:
     XData? tempMultiOptPropXData =
-        _formPropsStructure._getTempMultiOptPropXData(
+    _formPropsStructure._getTempMultiOptPropXData(
       propName: multiOptPropName,
     );
 
@@ -902,14 +903,14 @@ abstract class FormModel<
       // It can be a single value or a List.
       //
       final dynamic tempCurrentValue =
-          _formPropsStructure._getTempCurrentPropValue(
+      _formPropsStructure._getTempCurrentPropValue(
         propName: multiOptPropName,
       );
       //
       if (tempCurrentValue != null) {
         if (tempCurrentValue is List) {
           currentSelectedItems =
-              tempCurrentValue.isEmpty ? null : tempCurrentValue;
+          tempCurrentValue.isEmpty ? null : tempCurrentValue;
         } else {
           currentSelectedItems = [tempCurrentValue];
         }
@@ -917,10 +918,10 @@ abstract class FormModel<
       if (currentSelectedItems != null) {
         currentSelectedItems =
             tempMultiOptPropXData._findInternalItemsByDynamics(
-          dynamicValues: currentSelectedItems,
-          addToInternalIfNotFound: true,
-          removeCurrentNotFoundItems: true,
-        );
+              dynamicValues: currentSelectedItems,
+              addToInternalIfNotFound: true,
+              removeCurrentNotFoundItems: true,
+            );
       }
       // Candidate Selected Items:
       candidateSelectedItems = initialValueWrap?.values;
@@ -959,13 +960,13 @@ abstract class FormModel<
     // TODO: Dangerous, check not null:
     candidateSelectedItems =
         tempMultiOptPropXData?._findInternalItemsByDynamics(
-              dynamicValues: candidateSelectedItems,
-              //
-              // IMPORTANT: Add not found item to internal list.
-              //
-              addToInternalIfNotFound: true,
-              removeCurrentNotFoundItems: false,
-            ) ??
+          dynamicValues: candidateSelectedItems,
+          //
+          // IMPORTANT: Add not found item to internal list.
+          //
+          addToInternalIfNotFound: true,
+          removeCurrentNotFoundItems: false,
+        ) ??
             [];
     //
     // TODO: Double check this code:
@@ -994,7 +995,7 @@ abstract class FormModel<
     }
     //
     Object? tempSelectedPropValue =
-        _formPropsStructure._getTempCurrentPropValue(
+    _formPropsStructure._getTempCurrentPropValue(
       propName: multiOptPropName,
     );
 
@@ -1110,19 +1111,20 @@ abstract class FormModel<
     required String multiOptPropName,
   }) {
     MultiOptProp? multiOptProp =
-        _formPropsStructure._getMultiOptProp(multiOptPropName);
+    _formPropsStructure._getMultiOptProp(multiOptPropName);
     if (multiOptProp == null) {
       throw "The '$multiOptPropName' is not $MultiOptProp";
     }
     String message =
-        "The ${getClassName(this)}.$methodName() method must return a non-null $ValueWrap for the multiOptPropName '$multiOptPropName'. ";
+        "The ${getClassName(
+        this)}.$methodName() method must return a non-null $ValueWrap for the multiOptPropName '$multiOptPropName'. ";
     if (multiOptProp.singleSelection) {
       message += "$ValueWrap.single(null) or $ValueWrap.single(value). ";
     } else {
       message += "$ValueWrap.multi([null]) or $ValueWrap.multi([value]). ";
     }
     message +=
-        "And return null for not $MultiOptProp. See the specification of this method for more information.";
+    "And return null for not $MultiOptProp. See the specification of this method for more information.";
     // throw AppException(message: message);
   }
 
@@ -1244,8 +1246,10 @@ abstract class FormModel<
   }) {
     _formWidgetStates.update(
       widgetState,
-      (xState) => xState..isBuilding = isBuilding,
-      ifAbsent: () => _XState()..isBuilding = isBuilding,
+          (xState) => xState..isBuilding = isBuilding,
+      ifAbsent: () =>
+      _XState()
+        ..isBuilding = isBuilding,
     );
   }
 
@@ -1259,8 +1263,10 @@ abstract class FormModel<
     bool isShowingOLD = _formWidgetStates[widgetState]?.isShowing ?? false;
     _formWidgetStates.update(
       widgetState,
-      (xState) => xState..isShowing = isShowing,
-      ifAbsent: () => _XState()..isShowing = isShowing,
+          (xState) => xState..isShowing = isShowing,
+      ifAbsent: () =>
+      _XState()
+        ..isShowing = isShowing,
     );
     if (!isShowingOLD && isShowing) {
       block.shelf._startLoadDataForLazyUIComponentsIfNeed();
@@ -1398,7 +1404,7 @@ abstract class FormModel<
     _XBlock xBlock = xShelf.findXBlockByName(block.name)!;
     _XFormModel xFormModel = xBlock.xFormModel!;
     _FormViewChangeTaskUnit taskUnit =
-        _FormViewChangeTaskUnit(xFormModel: xFormModel);
+    _FormViewChangeTaskUnit(xFormModel: xFormModel);
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     await FlutterArtist.executor._executeTaskUnitQueue(showOverlay: false);
   }
@@ -1450,6 +1456,59 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  Actionable __canEnterFormFields({
+    required bool checkBusy,
+  }) {
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable.no(
+        message: "Enter-form-fields feature is disabled",
+        details: [
+          "The executor is busy.",
+        ],
+      );
+    }
+    if (formMode == FormMode.none) {
+      return Actionable.no(
+        message: "Enter-form-fields feature is disabled",
+        details: [
+          "The form in 'none' mode.",
+        ],
+      );
+    }
+    if (formDataState == DataState.error) {
+      return Actionable.no(
+        message: "Enter-form-fields feature is disabled",
+        details: [
+          "The form in 'error' mode.",
+        ],
+      );
+    }
+    return Actionable.yes();
+  }
+
+  bool __checkBeforeEnterFormFields({
+    required bool checkBusy,
+    required bool addErrorLog,
+    required bool showErrSnackBar,
+  }) {
+    Actionable createActionable = __canEnterFormFields(
+      checkBusy: checkBusy,
+    );
+    if (!createActionable.yes) {
+      if (addErrorLog) {
+        _addErrorLogActionable(
+          actionableFalse: createActionable,
+          showErrSnackBar: showErrSnackBar,
+        );
+      }
+      return false;
+    }
+    return true;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   // Test Case: [26a]
   @RootMethodAnnotation()
   Future<bool> enterFormFields({
@@ -1463,14 +1522,12 @@ abstract class FormModel<
       navigate: null,
     );
     //
-    if (formMode == FormMode.none) {
-      throw _FatalAppException(message: "Form in 'none' mode");
-    }
-    if (formDataState == DataState.error) {
-      if (!formInitialDataReady) {
-        throw _FatalAppException(
-            message: "The form initialization data is in an error state.");
-      }
+    if (!__checkBeforeEnterFormFields(
+      checkBusy: true,
+      addErrorLog: true,
+      showErrSnackBar: true,
+    )) {
+      return false;
     }
     //
     _XShelf xShelf = _XShelf(
