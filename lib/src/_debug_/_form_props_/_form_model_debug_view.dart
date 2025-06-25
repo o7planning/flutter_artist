@@ -53,7 +53,7 @@ class _FormModelDebugView extends StatelessWidget {
               contentPadding: EdgeInsets.all(0),
               leading: Icon(
                 _formErrorDisabledIconData2,
-                color: Colors.red,
+                color: Colors.deepOrangeAccent,
                 size: 40,
               ),
               title: Text(
