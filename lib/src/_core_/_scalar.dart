@@ -382,21 +382,24 @@ abstract class Scalar<
   // ****** UPDATE UI COMPONENTS ***********************************************
   // ***************************************************************************
 
-  void updateAllUIComponents({required bool withoutFilters}) {
+  void updateAllUIComponents({
+    required bool withoutFilters,
+    bool force = true,
+  }) {
     if (!withoutFilters) {
       filterModel?.updateAllUIComponents();
     }
-    updateControlWidgets();
-    updateFragmentWidgets();
+    updateControlWidgets(force: force);
+    updateFragmentWidgets(force: force);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateControlWidgets() {
+  void updateControlWidgets({bool force = true}) {
     for (_RefreshableWidgetState state in _scalarControlWidgetStates.keys) {
       if (state.mounted) {
-        state.refreshState();
+        state.refreshState(force: force);
       }
     }
   }
@@ -404,10 +407,10 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateFragmentWidgets() {
+  void updateFragmentWidgets({bool force = true}) {
     for (_RefreshableWidgetState state in _scalarFragmentWidgetStates.keys) {
       if (state.mounted) {
-        state.refreshState();
+        state.refreshState(force: force);
       }
     }
   }
