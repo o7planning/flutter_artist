@@ -140,6 +140,8 @@ const IconData _formCreateIconData = cupertino.CupertinoIcons.add_circled;
 
 const IconData _formErrorDisabledIconData = cupertino.CupertinoIcons.lock;
 
+const IconData _formPropDirtyIconData = cupertino.CupertinoIcons.pencil_outline;
+
 const IconData _formErrorDisabledIconData2 =
     cupertino.CupertinoIcons.lock_circle;
 

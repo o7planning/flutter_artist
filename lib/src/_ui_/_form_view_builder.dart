@@ -182,36 +182,44 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
         CircleAvatar(
           radius: 20,
           backgroundColor: circleAvatarBgColor,
-          child: IconButton(
-            icon: Icon(
-              widget.formModel.formInitialDataReady
-                  ? _formErrorModeIconData
-                  : _formErrorDisabledIconData,
-              size: 16,
-              color: Colors.red,
+          child: Tooltip(
+            message: widget.formModel.formInitialDataReady
+                ? "Form Error"
+                : "Form disabled due to error",
+            child: IconButton(
+              icon: Icon(
+                widget.formModel.formInitialDataReady
+                    ? _formErrorModeIconData
+                    : _formErrorDisabledIconData,
+                size: 16,
+                color: Colors.red,
+              ),
+              onPressed: () {
+                widget.formModel.showFormErrorViewerDialog(context);
+              },
             ),
-            onPressed: () {
-              widget.formModel.showFormErrorViewerDialog(context);
-            },
           ),
         ),
         SizedBox(width: 5),
         CircleAvatar(
           radius: 20,
           backgroundColor: circleAvatarBgColor,
-          child: IconButton(
-            icon: Icon(
-              _formErrorRollbackIconData,
-              size: 16,
-              color: widget.formModel.formInitialDataReady
-                  ? Colors.indigo
-                  : Colors.grey,
+          child: Tooltip(
+            message: "Restore the state before the error",
+            child: IconButton(
+              icon: Icon(
+                _formErrorRollbackIconData,
+                size: 16,
+                color: widget.formModel.formInitialDataReady
+                    ? Colors.indigo
+                    : Colors.grey,
+              ),
+              onPressed: widget.formModel.formInitialDataReady
+                  ? () {
+                      widget.formModel.showFormErrorViewerDialog(context);
+                    }
+                  : null,
             ),
-            onPressed: widget.formModel.formInitialDataReady
-                ? () {
-                    widget.formModel.showFormErrorViewerDialog(context);
-                  }
-                : null,
           ),
         )
       ],

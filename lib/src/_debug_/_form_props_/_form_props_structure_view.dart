@@ -16,7 +16,7 @@ class _FormPropsStructureView extends StatefulWidget {
 
 class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
   final MultiSplitViewController _splitViewController =
-  MultiSplitViewController();
+      MultiSplitViewController();
   TreeViewController<dynamic, TreeNode<dynamic>>? _treeViewController;
   late TreeNode<dynamic> rootTreeNode;
   late TreeNode<dynamic> _currentNode;
@@ -31,8 +31,7 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
       parent: null,
     );
     _currentNode = formModelNode;
-    rootTreeNode = TreeNode.root()
-      ..add(formModelNode);
+    rootTreeNode = TreeNode.root()..add(formModelNode);
     //
     FormPropsStructure structure = widget.formModel._formPropsStructure;
 
@@ -126,7 +125,8 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
           width: 10,
         ),
         onTreeReady: (
-            TreeViewController<dynamic, TreeNode<dynamic>> controller,) {
+          TreeViewController<dynamic, TreeNode<dynamic>> controller,
+        ) {
           _treeViewController = controller;
           controller.expandAllChildren(rootTreeNode);
         },
@@ -137,10 +137,12 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
           bool isMultiSelection = false;
           IconData prefixIconData;
           bool isDirty = false;
+          bool isError = false;
 
           if (data is FormModel) {
             title = getClassName(data);
             prefixIconData = _formModelIconData;
+            isError = (data as FormModel).formDataState == DataState.error;
           } else if (data is SimpleProp) {
             title = data.propName;
             prefixIconData = _simplePropOrCriterionIconData;
@@ -148,6 +150,7 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
             isMultiOpt = false;
             isMultiSelection = false;
             isDirty = data.isDirty();
+            isError = data.formErrorInfo != null;
           } else if (data is MultiOptProp) {
             title = data.propName;
             prefixIconData = _optPropOrCriterionIconData;
@@ -155,9 +158,10 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
             isMultiOpt = true;
             isMultiSelection = !data.singleSelection;
             isDirty = data.isDirty();
+            isError = data.formErrorInfo != null;
           } else {
             prefixIconData = _uknownIconData;
-            title = "UKNOWN";
+            title = "UNKNOWN";
           }
           return Material(
             child: ListTile(
@@ -174,7 +178,7 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
                   Icon(
                     prefixIconData,
                     size: 16,
-                    color: isDirty ? Colors.red : Colors.black,
+                    color: isError ? Colors.red : Colors.black,
                   ),
                   SizedBox(width: 5),
                   Expanded(
@@ -196,6 +200,16 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
                       size: 16,
                       color: Colors.red,
                     ),
+                  if (isDirty) const SizedBox(width: 5),
+                  if (isDirty)
+                    Tooltip(
+                      message: "Dirty",
+                      child: const Icon(
+                        _formPropDirtyIconData,
+                        size: 16,
+                        color: Colors.indigo,
+                      ),
+                    ),
                 ],
               ),
               onTap: () {
@@ -213,8 +227,8 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
     );
   }
 
-  void _addMultiOptPropCascade(TreeNode currentNode,
-      MultiOptProp multiOptProp) {
+  void _addMultiOptPropCascade(
+      TreeNode currentNode, MultiOptProp multiOptProp) {
     TreeNode childNode = TreeNode(
       key: "MultiOptProp-${multiOptProp.propName}",
       data: multiOptProp,
