@@ -416,13 +416,19 @@ abstract class FormModel<
     } else {
       _autovalidateMode = _defaultAutovalidateMode;
     }
-
+    //
     final ITEM_DETAIL? itemDetail = block.currentItemDetail;
     final FormMode currentFormMode;
     switch (activityType) {
       case FormActivityType.itemFirstLoad:
-        currentFormMode =
-            itemDetail == null ? FormMode.creation : FormMode.edit;
+        currentFormMode = itemDetail == null //
+            ? FormMode.creation
+            : FormMode.edit;
+        //
+        _formPropsStructure._setFormDataState(
+          formDataState: DataState.pending,
+          error: null,
+        );
       case FormActivityType.updateFromFormView:
         currentFormMode = formMode;
       case FormActivityType.autoEnterFormFields:
