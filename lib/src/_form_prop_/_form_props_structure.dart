@@ -30,18 +30,6 @@ class FormPropsStructure {
 
   FormErrorInfo? get formErrorInfo => _formErrorInfo;
 
-  // FormErrorMethod? _formErrorMethod;
-  //
-  // FormErrorMethod? get formErrorType => _formErrorMethod;
-  //
-  // Object? _error;
-  //
-  // Object? get error => _error;
-  //
-  // StackTrace? _errorStackTrace;
-  //
-  // StackTrace? get errorStackTrace => _errorStackTrace;
-
   bool get isNew => _formMode == FormMode.creation;
 
   FormPropsStructure({
@@ -84,8 +72,10 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void __standardizeCascade(MultiOptProp optProp,
-      MultiOptProp? parent,) {
+  void __standardizeCascade(
+    MultiOptProp optProp,
+    MultiOptProp? parent,
+  ) {
     optProp.parent = parent;
     optProp._structure = this;
     //
@@ -520,8 +510,7 @@ class FormPropsStructure {
       if (prop == null) {
         print("""\n
             ****************************************************************************************************
-            *** WARNING ***: You should declare prop '$propName' explicitly in ${getClassName(
-            formModel)}.
+            *** WARNING ***: You should declare prop '$propName' explicitly in ${getClassName(formModel)}.
             ****************************************************************************************************
             """);
         //

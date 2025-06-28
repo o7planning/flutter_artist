@@ -33,16 +33,6 @@ abstract class FormModel<
 
   FormErrorInfo? get formErrorInfo => _formPropsStructure.formErrorInfo;
 
-  // Object? get error => _formPropsStructure._error;
-  // FormErrorMethod? get formErrorType => _formPropsStructure.formErrorType;
-  // String? get errorMessage {
-  //   if (error == null) {
-  //     return null;
-  //   }
-  //   AppException exception = ErrorUtils.toAppException(error!);
-  //   return exception.message;
-  // }
-
   bool get formInitialDataReady => _formPropsStructure._formInitialDataReady;
 
   Shelf get shelf => block.shelf;
