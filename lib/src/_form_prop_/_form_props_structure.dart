@@ -65,8 +65,10 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void __standardizeCascade(MultiOptProp optProp,
-      MultiOptProp? parent,) {
+  void __standardizeCascade(
+    MultiOptProp optProp,
+    MultiOptProp? parent,
+  ) {
     optProp.parent = parent;
     optProp._structure = this;
     //
@@ -106,25 +108,12 @@ class FormPropsStructure {
     __formErrorInfo = null;
   }
 
-  void _setFormError({
-    required FormActivityType activityType,
-    required String? propName,
-    required FormErrorMethod formErrorMethod,
-    required Object error,
-    required StackTrace errorStackTrace,
-  }) {
-    var feInfo = FormErrorInfo(
-      activityType: activityType,
-      propName: propName,
-      formErrorMethod: formErrorMethod,
-      error: error,
-      errorStackTrace: errorStackTrace,
-    );
-    if (propName == null) {
-      __formErrorInfo = feInfo;
+  void _setFormError(FormErrorInfo formErrorInfo) {
+    if (formErrorInfo.propName == null) {
+      __formErrorInfo = formErrorInfo;
     } else {
-      Prop? prop = _allPropMap[propName];
-      prop?._formErrorInfo = feInfo;
+      Prop? prop = _allPropMap[formErrorInfo.propName!];
+      prop?._formErrorInfo = formErrorInfo;
     }
   }
 
@@ -519,8 +508,7 @@ class FormPropsStructure {
       if (prop == null) {
         print("""\n
             ****************************************************************************************************
-            *** WARNING ***: You should declare prop '$propName' explicitly in ${getClassName(
-            formModel)}.
+            *** WARNING ***: You should declare prop '$propName' explicitly in ${getClassName(formModel)}.
             ****************************************************************************************************
             """);
         //

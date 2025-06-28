@@ -20,4 +20,8 @@ class FormErrorInfo {
     AppException ex = ErrorUtils.toAppException(error);
     return ex.message;
   }
+
+  String get methodName {
+    return formErrorMethod.toString();
+  }
 }

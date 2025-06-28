@@ -425,6 +425,7 @@ abstract class FormModel<
             ? FormMode.creation
             : FormMode.edit;
         //
+        _formPropsStructure._clearFormError();
         _formPropsStructure._setFormDataState(
           formDataState: DataState.pending,
           error: null,
@@ -474,32 +475,32 @@ abstract class FormModel<
         );
       }
     } catch (e, stackTrace) {
-      String methodName;
+      final FormErrorInfo formErrorInfo;
       if (e is _FormInternalError) {
-        methodName = e.formErrorMethod.toString();
-        _formPropsStructure._setFormError(
+        formErrorInfo = FormErrorInfo(
           activityType: activityType,
           propName: e.propName,
           formErrorMethod: e.formErrorMethod,
           error: e.error,
           errorStackTrace: e.stackTrace,
         );
+        _formPropsStructure._setFormError(formErrorInfo);
       } else {
-        methodName = "_loadMultiOptPropDataCascade";
-        _formPropsStructure._setFormError(
+        formErrorInfo = FormErrorInfo(
           activityType: activityType,
           propName: null,
           formErrorMethod: FormErrorMethod.unknown,
           error: e,
           errorStackTrace: stackTrace,
         );
+        _formPropsStructure._setFormError(formErrorInfo);
       }
       //
       _handleError(
         shelf: shelf,
-        methodName: methodName,
-        error: e,
-        stackTrace: stackTrace,
+        methodName: formErrorInfo.methodName,
+        error: formErrorInfo.error,
+        stackTrace: formErrorInfo.errorStackTrace,
         showSnackBar: true,
       );
       //
@@ -530,19 +531,20 @@ abstract class FormModel<
             );
           }
         } catch (e, stackTrace) {
-          _formPropsStructure._setFormError(
+          final formErrorInfo = FormErrorInfo(
             activityType: activityType,
             propName: null,
             formErrorMethod: FormErrorMethod.getSimplePropValuesFromItemDetail,
             error: e,
             errorStackTrace: stackTrace,
           );
+          _formPropsStructure._setFormError(formErrorInfo);
           //
           _handleError(
             shelf: shelf,
-            methodName: "getSimplePropValuesFromItemDetail",
-            error: e,
-            stackTrace: stackTrace,
+            methodName: formErrorInfo.methodName,
+            error: formErrorInfo.error,
+            stackTrace: formErrorInfo.errorStackTrace,
             showSnackBar: true,
           );
           //
@@ -574,19 +576,20 @@ abstract class FormModel<
               );
             }
           } catch (e, stackTrace) {
-            _formPropsStructure._setFormError(
+            final formErrorInfo = FormErrorInfo(
               activityType: activityType,
               propName: null,
               formErrorMethod: FormErrorMethod.specifyDefaultSimplePropValues,
               error: e,
               errorStackTrace: stackTrace,
             );
+            _formPropsStructure._setFormError(formErrorInfo);
             //
             _handleError(
               shelf: shelf,
-              methodName: "specifyDefaultSimplePropValues",
-              error: e,
-              stackTrace: stackTrace,
+              methodName: formErrorInfo.methodName,
+              error: formErrorInfo.error,
+              stackTrace: formErrorInfo.errorStackTrace,
               showSnackBar: true,
             );
             //
@@ -615,7 +618,7 @@ abstract class FormModel<
               );
             }
           } catch (e, stackTrace) {
-            _formPropsStructure._setFormError(
+            final formErrorInfo = FormErrorInfo(
               activityType: activityType,
               propName: null,
               formErrorMethod:
@@ -623,12 +626,13 @@ abstract class FormModel<
               error: e,
               errorStackTrace: stackTrace,
             );
+            _formPropsStructure._setFormError(formErrorInfo);
             //
             _handleError(
               shelf: shelf,
-              methodName: "getSimplePropValuesFromItemDetail",
-              error: e,
-              stackTrace: stackTrace,
+              methodName: formErrorInfo.methodName,
+              error: formErrorInfo.error,
+              stackTrace: formErrorInfo.errorStackTrace,
               showSnackBar: true,
             );
             //
@@ -661,7 +665,7 @@ abstract class FormModel<
             );
           }
         } catch (e, stackTrace) {
-          _formPropsStructure._setFormError(
+          final formErrorInfo = FormErrorInfo(
             activityType: activityType,
             propName: null,
             formErrorMethod:
@@ -669,12 +673,13 @@ abstract class FormModel<
             error: e,
             errorStackTrace: stackTrace,
           );
+          _formPropsStructure._setFormError(formErrorInfo);
           //
           _handleError(
             shelf: shelf,
-            methodName: "getSimplePropValuesFromItemDetail",
-            error: e,
-            stackTrace: stackTrace,
+            methodName: formErrorInfo.methodName,
+            error: formErrorInfo.error,
+            stackTrace: formErrorInfo.errorStackTrace,
             showSnackBar: true,
           );
           //
