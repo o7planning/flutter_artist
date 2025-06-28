@@ -109,6 +109,7 @@ class FormPropsStructure {
   }
 
   void _setFormError({
+    required _FormActivityType activityType,
     required FormErrorMethod formErrorMethod,
     required Object error,
     required StackTrace errorStackTrace,

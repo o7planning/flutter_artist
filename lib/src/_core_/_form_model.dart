@@ -1,10 +1,10 @@
 part of '../../flutter_artist.dart';
 
 abstract class FormModel<
-ID extends Object,
-ITEM_DETAIL extends Object,
-FILTER_CRITERIA extends FilterCriteria,
-EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
+    ID extends Object,
+    ITEM_DETAIL extends Object,
+    FILTER_CRITERIA extends FilterCriteria,
+    EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
   int __loadCount = 0;
 
   int get loadCount => __loadCount;
@@ -85,8 +85,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
 
   FormModel({
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-  })
-      : _defaultAutovalidateMode = autovalidateMode,
+  })  : _defaultAutovalidateMode = autovalidateMode,
         _autovalidateMode = autovalidateMode {
     __registerPropsStructure();
   }
@@ -265,8 +264,8 @@ EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
       case _ForceType.force:
         forceReloadForm = true;
       case _ForceType.decidedAtRuntime:
-      // forceReloadForm =
-      //     formDataState != DataState.ready && hasActiveUIComponent();
+        // forceReloadForm =
+        //     formDataState != DataState.ready && hasActiveUIComponent();
         forceReloadForm = false;
     }
     //
@@ -279,7 +278,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
     }
     //
     EXTRA_FORM_INPUT? extraFormInput =
-    thisXFormModel.extraFormInput as EXTRA_FORM_INPUT?;
+        thisXFormModel.extraFormInput as EXTRA_FORM_INPUT?;
     //
     return await _startNewFormActivity(
       extraFormInput: extraFormInput,
@@ -340,15 +339,15 @@ EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
       //
       result = isNew
           ? await callApiCreateItem(
-        filterCriteria: blockCurrentFilterCriteria,
-        parentBlockItem: parentBlockItem,
-        formMapData: formMapData,
-      )
+              filterCriteria: blockCurrentFilterCriteria,
+              parentBlockItem: parentBlockItem,
+              formMapData: formMapData,
+            )
           : await callApiUpdateItem(
-        filterCriteria: blockCurrentFilterCriteria,
-        parentBlockItem: parentBlockItem,
-        formMapData: formMapData,
-      );
+              filterCriteria: blockCurrentFilterCriteria,
+              parentBlockItem: parentBlockItem,
+              formMapData: formMapData,
+            );
       //
       block._refreshSavingState(isSaving: false);
     } catch (e, stackTrace) {
@@ -444,7 +443,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
     switch (activityType) {
       case _FormActivityType.itemFirstLoad:
         currentFormMode =
-        itemDetail == null ? FormMode.creation : FormMode.edit;
+            itemDetail == null ? FormMode.creation : FormMode.edit;
       case _FormActivityType.updateFromFormView:
         currentFormMode = formMode;
       case _FormActivityType.autoEnterFormFields:
@@ -490,15 +489,20 @@ EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
         );
       }
     } catch (e, stackTrace) {
+      String methodName;
       if (e is _FormInternalError) {
+        methodName = e.formErrorMethod.toString();
         _formPropsStructure._setFormError(
+          activityType: activityType,
           propName: e.propName,
           formErrorMethod: e.formErrorMethod,
           error: e.error,
           errorStackTrace: e.stackTrace,
         );
       } else {
+        methodName = "_loadMultiOptPropDataCascade";
         _formPropsStructure._setFormError(
+          activityType: activityType,
           propName: null,
           formErrorMethod: FormErrorMethod.unknown,
           error: e,
@@ -508,7 +512,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
       //
       _handleError(
         shelf: shelf,
-        methodName: "callApiLoadMultiOptPropXData",
+        methodName: methodName,
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -542,6 +546,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
           }
         } catch (e, stackTrace) {
           _formPropsStructure._setFormError(
+            activityType: activityType,
             propName: null,
             formErrorMethod: FormErrorMethod.getSimplePropValuesFromItemDetail,
             error: e,
@@ -571,8 +576,8 @@ EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
         if (!_defaultValueInitiated) {
           try {
             simplePropValueDefault = await specifyDefaultSimplePropValues(
-              filterCriteria: blockCurrentFilterCriteria,
-            ) ??
+                  filterCriteria: blockCurrentFilterCriteria,
+                ) ??
                 {};
             //
             for (String propName in simplePropValueDefault.keys) {
@@ -585,6 +590,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
             }
           } catch (e, stackTrace) {
             _formPropsStructure._setFormError(
+              activityType: activityType,
               propName: null,
               formErrorMethod: FormErrorMethod.specifyDefaultSimplePropValues,
               error: e,
@@ -611,8 +617,8 @@ EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
         if (extraFormInput != null) {
           try {
             simplePropValueExtra = getSimplePropValuesFromExtraFormInput(
-              extraFormInput: extraFormInput,
-            ) ??
+                  extraFormInput: extraFormInput,
+                ) ??
                 {};
             //
             for (String propName in simplePropValueExtra.keys) {
@@ -625,9 +631,10 @@ EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
             }
           } catch (e, stackTrace) {
             _formPropsStructure._setFormError(
+              activityType: activityType,
               propName: null,
               formErrorMethod:
-              FormErrorMethod.getSimplePropValuesFromExtraFormInput,
+                  FormErrorMethod.getSimplePropValuesFromExtraFormInput,
               error: e,
               errorStackTrace: stackTrace,
             );
@@ -656,8 +663,8 @@ EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
         try {
           Map<String, dynamic> simplePropValueExtra =
               getSimplePropValuesFromExtraFormInput(
-                extraFormInput: extraFormInput,
-              ) ??
+                    extraFormInput: extraFormInput,
+                  ) ??
                   {};
           //
           for (String propName in simplePropValueExtra.keys) {
@@ -670,9 +677,10 @@ EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
           }
         } catch (e, stackTrace) {
           _formPropsStructure._setFormError(
+            activityType: activityType,
             propName: null,
             formErrorMethod:
-            FormErrorMethod.getSimplePropValuesFromExtraFormInput,
+                FormErrorMethod.getSimplePropValuesFromExtraFormInput,
             error: e,
             errorStackTrace: stackTrace,
           );
@@ -815,7 +823,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
 
     // Get current OptProp data:
     XData? tempMultiOptPropXData =
-    _formPropsStructure._getTempMultiOptPropXData(
+        _formPropsStructure._getTempMultiOptPropXData(
       propName: multiOptPropName,
     );
 
@@ -965,14 +973,14 @@ EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
       // It can be a single value or a List.
       //
       final dynamic tempCurrentValue =
-      _formPropsStructure._getTempCurrentPropValue(
+          _formPropsStructure._getTempCurrentPropValue(
         propName: multiOptPropName,
       );
       //
       if (tempCurrentValue != null) {
         if (tempCurrentValue is List) {
           currentSelectedItems =
-          tempCurrentValue.isEmpty ? null : tempCurrentValue;
+              tempCurrentValue.isEmpty ? null : tempCurrentValue;
         } else {
           currentSelectedItems = [tempCurrentValue];
         }
@@ -980,10 +988,10 @@ EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
       if (currentSelectedItems != null) {
         currentSelectedItems =
             tempMultiOptPropXData._findInternalItemsByDynamics(
-              dynamicValues: currentSelectedItems,
-              addToInternalIfNotFound: true,
-              removeCurrentNotFoundItems: true,
-            );
+          dynamicValues: currentSelectedItems,
+          addToInternalIfNotFound: true,
+          removeCurrentNotFoundItems: true,
+        );
       }
       // Candidate Selected Items:
       candidateSelectedItems = initialValueWrap?.values;
@@ -1022,13 +1030,13 @@ EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
     // TODO: Dangerous, check not null:
     candidateSelectedItems =
         tempMultiOptPropXData?._findInternalItemsByDynamics(
-          dynamicValues: candidateSelectedItems,
-          //
-          // IMPORTANT: Add not found item to internal list.
-          //
-          addToInternalIfNotFound: true,
-          removeCurrentNotFoundItems: false,
-        ) ??
+              dynamicValues: candidateSelectedItems,
+              //
+              // IMPORTANT: Add not found item to internal list.
+              //
+              addToInternalIfNotFound: true,
+              removeCurrentNotFoundItems: false,
+            ) ??
             [];
     //
     // TODO: Double check this code:
@@ -1057,7 +1065,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
     }
     //
     Object? tempSelectedPropValue =
-    _formPropsStructure._getTempCurrentPropValue(
+        _formPropsStructure._getTempCurrentPropValue(
       propName: multiOptPropName,
     );
 
@@ -1183,20 +1191,19 @@ EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
     required String multiOptPropName,
   }) {
     MultiOptProp? multiOptProp =
-    _formPropsStructure._getMultiOptProp(multiOptPropName);
+        _formPropsStructure._getMultiOptProp(multiOptPropName);
     if (multiOptProp == null) {
       throw "The '$multiOptPropName' is not $MultiOptProp";
     }
     String message =
-        "The ${getClassName(
-        this)}.$methodName() method must return a non-null $ValueWrap for the multiOptPropName '$multiOptPropName'. ";
+        "The ${getClassName(this)}.$methodName() method must return a non-null $ValueWrap for the multiOptPropName '$multiOptPropName'. ";
     if (multiOptProp.singleSelection) {
       message += "$ValueWrap.single(null) or $ValueWrap.single(value). ";
     } else {
       message += "$ValueWrap.multi([null]) or $ValueWrap.multi([value]). ";
     }
     message +=
-    "And return null for not $MultiOptProp. See the specification of this method for more information.";
+        "And return null for not $MultiOptProp. See the specification of this method for more information.";
     // throw AppException(message: message);
   }
 
@@ -1338,10 +1345,8 @@ EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
   }) {
     _formWidgetStates.update(
       widgetState,
-          (xState) => xState..isBuilding = isBuilding,
-      ifAbsent: () =>
-      _XState()
-        ..isBuilding = isBuilding,
+      (xState) => xState..isBuilding = isBuilding,
+      ifAbsent: () => _XState()..isBuilding = isBuilding,
     );
   }
 
@@ -1355,10 +1360,8 @@ EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
     bool isShowingOLD = _formWidgetStates[widgetState]?.isShowing ?? false;
     _formWidgetStates.update(
       widgetState,
-          (xState) => xState..isShowing = isShowing,
-      ifAbsent: () =>
-      _XState()
-        ..isShowing = isShowing,
+      (xState) => xState..isShowing = isShowing,
+      ifAbsent: () => _XState()..isShowing = isShowing,
     );
     if (!isShowingOLD && isShowing) {
       block.shelf._startLoadDataForLazyUIComponentsIfNeed();
@@ -1496,7 +1499,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
     _XBlock xBlock = xShelf.findXBlockByName(block.name)!;
     _XFormModel xFormModel = xBlock.xFormModel!;
     _FormViewChangeTaskUnit taskUnit =
-    _FormViewChangeTaskUnit(xFormModel: xFormModel);
+        _FormViewChangeTaskUnit(xFormModel: xFormModel);
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     await FlutterArtist.executor._executeTaskUnitQueue(showOverlay: false);
   }
