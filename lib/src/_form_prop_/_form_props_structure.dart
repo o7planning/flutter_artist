@@ -26,9 +26,7 @@ class FormPropsStructure {
 
   DataState get formDataState => _formDataState;
 
-  FormErrorInfo? _formErrorInfo;
-
-  FormErrorInfo? get formErrorInfo => _formErrorInfo;
+  FormErrorInfo? __formErrorInfo;
 
   bool get isNew => _formMode == FormMode.creation;
 
@@ -94,8 +92,25 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  FormErrorInfo? get formErrorInfo {
+    for (String propName in _allPropMap.keys) {
+      Prop prop = _allPropMap[propName]!;
+      if (prop._formErrorInfo != null) {
+        return prop._formErrorInfo;
+      }
+    }
+    return __formErrorInfo;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _clearFormError() {
-    _formErrorInfo = null;
+    for (String propName in _allPropMap.keys) {
+      Prop prop = _allPropMap[propName]!;
+      prop._formErrorInfo = null;
+    }
+    __formErrorInfo = null;
   }
 
   void _setFormError({
@@ -112,7 +127,7 @@ class FormPropsStructure {
       errorStackTrace: errorStackTrace,
     );
     if (propName == null) {
-      _formErrorInfo = feInfo;
+      __formErrorInfo = feInfo;
     } else {
       Prop? prop = _allPropMap[propName];
       prop?._formErrorInfo = feInfo;
