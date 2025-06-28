@@ -60,20 +60,13 @@ class FormPropsStructure {
         markTempDirty: false,
       );
     }
-    for (Prop prop in _allPropMap.values) {
-      if (prop is MultiOptProp) {
-        prop._checkCycleError();
-      }
-    }
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void __standardizeCascade(
-    MultiOptProp optProp,
-    MultiOptProp? parent,
-  ) {
+  void __standardizeCascade(MultiOptProp optProp,
+      MultiOptProp? parent,) {
     optProp.parent = parent;
     optProp._structure = this;
     //
@@ -122,6 +115,7 @@ class FormPropsStructure {
   }) {
     var feInfo = FormErrorInfo(
       activityType: activityType,
+      propName: propName,
       formErrorMethod: formErrorMethod,
       error: error,
       errorStackTrace: errorStackTrace,
@@ -525,7 +519,8 @@ class FormPropsStructure {
       if (prop == null) {
         print("""\n
             ****************************************************************************************************
-            *** WARNING ***: You should declare prop '$propName' explicitly in ${getClassName(formModel)}.
+            *** WARNING ***: You should declare prop '$propName' explicitly in ${getClassName(
+            formModel)}.
             ****************************************************************************************************
             """);
         //

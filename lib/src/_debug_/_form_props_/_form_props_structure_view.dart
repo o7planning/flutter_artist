@@ -16,7 +16,7 @@ class _FormPropsStructureView extends StatefulWidget {
 
 class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
   final MultiSplitViewController _splitViewController =
-      MultiSplitViewController();
+  MultiSplitViewController();
   TreeViewController<dynamic, TreeNode<dynamic>>? _treeViewController;
   late TreeNode<dynamic> rootTreeNode;
   late TreeNode<dynamic> _currentNode;
@@ -31,7 +31,8 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
       parent: null,
     );
     _currentNode = formModelNode;
-    rootTreeNode = TreeNode.root()..add(formModelNode);
+    rootTreeNode = TreeNode.root()
+      ..add(formModelNode);
     //
     FormPropsStructure structure = widget.formModel._formPropsStructure;
 
@@ -125,8 +126,7 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
           width: 10,
         ),
         onTreeReady: (
-          TreeViewController<dynamic, TreeNode<dynamic>> controller,
-        ) {
+            TreeViewController<dynamic, TreeNode<dynamic>> controller,) {
           _treeViewController = controller;
           controller.expandAllChildren(rootTreeNode);
         },
@@ -213,8 +213,8 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
     );
   }
 
-  void _addMultiOptPropCascade(
-      TreeNode currentNode, MultiOptProp multiOptProp) {
+  void _addMultiOptPropCascade(TreeNode currentNode,
+      MultiOptProp multiOptProp) {
     TreeNode childNode = TreeNode(
       key: "MultiOptProp-${multiOptProp.propName}",
       data: multiOptProp,

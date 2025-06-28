@@ -25,24 +25,6 @@ class MultiOptCriterion extends Criterion {
   })  : singleSelection = false,
         children = [];
 
-  void _checkCycleError() {
-    MultiOptCriterion? p = parent;
-    final List<String> criterionNames = [criterionName];
-    while (true) {
-      if (p == null) {
-        return;
-      }
-      if (criterionNames.contains(p.criterionName)) {
-        throw _FilterCriterionCycleError(
-          criterionName1: criterionNames.last,
-          criterionName2: p.criterionName,
-        );
-      }
-      criterionNames.add(p.criterionName);
-      p = p.parent;
-    }
-  }
-
   void _updateTempValueCascade({
     required Map<String, dynamic> updateValues,
   }) {

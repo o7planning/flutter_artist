@@ -27,32 +27,16 @@ class MultiOptProp<V> extends Prop<V> {
     required super.propName,
     this.reloadCondition = MultiOptPropReload.ifCriteriaChanged,
     List<MultiOptProp> children = const [],
-  })  : singleSelection = true,
+  })
+      : singleSelection = true,
         _children = children;
 
   MultiOptProp.multiSelection({
     required super.propName,
     this.reloadCondition = MultiOptPropReload.ifCriteriaChanged,
-  })  : singleSelection = false,
+  })
+      : singleSelection = false,
         _children = const [];
-
-  void _checkCycleError() {
-    MultiOptProp? p = parent;
-    final List<String> propNames = [propName];
-    while (true) {
-      if (p == null) {
-        return;
-      }
-      if (propNames.contains(p.propName)) {
-        throw _FormPropCycleError(
-          propName1: propNames.last,
-          propName2: p.propName,
-        );
-      }
-      propNames.add(p.propName);
-      p = p.parent;
-    }
-  }
 
   void _updateTempValueCascade({
     required Map<String, dynamic> updateValues,
@@ -99,7 +83,8 @@ class MultiOptProp<V> extends Prop<V> {
 
   void _printTempInfoCascade({required int indentFactor}) {
     print(
-        "${("- - - " * indentFactor)} $propName >>> UpdateVal: $_candidateUpdateValue >>> tempCurrentXData: $_tempCurrentXData");
+        "${("- - - " *
+            indentFactor)} $propName >>> UpdateVal: $_candidateUpdateValue >>> tempCurrentXData: $_tempCurrentXData");
     for (var child in _children) {
       child._printTempInfoCascade(indentFactor: indentFactor + 1);
     }

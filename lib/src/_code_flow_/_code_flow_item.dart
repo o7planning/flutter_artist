@@ -20,8 +20,7 @@ class _CodeFlowItem {
     required StackTrace currentStackTrace,
     required Map<String, dynamic>? arguments,
     required this.isLibCode,
-  })
-      : codeFlowType = CodeFlowType.methodCalled,
+  })  : codeFlowType = CodeFlowType.methodCalled,
         funcCallInfo = FuncCallInfo.fromCurrentStackTrace(
           currentStackTrace: currentStackTrace,
           arguments: arguments,
@@ -35,8 +34,7 @@ class _CodeFlowItem {
     required String methodName,
     required Map<String, dynamic>? arguments,
     required this.isLibCode,
-  })
-      : codeFlowType = CodeFlowType.methodCalled,
+  })  : codeFlowType = CodeFlowType.methodCalled,
         funcCallInfo = FuncCallInfo(funcName: methodName, arguments: arguments),
         info = null,
         error = null,
@@ -46,8 +44,7 @@ class _CodeFlowItem {
     required this.ownerClassInstance,
     required this.info,
     required this.isLibCode,
-  })
-      : codeFlowType = CodeFlowType.info,
+  })  : codeFlowType = CodeFlowType.info,
         funcCallInfo = null,
         error = null,
         id = __flowLogItemSEQ++;
@@ -56,8 +53,7 @@ class _CodeFlowItem {
     required this.ownerClassInstance,
     required this.error,
     required this.isLibCode,
-  })
-      : codeFlowType = CodeFlowType.error,
+  })  : codeFlowType = CodeFlowType.error,
         funcCallInfo = null,
         info = null,
         id = __flowLogItemSEQ++;

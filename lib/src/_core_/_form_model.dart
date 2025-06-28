@@ -385,17 +385,6 @@ abstract class FormModel<
       String message =
           "Duplicate prop '${e.propName}' in ${getClassName(this)}";
       throw _createFatalAppError(message);
-    } on _FormPropCycleError catch (e) {
-      String message = '''
-         The parent-child relationship of several properties forms a cycle.
-         ┌─────┐
-         |  ${e.propName1}
-         ↑     ↓
-         |  ${e.propName2}
-         └─────┘
-         Double check class ${getClassName(this)}.
-       ''';
-      throw _createFatalAppError(message);
     } catch (e, stackTrace) {
       print(stackTrace);
       String message = "Unknown Error $e in ${getClassName(this)}";

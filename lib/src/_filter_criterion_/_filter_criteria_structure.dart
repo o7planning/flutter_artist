@@ -39,11 +39,6 @@ class FilterCriteriaStructure {
         markTempDirty: false,
       );
     }
-    for (Criterion criterion in _allCriteriaMap.values) {
-      if (criterion is MultiOptCriterion) {
-        criterion._checkCycleError();
-      }
-    }
   }
 
   void __standardizeCascade(
