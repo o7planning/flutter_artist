@@ -26,17 +26,21 @@ class FormPropsStructure {
 
   DataState get formDataState => _formDataState;
 
-  FormErrorMethod? _formErrorMethod;
+  FormErrorInfo? _formErrorInfo;
 
-  FormErrorMethod? get formErrorType => _formErrorMethod;
+  FormErrorInfo? get formErrorInfo => _formErrorInfo;
 
-  Object? _error;
-
-  Object? get error => _error;
-
-  StackTrace? _errorStackTrace;
-
-  StackTrace? get errorStackTrace => _errorStackTrace;
+  // FormErrorMethod? _formErrorMethod;
+  //
+  // FormErrorMethod? get formErrorType => _formErrorMethod;
+  //
+  // Object? _error;
+  //
+  // Object? get error => _error;
+  //
+  // StackTrace? _errorStackTrace;
+  //
+  // StackTrace? get errorStackTrace => _errorStackTrace;
 
   bool get isNew => _formMode == FormMode.creation;
 
@@ -80,10 +84,8 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void __standardizeCascade(
-    MultiOptProp optProp,
-    MultiOptProp? parent,
-  ) {
+  void __standardizeCascade(MultiOptProp optProp,
+      MultiOptProp? parent,) {
     optProp.parent = parent;
     optProp._structure = this;
     //
@@ -103,21 +105,28 @@ class FormPropsStructure {
   // ***************************************************************************
 
   void _clearFormError() {
-    _formErrorMethod = null;
-    _error = null;
-    _errorStackTrace = null;
+    _formErrorInfo = null;
   }
 
   void _setFormError({
-    required _FormActivityType activityType,
+    required FormActivityType activityType,
+    required String? propName,
     required FormErrorMethod formErrorMethod,
     required Object error,
     required StackTrace errorStackTrace,
-    required String? propName,
   }) {
-    _formErrorMethod = formErrorMethod;
-    _error = error;
-    _errorStackTrace = errorStackTrace;
+    var feInfo = FormErrorInfo(
+      activityType: activityType,
+      formErrorMethod: formErrorMethod,
+      error: error,
+      errorStackTrace: errorStackTrace,
+    );
+    if (propName == null) {
+      _formErrorInfo = feInfo;
+    } else {
+      Prop? prop = _allPropMap[propName];
+      prop?._formErrorInfo = feInfo;
+    }
   }
 
   // ***************************************************************************
@@ -163,7 +172,6 @@ class FormPropsStructure {
     required dynamic error,
   }) {
     _formDataState = formDataState;
-    _error = error;
   }
 
   // TODO: Xem lai, xoa di?
@@ -329,7 +337,7 @@ class FormPropsStructure {
   // ***************************************************************************
 
   void _initTemporaryForNewTransaction({
-    required _FormActivityType activityType,
+    required FormActivityType activityType,
     required Map<String, dynamic> formKeyInstantValues,
   }) {
     __isTempMode = true;
@@ -339,7 +347,7 @@ class FormPropsStructure {
     //
     for (Prop prop in _allPropMap.values) {
       switch (activityType) {
-        case _FormActivityType.itemFirstLoad:
+        case FormActivityType.itemFirstLoad:
           _formInitialDataReady = false;
           if (prop is SimpleProp) {
             prop._tempCurrentValue = null;
@@ -367,7 +375,7 @@ class FormPropsStructure {
             // Never throw.
             throw UnimplementedError();
           }
-        case _FormActivityType.updateFromFormView:
+        case FormActivityType.updateFromFormView:
           prop._tempCurrentValue = prop._currentValue;
           prop._tempCurrentXData = prop._currentXData;
           prop._tempInitialValue = prop._initialValue;
@@ -378,7 +386,7 @@ class FormPropsStructure {
               prop._tempCurrentValue = formKeyInstantValues[prop.propName];
             }
           }
-        case _FormActivityType.autoEnterFormFields:
+        case FormActivityType.autoEnterFormFields:
           prop._tempCurrentValue = prop._currentValue;
           prop._tempCurrentXData = prop._currentXData;
           prop._tempInitialValue = prop._initialValue;
@@ -512,7 +520,8 @@ class FormPropsStructure {
       if (prop == null) {
         print("""\n
             ****************************************************************************************************
-            *** WARNING ***: You should declare prop '$propName' explicitly in ${getClassName(formModel)}.
+            *** WARNING ***: You should declare prop '$propName' explicitly in ${getClassName(
+            formModel)}.
             ****************************************************************************************************
             """);
         //

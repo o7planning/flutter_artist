@@ -1866,7 +1866,7 @@ abstract class Block<
       //
       success = await formModel!._startNewFormActivity(
         extraFormInput: extraFormInput,
-        activityType: _FormActivityType.itemFirstLoad,
+        activityType: FormActivityType.itemFirstLoad,
       );
       if (success) {
         formModel!._formPropsStructure._setManualDirty(initDirty);
@@ -2319,7 +2319,7 @@ abstract class Block<
         //
         bool success = await formModel!._startNewFormActivity(
           extraFormInput: null,
-          activityType: _FormActivityType.itemFirstLoad,
+          activityType: FormActivityType.itemFirstLoad,
         );
         if (!success) {
           return false;

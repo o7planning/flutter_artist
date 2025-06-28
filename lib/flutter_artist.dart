@@ -362,6 +362,8 @@ part 'src/_exception_/_fatal_app_exception.dart';
 
 part 'src/_exception_/_form_internal_error.dart';
 
+part 'src/_core_/_form_error_info.dart';
+
 part 'src/_fa_.dart';
 
 part 'src/_filter_criterion_/_calculated_criterion.dart';

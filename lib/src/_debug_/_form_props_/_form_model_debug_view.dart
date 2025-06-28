@@ -73,7 +73,7 @@ class _FormModelDebugView extends StatelessWidget {
           if (formModel.formDataState == DataState.error) SizedBox(height: 10),
           if (formModel.formDataState == DataState.error)
             Text(
-              "Error Message: ${formModel.errorMessage ?? ' - '}",
+              "Error Message: ${formModel.formErrorInfo?.errorMessage ?? ' - '}",
               style: TextStyle(
                 fontSize: 13,
                 color: Colors.red,

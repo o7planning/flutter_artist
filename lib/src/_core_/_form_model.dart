@@ -29,19 +29,19 @@ abstract class FormModel<
 
   FormMode get formMode => _formPropsStructure.formMode;
 
-  FormErrorMethod? get formErrorType => _formPropsStructure.formErrorType;
-
   DataState get formDataState => _formPropsStructure._formDataState;
 
-  Object? get error => _formPropsStructure._error;
+  FormErrorInfo? get formErrorInfo => _formPropsStructure.formErrorInfo;
 
-  String? get errorMessage {
-    if (error == null) {
-      return null;
-    }
-    AppException exception = ErrorUtils.toAppException(error!);
-    return exception.message;
-  }
+  // Object? get error => _formPropsStructure._error;
+  // FormErrorMethod? get formErrorType => _formPropsStructure.formErrorType;
+  // String? get errorMessage {
+  //   if (error == null) {
+  //     return null;
+  //   }
+  //   AppException exception = ErrorUtils.toAppException(error!);
+  //   return exception.message;
+  // }
 
   bool get formInitialDataReady => _formPropsStructure._formInitialDataReady;
 
@@ -150,7 +150,7 @@ abstract class FormModel<
     }
     _showFormErrorViewerDialog(
       context: context,
-      error: error ?? "Unknown Error",
+      formErrorInfo: formErrorInfo!,
       formInitialDataReady: formInitialDataReady,
     );
   }
@@ -248,7 +248,7 @@ abstract class FormModel<
     //
     await _startNewFormActivity(
       extraFormInput: null,
-      activityType: _FormActivityType.updateFromFormView,
+      activityType: FormActivityType.updateFromFormView,
     );
     return true;
   }
@@ -282,7 +282,7 @@ abstract class FormModel<
     //
     return await _startNewFormActivity(
       extraFormInput: extraFormInput,
-      activityType: _FormActivityType.itemFirstLoad,
+      activityType: FormActivityType.itemFirstLoad,
     );
   }
 
@@ -297,7 +297,7 @@ abstract class FormModel<
     //
     await _startNewFormActivity(
       extraFormInput: extraFormInput,
-      activityType: _FormActivityType.autoEnterFormFields,
+      activityType: FormActivityType.autoEnterFormFields,
     );
     return true;
   }
@@ -422,7 +422,7 @@ abstract class FormModel<
   @ImportantMethodAnnotation()
   Future<bool> _startNewFormActivity({
     required EXTRA_FORM_INPUT? extraFormInput,
-    required _FormActivityType activityType,
+    required FormActivityType activityType,
   }) async {
     FILTER_CRITERIA? blockCurrentFilterCriteria = block.filterCriteria;
     if (blockCurrentFilterCriteria == null) {
@@ -431,7 +431,7 @@ abstract class FormModel<
     __formActivityCount++;
     print(
         "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFormActivity, activityType: $activityType");
-    if (activityType == _FormActivityType.itemFirstLoad) {
+    if (activityType == FormActivityType.itemFirstLoad) {
       __loadCount++;
       _autovalidateMode = AutovalidateMode.disabled;
     } else {
@@ -441,12 +441,12 @@ abstract class FormModel<
     final ITEM_DETAIL? itemDetail = block.currentItemDetail;
     final FormMode currentFormMode;
     switch (activityType) {
-      case _FormActivityType.itemFirstLoad:
+      case FormActivityType.itemFirstLoad:
         currentFormMode =
             itemDetail == null ? FormMode.creation : FormMode.edit;
-      case _FormActivityType.updateFromFormView:
+      case FormActivityType.updateFromFormView:
         currentFormMode = formMode;
-      case _FormActivityType.autoEnterFormFields:
+      case FormActivityType.autoEnterFormFields:
         currentFormMode = formMode;
     }
     //
@@ -454,7 +454,7 @@ abstract class FormModel<
     final bool isNoneMode = currentFormMode == FormMode.none;
     final bool isCreationMode = currentFormMode == FormMode.creation;
     //
-    if (activityType == _FormActivityType.itemFirstLoad) {
+    if (activityType == FormActivityType.itemFirstLoad) {
       if (isNoneMode || isCreationMode) {
         _defaultValueInitiated = false;
       }
@@ -529,7 +529,7 @@ abstract class FormModel<
     // Get SimpleProp Value:
     //
     Map<String, dynamic> simplePropValue = {};
-    if (activityType == _FormActivityType.itemFirstLoad) {
+    if (activityType == FormActivityType.itemFirstLoad) {
       if (itemDetail != null) {
         try {
           simplePropValue = await getSimplePropValuesFromItemDetail(
@@ -658,7 +658,7 @@ abstract class FormModel<
       }
     }
     //
-    else if (activityType == _FormActivityType.autoEnterFormFields) {
+    else if (activityType == FormActivityType.autoEnterFormFields) {
       if (extraFormInput != null) {
         try {
           Map<String, dynamic> simplePropValueExtra =
@@ -715,7 +715,7 @@ abstract class FormModel<
 
   bool __endFormActivityWithDataState({
     required DataState formDataState,
-    required _FormActivityType activityType,
+    required FormActivityType activityType,
     required dynamic error,
   }) {
     try {
@@ -724,7 +724,7 @@ abstract class FormModel<
       //
       _formPropsStructure._updateTempToReal();
       //
-      if (activityType == _FormActivityType.itemFirstLoad) {
+      if (activityType == FormActivityType.itemFirstLoad) {
         _formPropsStructure._setInitialFormDataForItemFirstLoad();
       }
       //
@@ -740,7 +740,7 @@ abstract class FormModel<
         error: error,
       );
       //
-      if (activityType == _FormActivityType.itemFirstLoad) {
+      if (activityType == FormActivityType.itemFirstLoad) {
         if (formDataState == DataState.ready) {
           _formPropsStructure._formInitialDataReady = true;
         }
@@ -752,7 +752,7 @@ abstract class FormModel<
       // Form Initial Data Ready
       else {
         // Validate Form
-        if (activityType == _FormActivityType.itemFirstLoad) {
+        if (activityType == FormActivityType.itemFirstLoad) {
           if (formMode == FormMode.edit && _formKey.currentState != null) {
             if (_formPropsStructure._formInitialDataReady) {
               _formKey.currentState!.validate(focusOnInvalid: false);
@@ -817,7 +817,7 @@ abstract class FormModel<
     required MultiOptProp multiOptProp,
     required bool parentValueIsInitialValue,
     required Map<String, dynamic> formKeyInstantValues,
-    required _FormActivityType activityType,
+    required FormActivityType activityType,
   }) async {
     final String multiOptPropName = multiOptProp.propName;
 
@@ -836,7 +836,7 @@ abstract class FormModel<
     dynamic newSelectedValue = _formPropsStructure._getTempCurrentPropValue(
       propName: multiOptPropName,
     );
-    if (activityType == _FormActivityType.updateFromFormView) {
+    if (activityType == FormActivityType.updateFromFormView) {
       if (formKeyInstantValues.containsKey(multiOptPropName)) {
         newSelectedValue = formKeyInstantValues[multiOptPropName];
       }
@@ -924,7 +924,7 @@ abstract class FormModel<
     //
     if (tempMultiOptPropXData != null) {
       // Item First Load:
-      if (activityType == _FormActivityType.itemFirstLoad) {
+      if (activityType == FormActivityType.itemFirstLoad) {
         if (currentItemDetail == null) {
           if (extraFormInput != null) {
             // May throw _FormInternalError.
@@ -957,7 +957,7 @@ abstract class FormModel<
         }
       }
       // Auto Enter Form Fields:
-      else if (activityType == _FormActivityType.autoEnterFormFields) {
+      else if (activityType == FormActivityType.autoEnterFormFields) {
         if (extraFormInput != null) {
           // May throw _FormInternalError.
           initialValueWrap = __getMultiOptPropValueFromExtraFormInput(
@@ -1012,7 +1012,7 @@ abstract class FormModel<
     );
     //
     final dynamic initialValue;
-    if (activityType == _FormActivityType.itemFirstLoad) {
+    if (activityType == FormActivityType.itemFirstLoad) {
       initialValue = initialValueWrap?.values;
     } else {
       initialValue = _formPropsStructure._getInitialPropValue(
@@ -1020,7 +1020,7 @@ abstract class FormModel<
       );
     }
     //
-    if (activityType == _FormActivityType.itemFirstLoad ||
+    if (activityType == FormActivityType.itemFirstLoad ||
         parentValueIsInitialValue) {
       tempMultiOptPropXData?._addInitialValueIfNotFound(
         initialValue: initialValue,

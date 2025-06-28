@@ -1,11 +1,11 @@
 part of '../../flutter_artist.dart';
 
 class FormErrorViewerDialog extends StatelessWidget {
-  final Object error;
+  final FormErrorInfo formErrorInfo;
   final bool formInitialDataReady;
 
   const FormErrorViewerDialog({
-    required this.error,
+    required this.formErrorInfo,
     required this.formInitialDataReady,
     super.key,
   });
@@ -21,7 +21,7 @@ class FormErrorViewerDialog extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context) {
-    AppException exception = ErrorUtils.toAppException(error);
+    AppException exception = ErrorUtils.toAppException(formErrorInfo.error);
     //
     final Size size = calculatePreferredDialogSize(
       context,
@@ -120,14 +120,14 @@ class FormErrorViewerDialog extends StatelessWidget {
 
 Future<void> _showFormErrorViewerDialog({
   required BuildContext context,
-  required Object error,
+  required FormErrorInfo formErrorInfo,
   required bool formInitialDataReady,
 }) async {
   await showDialog(
     context: context,
     builder: (BuildContext context) {
       return FormErrorViewerDialog(
-        error: error,
+        formErrorInfo: formErrorInfo,
         formInitialDataReady: formInitialDataReady,
       );
     },

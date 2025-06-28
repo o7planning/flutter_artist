@@ -23,6 +23,14 @@ abstract class Prop<V> {
   V? _initialValue;
   XData? _initialXData;
 
+  // ------------ Error: -------------------------------------------------------
+
+  FormErrorInfo? _formErrorInfo;
+
+  FormErrorInfo? get formErrorInfo => _formErrorInfo;
+
+  // ---------------------------------------------------------------------------
+
   Prop({
     required this.propName,
   });
