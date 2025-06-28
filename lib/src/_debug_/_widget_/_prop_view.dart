@@ -1,10 +1,12 @@
 part of '../../../flutter_artist.dart';
 
 class _FormPropView extends StatelessWidget {
+  final bool formInitialDataReady;
   final Prop prop;
 
   const _FormPropView({
     required this.prop,
+    required this.formInitialDataReady,
   });
 
   @override
@@ -91,6 +93,21 @@ class _FormPropView extends StatelessWidget {
       children: [
         _SimpleAccordion(
           children: [
+            if (prop.formErrorInfo != null)
+              _SimpleAccordionSection(
+                initiallyExpanded: true,
+                headerTitle: Text(
+                  "Error Info:",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                headerSubtitle: null,
+                content: _FormErrorPropView(
+                  formInitialDataReady: formInitialDataReady,
+                  formErrorInfo: prop.formErrorInfo!,
+                ),
+              ),
             _SimpleAccordionSection(
               initiallyExpanded: true,
               headerTitle: Text(

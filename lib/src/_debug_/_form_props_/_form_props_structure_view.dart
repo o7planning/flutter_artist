@@ -71,6 +71,7 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
       );
     } else if (_currentNode!.data is Prop) {
       return _FormPropView(
+        formInitialDataReady: widget.formModel.formInitialDataReady,
         prop: _currentNode!.data,
       );
     } else {
@@ -175,10 +176,13 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(
-                    prefixIconData,
-                    size: 16,
-                    color: isError ? Colors.red : Colors.black,
+                  Tooltip(
+                    message: isError ? 'Error' : '',
+                    child: Icon(
+                      prefixIconData,
+                      size: 16,
+                      color: isError ? Colors.red : Colors.black,
+                    ),
                   ),
                   SizedBox(width: 5),
                   Expanded(

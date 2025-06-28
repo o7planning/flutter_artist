@@ -248,6 +248,8 @@ part 'src/_debug_/_widget_/_json_view.dart';
 
 part 'src/_debug_/_widget_/_prop_view.dart';
 
+part 'src/_debug_/_widget_/_prop_error_view.dart';
+
 part 'src/_debug_/_widget_/_xdata_view.dart';
 
 part 'src/_debug_filter_/__filter_criteria_debug_view.dart';
