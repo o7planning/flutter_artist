@@ -415,7 +415,7 @@ abstract class Block<
     );
     //
     if (formModel != null) {
-      formModel!._clearWithDataState(formDataState: formDataState);
+      formModel!._clearDataWithDataState(formDataState: formDataState);
     }
   }
 
@@ -941,7 +941,7 @@ abstract class Block<
     //
     this.__setCurrentItem(item: null, itemDetail: null);
     if (formModel != null) {
-      formModel!._clearWithDataState(formDataState: DataState.none);
+      formModel!._clearDataWithDataState(formDataState: DataState.none);
     }
     // Test Case: [38b].
     this.__clearAllChildrenBlocksToNone(
@@ -1231,7 +1231,7 @@ abstract class Block<
         );
         //
         if (formModel != null) {
-          formModel!._clearWithDataState(formDataState: DataState.none);
+          formModel!._clearDataWithDataState(formDataState: DataState.none);
         }
         // (Currently, In _unitQuery && forceQuery).
         // Test Case: [42a].
@@ -1698,7 +1698,7 @@ abstract class Block<
         );
       } else {
         if (forceReloadItem) {
-          formModel!._clearWithDataState(formDataState: DataState.pending);
+          formModel!._clearDataWithDataState(formDataState: DataState.pending);
         } else {
           // Do nothing.
         }
@@ -1810,7 +1810,7 @@ abstract class Block<
     //
     if (this.formModel != null) {
       // Clear Form:
-      formModel!._clearWithDataState(
+      formModel!._clearDataWithDataState(
         formDataState: DataState.none,
       );
     }
@@ -2359,7 +2359,7 @@ abstract class Block<
       //
       if (this.formModel != null) {
         // Clear Form:
-        formModel!._clearWithDataState(
+        formModel!._clearDataWithDataState(
           formDataState: DataState.none,
         );
       }

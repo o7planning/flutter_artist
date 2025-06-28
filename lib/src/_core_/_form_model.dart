@@ -262,7 +262,7 @@ abstract class FormModel<
     if (!forceReloadForm) {
       print("        ~~~~~~~> IGNORED --> form - [${block.name}]");
       if (formDataState != DataState.ready) {
-        _clearWithDataState(formDataState: DataState.pending);
+        _clearDataWithDataState(formDataState: DataState.pending);
       }
       return true;
     }
@@ -1293,7 +1293,7 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _clearWithDataState({required DataState formDataState}) {
+  void _clearDataWithDataState({required DataState formDataState}) {
     try {
       _formPropsStructure._clearFormDataWithState(
         formDataState: formDataState,
@@ -1306,7 +1306,7 @@ abstract class FormModel<
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: "_clearWithDataState",
+        methodName: "_clearDataWithDataState",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
