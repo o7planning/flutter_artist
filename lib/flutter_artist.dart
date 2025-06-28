@@ -324,6 +324,8 @@ part 'src/_enum_/_form_debug_item_type.dart';
 
 part 'src/_enum_/_form_mode.dart';
 
+part 'src/_enum_/_form_error_method.dart';
+
 part 'src/_enum_/_item_creation_type.dart';
 
 part 'src/_enum_/_list_behavior.dart';
@@ -357,6 +359,8 @@ part 'src/_enum_/_sort_rule_side.dart';
 part 'src/_enum_/_task_type.dart';
 
 part 'src/_exception_/_fatal_app_exception.dart';
+
+part 'src/_exception_/_form_internal_error.dart';
 
 part 'src/_fa_.dart';
 
@@ -577,10 +581,18 @@ part 'src/_xdata_/_x_tree.dart';
 // *****************************************************************************
 // *****************************************************************************
 
+class AbstractMethodAnnotation {
+  const AbstractMethodAnnotation();
+}
+
 class RootMethodAnnotation {
   const RootMethodAnnotation();
 }
 
 class ImportantMethodAnnotation {
   const ImportantMethodAnnotation();
+}
+
+class MayThrowFormInternalError {
+  const MayThrowFormInternalError();
 }

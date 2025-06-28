@@ -1,10 +1,10 @@
 part of '../../flutter_artist.dart';
 
 abstract class FormModel<
-    ID extends Object,
-    ITEM_DETAIL extends Object,
-    FILTER_CRITERIA extends FilterCriteria,
-    EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
+ID extends Object,
+ITEM_DETAIL extends Object,
+FILTER_CRITERIA extends FilterCriteria,
+EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
   int __loadCount = 0;
 
   int get loadCount => __loadCount;
@@ -28,6 +28,8 @@ abstract class FormModel<
   bool get loadTimeUIActive => _loadTimeUIActive;
 
   FormMode get formMode => _formPropsStructure.formMode;
+
+  FormErrorMethod? get formErrorType => _formPropsStructure.formErrorType;
 
   DataState get formDataState => _formPropsStructure._formDataState;
 
@@ -83,7 +85,8 @@ abstract class FormModel<
 
   FormModel({
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-  })  : _defaultAutovalidateMode = autovalidateMode,
+  })
+      : _defaultAutovalidateMode = autovalidateMode,
         _autovalidateMode = autovalidateMode {
     __registerPropsStructure();
   }
@@ -159,6 +162,7 @@ abstract class FormModel<
   ///
   /// Abstract method:
   ///
+  @AbstractMethodAnnotation()
   Future<XData?> callApiLoadMultiOptPropXData({
     required String multiOptPropName,
     required Object? parentMultiOptPropValue,
@@ -170,6 +174,7 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  @AbstractMethodAnnotation()
   ValueWrap? specifyDefaultMultiOptPropValue({
     required String multiOptPropName,
     required XData multiOptPropXData,
@@ -179,6 +184,7 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  @AbstractMethodAnnotation()
   Future<Map<String, dynamic>?> specifyDefaultSimplePropValues({
     required FILTER_CRITERIA filterCriteria,
   });
@@ -186,6 +192,7 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  @AbstractMethodAnnotation()
   ValueWrap? getMultiOptPropValueFromItemDetail({
     required String multiOptPropName,
     required XData multiOptPropXData,
@@ -196,6 +203,7 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  @AbstractMethodAnnotation()
   Future<Map<String, dynamic>> getSimplePropValuesFromItemDetail({
     required FILTER_CRITERIA filterCriteria,
     required ITEM_DETAIL itemDetail,
@@ -204,6 +212,7 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  @AbstractMethodAnnotation()
   ValueWrap? getMultiOptPropValueFromExtraFormInput({
     required String multiOptPropName,
     required XData multiOptPropXData,
@@ -214,6 +223,7 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  @AbstractMethodAnnotation()
   Map<String, dynamic>? getSimplePropValuesFromExtraFormInput({
     required EXTRA_FORM_INPUT extraFormInput,
   });
@@ -255,8 +265,8 @@ abstract class FormModel<
       case _ForceType.force:
         forceReloadForm = true;
       case _ForceType.decidedAtRuntime:
-        // forceReloadForm =
-        //     formDataState != DataState.ready && hasActiveUIComponent();
+      // forceReloadForm =
+      //     formDataState != DataState.ready && hasActiveUIComponent();
         forceReloadForm = false;
     }
     //
@@ -269,7 +279,7 @@ abstract class FormModel<
     }
     //
     EXTRA_FORM_INPUT? extraFormInput =
-        thisXFormModel.extraFormInput as EXTRA_FORM_INPUT?;
+    thisXFormModel.extraFormInput as EXTRA_FORM_INPUT?;
     //
     return await _startNewFormActivity(
       extraFormInput: extraFormInput,
@@ -330,15 +340,15 @@ abstract class FormModel<
       //
       result = isNew
           ? await callApiCreateItem(
-              filterCriteria: blockCurrentFilterCriteria,
-              parentBlockItem: parentBlockItem,
-              formMapData: formMapData,
-            )
+        filterCriteria: blockCurrentFilterCriteria,
+        parentBlockItem: parentBlockItem,
+        formMapData: formMapData,
+      )
           : await callApiUpdateItem(
-              filterCriteria: blockCurrentFilterCriteria,
-              parentBlockItem: parentBlockItem,
-              formMapData: formMapData,
-            );
+        filterCriteria: blockCurrentFilterCriteria,
+        parentBlockItem: parentBlockItem,
+        formMapData: formMapData,
+      );
       //
       block._refreshSavingState(isSaving: false);
     } catch (e, stackTrace) {
@@ -434,17 +444,13 @@ abstract class FormModel<
     switch (activityType) {
       case _FormActivityType.itemFirstLoad:
         currentFormMode =
-            itemDetail == null ? FormMode.creation : FormMode.edit;
+        itemDetail == null ? FormMode.creation : FormMode.edit;
       case _FormActivityType.updateFromFormView:
         currentFormMode = formMode;
       case _FormActivityType.autoEnterFormFields:
         currentFormMode = formMode;
     }
-    // final FormMode currentFormMode = formDataState == DataState.none
-    //     ? FormMode.none
-    //     : itemDetail == null
-    //         ? FormMode.creation
-    //         : FormMode.edit;
+    //
     _formPropsStructure._setFormMode(currentFormMode);
     final bool isNoneMode = currentFormMode == FormMode.none;
     final bool isCreationMode = currentFormMode == FormMode.creation;
@@ -471,7 +477,7 @@ abstract class FormModel<
         //
         // Load OptProp Data and set default and selected.
         //
-        // May throw ApiError.
+        // May throw ApiError or _FormInternalError.
         //
         await _loadMultiOptPropDataCascade(
           blockCurrentFilterCriteria: blockCurrentFilterCriteria,
@@ -484,6 +490,22 @@ abstract class FormModel<
         );
       }
     } catch (e, stackTrace) {
+      if (e is _FormInternalError) {
+        _formPropsStructure._setFormError(
+          propName: e.propName,
+          formErrorMethod: e.formErrorMethod,
+          error: e.error,
+          errorStackTrace: e.stackTrace,
+        );
+      } else {
+        _formPropsStructure._setFormError(
+          propName: null,
+          formErrorMethod: FormErrorMethod.unknown,
+          error: e,
+          errorStackTrace: stackTrace,
+        );
+      }
+      //
       _handleError(
         shelf: shelf,
         methodName: "callApiLoadMultiOptPropXData",
@@ -519,6 +541,13 @@ abstract class FormModel<
             );
           }
         } catch (e, stackTrace) {
+          _formPropsStructure._setFormError(
+            propName: null,
+            formErrorMethod: FormErrorMethod.getSimplePropValuesFromItemDetail,
+            error: e,
+            errorStackTrace: stackTrace,
+          );
+          //
           _handleError(
             shelf: shelf,
             methodName: "getSimplePropValuesFromItemDetail",
@@ -542,8 +571,8 @@ abstract class FormModel<
         if (!_defaultValueInitiated) {
           try {
             simplePropValueDefault = await specifyDefaultSimplePropValues(
-                  filterCriteria: blockCurrentFilterCriteria,
-                ) ??
+              filterCriteria: blockCurrentFilterCriteria,
+            ) ??
                 {};
             //
             for (String propName in simplePropValueDefault.keys) {
@@ -555,6 +584,13 @@ abstract class FormModel<
               );
             }
           } catch (e, stackTrace) {
+            _formPropsStructure._setFormError(
+              propName: null,
+              formErrorMethod: FormErrorMethod.specifyDefaultSimplePropValues,
+              error: e,
+              errorStackTrace: stackTrace,
+            );
+            //
             _handleError(
               shelf: shelf,
               methodName: "specifyDefaultSimplePropValues",
@@ -575,8 +611,8 @@ abstract class FormModel<
         if (extraFormInput != null) {
           try {
             simplePropValueExtra = getSimplePropValuesFromExtraFormInput(
-                  extraFormInput: extraFormInput,
-                ) ??
+              extraFormInput: extraFormInput,
+            ) ??
                 {};
             //
             for (String propName in simplePropValueExtra.keys) {
@@ -588,6 +624,14 @@ abstract class FormModel<
               );
             }
           } catch (e, stackTrace) {
+            _formPropsStructure._setFormError(
+              propName: null,
+              formErrorMethod:
+              FormErrorMethod.getSimplePropValuesFromExtraFormInput,
+              error: e,
+              errorStackTrace: stackTrace,
+            );
+            //
             _handleError(
               shelf: shelf,
               methodName: "getSimplePropValuesFromItemDetail",
@@ -612,8 +656,8 @@ abstract class FormModel<
         try {
           Map<String, dynamic> simplePropValueExtra =
               getSimplePropValuesFromExtraFormInput(
-                    extraFormInput: extraFormInput,
-                  ) ??
+                extraFormInput: extraFormInput,
+              ) ??
                   {};
           //
           for (String propName in simplePropValueExtra.keys) {
@@ -625,6 +669,14 @@ abstract class FormModel<
             );
           }
         } catch (e, stackTrace) {
+          _formPropsStructure._setFormError(
+            propName: null,
+            formErrorMethod:
+            FormErrorMethod.getSimplePropValuesFromExtraFormInput,
+            error: e,
+            errorStackTrace: stackTrace,
+          );
+          //
           _handleError(
             shelf: shelf,
             methodName: "getSimplePropValuesFromItemDetail",
@@ -763,7 +815,7 @@ abstract class FormModel<
 
     // Get current OptProp data:
     XData? tempMultiOptPropXData =
-        _formPropsStructure._getTempMultiOptPropXData(
+    _formPropsStructure._getTempMultiOptPropXData(
       propName: multiOptPropName,
     );
 
@@ -782,7 +834,6 @@ abstract class FormModel<
       }
     }
     //
-
     final bool valueChanged;
     if (tempMultiOptPropXData == null) {
       valueChanged = false;
@@ -821,10 +872,9 @@ abstract class FormModel<
       //  - And make sure children-OptProp to null if parent-Value is null or not selected.
       _formPropsStructure._updatePropsTempValues({multiOptPropName: null});
     }
-
+    //
     bool forceReload =
         multiOptProp.parent == null && multiOptProp._markToReload;
-
     //
     // Load OptProp data from Rest API.
     // May throw ApiError.
@@ -833,17 +883,27 @@ abstract class FormModel<
       // Always increase "__loadCount" value regardless of error.
       multiOptProp._loadCount++;
       Object? parentBlockItem = this.block.parent?.currentItem;
-      tempMultiOptPropXData = await callApiLoadMultiOptPropXData(
-        parentBlockCurrentItem: parentBlockItem,
-        filterCriteria: blockCurrentFilterCriteria,
-        extraFormInput: extraFormInput,
-        parentMultiOptPropValue: parentMultiOptPropValue,
-        multiOptPropName: multiOptPropName,
-      );
+      //
+      try {
+        tempMultiOptPropXData = await callApiLoadMultiOptPropXData(
+          parentBlockCurrentItem: parentBlockItem,
+          filterCriteria: blockCurrentFilterCriteria,
+          extraFormInput: extraFormInput,
+          parentMultiOptPropValue: parentMultiOptPropValue,
+          multiOptPropName: multiOptPropName,
+        );
+      } catch (e, stackTrace) {
+        throw _FormInternalError(
+          propName: multiOptPropName,
+          formErrorMethod: FormErrorMethod.callApiLoadMultiOptPropXData,
+          error: e,
+          stackTrace: stackTrace,
+        );
+      }
+      //
       multiOptProp._markToReload = false;
       multiOptProp._tempCurrentXData = tempMultiOptPropXData;
     }
-
     //
     // IMPORTANT: Do not use empty list here
     // to avoid cast Error (List<dynamic> to List<ITEM>)
@@ -859,6 +919,7 @@ abstract class FormModel<
       if (activityType == _FormActivityType.itemFirstLoad) {
         if (currentItemDetail == null) {
           if (extraFormInput != null) {
+            // May throw _FormInternalError.
             initialValueWrap = __getMultiOptPropValueFromExtraFormInput(
               extraFormInput: extraFormInput,
               multiOptPropXData: tempMultiOptPropXData,
@@ -867,6 +928,7 @@ abstract class FormModel<
             );
           } else {
             if (!_defaultValueInitiated) {
+              // May throw _FormInternalError.
               initialValueWrap = __specifyDefaultMultiOptPropValue(
                 multiOptPropName: multiOptPropName,
                 multiOptPropXData: tempMultiOptPropXData,
@@ -877,6 +939,7 @@ abstract class FormModel<
         }
         // currentItemDetail != null
         else {
+          // May throw _FormInternalError.
           initialValueWrap = __getMultiOptPropValueFromItemDetail(
             itemDetail: currentItemDetail,
             multiOptPropXData: tempMultiOptPropXData,
@@ -888,6 +951,7 @@ abstract class FormModel<
       // Auto Enter Form Fields:
       else if (activityType == _FormActivityType.autoEnterFormFields) {
         if (extraFormInput != null) {
+          // May throw _FormInternalError.
           initialValueWrap = __getMultiOptPropValueFromExtraFormInput(
             extraFormInput: extraFormInput,
             multiOptPropXData: tempMultiOptPropXData,
@@ -901,14 +965,14 @@ abstract class FormModel<
       // It can be a single value or a List.
       //
       final dynamic tempCurrentValue =
-          _formPropsStructure._getTempCurrentPropValue(
+      _formPropsStructure._getTempCurrentPropValue(
         propName: multiOptPropName,
       );
       //
       if (tempCurrentValue != null) {
         if (tempCurrentValue is List) {
           currentSelectedItems =
-              tempCurrentValue.isEmpty ? null : tempCurrentValue;
+          tempCurrentValue.isEmpty ? null : tempCurrentValue;
         } else {
           currentSelectedItems = [tempCurrentValue];
         }
@@ -916,10 +980,10 @@ abstract class FormModel<
       if (currentSelectedItems != null) {
         currentSelectedItems =
             tempMultiOptPropXData._findInternalItemsByDynamics(
-          dynamicValues: currentSelectedItems,
-          addToInternalIfNotFound: true,
-          removeCurrentNotFoundItems: true,
-        );
+              dynamicValues: currentSelectedItems,
+              addToInternalIfNotFound: true,
+              removeCurrentNotFoundItems: true,
+            );
       }
       // Candidate Selected Items:
       candidateSelectedItems = initialValueWrap?.values;
@@ -958,13 +1022,13 @@ abstract class FormModel<
     // TODO: Dangerous, check not null:
     candidateSelectedItems =
         tempMultiOptPropXData?._findInternalItemsByDynamics(
-              dynamicValues: candidateSelectedItems,
-              //
-              // IMPORTANT: Add not found item to internal list.
-              //
-              addToInternalIfNotFound: true,
-              removeCurrentNotFoundItems: false,
-            ) ??
+          dynamicValues: candidateSelectedItems,
+          //
+          // IMPORTANT: Add not found item to internal list.
+          //
+          addToInternalIfNotFound: true,
+          removeCurrentNotFoundItems: false,
+        ) ??
             [];
     //
     // TODO: Double check this code:
@@ -993,7 +1057,7 @@ abstract class FormModel<
     }
     //
     Object? tempSelectedPropValue =
-        _formPropsStructure._getTempCurrentPropValue(
+    _formPropsStructure._getTempCurrentPropValue(
       propName: multiOptPropName,
     );
 
@@ -1075,30 +1139,40 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  @MayThrowFormInternalError()
   ValueWrap? __specifyDefaultMultiOptPropValue({
     required String multiOptPropName,
     required XData multiOptPropXData,
     required Object? parentMultiOptPropValue,
   }) {
-    ValueWrap? valueWrap = specifyDefaultMultiOptPropValue(
-      multiOptPropXData: multiOptPropXData,
-      multiOptPropName: multiOptPropName,
-      parentMultiOptPropValue: parentMultiOptPropValue,
-    );
-    if (valueWrap == null) {
-      __createNullValueWrapAppException(
-        methodName: "specifyDefaultMultiOptPropValue",
+    try {
+      ValueWrap? valueWrap = specifyDefaultMultiOptPropValue(
+        multiOptPropXData: multiOptPropXData,
         multiOptPropName: multiOptPropName,
+        parentMultiOptPropValue: parentMultiOptPropValue,
+      );
+      if (valueWrap == null) {
+        __createNullValueWrapAppException(
+          methodName: "specifyDefaultMultiOptPropValue",
+          multiOptPropName: multiOptPropName,
+        );
+      }
+      List? value = valueWrap?.values ?? [];
+      return ValueWrap.multi(
+        multiOptPropXData._findInternalItemsByDynamics(
+          dynamicValues: value,
+          addToInternalIfNotFound: true,
+          removeCurrentNotFoundItems: true,
+        ),
+      );
+    } catch (e, stackTrace) {
+      throw _FormInternalError(
+        propName: multiOptPropName,
+        formErrorMethod: FormErrorMethod.specifyDefaultMultiOptPropValue,
+        error: e,
+        stackTrace: stackTrace,
       );
     }
-    List? value = valueWrap?.values ?? [];
-    return ValueWrap.multi(
-      multiOptPropXData._findInternalItemsByDynamics(
-        dynamicValues: value,
-        addToInternalIfNotFound: true,
-        removeCurrentNotFoundItems: true,
-      ),
-    );
   }
 
   // ***************************************************************************
@@ -1109,49 +1183,61 @@ abstract class FormModel<
     required String multiOptPropName,
   }) {
     MultiOptProp? multiOptProp =
-        _formPropsStructure._getMultiOptProp(multiOptPropName);
+    _formPropsStructure._getMultiOptProp(multiOptPropName);
     if (multiOptProp == null) {
       throw "The '$multiOptPropName' is not $MultiOptProp";
     }
     String message =
-        "The ${getClassName(this)}.$methodName() method must return a non-null $ValueWrap for the multiOptPropName '$multiOptPropName'. ";
+        "The ${getClassName(
+        this)}.$methodName() method must return a non-null $ValueWrap for the multiOptPropName '$multiOptPropName'. ";
     if (multiOptProp.singleSelection) {
       message += "$ValueWrap.single(null) or $ValueWrap.single(value). ";
     } else {
       message += "$ValueWrap.multi([null]) or $ValueWrap.multi([value]). ";
     }
     message +=
-        "And return null for not $MultiOptProp. See the specification of this method for more information.";
+    "And return null for not $MultiOptProp. See the specification of this method for more information.";
     // throw AppException(message: message);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
+  @MayThrowFormInternalError()
   ValueWrap? __getMultiOptPropValueFromItemDetail({
     required String multiOptPropName,
     required XData multiOptPropXData,
     required ITEM_DETAIL itemDetail,
     required Object? parentMultiOptPropValue,
   }) {
-    ValueWrap? valueWrap = getMultiOptPropValueFromItemDetail(
-      multiOptPropName: multiOptPropName,
-      multiOptPropXData: multiOptPropXData,
-      itemDetail: itemDetail,
-      parentMultiOptPropValue: parentMultiOptPropValue,
-    );
-    if (valueWrap == null) {
-      __createNullValueWrapAppException(
-        methodName: "getMultiOptPropValueFromItemDetail",
+    try {
+      ValueWrap? valueWrap = getMultiOptPropValueFromItemDetail(
         multiOptPropName: multiOptPropName,
+        multiOptPropXData: multiOptPropXData,
+        itemDetail: itemDetail,
+        parentMultiOptPropValue: parentMultiOptPropValue,
+      );
+      if (valueWrap == null) {
+        __createNullValueWrapAppException(
+          methodName: "getMultiOptPropValueFromItemDetail",
+          multiOptPropName: multiOptPropName,
+        );
+      }
+      return valueWrap;
+    } catch (e, stackTrace) {
+      throw _FormInternalError(
+        propName: multiOptPropName,
+        formErrorMethod: FormErrorMethod.getMultiOptPropValueFromItemDetail,
+        error: e,
+        stackTrace: stackTrace,
       );
     }
-    return valueWrap;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
+  @MayThrowFormInternalError()
   ValueWrap? __getMultiOptPropValueFromExtraFormInput({
     required String multiOptPropName,
     required XData multiOptPropXData,
@@ -1161,26 +1247,35 @@ abstract class FormModel<
     if (extraFormInput is EmptyExtraFormInput) {
       return null;
     }
-    ValueWrap? valueWrap = getMultiOptPropValueFromExtraFormInput(
-      extraFormInput: extraFormInput,
-      multiOptPropXData: multiOptPropXData,
-      multiOptPropName: multiOptPropName,
-      parentMultiOptPropValue: parentMultiOptPropValue,
-    );
-    if (valueWrap == null) {
-      __createNullValueWrapAppException(
-        methodName: "getMultiOptPropValueFromExtraFormInput",
+    try {
+      ValueWrap? valueWrap = getMultiOptPropValueFromExtraFormInput(
+        extraFormInput: extraFormInput,
+        multiOptPropXData: multiOptPropXData,
         multiOptPropName: multiOptPropName,
+        parentMultiOptPropValue: parentMultiOptPropValue,
+      );
+      if (valueWrap == null) {
+        __createNullValueWrapAppException(
+          methodName: "getMultiOptPropValueFromExtraFormInput",
+          multiOptPropName: multiOptPropName,
+        );
+      }
+      List? value = valueWrap?.values ?? [];
+      return ValueWrap.multi(
+        multiOptPropXData._findInternalItemsByDynamics(
+          dynamicValues: value,
+          addToInternalIfNotFound: true,
+          removeCurrentNotFoundItems: true,
+        ),
+      );
+    } catch (e, stackTrace) {
+      throw _FormInternalError(
+        propName: multiOptPropName,
+        formErrorMethod: FormErrorMethod.getMultiOptPropValueFromExtraFormInput,
+        error: e,
+        stackTrace: stackTrace,
       );
     }
-    List? value = valueWrap?.values ?? [];
-    return ValueWrap.multi(
-      multiOptPropXData._findInternalItemsByDynamics(
-        dynamicValues: value,
-        addToInternalIfNotFound: true,
-        removeCurrentNotFoundItems: true,
-      ),
-    );
   }
 
   // ***************************************************************************
@@ -1243,8 +1338,10 @@ abstract class FormModel<
   }) {
     _formWidgetStates.update(
       widgetState,
-      (xState) => xState..isBuilding = isBuilding,
-      ifAbsent: () => _XState()..isBuilding = isBuilding,
+          (xState) => xState..isBuilding = isBuilding,
+      ifAbsent: () =>
+      _XState()
+        ..isBuilding = isBuilding,
     );
   }
 
@@ -1258,8 +1355,10 @@ abstract class FormModel<
     bool isShowingOLD = _formWidgetStates[widgetState]?.isShowing ?? false;
     _formWidgetStates.update(
       widgetState,
-      (xState) => xState..isShowing = isShowing,
-      ifAbsent: () => _XState()..isShowing = isShowing,
+          (xState) => xState..isShowing = isShowing,
+      ifAbsent: () =>
+      _XState()
+        ..isShowing = isShowing,
     );
     if (!isShowingOLD && isShowing) {
       block.shelf._startLoadDataForLazyUIComponentsIfNeed();
@@ -1397,7 +1496,7 @@ abstract class FormModel<
     _XBlock xBlock = xShelf.findXBlockByName(block.name)!;
     _XFormModel xFormModel = xBlock.xFormModel!;
     _FormViewChangeTaskUnit taskUnit =
-        _FormViewChangeTaskUnit(xFormModel: xFormModel);
+    _FormViewChangeTaskUnit(xFormModel: xFormModel);
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     await FlutterArtist.executor._executeTaskUnitQueue(showOverlay: false);
   }

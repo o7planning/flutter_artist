@@ -18,17 +18,25 @@ class FormPropsStructure {
 
   bool _formInitialDataReady = false;
 
-  DataState _formDataState = DataState.none;
-
-  Object? _error;
-
-  dynamic get error => _error;
-
   FormMode _formMode = FormMode.none;
+
+  FormMode get formMode => _formMode;
+
+  DataState _formDataState = DataState.none;
 
   DataState get formDataState => _formDataState;
 
-  FormMode get formMode => _formMode;
+  FormErrorMethod? _formErrorMethod;
+
+  FormErrorMethod? get formErrorType => _formErrorMethod;
+
+  Object? _error;
+
+  Object? get error => _error;
+
+  StackTrace? _errorStackTrace;
+
+  StackTrace? get errorStackTrace => _errorStackTrace;
 
   bool get isNew => _formMode == FormMode.creation;
 
@@ -89,6 +97,26 @@ class FormPropsStructure {
     for (MultiOptProp child in optProp._children) {
       __standardizeCascade(child, optProp);
     }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _clearFormError() {
+    _formErrorMethod = null;
+    _error = null;
+    _errorStackTrace = null;
+  }
+
+  void _setFormError({
+    required FormErrorMethod formErrorMethod,
+    required Object error,
+    required StackTrace errorStackTrace,
+    required String? propName,
+  }) {
+    _formErrorMethod = formErrorMethod;
+    _error = error;
+    _errorStackTrace = errorStackTrace;
   }
 
   // ***************************************************************************
