@@ -70,11 +70,28 @@ class _FormModelDebugView extends StatelessWidget {
                 ),
               ),
             ),
-          if (formModel.formDataState == DataState.error) SizedBox(height: 10),
-          if (formModel.formDataState == DataState.error)
-            Text(
-              "Error Message: ${formModel.formErrorInfo?.errorMessage ?? ' - '}",
-              style: TextStyle(
+          if (formModel.formDataState == DataState.error &&
+              formModel.formErrorInfo != null)
+            SizedBox(height: 10),
+          if (formModel.formDataState == DataState.error &&
+              formModel.formErrorInfo != null)
+            IconLabelText(
+              label: "Method: ",
+              text: formModel.formErrorInfo!.methodName,
+              textStyle: TextStyle(
+                fontSize: 13,
+                color: Colors.red,
+              ),
+            ),
+          if (formModel.formDataState == DataState.error &&
+              formModel.formErrorInfo != null)
+            SizedBox(height: 10),
+          if (formModel.formDataState == DataState.error &&
+              formModel.formErrorInfo != null)
+            IconLabelText(
+              label: "Error Message: ",
+              text: formModel.formErrorInfo!.errorMessage,
+              textStyle: TextStyle(
                 fontSize: 13,
                 color: Colors.red,
               ),

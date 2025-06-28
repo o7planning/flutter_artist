@@ -22,6 +22,6 @@ class FormErrorInfo {
   }
 
   String get methodName {
-    return formErrorMethod.toString();
+    return formErrorMethod.name;
   }
 }
