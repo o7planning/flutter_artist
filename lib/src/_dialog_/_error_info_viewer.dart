@@ -71,7 +71,7 @@ class _ErrorInfoViewState extends State<ErrorInfoView> {
             color: Colors.red,
           ),
           title: Text(
-            widget. errorInfo.errorMessage,
+            widget.errorInfo.errorMessage,
             maxLines: 3,
             style: const TextStyle(
               fontSize: 13,
@@ -88,7 +88,7 @@ class _ErrorInfoViewState extends State<ErrorInfoView> {
                     width: double.maxFinite,
                     height: double.maxFinite,
                     child: ListView(
-                      children: appError.errorDetails!
+                      children: widget.errorInfo.errorDetails!
                           .map((errorDetail) => _buildErrorDetail(errorDetail))
                           .toList(),
                     ),

@@ -101,7 +101,7 @@ abstract class _XBase {
     //
     FlutterArtist.errorLogger.addError(
       shelfName: FlutterArtist.storage._getShelfName(shelf.runtimeType),
-      message: msg,
+      errorMessage: msg,
       errorDetails: err.errorDetails,
       stackTrace: stackTrace,
     );
@@ -123,7 +123,7 @@ abstract class _XBase {
   }) {
     FlutterArtist.errorLogger.addError(
       shelfName: FlutterArtist.storage._getShelfName(shelf.runtimeType),
-      message: message,
+      errorMessage: message,
       errorDetails: errorDetails,
       stackTrace: null,
     );
@@ -165,7 +165,7 @@ abstract class _XBase {
     if (!actionableFalse.yes) {
       FlutterArtist.errorLogger.addError(
         shelfName: shelf.name,
-        message: actionableFalse.message!,
+        errorMessage: actionableFalse.message!,
         errorDetails: null,
         stackTrace: null,
       );

@@ -107,7 +107,7 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
               color: Colors.red,
             ),
             title: Text(
-              _errorInfo!.message,
+              _errorInfo!.errorMessage,
               maxLines: 3,
               style: const TextStyle(
                 fontSize: 13,

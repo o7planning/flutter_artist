@@ -15,14 +15,14 @@ class ErrorLogger {
 
   void addError({
     required String? shelfName,
-    required String message,
+    required String errorMessage,
     required List<String>? errorDetails,
     required StackTrace? stackTrace,
   }) {
     final errorInfo = LogErrorInfo(
       id: ++_errorCount,
       shelfName: shelfName,
-      message: message,
+      errorMessage: errorMessage,
       errorDetails: errorDetails,
       stackTrace: stackTrace,
     );
