@@ -9,8 +9,6 @@ class _FormModelDebugView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Actionable actionable = formModel.block._isEnableFormToModify();
-    //
     return _CustomAppContainer(
       margin: const EdgeInsets.all(5),
       padding: const EdgeInsets.all(5),
@@ -37,8 +35,9 @@ class _FormModelDebugView extends StatelessWidget {
               formModel.formInitialDataReady
                   ? _formInitialDataReadyTrueIconData
                   : _formInitialDataReadyFalseIconData,
-              color:
-                  formModel.formInitialDataReady ? Colors.indigo : Colors.red,
+              color: formModel.formInitialDataReady //
+                  ? Colors.indigo
+                  : Colors.red,
               size: 20,
             ),
           ),
@@ -62,11 +61,22 @@ class _FormModelDebugView extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              subtitle: Text(
-                "Form is disabled due to data initialization error.",
-                style: TextStyle(
+              subtitle: IconLabelText(
+                text: "Form is disabled due to data initialization error.",
+                textStyle: TextStyle(
                   fontSize: 13,
                   color: Colors.red,
+                ),
+                suffixIcon: _SmallTextButton(
+                  onPressed: () {
+                    _showErrorDetails();
+                  },
+                  child: Text(
+                    "View Details",
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -99,5 +109,9 @@ class _FormModelDebugView extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _showErrorDetails() {
+    //
   }
 }

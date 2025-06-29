@@ -108,7 +108,7 @@ class SimpleErrorViewerDialog extends StatelessWidget {
   }
 }
 
-Future<void> _showErrorViewerDialog({
+Future<void> _showSimpleErrorViewerDialog({
   required BuildContext context,
   required String title,
   required dynamic error,

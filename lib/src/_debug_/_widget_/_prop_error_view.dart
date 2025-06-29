@@ -28,6 +28,17 @@ class _FormErrorPropView extends StatelessWidget {
               ),
               text: "Form is disabled due to data initialization error.",
               textStyle: TextStyle(fontSize: 13, color: Colors.red),
+              suffixIcon: _SmallTextButton(
+                onPressed: () {
+                  _showErrorDetails();
+                },
+                child: Text(
+                  "View Details",
+                  style: TextStyle(
+                    fontSize: 12,
+                  ),
+                ),
+              ),
             ),
           if (!formInitialDataReady) SizedBox(height: 5),
           IconLabelText(
@@ -46,5 +57,9 @@ class _FormErrorPropView extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _showErrorDetails() {
+    //
   }
 }

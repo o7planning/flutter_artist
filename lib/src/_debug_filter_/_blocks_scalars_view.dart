@@ -45,18 +45,20 @@ class _BlocksScalarsView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ...filterModel.blocks.map(
-          (block) => _buildItem(
-            iconData: _blockIconData,
-            blockOrScalarClassName: getClassName(block),
-            dataState: block.queryDataState,
-          ),
+              (block) =>
+              _buildItem(
+                iconData: _blockIconData,
+                blockOrScalarClassName: getClassName(block),
+                dataState: block.queryDataState,
+              ),
         ),
         ...filterModel.scalars.map(
-          (scalar) => _buildItem(
-            iconData: _scalarIconData,
-            blockOrScalarClassName: getClassName(scalar),
-            dataState: scalar.queryDataState,
-          ),
+              (scalar) =>
+              _buildItem(
+                iconData: _scalarIconData,
+                blockOrScalarClassName: getClassName(scalar),
+                dataState: scalar.queryDataState,
+              ),
         ),
       ],
     );
