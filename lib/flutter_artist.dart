@@ -278,7 +278,7 @@ part 'src/_enum_/_debug_cat.dart';
 
 part 'src/_dialog_/_error_info_viewer.dart';
 
-part 'src/_dialog_/_error_viewer_dialog.dart';
+part 'src/_dialog_/_simple_error_viewer_dialog.dart';
 
 part 'src/_dialog_/_form_error_viewer_dialog.dart';
 

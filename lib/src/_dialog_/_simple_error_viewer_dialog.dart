@@ -1,10 +1,10 @@
 part of '../../flutter_artist.dart';
 
-class ErrorViewerDialog extends StatelessWidget {
+class SimpleErrorViewerDialog extends StatelessWidget {
   final String title;
   final Object error;
 
-  const ErrorViewerDialog({
+  const SimpleErrorViewerDialog({
     required this.title,
     required this.error,
     super.key,
@@ -21,13 +21,13 @@ class ErrorViewerDialog extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context) {
-    AppError exception = ErrorUtils.toAppError(error);
+    AppError appError = ErrorUtils.toAppError(error);
     //
     final Size size = calculatePreferredDialogSize(
       context,
       preferredWidth: 440,
       preferredHeight:
-          exception.errorDetails == null || exception.errorDetails!.isEmpty
+          appError.errorDetails == null || appError.errorDetails!.isEmpty
               ? 160
               : 240,
     );
@@ -58,7 +58,7 @@ class ErrorViewerDialog extends StatelessWidget {
               color: Colors.red,
             ),
             title: Text(
-              exception?.errorMessage ?? "null",
+              appError.errorMessage,
               maxLines: 3,
               style: const TextStyle(
                 fontSize: 13,
@@ -66,16 +66,14 @@ class ErrorViewerDialog extends StatelessWidget {
               ),
             ),
           ),
-          if (exception != null &&
-              exception!.errorDetails != null &&
-              exception!.errorDetails!.isNotEmpty)
+          if (appError.errorDetails != null &&
+              appError.errorDetails!.isNotEmpty)
             Divider(height: 10),
           Expanded(
             child: ListView(
-              children: exception != null &&
-                      exception!.errorDetails != null &&
-                      exception!.errorDetails!.isNotEmpty
-                  ? exception!.errorDetails!
+              children: appError.errorDetails != null &&
+                      appError.errorDetails!.isNotEmpty
+                  ? appError.errorDetails!
                       .map((errorDetail) => _buildErrorDetail(errorDetail))
                       .toList()
                   : [],
@@ -118,7 +116,7 @@ Future<void> _showErrorViewerDialog({
   await showDialog(
     context: context,
     builder: (BuildContext context) {
-      return ErrorViewerDialog(
+      return SimpleErrorViewerDialog(
         title: title,
         error: error,
       );
