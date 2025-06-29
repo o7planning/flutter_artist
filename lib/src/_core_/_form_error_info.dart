@@ -8,7 +8,9 @@ class FormErrorInfo {
   final Object error;
   final StackTrace errorStackTrace;
 
-  const FormErrorInfo({
+  AppError? _appError;
+
+  FormErrorInfo({
     required this.activityType,
     required this.propName,
     required this.formErrorMethod,
@@ -16,12 +18,26 @@ class FormErrorInfo {
     required this.errorStackTrace,
   });
 
+  AppError _toAppError() {
+    _appError ??= ErrorUtils.toAppError(error);
+    return _appError!;
+  }
+
   String get errorMessage {
-    AppError ex = ErrorUtils.toAppError(error);
-    return ex.errorMessage;
+    AppError ae = _toAppError();
+    return ae.errorMessage;
   }
 
   String get methodName {
     return formErrorMethod.name;
+  }
+
+  ErrorInfo toErrorInfo() {
+    AppError ae = _toAppError();
+    return ErrorInfo(
+      errorMessage: errorMessage,
+      errorDetails: ae.errorDetails,
+      stackTrace: errorStackTrace,
+    );
   }
 }

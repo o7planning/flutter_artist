@@ -34,14 +34,14 @@ class ErrorViewerDialog extends StatelessWidget {
 Future<void> _showErrorViewerDialog({
   required BuildContext context,
   required String title,
-  required dynamic error,
+  required ErrorInfo errorInfo,
 }) async {
   await showDialog(
     context: context,
     builder: (BuildContext context) {
-      return SimpleErrorViewerDialog(
+      return ErrorViewerDialog(
         title: title,
-        error: error,
+        errorInfo: errorInfo,
       );
     },
   );

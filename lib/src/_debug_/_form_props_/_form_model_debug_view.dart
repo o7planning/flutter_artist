@@ -69,7 +69,7 @@ class _FormModelDebugView extends StatelessWidget {
                 ),
                 suffixIcon: _SmallTextButton(
                   onPressed: () {
-                    _showErrorDetails();
+                    _showErrorDetails(context);
                   },
                   child: Text(
                     "View Details",
@@ -111,7 +111,11 @@ class _FormModelDebugView extends StatelessWidget {
     );
   }
 
-  void _showErrorDetails() {
-    //
+  void _showErrorDetails(BuildContext context) {
+    ErrorInfo? errorInfo = formModel.formErrorInfo?.toErrorInfo();
+    if (errorInfo != null) {
+      _showErrorViewerDialog(
+          context: context, title: "Error", errorInfo: errorInfo);
+    }
   }
 }
