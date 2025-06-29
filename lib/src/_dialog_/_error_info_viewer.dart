@@ -19,7 +19,6 @@ class ErrorInfoView extends StatefulWidget {
 }
 
 class _ErrorInfoViewState extends State<ErrorInfoView> {
-  late AppError exception;
   bool showErrorDetail0 = true;
   bool showErrorDetail1 = true;
 
@@ -38,8 +37,8 @@ class _ErrorInfoViewState extends State<ErrorInfoView> {
   }
 
   Widget _buildErrorDetails() {
-    bool hasErrorDetails =
-        exception.errorDetails != null && exception.errorDetails!.isNotEmpty;
+    bool hasErrorDetails = widget.errorInfo.errorDetails != null &&
+        widget.errorInfo.errorDetails!.isNotEmpty;
     bool hasStackTrace = widget.errorInfo.stackTrace != null;
     //
     if (hasErrorDetails && hasStackTrace) {
@@ -72,7 +71,7 @@ class _ErrorInfoViewState extends State<ErrorInfoView> {
             color: Colors.red,
           ),
           title: Text(
-            exception.errorMessage,
+            widget. errorInfo.errorMessage,
             maxLines: 3,
             style: const TextStyle(
               fontSize: 13,
@@ -89,7 +88,7 @@ class _ErrorInfoViewState extends State<ErrorInfoView> {
                     width: double.maxFinite,
                     height: double.maxFinite,
                     child: ListView(
-                      children: exception.errorDetails!
+                      children: appError.errorDetails!
                           .map((errorDetail) => _buildErrorDetail(errorDetail))
                           .toList(),
                     ),
