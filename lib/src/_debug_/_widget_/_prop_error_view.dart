@@ -30,7 +30,7 @@ class _FormErrorPropView extends StatelessWidget {
               textStyle: TextStyle(fontSize: 13, color: Colors.red),
               suffixIcon: _SmallTextButton(
                 onPressed: () {
-                  _showErrorDetails();
+                  _showErrorDetails(context);
                 },
                 child: Text(
                   "View Details",
@@ -59,7 +59,10 @@ class _FormErrorPropView extends StatelessWidget {
     );
   }
 
-  void _showErrorDetails() {
+  void _showErrorDetails(BuildContext context) {
+    ErrorInfo? errorInfo = formErrorInfo.toErrorInfo();
     //
+    _showErrorViewerDialog(
+        context: context, title: "Error", errorInfo: errorInfo);
   }
 }
