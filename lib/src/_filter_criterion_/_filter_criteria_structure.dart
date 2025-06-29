@@ -378,13 +378,13 @@ class FilterCriteriaStructure {
   }) {
     Criterion? criterion = _allCriteriaMap[multiOptCriterionName];
     if (criterion == null) {
-      throw AppException(message: 'No Criterion "$multiOptCriterionName"');
+      throw AppError(errorMessage: 'No Criterion "$multiOptCriterionName"');
     }
     if (criterion is MultiOptCriterion) {
       criterion._tempCurrentXData = multiOptXData;
     } else {
-      throw AppException(
-          message:
+      throw AppError(
+          errorMessage:
               'Invalid Criterion "$multiOptCriterionName", it must be $MultiOptCriterion');
     }
   }
@@ -398,14 +398,14 @@ class FilterCriteriaStructure {
   }) {
     Criterion? criterion = _allCriteriaMap[criterionName];
     if (criterion == null) {
-      throw AppException(
-        message: 'No criterionName "$criterionName"',
-        details: null,
+      throw AppError(
+        errorMessage: 'No criterionName "$criterionName"',
+        errorDetails: null,
       );
     } else if (criterion is! SimpleCriterion) {
-      throw AppException(
-        message: '"$criterionName" is not $SimpleCriterion',
-        details: null,
+      throw AppError(
+        errorMessage: '"$criterionName" is not $SimpleCriterion',
+        errorDetails: null,
       );
     }
     criterion._tempCurrentValue = value;

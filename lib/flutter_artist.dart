@@ -196,8 +196,6 @@ part 'src/_debug_/_debug_colors_and_styles.dart';
 
 part 'src/_debug_/_debug_utils.dart';
 
-part 'src/_debug_/_error_info.dart';
-
 part 'src/_debug_/_error_logger.dart';
 
 part 'src/_debug_/_filter_criteria_/_criteria_value_view.dart';
@@ -277,6 +275,8 @@ part 'src/_dialog_/_dialog_size.dart';
 part 'src/_dialog_/_error_log_viewer_dialog.dart';
 
 part 'src/_enum_/_debug_cat.dart';
+
+part 'src/_dialog_/_error_info_viewer.dart';
 
 part 'src/_dialog_/_error_viewer_dialog.dart';
 

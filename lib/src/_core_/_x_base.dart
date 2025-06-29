@@ -74,16 +74,17 @@ abstract class _XBase {
     required StackTrace stackTrace,
     required bool showSnackBar,
   }) {
-    AppException err = ErrorUtils.toAppException(error);
+    AppError err = ErrorUtils.toAppError(error);
     //
     final String msg;
     if (methodName == null) {
-      msg = "Error: ${err.message}";
+      msg = "Error: ${err.errorMessage}";
     } else {
       if (methodName.contains("\\.")) {
-        msg = "Call $methodName() error: ${err.details}";
+        msg = "Call $methodName() error: ${err.errorMessage}";
       } else {
-        msg = "Call ${getClassName(this)}.$methodName() error: ${err.message}";
+        msg =
+        "Call ${getClassName(this)}.$methodName() error: ${err.errorMessage}";
       }
     }
     print(msg);
@@ -101,14 +102,14 @@ abstract class _XBase {
     FlutterArtist.errorLogger.addError(
       shelfName: FlutterArtist.storage._getShelfName(shelf.runtimeType),
       message: msg,
-      errorDetails: err.details,
+      errorDetails: err.errorDetails,
       stackTrace: stackTrace,
     );
     //
     if (showSnackBar) {
       showErrorSnackBar(
         message: msg,
-        errorDetails: err.details,
+        errorDetails: err.errorDetails,
       );
     }
   }

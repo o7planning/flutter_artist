@@ -615,7 +615,7 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __createNullValueWrapAppException({
+  void __createNullValueWrapAppError({
     required String methodName,
     required String multiOptCriterionName,
   }) {
@@ -633,7 +633,7 @@ abstract class FilterModel<
     }
     message +=
         "And return null for not $MultiOptCriterion. See the specification of this method for more information.";
-    // throw AppException(message: message);
+    // throw AppError(errorMessage: message);
   }
 
   // ***************************************************************************
@@ -652,7 +652,7 @@ abstract class FilterModel<
       multiOptCriterionName: multiOptCriterionName,
     );
     if (valueWrap == null) {
-      __createNullValueWrapAppException(
+      __createNullValueWrapAppError(
         methodName: "getMultiOptCriterionValueFromFilterInput",
         multiOptCriterionName: multiOptCriterionName,
       );
@@ -678,7 +678,7 @@ abstract class FilterModel<
       multiOptCriterionName: multiOptCriterionName,
     );
     if (valueWrap == null) {
-      __createNullValueWrapAppException(
+      __createNullValueWrapAppError(
         methodName: "specifyDefaultMultiOptCriterionValue",
         multiOptCriterionName: multiOptCriterionName,
       );

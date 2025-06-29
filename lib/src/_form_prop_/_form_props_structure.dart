@@ -571,13 +571,14 @@ class FormPropsStructure {
   }) {
     Prop? prop = _allPropMap[multiOptPropName];
     if (prop == null) {
-      throw AppException(message: 'No Prop "$multiOptPropName"');
+      throw AppError(errorMessage: 'No Prop "$multiOptPropName"');
     }
     if (prop is MultiOptProp) {
       prop._tempCurrentXData = multiOptPropXData;
     } else {
-      throw AppException(
-        message: 'Invalid Prop "$multiOptPropName", it must be $MultiOptProp',
+      throw AppError(
+        errorMessage:
+            'Invalid Prop "$multiOptPropName", it must be $MultiOptProp',
       );
     }
   }
@@ -592,14 +593,14 @@ class FormPropsStructure {
   }) {
     Prop? prop = _allPropMap[propName];
     if (prop == null) {
-      throw AppException(
-        message: 'No propName "$propName"',
-        details: null,
+      throw AppError(
+        errorMessage: 'No propName "$propName"',
+        errorDetails: null,
       );
     } else if (prop is! SimpleProp) {
-      throw AppException(
-        message: '"$propName" is not $SimpleProp',
-        details: null,
+      throw AppError(
+        errorMessage: '"$propName" is not $SimpleProp',
+        errorDetails: null,
       );
     }
     prop._tempCurrentValue = value;

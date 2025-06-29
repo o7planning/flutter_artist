@@ -21,13 +21,15 @@ class ErrorViewerDialog extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context) {
-    AppException exception = ErrorUtils.toAppException(error);
+    AppError exception = ErrorUtils.toAppError(error);
     //
     final Size size = calculatePreferredDialogSize(
       context,
       preferredWidth: 440,
       preferredHeight:
-          exception.details == null || exception.details!.isEmpty ? 160 : 240,
+          exception.errorDetails == null || exception.errorDetails!.isEmpty
+              ? 160
+              : 240,
     );
 
     return Container(
@@ -56,7 +58,7 @@ class ErrorViewerDialog extends StatelessWidget {
               color: Colors.red,
             ),
             title: Text(
-              exception?.message ?? "null",
+              exception?.errorMessage ?? "null",
               maxLines: 3,
               style: const TextStyle(
                 fontSize: 13,
@@ -65,15 +67,15 @@ class ErrorViewerDialog extends StatelessWidget {
             ),
           ),
           if (exception != null &&
-              exception!.details != null &&
-              exception!.details!.isNotEmpty)
+              exception!.errorDetails != null &&
+              exception!.errorDetails!.isNotEmpty)
             Divider(height: 10),
           Expanded(
             child: ListView(
               children: exception != null &&
-                      exception!.details != null &&
-                      exception!.details!.isNotEmpty
-                  ? exception!.details!
+                      exception!.errorDetails != null &&
+                      exception!.errorDetails!.isNotEmpty
+                  ? exception!.errorDetails!
                       .map((errorDetail) => _buildErrorDetail(errorDetail))
                       .toList()
                   : [],

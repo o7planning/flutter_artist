@@ -96,7 +96,7 @@ class _GlobalsManager {
 
   void updateWidgets() {
     for (_RefreshableWidgetState widgetState
-    in _loggedInUserWidgetStates.keys) {
+        in _loggedInUserWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }

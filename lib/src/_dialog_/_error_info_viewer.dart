@@ -1,80 +1,46 @@
 part of '../../flutter_artist.dart';
 
-class ErrorLogViewerDialog extends StatefulWidget {
-  final String title;
-  final ErrorLogger errorLogger;
+class ErrorInfoView extends StatefulWidget {
+  final ErrorInfo errorInfo;
+  final double width;
+  final double height;
 
-  const ErrorLogViewerDialog({
-    this.title = 'Error Log Viewer',
-    required this.errorLogger,
+  const ErrorInfoView({
+    required this.errorInfo,
+    required this.width,
+    required this.height,
     super.key,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _ErrorLogViewerDialogState();
+    return _ErrorInfoViewState();
   }
 }
 
-class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
-  ErrorInfo? _errorInfo;
+class _ErrorInfoViewState extends State<ErrorInfoView> {
+  late AppError exception;
   bool showErrorDetail0 = true;
   bool showErrorDetail1 = true;
 
   @override
   void initState() {
     super.initState();
-    _errorInfo = widget.errorLogger.lastError;
   }
 
   @override
   Widget build(BuildContext context) {
-    Size preferredSize = calculatePreferredDialogSize(
-      context,
-      preferredWidth: 620,
-      preferredHeight: 400,
-    );
-
-    dialogs.FaAlertDialog alert = dialogs.FaAlertDialog(
-      titleText: widget.title,
-      contentPadding: EdgeInsets.all(8),
-      content: _buildContent(preferredSize.width, preferredSize.height),
-    );
-    return alert;
-  }
-
-  Widget _buildErrorButtons() {
-    return _CustomAppContainer(
-      width: double.maxFinite,
-      child: Wrap(
-        spacing: 5,
-        children: widget.errorLogger.errorInfos
-            .map(
-              (errorInfo) => TextButton(
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.all(10),
-                  minimumSize: Size.zero,
-                  backgroundColor: _errorInfo == errorInfo
-                      ? Colors.blueGrey.withAlpha(80)
-                      : Colors.blueGrey.withAlpha(30),
-                ),
-                onPressed: () {
-                  _errorInfo = errorInfo;
-                  setState(() {});
-                },
-                child: Text(errorInfo.id.toString()),
-              ),
-            )
-            .toList(),
-      ),
+    return SizedBox(
+      width: widget.width,
+      height: widget.height,
+      child: _buildErrorDetails(),
     );
   }
 
   Widget _buildErrorDetails() {
-    bool hasErrorDetails = _errorInfo != null &&
-        _errorInfo!.errorDetails != null &&
-        _errorInfo!.errorDetails!.isNotEmpty;
-    bool hasStackTrace = _errorInfo != null && _errorInfo!.stackTrace != null;
+    bool hasErrorDetails =
+        exception.errorDetails != null && exception.errorDetails!.isNotEmpty;
+    bool hasStackTrace = widget.errorInfo.stackTrace != null;
     //
     if (hasErrorDetails && hasStackTrace) {
       showErrorDetail1 = showErrorDetail0;
@@ -88,33 +54,32 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (_errorInfo != null)
-          ListTile(
-            dense: true,
-            visualDensity: const VisualDensity(
-              vertical: -3,
-              horizontal: -3,
-            ),
-            contentPadding: EdgeInsets.all(0),
-            horizontalTitleGap: 5,
-            minVerticalPadding: 5,
-            minLeadingWidth: 24,
-            minTileHeight: 0,
-            titleAlignment: ListTileTitleAlignment.top,
-            leading: Icon(
-              _dataStateErrorIconData,
-              size: 18,
-              color: Colors.red,
-            ),
-            title: Text(
-              _errorInfo!.message,
-              maxLines: 3,
-              style: const TextStyle(
-                fontSize: 13,
-                overflow: TextOverflow.ellipsis,
-              ),
+        ListTile(
+          dense: true,
+          visualDensity: const VisualDensity(
+            vertical: -3,
+            horizontal: -3,
+          ),
+          contentPadding: EdgeInsets.all(0),
+          horizontalTitleGap: 5,
+          minVerticalPadding: 5,
+          minLeadingWidth: 24,
+          minTileHeight: 0,
+          titleAlignment: ListTileTitleAlignment.top,
+          leading: Icon(
+            _dataStateErrorIconData,
+            size: 18,
+            color: Colors.red,
+          ),
+          title: Text(
+            exception.errorMessage,
+            maxLines: 3,
+            style: const TextStyle(
+              fontSize: 13,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
+        ),
         if (hasErrorDetails || hasStackTrace)
           Expanded(
             child: Stack(
@@ -124,7 +89,7 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
                     width: double.maxFinite,
                     height: double.maxFinite,
                     child: ListView(
-                      children: _errorInfo!.errorDetails!
+                      children: exception.errorDetails!
                           .map((errorDetail) => _buildErrorDetail(errorDetail))
                           .toList(),
                     ),
@@ -135,7 +100,7 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
                     height: double.maxFinite,
                     child: SingleChildScrollView(
                       child: Text(
-                        _errorInfo!.stackTrace.toString(),
+                        widget.errorInfo.stackTrace.toString(),
                         style: const TextStyle(fontSize: 12),
                       ),
                     ),
@@ -196,34 +161,4 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
       ),
     );
   }
-
-  Widget _buildContent(double width, double height) {
-    return SizedBox(
-      width: width,
-      height: height,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildErrorButtons(),
-          Expanded(
-            child: _buildErrorDetails(),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-Future<void> _showErrorLogViewerDialog({
-  required BuildContext context,
-  required ErrorLogger errorLogger,
-}) async {
-  await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return ErrorLogViewerDialog(
-        errorLogger: errorLogger,
-      );
-    },
-  );
 }

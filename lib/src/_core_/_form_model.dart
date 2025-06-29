@@ -298,7 +298,7 @@ abstract class FormModel<
   Future<bool> _unitSaveForm({required _XFormModel thisXFormModel}) async {
     FILTER_CRITERIA? blockCurrentFilterCriteria = block.filterCriteria;
     if (blockCurrentFilterCriteria == null) {
-      throw _FatalAppException(message: "FilterCriteria is null");
+      throw _FatalAppError(errorMessage: "FilterCriteria is null");
     }
     if (!__checkWithFormValidationBeforeSave()) {
       return false;
@@ -405,7 +405,7 @@ abstract class FormModel<
   }) async {
     FILTER_CRITERIA? blockCurrentFilterCriteria = block.filterCriteria;
     if (blockCurrentFilterCriteria == null) {
-      throw AppException(message: "FilterCriteria is null");
+      throw AppError(errorMessage: "FilterCriteria is null");
     }
     __formActivityCount++;
     print(
@@ -1150,7 +1150,7 @@ abstract class FormModel<
         parentMultiOptPropValue: parentMultiOptPropValue,
       );
       if (valueWrap == null) {
-        __createNullValueWrapAppException(
+        __createNullValueWrapAppError(
           methodName: "specifyDefaultMultiOptPropValue",
           multiOptPropName: multiOptPropName,
         );
@@ -1176,7 +1176,7 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __createNullValueWrapAppException({
+  void __createNullValueWrapAppError({
     required String methodName,
     required String multiOptPropName,
   }) {
@@ -1194,7 +1194,7 @@ abstract class FormModel<
     }
     message +=
         "And return null for not $MultiOptProp. See the specification of this method for more information.";
-    // throw AppException(message: message);
+    // throw AppError(errorMessage: message);
   }
 
   // ***************************************************************************
@@ -1215,7 +1215,7 @@ abstract class FormModel<
         parentMultiOptPropValue: parentMultiOptPropValue,
       );
       if (valueWrap == null) {
-        __createNullValueWrapAppException(
+        __createNullValueWrapAppError(
           methodName: "getMultiOptPropValueFromItemDetail",
           multiOptPropName: multiOptPropName,
         );
@@ -1252,7 +1252,7 @@ abstract class FormModel<
         parentMultiOptPropValue: parentMultiOptPropValue,
       );
       if (valueWrap == null) {
-        __createNullValueWrapAppException(
+        __createNullValueWrapAppError(
           methodName: "getMultiOptPropValueFromExtraFormInput",
           multiOptPropName: multiOptPropName,
         );

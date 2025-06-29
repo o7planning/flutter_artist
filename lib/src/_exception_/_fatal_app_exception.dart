@@ -1,8 +1,8 @@
 part of '../../flutter_artist.dart';
 
-class _FatalAppException extends AppException {
-  _FatalAppException({
-    required super.message,
-    super.details,
+class _FatalAppError extends AppError {
+  _FatalAppError({
+    required super.errorMessage,
+    super.errorDetails,
   });
 }

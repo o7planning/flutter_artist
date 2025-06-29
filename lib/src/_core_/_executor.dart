@@ -186,7 +186,7 @@ class _Executor {
             taskType: null,
           );
         }
-        // May be AppException (FatalException).
+        // May be AppError (FatalException).
         catch (e, stackTrace) {
           FlutterArtist.taskUnitQueue.clear();
           rethrow;

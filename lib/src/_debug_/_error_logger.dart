@@ -3,15 +3,15 @@ part of '../../flutter_artist.dart';
 class ErrorLogger {
   int _errorCount = 0;
   final int maxDisplayErrorCount;
-  final List<ErrorInfo> _errorInfos = [];
+  final List<LogErrorInfo> _errorInfos = [];
 
   int get errorCount => _errorCount;
 
   ErrorLogger({required this.maxDisplayErrorCount});
 
-  List<ErrorInfo> get errorInfos => [..._errorInfos];
+  List<LogErrorInfo> get errorInfos => [..._errorInfos];
 
-  ErrorInfo? get lastError => _errorInfos.isEmpty ? null : _errorInfos.first;
+  LogErrorInfo? get lastError => _errorInfos.isEmpty ? null : _errorInfos.first;
 
   void addError({
     required String? shelfName,
@@ -19,7 +19,7 @@ class ErrorLogger {
     required List<String>? errorDetails,
     required StackTrace? stackTrace,
   }) {
-    ErrorInfo errorInfo = ErrorInfo(
+    final errorInfo = LogErrorInfo(
       id: ++_errorCount,
       shelfName: shelfName,
       message: message,
