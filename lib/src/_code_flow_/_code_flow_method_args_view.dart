@@ -69,8 +69,8 @@ class _CodeFlowMethodArgsView extends StatelessWidget {
               color: argEntry.value == null
                   ? Colors.blue
                   : _isCoreType(argEntry.value)
-                      ? Colors.indigo
-                      : Colors.black54,
+                  ? Colors.indigo
+                  : Colors.black54,
               fontWeight: FontWeight.bold,
               fontSize: 12,
             ),
@@ -108,14 +108,14 @@ class _CodeFlowMethodArgsView extends StatelessWidget {
         argEntry.value == null
             ? "null"
             : _isCoreType(argEntry.value)
-                ? argEntry.value.toString()
-                : "Instance of '${getClassName(argEntry.value)}'",
+            ? argEntry.value.toString()
+            : "Instance of '${getClassName(argEntry.value)}'",
         style: TextStyle(
           color: argEntry.value == null
               ? Colors.blue
               : _isCoreType(argEntry.value)
-                  ? Colors.indigo
-                  : Colors.black,
+              ? Colors.indigo
+              : Colors.black,
           fontSize: 12,
         ),
       ),
@@ -127,13 +127,14 @@ class _CodeFlowMethodArgsView extends StatelessWidget {
       children: (arguments ?? {})
           .entries
           .map(
-            (argEntry) => _SimpleAccordionSection(
+            (argEntry) =>
+            _SimpleAccordionSection(
               initiallyExpanded: true,
               headerTitle: _buildArgNameAndType(argEntry),
               headerSubtitle: _buildSubtitleArgValue(argEntry),
               content: _buildContentArgValue(argEntry),
             ),
-          )
+      )
           .toList(),
     );
   }

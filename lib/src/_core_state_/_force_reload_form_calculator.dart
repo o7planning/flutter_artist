@@ -14,24 +14,18 @@ _ForceReloadFormState _calculateFormState({
   bool forceReloadForm = false;
 
   _printDebugState(DebugCat.dataLoad,
-      "@~~~> ${getClassName(
-          block)} ~~~~~> FRM 0: currentItemSelectionType: ${currentItemSelectionType
-          .name}");
+      "@~~~> ${getClassName(block)} ~~~~~> FRM 0: currentItemSelectionType: ${currentItemSelectionType.name}");
   //
   if (thisXBlock.xFormModel!.forceTypeForForm == _ForceType.force) {
     _printDebugState(DebugCat.dataLoad,
-        "@~~~> ${getClassName(
-            block)} ~~~~~> FRM 0.1: forceTypeForForm: ${thisXBlock.xFormModel!
-            .forceTypeForForm}");
+        "@~~~> ${getClassName(block)} ~~~~~> FRM 0.1: forceTypeForForm: ${thisXBlock.xFormModel!.forceTypeForForm}");
     // Test Case: [43a].
     forceReloadForm = true;
   }
   // forceTypeForForm != force
   else {
     _printDebugState(DebugCat.dataLoad,
-        "@~~~> ${getClassName(
-            block)} ~~~~~> FRM 0.2: forceTypeForForm: ${thisXBlock.xFormModel!
-            .forceTypeForForm}");
+        "@~~~> ${getClassName(block)} ~~~~~> FRM 0.2: forceTypeForForm: ${thisXBlock.xFormModel!.forceTypeForForm}");
   }
   //
   final bool formLoadTimeUIActive = formModel.hasActiveUIComponent();
@@ -42,38 +36,32 @@ _ForceReloadFormState _calculateFormState({
     //
     switch (postQueryBehavior) {
       case PostQueryBehavior.clearCurrentItem:
-      // Never run.
+        // Never run.
         break;
       case PostQueryBehavior.createNewItem:
-      // Never run.
+        // Never run.
         break;
       case PostQueryBehavior.selectAnItemAsCurrentIfNeed:
         _printDebugState(DebugCat.dataLoad,
-            "@~~~> ${getClassName(
-                block)} ~~~~~> FRM 1: postQueryBehavior: ${postQueryBehavior
-                .name}");
+            "@~~~> ${getClassName(block)} ~~~~~> FRM 1: postQueryBehavior: ${postQueryBehavior.name}");
         //
         // ITEM == ITEM_DETAIL.
         //
         if (block.getItemType() == block.getItemDetailType()) {
           _printDebugState(DebugCat.dataLoad,
-              "@~~~> ${getClassName(
-                  block)} ~~~~~> FRM 1.1: ITEM == ITEM_DETAIL");
+              "@~~~> ${getClassName(block)} ~~~~~> FRM 1.1: ITEM == ITEM_DETAIL");
           // Just Queried:
           if (isCandidateCurrentItemInNewQueriedList) {
             _printDebugState(DebugCat.dataLoad,
-                "@~~~> ${getClassName(
-                    block)} ~~~~~> FRM 1.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
+                "@~~~> ${getClassName(block)} ~~~~~> FRM 1.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
             //
             if (currentItemChanged) {
               _printDebugState(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(
-                      block)} ~~~~~> FRM 1.1.1.1: currentItemChanged: TRUE");
+                  "@~~~> ${getClassName(block)} ~~~~~> FRM 1.1.1.1: currentItemChanged: TRUE");
               //
               if (formLoadTimeUIActive) {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 1.1.1.1.1: formLoadTimeUIActive: TRUE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 1.1.1.1.1: formLoadTimeUIActive: TRUE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 1.1.1.1.1",
@@ -86,8 +74,7 @@ _ForceReloadFormState _calculateFormState({
               // !formLoadTimeUIActive
               else {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 1.1.1.1.2: formLoadTimeUIActive: FALSE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 1.1.1.1.2: formLoadTimeUIActive: FALSE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 1.1.1.1.2",
@@ -101,13 +88,11 @@ _ForceReloadFormState _calculateFormState({
             // !currentItemChanged
             else {
               _printDebugState(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(
-                      block)} ~~~~~> FRM 1.1.1.2: currentItemChanged: FALSE");
+                  "@~~~> ${getClassName(block)} ~~~~~> FRM 1.1.1.2: currentItemChanged: FALSE");
               //
               if (formLoadTimeUIActive) {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 1.1.1.2.1: formLoadTimeUIActive: TRUE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 1.1.1.2.1: formLoadTimeUIActive: TRUE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 1.1.1.2.1",
@@ -120,8 +105,7 @@ _ForceReloadFormState _calculateFormState({
               // !formLoadTimeUIActive
               else {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 1.1.1.2.2: formLoadTimeUIActive: FALSE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 1.1.1.2.2: formLoadTimeUIActive: FALSE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 1.1.1.2.2",
@@ -136,18 +120,15 @@ _ForceReloadFormState _calculateFormState({
           // !isCandidateCurrentItemInNewQueriedList
           else {
             _printDebugState(DebugCat.dataLoad,
-                "@~~~> ${getClassName(
-                    block)} ~~~~~> FRM 1.1.2: isCandidateCurrentItemInNewQueriedList: FALSE");
+                "@~~~> ${getClassName(block)} ~~~~~> FRM 1.1.2: isCandidateCurrentItemInNewQueriedList: FALSE");
             //
             if (currentItemChanged) {
               _printDebugState(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(
-                      block)} ~~~~~> FRM 1.1.2.1: currentItemChanged: TRUE");
+                  "@~~~> ${getClassName(block)} ~~~~~> FRM 1.1.2.1: currentItemChanged: TRUE");
               //
               if (formLoadTimeUIActive) {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 1.1.2.1.1: formLoadTimeUIActive: TRUE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 1.1.2.1.1: formLoadTimeUIActive: TRUE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 1.1.2.1.1",
@@ -160,8 +141,7 @@ _ForceReloadFormState _calculateFormState({
               // !formLoadTimeUIActive.
               else {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 1.1.2.1.2: formLoadTimeUIActive: FALSE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 1.1.2.1.2: formLoadTimeUIActive: FALSE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 1.1.2.1.2",
@@ -175,18 +155,15 @@ _ForceReloadFormState _calculateFormState({
             // !currentItemChanged
             else {
               _printDebugState(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(
-                      block)} ~~~~~> FRM 1.1.2.2: currentItemChanged: FALSE");
+                  "@~~~> ${getClassName(block)} ~~~~~> FRM 1.1.2.2: currentItemChanged: FALSE");
               //
               if (formLoadTimeUIActive) {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 1.1.2.2.1: formLoadTimeUIActive: TRUE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 1.1.2.2.1: formLoadTimeUIActive: TRUE");
                 //
                 if (forceReloadItem) {
                   _printDebugState(DebugCat.dataLoad,
-                      "@~~~> ${getClassName(
-                          block)} ~~~~~> FRM 1.1.2.2.1.1: forceLoadItem: TRUE");
+                      "@~~~> ${getClassName(block)} ~~~~~> FRM 1.1.2.2.1.1: forceLoadItem: TRUE");
                   // Debug:
                   _addDebugForceReload(
                     debugCode: "FRM 1.1.2.2.1.1",
@@ -199,14 +176,11 @@ _ForceReloadFormState _calculateFormState({
                 // !forceLoadItem
                 else {
                   _printDebugState(DebugCat.dataLoad,
-                      "@~~~> ${getClassName(
-                          block)} ~~~~~> FRM 1.1.2.2.1.2: forceLoadItem: FALSE");
+                      "@~~~> ${getClassName(block)} ~~~~~> FRM 1.1.2.2.1.2: forceLoadItem: FALSE");
                   //
                   if (formModel.formDataState != DataState.ready) {
                     _printDebugState(DebugCat.dataLoad,
-                        "@~~~> ${getClassName(
-                            block)} ~~~~~> FRM 1.1.2.2.1.2.1: formDataState: NOT READY - ${formModel
-                            .formDataState}");
+                        "@~~~> ${getClassName(block)} ~~~~~> FRM 1.1.2.2.1.2.1: formDataState: NOT READY - ${formModel.formDataState}");
                     // Debug:
                     _addDebugForceReload(
                       debugCode: "FRM 1.1.2.2.1.2.1",
@@ -219,8 +193,7 @@ _ForceReloadFormState _calculateFormState({
                   // formModel.formDataState == DataState.ready
                   else {
                     _printDebugState(DebugCat.dataLoad,
-                        "@~~~> ${getClassName(
-                            block)} ~~~~~> FRM 1.1.2.2.1.2.2: formLoadTimeUIActive: READY");
+                        "@~~~> ${getClassName(block)} ~~~~~> FRM 1.1.2.2.1.2.2: formLoadTimeUIActive: READY");
                     // Debug:
                     _addDebugForceReload(
                       debugCode: "FRM 1.1.2.2.1.2.2",
@@ -235,8 +208,7 @@ _ForceReloadFormState _calculateFormState({
               // !formLoadTimeUIActive
               else {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 1.1.2.2.2: formLoadTimeUIActive: FALSE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 1.1.2.2.2: formLoadTimeUIActive: FALSE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 1.1.2.2.2",
@@ -252,29 +224,25 @@ _ForceReloadFormState _calculateFormState({
         // ITEM != ITEM_DETAIL:
         else {
           _printDebugState(DebugCat.dataLoad,
-              "@~~~> ${getClassName(
-                  block)} ~~~~~> FRM 1.2: ITEM != ITEM_DETAIL");
+              "@~~~> ${getClassName(block)} ~~~~~> FRM 1.2: ITEM != ITEM_DETAIL");
           // Just Queried:
           if (isCandidateCurrentItemInNewQueriedList) {
             _printDebugState(DebugCat.dataLoad,
-                "@~~~> ${getClassName(
-                    block)} ~~~~~> FRM 1.2.1: isCandidateCurrentItemInNewQueriedList: TRUE");
+                "@~~~> ${getClassName(block)} ~~~~~> FRM 1.2.1: isCandidateCurrentItemInNewQueriedList: TRUE");
             //
             if (currentItemChanged) {
               _printDebugState(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(
-                      block)} ~~~~~> FRM 1.2.1.1: currentItemChanged: TRUE");
+                  "@~~~> ${getClassName(block)} ~~~~~> FRM 1.2.1.1: currentItemChanged: TRUE");
               //
               if (formLoadTimeUIActive) {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 1.2.1.1.1: formLoadTimeUIActive: TRUE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 1.2.1.1.1: formLoadTimeUIActive: TRUE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 1.2.1.1.1",
                   shelf: block.shelf,
                   currentShelfCodes:
-                  "11a, 11b, 37a, 38a, 38b, 39a, 39b, 40a, 40b",
+                      "11a, 11b, 37a, 38a, 38b, 39a, 39b, 40a, 40b",
                 );
                 //
                 forceReloadForm = true;
@@ -282,14 +250,13 @@ _ForceReloadFormState _calculateFormState({
               // !formLoadTimeUIActive
               else {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 1.2.1.1.2: formLoadTimeUIActive: FALSE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 1.2.1.1.2: formLoadTimeUIActive: FALSE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 1.2.1.1.2",
                   shelf: block.shelf,
                   currentShelfCodes:
-                  "11a, 36a, 36b, 36c, 37a, 38a, 38b, 39b, 40b, 41a",
+                      "11a, 36a, 36b, 36c, 37a, 38a, 38b, 39b, 40b, 41a",
                 );
                 //
                 forceReloadForm = false;
@@ -298,13 +265,11 @@ _ForceReloadFormState _calculateFormState({
             // !currentItemChanged
             else {
               _printDebugState(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(
-                      block)} ~~~~~> FRM 1.2.1.2: currentItemChanged: FALSE");
+                  "@~~~> ${getClassName(block)} ~~~~~> FRM 1.2.1.2: currentItemChanged: FALSE");
               //
               if (formLoadTimeUIActive) {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 1.2.1.2.1: formLoadTimeUIActive: TRUE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 1.2.1.2.1: formLoadTimeUIActive: TRUE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 1.2.1.2.1",
@@ -317,8 +282,7 @@ _ForceReloadFormState _calculateFormState({
               // !formLoadTimeUIActive
               else {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 1.2.1.2.2: formLoadTimeUIActive: FALSE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 1.2.1.2.2: formLoadTimeUIActive: FALSE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 1.2.1.2.2",
@@ -333,18 +297,15 @@ _ForceReloadFormState _calculateFormState({
           // !isCandidateCurrentItemInNewQueriedList
           else {
             _printDebugState(DebugCat.dataLoad,
-                "@~~~> ${getClassName(
-                    block)} ~~~~~> FRM 1.2.2: isCandidateCurrentItemInNewQueriedList: FALSE");
+                "@~~~> ${getClassName(block)} ~~~~~> FRM 1.2.2: isCandidateCurrentItemInNewQueriedList: FALSE");
             //
             if (currentItemChanged) {
               _printDebugState(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(
-                      block)} ~~~~~> FRM 1.2.2.1: currentItemChanged: TRUE");
+                  "@~~~> ${getClassName(block)} ~~~~~> FRM 1.2.2.1: currentItemChanged: TRUE");
               //
               if (formLoadTimeUIActive) {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 1.2.2.1.1: formLoadTimeUIActive: TRUE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 1.2.2.1.1: formLoadTimeUIActive: TRUE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 1.2.2.1.1",
@@ -357,8 +318,7 @@ _ForceReloadFormState _calculateFormState({
               // !formLoadTimeUIActive
               else {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 1.2.2.1.2: formLoadTimeUIActive: FALSE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 1.2.2.1.2: formLoadTimeUIActive: FALSE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 1.2.2.1.2",
@@ -372,18 +332,15 @@ _ForceReloadFormState _calculateFormState({
             // !currentItemChanged
             else {
               _printDebugState(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(
-                      block)} ~~~~~> FRM 1.2.2.2: currentItemChanged: FALSE");
+                  "@~~~> ${getClassName(block)} ~~~~~> FRM 1.2.2.2: currentItemChanged: FALSE");
               //
               if (formLoadTimeUIActive) {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 1.2.2.2.1: formLoadTimeUIActive: TRUE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 1.2.2.2.1: formLoadTimeUIActive: TRUE");
                 //
                 if (forceReloadItem) {
                   _printDebugState(DebugCat.dataLoad,
-                      "@~~~> ${getClassName(
-                          block)} ~~~~~> FRM 1.2.2.2.1.1: forceReloadItem: TRUE");
+                      "@~~~> ${getClassName(block)} ~~~~~> FRM 1.2.2.2.1.1: forceReloadItem: TRUE");
                   // Debug:
                   _addDebugForceReload(
                     debugCode: "FRM 1.2.2.2.1.1",
@@ -396,14 +353,11 @@ _ForceReloadFormState _calculateFormState({
                 // !forceReloadItem
                 else {
                   _printDebugState(DebugCat.dataLoad,
-                      "@~~~> ${getClassName(
-                          block)} ~~~~~> FRM 1.2.2.2.1.2: forceReloadItem: FALSE");
+                      "@~~~> ${getClassName(block)} ~~~~~> FRM 1.2.2.2.1.2: forceReloadItem: FALSE");
                   //
                   if (formModel.formDataState != DataState.ready) {
                     _printDebugState(DebugCat.dataLoad,
-                        "@~~~> ${getClassName(
-                            block)} ~~~~~> FRM 1.2.2.2.1.2.1: formDataState: NOT READY - ${formModel
-                            .formDataState}");
+                        "@~~~> ${getClassName(block)} ~~~~~> FRM 1.2.2.2.1.2.1: formDataState: NOT READY - ${formModel.formDataState}");
                     // Debug:
                     _addDebugForceReload(
                       debugCode: "FRM 1.2.2.2.1.2.1",
@@ -416,8 +370,7 @@ _ForceReloadFormState _calculateFormState({
                   // formModel.formDataState == ready.
                   else {
                     _printDebugState(DebugCat.dataLoad,
-                        "@~~~> ${getClassName(
-                            block)} ~~~~~> FRM 1.2.2.2.1.2.2: formDataState: READY");
+                        "@~~~> ${getClassName(block)} ~~~~~> FRM 1.2.2.2.1.2.2: formDataState: READY");
                     // Debug:
                     _addDebugForceReload(
                       debugCode: "FRM 1.2.2.2.1.2.2",
@@ -432,8 +385,7 @@ _ForceReloadFormState _calculateFormState({
               // !formLoadTimeUIActive
               else {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 1.2.2.2.2: formLoadTimeUIActive: FALSE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 1.2.2.2.2: formLoadTimeUIActive: FALSE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 1.2.2.2.2",
@@ -447,31 +399,25 @@ _ForceReloadFormState _calculateFormState({
         }
       case PostQueryBehavior.selectAnItemAsCurrent:
         _printDebugState(DebugCat.dataLoad,
-            "@~~~> ${getClassName(
-                block)} ~~~~~> FRM 2: postQueryBehavior: ${postQueryBehavior
-                .name}");
+            "@~~~> ${getClassName(block)} ~~~~~> FRM 2: postQueryBehavior: ${postQueryBehavior.name}");
         //
         // ITEM == ITEM_DETAIL.
         //
         if (block.getItemType() == block.getItemDetailType()) {
           _printDebugState(DebugCat.dataLoad,
-              "@~~~> ${getClassName(
-                  block)} ~~~~~> FRM 2.1: ITEM == ITEM_DETAIL");
+              "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1: ITEM == ITEM_DETAIL");
           // Just Queried:
           if (isCandidateCurrentItemInNewQueriedList) {
             _printDebugState(DebugCat.dataLoad,
-                "@~~~> ${getClassName(
-                    block)} ~~~~~> FRM 2.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
+                "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
             //
             if (currentItemChanged) {
               _printDebugState(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(
-                      block)} ~~~~~> FRM 2.1.1.1: currentItemChanged: TRUE");
+                  "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1.1.1: currentItemChanged: TRUE");
               //
               if (formLoadTimeUIActive) {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 2.1.1.1.1: formLoadTimeUIActive: TRUE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1.1.1.1: formLoadTimeUIActive: TRUE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 2.1.1.1.1",
@@ -483,8 +429,7 @@ _ForceReloadFormState _calculateFormState({
               // !formLoadTimeUIActive
               else {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 2.1.1.1.2: formLoadTimeUIActive: FALSE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1.1.1.2: formLoadTimeUIActive: FALSE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 2.1.1.1.2",
@@ -497,13 +442,11 @@ _ForceReloadFormState _calculateFormState({
             // !currentItemChanged
             else {
               _printDebugState(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(
-                      block)} ~~~~~> FRM 2.1.1.2: currentItemChanged: FALSE");
+                  "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1.1.2: currentItemChanged: FALSE");
               //
               if (formLoadTimeUIActive) {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 2.1.1.2.1: formLoadTimeUIActive: TRUE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1.1.2.1: formLoadTimeUIActive: TRUE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 2.1.1.2.1",
@@ -515,8 +458,7 @@ _ForceReloadFormState _calculateFormState({
               // !formLoadTimeUIActive
               else {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 2.1.1.2.2: formLoadTimeUIActive: FALSE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1.1.2.2: formLoadTimeUIActive: FALSE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 2.1.1.2.2",
@@ -530,18 +472,15 @@ _ForceReloadFormState _calculateFormState({
           // !isCandidateCurrentItemInNewQueriedList.
           else {
             _printDebugState(DebugCat.dataLoad,
-                "@~~~> ${getClassName(
-                    block)} ~~~~~> FRM 2.1.2: isCandidateCurrentItemInNewQueriedList: FALSE");
+                "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1.2: isCandidateCurrentItemInNewQueriedList: FALSE");
             // IN Param: selectAnItemAsCurrent.
             if (currentItemChanged) {
               _printDebugState(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(
-                      block)} ~~~~~> FRM 2.1.2.1: currentItemChanged: TRUE");
+                  "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1.2.1: currentItemChanged: TRUE");
               //
               if (formLoadTimeUIActive) {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 2.1.2.1.1: formLoadTimeUIActive: TRUE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1.2.1.1: formLoadTimeUIActive: TRUE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 2.1.2.1.1",
@@ -553,8 +492,7 @@ _ForceReloadFormState _calculateFormState({
               // !formLoadTimeUIActive
               else {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 2.1.2.1.2: formLoadTimeUIActive: FALSE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1.2.1.2: formLoadTimeUIActive: FALSE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 2.1.2.1.2",
@@ -567,18 +505,15 @@ _ForceReloadFormState _calculateFormState({
             // !currentItemChanged
             else {
               _printDebugState(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(
-                      block)} ~~~~~> FRM 2.1.2.2: currentItemChanged: FALSE");
+                  "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1.2.2: currentItemChanged: FALSE");
               //
               if (formLoadTimeUIActive) {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 2.1.2.2.1: formLoadTimeUIActive: TRUE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1.2.2.1: formLoadTimeUIActive: TRUE");
                 //
                 if (forceReloadItem) {
                   _printDebugState(DebugCat.dataLoad,
-                      "@~~~> ${getClassName(
-                          block)} ~~~~~> FRM 2.1.2.2.1.1: forceReloadItem: TRUE");
+                      "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1.2.2.1.1: forceReloadItem: TRUE");
                   // Debug:
                   _addDebugForceReload(
                     debugCode: "FRM 2.1.2.2.1.1",
@@ -591,14 +526,11 @@ _ForceReloadFormState _calculateFormState({
                 // !forceReloadItem
                 else {
                   _printDebugState(DebugCat.dataLoad,
-                      "@~~~> ${getClassName(
-                          block)} ~~~~~> FRM 2.1.2.2.1.2: forceReloadItem: FALSE");
+                      "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1.2.2.1.2: forceReloadItem: FALSE");
                   //
                   if (formModel.formDataState != DataState.ready) {
                     _printDebugState(DebugCat.dataLoad,
-                        "@~~~> ${getClassName(
-                            block)} ~~~~~> FRM 2.1.2.2.1.2.1: formDataState: NOT READY - ${formModel
-                            .formDataState}");
+                        "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1.2.2.1.2.1: formDataState: NOT READY - ${formModel.formDataState}");
                     // Debug:
                     _addDebugForceReload(
                       debugCode: "FRM 2.1.2.2.1.2.1",
@@ -610,8 +542,7 @@ _ForceReloadFormState _calculateFormState({
                   // formModel.formDataState == ready.
                   else {
                     _printDebugState(DebugCat.dataLoad,
-                        "@~~~> ${getClassName(
-                            block)} ~~~~~> FRM 2.1.2.2.1.2.2: formDataState: READY");
+                        "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1.2.2.1.2.2: formDataState: READY");
                     // Debug:
                     _addDebugForceReload(
                       debugCode: "FRM 2.1.2.2.1.2.2",
@@ -626,8 +557,7 @@ _ForceReloadFormState _calculateFormState({
               // !formLoadTimeUIActive
               else {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 2.1.2.2.3: formLoadTimeUIActive: FALSE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1.2.2.3: formLoadTimeUIActive: FALSE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 2.1.2.2.3",
@@ -643,22 +573,18 @@ _ForceReloadFormState _calculateFormState({
         // ITEM != ITEM_DETAIL
         else {
           _printDebugState(DebugCat.dataLoad,
-              "@~~~> ${getClassName(
-                  block)} ~~~~~> FRM 2.2: ITEM != ITEM_DETAIL");
+              "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2: ITEM != ITEM_DETAIL");
           // Just Queried:
           if (isCandidateCurrentItemInNewQueriedList) {
             _printDebugState(DebugCat.dataLoad,
-                "@~~~> ${getClassName(
-                    block)} ~~~~~> FRM 2.2.1: isCandidateCurrentItemInNewQueriedList: TRUE");
+                "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2.1: isCandidateCurrentItemInNewQueriedList: TRUE");
             //
             if (currentItemChanged) {
               _printDebugState(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(
-                      block)} ~~~~~> FRM 2.2.1.1: currentItemChanged: TRUE");
+                  "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2.1.1: currentItemChanged: TRUE");
               if (formLoadTimeUIActive) {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 2.2.1.1.1: formLoadTimeUIActive: TRUE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2.1.1.1: formLoadTimeUIActive: TRUE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 2.2.1.1.1",
@@ -671,8 +597,7 @@ _ForceReloadFormState _calculateFormState({
               // !formLoadTimeUIActive
               else {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 2.2.1.1.2: formLoadTimeUIActive: FALSE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2.1.1.2: formLoadTimeUIActive: FALSE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 2.2.1.1.2",
@@ -686,13 +611,11 @@ _ForceReloadFormState _calculateFormState({
             // !currentItemChanged
             else {
               _printDebugState(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(
-                      block)} ~~~~~> FRM 2.2.1.2: currentItemChanged: FALSE");
+                  "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2.1.2: currentItemChanged: FALSE");
               //
               if (formLoadTimeUIActive) {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 2.2.1.2.1: formLoadTimeUIActive: TRUE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2.1.2.1: formLoadTimeUIActive: TRUE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 2.2.1.2.1",
@@ -705,8 +628,7 @@ _ForceReloadFormState _calculateFormState({
               // !formLoadTimeUIActive
               else {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 2.2.1.2.2: formLoadTimeUIActive: FALSE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2.1.2.2: formLoadTimeUIActive: FALSE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 2.2.1.2.2",
@@ -721,18 +643,15 @@ _ForceReloadFormState _calculateFormState({
           // !isCandidateCurrentItemInNewQueriedList
           else {
             _printDebugState(DebugCat.dataLoad,
-                "@~~~> ${getClassName(
-                    block)} ~~~~~> FRM 2.2.2: isCandidateCurrentItemInNewQueriedList: FALSE");
+                "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2.2: isCandidateCurrentItemInNewQueriedList: FALSE");
             //
             if (currentItemChanged) {
               _printDebugState(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(
-                      block)} ~~~~~> FRM 2.2.2.1: currentItemChanged: TRUE");
+                  "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2.2.1: currentItemChanged: TRUE");
               //
               if (formLoadTimeUIActive) {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 2.2.2.1.1: formLoadTimeUIActive: TRUE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2.2.1.1: formLoadTimeUIActive: TRUE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 2.2.2.1.1",
@@ -744,8 +663,7 @@ _ForceReloadFormState _calculateFormState({
               // !formLoadTimeUIActive
               else {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 2.2.2.1.2: formLoadTimeUIActive: FALSE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2.2.1.2: formLoadTimeUIActive: FALSE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 2.2.2.1.2",
@@ -758,18 +676,15 @@ _ForceReloadFormState _calculateFormState({
             // !currentItemChanged
             else {
               _printDebugState(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(
-                      block)} ~~~~~> FRM 2.2.2.2: currentItemChanged: FALSE");
+                  "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2.2.2: currentItemChanged: FALSE");
               //
               if (formLoadTimeUIActive) {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 2.2.2.2.1: formLoadTimeUIActive: TRUE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2.2.2.1: formLoadTimeUIActive: TRUE");
                 //
                 if (forceReloadItem) {
                   _printDebugState(DebugCat.dataLoad,
-                      "@~~~> ${getClassName(
-                          block)} ~~~~~> FRM 2.2.2.2.1.1: forceReloadItem: TRUE");
+                      "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2.2.2.1.1: forceReloadItem: TRUE");
                   // Debug:
                   _addDebugForceReload(
                     debugCode: "FRM 2.2.2.2.1.1",
@@ -781,14 +696,11 @@ _ForceReloadFormState _calculateFormState({
                 // !forceReloadItem
                 else {
                   _printDebugState(DebugCat.dataLoad,
-                      "@~~~> ${getClassName(
-                          block)} ~~~~~> FRM 2.2.2.2.1.1: forceReloadItem: FALSE");
+                      "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2.2.2.1.1: forceReloadItem: FALSE");
                   //
                   if (formModel.formDataState != DataState.ready) {
                     _printDebugState(DebugCat.dataLoad,
-                        "@~~~> ${getClassName(
-                            block)} ~~~~~> FRM 2.2.2.2.1.1.1: formDataState: NOT READY - ${formModel
-                            .formDataState}");
+                        "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2.2.2.1.1.1: formDataState: NOT READY - ${formModel.formDataState}");
                     // Debug:
                     _addDebugForceReload(
                       debugCode: "FRM 2.2.2.2.1.1.1",
@@ -800,8 +712,7 @@ _ForceReloadFormState _calculateFormState({
                   // formModel.formDataState == ready.
                   else {
                     _printDebugState(DebugCat.dataLoad,
-                        "@~~~> ${getClassName(
-                            block)} ~~~~~> FRM 2.2.2.2.1.1.2: formDataState: READY");
+                        "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2.2.2.1.1.2: formDataState: READY");
                     // Debug:
                     _addDebugForceReload(
                       debugCode: "FRM 2.2.2.2.1.1.2",
@@ -815,8 +726,7 @@ _ForceReloadFormState _calculateFormState({
               // !formLoadTimeUIActive
               else {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 2.2.2.2.2: formLoadTimeUIActive: FALSE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2.2.2.2: formLoadTimeUIActive: FALSE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 2.2.2.2.2",
@@ -831,33 +741,27 @@ _ForceReloadFormState _calculateFormState({
         }
       case PostQueryBehavior.selectAnItemAsCurrentAndLoadForm:
         _printDebugState(DebugCat.dataLoad,
-            "@~~~> ${getClassName(
-                block)} ~~~~~> FRM 3: postQueryBehavior: ${postQueryBehavior
-                .name}");
+            "@~~~> ${getClassName(block)} ~~~~~> FRM 3: postQueryBehavior: ${postQueryBehavior.name}");
         //
         // ITEM == ITEM_DETAIL.
         //
         if (block.getItemType() == block.getItemDetailType()) {
           _printDebugState(DebugCat.dataLoad,
-              "@~~~> ${getClassName(
-                  block)} ~~~~~> FRM 3.1: ITEM == ITEM_DETAIL");
+              "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1: ITEM == ITEM_DETAIL");
           // Just Queried:
           if (isCandidateCurrentItemInNewQueriedList) {
             _printDebugState(DebugCat.dataLoad,
-                "@~~~> ${getClassName(
-                    block)} ~~~~~> FRM 3.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
+                "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
             //
             if (currentItemChanged) {
               _printDebugState(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(
-                      block)} ~~~~~> FRM 3.1.1.1: currentItemChanged: TRUE");
+                  "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.1.1: currentItemChanged: TRUE");
               //
               // IN Param: selectAnItemAsCurrentAndLoadForm
               //
               if (formLoadTimeUIActive) {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 3.1.1.1.1: formLoadTimeUIActive: TRUE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.1.1.1: formLoadTimeUIActive: TRUE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 3.1.1.1.1",
@@ -869,8 +773,7 @@ _ForceReloadFormState _calculateFormState({
               // !formLoadTimeUIActive
               else {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 3.1.1.1.2: formLoadTimeUIActive: FALSE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.1.1.2: formLoadTimeUIActive: FALSE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 3.1.1.1.2",
@@ -883,15 +786,13 @@ _ForceReloadFormState _calculateFormState({
             // !currentItemChanged
             else {
               _printDebugState(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(
-                      block)} ~~~~~> FRM 3.1.1.2: currentItemChanged: FALSE");
+                  "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.1.2: currentItemChanged: FALSE");
               //
               // IN Param: selectAnItemAsCurrentAndLoadForm
               //
               if (formLoadTimeUIActive) {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 3.1.1.2.1: formLoadTimeUIActive: TRUE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.1.2.1: formLoadTimeUIActive: TRUE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 3.1.1.2.1",
@@ -903,8 +804,7 @@ _ForceReloadFormState _calculateFormState({
               // !formLoadTimeUIActive
               else {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 3.1.1.2.2: formLoadTimeUIActive: FALSE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.1.2.2: formLoadTimeUIActive: FALSE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 3.1.1.2.2",
@@ -918,20 +818,17 @@ _ForceReloadFormState _calculateFormState({
           // !isCandidateCurrentItemInNewQueriedList
           else {
             _printDebugState(DebugCat.dataLoad,
-                "@~~~> ${getClassName(
-                    block)} ~~~~~> FRM 3.1.2: isCandidateCurrentItemInNewQueriedList: FALSE");
+                "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.2: isCandidateCurrentItemInNewQueriedList: FALSE");
             //
             if (currentItemChanged) {
               _printDebugState(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(
-                      block)} ~~~~~> FRM 3.1.2.1: currentItemChanged: TRUE");
+                  "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.2.1: currentItemChanged: TRUE");
               //
               // IN Param: selectAnItemAsCurrentAndLoadForm
               //
               if (formLoadTimeUIActive) {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 3.1.2.1.1: formLoadTimeUIActive: TRUE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.2.1.1: formLoadTimeUIActive: TRUE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 3.1.2.1.1",
@@ -943,8 +840,7 @@ _ForceReloadFormState _calculateFormState({
               // !formLoadTimeUIActive
               else {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 3.1.2.1.2: formLoadTimeUIActive: FALSE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.2.1.2: formLoadTimeUIActive: FALSE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 3.1.2.1.2",
@@ -957,18 +853,15 @@ _ForceReloadFormState _calculateFormState({
             // !currentItemChanged
             else {
               _printDebugState(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(
-                      block)} ~~~~~> FRM 3.1.2.2: currentItemChanged: FALSE");
+                  "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.2.2: currentItemChanged: FALSE");
               //
               if (formLoadTimeUIActive) {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 3.1.2.2.1: formLoadTimeUIActive: TRUE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.2.2.1: formLoadTimeUIActive: TRUE");
                 //
                 if (forceReloadItem) {
                   _printDebugState(DebugCat.dataLoad,
-                      "@~~~> ${getClassName(
-                          block)} ~~~~~> FRM 3.1.2.2.1.1: forceReloadItem: TRUE");
+                      "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.2.2.1.1: forceReloadItem: TRUE");
                   // Debug:
                   _addDebugForceReload(
                     debugCode: "FRM 3.1.2.2.1.1",
@@ -981,14 +874,11 @@ _ForceReloadFormState _calculateFormState({
                 // !forceReloadItem
                 else {
                   _printDebugState(DebugCat.dataLoad,
-                      "@~~~> ${getClassName(
-                          block)} ~~~~~> FRM 3.1.2.2.1.2: forceReloadItem: FALSE");
+                      "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.2.2.1.2: forceReloadItem: FALSE");
                   //
                   if (formModel.formDataState != DataState.ready) {
                     _printDebugState(DebugCat.dataLoad,
-                        "@~~~> ${getClassName(
-                            block)} ~~~~~> FRM 3.1.2.2.1.2.1: formDataState: NOT READY - ${formModel
-                            .formDataState}");
+                        "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.2.2.1.2.1: formDataState: NOT READY - ${formModel.formDataState}");
                     // Debug:
                     _addDebugForceReload(
                       debugCode: "FRM 3.1.2.2.1.2.1",
@@ -1000,8 +890,7 @@ _ForceReloadFormState _calculateFormState({
                   // formModel.formDataState == ready.
                   else {
                     _printDebugState(DebugCat.dataLoad,
-                        "@~~~> ${getClassName(
-                            block)} ~~~~~> FRM 3.1.2.2.1.2.2: formDataState: READY");
+                        "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.2.2.1.2.2: formDataState: READY");
                     // Debug:
                     _addDebugForceReload(
                       debugCode: "FRM 3.1.2.2.1.2.2",
@@ -1016,14 +905,11 @@ _ForceReloadFormState _calculateFormState({
               // !formLoadTimeUIActive
               else {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 3.1.2.2.2: formLoadTimeUIActive: FALSE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.2.2.2: formLoadTimeUIActive: FALSE");
                 //
                 if (formModel.formDataState != DataState.ready) {
                   _printDebugState(DebugCat.dataLoad,
-                      "@~~~> ${getClassName(
-                          block)} ~~~~~> FRM 3.1.2.2.2.1: formDataState: NOT READY - ${formModel
-                          .formDataState}");
+                      "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.2.2.2.1: formDataState: NOT READY - ${formModel.formDataState}");
                   // Debug:
                   _addDebugForceReload(
                     debugCode: "FRM 3.1.2.2.2.1",
@@ -1036,8 +922,7 @@ _ForceReloadFormState _calculateFormState({
                 // formModel.formDataState == ready.
                 else {
                   _printDebugState(DebugCat.dataLoad,
-                      "@~~~> ${getClassName(
-                          block)} ~~~~~> FRM 3.1.2.2.2.2: formDataState: READY");
+                      "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.2.2.2.2: formDataState: READY");
                   // Debug:
                   _addDebugForceReload(
                     debugCode: "FRM 3.1.2.2.2.2",
@@ -1054,23 +939,19 @@ _ForceReloadFormState _calculateFormState({
         // ITEM != ITEM_DETAIL
         else {
           _printDebugState(DebugCat.dataLoad,
-              "@~~~> ${getClassName(
-                  block)} ~~~~~> FRM 3.2: ITEM != ITEM_DETAIL");
+              "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2: ITEM != ITEM_DETAIL");
           // Just Queried:
           if (isCandidateCurrentItemInNewQueriedList) {
             _printDebugState(DebugCat.dataLoad,
-                "@~~~> ${getClassName(
-                    block)} ~~~~~> FRM 3.2.1: isCandidateCurrentItemInNewQueriedList: TRUE");
+                "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.1: isCandidateCurrentItemInNewQueriedList: TRUE");
             //
             if (currentItemChanged) {
               _printDebugState(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(
-                      block)} ~~~~~> FRM 3.2.1.1: currentItemChanged: TRUE");
+                  "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.1.1: currentItemChanged: TRUE");
               //
               if (formLoadTimeUIActive) {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 3.2.1.1.1: formLoadTimeUIActive: TRUE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.1.1.1: formLoadTimeUIActive: TRUE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 3.2.1.1.1",
@@ -1083,8 +964,7 @@ _ForceReloadFormState _calculateFormState({
               // !formLoadTimeUIActive
               else {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 3.2.1.1.2: formLoadTimeUIActive: FALSE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.1.1.2: formLoadTimeUIActive: FALSE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 3.2.1.1.2",
@@ -1098,13 +978,11 @@ _ForceReloadFormState _calculateFormState({
             // !currentItemChanged
             else {
               _printDebugState(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(
-                      block)} ~~~~~> FRM 3.2.1.2: currentItemChanged: FALSE");
+                  "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.1.2: currentItemChanged: FALSE");
               //
               if (formLoadTimeUIActive) {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 3.2.1.2.1: formLoadTimeUIActive: TRUE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.1.2.1: formLoadTimeUIActive: TRUE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 3.2.1.2.1",
@@ -1117,8 +995,7 @@ _ForceReloadFormState _calculateFormState({
               // !formLoadTimeUIActive
               else {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 3.2.1.2.2: formLoadTimeUIActive: FALSE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.1.2.2: formLoadTimeUIActive: FALSE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 3.2.1.2.2",
@@ -1133,18 +1010,15 @@ _ForceReloadFormState _calculateFormState({
           // !isCandidateCurrentItemInNewQueriedList
           else {
             _printDebugState(DebugCat.dataLoad,
-                "@~~~> ${getClassName(
-                    block)} ~~~~~> FRM 3.2.2: isCandidateCurrentItemInNewQueriedList: FALSE");
+                "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2: isCandidateCurrentItemInNewQueriedList: FALSE");
             //
             if (currentItemChanged) {
               _printDebugState(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(
-                      block)} ~~~~~> FRM 3.2.2.1: currentItemChanged: TRUE");
+                  "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2.1: currentItemChanged: TRUE");
               // (*** IN Param: selectAnItemAsCurrentAndLoadForm)
               if (formLoadTimeUIActive) {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 3.2.2.1.1: formLoadTimeUIActive: TRUE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2.1.1: formLoadTimeUIActive: TRUE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 3.2.2.1.1",
@@ -1157,8 +1031,7 @@ _ForceReloadFormState _calculateFormState({
               // !formLoadTimeUIActive
               else {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 3.2.2.1.2: formLoadTimeUIActive: FALSE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2.1.2: formLoadTimeUIActive: FALSE");
                 // Debug:
                 _addDebugForceReload(
                   debugCode: "FRM 3.2.2.1.2",
@@ -1172,18 +1045,15 @@ _ForceReloadFormState _calculateFormState({
             // !currentItemChanged
             else {
               _printDebugState(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(
-                      block)} ~~~~~> FRM 3.2.2.2: currentItemChanged: FALSE");
+                  "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2.2: currentItemChanged: FALSE");
               // (*** IN Param: selectAnItemAsCurrentAndLoadForm)
               if (formLoadTimeUIActive) {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 3.2.2.2.1: formLoadTimeUIActive: TRUE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2.2.1: formLoadTimeUIActive: TRUE");
                 //
                 if (forceReloadItem) {
                   _printDebugState(DebugCat.dataLoad,
-                      "@~~~> ${getClassName(
-                          block)} ~~~~~> FRM 3.2.2.2.1.1: forceReloadItem: TRUE");
+                      "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2.2.1.1: forceReloadItem: TRUE");
                   // Debug:
                   _addDebugForceReload(
                     debugCode: "FRM 3.2.2.2.1.1",
@@ -1196,14 +1066,11 @@ _ForceReloadFormState _calculateFormState({
                 // !forceReloadItem
                 else {
                   _printDebugState(DebugCat.dataLoad,
-                      "@~~~> ${getClassName(
-                          block)} ~~~~~> FRM 3.2.2.2.1.2: forceReloadItem: FALSE");
+                      "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2.2.1.2: forceReloadItem: FALSE");
                   //
                   if (formModel.formDataState != DataState.ready) {
                     _printDebugState(DebugCat.dataLoad,
-                        "@~~~> ${getClassName(
-                            block)} ~~~~~> FRM 3.2.2.2.1.2.1: formDataState: NOT READY - ${formModel
-                            .formDataState}");
+                        "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2.2.1.2.1: formDataState: NOT READY - ${formModel.formDataState}");
                     // Debug:
                     _addDebugForceReload(
                       debugCode: "FRM 3.2.2.2.1.2.1",
@@ -1215,8 +1082,7 @@ _ForceReloadFormState _calculateFormState({
                   // formModel.formDataState == ready.
                   else {
                     _printDebugState(DebugCat.dataLoad,
-                        "@~~~> ${getClassName(
-                            block)} ~~~~~> FRM 3.2.2.2.1.2.2: formDataState: READY");
+                        "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2.2.1.2.2: formDataState: READY");
                     // Debug:
                     _addDebugForceReload(
                       debugCode: "FRM 3.2.2.2.1.2.2",
@@ -1230,14 +1096,11 @@ _ForceReloadFormState _calculateFormState({
               // !formLoadTimeUIActive
               else {
                 _printDebugState(DebugCat.dataLoad,
-                    "@~~~> ${getClassName(
-                        block)} ~~~~~> FRM 3.2.2.2.2: formLoadTimeUIActive: FALSE");
+                    "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2.2.2: formLoadTimeUIActive: FALSE");
                 //
                 if (formModel.formDataState != DataState.ready) {
                   _printDebugState(DebugCat.dataLoad,
-                      "@~~~> ${getClassName(
-                          block)} ~~~~~> FRM 3.2.2.2.2.1: formDataState: NOT READY - ${formModel
-                          .formDataState}");
+                      "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2.2.2.1: formDataState: NOT READY - ${formModel.formDataState}");
                   // Debug:
                   _addDebugForceReload(
                     debugCode: "FRM 3.2.2.2.2.1",
@@ -1249,8 +1112,7 @@ _ForceReloadFormState _calculateFormState({
                 // formModel.formDataState == ready.
                 else {
                   _printDebugState(DebugCat.dataLoad,
-                      "@~~~> ${getClassName(
-                          block)} ~~~~~> FRM 3.2.2.2.2.2: formDataState: READY");
+                      "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2.2.2.2: formDataState: READY");
                   // Debug:
                   _addDebugForceReload(
                     debugCode: "FRM 3.2.2.2.2.2",

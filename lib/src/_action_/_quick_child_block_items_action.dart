@@ -1,8 +1,8 @@
 part of '../../flutter_artist.dart';
 
 abstract class QuickChildBlockItemsAction<
-ITEM extends Object, //
-ITEM_DETAIL extends Object> extends BaseAction {
+    ITEM extends Object, //
+    ITEM_DETAIL extends Object> extends BaseAction {
   final ITEM item;
 
   const QuickChildBlockItemsAction({

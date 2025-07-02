@@ -56,7 +56,8 @@ class _Executor {
               }
             }
             print(
-                "\n@~~~~~~> Execute xSid:$__executingXShelfId - Task: ${taskUnit.taskType.name} - ${taskUnit.getObjectName()}");
+                "\n@~~~~~~> Execute xSid:$__executingXShelfId - Task: ${taskUnit
+                    .taskType.name} - ${taskUnit.getObjectName()}");
             //
             shelfMap[taskUnit.shelf.name] = taskUnit.shelf;
             //
@@ -215,9 +216,9 @@ class _Executor {
       bool onProgress = owner == null || taskType == null
           ? false
           : state.isMatches(
-              owner: owner,
-              taskType: taskType,
-            );
+        owner: owner,
+        taskType: taskType,
+      );
       //
       state.onProgress = onProgress;
       state.refreshState(force: true);
