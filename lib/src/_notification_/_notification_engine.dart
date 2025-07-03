@@ -36,8 +36,10 @@ class _NotificationEngine {
     }
     final String loggedInUserName = user.userName;
     //
-    final Box<DateTime> hiveBoxDateTime = await _openHiveBoxDateTime();
-    final Box<String> notificationSummaryBox = await _openHiveBoxNotification();
+    final Box<DateTime> hiveBoxDateTime =
+        await _HiveUtils.openHiveBoxDateTime();
+    final Box<String> notificationSummaryBox =
+        await _HiveUtils.openHiveBoxNotification();
 
     //
     final String lastFetchKey =

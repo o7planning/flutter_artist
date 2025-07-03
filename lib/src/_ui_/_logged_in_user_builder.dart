@@ -35,7 +35,7 @@ class _LoggedInUserBuilderState
 
   @override
   void addWidgetState({required bool isShowing}) {
-    FlutterArtist._globalsManager._addLoggedInUserWidgetState(
+    FlutterArtist.globalsManager._addLoggedInUserWidgetState(
       widgetState: this,
       isShowing: isShowing,
     );
@@ -43,7 +43,7 @@ class _LoggedInUserBuilderState
 
   @override
   void removeWidgetState() {
-    FlutterArtist._globalsManager._removeLoggedInUserWidgetState(
+    FlutterArtist.globalsManager._removeLoggedInUserWidgetState(
       widgetState: this,
     );
   }

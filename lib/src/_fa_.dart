@@ -17,7 +17,9 @@ class _FlutterArtist {
 
   IFlutterArtistAdapter? __adapter;
 
-  late final _GlobalsManager _globalsManager;
+  late final GlobalsManager globalsManager;
+
+  late final LocaleManager localeManager;
 
   PostQueryBehavior _defaultPostQueryBehavior =
       PostQueryBehavior.selectAnItemAsCurrentIfNeed;
@@ -78,7 +80,7 @@ class _FlutterArtist {
     _totalErrorCount = 0;
     storage._logout();
     storage._rencentShelves.clear();
-    await _globalsManager._logout();
+    await globalsManager._logout();
     offAllAndGotoRoute();
   }
 
@@ -93,11 +95,11 @@ class _FlutterArtist {
 
   // docs: [14683].
   ILoggedInUser? get loggedInUser {
-    return _globalsManager.loggedInUser;
+    return globalsManager.loggedInUser;
   }
 
   IGlobalData? get globalData {
-    return _globalsManager.globalData;
+    return globalsManager.globalData;
   }
 
   ///
@@ -113,7 +115,7 @@ class _FlutterArtist {
   /// ```
   ///
   Future<void> setOrUpdateLoggedInUser(ILoggedInUser loggedInUser) async {
-    await _globalsManager.setOrUpdateLoggedInUser(loggedInUser);
+    await globalsManager.setOrUpdateLoggedInUser(loggedInUser);
   }
 
   Future<void> config({
@@ -121,6 +123,7 @@ class _FlutterArtist {
     required INotificationAdapter? notificationAdapter,
     required ILoggedInUserAdapter loggedInUserAdapter,
     required IGlobalDataAdapter globalDataAdapter,
+    required ILocaleAdapter localeAdapter,
     required Function(BuildContext context)? showRestDebugDialog,
     int notificationFetchPeriodInSeconds = 60,
     List<DebugCat> allowDebugCats = const [],
@@ -134,9 +137,13 @@ class _FlutterArtist {
       ..clear()
       ..addAll(allowDebugCats);
     //
-    _globalsManager = _GlobalsManager(
+    globalsManager = GlobalsManager._(
       loggedInUserAdapter: loggedInUserAdapter,
       globalDataAdapter: globalDataAdapter,
+    );
+    localeManager = LocaleManager._(
+      globalsManager: globalsManager,
+      localeAdapter: localeAdapter,
     );
     //
     showRestDebugViewerDialog = showRestDebugDialog;
@@ -147,7 +154,7 @@ class _FlutterArtist {
     //
     // START ALL:
     //
-    await _globalsManager.start();
+    await globalsManager.start();
     // IMPORTANT: No await:
     __notificationEngine.start();
   }

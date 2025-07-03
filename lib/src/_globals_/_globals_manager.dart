@@ -1,8 +1,25 @@
 part of '../../flutter_artist.dart';
 
-class _GlobalsManager {
+class GlobalsManager {
+  final String __separator = "\n";
+
+  ///
+  /// Hive Prefix Key for "Extra Prop Names", for example: {'language', 'theme'}.
+  ///
+  final String __prefixHiveExtraPropNamesKey = "@__hiveExtraPropNamesKey__@";
+
+  ///
+  /// Hive Prefix Key for "Extra Prop Name", for example: 'language'.
+  ///
+  final String __prefixHiveExtraPropNameKey = "@__hiveExtraPropNameKey__@";
+
+  //
   final String __hiveKeyLoggedInUser =
       "---flutter-artist-hive-key-logged-in-user---";
+
+  int _loadGlobalDataCount = 0;
+
+  int get loadGlobalDataCount => _loadGlobalDataCount;
 
   IGlobalData? _globalData;
 
@@ -15,19 +32,141 @@ class _GlobalsManager {
   final Map<_RefreshableWidgetState, bool> _loggedInUserWidgetStates = {};
 
   final ILoggedInUserAdapter loggedInUserAdapter;
+
   final IGlobalDataAdapter globalDataAdapter;
 
-  _GlobalsManager({
+  ///
+  /// For example: {"language", "theme"}
+  ///
+  final Set<String> __registeredExtraPropNames = {};
+
+  Set<String> get registeredExtraPropNames => {...__registeredExtraPropNames};
+
+  final Map<String, dynamic> __extraPropMap = {};
+
+  GlobalsManager._({
     required this.loggedInUserAdapter,
     required this.globalDataAdapter,
   });
+
+  String __getHiveExtraGlobalPropNamesKey() {
+    String key = __prefixHiveExtraPropNamesKey;
+    if (_loggedInUser != null) {
+      key = "$key-**-${_loggedInUser!.userName}";
+    }
+    return key;
+  }
+
+  String __getHiveExtraGlobalPropNameKey(String propName) {
+    String key = __prefixHiveExtraPropNameKey;
+    if (_loggedInUser != null) {
+      key = "$key-**-$propName-**-${_loggedInUser!.userName}";
+    }
+    return key;
+  }
+
+  ///
+  /// Extra Global Prop Names. For Example:
+  /// - language
+  /// - theme
+  ///
+  Future<void> __readExtraGlobalProps() async {
+    print(
+        ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> __readExtraGlobalProps!");
+    // Store on local device:
+    Box<String> hiveBox = await _HiveUtils.openHiveBoxExtraGlobalPropNames();
+    try {
+      String key = __getHiveExtraGlobalPropNamesKey();
+      print(
+          ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> __readExtraGlobalProps.key = $key");
+      String extraGlobalPropNames = hiveBox.get(key) ?? "";
+      print(
+          ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> __readExtraGlobalProps.extraGlobalPropNames = $extraGlobalPropNames");
+      List<String> propNames = extraGlobalPropNames
+          .split(__separator)
+          .where((s) => s.isNotEmpty)
+          .toList();
+
+      print(
+          ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> propNames: $propNames");
+      //
+      __registeredExtraPropNames
+        ..clear()
+        ..addAll(propNames);
+    } catch (e, stackTrace) {
+      print("Error __readExtraGlobalProps: $e");
+      print(stackTrace);
+      return;
+    } finally {
+      await hiveBox.close();
+    }
+    //
+    for (String propName in __registeredExtraPropNames) {
+      dynamic value = await __readExtraGlobalProp(propName);
+      __extraPropMap[propName] = value;
+    }
+  }
+
+  Future<bool> __storeExtraGlobalPropNames() async {
+    // Store on local device:
+    Box<String> hiveBox = await _HiveUtils.openHiveBoxExtraGlobalPropNames();
+    try {
+      String key = __getHiveExtraGlobalPropNamesKey();
+      String value = __registeredExtraPropNames.toList().join(__separator);
+      print(
+          ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> __storeExtraGlobalPropNames: $value");
+      await hiveBox.put(key, value);
+      return true;
+    } catch (e, stackTrace) {
+      print("Error __storeExtraGlobalPropNames: $e");
+      print(stackTrace);
+      return false;
+    } finally {
+      await hiveBox.close();
+    }
+  }
+
+  Future<dynamic> __readExtraGlobalProp(String propName) async {
+    Box<dynamic> hiveBox = await _HiveUtils.openHiveBoxExtraGlobalProp();
+    try {
+      String key = __getHiveExtraGlobalPropNameKey(propName);
+      print(
+          ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> __readExtraGlobalProp.key: $key");
+      dynamic value = hiveBox.get(key);
+      print(
+          ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> __readExtraGlobalProp.value: $value");
+      return value;
+    } finally {
+      await hiveBox.close();
+    }
+  }
+
+  dynamic getExtraGlobalProp(String propName) {
+    return __extraPropMap[propName];
+  }
+
+  Future<void> storeExtraGlobalProp(String propName, dynamic value) async {
+    __registeredExtraPropNames.add(propName);
+    bool success = await __storeExtraGlobalPropNames();
+    if (!success) {
+      return;
+    }
+    //
+    __extraPropMap[propName] = value;
+    //
+    Box<dynamic> hiveBox = await _HiveUtils.openHiveBoxExtraGlobalProp();
+    String key = __getHiveExtraGlobalPropNameKey(propName);
+    await hiveBox.put(key, value);
+    await hiveBox.close();
+  }
 
   ///
   /// This method is called only once when FlutterArtist is started.
   ///
   Future<void> start() async {
-    Box<String> hiveBox = await _openHiveBoxLoggedInUser();
+    Box<String> hiveBox = await _HiveUtils.openHiveBoxLoggedInUser();
     String? loggedInUserJson = hiveBox.get(__hiveKeyLoggedInUser);
+    await hiveBox.close();
     if (loggedInUserJson == null) {
       return;
     }
@@ -46,6 +185,7 @@ class _GlobalsManager {
     }
     IGlobalData? globalData;
     try {
+      _loadGlobalDataCount++;
       // Load Global Data:
       globalData = await globalDataAdapter.loadFromServer(
         loggedInUser: loggedInUser,
@@ -60,6 +200,9 @@ class _GlobalsManager {
       // This will open login screen.
       return;
     }
+    // Load Extra Global Prop Names that stored in Hive Database.
+    __readExtraGlobalProps();
+    //
     _loggedInUser = loggedInUser;
     _globalData = globalData;
   }
@@ -74,6 +217,7 @@ class _GlobalsManager {
           " or you must log out before calling this method.");
     }
     if (_loggedInUser == null) {
+      _loadGlobalDataCount++;
       // Load GlobalData:
       IGlobalData globalData = await globalDataAdapter.loadFromServer(
         loggedInUser: loggedInUser,
@@ -82,10 +226,11 @@ class _GlobalsManager {
     }
     _loggedInUser = loggedInUser;
     // Store on local device:
-    Box<String> hiveBox = await _openHiveBoxLoggedInUser();
+    Box<String> hiveBox = await _HiveUtils.openHiveBoxLoggedInUser();
     try {
       String json = loggedInUserAdapter.toJson(loggedInUser);
-      hiveBox.put(__hiveKeyLoggedInUser, json);
+      await hiveBox.put(__hiveKeyLoggedInUser, json);
+      await hiveBox.close();
     } catch (e, stackTrace) {
       print("Error setLoggedInUser: $e");
       print(stackTrace);
@@ -117,7 +262,7 @@ class _GlobalsManager {
   Future<void> _logout() async {
     _loggedInUser = null;
     _globalData = null;
-    Box<String> hiveBox = await _openHiveBoxLoggedInUser();
+    Box<String> hiveBox = await _HiveUtils.openHiveBoxLoggedInUser();
     await hiveBox.delete(__hiveKeyLoggedInUser);
     await hiveBox.close();
     updateWidgets();

@@ -1,10 +1,10 @@
 part of '../../flutter_artist.dart';
 
 abstract class QuickUpdateItemAction<
-    ID extends Object, //
-    ITEM extends Object,
-    ITEM_DETAIL extends Object,
-    FILTER_CRITERIA extends FilterCriteria> extends BaseAction {
+ID extends Object, //
+ITEM extends Object,
+ITEM_DETAIL extends Object,
+FILTER_CRITERIA extends FilterCriteria> extends BaseAction {
   final ITEM item;
 
   const QuickUpdateItemAction({

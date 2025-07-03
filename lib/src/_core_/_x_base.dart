@@ -195,8 +195,7 @@ abstract class _XBase {
     );
   }
 
-  void showSavedSnackBar( ) {
-    FlutterArtist.adapter.showSavedSnackBar(
-    );
+  void showSavedSnackBar() {
+    FlutterArtist.adapter.showSavedSnackBar();
   }
 }

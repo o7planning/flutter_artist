@@ -50,6 +50,8 @@ part 'src/_adapter_/_logged_in_user_adapter.dart';
 
 part 'src/_adapter_/_notification_adapter.dart';
 
+part 'src/_adapter_/_locale_adapter.dart';
+
 part 'src/_code_flow_/__code_flow_const.dart';
 
 part 'src/_code_flow_/_code_flow_filter.dart';
@@ -401,6 +403,8 @@ part 'src/_form_prop_/_value_wrap.dart';
 part 'src/_globals_/_globals_manager.dart';
 
 part 'src/_hive_/_hive_utils.dart';
+
+part 'src/_locale_/_locale_manager.dart';
 
 part 'src/_icon_/_icon_constants.dart';
 
