@@ -23,6 +23,12 @@ interface class IFlutterArtistAdapter {
     throw UnimplementedError();
   }
 
+  void showSavedSnackBar({
+    Duration duration = const Duration(seconds: 2),
+  }) {
+    throw UnimplementedError();
+  }
+
   BuildContext getCurrentContext() {
     throw UnimplementedError();
   }

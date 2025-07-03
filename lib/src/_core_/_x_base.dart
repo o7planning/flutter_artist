@@ -194,4 +194,9 @@ abstract class _XBase {
       errorDetails: errorDetails,
     );
   }
+
+  void showSavedSnackBar( ) {
+    FlutterArtist.adapter.showSavedSnackBar(
+    );
+  }
 }

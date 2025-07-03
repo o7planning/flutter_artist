@@ -2251,6 +2251,8 @@ abstract class Block<
       return false;
     }
     //
+    showSavedSnackBar();
+    //
     FILTER_CRITERIA? blockCurrentFilterCriteria = filterCriteria;
     if (blockCurrentFilterCriteria == null) {
       // TODO-Review.
