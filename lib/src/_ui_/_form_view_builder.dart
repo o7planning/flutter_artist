@@ -177,7 +177,7 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _ErrorCircleButton(
+        _QuickSuggestionButton(
           iconData: widget.formModel.formInitialDataReady
               ? _formErrorModeIconData
               : _formErrorDisabledIconData,
@@ -190,7 +190,7 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
           },
         ),
         SizedBox(width: 5),
-        _ErrorCircleButton(
+        _QuickSuggestionButton(
           iconData: _formErrorRollbackIconData,
           iconColor: widget.formModel.formInitialDataReady
               ? _quick_iconColor_enable

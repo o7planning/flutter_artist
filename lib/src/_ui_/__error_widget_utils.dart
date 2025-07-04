@@ -8,13 +8,13 @@ final Color _quick_iconColor_error = Colors.red;
 final Color _quick_iconColor_enable = Colors.indigo;
 final Color _quick_iconColor_disable = Colors.grey;
 
-class _ErrorCircleButton extends StatelessWidget {
+class _QuickSuggestionButton extends StatelessWidget {
   final IconData iconData;
   final Color iconColor;
   final String tooltip;
   final Function()? onPressed;
 
-  const _ErrorCircleButton({
+  const _QuickSuggestionButton({
     required this.iconData,
     required this.iconColor,
     required this.tooltip,
