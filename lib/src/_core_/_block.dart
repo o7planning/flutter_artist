@@ -1767,7 +1767,7 @@ abstract class Block<
         showSnackBar: true,
       );
       //
-      thisXBlock.itemDeletionResult.addDFailedItem(item);
+      thisXBlock.itemDeletionResult.addFailedItem(item);
       //
       return;
     } finally {
@@ -1782,7 +1782,7 @@ abstract class Block<
         showSnackBar: true,
       );
       //
-      thisXBlock.itemDeletionResult.addDFailedItem(item);
+      thisXBlock.itemDeletionResult.addFailedItem(item);
       //
       return;
     }
@@ -1790,6 +1790,8 @@ abstract class Block<
     // Delete Successful.
     //
     thisXBlock.itemDeletionResult.addDeletedItem(item);
+    //
+    showDeletedSnackBar();
     //
     // #SAME-CODE-001
     if (!isCurrent) {

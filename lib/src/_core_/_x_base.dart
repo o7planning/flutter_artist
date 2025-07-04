@@ -84,7 +84,7 @@ abstract class _XBase {
         msg = "Call $methodName() error: ${err.errorMessage}";
       } else {
         msg =
-        "Call ${getClassName(this)}.$methodName() error: ${err.errorMessage}";
+            "Call ${getClassName(this)}.$methodName() error: ${err.errorMessage}";
       }
     }
     print(msg);
@@ -144,18 +144,6 @@ abstract class _XBase {
 
   // ***************************************************************************
   // ***************************************************************************
-  //
-  // Ac
-  //
-  //
-  // if (checkBusy && FlutterArtist.executor.isBusy) {
-  // return Actionable.no(
-  // message: "Item update is disabled because the executor is busy.",
-  // );
-  // }
-
-  // ***************************************************************************
-  // ***************************************************************************
 
   void _addErrorLogActionable({
     required Shelf shelf,
@@ -197,5 +185,9 @@ abstract class _XBase {
 
   void showSavedSnackBar() {
     FlutterArtist.adapter.showSavedSnackBar();
+  }
+
+  void showDeletedSnackBar() {
+    FlutterArtist.adapter.showDeletedSnackBar();
   }
 }

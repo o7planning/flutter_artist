@@ -103,7 +103,7 @@ class ItemDeletionResult<ITEM> {
     _deletedItems.add(item);
   }
 
-  void addDFailedItem(ITEM item) {
+  void addFailedItem(ITEM item) {
     _failedItems.add(item);
   }
 }
