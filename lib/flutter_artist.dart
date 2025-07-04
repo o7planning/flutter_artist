@@ -460,6 +460,8 @@ part 'src/_task_unit_/_task_result.dart';
 
 part 'src/_ui_/_table_container.dart';
 
+part 'src/_ui_/__error_widget_utils.dart';
+
 part 'src/_ui_/_activity_fragment_widget_builder.dart';
 
 part 'src/_ui_/_pagination_view.dart';

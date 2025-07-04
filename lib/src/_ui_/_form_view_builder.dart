@@ -77,8 +77,7 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
       selection = await dialogs.showYesNoCancelDialog(
         context: context,
         message:
-        "Do you want to save changes the [${getClassName(
-            widget.formModel)}] before closing?",
+            "Do you want to save changes the [${getClassName(widget.formModel)}] before closing?",
         details: "",
         defaultOption: dialogs.YesNoCancel.yes,
       );
@@ -102,7 +101,7 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
         }
         break;
       case dialogs.YesNoCancel.cancel:
-      // Do Nothing
+        // Do Nothing
         break;
     }
   }
@@ -173,56 +172,36 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
   }
 
   Widget _buildErrorIcon(BuildContext context) {
-    Color circleAvatarBgColor = Colors.deepOrange[50]!;
-    //
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        CircleAvatar(
-          radius: 20,
-          backgroundColor: circleAvatarBgColor,
-          child: Tooltip(
-            message: widget.formModel.formInitialDataReady
-                ? "Form Error"
-                : "Form disabled due to error",
-            child: IconButton(
-              icon: Icon(
-                widget.formModel.formInitialDataReady
-                    ? _formErrorModeIconData
-                    : _formErrorDisabledIconData,
-                size: 16,
-                color: Colors.red,
-              ),
-              onPressed: () {
-                widget.formModel.showFormErrorViewerDialog(context);
-              },
-            ),
-          ),
+        _ErrorCircleButton(
+          iconData: widget.formModel.formInitialDataReady
+              ? _formErrorModeIconData
+              : _formErrorDisabledIconData,
+          iconColor: _quick_iconColor_error,
+          tooltip: widget.formModel.formInitialDataReady
+              ? "Form Error"
+              : "Form disabled due to error",
+          onPressed: () {
+            widget.formModel.showFormErrorViewerDialog(context);
+          },
         ),
         SizedBox(width: 5),
-        CircleAvatar(
-          radius: 20,
-          backgroundColor: circleAvatarBgColor,
-          child: Tooltip(
-            message: "Restore the state before the error",
-            child: IconButton(
-              icon: Icon(
-                _formErrorRollbackIconData,
-                size: 16,
-                color: widget.formModel.formInitialDataReady
-                    ? Colors.indigo
-                    : Colors.grey,
-              ),
-              onPressed: widget.formModel.formInitialDataReady
-                  ? () {
-                widget.formModel.showFormErrorViewerDialog(context);
-              }
-                  : null,
-            ),
-          ),
-        )
+        _ErrorCircleButton(
+          iconData: _formErrorRollbackIconData,
+          iconColor: widget.formModel.formInitialDataReady
+              ? _quick_iconColor_enable
+              : _quick_iconColor_disable,
+          tooltip: "Restore the state before the error",
+          onPressed: widget.formModel.formInitialDataReady
+              ? () {
+                  widget.formModel.showFormErrorViewerDialog(context);
+                }
+              : null,
+        ),
       ],
     );
   }
