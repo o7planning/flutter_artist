@@ -125,6 +125,7 @@ class _XBlock {
 
   @override
   String toString() {
-    return "${getClassName(this)}(${getClassName(block)} - forceQuery: $forceQuery) forceReloadItem: $__forceReloadItem - $xFormModel";
+    return "${getClassName(this)}(${getClassName(
+        block)} - forceQuery: $forceQuery) forceReloadItem: $__forceReloadItem - $xFormModel";
   }
 }

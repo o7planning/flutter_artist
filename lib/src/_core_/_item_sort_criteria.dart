@@ -196,7 +196,8 @@ abstract class ItemSortCriteria<ITEM extends Object> {
   }) {
     if (shuffledSortablePropNames.length != _nonSignedPropNames.length) {
       throw Exception(
-          "Invalid shuffledSignedPropNames. Length must be ${_nonSignedPropNames.length}");
+          "Invalid shuffledSignedPropNames. Length must be ${_nonSignedPropNames
+              .length}");
     }
     //
     final List<SortCriterion> updateCriteria = [];
@@ -206,7 +207,8 @@ abstract class ItemSortCriteria<ITEM extends Object> {
       //
       if (!_nonSignedPropNames.contains(criterion.propName)) {
         throw Exception(
-            "Invalid propName '${criterion.propName}' (Must be in $_nonSignedPropNames)");
+            "Invalid propName '${criterion
+                .propName}' (Must be in $_nonSignedPropNames)");
       }
       updateCriteria.add(criterion);
     }

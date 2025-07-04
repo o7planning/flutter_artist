@@ -118,6 +118,11 @@ class _FlutterArtist {
     await globalsManager.setOrUpdateLoggedInUser(loggedInUser);
   }
 
+  void __printDebugState(String message) {
+    _printDebugState(DebugCat.appStart,
+        "FlutterArtist.config ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> $message");
+  }
+
   Future<void> config({
     required IFlutterArtistAdapter flutterArtistAdapter,
     required INotificationAdapter? notificationAdapter,
@@ -137,25 +142,44 @@ class _FlutterArtist {
       ..clear()
       ..addAll(allowDebugCats);
     //
+    __printDebugState("start");
+    //
+    // Global Manager:
+    //
     globalsManager = GlobalsManager._(
       loggedInUserAdapter: loggedInUserAdapter,
       globalDataAdapter: globalDataAdapter,
     );
+    __printDebugState("globalsManager start...");
+    await globalsManager.start();
+    __printDebugState("globalsManager loggedInUser: $loggedInUser");
+    //
+    // Locale Manager:
+    //
     localeManager = LocaleManager._(
       globalsManager: globalsManager,
       localeAdapter: localeAdapter,
     );
+    __printDebugState("localeManager readStoredLocale()");
+    final Locale? locale = localeManager.readStoredLocale();
+    __printDebugState("localeManager readStoredLocale() -> locale: $locale");
+    if (locale != null) {
+      __printDebugState("localeManager _updateLocale() delay 2s (***)");
+      Future.delayed(Duration(seconds: 2), () async {
+        await localeManager._updateLocale(locale: locale);
+      });
+    }
     //
     showRestDebugViewerDialog = showRestDebugDialog;
     //
-    this.notificationFetchPeriodInSeconds = notificationFetchPeriodInSeconds;
+    // Notification:
     //
+    this.notificationFetchPeriodInSeconds = notificationFetchPeriodInSeconds;
     __notificationEngine = _NotificationEngine(notificationAdapter);
     //
-    // START ALL:
-    //
-    await globalsManager.start();
     // IMPORTANT: No await:
+    //
+    __printDebugState("__notificationEngine start()");
     __notificationEngine.start();
   }
 

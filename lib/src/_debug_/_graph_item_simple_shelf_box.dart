@@ -42,7 +42,7 @@ class _GraphItemSimpleShelfBoxState extends State<_GraphItemSimpleShelfBox> {
   @override
   Widget build(BuildContext context) {
     Size textSize =
-    _calculateTextSize(text: widget.shelfName, style: textStyle);
+        _calculateTextSize(text: widget.shelfName, style: textStyle);
     double boxWidth =
         extraWidth + 2 * padding + shelfIconWidth + spacing + textSize.width;
 
@@ -61,8 +61,8 @@ class _GraphItemSimpleShelfBoxState extends State<_GraphItemSimpleShelfBox> {
           color: widget.isSelected
               ? _selectedGraphBoxBgColor
               : widget.shelf == null //
-              ? _inactiveGraphBoxBgColor
-              : _activeGraphBoxBgColor,
+                  ? _inactiveGraphBoxBgColor
+                  : _activeGraphBoxBgColor,
           borderRadius: BorderRadius.circular(4),
           boxShadow: [
             _graphBoxShadow,
