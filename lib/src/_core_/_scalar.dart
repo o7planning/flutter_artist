@@ -21,10 +21,10 @@ part of '../../flutter_artist.dart';
 /// ```
 ///
 abstract class Scalar<
-VALUE extends Object,
-FILTER_INPUT extends FilterInput, // EmptyFilterInput
-FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
-> extends _XBase {
+    VALUE extends Object,
+    FILTER_INPUT extends FilterInput, // EmptyFilterInput
+    FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
+    > extends _XBase {
   late final Shelf shelf;
 
   int _lazyLoadCount = 0;
@@ -70,7 +70,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   /// If this scalar does not declare a FilterModel, it will have the default FilterModel.
   ///
   late final FilterModel<FILTER_INPUT, FILTER_CRITERIA>
-  _registeredOrDefaultFilterModel;
+      _registeredOrDefaultFilterModel;
 
   ///
   /// Returns a FilterModel declared in the [Shelf.registerStructure()] method.
@@ -85,7 +85,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   }
 
   late final __scalarData =
-  _ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
+      _ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
 
   final ScalarHiddenBehavior hiddenBehavior;
 
@@ -134,6 +134,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   // ***************************************************************************
   // ***************************************************************************
 
+  @_ScalarQueryAnnotation()
   Future<ScalarQueryResult> _unitQuery({required _XScalar thisXScalar}) async {
     __assertThisXScalar(thisXScalar);
     //
@@ -145,11 +146,8 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
       }
     }
     //
-
     print(
-        ">> ${getClassName(
-            this)}._unitQuery - queryState: $queryDataState, forceQuery: ${thisXScalar
-            .needQuery}");
+        ">> ${getClassName(this)}._unitQuery - queryState: $queryDataState, forceQuery: ${thisXScalar.needQuery}");
     //
     if (!forceQuery) {
       return thisXScalar.queryResult;
@@ -183,7 +181,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
         xFilterModel.queried = true;
       } else {
         filterCriteriaOfFilterModel =
-        filterModel._filterCriteria! as FILTER_CRITERIA;
+            filterModel._filterCriteria! as FILTER_CRITERIA;
       }
     } catch (e, stackTrace) {
       /* Never Error */
@@ -204,8 +202,8 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     // Ready FilterCriteria:
     //
     bool xCriteriaChanged = this.__scalarData._isXCriteriaChanged(
-      newFilterCriteria: filterCriteriaOfFilterModel,
-    );
+          newFilterCriteria: filterCriteriaOfFilterModel,
+        );
     //
     bool isQueryError = false;
     VALUE? value;
@@ -261,6 +259,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   // ***************************************************************************
   // ***************************************************************************
 
+  @_ScalarExecuteQuickActionAnnotation()
   Future<bool> _unitQuickAction<DATA extends Object>({
     required _XScalar thisXScalar,
     required QuickAction<DATA> action,
@@ -347,10 +346,10 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     __assertThisXScalar(thisXScalar);
     //
     this.__scalarData._updateFrom(
-      filterCriteria: filterCriteria,
-      dataState: dataState,
-      value: value,
-    );
+          filterCriteria: filterCriteria,
+          dataState: dataState,
+          value: value,
+        );
   }
 
   // ***************************************************************************
@@ -429,6 +428,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
   @RootMethodAnnotation()
+  @_ScalarExecuteQuickActionAnnotation()
   Future<bool> executeQuickAction<DATA extends Object>({
     FILTER_INPUT? filterInput,
     required ActionConfirmationType actionConfirmationType,
@@ -506,6 +506,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   ///
   @nonVirtual
   @RootMethodAnnotation()
+  @_ScalarQueryAnnotation()
   Future<bool> query({
     FILTER_INPUT? filterInput,
   }) async {

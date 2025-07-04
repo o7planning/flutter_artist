@@ -609,6 +609,106 @@ class ImportantMethodAnnotation {
   const ImportantMethodAnnotation();
 }
 
-class MayThrowFormInternalError {
-  const MayThrowFormInternalError();
+class MayThrowFormInternalErrorAnnotation {
+  const MayThrowFormInternalErrorAnnotation();
+}
+
+class _BlockPrepareFormToCreateItemAnnotation {
+  const _BlockPrepareFormToCreateItemAnnotation();
+}
+
+class _BlockSelectItemAsCurrentAnnotation {
+  const _BlockSelectItemAsCurrentAnnotation();
+}
+
+class _BlockClearCurrentAnnotation {
+  const _BlockClearCurrentAnnotation();
+}
+
+class _BlockQueryNextPageAnnotation {
+  const _BlockQueryNextPageAnnotation();
+}
+
+class _BlockQueryPreviousPageAnnotation {
+  const _BlockQueryPreviousPageAnnotation();
+}
+
+class _BlockQueryMorePageAnnotation {
+  const _BlockQueryMorePageAnnotation();
+}
+
+class _BlockQueryAnnotation {
+  const _BlockQueryAnnotation();
+}
+
+class _BlockQueryAndPrepareToEditAnnotation {
+  const _BlockQueryAndPrepareToEditAnnotation();
+}
+
+class _BlockQueryAndPrepareToCreateAnnotation {
+  const _BlockQueryAndPrepareToCreateAnnotation();
+}
+
+class _BlockExecuteQuickActionAnnotation {
+  const _BlockExecuteQuickActionAnnotation();
+}
+
+class _BlockExecuteQuickActionCreateItemAnnotation {
+  const _BlockExecuteQuickActionCreateItemAnnotation();
+}
+
+class _BlockExecuteQuickActionCreateMultiItemsAnnotation {
+  const _BlockExecuteQuickActionCreateMultiItemsAnnotation();
+}
+
+class _BlockExecuteQuickActionUpdateItemAnnotation {
+  const _BlockExecuteQuickActionUpdateItemAnnotation();
+}
+
+class _BlockExecuteQuickChildBlockItemsAnnotation {
+  const _BlockExecuteQuickChildBlockItemsAnnotation();
+}
+
+class _BlockRefreshAndSelectFirstItemAsCurrentAnnotation {
+  const _BlockRefreshAndSelectFirstItemAsCurrentAnnotation();
+}
+
+class _BlockRefreshAndSelectNextItemAsCurrentAnnotation {
+  const _BlockRefreshAndSelectNextItemAsCurrentAnnotation();
+}
+
+class _BlockRefreshAndSelectPreviousItemAsCurrentAnnotation {
+  const _BlockRefreshAndSelectPreviousItemAsCurrentAnnotation();
+}
+
+class _BlockDeleteSelectedItemsAnnotation {
+  const _BlockDeleteSelectedItemsAnnotation();
+}
+
+class _BlockDeleteCheckedItemsAnnotation {
+  const _BlockDeleteCheckedItemsAnnotation();
+}
+
+class _BlockDeleteCurrentItemAnnotation {
+  const _BlockDeleteCurrentItemAnnotation();
+}
+
+class _BlockDeleteItemAnnotation {
+  const _BlockDeleteItemAnnotation();
+}
+
+class _BlockRefreshCurrentItemAnnotation {
+  const _BlockRefreshCurrentItemAnnotation();
+}
+
+class _BlockEnterFormFieldsAnnotation {
+  const _BlockEnterFormFieldsAnnotation();
+}
+
+class _ScalarQueryAnnotation {
+  const _ScalarQueryAnnotation();
+}
+
+class _ScalarExecuteQuickActionAnnotation {
+  const _ScalarExecuteQuickActionAnnotation();
 }
