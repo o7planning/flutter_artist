@@ -411,7 +411,7 @@ abstract class FormModel<
     try {
       _formPropsStructure = registerPropsStructure();
       _formPropsStructure.formModel = this;
-    } on _DuplicateFormPropException catch (e) {
+    } on _DuplicateFormPropError catch (e) {
       String message =
           "Duplicate prop '${e.propName}' in ${getClassName(this)}";
       throw _createFatalAppError(message);

@@ -19,7 +19,7 @@ class FilterCriteriaStructure {
     }
     for (SimpleCriterion sc in simpleCriteria) {
       if (_allCriteriaMap.containsKey(sc.criterionName)) {
-        throw _DuplicateFilterCriterionException(
+        throw _DuplicateFilterCriterionError(
           criterionName: sc.criterionName,
         );
       }
@@ -30,7 +30,7 @@ class FilterCriteriaStructure {
     }
     for (CalculatedCriterion cc in calculatedCriteria) {
       if (_allCriteriaMap.containsKey(cc.criterionName)) {
-        throw _DuplicateFilterCriterionException(
+        throw _DuplicateFilterCriterionError(
           criterionName: cc.criterionName,
         );
       }
@@ -49,7 +49,7 @@ class FilterCriteriaStructure {
     multiOptCriterion._structure = this;
     //
     if (_allCriteriaMap.containsKey(multiOptCriterion.criterionName)) {
-      throw _DuplicateFilterCriterionException(
+      throw _DuplicateFilterCriterionError(
         criterionName: multiOptCriterion.criterionName,
       );
     }

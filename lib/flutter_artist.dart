@@ -368,13 +368,13 @@ part 'src/_enum_/_sort_rule_side.dart';
 
 part 'src/_enum_/_task_type.dart';
 
-part 'src/_exception_/_fatal_app_exception.dart';
+part 'src/_error_/_fatal_app_error.dart';
 
-part 'src/_exception_/_duplicate_form_prop_exception.dart';
+part 'src/_error_/_duplicate_form_prop_error.dart';
 
-part 'src/_exception_/_duplicate_filter_criterion_exception.dart';
+part 'src/_error_/_duplicate_filter_criterion_error.dart';
 
-part 'src/_exception_/_form_internal_error.dart';
+part 'src/_error_/_form_internal_error.dart';
 
 part 'src/_core_/_form_error_info.dart';
 
@@ -609,13 +609,9 @@ class RootMethodAnnotation {
   const RootMethodAnnotation();
 }
 
-
 class OverridableMethodAnnotation {
   const OverridableMethodAnnotation();
 }
-
-
-
 
 class TaskUnitMethodAnnotation {
   const TaskUnitMethodAnnotation();

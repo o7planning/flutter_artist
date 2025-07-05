@@ -183,7 +183,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     try {
       _filterCriteriaStructure = registerCriteriaStructure();
       _filterCriteriaStructure.filterModel = this;
-    } on _DuplicateFilterCriterionException catch (e) {
+    } on _DuplicateFilterCriterionError catch (e) {
       String message =
           "Duplicate criterion '${e.criterionName}' in ${getClassName(this)}";
       throw _createFatalAppError(message);
