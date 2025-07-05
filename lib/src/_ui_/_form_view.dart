@@ -2,7 +2,7 @@ part of '../../flutter_artist.dart';
 
 abstract class FormView<FORM_MODEL extends FormModel> extends StatelessWidget {
   final FORM_MODEL formModel;
- final QuickSuggestionMode  quickSuggestionMode;
+  final QuickSuggestionMode quickSuggestionMode;
 
   const FormView({
     required this.formModel,
@@ -17,7 +17,7 @@ abstract class FormView<FORM_MODEL extends FormModel> extends StatelessWidget {
       ownerClassInstance: this,
       description: '',
       formModel: formModel,
-      quickSuggestionMode :quickSuggestionMode,
+      quickSuggestionMode: quickSuggestionMode,
       build: () {
         return buildContent(context);
       },

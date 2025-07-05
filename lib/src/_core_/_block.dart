@@ -68,13 +68,13 @@ part of '../../flutter_artist.dart';
 /// ```
 ///
 abstract class Block<
-    ID extends Object,
-    ITEM extends Object,
-    ITEM_DETAIL extends Object,
-    FILTER_INPUT extends FilterInput, // EmptyFilterInput
-    FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
-    EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
-    > extends _XBase {
+ID extends Object,
+ITEM extends Object,
+ITEM_DETAIL extends Object,
+FILTER_INPUT extends FilterInput, // EmptyFilterInput
+FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
+EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
+> extends _XBase {
   late final Shelf shelf;
 
   int _lazyLoadCount = 0;
@@ -139,7 +139,7 @@ abstract class Block<
   /// If this block does not declare a [FilterModel], it will have the default [FilterModel].
   ///
   late final FilterModel<FILTER_INPUT, FILTER_CRITERIA>
-      _registeredOrDefaultFilterModel;
+  _registeredOrDefaultFilterModel;
 
   ///
   /// Returns a FilterModel declared in the [Shelf.registerStructure()] method.
@@ -234,6 +234,10 @@ abstract class Block<
     this,
     __pageable,
   );
+
+  BlockErrorInfo? _blockErrorInfo;
+
+  BlockErrorInfo? get blockErrorInfo => _blockErrorInfo;
 
   final Map<_RefreshableWidgetState, _XState> _blockFragmentWidgetStates = {};
   final Map<_RefreshableWidgetState, _XState> _controlBarWidgetStates = {};
@@ -351,7 +355,8 @@ abstract class Block<
     this.outsideEventReaction,
     required List<Block>? childBlocks,
     ItemSortCriteria<ITEM>? itemSortCriteria,
-  })  : registerFilterModelName = filterModelName,
+  })
+      : registerFilterModelName = filterModelName,
         __pageable = pageable.copy(),
         _itemSortCriteria = itemSortCriteria,
         _childBlocks = childBlocks ?? [] {
@@ -597,8 +602,10 @@ abstract class Block<
   }) {
     _paginationWidgetStates.update(
       widgetState,
-      (xState) => xState..isShowing = isShowing,
-      ifAbsent: () => _XState()..isShowing = isShowing,
+          (xState) => xState..isShowing = isShowing,
+      ifAbsent: () =>
+      _XState()
+        ..isShowing = isShowing,
     );
     //
     if (isShowing) {
@@ -625,8 +632,10 @@ abstract class Block<
     bool activeOLD = hasActiveUIComponent();
     _controlBarWidgetStates.update(
       widgetState,
-      (xState) => xState..isShowing = isShowing,
-      ifAbsent: () => _XState()..isShowing = isShowing,
+          (xState) => xState..isShowing = isShowing,
+      ifAbsent: () =>
+      _XState()
+        ..isShowing = isShowing,
     );
     bool activeCURRENT = hasActiveUIComponent();
     //
@@ -663,8 +672,10 @@ abstract class Block<
     bool activeOLD = hasActiveUIComponent();
     _controlWidgetStates.update(
       widgetState,
-      (xState) => xState..isShowing = isShowing,
-      ifAbsent: () => _XState()..isShowing = isShowing,
+          (xState) => xState..isShowing = isShowing,
+      ifAbsent: () =>
+      _XState()
+        ..isShowing = isShowing,
     );
     bool activeCURRENT = hasActiveUIComponent();
     //
@@ -700,8 +711,10 @@ abstract class Block<
     bool activeOLD = hasActiveUIComponent();
     _blockFragmentWidgetStates.update(
       widgetState,
-      (xState) => xState..isShowing = isShowing,
-      ifAbsent: () => _XState()..isShowing = isShowing,
+          (xState) => xState..isShowing = isShowing,
+      ifAbsent: () =>
+      _XState()
+        ..isShowing = isShowing,
     );
     bool activeCURRENT = hasActiveUIComponent();
     //
@@ -743,7 +756,7 @@ abstract class Block<
     if (hiddenBehavior == BlockHiddenBehavior.clear) {
       Future.delayed(
         const Duration(seconds: 0),
-        () {
+            () {
           this.clear();
         },
       );
@@ -868,7 +881,7 @@ abstract class Block<
     if (alsoCheckChildren) {
       for (Block childBlock in _childBlocks) {
         bool active =
-            childBlock.hasActiveBlockFragmentWidget(alsoCheckChildren: true);
+        childBlock.hasActiveBlockFragmentWidget(alsoCheckChildren: true);
         if (active) {
           return true;
         }
@@ -882,7 +895,7 @@ abstract class Block<
 
   bool hasActiveControlBarWidget() {
     for (_RefreshableWidgetState controlBarState
-        in _controlBarWidgetStates.keys) {
+    in _controlBarWidgetStates.keys) {
       bool visible =
           _controlBarWidgetStates[controlBarState]?.isShowing ?? false;
       if (visible && controlBarState.mounted) {
@@ -910,7 +923,7 @@ abstract class Block<
 
   bool hasActivePaginationWidget() {
     for (_RefreshableWidgetState paginationState
-        in _paginationWidgetStates.keys) {
+    in _paginationWidgetStates.keys) {
       bool visible =
           _paginationWidgetStates[paginationState]?.isShowing ?? false;
       if (visible && paginationState.mounted) {
@@ -936,6 +949,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @TaskUnitMethodAnnotation()
   @_BlockClearCurrentAnnotation()
   Future<void> _unitClearCurrent({required _XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
@@ -953,6 +967,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @TaskUnitMethodAnnotation()
   @_BlockQueryAnnotation()
   @_BlockQueryMorePageAnnotation()
   @_BlockQueryNextPageAnnotation()
@@ -988,7 +1003,7 @@ abstract class Block<
           FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
           //
           filterCriteriaOfFilterModel =
-              await filterModel._startNewFilterActivity(
+          await filterModel._startNewFilterActivity(
             activityType: _FilterActivityType.newFilt,
             filterInput: filterInput,
           ) as FILTER_CRITERIA?;
@@ -996,7 +1011,7 @@ abstract class Block<
           xFilterModel.queried = true;
         } else {
           filterCriteriaOfFilterModel =
-              filterModel._filterCriteria! as FILTER_CRITERIA;
+          filterModel._filterCriteria! as FILTER_CRITERIA;
         }
       } catch (e, stackTrace) {
         // @@TODO@@ 12 Test.
@@ -1022,7 +1037,7 @@ abstract class Block<
       // Ready FilterCriteria:
       //
       final bool parentOrCriteriaChanged =
-          __blockData._isParentOrFilterCriteriaChanged(
+      __blockData._isParentOrFilterCriteriaChanged(
         newCurrentParentItemId: parentItemId,
         newFilterCriteria: filterCriteriaOfFilterModel,
       );
@@ -1092,23 +1107,23 @@ abstract class Block<
           if (parentOrCriteriaChanged) {
             switch (queryDataState) {
               case DataState.ready:
-                // @FaCode-002.
-                // Test Case: [42a].
-                // Replace by empty items.
+              // @FaCode-002.
+              // Test Case: [42a].
+              // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
               case DataState.pending:
-                // Replace by empty items.
+              // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
               case DataState.error:
-                // @FaCode-003.
-                // Test Case: [42a].
-                // Replace by empty items.
+              // @FaCode-003.
+              // Test Case: [42a].
+              // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
               case DataState.none:
-                // Replace by empty items.
+              // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
             }
@@ -1118,22 +1133,22 @@ abstract class Block<
           else {
             switch (queryDataState) {
               case DataState.ready:
-                // Append empty items (No items got from Server).
-                // Test Case: [42a].
-                // @FaCode-001.
+              // Append empty items (No items got from Server).
+              // Test Case: [42a].
+              // @FaCode-001.
                 realListBehavior = ListBehavior.append;
                 newQueryDataState = DataState.ready;
               case DataState.pending:
-                // Replace by empty items.
+              // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
               case DataState.error:
-                // @FaCode-004.
-                // Replace by empty items.
+              // @FaCode-004.
+              // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
               case DataState.none:
-                // Replace by empty items.
+              // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
             }
@@ -1146,19 +1161,19 @@ abstract class Block<
           if (parentOrCriteriaChanged) {
             switch (queryDataState) {
               case DataState.ready:
-                // Replace.
+              // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
               case DataState.pending:
-                // Replace.
+              // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
               case DataState.error:
-                // Replace.
+              // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
               case DataState.none:
-                // Replace.
+              // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
             }
@@ -1167,19 +1182,19 @@ abstract class Block<
           else {
             switch (queryDataState) {
               case DataState.ready:
-                // Replace or Append:
+              // Replace or Append:
                 realListBehavior = thisXBlock.listBehavior;
                 newQueryDataState = DataState.ready;
               case DataState.pending:
-                // Replace.
+              // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
               case DataState.error:
-                // Replace.
+              // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
               case DataState.none:
-                // Replace.
+              // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
             }
@@ -1250,19 +1265,19 @@ abstract class Block<
       else {
         switch (newQueryDataState) {
           case DataState.none:
-            // @@TODO@@ 04.
-            // Never run:
+          // @@TODO@@ 04.
+          // Never run:
             this.__clearAllChildrenBlocksToNone(
               thisXBlock: thisXBlock,
             );
           case DataState.pending:
-            // @@TODO@@ 05.
-            // Never run:
+          // @@TODO@@ 05.
+          // Never run:
             this.__clearAllChildrenBlocksToNone(
               thisXBlock: thisXBlock,
             );
           case DataState.error:
-            // @@TODO@@ 06.
+          // @@TODO@@ 06.
             this.__clearAllChildrenBlocksToNone(
               thisXBlock: thisXBlock,
             );
@@ -1338,6 +1353,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @TaskUnitMethodAnnotation()
   @_BlockRefreshCurrentItemAnnotation()
   @_BlockSelectItemAsCurrentAnnotation()
   @_BlockRefreshAndSelectNextItemAsCurrentAnnotation()
@@ -1463,7 +1479,7 @@ abstract class Block<
     }
     //
     final bool isCandidateCurrentItemInNewQueriedList =
-        ItemsUtils.isListContainItem(
+    ItemsUtils.isListContainItem(
       targetList: newQueriedList,
       item: candidateCurrentItem,
       getItemId: getItemId,
@@ -1479,7 +1495,8 @@ abstract class Block<
     bool forceReloadForm = false;
 
     _printDebugState(DebugCat.dataLoad,
-        "\n@~~~> ${getClassName(this)} ~~~~~> ITM - originForceReloadItem: $originForceReloadItem.\n");
+        "\n@~~~> ${getClassName(
+            this)} ~~~~~> ITM - originForceReloadItem: $originForceReloadItem.\n");
 
     //
     if (!forceReloadItem) {
@@ -1488,7 +1505,7 @@ abstract class Block<
         hasXActiveUI: hasXActiveUI,
         currentItemSelectionType: currentItemSelectionType,
         isCandidateCurrentItemInNewQueriedList:
-            isCandidateCurrentItemInNewQueriedList,
+        isCandidateCurrentItemInNewQueriedList,
         currentItemChanged: currentItemChanged,
       );
       //
@@ -1500,7 +1517,7 @@ abstract class Block<
         xFormModel: thisXBlock.xFormModel!,
         currentItemSelectionType: currentItemSelectionType,
         isCandidateCurrentItemInNewQueriedList:
-            isCandidateCurrentItemInNewQueriedList,
+        isCandidateCurrentItemInNewQueriedList,
         currentItemChanged: currentItemChanged,
         forceReloadItem: forceReloadItem,
       );
@@ -1514,9 +1531,11 @@ abstract class Block<
     }
     //
     _printDebugState(DebugCat.dataLoad,
-        "\n@~~~> ${getClassName(this)} ~~~~~> ITM/FRM: forceReloadItem: $forceReloadItem");
+        "\n@~~~> ${getClassName(
+            this)} ~~~~~> ITM/FRM: forceReloadItem: $forceReloadItem");
     _printDebugState(DebugCat.dataLoad,
-        "@~~~> ${getClassName(this)} ~~~~~> ITM/FRM: forceReloadForm: $forceReloadForm");
+        "@~~~> ${getClassName(
+            this)} ~~~~~> ITM/FRM: forceReloadForm: $forceReloadForm");
     //
     final bool isCandidateIsCurrent = isCurrentItem(
       item: candidateCurrentItem,
@@ -1525,7 +1544,7 @@ abstract class Block<
     if (forceReloadItem) {
       if (ITEM == ITEM_DETAIL && isCandidateCurrentItemInNewQueriedList) {
         final ITEM? candidateCurrentItemInNewQueriedList =
-            ItemsUtils.findItemInList(
+        ItemsUtils.findItemInList(
           item: candidateCurrentItem,
           targetList: newQueriedList,
           getItemId: getItemId,
@@ -1534,7 +1553,7 @@ abstract class Block<
         // No need to refresh Item.
         //
         refreshedCurrentItemDetail =
-            candidateCurrentItemInNewQueriedList as ITEM_DETAIL;
+        candidateCurrentItemInNewQueriedList as ITEM_DETAIL;
       } else {
         bool isLoadItemError = false;
 
@@ -1730,6 +1749,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @TaskUnitMethodAnnotation()
   @_BlockDeleteSelectedItemsAnnotation()
   @_BlockDeleteCheckedItemsAnnotation()
   @_BlockDeleteCurrentItemAnnotation()
@@ -1839,7 +1859,7 @@ abstract class Block<
     //
     _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
       currentItemSelectionType:
-          CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
+      CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
       xBlock: thisXBlock,
       newQueriedList: <ITEM>[],
       candidateItem: siblingItem,
@@ -1852,6 +1872,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @TaskUnitMethodAnnotation()
   @_BlockPrepareFormToCreateItemAnnotation()
   Future<bool> _unitPrepareFormToCreateItem({
     required _XBlock thisXBlock,
@@ -1908,11 +1929,12 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @TaskUnitMethodAnnotation()
   @_BlockExecuteQuickActionCreateItemAnnotation()
   Future<bool> _unitQuickCreateItem({
     required _XBlock thisXBlock,
     required QuickCreateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
-        action,
+    action,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -1975,11 +1997,12 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @TaskUnitMethodAnnotation()
   @_BlockExecuteQuickActionCreateMultiItemsAnnotation()
   Future<bool> _unitQuickCreateMultiItems({
     required _XBlock thisXBlock,
     required QuickCreateMultiItemsAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
-        action,
+    action,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -2024,7 +2047,7 @@ abstract class Block<
         thisXBlock: thisXBlock,
         blockCurrentFilterCriteria: blockCurrentFilterCriteria,
         calledMethodName:
-            "${getClassName(action)}.callApiQuickCreateMultiItems",
+        "${getClassName(action)}.callApiQuickCreateMultiItems",
         result: result,
       );
     } catch (e, stackTrace) {
@@ -2043,11 +2066,12 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @TaskUnitMethodAnnotation()
   @_BlockExecuteQuickActionUpdateItemAnnotation()
   Future<bool> _unitQuickUpdateItem({
     required _XBlock thisXBlock,
     required QuickUpdateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
-        action,
+    action,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -2111,6 +2135,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @TaskUnitMethodAnnotation()
   @_BlockExecuteQuickActionAnnotation()
   Future<bool> _unitQuickAction<DATA extends Object>({
     required _XBlock thisXBlock,
@@ -2206,6 +2231,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @TaskUnitMethodAnnotation()
   @_BlockExecuteQuickChildBlockItemsAnnotation()
   Future<bool> _unitQuickChildBlockItemsAction<DATA extends Object>({
     required _XBlock thisXBlock,
@@ -2396,7 +2422,7 @@ abstract class Block<
       //
       _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
         currentItemSelectionType:
-            CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
+        CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
         xBlock: thisXBlock,
         newQueriedList: [],
         candidateItem: siblingItem,
@@ -2454,6 +2480,25 @@ abstract class Block<
       );
     }
     return true;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @RootMethodAnnotation()
+  void showErrorViewerDialog(BuildContext context) {
+    if (queryDataState != DataState.error) {
+      return;
+    }
+    _showErrorViewerDialog(
+      context: context,
+      title: 'Error',
+      errorInfo: ErrorInfo(
+        errorMessage: "Test",
+        errorDetails: [],
+        stackTrace: null,
+      ),
+    );
   }
 
   // ***************************************************************************
@@ -2533,13 +2578,13 @@ abstract class Block<
       candidateItem: item,
       forceReloadItem: true,
       forceTypeForForm:
-          forceForm ? _ForceType.force : _ForceType.decidedAtRuntime,
+      forceForm ? _ForceType.force : _ForceType.decidedAtRuntime,
     );
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //
     await FlutterArtist.executor._executeTaskUnitQueue();
     var result = thisXBlock.currentItemSelectionResult
-        as CurrentItemSelectionResult<ITEM>?;
+    as CurrentItemSelectionResult<ITEM>?;
     if (result != null && result.success) {
       if (navigate != null) {
         navigate();
@@ -3219,7 +3264,7 @@ abstract class Block<
   @_BlockExecuteQuickActionCreateItemAnnotation()
   Future<bool> executeQuickActionCreateItem({
     required QuickCreateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
-        action,
+    action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -3281,7 +3326,7 @@ abstract class Block<
   @_BlockExecuteQuickActionCreateMultiItemsAnnotation()
   Future<bool> executeQuickActionCreateMultiItems({
     required QuickCreateMultiItemsAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
-        action,
+    action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -3343,7 +3388,7 @@ abstract class Block<
   @_BlockExecuteQuickActionUpdateItemAnnotation()
   Future<bool> executeQuickActionUpdateItem({
     required QuickUpdateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
-        action,
+    action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -3396,7 +3441,7 @@ abstract class Block<
   @RootMethodAnnotation()
   @_BlockExecuteQuickChildBlockItemsAnnotation()
   Future<bool> executeQuickChildBlockItems<
-      A extends QuickChildBlockItemsAction<ITEM, ITEM_DETAIL>>({
+  A extends QuickChildBlockItemsAction<ITEM, ITEM_DETAIL>>({
     required A action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -3494,7 +3539,7 @@ abstract class Block<
   @RootMethodAnnotation()
   @_BlockRefreshAndSelectPreviousItemAsCurrentAnnotation()
   Future<CurrentItemSelectionResult<ITEM>?>
-      refreshAndSelectPreviousItemAsCurrent({
+  refreshAndSelectPreviousItemAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
@@ -3990,7 +4035,7 @@ abstract class Block<
   void updateItemsView() {
     // TODO: Sua lai cho nay.
     for (_RefreshableWidgetState widgetState
-        in _blockFragmentWidgetStates.keys) {
+    in _blockFragmentWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }
@@ -4002,7 +4047,7 @@ abstract class Block<
 
   void updateBlockFragmentWidgets({bool force = false}) {
     for (_RefreshableWidgetState widgetState
-        in _blockFragmentWidgetStates.keys) {
+    in _blockFragmentWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -4128,11 +4173,11 @@ abstract class Block<
       return allow
           ? Actionable.yes()
           : Actionable.no(
-              message: "The Block querying is disabled.",
-              details: [
-                "The application logic does not allow query this block."
-              ],
-            );
+        message: "The Block querying is disabled.",
+        details: [
+          "The application logic does not allow query this block."
+        ],
+      );
     } catch (e, stackTrace) {
       // _handleError(
       //   shelf: shelf,
@@ -4160,11 +4205,11 @@ abstract class Block<
     return allow
         ? Actionable.yes()
         : Actionable.no(
-            message: "Form Resetting is disabled.",
-            details: [
-              "The application logic does not allow to reset the form."
-            ],
-          );
+      message: "Form Resetting is disabled.",
+      details: [
+        "The application logic does not allow to reset the form."
+      ],
+    );
   }
 
   // ***************************************************************************
@@ -4196,11 +4241,11 @@ abstract class Block<
       return allow
           ? Actionable.yes()
           : Actionable.no(
-              message: "Not allow to edit the item.",
-              details: [
-                "The application logic does not allow this item to be updated."
-              ],
-            );
+        message: "Not allow to edit the item.",
+        details: [
+          "The application logic does not allow this item to be updated."
+        ],
+      );
     } catch (e, stackTrace) {
       // _handleError(
       //   shelf: shelf,
@@ -4229,11 +4274,11 @@ abstract class Block<
       return allow
           ? Actionable.yes()
           : Actionable.no(
-              message: "Not allow to create item.",
-              details: [
-                "The application logic does not allow to create a new item."
-              ],
-            );
+        message: "Not allow to create item.",
+        details: [
+          "The application logic does not allow to create a new item."
+        ],
+      );
     } catch (e, stackTrace) {
       // _handleError(
       //   shelf: shelf,
@@ -4262,11 +4307,11 @@ abstract class Block<
       return allow
           ? Actionable.yes()
           : Actionable.no(
-              message: "Not allow to delete the item.",
-              details: [
-                "The application logic does not allow this item to be deleted."
-              ],
-            );
+        message: "Not allow to delete the item.",
+        details: [
+          "The application logic does not allow this item to be deleted."
+        ],
+      );
     } catch (e, stackTrace) {
       // _handleError(
       //   shelf: shelf,
@@ -4591,8 +4636,8 @@ abstract class Block<
     if (formModel != null) {
       switch (formModel!.formMode) {
         case FormMode.none:
-          // Has current item and Form in Lazy mode.
-          // Form State: pending.
+        // Has current item and Form in Lazy mode.
+        // Form State: pending.
           break; // Do nothing
         case FormMode.creation:
           break; // Do nothing

@@ -101,49 +101,9 @@ abstract class FormModel<
   ///   );
   /// }
   /// ```
+  ///
+  @AbstractMethodAnnotation()
   FormPropsStructure registerPropsStructure();
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Type getIdType() {
-    return ID;
-  }
-
-  Type getItemDetailType() {
-    return ITEM_DETAIL;
-  }
-
-  Type getFilterCriteriaType() {
-    return FILTER_CRITERIA;
-  }
-
-  Type getExtraFormInputType() {
-    return EXTRA_FORM_INPUT;
-  }
-
-  String get _classDefinition {
-    return "${getClassName(this)}$_classParametersDefinition";
-  }
-
-  String get _classParametersDefinition {
-    return "<${getIdType()}, ${getItemDetailType()}, "
-        "${getFilterCriteriaType()}, ${getExtraFormInputType()}>";
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void showFormErrorViewerDialog(BuildContext context) {
-    if (formDataState != DataState.error) {
-      return;
-    }
-    _showFormErrorViewerDialog(
-      context: context,
-      formErrorInfo: formErrorInfo!,
-      formInitialDataReady: formInitialDataReady,
-    );
-  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -220,6 +180,68 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  @AbstractMethodAnnotation()
+  Future<ApiResult<ITEM_DETAIL>> callApiCreateItem({
+    required Object? parentBlockItem,
+    required FILTER_CRITERIA filterCriteria,
+    required Map<String, dynamic> formMapData,
+  });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @AbstractMethodAnnotation()
+  Future<ApiResult<ITEM_DETAIL>> callApiUpdateItem({
+    required Object? parentBlockItem,
+    required FILTER_CRITERIA filterCriteria,
+    required Map<String, dynamic> formMapData,
+  });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Type getIdType() {
+    return ID;
+  }
+
+  Type getItemDetailType() {
+    return ITEM_DETAIL;
+  }
+
+  Type getFilterCriteriaType() {
+    return FILTER_CRITERIA;
+  }
+
+  Type getExtraFormInputType() {
+    return EXTRA_FORM_INPUT;
+  }
+
+  String get _classDefinition {
+    return "${getClassName(this)}$_classParametersDefinition";
+  }
+
+  String get _classParametersDefinition {
+    return "<${getIdType()}, ${getItemDetailType()}, "
+        "${getFilterCriteriaType()}, ${getExtraFormInputType()}>";
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void showFormErrorViewerDialog(BuildContext context) {
+    if (formDataState != DataState.error) {
+      return;
+    }
+    _showFormErrorViewerDialog(
+      context: context,
+      formErrorInfo: formErrorInfo!,
+      formInitialDataReady: formInitialDataReady,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _triggerFilterCriteriaChanged() {
     _formPropsStructure._triggerFilterCriteriaChanged();
   }
@@ -231,6 +253,8 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  @TaskUnitMethodAnnotation()
+  @_FormViewChangeAnnotation()
   Future<bool> _unitFormViewChanged({
     required _XFormModel xFormModel,
   }) async {
@@ -246,6 +270,7 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  @TaskUnitMethodAnnotation()
   Future<bool> _unitLoadForm({required _XFormModel thisXFormModel}) async {
     __assertThisXFormModel(thisXFormModel);
     //
@@ -279,6 +304,7 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  @TaskUnitMethodAnnotation()
   @_BlockEnterFormFieldsAnnotation()
   Future<bool> _unitQuickExtraFormInput({
     required _XFormModel thisXFormModel,
@@ -296,6 +322,8 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  @TaskUnitMethodAnnotation()
+  @_BlockSaveFormAnnotation()
   Future<bool> _unitSaveForm({required _XFormModel thisXFormModel}) async {
     FILTER_CRITERIA? blockCurrentFilterCriteria = block.filterCriteria;
     if (blockCurrentFilterCriteria == null) {
@@ -1476,6 +1504,8 @@ abstract class FormModel<
   // ***************************************************************************
 
   // Change Event from GUI.
+  @ImportantMethodAnnotation()
+  @_FormViewChangeAnnotation()
   Future<void> _onChangeFromFormView() async {
     print("#~~~~~~~~~~~~~~~> _onChangeFromFormView");
     //
@@ -1508,24 +1538,6 @@ abstract class FormModel<
   void _afterBuildFormView() {
     _formPropsStructure._justInitialized = false;
   }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Future<ApiResult<ITEM_DETAIL>> callApiCreateItem({
-    required Object? parentBlockItem,
-    required FILTER_CRITERIA filterCriteria,
-    required Map<String, dynamic> formMapData,
-  });
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Future<ApiResult<ITEM_DETAIL>> callApiUpdateItem({
-    required Object? parentBlockItem,
-    required FILTER_CRITERIA filterCriteria,
-    required Map<String, dynamic> formMapData,
-  });
 
   // ***************************************************************************
   // ***************************************************************************
@@ -1643,6 +1655,7 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  @_BlockSaveFormAnnotation()
   Future<bool> saveForm() async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,

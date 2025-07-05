@@ -10,7 +10,8 @@ class ScalarOutsideEventReaction {
   const ScalarOutsideEventReaction.custom({
     required List<Event> events,
     required ScalarReaction this.reaction,
-  })  : intrinsicMode = false,
+  })
+      : intrinsicMode = false,
         _events = events;
 
   List<Type> getDataEventTypes() {

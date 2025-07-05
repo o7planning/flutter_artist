@@ -48,22 +48,22 @@ class __FormDataInfoDialogState extends State<_FormDataInfoDialog> {
       height: height,
       child: showFormData
           ? _FormDataView(
-              formModel: widget.formModel,
-              locationInfo: widget.locationInfo,
-              onPressedShelf: () {
-                setState(() {
-                  showFormData = false;
-                });
-              },
-            )
+        formModel: widget.formModel,
+        locationInfo: widget.locationInfo,
+        onPressedShelf: () {
+          setState(() {
+            showFormData = false;
+          });
+        },
+      )
           : _ShelfStructureGraphView(
-              shelf: widget.formModel.block.shelf,
-              onPressedBack: () {
-                setState(() {
-                  showFormData = true;
-                });
-              },
-            ),
+        shelf: widget.formModel.block.shelf,
+        onPressedBack: () {
+          setState(() {
+            showFormData = true;
+          });
+        },
+      ),
     );
   }
 }

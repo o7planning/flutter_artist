@@ -134,6 +134,7 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
+  @TaskUnitMethodAnnotation()
   @_ScalarQueryAnnotation()
   Future<ScalarQueryResult> _unitQuery({required _XScalar thisXScalar}) async {
     __assertThisXScalar(thisXScalar);
@@ -259,6 +260,7 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
+  @TaskUnitMethodAnnotation()
   @_ScalarExecuteQuickActionAnnotation()
   Future<bool> _unitQuickAction<DATA extends Object>({
     required _XScalar thisXScalar,

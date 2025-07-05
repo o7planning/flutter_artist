@@ -70,13 +70,13 @@ class _BlockItemsViewBuilderState
         _QuickSuggestionButton.error(
           tooltip: "Error",
           onPressed: () {
-            //widget.block.showFormErrorViewerDialog(context);
+            widget.block.showErrorViewerDialog(context);
           },
         ),
         _QuickSuggestionButton.reQuery(
           tooltip: "Re Query",
-          onPressed: () {
-            // widget.block.showFormErrorViewerDialog(context);
+          onPressed: () async {
+            await widget.block.query();
           },
         ),
       ],

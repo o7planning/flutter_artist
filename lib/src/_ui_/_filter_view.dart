@@ -22,7 +22,8 @@ abstract class FilterView<FILTER_MODEL extends FilterModel>
     );
   }
 
-  Widget buildFilterBar(BuildContext context, {
+  Widget buildFilterBar(
+    BuildContext context, {
     Decoration? decoration,
     EdgeInsetsGeometry? padding,
   }) {
