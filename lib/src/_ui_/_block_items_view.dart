@@ -2,11 +2,11 @@ part of '../../flutter_artist.dart';
 
 abstract class BlockItemsView<BLOCK extends Block> extends StatelessWidget {
   final BLOCK block;
-  final bool showSuggestionIfError;
+  final QuickSuggestionMode quickSuggestionMode;
 
   const BlockItemsView({
     required this.block,
-    this.showSuggestionIfError = true,
+    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
     super.key,
   });
 
@@ -17,7 +17,7 @@ abstract class BlockItemsView<BLOCK extends Block> extends StatelessWidget {
       ownerClassInstance: this,
       description: '',
       block: block,
-      showSuggestionIfError: showSuggestionIfError,
+      quickSuggestionMode: quickSuggestionMode,
       build: () {
         return buildContent(context);
       },

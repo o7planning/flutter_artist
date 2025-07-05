@@ -2,7 +2,7 @@ part of '../../flutter_artist.dart';
 
 class BlockItemsViewBuilder extends _RefreshableWidget {
   final Block block;
-  final bool showSuggestionIfError;
+  final QuickSuggestionMode quickSuggestionMode;
   final Widget Function() build;
 
   const BlockItemsViewBuilder({
@@ -10,7 +10,7 @@ class BlockItemsViewBuilder extends _RefreshableWidget {
     required super.ownerClassInstance,
     required super.description,
     required this.block,
-      this.showSuggestionIfError = true,
+    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
     required this.build,
   });
 
@@ -47,7 +47,40 @@ class _BlockItemsViewBuilderState
 
   @override
   Widget buildContent(BuildContext context) {
-    return widget.build();
+    if (widget.quickSuggestionMode == QuickSuggestionMode.showIfError) {
+      return Stack(
+        children: [
+          widget.build(),
+          if (widget.block.queryDataState == DataState.error)
+            Positioned(
+              top: 5,
+              right: 5,
+              child: _buildQuickSuggestionButtonsBar(context),
+            ),
+        ],
+      );
+    } else {
+      return widget.build();
+    }
+  }
+
+  Widget _buildQuickSuggestionButtonsBar(BuildContext context) {
+    return _QuickSuggestionButtonsBar(
+      children: [
+        _QuickSuggestionButton.error(
+          tooltip: "Error",
+          onPressed: () {
+            //widget.block.showFormErrorViewerDialog(context);
+          },
+        ),
+        _QuickSuggestionButton.reQuery(
+          tooltip: "Re Query",
+          onPressed: () {
+            // widget.block.showFormErrorViewerDialog(context);
+          },
+        ),
+      ],
+    );
   }
 
   @override
