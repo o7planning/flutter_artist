@@ -1,5 +1,10 @@
 part of '../../flutter_artist.dart';
 
+@_BlockRefreshCurrentItemAnnotation()
+@_BlockSelectItemAsCurrentAnnotation()
+@_BlockRefreshAndSelectNextItemAsCurrentAnnotation()
+@_BlockRefreshAndSelectFirstItemAsCurrentAnnotation()
+@_BlockRefreshAndSelectPreviousItemAsCurrentAnnotation()
 class _BlockSelectAsCurrentTaskUnit<ITEM extends Object> extends _TaskUnit {
   final _XBlock xBlock;
   final _ForceType? forceTypeForForm;

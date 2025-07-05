@@ -1,5 +1,11 @@
 part of '../../flutter_artist.dart';
 
+@_BlockQueryAnnotation()
+@_BlockQueryMorePageAnnotation()
+@_BlockQueryNextPageAnnotation()
+@_BlockQueryPreviousPageAnnotation()
+@_BlockQueryAndPrepareToEditAnnotation()
+@_BlockQueryAndPrepareToCreateAnnotation()
 class _BlockQueryTaskUnit extends _TaskUnit {
   _XBlock xBlock;
 

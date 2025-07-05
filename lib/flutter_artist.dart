@@ -15,7 +15,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
-as dialogs;
+    as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
@@ -709,13 +709,16 @@ class _BlockRefreshCurrentItemAnnotation {
   const _BlockRefreshCurrentItemAnnotation();
 }
 
-class _BlockEnterFormFieldsAnnotation {
-  const _BlockEnterFormFieldsAnnotation();
+class _FormModelEnterFormFieldsAnnotation {
+  const _FormModelEnterFormFieldsAnnotation();
 }
 
+class _FormModelSaveFormAnnotation {
+  const _FormModelSaveFormAnnotation();
+}
 
-class _BlockSaveFormAnnotation {
-  const _BlockSaveFormAnnotation();
+class _FormModelLoadFormAnnotation {
+  const _FormModelLoadFormAnnotation();
 }
 
 class _FormViewChangeAnnotation {

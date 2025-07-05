@@ -1,5 +1,6 @@
 part of '../../flutter_artist.dart';
 
+@_BlockClearCurrentAnnotation()
 class _BlockClearCurrentTaskUnit<ITEM extends Object> extends _TaskUnit {
   final _XBlock xBlock;
 
