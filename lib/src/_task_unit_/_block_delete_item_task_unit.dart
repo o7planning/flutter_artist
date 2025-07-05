@@ -1,5 +1,6 @@
 part of '../../flutter_artist.dart';
 
+@_TaskUnitClassAnnotation()
 @_BlockDeleteSelectedItemsAnnotation()
 @_BlockDeleteCheckedItemsAnnotation()
 @_BlockDeleteCurrentItemAnnotation()

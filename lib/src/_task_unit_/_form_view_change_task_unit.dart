@@ -1,5 +1,6 @@
 part of '../../flutter_artist.dart';
 
+@_TaskUnitClassAnnotation()
 @_FormViewChangeAnnotation()
 class _FormViewChangeTaskUnit extends _TaskUnit {
   _XFormModel xFormModel;

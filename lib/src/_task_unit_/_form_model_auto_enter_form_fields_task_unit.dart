@@ -1,5 +1,6 @@
 part of '../../flutter_artist.dart';
 
+@_TaskUnitClassAnnotation()
 @_FormModelEnterFormFieldsAnnotation()
 class _FormModelAutoEnterFormFieldsTaskUnit<
     EXTRA_FORM_INPUT extends ExtraFormInput> extends _TaskUnit {

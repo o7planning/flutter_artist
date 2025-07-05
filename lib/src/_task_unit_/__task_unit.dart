@@ -1,5 +1,6 @@
 part of '../../flutter_artist.dart';
 
+@_TaskUnitClassAnnotation()
 abstract class _TaskUnit {
   final TaskType taskType;
 

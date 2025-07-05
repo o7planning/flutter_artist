@@ -1,5 +1,6 @@
 part of '../../flutter_artist.dart';
 
+@_TaskUnitClassAnnotation()
 @_BlockQueryAnnotation()
 @_BlockQueryMorePageAnnotation()
 @_BlockQueryNextPageAnnotation()

@@ -1,5 +1,6 @@
 part of '../../flutter_artist.dart';
 
+@_TaskUnitClassAnnotation()
 @_FilterViewChangeAnnotation()
 class _FilterViewChangeTaskUnit extends _TaskUnit {
   _XFilterModel xFilterModel;

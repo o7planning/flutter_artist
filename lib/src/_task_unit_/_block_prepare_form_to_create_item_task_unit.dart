@@ -1,5 +1,6 @@
 part of '../../flutter_artist.dart';
 
+@_TaskUnitClassAnnotation()
 @_BlockPrepareFormToCreateItemAnnotation()
 class _BlockPrepareFormToCreateItemTaskUnit extends _TaskUnit {
   _XBlock xBlock;

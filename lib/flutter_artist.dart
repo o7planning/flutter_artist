@@ -601,28 +601,32 @@ part 'src/_xdata_/_x_tree.dart';
 // *****************************************************************************
 // *****************************************************************************
 
-class AbstractMethodAnnotation {
-  const AbstractMethodAnnotation();
+class _AbstractMethodAnnotation {
+  const _AbstractMethodAnnotation();
 }
 
-class RootMethodAnnotation {
-  const RootMethodAnnotation();
+class _RootMethodAnnotation {
+  const _RootMethodAnnotation();
 }
 
-class OverridableMethodAnnotation {
-  const OverridableMethodAnnotation();
+class _OverridableMethodAnnotation {
+  const _OverridableMethodAnnotation();
 }
 
-class TaskUnitMethodAnnotation {
-  const TaskUnitMethodAnnotation();
+class _TaskUnitClassAnnotation {
+  const _TaskUnitClassAnnotation();
 }
 
-class ImportantMethodAnnotation {
-  const ImportantMethodAnnotation();
+class _TaskUnitMethodAnnotation {
+  const _TaskUnitMethodAnnotation();
 }
 
-class MayThrowFormInternalErrorAnnotation {
-  const MayThrowFormInternalErrorAnnotation();
+class _ImportantMethodAnnotation {
+  const _ImportantMethodAnnotation();
+}
+
+class _MayThrowFormInternalErrorAnnotation {
+  const _MayThrowFormInternalErrorAnnotation();
 }
 
 class _BlockPrepareFormToCreateItemAnnotation {

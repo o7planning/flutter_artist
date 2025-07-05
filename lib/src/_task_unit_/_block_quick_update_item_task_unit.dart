@@ -1,5 +1,6 @@
 part of '../../flutter_artist.dart';
 
+@_TaskUnitClassAnnotation()
 @_BlockExecuteQuickActionUpdateItemAnnotation()
 class _BlockQuickUpdateItemTaskUnit extends _TaskUnit {
   _XBlock xBlock;
