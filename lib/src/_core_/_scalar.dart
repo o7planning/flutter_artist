@@ -113,7 +113,6 @@ abstract class Scalar<
     required this.description,
     required String? filterModelName,
     required this.hiddenBehavior,
-    // required List<Type> listenToDataTypes,
     this.outsideEventReaction,
   }) : registerFilterModelName = filterModelName;
 
