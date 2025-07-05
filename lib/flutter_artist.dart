@@ -376,7 +376,7 @@ part 'src/_error_/_duplicate_filter_criterion_error.dart';
 
 part 'src/_error_/_form_internal_error.dart';
 
-part 'src/_core_/_form_error_info.dart';
+part 'src/_error_/_form_error_info.dart';
 
 part 'src/_fa_.dart';
 

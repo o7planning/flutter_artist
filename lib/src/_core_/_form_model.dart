@@ -913,6 +913,7 @@ abstract class FormModel<
       Object? parentBlockItem = this.block.parent?.currentItem;
       //
       try {
+        // May throw AppError, ApiError or others.
         tempMultiOptPropXData = await callApiLoadMultiOptPropXData(
           parentBlockCurrentItem: parentBlockItem,
           filterCriteria: blockCurrentFilterCriteria,
@@ -924,7 +925,7 @@ abstract class FormModel<
         throw _FormInternalError(
           propName: multiOptPropName,
           formErrorMethod: FormErrorMethod.callApiLoadMultiOptPropXData,
-          error: e,
+          error: e, // May be AppError, ApiError or others.
           stackTrace: stackTrace,
         );
       }

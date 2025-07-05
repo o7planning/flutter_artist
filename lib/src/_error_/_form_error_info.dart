@@ -2,30 +2,21 @@ part of '../../flutter_artist.dart';
 
 class FormErrorInfo {
   final FormActivityType activityType;
-
   final String? propName;
   final FormErrorMethod formErrorMethod;
-  final Object error;
+  final AppError error;
   final StackTrace errorStackTrace;
-
-  AppError? _appError;
 
   FormErrorInfo({
     required this.activityType,
     required this.propName,
     required this.formErrorMethod,
-    required this.error,
+    required Object error,
     required this.errorStackTrace,
-  });
-
-  AppError _toAppError() {
-    _appError ??= ErrorUtils.toAppError(error);
-    return _appError!;
-  }
+  }) : error = ErrorUtils.toAppError(error);
 
   String get errorMessage {
-    AppError ae = _toAppError();
-    return ae.errorMessage;
+    return error.errorMessage;
   }
 
   String get methodName {
@@ -33,10 +24,9 @@ class FormErrorInfo {
   }
 
   ErrorInfo toErrorInfo() {
-    AppError ae = _toAppError();
     return ErrorInfo(
-      errorMessage: errorMessage,
-      errorDetails: ae.errorDetails,
+      errorMessage: error.errorMessage,
+      errorDetails: error.errorDetails,
       stackTrace: errorStackTrace,
     );
   }
