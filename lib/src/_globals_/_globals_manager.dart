@@ -138,11 +138,7 @@ class GlobalsManager {
     Box<dynamic> hiveBox = await _HiveUtils.openHiveBoxExtraGlobalProp();
     try {
       String key = __getHiveExtraGlobalPropNameKey(propName);
-      print(
-          ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> __readExtraGlobalProp.key: $key");
       dynamic value = hiveBox.get(key);
-      print(
-          ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> __readExtraGlobalProp.value: $value");
       return value;
     } finally {
       await hiveBox.close();
@@ -273,7 +269,7 @@ class GlobalsManager {
 
   void updateWidgets() {
     for (_RefreshableWidgetState widgetState
-    in _loggedInUserWidgetStates.keys) {
+        in _loggedInUserWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }
