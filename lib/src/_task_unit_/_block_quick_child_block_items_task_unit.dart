@@ -1,5 +1,6 @@
 part of '../../flutter_artist.dart';
 
+@_BlockExecuteQuickChildBlockItemsAnnotation()
 class _BlockQuickChildBlockItemsTaskUnit<
     ITEM extends Object, //
     ITEM_DETAIL extends Object> extends _TaskUnit {

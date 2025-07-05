@@ -1,5 +1,6 @@
 part of '../../flutter_artist.dart';
 
+@_BlockExecuteQuickActionCreateMultiItemsAnnotation()
 class _BlockQuickCreateMultiItemsTaskUnit extends _TaskUnit {
   _XBlock xBlock;
 
