@@ -66,7 +66,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   /// }
   /// ```
   ///
-  @AbstractMethodAnnotation()
+  @_AbstractMethodAnnotation()
   FilterCriteriaStructure registerCriteriaStructure();
 
   // ***************************************************************************
@@ -75,7 +75,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   ///
   /// Abstract method:
   ///
-  @AbstractMethodAnnotation()
+  @_AbstractMethodAnnotation()
   Future<XData?> callApiLoadMultiOptCriterionXData({
     required String multiOptCriterionName,
     required FILTER_INPUT? filterInput,
@@ -86,7 +86,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   // ABSTRACT METHOD:
   // ***************************************************************************
 
-  @AbstractMethodAnnotation()
+  @_AbstractMethodAnnotation()
   ValueWrap? specifyDefaultMultiOptCriterionValue({
     required String multiOptCriterionName,
     required XData multiOptCriterionXData,
@@ -97,7 +97,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   // ABSTRACT METHOD:
   // ***************************************************************************
 
-  @AbstractMethodAnnotation()
+  @_AbstractMethodAnnotation()
   Future<Map<String, dynamic>?> specifyDefaultSimpleCriterionValues();
 
   // ***************************************************************************
@@ -127,7 +127,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   /// }
   /// ```
   ///
-  @AbstractMethodAnnotation()
+  @_AbstractMethodAnnotation()
   ValueWrap? getMultiOptCriterionValueFromFilterInput({
     required String multiOptCriterionName,
     required XData multiOptCriterionXData,
@@ -139,7 +139,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   // ABSTRACT METHOD:
   // ***************************************************************************
 
-  @AbstractMethodAnnotation()
+  @_AbstractMethodAnnotation()
   Future<Map<String, dynamic>?> getSimpleCriterionValuesFromFilterInput({
     required FILTER_INPUT filterInput,
   });
@@ -152,7 +152,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   /// calling [callApiLoadMultiOptCriterionXData]
   /// methods if there are no errors.
   ///
-  @AbstractMethodAnnotation()
+  @_AbstractMethodAnnotation()
   FILTER_CRITERIA toFilterCriteriaObject({
     required Map<String, dynamic> dataMap,
   });
@@ -160,7 +160,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   // ***************************************************************************
   // ***************************************************************************
 
-  @TaskUnitMethodAnnotation()
+  @_TaskUnitMethodAnnotation()
   @_FilterViewChangeAnnotation()
   Future<bool> _unitFilterViewChanged({
     required _XFilterModel xFilterModel,
@@ -270,7 +270,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   ///
   /// Return null is error.
   ///
-  @ImportantMethodAnnotation()
+  @_ImportantMethodAnnotation()
   Future<FILTER_CRITERIA?> _startNewFilterActivity({
     required FILTER_INPUT? filterInput,
     required _FilterActivityType activityType,
@@ -730,7 +730,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   // ***************************************************************************
 
   // Change Event from GUI.
-  @ImportantMethodAnnotation()
+  @_ImportantMethodAnnotation()
   @_FilterViewChangeAnnotation()
   Future<void> _onChangeFromFilterView() async {
     print("#~~~~~~~~~~~~~~~> _onChangeFromFilterView");

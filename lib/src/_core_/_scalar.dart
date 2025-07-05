@@ -133,7 +133,7 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
-  @TaskUnitMethodAnnotation()
+  @_TaskUnitMethodAnnotation()
   @_ScalarQueryAnnotation()
   Future<ScalarQueryResult> _unitQuery({required _XScalar thisXScalar}) async {
     __assertThisXScalar(thisXScalar);
@@ -259,7 +259,7 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
-  @TaskUnitMethodAnnotation()
+  @_TaskUnitMethodAnnotation()
   @_ScalarExecuteQuickActionAnnotation()
   Future<bool> _unitQuickAction<DATA extends Object>({
     required _XScalar thisXScalar,
@@ -420,7 +420,7 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
-  @AbstractMethodAnnotation()
+  @_AbstractMethodAnnotation()
   Future<ApiResult<VALUE>> callApiQuery({
     required FILTER_CRITERIA filterCriteria,
   });
@@ -429,7 +429,7 @@ abstract class Scalar<
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
-  @RootMethodAnnotation()
+  @_RootMethodAnnotation()
   @_ScalarExecuteQuickActionAnnotation()
   Future<bool> executeQuickAction<DATA extends Object>({
     FILTER_INPUT? filterInput,
@@ -507,7 +507,7 @@ abstract class Scalar<
   ///
   ///
   @nonVirtual
-  @RootMethodAnnotation()
+  @_RootMethodAnnotation()
   @_ScalarQueryAnnotation()
   Future<bool> query({
     FILTER_INPUT? filterInput,

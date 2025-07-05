@@ -940,7 +940,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @TaskUnitMethodAnnotation()
+  @_TaskUnitMethodAnnotation()
   @_BlockClearCurrentAnnotation()
   Future<void> _unitClearCurrent({required _XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
@@ -958,7 +958,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @TaskUnitMethodAnnotation()
+  @_TaskUnitMethodAnnotation()
   @_BlockQueryAnnotation()
   @_BlockQueryMorePageAnnotation()
   @_BlockQueryNextPageAnnotation()
@@ -1344,7 +1344,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @TaskUnitMethodAnnotation()
+  @_TaskUnitMethodAnnotation()
   @_FormModelLoadFormAnnotation()
   @_BlockRefreshCurrentItemAnnotation()
   @_BlockSelectItemAsCurrentAnnotation()
@@ -1738,7 +1738,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @TaskUnitMethodAnnotation()
+  @_TaskUnitMethodAnnotation()
   @_BlockDeleteSelectedItemsAnnotation()
   @_BlockDeleteCheckedItemsAnnotation()
   @_BlockDeleteCurrentItemAnnotation()
@@ -1861,7 +1861,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @TaskUnitMethodAnnotation()
+  @_TaskUnitMethodAnnotation()
   @_BlockPrepareFormToCreateItemAnnotation()
   Future<bool> _unitPrepareFormToCreateItem({
     required _XBlock thisXBlock,
@@ -1918,7 +1918,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @TaskUnitMethodAnnotation()
+  @_TaskUnitMethodAnnotation()
   @_BlockExecuteQuickActionCreateItemAnnotation()
   Future<bool> _unitQuickCreateItem({
     required _XBlock thisXBlock,
@@ -1986,7 +1986,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @TaskUnitMethodAnnotation()
+  @_TaskUnitMethodAnnotation()
   @_BlockExecuteQuickActionCreateMultiItemsAnnotation()
   Future<bool> _unitQuickCreateMultiItems({
     required _XBlock thisXBlock,
@@ -2055,7 +2055,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @TaskUnitMethodAnnotation()
+  @_TaskUnitMethodAnnotation()
   @_BlockExecuteQuickActionUpdateItemAnnotation()
   Future<bool> _unitQuickUpdateItem({
     required _XBlock thisXBlock,
@@ -2124,7 +2124,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @TaskUnitMethodAnnotation()
+  @_TaskUnitMethodAnnotation()
   @_BlockExecuteQuickActionAnnotation()
   Future<bool> _unitQuickAction<DATA extends Object>({
     required _XBlock thisXBlock,
@@ -2220,7 +2220,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @TaskUnitMethodAnnotation()
+  @_TaskUnitMethodAnnotation()
   @_BlockExecuteQuickChildBlockItemsAnnotation()
   Future<bool> _unitQuickChildBlockItemsAction<DATA extends Object>({
     required _XBlock thisXBlock,
@@ -2474,7 +2474,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @RootMethodAnnotation()
+  @_RootMethodAnnotation()
   void showErrorViewerDialog(BuildContext context) {
     if (queryDataState != DataState.error) {
       return;
@@ -2493,7 +2493,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @RootMethodAnnotation()
+  @_RootMethodAnnotation()
   @_BlockClearCurrentAnnotation()
   Future<void> clearCurrent() async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -2585,7 +2585,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @RootMethodAnnotation()
+  @_RootMethodAnnotation()
   @_BlockSelectItemAsCurrentAnnotation()
   Future<CurrentItemSelectionResult<ITEM>?> refreshAndSelectItemAsCurrent({
     required ITEM item,
@@ -2616,7 +2616,7 @@ abstract class Block<
   ///
   /// Clear and set block to "Pending State".
   ///
-  @RootMethodAnnotation()
+  @_RootMethodAnnotation()
   Future<bool> clear({Function()? navigate}) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -2659,7 +2659,7 @@ abstract class Block<
   ///
   /// Query the next page and replace the current items in the list.
   ///
-  @RootMethodAnnotation()
+  @_RootMethodAnnotation()
   @_BlockQueryNextPageAnnotation()
   Future<bool> queryNextPage({
     PostQueryBehavior postQueryBehavior =
@@ -2694,7 +2694,7 @@ abstract class Block<
   ///
   /// Query the previous page and replace the current items in the list.
   ///
-  @RootMethodAnnotation()
+  @_RootMethodAnnotation()
   @_BlockQueryPreviousPageAnnotation()
   Future<bool> queryPreviousPage({
     PostQueryBehavior postQueryBehavior =
@@ -2732,7 +2732,7 @@ abstract class Block<
   ///
   /// Query the next page and append to the current list of items.
   ///
-  @RootMethodAnnotation()
+  @_RootMethodAnnotation()
   @_BlockQueryMorePageAnnotation()
   Future<bool> queryMore({
     PostQueryBehavior postQueryBehavior =
@@ -2830,7 +2830,7 @@ abstract class Block<
   ///
   ///
   @nonVirtual
-  @RootMethodAnnotation()
+  @_RootMethodAnnotation()
   @_BlockQueryAnnotation()
   Future<bool> query({
     ListBehavior listBehavior = ListBehavior.replace,
@@ -2896,7 +2896,7 @@ abstract class Block<
   ///
   ///
   @nonVirtual
-  @RootMethodAnnotation()
+  @_RootMethodAnnotation()
   @_BlockQueryAndPrepareToEditAnnotation()
   Future<BlockQueryResult?> queryAndPrepareToEdit({
     FILTER_INPUT? filterInput,
@@ -2952,7 +2952,7 @@ abstract class Block<
   /// Clear and prepare Form to create new record.
   /// If this block has a FormModel its data state set to "Ready", else its data state set to "Pending".
   ///
-  @RootMethodAnnotation()
+  @_RootMethodAnnotation()
   @_BlockQueryAndPrepareToCreateAnnotation()
   Future<BlockQueryResult?> queryAndPrepareToCreate({
     FILTER_INPUT? filterInput,
@@ -2998,20 +2998,20 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @AbstractMethodAnnotation()
+  @_AbstractMethodAnnotation()
   ID getItemId(ITEM item);
 
   // ***************************************************************************
   // ***************************************************************************
 
-  @AbstractMethodAnnotation()
+  @_AbstractMethodAnnotation()
   ITEM convertItemDetailToItem({required ITEM_DETAIL itemDetail});
 
   // ***************************************************************************
   // ***************************************************************************
 
   // TODO: Them tham so ITEM.
-  @AbstractMethodAnnotation()
+  @_AbstractMethodAnnotation()
   bool needToKeepItemInList({
     required Object? parentBlockCurrentItem,
     required FILTER_CRITERIA filterCriteria,
@@ -3022,7 +3022,7 @@ abstract class Block<
   // ************* API METHOD **************************************************
   // ***************************************************************************
 
-  @AbstractMethodAnnotation()
+  @_AbstractMethodAnnotation()
   Future<ApiResult<PageData<ITEM>?>> callApiQuery({
     required Object? parentBlockCurrentItem,
     required FILTER_CRITERIA filterCriteria,
@@ -3032,7 +3032,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @AbstractMethodAnnotation()
+  @_AbstractMethodAnnotation()
   Future<ApiResult<void>> callApiDeleteItemById({
     required ID itemId,
   });
@@ -3040,7 +3040,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @AbstractMethodAnnotation()
+  @_AbstractMethodAnnotation()
   Future<ApiResult<ITEM_DETAIL>> callApiLoadItemDetailById({
     required ID itemId,
   });
@@ -3048,7 +3048,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @OverridableMethodAnnotation()
+  @_OverridableMethodAnnotation()
   void setChildrenForParent({
     required Object currentItemOfParentBlock,
     required List<ITEM> items,
@@ -3192,7 +3192,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @RootMethodAnnotation()
+  @_RootMethodAnnotation()
   @_BlockExecuteQuickActionAnnotation()
   Future<bool> executeQuickAction<DATA extends Object>({
     FILTER_INPUT? filterInput,
@@ -3277,7 +3277,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @RootMethodAnnotation()
+  @_RootMethodAnnotation()
   @_BlockExecuteQuickActionCreateItemAnnotation()
   Future<bool> executeQuickActionCreateItem({
     required QuickCreateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
@@ -3339,7 +3339,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @RootMethodAnnotation()
+  @_RootMethodAnnotation()
   @_BlockExecuteQuickActionCreateMultiItemsAnnotation()
   Future<bool> executeQuickActionCreateMultiItems({
     required QuickCreateMultiItemsAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
@@ -3401,7 +3401,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @RootMethodAnnotation()
+  @_RootMethodAnnotation()
   @_BlockExecuteQuickActionUpdateItemAnnotation()
   Future<bool> executeQuickActionUpdateItem({
     required QuickUpdateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
@@ -3455,7 +3455,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @RootMethodAnnotation()
+  @_RootMethodAnnotation()
   @_BlockExecuteQuickChildBlockItemsAnnotation()
   Future<bool> executeQuickChildBlockItems<
       A extends QuickChildBlockItemsAction<ITEM, ITEM_DETAIL>>({
@@ -3510,7 +3510,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @RootMethodAnnotation()
+  @_RootMethodAnnotation()
   @_BlockRefreshAndSelectFirstItemAsCurrentAnnotation()
   Future<CurrentItemSelectionResult<ITEM>?> refreshAndSelectFirstItemAsCurrent({
     bool forceLoadForm = false,
@@ -3530,7 +3530,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @RootMethodAnnotation()
+  @_RootMethodAnnotation()
   @_BlockRefreshAndSelectNextItemAsCurrentAnnotation()
   Future<CurrentItemSelectionResult<ITEM>?> refreshAndSelectNextItemAsCurrent({
     bool forceLoadForm = false,
@@ -3553,7 +3553,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @RootMethodAnnotation()
+  @_RootMethodAnnotation()
   @_BlockRefreshAndSelectPreviousItemAsCurrentAnnotation()
   Future<CurrentItemSelectionResult<ITEM>?>
       refreshAndSelectPreviousItemAsCurrent({
@@ -3654,7 +3654,7 @@ abstract class Block<
   ///
   /// Prepare to create an item in a Form.
   ///
-  @RootMethodAnnotation()
+  @_RootMethodAnnotation()
   @_BlockPrepareFormToCreateItemAnnotation()
   Future<bool> prepareFormToCreateItem({
     EXTRA_FORM_INPUT? extraFormInput,
@@ -3704,7 +3704,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @RootMethodAnnotation()
+  @_RootMethodAnnotation()
   @_BlockDeleteSelectedItemsAnnotation()
   Future<ItemDeletionResult?> deleteSelectedItems({
     required CurrentItemSelInclusion currentItemInclusion,
@@ -3733,7 +3733,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @RootMethodAnnotation()
+  @_RootMethodAnnotation()
   @_BlockDeleteCheckedItemsAnnotation()
   Future<ItemDeletionResult?> deleteCheckedItems({
     required CurrentItemChkInclusion currentItemInclusion,
@@ -3796,7 +3796,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @RootMethodAnnotation()
+  @_RootMethodAnnotation()
   @_BlockDeleteCurrentItemAnnotation()
   Future<ItemDeletionResult?> deleteCurrentItem() async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -3817,7 +3817,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @RootMethodAnnotation()
+  @_RootMethodAnnotation()
   @_BlockDeleteItemAnnotation()
   Future<ItemDeletionResult?> deleteItem({
     required ITEM item,
@@ -3881,7 +3881,7 @@ abstract class Block<
   ///
   ///
   ///
-  @RootMethodAnnotation()
+  @_RootMethodAnnotation()
   @_BlockRefreshCurrentItemAnnotation()
   Future<CurrentItemSelectionResult<ITEM>?> refreshCurrentItem({
     bool forceLoadForm = false,
