@@ -2,7 +2,7 @@ part of '../../flutter_artist.dart';
 
 class _FormViewBuilder extends _RefreshableWidget {
   final FormModel formModel;
-  final bool showIconIfError;
+  final QuickSuggestionMode quickSuggestionMode;
 
   final Widget Function() build;
 
@@ -12,7 +12,7 @@ class _FormViewBuilder extends _RefreshableWidget {
     required super.description,
     required this.formModel,
     required this.build,
-    this.showIconIfError = true,
+    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
   });
 
   @override
@@ -147,7 +147,7 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
   }
 
   Widget _build(BuildContext context) {
-    if (widget.showIconIfError) {
+    if (widget.quickSuggestionMode == QuickSuggestionMode.showIfError) {
       return Stack(
         children: [
           _buildAbsorbPointer(),
@@ -155,7 +155,7 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
             Positioned(
               top: 5,
               right: 5,
-              child: _buildErrorIcon(context),
+              child: _buildQuickSuggestionButtonsBar(context),
             ),
         ],
       );
@@ -171,30 +171,24 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
     );
   }
 
-  Widget _buildErrorIcon(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
+  Widget _buildQuickSuggestionButtonsBar(BuildContext context) {
+    return _QuickSuggestionButtonsBar(
       children: [
-        _QuickSuggestionButton(
-          iconData: widget.formModel.formInitialDataReady
-              ? _formErrorModeIconData
-              : _formErrorDisabledIconData,
-          iconColor: _quick_iconColor_error,
-          tooltip: widget.formModel.formInitialDataReady
-              ? "Form Error"
-              : "Form disabled due to error",
-          onPressed: () {
-            widget.formModel.showFormErrorViewerDialog(context);
-          },
-        ),
-        SizedBox(width: 5),
-        _QuickSuggestionButton(
-          iconData: _formErrorRollbackIconData,
-          iconColor: widget.formModel.formInitialDataReady
-              ? _quick_iconColor_enable
-              : _quick_iconColor_disable,
+        if (widget.formModel.formInitialDataReady)
+          _QuickSuggestionButton.error(
+            tooltip: "Form Error",
+            onPressed: () {
+              widget.formModel.showFormErrorViewerDialog(context);
+            },
+          ),
+        if (!widget.formModel.formInitialDataReady)
+          _QuickSuggestionButton.fatal(
+            tooltip: "Form disabled due to error",
+            onPressed: () {
+              widget.formModel.showFormErrorViewerDialog(context);
+            },
+          ),
+        _QuickSuggestionButton.restore(
           tooltip: "Restore the state before the error",
           onPressed: widget.formModel.formInitialDataReady
               ? () {

@@ -2,11 +2,11 @@ part of '../../flutter_artist.dart';
 
 abstract class FormView<FORM_MODEL extends FormModel> extends StatelessWidget {
   final FORM_MODEL formModel;
-  final bool showIconIfError;
+ final QuickSuggestionMode  quickSuggestionMode;
 
   const FormView({
     required this.formModel,
-    this.showIconIfError = true,
+    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
     super.key,
   });
 
@@ -17,7 +17,7 @@ abstract class FormView<FORM_MODEL extends FormModel> extends StatelessWidget {
       ownerClassInstance: this,
       description: '',
       formModel: formModel,
-      showIconIfError: showIconIfError,
+      quickSuggestionMode :quickSuggestionMode,
       build: () {
         return buildContent(context);
       },

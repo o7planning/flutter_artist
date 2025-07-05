@@ -2,6 +2,7 @@ part of '../../flutter_artist.dart';
 
 class BlockItemsViewBuilder extends _RefreshableWidget {
   final Block block;
+  final bool showSuggestionIfError;
   final Widget Function() build;
 
   const BlockItemsViewBuilder({
@@ -9,6 +10,7 @@ class BlockItemsViewBuilder extends _RefreshableWidget {
     required super.ownerClassInstance,
     required super.description,
     required this.block,
+      this.showSuggestionIfError = true,
     required this.build,
   });
 
