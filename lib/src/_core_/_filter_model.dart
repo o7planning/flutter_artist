@@ -9,7 +9,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
 
   late final String name;
 
-  String get id {
+  String get pathInfo {
     return "filter-model > ${shelf.name} > $name";
   }
 

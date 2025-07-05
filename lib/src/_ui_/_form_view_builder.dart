@@ -70,7 +70,7 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
     if (didPop || !widget.formModel.isDirty()) {
       return;
     }
-    _leavingDirtyForms[widget.formModel.id] = widget.formModel;
+    _leavingDirtyForms[widget.formModel.pathInfo] = widget.formModel;
     //
     dialogs.YesNoCancel selection = dialogs.YesNoCancel.cancel;
     try {
@@ -83,7 +83,7 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
         defaultOption: dialogs.YesNoCancel.yes,
       );
     } finally {
-      _leavingDirtyForms.remove(widget.formModel.id);
+      _leavingDirtyForms.remove(widget.formModel.pathInfo);
     }
     switch (selection) {
       case dialogs.YesNoCancel.yes:

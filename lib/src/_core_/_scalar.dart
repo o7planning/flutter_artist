@@ -40,7 +40,7 @@ abstract class Scalar<
     return "${shelf.name} >> $name";
   }
 
-  String get id {
+  String get pathInfo {
     return "scalar > ${shelf.name} > $name";
   }
 
@@ -421,6 +421,7 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
+  @AbstractMethodAnnotation()
   Future<ApiResult<VALUE>> callApiQuery({
     required FILTER_CRITERIA filterCriteria,
   });

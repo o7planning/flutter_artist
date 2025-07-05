@@ -609,6 +609,14 @@ class RootMethodAnnotation {
   const RootMethodAnnotation();
 }
 
+
+class OverridableMethodAnnotation {
+  const OverridableMethodAnnotation();
+}
+
+
+
+
 class TaskUnitMethodAnnotation {
   const TaskUnitMethodAnnotation();
 }

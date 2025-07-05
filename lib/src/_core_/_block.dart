@@ -112,7 +112,7 @@ abstract class Block<
     return "${shelf.name} > $name";
   }
 
-  String get id {
+  String get pathInfo {
     return "block > ${shelf.name} > $name";
   }
 
@@ -2998,12 +2998,63 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @AbstractMethodAnnotation()
   ID getItemId(ITEM item);
 
   // ***************************************************************************
   // ***************************************************************************
 
+  @AbstractMethodAnnotation()
   ITEM convertItemDetailToItem({required ITEM_DETAIL itemDetail});
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  // TODO: Them tham so ITEM.
+  @AbstractMethodAnnotation()
+  bool needToKeepItemInList({
+    required Object? parentBlockCurrentItem,
+    required FILTER_CRITERIA filterCriteria,
+    required ITEM_DETAIL itemDetail,
+  });
+
+  // ***************************************************************************
+  // ************* API METHOD **************************************************
+  // ***************************************************************************
+
+  @AbstractMethodAnnotation()
+  Future<ApiResult<PageData<ITEM>?>> callApiQuery({
+    required Object? parentBlockCurrentItem,
+    required FILTER_CRITERIA filterCriteria,
+    required PageableData pageable,
+  });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @AbstractMethodAnnotation()
+  Future<ApiResult<void>> callApiDeleteItemById({
+    required ID itemId,
+  });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @AbstractMethodAnnotation()
+  Future<ApiResult<ITEM_DETAIL>> callApiLoadItemDetailById({
+    required ID itemId,
+  });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @OverridableMethodAnnotation()
+  void setChildrenForParent({
+    required Object currentItemOfParentBlock,
+    required List<ITEM> items,
+  }) {
+    // Override if need.
+  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -3072,17 +3123,6 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  // @canOverride
-  void setChildrenForParent({
-    required Object currentItemOfParentBlock,
-    required List<ITEM> items,
-  }) {
-    // Override if need.
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   void __setCurrentItem({
     required ITEM? item,
     required ITEM_DETAIL? itemDetail,
@@ -3112,8 +3152,6 @@ abstract class Block<
     //
     __blockData._removeItem(removeItem: removeItem);
     this.updateItemsView();
-    // TODO: Disable delay in test mode:
-    // await Future.delayed(Duration(seconds: 1));
   }
 
   // ***************************************************************************
@@ -3150,16 +3188,6 @@ abstract class Block<
     );
     return actionable.yes;
   }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  // TODO: Them tham so ITEM.
-  bool needToKeepItemInList({
-    required Object? parentBlockCurrentItem,
-    required FILTER_CRITERIA filterCriteria,
-    required ITEM_DETAIL itemDetail,
-  });
 
   // ***************************************************************************
   // ***************************************************************************
@@ -3768,104 +3796,6 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  // @RootMethodAnnotation()
-  // Future<bool> deleteItemById({
-  //   required ID itemId,
-  //   required bool ignoreIfItemNotInList,
-  // }) async {
-  //   FlutterArtist.codeFlowLogger._addMethodCall(
-  //     isLibCode: true,
-  //     navigate: null,
-  //     ownerClassInstance: this,
-  //     methodName: "deleteItemById",
-  //     parameters: {
-  //       "itemId": itemId,
-  //     },
-  //   );
-  //   //
-  //   ITEM? item = findItemById(itemId);
-  //   //
-  //   if (item == null) {
-  //     if (ignoreIfItemNotInList) {
-  //       showErrorSnackBar(
-  //         message: "Ignore deletion because this item is not in the list.",
-  //         errorDetails: ["ignoreIfItemNotInList: true"],
-  //       );
-  //       return false;
-  //     }
-  //     ApiResult<ITEM_DETAIL> result;
-  //     try {
-  //       result = await FlutterArtist.executeTask(
-  //         asyncFunction: () async {
-  //           return await callApiFindItemById(itemId: itemId);
-  //         },
-  //       );
-  //     } catch (e, stackTrace) {
-  //       _handleError(
-  //         shelf: shelf,
-  //         methodName: "callApiFindItemById",
-  //         error: e,
-  //         stackTrace: stackTrace,
-  //         showSnackBar: true,
-  //       );
-  //       //
-  //       return false;
-  //     }
-  //     //
-  //     if (result.isError()) {
-  //       _handleRestError(
-  //         shelf: shelf,
-  //         methodName: "callApiFindItemById",
-  //         message: result.errorMessage!,
-  //         errorDetails: result.errorDetails,
-  //         showSnackBar: true,
-  //       );
-  //       return false;
-  //     }
-  //     ITEM_DETAIL? itemDetail = result.data;
-  //     if (itemDetail == null) {
-  //       return true;
-  //     }
-  //     try {
-  //       item = this.convertItemDetailToItem(itemDetail: itemDetail);
-  //     } catch (e, stackTrace) {
-  //       _handleError(
-  //         shelf: shelf,
-  //         methodName: "convertItemDetailToItem",
-  //         error: e,
-  //         stackTrace: stackTrace,
-  //         showSnackBar: true,
-  //       );
-  //       //
-  //       return false;
-  //     }
-  //   }
-  //   //
-  //   Actionable actionable = canDeleteItem(item: item);
-  //   if (!actionable.yes) {
-  //     shelf.showErrorSnackBar(
-  //       message: actionable.message!,
-  //       errorDetails: null,
-  //     );
-  //     return false;
-  //   }
-  //   ItemDeletionResult? result = await deleteItem(
-  //     item: item,
-  //     ignoreIfItemNotInList: ignoreIfItemNotInList,
-  //   );
-  //   return result == null ? false : result.success;
-  //
-  //   // bool confirm = await showConfirmDeleteDialog(details: getClassName(item));
-  //   // if (!confirm) {
-  //   //   return false;
-  //   // }
-  //   // return deleteIt
-  //   // return true;
-  // }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   @RootMethodAnnotation()
   @_BlockDeleteCurrentItemAnnotation()
   Future<ItemDeletionResult?> deleteCurrentItem() async {
@@ -3877,7 +3807,6 @@ abstract class Block<
       parameters: {},
     );
     //
-
     ITEM? currentItem = this.currentItem;
     if (currentItem != null) {
       return deleteItem(item: currentItem);
@@ -3975,28 +3904,6 @@ abstract class Block<
       forceLoadForm: forceLoadForm,
     );
   }
-
-  // ***************************************************************************
-  // ************* API METHOD **************************************************
-  // ***************************************************************************
-
-  Future<ApiResult<PageData<ITEM>?>> callApiQuery({
-    required Object? parentBlockCurrentItem,
-    required FILTER_CRITERIA filterCriteria,
-    required PageableData pageable,
-  });
-
-  // ---------------------------------------------------------------------------
-
-  Future<ApiResult<void>> callApiDeleteItemById({
-    required ID itemId,
-  });
-
-  // ---------------------------------------------------------------------------
-
-  Future<ApiResult<ITEM_DETAIL>> callApiLoadItemDetailById({
-    required ID itemId,
-  });
 
   // ***************************************************************************
   // ****** UPDATE UI COMPONENTS ***********************************************

@@ -17,7 +17,7 @@ abstract class FormModel<
 
   int get lazyLoadCount => _lazyLoadCount;
 
-  String get id {
+  String get pathInfo {
     return "block-form > ${shelf.name} > ${block.name}";
   }
 
