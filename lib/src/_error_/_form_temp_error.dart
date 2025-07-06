@@ -1,12 +1,12 @@
 part of '../../flutter_artist.dart';
 
-class _FormInternalError {
+class _FormTempError {
   final FormErrorMethod formErrorMethod;
   final AppError error;
   final StackTrace stackTrace;
   final String? propName;
 
-  _FormInternalError({
+  _FormTempError({
     required this.propName,
     required this.formErrorMethod,
     required Object error,

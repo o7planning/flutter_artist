@@ -641,7 +641,7 @@ abstract class FormModel<
       }
     } catch (e, stackTrace) {
       final FormErrorInfo formErrorInfo;
-      if (e is _FormInternalError) {
+      if (e is _FormTempError) {
         formErrorInfo = FormErrorInfo(
           activityType: activityType,
           propName: e.propName,
@@ -922,7 +922,7 @@ abstract class FormModel<
           multiOptPropName: multiOptPropName,
         );
       } catch (e, stackTrace) {
-        throw _FormInternalError(
+        throw _FormTempError(
           propName: multiOptPropName,
           formErrorMethod: FormErrorMethod.callApiLoadMultiOptPropXData,
           error: e, // May be AppError, ApiError or others.
@@ -1195,7 +1195,7 @@ abstract class FormModel<
         ),
       );
     } catch (e, stackTrace) {
-      throw _FormInternalError(
+      throw _FormTempError(
         propName: multiOptPropName,
         formErrorMethod: FormErrorMethod.specifyDefaultMultiOptPropValue,
         error: e,
@@ -1253,7 +1253,7 @@ abstract class FormModel<
       }
       return valueWrap;
     } catch (e, stackTrace) {
-      throw _FormInternalError(
+      throw _FormTempError(
         propName: multiOptPropName,
         formErrorMethod: FormErrorMethod.getMultiOptPropValueFromItemDetail,
         error: e,
@@ -1297,7 +1297,7 @@ abstract class FormModel<
         ),
       );
     } catch (e, stackTrace) {
-      throw _FormInternalError(
+      throw _FormTempError(
         propName: multiOptPropName,
         formErrorMethod: FormErrorMethod.getMultiOptPropValueFromExtraFormInput,
         error: e,
