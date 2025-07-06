@@ -978,6 +978,7 @@ abstract class Block<
     //
     thisXBlock._printParameters(hasActiveUI: hasActiveUI);
     //
+    final callApiQueryMethod = BlockErrorMethod.callApiQuery;
     DataState newQueryDataState = this.queryDataState;
     PageData<ITEM>? pageData;
     final ITEM? candidateCurrentItem;
@@ -1048,13 +1049,14 @@ abstract class Block<
         // Call Query API:
         //
         try {
+          __clearBlockError();
           __refreshQueryingState(isQuerying: true);
           //
           FlutterArtist.codeFlowLogger._addMethodCall(
             isLibCode: false,
             navigate: null,
             ownerClassInstance: this,
-            methodName: "callApiQuery",
+            methodName: callApiQueryMethod.name,
             parameters: {},
           );
           //
@@ -1064,30 +1066,45 @@ abstract class Block<
             filterCriteria: filterCriteriaOfFilterModel,
             pageable: callingPageable,
           );
+          // Throw ApiError:
+          result.throwIfError();
           //
-          if (result.apiError != null) {
-            _handleRestError(
-              shelf: shelf,
-              methodName: "callApiQuery",
-              message: result.apiError!.errorMessage,
-              errorDetails: result.apiError!.errorDetails,
-              showSnackBar: true,
-            );
-            queryResultState = ActionResultState.fail;
-            pageData = null;
-          } else {
-            queryResultState = ActionResultState.success;
-            pageData = result.data;
-          }
+          queryResultState = ActionResultState.success;
+          pageData = result.data;
+          // if (result.apiError != null) {
+          //   _handleRestError(
+          //     shelf: shelf,
+          //     methodName: "callApiQuery",
+          //     message: result.apiError!.errorMessage,
+          //     errorDetails: result.apiError!.errorDetails,
+          //     showSnackBar: true,
+          //   );
+          //   queryResultState = ActionResultState.fail;
+          //   pageData = null;
+          // } else {
+          //   queryResultState = ActionResultState.success;
+          //   pageData = result.data;
+          // }
         } catch (e, stackTrace) {
+          queryResultState = ActionResultState.fail;
+          pageData = null;
+          //
+          final blockErrorInfo = BlockErrorInfo(
+            queryDataState: queryDataState,
+            blockErrorMethod: callApiQueryMethod,
+            error: e, // AppError, ApiError or others.
+            errorStackTrace: stackTrace,
+          );
+          __setBlockErrorInfo(blockErrorInfo);
+          //
           _handleError(
             shelf: shelf,
-            methodName: 'callApiQuery',
+            methodName: callApiQueryMethod.name,
             error: e,
+            // AppError, ApiError or others.
             stackTrace: stackTrace,
             showSnackBar: true,
           );
-          queryResultState = ActionResultState.fail;
         } finally {
           __refreshQueryingState(isQuerying: false);
         }
@@ -2476,17 +2493,14 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   void showErrorViewerDialog(BuildContext context) {
-    if (queryDataState != DataState.error) {
+    if (queryDataState != DataState.error ||
+        _blockErrorInfo == null ||
+        _blockErrorInfo!.blockErrorMethod != BlockErrorMethod.callApiQuery) {
       return;
     }
-    _showErrorViewerDialog(
+    _showBlockErrorViewerDialog(
       context: context,
-      title: 'Error',
-      errorInfo: ErrorInfo(
-        errorMessage: "Test",
-        errorDetails: [],
-        stackTrace: null,
-      ),
+      blockErrorInfo: _blockErrorInfo!,
     );
   }
 
@@ -3054,6 +3068,17 @@ abstract class Block<
     required List<ITEM> items,
   }) {
     // Override if need.
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __clearBlockError() {
+    _blockErrorInfo = null;
+  }
+
+  void __setBlockErrorInfo(BlockErrorInfo errorInfo) {
+    _blockErrorInfo = errorInfo;
   }
 
   // ***************************************************************************

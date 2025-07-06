@@ -58,8 +58,7 @@ class _ShelfStructureTreeViewState extends State<_ShelfStructureTreeView> {
           width: 10,
         ),
         onTreeReady: (
-          TreeViewController<dynamic, TreeNode<dynamic>> controller,
-        ) {
+            TreeViewController<dynamic, TreeNode<dynamic>> controller,) {
           _treeViewController = controller;
           controller.expandAllChildren(rootTreeNode);
         },
@@ -107,8 +106,8 @@ class _ShelfStructureTreeViewState extends State<_ShelfStructureTreeView> {
                         color: isListener
                             ? _listenerTextColor
                             : isNotifier
-                                ? _eventSourceTextColor
-                                : Colors.black,
+                            ? _eventSourceTextColor
+                            : Colors.black,
                         fontWeight: _currentNode == node
                             ? FontWeight.bold
                             : FontWeight.normal,
@@ -152,7 +151,8 @@ class _ShelfStructureTreeViewState extends State<_ShelfStructureTreeView> {
       data: widget.shelf,
       parent: null,
     );
-    rootTreeNode = TreeNode.root()..add(shelfNode);
+    rootTreeNode = TreeNode.root()
+      ..add(shelfNode);
 
     List<Block> rootBlocks = widget.shelf.rootBlocks;
     for (Block rootBlock in rootBlocks) {

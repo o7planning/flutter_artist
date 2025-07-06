@@ -17,7 +17,7 @@ class _FilterCriteriaStructureView extends StatefulWidget {
 class _FilterCriteriaStructureViewState
     extends State<_FilterCriteriaStructureView> {
   final MultiSplitViewController _splitViewController =
-      MultiSplitViewController();
+  MultiSplitViewController();
   TreeViewController<dynamic, TreeNode<dynamic>>? _treeViewController;
   late TreeNode<dynamic> rootTreeNode;
   TreeNode<dynamic>? _currentNode;
@@ -109,8 +109,7 @@ class _FilterCriteriaStructureViewState
           width: 10,
         ),
         onTreeReady: (
-          TreeViewController<dynamic, TreeNode<dynamic>> controller,
-        ) {
+            TreeViewController<dynamic, TreeNode<dynamic>> controller,) {
           _treeViewController = controller;
           controller.expandAllChildren(rootTreeNode);
         },
@@ -199,7 +198,8 @@ class _FilterCriteriaStructureViewState
       data: widget.filterModel,
       parent: null,
     );
-    rootTreeNode = TreeNode.root()..add(filterModelNode);
+    rootTreeNode = TreeNode.root()
+      ..add(filterModelNode);
     //
     FilterCriteriaStructure structure =
         widget.filterModel._filterCriteriaStructure;
@@ -216,8 +216,8 @@ class _FilterCriteriaStructureViewState
     return rootTreeNode;
   }
 
-  void _addMultiOptCriterionCascade(
-      TreeNode currentNode, MultiOptCriterion multiOptCriterion) {
+  void _addMultiOptCriterionCascade(TreeNode currentNode,
+      MultiOptCriterion multiOptCriterion) {
     TreeNode childNode = TreeNode(
       key: "MultiOptCriterion-${multiOptCriterion.criterionName}",
       data: multiOptCriterion,
@@ -227,13 +227,13 @@ class _FilterCriteriaStructureViewState
     // }
     currentNode.add(childNode);
     for (MultiOptCriterion childMultiOptCriterion
-        in multiOptCriterion.children) {
+    in multiOptCriterion.children) {
       _addMultiOptCriterionCascade(childNode, childMultiOptCriterion);
     }
   }
 
-  void _addSimpleCriterion(
-      TreeNode currentNode, SimpleCriterion simpleCriterion) {
+  void _addSimpleCriterion(TreeNode currentNode,
+      SimpleCriterion simpleCriterion) {
     TreeNode childNode = TreeNode(
       key: "SimpleCriterion-${simpleCriterion.criterionName}",
       data: simpleCriterion,

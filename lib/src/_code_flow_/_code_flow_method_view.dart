@@ -30,29 +30,29 @@ class _CodeFlowMethodView extends StatelessWidget {
       ),
       trailing: selected
           ? const Icon(
-        Icons.check_box_outlined,
-        size: 16,
-        color: Colors.deepOrangeAccent,
-      )
+              Icons.check_box_outlined,
+              size: 16,
+              color: Colors.deepOrangeAccent,
+            )
           : null,
       title: textSelectable
           ? SelectableText(
-        _title(),
-        style: _titleStyle(),
-      )
+              _title(),
+              style: _titleStyle(),
+            )
           : Text(
-        _title(),
-        style: _titleStyle(),
-      ),
+              _title(),
+              style: _titleStyle(),
+            ),
       subtitle: textSelectable
           ? SelectableText(
-        _subtitle(),
-        style: _subtitleStyle(),
-      )
+              _subtitle(),
+              style: _subtitleStyle(),
+            )
           : Text(
-        _subtitle(),
-        style: _subtitleStyle(),
-      ),
+              _subtitle(),
+              style: _subtitleStyle(),
+            ),
       onTap: onTap,
     );
   }

@@ -16,10 +16,10 @@ class _StorageStructureView extends StatefulWidget {
 
 class _StorageStructureViewState extends State<_StorageStructureView> {
   final _StorageStructureGraphController globalFluStructureGraphController =
-  _StorageStructureGraphController();
+      _StorageStructureGraphController();
 
   final _ShelfRelationshipController shelfRelationshipController =
-  _ShelfRelationshipController();
+      _ShelfRelationshipController();
 
   Shelf? _selectedShelf;
 

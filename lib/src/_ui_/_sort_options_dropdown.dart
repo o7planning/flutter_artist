@@ -38,7 +38,7 @@ class SortOptionsDropdown extends StatelessWidget {
           value: selectedSortCriterion,
           icon: const Icon(Icons.keyboard_arrow_down),
           items: criteria.map(
-            (criterion) {
+                (criterion) {
               return DropdownMenuItem(
                 value: criterion,
                 child: _buildSortCriterionView(

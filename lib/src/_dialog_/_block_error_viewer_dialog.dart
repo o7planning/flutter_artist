@@ -1,19 +1,17 @@
 part of '../../flutter_artist.dart';
 
-class FormErrorViewerDialog extends StatelessWidget {
-  final FormErrorInfo formErrorInfo;
-  final bool formInitialDataReady;
+class BlockErrorViewerDialog extends StatelessWidget {
+  final BlockErrorInfo blockErrorInfo;
 
-  const FormErrorViewerDialog({
-    required this.formErrorInfo,
-    required this.formInitialDataReady,
+  const BlockErrorViewerDialog({
+    required this.blockErrorInfo,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     dialogs.FaAlertDialog alert = dialogs.FaAlertDialog(
-      titleText: "Form Error",
+      titleText: "Error",
       contentPadding: EdgeInsets.all(8),
       content: _buildContent(context),
     );
@@ -21,13 +19,13 @@ class FormErrorViewerDialog extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context) {
-    AppError exception = ErrorUtils.toAppError(formErrorInfo.error);
+    AppError apiError = ErrorUtils.toAppError(blockErrorInfo.error);
     //
     final Size size = calculatePreferredDialogSize(
       context,
       preferredWidth: 440,
       preferredHeight:
-          exception.errorDetails == null || exception.errorDetails!.isEmpty
+          apiError.errorDetails == null || apiError.errorDetails!.isEmpty
               ? 200
               : 280,
     );
@@ -40,14 +38,15 @@ class FormErrorViewerDialog extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (!formInitialDataReady)
+          Text("?? ${blockErrorInfo.queryDataState}"),
+          if (blockErrorInfo.queryDataState == DataState.error)
             IconLabelText(
               icon: Icon(
                 _formErrorDisabledIconData2,
                 color: Colors.red,
                 size: 20,
               ),
-              text: "Form is disabled due to data initialization error.",
+              text: "Block query data error.",
             ),
           Divider(),
           ListTile(
@@ -68,7 +67,7 @@ class FormErrorViewerDialog extends StatelessWidget {
               color: Colors.red,
             ),
             title: Text(
-              exception.errorMessage,
+              apiError.errorMessage,
               maxLines: 3,
               style: const TextStyle(
                 fontSize: 13,
@@ -76,16 +75,16 @@ class FormErrorViewerDialog extends StatelessWidget {
               ),
             ),
           ),
-          if (exception != null &&
-              exception.errorDetails != null &&
-              exception.errorDetails!.isNotEmpty)
+          if (apiError != null &&
+              apiError.errorDetails != null &&
+              apiError.errorDetails!.isNotEmpty)
             Divider(height: 10),
           Expanded(
             child: ListView(
-              children: exception != null &&
-                      exception.errorDetails != null &&
-                      exception.errorDetails!.isNotEmpty
-                  ? exception.errorDetails!
+              children: apiError != null &&
+                      apiError.errorDetails != null &&
+                      apiError.errorDetails!.isNotEmpty
+                  ? apiError.errorDetails!
                       .map((errorDetail) => _buildErrorDetail(errorDetail))
                       .toList()
                   : [],
@@ -120,17 +119,15 @@ class FormErrorViewerDialog extends StatelessWidget {
   }
 }
 
-Future<void> _showFormErrorViewerDialog({
+Future<void> _showBlockErrorViewerDialog({
   required BuildContext context,
-  required FormErrorInfo formErrorInfo,
-  required bool formInitialDataReady,
+  required BlockErrorInfo blockErrorInfo,
 }) async {
   await showDialog(
     context: context,
     builder: (BuildContext context) {
-      return FormErrorViewerDialog(
-        formErrorInfo: formErrorInfo,
-        formInitialDataReady: formInitialDataReady,
+      return BlockErrorViewerDialog(
+        blockErrorInfo: blockErrorInfo,
       );
     },
   );
