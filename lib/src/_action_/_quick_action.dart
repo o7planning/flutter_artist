@@ -16,27 +16,6 @@ abstract class QuickAction<DATA extends Object> extends BaseAction {
     required bool success,
     required DATA? apiData,
   });
-
-  ///
-  /// Example:
-  /// ```dart
-  /// CustomConfirmation? createCustomConfirmation() {
-  ///   return (BuildContext context) async {
-  ///      bool confirm = await showMyConfirmationDialog();
-  ///      return confirm;
-  ///   };
-  /// }
-  /// ```
-  ///
-  CustomConfirmation? createCustomConfirmation();
-
-  Future<bool> _defaultConfirmation(BuildContext context) async {
-    return await dialogs.showConfirmDialog(
-      context: context,
-      message: 'Are you sure you want to perform this action?',
-      details: actionInfo ?? "",
-    );
-  }
 }
 
 abstract class SimpleQuickAction extends QuickAction {

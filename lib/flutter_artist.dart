@@ -30,6 +30,8 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 part 'src/_action_/_base_action.dart';
 
+part 'src/_action_/_scalar_quick_action.dart';
+
 part 'src/_action_/_quick_action.dart';
 
 part 'src/_action_/_quick_child_block_items_action.dart';
