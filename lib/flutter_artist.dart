@@ -290,6 +290,8 @@ part 'src/_dialog_/_form_error_viewer_dialog.dart';
 
 part 'src/_dialog_/_block_error_viewer_dialog.dart';
 
+part 'src/_dialog_/_scalar_error_viewer_dialog.dart';
+
 part 'src/_dialog_/_filter_criteria_dialog.dart';
 
 part 'src/_dialog_/_filter_model_info_dialog.dart';
@@ -327,6 +329,8 @@ part 'src/_enum_/_data_mode.dart';
 part 'src/_enum_/_data_state.dart';
 
 part 'src/_enum_/_block_error_method.dart';
+
+part 'src/_enum_/_scalar_error_method.dart';
 
 part 'src/_enum_/_filter_activity_type.dart';
 
@@ -383,6 +387,8 @@ part 'src/_error_/_form_temp_error.dart';
 part 'src/_error_/_form_error_info.dart';
 
 part 'src/_error_/_block_error_info.dart';
+
+part 'src/_error_/_scalar_error_info.dart';
 
 part 'src/_fa_.dart';
 

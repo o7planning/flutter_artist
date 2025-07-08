@@ -1,19 +1,17 @@
 part of '../../flutter_artist.dart';
 
-class SimpleErrorViewerDialog extends StatelessWidget {
-  final String title;
-  final Object error;
+class ScalarErrorViewerDialog extends StatelessWidget {
+  final ScalarErrorInfo scalarErrorInfo;
 
-  const SimpleErrorViewerDialog({
-    required this.title,
-    required this.error,
+  const ScalarErrorViewerDialog({
+    required this.scalarErrorInfo,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     dialogs.FaAlertDialog alert = dialogs.FaAlertDialog(
-      titleText: title,
+      titleText: "Error",
       contentPadding: EdgeInsets.all(8),
       content: _buildContent(context),
     );
@@ -21,17 +19,17 @@ class SimpleErrorViewerDialog extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context) {
-    AppError appError = ErrorUtils.toAppError(error);
+    AppError apiError = ErrorUtils.toAppError(scalarErrorInfo.error);
     //
     final Size size = calculatePreferredDialogSize(
       context,
       preferredWidth: 440,
       preferredHeight:
-          appError.errorDetails == null || appError.errorDetails!.isEmpty
-              ? 160
-              : 240,
+          apiError.errorDetails == null || apiError.errorDetails!.isEmpty
+              ? 200
+              : 280,
     );
-
+    //
     return Container(
       height: size.height,
       width: size.width,
@@ -40,6 +38,17 @@ class SimpleErrorViewerDialog extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text("?? ${scalarErrorInfo.queryDataState}"),
+          if (scalarErrorInfo.queryDataState == DataState.error)
+            IconLabelText(
+              icon: Icon(
+                _formErrorDisabledIconData2,
+                color: Colors.red,
+                size: 20,
+              ),
+              text: "Scalar query data error.",
+            ),
+          Divider(),
           ListTile(
             dense: true,
             visualDensity: const VisualDensity(
@@ -58,7 +67,7 @@ class SimpleErrorViewerDialog extends StatelessWidget {
               color: Colors.red,
             ),
             title: Text(
-              appError.errorMessage,
+              apiError.errorMessage,
               maxLines: 3,
               style: const TextStyle(
                 fontSize: 13,
@@ -66,14 +75,16 @@ class SimpleErrorViewerDialog extends StatelessWidget {
               ),
             ),
           ),
-          if (appError.errorDetails != null &&
-              appError.errorDetails!.isNotEmpty)
+          if (apiError != null &&
+              apiError.errorDetails != null &&
+              apiError.errorDetails!.isNotEmpty)
             Divider(height: 10),
           Expanded(
             child: ListView(
-              children: appError.errorDetails != null &&
-                      appError.errorDetails!.isNotEmpty
-                  ? appError.errorDetails!
+              children: apiError != null &&
+                      apiError.errorDetails != null &&
+                      apiError.errorDetails!.isNotEmpty
+                  ? apiError.errorDetails!
                       .map((errorDetail) => _buildErrorDetail(errorDetail))
                       .toList()
                   : [],
@@ -108,17 +119,15 @@ class SimpleErrorViewerDialog extends StatelessWidget {
   }
 }
 
-Future<void> _showSimpleErrorViewerDialog({
+Future<void> _showScalarErrorViewerDialog({
   required BuildContext context,
-  required String title,
-  required dynamic error,
+  required ScalarErrorInfo scalarErrorInfo,
 }) async {
   await showDialog(
     context: context,
     builder: (BuildContext context) {
-      return SimpleErrorViewerDialog(
-        title: title,
-        error: error,
+      return ScalarErrorViewerDialog(
+        scalarErrorInfo: scalarErrorInfo,
       );
     },
   );

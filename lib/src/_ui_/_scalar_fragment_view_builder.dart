@@ -2,6 +2,7 @@ part of '../../flutter_artist.dart';
 
 class ScalarFragmentViewBuilder extends _RefreshableWidget {
   final Scalar scalar;
+  final QuickSuggestionMode quickSuggestionMode;
   final Widget Function() build;
 
   const ScalarFragmentViewBuilder({
@@ -9,6 +10,7 @@ class ScalarFragmentViewBuilder extends _RefreshableWidget {
     required super.ownerClassInstance,
     required super.description,
     required this.scalar,
+    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
     required this.build,
   });
 
@@ -30,7 +32,40 @@ class _ScalarFragmentViewBuilderState
 
   @override
   Widget buildContent(BuildContext context) {
-    return widget.build();
+    if (widget.quickSuggestionMode == QuickSuggestionMode.showIfError) {
+      return Stack(
+        children: [
+          widget.build(),
+          if (widget.scalar.queryDataState == DataState.error)
+            Positioned(
+              top: 5,
+              right: 5,
+              child: _buildQuickSuggestionButtonsBar(context),
+            ),
+        ],
+      );
+    } else {
+      return widget.build();
+    }
+  }
+
+  Widget _buildQuickSuggestionButtonsBar(BuildContext context) {
+    return _QuickSuggestionButtonsBar(
+      children: [
+        _QuickSuggestionButton.error(
+          tooltip: "Error",
+          onPressed: () {
+            widget.scalar.showScalarErrorViewerDialog(context);
+          },
+        ),
+        _QuickSuggestionButton.reQuery(
+          tooltip: "Re Query",
+          onPressed: () async {
+            await widget.scalar.query();
+          },
+        ),
+      ],
+    );
   }
 
   @override

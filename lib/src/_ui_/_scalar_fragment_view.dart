@@ -3,9 +3,11 @@ part of '../../flutter_artist.dart';
 abstract class ScalarFragmentView<SCALAR extends Scalar>
     extends StatelessWidget {
   final SCALAR scalar;
+  final QuickSuggestionMode quickSuggestionMode;
 
   const ScalarFragmentView({
     required this.scalar,
+    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
     super.key,
   });
 
@@ -16,6 +18,7 @@ abstract class ScalarFragmentView<SCALAR extends Scalar>
       ownerClassInstance: this,
       description: '',
       scalar: scalar,
+      quickSuggestionMode: quickSuggestionMode,
       build: () {
         return buildContent(context);
       },

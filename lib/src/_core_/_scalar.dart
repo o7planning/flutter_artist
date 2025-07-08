@@ -95,6 +95,10 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
+  ScalarErrorInfo? _scalarErrorInfo;
+
+  ScalarErrorInfo? get scalarErrorInfo => _scalarErrorInfo;
+
   DataState get queryDataState => __scalarData._queryDataState;
 
   FILTER_CRITERIA? get filterCriteria => __scalarData._filterCriteria;
@@ -333,6 +337,22 @@ abstract class Scalar<
         FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     }
     return true;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_RootMethodAnnotation()
+  void showScalarErrorViewerDialog(BuildContext context) {
+    if (queryDataState != DataState.error ||
+        _scalarErrorInfo == null ||
+        _scalarErrorInfo!.scalarErrorMethod != ScalarErrorMethod.callApiQuery) {
+      return;
+    }
+    _showScalarErrorViewerDialog(
+      context: context,
+      scalarErrorInfo: _scalarErrorInfo!,
+    );
   }
 
   // ***************************************************************************

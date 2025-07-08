@@ -2492,7 +2492,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
-  void showErrorViewerDialog(BuildContext context) {
+  void showBlockErrorViewerDialog(BuildContext context) {
     if (queryDataState != DataState.error ||
         _blockErrorInfo == null ||
         _blockErrorInfo!.blockErrorMethod != BlockErrorMethod.callApiQuery) {
