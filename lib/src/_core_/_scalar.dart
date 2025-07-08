@@ -209,31 +209,49 @@ abstract class Scalar<
           newFilterCriteria: filterCriteriaOfFilterModel,
         );
     //
+    final callApiQueryMethod = ScalarErrorMethod.callApiQuery;
     bool isQueryError = false;
     VALUE? value;
     try {
+      __clearScalarError();
       __refreshQueryingState(isQuerying: true);
       //
       ApiResult<VALUE> result = await callApiQuery(
         filterCriteria: filterCriteriaOfFilterModel,
       );
       //
-      if (result.apiError != null) {
-        _handleRestError(
-          shelf: shelf,
-          methodName: "callApiQuery",
-          message: result.apiError!.errorMessage,
-          errorDetails: result.apiError!.errorDetails,
-          showSnackBar: true,
-        );
-        isQueryError = true;
-      } else {
-        value = result.data;
-      }
+      // Throw ApiError:
+      result.throwIfError();
+      //
+      value = result.data;
+      //
+      // if (result.apiError != null) {
+      //   _handleRestError(
+      //     shelf: shelf,
+      //     methodName: "callApiQuery",
+      //     message: result.apiError!.errorMessage,
+      //     errorDetails: result.apiError!.errorDetails,
+      //     showSnackBar: true,
+      //   );
+      //   isQueryError = true;
+      // } else {
+      //   value = result.data;
+      // }
     } catch (e, stackTrace) {
+      isQueryError = true;
+      //
+      final scalarErrorInfo = ScalarErrorInfo(
+        queryDataState: queryDataState,
+        scalarErrorMethod: callApiQueryMethod,
+        error: e, // AppError, ApiError or others.
+        errorStackTrace: stackTrace,
+      );
+      __setScalarErrorInfo(scalarErrorInfo);
+      //
       _handleError(
         shelf: shelf,
-        methodName: 'callApiQuery',
+        methodName: callApiQueryMethod.name,
+        // AppError, ApiError or others.
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -444,6 +462,17 @@ abstract class Scalar<
   Future<ApiResult<VALUE>> callApiQuery({
     required FILTER_CRITERIA filterCriteria,
   });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __clearScalarError() {
+    _scalarErrorInfo = null;
+  }
+
+  void __setScalarErrorInfo(ScalarErrorInfo errorInfo) {
+    _scalarErrorInfo = errorInfo;
+  }
 
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
   // =============== @@@@@@@@@@@@@@@@@@ ========================================

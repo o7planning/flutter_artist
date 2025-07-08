@@ -1100,8 +1100,8 @@ abstract class Block<
           _handleError(
             shelf: shelf,
             methodName: callApiQueryMethod.name,
-            error: e,
             // AppError, ApiError or others.
+            error: e,
             stackTrace: stackTrace,
             showSnackBar: true,
           );
