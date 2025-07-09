@@ -12,10 +12,10 @@ abstract class QuickAction<DATA extends Object> extends BaseAction {
   Future<ApiResult<DATA>?> callApi();
 
   // TODO: Add document.
-  Future<void> doAfterCallApi({
-    required bool success,
-    required DATA? apiData,
-  });
+  // Future<void> doAfterCallApi({
+  //   required bool success,
+  //   required DATA? apiData,
+  // });
 }
 
 abstract class SimpleQuickAction extends QuickAction {

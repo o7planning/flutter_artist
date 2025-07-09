@@ -2187,7 +2187,7 @@ abstract class Block<
     //
     try {
       DATA? apiData = result?.data;
-      await action.doAfterCallApi(success: success, apiData: apiData);
+      // await action.doAfterCallApi(success: success, apiData: apiData);
       //
       if (success) {
         FlutterArtist.storage._fireEventToAffectedItemTypes(
