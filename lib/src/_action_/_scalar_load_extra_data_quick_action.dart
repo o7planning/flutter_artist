@@ -11,6 +11,6 @@ abstract class ScalarLoadExtraDataQuickAction<DATA extends Object>
 
   Future<void> doWithExtraData(BuildContext context, {
     required bool success,
-    required DATA? apiData,
+    required DATA? extraData,
   });
 }

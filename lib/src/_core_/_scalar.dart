@@ -405,14 +405,14 @@ abstract class Scalar<
     }
     //
     try {
-      DATA? apiData = result?.data;
+      DATA? extraData = result?.data;
       //
       // IMPORTANT: No await.
       //
       _showAfterScalarLoadExtraData(
         action: action,
         afterQuickAction: afterQuickAction,
-        apiData: apiData,
+        extraData: extraData,
         success: success,
       );
     } catch (e, stackTrace) {
@@ -431,11 +431,15 @@ abstract class Scalar<
   Future<void> _showAfterScalarLoadExtraData<DATA extends Object>({
     required ScalarLoadExtraDataQuickAction<DATA> action,
     required AfterScalarLoadExtraDataQuickAction afterQuickAction,
-    required DATA? apiData,
+    required DATA? extraData,
     required bool success,
   }) async {
     BuildContext context = FlutterArtist.adapter.getCurrentContext();
-    await action.doWithExtraData(context, success: success, apiData: apiData);
+    await action.doWithExtraData(
+      context,
+      success: success,
+      extraData: extraData,
+    );
     switch (afterQuickAction) {
       case AfterScalarLoadExtraDataQuickAction.none:
         break;
