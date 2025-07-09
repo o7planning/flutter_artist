@@ -10,9 +10,4 @@ abstract class ScalarQuickAction<DATA extends Object> extends BaseAction {
   });
 
   Future<ApiResult<DATA>?> callApi();
-
-  Future<void> doAfterCallApi({
-    required bool success,
-    required DATA? apiData,
-  });
 }
