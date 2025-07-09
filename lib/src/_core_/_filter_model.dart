@@ -1,9 +1,9 @@
 part of '../../flutter_artist.dart';
 
 abstract class FilterModel<
-FILTER_INPUT extends FilterInput, // EmptyFilterInput
-FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
-> extends _XBase {
+    FILTER_INPUT extends FilterInput, // EmptyFilterInput
+    FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
+    > extends _XBase {
   @override
   late final Shelf shelf;
 
@@ -295,7 +295,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     //
     try {
       for (MultiOptCriterion multiOptCriterion
-      in _filterCriteriaStructure._rootOptCriteria) {
+          in _filterCriteriaStructure._rootOptCriteria) {
         //
         // Load OptCriterion Data and set default and selected.
         //
@@ -327,8 +327,8 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
       try {
         Map<String, dynamic> simpleValues =
             await getSimpleCriterionValuesFromFilterInput(
-              filterInput: filterInput,
-            ) ??
+                  filterInput: filterInput,
+                ) ??
                 {};
         for (String criterionName in simpleValues.keys) {
           dynamic value = simpleValues[criterionName];
@@ -438,7 +438,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
 
     // Get current OptCriterion data:
     XData? tempMultiOptCriterionXData =
-    _filterCriteriaStructure._getTempMultiOptCriterionXData(
+        _filterCriteriaStructure._getTempMultiOptCriterionXData(
       multiOptCriterionName,
     );
     final dynamic tempCurrentMultiOptValue = _filterCriteriaStructure
@@ -446,7 +446,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
 
     //
     dynamic newSelectedValue =
-    _filterCriteriaStructure._getTempCurrentCriterionValue(
+        _filterCriteriaStructure._getTempCurrentCriterionValue(
       criterionName: multiOptCriterionName,
     );
     if (activityType == _FilterActivityType.updateFromFilterView) {
@@ -475,14 +475,14 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     //
     if (multiOptCriterionParent != null) {
       XData? tempMultiOptXDataParent =
-      _filterCriteriaStructure._getTempOptCriterionXData(
+          _filterCriteriaStructure._getTempOptCriterionXData(
         multiOptCriterionParent.criterionName,
       );
       //
       if (tempMultiOptXDataParent != null) {
         // Item or Item List (Multi Selection):
         Object? parentOptCriterionValueOLD =
-        _filterCriteriaStructure._getCurrentCriterionValue(
+            _filterCriteriaStructure._getCurrentCriterionValue(
           criterionName: multiOptCriterionParent.criterionName,
         );
         // Parent Value change?
@@ -549,14 +549,14 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
       // It can be a single value or a List.
       //
       final dynamic tempCurrentValue =
-      _filterCriteriaStructure._getTempCurrentCriterionValue(
+          _filterCriteriaStructure._getTempCurrentCriterionValue(
         criterionName: multiOptCriterionName,
       );
       //
       if (tempCurrentValue != null) {
         if (tempCurrentValue is List) {
           currentSelectedItems =
-          tempCurrentValue.isEmpty ? null : tempCurrentValue;
+              tempCurrentValue.isEmpty ? null : tempCurrentValue;
         } else {
           currentSelectedItems = [tempCurrentValue];
         }
@@ -564,10 +564,10 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
       if (currentSelectedItems != null) {
         currentSelectedItems =
             tempMultiOptCriterionXData._findInternalItemsByDynamics(
-              dynamicValues: currentSelectedItems,
-              removeCurrentNotFoundItems: true,
-              addToInternalIfNotFound: false,
-            );
+          dynamicValues: currentSelectedItems,
+          removeCurrentNotFoundItems: true,
+          addToInternalIfNotFound: false,
+        );
       }
       // Candidate Selected Items:
       candidateSelectedItems = inputValueWrap?.values;
@@ -615,7 +615,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     }
     //
     Object? tempSelectedCriterionValue =
-    _filterCriteriaStructure._getTempCurrentCriterionValue(
+        _filterCriteriaStructure._getTempCurrentCriterionValue(
       criterionName: multiOptCriterionName,
     );
 
@@ -642,20 +642,19 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     required String multiOptCriterionName,
   }) {
     MultiOptCriterion? multiOptCriterion =
-    _filterCriteriaStructure._getMultiOptCriterion(multiOptCriterionName);
+        _filterCriteriaStructure._getMultiOptCriterion(multiOptCriterionName);
     if (multiOptCriterion == null) {
       throw "The '$multiOptCriterionName' is not $MultiOptCriterion";
     }
     String message =
-        "The ${getClassName(
-        this)}.$methodName() method must return a non-null $ValueWrap for the multiOptCriterionName '$multiOptCriterionName'. ";
+        "The ${getClassName(this)}.$methodName() method must return a non-null $ValueWrap for the multiOptCriterionName '$multiOptCriterionName'. ";
     if (multiOptCriterion.singleSelection) {
       message += "$ValueWrap.single(null) or $ValueWrap.single(value). ";
     } else {
       message += "$ValueWrap.multi([null]) or $ValueWrap.multi([value]). ";
     }
     message +=
-    "And return null for not $MultiOptCriterion. See the specification of this method for more information.";
+        "And return null for not $MultiOptCriterion. See the specification of this method for more information.";
     // throw AppError(errorMessage: message);
   }
 
@@ -745,7 +744,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     //
     _XFilterModel xFilterModel = xShelf.findXFilterModelByName(name)!;
     _FilterViewChangeTaskUnit taskUnit =
-    _FilterViewChangeTaskUnit(xFilterModel: xFilterModel);
+        _FilterViewChangeTaskUnit(xFilterModel: xFilterModel);
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     await FlutterArtist.executor._executeTaskUnitQueue();
   }
@@ -838,12 +837,11 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
       forceQueryScalarOpts: _scalars
           .map(
             (s) => _ScalarOpt(scalar: s),
-      )
+          )
           .toList(),
       forceQueryBlockOpts: _blocks
           .map(
-            (b) =>
-            _BlockOpt(
+            (b) => _BlockOpt(
                 block: b,
                 forceQuery: true,
                 forceReloadItem: false,
@@ -851,7 +849,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
                 listBehavior: null,
                 suggestedSelection: null,
                 postQueryBehavior: null),
-      )
+          )
           .toList(),
       forceQueryFormModelOpts: [],
     );
@@ -890,10 +888,8 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   }) {
     _filterFragmentWidgetStates.update(
       widgetState,
-          (xState) => xState..isBuilding = isBuilding,
-      ifAbsent: () =>
-      _XState()
-        ..isBuilding = isBuilding,
+      (xState) => xState..isBuilding = isBuilding,
+      ifAbsent: () => _XState()..isBuilding = isBuilding,
     );
   }
 
@@ -907,10 +903,8 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     bool activeOLD = hasActiveUIComponent();
     _filterFragmentWidgetStates.update(
       widgetState,
-          (xState) => xState..isShowing = isShowing,
-      ifAbsent: () =>
-      _XState()
-        ..isShowing = isShowing,
+      (xState) => xState..isShowing = isShowing,
+      ifAbsent: () => _XState()..isShowing = isShowing,
     );
     bool activeCURRENT = hasActiveUIComponent();
 

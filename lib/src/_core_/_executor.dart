@@ -169,9 +169,17 @@ class _Executor {
                 thisXScalar: taskUnit.xScalar,
               );
             }
-            // Scalar QuickAction:
+            // Scalar Quick Action:
             else if (taskUnit is _ScalarQuickActionTaskUnit) {
               await taskUnit.xScalar.scalar._unitQuickAction(
+                thisXScalar: taskUnit.xScalar,
+                action: taskUnit.action,
+                afterQuickAction: taskUnit.afterQuickAction,
+              );
+            }
+            // Scalar Quick Action:
+            else if (taskUnit is _ScalarLoadExtraDataQuickActionTaskUnit) {
+              await taskUnit.xScalar.scalar._unitLoadExtraDataQuickAction(
                 thisXScalar: taskUnit.xScalar,
                 action: taskUnit.action,
                 afterQuickAction: taskUnit.afterQuickAction,

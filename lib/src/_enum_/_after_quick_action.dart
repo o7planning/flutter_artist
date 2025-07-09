@@ -10,3 +10,8 @@ enum AfterScalarQuickAction {
   none,
   query;
 }
+
+enum AfterScalarLoadExtraDataQuickAction {
+  none,
+  update;
+}

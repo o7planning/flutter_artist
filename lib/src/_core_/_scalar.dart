@@ -21,10 +21,10 @@ part of '../../flutter_artist.dart';
 /// ```
 ///
 abstract class Scalar<
-VALUE extends Object,
-FILTER_INPUT extends FilterInput, // EmptyFilterInput
-FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
-> extends _XBase {
+    VALUE extends Object,
+    FILTER_INPUT extends FilterInput, // EmptyFilterInput
+    FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
+    > extends _XBase {
   late final Shelf shelf;
 
   int _lazyLoadCount = 0;
@@ -70,7 +70,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   /// If this scalar does not declare a FilterModel, it will have the default FilterModel.
   ///
   late final FilterModel<FILTER_INPUT, FILTER_CRITERIA>
-  _registeredOrDefaultFilterModel;
+      _registeredOrDefaultFilterModel;
 
   ///
   /// Returns a FilterModel declared in the [Shelf.registerStructure()] method.
@@ -85,7 +85,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   }
 
   late final __scalarData =
-  _ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
+      _ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
 
   final ScalarHiddenBehavior hiddenBehavior;
 
@@ -151,9 +151,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     }
     //
     print(
-        ">> ${getClassName(
-            this)}._unitQuery - queryState: $queryDataState, forceQuery: ${thisXScalar
-            .needQuery}");
+        ">> ${getClassName(this)}._unitQuery - queryState: $queryDataState, forceQuery: ${thisXScalar.needQuery}");
     //
     if (!forceQuery) {
       return thisXScalar.queryResult;
@@ -187,7 +185,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
         xFilterModel.queried = true;
       } else {
         filterCriteriaOfFilterModel =
-        filterModel._filterCriteria! as FILTER_CRITERIA;
+            filterModel._filterCriteria! as FILTER_CRITERIA;
       }
     } catch (e, stackTrace) {
       /* Never Error */
@@ -208,8 +206,8 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     // Ready FilterCriteria:
     //
     bool xCriteriaChanged = this.__scalarData._isXCriteriaChanged(
-      newFilterCriteria: filterCriteriaOfFilterModel,
-    );
+          newFilterCriteria: filterCriteriaOfFilterModel,
+        );
     //
     final callApiQueryMethod = ScalarErrorMethod.callApiQuery;
     bool isQueryError = false;
@@ -362,6 +360,96 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   // ***************************************************************************
   // ***************************************************************************
 
+  @_TaskUnitMethodAnnotation()
+  @_ScalarExecuteLoadExtraDataQuickActionAnnotation()
+  Future<bool> _unitLoadExtraDataQuickAction<DATA extends Object>({
+    required _XScalar thisXScalar,
+    required ScalarLoadExtraDataQuickAction<DATA> action,
+    required AfterScalarLoadExtraDataQuickAction afterQuickAction,
+  }) async {
+    __assertThisXScalar(thisXScalar);
+    //
+    ApiResult<DATA>? result;
+    try {
+      FlutterArtist.codeFlowLogger._addMethodCall(
+        ownerClassInstance: action,
+        methodName: "callApiLoadExtraData",
+        parameters: null,
+        navigate: null,
+        isLibCode: false,
+      );
+      //
+      result = await action.callApiLoadExtraData();
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: '${getClassName(action)}.callApiLoadExtraData',
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      return false;
+    }
+    //
+    bool success = true;
+    if (result != null && result.apiError != null) {
+      success = false;
+      //
+      _handleRestError(
+        shelf: shelf,
+        methodName: "${getClassName(action)}.callApiLoadExtraData",
+        message: result.apiError!.errorMessage,
+        errorDetails: result.apiError!.errorDetails,
+        showSnackBar: true,
+      );
+    }
+    //
+    try {
+      DATA? apiData = result?.data;
+      //
+      // IMPORTANT: No await.
+      //
+      _showAfterScalarLoadExtraData(
+        action: action,
+        afterQuickAction: afterQuickAction,
+        apiData: apiData,
+        success: success,
+      );
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: '${getClassName(action)}.callApi',
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> _showAfterScalarLoadExtraData<DATA extends Object>({
+    required ScalarLoadExtraDataQuickAction<DATA> action,
+    required AfterScalarLoadExtraDataQuickAction afterQuickAction,
+    required DATA? apiData,
+    required bool success,
+  }) async {
+    BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    await action.doWithExtraData(context, success: success, apiData: apiData);
+    switch (afterQuickAction) {
+      case AfterScalarLoadExtraDataQuickAction.none:
+        break;
+      case AfterScalarLoadExtraDataQuickAction.update:
+        updateAllUIComponents(withoutFilters: true);
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   @_RootMethodAnnotation()
   void showScalarErrorViewerDialog(BuildContext context) {
     if (queryDataState != DataState.error ||
@@ -387,10 +475,10 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     __assertThisXScalar(thisXScalar);
     //
     this.__scalarData._updateFrom(
-      filterCriteria: filterCriteria,
-      dataState: dataState,
-      value: value,
-    );
+          filterCriteria: filterCriteria,
+          dataState: dataState,
+          value: value,
+        );
   }
 
   // ***************************************************************************
@@ -540,6 +628,80 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     _XScalar thisXScalar = xShelf.findXScalarByName(this.name)!;
     //
     _TaskUnit taskUnit = _ScalarQuickActionTaskUnit(
+      xScalar: thisXScalar,
+      action: action,
+      afterQuickAction: afterQuickAction,
+    );
+    //
+    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    //
+    await FlutterArtist.executor._executeTaskUnitQueue();
+    return true;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_RootMethodAnnotation()
+  @_ScalarExecuteLoadExtraDataQuickActionAnnotation()
+  Future<bool> executeLoadExtraDataQuickAction<DATA extends Object>({
+    FILTER_INPUT? filterInput,
+    required ActionConfirmationType actionConfirmationType,
+    required ScalarLoadExtraDataQuickAction<DATA> action,
+    required AfterScalarLoadExtraDataQuickAction afterQuickAction,
+    required Function(BuildContext context)? navigate,
+  }) async {
+    FlutterArtist.codeFlowLogger._addMethodCall(
+      isLibCode: true,
+      navigate: null,
+      ownerClassInstance: this,
+      methodName: "executeLoadExtraDataQuickAction",
+      parameters: {
+        "filterInput": filterInput,
+        "action": action,
+        "afterQuickAction": afterQuickAction,
+      },
+    );
+    //
+    // Confirmation:
+    //
+    bool confirm = true;
+    if (action.needToConfirm) {
+      confirm = await __showActionConfirmation(
+        shelf: shelf,
+        defaultConfirmation: action._defaultConfirmation,
+        customConfirmation: action.createCustomConfirmation(),
+      );
+    }
+    //
+    if (!confirm) {
+      return false;
+    }
+    //
+    List<_ScalarOpt> forceQueryScalarOpts = [];
+    switch (afterQuickAction) {
+      case AfterScalarLoadExtraDataQuickAction.none:
+        break;
+      case AfterScalarLoadExtraDataQuickAction.update:
+        forceQueryScalarOpts = [
+          _ScalarOpt(scalar: this),
+        ];
+    }
+    //
+    _XShelf xShelf = _XShelf(
+      shelf: shelf,
+      forceFilterModelOpt: _FilterModelOpt(
+        filterModel: _registeredOrDefaultFilterModel,
+        filterInput: filterInput,
+      ),
+      forceQueryScalarOpts: forceQueryScalarOpts,
+      forceQueryBlockOpts: [],
+      forceQueryFormModelOpts: [],
+    );
+    //
+    _XScalar thisXScalar = xShelf.findXScalarByName(this.name)!;
+    //
+    _TaskUnit taskUnit = _ScalarLoadExtraDataQuickActionTaskUnit(
       xScalar: thisXScalar,
       action: action,
       afterQuickAction: afterQuickAction,
