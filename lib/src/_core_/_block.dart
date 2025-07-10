@@ -454,6 +454,21 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  void __clearAllChildrenBlocksToReady({
+    required _XBlock thisXBlock,
+  }) {
+    __assertThisXBlock(thisXBlock);
+    //
+    for (var childXBlock in thisXBlock.childXBlocks) {
+      childXBlock.block.__clearWithDataStateAndChildrenToNonCascade(
+        thisXBlock: childXBlock,
+        qryDataState: DataState.ready,
+        frmDataState: DataState.none,
+        errorInFilter: false,
+      );
+    }
+  }
+
   void __clearAllChildrenBlocksToNone({
     required _XBlock thisXBlock,
   }) {
@@ -2362,6 +2377,10 @@ abstract class Block<
       this.__setCurrentItem(
         itemDetail: savedItemDetail,
         item: refreshedItem,
+      );
+      // New Tested:
+      __clearAllChildrenBlocksToReady(
+        thisXBlock: thisXBlock,
       );
       //
       if (formModel != null) {

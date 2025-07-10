@@ -368,11 +368,8 @@ abstract class FormModel<
               parentBlockItem: parentBlockItem,
               formMapData: formMapData,
             );
-      //
-      block._refreshSavingState(isSaving: false);
     } catch (e, stackTrace) {
       saveError = true;
-      block._refreshSavingState(isSaving: false);
       //
       _handleError(
         shelf: shelf,
@@ -382,6 +379,8 @@ abstract class FormModel<
         showSnackBar: true,
       );
       return false;
+    } finally {
+      block._refreshSavingState(isSaving: false);
     }
     //
     try {
