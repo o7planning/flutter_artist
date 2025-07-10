@@ -3,3 +3,6 @@
 
 Đổi tên emptyQuery() thành clear({newDataState: pending/ready})
 
+
+Loai bo: ActionConfirmationType.
+
