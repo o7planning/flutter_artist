@@ -160,13 +160,13 @@ abstract class _XBase {
       FlutterArtist.errorLogger.addError(
         shelfName: shelf.name,
         errorMessage: actionableFalse.message!,
-        errorDetails: null,
+        errorDetails: actionableFalse.details,
         stackTrace: null,
       );
       if (showErrSnackBar) {
         showErrorSnackBar(
           message: actionableFalse.message!,
-          errorDetails: null,
+          errorDetails: actionableFalse.details,
         );
       }
     }
