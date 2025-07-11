@@ -277,10 +277,6 @@ abstract class FilterModel<
   }) async {
     print("#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFilterActivity");
 
-    // if (activityType == _FilterDataAction.newFilt) {
-    //   _defaultValueInitiated = false;
-    // }
-
     final Map<String, dynamic> formKeyInstantValues =
         _formKey.currentState?.instantValue ?? {};
 
@@ -535,6 +531,15 @@ abstract class FilterModel<
           multiOptCriterionXData: tempMultiOptCriterionXData,
           multiOptCriterionName: multiOptCriterionName,
         );
+        if (inputValueWrap == null) {
+          if (!_defaultValueInitiated) {
+            inputValueWrap = __specifyDefaultMultiOptCriterionValue(
+              parentMultiOptCriterionValue: parentMultiOptCriterionValue,
+              multiOptCriterionXData: tempMultiOptCriterionXData,
+              multiOptCriterionName: multiOptCriterionName,
+            );
+          }
+        }
       } else {
         if (!_defaultValueInitiated) {
           inputValueWrap = __specifyDefaultMultiOptCriterionValue(
@@ -678,6 +683,7 @@ abstract class FilterModel<
         methodName: "getMultiOptCriterionValueFromFilterInput",
         multiOptCriterionName: multiOptCriterionName,
       );
+      return null;
     }
     List? value = valueWrap?.values ?? [];
     return ValueWrap.multi(
