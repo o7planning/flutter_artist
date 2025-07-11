@@ -2378,10 +2378,12 @@ abstract class Block<
         itemDetail: savedItemDetail,
         item: refreshedItem,
       );
-      // New Tested:
-      __clearAllChildrenBlocksToReady(
-        thisXBlock: thisXBlock,
-      );
+      // New Code:
+      if (isNew) {
+        __clearAllChildrenBlocksToReady(
+          thisXBlock: thisXBlock,
+        );
+      }
       //
       if (formModel != null) {
         formModel!._formPropsStructure._setFormMode_TODO_DELETE(
