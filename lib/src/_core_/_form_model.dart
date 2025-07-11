@@ -626,7 +626,7 @@ abstract class FormModel<
         //
         // Load OptProp Data and set default and selected.
         //
-        // May throw ApiError or _FormInternalError.
+        // May throw ApiError or _FormTempError.
         //
         await _loadMultiOptPropDataCascade(
           blockCurrentFilterCriteria: blockCurrentFilterCriteria,
@@ -947,16 +947,27 @@ abstract class FormModel<
       if (activityType == FormActivityType.itemFirstLoad) {
         if (currentItemDetail == null) {
           if (extraFormInput != null) {
-            // May throw _FormInternalError.
+            // May throw _FormTempError.
             initialValueWrap = __getMultiOptPropValueFromExtraFormInput(
               extraFormInput: extraFormInput,
               multiOptPropXData: tempMultiOptPropXData,
               multiOptPropName: multiOptPropName,
               parentMultiOptPropValue: parentMultiOptPropValue,
             );
+            // TODO-XXX Test Case.
+            if (initialValueWrap == null) {
+              if (!_defaultValueInitiated) {
+                // May throw _FormTempError.
+                initialValueWrap = __specifyDefaultMultiOptPropValue(
+                  multiOptPropName: multiOptPropName,
+                  multiOptPropXData: tempMultiOptPropXData,
+                  parentMultiOptPropValue: parentMultiOptPropValue,
+                );
+              }
+            }
           } else {
             if (!_defaultValueInitiated) {
-              // May throw _FormInternalError.
+              // May throw _FormTempError.
               initialValueWrap = __specifyDefaultMultiOptPropValue(
                 multiOptPropName: multiOptPropName,
                 multiOptPropXData: tempMultiOptPropXData,
@@ -967,7 +978,7 @@ abstract class FormModel<
         }
         // currentItemDetail != null
         else {
-          // May throw _FormInternalError.
+          // May throw _FormTempError.
           initialValueWrap = __getMultiOptPropValueFromItemDetail(
             itemDetail: currentItemDetail,
             multiOptPropXData: tempMultiOptPropXData,
@@ -979,7 +990,7 @@ abstract class FormModel<
       // Auto Enter Form Fields:
       else if (activityType == FormActivityType.autoEnterFormFields) {
         if (extraFormInput != null) {
-          // May throw _FormInternalError.
+          // May throw _FormTempError.
           initialValueWrap = __getMultiOptPropValueFromExtraFormInput(
             extraFormInput: extraFormInput,
             multiOptPropXData: tempMultiOptPropXData,
@@ -1167,7 +1178,7 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_MayThrowFormInternalErrorAnnotation()
+  @_MayThrowFormTempErrorAnnotation()
   ValueWrap? __specifyDefaultMultiOptPropValue({
     required String multiOptPropName,
     required XData multiOptPropXData,
@@ -1184,6 +1195,7 @@ abstract class FormModel<
           methodName: "specifyDefaultMultiOptPropValue",
           multiOptPropName: multiOptPropName,
         );
+        return null;
       }
       List? value = valueWrap?.values ?? [];
       return ValueWrap.multi(
@@ -1230,7 +1242,7 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_MayThrowFormInternalErrorAnnotation()
+  @_MayThrowFormTempErrorAnnotation()
   ValueWrap? __getMultiOptPropValueFromItemDetail({
     required String multiOptPropName,
     required XData multiOptPropXData,
@@ -1264,7 +1276,7 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_MayThrowFormInternalErrorAnnotation()
+  @_MayThrowFormTempErrorAnnotation()
   ValueWrap? __getMultiOptPropValueFromExtraFormInput({
     required String multiOptPropName,
     required XData multiOptPropXData,

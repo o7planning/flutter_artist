@@ -641,8 +641,8 @@ class _ImportantMethodAnnotation {
   const _ImportantMethodAnnotation();
 }
 
-class _MayThrowFormInternalErrorAnnotation {
-  const _MayThrowFormInternalErrorAnnotation();
+class _MayThrowFormTempErrorAnnotation {
+  const _MayThrowFormTempErrorAnnotation();
 }
 
 class _BlockPrepareFormToCreateItemAnnotation {

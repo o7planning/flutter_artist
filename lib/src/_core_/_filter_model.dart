@@ -531,6 +531,7 @@ abstract class FilterModel<
           multiOptCriterionXData: tempMultiOptCriterionXData,
           multiOptCriterionName: multiOptCriterionName,
         );
+        // TODO-XXX Test Case.
         if (inputValueWrap == null) {
           if (!_defaultValueInitiated) {
             inputValueWrap = __specifyDefaultMultiOptCriterionValue(
