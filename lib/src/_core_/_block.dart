@@ -2563,6 +2563,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @_BlockSelectItemAsCurrentAnnotation()
   Future<CurrentItemSelectionResult<ITEM>?> _refreshToShowOrEditItemAsCurrent({
     required ITEM item,
     required bool forceForm,
