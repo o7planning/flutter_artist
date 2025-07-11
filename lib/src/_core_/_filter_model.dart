@@ -525,13 +525,14 @@ abstract class FilterModel<
     if (tempMultiOptCriterionXData != null) {
       ValueWrap? inputValueWrap;
       if (filterInput != null) {
+        // Test Case: [20c], [20d].
         inputValueWrap = __getMultiOptCriterionValueFromFilterInput(
           filterInput: filterInput,
           parentMultiOptCriterionValue: parentMultiOptCriterionValue,
           multiOptCriterionXData: tempMultiOptCriterionXData,
           multiOptCriterionName: multiOptCriterionName,
         );
-        // TODO-XXX Test Case.
+        // Test Case: [20d].
         if (inputValueWrap == null) {
           if (!_defaultValueInitiated) {
             inputValueWrap = __specifyDefaultMultiOptCriterionValue(
