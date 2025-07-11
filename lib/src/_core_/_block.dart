@@ -1670,13 +1670,8 @@ abstract class Block<
         await __removeItemFromList(
           removeItem: candidateCurrentItem,
         );
-        //
-        this.__clearWithDataStateAndChildrenToNonCascade(
-          thisXBlock: thisXBlock,
-          qryDataState: DataState.ready,
-          frmDataState: DataState.none,
-          errorInFilter: false,
-        );
+        // Test Case: [46a].
+        __clearAllChildrenBlocksToNone(thisXBlock: thisXBlock);
         //
         if (siblingItem != null) {
           var taskUnit = _BlockSelectAsCurrentTaskUnit(
