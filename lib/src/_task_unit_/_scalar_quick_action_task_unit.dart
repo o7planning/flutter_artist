@@ -1,7 +1,7 @@
 part of '../../flutter_artist.dart';
 
 @_TaskUnitClassAnnotation()
-@_ScalarExecuteQuickActionAnnotation()
+@_ScalarQuickActionAnnotation()
 class _ScalarQuickActionTaskUnit<DATA extends Object> extends _TaskUnit {
   final _XScalar xScalar;
   final ScalarQuickAction<DATA> action;

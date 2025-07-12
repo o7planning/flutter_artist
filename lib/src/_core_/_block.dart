@@ -1946,7 +1946,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_BlockExecuteQuickActionCreateItemAnnotation()
+  @_BlockQuickCreateItemActionAnnotation()
   Future<bool> _unitQuickCreateItem({
     required _XBlock thisXBlock,
     required BlockQuickCreateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
@@ -2014,10 +2014,11 @@ abstract class Block<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_BlockExecuteQuickActionCreateMultiItemsAnnotation()
+  @_BlockQuickCreateMultiItemsActionAnnotation()
   Future<bool> _unitQuickCreateMultiItems({
     required _XBlock thisXBlock,
-    required BlockQuickCreateMultiItemsAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
+    required BlockQuickCreateMultiItemsAction<ID, ITEM, ITEM_DETAIL,
+            FILTER_CRITERIA>
         action,
   }) async {
     __assertThisXBlock(thisXBlock);
@@ -2083,7 +2084,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_BlockExecuteQuickActionUpdateItemAnnotation()
+  @_BlockQuickUpdateItemActionAnnotation()
   Future<bool> _unitQuickUpdateItem({
     required _XBlock thisXBlock,
     required BlockQuickUpdateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
@@ -2152,7 +2153,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_BlockExecuteQuickActionAnnotation()
+  @_BlockQuickActionAnnotation()
   Future<bool> _unitQuickAction<DATA extends Object>({
     required _XBlock thisXBlock,
     required BlockQuickAction<DATA> action,
@@ -2248,7 +2249,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_BlockExecuteQuickChildBlockItemsAnnotation()
+  @_BlockQuickChildBlockItemsActionAnnotation()
   Future<bool> _unitQuickChildBlockItemsAction<DATA extends Object>({
     required _XBlock thisXBlock,
     required BlockQuickChildBlockItemsAction<ITEM, ITEM_DETAIL> action,
@@ -3235,7 +3236,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
-  @_BlockExecuteQuickActionAnnotation()
+  @_BlockQuickActionAnnotation()
   Future<bool> executeQuickAction<DATA extends Object>({
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
@@ -3320,8 +3321,8 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
-  @_BlockExecuteQuickActionCreateItemAnnotation()
-  Future<bool> executeQuickActionCreateItem({
+  @_BlockQuickCreateItemActionAnnotation()
+  Future<bool> executeQuickCreateItemAction({
     required BlockQuickCreateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
         action,
   }) async {
@@ -3329,7 +3330,7 @@ abstract class Block<
       isLibCode: true,
       navigate: null,
       ownerClassInstance: this,
-      methodName: "executeQuickActionCreateItem",
+      methodName: "executeQuickCreateItemAction",
       parameters: {
         "action": action,
       },
@@ -3382,16 +3383,17 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
-  @_BlockExecuteQuickActionCreateMultiItemsAnnotation()
-  Future<bool> executeQuickActionCreateMultiItems({
-    required BlockQuickCreateMultiItemsAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
+  @_BlockQuickCreateMultiItemsActionAnnotation()
+  Future<bool> executeQuickCreateMultiItemsAction({
+    required BlockQuickCreateMultiItemsAction<ID, ITEM, ITEM_DETAIL,
+            FILTER_CRITERIA>
         action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: null,
       ownerClassInstance: this,
-      methodName: "executeQuickActionCreateMultiItems",
+      methodName: "executeQuickCreateMultiItemsAction",
       parameters: {
         "action": action,
       },
@@ -3444,8 +3446,8 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
-  @_BlockExecuteQuickActionUpdateItemAnnotation()
-  Future<bool> executeQuickActionUpdateItem({
+  @_BlockQuickUpdateItemActionAnnotation()
+  Future<bool> executeQuickUpdateItemAction({
     required BlockQuickUpdateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
         action,
   }) async {
@@ -3453,7 +3455,7 @@ abstract class Block<
       isLibCode: true,
       navigate: null,
       ownerClassInstance: this,
-      methodName: "executeQuickActionUpdateItem",
+      methodName: "executeQuickUpdateItemAction",
       parameters: {
         "action": action,
       },
@@ -3498,8 +3500,8 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
-  @_BlockExecuteQuickChildBlockItemsAnnotation()
-  Future<bool> executeQuickChildBlockItems<
+  @_BlockQuickChildBlockItemsActionAnnotation()
+  Future<bool> executeQuickChildBlockItemsAction<
       A extends BlockQuickChildBlockItemsAction<ITEM, ITEM_DETAIL>>({
     required A action,
   }) async {
@@ -3507,7 +3509,7 @@ abstract class Block<
       isLibCode: true,
       navigate: null,
       ownerClassInstance: this,
-      methodName: "executeQuickChildBlockItems",
+      methodName: "executeQuickChildBlockItemsAction",
       parameters: {
         "action": action,
       },

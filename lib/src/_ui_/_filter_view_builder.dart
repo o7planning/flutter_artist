@@ -67,6 +67,7 @@ class _FilterViewBuilderState
     widget.filterModel._formKey = formKey;
   }
 
+  @_FilterViewChangeAnnotation()
   Future<void> _onChanged() async {
     if (FlutterArtist.executor.executingXShelfId != null) {
       return;
@@ -81,6 +82,7 @@ class _FilterViewBuilderState
   }
 
   @override
+  @_FilterViewChangeAnnotation()
   Widget buildContent(BuildContext context) {
     widget.filterModel._setFilterViewBuildingState(
       widgetState: this,

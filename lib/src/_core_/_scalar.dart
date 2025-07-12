@@ -282,7 +282,7 @@ abstract class Scalar<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_ScalarExecuteQuickActionAnnotation()
+  @_ScalarQuickActionAnnotation()
   Future<bool> _unitQuickAction<DATA extends Object>({
     required _XScalar thisXScalar,
     required ScalarQuickAction<DATA> action,
@@ -361,7 +361,7 @@ abstract class Scalar<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_ScalarExecuteLoadExtraDataQuickActionAnnotation()
+  @_ScalarLoadExtraDataQuickActionAnnotation()
   Future<bool> _unitLoadExtraDataQuickAction<DATA extends Object>({
     required _XScalar thisXScalar,
     required ScalarLoadExtraDataQuickAction<DATA> action,
@@ -573,7 +573,7 @@ abstract class Scalar<
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
   @_RootMethodAnnotation()
-  @_ScalarExecuteQuickActionAnnotation()
+  @_ScalarQuickActionAnnotation()
   Future<bool> executeQuickAction<DATA extends Object>({
     FILTER_INPUT? filterInput,
     required ActionConfirmationType actionConfirmationType,
@@ -647,8 +647,8 @@ abstract class Scalar<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
-  @_ScalarExecuteLoadExtraDataQuickActionAnnotation()
-  Future<bool> executeLoadExtraDataQuickAction<DATA extends Object>({
+  @_ScalarLoadExtraDataQuickActionAnnotation()
+  Future<bool> executeQuickLoadExtraDataAction<DATA extends Object>({
     FILTER_INPUT? filterInput,
     required ActionConfirmationType actionConfirmationType,
     required ScalarLoadExtraDataQuickAction<DATA> action,
@@ -659,7 +659,7 @@ abstract class Scalar<
       isLibCode: true,
       navigate: null,
       ownerClassInstance: this,
-      methodName: "executeLoadExtraDataQuickAction",
+      methodName: "executeQuickLoadExtraDataAction",
       parameters: {
         "filterInput": filterInput,
         "action": action,

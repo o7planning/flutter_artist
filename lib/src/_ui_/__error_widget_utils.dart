@@ -29,32 +29,28 @@ class _QuickSuggestionButton extends StatelessWidget {
   const _QuickSuggestionButton.fatal({
     required this.tooltip,
     required this.onPressed,
-  })
-      : suggestionType = QuickSuggestionType.fatal,
+  })  : suggestionType = QuickSuggestionType.fatal,
         iconData = _formErrorDisabledIconData,
         iconColor = _quick_iconColor_error;
 
   const _QuickSuggestionButton.error({
     required this.tooltip,
     required this.onPressed,
-  })
-      : suggestionType = QuickSuggestionType.error,
+  })  : suggestionType = QuickSuggestionType.error,
         iconData = _formErrorModeIconData,
         iconColor = _quick_iconColor_error;
 
   const _QuickSuggestionButton.restore({
     required this.tooltip,
     required this.onPressed,
-  })
-      : suggestionType = QuickSuggestionType.normal,
+  })  : suggestionType = QuickSuggestionType.normal,
         iconData = _formErrorRollbackIconData,
         iconColor = null;
 
   const _QuickSuggestionButton.reQuery({
     required this.tooltip,
     required this.onPressed,
-  })
-      : suggestionType = QuickSuggestionType.normal,
+  })  : suggestionType = QuickSuggestionType.normal,
         iconData = _formQueryIconData,
         iconColor = null;
 

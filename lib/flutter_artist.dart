@@ -15,7 +15,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
-    as dialogs;
+as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
@@ -681,26 +681,6 @@ class _BlockQueryAndPrepareToCreateAnnotation {
   const _BlockQueryAndPrepareToCreateAnnotation();
 }
 
-class _BlockExecuteQuickActionAnnotation {
-  const _BlockExecuteQuickActionAnnotation();
-}
-
-class _BlockExecuteQuickActionCreateItemAnnotation {
-  const _BlockExecuteQuickActionCreateItemAnnotation();
-}
-
-class _BlockExecuteQuickActionCreateMultiItemsAnnotation {
-  const _BlockExecuteQuickActionCreateMultiItemsAnnotation();
-}
-
-class _BlockExecuteQuickActionUpdateItemAnnotation {
-  const _BlockExecuteQuickActionUpdateItemAnnotation();
-}
-
-class _BlockExecuteQuickChildBlockItemsAnnotation {
-  const _BlockExecuteQuickChildBlockItemsAnnotation();
-}
-
 class _BlockRefreshAndSelectFirstItemAsCurrentAnnotation {
   const _BlockRefreshAndSelectFirstItemAsCurrentAnnotation();
 }
@@ -757,10 +737,38 @@ class _ScalarQueryAnnotation {
   const _ScalarQueryAnnotation();
 }
 
-class _ScalarExecuteQuickActionAnnotation {
-  const _ScalarExecuteQuickActionAnnotation();
+// ******* Scalar QuickAction (START) ******************************************
+
+class _ScalarQuickActionAnnotation {
+  const _ScalarQuickActionAnnotation();
 }
 
-class _ScalarExecuteLoadExtraDataQuickActionAnnotation {
-  const _ScalarExecuteLoadExtraDataQuickActionAnnotation();
+class _ScalarLoadExtraDataQuickActionAnnotation {
+  const _ScalarLoadExtraDataQuickActionAnnotation();
 }
+
+// ******* Scalar QuickAction (END) ********************************************
+
+// ******* Block QuickAction (START) *******************************************
+
+class _BlockQuickActionAnnotation {
+  const _BlockQuickActionAnnotation();
+}
+
+class _BlockQuickCreateItemActionAnnotation {
+  const _BlockQuickCreateItemActionAnnotation();
+}
+
+class _BlockQuickCreateMultiItemsActionAnnotation {
+  const _BlockQuickCreateMultiItemsActionAnnotation();
+}
+
+class _BlockQuickUpdateItemActionAnnotation {
+  const _BlockQuickUpdateItemActionAnnotation();
+}
+
+class _BlockQuickChildBlockItemsActionAnnotation {
+  const _BlockQuickChildBlockItemsActionAnnotation();
+}
+
+// ******* Block QuickAction (END) *********************************************
