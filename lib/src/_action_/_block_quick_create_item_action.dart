@@ -1,16 +1,16 @@
 part of '../../flutter_artist.dart';
 
-abstract class QuickCreateMultiItemsAction<
+abstract class BlockQuickCreateItemAction<
     ID extends Object, //
     ITEM extends Object,
     ITEM_DETAIL extends Object,
     FILTER_CRITERIA extends FilterCriteria> extends BaseAction {
-  const QuickCreateMultiItemsAction({
+  const BlockQuickCreateItemAction({
     required super.needToConfirm,
     required super.actionInfo,
   });
 
-  Future<ApiResult<PageData<ITEM>>> callApiQuickCreateMultiItems({
+  Future<ApiResult<ITEM_DETAIL>> callApiQuickCreateItem({
     required Object? parentBlockItem,
     required FILTER_CRITERIA filterCriteria,
   });

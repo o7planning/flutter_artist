@@ -4,7 +4,7 @@ part of '../../flutter_artist.dart';
 @_BlockExecuteQuickActionCreateItemAnnotation()
 class _BlockQuickCreateItemTaskUnit extends _TaskUnit {
   _XBlock xBlock;
-  QuickCreateItemAction action;
+  BlockQuickCreateItemAction action;
 
   _BlockQuickCreateItemTaskUnit({
     required this.xBlock,

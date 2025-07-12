@@ -1,11 +1,11 @@
 part of '../../flutter_artist.dart';
 
-abstract class QuickChildBlockItemsAction<
-ITEM extends Object, //
-ITEM_DETAIL extends Object> extends BaseAction {
+abstract class BlockQuickChildBlockItemsAction<
+    ITEM extends Object, //
+    ITEM_DETAIL extends Object> extends BaseAction {
   final ITEM item;
 
-  const QuickChildBlockItemsAction({
+  const BlockQuickChildBlockItemsAction({
     required this.item,
     required super.needToConfirm,
     required super.actionInfo,

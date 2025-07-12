@@ -1,13 +1,13 @@
 part of '../../flutter_artist.dart';
 
-abstract class QuickUpdateItemAction<
+abstract class BlockQuickUpdateItemAction<
 ID extends Object, //
 ITEM extends Object,
 ITEM_DETAIL extends Object,
 FILTER_CRITERIA extends FilterCriteria> extends BaseAction {
   final ITEM item;
 
-  const QuickUpdateItemAction({
+  const BlockQuickUpdateItemAction({
     required this.item,
     required super.needToConfirm,
     required super.actionInfo,

@@ -34,15 +34,15 @@ part 'src/_action_/_scalar_quick_action.dart';
 
 part 'src/_action_/_scalar_load_extra_data_quick_action.dart';
 
-part 'src/_action_/_quick_action.dart';
+part 'src/_action_/_block_quick_action.dart';
 
-part 'src/_action_/_quick_child_block_items_action.dart';
+part 'src/_action_/_block_quick_child_block_items_action.dart';
 
-part 'src/_action_/_quick_create_item_action.dart';
+part 'src/_action_/_block_quick_create_item_action.dart';
 
-part 'src/_action_/_quick_create_multi_items_action.dart';
+part 'src/_action_/_block_quick_create_multi_items_action.dart';
 
-part 'src/_action_/_quick_update_item_action.dart';
+part 'src/_action_/_block_quick_update_item_action.dart';
 
 part 'src/_actionable_/_cre_item_actionable.dart';
 

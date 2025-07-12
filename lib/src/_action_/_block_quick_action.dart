@@ -1,9 +1,9 @@
 part of '../../flutter_artist.dart';
 
-abstract class QuickAction<DATA extends Object> extends BaseAction {
+abstract class BlockQuickAction<DATA extends Object> extends BaseAction {
   final List<Type> affectedItemTypes;
 
-  const QuickAction({
+  const BlockQuickAction({
     required super.needToConfirm,
     required super.actionInfo,
     required this.affectedItemTypes,
@@ -11,14 +11,14 @@ abstract class QuickAction<DATA extends Object> extends BaseAction {
 
   Future<ApiResult<DATA>?> callApi();
 
-  // TODO: Add document.
-  // Future<void> doAfterCallApi({
-  //   required bool success,
-  //   required DATA? apiData,
-  // });
+// TODO: Add document.
+// Future<void> doAfterCallApi({
+//   required bool success,
+//   required DATA? apiData,
+// });
 }
 
-abstract class SimpleQuickAction extends QuickAction {
+abstract class SimpleQuickAction extends BlockQuickAction {
   final dynamic data;
 
   const SimpleQuickAction({

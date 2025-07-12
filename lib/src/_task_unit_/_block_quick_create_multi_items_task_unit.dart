@@ -5,7 +5,7 @@ part of '../../flutter_artist.dart';
 class _BlockQuickCreateMultiItemsTaskUnit extends _TaskUnit {
   _XBlock xBlock;
 
-  QuickCreateMultiItemsAction action;
+  BlockQuickCreateMultiItemsAction action;
 
   _BlockQuickCreateMultiItemsTaskUnit({
     required this.xBlock,
