@@ -25,7 +25,7 @@ abstract class FilterModel<
 
   FILTER_CRITERIA? get filterCriteria => _filterCriteria;
 
-  bool _defaultValueInitiated = false;
+  bool _initiatedAtLeastOnce = false;
 
   bool _lockAddMoreQuery = false;
 
@@ -346,9 +346,11 @@ abstract class FilterModel<
         _filterCriteria = null;
         return _filterCriteria;
       }
-    } else {
+    }
+    // filterInput is null
+    else {
       try {
-        if (!_defaultValueInitiated) {
+        if (!_initiatedAtLeastOnce) {
           Map<String, dynamic> defaultValues =
               await specifyDefaultSimpleCriterionValues() ?? {};
 
@@ -392,7 +394,7 @@ abstract class FilterModel<
         newCurrentValue: _filterCriteriaStructure._currentCriteriaValues,
       );
       //
-      _defaultValueInitiated = true;
+      _initiatedAtLeastOnce = true;
       _filterCriteriaStructure._setFilterDataState(DataState.ready);
       //
       _filterCriteria = newCriteria;
@@ -534,7 +536,7 @@ abstract class FilterModel<
         );
         // Test Case: [20d].
         if (inputValueWrap == null) {
-          if (!_defaultValueInitiated) {
+          if (!_initiatedAtLeastOnce) {
             inputValueWrap = __specifyDefaultMultiOptCriterionValue(
               parentMultiOptCriterionValue: parentMultiOptCriterionValue,
               multiOptCriterionXData: tempMultiOptCriterionXData,
@@ -543,7 +545,7 @@ abstract class FilterModel<
           }
         }
       } else {
-        if (!_defaultValueInitiated) {
+        if (!_initiatedAtLeastOnce) {
           inputValueWrap = __specifyDefaultMultiOptCriterionValue(
             parentMultiOptCriterionValue: parentMultiOptCriterionValue,
             multiOptCriterionXData: tempMultiOptCriterionXData,
