@@ -4,6 +4,8 @@ abstract class Shelf extends _XBase {
   @override
   Shelf get shelf => this;
 
+  final ShelfHiddenBehavior hiddenBehavior;
+
   late final ShelfStructure _shelfStruct;
 
   String? get description => _shelfStruct.description;
@@ -57,7 +59,9 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
   // ***************************************************************************
 
-  Shelf() {
+  Shelf({
+    this.hiddenBehavior = ShelfHiddenBehavior.none,
+  }) {
     __onInit();
   }
 
