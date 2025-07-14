@@ -107,11 +107,6 @@ abstract class FilterModel<
   // ***************************************************************************
 
   ///
-  /// This method is called after [prepareMasterData] method.
-  ///
-  /// For example, after getting a list of companies from the [prepareMasterData] method.
-  /// Use [FilterInput] to identify a company that will be used as a criterion for the filter.
-  ///
   /// ```dart
   /// @override
   /// ValueWrap? getMultiOptCriterionValueFromFilterInput({
@@ -123,7 +118,7 @@ abstract class FilterModel<
   ///    if(multiOptCriterionName == "company") {
   ///       int inputCompanyId = filterInput.filterInput;
   ///       CompanyInfo? inputCompany = materPropData?.getItemById(inputCompanyId);
-  ///       return MasterPropValueWrap([inputCompany])
+  ///       return ValueWrap.single(inputCompany)
   ///    }
   ///    return null;
   /// }
@@ -153,6 +148,17 @@ abstract class FilterModel<
   /// This method is called immediately after
   /// calling [callApiLoadMultiOptCriterionXData]
   /// methods if there are no errors.
+  /// 
+  /// ```
+  ///  MyFilterCriteria toFilterCriteriaObject({
+  ///     required Map<String, dynamic> dataMap,
+  ///   }) {
+  ///      return MyFilterCriteria(
+  ///         company: dataMap["company"],
+  ///         department: dataMap["department"],
+  ///      );
+  ///  }
+  /// ```
   ///
   @_AbstractMethodAnnotation()
   FILTER_CRITERIA toFilterCriteriaObject({
