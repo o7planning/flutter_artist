@@ -542,16 +542,6 @@ abstract class FilterModel<
           multiOptCriterionXData: tempMultiOptCriterionXData,
           multiOptCriterionName: multiOptCriterionName,
         );
-        // Test Case: [20d].
-        // if (inputValueWrap == null) {
-        //   if (!__initiatedAtLeastOnce) {
-        //     inputValueWrap = __specifyDefaultMultiOptCriterionValue(
-        //       parentMultiOptCriterionValue: parentMultiOptCriterionValue,
-        //       multiOptCriterionXData: tempMultiOptCriterionXData,
-        //       multiOptCriterionName: multiOptCriterionName,
-        //     );
-        //   }
-        // }
       } else {
         if (!__initiatedAtLeastOnce) {
           inputValueWrap = __specifyDefaultMultiOptCriterionValue(
