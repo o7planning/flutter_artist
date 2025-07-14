@@ -148,7 +148,7 @@ abstract class FilterModel<
   /// This method is called immediately after
   /// calling [callApiLoadMultiOptCriterionXData]
   /// methods if there are no errors.
-  /// 
+  ///
   /// ```
   ///  MyFilterCriteria toFilterCriteriaObject({
   ///     required Map<String, dynamic> dataMap,
