@@ -25,7 +25,9 @@ abstract class FilterModel<
 
   FILTER_CRITERIA? get filterCriteria => _filterCriteria;
 
-  bool _initiatedAtLeastOnce = false;
+  bool __initiatedAtLeastOnce = false;
+
+  bool get initiatedAtLeastOnce => __initiatedAtLeastOnce;
 
   bool _lockAddMoreQuery = false;
 
@@ -350,7 +352,7 @@ abstract class FilterModel<
     // filterInput is null
     else {
       try {
-        if (!_initiatedAtLeastOnce) {
+        if (!__initiatedAtLeastOnce) {
           Map<String, dynamic> defaultValues =
               await specifyDefaultSimpleCriterionValues() ?? {};
 
@@ -394,7 +396,7 @@ abstract class FilterModel<
         newCurrentValue: _filterCriteriaStructure._currentCriteriaValues,
       );
       //
-      _initiatedAtLeastOnce = true;
+      __initiatedAtLeastOnce = true;
       _filterCriteriaStructure._setFilterDataState(DataState.ready);
       //
       _filterCriteria = newCriteria;
@@ -535,17 +537,17 @@ abstract class FilterModel<
           multiOptCriterionName: multiOptCriterionName,
         );
         // Test Case: [20d].
-        if (inputValueWrap == null) {
-          if (!_initiatedAtLeastOnce) {
-            inputValueWrap = __specifyDefaultMultiOptCriterionValue(
-              parentMultiOptCriterionValue: parentMultiOptCriterionValue,
-              multiOptCriterionXData: tempMultiOptCriterionXData,
-              multiOptCriterionName: multiOptCriterionName,
-            );
-          }
-        }
+        // if (inputValueWrap == null) {
+        //   if (!__initiatedAtLeastOnce) {
+        //     inputValueWrap = __specifyDefaultMultiOptCriterionValue(
+        //       parentMultiOptCriterionValue: parentMultiOptCriterionValue,
+        //       multiOptCriterionXData: tempMultiOptCriterionXData,
+        //       multiOptCriterionName: multiOptCriterionName,
+        //     );
+        //   }
+        // }
       } else {
-        if (!_initiatedAtLeastOnce) {
+        if (!__initiatedAtLeastOnce) {
           inputValueWrap = __specifyDefaultMultiOptCriterionValue(
             parentMultiOptCriterionValue: parentMultiOptCriterionValue,
             multiOptCriterionXData: tempMultiOptCriterionXData,

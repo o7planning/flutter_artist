@@ -2322,11 +2322,13 @@ abstract class Block<
     //
     FILTER_CRITERIA? blockCurrentFilterCriteria = filterCriteria;
     if (blockCurrentFilterCriteria == null) {
+      print("????????????? ${this.name} - filterCriteria is null");
       // TODO-Review.
       return true;
     }
     bool fireOutsideEvent = false;
     final ITEM_DETAIL? savedItemDetail = result.data;
+    print(">>> savedItemDetail: $savedItemDetail");
     final bool keepInList;
     if (savedItemDetail == null) {
       keepInList = false;
@@ -2351,6 +2353,8 @@ abstract class Block<
         eventBlock: this,
         itemIdString: null,
       );
+    } else {
+      print(">>> fireOutsideEvent: false (keepInList: $keepInList)");
     }
     //
     if (savedItemDetail != null && keepInList) {
