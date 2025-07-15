@@ -2685,7 +2685,7 @@ abstract class Block<
   ///
   @_RootMethodAnnotation()
   @_BlockQueryNextPageAnnotation()
-  Future<bool> queryNextPage({
+  Future<BlockQueryResult> queryNextPage({
     PostQueryBehavior postQueryBehavior =
         PostQueryBehavior.selectAnItemAsCurrent,
   }) async {
@@ -2699,7 +2699,7 @@ abstract class Block<
     //
     PageableData? currentPageable = __blockData.pageable;
     if (currentPageable == null) {
-      return false;
+      return BlockQueryResult.noCurrentPageable();
     }
     PageableData pageable = currentPageable.next();
     //
@@ -2720,7 +2720,7 @@ abstract class Block<
   ///
   @_RootMethodAnnotation()
   @_BlockQueryPreviousPageAnnotation()
-  Future<bool> queryPreviousPage({
+  Future<BlockQueryResult> queryPreviousPage({
     PostQueryBehavior postQueryBehavior =
         PostQueryBehavior.selectAnItemAsCurrent,
   }) async {
@@ -2734,11 +2734,11 @@ abstract class Block<
     //
     PageableData? currentPageable = __blockData.pageable;
     if (currentPageable == null) {
-      return false;
+      return BlockQueryResult.noCurrentPageable();
     }
     PageableData? pageable = currentPageable.previous();
     if (pageable == null) {
-      return false;
+      return BlockQueryResult.noPreviousPage();
     }
     //
     return await query(
@@ -2758,7 +2758,7 @@ abstract class Block<
   ///
   @_RootMethodAnnotation()
   @_BlockQueryMorePageAnnotation()
-  Future<bool> queryMore({
+  Future<BlockQueryResult> queryMore({
     PostQueryBehavior postQueryBehavior =
         PostQueryBehavior.selectAnItemAsCurrent,
   }) async {
@@ -2772,7 +2772,7 @@ abstract class Block<
     //
     PageableData? nxtPageable = nextPageable;
     if (nxtPageable == null) {
-      return false;
+      return BlockQueryResult.noPreviousPage();
     }
     //
     return await query(
@@ -2856,7 +2856,7 @@ abstract class Block<
   @nonVirtual
   @_RootMethodAnnotation()
   @_BlockQueryAnnotation()
-  Future<bool> query({
+  Future<BlockQueryResult> query({
     ListBehavior listBehavior = ListBehavior.replace,
     PostQueryBehavior postQueryBehavior =
         PostQueryBehavior.selectAnItemAsCurrentIfNeed,
@@ -2866,7 +2866,7 @@ abstract class Block<
     Function()? navigate,
   }) async {
     if (filterModel != null && filterModel!._lockAddMoreQuery) {
-      return false;
+      return BlockQueryResult.lockAddMoreQuery();
     }
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -2910,7 +2910,7 @@ abstract class Block<
     if (queryResult.success) {
       _executeNavigation(navigate: navigate);
     }
-    return queryResult.success;
+    return queryResult;
   }
 
   // ***************************************************************************
