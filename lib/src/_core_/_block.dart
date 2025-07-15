@@ -2787,6 +2787,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @_RootMethodAnnotation()
   Future<bool> queryEmptyAndPrepareToCreate({
     FILTER_INPUT? filterInput,
     Function()? navigate,
@@ -2801,6 +2802,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @_RootMethodAnnotation()
   Future<bool> queryEmpty({
     FILTER_INPUT? filterInput,
     bool prepareFormToCreateItem = false,
