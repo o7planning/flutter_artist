@@ -225,12 +225,12 @@ abstract class Scalar<
       //
       value = result.data;
       //
-      // if (result.apiError != null) {
+      // if (result.error != null) {
       //   _handleRestError(
       //     shelf: shelf,
       //     methodName: "callApiQuery",
-      //     message: result.apiError!.errorMessage,
-      //     errorDetails: result.apiError!.errorDetails,
+      //     message: result.error!.errorMessage,
+      //     errorDetails: result.error!.errorDetails,
       //     showSnackBar: true,
       //   );
       //   isQueryError = true;
@@ -313,14 +313,14 @@ abstract class Scalar<
     }
     //
     bool success = true;
-    if (result != null && result.apiError != null) {
+    if (result != null && result.error != null) {
       success = false;
       //
       _handleRestError(
         shelf: shelf,
         methodName: "${getClassName(action)}.callApi",
-        message: result.apiError!.errorMessage,
-        errorDetails: result.apiError!.errorDetails,
+        message: result.error!.errorMessage,
+        errorDetails: result.error!.errorDetails,
         showSnackBar: true,
       );
     }
@@ -392,14 +392,14 @@ abstract class Scalar<
     }
     //
     bool success = true;
-    if (result != null && result.apiError != null) {
+    if (result != null && result.error != null) {
       success = false;
       //
       _handleRestError(
         shelf: shelf,
         methodName: "${getClassName(action)}.callApiLoadExtraData",
-        message: result.apiError!.errorMessage,
-        errorDetails: result.apiError!.errorDetails,
+        message: result.error!.errorMessage,
+        errorDetails: result.error!.errorDetails,
         showSnackBar: true,
       );
     }

@@ -32,10 +32,10 @@ abstract class LoginActivityBase<USER extends ILoggedInUser> extends Activity {
     ApiResult<USER> result;
     try {
       result = await callApiLogin();
-      if (result.apiError != null) {
+      if (result.error != null) {
         showErrorSnackBar(
-          message: result.apiError!.errorMessage,
-          errorDetails: result.apiError!.errorDetails,
+          message: result.error!.errorMessage,
+          errorDetails: result.error!.errorDetails,
         );
         return false;
       }

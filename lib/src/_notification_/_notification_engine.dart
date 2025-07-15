@@ -86,11 +86,11 @@ class _NotificationEngine {
         // Fetch from Server:
         ApiResult<INotificationSummary> result =
         await adapter!.callApiGetNotificationSummary();
-        if (result.apiError != null) {
+        if (result.error != null) {
           FlutterArtist.errorLogger.addError(
             shelfName: null,
-            errorMessage: result.apiError!.errorMessage,
-            errorDetails: result.apiError!.errorDetails,
+            errorMessage: result.error!.errorMessage,
+            errorDetails: result.error!.errorDetails,
             stackTrace: null,
           );
           return;

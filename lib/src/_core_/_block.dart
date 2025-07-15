@@ -1086,12 +1086,12 @@ abstract class Block<
           //
           queryResultState = ActionResultState.success;
           pageData = result.data;
-          // if (result.apiError != null) {
+          // if (result.error != null) {
           //   _handleRestError(
           //     shelf: shelf,
           //     methodName: "callApiQuery",
-          //     message: result.apiError!.errorMessage,
-          //     errorDetails: result.apiError!.errorDetails,
+          //     message: result.error!.errorMessage,
+          //     errorDetails: result.error!.errorDetails,
           //     showSnackBar: true,
           //   );
           //   queryResultState = ActionResultState.fail;
@@ -1589,14 +1589,14 @@ abstract class Block<
             itemId: itemId,
           );
           //
-          if (result.apiError != null) {
+          if (result.error != null) {
             isLoadItemError = true;
             //
             _handleRestError(
               shelf: shelf,
               methodName: "callApiLoadItemDetailById",
-              message: result.apiError!.errorMessage,
-              errorDetails: result.apiError!.errorDetails,
+              message: result.error!.errorMessage,
+              errorDetails: result.error!.errorDetails,
               showSnackBar: true,
             );
           } else {
@@ -1825,12 +1825,12 @@ abstract class Block<
     } finally {
       __refreshDeletingState(isDeleting: false);
     }
-    if (result.apiError != null) {
+    if (result.error != null) {
       _handleRestError(
         shelf: shelf,
         methodName: "callApiDeleteItemById",
-        message: result.apiError!.errorMessage,
-        errorDetails: result.apiError!.errorDetails,
+        message: result.error!.errorMessage,
+        errorDetails: result.error!.errorDetails,
         showSnackBar: true,
       );
       //
@@ -2184,14 +2184,14 @@ abstract class Block<
     }
     //
     bool success = true;
-    if (result != null && result.apiError != null) {
+    if (result != null && result.error != null) {
       success = false;
       //
       _handleRestError(
         shelf: shelf,
         methodName: "${getClassName(action)}.callApi",
-        message: result.apiError!.errorMessage,
-        errorDetails: result.apiError!.errorDetails,
+        message: result.error!.errorMessage,
+        errorDetails: result.error!.errorDetails,
         showSnackBar: true,
       );
     }
@@ -2278,12 +2278,12 @@ abstract class Block<
       return false;
     }
     //
-    if (result.apiError != null) {
+    if (result.error != null) {
       _handleRestError(
         shelf: shelf,
         methodName: "callApiChildBlockItems",
-        message: result.apiError!.errorMessage,
-        errorDetails: result.apiError!.errorDetails,
+        message: result.error!.errorMessage,
+        errorDetails: result.error!.errorDetails,
         showSnackBar: true,
       );
       // TODO: Xem lai (Hanh dong neu Error).
@@ -2307,12 +2307,12 @@ abstract class Block<
     required String calledMethodName,
     required ApiResult<ITEM_DETAIL> result,
   }) async {
-    if (result.apiError != null) {
+    if (result.error != null) {
       _handleRestError(
         shelf: shelf,
         methodName: calledMethodName,
-        message: result.apiError!.errorMessage,
-        errorDetails: result.apiError!.errorDetails,
+        message: result.error!.errorMessage,
+        errorDetails: result.error!.errorDetails,
         showSnackBar: true,
       );
       return false;
@@ -2471,12 +2471,12 @@ abstract class Block<
     required String calledMethodName,
     required ApiResult<PageData<ITEM>> result,
   }) async {
-    if (result.apiError != null) {
+    if (result.error != null) {
       _handleRestError(
         shelf: shelf,
         methodName: calledMethodName,
-        message: result.apiError!.errorMessage,
-        errorDetails: result.apiError!.errorDetails,
+        message: result.error!.errorMessage,
+        errorDetails: result.error!.errorDetails,
         showSnackBar: true,
       );
       return false;
