@@ -1,6 +1,7 @@
 part of '../../flutter_artist.dart';
 
-class CurrentItemSelectionResult<ITEM> {
+// Old Name: CurrentItemSelectionResult
+class BlockCurrentItemSelectionResult<ITEM> extends ActionResult {
   final CurrentItemSelectionType currentItemSelectionType;
   final List<ITEM?> _candidateItems = [];
   ITEM? _oldCurrentItem;
@@ -9,7 +10,7 @@ class CurrentItemSelectionResult<ITEM> {
   bool _apiError = false;
   bool _convertError = false;
 
-  CurrentItemSelectionResult({
+  BlockCurrentItemSelectionResult({
     required this.currentItemSelectionType,
     required Object Function(ITEM item) getItemId,
     //
@@ -21,6 +22,20 @@ class CurrentItemSelectionResult<ITEM> {
         _getItemId = getItemId {
     if (candidateItem != null) {
       _candidateItems.add(candidateItem);
+    }
+  }
+
+  @override
+  bool get success {
+    switch (currentItemSelectionType) {
+      case CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm:
+        return _successfullySelectedToEdit();
+      case CurrentItemSelectionType.selectAnItemAsCurrent:
+        return _successfullySelectedToShow();
+      case CurrentItemSelectionType.selectAnItemAsCurrentIfNeed:
+        return _successfullySelectedDefault();
+      case CurrentItemSelectionType.refresh:
+        return _successfullySelectedToRefresh();
     }
   }
 
@@ -69,60 +84,5 @@ class CurrentItemSelectionResult<ITEM> {
 
   bool _successfullySelectedDefault() {
     return _apiError || _convertError;
-  }
-
-  bool get success {
-    switch (currentItemSelectionType) {
-      case CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm:
-        return _successfullySelectedToEdit();
-      case CurrentItemSelectionType.selectAnItemAsCurrent:
-        return _successfullySelectedToShow();
-      case CurrentItemSelectionType.selectAnItemAsCurrentIfNeed:
-        return _successfullySelectedDefault();
-      case CurrentItemSelectionType.refresh:
-        return _successfullySelectedToRefresh();
-    }
-  }
-}
-
-class ItemDeletionResult<ITEM> {
-  List<ITEM> _candidateItems = [];
-  List<ITEM> _deletedItems = [];
-  List<ITEM> _failedItems = [];
-
-  bool get success {
-    // TODO: Xem lai.
-    return _deletedItems.isNotEmpty;
-  }
-
-  void addCandidateItem(ITEM item) {
-    _candidateItems.add(item);
-  }
-
-  void addDeletedItem(ITEM item) {
-    _deletedItems.add(item);
-  }
-
-  void addFailedItem(ITEM item) {
-    _failedItems.add(item);
-  }
-}
-
-class BlockQueryResult {
-  bool _otherError = false;
-  bool _filterError = false;
-  bool _apiError = false;
-
-  bool get success {
-    return !_filterError && !_apiError && !_otherError;
-  }
-}
-
-class ScalarQueryResult {
-  bool _filterError = false;
-  bool _apiError = false;
-
-  bool get success {
-    return !_filterError && !_apiError;
   }
 }

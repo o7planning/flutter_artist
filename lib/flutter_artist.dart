@@ -474,7 +474,15 @@ part 'src/_task_unit_/_scalar_quick_action_task_unit.dart';
 
 part 'src/_task_unit_/_scalar_load_extra_data_quick_action_task_unit.dart';
 
-part 'src/_task_unit_/_task_result.dart';
+part 'src/_action_result_/_block_current_item_selection_result.dart';
+
+part 'src/_action_result_/_action_result.dart';
+
+part 'src/_action_result_/_scalar_query_result.dart';
+
+part 'src/_action_result_/_block_query_result.dart';
+
+part 'src/_action_result_/_block_item_deletion_result.dart';
 
 part 'src/_ui_/_table_container.dart';
 

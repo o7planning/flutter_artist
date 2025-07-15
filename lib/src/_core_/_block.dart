@@ -1380,7 +1380,8 @@ abstract class Block<
     formModel?._formPropsStructure._setManualDirty(false);
     //
     if (thisXBlock.currentItemSelectionResult == null) {
-      thisXBlock.currentItemSelectionResult = CurrentItemSelectionResult<ITEM>(
+      thisXBlock.currentItemSelectionResult =
+          BlockCurrentItemSelectionResult<ITEM>(
         currentItemSelectionType: currentItemSelectionType,
         getItemId: getItemId,
         candidateItem: candidateItem,
@@ -2550,7 +2551,8 @@ abstract class Block<
   // ***************************************************************************
 
   @_BlockSelectItemAsCurrentAnnotation()
-  Future<CurrentItemSelectionResult<ITEM>?> _refreshToShowOrEditItemAsCurrent({
+  Future<BlockCurrentItemSelectionResult<ITEM>?>
+      _refreshToShowOrEditItemAsCurrent({
     required ITEM item,
     required bool forceForm,
     required Function()? navigate,
@@ -2595,7 +2597,7 @@ abstract class Block<
     //
     await FlutterArtist.executor._executeTaskUnitQueue();
     var result = thisXBlock.currentItemSelectionResult
-        as CurrentItemSelectionResult<ITEM>?;
+        as BlockCurrentItemSelectionResult<ITEM>?;
     if (result != null && result.success) {
       if (navigate != null) {
         navigate();
@@ -2609,7 +2611,7 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_BlockSelectItemAsCurrentAnnotation()
-  Future<CurrentItemSelectionResult<ITEM>?> refreshAndSelectItemAsCurrent({
+  Future<BlockCurrentItemSelectionResult<ITEM>?> refreshAndSelectItemAsCurrent({
     required ITEM item,
     bool forceLoadForm = false,
     Function()? navigate,
@@ -3546,7 +3548,8 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_BlockRefreshAndSelectFirstItemAsCurrentAnnotation()
-  Future<CurrentItemSelectionResult<ITEM>?> refreshAndSelectFirstItemAsCurrent({
+  Future<BlockCurrentItemSelectionResult<ITEM>?>
+      refreshAndSelectFirstItemAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
@@ -3566,7 +3569,8 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_BlockRefreshAndSelectNextItemAsCurrentAnnotation()
-  Future<CurrentItemSelectionResult<ITEM>?> refreshAndSelectNextItemAsCurrent({
+  Future<BlockCurrentItemSelectionResult<ITEM>?>
+      refreshAndSelectNextItemAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
@@ -3589,7 +3593,7 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_BlockRefreshAndSelectPreviousItemAsCurrentAnnotation()
-  Future<CurrentItemSelectionResult<ITEM>?>
+  Future<BlockCurrentItemSelectionResult<ITEM>?>
       refreshAndSelectPreviousItemAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
@@ -3917,7 +3921,7 @@ abstract class Block<
   ///
   @_RootMethodAnnotation()
   @_BlockRefreshCurrentItemAnnotation()
-  Future<CurrentItemSelectionResult<ITEM>?> refreshCurrentItem({
+  Future<BlockCurrentItemSelectionResult<ITEM>?> refreshCurrentItem({
     bool forceLoadForm = false,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
