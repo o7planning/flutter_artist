@@ -1086,20 +1086,6 @@ abstract class Block<
           //
           queryResultState = ActionResultState.success;
           pageData = result.data;
-          // if (result.error != null) {
-          //   _handleRestError(
-          //     shelf: shelf,
-          //     methodName: "callApiQuery",
-          //     message: result.error!.errorMessage,
-          //     errorDetails: result.error!.errorDetails,
-          //     showSnackBar: true,
-          //   );
-          //   queryResultState = ActionResultState.fail;
-          //   pageData = null;
-          // } else {
-          //   queryResultState = ActionResultState.success;
-          //   pageData = result.data;
-          // }
         } catch (e, stackTrace) {
           queryResultState = ActionResultState.fail;
           pageData = null;
