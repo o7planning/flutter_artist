@@ -4,7 +4,7 @@ abstract class Shelf extends _XBase {
   @override
   Shelf get shelf => this;
 
-  final ShelfHiddenBehavior hiddenBehavior;
+  late final ShelfHiddenBehavior hiddenBehavior;
 
   late final ShelfStructure _shelfStruct;
 
@@ -59,9 +59,7 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
   // ***************************************************************************
 
-  Shelf({
-    this.hiddenBehavior = ShelfHiddenBehavior.none,
-  }) {
+  Shelf() {
     __onInit();
   }
 
@@ -82,6 +80,7 @@ abstract class Shelf extends _XBase {
 
   void __onInit() {
     _shelfStruct = registerStructure();
+    hiddenBehavior = _shelfStruct.hiddenBehavior;
 
     for (String filterModelName in _shelfStruct.filterModels.keys) {
       FilterModel filterModel = _shelfStruct.filterModels[filterModelName]!;
