@@ -21,8 +21,7 @@ enum EnterFormFieldsState implements ECodeDetail {
     details: [
       "The form in 'error' state.",
     ],
-  )
-  ;
+  );
 
   @override
   final ECode eCode;

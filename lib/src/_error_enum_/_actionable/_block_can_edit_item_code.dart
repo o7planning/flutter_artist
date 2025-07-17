@@ -6,13 +6,11 @@ enum BlockCanEditItemCode implements ECodeDetail {
     message: "Item edit is disabled.",
     details: ["The executor is busy."],
   ),
-
   noForm(
     eCode: ECode.noForm,
     message: "The item cannot be edited on the form.",
     details: ["The block has no form."],
   ),
-
   formInErrorState(
     eCode: ECode.inErrorState,
     message: "The item cannot be edited on the form.",
@@ -30,33 +28,26 @@ enum BlockCanEditItemCode implements ECodeDetail {
     message: "Item edit is disabled.",
     details: ["The block is in an 'error' state."],
   ),
-
   blockInNoneState(
     eCode: ECode.inNoneState,
     message: "Item update is disabled.",
     details: ["The block is in a 'none' state."],
   ),
-
   formModeInNone(
     eCode: ECode.inNoneMode,
     message: "The item cannot be edited on the form.",
     details: ["The form is in 'none' mode."],
   ),
-
-  // TODO: BlockItemAllowUpdateState
   notAllow(
     eCode: ECode.notAllow,
     message: "Not allow to edit the item.",
     details: ["The application logic does not allow this item to be updated."],
   ),
-
-  // TODO: BlockItemAllowUpdateState
   checkAllowMethodError(
     eCode: ECode.checkAllowMethodError,
     message: "Not allow to edit the item.",
     details: ["The isAllowUpdateItem() method error."],
   ),
-
   noTarget(
     eCode: ECode.noTarget,
     message: "Not allow to edit item.",

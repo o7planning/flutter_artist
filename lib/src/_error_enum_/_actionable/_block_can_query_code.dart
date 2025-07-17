@@ -1,19 +1,17 @@
-part of '../../flutter_artist.dart';
+part of '../../../flutter_artist.dart';
 
-enum BlockQueryState implements ECodeDetail {
+enum BlockCanQueryCode implements ECodeDetail {
   busy(
     eCode: ECode.busy,
     message: "Block Querying is disabled.",
     details: ["The executor is busy."],
   ),
-
-  notAllowToQuery(
+  notAllow(
     eCode: ECode.notAllow,
     message: "The Block querying is disabled.",
     details: ["The application logic does not allow query this block."],
   ),
-
-  isAllowQueryMethodError(
+  checkAllowMethodError(
     eCode: ECode.checkAllowMethodError,
     message: "The Block querying is disabled.",
     details: ["The isAllowQuery() method error."],
@@ -29,7 +27,7 @@ enum BlockQueryState implements ECodeDetail {
   @override
   final List<String>? details;
 
-  const BlockQueryState({
+  const BlockCanQueryCode({
     required this.eCode,
     required this.message,
     required this.details,

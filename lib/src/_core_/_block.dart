@@ -3206,10 +3206,10 @@ abstract class Block<
     if (this.currentItem == null) {
       return false;
     }
-    Actionable actionable = __isAllowDeleteItem(
+    CheckAllowResult result = __isAllowDeleteItem(
       item: this.currentItem!,
     );
-    return actionable.yes;
+    return result.result == CheckAllow.allow;
   }
 
   // ***************************************************************************
@@ -3220,10 +3220,10 @@ abstract class Block<
     if (this.currentItem == null) {
       return false;
     }
-    Actionable actionable = __isAllowDeleteItem(
+    CheckAllowResult result = __isAllowDeleteItem(
       item: this.currentItem!,
     );
-    return actionable.yes;
+    return result.result == CheckAllow.allow;
   }
 
   // ***************************************************************************
@@ -4060,6 +4060,7 @@ abstract class Block<
   ///
   /// Allows edit an Item or not according to the application logic.
   ///
+  // TODO: Rename to isAllowToEditItem()
   bool isAllowUpdateItem({required ITEM item}) {
     return true;
   }
@@ -4103,15 +4104,13 @@ abstract class Block<
   ///
   /// Allows to Query the Block.
   ///
-  Actionable<BlockQueryState> __isAllowQuery() {
+  @_IsAllowPrivateMethodAnnotation()
+  CheckAllowResult __isAllowQuery() {
     try {
       bool allow = isAllowQuery();
-      return allow
-          ? Actionable.yes()
-          : Actionable.no(eCode: BlockQueryState.notAllowToQuery);
+      return allow ? CheckAllowResult.allow() : CheckAllowResult.notAllow();
     } catch (e, stackTrace) {
-      return Actionable.no(
-        eCode: BlockQueryState.isAllowQueryMethodError,
+      return CheckAllowResult.error(
         stackTrace: stackTrace,
       );
     }
@@ -4123,11 +4122,16 @@ abstract class Block<
   ///
   /// Allows edit current item or not according to the application logic.
   ///
-  Actionable<FormResetState> __isAllowResetForm() {
-    bool allow = isAllowResetForm();
-    return allow
-        ? Actionable.yes()
-        : Actionable.no(eCode: FormResetState.notAllowToReset);
+  @_IsAllowPrivateMethodAnnotation()
+  CheckAllowResult __isAllowResetForm() {
+    try {
+      bool allow = isAllowResetForm();
+      return allow ? CheckAllowResult.allow() : CheckAllowResult.notAllow();
+    } catch (e, stackTrace) {
+      return CheckAllowResult.error(
+        stackTrace: stackTrace,
+      );
+    }
   }
 
   // ***************************************************************************
@@ -4136,15 +4140,16 @@ abstract class Block<
   ///
   /// Allows edit current item or not according to the application logic.
   ///
-  Actionable<BlockCanEditItemCode> __isAllowUpdateItemCurrentItem() {
-    ITEM? currentItem = this.currentItem;
-    if (currentItem == null) {
-      return Actionable.no(
-        eCode: BlockCanEditItemCode.noTarget,
-      );
-    }
-    return _isAllowUpdateItem(item: currentItem);
-  }
+  // @_IsAllowPrivateMethodAnnotation()
+  // Actionable<BlockCanEditItemCode> __isAllowUpdateItemCurrentItem() {
+  //   ITEM? currentItem = this.currentItem;
+  //   if (currentItem == null) {
+  //     return Actionable.no(
+  //       eCode: BlockCanEditItemCode.noTarget,
+  //     );
+  //   }
+  //   return _isAllowUpdateItem(item: currentItem);
+  // }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -4152,19 +4157,15 @@ abstract class Block<
   ///
   /// Allows updating an Item or not according to the application logic.
   ///
-  Actionable<BlockAllowEditItemCode> _isAllowUpdateItem({
+  @_IsAllowPrivateMethodAnnotation()
+  CheckAllowResult _isAllowUpdateItem({
     required ITEM item,
   }) {
     try {
       bool allow = isAllowUpdateItem(item: item);
-      return allow
-          ? Actionable.yes()
-          : Actionable.no(eCode: BlockAllowEditItemCode.notAllow);
+      return allow ? CheckAllowResult.allow() : CheckAllowResult.notAllow();
     } catch (e, stackTrace) {
-      return Actionable.no(
-        eCode: BlockAllowEditItemCode.checkAllowMethodError,
-        stackTrace: stackTrace,
-      );
+      return CheckAllowResult.error(stackTrace: stackTrace);
     }
   }
 
@@ -4174,15 +4175,13 @@ abstract class Block<
   ///
   /// Allows creating a new Item or not according to the application logic.
   ///
-  Actionable<BlockCanCreateItemCode> __isAllowCreateItem() {
+  @_IsAllowPrivateMethodAnnotation()
+  CheckAllowResult __isAllowCreateItem() {
     try {
       bool allow = isAllowCreateItem();
-      return allow
-          ? Actionable.yes()
-          : Actionable.no(eCode: BlockCanCreateItemCode.notAllow);
+      return allow ? CheckAllowResult.allow() : CheckAllowResult.notAllow();
     } catch (e, stackTrace) {
-      return Actionable.no(
-        eCode: BlockCanCreateItemCode.checkAllowMethodError,
+      return CheckAllowResult.error(
         stackTrace: stackTrace,
       );
     }
@@ -4194,17 +4193,13 @@ abstract class Block<
   ///
   /// Allows deleting an Item or not according to the application logic.
   ///
-  Actionable<BlockCanDeleteItemCode> __isAllowDeleteItem({required ITEM item}) {
+  @_IsAllowPrivateMethodAnnotation()
+  CheckAllowResult __isAllowDeleteItem({required ITEM item}) {
     try {
       bool allow = isAllowDeleteItem(item: item);
-      return allow
-          ? Actionable.yes()
-          : Actionable.no(
-              eCode: BlockCanDeleteItemCode.notAllow,
-            );
+      return allow ? CheckAllowResult.allow() : CheckAllowResult.notAllow();
     } catch (e, stackTrace) {
-      return Actionable.no(
-        eCode: BlockCanDeleteItemCode.checkAllowMethodError,
+      return CheckAllowResult.error(
         stackTrace: stackTrace,
       );
     }
@@ -4240,7 +4235,24 @@ abstract class Block<
       );
     }
     //
-    return checkAllow ? __isAllowDeleteItem(item: item) : Actionable.yes();
+    if (checkAllow) {
+      CheckAllowResult result = __isAllowDeleteItem(item: item);
+      switch (result.result) {
+        case CheckAllow.allow:
+          return Actionable<BlockCanDeleteItemCode>.yes();
+        case CheckAllow.notAllow:
+          return Actionable<BlockCanDeleteItemCode>.no(
+            eCode: BlockCanDeleteItemCode.notAllow,
+          );
+        case CheckAllow.error:
+          return Actionable<BlockCanDeleteItemCode>.no(
+            eCode: BlockCanDeleteItemCode.checkAllowMethodError,
+            stackTrace: result.stackTrace,
+          );
+      }
+    }
+    //
+    return Actionable<BlockCanDeleteItemCode>.yes();
   }
 
   // ***************************************************************************
@@ -4270,7 +4282,24 @@ abstract class Block<
         break;
     }
     //
-    return checkAllow ? __isAllowCreateItem() : Actionable.yes();
+    if (checkAllow) {
+      CheckAllowResult result = __isAllowCreateItem();
+      switch (result.result) {
+        case CheckAllow.allow:
+          return Actionable<BlockCanCreateItemCode>.yes();
+        case CheckAllow.notAllow:
+          return Actionable<BlockCanCreateItemCode>.no(
+            eCode: BlockCanCreateItemCode.notAllow,
+          );
+        case CheckAllow.error:
+          return Actionable<BlockCanCreateItemCode>.no(
+            eCode: BlockCanCreateItemCode.checkAllowMethodError,
+            stackTrace: result.stackTrace,
+          );
+      }
+    }
+    //
+    return Actionable<BlockCanCreateItemCode>.yes();
   }
 
   // ***************************************************************************
@@ -4304,42 +4333,75 @@ abstract class Block<
         break;
     }
     //
-    return checkAllow ? _isAllowUpdateItem(item: item) : Actionable.yes();
+    if (checkAllow) {
+      CheckAllowResult result = _isAllowUpdateItem(item: item);
+      switch (result.result) {
+        case CheckAllow.allow:
+          return Actionable<BlockCanEditItemCode>.yes();
+        case CheckAllow.notAllow:
+          return Actionable<BlockCanEditItemCode>.no(
+            eCode: BlockCanEditItemCode.notAllow,
+          );
+        case CheckAllow.error:
+          return Actionable<BlockCanEditItemCode>.no(
+            eCode: BlockCanEditItemCode.checkAllowMethodError,
+            stackTrace: result.stackTrace,
+          );
+      }
+    }
+    //
+    return Actionable<BlockCanEditItemCode>.yes();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable<FormResetState> __canResetForm({
+  Actionable<BlockFormCamResetCode> __canResetForm({
     required bool checkBusy,
     required bool checkAllow,
   }) {
     if (formModel == null) {
-      return Actionable.no(eCode: FormResetState.noFormToReset);
+      return Actionable.no(eCode: BlockFormCamResetCode.noForm);
     }
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable.no(eCode: FormResetState.busy);
+      return Actionable.no(eCode: BlockFormCamResetCode.busy);
     }
     if (!formModel!.isDirty()) {
-      return Actionable.no(eCode: FormResetState.formIsNotDirty);
+      return Actionable.no(eCode: BlockFormCamResetCode.formIsNotDirty);
     }
     if (!formModel!.formInitialDataReady) {
       return Actionable.no(
-        eCode: FormResetState.formInitialDataNotReady,
+        eCode: BlockFormCamResetCode.formInitialDataNotReady,
       );
     }
     switch (formModel!.formMode) {
       case FormMode.none:
         return Actionable.no(
-          eCode: FormResetState.formModeInNone,
+          eCode: BlockFormCamResetCode.formInNoneMode,
         );
       case FormMode.creation:
         break; // Do nothing.
       case FormMode.edit:
         break; // Do nothing.
     }
+    if (checkAllow) {
+      CheckAllowResult result = __isAllowResetForm();
+      switch (result.result) {
+        case CheckAllow.allow:
+          return Actionable<BlockFormCamResetCode>.yes();
+        case CheckAllow.notAllow:
+          return Actionable<BlockFormCamResetCode>.no(
+            eCode: BlockFormCamResetCode.notAllow,
+          );
+        case CheckAllow.error:
+          return Actionable<BlockFormCamResetCode>.no(
+            eCode: BlockFormCamResetCode.checkAllowMethodError,
+            stackTrace: result.stackTrace,
+          );
+      }
+    }
     //
-    return checkAllow ? __isAllowResetForm() : Actionable.yes();
+    return Actionable<BlockFormCamResetCode>.yes();
   }
 
   // ***************************************************************************
@@ -4353,7 +4415,7 @@ abstract class Block<
       return Actionable.no(eCode: BlockItemSaveState.busy);
     }
     if (formModel == null) {
-      return Actionable.no(eCode: BlockItemSaveState.noFormToSave);
+      return Actionable.no(eCode: BlockItemSaveState.noForm);
     }
     if (!formModel!.formInitialDataReady) {
       return Actionable.no(eCode: BlockItemSaveState.formInitialDataNotReady);
@@ -4392,9 +4454,25 @@ abstract class Block<
       case FormMode.edit:
         break; // Do nothing.
     }
-    return checkAllow
-        ? _isAllowUpdateItem(item: item)
-        : Actionable<BlockCanEditItemCode>.yes();
+    //
+    if (checkAllow) {
+      CheckAllowResult result = _isAllowUpdateItem(item: item);
+      switch (result.result) {
+        case CheckAllow.allow:
+          return Actionable<BlockCanEditItemCode>.yes();
+        case CheckAllow.notAllow:
+          return Actionable<BlockCanEditItemCode>.no(
+            eCode: BlockCanEditItemCode.notAllow,
+          );
+        case CheckAllow.error:
+          return Actionable<BlockCanEditItemCode>.no(
+            eCode: BlockCanEditItemCode.checkAllowMethodError,
+            stackTrace: result.stackTrace,
+          );
+      }
+    }
+    //
+    return Actionable<BlockCanEditItemCode>.yes();
   }
 
   // ***************************************************************************
@@ -4404,54 +4482,66 @@ abstract class Block<
   /// Edit on edit-mode
   /// Edit on creation-mode
   ///
-  Actionable<FormEnableState> __isEnableFormToModify({
+  Actionable<BlockFormEnableCode> __isEnableFormToModify({
     required bool checkAllow,
   }) {
     if (formModel == null) {
-      return Actionable.no(eCode: FormEnableState.noForm);
+      return Actionable<BlockFormEnableCode>.no(
+        eCode: BlockFormEnableCode.noForm,
+      );
     }
     //
     switch (formModel!.formMode) {
       case FormMode.none:
-        return Actionable.no(
-          eCode: FormEnableState.formInNoneMode,
+        return Actionable<BlockFormEnableCode>.no(
+          eCode: BlockFormEnableCode.formInNoneMode,
         );
       case FormMode.creation:
         if (formModel!.formDataState == DataState.error) {
           // TODO-XXX (Test case).
           if (!formModel!.formInitialDataReady) {
-            return Actionable.no(
-              eCode: FormEnableState.formInitialDataNotReady,
+            return Actionable<BlockFormEnableCode>.no(
+              eCode: BlockFormEnableCode.formInitialDataNotReady,
             );
           }
         }
-        return Actionable.yes();
+        return Actionable<BlockFormEnableCode>.yes();
       case FormMode.edit:
-        break; // Continue check below .
+        if (checkAllow) {
+          CheckAllowResult result = _isAllowUpdateItem(item: currentItem!);
+          switch (result.result) {
+            case CheckAllow.allow:
+              return Actionable<BlockFormEnableCode>.yes();
+            case CheckAllow.notAllow:
+              return Actionable<BlockFormEnableCode>.no(
+                eCode: BlockFormEnableCode.notAllow,
+              );
+            case CheckAllow.error:
+              return Actionable<BlockFormEnableCode>.no(
+                eCode: BlockFormEnableCode.checkAllowMethodError,
+                stackTrace: result.stackTrace,
+              );
+          }
+        }
+        return Actionable<BlockFormEnableCode>.yes();
     }
-    //
-    if (checkAllow) {
-      // Actionable<BlockAllowEditItemCode> actionable =
-      //     _isAllowUpdateItem(item: item);
-    }
-    return checkAllow
-        ? _isAllowUpdateItem(item: item)
-        : Actionable<BlockCanEditItemCode>.yes();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable<BlockItemRefreshState> __canRefreshCurrentItem({
+  Actionable<BlockCanRefreshItemCode> __canRefreshCurrentItem({
     required bool checkBusy,
   }) {
     if (this.currentItemDetail == null) {
-      return Actionable.no(
-        eCode: BlockItemRefreshState.noTargetItemToRefresh,
+      return Actionable<BlockCanRefreshItemCode>.no(
+        eCode: BlockCanRefreshItemCode.noTarget,
       );
     }
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable.no(eCode: BlockItemRefreshState.busy);
+      return Actionable<BlockCanRefreshItemCode>.no(
+        eCode: BlockCanRefreshItemCode.busy,
+      );
     }
     //
     if (formModel != null) {
@@ -4467,13 +4557,13 @@ abstract class Block<
       }
     }
     //
-    return Actionable.yes();
+    return Actionable<BlockCanRefreshItemCode>.yes();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable canCreateItemWithForm() {
+  Actionable<BlockCanCreateItemCode> canCreateItemWithForm() {
     return __canCreateItem(
       checkBusy: true,
       checkAllow: true,
@@ -4484,7 +4574,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable canResetForm() {
+  Actionable<BlockFormCamResetCode> canResetForm() {
     return __canResetForm(
       checkBusy: true,
       checkAllow: true,
@@ -4601,15 +4691,32 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable<BlockQueryState> __canQuery({
+  Actionable<BlockCanQueryCode> __canQuery({
     required bool checkBusy,
     required bool checkAllow,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable.no(eCode: BlockQueryState.busy);
+      return Actionable<BlockCanQueryCode>.no(eCode: BlockCanQueryCode.busy);
     }
     //
-    return checkAllow ? __isAllowQuery() : Actionable.yes();
+    if (checkAllow) {
+      CheckAllowResult result = __isAllowQuery();
+      switch (result.result) {
+        case CheckAllow.allow:
+          return Actionable<BlockCanQueryCode>.yes();
+        case CheckAllow.notAllow:
+          return Actionable<BlockCanQueryCode>.no(
+            eCode: BlockCanQueryCode.notAllow,
+          );
+        case CheckAllow.error:
+          return Actionable<BlockCanQueryCode>.no(
+            eCode: BlockCanQueryCode.checkAllowMethodError,
+            stackTrace: result.stackTrace,
+          );
+      }
+    }
+    //
+    return Actionable<BlockCanQueryCode>.yes();
   }
 
   // ***************************************************************************

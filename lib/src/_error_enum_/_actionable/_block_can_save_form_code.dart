@@ -1,25 +1,23 @@
-part of '../../flutter_artist.dart';
+part of '../../../flutter_artist.dart';
 
 enum BlockItemSaveState implements ECodeDetail {
   busy(
-    eCode:ECode.busy,
+    eCode: ECode.busy,
     message: "Form saving is disabled.",
     details: ["The block has no form."],
   ),
-  noFormToSave(
-    eCode:ECode.noForm,
+  noForm(
+    eCode: ECode.noForm,
     message: "Form saving is disabled.",
     details: ["The block has no form."],
   ),
-
   formInitialDataNotReady(
-    eCode:ECode.formInitialDataNotReady,
+    eCode: ECode.formInitialDataNotReady,
     message: "Form saving is disabled.",
     details: ["The formInitialData is not ready."],
   ),
-
   formIsNotDirty(
-    eCode:ECode.formIsNotDirty,
+    eCode: ECode.formIsNotDirty,
     message: "Form saving is disabled.",
     details: ["The form is not dirty."],
   );

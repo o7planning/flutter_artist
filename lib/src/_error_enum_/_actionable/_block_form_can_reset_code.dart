@@ -1,40 +1,41 @@
-part of '../../flutter_artist.dart';
+part of '../../../flutter_artist.dart';
 
-enum FormResetState implements ECodeDetail {
+enum BlockFormCamResetCode implements ECodeDetail {
   busy(
     eCode: ECode.busy,
     message: "Form reset is disabled.",
     details: ["The executor is busy."],
   ),
-
-  noFormToReset(
+  noForm(
     eCode: ECode.noForm,
     message: "Form reset is disabled.",
     details: ["The block has no form."],
   ),
-
   formIsNotDirty(
     eCode: ECode.formIsNotDirty,
     message: "Form reset is disabled.",
     details: ["The form is not in dirty state."],
   ),
-
   formInitialDataNotReady(
     eCode: ECode.formInitialDataNotReady,
     message: "Form reset is disabled.",
     details: ["The formInitialData is not ready."],
   ),
-  formModeInNone(
+  formInNoneMode(
     eCode: ECode.inNoneMode,
     message: "Form reset is disabled.",
     details: ["The form is in 'none' mode."],
   ),
-  notAllowToReset(
+  notAllow(
     eCode: ECode.notAllow,
     message: "Form Resetting is disabled.",
     details: ["The application logic does not allow to reset the form."],
   ),
-  ;
+  checkAllowMethodError(
+    eCode: ECode.checkAllowMethodError,
+    message: "Form Resetting is disabled.",
+    details: ["The isAllowResetForm() method error.."],
+  );
 
   @override
   final ECode eCode;
@@ -45,7 +46,7 @@ enum FormResetState implements ECodeDetail {
   @override
   final List<String>? details;
 
-  const FormResetState({
+  const BlockFormCamResetCode({
     required this.eCode,
     required this.message,
     required this.details,

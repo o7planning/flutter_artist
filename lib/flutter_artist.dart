@@ -15,7 +15,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
-as dialogs;
+    as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
@@ -477,20 +477,37 @@ part 'src/_task_unit_/_scalar_load_extra_data_quick_action_task_unit.dart';
 part 'src/_action_result_/_block_current_item_selection_result.dart';
 
 part 'src/_action_result_/_action_result.dart';
+
 part 'src/_error_enum_/__e_code_detail.dart';
+
 part 'src/_error_enum_/__actionable_code.dart';
+
 part 'src/_error_enum_/__e_code.dart';
-part 'src/_error_enum_/_form_reset_state.dart';
-part 'src/_error_enum_/_form_enable_state.dart';
+
+part 'src/_error_enum_/_actionable/_block_form_can_reset_code.dart';
+
+part 'src/_error_enum_/_actionable/_block_form_enable_code.dart';
+
 part 'src/_error_enum_/_actionable/_block_allow_edit_item_code.dart';
+
 part 'src/_error_enum_/_show_form_info_state.dart';
+
 part 'src/_error_enum_/_enter_form_fields_state.dart';
-part 'src/_error_enum_/_block_query_state.dart';
+
+part 'src/_error_enum_/_actionable/_block_can_query_code.dart';
+
 part 'src/_error_enum_/_actionable/_block_can_delete_item_code.dart';
-part 'src/_error_enum_/_block_item_refresh_state.dart';
+
+part 'src/_error_enum_/_actionable/_block_can_refresh_item_code.dart';
+
 part 'src/_error_enum_/_actionable/_block_can_edit_item_code.dart';
+
 part 'src/_error_enum_/_actionable/_block_can_create_item_code.dart';
-part 'src/_error_enum_/_block_item_save_state.dart';
+
+part 'src/_error_enum_/_actionable/_block_can_save_form_code.dart';
+
+part 'src/_error_enum_/_actionable/_check_allow.dart';
+
 part 'src/_action_result_/_scalar_query_result.dart';
 
 part 'src/_action_result_/_block_query_result.dart';
@@ -644,6 +661,10 @@ class _AbstractMethodAnnotation {
 
 class _RootMethodAnnotation {
   const _RootMethodAnnotation();
+}
+
+class _IsAllowPrivateMethodAnnotation {
+  const _IsAllowPrivateMethodAnnotation();
 }
 
 class _OverridableMethodAnnotation {
