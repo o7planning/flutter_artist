@@ -1567,32 +1567,17 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable __canEnterFormFields({
+  Actionable<EnterFormFieldsState> __canEnterFormFields({
     required bool checkBusy,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable.no(
-        message: "Enter-form-fields feature is disabled",
-        details: [
-          "The executor is busy.",
-        ],
-      );
+      return Actionable.no(eCode: EnterFormFieldsState.busy);
     }
     if (formMode == FormMode.none) {
-      return Actionable.no(
-        message: "Enter-form-fields feature is disabled",
-        details: [
-          "The form in 'none' mode.",
-        ],
-      );
+      return Actionable.no(eCode: EnterFormFieldsState.formInNoneMode);
     }
     if (formDataState == DataState.error) {
-      return Actionable.no(
-        message: "Enter-form-fields feature is disabled",
-        details: [
-          "The form in 'error' mode.",
-        ],
-      );
+      return Actionable.no(eCode: EnterFormFieldsState.formInErrorState);
     }
     return Actionable.yes();
   }

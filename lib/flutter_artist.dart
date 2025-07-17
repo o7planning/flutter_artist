@@ -477,7 +477,20 @@ part 'src/_task_unit_/_scalar_load_extra_data_quick_action_task_unit.dart';
 part 'src/_action_result_/_block_current_item_selection_result.dart';
 
 part 'src/_action_result_/_action_result.dart';
-
+part 'src/_error_enum_/__e_code_detail.dart';
+part 'src/_error_enum_/__actionable_code.dart';
+part 'src/_error_enum_/__e_code.dart';
+part 'src/_error_enum_/_form_reset_state.dart';
+part 'src/_error_enum_/_form_enable_state.dart';
+part 'src/_error_enum_/_actionable/_block_allow_edit_item_code.dart';
+part 'src/_error_enum_/_show_form_info_state.dart';
+part 'src/_error_enum_/_enter_form_fields_state.dart';
+part 'src/_error_enum_/_block_query_state.dart';
+part 'src/_error_enum_/_actionable/_block_can_delete_item_code.dart';
+part 'src/_error_enum_/_block_item_refresh_state.dart';
+part 'src/_error_enum_/_actionable/_block_can_edit_item_code.dart';
+part 'src/_error_enum_/_actionable/_block_can_create_item_code.dart';
+part 'src/_error_enum_/_block_item_save_state.dart';
 part 'src/_action_result_/_scalar_query_result.dart';
 
 part 'src/_action_result_/_block_query_result.dart';
