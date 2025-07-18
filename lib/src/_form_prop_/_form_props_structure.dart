@@ -65,8 +65,10 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void __standardizeCascade(MultiOptProp optProp,
-      MultiOptProp? parent,) {
+  void __standardizeCascade(
+    MultiOptProp optProp,
+    MultiOptProp? parent,
+  ) {
     optProp.parent = parent;
     optProp._structure = this;
     //
@@ -506,8 +508,7 @@ class FormPropsStructure {
       if (prop == null) {
         print("""\n
             ****************************************************************************************************
-            *** WARNING ***: You should declare prop '$propName' explicitly in ${getClassName(
-            formModel)}.
+            *** WARNING ***: You should declare prop '$propName' explicitly in ${getClassName(formModel)}.
             ****************************************************************************************************
             """);
         //
@@ -577,7 +578,7 @@ class FormPropsStructure {
     } else {
       throw AppError(
         errorMessage:
-        'Invalid Prop "$multiOptPropName", it must be $MultiOptProp',
+            'Invalid Prop "$multiOptPropName", it must be $MultiOptProp',
       );
     }
   }

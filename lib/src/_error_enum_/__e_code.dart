@@ -14,8 +14,11 @@ enum ECode {
   inNoneMode, // Mode
   //
   noTarget,
+  invalidTarget,
   formIsNotDirty,
   //
   noLoggedInUser,
   permissionDenied,
+  //
+  cancelled,
 }

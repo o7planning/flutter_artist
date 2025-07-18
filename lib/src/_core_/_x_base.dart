@@ -90,7 +90,7 @@ abstract class _XBase {
         msg = "Call $methodName() error: ${err.errorMessage}";
       } else {
         msg =
-        "Call ${getClassName(this)}.$methodName() error: ${err.errorMessage}";
+            "Call ${getClassName(this)}.$methodName() error: ${err.errorMessage}";
       }
     }
     print(msg);

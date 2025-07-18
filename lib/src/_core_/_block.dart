@@ -3873,27 +3873,23 @@ abstract class Block<
       },
     );
     //
-    Actionable<BlockCanDeleteItemCode> actionable = canDeleteItem(item: item);
+    Actionable<BlockCanDeleteItemCode> actionable = __canDeleteItem(
+      checkBusy: true,
+      item: item,
+      ignoreIfItemNotInList: ignoreIfItemNotInList,
+      checkAllow: true,
+    );
     if (!actionable.yes) {
-      return null;
+      return ItemDeletionResult(precheck: actionable.eCode);
     }
-    if (ignoreIfItemNotInList) {
-      ITEM? it = findItemSameIdWith(item: item);
-      if (it == null) {
-        showErrorSnackBar(
-          message: "Ignore deletion because this item is not in the list.",
-          errorDetails: ["ignoreIfItemNotInList: true"],
-        );
-        return null;
-      }
-    }
+    //
     BuildContext context = FlutterArtist.adapter.getCurrentContext();
     bool confirm = await showConfirmDeleteDialog(
       context: context,
       details: getClassName(item),
     );
     if (!confirm) {
-      return null;
+      return ItemDeletionResult(precheck: BlockCanDeleteItemCode.cancelled);
     }
     _XShelf xShelf = _XShelf(
       shelf: shelf,
@@ -4221,11 +4217,13 @@ abstract class Block<
       checkBusy: checkBusy,
       item: currentItem!,
       checkAllow: checkAllow,
+      ignoreIfItemNotInList: true,
     );
   }
 
   Actionable<BlockCanDeleteItemCode> __canDeleteItem({
     required bool checkBusy,
+    required bool ignoreIfItemNotInList,
     required ITEM item,
     required bool checkAllow,
   }) {
@@ -4233,6 +4231,15 @@ abstract class Block<
       return Actionable.no(
         eCode: BlockCanDeleteItemCode.busy,
       );
+    }
+    //
+    if (ignoreIfItemNotInList) {
+      ITEM? it = findItemSameIdWith(item: item);
+      if (it == null) {
+        return Actionable.no(
+          eCode: BlockCanDeleteItemCode.invalidTarget,
+        );
+      }
     }
     //
     if (checkAllow) {
@@ -4618,6 +4625,7 @@ abstract class Block<
     return __canDeleteItem(
       checkBusy: true,
       item: item,
+      ignoreIfItemNotInList: true,
       checkAllow: true,
     );
   }

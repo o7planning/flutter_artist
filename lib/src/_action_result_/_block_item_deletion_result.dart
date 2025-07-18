@@ -1,9 +1,12 @@
 part of '../../flutter_artist.dart';
 
 class ItemDeletionResult<ITEM> extends ActionResult {
+  final BlockCanDeleteItemCode? precheck;
   List<ITEM> _candidateItems = [];
   List<ITEM> _deletedItems = [];
   List<ITEM> _failedItems = [];
+
+  ItemDeletionResult({this.precheck = null});
 
   @override
   bool get success {
