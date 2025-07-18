@@ -77,6 +77,10 @@ abstract class Block<
     > extends _XBase {
   late final Shelf shelf;
 
+  int _deletionErrorCount = 0;
+
+  int get deletionErrorCount => _deletionErrorCount;
+
   int _lazyLoadCount = 0;
 
   int get lazyLoadCount => _lazyLoadCount;
@@ -3849,8 +3853,18 @@ abstract class Block<
     //
     ITEM? currentItem = this.currentItem;
     if (currentItem == null) {
+      _deletionErrorCount++;
+      final actionable = Actionable<BlockCanDeleteItemCode>.no(
+        eCode: BlockCanDeleteItemCode.noTarget,
+      );
+      _addErrorLogActionable(
+        shelf: shelf,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+      );
       return ItemDeletionResult<ITEM>(
-          precheck: BlockCanDeleteItemCode.noTarget);
+        precheck: actionable.eCode,
+      );
     }
     return await deleteItem(item: currentItem);
   }
@@ -3881,7 +3895,13 @@ abstract class Block<
       checkAllow: true,
     );
     if (!actionable.yes) {
-      return ItemDeletionResult(precheck: actionable.eCode);
+      _deletionErrorCount++;
+      _addErrorLogActionable(
+        shelf: shelf,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+      );
+      return ItemDeletionResult<ITEM>(precheck: actionable.eCode);
     }
     //
     BuildContext context = FlutterArtist.adapter.getCurrentContext();
@@ -3890,7 +3910,9 @@ abstract class Block<
       details: getClassName(item),
     );
     if (!confirm) {
-      return ItemDeletionResult(precheck: BlockCanDeleteItemCode.cancelled);
+      return ItemDeletionResult<ITEM>(
+        precheck: BlockCanDeleteItemCode.cancelled,
+      );
     }
     _XShelf xShelf = _XShelf(
       shelf: shelf,
@@ -5311,6 +5333,12 @@ abstract class Block<
     return success;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ItemDeletionResult<ITEM> _createEmptyItemDeletionResult() {
+    return ItemDeletionResult<ITEM>();
+  }
   // ***************************************************************************
   // ***************************************************************************
   // ***************************************************************************

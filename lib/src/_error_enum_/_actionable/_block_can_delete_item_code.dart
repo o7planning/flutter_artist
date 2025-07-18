@@ -19,7 +19,7 @@ enum BlockCanDeleteItemCode implements ECodeDetail {
   invalidTarget(
     eCode: ECode.invalidTarget,
     message: "Deletion Ignored",
-    details: ["Target item is not valid"],
+    details: ["Target item is not in the list"],
   ),
   noTarget(
     eCode: ECode.noTarget,

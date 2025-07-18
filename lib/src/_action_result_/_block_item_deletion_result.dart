@@ -6,10 +6,13 @@ class ItemDeletionResult<ITEM> extends ActionResult {
   List<ITEM> _deletedItems = [];
   List<ITEM> _failedItems = [];
 
-  ItemDeletionResult({this.precheck = null});
+  ItemDeletionResult({this.precheck});
 
   @override
   bool get success {
+    if (precheck != null) {
+      return false;
+    }
     // TODO: Xem lai.
     return _deletedItems.isNotEmpty;
   }
