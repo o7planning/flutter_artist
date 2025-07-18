@@ -3838,7 +3838,7 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_BlockDeleteCurrentItemAnnotation()
-  Future<ItemDeletionResult?> deleteCurrentItem() async {
+  Future<ItemDeletionResult<ITEM>> deleteCurrentItem() async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: null,
@@ -3848,10 +3848,11 @@ abstract class Block<
     );
     //
     ITEM? currentItem = this.currentItem;
-    if (currentItem != null) {
-      return deleteItem(item: currentItem);
+    if (currentItem == null) {
+      return ItemDeletionResult<ITEM>(
+          precheck: BlockCanDeleteItemCode.noTarget);
     }
-    return null;
+    return await deleteItem(item: currentItem);
   }
 
   // ***************************************************************************
@@ -3859,7 +3860,7 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_BlockDeleteItemAnnotation()
-  Future<ItemDeletionResult> deleteItem({
+  Future<ItemDeletionResult<ITEM>> deleteItem({
     required ITEM item,
     bool ignoreIfItemNotInList = true,
   }) async {
@@ -3908,7 +3909,7 @@ abstract class Block<
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //
     await FlutterArtist.executor._executeTaskUnitQueue();
-    return thisXBlock.itemDeletionResult;
+    return thisXBlock.itemDeletionResult as ItemDeletionResult<ITEM>;
   }
 
   // ***************************************************************************

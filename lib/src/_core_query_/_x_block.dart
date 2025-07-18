@@ -41,7 +41,7 @@ class _XBlock {
   // This property must have a null value initially.
   BlockCurrentItemSelectionResult? currentItemSelectionResult;
 
-  final itemDeletionResult = ItemDeletionResult();
+  final ItemDeletionResult itemDeletionResult = ItemDeletionResult();
 
   final queryResult = BlockQueryResult();
 
