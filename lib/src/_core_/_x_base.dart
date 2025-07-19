@@ -81,6 +81,7 @@ abstract class _XBase {
     required bool showSnackBar,
   }) {
     AppError err = ErrorUtils.toAppError(error);
+    StackTrace? st = err is ApiError ? null : stackTrace;
     //
     final String msg;
     if (methodName == null) {
@@ -95,8 +96,8 @@ abstract class _XBase {
     }
     print(msg);
     //
-    if (!FlutterArtist.testCaseMode) {
-      print(stackTrace);
+    if (!FlutterArtist.testCaseMode && st != null) {
+      print(st);
     }
     //
     FlutterArtist.codeFlowLogger._addError(
@@ -109,7 +110,7 @@ abstract class _XBase {
       shelfName: FlutterArtist.storage._getShelfName(shelf.runtimeType),
       errorMessage: msg,
       errorDetails: err.errorDetails,
-      stackTrace: stackTrace,
+      stackTrace: st,
     );
     //
     if (showSnackBar) {
