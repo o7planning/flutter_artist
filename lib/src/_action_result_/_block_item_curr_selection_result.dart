@@ -33,6 +33,11 @@ class BlockItemCurrSelectionResult<ITEM> extends ActionResult {
 
   @override
   bool get success {
+    if (precheck != null) {
+      return false;
+    } else if (_appError != null) {
+      return false;
+    }
     switch (currentItemSelectionType) {
       case CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm:
         return _successfullySelectedToEdit();

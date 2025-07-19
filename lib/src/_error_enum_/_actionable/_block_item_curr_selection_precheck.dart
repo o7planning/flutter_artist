@@ -15,6 +15,11 @@ enum BlockItemCurrSelectionPrecheck implements ECodeDetail {
     eCode: ECode.invalidTarget,
     message: "The Refresh Ignored",
     details: ["Item is not in the List"],
+  ),
+  notAllow(
+    eCode: ECode.notAllow,
+    message: "The Refresh Ignored",
+    details: ["Not Allow to Refresh Item"],
   )
   ;
 

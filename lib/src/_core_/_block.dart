@@ -1569,7 +1569,6 @@ abstract class Block<
             candidateCurrentItemInNewQueriedList as ITEM_DETAIL;
       } else {
         bool isLoadItemError = false;
-
         try {
           __refreshRefreshingCurrentItemState(
             isRefreshingCurrentItem: true,
@@ -1580,31 +1579,23 @@ abstract class Block<
           ApiResult<ITEM_DETAIL> result = await callApiLoadItemDetailById(
             itemId: itemId,
           );
+          // Throw if error:
+          result.throwIfError();
           //
-          if (result.error != null) {
-            isLoadItemError = true;
-            //
-            _handleRestError(
-              shelf: shelf,
-              methodName: "callApiLoadItemDetailById",
-              message: result.error!.errorMessage,
-              errorDetails: result.error!.errorDetails,
-              showSnackBar: true,
-            );
-          } else {
-            isLoadItemError = false;
-            //
-            refreshedCurrentItemDetail = result.data;
-          }
+          refreshedCurrentItemDetail = result.data;
         } catch (e, stackTrace) {
           isLoadItemError = true;
           //
-          _handleError(
+          AppError appError = _handleError(
             shelf: shelf,
             methodName: "callApiLoadItemDetailById",
             error: e,
             stackTrace: stackTrace,
             showSnackBar: true,
+          );
+          //
+          thisXBlock.currentItemSelectionResult?._setAppError(
+            appError: appError,
           );
         } finally {
           __refreshRefreshingCurrentItemState(
@@ -2572,6 +2563,13 @@ abstract class Block<
     Actionable<BlockItemCurrSelectionPrecheck> actionable =
         this.canSelectItem(item: item);
     if (!actionable.yes) {
+      // _refreshErrorCount++;
+      _addErrorLogActionable(
+        shelf: shelf,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+      );
+      //
       return BlockItemCurrSelectionResult<ITEM>(
         precheck: actionable.eCode,
         currentItemSelectionType: currentItemSelectionType,
@@ -3968,6 +3966,12 @@ abstract class Block<
       checkBusy: true,
     );
     if (!actionable.yes) {
+      // _refreshErrorCount++;
+      _addErrorLogActionable(
+        shelf: shelf,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+      );
       return BlockItemCurrSelectionResult<ITEM>(
         precheck: actionable.eCode,
         currentItemSelectionType: CurrentItemSelectionType.refresh,
@@ -4673,7 +4677,8 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable<BlockItemCurrSelectionPrecheck> canSelectItem({required ITEM item}) {
+  Actionable<BlockItemCurrSelectionPrecheck> canSelectItem(
+      {required ITEM item}) {
     ITEM? internalItem = findItemSameIdWith(item: item);
     //
     if (internalItem == null) {
