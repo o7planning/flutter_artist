@@ -44,6 +44,9 @@ class _XBlock {
   late final ItemDeletionResult itemDeletionResult =
       block._createEmptyItemDeletionResult();
 
+  late final ItemCreationResult itemCreationResult =
+      block._createEmptyItemCreationResult();
+
   final queryResult = BlockQueryResult();
 
   // ***************************************************************************

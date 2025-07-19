@@ -24,6 +24,9 @@ class ItemDeletionResult<ITEM> extends ActionResult {
     if (precheck != null) {
       return false;
     }
+    if (_appError != null) {
+      return false;
+    }
     // TODO: Xem lai.
     return _deletedItem != null;
   }

@@ -3626,28 +3626,28 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool __checkBeforeFormCreation({
-    required bool checkBusy,
-    required bool addErrorLog,
-    required bool showErrSnackBar,
-  }) {
-    Actionable createActionable = __canCreateItem(
-      checkBusy: checkBusy,
-      checkAllow: true,
-      creationType: ItemCreationType.form,
-    );
-    if (!createActionable.yes) {
-      if (addErrorLog) {
-        _addErrorLogActionable(
-          shelf: shelf,
-          actionableFalse: createActionable,
-          showErrSnackBar: showErrSnackBar,
-        );
-      }
-      return false;
-    }
-    return true;
-  }
+  // bool __checkBeforeFormCreation({
+  //   required bool checkBusy,
+  //   required bool addErrorLog,
+  //   required bool showErrSnackBar,
+  // }) {
+  //   Actionable<BlockItemCreationPrecheck> actionable = __canCreateItem(
+  //     checkBusy: checkBusy,
+  //     checkAllow: true,
+  //     creationType: ItemCreationType.form,
+  //   );
+  //   if (!actionable.yes) {
+  //     if (addErrorLog) {
+  //       _addErrorLogActionable(
+  //         shelf: shelf,
+  //         actionableFalse: actionable,
+  //         showErrSnackBar: showErrSnackBar,
+  //       );
+  //     }
+  //     return false;
+  //   }
+  //   return true;
+  // }
 
   bool __checkBeforeQuickActionCreateItem({
     required bool checkBusy,
@@ -3705,7 +3705,7 @@ abstract class Block<
   ///
   @_RootMethodAnnotation()
   @_BlockPrepareFormToCreateItemAnnotation()
-  Future<bool> prepareFormToCreateItem({
+  Future<ItemCreationResult<ITEM>> prepareFormToCreateItem({
     EXTRA_FORM_INPUT? extraFormInput,
     required Function()? navigate,
     bool initDirty = false,
@@ -3718,12 +3718,21 @@ abstract class Block<
       parameters: {"extraFormInput": extraFormInput},
     );
     //
-    if (!__checkBeforeFormCreation(
+    Actionable<BlockItemCreationPrecheck> actionable = __canCreateItem(
       checkBusy: true,
-      addErrorLog: true,
-      showErrSnackBar: true,
-    )) {
-      return false;
+      checkAllow: true,
+      creationType: ItemCreationType.form,
+    );
+    if (!actionable.yes) {
+      // _createItemErrorCount++;
+      _addErrorLogActionable(
+        shelf: shelf,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+      );
+      return ItemCreationResult<ITEM>(
+        precheck: actionable.eCode,
+      );
     }
     //
     extraFormInput?.formAction = FormAction.create;
@@ -3747,7 +3756,7 @@ abstract class Block<
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //
     await FlutterArtist.executor._executeTaskUnitQueue();
-    return true;
+    return thisXBlock.itemCreationResult as ItemCreationResult<ITEM>;
   }
 
   // ***************************************************************************
@@ -5416,6 +5425,11 @@ abstract class Block<
   ItemDeletionResult<ITEM> _createEmptyItemDeletionResult() {
     return ItemDeletionResult<ITEM>(candidateItem: null);
   }
+
+  ItemCreationResult<ITEM> _createEmptyItemCreationResult() {
+    return ItemCreationResult<ITEM>();
+  }
+
   // ***************************************************************************
   // ***************************************************************************
   // ***************************************************************************
