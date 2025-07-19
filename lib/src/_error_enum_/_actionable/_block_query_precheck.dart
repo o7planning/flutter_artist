@@ -1,6 +1,6 @@
 part of '../../../flutter_artist.dart';
 
-enum BlockCanQueryCode implements ECodeDetail {
+enum BlockQueryPrecheck implements ECodeDetail {
   busy(
     eCode: ECode.busy,
     message: "Block Querying is disabled.",
@@ -27,7 +27,7 @@ enum BlockCanQueryCode implements ECodeDetail {
   @override
   final List<String>? details;
 
-  const BlockCanQueryCode({
+  const BlockQueryPrecheck({
     required this.eCode,
     required this.message,
     required this.details,

@@ -9,6 +9,8 @@ class _XFormModel {
 
   late final _XBlock xBlock;
 
+  final FormSaveResult _formSaveResult = FormSaveResult();
+
   int get xShelfId => xShelf.xShelfId;
 
   _XFormModel({

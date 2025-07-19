@@ -16,6 +16,7 @@ enum ECode {
   noTarget,
   invalidTarget,
   formIsNotDirty,
+  formInvalidated,
   //
   noLoggedInUser,
   permissionDenied,

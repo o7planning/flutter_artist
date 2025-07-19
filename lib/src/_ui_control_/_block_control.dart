@@ -62,7 +62,8 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
         Actionable queryActionable = widget.block.canQuery();
         return queryActionable.yes ? __queryBlock : null;
       case BlockControlActionType.saveForm:
-        Actionable saveActionable = widget.block.canSaveForm();
+        Actionable<BlockFormSavingPrecheck> saveActionable =
+            widget.block.canSaveForm();
         return saveActionable.yes ? __saveForm : null;
       case BlockControlActionType.refreshCurrentItem:
         Actionable refreshActionable = widget.block.canRefreshCurrentItem();
@@ -93,7 +94,8 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
       );
     }
     //
-    return await widget.block.formModel!.saveForm();
+    FormSaveResult result = await widget.block.formModel!.saveForm();
+    return result.success;
   }
 
   Future<bool> __deleteCurrentItem() async {

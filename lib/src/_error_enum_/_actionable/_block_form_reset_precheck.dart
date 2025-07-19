@@ -1,6 +1,6 @@
 part of '../../../flutter_artist.dart';
 
-enum BlockFormCamResetCode implements ECodeDetail {
+enum BlockFormResetingPrecheck implements ECodeDetail {
   busy(
     eCode: ECode.busy,
     message: "Form reset is disabled.",
@@ -46,7 +46,7 @@ enum BlockFormCamResetCode implements ECodeDetail {
   @override
   final List<String>? details;
 
-  const BlockFormCamResetCode({
+  const BlockFormResetingPrecheck({
     required this.eCode,
     required this.message,
     required this.details,

@@ -86,8 +86,8 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
     }
     switch (selection) {
       case dialogs.YesNoCancel.yes:
-        bool success = await widget.formModel.saveForm();
-        if (!success) {
+        FormSaveResult result = await widget.formModel.saveForm();
+        if (!result.success) {
           return;
         }
         if (mounted && _leavingDirtyForms.isEmpty) {

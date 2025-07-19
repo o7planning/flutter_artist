@@ -73,7 +73,7 @@ abstract class _XBase {
   // *********** HANDLE ERROR **************************************************
   // ***************************************************************************
 
-  void _handleError({
+  AppError   _handleError({
     required Shelf shelf,
     required String? methodName,
     required Object error,
@@ -118,6 +118,7 @@ abstract class _XBase {
         errorDetails: err.errorDetails,
       );
     }
+    return err;
   }
 
   void _handleRestError({

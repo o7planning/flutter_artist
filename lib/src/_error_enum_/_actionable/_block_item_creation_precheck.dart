@@ -1,6 +1,6 @@
 part of '../../../flutter_artist.dart';
 
-enum BlockCanCreateItemCode implements ECodeDetail {
+enum BlockItemCreationPrecheck implements ECodeDetail {
   busy(
     eCode: ECode.busy,
     message: "New item creation is disabled.",
@@ -47,7 +47,7 @@ enum BlockCanCreateItemCode implements ECodeDetail {
   @override
   final List<String>? details;
 
-  const BlockCanCreateItemCode({
+  const BlockItemCreationPrecheck({
     required this.eCode,
     required this.message,
     required this.details,

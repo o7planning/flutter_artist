@@ -1,12 +1,14 @@
 part of '../../flutter_artist.dart';
 
 class ItemDeletionResult<ITEM> extends ActionResult {
-  final BlockCanDeleteItemCode? precheck;
-  List<ITEM> _candidateItems = [];
-  List<ITEM> _deletedItems = [];
-  List<ITEM> _failedItems = [];
+  final BlockItemDeletionPrecheck? precheck;
+  AppError? _appError;
+  ITEM? _candidateItem;
+  ITEM? _deletedItem;
+  ITEM? _failedItem;
 
-  ItemDeletionResult({this.precheck});
+  ItemDeletionResult({required ITEM? candidateItem, this.precheck})
+      : _candidateItem = candidateItem;
 
   @override
   bool get success {
@@ -14,18 +16,19 @@ class ItemDeletionResult<ITEM> extends ActionResult {
       return false;
     }
     // TODO: Xem lai.
-    return _deletedItems.isNotEmpty;
+    return _deletedItem != null;
   }
 
-  void addCandidateItem(ITEM item) {
-    _candidateItems.add(item);
+  void setCandidateItem({required ITEM candidateItem}) {
+    _candidateItem = _candidateItem;
   }
 
-  void addDeletedItem(ITEM item) {
-    _deletedItems.add(item);
+  void setDeletedItem({required ITEM deletedItem}) {
+    _deletedItem = deletedItem;
   }
 
-  void addFailedItem(ITEM item) {
-    _failedItems.add(item);
+  void setFailedItem({required ITEM failedItem, required AppError appError}) {
+    _failedItem = failedItem;
+    _appError = appError;
   }
 }

@@ -1,6 +1,6 @@
 part of '../../../flutter_artist.dart';
 
-enum BlockCanDeleteItemCode implements ECodeDetail {
+enum BlockItemDeletionPrecheck implements ECodeDetail {
   busy(
     eCode: ECode.busy,
     message: "Can not delete the item",
@@ -41,7 +41,7 @@ enum BlockCanDeleteItemCode implements ECodeDetail {
   @override
   final List<String>? details;
 
-  const BlockCanDeleteItemCode({
+  const BlockItemDeletionPrecheck({
     required this.eCode,
     required this.message,
     required this.details,

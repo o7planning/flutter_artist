@@ -478,33 +478,33 @@ part 'src/_action_result_/_block_current_item_selection_result.dart';
 
 part 'src/_action_result_/_action_result.dart';
 
+part 'src/_action_result_/_form_save_result.dart';
+
 part 'src/_error_enum_/__e_code_detail.dart';
 
 part 'src/_error_enum_/__actionable_code.dart';
 
 part 'src/_error_enum_/__e_code.dart';
 
-part 'src/_error_enum_/_actionable/_block_form_can_reset_code.dart';
+part 'src/_error_enum_/_actionable/_block_form_reset_precheck.dart';
 
 part 'src/_error_enum_/_actionable/_block_form_enable_code.dart';
-
-part 'src/_error_enum_/_actionable/_block_allow_edit_item_code.dart';
 
 part 'src/_error_enum_/_show_form_info_state.dart';
 
 part 'src/_error_enum_/_enter_form_fields_state.dart';
 
-part 'src/_error_enum_/_actionable/_block_can_query_code.dart';
+part 'src/_error_enum_/_actionable/_block_query_precheck.dart';
 
-part 'src/_error_enum_/_actionable/_block_can_delete_item_code.dart';
+part 'src/_error_enum_/_actionable/_block_item_deletion_precheck.dart';
 
-part 'src/_error_enum_/_actionable/_block_can_refresh_item_code.dart';
+part 'src/_error_enum_/_actionable/_block_item_refreshing_precheck.dart';
 
-part 'src/_error_enum_/_actionable/_block_can_edit_item_code.dart';
+part 'src/_error_enum_/_actionable/_block_item_editing_precheck.dart';
 
-part 'src/_error_enum_/_actionable/_block_can_create_item_code.dart';
+part 'src/_error_enum_/_actionable/_block_item_creation_precheck.dart';
 
-part 'src/_error_enum_/_actionable/_block_can_save_form_code.dart';
+part 'src/_error_enum_/_actionable/_block_form_saving_precheck.dart';
 
 part 'src/_error_enum_/_actionable/_check_allow.dart';
 
@@ -814,3 +814,7 @@ class _BlockQuickChildBlockItemsActionAnnotation {
 }
 
 // ******* Block QuickAction (END) *********************************************
+
+class _RenameAnnotation {
+  const _RenameAnnotation();
+}
