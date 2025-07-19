@@ -3705,7 +3705,7 @@ abstract class Block<
   ///
   @_RootMethodAnnotation()
   @_BlockPrepareFormToCreateItemAnnotation()
-  Future<ItemCreationResult> prepareFormToCreateItem({
+  Future<PrepareItemCreationResult> prepareFormToCreateItem({
     EXTRA_FORM_INPUT? extraFormInput,
     required Function()? navigate,
     bool initDirty = false,
@@ -3730,7 +3730,7 @@ abstract class Block<
         actionableFalse: actionable,
         showErrSnackBar: true,
       );
-      return ItemCreationResult(
+      return PrepareItemCreationResult(
         precheck: actionable.eCode,
       );
     }
@@ -5426,8 +5426,8 @@ abstract class Block<
     return ItemDeletionResult<ITEM>(candidateItem: null);
   }
 
-  ItemCreationResult _createEmptyItemCreationResult() {
-    return ItemCreationResult();
+  PrepareItemCreationResult _createEmptyItemCreationResult() {
+    return PrepareItemCreationResult();
   }
 
   // ***************************************************************************

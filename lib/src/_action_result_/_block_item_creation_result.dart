@@ -1,6 +1,7 @@
 part of '../../flutter_artist.dart';
 
-class ItemCreationResult extends ActionResult {
+@_RenameAnnotation() // PrepareItemCreationRslt
+class PrepareItemCreationResult extends ActionResult {
   final BlockItemCreationPrecheck? precheck;
   AppError? _appError;
   StackTrace? _stackTrace;
@@ -8,7 +9,7 @@ class ItemCreationResult extends ActionResult {
   AppError? get error => _appError;
   StackTrace? get stackTrace => _stackTrace;
 
-  ItemCreationResult({this.precheck});
+  PrepareItemCreationResult({this.precheck});
 
   @override
   bool get success {

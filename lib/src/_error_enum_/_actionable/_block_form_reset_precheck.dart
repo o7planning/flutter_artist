@@ -1,5 +1,6 @@
 part of '../../../flutter_artist.dart';
 
+@_RenameAnnotation()
 enum BlockFormResetingPrecheck implements ECodeDetail {
   busy(
     eCode: ECode.busy,

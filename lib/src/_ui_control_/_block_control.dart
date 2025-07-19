@@ -111,7 +111,7 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
       );
     }
     //
-    ItemCreationResult result = await widget.block.prepareFormToCreateItem(
+    PrepareItemCreationResult result = await widget.block.prepareFormToCreateItem(
       navigate: null,
     );
     return result.success;

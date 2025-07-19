@@ -25,9 +25,7 @@ enum BlockFormSavingPrecheck implements ECodeDetail {
     eCode: ECode.formInvalidated,
     message: "Form saving is disabled.",
     details: ["The form is invalidated."],
-  )
-
-  ;
+  );
 
   @override
   final ECode eCode;

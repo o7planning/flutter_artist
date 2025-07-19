@@ -1,5 +1,6 @@
 part of '../../../flutter_artist.dart';
 
+@_RenameAnnotation()
 enum BlockFormEnableCode implements ECodeDetail {
   noForm(
     eCode: ECode.noForm,

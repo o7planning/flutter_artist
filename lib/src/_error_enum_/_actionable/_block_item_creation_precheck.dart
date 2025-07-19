@@ -1,5 +1,6 @@
 part of '../../../flutter_artist.dart';
 
+@_RenameAnnotation()
 enum BlockItemCreationPrecheck implements ECodeDetail {
   busy(
     eCode: ECode.busy,
