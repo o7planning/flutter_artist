@@ -1579,7 +1579,7 @@ abstract class Block<
           ApiResult<ITEM_DETAIL> result = await callApiLoadItemDetailById(
             itemId: itemId,
           );
-          // Throw if error:
+          // Throw ApiError:
           result.throwIfError();
           //
           refreshedCurrentItemDetail = result.data;
@@ -1596,6 +1596,7 @@ abstract class Block<
           //
           thisXBlock.currentItemSelectionResult?._setAppError(
             appError: appError,
+            stackTrace: appError is ApiError ? null : stackTrace,
           );
         } finally {
           __refreshRefreshingCurrentItemState(
@@ -1807,6 +1808,7 @@ abstract class Block<
       thisXBlock.itemDeletionResult._setFailedItem(
         failedItem: item,
         appError: appError,
+        stackTrace: appError is ApiError ? null : stackTrace,
       );
       //
       return;

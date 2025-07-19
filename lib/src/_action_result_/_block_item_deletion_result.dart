@@ -3,6 +3,11 @@ part of '../../flutter_artist.dart';
 class ItemDeletionResult<ITEM> extends ActionResult {
   final BlockItemDeletionPrecheck? precheck;
   AppError? _appError;
+  StackTrace? _stackTrace;
+
+  AppError? get error => _appError;
+  StackTrace? get stackTrace => _stackTrace;
+
   ITEM? _candidateItem;
   ITEM? _deletedItem;
   ITEM? _failedItem;
@@ -10,7 +15,6 @@ class ItemDeletionResult<ITEM> extends ActionResult {
   ITEM? get candidateItem => _candidateItem;
   ITEM? get deletedItem => _deletedItem;
   ITEM? get failedItem => _failedItem;
-  AppError? get error => _appError;
 
   ItemDeletionResult({required ITEM? candidateItem, this.precheck})
       : _candidateItem = candidateItem;
@@ -32,8 +36,13 @@ class ItemDeletionResult<ITEM> extends ActionResult {
     _deletedItem = deletedItem;
   }
 
-  void _setFailedItem({required ITEM failedItem, required AppError appError}) {
+  void _setFailedItem({
+    required ITEM failedItem,
+    required AppError appError,
+    required StackTrace? stackTrace,
+  }) {
     _failedItem = failedItem;
     _appError = appError;
+    _stackTrace = stackTrace;
   }
 }

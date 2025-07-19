@@ -4,8 +4,10 @@ part of '../../flutter_artist.dart';
 class BlockItemCurrSelectionResult<ITEM> extends ActionResult {
   final BlockItemCurrSelectionPrecheck? precheck;
   AppError? _appError;
+  StackTrace? _stackTrace;
 
   AppError? get error => _appError;
+  StackTrace? get stackTrace => _stackTrace;
 
   final CurrentItemSelectionType currentItemSelectionType;
   final List<ITEM?> _candidateItems = [];
@@ -50,8 +52,12 @@ class BlockItemCurrSelectionResult<ITEM> extends ActionResult {
     }
   }
 
-  void _setAppError({required AppError appError}) {
+  void _setAppError({
+    required AppError appError,
+    required StackTrace? stackTrace,
+  }) {
     _appError = appError;
+    _stackTrace = stackTrace;
   }
 
   void _addCandidateItem(ITEM? candidateItem) {
