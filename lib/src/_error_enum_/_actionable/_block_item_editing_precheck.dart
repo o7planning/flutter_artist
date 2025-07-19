@@ -1,6 +1,6 @@
 part of '../../../flutter_artist.dart';
 
-enum BlockItemEditiingPrecheck implements ECodeDetail {
+enum BlockItemEditingPrecheck implements ECodeDetail {
   busy(
     eCode: ECode.busy,
     message: "Item edit is disabled.",
@@ -63,7 +63,7 @@ enum BlockItemEditiingPrecheck implements ECodeDetail {
   @override
   final List<String>? details;
 
-  const BlockItemEditiingPrecheck({
+  const BlockItemEditingPrecheck({
     required this.eCode,
     required this.message,
     required this.details,

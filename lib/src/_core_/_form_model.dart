@@ -1583,15 +1583,21 @@ abstract class FormModel<
     required bool checkBusy,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable.no(eCode: EnterFormFieldsState.busy);
+      return Actionable<EnterFormFieldsState>.no(
+        eCode: EnterFormFieldsState.busy,
+      );
     }
     if (formMode == FormMode.none) {
-      return Actionable.no(eCode: EnterFormFieldsState.formInNoneMode);
+      return Actionable<EnterFormFieldsState>.no(
+        eCode: EnterFormFieldsState.formInNoneMode,
+      );
     }
     if (formDataState == DataState.error) {
-      return Actionable.no(eCode: EnterFormFieldsState.formInErrorState);
+      return Actionable<EnterFormFieldsState>.no(
+        eCode: EnterFormFieldsState.formInErrorState,
+      );
     }
-    return Actionable.yes();
+    return Actionable<EnterFormFieldsState>.yes();
   }
 
   bool __checkBeforeEnterFormFields({
