@@ -3705,7 +3705,7 @@ abstract class Block<
   ///
   @_RootMethodAnnotation()
   @_BlockPrepareFormToCreateItemAnnotation()
-  Future<ItemCreationResult<ITEM>> prepareFormToCreateItem({
+  Future<ItemCreationResult> prepareFormToCreateItem({
     EXTRA_FORM_INPUT? extraFormInput,
     required Function()? navigate,
     bool initDirty = false,
@@ -3730,7 +3730,7 @@ abstract class Block<
         actionableFalse: actionable,
         showErrSnackBar: true,
       );
-      return ItemCreationResult<ITEM>(
+      return ItemCreationResult(
         precheck: actionable.eCode,
       );
     }
@@ -3756,7 +3756,7 @@ abstract class Block<
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //
     await FlutterArtist.executor._executeTaskUnitQueue();
-    return thisXBlock.itemCreationResult as ItemCreationResult<ITEM>;
+    return thisXBlock.itemCreationResult;
   }
 
   // ***************************************************************************
@@ -5426,8 +5426,8 @@ abstract class Block<
     return ItemDeletionResult<ITEM>(candidateItem: null);
   }
 
-  ItemCreationResult<ITEM> _createEmptyItemCreationResult() {
-    return ItemCreationResult<ITEM>();
+  ItemCreationResult _createEmptyItemCreationResult() {
+    return ItemCreationResult();
   }
 
   // ***************************************************************************

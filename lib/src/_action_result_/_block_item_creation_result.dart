@@ -1,6 +1,6 @@
 part of '../../flutter_artist.dart';
 
-class ItemCreationResult<ITEM> extends ActionResult {
+class ItemCreationResult extends ActionResult {
   final BlockItemCreationPrecheck? precheck;
   AppError? _appError;
   StackTrace? _stackTrace;
