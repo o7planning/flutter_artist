@@ -10,7 +10,13 @@ enum BlockItemRefreshingPrecheck implements ECodeDetail {
     eCode: ECode.noTarget,
     message: "The Refresh Ignored",
     details: ["No target item to refresh"],
-  );
+  ),
+  invalidTarget(
+    eCode: ECode.invalidTarget,
+    message: "The Refresh Ignored",
+    details: ["Item is not in the List"],
+  )
+  ;
 
   @override
   final ECode eCode;

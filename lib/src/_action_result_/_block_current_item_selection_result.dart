@@ -2,6 +2,8 @@ part of '../../flutter_artist.dart';
 
 // Old Name: CurrentItemSelectionResult
 class BlockCurrentItemSelectionResult<ITEM> extends ActionResult {
+  final BlockItemRefreshingPrecheck? precheck;
+
   final CurrentItemSelectionType currentItemSelectionType;
   final List<ITEM?> _candidateItems = [];
   ITEM? _oldCurrentItem;
@@ -10,7 +12,10 @@ class BlockCurrentItemSelectionResult<ITEM> extends ActionResult {
   bool _apiError = false;
   bool _convertError = false;
 
+
+
   BlockCurrentItemSelectionResult({
+    required this.precheck,
     required this.currentItemSelectionType,
     required Object Function(ITEM item) getItemId,
     //

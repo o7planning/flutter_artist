@@ -1386,6 +1386,7 @@ abstract class Block<
     if (thisXBlock.currentItemSelectionResult == null) {
       thisXBlock.currentItemSelectionResult =
           BlockCurrentItemSelectionResult<ITEM>(
+        precheck: null,
         currentItemSelectionType: currentItemSelectionType,
         getItemId: getItemId,
         candidateItem: candidateItem,
@@ -2564,8 +2565,21 @@ abstract class Block<
       },
     );
     //
-    if (!this.canSelectItem()) {
-      return null;
+    final currentItemSelectionType = forceForm
+        ? CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm
+        : CurrentItemSelectionType.selectAnItemAsCurrent;
+    //
+    Actionable<BlockItemRefreshingPrecheck> actionable =
+        this.canSelectItem(item: item);
+    if (!actionable.yes) {
+      return BlockCurrentItemSelectionResult<ITEM>(
+        precheck: actionable.eCode,
+        currentItemSelectionType: currentItemSelectionType,
+        getItemId: getItemId,
+        candidateItem: item,
+        oldCurrentItem: currentItem,
+        currentItem: currentItem,
+      );
     }
     //
     _XShelf xShelf = _XShelf(
@@ -2579,15 +2593,14 @@ abstract class Block<
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
     _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
-      currentItemSelectionType: forceForm
-          ? CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm
-          : CurrentItemSelectionType.selectAnItemAsCurrent,
+      currentItemSelectionType: currentItemSelectionType,
       xBlock: thisXBlock,
       newQueriedList: [],
       candidateItem: item,
       forceReloadItem: true,
-      forceTypeForForm:
-          forceForm ? _ForceType.force : _ForceType.decidedAtRuntime,
+      forceTypeForForm: forceForm //
+          ? _ForceType.force
+          : _ForceType.decidedAtRuntime,
     );
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //
@@ -3950,9 +3963,19 @@ abstract class Block<
       parameters: {},
     );
     //
-    Actionable actionable = canRefreshCurrentItem();
+    Actionable<BlockItemRefreshingPrecheck> actionable =
+        __canRefreshCurrentItem(
+      checkBusy: true,
+    );
     if (!actionable.yes) {
-      return null;
+      return BlockCurrentItemSelectionResult<ITEM>(
+        precheck: actionable.eCode,
+        currentItemSelectionType: CurrentItemSelectionType.refresh,
+        getItemId: getItemId,
+        candidateItem: currentItem,
+        oldCurrentItem: currentItem,
+        currentItem: currentItem,
+      );
     }
     //
     return await refreshAndSelectItemAsCurrent(
@@ -4641,14 +4664,32 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool canSelectItem() {
-    return this.queryDataState == DataState.ready;
+  Actionable<BlockItemRefreshingPrecheck> canSelectItem({required ITEM item}) {
+    ITEM? internalItem = findItemSameIdWith(item: item);
+    //
+    if (internalItem == null) {
+      return Actionable<BlockItemRefreshingPrecheck>.no(
+        eCode: BlockItemRefreshingPrecheck.invalidTarget,
+      );
+    }
+    // switch (this.queryDataState) {
+    //   case DataState.ready:
+    //     // Continue
+    //     break;
+    //   case DataState.pending:
+    //   //
+    //   case DataState.error:
+    //   //
+    //   case DataState.none:
+    //   //
+    // }
+    return Actionable<BlockItemRefreshingPrecheck>.yes();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable canDeleteCurrentItem() {
+  Actionable<BlockItemDeletionPrecheck> canDeleteCurrentItem() {
     return __canDeleteCurrentItem(
       checkBusy: true,
       checkAllow: true,
@@ -4700,7 +4741,7 @@ abstract class Block<
   ///
   /// This method will return [true] if all the usual conditions are met.
   ///
-  Actionable canRefreshCurrentItem() {
+  Actionable<BlockItemRefreshingPrecheck> canRefreshCurrentItem() {
     return __canRefreshCurrentItem(
       checkBusy: true,
     );
