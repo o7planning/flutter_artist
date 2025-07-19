@@ -1,6 +1,6 @@
 part of '../../../flutter_artist.dart';
 
-enum BlockItemRefreshingPrecheck implements ECodeDetail {
+enum BlockItemCurrSelectionPrecheck implements ECodeDetail {
   busy(
     eCode: ECode.busy,
     message: "Cannot refresh the current item.",
@@ -27,7 +27,7 @@ enum BlockItemRefreshingPrecheck implements ECodeDetail {
   @override
   final List<String>? details;
 
-  const BlockItemRefreshingPrecheck({
+  const BlockItemCurrSelectionPrecheck({
     required this.eCode,
     required this.message,
     required this.details,

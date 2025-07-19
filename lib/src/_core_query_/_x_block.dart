@@ -39,7 +39,7 @@ class _XBlock {
   // ***************************************************************************
 
   // This property must have a null value initially.
-  BlockCurrentItemSelectionResult? currentItemSelectionResult;
+  BlockItemCurrSelectionResult? currentItemSelectionResult;
 
   late final ItemDeletionResult itemDeletionResult =
       block._createEmptyItemDeletionResult();

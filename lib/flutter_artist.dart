@@ -474,7 +474,7 @@ part 'src/_task_unit_/_scalar_quick_action_task_unit.dart';
 
 part 'src/_task_unit_/_scalar_load_extra_data_quick_action_task_unit.dart';
 
-part 'src/_action_result_/_block_current_item_selection_result.dart';
+part 'src/_action_result_/_block_item_curr_selection_result.dart';
 
 part 'src/_action_result_/_action_result.dart';
 
@@ -498,7 +498,7 @@ part 'src/_error_enum_/_actionable/_block_query_precheck.dart';
 
 part 'src/_error_enum_/_actionable/_block_item_deletion_precheck.dart';
 
-part 'src/_error_enum_/_actionable/_block_item_refreshing_precheck.dart';
+part 'src/_error_enum_/_actionable/_block_item_curr_selection_precheck.dart';
 
 part 'src/_error_enum_/_actionable/_block_item_editing_precheck.dart';
 

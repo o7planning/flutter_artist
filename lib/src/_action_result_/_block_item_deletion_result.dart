@@ -24,15 +24,15 @@ class ItemDeletionResult<ITEM> extends ActionResult {
     return _deletedItem != null;
   }
 
-  void setCandidateItem({required ITEM candidateItem}) {
+  void _setCandidateItem({required ITEM candidateItem}) {
     _candidateItem = _candidateItem;
   }
 
-  void setDeletedItem({required ITEM deletedItem}) {
+  void _setDeletedItem({required ITEM deletedItem}) {
     _deletedItem = deletedItem;
   }
 
-  void setFailedItem({required ITEM failedItem, required AppError appError}) {
+  void _setFailedItem({required ITEM failedItem, required AppError appError}) {
     _failedItem = failedItem;
     _appError = appError;
   }

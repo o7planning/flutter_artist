@@ -1,8 +1,11 @@
 part of '../../flutter_artist.dart';
 
 // Old Name: CurrentItemSelectionResult
-class BlockCurrentItemSelectionResult<ITEM> extends ActionResult {
-  final BlockItemRefreshingPrecheck? precheck;
+class BlockItemCurrSelectionResult<ITEM> extends ActionResult {
+  final BlockItemCurrSelectionPrecheck? precheck;
+  AppError? _appError;
+
+  AppError? get error => _appError;
 
   final CurrentItemSelectionType currentItemSelectionType;
   final List<ITEM?> _candidateItems = [];
@@ -12,9 +15,7 @@ class BlockCurrentItemSelectionResult<ITEM> extends ActionResult {
   bool _apiError = false;
   bool _convertError = false;
 
-
-
-  BlockCurrentItemSelectionResult({
+  BlockItemCurrSelectionResult({
     required this.precheck,
     required this.currentItemSelectionType,
     required Object Function(ITEM item) getItemId,
@@ -42,6 +43,10 @@ class BlockCurrentItemSelectionResult<ITEM> extends ActionResult {
       case CurrentItemSelectionType.refresh:
         return _successfullySelectedToRefresh();
     }
+  }
+
+  void _setAppError({required AppError appError}) {
+    _appError = appError;
   }
 
   void _addCandidateItem(ITEM? candidateItem) {

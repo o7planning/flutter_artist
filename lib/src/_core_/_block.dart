@@ -1385,7 +1385,7 @@ abstract class Block<
     //
     if (thisXBlock.currentItemSelectionResult == null) {
       thisXBlock.currentItemSelectionResult =
-          BlockCurrentItemSelectionResult<ITEM>(
+          BlockItemCurrSelectionResult<ITEM>(
         precheck: null,
         currentItemSelectionType: currentItemSelectionType,
         getItemId: getItemId,
@@ -1777,7 +1777,7 @@ abstract class Block<
     //
     // Candidate Item to delete.
     //
-    thisXBlock.itemDeletionResult.setCandidateItem(candidateItem: item);
+    thisXBlock.itemDeletionResult._setCandidateItem(candidateItem: item);
     //
     final bool isCurrent = isCurrentItem(item: item);
     //
@@ -1813,7 +1813,7 @@ abstract class Block<
         showSnackBar: true,
       );
       //
-      thisXBlock.itemDeletionResult.setFailedItem(
+      thisXBlock.itemDeletionResult._setFailedItem(
         failedItem: item,
         appError: appError,
       );
@@ -1825,7 +1825,7 @@ abstract class Block<
     //
     // Delete Successful.
     //
-    thisXBlock.itemDeletionResult.setDeletedItem(deletedItem: item);
+    thisXBlock.itemDeletionResult._setDeletedItem(deletedItem: item);
     //
     showDeletedSnackBar();
     //
@@ -2548,7 +2548,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_BlockSelectItemAsCurrentAnnotation()
-  Future<BlockCurrentItemSelectionResult<ITEM>?>
+  Future<BlockItemCurrSelectionResult<ITEM>?>
       _refreshToShowOrEditItemAsCurrent({
     required ITEM item,
     required bool forceForm,
@@ -2569,10 +2569,10 @@ abstract class Block<
         ? CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm
         : CurrentItemSelectionType.selectAnItemAsCurrent;
     //
-    Actionable<BlockItemRefreshingPrecheck> actionable =
+    Actionable<BlockItemCurrSelectionPrecheck> actionable =
         this.canSelectItem(item: item);
     if (!actionable.yes) {
-      return BlockCurrentItemSelectionResult<ITEM>(
+      return BlockItemCurrSelectionResult<ITEM>(
         precheck: actionable.eCode,
         currentItemSelectionType: currentItemSelectionType,
         getItemId: getItemId,
@@ -2606,7 +2606,7 @@ abstract class Block<
     //
     await FlutterArtist.executor._executeTaskUnitQueue();
     var result = thisXBlock.currentItemSelectionResult
-        as BlockCurrentItemSelectionResult<ITEM>?;
+        as BlockItemCurrSelectionResult<ITEM>?;
     if (result != null && result.success) {
       if (navigate != null) {
         navigate();
@@ -2620,7 +2620,7 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_BlockSelectItemAsCurrentAnnotation()
-  Future<BlockCurrentItemSelectionResult<ITEM>?> refreshAndSelectItemAsCurrent({
+  Future<BlockItemCurrSelectionResult<ITEM>?> refreshAndSelectItemAsCurrent({
     required ITEM item,
     bool forceLoadForm = false,
     Function()? navigate,
@@ -3559,7 +3559,7 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_BlockRefreshAndSelectFirstItemAsCurrentAnnotation()
-  Future<BlockCurrentItemSelectionResult<ITEM>?>
+  Future<BlockItemCurrSelectionResult<ITEM>?>
       refreshAndSelectFirstItemAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
@@ -3580,7 +3580,7 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_BlockRefreshAndSelectNextItemAsCurrentAnnotation()
-  Future<BlockCurrentItemSelectionResult<ITEM>?>
+  Future<BlockItemCurrSelectionResult<ITEM>?>
       refreshAndSelectNextItemAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
@@ -3604,7 +3604,7 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_BlockRefreshAndSelectPreviousItemAsCurrentAnnotation()
-  Future<BlockCurrentItemSelectionResult<ITEM>?>
+  Future<BlockItemCurrSelectionResult<ITEM>?>
       refreshAndSelectPreviousItemAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
@@ -3952,7 +3952,7 @@ abstract class Block<
   ///
   @_RootMethodAnnotation()
   @_BlockRefreshCurrentItemAnnotation()
-  Future<BlockCurrentItemSelectionResult<ITEM>?> refreshCurrentItem({
+  Future<BlockItemCurrSelectionResult<ITEM>?> refreshCurrentItem({
     bool forceLoadForm = false,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -3963,12 +3963,12 @@ abstract class Block<
       parameters: {},
     );
     //
-    Actionable<BlockItemRefreshingPrecheck> actionable =
+    Actionable<BlockItemCurrSelectionPrecheck> actionable =
         __canRefreshCurrentItem(
       checkBusy: true,
     );
     if (!actionable.yes) {
-      return BlockCurrentItemSelectionResult<ITEM>(
+      return BlockItemCurrSelectionResult<ITEM>(
         precheck: actionable.eCode,
         currentItemSelectionType: CurrentItemSelectionType.refresh,
         getItemId: getItemId,
@@ -4605,17 +4605,17 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable<BlockItemRefreshingPrecheck> __canRefreshCurrentItem({
+  Actionable<BlockItemCurrSelectionPrecheck> __canRefreshCurrentItem({
     required bool checkBusy,
   }) {
     if (this.currentItemDetail == null) {
-      return Actionable<BlockItemRefreshingPrecheck>.no(
-        eCode: BlockItemRefreshingPrecheck.noTarget,
+      return Actionable<BlockItemCurrSelectionPrecheck>.no(
+        eCode: BlockItemCurrSelectionPrecheck.noTarget,
       );
     }
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockItemRefreshingPrecheck>.no(
-        eCode: BlockItemRefreshingPrecheck.busy,
+      return Actionable<BlockItemCurrSelectionPrecheck>.no(
+        eCode: BlockItemCurrSelectionPrecheck.busy,
       );
     }
     //
@@ -4632,7 +4632,7 @@ abstract class Block<
       }
     }
     //
-    return Actionable<BlockItemRefreshingPrecheck>.yes();
+    return Actionable<BlockItemCurrSelectionPrecheck>.yes();
   }
 
   // ***************************************************************************
@@ -4673,12 +4673,12 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable<BlockItemRefreshingPrecheck> canSelectItem({required ITEM item}) {
+  Actionable<BlockItemCurrSelectionPrecheck> canSelectItem({required ITEM item}) {
     ITEM? internalItem = findItemSameIdWith(item: item);
     //
     if (internalItem == null) {
-      return Actionable<BlockItemRefreshingPrecheck>.no(
-        eCode: BlockItemRefreshingPrecheck.invalidTarget,
+      return Actionable<BlockItemCurrSelectionPrecheck>.no(
+        eCode: BlockItemCurrSelectionPrecheck.invalidTarget,
       );
     }
     // switch (this.queryDataState) {
@@ -4692,7 +4692,7 @@ abstract class Block<
     //   case DataState.none:
     //   //
     // }
-    return Actionable<BlockItemRefreshingPrecheck>.yes();
+    return Actionable<BlockItemCurrSelectionPrecheck>.yes();
   }
 
   // ***************************************************************************
@@ -4750,7 +4750,7 @@ abstract class Block<
   ///
   /// This method will return [true] if all the usual conditions are met.
   ///
-  Actionable<BlockItemRefreshingPrecheck> canRefreshCurrentItem() {
+  Actionable<BlockItemCurrSelectionPrecheck> canRefreshCurrentItem() {
     return __canRefreshCurrentItem(
       checkBusy: true,
     );
