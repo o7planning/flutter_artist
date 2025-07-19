@@ -7,6 +7,11 @@ class ItemDeletionResult<ITEM> extends ActionResult {
   ITEM? _deletedItem;
   ITEM? _failedItem;
 
+  ITEM? get candidateItem => _candidateItem;
+  ITEM? get deletedItem => _deletedItem;
+  ITEM? get failedItem => _failedItem;
+  AppError? get error => _appError;
+
   ItemDeletionResult({required ITEM? candidateItem, this.precheck})
       : _candidateItem = candidateItem;
 
