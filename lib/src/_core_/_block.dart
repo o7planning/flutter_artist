@@ -3732,6 +3732,7 @@ abstract class Block<
       );
       return PrepareItemCreationResult(
         precheck: actionable.eCode,
+        stackTrace: actionable.stackTrace,
       );
     }
     //
@@ -3919,6 +3920,7 @@ abstract class Block<
       return ItemDeletionResult<ITEM>(
         candidateItem: item,
         precheck: actionable.eCode,
+        stackTrace: actionable.stackTrace,
       );
     }
     //
@@ -4297,7 +4299,7 @@ abstract class Block<
         case CheckAllow.error:
           return Actionable<BlockItemDeletionPrecheck>.no(
             eCode: BlockItemDeletionPrecheck.checkAllowMethodError,
-            stackTrace: result.stackTrace,
+            stackTrace: result.stackTrace, // [03a]
           );
       }
     }

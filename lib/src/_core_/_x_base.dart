@@ -163,7 +163,7 @@ abstract class _XBase {
         shelfName: shelf.name,
         errorMessage: actionableFalse.message!,
         errorDetails: actionableFalse.details,
-        stackTrace: null,
+        stackTrace: actionableFalse.stackTrace,
       );
       if (showErrSnackBar) {
         showErrorSnackBar(

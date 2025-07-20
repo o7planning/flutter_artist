@@ -16,8 +16,12 @@ class ItemDeletionResult<ITEM> extends ActionResult {
   ITEM? get deletedItem => _deletedItem;
   ITEM? get failedItem => _failedItem;
 
-  ItemDeletionResult({required ITEM? candidateItem, this.precheck})
-      : _candidateItem = candidateItem;
+  ItemDeletionResult({
+    required ITEM? candidateItem,
+    this.precheck,
+    StackTrace? stackTrace,
+  })  : _candidateItem = candidateItem,
+        _stackTrace = stackTrace;
 
   @override
   bool get success {

@@ -6,11 +6,13 @@ enum BlockItemDeletionPrecheck implements ECodeDetail {
     message: "Can not delete the item",
     details: ["The executor is busy."],
   ),
+  // Test Cases: [03a].
   notAllow(
     eCode: ECode.notAllow,
     message: "Can not delete the item",
     details: ["The application logic does not allow to delete this item."],
   ),
+  // Test Cases: [03a].
   checkAllowMethodError(
     eCode: ECode.checkAllowMethodError,
     message: "Can not delete the item",
