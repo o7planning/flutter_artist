@@ -13,13 +13,13 @@ enum BlockItemCreationPrecheck implements ECodeDetail {
     message: "New item creation is disabled.",
     details: ["The block has no form."],
   ),
-  // Test Cases: [02a]
+  // Test Cases: [01b]
   inPendingState(
     eCode: ECode.inPendingState,
     message: "New item creation is disabled.",
     details: ["The block is in a 'pending' state."],
   ),
-  // Test Cases: [02a]
+  // Test Cases: [01b]
   inErrorState(
     eCode: ECode.inErrorState,
     message: "New item creation is disabled.",
