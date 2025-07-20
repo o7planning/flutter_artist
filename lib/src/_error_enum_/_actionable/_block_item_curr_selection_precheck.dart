@@ -6,16 +6,19 @@ enum BlockItemCurrSelectionPrecheck implements ECodeDetail {
     message: "Cannot refresh the current item.",
     details: ["The executor is busy."],
   ),
+  // Test Cases: [03b]
   noTarget(
     eCode: ECode.noTarget,
     message: "The Refresh Ignored",
     details: ["No target item to refresh"],
   ),
+  // Test Cases: [03b]
   invalidTarget(
     eCode: ECode.invalidTarget,
     message: "The Refresh Ignored",
     details: ["Item is not in the List"],
   ),
+  // Test Cases: [03b] ??
   notAllow(
     eCode: ECode.notAllow,
     message: "The Refresh Ignored",

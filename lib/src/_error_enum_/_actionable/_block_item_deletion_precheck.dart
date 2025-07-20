@@ -18,16 +18,19 @@ enum BlockItemDeletionPrecheck implements ECodeDetail {
     message: "Can not delete the item",
     details: ["The isAllowDeleteItem() method is error."],
   ),
+  // Test Cases: [03a].
   invalidTarget(
     eCode: ECode.invalidTarget,
     message: "Deletion Ignored",
     details: ["Target item is not in the list"],
   ),
+  // Test Cases: [03a].
   noTarget(
     eCode: ECode.noTarget,
     message: "Deletion Ignored",
     details: ["No target item to delete"],
   ),
+  // Test Cases: [03a].
   cancelled(
     eCode: ECode.cancelled,
     message: "Deletion Cancelled",
