@@ -65,6 +65,8 @@ abstract class Scalar<
 
   final ScalarOutsideEventReaction? outsideEventReaction;
 
+  final ScalarInternalEventReaction? internalEventReaction;
+
   ///
   /// This field is not null.
   /// If this scalar does not declare a FilterModel, it will have the default FilterModel.
@@ -118,20 +120,40 @@ abstract class Scalar<
     required String? filterModelName,
     required this.hiddenBehavior,
     this.outsideEventReaction,
+    this.internalEventReaction,
   }) : registerFilterModelName = filterModelName;
 
   // ***************************************************************************
   // ***************************************************************************
 
-  List<Type> _getOutsideDataTypesToListen() {
-    if (outsideEventReaction == null) {
-      return [];
+  List<Type> _getOutsideDataTypesToListen({required bool external}) {
+    if (external) {
+      if (outsideEventReaction == null) {
+        return [];
+      }
+      if (outsideEventReaction!.intrinsicMode) {
+        return [getValueType()];
+      } else {
+        return (outsideEventReaction!._events ?? [])
+            .map((e) => e.dataType)
+            .toSet()
+            .toList();
+      }
     }
-    List<Type> itemTypes = [];
-    for (Event event in outsideEventReaction!._events ?? []) {
-      itemTypes.add(event.dataType);
+    // Internal:
+    else {
+      if (internalEventReaction == null) {
+        return [];
+      }
+      if (internalEventReaction!.intrinsicMode) {
+        return [getValueType()];
+      } else {
+        return (internalEventReaction!._events ?? [])
+            .map((e) => e.dataType)
+            .toSet()
+            .toList();
+      }
     }
-    return itemTypes;
   }
 
   // ***************************************************************************
@@ -331,6 +353,7 @@ abstract class Scalar<
       //
       if (success) {
         FlutterArtist.storage._fireEventToAffectedItemTypes(
+          eventShelf: shelf,
           affectedItemTypes: action.affectedItemTypes,
         );
       }

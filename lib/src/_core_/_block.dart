@@ -2196,6 +2196,7 @@ abstract class Block<
       //
       if (success) {
         FlutterArtist.storage._fireEventToAffectedItemTypes(
+          eventShelf: shelf,
           affectedItemTypes: action.affectedItemTypes,
         );
       }
