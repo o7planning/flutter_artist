@@ -64,6 +64,7 @@ class _Storage {
       );
       //
       final List<Block> listenerBlocks = __getListenerBlocksByAffectedItemTypes(
+        eventShelf: eventShelf,
         affectedItemTypes: affectedItemTypes,
       );
       //
@@ -85,7 +86,7 @@ class _Storage {
     final BlockInternalBroadcast? internalBroadcast =
         eventBlock.internalBroadcast;
 
-    // Broadcase Data Types:
+    // Broadcast Data Types:
     List<Type> outsideEventTypes =
         eventBlock._getBroadcastDataTypes(external: true);
     List<Type> internalEventTypes =
@@ -100,6 +101,29 @@ class _Storage {
         "~~~~~~~~~> ${internalBroadcast != null ? 'FIRE EVENT IN INTERNAL' : 'NOT FIRE EVENT IN INTERNAL'}"
         " --> Event Item Types: $internalEventTypes"
         " - ${getClassName(eventBlock)}");
+
+    if (internalBroadcast != null) {
+      final List<Scalar> listenerScalars = __getListenerScalarsByBlock(
+        eventBlock: eventBlock,
+        external: false,
+      );
+      //
+      final List<Block> listenerBlocks = __getListenerBlocksByBlock(
+        eventBlock: eventBlock,
+        external: false,
+      );
+      print(
+          "~~~~~~~~~> listenerBlocks: ${listenerBlocks}, listenerScalars: $listenerScalars");
+      //
+      // TODO: Add to QUEUE lazy.
+      //
+      if (listenerScalars.isNotEmpty || listenerBlocks.isNotEmpty) {
+        __executeListeners(
+          listenerScalars: listenerScalars,
+          listenerBlocks: listenerBlocks,
+        );
+      }
+    }
     //
     if (outsideBroadcast != null) {
       final List<Scalar> listenerScalars = __getListenerScalarsByBlock(
@@ -109,6 +133,7 @@ class _Storage {
       //
       final List<Block> listenerBlocks = __getListenerBlocksByBlock(
         eventBlock: eventBlock,
+        external: true,
       );
       print(
           "~~~~~~~~~> listenerBlocks: ${listenerBlocks}, listenerScalars: $listenerScalars");
@@ -226,7 +251,10 @@ class _Storage {
     Map<String, Shelf> foundEventShelfMap = {};
     //
     for (Shelf shelf in __shelfMap.values) {
-      List<Block> listenerBlocks = _getListenerBlocksByShelf(eventShelf: shelf);
+      List<Block> listenerBlocks = _getListenerBlocksByShelf(
+        eventShelf: shelf,
+        external: external,
+      );
       if (listenerBlocks.isNotEmpty) {
         foundEventShelfMap[shelf.name] = shelf;
         continue;
@@ -343,13 +371,17 @@ class _Storage {
   // ***************************************************************************
   // ***************************************************************************
 
-  List<Block> _getListenerBlocksByShelf({required Shelf eventShelf}) {
+  List<Block> _getListenerBlocksByShelf({
+    required Shelf eventShelf,
+    required bool external,
+  }) {
     // FullName, Block
     Map<String, Block> foundMap = {};
     //
     for (Block eventBlock in eventShelf.blocks) {
       List<Block> listenerBlocks = __getListenerBlocksByBlock(
         eventBlock: eventBlock,
+        external: external,
       );
       for (var lb in listenerBlocks) {
         foundMap[lb._shortPathName] = lb;
@@ -385,6 +417,7 @@ class _Storage {
 
   // Callable.
   List<Block> __getListenerBlocksByAffectedItemTypes({
+    required Shelf eventShelf,
     required List<Type> affectedItemTypes,
   }) {
     // FullName, Block
@@ -414,15 +447,19 @@ class _Storage {
   // ***************************************************************************
 
   // Callable.
-  List<Block> __getListenerBlocksByBlock({required Block eventBlock}) {
+  List<Block> __getListenerBlocksByBlock({
+    required Block eventBlock,
+    required bool external,
+  }) {
     List<Type> itemTypes = eventBlock._getBroadcastDataTypes(
-      external: true,
+      external: external,
     );
     if (itemTypes.isEmpty) {
       return [];
     }
     //
     List<Block> blockList = __getListenerBlocksByAffectedItemTypes(
+      eventShelf: eventBlock.shelf,
       affectedItemTypes: itemTypes,
     );
     return blockList
@@ -514,6 +551,7 @@ class _Storage {
       if (eventBlockOrScalar.block != null) {
         List<Block> listenerBlocks = __getListenerBlocksByBlock(
           eventBlock: eventBlockOrScalar.block!,
+          external: external,
         );
         List<Scalar> listenerScalars = __getListenerScalarsByBlock(
           eventBlock: eventBlockOrScalar.block!,
