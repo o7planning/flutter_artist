@@ -93,9 +93,9 @@ part 'src/_core_/_block_data.dart';
 part 'src/_core_/_block_or_scalar.dart';
 
 part 'src/_core_/_block_outside_broadcast.dart';
-
+part 'src/_core_/_block_internal_broadcast.dart';
 part 'src/_core_/_block_outside_event_reaction.dart';
-
+part 'src/_core_/_block_internal_event_reaction.dart';
 part 'src/_core_/_current_couple_item.dart';
 
 part 'src/_core_/_custom_confirmation.dart';

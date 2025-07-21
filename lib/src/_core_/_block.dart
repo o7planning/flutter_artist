@@ -226,6 +226,10 @@ abstract class Block<
 
   final BlockOutsideEventReaction? outsideEventReaction;
 
+  final BlockInternalBroadcast? internalBroadcast;
+
+  final BlockInternalEventReaction? internalEventReaction;
+
   final PageableData __pageable;
 
   late final __blockData = _BlockData<
@@ -357,6 +361,8 @@ abstract class Block<
     required this.formModel,
     this.outsideBroadcast,
     this.outsideEventReaction,
+    this.internalBroadcast,
+    this.internalEventReaction,
     required List<Block>? childBlocks,
     ItemSortCriteria<ITEM>? itemSortCriteria,
   })  : registerFilterModelName = filterModelName,
