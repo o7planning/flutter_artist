@@ -113,7 +113,7 @@ class _Storage {
         external: false,
       );
       print(
-          "~~~~~~~~~> listenerBlocks: ${listenerBlocks}, listenerScalars: $listenerScalars");
+          "~~~~~~~~~> listenerBlocks: $listenerBlocks, listenerScalars: $listenerScalars");
       //
       // TODO: Add to QUEUE lazy.
       //
@@ -136,7 +136,7 @@ class _Storage {
         external: true,
       );
       print(
-          "~~~~~~~~~> listenerBlocks: ${listenerBlocks}, listenerScalars: $listenerScalars");
+          "~~~~~~~~~> listenerBlocks: $listenerBlocks, listenerScalars: $listenerScalars");
       //
       // TODO: Add to QUEUE lazy.
       //
