@@ -75,14 +75,23 @@ class _Storage {
     required Block eventBlock,
     required String? itemIdString,
   }) {
-    Type eventItemType = eventBlock.getItemType();
-    Type eventItemDetailType = eventBlock.getItemDetailType();
-    //
     final BlockOutsideBroadcast? outsideBroadcast = eventBlock.outsideBroadcast;
+    final BlockInternalBroadcast? internalBroadcast =
+        eventBlock.internalBroadcast;
+
+    List<Type> outsideEventTypes =
+        eventBlock._getBroadcastDataTypes(external: true);
+    List<Type> internalEventTypes =
+        eventBlock._getBroadcastDataTypes(external: false);
     //
     print(
-        "~~~~~~~~~> ${outsideBroadcast != null ? 'FIRE EVENT' : 'NOT FIRE EVENT'}"
-        " --> Event Item Type: ($eventItemType, $eventItemDetailType)"
+        "~~~~~~~~~> ${outsideBroadcast != null ? 'FIRE EVENT TO OUTSIDE' : 'NOT FIRE EVENT TO OUTSIDE'}"
+        " --> Event Item Types: $outsideEventTypes"
+        " - ${getClassName(eventBlock)}");
+
+    print(
+        "~~~~~~~~~> ${internalBroadcast != null ? 'FIRE EVENT IN INTERNAL' : 'NOT FIRE EVENT IN INTERNAL'}"
+        " --> Event Item Types: $internalEventTypes"
         " - ${getClassName(eventBlock)}");
     //
     if (outsideBroadcast == null) {
@@ -394,7 +403,9 @@ class _Storage {
 
   // Callable.
   List<Block> __getListenerBlocksByBlock({required Block eventBlock}) {
-    List<Type> itemTypes = eventBlock._getOutsideBroadcastItemTypes();
+    List<Type> itemTypes = eventBlock._getBroadcastDataTypes(
+      external: true,
+    );
     if (itemTypes.isEmpty) {
       return [];
     }
@@ -438,7 +449,9 @@ class _Storage {
   // ***************************************************************************
 
   List<Scalar> __getListenerScalarsByBlock({required Block eventBlock}) {
-    List<Type> itemTypes = eventBlock._getOutsideBroadcastItemTypes();
+    List<Type> itemTypes = eventBlock._getBroadcastDataTypes(
+      external: true,
+    );
     if (itemTypes.isEmpty) {
       return [];
     }

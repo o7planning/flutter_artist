@@ -381,20 +381,31 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  List<Type> _getOutsideBroadcastItemTypes() {
-    if (outsideBroadcast == null) {
-      return [];
-    }
-    //
-    List<Type> itemTypes = [];
-    if (outsideBroadcast!.intrinsicEventMode) {
-      itemTypes = [getItemType(), getItemDetailType()];
+  List<Type> _getBroadcastDataTypes({required bool external}) {
+    if (external) {
+      if (outsideBroadcast == null) {
+        return [];
+      }
+      //
+      if (outsideBroadcast!.intrinsicEventMode) {
+        return {getItemType(), getItemDetailType()}.toList();
+      } else {
+        return outsideBroadcast!.events.map((e) => e.dataType).toSet().toList();
+      }
     } else {
-      for (Event event in outsideBroadcast!.events) {
-        itemTypes.add(event.dataType);
+      if (internalBroadcast == null) {
+        return [];
+      }
+      //
+      if (internalBroadcast!.intrinsicEventMode) {
+        return {getItemType(), getItemDetailType()}.toList();
+      } else {
+        return internalBroadcast!.events
+            .map((e) => e.dataType)
+            .toSet()
+            .toList();
       }
     }
-    return itemTypes;
   }
 
   List<Type> _getOutsideDataTypesToListen() {
