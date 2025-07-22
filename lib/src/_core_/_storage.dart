@@ -82,9 +82,10 @@ class _Storage {
     required Block eventBlock,
     required String? itemIdString,
   }) {
-    final BlockOutsideBroadcast? outsideBroadcast = eventBlock.outsideBroadcast;
+    final BlockOutsideBroadcast? outsideBroadcast =
+        eventBlock.config.outsideBroadcast;
     final BlockInternalBroadcast? internalBroadcast =
-        eventBlock.internalBroadcast;
+        eventBlock.config.internalBroadcast;
 
     // Broadcast Data Types:
     List<Type> outsideEventTypes =
@@ -300,7 +301,7 @@ class _Storage {
       }
       List<Block> allBlocks = shelf.blocks;
       for (Block blk in allBlocks) {
-        if (blk.outsideBroadcast == null) {
+        if (blk.config.outsideBroadcast == null) {
           continue;
         }
         final Type itemType = blk.getItemType();
@@ -603,7 +604,7 @@ class _Storage {
     for (Shelf shelf in __shelfMap.values) {
       List<Block> allBlocks = shelf.blocks;
       for (Block blk in allBlocks) {
-        if (blk.outsideBroadcast == null) {
+        if (blk.config.outsideBroadcast == null) {
           continue;
         }
         final List<Type> listenToDataTypes =
@@ -631,11 +632,11 @@ class _Storage {
 
     for (Shelf shelf in __shelfMap.values) {
       for (Block blk in shelf.blocks) {
-        if (blk.outsideBroadcast == null) {
+        if (blk.config.outsideBroadcast == null) {
           continue;
         }
         ScalarOutsideEventReaction? outsideReaction =
-            listenerScalar.outsideEventReaction;
+            listenerScalar.config.outsideEventReaction;
         if (outsideReaction == null) {
           continue;
         }

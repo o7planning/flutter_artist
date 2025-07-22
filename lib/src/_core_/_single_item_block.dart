@@ -30,11 +30,8 @@ abstract class SingleItemBlock<
         EXTRA_FORM_INPUT> {
   SingleItemBlock({
     required super.name,
+    required super.config,
     required super.description,
-    super.hiddenBehavior,
-    super.leaveTheFormSafely,
-    required super.outsideBroadcast,
-    required super.outsideEventReaction,
     required super.filterModelName,
     required super.formModel,
     required super.childBlocks,

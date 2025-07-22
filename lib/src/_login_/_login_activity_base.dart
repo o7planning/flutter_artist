@@ -1,7 +1,7 @@
 part of '../../flutter_artist.dart';
 
 abstract class LoginActivityBase<USER extends ILoggedInUser> extends Activity {
-  LoginActivityBase({required super.name});
+  LoginActivityBase({required super.name, required super.config});
 
   Future<ApiResult<USER>> callApiLogin();
 

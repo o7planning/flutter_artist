@@ -21,10 +21,10 @@ part of '../../flutter_artist.dart';
 /// ```
 ///
 abstract class Scalar<
-    VALUE extends Object,
-    FILTER_INPUT extends FilterInput, // EmptyFilterInput
-    FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
-    > extends _XBase {
+VALUE extends Object,
+FILTER_INPUT extends FilterInput, // EmptyFilterInput
+FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
+> extends _XBase {
   late final Shelf shelf;
 
   int _lazyLoadCount = 0;
@@ -59,20 +59,18 @@ abstract class Scalar<
 
   final String? description;
 
+  final ScalarConfig config;
+
   bool __isQuerying = false;
 
   bool get isQuerying => __isQuerying;
-
-  final ScalarOutsideEventReaction? outsideEventReaction;
-
-  final ScalarInternalEventReaction? internalEventReaction;
 
   ///
   /// This field is not null.
   /// If this scalar does not declare a FilterModel, it will have the default FilterModel.
   ///
   late final FilterModel<FILTER_INPUT, FILTER_CRITERIA>
-      _registeredOrDefaultFilterModel;
+  _registeredOrDefaultFilterModel;
 
   ///
   /// Returns a FilterModel declared in the [Shelf.registerStructure()] method.
@@ -87,9 +85,7 @@ abstract class Scalar<
   }
 
   late final __scalarData =
-      _ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
-
-  final ScalarHiddenBehavior hiddenBehavior;
+  _ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
 
   final Map<_RefreshableWidgetState, bool> _scalarFragmentWidgetStates = {};
   final Map<_RefreshableWidgetState, bool> _scalarControlWidgetStates = {};
@@ -118,9 +114,7 @@ abstract class Scalar<
     required this.name,
     required this.description,
     required String? filterModelName,
-    required this.hiddenBehavior,
-    this.outsideEventReaction,
-    this.internalEventReaction,
+    required this.config,
   }) : registerFilterModelName = filterModelName;
 
   // ***************************************************************************
@@ -128,13 +122,13 @@ abstract class Scalar<
 
   List<Type> _getOutsideDataTypesToListen({required bool external}) {
     if (external) {
-      if (outsideEventReaction == null) {
+      if (config.outsideEventReaction == null) {
         return [];
       }
-      if (outsideEventReaction!.intrinsicMode) {
+      if (config.outsideEventReaction!.intrinsicMode) {
         return [getValueType()];
       } else {
-        return (outsideEventReaction!._events ?? [])
+        return (config.outsideEventReaction!._events ?? [])
             .map((e) => e.dataType)
             .toSet()
             .toList();
@@ -142,13 +136,13 @@ abstract class Scalar<
     }
     // Internal:
     else {
-      if (internalEventReaction == null) {
+      if (config.internalEventReaction == null) {
         return [];
       }
-      if (internalEventReaction!.intrinsicMode) {
+      if (config.internalEventReaction!.intrinsicMode) {
         return [getValueType()];
       } else {
-        return (internalEventReaction!._events ?? [])
+        return (config.internalEventReaction!._events ?? [])
             .map((e) => e.dataType)
             .toSet()
             .toList();
@@ -173,7 +167,9 @@ abstract class Scalar<
     }
     //
     print(
-        ">> ${getClassName(this)}._unitQuery - queryState: $queryDataState, forceQuery: ${thisXScalar.needQuery}");
+        ">> ${getClassName(
+            this)}._unitQuery - queryState: $queryDataState, forceQuery: ${thisXScalar
+            .needQuery}");
     //
     if (!forceQuery) {
       return thisXScalar.queryResult;
@@ -207,7 +203,7 @@ abstract class Scalar<
         xFilterModel.queried = true;
       } else {
         filterCriteriaOfFilterModel =
-            filterModel._filterCriteria! as FILTER_CRITERIA;
+        filterModel._filterCriteria! as FILTER_CRITERIA;
       }
     } catch (e, stackTrace) {
       /* Never Error */
@@ -228,8 +224,8 @@ abstract class Scalar<
     // Ready FilterCriteria:
     //
     bool xCriteriaChanged = this.__scalarData._isXCriteriaChanged(
-          newFilterCriteria: filterCriteriaOfFilterModel,
-        );
+      newFilterCriteria: filterCriteriaOfFilterModel,
+    );
     //
     final callApiQueryMethod = ScalarErrorMethod.callApiQuery;
     bool isQueryError = false;
@@ -502,10 +498,10 @@ abstract class Scalar<
     __assertThisXScalar(thisXScalar);
     //
     this.__scalarData._updateFrom(
-          filterCriteria: filterCriteria,
-          dataState: dataState,
-          value: value,
-        );
+      filterCriteria: filterCriteria,
+      dataState: dataState,
+      value: value,
+    );
   }
 
   // ***************************************************************************
@@ -914,7 +910,7 @@ abstract class Scalar<
       event: "Scalar '${getClassName(this)}' just hides all UI Components!",
       isLibCode: true,
     );
-    switch (hiddenBehavior) {
+    switch (config.hiddenBehavior) {
       case ScalarHiddenBehavior.none:
         break;
       case ScalarHiddenBehavior.clear:

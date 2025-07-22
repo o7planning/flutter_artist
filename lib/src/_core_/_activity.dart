@@ -4,15 +4,14 @@ abstract class Activity extends _XBase {
   late final Shelf shelf;
 
   final String name;
-
-  final ActivityHiddenBehavior hiddenBehavior;
+  final ActivityConfig config;
 
   final Map<_RefreshableWidgetState, bool> _activityFragmentWidgetStates = {};
   final Map<_RefreshableWidgetState, bool> _activityControlWidgetStates = {};
 
   Activity({
     required this.name,
-    this.hiddenBehavior = ActivityHiddenBehavior.none,
+    required this.config,
   });
 
   // ***************************************************************************
@@ -94,7 +93,7 @@ abstract class Activity extends _XBase {
       event: "Activity '${getClassName(this)}' just hides all UI Components!",
       isLibCode: true,
     );
-    switch (hiddenBehavior) {
+    switch (config.hiddenBehavior) {
       case ActivityHiddenBehavior.none:
         break;
     }

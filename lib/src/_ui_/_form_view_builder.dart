@@ -109,7 +109,7 @@ class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
 
   @override
   Widget buildContent(BuildContext context) {
-    if (widget.formModel.block.leaveTheFormSafely) {
+    if (widget.formModel.block.config.leaveTheFormSafely) {
       return PopScope(
         // TODO: In Error, check again late.
         canPop: !widget.formModel.isDirty(),
