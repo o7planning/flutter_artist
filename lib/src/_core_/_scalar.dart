@@ -59,13 +59,11 @@ abstract class Scalar<
 
   final String? description;
 
+  final ScalarConfig config;
+
   bool __isQuerying = false;
 
   bool get isQuerying => __isQuerying;
-
-  final ScalarOutsideEventReaction? outsideEventReaction;
-
-  final ScalarInternalEventReaction? internalEventReaction;
 
   ///
   /// This field is not null.
@@ -88,8 +86,6 @@ abstract class Scalar<
 
   late final __scalarData =
       _ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
-
-  final ScalarHiddenBehavior hiddenBehavior;
 
   final Map<_RefreshableWidgetState, bool> _scalarFragmentWidgetStates = {};
   final Map<_RefreshableWidgetState, bool> _scalarControlWidgetStates = {};
@@ -117,24 +113,23 @@ abstract class Scalar<
   Scalar({
     required this.name,
     required this.description,
+    required ScalarConfig config,
     required String? filterModelName,
-    required this.hiddenBehavior,
-    this.outsideEventReaction,
-    this.internalEventReaction,
-  }) : registerFilterModelName = filterModelName;
+  })  : config = config.copy(),
+        registerFilterModelName = filterModelName;
 
   // ***************************************************************************
   // ***************************************************************************
 
   List<Type> _getOutsideDataTypesToListen({required bool external}) {
     if (external) {
-      if (outsideEventReaction == null) {
+      if (config.outsideEventReaction == null) {
         return [];
       }
-      if (outsideEventReaction!.intrinsicMode) {
+      if (config.outsideEventReaction!.intrinsicMode) {
         return [getValueType()];
       } else {
-        return (outsideEventReaction!._events ?? [])
+        return (config.outsideEventReaction!._events ?? [])
             .map((e) => e.dataType)
             .toSet()
             .toList();
@@ -142,13 +137,13 @@ abstract class Scalar<
     }
     // Internal:
     else {
-      if (internalEventReaction == null) {
+      if (config.internalEventReaction == null) {
         return [];
       }
-      if (internalEventReaction!.intrinsicMode) {
+      if (config.internalEventReaction!.intrinsicMode) {
         return [getValueType()];
       } else {
-        return (internalEventReaction!._events ?? [])
+        return (config.internalEventReaction!._events ?? [])
             .map((e) => e.dataType)
             .toSet()
             .toList();
@@ -914,7 +909,7 @@ abstract class Scalar<
       event: "Scalar '${getClassName(this)}' just hides all UI Components!",
       isLibCode: true,
     );
-    switch (hiddenBehavior) {
+    switch (config.hiddenBehavior) {
       case ScalarHiddenBehavior.none:
         break;
       case ScalarHiddenBehavior.clear:

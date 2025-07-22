@@ -5,6 +5,8 @@ abstract class FormModel<
     ITEM_DETAIL extends Object,
     FILTER_CRITERIA extends FilterCriteria,
     EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
+  final FormModelConfig config;
+
   int __loadCount = 0;
 
   int get loadCount => __loadCount;
@@ -51,8 +53,6 @@ abstract class FormModel<
 
   bool _defaultValueInitiated = false;
 
-  final AutovalidateMode _defaultAutovalidateMode;
-
   AutovalidateMode _autovalidateMode = AutovalidateMode.onUserInteraction;
 
   AutovalidateMode get autovalidateMode => _autovalidateMode;
@@ -79,8 +79,9 @@ abstract class FormModel<
 
   FormModel({
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-  })  : _defaultAutovalidateMode = autovalidateMode,
-        _autovalidateMode = autovalidateMode {
+    FormModelConfig config = const FormModelConfig(),
+  })  : config = config.copy(),
+        _autovalidateMode = config.autovalidateMode {
     __registerPropsStructure();
   }
 
@@ -455,7 +456,7 @@ abstract class FormModel<
       __loadCount++;
       _autovalidateMode = AutovalidateMode.disabled;
     } else {
-      _autovalidateMode = _defaultAutovalidateMode;
+      _autovalidateMode = config.autovalidateMode;
     }
     //
     final ITEM_DETAIL? itemDetail = block.currentItemDetail;

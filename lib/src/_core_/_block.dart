@@ -105,9 +105,7 @@ abstract class Block<
 
   bool get isPreparingFormCreation => __isPreparingFormCreation;
 
-  final bool leaveTheFormSafely;
-
-  final BlockRefreshItemMode refreshItemMode;
+  final BlockConfig config;
 
   ///
   /// Block name. It is unique in a Shelf.
@@ -132,8 +130,6 @@ abstract class Block<
   }
 
   final String? description;
-
-  final BlockHiddenBehavior hiddenBehavior;
 
   ///
   /// FilterModel Name registered in [Shelf.registerStructure()] method.
@@ -224,16 +220,6 @@ abstract class Block<
 
   QueryType get lastQueryType => __lastQueryType;
 
-  final BlockOutsideBroadcast? outsideBroadcast;
-
-  final BlockOutsideEventReaction? outsideEventReaction;
-
-  final BlockInternalBroadcast? internalBroadcast;
-
-  final BlockInternalEventReaction? internalEventReaction;
-
-  final PageableData __pageable;
-
   late final __blockData = _BlockData<
       ID, //
       ITEM,
@@ -242,7 +228,7 @@ abstract class Block<
       FILTER_CRITERIA,
       EXTRA_FORM_INPUT>._(
     this,
-    __pageable,
+    config.pageable,
   );
 
   BlockErrorInfo? _blockErrorInfo;
@@ -353,23 +339,13 @@ abstract class Block<
   Block({
     required this.name,
     required this.description,
-    PageableData pageable = const PageableData(
-      page: 1,
-      pageSize: 20,
-    ),
-    this.hiddenBehavior = BlockHiddenBehavior.none,
-    this.refreshItemMode = BlockRefreshItemMode.auto,
-    this.leaveTheFormSafely = true,
+    required BlockConfig config,
     required String? filterModelName,
     required this.formModel,
-    this.outsideBroadcast,
-    this.outsideEventReaction,
-    this.internalBroadcast,
-    this.internalEventReaction,
     required List<Block>? childBlocks,
     ItemSortCriteria<ITEM>? itemSortCriteria,
   })  : registerFilterModelName = filterModelName,
-        __pageable = pageable.copy(),
+        config = config.copy(),
         _itemSortCriteria = itemSortCriteria,
         _childBlocks = childBlocks ?? [] {
     itemSortCriteria?.block = this;
@@ -386,24 +362,27 @@ abstract class Block<
 
   List<Type> _getBroadcastDataTypes({required bool external}) {
     if (external) {
-      if (outsideBroadcast == null) {
+      if (config.outsideBroadcast == null) {
         return [];
       }
       //
-      if (outsideBroadcast!.intrinsicEventMode) {
+      if (config.outsideBroadcast!.intrinsicEventMode) {
         return {getItemType(), getItemDetailType()}.toList();
       } else {
-        return outsideBroadcast!.events.map((e) => e.dataType).toSet().toList();
+        return config.outsideBroadcast!.events
+            .map((e) => e.dataType)
+            .toSet()
+            .toList();
       }
     } else {
-      if (internalBroadcast == null) {
+      if (config.internalBroadcast == null) {
         return [];
       }
       //
-      if (internalBroadcast!.intrinsicEventMode) {
+      if (config.internalBroadcast!.intrinsicEventMode) {
         return {getItemType(), getItemDetailType()}.toList();
       } else {
-        return internalBroadcast!.events
+        return config.internalBroadcast!.events
             .map((e) => e.dataType)
             .toSet()
             .toList();
@@ -412,14 +391,14 @@ abstract class Block<
   }
 
   List<Type> _getOutsideDataTypesToListen() {
-    if (outsideEventReaction == null) {
+    if (config.outsideEventReaction == null) {
       return [];
     }
     List<Type> itemTypes = [];
-    if (outsideEventReaction!.intrinsicMode) {
+    if (config.outsideEventReaction!.intrinsicMode) {
       itemTypes = [getItemType(), getItemDetailType()];
     } else {
-      for (Event event in outsideEventReaction!._events ?? []) {
+      for (Event event in config.outsideEventReaction!._events ?? []) {
         itemTypes.add(event.dataType);
       }
     }
@@ -783,7 +762,7 @@ abstract class Block<
       event: "Block '${getClassName(this)}' just hides all UI Components!",
       isLibCode: true,
     );
-    if (hiddenBehavior == BlockHiddenBehavior.clear) {
+    if (config.hiddenBehavior == BlockHiddenBehavior.clear) {
       Future.delayed(
         const Duration(seconds: 0),
         () {
@@ -1080,7 +1059,7 @@ abstract class Block<
       final PageableData? callingPageable;
       //
       if (thisXBlock.queryType == QueryType.realQuery) {
-        callingPageable = thisXBlock.pageable ?? __pageable;
+        callingPageable = thisXBlock.pageable ?? config.pageable;
         final QueryType newQueryType = thisXBlock.queryType;
         final queryTypeChanged = __lastQueryType != newQueryType;
         __lastQueryType = newQueryType;
@@ -1580,7 +1559,7 @@ abstract class Block<
     ITEM_DETAIL? refreshedCurrentItemDetail;
     if (forceReloadItem) {
       if (ITEM == ITEM_DETAIL &&
-          refreshItemMode == BlockRefreshItemMode.auto &&
+          config.refreshItemMode == BlockRefreshItemMode.auto &&
           isCandidateCurrentItemInNewQueriedList) {
         final ITEM? candidateCurrentItemInNewQueriedList =
             ItemsUtils.findItemInList(
