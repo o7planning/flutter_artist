@@ -15,7 +15,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
-    as dialogs;
+as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
@@ -88,14 +88,28 @@ part 'src/_core_/_activity.dart';
 
 part 'src/_core_/_block.dart';
 
+part 'src/_core_/_activity_config.dart';
+
+part 'src/_core_/_block_config.dart';
+
+part 'src/_core_/_scalar_config.dart';
+
 part 'src/_core_/_block_data.dart';
+
+part 'src/_core_/_form_model_config.dart';
+
+part 'src/_core_/_filter_model_config.dart';
 
 part 'src/_core_/_block_or_scalar.dart';
 
 part 'src/_core_/_block_outside_broadcast.dart';
+
 part 'src/_core_/_block_internal_broadcast.dart';
+
 part 'src/_core_/_block_outside_event_reaction.dart';
+
 part 'src/_core_/_block_internal_event_reaction.dart';
+
 part 'src/_core_/_current_couple_item.dart';
 
 part 'src/_core_/_custom_confirmation.dart';
@@ -131,8 +145,11 @@ part 'src/_core_/_scalar.dart';
 part 'src/_core_/_scalar_data.dart';
 
 part 'src/_core_/_scalar_outside_event_reaction.dart';
+
 part 'src/_core_/_scalar_internal_event_reaction.dart';
+
 part 'src/_core_/_shelf.dart';
+
 part 'src/_enum_/_block_refresh_item_mode.dart';
 
 part 'src/_core_/_shelf_block_scalar_type.dart';
@@ -514,7 +531,9 @@ part 'src/_action_result_/_scalar_query_result.dart';
 part 'src/_action_result_/_block_query_result.dart';
 
 part 'src/_action_result_/_block_item_deletion_result.dart';
+
 part 'src/_action_result_/_block_item_creation_result.dart';
+
 part 'src/_ui_/_table_container.dart';
 
 part 'src/_ui_/__error_widget_utils.dart';

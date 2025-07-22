@@ -6,6 +6,7 @@ class ItemDeletionResult<ITEM> extends ActionResult {
   StackTrace? _stackTrace;
 
   AppError? get error => _appError;
+
   StackTrace? get stackTrace => _stackTrace;
 
   ITEM? _candidateItem;
@@ -13,14 +14,17 @@ class ItemDeletionResult<ITEM> extends ActionResult {
   ITEM? _failedItem;
 
   ITEM? get candidateItem => _candidateItem;
+
   ITEM? get deletedItem => _deletedItem;
+
   ITEM? get failedItem => _failedItem;
 
   ItemDeletionResult({
     required ITEM? candidateItem,
     this.precheck,
     StackTrace? stackTrace,
-  })  : _candidateItem = candidateItem,
+  })
+      : _candidateItem = candidateItem,
         _stackTrace = stackTrace;
 
   @override

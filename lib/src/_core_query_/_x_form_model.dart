@@ -21,6 +21,7 @@ class _XFormModel {
 
   @override
   String toString() {
-    return "${getClassName(this)}(${getClassName(formModel)} - needQuery: $forceTypeForForm)";
+    return "${getClassName(this)}(${getClassName(
+        formModel)} - needQuery: $forceTypeForForm)";
   }
 }

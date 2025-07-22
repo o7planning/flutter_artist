@@ -23,8 +23,7 @@ enum BlockItemCurrSelectionPrecheck implements ECodeDetail {
     eCode: ECode.notAllow,
     message: "The Refresh Ignored",
     details: ["Not Allow to Refresh Item"],
-  )
-  ;
+  );
 
   @override
   final ECode eCode;

@@ -90,11 +90,12 @@ class __FormDataViewState extends State<_FormDataView> {
       TabData(
         text: ' Form Props Structure',
         closable: false,
-        leading: (context, status) => Icon(
-          _formValueIconData,
-          color: _getTabIconColor(status),
-          size: iconSize,
-        ),
+        leading: (context, status) =>
+            Icon(
+              _formValueIconData,
+              color: _getTabIconColor(status),
+              size: iconSize,
+            ),
         content: _buildTabFormPropsStructure(),
       ),
     );
@@ -102,11 +103,12 @@ class __FormDataViewState extends State<_FormDataView> {
       TabData(
         text: ' Initial',
         closable: false,
-        leading: (context, status) => Icon(
-          _formValueIconData,
-          color: _getTabIconColor(status),
-          size: iconSize,
-        ),
+        leading: (context, status) =>
+            Icon(
+              _formValueIconData,
+              color: _getTabIconColor(status),
+              size: iconSize,
+            ),
         content: _buildTabContent(
           info: "Initial Form values",
           json: initial1Json,
@@ -117,15 +119,17 @@ class __FormDataViewState extends State<_FormDataView> {
       TabData(
         text: ' Current',
         closable: false,
-        leading: (context, status) => Icon(
-          _formValueIconData,
-          color: _getTabIconColor(status),
-          size: iconSize,
-        ),
+        leading: (context, status) =>
+            Icon(
+              _formValueIconData,
+              color: _getTabIconColor(status),
+              size: iconSize,
+            ),
         content: _buildTabContent(
           info: "The current values of the form (Will be passed to the "
               "${getClassName(widget.formModel)}.callApiCreateItem() "
-              "or ${getClassName(widget.formModel)}.callApiUpdateItem() method).",
+              "or ${getClassName(
+              widget.formModel)}.callApiUpdateItem() method).",
           json: instantJson,
         ),
       ),
@@ -135,11 +139,12 @@ class __FormDataViewState extends State<_FormDataView> {
       TabData(
         text: ' ',
         closable: false,
-        leading: (context, status) => Icon(
-          _effectIconData,
-          color: _getTabIconColor(status),
-          size: iconSize,
-        ),
+        leading: (context, status) =>
+            Icon(
+              _effectIconData,
+              color: _getTabIconColor(status),
+              size: iconSize,
+            ),
         content: _buildFormEventListenerInfo(),
       ),
     );
@@ -195,18 +200,20 @@ class __FormDataViewState extends State<_FormDataView> {
           children: [
             _InfoView(
                 info:
-                    "When you successfully add or modify a record on the '${getClassName(widget.formModel.block)}' block, "
+                "When you successfully add or modify a record on the '${getClassName(
+                    widget.formModel.block)}' block, "
                     "the listening blocks will be switched to the 'pending' state, "
                     "they will be lazily queried again when they are visible on the screen.\n"
                     "Here is a list of affected blocks or scalars:"),
             const Divider(height: 10),
             ...listeners.map(
-              (listener) => _ShelfBlockScalarTypeWidget(
-                shelfBlockScalarType: listener,
-                isListener: true,
-                isEventSource: false,
-                onTap: null,
-              ),
+                  (listener) =>
+                  _ShelfBlockScalarTypeWidget(
+                    shelfBlockScalarType: listener,
+                    isListener: true,
+                    isEventSource: false,
+                    onTap: null,
+                  ),
             ),
           ],
         ),
