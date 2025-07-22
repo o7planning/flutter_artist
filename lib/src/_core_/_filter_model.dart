@@ -9,6 +9,8 @@ abstract class FilterModel<
 
   late final String name;
 
+  final FilterModelConfig config;
+
   String get pathInfo {
     return "filter-model > ${shelf.name} > $name";
   }
@@ -42,7 +44,9 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  FilterModel() {
+  FilterModel({
+    FilterModelConfig config = const FilterModelConfig(),
+  }) : config = config.copy() {
     __registerCriteriaStructure();
   }
 

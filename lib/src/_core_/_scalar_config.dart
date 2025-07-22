@@ -12,4 +12,12 @@ class ScalarConfig {
     required this.internalEventReaction,
     this.hiddenBehavior = ScalarHiddenBehavior.none,
   });
+
+  ScalarConfig copy() {
+    return ScalarConfig(
+      outsideEventReaction: outsideEventReaction,
+      internalEventReaction: internalEventReaction,
+      hiddenBehavior: hiddenBehavior,
+    );
+  }
 }

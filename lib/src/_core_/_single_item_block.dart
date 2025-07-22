@@ -21,17 +21,22 @@ part of '../../flutter_artist.dart';
 /// ```
 ///
 abstract class SingleItemBlock<
-        ID extends Object,
+        ID extends Object, //
         ITEM_DETAIL extends Object,
         FILTER_INPUT extends FilterInput,
         FILTER_CRITERIA extends FilterCriteria,
-        EXTRA_FORM_INPUT extends ExtraFormInput>
-    extends Block<ID, ITEM_DETAIL, ITEM_DETAIL, FILTER_INPUT, FILTER_CRITERIA,
+        EXTRA_FORM_INPUT extends ExtraFormInput> //
+    extends Block<
+        ID, //
+        ITEM_DETAIL,
+        ITEM_DETAIL,
+        FILTER_INPUT,
+        FILTER_CRITERIA,
         EXTRA_FORM_INPUT> {
   SingleItemBlock({
     required super.name,
-    required super.config,
     required super.description,
+    required super.config,
     required super.filterModelName,
     required super.formModel,
     required super.childBlocks,

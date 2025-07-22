@@ -21,10 +21,10 @@ part of '../../flutter_artist.dart';
 /// ```
 ///
 abstract class Scalar<
-VALUE extends Object,
-FILTER_INPUT extends FilterInput, // EmptyFilterInput
-FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
-> extends _XBase {
+    VALUE extends Object,
+    FILTER_INPUT extends FilterInput, // EmptyFilterInput
+    FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
+    > extends _XBase {
   late final Shelf shelf;
 
   int _lazyLoadCount = 0;
@@ -70,7 +70,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   /// If this scalar does not declare a FilterModel, it will have the default FilterModel.
   ///
   late final FilterModel<FILTER_INPUT, FILTER_CRITERIA>
-  _registeredOrDefaultFilterModel;
+      _registeredOrDefaultFilterModel;
 
   ///
   /// Returns a FilterModel declared in the [Shelf.registerStructure()] method.
@@ -85,7 +85,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   }
 
   late final __scalarData =
-  _ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
+      _ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
 
   final Map<_RefreshableWidgetState, bool> _scalarFragmentWidgetStates = {};
   final Map<_RefreshableWidgetState, bool> _scalarControlWidgetStates = {};
@@ -113,9 +113,10 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
   Scalar({
     required this.name,
     required this.description,
+    required ScalarConfig config,
     required String? filterModelName,
-    required this.config,
-  }) : registerFilterModelName = filterModelName;
+  })  : config = config.copy(),
+        registerFilterModelName = filterModelName;
 
   // ***************************************************************************
   // ***************************************************************************
@@ -167,9 +168,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     }
     //
     print(
-        ">> ${getClassName(
-            this)}._unitQuery - queryState: $queryDataState, forceQuery: ${thisXScalar
-            .needQuery}");
+        ">> ${getClassName(this)}._unitQuery - queryState: $queryDataState, forceQuery: ${thisXScalar.needQuery}");
     //
     if (!forceQuery) {
       return thisXScalar.queryResult;
@@ -203,7 +202,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
         xFilterModel.queried = true;
       } else {
         filterCriteriaOfFilterModel =
-        filterModel._filterCriteria! as FILTER_CRITERIA;
+            filterModel._filterCriteria! as FILTER_CRITERIA;
       }
     } catch (e, stackTrace) {
       /* Never Error */
@@ -224,8 +223,8 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     // Ready FilterCriteria:
     //
     bool xCriteriaChanged = this.__scalarData._isXCriteriaChanged(
-      newFilterCriteria: filterCriteriaOfFilterModel,
-    );
+          newFilterCriteria: filterCriteriaOfFilterModel,
+        );
     //
     final callApiQueryMethod = ScalarErrorMethod.callApiQuery;
     bool isQueryError = false;
@@ -498,10 +497,10 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     __assertThisXScalar(thisXScalar);
     //
     this.__scalarData._updateFrom(
-      filterCriteria: filterCriteria,
-      dataState: dataState,
-      value: value,
-    );
+          filterCriteria: filterCriteria,
+          dataState: dataState,
+          value: value,
+        );
   }
 
   // ***************************************************************************

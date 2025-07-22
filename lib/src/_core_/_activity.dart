@@ -11,8 +11,8 @@ abstract class Activity extends _XBase {
 
   Activity({
     required this.name,
-    required this.config,
-  });
+    ActivityConfig config = const ActivityConfig(),
+  }) : config = config.copy();
 
   // ***************************************************************************
   // ***************************************************************************

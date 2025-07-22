@@ -6,4 +6,8 @@ class ActivityConfig {
   const ActivityConfig({
     this.hiddenBehavior = ActivityHiddenBehavior.none,
   });
+
+  ActivityConfig copy() {
+    return ActivityConfig(hiddenBehavior: hiddenBehavior);
+  }
 }

@@ -220,8 +220,6 @@ abstract class Block<
 
   QueryType get lastQueryType => __lastQueryType;
 
-  final PageableData __pageable;
-
   late final __blockData = _BlockData<
       ID, //
       ITEM,
@@ -230,7 +228,7 @@ abstract class Block<
       FILTER_CRITERIA,
       EXTRA_FORM_INPUT>._(
     this,
-    __pageable,
+    config.pageable,
   );
 
   BlockErrorInfo? _blockErrorInfo;
@@ -340,18 +338,14 @@ abstract class Block<
 
   Block({
     required this.name,
-    required this.config,
     required this.description,
-    PageableData pageable = const PageableData(
-      page: 1,
-      pageSize: 20,
-    ),
+    required BlockConfig config,
     required String? filterModelName,
     required this.formModel,
     required List<Block>? childBlocks,
     ItemSortCriteria<ITEM>? itemSortCriteria,
   })  : registerFilterModelName = filterModelName,
-        __pageable = pageable.copy(),
+        config = config.copy(),
         _itemSortCriteria = itemSortCriteria,
         _childBlocks = childBlocks ?? [] {
     itemSortCriteria?.block = this;
@@ -1065,7 +1059,7 @@ abstract class Block<
       final PageableData? callingPageable;
       //
       if (thisXBlock.queryType == QueryType.realQuery) {
-        callingPageable = thisXBlock.pageable ?? __pageable;
+        callingPageable = thisXBlock.pageable ?? config.pageable;
         final QueryType newQueryType = thisXBlock.queryType;
         final queryTypeChanged = __lastQueryType != newQueryType;
         __lastQueryType = newQueryType;

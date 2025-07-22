@@ -13,6 +13,8 @@ class BlockConfig {
 
   final BlockInternalEventReaction? internalEventReaction;
 
+  final PageableData pageable;
+
   BlockConfig({
     this.refreshItemMode = BlockRefreshItemMode.auto,
     this.leaveTheFormSafely = true,
@@ -21,5 +23,22 @@ class BlockConfig {
     this.outsideEventReaction,
     this.internalBroadcast,
     this.internalEventReaction,
+    this.pageable = const PageableData(
+      page: 1,
+      pageSize: 20,
+    ),
   });
+
+  BlockConfig copy() {
+    return BlockConfig(
+      refreshItemMode: refreshItemMode,
+      leaveTheFormSafely: leaveTheFormSafely,
+      hiddenBehavior: hiddenBehavior,
+      outsideBroadcast: outsideBroadcast,
+      outsideEventReaction: outsideEventReaction,
+      internalBroadcast: internalBroadcast,
+      internalEventReaction: internalEventReaction,
+      pageable: pageable.copy(),
+    );
+  }
 }
