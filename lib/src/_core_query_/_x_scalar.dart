@@ -39,6 +39,7 @@ class _XScalar {
 
   @override
   String toString() {
-    return "${getClassName(this)}(${getClassName(scalar)} - needQuery: $needQuery)";
+    return "${getClassName(this)}(${getClassName(
+        scalar)} - needQuery: $needQuery)";
   }
 }

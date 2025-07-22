@@ -121,7 +121,7 @@ class _BlockOrScalar extends Equatable {
           .toList();
     } else {
       return scalar!
-          ._getOutsideDataTypesToListen(external:external)
+          ._getOutsideDataTypesToListen(external: external)
           .map((type) => type.toString())
           .toList();
     }

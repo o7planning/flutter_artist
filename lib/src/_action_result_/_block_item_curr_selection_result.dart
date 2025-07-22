@@ -7,6 +7,7 @@ class BlockItemCurrSelectionResult<ITEM> extends ActionResult {
   StackTrace? _stackTrace;
 
   AppError? get error => _appError;
+
   StackTrace? get stackTrace => _stackTrace;
 
   final CurrentItemSelectionType currentItemSelectionType;
@@ -25,7 +26,8 @@ class BlockItemCurrSelectionResult<ITEM> extends ActionResult {
     required ITEM? candidateItem,
     required ITEM? oldCurrentItem,
     required ITEM? currentItem,
-  })  : _oldCurrentItem = oldCurrentItem,
+  })
+      : _oldCurrentItem = oldCurrentItem,
         _currentItem = currentItem,
         _getItemId = getItemId {
     if (candidateItem != null) {

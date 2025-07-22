@@ -7,6 +7,7 @@ class PrepareItemCreationResult extends ActionResult {
   StackTrace? _stackTrace;
 
   AppError? get error => _appError;
+
   StackTrace? get stackTrace => _stackTrace;
 
   PrepareItemCreationResult({this.precheck, StackTrace? stackTrace})

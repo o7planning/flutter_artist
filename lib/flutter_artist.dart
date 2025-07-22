@@ -15,7 +15,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
-    as dialogs;
+as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
@@ -88,7 +88,17 @@ part 'src/_core_/_activity.dart';
 
 part 'src/_core_/_block.dart';
 
+part 'src/_core_/_activity_config.dart';
+
+part 'src/_core_/_block_config.dart';
+
+part 'src/_core_/_scalar_config.dart';
+
 part 'src/_core_/_block_data.dart';
+
+part 'src/_core_/_form_model_config.dart';
+
+part 'src/_core_/_filter_model_config.dart';
 
 part 'src/_core_/_block_or_scalar.dart';
 

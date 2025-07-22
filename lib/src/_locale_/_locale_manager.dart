@@ -10,7 +10,8 @@ class LocaleManager {
   LocaleManager._({
     required GlobalsManager globalsManager,
     required ILocaleAdapter localeAdapter,
-  })  : _globalsManager = globalsManager,
+  })
+      : _globalsManager = globalsManager,
         _localeAdapter = localeAdapter;
 
   ///
