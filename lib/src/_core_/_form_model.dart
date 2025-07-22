@@ -53,8 +53,6 @@ abstract class FormModel<
 
   bool _defaultValueInitiated = false;
 
-  final AutovalidateMode _defaultAutovalidateMode;
-
   AutovalidateMode _autovalidateMode = AutovalidateMode.onUserInteraction;
 
   AutovalidateMode get autovalidateMode => _autovalidateMode;
@@ -83,8 +81,7 @@ abstract class FormModel<
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     FormModelConfig config = const FormModelConfig(),
   })  : config = config.copy(),
-        _defaultAutovalidateMode = autovalidateMode,
-        _autovalidateMode = autovalidateMode {
+        _autovalidateMode = config.autovalidateMode {
     __registerPropsStructure();
   }
 
@@ -459,7 +456,7 @@ abstract class FormModel<
       __loadCount++;
       _autovalidateMode = AutovalidateMode.disabled;
     } else {
-      _autovalidateMode = _defaultAutovalidateMode;
+      _autovalidateMode = config.autovalidateMode;
     }
     //
     final ITEM_DETAIL? itemDetail = block.currentItemDetail;

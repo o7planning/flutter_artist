@@ -1,9 +1,13 @@
 part of '../../flutter_artist.dart';
 
 class FormModelConfig {
-  const FormModelConfig();
+  final AutovalidateMode autovalidateMode;
+
+  const FormModelConfig({
+    this.autovalidateMode = AutovalidateMode.onUserInteraction,
+  });
 
   FormModelConfig copy() {
-    return FormModelConfig();
+    return FormModelConfig(autovalidateMode: autovalidateMode);
   }
 }
