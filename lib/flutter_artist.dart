@@ -133,6 +133,7 @@ part 'src/_core_/_scalar_data.dart';
 part 'src/_core_/_scalar_outside_event_reaction.dart';
 part 'src/_core_/_scalar_internal_event_reaction.dart';
 part 'src/_core_/_shelf.dart';
+part 'src/_enum_/_block_refresh_item_mode.dart';
 
 part 'src/_core_/_shelf_block_scalar_type.dart';
 

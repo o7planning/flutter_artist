@@ -107,6 +107,8 @@ abstract class Block<
 
   final bool leaveTheFormSafely;
 
+  final BlockRefreshItemMode refreshItemMode;
+
   ///
   /// Block name. It is unique in a Shelf.
   ///
@@ -356,6 +358,7 @@ abstract class Block<
       pageSize: 20,
     ),
     this.hiddenBehavior = BlockHiddenBehavior.none,
+    this.refreshItemMode = BlockRefreshItemMode.auto,
     this.leaveTheFormSafely = true,
     required String? filterModelName,
     required this.formModel,
@@ -1470,6 +1473,10 @@ abstract class Block<
     //
     final bool currentItemChanged;
     if (currentItem == null) {
+      int? suggestIdx = specifyItemIndexToSelectAsCurrent();
+      if (suggestIdx != null && suggestIdx >= 0 && suggestIdx < itemCount) {
+        candidateCurrentItem = candidateCurrentItem ?? items[suggestIdx];
+      }
       candidateCurrentItem = candidateCurrentItem ?? firstItem;
       currentItemChanged = candidateCurrentItem != null;
     }
@@ -1572,7 +1579,9 @@ abstract class Block<
     );
     ITEM_DETAIL? refreshedCurrentItemDetail;
     if (forceReloadItem) {
-      if (ITEM == ITEM_DETAIL && isCandidateCurrentItemInNewQueriedList) {
+      if (ITEM == ITEM_DETAIL &&
+          refreshItemMode == BlockRefreshItemMode.auto &&
+          isCandidateCurrentItemInNewQueriedList) {
         final ITEM? candidateCurrentItemInNewQueriedList =
             ItemsUtils.findItemInList(
           item: candidateCurrentItem,
@@ -3074,6 +3083,11 @@ abstract class Block<
   // ***************************************************************************
   // ************* API METHOD **************************************************
   // ***************************************************************************
+
+  @_AbstractMethodAnnotation()
+  int? specifyItemIndexToSelectAsCurrent() {
+    return null;
+  }
 
   @_AbstractMethodAnnotation()
   Future<ApiResult<PageData<ITEM>?>> callApiQuery({
@@ -4890,6 +4904,14 @@ abstract class Block<
   ITEM? get currentItem => __blockData.current._item;
 
   ITEM_DETAIL? get currentItemDetail => __blockData.current._itemDetail;
+
+  int get currentItemIndex {
+    ITEM? ci = currentItem;
+    if (ci == null) {
+      return -1;
+    }
+    return items.indexWhere((it) => identical(it, ci));
+  }
 
   // ***************************************************************************
   // ***************************************************************************
