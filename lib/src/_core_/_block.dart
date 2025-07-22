@@ -2547,8 +2547,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_BlockSelectItemAsCurrentAnnotation()
-  Future<BlockItemCurrSelectionResult<ITEM>?>
-      _refreshToShowOrEditItemAsCurrent({
+  Future<BlockItemCurrSelectionResult<ITEM>> _refreshToShowOrEditItemAsCurrent({
     required ITEM item,
     required bool forceForm,
     required Function()? navigate,
@@ -2612,8 +2611,8 @@ abstract class Block<
     //
     await FlutterArtist.executor._executeTaskUnitQueue();
     var result = thisXBlock.currentItemSelectionResult
-        as BlockItemCurrSelectionResult<ITEM>?;
-    if (result != null && result.success) {
+        as BlockItemCurrSelectionResult<ITEM>;
+    if (result.success) {
       if (navigate != null) {
         navigate();
       }
@@ -2626,7 +2625,7 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_BlockSelectItemAsCurrentAnnotation()
-  Future<BlockItemCurrSelectionResult<ITEM>?> refreshAndSelectItemAsCurrent({
+  Future<BlockItemCurrSelectionResult<ITEM>> refreshAndSelectItemAsCurrent({
     required ITEM item,
     bool forceLoadForm = false,
     Function()? navigate,
