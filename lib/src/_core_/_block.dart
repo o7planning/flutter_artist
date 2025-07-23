@@ -4274,7 +4274,7 @@ abstract class Block<
   // *********** __canXXX() method *********************************************
   // ***************************************************************************
 
-  @_PrecheckMethod()
+  @_PrecheckPrivateMethod()
   Actionable<BlockItemDeletionPrecheck> __canDeleteCurrentItem({
     required bool checkBusy,
     required bool checkAllow,
@@ -4296,7 +4296,39 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_PrecheckMethod()
+  @_PrecheckPrivateMethod()
+  Actionable<BlockQueryPrecheck> __canQuery({
+    required bool checkBusy,
+    required bool checkAllow,
+  }) {
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable<BlockQueryPrecheck>.no(
+          errCode: BlockQueryPrecheck.busy);
+    }
+    //
+    if (checkAllow) {
+      CheckAllowResult result = __isAllowQuery();
+      switch (result.result) {
+        case CheckAllow.allow:
+          return Actionable<BlockQueryPrecheck>.yes();
+        case CheckAllow.notAllow:
+          return Actionable<BlockQueryPrecheck>.no(
+            errCode: BlockQueryPrecheck.notAllow,
+          );
+        case CheckAllow.error:
+          return Actionable<BlockQueryPrecheck>.no(
+            errCode: BlockQueryPrecheck.checkAllowMethodError,
+            stackTrace: result.stackTrace,
+          );
+      }
+    }
+    //
+    return Actionable<BlockQueryPrecheck>.yes();
+  }
+
+  // ***************************************************************************
+
+  @_PrecheckPrivateMethod()
   Actionable<BlockItemDeletionPrecheck> __canDeleteItem({
     required bool checkBusy,
     required bool ignoreIfItemNotInList,
@@ -4341,7 +4373,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_PrecheckMethod()
+  @_PrecheckPrivateMethod()
   Actionable<BlockItemCreationPrecheck> __canCreateItem({
     required bool checkBusy,
     required ItemCreationType creationType,
@@ -4399,7 +4431,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_PrecheckMethod()
+  @_PrecheckPrivateMethod()
   Actionable<BlockClearPrecheck> __canClearBlock({
     required bool checkBusy,
   }) {
@@ -4420,7 +4452,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_PrecheckMethod()
+  @_PrecheckPrivateMethod()
   Actionable<BlockItemEditingPrecheck> __canUpdateItem({
     required ITEM item,
     required bool checkBusy,
@@ -4472,7 +4504,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_PrecheckMethod()
+  @_PrecheckPrivateMethod()
   Actionable<BlockFormResetingPrecheck> __canResetForm({
     required bool checkBusy,
     required bool checkAllow,
@@ -4530,7 +4562,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_PrecheckMethod()
+  @_PrecheckPrivateMethod()
   Actionable<BlockFormSavingPrecheck> __canSaveForm({
     required bool checkBusy,
     required bool checkAllow,
@@ -4570,7 +4602,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_PrecheckMethod()
+  @_PrecheckPrivateMethod()
   Actionable<BlockItemEditingPrecheck> __canEditItemOnForm({
     required bool checkBusy,
     required ITEM item,
@@ -4627,7 +4659,8 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_PrecheckMethod()
+  @_PrecheckPrivateMethod()
+  // @seeAlso: __canRefreshCurrentItem()
   Actionable<BlockItemCurrSelectionPrecheck> __canSelectItemAsCurrent({
     required ITEM item,
     required bool checkBusy,
@@ -4649,7 +4682,8 @@ abstract class Block<
 
   // ***************************************************************************
 
-  @_PrecheckMethod()
+  @_PrecheckPrivateMethod()
+  // @seeAlso: __canSelectItemAsCurrent()
   Actionable<BlockItemCurrSelectionPrecheck> __canRefreshCurrentItem({
     required bool checkBusy,
   }) {
@@ -4674,7 +4708,7 @@ abstract class Block<
   /// Edit on edit-mode
   /// Edit on creation-mode
   ///
-  @_PrecheckMethod()
+  @_PrecheckPrivateMethod()
   Actionable<BlockFormEnableCode> __isEnableFormToModify({
     required bool checkAllow,
   }) {
@@ -4803,13 +4837,11 @@ abstract class Block<
   }
 
   // ***************************************************************************
-  // ***************************************************************************
 
   ///
   /// Checks whether the current item can be refreshed.
   ///
-  /// This method will return [true] if all the usual conditions are met.
-  ///
+  @_PrecheckMethod()
   Actionable<BlockItemCurrSelectionPrecheck> canRefreshCurrentItem() {
     return __canRefreshCurrentItem(
       checkBusy: true,
@@ -4817,18 +4849,27 @@ abstract class Block<
   }
 
   // ***************************************************************************
-  // ***************************************************************************
 
-  bool canShowFilterCriteria() {
-    ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
-    return filterModel != null &&
-        loggedInUser != null &&
-        loggedInUser.isSystemUser;
+  @_PrecheckMethod()
+  Actionable<BlockItemCurrSelectionPrecheck> canSelectItemAsCurrent({
+    required ITEM item,
+  }) {
+    return __canSelectItemAsCurrent(
+      item: item,
+      checkBusy: true,
+    );
   }
 
   // ***************************************************************************
+
+  @_PrecheckMethod()
+  Actionable<BlockQueryPrecheck> canQuery() {
+    return __canQuery(checkBusy: true, checkAllow: true);
+  }
+
   // ***************************************************************************
 
+  @_PrecheckMethod()
   Actionable<ShowFormInfoState> canShowFormInfo() {
     ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
     if (formModel == null) {
@@ -4852,40 +4893,11 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable<BlockQueryPrecheck> __canQuery({
-    required bool checkBusy,
-    required bool checkAllow,
-  }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockQueryPrecheck>.no(
-          errCode: BlockQueryPrecheck.busy);
-    }
-    //
-    if (checkAllow) {
-      CheckAllowResult result = __isAllowQuery();
-      switch (result.result) {
-        case CheckAllow.allow:
-          return Actionable<BlockQueryPrecheck>.yes();
-        case CheckAllow.notAllow:
-          return Actionable<BlockQueryPrecheck>.no(
-            errCode: BlockQueryPrecheck.notAllow,
-          );
-        case CheckAllow.error:
-          return Actionable<BlockQueryPrecheck>.no(
-            errCode: BlockQueryPrecheck.checkAllowMethodError,
-            stackTrace: result.stackTrace,
-          );
-      }
-    }
-    //
-    return Actionable<BlockQueryPrecheck>.yes();
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Actionable canQuery() {
-    return __canQuery(checkBusy: true, checkAllow: true);
+  bool canShowFilterCriteria() {
+    ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
+    return filterModel != null &&
+        loggedInUser != null &&
+        loggedInUser.isSystemUser;
   }
 
   // ***************************************************************************

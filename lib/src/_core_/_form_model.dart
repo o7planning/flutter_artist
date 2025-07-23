@@ -1580,25 +1580,25 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable<EnterFormFieldsState> __canEnterFormFields({
+  Actionable<EnterFormFieldsPrecheck> __canEnterFormFields({
     required bool checkBusy,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<EnterFormFieldsState>.no(
-        errCode: EnterFormFieldsState.busy,
+      return Actionable<EnterFormFieldsPrecheck>.no(
+        errCode: EnterFormFieldsPrecheck.busy,
       );
     }
     if (formMode == FormMode.none) {
-      return Actionable<EnterFormFieldsState>.no(
-        errCode: EnterFormFieldsState.formInNoneMode,
+      return Actionable<EnterFormFieldsPrecheck>.no(
+        errCode: EnterFormFieldsPrecheck.formInNoneMode,
       );
     }
     if (formDataState == DataState.error) {
-      return Actionable<EnterFormFieldsState>.no(
-        errCode: EnterFormFieldsState.formInErrorState,
+      return Actionable<EnterFormFieldsPrecheck>.no(
+        errCode: EnterFormFieldsPrecheck.formInErrorState,
       );
     }
-    return Actionable<EnterFormFieldsState>.yes();
+    return Actionable<EnterFormFieldsPrecheck>.yes();
   }
 
   bool __checkBeforeEnterFormFields({

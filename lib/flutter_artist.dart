@@ -424,11 +424,9 @@ part 'src/_error_/_form_temp_error.dart';
 
 part 'src/_error_/_scalar_error_info.dart';
 
-part 'src/_error_enum_/__actionable_code.dart';
+part 'src/_error_enum_/__chk_code.dart';
 
-part 'src/_error_enum_/__e_code.dart';
-
-part 'src/_error_enum_/__e_code_detail.dart';
+part 'src/_error_enum_/__chk_code_detail.dart';
 
 part 'src/_error_enum_/_actionable/_block_clear_precheck.dart';
 
@@ -450,9 +448,9 @@ part 'src/_error_enum_/_actionable/_block_query_precheck.dart';
 
 part 'src/_error_enum_/_actionable/_check_allow.dart';
 
-part 'src/_error_enum_/_enter_form_fields_state.dart';
+part 'src/_error_enum_/_actionable/_enter_form_fields_precheck.dart';
 
-part 'src/_error_enum_/_show_form_info_state.dart';
+part 'src/_error_enum_/_actionable/_show_form_info_precheck.dart';
 
 part 'src/_fa_.dart';
 
@@ -685,6 +683,10 @@ class _AbstractMethodAnnotation {
 
 class _RootMethodAnnotation {
   const _RootMethodAnnotation();
+}
+
+class _PrecheckPrivateMethod {
+  const _PrecheckPrivateMethod();
 }
 
 class _PrecheckMethod {

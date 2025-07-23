@@ -1,25 +1,25 @@
 part of '../../../flutter_artist.dart';
 
-enum BlockQueryPrecheck implements ECodeDetail {
+enum BlockQueryPrecheck implements ChkCodeDetail {
   busy(
-    eCode: ECode.busy,
+    chkCode: ChkCode.busy,
     message: "Block Querying is disabled.",
     details: ["The executor is busy."],
   ),
   notAllow(
-    eCode: ECode.notAllow,
+    chkCode: ChkCode.notAllow,
     message: "The Block querying is disabled.",
     details: ["The application logic does not allow query this block."],
   ),
   checkAllowMethodError(
-    eCode: ECode.checkAllowMethodError,
+    chkCode: ChkCode.checkAllowMethodError,
     message: "The Block querying is disabled.",
     details: ["The isAllowQuery() method error."],
   ),
   ;
 
   @override
-  final ECode eCode;
+  final ChkCode chkCode;
 
   @override
   final String message;
@@ -28,7 +28,7 @@ enum BlockQueryPrecheck implements ECodeDetail {
   final List<String>? details;
 
   const BlockQueryPrecheck({
-    required this.eCode,
+    required this.chkCode,
     required this.message,
     required this.details,
   });

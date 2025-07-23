@@ -1,21 +1,21 @@
 part of '../../../flutter_artist.dart';
 
 @_RenameAnnotation()
-enum BlockClearPrecheck implements ECodeDetail {
+enum BlockClearPrecheck implements ChkCodeDetail {
   busy(
-    eCode: ECode.busy,
+    chkCode: ChkCode.busy,
     message: "Can not clear block.",
     details: ["The executor is busy."],
   ),
   hasActiveUI(
-    eCode: ECode.hasActiveUI,
+    chkCode: ChkCode.hasActiveUI,
     message: "Can not clear block.",
     details: ["The Block currently has active UI components."],
   ),
   ;
 
   @override
-  final ECode eCode;
+  final ChkCode chkCode;
 
   @override
   final String message;
@@ -24,7 +24,7 @@ enum BlockClearPrecheck implements ECodeDetail {
   final List<String>? details;
 
   const BlockClearPrecheck({
-    required this.eCode,
+    required this.chkCode,
     required this.message,
     required this.details,
   });

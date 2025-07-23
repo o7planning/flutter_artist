@@ -1,32 +1,32 @@
 part of '../../../flutter_artist.dart';
 
-enum BlockItemCurrSelectionPrecheck implements ECodeDetail {
+enum BlockItemCurrSelectionPrecheck implements ChkCodeDetail {
   busy(
-    eCode: ECode.busy,
+    chkCode: ChkCode.busy,
     message: "Cannot refresh the current item.",
     details: ["The executor is busy."],
   ),
   // Test Cases: [03b]
   noTarget(
-    eCode: ECode.noTarget,
+    chkCode: ChkCode.noTarget,
     message: "The Refresh Ignored",
     details: ["No target item to refresh"],
   ),
   // Test Cases: [03b]
   invalidTarget(
-    eCode: ECode.invalidTarget,
+    chkCode: ChkCode.invalidTarget,
     message: "The Refresh Ignored",
     details: ["Item is not in the List"],
   ),
   // Test Cases: [03b] ??
   notAllow(
-    eCode: ECode.notAllow,
+    chkCode: ChkCode.notAllow,
     message: "The Refresh Ignored",
     details: ["Not Allow to Refresh Item"],
   );
 
   @override
-  final ECode eCode;
+  final ChkCode chkCode;
 
   @override
   final String message;
@@ -35,7 +35,7 @@ enum BlockItemCurrSelectionPrecheck implements ECodeDetail {
   final List<String>? details;
 
   const BlockItemCurrSelectionPrecheck({
-    required this.eCode,
+    required this.chkCode,
     required this.message,
     required this.details,
   });

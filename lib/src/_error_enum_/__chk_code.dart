@@ -1,6 +1,6 @@
 part of '../../flutter_artist.dart';
 
-enum ECode {
+enum ChkCode {
   busy,
   noForm,
   formInitialDataNotReady,

@@ -1,45 +1,45 @@
 part of '../../../flutter_artist.dart';
 
 @_RenameAnnotation()
-enum BlockFormResetingPrecheck implements ECodeDetail {
+enum BlockFormResetingPrecheck implements ChkCodeDetail {
   busy(
-    eCode: ECode.busy,
+    chkCode: ChkCode.busy,
     message: "Form reset is disabled.",
     details: ["The executor is busy."],
   ),
   noForm(
-    eCode: ECode.noForm,
+    chkCode: ChkCode.noForm,
     message: "Form reset is disabled.",
     details: ["The block has no form."],
   ),
   formIsNotDirty(
-    eCode: ECode.formIsNotDirty,
+    chkCode: ChkCode.formIsNotDirty,
     message: "Form reset is disabled.",
     details: ["The form is not in dirty state."],
   ),
   formInitialDataNotReady(
-    eCode: ECode.formInitialDataNotReady,
+    chkCode: ChkCode.formInitialDataNotReady,
     message: "Form reset is disabled.",
     details: ["The formInitialData is not ready."],
   ),
   formInNoneMode(
-    eCode: ECode.inNoneMode,
+    chkCode: ChkCode.inNoneMode,
     message: "Form reset is disabled.",
     details: ["The form is in 'none' mode."],
   ),
   notAllow(
-    eCode: ECode.notAllow,
+    chkCode: ChkCode.notAllow,
     message: "Form Resetting is disabled.",
     details: ["The application logic does not allow to reset the form."],
   ),
   checkAllowMethodError(
-    eCode: ECode.checkAllowMethodError,
+    chkCode: ChkCode.checkAllowMethodError,
     message: "Form Resetting is disabled.",
     details: ["The isAllowResetForm() method error.."],
   );
 
   @override
-  final ECode eCode;
+  final ChkCode chkCode;
 
   @override
   final String message;
@@ -48,7 +48,7 @@ enum BlockFormResetingPrecheck implements ECodeDetail {
   final List<String>? details;
 
   const BlockFormResetingPrecheck({
-    required this.eCode,
+    required this.chkCode,
     required this.message,
     required this.details,
   });
