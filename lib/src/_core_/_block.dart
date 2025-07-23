@@ -1040,7 +1040,7 @@ abstract class Block<
           frmDataState: DataState.none,
           errorInFilter: true,
         );
-        thisXBlock.queryResult._filterError = true;
+        thisXBlock.queryResult._setFilterError();
         return thisXBlock.queryResult;
       }
       //
@@ -1053,6 +1053,7 @@ abstract class Block<
       );
       //
       ActionResultState queryResultState;
+      AppError? appError;
       //
       ListBehavior realListBehavior;
       //
@@ -1101,7 +1102,7 @@ abstract class Block<
           );
           __setBlockErrorInfo(blockErrorInfo);
           //
-          _handleError(
+          appError = _handleError(
             shelf: shelf,
             methodName: callApiQueryMethod.name,
             // AppError, ApiError or others.
@@ -1109,12 +1110,15 @@ abstract class Block<
             stackTrace: stackTrace,
             showSnackBar: true,
           );
+          thisXBlock.queryResult._setAppError(
+            appError: appError,
+            stackTrace: appError is ApiError ? null : stackTrace,
+          );
         } finally {
           __refreshQueryingState(isQuerying: false);
         }
         //
         if (queryResultState == ActionResultState.fail) {
-          thisXBlock.queryResult._apiError = true;
           // Query Error + Parent or Criteria changed.
           if (parentOrCriteriaChanged) {
             switch (queryDataState) {
@@ -1168,7 +1172,6 @@ abstract class Block<
         }
         // Query Successful:
         else {
-          thisXBlock.queryResult._apiError = false;
           // Query Successful + Parent or Criteria changed.
           if (parentOrCriteriaChanged) {
             switch (queryDataState) {
@@ -1243,14 +1246,17 @@ abstract class Block<
           queryResultState: queryResultState,
         );
       } catch (e, stackTrace) {
-        _handleError(
+        AppError appError = _handleError(
           shelf: shelf,
           methodName: '__blockData._updateFrom()',
           error: e,
           stackTrace: stackTrace,
           showSnackBar: true,
         );
-        thisXBlock.queryResult._otherError = true;
+        thisXBlock.queryResult._setAppError(
+          appError: appError,
+          stackTrace: stackTrace,
+        );
         return thisXBlock.queryResult;
       }
       //
@@ -2729,7 +2735,7 @@ abstract class Block<
     //
     PageableData? currentPageable = __blockData.pageable;
     if (currentPageable == null) {
-      return BlockQueryResult.noCurrentPageable();
+      return BlockQueryResult._noCurrentPagination();
     }
     PageableData pageable = currentPageable.next();
     //
@@ -2764,11 +2770,11 @@ abstract class Block<
     //
     PageableData? currentPageable = __blockData.pageable;
     if (currentPageable == null) {
-      return BlockQueryResult.noCurrentPageable();
+      return BlockQueryResult._noCurrentPagination();
     }
     PageableData? pageable = currentPageable.previous();
     if (pageable == null) {
-      return BlockQueryResult.noPreviousPage();
+      return BlockQueryResult._noPreviousPage();
     }
     //
     return await query(
@@ -2802,7 +2808,7 @@ abstract class Block<
     //
     PageableData? nxtPageable = nextPageable;
     if (nxtPageable == null) {
-      return BlockQueryResult.noPreviousPage();
+      return BlockQueryResult._noPreviousPage();
     }
     //
     return await query(
@@ -2898,7 +2904,7 @@ abstract class Block<
     Function()? navigate,
   }) async {
     if (filterModel != null && filterModel!._lockAddMoreQuery) {
-      return BlockQueryResult.lockAddMoreQuery();
+      return BlockQueryResult._queryBlockedTemporarily();
     }
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,

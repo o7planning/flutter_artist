@@ -7,6 +7,31 @@ enum BlockQueryPrecheck implements ChkCodeDetail {
     message: "The Block querying is disabled.",
     details: ["The executor is busy."],
   ),
+  filterError(
+    chkCode: ChkCode.filterError,
+    message: "The Block querying is disabled.",
+    details: ["The Filter is Error"],
+  ),
+  queryBlockedTemporarily(
+    chkCode: ChkCode.queryLockedTemporarily,
+    message: "The Block querying is disabled.",
+    details: ["The Query is Locked Temporarily"],
+  ),
+  noPreviousPage(
+    chkCode: ChkCode.noPreviousPage,
+    message: "The Block querying is disabled.",
+    details: ["No Previous Page"],
+  ),
+  noNextPage(
+    chkCode: ChkCode.noNextPage,
+    message: "The Block querying is disabled.",
+    details: ["No Next Page"],
+  ),
+  noCurrentPagination(
+    chkCode: ChkCode.noCurrentPagination,
+    message: "The Block querying is disabled.",
+    details: ["No Current Pagination"],
+  ),
   notAllow(
     chkCode: ChkCode.notAllow,
     message: "The Block querying is disabled.",

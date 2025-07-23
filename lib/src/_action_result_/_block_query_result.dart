@@ -1,32 +1,47 @@
 part of '../../flutter_artist.dart';
 
 class BlockQueryResult extends ActionResult {
-  bool _noCurrentPageable = false;
-  bool _noPreviousPage = false;
-  bool _noNextPage = false;
-  bool _lockAddMoreQuery = false;
-  bool _otherError = false;
-  bool _filterError = false;
-  bool _apiError = false;
+  BlockQueryPrecheck? _precheck;
 
-  BlockQueryResult();
+  BlockQueryPrecheck? get precheck => _precheck;
 
-  BlockQueryResult.lockAddMoreQuery() : _lockAddMoreQuery = true;
+  AppError? _appError;
+  StackTrace? _stackTrace;
 
-  BlockQueryResult.noCurrentPageable() : _noCurrentPageable = true;
+  AppError? get error => _appError;
+  StackTrace? get stackTrace => _stackTrace;
 
-  BlockQueryResult.noPreviousPage() : _noPreviousPage = true;
+  BlockQueryResult._();
 
-  BlockQueryResult.noNextPage() : _noNextPage = true;
+  BlockQueryResult._queryBlockedTemporarily()
+      : _precheck = BlockQueryPrecheck.queryBlockedTemporarily;
+
+  BlockQueryResult._noCurrentPagination()
+      : _precheck = BlockQueryPrecheck.noCurrentPagination;
+
+  BlockQueryResult._noPreviousPage()
+      : _precheck = BlockQueryPrecheck.noPreviousPage;
+
+  BlockQueryResult._noNextPage() //
+      : _precheck = BlockQueryPrecheck.noNextPage;
+
+  void _setFilterError() {
+    _precheck = BlockQueryPrecheck.filterError;
+  }
+
+  void _setAppError({required AppError appError, StackTrace? stackTrace}) {
+    _appError = appError;
+    _stackTrace = stackTrace;
+  }
 
   @override
   bool get success {
-    return !_noCurrentPageable &&
-        !_noPreviousPage &&
-        !_noNextPage &&
-        !_lockAddMoreQuery &&
-        !_filterError &&
-        !_apiError &&
-        !_otherError;
+    if (precheck != null) {
+      return false;
+    }
+    if (_appError != null) {
+      return false;
+    }
+    return true;
   }
 }

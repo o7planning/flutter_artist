@@ -7,6 +7,12 @@ enum ChkCode {
   notAllow,
   checkAllowMethodError,
   //
+  filterError,
+  queryLockedTemporarily,
+  noPreviousPage,
+  noNextPage,
+  noCurrentPagination,
+  //
   inPendingState, // State
   inErrorState, // State
   inNoneState, // State
