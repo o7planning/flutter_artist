@@ -1,6 +1,6 @@
 part of '../../../flutter_artist.dart';
 
-enum BlockItemEditingPrecheck implements ChkCodeDetail {
+enum BlockItemEditPrecheck implements ChkCodeDetail {
   busy(
     chkCode: ChkCode.busy,
     message: "Item edit is disabled.",
@@ -63,7 +63,7 @@ enum BlockItemEditingPrecheck implements ChkCodeDetail {
   @override
   final List<String>? details;
 
-  const BlockItemEditingPrecheck({
+  const BlockItemEditPrecheck({
     required this.chkCode,
     required this.message,
     required this.details,

@@ -338,7 +338,7 @@ abstract class FormModel<
     //
     // No need to check again?
     //
-    Actionable<BlockFormSavingPrecheck> actionable = block.__canSaveForm(
+    Actionable<BlockFormSavePrecheck> actionable = block.__canSaveForm(
       checkBusy: true,
       checkAllow: true,
       checkValidate: true,
@@ -1682,7 +1682,7 @@ abstract class FormModel<
       navigate: null,
     );
     //
-    Actionable<BlockFormSavingPrecheck> actionable = block.__canSaveForm(
+    Actionable<BlockFormSavePrecheck> actionable = block.__canSaveForm(
       checkBusy: true,
       checkAllow: true,
       checkValidate: true,

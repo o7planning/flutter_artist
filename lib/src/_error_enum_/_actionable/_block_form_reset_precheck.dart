@@ -1,7 +1,7 @@
 part of '../../../flutter_artist.dart';
 
-@_RenameAnnotation()
-enum BlockFormResetingPrecheck implements ChkCodeDetail {
+// Name (OK)
+enum BlockFormResetPrecheck implements ChkCodeDetail {
   busy(
     chkCode: ChkCode.busy,
     message: "Form reset is disabled.",
@@ -47,7 +47,7 @@ enum BlockFormResetingPrecheck implements ChkCodeDetail {
   @override
   final List<String>? details;
 
-  const BlockFormResetingPrecheck({
+  const BlockFormResetPrecheck({
     required this.chkCode,
     required this.message,
     required this.details,

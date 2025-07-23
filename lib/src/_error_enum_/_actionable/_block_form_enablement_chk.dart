@@ -1,7 +1,7 @@
 part of '../../../flutter_artist.dart';
 
 @_RenameAnnotation()
-enum BlockFormEnableCode implements ChkCodeDetail {
+enum BlockFormEnablementChkCode implements ChkCodeDetail {
   noForm(
     chkCode: ChkCode.noForm,
     message: "Block has no Form",
@@ -38,7 +38,7 @@ enum BlockFormEnableCode implements ChkCodeDetail {
   @override
   final List<String>? details;
 
-  const BlockFormEnableCode({
+  const BlockFormEnablementChkCode({
     required this.chkCode,
     required this.message,
     required this.details,

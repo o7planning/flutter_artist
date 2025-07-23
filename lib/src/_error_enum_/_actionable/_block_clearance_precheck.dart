@@ -1,7 +1,7 @@
 part of '../../../flutter_artist.dart';
 
-@_RenameAnnotation()
-enum BlockClearPrecheck implements ChkCodeDetail {
+// Name (OK)
+enum BlockClearancePrecheck implements ChkCodeDetail {
   busy(
     chkCode: ChkCode.busy,
     message: "Can not clear block.",
@@ -23,7 +23,7 @@ enum BlockClearPrecheck implements ChkCodeDetail {
   @override
   final List<String>? details;
 
-  const BlockClearPrecheck({
+  const BlockClearancePrecheck({
     required this.chkCode,
     required this.message,
     required this.details,

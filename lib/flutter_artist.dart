@@ -428,13 +428,13 @@ part 'src/_error_enum_/__chk_code.dart';
 
 part 'src/_error_enum_/__chk_code_detail.dart';
 
-part 'src/_error_enum_/_actionable/_block_clear_precheck.dart';
+part 'src/_error_enum_/_actionable/_block_clearance_precheck.dart';
 
-part 'src/_error_enum_/_actionable/_block_form_enable_code.dart';
+part 'src/_error_enum_/_actionable/_block_form_enablement_chk.dart';
 
 part 'src/_error_enum_/_actionable/_block_form_reset_precheck.dart';
 
-part 'src/_error_enum_/_actionable/_block_form_saving_precheck.dart';
+part 'src/_error_enum_/_actionable/_block_form_save_precheck.dart';
 
 part 'src/_error_enum_/_actionable/_block_item_creation_precheck.dart';
 
@@ -442,7 +442,7 @@ part 'src/_error_enum_/_actionable/_block_item_curr_selection_precheck.dart';
 
 part 'src/_error_enum_/_actionable/_block_item_deletion_precheck.dart';
 
-part 'src/_error_enum_/_actionable/_block_item_editing_precheck.dart';
+part 'src/_error_enum_/_actionable/_block_item_edit_precheck.dart';
 
 part 'src/_error_enum_/_actionable/_block_query_precheck.dart';
 

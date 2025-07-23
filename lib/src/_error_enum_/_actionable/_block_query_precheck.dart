@@ -1,9 +1,10 @@
 part of '../../../flutter_artist.dart';
 
+// Name (OK)
 enum BlockQueryPrecheck implements ChkCodeDetail {
   busy(
     chkCode: ChkCode.busy,
-    message: "Block Querying is disabled.",
+    message: "The Block querying is disabled.",
     details: ["The executor is busy."],
   ),
   notAllow(

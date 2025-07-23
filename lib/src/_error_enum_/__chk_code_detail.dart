@@ -1,5 +1,6 @@
 part of '../../flutter_artist.dart';
 
+@_RenameAnnotation()
 abstract interface class ChkCodeDetail {
   ChkCode get chkCode;
 

@@ -1,6 +1,7 @@
 part of '../../../flutter_artist.dart';
 
-enum BlockFormSavingPrecheck implements ChkCodeDetail {
+// Name (OK)
+enum BlockFormSavePrecheck implements ChkCodeDetail {
   busy(
     chkCode: ChkCode.busy,
     message: "Form saving is disabled.",
@@ -36,7 +37,7 @@ enum BlockFormSavingPrecheck implements ChkCodeDetail {
   @override
   final List<String>? details;
 
-  const BlockFormSavingPrecheck({
+  const BlockFormSavePrecheck({
     required this.chkCode,
     required this.message,
     required this.details,
