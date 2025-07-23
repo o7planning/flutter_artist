@@ -1585,17 +1585,17 @@ abstract class FormModel<
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
       return Actionable<EnterFormFieldsState>.no(
-        eCode: EnterFormFieldsState.busy,
+        errCode: EnterFormFieldsState.busy,
       );
     }
     if (formMode == FormMode.none) {
       return Actionable<EnterFormFieldsState>.no(
-        eCode: EnterFormFieldsState.formInNoneMode,
+        errCode: EnterFormFieldsState.formInNoneMode,
       );
     }
     if (formDataState == DataState.error) {
       return Actionable<EnterFormFieldsState>.no(
-        eCode: EnterFormFieldsState.formInErrorState,
+        errCode: EnterFormFieldsState.formInErrorState,
       );
     }
     return Actionable<EnterFormFieldsState>.yes();
@@ -1694,7 +1694,7 @@ abstract class FormModel<
         actionableFalse: actionable,
         showErrSnackBar: true,
       );
-      return FormSaveResult(precheck: actionable.eCode);
+      return FormSaveResult(precheck: actionable.errCode);
     }
     //
     _XShelf xShelf = _XShelf(
