@@ -1,6 +1,6 @@
 part of '../../flutter_artist.dart';
 
-@_RenameAnnotation() // PrepareItemCreationRslt
+@_RenameAnnotation()
 class PrepareItemCreationResult extends ActionResult {
   final BlockItemCreationPrecheck? precheck;
   AppError? _appError;
@@ -18,7 +18,7 @@ class PrepareItemCreationResult extends ActionResult {
     if (precheck != null) {
       return false;
     }
-    return _appError != null;
+    return _appError == null;
   }
 
   void _setAppError({
