@@ -22,4 +22,7 @@ enum ECode {
   permissionDenied,
   //
   cancelled,
+  //
+  hasActiveUI,
+  hasNoActiveUI,
 }
