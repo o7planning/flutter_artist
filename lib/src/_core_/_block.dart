@@ -2568,7 +2568,11 @@ abstract class Block<
         : CurrentItemSelectionType.selectAnItemAsCurrent;
     // @Same-Code-Precheck-01
     Actionable<BlockItemCurrSelectionPrecheck> actionable =
-        this.canSelectItem(item: item);
+        this.__canSelectItemAsCurrent(
+      item: item,
+      checkBusy: true,
+    );
+
     if (!actionable.yes) {
       // _refreshErrorCount++;
       _addErrorLogActionable(
@@ -4624,10 +4628,32 @@ abstract class Block<
   // ***************************************************************************
 
   @_PrecheckMethod()
+  Actionable<BlockItemCurrSelectionPrecheck> __canSelectItemAsCurrent({
+    required ITEM item,
+    required bool checkBusy,
+  }) {
+    ITEM? internalItem = findItemSameIdWith(item: item);
+    // Test Cases: [03b].
+    if (internalItem == null) {
+      return Actionable<BlockItemCurrSelectionPrecheck>.no(
+        errCode: BlockItemCurrSelectionPrecheck.invalidTarget,
+      );
+    }
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable<BlockItemCurrSelectionPrecheck>.no(
+        errCode: BlockItemCurrSelectionPrecheck.busy,
+      );
+    }
+    return Actionable<BlockItemCurrSelectionPrecheck>.yes();
+  }
+
+  // ***************************************************************************
+
+  @_PrecheckMethod()
   Actionable<BlockItemCurrSelectionPrecheck> __canRefreshCurrentItem({
     required bool checkBusy,
   }) {
-    if (this.currentItemDetail == null) {
+    if (currentItem == null) {
       return Actionable<BlockItemCurrSelectionPrecheck>.no(
         errCode: BlockItemCurrSelectionPrecheck.noTarget,
       );
@@ -4636,19 +4662,6 @@ abstract class Block<
       return Actionable<BlockItemCurrSelectionPrecheck>.no(
         errCode: BlockItemCurrSelectionPrecheck.busy,
       );
-    }
-    //
-    if (formModel != null) {
-      switch (formModel!.formMode) {
-        case FormMode.none:
-          // Has current item and Form in Lazy mode.
-          // Form State: pending.
-          break; // Do nothing
-        case FormMode.creation:
-          break; // Do nothing
-        case FormMode.edit:
-          break; // Do nothing
-      }
     }
     //
     return Actionable<BlockItemCurrSelectionPrecheck>.yes();
@@ -4740,32 +4753,6 @@ abstract class Block<
       checkAllow: true,
       checkValidate: false, // IMPORTANT.
     );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Actionable<BlockItemCurrSelectionPrecheck> canSelectItem(
-      {required ITEM item}) {
-    ITEM? internalItem = findItemSameIdWith(item: item);
-    //
-    if (internalItem == null) {
-      return Actionable<BlockItemCurrSelectionPrecheck>.no(
-        errCode: BlockItemCurrSelectionPrecheck.invalidTarget,
-      );
-    }
-    // switch (this.queryDataState) {
-    //   case DataState.ready:
-    //     // Continue
-    //     break;
-    //   case DataState.pending:
-    //   //
-    //   case DataState.error:
-    //   //
-    //   case DataState.none:
-    //   //
-    // }
-    return Actionable<BlockItemCurrSelectionPrecheck>.yes();
   }
 
   // ***************************************************************************
