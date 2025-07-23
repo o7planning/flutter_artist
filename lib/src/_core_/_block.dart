@@ -2808,7 +2808,7 @@ abstract class Block<
     //
     PageableData? nxtPageable = nextPageable;
     if (nxtPageable == null) {
-      return BlockQueryResult._noPreviousPage();
+      return BlockQueryResult._noNextPage();
     }
     //
     return await query(

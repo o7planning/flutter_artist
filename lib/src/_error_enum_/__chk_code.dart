@@ -7,6 +7,7 @@ enum ChkCode {
   notAllow,
   checkAllowMethodError,
   //
+  @Deprecated("Xoa di, thay the bang cach khac")
   filterError,
   queryLockedTemporarily,
   noPreviousPage,

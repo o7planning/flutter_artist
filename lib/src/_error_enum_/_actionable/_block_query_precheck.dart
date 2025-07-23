@@ -7,6 +7,7 @@ enum BlockQueryPrecheck implements ChkCodeDetail {
     message: "The Block querying is disabled.",
     details: ["The executor is busy."],
   ),
+  @Deprecated("Xoa di, thay the bang cach khac")
   filterError(
     chkCode: ChkCode.filterError,
     message: "The Block querying is disabled.",
