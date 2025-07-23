@@ -2655,7 +2655,7 @@ abstract class Block<
   /// Clear and set block to "Pending State".
   ///
   @_RootMethodAnnotation()
-  Future<bool> clear({Function()? navigate}) async {
+  Future<BlockClearResult> clear({Function()? navigate}) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: navigate,
@@ -2663,9 +2663,21 @@ abstract class Block<
       methodName: "clear",
       parameters: {},
     );
-    bool hasActive = this.hasActiveUIComponent();
-    if (hasActive) {
-      return false;
+    // @Same-Code-Precheck-01
+    Actionable<BlockClearPrecheck> actionable = __canClearBlock(
+      checkBusy: true,
+    );
+    //
+    if (!actionable.yes) {
+      // _createItemErrorCount++;
+      _addErrorLogActionable(
+        shelf: shelf,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+      );
+      return BlockClearResult(
+        precheck: actionable.eCode,
+      );
     }
     //
     _XShelf xShelf = _XShelf(
@@ -2688,7 +2700,7 @@ abstract class Block<
     //
     _executeNavigation(navigate: navigate);
     //
-    return true;
+    return BlockClearResult();
   }
 
   // ***************************************************************************
@@ -3688,7 +3700,7 @@ abstract class Block<
     required bool addErrorLog,
     required bool showErrSnackBar,
   }) {
-    Actionable updateActionable = __canUpdateItem(
+    Actionable<BlockItemEditingPrecheck> updateActionable = __canUpdateItem(
       checkBusy: checkBusy,
       item: item,
       updateType: ItemUpdateType.quickUpdate,
@@ -3727,7 +3739,7 @@ abstract class Block<
       methodName: "prepareFormToCreateItem",
       parameters: {"extraFormInput": extraFormInput},
     );
-    //
+    // @Same-Code-Precheck-01
     Actionable<BlockItemCreationPrecheck> actionable = __canCreateItem(
       checkBusy: true,
       checkAllow: true,
@@ -3913,7 +3925,7 @@ abstract class Block<
         "item": item,
       },
     );
-    //
+    // @Same-Code-Precheck-01
     Actionable<BlockItemDeletionPrecheck> actionable = __canDeleteItem(
       checkBusy: true,
       item: item,
@@ -4258,6 +4270,7 @@ abstract class Block<
   // *********** __canXXX() method *********************************************
   // ***************************************************************************
 
+  @_PrecheckMethod()
   Actionable<BlockItemDeletionPrecheck> __canDeleteCurrentItem({
     required bool checkBusy,
     required bool checkAllow,
@@ -4276,6 +4289,10 @@ abstract class Block<
     );
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_PrecheckMethod()
   Actionable<BlockItemDeletionPrecheck> __canDeleteItem({
     required bool checkBusy,
     required bool ignoreIfItemNotInList,
@@ -4320,6 +4337,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @_PrecheckMethod()
   Actionable<BlockItemCreationPrecheck> __canCreateItem({
     required bool checkBusy,
     required ItemCreationType creationType,
@@ -4377,6 +4395,28 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @_PrecheckMethod()
+  Actionable<BlockClearPrecheck> __canClearBlock({
+    required bool checkBusy,
+  }) {
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable<BlockClearPrecheck>.no(
+        eCode: BlockClearPrecheck.busy,
+      );
+    }
+    bool hasActiveUI = hasActiveUIComponent(alsoCheckChildren: true);
+    if (hasActiveUI) {
+      return Actionable<BlockClearPrecheck>.no(
+        eCode: BlockClearPrecheck.hasActiveUI,
+      );
+    }
+    return Actionable<BlockClearPrecheck>.yes();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_PrecheckMethod()
   Actionable<BlockItemEditingPrecheck> __canUpdateItem({
     required ITEM item,
     required bool checkBusy,
@@ -4428,6 +4468,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @_PrecheckMethod()
   Actionable<BlockFormResetingPrecheck> __canResetForm({
     required bool checkBusy,
     required bool checkAllow,
@@ -4485,6 +4526,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @_PrecheckMethod()
   Actionable<BlockFormSavingPrecheck> __canSaveForm({
     required bool checkBusy,
     required bool checkAllow,
@@ -4524,6 +4566,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @_PrecheckMethod()
   Actionable<BlockItemEditingPrecheck> __canEditItemOnForm({
     required bool checkBusy,
     required ITEM item,
@@ -4580,10 +4623,45 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @_PrecheckMethod()
+  Actionable<BlockItemCurrSelectionPrecheck> __canRefreshCurrentItem({
+    required bool checkBusy,
+  }) {
+    if (this.currentItemDetail == null) {
+      return Actionable<BlockItemCurrSelectionPrecheck>.no(
+        eCode: BlockItemCurrSelectionPrecheck.noTarget,
+      );
+    }
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable<BlockItemCurrSelectionPrecheck>.no(
+        eCode: BlockItemCurrSelectionPrecheck.busy,
+      );
+    }
+    //
+    if (formModel != null) {
+      switch (formModel!.formMode) {
+        case FormMode.none:
+          // Has current item and Form in Lazy mode.
+          // Form State: pending.
+          break; // Do nothing
+        case FormMode.creation:
+          break; // Do nothing
+        case FormMode.edit:
+          break; // Do nothing
+      }
+    }
+    //
+    return Actionable<BlockItemCurrSelectionPrecheck>.yes();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   ///
   /// Edit on edit-mode
   /// Edit on creation-mode
   ///
+  @_PrecheckMethod()
   Actionable<BlockFormEnableCode> __isEnableFormToModify({
     required bool checkAllow,
   }) {
@@ -4627,39 +4705,6 @@ abstract class Block<
         }
         return Actionable<BlockFormEnableCode>.yes();
     }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Actionable<BlockItemCurrSelectionPrecheck> __canRefreshCurrentItem({
-    required bool checkBusy,
-  }) {
-    if (this.currentItemDetail == null) {
-      return Actionable<BlockItemCurrSelectionPrecheck>.no(
-        eCode: BlockItemCurrSelectionPrecheck.noTarget,
-      );
-    }
-    if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockItemCurrSelectionPrecheck>.no(
-        eCode: BlockItemCurrSelectionPrecheck.busy,
-      );
-    }
-    //
-    if (formModel != null) {
-      switch (formModel!.formMode) {
-        case FormMode.none:
-          // Has current item and Form in Lazy mode.
-          // Form State: pending.
-          break; // Do nothing
-        case FormMode.creation:
-          break; // Do nothing
-        case FormMode.edit:
-          break; // Do nothing
-      }
-    }
-    //
-    return Actionable<BlockItemCurrSelectionPrecheck>.yes();
   }
 
   // ***************************************************************************
