@@ -2210,6 +2210,7 @@ abstract class Block<
         break;
       case AfterBlockQuickAction.refreshCurrentItem:
         Actionable actionable = canRefreshCurrentItem();
+        print(">>>> refreshCurrentItem after quickAction: ${actionable.yes} - ${actionable.message}");
         if (!actionable.yes) {
           return true;
         }
