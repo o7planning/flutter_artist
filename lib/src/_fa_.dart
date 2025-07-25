@@ -28,7 +28,7 @@ class _FlutterArtist {
 
   Function(BuildContext context)? showRestDebugViewerDialog;
 
-  late final ErrorLogger errorLogger = ErrorLogger(
+  late final ErrorLogger errorLogger = ErrorLogger._(
     maxDisplayErrorCount: 20,
   );
 
