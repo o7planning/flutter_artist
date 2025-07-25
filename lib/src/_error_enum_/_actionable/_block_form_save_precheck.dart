@@ -1,34 +1,35 @@
 part of '../../../flutter_artist.dart';
 
-enum BlockFormSavingPrecheck implements ECodeDetail {
+// Name (OK)
+enum BlockFormSavePrecheck implements ChkCodeDetail {
   busy(
-    eCode: ECode.busy,
+    chkCode: ChkCode.busy,
     message: "Form saving is disabled.",
     details: ["The block has no form."],
   ),
   noForm(
-    eCode: ECode.noForm,
+    chkCode: ChkCode.noForm,
     message: "Form saving is disabled.",
     details: ["The block has no form."],
   ),
   formInitialDataNotReady(
-    eCode: ECode.formInitialDataNotReady,
+    chkCode: ChkCode.formInitialDataNotReady,
     message: "Form saving is disabled.",
     details: ["The formInitialData is not ready."],
   ),
   formIsNotDirty(
-    eCode: ECode.formIsNotDirty,
+    chkCode: ChkCode.formIsNotDirty,
     message: "Form saving is disabled.",
     details: ["The form is not dirty."],
   ),
   formInvalidated(
-    eCode: ECode.formInvalidated,
+    chkCode: ChkCode.formInvalidated,
     message: "Form saving is disabled.",
     details: ["The form is invalidated."],
   );
 
   @override
-  final ECode eCode;
+  final ChkCode chkCode;
 
   @override
   final String message;
@@ -36,8 +37,8 @@ enum BlockFormSavingPrecheck implements ECodeDetail {
   @override
   final List<String>? details;
 
-  const BlockFormSavingPrecheck({
-    required this.eCode,
+  const BlockFormSavePrecheck({
+    required this.chkCode,
     required this.message,
     required this.details,
   });

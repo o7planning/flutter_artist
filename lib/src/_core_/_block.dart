@@ -1040,7 +1040,7 @@ abstract class Block<
           frmDataState: DataState.none,
           errorInFilter: true,
         );
-        thisXBlock.queryResult._filterError = true;
+        thisXBlock.queryResult._setFilterError();
         return thisXBlock.queryResult;
       }
       //
@@ -1053,6 +1053,7 @@ abstract class Block<
       );
       //
       ActionResultState queryResultState;
+      AppError? appError;
       //
       ListBehavior realListBehavior;
       //
@@ -1101,7 +1102,7 @@ abstract class Block<
           );
           __setBlockErrorInfo(blockErrorInfo);
           //
-          _handleError(
+          appError = _handleError(
             shelf: shelf,
             methodName: callApiQueryMethod.name,
             // AppError, ApiError or others.
@@ -1109,12 +1110,15 @@ abstract class Block<
             stackTrace: stackTrace,
             showSnackBar: true,
           );
+          thisXBlock.queryResult._setAppError(
+            appError: appError,
+            stackTrace: appError is ApiError ? null : stackTrace,
+          );
         } finally {
           __refreshQueryingState(isQuerying: false);
         }
         //
         if (queryResultState == ActionResultState.fail) {
-          thisXBlock.queryResult._apiError = true;
           // Query Error + Parent or Criteria changed.
           if (parentOrCriteriaChanged) {
             switch (queryDataState) {
@@ -1168,7 +1172,6 @@ abstract class Block<
         }
         // Query Successful:
         else {
-          thisXBlock.queryResult._apiError = false;
           // Query Successful + Parent or Criteria changed.
           if (parentOrCriteriaChanged) {
             switch (queryDataState) {
@@ -1243,14 +1246,17 @@ abstract class Block<
           queryResultState: queryResultState,
         );
       } catch (e, stackTrace) {
-        _handleError(
+        AppError appError = _handleError(
           shelf: shelf,
           methodName: '__blockData._updateFrom()',
           error: e,
           stackTrace: stackTrace,
           showSnackBar: true,
         );
-        thisXBlock.queryResult._otherError = true;
+        thisXBlock.queryResult._setAppError(
+          appError: appError,
+          stackTrace: stackTrace,
+        );
         return thisXBlock.queryResult;
       }
       //
@@ -2204,6 +2210,7 @@ abstract class Block<
         break;
       case AfterBlockQuickAction.refreshCurrentItem:
         Actionable actionable = canRefreshCurrentItem();
+        print(">>>> refreshCurrentItem after quickAction: ${actionable.yes} - ${actionable.message}");
         if (!actionable.yes) {
           return true;
         }
@@ -2566,9 +2573,13 @@ abstract class Block<
     final currentItemSelectionType = forceForm
         ? CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm
         : CurrentItemSelectionType.selectAnItemAsCurrent;
-    //
+    // @Same-Code-Precheck-01
     Actionable<BlockItemCurrSelectionPrecheck> actionable =
-        this.canSelectItem(item: item);
+        this.__canSelectItemAsCurrent(
+      item: item,
+      checkBusy: true,
+    );
+
     if (!actionable.yes) {
       // _refreshErrorCount++;
       _addErrorLogActionable(
@@ -2578,7 +2589,7 @@ abstract class Block<
       );
       //
       return BlockItemCurrSelectionResult<ITEM>(
-        precheck: actionable.eCode,
+        precheck: actionable.errCode,
         currentItemSelectionType: currentItemSelectionType,
         getItemId: getItemId,
         candidateItem: item,
@@ -2655,7 +2666,7 @@ abstract class Block<
   /// Clear and set block to "Pending State".
   ///
   @_RootMethodAnnotation()
-  Future<bool> clear({Function()? navigate}) async {
+  Future<BlockClearResult> clear({Function()? navigate}) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: navigate,
@@ -2663,9 +2674,21 @@ abstract class Block<
       methodName: "clear",
       parameters: {},
     );
-    bool hasActive = this.hasActiveUIComponent();
-    if (hasActive) {
-      return false;
+    // @Same-Code-Precheck-01
+    Actionable<BlockClearancePrecheck> actionable = __canClearBlock(
+      checkBusy: true,
+    );
+    //
+    if (!actionable.yes) {
+      // _createItemErrorCount++;
+      _addErrorLogActionable(
+        shelf: shelf,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+      );
+      return BlockClearResult(
+        precheck: actionable.errCode,
+      );
     }
     //
     _XShelf xShelf = _XShelf(
@@ -2688,7 +2711,7 @@ abstract class Block<
     //
     _executeNavigation(navigate: navigate);
     //
-    return true;
+    return BlockClearResult();
   }
 
   // ***************************************************************************
@@ -2713,7 +2736,7 @@ abstract class Block<
     //
     PageableData? currentPageable = __blockData.pageable;
     if (currentPageable == null) {
-      return BlockQueryResult.noCurrentPageable();
+      return BlockQueryResult._noCurrentPagination();
     }
     PageableData pageable = currentPageable.next();
     //
@@ -2748,11 +2771,11 @@ abstract class Block<
     //
     PageableData? currentPageable = __blockData.pageable;
     if (currentPageable == null) {
-      return BlockQueryResult.noCurrentPageable();
+      return BlockQueryResult._noCurrentPagination();
     }
     PageableData? pageable = currentPageable.previous();
     if (pageable == null) {
-      return BlockQueryResult.noPreviousPage();
+      return BlockQueryResult._noPreviousPage();
     }
     //
     return await query(
@@ -2786,7 +2809,7 @@ abstract class Block<
     //
     PageableData? nxtPageable = nextPageable;
     if (nxtPageable == null) {
-      return BlockQueryResult.noPreviousPage();
+      return BlockQueryResult._noNextPage();
     }
     //
     return await query(
@@ -2882,7 +2905,7 @@ abstract class Block<
     Function()? navigate,
   }) async {
     if (filterModel != null && filterModel!._lockAddMoreQuery) {
-      return BlockQueryResult.lockAddMoreQuery();
+      return BlockQueryResult._queryBlockedTemporarily();
     }
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -3688,7 +3711,7 @@ abstract class Block<
     required bool addErrorLog,
     required bool showErrSnackBar,
   }) {
-    Actionable updateActionable = __canUpdateItem(
+    Actionable<BlockItemEditPrecheck> updateActionable = __canUpdateItem(
       checkBusy: checkBusy,
       item: item,
       updateType: ItemUpdateType.quickUpdate,
@@ -3727,7 +3750,7 @@ abstract class Block<
       methodName: "prepareFormToCreateItem",
       parameters: {"extraFormInput": extraFormInput},
     );
-    //
+    // @Same-Code-Precheck-01
     Actionable<BlockItemCreationPrecheck> actionable = __canCreateItem(
       checkBusy: true,
       checkAllow: true,
@@ -3741,7 +3764,7 @@ abstract class Block<
         showErrSnackBar: true,
       );
       return PrepareItemCreationResult(
-        precheck: actionable.eCode,
+        precheck: actionable.errCode,
         stackTrace: actionable.stackTrace,
       );
     }
@@ -3880,7 +3903,7 @@ abstract class Block<
     if (currentItem == null) {
       _deletionErrorCount++;
       final actionable = Actionable<BlockItemDeletionPrecheck>.no(
-        eCode: BlockItemDeletionPrecheck.noTarget,
+        errCode: BlockItemDeletionPrecheck.noTarget,
       );
       _addErrorLogActionable(
         shelf: shelf,
@@ -3889,7 +3912,7 @@ abstract class Block<
       );
       return ItemDeletionResult<ITEM>(
         candidateItem: null,
-        precheck: actionable.eCode,
+        precheck: actionable.errCode,
       );
     }
     return await deleteItem(item: currentItem);
@@ -3913,7 +3936,7 @@ abstract class Block<
         "item": item,
       },
     );
-    //
+    // @Same-Code-Precheck-01
     Actionable<BlockItemDeletionPrecheck> actionable = __canDeleteItem(
       checkBusy: true,
       item: item,
@@ -3929,7 +3952,7 @@ abstract class Block<
       );
       return ItemDeletionResult<ITEM>(
         candidateItem: item,
-        precheck: actionable.eCode,
+        precheck: actionable.errCode,
         stackTrace: actionable.stackTrace,
       );
     }
@@ -3983,7 +4006,7 @@ abstract class Block<
       methodName: "refreshCurrentItem",
       parameters: {},
     );
-    //
+    // @Same-Code-Precheck-01
     Actionable<BlockItemCurrSelectionPrecheck> actionable =
         __canRefreshCurrentItem(
       checkBusy: true,
@@ -3996,7 +4019,7 @@ abstract class Block<
         showErrSnackBar: true,
       );
       return BlockItemCurrSelectionResult<ITEM>(
-        precheck: actionable.eCode,
+        precheck: actionable.errCode,
         currentItemSelectionType: CurrentItemSelectionType.refresh,
         getItemId: getItemId,
         candidateItem: currentItem,
@@ -4258,13 +4281,14 @@ abstract class Block<
   // *********** __canXXX() method *********************************************
   // ***************************************************************************
 
+  @_PrecheckPrivateMethod()
   Actionable<BlockItemDeletionPrecheck> __canDeleteCurrentItem({
     required bool checkBusy,
     required bool checkAllow,
   }) {
     if (currentItem == null) {
       return Actionable<BlockItemDeletionPrecheck>.no(
-        eCode: BlockItemDeletionPrecheck.noTarget,
+        errCode: BlockItemDeletionPrecheck.noTarget,
       );
     }
     //
@@ -4276,6 +4300,42 @@ abstract class Block<
     );
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_PrecheckPrivateMethod()
+  Actionable<BlockQueryPrecheck> __canQuery({
+    required bool checkBusy,
+    required bool checkAllow,
+  }) {
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable<BlockQueryPrecheck>.no(
+          errCode: BlockQueryPrecheck.busy);
+    }
+    //
+    if (checkAllow) {
+      CheckAllowResult result = __isAllowQuery();
+      switch (result.result) {
+        case CheckAllow.allow:
+          return Actionable<BlockQueryPrecheck>.yes();
+        case CheckAllow.notAllow:
+          return Actionable<BlockQueryPrecheck>.no(
+            errCode: BlockQueryPrecheck.notAllow,
+          );
+        case CheckAllow.error:
+          return Actionable<BlockQueryPrecheck>.no(
+            errCode: BlockQueryPrecheck.checkAllowMethodError,
+            stackTrace: result.stackTrace,
+          );
+      }
+    }
+    //
+    return Actionable<BlockQueryPrecheck>.yes();
+  }
+
+  // ***************************************************************************
+
+  @_PrecheckPrivateMethod()
   Actionable<BlockItemDeletionPrecheck> __canDeleteItem({
     required bool checkBusy,
     required bool ignoreIfItemNotInList,
@@ -4284,7 +4344,7 @@ abstract class Block<
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
       return Actionable<BlockItemDeletionPrecheck>.no(
-        eCode: BlockItemDeletionPrecheck.busy,
+        errCode: BlockItemDeletionPrecheck.busy,
       );
     }
     //
@@ -4292,7 +4352,7 @@ abstract class Block<
       ITEM? it = findItemSameIdWith(item: item);
       if (it == null) {
         return Actionable<BlockItemDeletionPrecheck>.no(
-          eCode: BlockItemDeletionPrecheck.invalidTarget,
+          errCode: BlockItemDeletionPrecheck.invalidTarget,
         );
       }
     }
@@ -4304,11 +4364,11 @@ abstract class Block<
           return Actionable<BlockItemDeletionPrecheck>.yes();
         case CheckAllow.notAllow:
           return Actionable<BlockItemDeletionPrecheck>.no(
-            eCode: BlockItemDeletionPrecheck.notAllow,
+            errCode: BlockItemDeletionPrecheck.notAllow,
           );
         case CheckAllow.error:
           return Actionable<BlockItemDeletionPrecheck>.no(
-            eCode: BlockItemDeletionPrecheck.checkAllowMethodError,
+            errCode: BlockItemDeletionPrecheck.checkAllowMethodError,
             stackTrace: result.stackTrace, // [03a]
           );
       }
@@ -4320,6 +4380,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @_PrecheckPrivateMethod()
   Actionable<BlockItemCreationPrecheck> __canCreateItem({
     required bool checkBusy,
     required ItemCreationType creationType,
@@ -4327,28 +4388,28 @@ abstract class Block<
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
       return Actionable<BlockItemCreationPrecheck>.no(
-        eCode: BlockItemCreationPrecheck.busy,
+        errCode: BlockItemCreationPrecheck.busy,
       );
     }
     if (creationType == ItemCreationType.form) {
       if (formModel == null) {
         return Actionable<BlockItemCreationPrecheck>.no(
-          eCode: BlockItemCreationPrecheck.noForm,
+          errCode: BlockItemCreationPrecheck.noForm,
         );
       }
     }
     switch (queryDataState) {
       case DataState.pending:
         return Actionable<BlockItemCreationPrecheck>.no(
-          eCode: BlockItemCreationPrecheck.inPendingState,
+          errCode: BlockItemCreationPrecheck.inPendingState,
         );
       case DataState.error:
         return Actionable<BlockItemCreationPrecheck>.no(
-          eCode: BlockItemCreationPrecheck.inErrorState,
+          errCode: BlockItemCreationPrecheck.inErrorState,
         );
       case DataState.none:
         return Actionable<BlockItemCreationPrecheck>.no(
-          eCode: BlockItemCreationPrecheck.inNoneState,
+          errCode: BlockItemCreationPrecheck.inNoneState,
         );
       case DataState.ready:
         break;
@@ -4361,11 +4422,11 @@ abstract class Block<
           return Actionable<BlockItemCreationPrecheck>.yes();
         case CheckAllow.notAllow:
           return Actionable<BlockItemCreationPrecheck>.no(
-            eCode: BlockItemCreationPrecheck.notAllow,
+            errCode: BlockItemCreationPrecheck.notAllow,
           );
         case CheckAllow.error:
           return Actionable<BlockItemCreationPrecheck>.no(
-            eCode: BlockItemCreationPrecheck.checkAllowMethodError,
+            errCode: BlockItemCreationPrecheck.checkAllowMethodError,
             stackTrace: result.stackTrace,
           );
       }
@@ -4377,29 +4438,51 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable<BlockItemEditingPrecheck> __canUpdateItem({
+  @_PrecheckPrivateMethod()
+  Actionable<BlockClearancePrecheck> __canClearBlock({
+    required bool checkBusy,
+  }) {
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable<BlockClearancePrecheck>.no(
+        errCode: BlockClearancePrecheck.busy,
+      );
+    }
+    bool hasActiveUI = hasActiveUIComponent(alsoCheckChildren: true);
+    if (hasActiveUI) {
+      return Actionable<BlockClearancePrecheck>.no(
+        errCode: BlockClearancePrecheck.hasActiveUI,
+      );
+    }
+    return Actionable<BlockClearancePrecheck>.yes();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_PrecheckPrivateMethod()
+  Actionable<BlockItemEditPrecheck> __canUpdateItem({
     required ITEM item,
     required bool checkBusy,
     required ItemUpdateType updateType,
     required bool checkAllow,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockItemEditingPrecheck>.no(
-        eCode: BlockItemEditingPrecheck.busy,
+      return Actionable<BlockItemEditPrecheck>.no(
+        errCode: BlockItemEditPrecheck.busy,
       );
     }
     switch (queryDataState) {
       case DataState.pending:
-        return Actionable<BlockItemEditingPrecheck>.no(
-          eCode: BlockItemEditingPrecheck.inPendingState,
+        return Actionable<BlockItemEditPrecheck>.no(
+          errCode: BlockItemEditPrecheck.inPendingState,
         );
       case DataState.error:
-        return Actionable<BlockItemEditingPrecheck>.no(
-          eCode: BlockItemEditingPrecheck.blockInErrorState,
+        return Actionable<BlockItemEditPrecheck>.no(
+          errCode: BlockItemEditPrecheck.blockInErrorState,
         );
       case DataState.none:
-        return Actionable<BlockItemEditingPrecheck>.no(
-          eCode: BlockItemEditingPrecheck.blockInNoneState,
+        return Actionable<BlockItemEditPrecheck>.no(
+          errCode: BlockItemEditPrecheck.blockInNoneState,
         );
       case DataState.ready:
         break;
@@ -4409,53 +4492,54 @@ abstract class Block<
       CheckAllowResult result = _isAllowUpdateItem(item: item);
       switch (result.result) {
         case CheckAllow.allow:
-          return Actionable<BlockItemEditingPrecheck>.yes();
+          return Actionable<BlockItemEditPrecheck>.yes();
         case CheckAllow.notAllow:
-          return Actionable<BlockItemEditingPrecheck>.no(
-            eCode: BlockItemEditingPrecheck.notAllow,
+          return Actionable<BlockItemEditPrecheck>.no(
+            errCode: BlockItemEditPrecheck.notAllow,
           );
         case CheckAllow.error:
-          return Actionable<BlockItemEditingPrecheck>.no(
-            eCode: BlockItemEditingPrecheck.checkAllowMethodError,
+          return Actionable<BlockItemEditPrecheck>.no(
+            errCode: BlockItemEditPrecheck.checkAllowMethodError,
             stackTrace: result.stackTrace,
           );
       }
     }
     //
-    return Actionable<BlockItemEditingPrecheck>.yes();
+    return Actionable<BlockItemEditPrecheck>.yes();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable<BlockFormResetingPrecheck> __canResetForm({
+  @_PrecheckPrivateMethod()
+  Actionable<BlockFormResetPrecheck> __canResetForm({
     required bool checkBusy,
     required bool checkAllow,
   }) {
     if (formModel == null) {
-      return Actionable<BlockFormResetingPrecheck>.no(
-        eCode: BlockFormResetingPrecheck.noForm,
+      return Actionable<BlockFormResetPrecheck>.no(
+        errCode: BlockFormResetPrecheck.noForm,
       );
     }
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockFormResetingPrecheck>.no(
-        eCode: BlockFormResetingPrecheck.busy,
+      return Actionable<BlockFormResetPrecheck>.no(
+        errCode: BlockFormResetPrecheck.busy,
       );
     }
     if (!formModel!.isDirty()) {
-      return Actionable<BlockFormResetingPrecheck>.no(
-        eCode: BlockFormResetingPrecheck.formIsNotDirty,
+      return Actionable<BlockFormResetPrecheck>.no(
+        errCode: BlockFormResetPrecheck.formIsNotDirty,
       );
     }
     if (!formModel!.formInitialDataReady) {
-      return Actionable<BlockFormResetingPrecheck>.no(
-        eCode: BlockFormResetingPrecheck.formInitialDataNotReady,
+      return Actionable<BlockFormResetPrecheck>.no(
+        errCode: BlockFormResetPrecheck.formInitialDataNotReady,
       );
     }
     switch (formModel!.formMode) {
       case FormMode.none:
-        return Actionable<BlockFormResetingPrecheck>.no(
-          eCode: BlockFormResetingPrecheck.formInNoneMode,
+        return Actionable<BlockFormResetPrecheck>.no(
+          errCode: BlockFormResetPrecheck.formInNoneMode,
         );
       case FormMode.creation:
         break; // Do nothing.
@@ -4466,90 +4550,92 @@ abstract class Block<
       CheckAllowResult result = __isAllowResetForm();
       switch (result.result) {
         case CheckAllow.allow:
-          return Actionable<BlockFormResetingPrecheck>.yes();
+          return Actionable<BlockFormResetPrecheck>.yes();
         case CheckAllow.notAllow:
-          return Actionable<BlockFormResetingPrecheck>.no(
-            eCode: BlockFormResetingPrecheck.notAllow,
+          return Actionable<BlockFormResetPrecheck>.no(
+            errCode: BlockFormResetPrecheck.notAllow,
           );
         case CheckAllow.error:
-          return Actionable<BlockFormResetingPrecheck>.no(
-            eCode: BlockFormResetingPrecheck.checkAllowMethodError,
+          return Actionable<BlockFormResetPrecheck>.no(
+            errCode: BlockFormResetPrecheck.checkAllowMethodError,
             stackTrace: result.stackTrace,
           );
       }
     }
     //
-    return Actionable<BlockFormResetingPrecheck>.yes();
+    return Actionable<BlockFormResetPrecheck>.yes();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable<BlockFormSavingPrecheck> __canSaveForm({
+  @_PrecheckPrivateMethod()
+  Actionable<BlockFormSavePrecheck> __canSaveForm({
     required bool checkBusy,
     required bool checkAllow,
     required bool checkValidate,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockFormSavingPrecheck>.no(
-        eCode: BlockFormSavingPrecheck.busy,
+      return Actionable<BlockFormSavePrecheck>.no(
+        errCode: BlockFormSavePrecheck.busy,
       );
     }
     if (formModel == null) {
-      return Actionable<BlockFormSavingPrecheck>.no(
-        eCode: BlockFormSavingPrecheck.noForm,
+      return Actionable<BlockFormSavePrecheck>.no(
+        errCode: BlockFormSavePrecheck.noForm,
       );
     }
     if (!formModel!.formInitialDataReady) {
-      return Actionable<BlockFormSavingPrecheck>.no(
-        eCode: BlockFormSavingPrecheck.formInitialDataNotReady,
+      return Actionable<BlockFormSavePrecheck>.no(
+        errCode: BlockFormSavePrecheck.formInitialDataNotReady,
       );
     }
     //
     if (!formModel!.isDirty()) {
-      return Actionable<BlockFormSavingPrecheck>.no(
-        eCode: BlockFormSavingPrecheck.formIsNotDirty,
+      return Actionable<BlockFormSavePrecheck>.no(
+        errCode: BlockFormSavePrecheck.formIsNotDirty,
       );
     }
     if (checkValidate) {
       if (!(formModel!._formKey.currentState?.validate() ?? false)) {
-        return Actionable<BlockFormSavingPrecheck>.no(
-          eCode: BlockFormSavingPrecheck.formInvalidated,
+        return Actionable<BlockFormSavePrecheck>.no(
+          errCode: BlockFormSavePrecheck.formInvalidated,
         );
       }
     }
-    return Actionable<BlockFormSavingPrecheck>.yes();
+    return Actionable<BlockFormSavePrecheck>.yes();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable<BlockItemEditingPrecheck> __canEditItemOnForm({
+  @_PrecheckPrivateMethod()
+  Actionable<BlockItemEditPrecheck> __canEditItemOnForm({
     required bool checkBusy,
     required ITEM item,
     required bool checkAllow,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockItemEditingPrecheck>.no(
-        eCode: BlockItemEditingPrecheck.busy,
+      return Actionable<BlockItemEditPrecheck>.no(
+        errCode: BlockItemEditPrecheck.busy,
       );
     }
     if (formModel == null) {
-      return Actionable<BlockItemEditingPrecheck>.no(
-        eCode: BlockItemEditingPrecheck.noForm,
+      return Actionable<BlockItemEditPrecheck>.no(
+        errCode: BlockItemEditPrecheck.noForm,
       );
     }
     if (formModel!.formDataState == DataState.error) {
       // Test Case: TODO
-      return Actionable<BlockItemEditingPrecheck>.no(
-        eCode: BlockItemEditingPrecheck.formInErrorState,
+      return Actionable<BlockItemEditPrecheck>.no(
+        errCode: BlockItemEditPrecheck.formInErrorState,
       );
     }
     //
     switch (formModel!.formMode) {
       case FormMode.none:
-        return Actionable<BlockItemEditingPrecheck>.no(
-          eCode: BlockItemEditingPrecheck.formModeInNone,
+        return Actionable<BlockItemEditPrecheck>.no(
+          errCode: BlockItemEditPrecheck.formModeInNone,
         );
       case FormMode.creation:
         break; // Do nothing.
@@ -4561,20 +4647,65 @@ abstract class Block<
       CheckAllowResult result = _isAllowUpdateItem(item: item);
       switch (result.result) {
         case CheckAllow.allow:
-          return Actionable<BlockItemEditingPrecheck>.yes();
+          return Actionable<BlockItemEditPrecheck>.yes();
         case CheckAllow.notAllow:
-          return Actionable<BlockItemEditingPrecheck>.no(
-            eCode: BlockItemEditingPrecheck.notAllow,
+          return Actionable<BlockItemEditPrecheck>.no(
+            errCode: BlockItemEditPrecheck.notAllow,
           );
         case CheckAllow.error:
-          return Actionable<BlockItemEditingPrecheck>.no(
-            eCode: BlockItemEditingPrecheck.checkAllowMethodError,
+          return Actionable<BlockItemEditPrecheck>.no(
+            errCode: BlockItemEditPrecheck.checkAllowMethodError,
             stackTrace: result.stackTrace,
           );
       }
     }
     //
-    return Actionable<BlockItemEditingPrecheck>.yes();
+    return Actionable<BlockItemEditPrecheck>.yes();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_PrecheckPrivateMethod()
+  // @seeAlso: __canRefreshCurrentItem()
+  Actionable<BlockItemCurrSelectionPrecheck> __canSelectItemAsCurrent({
+    required ITEM item,
+    required bool checkBusy,
+  }) {
+    ITEM? internalItem = findItemSameIdWith(item: item);
+    // Test Cases: [03b].
+    if (internalItem == null) {
+      return Actionable<BlockItemCurrSelectionPrecheck>.no(
+        errCode: BlockItemCurrSelectionPrecheck.invalidTarget,
+      );
+    }
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable<BlockItemCurrSelectionPrecheck>.no(
+        errCode: BlockItemCurrSelectionPrecheck.busy,
+      );
+    }
+    return Actionable<BlockItemCurrSelectionPrecheck>.yes();
+  }
+
+  // ***************************************************************************
+
+  @_PrecheckPrivateMethod()
+  // @seeAlso: __canSelectItemAsCurrent()
+  Actionable<BlockItemCurrSelectionPrecheck> __canRefreshCurrentItem({
+    required bool checkBusy,
+  }) {
+    if (currentItem == null) {
+      return Actionable<BlockItemCurrSelectionPrecheck>.no(
+        errCode: BlockItemCurrSelectionPrecheck.noTarget,
+      );
+    }
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable<BlockItemCurrSelectionPrecheck>.no(
+        errCode: BlockItemCurrSelectionPrecheck.busy,
+      );
+    }
+    //
+    return Actionable<BlockItemCurrSelectionPrecheck>.yes();
   }
 
   // ***************************************************************************
@@ -4584,82 +4715,50 @@ abstract class Block<
   /// Edit on edit-mode
   /// Edit on creation-mode
   ///
-  Actionable<BlockFormEnableCode> __isEnableFormToModify({
+  @_PrecheckPrivateMethod()
+  Actionable<BlockFormEnablementChkCode> __isEnableFormToModify({
     required bool checkAllow,
   }) {
     if (formModel == null) {
-      return Actionable<BlockFormEnableCode>.no(
-        eCode: BlockFormEnableCode.noForm,
+      return Actionable<BlockFormEnablementChkCode>.no(
+        errCode: BlockFormEnablementChkCode.noForm,
       );
     }
     //
     switch (formModel!.formMode) {
       case FormMode.none:
-        return Actionable<BlockFormEnableCode>.no(
-          eCode: BlockFormEnableCode.formInNoneMode,
+        return Actionable<BlockFormEnablementChkCode>.no(
+          errCode: BlockFormEnablementChkCode.formInNoneMode,
         );
       case FormMode.creation:
         if (formModel!.formDataState == DataState.error) {
           // TODO-XXX (Test case).
           if (!formModel!.formInitialDataReady) {
-            return Actionable<BlockFormEnableCode>.no(
-              eCode: BlockFormEnableCode.formInitialDataNotReady,
+            return Actionable<BlockFormEnablementChkCode>.no(
+              errCode: BlockFormEnablementChkCode.formInitialDataNotReady,
             );
           }
         }
-        return Actionable<BlockFormEnableCode>.yes();
+        return Actionable<BlockFormEnablementChkCode>.yes();
       case FormMode.edit:
         if (checkAllow) {
           CheckAllowResult result = _isAllowUpdateItem(item: currentItem!);
           switch (result.result) {
             case CheckAllow.allow:
-              return Actionable<BlockFormEnableCode>.yes();
+              return Actionable<BlockFormEnablementChkCode>.yes();
             case CheckAllow.notAllow:
-              return Actionable<BlockFormEnableCode>.no(
-                eCode: BlockFormEnableCode.notAllow,
+              return Actionable<BlockFormEnablementChkCode>.no(
+                errCode: BlockFormEnablementChkCode.notAllow,
               );
             case CheckAllow.error:
-              return Actionable<BlockFormEnableCode>.no(
-                eCode: BlockFormEnableCode.checkAllowMethodError,
+              return Actionable<BlockFormEnablementChkCode>.no(
+                errCode: BlockFormEnablementChkCode.checkAllowMethodError,
                 stackTrace: result.stackTrace,
               );
           }
         }
-        return Actionable<BlockFormEnableCode>.yes();
+        return Actionable<BlockFormEnablementChkCode>.yes();
     }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Actionable<BlockItemCurrSelectionPrecheck> __canRefreshCurrentItem({
-    required bool checkBusy,
-  }) {
-    if (this.currentItemDetail == null) {
-      return Actionable<BlockItemCurrSelectionPrecheck>.no(
-        eCode: BlockItemCurrSelectionPrecheck.noTarget,
-      );
-    }
-    if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockItemCurrSelectionPrecheck>.no(
-        eCode: BlockItemCurrSelectionPrecheck.busy,
-      );
-    }
-    //
-    if (formModel != null) {
-      switch (formModel!.formMode) {
-        case FormMode.none:
-          // Has current item and Form in Lazy mode.
-          // Form State: pending.
-          break; // Do nothing
-        case FormMode.creation:
-          break; // Do nothing
-        case FormMode.edit:
-          break; // Do nothing
-      }
-    }
-    //
-    return Actionable<BlockItemCurrSelectionPrecheck>.yes();
   }
 
   // ***************************************************************************
@@ -4676,7 +4775,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable<BlockFormResetingPrecheck> canResetForm() {
+  Actionable<BlockFormResetPrecheck> canResetForm() {
     return __canResetForm(
       checkBusy: true,
       checkAllow: true,
@@ -4689,38 +4788,12 @@ abstract class Block<
   ///
   /// Without check Form validation.
   ///
-  Actionable<BlockFormSavingPrecheck> canSaveForm() {
+  Actionable<BlockFormSavePrecheck> canSaveForm() {
     return __canSaveForm(
       checkBusy: true,
       checkAllow: true,
       checkValidate: false, // IMPORTANT.
     );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Actionable<BlockItemCurrSelectionPrecheck> canSelectItem(
-      {required ITEM item}) {
-    ITEM? internalItem = findItemSameIdWith(item: item);
-    //
-    if (internalItem == null) {
-      return Actionable<BlockItemCurrSelectionPrecheck>.no(
-        eCode: BlockItemCurrSelectionPrecheck.invalidTarget,
-      );
-    }
-    // switch (this.queryDataState) {
-    //   case DataState.ready:
-    //     // Continue
-    //     break;
-    //   case DataState.pending:
-    //   //
-    //   case DataState.error:
-    //   //
-    //   case DataState.none:
-    //   //
-    // }
-    return Actionable<BlockItemCurrSelectionPrecheck>.yes();
   }
 
   // ***************************************************************************
@@ -4771,17 +4844,57 @@ abstract class Block<
   }
 
   // ***************************************************************************
-  // ***************************************************************************
 
   ///
   /// Checks whether the current item can be refreshed.
   ///
-  /// This method will return [true] if all the usual conditions are met.
-  ///
+  @_PrecheckMethod()
   Actionable<BlockItemCurrSelectionPrecheck> canRefreshCurrentItem() {
     return __canRefreshCurrentItem(
       checkBusy: true,
     );
+  }
+
+  // ***************************************************************************
+
+  @_PrecheckMethod()
+  Actionable<BlockItemCurrSelectionPrecheck> canSelectItemAsCurrent({
+    required ITEM item,
+  }) {
+    return __canSelectItemAsCurrent(
+      item: item,
+      checkBusy: true,
+    );
+  }
+
+  // ***************************************************************************
+
+  @_PrecheckMethod()
+  Actionable<BlockQueryPrecheck> canQuery() {
+    return __canQuery(checkBusy: true, checkAllow: true);
+  }
+
+  // ***************************************************************************
+
+  @_PrecheckMethod()
+  Actionable<ShowFormInfoState> canShowFormInfo() {
+    ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
+    if (formModel == null) {
+      return Actionable<ShowFormInfoState>.no(
+        errCode: ShowFormInfoState.noForm,
+      );
+    }
+    if (loggedInUser == null) {
+      return Actionable<ShowFormInfoState>.no(
+        errCode: ShowFormInfoState.noLoggedInUser,
+      );
+    }
+    if (!loggedInUser.isSystemUser) {
+      return Actionable<ShowFormInfoState>.no(
+        errCode: ShowFormInfoState.userIsNotSystemUser,
+      );
+    }
+    return Actionable<ShowFormInfoState>.yes();
   }
 
   // ***************************************************************************
@@ -4792,67 +4905,6 @@ abstract class Block<
     return filterModel != null &&
         loggedInUser != null &&
         loggedInUser.isSystemUser;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Actionable<ShowFormInfoState> canShowFormInfo() {
-    ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
-    if (formModel == null) {
-      return Actionable<ShowFormInfoState>.no(
-        eCode: ShowFormInfoState.noForm,
-      );
-    }
-    if (loggedInUser == null) {
-      return Actionable<ShowFormInfoState>.no(
-        eCode: ShowFormInfoState.noLoggedInUser,
-      );
-    }
-    if (!loggedInUser.isSystemUser) {
-      return Actionable<ShowFormInfoState>.no(
-        eCode: ShowFormInfoState.userIsNotSystemUser,
-      );
-    }
-    return Actionable<ShowFormInfoState>.yes();
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Actionable<BlockQueryPrecheck> __canQuery({
-    required bool checkBusy,
-    required bool checkAllow,
-  }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockQueryPrecheck>.no(eCode: BlockQueryPrecheck.busy);
-    }
-    //
-    if (checkAllow) {
-      CheckAllowResult result = __isAllowQuery();
-      switch (result.result) {
-        case CheckAllow.allow:
-          return Actionable<BlockQueryPrecheck>.yes();
-        case CheckAllow.notAllow:
-          return Actionable<BlockQueryPrecheck>.no(
-            eCode: BlockQueryPrecheck.notAllow,
-          );
-        case CheckAllow.error:
-          return Actionable<BlockQueryPrecheck>.no(
-            eCode: BlockQueryPrecheck.checkAllowMethodError,
-            stackTrace: result.stackTrace,
-          );
-      }
-    }
-    //
-    return Actionable<BlockQueryPrecheck>.yes();
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Actionable canQuery() {
-    return __canQuery(checkBusy: true, checkAllow: true);
   }
 
   // ***************************************************************************

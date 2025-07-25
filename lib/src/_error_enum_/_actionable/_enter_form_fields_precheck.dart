@@ -1,22 +1,22 @@
-part of '../../flutter_artist.dart';
+part of '../../../flutter_artist.dart';
 
-enum EnterFormFieldsState implements ECodeDetail {
+enum EnterFormFieldsPrecheck implements ChkCodeDetail {
   busy(
-    eCode: ECode.busy,
+    chkCode: ChkCode.busy,
     message: "Enter-form-fields feature is disabled",
     details: [
       "The executor is busy.",
     ],
   ),
   formInNoneMode(
-    eCode: ECode.inNoneMode,
+    chkCode: ChkCode.inNoneMode,
     message: "Enter-form-fields feature is disabled",
     details: [
       "The form in 'none' mode.",
     ],
   ),
   formInErrorState(
-    eCode: ECode.inErrorState,
+    chkCode: ChkCode.inErrorState,
     message: "Enter-form-fields feature is disabled",
     details: [
       "The form in 'error' state.",
@@ -24,7 +24,7 @@ enum EnterFormFieldsState implements ECodeDetail {
   );
 
   @override
-  final ECode eCode;
+  final ChkCode chkCode;
 
   @override
   final String message;
@@ -32,8 +32,8 @@ enum EnterFormFieldsState implements ECodeDetail {
   @override
   final List<String>? details;
 
-  const EnterFormFieldsState({
-    required this.eCode,
+  const EnterFormFieldsPrecheck({
+    required this.chkCode,
     required this.message,
     required this.details,
   });

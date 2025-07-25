@@ -47,7 +47,7 @@ class _XBlock {
   late final PrepareItemCreationResult itemCreationResult =
       block._createEmptyItemCreationResult();
 
-  final queryResult = BlockQueryResult();
+  final queryResult = BlockQueryResult._();
 
   // ***************************************************************************
   // ***************************************************************************

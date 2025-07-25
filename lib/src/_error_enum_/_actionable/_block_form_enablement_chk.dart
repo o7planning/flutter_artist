@@ -1,36 +1,36 @@
 part of '../../../flutter_artist.dart';
 
 @_RenameAnnotation()
-enum BlockFormEnableCode implements ECodeDetail {
+enum BlockFormEnablementChkCode implements ChkCodeDetail {
   noForm(
-    eCode: ECode.noForm,
+    chkCode: ChkCode.noForm,
     message: "Block has no Form",
     details: [],
   ),
   formInNoneMode(
-    eCode: ECode.inNoneMode,
+    chkCode: ChkCode.inNoneMode,
     message: "The Form is disabled",
     details: ["The form in 'none' mode"],
   ),
   formInitialDataNotReady(
-    eCode: ECode.formInitialDataNotReady,
+    chkCode: ChkCode.formInitialDataNotReady,
     message: "The Form is disabled.",
     details: ["The formInitialData is not ready."],
   ),
   notAllow(
-    eCode: ECode.notAllow,
+    chkCode: ChkCode.notAllow,
     message: "The Form is disabled.",
     details: ["The application logic does not allow this item to be updated."],
   ),
   checkAllowMethodError(
-    eCode: ECode.checkAllowMethodError,
+    chkCode: ChkCode.checkAllowMethodError,
     message: "The Form is disabled.",
     details: ["The isAllowUpdateItem() method error."],
   ),
   ;
 
   @override
-  final ECode eCode;
+  final ChkCode chkCode;
 
   @override
   final String message;
@@ -38,8 +38,8 @@ enum BlockFormEnableCode implements ECodeDetail {
   @override
   final List<String>? details;
 
-  const BlockFormEnableCode({
-    required this.eCode,
+  const BlockFormEnablementChkCode({
+    required this.chkCode,
     required this.message,
     required this.details,
   });

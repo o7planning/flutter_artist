@@ -1,41 +1,32 @@
 part of '../../flutter_artist.dart';
 
-class Actionable<ENUM extends ECodeDetail> {
+class Actionable<ENUM extends ChkCodeDetail> {
   final bool yes;
 
-  final ENUM? eCode;
+  final ENUM? errCode;
   final StackTrace? stackTrace;
 
   bool get no => !yes;
 
   Actionable._({
     required this.yes,
-    required this.eCode,
+    required this.errCode,
     required this.stackTrace,
   });
 
   Actionable.yes()
-      : eCode = null,
+      : errCode = null,
         stackTrace = null,
         yes = true;
 
   Actionable.no({
-    required ENUM this.eCode,
+    required ENUM this.errCode,
     this.stackTrace,
   }) : yes = false;
 
-  @Deprecated("Delete")
-  Actionable _copyWith({required ActionableCode actionableCode}) {
-    return Actionable._(
-      yes: yes,
-      eCode: eCode,
-      stackTrace: stackTrace,
-    );
-  }
+  String? get message => errCode?.message;
 
-  String? get message => eCode?.message;
-
-  List<String>? get details => eCode?.details;
+  List<String>? get details => errCode?.details;
 
   @override
   String toString() {

@@ -74,7 +74,7 @@ abstract class _XBase {
   // ***************************************************************************
 
   AppError _handleError({
-    required Shelf shelf,
+    required Shelf? shelf,
     required String? methodName,
     required Object error,
     required StackTrace stackTrace,

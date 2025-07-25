@@ -1,28 +1,61 @@
 part of '../../flutter_artist.dart';
 
 abstract class Coordinator extends _XBase {
+  final CoordinatorConfig config;
   void Function()? customNavigate;
 
-  Coordinator({required this.customNavigate});
+  Coordinator({
+    required this.config,
+    required this.customNavigate,
+  });
 
   Future<bool> execute() async {
+    bool success;
     try {
-      bool success = await coordinationLogic();
-      if (!success) {
-        return false;
-      }
+      success = await coordinationLogic();
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: null,
+        methodName: "coordinationLogic",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      success = false;
+    }
+    switch (config.navCondition) {
+      case CoordinatorNavCondition.any:
+        _navigate();
+      case CoordinatorNavCondition.success:
+        if (success) {
+          _navigate();
+        }
+      case CoordinatorNavCondition.error:
+        if (!success) {
+          _navigate();
+        }
+    }
+    return success;
+  }
+
+  void _navigate() async {
+    String methodName = "";
+    try {
       if (customNavigate != null) {
+        methodName = "customNavigate";
         customNavigate!();
       } else {
-        await defaultNavigate();
+        methodName = "defaultNavigate";
+        defaultNavigate();
       }
-      return true;
     } catch (e, stackTrace) {
-      showErrorSnackBar(
-        message: "${getClassName(this)} execute error",
-        errorDetails: ["Error: $e"],
+      _handleError(
+        shelf: null,
+        methodName: methodName,
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
       );
-      return false;
     }
   }
 

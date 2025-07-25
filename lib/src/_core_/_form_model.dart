@@ -338,7 +338,7 @@ abstract class FormModel<
     //
     // No need to check again?
     //
-    Actionable<BlockFormSavingPrecheck> actionable = block.__canSaveForm(
+    Actionable<BlockFormSavePrecheck> actionable = block.__canSaveForm(
       checkBusy: true,
       checkAllow: true,
       checkValidate: true,
@@ -1580,25 +1580,25 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable<EnterFormFieldsState> __canEnterFormFields({
+  Actionable<EnterFormFieldsPrecheck> __canEnterFormFields({
     required bool checkBusy,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<EnterFormFieldsState>.no(
-        eCode: EnterFormFieldsState.busy,
+      return Actionable<EnterFormFieldsPrecheck>.no(
+        errCode: EnterFormFieldsPrecheck.busy,
       );
     }
     if (formMode == FormMode.none) {
-      return Actionable<EnterFormFieldsState>.no(
-        eCode: EnterFormFieldsState.formInNoneMode,
+      return Actionable<EnterFormFieldsPrecheck>.no(
+        errCode: EnterFormFieldsPrecheck.formInNoneMode,
       );
     }
     if (formDataState == DataState.error) {
-      return Actionable<EnterFormFieldsState>.no(
-        eCode: EnterFormFieldsState.formInErrorState,
+      return Actionable<EnterFormFieldsPrecheck>.no(
+        errCode: EnterFormFieldsPrecheck.formInErrorState,
       );
     }
-    return Actionable<EnterFormFieldsState>.yes();
+    return Actionable<EnterFormFieldsPrecheck>.yes();
   }
 
   bool __checkBeforeEnterFormFields({
@@ -1682,7 +1682,7 @@ abstract class FormModel<
       navigate: null,
     );
     //
-    Actionable<BlockFormSavingPrecheck> actionable = block.__canSaveForm(
+    Actionable<BlockFormSavePrecheck> actionable = block.__canSaveForm(
       checkBusy: true,
       checkAllow: true,
       checkValidate: true,
@@ -1694,7 +1694,7 @@ abstract class FormModel<
         actionableFalse: actionable,
         showErrSnackBar: true,
       );
-      return FormSaveResult(precheck: actionable.eCode);
+      return FormSaveResult(precheck: actionable.errCode);
     }
     //
     _XShelf xShelf = _XShelf(

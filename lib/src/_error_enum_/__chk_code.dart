@@ -1,11 +1,18 @@
 part of '../../flutter_artist.dart';
 
-enum ECode {
+enum ChkCode {
   busy,
   noForm,
   formInitialDataNotReady,
   notAllow,
   checkAllowMethodError,
+  //
+  @Deprecated("Xoa di, thay the bang cach khac")
+  filterError,
+  queryLockedTemporarily,
+  noPreviousPage,
+  noNextPage,
+  noCurrentPagination,
   //
   inPendingState, // State
   inErrorState, // State

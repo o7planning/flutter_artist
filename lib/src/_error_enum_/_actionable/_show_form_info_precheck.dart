@@ -1,25 +1,25 @@
-part of '../../flutter_artist.dart';
+part of '../../../flutter_artist.dart';
 
-enum ShowFormInfoState implements ECodeDetail {
+enum ShowFormInfoState implements ChkCodeDetail {
   noForm(
-    eCode: ECode.noForm,
+    chkCode: ChkCode.noForm,
     message: "Can not show Form Info.",
     details: ["The block has no Form."],
   ),
   noLoggedInUser(
-    eCode: ECode.noLoggedInUser,
+    chkCode: ChkCode.noLoggedInUser,
     message: "Can not show Form Info.",
     details: ["The user is not logged in."],
   ),
   userIsNotSystemUser(
-    eCode: ECode.permissionDenied,
+    chkCode: ChkCode.permissionDenied,
     message: "Can not show Form Info.",
     details: ["The user is not a system user."],
   ),
   ;
 
   @override
-  final ECode eCode;
+  final ChkCode chkCode;
 
   @override
   final String message;
@@ -28,7 +28,7 @@ enum ShowFormInfoState implements ECodeDetail {
   final List<String>? details;
 
   const ShowFormInfoState({
-    required this.eCode,
+    required this.chkCode,
     required this.message,
     required this.details,
   });

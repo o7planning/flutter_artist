@@ -62,7 +62,7 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
         Actionable queryActionable = widget.block.canQuery();
         return queryActionable.yes ? __queryBlock : null;
       case BlockControlActionType.saveForm:
-        Actionable<BlockFormSavingPrecheck> saveActionable =
+        Actionable<BlockFormSavePrecheck> saveActionable =
             widget.block.canSaveForm();
         return saveActionable.yes ? __saveForm : null;
       case BlockControlActionType.refreshCurrentItem:

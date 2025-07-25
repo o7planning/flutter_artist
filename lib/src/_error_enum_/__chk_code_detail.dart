@@ -1,7 +1,8 @@
 part of '../../flutter_artist.dart';
 
-abstract interface class ECodeDetail {
-  ECode get eCode;
+@_RenameAnnotation()
+abstract interface class ChkCodeDetail {
+  ChkCode get chkCode;
 
   String get message;
 
