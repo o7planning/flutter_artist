@@ -116,25 +116,35 @@ class CodeFlowLogger {
 
   void addError({
     required Object ownerClassInstance,
-    required String error,
+    required String? methodName,
+    required AppError error,
+    required StackTrace? stackTrace,
   }) {
     return _addError(
       ownerClassInstance: ownerClassInstance,
       error: error,
+      stackTrace: stackTrace,
+      methodName: methodName,
       isLibCode: false,
     );
   }
 
   void _addError({
     required Object ownerClassInstance,
-    required String error,
+    required AppError error,
+    required StackTrace? stackTrace,
+    required String? methodName,
     required bool isLibCode,
   }) {
     __markDateTime();
     //
     _CodeFlowItem log = _CodeFlowItem._error(
       ownerClassInstance: ownerClassInstance,
-      error: error,
+      errorInfo: AppErrorInfo(
+        error: error,
+        stackTrace: stackTrace,
+        methodName: methodName,
+      ),
       isLibCode: isLibCode,
     );
     _codeFlowItems.add(log);

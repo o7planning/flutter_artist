@@ -6,7 +6,7 @@ class _CodeFlowItem {
   final int id;
 
   final String? info;
-  final String? error;
+  final AppErrorInfo? errorInfo;
   final FuncCallInfo? funcCallInfo;
   final bool isLibCode;
 
@@ -20,14 +20,13 @@ class _CodeFlowItem {
     required StackTrace currentStackTrace,
     required Map<String, dynamic>? arguments,
     required this.isLibCode,
-  })
-      : codeFlowType = CodeFlowType.methodCalled,
+  })  : codeFlowType = CodeFlowType.methodCalled,
         funcCallInfo = FuncCallInfo.fromCurrentStackTrace(
           currentStackTrace: currentStackTrace,
           arguments: arguments,
         ),
         info = null,
-        error = null,
+        errorInfo = null,
         id = __flowLogItemSEQ++;
 
   _CodeFlowItem._methodCall({
@@ -35,29 +34,26 @@ class _CodeFlowItem {
     required String methodName,
     required Map<String, dynamic>? arguments,
     required this.isLibCode,
-  })
-      : codeFlowType = CodeFlowType.methodCalled,
+  })  : codeFlowType = CodeFlowType.methodCalled,
         funcCallInfo = FuncCallInfo(funcName: methodName, arguments: arguments),
         info = null,
-        error = null,
+        errorInfo = null,
         id = __flowLogItemSEQ++;
 
   _CodeFlowItem._info({
     required this.ownerClassInstance,
     required this.info,
     required this.isLibCode,
-  })
-      : codeFlowType = CodeFlowType.info,
+  })  : codeFlowType = CodeFlowType.info,
         funcCallInfo = null,
-        error = null,
+        errorInfo = null,
         id = __flowLogItemSEQ++;
 
   _CodeFlowItem._error({
     required this.ownerClassInstance,
-    required this.error,
+    required this.errorInfo,
     required this.isLibCode,
-  })
-      : codeFlowType = CodeFlowType.error,
+  })  : codeFlowType = CodeFlowType.error,
         funcCallInfo = null,
         info = null,
         id = __flowLogItemSEQ++;
@@ -95,12 +91,12 @@ class _CodeFlowItem {
   }
 
   bool isMethodCall() {
-    return funcCallInfo != null && info == null && error == null;
+    return funcCallInfo != null && info == null && errorInfo == null;
   }
 
   bool isMethodCallWithTrace() {
     return info == null &&
-        error == null &&
+        errorInfo == null &&
         funcCallInfo != null &&
         funcCallInfo!.hasTraceInfo();
   }
@@ -110,7 +106,7 @@ class _CodeFlowItem {
   }
 
   bool isError() {
-    return error != null;
+    return errorInfo != null;
   }
 
   Shelf? _getShelf() {

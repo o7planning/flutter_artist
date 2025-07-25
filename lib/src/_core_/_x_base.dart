@@ -80,18 +80,18 @@ abstract class _XBase {
     required StackTrace stackTrace,
     required bool showSnackBar,
   }) {
-    AppError err = ErrorUtils.toAppError(error);
-    StackTrace? st = err is ApiError ? null : stackTrace;
+    AppError appError = ErrorUtils.toAppError(error);
+    StackTrace? st = appError is ApiError ? null : stackTrace;
     //
     final String msg;
     if (methodName == null) {
-      msg = "Error: ${err.errorMessage}";
+      msg = "Error: ${appError.errorMessage}";
     } else {
       if (methodName.contains("\\.")) {
-        msg = "Call $methodName() error: ${err.errorMessage}";
+        msg = "Call $methodName() error: ${appError.errorMessage}";
       } else {
         msg =
-            "Call ${getClassName(this)}.$methodName() error: ${err.errorMessage}";
+            "Call ${getClassName(this)}.$methodName() error: ${appError.errorMessage}";
       }
     }
     print(msg);
@@ -103,23 +103,26 @@ abstract class _XBase {
     FlutterArtist.codeFlowLogger._addError(
       isLibCode: true,
       ownerClassInstance: this,
-      error: msg,
+      error: appError,
+      stackTrace: st,
+      methodName: methodName,
     );
     //
-    FlutterArtist.errorLogger.addError(
+    LogErrorInfo errorInfo = FlutterArtist.errorLogger.addError(
       shelfName: FlutterArtist.storage._getShelfName(shelf.runtimeType),
-      errorMessage: msg,
-      errorDetails: err.errorDetails,
+      methodName: methodName,
+      errorMessage: appError.errorMessage,
+      errorDetails: appError.errorDetails,
       stackTrace: st,
     );
     //
     if (showSnackBar) {
       showErrorSnackBar(
         message: msg,
-        errorDetails: err.errorDetails,
+        errorDetails: appError.errorDetails,
       );
     }
-    return err;
+    return appError;
   }
 
   void _handleRestError({
@@ -131,13 +134,19 @@ abstract class _XBase {
   }) {
     FlutterArtist.errorLogger.addError(
       shelfName: FlutterArtist.storage._getShelfName(shelf.runtimeType),
+      methodName: methodName,
       errorMessage: message,
       errorDetails: errorDetails,
       stackTrace: null,
     );
     FlutterArtist.codeFlowLogger._addError(
       ownerClassInstance: this,
-      error: message,
+      error: AppError(
+        errorMessage: message,
+        errorDetails: errorDetails,
+      ),
+      stackTrace: null,
+      methodName: methodName,
       isLibCode: true,
     );
     String msg = "Call ${getClassName(this)}.$methodName() error: $message";
@@ -161,6 +170,7 @@ abstract class _XBase {
     if (!actionableFalse.yes) {
       FlutterArtist.errorLogger.addError(
         shelfName: shelf.name,
+        methodName: null,
         errorMessage: actionableFalse.message!,
         errorDetails: actionableFalse.details,
         stackTrace: actionableFalse.stackTrace,

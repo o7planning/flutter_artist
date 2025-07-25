@@ -62,6 +62,7 @@ class _NotificationEngine {
       } catch (e, stackTrace) {
         FlutterArtist.errorLogger.addError(
           shelfName: null,
+          methodName: null,
           errorMessage: "Invalid Local Notification Summary JSON",
           errorDetails: null,
           stackTrace: stackTrace,
@@ -89,6 +90,7 @@ class _NotificationEngine {
         if (result.error != null) {
           FlutterArtist.errorLogger.addError(
             shelfName: null,
+            methodName: null,
             errorMessage: result.error!.errorMessage,
             errorDetails: result.error!.errorDetails,
             stackTrace: null,
@@ -101,6 +103,7 @@ class _NotificationEngine {
         print(stackTrace);
         FlutterArtist.errorLogger.addError(
           shelfName: null,
+          methodName: null,
           errorMessage: "Fetch Notification Error: $e",
           errorDetails: null,
           stackTrace: stackTrace,
@@ -111,6 +114,7 @@ class _NotificationEngine {
       if (fetchedData == null) {
         FlutterArtist.errorLogger.addError(
           shelfName: null,
+          methodName: null,
           errorMessage: "No Notification Summary Data",
           errorDetails: null,
           stackTrace: null,
@@ -132,6 +136,7 @@ class _NotificationEngine {
       } catch (e, stackTrace) {
         FlutterArtist.errorLogger.addError(
           shelfName: null,
+          methodName: null,
           errorMessage: "Error ${getClassName(adapter)}.toJson()",
           errorDetails: null,
           stackTrace: stackTrace,

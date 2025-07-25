@@ -7,14 +7,15 @@ class ErrorLogger {
 
   int get errorCount => _errorCount;
 
-  ErrorLogger({required this.maxDisplayErrorCount});
+  ErrorLogger._({required this.maxDisplayErrorCount});
 
   List<LogErrorInfo> get errorInfos => [..._errorInfos];
 
   LogErrorInfo? get lastError => _errorInfos.isEmpty ? null : _errorInfos.first;
 
-  void addError({
+  LogErrorInfo addError({
     required String? shelfName,
+    required String? methodName,
     required String errorMessage,
     required List<String>? errorDetails,
     required StackTrace? stackTrace,
@@ -22,6 +23,7 @@ class ErrorLogger {
     final errorInfo = LogErrorInfo(
       id: ++_errorCount,
       shelfName: shelfName,
+      methodName: methodName,
       errorMessage: errorMessage,
       errorDetails: errorDetails,
       stackTrace: stackTrace,
@@ -32,5 +34,6 @@ class ErrorLogger {
     _errorInfos.insert(0, errorInfo);
     FlutterArtist._totalErrorCount++;
     FlutterArtist._notifyError();
+    return errorInfo;
   }
 }
