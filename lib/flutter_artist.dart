@@ -98,6 +98,8 @@ part 'src/_code_flow_/_func_call_info.dart';
 
 part 'src/_coordinator_/_coordinator.dart';
 
+part 'src/_coordinator_/_coordinator_config.dart';
+
 part 'src/_core_/_actionable.dart';
 
 part 'src/_core_/_activity.dart';
