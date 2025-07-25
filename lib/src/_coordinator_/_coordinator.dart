@@ -5,9 +5,9 @@ abstract class Coordinator extends _XBase {
   void Function()? customNavigate;
 
   Coordinator({
-    required CoordinatorConfig? config,
+    required this.config,
     required this.customNavigate,
-  }) : config = config ?? CoordinatorConfig();
+  });
 
   Future<bool> execute() async {
     bool success;
@@ -23,14 +23,14 @@ abstract class Coordinator extends _XBase {
       );
       success = false;
     }
-    switch (config.navigationCondition) {
-      case CoordinatorNavigationCondition.any:
+    switch (config.navCondition) {
+      case CoordinatorNavCondition.any:
         _navigate();
-      case CoordinatorNavigationCondition.success:
+      case CoordinatorNavCondition.success:
         if (success) {
           _navigate();
         }
-      case CoordinatorNavigationCondition.error:
+      case CoordinatorNavCondition.error:
         if (!success) {
           _navigate();
         }

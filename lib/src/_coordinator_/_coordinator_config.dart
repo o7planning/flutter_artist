@@ -1,15 +1,15 @@
 part of '../../flutter_artist.dart';
 
-enum CoordinatorNavigationCondition {
+enum CoordinatorNavCondition {
   any,
   success,
   error;
 }
 
 class CoordinatorConfig {
-  final CoordinatorNavigationCondition navigationCondition;
+  final CoordinatorNavCondition navCondition;
 
   const CoordinatorConfig({
-    this.navigationCondition = CoordinatorNavigationCondition.success,
+    this.navCondition = CoordinatorNavCondition.success,
   });
 }
