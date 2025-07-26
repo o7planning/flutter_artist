@@ -52,6 +52,8 @@ part 'src/_action_result_/_block_item_creation_result.dart';
 
 part 'src/_action_result_/_block_quick_update_item_result.dart';
 
+part 'src/_action_result_/_block_quick_action_result.dart';
+
 part 'src/_action_result_/_block_quick_create_item_result.dart';
 
 part 'src/_action_result_/_block_item_curr_selection_result.dart';
@@ -441,6 +443,8 @@ part 'src/_error_enum_/__chk_code_detail.dart';
 part 'src/_error_enum_/_actionable/_block_clearance_precheck.dart';
 
 part 'src/_error_enum_/_actionable/_block_form_enablement_chk.dart';
+
+part 'src/_error_enum_/_actionable/_block_quick_action_precheck.dart';
 
 part 'src/_error_enum_/_actionable/_block_form_reset_precheck.dart';
 

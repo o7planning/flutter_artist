@@ -3292,7 +3292,7 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_BlockQuickActionAnnotation()
-  Future<bool> executeQuickAction<DATA extends Object>({
+  Future<BlockQuickActionResult> executeQuickAction<DATA extends Object>({
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
     required ActionConfirmationType actionConfirmationType,
@@ -3312,6 +3312,25 @@ abstract class Block<
       },
     );
     //
+    // @Same-Code-Precheck-01
+    //
+    final Actionable<BlockQuickActionPrecheck> actionable = __canQuickAction(
+      checkBusy: true,
+    );
+    //
+    if (!actionable.yes) {
+      // _createItemErrorCount++;
+      _addErrorLogActionable(
+        shelf: shelf,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+      );
+      return BlockQuickActionResult(
+        precheck: actionable.errCode,
+        stackTrace: actionable.stackTrace,
+      );
+    }
+    //
     // Confirmation:
     //
     bool confirm = true;
@@ -3324,7 +3343,9 @@ abstract class Block<
     }
     //
     if (!confirm) {
-      return false;
+      return BlockQuickActionResult(
+        precheck: BlockQuickActionPrecheck.cancelled,
+      );
     }
     //
     List<_BlockOpt> forceQueryBlockOpts = [];
@@ -3369,7 +3390,7 @@ abstract class Block<
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //
     await FlutterArtist.executor._executeTaskUnitQueue();
-    return true;
+    return taskUnit.taskResult;
   }
 
   // ***************************************************************************
@@ -4440,6 +4461,38 @@ abstract class Block<
     }
     //
     return Actionable<BlockItemDeletionPrecheck>.yes();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_PrecheckPrivateMethod()
+  Actionable<BlockQuickActionPrecheck> __canQuickAction({
+    required bool checkBusy,
+  }) {
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable<BlockQuickActionPrecheck>.no(
+        errCode: BlockQuickActionPrecheck.busy,
+      );
+    }
+    switch (queryDataState) {
+      case DataState.pending:
+        return Actionable<BlockQuickActionPrecheck>.no(
+          errCode: BlockQuickActionPrecheck.inPendingState,
+        );
+      case DataState.error:
+        return Actionable<BlockQuickActionPrecheck>.no(
+          errCode: BlockQuickActionPrecheck.inErrorState,
+        );
+      case DataState.none:
+        return Actionable<BlockQuickActionPrecheck>.no(
+          errCode: BlockQuickActionPrecheck.inNoneState,
+        );
+      case DataState.ready:
+        break;
+    }
+    //
+    return Actionable<BlockQuickActionPrecheck>.yes();
   }
 
   // ***************************************************************************
