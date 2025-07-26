@@ -1943,18 +1943,14 @@ abstract class Block<
   @_BlockQuickCreateItemActionAnnotation()
   Future<bool> _unitQuickCreateItem({
     required _XBlock thisXBlock,
+    required BlockQuickCreateItemResult taskResult,
     required BlockQuickCreateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
         action,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    if (!__checkBeforeQuickActionCreateItem(
-      checkBusy: false, // (Task is running, busy!)
-      addErrorLog: true,
-      showErrSnackBar: true,
-    )) {
-      return false;
-    }
+    // (No Precheck Again)
+    //
     FILTER_CRITERIA blockCurrentFilterCriteria = filterCriteria!;
     //
     ApiResult<ITEM_DETAIL> result;
@@ -1975,7 +1971,7 @@ abstract class Block<
       //
     } catch (e, stackTrace) {
       // Test Cases: [90b].
-      _handleError(
+      AppError appError = _handleError(
         shelf: shelf,
         methodName: '${getClassName(action)}.$methodName',
         error: e,
@@ -1983,6 +1979,10 @@ abstract class Block<
         showSnackBar: true,
       );
       //
+      taskResult._setAppError(
+        appError: appError,
+        stackTrace: appError is ApiError ? null : stackTrace,
+      );
       return false;
     }
     //
@@ -1994,7 +1994,7 @@ abstract class Block<
         result: result,
       );
     } catch (e, stackTrace) {
-      _handleError(
+      AppError appError = _handleError(
         shelf: shelf,
         methodName: "${getClassName(action)}.$methodName",
         error: e,
@@ -2002,6 +2002,10 @@ abstract class Block<
         showSnackBar: true,
       );
       //
+      taskResult._setAppError(
+        appError: appError,
+        stackTrace: appError is ApiError ? null : stackTrace,
+      );
       return false;
     }
   }
@@ -2083,19 +2087,14 @@ abstract class Block<
   @_BlockQuickUpdateItemActionAnnotation()
   Future<bool> _unitQuickUpdateItem({
     required _XBlock thisXBlock,
+    required BlockQuickUpdateItemResult taskResult,
     required BlockQuickUpdateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
         action,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    if (!__checkBeforeQuickActionUpdateItem(
-      checkBusy: false, // (Task is running, busy!)
-      item: action.item,
-      addErrorLog: true,
-      showErrSnackBar: true,
-    )) {
-      return false;
-    }
+    // No Need Precheck Again.
+    //
     FILTER_CRITERIA blockCurrentFilterCriteria = filterCriteria!;
     //
     ApiResult<ITEM_DETAIL> result;
@@ -2116,7 +2115,7 @@ abstract class Block<
       //
     } catch (e, stackTrace) {
       // Test Cases: [90b].
-      _handleError(
+      AppError appError = _handleError(
         shelf: shelf,
         methodName: '${getClassName(action)}.$methodName',
         error: e,
@@ -2124,6 +2123,10 @@ abstract class Block<
         showSnackBar: true,
       );
       //
+      taskResult._setAppError(
+        appError: appError,
+        stackTrace: appError is ApiError ? null : stackTrace,
+      );
       return false;
     }
     //
@@ -2135,7 +2138,7 @@ abstract class Block<
         result: result,
       );
     } catch (e, stackTrace) {
-      _handleError(
+      AppError appError = _handleError(
         shelf: shelf,
         methodName: "${getClassName(action)}.$methodName",
         error: e,
@@ -2143,6 +2146,10 @@ abstract class Block<
         showSnackBar: true,
       );
       //
+      taskResult._setAppError(
+        appError: appError,
+        stackTrace: appError is ApiError ? null : stackTrace,
+      );
       return false;
     }
   }
@@ -3368,7 +3375,7 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_BlockQuickCreateItemActionAnnotation()
-  Future<bool> executeQuickCreateItemAction({
+  Future<BlockQuickCreateItemResult> executeQuickCreateItemAction({
     required BlockQuickCreateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
         action,
   }) async {
@@ -3382,12 +3389,24 @@ abstract class Block<
       },
     );
     //
-    if (!__checkBeforeQuickActionCreateItem(
+    // @Same-Code-Precheck-01
+    //
+    final Actionable<BlockQuickCreateItemPrecheck> actionable =
+        __canQuickCreateItem(
       checkBusy: true,
-      addErrorLog: true,
-      showErrSnackBar: true,
-    )) {
-      return false;
+      checkAllow: true,
+    );
+    if (!actionable.yes) {
+      // _refreshErrorCount++;
+      _addErrorLogActionable(
+        shelf: shelf,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+      );
+      return BlockQuickCreateItemResult(
+        precheck: actionable.errCode,
+        stackTrace: actionable.stackTrace,
+      );
     }
     //
     // Confirmation:
@@ -3401,7 +3420,9 @@ abstract class Block<
       );
     }
     if (!confirm) {
-      return false;
+      return BlockQuickCreateItemResult(
+        precheck: BlockQuickCreateItemPrecheck.cancelled,
+      );
     }
     //
     _XShelf xShelf = _XShelf(
@@ -3422,7 +3443,7 @@ abstract class Block<
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //
     await FlutterArtist.executor._executeTaskUnitQueue();
-    return true;
+    return taskUnit.result;
   }
 
   // ***************************************************************************
@@ -3507,7 +3528,8 @@ abstract class Block<
       },
     );
     // @Same-Code-Precheck-01
-    Actionable<BlockQuickUpdateItemPrecheck> actionable = __canQuickUpdateItem(
+    final Actionable<BlockQuickUpdateItemPrecheck> actionable =
+        __canQuickUpdateItem(
       item: action.item,
       checkBusy: true,
       checkAllow: true,
@@ -3522,6 +3544,7 @@ abstract class Block<
       );
       return BlockQuickUpdateItemResult(
         precheck: actionable.errCode,
+        stackTrace: actionable.stackTrace,
       );
     }
     //
@@ -3712,6 +3735,7 @@ abstract class Block<
   //   return true;
   // }
 
+  @Deprecated("Xoa di")
   bool __checkBeforeQuickActionCreateItem({
     required bool checkBusy,
     required bool addErrorLog,
@@ -4596,6 +4620,61 @@ abstract class Block<
     }
     //
     return Actionable<BlockQuickUpdateItemPrecheck>.yes();
+  }
+
+  // Actionable createActionable = __canCreateItem(
+  //     checkBusy: checkBusy,
+  //     creationType: ItemCreationType.quickCreate,
+  //     checkAllow
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_PrecheckPrivateMethod()
+  Actionable<BlockQuickCreateItemPrecheck> __canQuickCreateItem({
+    required bool checkBusy,
+    required bool checkAllow,
+  }) {
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable<BlockQuickCreateItemPrecheck>.no(
+        errCode: BlockQuickCreateItemPrecheck.busy,
+      );
+    }
+    switch (queryDataState) {
+      case DataState.pending:
+        return Actionable<BlockQuickCreateItemPrecheck>.no(
+          errCode: BlockQuickCreateItemPrecheck.inPendingState,
+        );
+      case DataState.error:
+        return Actionable<BlockQuickCreateItemPrecheck>.no(
+          errCode: BlockQuickCreateItemPrecheck.inErrorState,
+        );
+      case DataState.none:
+        return Actionable<BlockQuickCreateItemPrecheck>.no(
+          errCode: BlockQuickCreateItemPrecheck.inNoneState,
+        );
+      case DataState.ready:
+        break;
+    }
+    //
+    if (checkAllow) {
+      CheckAllowResult result = __isAllowCreateItem();
+      switch (result.result) {
+        case CheckAllow.allow:
+          return Actionable<BlockQuickCreateItemPrecheck>.yes();
+        case CheckAllow.notAllow:
+          return Actionable<BlockQuickCreateItemPrecheck>.no(
+            errCode: BlockQuickCreateItemPrecheck.notAllow,
+          );
+        case CheckAllow.error:
+          return Actionable<BlockQuickCreateItemPrecheck>.no(
+            errCode: BlockQuickCreateItemPrecheck.checkAllowMethodError,
+            stackTrace: result.stackTrace,
+          );
+      }
+    }
+    //
+    return Actionable<BlockQuickCreateItemPrecheck>.yes();
   }
 
   // ***************************************************************************

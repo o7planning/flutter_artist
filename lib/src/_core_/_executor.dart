@@ -148,6 +148,7 @@ class _Executor {
       await taskUnit.xBlock.block._unitQuickCreateItem(
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
+        taskResult: taskUnit.result as BlockQuickCreateItemResult,
       );
     }
     // Block QuickCreateMultiItems:
@@ -162,6 +163,7 @@ class _Executor {
       await taskUnit.xBlock.block._unitQuickUpdateItem(
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
+        taskResult: taskUnit.result as BlockQuickUpdateItemResult,
       );
     }
     // Block QuickAction:

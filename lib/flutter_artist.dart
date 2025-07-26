@@ -52,6 +52,8 @@ part 'src/_action_result_/_block_item_creation_result.dart';
 
 part 'src/_action_result_/_block_quick_update_item_result.dart';
 
+part 'src/_action_result_/_block_quick_create_item_result.dart';
+
 part 'src/_action_result_/_block_item_curr_selection_result.dart';
 
 part 'src/_action_result_/_block_item_deletion_result.dart';

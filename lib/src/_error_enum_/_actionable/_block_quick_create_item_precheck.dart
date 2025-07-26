@@ -41,6 +41,11 @@ enum BlockQuickCreateItemPrecheck implements ChkCodeDetail {
     chkCode: ChkCode.checkAllowMethodError,
     message: "Not allow to create item.",
     details: ["The isAllowCreateItem() method error."],
+  ),
+  cancelled(
+    chkCode: ChkCode.cancelled,
+    message: "Quick Create Item Action Cancelled.",
+    details: null,
   );
 
   @override

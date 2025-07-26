@@ -55,7 +55,7 @@ enum BlockQuickUpdateItemPrecheck implements ChkCodeDetail {
   ),
   cancelled(
     chkCode: ChkCode.cancelled,
-    message: "Quick Action Cancelled.",
+    message: "Quick Update Item Action Cancelled.",
     details: null,
   );
 
