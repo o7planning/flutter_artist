@@ -1,7 +1,8 @@
 part of '../../flutter_artist.dart';
 
-class FormSaveResult extends ActionResult {
-  final BlockFormSavePrecheck? precheck;
+@_RenameAnnotation("FormModelDataLoadResult")
+class FormModelLoadDataResult extends ActionResult {
+  final FormModelLoadDataPrecheck? precheck;
 
   AppError? _appError;
   StackTrace? _stackTrace;
@@ -9,7 +10,7 @@ class FormSaveResult extends ActionResult {
   AppError? get error => _appError;
   StackTrace? get stackTrace => _stackTrace;
 
-  FormSaveResult({this.precheck});
+  FormModelLoadDataResult({this.precheck});
 
   @override
   bool get success {

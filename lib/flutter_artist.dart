@@ -15,7 +15,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
-as dialogs;
+    as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
@@ -47,6 +47,8 @@ part 'src/_action_/_scalar_quick_action.dart';
 part 'src/_action_result_/_action_result.dart';
 
 part 'src/_action_result_/_block_clearance_result.dart';
+
+part 'src/_action_result_/_form_model_load_data_result.dart';
 
 part 'src/_action_result_/_block_item_creation_result.dart';
 
@@ -444,6 +446,8 @@ part 'src/_error_enum_/_actionable/_block_clearance_precheck.dart';
 
 part 'src/_error_enum_/_actionable/_block_form_enablement_chk.dart';
 
+part 'src/_error_enum_/_actionable/_form_model_load_data_precheck.dart';
+
 part 'src/_error_enum_/_actionable/_block_quick_action_precheck.dart';
 
 part 'src/_error_enum_/_actionable/_block_form_reset_precheck.dart';
@@ -463,6 +467,8 @@ part 'src/_error_enum_/_actionable/_block_quick_update_item_precheck.dart';
 part 'src/_error_enum_/_actionable/_block_quick_create_item_precheck.dart';
 
 part 'src/_error_enum_/_actionable/_block_query_precheck.dart';
+
+part 'src/_error_enum_/_actionable/_scalar_query_precheck.dart';
 
 part 'src/_error_enum_/_actionable/_check_allow.dart';
 
@@ -864,5 +870,6 @@ class _BlockQuickChildBlockItemsActionAnnotation {
 // ******* Block QuickAction (END) *********************************************
 
 class _RenameAnnotation {
-  const _RenameAnnotation();
+  final String? newName;
+  const _RenameAnnotation([this.newName]);
 }

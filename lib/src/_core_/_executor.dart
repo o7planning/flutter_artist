@@ -172,6 +172,7 @@ class _Executor {
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
         afterQuickAction: taskUnit.afterQuickAction,
+        taskResult: taskUnit.taskResult as BlockQuickActionResult,
       );
     }
     // Block QuickChildBlockItemsAction:
@@ -183,14 +184,16 @@ class _Executor {
     }
     // FormModel LoadForm:
     else if (taskUnit is _FormModelLoadFormTaskUnit) {
-      await taskUnit.xFormModel.formModel._unitLoadForm(
+      await taskUnit.xFormModel.formModel._unitLoadFormData(
         thisXFormModel: taskUnit.xFormModel,
+        taskResult: taskUnit.taskResult as FormModelLoadDataResult,
       );
     }
     // FormModel Save:
     else if (taskUnit is _FormModelSaveFormTaskUnit) {
       await taskUnit.xFormModel.formModel._unitSaveForm(
         thisXFormModel: taskUnit.xFormModel,
+        taskResult: taskUnit.taskResult,
       );
     }
     // FormModel QuickExtraFormInputAction:
@@ -204,6 +207,7 @@ class _Executor {
     else if (taskUnit is _ScalarQueryTaskUnit) {
       await taskUnit.xScalar.scalar._unitQuery(
         thisXScalar: taskUnit.xScalar,
+        taskResult: taskUnit.taskResult as ScalarQueryResult,
       );
     }
     // Scalar Quick Action:

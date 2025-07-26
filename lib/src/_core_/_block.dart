@@ -2163,6 +2163,7 @@ abstract class Block<
     required _XBlock thisXBlock,
     required BlockQuickAction<DATA> action,
     required AfterBlockQuickAction afterQuickAction,
+    required BlockQuickActionResult taskResult,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -2177,50 +2178,32 @@ abstract class Block<
       );
       //
       result = await action.callApi();
+      // Throw ApiError.
+      result?.throwIfError();
     } catch (e, stackTrace) {
-      _handleError(
+      AppError appError = _handleError(
         shelf: shelf,
         methodName: '${getClassName(action)}.callApi',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
       );
-      return false;
-    }
-    //
-    bool success = true;
-    if (result != null && result.error != null) {
-      success = false;
       //
-      _handleRestError(
-        shelf: shelf,
-        methodName: "${getClassName(action)}.callApi",
-        message: result.error!.errorMessage,
-        errorDetails: result.error!.errorDetails,
-        showSnackBar: true,
-      );
-    }
-    //
-    try {
-      DATA? apiData = result?.data;
-      // await action.doAfterCallApi(success: success, apiData: apiData);
-      //
-      if (success) {
-        FlutterArtist.storage._fireEventToAffectedItemTypes(
-          eventShelf: shelf,
-          affectedItemTypes: action.affectedItemTypes,
-        );
-      }
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: '${getClassName(action)}.callApi',
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
+      taskResult._setAppError(
+        appError: appError,
+        stackTrace: appError is ApiError ? null : stackTrace,
       );
       return false;
     }
+    //
+    DATA? apiData = result?.data;
+    //
+    // await action.doAfterCallApi(success: success, apiData: apiData);
+    //
+    FlutterArtist.storage._fireEventToAffectedItemTypes(
+      eventShelf: shelf,
+      affectedItemTypes: action.affectedItemTypes,
+    );
     //
     switch (afterQuickAction) {
       case AfterBlockQuickAction.none:
