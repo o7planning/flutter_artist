@@ -1952,12 +1952,13 @@ abstract class Block<
     FILTER_CRITERIA blockCurrentFilterCriteria = filterCriteria!;
     //
     ApiResult<ITEM_DETAIL> result;
+    final String methodName = "callApiQuickCreateItem";
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
         navigate: null,
         ownerClassInstance: action,
-        methodName: "callApiQuickCreateItem",
+        methodName: methodName,
         parameters: {},
       );
       //
@@ -1967,9 +1968,10 @@ abstract class Block<
       );
       //
     } catch (e, stackTrace) {
+      // Test Cases: [90b].
       _handleError(
         shelf: shelf,
-        methodName: '${getClassName(action)}.callApiQuickCreateItem',
+        methodName: '${getClassName(action)}.$methodName',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -1982,13 +1984,13 @@ abstract class Block<
       return await _processSaveActionRestResult(
         thisXBlock: thisXBlock,
         isNew: true,
-        calledMethodName: "${getClassName(action)}.callApiQuickCreateItem",
+        calledMethodName: "${getClassName(action)}.$methodName",
         result: result,
       );
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: "${getClassName(action)}.callApiQuickCreateItem",
+        methodName: "${getClassName(action)}.$methodName",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -2091,12 +2093,13 @@ abstract class Block<
     FILTER_CRITERIA blockCurrentFilterCriteria = filterCriteria!;
     //
     ApiResult<ITEM_DETAIL> result;
+    final String methodName = "callApiQuickUpdateItem";
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
         navigate: null,
         ownerClassInstance: action,
-        methodName: "callApiQuickUpdateItem",
+        methodName: methodName,
         parameters: {},
       );
       //
@@ -2106,9 +2109,10 @@ abstract class Block<
       );
       //
     } catch (e, stackTrace) {
+      // Test Cases: [90b].
       _handleError(
         shelf: shelf,
-        methodName: '${getClassName(action)}.callApiQuickUpdateItem',
+        methodName: '${getClassName(action)}.$methodName',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -2121,13 +2125,13 @@ abstract class Block<
       return await _processSaveActionRestResult(
         thisXBlock: thisXBlock,
         isNew: false,
-        calledMethodName: "${getClassName(action)}.callApiQuickUpdateItem",
+        calledMethodName: "${getClassName(action)}.$methodName",
         result: result,
       );
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: "${getClassName(action)}.callApiQuickUpdateItem",
+        methodName: "${getClassName(action)}.$methodName",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -2210,7 +2214,8 @@ abstract class Block<
         break;
       case AfterBlockQuickAction.refreshCurrentItem:
         Actionable actionable = canRefreshCurrentItem();
-        print(">>>> refreshCurrentItem after quickAction: ${actionable.yes} - ${actionable.message}");
+        print(
+            ">>>> refreshCurrentItem after quickAction: ${actionable.yes} - ${actionable.message}");
         if (!actionable.yes) {
           return true;
         }

@@ -14,6 +14,7 @@ abstract class Coordinator extends _XBase {
     try {
       success = await coordinationLogic();
     } catch (e, stackTrace) {
+      // Test Cases: [90a].
       _handleError(
         shelf: null,
         methodName: "coordinationLogic",
