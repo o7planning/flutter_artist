@@ -56,6 +56,8 @@ part 'src/_action_result_/_block_item_curr_selection_result.dart';
 
 part 'src/_action_result_/_block_item_deletion_result.dart';
 
+part 'src/_action_result_/_block_items_deletion_result.dart';
+
 part 'src/_action_result_/_block_query_result.dart';
 
 part 'src/_action_result_/_form_save_result.dart';

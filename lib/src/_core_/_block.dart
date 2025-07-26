@@ -1768,6 +1768,7 @@ abstract class Block<
   Future<void> _unitDeleteItem({
     required _XBlock thisXBlock,
     required ITEM item,
+    required ItemDeletionResult<ITEM> deletionResult,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -1780,7 +1781,7 @@ abstract class Block<
     //
     // Candidate Item to delete.
     //
-    thisXBlock.itemDeletionResult._setCandidateItem(candidateItem: item);
+    deletionResult._setCandidateItem(candidateItem: item);
     //
     final bool isCurrent = isCurrentItem(item: item);
     //
@@ -1816,7 +1817,7 @@ abstract class Block<
         showSnackBar: true,
       );
       //
-      thisXBlock.itemDeletionResult._setFailedItem(
+      deletionResult._setFailedItem(
         failedItem: item,
         appError: appError,
         stackTrace: appError is ApiError ? null : stackTrace,
@@ -1829,7 +1830,7 @@ abstract class Block<
     //
     // Delete Successful.
     //
-    thisXBlock.itemDeletionResult._setDeletedItem(deletedItem: item);
+    deletionResult._setDeletedItem(deletedItem: item);
     //
     showDeletedSnackBar();
     //
@@ -3554,7 +3555,7 @@ abstract class Block<
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //
     await FlutterArtist.executor._executeTaskUnitQueue();
-    return thisXBlock.blockQuickUpdateItemResult;
+    return taskUnit.result;
   }
 
   // ***************************************************************************
@@ -3879,7 +3880,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<ItemDeletionResult?> deleteItems({
+  Future<ItemDeletionResult> deleteItems({
     required List<ITEM> items,
     required bool stopIfError,
   }) async {
@@ -3896,18 +3897,23 @@ abstract class Block<
     //
     // xBlock.itemDeletionResult.candidateItems = deleteItems;
     //
-    for (ITEM item in deleteItems) {
-      var taskUnit = _BlockDeleteItemTaskUnit(xBlock: xBlock, item: item);
-      FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
-      await FlutterArtist.executor._executeTaskUnitQueue();
-      if (stopIfError) {
-        ItemDeletionResult result = xBlock.itemDeletionResult;
-        if (!result.success) {
-          return result;
-        }
-      }
-    }
-    return xBlock.itemDeletionResult;
+    // for (ITEM item in deleteItems) {
+    //   var taskUnit = _BlockDeleteItemTaskUnit(
+    //     xBlock: xBlock,
+    //     item: item,
+    //     result: null, // ??????????/
+    //   );
+    //   FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    //   await FlutterArtist.executor._executeTaskUnitQueue();
+    //   if (stopIfError) {
+    //     ItemDeletionResult result = xBlock.itemDeletionResult;
+    //     if (!result.success) {
+    //       return result;
+    //     }
+    //   }
+    // }
+    // return xBlock.itemDeletionResult;
+    throw UnimplementedError();
   }
 
   // ***************************************************************************
@@ -4002,15 +4008,18 @@ abstract class Block<
     );
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
+    //
+    final itemDeletionResult = _createEmptyItemDeletionResult();
     _TaskUnit taskUnit = _BlockDeleteItemTaskUnit(
       xBlock: thisXBlock,
       item: item,
+      result: itemDeletionResult,
     );
     //
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //
     await FlutterArtist.executor._executeTaskUnitQueue();
-    return thisXBlock.itemDeletionResult as ItemDeletionResult<ITEM>;
+    return itemDeletionResult;
   }
 
   // ***************************************************************************
@@ -4053,9 +4062,10 @@ abstract class Block<
       );
     }
     //
-    return await refreshAndSelectItemAsCurrent(
+    return await _refreshToShowOrEditItemAsCurrent(
       item: this.currentItem!,
-      forceLoadForm: forceLoadForm,
+      forceForm: forceLoadForm,
+      navigate: null,
     );
   }
 

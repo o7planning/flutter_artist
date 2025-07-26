@@ -138,6 +138,7 @@ class _Executor {
       await taskUnit.xBlock.block._unitDeleteItem(
         thisXBlock: taskUnit.xBlock,
         item: taskUnit.item,
+        deletionResult: taskUnit.result as ItemDeletionResult<Object>,
       );
     }
     // Block QuickCreateItem:

@@ -41,15 +41,13 @@ class _XBlock {
   // This property must have a null value initially.
   BlockItemCurrSelectionResult? currentItemSelectionResult;
 
-  late final ItemDeletionResult itemDeletionResult =
-      block._createEmptyItemDeletionResult();
+  // late final ItemDeletionResult itemDeletionResult =
+  //     block._createEmptyItemDeletionResult();
 
   late final PrepareItemCreationResult itemCreationResult =
       block._createEmptyItemCreationResult();
 
   final queryResult = BlockQueryResult._();
-
-  final blockQuickUpdateItemResult = BlockQuickUpdateItemResult();
 
   // ***************************************************************************
   // ***************************************************************************
