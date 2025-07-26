@@ -132,7 +132,7 @@ class _Executor {
         candidateItem: taskUnit.candidateItem,
         thisXBlock: taskUnit.xBlock,
         currentItemSelectionResult:
-            taskUnit.result as BlockItemCurrSelectionResult<Object>,
+            taskUnit.taskResult as BlockItemCurrSelectionResult<Object>,
       );
     }
     // Block Delete Item:
@@ -140,7 +140,7 @@ class _Executor {
       await taskUnit.xBlock.block._unitDeleteItem(
         thisXBlock: taskUnit.xBlock,
         item: taskUnit.item,
-        deletionResult: taskUnit.result as ItemDeletionResult<Object>,
+        deletionResult: taskUnit.taskResult as ItemDeletionResult<Object>,
       );
     }
     // Block QuickCreateItem:
@@ -148,7 +148,7 @@ class _Executor {
       await taskUnit.xBlock.block._unitQuickCreateItem(
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
-        taskResult: taskUnit.result as BlockQuickCreateItemResult,
+        taskResult: taskUnit.taskResult as BlockQuickCreateItemResult,
       );
     }
     // Block QuickCreateMultiItems:
@@ -163,7 +163,7 @@ class _Executor {
       await taskUnit.xBlock.block._unitQuickUpdateItem(
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
-        taskResult: taskUnit.result as BlockQuickUpdateItemResult,
+        taskResult: taskUnit.taskResult as BlockQuickUpdateItemResult,
       );
     }
     // Block QuickAction:

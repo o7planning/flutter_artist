@@ -2591,13 +2591,15 @@ abstract class Block<
     final currentItemSelectionType = forceForm
         ? CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm
         : CurrentItemSelectionType.selectAnItemAsCurrent;
+    //
     // @Same-Code-Precheck-01
+    //
     Actionable<BlockItemCurrSelectionPrecheck> actionable =
         this.__canSelectItemAsCurrent(
       item: item,
       checkBusy: true,
     );
-
+    //
     if (!actionable.yes) {
       // _refreshErrorCount++;
       _addErrorLogActionable(
@@ -2639,7 +2641,7 @@ abstract class Block<
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //
     await FlutterArtist.executor._executeTaskUnitQueue();
-    var result = taskUnit.result as BlockItemCurrSelectionResult<ITEM>;
+    var result = taskUnit.taskResult as BlockItemCurrSelectionResult<ITEM>;
     if (result.success) {
       if (navigate != null) {
         navigate();
@@ -2683,7 +2685,7 @@ abstract class Block<
   /// Clear and set block to "Pending State".
   ///
   @_RootMethodAnnotation()
-  Future<BlockClearResult> clear({Function()? navigate}) async {
+  Future<BlockClearanceResult> clear({Function()? navigate}) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: navigate,
@@ -2703,7 +2705,7 @@ abstract class Block<
         actionableFalse: actionable,
         showErrSnackBar: true,
       );
-      return BlockClearResult(
+      return BlockClearanceResult(
         precheck: actionable.errCode,
       );
     }
@@ -2728,7 +2730,7 @@ abstract class Block<
     //
     _executeNavigation(navigate: navigate);
     //
-    return BlockClearResult();
+    return BlockClearanceResult();
   }
 
   // ***************************************************************************
@@ -3443,7 +3445,7 @@ abstract class Block<
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //
     await FlutterArtist.executor._executeTaskUnitQueue();
-    return taskUnit.result;
+    return taskUnit.taskResult;
   }
 
   // ***************************************************************************
@@ -3582,7 +3584,7 @@ abstract class Block<
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //
     await FlutterArtist.executor._executeTaskUnitQueue();
-    return taskUnit.result;
+    return taskUnit.taskResult;
   }
 
   // ***************************************************************************
@@ -4037,17 +4039,17 @@ abstract class Block<
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
-    final itemDeletionResult = _createEmptyItemDeletionResult();
+    final taskResult = _createEmptyItemDeletionResult();
     _TaskUnit taskUnit = _BlockDeleteItemTaskUnit(
       xBlock: thisXBlock,
       item: item,
-      result: itemDeletionResult,
+      taskResult: taskResult,
     );
     //
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //
     await FlutterArtist.executor._executeTaskUnitQueue();
-    return itemDeletionResult;
+    return taskResult;
   }
 
   // ***************************************************************************

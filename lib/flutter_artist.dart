@@ -46,7 +46,7 @@ part 'src/_action_/_scalar_quick_action.dart';
 
 part 'src/_action_result_/_action_result.dart';
 
-part 'src/_action_result_/_block_clear_result.dart';
+part 'src/_action_result_/_block_clearance_result.dart';
 
 part 'src/_action_result_/_block_item_creation_result.dart';
 

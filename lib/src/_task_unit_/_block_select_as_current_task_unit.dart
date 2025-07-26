@@ -23,7 +23,7 @@ class _BlockSelectAsCurrentTaskUnit<ITEM extends Object>
     required this.forceTypeForForm,
   }) : super(
           taskType: TaskType.blockSelectItemAsCurrent,
-          result: BlockItemCurrSelectionResult<ITEM>(
+          taskResult: BlockItemCurrSelectionResult<ITEM>(
             precheck: null,
             currentItemSelectionType: currentItemSelectionType,
             getItemId: xBlock.block.getItemId,

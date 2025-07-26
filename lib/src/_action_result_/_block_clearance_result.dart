@@ -1,11 +1,12 @@
 part of '../../flutter_artist.dart';
 
-class BlockClearResult extends ActionResult {
+class BlockClearanceResult extends ActionResult {
   BlockClearancePrecheck? _precheck;
 
   BlockClearancePrecheck? get precheck => _precheck;
 
-  BlockClearResult({BlockClearancePrecheck? precheck}) : _precheck = precheck;
+  BlockClearanceResult({BlockClearancePrecheck? precheck})
+      : _precheck = precheck;
 
   @override
   bool get success {

@@ -12,7 +12,7 @@ class _BlockDeleteItemTaskUnit extends _TaskUnit<ItemDeletionResult> {
   _BlockDeleteItemTaskUnit({
     required this.xBlock,
     required this.item,
-    required super.result,
+    required super.taskResult,
   }) : super(taskType: TaskType.blockDeleteItem);
 
   @override
