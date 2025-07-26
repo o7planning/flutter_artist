@@ -131,6 +131,8 @@ class _Executor {
         newQueriedList: taskUnit.newQueriedList,
         candidateItem: taskUnit.candidateItem,
         thisXBlock: taskUnit.xBlock,
+        currentItemSelectionResult:
+            taskUnit.result as BlockItemCurrSelectionResult<Object>,
       );
     }
     // Block Delete Item:

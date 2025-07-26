@@ -1383,27 +1383,32 @@ abstract class Block<
     required CurrentItemSelectionType currentItemSelectionType,
     required List<ITEM> newQueriedList,
     required ITEM? candidateItem,
+    required BlockItemCurrSelectionResult<ITEM> currentItemSelectionResult,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
     formModel?._formPropsStructure._setManualDirty(false);
     //
-    if (thisXBlock.currentItemSelectionResult == null) {
-      thisXBlock.currentItemSelectionResult =
-          BlockItemCurrSelectionResult<ITEM>(
-        precheck: null,
-        currentItemSelectionType: currentItemSelectionType,
-        getItemId: getItemId,
-        candidateItem: candidateItem,
-        oldCurrentItem: this.currentItem,
-        currentItem: this.currentItem,
-      );
-    } else {
-      thisXBlock.currentItemSelectionResult!._addCandidateItem(
-        candidateItem,
-      );
-    }
-    var result = thisXBlock.currentItemSelectionResult!;
+    // if (thisXBlock.currentItemSelectionResult == null) {
+    //   thisXBlock.currentItemSelectionResult =
+    //       BlockItemCurrSelectionResult<ITEM>(
+    //     precheck: null,
+    //     currentItemSelectionType: currentItemSelectionType,
+    //     getItemId: getItemId,
+    //     candidateItem: candidateItem,
+    //     oldCurrentItem: this.currentItem,
+    //     currentItem: this.currentItem,
+    //   );
+    // } else {
+    //   thisXBlock.currentItemSelectionResult!._addCandidateItem(
+    //     candidateItem,
+    //   );
+    // }
+    // var result = thisXBlock.currentItemSelectionResult!;
+
+    currentItemSelectionResult._addCandidateItem(
+      candidateItem,
+    );
     //
     if (queryDataState == DataState.pending) {
       this.__clearWithDataStateAndChildrenToNonCascade(
@@ -1500,7 +1505,7 @@ abstract class Block<
       item2: candidateCurrentItem,
     );
     if (!isSameCandidateItem) {
-      result._addCandidateItem(candidateCurrentItem);
+      currentItemSelectionResult._addCandidateItem(candidateCurrentItem);
     }
     //
     final bool isCandidateCurrentItemInNewQueriedList =
@@ -1605,7 +1610,7 @@ abstract class Block<
             showSnackBar: true,
           );
           //
-          thisXBlock.currentItemSelectionResult?._setAppError(
+          currentItemSelectionResult._setAppError(
             appError: appError,
             stackTrace: appError is ApiError ? null : stackTrace,
           );
@@ -1615,7 +1620,7 @@ abstract class Block<
           );
         }
         if (isLoadItemError) {
-          result._apiError = true;
+          currentItemSelectionResult._apiError = true;
           // ???????????????????????????????
           // TODO: Them test case:
           // TODO: Alway return? Load ITEM Error
@@ -1703,7 +1708,7 @@ abstract class Block<
       }
       //
       if (convertItemError) {
-        result._convertError = true;
+        currentItemSelectionResult._convertError = true;
         // TODO Always return??
         // If currentItemChanged or not currentItemChanged
         // Always return. Nothing to do if has error!!
@@ -1721,7 +1726,7 @@ abstract class Block<
       // (On _unitSelectItemAsCurrent method).
       // candidateCurrentItem != null.
       if (currentItemChanged) {
-        result._currentItem = candidateCurrentItem;
+        currentItemSelectionResult._currentItem = candidateCurrentItem;
         // @@TODO@@ 10.
         this.__clearAllChildrenBlocksToPending(
           thisXBlock: thisXBlock,
@@ -2627,8 +2632,7 @@ abstract class Block<
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //
     await FlutterArtist.executor._executeTaskUnitQueue();
-    var result = thisXBlock.currentItemSelectionResult
-        as BlockItemCurrSelectionResult<ITEM>;
+    var result = taskUnit.result as BlockItemCurrSelectionResult<ITEM>;
     if (result.success) {
       if (navigate != null) {
         navigate();
