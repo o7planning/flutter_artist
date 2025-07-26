@@ -3488,7 +3488,7 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_BlockQuickUpdateItemActionAnnotation()
-  Future<bool> executeQuickUpdateItemAction({
+  Future<BlockQuickUpdateItemResult> executeQuickUpdateItemAction({
     required BlockQuickUpdateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
         action,
   }) async {
@@ -3501,6 +3501,24 @@ abstract class Block<
         "action": action,
       },
     );
+    // @Same-Code-Precheck-01
+    Actionable<BlockQuickUpdateItemPrecheck> actionable = __canQuickUpdateItem(
+      item: action.item,
+      checkBusy: true,
+      checkAllow: true,
+    );
+    //
+    if (!actionable.yes) {
+      // _createItemErrorCount++;
+      _addErrorLogActionable(
+        shelf: shelf,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+      );
+      return BlockQuickUpdateItemResult(
+        precheck: actionable.errCode,
+      );
+    }
     //
     // Confirmation:
     //
@@ -3513,7 +3531,9 @@ abstract class Block<
       );
     }
     if (!confirm) {
-      return false;
+      return BlockQuickUpdateItemResult(
+        precheck: BlockQuickUpdateItemPrecheck.cancelled,
+      );
     }
     //
     _XShelf xShelf = _XShelf(
@@ -3534,7 +3554,7 @@ abstract class Block<
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //
     await FlutterArtist.executor._executeTaskUnitQueue();
-    return true;
+    return thisXBlock.blockQuickUpdateItemResult;
   }
 
   // ***************************************************************************
@@ -4511,6 +4531,57 @@ abstract class Block<
     }
     //
     return Actionable<BlockItemEditPrecheck>.yes();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_PrecheckPrivateMethod()
+  Actionable<BlockQuickUpdateItemPrecheck> __canQuickUpdateItem({
+    required ITEM item,
+    required bool checkBusy,
+    required bool checkAllow,
+  }) {
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable<BlockQuickUpdateItemPrecheck>.no(
+        errCode: BlockQuickUpdateItemPrecheck.busy,
+      );
+    }
+    switch (queryDataState) {
+      case DataState.pending:
+        return Actionable<BlockQuickUpdateItemPrecheck>.no(
+          errCode: BlockQuickUpdateItemPrecheck.inPendingState,
+        );
+      case DataState.error:
+        return Actionable<BlockQuickUpdateItemPrecheck>.no(
+          errCode: BlockQuickUpdateItemPrecheck.blockInErrorState,
+        );
+      case DataState.none:
+        return Actionable<BlockQuickUpdateItemPrecheck>.no(
+          errCode: BlockQuickUpdateItemPrecheck.blockInNoneState,
+        );
+      case DataState.ready:
+        break;
+    }
+    //
+    if (checkAllow) {
+      CheckAllowResult result = _isAllowUpdateItem(item: item);
+      switch (result.result) {
+        case CheckAllow.allow:
+          return Actionable<BlockQuickUpdateItemPrecheck>.yes();
+        case CheckAllow.notAllow:
+          return Actionable<BlockQuickUpdateItemPrecheck>.no(
+            errCode: BlockQuickUpdateItemPrecheck.notAllow,
+          );
+        case CheckAllow.error:
+          return Actionable<BlockQuickUpdateItemPrecheck>.no(
+            errCode: BlockQuickUpdateItemPrecheck.checkAllowMethodError,
+            stackTrace: result.stackTrace,
+          );
+      }
+    }
+    //
+    return Actionable<BlockQuickUpdateItemPrecheck>.yes();
   }
 
   // ***************************************************************************

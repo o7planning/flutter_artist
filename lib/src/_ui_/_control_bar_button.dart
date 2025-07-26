@@ -26,12 +26,12 @@ class _ControlBarButton extends StatelessWidget {
       child: onAction
           ? const CircularProgressIndicator()
           : SimpleSmallIconButton(
-              tooltip: tooltip,
-              iconData: iconData,
-              // iconSize: iconSize,
-              iconColor: iconColor,
-              onPressed: onPressed,
-            ),
+        tooltip: tooltip,
+        iconData: iconData,
+        // iconSize: iconSize,
+        iconColor: iconColor,
+        onPressed: onPressed,
+      ),
     );
   }
 }

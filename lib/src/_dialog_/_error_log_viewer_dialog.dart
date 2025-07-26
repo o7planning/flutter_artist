@@ -48,7 +48,8 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
         spacing: 5,
         children: widget.errorLogger.errorInfos
             .map(
-              (errorInfo) => TextButton(
+              (errorInfo) =>
+              TextButton(
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.all(10),
                   minimumSize: Size.zero,
@@ -62,7 +63,7 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
                 },
                 child: Text(errorInfo.id.toString()),
               ),
-            )
+        )
             .toList(),
       ),
     );
@@ -80,10 +81,10 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
             child: _errorInfo == null
                 ? SizedBox()
                 : ErrorInfoView(
-                    errorInfo: _errorInfo!,
-                    width: width,
-                    height: height,
-                  ),
+              errorInfo: _errorInfo!,
+              width: width,
+              height: height,
+            ),
           ),
         ],
       ),

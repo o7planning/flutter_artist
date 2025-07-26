@@ -49,6 +49,8 @@ class _XBlock {
 
   final queryResult = BlockQueryResult._();
 
+  final blockQuickUpdateItemResult = BlockQuickUpdateItemResult();
+
   // ***************************************************************************
   // ***************************************************************************
 

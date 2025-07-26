@@ -9,7 +9,7 @@ class SimpleProp<V> extends Prop<V> {
     return propNames
         .map(
           (name) => SimpleProp(propName: name),
-        )
+    )
         .toList();
   }
 

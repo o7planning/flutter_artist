@@ -15,7 +15,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
-    as dialogs;
+as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
@@ -49,6 +49,8 @@ part 'src/_action_result_/_action_result.dart';
 part 'src/_action_result_/_block_clear_result.dart';
 
 part 'src/_action_result_/_block_item_creation_result.dart';
+
+part 'src/_action_result_/_block_quick_update_item_result.dart';
 
 part 'src/_action_result_/_block_item_curr_selection_result.dart';
 
@@ -447,6 +449,10 @@ part 'src/_error_enum_/_actionable/_block_item_curr_selection_precheck.dart';
 part 'src/_error_enum_/_actionable/_block_item_deletion_precheck.dart';
 
 part 'src/_error_enum_/_actionable/_block_item_edit_precheck.dart';
+
+part 'src/_error_enum_/_actionable/_block_quick_update_item_precheck.dart';
+
+part 'src/_error_enum_/_actionable/_block_quick_create_item_precheck.dart';
 
 part 'src/_error_enum_/_actionable/_block_query_precheck.dart';
 

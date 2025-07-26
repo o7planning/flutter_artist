@@ -8,8 +8,8 @@ class ScalarConfig {
   final ScalarHiddenBehavior hiddenBehavior;
 
   ScalarConfig({
-      this.outsideEventReaction,
-      this.internalEventReaction,
+    this.outsideEventReaction,
+    this.internalEventReaction,
     this.hiddenBehavior = ScalarHiddenBehavior.none,
   });
 

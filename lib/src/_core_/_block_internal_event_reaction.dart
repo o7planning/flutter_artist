@@ -9,14 +9,12 @@ class BlockInternalEventReaction {
 
   const BlockInternalEventReaction.intrinsic({
     required BlockReaction this.reaction,
-  })
-      : intrinsicMode = true,
+  })  : intrinsicMode = true,
         _events = null;
 
   const BlockInternalEventReaction.custom({
     required List<Event> events,
     required BlockReaction this.reaction,
-  })
-      : intrinsicMode = false,
+  })  : intrinsicMode = false,
         _events = events;
 }
