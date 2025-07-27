@@ -13,9 +13,9 @@ class _BlockQuickActionTaskUnit<DATA extends Object>
     required this.action,
     required this.afterQuickAction,
   }) : super(
-          taskType: TaskType.blockQuickAction,
-          taskResult: BlockQuickActionResult(),
-        );
+    taskType: TaskType.blockQuickAction,
+    taskResult: BlockQuickActionResult(),
+  );
 
   @override
   int get xShelfId => xBlock.xShelfId;

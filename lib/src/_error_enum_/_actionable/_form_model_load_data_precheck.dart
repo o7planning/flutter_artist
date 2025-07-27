@@ -6,7 +6,8 @@ enum FormModelLoadDataPrecheck implements ChkCodeDetail {
     chkCode: ChkCode.busy,
     message: "Can not load form data.",
     details: ["The executor is busy."],
-  ),;
+  ),
+  ;
 
   @override
   final ChkCode chkCode;

@@ -2,7 +2,8 @@ part of '../../flutter_artist.dart';
 
 @_TaskUnitClassAnnotation()
 @_FormModelLoadFormAnnotation()
-class _FormModelLoadFormTaskUnit extends _ResultedTaskUnit<FormModelLoadDataResult> {
+class _FormModelLoadFormTaskUnit
+    extends _ResultedTaskUnit<FormModelLoadDataResult> {
   _XFormModel xFormModel;
 
   _FormModelLoadFormTaskUnit({

@@ -27,7 +27,7 @@ class _StorageStructureGraphViewState
   String? selectedShelfName;
 
   final BuchheimWalkerConfiguration config =
-  _GalerryBuchheimWalkerConfiguration();
+      _GalerryBuchheimWalkerConfiguration();
 
   final EdgeInsets boundaryMargin = const EdgeInsets.only(left: 20, right: 20);
 
@@ -67,7 +67,7 @@ class _StorageStructureGraphViewState
     }
     if (!found) {
       _GraphGItem? item =
-      rootItem.children.isEmpty ? null : rootItem.children[0];
+          rootItem.children.isEmpty ? null : rootItem.children[0];
       if (item != null) {
         _onSelectFluToShowTreeView(item);
       }
@@ -75,8 +75,7 @@ class _StorageStructureGraphViewState
   }
 
   Widget _buildMain() {
-    final Graph graph = Graph()
-      ..isTree = false;
+    final Graph graph = Graph()..isTree = false;
     _GraphGItem rootItem = _createRootItemAndChildren();
     Map<String, _GraphGItem> graphItemMap = <String, _GraphGItem>{};
     final String rootNodeId = rootItem.shelfName;
@@ -103,40 +102,40 @@ class _StorageStructureGraphViewState
     //
     return rootItem.children.isEmpty
         ? const SizedBox(
-      child: Center(
-        child: Text(
-          "No Shelf",
-          style: TextStyle(
-            fontSize: 13,
-          ),
-        ),
-      ),
-    )
+            child: Center(
+              child: Text(
+                "No Shelf",
+                style: TextStyle(
+                  fontSize: 13,
+                ),
+              ),
+            ),
+          )
         : _CustomAppContainer.transparent(
-      child: InteractiveViewer(
-        panAxis: PanAxis.horizontal,
-        constrained: false,
-        boundaryMargin: boundaryMargin,
-        minScale: 1,
-        maxScale: 1,
-        child: GraphView(
-          graph: graph,
-          algorithm: BuchheimWalkerAlgorithm(
-            config,
-            TreeEdgeRenderer(config),
-          ),
-          paint: Paint()
-            ..color = Colors.green
-            ..strokeWidth = 1
-            ..style = PaintingStyle.stroke,
-          builder: (Node node) {
-            var id = node.key!.value as String?;
-            _GraphGItem item = graphItemMap[id!]!;
-            return rectangleWidget(item);
-          },
-        ),
-      ),
-    );
+            child: InteractiveViewer(
+              panAxis: PanAxis.horizontal,
+              constrained: false,
+              boundaryMargin: boundaryMargin,
+              minScale: 1,
+              maxScale: 1,
+              child: GraphView(
+                graph: graph,
+                algorithm: BuchheimWalkerAlgorithm(
+                  config,
+                  TreeEdgeRenderer(config),
+                ),
+                paint: Paint()
+                  ..color = Colors.green
+                  ..strokeWidth = 1
+                  ..style = PaintingStyle.stroke,
+                builder: (Node node) {
+                  var id = node.key!.value as String?;
+                  _GraphGItem item = graphItemMap[id!]!;
+                  return rectangleWidget(item);
+                },
+              ),
+            ),
+          );
   }
 
   Widget _buildTopRightButtons() {
@@ -207,11 +206,11 @@ class _StorageStructureGraphViewState
     //
     Map<String, Shelf?> shelfMap = FlutterArtist.storage.shelfMap;
     Map<String, Shelf?> shelfListenerMap =
-    FlutterArtist.storage._getListenerShelves();
+        FlutterArtist.storage._getListenerShelves();
     Map<String, Shelf?> shelfNotifierMap =
-    FlutterArtist.storage._getEventShelves(external: external);
+        FlutterArtist.storage._getEventShelves(external: external);
     Map<String, Shelf?> shelfIndependentMap =
-    FlutterArtist.storage._getIndependentShelves(external: external);
+        FlutterArtist.storage._getIndependentShelves(external: external);
 
     for (String shelfName in shelfMap.keys) {
       _GraphGItem item = _GraphGItem(
@@ -251,8 +250,7 @@ class _StorageStructureGraphViewState
       graph.addEdge(
         currentNode,
         childNode,
-        paint: Paint()
-          ..color = Colors.black87,
+        paint: Paint()..color = Colors.black87,
       );
 
       if (childGraphItem.children.isNotEmpty) {
@@ -281,8 +279,8 @@ class _StorageStructureGraphViewState
         onSelectFluToShowGraph: item.isRoot
             ? null
             : () {
-          _onSelectFluToShowGraph(item);
-        },
+                _onSelectFluToShowGraph(item);
+              },
         onSelectFluToShowTreeView: () {
           _onSelectFluToShowTreeView(item);
         },
