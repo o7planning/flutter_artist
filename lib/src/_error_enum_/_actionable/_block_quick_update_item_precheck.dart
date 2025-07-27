@@ -7,23 +7,25 @@ enum BlockQuickUpdateItemPrecheck implements ChkCodeDetail {
     details: ["The executor is busy."],
   ),
 
-  // Block In Pending State.
+  // Test Cases: [91b].
   inPendingState(
     chkCode: ChkCode.inPendingState,
     message: "Item update is disabled.",
     details: ["The block is in a 'pending' state."],
   ),
+  // Test Cases: [91b].
   blockInErrorState(
     chkCode: ChkCode.inErrorState,
     message: "Item update is disabled.",
     details: ["The block is in an 'error' state."],
   ),
+  // Test Cases: [91b].
   blockInNoneState(
     chkCode: ChkCode.inNoneState,
     message: "Item update is disabled.",
     details: ["The block is in a 'none' state."],
   ),
-  // Test Cases: [90b].
+  // Test Cases: [90b], [91b].
   invalidTarget(
     chkCode: ChkCode.invalidTarget,
     message: "Not allow to update the item.",

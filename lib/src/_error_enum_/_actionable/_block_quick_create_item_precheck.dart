@@ -6,19 +6,19 @@ enum BlockQuickCreateItemPrecheck implements ChkCodeDetail {
     message: "New item creation is disabled.",
     details: ["The executor is busy."],
   ),
-  //
+  // Test Cases: [91a].
   inPendingState(
     chkCode: ChkCode.inPendingState,
     message: "New item creation is disabled.",
     details: ["The block is in a 'pending' state."],
   ),
-  //
+  // Test Cases: [91a].
   inErrorState(
     chkCode: ChkCode.inErrorState,
     message: "New item creation is disabled.",
     details: ["The block is in an 'error' state."],
   ),
-  //
+  // Test Cases: [91a].
   inNoneState(
     chkCode: ChkCode.inNoneState,
     message: "New item creation is disabled.",
