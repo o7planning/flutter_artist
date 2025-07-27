@@ -23,16 +23,19 @@ enum BlockQuickUpdateItemPrecheck implements ChkCodeDetail {
     message: "Item update is disabled.",
     details: ["The block is in a 'none' state."],
   ),
+  // Test Cases: [90b].
   invalidTarget(
     chkCode: ChkCode.invalidTarget,
     message: "Not allow to update the item.",
     details: ["Item not in the List."],
   ),
+  // Test Cases: [90b].
   notAllow(
     chkCode: ChkCode.notAllow,
     message: "Not allow to update the item.",
     details: ["The application logic does not allow this item to be updated."],
   ),
+  // Test Cases: [90b].
   checkAllowMethodError(
     chkCode: ChkCode.checkAllowMethodError,
     message: "Not allow to update the item.",

@@ -7,12 +7,6 @@ enum BlockQuickCreateItemPrecheck implements ChkCodeDetail {
     details: ["The executor is busy."],
   ),
   //
-  noForm(
-    chkCode: ChkCode.noForm,
-    message: "New item creation is disabled.",
-    details: ["The block has no form."],
-  ),
-  //
   inPendingState(
     chkCode: ChkCode.inPendingState,
     message: "New item creation is disabled.",
@@ -30,18 +24,19 @@ enum BlockQuickCreateItemPrecheck implements ChkCodeDetail {
     message: "New item creation is disabled.",
     details: ["The block is in a 'none' state."],
   ),
-  //
+  // Test Cases: [90b].
   notAllow(
     chkCode: ChkCode.notAllow,
     message: "Not allow to create item.",
     details: ["The application logic does not allow to create a new item."],
   ),
-  //
+  // Test Cases: [90b].
   checkAllowMethodError(
     chkCode: ChkCode.checkAllowMethodError,
     message: "Not allow to create item.",
     details: ["The isAllowCreateItem() method error."],
   ),
+  // Test Cases: [90b].
   cancelled(
     chkCode: ChkCode.cancelled,
     message: "Quick Create Item Action Cancelled.",
