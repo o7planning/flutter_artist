@@ -4623,6 +4623,13 @@ abstract class Block<
         errCode: BlockQuickUpdateItemPrecheck.busy,
       );
     }
+    ITEM? internalItem = findItemSameIdWith(item: item);
+    // Test Cases: [90b].
+    if (internalItem == null) {
+      return Actionable<BlockQuickUpdateItemPrecheck>.no(
+        errCode: BlockQuickUpdateItemPrecheck.invalidTarget,
+      );
+    }
     switch (queryDataState) {
       case DataState.pending:
         return Actionable<BlockQuickUpdateItemPrecheck>.no(
