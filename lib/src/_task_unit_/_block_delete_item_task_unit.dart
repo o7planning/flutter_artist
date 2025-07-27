@@ -5,7 +5,7 @@ part of '../../flutter_artist.dart';
 @_BlockDeleteCheckedItemsAnnotation()
 @_BlockDeleteCurrentItemAnnotation()
 @_BlockDeleteItemAnnotation()
-class _BlockDeleteItemTaskUnit extends _TaskUnit<ItemDeletionResult> {
+class _BlockDeleteItemTaskUnit extends _ResultedTaskUnit<ItemDeletionResult> {
   _XBlock xBlock;
   final Object item;
 

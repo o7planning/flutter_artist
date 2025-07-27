@@ -2611,7 +2611,7 @@ abstract class Block<
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+    _ResultedTaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
       currentItemSelectionType: currentItemSelectionType,
       xBlock: thisXBlock,
       newQueriedList: [],
@@ -3364,7 +3364,7 @@ abstract class Block<
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    _TaskUnit taskUnit = _BlockQuickActionTaskUnit(
+    _ResultedTaskUnit taskUnit = _BlockQuickActionTaskUnit(
       xBlock: thisXBlock,
       action: action,
       afterQuickAction: afterQuickAction,
@@ -3441,7 +3441,7 @@ abstract class Block<
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    _TaskUnit taskUnit = _BlockQuickCreateItemTaskUnit(
+    _ResultedTaskUnit taskUnit = _BlockQuickCreateItemTaskUnit(
       xBlock: thisXBlock,
       action: action,
     );
@@ -3580,7 +3580,7 @@ abstract class Block<
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    _TaskUnit taskUnit = _BlockQuickUpdateItemTaskUnit(
+    _ResultedTaskUnit taskUnit = _BlockQuickUpdateItemTaskUnit(
       xBlock: thisXBlock,
       action: action,
     );

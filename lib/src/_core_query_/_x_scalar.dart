@@ -11,6 +11,8 @@ class _XScalar {
 
   int get xShelfId => xShelf.xShelfId;
 
+  final ScalarQueryResult queryResult = ScalarQueryResult(precheck: null);
+
   // ***************************************************************************
   // ***************************************************************************
 

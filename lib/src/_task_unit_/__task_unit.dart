@@ -1,13 +1,11 @@
 part of '../../flutter_artist.dart';
 
 @_TaskUnitClassAnnotation()
-abstract class _TaskUnit<RESULT> {
+abstract class _TaskUnit {
   final TaskType taskType;
-  final RESULT? taskResult;
 
   _TaskUnit({
     required this.taskType,
-    this.taskResult,
   });
 
   String getTaskUnitId() {

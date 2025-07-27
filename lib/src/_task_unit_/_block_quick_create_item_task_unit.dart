@@ -3,7 +3,7 @@ part of '../../flutter_artist.dart';
 @_TaskUnitClassAnnotation()
 @_BlockQuickCreateItemActionAnnotation()
 class _BlockQuickCreateItemTaskUnit
-    extends _TaskUnit<BlockQuickCreateItemResult> {
+    extends _ResultedTaskUnit<BlockQuickCreateItemResult> {
   _XBlock xBlock;
   BlockQuickCreateItemAction action;
 

@@ -158,7 +158,6 @@ abstract class Scalar<
   @_ScalarQueryAnnotation()
   Future<void> _unitQuery({
     required _XScalar thisXScalar,
-    required ScalarQueryResult taskResult,
   }) async {
     __assertThisXScalar(thisXScalar);
     //
@@ -219,7 +218,7 @@ abstract class Scalar<
         thisXScalar: thisXScalar,
         queryDataState: DataState.error,
       );
-      taskResult._setFilterError();
+      thisXScalar.queryResult._setFilterError();
       return;
     }
     //
@@ -264,7 +263,7 @@ abstract class Scalar<
         showSnackBar: true,
       );
       //
-      taskResult._setAppError(
+      thisXScalar.queryResult._setAppError(
         appError: appError,
         stackTrace: appError is ApiError ? null : stackTrace,
       );

@@ -1724,7 +1724,7 @@ abstract class FormModel<
     //
     _XBlock xBlock = xShelf.findXBlockByName(this.block.name)!;
     _XFormModel xFormModel = xBlock.xFormModel!;
-    _TaskUnit taskUnit = _FormModelSaveFormTaskUnit(
+    _ResultedTaskUnit taskUnit = _FormModelSaveFormTaskUnit(
       xFormModel: xFormModel,
     );
     //
@@ -1732,7 +1732,7 @@ abstract class FormModel<
     //
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
-    return xFormModel._formSaveResult;
+    return taskUnit.taskResult;
   }
 
   // ***************************************************************************

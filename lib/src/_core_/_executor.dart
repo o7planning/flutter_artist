@@ -193,7 +193,7 @@ class _Executor {
     else if (taskUnit is _FormModelSaveFormTaskUnit) {
       await taskUnit.xFormModel.formModel._unitSaveForm(
         thisXFormModel: taskUnit.xFormModel,
-        taskResult: taskUnit.taskResult,
+        taskResult: taskUnit.taskResult as FormSaveResult,
       );
     }
     // FormModel QuickExtraFormInputAction:
@@ -207,7 +207,6 @@ class _Executor {
     else if (taskUnit is _ScalarQueryTaskUnit) {
       await taskUnit.xScalar.scalar._unitQuery(
         thisXScalar: taskUnit.xScalar,
-        taskResult: taskUnit.taskResult as ScalarQueryResult,
       );
     }
     // Scalar Quick Action:

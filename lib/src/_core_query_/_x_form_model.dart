@@ -9,7 +9,7 @@ class _XFormModel {
 
   late final _XBlock xBlock;
 
-  final FormSaveResult _formSaveResult = FormSaveResult();
+  // final FormSaveResult _formSaveResult = FormSaveResult(precheck: null);
 
   int get xShelfId => xShelf.xShelfId;
 

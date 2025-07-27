@@ -9,7 +9,7 @@ class FormSaveResult extends ActionResult {
   AppError? get error => _appError;
   StackTrace? get stackTrace => _stackTrace;
 
-  FormSaveResult({this.precheck});
+  FormSaveResult({required this.precheck});
 
   @override
   bool get success {

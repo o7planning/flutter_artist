@@ -2,14 +2,13 @@ part of '../../flutter_artist.dart';
 
 @_TaskUnitClassAnnotation()
 @_ScalarQueryAnnotation()
-class _ScalarQueryTaskUnit extends _TaskUnit<ScalarQueryResult> {
+class _ScalarQueryTaskUnit extends _TaskUnit {
   _XScalar xScalar;
 
   _ScalarQueryTaskUnit({
     required this.xScalar,
   }) : super(
           taskType: TaskType.scalarQuery,
-          taskResult: ScalarQueryResult(precheck: null),
         );
 
   @override
