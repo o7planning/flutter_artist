@@ -7,6 +7,7 @@ class FormSaveResult extends ActionResult {
   StackTrace? _stackTrace;
 
   AppError? get error => _appError;
+
   StackTrace? get stackTrace => _stackTrace;
 
   FormSaveResult({required this.precheck});

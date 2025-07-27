@@ -871,5 +871,6 @@ class _BlockQuickChildBlockItemsActionAnnotation {
 
 class _RenameAnnotation {
   final String? newName;
+
   const _RenameAnnotation([this.newName]);
 }
