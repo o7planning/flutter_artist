@@ -7,6 +7,7 @@ class BlockQuickCreateItemResult extends ActionResult {
   StackTrace? _stackTrace;
 
   AppError? get error => _appError;
+
   StackTrace? get stackTrace => _stackTrace;
 
   BlockQuickCreateItemResult({this.precheck, StackTrace? stackTrace})

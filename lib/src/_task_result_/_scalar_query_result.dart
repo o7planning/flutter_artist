@@ -8,6 +8,7 @@ class ScalarQueryResult extends ActionResult {
   StackTrace? _stackTrace;
 
   AppError? get error => _appError;
+
   StackTrace? get stackTrace => _stackTrace;
 
   ScalarQueryResult({required ScalarQueryPrecheck? precheck})

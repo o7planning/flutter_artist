@@ -23,8 +23,7 @@ class ItemDeletionResult<ITEM> extends ActionResult {
     required ITEM? candidateItem,
     this.precheck,
     StackTrace? stackTrace,
-  })
-      : _candidateItem = candidateItem,
+  })  : _candidateItem = candidateItem,
         _stackTrace = stackTrace;
 
   @override
