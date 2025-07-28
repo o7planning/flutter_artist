@@ -8,7 +8,7 @@ enum BlockQuickUpdateItemPrecheck implements ChkCodeDetail {
   ),
 
   // Test Cases: [91b].
-  inPendingState(
+  blockInPendingState(
     chkCode: ChkCode.inPendingState,
     message: "Item update is disabled.",
     details: ["The block is in a 'pending' state."],
@@ -43,6 +43,7 @@ enum BlockQuickUpdateItemPrecheck implements ChkCodeDetail {
     message: "Not allow to update the item.",
     details: ["The isAllowUpdateItem() method error."],
   ),
+  // TODO: Not Use?
   noTarget(
     chkCode: ChkCode.noTarget,
     message: "Not allow to update the item.",

@@ -14,19 +14,19 @@ enum BlockItemCreationPrecheck implements ChkCodeDetail {
     details: ["The block has no form."],
   ),
   // Test Cases: [01b]
-  inPendingState(
+  blockInPendingState(
     chkCode: ChkCode.inPendingState,
     message: "New item creation is disabled.",
     details: ["The block is in a 'pending' state."],
   ),
   // Test Cases: [01b]
-  inErrorState(
+  blockInErrorState(
     chkCode: ChkCode.inErrorState,
     message: "New item creation is disabled.",
     details: ["The block is in an 'error' state."],
   ),
   // Test Cases: [01a]
-  inNoneState(
+  blockInNoneState(
     chkCode: ChkCode.inNoneState,
     message: "New item creation is disabled.",
     details: ["The block is in a 'none' state."],

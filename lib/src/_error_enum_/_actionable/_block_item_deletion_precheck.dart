@@ -19,6 +19,9 @@ enum BlockItemDeletionPrecheck implements ChkCodeDetail {
     details: ["The isAllowDeleteItem() method is error."],
   ),
   // Test Cases: [03a].
+  ///
+  /// Try to delete item not in the list.
+  ///
   invalidTarget(
     chkCode: ChkCode.invalidTarget,
     message: "Deletion Ignored",
