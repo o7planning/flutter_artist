@@ -60,7 +60,8 @@ class SortOptionsBar extends StatelessWidget {
     this.transform,
     this.transformAlignment,
     this.clipBehavior = Clip.none,
-  })  : _block = block,
+  })
+      : _block = block,
         decoration = BoxDecoration(
           border: Border.all(color: Colors.grey, width: 0.4),
         );
@@ -100,11 +101,12 @@ class SortOptionsBar extends StatelessWidget {
             ),
             items: criteria
                 .map(
-                  (criterion) => _buildBreadCrumbItem(
+                  (criterion) =>
+                  _buildBreadCrumbItem(
                     itemSortCriteria,
                     criterion,
                   ),
-                )
+            )
                 .toList(),
           ),
         );
@@ -112,10 +114,8 @@ class SortOptionsBar extends StatelessWidget {
     );
   }
 
-  BreadCrumbItem _buildBreadCrumbItem(
-    ItemSortCriteria itemSortCriteria,
-    SortCriterion criterion,
-  ) {
+  BreadCrumbItem _buildBreadCrumbItem(ItemSortCriteria itemSortCriteria,
+      SortCriterion criterion,) {
     return BreadCrumbItem(
       content: DragTarget<SortCriterion>(
         hitTestBehavior: HitTestBehavior.deferToChild,
@@ -135,11 +135,9 @@ class SortOptionsBar extends StatelessWidget {
             force: true,
           );
         },
-        builder: (
-          BuildContext context,
-          List<SortCriterion?> candidateData,
-          List<dynamic> rejectedData,
-        ) {
+        builder: (BuildContext context,
+            List<SortCriterion?> candidateData,
+            List<dynamic> rejectedData,) {
           return Draggable<SortCriterion>(
             data: criterion,
             feedback: _buildDragFeedback(

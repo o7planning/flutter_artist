@@ -216,7 +216,7 @@ class _FlutterArtist {
     await shelf.showActiveUiComponentsDialog();
   }
 
-  Future<dynamic> executeTask({
+  Future<dynamic> _executeTask({
     bool showOverlay = true,
     required Future<dynamic> Function() asyncFunction,
   }) {

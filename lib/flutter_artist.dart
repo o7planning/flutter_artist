@@ -44,23 +44,31 @@ part 'src/_action_/_scalar_load_extra_data_quick_action.dart';
 
 part 'src/_action_/_scalar_quick_action.dart';
 
-part 'src/_action_result_/_action_result.dart';
+part 'src/_task_result_/_action_result.dart';
 
-part 'src/_action_result_/_block_clear_result.dart';
+part 'src/_task_result_/_block_clearance_result.dart';
 
-part 'src/_action_result_/_block_item_creation_result.dart';
+part 'src/_task_result_/_form_model_load_data_result.dart';
 
-part 'src/_action_result_/_block_item_curr_selection_result.dart';
+part 'src/_task_result_/_block_item_creation_result.dart';
 
-part 'src/_action_result_/_block_item_deletion_result.dart';
+part 'src/_task_result_/_block_quick_update_item_result.dart';
 
-part 'src/_action_result_/_block_query_result.dart';
+part 'src/_task_result_/_block_quick_action_result.dart';
 
-part 'src/_action_result_/_form_save_result.dart';
+part 'src/_task_result_/_block_quick_create_item_result.dart';
 
-part 'src/_action_result_/_scalar_query_result.dart';
+part 'src/_task_result_/_block_item_curr_selection_result.dart';
 
-part 'src/_actionable_/_cre_item_actionable.dart';
+part 'src/_task_result_/_block_item_deletion_result.dart';
+
+part 'src/_task_result_/_block_items_deletion_result.dart';
+
+part 'src/_task_result_/_block_query_result.dart';
+
+part 'src/_task_result_/_form_save_result.dart';
+
+part 'src/_task_result_/_scalar_query_result.dart';
 
 part 'src/_adapter_/_flutter_artist_adapter.dart';
 
@@ -436,6 +444,10 @@ part 'src/_error_enum_/_actionable/_block_clearance_precheck.dart';
 
 part 'src/_error_enum_/_actionable/_block_form_enablement_chk.dart';
 
+part 'src/_error_enum_/_actionable/_form_model_load_data_precheck.dart';
+
+part 'src/_error_enum_/_actionable/_block_quick_action_precheck.dart';
+
 part 'src/_error_enum_/_actionable/_block_form_reset_precheck.dart';
 
 part 'src/_error_enum_/_actionable/_block_form_save_precheck.dart';
@@ -448,7 +460,13 @@ part 'src/_error_enum_/_actionable/_block_item_deletion_precheck.dart';
 
 part 'src/_error_enum_/_actionable/_block_item_edit_precheck.dart';
 
+part 'src/_error_enum_/_actionable/_block_quick_update_item_precheck.dart';
+
+part 'src/_error_enum_/_actionable/_block_quick_create_item_precheck.dart';
+
 part 'src/_error_enum_/_actionable/_block_query_precheck.dart';
+
+part 'src/_error_enum_/_actionable/_scalar_query_precheck.dart';
 
 part 'src/_error_enum_/_actionable/_check_allow.dart';
 
@@ -499,6 +517,8 @@ part 'src/_notification_/_notification_engine.dart';
 part 'src/_notification_/_notification_summary.dart';
 
 part 'src/_task_unit_/__task_unit.dart';
+
+part 'src/_task_unit_/__resulted_task_unit.dart';
 
 part 'src/_task_unit_/__task_unit_queue.dart';
 
@@ -850,5 +870,7 @@ class _BlockQuickChildBlockItemsActionAnnotation {
 // ******* Block QuickAction (END) *********************************************
 
 class _RenameAnnotation {
-  const _RenameAnnotation();
+  final String? newName;
+
+  const _RenameAnnotation([this.newName]);
 }

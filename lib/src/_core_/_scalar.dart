@@ -156,7 +156,9 @@ abstract class Scalar<
 
   @_TaskUnitMethodAnnotation()
   @_ScalarQueryAnnotation()
-  Future<ScalarQueryResult> _unitQuery({required _XScalar thisXScalar}) async {
+  Future<void> _unitQuery({
+    required _XScalar thisXScalar,
+  }) async {
     __assertThisXScalar(thisXScalar);
     //
     bool hasActiveUI = this.hasActiveUIComponent();
@@ -171,7 +173,7 @@ abstract class Scalar<
         ">> ${getClassName(this)}._unitQuery - queryState: $queryDataState, forceQuery: ${thisXScalar.needQuery}");
     //
     if (!forceQuery) {
-      return thisXScalar.queryResult;
+      return;
     }
     //
     // this.queryDataState != DataState.ready || thisXScalar.forceQuery
@@ -216,8 +218,8 @@ abstract class Scalar<
         thisXScalar: thisXScalar,
         queryDataState: DataState.error,
       );
-      thisXScalar.queryResult._filterError = true;
-      return thisXScalar.queryResult;
+      thisXScalar.queryResult._setFilterError();
+      return;
     }
     //
     // Ready FilterCriteria:
@@ -241,19 +243,6 @@ abstract class Scalar<
       result.throwIfError();
       //
       value = result.data;
-      //
-      // if (result.error != null) {
-      //   _handleRestError(
-      //     shelf: shelf,
-      //     methodName: "callApiQuery",
-      //     message: result.error!.errorMessage,
-      //     errorDetails: result.error!.errorDetails,
-      //     showSnackBar: true,
-      //   );
-      //   isQueryError = true;
-      // } else {
-      //   value = result.data;
-      // }
     } catch (e, stackTrace) {
       isQueryError = true;
       //
@@ -265,7 +254,7 @@ abstract class Scalar<
       );
       __setScalarErrorInfo(scalarErrorInfo);
       //
-      _handleError(
+      AppError appError = _handleError(
         shelf: shelf,
         methodName: callApiQueryMethod.name,
         // AppError, ApiError or others.
@@ -273,18 +262,22 @@ abstract class Scalar<
         stackTrace: stackTrace,
         showSnackBar: true,
       );
+      //
+      thisXScalar.queryResult._setAppError(
+        appError: appError,
+        stackTrace: appError is ApiError ? null : stackTrace,
+      );
       isQueryError = true;
     } finally {
       __refreshQueryingState(isQuerying: false);
     }
     //
     if (isQueryError) {
-      thisXScalar.queryResult._apiError = true;
       newQueryDataState = DataState.error;
     } else {
       newQueryDataState = DataState.ready;
     }
-    //
+    // TODO: Test Case.
     __setQueryDataWithState(
       thisXScalar: thisXScalar,
       filterCriteria: filterCriteriaOfFilterModel,
@@ -292,7 +285,7 @@ abstract class Scalar<
       value: value,
     );
     //
-    return thisXScalar.queryResult;
+    return;
   }
 
   // ***************************************************************************

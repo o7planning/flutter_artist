@@ -7,7 +7,9 @@ class _ScalarQueryTaskUnit extends _TaskUnit {
 
   _ScalarQueryTaskUnit({
     required this.xScalar,
-  }) : super(taskType: TaskType.scalarQuery);
+  }) : super(
+          taskType: TaskType.scalarQuery,
+        );
 
   @override
   int get xShelfId => xScalar.xShelfId;

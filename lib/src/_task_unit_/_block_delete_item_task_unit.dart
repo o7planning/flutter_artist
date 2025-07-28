@@ -5,13 +5,14 @@ part of '../../flutter_artist.dart';
 @_BlockDeleteCheckedItemsAnnotation()
 @_BlockDeleteCurrentItemAnnotation()
 @_BlockDeleteItemAnnotation()
-class _BlockDeleteItemTaskUnit extends _TaskUnit {
+class _BlockDeleteItemTaskUnit extends _ResultedTaskUnit<ItemDeletionResult> {
   _XBlock xBlock;
-  Object item;
+  final Object item;
 
   _BlockDeleteItemTaskUnit({
     required this.xBlock,
     required this.item,
+    required super.taskResult,
   }) : super(taskType: TaskType.blockDeleteItem);
 
   @override

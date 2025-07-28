@@ -277,7 +277,10 @@ abstract class FormModel<
 
   @_TaskUnitMethodAnnotation()
   @_FormModelLoadFormAnnotation()
-  Future<bool> _unitLoadForm({required _XFormModel thisXFormModel}) async {
+  Future<bool> _unitLoadFormData({
+    required _XFormModel thisXFormModel,
+    required FormModelLoadDataResult taskResult,
+  }) async {
     __assertThisXFormModel(thisXFormModel);
     //
     final bool forceReloadForm;
@@ -300,7 +303,7 @@ abstract class FormModel<
     //
     EXTRA_FORM_INPUT? extraFormInput =
         thisXFormModel.extraFormInput as EXTRA_FORM_INPUT?;
-    //
+    // TODO: Bắt lỗi cho vào "taskResult" ???????
     return await _startNewFormActivity(
       extraFormInput: extraFormInput,
       activityType: FormActivityType.itemFirstLoad,
@@ -330,7 +333,10 @@ abstract class FormModel<
 
   @_TaskUnitMethodAnnotation()
   @_FormModelSaveFormAnnotation()
-  Future<bool> _unitSaveForm({required _XFormModel thisXFormModel}) async {
+  Future<bool> _unitSaveForm({
+    required _XFormModel thisXFormModel,
+    required FormSaveResult taskResult,
+  }) async {
     FILTER_CRITERIA? blockCurrentFilterCriteria = block.filterCriteria;
     if (blockCurrentFilterCriteria == null) {
       throw _FatalAppError(errorMessage: "FilterCriteria is null");
@@ -384,13 +390,19 @@ abstract class FormModel<
     } catch (e, stackTrace) {
       saveError = true;
       //
-      _handleError(
+      AppError appError = _handleError(
         shelf: shelf,
         methodName: calledMethodName,
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
       );
+      //
+      taskResult._setAppError(
+        appError: appError,
+        stackTrace: appError is ApiError ? null : stackTrace,
+      );
+      //
       return false;
     } finally {
       block._refreshSavingState(isSaving: false);
@@ -404,12 +416,17 @@ abstract class FormModel<
         result: result,
       );
     } catch (e, stackTrace) {
-      _handleError(
+      AppError appError = _handleError(
         shelf: shelf,
         methodName: calledMethodName,
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
+      );
+      //
+      taskResult._setAppError(
+        appError: appError,
+        stackTrace: appError is ApiError ? null : stackTrace,
       );
       //
       return false;
@@ -1707,7 +1724,7 @@ abstract class FormModel<
     //
     _XBlock xBlock = xShelf.findXBlockByName(this.block.name)!;
     _XFormModel xFormModel = xBlock.xFormModel!;
-    _TaskUnit taskUnit = _FormModelSaveFormTaskUnit(
+    _ResultedTaskUnit taskUnit = _FormModelSaveFormTaskUnit(
       xFormModel: xFormModel,
     );
     //
@@ -1715,7 +1732,7 @@ abstract class FormModel<
     //
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
-    return xFormModel._formSaveResult;
+    return taskUnit.taskResult;
   }
 
   // ***************************************************************************

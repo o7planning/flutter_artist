@@ -2,14 +2,18 @@ part of '../../flutter_artist.dart';
 
 @_TaskUnitClassAnnotation()
 @_BlockQuickUpdateItemActionAnnotation()
-class _BlockQuickUpdateItemTaskUnit extends _TaskUnit {
+class _BlockQuickUpdateItemTaskUnit
+    extends _ResultedTaskUnit<BlockQuickUpdateItemResult> {
   _XBlock xBlock;
   BlockQuickUpdateItemAction action;
 
   _BlockQuickUpdateItemTaskUnit({
     required this.xBlock,
     required this.action,
-  }) : super(taskType: TaskType.blockQuickUpdateItem);
+  }) : super(
+          taskType: TaskType.blockQuickUpdateItem,
+          taskResult: BlockQuickUpdateItemResult(),
+        );
 
   @override
   int get xShelfId => xBlock.xShelfId;
