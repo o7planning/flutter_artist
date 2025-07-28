@@ -3990,7 +3990,7 @@ abstract class Block<
   @_BlockDeleteItemAnnotation()
   Future<ItemDeletionResult<ITEM>> deleteItem({
     required ITEM item,
-    bool ignoreIfItemNotInList = true,
+    bool errorIfItemNotInList = true,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -4005,7 +4005,7 @@ abstract class Block<
     Actionable<BlockItemDeletionPrecheck> actionable = __canDeleteItem(
       checkBusy: true,
       item: item,
-      ignoreIfItemNotInList: ignoreIfItemNotInList,
+      errorIfItemNotInList: errorIfItemNotInList,
       checkAllow: true,
     );
     if (!actionable.yes) {
@@ -4365,7 +4365,7 @@ abstract class Block<
       checkBusy: checkBusy,
       item: currentItem!,
       checkAllow: checkAllow,
-      ignoreIfItemNotInList: true,
+      errorIfItemNotInList: true,
     );
   }
 
@@ -4407,7 +4407,7 @@ abstract class Block<
   @_PrecheckPrivateMethod()
   Actionable<BlockItemDeletionPrecheck> __canDeleteItem({
     required bool checkBusy,
-    required bool ignoreIfItemNotInList,
+    required bool errorIfItemNotInList,
     required ITEM item,
     required bool checkAllow,
   }) {
@@ -4417,7 +4417,7 @@ abstract class Block<
       );
     }
     //
-    if (ignoreIfItemNotInList) {
+    if (errorIfItemNotInList) {
       ITEM? it = findItemSameIdWith(item: item);
       if (it == null) {
         return Actionable<BlockItemDeletionPrecheck>.no(
@@ -4461,15 +4461,15 @@ abstract class Block<
     switch (queryDataState) {
       case DataState.pending:
         return Actionable<BlockQuickActionPrecheck>.no(
-          errCode: BlockQuickActionPrecheck.inPendingState,
+          errCode: BlockQuickActionPrecheck.blockInPendingState,
         );
       case DataState.error:
         return Actionable<BlockQuickActionPrecheck>.no(
-          errCode: BlockQuickActionPrecheck.inErrorState,
+          errCode: BlockQuickActionPrecheck.blockInErrorState,
         );
       case DataState.none:
         return Actionable<BlockQuickActionPrecheck>.no(
-          errCode: BlockQuickActionPrecheck.inNoneState,
+          errCode: BlockQuickActionPrecheck.blockInNoneState,
         );
       case DataState.ready:
         break;
@@ -4502,15 +4502,15 @@ abstract class Block<
     switch (queryDataState) {
       case DataState.pending:
         return Actionable<BlockItemCreationPrecheck>.no(
-          errCode: BlockItemCreationPrecheck.inPendingState,
+          errCode: BlockItemCreationPrecheck.blockInPendingState,
         );
       case DataState.error:
         return Actionable<BlockItemCreationPrecheck>.no(
-          errCode: BlockItemCreationPrecheck.inErrorState,
+          errCode: BlockItemCreationPrecheck.blockInErrorState,
         );
       case DataState.none:
         return Actionable<BlockItemCreationPrecheck>.no(
-          errCode: BlockItemCreationPrecheck.inNoneState,
+          errCode: BlockItemCreationPrecheck.blockInNoneState,
         );
       case DataState.ready:
         break;
@@ -4623,17 +4623,10 @@ abstract class Block<
         errCode: BlockQuickUpdateItemPrecheck.busy,
       );
     }
-    ITEM? internalItem = findItemSameIdWith(item: item);
-    // Test Cases: [90b].
-    if (internalItem == null) {
-      return Actionable<BlockQuickUpdateItemPrecheck>.no(
-        errCode: BlockQuickUpdateItemPrecheck.invalidTarget,
-      );
-    }
     switch (queryDataState) {
       case DataState.pending:
         return Actionable<BlockQuickUpdateItemPrecheck>.no(
-          errCode: BlockQuickUpdateItemPrecheck.inPendingState,
+          errCode: BlockQuickUpdateItemPrecheck.blockInPendingState,
         );
       case DataState.error:
         return Actionable<BlockQuickUpdateItemPrecheck>.no(
@@ -4645,6 +4638,15 @@ abstract class Block<
         );
       case DataState.ready:
         break;
+    }
+    //
+
+    ITEM? internalItem = findItemSameIdWith(item: item);
+    // Test Cases: [90b].
+    if (internalItem == null) {
+      return Actionable<BlockQuickUpdateItemPrecheck>.no(
+        errCode: BlockQuickUpdateItemPrecheck.invalidTarget,
+      );
     }
     //
     if (checkAllow) {
@@ -4683,15 +4685,15 @@ abstract class Block<
     switch (queryDataState) {
       case DataState.pending:
         return Actionable<BlockQuickCreateItemPrecheck>.no(
-          errCode: BlockQuickCreateItemPrecheck.inPendingState,
+          errCode: BlockQuickCreateItemPrecheck.blockInPendingState,
         );
       case DataState.error:
         return Actionable<BlockQuickCreateItemPrecheck>.no(
-          errCode: BlockQuickCreateItemPrecheck.inErrorState,
+          errCode: BlockQuickCreateItemPrecheck.blockInErrorState,
         );
       case DataState.none:
         return Actionable<BlockQuickCreateItemPrecheck>.no(
-          errCode: BlockQuickCreateItemPrecheck.inNoneState,
+          errCode: BlockQuickCreateItemPrecheck.blockInNoneState,
         );
       case DataState.ready:
         break;
@@ -5022,7 +5024,7 @@ abstract class Block<
     return __canDeleteItem(
       checkBusy: true,
       item: item,
-      ignoreIfItemNotInList: true,
+      errorIfItemNotInList: true,
       checkAllow: true,
     );
   }
