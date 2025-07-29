@@ -2161,7 +2161,7 @@ abstract class Block<
   @_BlockQuickActionAnnotation()
   Future<bool> _unitQuickAction<DATA extends Object>({
     required _XBlock thisXBlock,
-    required BlockQuickAction<DATA> action,
+    required BlockQuickAction action,
     required BlockQuickActionResult taskResult,
   }) async {
     __assertThisXBlock(thisXBlock);
@@ -3272,12 +3272,11 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_BlockQuickActionAnnotation()
-  Future<BlockQuickActionResult> executeQuickAction<DATA extends Object>({
+  Future<BlockQuickActionResult> executeQuickAction({
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
     required ActionConfirmationType actionConfirmationType,
-    required BlockQuickAction<DATA> action,
-    required AfterBlockQuickAction afterQuickAction,
+    required BlockQuickAction action,
     required Function(BuildContext context)? navigate,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -3329,7 +3328,7 @@ abstract class Block<
     }
     //
     List<_BlockOpt> forceQueryBlockOpts = [];
-    switch (afterQuickAction) {
+    switch (action.config.afterQuickAction) {
       case AfterBlockQuickAction.none:
         forceQueryBlockOpts = [];
       case AfterBlockQuickAction.refreshCurrentItem:

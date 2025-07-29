@@ -5,7 +5,7 @@ part of '../../flutter_artist.dart';
 class _BlockQuickActionTaskUnit<DATA extends Object>
     extends _ResultedTaskUnit<BlockQuickActionResult> {
   final _XBlock xBlock;
-  final BlockQuickAction<DATA> action;
+  final BlockQuickAction action;
 
   _BlockQuickActionTaskUnit({
     required this.xBlock,

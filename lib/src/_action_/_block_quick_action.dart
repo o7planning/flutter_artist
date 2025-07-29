@@ -1,13 +1,16 @@
 part of '../../flutter_artist.dart';
 
-abstract class BlockQuickAction<DATA extends Object> extends BaseAction {
-  final BlockQuickActionConfig config;
+abstract class BlockQuickAction  extends BaseAction {
+  late final BlockQuickActionConfig config;
 
-  const BlockQuickAction({
+  BlockQuickAction({
     required super.needToConfirm,
     required super.actionInfo,
-    required this.config,
-  });
+  }) {
+    config = initConfig();
+  }
+
+  BlockQuickActionConfig initConfig();
 
   Future<ApiResult<void>> callApi();
 }
@@ -17,7 +20,7 @@ class BlockQuickActionConfig {
   final List<Type> affectedItemTypes;
 
   const BlockQuickActionConfig({
-    this.affectedItemTypes = const [],
+    required  this.affectedItemTypes  ,
     required this.afterQuickAction,
   });
 }
