@@ -1,4 +1,4 @@
-export 'src/_fa_core.dart';
+export 'src/core/_fa_core.dart';
 export 'src/action/base_action.dart';
 export 'src/action/block_quick_action.dart';
 export 'src/action/block_quick_child_block_items_action.dart';

@@ -1,0 +1,71 @@
+part of '../_fa_core.dart';
+
+class ScalarControlOutlinedButton extends ScalarControl {
+  ScalarControlOutlinedButton({
+    super.key,
+    required super.currentStackTrace,
+    required super.ownerClassInstance,
+    required super.scalar,
+    required super.actionType,
+    super.navigate,
+    //
+    ValueChanged<bool>? onHover,
+    ValueChanged<bool>? onFocusChange,
+    ButtonStyle? style,
+    FocusNode? focusNode,
+    bool autofocus = false,
+    Clip? clipBehavior,
+    WidgetStatesController? statesController,
+    Widget? child,
+  }) : super(
+          build: (VoidCallback? onPressed) {
+            return OutlinedButton(
+              onPressed: onPressed,
+              onHover: onHover,
+              onFocusChange: onFocusChange,
+              style: style,
+              focusNode: focusNode,
+              autofocus: autofocus,
+              clipBehavior: clipBehavior,
+              statesController: statesController,
+              child: child,
+            );
+          },
+        );
+
+  ScalarControlOutlinedButton.icon({
+    super.key,
+    required super.currentStackTrace,
+    required super.ownerClassInstance,
+    required super.scalar,
+    required super.actionType,
+    super.navigate,
+    //
+    ValueChanged<bool>? onHover,
+    ValueChanged<bool>? onFocusChange,
+    ButtonStyle? style,
+    FocusNode? focusNode,
+    bool autofocus = false,
+    Clip? clipBehavior,
+    WidgetStatesController? statesController,
+    required Widget label,
+    Widget? icon,
+    IconAlignment iconAlignment = IconAlignment.start,
+  }) : super(
+          build: (VoidCallback? onPressed) {
+            return OutlinedButton.icon(
+              onPressed: onPressed,
+              onHover: onHover,
+              onFocusChange: onFocusChange,
+              style: style,
+              focusNode: focusNode,
+              autofocus: autofocus,
+              clipBehavior: clipBehavior,
+              statesController: statesController,
+              iconAlignment: iconAlignment,
+              label: label,
+              icon: icon,
+            );
+          },
+        );
+}
