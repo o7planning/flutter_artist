@@ -1,4 +1,8 @@
-part of '../_fa_core.dart';
+
+
+import 'package:flutter_artist_core/flutter_artist_core.dart';
+
+import '../../flutter_artist.dart';
 
 interface class IGlobalDataAdapter<G extends IGlobalData> {
   Future<G> loadFromServer({

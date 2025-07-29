@@ -1,4 +1,6 @@
-part of '../_fa_core.dart';
+
+
+import 'package:flutter/material.dart';
 
 ///
 ///

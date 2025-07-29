@@ -1,4 +1,4 @@
-part of '../_fa_core.dart';
+import 'package:flutter/material.dart';
 
 interface class IFlutterArtistAdapter {
   Future<dynamic> showOverlay({

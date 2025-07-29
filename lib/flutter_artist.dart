@@ -1,6 +1,25 @@
 export 'src/_fa_core.dart';
 export 'src/action/block_quick_item_replacement_action.dart';
 export 'src/action/block_quick_item_update_action.dart';
+
+
+
+
+
+export 'src/adapter/_flutter_artist_adapter.dart';
+
+export 'src/adapter/_global_data_adapter.dart';
+
+export 'src/adapter/_locale_adapter.dart';
+
+export 'src/adapter/_logged_in_user_adapter.dart';
+
+export 'src/adapter/_notification_adapter.dart';
+
+
+export 'src/global/_notification_listener.dart';
+export 'src/global/_notification_summary.dart';
+export 'src/global/_global_data.dart';
 export 'src/enums/_action_confirmation_type.dart';
 export 'src/enums/_action_result_state.dart';
 export 'src/enums/_activity_hidden_behavior.dart';

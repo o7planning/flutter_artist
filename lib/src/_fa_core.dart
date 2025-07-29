@@ -56,6 +56,11 @@ import 'action/block_quick_create_multi_items_action.dart';
 import 'action/block_quick_item_update_action.dart';
 import 'action/scalar_load_extra_data_quick_action.dart';
 import 'action/scalar_quick_action.dart';
+import 'adapter/_flutter_artist_adapter.dart';
+import 'adapter/_global_data_adapter.dart';
+import 'adapter/_locale_adapter.dart';
+import 'adapter/_logged_in_user_adapter.dart';
+import 'adapter/_notification_adapter.dart';
 import 'annotation/annotation.dart';
 import 'enums/_action_confirmation_type.dart';
 import 'enums/_action_result_state.dart';
@@ -117,16 +122,6 @@ part '_task_result_/_block_query_result.dart';
 part '_task_result_/_form_save_result.dart';
 
 part '_task_result_/_scalar_query_result.dart';
-
-part '_adapter_/_flutter_artist_adapter.dart';
-
-part '_adapter_/_global_data_adapter.dart';
-
-part '_adapter_/_locale_adapter.dart';
-
-part '_adapter_/_logged_in_user_adapter.dart';
-
-part '_adapter_/_notification_adapter.dart';
 
 part '_code_flow_/__code_flow_const.dart';
 
@@ -204,13 +199,9 @@ part '_core_/_form_model.dart';
 
 part '_core_/_form_model_config.dart';
 
-part '_core_/_global_data.dart';
-
 part '_core_/_item_sort_criteria.dart';
 
 part '_core_/_logging.dart';
-
-part '_core_/_notification_listener.dart';
 
 part '_core_/_scalar.dart';
 
@@ -442,11 +433,7 @@ part '_login_/_login_activity_base.dart';
 
 part '_login_/_simple_login_view.dart';
 
-part '_notification_/_notification.dart';
-
 part '_notification_/_notification_engine.dart';
-
-part '_notification_/_notification_summary.dart';
 
 part '_task_unit_/__task_unit.dart';
 
