@@ -1,4 +1,7 @@
-part of '../_fa_core.dart';
+import 'package:flutter_artist_core/flutter_artist_core.dart';
+
+import '../enums/_block_error_method.dart';
+import '../enums/_data_state.dart';
 
 class BlockErrorInfo {
   final DataState queryDataState;

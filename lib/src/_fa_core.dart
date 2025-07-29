@@ -15,23 +15,14 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:flutter_artist/src/precheck/__chk_code_detail.dart';
-import 'package:flutter_artist/src/precheck/_block_clearance_precheck.dart';
-import 'package:flutter_artist/src/precheck/_block_form_enablement_chk.dart';
-import 'package:flutter_artist/src/precheck/_block_form_reset_precheck.dart';
-import 'package:flutter_artist/src/precheck/_block_form_save_precheck.dart';
-import 'package:flutter_artist/src/precheck/_block_item_creation_precheck.dart';
-import 'package:flutter_artist/src/precheck/_block_item_curr_selection_precheck.dart';
-import 'package:flutter_artist/src/precheck/_block_item_deletion_precheck.dart';
-import 'package:flutter_artist/src/precheck/_block_item_edit_precheck.dart';
-import 'package:flutter_artist/src/precheck/_block_query_precheck.dart';
-import 'package:flutter_artist/src/precheck/_block_quick_action_precheck.dart';
-import 'package:flutter_artist/src/precheck/_block_quick_create_item_precheck.dart';
-import 'package:flutter_artist/src/precheck/_block_quick_update_item_precheck.dart';
+import 'package:flutter_artist/src/precheck/block_quick_action_precheck.dart';
+import 'package:flutter_artist/src/precheck/block_quick_create_item_precheck.dart';
+import 'package:flutter_artist/src/precheck/block_quick_update_item_precheck.dart';
 import 'package:flutter_artist/src/precheck/_check_allow.dart';
-import 'package:flutter_artist/src/precheck/_enter_form_fields_precheck.dart';
-import 'package:flutter_artist/src/precheck/_form_model_load_data_precheck.dart';
-import 'package:flutter_artist/src/precheck/_scalar_query_precheck.dart';
-import 'package:flutter_artist/src/precheck/_show_form_info_precheck.dart';
+import 'package:flutter_artist/src/precheck/enter_form_fields_precheck.dart';
+import 'package:flutter_artist/src/precheck/form_model_load_data_precheck.dart';
+import 'package:flutter_artist/src/precheck/scalar_query_precheck.dart';
+import 'package:flutter_artist/src/precheck/show_form_info_precheck.dart';
 import 'package:flutter_artist/src/typedef/custom_confirmation.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
     as dialogs;
@@ -95,9 +86,17 @@ import 'enums/_show_mode.dart';
 import 'enums/_sorting_direction.dart';
 import 'enums/_task_type.dart';
 import 'enums/after_quick_action.dart';
+import 'error/_app_error_info.dart';
+import 'error/_block_error_info.dart';
+import 'error/_duplicate_filter_criterion_error.dart';
+import 'error/_duplicate_form_prop_error.dart';
+import 'error/_fatal_app_error.dart';
+import 'error/_form_error_info.dart';
+import 'error/_form_temp_error.dart';
+import 'error/_scalar_error_info.dart';
 import 'icon/icon_constants.dart';
 
-part '_task_result_/_action_result.dart';
+part '_task_result_/_task_result.dart';
 
 part '_task_result_/_block_clearance_result.dart';
 
@@ -382,22 +381,6 @@ part '_dialog_/_simple_error_viewer_dialog.dart';
 part '_dialog_/_storage_dialog.dart';
 
 part '_dialog_/_ui_components_dialog.dart';
-
-part '_error_/_block_error_info.dart';
-
-part '_error_/_app_error_info.dart';
-
-part '_error_/_duplicate_filter_criterion_error.dart';
-
-part '_error_/_duplicate_form_prop_error.dart';
-
-part '_error_/_fatal_app_error.dart';
-
-part '_error_/_form_error_info.dart';
-
-part '_error_/_form_temp_error.dart';
-
-part '_error_/_scalar_error_info.dart';
 
 part '_fa_.dart';
 

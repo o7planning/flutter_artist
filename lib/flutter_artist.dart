@@ -1,8 +1,4 @@
 export 'src/_fa_core.dart';
-export 'src/action/block_quick_item_replacement_action.dart';
-export 'src/action/block_quick_item_update_action.dart';
-
-
 export 'src/action/base_action.dart';
 export 'src/action/block_quick_action.dart';
 export 'src/action/block_quick_child_block_items_action.dart';
@@ -12,41 +8,11 @@ export 'src/action/block_quick_item_replacement_action.dart';
 export 'src/action/block_quick_item_update_action.dart';
 export 'src/action/scalar_load_extra_data_quick_action.dart';
 export 'src/action/scalar_quick_action.dart';
-export 'src/global/_notification.dart';
-export 'src/precheck/__chk_code.dart';
-export 'src/precheck/__chk_code_detail.dart';
-export 'src/precheck/_block_clearance_precheck.dart';
-export 'src/precheck/_block_form_enablement_chk.dart';
-export 'src/precheck/_block_form_reset_precheck.dart';
-export 'src/precheck/_block_form_save_precheck.dart';
-export 'src/precheck/_block_form_save_precheck.dart';
-export 'src/precheck/_block_item_creation_precheck.dart';
-export 'src/precheck/_block_item_curr_selection_precheck.dart';
-export 'src/precheck/_block_item_deletion_precheck.dart';
-export 'src/precheck/_block_item_edit_precheck.dart';
-export 'src/precheck/_block_query_precheck.dart';
-export 'src/precheck/_block_quick_action_precheck.dart';
-export 'src/precheck/_block_quick_create_item_precheck.dart';
-export 'src/precheck/_block_quick_update_item_precheck.dart';
-export 'src/precheck/_check_allow.dart';
-export 'src/precheck/_enter_form_fields_precheck.dart';
-export 'src/precheck/_form_model_load_data_precheck.dart';
-export 'src/precheck/_scalar_query_precheck.dart';
-export 'src/precheck/_show_form_info_precheck.dart';
-
 export 'src/adapter/_flutter_artist_adapter.dart';
-
 export 'src/adapter/_global_data_adapter.dart';
-
 export 'src/adapter/_locale_adapter.dart';
-
 export 'src/adapter/_logged_in_user_adapter.dart';
-
 export 'src/adapter/_notification_adapter.dart';
-
-export 'src/global/_notification_listener.dart';
-export 'src/global/_notification_summary.dart';
-export 'src/global/_global_data.dart';
 export 'src/enums/_action_confirmation_type.dart';
 export 'src/enums/_action_result_state.dart';
 export 'src/enums/_activity_hidden_behavior.dart';
@@ -84,4 +50,27 @@ export 'src/enums/_sort_rule_side.dart';
 export 'src/enums/_sorting_direction.dart';
 export 'src/enums/_task_type.dart';
 export 'src/enums/after_quick_action.dart';
+export 'src/global/_global_data.dart';
+export 'src/global/_notification.dart';
+export 'src/global/_notification_listener.dart';
+export 'src/global/_notification_summary.dart';
+export 'src/precheck/__chk_code.dart';
+export 'src/precheck/__chk_code_detail.dart';
+export 'src/precheck/_check_allow.dart';
+export 'src/precheck/block_clearance_precheck.dart';
+export 'src/precheck/block_form_enablement_chk.dart';
+export 'src/precheck/block_form_reset_precheck.dart';
+export 'src/precheck/block_form_save_precheck.dart';
+export 'src/precheck/block_item_creation_precheck.dart';
+export 'src/precheck/block_item_curr_selection_precheck.dart';
+export 'src/precheck/block_item_deletion_precheck.dart';
+export 'src/precheck/block_item_edit_precheck.dart';
+export 'src/precheck/block_query_precheck.dart';
+export 'src/precheck/block_quick_action_precheck.dart';
+export 'src/precheck/block_quick_create_item_precheck.dart';
+export 'src/precheck/block_quick_update_item_precheck.dart';
+export 'src/precheck/enter_form_fields_precheck.dart';
+export 'src/precheck/form_model_load_data_precheck.dart';
+export 'src/precheck/scalar_query_precheck.dart';
+export 'src/precheck/show_form_info_precheck.dart';
 export 'src/typedef/custom_confirmation.dart';

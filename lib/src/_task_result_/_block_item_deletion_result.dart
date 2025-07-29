@@ -1,6 +1,6 @@
 part of '../_fa_core.dart';
 
-class ItemDeletionResult<ITEM> extends ActionResult<BlockItemDeletionPrecheck> {
+class ItemDeletionResult<ITEM> extends TaskResult<BlockItemDeletionPrecheck> {
   ITEM? _candidateItem;
   ITEM? _deletedItem;
   ITEM? _failedItem;

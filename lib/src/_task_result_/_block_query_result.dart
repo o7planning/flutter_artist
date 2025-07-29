@@ -1,6 +1,6 @@
 part of '../_fa_core.dart';
 
-class BlockQueryResult extends ActionResult<BlockQueryPrecheck> {
+class BlockQueryResult extends TaskResult<BlockQueryPrecheck> {
   BlockQueryResult._();
 
   BlockQueryResult._queryBlockedTemporarily()

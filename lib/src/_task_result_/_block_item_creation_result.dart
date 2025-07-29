@@ -1,8 +1,7 @@
 part of '../_fa_core.dart';
 
 @RenameAnnotation()
-class PrepareItemCreationResult
-    extends ActionResult<BlockItemCreationPrecheck> {
+class PrepareItemCreationResult extends TaskResult<BlockItemCreationPrecheck> {
   PrepareItemCreationResult({super.precheck, super.stackTrace});
 
   @override

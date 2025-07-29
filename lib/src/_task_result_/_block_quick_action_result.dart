@@ -1,6 +1,6 @@
 part of '../_fa_core.dart';
 
-class BlockQuickActionResult extends ActionResult<BlockQuickActionPrecheck> {
+class BlockQuickActionResult extends TaskResult<BlockQuickActionPrecheck> {
   BlockQuickActionResult({super.precheck, super.stackTrace});
 
   @override

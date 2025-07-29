@@ -2,7 +2,7 @@ part of '../_fa_core.dart';
 
 @RenameAnnotation()
 class BlockQuickCreateItemResult
-    extends ActionResult<BlockQuickCreateItemPrecheck> {
+    extends TaskResult<BlockQuickCreateItemPrecheck> {
   BlockQuickCreateItemResult({super.precheck, super.stackTrace});
 
   @override

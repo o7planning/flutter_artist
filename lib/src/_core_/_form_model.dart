@@ -339,7 +339,7 @@ abstract class FormModel<
   }) async {
     FILTER_CRITERIA? blockCurrentFilterCriteria = block.filterCriteria;
     if (blockCurrentFilterCriteria == null) {
-      throw _FatalAppError(errorMessage: "FilterCriteria is null");
+      throw FatalAppError(errorMessage: "FilterCriteria is null");
     }
     //
     // No need to check again?
@@ -440,7 +440,7 @@ abstract class FormModel<
     try {
       _formPropsStructure = registerPropsStructure();
       _formPropsStructure.formModel = this;
-    } on _DuplicateFormPropError catch (e) {
+    } on DuplicateFormPropError catch (e) {
       String message =
           "Duplicate prop '${e.propName}' in ${getClassName(this)}";
       throw _createFatalAppError(message);
@@ -656,7 +656,7 @@ abstract class FormModel<
         //
         // Load OptProp Data and set default and selected.
         //
-        // May throw ApiError or _FormTempError.
+        // May throw ApiError or FormTempError.
         //
         await _loadMultiOptPropDataCascade(
           blockCurrentFilterCriteria: blockCurrentFilterCriteria,
@@ -670,7 +670,7 @@ abstract class FormModel<
       }
     } catch (e, stackTrace) {
       final FormErrorInfo formErrorInfo;
-      if (e is _FormTempError) {
+      if (e is FormTempError) {
         formErrorInfo = FormErrorInfo(
           activityType: activityType,
           propName: e.propName,
@@ -951,7 +951,7 @@ abstract class FormModel<
           multiOptPropName: multiOptPropName,
         );
       } catch (e, stackTrace) {
-        throw _FormTempError(
+        throw FormTempError(
           propName: multiOptPropName,
           formErrorMethod: FormErrorMethod.callApiLoadMultiOptPropXData,
           error: e, // May be AppError, ApiError or others.
@@ -977,7 +977,7 @@ abstract class FormModel<
       if (activityType == FormActivityType.itemFirstLoad) {
         if (currentItemDetail == null) {
           if (extraFormInput != null) {
-            // May throw _FormTempError.
+            // May throw FormTempError.
             initialValueWrap = __getMultiOptPropValueFromExtraFormInput(
               extraFormInput: extraFormInput,
               multiOptPropXData: tempMultiOptPropXData,
@@ -987,7 +987,7 @@ abstract class FormModel<
             // TODO-XXX Test Case.
             if (initialValueWrap == null) {
               if (!_defaultValueInitiated) {
-                // May throw _FormTempError.
+                // May throw FormTempError.
                 initialValueWrap = __specifyDefaultMultiOptPropValue(
                   multiOptPropName: multiOptPropName,
                   multiOptPropXData: tempMultiOptPropXData,
@@ -997,7 +997,7 @@ abstract class FormModel<
             }
           } else {
             if (!_defaultValueInitiated) {
-              // May throw _FormTempError.
+              // May throw FormTempError.
               initialValueWrap = __specifyDefaultMultiOptPropValue(
                 multiOptPropName: multiOptPropName,
                 multiOptPropXData: tempMultiOptPropXData,
@@ -1008,7 +1008,7 @@ abstract class FormModel<
         }
         // currentItemDetail != null
         else {
-          // May throw _FormTempError.
+          // May throw FormTempError.
           initialValueWrap = __getMultiOptPropValueFromItemDetail(
             itemDetail: currentItemDetail,
             multiOptPropXData: tempMultiOptPropXData,
@@ -1020,7 +1020,7 @@ abstract class FormModel<
       // Auto Enter Form Fields:
       else if (activityType == FormActivityType.autoEnterFormFields) {
         if (extraFormInput != null) {
-          // May throw _FormTempError.
+          // May throw FormTempError.
           initialValueWrap = __getMultiOptPropValueFromExtraFormInput(
             extraFormInput: extraFormInput,
             multiOptPropXData: tempMultiOptPropXData,
@@ -1236,7 +1236,7 @@ abstract class FormModel<
         ),
       );
     } catch (e, stackTrace) {
-      throw _FormTempError(
+      throw FormTempError(
         propName: multiOptPropName,
         formErrorMethod: FormErrorMethod.specifyDefaultMultiOptPropValue,
         error: e,
@@ -1294,7 +1294,7 @@ abstract class FormModel<
       }
       return valueWrap;
     } catch (e, stackTrace) {
-      throw _FormTempError(
+      throw FormTempError(
         propName: multiOptPropName,
         formErrorMethod: FormErrorMethod.getMultiOptPropValueFromItemDetail,
         error: e,
@@ -1338,7 +1338,7 @@ abstract class FormModel<
         ),
       );
     } catch (e, stackTrace) {
-      throw _FormTempError(
+      throw FormTempError(
         propName: multiOptPropName,
         formErrorMethod: FormErrorMethod.getMultiOptPropValueFromExtraFormInput,
         error: e,

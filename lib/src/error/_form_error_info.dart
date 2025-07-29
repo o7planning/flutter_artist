@@ -1,14 +1,19 @@
-part of '../_fa_core.dart';
+import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-class ScalarErrorInfo {
-  final DataState queryDataState;
-  final ScalarErrorMethod scalarErrorMethod;
+import '../enums/_form_activity_type.dart';
+import '../enums/_form_error_method.dart';
+
+class FormErrorInfo {
+  final FormActivityType activityType;
+  final String? propName;
+  final FormErrorMethod formErrorMethod;
   final AppError error;
   final StackTrace errorStackTrace;
 
-  ScalarErrorInfo({
-    required this.queryDataState,
-    required this.scalarErrorMethod,
+  FormErrorInfo({
+    required this.activityType,
+    required this.propName,
+    required this.formErrorMethod,
     required Object error,
     required this.errorStackTrace,
   }) : error = ErrorUtils.toAppError(error);
@@ -18,7 +23,7 @@ class ScalarErrorInfo {
   }
 
   String get methodName {
-    return scalarErrorMethod.name;
+    return formErrorMethod.name;
   }
 
   ErrorInfo toErrorInfo() {

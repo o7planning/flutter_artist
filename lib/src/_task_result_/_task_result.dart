@@ -1,6 +1,6 @@
 part of '../_fa_core.dart';
 
-abstract class ActionResult<PRECHECK> {
+abstract class TaskResult<PRECHECK> {
   PRECHECK? _precheck;
   AppError? _appError;
   StackTrace? _stackTrace;
@@ -11,7 +11,7 @@ abstract class ActionResult<PRECHECK> {
 
   StackTrace? get stackTrace => _stackTrace;
 
-  ActionResult({
+  TaskResult({
     PRECHECK? precheck,
     StackTrace? stackTrace,
   })  : _precheck = precheck,

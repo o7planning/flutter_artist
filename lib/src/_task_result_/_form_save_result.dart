@@ -1,6 +1,6 @@
 part of '../_fa_core.dart';
 
-class FormSaveResult extends ActionResult<BlockFormSavePrecheck> {
+class FormSaveResult extends TaskResult<BlockFormSavePrecheck> {
   FormSaveResult({required super.precheck});
 
   @override

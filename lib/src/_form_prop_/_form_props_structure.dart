@@ -40,7 +40,7 @@ class FormPropsStructure {
     }
     for (SimpleProp sp in simpleProps) {
       if (_allPropMap.containsKey(sp.propName)) {
-        throw _DuplicateFormPropError(
+        throw DuplicateFormPropError(
           propName: sp.propName,
         );
       }
@@ -51,7 +51,7 @@ class FormPropsStructure {
     }
     for (CalculatedProp cp in calculatedProps) {
       if (_allPropMap.containsKey(cp.propName)) {
-        throw _DuplicateFormPropError(
+        throw DuplicateFormPropError(
           propName: cp.propName,
         );
       }
@@ -73,7 +73,7 @@ class FormPropsStructure {
     optProp._structure = this;
     //
     if (_allPropMap.containsKey(optProp.propName)) {
-      throw _DuplicateFormPropError(
+      throw DuplicateFormPropError(
         propName: optProp.propName,
       );
     }

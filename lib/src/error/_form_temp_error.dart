@@ -1,12 +1,14 @@
-part of '../_fa_core.dart';
+import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-class _FormTempError {
+import '../enums/_form_error_method.dart';
+
+class FormTempError {
   final FormErrorMethod formErrorMethod;
   final AppError error;
   final StackTrace stackTrace;
   final String? propName;
 
-  _FormTempError({
+  FormTempError({
     required this.propName,
     required this.formErrorMethod,
     required Object error,

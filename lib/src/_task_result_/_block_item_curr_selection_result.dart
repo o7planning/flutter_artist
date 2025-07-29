@@ -2,7 +2,7 @@ part of '../_fa_core.dart';
 
 // Old Name: CurrentItemSelectionResult
 class BlockItemCurrSelectionResult<ITEM>
-    extends ActionResult<BlockItemCurrSelectionPrecheck> {
+    extends TaskResult<BlockItemCurrSelectionPrecheck> {
   final CurrentItemSelectionType currentItemSelectionType;
   final List<ITEM?> _candidateItems = [];
   ITEM? _oldCurrentItem;

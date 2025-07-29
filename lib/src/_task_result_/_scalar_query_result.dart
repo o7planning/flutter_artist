@@ -1,6 +1,6 @@
 part of '../_fa_core.dart';
 
-class ScalarQueryResult extends ActionResult<ScalarQueryPrecheck> {
+class ScalarQueryResult extends TaskResult<ScalarQueryPrecheck> {
   ScalarQueryResult({required super.precheck});
 
   void _setFilterError() {

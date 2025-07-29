@@ -1,4 +1,4 @@
-part of '../_fa_core.dart';
+import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 class AppErrorInfo {
   final AppError error;
