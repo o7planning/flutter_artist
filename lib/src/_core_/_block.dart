@@ -2161,13 +2161,12 @@ abstract class Block<
   @_BlockQuickActionAnnotation()
   Future<bool> _unitQuickAction<DATA extends Object>({
     required _XBlock thisXBlock,
-    required BlockQuickAction<DATA> action,
-    required AfterBlockQuickAction afterQuickAction,
+    required BlockQuickAction action,
     required BlockQuickActionResult taskResult,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    ApiResult<DATA>? result;
+    ApiResult<void>? result;
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
         ownerClassInstance: action,
@@ -2196,16 +2195,14 @@ abstract class Block<
       return false;
     }
     //
-    DATA? apiData = result?.data;
-    //
     // await action.doAfterCallApi(success: success, apiData: apiData);
     //
     FlutterArtist.storage._fireEventToAffectedItemTypes(
       eventShelf: shelf,
-      affectedItemTypes: action.affectedItemTypes,
+      affectedItemTypes: action.config.affectedItemTypes,
     );
     //
-    switch (afterQuickAction) {
+    switch (action.config.afterQuickAction) {
       case AfterBlockQuickAction.none:
         break;
       case AfterBlockQuickAction.refreshCurrentItem:
@@ -3275,12 +3272,11 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_BlockQuickActionAnnotation()
-  Future<BlockQuickActionResult> executeQuickAction<DATA extends Object>({
+  Future<BlockQuickActionResult> executeQuickAction({
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
     required ActionConfirmationType actionConfirmationType,
-    required BlockQuickAction<DATA> action,
-    required AfterBlockQuickAction afterQuickAction,
+    required BlockQuickAction action,
     required Function(BuildContext context)? navigate,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -3332,7 +3328,7 @@ abstract class Block<
     }
     //
     List<_BlockOpt> forceQueryBlockOpts = [];
-    switch (afterQuickAction) {
+    switch (action.config.afterQuickAction) {
       case AfterBlockQuickAction.none:
         forceQueryBlockOpts = [];
       case AfterBlockQuickAction.refreshCurrentItem:
@@ -3367,7 +3363,6 @@ abstract class Block<
     _ResultedTaskUnit taskUnit = _BlockQuickActionTaskUnit(
       xBlock: thisXBlock,
       action: action,
-      afterQuickAction: afterQuickAction,
     );
     //
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
