@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class BlockControlBar extends _RefreshableWidget {
   final EdgeInsets padding;
@@ -103,7 +103,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
         if (widget.block.formModel != null && widget.showCreateButton)
           _ControlBarButton(
             tooltip: "Create",
-            iconData: _formCreateIconData,
+            iconData: FaIconConstants.formCreateIconData,
             onAction: widget.block.isPreparingFormCreation,
             onPressed: widget.showCreateButton && createActionable.yes
                 ? () {
@@ -114,7 +114,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
         if (widget.showDeleteButton)
           _ControlBarButton(
             tooltip: "Delete",
-            iconData: _formDeleteIconData,
+            iconData: FaIconConstants.formDeleteIconData,
             iconColor: widget.showDeleteButton && deleteActionable.yes
                 ? Colors.red
                 : Colors.black26,
@@ -148,7 +148,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             if (widget.showBackButton)
               _ControlBarButton(
                 tooltip: "Back",
-                iconData: _formBackIconData,
+                iconData: FaIconConstants.formBackIconData,
                 onAction: false,
                 onPressed:
                     widget.showBackButton && Navigator.of(context).canPop()
@@ -163,8 +163,8 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
                 tooltip:
                     'Error: ${widget.block.formModel!.formErrorInfo?.errorMessage}',
                 iconData: widget.block.formModel!.formInitialDataReady
-                    ? _formErrorModeIconData
-                    : _formErrorDisabledIconData,
+                    ? FaIconConstants.formErrorModeIconData
+                    : FaIconConstants.formErrorDisabledIconData,
                 iconColor: Colors.red,
                 onAction: false,
                 onPressed: () {
@@ -178,10 +178,10 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
                     "${widget.block.formModel!.formMode.tooltip} [${getClassName(widget.block)}]",
                 child: Icon(
                   widget.block.formModel!.formMode == FormMode.none
-                      ? _formNoneModeIconData
+                      ? FaIconConstants.formNoneModeIconData
                       : widget.block.formModel!.formMode == FormMode.creation
-                          ? _formCreationModeIconData
-                          : _formEditModeIconData,
+                          ? FaIconConstants.formCreationModeIconData
+                          : FaIconConstants.formEditModeIconData,
                   size: _ControlBarButton.iconSize,
                 ),
               ),
@@ -222,7 +222,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
         if (widget.showRefreshButton)
           _ControlBarButton(
             tooltip: "Refresh Current Item",
-            iconData: _formRefreshIconData,
+            iconData: FaIconConstants.formRefreshIconData,
             onAction: widget.block.isRefreshingCurrentItem,
             onPressed: widget.showRefreshButton && refreshActionable.yes
                 ? () {
@@ -233,7 +233,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
         if (widget.showQueryButton)
           _ControlBarButton(
             tooltip: "Re Query",
-            iconData: _formQueryIconData,
+            iconData: FaIconConstants.formQueryIconData,
             onAction: widget.block.isQuerying,
             onPressed: widget.showQueryButton && queryActionable.yes
                 ? () {
@@ -260,7 +260,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
         if (widget.block.formModel != null && widget.showSaveButton)
           _ControlBarButton(
             tooltip: "Save",
-            iconData: _formSaveIconData,
+            iconData: FaIconConstants.formSaveIconData,
             onAction: widget.block.__isSaving,
             onPressed: widget.showSaveButton && saveActionable.yes
                 ? () {
@@ -271,7 +271,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
         if (widget.block.formModel != null && widget.showSaveButton)
           _ControlBarButton(
             tooltip: "Reset",
-            iconData: _formCleanIconData,
+            iconData: FaIconConstants.formCleanIconData,
             onAction: false,
             onPressed: widget.showSaveButton && resetActionable.yes
                 ? () {
@@ -298,7 +298,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             widget.block.canShowFilterCriteria())
           _ControlBarButton(
             tooltip: "Current Filter Criteria of ${getClassName(widget.block)}",
-            iconData: _filterCriteriaIconData,
+            iconData: FaIconConstants.filterCriteriaIconData,
             onAction: false,
             onPressed: widget.showFilterCriteriaButton
                 ? () {
@@ -312,7 +312,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
         if (widget.showFormInfoButton && formInfoActionable.yes)
           _ControlBarButton(
             tooltip: "Form Data",
-            iconData: _blockIconData,
+            iconData: FaIconConstants.blockIconData,
             onAction: false,
             onPressed: widget.showFormInfoButton
                 ? () {

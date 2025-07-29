@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class RefreshableNeutralViewBuilder extends _RefreshableWidget {
   final List<Shelf> shelves;

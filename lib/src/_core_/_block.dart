@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 ///
 /// Block example:
@@ -1014,7 +1014,7 @@ abstract class Block<
           //
           filterCriteriaOfFilterModel =
               await filterModel._startNewFilterActivity(
-            activityType: _FilterActivityType.newFilt,
+            activityType: FilterActivityType.newFilt,
             filterInput: filterInput,
           ) as FILTER_CRITERIA?;
           //
@@ -1555,7 +1555,7 @@ abstract class Block<
       forceReloadForm = frmState.forceReloadForm;
       //
       if (forceReloadForm) {
-        thisXBlock.xFormModel!.forceTypeForForm = _ForceType.force;
+        thisXBlock.xFormModel!.forceTypeForForm = ForceType.force;
       }
     }
     //
@@ -2615,8 +2615,8 @@ abstract class Block<
       candidateItem: item,
       forceReloadItem: true,
       forceTypeForForm: forceForm //
-          ? _ForceType.force
-          : _ForceType.decidedAtRuntime,
+          ? ForceType.force
+          : ForceType.decidedAtRuntime,
     );
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //
@@ -3316,7 +3316,7 @@ abstract class Block<
     if (action.needToConfirm) {
       confirm = await __showActionConfirmation(
         shelf: shelf,
-        defaultConfirmation: action._defaultConfirmation,
+        defaultConfirmation: action.defaultConfirmation,
         customConfirmation: action.createCustomConfirmation(),
       );
     }
@@ -3416,7 +3416,7 @@ abstract class Block<
     if (action.needToConfirm) {
       confirm = await __showActionConfirmation(
         shelf: shelf,
-        defaultConfirmation: action._defaultConfirmation,
+        defaultConfirmation: action.defaultConfirmation,
         customConfirmation: action.createCustomConfirmation(),
       );
     }
@@ -3481,7 +3481,7 @@ abstract class Block<
     if (action.needToConfirm) {
       confirm = await __showActionConfirmation(
         shelf: shelf,
-        defaultConfirmation: action._defaultConfirmation,
+        defaultConfirmation: action.defaultConfirmation,
         customConfirmation: action.createCustomConfirmation(),
       );
     }
@@ -3555,7 +3555,7 @@ abstract class Block<
     if (action.needToConfirm) {
       confirm = await __showActionConfirmation(
         shelf: shelf,
-        defaultConfirmation: action._defaultConfirmation,
+        defaultConfirmation: action.defaultConfirmation,
         customConfirmation: action.createCustomConfirmation(),
       );
     }
@@ -3611,7 +3611,7 @@ abstract class Block<
     if (action.needToConfirm) {
       confirm = await __showActionConfirmation(
         shelf: shelf,
-        defaultConfirmation: action._defaultConfirmation,
+        defaultConfirmation: action.defaultConfirmation,
         customConfirmation: action.createCustomConfirmation(),
       );
     }

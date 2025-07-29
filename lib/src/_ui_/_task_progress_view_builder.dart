@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class TaskProgressViewBuilder extends _RefreshableWidget {
   final EdgeInsets progressOnMargin;
@@ -11,8 +11,8 @@ class TaskProgressViewBuilder extends _RefreshableWidget {
   final List<Activity> activities;
 
   final Widget Function(
-      bool onProgress,
-      ) build;
+    bool onProgress,
+  ) build;
 
   const TaskProgressViewBuilder({
     super.key,

@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class _ShelfBlockScalarTypeWidget extends StatelessWidget {
   final Function()? onTap;
@@ -27,7 +27,9 @@ class _ShelfBlockScalarTypeWidget extends StatelessWidget {
         dense: true,
         visualDensity: const VisualDensity(vertical: -3, horizontal: -3),
         leading: Icon(
-          isListener ? _listenerIconData : _eventSourceIconData,
+          isListener
+              ? FaIconConstants.listenerIconData
+              : FaIconConstants.eventSourceIconData,
           size: 16,
           color: isListener ? _listenerIconColor : _eventSourceIconColor,
         ),
@@ -35,7 +37,7 @@ class _ShelfBlockScalarTypeWidget extends StatelessWidget {
           divider: const Padding(
             padding: EdgeInsets.symmetric(horizontal: 5),
             child: Icon(
-              _breadcrumbIconData,
+              FaIconConstants.breadcrumbIconData,
               size: 16,
             ),
           ),

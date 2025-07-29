@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class _CurrentCoupleItem<ITEM, ITEM_DETAIL> {
   final ITEM? _item;

@@ -1,0 +1,4 @@
+enum ShowMode {
+  dev,
+  production;
+}

@@ -1,0 +1,4 @@
+enum QueryMode {
+  lazy,
+  eager;
+}

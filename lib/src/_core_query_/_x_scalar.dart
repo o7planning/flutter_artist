@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class _XScalar {
   final _XShelf xShelf;
@@ -36,7 +36,6 @@ class _XScalar {
 
   @override
   String toString() {
-    return "${getClassName(this)}(${getClassName(
-        scalar)} - needQuery: $needQuery)";
+    return "${getClassName(this)}(${getClassName(scalar)} - needQuery: $needQuery)";
   }
 }

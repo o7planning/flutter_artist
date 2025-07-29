@@ -1,4 +1,4 @@
-part of '../../../flutter_artist.dart';
+part of '../../_fa_core.dart';
 
 class _FormPropView extends StatelessWidget {
   final bool formInitialDataReady;
@@ -21,8 +21,8 @@ class _FormPropView extends StatelessWidget {
           IconLabelText(
             icon: Icon(
               prop is SimpleProp
-                  ? _simplePropOrCriterionIconData
-                  : _optPropOrCriterionIconData,
+                  ? FaIconConstants.simplePropOrCriterionIconData
+                  : FaIconConstants.optPropOrCriterionIconData,
               size: 18,
             ),
             label: prop is SimpleProp ? 'Prop Name: ' : 'Multi Opt Prop Name: ',

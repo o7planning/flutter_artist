@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class BlockErrorViewerDialog extends StatelessWidget {
   final BlockErrorInfo blockErrorInfo;
@@ -25,9 +25,9 @@ class BlockErrorViewerDialog extends StatelessWidget {
       context,
       preferredWidth: 440,
       preferredHeight:
-      apiError.errorDetails == null || apiError.errorDetails!.isEmpty
-          ? 200
-          : 280,
+          apiError.errorDetails == null || apiError.errorDetails!.isEmpty
+              ? 200
+              : 280,
     );
     //
     return Container(
@@ -42,7 +42,7 @@ class BlockErrorViewerDialog extends StatelessWidget {
           if (blockErrorInfo.queryDataState == DataState.error)
             IconLabelText(
               icon: Icon(
-                _formErrorDisabledIconData2,
+                FaIconConstants.formErrorDisabledIconData2,
                 color: Colors.red,
                 size: 20,
               ),
@@ -62,7 +62,7 @@ class BlockErrorViewerDialog extends StatelessWidget {
             minTileHeight: 0,
             titleAlignment: ListTileTitleAlignment.top,
             leading: Icon(
-              _dataStateErrorIconData,
+              FaIconConstants.dataStateErrorIconData,
               size: 18,
               color: Colors.red,
             ),
@@ -82,11 +82,11 @@ class BlockErrorViewerDialog extends StatelessWidget {
           Expanded(
             child: ListView(
               children: apiError != null &&
-                  apiError.errorDetails != null &&
-                  apiError.errorDetails!.isNotEmpty
+                      apiError.errorDetails != null &&
+                      apiError.errorDetails!.isNotEmpty
                   ? apiError.errorDetails!
-                  .map((errorDetail) => _buildErrorDetail(errorDetail))
-                  .toList()
+                      .map((errorDetail) => _buildErrorDetail(errorDetail))
+                      .toList()
                   : [],
             ),
           ),
@@ -106,7 +106,7 @@ class BlockErrorViewerDialog extends StatelessWidget {
       leading: const Padding(
         padding: EdgeInsets.only(left: 10),
         child: Icon(
-          _listItemBulletIconData,
+          FaIconConstants.listItemBulletIconData,
           color: Colors.black,
           size: 16,
         ),

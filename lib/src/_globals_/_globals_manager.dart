@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class GlobalsManager {
   final String __separator = "\n";
@@ -269,7 +269,7 @@ class GlobalsManager {
 
   void updateWidgets() {
     for (_RefreshableWidgetState widgetState
-    in _loggedInUserWidgetStates.keys) {
+        in _loggedInUserWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }

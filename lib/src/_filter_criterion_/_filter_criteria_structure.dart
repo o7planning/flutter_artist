@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class FilterCriteriaStructure {
   final Map<String, Criterion> _allCriteriaMap = {};
@@ -144,7 +144,7 @@ class FilterCriteriaStructure {
   // ***************************************************************************
 
   void _initTemporaryForNewTransaction({
-    required _FilterActivityType activityType,
+    required FilterActivityType activityType,
     required Map<String, dynamic> formKeyInstantValues,
     required FilterInput? filterInput,
   }) {
@@ -154,7 +154,7 @@ class FilterCriteriaStructure {
     //
     for (Criterion criterion in _allCriteriaMap.values) {
       switch (activityType) {
-        case _FilterActivityType.newFilt:
+        case FilterActivityType.newFilt:
           if (filterInput != null && filterInput is! EmptyFilterInput) {
             criterion._tempCurrentValue = null;
             criterion._tempCurrentXData = null;
@@ -173,7 +173,7 @@ class FilterCriteriaStructure {
               }
             }
           }
-        case _FilterActivityType.updateFromFilterView:
+        case FilterActivityType.updateFromFilterView:
           criterion._tempCurrentValue = criterion._currentValue;
           criterion._tempCurrentXData = criterion._currentXData;
           criterion._tempInitialValue = criterion._initialValue;

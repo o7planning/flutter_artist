@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 final Color _quick_circleAvatarBgColor = Colors.blueGrey[50]!;
 final double _quick_circleAvatarRadius = 20;
@@ -30,28 +30,28 @@ class _QuickSuggestionButton extends StatelessWidget {
     required this.tooltip,
     required this.onPressed,
   })  : suggestionType = QuickSuggestionType.fatal,
-        iconData = _formErrorDisabledIconData,
+        iconData = FaIconConstants.formErrorDisabledIconData,
         iconColor = _quick_iconColor_error;
 
   const _QuickSuggestionButton.error({
     required this.tooltip,
     required this.onPressed,
   })  : suggestionType = QuickSuggestionType.error,
-        iconData = _formErrorModeIconData,
+        iconData = FaIconConstants.formErrorModeIconData,
         iconColor = _quick_iconColor_error;
 
   const _QuickSuggestionButton.restore({
     required this.tooltip,
     required this.onPressed,
   })  : suggestionType = QuickSuggestionType.normal,
-        iconData = _formErrorRollbackIconData,
+        iconData = FaIconConstants.formErrorRollbackIconData,
         iconColor = null;
 
   const _QuickSuggestionButton.reQuery({
     required this.tooltip,
     required this.onPressed,
   })  : suggestionType = QuickSuggestionType.normal,
-        iconData = _formQueryIconData,
+        iconData = FaIconConstants.formQueryIconData,
         iconColor = null;
 
   @override

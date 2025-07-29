@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class _ShelfRelationshipView extends StatefulWidget {
   final _ShelfRelationshipController shelfRelationshipController;
@@ -170,7 +170,7 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
             children: [
               const WidgetSpan(
                 child: Icon(
-                  _eventSourceIconData,
+                  FaIconConstants.eventSourceIconData,
                   size: 16,
                   color: _eventSourceIconColor,
                 ),
@@ -236,7 +236,7 @@ class _ShelfRelationshipViewState extends State<_ShelfRelationshipView> {
             children: [
               const WidgetSpan(
                 child: Icon(
-                  _listenerIconData,
+                  FaIconConstants.listenerIconData,
                   size: 16,
                   color: _listenerIconColor,
                 ),

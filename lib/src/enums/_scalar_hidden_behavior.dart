@@ -1,0 +1,4 @@
+enum ScalarHiddenBehavior {
+  none,
+  clear;
+}

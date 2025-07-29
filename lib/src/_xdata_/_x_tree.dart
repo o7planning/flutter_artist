@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class XTree<ID, TREE_ITEM, TREE_DATA> extends XData<ID, TREE_ITEM, TREE_DATA> {
   final TREE_DATA treeData;

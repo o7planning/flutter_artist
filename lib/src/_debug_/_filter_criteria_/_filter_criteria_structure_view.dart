@@ -1,4 +1,4 @@
-part of '../../../flutter_artist.dart';
+part of '../../_fa_core.dart';
 
 class _FilterCriteriaStructureView extends StatefulWidget {
   final FilterModel filterModel;
@@ -123,21 +123,21 @@ class _FilterCriteriaStructureViewState
 
           if (data is FilterModel) {
             title = getClassName(data);
-            prefixIconData = _filterModelIconData;
+            prefixIconData = FaIconConstants.filterModelIconData;
           } else if (data is SimpleCriterion) {
             title = data.criterionName;
-            prefixIconData = _simplePropOrCriterionIconData;
+            prefixIconData = FaIconConstants.simplePropOrCriterionIconData;
             //
             isMultiOpt = false;
             isMultiSelection = false;
           } else if (data is MultiOptCriterion) {
             title = data.criterionName;
-            prefixIconData = _optPropOrCriterionIconData;
+            prefixIconData = FaIconConstants.optPropOrCriterionIconData;
             //
             isMultiOpt = true;
             isMultiSelection = !data.singleSelection;
           } else {
-            prefixIconData = _uknownIconData;
+            prefixIconData = FaIconConstants.uknownIconData;
             title = "UKNOWN";
           }
           return Material(
@@ -172,7 +172,7 @@ class _FilterCriteriaStructureViewState
                   if (isMultiOpt && isMultiSelection) const SizedBox(width: 5),
                   if (isMultiOpt && isMultiSelection)
                     const Icon(
-                      _multiSelectionIconData,
+                      FaIconConstants.multiSelectionIconData,
                       size: 16,
                       color: Colors.red,
                     ),

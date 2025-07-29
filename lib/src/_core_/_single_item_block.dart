@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 ///
 /// [ID] is Id type of Item. For example: [String].

@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 abstract class XData<ID, ITEM, DATA> {
   final ID Function(ITEM item) _getItemId;

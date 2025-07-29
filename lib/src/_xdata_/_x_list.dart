@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class XList<ID, ITEM> extends XData<ID, ITEM, List<ITEM>> {
   final List<ITEM> _items;

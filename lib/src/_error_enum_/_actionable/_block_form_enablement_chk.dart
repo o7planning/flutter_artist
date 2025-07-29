@@ -1,4 +1,4 @@
-part of '../../../flutter_artist.dart';
+part of '../../_fa_core.dart';
 
 @_RenameAnnotation()
 enum BlockFormEnablementChkCode implements ChkCodeDetail {

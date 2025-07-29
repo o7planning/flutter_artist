@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 abstract class FormView<FORM_MODEL extends FormModel> extends StatelessWidget {
   final FORM_MODEL formModel;
@@ -13,7 +13,7 @@ abstract class FormView<FORM_MODEL extends FormModel> extends StatelessWidget {
   @override
   @nonVirtual
   Widget build(BuildContext context) {
-    return _FormViewBuilder(
+    return FormViewBuilder(
       ownerClassInstance: this,
       description: '',
       formModel: formModel,

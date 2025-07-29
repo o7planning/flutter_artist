@@ -1,4 +1,4 @@
-part of '../../../flutter_artist.dart';
+part of '../../_fa_core.dart';
 
 class _FilterCriterionView extends StatelessWidget {
   final Criterion criterion;
@@ -19,8 +19,8 @@ class _FilterCriterionView extends StatelessWidget {
           IconLabelText(
             icon: Icon(
               criterion is SimpleCriterion
-                  ? _simplePropOrCriterionIconData
-                  : _optPropOrCriterionIconData,
+                  ? FaIconConstants.simplePropOrCriterionIconData
+                  : FaIconConstants.optPropOrCriterionIconData,
               size: 18,
             ),
             label: criterion is SimpleCriterion

@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 _GraphItem _toRootDebugGraphItem(Shelf shelf) {
   _GraphItem rootItem = _GraphItem.shelf(shelf);

@@ -1,15 +1,13 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class _XFormModel {
   final _XShelf xShelf;
-  _ForceType forceTypeForForm = _ForceType.decidedAtRuntime;
+  ForceType forceTypeForForm = ForceType.decidedAtRuntime;
   bool queried = false;
   final FormModel formModel;
   final ExtraFormInput? extraFormInput;
 
   late final _XBlock xBlock;
-
-  // final FormSaveResult _formSaveResult = FormSaveResult(precheck: null);
 
   int get xShelfId => xShelf.xShelfId;
 

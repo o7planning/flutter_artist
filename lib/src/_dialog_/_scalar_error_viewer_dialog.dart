@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class ScalarErrorViewerDialog extends StatelessWidget {
   final ScalarErrorInfo scalarErrorInfo;
@@ -42,7 +42,7 @@ class ScalarErrorViewerDialog extends StatelessWidget {
           if (scalarErrorInfo.queryDataState == DataState.error)
             IconLabelText(
               icon: Icon(
-                _formErrorDisabledIconData2,
+                FaIconConstants.formErrorDisabledIconData2,
                 color: Colors.red,
                 size: 20,
               ),
@@ -62,7 +62,7 @@ class ScalarErrorViewerDialog extends StatelessWidget {
             minTileHeight: 0,
             titleAlignment: ListTileTitleAlignment.top,
             leading: Icon(
-              _dataStateErrorIconData,
+              FaIconConstants.dataStateErrorIconData,
               size: 18,
               color: Colors.red,
             ),
@@ -106,7 +106,7 @@ class ScalarErrorViewerDialog extends StatelessWidget {
       leading: const Padding(
         padding: EdgeInsets.only(left: 10),
         child: Icon(
-          _listItemBulletIconData,
+          FaIconConstants.listItemBulletIconData,
           color: Colors.black,
           size: 16,
         ),

@@ -1,4 +1,4 @@
-part of '../../../flutter_artist.dart';
+part of '../../_fa_core.dart';
 
 class _InfoView extends StatelessWidget {
   final String info;
@@ -11,7 +11,7 @@ class _InfoView extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
       child: IconLabelText(
         icon: const Icon(
-          _infoIconData,
+          FaIconConstants.infoIconData,
           size: 16,
         ),
         label: "",

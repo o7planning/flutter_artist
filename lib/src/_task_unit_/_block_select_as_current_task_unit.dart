@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 @_TaskUnitClassAnnotation()
 @_BlockRefreshCurrentItemAnnotation()
@@ -9,7 +9,7 @@ part of '../../flutter_artist.dart';
 class _BlockSelectAsCurrentTaskUnit<ITEM extends Object>
     extends _ResultedTaskUnit<BlockItemCurrSelectionResult<ITEM>> {
   final _XBlock xBlock;
-  final _ForceType? forceTypeForForm;
+  final ForceType? forceTypeForForm;
   final CurrentItemSelectionType currentItemSelectionType;
   final ITEM? candidateItem;
   final List<ITEM> newQueriedList;
@@ -22,16 +22,16 @@ class _BlockSelectAsCurrentTaskUnit<ITEM extends Object>
     required bool forceReloadItem,
     required this.forceTypeForForm,
   }) : super(
-    taskType: TaskType.blockSelectItemAsCurrent,
-    taskResult: BlockItemCurrSelectionResult<ITEM>(
-      precheck: null,
-      currentItemSelectionType: currentItemSelectionType,
-      getItemId: xBlock.block.getItemId,
-      candidateItem: candidateItem,
-      oldCurrentItem: xBlock.block.currentItem as ITEM?,
-      currentItem: xBlock.block.currentItem as ITEM?,
-    ),
-  ) {
+          taskType: TaskType.blockSelectItemAsCurrent,
+          taskResult: BlockItemCurrSelectionResult<ITEM>(
+            precheck: null,
+            currentItemSelectionType: currentItemSelectionType,
+            getItemId: xBlock.block.getItemId,
+            candidateItem: candidateItem,
+            oldCurrentItem: xBlock.block.currentItem as ITEM?,
+            currentItem: xBlock.block.currentItem as ITEM?,
+          ),
+        ) {
     if (forceReloadItem) {
       xBlock.setForceReloadItem();
     }

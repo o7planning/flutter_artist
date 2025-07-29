@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class _FilterCriteriaDebugView extends StatelessWidget {
   final Block? block;
@@ -35,7 +35,7 @@ class _FilterCriteriaDebugView extends StatelessWidget {
           text: getClassName(block!),
           closable: false,
           leading: (context, status) => Icon(
-            _blockIconData,
+            FaIconConstants.blockIconData,
             color: Colors.indigo,
             size: 16,
           ),
@@ -55,7 +55,7 @@ class _FilterCriteriaDebugView extends StatelessWidget {
           text: getClassName(scalar!),
           closable: false,
           leading: (context, status) => Icon(
-            _scalarIconData,
+            FaIconConstants.scalarIconData,
             color: Colors.indigo,
             size: 16,
           ),
@@ -73,7 +73,7 @@ class _FilterCriteriaDebugView extends StatelessWidget {
           text: getClassName(_filterModel),
           closable: false,
           leading: (context, status) => Icon(
-            _filterModelIconData,
+            FaIconConstants.filterModelIconData,
             color: Colors.indigo,
             size: 16,
           ),

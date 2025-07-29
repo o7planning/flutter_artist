@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 abstract class BlockFragmentView<BLOCK extends Block> extends StatelessWidget {
   final BLOCK block;

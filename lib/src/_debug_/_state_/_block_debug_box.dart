@@ -1,4 +1,4 @@
-part of '../../../flutter_artist.dart';
+part of '../../_fa_core.dart';
 
 const double _debugBoxFontSize = 11.5;
 
@@ -43,13 +43,14 @@ abstract class _BaseDebugBox extends StatelessWidget {
         children: children.isEmpty
             ? children
             : children
-                .expand(
-                  (w) => [
-                    w,
-                    const SizedBox(height: 5),
-                  ],
-                )
-                .toList(),
+            .expand(
+              (w) =>
+          [
+            w,
+            const SizedBox(height: 5),
+          ],
+        )
+            .toList(),
       ),
     );
   }

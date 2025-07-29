@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class FuncCallInfo {
   final String funcName;
@@ -20,8 +20,7 @@ class FuncCallInfo {
   FuncCallInfo({
     required this.funcName,
     this.arguments,
-  })
-      : callerFuncName = null,
+  })  : callerFuncName = null,
         filePath = null,
         lineNumber = null,
         columnNumber = null;

@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 Size _calculateDebugDialogSize(BuildContext context) {
   Size size = MediaQuery.of(context).size;

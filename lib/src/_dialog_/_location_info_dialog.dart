@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
@@ -48,14 +48,14 @@ class _LocationInfoDialog extends StatelessWidget {
           const SizedBox(height: 10),
           IconLabelText(
             icon: const Icon(
-              _locationIconData,
+              FaIconConstants.locationIconData,
               size: 18,
               color: Colors.black54,
             ),
             label: "Location: ",
             text: locationInfo,
             suffixIcon: SimpleSmallIconButton(
-              iconData: _copyToClipboardIconData,
+              iconData: FaIconConstants.copyToClipboardIconData,
               iconSize: 14,
               iconColor: Colors.black54,
               onPressed: () {

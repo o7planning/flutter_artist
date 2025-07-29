@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class _ShelfStructureTreeView extends StatefulWidget {
   final Shelf shelf;
@@ -121,14 +121,14 @@ class _ShelfStructureTreeViewState extends State<_ShelfStructureTreeView> {
                   if (isNotifier) const SizedBox(width: 5),
                   if (isNotifier)
                     const Icon(
-                      _eventSourceIconData,
+                      FaIconConstants.eventSourceIconData,
                       size: 16,
                       color: _eventSourceIconColor,
                     ),
                   if (isListener) const SizedBox(width: 5),
                   if (isListener)
                     const Icon(
-                      _listenerIconData,
+                      FaIconConstants.listenerIconData,
                       size: 16,
                       color: _listenerIconColor,
                     )

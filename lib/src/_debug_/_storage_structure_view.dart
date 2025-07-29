@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class _StorageStructureView extends StatefulWidget {
   final Function(Shelf shelf) onSelectShelfToShowGraph;
@@ -16,10 +16,10 @@ class _StorageStructureView extends StatefulWidget {
 
 class _StorageStructureViewState extends State<_StorageStructureView> {
   final _StorageStructureGraphController globalFluStructureGraphController =
-  _StorageStructureGraphController();
+      _StorageStructureGraphController();
 
   final _ShelfRelationshipController shelfRelationshipController =
-  _ShelfRelationshipController();
+      _ShelfRelationshipController();
 
   Shelf? _selectedShelf;
 

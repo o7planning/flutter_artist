@@ -1,4 +1,4 @@
-part of '../../../flutter_artist.dart';
+part of '../../_fa_core.dart';
 
 class _DynamicValueView extends StatelessWidget {
   final dynamic value;

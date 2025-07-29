@@ -6,3 +6,10 @@
 
 Loai bo: ActionConfirmationType.
 
+
+Thêm: BlockQuickReplacementItemAction?
+
+     BlockQuickItemReplacementActtion.
+
+
+

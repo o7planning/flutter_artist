@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 Color _selectedCodeFlowItemBgColor = Colors.green.withAlpha(30);
 

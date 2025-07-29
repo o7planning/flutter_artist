@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
@@ -51,7 +51,7 @@ class _FilterCriteriaDialogState extends State<_FilterCriteriaDialog> {
   Widget build(BuildContext context) {
     dialogs.FaAlertDialog alert = dialogs.FaAlertDialog(
       icon: Icon(
-        _filterCriteriaDebugIconData,
+        FaIconConstants.filterCriteriaDebugIconData,
         size: 16,
       ),
       titleText: _title(),

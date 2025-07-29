@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class _BlocksScalarsView extends StatelessWidget {
   final FilterModel filterModel;
@@ -46,14 +46,14 @@ class _BlocksScalarsView extends StatelessWidget {
       children: [
         ...filterModel.blocks.map(
           (block) => _buildItem(
-            iconData: _blockIconData,
+            iconData: FaIconConstants.blockIconData,
             blockOrScalarClassName: getClassName(block),
             dataState: block.queryDataState,
           ),
         ),
         ...filterModel.scalars.map(
           (scalar) => _buildItem(
-            iconData: _scalarIconData,
+            iconData: FaIconConstants.scalarIconData,
             blockOrScalarClassName: getClassName(scalar),
             dataState: scalar.queryDataState,
           ),

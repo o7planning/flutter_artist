@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class _FilterModelCriteriaView extends StatelessWidget {
   final FilterModel filterModel;
@@ -66,7 +66,7 @@ class _FilterModelCriteriaView extends StatelessWidget {
           ),
           TextSpan(
               text:
-              " property. It is used as criteria to query data on the following blocks and scales:"),
+                  " property. It is used as criteria to query data on the following blocks and scales:"),
         ],
       ),
     );

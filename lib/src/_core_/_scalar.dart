@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 ///
 /// [VALUE] - Value.
@@ -197,7 +197,7 @@ abstract class Scalar<
         FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
         //
         filterCriteriaOfFilterModel = await filterModel._startNewFilterActivity(
-          activityType: _FilterActivityType.newFilt,
+          activityType: FilterActivityType.newFilt,
           filterInput: filterInput,
         ) as FILTER_CRITERIA?;
         //
@@ -610,7 +610,7 @@ abstract class Scalar<
     if (action.needToConfirm) {
       confirm = await __showActionConfirmation(
         shelf: shelf,
-        defaultConfirmation: action._defaultConfirmation,
+        defaultConfirmation: action.defaultConfirmation,
         customConfirmation: action.createCustomConfirmation(),
       );
     }
@@ -684,7 +684,7 @@ abstract class Scalar<
     if (action.needToConfirm) {
       confirm = await __showActionConfirmation(
         shelf: shelf,
-        defaultConfirmation: action._defaultConfirmation,
+        defaultConfirmation: action.defaultConfirmation,
         customConfirmation: action.createCustomConfirmation(),
       );
     }

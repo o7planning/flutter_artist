@@ -1,4 +1,4 @@
-part of '../../../flutter_artist.dart';
+part of '../../_fa_core.dart';
 
 class _FormDebugBox extends _BaseDebugBox {
   final FormModel formModel;
@@ -20,7 +20,7 @@ class _FormDebugBox extends _BaseDebugBox {
         IconLabelText(
           label: "Form UI Active?: ",
           text:
-              "${formModel.hasActiveUIComponent()}/${formModel.loadTimeUIActive}*",
+          "${formModel.hasActiveUIComponent()}/${formModel.loadTimeUIActive}*",
           labelStyle: labelStyle0,
           textStyle: textStyle0,
         ),
@@ -72,13 +72,14 @@ class _FormDebugBox extends _BaseDebugBox {
       if (options.showFormProps && optProps.isNotEmpty)
         ...optProps
             .map(
-              (optProp) => IconLabelText(
+              (optProp) =>
+              IconLabelText(
                 label: "Load Count (${optProp.propName}): ",
                 text: optProp.loadCount.toString(),
                 labelStyle: labelStyle0,
                 textStyle: textStyle0,
               ),
-            )
+        )
             .toList(),
     ];
     return [

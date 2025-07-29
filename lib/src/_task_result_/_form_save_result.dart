@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class FormSaveResult extends ActionResult {
   final BlockFormSavePrecheck? precheck;

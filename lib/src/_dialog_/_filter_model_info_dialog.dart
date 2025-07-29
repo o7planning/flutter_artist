@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
@@ -48,21 +48,21 @@ class _FilterModelInfoDialogState extends State<_FilterModelInfoDialog> {
       height: height,
       child: showFormData
           ? _FilterDataDebugView(
-        filterModel: widget.filterModel,
-        onPressedShelf: () {
-          setState(() {
-            showFormData = false;
-          });
-        },
-      )
+              filterModel: widget.filterModel,
+              onPressedShelf: () {
+                setState(() {
+                  showFormData = false;
+                });
+              },
+            )
           : _ShelfStructureGraphView(
-        shelf: widget.filterModel.shelf,
-        onPressedBack: () {
-          setState(() {
-            showFormData = true;
-          });
-        },
-      ),
+              shelf: widget.filterModel.shelf,
+              onPressedBack: () {
+                setState(() {
+                  showFormData = true;
+                });
+              },
+            ),
     );
   }
 }

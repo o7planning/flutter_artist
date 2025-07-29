@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class _GraphItemSimpleShelfBox extends StatefulWidget {
   final bool isRoot;
@@ -42,7 +42,7 @@ class _GraphItemSimpleShelfBoxState extends State<_GraphItemSimpleShelfBox> {
   @override
   Widget build(BuildContext context) {
     Size textSize =
-    _calculateTextSize(text: widget.shelfName, style: textStyle);
+        _calculateTextSize(text: widget.shelfName, style: textStyle);
     double boxWidth =
         extraWidth + 2 * padding + shelfIconWidth + spacing + textSize.width;
 
@@ -61,8 +61,8 @@ class _GraphItemSimpleShelfBoxState extends State<_GraphItemSimpleShelfBox> {
           color: widget.isSelected
               ? _selectedGraphBoxBgColor
               : widget.shelf == null //
-              ? _inactiveGraphBoxBgColor
-              : _activeGraphBoxBgColor,
+                  ? _inactiveGraphBoxBgColor
+                  : _activeGraphBoxBgColor,
           borderRadius: BorderRadius.circular(4),
           boxShadow: [
             _graphBoxShadow,
@@ -116,14 +116,14 @@ class _GraphItemSimpleShelfBoxState extends State<_GraphItemSimpleShelfBox> {
             if (widget.isEventSource) const SizedBox(width: spacing),
             if (widget.isEventSource)
               const Icon(
-                _eventSourceIconData,
+                FaIconConstants.eventSourceIconData,
                 size: iconSize,
                 color: Colors.deepOrange,
               ),
             if (widget.isListener) const SizedBox(width: padding),
             if (widget.isListener)
               const Icon(
-                _listenerIconData,
+                FaIconConstants.listenerIconData,
                 size: iconSize,
                 color: Colors.indigo,
               ),

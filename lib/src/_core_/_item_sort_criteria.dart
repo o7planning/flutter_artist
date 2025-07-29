@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 abstract class ItemSortCriteria<ITEM extends Object> {
   late final Block block;

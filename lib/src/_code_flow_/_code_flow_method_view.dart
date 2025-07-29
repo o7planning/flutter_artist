@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class _CodeFlowMethodView extends StatelessWidget {
   final _CodeFlowItem codeFlowItem;
@@ -80,13 +80,13 @@ class _CodeFlowMethodView extends StatelessWidget {
 
   IconData _titleIconData() {
     if (codeFlowItem.isBlock()) {
-      return _blockIconData;
+      return FaIconConstants.blockIconData;
     } else if (codeFlowItem.isFilterModel()) {
-      return _filterModelIconData;
+      return FaIconConstants.filterModelIconData;
     } else if (codeFlowItem.isFormModel()) {
-      return _formModelIconData;
+      return FaIconConstants.formModelIconData;
     } else {
-      return _otherClassIconData;
+      return FaIconConstants.otherClassIconData;
     }
   }
 

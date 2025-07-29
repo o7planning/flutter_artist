@@ -1,4 +1,4 @@
-part of '../../../flutter_artist.dart';
+part of '../../_fa_core.dart';
 
 class _FormPropsStructureView extends StatefulWidget {
   final FormModel formModel;
@@ -142,11 +142,11 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
 
           if (data is FormModel) {
             title = getClassName(data);
-            prefixIconData = _formModelIconData;
+            prefixIconData = FaIconConstants.formModelIconData;
             isError = (data as FormModel).formDataState == DataState.error;
           } else if (data is SimpleProp) {
             title = data.propName;
-            prefixIconData = _simplePropOrCriterionIconData;
+            prefixIconData = FaIconConstants.simplePropOrCriterionIconData;
             //
             isMultiOpt = false;
             isMultiSelection = false;
@@ -154,14 +154,14 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
             isError = data.formErrorInfo != null;
           } else if (data is MultiOptProp) {
             title = data.propName;
-            prefixIconData = _optPropOrCriterionIconData;
+            prefixIconData = FaIconConstants.optPropOrCriterionIconData;
             //
             isMultiOpt = true;
             isMultiSelection = !data.singleSelection;
             isDirty = data.isDirty();
             isError = data.formErrorInfo != null;
           } else {
-            prefixIconData = _uknownIconData;
+            prefixIconData = FaIconConstants.uknownIconData;
             title = "UNKNOWN";
           }
           return Material(
@@ -200,7 +200,7 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
                   if (isMultiOpt && isMultiSelection) const SizedBox(width: 5),
                   if (isMultiOpt && isMultiSelection)
                     const Icon(
-                      _multiSelectionIconData,
+                      FaIconConstants.multiSelectionIconData,
                       size: 16,
                       color: Colors.red,
                     ),
@@ -209,7 +209,7 @@ class _FormPropsStructureViewState extends State<_FormPropsStructureView> {
                     Tooltip(
                       message: "Dirty",
                       child: const Icon(
-                        _formPropDirtyIconData,
+                        FaIconConstants.formPropDirtyIconData,
                         size: 16,
                         color: Colors.indigo,
                       ),

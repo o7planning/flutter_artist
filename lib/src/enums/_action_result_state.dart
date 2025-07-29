@@ -1,0 +1,4 @@
+enum ActionResultState {
+  success,
+  fail;
+}

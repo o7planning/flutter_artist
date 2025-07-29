@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class _FormDataView extends StatefulWidget {
   final FormModel formModel;
@@ -91,7 +91,7 @@ class __FormDataViewState extends State<_FormDataView> {
         text: ' Form Props Structure',
         closable: false,
         leading: (context, status) => Icon(
-          _formValueIconData,
+          FaIconConstants.formValueIconData,
           color: _getTabIconColor(status),
           size: iconSize,
         ),
@@ -103,7 +103,7 @@ class __FormDataViewState extends State<_FormDataView> {
         text: ' Initial',
         closable: false,
         leading: (context, status) => Icon(
-          _formValueIconData,
+          FaIconConstants.formValueIconData,
           color: _getTabIconColor(status),
           size: iconSize,
         ),
@@ -118,7 +118,7 @@ class __FormDataViewState extends State<_FormDataView> {
         text: ' Current',
         closable: false,
         leading: (context, status) => Icon(
-          _formValueIconData,
+          FaIconConstants.formValueIconData,
           color: _getTabIconColor(status),
           size: iconSize,
         ),
@@ -136,7 +136,7 @@ class __FormDataViewState extends State<_FormDataView> {
         text: ' ',
         closable: false,
         leading: (context, status) => Icon(
-          _effectIconData,
+          FaIconConstants.effectIconData,
           color: _getTabIconColor(status),
           size: iconSize,
         ),
@@ -253,7 +253,7 @@ class __FormDataViewState extends State<_FormDataView> {
                 content: IconLabelText(
                   style: const TextStyle(fontSize: fontSize),
                   icon: const Icon(
-                    _blockIconData,
+                    FaIconConstants.blockIconData,
                     size: iconSize,
                   ),
                   label: '',
@@ -264,7 +264,7 @@ class __FormDataViewState extends State<_FormDataView> {
                 content: IconLabelText(
                   style: const TextStyle(fontSize: fontSize),
                   icon: const Icon(
-                    _formModelIconData,
+                    FaIconConstants.formModelIconData,
                     size: iconSize,
                   ),
                   label: '',
@@ -277,14 +277,14 @@ class __FormDataViewState extends State<_FormDataView> {
           IconLabelText(
             style: const TextStyle(fontSize: fontSize),
             icon: const Icon(
-              _locationIconData,
+              FaIconConstants.locationIconData,
               size: iconSize,
               color: Colors.black54,
             ),
             label: "Location: ",
             text: widget.locationInfo,
             suffixIcon: SimpleSmallIconButton(
-              iconData: _copyToClipboardIconData,
+              iconData: FaIconConstants.copyToClipboardIconData,
               iconSize: 14,
               iconColor: Colors.black54,
               onPressed: () {

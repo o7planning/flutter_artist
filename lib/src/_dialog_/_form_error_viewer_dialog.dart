@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class FormErrorViewerDialog extends StatelessWidget {
   final FormErrorInfo formErrorInfo;
@@ -43,7 +43,7 @@ class FormErrorViewerDialog extends StatelessWidget {
           if (!formInitialDataReady)
             IconLabelText(
               icon: Icon(
-                _formErrorDisabledIconData2,
+                FaIconConstants.formErrorDisabledIconData2,
                 color: Colors.red,
                 size: 20,
               ),
@@ -63,7 +63,7 @@ class FormErrorViewerDialog extends StatelessWidget {
             minTileHeight: 0,
             titleAlignment: ListTileTitleAlignment.top,
             leading: Icon(
-              _dataStateErrorIconData,
+              FaIconConstants.dataStateErrorIconData,
               size: 18,
               color: Colors.red,
             ),
@@ -107,7 +107,7 @@ class FormErrorViewerDialog extends StatelessWidget {
       leading: const Padding(
         padding: EdgeInsets.only(left: 10),
         child: Icon(
-          _listItemBulletIconData,
+          FaIconConstants.listItemBulletIconData,
           color: Colors.black,
           size: 16,
         ),

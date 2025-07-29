@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class _XFilterModel {
   final _XShelf xShelf;
@@ -18,7 +18,6 @@ class _XFilterModel {
 
   @override
   String toString() {
-    return "${getClassName(
-        filterModel)} - queried: $queried >>> FILTER_INPUT: $filterInput";
+    return "${getClassName(filterModel)} - queried: $queried >>> FILTER_INPUT: $filterInput";
   }
 }

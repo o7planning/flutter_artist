@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class ErrorInfoView extends StatefulWidget {
   final ErrorInfo errorInfo;
@@ -66,7 +66,7 @@ class _ErrorInfoViewState extends State<ErrorInfoView> {
           minTileHeight: 0,
           titleAlignment: ListTileTitleAlignment.top,
           leading: Icon(
-            _dataStateErrorIconData,
+            FaIconConstants.dataStateErrorIconData,
             size: 18,
             color: Colors.red,
           ),
@@ -148,7 +148,7 @@ class _ErrorInfoViewState extends State<ErrorInfoView> {
         leading: const Padding(
           padding: EdgeInsets.only(left: 10),
           child: Icon(
-            _listItemBulletIconData,
+            FaIconConstants.listItemBulletIconData,
             color: Colors.black,
             size: 16,
           ),

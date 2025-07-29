@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class ScalarControlOutlinedButton extends ScalarControl {
   ScalarControlOutlinedButton({
@@ -18,20 +18,20 @@ class ScalarControlOutlinedButton extends ScalarControl {
     WidgetStatesController? statesController,
     Widget? child,
   }) : super(
-    build: (VoidCallback? onPressed) {
-      return OutlinedButton(
-        onPressed: onPressed,
-        onHover: onHover,
-        onFocusChange: onFocusChange,
-        style: style,
-        focusNode: focusNode,
-        autofocus: autofocus,
-        clipBehavior: clipBehavior,
-        statesController: statesController,
-        child: child,
-      );
-    },
-  );
+          build: (VoidCallback? onPressed) {
+            return OutlinedButton(
+              onPressed: onPressed,
+              onHover: onHover,
+              onFocusChange: onFocusChange,
+              style: style,
+              focusNode: focusNode,
+              autofocus: autofocus,
+              clipBehavior: clipBehavior,
+              statesController: statesController,
+              child: child,
+            );
+          },
+        );
 
   ScalarControlOutlinedButton.icon({
     super.key,
@@ -52,20 +52,20 @@ class ScalarControlOutlinedButton extends ScalarControl {
     Widget? icon,
     IconAlignment iconAlignment = IconAlignment.start,
   }) : super(
-    build: (VoidCallback? onPressed) {
-      return OutlinedButton.icon(
-        onPressed: onPressed,
-        onHover: onHover,
-        onFocusChange: onFocusChange,
-        style: style,
-        focusNode: focusNode,
-        autofocus: autofocus,
-        clipBehavior: clipBehavior,
-        statesController: statesController,
-        iconAlignment: iconAlignment,
-        label: label,
-        icon: icon,
-      );
-    },
-  );
+          build: (VoidCallback? onPressed) {
+            return OutlinedButton.icon(
+              onPressed: onPressed,
+              onHover: onHover,
+              onFocusChange: onFocusChange,
+              style: style,
+              focusNode: focusNode,
+              autofocus: autofocus,
+              clipBehavior: clipBehavior,
+              statesController: statesController,
+              iconAlignment: iconAlignment,
+              label: label,
+              icon: icon,
+            );
+          },
+        );
 }

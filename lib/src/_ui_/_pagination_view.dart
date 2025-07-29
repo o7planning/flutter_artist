@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 abstract class PaginationView extends _RefreshableWidget {
   final Block block;

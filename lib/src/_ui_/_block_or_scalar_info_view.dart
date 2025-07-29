@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class _BlockOrScalarInfoView extends StatelessWidget {
   final _BlockOrScalar blockOrScalar;
@@ -17,7 +17,9 @@ class _BlockOrScalarInfoView extends StatelessWidget {
         vertical: -3,
       ),
       leading: Icon(
-        blockOrScalar.isBlock ? _blockIconData : _scalarIconData,
+        blockOrScalar.isBlock
+            ? FaIconConstants.blockIconData
+            : FaIconConstants.scalarIconData,
         size: 18,
       ),
       title: SelectableText.rich(

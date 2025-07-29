@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 abstract class FormModel<
     ID extends Object,
@@ -285,9 +285,9 @@ abstract class FormModel<
     //
     final bool forceReloadForm;
     switch (thisXFormModel.forceTypeForForm) {
-      case _ForceType.force:
+      case ForceType.force:
         forceReloadForm = true;
-      case _ForceType.decidedAtRuntime:
+      case ForceType.decidedAtRuntime:
         // forceReloadForm =
         //     formDataState != DataState.ready && hasActiveUIComponent();
         forceReloadForm = false;

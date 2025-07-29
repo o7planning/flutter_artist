@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 abstract class FilterView<FILTER_MODEL extends FilterModel>
     extends StatelessWidget {
@@ -22,7 +22,8 @@ abstract class FilterView<FILTER_MODEL extends FilterModel>
     );
   }
 
-  Widget buildFilterBar(BuildContext context, {
+  Widget buildFilterBar(
+    BuildContext context, {
     Decoration? decoration,
     EdgeInsetsGeometry? padding,
   }) {
@@ -57,7 +58,7 @@ abstract class FilterView<FILTER_MODEL extends FilterModel>
         showFilterModelDebugDialog();
       },
       child: Icon(
-        _filterModelDebugIconData,
+        FaIconConstants.filterModelDebugIconData,
         size: iconSize ?? 16,
         color: iconColor ?? null,
       ),

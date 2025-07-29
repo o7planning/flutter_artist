@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class _StorageStructureGraphView extends StatefulWidget {
   final _StorageStructureGraphController controller;
@@ -154,7 +154,7 @@ class _StorageStructureGraphViewState
               }
             });
           },
-          iconData: _listenerIconData,
+          iconData: FaIconConstants.listenerIconData,
           iconColor: _listenerIconColor,
         ),
         const SizedBox(width: 10),
@@ -171,7 +171,7 @@ class _StorageStructureGraphViewState
               }
             });
           },
-          iconData: _eventSourceIconData,
+          iconData: FaIconConstants.eventSourceIconData,
           iconColor: _eventSourceIconColor,
         ),
         const SizedBox(width: 10),
@@ -188,7 +188,7 @@ class _StorageStructureGraphViewState
               }
             });
           },
-          iconData: _independentIconData,
+          iconData: FaIconConstants.independentIconData,
           iconColor: _nonEventOrListenerIconColor,
         ),
       ],

@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class _GraphItemShelfBox extends StatefulWidget {
   final Function() gotoStorage;
@@ -86,7 +86,7 @@ class _GraphItemShelfBoxState extends State<_GraphItemShelfBox> {
               ),
               onPressed: widget.gotoStorage,
               child: const Icon(
-                _uptoStorageIconData,
+                FaIconConstants.uptoStorageIconData,
                 color: Colors.white,
                 size: iconSize,
               ),

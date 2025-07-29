@@ -1,4 +1,4 @@
-part of '../../../flutter_artist.dart';
+part of '../../_fa_core.dart';
 
 class _FormErrorPropView extends StatelessWidget {
   final bool formInitialDataReady;
@@ -22,7 +22,7 @@ class _FormErrorPropView extends StatelessWidget {
           if (!formInitialDataReady)
             IconLabelText(
               icon: Icon(
-                _formErrorDisabledIconData,
+                FaIconConstants.formErrorDisabledIconData,
                 size: 16,
                 color: Colors.red,
               ),

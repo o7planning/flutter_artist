@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 final Color _listenerTextColor = Colors.indigo;
 final Color _eventSourceTextColor = Colors.red;

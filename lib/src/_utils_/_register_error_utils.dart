@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 String _printFatalError(String message) {
   return "\n*********************************************************************************************\n"

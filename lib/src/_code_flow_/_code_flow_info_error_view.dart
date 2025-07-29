@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class _CodeFlowInfoErrorView extends StatelessWidget {
   final _CodeFlowItem codeFlowItem;
@@ -52,9 +52,9 @@ class _CodeFlowInfoErrorView extends StatelessWidget {
 
   IconData _titleIconData() {
     if (codeFlowItem.isError()) {
-      return _errorIconData;
+      return FaIconConstants.errorIconData;
     } else if (codeFlowItem.isInfo()) {
-      return _infoIconData;
+      return FaIconConstants.infoIconData;
     } else {
       return Icons.question_mark;
     }

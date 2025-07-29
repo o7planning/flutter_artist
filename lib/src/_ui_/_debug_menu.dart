@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 class DebugMenu extends StatefulWidget {
   final double menuItemIconSize;
@@ -61,7 +61,7 @@ class _DebugMenuState extends State<DebugMenu> implements IErrorListener {
                 items: [
                   if (hasRecentErrors)
                     _buildPopupMenuItem(
-                      iconData: _errorIconData,
+                      iconData: FaIconConstants.errorIconData,
                       iconColor: Colors.red,
                       title: 'Recent Errors',
                       onTab: _showRecentErrors,
@@ -69,32 +69,32 @@ class _DebugMenuState extends State<DebugMenu> implements IErrorListener {
                   if (isSystemUser && hasRecentErrors) _divider(),
                   if (isSystemUser && FlutterArtist.canShowShelfStructure())
                     _buildPopupMenuItem(
-                      iconData: _shelfStructureIconData,
+                      iconData: FaIconConstants.shelfStructureIconData,
                       title: 'Shelf Structure',
                       onTab: _showShelfStructure,
                     ),
                   if (isSystemUser && FlutterArtist._canShowUiComponentDialog())
                     _buildPopupMenuItem(
-                      iconData: _uiComponentsIconData,
+                      iconData: FaIconConstants.uiComponentsIconData,
                       title: 'UI Components',
                       onTab: _showUiComponentsDialog,
                     ),
                   if (isSystemUser)
                     _buildPopupMenuItem(
-                      iconData: _storageIconData,
+                      iconData: FaIconConstants.storageIconData,
                       title: 'Storage Viewer',
                       onTab: _showStorage,
                     ),
                   if (isSystemUser) _divider(),
                   if (isSystemUser)
                     _buildPopupMenuItem(
-                      iconData: _clearCodeFlowIconData,
+                      iconData: FaIconConstants.clearCodeFlowIconData,
                       title: 'Clear Code Flow',
                       onTab: _clearCodeFlow,
                     ),
                   if (isSystemUser)
                     _buildPopupMenuItem(
-                      iconData: _flowLogIconData,
+                      iconData: FaIconConstants.flowLogIconData,
                       title: 'Code Flow Viewer',
                       onTab: _showFlowLogStructure,
                     ),
@@ -102,7 +102,7 @@ class _DebugMenuState extends State<DebugMenu> implements IErrorListener {
                   if (isSystemUser &&
                       FlutterArtist.showRestDebugViewerDialog != null)
                     _buildPopupMenuItem(
-                      iconData: _restDebugIconData,
+                      iconData: FaIconConstants.restDebugIconData,
                       title: 'Rest Debug Viewer',
                       onTab: () {
                         _showRestDebugViewerDialog();

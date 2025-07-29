@@ -1,4 +1,4 @@
-part of '../../../flutter_artist.dart';
+part of '../../_fa_core.dart';
 
 class _FormModelDebugView extends StatelessWidget {
   final FormModel formModel;
@@ -33,8 +33,8 @@ class _FormModelDebugView extends StatelessWidget {
             text: "",
             suffixIcon: Icon(
               formModel.formInitialDataReady
-                  ? _formInitialDataReadyTrueIconData
-                  : _formInitialDataReadyFalseIconData,
+                  ? FaIconConstants.formInitialDataReadyTrueIconData
+                  : FaIconConstants.formInitialDataReadyFalseIconData,
               color: formModel.formInitialDataReady //
                   ? Colors.indigo
                   : Colors.red,
@@ -51,7 +51,7 @@ class _FormModelDebugView extends StatelessWidget {
               visualDensity: VisualDensity(vertical: -3, horizontal: -3),
               contentPadding: EdgeInsets.all(0),
               leading: Icon(
-                _formErrorDisabledIconData2,
+                FaIconConstants.formErrorDisabledIconData2,
                 color: Colors.deepOrangeAccent,
                 size: 40,
               ),

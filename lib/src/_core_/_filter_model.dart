@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 abstract class FilterModel<
     FILTER_INPUT extends FilterInput, // EmptyFilterInput
@@ -182,7 +182,7 @@ abstract class FilterModel<
     _filterCriteriaStructure._setFilterDataState(DataState.pending);
     //
     FILTER_CRITERIA? filterCriteria = await _startNewFilterActivity(
-      activityType: _FilterActivityType.updateFromFilterView,
+      activityType: FilterActivityType.updateFromFilterView,
       filterInput: null,
     );
     return filterCriteria != null;
@@ -285,7 +285,7 @@ abstract class FilterModel<
   @_ImportantMethodAnnotation()
   Future<FILTER_CRITERIA?> _startNewFilterActivity({
     required FILTER_INPUT? filterInput,
-    required _FilterActivityType activityType,
+    required FilterActivityType activityType,
   }) async {
     print("#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFilterActivity");
 
@@ -440,7 +440,7 @@ abstract class FilterModel<
     required Object? parentMultiOptCriterionValue,
     required MultiOptCriterion multiOptCriterion,
     required Map<String, dynamic> formKeyInstantValues,
-    required _FilterActivityType activityType,
+    required FilterActivityType activityType,
   }) async {
     final String multiOptCriterionName = multiOptCriterion.criterionName;
 
@@ -459,7 +459,7 @@ abstract class FilterModel<
         _filterCriteriaStructure._getTempCurrentCriterionValue(
       criterionName: multiOptCriterionName,
     );
-    if (activityType == _FilterActivityType.updateFromFilterView) {
+    if (activityType == FilterActivityType.updateFromFilterView) {
       if (formKeyInstantValues.containsKey(multiOptCriterionName)) {
         newSelectedValue = formKeyInstantValues[multiOptCriterionName];
       }

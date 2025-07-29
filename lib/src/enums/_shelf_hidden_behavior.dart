@@ -1,0 +1,4 @@
+enum ShelfHiddenBehavior {
+  none,
+  clear;
+}

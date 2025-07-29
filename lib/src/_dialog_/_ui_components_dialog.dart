@@ -1,4 +1,4 @@
-part of '../../flutter_artist.dart';
+part of '../_fa_core.dart';
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
@@ -150,7 +150,7 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
         ),
         title: IconLabelText(
           icon: const Icon(
-            _locationIconData,
+            FaIconConstants.locationIconData,
             size: 16,
           ),
           label: "",
