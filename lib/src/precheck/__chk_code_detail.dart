@@ -1,6 +1,7 @@
-part of '../_fa_core.dart';
+import '../annotation/annotation.dart';
+import '__chk_code.dart';
 
-@_RenameAnnotation()
+@RenameAnnotation()
 abstract interface class ChkCodeDetail {
   ChkCode get chkCode;
 

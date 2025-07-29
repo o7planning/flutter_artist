@@ -21,10 +21,10 @@ part of '../_fa_core.dart';
 /// ```
 ///
 abstract class Scalar<
-    VALUE extends Object,
-    FILTER_INPUT extends FilterInput, // EmptyFilterInput
-    FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
-    > extends _XBase {
+VALUE extends Object,
+FILTER_INPUT extends FilterInput, // EmptyFilterInput
+FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
+> extends _XBase {
   late final Shelf shelf;
 
   int _lazyLoadCount = 0;
@@ -70,7 +70,7 @@ abstract class Scalar<
   /// If this scalar does not declare a FilterModel, it will have the default FilterModel.
   ///
   late final FilterModel<FILTER_INPUT, FILTER_CRITERIA>
-      _registeredOrDefaultFilterModel;
+  _registeredOrDefaultFilterModel;
 
   ///
   /// Returns a FilterModel declared in the [Shelf.registerStructure()] method.
@@ -85,7 +85,7 @@ abstract class Scalar<
   }
 
   late final __scalarData =
-      _ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
+  _ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
 
   final Map<_RefreshableWidgetState, bool> _scalarFragmentWidgetStates = {};
   final Map<_RefreshableWidgetState, bool> _scalarControlWidgetStates = {};
@@ -115,7 +115,8 @@ abstract class Scalar<
     required this.description,
     required ScalarConfig config,
     required String? filterModelName,
-  })  : config = config.copy(),
+  })
+      : config = config.copy(),
         registerFilterModelName = filterModelName;
 
   // ***************************************************************************
@@ -170,7 +171,9 @@ abstract class Scalar<
     }
     //
     print(
-        ">> ${getClassName(this)}._unitQuery - queryState: $queryDataState, forceQuery: ${thisXScalar.needQuery}");
+        ">> ${getClassName(
+            this)}._unitQuery - queryState: $queryDataState, forceQuery: ${thisXScalar
+            .needQuery}");
     //
     if (!forceQuery) {
       return;
@@ -204,7 +207,7 @@ abstract class Scalar<
         xFilterModel.queried = true;
       } else {
         filterCriteriaOfFilterModel =
-            filterModel._filterCriteria! as FILTER_CRITERIA;
+        filterModel._filterCriteria! as FILTER_CRITERIA;
       }
     } catch (e, stackTrace) {
       /* Never Error */
@@ -225,8 +228,8 @@ abstract class Scalar<
     // Ready FilterCriteria:
     //
     bool xCriteriaChanged = this.__scalarData._isXCriteriaChanged(
-          newFilterCriteria: filterCriteriaOfFilterModel,
-        );
+      newFilterCriteria: filterCriteriaOfFilterModel,
+    );
     //
     final callApiQueryMethod = ScalarErrorMethod.callApiQuery;
     bool isQueryError = false;
@@ -490,10 +493,10 @@ abstract class Scalar<
     __assertThisXScalar(thisXScalar);
     //
     this.__scalarData._updateFrom(
-          filterCriteria: filterCriteria,
-          dataState: dataState,
-          value: value,
-        );
+      filterCriteria: filterCriteria,
+      dataState: dataState,
+      value: value,
+    );
   }
 
   // ***************************************************************************

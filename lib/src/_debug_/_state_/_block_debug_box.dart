@@ -43,14 +43,13 @@ abstract class _BaseDebugBox extends StatelessWidget {
         children: children.isEmpty
             ? children
             : children
-            .expand(
-              (w) =>
-          [
-            w,
-            const SizedBox(height: 5),
-          ],
-        )
-            .toList(),
+                .expand(
+                  (w) => [
+                    w,
+                    const SizedBox(height: 5),
+                  ],
+                )
+                .toList(),
       ),
     );
   }

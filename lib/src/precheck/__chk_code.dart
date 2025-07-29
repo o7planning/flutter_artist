@@ -1,5 +1,3 @@
-part of '../_fa_core.dart';
-
 enum ChkCode {
   busy,
   noForm,

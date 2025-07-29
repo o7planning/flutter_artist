@@ -1,6 +1,8 @@
-part of '../../_fa_core.dart';
+import '../annotation/annotation.dart';
+import '__chk_code.dart';
+import '__chk_code_detail.dart';
 
-@_RenameAnnotation()
+@RenameAnnotation()
 enum BlockItemCreationPrecheck implements ChkCodeDetail {
   busy(
     chkCode: ChkCode.busy,

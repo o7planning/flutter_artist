@@ -1,12 +1,12 @@
 part of '../_fa_core.dart';
 
 class _BlockData<
-    ID extends Object,
-    ITEM extends Object,
-    ITEM_DETAIL extends Object,
-    FILTER_INPUT extends FilterInput,
-    FILTER_CRITERIA extends FilterCriteria,
-    EXTRA_FORM_INPUT extends ExtraFormInput> {
+ID extends Object,
+ITEM extends Object,
+ITEM_DETAIL extends Object,
+FILTER_INPUT extends FilterInput,
+FILTER_CRITERIA extends FilterCriteria,
+EXTRA_FORM_INPUT extends ExtraFormInput> {
   ///
   /// Owner block
   ///
@@ -35,7 +35,7 @@ class _BlockData<
     List<ITEM> newList = [...itemList];
     final itemCount = newList.length;
     newList.removeWhere(
-      (it) => block.getItemId(it) == block.getItemId(currItem),
+          (it) => block.getItemId(it) == block.getItemId(currItem),
     );
     if (itemCount > newList.length) {
       newList.add(currItem);
@@ -54,7 +54,7 @@ class _BlockData<
     //
     if (currItem != null) {
       List<ITEM> chkItems =
-          _checkedItems.where((it) => it != currItem).toList();
+      _checkedItems.where((it) => it != currItem).toList();
       switch (currentItemInclusion) {
         case CurrentItemChkInclusion.withoutCurrentItem:
           break;
@@ -82,7 +82,7 @@ class _BlockData<
     //
     if (currItem != null) {
       List<ITEM> selItems =
-          _selectedItems.where((it) => it != currItem).toList();
+      _selectedItems.where((it) => it != currItem).toList();
       switch (currentItemInclusion) {
         case CurrentItemSelInclusion.withoutCurrentItem:
           break;
@@ -172,10 +172,9 @@ class _BlockData<
   // ***************************************************************************
   // ***************************************************************************
 
-  _BlockData._(
-    this.block,
-    PageableData? pageable,
-  )   : _pageable = pageable,
+  _BlockData._(this.block,
+      PageableData? pageable,)
+      : _pageable = pageable,
         _initialPageable = pageable,
         _pagination = PaginationData.empty() {
     _queryDataState = block.isRoot ? DataState.pending : DataState.none;

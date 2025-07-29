@@ -14,6 +14,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
+import 'package:flutter_artist/src/precheck/__chk_code_detail.dart';
+import 'package:flutter_artist/src/precheck/_block_clearance_precheck.dart';
+import 'package:flutter_artist/src/precheck/_block_form_enablement_chk.dart';
+import 'package:flutter_artist/src/precheck/_block_form_reset_precheck.dart';
+import 'package:flutter_artist/src/precheck/_block_form_save_precheck.dart';
+import 'package:flutter_artist/src/precheck/_block_item_creation_precheck.dart';
+import 'package:flutter_artist/src/precheck/_block_item_curr_selection_precheck.dart';
+import 'package:flutter_artist/src/precheck/_block_item_deletion_precheck.dart';
+import 'package:flutter_artist/src/precheck/_block_item_edit_precheck.dart';
+import 'package:flutter_artist/src/precheck/_block_query_precheck.dart';
+import 'package:flutter_artist/src/precheck/_block_quick_action_precheck.dart';
+import 'package:flutter_artist/src/precheck/_block_quick_create_item_precheck.dart';
+import 'package:flutter_artist/src/precheck/_block_quick_update_item_precheck.dart';
+import 'package:flutter_artist/src/precheck/_check_allow.dart';
+import 'package:flutter_artist/src/precheck/_enter_form_fields_precheck.dart';
+import 'package:flutter_artist/src/precheck/_form_model_load_data_precheck.dart';
+import 'package:flutter_artist/src/precheck/_scalar_query_precheck.dart';
+import 'package:flutter_artist/src/precheck/_show_form_info_precheck.dart';
 import 'package:flutter_artist/src/typedef/custom_confirmation.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
     as dialogs;
@@ -38,6 +56,7 @@ import 'action/block_quick_create_multi_items_action.dart';
 import 'action/block_quick_item_update_action.dart';
 import 'action/scalar_load_extra_data_quick_action.dart';
 import 'action/scalar_quick_action.dart';
+import 'annotation/annotation.dart';
 import 'enums/_action_confirmation_type.dart';
 import 'enums/_action_result_state.dart';
 import 'enums/_activity_hidden_behavior.dart';
@@ -388,44 +407,6 @@ part '_error_/_form_error_info.dart';
 part '_error_/_form_temp_error.dart';
 
 part '_error_/_scalar_error_info.dart';
-
-part '_error_enum_/__chk_code.dart';
-
-part '_error_enum_/__chk_code_detail.dart';
-
-part '_error_enum_/_actionable/_block_clearance_precheck.dart';
-
-part '_error_enum_/_actionable/_block_form_enablement_chk.dart';
-
-part '_error_enum_/_actionable/_form_model_load_data_precheck.dart';
-
-part '_error_enum_/_actionable/_block_quick_action_precheck.dart';
-
-part '_error_enum_/_actionable/_block_form_reset_precheck.dart';
-
-part '_error_enum_/_actionable/_block_form_save_precheck.dart';
-
-part '_error_enum_/_actionable/_block_item_creation_precheck.dart';
-
-part '_error_enum_/_actionable/_block_item_curr_selection_precheck.dart';
-
-part '_error_enum_/_actionable/_block_item_deletion_precheck.dart';
-
-part '_error_enum_/_actionable/_block_item_edit_precheck.dart';
-
-part '_error_enum_/_actionable/_block_quick_update_item_precheck.dart';
-
-part '_error_enum_/_actionable/_block_quick_create_item_precheck.dart';
-
-part '_error_enum_/_actionable/_block_query_precheck.dart';
-
-part '_error_enum_/_actionable/_scalar_query_precheck.dart';
-
-part '_error_enum_/_actionable/_check_allow.dart';
-
-part '_error_enum_/_actionable/_enter_form_fields_precheck.dart';
-
-part '_error_enum_/_actionable/_show_form_info_precheck.dart';
 
 part '_fa_.dart';
 
@@ -819,9 +800,3 @@ class _BlockQuickChildBlockItemsActionAnnotation {
 }
 
 // ******* Block QuickAction (END) *********************************************
-
-class _RenameAnnotation {
-  final String? newName;
-
-  const _RenameAnnotation([this.newName]);
-}

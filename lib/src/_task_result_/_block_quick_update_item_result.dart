@@ -1,6 +1,6 @@
 part of '../_fa_core.dart';
 
-@_RenameAnnotation()
+@RenameAnnotation()
 class BlockQuickUpdateItemResult extends ActionResult {
   final BlockQuickUpdateItemPrecheck? precheck;
   AppError? _appError;

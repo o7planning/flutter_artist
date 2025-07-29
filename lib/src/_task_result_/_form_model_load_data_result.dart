@@ -1,6 +1,6 @@
 part of '../_fa_core.dart';
 
-@_RenameAnnotation("FormModelDataLoadResult")
+@RenameAnnotation("FormModelDataLoadResult")
 class FormModelLoadDataResult extends ActionResult {
   final FormModelLoadDataPrecheck? precheck;
 
