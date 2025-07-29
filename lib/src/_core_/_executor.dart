@@ -171,7 +171,6 @@ class _Executor {
       await taskUnit.xBlock.block._unitQuickAction(
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
-        afterQuickAction: taskUnit.afterQuickAction,
         taskResult: taskUnit.taskResult as BlockQuickActionResult,
       );
     }

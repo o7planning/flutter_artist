@@ -6,16 +6,14 @@ class _BlockQuickActionTaskUnit<DATA extends Object>
     extends _ResultedTaskUnit<BlockQuickActionResult> {
   final _XBlock xBlock;
   final BlockQuickAction<DATA> action;
-  final AfterBlockQuickAction afterQuickAction;
 
   _BlockQuickActionTaskUnit({
     required this.xBlock,
     required this.action,
-    required this.afterQuickAction,
   }) : super(
-    taskType: TaskType.blockQuickAction,
-    taskResult: BlockQuickActionResult(),
-  );
+          taskType: TaskType.blockQuickAction,
+          taskResult: BlockQuickActionResult(),
+        );
 
   @override
   int get xShelfId => xBlock.xShelfId;

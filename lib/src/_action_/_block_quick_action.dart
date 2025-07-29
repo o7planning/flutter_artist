@@ -1,24 +1,34 @@
 part of '../../flutter_artist.dart';
 
 abstract class BlockQuickAction<DATA extends Object> extends BaseAction {
-  final List<Type> affectedItemTypes;
+  final BlockQuickActionConfig config;
 
   const BlockQuickAction({
     required super.needToConfirm,
     required super.actionInfo,
-    required this.affectedItemTypes,
+    required this.config,
   });
 
-  Future<ApiResult<DATA>?> callApi();
+  Future<ApiResult<void>> callApi();
 }
 
-abstract class SimpleQuickAction extends BlockQuickAction {
-  final dynamic data;
+class BlockQuickActionConfig {
+  final AfterBlockQuickAction afterQuickAction;
+  final List<Type> affectedItemTypes;
 
-  const SimpleQuickAction({
-    required this.data,
-    required super.needToConfirm,
-    required super.actionInfo,
-    required super.affectedItemTypes,
+  const BlockQuickActionConfig({
+    this.affectedItemTypes = const [],
+    required this.afterQuickAction,
   });
 }
+
+// abstract class SimpleQuickAction extends BlockQuickAction {
+//   final dynamic data;
+//
+//   const SimpleQuickAction({
+//     required this.data,
+//     required super.needToConfirm,
+//     required super.actionInfo,
+//     required super.affectedItemTypes,
+//   });
+// }
