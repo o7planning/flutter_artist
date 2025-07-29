@@ -1,6 +1,6 @@
 part of '../_fa_core.dart';
 
-class BlockClearanceResult extends ActionResult<BlockClearancePrecheck> {
+class BlockClearanceResult extends TaskResult<BlockClearancePrecheck> {
   BlockClearanceResult({super.precheck});
 
   @override
