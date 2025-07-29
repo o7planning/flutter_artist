@@ -1,15 +1,8 @@
 part of '../_fa_core.dart';
 
 // Old Name: CurrentItemSelectionResult
-class BlockItemCurrSelectionResult<ITEM> extends ActionResult {
-  final BlockItemCurrSelectionPrecheck? precheck;
-  AppError? _appError;
-  StackTrace? _stackTrace;
-
-  AppError? get error => _appError;
-
-  StackTrace? get stackTrace => _stackTrace;
-
+class BlockItemCurrSelectionResult<ITEM>
+    extends ActionResult<BlockItemCurrSelectionPrecheck> {
   final CurrentItemSelectionType currentItemSelectionType;
   final List<ITEM?> _candidateItems = [];
   ITEM? _oldCurrentItem;
@@ -19,7 +12,7 @@ class BlockItemCurrSelectionResult<ITEM> extends ActionResult {
   bool _convertError = false;
 
   BlockItemCurrSelectionResult({
-    required this.precheck,
+    required super.precheck,
     required this.currentItemSelectionType,
     required Object Function(ITEM item) getItemId,
     //
@@ -38,7 +31,7 @@ class BlockItemCurrSelectionResult<ITEM> extends ActionResult {
   bool get success {
     if (precheck != null) {
       return false;
-    } else if (_appError != null) {
+    } else if (error != null) {
       return false;
     }
     switch (currentItemSelectionType) {
@@ -51,14 +44,6 @@ class BlockItemCurrSelectionResult<ITEM> extends ActionResult {
       case CurrentItemSelectionType.refresh:
         return _successfullySelectedToRefresh();
     }
-  }
-
-  void _setAppError({
-    required AppError appError,
-    required StackTrace? stackTrace,
-  }) {
-    _appError = appError;
-    _stackTrace = stackTrace;
   }
 
   void _addCandidateItem(ITEM? candidateItem) {

@@ -1,14 +1,7 @@
 part of '../_fa_core.dart';
 
-class ItemsDeletionResult<ITEM> extends ActionResult {
-  final BlockItemDeletionPrecheck? precheck;
-  AppError? _appError;
-  StackTrace? _stackTrace;
-
-  AppError? get error => _appError;
-
-  StackTrace? get stackTrace => _stackTrace;
-
+class ItemsDeletionResult<ITEM>
+    extends ActionResult<BlockItemDeletionPrecheck> {
   ITEM? _deletedItem;
   ITEM? _failedItem;
 
@@ -17,9 +10,9 @@ class ItemsDeletionResult<ITEM> extends ActionResult {
   ITEM? get failedItem => _failedItem;
 
   ItemsDeletionResult({
-    this.precheck,
-    StackTrace? stackTrace,
-  }) : _stackTrace = stackTrace;
+    super.precheck,
+    super.stackTrace,
+  });
 
   @override
   bool get success {
@@ -39,7 +32,6 @@ class ItemsDeletionResult<ITEM> extends ActionResult {
     required StackTrace? stackTrace,
   }) {
     _failedItem = failedItem;
-    _appError = appError;
-    _stackTrace = stackTrace;
+    _setAppError(appError: appError, stackTrace: stackTrace);
   }
 }

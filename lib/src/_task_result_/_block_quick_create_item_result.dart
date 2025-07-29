@@ -1,31 +1,15 @@
 part of '../_fa_core.dart';
 
 @RenameAnnotation()
-class BlockQuickCreateItemResult extends ActionResult {
-  final BlockQuickCreateItemPrecheck? precheck;
-  AppError? _appError;
-  StackTrace? _stackTrace;
-
-  AppError? get error => _appError;
-
-  StackTrace? get stackTrace => _stackTrace;
-
-  BlockQuickCreateItemResult({this.precheck, StackTrace? stackTrace})
-      : _stackTrace = stackTrace;
+class BlockQuickCreateItemResult
+    extends ActionResult<BlockQuickCreateItemPrecheck> {
+  BlockQuickCreateItemResult({super.precheck, super.stackTrace});
 
   @override
   bool get success {
     if (precheck != null) {
       return false;
     }
-    return _appError == null;
-  }
-
-  void _setAppError({
-    required AppError appError,
-    required StackTrace? stackTrace,
-  }) {
-    _appError = appError;
-    _stackTrace = stackTrace;
+    return error == null;
   }
 }

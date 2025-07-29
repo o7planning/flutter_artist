@@ -1,33 +1,22 @@
 part of '../_fa_core.dart';
 
-class BlockQueryResult extends ActionResult {
-  BlockQueryPrecheck? _precheck;
-
-  BlockQueryPrecheck? get precheck => _precheck;
-
-  AppError? _appError;
-  StackTrace? _stackTrace;
-
-  AppError? get error => _appError;
-
-  StackTrace? get stackTrace => _stackTrace;
-
+class BlockQueryResult extends ActionResult<BlockQueryPrecheck> {
   BlockQueryResult._();
 
   BlockQueryResult._queryBlockedTemporarily()
-      : _precheck = BlockQueryPrecheck.queryBlockedTemporarily;
+      : super(precheck: BlockQueryPrecheck.queryBlockedTemporarily);
 
   BlockQueryResult._noCurrentPagination()
-      : _precheck = BlockQueryPrecheck.noCurrentPagination;
+      : super(precheck: BlockQueryPrecheck.noCurrentPagination);
 
   BlockQueryResult._noPreviousPage()
-      : _precheck = BlockQueryPrecheck.noPreviousPage;
+      : super(precheck: BlockQueryPrecheck.noPreviousPage);
 
   BlockQueryResult._noNextPage() //
-      : _precheck = BlockQueryPrecheck.noNextPage;
+      : super(precheck: BlockQueryPrecheck.noNextPage);
 
   void _setFilterError() {
-    _precheck = BlockQueryPrecheck.filterError;
+    _setPrecheck(BlockQueryPrecheck.filterError);
   }
 
   void _setAppError({required AppError appError, StackTrace? stackTrace}) {

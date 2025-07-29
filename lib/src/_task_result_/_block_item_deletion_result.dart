@@ -1,14 +1,6 @@
 part of '../_fa_core.dart';
 
-class ItemDeletionResult<ITEM> extends ActionResult {
-  final BlockItemDeletionPrecheck? precheck;
-  AppError? _appError;
-  StackTrace? _stackTrace;
-
-  AppError? get error => _appError;
-
-  StackTrace? get stackTrace => _stackTrace;
-
+class ItemDeletionResult<ITEM> extends ActionResult<BlockItemDeletionPrecheck> {
   ITEM? _candidateItem;
   ITEM? _deletedItem;
   ITEM? _failedItem;
@@ -21,17 +13,16 @@ class ItemDeletionResult<ITEM> extends ActionResult {
 
   ItemDeletionResult({
     required ITEM? candidateItem,
-    this.precheck,
-    StackTrace? stackTrace,
-  })  : _candidateItem = candidateItem,
-        _stackTrace = stackTrace;
+    super.precheck,
+    super.stackTrace,
+  }) : _candidateItem = candidateItem;
 
   @override
   bool get success {
     if (precheck != null) {
       return false;
     }
-    if (_appError != null) {
+    if (error != null) {
       return false;
     }
     // TODO: Xem lai.
@@ -52,7 +43,6 @@ class ItemDeletionResult<ITEM> extends ActionResult {
     required StackTrace? stackTrace,
   }) {
     _failedItem = failedItem;
-    _appError = appError;
-    _stackTrace = stackTrace;
+    _setAppError(appError: appError, stackTrace: stackTrace);
   }
 }
