@@ -11,9 +11,9 @@ class _BlockQuickUpdateItemTaskUnit
     required this.xBlock,
     required this.action,
   }) : super(
-          taskType: TaskType.blockQuickUpdateItem,
-          taskResult: BlockQuickUpdateItemResult(),
-        );
+    taskType: TaskType.blockQuickUpdateItem,
+    taskResult: BlockQuickUpdateItemResult(),
+  );
 
   @override
   int get xShelfId => xBlock.xShelfId;

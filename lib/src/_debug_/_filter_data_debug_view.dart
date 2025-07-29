@@ -93,12 +93,11 @@ class _FilterDataDebugViewState extends State<_FilterDataDebugView> {
       TabData(
         text: ' Filter Criteria Structure',
         closable: false,
-        leading: (context, status) =>
-            Icon(
-              FaIconConstants.formValueIconData,
-              color: _getTabIconColor(status),
-              size: iconSize,
-            ),
+        leading: (context, status) => Icon(
+          FaIconConstants.formValueIconData,
+          color: _getTabIconColor(status),
+          size: iconSize,
+        ),
         content: _buildTabFilterCriteriaStructure(),
       ),
     );
@@ -106,12 +105,11 @@ class _FilterDataDebugViewState extends State<_FilterDataDebugView> {
       TabData(
         text: ' Initial',
         closable: false,
-        leading: (context, status) =>
-            Icon(
-              FaIconConstants.formValueIconData,
-              color: _getTabIconColor(status),
-              size: iconSize,
-            ),
+        leading: (context, status) => Icon(
+          FaIconConstants.formValueIconData,
+          color: _getTabIconColor(status),
+          size: iconSize,
+        ),
         content: _buildTabContent(
           info: "Initial Form values",
           json: initial1Json,
@@ -122,12 +120,11 @@ class _FilterDataDebugViewState extends State<_FilterDataDebugView> {
       TabData(
         text: ' Current',
         closable: false,
-        leading: (context, status) =>
-            Icon(
-              FaIconConstants.formValueIconData,
-              color: _getTabIconColor(status),
-              size: iconSize,
-            ),
+        leading: (context, status) => Icon(
+          FaIconConstants.formValueIconData,
+          color: _getTabIconColor(status),
+          size: iconSize,
+        ),
         content: _buildTabContent(
           info: "The current values of the filter (Will be passed to the "
               "${getClassName(widget.filterModel)}.toFilterCriteriaObject()).",
@@ -140,12 +137,11 @@ class _FilterDataDebugViewState extends State<_FilterDataDebugView> {
       TabData(
         text: ' ',
         closable: false,
-        leading: (context, status) =>
-            Icon(
-              FaIconConstants.effectIconData,
-              color: _getTabIconColor(status),
-              size: iconSize,
-            ),
+        leading: (context, status) => Icon(
+          FaIconConstants.effectIconData,
+          color: _getTabIconColor(status),
+          size: iconSize,
+        ),
         content: _buildFormEventListenerInfo(),
       ),
     );
@@ -201,20 +197,18 @@ class _FilterDataDebugViewState extends State<_FilterDataDebugView> {
           children: [
             _InfoView(
                 info:
-                "When you successfully add or modify a record on the '${getClassName(
-                    widget.filterModel)}' block, "
+                    "When you successfully add or modify a record on the '${getClassName(widget.filterModel)}' block, "
                     "the listening blocks will be switched to the 'pending' state, "
                     "they will be lazily queried again when they are visible on the screen.\n"
                     "Here is a list of affected blocks or scalars:"),
             const Divider(height: 10),
             ...listeners.map(
-                  (listener) =>
-                  _ShelfBlockScalarTypeWidget(
-                    shelfBlockScalarType: listener,
-                    isListener: true,
-                    isEventSource: false,
-                    onTap: null,
-                  ),
+              (listener) => _ShelfBlockScalarTypeWidget(
+                shelfBlockScalarType: listener,
+                isListener: true,
+                isEventSource: false,
+                onTap: null,
+              ),
             ),
           ],
         ),

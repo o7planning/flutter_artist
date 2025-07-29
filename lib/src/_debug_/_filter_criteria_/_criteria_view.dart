@@ -57,7 +57,7 @@ class _FilterCriterionView extends StatelessWidget {
                       message: "Multi Selection",
                       child: Radio(
                         value:
-                            !(criterion as MultiOptCriterion).singleSelection,
+                        !(criterion as MultiOptCriterion).singleSelection,
                         onChanged: null,
                         groupValue: true,
                       ),
@@ -150,10 +150,10 @@ class _FilterCriterionView extends StatelessWidget {
     return value == null
         ? null
         : Text(
-            " - ${value!.runtimeType?.toString()}" ?? "",
-            style: TextStyle(
-              fontSize: 12,
-            ),
-          );
+      " - ${value!.runtimeType?.toString()}" ?? "",
+      style: TextStyle(
+        fontSize: 12,
+      ),
+    );
   }
 }

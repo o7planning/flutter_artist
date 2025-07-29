@@ -1,5 +1,4 @@
-import '__chk_code.dart';
-import '__chk_code_detail.dart';
+
 
 enum CheckAllow {
   allow,

@@ -1,5 +1,3 @@
-
-
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 import '../../flutter_artist.dart';

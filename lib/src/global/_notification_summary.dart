@@ -1,5 +1,3 @@
-
-
 interface class INotificationSummary {
   // Nothing
 }

@@ -57,7 +57,7 @@ class _Storage {
 
     if (external) {
       final List<Scalar> listenerScalars =
-      __getListenerScalarsByAffectedItemTypes(
+          __getListenerScalarsByAffectedItemTypes(
         eventShelf: eventShelf,
         affectedItemTypes: affectedItemTypes,
         external: external,
@@ -89,23 +89,19 @@ class _Storage {
 
     // Broadcast Data Types:
     List<Type> outsideEventTypes =
-    eventBlock._getBroadcastDataTypes(external: true);
+        eventBlock._getBroadcastDataTypes(external: true);
     List<Type> internalEventTypes =
-    eventBlock._getBroadcastDataTypes(external: false);
+        eventBlock._getBroadcastDataTypes(external: false);
     //
     print(
-        "~~~~~~~~~> ${outsideBroadcast != null
-            ? 'FIRE EVENT TO OUTSIDE'
-            : 'NOT FIRE EVENT TO OUTSIDE'}"
-            " --> Event Item Types: $outsideEventTypes"
-            " - ${getClassName(eventBlock)}");
+        "~~~~~~~~~> ${outsideBroadcast != null ? 'FIRE EVENT TO OUTSIDE' : 'NOT FIRE EVENT TO OUTSIDE'}"
+        " --> Event Item Types: $outsideEventTypes"
+        " - ${getClassName(eventBlock)}");
 
     print(
-        "~~~~~~~~~> ${internalBroadcast != null
-            ? 'FIRE EVENT IN INTERNAL'
-            : 'NOT FIRE EVENT IN INTERNAL'}"
-            " --> Event Item Types: $internalEventTypes"
-            " - ${getClassName(eventBlock)}");
+        "~~~~~~~~~> ${internalBroadcast != null ? 'FIRE EVENT IN INTERNAL' : 'NOT FIRE EVENT IN INTERNAL'}"
+        " --> Event Item Types: $internalEventTypes"
+        " - ${getClassName(eventBlock)}");
 
     if (internalBroadcast != null) {
       final List<Scalar> listenerScalars = __getListenerScalarsByBlock(
@@ -187,7 +183,7 @@ class _Storage {
     if (creator == null) {
       throw _printFatalError(
           " ERROR: '$shelfName' not found. You need to call:\n "
-              " FlutterArtist.storage.registerShelf(()=> $shelfName())");
+          " FlutterArtist.storage.registerShelf(()=> $shelfName())");
     }
     shelf = creator() as F;
     __shelfMap[shelfName] = shelf;
@@ -242,7 +238,7 @@ class _Storage {
     Map<String, Shelf> listenerMap = _getListenerShelves();
     Map<String, Shelf> map = {}..addAll(__shelfMap);
     map.removeWhere((shelfName, shelf) =>
-    eventMap.keys.contains(shelfName) ||
+        eventMap.keys.contains(shelfName) ||
         listenerMap.keys.contains(shelfName));
     return map;
   }
@@ -338,7 +334,7 @@ class _Storage {
       Shelf listenerShelf = __shelfMap[shelfName]!;
 
       List<Block> eventBlocks =
-      _getEventBlocksByShelf(listenerShelf: listenerShelf);
+          _getEventBlocksByShelf(listenerShelf: listenerShelf);
       if (eventBlocks.isNotEmpty) {
         foundShelfMap[shelfName] = listenerShelf;
         continue;
@@ -571,7 +567,7 @@ class _Storage {
               blockType: listenerBlock.runtimeType,
               classDefinition: listenerBlock._classDefinition,
               classParameterDefinition:
-              listenerBlock._classParametersDefinition,
+                  listenerBlock._classParametersDefinition,
             ),
           );
         }
@@ -582,7 +578,7 @@ class _Storage {
               scalarType: listenerScalar.runtimeType,
               classDefinition: listenerScalar._classDefinition,
               classParameterDefinition:
-              listenerScalar._classParametersDefinition,
+                  listenerScalar._classParametersDefinition,
             ),
           );
         }
@@ -612,7 +608,7 @@ class _Storage {
           continue;
         }
         final List<Type> listenToDataTypes =
-        listenerBlock._getOutsideDataTypesToListen();
+            listenerBlock._getOutsideDataTypesToListen();
         final Type itemType = blk.getItemType();
         final Type itemDetailType = blk.getItemDetailType();
         if (_contains(listenToDataTypes, itemType) ||
@@ -723,8 +719,7 @@ class _Storage {
       );
       if (shelf.hiddenBehavior == ShelfHiddenBehavior.clear) {
         print(
-            "  ---------> Remove ${getClassName(
-                shelf)} from FlutterArtist Storage");
+            "  ---------> Remove ${getClassName(shelf)} from FlutterArtist Storage");
         __shelfMap.remove(shelf.name);
       } else {
         print("  ---------> Do Nothing");
@@ -812,12 +807,11 @@ class _Storage {
         forceQueryScalarOpts: sbList.queryScalars
             .map(
               (s) => _ScalarOpt(scalar: s),
-        )
+            )
             .toList(),
         forceQueryBlockOpts: sbList.queryBlocks
             .map(
-              (b) =>
-              _BlockOpt(
+              (b) => _BlockOpt(
                   block: b,
                   forceQuery: true,
                   forceReloadItem: true,
@@ -825,7 +819,7 @@ class _Storage {
                   listBehavior: null,
                   suggestedSelection: null,
                   postQueryBehavior: null),
-        )
+            )
             .toList(),
         forceQueryFormModelOpts: [],
       );
