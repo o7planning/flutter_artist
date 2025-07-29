@@ -27,6 +27,7 @@ class _BlockOpt {
 
   @override
   String toString() {
-    return "${getClassName(this)}(${getClassName(block)}, forceQuery: $forceQuery)";
+    return "${getClassName(this)}(${getClassName(
+        block)}, forceQuery: $forceQuery)";
   }
 }
