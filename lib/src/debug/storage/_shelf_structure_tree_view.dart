@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import '../../core/_fa_core.dart';
 import '../../icon/icon_constants.dart';
 import '../../widgets/_custom_app_container.dart';
-import '_block_or_scalar.dart';
 import '../constants/_debug_constants.dart';
+import '_block_or_scalar.dart';
 
 class ShelfStructureTreeView extends StatefulWidget {
   final Shelf shelf;

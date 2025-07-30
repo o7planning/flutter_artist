@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 import '../../core/_fa_core.dart';
-import '../../core/_ui_/_block_or_scalar_info_view.dart';
-import '../../core/_ui_/_shelf_block_scalar_type_widget.dart';
-import '../../core/_ui_/_shelf_info_view.dart';
 import '../../icon/icon_constants.dart';
 import '../../widgets/_custom_app_container.dart';
-import '_block_or_scalar.dart';
 import '../constants/_debug_constants.dart';
+import '_block_or_scalar.dart';
 import '_shelf_relationship_controller.dart';
 import '_shelf_structure_tree_view.dart';
+import 'widgets/_block_or_scalar_info_view.dart';
+import 'widgets/_shelf_block_scalar_type_widget.dart';
+import 'widgets/_shelf_info_view.dart';
 
 class ShelfRelationshipView extends StatefulWidget {
   final ShelfRelationshipController shelfRelationshipController;
@@ -17,6 +17,7 @@ class ShelfRelationshipView extends StatefulWidget {
   final Function(ShelfBlockScalarType shelfBlockType) onSelectShelfBlockType;
 
   const ShelfRelationshipView({
+    super.key,
     required this.shelfRelationshipController,
     required this.shelf,
     required this.onSelectShelfBlockType,

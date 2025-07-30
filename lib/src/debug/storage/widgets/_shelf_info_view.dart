@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../_fa_core.dart';
+import '../../../core/_fa_core.dart';
 
 class ShelfInfoView extends StatelessWidget {
   final Shelf? shelf;
 
-  const ShelfInfoView({required this.shelf});
+  const ShelfInfoView({super.key, required this.shelf});
 
   @override
   Widget build(BuildContext context) {

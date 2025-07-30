@@ -1,6 +1,6 @@
 import '../../core/_fa_core.dart';
 import '_block_or_scalar.dart';
-import '_graph_item.dart';
+import 'widgets/_graph_item.dart';
 
 class DebugUtils {
   static GraphItem toRootDebugGraphItem(Shelf shelf) {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist/src/debug/constants/_debug_constants.dart';
 
-import '../../core/_fa_core.dart';
-import '../../icon/icon_constants.dart';
+import '../../../core/_fa_core.dart';
+import '../../../icon/icon_constants.dart';
 
 class GraphItemSimpleShelfBox extends StatefulWidget {
   final bool isRoot;

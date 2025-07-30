@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 
-import '../../debug/constants/_debug_constants.dart';
-import '../../icon/icon_constants.dart';
-import '../_fa_core.dart';
+import '../../../core/_fa_core.dart';
+import '../../../icon/icon_constants.dart';
+import '../../constants/_debug_constants.dart';
 
 class ShelfBlockScalarTypeWidget extends StatelessWidget {
   final Function()? onTap;

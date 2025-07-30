@@ -9,8 +9,8 @@ import '../../core/_fa_core.dart';
 import '../../enums/_data_state.dart';
 import '../../icon/icon_constants.dart';
 import '../../widgets/_custom_app_container.dart';
-import 'widgets/_prop_view.dart';
 import '_form_model_debug_view.dart';
+import 'widgets/_prop_view.dart';
 
 class FormPropsStructureView extends StatefulWidget {
   final FormModel formModel;

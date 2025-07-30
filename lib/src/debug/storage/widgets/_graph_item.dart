@@ -1,5 +1,5 @@
-import '../../core/_fa_core.dart';
-import '_block_or_scalar.dart';
+import '../../../core/_fa_core.dart';
+import '../_block_or_scalar.dart';
 
 class GraphItem {
   BlockOrScalar? blockOrScalar;

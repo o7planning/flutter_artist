@@ -7,8 +7,8 @@ import '../../core/_fa_core.dart';
 import '../../enums/_data_state.dart';
 import '../../icon/icon_constants.dart';
 import '../../utils/_tooltip_utils.dart';
-import '_block_or_scalar.dart';
 import '../constants/_debug_constants.dart';
+import '../storage/_block_or_scalar.dart';
 
 class GraphItemBlockOrScalarBox extends StatefulWidget {
   final BlockOrScalar blockOrScalar;
