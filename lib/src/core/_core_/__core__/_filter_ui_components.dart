@@ -5,6 +5,9 @@ class _FilterUIComponents {
 
   final Map<_RefreshableWidgetState, XState> _filterFragmentWidgetStates = {};
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   _FilterUIComponents({required this.filterModel});
 
   // ***************************************************************************
