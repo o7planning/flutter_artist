@@ -183,10 +183,13 @@ class FilterCriteriaStructureViewState
                   ),
                   if (isMultiOpt && isMultiSelection) const SizedBox(width: 5),
                   if (isMultiOpt && isMultiSelection)
-                    const Icon(
-                      FaIconConstants.multiSelectionIconData,
-                      size: 16,
-                      color: Colors.red,
+                    Tooltip(
+                      message: "Multi Selection",
+                      child: const Icon(
+                        FaIconConstants.multiSelectionIconData,
+                        size: 16,
+                        color: Colors.red,
+                      ),
                     ),
                 ],
               ),
