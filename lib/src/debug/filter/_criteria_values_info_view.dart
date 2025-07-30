@@ -10,6 +10,7 @@ class CriteriaValuesView extends StatelessWidget {
   static const double fontSize = 11;
 
   const CriteriaValuesView({
+    super.key,
     required this.filterCriteria,
     required this.filterCriteriaPath,
   });

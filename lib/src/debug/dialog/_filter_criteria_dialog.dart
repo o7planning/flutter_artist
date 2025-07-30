@@ -3,7 +3,7 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../core/_fa_core.dart';
 import '../../icon/icon_constants.dart';
-import '../_debug_filter_/__filter_criteria_debug_view.dart';
+import '../filter/__filter_criteria_debug_view.dart';
 
 class FilterCriteriaDialog extends StatefulWidget {
   final FilterModel? filterModel;

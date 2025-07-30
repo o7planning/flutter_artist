@@ -4,7 +4,7 @@ import '_blk_or_scr_criteria_view.dart';
 class ScalarCriteriaView extends BlkOrScrCriteriaView {
   final Scalar scalar;
 
-  ScalarCriteriaView({required this.scalar});
+  const ScalarCriteriaView({super.key, required this.scalar});
 
   @override
   String getBlockOrScalarClassName() {

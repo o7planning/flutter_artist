@@ -55,16 +55,16 @@ import '../adapter/_logged_in_user_adapter.dart';
 import '../adapter/_notification_adapter.dart';
 import '../annotation/annotation.dart';
 
-import '../debug/_code_flow_/_code_flow_func_trace_info_view.dart';
-import '../debug/_code_flow_/_code_flow_info_error_view.dart';
-import '../debug/_code_flow_/_code_flow_method_args_view.dart';
-import '../debug/_code_flow_/_code_flow_method_view.dart';
+import '../debug/code_flow/_code_flow_func_trace_info_view.dart';
+import '../debug/code_flow/_code_flow_info_error_view.dart';
+import '../debug/code_flow/_code_flow_method_args_view.dart';
+import '../debug/code_flow/_code_flow_method_view.dart';
 import '../debug/_debug_/_block_or_scalar.dart';
 import '../debug/_debug_/_error_logger.dart';
 import '../debug/_debug_/_filter_data_debug_view.dart';
 import '../debug/_debug_/_shelf_structure_graph_view.dart';
 import '../debug/_debug_/_storage_structure_view.dart';
-import '../debug/_debug_filter_/__filter_criteria_debug_view.dart';
+import '../debug/filter/__filter_criteria_debug_view.dart';
 import '../debug/_dialog_size.dart';
 import '../debug/dialog/_block_error_viewer_dialog.dart';
 import '../debug/dialog/_code_flow_viewer_dialog.dart';
@@ -166,7 +166,7 @@ part '_task_result_/_scalar_query_result.dart';
 
 part '_code_flow_/_code_flow_item.dart';
 
-part '../debug/_code_flow_/_code_flow_item_view.dart';
+part '../debug/code_flow/_code_flow_item_view.dart';
 
 part '_code_flow_/_code_flow_logger.dart';
 
