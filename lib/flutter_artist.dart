@@ -1,4 +1,8 @@
-export 'src/core/_fa_core.dart';
+export 'src/debug/_debug_/_state_/_block_debug_state_view.dart';
+export 'src/debug/_debug_/_state_/_block_debug_options.dart';
+export 'src/debug/_debug_/_state_/_form_debug_options.dart';
+export 'src/debug/_debug_/_state_/_pagination_debug_options.dart';
+
 export 'src/action/base_action.dart';
 export 'src/action/block_quick_action.dart';
 export 'src/action/block_quick_child_block_items_action.dart';
@@ -13,6 +17,7 @@ export 'src/adapter/_global_data_adapter.dart';
 export 'src/adapter/_locale_adapter.dart';
 export 'src/adapter/_logged_in_user_adapter.dart';
 export 'src/adapter/_notification_adapter.dart';
+export 'src/core/_fa_core.dart';
 export 'src/enums/_action_confirmation_type.dart';
 export 'src/enums/_action_result_state.dart';
 export 'src/enums/_activity_hidden_behavior.dart';

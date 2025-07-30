@@ -1,5 +1,3 @@
-
-
 enum CheckAllow {
   allow,
   notAllow,

@@ -127,8 +127,8 @@ class FormPropView extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              headerSubtitle: _headerSubtitle(prop._initialValue),
-              content: DynamicValueView(value: prop._initialValue),
+              headerSubtitle: _headerSubtitle(prop.initialValue),
+              content: DynamicValueView(value: prop.initialValue),
             ),
             SimpleAccordionSection(
               initiallyExpanded: true,
@@ -138,8 +138,8 @@ class FormPropView extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              headerSubtitle: _headerSubtitle(prop._currentValue),
-              content: DynamicValueView(value: prop._currentValue),
+              headerSubtitle: _headerSubtitle(prop.currentValue),
+              content: DynamicValueView(value: prop.currentValue),
             ),
             if (prop is MultiOptProp)
               SimpleAccordionSection(
@@ -150,8 +150,8 @@ class FormPropView extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                headerSubtitle: _headerSubtitle(prop._initialXData),
-                content: XDataView(xData: prop._initialXData),
+                headerSubtitle: _headerSubtitle(prop.initialXData),
+                content: XDataView(xData: prop.initialXData),
               ),
             if (prop is MultiOptProp)
               SimpleAccordionSection(
@@ -162,8 +162,8 @@ class FormPropView extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                headerSubtitle: _headerSubtitle(prop._currentXData),
-                content: XDataView(xData: prop._currentXData),
+                headerSubtitle: _headerSubtitle(prop.currentXData),
+                content: XDataView(xData: prop.currentXData),
               ),
           ],
         ),

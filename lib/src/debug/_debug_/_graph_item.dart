@@ -1,14 +1,15 @@
-part of '../_debug.dart';
+import '../../core/_fa_core.dart';
+import '_block_or_scalar.dart';
 
-class _GraphItem {
+class GraphItem {
   BlockOrScalar? blockOrScalar;
   Shelf? shelf;
 
-  final List<_GraphItem> children = [];
+  final List<GraphItem> children = [];
 
-  _GraphItem.shelf(this.shelf);
+  GraphItem.shelf(this.shelf);
 
-  _GraphItem.blockOrScalar(this.blockOrScalar);
+  GraphItem.blockOrScalar(this.blockOrScalar);
 
   String get name {
     if (shelf != null) {
@@ -19,16 +20,16 @@ class _GraphItem {
   }
 }
 
-class _GraphGItem {
+class GraphGItem {
   bool isRoot;
   bool isNotifier;
   bool isListener;
   String shelfName;
   Shelf? shelf;
 
-  final List<_GraphGItem> children = [];
+  final List<GraphGItem> children = [];
 
-  _GraphGItem({
+  GraphGItem({
     required this.isRoot,
     required this.isListener,
     required this.isNotifier,

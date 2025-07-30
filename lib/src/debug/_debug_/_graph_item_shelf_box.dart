@@ -118,7 +118,7 @@ class GraphItemShelfBoxState extends State<GraphItemShelfBox> {
         2 * spacing +
         2 * padding +
         iconSize +
-        _calculateTextSize(
+        TextSizeUtils.calculateTextSize(
           text: _getShelfName(),
           style: _getTextStyle(),
         ).width;

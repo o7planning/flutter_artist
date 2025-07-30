@@ -1,10 +1,11 @@
- 
 import 'package:flutter/material.dart';
-import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart' as dialogs;
+import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
+    as dialogs;
 
 import '../../../flutter_artist.dart';
-import '../../debug/_debug.dart';
 import '../../debug/_debug_/_form_data_debug_view.dart';
+import '../../debug/_debug_/_shelf_structure_graph_view.dart';
+import '../../debug/_dialog_size.dart';
 
 class FormDataInfoDialog extends StatefulWidget {
   final FormModel formModel;
@@ -20,6 +21,22 @@ class FormDataInfoDialog extends StatefulWidget {
   State<StatefulWidget> createState() {
     return _FormDataInfoDialogState();
   }
+
+  static Future<void> showFormInfoDialog({
+    required BuildContext context,
+    required String locationInfo,
+    required FormModel formModel,
+  }) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return FormDataInfoDialog(
+          formModel: formModel,
+          locationInfo: locationInfo,
+        );
+      },
+    );
+  }
 }
 
 class _FormDataInfoDialogState extends State<FormDataInfoDialog> {
@@ -27,7 +44,7 @@ class _FormDataInfoDialogState extends State<FormDataInfoDialog> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = _calculateDebugDialogSize(context);
+    Size size = DialogSizeUtils.calculateDebugDialogSize(context);
 
     // Set up the AlertDialog
     dialogs.FaAlertDialog alert = dialogs.FaAlertDialog(
@@ -69,20 +86,4 @@ class _FormDataInfoDialogState extends State<FormDataInfoDialog> {
             ),
     );
   }
-}
-
-Future<void> _showFormInfoDialog({
-  required BuildContext context,
-  required String locationInfo,
-  required FormModel formModel,
-}) async {
-  await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return FormDataInfoDialog(
-        formModel: formModel,
-        locationInfo: locationInfo,
-      );
-    },
-  );
 }

@@ -273,7 +273,7 @@ class _FlutterArtist {
 
   Future<void> showStorageDialog() async {
     BuildContext context = adapter.getCurrentContext();
-    await _showStorageDialog(context: context, shelf: null);
+    await StorageDialog.showStorageDialog(context: context, shelf: null);
   }
 
   Future<void> showFlowLogDialog() async {
@@ -300,7 +300,8 @@ class _FlutterArtist {
 
   Future<void> showErrorViewerDialog() async {
     BuildContext context = adapter.getCurrentContext();
-    await _showErrorLogViewerDialog(
+    //
+    await ErrorLogViewerDialog.showErrorLogViewerDialog(
       context: context,
       errorLogger: errorLogger,
     );
@@ -310,7 +311,13 @@ class _FlutterArtist {
     return errorLogger.errorCount != 0;
   }
 
-  void _notifyError() {
+  // TODO: (Internal)
+  void internalIncreaseTotalErrorCount() {
+    _totalErrorCount++;
+  }
+
+  // TODO: (Internal)
+  void internalNotifyError() {
     Future.delayed(
       Duration.zero,
       () {

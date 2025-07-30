@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-import '../../debug/_debug.dart';
+import '../../debug/_debug_/_debug_constants.dart';
+import '../../debug/_debug_/_shelf_structure_graph_view.dart';
 import '../../debug/_debug_/_storage_structure_view.dart';
+import '../../debug/_dialog_size.dart';
 import '../../widgets/_custom_app_container.dart';
 import '../_fa_core.dart';
 
@@ -18,6 +20,18 @@ class StorageDialog extends StatefulWidget {
   State<StorageDialog> createState() {
     return _StorageDialogState();
   }
+
+  static Future<void> showStorageDialog({
+    required BuildContext context,
+    required Shelf? shelf,
+  }) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StorageDialog(shelf: shelf);
+      },
+    );
+  }
 }
 
 class _StorageDialogState extends State<StorageDialog> {
@@ -26,13 +40,13 @@ class _StorageDialogState extends State<StorageDialog> {
   @override
   void initState() {
     super.initState();
-    FlutterArtist.storage._loadAll();
+    FlutterArtist.storage.debugLoadAll();
     _currentShelf = widget.shelf;
   }
 
   @override
   Widget build(BuildContext context) {
-    Size size = _calculateDebugDialogSize(context);
+    Size size = DialogSizeUtils.calculateDebugDialogSize(context);
 
     Widget contentWidget = CustomAppContainer(
       padding: const EdgeInsets.all(2),
@@ -81,11 +95,11 @@ class _StorageDialogState extends State<StorageDialog> {
             backgroundColor: Colors.blue.withAlpha(30),
           ),
           onPressed: null,
-          child: const Text(
+          child: Text(
             "Storage Graph",
             style: TextStyle(
-              fontSize: _graphBoxFontSizeChildBox,
-              color: _graphBoxTextColor,
+              fontSize: DebugConstants.graphBoxFontSizeChildBox,
+              color: DebugConstants.graphBoxTextColor,
             ),
           ),
         ),
@@ -100,16 +114,4 @@ class _StorageDialogState extends State<StorageDialog> {
       _currentShelf = shelf;
     });
   }
-}
-
-Future<void> _showStorageDialog({
-  required BuildContext context,
-  required Shelf? shelf,
-}) async {
-  await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return StorageDialog(shelf: shelf);
-    },
-  );
 }

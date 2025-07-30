@@ -24,7 +24,7 @@ class _FilterModelInfoDialogState extends State<_FilterModelInfoDialog> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = _calculateDebugDialogSize(context);
+    Size size = DialogSizeUtils.calculateDebugDialogSize(context);
 
     // Set up the AlertDialog
     dialogs.FaAlertDialog alert = dialogs.FaAlertDialog(

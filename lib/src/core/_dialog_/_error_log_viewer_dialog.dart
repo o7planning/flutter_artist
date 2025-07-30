@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
+as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
-import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart' as dialogs;
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 import '../../../flutter_artist.dart';
@@ -20,6 +21,20 @@ class ErrorLogViewerDialog extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _ErrorLogViewerDialogState();
+  }
+
+  static Future<void> showErrorLogViewerDialog({
+    required BuildContext context,
+    required ErrorLogger errorLogger,
+  }) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ErrorLogViewerDialog(
+          errorLogger: errorLogger,
+        );
+      },
+    );
   }
 }
 
@@ -96,18 +111,4 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
       ),
     );
   }
-}
-
-Future<void> _showErrorLogViewerDialog({
-  required BuildContext context,
-  required ErrorLogger errorLogger,
-}) async {
-  await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return ErrorLogViewerDialog(
-        errorLogger: errorLogger,
-      );
-    },
-  );
 }

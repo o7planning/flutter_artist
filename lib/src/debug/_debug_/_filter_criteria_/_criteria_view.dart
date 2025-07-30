@@ -6,6 +6,7 @@ import '../../../icon/icon_constants.dart';
 import '../../../widgets/_custom_app_container.dart';
 import '../../../widgets/_simple_accordion.dart';
 import '../../../widgets/_simple_accordion_section.dart';
+import '../_widget_/_xdata_view.dart';
 import '_criteria_value_view.dart';
 
 class FilterCriterionView extends StatelessWidget {
@@ -111,8 +112,8 @@ class FilterCriterionView extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              headerSubtitle: _headerSubtitle(criterion._initialValue),
-              content: CriterionValueView(value: criterion._initialValue),
+              headerSubtitle: _headerSubtitle(criterion.initialValue),
+              content: CriterionValueView(value: criterion.initialValue),
             ),
             SimpleAccordionSection(
               initiallyExpanded: true,
@@ -122,8 +123,8 @@ class FilterCriterionView extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              headerSubtitle: _headerSubtitle(criterion._currentValue),
-              content: CriterionValueView(value: criterion._currentValue),
+              headerSubtitle: _headerSubtitle(criterion.currentValue),
+              content: CriterionValueView(value: criterion.currentValue),
             ),
             if (criterion is MultiOptCriterion)
               SimpleAccordionSection(
@@ -134,8 +135,8 @@ class FilterCriterionView extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                headerSubtitle: _headerSubtitle(criterion._initialXData),
-                content: XDataView(xData: criterion._initialXData),
+                headerSubtitle: _headerSubtitle(criterion.initialXData),
+                content: XDataView(xData: criterion.initialXData),
               ),
             if (criterion is MultiOptCriterion)
               SimpleAccordionSection(
@@ -146,8 +147,8 @@ class FilterCriterionView extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                headerSubtitle: _headerSubtitle(criterion._currentXData),
-                content: XDataView(xData: criterion._currentXData),
+                headerSubtitle: _headerSubtitle(criterion.currentXData),
+                content: XDataView(xData: criterion.currentXData),
               ),
           ],
         ),

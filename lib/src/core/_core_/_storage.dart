@@ -157,6 +157,10 @@ class _Storage {
     return type.toString();
   }
 
+  String debugGetShelfName(Type type) {
+    return _getShelfName(type);
+  }
+
   // ***************************************************************************
   // ***************************************************************************
 
@@ -200,6 +204,16 @@ class _Storage {
     }
   }
 
+  // TODO: Internal Use.
+  void debugLoadAll() {
+    _loadAll();
+  }
+
+  // TODO: Internal Use.
+  F debugCreateShelf<F extends Shelf>(String shelfName) {
+    return _createShelf(shelfName);
+  }
+
   // ***************************************************************************
   // ***************************************************************************
 
@@ -208,6 +222,11 @@ class _Storage {
     Shelf? shelf = __shelfMap[shelfName];
     shelf ??= _createShelf(shelfName);
     return shelf;
+  }
+
+  // TODO: Internal Use.
+  Shelf? debugFindShelf(Type shelfType) {
+    return _findShelf(shelfType);
   }
 
   // ***************************************************************************
@@ -293,7 +312,7 @@ class _Storage {
     required Block listenerBlock,
     required Map<String, Shelf> foundShelfMap,
   }) {
-    List<Type> listenTypes = listenerBlock._getOutsideDataTypesToListen();
+    List<Type> listenTypes = listenerBlock.getOutsideDataTypesToListen();
 
     for (Shelf shelf in __shelfMap.values) {
       if (shelf == listenerBlock.shelf) {
@@ -320,6 +339,21 @@ class _Storage {
         foundShelfMap: foundShelfMap,
       );
     }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Map<String, Shelf> debugGetListenerShelves() {
+    return _getListenerShelves();
+  }
+
+  Map<String, Shelf> debugGetEventShelves({required bool external}) {
+    return _getEventShelves(external: external);
+  }
+
+  Map<String, Shelf> debugGetIndependentShelves({required bool external}) {
+    return _getIndependentShelves(external: external);
   }
 
   // ***************************************************************************
@@ -432,7 +466,7 @@ class _Storage {
       for (Block blockToCheck in shelf.blocks) {
         for (Type affectedItemType in affectedItemTypes) {
           if (_contains(
-            blockToCheck._getOutsideDataTypesToListen(),
+            blockToCheck.getOutsideDataTypesToListen(),
             affectedItemType,
           )) {
             foundMap[blockToCheck._shortPathName] = blockToCheck;
@@ -486,7 +520,7 @@ class _Storage {
           continue;
         }
         for (Scalar scalar in shelf.scalars) {
-          List<Type> listenerTypes = scalar._getOutsideDataTypesToListen(
+          List<Type> listenerTypes = scalar.getOutsideDataTypesToListen(
             external: true,
           );
           for (Type affectedItemType in affectedItemTypes) {
@@ -502,7 +536,7 @@ class _Storage {
     // Internal:
     else {
       for (Scalar scalar in eventShelf.scalars) {
-        List<Type> listenerTypes = scalar._getOutsideDataTypesToListen(
+        List<Type> listenerTypes = scalar.getOutsideDataTypesToListen(
           external: false,
         );
         for (Type affectedItemType in affectedItemTypes) {
@@ -544,7 +578,7 @@ class _Storage {
   // ***************************************************************************
 
   // Callable.
-  List<ShelfBlockScalarType> _getListenerShelfBlockScalarTypes({
+  List<ShelfBlockScalarType> getListenerShelfBlockScalarTypes({
     required BlockOrScalar eventBlockOrScalar,
     required bool external,
   }) {
@@ -565,9 +599,9 @@ class _Storage {
             ShelfBlockScalarType.block(
               shelfType: listenerBlock.shelf.runtimeType,
               blockType: listenerBlock.runtimeType,
-              classDefinition: listenerBlock._classDefinition,
+              classDefinition: listenerBlock.debugClassDefinition,
               classParameterDefinition:
-                  listenerBlock._classParametersDefinition,
+                  listenerBlock.debugClassParametersDefinition,
             ),
           );
         }
@@ -576,9 +610,9 @@ class _Storage {
             ShelfBlockScalarType.scalar(
               shelfType: listenerScalar.shelf.runtimeType,
               scalarType: listenerScalar.runtimeType,
-              classDefinition: listenerScalar._classDefinition,
+              classDefinition: listenerScalar.debugClassDefinition,
               classParameterDefinition:
-                  listenerScalar._classParametersDefinition,
+                  listenerScalar.debugClassParametersDefinition,
             ),
           );
         }
@@ -608,7 +642,7 @@ class _Storage {
           continue;
         }
         final List<Type> listenToDataTypes =
-            listenerBlock._getOutsideDataTypesToListen();
+            listenerBlock.getOutsideDataTypesToListen();
         final Type itemType = blk.getItemType();
         final Type itemDetailType = blk.getItemDetailType();
         if (_contains(listenToDataTypes, itemType) ||
@@ -656,7 +690,7 @@ class _Storage {
   // ***************************************************************************
 
   // Callable.
-  List<ShelfBlockScalarType> _getEventShelfBlockTypes({
+  List<ShelfBlockScalarType> getEventShelfBlockTypes({
     required BlockOrScalar listenerBlockOrScalar,
   }) {
     final List<Block> foundEventBlocks;
@@ -676,8 +710,8 @@ class _Storage {
         ShelfBlockScalarType.block(
           shelfType: eventBlock.shelf.runtimeType,
           blockType: eventBlock.runtimeType,
-          classDefinition: eventBlock._classDefinition,
-          classParameterDefinition: eventBlock._classParametersDefinition,
+          classDefinition: eventBlock.debugClassDefinition,
+          classParameterDefinition: eventBlock.debugClassParametersDefinition,
         ),
       );
     }

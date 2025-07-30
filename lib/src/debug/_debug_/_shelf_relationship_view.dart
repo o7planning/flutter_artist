@@ -6,9 +6,9 @@ import '../../core/_ui_/_shelf_block_scalar_type_widget.dart';
 import '../../core/_ui_/_shelf_info_view.dart';
 import '../../icon/icon_constants.dart';
 import '../../widgets/_custom_app_container.dart';
-import '../_debug.dart';
 import '_block_or_scalar.dart';
 import '_debug_constants.dart';
+import '_shelf_relationship_controller.dart';
 import '_shelf_structure_tree_view.dart';
 
 class ShelfRelationshipView extends StatefulWidget {
@@ -34,7 +34,7 @@ class _ShelfRelationshipViewState extends State<ShelfRelationshipView> {
   @override
   void initState() {
     super.initState();
-    widget.shelfRelationshipController._setShelfBlockType =
+    widget.shelfRelationshipController.setShelfBlockType =
         (ShelfBlockScalarType shelfBlockType) {
       //
     };
@@ -105,21 +105,21 @@ class _ShelfRelationshipViewState extends State<ShelfRelationshipView> {
     List<ShelfBlockScalarType> listeners = [];
     List<ShelfBlockScalarType> eventSources = [];
     if (selectedBlockOrScalar?.block != null) {
-      listeners = FlutterArtist.storage._getListenerShelfBlockScalarTypes(
+      listeners = FlutterArtist.storage.getListenerShelfBlockScalarTypes(
         eventBlockOrScalar: BlockOrScalar.block(selectedBlockOrScalar!.block!),
         external: true,
       );
-      eventSources = FlutterArtist.storage._getEventShelfBlockTypes(
+      eventSources = FlutterArtist.storage.getEventShelfBlockTypes(
         listenerBlockOrScalar:
             BlockOrScalar.block(selectedBlockOrScalar!.block!),
       );
     } else if (selectedBlockOrScalar?.scalar != null) {
-      listeners = FlutterArtist.storage._getListenerShelfBlockScalarTypes(
+      listeners = FlutterArtist.storage.getListenerShelfBlockScalarTypes(
         eventBlockOrScalar:
             BlockOrScalar.scalar(selectedBlockOrScalar!.scalar!),
         external: true,
       );
-      eventSources = FlutterArtist.storage._getEventShelfBlockTypes(
+      eventSources = FlutterArtist.storage.getEventShelfBlockTypes(
         listenerBlockOrScalar:
             BlockOrScalar.scalar(selectedBlockOrScalar!.scalar!),
       );
@@ -160,7 +160,8 @@ class _ShelfRelationshipViewState extends State<ShelfRelationshipView> {
   }
 
   void _onSelectFluBlockType(ShelfBlockScalarType shelfBlockType) {
-    Shelf? shelf = FlutterArtist.storage._findShelf(shelfBlockType.shelfType);
+    Shelf? shelf =
+        FlutterArtist.storage.debugFindShelf(shelfBlockType.shelfType);
     if (shelf != null) {
       // TODO ...
     }

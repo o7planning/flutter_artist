@@ -27,6 +27,14 @@ abstract class Criterion<V> {
 
   //
 
+  XData? get currentXData => _currentXData;
+
+  V? get currentValue => _currentValue;
+
+  V? get initialValue => _initialValue;
+
+  XData? get initialXData => _initialXData;
+
   Criterion({required this.criterionName});
 
   bool isDirty() {

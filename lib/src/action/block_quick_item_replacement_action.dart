@@ -1,6 +1,4 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
-
-
 import '../core/_fa_core.dart';
 import 'base_action.dart';
 

@@ -120,11 +120,11 @@ abstract class Block<
     return "block > ${shelf.name} > $name";
   }
 
-  String get _classDefinition {
-    return "${getClassName(this)}$_classParametersDefinition";
+  String get debugClassDefinition {
+    return "${getClassName(this)}$debugClassParametersDefinition";
   }
 
-  String get _classParametersDefinition {
+  String get debugClassParametersDefinition {
     return "<${getItemIdType()}, ${getItemType()}, ${getItemDetailType()}, "
         "${getFilterInputType()}, ${getFilterCriteriaType()}, ${getExtraFormInputType()}>";
   }
@@ -142,6 +142,13 @@ abstract class Block<
   ///
   late final FilterModel<FILTER_INPUT, FILTER_CRITERIA>
       _registeredOrDefaultFilterModel;
+
+  ///
+  /// This field is not null.
+  /// If this block does not declare a [FilterModel], it will have the default [FilterModel].
+  ///
+  FilterModel<FILTER_INPUT, FILTER_CRITERIA>
+      get registeredOrDefaultFilterModel => _registeredOrDefaultFilterModel;
 
   ///
   /// Returns a FilterModel declared in the [Shelf.registerStructure()] method.
@@ -390,7 +397,7 @@ abstract class Block<
     }
   }
 
-  List<Type> _getOutsideDataTypesToListen() {
+  List<Type> getOutsideDataTypesToListen() {
     if (config.outsideEventReaction == null) {
       return [];
     }

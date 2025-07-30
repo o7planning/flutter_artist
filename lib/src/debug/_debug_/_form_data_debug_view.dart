@@ -10,6 +10,7 @@ import '../../core/_fa_core.dart';
 import '../../core/_ui_/_shelf_block_scalar_type_widget.dart';
 import '../../icon/icon_constants.dart';
 import '../../widgets/_custom_app_container.dart';
+import '../_tab_theme_utils.dart';
 import '_block_or_scalar.dart';
 import '_form_props_/_form_props_structure_view.dart';
 import '_widget_/_info_view.dart';
@@ -46,7 +47,7 @@ class _FormDataViewState extends State<FormDataView> {
   void initState() {
     super.initState();
     //
-    listeners = FlutterArtist.storage._getListenerShelfBlockScalarTypes(
+    listeners = FlutterArtist.storage.getListenerShelfBlockScalarTypes(
       eventBlockOrScalar: BlockOrScalar.block(widget.formModel.block),
       external: true,
     );
@@ -89,8 +90,8 @@ class _FormDataViewState extends State<FormDataView> {
   }
 
   Widget _buildTabContainer() {
-    FormPropsStructure formPropsStructure =
-        widget.formModel._formPropsStructure;
+    FormPropsStructure formPropsStructure = widget.formModel.formPropsStructure;
+    //
     Map<String, dynamic> initial1Value = formPropsStructure.initialFormData;
     Map<String, dynamic> instantValue = formPropsStructure.currentFormData;
 
@@ -162,7 +163,7 @@ class _FormDataViewState extends State<FormDataView> {
     _controller = TabbedViewController(tabs);
     TabbedView tabbedView = TabbedView(controller: _controller);
 
-    TabbedViewThemeData themeData = _getTabbedViewThemeData();
+    TabbedViewThemeData themeData = TabThemeUtils.getTabbedViewThemeData();
 
     TabbedViewTheme tabbedViewTheme = TabbedViewTheme(
       data: themeData,

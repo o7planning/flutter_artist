@@ -22,7 +22,7 @@ class _CodeFlowViewerDialogState extends State<_CodeFlowViewerDialog> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = _calculateDebugDialogSize(context);
+    Size size = DialogSizeUtils.calculateDebugDialogSize(context);
 
     Widget contentWidget = CustomAppContainer(
       padding: const EdgeInsets.all(2),

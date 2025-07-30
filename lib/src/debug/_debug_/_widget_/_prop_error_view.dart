@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
+import '../../../../flutter_artist.dart';
 import '../../../error/_form_error_info.dart';
 import '../../../icon/icon_constants.dart';
 import '../../../widgets/_custom_app_container.dart';
@@ -70,7 +71,10 @@ class FormErrorPropView extends StatelessWidget {
   void _showErrorDetails(BuildContext context) {
     ErrorInfo? errorInfo = formErrorInfo.toErrorInfo();
     //
-    _showErrorViewerDialog(
-        context: context, title: "Error", errorInfo: errorInfo);
+    ErrorViewerDialog.showErrorViewerDialog(
+      context: context,
+      title: "Error",
+      errorInfo: errorInfo,
+    );
   }
 }

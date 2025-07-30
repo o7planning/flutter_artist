@@ -128,7 +128,7 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
   }
 
   Future<bool> __showFormInfo() async {
-    _showFormInfoDialog(
+    FormDataInfoDialog.showFormInfoDialog(
       context: context,
       locationInfo: getClassName(widget.ownerClassInstance),
       formModel: widget.block.formModel!,

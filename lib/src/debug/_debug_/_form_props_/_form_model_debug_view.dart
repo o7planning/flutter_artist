@@ -24,7 +24,7 @@ class FormModelDebugView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(formModel._classDefinition),
+          Text(formModel.debugClassDefinition),
           Divider(),
           IconLabelText(
             label: "Form Mode: ",
@@ -122,8 +122,11 @@ class FormModelDebugView extends StatelessWidget {
   void _showErrorDetails(BuildContext context) {
     ErrorInfo? errorInfo = formModel.formErrorInfo?.toErrorInfo();
     if (errorInfo != null) {
-      _showErrorViewerDialog(
-          context: context, title: "Error", errorInfo: errorInfo);
+      ErrorViewerDialog.showErrorViewerDialog(
+        context: context,
+        title: "Error",
+        errorInfo: errorInfo,
+      );
     }
   }
 }

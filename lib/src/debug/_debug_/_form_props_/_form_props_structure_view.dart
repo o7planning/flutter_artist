@@ -45,13 +45,13 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
     _currentNode = formModelNode;
     rootTreeNode = TreeNode.root()..add(formModelNode);
     //
-    FormPropsStructure structure = widget.formModel._formPropsStructure;
+    FormPropsStructure structure = widget.formModel.formPropsStructure;
 
-    List<MultiOptProp> rootMultiOptProp = structure._rootOptProps;
+    List<MultiOptProp> rootMultiOptProp = structure.debugRootOptProps;
     for (MultiOptProp multiOptProp in rootMultiOptProp) {
       _addMultiOptPropCascade(formModelNode, multiOptProp);
     }
-    List<SimpleProp> simpleProps = structure._simpleProps;
+    List<SimpleProp> simpleProps = structure.simpleProps;
     for (SimpleProp simpleProp in simpleProps) {
       _addSimpleProp(formModelNode, simpleProp);
     }
@@ -113,8 +113,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
   // ***************************************************************************
 
   Widget buildTreeView(BuildContext context) {
-    FormPropsStructure formPropsStructure =
-        widget.formModel._formPropsStructure;
+    FormPropsStructure formPropsStructure = widget.formModel.formPropsStructure;
     //
     return CustomAppContainer(
       margin: const EdgeInsets.all(5),
@@ -253,7 +252,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
     //   _currentNode = childNode;
     // }
     currentNode.add(childNode);
-    for (MultiOptProp childMultiOptProp in multiOptProp._children) {
+    for (MultiOptProp childMultiOptProp in multiOptProp.children) {
       _addMultiOptPropCascade(childNode, childMultiOptProp);
     }
   }

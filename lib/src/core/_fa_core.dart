@@ -53,12 +53,14 @@ import '../adapter/_locale_adapter.dart';
 import '../adapter/_logged_in_user_adapter.dart';
 import '../adapter/_notification_adapter.dart';
 import '../annotation/annotation.dart';
-import '../debug/_debug.dart';
+
 import '../debug/_debug_/_block_or_scalar.dart';
 import '../debug/_debug_/_error_logger.dart';
 import '../debug/_debug_/_filter_data_debug_view.dart';
+import '../debug/_debug_/_shelf_structure_graph_view.dart';
 import '../debug/_debug_/_storage_structure_view.dart';
 import '../debug/_debug_filter_/__filter_criteria_debug_view.dart';
+import '../debug/_dialog_size.dart';
 import '../enums/_action_confirmation_type.dart';
 import '../enums/_action_result_state.dart';
 import '../enums/_activity_hidden_behavior.dart';
@@ -116,6 +118,9 @@ import '../precheck/block_query_precheck.dart';
 import '../widgets/_custom_app_container.dart';
 import '../widgets/_simple_accordion.dart';
 import '../widgets/_simple_accordion_section.dart';
+import '_dialog_/_error_log_viewer_dialog.dart';
+import '_dialog_/_form_data_info_dialog.dart';
+import '_dialog_/_storage_dialog.dart';
 import '_ui_/_shelf_info_view.dart';
 import '_utils_/_debug_print.dart';
 
@@ -190,8 +195,6 @@ part '_core_/_block_data.dart';
 part '_core_/_block_internal_broadcast.dart';
 
 part '_core_/_block_internal_event_reaction.dart';
-
-part '../debug/_debug_/_block_or_scalar.dart';
 
 part '_core_/_block_outside_broadcast.dart';
 
@@ -289,19 +292,13 @@ part '_dialog_/_dev_mode_settings_dialog.dart';
 
 part '_dialog_/_dialog_constants.dart';
 
-part '_dialog_/_dialog_size.dart';
-
 part '_dialog_/_error_info_viewer.dart';
-
-part '_dialog_/_error_log_viewer_dialog.dart';
 
 part '_dialog_/_error_viewer_dialog.dart';
 
 part '_dialog_/_filter_criteria_dialog.dart';
 
 part '_dialog_/_filter_model_info_dialog.dart';
-
-part '_dialog_/_form_data_info_dialog.dart';
 
 part '_dialog_/_form_error_viewer_dialog.dart';
 
@@ -310,8 +307,6 @@ part '_dialog_/_location_info_dialog.dart';
 part '_dialog_/_scalar_error_viewer_dialog.dart';
 
 part '_dialog_/_simple_error_viewer_dialog.dart';
-
-part '_dialog_/_storage_dialog.dart';
 
 part '_dialog_/_ui_components_dialog.dart';
 
@@ -407,11 +402,7 @@ part '_ui_/_block_items_view.dart';
 
 part '_ui_/_block_items_view_builder.dart';
 
-part '_ui_/_block_or_scalar_info_view.dart';
-
 part '_ui_/_control_bar_button.dart';
-
-part '../widgets/_custom_app_container.dart';
 
 part '_ui_/_debug_menu.dart';
 
@@ -420,8 +411,6 @@ part '_ui_/_dev_container.dart';
 part '_ui_/_filter_view.dart';
 
 part '_ui_/_filter_view_builder.dart';
-
-part '_ui_/_floating_button.dart';
 
 part '_ui_/_form_view.dart';
 
@@ -451,23 +440,11 @@ part '_ui_/_scalar_fragment_view.dart';
 
 part '_ui_/_scalar_fragment_view_builder.dart';
 
-part '_ui_/_shelf_block_scalar_type_widget.dart';
-
-part '_ui_/_shelf_info_view.dart';
-
-part '../widgets/_simple_accordion.dart';
-
-part '../widgets/_simple_accordion_section.dart';
-
-part '../widgets/_small_text_button.dart';
-
 part '_ui_/_sort_options.dart';
 
 part '_ui_/_sort_options_bar.dart';
 
 part '_ui_/_sort_options_dropdown.dart';
-
-part '../widgets/_table_container.dart';
 
 part '_ui_/_task_progress_view_builder.dart';
 
@@ -515,11 +492,7 @@ part '_utils_/_register_error_utils.dart';
 
 part '_utils_/_string_utils.dart';
 
-part '_utils_/_tab_theme_utils.dart';
-
-part '_utils_/_text_size_utils.dart';
-
-part '_utils_/_tooltip_utils.dart';
+part '../utils/_text_size_utils.dart';
 
 part '_utils_/_utils.dart';
 

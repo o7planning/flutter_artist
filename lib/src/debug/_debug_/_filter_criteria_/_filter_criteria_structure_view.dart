@@ -96,7 +96,7 @@ class FilterCriteriaStructureViewState
 
   Widget buildTreeView(BuildContext context) {
     FilterCriteriaStructure filterCriteriaStructure =
-        widget.filterModel._filterCriteriaStructure;
+        widget.filterModel.filterCriteriaStructure;
     //
     return CustomAppContainer(
       margin: const EdgeInsets.all(5),
@@ -213,13 +213,14 @@ class FilterCriteriaStructureViewState
     rootTreeNode = TreeNode.root()..add(filterModelNode);
     //
     FilterCriteriaStructure structure =
-        widget.filterModel._filterCriteriaStructure;
+        widget.filterModel.filterCriteriaStructure;
 
-    List<MultiOptCriterion> rootMultiOptCriterion = structure._rootOptCriteria;
+    List<MultiOptCriterion> rootMultiOptCriterion =
+        structure.debugRootOptCriteria;
     for (MultiOptCriterion multiOptCriterion in rootMultiOptCriterion) {
       _addMultiOptCriterionCascade(filterModelNode, multiOptCriterion);
     }
-    List<SimpleCriterion> simpleCriteria = structure._simpleCriteria;
+    List<SimpleCriterion> simpleCriteria = structure.debugSimpleCriteria;
     for (SimpleCriterion simpleCriterion in simpleCriteria) {
       _addSimpleCriterion(filterModelNode, simpleCriterion);
     }

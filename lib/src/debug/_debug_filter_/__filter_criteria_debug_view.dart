@@ -3,6 +3,7 @@ import 'package:tabbed_view/tabbed_view.dart';
 
 import '../../core/_fa_core.dart';
 import '../../icon/icon_constants.dart';
+import '../_tab_theme_utils.dart';
 import '_block_criteria_view.dart';
 import '_filter_model_criteria_view.dart';
 import '_scalar_criteria_view.dart';
@@ -96,7 +97,7 @@ class FilterCriteriaDebugView extends StatelessWidget {
     TabbedViewController _controller = TabbedViewController(tabs);
     TabbedView tabbedView = TabbedView(controller: _controller);
 
-    TabbedViewThemeData themeData = _getTabbedViewThemeData();
+    TabbedViewThemeData themeData = TabThemeUtils.getTabbedViewThemeData();
 
     TabbedViewTheme tabbedViewTheme = TabbedViewTheme(
       data: themeData,

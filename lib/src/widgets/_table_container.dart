@@ -1,4 +1,6 @@
-part of '../core/_fa_core.dart';
+
+
+import 'package:flutter/material.dart';
 
 class TableContainer extends StatelessWidget {
   final List<double> flexes;

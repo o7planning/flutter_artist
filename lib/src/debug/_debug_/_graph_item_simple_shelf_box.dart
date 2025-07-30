@@ -39,14 +39,14 @@ class GraphItemSimpleShelfBoxState extends State<GraphItemSimpleShelfBox> {
   static const double padding = 5;
   static const double iconSize = 16;
 
-  final TextStyle textStyle = const TextStyle(
-    fontSize: _graphBoxFontSizeChildBox,
+  final TextStyle textStyle = TextStyle(
+    fontSize: DebugConstants.graphBoxFontSizeChildBox,
   );
 
   @override
   Widget build(BuildContext context) {
-    Size textSize =
-        _calculateTextSize(text: widget.shelfName, style: textStyle);
+    Size textSize = TextSizeUtils.calculateTextSize(
+        text: widget.shelfName, style: textStyle);
     double boxWidth =
         extraWidth + 2 * padding + shelfIconWidth + spacing + textSize.width;
 

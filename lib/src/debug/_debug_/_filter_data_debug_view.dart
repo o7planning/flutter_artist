@@ -9,6 +9,7 @@ import '../../core/_fa_core.dart';
 import '../../core/_ui_/_shelf_block_scalar_type_widget.dart';
 import '../../icon/icon_constants.dart';
 import '../../widgets/_custom_app_container.dart';
+import '../_tab_theme_utils.dart';
 import '_filter_criteria_/_filter_criteria_structure_view.dart';
 import '_widget_/_info_view.dart';
 import '_widget_/_json_view.dart';
@@ -86,13 +87,16 @@ class _FilterDataDebugViewState extends State<FilterDataDebugView> {
 
   Widget _buildTabContainer() {
     FilterCriteriaStructure filterCriteriaStructure =
-        widget.filterModel._filterCriteriaStructure;
+        widget.filterModel.filterCriteriaStructure;
+
     Map<String, dynamic> initial1Value =
-        filterCriteriaStructure._initialCriteriaValues;
+        filterCriteriaStructure.debugInitialCriteriaValues;
+
     Map<String, dynamic> instantValue =
-        widget.filterModel._formKey.currentState?.instantValue ?? {};
+        filterCriteriaStructure.debugInstantValues;
+
     Map<String, dynamic> currentValue =
-        filterCriteriaStructure._currentCriteriaValues;
+        filterCriteriaStructure.debugCurrentCriteriaValues;
 
     String initial1Json = toJson(initial1Value);
     String instantJson = toJson(instantValue);
@@ -162,7 +166,7 @@ class _FilterDataDebugViewState extends State<FilterDataDebugView> {
     _controller = TabbedViewController(tabs);
     TabbedView tabbedView = TabbedView(controller: _controller);
 
-    TabbedViewThemeData themeData = _getTabbedViewThemeData();
+    TabbedViewThemeData themeData = TabThemeUtils.getTabbedViewThemeData();
 
     TabbedViewTheme tabbedViewTheme = TabbedViewTheme(
       data: themeData,

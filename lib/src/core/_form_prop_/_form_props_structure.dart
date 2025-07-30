@@ -612,6 +612,13 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  List<MultiOptProp> get debugRootOptProps => _rootOptProps;
+
+  List<SimpleProp> get simpleProps => _simpleProps;
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _printTemporaryInfo(String prefix) {
     if (true) {
       print(

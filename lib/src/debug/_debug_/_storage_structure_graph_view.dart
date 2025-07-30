@@ -4,11 +4,15 @@ import 'package:graphview/GraphView.dart';
 import '../../core/_fa_core.dart';
 import '../../enums/_nli_type.dart';
 import '../../icon/icon_constants.dart';
+import '../../widgets/_custom_app_container.dart';
+import '../../widgets/_floating_button.dart';
 import '_debug_constants.dart';
+import '_graph_item.dart';
 import '_graph_item_simple_shelf_box.dart';
+import '_shelf_structure_view_config.dart';
 
 class StorageStructureGraphView extends StatefulWidget {
-  final _StorageStructureGraphController controller;
+  final StorageStructureGraphController controller;
   final Function(Shelf shelf) onSelectShelfToShowGraph;
   final Function(Shelf shelf) onSelectShelfToShowTreeView;
 
@@ -33,7 +37,7 @@ class _StorageStructureGraphViewState extends State<StorageStructureGraphView> {
   String? selectedShelfName;
 
   final BuchheimWalkerConfiguration config =
-      _GalerryBuchheimWalkerConfiguration();
+      GalerryBuchheimWalkerConfiguration();
 
   final EdgeInsets boundaryMargin = const EdgeInsets.only(left: 20, right: 20);
 
@@ -42,7 +46,7 @@ class _StorageStructureGraphViewState extends State<StorageStructureGraphView> {
     super.initState();
     widget.controller._setSelectedShelf = (Shelf shelf) {
       setState(() {
-        selectedShelfName = FlutterArtist.storage._getShelfName(
+        selectedShelfName = FlutterArtist.storage.debugGetShelfName(
           shelf.runtimeType,
         );
       });
@@ -63,16 +67,16 @@ class _StorageStructureGraphViewState extends State<StorageStructureGraphView> {
     );
   }
 
-  void selectedDefaultFlu(_GraphGItem rootItem) {
+  void selectedDefaultFlu(GraphGItem rootItem) {
     bool found = false;
-    for (_GraphGItem item in rootItem.children) {
+    for (GraphGItem item in rootItem.children) {
       if (item.shelfName == selectedShelfName) {
         found = true;
         break;
       }
     }
     if (!found) {
-      _GraphGItem? item =
+      GraphGItem? item =
           rootItem.children.isEmpty ? null : rootItem.children[0];
       if (item != null) {
         _onSelectFluToShowTreeView(item);
@@ -82,8 +86,8 @@ class _StorageStructureGraphViewState extends State<StorageStructureGraphView> {
 
   Widget _buildMain() {
     final Graph graph = Graph()..isTree = false;
-    _GraphGItem rootItem = _createRootItemAndChildren();
-    Map<String, _GraphGItem> graphItemMap = <String, _GraphGItem>{};
+    GraphGItem rootItem = _createRootItemAndChildren();
+    Map<String, GraphGItem> graphItemMap = <String, GraphGItem>{};
     final String rootNodeId = rootItem.shelfName;
     //
     graphItemMap[rootNodeId] = rootItem;
@@ -136,7 +140,7 @@ class _StorageStructureGraphViewState extends State<StorageStructureGraphView> {
                   ..style = PaintingStyle.stroke,
                 builder: (Node node) {
                   var id = node.key!.value as String?;
-                  _GraphGItem item = graphItemMap[id!]!;
+                  GraphGItem item = graphItemMap[id!]!;
                   return rectangleWidget(item);
                 },
               ),
@@ -147,7 +151,7 @@ class _StorageStructureGraphViewState extends State<StorageStructureGraphView> {
   Widget _buildTopRightButtons() {
     return Row(
       children: [
-        _FloatingButton(
+        FloatingButton(
           selected: nliTypes.contains(NliType.listener),
           tooltip: 'Show/Hide Listener Shelves',
           onPressed: () {
@@ -161,10 +165,10 @@ class _StorageStructureGraphViewState extends State<StorageStructureGraphView> {
             });
           },
           iconData: FaIconConstants.listenerIconData,
-          iconColor: _listenerIconColor,
+          iconColor: DebugConstants.listenerIconColor,
         ),
         const SizedBox(width: 10),
-        _FloatingButton(
+        FloatingButton(
           selected: nliTypes.contains(NliType.eventSource),
           tooltip: 'Show/Hide Event Shelves',
           onPressed: () {
@@ -178,10 +182,10 @@ class _StorageStructureGraphViewState extends State<StorageStructureGraphView> {
             });
           },
           iconData: FaIconConstants.eventSourceIconData,
-          iconColor: _eventSourceIconColor,
+          iconColor: DebugConstants.eventSourceIconColor,
         ),
         const SizedBox(width: 10),
-        _FloatingButton(
+        FloatingButton(
           selected: nliTypes.contains(NliType.independent),
           tooltip: 'Show/Hide Independent Shelves',
           onPressed: () {
@@ -201,8 +205,8 @@ class _StorageStructureGraphViewState extends State<StorageStructureGraphView> {
     );
   }
 
-  _GraphGItem _createRootItemAndChildren() {
-    _GraphGItem root = _GraphGItem(
+  GraphGItem _createRootItemAndChildren() {
+    GraphGItem root = GraphGItem(
       isRoot: true,
       isNotifier: false,
       isListener: false,
@@ -212,14 +216,14 @@ class _StorageStructureGraphViewState extends State<StorageStructureGraphView> {
     //
     Map<String, Shelf?> shelfMap = FlutterArtist.storage.shelfMap;
     Map<String, Shelf?> shelfListenerMap =
-        FlutterArtist.storage._getListenerShelves();
+        FlutterArtist.storage.debugGetListenerShelves();
     Map<String, Shelf?> shelfNotifierMap =
-        FlutterArtist.storage._getEventShelves(external: external);
+        FlutterArtist.storage.debugGetEventShelves(external: external);
     Map<String, Shelf?> shelfIndependentMap =
-        FlutterArtist.storage._getIndependentShelves(external: external);
+        FlutterArtist.storage.debugGetIndependentShelves(external: external);
 
     for (String shelfName in shelfMap.keys) {
-      _GraphGItem item = _GraphGItem(
+      GraphGItem item = GraphGItem(
         isRoot: false,
         isNotifier: shelfNotifierMap.containsKey(shelfName),
         isListener: shelfListenerMap.containsKey(shelfName),
@@ -243,8 +247,8 @@ class _StorageStructureGraphViewState extends State<StorageStructureGraphView> {
   void _addToMapCascade({
     required Graph graph,
     required Node currentNode,
-    required List<_GraphGItem> childItems,
-    required Map<String, _GraphGItem> graphItemMap,
+    required List<GraphGItem> childItems,
+    required Map<String, GraphGItem> graphItemMap,
     required Map<String, Node> nodeMap,
   }) {
     for (var childGraphItem in childItems) {
@@ -271,7 +275,7 @@ class _StorageStructureGraphViewState extends State<StorageStructureGraphView> {
     }
   }
 
-  Widget rectangleWidget(_GraphGItem item) {
+  Widget rectangleWidget(GraphGItem item) {
     if (item.isRoot) {
       return const SizedBox(width: 10, height: 10);
     } else {
@@ -294,17 +298,17 @@ class _StorageStructureGraphViewState extends State<StorageStructureGraphView> {
     }
   }
 
-  void _onSelectFluToShowGraph(_GraphGItem item) {
+  void _onSelectFluToShowGraph(GraphGItem item) {
     Shelf? shelf = item.shelf;
-    shelf ??= FlutterArtist.storage._createShelf(item.shelfName);
+    shelf ??= FlutterArtist.storage.debugCreateShelf(item.shelfName);
     widget.onSelectShelfToShowGraph(shelf);
   }
 
-  void _onSelectFluToShowTreeView(_GraphGItem item) {
+  void _onSelectFluToShowTreeView(GraphGItem item) {
     setState(() {
       selectedShelfName = item.shelfName;
       Shelf? shelf = item.shelf;
-      shelf ??= FlutterArtist.storage._createShelf(item.shelfName);
+      shelf ??= FlutterArtist.storage.debugCreateShelf(item.shelfName);
       widget.onSelectShelfToShowTreeView(shelf);
     });
   }
@@ -315,7 +319,7 @@ class _StorageStructureGraphViewState extends State<StorageStructureGraphView> {
   }
 }
 
-class _StorageStructureGraphController {
+class StorageStructureGraphController {
   Function(Shelf shelf)? _setSelectedShelf;
 
   void setSelectedShelf(Shelf shelf) {

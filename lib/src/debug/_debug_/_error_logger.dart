@@ -34,8 +34,8 @@ class ErrorLogger {
       _errorInfos.removeLast();
     }
     _errorInfos.insert(0, errorInfo);
-    FlutterArtist._totalErrorCount++;
-    FlutterArtist._notifyError();
+    FlutterArtist.internalIncreaseTotalErrorCount();
+    FlutterArtist.internalNotifyError();
     return errorInfo;
   }
 }

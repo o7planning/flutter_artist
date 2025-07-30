@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 import '../../core/_fa_core.dart';
+import '../../enums/_data_state.dart';
 
 class BlockOrScalar extends Equatable {
   final Block? block;
@@ -76,25 +77,27 @@ class BlockOrScalar extends Equatable {
 
   String get filterClassParametersDefinition {
     if (block != null) {
-      return block!._registeredOrDefaultFilterModel._classParametersDefinition;
+      return block!
+          .registeredOrDefaultFilterModel.debugClassParametersDefinition;
     } else {
-      return scalar!._registeredOrDefaultFilterModel._classParametersDefinition;
+      return scalar!
+          .registeredOrDefaultFilterModel.debugClassParametersDefinition;
     }
   }
 
   String get blockOrScalarClassParametersDefinition {
     if (block != null) {
-      return block!._classParametersDefinition;
+      return block!.debugClassParametersDefinition;
     } else {
-      return scalar!._classParametersDefinition;
+      return scalar!.debugClassParametersDefinition;
     }
   }
 
   String get blockOrScalarClassDefinition {
     if (block != null) {
-      return block!._classDefinition;
+      return block!.debugClassDefinition;
     } else {
-      return scalar!._classDefinition;
+      return scalar!.debugClassDefinition;
     }
   }
 
@@ -108,9 +111,9 @@ class BlockOrScalar extends Equatable {
 
   List<Type> getListenItemTypes({required bool external}) {
     if (block != null) {
-      return block!._getOutsideDataTypesToListen();
+      return block!.getOutsideDataTypesToListen();
     } else {
-      return scalar!._getOutsideDataTypesToListen(external: external);
+      return scalar!.getOutsideDataTypesToListen(external: external);
     }
   }
 
@@ -118,12 +121,12 @@ class BlockOrScalar extends Equatable {
   List<String> getListenItemTypesAsStrings({required bool external}) {
     if (block != null) {
       return block!
-          ._getOutsideDataTypesToListen()
+          .getOutsideDataTypesToListen()
           .map((type) => type.toString())
           .toList();
     } else {
       return scalar!
-          ._getOutsideDataTypesToListen(external: external)
+          .getOutsideDataTypesToListen(external: external)
           .map((type) => type.toString())
           .toList();
     }

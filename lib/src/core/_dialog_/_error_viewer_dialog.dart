@@ -29,20 +29,20 @@ class ErrorViewerDialog extends StatelessWidget {
     );
     return alert;
   }
-}
 
-Future<void> _showErrorViewerDialog({
-  required BuildContext context,
-  required String title,
-  required ErrorInfo errorInfo,
-}) async {
-  await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return ErrorViewerDialog(
-        title: title,
-        errorInfo: errorInfo,
-      );
-    },
-  );
+  static Future<void> showErrorViewerDialog({
+    required BuildContext context,
+    required String title,
+    required ErrorInfo errorInfo,
+  }) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ErrorViewerDialog(
+          title: title,
+          errorInfo: errorInfo,
+        );
+      },
+    );
+  }
 }

@@ -1,5 +1,4 @@
 import '../../../flutter_artist.dart';
-import '../../enums/_debug_cat.dart';
 
 class DebugPrint {
   static void debugPrint(String message) {

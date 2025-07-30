@@ -23,6 +23,15 @@ abstract class Prop<V> {
   V? _initialValue;
   XData? _initialXData;
 
+  // @NEW-TODO
+  V? get initialValue => _initialValue;
+
+  XData? get initialXData => _initialXData;
+
+  V? get currentValue => _currentValue;
+
+  XData? get currentXData => _currentXData;
+
   // ------------ Error: -------------------------------------------------------
 
   FormErrorInfo? _formErrorInfo;

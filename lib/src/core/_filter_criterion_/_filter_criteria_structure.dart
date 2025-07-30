@@ -86,6 +86,18 @@ class FilterCriteriaStructure {
     return _allCriteriaMap.map((k, v) => MapEntry(k, v._tempCurrentValue));
   }
 
+  Map<String, dynamic> get debugInitialCriteriaValues => _initialCriteriaValues;
+
+  Map<String, dynamic> get debugCurrentCriteriaValues => _currentCriteriaValues;
+
+  Map<String, dynamic> get debugInstantValues {
+    return filterModel._formKey.currentState?.instantValue ?? {};
+  }
+
+  List<MultiOptCriterion> get debugRootOptCriteria => _rootOptCriteria;
+
+  List<SimpleCriterion<dynamic>> get debugSimpleCriteria => _simpleCriteria;
+
   // ***************************************************************************
   // ***************************************************************************
 
@@ -102,14 +114,6 @@ class FilterCriteriaStructure {
       criterion._currentXData = criterion._tempCurrentXData;
     }
   }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  // String _duplicateCriterionException(String name) {
-  //   String message =
-  //       "Duplicate criterionName '$name' in ${getClassName(filterModel)}";
-  // }
 
   // ***************************************************************************
   // ***************************************************************************

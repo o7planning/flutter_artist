@@ -37,6 +37,9 @@ abstract class FilterModel<
 
   late final FilterCriteriaStructure _filterCriteriaStructure;
 
+  FilterCriteriaStructure get filterCriteriaStructure =>
+      _filterCriteriaStructure;
+
   DataState? get filterDataState => _filterCriteriaStructure._filterDataState;
 
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
@@ -802,11 +805,11 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  String get _classDefinition {
-    return "${getClassName(this)}$_classParametersDefinition";
+  String get debugClassDefinition {
+    return "${getClassName(this)}$debugClassParametersDefinition";
   }
 
-  String get _classParametersDefinition {
+  String get debugClassParametersDefinition {
     return "<${getFilterInputType()}, ${getFilterCriteriaType()}>";
   }
 

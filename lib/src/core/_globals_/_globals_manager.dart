@@ -153,7 +153,8 @@ class GlobalsManager {
     DebugPrint.printDebugState(DebugCat.globalManager,
         "GlobalManager ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> storeExtraGlobalProp()...");
     __registeredExtraPropNames.add(propName);
-    DebugPrint.printDebugState(DebugCat.globalManager, "   --- propName: $propName");
+    DebugPrint.printDebugState(
+        DebugCat.globalManager, "   --- propName: $propName");
     DebugPrint.printDebugState(DebugCat.globalManager,
         "   --- __registeredExtraPropNames: $__registeredExtraPropNames");
     bool success = await __storeExtraGlobalPropNames();
@@ -175,7 +176,8 @@ class GlobalsManager {
   /// This method is called only once when FlutterArtist is started.
   ///
   Future<void> start() async {
-    DebugPrint.printDebugState(DebugCat.appStart, "  --- globalManager start...");
+    DebugPrint.printDebugState(
+        DebugCat.appStart, "  --- globalManager start...");
     Box<String> hiveBox = await HiveUtils.openHiveBoxLoggedInUser();
     String? loggedInUserJson = hiveBox.get(__hiveKeyLoggedInUser);
     await hiveBox.close();

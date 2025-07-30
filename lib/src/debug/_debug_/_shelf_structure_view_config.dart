@@ -1,6 +1,6 @@
-part of '../_debug.dart';
+import 'package:graphview/GraphView.dart';
 
-class _CustomBuchheimWalkerConfiguration extends BuchheimWalkerConfiguration {
+class CustomBuchheimWalkerConfiguration extends BuchheimWalkerConfiguration {
   @override
   int siblingSeparation = 40;
 
@@ -26,7 +26,7 @@ class _CustomBuchheimWalkerConfiguration extends BuchheimWalkerConfiguration {
   }
 }
 
-class _GalerryBuchheimWalkerConfiguration extends BuchheimWalkerConfiguration {
+class GalerryBuchheimWalkerConfiguration extends BuchheimWalkerConfiguration {
   @override
   int siblingSeparation = 20;
 

@@ -1,11 +1,11 @@
-part of '../_debug.dart';
+import '../../core/_fa_core.dart';
 
 class ShelfRelationshipController {
-  Function(ShelfBlockScalarType shelfBlockType)? _setShelfBlockType;
+  Function(ShelfBlockScalarType shelfBlockType)? setShelfBlockType;
 
   void setFluBlockType(ShelfBlockScalarType shelfBlockType) {
-    if (_setShelfBlockType != null) {
-      _setShelfBlockType!(shelfBlockType);
+    if (setShelfBlockType != null) {
+      setShelfBlockType!(shelfBlockType);
     }
   }
 }

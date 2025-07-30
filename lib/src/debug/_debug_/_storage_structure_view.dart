@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/_fa_core.dart';
+import '_shelf_relationship_controller.dart';
 import '_shelf_relationship_view.dart';
 import '_storage_structure_graph_view.dart';
 
@@ -19,8 +20,8 @@ class StorageStructureView extends StatefulWidget {
 }
 
 class _StorageStructureViewState extends State<StorageStructureView> {
-  final _StorageStructureGraphController globalFluStructureGraphController =
-      _StorageStructureGraphController();
+  final StorageStructureGraphController globalFluStructureGraphController =
+      StorageStructureGraphController();
 
   final ShelfRelationshipController shelfRelationshipController =
       ShelfRelationshipController();
@@ -50,7 +51,7 @@ class _StorageStructureViewState extends State<StorageStructureView> {
             shelf: _selectedShelf,
             onSelectShelfBlockType: (ShelfBlockScalarType shelfBlockType) {
               Type shelfType = shelfBlockType.shelfType;
-              Shelf? shelf = FlutterArtist.storage._findShelf(shelfType);
+              Shelf? shelf = FlutterArtist.storage.debugFindShelf(shelfType);
               if (shelf != null) {
                 globalFluStructureGraphController.setSelectedShelf(shelf);
               }

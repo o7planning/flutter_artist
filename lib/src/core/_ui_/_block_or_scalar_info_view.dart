@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../debug/_debug_/_block_or_scalar.dart';
+import '../../debug/_debug_/_debug_constants.dart';
 import '../../icon/icon_constants.dart';
 
 class BlockOrScalarInfoView extends StatelessWidget {
@@ -26,7 +27,7 @@ class BlockOrScalarInfoView extends StatelessWidget {
         size: 18,
       ),
       title: SelectableText.rich(
-        style: TextStyle(fontSize: _blockOrScalaInfoFontSize),
+        style: TextStyle(fontSize: DebugConstants.blockOrScalaInfoFontSize),
         TextSpan(
           children: [
             WidgetSpan(child: SizedBox(width: 3)),
@@ -40,7 +41,7 @@ class BlockOrScalarInfoView extends StatelessWidget {
             TextSpan(
               text: blockOrScalar.blockOrScalarClassParametersDefinition,
               style: const TextStyle(
-                color: _classParametersColor,
+                color: DebugConstants.classParametersColor,
               ),
             ),
           ],

@@ -1,23 +1,27 @@
-part of '../_debug.dart';
+import '../../core/_fa_core.dart';
+import '_block_or_scalar.dart';
+import '_graph_item.dart';
 
-_GraphItem _toRootDebugGraphItem(Shelf shelf) {
-  _GraphItem rootItem = _GraphItem.shelf(shelf);
-  for (Block rootBlock in shelf.rootBlocks) {
-    _GraphItem item = _toDebugGraphItemCascade(rootBlock);
-    rootItem.children.add(item);
+class DebugUtils {
+  static GraphItem toRootDebugGraphItem(Shelf shelf) {
+    GraphItem rootItem = GraphItem.shelf(shelf);
+    for (Block rootBlock in shelf.rootBlocks) {
+      GraphItem item = toDebugGraphItemCascade(rootBlock);
+      rootItem.children.add(item);
+    }
+    for (Scalar scalar in shelf.scalars) {
+      GraphItem item = GraphItem.blockOrScalar(BlockOrScalar.scalar(scalar));
+      rootItem.children.add(item);
+    }
+    return rootItem;
   }
-  for (Scalar scalar in shelf.scalars) {
-    _GraphItem item = _GraphItem.blockOrScalar(BlockOrScalar.scalar(scalar));
-    rootItem.children.add(item);
-  }
-  return rootItem;
-}
 
-_GraphItem _toDebugGraphItemCascade(Block block) {
-  _GraphItem item = _GraphItem.blockOrScalar(BlockOrScalar.block(block));
-  for (Block childBlock in block.childBlocks) {
-    _GraphItem childItem = _toDebugGraphItemCascade(childBlock);
-    item.children.add(childItem);
+  static GraphItem toDebugGraphItemCascade(Block block) {
+    GraphItem item = GraphItem.blockOrScalar(BlockOrScalar.block(block));
+    for (Block childBlock in block.childBlocks) {
+      GraphItem childItem = toDebugGraphItemCascade(childBlock);
+      item.children.add(childItem);
+    }
+    return item;
   }
-  return item;
 }

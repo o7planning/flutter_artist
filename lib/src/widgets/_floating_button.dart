@@ -1,13 +1,13 @@
-part of '../_fa_core.dart';
+import 'package:flutter/material.dart';
 
-class _FloatingButton extends StatelessWidget {
+class FloatingButton extends StatelessWidget {
   final bool selected;
   final String tooltip;
   final Color iconColor;
   final IconData iconData;
   final Function() onPressed;
 
-  const _FloatingButton({
+  const FloatingButton({
     required this.selected,
     required this.iconData,
     required this.iconColor,

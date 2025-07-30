@@ -221,11 +221,11 @@ abstract class FormModel<
     return EXTRA_FORM_INPUT;
   }
 
-  String get _classDefinition {
-    return "${getClassName(this)}$_classParametersDefinition";
+  String get debugClassDefinition {
+    return "${getClassName(this)}$debugClassParametersDefinition";
   }
 
-  String get _classParametersDefinition {
+  String get debugClassParametersDefinition {
     return "<${getIdType()}, ${getItemDetailType()}, "
         "${getFilterCriteriaType()}, ${getExtraFormInputType()}>";
   }

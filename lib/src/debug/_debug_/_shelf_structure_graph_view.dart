@@ -1,4 +1,15 @@
-part of '../_debug.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
+import 'package:graphview/GraphView.dart';
+
+import '../../core/_fa_core.dart';
+import '../../utils/_tooltip_utils.dart';
+import '../../widgets/_custom_app_container.dart';
+import '_debug_utils.dart';
+import '_graph_item.dart';
+import '_graph_item_block_or_scalar_box.dart';
+import '_graph_item_shelf_box.dart';
+import '_shelf_structure_view_config.dart';
 
 class ShelfStructureGraphView extends StatefulWidget {
   final Function() onPressedBack;
@@ -18,8 +29,8 @@ class ShelfStructureGraphView extends StatefulWidget {
 class _ShelfStructureGraphViewState extends State<ShelfStructureGraphView> {
   final Graph graph = Graph()..isTree = false;
   BuchheimWalkerConfiguration configuration =
-      _CustomBuchheimWalkerConfiguration();
-  late Map<String, _GraphItem> graphItemMap;
+      CustomBuchheimWalkerConfiguration();
+  late Map<String, GraphItem> graphItemMap;
 
   String? _highlighFilterModelName;
 
@@ -29,7 +40,7 @@ class _ShelfStructureGraphViewState extends State<ShelfStructureGraphView> {
   static const double itemWidth = 280;
   static const double? itemHeight = null; // 160;
 
-  late _GraphItem rootItem;
+  late GraphItem rootItem;
 
   bool _showClassParameters = false;
 
@@ -37,8 +48,8 @@ class _ShelfStructureGraphViewState extends State<ShelfStructureGraphView> {
   void initState() {
     super.initState();
     //
-    rootItem = _toRootDebugGraphItem(widget.shelf);
-    graphItemMap = <String, _GraphItem>{};
+    rootItem = DebugUtils.toRootDebugGraphItem(widget.shelf);
+    graphItemMap = <String, GraphItem>{};
     final String rootNodeId = rootItem.name;
     //
     graphItemMap[rootNodeId] = rootItem;
@@ -59,8 +70,8 @@ class _ShelfStructureGraphViewState extends State<ShelfStructureGraphView> {
 
   void _addToMapCascade({
     required Node currentNode,
-    required List<_GraphItem> childItems,
-    required Map<String, _GraphItem> graphItemMap,
+    required List<GraphItem> childItems,
+    required Map<String, GraphItem> graphItemMap,
     required Map<String, Node> nodeMap,
   }) {
     for (var childGraphItem in childItems) {
@@ -101,7 +112,7 @@ class _ShelfStructureGraphViewState extends State<ShelfStructureGraphView> {
   }
 
   Widget _buildFloatingButtonLayer(BuildContext context) {
-    return _buildTooltip(
+    return TooltipUtils.buildTooltip(
       child: SimpleSmallIconButton(
         onPressed: () {
           _showClassParameters = !_showClassParameters;
@@ -146,7 +157,7 @@ class _ShelfStructureGraphViewState extends State<ShelfStructureGraphView> {
   }
 
   Widget rectangleWidget(String? id) {
-    _GraphItem item = graphItemMap[id!]!;
+    GraphItem item = graphItemMap[id!]!;
     return InkWell(
       onTap: () {
         // print('clicked');

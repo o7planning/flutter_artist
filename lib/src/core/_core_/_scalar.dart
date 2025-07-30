@@ -44,11 +44,11 @@ abstract class Scalar<
     return "scalar > ${shelf.name} > $name";
   }
 
-  String get _classDefinition {
-    return "${getClassName(this)}$_classParametersDefinition";
+  String get debugClassDefinition {
+    return "${getClassName(this)}$debugClassParametersDefinition";
   }
 
-  String get _classParametersDefinition {
+  String get debugClassParametersDefinition {
     return "<${getFilterInputType()}, ${getValueType()}, ${getFilterCriteriaType()}>";
   }
 
@@ -71,6 +71,13 @@ abstract class Scalar<
   ///
   late final FilterModel<FILTER_INPUT, FILTER_CRITERIA>
       _registeredOrDefaultFilterModel;
+
+  ///
+  /// This field is not null.
+  /// If this scalar does not declare a FilterModel, it will have the default FilterModel.
+  ///
+  FilterModel<FILTER_INPUT, FILTER_CRITERIA>
+      get registeredOrDefaultFilterModel => _registeredOrDefaultFilterModel;
 
   ///
   /// Returns a FilterModel declared in the [Shelf.registerStructure()] method.
@@ -121,7 +128,7 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
-  List<Type> _getOutsideDataTypesToListen({required bool external}) {
+  List<Type> getOutsideDataTypesToListen({required bool external}) {
     if (external) {
       if (config.outsideEventReaction == null) {
         return [];

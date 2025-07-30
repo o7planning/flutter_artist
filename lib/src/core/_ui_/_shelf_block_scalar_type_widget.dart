@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 
+import '../../debug/_debug_/_debug_constants.dart';
 import '../../icon/icon_constants.dart';
 import '../_fa_core.dart';
 
@@ -36,7 +37,9 @@ class ShelfBlockScalarTypeWidget extends StatelessWidget {
               ? FaIconConstants.listenerIconData
               : FaIconConstants.eventSourceIconData,
           size: 16,
-          color: isListener ? _listenerIconColor : _eventSourceIconColor,
+          color: isListener
+              ? DebugConstants.listenerIconColor
+              : DebugConstants.eventSourceIconColor,
         ),
         title: BreadCrumb(
           divider: const Padding(
@@ -61,8 +64,9 @@ class ShelfBlockScalarTypeWidget extends StatelessWidget {
   }
 
   Widget _buildShelf() {
-    Shelf? shelf =
-        FlutterArtist.storage._findShelf(shelfBlockScalarType.shelfType);
+    Shelf? shelf = FlutterArtist.storage.debugFindShelf(
+      shelfBlockScalarType.shelfType,
+    );
     String? shelfName = shelf?.name;
     String? description = shelf?.description;
 

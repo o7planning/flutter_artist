@@ -6,6 +6,7 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import '../../core/_fa_core.dart';
 import '../../enums/_data_state.dart';
 import '../../icon/icon_constants.dart';
+import '../../utils/_tooltip_utils.dart';
 import '_block_or_scalar.dart';
 import '_debug_constants.dart';
 
@@ -27,10 +28,10 @@ class GraphItemBlockOrScalarBox extends StatefulWidget {
 
   @override
   State<GraphItemBlockOrScalarBox> createState() =>
-      _GraphItemBlockOrScalarBoxState();
+      GraphItemBlockOrScalarBoxState();
 }
 
-class _GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
+class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
   int filterColorIdx = 0;
 
   static const double minBoxWidth = 220;
@@ -130,7 +131,7 @@ class _GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
                   label: 'Name: ',
                   text: _getBlockOrScalarNameText(),
                 ),
-                _buildTooltip(
+                TooltipUtils.buildTooltip(
                   message:
                       "${widget.blockOrScalar.isBlock ? 'BLOCK' : 'SCALAR'}: ${widget.blockOrScalar.blockOrScalarClassName}\n"
                       "${widget.blockOrScalar.blockOrScalarClassParametersDefinition}",
@@ -153,7 +154,7 @@ class _GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
         DebugConstants.graphBoxImageWidth +
         spacing +
         2 * padding +
-        _calculateTextSize(
+        TextSizeUtils.calculateTextSize(
           text: "Name: ${_getBlockOrScalarNameText()}",
           style: _getBlockNameTextStyle(),
         ).width;
@@ -162,7 +163,7 @@ class _GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
         DebugConstants.graphBoxImageWidth +
         spacing +
         2 * padding +
-        _calculateTextSize(
+        TextSizeUtils.calculateTextSize(
           text: "Class: ${_getBlockOrScalarClassNameText()}",
           style: _getBlockNameTextStyle(),
         ).width;
@@ -170,7 +171,7 @@ class _GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
     double blkLine3 = widget.showClassParameters
         ? extraWidth +
             2 * padding +
-            _calculateTextSize(
+            TextSizeUtils.calculateTextSize(
               text: _line3ClassParamsDefinition(),
               style: _getBlockClassParameterTextStyle(),
             ).width
@@ -178,14 +179,14 @@ class _GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
     //
     double filterLine1 = extraWidth +
         2 * padding +
-        _calculateTextSize(
+        TextSizeUtils.calculateTextSize(
           text: _getFilterTextRow1(),
           style: _getFilterTextStyle(),
         ).width;
     //
     double filterLine2 = extraWidth +
         2 * padding +
-        _calculateTextSize(
+        TextSizeUtils.calculateTextSize(
           text: _getFilterTextRow2(),
           style: _getFilterTextStyle(),
         ).width;
@@ -208,7 +209,7 @@ class _GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
         2 * padding +
         iconSize +
         lastLineBlockSpacing +
-        _calculateTextSize(
+        TextSizeUtils.calculateTextSize(
           text:
               "${widget.blockOrScalar.isBlock ? 'BLOCK' : 'SCALAR'}     ${widget.blockOrScalar.itemCount.toString()}",
           style: _getSummaryTextStyle(),
@@ -216,7 +217,7 @@ class _GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
     if (widget.blockOrScalar.block?.formModel != null) {
       width += spacing +
           iconSize +
-          _calculateTextSize(
+          TextSizeUtils.calculateTextSize(
             text: "FORM",
             style: _getSummaryTextStyle(),
           ).width;
@@ -362,7 +363,7 @@ class _GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
       ),
       child: filterModel == null
           ? row
-          : _buildCustomTooltip(
+          : TooltipUtils.buildCustomTooltip(
               verticalOffset: -85,
               message: "FILTER: ${getClassName(filterModel)} \n"
                   "${widget.blockOrScalar.filterClassParametersDefinition}",
@@ -449,7 +450,7 @@ class _GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
     return Container(
       padding: const EdgeInsets.all(3),
       color: _dataStateBgColor(dataState),
-      child: _buildCustomTooltip(
+      child: TooltipUtils.buildCustomTooltip(
         message: _blockOrScalarTooltipMessage(blockOrScalar, dataState, active),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -485,7 +486,7 @@ class _GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
     return Container(
       padding: const EdgeInsets.all(3),
       color: _dataStateBgColor(formModel.formDataState),
-      child: _buildCustomTooltip(
+      child: TooltipUtils.buildCustomTooltip(
         message: _formTooltipMessage(
           formModel,
         ),
