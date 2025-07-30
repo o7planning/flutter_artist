@@ -8,6 +8,9 @@ class _BlockUIComponents {
   final Map<_RefreshableWidgetState, XState> _controlWidgetStates = {};
   final Map<_RefreshableWidgetState, XState> _paginationWidgetStates = {};
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   _BlockUIComponents({required this.block});
 
   // ***************************************************************************
@@ -221,6 +224,9 @@ class _BlockUIComponents {
       activeOnly: activeOnly,
     );
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Map<_RefreshableWidgetState, XState> _findMountedWidgetStates({
     required bool withPagination,
