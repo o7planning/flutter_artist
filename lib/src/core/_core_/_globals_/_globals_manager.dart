@@ -29,8 +29,6 @@ class GlobalsManager {
 
   IGlobalData? get globalData => _globalData;
 
-  final Map<_RefreshableWidgetState, bool> _loggedInUserWidgetStates = {};
-
   final ILoggedInUserAdapter loggedInUserAdapter;
 
   final IGlobalDataAdapter globalDataAdapter;
@@ -43,6 +41,8 @@ class GlobalsManager {
   Set<String> get registeredExtraPropNames => {...__registeredExtraPropNames};
 
   final Map<String, dynamic> __extraPropMap = {};
+
+  final _LoggedInUserUIComponents ui = _LoggedInUserUIComponents();
 
   GlobalsManager._({
     required this.loggedInUserAdapter,
@@ -266,27 +266,7 @@ class GlobalsManager {
       print(stackTrace);
       return;
     }
-    updateWidgets();
-  }
-
-  void updateWidgets() {
-    for (_RefreshableWidgetState widgetState
-        in _loggedInUserWidgetStates.keys) {
-      if (widgetState.mounted) {
-        widgetState.refreshState();
-      }
-    }
-  }
-
-  void _addLoggedInUserWidgetState({
-    required _RefreshableWidgetState widgetState,
-    required bool isShowing,
-  }) {
-    _loggedInUserWidgetStates[widgetState] = isShowing;
-  }
-
-  void _removeLoggedInUserWidgetState({required State widgetState}) {
-    _loggedInUserWidgetStates.remove(widgetState);
+    ui.updateWidgets();
   }
 
   Future<void> _logout() async {
@@ -295,6 +275,6 @@ class GlobalsManager {
     Box<String> hiveBox = await HiveUtils.openHiveBoxLoggedInUser();
     await hiveBox.delete(__hiveKeyLoggedInUser);
     await hiveBox.close();
-    updateWidgets();
+    ui.updateWidgets();
   }
 }
