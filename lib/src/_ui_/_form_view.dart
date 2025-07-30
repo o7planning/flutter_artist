@@ -13,7 +13,7 @@ abstract class FormView<FORM_MODEL extends FormModel> extends StatelessWidget {
   @override
   @nonVirtual
   Widget build(BuildContext context) {
-    return _FormViewBuilder(
+    return FormViewBuilder(
       ownerClassInstance: this,
       description: '',
       formModel: formModel,

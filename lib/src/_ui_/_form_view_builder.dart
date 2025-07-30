@@ -1,12 +1,12 @@
 part of '../../flutter_artist.dart';
 
-class _FormViewBuilder extends _RefreshableWidget {
+class FormViewBuilder extends _RefreshableWidget {
   final FormModel formModel;
   final QuickSuggestionMode quickSuggestionMode;
 
   final Widget Function() build;
 
-  const _FormViewBuilder({
+  const FormViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
@@ -21,7 +21,7 @@ class _FormViewBuilder extends _RefreshableWidget {
   }
 }
 
-class _FormViewBuilderState extends _RefreshableWidgetState<_FormViewBuilder> {
+class _FormViewBuilderState extends _RefreshableWidgetState<FormViewBuilder> {
   GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
 
   @override
