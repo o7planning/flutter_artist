@@ -1,13 +1,31 @@
 part of '../core.dart';
 
-abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
-    extends State<W> {
-  int _refreshCount = 0;
+interface class IRefreshableWidgetState {
   ShowMode showMode = ShowMode.production;
+
+  RefreshableWidgetType get type => throw UnimplementedError();
+
+  String get locationInfo => throw UnimplementedError();
+
+  String get description => throw UnimplementedError();
+
+  void setState(Function() func) {}
+}
+
+abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
+    extends State<W> implements IRefreshableWidgetState {
+  int _refreshCount = 0;
 
   late final String keyId;
 
+  @override
+  ShowMode showMode = ShowMode.production;
+
+  @override
   RefreshableWidgetType get type;
+
+  @override
+  String get locationInfo => getClassName(widget.ownerClassInstance);
 
   void setBuildingState({required bool isBuilding});
 
@@ -19,8 +37,6 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
 
   Widget buildContent(BuildContext context);
 
-  String get locationInfo => getClassName(widget.ownerClassInstance);
-
   ///
   /// Class name of Owner (Block, FormModel, FilterModel).
   ///
@@ -28,6 +44,7 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
 
   void checkAndFreeMemory();
 
+  @override
   String get description {
     return widget.description == null || widget.description!.trim().isEmpty
         ? "${getWidgetOwnerClassName()} (${type.name})"

@@ -775,7 +775,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   bool _isBuilding() {
-    for (_XState xState in _filterFragmentWidgetStates.values) {
+    for (XState xState in _filterFragmentWidgetStates.values) {
       if (xState.isBuilding) {
         return true;
       }
@@ -800,7 +800,7 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  final Map<_RefreshableWidgetState, _XState> _filterFragmentWidgetStates = {};
+  final Map<_RefreshableWidgetState, XState> _filterFragmentWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -903,8 +903,8 @@ abstract class FilterModel<
   }) {
     _filterFragmentWidgetStates.update(
       widgetState,
-      (xState) => xState..isBuilding = isBuilding,
-      ifAbsent: () => _XState()..isBuilding = isBuilding,
+      (xState) => xState.._setBuilding(isBuilding),
+      ifAbsent: () => XState().._setBuilding(isBuilding),
     );
   }
 
@@ -918,8 +918,8 @@ abstract class FilterModel<
     bool activeOLD = hasActiveUIComponent();
     _filterFragmentWidgetStates.update(
       widgetState,
-      (xState) => xState..isShowing = isShowing,
-      ifAbsent: () => _XState()..isShowing = isShowing,
+      (xState) => xState.._setShowing(isShowing),
+      ifAbsent: () => XState().._setShowing(isShowing),
     );
     bool activeCURRENT = hasActiveUIComponent();
 

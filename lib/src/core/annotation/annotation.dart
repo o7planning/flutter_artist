@@ -3,3 +3,7 @@ class RenameAnnotation {
 
   const RenameAnnotation([this.newName]);
 }
+
+class DebugMethodAnnotation {
+  const DebugMethodAnnotation();
+}

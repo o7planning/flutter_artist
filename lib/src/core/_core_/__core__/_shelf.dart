@@ -338,7 +338,10 @@ abstract class Shelf extends _XBase {
 
   Future<void> showActiveUiComponentsDialog() async {
     BuildContext context = FlutterArtist.adapter.getCurrentContext();
-    await _showActiveUIComponentsDialog(context: context, shelf: this);
+    await UiComponentsDialog.showActiveUIComponentsDialog(
+      context: context,
+      shelf: this,
+    );
   }
 
   // ***************************************************************************
@@ -383,10 +386,10 @@ abstract class Shelf extends _XBase {
     required bool withControl,
     required bool activeOnly,
     required bool withPagination,
-    required Map<_RefreshableWidgetState, _XState> founds,
+    required Map<_RefreshableWidgetState, XState> founds,
   }) {
     for (Block block in blocks) {
-      Map<_RefreshableWidgetState, _XState> m = block._findMountedWidgetStates(
+      Map<_RefreshableWidgetState, XState> m = block._findMountedWidgetStates(
         activeOnly: activeOnly,
         withPagination: withPagination,
         withBlockFragment: withBlockFragment,
@@ -414,7 +417,8 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_RefreshableWidgetState, _XState> _findMountedWidgetStates({
+  @DebugMethodAnnotation()
+  Map<IRefreshableWidgetState, XState> debugFindMountedWidgetStates({
     required bool withBlockFragment,
     required bool withPagination,
     required bool withFilter,
@@ -423,7 +427,27 @@ abstract class Shelf extends _XBase {
     required bool withControl,
     required bool activeOnly,
   }) {
-    Map<_RefreshableWidgetState, _XState> founds = {};
+    return _findMountedWidgetStates(
+      withBlockFragment: withBlockFragment,
+      withPagination: withPagination,
+      withFilter: withFilter,
+      withForm: withForm,
+      withControlBar: withControlBar,
+      withControl: withControl,
+      activeOnly: activeOnly,
+    );
+  }
+
+  Map<_RefreshableWidgetState, XState> _findMountedWidgetStates({
+    required bool withBlockFragment,
+    required bool withPagination,
+    required bool withFilter,
+    required bool withForm,
+    required bool withControlBar,
+    required bool withControl,
+    required bool activeOnly,
+  }) {
+    Map<_RefreshableWidgetState, XState> founds = {};
     __findMountedWidgetStates(
       withPagination: withPagination,
       withBlockFragment: withBlockFragment,

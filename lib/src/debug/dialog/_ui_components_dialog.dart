@@ -1,20 +1,23 @@
-part of '../core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+import '../../core/_core_/core.dart';
+import '../../core/enums/_show_mode.dart';
+import '../../core/icon/icon_constants.dart';
+import '../../core/utils/_class_utils.dart';
 
-class _UiComponentsDialog extends StatefulWidget {
+class UiComponentsDialog extends StatefulWidget {
   final Shelf? shelf;
   final Block? block;
   final bool showActiveOnly;
 
-  const _UiComponentsDialog.block({
+  const UiComponentsDialog.block({
     required Block this.block,
     this.showActiveOnly = true,
     super.key,
   }) : shelf = null;
 
-  const _UiComponentsDialog.shelf({
+  const UiComponentsDialog.shelf({
     required Shelf this.shelf,
     this.showActiveOnly = true,
     super.key,
@@ -24,9 +27,23 @@ class _UiComponentsDialog extends StatefulWidget {
   State<StatefulWidget> createState() {
     return _UiComponentsDialogState();
   }
+
+  static Future<void> showActiveUIComponentsDialog({
+    required BuildContext context,
+    required Shelf shelf,
+  }) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return UiComponentsDialog.shelf(
+          shelf: shelf,
+        );
+      },
+    );
+  }
 }
 
-class _UiComponentsDialogState extends State<_UiComponentsDialog> {
+class _UiComponentsDialogState extends State<UiComponentsDialog> {
   static const double fontSize = 13;
 
   String _title() {
@@ -39,9 +56,9 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
     }
   }
 
-  Map<_RefreshableWidgetState, _XState> _findWidgetStates() {
+  Map<IRefreshableWidgetState, XState> _findWidgetStates() {
     if (widget.shelf != null) {
-      return widget.shelf!._findMountedWidgetStates(
+      return widget.shelf!.debugFindMountedWidgetStates(
         activeOnly: true,
         withPagination: true,
         withBlockFragment: true,
@@ -51,7 +68,7 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
         withControl: true,
       );
     } else if (widget.block != null) {
-      return widget.block!._findMountedWidgetStates(
+      return widget.block!.debugFindMountedWidgetStates(
         activeOnly: false,
         withPagination: true,
         withBlockFragment: true,
@@ -67,7 +84,7 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
 
   @override
   Widget build(BuildContext context) {
-    dialogs.FaAlertDialog alert = dialogs.FaAlertDialog(
+    FaAlertDialog alert = FaAlertDialog(
       titleText: _title(),
       contentPadding: const EdgeInsets.all(5),
       content: _buildMainContent(context),
@@ -89,7 +106,7 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
       height = height - 60;
     }
     //
-    Map<_RefreshableWidgetState, _XState> widgetStates = _findWidgetStates();
+    Map<IRefreshableWidgetState, XState> widgetStates = _findWidgetStates();
     return SizedBox(
       width: width,
       height: height,
@@ -121,7 +138,7 @@ class _UiComponentsDialogState extends State<_UiComponentsDialog> {
   }
 
   Widget _buildRowInfo({
-    required MapEntry<_RefreshableWidgetState, _XState> widgetStateEntry,
+    required MapEntry<IRefreshableWidgetState, XState> widgetStateEntry,
   }) {
     return Card(
       shape: const RoundedRectangleBorder(
@@ -184,22 +201,8 @@ Future<void> _showBlockUIComponentsDialog({
   await showDialog(
     context: context,
     builder: (BuildContext context) {
-      return _UiComponentsDialog.block(
+      return UiComponentsDialog.block(
         block: block,
-      );
-    },
-  );
-}
-
-Future<void> _showActiveUIComponentsDialog({
-  required BuildContext context,
-  required Shelf shelf,
-}) async {
-  await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return _UiComponentsDialog.shelf(
-        shelf: shelf,
       );
     },
   );

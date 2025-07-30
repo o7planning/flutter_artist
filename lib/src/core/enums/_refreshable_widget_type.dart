@@ -3,88 +3,67 @@ import 'package:flutter/material.dart';
 import '../icon/icon_constants.dart';
 
 enum RefreshableWidgetType {
-  pagination,
-  filter,
-  controlBar,
-  customControlBar,
-  form,
-  blockFragment,
-  blockItemsView,
-  shelfFragment,
-  blockControlButton,
-  scalarControlButton,
+  pagination(
+    name: "Pagination",
+    iconData: FaIconConstants.paginationIconData,
+  ),
+  filter(
+    name: "FilterModel",
+    iconData: FaIconConstants.filterModelIconData,
+  ),
+  controlBar(
+    name: "ControlBar",
+    iconData: FaIconConstants.blockControlBarIconData,
+  ),
+  customControlBar(
+    name: "CustomControlBar",
+    iconData: FaIconConstants.blockCustomControlBarIconData,
+  ),
+  form(
+    name: "FormModel",
+    iconData: FaIconConstants.formModelIconData,
+  ),
+  blockFragment(
+    name: "BlockFragment",
+    iconData: FaIconConstants.blockFragmentIconData,
+  ),
+  blockItemsView(
+    name: "BlockItemsView",
+    iconData: FaIconConstants.blockItemsViewIconData,
+  ),
+  shelfFragment(
+    name: "ShelfFragment",
+    iconData: FaIconConstants.shelfFragmentIconData,
+  ),
+  blockControlButton(
+    name: "ControlButton",
+    iconData: FaIconConstants.blockControlButtonIconData,
+  ),
+  scalarControlButton(
+    name: "Scalar Control Button",
+    iconData: FaIconConstants.scalarControlButtonIconData,
+  ),
   //
-  scalarFragment,
-  activityFragment,
-  loggedInUser,
+  scalarFragment(
+    name: "ScalarFragment",
+    iconData: FaIconConstants.scalarFragmentIconData,
+  ),
+  activityFragment(
+    name: "ActivityFragment",
+    iconData: FaIconConstants.activityFragmentIconData,
+  ),
+  loggedInUser(
+    name: "LoggedInUser",
+    iconData: FaIconConstants.loggedUserIconData,
+  ),
   //
-  taskProgressView;
-}
+  taskProgressView(
+    name: "Task Progress View",
+    iconData: FaIconConstants.taskProgressViewIconData,
+  );
 
-extension WidgetStateTypeE on RefreshableWidgetType {
-  String get name {
-    switch (this) {
-      case RefreshableWidgetType.pagination:
-        return "Pagination";
-      case RefreshableWidgetType.filter:
-        return "FilterModel";
-      case RefreshableWidgetType.controlBar:
-        return "ControlBar";
-      case RefreshableWidgetType.customControlBar:
-        return "CustomControlBar";
-      case RefreshableWidgetType.form:
-        return "FormModel";
-      case RefreshableWidgetType.blockFragment:
-        return "BlockFragment";
-      case RefreshableWidgetType.blockItemsView:
-        return "BlockItemsView";
-      case RefreshableWidgetType.shelfFragment:
-        return "ShelfFragment";
-      case RefreshableWidgetType.scalarFragment:
-        return "ScalarFragment";
-      case RefreshableWidgetType.activityFragment:
-        return "ActivityFragment";
-      case RefreshableWidgetType.loggedInUser:
-        return "LoggedInUser";
-      case RefreshableWidgetType.blockControlButton:
-        return "ControlButton";
-      case RefreshableWidgetType.scalarControlButton:
-        return "Scalar Control Button";
-      case RefreshableWidgetType.taskProgressView:
-        return "Task Progress View";
-    }
-  }
+  final String name;
+  final IconData iconData;
 
-  IconData get iconData {
-    switch (this) {
-      case RefreshableWidgetType.filter:
-        return FaIconConstants.filterModelIconData;
-      case RefreshableWidgetType.controlBar:
-        return FaIconConstants.blockControlBarIconData;
-      case RefreshableWidgetType.customControlBar:
-        return FaIconConstants.blockCustomControlBarIconData;
-      case RefreshableWidgetType.form:
-        return FaIconConstants.formModelIconData;
-      case RefreshableWidgetType.blockFragment:
-        return FaIconConstants.blockFragmentIconData;
-      case RefreshableWidgetType.blockItemsView:
-        return FaIconConstants.blockItemsViewIconData;
-      case RefreshableWidgetType.pagination:
-        return FaIconConstants.paginationIconData;
-      case RefreshableWidgetType.loggedInUser:
-        return FaIconConstants.loggedUserIconData;
-      case RefreshableWidgetType.scalarFragment:
-        return FaIconConstants.scalarFragmentIconData;
-      case RefreshableWidgetType.activityFragment:
-        return FaIconConstants.activityFragmentIconData;
-      case RefreshableWidgetType.shelfFragment:
-        return FaIconConstants.shelfFragmentIconData;
-      case RefreshableWidgetType.blockControlButton:
-        return FaIconConstants.blockControlButtonIconData;
-      case RefreshableWidgetType.scalarControlButton:
-        return FaIconConstants.scalarControlButtonIconData;
-      case RefreshableWidgetType.taskProgressView:
-        return FaIconConstants.taskProgressViewIconData;
-    }
-  }
+  const RefreshableWidgetType({required this.name, required this.iconData});
 }

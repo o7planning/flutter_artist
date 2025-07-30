@@ -64,7 +64,7 @@ abstract class FormModel<
     return _autovalidateMode;
   }
 
-  final Map<_RefreshableWidgetState, _XState> _formWidgetStates = {};
+  final Map<_RefreshableWidgetState, XState> _formWidgetStates = {};
 
   // ***************************************************************************
 
@@ -1407,8 +1407,8 @@ abstract class FormModel<
   }) {
     _formWidgetStates.update(
       widgetState,
-      (xState) => xState..isBuilding = isBuilding,
-      ifAbsent: () => _XState()..isBuilding = isBuilding,
+      (xState) => xState.._setBuilding(isBuilding),
+      ifAbsent: () => XState().._setBuilding(isBuilding),
     );
   }
 
@@ -1422,8 +1422,8 @@ abstract class FormModel<
     bool isShowingOLD = _formWidgetStates[widgetState]?.isShowing ?? false;
     _formWidgetStates.update(
       widgetState,
-      (xState) => xState..isShowing = isShowing,
-      ifAbsent: () => _XState()..isShowing = isShowing,
+      (xState) => xState.._setShowing(isShowing),
+      ifAbsent: () => XState().._setShowing(isShowing),
     );
     if (!isShowingOLD && isShowing) {
       block.shelf._startLoadDataForLazyUIComponentsIfNeed();

@@ -242,10 +242,10 @@ abstract class Block<
 
   BlockErrorInfo? get blockErrorInfo => _blockErrorInfo;
 
-  final Map<_RefreshableWidgetState, _XState> _blockFragmentWidgetStates = {};
-  final Map<_RefreshableWidgetState, _XState> _controlBarWidgetStates = {};
-  final Map<_RefreshableWidgetState, _XState> _controlWidgetStates = {};
-  final Map<_RefreshableWidgetState, _XState> _paginationWidgetStates = {};
+  final Map<_RefreshableWidgetState, XState> _blockFragmentWidgetStates = {};
+  final Map<_RefreshableWidgetState, XState> _controlBarWidgetStates = {};
+  final Map<_RefreshableWidgetState, XState> _controlWidgetStates = {};
+  final Map<_RefreshableWidgetState, XState> _paginationWidgetStates = {};
 
   // ***************************************************************************
   // *** DATA STATE ************************************************************
@@ -626,8 +626,8 @@ abstract class Block<
   }) {
     _paginationWidgetStates.update(
       widgetState,
-      (xState) => xState..isShowing = isShowing,
-      ifAbsent: () => _XState()..isShowing = isShowing,
+      (xState) => xState.._setShowing(isShowing),
+      ifAbsent: () => XState().._setShowing(isShowing),
     );
     //
     if (isShowing) {
@@ -654,8 +654,8 @@ abstract class Block<
     bool activeOLD = hasActiveUIComponent();
     _controlBarWidgetStates.update(
       widgetState,
-      (xState) => xState..isShowing = isShowing,
-      ifAbsent: () => _XState()..isShowing = isShowing,
+      (xState) => xState.._setShowing(isShowing),
+      ifAbsent: () => XState().._setShowing(isShowing),
     );
     bool activeCURRENT = hasActiveUIComponent();
     //
@@ -692,8 +692,8 @@ abstract class Block<
     bool activeOLD = hasActiveUIComponent();
     _controlWidgetStates.update(
       widgetState,
-      (xState) => xState..isShowing = isShowing,
-      ifAbsent: () => _XState()..isShowing = isShowing,
+      (xState) => xState.._setShowing(isShowing),
+      ifAbsent: () => XState().._setShowing(isShowing),
     );
     bool activeCURRENT = hasActiveUIComponent();
     //
@@ -729,8 +729,8 @@ abstract class Block<
     bool activeOLD = hasActiveUIComponent();
     _blockFragmentWidgetStates.update(
       widgetState,
-      (xState) => xState..isShowing = isShowing,
-      ifAbsent: () => _XState()..isShowing = isShowing,
+      (xState) => xState.._setShowing(isShowing),
+      ifAbsent: () => XState().._setShowing(isShowing),
     );
     bool activeCURRENT = hasActiveUIComponent();
     //
@@ -782,7 +782,8 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_RefreshableWidgetState, _XState> _findMountedWidgetStates({
+  @DebugMethodAnnotation()
+  Map<IRefreshableWidgetState, XState> debugFindMountedWidgetStates({
     required bool withPagination,
     required bool withBlockFragment,
     required bool withFilter,
@@ -791,7 +792,27 @@ abstract class Block<
     required bool withControlBar,
     required bool activeOnly,
   }) {
-    Map<_RefreshableWidgetState, _XState> ret = {};
+    return _findMountedWidgetStates(
+      withPagination: withPagination,
+      withBlockFragment: withBlockFragment,
+      withFilter: withFilter,
+      withForm: withForm,
+      withControl: withControl,
+      withControlBar: withControlBar,
+      activeOnly: activeOnly,
+    );
+  }
+
+  Map<_RefreshableWidgetState, XState> _findMountedWidgetStates({
+    required bool withPagination,
+    required bool withBlockFragment,
+    required bool withFilter,
+    required bool withForm,
+    required bool withControl,
+    required bool withControlBar,
+    required bool activeOnly,
+  }) {
+    Map<_RefreshableWidgetState, XState> ret = {};
     //
     if (withFilter) {
       ret.addAll(_registeredOrDefaultFilterModel._filterFragmentWidgetStates);
