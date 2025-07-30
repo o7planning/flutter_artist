@@ -1,0 +1,4 @@
+enum FilterActivityType {
+  newFilt,
+  updateFromFilterView;
+}

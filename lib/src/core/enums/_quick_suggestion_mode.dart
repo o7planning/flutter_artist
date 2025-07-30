@@ -1,0 +1,4 @@
+enum QuickSuggestionMode {
+  none,
+  showIfError;
+}

@@ -1,0 +1,4 @@
+enum ActionConfirmationType {
+  delete,
+  custom;
+}

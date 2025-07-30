@@ -1,0 +1,4 @@
+enum BlockHiddenBehavior {
+  none,
+  clear;
+}

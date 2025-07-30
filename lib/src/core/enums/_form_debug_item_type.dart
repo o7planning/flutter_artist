@@ -1,0 +1,4 @@
+enum FormDebugItemType {
+  info,
+  call,
+}

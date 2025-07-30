@@ -1,0 +1,61 @@
+import 'package:flutter/material.dart';
+
+import '../../../core/icon/icon_constants.dart';
+import '../../constants/_debug_constants.dart';
+import '../_block_or_scalar.dart';
+
+class BlockOrScalarInfoView extends StatelessWidget {
+  final BlockOrScalar blockOrScalar;
+
+  const BlockOrScalarInfoView({super.key, required this.blockOrScalar});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      minLeadingWidth: 0,
+      horizontalTitleGap: 5,
+      dense: true,
+      visualDensity: const VisualDensity(
+        horizontal: -3,
+        vertical: -3,
+      ),
+      leading: Icon(
+        blockOrScalar.isBlock
+            ? FaIconConstants.blockIconData
+            : FaIconConstants.scalarIconData,
+        size: 18,
+      ),
+      title: SelectableText.rich(
+        style: TextStyle(fontSize: DebugConstants.blockOrScalaInfoFontSize),
+        TextSpan(
+          children: [
+            WidgetSpan(child: SizedBox(width: 3)),
+            TextSpan(
+              text: blockOrScalar.blockOrScalarClassName,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+            TextSpan(
+              text: blockOrScalar.blockOrScalarClassParametersDefinition,
+              style: const TextStyle(
+                color: DebugConstants.classParametersColor,
+              ),
+            ),
+          ],
+        ),
+      ),
+      subtitle: blockOrScalar.description == null
+          ? null
+          : Text(
+              blockOrScalar.description!,
+              style: const TextStyle(
+                fontSize: 12,
+                color: Colors.grey,
+              ),
+            ),
+    );
+  }
+}
