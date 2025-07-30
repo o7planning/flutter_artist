@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/_fa_core.dart';
-import '../_debug_/_debug_constants.dart';
+import '../constants/_debug_constants.dart';
 import '_criteria_values_info_view.dart';
 
 abstract class BlkOrScrCriteriaView extends StatelessWidget {

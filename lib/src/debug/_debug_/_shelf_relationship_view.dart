@@ -7,7 +7,7 @@ import '../../core/_ui_/_shelf_info_view.dart';
 import '../../icon/icon_constants.dart';
 import '../../widgets/_custom_app_container.dart';
 import '_block_or_scalar.dart';
-import '_debug_constants.dart';
+import '../constants/_debug_constants.dart';
 import '_shelf_relationship_controller.dart';
 import '_shelf_structure_tree_view.dart';
 

@@ -5,7 +5,7 @@ as dialogs;
 import '../../core/_fa_core.dart';
 import '../_debug_/_form_data_debug_view.dart';
 import '../_debug_/_shelf_structure_graph_view.dart';
-import '../_dialog_size.dart';
+import '../utils/_dialog_size.dart';
 
 class FormDataInfoDialog extends StatefulWidget {
   final FormModel formModel;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../debug/_debug_/_block_or_scalar.dart';
-import '../../debug/_debug_/_debug_constants.dart';
+import '../../debug/constants/_debug_constants.dart';
 import '../../icon/icon_constants.dart';
 
 class BlockOrScalarInfoView extends StatelessWidget {
