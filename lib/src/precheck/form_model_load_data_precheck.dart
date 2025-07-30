@@ -1,4 +1,4 @@
-import '../annotation/annotation.dart';
+import '../core/annotation/annotation.dart';
 import '__chk_code.dart';
 import '__chk_code_detail.dart';
 
@@ -8,8 +8,7 @@ enum FormModelLoadDataPrecheck implements ChkCodeDetail {
     chkCode: ChkCode.busy,
     message: "Can not load form data.",
     details: ["The executor is busy."],
-  ),
-  ;
+  );
 
   @override
   final ChkCode chkCode;

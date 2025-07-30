@@ -53,13 +53,13 @@ import '../adapter/_global_data_adapter.dart';
 import '../adapter/_locale_adapter.dart';
 import '../adapter/_logged_in_user_adapter.dart';
 import '../adapter/_notification_adapter.dart';
-import '../annotation/annotation.dart';
 
 import '../debug/code_flow/_code_flow_func_trace_info_view.dart';
 import '../debug/code_flow/_code_flow_info_error_view.dart';
 import '../debug/code_flow/_code_flow_method_args_view.dart';
 import '../debug/code_flow/_code_flow_method_view.dart';
 import '../debug/storage/_block_or_scalar.dart';
+import 'annotation/annotation.dart';
 import 'error_logger/_error_logger.dart';
 import '../debug/filter/_filter_data_debug_view.dart';
 import '../debug/storage/_shelf_structure_graph_view.dart';

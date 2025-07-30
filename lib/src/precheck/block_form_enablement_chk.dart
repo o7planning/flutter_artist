@@ -1,4 +1,5 @@
-import '../annotation/annotation.dart';
+
+import '../core/annotation/annotation.dart';
 import '__chk_code.dart';
 import '__chk_code_detail.dart';
 
