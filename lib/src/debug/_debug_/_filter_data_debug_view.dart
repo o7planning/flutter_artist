@@ -9,10 +9,10 @@ import '../../core/_fa_core.dart';
 import '../../core/_ui_/_shelf_block_scalar_type_widget.dart';
 import '../../icon/icon_constants.dart';
 import '../../widgets/_custom_app_container.dart';
-import '../_tab_theme_utils.dart';
-import '_filter_criteria_/_filter_criteria_structure_view.dart';
-import '_widget_/_info_view.dart';
-import '_widget_/_json_view.dart';
+import '../utils/_tab_theme_utils.dart';
+import '../filter_criteria/_filter_criteria_structure_view.dart';
+import '../widgets/_info_view.dart';
+import '../widgets/_json_view.dart';
 
 class FilterDataDebugView extends StatefulWidget {
   final FilterModel filterModel;

@@ -10,11 +10,11 @@ import '../../core/_fa_core.dart';
 import '../../core/_ui_/_shelf_block_scalar_type_widget.dart';
 import '../../icon/icon_constants.dart';
 import '../../widgets/_custom_app_container.dart';
-import '../_tab_theme_utils.dart';
+import '../utils/_tab_theme_utils.dart';
 import '_block_or_scalar.dart';
-import '_form_props_/_form_props_structure_view.dart';
-import '_widget_/_info_view.dart';
-import '_widget_/_json_view.dart';
+import '../form_props/_form_props_structure_view.dart';
+import '../widgets/_info_view.dart';
+import '../widgets/_json_view.dart';
 
 class FormDataView extends StatefulWidget {
   final FormModel formModel;

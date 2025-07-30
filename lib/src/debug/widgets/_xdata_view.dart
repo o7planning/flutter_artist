@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
-class CriterionValueView extends StatelessWidget {
-  final dynamic value;
+import '../../core/_fa_core.dart';
 
-  const CriterionValueView({
-    required this.value,
+class XDataView extends StatelessWidget {
+  final XData? xData;
+
+  const XDataView({
+    super.key,
+    required this.xData,
   });
 
   @override
@@ -17,7 +20,7 @@ class CriterionValueView extends StatelessWidget {
         color: Colors.white,
       ),
       child: Text(
-        value.toString(),
+        xData == null ? "null" : xData!.data.toString(),
         style: TextStyle(fontSize: 12),
       ),
     );

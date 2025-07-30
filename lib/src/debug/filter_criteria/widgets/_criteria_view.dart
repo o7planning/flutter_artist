@@ -6,8 +6,8 @@ import '../../../icon/icon_constants.dart';
 import '../../../widgets/_custom_app_container.dart';
 import '../../../widgets/_simple_accordion.dart';
 import '../../../widgets/_simple_accordion_section.dart';
-import '../_widget_/_xdata_view.dart';
-import '_criteria_value_view.dart';
+import '../../widgets/_dynamic_value_view.dart';
+import '../../widgets/_xdata_view.dart';
 
 class FilterCriterionView extends StatelessWidget {
   final Criterion criterion;
@@ -113,7 +113,7 @@ class FilterCriterionView extends StatelessWidget {
                 ),
               ),
               headerSubtitle: _headerSubtitle(criterion.initialValue),
-              content: CriterionValueView(value: criterion.initialValue),
+              content: DynamicValueView(value: criterion.initialValue),
             ),
             SimpleAccordionSection(
               initiallyExpanded: true,
@@ -124,7 +124,7 @@ class FilterCriterionView extends StatelessWidget {
                 ),
               ),
               headerSubtitle: _headerSubtitle(criterion.currentValue),
-              content: CriterionValueView(value: criterion.currentValue),
+              content: DynamicValueView(value: criterion.currentValue),
             ),
             if (criterion is MultiOptCriterion)
               SimpleAccordionSection(

@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../../../core/_fa_core.dart';
-import '../../../enums/_data_state.dart';
-import '../../../icon/icon_constants.dart';
-import '../../../widgets/_custom_app_container.dart';
-import '../../../widgets/_small_text_button.dart';
-import '../../dialog/_error_viewer_dialog.dart';
+import '../../core/_fa_core.dart';
+import '../../enums/_data_state.dart';
+import '../../icon/icon_constants.dart';
+import '../../widgets/_custom_app_container.dart';
+import '../../widgets/_small_text_button.dart';
+import '../dialog/_error_viewer_dialog.dart';
 
 class FormModelDebugView extends StatelessWidget {
   final FormModel formModel;
 
   const FormModelDebugView({
+    super.key,
     required this.formModel,
   });
 

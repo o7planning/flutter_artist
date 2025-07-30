@@ -6,9 +6,9 @@ import '../../../icon/icon_constants.dart';
 import '../../../widgets/_custom_app_container.dart';
 import '../../../widgets/_simple_accordion.dart';
 import '../../../widgets/_simple_accordion_section.dart';
-import '_dynamic_value_view.dart';
+import '../../widgets/_dynamic_value_view.dart';
 import '_prop_error_view.dart';
-import '_xdata_view.dart';
+import '../../widgets/_xdata_view.dart';
 
 class FormPropView extends StatelessWidget {
   final bool formInitialDataReady;

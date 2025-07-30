@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 
-import '../../debug/_debug_/_debug_constants.dart';
+import '../../debug/constants/_debug_constants.dart';
 import '../../icon/icon_constants.dart';
 import '../_fa_core.dart';
 
