@@ -4,7 +4,7 @@ as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../../core/_core/error_logger/_error_logger.dart';
+import '../../core/error_logger/_error_logger.dart';
 import '../../core/widgets/_custom_app_container.dart';
 import '../section/_error_info_viewer.dart';
 

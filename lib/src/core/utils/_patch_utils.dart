@@ -1,4 +1,4 @@
-part of '../code.dart';
+
 
 class PatchUtils {
   static Map<String, dynamic> getMinPatchValues({
