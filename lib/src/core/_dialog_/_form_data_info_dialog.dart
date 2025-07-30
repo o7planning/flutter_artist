@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
     as dialogs;
 
-import '../../../flutter_artist.dart';
+
 import '../../debug/_debug_/_form_data_debug_view.dart';
 import '../../debug/_debug_/_shelf_structure_graph_view.dart';
 import '../../debug/_dialog_size.dart';
+import '../_fa_core.dart';
 
 class FormDataInfoDialog extends StatefulWidget {
   final FormModel formModel;

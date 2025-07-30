@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../../../../flutter_artist.dart';
+import '../../../core/_fa_core.dart';
 import '../../../error/_form_error_info.dart';
 import '../../../icon/icon_constants.dart';
 import '../../../widgets/_custom_app_container.dart';

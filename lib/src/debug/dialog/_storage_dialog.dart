@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-import '../../debug/_debug_/_debug_constants.dart';
-import '../../debug/_debug_/_shelf_structure_graph_view.dart';
-import '../../debug/_debug_/_storage_structure_view.dart';
-import '../../debug/_dialog_size.dart';
+import '../_debug_/_debug_constants.dart';
+import '../_debug_/_shelf_structure_graph_view.dart';
+import '../_debug_/_storage_structure_view.dart';
+import '../_dialog_size.dart';
 import '../../widgets/_custom_app_container.dart';
-import '../_fa_core.dart';
+import '../../core/_fa_core.dart';
 
 class StorageDialog extends StatefulWidget {
   final Shelf? shelf;

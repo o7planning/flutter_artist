@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
-as dialogs;
+    as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../../../flutter_artist.dart';
 import '../../debug/_debug_/_error_logger.dart';
 import '../../widgets/_custom_app_container.dart';
+import '../_fa_core.dart';
 
 class ErrorLogViewerDialog extends StatefulWidget {
   final String title;

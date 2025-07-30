@@ -1,6 +1,6 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../../flutter_artist.dart';
+import '../global/_global_data.dart';
 
 interface class IGlobalDataAdapter<G extends IGlobalData> {
   Future<G> loadFromServer({

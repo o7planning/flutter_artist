@@ -120,9 +120,9 @@ import '../widgets/_simple_accordion.dart';
 import '../widgets/_simple_accordion_section.dart';
 import '_dialog_/_error_log_viewer_dialog.dart';
 import '_dialog_/_form_data_info_dialog.dart';
-import '_dialog_/_storage_dialog.dart';
+import '../debug/dialog/_storage_dialog.dart';
 import '_ui_/_shelf_info_view.dart';
-import '_utils_/_debug_print.dart';
+import '../utils/_debug_print.dart';
 
 part '_task_result_/_task_result.dart';
 
