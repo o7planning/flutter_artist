@@ -805,10 +805,12 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  @DebugMethodAnnotation()
   String get debugClassDefinition {
     return "${getClassName(this)}$debugClassParametersDefinition";
   }
 
+  @DebugMethodAnnotation()
   String get debugClassParametersDefinition {
     return "<${getFilterInputType()}, ${getFilterCriteriaType()}>";
   }

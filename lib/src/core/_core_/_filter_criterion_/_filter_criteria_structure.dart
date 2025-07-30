@@ -86,16 +86,21 @@ class FilterCriteriaStructure {
     return _allCriteriaMap.map((k, v) => MapEntry(k, v._tempCurrentValue));
   }
 
+  @DebugMethodAnnotation()
   Map<String, dynamic> get debugInitialCriteriaValues => _initialCriteriaValues;
 
+  @DebugMethodAnnotation()
   Map<String, dynamic> get debugCurrentCriteriaValues => _currentCriteriaValues;
 
+  @DebugMethodAnnotation()
   Map<String, dynamic> get debugInstantValues {
     return filterModel._formKey.currentState?.instantValue ?? {};
   }
 
+  @DebugMethodAnnotation()
   List<MultiOptCriterion> get debugRootOptCriteria => _rootOptCriteria;
 
+  @DebugMethodAnnotation()
   List<SimpleCriterion<dynamic>> get debugSimpleCriteria => _simpleCriteria;
 
   // ***************************************************************************

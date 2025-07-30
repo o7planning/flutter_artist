@@ -157,6 +157,7 @@ class _Storage {
     return type.toString();
   }
 
+  @DebugMethodAnnotation()
   String debugGetShelfName(Type type) {
     return _getShelfName(type);
   }
@@ -205,11 +206,13 @@ class _Storage {
   }
 
   // TODO: Internal Use.
+  @DebugMethodAnnotation()
   void debugLoadAll() {
     _loadAll();
   }
 
   // TODO: Internal Use.
+  @DebugMethodAnnotation()
   F debugCreateShelf<F extends Shelf>(String shelfName) {
     return _createShelf(shelfName);
   }
@@ -225,6 +228,7 @@ class _Storage {
   }
 
   // TODO: Internal Use.
+  @DebugMethodAnnotation()
   Shelf? debugFindShelf(Type shelfType) {
     return _findShelf(shelfType);
   }
@@ -344,14 +348,17 @@ class _Storage {
   // ***************************************************************************
   // ***************************************************************************
 
+  @DebugMethodAnnotation()
   Map<String, Shelf> debugGetListenerShelves() {
     return _getListenerShelves();
   }
 
+  @DebugMethodAnnotation()
   Map<String, Shelf> debugGetEventShelves({required bool external}) {
     return _getEventShelves(external: external);
   }
 
+  @DebugMethodAnnotation()
   Map<String, Shelf> debugGetIndependentShelves({required bool external}) {
     return _getIndependentShelves(external: external);
   }

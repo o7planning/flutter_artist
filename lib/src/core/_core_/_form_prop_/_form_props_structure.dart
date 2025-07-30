@@ -612,8 +612,10 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  @DebugMethodAnnotation()
   List<MultiOptProp> get debugRootOptProps => _rootOptProps;
 
+  @DebugMethodAnnotation()
   List<SimpleProp> get simpleProps => _simpleProps;
 
   // ***************************************************************************

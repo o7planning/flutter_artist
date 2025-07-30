@@ -44,10 +44,12 @@ abstract class Scalar<
     return "scalar > ${shelf.name} > $name";
   }
 
+  @DebugMethodAnnotation()
   String get debugClassDefinition {
     return "${getClassName(this)}$debugClassParametersDefinition";
   }
 
+  @DebugMethodAnnotation()
   String get debugClassParametersDefinition {
     return "<${getFilterInputType()}, ${getValueType()}, ${getFilterCriteriaType()}>";
   }

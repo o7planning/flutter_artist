@@ -120,10 +120,12 @@ abstract class Block<
     return "block > ${shelf.name} > $name";
   }
 
+  @DebugMethodAnnotation()
   String get debugClassDefinition {
     return "${getClassName(this)}$debugClassParametersDefinition";
   }
 
+  @DebugMethodAnnotation()
   String get debugClassParametersDefinition {
     return "<${getItemIdType()}, ${getItemType()}, ${getItemDetailType()}, "
         "${getFilterInputType()}, ${getFilterCriteriaType()}, ${getExtraFormInputType()}>";
