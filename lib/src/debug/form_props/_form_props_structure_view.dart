@@ -5,7 +5,7 @@ import 'package:animated_tree_view/tree_view/widgets/indent.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_split_view/multi_split_view.dart';
 
-import '../../core/_fa_core.dart';
+import '../../core/_core/code.dart';
 import '../../core/enums/_data_state.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/widgets/_custom_app_container.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../core/_fa_core.dart';
+import '../../core/_core/code.dart';
 import '__code_flow_const.dart';
 import '_code_flow_info_error_view.dart';
 import '_code_flow_method_view.dart';

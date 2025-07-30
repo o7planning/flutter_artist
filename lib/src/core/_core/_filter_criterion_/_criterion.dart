@@ -1,4 +1,4 @@
-part of '../../_fa_core.dart';
+part of '../code.dart';
 
 abstract class Criterion<V> {
   late final FilterCriteriaStructure _structure;

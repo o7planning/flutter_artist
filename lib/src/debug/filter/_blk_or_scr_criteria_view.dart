@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../core/_fa_core.dart';
+import '../../core/_core/code.dart';
 import '../constants/_debug_constants.dart';
 import '_criteria_values_info_view.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../../_fa_core.dart';
+import '../code.dart';
 
 class ErrorLogger {
   int _errorCount = 0;

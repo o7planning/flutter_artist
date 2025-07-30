@@ -1,4 +1,4 @@
-part of '../../_fa_core.dart';
+part of '../code.dart';
 
 class _CurrentCoupleItem<ITEM, ITEM_DETAIL> {
   final ITEM? _item;

@@ -1,4 +1,4 @@
-part of '../../_fa_core.dart';
+part of '../code.dart';
 
 abstract class LoginActivityBase<USER extends ILoggedInUser> extends Activity {
   LoginActivityBase({required super.name, required super.config});

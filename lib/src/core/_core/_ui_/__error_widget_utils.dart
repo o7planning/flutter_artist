@@ -1,4 +1,4 @@
-part of '../../_fa_core.dart';
+part of '../code.dart';
 
 final Color _quick_circleAvatarBgColor = Colors.blueGrey[50]!;
 final double _quick_circleAvatarRadius = 20;

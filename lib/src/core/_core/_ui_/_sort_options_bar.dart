@@ -1,4 +1,4 @@
-part of '../../_fa_core.dart';
+part of '../code.dart';
 
 class SortOptionsBar extends StatelessWidget {
   final Block _block;

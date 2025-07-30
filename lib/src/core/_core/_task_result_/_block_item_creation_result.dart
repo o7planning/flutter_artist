@@ -1,4 +1,4 @@
-part of '../../_fa_core.dart';
+part of '../code.dart';
 
 @RenameAnnotation()
 class PrepareItemCreationResult extends TaskResult<BlockItemCreationPrecheck> {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 
-import '../../core/_fa_core.dart';
+import '../../core/_core/code.dart';
 import '../../core/icon/icon_constants.dart';
 import '../utils/_tab_theme_utils.dart';
 import '_block_criteria_view.dart';

@@ -1,4 +1,4 @@
-part of '../../_fa_core.dart';
+part of '../code.dart';
 
 abstract class XData<ID, ITEM, DATA> {
   final ID Function(ITEM item) _getItemId;

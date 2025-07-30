@@ -1,4 +1,4 @@
-part of '../_fa_core.dart';
+part of '../_core/code.dart';
 
 class TextSizeUtils {
   static Size calculateTextSize(

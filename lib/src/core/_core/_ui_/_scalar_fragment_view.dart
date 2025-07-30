@@ -1,4 +1,4 @@
-part of '../../_fa_core.dart';
+part of '../code.dart';
 
 abstract class ScalarFragmentView<SCALAR extends Scalar>
     extends StatelessWidget {

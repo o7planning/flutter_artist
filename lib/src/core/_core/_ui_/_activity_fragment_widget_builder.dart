@@ -1,4 +1,4 @@
-part of '../../_fa_core.dart';
+part of '../code.dart';
 
 class ActivityFragmentWidgetBuilder extends _RefreshableWidget {
   final Activity activity;

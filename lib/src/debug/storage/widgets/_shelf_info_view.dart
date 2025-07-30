@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/_fa_core.dart';
+import '../../../core/_core/code.dart';
 
 class ShelfInfoView extends StatelessWidget {
   final Shelf? shelf;

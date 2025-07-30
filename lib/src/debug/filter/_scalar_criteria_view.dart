@@ -1,4 +1,4 @@
-import '../../core/_fa_core.dart';
+import '../../core/_core/code.dart';
 import '_blk_or_scr_criteria_view.dart';
 
 class ScalarCriteriaView extends BlkOrScrCriteriaView {

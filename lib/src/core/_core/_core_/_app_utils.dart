@@ -1,4 +1,4 @@
-part of '../../_fa_core.dart';
+part of '../code.dart';
 
 String _createFatalAppError(String message) {
   return "\n*********************************************************************************************\n"

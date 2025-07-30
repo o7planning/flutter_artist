@@ -1,4 +1,4 @@
-part of '../../_fa_core.dart';
+part of '../code.dart';
 
 abstract class BlockItemsView<BLOCK extends Block> extends StatelessWidget {
   final BLOCK block;

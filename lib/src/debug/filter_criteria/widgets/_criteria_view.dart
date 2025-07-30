@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-import '../../../core/_fa_core.dart';
+import '../../../core/_core/code.dart';
 import '../../../core/icon/icon_constants.dart';
 import '../../../core/widgets/_custom_app_container.dart';
 import '../../../core/widgets/_simple_accordion.dart';

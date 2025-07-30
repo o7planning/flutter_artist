@@ -1,4 +1,4 @@
-part of '../../_fa_core.dart';
+part of '../code.dart';
 
 class ScalarFragmentViewBuilder extends _RefreshableWidget {
   final Scalar scalar;

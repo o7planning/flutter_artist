@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../core/_fa_core.dart';
+import '../../core/_core/code.dart';
 import '../../core/enums/_data_state.dart';
 
 class BlockOrScalar extends Equatable {

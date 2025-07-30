@@ -1,4 +1,4 @@
-part of '../../_fa_core.dart';
+part of '../code.dart';
 
 typedef ShelfCreator<S> = S Function();
 

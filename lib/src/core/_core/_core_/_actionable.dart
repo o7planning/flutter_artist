@@ -1,4 +1,4 @@
-part of '../../_fa_core.dart';
+part of '../code.dart';
 
 class Actionable<ENUM extends ChkCodeDetail> {
   final bool yes;

@@ -1,4 +1,4 @@
-part of '../../_fa_core.dart';
+part of '../code.dart';
 
 class FormPropsStructure {
   final Map<String, Prop> _allPropMap = {};

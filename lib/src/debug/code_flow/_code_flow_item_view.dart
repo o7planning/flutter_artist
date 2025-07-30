@@ -1,4 +1,4 @@
-part of '../../core/_fa_core.dart';
+part of '../../core/_core/code.dart';
 
 class CodeFlowItemView extends StatelessWidget {
   final CodeFlowItem codeFlowItem;

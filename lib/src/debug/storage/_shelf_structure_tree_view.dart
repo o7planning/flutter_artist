@@ -4,7 +4,7 @@ import 'package:animated_tree_view/tree_view/widgets/expansion_indicator.dart';
 import 'package:animated_tree_view/tree_view/widgets/indent.dart';
 import 'package:flutter/material.dart';
 
-import '../../core/_fa_core.dart';
+import '../../core/_core/code.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/widgets/_custom_app_container.dart';
 import '../constants/_debug_constants.dart';

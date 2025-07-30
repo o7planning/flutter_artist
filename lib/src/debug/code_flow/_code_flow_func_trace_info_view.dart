@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../core/_fa_core.dart';
+import '../../core/_core/code.dart';
 
 class CodeFlowFuncTraceInfoView extends StatelessWidget {
   final FuncCallInfo funcCallInfo;
