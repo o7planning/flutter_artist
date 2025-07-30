@@ -7,7 +7,8 @@ class FloatingButton extends StatelessWidget {
   final IconData iconData;
   final Function() onPressed;
 
-  const FloatingButton({super.key,
+  const FloatingButton({
+    super.key,
     required this.selected,
     required this.iconData,
     required this.iconColor,
