@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 abstract class FormView<FORM_MODEL extends FormModel> extends StatelessWidget {
   final FORM_MODEL formModel;

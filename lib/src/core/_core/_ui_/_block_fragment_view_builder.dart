@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 class BlockFragmentViewBuilder extends _RefreshableWidget {
   final Block block;

@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 class SimpleCriterion<V> extends Criterion<V> {
   SimpleCriterion({

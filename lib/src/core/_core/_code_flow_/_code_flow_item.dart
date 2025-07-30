@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 int __flowLogItemSEQ = 0;
 
@@ -109,7 +109,7 @@ class CodeFlowItem {
     return errorInfo != null;
   }
 
-  Shelf? _getShelf() {
+  Shelf? getShelf() {
     if (ownerClassInstance is Block) {
       return (ownerClassInstance as Block).shelf;
     } else if (ownerClassInstance is FilterModel) {

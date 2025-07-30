@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 @RenameAnnotation("FormModelDataLoadResult")
 class FormModelLoadDataResult extends TaskResult<FormModelLoadDataPrecheck> {

@@ -1,4 +1,12 @@
-part of '../../core/_core/code.dart';
+import 'package:flutter/material.dart';
+
+import '../../core/_core/core.dart';
+import '../../core/widgets/_labeled_radio.dart';
+import '../storage/widgets/_shelf_info_view.dart';
+import '_code_flow_func_trace_info_view.dart';
+import '_code_flow_info_error_view.dart';
+import '_code_flow_method_args_view.dart';
+import '_code_flow_method_view.dart';
 
 class CodeFlowItemView extends StatelessWidget {
   final CodeFlowItem codeFlowItem;
@@ -10,7 +18,7 @@ class CodeFlowItemView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Shelf? shelf = codeFlowItem._getShelf();
+    Shelf? shelf = codeFlowItem.getShelf();
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -18,13 +26,13 @@ class CodeFlowItemView extends StatelessWidget {
       children: [
         Row(
           children: [
-            _LabeledRadio<bool>(
+            LabeledRadio<bool>(
               label: "Dev Code",
               value: true,
               groupValue: codeFlowItem.isDevCode,
               onChanged: null,
             ),
-            _LabeledRadio<bool>(
+            LabeledRadio<bool>(
               label: "Lib Code",
               value: true,
               groupValue: codeFlowItem.isLibCode,

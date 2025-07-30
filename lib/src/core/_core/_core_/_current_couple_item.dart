@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 class _CurrentCoupleItem<ITEM, ITEM_DETAIL> {
   final ITEM? _item;

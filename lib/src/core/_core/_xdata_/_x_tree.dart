@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 class XTree<ID, TREE_ITEM, TREE_DATA> extends XData<ID, TREE_ITEM, TREE_DATA> {
   final TREE_DATA treeData;

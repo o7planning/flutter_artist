@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 class LoggedInUserBuilder extends _RefreshableWidget {
   final Widget Function(ILoggedInUser? user) build;

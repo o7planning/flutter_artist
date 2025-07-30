@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 class _XFormModel {
   final _XShelf xShelf;

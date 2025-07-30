@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 class XList<ID, ITEM> extends XData<ID, ITEM, List<ITEM>> {
   final List<ITEM> _items;

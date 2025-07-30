@@ -1,13 +1,13 @@
-part of '../code.dart';
+import 'package:flutter/material.dart';
 
-class _LabeledRadio<E> extends StatelessWidget {
+class LabeledRadio<E> extends StatelessWidget {
   final String label;
   final E value;
   final E? groupValue;
   final Function(E? value)? onChanged;
   final TextStyle? labelStyle;
 
-  const _LabeledRadio({
+  const LabeledRadio({
     super.key,
     required this.label,
     this.labelStyle,

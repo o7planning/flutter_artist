@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 int __xShelfIdSequence = 0;
 

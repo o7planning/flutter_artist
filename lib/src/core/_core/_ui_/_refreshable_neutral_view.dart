@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 abstract class RefreshableNeutralView extends StatelessWidget {
   final List<Shelf> shelves;

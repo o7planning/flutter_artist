@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 class ForceReloadDebug {
   String currentShelfCodes;

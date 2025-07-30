@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 class RefreshableNeutralViewBuilder extends _RefreshableWidget {
   final List<Shelf> shelves;

@@ -1,5 +1,3 @@
-
-
 class PatchUtils {
   static Map<String, dynamic> getMinPatchValues({
     required Map<String, dynamic> currentValues,

@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 final Color _quick_circleAvatarBgColor = Colors.blueGrey[50]!;
 final double _quick_circleAvatarRadius = 20;
@@ -7,17 +7,6 @@ final double _quick_iconSize = 16;
 const Color _quick_iconColor_error = Colors.red;
 const Color _quick_iconColor_enable = Colors.indigo;
 const Color _quick_iconColor_disable = Colors.grey;
-
-enum QuickSuggestionMode {
-  none,
-  showIfError;
-}
-
-enum QuickSuggestionType {
-  normal,
-  error,
-  fatal;
-}
 
 class _QuickSuggestionButton extends StatelessWidget {
   final QuickSuggestionType suggestionType;

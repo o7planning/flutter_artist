@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 class BlockControlBar extends _RefreshableWidget {
   final EdgeInsets padding;

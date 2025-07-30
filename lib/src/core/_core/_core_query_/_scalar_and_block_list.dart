@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 class _ScalarAndBlockList {
   List<Scalar> queryScalars = [];

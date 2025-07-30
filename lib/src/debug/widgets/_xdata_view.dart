@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../core/_core/code.dart';
+import '../../core/_core/core.dart';
 
 class XDataView extends StatelessWidget {
   final XData? xData;

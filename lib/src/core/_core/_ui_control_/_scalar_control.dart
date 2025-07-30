@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 abstract class ScalarControl extends _RefreshableWidget {
   final Scalar scalar;

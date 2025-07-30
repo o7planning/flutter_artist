@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 ///
 /// [ID] is Id type of Item. For example: [String].

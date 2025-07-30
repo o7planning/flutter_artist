@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 class CalculatedCriterion<V> extends Criterion<V> {
   final V Function() calculate;

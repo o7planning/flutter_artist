@@ -1,4 +1,4 @@
-part of 'code.dart';
+part of 'core.dart';
 
 final FlutterArtist = _FlutterArtist();
 
@@ -137,7 +137,8 @@ class _FlutterArtist {
     List<DebugCat> allowDebugCats = const [],
   }) async {
     if (__adapter != null) {
-      throw DebugPrint.printFatalError("${getClassName(__adapter)} already registered!");
+      throw DebugPrint.printFatalError(
+          "${getClassName(__adapter)} already registered!");
     }
     __adapter = flutterArtistAdapter;
     //

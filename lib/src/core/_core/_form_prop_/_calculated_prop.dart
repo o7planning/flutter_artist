@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 class CalculatedProp<V> extends Prop {
   final V Function() calculate;

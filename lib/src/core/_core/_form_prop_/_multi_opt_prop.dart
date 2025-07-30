@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 class MultiOptProp<V> extends Prop<V> {
   late final MultiOptProp? parent;

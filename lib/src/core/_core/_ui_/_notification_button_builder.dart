@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 class NotificationButtonBuilder extends StatefulWidget {
   final Widget Function(INotificationSummary? notificationSummary) build;

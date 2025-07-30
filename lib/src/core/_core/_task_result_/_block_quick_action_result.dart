@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 class BlockQuickActionResult extends TaskResult<BlockQuickActionPrecheck> {
   BlockQuickActionResult({super.precheck, super.stackTrace});

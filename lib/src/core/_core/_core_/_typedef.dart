@@ -1,1 +1,1 @@
-part of '../code.dart';
+part of '../core.dart';

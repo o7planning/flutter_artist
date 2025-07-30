@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 abstract class Coordinator extends _XBase {
   final CoordinatorConfig config;

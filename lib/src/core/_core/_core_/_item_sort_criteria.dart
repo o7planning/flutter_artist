@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 abstract class ItemSortCriteria<ITEM extends Object> {
   late final Block block;

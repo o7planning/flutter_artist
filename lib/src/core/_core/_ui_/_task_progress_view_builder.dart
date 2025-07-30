@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 class TaskProgressViewBuilder extends _RefreshableWidget {
   final EdgeInsets progressOnMargin;

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../core/_core/code.dart';
 import '../../core/utils/_class_utils.dart';
 import '../../core/widgets/_simple_accordion.dart';
 import '../../core/widgets/_simple_accordion_section.dart';

@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 class MultiOptCriterion extends Criterion {
   late final MultiOptCriterion? parent;

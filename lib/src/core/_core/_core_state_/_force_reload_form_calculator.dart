@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 _ForceReloadFormState _calculateFormState({
   required _XFormModel xFormModel,

@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 abstract class Prop<V> {
   late final FormPropsStructure _structure;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
     as dialogs;
 
-import '../../core/_core/code.dart';
+import '../../core/_core/core.dart';
 import '_dialog_constants.dart';
 
 class DevelopmentModeSettingsDialog extends StatefulWidget {

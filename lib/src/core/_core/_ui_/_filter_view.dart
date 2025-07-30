@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 abstract class FilterView<FILTER_MODEL extends FilterModel>
     extends StatelessWidget {

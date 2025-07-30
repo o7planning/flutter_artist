@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../../core/_core/code.dart';
+import '../../core/_core/core.dart';
 import '../../core/icon/icon_constants.dart';
 
 class DebugMenu extends StatefulWidget {

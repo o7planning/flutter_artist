@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 class FilterCriteriaStructure {
   final Map<String, Criterion> _allCriteriaMap = {};

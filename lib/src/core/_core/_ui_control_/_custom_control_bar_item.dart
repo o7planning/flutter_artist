@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 class CustomControlBarItem extends StatelessWidget {
   final Widget child;

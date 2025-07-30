@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../core/_core/code.dart';
+import '../../core/_core/core.dart';
 
 class FilterModelDebugView extends StatelessWidget {
   final FilterModel filterModel;

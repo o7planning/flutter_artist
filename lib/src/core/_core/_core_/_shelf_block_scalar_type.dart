@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 class ShelfBlockScalarType extends Equatable {
   final Type shelfType;

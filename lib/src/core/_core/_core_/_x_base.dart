@@ -1,4 +1,4 @@
-part of '../code.dart';
+part of '../core.dart';
 
 abstract class _XBase {
   // TODO: Them tham so BuildContext?

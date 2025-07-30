@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-import '../../core/_core/code.dart';
+import '../../core/_core/core.dart';
 import '_block_debug_options.dart';
 
 const double _debugBoxFontSize = 11.5;
