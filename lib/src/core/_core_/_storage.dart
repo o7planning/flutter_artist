@@ -545,7 +545,7 @@ class _Storage {
 
   // Callable.
   List<ShelfBlockScalarType> _getListenerShelfBlockScalarTypes({
-    required _BlockOrScalar eventBlockOrScalar,
+    required BlockOrScalar eventBlockOrScalar,
     required bool external,
   }) {
     if (external) {
@@ -657,7 +657,7 @@ class _Storage {
 
   // Callable.
   List<ShelfBlockScalarType> _getEventShelfBlockTypes({
-    required _BlockOrScalar listenerBlockOrScalar,
+    required BlockOrScalar listenerBlockOrScalar,
   }) {
     final List<Block> foundEventBlocks;
     if (listenerBlockOrScalar.block != null) {

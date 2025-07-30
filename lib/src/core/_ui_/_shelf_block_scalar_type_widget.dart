@@ -1,12 +1,17 @@
-part of '../_fa_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 
-class _ShelfBlockScalarTypeWidget extends StatelessWidget {
+import '../../icon/icon_constants.dart';
+import '../_fa_core.dart';
+
+class ShelfBlockScalarTypeWidget extends StatelessWidget {
   final Function()? onTap;
   final ShelfBlockScalarType shelfBlockScalarType;
   final bool isListener;
   final bool isEventSource;
 
-  const _ShelfBlockScalarTypeWidget({
+  const ShelfBlockScalarTypeWidget({
+    super.key,
     required this.onTap,
     required this.shelfBlockScalarType,
     required this.isListener,

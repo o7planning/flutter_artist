@@ -53,6 +53,12 @@ import '../adapter/_locale_adapter.dart';
 import '../adapter/_logged_in_user_adapter.dart';
 import '../adapter/_notification_adapter.dart';
 import '../annotation/annotation.dart';
+import '../debug/_debug.dart';
+import '../debug/_debug_/_block_or_scalar.dart';
+import '../debug/_debug_/_error_logger.dart';
+import '../debug/_debug_/_filter_data_debug_view.dart';
+import '../debug/_debug_/_storage_structure_view.dart';
+import '../debug/_debug_filter_/__filter_criteria_debug_view.dart';
 import '../enums/_action_confirmation_type.dart';
 import '../enums/_action_result_state.dart';
 import '../enums/_activity_hidden_behavior.dart';
@@ -107,6 +113,11 @@ import '../precheck/block_item_curr_selection_precheck.dart';
 import '../precheck/block_item_deletion_precheck.dart';
 import '../precheck/block_item_edit_precheck.dart';
 import '../precheck/block_query_precheck.dart';
+import '../widgets/_custom_app_container.dart';
+import '../widgets/_simple_accordion.dart';
+import '../widgets/_simple_accordion_section.dart';
+import '_ui_/_shelf_info_view.dart';
+import '_utils_/_debug_print.dart';
 
 part '_task_result_/_task_result.dart';
 
@@ -180,7 +191,7 @@ part '_core_/_block_internal_broadcast.dart';
 
 part '_core_/_block_internal_event_reaction.dart';
 
-part '_core_/_block_or_scalar.dart';
+part '../debug/_debug_/_block_or_scalar.dart';
 
 part '_core_/_block_outside_broadcast.dart';
 
@@ -269,96 +280,6 @@ part '_core_state_/_force_reload_form_calculator.dart';
 part '_core_state_/_force_reload_item_calculator.dart';
 
 part '_core_state_/_force_reload_state.dart';
-
-part '_debug_/_/_debug_print.dart';
-
-part '_debug_/_constants.dart';
-
-part '_debug_/_debug_colors_and_styles.dart';
-
-part '_debug_/_debug_utils.dart';
-
-part '_debug_/_error_logger.dart';
-
-part '_debug_/_filter_criteria_/_criteria_value_view.dart';
-
-part '_debug_/_filter_criteria_/_criteria_view.dart';
-
-part '_debug_/_filter_criteria_/_filter_criteria_structure_view.dart';
-
-part '_debug_/_filter_criteria_/_filter_model_debug_view.dart';
-
-part '_debug_/_filter_data_debug_view.dart';
-
-part '_debug_/_form_data_debug_view.dart';
-
-part '_debug_/_form_props_/_form_model_debug_view.dart';
-
-part '_debug_/_form_props_/_form_props_structure_view.dart';
-
-part '_debug_/_graph_item.dart';
-
-part '_debug_/_graph_item_block_or_scalar_box.dart';
-
-part '_debug_/_graph_item_shelf_box.dart';
-
-part '_debug_/_graph_item_simple_shelf_box.dart';
-
-part '_debug_/_shelf_relationship_controller.dart';
-
-part '_debug_/_shelf_relationship_view.dart';
-
-part '_debug_/_shelf_structure_graph_view.dart';
-
-part '_debug_/_shelf_structure_tree_view.dart';
-
-part '_debug_/_shelf_structure_view_config.dart';
-
-part '_debug_/_state_/_block_debug_box.dart';
-
-part '_debug_/_state_/_block_debug_options.dart';
-
-part '_debug_/_state_/_block_debug_state_view.dart';
-
-part '_debug_/_state_/_form_debug_box.dart';
-
-part '_debug_/_state_/_form_debug_options.dart';
-
-part '_debug_/_state_/_pagination_debug_box.dart';
-
-part '_debug_/_state_/_pagination_debug_options.dart';
-
-part '_debug_/_storage_structure_graph_controller.dart';
-
-part '_debug_/_storage_structure_graph_view.dart';
-
-part '_debug_/_storage_structure_view.dart';
-
-part '_debug_/_widget_/_dynamic_value_view.dart';
-
-part '_debug_/_widget_/_info_view.dart';
-
-part '_debug_/_widget_/_json_view.dart';
-
-part '_debug_/_widget_/_prop_error_view.dart';
-
-part '_debug_/_widget_/_prop_view.dart';
-
-part '_debug_/_widget_/_xdata_view.dart';
-
-part '_debug_filter_/__filter_criteria_debug_view.dart';
-
-part '_debug_filter_/_blk_or_scr_criteria_view.dart';
-
-part '_debug_filter_/_block_criteria_view.dart';
-
-part '_debug_filter_/_blocks_scalars_view.dart';
-
-part '_debug_filter_/_criteria_values_info_view.dart';
-
-part '_debug_filter_/_filter_model_criteria_view.dart';
-
-part '_debug_filter_/_scalar_criteria_view.dart';
 
 part '_dialog_/_block_error_viewer_dialog.dart';
 
@@ -490,7 +411,7 @@ part '_ui_/_block_or_scalar_info_view.dart';
 
 part '_ui_/_control_bar_button.dart';
 
-part '_ui_/_custom_app_container.dart';
+part '../widgets/_custom_app_container.dart';
 
 part '_ui_/_debug_menu.dart';
 
@@ -534,11 +455,11 @@ part '_ui_/_shelf_block_scalar_type_widget.dart';
 
 part '_ui_/_shelf_info_view.dart';
 
-part '_ui_/_simple_accordion.dart';
+part '../widgets/_simple_accordion.dart';
 
-part '_ui_/_simple_accordion_section.dart';
+part '../widgets/_simple_accordion_section.dart';
 
-part '_ui_/_small_text_button.dart';
+part '../widgets/_small_text_button.dart';
 
 part '_ui_/_sort_options.dart';
 
@@ -546,7 +467,7 @@ part '_ui_/_sort_options_bar.dart';
 
 part '_ui_/_sort_options_dropdown.dart';
 
-part '_ui_/_table_container.dart';
+part '../widgets/_table_container.dart';
 
 part '_ui_/_task_progress_view_builder.dart';
 

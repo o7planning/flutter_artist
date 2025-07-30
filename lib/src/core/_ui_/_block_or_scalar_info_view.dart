@@ -1,9 +1,12 @@
-part of '../_fa_core.dart';
+import 'package:flutter/material.dart';
 
-class _BlockOrScalarInfoView extends StatelessWidget {
-  final _BlockOrScalar blockOrScalar;
+import '../../debug/_debug_/_block_or_scalar.dart';
+import '../../icon/icon_constants.dart';
 
-  const _BlockOrScalarInfoView({required this.blockOrScalar});
+class BlockOrScalarInfoView extends StatelessWidget {
+  final BlockOrScalar blockOrScalar;
+
+  const BlockOrScalarInfoView({super.key, required this.blockOrScalar});
 
   @override
   Widget build(BuildContext context) {

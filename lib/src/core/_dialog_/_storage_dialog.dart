@@ -1,23 +1,26 @@
-part of '../_fa_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+import '../../debug/_debug.dart';
+import '../../debug/_debug_/_storage_structure_view.dart';
+import '../../widgets/_custom_app_container.dart';
+import '../_fa_core.dart';
 
-class _StorageDialog extends StatefulWidget {
+class StorageDialog extends StatefulWidget {
   final Shelf? shelf;
 
-  const _StorageDialog({
+  const StorageDialog({
     required this.shelf,
     super.key,
   });
 
   @override
-  State<_StorageDialog> createState() {
+  State<StorageDialog> createState() {
     return _StorageDialogState();
   }
 }
 
-class _StorageDialogState extends State<_StorageDialog> {
+class _StorageDialogState extends State<StorageDialog> {
   Shelf? _currentShelf;
 
   @override
@@ -31,14 +34,14 @@ class _StorageDialogState extends State<_StorageDialog> {
   Widget build(BuildContext context) {
     Size size = _calculateDebugDialogSize(context);
 
-    Widget contentWidget = _CustomAppContainer(
+    Widget contentWidget = CustomAppContainer(
       padding: const EdgeInsets.all(2),
       width: size.width,
       height: size.height,
       child: _buildMainWidget(),
     );
 
-    dialogs.FaAlertDialog alert = dialogs.FaAlertDialog(
+    FaAlertDialog alert = FaAlertDialog(
       titleText: _currentShelf == null ? "Storage Viewer" : "Shelf Structure",
       content: contentWidget,
       contentPadding: EdgeInsets.zero,
@@ -50,15 +53,15 @@ class _StorageDialogState extends State<_StorageDialog> {
     return Stack(
       children: [
         _currentShelf == null
-            ? _StorageStructureView(
-          onSelectShelfToShowGraph: _setDetailedShelf,
-        )
-            : _ShelfStructureGraphView(
-          shelf: _currentShelf!,
-          onPressedBack: () {
-            _setDetailedShelf(null);
-          },
-        ),
+            ? StorageStructureView(
+                onSelectShelfToShowGraph: _setDetailedShelf,
+              )
+            : ShelfStructureGraphView(
+                shelf: _currentShelf!,
+                onPressedBack: () {
+                  _setDetailedShelf(null);
+                },
+              ),
         Positioned(
           bottom: 10,
           right: 10,
@@ -90,7 +93,9 @@ class _StorageDialogState extends State<_StorageDialog> {
     );
   }
 
-  void _setDetailedShelf(Shelf? shelf,) {
+  void _setDetailedShelf(
+    Shelf? shelf,
+  ) {
     setState(() {
       _currentShelf = shelf;
     });
@@ -104,7 +109,7 @@ Future<void> _showStorageDialog({
   await showDialog(
     context: context,
     builder: (BuildContext context) {
-      return _StorageDialog(shelf: shelf);
+      return StorageDialog(shelf: shelf);
     },
   );
 }

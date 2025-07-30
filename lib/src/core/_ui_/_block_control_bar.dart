@@ -63,7 +63,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
 
   @override
   Widget buildContent(BuildContext context) {
-    return _CustomAppContainer.bar(
+    return CustomAppContainer.bar(
       padding: widget.padding,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,

@@ -1,9 +1,11 @@
-part of '../_fa_core.dart';
+import 'package:flutter/material.dart';
 
-class _ShelfInfoView extends StatelessWidget {
+import '../_fa_core.dart';
+
+class ShelfInfoView extends StatelessWidget {
   final Shelf? shelf;
 
-  const _ShelfInfoView({required this.shelf});
+  const ShelfInfoView({required this.shelf});
 
   @override
   Widget build(BuildContext context) {

@@ -84,7 +84,7 @@ class _ErrorInfoViewState extends State<ErrorInfoView> {
             child: Stack(
               children: [
                 if (hasErrorDetails && showErrorDetail1)
-                  _CustomAppContainer(
+                  CustomAppContainer(
                     width: double.maxFinite,
                     height: double.maxFinite,
                     child: ListView(
@@ -94,7 +94,7 @@ class _ErrorInfoViewState extends State<ErrorInfoView> {
                     ),
                   ),
                 if (hasStackTrace && !showErrorDetail1)
-                  _CustomAppContainer(
+                  CustomAppContainer(
                     width: double.maxFinite,
                     height: double.maxFinite,
                     child: SingleChildScrollView(

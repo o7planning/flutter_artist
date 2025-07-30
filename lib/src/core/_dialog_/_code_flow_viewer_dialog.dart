@@ -24,7 +24,7 @@ class _CodeFlowViewerDialogState extends State<_CodeFlowViewerDialog> {
   Widget build(BuildContext context) {
     Size size = _calculateDebugDialogSize(context);
 
-    Widget contentWidget = _CustomAppContainer(
+    Widget contentWidget = CustomAppContainer(
       padding: const EdgeInsets.all(2),
       width: size.width,
       height: size.height,

@@ -123,11 +123,11 @@ class _CodeFlowMethodArgsView extends StatelessWidget {
   }
 
   Widget _buildArgs() {
-    return _SimpleAccordion(
+    return SimpleAccordion(
       children: (arguments ?? {})
           .entries
           .map(
-            (argEntry) => _SimpleAccordionSection(
+            (argEntry) => SimpleAccordionSection(
               initiallyExpanded: true,
               headerTitle: _buildArgNameAndType(argEntry),
               headerSubtitle: _buildSubtitleArgValue(argEntry),

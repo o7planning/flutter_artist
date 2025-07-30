@@ -28,7 +28,7 @@ class _FlutterArtist {
 
   Function(BuildContext context)? showRestDebugViewerDialog;
 
-  late final ErrorLogger errorLogger = ErrorLogger._(
+  late final ErrorLogger errorLogger = ErrorLogger(
     maxDisplayErrorCount: 20,
   );
 
@@ -118,8 +118,8 @@ class _FlutterArtist {
     await globalsManager.setOrUpdateLoggedInUser(loggedInUser);
   }
 
-  void __printDebugState(String message) {
-    _printDebugState(DebugCat.appStart,
+  void _printDebugState(String message) {
+    DebugPrint.printDebugState(DebugCat.appStart,
         "FlutterArtist.config ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> $message");
   }
 
@@ -142,7 +142,7 @@ class _FlutterArtist {
       ..clear()
       ..addAll(allowDebugCats);
     //
-    __printDebugState("start");
+    _printDebugState("start");
     //
     // Global Manager:
     //
@@ -150,9 +150,9 @@ class _FlutterArtist {
       loggedInUserAdapter: loggedInUserAdapter,
       globalDataAdapter: globalDataAdapter,
     );
-    __printDebugState("globalsManager start...");
+    _printDebugState("globalsManager start...");
     await globalsManager.start();
-    __printDebugState("globalsManager loggedInUser: $loggedInUser");
+    _printDebugState("globalsManager loggedInUser: $loggedInUser");
     //
     // Locale Manager:
     //
@@ -160,11 +160,11 @@ class _FlutterArtist {
       globalsManager: globalsManager,
       localeAdapter: localeAdapter,
     );
-    __printDebugState("localeManager readStoredLocale()");
+    _printDebugState("localeManager readStoredLocale()");
     final Locale? locale = localeManager.readStoredLocale();
-    __printDebugState("localeManager readStoredLocale() -> locale: $locale");
+    _printDebugState("localeManager readStoredLocale() -> locale: $locale");
     if (locale != null) {
-      __printDebugState("localeManager _updateLocale() delay 2s (***)");
+      _printDebugState("localeManager _updateLocale() delay 2s (***)");
       Future.delayed(Duration(seconds: 2), () async {
         await localeManager._updateLocale(locale: locale);
       });
@@ -179,7 +179,7 @@ class _FlutterArtist {
     //
     // IMPORTANT: No await:
     //
-    __printDebugState("__notificationEngine start()");
+    _printDebugState("__notificationEngine start()");
     __notificationEngine.start();
   }
 

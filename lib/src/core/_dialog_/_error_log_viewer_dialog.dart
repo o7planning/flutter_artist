@@ -1,4 +1,11 @@
-part of '../_fa_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
+import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart' as dialogs;
+import 'package:flutter_artist_core/flutter_artist_core.dart';
+
+import '../../../flutter_artist.dart';
+import '../../debug/_debug_/_error_logger.dart';
+import '../../widgets/_custom_app_container.dart';
 
 class ErrorLogViewerDialog extends StatefulWidget {
   final String title;
@@ -42,7 +49,7 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
   }
 
   Widget _buildErrorButtons() {
-    return _CustomAppContainer(
+    return CustomAppContainer(
       width: double.maxFinite,
       child: Wrap(
         spacing: 5,

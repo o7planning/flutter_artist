@@ -77,11 +77,11 @@ class _FilterCriteriaDialogState extends State<_FilterCriteriaDialog> {
     //
     Widget child;
     if (widget.block != null) {
-      child = _FilterCriteriaDebugView.block(block: widget.block!);
+      child = FilterCriteriaDebugView.block(block: widget.block!);
     } else if (widget.scalar != null) {
-      child = _FilterCriteriaDebugView.scalar(scalar: widget.scalar!);
+      child = FilterCriteriaDebugView.scalar(scalar: widget.scalar!);
     } else if (widget.filterModel != null) {
-      child = _FilterCriteriaDebugView.filterModel(
+      child = FilterCriteriaDebugView.filterModel(
         filterModel: widget.filterModel!,
       );
     } else {

@@ -47,7 +47,7 @@ class _FilterModelInfoDialogState extends State<_FilterModelInfoDialog> {
       width: width,
       height: height,
       child: showFormData
-          ? _FilterDataDebugView(
+          ? FilterDataDebugView(
               filterModel: widget.filterModel,
               onPressedShelf: () {
                 setState(() {
@@ -55,7 +55,7 @@ class _FilterModelInfoDialogState extends State<_FilterModelInfoDialog> {
                 });
               },
             )
-          : _ShelfStructureGraphView(
+          : ShelfStructureGraphView(
               shelf: widget.filterModel.shelf,
               onPressedBack: () {
                 setState(() {

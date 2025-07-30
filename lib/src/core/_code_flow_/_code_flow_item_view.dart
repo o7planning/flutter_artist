@@ -34,7 +34,7 @@ class _CodeFlowItemView extends StatelessWidget {
         ),
         const Divider(),
         if (codeFlowItem.isMethodCall() && shelf != null)
-          _ShelfInfoView(shelf: shelf),
+          ShelfInfoView(shelf: shelf),
         if (codeFlowItem.isMethodCall() && shelf != null) const Divider(),
         if (codeFlowItem.isMethodCall())
           Card(

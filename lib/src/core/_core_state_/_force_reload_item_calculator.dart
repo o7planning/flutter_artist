@@ -10,30 +10,30 @@ _ForceReloadItemState _calculateBlockState({
   final Block block = thisXBlock.block;
   //
   bool forceReloadItem = false;
-  _printDebugState(
+  DebugPrint.printDebugState(
       DebugCat.dataLoad, "@~~~> ${getClassName(block)} ~~~~~> ITM 0");
   //
   switch (currentItemSelectionType) {
     case CurrentItemSelectionType.selectAnItemAsCurrentIfNeed:
-      _printDebugState(DebugCat.dataLoad,
+      DebugPrint.printDebugState(DebugCat.dataLoad,
           "@~~~> ${getClassName(block)} ~~~~~> ITM 1: currentItemSelectionType: ${currentItemSelectionType.name}");
       //
       // ITEM == ITEM_DETAIL.
       //
       if (block.getItemType() == block.getItemDetailType()) {
-        _printDebugState(DebugCat.dataLoad,
+        DebugPrint.printDebugState(DebugCat.dataLoad,
             "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1: ITEM == ITEM_DETAIL");
         // Just Queried.
         if (isCandidateCurrentItemInNewQueriedList) {
-          _printDebugState(DebugCat.dataLoad,
+          DebugPrint.printDebugState(DebugCat.dataLoad,
               "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
           //
           if (currentItemChanged) {
-            _printDebugState(DebugCat.dataLoad,
+            DebugPrint.printDebugState(DebugCat.dataLoad,
                 "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.1.1: currentItemChanged: TRUE");
             //
             if (hasXActiveUI) {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.1.1.1: hasXActiveUI: TRUE");
               // Debug:
               _addDebugForceReload(
@@ -46,7 +46,7 @@ _ForceReloadItemState _calculateBlockState({
             }
             // !hasXActiveUI
             else {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.1.1.2: hasXActiveUI: FALSE");
               // Debug:
               _addDebugForceReload(
@@ -60,11 +60,11 @@ _ForceReloadItemState _calculateBlockState({
           }
           // !currentItemChanged
           else {
-            _printDebugState(DebugCat.dataLoad,
+            DebugPrint.printDebugState(DebugCat.dataLoad,
                 "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.1.2: currentItemChanged: FALSE");
             //
             if (hasXActiveUI) {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.1.2.1: hasXActiveUI: TRUE");
               // Debug:
               _addDebugForceReload(
@@ -77,7 +77,7 @@ _ForceReloadItemState _calculateBlockState({
             }
             // !hasXActiveUI
             else {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.1.2.2: hasXActiveUI: FALSE");
               // Debug:
               _addDebugForceReload(
@@ -92,15 +92,15 @@ _ForceReloadItemState _calculateBlockState({
         }
         // !isCandidateCurrentItemInNewQueriedList
         else {
-          _printDebugState(DebugCat.dataLoad,
+          DebugPrint.printDebugState(DebugCat.dataLoad,
               "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.2: isCandidateCurrentItemInNewQueriedList: FALSE");
           //
           if (currentItemChanged) {
-            _printDebugState(DebugCat.dataLoad,
+            DebugPrint.printDebugState(DebugCat.dataLoad,
                 "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.2.1: currentItemChanged: TRUE");
             //
             if (hasXActiveUI) {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.2.1.1: hasXActiveUI: TRUE");
               // Debug:
               _addDebugForceReload(
@@ -113,7 +113,7 @@ _ForceReloadItemState _calculateBlockState({
             }
             // !hasXActiveUI
             else {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.2.1.2: hasXActiveUI: FALSE");
               // Debug:
               _addDebugForceReload(
@@ -127,11 +127,11 @@ _ForceReloadItemState _calculateBlockState({
           }
           // !currentItemChanged
           else {
-            _printDebugState(DebugCat.dataLoad,
+            DebugPrint.printDebugState(DebugCat.dataLoad,
                 "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.2.2: currentItemChanged: FALSE");
             //
             if (hasXActiveUI) {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.2.2.1: hasXActiveUI: TRUE");
               // Debug:
               _addDebugForceReload(
@@ -144,7 +144,7 @@ _ForceReloadItemState _calculateBlockState({
             }
             // !hasXActiveUI
             else {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.2.2.2: hasXActiveUI: FALSE");
               // Debug:
               _addDebugForceReload(
@@ -160,19 +160,19 @@ _ForceReloadItemState _calculateBlockState({
       }
       // ITEM != ITEM_DETAIL
       else {
-        _printDebugState(DebugCat.dataLoad,
+        DebugPrint.printDebugState(DebugCat.dataLoad,
             "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2: ITEM != ITEM_DETAIL");
         // Just Queried.
         if (isCandidateCurrentItemInNewQueriedList) {
-          _printDebugState(DebugCat.dataLoad,
+          DebugPrint.printDebugState(DebugCat.dataLoad,
               "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.1: isCandidateCurrentItemInNewQueriedList: TRUE");
           //
           if (currentItemChanged) {
-            _printDebugState(DebugCat.dataLoad,
+            DebugPrint.printDebugState(DebugCat.dataLoad,
                 "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.1.1: currentItemChanged: TRUE");
             //
             if (hasXActiveUI) {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.1.1.1: hasXActiveUI: TRUE");
               // Debug:
               _addDebugForceReload(
@@ -186,7 +186,7 @@ _ForceReloadItemState _calculateBlockState({
             }
             // !hasXActiveUI
             else {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.1.1.2: hasXActiveUI: FALSE");
               // Debug:
               _addDebugForceReload(
@@ -200,11 +200,11 @@ _ForceReloadItemState _calculateBlockState({
           }
           // !currentItemChanged
           else {
-            _printDebugState(DebugCat.dataLoad,
+            DebugPrint.printDebugState(DebugCat.dataLoad,
                 "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.1.2: currentItemChanged: FALSE");
             //
             if (hasXActiveUI) {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.1.2.1: hasXActiveUI: TRUE");
               // Debug:
               _addDebugForceReload(
@@ -217,7 +217,7 @@ _ForceReloadItemState _calculateBlockState({
             }
             // !hasXActiveUI
             else {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.1.2.2: hasXActiveUI: FALSE");
               // Debug:
               _addDebugForceReload(
@@ -232,15 +232,15 @@ _ForceReloadItemState _calculateBlockState({
         }
         // !isCandidateCurrentItemInNewQueriedList
         else {
-          _printDebugState(DebugCat.dataLoad,
+          DebugPrint.printDebugState(DebugCat.dataLoad,
               "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.2: isCandidateCurrentItemInNewQueriedList: FALSE");
           //
           if (currentItemChanged) {
-            _printDebugState(DebugCat.dataLoad,
+            DebugPrint.printDebugState(DebugCat.dataLoad,
                 "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.2.1: currentItemChanged: TRUE");
             //
             if (hasXActiveUI) {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.2.1.1: hasXActiveUI: TRUE");
               // Debug:
               _addDebugForceReload(
@@ -253,7 +253,7 @@ _ForceReloadItemState _calculateBlockState({
             }
             // !hasXActiveUI
             else {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.2.1.2: hasXActiveUI: FALSE");
               // Debug:
               _addDebugForceReload(
@@ -267,11 +267,11 @@ _ForceReloadItemState _calculateBlockState({
           }
           // !currentItemChanged
           else {
-            _printDebugState(DebugCat.dataLoad,
+            DebugPrint.printDebugState(DebugCat.dataLoad,
                 "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.2.2: currentItemChanged: FALSE");
             //
             if (hasXActiveUI) {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.2.2.1: hasXActiveUI: TRUE");
               // Debug:
               _addDebugForceReload(
@@ -285,7 +285,7 @@ _ForceReloadItemState _calculateBlockState({
             }
             // !hasXActiveUI
             else {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.2.2.2: hasXActiveUI: FALSE");
               // Debug:
               _addDebugForceReload(
@@ -300,25 +300,25 @@ _ForceReloadItemState _calculateBlockState({
         }
       }
     case CurrentItemSelectionType.selectAnItemAsCurrent:
-      _printDebugState(DebugCat.dataLoad,
+      DebugPrint.printDebugState(DebugCat.dataLoad,
           "@~~~> ${getClassName(block)} ~~~~~> ITM 2: currentItemSelectionType: ${currentItemSelectionType.name}");
       //
       // ITEM == ITEM_DETAIL.
       //
       if (block.getItemType() == block.getItemDetailType()) {
-        _printDebugState(DebugCat.dataLoad,
+        DebugPrint.printDebugState(DebugCat.dataLoad,
             "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1: ITEM == ITEM_DETAIL");
         // Just Queried.
         if (isCandidateCurrentItemInNewQueriedList) {
-          _printDebugState(DebugCat.dataLoad,
+          DebugPrint.printDebugState(DebugCat.dataLoad,
               "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
           //
           if (currentItemChanged) {
-            _printDebugState(DebugCat.dataLoad,
+            DebugPrint.printDebugState(DebugCat.dataLoad,
                 "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.1.1: currentItemChanged: TRUE");
             //
             if (hasXActiveUI) {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.1.1.1: hasXActiveUI: TRUE");
               // Debug:
               _addDebugForceReload(
@@ -331,7 +331,7 @@ _ForceReloadItemState _calculateBlockState({
             }
             // !hasXActiveUI
             else {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.1.1.2: hasXActiveUI: FALSE");
               // Debug:
               _addDebugForceReload(
@@ -345,11 +345,11 @@ _ForceReloadItemState _calculateBlockState({
           }
           // !currentItemChanged
           else {
-            _printDebugState(DebugCat.dataLoad,
+            DebugPrint.printDebugState(DebugCat.dataLoad,
                 "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.1.2: currentItemChanged: FALSE");
             //
             if (hasXActiveUI) {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.1.2.1: hasXActiveUI: TRUE");
               // Debug:
               _addDebugForceReload(
@@ -362,7 +362,7 @@ _ForceReloadItemState _calculateBlockState({
             }
             // !hasXActiveUI
             else {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.1.2.2: hasXActiveUI: FALSE");
               // Debug:
               _addDebugForceReload(
@@ -377,15 +377,15 @@ _ForceReloadItemState _calculateBlockState({
         }
         // !isCandidateCurrentItemInNewQueriedList
         else {
-          _printDebugState(DebugCat.dataLoad,
+          DebugPrint.printDebugState(DebugCat.dataLoad,
               "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.2: isCandidateCurrentItemInNewQueriedList: FALSE");
           //
           if (currentItemChanged) {
-            _printDebugState(DebugCat.dataLoad,
+            DebugPrint.printDebugState(DebugCat.dataLoad,
                 "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.2.1: currentItemChanged: TRUE");
             //
             if (hasXActiveUI) {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.2.1.1: hasXActiveUI: TRUE");
               // Debug:
               _addDebugForceReload(
@@ -398,7 +398,7 @@ _ForceReloadItemState _calculateBlockState({
             }
             // !hasXActiveUI
             else {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.2.1.2: hasXActiveUI: FALSE");
               // Debug:
               _addDebugForceReload(
@@ -412,11 +412,11 @@ _ForceReloadItemState _calculateBlockState({
           }
           // !currentItemChanged
           else {
-            _printDebugState(DebugCat.dataLoad,
+            DebugPrint.printDebugState(DebugCat.dataLoad,
                 "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.2.2: currentItemChanged: FALSE");
             //
             if (hasXActiveUI) {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.2.2.1: hasXActiveUI: TRUE");
               // Debug:
               _addDebugForceReload(
@@ -430,7 +430,7 @@ _ForceReloadItemState _calculateBlockState({
             }
             // !hasXActiveUI
             else {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.2.2.2: hasXActiveUI: FALSE");
               // Debug:
               _addDebugForceReload(
@@ -447,19 +447,19 @@ _ForceReloadItemState _calculateBlockState({
       }
       // ITEM != ITEM_DETAIL
       else {
-        _printDebugState(DebugCat.dataLoad,
+        DebugPrint.printDebugState(DebugCat.dataLoad,
             "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2: ITEM != ITEM_DETAIL");
         // Just Queried.
         if (isCandidateCurrentItemInNewQueriedList) {
-          _printDebugState(DebugCat.dataLoad,
+          DebugPrint.printDebugState(DebugCat.dataLoad,
               "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.1: isCandidateCurrentItemInNewQueriedList: TRUE");
           //
           if (currentItemChanged) {
-            _printDebugState(DebugCat.dataLoad,
+            DebugPrint.printDebugState(DebugCat.dataLoad,
                 "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.1.1: currentItemChanged: TRUE");
             //
             if (hasXActiveUI) {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.1.1.1: hasXActiveUI: TRUE");
               // Debug:
               _addDebugForceReload(
@@ -472,7 +472,7 @@ _ForceReloadItemState _calculateBlockState({
             }
             // !hasXActiveUI
             else {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.1.1.2: hasXActiveUI: FALSE");
               // Debug:
               _addDebugForceReload(
@@ -486,11 +486,11 @@ _ForceReloadItemState _calculateBlockState({
           }
           // !currentItemChanged
           else {
-            _printDebugState(DebugCat.dataLoad,
+            DebugPrint.printDebugState(DebugCat.dataLoad,
                 "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.1.2: currentItemChanged: FALSE");
             //
             if (hasXActiveUI) {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.1.2.1: hasXActiveUI: TRUE");
               // Debug:
               _addDebugForceReload(
@@ -503,7 +503,7 @@ _ForceReloadItemState _calculateBlockState({
             }
             // !hasXActiveUI
             else {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.1.2.2: hasXActiveUI: FALSE");
               // Debug:
               _addDebugForceReload(
@@ -518,15 +518,15 @@ _ForceReloadItemState _calculateBlockState({
         }
         // !isCandidateCurrentItemInNewQueriedList
         else {
-          _printDebugState(DebugCat.dataLoad,
+          DebugPrint.printDebugState(DebugCat.dataLoad,
               "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.2: isCandidateCurrentItemInNewQueriedList: FALSE");
           //
           if (currentItemChanged) {
-            _printDebugState(DebugCat.dataLoad,
+            DebugPrint.printDebugState(DebugCat.dataLoad,
                 "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.2.1: currentItemChanged: TRUE");
             //
             if (hasXActiveUI) {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.2.1.1: hasXActiveUI: TRUE");
               // Debug:
               _addDebugForceReload(
@@ -539,7 +539,7 @@ _ForceReloadItemState _calculateBlockState({
             }
             // !hasXActiveUI
             else {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.2.1.2: hasXActiveUI: FALSE");
               // Debug:
               _addDebugForceReload(
@@ -553,11 +553,11 @@ _ForceReloadItemState _calculateBlockState({
           }
           // !currentItemChanged
           else {
-            _printDebugState(DebugCat.dataLoad,
+            DebugPrint.printDebugState(DebugCat.dataLoad,
                 "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.2.2: currentItemChanged: FALSE");
             //
             if (hasXActiveUI) {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.2.2.1: hasXActiveUI: TRUE");
               // Debug:
               _addDebugForceReload(
@@ -570,7 +570,7 @@ _ForceReloadItemState _calculateBlockState({
             }
             // !hasXActiveUI
             else {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.2.2.2: hasXActiveUI: FALSE");
               // Debug:
               _addDebugForceReload(
@@ -585,25 +585,25 @@ _ForceReloadItemState _calculateBlockState({
         }
       }
     case CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm:
-      _printDebugState(DebugCat.dataLoad,
+      DebugPrint.printDebugState(DebugCat.dataLoad,
           "@~~~> ${getClassName(block)} ~~~~~> ITM 3: currentItemSelectionType: ${currentItemSelectionType.name}");
       //
       // ITEM == ITEM_DETAIL.
       //
       if (block.getItemType() == block.getItemDetailType()) {
-        _printDebugState(DebugCat.dataLoad,
+        DebugPrint.printDebugState(DebugCat.dataLoad,
             "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1: ITEM == ITEM_DETAIL");
         // Just Queried.
         if (isCandidateCurrentItemInNewQueriedList) {
-          _printDebugState(DebugCat.dataLoad,
+          DebugPrint.printDebugState(DebugCat.dataLoad,
               "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
           //
           if (currentItemChanged) {
-            _printDebugState(DebugCat.dataLoad,
+            DebugPrint.printDebugState(DebugCat.dataLoad,
                 "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.1.1: currentItemChanged: TRUE");
             //
             if (hasXActiveUI) {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.1.1.1: hasXActiveUI: TRUE");
               // Debug:
               _addDebugForceReload(
@@ -616,7 +616,7 @@ _ForceReloadItemState _calculateBlockState({
             }
             // !hasXActiveUI
             else {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.1.1.2: hasXActiveUI: FALSE");
               // Debug:
               _addDebugForceReload(
@@ -630,11 +630,11 @@ _ForceReloadItemState _calculateBlockState({
           }
           // !currentItemChanged
           else {
-            _printDebugState(DebugCat.dataLoad,
+            DebugPrint.printDebugState(DebugCat.dataLoad,
                 "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.1.2: currentItemChanged: FALSE");
             //
             if (hasXActiveUI) {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.1.2.1: hasXActiveUI: TRUE");
               // Debug:
               _addDebugForceReload(
@@ -647,7 +647,7 @@ _ForceReloadItemState _calculateBlockState({
             }
             // !hasXActiveUI
             else {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.1.2.2: hasXActiveUI: FALSE");
               // Debug:
               _addDebugForceReload(
@@ -662,15 +662,15 @@ _ForceReloadItemState _calculateBlockState({
         }
         // !isCandidateCurrentItemInNewQueriedList
         else {
-          _printDebugState(DebugCat.dataLoad,
+          DebugPrint.printDebugState(DebugCat.dataLoad,
               "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.2: isCandidateCurrentItemInNewQueriedList: FALSE");
           //
           if (currentItemChanged) {
-            _printDebugState(DebugCat.dataLoad,
+            DebugPrint.printDebugState(DebugCat.dataLoad,
                 "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.2.1: currentItemChanged: TRUE");
             //
             if (hasXActiveUI) {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.2.1.1: hasXActiveUI: TRUE");
               // Debug:
               _addDebugForceReload(
@@ -683,7 +683,7 @@ _ForceReloadItemState _calculateBlockState({
             }
             // !hasXActiveUI
             else {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.2.1.2: hasXActiveUI: FALSE");
               // Debug:
               _addDebugForceReload(
@@ -697,11 +697,11 @@ _ForceReloadItemState _calculateBlockState({
           }
           // !currentItemChanged
           else {
-            _printDebugState(DebugCat.dataLoad,
+            DebugPrint.printDebugState(DebugCat.dataLoad,
                 "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.2.2: currentItemChanged: FALSE");
             //
             if (hasXActiveUI) {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.2.2.1: hasXActiveUI: TRUE");
               // Debug:
               _addDebugForceReload(
@@ -714,7 +714,7 @@ _ForceReloadItemState _calculateBlockState({
             }
             // !hasXActiveUI
             else {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.2.2.2: hasXActiveUI: FALSE");
               // Debug:
               _addDebugForceReload(
@@ -730,19 +730,19 @@ _ForceReloadItemState _calculateBlockState({
       }
       // ITEM != ITEM_DETAIL
       else {
-        _printDebugState(DebugCat.dataLoad,
+        DebugPrint.printDebugState(DebugCat.dataLoad,
             "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2: ITEM != ITEM_DETAIL");
         // Just Queried.
         if (isCandidateCurrentItemInNewQueriedList) {
-          _printDebugState(DebugCat.dataLoad,
+          DebugPrint.printDebugState(DebugCat.dataLoad,
               "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.1: isCandidateCurrentItemInNewQueriedList: TRUE");
           //
           if (currentItemChanged) {
-            _printDebugState(DebugCat.dataLoad,
+            DebugPrint.printDebugState(DebugCat.dataLoad,
                 "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.1.1: currentItemChanged: TRUE");
             //
             if (hasXActiveUI) {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.1.1.1: hasXActiveUI: TRUE");
               // Debug:
               _addDebugForceReload(
@@ -755,7 +755,7 @@ _ForceReloadItemState _calculateBlockState({
             }
             // !hasXActiveUI
             else {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.1.1.2: hasXActiveUI: FALSE");
               // Debug:
               _addDebugForceReload(
@@ -769,11 +769,11 @@ _ForceReloadItemState _calculateBlockState({
           }
           // !currentItemChanged
           else {
-            _printDebugState(DebugCat.dataLoad,
+            DebugPrint.printDebugState(DebugCat.dataLoad,
                 "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.1.2: currentItemChanged: FALSE");
             //
             if (hasXActiveUI) {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.1.2.1: hasXActiveUI: TRUE");
               // Debug:
               _addDebugForceReload(
@@ -786,7 +786,7 @@ _ForceReloadItemState _calculateBlockState({
             }
             // !hasXActiveUI
             else {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.1.2.2: hasXActiveUI: FALSE");
               // Debug:
               _addDebugForceReload(
@@ -801,15 +801,15 @@ _ForceReloadItemState _calculateBlockState({
         }
         // !isCandidateCurrentItemInNewQueriedList
         else {
-          _printDebugState(DebugCat.dataLoad,
+          DebugPrint.printDebugState(DebugCat.dataLoad,
               "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.2: isCandidateCurrentItemInNewQueriedList: FALSE");
           //
           if (currentItemChanged) {
-            _printDebugState(DebugCat.dataLoad,
+            DebugPrint.printDebugState(DebugCat.dataLoad,
                 "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.2.1: currentItemChanged: TRUE");
             //
             if (hasXActiveUI) {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.2.1.1: hasXActiveUI: TRUE");
               // Debug:
               _addDebugForceReload(
@@ -822,7 +822,7 @@ _ForceReloadItemState _calculateBlockState({
             }
             // !hasXActiveUI
             else {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.2.1.2: hasXActiveUI: FALSE");
               // Debug:
               _addDebugForceReload(
@@ -836,11 +836,11 @@ _ForceReloadItemState _calculateBlockState({
           }
           // !currentItemChanged
           else {
-            _printDebugState(DebugCat.dataLoad,
+            DebugPrint.printDebugState(DebugCat.dataLoad,
                 "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.2.2: currentItemChanged: FALSE");
             //
             if (hasXActiveUI) {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.2.2.1: hasXActiveUI: TRUE");
               // Debug:
               _addDebugForceReload(
@@ -853,7 +853,7 @@ _ForceReloadItemState _calculateBlockState({
             }
             // !hasXActiveUI
             else {
-              _printDebugState(DebugCat.dataLoad,
+              DebugPrint.printDebugState(DebugCat.dataLoad,
                   "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.2.2.2: hasXActiveUI: FALSE");
               // Debug:
               _addDebugForceReload(
@@ -868,7 +868,7 @@ _ForceReloadItemState _calculateBlockState({
         }
       }
     case CurrentItemSelectionType.refresh:
-      _printDebugState(DebugCat.dataLoad,
+      DebugPrint.printDebugState(DebugCat.dataLoad,
           "@~~~> ${getClassName(block)} ~~~~~> ITM 4: currentItemSelectionType: ${currentItemSelectionType.name}");
       //
       break;

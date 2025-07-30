@@ -1,13 +1,16 @@
-part of '../_fa_core.dart';
+ 
+import 'package:flutter/material.dart';
+import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart' as dialogs;
 
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+import '../../../flutter_artist.dart';
+import '../../debug/_debug.dart';
+import '../../debug/_debug_/_form_data_debug_view.dart';
 
-class _FormDataInfoDialog extends StatefulWidget {
+class FormDataInfoDialog extends StatefulWidget {
   final FormModel formModel;
   final String locationInfo;
 
-  const _FormDataInfoDialog({
+  const FormDataInfoDialog({
     required this.formModel,
     required this.locationInfo,
     super.key,
@@ -15,11 +18,11 @@ class _FormDataInfoDialog extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return __FormDataInfoDialogState();
+    return _FormDataInfoDialogState();
   }
 }
 
-class __FormDataInfoDialogState extends State<_FormDataInfoDialog> {
+class _FormDataInfoDialogState extends State<FormDataInfoDialog> {
   bool showFormData = true;
 
   @override
@@ -47,7 +50,7 @@ class __FormDataInfoDialogState extends State<_FormDataInfoDialog> {
       width: width,
       height: height,
       child: showFormData
-          ? _FormDataView(
+          ? FormDataView(
               formModel: widget.formModel,
               locationInfo: widget.locationInfo,
               onPressedShelf: () {
@@ -56,7 +59,7 @@ class __FormDataInfoDialogState extends State<_FormDataInfoDialog> {
                 });
               },
             )
-          : _ShelfStructureGraphView(
+          : ShelfStructureGraphView(
               shelf: widget.formModel.block.shelf,
               onPressedBack: () {
                 setState(() {
@@ -76,7 +79,7 @@ Future<void> _showFormInfoDialog({
   await showDialog(
     context: context,
     builder: (BuildContext context) {
-      return _FormDataInfoDialog(
+      return FormDataInfoDialog(
         formModel: formModel,
         locationInfo: locationInfo,
       );
