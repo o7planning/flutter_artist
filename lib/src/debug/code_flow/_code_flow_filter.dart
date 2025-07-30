@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 
-import '../../enums/_code_flow_item_type.dart';
-import '../../widgets/_custom_app_container.dart';
-import '../../widgets/_labeled_checkbox.dart';
+import '../../core/enums/_code_flow_item_type.dart';
+import '../../core/widgets/_custom_app_container.dart';
+import '../../core/widgets/_labeled_checkbox.dart';
 
 class CodeFlowFilter extends StatelessWidget {
   final List<CodeFlowItemType> codeFlowItemTypes;

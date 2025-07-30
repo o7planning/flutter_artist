@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../icon/icon_constants.dart';
+import '../../../core/icon/icon_constants.dart';
 import '../../constants/_debug_constants.dart';
 import '../_block_or_scalar.dart';
 

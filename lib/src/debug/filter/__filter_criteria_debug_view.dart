@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 
 import '../../core/_fa_core.dart';
-import '../../icon/icon_constants.dart';
+import '../../core/icon/icon_constants.dart';
 import '../utils/_tab_theme_utils.dart';
 import '_block_criteria_view.dart';
 import '_filter_model_criteria_view.dart';

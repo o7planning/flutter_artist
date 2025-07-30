@@ -3,10 +3,10 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 import '../../core/_fa_core.dart';
-import '../../enums/_data_state.dart';
-import '../../icon/icon_constants.dart';
-import '../../widgets/_custom_app_container.dart';
-import '../../widgets/_small_text_button.dart';
+import '../../core/enums/_data_state.dart';
+import '../../core/icon/icon_constants.dart';
+import '../../core/widgets/_custom_app_container.dart';
+import '../../core/widgets/_small_text_button.dart';
 import '../dialog/_error_viewer_dialog.dart';
 
 class FormModelDebugView extends StatelessWidget {

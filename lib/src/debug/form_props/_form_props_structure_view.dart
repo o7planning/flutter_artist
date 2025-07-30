@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:multi_split_view/multi_split_view.dart';
 
 import '../../core/_fa_core.dart';
-import '../../enums/_data_state.dart';
-import '../../icon/icon_constants.dart';
-import '../../widgets/_custom_app_container.dart';
+import '../../core/enums/_data_state.dart';
+import '../../core/icon/icon_constants.dart';
+import '../../core/widgets/_custom_app_container.dart';
 import '_form_model_debug_view.dart';
 import 'widgets/_prop_view.dart';
 
@@ -113,8 +113,6 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
   // ***************************************************************************
 
   Widget buildTreeView(BuildContext context) {
-    FormPropsStructure formPropsStructure = widget.formModel.formPropsStructure;
-    //
     return CustomAppContainer(
       margin: const EdgeInsets.all(5),
       padding: const EdgeInsets.all(5),

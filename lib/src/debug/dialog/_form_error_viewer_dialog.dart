@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../../error/_form_error_info.dart';
-import '../../icon/icon_constants.dart';
+import '../../core/error/_form_error_info.dart';
+import '../../core/icon/icon_constants.dart';
 
 class FormErrorViewerDialog extends StatelessWidget {
   final FormErrorInfo formErrorInfo;

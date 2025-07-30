@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 import '../../core/_fa_core.dart';
-import '../../icon/icon_constants.dart';
+import '../../core/icon/icon_constants.dart';
 
 class DebugMenu extends StatefulWidget {
   final double menuItemIconSize;

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../../../error/_form_error_info.dart';
-import '../../../icon/icon_constants.dart';
-import '../../../widgets/_custom_app_container.dart';
-import '../../../widgets/_small_text_button.dart';
+import '../../../core/error/_form_error_info.dart';
+import '../../../core/icon/icon_constants.dart';
+import '../../../core/widgets/_custom_app_container.dart';
+import '../../../core/widgets/_small_text_button.dart';
 import '../../dialog/_error_viewer_dialog.dart';
 
 class FormErrorPropView extends StatelessWidget {

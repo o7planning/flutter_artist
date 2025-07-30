@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../../core/_fa_core.dart';
-import '../../../icon/icon_constants.dart';
-import '../../../widgets/_custom_app_container.dart';
-import '../../../widgets/_simple_accordion.dart';
-import '../../../widgets/_simple_accordion_section.dart';
+import '../../../core/icon/icon_constants.dart';
+import '../../../core/widgets/_custom_app_container.dart';
+import '../../../core/widgets/_simple_accordion.dart';
+import '../../../core/widgets/_simple_accordion_section.dart';
 import '../../widgets/_dynamic_value_view.dart';
 import '../../widgets/_xdata_view.dart';
 import '_prop_error_view.dart';

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:graphview/GraphView.dart';
 
 import '../../core/_fa_core.dart';
-import '../../enums/_nli_type.dart';
-import '../../icon/icon_constants.dart';
-import '../../widgets/_custom_app_container.dart';
-import '../../widgets/_floating_button.dart';
+import '../../core/enums/_nli_type.dart';
+import '../../core/icon/icon_constants.dart';
+import '../../core/widgets/_custom_app_container.dart';
+import '../../core/widgets/_floating_button.dart';
 import '../constants/_debug_constants.dart';
 import '_shelf_structure_view_config.dart';
 import 'widgets/_graph_item.dart';

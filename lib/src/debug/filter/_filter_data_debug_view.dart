@@ -6,8 +6,8 @@ import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 
 import '../../core/_fa_core.dart';
-import '../../icon/icon_constants.dart';
-import '../../widgets/_custom_app_container.dart';
+import '../../core/icon/icon_constants.dart';
+import '../../core/widgets/_custom_app_container.dart';
 import '../filter_criteria/_filter_criteria_structure_view.dart';
 import '../storage/widgets/_shelf_block_scalar_type_widget.dart';
 import '../utils/_tab_theme_utils.dart';

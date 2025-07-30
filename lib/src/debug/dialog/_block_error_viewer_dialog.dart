@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../../enums/_data_state.dart';
-import '../../error/_block_error_info.dart';
-import '../../icon/icon_constants.dart';
+import '../../core/enums/_data_state.dart';
+import '../../core/error/_block_error_info.dart';
+import '../../core/icon/icon_constants.dart';
 
 class BlockErrorViewerDialog extends StatelessWidget {
   final BlockErrorInfo blockErrorInfo;

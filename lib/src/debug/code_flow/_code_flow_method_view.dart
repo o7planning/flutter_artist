@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/_fa_core.dart';
-import '../../icon/icon_constants.dart';
+import '../../core/icon/icon_constants.dart';
 import '__code_flow_const.dart';
 
 class CodeFlowMethodView extends StatelessWidget {

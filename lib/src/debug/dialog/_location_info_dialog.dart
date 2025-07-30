@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-import '../../icon/icon_constants.dart';
+import '../../core/icon/icon_constants.dart';
 import '_dialog_constants.dart';
 
 class LocationInfoDialog extends StatelessWidget {
@@ -49,7 +49,7 @@ class LocationInfoDialog extends StatelessWidget {
         children: [
           const SizedBox(height: 10),
           IconLabelText(
-            icon: const Icon(
+            icon: Icon(
               FaIconConstants.locationIconData,
               size: 18,
               color: Colors.black54,

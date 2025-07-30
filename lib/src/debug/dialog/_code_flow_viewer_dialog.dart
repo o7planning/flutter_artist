@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-import '../../widgets/_custom_app_container.dart';
+import '../../core/widgets/_custom_app_container.dart';
 import '../code_flow/_code_flow_viewer.dart';
 import '../utils/_dialog_size.dart';
 

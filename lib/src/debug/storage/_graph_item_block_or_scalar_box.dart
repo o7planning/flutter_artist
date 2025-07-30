@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../core/_fa_core.dart';
-import '../../enums/_data_state.dart';
-import '../../icon/icon_constants.dart';
-import '../../utils/_tooltip_utils.dart';
+import '../../core/enums/_data_state.dart';
+import '../../core/icon/icon_constants.dart';
+import '../../core/utils/_tooltip_utils.dart';
 import '../constants/_debug_constants.dart';
 import '_block_or_scalar.dart';
 

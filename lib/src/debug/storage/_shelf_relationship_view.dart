@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../core/_fa_core.dart';
-import '../../icon/icon_constants.dart';
-import '../../widgets/_custom_app_container.dart';
+import '../../core/icon/icon_constants.dart';
+import '../../core/widgets/_custom_app_container.dart';
 import '../constants/_debug_constants.dart';
 import '_block_or_scalar.dart';
 import '_shelf_relationship_controller.dart';
