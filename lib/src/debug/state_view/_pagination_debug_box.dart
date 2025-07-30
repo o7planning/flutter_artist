@@ -1,6 +1,6 @@
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-import '../../../core/_fa_core.dart';
+import '../../core/_fa_core.dart';
 import '_block_debug_box.dart';
 import '_pagination_debug_options.dart';
 
