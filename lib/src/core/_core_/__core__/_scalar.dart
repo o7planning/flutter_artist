@@ -935,6 +935,18 @@ abstract class Scalar<
 
   // ***************************************************************************
   // ***************************************************************************
+
+  void showFilterCriteriaDialog() {
+    BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    //
+    FilterCriteriaDialog.showScalarFilterCriteriaDialog(
+      context: context,
+      scalar: this,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
   // ***************************************************************************
 
   void __assertThisXScalar(_XScalar thisXScalar) {

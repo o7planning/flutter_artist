@@ -5740,6 +5740,18 @@ abstract class Block<
 
   // ***************************************************************************
   // ***************************************************************************
+
+  void showFilterCriteriaDialog() {
+    BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    //
+    FilterCriteriaDialog.showBlockFilterCriteriaDialog(
+      context: context,
+      block: this,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
   // ***************************************************************************
 
   void __assertThisXBlock(_XBlock thisXBlock) {
