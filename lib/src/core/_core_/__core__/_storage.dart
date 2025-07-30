@@ -808,7 +808,7 @@ class _Storage {
 
     for (Block listenerBlock in listenerBlocks) {
       // TODO: Doi thanh hasActiveUiComponents()??
-      final bool active = listenerBlock.hasActiveBlockFragmentWidget(
+      final bool active = listenerBlock.ui.hasActiveBlockFragmentWidget(
         alsoCheckChildren: true,
       );
       if (!active) {
@@ -818,7 +818,7 @@ class _Storage {
 
     for (Block listenerBlock in listenerBlocks) {
       // TODO: Doi thanh hasActiveUiComponents()??
-      final bool active = listenerBlock.hasActiveBlockFragmentWidget(
+      final bool active = listenerBlock.ui.hasActiveBlockFragmentWidget(
         alsoCheckChildren: true,
       );
       if (active) {

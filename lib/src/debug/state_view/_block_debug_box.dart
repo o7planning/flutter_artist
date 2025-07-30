@@ -75,7 +75,7 @@ class BlockDebugBox extends BaseDebugBox {
       if (options.showUIActive)
         IconLabelText(
           label: "UI Active?: ",
-          text: "${block.hasActiveUIComponent()}",
+          text: "${block.ui.hasActiveUIComponent()}",
           labelStyle: labelStyle0,
           textStyle: textStyle0,
         ),

@@ -389,7 +389,7 @@ abstract class Shelf extends _XBase {
     required Map<_RefreshableWidgetState, XState> founds,
   }) {
     for (Block block in blocks) {
-      Map<_RefreshableWidgetState, XState> m = block._findMountedWidgetStates(
+      Map<_RefreshableWidgetState, XState> m = block.ui._findMountedWidgetStates(
         activeOnly: activeOnly,
         withPagination: withPagination,
         withBlockFragment: withBlockFragment,
@@ -499,7 +499,7 @@ abstract class Shelf extends _XBase {
     Block block, {
     required bool withoutFilters,
   }) {
-    block.updateAllUIComponents(withoutFilters: withoutFilters);
+    block.ui.updateAllUIComponents(withoutFilters: withoutFilters);
     //
     for (Block childBlock in block._childBlocks) {
       __updateAllBlockUIComponentsCascade(
@@ -682,7 +682,7 @@ abstract class Shelf extends _XBase {
       //
       // TODO: Mới kt các fragment, còn các cái khác thì sao? ItemsView?
       //
-      if (block.hasActiveBlockFragmentWidget(alsoCheckChildren: true)) {
+      if (block.ui.hasActiveBlockFragmentWidget(alsoCheckChildren: true)) {
         if (block.queryDataState == DataState.pending ||
             block.queryDataState == DataState.error) {
           founds.addLazyBlock(block: block, forceQuery: true);
@@ -736,7 +736,7 @@ abstract class Shelf extends _XBase {
 
   bool _hasMountedBlockUIComponentCascade(List<Block> blocks) {
     for (Block block in blocks) {
-      if (block.hasMountedUIComponent()) {
+      if (block.ui.hasMountedUIComponent()) {
         return true;
       }
       bool hasMounted = _hasMountedBlockUIComponentCascade(block._childBlocks);

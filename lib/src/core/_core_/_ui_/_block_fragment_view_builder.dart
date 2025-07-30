@@ -30,7 +30,7 @@ class _BlockFragmentWidgetBuilderState
 
   @override
   void addWidgetState({required bool isShowing}) {
-    widget.block._addBlockFragmentWidgetState(
+    widget.block.ui._addBlockFragmentWidgetState(
       widgetState: this,
       isShowing: isShowing,
     );
@@ -38,7 +38,7 @@ class _BlockFragmentWidgetBuilderState
 
   @override
   void removeWidgetState() {
-    widget.block._removeBlockFragmentWidgetState(
+    widget.block.ui._removeBlockFragmentWidgetState(
       widgetState: this,
     );
   }

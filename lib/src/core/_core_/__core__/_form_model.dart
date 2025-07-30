@@ -1376,7 +1376,7 @@ abstract class FormModel<
       this.__clearFormKey();
       //
       // updateAllUIComponents(); // TODO: Xu ly loi?
-      block.updateControlBarWidgets();
+      block.ui.updateControlBarWidgets();
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,

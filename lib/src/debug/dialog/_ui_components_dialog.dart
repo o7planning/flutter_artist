@@ -68,7 +68,7 @@ class _UiComponentsDialogState extends State<UiComponentsDialog> {
         withControl: true,
       );
     } else if (widget.block != null) {
-      return widget.block!.debugFindMountedWidgetStates(
+      return widget.block!.ui.debugFindMountedWidgetStates(
         activeOnly: false,
         withPagination: true,
         withBlockFragment: true,

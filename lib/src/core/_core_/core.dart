@@ -136,6 +136,8 @@ part '__core__/_app_utils.dart';
 
 part '__core__/_block.dart';
 
+part '__core__/_block_ui_components.dart';
+
 part '__core__/_block_config.dart';
 
 part '__core__/_block_data.dart';

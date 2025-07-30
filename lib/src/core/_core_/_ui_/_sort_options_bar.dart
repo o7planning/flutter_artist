@@ -130,7 +130,7 @@ class SortOptionsBar extends StatelessWidget {
             movingCriterion: details.data,
             destCriterion: criterion,
           );
-          _block.updateAllUIComponents(
+          _block.ui.updateAllUIComponents(
             withoutFilters: true,
             force: true,
           );
