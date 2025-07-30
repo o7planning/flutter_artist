@@ -13,26 +13,6 @@ class _FilterUIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _isWidgetStateBuilding({required _RefreshableWidgetState widgetState}) {
-    return _filterFragmentWidgetStates[widgetState]?.isBuilding ?? false;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool _isBuilding() {
-    for (XState xState in _filterFragmentWidgetStates.values) {
-      if (xState.isBuilding) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  // ***************************************************************************
-  // *** UI COMPONENTS ***
-  // ***************************************************************************
-
   bool hasMountedUIComponent() {
     return _filterFragmentWidgetStates.isNotEmpty;
   }
@@ -45,6 +25,38 @@ class _FilterUIComponents {
       bool isShowing =
           _filterFragmentWidgetStates[widgetState]?.isShowing ?? false;
       if (isShowing && widgetState.mounted) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void updateAllUIComponents({bool force = true}) {
+    for (_RefreshableWidgetState widgetState in [
+      ..._filterFragmentWidgetStates.keys
+    ]) {
+      if (widgetState.mounted) {
+        widgetState.refreshState(force: force);
+      }
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool _isWidgetStateBuilding({required _RefreshableWidgetState widgetState}) {
+    return _filterFragmentWidgetStates[widgetState]?.isBuilding ?? false;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool _isBuilding() {
+    for (XState xState in _filterFragmentWidgetStates.values) {
+      if (xState.isBuilding) {
         return true;
       }
     }
@@ -100,18 +112,5 @@ class _FilterUIComponents {
     required State widgetState,
   }) {
     _filterFragmentWidgetStates.remove(widgetState);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void updateAllUIComponents({bool force = true}) {
-    for (_RefreshableWidgetState widgetState in [
-      ..._filterFragmentWidgetStates.keys
-    ]) {
-      if (widgetState.mounted) {
-        widgetState.refreshState(force: force);
-      }
-    }
   }
 }
