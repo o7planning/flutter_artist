@@ -974,6 +974,18 @@ abstract class FilterModel<
 
   // ***************************************************************************
   // ***************************************************************************
+
+  void showFilterCriteriaDialog() {
+    BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    //
+    FilterCriteriaDialog.showFilterCriteriaDialog(
+      context: context,
+      filterModel: this,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
   // ***************************************************************************
 
   void __assertThisXFilterModel(_XFilterModel thisXFilterModel) {
