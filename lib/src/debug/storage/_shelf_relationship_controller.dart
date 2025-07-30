@@ -1,4 +1,4 @@
-import '../../core/_core/core.dart';
+import '../../core/_core_/core.dart';
 
 class ShelfRelationshipController {
   Function(ShelfBlockScalarType shelfBlockType)? setShelfBlockType;

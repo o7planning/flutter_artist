@@ -1,6 +1,6 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../_core/core.dart';
+import '../_core_/core.dart';
 import 'base_action.dart';
 
 abstract class BlockQuickItemReplacementAction<

@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../core/_core/core.dart';
+import '../../core/_core_/core.dart';
 import '../../core/enums/_data_state.dart';
 import '../../core/utils/_class_utils.dart';
 

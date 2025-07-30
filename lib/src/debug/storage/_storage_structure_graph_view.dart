@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graphview/GraphView.dart';
 
-import '../../core/_core/core.dart';
+import '../../core/_core_/core.dart';
 import '../../core/enums/_nli_type.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/widgets/_custom_app_container.dart';

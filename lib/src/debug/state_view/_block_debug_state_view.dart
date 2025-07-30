@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../core/_core/core.dart';
+import '../../core/_core_/core.dart';
 import '../../core/widgets/_table_container.dart';
 import '_block_debug_box.dart';
 import '_block_debug_options.dart';

@@ -1,4 +1,4 @@
-import '../_core/core.dart';
+import '../_core_/core.dart';
 import '../enums/_debug_cat.dart';
 
 class DebugPrint {

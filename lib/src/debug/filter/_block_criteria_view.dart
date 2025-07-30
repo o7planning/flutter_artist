@@ -1,4 +1,4 @@
-import '../../core/_core/core.dart';
+import '../../core/_core_/core.dart';
 import '../../core/utils/_class_utils.dart';
 import '_blk_or_scr_criteria_view.dart';
 

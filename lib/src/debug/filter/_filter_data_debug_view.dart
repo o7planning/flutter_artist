@@ -5,7 +5,7 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 
-import '../../core/_core/core.dart';
+import '../../core/_core_/core.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/utils/_class_utils.dart';
 import '../../core/widgets/_custom_app_container.dart';

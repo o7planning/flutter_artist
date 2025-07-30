@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../core/_core/core.dart';
+import '../../core/_core_/core.dart';
 import '../../core/utils/_class_utils.dart';
 import '../constants/_debug_constants.dart';
 import '_blocks_scalars_view.dart';
