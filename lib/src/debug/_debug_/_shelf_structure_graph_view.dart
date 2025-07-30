@@ -5,11 +5,11 @@ import 'package:graphview/GraphView.dart';
 import '../../core/_fa_core.dart';
 import '../../utils/_tooltip_utils.dart';
 import '../../widgets/_custom_app_container.dart';
-import '_debug_utils.dart';
-import '_graph_item.dart';
+import '../storage/_debug_utils.dart';
+import '../storage/widgets/_graph_item.dart';
 import '_graph_item_block_or_scalar_box.dart';
 import '_graph_item_shelf_box.dart';
-import '_shelf_structure_view_config.dart';
+import '../storage/_shelf_structure_view_config.dart';
 
 class ShelfStructureGraphView extends StatefulWidget {
   final Function() onPressedBack;

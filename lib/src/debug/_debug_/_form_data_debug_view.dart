@@ -7,12 +7,12 @@ import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 
 import '../../core/_fa_core.dart';
-import '../../core/_ui_/_shelf_block_scalar_type_widget.dart';
 import '../../icon/icon_constants.dart';
 import '../../widgets/_custom_app_container.dart';
-import '../utils/_tab_theme_utils.dart';
-import '_block_or_scalar.dart';
 import '../form_props/_form_props_structure_view.dart';
+import '../storage/_block_or_scalar.dart';
+import '../storage/widgets/_shelf_block_scalar_type_widget.dart';
+import '../utils/_tab_theme_utils.dart';
 import '../widgets/_info_view.dart';
 import '../widgets/_json_view.dart';
 
