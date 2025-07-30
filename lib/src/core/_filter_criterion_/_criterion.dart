@@ -38,7 +38,7 @@ abstract class Criterion<V> {
   Criterion({required this.criterionName});
 
   bool isDirty() {
-    return !_compareDynamicAndDynamic(
+    return !ComparisonUtils.compareDynamicAndDynamic(
       _currentValue,
       _initialValue,
     );

@@ -45,7 +45,7 @@ abstract class Prop<V> {
   });
 
   bool isDirty() {
-    return !_compareDynamicAndDynamic(
+    return !ComparisonUtils.compareDynamicAndDynamic(
       _currentValue,
       _initialValue,
     );

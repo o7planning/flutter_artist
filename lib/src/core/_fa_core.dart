@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:animated_tree_view/node/base/i_node.dart';
 import 'package:animated_tree_view/tree_view/tree_node.dart';
 import 'package:animated_tree_view/tree_view/tree_view.dart';
 import 'package:animated_tree_view/tree_view/widgets/expansion_indicator.dart';
@@ -115,6 +116,8 @@ import '../precheck/block_item_curr_selection_precheck.dart';
 import '../precheck/block_item_deletion_precheck.dart';
 import '../precheck/block_item_edit_precheck.dart';
 import '../precheck/block_query_precheck.dart';
+import '../utils/_compare_utils.dart';
+import '../utils/_string_utils.dart';
 import '../widgets/_custom_app_container.dart';
 import '../widgets/_simple_accordion.dart';
 import '../widgets/_simple_accordion_section.dart';
@@ -482,15 +485,11 @@ part '_ui_control_/_scalar_control_outlined_button.dart';
 
 part '_ui_control_/_scalar_control_text_button.dart';
 
-part '_utils_/_compare_utils.dart';
-
 part '_utils_/_json_utils.dart';
 
 part '_utils_/_patch_utils.dart';
 
 part '_utils_/_register_error_utils.dart';
-
-part '_utils_/_string_utils.dart';
 
 part '../utils/_text_size_utils.dart';
 
