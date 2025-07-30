@@ -1,19 +1,23 @@
-part of '../_fa_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
+import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-class FormErrorViewerDialog extends StatelessWidget {
-  final FormErrorInfo formErrorInfo;
-  final bool formInitialDataReady;
+import '../../enums/_data_state.dart';
+import '../../error/_scalar_error_info.dart';
+import '../../icon/icon_constants.dart';
 
-  const FormErrorViewerDialog({
-    required this.formErrorInfo,
-    required this.formInitialDataReady,
+class ScalarErrorViewerDialog extends StatelessWidget {
+  final ScalarErrorInfo scalarErrorInfo;
+
+  const ScalarErrorViewerDialog({
+    required this.scalarErrorInfo,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    dialogs.FaAlertDialog alert = dialogs.FaAlertDialog(
-      titleText: "Form Error",
+    FaAlertDialog alert = FaAlertDialog(
+      titleText: "Error",
       contentPadding: EdgeInsets.all(8),
       content: _buildContent(context),
     );
@@ -21,13 +25,13 @@ class FormErrorViewerDialog extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context) {
-    AppError exception = ErrorUtils.toAppError(formErrorInfo.error);
+    AppError apiError = ErrorUtils.toAppError(scalarErrorInfo.error);
     //
     final Size size = calculatePreferredDialogSize(
       context,
       preferredWidth: 440,
       preferredHeight:
-          exception.errorDetails == null || exception.errorDetails!.isEmpty
+          apiError.errorDetails == null || apiError.errorDetails!.isEmpty
               ? 200
               : 280,
     );
@@ -40,14 +44,15 @@ class FormErrorViewerDialog extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (!formInitialDataReady)
+          Text("?? ${scalarErrorInfo.queryDataState}"),
+          if (scalarErrorInfo.queryDataState == DataState.error)
             IconLabelText(
               icon: Icon(
                 FaIconConstants.formErrorDisabledIconData2,
                 color: Colors.red,
                 size: 20,
               ),
-              text: "Form is disabled due to data initialization error.",
+              text: "Scalar query data error.",
             ),
           Divider(),
           ListTile(
@@ -68,7 +73,7 @@ class FormErrorViewerDialog extends StatelessWidget {
               color: Colors.red,
             ),
             title: Text(
-              exception.errorMessage,
+              apiError.errorMessage,
               maxLines: 3,
               style: const TextStyle(
                 fontSize: 13,
@@ -76,16 +81,16 @@ class FormErrorViewerDialog extends StatelessWidget {
               ),
             ),
           ),
-          if (exception != null &&
-              exception.errorDetails != null &&
-              exception.errorDetails!.isNotEmpty)
+          if (apiError != null &&
+              apiError.errorDetails != null &&
+              apiError.errorDetails!.isNotEmpty)
             Divider(height: 10),
           Expanded(
             child: ListView(
-              children: exception != null &&
-                      exception.errorDetails != null &&
-                      exception.errorDetails!.isNotEmpty
-                  ? exception.errorDetails!
+              children: apiError != null &&
+                      apiError.errorDetails != null &&
+                      apiError.errorDetails!.isNotEmpty
+                  ? apiError.errorDetails!
                       .map((errorDetail) => _buildErrorDetail(errorDetail))
                       .toList()
                   : [],
@@ -118,20 +123,18 @@ class FormErrorViewerDialog extends StatelessWidget {
       ),
     );
   }
-}
 
-Future<void> _showFormErrorViewerDialog({
-  required BuildContext context,
-  required FormErrorInfo formErrorInfo,
-  required bool formInitialDataReady,
-}) async {
-  await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return FormErrorViewerDialog(
-        formErrorInfo: formErrorInfo,
-        formInitialDataReady: formInitialDataReady,
-      );
-    },
-  );
+  static Future<void> showScalarErrorViewerDialog({
+    required BuildContext context,
+    required ScalarErrorInfo scalarErrorInfo,
+  }) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ScalarErrorViewerDialog(
+          scalarErrorInfo: scalarErrorInfo,
+        );
+      },
+    );
+  }
 }

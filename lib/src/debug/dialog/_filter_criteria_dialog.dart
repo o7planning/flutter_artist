@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
@@ -35,8 +33,6 @@ class FilterCriteriaDialog extends StatefulWidget {
     return _FilterCriteriaDialogState();
   }
 
-
-
   static Future<void> showFilterCriteriaDialog({
     required BuildContext context,
     required FilterModel filterModel,
@@ -51,7 +47,7 @@ class FilterCriteriaDialog extends StatefulWidget {
     );
   }
 
-  static  Future<void> showBlockFilterCriteriaDialog({
+  static Future<void> showBlockFilterCriteriaDialog({
     required BuildContext context,
     required Block block,
   }) async {
@@ -65,7 +61,7 @@ class FilterCriteriaDialog extends StatefulWidget {
     );
   }
 
-  static  Future<void> showScalarFilterCriteriaDialog({
+  static Future<void> showScalarFilterCriteriaDialog({
     required BuildContext context,
     required Scalar scalar,
   }) async {
@@ -78,7 +74,6 @@ class FilterCriteriaDialog extends StatefulWidget {
       },
     );
   }
-
 }
 
 class _FilterCriteriaDialogState extends State<FilterCriteriaDialog> {
@@ -98,7 +93,7 @@ class _FilterCriteriaDialogState extends State<FilterCriteriaDialog> {
 
   @override
   Widget build(BuildContext context) {
-     FaAlertDialog alert =  FaAlertDialog(
+    FaAlertDialog alert = FaAlertDialog(
       icon: Icon(
         FaIconConstants.filterCriteriaDebugIconData,
         size: 16,

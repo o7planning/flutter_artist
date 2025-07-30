@@ -66,9 +66,13 @@ import '../debug/_debug_/_shelf_structure_graph_view.dart';
 import '../debug/_debug_/_storage_structure_view.dart';
 import '../debug/_debug_filter_/__filter_criteria_debug_view.dart';
 import '../debug/_dialog_size.dart';
+import '../debug/dialog/_block_error_viewer_dialog.dart';
 import '../debug/dialog/_code_flow_viewer_dialog.dart';
+import '../debug/dialog/_dialog_constants.dart';
 import '../debug/dialog/_filter_criteria_dialog.dart';
 import '../debug/dialog/_filter_model_info_dialog.dart';
+import '../debug/dialog/_form_error_viewer_dialog.dart';
+import '../debug/dialog/_scalar_error_viewer_dialog.dart';
 import '../enums/_action_confirmation_type.dart';
 import '../enums/_action_result_state.dart';
 import '../enums/_activity_hidden_behavior.dart';
@@ -278,24 +282,6 @@ part '_core_state_/_force_reload_item_calculator.dart';
 
 part '_core_state_/_force_reload_state.dart';
 
-part '_dialog_/_block_error_viewer_dialog.dart';
-
-part '_dialog_/_dev_mode_settings_dialog.dart';
-
-part '_dialog_/_dialog_constants.dart';
-
-part '_dialog_/_error_info_viewer.dart';
-
-part '_dialog_/_error_viewer_dialog.dart';
-
-part '_dialog_/_form_error_viewer_dialog.dart';
-
-part '_dialog_/_location_info_dialog.dart';
-
-part '_dialog_/_scalar_error_viewer_dialog.dart';
-
-part '_dialog_/_simple_error_viewer_dialog.dart';
-
 part '_dialog_/_ui_components_dialog.dart';
 
 part '_fa_.dart';
@@ -391,8 +377,6 @@ part '_ui_/_block_items_view.dart';
 part '_ui_/_block_items_view_builder.dart';
 
 part '_ui_/_control_bar_button.dart';
-
-part '_ui_/_debug_menu.dart';
 
 part '_ui_/_dev_container.dart';
 

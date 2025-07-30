@@ -37,7 +37,10 @@ class _FlutterArtist {
 
   final List<IErrorListener> _errorListeners = [];
   final List<INotificationListener> _notificationListeners = [];
+
   int _totalErrorCount = 0;
+
+  int get totalErrorCount => _totalErrorCount;
 
   final List<Future<dynamic>> __futureTaskList = [];
 
@@ -203,11 +206,6 @@ class _FlutterArtist {
     _notificationListeners.remove(listener);
   }
 
-  bool _canShowUiComponentDialog() {
-    Shelf? shelf = storage._recentShelf();
-    return shelf != null;
-  }
-
   Future<void> showUiComponentsDialog() async {
     Shelf? shelf = storage._recentShelf();
     if (shelf == null) {
@@ -346,5 +344,10 @@ class _FlutterArtist {
       }
       listener.handleNotification(notificationSummary);
     }
+  }
+
+  bool debugCanShowUiComponentDialog() {
+    Shelf? shelf = storage._recentShelf();
+    return shelf != null;
   }
 }

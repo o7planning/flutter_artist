@@ -1,13 +1,15 @@
-part of '../_fa_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
+    as dialogs;
 
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+import '../../core/_fa_core.dart';
+import '_dialog_constants.dart';
 
-class _DevelopmentModeSettingsDialog extends StatefulWidget {
+class DevelopmentModeSettingsDialog extends StatefulWidget {
   final String title;
   final Shelf shelf;
 
-  const _DevelopmentModeSettingsDialog({
+  const DevelopmentModeSettingsDialog({
     this.title = 'Development Mode Settings',
     required this.shelf,
     super.key,
@@ -20,7 +22,7 @@ class _DevelopmentModeSettingsDialog extends StatefulWidget {
 }
 
 class _DevelopmentModeSettingsDialogState
-    extends State<_DevelopmentModeSettingsDialog> {
+    extends State<DevelopmentModeSettingsDialog> {
   static const double fontSize = 13;
 
   @override
@@ -35,7 +37,7 @@ class _DevelopmentModeSettingsDialogState
           child: const Text(
             "Close",
             style: TextStyle(
-              fontSize: _dialogButtonFontSize,
+              fontSize: DialogConstants.dialogButtonFontSize,
             ),
           ),
           onPressed: () {
@@ -89,7 +91,7 @@ Future<void> _showDevelopmentSettingsDialog({
   await showDialog(
     context: context,
     builder: (BuildContext context) {
-      return _DevelopmentModeSettingsDialog(
+      return DevelopmentModeSettingsDialog(
         shelf: shelf,
       );
     },

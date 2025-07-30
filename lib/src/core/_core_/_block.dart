@@ -2514,7 +2514,7 @@ abstract class Block<
         _blockErrorInfo!.blockErrorMethod != BlockErrorMethod.callApiQuery) {
       return;
     }
-    _showBlockErrorViewerDialog(
+    BlockErrorViewerDialog.showBlockErrorViewerDialog(
       context: context,
       blockErrorInfo: _blockErrorInfo!,
     );

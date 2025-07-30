@@ -237,7 +237,7 @@ abstract class FormModel<
     if (formDataState != DataState.error) {
       return;
     }
-    _showFormErrorViewerDialog(
+    FormErrorViewerDialog.showFormErrorViewerDialog(
       context: context,
       formErrorInfo: formErrorInfo!,
       formInitialDataReady: formInitialDataReady,

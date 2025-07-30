@@ -1,4 +1,8 @@
-part of '../_fa_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_artist_core/flutter_artist_core.dart';
+
+import '../../core/_fa_core.dart';
+import '../../icon/icon_constants.dart';
 
 class DebugMenu extends StatefulWidget {
   final double menuItemIconSize;
@@ -73,7 +77,8 @@ class __DebugMenuState extends State<DebugMenu> implements IErrorListener {
                       title: 'Shelf Structure',
                       onTab: _showShelfStructure,
                     ),
-                  if (isSystemUser && FlutterArtist._canShowUiComponentDialog())
+                  if (isSystemUser &&
+                      FlutterArtist.debugCanShowUiComponentDialog())
                     _buildPopupMenuItem(
                       iconData: FaIconConstants.uiComponentsIconData,
                       title: 'UI Components',
@@ -112,7 +117,7 @@ class __DebugMenuState extends State<DebugMenu> implements IErrorListener {
               );
             },
       child: widget.menuButtonBuilder(
-        errorCount: FlutterArtist._totalErrorCount,
+        errorCount: FlutterArtist.totalErrorCount,
       ),
     );
   }

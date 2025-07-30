@@ -469,9 +469,6 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
-  // ***************************************************************************
-  // ***************************************************************************
-
   @_RootMethodAnnotation()
   void showScalarErrorViewerDialog(BuildContext context) {
     if (queryDataState != DataState.error ||
@@ -479,7 +476,7 @@ abstract class Scalar<
         _scalarErrorInfo!.scalarErrorMethod != ScalarErrorMethod.callApiQuery) {
       return;
     }
-    _showScalarErrorViewerDialog(
+    ScalarErrorViewerDialog.showScalarErrorViewerDialog(
       context: context,
       scalarErrorInfo: _scalarErrorInfo!,
     );

@@ -1,13 +1,15 @@
-part of '../_fa_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+import '../../icon/icon_constants.dart';
+import '_dialog_constants.dart';
 
-class _LocationInfoDialog extends StatelessWidget {
+class LocationInfoDialog extends StatelessWidget {
   final String title;
   final String locationInfo;
 
-  const _LocationInfoDialog({
+  const LocationInfoDialog({
     this.title = 'Location',
     required this.locationInfo,
     super.key,
@@ -16,16 +18,16 @@ class _LocationInfoDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Set up the AlertDialog
-    dialogs.FaAlertDialog alert = dialogs.FaAlertDialog(
+    FaAlertDialog alert = FaAlertDialog(
       titleText: title,
       contentPadding: const EdgeInsets.all(5),
       content: _buildMainContent(context),
       actions: [
         ElevatedButton(
-          child: const Text(
+          child: Text(
             "Close",
             style: TextStyle(
-              fontSize: _dialogButtonFontSize,
+              fontSize: DialogConstants.dialogButtonFontSize,
             ),
           ),
           onPressed: () {
@@ -78,7 +80,7 @@ Future<void> _showLocationInfoDialog({
   await showDialog(
     context: context,
     builder: (BuildContext context) {
-      return _LocationInfoDialog(
+      return LocationInfoDialog(
         locationInfo: locationInfo,
       );
     },

@@ -1,17 +1,23 @@
-part of '../_fa_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
+import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-class BlockErrorViewerDialog extends StatelessWidget {
-  final BlockErrorInfo blockErrorInfo;
+import '../../icon/icon_constants.dart';
 
-  const BlockErrorViewerDialog({
-    required this.blockErrorInfo,
+class SimpleErrorViewerDialog extends StatelessWidget {
+  final String title;
+  final Object error;
+
+  const SimpleErrorViewerDialog({
+    required this.title,
+    required this.error,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    dialogs.FaAlertDialog alert = dialogs.FaAlertDialog(
-      titleText: "Error",
+    FaAlertDialog alert = FaAlertDialog(
+      titleText: title,
       contentPadding: EdgeInsets.all(8),
       content: _buildContent(context),
     );
@@ -19,17 +25,17 @@ class BlockErrorViewerDialog extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context) {
-    AppError apiError = ErrorUtils.toAppError(blockErrorInfo.error);
+    AppError appError = ErrorUtils.toAppError(error);
     //
     final Size size = calculatePreferredDialogSize(
       context,
       preferredWidth: 440,
       preferredHeight:
-          apiError.errorDetails == null || apiError.errorDetails!.isEmpty
-              ? 200
-              : 280,
+          appError.errorDetails == null || appError.errorDetails!.isEmpty
+              ? 160
+              : 240,
     );
-    //
+
     return Container(
       height: size.height,
       width: size.width,
@@ -38,17 +44,6 @@ class BlockErrorViewerDialog extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("?? ${blockErrorInfo.queryDataState}"),
-          if (blockErrorInfo.queryDataState == DataState.error)
-            IconLabelText(
-              icon: Icon(
-                FaIconConstants.formErrorDisabledIconData2,
-                color: Colors.red,
-                size: 20,
-              ),
-              text: "Block query data error.",
-            ),
-          Divider(),
           ListTile(
             dense: true,
             visualDensity: const VisualDensity(
@@ -67,7 +62,7 @@ class BlockErrorViewerDialog extends StatelessWidget {
               color: Colors.red,
             ),
             title: Text(
-              apiError.errorMessage,
+              appError.errorMessage,
               maxLines: 3,
               style: const TextStyle(
                 fontSize: 13,
@@ -75,16 +70,14 @@ class BlockErrorViewerDialog extends StatelessWidget {
               ),
             ),
           ),
-          if (apiError != null &&
-              apiError.errorDetails != null &&
-              apiError.errorDetails!.isNotEmpty)
+          if (appError.errorDetails != null &&
+              appError.errorDetails!.isNotEmpty)
             Divider(height: 10),
           Expanded(
             child: ListView(
-              children: apiError != null &&
-                      apiError.errorDetails != null &&
-                      apiError.errorDetails!.isNotEmpty
-                  ? apiError.errorDetails!
+              children: appError.errorDetails != null &&
+                      appError.errorDetails!.isNotEmpty
+                  ? appError.errorDetails!
                       .map((errorDetail) => _buildErrorDetail(errorDetail))
                       .toList()
                   : [],
@@ -119,15 +112,17 @@ class BlockErrorViewerDialog extends StatelessWidget {
   }
 }
 
-Future<void> _showBlockErrorViewerDialog({
+Future<void> _showSimpleErrorViewerDialog({
   required BuildContext context,
-  required BlockErrorInfo blockErrorInfo,
+  required String title,
+  required dynamic error,
 }) async {
   await showDialog(
     context: context,
     builder: (BuildContext context) {
-      return BlockErrorViewerDialog(
-        blockErrorInfo: blockErrorInfo,
+      return SimpleErrorViewerDialog(
+        title: title,
+        error: error,
       );
     },
   );

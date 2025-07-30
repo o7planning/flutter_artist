@@ -21,7 +21,6 @@ class FilterModelInfoDialog extends StatefulWidget {
     return _FilterModelInfoDialogState();
   }
 
-
   static Future<void> showFilterModelInfoDialog({
     required BuildContext context,
     required String locationInfo,
@@ -37,7 +36,6 @@ class FilterModelInfoDialog extends StatefulWidget {
       },
     );
   }
-
 }
 
 class _FilterModelInfoDialogState extends State<FilterModelInfoDialog> {

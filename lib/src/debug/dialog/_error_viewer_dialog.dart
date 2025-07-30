@@ -1,4 +1,8 @@
-part of '../_fa_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
+import 'package:flutter_artist_core/flutter_artist_core.dart';
+
+import '../section/_error_info_viewer.dart';
 
 class ErrorViewerDialog extends StatelessWidget {
   final String title;
@@ -18,7 +22,7 @@ class ErrorViewerDialog extends StatelessWidget {
       preferredHeight: 400,
     );
 
-    dialogs.FaAlertDialog alert = dialogs.FaAlertDialog(
+    FaAlertDialog alert = FaAlertDialog(
       titleText: title,
       contentPadding: EdgeInsets.all(8),
       content: ErrorInfoView(

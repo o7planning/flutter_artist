@@ -1,4 +1,9 @@
-part of '../_fa_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
+import 'package:flutter_artist_core/flutter_artist_core.dart';
+
+import '../../icon/icon_constants.dart';
+import '../../widgets/_custom_app_container.dart';
 
 class ErrorInfoView extends StatefulWidget {
   final ErrorInfo errorInfo;
