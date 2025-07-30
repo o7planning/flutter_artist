@@ -1,5 +1,5 @@
 class StrUtils {
- static  String? trimStringToNullIfEmpty(String? s) {
+  static String? trimStringToNullIfEmpty(String? s) {
     if (s == null) {
       return null;
     }
@@ -9,7 +9,7 @@ class StrUtils {
 
   // -----------------------------------------------------------------------------
 
- static String? stringToNullIfEmpty(String? s) {
+  static String? stringToNullIfEmpty(String? s) {
     if (s == null) {
       return null;
     }

@@ -276,9 +276,9 @@ class _FlutterArtist {
     await StorageDialog.showStorageDialog(context: context, shelf: null);
   }
 
-  Future<void> showFlowLogDialog() async {
+  Future<void> showCodeFlowViewerDialog() async {
     BuildContext context = adapter.getCurrentContext();
-    await _showFlowLogViewerDialog(context: context);
+    await CodeFlowViewerDialog.showCodeFlowViewerDialog(context: context);
   }
 
   Future<void> showShelfStructure() async {

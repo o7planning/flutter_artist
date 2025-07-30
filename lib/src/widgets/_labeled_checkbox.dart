@@ -1,12 +1,12 @@
-part of '../_fa_core.dart';
+import 'package:flutter/material.dart';
 
-class _LabeledCheckbox extends StatelessWidget {
+class LabeledCheckbox extends StatelessWidget {
   final String label;
   final bool value;
   final Function(bool? value)? onChanged;
   final TextStyle? labelStyle;
 
-  const _LabeledCheckbox({
+  const LabeledCheckbox({
     super.key,
     required this.label,
     this.labelStyle,

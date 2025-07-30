@@ -1,9 +1,13 @@
-part of '../_fa_core.dart';
+import 'package:flutter/material.dart';
 
-class _CodeFlowMethodArgsView extends StatelessWidget {
+import '../../core/_fa_core.dart';
+import '../../widgets/_simple_accordion.dart';
+import '../../widgets/_simple_accordion_section.dart';
+
+class CodeFlowMethodArgsView extends StatelessWidget {
   final Map<String, dynamic>? arguments;
 
-  const _CodeFlowMethodArgsView({
+  const CodeFlowMethodArgsView({
     required this.arguments,
   });
 

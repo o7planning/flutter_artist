@@ -1,12 +1,17 @@
-part of '../_fa_core.dart';
+import 'package:flutter/material.dart';
 
-class _CodeFlowListItem extends StatelessWidget {
-  final _CodeFlowItem flowLogItem;
+import '../../core/_fa_core.dart';
+import '__code_flow_const.dart';
+import '_code_flow_info_error_view.dart';
+import '_code_flow_method_view.dart';
+
+class CodeFlowListItem extends StatelessWidget {
+  final CodeFlowItem flowLogItem;
   final bool selected;
 
   final Function() onTap;
 
-  const _CodeFlowListItem({
+  const CodeFlowListItem({
     required this.flowLogItem,
     required this.selected,
     required this.onTap,
@@ -18,13 +23,13 @@ class _CodeFlowListItem extends StatelessWidget {
     return Card(
       color: _backgroundColor(),
       child: flowLogItem.isMethodCall()
-          ? _CodeFlowMethodView(
+          ? CodeFlowMethodView(
               codeFlowItem: flowLogItem,
               selected: selected,
               textSelectable: false,
               onTap: onTap,
             )
-          : _CodeFlowInfoErrorView(
+          : CodeFlowInfoErrorView(
               codeFlowItem: flowLogItem,
               textOverflow: TextOverflow.ellipsis,
               selected: selected,
@@ -35,7 +40,7 @@ class _CodeFlowListItem extends StatelessWidget {
 
   Color _backgroundColor() {
     return selected
-        ? _selectedCodeFlowItemBgColor
-        : _deselectedCodeFlowItemBgColor;
+        ? CodeFlowConstants.selectedCodeFlowItemBgColor
+        : CodeFlowConstants.deselectedCodeFlowItemBgColor;
   }
 }

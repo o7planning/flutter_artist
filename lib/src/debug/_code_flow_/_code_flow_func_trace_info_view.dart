@@ -1,9 +1,11 @@
-part of '../_fa_core.dart';
+import 'package:flutter/material.dart';
 
-class _CodeFlowFuncTraceInfoView extends StatelessWidget {
+import '../../core/_fa_core.dart';
+
+class CodeFlowFuncTraceInfoView extends StatelessWidget {
   final FuncCallInfo funcCallInfo;
 
-  const _CodeFlowFuncTraceInfoView({required this.funcCallInfo});
+  const CodeFlowFuncTraceInfoView({required this.funcCallInfo});
 
   @override
   Widget build(BuildContext context) {

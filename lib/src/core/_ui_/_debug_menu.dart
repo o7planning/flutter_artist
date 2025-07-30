@@ -165,7 +165,7 @@ class _DebugMenuState extends State<DebugMenu> implements IErrorListener {
 
   Future<void> _showFlowLogStructure() async {
     Navigator.pop(context, null);
-    await FlutterArtist.showFlowLogDialog();
+    await FlutterArtist.showCodeFlowViewerDialog();
   }
 
   Future<void> _showShelfStructure() async {

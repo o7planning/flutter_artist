@@ -55,6 +55,10 @@ import '../adapter/_logged_in_user_adapter.dart';
 import '../adapter/_notification_adapter.dart';
 import '../annotation/annotation.dart';
 
+import '../debug/_code_flow_/_code_flow_func_trace_info_view.dart';
+import '../debug/_code_flow_/_code_flow_info_error_view.dart';
+import '../debug/_code_flow_/_code_flow_method_args_view.dart';
+import '../debug/_code_flow_/_code_flow_method_view.dart';
 import '../debug/_debug_/_block_or_scalar.dart';
 import '../debug/_debug_/_error_logger.dart';
 import '../debug/_debug_/_filter_data_debug_view.dart';
@@ -62,6 +66,7 @@ import '../debug/_debug_/_shelf_structure_graph_view.dart';
 import '../debug/_debug_/_storage_structure_view.dart';
 import '../debug/_debug_filter_/__filter_criteria_debug_view.dart';
 import '../debug/_dialog_size.dart';
+import '../debug/dialog/_code_flow_viewer_dialog.dart';
 import '../enums/_action_confirmation_type.dart';
 import '../enums/_action_result_state.dart';
 import '../enums/_activity_hidden_behavior.dart';
@@ -153,27 +158,11 @@ part '_task_result_/_form_save_result.dart';
 
 part '_task_result_/_scalar_query_result.dart';
 
-part '_code_flow_/__code_flow_const.dart';
-
-part '_code_flow_/_code_flow_filter.dart';
-
-part '_code_flow_/_code_flow_func_trace_info_view.dart';
-
-part '_code_flow_/_code_flow_info_error_view.dart';
-
 part '_code_flow_/_code_flow_item.dart';
 
-part '_code_flow_/_code_flow_item_view.dart';
-
-part '_code_flow_/_code_flow_list_item.dart';
+part '../debug/_code_flow_/_code_flow_item_view.dart';
 
 part '_code_flow_/_code_flow_logger.dart';
-
-part '_code_flow_/_code_flow_method_args_view.dart';
-
-part '_code_flow_/_code_flow_method_view.dart';
-
-part '_code_flow_/_code_flow_viewer.dart';
 
 part '_code_flow_/_func_call_info.dart';
 
@@ -288,8 +277,6 @@ part '_core_state_/_force_reload_item_calculator.dart';
 part '_core_state_/_force_reload_state.dart';
 
 part '_dialog_/_block_error_viewer_dialog.dart';
-
-part '_dialog_/_code_flow_viewer_dialog.dart';
 
 part '_dialog_/_dev_mode_settings_dialog.dart';
 
@@ -418,8 +405,6 @@ part '_ui_/_filter_view_builder.dart';
 part '_ui_/_form_view.dart';
 
 part '_ui_/_form_view_builder.dart';
-
-part '_ui_/_labeled_checkbox.dart';
 
 part '_ui_/_labeled_radio.dart';
 

@@ -1,5 +1,5 @@
-import '../enums/_debug_cat.dart';
 import '../core/_fa_core.dart';
+import '../enums/_debug_cat.dart';
 
 class DebugPrint {
   static void debugPrint(String message) {

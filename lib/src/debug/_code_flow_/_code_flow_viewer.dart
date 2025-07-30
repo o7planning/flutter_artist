@@ -1,16 +1,21 @@
-part of '../_fa_core.dart';
+import 'package:flutter/material.dart';
 
-class _CodeFlowViewer extends StatefulWidget {
-  const _CodeFlowViewer({
+import '../../core/_fa_core.dart';
+import '../../widgets/_custom_app_container.dart';
+import '_code_flow_filter.dart';
+import '_code_flow_list_item.dart';
+
+class CodeFlowViewer extends StatefulWidget {
+  const CodeFlowViewer({
     super.key,
   });
 
   @override
-  State<_CodeFlowViewer> createState() => _CodeFlowViewerState();
+  State<CodeFlowViewer> createState() => _CodeFlowViewerState();
 }
 
-class _CodeFlowViewerState extends State<_CodeFlowViewer> {
-  _CodeFlowItem? selectedFlowItem;
+class _CodeFlowViewerState extends State<CodeFlowViewer> {
+  CodeFlowItem? selectedFlowItem;
   bool showDevMethod = true;
 
   //
@@ -26,7 +31,7 @@ class _CodeFlowViewerState extends State<_CodeFlowViewer> {
     super.initState();
   }
 
-  bool _checkItem(_CodeFlowItem item) {
+  bool _checkItem(CodeFlowItem item) {
     bool ok1 = (showDevMethod && item.isDevCode && item.isMethodCall());
     if (ok1) {
       return true;
@@ -40,9 +45,7 @@ class _CodeFlowViewerState extends State<_CodeFlowViewer> {
 
   @override
   Widget build(BuildContext context) {
-    List<_CodeFlowItem> items = [
-      ...FlutterArtist.codeFlowLogger._codeFlowItems
-    ];
+    List<CodeFlowItem> items = [...FlutterArtist.codeFlowLogger.codeFlowItems];
     items = items.where((item) => _checkItem(item)).toList();
 
     if (!items.contains(selectedFlowItem)) {
@@ -53,7 +56,7 @@ class _CodeFlowViewerState extends State<_CodeFlowViewer> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _CodeFlowFilter(
+        CodeFlowFilter(
           codeFlowItemTypes: [],
           showDevMethod: showDevMethod,
           showPublicMethod: showPublicMethod,
@@ -116,12 +119,12 @@ class _CodeFlowViewerState extends State<_CodeFlowViewer> {
     );
   }
 
-  Widget _buildLeftList(List<_CodeFlowItem> items) {
+  Widget _buildLeftList(List<CodeFlowItem> items) {
     return ListView(
       padding: const EdgeInsets.only(right: 10),
       children: items
           .map(
-            (logItem) => _CodeFlowListItem(
+            (logItem) => CodeFlowListItem(
               key: Key("LogItem-${logItem.id}"),
               flowLogItem: logItem,
               selected: logItem == selectedFlowItem,
@@ -136,8 +139,8 @@ class _CodeFlowViewerState extends State<_CodeFlowViewer> {
     );
   }
 
-  Widget _buildRightView(_CodeFlowItem codeFlowItem) {
-    return _CodeFlowItemView(
+  Widget _buildRightView(CodeFlowItem codeFlowItem) {
+    return CodeFlowItemView(
       key: Key("LogItem-${selectedFlowItem?.id}"),
       codeFlowItem: codeFlowItem,
     );

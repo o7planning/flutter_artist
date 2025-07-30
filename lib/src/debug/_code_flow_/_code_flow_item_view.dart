@@ -1,9 +1,9 @@
-part of '../_fa_core.dart';
+part of '../../core/_fa_core.dart';
 
-class _CodeFlowItemView extends StatelessWidget {
-  final _CodeFlowItem codeFlowItem;
+class CodeFlowItemView extends StatelessWidget {
+  final CodeFlowItem codeFlowItem;
 
-  const _CodeFlowItemView({
+  const CodeFlowItemView({
     required this.codeFlowItem,
     required super.key,
   });
@@ -38,7 +38,7 @@ class _CodeFlowItemView extends StatelessWidget {
         if (codeFlowItem.isMethodCall() && shelf != null) const Divider(),
         if (codeFlowItem.isMethodCall())
           Card(
-            child: _CodeFlowMethodView(
+            child: CodeFlowMethodView(
               codeFlowItem: codeFlowItem,
               textSelectable: true,
               selected: false,
@@ -47,16 +47,16 @@ class _CodeFlowItemView extends StatelessWidget {
           ),
         if (codeFlowItem.isMethodCallWithTrace()) const SizedBox(height: 5),
         if (codeFlowItem.isMethodCallWithTrace())
-          _CodeFlowFuncTraceInfoView(
+          CodeFlowFuncTraceInfoView(
             funcCallInfo: codeFlowItem.funcCallInfo!,
           ),
         if (codeFlowItem.isMethodCall()) const SizedBox(height: 10),
         if (codeFlowItem.isMethodCall())
-          _CodeFlowMethodArgsView(
+          CodeFlowMethodArgsView(
             arguments: codeFlowItem.funcCallInfo?.arguments,
           ),
         if (codeFlowItem.isInfo() || codeFlowItem.isError())
-          _CodeFlowInfoErrorView(
+          CodeFlowInfoErrorView(
             codeFlowItem: codeFlowItem,
             textOverflow: TextOverflow.visible,
             selected: false,

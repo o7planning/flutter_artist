@@ -2,7 +2,7 @@ part of '../_fa_core.dart';
 
 int __flowLogItemSEQ = 0;
 
-class _CodeFlowItem {
+class CodeFlowItem {
   final int id;
 
   final String? info;
@@ -15,7 +15,7 @@ class _CodeFlowItem {
   CodeFlowType codeFlowType;
   final Object ownerClassInstance;
 
-  _CodeFlowItem._methodCallFromStackTrace({
+  CodeFlowItem._methodCallFromStackTrace({
     required this.ownerClassInstance,
     required StackTrace currentStackTrace,
     required Map<String, dynamic>? arguments,
@@ -29,7 +29,7 @@ class _CodeFlowItem {
         errorInfo = null,
         id = __flowLogItemSEQ++;
 
-  _CodeFlowItem._methodCall({
+  CodeFlowItem._methodCall({
     required this.ownerClassInstance,
     required String methodName,
     required Map<String, dynamic>? arguments,
@@ -40,7 +40,7 @@ class _CodeFlowItem {
         errorInfo = null,
         id = __flowLogItemSEQ++;
 
-  _CodeFlowItem._info({
+  CodeFlowItem._info({
     required this.ownerClassInstance,
     required this.info,
     required this.isLibCode,
@@ -49,7 +49,7 @@ class _CodeFlowItem {
         errorInfo = null,
         id = __flowLogItemSEQ++;
 
-  _CodeFlowItem._error({
+  CodeFlowItem._error({
     required this.ownerClassInstance,
     required this.errorInfo,
     required this.isLibCode,

@@ -14,8 +14,7 @@ abstract class TaskResult<PRECHECK> {
   TaskResult({
     PRECHECK? precheck,
     StackTrace? stackTrace,
-  })
-      : _precheck = precheck,
+  })  : _precheck = precheck,
         _stackTrace = stackTrace;
 
   bool get success;

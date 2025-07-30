@@ -1,6 +1,11 @@
-part of '../_fa_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 
-class _CodeFlowFilter extends StatelessWidget {
+import '../../enums/_code_flow_item_type.dart';
+import '../../widgets/_custom_app_container.dart';
+import '../../widgets/_labeled_checkbox.dart';
+
+class CodeFlowFilter extends StatelessWidget {
   final List<CodeFlowItemType> codeFlowItemTypes;
 
   final bool showDevMethod;
@@ -23,7 +28,7 @@ class _CodeFlowFilter extends StatelessWidget {
   final Function(bool? value) onShowInfoChanged;
   final Function(bool? value) onShowErrorChanged;
 
-  const _CodeFlowFilter({
+  const CodeFlowFilter({
     required this.codeFlowItemTypes,
     required this.showDevMethod,
     required this.showPublicMethod,
@@ -107,7 +112,7 @@ class _CodeFlowFilter extends StatelessWidget {
   }) {
     return Tooltip(
       message: tooltip,
-      child: _LabeledCheckbox(
+      child: LabeledCheckbox(
         value: value,
         label: label,
         labelStyle: const TextStyle(

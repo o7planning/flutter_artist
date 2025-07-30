@@ -1,12 +1,17 @@
-part of '../_fa_core.dart';
+import 'package:flutter/material.dart';
 
-class _CodeFlowMethodView extends StatelessWidget {
-  final _CodeFlowItem codeFlowItem;
+import '../../core/_fa_core.dart';
+import '../../icon/icon_constants.dart';
+import '__code_flow_const.dart';
+
+class CodeFlowMethodView extends StatelessWidget {
+  final CodeFlowItem codeFlowItem;
   final bool selected;
   final bool textSelectable;
   final Function()? onTap;
 
-  const _CodeFlowMethodView({
+  const CodeFlowMethodView({
+    super.key,
     required this.codeFlowItem,
     required this.textSelectable,
     required this.selected,
@@ -93,12 +98,12 @@ class _CodeFlowMethodView extends StatelessWidget {
   Color _titleIconColor() {
     if (codeFlowItem.isLibCode) {
       if (codeFlowItem.isLibPublicMethod) {
-        return _libPublicCodeIconColor;
+        return CodeFlowConstants.libPublicCodeIconColor;
       } else {
-        return _libPrivateCodeIconColor;
+        return CodeFlowConstants.libPrivateCodeIconColor;
       }
     } else {
-      return _devCodeIconColor;
+      return CodeFlowConstants.devCodeIconColor;
     }
   }
 

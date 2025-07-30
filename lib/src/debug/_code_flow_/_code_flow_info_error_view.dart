@@ -1,12 +1,16 @@
-part of '../_fa_core.dart';
+import 'package:flutter/material.dart';
 
-class _CodeFlowInfoErrorView extends StatelessWidget {
-  final _CodeFlowItem codeFlowItem;
+import '../../core/_fa_core.dart';
+import '../../icon/icon_constants.dart';
+
+class CodeFlowInfoErrorView extends StatelessWidget {
+  final CodeFlowItem codeFlowItem;
   final bool selected;
   final Function()? onTap;
   final TextOverflow textOverflow;
 
-  const _CodeFlowInfoErrorView({
+  const CodeFlowInfoErrorView({
+    super.key,
     required this.codeFlowItem,
     required this.textOverflow,
     required this.selected,

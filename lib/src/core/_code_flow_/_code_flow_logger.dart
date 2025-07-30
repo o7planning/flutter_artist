@@ -3,7 +3,9 @@ part of '../_fa_core.dart';
 class CodeFlowLogger {
   static const double resetSeconds = 10;
 
-  final List<_CodeFlowItem> _codeFlowItems = [];
+  final List<CodeFlowItem> _codeFlowItems = [];
+
+  List<CodeFlowItem> get codeFlowItems => [..._codeFlowItems];
 
   DateTime __lastDateTime = DateTime.now();
 
@@ -30,16 +32,16 @@ class CodeFlowLogger {
   }) {
     __markDateTime();
     //
-    _CodeFlowItem item;
+    CodeFlowItem item;
     try {
-      item = _CodeFlowItem._methodCallFromStackTrace(
+      item = CodeFlowItem._methodCallFromStackTrace(
         ownerClassInstance: ownerClassInstance,
         currentStackTrace: currentStackTrace,
         arguments: parameters,
         isLibCode: false,
       );
     } catch (e) {
-      item = _CodeFlowItem._methodCall(
+      item = CodeFlowItem._methodCall(
         ownerClassInstance: ownerClassInstance,
         methodName: "Something Error",
         arguments: parameters,
@@ -58,7 +60,7 @@ class CodeFlowLogger {
   }) {
     __markDateTime();
     //
-    _CodeFlowItem log = _CodeFlowItem._methodCall(
+    CodeFlowItem log = CodeFlowItem._methodCall(
       ownerClassInstance: ownerClassInstance,
       methodName: methodName,
       arguments: parameters,
@@ -88,7 +90,7 @@ class CodeFlowLogger {
   }) {
     __markDateTime();
     //
-    _CodeFlowItem log = _CodeFlowItem._info(
+    CodeFlowItem log = CodeFlowItem._info(
       ownerClassInstance: ownerClassInstance,
       info: info,
       isLibCode: isLibCode,
@@ -103,7 +105,7 @@ class CodeFlowLogger {
   }) {
     __markDateTime();
     //
-    _CodeFlowItem log = _CodeFlowItem._info(
+    CodeFlowItem log = CodeFlowItem._info(
       ownerClassInstance: ownerClassInstance,
       info: event,
       isLibCode: isLibCode,
@@ -138,7 +140,7 @@ class CodeFlowLogger {
   }) {
     __markDateTime();
     //
-    _CodeFlowItem log = _CodeFlowItem._error(
+    CodeFlowItem log = CodeFlowItem._error(
       ownerClassInstance: ownerClassInstance,
       errorInfo: AppErrorInfo(
         error: error,

@@ -1,7 +1,4 @@
-
-
 class ComparisonUtils {
-
   ///
   /// This function is used to check for "dirty" in a form.
   ///
@@ -40,7 +37,7 @@ class ComparisonUtils {
   ///
   /// This function is used to check for "dirty" in a form.
   ///
- static bool _compareIterableAndIterable(Iterable iterable, Iterable other) {
+  static bool _compareIterableAndIterable(Iterable iterable, Iterable other) {
     if (iterable.length != other.length) {
       return false;
     }
@@ -90,7 +87,7 @@ class ComparisonUtils {
   ///
   /// This function is used to check for "dirty" in a form.
   ///
- static bool _compareMapAndDynamic(Map map, dynamic other) {
+  static bool _compareMapAndDynamic(Map map, dynamic other) {
     if (map.isEmpty) {
       if (other == null) {
         return true;
@@ -119,5 +116,4 @@ class ComparisonUtils {
       }
     }
   }
-
 }
