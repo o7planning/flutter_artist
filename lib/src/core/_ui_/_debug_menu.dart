@@ -16,11 +16,11 @@ class DebugMenu extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _DebugMenuState();
+    return __DebugMenuState();
   }
 }
 
-class _DebugMenuState extends State<DebugMenu> implements IErrorListener {
+class __DebugMenuState extends State<DebugMenu> implements IErrorListener {
   @override
   void initState() {
     super.initState();

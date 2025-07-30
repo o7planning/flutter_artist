@@ -1,13 +1,16 @@
-part of '../_fa_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+import '../../core/_fa_core.dart';
+import '../_debug_/_filter_data_debug_view.dart';
+import '../_debug_/_shelf_structure_graph_view.dart';
+import '../_dialog_size.dart';
 
-class _FilterModelInfoDialog extends StatefulWidget {
+class FilterModelInfoDialog extends StatefulWidget {
   final FilterModel filterModel;
   final String locationInfo;
 
-  const _FilterModelInfoDialog({
+  const FilterModelInfoDialog({
     required this.filterModel,
     required this.locationInfo,
     super.key,
@@ -17,9 +20,27 @@ class _FilterModelInfoDialog extends StatefulWidget {
   State<StatefulWidget> createState() {
     return _FilterModelInfoDialogState();
   }
+
+
+  static Future<void> showFilterModelInfoDialog({
+    required BuildContext context,
+    required String locationInfo,
+    required FilterModel filterModel,
+  }) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return FilterModelInfoDialog(
+          filterModel: filterModel,
+          locationInfo: locationInfo,
+        );
+      },
+    );
+  }
+
 }
 
-class _FilterModelInfoDialogState extends State<_FilterModelInfoDialog> {
+class _FilterModelInfoDialogState extends State<FilterModelInfoDialog> {
   bool showFormData = true;
 
   @override
@@ -27,7 +48,7 @@ class _FilterModelInfoDialogState extends State<_FilterModelInfoDialog> {
     Size size = DialogSizeUtils.calculateDebugDialogSize(context);
 
     // Set up the AlertDialog
-    dialogs.FaAlertDialog alert = dialogs.FaAlertDialog(
+    FaAlertDialog alert = FaAlertDialog(
       titleText: showFormData
           ? "${getClassName(widget.filterModel)} - Filter Model"
           : "${getClassName(widget.filterModel.shelf)} - Structure",
@@ -65,20 +86,4 @@ class _FilterModelInfoDialogState extends State<_FilterModelInfoDialog> {
             ),
     );
   }
-}
-
-Future<void> _showFilterModelInfoDialog({
-  required BuildContext context,
-  required String locationInfo,
-  required FilterModel filterModel,
-}) async {
-  await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return _FilterModelInfoDialog(
-        filterModel: filterModel,
-        locationInfo: locationInfo,
-      );
-    },
-  );
 }

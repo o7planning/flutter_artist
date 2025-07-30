@@ -964,7 +964,7 @@ abstract class FilterModel<
   Future<void> showFilterModelDebugDialog() async {
     BuildContext context = FlutterArtist.adapter.getCurrentContext();
     //
-    await _showFilterModelInfoDialog(
+    await FilterModelInfoDialog.showFilterModelInfoDialog(
       context: context,
       locationInfo: "locationInfo", // TODO: Remove.
       filterModel: this,

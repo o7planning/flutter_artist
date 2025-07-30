@@ -1,26 +1,30 @@
-part of '../_fa_core.dart';
 
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
 
-class _FilterCriteriaDialog extends StatefulWidget {
+import 'package:flutter/material.dart';
+import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
+
+import '../../core/_fa_core.dart';
+import '../../icon/icon_constants.dart';
+import '../_debug_filter_/__filter_criteria_debug_view.dart';
+
+class FilterCriteriaDialog extends StatefulWidget {
   final FilterModel? filterModel;
   final Scalar? scalar;
   final Block? block;
 
-  const _FilterCriteriaDialog.block({
+  const FilterCriteriaDialog.block({
     required Block this.block,
     super.key,
   })  : scalar = null,
         filterModel = null;
 
-  const _FilterCriteriaDialog.scalar({
+  const FilterCriteriaDialog.scalar({
     required Scalar this.scalar,
     super.key,
   })  : block = null,
         filterModel = null;
 
-  const _FilterCriteriaDialog.filterModel({
+  const FilterCriteriaDialog.filterModel({
     required FilterModel this.filterModel,
     super.key,
   })  : block = null,
@@ -30,9 +34,54 @@ class _FilterCriteriaDialog extends StatefulWidget {
   State<StatefulWidget> createState() {
     return _FilterCriteriaDialogState();
   }
+
+
+
+  static Future<void> showFilterCriteriaDialog({
+    required BuildContext context,
+    required FilterModel filterModel,
+  }) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return FilterCriteriaDialog.filterModel(
+          filterModel: filterModel,
+        );
+      },
+    );
+  }
+
+  static  Future<void> showBlockFilterCriteriaDialog({
+    required BuildContext context,
+    required Block block,
+  }) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return FilterCriteriaDialog.block(
+          block: block,
+        );
+      },
+    );
+  }
+
+  static  Future<void> showScalarFilterCriteriaDialog({
+    required BuildContext context,
+    required Scalar scalar,
+  }) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return FilterCriteriaDialog.scalar(
+          scalar: scalar,
+        );
+      },
+    );
+  }
+
 }
 
-class _FilterCriteriaDialogState extends State<_FilterCriteriaDialog> {
+class _FilterCriteriaDialogState extends State<FilterCriteriaDialog> {
   static const double fontSize = 13;
 
   String _title() {
@@ -49,7 +98,7 @@ class _FilterCriteriaDialogState extends State<_FilterCriteriaDialog> {
 
   @override
   Widget build(BuildContext context) {
-    dialogs.FaAlertDialog alert = dialogs.FaAlertDialog(
+     FaAlertDialog alert =  FaAlertDialog(
       icon: Icon(
         FaIconConstants.filterCriteriaDebugIconData,
         size: 16,
@@ -95,46 +144,4 @@ class _FilterCriteriaDialogState extends State<_FilterCriteriaDialog> {
       child: child,
     );
   }
-}
-
-Future<void> showFilterCriteriaDialog({
-  required BuildContext context,
-  required FilterModel filterModel,
-}) async {
-  await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return _FilterCriteriaDialog.filterModel(
-        filterModel: filterModel,
-      );
-    },
-  );
-}
-
-Future<void> showBlockFilterCriteriaDialog({
-  required BuildContext context,
-  required Block block,
-}) async {
-  await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return _FilterCriteriaDialog.block(
-        block: block,
-      );
-    },
-  );
-}
-
-Future<void> showScalarFilterCriteriaDialog({
-  required BuildContext context,
-  required Scalar scalar,
-}) async {
-  await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return _FilterCriteriaDialog.scalar(
-        scalar: scalar,
-      );
-    },
-  );
 }

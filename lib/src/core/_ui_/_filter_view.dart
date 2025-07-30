@@ -68,7 +68,7 @@ abstract class FilterView<FILTER_MODEL extends FilterModel>
   Future<void> showFilterModelDebugDialog() async {
     BuildContext context = FlutterArtist.adapter.getCurrentContext();
     //
-    await _showFilterModelInfoDialog(
+    await FilterModelInfoDialog.showFilterModelInfoDialog(
       context: context,
       locationInfo: getClassName(this),
       filterModel: filterModel,

@@ -302,7 +302,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             onAction: false,
             onPressed: widget.showFilterCriteriaButton
                 ? () {
-                    showBlockFilterCriteriaDialog(
+                    FilterCriteriaDialog.showBlockFilterCriteriaDialog(
                       context: context,
                       block: widget.block,
                     );

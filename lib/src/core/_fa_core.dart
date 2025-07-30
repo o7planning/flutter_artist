@@ -67,6 +67,8 @@ import '../debug/_debug_/_storage_structure_view.dart';
 import '../debug/_debug_filter_/__filter_criteria_debug_view.dart';
 import '../debug/_dialog_size.dart';
 import '../debug/dialog/_code_flow_viewer_dialog.dart';
+import '../debug/dialog/_filter_criteria_dialog.dart';
+import '../debug/dialog/_filter_model_info_dialog.dart';
 import '../enums/_action_confirmation_type.dart';
 import '../enums/_action_result_state.dart';
 import '../enums/_activity_hidden_behavior.dart';
@@ -126,8 +128,8 @@ import '../utils/_string_utils.dart';
 import '../widgets/_custom_app_container.dart';
 import '../widgets/_simple_accordion.dart';
 import '../widgets/_simple_accordion_section.dart';
-import '_dialog_/_error_log_viewer_dialog.dart';
-import '_dialog_/_form_data_info_dialog.dart';
+import '../debug/dialog/_error_log_viewer_dialog.dart';
+import '../debug/dialog/_form_data_info_dialog.dart';
 import '../debug/dialog/_storage_dialog.dart';
 import '_ui_/_shelf_info_view.dart';
 import '../utils/_debug_print.dart';
@@ -285,10 +287,6 @@ part '_dialog_/_dialog_constants.dart';
 part '_dialog_/_error_info_viewer.dart';
 
 part '_dialog_/_error_viewer_dialog.dart';
-
-part '_dialog_/_filter_criteria_dialog.dart';
-
-part '_dialog_/_filter_model_info_dialog.dart';
 
 part '_dialog_/_form_error_viewer_dialog.dart';
 
