@@ -7,6 +7,7 @@ class SimpleAccordionSection extends StatelessWidget {
   final Widget? content;
 
   const SimpleAccordionSection({
+    super.key,
     required this.initiallyExpanded,
     required this.headerTitle,
     required this.headerSubtitle,

@@ -96,7 +96,7 @@ class BlockDebugBox extends BaseDebugBox {
       if (options.showLastQueryResultState)
         IconLabelText(
           label: "Last Query Result: ",
-          text: block.lastQueryResultState?.name?.toString() ?? "",
+          text: block.lastQueryResultState?.name.toString() ?? "",
           labelStyle: labelStyle,
           textStyle: textStyle0,
         ),

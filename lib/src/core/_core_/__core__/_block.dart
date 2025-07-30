@@ -1518,7 +1518,7 @@ abstract class Block<
     // If no item can be current.
     //
     if (candidateCurrentItem == null) {
-      print("        ~~~~~~~> candidateCurrentItem == null - [${name}]");
+      print("        ~~~~~~~> candidateCurrentItem == null - [$name]");
       this.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: thisXBlock,
         qryDataState: DataState.ready,
@@ -2208,7 +2208,7 @@ abstract class Block<
       //
       result = await action.callApi();
       // Throw ApiError.
-      result?.throwIfError();
+      result.throwIfError();
     } catch (e, stackTrace) {
       AppError appError = _handleError(
         shelf: shelf,

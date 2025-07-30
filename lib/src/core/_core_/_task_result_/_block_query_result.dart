@@ -19,11 +19,6 @@ class BlockQueryResult extends TaskResult<BlockQueryPrecheck> {
     _setPrecheck(BlockQueryPrecheck.filterError);
   }
 
-  void _setAppError({required AppError appError, StackTrace? stackTrace}) {
-    _appError = appError;
-    _stackTrace = stackTrace;
-  }
-
   @override
   bool get success {
     if (precheck != null) {

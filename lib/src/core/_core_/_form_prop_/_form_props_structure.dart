@@ -271,7 +271,7 @@ class FormPropsStructure {
   dynamic _getCurrentPropValue({required String propName}) {
     Prop? prop = _allPropMap[propName];
     if (prop != null) {
-      return prop?._currentValue;
+      return prop._currentValue;
     }
     return null;
   }

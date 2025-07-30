@@ -60,7 +60,7 @@ abstract class FilterView<FILTER_MODEL extends FilterModel>
       child: Icon(
         FaIconConstants.filterModelDebugIconData,
         size: iconSize ?? 16,
-        color: iconColor ?? null,
+        color: iconColor,
       ),
     );
   }

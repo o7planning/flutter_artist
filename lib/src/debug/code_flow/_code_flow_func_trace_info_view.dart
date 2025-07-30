@@ -5,7 +5,7 @@ import '../../core/_core_/core.dart';
 class CodeFlowFuncTraceInfoView extends StatelessWidget {
   final FuncCallInfo funcCallInfo;
 
-  const CodeFlowFuncTraceInfoView({required this.funcCallInfo});
+  const CodeFlowFuncTraceInfoView({super.key, required this.funcCallInfo});
 
   @override
   Widget build(BuildContext context) {

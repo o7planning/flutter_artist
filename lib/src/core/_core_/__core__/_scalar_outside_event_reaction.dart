@@ -17,7 +17,7 @@ class ScalarOutsideEventReaction {
     if (_events == null) {
       return [];
     }
-    return _events!.map((e) => e.dataType).toList();
+    return _events.map((e) => e.dataType).toList();
   }
 }
 

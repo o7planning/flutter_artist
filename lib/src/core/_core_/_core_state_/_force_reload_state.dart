@@ -149,8 +149,8 @@ void _addDebugForceReload({
       forceReloadMap[debugCode] = debug;
     }
     // currentShelfCodes = "20a, 30b".
-    debug!.currentShelfCodes = currentShelfCodes;
-    debug!.addShelfCode(testCode);
+    debug.currentShelfCodes = currentShelfCodes;
+    debug.addShelfCode(testCode);
   }
 }
 

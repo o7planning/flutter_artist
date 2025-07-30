@@ -75,16 +75,14 @@ class FormDebugBox extends BaseDebugBox {
 
     List<Widget> list2 = [
       if (options.showFormProps && optProps.isNotEmpty)
-        ...optProps
-            .map(
-              (optProp) => IconLabelText(
-                label: "Load Count (${optProp.propName}): ",
-                text: optProp.loadCount.toString(),
-                labelStyle: labelStyle0,
-                textStyle: textStyle0,
-              ),
-            )
-            .toList(),
+        ...optProps.map(
+          (optProp) => IconLabelText(
+            label: "Load Count (${optProp.propName}): ",
+            text: optProp.loadCount.toString(),
+            labelStyle: labelStyle0,
+            textStyle: textStyle0,
+          ),
+        ),
     ];
     return [
       ...list1,

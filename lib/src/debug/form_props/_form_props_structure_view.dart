@@ -78,14 +78,14 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
   }
 
   Widget _buildRight() {
-    if (_currentNode!.data is FormModel) {
+    if (_currentNode.data is FormModel) {
       return FormModelDebugView(
-        formModel: _currentNode!.data,
+        formModel: _currentNode.data,
       );
-    } else if (_currentNode!.data is Prop) {
+    } else if (_currentNode.data is Prop) {
       return FormPropView(
         formInitialDataReady: widget.formModel.formInitialDataReady,
-        prop: _currentNode!.data,
+        prop: _currentNode.data,
       );
     } else {
       return Text("TODO");
@@ -153,7 +153,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
           if (data is FormModel) {
             title = getClassName(data);
             prefixIconData = FaIconConstants.formModelIconData;
-            isError = (data as FormModel).formDataState == DataState.error;
+            isError = data.formDataState == DataState.error;
           } else if (data is SimpleProp) {
             title = data.propName;
             prefixIconData = FaIconConstants.simplePropOrCriterionIconData;

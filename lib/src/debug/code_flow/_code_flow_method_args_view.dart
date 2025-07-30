@@ -8,6 +8,7 @@ class CodeFlowMethodArgsView extends StatelessWidget {
   final Map<String, dynamic>? arguments;
 
   const CodeFlowMethodArgsView({
+    super.key,
     required this.arguments,
   });
 

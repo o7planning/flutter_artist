@@ -1104,7 +1104,7 @@ abstract class FormModel<
     //
     // TODO: Double check this code:
     //
-    if (candidateSelectedItems != null && candidateSelectedItems.isNotEmpty) {
+    if (candidateSelectedItems.isNotEmpty) {
       if (multiOptProp.singleSelection) {
         // IMPORTANT:
         //  - Update from ROOTs to LEAVES
@@ -1229,7 +1229,7 @@ abstract class FormModel<
         );
         return null;
       }
-      List? value = valueWrap?.values ?? [];
+      List? value = valueWrap.values;
       return ValueWrap.multi(
         multiOptPropXData._findInternalItemsByDynamics(
           dynamicValues: value,

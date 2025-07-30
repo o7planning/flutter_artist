@@ -89,7 +89,6 @@ class FaIconConstants {
   static const IconData queryModeEagerIconData =
       cupertino.CupertinoIcons.arrow_right_arrow_left_square;
 
-  @deprecated
   static const IconData dialogCloseIconData =
       cupertino.CupertinoIcons.clear_circled;
 

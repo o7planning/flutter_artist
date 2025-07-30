@@ -66,7 +66,7 @@ class CodeFlowInfoErrorView extends StatelessWidget {
 
   String _title() {
     if (codeFlowItem.isError()) {
-      return codeFlowItem.errorInfo?.error?.errorMessage ?? " - ";
+      return codeFlowItem.errorInfo?.error.errorMessage ?? " - ";
     } else if (codeFlowItem.isInfo()) {
       return codeFlowItem.info ?? " - ";
     } else {

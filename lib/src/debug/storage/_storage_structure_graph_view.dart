@@ -17,6 +17,7 @@ class StorageStructureGraphView extends StatefulWidget {
   final Function(Shelf shelf) onSelectShelfToShowTreeView;
 
   const StorageStructureGraphView({
+    super.key,
     required this.controller,
     required this.onSelectShelfToShowGraph,
     required this.onSelectShelfToShowTreeView,

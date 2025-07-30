@@ -81,14 +81,12 @@ class FormErrorViewerDialog extends StatelessWidget {
               ),
             ),
           ),
-          if (exception != null &&
-              exception.errorDetails != null &&
+          if (exception.errorDetails != null &&
               exception.errorDetails!.isNotEmpty)
             Divider(height: 10),
           Expanded(
             child: ListView(
-              children: exception != null &&
-                      exception.errorDetails != null &&
+              children: exception.errorDetails != null &&
                       exception.errorDetails!.isNotEmpty
                   ? exception.errorDetails!
                       .map((errorDetail) => _buildErrorDetail(errorDetail))

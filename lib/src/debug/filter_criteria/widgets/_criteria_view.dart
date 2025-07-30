@@ -160,7 +160,7 @@ class FilterCriterionView extends StatelessWidget {
     return value == null
         ? null
         : Text(
-            " - ${value!.runtimeType?.toString()}" ?? "",
+            " - ${value!.runtimeType.toString()}",
             style: TextStyle(
               fontSize: 12,
             ),

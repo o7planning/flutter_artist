@@ -29,6 +29,7 @@ class CodeFlowFilter extends StatelessWidget {
   final Function(bool? value) onShowErrorChanged;
 
   const CodeFlowFilter({
+    super.key,
     required this.codeFlowItemTypes,
     required this.showDevMethod,
     required this.showPublicMethod,

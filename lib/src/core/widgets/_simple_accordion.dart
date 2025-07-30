@@ -6,6 +6,7 @@ class SimpleAccordion extends StatefulWidget {
   final List<SimpleAccordionSection> children;
 
   const SimpleAccordion({
+    super.key,
     required this.children,
   });
 

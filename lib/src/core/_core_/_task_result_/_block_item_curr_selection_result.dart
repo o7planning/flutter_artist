@@ -6,7 +6,7 @@ class BlockItemCurrSelectionResult<ITEM>
   final List<ITEM?> _candidateItems = [];
   ITEM? _oldCurrentItem;
   ITEM? _currentItem;
-  Object Function(ITEM item) _getItemId;
+  final Object Function(ITEM item) _getItemId;
   bool _apiError = false;
   bool _convertError = false;
 

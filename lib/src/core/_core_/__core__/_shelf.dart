@@ -603,18 +603,18 @@ abstract class Shelf extends _XBase {
     final List<_FormModelOpt> topLazyFormModelOpts = [];
     //
     for (_LazyScalar lazyScalar in lazyObjects.lazyScalars) {
-      lazyScalar.scalar!._lazyLoadCount++;
+      lazyScalar.scalar._lazyLoadCount++;
       //
       scalarOpts.add(
-        _ScalarOpt(scalar: lazyScalar.scalar!),
+        _ScalarOpt(scalar: lazyScalar.scalar),
       );
     }
     for (_LazyBlock lazyBlock in lazyObjects.lazyBlocks) {
-      lazyBlock.block!._lazyLoadCount++;
+      lazyBlock.block._lazyLoadCount++;
       //
       topLazyBlockOpts.add(
         _BlockOpt(
-          block: lazyBlock.block!,
+          block: lazyBlock.block,
           forceQuery: lazyBlock.forceQuery,
           forceReloadItem: false,
           pageable: null,
@@ -625,10 +625,10 @@ abstract class Shelf extends _XBase {
       );
     }
     for (_LazyFormModel lazyFormModel in lazyObjects.lazyFormModels) {
-      lazyFormModel.formModel!._lazyLoadCount++;
+      lazyFormModel.formModel._lazyLoadCount++;
       //
       topLazyFormModelOpts.add(
-        _FormModelOpt(formModel: lazyFormModel.formModel!),
+        _FormModelOpt(formModel: lazyFormModel.formModel),
       );
     }
     //

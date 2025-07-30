@@ -66,7 +66,7 @@ class FilterCriteriaStructure {
   dynamic _getCurrentCriterionValue({required String criterionName}) {
     Criterion? criterion = _allCriteriaMap[criterionName];
     if (criterion != null) {
-      return criterion?._currentValue;
+      return criterion._currentValue;
     }
     return null;
   }

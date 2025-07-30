@@ -81,14 +81,12 @@ class BlockErrorViewerDialog extends StatelessWidget {
               ),
             ),
           ),
-          if (apiError != null &&
-              apiError.errorDetails != null &&
+          if (apiError.errorDetails != null &&
               apiError.errorDetails!.isNotEmpty)
             Divider(height: 10),
           Expanded(
             child: ListView(
-              children: apiError != null &&
-                      apiError.errorDetails != null &&
+              children: apiError.errorDetails != null &&
                       apiError.errorDetails!.isNotEmpty
                   ? apiError.errorDetails!
                       .map((errorDetail) => _buildErrorDetail(errorDetail))
