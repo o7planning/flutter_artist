@@ -26,7 +26,7 @@ class _PaginationViewState extends _RefreshableWidgetState<PaginationView> {
 
   @override
   void addWidgetState({required bool isShowing}) {
-    widget.block._addPaginationWidgetState(
+    widget.block.ui._addPaginationWidgetState(
       widgetState: this,
       isShowing: isShowing,
     );
@@ -34,7 +34,7 @@ class _PaginationViewState extends _RefreshableWidgetState<PaginationView> {
 
   @override
   void removeWidgetState() {
-    widget.block._removePaginationWidgetState(
+    widget.block.ui._removePaginationWidgetState(
       widgetState: this,
     );
   }

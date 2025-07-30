@@ -34,7 +34,7 @@ class _FormViewBuilderState extends _RefreshableWidgetState<FormViewBuilder> {
 
   @override
   void setBuildingState({required bool isBuilding}) {
-    widget.formModel._setFormViewBuildingState(
+    widget.formModel.ui._setFormViewBuildingState(
       widgetState: this,
       isBuilding: isBuilding,
     );
@@ -42,7 +42,7 @@ class _FormViewBuilderState extends _RefreshableWidgetState<FormViewBuilder> {
 
   @override
   void addWidgetState({required bool isShowing}) {
-    widget.formModel._addFormWidgetState(
+    widget.formModel.ui._addFormWidgetState(
       widgetState: this,
       isShowing: true,
     );
@@ -50,7 +50,7 @@ class _FormViewBuilderState extends _RefreshableWidgetState<FormViewBuilder> {
 
   @override
   void removeWidgetState() {
-    widget.formModel._removeFormWidgetState(
+    widget.formModel.ui._removeFormWidgetState(
       widgetState: this,
     );
   }
@@ -128,7 +128,7 @@ class _FormViewBuilderState extends _RefreshableWidgetState<FormViewBuilder> {
       return;
     }
     //
-    bool isBuilding = widget.formModel._isWidgetStateBuilding(
+    bool isBuilding = widget.formModel.ui._isWidgetStateBuilding(
       widgetState: this,
     );
     if (!isBuilding) {

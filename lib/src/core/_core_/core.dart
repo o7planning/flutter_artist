@@ -136,6 +136,8 @@ part '__core__/_app_utils.dart';
 
 part '__core__/_block.dart';
 
+part '__core__/_block_ui_components.dart';
+
 part '__core__/_block_config.dart';
 
 part '__core__/_block_data.dart';
@@ -164,17 +166,23 @@ part '__core__/_filter_input.dart';
 
 part '__core__/_filter_model.dart';
 
+part '__core__/_filter_ui_components.dart';
+
 part '__core__/_filter_model_config.dart';
 
 part '__core__/_form_leave_safely.dart';
 
 part '__core__/_form_model.dart';
 
+part '__core__/_form_ui_components.dart';
+
 part '__core__/_form_model_config.dart';
 
 part '__core__/_item_sort_criteria.dart';
 
 part '__core__/_scalar.dart';
+
+part '__core__/_scalar_ui_components.dart';
 
 part '__core__/_scalar_config.dart';
 

@@ -151,7 +151,7 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
 
   @override
   void addWidgetState({required bool isShowing}) {
-    widget.block._addControlWidgetState(
+    widget.block.ui._addControlWidgetState(
       widgetState: this,
       isShowing: isShowing,
     );
@@ -159,7 +159,7 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
 
   @override
   void removeWidgetState() {
-    widget.block._removeControlWidgetState(
+    widget.block.ui._removeControlWidgetState(
       widgetState: this,
     );
   }

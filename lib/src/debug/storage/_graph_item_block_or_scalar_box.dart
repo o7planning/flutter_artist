@@ -392,7 +392,7 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
   ) {
     String className = getClassName(formModel);
     final DataState dataState = formModel.formDataState;
-    final bool active = formModel.hasActiveUIComponent();
+    final bool active = formModel.ui.hasActiveUIComponent();
     //
     return "FORM MODEL: $className \n"
         "Data State: ${dataState.name.toUpperCase()} "

@@ -48,7 +48,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
 
   @override
   void addWidgetState({required bool isShowing}) {
-    widget.block._addControlBarWidgetState(
+    widget.block.ui._addControlBarWidgetState(
       widgetState: this,
       isShowing: isShowing,
     );
@@ -56,7 +56,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
 
   @override
   void removeWidgetState() {
-    widget.block._removeControlBarWidgetState(
+    widget.block.ui._removeControlBarWidgetState(
       widgetState: this,
     );
   }
