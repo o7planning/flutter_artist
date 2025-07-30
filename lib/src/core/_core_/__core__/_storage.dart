@@ -789,7 +789,7 @@ class _Storage {
       print(">> ~~~~~~~~~~~~~~~~~~~~~~~~> listenerBlocks: $listenerBlocks");
     }
     for (Scalar listenerScalar in listenerScalars) {
-      if (!listenerScalar.hasActiveUIComponent()) {
+      if (!listenerScalar.ui.hasActiveUIComponent()) {
         listenerScalar.setToPending();
       }
     }
@@ -797,7 +797,7 @@ class _Storage {
     Map<String, _ScalarAndBlockList> queryMap = {};
 
     for (Scalar listenerScalar in listenerScalars) {
-      if (listenerScalar.hasActiveUIComponent()) {
+      if (listenerScalar.ui.hasActiveUIComponent()) {
         String shelfName = listenerScalar.shelf.name;
         _ScalarAndBlockList sbList =
             queryMap[shelfName] ?? _ScalarAndBlockList();

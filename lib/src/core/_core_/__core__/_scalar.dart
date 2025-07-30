@@ -96,8 +96,7 @@ abstract class Scalar<
   late final __scalarData =
       _ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
 
-  final Map<_RefreshableWidgetState, bool> _scalarFragmentWidgetStates = {};
-  final Map<_RefreshableWidgetState, bool> _scalarControlWidgetStates = {};
+  late final _ScalarUIComponents ui = _ScalarUIComponents(scalar: this);
 
   // ***************************************************************************
   // ***************************************************************************
@@ -170,7 +169,7 @@ abstract class Scalar<
   }) async {
     __assertThisXScalar(thisXScalar);
     //
-    bool hasActiveUI = this.hasActiveUIComponent();
+    bool hasActiveUI = ui.hasActiveUIComponent();
     bool forceQuery = thisXScalar.needQuery;
     if (!forceQuery) {
       if (this.queryDataState != DataState.ready && hasActiveUI) {
@@ -464,7 +463,7 @@ abstract class Scalar<
       case AfterScalarLoadExtraDataQuickAction.none:
         break;
       case AfterScalarLoadExtraDataQuickAction.update:
-        updateAllUIComponents(withoutFilters: true);
+        ui.updateAllUIComponents(withoutFilters: true);
     }
   }
 
@@ -527,43 +526,6 @@ abstract class Scalar<
 
   Type getFilterCriteriaType() {
     return FILTER_CRITERIA;
-  }
-
-  // ***************************************************************************
-  // ****** UPDATE UI COMPONENTS ***********************************************
-  // ***************************************************************************
-
-  void updateAllUIComponents({
-    required bool withoutFilters,
-    bool force = true,
-  }) {
-    if (!withoutFilters) {
-      filterModel?.updateAllUIComponents();
-    }
-    updateControlWidgets(force: force);
-    updateFragmentWidgets(force: force);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void updateControlWidgets({bool force = true}) {
-    for (_RefreshableWidgetState state in _scalarControlWidgetStates.keys) {
-      if (state.mounted) {
-        state.refreshState(force: force);
-      }
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void updateFragmentWidgets({bool force = true}) {
-    for (_RefreshableWidgetState state in _scalarFragmentWidgetStates.keys) {
-      if (state.mounted) {
-        state.refreshState(force: force);
-      }
-    }
   }
 
   // ***************************************************************************
@@ -777,126 +739,8 @@ abstract class Scalar<
   void __refreshQueryingState({required bool isQuerying}) {
     try {
       __isQuerying = isQuerying;
-      this.updateControlWidgets();
+      ui.updateControlWidgets();
     } catch (e) {}
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool hasMountedUIComponent() {
-    return _scalarFragmentWidgetStates.isNotEmpty ||
-        _scalarControlWidgetStates.isNotEmpty;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool hasActiveUIComponent() {
-    return _hasActiveScalarFragmentWidgetState() ||
-        _hasActiveControlWidgetState();
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool _hasActiveScalarFragmentWidgetState() {
-    for (State widgetState in _scalarFragmentWidgetStates.keys) {
-      if (widgetState.mounted) {
-        bool isShowing = _scalarFragmentWidgetStates[widgetState] ?? false;
-        if (isShowing) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool _hasActiveControlWidgetState() {
-    for (State widgetState in _scalarControlWidgetStates.keys) {
-      if (widgetState.mounted) {
-        bool isShowing = _scalarControlWidgetStates[widgetState] ?? false;
-        if (isShowing) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _addControlWidgetState({
-    required _RefreshableWidgetState widgetState,
-    required bool isShowing,
-  }) {
-    bool activeOLD = hasActiveUIComponent();
-    _scalarControlWidgetStates[widgetState] = isShowing;
-    bool activeCURRENT = hasActiveUIComponent();
-    //
-    if (isShowing) {
-      FlutterArtist.storage._addRecentShelf(shelf);
-    }
-    //
-    if (!activeOLD && activeCURRENT) {
-      // Fire event:
-      shelf._startLoadDataForLazyUIComponentsIfNeed();
-    } else if (activeOLD && !activeCURRENT) {
-      _fireScalarHidden();
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _removeControlWidgetState({required State widgetState}) {
-    bool activeOLD = hasActiveUIComponent();
-    _scalarControlWidgetStates.remove(widgetState);
-    bool activeCURRENT = hasActiveUIComponent();
-    //
-    if (activeOLD && !activeCURRENT) {
-      _fireScalarHidden();
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _addScalarFragmentWidgetState({
-    required _RefreshableWidgetState widgetState,
-    required bool isShowing,
-  }) {
-    bool activeOLD = hasActiveUIComponent();
-    _scalarFragmentWidgetStates[widgetState] = isShowing;
-    bool activeCURRENT = hasActiveUIComponent();
-    //
-    if (isShowing) {
-      FlutterArtist.storage._addRecentShelf(shelf);
-    }
-    //
-    if (!activeOLD && activeCURRENT) {
-      // Fire event:
-      shelf._startLoadDataForLazyUIComponentsIfNeed();
-    } else if (activeOLD && !activeCURRENT) {
-      _fireScalarHidden();
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _removeScalarFragmentWidgetState({required State widgetState}) {
-    bool activeOLD = hasActiveUIComponent();
-    _scalarFragmentWidgetStates.remove(widgetState);
-    bool activeCURRENT = hasActiveUIComponent();
-    //
-    if (activeOLD && !activeCURRENT) {
-      _fireScalarHidden();
-    }
   }
 
   // ***************************************************************************

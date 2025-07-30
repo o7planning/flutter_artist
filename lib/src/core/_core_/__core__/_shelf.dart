@@ -389,7 +389,8 @@ abstract class Shelf extends _XBase {
     required Map<_RefreshableWidgetState, XState> founds,
   }) {
     for (Block block in blocks) {
-      Map<_RefreshableWidgetState, XState> m = block.ui._findMountedWidgetStates(
+      Map<_RefreshableWidgetState, XState> m =
+          block.ui._findMountedWidgetStates(
         activeOnly: activeOnly,
         withPagination: withPagination,
         withBlockFragment: withBlockFragment,
@@ -480,7 +481,7 @@ abstract class Shelf extends _XBase {
       }
       //
       for (Scalar scalar in __scalars) {
-        scalar.updateAllUIComponents(withoutFilters: true);
+        scalar.ui.updateAllUIComponents(withoutFilters: true);
       }
       //
       for (Block block in __rootBlocks) {
@@ -661,7 +662,7 @@ abstract class Shelf extends _XBase {
 
   void __findLazyScalars(_LazyObjects founds) {
     for (Scalar scalar in __scalars) {
-      if (scalar.hasActiveUIComponent()) {
+      if (scalar.ui.hasActiveUIComponent()) {
         if (scalar.queryDataState == DataState.pending ||
             scalar.queryDataState == DataState.error) {
           founds.addLazyScalar(scalar: scalar);
@@ -724,7 +725,7 @@ abstract class Shelf extends _XBase {
 
   bool _hasMountedScalarUIComponent() {
     for (Scalar scalar in scalars) {
-      if (scalar.hasMountedUIComponent()) {
+      if (scalar.ui.hasMountedUIComponent()) {
         return true;
       }
     }

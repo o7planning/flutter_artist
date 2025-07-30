@@ -178,6 +178,8 @@ part '__core__/_item_sort_criteria.dart';
 
 part '__core__/_scalar.dart';
 
+part '__core__/_scalar_ui_components.dart';
+
 part '__core__/_scalar_config.dart';
 
 part '__core__/_scalar_data.dart';
