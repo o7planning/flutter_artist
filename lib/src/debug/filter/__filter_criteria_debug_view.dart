@@ -3,6 +3,7 @@ import 'package:tabbed_view/tabbed_view.dart';
 
 import '../../core/_core/code.dart';
 import '../../core/icon/icon_constants.dart';
+import '../../core/utils/_class_utils.dart';
 import '../utils/_tab_theme_utils.dart';
 import '_block_criteria_view.dart';
 import '_filter_model_criteria_view.dart';

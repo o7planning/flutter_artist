@@ -79,7 +79,7 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
   void initState() {
     super.initState();
     //
-    keyId = _generateVisibilityDetectorId(
+    keyId = VisibilityDetectorUtils.generateVisibilityDetectorId(
         prefix: "${type.toString()}-${getWidgetOwnerClassName()}");
     //
     addWidgetState(isShowing: true);

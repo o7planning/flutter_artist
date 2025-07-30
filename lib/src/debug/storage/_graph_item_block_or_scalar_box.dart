@@ -6,6 +6,7 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import '../../core/_core/code.dart';
 import '../../core/enums/_data_state.dart';
 import '../../core/icon/icon_constants.dart';
+import '../../core/utils/_class_utils.dart';
 import '../../core/utils/_tooltip_utils.dart';
 import '../constants/_debug_constants.dart';
 import '_block_or_scalar.dart';

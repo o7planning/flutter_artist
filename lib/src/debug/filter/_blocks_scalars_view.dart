@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/_core/code.dart';
 import '../../core/enums/_data_state.dart';
 import '../../core/icon/icon_constants.dart';
+import '../../core/utils/_class_utils.dart';
 import '../constants/_debug_constants.dart';
 
 class BlocksScalarsView extends StatelessWidget {

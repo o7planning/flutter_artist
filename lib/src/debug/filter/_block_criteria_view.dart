@@ -1,4 +1,5 @@
 import '../../core/_core/code.dart';
+import '../../core/utils/_class_utils.dart';
 import '_blk_or_scr_criteria_view.dart';
 
 class BlockCriteriaView extends BlkOrScrCriteriaView {
