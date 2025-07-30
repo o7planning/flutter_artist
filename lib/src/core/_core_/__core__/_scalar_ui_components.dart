@@ -160,7 +160,7 @@ class _ScalarUIComponents {
     bool force = true,
   }) {
     if (!withoutFilters) {
-      scalar.filterModel?.updateAllUIComponents();
+      scalar.filterModel?.ui.updateAllUIComponents();
     }
     updateControlWidgets(force: force);
     updateFragmentWidgets(force: force);

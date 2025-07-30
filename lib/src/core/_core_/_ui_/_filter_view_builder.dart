@@ -35,7 +35,7 @@ class _FilterViewBuilderState
 
   @override
   void setBuildingState({required bool isBuilding}) {
-    widget.filterModel._setFilterViewBuildingState(
+    widget.filterModel.ui._setFilterViewBuildingState(
       widgetState: this,
       isBuilding: isBuilding,
     );
@@ -43,7 +43,7 @@ class _FilterViewBuilderState
 
   @override
   void addWidgetState({required bool isShowing}) {
-    widget.filterModel._addFilterFragmentWidgetState(
+    widget.filterModel.ui._addFilterFragmentWidgetState(
       widgetState: this,
       isShowing: true,
     );
@@ -51,7 +51,7 @@ class _FilterViewBuilderState
 
   @override
   void removeWidgetState() {
-    widget.filterModel._removeFilterFragmentWidgetState(
+    widget.filterModel.ui._removeFilterFragmentWidgetState(
       widgetState: this,
     );
   }
@@ -73,7 +73,7 @@ class _FilterViewBuilderState
       return;
     }
     //
-    bool isBuilding = widget.filterModel._isWidgetStateBuilding(
+    bool isBuilding = widget.filterModel.ui._isWidgetStateBuilding(
       widgetState: this,
     );
     if (!isBuilding) {
@@ -84,7 +84,7 @@ class _FilterViewBuilderState
   @override
   @_FilterViewChangeAnnotation()
   Widget buildContent(BuildContext context) {
-    widget.filterModel._setFilterViewBuildingState(
+    widget.filterModel.ui._setFilterViewBuildingState(
       widgetState: this,
       isBuilding: true,
     );

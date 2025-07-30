@@ -477,7 +477,7 @@ abstract class Shelf extends _XBase {
       __updateRefreshableNeutralViews();
       //
       for (FilterModel filterModel in _allFilterModels) {
-        filterModel.updateAllUIComponents();
+        filterModel.ui.updateAllUIComponents();
       }
       //
       for (Scalar scalar in __scalars) {
@@ -696,7 +696,8 @@ abstract class Shelf extends _XBase {
         }
       }
       //
-      if (block.formModel != null && block.formModel!.hasActiveUIComponent()) {
+      if (block.formModel != null &&
+          block.formModel!.ui.hasActiveUIComponent()) {
         if (block.formModel!.formDataState == DataState.pending ||
             block.formModel!.formDataState == DataState.error ||
             block.formModel!.formDataState == DataState.none) {

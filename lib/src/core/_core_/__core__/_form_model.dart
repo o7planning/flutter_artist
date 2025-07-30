@@ -64,7 +64,7 @@ abstract class FormModel<
     return _autovalidateMode;
   }
 
-  final Map<_RefreshableWidgetState, XState> _formWidgetStates = {};
+  late final _FormUIComponents ui = _FormUIComponents(formModel: this);
 
   // ***************************************************************************
 
@@ -1177,7 +1177,7 @@ abstract class FormModel<
       propName: propertyName,
       value: value,
     );
-    this.updateAllUIComponents();
+    ui.updateAllUIComponents();
   }
 
   dynamic getPropValue(String propName) {
@@ -1403,105 +1403,6 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _setFormViewBuildingState({
-    required _RefreshableWidgetState widgetState,
-    required bool isBuilding,
-  }) {
-    _formWidgetStates.update(
-      widgetState,
-      (xState) => xState.._setBuilding(isBuilding),
-      ifAbsent: () => XState().._setBuilding(isBuilding),
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _addFormWidgetState({
-    required _RefreshableWidgetState widgetState,
-    required final bool isShowing,
-  }) {
-    bool isShowingOLD = _formWidgetStates[widgetState]?.isShowing ?? false;
-    _formWidgetStates.update(
-      widgetState,
-      (xState) => xState.._setShowing(isShowing),
-      ifAbsent: () => XState().._setShowing(isShowing),
-    );
-    if (!isShowingOLD && isShowing) {
-      block.shelf._startLoadDataForLazyUIComponentsIfNeed();
-    }
-    if (isShowing) {
-      FlutterArtist.storage._addRecentShelf(block.shelf);
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _removeFormWidgetState({
-    required _RefreshableWidgetState widgetState,
-  }) {
-    _formWidgetStates.remove(widgetState);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void updateAllUIComponents({bool force = false}) {
-    __updateFormWidgets(force: force);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ///
-  /// Call this method to refresh Widgets..
-  ///
-  void __updateFormWidgets({bool force = false}) {
-    List<_RefreshableWidgetState> list = _getMountedFormWidgetStates();
-    for (_RefreshableWidgetState formWidgetState in list) {
-      if (formWidgetState.mounted) {
-        formWidgetState.refreshState(force: force);
-      }
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  List<_RefreshableWidgetState> _getMountedFormWidgetStates() {
-    List<_RefreshableWidgetState> ret = [];
-    for (_RefreshableWidgetState widgetState in [..._formWidgetStates.keys]) {
-      if (widgetState.mounted) {
-        ret.add(widgetState);
-      }
-    }
-    return ret;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool hasMountedUIComponent() {
-    return _formWidgetStates.isNotEmpty;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool hasActiveUIComponent() {
-    for (State formWidgetState in _formWidgetStates.keys) {
-      bool visible = _formWidgetStates[formWidgetState]?.isShowing ?? false;
-      if (visible && formWidgetState.mounted) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   bool isDirty() {
     return _formPropsStructure._isDirty();
   }
@@ -1568,13 +1469,6 @@ abstract class FormModel<
         _FormViewChangeTaskUnit(xFormModel: xFormModel);
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     await FlutterArtist.executor._executeTaskUnitQueue(showOverlay: false);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool _isWidgetStateBuilding({required _RefreshableWidgetState widgetState}) {
-    return _formWidgetStates[widgetState]?.isBuilding ?? false;
   }
 
   // ***************************************************************************

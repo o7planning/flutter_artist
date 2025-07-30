@@ -235,7 +235,7 @@ class _BlockUIComponents {
     //
     if (withFilter) {
       ret.addAll(
-          block._registeredOrDefaultFilterModel._filterFragmentWidgetStates);
+          block._registeredOrDefaultFilterModel.ui._filterFragmentWidgetStates);
     }
     //
     if (withBlockFragment) {
@@ -254,7 +254,7 @@ class _BlockUIComponents {
     }
     //
     if (withForm && block.formModel != null) {
-      ret.addAll(block.formModel!._formWidgetStates);
+      ret.addAll(block.formModel!.ui._formWidgetStates);
     }
     return ret;
   }
@@ -263,12 +263,12 @@ class _BlockUIComponents {
   // ***************************************************************************
 
   bool hasMountedUIComponent() {
-    return (block.filterModel?.hasMountedUIComponent() ?? false) ||
+    return (block.filterModel?.ui.hasMountedUIComponent() ?? false) ||
         _blockFragmentWidgetStates.isNotEmpty ||
         _controlBarWidgetStates.isNotEmpty ||
         _controlWidgetStates.isNotEmpty ||
         _paginationWidgetStates.isNotEmpty ||
-        (block.formModel?.hasMountedUIComponent() ?? false);
+        (block.formModel?.ui.hasMountedUIComponent() ?? false);
   }
 
   // ***************************************************************************
@@ -278,13 +278,14 @@ class _BlockUIComponents {
     bool active = false;
     // Filter
     if (block.filterModel != null) {
-      active = block.filterModel!.hasActiveUIComponent();
+      active = block.filterModel!.ui.hasActiveUIComponent();
       if (active) {
         return true;
       }
     }
     // Form
-    active = block.formModel != null && block.formModel!.hasActiveUIComponent();
+    active =
+        block.formModel != null && block.formModel!.ui.hasActiveUIComponent();
     if (active) {
       return true;
     }
@@ -399,7 +400,7 @@ class _BlockUIComponents {
     bool force = true,
   }) {
     if (!withoutFilters) {
-      block.filterModel?.updateAllUIComponents();
+      block.filterModel?.ui.updateAllUIComponents();
     }
     //
     updateBlockFragmentWidgets(force: force);
@@ -407,7 +408,7 @@ class _BlockUIComponents {
     updateControlBarWidgets(force: force);
     updateControlWidgets(force: force);
     //
-    block.formModel?.updateAllUIComponents(force: force);
+    block.formModel?.ui.updateAllUIComponents(force: force);
   }
 
   // ***************************************************************************

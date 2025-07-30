@@ -28,7 +28,7 @@ _ForceReloadFormState _calculateFormState({
         "@~~~> ${getClassName(block)} ~~~~~> FRM 0.2: forceTypeForForm: ${thisXBlock.xFormModel!.forceTypeForForm}");
   }
   //
-  final bool formLoadTimeUIActive = formModel.hasActiveUIComponent();
+  final bool formLoadTimeUIActive = formModel.ui.hasActiveUIComponent();
   formModel._loadTimeUIActive = formLoadTimeUIActive;
   //
   if (!forceReloadForm) {
