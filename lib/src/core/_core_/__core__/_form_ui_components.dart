@@ -13,6 +13,33 @@ class _FormUIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  void updateAllUIComponents({bool force = false}) {
+    __updateFormWidgets(force: force);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool hasMountedUIComponent() {
+    return _formWidgetStates.isNotEmpty;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool hasActiveUIComponent() {
+    for (State formWidgetState in _formWidgetStates.keys) {
+      bool visible = _formWidgetStates[formWidgetState]?.isShowing ?? false;
+      if (visible && formWidgetState.mounted) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _setFormViewBuildingState({
     required _RefreshableWidgetState widgetState,
     required bool isBuilding,
@@ -57,8 +84,21 @@ class _FormUIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateAllUIComponents({bool force = false}) {
-    __updateFormWidgets(force: force);
+  List<_RefreshableWidgetState> _getMountedFormWidgetStates() {
+    List<_RefreshableWidgetState> ret = [];
+    for (_RefreshableWidgetState widgetState in [..._formWidgetStates.keys]) {
+      if (widgetState.mounted) {
+        ret.add(widgetState);
+      }
+    }
+    return ret;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool _isWidgetStateBuilding({required _RefreshableWidgetState widgetState}) {
+    return _formWidgetStates[widgetState]?.isBuilding ?? false;
   }
 
   // ***************************************************************************
@@ -74,45 +114,5 @@ class _FormUIComponents {
         formWidgetState.refreshState(force: force);
       }
     }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  List<_RefreshableWidgetState> _getMountedFormWidgetStates() {
-    List<_RefreshableWidgetState> ret = [];
-    for (_RefreshableWidgetState widgetState in [..._formWidgetStates.keys]) {
-      if (widgetState.mounted) {
-        ret.add(widgetState);
-      }
-    }
-    return ret;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool hasMountedUIComponent() {
-    return _formWidgetStates.isNotEmpty;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool hasActiveUIComponent() {
-    for (State formWidgetState in _formWidgetStates.keys) {
-      bool visible = _formWidgetStates[formWidgetState]?.isShowing ?? false;
-      if (visible && formWidgetState.mounted) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool _isWidgetStateBuilding({required _RefreshableWidgetState widgetState}) {
-    return _formWidgetStates[widgetState]?.isBuilding ?? false;
   }
 }

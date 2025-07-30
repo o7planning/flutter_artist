@@ -30,6 +30,42 @@ class _ScalarUIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  void updateControlWidgets({bool force = true}) {
+    for (_RefreshableWidgetState state in _scalarControlWidgetStates.keys) {
+      if (state.mounted) {
+        state.refreshState(force: force);
+      }
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void updateFragmentWidgets({bool force = true}) {
+    for (_RefreshableWidgetState state in _scalarFragmentWidgetStates.keys) {
+      if (state.mounted) {
+        state.refreshState(force: force);
+      }
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void updateAllUIComponents({
+    required bool withoutFilters,
+    bool force = true,
+  }) {
+    if (!withoutFilters) {
+      scalar.filterModel?.ui.updateAllUIComponents();
+    }
+    updateControlWidgets(force: force);
+    updateFragmentWidgets(force: force);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool _hasActiveScalarFragmentWidgetState() {
     for (State widgetState in _scalarFragmentWidgetStates.keys) {
       if (widgetState.mounted) {
@@ -127,42 +163,5 @@ class _ScalarUIComponents {
     if (activeOLD && !activeCURRENT) {
       scalar._fireScalarHidden();
     }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void updateControlWidgets({bool force = true}) {
-    for (_RefreshableWidgetState state in _scalarControlWidgetStates.keys) {
-      if (state.mounted) {
-        state.refreshState(force: force);
-      }
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void updateFragmentWidgets({bool force = true}) {
-    for (_RefreshableWidgetState state in _scalarFragmentWidgetStates.keys) {
-      if (state.mounted) {
-        state.refreshState(force: force);
-      }
-    }
-  }
-
-  // ***************************************************************************
-  // ****** UPDATE UI COMPONENTS ***********************************************
-  // ***************************************************************************
-
-  void updateAllUIComponents({
-    required bool withoutFilters,
-    bool force = true,
-  }) {
-    if (!withoutFilters) {
-      scalar.filterModel?.ui.updateAllUIComponents();
-    }
-    updateControlWidgets(force: force);
-    updateFragmentWidgets(force: force);
   }
 }

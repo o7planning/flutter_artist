@@ -61,149 +61,6 @@ class _BlockUIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _addPaginationWidgetState({
-    required _RefreshableWidgetState widgetState,
-    required bool isShowing,
-  }) {
-    _paginationWidgetStates.update(
-      widgetState,
-      (xState) => xState.._setShowing(isShowing),
-      ifAbsent: () => XState().._setShowing(isShowing),
-    );
-    //
-    if (isShowing) {
-      FlutterArtist.storage._addRecentShelf(block.shelf);
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _removePaginationWidgetState({
-    required _RefreshableWidgetState widgetState,
-  }) {
-    _paginationWidgetStates.remove(widgetState);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _addControlBarWidgetState({
-    required _RefreshableWidgetState widgetState,
-    required bool isShowing,
-  }) {
-    bool activeOLD = hasActiveUIComponent();
-    _controlBarWidgetStates.update(
-      widgetState,
-      (xState) => xState.._setShowing(isShowing),
-      ifAbsent: () => XState().._setShowing(isShowing),
-    );
-    bool activeCURRENT = hasActiveUIComponent();
-    //
-    if (isShowing) {
-      FlutterArtist.storage._addRecentShelf(block.shelf);
-    }
-    //
-    if (!activeOLD && activeCURRENT) {
-      print(
-          "@@@@@@@@@@@@ Active Block **: ${getClassName(this)} - (ControlBar)");
-      // Fire event:
-      block.shelf._startLoadDataForLazyUIComponentsIfNeed();
-    } else if (activeOLD && !activeCURRENT) {
-      block._fireBlockHidden();
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _removeControlBarWidgetState({
-    required _RefreshableWidgetState widgetState,
-  }) {
-    _controlBarWidgetStates.remove(widgetState);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _addControlWidgetState({
-    required _RefreshableWidgetState widgetState,
-    required bool isShowing,
-  }) {
-    bool activeOLD = hasActiveUIComponent();
-    _controlWidgetStates.update(
-      widgetState,
-      (xState) => xState.._setShowing(isShowing),
-      ifAbsent: () => XState().._setShowing(isShowing),
-    );
-    bool activeCURRENT = hasActiveUIComponent();
-    //
-    if (isShowing) {
-      FlutterArtist.storage._addRecentShelf(block.shelf);
-    }
-    //
-    if (!activeOLD && activeCURRENT) {
-      print("@@@@@@@@@@@@ Active Block **: ${getClassName(this)} - (Control)");
-      // Fire event:
-      block.shelf._startLoadDataForLazyUIComponentsIfNeed();
-    } else if (activeOLD && !activeCURRENT) {
-      block._fireBlockHidden();
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _removeControlWidgetState({
-    required _RefreshableWidgetState widgetState,
-  }) {
-    _controlWidgetStates.remove(widgetState);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _addBlockFragmentWidgetState({
-    required _RefreshableWidgetState widgetState,
-    required bool isShowing,
-  }) {
-    bool activeOLD = hasActiveUIComponent();
-    _blockFragmentWidgetStates.update(
-      widgetState,
-      (xState) => xState.._setShowing(isShowing),
-      ifAbsent: () => XState().._setShowing(isShowing),
-    );
-    bool activeCURRENT = hasActiveUIComponent();
-    //
-    if (isShowing) {
-      FlutterArtist.storage._addRecentShelf(block.shelf);
-    }
-    //
-    if (!activeOLD && activeCURRENT) {
-      print("@@@@@@@@@@@@ Active Block **: ${getClassName(this)} - (Fragment)");
-      // Fire event:
-      block.shelf._startLoadDataForLazyUIComponentsIfNeed();
-    } else if (activeOLD && !activeCURRENT) {
-      block._fireBlockHidden();
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _removeBlockFragmentWidgetState({required State widgetState}) {
-    bool activeOLD = hasActiveUIComponent();
-    _blockFragmentWidgetStates.remove(widgetState);
-    bool activeCURRENT = hasActiveUIComponent();
-    //
-    if (activeOLD && !activeCURRENT) {
-      block._fireBlockHidden();
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   @DebugMethodAnnotation()
   Map<IRefreshableWidgetState, XState> debugFindMountedWidgetStates({
     required bool withPagination,
@@ -223,46 +80,6 @@ class _BlockUIComponents {
       withControlBar: withControlBar,
       activeOnly: activeOnly,
     );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Map<_RefreshableWidgetState, XState> _findMountedWidgetStates({
-    required bool withPagination,
-    required bool withBlockFragment,
-    required bool withFilter,
-    required bool withForm,
-    required bool withControl,
-    required bool withControlBar,
-    required bool activeOnly,
-  }) {
-    Map<_RefreshableWidgetState, XState> ret = {};
-    //
-    if (withFilter) {
-      ret.addAll(
-          block._registeredOrDefaultFilterModel.ui._filterFragmentWidgetStates);
-    }
-    //
-    if (withBlockFragment) {
-      ret.addAll(_blockFragmentWidgetStates);
-    }
-    //
-    if (withPagination) {
-      ret.addAll(_paginationWidgetStates);
-    }
-    //
-    if (withControlBar) {
-      ret.addAll(_controlBarWidgetStates);
-    }
-    if (withControl) {
-      ret.addAll(_controlWidgetStates);
-    }
-    //
-    if (withForm && block.formModel != null) {
-      ret.addAll(block.formModel!.ui._formWidgetStates);
-    }
-    return ret;
   }
 
   // ***************************************************************************
@@ -398,7 +215,6 @@ class _BlockUIComponents {
   }
 
   // ***************************************************************************
-  // ****** UPDATE UI COMPONENTS ***********************************************
   // ***************************************************************************
 
   void updateAllUIComponents({
@@ -428,5 +244,184 @@ class _BlockUIComponents {
         widgetState.refreshState();
       }
     }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _addPaginationWidgetState({
+    required _RefreshableWidgetState widgetState,
+    required bool isShowing,
+  }) {
+    _paginationWidgetStates.update(
+      widgetState,
+      (xState) => xState.._setShowing(isShowing),
+      ifAbsent: () => XState().._setShowing(isShowing),
+    );
+    //
+    if (isShowing) {
+      FlutterArtist.storage._addRecentShelf(block.shelf);
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _removePaginationWidgetState({
+    required _RefreshableWidgetState widgetState,
+  }) {
+    _paginationWidgetStates.remove(widgetState);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _addControlBarWidgetState({
+    required _RefreshableWidgetState widgetState,
+    required bool isShowing,
+  }) {
+    bool activeOLD = hasActiveUIComponent();
+    _controlBarWidgetStates.update(
+      widgetState,
+      (xState) => xState.._setShowing(isShowing),
+      ifAbsent: () => XState().._setShowing(isShowing),
+    );
+    bool activeCURRENT = hasActiveUIComponent();
+    //
+    if (isShowing) {
+      FlutterArtist.storage._addRecentShelf(block.shelf);
+    }
+    //
+    if (!activeOLD && activeCURRENT) {
+      // Fire event:
+      block.shelf._startLoadDataForLazyUIComponentsIfNeed();
+    } else if (activeOLD && !activeCURRENT) {
+      block._fireBlockHidden();
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _removeControlBarWidgetState({
+    required _RefreshableWidgetState widgetState,
+  }) {
+    _controlBarWidgetStates.remove(widgetState);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _addControlWidgetState({
+    required _RefreshableWidgetState widgetState,
+    required bool isShowing,
+  }) {
+    bool activeOLD = hasActiveUIComponent();
+    _controlWidgetStates.update(
+      widgetState,
+      (xState) => xState.._setShowing(isShowing),
+      ifAbsent: () => XState().._setShowing(isShowing),
+    );
+    bool activeCURRENT = hasActiveUIComponent();
+    //
+    if (isShowing) {
+      FlutterArtist.storage._addRecentShelf(block.shelf);
+    }
+    //
+    if (!activeOLD && activeCURRENT) {
+      // Fire event:
+      block.shelf._startLoadDataForLazyUIComponentsIfNeed();
+    } else if (activeOLD && !activeCURRENT) {
+      block._fireBlockHidden();
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _removeControlWidgetState({
+    required _RefreshableWidgetState widgetState,
+  }) {
+    _controlWidgetStates.remove(widgetState);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _addBlockFragmentWidgetState({
+    required _RefreshableWidgetState widgetState,
+    required bool isShowing,
+  }) {
+    bool activeOLD = hasActiveUIComponent();
+    _blockFragmentWidgetStates.update(
+      widgetState,
+      (xState) => xState.._setShowing(isShowing),
+      ifAbsent: () => XState().._setShowing(isShowing),
+    );
+    bool activeCURRENT = hasActiveUIComponent();
+    //
+    if (isShowing) {
+      FlutterArtist.storage._addRecentShelf(block.shelf);
+    }
+    //
+    if (!activeOLD && activeCURRENT) {
+      // Fire event:
+      block.shelf._startLoadDataForLazyUIComponentsIfNeed();
+    } else if (activeOLD && !activeCURRENT) {
+      block._fireBlockHidden();
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _removeBlockFragmentWidgetState({required State widgetState}) {
+    bool activeOLD = hasActiveUIComponent();
+    _blockFragmentWidgetStates.remove(widgetState);
+    bool activeCURRENT = hasActiveUIComponent();
+    //
+    if (activeOLD && !activeCURRENT) {
+      block._fireBlockHidden();
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Map<_RefreshableWidgetState, XState> _findMountedWidgetStates({
+    required bool withPagination,
+    required bool withBlockFragment,
+    required bool withFilter,
+    required bool withForm,
+    required bool withControl,
+    required bool withControlBar,
+    required bool activeOnly,
+  }) {
+    Map<_RefreshableWidgetState, XState> ret = {};
+    //
+    if (withFilter) {
+      ret.addAll(
+          block._registeredOrDefaultFilterModel.ui._filterFragmentWidgetStates);
+    }
+    //
+    if (withBlockFragment) {
+      ret.addAll(_blockFragmentWidgetStates);
+    }
+    //
+    if (withPagination) {
+      ret.addAll(_paginationWidgetStates);
+    }
+    //
+    if (withControlBar) {
+      ret.addAll(_controlBarWidgetStates);
+    }
+    if (withControl) {
+      ret.addAll(_controlWidgetStates);
+    }
+    //
+    if (withForm && block.formModel != null) {
+      ret.addAll(block.formModel!.ui._formWidgetStates);
+    }
+    return ret;
   }
 }
