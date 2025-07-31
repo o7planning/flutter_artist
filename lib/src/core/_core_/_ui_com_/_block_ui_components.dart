@@ -1,12 +1,12 @@
 part of '../core.dart';
 
-class _BlockUIComponents {
+class _BlockUIComponents extends _UIComponents {
   final Block block;
 
-  final Map<_RefreshableWidgetState, XState> _blockFragmentWidgetStates = {};
-  final Map<_RefreshableWidgetState, XState> _controlBarWidgetStates = {};
-  final Map<_RefreshableWidgetState, XState> _controlWidgetStates = {};
-  final Map<_RefreshableWidgetState, XState> _paginationWidgetStates = {};
+  final Map<_RefreshableWidgetState, XState> __blockFragmentWidgetStates = {};
+  final Map<_RefreshableWidgetState, XState> __controlBarWidgetStates = {};
+  final Map<_RefreshableWidgetState, XState> __controlWidgetStates = {};
+  final Map<_RefreshableWidgetState, XState> __paginationWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -17,7 +17,7 @@ class _BlockUIComponents {
   // ***************************************************************************
 
   void updatePaginationWidgets({bool force = false}) {
-    for (_RefreshableWidgetState widgetState in _paginationWidgetStates.keys) {
+    for (_RefreshableWidgetState widgetState in __paginationWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -29,7 +29,7 @@ class _BlockUIComponents {
 
   void updateBlockFragmentWidgets({bool force = false}) {
     for (_RefreshableWidgetState widgetState
-        in _blockFragmentWidgetStates.keys) {
+        in __blockFragmentWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -40,7 +40,7 @@ class _BlockUIComponents {
   // ***************************************************************************
 
   void updateControlBarWidgets({bool force = false}) {
-    for (_RefreshableWidgetState widgetState in _controlBarWidgetStates.keys) {
+    for (_RefreshableWidgetState widgetState in __controlBarWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -51,7 +51,7 @@ class _BlockUIComponents {
   // ***************************************************************************
 
   void updateControlWidgets({bool force = false}) {
-    for (_RefreshableWidgetState widgetState in _controlWidgetStates.keys) {
+    for (_RefreshableWidgetState widgetState in __controlWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -61,36 +61,13 @@ class _BlockUIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  @DebugMethodAnnotation()
-  Map<IRefreshableWidgetState, XState> debugFindMountedWidgetStates({
-    required bool withPagination,
-    required bool withBlockFragment,
-    required bool withFilter,
-    required bool withForm,
-    required bool withControl,
-    required bool withControlBar,
-    required bool activeOnly,
-  }) {
-    return _findMountedWidgetStates(
-      withPagination: withPagination,
-      withBlockFragment: withBlockFragment,
-      withFilter: withFilter,
-      withForm: withForm,
-      withControl: withControl,
-      withControlBar: withControlBar,
-      activeOnly: activeOnly,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
+  @override
   bool hasMountedUIComponent() {
     return (block.filterModel?.ui.hasMountedUIComponent() ?? false) ||
-        _blockFragmentWidgetStates.isNotEmpty ||
-        _controlBarWidgetStates.isNotEmpty ||
-        _controlWidgetStates.isNotEmpty ||
-        _paginationWidgetStates.isNotEmpty ||
+        __blockFragmentWidgetStates.isNotEmpty ||
+        __controlBarWidgetStates.isNotEmpty ||
+        __controlWidgetStates.isNotEmpty ||
+        __paginationWidgetStates.isNotEmpty ||
         (block.formModel?.ui.hasMountedUIComponent() ?? false);
   }
 
@@ -150,7 +127,7 @@ class _BlockUIComponents {
   // ***************************************************************************
 
   bool hasActiveBlockFragmentWidget({required bool alsoCheckChildren}) {
-    var map = {..._blockFragmentWidgetStates};
+    var map = {...__blockFragmentWidgetStates};
     for (State widgetState in map.keys) {
       if (widgetState.mounted) {
         bool isShowing = map[widgetState]?.isShowing ?? false;
@@ -176,9 +153,9 @@ class _BlockUIComponents {
 
   bool hasActiveControlBarWidget() {
     for (_RefreshableWidgetState controlBarState
-        in _controlBarWidgetStates.keys) {
+        in __controlBarWidgetStates.keys) {
       bool visible =
-          _controlBarWidgetStates[controlBarState]?.isShowing ?? false;
+          __controlBarWidgetStates[controlBarState]?.isShowing ?? false;
       if (visible && controlBarState.mounted) {
         return true;
       }
@@ -190,8 +167,8 @@ class _BlockUIComponents {
   // ***************************************************************************
 
   bool hasActiveControlWidget() {
-    for (_RefreshableWidgetState controlState in _controlWidgetStates.keys) {
-      bool visible = _controlWidgetStates[controlState]?.isShowing ?? false;
+    for (_RefreshableWidgetState controlState in __controlWidgetStates.keys) {
+      bool visible = __controlWidgetStates[controlState]?.isShowing ?? false;
       if (visible && controlState.mounted) {
         return true;
       }
@@ -204,9 +181,9 @@ class _BlockUIComponents {
 
   bool hasActivePaginationWidget() {
     for (_RefreshableWidgetState paginationState
-        in _paginationWidgetStates.keys) {
+        in __paginationWidgetStates.keys) {
       bool visible =
-          _paginationWidgetStates[paginationState]?.isShowing ?? false;
+          __paginationWidgetStates[paginationState]?.isShowing ?? false;
       if (visible && paginationState.mounted) {
         return true;
       }
@@ -239,7 +216,7 @@ class _BlockUIComponents {
   void updateItemsView() {
     // TODO: Sua lai cho nay.
     for (_RefreshableWidgetState widgetState
-        in _blockFragmentWidgetStates.keys) {
+        in __blockFragmentWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }
@@ -253,7 +230,7 @@ class _BlockUIComponents {
     required _RefreshableWidgetState widgetState,
     required bool isShowing,
   }) {
-    _paginationWidgetStates.update(
+    __paginationWidgetStates.update(
       widgetState,
       (xState) => xState.._setShowing(isShowing),
       ifAbsent: () => XState().._setShowing(isShowing),
@@ -270,7 +247,7 @@ class _BlockUIComponents {
   void _removePaginationWidgetState({
     required _RefreshableWidgetState widgetState,
   }) {
-    _paginationWidgetStates.remove(widgetState);
+    __paginationWidgetStates.remove(widgetState);
   }
 
   // ***************************************************************************
@@ -281,7 +258,7 @@ class _BlockUIComponents {
     required bool isShowing,
   }) {
     bool activeOLD = hasActiveUIComponent();
-    _controlBarWidgetStates.update(
+    __controlBarWidgetStates.update(
       widgetState,
       (xState) => xState.._setShowing(isShowing),
       ifAbsent: () => XState().._setShowing(isShowing),
@@ -306,7 +283,7 @@ class _BlockUIComponents {
   void _removeControlBarWidgetState({
     required _RefreshableWidgetState widgetState,
   }) {
-    _controlBarWidgetStates.remove(widgetState);
+    __controlBarWidgetStates.remove(widgetState);
   }
 
   // ***************************************************************************
@@ -317,7 +294,7 @@ class _BlockUIComponents {
     required bool isShowing,
   }) {
     bool activeOLD = hasActiveUIComponent();
-    _controlWidgetStates.update(
+    __controlWidgetStates.update(
       widgetState,
       (xState) => xState.._setShowing(isShowing),
       ifAbsent: () => XState().._setShowing(isShowing),
@@ -342,7 +319,7 @@ class _BlockUIComponents {
   void _removeControlWidgetState({
     required _RefreshableWidgetState widgetState,
   }) {
-    _controlWidgetStates.remove(widgetState);
+    __controlWidgetStates.remove(widgetState);
   }
 
   // ***************************************************************************
@@ -353,7 +330,7 @@ class _BlockUIComponents {
     required bool isShowing,
   }) {
     bool activeOLD = hasActiveUIComponent();
-    _blockFragmentWidgetStates.update(
+    __blockFragmentWidgetStates.update(
       widgetState,
       (xState) => xState.._setShowing(isShowing),
       ifAbsent: () => XState().._setShowing(isShowing),
@@ -377,7 +354,7 @@ class _BlockUIComponents {
 
   void _removeBlockFragmentWidgetState({required State widgetState}) {
     bool activeOLD = hasActiveUIComponent();
-    _blockFragmentWidgetStates.remove(widgetState);
+    __blockFragmentWidgetStates.remove(widgetState);
     bool activeCURRENT = hasActiveUIComponent();
     //
     if (activeOLD && !activeCURRENT) {
@@ -405,23 +382,47 @@ class _BlockUIComponents {
     }
     //
     if (withBlockFragment) {
-      ret.addAll(_blockFragmentWidgetStates);
+      ret.addAll(__blockFragmentWidgetStates);
     }
     //
     if (withPagination) {
-      ret.addAll(_paginationWidgetStates);
+      ret.addAll(__paginationWidgetStates);
     }
     //
     if (withControlBar) {
-      ret.addAll(_controlBarWidgetStates);
+      ret.addAll(__controlBarWidgetStates);
     }
     if (withControl) {
-      ret.addAll(_controlWidgetStates);
+      ret.addAll(__controlWidgetStates);
     }
     //
     if (withForm && block.formModel != null) {
       ret.addAll(block.formModel!.ui._formWidgetStates);
     }
     return ret;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @DebugMethodAnnotation()
+  Map<IRefreshableWidgetState, XState> debugFindMountedWidgetStates({
+    required bool withPagination,
+    required bool withBlockFragment,
+    required bool withFilter,
+    required bool withForm,
+    required bool withControl,
+    required bool withControlBar,
+    required bool activeOnly,
+  }) {
+    return _findMountedWidgetStates(
+      withPagination: withPagination,
+      withBlockFragment: withBlockFragment,
+      withFilter: withFilter,
+      withForm: withForm,
+      withControl: withControl,
+      withControlBar: withControlBar,
+      activeOnly: activeOnly,
+    );
   }
 }

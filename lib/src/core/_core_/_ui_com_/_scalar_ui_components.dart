@@ -1,10 +1,10 @@
 part of '../core.dart';
 
-class _ScalarUIComponents {
+class _ScalarUIComponents extends _UIComponents {
   final Scalar scalar;
 
-  final Map<_RefreshableWidgetState, bool> _scalarFragmentWidgetStates = {};
-  final Map<_RefreshableWidgetState, bool> _scalarControlWidgetStates = {};
+  final Map<_RefreshableWidgetState, bool> __scalarFragmentWidgetStates = {};
+  final Map<_RefreshableWidgetState, bool> __scalarControlWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -14,9 +14,10 @@ class _ScalarUIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
   bool hasMountedUIComponent() {
-    return _scalarFragmentWidgetStates.isNotEmpty ||
-        _scalarControlWidgetStates.isNotEmpty;
+    return __scalarFragmentWidgetStates.isNotEmpty ||
+        __scalarControlWidgetStates.isNotEmpty;
   }
 
   // ***************************************************************************
@@ -31,7 +32,7 @@ class _ScalarUIComponents {
   // ***************************************************************************
 
   void updateControlWidgets({bool force = true}) {
-    for (_RefreshableWidgetState state in _scalarControlWidgetStates.keys) {
+    for (_RefreshableWidgetState state in __scalarControlWidgetStates.keys) {
       if (state.mounted) {
         state.refreshState(force: force);
       }
@@ -42,7 +43,7 @@ class _ScalarUIComponents {
   // ***************************************************************************
 
   void updateFragmentWidgets({bool force = true}) {
-    for (_RefreshableWidgetState state in _scalarFragmentWidgetStates.keys) {
+    for (_RefreshableWidgetState state in __scalarFragmentWidgetStates.keys) {
       if (state.mounted) {
         state.refreshState(force: force);
       }
@@ -67,9 +68,9 @@ class _ScalarUIComponents {
   // ***************************************************************************
 
   bool _hasActiveScalarFragmentWidgetState() {
-    for (State widgetState in _scalarFragmentWidgetStates.keys) {
+    for (State widgetState in __scalarFragmentWidgetStates.keys) {
       if (widgetState.mounted) {
-        bool isShowing = _scalarFragmentWidgetStates[widgetState] ?? false;
+        bool isShowing = __scalarFragmentWidgetStates[widgetState] ?? false;
         if (isShowing) {
           return true;
         }
@@ -82,9 +83,9 @@ class _ScalarUIComponents {
   // ***************************************************************************
 
   bool _hasActiveControlWidgetState() {
-    for (State widgetState in _scalarControlWidgetStates.keys) {
+    for (State widgetState in __scalarControlWidgetStates.keys) {
       if (widgetState.mounted) {
-        bool isShowing = _scalarControlWidgetStates[widgetState] ?? false;
+        bool isShowing = __scalarControlWidgetStates[widgetState] ?? false;
         if (isShowing) {
           return true;
         }
@@ -101,7 +102,7 @@ class _ScalarUIComponents {
     required bool isShowing,
   }) {
     bool activeOLD = hasActiveUIComponent();
-    _scalarControlWidgetStates[widgetState] = isShowing;
+    __scalarControlWidgetStates[widgetState] = isShowing;
     bool activeCURRENT = hasActiveUIComponent();
     //
     if (isShowing) {
@@ -121,7 +122,7 @@ class _ScalarUIComponents {
 
   void _removeControlWidgetState({required State widgetState}) {
     bool activeOLD = hasActiveUIComponent();
-    _scalarControlWidgetStates.remove(widgetState);
+    __scalarControlWidgetStates.remove(widgetState);
     bool activeCURRENT = hasActiveUIComponent();
     //
     if (activeOLD && !activeCURRENT) {
@@ -137,7 +138,7 @@ class _ScalarUIComponents {
     required bool isShowing,
   }) {
     bool activeOLD = hasActiveUIComponent();
-    _scalarFragmentWidgetStates[widgetState] = isShowing;
+    __scalarFragmentWidgetStates[widgetState] = isShowing;
     bool activeCURRENT = hasActiveUIComponent();
     //
     if (isShowing) {
@@ -157,7 +158,7 @@ class _ScalarUIComponents {
 
   void _removeScalarFragmentWidgetState({required State widgetState}) {
     bool activeOLD = hasActiveUIComponent();
-    _scalarFragmentWidgetStates.remove(widgetState);
+    __scalarFragmentWidgetStates.remove(widgetState);
     bool activeCURRENT = hasActiveUIComponent();
     //
     if (activeOLD && !activeCURRENT) {

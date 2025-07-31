@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class _FilterUIComponents {
+class _FilterUIComponents extends _UIComponents {
   final FilterModel filterModel;
 
   final Map<_RefreshableWidgetState, XState> _filterFragmentWidgetStates = {};
@@ -13,6 +13,7 @@ class _FilterUIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
   bool hasMountedUIComponent() {
     return _filterFragmentWidgetStates.isNotEmpty;
   }

@@ -266,7 +266,7 @@ class GlobalsManager {
       print(stackTrace);
       return;
     }
-    ui.updateWidgets();
+    ui.updateAllUIComponents();
   }
 
   Future<void> _logout() async {
@@ -275,6 +275,6 @@ class GlobalsManager {
     Box<String> hiveBox = await HiveUtils.openHiveBoxLoggedInUser();
     await hiveBox.delete(__hiveKeyLoggedInUser);
     await hiveBox.close();
-    ui.updateWidgets();
+    ui.updateAllUIComponents();
   }
 }
