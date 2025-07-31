@@ -2879,34 +2879,6 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  // TODO: Xem lai phuong thuc nay. No da duoc goi o dau.
-  bool hasCurrentItemAndAllowUpdate() {
-    if (this.currentItem == null) {
-      return false;
-    }
-    CheckAllowResult result = __isAllowDeleteItem(
-      item: this.currentItem!,
-    );
-    return result.result == CheckAllow.allow;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  // TODO: Xem lai phuong thuc nay. No da duoc goi o dau.
-  bool hasCurrentItemAndAllowDelete() {
-    if (this.currentItem == null) {
-      return false;
-    }
-    CheckAllowResult result = __isAllowDeleteItem(
-      item: this.currentItem!,
-    );
-    return result.result == CheckAllow.allow;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   @_RootMethodAnnotation()
   @_BlockQuickActionAnnotation()
   Future<BlockQuickActionResult> executeQuickAction({
