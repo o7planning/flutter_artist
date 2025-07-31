@@ -19,6 +19,12 @@ enum ScalarQuickActionPrecheck implements ChkCodeDetail {
     message: "Quick Action is disabled.",
     details: ["The scalar is in an 'error' state."],
   ),
+  // TODO: Remove this?
+  scalarInNoneState(
+    chkCode: ChkCode.inNoneState,
+    message: "Quick Action is disabled.",
+    details: ["The scalar is in an 'none' state."],
+  ),
   //
   cancelled(
     chkCode: ChkCode.cancelled,

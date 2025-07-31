@@ -525,13 +525,45 @@ abstract class Scalar<
     _scalarErrorInfo = errorInfo;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_PrecheckPrivateMethod()
+  Actionable<ScalarQuickActionPrecheck> __canQuickAction({
+    required bool checkBusy,
+  }) {
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable<ScalarQuickActionPrecheck>.no(
+        errCode: ScalarQuickActionPrecheck.busy,
+      );
+    }
+    switch (queryDataState) {
+      case DataState.pending:
+        return Actionable<ScalarQuickActionPrecheck>.no(
+          errCode: ScalarQuickActionPrecheck.scalarInPendingState,
+        );
+      case DataState.error:
+        return Actionable<ScalarQuickActionPrecheck>.no(
+          errCode: ScalarQuickActionPrecheck.scalarInErrorState,
+        );
+      case DataState.none:
+        return Actionable<ScalarQuickActionPrecheck>.no(
+          errCode: ScalarQuickActionPrecheck.scalarInNoneState,
+        );
+      case DataState.ready:
+        break;
+    }
+    //
+    return Actionable<ScalarQuickActionPrecheck>.yes();
+  }
+
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
   @_RootMethodAnnotation()
   @_ScalarQuickActionAnnotation()
-  Future<bool> executeQuickAction({
+  Future<ScalarQuickActionResult> executeQuickAction({
     FILTER_INPUT? filterInput,
     required ActionConfirmationType actionConfirmationType,
     required ScalarQuickAction action,
@@ -548,6 +580,25 @@ abstract class Scalar<
       },
     );
     //
+    // @Same-Code-Precheck-01
+    //
+    final Actionable<ScalarQuickActionPrecheck> actionable = __canQuickAction(
+      checkBusy: true,
+    );
+    //
+    if (!actionable.yes) {
+      // _createItemErrorCount++;
+      _addErrorLogActionable(
+        shelf: shelf,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+      );
+      return ScalarQuickActionResult(
+        precheck: actionable.errCode,
+        stackTrace: actionable.stackTrace,
+      );
+    }
+    //
     // Confirmation:
     //
     bool confirm = true;
@@ -560,7 +611,9 @@ abstract class Scalar<
     }
     //
     if (!confirm) {
-      return false;
+      return ScalarQuickActionResult(
+        precheck: ScalarQuickActionPrecheck.cancelled,
+      );
     }
     //
     List<_ScalarOpt> forceQueryScalarOpts = [];
@@ -586,7 +639,7 @@ abstract class Scalar<
     //
     _XScalar thisXScalar = xShelf.findXScalarByName(this.name)!;
     //
-    _TaskUnit taskUnit = _ScalarQuickActionTaskUnit(
+    _ResultedTaskUnit taskUnit = _ScalarQuickActionTaskUnit(
       xScalar: thisXScalar,
       action: action,
     );
@@ -594,7 +647,7 @@ abstract class Scalar<
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //
     await FlutterArtist.executor._executeTaskUnitQueue();
-    return true;
+    return taskUnit.taskResult;
   }
 
   // ***************************************************************************
