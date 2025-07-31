@@ -36,7 +36,7 @@ class _RefreshableNeutralViewState
   @override
   void addWidgetState({required bool isShowing}) {
     for (Shelf shelf in widget.shelves) {
-      shelf._addShelfWidgetState(
+      shelf.ui._addShelfWidgetState(
         widgetState: this,
         isShowing: isShowing,
       );
@@ -46,7 +46,7 @@ class _RefreshableNeutralViewState
   @override
   void removeWidgetState() {
     for (Shelf shelf in widget.shelves) {
-      shelf._removeShelfWidgetState(
+      shelf.ui._removeShelfWidgetState(
         widgetState: this,
       );
     }

@@ -21,7 +21,7 @@ abstract class LoginActivityBase<USER extends ILoggedInUser> extends Activity {
         print("Success");
         await navigateToSuccessScreen();
       } else {
-        shelf.updateAllUIComponents();
+        shelf.ui.updateAllUIComponents();
       }
     } finally {
       // shelf.updateAllUIComponents();

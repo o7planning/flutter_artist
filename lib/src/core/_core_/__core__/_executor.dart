@@ -56,7 +56,7 @@ class _Executor {
           rethrow;
         } finally {
           for (Shelf shelf in shelfMap.values) {
-            shelf.updateAllUIComponents();
+            shelf.ui.updateAllUIComponents();
           }
           //
           __executingXShelfId = null;
