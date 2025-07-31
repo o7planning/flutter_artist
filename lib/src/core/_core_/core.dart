@@ -122,9 +122,9 @@ part '_code_flow_/_code_flow_logger.dart';
 
 part '_code_flow_/_func_call_info.dart';
 
-part '_coordinator_/_coordinator.dart';
+part '__core__/_coordinator.dart';
 
-part '_coordinator_/_coordinator_config.dart';
+part '_config_/_coordinator_config.dart';
 
 part '__core__/_actionable.dart';
 
