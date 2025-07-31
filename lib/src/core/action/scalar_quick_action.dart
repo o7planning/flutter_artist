@@ -1,15 +1,29 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
+import '../enums/after_quick_action.dart';
 import 'base_action.dart';
 
-abstract class ScalarQuickAction<DATA extends Object> extends BaseAction {
-  final List<Type> affectedItemTypes;
+abstract class ScalarQuickAction extends BaseAction {
+  late final ScalarQuickActionConfig config;
 
-  const ScalarQuickAction({
+  ScalarQuickAction({
     required super.needToConfirm,
     required super.actionInfo,
-    required this.affectedItemTypes,
-  });
+  }) {
+    config = initConfig();
+  }
 
-  Future<ApiResult<DATA>?> callApi();
+  ScalarQuickActionConfig initConfig();
+
+  Future<ApiResult<void>> callApi();
+}
+
+class ScalarQuickActionConfig {
+  final AfterScalarQuickAction afterQuickAction;
+  final List<Type> affectedItemTypes;
+
+  const ScalarQuickActionConfig({
+    required this.affectedItemTypes,
+    required this.afterQuickAction,
+  });
 }

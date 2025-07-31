@@ -1,29 +1,23 @@
 import '__chk_code.dart';
 import '__chk_code_detail.dart';
 
-enum BlockQuickActionPrecheck implements ChkCodeDetail {
+enum ScalarQuickActionPrecheck implements ChkCodeDetail {
   busy(
     chkCode: ChkCode.busy,
     message: "Quick Action is disabled.",
     details: ["The executor is busy."],
   ),
   //
-  blockInPendingState(
+  scalarInPendingState(
     chkCode: ChkCode.inPendingState,
     message: "Quick Action is disabled.",
-    details: ["The block is in a 'pending' state."],
+    details: ["The scalar is in a 'pending' state."],
   ),
   //
-  blockInErrorState(
+  scalarInErrorState(
     chkCode: ChkCode.inErrorState,
     message: "Quick Action is disabled.",
-    details: ["The block is in an 'error' state."],
-  ),
-  //
-  blockInNoneState(
-    chkCode: ChkCode.inNoneState,
-    message: "Quick Action is disabled.",
-    details: ["The block is in a 'none' state."],
+    details: ["The scalar is in an 'error' state."],
   ),
   //
   cancelled(
@@ -41,7 +35,7 @@ enum BlockQuickActionPrecheck implements ChkCodeDetail {
   @override
   final List<String>? details;
 
-  const BlockQuickActionPrecheck({
+  const ScalarQuickActionPrecheck({
     required this.chkCode,
     required this.message,
     required this.details,

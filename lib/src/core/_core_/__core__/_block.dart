@@ -1798,7 +1798,7 @@ abstract class Block<
 
   @_TaskUnitMethodAnnotation()
   @_BlockQuickActionAnnotation()
-  Future<bool> _unitQuickAction<DATA extends Object>({
+  Future<bool> _unitQuickAction({
     required _XBlock thisXBlock,
     required BlockQuickAction action,
     required BlockQuickActionResult taskResult,
@@ -1833,8 +1833,6 @@ abstract class Block<
       );
       return false;
     }
-    //
-    // await action.doAfterCallApi(success: success, apiData: apiData);
     //
     FlutterArtist.storage._fireEventToAffectedItemTypes(
       eventShelf: shelf,

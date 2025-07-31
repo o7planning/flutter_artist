@@ -301,14 +301,14 @@ abstract class Scalar<
 
   @_TaskUnitMethodAnnotation()
   @_ScalarQuickActionAnnotation()
-  Future<bool> _unitQuickAction<DATA extends Object>({
+  Future<bool> _unitQuickAction({
     required _XScalar thisXScalar,
-    required ScalarQuickAction<DATA> action,
-    required AfterScalarQuickAction afterQuickAction,
+    required ScalarQuickAction action,
+    required ScalarQuickActionResult taskResult,
   }) async {
     __assertThisXScalar(thisXScalar);
     //
-    ApiResult<DATA>? result;
+    ApiResult<void>? result;
     try {
       FlutterArtist.codeFlowLogger._addMethodCall(
         ownerClassInstance: action,
@@ -319,52 +319,30 @@ abstract class Scalar<
       );
       //
       result = await action.callApi();
+      // Throw ApiError.
+      result.throwIfError();
     } catch (e, stackTrace) {
-      _handleError(
+      AppError appError = _handleError(
         shelf: shelf,
         methodName: '${getClassName(action)}.callApi',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
       );
-      return false;
-    }
-    //
-    bool success = true;
-    if (result != null && result.error != null) {
-      success = false;
       //
-      _handleRestError(
-        shelf: shelf,
-        methodName: "${getClassName(action)}.callApi",
-        message: result.error!.errorMessage,
-        errorDetails: result.error!.errorDetails,
-        showSnackBar: true,
-      );
-    }
-    //
-    try {
-      DATA? apiData = result?.data;
-      // await action.doAfterCallApi(success: success, apiData: apiData);
-      //
-      if (success) {
-        FlutterArtist.storage._fireEventToAffectedItemTypes(
-          eventShelf: shelf,
-          affectedItemTypes: action.affectedItemTypes,
-        );
-      }
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: '${getClassName(action)}.callApi',
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
+      taskResult._setAppError(
+        appError: appError,
+        stackTrace: appError is ApiError ? null : stackTrace,
       );
       return false;
     }
     //
-    switch (afterQuickAction) {
+    FlutterArtist.storage._fireEventToAffectedItemTypes(
+      eventShelf: shelf,
+      affectedItemTypes: action.config.affectedItemTypes,
+    );
+    //
+    switch (action.config.afterQuickAction) {
       case AfterScalarQuickAction.none:
         break;
       case AfterScalarQuickAction.query:
@@ -553,11 +531,10 @@ abstract class Scalar<
 
   @_RootMethodAnnotation()
   @_ScalarQuickActionAnnotation()
-  Future<bool> executeQuickAction<DATA extends Object>({
+  Future<bool> executeQuickAction({
     FILTER_INPUT? filterInput,
     required ActionConfirmationType actionConfirmationType,
-    required ScalarQuickAction<DATA> action,
-    required AfterScalarQuickAction afterQuickAction,
+    required ScalarQuickAction action,
     required Function(BuildContext context)? navigate,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -568,7 +545,6 @@ abstract class Scalar<
       parameters: {
         "filterInput": filterInput,
         "action": action,
-        "afterQuickAction": afterQuickAction,
       },
     );
     //
@@ -588,7 +564,7 @@ abstract class Scalar<
     }
     //
     List<_ScalarOpt> forceQueryScalarOpts = [];
-    switch (afterQuickAction) {
+    switch (action.config.afterQuickAction) {
       case AfterScalarQuickAction.none:
         break;
       case AfterScalarQuickAction.query:
@@ -613,7 +589,6 @@ abstract class Scalar<
     _TaskUnit taskUnit = _ScalarQuickActionTaskUnit(
       xScalar: thisXScalar,
       action: action,
-      afterQuickAction: afterQuickAction,
     );
     //
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);

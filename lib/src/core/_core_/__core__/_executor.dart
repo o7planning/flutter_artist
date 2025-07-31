@@ -166,7 +166,7 @@ class _Executor {
         taskResult: taskUnit.taskResult as BlockQuickUpdateItemResult,
       );
     }
-    // Block QuickAction:
+    // Block Quick Action:
     else if (taskUnit is _BlockQuickActionTaskUnit) {
       await taskUnit.xBlock.block._unitQuickAction(
         thisXBlock: taskUnit.xBlock,
@@ -213,7 +213,7 @@ class _Executor {
       await taskUnit.xScalar.scalar._unitQuickAction(
         thisXScalar: taskUnit.xScalar,
         action: taskUnit.action,
-        afterQuickAction: taskUnit.afterQuickAction,
+        taskResult: taskUnit.taskResult as ScalarQuickActionResult,
       );
     }
     // Scalar Quick Action:

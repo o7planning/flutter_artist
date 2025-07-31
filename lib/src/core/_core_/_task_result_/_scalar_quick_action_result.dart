@@ -1,7 +1,7 @@
 part of '../core.dart';
 
-class BlockQuickActionResult extends TaskResult<BlockQuickActionPrecheck> {
-  BlockQuickActionResult({super.precheck, super.stackTrace});
+class ScalarQuickActionResult extends TaskResult<ScalarQuickActionPrecheck> {
+  ScalarQuickActionResult({super.precheck, super.stackTrace});
 
   @override
   bool get success {

@@ -2,7 +2,7 @@ part of '../core.dart';
 
 @_TaskUnitClassAnnotation()
 @_BlockQuickActionAnnotation()
-class _BlockQuickActionTaskUnit<DATA extends Object>
+class _BlockQuickActionTaskUnit
     extends _ResultedTaskUnit<BlockQuickActionResult> {
   final _XBlock xBlock;
   final BlockQuickAction action;

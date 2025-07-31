@@ -2,16 +2,18 @@ part of '../core.dart';
 
 @_TaskUnitClassAnnotation()
 @_ScalarQuickActionAnnotation()
-class _ScalarQuickActionTaskUnit<DATA extends Object> extends _TaskUnit {
+class _ScalarQuickActionTaskUnit
+    extends _ResultedTaskUnit<ScalarQuickActionResult> {
   final _XScalar xScalar;
-  final ScalarQuickAction<DATA> action;
-  final AfterScalarQuickAction afterQuickAction;
+  final ScalarQuickAction action;
 
   _ScalarQuickActionTaskUnit({
     required this.xScalar,
     required this.action,
-    required this.afterQuickAction,
-  }) : super(taskType: TaskType.scalarQuickAction);
+  }) : super(
+          taskType: TaskType.scalarQuickAction,
+          taskResult: ScalarQuickActionResult(),
+        );
 
   @override
   int get xShelfId => xScalar.xShelfId;
