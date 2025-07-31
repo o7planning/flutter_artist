@@ -61,30 +61,6 @@ class _BlockUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  @DebugMethodAnnotation()
-  Map<IRefreshableWidgetState, XState> debugFindMountedWidgetStates({
-    required bool withPagination,
-    required bool withBlockFragment,
-    required bool withFilter,
-    required bool withForm,
-    required bool withControl,
-    required bool withControlBar,
-    required bool activeOnly,
-  }) {
-    return _findMountedWidgetStates(
-      withPagination: withPagination,
-      withBlockFragment: withBlockFragment,
-      withFilter: withFilter,
-      withForm: withForm,
-      withControl: withControl,
-      withControlBar: withControlBar,
-      activeOnly: activeOnly,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   @override
   bool hasMountedUIComponent() {
     return (block.filterModel?.ui.hasMountedUIComponent() ?? false) ||
@@ -424,5 +400,29 @@ class _BlockUIComponents extends _UIComponents {
       ret.addAll(block.formModel!.ui._formWidgetStates);
     }
     return ret;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @DebugMethodAnnotation()
+  Map<IRefreshableWidgetState, XState> debugFindMountedWidgetStates({
+    required bool withPagination,
+    required bool withBlockFragment,
+    required bool withFilter,
+    required bool withForm,
+    required bool withControl,
+    required bool withControlBar,
+    required bool activeOnly,
+  }) {
+    return _findMountedWidgetStates(
+      withPagination: withPagination,
+      withBlockFragment: withBlockFragment,
+      withFilter: withFilter,
+      withForm: withForm,
+      withControl: withControl,
+      withControlBar: withControlBar,
+      activeOnly: activeOnly,
+    );
   }
 }
