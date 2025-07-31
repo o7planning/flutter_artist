@@ -1418,7 +1418,10 @@ abstract class Block<
     //
     // No need to check again?
     //
-    Actionable actionable = canDeleteItem(item: item);
+    Actionable actionable = canDeleteItem(
+      item: item,
+      errorIfItemNotInList: true,
+    );
     if (!actionable.yes) {
       return;
     }
@@ -4404,6 +4407,30 @@ abstract class Block<
   // ***************************************************************************
 
   @_PrecheckPrivateMethod()
+  Actionable<BlockItemEditPrecheck> __canEditCurrentItemOnForm({
+    required bool checkBusy,
+    required bool checkAllow,
+  }) {
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable<BlockItemEditPrecheck>.no(
+        errCode: BlockItemEditPrecheck.busy,
+      );
+    }
+    ITEM? curItem = currentItem;
+    if (curItem == null) {
+      return Actionable.no(errCode: BlockItemEditPrecheck.noTarget);
+    }
+    return __canEditItemOnForm(
+      checkBusy: checkBusy,
+      item: curItem,
+      checkAllow: checkAllow,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_PrecheckPrivateMethod()
   // @seeAlso: __canRefreshCurrentItem()
   Actionable<BlockItemCurrSelectionPrecheck> __canSelectItemAsCurrent({
     required ITEM item,
@@ -4501,6 +4528,188 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @_PrecheckMethod()
+  Actionable<BlockItemDeletionPrecheck> canDeleteCurrentItem({
+    bool checkAllow = true,
+  }) {
+    return __canDeleteCurrentItem(
+      checkBusy: true,
+      checkAllow: checkAllow,
+    );
+  }
+
+  @_PrecheckMethod()
+  Actionable<BlockQueryPrecheck> canQuery({
+    bool checkAllow = true,
+  }) {
+    return __canQuery(checkBusy: true, checkAllow: checkAllow);
+  }
+
+  @_PrecheckMethod()
+  Actionable<BlockItemDeletionPrecheck> canDeleteItem({
+    required bool errorIfItemNotInList,
+    required ITEM item,
+    bool checkAllow = true,
+  }) {
+    return __canDeleteItem(
+      checkBusy: true,
+      checkAllow: checkAllow,
+      item: item,
+      errorIfItemNotInList: errorIfItemNotInList,
+    );
+  }
+
+  @_PrecheckMethod()
+  Actionable<BlockQuickActionPrecheck> canQuickAction() {
+    return __canQuickAction(
+      checkBusy: true,
+    );
+  }
+
+  @_PrecheckMethod()
+  Actionable<BlockItemCreationPrecheck> canCreateItem({
+    required ItemCreationType creationType,
+    bool checkAllow = true,
+  }) {
+    return __canCreateItem(
+      checkBusy: true,
+      creationType: creationType,
+      checkAllow: checkAllow,
+    );
+  }
+
+  @_PrecheckMethod()
+  Actionable<BlockClearancePrecheck> canClearBlock() {
+    return __canClearBlock(
+      checkBusy: true,
+    );
+  }
+
+  @_PrecheckMethod()
+  Actionable<BlockItemEditPrecheck> canUpdateItem({
+    required ITEM item,
+    required ItemUpdateType updateType,
+    bool checkAllow = true,
+  }) {
+    return __canUpdateItem(
+      checkBusy: true,
+      item: item,
+      updateType: updateType,
+      checkAllow: checkAllow,
+    );
+  }
+
+  @_PrecheckMethod()
+  Actionable<BlockQuickUpdateItemPrecheck> canQuickUpdateItem({
+    required ITEM item,
+    bool checkAllow = true,
+  }) {
+    return __canQuickUpdateItem(
+      checkBusy: true,
+      item: item,
+      checkAllow: checkAllow,
+    );
+  }
+
+  @_PrecheckMethod()
+  Actionable<BlockQuickCreateItemPrecheck> canQuickCreateItem({
+    bool checkAllow = true,
+  }) {
+    return __canQuickCreateItem(
+      checkBusy: true,
+      checkAllow: checkAllow,
+    );
+  }
+
+  @_PrecheckMethod()
+  Actionable<BlockFormResetPrecheck> canResetForm({
+    bool checkAllow = true,
+  }) {
+    return __canResetForm(
+      checkBusy: true,
+      checkAllow: checkAllow,
+    );
+  }
+
+  @_PrecheckMethod()
+  Actionable<BlockFormSavePrecheck> canSaveForm({
+    bool checkAllow = true,
+    bool checkValidate = false,
+  }) {
+    return __canSaveForm(
+      checkBusy: true,
+      checkAllow: checkAllow,
+      checkValidate: checkValidate,
+    );
+  }
+
+  @_PrecheckMethod()
+  Actionable<BlockItemEditPrecheck> canEditItemOnForm({
+    required ITEM item,
+    bool checkAllow = true,
+  }) {
+    return __canEditItemOnForm(
+      checkBusy: true,
+      item: item,
+      checkAllow: checkAllow,
+    );
+  }
+
+  // ***************************************************************************
+
+  @_PrecheckMethod()
+  Actionable<BlockItemEditPrecheck> canEditCurrentItemOnForm() {
+    return __canEditCurrentItemOnForm(
+      checkBusy: true,
+      checkAllow: true,
+    );
+  }
+
+  // ***************************************************************************
+
+  @_PrecheckMethod()
+  // @seeAlso: canRefreshCurrentItem()
+  Actionable<BlockItemCurrSelectionPrecheck> canSelectItemAsCurrent({
+    required ITEM item,
+  }) {
+    return __canSelectItemAsCurrent(
+      checkBusy: true,
+      item: item,
+    );
+  }
+
+  // ***************************************************************************
+
+  ///
+  /// Checks whether the current item can be refreshed.
+  ///
+  @_PrecheckMethod()
+  // @seeAlso: canSelectItemAsCurrent()
+  Actionable<BlockItemCurrSelectionPrecheck> canRefreshCurrentItem() {
+    return __canRefreshCurrentItem(
+      checkBusy: true,
+    );
+  }
+
+  // ***************************************************************************
+
+  ///
+  /// Edit on edit-mode
+  /// Edit on creation-mode
+  ///
+  @_PrecheckMethod()
+  Actionable<BlockFormEnablementChkCode> isEnableFormToModify({
+    bool checkAllow = true,
+  }) {
+    return __isEnableFormToModify(
+      checkAllow: checkAllow,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_PrecheckMethod()
   Actionable<BlockItemCreationPrecheck> canCreateItemWithForm() {
     return __canCreateItem(
       checkBusy: true,
@@ -4512,103 +4721,8 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable<BlockFormResetPrecheck> canResetForm() {
-    return __canResetForm(
-      checkBusy: true,
-      checkAllow: true,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ///
-  /// Without check Form validation.
-  ///
-  Actionable<BlockFormSavePrecheck> canSaveForm() {
-    return __canSaveForm(
-      checkBusy: true,
-      checkAllow: true,
-      checkValidate: false, // IMPORTANT.
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Actionable<BlockItemDeletionPrecheck> canDeleteCurrentItem() {
-    return __canDeleteCurrentItem(
-      checkBusy: true,
-      checkAllow: true,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Actionable<BlockItemDeletionPrecheck> canDeleteItem({required ITEM item}) {
-    return __canDeleteItem(
-      checkBusy: true,
-      item: item,
-      errorIfItemNotInList: true,
-      checkAllow: true,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Actionable canEditItemOnForm({required ITEM item}) {
-    return __canEditItemOnForm(
-      checkBusy: true,
-      item: item,
-      checkAllow: true,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   Actionable _isEnableFormToModify() {
     return __isEnableFormToModify(checkAllow: true);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Actionable canEditCurrentItemOnForm() {
-    return __isEnableFormToModify(checkAllow: true);
-  }
-
-  // ***************************************************************************
-
-  ///
-  /// Checks whether the current item can be refreshed.
-  ///
-  @_PrecheckMethod()
-  Actionable<BlockItemCurrSelectionPrecheck> canRefreshCurrentItem() {
-    return __canRefreshCurrentItem(
-      checkBusy: true,
-    );
-  }
-
-  // ***************************************************************************
-
-  @_PrecheckMethod()
-  Actionable<BlockItemCurrSelectionPrecheck> canSelectItemAsCurrent({
-    required ITEM item,
-  }) {
-    return __canSelectItemAsCurrent(
-      item: item,
-      checkBusy: true,
-    );
-  }
-
-  // ***************************************************************************
-
-  @_PrecheckMethod()
-  Actionable<BlockQueryPrecheck> canQuery() {
-    return __canQuery(checkBusy: true, checkAllow: true);
   }
 
   // ***************************************************************************
