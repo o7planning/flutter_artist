@@ -4751,6 +4751,31 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  bool hasCurrentItemAndCanEditOnForm() {
+    Actionable<BlockItemEditPrecheck> actionable = __canEditCurrentItemOnForm(
+      checkBusy: true,
+      checkAllow: true,
+    );
+    return actionable.yes;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool hasCurrentItemAndCanDelete() {
+    if (this.currentItem == null) {
+      return false;
+    }
+    Actionable<BlockItemDeletionPrecheck> actionable = __canDeleteCurrentItem(
+      checkBusy: true,
+      checkAllow: true,
+    );
+    return actionable.yes;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool canShowFilterCriteria() {
     ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
     return filterModel != null &&
