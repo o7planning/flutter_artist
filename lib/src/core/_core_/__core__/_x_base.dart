@@ -38,7 +38,7 @@ abstract class _XBase {
     );
   }
 
-  Future<bool> __showActionConfirmation<A extends BaseAction>({
+  Future<bool> __showActionConfirmation<A extends QuickAction>({
     required Shelf? shelf,
     required DefaultConfirmation defaultConfirmation,
     required CustomConfirmation? customConfirmation,

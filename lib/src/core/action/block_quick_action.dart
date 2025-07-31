@@ -1,9 +1,9 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 import '../enums/after_quick_action.dart';
-import 'base_action.dart';
+import '_quick_action.dart';
 
-abstract class BlockQuickAction extends BaseAction {
+abstract class BlockQuickAction extends QuickAction {
   late final BlockQuickActionConfig config;
 
   BlockQuickAction({

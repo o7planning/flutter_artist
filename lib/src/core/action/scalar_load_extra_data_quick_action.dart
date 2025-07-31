@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import 'base_action.dart';
+import '_quick_action.dart';
 
 abstract class ScalarLoadExtraDataQuickAction<DATA extends Object>
-    extends BaseAction {
+    extends QuickAction {
   const ScalarLoadExtraDataQuickAction({
     required super.needToConfirm,
     required super.actionInfo,

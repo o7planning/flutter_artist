@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:web/web.dart' as web;
 
-import 'base_background_action.dart';
+import '_background_action.dart';
 
 abstract class BackgroundWebDownloadAction extends BackgroundAction {
   final String fileName;
