@@ -751,7 +751,7 @@ class _Storage {
   // ***************************************************************************
 
   void _checkToRemoveShelf(Shelf shelf) {
-    bool hasMountedUIComponent = shelf.hasMountedUIComponent();
+    bool hasMountedUIComponent = shelf.ui.hasMountedUIComponent();
     if (!hasMountedUIComponent) {
       print(">>>>>>>>>>> Shelf: ${getClassName(shelf)} dispose all component");
       FlutterArtist.codeFlowLogger.addInfo(

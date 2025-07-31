@@ -4688,7 +4688,7 @@ abstract class Block<
   void sort({required bool refresh}) {
     __blockData._sortItems();
     if (refresh) {
-      shelf.updateAllUIComponents();
+      shelf.ui.updateAllUIComponents();
     }
   }
 

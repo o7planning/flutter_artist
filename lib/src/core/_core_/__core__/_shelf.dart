@@ -26,13 +26,13 @@ abstract class Shelf extends _XBase {
 
   final Map<String, Scalar> __scalarMap = {};
 
-  final List<Scalar> __scalars = [];
+  final List<Scalar> _scalars = [];
 
-  List<Scalar> get scalars => [...__scalars];
+  List<Scalar> get scalars => [..._scalars];
 
   final Map<String, Block> __blockMap = {};
 
-  final List<Block> __rootBlocks = [];
+  final List<Block> _rootBlocks = [];
 
   bool _isStructError = false;
 
@@ -42,7 +42,7 @@ abstract class Shelf extends _XBase {
 
   String? get structError => _structError;
 
-  List<Block> get rootBlocks => [...__rootBlocks];
+  List<Block> get rootBlocks => [..._rootBlocks];
 
   int __lastLazyLoadId = 0;
 
@@ -54,7 +54,7 @@ abstract class Shelf extends _XBase {
 
   String get name => FlutterArtist.storage._getShelfName(runtimeType);
 
-  final Map<_RefreshableWidgetState, bool> _refreshableNeutralViewStates = {};
+  late final _ShelfUIComponents ui = _ShelfUIComponents(shelf: this);
 
   // ***************************************************************************
   // ***************************************************************************
@@ -116,7 +116,7 @@ abstract class Shelf extends _XBase {
         __scalarMap[scalar.name] = scalar;
       }
       scalar.shelf = this;
-      __scalars.add(scalar);
+      _scalars.add(scalar);
       //
       if (scalar.registerFilterModelName != null) {
         FilterModel? filterModel =
@@ -196,7 +196,7 @@ abstract class Shelf extends _XBase {
     List<Block> rootBlocks = _shelfStruct.blocks;
     for (Block rootBlock in rootBlocks) {
       rootBlock.parent = null;
-      __rootBlocks.add(rootBlock);
+      _rootBlocks.add(rootBlock);
       __registerBlockCascade(rootBlock);
     }
   }
@@ -310,7 +310,7 @@ abstract class Shelf extends _XBase {
 
   List<Block> get blocks {
     List<Block> ret = [];
-    for (Block rootBlock in __rootBlocks) {
+    for (Block rootBlock in _rootBlocks) {
       ret.add(rootBlock);
       ret.addAll(rootBlock.descendantBlocks);
     }
@@ -457,86 +457,10 @@ abstract class Shelf extends _XBase {
       withControlBar: withControlBar,
       withControl: withControl,
       activeOnly: activeOnly,
-      blocks: __rootBlocks,
+      blocks: _rootBlocks,
       founds: founds,
     );
     return founds;
-  }
-
-  // ***************************************************************************
-  // ****** UPDATE UI COMPONENTS ***********************************************
-  // ***************************************************************************
-
-  void updateAllRefreshableNeutralViews() {
-    __updateRefreshableNeutralViews(force: true);
-  }
-
-  void updateAllUIComponents() {
-    try {
-      print("|----> ${getClassName(this)}.updateAllUIComponents()");
-      __updateRefreshableNeutralViews();
-      //
-      for (FilterModel filterModel in _allFilterModels) {
-        filterModel.ui.updateAllUIComponents();
-      }
-      //
-      for (Scalar scalar in __scalars) {
-        scalar.ui.updateAllUIComponents(withoutFilters: true);
-      }
-      //
-      for (Block block in __rootBlocks) {
-        __updateAllBlockUIComponentsCascade(block, withoutFilters: true);
-      }
-    } catch (e, stackTrace) {
-      print("ERROR: $e");
-      print(stackTrace);
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void __updateAllBlockUIComponentsCascade(
-    Block block, {
-    required bool withoutFilters,
-  }) {
-    block.ui.updateAllUIComponents(withoutFilters: withoutFilters);
-    //
-    for (Block childBlock in block._childBlocks) {
-      __updateAllBlockUIComponentsCascade(
-        childBlock,
-        withoutFilters: withoutFilters,
-      );
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void __updateRefreshableNeutralViews({bool force = true}) {
-    for (_RefreshableWidgetState state in _refreshableNeutralViewStates.keys) {
-      if (state.mounted) {
-        state.refreshState(force: force);
-      }
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _addShelfWidgetState({
-    required _RefreshableWidgetState widgetState,
-    required bool isShowing,
-  }) {
-    _refreshableNeutralViewStates[widgetState] = isShowing;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _removeShelfWidgetState({required State widgetState}) {
-    _refreshableNeutralViewStates.remove(widgetState);
   }
 
   // ***************************************************************************
@@ -590,7 +514,7 @@ abstract class Shelf extends _XBase {
       __lastLazyLoadId = __lazyLoadId;
       __lazyLoadLocked = false;
       // IMPORTANT: No Lazy entities, but need to refresh UIComponents:
-      updateAllUIComponents();
+      ui.updateAllUIComponents();
       return;
     }
     print("@@@@@@@@@@@@ Lazy Load - ID: $__lazyLoadId");
@@ -661,7 +585,7 @@ abstract class Shelf extends _XBase {
   // ***************************************************************************
 
   void __findLazyScalars(_LazyObjects founds) {
-    for (Scalar scalar in __scalars) {
+    for (Scalar scalar in _scalars) {
       if (scalar.ui.hasActiveUIComponent()) {
         if (scalar.queryDataState == DataState.pending ||
             scalar.queryDataState == DataState.error) {
@@ -716,56 +640,8 @@ abstract class Shelf extends _XBase {
   _LazyObjects __findLazyObjects() {
     final _LazyObjects founds = _LazyObjects();
     __findLazyScalars(founds);
-    __findXVisibleLazyBlocksCascade(__rootBlocks, founds);
+    __findXVisibleLazyBlocksCascade(_rootBlocks, founds);
     return founds;
-  }
-
-  // ***************************************************************************
-  // ********** ACTIVE/MOUNTED COMPONENT ***************************************
-  // ***************************************************************************
-
-  bool _hasMountedScalarUIComponent() {
-    for (Scalar scalar in scalars) {
-      if (scalar.ui.hasMountedUIComponent()) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool _hasMountedBlockUIComponentCascade(List<Block> blocks) {
-    for (Block block in blocks) {
-      if (block.ui.hasMountedUIComponent()) {
-        return true;
-      }
-      bool hasMounted = _hasMountedBlockUIComponentCascade(block._childBlocks);
-      if (hasMounted) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool hasMountedUIComponent() {
-    bool hasMounted = _refreshableNeutralViewStates.isNotEmpty;
-    if (hasMounted) {
-      return true;
-    }
-    hasMounted = _hasMountedBlockUIComponentCascade(__rootBlocks);
-    if (hasMounted) {
-      return true;
-    }
-    hasMounted = _hasMountedScalarUIComponent();
-    if (hasMounted) {
-      return true;
-    }
-    return false;
   }
 
   // ***************************************************************************

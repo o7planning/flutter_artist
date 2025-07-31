@@ -1440,7 +1440,7 @@ abstract class FormModel<
       }
       _formKey.currentState?.patchValue(initData);
       //
-      shelf.updateAllUIComponents();
+      shelf.ui.updateAllUIComponents();
     } finally {
       _changeEventLocked = false;
     }
