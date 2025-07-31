@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class _LoggedInUserUIComponents {
+class _LoggedInUserUIComponents extends _UIComponents {
   final Map<_RefreshableWidgetState, bool> _loggedInUserWidgetStates = {};
 
   // ***************************************************************************
@@ -11,7 +11,15 @@ class _LoggedInUserUIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateWidgets() {
+  @override
+  bool hasMountedUIComponent() {
+    return _loggedInUserWidgetStates.isNotEmpty;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void updateAllUIComponents() {
     for (_RefreshableWidgetState widgetState
         in _loggedInUserWidgetStates.keys) {
       if (widgetState.mounted) {

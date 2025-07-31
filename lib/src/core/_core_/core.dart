@@ -130,15 +130,15 @@ part '__core__/_actionable.dart';
 
 part '__core__/_activity.dart';
 
-part '__core__/_activity_config.dart';
+part '_config_/_activity_config.dart';
 
 part '__core__/_app_utils.dart';
 
 part '__core__/_block.dart';
 
-part '__core__/_block_ui_components.dart';
+part '_ui_com_/_block_ui_components.dart';
 
-part '__core__/_block_config.dart';
+part '_config_/_block_config.dart';
 
 part '__core__/_block_data.dart';
 
@@ -166,27 +166,27 @@ part '__core__/_filter_input.dart';
 
 part '__core__/_filter_model.dart';
 
-part '__core__/_filter_ui_components.dart';
+part '_ui_com_/_filter_ui_components.dart';
 
-part '__core__/_filter_model_config.dart';
+part '_config_/_filter_model_config.dart';
 
 part '__core__/_form_leave_safely.dart';
 
 part '__core__/_form_model.dart';
 
-part '__core__/_form_ui_components.dart';
+part '_ui_com_/_form_ui_components.dart';
 
-part '__core__/_form_model_config.dart';
+part '_config_/_form_model_config.dart';
 
-part '__core__/_logged_in_user_ui_components.dart';
+part '_ui_com_/_logged_in_user_ui_components.dart';
 
 part '__core__/_item_sort_criteria.dart';
 
 part '__core__/_scalar.dart';
 
-part '__core__/_scalar_ui_components.dart';
+part '_ui_com_/_scalar_ui_components.dart';
 
-part '__core__/_scalar_config.dart';
+part '_config_/_scalar_config.dart';
 
 part '__core__/_scalar_data.dart';
 
@@ -196,9 +196,9 @@ part '__core__/_scalar_outside_event_reaction.dart';
 
 part '__core__/_shelf.dart';
 
-part '__core__/_ui_components.dart';
+part '_ui_com_/_ui_components.dart';
 
-part '__core__/_shelf_ui_components.dart';
+part '_ui_com_/_shelf_ui_components.dart';
 
 part '__core__/_shelf_block_scalar_type.dart';
 
