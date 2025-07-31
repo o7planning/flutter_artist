@@ -901,7 +901,7 @@ class _Storage extends _XBase {
     }
     BackgroundActionResult backgroundResult = BackgroundActionResult();
     try {
-      ApiResult<void> result = await action.callApi();
+      ApiResult<void> result = await action.run();
       // Throw ApiError:
       result.throwIfError();
     } catch (e, stackTrace) {

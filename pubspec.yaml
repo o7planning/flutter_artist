@@ -25,6 +25,7 @@ dependencies:
   flutter_svg:
   multi_split_view: ^3.6.0
   flutter_advanced_switch: ^3.1.0
+  web: ^1.1.1
 
   flutter_artist_core:
     path: ../flutter_artist_core
