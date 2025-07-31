@@ -11,5 +11,6 @@ enum AfterScalarQuickAction {
 
 enum AfterScalarLoadExtraDataQuickAction {
   none,
+  // TODO: Change to updateUIComponents.
   update;
 }

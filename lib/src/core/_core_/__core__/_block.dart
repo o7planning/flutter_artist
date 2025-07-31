@@ -4547,8 +4547,8 @@ abstract class Block<
 
   @_PrecheckMethod()
   Actionable<BlockItemDeletionPrecheck> canDeleteItem({
-    required bool errorIfItemNotInList,
     required ITEM item,
+    bool errorIfItemNotInList = true,
     bool checkAllow = true,
   }) {
     return __canDeleteItem(

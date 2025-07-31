@@ -694,6 +694,7 @@ abstract class Scalar<
       case AfterScalarLoadExtraDataQuickAction.none:
         break;
       case AfterScalarLoadExtraDataQuickAction.update:
+        // TODO: Xem lai.
         forceQueryScalarOpts = [
           _ScalarOpt(scalar: this),
         ];
