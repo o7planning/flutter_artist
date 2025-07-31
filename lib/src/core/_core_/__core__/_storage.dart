@@ -2,7 +2,7 @@ part of '../core.dart';
 
 typedef ShelfCreator<S> = S Function();
 
-class _Storage {
+class _Storage extends _XBase {
   final List<Shelf> _rencentShelves = [];
 
   final Map<String, ShelfCreator> __shelfCreatorMap = {};
@@ -865,5 +865,58 @@ class _Storage {
         forceQueryFormModelOpts: [],
       );
     }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_RootMethodAnnotation()
+  void executeBackgroundAction({
+    required BackgroundAction action,
+  }) {
+    __executeBackgroundAction(action: action);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<BackgroundActionResult> __executeBackgroundAction({
+    required BackgroundAction action,
+  }) async {
+    //
+    // Confirmation:
+    //
+    bool confirm = true;
+    if (action.needToConfirm) {
+      confirm = await __showActionConfirmation(
+        shelf: null,
+        defaultConfirmation: action.defaultConfirmation,
+        customConfirmation: action.createCustomConfirmation(),
+      );
+    }
+    if (!confirm) {
+      return BackgroundActionResult(
+        precheck: BackgroundActionPrecheck.cancelled,
+      );
+    }
+    BackgroundActionResult backgroundResult = BackgroundActionResult();
+    try {
+      ApiResult<void> result = await action.callApi();
+      // Throw ApiError:
+      result.throwIfError();
+    } catch (e, stackTrace) {
+      AppError appError = _handleError(
+        shelf: null,
+        methodName: "executeBackgroundAction",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: false,
+      );
+      backgroundResult._setAppError(
+        appError: appError,
+        stackTrace: stackTrace,
+      );
+    }
+    return backgroundResult;
   }
 }

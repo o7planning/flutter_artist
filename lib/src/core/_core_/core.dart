@@ -28,6 +28,7 @@ import '../../debug/dialog/_storage_dialog.dart';
 import '../../debug/dialog/_ui_components_dialog.dart';
 import '../../debug/storage/_block_or_scalar.dart';
 import '../action/base_action.dart';
+import '../action/base_background_action.dart';
 import '../action/block_quick_action.dart';
 import '../action/block_quick_child_block_items_action.dart';
 import '../action/block_quick_create_item_action.dart';
@@ -89,6 +90,7 @@ import '../global/_notification_summary.dart';
 import '../icon/icon_constants.dart';
 import '../precheck/__chk_code_detail.dart';
 import '../precheck/_check_allow.dart';
+import '../precheck/background_action_precheck.dart';
 import '../precheck/block_clearance_precheck.dart';
 import '../precheck/block_form_enablement_chk.dart';
 import '../precheck/block_form_reset_precheck.dart';
@@ -226,7 +228,7 @@ part '_core_query_/_lazy_objects.dart';
 part '_core_query_/_scalar_and_block_list.dart';
 
 part '_core_query_/_scalar_opt.dart';
-
+part '_utils_/_debug_query_utils.dart';
 part '_core_query_/_x_block.dart';
 
 part '_core_query_/_x_filter_model.dart';
@@ -278,6 +280,8 @@ part '_login_/_simple_login_view.dart';
 part '_notification_/_notification_engine.dart';
 
 part '_task_result_/_block_clearance_result.dart';
+
+part '_task_result_/_background_action_result.dart';
 
 part '_task_result_/_block_item_creation_result.dart';
 
