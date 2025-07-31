@@ -1,9 +1,9 @@
 part of '../core.dart';
 
-class _ShelfUIComponents {
+class _ShelfUIComponents extends _UIComponents {
   final Shelf shelf;
 
-  final Map<_RefreshableWidgetState, bool> _refreshableNeutralViewStates = {};
+  final Map<_RefreshableWidgetState, bool> __refreshableNeutralViewStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -13,8 +13,9 @@ class _ShelfUIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
   bool hasMountedUIComponent() {
-    bool hasMounted = _refreshableNeutralViewStates.isNotEmpty;
+    bool hasMounted = __refreshableNeutralViewStates.isNotEmpty;
     if (hasMounted) {
       return true;
     }
@@ -57,6 +58,13 @@ class _ShelfUIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  void updateAllRefreshableNeutralViews() {
+    __updateRefreshableNeutralViews(force: true);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool _hasMountedScalarUIComponent() {
     for (Scalar scalar in shelf.scalars) {
       if (scalar.ui.hasMountedUIComponent()) {
@@ -90,21 +98,14 @@ class _ShelfUIComponents {
     required _RefreshableWidgetState widgetState,
     required bool isShowing,
   }) {
-    _refreshableNeutralViewStates[widgetState] = isShowing;
+    __refreshableNeutralViewStates[widgetState] = isShowing;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   void _removeShelfWidgetState({required State widgetState}) {
-    _refreshableNeutralViewStates.remove(widgetState);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void updateAllRefreshableNeutralViews() {
-    __updateRefreshableNeutralViews(force: true);
+    __refreshableNeutralViewStates.remove(widgetState);
   }
 
   // ***************************************************************************
@@ -128,7 +129,7 @@ class _ShelfUIComponents {
   // ***************************************************************************
 
   void __updateRefreshableNeutralViews({bool force = true}) {
-    for (_RefreshableWidgetState state in _refreshableNeutralViewStates.keys) {
+    for (_RefreshableWidgetState state in __refreshableNeutralViewStates.keys) {
       if (state.mounted) {
         state.refreshState(force: force);
       }

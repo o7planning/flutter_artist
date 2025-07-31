@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class _FormUIComponents {
+class _FormUIComponents extends _UIComponents {
   final FormModel formModel;
 
   final Map<_RefreshableWidgetState, XState> _formWidgetStates = {};
@@ -20,6 +20,7 @@ class _FormUIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
   bool hasMountedUIComponent() {
     return _formWidgetStates.isNotEmpty;
   }

@@ -196,6 +196,8 @@ part '__core__/_scalar_outside_event_reaction.dart';
 
 part '__core__/_shelf.dart';
 
+part '__core__/_ui_components.dart';
+
 part '__core__/_shelf_ui_components.dart';
 
 part '__core__/_shelf_block_scalar_type.dart';
