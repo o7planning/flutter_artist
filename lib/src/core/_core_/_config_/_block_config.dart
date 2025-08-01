@@ -44,11 +44,11 @@ class BlockConfig {
       //
       outsideBroadcastEvents: outsideBroadcastEvents,
       refreshCurrItemByInternalShelfEvents:
-      refreshCurrItemByInternalShelfEvents,
+          refreshCurrItemByInternalShelfEvents,
       reQueryByInternalShelfEvents: reQueryByInternalShelfEvents,
       //
       refreshCurrItemByExternalShelfEvents:
-      refreshCurrItemByExternalShelfEvents,
+          refreshCurrItemByExternalShelfEvents,
       reQueryByExternalShelfEvents: reQueryByExternalShelfEvents,
     );
   }

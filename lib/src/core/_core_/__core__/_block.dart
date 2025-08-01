@@ -1386,7 +1386,7 @@ abstract class Block<
     //
     // No need to check again?
     //
-    Actionable actionable = canDeleteItem(
+    Actionable<BlockItemDeletionPrecheck> actionable = canDeleteItem(
       item: item,
       errorIfItemNotInList: true,
     );
@@ -1814,9 +1814,8 @@ abstract class Block<
       case AfterBlockQuickAction.none:
         break;
       case AfterBlockQuickAction.refreshCurrentItem:
-        Actionable actionable = canRefreshCurrentItem();
-        print(
-            ">>>> refreshCurrentItem after quickAction: ${actionable.yes} - ${actionable.message}");
+        Actionable<BlockItemCurrSelectionPrecheck> actionable =
+            canRefreshCurrentItem();
         if (!actionable.yes) {
           return true;
         }
@@ -1962,7 +1961,8 @@ abstract class Block<
         item: refreshedItem,
       );
       //
-      Actionable actionable = canEditItemOnForm(item: refreshedItem);
+      Actionable<BlockItemEditPrecheck> actionable =
+          canEditItemOnForm(item: refreshedItem);
       //
       FlutterArtist.codeFlowLogger._addInfo(
         ownerClassInstance: this,
@@ -4689,7 +4689,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable _isEnableFormToModify() {
+  Actionable<BlockFormEnablementChkCode> _isEnableFormToModify() {
     return __isEnableFormToModify(checkAllow: true);
   }
 

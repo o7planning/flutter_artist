@@ -88,6 +88,7 @@ import '../global/_global_data.dart';
 import '../notification/_notification_listener.dart';
 import '../notification/_notification_summary.dart';
 import '../icon/icon_constants.dart';
+import '../precheck/__actionable.dart';
 import '../precheck/__chk_code_detail.dart';
 import '../precheck/_check_allow.dart';
 import '../precheck/background_action_precheck.dart';
@@ -129,13 +130,11 @@ part '_config_/_coordinator_config.dart';
 
 part '_config_/_event_config.dart';
 
-part '__core__/_actionable.dart';
-
 part '__core__/_activity.dart';
 
 part '_config_/_activity_config.dart';
 
-part '__core__/_app_utils.dart';
+part '_utils_/_app_utils.dart';
 
 part '__core__/_block.dart';
 

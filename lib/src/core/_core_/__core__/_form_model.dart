@@ -1411,7 +1411,8 @@ abstract class FormModel<
   // ***************************************************************************
 
   bool isEnabled() {
-    Actionable actionable = block._isEnableFormToModify();
+    Actionable<BlockFormEnablementChkCode> actionable =
+        block._isEnableFormToModify();
     return actionable.yes;
   }
 
@@ -1477,18 +1478,6 @@ abstract class FormModel<
   void _afterBuildFormView() {
     _formPropsStructure._justInitialized = false;
   }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  // Private method. Only for use in this class.
-  // bool __checkWithFormValidationBeforeSave() {
-  //   Actionable actionable = block.canSaveForm();
-  //   if (!actionable.yes) {
-  //     return false;
-  //   }
-  //   return _formKey.currentState?.validate() ?? false;
-  // }
 
   // ***************************************************************************
   // ***************************************************************************

@@ -1,4 +1,5 @@
-part of '../core.dart';
+import '../utils/_class_utils.dart';
+import '__chk_code_detail.dart';
 
 class Actionable<ENUM extends ChkCodeDetail> {
   final bool yes;
