@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-abstract class _XBase {
+abstract class _Core {
   // TODO: Them tham so BuildContext?
   Future<bool> showConfirmDialog({
     required String message,
@@ -62,12 +62,6 @@ abstract class _XBase {
       return await defaultConfirmation(context);
     }
   }
-
-  // ***************************************************************************
-  // *********** HANDLE ERROR **************************************************
-  // ***************************************************************************
-
-  void _handAppError() {}
 
   // ***************************************************************************
   // *********** HANDLE ERROR **************************************************

@@ -3,7 +3,7 @@ part of '../core.dart';
 abstract class FilterModel<
     FILTER_INPUT extends FilterInput, // EmptyFilterInput
     FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
-    > extends _XBase {
+    > extends _Core {
   late final Shelf shelf;
 
   late final String name;

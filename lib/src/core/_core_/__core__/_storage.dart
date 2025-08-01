@@ -2,7 +2,7 @@ part of '../core.dart';
 
 typedef ShelfCreator<S> = S Function();
 
-class _Storage extends _XBase {
+class _Storage extends _Core {
   final List<Shelf> _rencentShelves = [];
 
   final Map<String, ShelfCreator> __shelfCreatorMap = {};

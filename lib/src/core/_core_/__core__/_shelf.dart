@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-abstract class Shelf extends _XBase {
+abstract class Shelf extends _Core {
   @override
   Shelf get shelf => this;
 

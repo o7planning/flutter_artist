@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-abstract class Coordinator extends _XBase {
+abstract class Coordinator extends _Core {
   final CoordinatorConfig config;
   void Function()? customNavigate;
 

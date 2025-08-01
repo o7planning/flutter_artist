@@ -202,7 +202,7 @@ part '__core__/_storage.dart';
 
 part '__core__/_suggested_selection.dart';
 
-part '__core__/_x_base.dart';
+part '__core__/___core.dart';
 
 part '_core_query_/_block_opt.dart';
 
