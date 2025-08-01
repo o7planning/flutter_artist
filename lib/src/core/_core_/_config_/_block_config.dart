@@ -9,11 +9,6 @@ class BlockConfig {
 
   //
 
-  // @Deprecated("Xoa di")
-  // final BlockOutsideEventReaction? outsideEventReaction;
-
-  //
-
   final List<Type>? outsideBroadcastEvents;
 
   final List<Type>? refreshCurrItemByExternalShelfEvents;
@@ -26,7 +21,6 @@ class BlockConfig {
     this.refreshItemMode = BlockRefreshItemMode.auto,
     this.leaveTheFormSafely = true,
     this.hiddenBehavior = BlockHiddenBehavior.none,
-    // this.outsideEventReaction,
     this.outsideBroadcastEvents,
     //
     this.refreshCurrItemByExternalShelfEvents,

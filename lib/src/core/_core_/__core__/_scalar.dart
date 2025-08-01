@@ -130,13 +130,11 @@ abstract class Scalar<
   // ***************************************************************************
 
   List<Type> getOutsideDataTypesToListen() {
-    if (config.outsideEventReaction == null) {
-      return [];
-    }
-    return (config.outsideEventReaction!._events ?? [])
-        .map((e) => e.dataType)
-        .toSet()
-        .toList();
+    final List<Type> list = [];
+    //
+    list.addAll(config.reQueryByExternalShelfEvents ?? []);
+    //
+    return list.toSet().toList();
   }
 
   // ***************************************************************************

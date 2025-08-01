@@ -594,12 +594,11 @@ class _Storage extends _XBase {
         if (blk.config.outsideBroadcastEvents == null) {
           continue;
         }
-        ScalarOutsideEventReaction? outsideReaction =
-            listenerScalar.config.outsideEventReaction;
-        if (outsideReaction == null) {
+        List<Type> listenerTypes =
+            listenerScalar.config.reQueryByExternalShelfEvents ?? [];
+        if (listenerTypes.isEmpty) {
           continue;
         }
-        final List<Type> listenerTypes = outsideReaction.getDataEventTypes();
         final Type itemType = blk.getItemType();
         final Type itemDetailType = blk.getItemDetailType();
         if (_contains(listenerTypes, itemType) ||
