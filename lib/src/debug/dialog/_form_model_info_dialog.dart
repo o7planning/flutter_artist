@@ -8,11 +8,11 @@ import '../form/_form_data_debug_view.dart';
 import '../storage/_shelf_structure_graph_view.dart';
 import '../utils/_dialog_size.dart';
 
-class FormDataInfoDialog extends StatefulWidget {
+class FormModelInfoDialog extends StatefulWidget {
   final FormModel formModel;
   final String locationInfo;
 
-  const FormDataInfoDialog({
+  const FormModelInfoDialog({
     required this.formModel,
     required this.locationInfo,
     super.key,
@@ -20,10 +20,10 @@ class FormDataInfoDialog extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _FormDataInfoDialogState();
+    return _FormModelInfoDialogState();
   }
 
-  static Future<void> showFormInfoDialog({
+  static Future<void> showFormModelInfoDialog({
     required BuildContext context,
     required String locationInfo,
     required FormModel formModel,
@@ -31,7 +31,7 @@ class FormDataInfoDialog extends StatefulWidget {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return FormDataInfoDialog(
+        return FormModelInfoDialog(
           formModel: formModel,
           locationInfo: locationInfo,
         );
@@ -40,7 +40,7 @@ class FormDataInfoDialog extends StatefulWidget {
   }
 }
 
-class _FormDataInfoDialogState extends State<FormDataInfoDialog> {
+class _FormModelInfoDialogState extends State<FormModelInfoDialog> {
   bool showFormData = true;
 
   @override
