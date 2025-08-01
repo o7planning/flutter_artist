@@ -1,7 +1,7 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../global/_notification.dart';
-import '../global/_notification_summary.dart';
+import '../notification/_notification.dart';
+import '../notification/_notification_summary.dart';
 
 ///
 ///
