@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
-    as dialogs;
+as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
@@ -70,7 +70,8 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
         spacing: 5,
         children: widget.errorLogger.errorInfos
             .map(
-              (errorInfo) => TextButton(
+              (errorInfo) =>
+              TextButton(
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.all(10),
                   minimumSize: Size.zero,
@@ -84,7 +85,7 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
                 },
                 child: Text(errorInfo.id.toString()),
               ),
-            )
+        )
             .toList(),
       ),
     );
@@ -102,10 +103,10 @@ class _ErrorLogViewerDialogState extends State<ErrorLogViewerDialog> {
             child: _errorInfo == null
                 ? SizedBox()
                 : ErrorInfoView(
-                    errorInfo: _errorInfo!,
-                    width: width,
-                    height: height,
-                  ),
+              errorInfo: _errorInfo!,
+              width: width,
+              height: height,
+            ),
           ),
         ],
       ),
