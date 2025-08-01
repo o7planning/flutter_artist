@@ -42,8 +42,6 @@ class BlockConfig {
       hiddenBehavior: hiddenBehavior,
       pageable: pageable.copy(),
       //
-      // outsideEventReaction: outsideEventReaction,
-      //
       outsideBroadcastEvents: outsideBroadcastEvents,
       refreshCurrItemByInternalShelfEvents:
           refreshCurrItemByInternalShelfEvents,
