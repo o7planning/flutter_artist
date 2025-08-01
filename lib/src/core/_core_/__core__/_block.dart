@@ -371,14 +371,12 @@ abstract class Block<
   }
 
   List<Type> getOutsideDataTypesToListen() {
-    if (config.outsideEventReaction == null) {
-      return [];
-    }
     List<Type> itemTypes = [];
-    for (Event event in config.outsideEventReaction!._events ?? []) {
-      itemTypes.add(event.dataType);
-    }
-    return itemTypes;
+    //
+    itemTypes.addAll(config.refreshCurrItemByExternalShelfEvents ?? []);
+    itemTypes.addAll(config.reQueryByExternalShelfEvents ?? []);
+    //
+    return itemTypes.toSet().toList();
   }
 
   // ***************************************************************************

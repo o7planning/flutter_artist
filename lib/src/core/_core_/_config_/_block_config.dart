@@ -9,8 +9,8 @@ class BlockConfig {
 
   //
 
-  @Deprecated("Xoa di")
-  final BlockOutsideEventReaction? outsideEventReaction;
+  // @Deprecated("Xoa di")
+  // final BlockOutsideEventReaction? outsideEventReaction;
 
   //
 
@@ -26,7 +26,7 @@ class BlockConfig {
     this.refreshItemMode = BlockRefreshItemMode.auto,
     this.leaveTheFormSafely = true,
     this.hiddenBehavior = BlockHiddenBehavior.none,
-    this.outsideEventReaction,
+    // this.outsideEventReaction,
     this.outsideBroadcastEvents,
     //
     this.refreshCurrItemByExternalShelfEvents,
@@ -48,7 +48,7 @@ class BlockConfig {
       hiddenBehavior: hiddenBehavior,
       pageable: pageable.copy(),
       //
-      outsideEventReaction: outsideEventReaction,
+      // outsideEventReaction: outsideEventReaction,
       //
       outsideBroadcastEvents: outsideBroadcastEvents,
       refreshCurrItemByInternalShelfEvents:
