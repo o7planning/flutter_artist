@@ -1177,7 +1177,7 @@ abstract class Block<
     ITEM_DETAIL? refreshedCurrentItemDetail;
     if (forceReloadItem) {
       if (ITEM == ITEM_DETAIL &&
-          config.refreshItemMode == BlockRefreshItemMode.auto &&
+          config.itemRefreshmentMode == BlockItemRefreshmentMode.auto &&
           isCandidateCurrentItemInNewQueriedList) {
         final ITEM? candidateCurrentItemInNewQueriedList =
             ItemsUtils.findItemInList(

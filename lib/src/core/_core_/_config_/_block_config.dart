@@ -2,7 +2,7 @@ part of '../core.dart';
 
 class BlockConfig {
   final bool leaveTheFormSafely;
-  final BlockRefreshItemMode refreshItemMode;
+  final BlockItemRefreshmentMode itemRefreshmentMode;
   final BlockHiddenBehavior hiddenBehavior;
 
   final PageableData pageable;
@@ -18,7 +18,7 @@ class BlockConfig {
   final List<Evt>? reQueryByInternalShelfEvents;
 
   BlockConfig({
-    this.refreshItemMode = BlockRefreshItemMode.auto,
+    this.itemRefreshmentMode = BlockItemRefreshmentMode.auto,
     this.leaveTheFormSafely = true,
     this.hiddenBehavior = BlockHiddenBehavior.none,
     this.outsideBroadcastEvents,
@@ -37,7 +37,7 @@ class BlockConfig {
 
   BlockConfig copy() {
     return BlockConfig(
-      refreshItemMode: refreshItemMode,
+      itemRefreshmentMode: itemRefreshmentMode,
       leaveTheFormSafely: leaveTheFormSafely,
       hiddenBehavior: hiddenBehavior,
       pageable: pageable.copy(),

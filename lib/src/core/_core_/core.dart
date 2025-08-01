@@ -48,7 +48,7 @@ import '../enums/_activity_hidden_behavior.dart';
 import '../enums/_block_control_action_type.dart';
 import '../enums/_block_error_method.dart';
 import '../enums/_block_hidden_behavior.dart';
-import '../enums/_block_refresh_item_mode.dart';
+import '../enums/_block_item_refreshment_mode.dart';
 import '../enums/_code_flow_type.dart';
 import '../enums/_current_item_selection_type.dart';
 import '../enums/_data_mode.dart';

@@ -1,4 +1,0 @@
-enum BlockRefreshItemMode {
-  auto,
-  force;
-}
