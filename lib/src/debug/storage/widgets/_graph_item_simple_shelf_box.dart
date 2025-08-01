@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/_core_/core.dart';
 import '../../../core/icon/icon_constants.dart';
+import '../../../core/utils/_text_size_utils.dart';
 import '../../constants/_debug_constants.dart';
 
 class GraphItemSimpleShelfBox extends StatefulWidget {

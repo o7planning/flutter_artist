@@ -47,8 +47,10 @@ class _FormUIComponents extends _UIComponents {
   }) {
     _formWidgetStates.update(
       widgetState,
-      (xState) => xState.._setBuilding(isBuilding),
-      ifAbsent: () => XState().._setBuilding(isBuilding),
+          (xState) => xState.._setBuilding(isBuilding),
+      ifAbsent: () =>
+      XState()
+        .._setBuilding(isBuilding),
     );
   }
 
@@ -62,8 +64,10 @@ class _FormUIComponents extends _UIComponents {
     bool isShowingOLD = _formWidgetStates[widgetState]?.isShowing ?? false;
     _formWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isShowing),
-      ifAbsent: () => XState().._setShowing(isShowing),
+          (xState) => xState.._setShowing(isShowing),
+      ifAbsent: () =>
+      XState()
+        .._setShowing(isShowing),
     );
     if (!isShowingOLD && isShowing) {
       formModel.shelf._startLoadDataForLazyUIComponentsIfNeed();

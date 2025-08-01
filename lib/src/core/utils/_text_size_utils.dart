@@ -1,4 +1,4 @@
-part of '../_core_/core.dart';
+import 'package:flutter/material.dart';
 
 class TextSizeUtils {
   static Size calculateTextSize(

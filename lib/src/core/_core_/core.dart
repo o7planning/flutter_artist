@@ -117,8 +117,6 @@ import '../utils/_string_utils.dart';
 import '../utils/_visibility_detector_utils.dart';
 import '../widgets/_custom_app_container.dart';
 
-part '../utils/_text_size_utils.dart';
-
 part '_code_flow_/_code_flow_item.dart';
 
 part '_code_flow_/_code_flow_logger.dart';
