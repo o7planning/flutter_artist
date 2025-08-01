@@ -129,33 +129,17 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
-  List<Type> getOutsideDataTypesToListen({required bool external}) {
-    if (external) {
-      if (config.outsideEventReaction == null) {
-        return [];
-      }
-      if (config.outsideEventReaction!.intrinsicMode) {
-        return [getValueType()];
-      } else {
-        return (config.outsideEventReaction!._events ?? [])
-            .map((e) => e.dataType)
-            .toSet()
-            .toList();
-      }
+  List<Type> getOutsideDataTypesToListen() {
+    if (config.outsideEventReaction == null) {
+      return [];
     }
-    // Internal:
-    else {
-      if (config.internalEventReaction == null) {
-        return [];
-      }
-      if (config.internalEventReaction!.intrinsicMode) {
-        return [getValueType()];
-      } else {
-        return (config.internalEventReaction!._events ?? [])
-            .map((e) => e.dataType)
-            .toSet()
-            .toList();
-      }
+    if (config.outsideEventReaction!.intrinsicMode) {
+      return [getValueType()];
+    } else {
+      return (config.outsideEventReaction!._events ?? [])
+          .map((e) => e.dataType)
+          .toSet()
+          .toList();
     }
   }
 

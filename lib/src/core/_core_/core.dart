@@ -129,7 +129,7 @@ part '__core__/_coordinator.dart';
 
 part '_config_/_coordinator_config.dart';
 
-part '_event_config_/_internal_event_config.dart';
+part '_config_/_event_config.dart';
 
 part '__core__/_actionable.dart';
 
@@ -147,9 +147,9 @@ part '_config_/_block_config.dart';
 
 part '__core__/_block_data.dart';
 
-part '__core__/_block_outside_broadcast.dart';
+part '_config_/__block_outside_broadcast.dart';
 
-part '__core__/_block_outside_event_reaction.dart';
+part '_config_/__block_outside_event_reaction.dart';
 
 part '__core__/_current_couple_item.dart';
 
@@ -191,9 +191,7 @@ part '_config_/_scalar_config.dart';
 
 part '__core__/_scalar_data.dart';
 
-part '__core__/_scalar_internal_event_reaction.dart';
-
-part '__core__/_scalar_outside_event_reaction.dart';
+part '_config_/__scalar_outside_event_reaction.dart';
 
 part '__core__/_shelf.dart';
 

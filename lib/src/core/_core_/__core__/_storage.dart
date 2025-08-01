@@ -472,9 +472,7 @@ class _Storage extends _XBase {
     Map<String, Scalar> foundMap = {};
 
     for (Scalar scalar in eventShelf.scalars) {
-      List<Type> listenerTypes = scalar.getOutsideDataTypesToListen(
-        external: false,
-      );
+      List<Type> listenerTypes = scalar.getOutsideDataTypesToListen();
       for (Type affectedItemType in affectedItemTypes) {
         if (_contains(listenerTypes, affectedItemType)) {
           foundMap[scalar._shortPathName] = scalar;

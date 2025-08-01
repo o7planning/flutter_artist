@@ -236,9 +236,9 @@ class _ShelfRelationshipViewState extends State<ShelfRelationshipView> {
   }
 
   Widget _buildEventSources(
-      BlockOrScalar blockOrScalar, List<ShelfBlockScalarType> notifiers) {
-    final bool external = true;
-    //
+    BlockOrScalar blockOrScalar,
+    List<ShelfBlockScalarType> notifiers,
+  ) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -271,8 +271,7 @@ class _ShelfRelationshipViewState extends State<ShelfRelationshipView> {
               ),
               TextSpan(text: ". It listens for changes on Item types: "),
               TextSpan(
-                text:
-                    "${blockOrScalar.getListenItemTypesAsStrings(external: external)}",
+                text: "${blockOrScalar.getListenItemTypesAsStrings()}",
                 style: DebugConstants.eventSourceTextStyle,
               ),
               TextSpan(

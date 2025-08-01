@@ -5,6 +5,7 @@ part of '../core.dart';
 ///    Okr:
 /// }
 ///
+@Deprecated("Xoa di")
 class BlockOutsideBroadcast {
   final bool intrinsicEventMode;
   final List<Event> events;
@@ -18,6 +19,7 @@ class BlockOutsideBroadcast {
   }) : intrinsicEventMode = false;
 }
 
+@Deprecated("Xoa di")
 class Event {
   final Type dataType;
 

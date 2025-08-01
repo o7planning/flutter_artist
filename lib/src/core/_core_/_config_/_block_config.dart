@@ -5,11 +5,22 @@ class BlockConfig {
   final BlockRefreshItemMode refreshItemMode;
   final BlockHiddenBehavior hiddenBehavior;
 
+  final PageableData pageable;
+
+  //
+
+  @Deprecated("Xoa di")
   final BlockOutsideBroadcast? outsideBroadcast;
 
+  @Deprecated("Xoa di")
   final BlockOutsideEventReaction? outsideEventReaction;
 
-  final PageableData pageable;
+  //
+
+  final List<Type>? outsideBroadcastEvents;
+
+  final List<Type>? refreshCurrItemByExternalShelfEvents;
+  final List<Type>? reQueryByExternalShelfEvents;
 
   final List<Evt>? refreshCurrItemByInternalShelfEvents;
   final List<Evt>? reQueryByInternalShelfEvents;
@@ -20,8 +31,14 @@ class BlockConfig {
     this.hiddenBehavior = BlockHiddenBehavior.none,
     this.outsideBroadcast,
     this.outsideEventReaction,
+    this.outsideBroadcastEvents,
+    //
+    this.refreshCurrItemByExternalShelfEvents,
+    this.reQueryByExternalShelfEvents,
+    //
     this.refreshCurrItemByInternalShelfEvents,
     this.reQueryByInternalShelfEvents,
+    //
     this.pageable = const PageableData(
       page: 1,
       pageSize: 20,
@@ -33,12 +50,18 @@ class BlockConfig {
       refreshItemMode: refreshItemMode,
       leaveTheFormSafely: leaveTheFormSafely,
       hiddenBehavior: hiddenBehavior,
+      pageable: pageable.copy(),
+      //
       outsideBroadcast: outsideBroadcast,
       outsideEventReaction: outsideEventReaction,
+      //
       refreshCurrItemByInternalShelfEvents:
           refreshCurrItemByInternalShelfEvents,
       reQueryByInternalShelfEvents: reQueryByInternalShelfEvents,
-      pageable: pageable.copy(),
+      //
+      refreshCurrItemByExternalShelfEvents:
+          refreshCurrItemByExternalShelfEvents,
+      reQueryByExternalShelfEvents: reQueryByExternalShelfEvents,
     );
   }
 }

@@ -110,16 +110,16 @@ class BlockOrScalar extends Equatable {
     }
   }
 
-  List<Type> getListenItemTypes({required bool external}) {
+  List<Type> getListenItemTypes() {
     if (block != null) {
       return block!.getOutsideDataTypesToListen();
     } else {
-      return scalar!.getOutsideDataTypesToListen(external: external);
+      return scalar!.getOutsideDataTypesToListen();
     }
   }
 
   // TODO-Rename
-  List<String> getListenItemTypesAsStrings({required bool external}) {
+  List<String> getListenItemTypesAsStrings() {
     if (block != null) {
       return block!
           .getOutsideDataTypesToListen()
@@ -127,7 +127,7 @@ class BlockOrScalar extends Equatable {
           .toList();
     } else {
       return scalar!
-          .getOutsideDataTypesToListen(external: external)
+          .getOutsideDataTypesToListen()
           .map((type) => type.toString())
           .toList();
     }

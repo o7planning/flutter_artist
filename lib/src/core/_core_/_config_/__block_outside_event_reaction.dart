@@ -2,6 +2,7 @@ part of '../core.dart';
 
 ///
 ///
+@Deprecated("Xoa di")
 class BlockOutsideEventReaction {
   final bool intrinsicMode;
   final BlockReaction? reaction;

@@ -8,12 +8,6 @@ class Actionable<ENUM extends ChkCodeDetail> {
 
   bool get no => !yes;
 
-  Actionable._({
-    required this.yes,
-    required this.errCode,
-    required this.stackTrace,
-  });
-
   Actionable.yes()
       : errCode = null,
         stackTrace = null,
