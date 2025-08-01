@@ -57,6 +57,7 @@ export 'src/core/global/_global_data.dart';
 export 'src/core/notification/_notification.dart';
 export 'src/core/notification/_notification_listener.dart';
 export 'src/core/notification/_notification_summary.dart';
+export 'src/core/precheck/__actionable.dart';
 export 'src/core/precheck/__chk_code.dart';
 export 'src/core/precheck/__chk_code_detail.dart';
 export 'src/core/precheck/_check_allow.dart';
