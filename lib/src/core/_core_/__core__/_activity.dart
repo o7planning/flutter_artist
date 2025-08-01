@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-abstract class Activity extends _XBase {
+abstract class Activity extends _Core {
   late final Shelf shelf;
 
   final String name;

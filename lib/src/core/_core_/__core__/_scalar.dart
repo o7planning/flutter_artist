@@ -24,7 +24,7 @@ abstract class Scalar<
     VALUE extends Object,
     FILTER_INPUT extends FilterInput, // EmptyFilterInput
     FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
-    > extends _XBase {
+    > extends _Core {
   late final Shelf shelf;
 
   int _lazyLoadCount = 0;

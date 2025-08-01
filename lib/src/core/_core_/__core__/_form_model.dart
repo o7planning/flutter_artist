@@ -4,7 +4,7 @@ abstract class FormModel<
     ID extends Object,
     ITEM_DETAIL extends Object,
     FILTER_CRITERIA extends FilterCriteria,
-    EXTRA_FORM_INPUT extends ExtraFormInput> extends _XBase {
+    EXTRA_FORM_INPUT extends ExtraFormInput> extends _Core {
   final FormModelConfig config;
 
   int __loadCount = 0;

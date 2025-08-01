@@ -74,7 +74,7 @@ abstract class Block<
     FILTER_INPUT extends FilterInput, // EmptyFilterInput
     FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
     EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
-    > extends _XBase {
+    > extends _Core {
   late final Shelf shelf;
 
   int _deletionErrorCount = 0;
