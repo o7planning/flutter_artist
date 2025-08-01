@@ -77,18 +77,16 @@ class _Storage extends _XBase {
     required Block eventBlock,
     required String? itemIdString,
   }) {
-    List<Type> outsideEvents = eventBlock.config.outsideBroadcastEvents ?? [];
-
     // Broadcast Data Types:
     List<Type> outsideEventTypes = eventBlock._getBroadcastDataTypes();
     //
     print(
-        "~~~~~~~~~> ${outsideEvents.isNotEmpty ? 'FIRE EVENT TO OUTSIDE' : 'NOT FIRE EVENT TO OUTSIDE'}"
+        "~~~~~~~~~> ${outsideEventTypes.isNotEmpty ? 'FIRE EVENT TO OUTSIDE' : 'NOT FIRE EVENT TO OUTSIDE'}"
         " --> Event Item Types: $outsideEventTypes"
         " - ${getClassName(eventBlock)}");
 
     //
-    if (outsideEvents.isNotEmpty) {
+    if (outsideEventTypes.isNotEmpty) {
       final List<Scalar> listenerScalars = __getListenerScalarsByBlock(
         eventBlock: eventBlock,
       );
@@ -470,12 +468,18 @@ class _Storage extends _XBase {
     // FullName, Scalar
     Map<String, Scalar> foundMap = {};
 
-    for (Scalar scalar in eventShelf.scalars) {
-      List<Type> listenerTypes = scalar.getOutsideDataTypesToListen();
-      for (Type affectedItemType in affectedItemTypes) {
-        if (_contains(listenerTypes, affectedItemType)) {
-          foundMap[scalar._shortPathName] = scalar;
-          break;
+    for (String shelfName in __shelfMap.keys) {
+      Shelf? shelf = __shelfMap[shelfName];
+      if (shelf == null || identical(shelf, eventShelf)) {
+        continue;
+      }
+      for (Scalar scalar in shelf.scalars) {
+        List<Type> listenerTypes = scalar.getOutsideDataTypesToListen();
+        for (Type affectedItemType in affectedItemTypes) {
+          if (_contains(listenerTypes, affectedItemType)) {
+            foundMap[scalar._shortPathName] = scalar;
+            break;
+          }
         }
       }
     }

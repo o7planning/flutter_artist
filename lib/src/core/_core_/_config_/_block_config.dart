@@ -29,7 +29,7 @@ class BlockConfig {
     this.refreshItemMode = BlockRefreshItemMode.auto,
     this.leaveTheFormSafely = true,
     this.hiddenBehavior = BlockHiddenBehavior.none,
-   // this.outsideBroadcast,
+    // this.outsideBroadcast,
     this.outsideEventReaction,
     this.outsideBroadcastEvents,
     //
@@ -52,9 +52,10 @@ class BlockConfig {
       hiddenBehavior: hiddenBehavior,
       pageable: pageable.copy(),
       //
-     // outsideBroadcast: outsideBroadcast,
+      // outsideBroadcast: outsideBroadcast,
       outsideEventReaction: outsideEventReaction,
       //
+      outsideBroadcastEvents: outsideBroadcastEvents,
       refreshCurrItemByInternalShelfEvents:
           refreshCurrItemByInternalShelfEvents,
       reQueryByInternalShelfEvents: reQueryByInternalShelfEvents,
