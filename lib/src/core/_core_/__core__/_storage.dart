@@ -53,26 +53,21 @@ class _Storage extends _XBase {
     required Shelf eventShelf,
     required List<Type> affectedItemTypes,
   }) {
-    final bool external = true;
-
-    if (external) {
-      final List<Scalar> listenerScalars =
-          __getListenerScalarsByAffectedItemTypes(
-        eventShelf: eventShelf,
-        affectedItemTypes: affectedItemTypes,
-        external: external,
-      );
-      //
-      final List<Block> listenerBlocks = __getListenerBlocksByAffectedItemTypes(
-        eventShelf: eventShelf,
-        affectedItemTypes: affectedItemTypes,
-      );
-      //
-      __executeListeners(
-        listenerScalars: listenerScalars,
-        listenerBlocks: listenerBlocks,
-      );
-    }
+    final List<Scalar> listenerScalars =
+        __getListenerScalarsByAffectedItemTypes(
+      eventShelf: eventShelf,
+      affectedItemTypes: affectedItemTypes,
+    );
+    //
+    final List<Block> listenerBlocks = __getListenerBlocksByAffectedItemTypes(
+      eventShelf: eventShelf,
+      affectedItemTypes: affectedItemTypes,
+    );
+    //
+    __executeListeners(
+      listenerScalars: listenerScalars,
+      listenerBlocks: listenerBlocks,
+    );
   }
 
   // ***************************************************************************
@@ -84,57 +79,23 @@ class _Storage extends _XBase {
   }) {
     final BlockOutsideBroadcast? outsideBroadcast =
         eventBlock.config.outsideBroadcast;
-    final BlockInternalBroadcast? internalBroadcast =
-        eventBlock.config.internalBroadcast;
 
     // Broadcast Data Types:
-    List<Type> outsideEventTypes =
-        eventBlock._getBroadcastDataTypes(external: true);
-    List<Type> internalEventTypes =
-        eventBlock._getBroadcastDataTypes(external: false);
+    List<Type> outsideEventTypes = eventBlock._getBroadcastDataTypes();
     //
     print(
         "~~~~~~~~~> ${outsideBroadcast != null ? 'FIRE EVENT TO OUTSIDE' : 'NOT FIRE EVENT TO OUTSIDE'}"
         " --> Event Item Types: $outsideEventTypes"
         " - ${getClassName(eventBlock)}");
 
-    print(
-        "~~~~~~~~~> ${internalBroadcast != null ? 'FIRE EVENT IN INTERNAL' : 'NOT FIRE EVENT IN INTERNAL'}"
-        " --> Event Item Types: $internalEventTypes"
-        " - ${getClassName(eventBlock)}");
-
-    if (internalBroadcast != null) {
-      final List<Scalar> listenerScalars = __getListenerScalarsByBlock(
-        eventBlock: eventBlock,
-        external: false,
-      );
-      //
-      final List<Block> listenerBlocks = __getListenerBlocksByBlock(
-        eventBlock: eventBlock,
-        external: false,
-      );
-      print(
-          "~~~~~~~~~> listenerBlocks: $listenerBlocks, listenerScalars: $listenerScalars");
-      //
-      // TODO: Add to QUEUE lazy.
-      //
-      if (listenerScalars.isNotEmpty || listenerBlocks.isNotEmpty) {
-        __executeListeners(
-          listenerScalars: listenerScalars,
-          listenerBlocks: listenerBlocks,
-        );
-      }
-    }
     //
     if (outsideBroadcast != null) {
       final List<Scalar> listenerScalars = __getListenerScalarsByBlock(
         eventBlock: eventBlock,
-        external: true,
       );
       //
       final List<Block> listenerBlocks = __getListenerBlocksByBlock(
         eventBlock: eventBlock,
-        external: true,
       );
       print(
           "~~~~~~~~~> listenerBlocks: $listenerBlocks, listenerScalars: $listenerScalars");
@@ -256,8 +217,8 @@ class _Storage extends _XBase {
   // ***************************************************************************
 
   // @Callable
-  Map<String, Shelf> _getIndependentShelves({required bool external}) {
-    Map<String, Shelf> eventMap = _getEventShelves(external: external);
+  Map<String, Shelf> _getIndependentShelves() {
+    Map<String, Shelf> eventMap = _getEventShelves();
     Map<String, Shelf> listenerMap = _getListenerShelves();
     Map<String, Shelf> map = {}..addAll(__shelfMap);
     map.removeWhere((shelfName, shelf) =>
@@ -270,14 +231,13 @@ class _Storage extends _XBase {
   // ***************************************************************************
 
   // @Callable
-  Map<String, Shelf> _getEventShelves({required bool external}) {
+  Map<String, Shelf> _getEventShelves() {
     // Name, Shelf
     Map<String, Shelf> foundEventShelfMap = {};
     //
     for (Shelf shelf in __shelfMap.values) {
       List<Block> listenerBlocks = _getListenerBlocksByShelf(
         eventShelf: shelf,
-        external: external,
       );
       if (listenerBlocks.isNotEmpty) {
         foundEventShelfMap[shelf.name] = shelf;
@@ -285,7 +245,6 @@ class _Storage extends _XBase {
       }
       List<Scalar> listenerScalars = _getListenerScalarsByShelf(
         eventShelf: shelf,
-        external: external,
       );
       if (listenerScalars.isNotEmpty) {
         foundEventShelfMap[shelf.name] = shelf;
@@ -354,13 +313,13 @@ class _Storage extends _XBase {
   }
 
   @DebugMethodAnnotation()
-  Map<String, Shelf> debugGetEventShelves({required bool external}) {
-    return _getEventShelves(external: external);
+  Map<String, Shelf> debugGetEventShelves() {
+    return _getEventShelves();
   }
 
   @DebugMethodAnnotation()
-  Map<String, Shelf> debugGetIndependentShelves({required bool external}) {
-    return _getIndependentShelves(external: external);
+  Map<String, Shelf> debugGetIndependentShelves() {
+    return _getIndependentShelves();
   }
 
   // ***************************************************************************
@@ -415,7 +374,6 @@ class _Storage extends _XBase {
 
   List<Block> _getListenerBlocksByShelf({
     required Shelf eventShelf,
-    required bool external,
   }) {
     // FullName, Block
     Map<String, Block> foundMap = {};
@@ -423,7 +381,6 @@ class _Storage extends _XBase {
     for (Block eventBlock in eventShelf.blocks) {
       List<Block> listenerBlocks = __getListenerBlocksByBlock(
         eventBlock: eventBlock,
-        external: external,
       );
       for (var lb in listenerBlocks) {
         foundMap[lb._shortPathName] = lb;
@@ -437,7 +394,6 @@ class _Storage extends _XBase {
 
   List<Scalar> _getListenerScalarsByShelf({
     required Shelf eventShelf,
-    required bool external,
   }) {
     // FullName, Scalar
     Map<String, Scalar> foundMap = {};
@@ -445,7 +401,6 @@ class _Storage extends _XBase {
     for (Block eventBlock in eventShelf.blocks) {
       List<Scalar> listenerScalars = __getListenerScalarsByBlock(
         eventBlock: eventBlock,
-        external: external,
       );
       for (var scalar in listenerScalars) {
         foundMap[scalar._shortPathName] = scalar;
@@ -491,11 +446,8 @@ class _Storage extends _XBase {
   // Callable.
   List<Block> __getListenerBlocksByBlock({
     required Block eventBlock,
-    required bool external,
   }) {
-    List<Type> itemTypes = eventBlock._getBroadcastDataTypes(
-      external: external,
-    );
+    List<Type> itemTypes = eventBlock._getBroadcastDataTypes();
     if (itemTypes.isEmpty) {
       return [];
     }
@@ -515,46 +467,22 @@ class _Storage extends _XBase {
   List<Scalar> __getListenerScalarsByAffectedItemTypes({
     required Shelf eventShelf,
     required List<Type> affectedItemTypes,
-    required bool external,
   }) {
     // FullName, Scalar
     Map<String, Scalar> foundMap = {};
 
-    if (external) {
-      for (String shelfName in __shelfMap.keys) {
-        Shelf? shelf = __shelfMap[shelfName];
-        if (shelf == null || identical(shelf, eventShelf)) {
-          continue;
-        }
-        for (Scalar scalar in shelf.scalars) {
-          List<Type> listenerTypes = scalar.getOutsideDataTypesToListen(
-            external: true,
-          );
-          for (Type affectedItemType in affectedItemTypes) {
-            if (_contains(listenerTypes, affectedItemType)) {
-              foundMap[scalar._shortPathName] = scalar;
-              break;
-            }
-          }
+    for (Scalar scalar in eventShelf.scalars) {
+      List<Type> listenerTypes = scalar.getOutsideDataTypesToListen(
+        external: false,
+      );
+      for (Type affectedItemType in affectedItemTypes) {
+        if (_contains(listenerTypes, affectedItemType)) {
+          foundMap[scalar._shortPathName] = scalar;
+          break;
         }
       }
-      return foundMap.values.toList();
     }
-    // Internal:
-    else {
-      for (Scalar scalar in eventShelf.scalars) {
-        List<Type> listenerTypes = scalar.getOutsideDataTypesToListen(
-          external: false,
-        );
-        for (Type affectedItemType in affectedItemTypes) {
-          if (_contains(listenerTypes, affectedItemType)) {
-            foundMap[scalar._shortPathName] = scalar;
-            break;
-          }
-        }
-      }
-      return foundMap.values.toList();
-    }
+    return foundMap.values.toList();
   }
 
   // ***************************************************************************
@@ -562,11 +490,8 @@ class _Storage extends _XBase {
 
   List<Scalar> __getListenerScalarsByBlock({
     required Block eventBlock,
-    required bool external,
   }) {
-    List<Type> itemTypes = eventBlock._getBroadcastDataTypes(
-      external: external,
-    );
+    List<Type> itemTypes = eventBlock._getBroadcastDataTypes();
     if (itemTypes.isEmpty) {
       return [];
     }
@@ -574,7 +499,6 @@ class _Storage extends _XBase {
     List<Scalar> scalarList = __getListenerScalarsByAffectedItemTypes(
       eventShelf: eventBlock.shelf,
       affectedItemTypes: itemTypes,
-      external: external,
     );
     return scalarList
         .where((scalar) => !identical(scalar.shelf, eventBlock.shelf))
@@ -587,48 +511,41 @@ class _Storage extends _XBase {
   // Callable.
   List<ShelfBlockScalarType> getListenerShelfBlockScalarTypes({
     required BlockOrScalar eventBlockOrScalar,
-    required bool external,
   }) {
-    if (external) {
-      if (eventBlockOrScalar.block != null) {
-        List<Block> listenerBlocks = __getListenerBlocksByBlock(
-          eventBlock: eventBlockOrScalar.block!,
-          external: external,
+    if (eventBlockOrScalar.block != null) {
+      List<Block> listenerBlocks = __getListenerBlocksByBlock(
+        eventBlock: eventBlockOrScalar.block!,
+      );
+      List<Scalar> listenerScalars = __getListenerScalarsByBlock(
+        eventBlock: eventBlockOrScalar.block!,
+      );
+      //
+      List<ShelfBlockScalarType> foundShelfBlockTypes = [];
+      for (Block listenerBlock in listenerBlocks) {
+        foundShelfBlockTypes.add(
+          ShelfBlockScalarType.block(
+            shelfType: listenerBlock.shelf.runtimeType,
+            blockType: listenerBlock.runtimeType,
+            classDefinition: listenerBlock.debugClassDefinition,
+            classParameterDefinition:
+                listenerBlock.debugClassParametersDefinition,
+          ),
         );
-        List<Scalar> listenerScalars = __getListenerScalarsByBlock(
-          eventBlock: eventBlockOrScalar.block!,
-          external: external,
-        );
-        //
-        List<ShelfBlockScalarType> foundShelfBlockTypes = [];
-        for (Block listenerBlock in listenerBlocks) {
-          foundShelfBlockTypes.add(
-            ShelfBlockScalarType.block(
-              shelfType: listenerBlock.shelf.runtimeType,
-              blockType: listenerBlock.runtimeType,
-              classDefinition: listenerBlock.debugClassDefinition,
-              classParameterDefinition:
-                  listenerBlock.debugClassParametersDefinition,
-            ),
-          );
-        }
-        for (Scalar listenerScalar in listenerScalars) {
-          foundShelfBlockTypes.add(
-            ShelfBlockScalarType.scalar(
-              shelfType: listenerScalar.shelf.runtimeType,
-              scalarType: listenerScalar.runtimeType,
-              classDefinition: listenerScalar.debugClassDefinition,
-              classParameterDefinition:
-                  listenerScalar.debugClassParametersDefinition,
-            ),
-          );
-        }
-        return foundShelfBlockTypes;
-      } else {
-        return [];
       }
+      for (Scalar listenerScalar in listenerScalars) {
+        foundShelfBlockTypes.add(
+          ShelfBlockScalarType.scalar(
+            shelfType: listenerScalar.shelf.runtimeType,
+            scalarType: listenerScalar.runtimeType,
+            classDefinition: listenerScalar.debugClassDefinition,
+            classParameterDefinition:
+                listenerScalar.debugClassParametersDefinition,
+          ),
+        );
+      }
+      return foundShelfBlockTypes;
     } else {
-      throw UnimplementedError();
+      return [];
     }
   }
 

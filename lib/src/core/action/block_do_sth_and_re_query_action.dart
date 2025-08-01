@@ -1,6 +1,5 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../enums/after_quick_action.dart';
 import '_quick_action.dart';
 
 ///
@@ -24,11 +23,16 @@ abstract class BlockDoSthAndReQueryAction extends QuickAction {
 }
 
 class BlockDoSthAndReQueryActionConfig {
-  final AfterBlockQuickAction afterQuickAction;
+  final AfterBlockDoSthAndReQueryAction afterQuickAction;
   final List<Type> affectedItemTypes;
 
   const BlockDoSthAndReQueryActionConfig({
     required this.affectedItemTypes,
     required this.afterQuickAction,
   });
+}
+
+enum AfterBlockDoSthAndReQueryAction {
+  reQuery,
+  refreshParentBlockCurrentItem;
 }

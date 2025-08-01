@@ -109,7 +109,6 @@ class _ShelfRelationshipViewState extends State<ShelfRelationshipView> {
     if (selectedBlockOrScalar?.block != null) {
       listeners = FlutterArtist.storage.getListenerShelfBlockScalarTypes(
         eventBlockOrScalar: BlockOrScalar.block(selectedBlockOrScalar!.block!),
-        external: true,
       );
       eventSources = FlutterArtist.storage.getEventShelfBlockTypes(
         listenerBlockOrScalar:
@@ -119,7 +118,6 @@ class _ShelfRelationshipViewState extends State<ShelfRelationshipView> {
       listeners = FlutterArtist.storage.getListenerShelfBlockScalarTypes(
         eventBlockOrScalar:
             BlockOrScalar.scalar(selectedBlockOrScalar!.scalar!),
-        external: true,
       );
       eventSources = FlutterArtist.storage.getEventShelfBlockTypes(
         listenerBlockOrScalar:

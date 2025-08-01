@@ -129,6 +129,8 @@ part '__core__/_coordinator.dart';
 
 part '_config_/_coordinator_config.dart';
 
+part '_event_config_/_internal_event_config.dart';
+
 part '__core__/_actionable.dart';
 
 part '__core__/_activity.dart';
@@ -144,10 +146,6 @@ part '_ui_com_/_block_ui_components.dart';
 part '_config_/_block_config.dart';
 
 part '__core__/_block_data.dart';
-
-part '__core__/_block_internal_broadcast.dart';
-
-part '__core__/_block_internal_event_reaction.dart';
 
 part '__core__/_block_outside_broadcast.dart';
 

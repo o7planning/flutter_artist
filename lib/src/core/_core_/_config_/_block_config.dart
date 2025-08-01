@@ -9,10 +9,6 @@ class BlockConfig {
 
   final BlockOutsideEventReaction? outsideEventReaction;
 
-  final BlockInternalBroadcast? internalBroadcast;
-
-  final BlockInternalEventReaction? internalEventReaction;
-
   final PageableData pageable;
 
   BlockConfig({
@@ -21,8 +17,6 @@ class BlockConfig {
     this.hiddenBehavior = BlockHiddenBehavior.none,
     this.outsideBroadcast,
     this.outsideEventReaction,
-    this.internalBroadcast,
-    this.internalEventReaction,
     this.pageable = const PageableData(
       page: 1,
       pageSize: 20,
@@ -36,8 +30,6 @@ class BlockConfig {
       hiddenBehavior: hiddenBehavior,
       outsideBroadcast: outsideBroadcast,
       outsideEventReaction: outsideEventReaction,
-      internalBroadcast: internalBroadcast,
-      internalEventReaction: internalEventReaction,
       pageable: pageable.copy(),
     );
   }
