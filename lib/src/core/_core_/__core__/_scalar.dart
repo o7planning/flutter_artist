@@ -133,14 +133,10 @@ abstract class Scalar<
     if (config.outsideEventReaction == null) {
       return [];
     }
-    if (config.outsideEventReaction!.intrinsicMode) {
-      return [getValueType()];
-    } else {
-      return (config.outsideEventReaction!._events ?? [])
-          .map((e) => e.dataType)
-          .toSet()
-          .toList();
-    }
+    return (config.outsideEventReaction!._events ?? [])
+        .map((e) => e.dataType)
+        .toSet()
+        .toList();
   }
 
   // ***************************************************************************

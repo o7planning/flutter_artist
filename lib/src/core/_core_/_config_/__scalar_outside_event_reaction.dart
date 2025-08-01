@@ -4,15 +4,13 @@ part of '../core.dart';
 ///
 @Deprecated("Xoa di")
 class ScalarOutsideEventReaction {
-  final bool intrinsicMode;
   final ScalarReaction? reaction;
   final List<Event>? _events;
 
   const ScalarOutsideEventReaction.custom({
     required List<Event> events,
     required ScalarReaction this.reaction,
-  })  : intrinsicMode = false,
-        _events = events;
+  }) : _events = events;
 
   List<Type> getDataEventTypes() {
     if (_events == null) {
@@ -22,6 +20,7 @@ class ScalarOutsideEventReaction {
   }
 }
 
+@Deprecated("Xoa di")
 enum ScalarReaction {
   reQuery,
 }

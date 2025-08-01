@@ -371,14 +371,10 @@ abstract class Block<
       return [];
     }
     //
-    if (config.outsideBroadcast!.intrinsicEventMode) {
-      return {getItemType(), getItemDetailType()}.toList();
-    } else {
-      return config.outsideBroadcast!.events
-          .map((e) => e.dataType)
-          .toSet()
-          .toList();
-    }
+    return config.outsideBroadcast!.events
+        .map((e) => e.dataType)
+        .toSet()
+        .toList();
   }
 
   List<Type> getOutsideDataTypesToListen() {
@@ -386,12 +382,8 @@ abstract class Block<
       return [];
     }
     List<Type> itemTypes = [];
-    if (config.outsideEventReaction!.intrinsicMode) {
-      itemTypes = [getItemType(), getItemDetailType()];
-    } else {
-      for (Event event in config.outsideEventReaction!._events ?? []) {
-        itemTypes.add(event.dataType);
-      }
+    for (Event event in config.outsideEventReaction!._events ?? []) {
+      itemTypes.add(event.dataType);
     }
     return itemTypes;
   }
