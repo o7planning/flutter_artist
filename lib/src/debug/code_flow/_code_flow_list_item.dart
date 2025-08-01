@@ -6,13 +6,13 @@ import '_code_flow_info_error_view.dart';
 import '_code_flow_method_view.dart';
 
 class CodeFlowListItem extends StatelessWidget {
-  final CodeFlowItem flowLogItem;
+  final CodeFlowItem codeFlowItem;
   final bool selected;
 
   final Function() onTap;
 
   const CodeFlowListItem({
-    required this.flowLogItem,
+    required this.codeFlowItem,
     required this.selected,
     required this.onTap,
     required super.key,
@@ -22,15 +22,15 @@ class CodeFlowListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: _backgroundColor(),
-      child: flowLogItem.isMethodCall()
+      child: codeFlowItem.isMethodCall()
           ? CodeFlowMethodView(
-              codeFlowItem: flowLogItem,
+              codeFlowItem: codeFlowItem,
               selected: selected,
               textSelectable: false,
               onTap: onTap,
             )
           : CodeFlowInfoErrorView(
-              codeFlowItem: flowLogItem,
+              codeFlowItem: codeFlowItem,
               textOverflow: TextOverflow.ellipsis,
               selected: selected,
               onTap: onTap,

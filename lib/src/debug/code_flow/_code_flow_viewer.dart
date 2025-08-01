@@ -127,7 +127,7 @@ class _CodeFlowViewerState extends State<CodeFlowViewer> {
           .map(
             (logItem) => CodeFlowListItem(
               key: Key("LogItem-${logItem.id}"),
-              flowLogItem: logItem,
+              codeFlowItem: logItem,
               selected: logItem == selectedFlowItem,
               onTap: () {
                 setState(() {
