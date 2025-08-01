@@ -77,19 +77,18 @@ class _Storage extends _XBase {
     required Block eventBlock,
     required String? itemIdString,
   }) {
-    final BlockOutsideBroadcast? outsideBroadcast =
-        eventBlock.config.outsideBroadcast;
+    List<Type> outsideEvents = eventBlock.config.outsideBroadcastEvents ?? [];
 
     // Broadcast Data Types:
     List<Type> outsideEventTypes = eventBlock._getBroadcastDataTypes();
     //
     print(
-        "~~~~~~~~~> ${outsideBroadcast != null ? 'FIRE EVENT TO OUTSIDE' : 'NOT FIRE EVENT TO OUTSIDE'}"
+        "~~~~~~~~~> ${outsideEvents.isNotEmpty ? 'FIRE EVENT TO OUTSIDE' : 'NOT FIRE EVENT TO OUTSIDE'}"
         " --> Event Item Types: $outsideEventTypes"
         " - ${getClassName(eventBlock)}");
 
     //
-    if (outsideBroadcast != null) {
+    if (outsideEvents.isNotEmpty) {
       final List<Scalar> listenerScalars = __getListenerScalarsByBlock(
         eventBlock: eventBlock,
       );
@@ -283,7 +282,7 @@ class _Storage extends _XBase {
       }
       List<Block> allBlocks = shelf.blocks;
       for (Block blk in allBlocks) {
-        if (blk.config.outsideBroadcast == null) {
+        if (blk.config.outsideBroadcastEvents == null) {
           continue;
         }
         final Type itemType = blk.getItemType();
@@ -560,7 +559,7 @@ class _Storage extends _XBase {
     for (Shelf shelf in __shelfMap.values) {
       List<Block> allBlocks = shelf.blocks;
       for (Block blk in allBlocks) {
-        if (blk.config.outsideBroadcast == null) {
+        if (blk.config.outsideBroadcastEvents == null) {
           continue;
         }
         final List<Type> listenToDataTypes =
@@ -588,7 +587,7 @@ class _Storage extends _XBase {
 
     for (Shelf shelf in __shelfMap.values) {
       for (Block blk in shelf.blocks) {
-        if (blk.config.outsideBroadcast == null) {
+        if (blk.config.outsideBroadcastEvents == null) {
           continue;
         }
         ScalarOutsideEventReaction? outsideReaction =
