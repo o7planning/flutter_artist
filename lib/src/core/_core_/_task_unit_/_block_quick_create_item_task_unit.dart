@@ -11,9 +11,9 @@ class _BlockQuickCreateItemTaskUnit
     required this.xBlock,
     required this.action,
   }) : super(
-    taskType: TaskType.blockQuickCreateItem,
-    taskResult: BlockQuickCreateItemResult(),
-  );
+          taskType: TaskType.blockQuickCreateItem,
+          taskResult: BlockQuickCreateItemResult(),
+        );
 
   @override
   int get xShelfId => xBlock.xShelfId;

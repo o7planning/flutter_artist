@@ -3046,7 +3046,7 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockQuickCreateMultiItemsActionAnnotation()
-  Future<bool> executeQuickCreateMultiItemsAction({
+  Future<BlockQuickCreateMultiItemsResult> executeQuickCreateMultiItemsAction({
     required BlockQuickCreateMultiItemsAction<ID, ITEM, ITEM_DETAIL,
             FILTER_CRITERIA>
         action,
@@ -3061,12 +3061,24 @@ abstract class Block<
       },
     );
     //
-    if (!__checkBeforeQuickActionCreateItem(
+    // @Same-Code-Precheck-01
+    //
+    Actionable<BlockMultiItemsCreationPrecheck> actionable =
+        __canCreateMultiItems(
       checkBusy: true,
-      addErrorLog: true,
-      showErrSnackBar: true,
-    )) {
-      return false;
+      checkAllow: true,
+    );
+    if (!actionable.yes) {
+      // _refreshErrorCount++;
+      _addErrorLogActionable(
+        shelf: shelf,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+      );
+      return BlockQuickCreateMultiItemsResult(
+        precheck: actionable.errCode,
+        stackTrace: actionable.stackTrace,
+      );
     }
     //
     // Confirmation:
@@ -3080,7 +3092,9 @@ abstract class Block<
       );
     }
     if (!confirm) {
-      return false;
+      return BlockQuickCreateMultiItemsResult(
+        precheck: BlockMultiItemsCreationPrecheck.cancelled,
+      );
     }
     //
     _XShelf xShelf = _XShelf(
@@ -3093,7 +3107,7 @@ abstract class Block<
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    _TaskUnit taskUnit = _BlockQuickCreateMultiItemsTaskUnit(
+    _ResultedTaskUnit taskUnit = _BlockQuickCreateMultiItemsTaskUnit(
       xBlock: thisXBlock,
       action: action,
     );
@@ -3101,7 +3115,7 @@ abstract class Block<
     FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
     //
     await FlutterArtist.executor._executeTaskUnitQueue();
-    return true;
+    return taskUnit.taskResult;
   }
 
   // ***************************************************************************
@@ -4028,6 +4042,56 @@ abstract class Block<
     }
     //
     return Actionable<BlockQuickActionPrecheck>.yes();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_PrecheckPrivateMethod()
+  Actionable<BlockMultiItemsCreationPrecheck> __canCreateMultiItems({
+    required bool checkBusy,
+    required bool checkAllow,
+  }) {
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable<BlockMultiItemsCreationPrecheck>.no(
+        errCode: BlockMultiItemsCreationPrecheck.busy,
+      );
+    }
+    switch (queryDataState) {
+      case DataState.pending:
+        return Actionable<BlockMultiItemsCreationPrecheck>.no(
+          errCode: BlockMultiItemsCreationPrecheck.blockInPendingState,
+        );
+      case DataState.error:
+        return Actionable<BlockMultiItemsCreationPrecheck>.no(
+          errCode: BlockMultiItemsCreationPrecheck.blockInErrorState,
+        );
+      case DataState.none:
+        return Actionable<BlockMultiItemsCreationPrecheck>.no(
+          errCode: BlockMultiItemsCreationPrecheck.blockInNoneState,
+        );
+      case DataState.ready:
+        break;
+    }
+    //
+    if (checkAllow) {
+      CheckAllowResult result = __isAllowCreateItem();
+      switch (result.result) {
+        case CheckAllow.allow:
+          return Actionable<BlockMultiItemsCreationPrecheck>.yes();
+        case CheckAllow.notAllow:
+          return Actionable<BlockMultiItemsCreationPrecheck>.no(
+            errCode: BlockMultiItemsCreationPrecheck.notAllow,
+          );
+        case CheckAllow.error:
+          return Actionable<BlockMultiItemsCreationPrecheck>.no(
+            errCode: BlockMultiItemsCreationPrecheck.checkAllowMethodError,
+            stackTrace: result.stackTrace,
+          );
+      }
+    }
+    //
+    return Actionable<BlockMultiItemsCreationPrecheck>.yes();
   }
 
   // ***************************************************************************

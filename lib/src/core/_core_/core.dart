@@ -103,6 +103,7 @@ import '../precheck/block_item_edit_precheck.dart';
 import '../precheck/block_query_precheck.dart';
 import '../precheck/block_quick_action_precheck.dart';
 import '../precheck/block_quick_create_item_precheck.dart';
+import '../precheck/block_multi_items_creation_precheck.dart';
 import '../precheck/block_quick_update_item_precheck.dart';
 import '../precheck/enter_form_fields_precheck.dart';
 import '../precheck/form_model_load_data_precheck.dart';
@@ -285,6 +286,8 @@ part '_task_result_/_block_query_result.dart';
 part '_task_result_/_block_quick_action_result.dart';
 
 part '_task_result_/_scalar_quick_action_result.dart';
+
+part '_task_result_/_block_quick_create_multi_items_result.dart';
 
 part '_task_result_/_block_quick_create_item_result.dart';
 

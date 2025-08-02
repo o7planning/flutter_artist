@@ -9,9 +9,9 @@ class _FormModelLoadFormTaskUnit
   _FormModelLoadFormTaskUnit({
     required this.xFormModel,
   }) : super(
-    taskType: TaskType.formModelLoadForm,
-    taskResult: FormModelLoadDataResult(),
-  );
+          taskType: TaskType.formModelLoadForm,
+          taskResult: FormModelLoadDataResult(),
+        );
 
   @override
   int get xShelfId => xFormModel.xShelfId;
