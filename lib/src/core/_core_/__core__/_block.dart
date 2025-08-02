@@ -2242,6 +2242,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
   @_BlockSelectItemAsCurrentAnnotation()
   Future<BlockItemCurrSelectionResult<ITEM>> refreshAndSelectItemAsCurrent({
     required ITEM item,
@@ -2273,6 +2274,7 @@ abstract class Block<
   /// Clear and set block to "Pending State".
   ///
   @_RootMethodAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
   Future<BlockClearanceResult> clear({Function()? navigate}) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -2329,6 +2331,7 @@ abstract class Block<
   ///
   @_RootMethodAnnotation()
   @_BlockQueryNextPageAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
   Future<BlockQueryResult> queryNextPage({
     PostQueryBehavior postQueryBehavior =
         PostQueryBehavior.selectAnItemAsCurrent,
@@ -2363,6 +2366,7 @@ abstract class Block<
   /// Query the previous page and replace the current items in the list.
   ///
   @_RootMethodAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
   @_BlockQueryPreviousPageAnnotation()
   Future<BlockQueryResult> queryPreviousPage({
     PostQueryBehavior postQueryBehavior =
@@ -2402,6 +2406,7 @@ abstract class Block<
   ///
   @_RootMethodAnnotation()
   @_BlockQueryMorePageAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
   Future<BlockQueryResult> queryMore({
     PostQueryBehavior postQueryBehavior =
         PostQueryBehavior.selectAnItemAsCurrent,
@@ -2432,6 +2437,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
   Future<bool> queryEmptyAndPrepareToCreate({
     FILTER_INPUT? filterInput,
     Function()? navigate,
@@ -2447,6 +2453,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
   Future<bool> queryEmpty({
     FILTER_INPUT? filterInput,
     bool prepareFormToCreateItem = false,
@@ -2502,6 +2509,7 @@ abstract class Block<
   @nonVirtual
   @_RootMethodAnnotation()
   @_BlockQueryAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
   Future<BlockQueryResult> query({
     ListBehavior listBehavior = ListBehavior.replace,
     PostQueryBehavior postQueryBehavior =
@@ -2567,8 +2575,10 @@ abstract class Block<
   ///
   @nonVirtual
   @_RootMethodAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
   @_BlockQueryAndPrepareToEditAnnotation()
-  Future<BlockQueryResult?> queryAndPrepareToEdit({
+  Future<BlockQueryResult> queryAndPrepareToEdit({
     FILTER_INPUT? filterInput,
     ListBehavior listBehavior = ListBehavior.replace,
     SuggestedSelection<ID>? suggestedSelection,
@@ -2623,8 +2633,9 @@ abstract class Block<
   /// If this block has a FormModel its data state set to "Ready", else its data state set to "Pending".
   ///
   @_RootMethodAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
   @_BlockQueryAndPrepareToCreateAnnotation()
-  Future<BlockQueryResult?> queryAndPrepareToCreate({
+  Future<BlockQueryResult> queryAndPrepareToCreate({
     FILTER_INPUT? filterInput,
     Function()? navigate,
   }) async {
@@ -2852,6 +2863,7 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_BlockQuickActionAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
   Future<BlockQuickActionResult> executeQuickAction({
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
@@ -2955,6 +2967,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
   @_BlockQuickCreateItemActionAnnotation()
   Future<BlockQuickCreateItemResult> executeQuickCreateItemAction({
     required BlockQuickCreateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
@@ -3031,6 +3044,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
   @_BlockQuickCreateMultiItemsActionAnnotation()
   Future<bool> executeQuickCreateMultiItemsAction({
     required BlockQuickCreateMultiItemsAction<ID, ITEM, ITEM_DETAIL,
@@ -3094,6 +3108,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
   @_BlockQuickUpdateItemActionAnnotation()
   Future<BlockQuickUpdateItemResult> executeQuickUpdateItemAction({
     required BlockQuickUpdateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
@@ -3170,6 +3185,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
   @_BlockQuickChildBlockItemsActionAnnotation()
   Future<bool> executeQuickChildBlockItemsAction<
       A extends BlockQuickChildBlockItemsAction<ITEM, ITEM_DETAIL>>({
@@ -3225,15 +3241,25 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
   @_BlockRefreshAndSelectFirstItemAsCurrentAnnotation()
-  Future<BlockItemCurrSelectionResult<ITEM>?>
+  Future<BlockItemCurrSelectionResult<ITEM>>
       refreshAndSelectFirstItemAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
     ITEM? firstItm = firstItem;
     if (firstItm == null) {
-      return null;
+      // TODO: Xu ly theo cach khac?
+      return BlockItemCurrSelectionResult<ITEM>(
+        precheck: BlockItemCurrSelectionPrecheck.noTarget,
+        currentItemSelectionType:
+            CurrentItemSelectionType.selectAnItemAsCurrent,
+        getItemId: getItemId,
+        candidateItem: null,
+        oldCurrentItem: null,
+        currentItem: null,
+      );
     }
     return await refreshAndSelectItemAsCurrent(
       item: firstItm,
@@ -3246,18 +3272,24 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
   @_BlockRefreshAndSelectNextItemAsCurrentAnnotation()
-  Future<BlockItemCurrSelectionResult<ITEM>?>
-      refreshAndSelectNextItemAsCurrent({
+  Future<BlockItemCurrSelectionResult<ITEM>> refreshAndSelectNextItemAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
-    if (!hasNextItem) {
-      return null;
-    }
     ITEM? nextItem = nextSiblingItem;
     if (nextItem == null) {
-      return null;
+      // TODO: Xu ly theo cach khac?
+      return BlockItemCurrSelectionResult<ITEM>(
+        precheck: BlockItemCurrSelectionPrecheck.noTarget,
+        currentItemSelectionType:
+            CurrentItemSelectionType.selectAnItemAsCurrent,
+        getItemId: getItemId,
+        candidateItem: null,
+        oldCurrentItem: null,
+        currentItem: null,
+      );
     }
     return await refreshAndSelectItemAsCurrent(
       item: nextItem,
@@ -3270,18 +3302,25 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
   @_BlockRefreshAndSelectPreviousItemAsCurrentAnnotation()
-  Future<BlockItemCurrSelectionResult<ITEM>?>
+  Future<BlockItemCurrSelectionResult<ITEM>>
       refreshAndSelectPreviousItemAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
-    if (!hasPreviousItem) {
-      return null;
-    }
     ITEM? previousItem = previousSiblingItem;
     if (previousItem == null) {
-      return null;
+      // TODO: Xu ly theo cach khac?
+      return BlockItemCurrSelectionResult<ITEM>(
+        precheck: BlockItemCurrSelectionPrecheck.noTarget,
+        currentItemSelectionType:
+            CurrentItemSelectionType.selectAnItemAsCurrent,
+        getItemId: getItemId,
+        candidateItem: null,
+        oldCurrentItem: null,
+        currentItem: null,
+      );
     }
     return await refreshAndSelectItemAsCurrent(
       item: previousItem,
@@ -3315,7 +3354,6 @@ abstract class Block<
   //   }
   //   return true;
   // }
-
   @Deprecated("Xoa di")
   bool __checkBeforeQuickActionCreateItem({
     required bool checkBusy,
@@ -3372,6 +3410,7 @@ abstract class Block<
   /// Prepare to create an item in a Form.
   ///
   @_RootMethodAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
   @_BlockPrepareFormToCreateItemAnnotation()
   Future<PrepareItemCreationResult> prepareFormToCreateItem({
     EXTRA_FORM_INPUT? extraFormInput,
@@ -3432,8 +3471,10 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
   @_BlockDeleteSelectedItemsAnnotation()
-  Future<ItemDeletionResult?> deleteSelectedItems({
+  // TODO: Change to ItemsDeletionResult?
+  Future<ItemDeletionResult> deleteSelectedItems({
     required CurrentItemSelInclusion currentItemInclusion,
     required bool stopIfError,
   }) async {
@@ -3449,7 +3490,11 @@ abstract class Block<
       currentItemInclusion: currentItemInclusion,
     );
     if (selItems.isEmpty) {
-      return null;
+      // TODO: Xu ly theo cach khac?
+      return ItemDeletionResult(
+        precheck: BlockItemDeletionPrecheck.noTarget,
+        candidateItem: null,
+      );
     }
     return await deleteItems(
       items: selItems,
@@ -3461,8 +3506,9 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
   @_BlockDeleteCheckedItemsAnnotation()
-  Future<ItemDeletionResult?> deleteCheckedItems({
+  Future<ItemDeletionResult> deleteCheckedItems({
     required CurrentItemChkInclusion currentItemInclusion,
     required bool stopIfError,
   }) async {
@@ -3478,7 +3524,11 @@ abstract class Block<
       currentItemInclusion: currentItemInclusion,
     );
     if (chkItems.isEmpty) {
-      return null;
+      // TODO: Xu ly theo cach khac?
+      return ItemDeletionResult(
+        precheck: BlockItemDeletionPrecheck.noTarget,
+        candidateItem: null,
+      );
     }
     return await deleteItems(
       items: chkItems,
@@ -3489,6 +3539,8 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @_RootMethodAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
   Future<ItemDeletionResult> deleteItems({
     required List<ITEM> items,
     required bool stopIfError,
@@ -3529,6 +3581,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
   @_BlockDeleteCurrentItemAnnotation()
   Future<ItemDeletionResult<ITEM>> deleteCurrentItem() async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -3563,6 +3616,7 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_BlockDeleteItemAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
   Future<ItemDeletionResult<ITEM>> deleteItem({
     required ITEM item,
     bool errorIfItemNotInList = true,
@@ -3638,8 +3692,9 @@ abstract class Block<
   ///
   ///
   @_RootMethodAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
   @_BlockRefreshCurrentItemAnnotation()
-  Future<BlockItemCurrSelectionResult<ITEM>?> refreshCurrentItem({
+  Future<BlockItemCurrSelectionResult<ITEM>> refreshCurrentItem({
     bool forceLoadForm = false,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(

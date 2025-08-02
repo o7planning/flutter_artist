@@ -449,6 +449,10 @@ class _RootMethodAnnotation {
   const _RootMethodAnnotation();
 }
 
+class _ReturnTaskResultMethodAnnotation {
+  const _ReturnTaskResultMethodAnnotation();
+}
+
 class _PrecheckPrivateMethod {
   const _PrecheckPrivateMethod();
 }
