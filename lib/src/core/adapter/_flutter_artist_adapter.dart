@@ -37,6 +37,7 @@ interface class IFlutterArtistAdapter {
   }
 
   void showDeletedSnackBar({
+    String? customMessage,
     Duration duration = const Duration(seconds: 2),
   }) {
     throw UnimplementedError();

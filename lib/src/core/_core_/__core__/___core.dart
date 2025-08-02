@@ -212,7 +212,9 @@ abstract class _Core {
     FlutterArtist.adapter.showSavedSnackBar();
   }
 
-  void showDeletedSnackBar() {
-    FlutterArtist.adapter.showDeletedSnackBar();
+  void showDeletedSnackBar({String? customMessage}) {
+    FlutterArtist.adapter.showDeletedSnackBar(
+      customMessage: customMessage,
+    );
   }
 }

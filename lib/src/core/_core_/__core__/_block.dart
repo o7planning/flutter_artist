@@ -1584,14 +1584,20 @@ abstract class Block<
       );
     }
     //
-    showMessageSnackBar(
-      message: 'Deletion Results',
-      details: [
-        "${items.length} Items",
-        "${deletionResult.deletedItems.length} Deleted",
-        "${deletionResult.failedItemDeletions.length} Failed",
-      ],
-    );
+    if (deletionResult.failedItemDeletions.isEmpty) {
+      showDeletedSnackBar(
+        customMessage: "${deletionResult.deletedItems.length} Item Deleted!",
+      );
+    } else {
+      showMessageSnackBar(
+        message: 'Deletion Results',
+        details: [
+          "${items.length} Items",
+          "${deletionResult.deletedItems.length} Deleted",
+          "${deletionResult.failedItemDeletions.length} Failed",
+        ],
+      );
+    }
     //
     if (!currentItemDeleted) {
       return;

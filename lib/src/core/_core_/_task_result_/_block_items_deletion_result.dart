@@ -24,7 +24,7 @@ class BlockItemsDeletionResult<ITEM>
     if (precheck != null) {
       return false;
     }
-    if (_appError != null) {
+    if (_failedItemDeletions.isNotEmpty) {
       return false;
     }
     return true;
