@@ -1,9 +1,9 @@
 import '../annotation/annotation.dart';
 import '__chk_code.dart';
-import '__chk_code_detail.dart';
+import '__precheck.dart';
 
 @RenameAnnotation()
-enum BlockFormEnablementChkCode implements ChkCodeDetail {
+enum BlockFormEnablementChkCode implements Precheck {
   noForm(
     chkCode: ChkCode.noForm,
     message: "Block has no Form",

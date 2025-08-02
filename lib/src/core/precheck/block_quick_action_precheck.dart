@@ -1,7 +1,7 @@
 import '__chk_code.dart';
-import '__chk_code_detail.dart';
+import '__precheck.dart';
 
-enum BlockQuickActionPrecheck implements ChkCodeDetail {
+enum BlockQuickActionPrecheck implements Precheck {
   busy(
     chkCode: ChkCode.busy,
     message: "Quick Action is disabled.",

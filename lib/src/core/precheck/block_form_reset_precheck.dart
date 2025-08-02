@@ -1,8 +1,8 @@
 import '__chk_code.dart';
-import '__chk_code_detail.dart';
+import '__precheck.dart';
 
 // Name (OK)
-enum BlockFormResetPrecheck implements ChkCodeDetail {
+enum BlockFormResetPrecheck implements Precheck {
   busy(
     chkCode: ChkCode.busy,
     message: "Form reset is disabled.",

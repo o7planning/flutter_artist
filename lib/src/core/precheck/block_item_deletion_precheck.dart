@@ -1,7 +1,7 @@
 import '__chk_code.dart';
-import '__chk_code_detail.dart';
+import '__precheck.dart';
 
-enum BlockItemDeletionPrecheck implements ChkCodeDetail {
+enum BlockItemDeletionPrecheck implements Precheck {
   busy(
     chkCode: ChkCode.busy,
     message: "Can not delete the item",

@@ -1,7 +1,7 @@
 import '__chk_code.dart';
-import '__chk_code_detail.dart';
+import '__precheck.dart';
 
-enum BlockItemCurrSelectionPrecheck implements ChkCodeDetail {
+enum BlockItemCurrSelectionPrecheck implements Precheck {
   busy(
     chkCode: ChkCode.busy,
     message: "Cannot refresh the current item.",

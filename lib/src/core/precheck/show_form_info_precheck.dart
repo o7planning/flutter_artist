@@ -1,7 +1,7 @@
 import '__chk_code.dart';
-import '__chk_code_detail.dart';
+import '__precheck.dart';
 
-enum ShowFormInfoState implements ChkCodeDetail {
+enum ShowFormInfoState implements Precheck {
   noForm(
     chkCode: ChkCode.noForm,
     message: "Can not show Form Info.",

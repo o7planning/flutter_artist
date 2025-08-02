@@ -1,8 +1,8 @@
 import '__chk_code.dart';
-import '__chk_code_detail.dart';
+import '__precheck.dart';
 
 // Name (OK)
-enum ScalarQueryPrecheck implements ChkCodeDetail {
+enum ScalarQueryPrecheck implements Precheck {
   busy(
     chkCode: ChkCode.busy,
     message: "The Scalar querying is disabled.",

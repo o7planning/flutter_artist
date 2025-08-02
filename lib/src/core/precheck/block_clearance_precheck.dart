@@ -1,8 +1,8 @@
 import '__chk_code.dart';
-import '__chk_code_detail.dart';
+import '__precheck.dart';
 
 // Name (OK)
-enum BlockClearancePrecheck implements ChkCodeDetail {
+enum BlockClearancePrecheck implements Precheck {
   busy(
     chkCode: ChkCode.busy,
     message: "Can not clear block.",

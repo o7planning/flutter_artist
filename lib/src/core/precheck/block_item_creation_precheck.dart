@@ -1,9 +1,9 @@
 import '../annotation/annotation.dart';
 import '__chk_code.dart';
-import '__chk_code_detail.dart';
+import '__precheck.dart';
 
 @RenameAnnotation()
-enum BlockItemCreationPrecheck implements ChkCodeDetail {
+enum BlockItemCreationPrecheck implements Precheck {
   busy(
     chkCode: ChkCode.busy,
     message: "New item creation is disabled.",

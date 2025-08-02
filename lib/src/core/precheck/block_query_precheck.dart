@@ -1,8 +1,8 @@
 import '__chk_code.dart';
-import '__chk_code_detail.dart';
+import '__precheck.dart';
 
 // Name (OK)
-enum BlockQueryPrecheck implements ChkCodeDetail {
+enum BlockQueryPrecheck implements Precheck {
   busy(
     chkCode: ChkCode.busy,
     message: "The Block querying is disabled.",

@@ -89,7 +89,7 @@ import '../notification/_notification_listener.dart';
 import '../notification/_notification_summary.dart';
 import '../icon/icon_constants.dart';
 import '../precheck/__actionable.dart';
-import '../precheck/__chk_code_detail.dart';
+import '../precheck/__precheck.dart';
 import '../precheck/_check_allow.dart';
 import '../precheck/background_action_precheck.dart';
 import '../precheck/block_clearance_precheck.dart';

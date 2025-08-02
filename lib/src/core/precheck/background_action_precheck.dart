@@ -1,7 +1,7 @@
 import '__chk_code.dart';
-import '__chk_code_detail.dart';
+import '__precheck.dart';
 
-enum BackgroundActionPrecheck implements ChkCodeDetail {
+enum BackgroundActionPrecheck implements Precheck {
   busy(
     chkCode: ChkCode.busy,
     message: "Background Action is disabled.",

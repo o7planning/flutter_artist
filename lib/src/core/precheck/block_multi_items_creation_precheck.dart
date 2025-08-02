@@ -1,7 +1,7 @@
 import '__chk_code.dart';
-import '__chk_code_detail.dart';
+import '__precheck.dart';
 
-enum BlockMultiItemsCreationPrecheck implements ChkCodeDetail {
+enum BlockMultiItemsCreationPrecheck implements Precheck {
   busy(
     chkCode: ChkCode.busy,
     message: "Multi Items creation is disabled.",

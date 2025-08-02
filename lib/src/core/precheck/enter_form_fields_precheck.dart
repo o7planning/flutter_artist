@@ -1,7 +1,7 @@
 import '__chk_code.dart';
-import '__chk_code_detail.dart';
+import '__precheck.dart';
 
-enum EnterFormFieldsPrecheck implements ChkCodeDetail {
+enum EnterFormFieldsPrecheck implements Precheck {
   busy(
     chkCode: ChkCode.busy,
     message: "Enter-form-fields feature is disabled",

@@ -1,7 +1,7 @@
 import '__chk_code.dart';
-import '__chk_code_detail.dart';
+import '__precheck.dart';
 
-enum BlockQuickCreateItemPrecheck implements ChkCodeDetail {
+enum BlockQuickCreateItemPrecheck implements Precheck {
   busy(
     chkCode: ChkCode.busy,
     message: "New item creation is disabled.",

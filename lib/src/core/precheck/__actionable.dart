@@ -1,7 +1,7 @@
 import '../utils/_class_utils.dart';
-import '__chk_code_detail.dart';
+import '__precheck.dart';
 
-class Actionable<ENUM extends ChkCodeDetail> {
+class Actionable<ENUM extends Precheck> {
   final bool yes;
 
   final ENUM? errCode;
