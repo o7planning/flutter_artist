@@ -1562,9 +1562,17 @@ abstract class Block<
           );
         }
       } catch (e, stackTrace) {
+        AppError appError = _handleError(
+          shelf: shelf,
+          methodName: "callApiDeleteItemById",
+          error: e,
+          stackTrace: stackTrace,
+          showSnackBar: false,
+        );
+        //
         deletionResult._addFailedItem(
           failedItem: delItem,
-          error: e,
+          error: appError,
           stackTrace: stackTrace,
         );
         //
