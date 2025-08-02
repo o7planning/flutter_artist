@@ -38,7 +38,7 @@ abstract class BackgroundWebDownloadAction extends BackgroundAction {
       ..setAttribute('download', fileName)
       ..click(); // Programmatically clicks the anchor to trigger download
 
-    web.URL.revokeObjectURL(anchor.href!); // Clean up.
+    web.URL.revokeObjectURL(anchor.href); // Clean up.
     return result;
   }
 }
