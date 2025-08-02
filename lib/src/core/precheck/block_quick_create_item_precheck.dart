@@ -1,6 +1,9 @@
+import 'package:flutter_artist/src/core/annotation/annotation.dart';
+
 import '__chk_code.dart';
 import '__precheck.dart';
 
+@RenameAnnotation("BlockQuickItemCreationPrecheck")
 enum BlockQuickCreateItemPrecheck implements Precheck {
   busy(
     chkCode: ChkCode.busy,

@@ -4503,12 +4503,16 @@ abstract class Block<
     );
   }
 
+  // ***************************************************************************
+
   @_PrecheckMethod()
   Actionable<BlockQueryPrecheck> canQuery({
     bool checkAllow = true,
   }) {
     return __canQuery(checkBusy: true, checkAllow: checkAllow);
   }
+
+  // ***************************************************************************
 
   @_PrecheckMethod()
   Actionable<BlockItemDeletionPrecheck> canDeleteItem({
@@ -4525,6 +4529,8 @@ abstract class Block<
     );
   }
 
+  // ***************************************************************************
+
   @_PrecheckMethod()
   Actionable<BlockQuickActionPrecheck> canQuickAction() {
     return __canQuickAction(
@@ -4532,17 +4538,44 @@ abstract class Block<
     );
   }
 
+  // ***************************************************************************
+
+  // @_PrecheckMethod()
+  // Actionable<BlockItemCreationPrecheck> canCreateItem({
+  //   required ItemCreationType creationType,
+  //   bool checkAllow = true,
+  // }) {
+  //   return __canCreateItem(
+  //     checkBusy: true,
+  //     creationType: creationType,
+  //     checkAllow: checkAllow,
+  //   );
+  // }
+
+  // ***************************************************************************
+
   @_PrecheckMethod()
-  Actionable<BlockItemCreationPrecheck> canCreateItem({
-    required ItemCreationType creationType,
-    bool checkAllow = true,
-  }) {
+  Actionable<BlockItemCreationPrecheck> canCreateItemWithForm() {
     return __canCreateItem(
       checkBusy: true,
-      creationType: creationType,
+      checkAllow: true,
+      creationType: ItemCreationType.form,
+    );
+  }
+
+  // ***************************************************************************
+
+  @_PrecheckMethod()
+  Actionable<BlockQuickCreateItemPrecheck> canQuickCreateItem({
+    bool checkAllow = true,
+  }) {
+    return __canQuickCreateItem(
+      checkBusy: true,
       checkAllow: checkAllow,
     );
   }
+
+  // ***************************************************************************
 
   @_PrecheckMethod()
   Actionable<BlockClearancePrecheck> canClearBlock() {
@@ -4550,6 +4583,8 @@ abstract class Block<
       checkBusy: true,
     );
   }
+
+  // ***************************************************************************
 
   @_PrecheckMethod()
   Actionable<BlockItemEditPrecheck> canUpdateItem({
@@ -4565,6 +4600,8 @@ abstract class Block<
     );
   }
 
+  // ***************************************************************************
+
   @_PrecheckMethod()
   Actionable<BlockQuickUpdateItemPrecheck> canQuickUpdateItem({
     required ITEM item,
@@ -4577,15 +4614,7 @@ abstract class Block<
     );
   }
 
-  @_PrecheckMethod()
-  Actionable<BlockQuickCreateItemPrecheck> canQuickCreateItem({
-    bool checkAllow = true,
-  }) {
-    return __canQuickCreateItem(
-      checkBusy: true,
-      checkAllow: checkAllow,
-    );
-  }
+  // ***************************************************************************
 
   @_PrecheckMethod()
   Actionable<BlockFormResetPrecheck> canResetForm({
@@ -4596,6 +4625,8 @@ abstract class Block<
       checkAllow: checkAllow,
     );
   }
+
+  // ***************************************************************************
 
   @_PrecheckMethod()
   Actionable<BlockFormSavePrecheck> canSaveForm({
@@ -4608,6 +4639,8 @@ abstract class Block<
       checkValidate: checkValidate,
     );
   }
+
+  // ***************************************************************************
 
   @_PrecheckMethod()
   Actionable<BlockItemEditPrecheck> canEditItemOnForm({
@@ -4660,6 +4693,29 @@ abstract class Block<
 
   // ***************************************************************************
 
+  @_PrecheckMethod()
+  Actionable<ShowFormInfoPrecheck> canShowFormInfo() {
+    ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
+    if (formModel == null) {
+      return Actionable<ShowFormInfoPrecheck>.no(
+        errCode: ShowFormInfoPrecheck.noForm,
+      );
+    }
+    if (loggedInUser == null) {
+      return Actionable<ShowFormInfoPrecheck>.no(
+        errCode: ShowFormInfoPrecheck.noLoggedInUser,
+      );
+    }
+    if (!loggedInUser.isSystemUser) {
+      return Actionable<ShowFormInfoPrecheck>.no(
+        errCode: ShowFormInfoPrecheck.userIsNotSystemUser,
+      );
+    }
+    return Actionable<ShowFormInfoPrecheck>.yes();
+  }
+
+  // ***************************************************************************
+
   ///
   /// Edit on edit-mode
   /// Edit on creation-mode
@@ -4676,43 +4732,8 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_PrecheckMethod()
-  Actionable<BlockItemCreationPrecheck> canCreateItemWithForm() {
-    return __canCreateItem(
-      checkBusy: true,
-      checkAllow: true,
-      creationType: ItemCreationType.form,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   Actionable<BlockFormEnablementChkCode> _isEnableFormToModify() {
     return __isEnableFormToModify(checkAllow: true);
-  }
-
-  // ***************************************************************************
-
-  @_PrecheckMethod()
-  Actionable<ShowFormInfoState> canShowFormInfo() {
-    ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
-    if (formModel == null) {
-      return Actionable<ShowFormInfoState>.no(
-        errCode: ShowFormInfoState.noForm,
-      );
-    }
-    if (loggedInUser == null) {
-      return Actionable<ShowFormInfoState>.no(
-        errCode: ShowFormInfoState.noLoggedInUser,
-      );
-    }
-    if (!loggedInUser.isSystemUser) {
-      return Actionable<ShowFormInfoState>.no(
-        errCode: ShowFormInfoState.userIsNotSystemUser,
-      );
-    }
-    return Actionable<ShowFormInfoState>.yes();
   }
 
   // ***************************************************************************

@@ -1,7 +1,7 @@
 import '__chk_code.dart';
 import '__precheck.dart';
 
-enum ShowFormInfoState implements Precheck {
+enum ShowFormInfoPrecheck implements Precheck {
   noForm(
     chkCode: ChkCode.noForm,
     message: "Can not show Form Info.",
@@ -16,8 +16,7 @@ enum ShowFormInfoState implements Precheck {
     chkCode: ChkCode.permissionDenied,
     message: "Can not show Form Info.",
     details: ["The user is not a system user."],
-  ),
-  ;
+  );
 
   @override
   final ChkCode chkCode;
@@ -28,7 +27,7 @@ enum ShowFormInfoState implements Precheck {
   @override
   final List<String>? details;
 
-  const ShowFormInfoState({
+  const ShowFormInfoPrecheck({
     required this.chkCode,
     required this.message,
     required this.details,
