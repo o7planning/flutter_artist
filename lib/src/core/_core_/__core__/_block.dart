@@ -1380,7 +1380,7 @@ abstract class Block<
   Future<void> _unitDeleteItem({
     required _XBlock thisXBlock,
     required ITEM item,
-    required ItemDeletionResult<ITEM> deletionResult,
+    required BlockItemDeletionResult<ITEM> deletionResult,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -3372,7 +3372,7 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockDeleteSelectedItemsAnnotation()
   // TODO: Change to ItemsDeletionResult?
-  Future<ItemDeletionResult> deleteSelectedItems({
+  Future<BlockItemsDeletionResult<ITEM>> deleteSelectedItems({
     required CurrentItemSelInclusion currentItemInclusion,
     required bool stopIfError,
   }) async {
@@ -3389,9 +3389,8 @@ abstract class Block<
     );
     if (selItems.isEmpty) {
       // TODO: Xu ly theo cach khac?
-      return ItemDeletionResult(
-        precheck: BlockItemDeletionPrecheck.noTarget,
-        candidateItem: null,
+      return BlockItemsDeletionResult(
+        precheck: BlockItemsDeletionPrecheck.noTarget,
       );
     }
     return await deleteItems(
@@ -3406,7 +3405,7 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockDeleteCheckedItemsAnnotation()
-  Future<ItemDeletionResult> deleteCheckedItems({
+  Future<BlockItemsDeletionResult> deleteCheckedItems({
     required CurrentItemChkInclusion currentItemInclusion,
     required bool stopIfError,
   }) async {
@@ -3423,9 +3422,8 @@ abstract class Block<
     );
     if (chkItems.isEmpty) {
       // TODO: Xu ly theo cach khac?
-      return ItemDeletionResult(
-        precheck: BlockItemDeletionPrecheck.noTarget,
-        candidateItem: null,
+      return BlockItemsDeletionResult(
+        precheck: BlockItemsDeletionPrecheck.noTarget,
       );
     }
     return await deleteItems(
@@ -3439,7 +3437,7 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
-  Future<ItemDeletionResult> deleteItems({
+  Future<BlockItemsDeletionResult<ITEM>> deleteItems({
     required List<ITEM> items,
     required bool stopIfError,
   }) async {
@@ -3481,7 +3479,7 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockDeleteCurrentItemAnnotation()
-  Future<ItemDeletionResult<ITEM>> deleteCurrentItem() async {
+  Future<BlockItemDeletionResult<ITEM>> deleteCurrentItem() async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: null,
@@ -3501,7 +3499,7 @@ abstract class Block<
         actionableFalse: actionable,
         showErrSnackBar: true,
       );
-      return ItemDeletionResult<ITEM>(
+      return BlockItemDeletionResult<ITEM>(
         candidateItem: null,
         precheck: actionable.errCode,
       );
@@ -3515,7 +3513,7 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_BlockDeleteItemAnnotation()
   @_ReturnTaskResultMethodAnnotation()
-  Future<ItemDeletionResult<ITEM>> deleteItem({
+  Future<BlockItemDeletionResult<ITEM>> deleteItem({
     required ITEM item,
     bool errorIfItemNotInList = true,
   }) async {
@@ -3542,7 +3540,7 @@ abstract class Block<
         actionableFalse: actionable,
         showErrSnackBar: true,
       );
-      return ItemDeletionResult<ITEM>(
+      return BlockItemDeletionResult<ITEM>(
         candidateItem: item,
         precheck: actionable.errCode,
         stackTrace: actionable.stackTrace,
@@ -3555,7 +3553,7 @@ abstract class Block<
       details: getClassName(item),
     );
     if (!confirm) {
-      return ItemDeletionResult<ITEM>(
+      return BlockItemDeletionResult<ITEM>(
         candidateItem: item,
         precheck: BlockItemDeletionPrecheck.cancelled,
       );
@@ -5409,8 +5407,8 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  ItemDeletionResult<ITEM> _createEmptyItemDeletionResult() {
-    return ItemDeletionResult<ITEM>(candidateItem: null);
+  BlockItemDeletionResult<ITEM> _createEmptyItemDeletionResult() {
+    return BlockItemDeletionResult<ITEM>(candidateItem: null);
   }
 
   PrepareItemCreationResult _createEmptyItemCreationResult() {

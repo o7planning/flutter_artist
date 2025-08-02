@@ -100,6 +100,7 @@ import '../precheck/block_item_creation_precheck.dart';
 import '../precheck/block_item_curr_selection_precheck.dart';
 import '../precheck/block_item_deletion_precheck.dart';
 import '../precheck/block_item_edit_precheck.dart';
+import '../precheck/block_items_deletion_precheck.dart';
 import '../precheck/block_query_precheck.dart';
 import '../precheck/block_quick_action_precheck.dart';
 import '../precheck/block_quick_create_item_precheck.dart';

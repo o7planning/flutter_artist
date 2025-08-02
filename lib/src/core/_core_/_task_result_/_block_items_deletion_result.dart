@@ -1,6 +1,7 @@
 part of '../core.dart';
 
-class ItemsDeletionResult<ITEM> extends TaskResult<BlockItemDeletionPrecheck> {
+class BlockItemsDeletionResult<ITEM>
+    extends TaskResult<BlockItemsDeletionPrecheck> {
   ITEM? _deletedItem;
   ITEM? _failedItem;
 
@@ -8,7 +9,7 @@ class ItemsDeletionResult<ITEM> extends TaskResult<BlockItemDeletionPrecheck> {
 
   ITEM? get failedItem => _failedItem;
 
-  ItemsDeletionResult({
+  BlockItemsDeletionResult({
     super.precheck,
     super.stackTrace,
   });
