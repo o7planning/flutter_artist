@@ -1,0 +1,4 @@
+enum ErrCodeIfItemIsNull {
+  invalidTarget,
+  noTarget;
+}

@@ -2154,7 +2154,9 @@ abstract class Block<
 
   @_BlockSelectItemAsCurrentAnnotation()
   Future<BlockItemCurrSelectionResult<ITEM>> _refreshToShowOrEditItemAsCurrent({
-    required ITEM item,
+    required String methodName,
+    required ITEM? item,
+    required ErrCodeIfItemIsNull errCodeIfItemIsNull,
     required bool forceForm,
     required Function()? navigate,
   }) async {
@@ -2162,7 +2164,7 @@ abstract class Block<
       isLibCode: true,
       navigate: navigate,
       ownerClassInstance: this,
-      methodName: "_refreshToShowOrEditItemAsCurrent",
+      methodName: methodName,
       parameters: {
         "item": item,
         "forceForm": forceForm,
@@ -2178,6 +2180,7 @@ abstract class Block<
     Actionable<BlockItemCurrSelectionPrecheck> actionable =
         this.__canSelectItemAsCurrent(
       item: item,
+      errCodeIfItemIsNull: errCodeIfItemIsNull,
       checkBusy: true,
     );
     //
@@ -2242,19 +2245,10 @@ abstract class Block<
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
-    FlutterArtist.codeFlowLogger._addMethodCall(
-      isLibCode: true,
-      navigate: navigate,
-      ownerClassInstance: this,
-      methodName: "refreshAndSelectItemAsCurrent",
-      parameters: {
-        "item": item,
-        "forceLoadForm": forceLoadForm,
-      },
-    );
-    //
     return await _refreshToShowOrEditItemAsCurrent(
+      methodName: "refreshAndSelectItemAsCurrent",
       item: item,
+      errCodeIfItemIsNull: ErrCodeIfItemIsNull.invalidTarget,
       forceForm: forceLoadForm,
       navigate: navigate,
     );
@@ -3630,37 +3624,39 @@ abstract class Block<
   Future<BlockItemCurrSelectionResult<ITEM>> refreshCurrentItem({
     bool forceLoadForm = false,
   }) async {
-    FlutterArtist.codeFlowLogger._addMethodCall(
-      isLibCode: true,
-      navigate: null,
-      ownerClassInstance: this,
-      methodName: "refreshCurrentItem",
-      parameters: {},
-    );
-    // @Same-Code-Precheck-01
-    Actionable<BlockItemCurrSelectionPrecheck> actionable =
-        __canRefreshCurrentItem(
-      checkBusy: true,
-    );
-    if (!actionable.yes) {
-      // _refreshErrorCount++;
-      _addErrorLogActionable(
-        shelf: shelf,
-        actionableFalse: actionable,
-        showErrSnackBar: true,
-      );
-      return BlockItemCurrSelectionResult<ITEM>(
-        precheck: actionable.errCode,
-        currentItemSelectionType: CurrentItemSelectionType.refresh,
-        getItemId: getItemId,
-        candidateItem: currentItem,
-        oldCurrentItem: currentItem,
-        currentItem: currentItem,
-      );
-    }
-    //
+    // FlutterArtist.codeFlowLogger._addMethodCall(
+    //   isLibCode: true,
+    //   navigate: null,
+    //   ownerClassInstance: this,
+    //   methodName: "refreshCurrentItem",
+    //   parameters: {},
+    // );
+    // // @Same-Code-Precheck-01
+    // Actionable<BlockItemCurrSelectionPrecheck> actionable =
+    //     __canRefreshCurrentItem(
+    //   checkBusy: true,
+    // );
+    // if (!actionable.yes) {
+    //   // _refreshErrorCount++;
+    //   _addErrorLogActionable(
+    //     shelf: shelf,
+    //     actionableFalse: actionable,
+    //     showErrSnackBar: true,
+    //   );
+    //   return BlockItemCurrSelectionResult<ITEM>(
+    //     precheck: actionable.errCode,
+    //     currentItemSelectionType: CurrentItemSelectionType.refresh,
+    //     getItemId: getItemId,
+    //     candidateItem: currentItem,
+    //     oldCurrentItem: currentItem,
+    //     currentItem: currentItem,
+    //   );
+    // }
+    // //
     return await _refreshToShowOrEditItemAsCurrent(
-      item: this.currentItem!,
+      methodName: 'refreshCurrentItem',
+      item: this.currentItem,
+      errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
       forceForm: forceLoadForm,
       navigate: null,
     );
@@ -4439,21 +4435,32 @@ abstract class Block<
   @_PrecheckPrivateMethod()
   // @seeAlso: __canRefreshCurrentItem()
   Actionable<BlockItemCurrSelectionPrecheck> __canSelectItemAsCurrent({
-    required ITEM item,
+    required ITEM? item,
     required bool checkBusy,
+    required ErrCodeIfItemIsNull errCodeIfItemIsNull,
   }) {
-    ITEM? internalItem = findItemSameIdWith(item: item);
-    // Test Cases: [03b].
-    if (internalItem == null) {
-      return Actionable<BlockItemCurrSelectionPrecheck>.no(
-        errCode: BlockItemCurrSelectionPrecheck.invalidTarget,
-      );
-    }
     if (checkBusy && FlutterArtist.executor.isBusy) {
       return Actionable<BlockItemCurrSelectionPrecheck>.no(
         errCode: BlockItemCurrSelectionPrecheck.busy,
       );
     }
+    ITEM? internalItem = item;
+    if (item != null) {
+      internalItem = findItemSameIdWith(item: item);
+    }
+    // Test Cases: [03b].
+    if (internalItem == null) {
+      if (errCodeIfItemIsNull == ErrCodeIfItemIsNull.noTarget) {
+        return Actionable<BlockItemCurrSelectionPrecheck>.no(
+          errCode: BlockItemCurrSelectionPrecheck.noTarget,
+        );
+      } else {
+        return Actionable<BlockItemCurrSelectionPrecheck>.no(
+          errCode: BlockItemCurrSelectionPrecheck.invalidTarget,
+        );
+      }
+    }
+    //
     return Actionable<BlockItemCurrSelectionPrecheck>.yes();
   }
 
@@ -4681,6 +4688,7 @@ abstract class Block<
     return __canSelectItemAsCurrent(
       checkBusy: true,
       item: item,
+      errCodeIfItemIsNull: ErrCodeIfItemIsNull.invalidTarget,
     );
   }
 
