@@ -4,7 +4,7 @@ abstract class Shelf extends _Core {
   @override
   Shelf get shelf => this;
 
-  late final ShelfHiddenBehavior hiddenBehavior;
+  late final ShelfConfig config;
 
   late final ShelfStructure _shelfStruct;
 
@@ -80,7 +80,7 @@ abstract class Shelf extends _Core {
 
   void __onInit() {
     _shelfStruct = registerStructure();
-    hiddenBehavior = _shelfStruct.hiddenBehavior;
+    config = _shelfStruct._config;
 
     for (String filterModelName in _shelfStruct.filterModels.keys) {
       FilterModel filterModel = _shelfStruct.filterModels[filterModelName]!;

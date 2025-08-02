@@ -675,7 +675,7 @@ class _Storage extends _Core {
         ownerClassInstance: this,
         info: "Shelf: ${getClassName(shelf)} dispose all UI components",
       );
-      if (shelf.hiddenBehavior == ShelfHiddenBehavior.clear) {
+      if (shelf.config.hiddenBehavior == ShelfHiddenBehavior.clear) {
         print(
             "  ---------> Remove ${getClassName(shelf)} from FlutterArtist Storage");
         __shelfMap.remove(shelf.name);

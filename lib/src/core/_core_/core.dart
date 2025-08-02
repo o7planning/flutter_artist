@@ -142,6 +142,8 @@ part '__core__/_block.dart';
 
 part '_ui_com_/_block_ui_components.dart';
 
+part '_config_/_shelf_config.dart';
+
 part '_config_/_block_config.dart';
 
 part '__core__/_block_data.dart';
