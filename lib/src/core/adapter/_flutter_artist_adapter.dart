@@ -16,9 +16,16 @@ interface class IFlutterArtistAdapter {
     throw UnimplementedError();
   }
 
+  void showMessageSnackBar({
+    required String message,
+    required List<String>? details,
+  }) {
+    throw UnimplementedError();
+  }
+
   void showErrorSnackBar({
     required String message,
-    required List<String>? errorDetails,
+    required List<String>? details,
   }) {
     throw UnimplementedError();
   }

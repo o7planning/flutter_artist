@@ -2,17 +2,22 @@ part of '../core.dart';
 
 class BlockItemsDeletionResult<ITEM>
     extends TaskResult<BlockItemsDeletionPrecheck> {
-  ITEM? _deletedItem;
-  ITEM? _failedItem;
+  final List<ITEM> _candidateItems;
+  final List<ITEM> _deletedItems = [];
+  final List<FailedItemDeletion<ITEM>> _failedItemDeletions = [];
 
-  ITEM? get deletedItem => _deletedItem;
+  List<ITEM> get candidateItems => [..._candidateItems];
 
-  ITEM? get failedItem => _failedItem;
+  List<ITEM> get deletedItems => [..._deletedItems];
+
+  List<FailedItemDeletion<ITEM>> get failedItemDeletions =>
+      [..._failedItemDeletions];
 
   BlockItemsDeletionResult({
+    required List<ITEM> candidateItems,
     super.precheck,
     super.stackTrace,
-  });
+  }) : _candidateItems = candidateItems;
 
   @override
   bool get success {
@@ -22,16 +27,46 @@ class BlockItemsDeletionResult<ITEM>
     if (_appError != null) {
       return false;
     }
-    // TODO: Xem lai.
-    return _deletedItem != null;
+    return true;
   }
 
-  void _setFailedItem({
+  void _setCandidateItems({required List<ITEM> candidateItems}) {
+    _candidateItems
+      ..clear()
+      ..addAll(candidateItems);
+  }
+
+  void _addDeletedItem({
+    required ITEM deletedItem,
+  }) {
+    _deletedItems.add(deletedItem);
+  }
+
+  void _addFailedItem({
     required ITEM failedItem,
-    required AppError appError,
+    required Object error,
     required StackTrace? stackTrace,
   }) {
-    _failedItem = failedItem;
-    _setAppError(appError: appError, stackTrace: stackTrace);
+    AppError appError = ErrorUtils.toAppError(error);
+    //
+    _failedItemDeletions.add(
+      FailedItemDeletion(
+        failedItem: failedItem,
+        appError: appError,
+        stackTrace: appError is ApiError ? null : stackTrace,
+      ),
+    );
   }
+}
+
+class FailedItemDeletion<ITEM> {
+  final ITEM failedItem;
+  final AppError appError;
+  final StackTrace? stackTrace;
+
+  FailedItemDeletion({
+    required this.failedItem,
+    required this.appError,
+    required this.stackTrace,
+  });
 }

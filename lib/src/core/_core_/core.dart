@@ -312,6 +312,8 @@ part '_task_unit_/_block_clear_current_task_unit.dart';
 
 part '_task_unit_/_block_delete_item_task_unit.dart';
 
+part '_task_unit_/_block_delete_items_task_unit.dart';
+
 part '_task_unit_/_block_prepare_form_to_create_item_task_unit.dart';
 
 part '_task_unit_/_block_query_task_unit.dart';
@@ -551,6 +553,10 @@ class _BlockDeleteCurrentItemAnnotation {
 
 class _BlockDeleteItemAnnotation {
   const _BlockDeleteItemAnnotation();
+}
+
+class _BlockDeleteItemsAnnotation {
+  const _BlockDeleteItemsAnnotation();
 }
 
 class _BlockRefreshCurrentItemAnnotation {

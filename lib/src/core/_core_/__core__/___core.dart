@@ -191,7 +191,20 @@ abstract class _Core {
     }
     FlutterArtist.adapter.showErrorSnackBar(
       message: message,
-      errorDetails: errorDetails,
+      details: errorDetails,
+    );
+  }
+
+  void showMessageSnackBar({
+    required String message,
+    required List<String>? details,
+  }) {
+    if (FlutterArtist.testCaseMode) {
+      return;
+    }
+    FlutterArtist.adapter.showErrorSnackBar(
+      message: message,
+      details: details,
     );
   }
 

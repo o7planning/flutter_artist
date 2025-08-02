@@ -1388,7 +1388,7 @@ abstract class Block<
     //
     Actionable<BlockItemDeletionPrecheck> actionable = canDeleteItem(
       item: item,
-      errorIfItemNotInList: true,
+      errorIfItemNotInTheBlock: true,
     );
     if (!actionable.yes) {
       return;
@@ -1477,6 +1477,128 @@ abstract class Block<
       thisXBlock: thisXBlock,
     );
     //
+    _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+      currentItemSelectionType:
+          CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
+      xBlock: thisXBlock,
+      newQueriedList: <ITEM>[],
+      candidateItem: siblingItem,
+      forceReloadItem: false,
+      forceTypeForForm: null,
+    );
+    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_TaskUnitMethodAnnotation()
+  @_BlockDeleteItemsAnnotation()
+  Future<void> _unitDeleteItems({
+    required _XBlock thisXBlock,
+    required List<ITEM> items,
+    required BlockItemsDeletionResult<ITEM> deletionResult,
+    required bool stopIfError,
+  }) async {
+    __assertThisXBlock(thisXBlock);
+    //
+    // Precheck: No need to check again!.
+    // Candidate Items to delete.
+    //
+    deletionResult._setCandidateItems(candidateItems: items);
+    //
+    final ITEM? currItem = currentItem;
+    ITEM? siblingItem;
+    //
+    bool currentItemDeleted = false;
+    //
+    for (ITEM item in [...items]) {
+      ApiResult<void> result;
+      try {
+        FlutterArtist.codeFlowLogger._addMethodCall(
+          isLibCode: false,
+          navigate: null,
+          ownerClassInstance: this,
+          methodName: "callApiDeleteItemById",
+          parameters: {
+            "item": item,
+          },
+        );
+        // TODO: Move to out of for loop (Need to catch error).
+        final ID? currentItemId = currItem == null ? null : getItemId(currItem);
+        final ID deletingItemId = getItemId(item);
+        //
+        siblingItem = findSiblingItem(item: item);
+        __refreshDeletingState(isDeleting: true);
+        //
+        result = await callApiDeleteItemById(itemId: deletingItemId);
+        // Throw ApiError:
+        result.throwIfError();
+        //
+        deletionResult._addDeletedItem(deletedItem: item);
+        //
+        // Remove Item from the List.
+        //
+        await __removeItemFromList(removeItem: item);
+        //
+        // Current Item DELETED!
+        //
+        if (deletingItemId == currentItemId) {
+          currentItemDeleted = true;
+          //
+          __blockData._setCurrentItemOnly(
+            refreshedItem: null,
+            refreshedItemDetail: null,
+          );
+          //
+          // Clear Form:
+          //
+          formModel?._clearDataWithDataState(
+            formDataState: DataState.none,
+          );
+          // @@TODO@@ 09.
+          __clearAllChildrenBlocksToNone(
+            thisXBlock: thisXBlock,
+          );
+        }
+      } catch (e, stackTrace) {
+        deletionResult._addFailedItem(
+          failedItem: item,
+          error: e,
+          stackTrace: stackTrace,
+        );
+        //
+        if (stopIfError) {
+          break;
+        }
+      } finally {
+        __refreshDeletingState(isDeleting: false);
+      }
+    }
+    //
+    if (deletionResult.deletedItems.isNotEmpty) {
+      // TODO: Chuyen di noi khac?
+      FlutterArtist.storage._fireEventSourceChanged(
+        eventBlock: this,
+        itemIdString: null,
+      );
+    }
+    //
+    showMessageSnackBar(
+      message: 'Deletion Results',
+      details: [
+        "${items.length} Items",
+        "${deletionResult.deletedItems.length} Deleted",
+        "${deletionResult.failedItemDeletions.length} Failed",
+      ],
+    );
+    //
+    if (!currentItemDeleted) {
+      return;
+    }
+    if (siblingItem == null) {
+      return;
+    }
     _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
       currentItemSelectionType:
           CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
@@ -2157,7 +2279,7 @@ abstract class Block<
     required String methodName,
     required ITEM? item,
     required ErrCodeIfItemIsNull errCodeIfItemIsNull,
-    bool errorIfItemNotInList = true,
+    bool errorIfItemNotInTheBlock = true,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -2173,7 +2295,7 @@ abstract class Block<
       checkBusy: true,
       item: item,
       errCodeIfItemIsNull: errCodeIfItemIsNull,
-      errorIfItemNotInList: errorIfItemNotInList,
+      errorIfItemNotInTheBlock: errorIfItemNotInTheBlock,
       checkAllow: true,
     );
     if (!actionable.yes) {
@@ -2212,7 +2334,8 @@ abstract class Block<
     _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
     final taskResult = _createEmptyItemDeletionResult();
-    _TaskUnit taskUnit = _BlockDeleteItemTaskUnit(
+    //
+    _ResultedTaskUnit taskUnit = _BlockDeleteItemTaskUnit(
       xBlock: thisXBlock,
       item: item!,
       taskResult: taskResult,
@@ -2232,18 +2355,71 @@ abstract class Block<
     required String methodName,
     required List<ITEM> items,
     required bool stopIfError,
+    bool errorIfItemNotInTheBlock = true,
   }) async {
-    _XShelf xShelf = _XShelf(
-        shelf: shelf,
-        forceFilterModelOpt: null,
-        forceQueryScalarOpts: [],
-        forceQueryBlockOpts: [],
-        forceQueryFormModelOpts: []);
-    _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
-    List<ITEM> deleteItems = __blockData.moveCurrentItemToEndOfList(
+    final List<ITEM> candidateDeleteItems =
+        __blockData.moveCurrentItemToEndOfList(
       itemList: items,
     );
-
+    // @Same-Code-Precheck-01
+    Actionable<BlockItemsDeletionPrecheck> actionable = __canDeleteItems(
+      checkBusy: true,
+      checkAllow: true,
+      errorIfItemNotInTheBlock: errorIfItemNotInTheBlock,
+      items: candidateDeleteItems,
+    );
+    if (!actionable.yes) {
+      _deletionErrorCount++;
+      _addErrorLogActionable(
+        shelf: shelf,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+      );
+      return BlockItemsDeletionResult<ITEM>(
+        candidateItems: candidateDeleteItems,
+        precheck: actionable.errCode,
+        stackTrace: actionable.stackTrace,
+      );
+    }
+    //
+    BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    bool confirm = await showConfirmDeleteDialog(
+      context: context,
+      details: "Delete Multi Items",
+    );
+    if (!confirm) {
+      return BlockItemsDeletionResult<ITEM>(
+        candidateItems: candidateDeleteItems,
+        precheck: BlockItemsDeletionPrecheck.cancelled,
+      );
+    }
+    //
+    _XShelf xShelf = _XShelf(
+      shelf: shelf,
+      forceFilterModelOpt: null,
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: [],
+      forceQueryFormModelOpts: [],
+    );
+    //
+    _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
+    //
+    final taskResult = _createEmptyItemsDeletionResult(
+      candidateItems: candidateDeleteItems,
+    );
+    _ResultedTaskUnit taskUnit = _BlockDeleteItemsTaskUnit(
+      xBlock: thisXBlock,
+      items: candidateDeleteItems,
+      stopIfError: stopIfError,
+      taskResult: taskResult,
+    );
+    //
+    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    //
+    await FlutterArtist.executor._executeTaskUnitQueue();
+    return taskResult;
+    //
+    // _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
     // xBlock.itemDeletionResult.candidateItems = deleteItems;
     //
     // for (ITEM item in deleteItems) {
@@ -2262,7 +2438,7 @@ abstract class Block<
     //   }
     // }
     // return xBlock.itemDeletionResult;
-    throw UnimplementedError();
+    // throw UnimplementedError();
   }
 
   // ***************************************************************************
@@ -3554,7 +3730,7 @@ abstract class Block<
       methodName: "deleteCurrentItem",
       item: currItem,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
-      errorIfItemNotInList: true,
+      errorIfItemNotInTheBlock: true,
     );
   }
 
@@ -3566,13 +3742,13 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockItemDeletionResult<ITEM>> deleteItem({
     required ITEM item,
-    bool errorIfItemNotInList = true,
+    bool errorIfItemNotInTheBlock = true,
   }) async {
     return __deleteItem(
       methodName: "deleteItem",
       item: item,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.invalidTarget,
-      errorIfItemNotInList: errorIfItemNotInList,
+      errorIfItemNotInTheBlock: errorIfItemNotInTheBlock,
     );
   }
 
@@ -3776,7 +3952,7 @@ abstract class Block<
       item: currentItem,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
       checkAllow: checkAllow,
-      errorIfItemNotInList: true,
+      errorIfItemNotInTheBlock: true,
     );
   }
 
@@ -3818,7 +3994,7 @@ abstract class Block<
   @_PrecheckPrivateMethod()
   Actionable<BlockItemDeletionPrecheck> __canDeleteItem({
     required bool checkBusy,
-    required bool errorIfItemNotInList,
+    required bool errorIfItemNotInTheBlock,
     required ITEM? item,
     required ErrCodeIfItemIsNull errCodeIfItemIsNull,
     required bool checkAllow,
@@ -3841,7 +4017,7 @@ abstract class Block<
       }
     }
     //
-    if (errorIfItemNotInList) {
+    if (errorIfItemNotInTheBlock) {
       ITEM? it = findItemSameIdWith(item: item);
       if (it == null) {
         return Actionable<BlockItemDeletionPrecheck>.no(
@@ -3868,6 +4044,57 @@ abstract class Block<
     }
     //
     return Actionable<BlockItemDeletionPrecheck>.yes();
+  }
+
+  // ***************************************************************************
+
+  @_PrecheckPrivateMethod()
+  Actionable<BlockItemsDeletionPrecheck> __canDeleteItems({
+    required bool checkBusy,
+    required bool checkAllow,
+    required List<ITEM> items,
+    required bool errorIfItemNotInTheBlock,
+  }) {
+    List<ITEM> rmvItems = ItemsUtils.removeDuplicatedItems(
+      items: items,
+      getItemId: getItemId,
+    );
+    //
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable<BlockItemsDeletionPrecheck>.no(
+        errCode: BlockItemsDeletionPrecheck.busy,
+      );
+    }
+    //
+    if (errorIfItemNotInTheBlock) {
+      for (ITEM item in rmvItems) {
+        ITEM? it = findItemSameIdWith(item: item);
+        if (it == null) {
+          return Actionable<BlockItemsDeletionPrecheck>.no(
+            errCode: BlockItemsDeletionPrecheck.invalidTarget,
+          );
+        }
+        //
+        if (checkAllow) {
+          CheckAllowResult result = __isAllowDeleteItem(item: item);
+          switch (result.result) {
+            case CheckAllow.allow:
+              continue;
+            case CheckAllow.notAllow:
+              return Actionable<BlockItemsDeletionPrecheck>.no(
+                errCode: BlockItemsDeletionPrecheck.notAllow,
+              );
+            case CheckAllow.error:
+              return Actionable<BlockItemsDeletionPrecheck>.no(
+                errCode: BlockItemsDeletionPrecheck.checkAllowMethodError,
+                stackTrace: result.stackTrace,
+              );
+          }
+        }
+      }
+    }
+    //
+    return Actionable<BlockItemsDeletionPrecheck>.yes();
   }
 
   // ***************************************************************************
@@ -4508,7 +4735,7 @@ abstract class Block<
   @_PrecheckMethod()
   Actionable<BlockItemDeletionPrecheck> canDeleteItem({
     required ITEM item,
-    bool errorIfItemNotInList = true,
+    bool errorIfItemNotInTheBlock = true,
     bool checkAllow = true,
   }) {
     return __canDeleteItem(
@@ -4516,7 +4743,7 @@ abstract class Block<
       checkAllow: checkAllow,
       item: item,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.invalidTarget,
-      errorIfItemNotInList: errorIfItemNotInList,
+      errorIfItemNotInTheBlock: errorIfItemNotInTheBlock,
     );
   }
 
@@ -5405,6 +5632,12 @@ abstract class Block<
 
   BlockItemDeletionResult<ITEM> _createEmptyItemDeletionResult() {
     return BlockItemDeletionResult<ITEM>(candidateItem: null);
+  }
+
+  BlockItemsDeletionResult<ITEM> _createEmptyItemsDeletionResult({
+    required List<ITEM> candidateItems,
+  }) {
+    return BlockItemsDeletionResult<ITEM>(candidateItems: candidateItems);
   }
 
   PrepareItemCreationResult _createEmptyItemCreationResult() {

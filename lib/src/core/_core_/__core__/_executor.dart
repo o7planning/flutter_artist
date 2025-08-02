@@ -143,6 +143,15 @@ class _Executor {
         deletionResult: taskUnit.taskResult as BlockItemDeletionResult<Object>,
       );
     }
+    // Block Delete Items:
+    else if (taskUnit is _BlockDeleteItemsTaskUnit) {
+      await taskUnit.xBlock.block._unitDeleteItems(
+        thisXBlock: taskUnit.xBlock,
+        items: taskUnit.items,
+        stopIfError: taskUnit.stopIfError,
+        deletionResult: taskUnit.taskResult as BlockItemsDeletionResult<Object>,
+      );
+    }
     // Block QuickCreateItem:
     else if (taskUnit is _BlockQuickCreateItemTaskUnit) {
       await taskUnit.xBlock.block._unitQuickCreateItem(

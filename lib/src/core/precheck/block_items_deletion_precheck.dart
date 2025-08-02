@@ -19,7 +19,6 @@ enum BlockItemsDeletionPrecheck implements Precheck {
     message: "Can not delete the item",
     details: ["The isAllowDeleteItem() method is error."],
   ),
-  //
   ///
   /// Try to delete items not in the list.
   ///
