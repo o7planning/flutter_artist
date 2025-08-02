@@ -384,7 +384,7 @@ part '_ui_/_refreshable_neutral_view_builder.dart';
 
 part '_ui_/__refreshable_widget.dart';
 
-part '_ui_/_refreshable_widget_state.dart';
+part '_ui_/__refreshable_widget_state.dart';
 
 part '_ui_/_scalar_fragment_view.dart';
 
