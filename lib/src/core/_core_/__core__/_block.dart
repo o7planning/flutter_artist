@@ -1633,13 +1633,6 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    if (!__checkBeforeQuickActionCreateItem(
-      checkBusy: false, // (Task is running, busy!)
-      addErrorLog: true,
-      showErrSnackBar: true,
-    )) {
-      return false;
-    }
     FILTER_CRITERIA blockCurrentFilterCriteria = filterCriteria!;
     //
     ApiResult<PageData<ITEM>> result;
@@ -3341,80 +3334,6 @@ abstract class Block<
       forceLoadForm: forceLoadForm,
       navigate: navigate,
     );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  // bool __checkBeforeFormCreation({
-  //   required bool checkBusy,
-  //   required bool addErrorLog,
-  //   required bool showErrSnackBar,
-  // }) {
-  //   Actionable<BlockItemCreationPrecheck> actionable = __canCreateItem(
-  //     checkBusy: checkBusy,
-  //     checkAllow: true,
-  //     creationType: ItemCreationType.form,
-  //   );
-  //   if (!actionable.yes) {
-  //     if (addErrorLog) {
-  //       _addErrorLogActionable(
-  //         shelf: shelf,
-  //         actionableFalse: actionable,
-  //         showErrSnackBar: showErrSnackBar,
-  //       );
-  //     }
-  //     return false;
-  //   }
-  //   return true;
-  // }
-  @Deprecated("Xoa di")
-  bool __checkBeforeQuickActionCreateItem({
-    required bool checkBusy,
-    required bool addErrorLog,
-    required bool showErrSnackBar,
-  }) {
-    Actionable createActionable = __canCreateItem(
-      checkBusy: checkBusy,
-      creationType: ItemCreationType.quickCreate,
-      checkAllow: true,
-    );
-    if (!createActionable.yes) {
-      if (addErrorLog) {
-        _addErrorLogActionable(
-          shelf: shelf,
-          actionableFalse: createActionable,
-          showErrSnackBar: showErrSnackBar,
-        );
-      }
-      return false;
-    }
-    return true;
-  }
-
-  bool __checkBeforeQuickActionUpdateItem({
-    required bool checkBusy,
-    required ITEM item,
-    required bool addErrorLog,
-    required bool showErrSnackBar,
-  }) {
-    Actionable<BlockItemEditPrecheck> updateActionable = __canUpdateItem(
-      checkBusy: checkBusy,
-      item: item,
-      updateType: ItemUpdateType.quickUpdate,
-      checkAllow: true,
-    );
-    if (!updateActionable.yes) {
-      if (addErrorLog) {
-        _addErrorLogActionable(
-          shelf: shelf,
-          actionableFalse: updateActionable,
-          showErrSnackBar: showErrSnackBar,
-        );
-      }
-      return false;
-    }
-    return true;
   }
 
   // ***************************************************************************
