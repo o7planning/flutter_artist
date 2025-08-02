@@ -68,13 +68,13 @@ part of '../core.dart';
 /// ```
 ///
 abstract class Block<
-    ID extends Object,
-    ITEM extends Object,
-    ITEM_DETAIL extends Object,
-    FILTER_INPUT extends FilterInput, // EmptyFilterInput
-    FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
-    EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
-    > extends _Core {
+ID extends Object,
+ITEM extends Object,
+ITEM_DETAIL extends Object,
+FILTER_INPUT extends FilterInput, // EmptyFilterInput
+FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
+EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
+> extends _Core {
   late final Shelf shelf;
 
   int _deletionErrorCount = 0;
@@ -143,14 +143,14 @@ abstract class Block<
   /// If this block does not declare a [FilterModel], it will have the default [FilterModel].
   ///
   late final FilterModel<FILTER_INPUT, FILTER_CRITERIA>
-      _registeredOrDefaultFilterModel;
+  _registeredOrDefaultFilterModel;
 
   ///
   /// This field is not null.
   /// If this block does not declare a [FilterModel], it will have the default [FilterModel].
   ///
   FilterModel<FILTER_INPUT, FILTER_CRITERIA>
-      get registeredOrDefaultFilterModel => _registeredOrDefaultFilterModel;
+  get registeredOrDefaultFilterModel => _registeredOrDefaultFilterModel;
 
   ///
   /// Returns a FilterModel declared in the [Shelf.registerStructure()] method.
@@ -542,7 +542,7 @@ abstract class Block<
     if (config.hiddenBehavior == BlockHiddenBehavior.clear) {
       Future.delayed(
         const Duration(seconds: 0),
-        () {
+            () {
           this.clear();
         },
       );
@@ -620,7 +620,7 @@ abstract class Block<
           FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
           //
           filterCriteriaOfFilterModel =
-              await filterModel._startNewFilterActivity(
+          await filterModel._startNewFilterActivity(
             activityType: FilterActivityType.newFilt,
             filterInput: filterInput,
           ) as FILTER_CRITERIA?;
@@ -628,7 +628,7 @@ abstract class Block<
           xFilterModel.queried = true;
         } else {
           filterCriteriaOfFilterModel =
-              filterModel._filterCriteria! as FILTER_CRITERIA;
+          filterModel._filterCriteria! as FILTER_CRITERIA;
         }
       } catch (e, stackTrace) {
         // @@TODO@@ 12 Test.
@@ -654,7 +654,7 @@ abstract class Block<
       // Ready FilterCriteria:
       //
       final bool parentOrCriteriaChanged =
-          __blockData._isParentOrFilterCriteriaChanged(
+      __blockData._isParentOrFilterCriteriaChanged(
         newCurrentParentItemId: parentItemId,
         newFilterCriteria: filterCriteriaOfFilterModel,
       );
@@ -730,23 +730,23 @@ abstract class Block<
           if (parentOrCriteriaChanged) {
             switch (queryDataState) {
               case DataState.ready:
-                // @FaCode-002.
-                // Test Case: [42a].
-                // Replace by empty items.
+              // @FaCode-002.
+              // Test Case: [42a].
+              // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
               case DataState.pending:
-                // Replace by empty items.
+              // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
               case DataState.error:
-                // @FaCode-003.
-                // Test Case: [42a].
-                // Replace by empty items.
+              // @FaCode-003.
+              // Test Case: [42a].
+              // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
               case DataState.none:
-                // Replace by empty items.
+              // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
             }
@@ -756,22 +756,22 @@ abstract class Block<
           else {
             switch (queryDataState) {
               case DataState.ready:
-                // Append empty items (No items got from Server).
-                // Test Case: [42a].
-                // @FaCode-001.
+              // Append empty items (No items got from Server).
+              // Test Case: [42a].
+              // @FaCode-001.
                 realListBehavior = ListBehavior.append;
                 newQueryDataState = DataState.ready;
               case DataState.pending:
-                // Replace by empty items.
+              // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
               case DataState.error:
-                // @FaCode-004.
-                // Replace by empty items.
+              // @FaCode-004.
+              // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
               case DataState.none:
-                // Replace by empty items.
+              // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
             }
@@ -783,19 +783,19 @@ abstract class Block<
           if (parentOrCriteriaChanged) {
             switch (queryDataState) {
               case DataState.ready:
-                // Replace.
+              // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
               case DataState.pending:
-                // Replace.
+              // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
               case DataState.error:
-                // Replace.
+              // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
               case DataState.none:
-                // Replace.
+              // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
             }
@@ -804,19 +804,19 @@ abstract class Block<
           else {
             switch (queryDataState) {
               case DataState.ready:
-                // Replace or Append:
+              // Replace or Append:
                 realListBehavior = thisXBlock.listBehavior;
                 newQueryDataState = DataState.ready;
               case DataState.pending:
-                // Replace.
+              // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
               case DataState.error:
-                // Replace.
+              // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
               case DataState.none:
-                // Replace.
+              // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
             }
@@ -890,19 +890,19 @@ abstract class Block<
       else {
         switch (newQueryDataState) {
           case DataState.none:
-            // @@TODO@@ 04.
-            // Never run:
+          // @@TODO@@ 04.
+          // Never run:
             this.__clearAllChildrenBlocksToNone(
               thisXBlock: thisXBlock,
             );
           case DataState.pending:
-            // @@TODO@@ 05.
-            // Never run:
+          // @@TODO@@ 05.
+          // Never run:
             this.__clearAllChildrenBlocksToNone(
               thisXBlock: thisXBlock,
             );
           case DataState.error:
-            // @@TODO@@ 06.
+          // @@TODO@@ 06.
             this.__clearAllChildrenBlocksToNone(
               thisXBlock: thisXBlock,
             );
@@ -1116,7 +1116,7 @@ abstract class Block<
     }
     //
     final bool isCandidateCurrentItemInNewQueriedList =
-        ItemsUtils.isListContainItem(
+    ItemsUtils.isListContainItem(
       targetList: newQueriedList,
       item: candidateCurrentItem,
       getItemId: getItemId,
@@ -1141,7 +1141,7 @@ abstract class Block<
         hasXActiveUI: hasXActiveUI,
         currentItemSelectionType: currentItemSelectionType,
         isCandidateCurrentItemInNewQueriedList:
-            isCandidateCurrentItemInNewQueriedList,
+        isCandidateCurrentItemInNewQueriedList,
         currentItemChanged: currentItemChanged,
       );
       //
@@ -1153,7 +1153,7 @@ abstract class Block<
         xFormModel: thisXBlock.xFormModel!,
         currentItemSelectionType: currentItemSelectionType,
         isCandidateCurrentItemInNewQueriedList:
-            isCandidateCurrentItemInNewQueriedList,
+        isCandidateCurrentItemInNewQueriedList,
         currentItemChanged: currentItemChanged,
         forceReloadItem: forceReloadItem,
       );
@@ -1180,7 +1180,7 @@ abstract class Block<
           config.itemRefreshmentMode == BlockItemRefreshmentMode.auto &&
           isCandidateCurrentItemInNewQueriedList) {
         final ITEM? candidateCurrentItemInNewQueriedList =
-            ItemsUtils.findItemInList(
+        ItemsUtils.findItemInList(
           item: candidateCurrentItem,
           targetList: newQueriedList,
           getItemId: getItemId,
@@ -1189,7 +1189,7 @@ abstract class Block<
         // No need to refresh Item.
         //
         refreshedCurrentItemDetail =
-            candidateCurrentItemInNewQueriedList as ITEM_DETAIL;
+        candidateCurrentItemInNewQueriedList as ITEM_DETAIL;
       } else {
         bool isLoadItemError = false;
         try {
@@ -1479,7 +1479,7 @@ abstract class Block<
     //
     _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
       currentItemSelectionType:
-          CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
+      CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
       xBlock: thisXBlock,
       newQueriedList: <ITEM>[],
       candidateItem: siblingItem,
@@ -1555,7 +1555,7 @@ abstract class Block<
     required _XBlock thisXBlock,
     required BlockQuickCreateItemResult taskResult,
     required BlockQuickCreateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
-        action,
+    action,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -1628,8 +1628,8 @@ abstract class Block<
   Future<bool> _unitQuickCreateMultiItems({
     required _XBlock thisXBlock,
     required BlockQuickCreateMultiItemsAction<ID, ITEM, ITEM_DETAIL,
-            FILTER_CRITERIA>
-        action,
+        FILTER_CRITERIA>
+    action,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -1667,7 +1667,7 @@ abstract class Block<
         thisXBlock: thisXBlock,
         blockCurrentFilterCriteria: blockCurrentFilterCriteria,
         calledMethodName:
-            "${getClassName(action)}.callApiQuickCreateMultiItems",
+        "${getClassName(action)}.callApiQuickCreateMultiItems",
         result: result,
       );
     } catch (e, stackTrace) {
@@ -1692,7 +1692,7 @@ abstract class Block<
     required _XBlock thisXBlock,
     required BlockQuickUpdateItemResult taskResult,
     required BlockQuickUpdateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
-        action,
+    action,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -1808,7 +1808,7 @@ abstract class Block<
         break;
       case AfterBlockQuickAction.refreshCurrentItem:
         Actionable<BlockItemCurrSelectionPrecheck> actionable =
-            canRefreshCurrentItem();
+        canRefreshCurrentItem();
         if (!actionable.yes) {
           return true;
         }
@@ -1955,7 +1955,7 @@ abstract class Block<
       );
       //
       Actionable<BlockItemEditPrecheck> actionable =
-          canEditItemOnForm(item: refreshedItem);
+      canEditItemOnForm(item: refreshedItem);
       //
       FlutterArtist.codeFlowLogger._addInfo(
         ownerClassInstance: this,
@@ -2038,7 +2038,7 @@ abstract class Block<
       //
       _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
         currentItemSelectionType:
-            CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
+        CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
         xBlock: thisXBlock,
         newQueriedList: [],
         candidateItem: siblingItem,
@@ -2227,10 +2227,51 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @_ReturnTaskResultMethodAnnotation()
+  Future<BlockItemsDeletionResult<ITEM>> __deleteItems({
+    required String methodName,
+    required List<ITEM> items,
+    required bool stopIfError,
+  }) async {
+    _XShelf xShelf = _XShelf(
+        shelf: shelf,
+        forceFilterModelOpt: null,
+        forceQueryScalarOpts: [],
+        forceQueryBlockOpts: [],
+        forceQueryFormModelOpts: []);
+    _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
+    List<ITEM> deleteItems = __blockData.moveCurrentItemToEndOfList(
+      itemList: items,
+    );
+
+    // xBlock.itemDeletionResult.candidateItems = deleteItems;
+    //
+    // for (ITEM item in deleteItems) {
+    //   var taskUnit = _BlockDeleteItemTaskUnit(
+    //     xBlock: xBlock,
+    //     item: item,
+    //     result: null, // ??????????/
+    //   );
+    //   FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    //   await FlutterArtist.executor._executeTaskUnitQueue();
+    //   if (stopIfError) {
+    //     ItemDeletionResult result = xBlock.itemDeletionResult;
+    //     if (!result.success) {
+    //       return result;
+    //     }
+    //   }
+    // }
+    // return xBlock.itemDeletionResult;
+    throw UnimplementedError();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   @_BlockSelectItemAsCurrentAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockItemCurrSelectionResult<ITEM>>
-      __refreshToShowOrEditItemAsCurrent({
+  __refreshToShowOrEditItemAsCurrent({
     required String methodName,
     required ITEM? item,
     required ErrCodeIfItemIsNull errCodeIfItemIsNull,
@@ -2255,7 +2296,7 @@ abstract class Block<
     // @Same-Code-Precheck-01
     //
     Actionable<BlockItemCurrSelectionPrecheck> actionable =
-        this.__canSelectItemAsCurrent(
+    this.__canSelectItemAsCurrent(
       item: item,
       errCodeIfItemIsNull: errCodeIfItemIsNull,
       checkBusy: true,
@@ -3035,7 +3076,7 @@ abstract class Block<
   @_BlockQuickCreateItemActionAnnotation()
   Future<BlockQuickCreateItemResult> executeQuickCreateItemAction({
     required BlockQuickCreateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
-        action,
+    action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -3050,7 +3091,7 @@ abstract class Block<
     // @Same-Code-Precheck-01
     //
     final Actionable<BlockQuickCreateItemPrecheck> actionable =
-        __canQuickCreateItem(
+    __canQuickCreateItem(
       checkBusy: true,
       checkAllow: true,
     );
@@ -3112,8 +3153,8 @@ abstract class Block<
   @_BlockQuickCreateMultiItemsActionAnnotation()
   Future<BlockQuickCreateMultiItemsResult> executeQuickCreateMultiItemsAction({
     required BlockQuickCreateMultiItemsAction<ID, ITEM, ITEM_DETAIL,
-            FILTER_CRITERIA>
-        action,
+        FILTER_CRITERIA>
+    action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -3128,7 +3169,7 @@ abstract class Block<
     // @Same-Code-Precheck-01
     //
     Actionable<BlockMultiItemsCreationPrecheck> actionable =
-        __canCreateMultiItems(
+    __canCreateMultiItems(
       checkBusy: true,
       checkAllow: true,
     );
@@ -3190,7 +3231,7 @@ abstract class Block<
   @_BlockQuickUpdateItemActionAnnotation()
   Future<BlockQuickUpdateItemResult> executeQuickUpdateItemAction({
     required BlockQuickUpdateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
-        action,
+    action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -3203,7 +3244,7 @@ abstract class Block<
     );
     // @Same-Code-Precheck-01
     final Actionable<BlockQuickUpdateItemPrecheck> actionable =
-        __canQuickUpdateItem(
+    __canQuickUpdateItem(
       item: action.item,
       checkBusy: true,
       checkAllow: true,
@@ -3266,7 +3307,7 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockQuickChildBlockItemsActionAnnotation()
   Future<bool> executeQuickChildBlockItemsAction<
-      A extends BlockQuickChildBlockItemsAction<ITEM, ITEM_DETAIL>>({
+  A extends BlockQuickChildBlockItemsAction<ITEM, ITEM_DETAIL>>({
     required A action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -3322,7 +3363,7 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockRefreshAndSelectFirstItemAsCurrentAnnotation()
   Future<BlockItemCurrSelectionResult<ITEM>>
-      refreshAndSelectFirstItemAsCurrent({
+  refreshAndSelectFirstItemAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
@@ -3363,7 +3404,7 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockRefreshAndSelectPreviousItemAsCurrentAnnotation()
   Future<BlockItemCurrSelectionResult<ITEM>>
-      refreshAndSelectPreviousItemAsCurrent({
+  refreshAndSelectPreviousItemAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
@@ -3448,29 +3489,16 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockDeleteSelectedItemsAnnotation()
-  // TODO: Change to ItemsDeletionResult?
   Future<BlockItemsDeletionResult<ITEM>> deleteSelectedItems({
     required CurrentItemSelInclusion currentItemInclusion,
     required bool stopIfError,
   }) async {
-    FlutterArtist.codeFlowLogger._addMethodCall(
-      isLibCode: true,
-      navigate: null,
-      ownerClassInstance: this,
-      methodName: "deleteSelectedItems",
-      parameters: null,
-    );
-    //
     List<ITEM> selItems = __blockData.getSelectedItems(
       currentItemInclusion: currentItemInclusion,
     );
-    if (selItems.isEmpty) {
-      // TODO: Xu ly theo cach khac?
-      return BlockItemsDeletionResult(
-        precheck: BlockItemsDeletionPrecheck.noTarget,
-      );
-    }
-    return await deleteItems(
+    //
+    return await __deleteItems(
+      methodName: "deleteSelectedItems",
       items: selItems,
       stopIfError: stopIfError,
     );
@@ -3486,24 +3514,12 @@ abstract class Block<
     required CurrentItemChkInclusion currentItemInclusion,
     required bool stopIfError,
   }) async {
-    FlutterArtist.codeFlowLogger._addMethodCall(
-      isLibCode: true,
-      navigate: null,
-      ownerClassInstance: this,
-      methodName: "deleteCheckedItems",
-      parameters: null,
-    );
-    //
     List<ITEM> chkItems = __blockData.getCheckedItems(
       currentItemInclusion: currentItemInclusion,
     );
-    if (chkItems.isEmpty) {
-      // TODO: Xu ly theo cach khac?
-      return BlockItemsDeletionResult(
-        precheck: BlockItemsDeletionPrecheck.noTarget,
-      );
-    }
-    return await deleteItems(
+    //
+    return await __deleteItems(
+      methodName: "deleteCheckedItems",
       items: chkItems,
       stopIfError: stopIfError,
     );
@@ -3518,36 +3534,11 @@ abstract class Block<
     required List<ITEM> items,
     required bool stopIfError,
   }) async {
-    _XShelf xShelf = _XShelf(
-        shelf: shelf,
-        forceFilterModelOpt: null,
-        forceQueryScalarOpts: [],
-        forceQueryBlockOpts: [],
-        forceQueryFormModelOpts: []);
-    _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
-    List<ITEM> deleteItems = __blockData.moveCurrentItemToEndOfList(
-      itemList: items,
+    return await __deleteItems(
+      methodName: "deleteItems",
+      items: items,
+      stopIfError: stopIfError,
     );
-    //
-    // xBlock.itemDeletionResult.candidateItems = deleteItems;
-    //
-    // for (ITEM item in deleteItems) {
-    //   var taskUnit = _BlockDeleteItemTaskUnit(
-    //     xBlock: xBlock,
-    //     item: item,
-    //     result: null, // ??????????/
-    //   );
-    //   FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
-    //   await FlutterArtist.executor._executeTaskUnitQueue();
-    //   if (stopIfError) {
-    //     ItemDeletionResult result = xBlock.itemDeletionResult;
-    //     if (!result.success) {
-    //       return result;
-    //     }
-    //   }
-    // }
-    // return xBlock.itemDeletionResult;
-    throw UnimplementedError();
   }
 
   // ***************************************************************************
