@@ -186,7 +186,7 @@ part '__core__/_scalar_data.dart';
 
 part '__core__/_shelf.dart';
 
-part '_ui_com_/_ui_components.dart';
+part '_ui_com_/__ui_components.dart';
 
 part '_ui_com_/_shelf_ui_components.dart';
 
@@ -296,7 +296,7 @@ part '_task_result_/_form_save_result.dart';
 
 part '_task_result_/_scalar_query_result.dart';
 
-part '_task_result_/_task_result.dart';
+part '_task_result_/__task_result.dart';
 
 part '_task_unit_/__resulted_task_unit.dart';
 
