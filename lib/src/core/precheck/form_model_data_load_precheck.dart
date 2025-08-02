@@ -1,9 +1,7 @@
-import '../annotation/annotation.dart';
 import '__chk_code.dart';
 import '__precheck.dart';
 
-@RenameAnnotation("FormModelDataLoadPrecheck")
-enum FormModelLoadDataPrecheck implements Precheck {
+enum FormModelDataLoadPrecheck implements Precheck {
   busy(
     chkCode: ChkCode.busy,
     message: "Can not load form data.",
@@ -19,7 +17,7 @@ enum FormModelLoadDataPrecheck implements Precheck {
   @override
   final List<String>? details;
 
-  const FormModelLoadDataPrecheck({
+  const FormModelDataLoadPrecheck({
     required this.chkCode,
     required this.message,
     required this.details,

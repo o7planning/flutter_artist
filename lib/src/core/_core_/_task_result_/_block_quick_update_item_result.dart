@@ -2,7 +2,7 @@ part of '../core.dart';
 
 @RenameAnnotation()
 class BlockQuickUpdateItemResult
-    extends TaskResult<BlockQuickUpdateItemPrecheck> {
+    extends TaskResult<BlockQuickItemUpdatePrecheck> {
   BlockQuickUpdateItemResult({super.precheck, super.stackTrace});
 
   @override

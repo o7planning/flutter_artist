@@ -1,10 +1,7 @@
-import 'package:flutter_artist/src/core/annotation/annotation.dart';
-
 import '__chk_code.dart';
 import '__precheck.dart';
 
-@RenameAnnotation("BlockQuickItemCreationPrecheck")
-enum BlockQuickCreateItemPrecheck implements Precheck {
+enum BlockQuickItemCreationPrecheck implements Precheck {
   busy(
     chkCode: ChkCode.busy,
     message: "New item creation is disabled.",
@@ -56,7 +53,7 @@ enum BlockQuickCreateItemPrecheck implements Precheck {
   @override
   final List<String>? details;
 
-  const BlockQuickCreateItemPrecheck({
+  const BlockQuickItemCreationPrecheck({
     required this.chkCode,
     required this.message,
     required this.details,

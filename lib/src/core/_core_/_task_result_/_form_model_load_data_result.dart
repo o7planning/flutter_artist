@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 @RenameAnnotation("FormModelDataLoadResult")
-class FormModelLoadDataResult extends TaskResult<FormModelLoadDataPrecheck> {
+class FormModelLoadDataResult extends TaskResult<FormModelDataLoadPrecheck> {
   FormModelLoadDataResult({super.precheck});
 
   @override

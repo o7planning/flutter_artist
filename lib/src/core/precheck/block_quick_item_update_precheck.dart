@@ -1,7 +1,7 @@
 import '__chk_code.dart';
 import '__precheck.dart';
 
-enum BlockQuickUpdateItemPrecheck implements Precheck {
+enum BlockQuickItemUpdatePrecheck implements Precheck {
   busy(
     chkCode: ChkCode.busy,
     message: "Item update is disabled.",
@@ -65,7 +65,7 @@ enum BlockQuickUpdateItemPrecheck implements Precheck {
   @override
   final List<String>? details;
 
-  const BlockQuickUpdateItemPrecheck({
+  const BlockQuickItemUpdatePrecheck({
     required this.chkCode,
     required this.message,
     required this.details,

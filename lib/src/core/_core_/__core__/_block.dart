@@ -68,13 +68,13 @@ part of '../core.dart';
 /// ```
 ///
 abstract class Block<
-ID extends Object,
-ITEM extends Object,
-ITEM_DETAIL extends Object,
-FILTER_INPUT extends FilterInput, // EmptyFilterInput
-FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
-EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
-> extends _Core {
+    ID extends Object,
+    ITEM extends Object,
+    ITEM_DETAIL extends Object,
+    FILTER_INPUT extends FilterInput, // EmptyFilterInput
+    FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
+    EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
+    > extends _Core {
   late final Shelf shelf;
 
   int _deletionErrorCount = 0;
@@ -143,14 +143,14 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
   /// If this block does not declare a [FilterModel], it will have the default [FilterModel].
   ///
   late final FilterModel<FILTER_INPUT, FILTER_CRITERIA>
-  _registeredOrDefaultFilterModel;
+      _registeredOrDefaultFilterModel;
 
   ///
   /// This field is not null.
   /// If this block does not declare a [FilterModel], it will have the default [FilterModel].
   ///
   FilterModel<FILTER_INPUT, FILTER_CRITERIA>
-  get registeredOrDefaultFilterModel => _registeredOrDefaultFilterModel;
+      get registeredOrDefaultFilterModel => _registeredOrDefaultFilterModel;
 
   ///
   /// Returns a FilterModel declared in the [Shelf.registerStructure()] method.
@@ -542,7 +542,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
     if (config.hiddenBehavior == BlockHiddenBehavior.clear) {
       Future.delayed(
         const Duration(seconds: 0),
-            () {
+        () {
           this.clear();
         },
       );
@@ -620,7 +620,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
           FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
           //
           filterCriteriaOfFilterModel =
-          await filterModel._startNewFilterActivity(
+              await filterModel._startNewFilterActivity(
             activityType: FilterActivityType.newFilt,
             filterInput: filterInput,
           ) as FILTER_CRITERIA?;
@@ -628,7 +628,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
           xFilterModel.queried = true;
         } else {
           filterCriteriaOfFilterModel =
-          filterModel._filterCriteria! as FILTER_CRITERIA;
+              filterModel._filterCriteria! as FILTER_CRITERIA;
         }
       } catch (e, stackTrace) {
         // @@TODO@@ 12 Test.
@@ -654,7 +654,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
       // Ready FilterCriteria:
       //
       final bool parentOrCriteriaChanged =
-      __blockData._isParentOrFilterCriteriaChanged(
+          __blockData._isParentOrFilterCriteriaChanged(
         newCurrentParentItemId: parentItemId,
         newFilterCriteria: filterCriteriaOfFilterModel,
       );
@@ -730,23 +730,23 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
           if (parentOrCriteriaChanged) {
             switch (queryDataState) {
               case DataState.ready:
-              // @FaCode-002.
-              // Test Case: [42a].
-              // Replace by empty items.
+                // @FaCode-002.
+                // Test Case: [42a].
+                // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
               case DataState.pending:
-              // Replace by empty items.
+                // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
               case DataState.error:
-              // @FaCode-003.
-              // Test Case: [42a].
-              // Replace by empty items.
+                // @FaCode-003.
+                // Test Case: [42a].
+                // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
               case DataState.none:
-              // Replace by empty items.
+                // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
             }
@@ -756,22 +756,22 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
           else {
             switch (queryDataState) {
               case DataState.ready:
-              // Append empty items (No items got from Server).
-              // Test Case: [42a].
-              // @FaCode-001.
+                // Append empty items (No items got from Server).
+                // Test Case: [42a].
+                // @FaCode-001.
                 realListBehavior = ListBehavior.append;
                 newQueryDataState = DataState.ready;
               case DataState.pending:
-              // Replace by empty items.
+                // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
               case DataState.error:
-              // @FaCode-004.
-              // Replace by empty items.
+                // @FaCode-004.
+                // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
               case DataState.none:
-              // Replace by empty items.
+                // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
             }
@@ -783,19 +783,19 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
           if (parentOrCriteriaChanged) {
             switch (queryDataState) {
               case DataState.ready:
-              // Replace.
+                // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
               case DataState.pending:
-              // Replace.
+                // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
               case DataState.error:
-              // Replace.
+                // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
               case DataState.none:
-              // Replace.
+                // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
             }
@@ -804,19 +804,19 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
           else {
             switch (queryDataState) {
               case DataState.ready:
-              // Replace or Append:
+                // Replace or Append:
                 realListBehavior = thisXBlock.listBehavior;
                 newQueryDataState = DataState.ready;
               case DataState.pending:
-              // Replace.
+                // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
               case DataState.error:
-              // Replace.
+                // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
               case DataState.none:
-              // Replace.
+                // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
             }
@@ -890,19 +890,19 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
       else {
         switch (newQueryDataState) {
           case DataState.none:
-          // @@TODO@@ 04.
-          // Never run:
+            // @@TODO@@ 04.
+            // Never run:
             this.__clearAllChildrenBlocksToNone(
               thisXBlock: thisXBlock,
             );
           case DataState.pending:
-          // @@TODO@@ 05.
-          // Never run:
+            // @@TODO@@ 05.
+            // Never run:
             this.__clearAllChildrenBlocksToNone(
               thisXBlock: thisXBlock,
             );
           case DataState.error:
-          // @@TODO@@ 06.
+            // @@TODO@@ 06.
             this.__clearAllChildrenBlocksToNone(
               thisXBlock: thisXBlock,
             );
@@ -1116,7 +1116,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
     }
     //
     final bool isCandidateCurrentItemInNewQueriedList =
-    ItemsUtils.isListContainItem(
+        ItemsUtils.isListContainItem(
       targetList: newQueriedList,
       item: candidateCurrentItem,
       getItemId: getItemId,
@@ -1141,7 +1141,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
         hasXActiveUI: hasXActiveUI,
         currentItemSelectionType: currentItemSelectionType,
         isCandidateCurrentItemInNewQueriedList:
-        isCandidateCurrentItemInNewQueriedList,
+            isCandidateCurrentItemInNewQueriedList,
         currentItemChanged: currentItemChanged,
       );
       //
@@ -1153,7 +1153,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
         xFormModel: thisXBlock.xFormModel!,
         currentItemSelectionType: currentItemSelectionType,
         isCandidateCurrentItemInNewQueriedList:
-        isCandidateCurrentItemInNewQueriedList,
+            isCandidateCurrentItemInNewQueriedList,
         currentItemChanged: currentItemChanged,
         forceReloadItem: forceReloadItem,
       );
@@ -1180,7 +1180,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
           config.itemRefreshmentMode == BlockItemRefreshmentMode.auto &&
           isCandidateCurrentItemInNewQueriedList) {
         final ITEM? candidateCurrentItemInNewQueriedList =
-        ItemsUtils.findItemInList(
+            ItemsUtils.findItemInList(
           item: candidateCurrentItem,
           targetList: newQueriedList,
           getItemId: getItemId,
@@ -1189,7 +1189,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
         // No need to refresh Item.
         //
         refreshedCurrentItemDetail =
-        candidateCurrentItemInNewQueriedList as ITEM_DETAIL;
+            candidateCurrentItemInNewQueriedList as ITEM_DETAIL;
       } else {
         bool isLoadItemError = false;
         try {
@@ -1479,7 +1479,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
     //
     _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
       currentItemSelectionType:
-      CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
+          CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
       xBlock: thisXBlock,
       newQueriedList: <ITEM>[],
       candidateItem: siblingItem,
@@ -1555,7 +1555,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
     required _XBlock thisXBlock,
     required BlockQuickCreateItemResult taskResult,
     required BlockQuickCreateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
-    action,
+        action,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -1628,8 +1628,8 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
   Future<bool> _unitQuickCreateMultiItems({
     required _XBlock thisXBlock,
     required BlockQuickCreateMultiItemsAction<ID, ITEM, ITEM_DETAIL,
-        FILTER_CRITERIA>
-    action,
+            FILTER_CRITERIA>
+        action,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -1667,7 +1667,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
         thisXBlock: thisXBlock,
         blockCurrentFilterCriteria: blockCurrentFilterCriteria,
         calledMethodName:
-        "${getClassName(action)}.callApiQuickCreateMultiItems",
+            "${getClassName(action)}.callApiQuickCreateMultiItems",
         result: result,
       );
     } catch (e, stackTrace) {
@@ -1692,7 +1692,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
     required _XBlock thisXBlock,
     required BlockQuickUpdateItemResult taskResult,
     required BlockQuickUpdateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
-    action,
+        action,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -1808,7 +1808,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
         break;
       case AfterBlockQuickAction.refreshCurrentItem:
         Actionable<BlockItemCurrSelectionPrecheck> actionable =
-        canRefreshCurrentItem();
+            canRefreshCurrentItem();
         if (!actionable.yes) {
           return true;
         }
@@ -1955,7 +1955,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
       );
       //
       Actionable<BlockItemEditPrecheck> actionable =
-      canEditItemOnForm(item: refreshedItem);
+          canEditItemOnForm(item: refreshedItem);
       //
       FlutterArtist.codeFlowLogger._addInfo(
         ownerClassInstance: this,
@@ -2038,7 +2038,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
       //
       _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
         currentItemSelectionType:
-        CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
+            CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
         xBlock: thisXBlock,
         newQueriedList: [],
         candidateItem: siblingItem,
@@ -2271,7 +2271,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
   @_BlockSelectItemAsCurrentAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockItemCurrSelectionResult<ITEM>>
-  __refreshToShowOrEditItemAsCurrent({
+      __refreshToShowOrEditItemAsCurrent({
     required String methodName,
     required ITEM? item,
     required ErrCodeIfItemIsNull errCodeIfItemIsNull,
@@ -2296,7 +2296,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
     // @Same-Code-Precheck-01
     //
     Actionable<BlockItemCurrSelectionPrecheck> actionable =
-    this.__canSelectItemAsCurrent(
+        this.__canSelectItemAsCurrent(
       item: item,
       errCodeIfItemIsNull: errCodeIfItemIsNull,
       checkBusy: true,
@@ -3076,7 +3076,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
   @_BlockQuickCreateItemActionAnnotation()
   Future<BlockQuickCreateItemResult> executeQuickCreateItemAction({
     required BlockQuickCreateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
-    action,
+        action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -3090,8 +3090,8 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
     //
     // @Same-Code-Precheck-01
     //
-    final Actionable<BlockQuickCreateItemPrecheck> actionable =
-    __canQuickCreateItem(
+    final Actionable<BlockQuickItemCreationPrecheck> actionable =
+        __canQuickCreateItem(
       checkBusy: true,
       checkAllow: true,
     );
@@ -3120,7 +3120,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
     }
     if (!confirm) {
       return BlockQuickCreateItemResult(
-        precheck: BlockQuickCreateItemPrecheck.cancelled,
+        precheck: BlockQuickItemCreationPrecheck.cancelled,
       );
     }
     //
@@ -3153,8 +3153,8 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
   @_BlockQuickCreateMultiItemsActionAnnotation()
   Future<BlockQuickCreateMultiItemsResult> executeQuickCreateMultiItemsAction({
     required BlockQuickCreateMultiItemsAction<ID, ITEM, ITEM_DETAIL,
-        FILTER_CRITERIA>
-    action,
+            FILTER_CRITERIA>
+        action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -3169,7 +3169,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
     // @Same-Code-Precheck-01
     //
     Actionable<BlockMultiItemsCreationPrecheck> actionable =
-    __canCreateMultiItems(
+        __canCreateMultiItems(
       checkBusy: true,
       checkAllow: true,
     );
@@ -3231,7 +3231,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
   @_BlockQuickUpdateItemActionAnnotation()
   Future<BlockQuickUpdateItemResult> executeQuickUpdateItemAction({
     required BlockQuickUpdateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
-    action,
+        action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -3243,8 +3243,8 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
       },
     );
     // @Same-Code-Precheck-01
-    final Actionable<BlockQuickUpdateItemPrecheck> actionable =
-    __canQuickUpdateItem(
+    final Actionable<BlockQuickItemUpdatePrecheck> actionable =
+        __canQuickUpdateItem(
       item: action.item,
       checkBusy: true,
       checkAllow: true,
@@ -3275,7 +3275,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
     }
     if (!confirm) {
       return BlockQuickUpdateItemResult(
-        precheck: BlockQuickUpdateItemPrecheck.cancelled,
+        precheck: BlockQuickItemUpdatePrecheck.cancelled,
       );
     }
     //
@@ -3307,7 +3307,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
   @_ReturnTaskResultMethodAnnotation()
   @_BlockQuickChildBlockItemsActionAnnotation()
   Future<bool> executeQuickChildBlockItemsAction<
-  A extends BlockQuickChildBlockItemsAction<ITEM, ITEM_DETAIL>>({
+      A extends BlockQuickChildBlockItemsAction<ITEM, ITEM_DETAIL>>({
     required A action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -3363,7 +3363,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
   @_ReturnTaskResultMethodAnnotation()
   @_BlockRefreshAndSelectFirstItemAsCurrentAnnotation()
   Future<BlockItemCurrSelectionResult<ITEM>>
-  refreshAndSelectFirstItemAsCurrent({
+      refreshAndSelectFirstItemAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
@@ -3404,7 +3404,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
   @_ReturnTaskResultMethodAnnotation()
   @_BlockRefreshAndSelectPreviousItemAsCurrentAnnotation()
   Future<BlockItemCurrSelectionResult<ITEM>>
-  refreshAndSelectPreviousItemAsCurrent({
+      refreshAndSelectPreviousItemAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
@@ -4087,28 +4087,28 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
   // ***************************************************************************
 
   @_PrecheckPrivateMethod()
-  Actionable<BlockQuickUpdateItemPrecheck> __canQuickUpdateItem({
+  Actionable<BlockQuickItemUpdatePrecheck> __canQuickUpdateItem({
     required ITEM item,
     required bool checkBusy,
     required bool checkAllow,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockQuickUpdateItemPrecheck>.no(
-        errCode: BlockQuickUpdateItemPrecheck.busy,
+      return Actionable<BlockQuickItemUpdatePrecheck>.no(
+        errCode: BlockQuickItemUpdatePrecheck.busy,
       );
     }
     switch (queryDataState) {
       case DataState.pending:
-        return Actionable<BlockQuickUpdateItemPrecheck>.no(
-          errCode: BlockQuickUpdateItemPrecheck.blockInPendingState,
+        return Actionable<BlockQuickItemUpdatePrecheck>.no(
+          errCode: BlockQuickItemUpdatePrecheck.blockInPendingState,
         );
       case DataState.error:
-        return Actionable<BlockQuickUpdateItemPrecheck>.no(
-          errCode: BlockQuickUpdateItemPrecheck.blockInErrorState,
+        return Actionable<BlockQuickItemUpdatePrecheck>.no(
+          errCode: BlockQuickItemUpdatePrecheck.blockInErrorState,
         );
       case DataState.none:
-        return Actionable<BlockQuickUpdateItemPrecheck>.no(
-          errCode: BlockQuickUpdateItemPrecheck.blockInNoneState,
+        return Actionable<BlockQuickItemUpdatePrecheck>.no(
+          errCode: BlockQuickItemUpdatePrecheck.blockInNoneState,
         );
       case DataState.ready:
         break;
@@ -4118,8 +4118,8 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
     ITEM? internalItem = findItemSameIdWith(item: item);
     // Test Cases: [90b].
     if (internalItem == null) {
-      return Actionable<BlockQuickUpdateItemPrecheck>.no(
-        errCode: BlockQuickUpdateItemPrecheck.invalidTarget,
+      return Actionable<BlockQuickItemUpdatePrecheck>.no(
+        errCode: BlockQuickItemUpdatePrecheck.invalidTarget,
       );
     }
     //
@@ -4127,47 +4127,47 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
       CheckAllowResult result = _isAllowUpdateItem(item: item);
       switch (result.result) {
         case CheckAllow.allow:
-          return Actionable<BlockQuickUpdateItemPrecheck>.yes();
+          return Actionable<BlockQuickItemUpdatePrecheck>.yes();
         case CheckAllow.notAllow:
-          return Actionable<BlockQuickUpdateItemPrecheck>.no(
-            errCode: BlockQuickUpdateItemPrecheck.notAllow,
+          return Actionable<BlockQuickItemUpdatePrecheck>.no(
+            errCode: BlockQuickItemUpdatePrecheck.notAllow,
           );
         case CheckAllow.error:
-          return Actionable<BlockQuickUpdateItemPrecheck>.no(
-            errCode: BlockQuickUpdateItemPrecheck.checkAllowMethodError,
+          return Actionable<BlockQuickItemUpdatePrecheck>.no(
+            errCode: BlockQuickItemUpdatePrecheck.checkAllowMethodError,
             stackTrace: result.stackTrace,
           );
       }
     }
     //
-    return Actionable<BlockQuickUpdateItemPrecheck>.yes();
+    return Actionable<BlockQuickItemUpdatePrecheck>.yes();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   @_PrecheckPrivateMethod()
-  Actionable<BlockQuickCreateItemPrecheck> __canQuickCreateItem({
+  Actionable<BlockQuickItemCreationPrecheck> __canQuickCreateItem({
     required bool checkBusy,
     required bool checkAllow,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockQuickCreateItemPrecheck>.no(
-        errCode: BlockQuickCreateItemPrecheck.busy,
+      return Actionable<BlockQuickItemCreationPrecheck>.no(
+        errCode: BlockQuickItemCreationPrecheck.busy,
       );
     }
     switch (queryDataState) {
       case DataState.pending:
-        return Actionable<BlockQuickCreateItemPrecheck>.no(
-          errCode: BlockQuickCreateItemPrecheck.blockInPendingState,
+        return Actionable<BlockQuickItemCreationPrecheck>.no(
+          errCode: BlockQuickItemCreationPrecheck.blockInPendingState,
         );
       case DataState.error:
-        return Actionable<BlockQuickCreateItemPrecheck>.no(
-          errCode: BlockQuickCreateItemPrecheck.blockInErrorState,
+        return Actionable<BlockQuickItemCreationPrecheck>.no(
+          errCode: BlockQuickItemCreationPrecheck.blockInErrorState,
         );
       case DataState.none:
-        return Actionable<BlockQuickCreateItemPrecheck>.no(
-          errCode: BlockQuickCreateItemPrecheck.blockInNoneState,
+        return Actionable<BlockQuickItemCreationPrecheck>.no(
+          errCode: BlockQuickItemCreationPrecheck.blockInNoneState,
         );
       case DataState.ready:
         break;
@@ -4177,20 +4177,20 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
       CheckAllowResult result = __isAllowCreateItem();
       switch (result.result) {
         case CheckAllow.allow:
-          return Actionable<BlockQuickCreateItemPrecheck>.yes();
+          return Actionable<BlockQuickItemCreationPrecheck>.yes();
         case CheckAllow.notAllow:
-          return Actionable<BlockQuickCreateItemPrecheck>.no(
-            errCode: BlockQuickCreateItemPrecheck.notAllow,
+          return Actionable<BlockQuickItemCreationPrecheck>.no(
+            errCode: BlockQuickItemCreationPrecheck.notAllow,
           );
         case CheckAllow.error:
-          return Actionable<BlockQuickCreateItemPrecheck>.no(
-            errCode: BlockQuickCreateItemPrecheck.checkAllowMethodError,
+          return Actionable<BlockQuickItemCreationPrecheck>.no(
+            errCode: BlockQuickItemCreationPrecheck.checkAllowMethodError,
             stackTrace: result.stackTrace,
           );
       }
     }
     //
-    return Actionable<BlockQuickCreateItemPrecheck>.yes();
+    return Actionable<BlockQuickItemCreationPrecheck>.yes();
   }
 
   // ***************************************************************************
@@ -4557,7 +4557,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
   // ***************************************************************************
 
   @_PrecheckMethod()
-  Actionable<BlockQuickCreateItemPrecheck> canQuickCreateItem({
+  Actionable<BlockQuickItemCreationPrecheck> canQuickCreateItem({
     bool checkAllow = true,
   }) {
     return __canQuickCreateItem(
@@ -4594,7 +4594,7 @@ EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
   // ***************************************************************************
 
   @_PrecheckMethod()
-  Actionable<BlockQuickUpdateItemPrecheck> canQuickUpdateItem({
+  Actionable<BlockQuickItemUpdatePrecheck> canQuickUpdateItem({
     required ITEM item,
     bool checkAllow = true,
   }) {
