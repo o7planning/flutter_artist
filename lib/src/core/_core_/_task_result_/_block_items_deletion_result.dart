@@ -2,7 +2,7 @@ part of '../core.dart';
 
 class BlockItemsDeletionResult<ITEM>
     extends TaskResult<BlockItemsDeletionPrecheck> {
-  final List<ITEM> _candidateItems;
+  List<ITEM> _candidateItems;
   final List<ITEM> _deletedItems = [];
   final List<FailedItemDeletion<ITEM>> _failedItemDeletions = [];
 
@@ -31,9 +31,7 @@ class BlockItemsDeletionResult<ITEM>
   }
 
   void _setCandidateItems({required List<ITEM> candidateItems}) {
-    _candidateItems
-      ..clear()
-      ..addAll(candidateItems);
+    _candidateItems = candidateItems;
   }
 
   void _addDeletedItem({

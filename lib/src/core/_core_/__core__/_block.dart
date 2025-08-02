@@ -1512,7 +1512,7 @@ abstract class Block<
     //
     bool currentItemDeleted = false;
     //
-    for (ITEM item in [...items]) {
+    for (ITEM delItem in [...items]) {
       ApiResult<void> result;
       try {
         FlutterArtist.codeFlowLogger._addMethodCall(
@@ -1521,25 +1521,25 @@ abstract class Block<
           ownerClassInstance: this,
           methodName: "callApiDeleteItemById",
           parameters: {
-            "item": item,
+            "item": delItem,
           },
         );
         // TODO: Move to out of for loop (Need to catch error).
         final ID? currentItemId = currItem == null ? null : getItemId(currItem);
-        final ID deletingItemId = getItemId(item);
+        final ID deletingItemId = getItemId(delItem);
         //
-        siblingItem = findSiblingItem(item: item);
+        siblingItem = findSiblingItem(item: delItem);
         __refreshDeletingState(isDeleting: true);
         //
         result = await callApiDeleteItemById(itemId: deletingItemId);
         // Throw ApiError:
         result.throwIfError();
         //
-        deletionResult._addDeletedItem(deletedItem: item);
+        deletionResult._addDeletedItem(deletedItem: delItem);
         //
         // Remove Item from the List.
         //
-        await __removeItemFromList(removeItem: item);
+        await __removeItemFromList(removeItem: delItem);
         //
         // Current Item DELETED!
         //
@@ -1563,7 +1563,7 @@ abstract class Block<
         }
       } catch (e, stackTrace) {
         deletionResult._addFailedItem(
-          failedItem: item,
+          failedItem: delItem,
           error: e,
           stackTrace: stackTrace,
         );
@@ -2418,27 +2418,6 @@ abstract class Block<
     //
     await FlutterArtist.executor._executeTaskUnitQueue();
     return taskResult;
-    //
-    // _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
-    // xBlock.itemDeletionResult.candidateItems = deleteItems;
-    //
-    // for (ITEM item in deleteItems) {
-    //   var taskUnit = _BlockDeleteItemTaskUnit(
-    //     xBlock: xBlock,
-    //     item: item,
-    //     result: null, // ??????????/
-    //   );
-    //   FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
-    //   await FlutterArtist.executor._executeTaskUnitQueue();
-    //   if (stopIfError) {
-    //     ItemDeletionResult result = xBlock.itemDeletionResult;
-    //     if (!result.success) {
-    //       return result;
-    //     }
-    //   }
-    // }
-    // return xBlock.itemDeletionResult;
-    // throw UnimplementedError();
   }
 
   // ***************************************************************************
