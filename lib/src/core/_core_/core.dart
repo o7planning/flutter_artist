@@ -238,7 +238,7 @@ part '_fa_.dart';
 
 part '_filter_criterion_/_calculated_criterion.dart';
 
-part '_filter_criterion_/_criterion.dart';
+part '_filter_criterion_/__criterion.dart';
 
 part '_filter_criterion_/_filter_criteria_structure.dart';
 
@@ -252,7 +252,7 @@ part '_form_prop_/_form_props_structure.dart';
 
 part '_form_prop_/_multi_opt_prop.dart';
 
-part '_form_prop_/_prop.dart';
+part '_form_prop_/__prop.dart';
 
 part '_form_prop_/_simple_prop.dart';
 
@@ -340,7 +340,9 @@ part '_task_unit_/_scalar_query_task_unit.dart';
 
 part '_task_unit_/_scalar_quick_action_task_unit.dart';
 
-part '_ui_/__error_widget_utils.dart';
+part '_ui_/_quick_suggestion_bar.dart';
+
+part '_ui_/_quick_suggestion_button.dart';
 
 part '_ui_/_activity_fragment_widget_builder.dart';
 
@@ -380,7 +382,7 @@ part '_ui_/_refreshable_neutral_view.dart';
 
 part '_ui_/_refreshable_neutral_view_builder.dart';
 
-part '_ui_/_refreshable_widget.dart';
+part '_ui_/__refreshable_widget.dart';
 
 part '_ui_/_refreshable_widget_state.dart';
 
