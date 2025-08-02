@@ -3249,22 +3249,11 @@ abstract class Block<
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
-    ITEM? firstItm = firstItem;
-    if (firstItm == null) {
-      // TODO: Xu ly theo cach khac?
-      return BlockItemCurrSelectionResult<ITEM>(
-        precheck: BlockItemCurrSelectionPrecheck.noTarget,
-        currentItemSelectionType:
-            CurrentItemSelectionType.selectAnItemAsCurrent,
-        getItemId: getItemId,
-        candidateItem: null,
-        oldCurrentItem: null,
-        currentItem: null,
-      );
-    }
-    return await refreshAndSelectItemAsCurrent(
-      item: firstItm,
-      forceLoadForm: forceLoadForm,
+    return _refreshToShowOrEditItemAsCurrent(
+      methodName: "refreshAndSelectFirstItemAsCurrent",
+      item: firstItem,
+      errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
+      forceForm: forceLoadForm,
       navigate: navigate,
     );
   }
@@ -3280,21 +3269,12 @@ abstract class Block<
     Function()? navigate,
   }) async {
     ITEM? nextItem = nextSiblingItem;
-    if (nextItem == null) {
-      // TODO: Xu ly theo cach khac?
-      return BlockItemCurrSelectionResult<ITEM>(
-        precheck: BlockItemCurrSelectionPrecheck.noTarget,
-        currentItemSelectionType:
-            CurrentItemSelectionType.selectAnItemAsCurrent,
-        getItemId: getItemId,
-        candidateItem: null,
-        oldCurrentItem: null,
-        currentItem: null,
-      );
-    }
-    return await refreshAndSelectItemAsCurrent(
+    //
+    return _refreshToShowOrEditItemAsCurrent(
+      methodName: "refreshAndSelectNextItemAsCurrent",
       item: nextItem,
-      forceLoadForm: forceLoadForm,
+      errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
+      forceForm: forceLoadForm,
       navigate: navigate,
     );
   }
@@ -3311,21 +3291,12 @@ abstract class Block<
     Function()? navigate,
   }) async {
     ITEM? previousItem = previousSiblingItem;
-    if (previousItem == null) {
-      // TODO: Xu ly theo cach khac?
-      return BlockItemCurrSelectionResult<ITEM>(
-        precheck: BlockItemCurrSelectionPrecheck.noTarget,
-        currentItemSelectionType:
-            CurrentItemSelectionType.selectAnItemAsCurrent,
-        getItemId: getItemId,
-        candidateItem: null,
-        oldCurrentItem: null,
-        currentItem: null,
-      );
-    }
-    return await refreshAndSelectItemAsCurrent(
+    //
+    return _refreshToShowOrEditItemAsCurrent(
+      methodName: "refreshAndSelectPreviousItemAsCurrent",
       item: previousItem,
-      forceLoadForm: forceLoadForm,
+      errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
+      forceForm: forceLoadForm,
       navigate: navigate,
     );
   }
