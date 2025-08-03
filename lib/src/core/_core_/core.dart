@@ -140,6 +140,8 @@ part '_utils_/_app_utils.dart';
 
 part '__core__/_block.dart';
 
+part '__core__/_internal_listeners.dart';
+
 part '_ui_com_/_block_ui_components.dart';
 
 part '_config_/_shelf_config.dart';

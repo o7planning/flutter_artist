@@ -199,6 +199,134 @@ abstract class Shelf extends _Core {
       _rootBlocks.add(rootBlock);
       __registerBlockCascade(rootBlock);
     }
+    //
+    for (String blockName in __blockMap.keys) {
+      Block blk = __blockMap[blockName]!;
+      for (Evt evt in blk.config.reQueryByInternalShelfEvents ?? []) {
+        // BLOCK EVENT:
+        if (evt.srcType == SrcType.block) {
+          Block? eventBlock = __blockMap[evt.srcName];
+          if (eventBlock == null) {
+            throw ___registerError(
+              "SHELF '${getClassName(blk.shelf)} -> BLOCK '${getClassName(blk)}' -> reQueryByInternalShelfEvents -> Configuration Error! \n"
+              " --> No Block Name: ${evt.srcName}. \n",
+            );
+          }
+          // BLOCK EVENTs: creation, update, deletion:
+          if (evt.evtType == null) {
+            eventBlock
+                ._internalListeners.blockQueryListenerMap[EvtType.creation]!
+                .add(blk);
+            eventBlock._internalListeners.blockQueryListenerMap[EvtType.update]!
+                .add(blk);
+            eventBlock._internalListeners.blockQueryListenerMap[EvtType.update]!
+                .add(blk);
+          } else {
+            eventBlock._internalListeners.blockQueryListenerMap[evt.evtType]!
+                .add(blk);
+          }
+        }
+        // SCALAR EVENT:
+        else if (evt.srcType == SrcType.scalar) {
+          Scalar? eventScalar = __scalarMap[evt.srcName];
+          if (eventScalar == null) {
+            throw ___registerError(
+              "SHELF '${getClassName(blk.shelf)} -> BLOCK '${getClassName(blk)}' -> reQueryByInternalShelfEvents -> Configuration Error! \n"
+              " --> No Scalar Name: ${evt.srcName}. \n",
+            );
+          }
+          // SCALAR EVENT: update (Only One Events).
+          eventScalar._internalListeners.blockQueryListenerMap[evt.evtType]!
+              .add(blk);
+        }
+      }
+      //
+      for (Evt evt in blk.config.refreshCurrItemByInternalShelfEvents ?? []) {
+        // BLOCK EVENT:
+        if (evt.srcType == SrcType.block) {
+          Block? eventBlock = __blockMap[evt.srcName];
+          if (eventBlock == null) {
+            throw ___registerError(
+              "SHELF '${getClassName(blk.shelf)} -> BLOCK '${getClassName(blk)}' -> refreshCurrItemByInternalShelfEvents -> Configuration Error! \n"
+              " --> No Block Name: ${evt.srcName}. \n",
+            );
+          }
+          // BLOCK EVENTS: creation, update, deletion:
+          if (evt.evtType == null) {
+            eventBlock._internalListeners
+                .blockRefreshCurrListenerMap[EvtType.creation]!
+                .add(blk);
+            eventBlock
+                ._internalListeners.blockRefreshCurrListenerMap[EvtType.update]!
+                .add(blk);
+            eventBlock
+                ._internalListeners.blockRefreshCurrListenerMap[EvtType.update]!
+                .add(blk);
+          } else {
+            eventBlock
+                ._internalListeners.blockRefreshCurrListenerMap[evt.evtType]!
+                .add(blk);
+          }
+        }
+        // SCALAR EVENT:
+        else if (evt.srcType == SrcType.scalar) {
+          Scalar? eventScalar = __scalarMap[evt.srcName];
+          if (eventScalar == null) {
+            throw ___registerError(
+              "SHELF '${getClassName(blk.shelf)} -> BLOCK '${getClassName(blk)}' -> refreshCurrItemByInternalShelfEvents -> Configuration Error! \n"
+              " --> No Scalar Name: ${evt.srcName}. \n",
+            );
+          }
+          // SCALAR EVENT: update (Only One Events).
+          eventScalar._internalListeners.blockQueryListenerMap[evt.evtType]!
+              .add(blk);
+        }
+      }
+    }
+    //
+    for (String scalarName in __scalarMap.keys) {
+      Scalar sclr = __scalarMap[scalarName]!;
+      for (Evt evt in sclr.config.reQueryByInternalShelfEvents ?? []) {
+        // BLOCK EVENT:
+        if (evt.srcType == SrcType.block) {
+          Block? eventBlock = __blockMap[evt.srcName];
+          if (eventBlock == null) {
+            throw ___registerError(
+              "SHELF '${getClassName(sclr.shelf)} -> SCALAR '${getClassName(sclr)}' -> reQueryByInternalShelfEvents -> Configuration Error! \n"
+              " --> No Block Name: ${evt.srcName}. \n",
+            );
+          }
+          // BLOCK EVENT: creation, update, deletion:
+          if (evt.evtType == null) {
+            eventBlock
+                ._internalListeners.scalarQueryListenerMap[EvtType.creation]!
+                .add(sclr);
+            eventBlock
+                ._internalListeners.scalarQueryListenerMap[EvtType.update]!
+                .add(sclr);
+            eventBlock
+                ._internalListeners.scalarQueryListenerMap[EvtType.update]!
+                .add(sclr);
+          } else {
+            eventBlock._internalListeners.scalarQueryListenerMap[evt.evtType]!
+                .add(sclr);
+          }
+        }
+        // SCALAR EVENT:
+        else if (evt.srcType == SrcType.scalar) {
+          Scalar? eventScalar = __scalarMap[evt.srcName];
+          if (eventScalar == null) {
+            throw ___registerError(
+              "SHELF '${getClassName(sclr.shelf)} -> SCALAR '${getClassName(sclr)}' -> reQueryByInternalShelfEvents -> Configuration Error! \n"
+              " --> No Scalar Name: ${evt.srcName}. \n",
+            );
+          }
+          // SCALAR EVENT: update (Only One Events).
+          eventScalar._internalListeners.scalarQueryListenerMap[evt.evtType]!
+              .add(sclr);
+        }
+      }
+    }
   }
 
   // ***************************************************************************

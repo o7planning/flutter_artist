@@ -107,6 +107,8 @@ abstract class Block<
 
   final BlockConfig config;
 
+  final InternalListeners _internalListeners = InternalListeners();
+
   ///
   /// Block name. It is unique in a Shelf.
   ///
@@ -378,6 +380,9 @@ abstract class Block<
     //
     return itemTypes.toSet().toList();
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   // ***************************************************************************
   // ***************************************************************************

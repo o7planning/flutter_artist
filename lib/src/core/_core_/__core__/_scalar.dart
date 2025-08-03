@@ -63,6 +63,8 @@ abstract class Scalar<
 
   final ScalarConfig config;
 
+  final InternalListeners _internalListeners = InternalListeners();
+
   bool __isQuerying = false;
 
   bool get isQuerying => __isQuerying;
