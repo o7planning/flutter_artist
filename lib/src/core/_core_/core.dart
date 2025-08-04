@@ -65,6 +65,7 @@ import '../enums/_item_creation_type.dart';
 import '../enums/_list_behavior.dart';
 import '../enums/_multi_opt_prop_reload.dart';
 import '../enums/_post_query_behavior.dart';
+import '../enums/_qry_pagination_type.dart';
 import '../enums/_quick_suggestion_mode.dart';
 import '../enums/_quick_suggestion_type.dart';
 import '../enums/_refreshable_widget_type.dart';

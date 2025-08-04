@@ -52,4 +52,39 @@ class InternalListeners {
   Set<Scalar> getScalarQueryListenersForEventType(EvtType eventType) {
     return scalarQueryListenerMap[eventType]!;
   }
+
+  List<_ScalarOpt> getForceQueryScalarOpts(EvtType eventType) {
+    Set<Scalar> scalars = getScalarQueryListenersForEventType(eventType);
+    List<_ScalarOpt> ret = [];
+
+    for (Scalar s in scalars) {
+      ret.add(_ScalarOpt(scalar: s));
+    }
+    return ret;
+  }
+
+  List<_BlockOpt> getForceQueryBlockOpts(EvtType eventType) {
+    Set<Block> blocks = getBlockQueryListenersForEventType(eventType);
+    List<_BlockOpt> ret = [];
+
+    for (Block b in blocks) {
+      ret.add(
+        _BlockOpt(
+          block: b,
+          forceQuery: true,
+          forceReloadItem: false,
+          queryType: QueryType.realQuery,
+          pageable: null,
+          listBehavior: ListBehavior.replace,
+          suggestedSelection: null,
+          postQueryBehavior: null,
+        ),
+      );
+    }
+    return ret;
+  }
+
+  List<_FormModelOpt> getForceQueryFormModelOpts() {
+    return [];
+  }
 }
