@@ -84,7 +84,7 @@ class InternalListeners {
     return ret;
   }
 
-  List<_FormModelOpt> getForceQueryFormModelOpts() {
+  List<_FormModelOpt> getForceQueryFormModelOpts(EvtType eventType) {
     return [];
   }
 }

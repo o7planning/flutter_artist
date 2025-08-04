@@ -64,7 +64,7 @@ class _Storage extends _Core {
       affectedItemTypes: affectedItemTypes,
     );
     //
-    __executeListeners(
+    __executeExternalListenersOfShelf(
       listenerScalars: listenerScalars,
       listenerBlocks: listenerBlocks,
     );
@@ -100,7 +100,7 @@ class _Storage extends _Core {
       // TODO: Add to QUEUE lazy.
       //
       if (listenerScalars.isNotEmpty || listenerBlocks.isNotEmpty) {
-        __executeListeners(
+        __executeExternalListenersOfShelf(
           listenerScalars: listenerScalars,
           listenerBlocks: listenerBlocks,
         );
@@ -695,7 +695,7 @@ class _Storage extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> __executeListeners({
+  Future<void> __executeExternalListenersOfShelf({
     required List<Scalar> listenerScalars,
     required List<Block> listenerBlocks,
   }) async {
