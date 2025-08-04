@@ -460,6 +460,10 @@ class _RootMethodAnnotation {
   const _RootMethodAnnotation();
 }
 
+class _InternalEventReactAnnotation {
+  const _InternalEventReactAnnotation();
+}
+
 class _ReturnTaskResultMethodAnnotation {
   const _ReturnTaskResultMethodAnnotation();
 }

@@ -3765,11 +3765,12 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @_InternalEventReactAnnotation()
   Future<void> __internalShelfEventReaction() async {
-    List<_ScalarOpt> scalarOpts = _internalListeners.getForceQueryScalarOpts();
-    List<_BlockOpt> blockOpts = _internalListeners.getForceQueryBlockOpts();
+    List<_ScalarOpt> scalarOpts = _internalListeners._getForceQueryScalarOpts();
+    List<_BlockOpt> blockOpts = _internalListeners._getForceQueryBlockOpts();
     List<_FormModelOpt> formModelOpts =
-        _internalListeners.getForceQueryFormModelOpts();
+        _internalListeners._getForceQueryFormModelOpts();
 
     await shelf._queryAll(
       forceFilterModelOpt: null,

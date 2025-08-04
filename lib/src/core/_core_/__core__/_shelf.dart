@@ -213,7 +213,7 @@ abstract class Shelf extends _Core {
             );
           }
           // BLOCK EVENT
-          eventBlock._internalListeners.blockQueryListeners.add(listenerBlock);
+          eventBlock._internalListeners._addBlockQueryListener(listenerBlock);
         }
         // SCALAR EVENT:
         else if (evt.srcType == SrcType.scalar) {
@@ -225,7 +225,7 @@ abstract class Shelf extends _Core {
             );
           }
           // SCALAR EVENT: update (Only One Events).
-          eventScalar._internalListeners.blockQueryListeners.add(listenerBlock);
+          eventScalar._internalListeners._addBlockQueryListener(listenerBlock);
         }
       }
       //
@@ -241,8 +241,8 @@ abstract class Shelf extends _Core {
             );
           }
           // BLOCK EVENTS
-          eventBlock._internalListeners.blockRefreshCurrListeners
-              .add(listenerBlock);
+          eventBlock._internalListeners
+              ._addBlockRefreshCurrListener(listenerBlock);
         }
         // SCALAR EVENT:
         else if (evt.srcType == SrcType.scalar) {
@@ -254,7 +254,8 @@ abstract class Shelf extends _Core {
             );
           }
           // SCALAR EVENT: update (Only One Events).
-          eventScalar._internalListeners.blockQueryListeners.add(listenerBlock);
+          eventScalar._internalListeners
+              ._addBlockRefreshCurrListener(listenerBlock);
         }
       }
     }
@@ -273,8 +274,8 @@ abstract class Shelf extends _Core {
             );
           }
           // BLOCK EVENT:
-          eventBlock._internalListeners.scalarQueryListeners
-              .add(listenterScalar);
+          eventBlock._internalListeners
+              ._addScalarQueryListener(listenterScalar);
         }
         // SCALAR EVENT:
         else if (evt.srcType == SrcType.scalar) {
@@ -286,8 +287,8 @@ abstract class Shelf extends _Core {
             );
           }
           // SCALAR EVENT: update (Only One Events).
-          eventScalar._internalListeners.scalarQueryListeners
-              .add(listenterScalar);
+          eventScalar._internalListeners
+              ._addScalarQueryListener(listenterScalar);
         }
       }
     }

@@ -1,21 +1,23 @@
 part of '../core.dart';
 
+@_InternalEventReactAnnotation()
 class InternalListeners {
-  final Set<Block> blockQueryListeners = {};
-  final Set<Scalar> scalarQueryListeners = {};
-  final Set<Block> blockRefreshCurrListeners = {};
+  final Map<String, Block> __blockReQueryListenerMAP = {};
+  final Map<String, Scalar> __scalarReQueryListenerMAP = {};
+  final Map<String, Block> __blockRefreshCurrListenerMAP = {};
 
   ///
   /// BlockConfig:
   /// ```dart
   /// config: BlockConfig (
   ///   reQueryByInternalShelfEvents: [
-  ///      "block1",
-  ///      "block2",
+  ///      Evt.insideBlock("block1"),
+  ///      Evt.insideBlock("block2"),
+  ///      Evt.insideScalar("scalar1"),
   ///   ],
   ///   refreshCurrItemByInternalShelfEvents: [
-  ///      "block1",
-  ///      "block2",
+  ///      Evt.insideBlock"block1"),
+  ///      Evt.insideBlock"block2"),
   ///   ]
   /// ),
   /// ```
@@ -23,29 +25,50 @@ class InternalListeners {
   InternalListeners();
 
   bool hasListeners() {
-    return blockQueryListeners.isNotEmpty ||
-        scalarQueryListeners.isNotEmpty ||
-        blockRefreshCurrListeners.isNotEmpty;
+    return __blockReQueryListenerMAP.isNotEmpty ||
+        __scalarReQueryListenerMAP.isNotEmpty ||
+        __blockRefreshCurrListenerMAP.isNotEmpty;
   }
 
-  List<_ScalarOpt> getForceQueryScalarOpts() {
+  // ***************************************************************************
+
+  void _addScalarQueryListener(Scalar scalar) {
+    __scalarReQueryListenerMAP[scalar.name] = scalar;
+  }
+
+  void _addBlockQueryListener(Block block) {
+    __blockReQueryListenerMAP[block.name] = block;
+  }
+
+  void _addBlockRefreshCurrListener(Block block) {
+    __blockRefreshCurrListenerMAP[block.name] = block;
+  }
+
+  // ***************************************************************************
+
+  List<_ScalarOpt> _getForceQueryScalarOpts() {
     List<_ScalarOpt> ret = [];
 
-    for (Scalar s in scalarQueryListeners) {
+    for (Scalar s in __scalarReQueryListenerMAP.values) {
       ret.add(_ScalarOpt(scalar: s));
     }
     return ret;
   }
 
-  List<_BlockOpt> getForceQueryBlockOpts() {
+  List<_BlockOpt> _getForceQueryBlockOpts() {
     List<_BlockOpt> ret = [];
+    Set<String> listenerBlockNames = {}
+      ..addAll(__blockReQueryListenerMAP.keys)
+      ..addAll(__blockRefreshCurrListenerMAP.keys);
 
-    for (Block b in blockQueryListeners) {
+    for (String listenerBlkName in listenerBlockNames) {
+      Block? reQryBlock = __blockReQueryListenerMAP[listenerBlkName];
+      Block? refreshCurrBlock = __blockRefreshCurrListenerMAP[listenerBlkName];
       ret.add(
         _BlockOpt(
-          block: b,
-          forceQuery: true,
-          forceReloadItem: false,
+          block: (reQryBlock ?? refreshCurrBlock)!,
+          forceQuery: reQryBlock != null,
+          forceReloadItem: refreshCurrBlock != null,
           queryType: QueryType.realQuery,
           pageable: null,
           listBehavior: ListBehavior.replace,
@@ -57,7 +80,7 @@ class InternalListeners {
     return ret;
   }
 
-  List<_FormModelOpt> getForceQueryFormModelOpts() {
+  List<_FormModelOpt> _getForceQueryFormModelOpts() {
     return [];
   }
 }
