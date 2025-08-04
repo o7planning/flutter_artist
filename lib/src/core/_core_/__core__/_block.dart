@@ -2615,6 +2615,10 @@ abstract class Block<
     PostQueryBehavior postQueryBehavior =
         PostQueryBehavior.selectAnItemAsCurrent,
   }) async {
+    if (filterModel != null && filterModel!._lockAddMoreQuery) {
+      return BlockQueryResult._queryBlockedTemporarily();
+    }
+    //
     var qryMethod = BlockQryMethodName.queryNextPage;
     //
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -2625,7 +2629,7 @@ abstract class Block<
       parameters: {"postQueryBehavior": postQueryBehavior},
     );
     //
-    return await __query(
+    return await __queryBlock(
       qryMethod: qryMethod,
       listBehavior: ListBehavior.replace,
       filterInput: null,
@@ -2649,6 +2653,10 @@ abstract class Block<
     PostQueryBehavior postQueryBehavior =
         PostQueryBehavior.selectAnItemAsCurrent,
   }) async {
+    if (filterModel != null && filterModel!._lockAddMoreQuery) {
+      return BlockQueryResult._queryBlockedTemporarily();
+    }
+    //
     final qryMethod = BlockQryMethodName.queryPreviousPage;
     //
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -2659,7 +2667,7 @@ abstract class Block<
       parameters: {"postQueryBehavior": postQueryBehavior},
     );
     //
-    return await __query(
+    return await __queryBlock(
       qryMethod: qryMethod,
       listBehavior: ListBehavior.replace,
       filterInput: null,
@@ -2683,6 +2691,10 @@ abstract class Block<
     PostQueryBehavior postQueryBehavior =
         PostQueryBehavior.selectAnItemAsCurrent,
   }) async {
+    if (filterModel != null && filterModel!._lockAddMoreQuery) {
+      return BlockQueryResult._queryBlockedTemporarily();
+    }
+    //
     final qryMethod = BlockQryMethodName.queryMore;
     //
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -2693,7 +2705,7 @@ abstract class Block<
       parameters: {"postQueryBehavior": postQueryBehavior},
     );
     //
-    return await __query(
+    return await __queryBlock(
       qryMethod: qryMethod,
       listBehavior: ListBehavior.append,
       postQueryBehavior: postQueryBehavior,
@@ -2793,6 +2805,7 @@ abstract class Block<
     if (filterModel != null && filterModel!._lockAddMoreQuery) {
       return BlockQueryResult._queryBlockedTemporarily();
     }
+    //
     final qryMethod = BlockQryMethodName.query;
     //
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -2809,7 +2822,7 @@ abstract class Block<
       },
     );
     //
-    return await __query(
+    return await __queryBlock(
       qryMethod: qryMethod,
       listBehavior: listBehavior,
       postQueryBehavior: postQueryBehavior,
@@ -2818,76 +2831,6 @@ abstract class Block<
       specifiedPageable: pageable,
       navigate: navigate,
     );
-  }
-
-
-  @_ReturnTaskResultMethodAnnotation()
-  Future<BlockQueryResult> __query({
-    required BlockQryMethodName qryMethod,
-    required ListBehavior listBehavior,
-    required PostQueryBehavior postQueryBehavior,
-    required FILTER_INPUT? filterInput,
-    required SuggestedSelection? suggestedSelection,
-    required PageableData? specifiedPageable,
-    Function()? navigate,
-  }) async {
-    if (filterModel != null && filterModel!._lockAddMoreQuery) {
-      return BlockQueryResult._queryBlockedTemporarily();
-    }
-    PageableData? usedPageable;
-    switch (qryMethod) {
-      case BlockQryMethodName.query:
-        usedPageable = pageable;
-      case BlockQryMethodName.queryNextPage:
-        PageableData? currentPageable = __blockData.pageable;
-        if (currentPageable == null) {
-          return BlockQueryResult._noCurrentPagination();
-        }
-        usedPageable = currentPageable.next();
-      case BlockQryMethodName.queryPreviousPage:
-        PageableData? currentPageable = __blockData.pageable;
-        if (currentPageable == null) {
-          return BlockQueryResult._noCurrentPagination();
-        }
-        usedPageable = currentPageable.previous();
-        if (usedPageable == null) {
-          return BlockQueryResult._noPreviousPage();
-        }
-      case BlockQryMethodName.queryMore:
-        usedPageable = nextPageable;
-        if (usedPageable == null) {
-          return BlockQueryResult._noNextPage();
-        }
-    }
-    //
-    _XShelf xShelf = await shelf._queryAll(
-      forceFilterModelOpt: _FilterModelOpt(
-        filterModel: _registeredOrDefaultFilterModel,
-        filterInput: filterInput,
-      ),
-      forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [
-        _BlockOpt(
-          block: this,
-          forceQuery: true,
-          // Force Reload Item.
-          forceReloadItem: false,
-          // Must reload after query (????????????).
-          pageable: usedPageable,
-          listBehavior: listBehavior,
-          postQueryBehavior: postQueryBehavior,
-          suggestedSelection: suggestedSelection,
-        ),
-      ],
-      forceQueryFormModelOpts: [],
-    );
-    //
-    _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
-    BlockQueryResult queryResult = xBlock.queryResult;
-    if (queryResult.success) {
-      _executeNavigation(navigate: navigate);
-    }
-    return queryResult;
   }
 
   // ***************************************************************************
@@ -3813,6 +3756,75 @@ abstract class Block<
       forceForm: forceLoadForm,
       navigate: null,
     );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_ReturnTaskResultMethodAnnotation()
+  Future<BlockQueryResult> __queryBlock({
+    required BlockQryMethodName qryMethod,
+    required ListBehavior listBehavior,
+    required PostQueryBehavior postQueryBehavior,
+    required FILTER_INPUT? filterInput,
+    required SuggestedSelection? suggestedSelection,
+    required PageableData? specifiedPageable,
+    Function()? navigate,
+  }) async {
+    PageableData? usedPageable;
+    switch (qryMethod) {
+      case BlockQryMethodName.query:
+        usedPageable = pageable;
+      case BlockQryMethodName.queryNextPage:
+        PageableData? currentPageable = __blockData.pageable;
+        if (currentPageable == null) {
+          return BlockQueryResult._noCurrentPagination();
+        }
+        usedPageable = currentPageable.next();
+      case BlockQryMethodName.queryPreviousPage:
+        PageableData? currentPageable = __blockData.pageable;
+        if (currentPageable == null) {
+          return BlockQueryResult._noCurrentPagination();
+        }
+        usedPageable = currentPageable.previous();
+        if (usedPageable == null) {
+          return BlockQueryResult._noPreviousPage();
+        }
+      case BlockQryMethodName.queryMore:
+        usedPageable = nextPageable;
+        if (usedPageable == null) {
+          return BlockQueryResult._noNextPage();
+        }
+    }
+    //
+    _XShelf xShelf = await shelf._queryAll(
+      forceFilterModelOpt: _FilterModelOpt(
+        filterModel: _registeredOrDefaultFilterModel,
+        filterInput: filterInput,
+      ),
+      forceQueryScalarOpts: [],
+      forceQueryBlockOpts: [
+        _BlockOpt(
+          block: this,
+          forceQuery: true,
+          // Force Reload Item.
+          forceReloadItem: false,
+          // Must reload after query (????????????).
+          pageable: usedPageable,
+          listBehavior: listBehavior,
+          postQueryBehavior: postQueryBehavior,
+          suggestedSelection: suggestedSelection,
+        ),
+      ],
+      forceQueryFormModelOpts: [],
+    );
+    //
+    _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
+    BlockQueryResult queryResult = xBlock.queryResult;
+    if (queryResult.success) {
+      _executeNavigation(navigate: navigate);
+    }
+    return queryResult;
   }
 
   // ***************************************************************************
