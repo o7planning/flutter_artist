@@ -2055,7 +2055,6 @@ abstract class Block<
       // TODO-Review.
       return true;
     }
-    EvtType? internalEvtType ;
     bool fireOutsideEvent = false;
     final ITEM_DETAIL? savedItemDetail = result.data;
     print(">>> savedItemDetail: $savedItemDetail");
@@ -2064,10 +2063,8 @@ abstract class Block<
       keepInList = false;
       if (isNew) {
         fireOutsideEvent = false;
-        internalEvtType = null;
       } else {
         fireOutsideEvent = true;
-        internalEvtType = EvtType.deletion;
       }
     } else {
       fireOutsideEvent = true;
@@ -2077,11 +2074,10 @@ abstract class Block<
         filterCriteria: blockCurrentFilterCriteria,
         itemDetail: savedItemDetail,
       );
-      if (isNew) {
-        internalEvtType = null;
-      } else {
-        internalEvtType = EvtType.deletion;
-      }
+    }
+    bool fireInternalEvent = this._internalListeners.hasListeners();
+    if (fireInternalEvent) {
+      __internalShelfEventReaction();
     }
     //
     if (fireOutsideEvent) {
@@ -3769,14 +3765,11 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> __internalShelfEventReaction(
-      {required EvtType eventType}) async {
-    List<_ScalarOpt> scalarOpts =
-        _internalListeners.getForceQueryScalarOpts(eventType);
-    List<_BlockOpt> blockOpts =
-        _internalListeners.getForceQueryBlockOpts(eventType);
+  Future<void> __internalShelfEventReaction() async {
+    List<_ScalarOpt> scalarOpts = _internalListeners.getForceQueryScalarOpts();
+    List<_BlockOpt> blockOpts = _internalListeners.getForceQueryBlockOpts();
     List<_FormModelOpt> formModelOpts =
-        _internalListeners.getForceQueryFormModelOpts(eventType);
+        _internalListeners.getForceQueryFormModelOpts();
 
     await shelf._queryAll(
       forceFilterModelOpt: null,
