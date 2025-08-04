@@ -2615,25 +2615,23 @@ abstract class Block<
     PostQueryBehavior postQueryBehavior =
         PostQueryBehavior.selectAnItemAsCurrent,
   }) async {
+    var qryMethod = BlockQryMethodName.queryNextPage;
+    //
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: null,
       ownerClassInstance: this,
-      methodName: "queryNextPage",
+      methodName: qryMethod.name,
       parameters: {"postQueryBehavior": postQueryBehavior},
     );
     //
-    PageableData? currentPageable = __blockData.pageable;
-    if (currentPageable == null) {
-      return BlockQueryResult._noCurrentPagination();
-    }
-    PageableData pageable = currentPageable.next();
-    //
-    return await query(
+    return await __query(
+      qryMethod: qryMethod,
       listBehavior: ListBehavior.replace,
+      filterInput: null,
       postQueryBehavior: postQueryBehavior,
       suggestedSelection: null,
-      pageable: pageable,
+      specifiedPageable: null,
       navigate: null,
     );
   }
@@ -2651,28 +2649,23 @@ abstract class Block<
     PostQueryBehavior postQueryBehavior =
         PostQueryBehavior.selectAnItemAsCurrent,
   }) async {
+    final qryMethod = BlockQryMethodName.queryPreviousPage;
+    //
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: null,
       ownerClassInstance: this,
-      methodName: "queryPreviousPage",
+      methodName: qryMethod.name,
       parameters: {"postQueryBehavior": postQueryBehavior},
     );
     //
-    PageableData? currentPageable = __blockData.pageable;
-    if (currentPageable == null) {
-      return BlockQueryResult._noCurrentPagination();
-    }
-    PageableData? pageable = currentPageable.previous();
-    if (pageable == null) {
-      return BlockQueryResult._noPreviousPage();
-    }
-    //
-    return await query(
+    return await __query(
+      qryMethod: qryMethod,
       listBehavior: ListBehavior.replace,
+      filterInput: null,
       postQueryBehavior: postQueryBehavior,
       suggestedSelection: null,
-      pageable: pageable,
+      specifiedPageable: null,
       navigate: null,
     );
   }
@@ -2690,24 +2683,23 @@ abstract class Block<
     PostQueryBehavior postQueryBehavior =
         PostQueryBehavior.selectAnItemAsCurrent,
   }) async {
+    final qryMethod = BlockQryMethodName.queryMore;
+    //
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: null,
       ownerClassInstance: this,
-      methodName: "queryMore",
+      methodName: qryMethod.name,
       parameters: {"postQueryBehavior": postQueryBehavior},
     );
     //
-    PageableData? nxtPageable = nextPageable;
-    if (nxtPageable == null) {
-      return BlockQueryResult._noNextPage();
-    }
-    //
-    return await query(
+    return await __query(
+      qryMethod: qryMethod,
       listBehavior: ListBehavior.append,
       postQueryBehavior: postQueryBehavior,
+      filterInput: null,
       suggestedSelection: null,
-      pageable: nxtPageable,
+      specifiedPageable: null,
       navigate: null,
     );
   }
@@ -2801,11 +2793,13 @@ abstract class Block<
     if (filterModel != null && filterModel!._lockAddMoreQuery) {
       return BlockQueryResult._queryBlockedTemporarily();
     }
+    final qryMethod = BlockQryMethodName.query;
+    //
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: navigate,
       ownerClassInstance: this,
-      methodName: "query",
+      methodName: qryMethod.name,
       parameters: {
         "listBehavior": listBehavior,
         "postQueryBehavior": postQueryBehavior,
@@ -2814,6 +2808,57 @@ abstract class Block<
         "pageable": pageable,
       },
     );
+    //
+    return await __query(
+      qryMethod: qryMethod,
+      listBehavior: listBehavior,
+      postQueryBehavior: postQueryBehavior,
+      filterInput: filterInput,
+      suggestedSelection: suggestedSelection,
+      specifiedPageable: pageable,
+      navigate: navigate,
+    );
+  }
+
+
+  @_ReturnTaskResultMethodAnnotation()
+  Future<BlockQueryResult> __query({
+    required BlockQryMethodName qryMethod,
+    required ListBehavior listBehavior,
+    required PostQueryBehavior postQueryBehavior,
+    required FILTER_INPUT? filterInput,
+    required SuggestedSelection? suggestedSelection,
+    required PageableData? specifiedPageable,
+    Function()? navigate,
+  }) async {
+    if (filterModel != null && filterModel!._lockAddMoreQuery) {
+      return BlockQueryResult._queryBlockedTemporarily();
+    }
+    PageableData? usedPageable;
+    switch (qryMethod) {
+      case BlockQryMethodName.query:
+        usedPageable = pageable;
+      case BlockQryMethodName.queryNextPage:
+        PageableData? currentPageable = __blockData.pageable;
+        if (currentPageable == null) {
+          return BlockQueryResult._noCurrentPagination();
+        }
+        usedPageable = currentPageable.next();
+      case BlockQryMethodName.queryPreviousPage:
+        PageableData? currentPageable = __blockData.pageable;
+        if (currentPageable == null) {
+          return BlockQueryResult._noCurrentPagination();
+        }
+        usedPageable = currentPageable.previous();
+        if (usedPageable == null) {
+          return BlockQueryResult._noPreviousPage();
+        }
+      case BlockQryMethodName.queryMore:
+        usedPageable = nextPageable;
+        if (usedPageable == null) {
+          return BlockQueryResult._noNextPage();
+        }
+    }
     //
     _XShelf xShelf = await shelf._queryAll(
       forceFilterModelOpt: _FilterModelOpt(
@@ -2827,9 +2872,8 @@ abstract class Block<
           forceQuery: true,
           // Force Reload Item.
           forceReloadItem: false,
-          // ????????????
-          // Must reload after query.
-          pageable: pageable,
+          // Must reload after query (????????????).
+          pageable: usedPageable,
           listBehavior: listBehavior,
           postQueryBehavior: postQueryBehavior,
           suggestedSelection: suggestedSelection,
