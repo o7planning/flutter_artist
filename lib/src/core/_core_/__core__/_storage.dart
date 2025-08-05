@@ -591,11 +591,11 @@ class _Storage extends _Core {
 
     for (Shelf shelf in __shelfMap.values) {
       for (Block blk in shelf.blocks) {
-        if (blk.config.outsideBroadcastEvents .isEmpty) {
+        if (blk.config.outsideBroadcastEvents.isEmpty) {
           continue;
         }
         List<Type> listenerTypes =
-            listenerScalar.config.reQueryByExternalShelfEvents ?? [];
+            listenerScalar.config.reQueryByExternalShelfEvents;
         if (listenerTypes.isEmpty) {
           continue;
         }

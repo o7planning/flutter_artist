@@ -11,11 +11,11 @@ class BlockConfig {
 
   final List<Type> outsideBroadcastEvents;
 
-  final List<Type>? refreshCurrItemByExternalShelfEvents;
-  final List<Type>? reQueryByExternalShelfEvents;
+  final List<Type> refreshCurrItemByExternalShelfEvents;
+  final List<Type> reQueryByExternalShelfEvents;
 
-  final List<Evt>? refreshCurrItemByInternalShelfEvents;
-  final List<Evt>? reQueryByInternalShelfEvents;
+  final List<Evt> refreshCurrItemByInternalShelfEvents;
+  final List<Evt> reQueryByInternalShelfEvents;
 
   BlockConfig({
     this.itemRefreshmentMode = BlockItemRefreshmentMode.auto,

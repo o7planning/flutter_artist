@@ -212,7 +212,7 @@ abstract class Shelf extends _Core {
     //
     for (String blockName in __blockMap.keys) {
       Block listenerBlock = __blockMap[blockName]!;
-      for (Evt evt in listenerBlock.config.reQueryByInternalShelfEvents ?? []) {
+      for (Evt evt in listenerBlock.config.reQueryByInternalShelfEvents) {
         // BLOCK EVENT:
         if (evt.srcType == SrcType.block) {
           Block? eventBlock = __blockMap[evt.srcName];
@@ -240,7 +240,7 @@ abstract class Shelf extends _Core {
       }
       //
       for (Evt evt
-          in listenerBlock.config.refreshCurrItemByInternalShelfEvents ?? []) {
+          in listenerBlock.config.refreshCurrItemByInternalShelfEvents) {
         // BLOCK EVENT:
         if (evt.srcType == SrcType.block) {
           Block? eventBlock = __blockMap[evt.srcName];
@@ -272,8 +272,7 @@ abstract class Shelf extends _Core {
     //
     for (String scalarName in __scalarMap.keys) {
       Scalar listenterScalar = __scalarMap[scalarName]!;
-      for (Evt evt
-          in listenterScalar.config.reQueryByInternalShelfEvents ?? []) {
+      for (Evt evt in listenterScalar.config.reQueryByInternalShelfEvents) {
         // BLOCK EVENT:
         if (evt.srcType == SrcType.block) {
           Block? eventBlock = __blockMap[evt.srcName];

@@ -134,7 +134,7 @@ abstract class Scalar<
   List<Type> getOutsideDataTypesToListen() {
     final List<Type> list = [];
     //
-    list.addAll(config.reQueryByExternalShelfEvents ?? []);
+    list.addAll(config.reQueryByExternalShelfEvents);
     //
     return list.toSet().toList();
   }
