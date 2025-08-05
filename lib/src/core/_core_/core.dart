@@ -173,6 +173,8 @@ part '__core__/_sort_criterion.dart';
 
 part '__core__/_storage.dart';
 
+part '__core__/_storage_event_handler.dart';
+
 part '__core__/_suggested_selection.dart';
 
 part '_code_flow_/_code_flow_item.dart';

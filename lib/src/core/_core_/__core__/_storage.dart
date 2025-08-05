@@ -15,6 +15,8 @@ class _Storage extends _Core {
     return m;
   }
 
+  final _StorageEventHandler eventHandler = _StorageEventHandler();
+
   // ***************************************************************************
   // ***************************************************************************
 
