@@ -3,7 +3,7 @@ part of '../core.dart';
 @_TaskUnitClassAnnotation()
 @_BlockQuickCreateMultiItemsActionAnnotation()
 class _BlockQuickCreateMultiItemsTaskUnit
-    extends _ResultedTaskUnit<BlockQuickCreateMultiItemsResult> {
+    extends _ResultedTaskUnit<BlockQuickMultiItemsCreationResult> {
   _XBlock xBlock;
 
   BlockQuickCreateMultiItemsAction action;
@@ -13,7 +13,7 @@ class _BlockQuickCreateMultiItemsTaskUnit
     required this.action,
   }) : super(
           taskType: TaskType.blockQuickCreateMultiItems,
-          taskResult: BlockQuickCreateMultiItemsResult(),
+          taskResult: BlockQuickMultiItemsCreationResult(),
         );
 
   @override

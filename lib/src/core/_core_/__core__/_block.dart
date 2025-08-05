@@ -1694,7 +1694,7 @@ abstract class Block<
   @_BlockQuickCreateItemActionAnnotation()
   Future<bool> _unitQuickCreateItem({
     required _XBlock thisXBlock,
-    required BlockQuickCreateItemResult taskResult,
+    required BlockQuickItemCreationResult taskResult,
     required BlockQuickCreateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
         action,
   }) async {
@@ -1831,7 +1831,7 @@ abstract class Block<
   @_BlockQuickUpdateItemActionAnnotation()
   Future<bool> _unitQuickUpdateItem({
     required _XBlock thisXBlock,
-    required BlockQuickUpdateItemResult taskResult,
+    required BlockQuickItemUpdateResult taskResult,
     required BlockQuickUpdateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
         action,
   }) async {
@@ -3239,7 +3239,7 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockQuickCreateItemActionAnnotation()
-  Future<BlockQuickCreateItemResult> executeQuickCreateItemAction({
+  Future<BlockQuickItemCreationResult> executeQuickCreateItemAction({
     required BlockQuickCreateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
         action,
   }) async {
@@ -3267,7 +3267,7 @@ abstract class Block<
         actionableFalse: actionable,
         showErrSnackBar: true,
       );
-      return BlockQuickCreateItemResult(
+      return BlockQuickItemCreationResult(
         precheck: actionable.errCode,
         stackTrace: actionable.stackTrace,
       );
@@ -3284,7 +3284,7 @@ abstract class Block<
       );
     }
     if (!confirm) {
-      return BlockQuickCreateItemResult(
+      return BlockQuickItemCreationResult(
         precheck: BlockQuickItemCreationPrecheck.cancelled,
       );
     }
@@ -3316,7 +3316,8 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockQuickCreateMultiItemsActionAnnotation()
-  Future<BlockQuickCreateMultiItemsResult> executeQuickCreateMultiItemsAction({
+  Future<BlockQuickMultiItemsCreationResult>
+      executeQuickCreateMultiItemsAction({
     required BlockQuickCreateMultiItemsAction<ID, ITEM, ITEM_DETAIL,
             FILTER_CRITERIA>
         action,
@@ -3345,7 +3346,7 @@ abstract class Block<
         actionableFalse: actionable,
         showErrSnackBar: true,
       );
-      return BlockQuickCreateMultiItemsResult(
+      return BlockQuickMultiItemsCreationResult(
         precheck: actionable.errCode,
         stackTrace: actionable.stackTrace,
       );
@@ -3362,7 +3363,7 @@ abstract class Block<
       );
     }
     if (!confirm) {
-      return BlockQuickCreateMultiItemsResult(
+      return BlockQuickMultiItemsCreationResult(
         precheck: BlockMultiItemsCreationPrecheck.cancelled,
       );
     }
@@ -3394,7 +3395,7 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockQuickUpdateItemActionAnnotation()
-  Future<BlockQuickUpdateItemResult> executeQuickUpdateItemAction({
+  Future<BlockQuickItemUpdateResult> executeQuickUpdateItemAction({
     required BlockQuickUpdateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
         action,
   }) async {
@@ -3422,7 +3423,7 @@ abstract class Block<
         actionableFalse: actionable,
         showErrSnackBar: true,
       );
-      return BlockQuickUpdateItemResult(
+      return BlockQuickItemUpdateResult(
         precheck: actionable.errCode,
         stackTrace: actionable.stackTrace,
       );
@@ -3439,7 +3440,7 @@ abstract class Block<
       );
     }
     if (!confirm) {
-      return BlockQuickUpdateItemResult(
+      return BlockQuickItemUpdateResult(
         precheck: BlockQuickItemUpdatePrecheck.cancelled,
       );
     }

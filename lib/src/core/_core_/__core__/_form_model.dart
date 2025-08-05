@@ -281,7 +281,7 @@ abstract class FormModel<
   @_FormModelLoadFormAnnotation()
   Future<bool> _unitLoadFormData({
     required _XFormModel thisXFormModel,
-    required FormModelLoadDataResult taskResult,
+    required FormModelDataLoadResult taskResult,
   }) async {
     __assertThisXFormModel(thisXFormModel);
     //

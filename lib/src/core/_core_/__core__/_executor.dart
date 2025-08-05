@@ -157,7 +157,7 @@ class _Executor {
       await taskUnit.xBlock.block._unitQuickCreateItem(
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
-        taskResult: taskUnit.taskResult as BlockQuickCreateItemResult,
+        taskResult: taskUnit.taskResult as BlockQuickItemCreationResult,
       );
     }
     // Block QuickCreateMultiItems:
@@ -172,7 +172,7 @@ class _Executor {
       await taskUnit.xBlock.block._unitQuickUpdateItem(
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
-        taskResult: taskUnit.taskResult as BlockQuickUpdateItemResult,
+        taskResult: taskUnit.taskResult as BlockQuickItemUpdateResult,
       );
     }
     // Block Quick Action:
@@ -194,7 +194,7 @@ class _Executor {
     else if (taskUnit is _FormModelLoadFormTaskUnit) {
       await taskUnit.xFormModel.formModel._unitLoadFormData(
         thisXFormModel: taskUnit.xFormModel,
-        taskResult: taskUnit.taskResult as FormModelLoadDataResult,
+        taskResult: taskUnit.taskResult as FormModelDataLoadResult,
       );
     }
     // FormModel Save:

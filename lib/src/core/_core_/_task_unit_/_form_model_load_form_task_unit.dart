@@ -3,14 +3,14 @@ part of '../core.dart';
 @_TaskUnitClassAnnotation()
 @_FormModelLoadFormAnnotation()
 class _FormModelLoadFormTaskUnit
-    extends _ResultedTaskUnit<FormModelLoadDataResult> {
+    extends _ResultedTaskUnit<FormModelDataLoadResult> {
   _XFormModel xFormModel;
 
   _FormModelLoadFormTaskUnit({
     required this.xFormModel,
   }) : super(
           taskType: TaskType.formModelLoadForm,
-          taskResult: FormModelLoadDataResult(),
+          taskResult: FormModelDataLoadResult(),
         );
 
   @override

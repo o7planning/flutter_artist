@@ -293,13 +293,13 @@ part '_task_result_/_block_quick_action_result.dart';
 
 part '_task_result_/_scalar_quick_action_result.dart';
 
-part '_task_result_/_block_quick_create_multi_items_result.dart';
+part '_task_result_/_block_quick_multi_items_creation_result.dart';
 
-part '_task_result_/_block_quick_create_item_result.dart';
+part '_task_result_/_block_quick_item_creation_result.dart';
 
-part '_task_result_/_block_quick_update_item_result.dart';
+part '_task_result_/_block_quick_item_update_result.dart';
 
-part '_task_result_/_form_model_load_data_result.dart';
+part '_task_result_/_form_model_data_load_result.dart';
 
 part '_task_result_/_form_save_result.dart';
 
