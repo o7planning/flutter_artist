@@ -34,15 +34,17 @@ class BlockConfig {
       pageSize: 20,
     ),
   })  : outsideBroadcastEvents =
-            List.unmodifiable(outsideBroadcastEvents ?? []),
-        refreshCurrItemByExternalShelfEvents =
-            List.unmodifiable(refreshCurrItemByExternalShelfEvents ?? []),
+            List.unmodifiable(outsideBroadcastEvents?.toSet() ?? []),
+        refreshCurrItemByExternalShelfEvents = //
+            List.unmodifiable(
+                refreshCurrItemByExternalShelfEvents?.toSet() ?? []),
         reQueryByExternalShelfEvents =
-            List.unmodifiable(reQueryByExternalShelfEvents ?? []),
-        refreshCurrItemByInternalShelfEvents =
-            List.unmodifiable(refreshCurrItemByInternalShelfEvents ?? []),
+            List.unmodifiable(reQueryByExternalShelfEvents?.toSet() ?? []),
+        refreshCurrItemByInternalShelfEvents = //
+            List.unmodifiable(
+                refreshCurrItemByInternalShelfEvents?.toSet() ?? []),
         reQueryByInternalShelfEvents =
-            List.unmodifiable(reQueryByInternalShelfEvents ?? []);
+            List.unmodifiable(reQueryByInternalShelfEvents?.toSet() ?? []);
 
   BlockConfig copy() {
     return BlockConfig(

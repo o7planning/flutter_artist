@@ -370,10 +370,6 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  List<Type> _getBroadcastDataTypes() {
-    return config.outsideBroadcastEvents?.toSet().toList() ?? [];
-  }
-
   List<Type> getOutsideDataTypesToListen() {
     List<Type> itemTypes = [];
     //

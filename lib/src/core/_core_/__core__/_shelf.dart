@@ -1,7 +1,6 @@
 part of '../core.dart';
 
 abstract class Shelf extends _Core {
-  @override
   Shelf get shelf => this;
 
   late final ShelfConfig config;
@@ -34,6 +33,17 @@ abstract class Shelf extends _Core {
 
   final List<Block> _rootBlocks = [];
 
+  List<Block> get rootBlocks => [..._rootBlocks];
+
+  List<Block> get blocks {
+    List<Block> ret = [];
+    for (Block rootBlock in _rootBlocks) {
+      ret.add(rootBlock);
+      ret.addAll(rootBlock.descendantBlocks);
+    }
+    return ret;
+  }
+
   bool _isStructError = false;
 
   String? _structError;
@@ -41,8 +51,6 @@ abstract class Shelf extends _Core {
   bool get isStructError => _isStructError;
 
   String? get structError => _structError;
-
-  List<Block> get rootBlocks => [..._rootBlocks];
 
   int __lastLazyLoadId = 0;
 
@@ -398,18 +406,6 @@ abstract class Shelf extends _Core {
     for (Block childBlock in block.childBlocks) {
       __registerBlockCascade(childBlock);
     }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  List<Block> get blocks {
-    List<Block> ret = [];
-    for (Block rootBlock in _rootBlocks) {
-      ret.add(rootBlock);
-      ret.addAll(rootBlock.descendantBlocks);
-    }
-    return ret;
   }
 
   // ***************************************************************************

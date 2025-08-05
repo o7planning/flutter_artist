@@ -78,7 +78,7 @@ class _Storage extends _Core {
     required String? itemIdString,
   }) {
     // Broadcast Data Types:
-    List<Type> outsideEventTypes = eventBlock._getBroadcastDataTypes();
+    List<Type> outsideEventTypes = eventBlock.config.outsideBroadcastEvents;
     //
     print(
         "~~~~~~~~~> ${outsideEventTypes.isNotEmpty ? 'FIRE EVENT TO OUTSIDE' : 'NOT FIRE EVENT TO OUTSIDE'}"
@@ -280,7 +280,7 @@ class _Storage extends _Core {
       }
       List<Block> allBlocks = shelf.blocks;
       for (Block blk in allBlocks) {
-        if (blk.config.outsideBroadcastEvents == null) {
+        if (blk.config.outsideBroadcastEvents.isEmpty) {
           continue;
         }
         final Type itemType = blk.getItemType();
@@ -444,7 +444,7 @@ class _Storage extends _Core {
   List<Block> __getListenerBlocksByBlock({
     required Block eventBlock,
   }) {
-    List<Type> itemTypes = eventBlock._getBroadcastDataTypes();
+    List<Type> itemTypes = eventBlock.config.outsideBroadcastEvents;
     if (itemTypes.isEmpty) {
       return [];
     }
@@ -492,7 +492,7 @@ class _Storage extends _Core {
   List<Scalar> __getListenerScalarsByBlock({
     required Block eventBlock,
   }) {
-    List<Type> itemTypes = eventBlock._getBroadcastDataTypes();
+    List<Type> itemTypes = eventBlock.config.outsideBroadcastEvents;
     if (itemTypes.isEmpty) {
       return [];
     }
@@ -563,7 +563,7 @@ class _Storage extends _Core {
     for (Shelf shelf in __shelfMap.values) {
       List<Block> allBlocks = shelf.blocks;
       for (Block blk in allBlocks) {
-        if (blk.config.outsideBroadcastEvents == null) {
+        if (blk.config.outsideBroadcastEvents.isEmpty) {
           continue;
         }
         final List<Type> listenToDataTypes =
@@ -591,7 +591,7 @@ class _Storage extends _Core {
 
     for (Shelf shelf in __shelfMap.values) {
       for (Block blk in shelf.blocks) {
-        if (blk.config.outsideBroadcastEvents == null) {
+        if (blk.config.outsideBroadcastEvents .isEmpty) {
           continue;
         }
         List<Type> listenerTypes =
