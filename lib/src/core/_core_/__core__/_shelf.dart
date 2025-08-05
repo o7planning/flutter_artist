@@ -200,6 +200,8 @@ abstract class Shelf extends _Core {
       __registerBlockCascade(rootBlock);
     }
     //
+    // -------- SHELF INTERNAL EVENTS ------------
+    //
     for (String blockName in __blockMap.keys) {
       Block listenerBlock = __blockMap[blockName]!;
       for (Evt evt in listenerBlock.config.reQueryByInternalShelfEvents ?? []) {
@@ -464,96 +466,6 @@ abstract class Shelf extends _Core {
 
   FilterModel? findFilterModel(String filterModelName) {
     return _shelfStruct.filterModels[filterModelName];
-  }
-
-  // ***************************************************************************
-  // ******** UI COMPONENTS ****************************************************
-  // ***************************************************************************
-
-  void __findMountedWidgetStates({
-    required List<Block> blocks,
-    required bool withBlockFragment,
-    required bool withFilter,
-    required bool withForm,
-    required bool withControlBar,
-    required bool withControl,
-    required bool activeOnly,
-    required bool withPagination,
-    required Map<_RefreshableWidgetState, XState> founds,
-  }) {
-    for (Block block in blocks) {
-      Map<_RefreshableWidgetState, XState> m =
-          block.ui._findMountedWidgetStates(
-        activeOnly: activeOnly,
-        withPagination: withPagination,
-        withBlockFragment: withBlockFragment,
-        withFilter: withFilter,
-        withForm: withForm,
-        withControlBar: withControlBar,
-        withControl: withControl,
-      );
-      founds.addAll(m);
-      //
-      __findMountedWidgetStates(
-        withPagination: withPagination,
-        withBlockFragment: withBlockFragment,
-        withFilter: withFilter,
-        withForm: withForm,
-        withControlBar: withControlBar,
-        withControl: withControl,
-        activeOnly: activeOnly,
-        blocks: block.childBlocks,
-        founds: founds,
-      );
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @DebugMethodAnnotation()
-  Map<IRefreshableWidgetState, XState> debugFindMountedWidgetStates({
-    required bool withBlockFragment,
-    required bool withPagination,
-    required bool withFilter,
-    required bool withForm,
-    required bool withControlBar,
-    required bool withControl,
-    required bool activeOnly,
-  }) {
-    return _findMountedWidgetStates(
-      withBlockFragment: withBlockFragment,
-      withPagination: withPagination,
-      withFilter: withFilter,
-      withForm: withForm,
-      withControlBar: withControlBar,
-      withControl: withControl,
-      activeOnly: activeOnly,
-    );
-  }
-
-  Map<_RefreshableWidgetState, XState> _findMountedWidgetStates({
-    required bool withBlockFragment,
-    required bool withPagination,
-    required bool withFilter,
-    required bool withForm,
-    required bool withControlBar,
-    required bool withControl,
-    required bool activeOnly,
-  }) {
-    Map<_RefreshableWidgetState, XState> founds = {};
-    __findMountedWidgetStates(
-      withPagination: withPagination,
-      withBlockFragment: withBlockFragment,
-      withFilter: withFilter,
-      withForm: withForm,
-      withControlBar: withControlBar,
-      withControl: withControl,
-      activeOnly: activeOnly,
-      blocks: _rootBlocks,
-      founds: founds,
-    );
-    return founds;
   }
 
   // ***************************************************************************

@@ -58,7 +58,7 @@ class _UiComponentsDialogState extends State<UiComponentsDialog> {
 
   Map<IRefreshableWidgetState, XState> _findWidgetStates() {
     if (widget.shelf != null) {
-      return widget.shelf!.debugFindMountedWidgetStates(
+      return widget.shelf!.ui.debugFindMountedWidgetStates(
         activeOnly: true,
         withPagination: true,
         withBlockFragment: true,

@@ -9,7 +9,7 @@ class BlockConfig {
 
   //
 
-  final List<Type>? outsideBroadcastEvents;
+  final List<Type> outsideBroadcastEvents;
 
   final List<Type>? refreshCurrItemByExternalShelfEvents;
   final List<Type>? reQueryByExternalShelfEvents;
@@ -21,19 +21,28 @@ class BlockConfig {
     this.itemRefreshmentMode = BlockItemRefreshmentMode.auto,
     this.leaveTheFormSafely = true,
     this.hiddenBehavior = BlockHiddenBehavior.none,
-    this.outsideBroadcastEvents,
+    List<Type>? outsideBroadcastEvents,
     //
-    this.refreshCurrItemByExternalShelfEvents,
-    this.reQueryByExternalShelfEvents,
+    List<Type>? refreshCurrItemByExternalShelfEvents,
+    List<Type>? reQueryByExternalShelfEvents,
     //
-    this.refreshCurrItemByInternalShelfEvents,
-    this.reQueryByInternalShelfEvents,
+    List<Evt>? refreshCurrItemByInternalShelfEvents,
+    List<Evt>? reQueryByInternalShelfEvents,
     //
     this.pageable = const PageableData(
       page: 1,
       pageSize: 20,
     ),
-  });
+  })  : outsideBroadcastEvents =
+            List.unmodifiable(outsideBroadcastEvents ?? []),
+        refreshCurrItemByExternalShelfEvents =
+            List.unmodifiable(refreshCurrItemByExternalShelfEvents ?? []),
+        reQueryByExternalShelfEvents =
+            List.unmodifiable(reQueryByExternalShelfEvents ?? []),
+        refreshCurrItemByInternalShelfEvents =
+            List.unmodifiable(refreshCurrItemByInternalShelfEvents ?? []),
+        reQueryByInternalShelfEvents =
+            List.unmodifiable(reQueryByInternalShelfEvents ?? []);
 
   BlockConfig copy() {
     return BlockConfig(
