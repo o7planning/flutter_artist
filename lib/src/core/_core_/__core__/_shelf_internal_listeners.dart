@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 @_InternalEventReactAnnotation()
-class InternalListeners {
+class ShelfInternalListeners {
   final Map<String, Block> __blockReQueryListenerMAP = {};
   final Map<String, Scalar> __scalarReQueryListenerMAP = {};
   final Map<String, Block> __blockRefreshCurrListenerMAP = {};
@@ -22,7 +22,7 @@ class InternalListeners {
   /// ),
   /// ```
   ///
-  InternalListeners();
+  ShelfInternalListeners();
 
   bool hasListeners() {
     return __blockReQueryListenerMAP.isNotEmpty ||

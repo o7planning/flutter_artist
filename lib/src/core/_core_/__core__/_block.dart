@@ -107,7 +107,9 @@ abstract class Block<
 
   final BlockConfig config;
 
-  final InternalListeners _internalListeners = InternalListeners();
+  final ShelfInternalListeners _internalListeners = ShelfInternalListeners();
+
+  final ShelfExternalListeners _externallListeners = ShelfExternalListeners();
 
   ///
   /// Block name. It is unique in a Shelf.
