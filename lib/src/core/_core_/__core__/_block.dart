@@ -2107,9 +2107,12 @@ abstract class Block<
         itemDetail: savedItemDetail,
         item: refreshedItem,
       );
-      // New Code:
+      // Test Case [01c]. New Code:
       if (isNew) {
-        __clearAllChildrenBlocksToReady(
+        // __clearAllChildrenBlocksToReady(
+        //   thisXBlock: thisXBlock,
+        // );
+        __clearAllChildrenBlocksToPending(
           thisXBlock: thisXBlock,
         );
       }
