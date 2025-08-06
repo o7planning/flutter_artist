@@ -3795,7 +3795,7 @@ abstract class Block<
     PageableData? usedPageable;
     switch (qryMethod) {
       case BlockQryMethodName.query:
-        usedPageable = pageable;
+        usedPageable = specifiedPageable;
       case BlockQryMethodName.queryNextPage:
         PageableData? currentPageable = __blockData.pageable;
         if (currentPageable == null) {
