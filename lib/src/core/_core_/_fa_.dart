@@ -11,7 +11,7 @@ class _FlutterArtist {
 
   final _Executor executor = _Executor();
 
-  final _AsyncExecutor asyncExecutor = _AsyncExecutor();
+  final _BackgroundExecutor backgroundExecutor = _BackgroundExecutor();
 
   final _TaskUnitQueue taskUnitQueue = _TaskUnitQueue();
 

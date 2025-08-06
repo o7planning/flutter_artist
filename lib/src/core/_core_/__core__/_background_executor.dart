@@ -1,7 +1,7 @@
 part of '../core.dart';
 
-class _AsyncExecutor extends _Core {
-  _AsyncExecutor();
+class _BackgroundExecutor extends _Core {
+  _BackgroundExecutor();
 
   // ***************************************************************************
   // ***************************************************************************
