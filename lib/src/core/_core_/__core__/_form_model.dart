@@ -466,6 +466,8 @@ abstract class FormModel<
   }) async {
     FILTER_CRITERIA? blockCurrentFilterCriteria = block.filterCriteria;
     if (blockCurrentFilterCriteria == null) {
+      // Test Case: [01c]
+      // Make sure never get this error.
       throw AppError(errorMessage: "FilterCriteria is null");
     }
     __formActivityCount++;
