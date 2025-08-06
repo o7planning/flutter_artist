@@ -1,12 +1,7 @@
 part of '../core.dart';
 
-class _StorageExecutor {
-  final _Storage storage;
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  _StorageExecutor(this.storage);
+class _AsyncExecutor extends _Core {
+  _AsyncExecutor();
 
   // ***************************************************************************
   // ***************************************************************************
@@ -29,7 +24,7 @@ class _StorageExecutor {
     //
     bool confirm = true;
     if (action.needToConfirm) {
-      confirm = await storage._showActionConfirmation(
+      confirm = await _showActionConfirmation(
         shelf: null,
         defaultConfirmation: action.defaultConfirmation,
         customConfirmation: action.createCustomConfirmation(),
@@ -46,7 +41,7 @@ class _StorageExecutor {
       // Throw ApiError:
       result.throwIfError();
     } catch (e, stackTrace) {
-      AppError appError = storage._handleError(
+      AppError appError = _handleError(
         shelf: null,
         methodName: "executeBackgroundAction",
         error: e,

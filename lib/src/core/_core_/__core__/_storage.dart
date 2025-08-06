@@ -19,8 +19,6 @@ class _Storage extends _Core {
 
   late final _StorageEventHandler ev = _StorageEventHandler(this);
 
-  late final _StorageExecutor executor = _StorageExecutor(this);
-
   // ***************************************************************************
   // ***************************************************************************
 

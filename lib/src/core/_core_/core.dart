@@ -125,6 +125,8 @@ part '__core__/___core.dart';
 
 part '__core__/_activity.dart';
 
+part '__core__/_async_executor.dart';
+
 part '__core__/_block.dart';
 
 part '__core__/_block_data.dart';
@@ -174,8 +176,6 @@ part '__core__/_sort_criterion.dart';
 part '__core__/_storage.dart';
 
 part '__core__/_storage_ev.dart';
-
-part '__core__/_storage_executor.dart';
 
 part '__core__/_suggested_selection.dart';
 

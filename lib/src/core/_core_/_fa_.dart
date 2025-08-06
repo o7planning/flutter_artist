@@ -11,6 +11,8 @@ class _FlutterArtist {
 
   final _Executor executor = _Executor();
 
+  final _AsyncExecutor asyncExecutor = _AsyncExecutor();
+
   final _TaskUnitQueue taskUnitQueue = _TaskUnitQueue();
 
   int notificationFetchPeriodInSeconds = 60;
