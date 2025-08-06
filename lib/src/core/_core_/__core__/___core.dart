@@ -38,7 +38,7 @@ abstract class _Core {
     );
   }
 
-  Future<bool> __showActionConfirmation<A extends QuickAction>({
+  Future<bool> _showActionConfirmation<A extends QuickAction>({
     required Shelf? shelf,
     required DefaultConfirmation defaultConfirmation,
     required CustomConfirmation? customConfirmation,

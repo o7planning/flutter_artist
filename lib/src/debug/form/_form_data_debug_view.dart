@@ -48,7 +48,7 @@ class _FormDataViewState extends State<FormDataView> {
   void initState() {
     super.initState();
     //
-    listeners = FlutterArtist.storage.getListenerShelfBlockScalarTypes(
+    listeners = FlutterArtist.storage.ev.getListenerShelfBlockScalarTypes(
       eventBlockOrScalar: BlockOrScalar.block(widget.formModel.block),
     );
   }

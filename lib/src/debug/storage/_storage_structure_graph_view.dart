@@ -216,11 +216,11 @@ class _StorageStructureGraphViewState extends State<StorageStructureGraphView> {
     //
     Map<String, Shelf?> shelfMap = FlutterArtist.storage.shelfMap;
     Map<String, Shelf?> shelfListenerMap =
-        FlutterArtist.storage.debugGetListenerShelves();
+        FlutterArtist.storage.ev.debugGetListenerShelves();
     Map<String, Shelf?> shelfNotifierMap =
-        FlutterArtist.storage.debugGetEventShelves();
+        FlutterArtist.storage.ev.debugGetEventShelves();
     Map<String, Shelf?> shelfIndependentMap =
-        FlutterArtist.storage.debugGetIndependentShelves();
+        FlutterArtist.storage.ev.debugGetIndependentShelves();
 
     for (String shelfName in shelfMap.keys) {
       GraphGItem item = GraphGItem(

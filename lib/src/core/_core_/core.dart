@@ -173,7 +173,9 @@ part '__core__/_sort_criterion.dart';
 
 part '__core__/_storage.dart';
 
-part '__core__/_storage_event_handler.dart';
+part '__core__/_storage_ev.dart';
+
+part '__core__/_storage_executor.dart';
 
 part '__core__/_suggested_selection.dart';
 

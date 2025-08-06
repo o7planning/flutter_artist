@@ -107,19 +107,19 @@ class _ShelfRelationshipViewState extends State<ShelfRelationshipView> {
     List<ShelfBlockScalarType> listeners = [];
     List<ShelfBlockScalarType> eventSources = [];
     if (selectedBlockOrScalar?.block != null) {
-      listeners = FlutterArtist.storage.getListenerShelfBlockScalarTypes(
+      listeners = FlutterArtist.storage.ev.getListenerShelfBlockScalarTypes(
         eventBlockOrScalar: BlockOrScalar.block(selectedBlockOrScalar!.block!),
       );
-      eventSources = FlutterArtist.storage.getEventShelfBlockTypes(
+      eventSources = FlutterArtist.storage.ev.getEventShelfBlockTypes(
         listenerBlockOrScalar:
             BlockOrScalar.block(selectedBlockOrScalar!.block!),
       );
     } else if (selectedBlockOrScalar?.scalar != null) {
-      listeners = FlutterArtist.storage.getListenerShelfBlockScalarTypes(
+      listeners = FlutterArtist.storage.ev.getListenerShelfBlockScalarTypes(
         eventBlockOrScalar:
             BlockOrScalar.scalar(selectedBlockOrScalar!.scalar!),
       );
-      eventSources = FlutterArtist.storage.getEventShelfBlockTypes(
+      eventSources = FlutterArtist.storage.ev.getEventShelfBlockTypes(
         listenerBlockOrScalar:
             BlockOrScalar.scalar(selectedBlockOrScalar!.scalar!),
       );

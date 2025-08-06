@@ -317,7 +317,7 @@ abstract class Scalar<
       return false;
     }
     //
-    FlutterArtist.storage._fireEventToAffectedItemTypes(
+    FlutterArtist.storage.ev._fireEventToAffectedItemTypes(
       eventShelf: shelf,
       affectedItemTypes: action.config.affectedItemTypes,
     );
@@ -583,7 +583,7 @@ abstract class Scalar<
     //
     bool confirm = true;
     if (action.needToConfirm) {
-      confirm = await __showActionConfirmation(
+      confirm = await _showActionConfirmation(
         shelf: shelf,
         defaultConfirmation: action.defaultConfirmation,
         customConfirmation: action.createCustomConfirmation(),
@@ -658,7 +658,7 @@ abstract class Scalar<
     //
     bool confirm = true;
     if (action.needToConfirm) {
-      confirm = await __showActionConfirmation(
+      confirm = await _showActionConfirmation(
         shelf: shelf,
         defaultConfirmation: action.defaultConfirmation,
         customConfirmation: action.createCustomConfirmation(),

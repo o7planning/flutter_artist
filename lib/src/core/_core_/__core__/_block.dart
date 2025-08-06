@@ -1419,7 +1419,7 @@ abstract class Block<
       // Throw ApiError:
       result.throwIfError();
       // TODO: Chuyen di noi khac?
-      FlutterArtist.storage._fireEventSourceChanged(
+      FlutterArtist.storage.ev._fireEventSourceChanged(
         eventBlock: this,
         itemIdString: null,
       );
@@ -1586,7 +1586,7 @@ abstract class Block<
     //
     if (deletionResult.deletedItems.isNotEmpty) {
       // TODO: Chuyen di noi khac?
-      FlutterArtist.storage._fireEventSourceChanged(
+      FlutterArtist.storage.ev._fireEventSourceChanged(
         eventBlock: this,
         itemIdString: null,
       );
@@ -1934,7 +1934,7 @@ abstract class Block<
       return false;
     }
     //
-    FlutterArtist.storage._fireEventToAffectedItemTypes(
+    FlutterArtist.storage.ev._fireEventToAffectedItemTypes(
       eventShelf: shelf,
       affectedItemTypes: action.config.affectedItemTypes,
     );
@@ -2077,7 +2077,7 @@ abstract class Block<
     //
     if (fireOutsideEvent) {
       // TODO: Chuyen di noi khac.
-      FlutterArtist.storage._fireEventSourceChanged(
+      FlutterArtist.storage.ev._fireEventSourceChanged(
         eventBlock: this,
         itemIdString: null,
       );
@@ -2211,7 +2211,7 @@ abstract class Block<
       return false;
     }
     // TODO: Chuyen di noi khac.
-    FlutterArtist.storage._fireEventSourceChanged(
+    FlutterArtist.storage.ev._fireEventSourceChanged(
       eventBlock: this,
       itemIdString: null,
     );
@@ -3171,7 +3171,7 @@ abstract class Block<
     //
     bool confirm = true;
     if (action.needToConfirm) {
-      confirm = await __showActionConfirmation(
+      confirm = await _showActionConfirmation(
         shelf: shelf,
         defaultConfirmation: action.defaultConfirmation,
         customConfirmation: action.createCustomConfirmation(),
@@ -3272,7 +3272,7 @@ abstract class Block<
     //
     bool confirm = true;
     if (action.needToConfirm) {
-      confirm = await __showActionConfirmation(
+      confirm = await _showActionConfirmation(
         shelf: shelf,
         defaultConfirmation: action.defaultConfirmation,
         customConfirmation: action.createCustomConfirmation(),
@@ -3351,7 +3351,7 @@ abstract class Block<
     //
     bool confirm = true;
     if (action.needToConfirm) {
-      confirm = await __showActionConfirmation(
+      confirm = await _showActionConfirmation(
         shelf: shelf,
         defaultConfirmation: action.defaultConfirmation,
         customConfirmation: action.createCustomConfirmation(),
@@ -3428,7 +3428,7 @@ abstract class Block<
     //
     bool confirm = true;
     if (action.needToConfirm) {
-      confirm = await __showActionConfirmation(
+      confirm = await _showActionConfirmation(
         shelf: shelf,
         defaultConfirmation: action.defaultConfirmation,
         customConfirmation: action.createCustomConfirmation(),
@@ -3485,7 +3485,7 @@ abstract class Block<
     //
     bool confirm = true;
     if (action.needToConfirm) {
-      confirm = await __showActionConfirmation(
+      confirm = await _showActionConfirmation(
         shelf: shelf,
         defaultConfirmation: action.defaultConfirmation,
         customConfirmation: action.createCustomConfirmation(),
