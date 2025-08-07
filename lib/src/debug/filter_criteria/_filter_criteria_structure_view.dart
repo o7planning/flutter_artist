@@ -129,6 +129,7 @@ class FilterCriteriaStructureViewState
         builder: (context, node) {
           dynamic data = node.data;
           String title;
+          String? tooltip;
           bool isMultiOpt = false;
           bool isMultiSelection = false;
           IconData prefixIconData;
@@ -138,12 +139,16 @@ class FilterCriteriaStructureViewState
             prefixIconData = FaIconConstants.filterModelIconData;
           } else if (data is SimpleCriterion) {
             title = data.criterionName;
+            tooltip =
+                "SimpleCriterion<${data.dataType.toString()}> ${data.criterionName}";
             prefixIconData = FaIconConstants.simplePropOrCriterionIconData;
             //
             isMultiOpt = false;
             isMultiSelection = false;
           } else if (data is MultiOptCriterion) {
             title = data.criterionName;
+            tooltip =
+                "MultiOptCriterion<${data.dataType.toString()}> ${data.criterionName}";
             prefixIconData = FaIconConstants.optPropOrCriterionIconData;
             //
             isMultiOpt = true;
@@ -170,14 +175,17 @@ class FilterCriteriaStructureViewState
                   ),
                   SizedBox(width: 5),
                   Expanded(
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                        overflow: TextOverflow.ellipsis,
-                        fontSize: 13,
-                        fontWeight: _currentNode == node
-                            ? FontWeight.bold
-                            : FontWeight.normal,
+                    child: Tooltip(
+                      message: tooltip ?? "",
+                      child: Text(
+                        title,
+                        style: TextStyle(
+                          overflow: TextOverflow.ellipsis,
+                          fontSize: 13,
+                          fontWeight: _currentNode == node
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                        ),
                       ),
                     ),
                   ),

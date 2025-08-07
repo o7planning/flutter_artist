@@ -35,6 +35,8 @@ abstract class Criterion<V> {
 
   XData? get initialXData => _initialXData;
 
+  Type get dataType => V;
+
   Criterion({required this.criterionName});
 
   bool isDirty() {

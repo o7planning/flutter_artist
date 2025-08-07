@@ -11,6 +11,10 @@ abstract class Prop<V> {
 
   //
 
+  Type get dataType => V;
+
+  //
+
   V? _tempCurrentValue;
   XData? _tempCurrentXData;
 

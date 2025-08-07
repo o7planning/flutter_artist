@@ -144,6 +144,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
         builder: (context, node) {
           dynamic data = node.data;
           String title;
+          String? tooltip;
           bool isMultiOpt = false;
           bool isMultiSelection = false;
           IconData prefixIconData;
@@ -156,6 +157,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
             isError = data.formDataState == DataState.error;
           } else if (data is SimpleProp) {
             title = data.propName;
+            tooltip = "SimpleProp<${data.dataType.toString()}> ${data.propName}";
             prefixIconData = FaIconConstants.simplePropOrCriterionIconData;
             //
             isMultiOpt = false;
@@ -164,6 +166,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
             isError = data.formErrorInfo != null;
           } else if (data is MultiOptProp) {
             title = data.propName;
+            tooltip = "MultiOptProp<${data.dataType.toString()}> ${data.propName}";
             prefixIconData = FaIconConstants.optPropOrCriterionIconData;
             //
             isMultiOpt = true;
@@ -196,14 +199,17 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
                   ),
                   SizedBox(width: 5),
                   Expanded(
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                        overflow: TextOverflow.ellipsis,
-                        fontSize: 13,
-                        fontWeight: _currentNode == node
-                            ? FontWeight.bold
-                            : FontWeight.normal,
+                    child: Tooltip(
+                      message: tooltip ?? "",
+                      child: Text(
+                        title,
+                        style: TextStyle(
+                          overflow: TextOverflow.ellipsis,
+                          fontSize: 13,
+                          fontWeight: _currentNode == node
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                        ),
                       ),
                     ),
                   ),
