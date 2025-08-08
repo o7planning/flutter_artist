@@ -25,18 +25,20 @@ abstract class BackgroundWebDownloadAction extends BackgroundAction {
     }
     List<int>? data = result.data;
 
-    final JSArray<web.BlobPart> jsArray = JSArray();
-    // Convert int to Uint8List (a common BlobPart type)
-    jsArray.add(Uint8List.fromList(data ?? []).toJS as web.BlobPart);
+    Uint8List uint8List = Uint8List.fromList(data ?? []);
+    final dataBuffer = uint8List.buffer.toJS;
 
-    // Create a Blob from the received bytes
-    final blob = web.Blob(jsArray);
+    web.Blob blobData = web.Blob(
+      [dataBuffer].toJS,
+      web.BlobPropertyBag(type: 'application/octet-stream'),
+    );
 
-    final url = web.URL.createObjectURL(blob);
+    final url = web.URL.createObjectURL(blobData);
     final anchor = web.HTMLAnchorElement()
       ..href = url
       ..setAttribute('download', fileName)
-      ..click(); // Programmatically clicks the anchor to trigger download
+      // Programmatically clicks the anchor to trigger download
+      ..click();
 
     web.URL.revokeObjectURL(anchor.href); // Clean up.
     return result;
