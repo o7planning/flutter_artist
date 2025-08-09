@@ -68,13 +68,13 @@ part of '../core.dart';
 /// ```
 ///
 abstract class Block<
-    ID extends Object,
-    ITEM extends Object,
-    ITEM_DETAIL extends Object,
-    FILTER_INPUT extends FilterInput, // EmptyFilterInput
-    FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
-    EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
-    > extends _Core {
+ID extends Object,
+ITEM extends Object,
+ITEM_DETAIL extends Object,
+FILTER_INPUT extends FilterInput, // EmptyFilterInput
+FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
+EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
+> extends _Core {
   late final Shelf shelf;
 
   int _deletionErrorCount = 0;
@@ -110,6 +110,10 @@ abstract class Block<
   final ShelfInternalListeners _internalListeners = ShelfInternalListeners();
 
   final ShelfExternalListeners _externallListeners = ShelfExternalListeners();
+
+  // TODO: LOGIC-01
+  final bool _alwayTrySelectAnItemAsCurrent = true;
+  bool get alwayTrySelectAnItemAsCurrent => _alwayTrySelectAnItemAsCurrent;
 
   ///
   /// Block name. It is unique in a Shelf.
@@ -147,14 +151,14 @@ abstract class Block<
   /// If this block does not declare a [FilterModel], it will have the default [FilterModel].
   ///
   late final FilterModel<FILTER_INPUT, FILTER_CRITERIA>
-      _registeredOrDefaultFilterModel;
+  _registeredOrDefaultFilterModel;
 
   ///
   /// This field is not null.
   /// If this block does not declare a [FilterModel], it will have the default [FilterModel].
   ///
   FilterModel<FILTER_INPUT, FILTER_CRITERIA>
-      get registeredOrDefaultFilterModel => _registeredOrDefaultFilterModel;
+  get registeredOrDefaultFilterModel => _registeredOrDefaultFilterModel;
 
   ///
   /// Returns a FilterModel declared in the [Shelf.registerStructure()] method.
@@ -542,7 +546,7 @@ abstract class Block<
     if (config.hiddenBehavior == BlockHiddenBehavior.clear) {
       Future.delayed(
         const Duration(seconds: 0),
-        () {
+            () {
           this.clear();
         },
       );
@@ -607,6 +611,7 @@ abstract class Block<
     DataState newQueryDataState = this.queryDataState;
     PageData<ITEM>? pageData;
     final ITEM? candidateCurrentItem;
+    bool queried = false;
     if (forceQuery) {
       //
       // thisXBlock.forceQuery || (hasActiveUI && this.queryDataState != DataState.ready)
@@ -620,7 +625,7 @@ abstract class Block<
           FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
           //
           filterCriteriaOfFilterModel =
-              await filterModel._startNewFilterActivity(
+          await filterModel._startNewFilterActivity(
             activityType: FilterActivityType.newFilt,
             filterInput: filterInput,
           ) as FILTER_CRITERIA?;
@@ -628,7 +633,7 @@ abstract class Block<
           xFilterModel.queried = true;
         } else {
           filterCriteriaOfFilterModel =
-              filterModel._filterCriteria! as FILTER_CRITERIA;
+          filterModel._filterCriteria! as FILTER_CRITERIA;
         }
       } catch (e, stackTrace) {
         // @@TODO@@ 12 Test.
@@ -654,7 +659,7 @@ abstract class Block<
       // Ready FilterCriteria:
       //
       final bool parentOrCriteriaChanged =
-          __blockData._isParentOrFilterCriteriaChanged(
+      __blockData._isParentOrFilterCriteriaChanged(
         newCurrentParentItemId: parentItemId,
         newFilterCriteria: filterCriteriaOfFilterModel,
       );
@@ -695,6 +700,7 @@ abstract class Block<
           // Throw ApiError:
           result.throwIfError();
           //
+          queried = true;
           queryResultState = ActionResultState.success;
           pageData = result.data;
         } catch (e, stackTrace) {
@@ -730,23 +736,23 @@ abstract class Block<
           if (parentOrCriteriaChanged) {
             switch (queryDataState) {
               case DataState.ready:
-                // @FaCode-002.
-                // Test Case: [42a].
-                // Replace by empty items.
+              // @FaCode-002.
+              // Test Case: [42a].
+              // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
               case DataState.pending:
-                // Replace by empty items.
+              // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
               case DataState.error:
-                // @FaCode-003.
-                // Test Case: [42a].
-                // Replace by empty items.
+              // @FaCode-003.
+              // Test Case: [42a].
+              // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
               case DataState.none:
-                // Replace by empty items.
+              // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
             }
@@ -756,22 +762,22 @@ abstract class Block<
           else {
             switch (queryDataState) {
               case DataState.ready:
-                // Append empty items (No items got from Server).
-                // Test Case: [42a].
-                // @FaCode-001.
+              // Append empty items (No items got from Server).
+              // Test Case: [42a].
+              // @FaCode-001.
                 realListBehavior = ListBehavior.append;
                 newQueryDataState = DataState.ready;
               case DataState.pending:
-                // Replace by empty items.
+              // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
               case DataState.error:
-                // @FaCode-004.
-                // Replace by empty items.
+              // @FaCode-004.
+              // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
               case DataState.none:
-                // Replace by empty items.
+              // Replace by empty items.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.error;
             }
@@ -783,19 +789,19 @@ abstract class Block<
           if (parentOrCriteriaChanged) {
             switch (queryDataState) {
               case DataState.ready:
-                // Replace.
+              // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
               case DataState.pending:
-                // Replace.
+              // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
               case DataState.error:
-                // Replace.
+              // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
               case DataState.none:
-                // Replace.
+              // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
             }
@@ -804,19 +810,19 @@ abstract class Block<
           else {
             switch (queryDataState) {
               case DataState.ready:
-                // Replace or Append:
+              // Replace or Append:
                 realListBehavior = thisXBlock.listBehavior;
                 newQueryDataState = DataState.ready;
               case DataState.pending:
-                // Replace.
+              // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
               case DataState.error:
-                // Replace.
+              // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
               case DataState.none:
-                // Replace.
+              // Replace.
                 realListBehavior = ListBehavior.replace;
                 newQueryDataState = DataState.ready;
             }
@@ -890,19 +896,19 @@ abstract class Block<
       else {
         switch (newQueryDataState) {
           case DataState.none:
-            // @@TODO@@ 04.
-            // Never run:
+          // @@TODO@@ 04.
+          // Never run:
             this.__clearAllChildrenBlocksToNone(
               thisXBlock: thisXBlock,
             );
           case DataState.pending:
-            // @@TODO@@ 05.
-            // Never run:
+          // @@TODO@@ 05.
+          // Never run:
             this.__clearAllChildrenBlocksToNone(
               thisXBlock: thisXBlock,
             );
           case DataState.error:
-            // @@TODO@@ 06.
+          // @@TODO@@ 06.
             this.__clearAllChildrenBlocksToNone(
               thisXBlock: thisXBlock,
             );
@@ -916,18 +922,25 @@ abstract class Block<
       print("        ~~~~~~~> IGNORED --> forceQuery: $forceQuery - [$name]");
       candidateCurrentItem = null;
     }
+
+    // TODO: LOGIC-01 (If not querying block --> No need to force select an item).
+    PostQueryBehavior postQueryBehavior = thisXBlock.postQueryBehavior;
+    if (!queried) {
+      postQueryBehavior = PostQueryBehavior.selectAnItemAsCurrentIfNeed;
+    }
+    print(
+        "   >>> ${getClassName(this)}    @@@@@@@@@ forceQuery: $forceQuery >>> postQueryBehavior: $postQueryBehavior");
     //
     // Add TaskUnit:
     // - Find Item to Select as Current:
     //
-    if (thisXBlock.postQueryBehavior == PostQueryBehavior.clearCurrentItem) {
+    if (postQueryBehavior == PostQueryBehavior.clearCurrentItem) {
       FlutterArtist.taskUnitQueue.addTaskUnit(
         _BlockClearCurrentTaskUnit<ITEM>(
           xBlock: thisXBlock,
         ),
       );
-    } else if (thisXBlock.postQueryBehavior ==
-        PostQueryBehavior.createNewItem) {
+    } else if (postQueryBehavior == PostQueryBehavior.createNewItem) {
       FlutterArtist.taskUnitQueue.addTaskUnit(
         _BlockPrepareFormToCreateItemTaskUnit(
           xBlock: thisXBlock,
@@ -941,10 +954,10 @@ abstract class Block<
       //  ==> Do not "select an item as current".
       if (thisXBlock.xShelf.naturalMode && formMode == FormMode.creation) {
         // Do nothing.
-        // Test Case: com-dept-emp38b.
+        // Test Case: [38b].
       } else {
         final CurrentItemSelectionType currentItemSelectionType;
-        switch (thisXBlock.postQueryBehavior) {
+        switch (postQueryBehavior) {
           case PostQueryBehavior.selectAnItemAsCurrentIfNeed:
             currentItemSelectionType =
                 CurrentItemSelectionType.selectAnItemAsCurrentIfNeed;
@@ -996,23 +1009,6 @@ abstract class Block<
     //
     formModel?._formPropsStructure._setManualDirty(false);
     //
-    // if (thisXBlock.currentItemSelectionResult == null) {
-    //   thisXBlock.currentItemSelectionResult =
-    //       BlockItemCurrSelectionResult<ITEM>(
-    //     precheck: null,
-    //     currentItemSelectionType: currentItemSelectionType,
-    //     getItemId: getItemId,
-    //     candidateItem: candidateItem,
-    //     oldCurrentItem: this.currentItem,
-    //     currentItem: this.currentItem,
-    //   );
-    // } else {
-    //   thisXBlock.currentItemSelectionResult!._addCandidateItem(
-    //     candidateItem,
-    //   );
-    // }
-    // var result = thisXBlock.currentItemSelectionResult!;
-
     currentItemSelectionResult._addCandidateItem(
       candidateItem,
     );
@@ -1116,7 +1112,7 @@ abstract class Block<
     }
     //
     final bool isCandidateCurrentItemInNewQueriedList =
-        ItemsUtils.isListContainItem(
+    ItemsUtils.isListContainItem(
       targetList: newQueriedList,
       item: candidateCurrentItem,
       getItemId: getItemId,
@@ -1141,7 +1137,7 @@ abstract class Block<
         hasXActiveUI: hasXActiveUI,
         currentItemSelectionType: currentItemSelectionType,
         isCandidateCurrentItemInNewQueriedList:
-            isCandidateCurrentItemInNewQueriedList,
+        isCandidateCurrentItemInNewQueriedList,
         currentItemChanged: currentItemChanged,
       );
       //
@@ -1153,7 +1149,7 @@ abstract class Block<
         xFormModel: thisXBlock.xFormModel!,
         currentItemSelectionType: currentItemSelectionType,
         isCandidateCurrentItemInNewQueriedList:
-            isCandidateCurrentItemInNewQueriedList,
+        isCandidateCurrentItemInNewQueriedList,
         currentItemChanged: currentItemChanged,
         forceReloadItem: forceReloadItem,
       );
@@ -1180,7 +1176,7 @@ abstract class Block<
           config.itemRefreshmentMode == BlockItemRefreshmentMode.auto &&
           isCandidateCurrentItemInNewQueriedList) {
         final ITEM? candidateCurrentItemInNewQueriedList =
-            ItemsUtils.findItemInList(
+        ItemsUtils.findItemInList(
           item: candidateCurrentItem,
           targetList: newQueriedList,
           getItemId: getItemId,
@@ -1189,7 +1185,7 @@ abstract class Block<
         // No need to refresh Item.
         //
         refreshedCurrentItemDetail =
-            candidateCurrentItemInNewQueriedList as ITEM_DETAIL;
+        candidateCurrentItemInNewQueriedList as ITEM_DETAIL;
       } else {
         bool isLoadItemError = false;
         try {
@@ -1479,7 +1475,7 @@ abstract class Block<
     //
     _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
       currentItemSelectionType:
-          CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
+      CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
       xBlock: thisXBlock,
       newQueriedList: <ITEM>[],
       candidateItem: siblingItem,
@@ -1615,7 +1611,7 @@ abstract class Block<
     }
     _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
       currentItemSelectionType:
-          CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
+      CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
       xBlock: thisXBlock,
       newQueriedList: <ITEM>[],
       candidateItem: siblingItem,
@@ -1691,7 +1687,7 @@ abstract class Block<
     required _XBlock thisXBlock,
     required BlockQuickItemCreationResult taskResult,
     required BlockQuickCreateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
-        action,
+    action,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -1764,8 +1760,8 @@ abstract class Block<
   Future<bool> _unitQuickCreateMultiItems({
     required _XBlock thisXBlock,
     required BlockQuickCreateMultiItemsAction<ID, ITEM, ITEM_DETAIL,
-            FILTER_CRITERIA>
-        action,
+        FILTER_CRITERIA>
+    action,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -1803,7 +1799,7 @@ abstract class Block<
         thisXBlock: thisXBlock,
         blockCurrentFilterCriteria: blockCurrentFilterCriteria,
         calledMethodName:
-            "${getClassName(action)}.callApiQuickCreateMultiItems",
+        "${getClassName(action)}.callApiQuickCreateMultiItems",
         result: result,
       );
     } catch (e, stackTrace) {
@@ -1828,7 +1824,7 @@ abstract class Block<
     required _XBlock thisXBlock,
     required BlockQuickItemUpdateResult taskResult,
     required BlockQuickUpdateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
-        action,
+    action,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -1944,7 +1940,7 @@ abstract class Block<
         break;
       case AfterBlockQuickAction.refreshCurrentItem:
         Actionable<BlockItemCurrSelectionPrecheck> actionable =
-            canRefreshCurrentItem();
+        canRefreshCurrentItem();
         if (!actionable.yes) {
           return true;
         }
@@ -2095,7 +2091,7 @@ abstract class Block<
       );
       //
       Actionable<BlockItemEditPrecheck> actionable =
-          canEditItemOnForm(item: refreshedItem);
+      canEditItemOnForm(item: refreshedItem);
       //
       FlutterArtist.codeFlowLogger._addInfo(
         ownerClassInstance: this,
@@ -2181,7 +2177,7 @@ abstract class Block<
       //
       _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
         currentItemSelectionType:
-            CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
+        CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
         xBlock: thisXBlock,
         newQueriedList: [],
         candidateItem: siblingItem,
@@ -2379,7 +2375,7 @@ abstract class Block<
     bool errorIfItemNotInTheBlock = true,
   }) async {
     final List<ITEM> candidateDeleteItems =
-        __blockData.moveCurrentItemToEndOfList(
+    __blockData.moveCurrentItemToEndOfList(
       itemList: items,
     );
     // @Same-Code-Precheck-01
@@ -2447,7 +2443,7 @@ abstract class Block<
   @_BlockSelectItemAsCurrentAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockItemCurrSelectionResult<ITEM>>
-      __refreshToShowOrEditItemAsCurrent({
+  __refreshToShowOrEditItemAsCurrent({
     required String methodName,
     required ITEM? item,
     required ErrCodeIfItemIsNull errCodeIfItemIsNull,
@@ -2472,7 +2468,7 @@ abstract class Block<
     // @Same-Code-Precheck-01
     //
     Actionable<BlockItemCurrSelectionPrecheck> actionable =
-        this.__canSelectItemAsCurrent(
+    this.__canSelectItemAsCurrent(
       item: item,
       errCodeIfItemIsNull: errCodeIfItemIsNull,
       checkBusy: true,
@@ -3239,7 +3235,7 @@ abstract class Block<
   @_BlockQuickCreateItemActionAnnotation()
   Future<BlockQuickItemCreationResult> executeQuickCreateItemAction({
     required BlockQuickCreateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
-        action,
+    action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -3254,7 +3250,7 @@ abstract class Block<
     // @Same-Code-Precheck-01
     //
     final Actionable<BlockQuickItemCreationPrecheck> actionable =
-        __canQuickCreateItem(
+    __canQuickCreateItem(
       checkBusy: true,
       checkAllow: true,
     );
@@ -3315,10 +3311,10 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockQuickCreateMultiItemsActionAnnotation()
   Future<BlockQuickMultiItemsCreationResult>
-      executeQuickCreateMultiItemsAction({
+  executeQuickCreateMultiItemsAction({
     required BlockQuickCreateMultiItemsAction<ID, ITEM, ITEM_DETAIL,
-            FILTER_CRITERIA>
-        action,
+        FILTER_CRITERIA>
+    action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -3333,7 +3329,7 @@ abstract class Block<
     // @Same-Code-Precheck-01
     //
     Actionable<BlockMultiItemsCreationPrecheck> actionable =
-        __canCreateMultiItems(
+    __canCreateMultiItems(
       checkBusy: true,
       checkAllow: true,
     );
@@ -3395,7 +3391,7 @@ abstract class Block<
   @_BlockQuickUpdateItemActionAnnotation()
   Future<BlockQuickItemUpdateResult> executeQuickUpdateItemAction({
     required BlockQuickUpdateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
-        action,
+    action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
@@ -3408,7 +3404,7 @@ abstract class Block<
     );
     // @Same-Code-Precheck-01
     final Actionable<BlockQuickItemUpdatePrecheck> actionable =
-        __canQuickUpdateItem(
+    __canQuickUpdateItem(
       item: action.item,
       checkBusy: true,
       checkAllow: true,
@@ -3471,7 +3467,7 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockQuickChildBlockItemsActionAnnotation()
   Future<bool> executeQuickChildBlockItemsAction<
-      A extends BlockQuickChildBlockItemsAction<ITEM, ITEM_DETAIL>>({
+  A extends BlockQuickChildBlockItemsAction<ITEM, ITEM_DETAIL>>({
     required A action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -3527,7 +3523,7 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockRefreshAndSelectFirstItemAsCurrentAnnotation()
   Future<BlockItemCurrSelectionResult<ITEM>>
-      refreshAndSelectFirstItemAsCurrent({
+  refreshAndSelectFirstItemAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
@@ -3568,7 +3564,7 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockRefreshAndSelectPreviousItemAsCurrentAnnotation()
   Future<BlockItemCurrSelectionResult<ITEM>>
-      refreshAndSelectPreviousItemAsCurrent({
+  refreshAndSelectPreviousItemAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
@@ -3769,7 +3765,7 @@ abstract class Block<
     List<_ScalarOpt> scalarOpts = _internalListeners._getForceQueryScalarOpts();
     List<_BlockOpt> blockOpts = _internalListeners._getForceQueryBlockOpts();
     List<_FormModelOpt> formModelOpts =
-        _internalListeners._getForceQueryFormModelOpts();
+    _internalListeners._getForceQueryFormModelOpts();
 
     await shelf._queryAll(
       forceFilterModelOpt: null,
