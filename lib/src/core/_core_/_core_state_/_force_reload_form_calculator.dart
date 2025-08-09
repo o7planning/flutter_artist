@@ -32,18 +32,10 @@ _ForceReloadFormState _calculateFormState({
   formModel._loadTimeUIActive = formLoadTimeUIActive;
   //
   if (!forceReloadForm) {
-    final postQueryBehavior = thisXBlock.postQueryBehavior;
-    //
-    switch (postQueryBehavior) {
-      case PostQueryBehavior.clearCurrentItem:
-        // Never run.
-        break;
-      case PostQueryBehavior.createNewItem:
-        // Never run.
-        break;
-      case PostQueryBehavior.selectAnItemAsCurrentIfNeed:
+    switch (currentItemSelectionType) {
+      case CurrentItemSelectionType.selectAnItemAsCurrentIfNeed:
         DebugPrint.printDebugState(DebugCat.dataLoad,
-            "@~~~> ${getClassName(block)} ~~~~~> FRM 1: postQueryBehavior: ${postQueryBehavior.name}");
+            "@~~~> ${getClassName(block)} ~~~~~> FRM 1: currentItemSelectionType: ${currentItemSelectionType.name}");
         //
         // ITEM == ITEM_DETAIL.
         //
@@ -397,9 +389,9 @@ _ForceReloadFormState _calculateFormState({
             }
           }
         }
-      case PostQueryBehavior.selectAnItemAsCurrent:
+      case CurrentItemSelectionType.selectAnItemAsCurrent:
         DebugPrint.printDebugState(DebugCat.dataLoad,
-            "@~~~> ${getClassName(block)} ~~~~~> FRM 2: postQueryBehavior: ${postQueryBehavior.name}");
+            "@~~~> ${getClassName(block)} ~~~~~> FRM 2: currentItemSelectionType: ${currentItemSelectionType.name}");
         //
         // ITEM == ITEM_DETAIL.
         //
@@ -739,9 +731,9 @@ _ForceReloadFormState _calculateFormState({
             }
           }
         }
-      case PostQueryBehavior.selectAnItemAsCurrentAndLoadForm:
+      case CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm:
         DebugPrint.printDebugState(DebugCat.dataLoad,
-            "@~~~> ${getClassName(block)} ~~~~~> FRM 3: postQueryBehavior: ${postQueryBehavior.name}");
+            "@~~~> ${getClassName(block)} ~~~~~> FRM 3: currentItemSelectionType: ${currentItemSelectionType.name}");
         //
         // ITEM == ITEM_DETAIL.
         //
@@ -1125,6 +1117,8 @@ _ForceReloadFormState _calculateFormState({
             }
           }
         }
+      case CurrentItemSelectionType.refresh:
+        throw UnimplementedError();
     }
   }
   //
