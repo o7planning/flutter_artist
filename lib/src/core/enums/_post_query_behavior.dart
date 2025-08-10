@@ -1,5 +1,8 @@
 // TODO-XXX Change to PostQueryAction?
 enum PostQueryBehavior {
+  /// Do Nothing.
+  doNothing,
+
   /// Clear Current Item.
   clearCurrentItem,
 

@@ -928,7 +928,7 @@ abstract class Block<
     PostQueryBehavior postQueryBehavior = thisXBlock.postQueryBehavior;
     if (!thisXBlock.xShelf.naturalMode) {
       if (!queried) {
-        postQueryBehavior = PostQueryBehavior.selectAnItemAsCurrentIfNeed;
+        postQueryBehavior = PostQueryBehavior.doNothing;
       }
     }
     print(
@@ -961,6 +961,8 @@ abstract class Block<
       } else {
         final CurrentItemSelectionType currentItemSelectionType;
         switch (postQueryBehavior) {
+          case PostQueryBehavior.doNothing:
+            currentItemSelectionType = CurrentItemSelectionType.doNothing;
           case PostQueryBehavior.selectAnItemAsCurrentIfNeed:
             currentItemSelectionType =
                 CurrentItemSelectionType.selectAnItemAsCurrentIfNeed;

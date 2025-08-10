@@ -14,18 +14,18 @@ _ForceReloadFormState _calculateFormState({
   bool forceReloadForm = false;
 
   DebugPrint.printDebugState(DebugCat.dataLoad,
-      "@~~~> ${getClassName(block)} ~~~~~> FRM 0: currentItemSelectionType: ${currentItemSelectionType.name}");
+      "@~~~> ${getClassName(block)} ~~~~~> FRM #: currentItemSelectionType: ${currentItemSelectionType.name}");
   //
   if (thisXBlock.xFormModel!.forceTypeForForm == ForceType.force) {
     DebugPrint.printDebugState(DebugCat.dataLoad,
-        "@~~~> ${getClassName(block)} ~~~~~> FRM 0.1: forceTypeForForm: ${thisXBlock.xFormModel!.forceTypeForForm}");
+        "@~~~> ${getClassName(block)} ~~~~~> FRM #.1: forceTypeForForm: ${thisXBlock.xFormModel!.forceTypeForForm}");
     // Test Case: [43a].
     forceReloadForm = true;
   }
   // forceTypeForForm != force
   else {
     DebugPrint.printDebugState(DebugCat.dataLoad,
-        "@~~~> ${getClassName(block)} ~~~~~> FRM 0.2: forceTypeForForm: ${thisXBlock.xFormModel!.forceTypeForForm}");
+        "@~~~> ${getClassName(block)} ~~~~~> FRM #.2: forceTypeForForm: ${thisXBlock.xFormModel!.forceTypeForForm}");
   }
   //
   final bool formLoadTimeUIActive = formModel.ui.hasActiveUIComponent();
