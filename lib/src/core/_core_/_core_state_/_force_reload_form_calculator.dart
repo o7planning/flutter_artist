@@ -835,8 +835,9 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 2.1.2.1.1",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "13a",
                 );
+                // Test Cases: [13a] -
                 forceReloadForm = true;
               }
               // !formLoadTimeUIActive
