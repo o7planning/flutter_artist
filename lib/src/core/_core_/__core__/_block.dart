@@ -475,7 +475,7 @@ abstract class Block<
       childXBlock.block.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: childXBlock,
         qryDataState: DataState.pending,
-        frmDataState: DataState.pending,
+        frmDataState: DataState.none,
         errorInFilter: false,
       );
     }
@@ -2115,10 +2115,8 @@ abstract class Block<
         item: refreshedItem,
       );
       // Test Case [01c]. New Code:
+      // Test Case [02b] - __test_form_cat_product02b_newCat.
       if (isNew) {
-        // __clearAllChildrenBlocksToReady(
-        //   thisXBlock: thisXBlock,
-        // );
         __clearAllChildrenBlocksToPending(
           thisXBlock: thisXBlock,
         );
