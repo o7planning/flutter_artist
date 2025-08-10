@@ -562,9 +562,9 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 1.1.2.2.2",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "43a",
                 );
-                //
+                // Test Cases: [43a] - _test_false1_productScreen_refreshCategory_1
                 forceReloadForm = false;
               }
             }
@@ -885,8 +885,9 @@ _ForceReloadFormState _calculateFormState({
                     _addDebugForceReload(
                       debugCode: "FRM 2.1.2.2.1.2.1",
                       shelf: block.shelf,
-                      currentShelfCodes: "",
+                      currentShelfCodes: "43a",
                     );
+                    // Test Cases: [43a] - _test_false2_productScreen_refreshProduct_1
                     forceReloadForm = true;
                   }
                   // formModel.formDataState == ready.
@@ -897,9 +898,9 @@ _ForceReloadFormState _calculateFormState({
                     _addDebugForceReload(
                       debugCode: "FRM 2.1.2.2.1.2.2",
                       shelf: block.shelf,
-                      currentShelfCodes: "",
+                      currentShelfCodes: "43a",
                     );
-                    // Test Case: [43a].
+                    // Test Case: [43a] - _test_false2_productScreen_refreshProduct_1
                     forceReloadForm = false;
                   }
                 }
@@ -1218,9 +1219,9 @@ _ForceReloadFormState _calculateFormState({
                   _addDebugForceReload(
                     debugCode: "FRM 3.1.2.2.1.1",
                     shelf: block.shelf,
-                    currentShelfCodes: "",
+                    currentShelfCodes: "43a",
                   );
-                  // Test Case: [43a].
+                  // Test Case: [43a] -  _test_false3_productScreen_refreshProduct_1
                   forceReloadForm = true;
                 }
                 // !forceReloadItem

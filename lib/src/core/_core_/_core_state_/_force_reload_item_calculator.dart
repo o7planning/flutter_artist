@@ -259,7 +259,7 @@ _ForceReloadItemState _calculateBlockState({
               _addDebugForceReload(
                 debugCode: "ITM 0.2.2.1.2",
                 shelf: block.shelf,
-                currentShelfCodes: "43a",
+                currentShelfCodes: "44a",
               );
               // Test Cases: [44a] -  _test_false1_productScreen_refreshCategory_1
               forceReloadItem = false;
@@ -277,7 +277,7 @@ _ForceReloadItemState _calculateBlockState({
               _addDebugForceReload(
                 debugCode: "ITM 0.2.2.2.1",
                 shelf: block.shelf,
-                currentShelfCodes: "43a",
+                currentShelfCodes: "44a",
               );
               // Test Cases: [44a] - _test_false1_productScreen_refreshCategory_1
               forceReloadItem = false;
@@ -290,7 +290,7 @@ _ForceReloadItemState _calculateBlockState({
               _addDebugForceReload(
                 debugCode: "ITM 0.2.2.2.2",
                 shelf: block.shelf,
-                currentShelfCodes: "43a",
+                currentShelfCodes: "44a",
               );
               // Test Cases: [44a] - _test_false1_productScreen_refreshCategory_1
               forceReloadItem = false;
@@ -326,7 +326,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "13a, 42a",
               );
-              //
+              // Test Cases: [43a] -
               forceReloadItem = true;
             }
             // !hasXActiveUI
@@ -339,7 +339,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "13a, 36c, 41a",
               );
-              //
+              // Test Cases: [43a] -
               forceReloadItem = true;
             }
           }
@@ -357,7 +357,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "13a, 36c, 41a",
               );
-              //
+              // Test Cases: [43a] -
               forceReloadItem = true;
             }
             // !hasXActiveUI
@@ -424,7 +424,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "13a, 36b, 36c, 42a",
               );
-              //
+              // Test Cases: [43a] -
               forceReloadItem = false;
             }
             // !hasXActiveUI
@@ -435,9 +435,9 @@ _ForceReloadItemState _calculateBlockState({
               _addDebugForceReload(
                 debugCode: "ITM 1.1.2.2.2",
                 shelf: block.shelf,
-                currentShelfCodes: "",
+                currentShelfCodes: "43a",
               );
-              //
+              // Test Cases: [43a] - _test_false1_productScreen_refreshCategory_1
               forceReloadItem = false;
             }
           }
@@ -466,7 +466,7 @@ _ForceReloadItemState _calculateBlockState({
                 currentShelfCodes:
                     "11a, 11b, 29a, 36a, 36b, 36c, 37a, 38a, 38b, 39a, 39b, 40a, 40b, 41a",
               );
-              //
+              // Test Cases: [44a] -
               forceReloadItem = true;
             }
             // !hasXActiveUI
@@ -479,7 +479,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "11a, 39b, 40b",
               );
-              //
+              // Test Cases: [44a] -
               forceReloadItem = false;
             }
           }
@@ -497,7 +497,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "29a, 39a, 40a",
               );
-              //
+              // Test Cases: [44a] -
               forceReloadItem = true;
             }
             // !hasXActiveUI
@@ -533,7 +533,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "11a, 11b, 29a, 37a, 38b, 39b, 40a, 40b",
               );
-              //
+              // Test Cases: [44a] -
               forceReloadItem = true;
             }
             // !hasXActiveUI
@@ -565,7 +565,7 @@ _ForceReloadItemState _calculateBlockState({
                 currentShelfCodes:
                     "11a, 36a, 36b, 36c, 37a, 38a, 38b, 39b, 40a, 40b",
               );
-              //
+              // Test Cases: [44a] -
               forceReloadItem = false;
             }
             // !hasXActiveUI
@@ -578,7 +578,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "38b, 40b",
               );
-              //
+              // Test Cases: [44a] -
               forceReloadItem = false;
             }
           }
@@ -708,9 +708,9 @@ _ForceReloadItemState _calculateBlockState({
               _addDebugForceReload(
                 debugCode: "ITM 2.1.2.2.1",
                 shelf: block.shelf,
-                currentShelfCodes: "",
+                currentShelfCodes: "43a",
               );
-              //
+              // Test Cases: [43a] - _test_false2_productScreen_refreshProduct_1
               // Ready selected as current (No need to refresh):
               forceReloadItem = false;
             }
@@ -820,7 +820,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "40a",
               );
-              //
+              // Test Cases: [44a] -
               forceReloadItem = true;
             }
             // !hasXActiveUI
@@ -851,7 +851,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "40a, 40b",
               );
-              //
+              // Test Cases: [44a] -
               forceReloadItem = false;
             }
             // !hasXActiveUI
@@ -911,7 +911,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "36a, 41a",
               );
-              //
+              // Test Cases: [43a] -
               forceReloadItem = true;
             }
           }
@@ -929,7 +929,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "36a, 41a",
               );
-              //
+              // Test Cases: [43a] -
               forceReloadItem = true;
             }
             // !hasXActiveUI
@@ -994,9 +994,9 @@ _ForceReloadItemState _calculateBlockState({
               _addDebugForceReload(
                 debugCode: "ITM 3.1.2.2.1",
                 shelf: block.shelf,
-                currentShelfCodes: "",
+                currentShelfCodes: "43a",
               );
-              //
+              // Test Cases: [43a] - _test_false3_productScreen_refreshProduct_1
               forceReloadItem = true;
             }
             // !hasXActiveUI
@@ -1050,7 +1050,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "39b, 40b",
               );
-              //
+              // Test Cases: [44a] -
               forceReloadItem = true;
             }
           }
@@ -1068,7 +1068,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "39a",
               );
-              //
+              // Test Cases: [44a] -
               forceReloadItem = true;
             }
             // !hasXActiveUI
@@ -1104,7 +1104,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "40a",
               );
-              //
+              // Test Casese: [44a] -
               forceReloadItem = true;
             }
             // !hasXActiveUI
@@ -1135,6 +1135,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "40a, 40b",
               );
+              // Test Cases: [44a] -
               // Ready selected as current (No need to refresh):
               forceReloadItem = false;
             }
