@@ -122,7 +122,7 @@ _ForceReloadItemState _calculateBlockState({
                 shelf: block.shelf,
                 currentShelfCodes: "",
               );
-              // (43a) - _test_false1_categoryScreen_refreshCategory_3_prodREADY_curr0_form0
+              // (43a) -
               forceReloadItem = false;
             }
           }
@@ -404,9 +404,9 @@ _ForceReloadItemState _calculateBlockState({
               _addDebugForceReload(
                 debugCode: "ITM 1.1.2.1.2",
                 shelf: block.shelf,
-                currentShelfCodes: "43a",
+                currentShelfCodes: "",
               );
-              // (43a) - _test_false1_categoryScreen_refreshCategory_3_prodREADY_curr0_form0
+              // (43a) -
               forceReloadItem = false;
             }
           }

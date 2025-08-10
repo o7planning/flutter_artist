@@ -867,9 +867,9 @@ _ForceReloadFormState _calculateFormState({
                   _addDebugForceReload(
                     debugCode: "FRM 2.1.2.2.1.1",
                     shelf: block.shelf,
-                    currentShelfCodes: "43a",
+                    currentShelfCodes: "",
                   );
-                  // Test Case: [43a] - _test_false1_categoryScreen_refreshCategory_1_prodPENDING.
+                  // Test Case: [43a] -
                   forceReloadForm = true;
                 }
                 // !forceReloadItem
