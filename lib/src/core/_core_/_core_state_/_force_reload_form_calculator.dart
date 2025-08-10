@@ -139,9 +139,9 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 0.1.2.1.2",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "43a",
                 );
-                //
+                // Test Cases: [43a] - _test_false1_categoryScreen_refreshCategory_3_prodREADY_curr0_form0
                 forceReloadForm = false;
               }
             }
@@ -191,9 +191,9 @@ _ForceReloadFormState _calculateFormState({
                     _addDebugForceReload(
                       debugCode: "FRM 0.1.2.2.1.2.2",
                       shelf: block.shelf,
-                      currentShelfCodes: "",
+                      currentShelfCodes: "43a",
                     );
-                    //
+                    // Test Cases: [43a] - _test_false1_categoryScreen_refreshCategory_2_prodREADY_curr1_form0
                     forceReloadForm = false;
                   }
                 }
@@ -206,9 +206,9 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 0.1.2.2.2",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "43a",
                 );
-                //
+                // Test Cases: [43a] - _test_false1_categoryScreen_refreshCategory_2_prodREADY_curr1_form0
                 forceReloadForm = false;
               }
             }
@@ -314,9 +314,9 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 0.2.2.1.2",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "43a",
                 );
-                //
+                // Test Cases: [44a] - _test_false1_productScreen_refreshCategory_1
                 forceReloadForm = false;
               }
             }
@@ -366,9 +366,9 @@ _ForceReloadFormState _calculateFormState({
                     _addDebugForceReload(
                       debugCode: "FRM 0.2.2.2.1.2.2",
                       shelf: block.shelf,
-                      currentShelfCodes: "",
+                      currentShelfCodes: "43a",
                     );
-                    //
+                    // Test Cases: [44a] -  _test_false1_productScreen_refreshCategory_1
                     forceReloadForm = false;
                   }
                 }
@@ -381,8 +381,9 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 0.2.2.2.2",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "43a",
                 );
+                // Test Cases: [44a] - _test_false1_productScreen_refreshCategory_1
                 forceReloadForm = false;
               }
             }
@@ -635,9 +636,9 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 1.2.1.2.2",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "43a",
                 );
-                //
+                // Test Cases: [43a] -  _test_false1_productScreen_refreshCategory_1
                 forceReloadForm = false;
               }
             }
@@ -867,9 +868,9 @@ _ForceReloadFormState _calculateFormState({
                   _addDebugForceReload(
                     debugCode: "FRM 2.1.2.2.1.1",
                     shelf: block.shelf,
-                    currentShelfCodes: "",
+                    currentShelfCodes: "43a",
                   );
-                  // Test Case: [43a] -
+                  // Test Case: [43a] - _test_false1_categoryScreen_refreshCategory_1_prodPENDING
                   forceReloadForm = true;
                 }
                 // !forceReloadItem
@@ -1038,8 +1039,9 @@ _ForceReloadFormState _calculateFormState({
                   _addDebugForceReload(
                     debugCode: "FRM 2.2.2.2.1.1",
                     shelf: block.shelf,
-                    currentShelfCodes: "",
+                    currentShelfCodes: "43a",
                   );
+                  // Test Cases: [44a] -  _test_false1_productScreen_refreshCategory_1
                   forceReloadForm = true;
                 }
                 // !forceReloadItem
@@ -1350,9 +1352,9 @@ _ForceReloadFormState _calculateFormState({
                 _addDebugForceReload(
                   debugCode: "FRM 3.2.1.2.2",
                   shelf: block.shelf,
-                  currentShelfCodes: "",
+                  currentShelfCodes: "43a",
                 );
-                // [39b]
+                // Test Cases: [44a] - _test_false1_productScreen_refreshCategory_1
                 forceReloadForm = true;
               }
             }

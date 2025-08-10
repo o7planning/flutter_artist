@@ -120,9 +120,9 @@ _ForceReloadItemState _calculateBlockState({
               _addDebugForceReload(
                 debugCode: "ITM 0.1.2.1.2",
                 shelf: block.shelf,
-                currentShelfCodes: "",
+                currentShelfCodes: "43a",
               );
-              // (43a) -
+              // Test Cases: [43a] -  _test_false1_categoryScreen_refreshCategory_3_prodREADY_curr0_form0
               forceReloadItem = false;
             }
           }
@@ -138,9 +138,9 @@ _ForceReloadItemState _calculateBlockState({
               _addDebugForceReload(
                 debugCode: "ITM 0.1.2.2.1",
                 shelf: block.shelf,
-                currentShelfCodes: "",
+                currentShelfCodes: "43a",
               );
-              //
+              // Test Cases: [43a] - _test_false1_categoryScreen_refreshCategory_2_prodREADY_curr1_form0
               forceReloadItem = false;
             }
             // !hasXActiveUI
@@ -151,9 +151,9 @@ _ForceReloadItemState _calculateBlockState({
               _addDebugForceReload(
                 debugCode: "ITM 0.1.2.2.2",
                 shelf: block.shelf,
-                currentShelfCodes: "",
+                currentShelfCodes: "43a",
               );
-              //
+              // Test Cases: [43a] - _test_false1_categoryScreen_refreshCategory_2_prodREADY_curr1_form0
               forceReloadItem = false;
             }
           }
@@ -259,9 +259,9 @@ _ForceReloadItemState _calculateBlockState({
               _addDebugForceReload(
                 debugCode: "ITM 0.2.2.1.2",
                 shelf: block.shelf,
-                currentShelfCodes: "",
+                currentShelfCodes: "43a",
               );
-              //
+              // Test Cases: [44a] -  _test_false1_productScreen_refreshCategory_1
               forceReloadItem = false;
             }
           }
@@ -277,9 +277,9 @@ _ForceReloadItemState _calculateBlockState({
               _addDebugForceReload(
                 debugCode: "ITM 0.2.2.2.1",
                 shelf: block.shelf,
-                currentShelfCodes: "",
+                currentShelfCodes: "43a",
               );
-              //
+              // Test Cases: [44a] - _test_false1_productScreen_refreshCategory_1
               forceReloadItem = false;
             }
             // !hasXActiveUI
@@ -290,9 +290,9 @@ _ForceReloadItemState _calculateBlockState({
               _addDebugForceReload(
                 debugCode: "ITM 0.2.2.2.2",
                 shelf: block.shelf,
-                currentShelfCodes: "",
+                currentShelfCodes: "43a",
               );
-              //
+              // Test Cases: [44a] - _test_false1_productScreen_refreshCategory_1
               forceReloadItem = false;
             }
           }
