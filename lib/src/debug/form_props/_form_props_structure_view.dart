@@ -157,7 +157,8 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
             isError = data.formDataState == DataState.error;
           } else if (data is SimpleProp) {
             title = data.propName;
-            tooltip = "SimpleProp<${data.dataType.toString()}> ${data.propName}";
+            tooltip =
+                "SimpleProp<${data.dataType.toString()}> ${data.propName}";
             prefixIconData = FaIconConstants.simplePropOrCriterionIconData;
             //
             isMultiOpt = false;
@@ -166,7 +167,8 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
             isError = data.formErrorInfo != null;
           } else if (data is MultiOptProp) {
             title = data.propName;
-            tooltip = "MultiOptProp<${data.dataType.toString()}> ${data.propName}";
+            tooltip =
+                "MultiOptProp<${data.dataType.toString()}> ${data.propName}";
             prefixIconData = FaIconConstants.optPropOrCriterionIconData;
             //
             isMultiOpt = true;

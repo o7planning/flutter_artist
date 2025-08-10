@@ -113,6 +113,7 @@ abstract class Block<
 
   // TODO: LOGIC-01
   final bool _alwayTrySelectAnItemAsCurrent = true;
+
   bool get alwayTrySelectAnItemAsCurrent => _alwayTrySelectAnItemAsCurrent;
 
   ///

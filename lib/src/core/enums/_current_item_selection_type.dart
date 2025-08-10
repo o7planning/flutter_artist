@@ -1,4 +1,5 @@
 enum CurrentItemSelectionType {
+  doNothing,
   selectAnItemAsCurrentIfNeed, // DEFAULT.
   selectAnItemAsCurrent,
   selectAnItemAsCurrentAndLoadForm,

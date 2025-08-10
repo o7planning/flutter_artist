@@ -34,6 +34,8 @@ class BlockItemCurrSelectionResult<ITEM>
       return false;
     }
     switch (currentItemSelectionType) {
+      case CurrentItemSelectionType.doNothing:
+        return _successfullyDoNothing();
       case CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm:
         return _successfullySelectedToEdit();
       case CurrentItemSelectionType.selectAnItemAsCurrent:
@@ -55,6 +57,10 @@ class BlockItemCurrSelectionResult<ITEM>
 
   ITEM? get lastCandidateItem {
     return _candidateItems.lastOrNull;
+  }
+
+  bool _successfullyDoNothing() {
+    return true;
   }
 
   bool _successfullySelectedToEdit() {

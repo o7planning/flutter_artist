@@ -131,6 +131,9 @@ void _addDebugForceReload({
   required String currentShelfCodes, // "20a, 30b"
   required Shelf shelf,
 }) {
+  if (currentShelfCodes.isEmpty) {
+    __throwForceReloadError(debugCode);
+  }
   String clsName = getClassName(shelf);
   if (!clsName.endsWith("Shelf")) {
     return;

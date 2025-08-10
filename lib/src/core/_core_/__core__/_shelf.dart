@@ -476,6 +476,9 @@ abstract class Shelf extends _Core {
     }
 
     // New Code:
+    await Future.delayed(Duration(microseconds: 200));
+
+    // New Code:
     // SchedulerBinding binding = SchedulerBinding.instance;
     // bool hasScheduledFrame = binding.hasScheduledFrame;
     // if (hasScheduledFrame) {
