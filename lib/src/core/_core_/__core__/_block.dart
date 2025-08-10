@@ -1278,6 +1278,12 @@ abstract class Block<
         await __removeItemFromList(
           removeItem: candidateCurrentItem,
         );
+        // Test Case: [36b] - _testEdit_withoutCoordinator_itemNotFoundON
+        __setCurrentItem(
+          item: null,
+          itemDetail: null,
+        );
+        formModel?._clearDataWithDataState(formDataState: DataState.none);
         // Test Case: [46a].
         __clearAllChildrenBlocksToNone(thisXBlock: thisXBlock);
         //
