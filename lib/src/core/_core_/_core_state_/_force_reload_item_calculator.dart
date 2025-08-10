@@ -43,7 +43,7 @@ _ForceReloadItemState _calculateBlockState({
                 currentShelfCodes: "",
               );
               //
-              forceReloadItem = true;
+              forceReloadItem = false; // (**??**)
             }
             // !hasXActiveUI
             else {
@@ -56,7 +56,7 @@ _ForceReloadItemState _calculateBlockState({
                 currentShelfCodes: "",
               );
               //
-              forceReloadItem = true;
+              forceReloadItem = false; // (**??**)
             }
           }
           // !currentItemChanged
@@ -74,7 +74,7 @@ _ForceReloadItemState _calculateBlockState({
                 currentShelfCodes: "",
               );
               //
-              forceReloadItem = true;
+              forceReloadItem = false; // (**??**)
             }
             // !hasXActiveUI
             else {
@@ -87,7 +87,7 @@ _ForceReloadItemState _calculateBlockState({
                 currentShelfCodes: "",
               );
               //
-              forceReloadItem = true;
+              forceReloadItem = false; // (**??**)
             }
           }
         }
@@ -110,7 +110,7 @@ _ForceReloadItemState _calculateBlockState({
                 currentShelfCodes: "",
               );
               //
-              forceReloadItem = true;
+              forceReloadItem = false; // (**??**)
             }
             // !hasXActiveUI
             else {
@@ -182,7 +182,7 @@ _ForceReloadItemState _calculateBlockState({
                 currentShelfCodes: "",
               );
               //
-              forceReloadItem = true;
+              forceReloadItem = false; // (**??**)
             }
             // !hasXActiveUI
             else {
@@ -213,7 +213,7 @@ _ForceReloadItemState _calculateBlockState({
                 currentShelfCodes: "",
               );
               //
-              forceReloadItem = true;
+              forceReloadItem = false; // (**??**)
             }
             // !hasXActiveUI
             else {
@@ -226,7 +226,7 @@ _ForceReloadItemState _calculateBlockState({
                 currentShelfCodes: "",
               );
               //
-              forceReloadItem = true;
+              forceReloadItem = false; // (**??**)
             }
           }
         }
@@ -249,7 +249,7 @@ _ForceReloadItemState _calculateBlockState({
                 currentShelfCodes: "",
               );
               //
-              forceReloadItem = true;
+              forceReloadItem = false; // (**??**)
             }
             // !hasXActiveUI
             else {

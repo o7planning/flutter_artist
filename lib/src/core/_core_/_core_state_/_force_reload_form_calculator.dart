@@ -36,7 +36,7 @@ _ForceReloadFormState _calculateFormState({
       /* ---------------------------------------------------------------------*/
       case CurrentItemSelectionType.doNothing:
         DebugPrint.printDebugState(DebugCat.dataLoad,
-            "@~~~> ${getClassName(block)} ~~~~~> FRM 1: currentItemSelectionType: ${currentItemSelectionType.name}");
+            "@~~~> ${getClassName(block)} ~~~~~> FRM 0: currentItemSelectionType: ${currentItemSelectionType.name}");
         //
         // ITEM == ITEM_DETAIL.
         //
@@ -62,7 +62,7 @@ _ForceReloadFormState _calculateFormState({
                   currentShelfCodes: "",
                 );
                 //
-                forceReloadForm = true;
+                forceReloadForm = false; // (**??**)
               }
               // !formLoadTimeUIActive
               else {
@@ -93,7 +93,7 @@ _ForceReloadFormState _calculateFormState({
                   currentShelfCodes: "",
                 );
                 //
-                forceReloadForm = true;
+                forceReloadForm = false; // (**??**)
               }
               // !formLoadTimeUIActive
               else {
@@ -129,7 +129,7 @@ _ForceReloadFormState _calculateFormState({
                   currentShelfCodes: "",
                 );
                 //
-                forceReloadForm = true;
+                forceReloadForm = false; // (**??**)
               }
               // !formLoadTimeUIActive.
               else {
@@ -164,7 +164,7 @@ _ForceReloadFormState _calculateFormState({
                     currentShelfCodes: "",
                   );
                   //
-                  forceReloadForm = true;
+                  forceReloadForm = false; // (**??**)
                 }
                 // !forceLoadItem
                 else {
@@ -181,7 +181,7 @@ _ForceReloadFormState _calculateFormState({
                       currentShelfCodes: "",
                     );
                     //
-                    forceReloadForm = true;
+                    forceReloadForm = false; // (**??**)
                   }
                   // formModel.formDataState == DataState.ready
                   else {
@@ -237,7 +237,7 @@ _ForceReloadFormState _calculateFormState({
                   currentShelfCodes: "",
                 );
                 //
-                forceReloadForm = true;
+                forceReloadForm = false; // (**??**)
               }
               // !formLoadTimeUIActive
               else {
@@ -268,7 +268,7 @@ _ForceReloadFormState _calculateFormState({
                   currentShelfCodes: "",
                 );
                 //
-                forceReloadForm = true;
+                forceReloadForm = false; // (**??**)
               }
               // !formLoadTimeUIActive
               else {
@@ -304,7 +304,7 @@ _ForceReloadFormState _calculateFormState({
                   currentShelfCodes: "",
                 );
                 //
-                forceReloadForm = true;
+                forceReloadForm = false; // (**??**)
               }
               // !formLoadTimeUIActive
               else {
@@ -339,7 +339,7 @@ _ForceReloadFormState _calculateFormState({
                     currentShelfCodes: "",
                   );
                   //
-                  forceReloadForm = true;
+                  forceReloadForm = false; // (**??**)
                 }
                 // !forceReloadItem
                 else {
@@ -356,7 +356,7 @@ _ForceReloadFormState _calculateFormState({
                       currentShelfCodes: "",
                     );
                     //
-                    forceReloadForm = true;
+                    forceReloadForm = false; // (**??**)
                   }
                   // formModel.formDataState == ready.
                   else {
