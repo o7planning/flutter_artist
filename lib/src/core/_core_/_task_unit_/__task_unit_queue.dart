@@ -40,7 +40,7 @@ class _TaskUnitQueue {
   }
 
   void addTaskUnit(_TaskUnit taskUnit) {
-    final int? executingXShelfId = FlutterArtist._executor.executingXShelfId;
+    final int? executingXShelfId = FlutterArtist.executor.executingXShelfId;
     //
     if (executingXShelfId != null) {
       if (taskUnit.xShelfId > executingXShelfId) {

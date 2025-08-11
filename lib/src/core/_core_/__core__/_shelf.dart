@@ -605,7 +605,7 @@ abstract class Shelf extends _Core {
     _ShelfQueryTaskUnit taskUnit = _ShelfQueryTaskUnit(xShelf: xShelf);
     FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
     //
-    await FlutterArtist._executor._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeTaskUnitQueue();
     return xShelf;
   }
 
@@ -659,6 +659,34 @@ abstract class Shelf extends _Core {
     // }
     // (NEW CODE: REMOVE this code:)
     // await FlutterArtist.executor._executeTaskUnitQueue();
+  }
+
+  // ***************************************************************************
+
+  @_TaskUnitMethodAnnotation()
+  @_ShelfInternalReactAnnotation()
+  Future<void> _unitInternalReact({
+    required ShelfInternalListeners shelfInternalListeners,
+  }) async {
+    List<_ScalarOpt> scalarOpts =
+        shelfInternalListeners._getForceQueryScalarOpts();
+    List<_BlockOpt> blockOpts =
+        shelfInternalListeners._getForceQueryBlockOpts();
+    List<_FormModelOpt> formModelOpts =
+        shelfInternalListeners._getForceQueryFormModelOpts();
+
+    _XShelf xShelf = _XShelf(
+      naturalMode: false,
+      shelf: this,
+      forceFilterModelOpt: null,
+      forceQueryScalarOpts: scalarOpts,
+      forceQueryBlockOpts: blockOpts,
+      forceQueryFormModelOpts: formModelOpts,
+    );
+
+    await _unitQueryShelf(
+      xShelf: xShelf,
+    );
   }
 
   // ***************************************************************************

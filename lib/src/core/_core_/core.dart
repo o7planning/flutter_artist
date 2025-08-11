@@ -299,6 +299,8 @@ part '_task_result_/_scalar_quick_action_result.dart';
 
 part '_task_unit_/__resulted_task_unit.dart';
 
+part '_task_unit_/_shelf_internal_react_task_unit.dart';
+
 part '_task_unit_/_shelf_query_task_unit.dart';
 
 part '_task_unit_/__task_unit.dart';
@@ -544,6 +546,10 @@ class _BlockQueryMorePageAnnotation {
 
 class _ShelfQueryAnnotation {
   const _ShelfQueryAnnotation();
+}
+
+class _ShelfInternalReactAnnotation {
+  const _ShelfInternalReactAnnotation();
 }
 
 class _BlockQueryAnnotation {

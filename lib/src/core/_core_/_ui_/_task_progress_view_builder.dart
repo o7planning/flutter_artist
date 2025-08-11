@@ -70,7 +70,7 @@ class _TaskProgressBuilderState
 
   @override
   void addWidgetState({required bool isShowing}) {
-    FlutterArtist._executor._addTaskProgressViewWidgetState(
+    FlutterArtist.executor._addTaskProgressViewWidgetState(
       widgetState: this,
       isShowing: isShowing,
     );
@@ -78,7 +78,7 @@ class _TaskProgressBuilderState
 
   @override
   void removeWidgetState() {
-    FlutterArtist._executor._removeTaskProgressViewWidgetState(
+    FlutterArtist.executor._removeTaskProgressViewWidgetState(
       widgetState: this,
     );
   }

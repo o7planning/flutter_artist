@@ -9,7 +9,7 @@ class _FlutterArtist {
 
   final _Storage storage = _Storage();
 
-  final _Executor _executor = _Executor();
+  final _Executor executor = _Executor();
 
   final _BackgroundExecutor backgroundExecutor = _BackgroundExecutor();
 

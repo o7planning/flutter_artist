@@ -69,7 +69,7 @@ class _FilterViewBuilderState
 
   @_FilterViewChangeAnnotation()
   Future<void> _onChanged() async {
-    if (FlutterArtist._executor.executingXShelfId != null) {
+    if (FlutterArtist.executor.executingXShelfId != null) {
       return;
     }
     //

@@ -38,7 +38,8 @@ class _Executor {
         final Map<String, Shelf> shelfMap = {};
         try {
           while (FlutterArtist._taskUnitQueue.hasNext()) {
-            _TaskUnit taskUnit = FlutterArtist._taskUnitQueue.getNextTaskUnit()!;
+            _TaskUnit taskUnit =
+                FlutterArtist._taskUnitQueue.getNextTaskUnit()!;
             //
             await __executeTaskUnit(taskUnit: taskUnit, shelfMap: shelfMap);
           }
@@ -95,6 +96,12 @@ class _Executor {
     if (taskUnit is _ShelfQueryTaskUnit) {
       await taskUnit.xShelf.shelf._unitQueryShelf(
         xShelf: taskUnit.xShelf,
+      );
+    }
+    //
+    else if (taskUnit is _ShelfInternalReactTaskUnit) {
+      await taskUnit.shelf._unitInternalReact(
+        shelfInternalListeners: taskUnit.shelfInternalListeners,
       );
     }
     //

@@ -512,7 +512,7 @@ abstract class Scalar<
   Actionable<ScalarQuickActionPrecheck> __canQuickAction({
     required bool checkBusy,
   }) {
-    if (checkBusy && FlutterArtist._executor.isBusy) {
+    if (checkBusy && FlutterArtist.executor.isBusy) {
       return Actionable<ScalarQuickActionPrecheck>.no(
         errCode: ScalarQuickActionPrecheck.busy,
       );
@@ -626,7 +626,7 @@ abstract class Scalar<
     //
     FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
     //
-    await FlutterArtist._executor._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeTaskUnitQueue();
     return taskUnit.taskResult;
   }
 
@@ -701,7 +701,7 @@ abstract class Scalar<
     //
     FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
     //
-    await FlutterArtist._executor._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeTaskUnitQueue();
     return true;
   }
 

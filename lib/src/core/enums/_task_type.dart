@@ -1,5 +1,6 @@
 enum TaskType {
   shelfQuery,
+  shelfInternalReact,
   //
   blockClearCurrentItem,
   blockDeleteItem,
