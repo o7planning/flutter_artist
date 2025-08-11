@@ -823,7 +823,7 @@ abstract class FilterModel<
       },
       navigate: null,
     );
-    _XShelf xShelf = await shelf._queryAll(
+    _XShelf xShelf = await shelf._queryShelf(
       forceFilterModelOpt: _FilterModelOpt(
         filterModel: this,
         filterInput: filterInput,

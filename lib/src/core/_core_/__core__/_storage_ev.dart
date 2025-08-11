@@ -498,7 +498,7 @@ class _StorageEventHandler {
       Shelf shelf = storage.findShelfByName(shelfName)!;
       _ScalarAndBlockList sbList = queryMap[shelfName]!;
       //
-      await shelf._queryAll(
+      await shelf._queryShelf(
         forceFilterModelOpt: null,
         forceQueryScalarOpts: sbList.queryScalars
             .map(

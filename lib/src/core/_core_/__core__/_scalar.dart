@@ -725,7 +725,7 @@ abstract class Scalar<
       parameters: {"filterInput": filterInput},
     );
     //
-    _XShelf xShelf = await shelf._queryAll(
+    _XShelf xShelf = await shelf._queryShelf(
       forceFilterModelOpt: _FilterModelOpt(
         filterModel: _registeredOrDefaultFilterModel,
         filterInput: filterInput,

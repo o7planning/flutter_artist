@@ -514,6 +514,10 @@ class _MayThrowFormTempErrorAnnotation {
   const _MayThrowFormTempErrorAnnotation();
 }
 
+class _BlockShelfQueryAnnotation {
+  const _BlockShelfQueryAnnotation();
+}
+
 class _BlockPrepareFormToCreateItemAnnotation {
   const _BlockPrepareFormToCreateItemAnnotation();
 }

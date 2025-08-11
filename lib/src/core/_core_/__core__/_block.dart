@@ -2762,7 +2762,7 @@ abstract class Block<
       },
     );
     //
-    _XShelf xShelf = await shelf._queryAll(
+    _XShelf xShelf = await shelf._queryShelf(
       forceFilterModelOpt: _FilterModelOpt(
         filterModel: _registeredOrDefaultFilterModel,
         filterInput: filterInput,
@@ -2870,7 +2870,7 @@ abstract class Block<
       },
     );
     //
-    _XShelf xShelf = await shelf._queryAll(
+    _XShelf xShelf = await shelf._queryShelf(
       forceFilterModelOpt: _FilterModelOpt(
         filterModel: _registeredOrDefaultFilterModel,
         filterInput: filterInput,
@@ -2920,7 +2920,7 @@ abstract class Block<
       parameters: {},
     );
     //
-    _XShelf xShelf = await shelf._queryAll(
+    _XShelf xShelf = await shelf._queryShelf(
       forceFilterModelOpt: _FilterModelOpt(
         filterModel: this._registeredOrDefaultFilterModel,
         filterInput: filterInput,
@@ -3776,7 +3776,7 @@ abstract class Block<
     List<_FormModelOpt> formModelOpts =
         _internalListeners._getForceQueryFormModelOpts();
 
-    await shelf._queryAll(
+    await shelf._queryShelf(
       forceFilterModelOpt: null,
       forceQueryScalarOpts: scalarOpts,
       forceQueryBlockOpts: blockOpts,
@@ -3823,7 +3823,7 @@ abstract class Block<
         }
     }
     //
-    _XShelf xShelf = await shelf._queryAll(
+    _XShelf xShelf = await shelf._queryShelf(
       forceFilterModelOpt: _FilterModelOpt(
         filterModel: _registeredOrDefaultFilterModel,
         filterInput: filterInput,

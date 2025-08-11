@@ -569,7 +569,7 @@ abstract class Shelf extends _Core {
       //
       // TODO: Handle Error:
       //
-      await _queryAll(
+      await _queryShelf(
         naturalMode: true,
         forceFilterModelOpt: null,
         forceQueryScalarOpts: scalarOpts,
@@ -579,6 +579,86 @@ abstract class Shelf extends _Core {
     } finally {
       __lazyLoadLocked = false;
     }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_ImportantMethodAnnotation()
+  @_BlockShelfQueryAnnotation()
+  Future<_XShelf> _queryShelf({
+    bool naturalMode = false,
+    required _FilterModelOpt? forceFilterModelOpt,
+    required List<_ScalarOpt> forceQueryScalarOpts,
+    required List<_BlockOpt> forceQueryBlockOpts,
+    required List<_FormModelOpt> forceQueryFormModelOpts,
+  }) async {
+    _XShelf xShelf = _XShelf(
+      naturalMode: naturalMode,
+      shelf: this,
+      forceFilterModelOpt: forceFilterModelOpt,
+      forceQueryScalarOpts: forceQueryScalarOpts,
+      forceQueryBlockOpts: forceQueryBlockOpts,
+      forceQueryFormModelOpts: forceQueryFormModelOpts,
+    );
+    //
+    _ShelfQueryTaskUnit taskUnit = _ShelfQueryTaskUnit(xShelf: xShelf);
+    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    //
+    await FlutterArtist.executor._executeTaskUnitQueue();
+    return xShelf;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_TaskUnitMethodAnnotation()
+  @_BlockShelfQueryAnnotation()
+  Future<void> _unitQueryShelf({
+    required _XShelf xShelf,
+  }) async {
+    xShelf.printMe();
+    //
+    for (_XScalar xScalar in xShelf.allXScalars) {
+      if (!xScalar.needQuery) {
+        continue;
+      }
+      //
+      // Add to Queue:
+      //
+      FlutterArtist.taskUnitQueue.addTaskUnit(
+        _ScalarQueryTaskUnit(
+          xScalar: xScalar,
+        ),
+      );
+    }
+    //
+    for (_XBlock xBlock in xShelf.allRootXBlocks) {
+      //
+      // Add to Queue:
+      //
+      FlutterArtist.taskUnitQueue.addTaskUnit(
+        _BlockQueryTaskUnit(
+          xBlock: xBlock,
+        ),
+      );
+    }
+    //
+    // for (_XFormModel xFormModel in xShelf.allXFormModels) {
+    //   if (!xFormModel.forceForm) {
+    //     continue;
+    //   }
+    //   //
+    //   // Add to Queue:
+    //   //
+    //   FlutterArtist.taskUnitQueue.addTaskUnit(
+    //     _FormModelLoadFormTaskUnit(
+    //       xFormModel: xFormModel,
+    //     ),
+    //   );
+    // }
+    // (NEW CODE: REMOVE this code:)
+    // await FlutterArtist.executor._executeTaskUnitQueue();
   }
 
   // ***************************************************************************
@@ -645,79 +725,6 @@ abstract class Shelf extends _Core {
     __findLazyScalars(founds);
     __findXVisibleLazyBlocksCascade(_rootBlocks, founds);
     return founds;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Future<_XShelf> _queryAll({
-    bool naturalMode = false,
-    required _FilterModelOpt? forceFilterModelOpt,
-    required List<_ScalarOpt> forceQueryScalarOpts,
-    required List<_BlockOpt> forceQueryBlockOpts,
-    required List<_FormModelOpt> forceQueryFormModelOpts,
-  }) async {
-    _XShelf xShelf = _XShelf(
-      naturalMode: naturalMode,
-      shelf: this,
-      forceFilterModelOpt: forceFilterModelOpt,
-      forceQueryScalarOpts: forceQueryScalarOpts,
-      forceQueryBlockOpts: forceQueryBlockOpts,
-      forceQueryFormModelOpts: forceQueryFormModelOpts,
-    );
-    //
-    await _executeQueryXShelf(xShelf: xShelf);
-    return xShelf;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Future<void> _executeQueryXShelf({
-    required _XShelf xShelf,
-  }) async {
-    xShelf.printMe();
-    //
-    for (_XScalar xScalar in xShelf.allXScalars) {
-      if (!xScalar.needQuery) {
-        continue;
-      }
-      //
-      // Add to Queue:
-      //
-      FlutterArtist.taskUnitQueue.addTaskUnit(
-        _ScalarQueryTaskUnit(
-          xScalar: xScalar,
-        ),
-      );
-    }
-    //
-    for (_XBlock xBlock in xShelf.allRootXBlocks) {
-      //
-      // Add to Queue:
-      //
-      FlutterArtist.taskUnitQueue.addTaskUnit(
-        _BlockQueryTaskUnit(
-          xBlock: xBlock,
-        ),
-      );
-    }
-    //
-    // for (_XFormModel xFormModel in xShelf.allXFormModels) {
-    //   if (!xFormModel.forceForm) {
-    //     continue;
-    //   }
-    //   //
-    //   // Add to Queue:
-    //   //
-    //   FlutterArtist.taskUnitQueue.addTaskUnit(
-    //     _FormModelLoadFormTaskUnit(
-    //       xFormModel: xFormModel,
-    //     ),
-    //   );
-    // }
-    //
-    await FlutterArtist.executor._executeTaskUnitQueue();
   }
 
   // ***************************************************************************
