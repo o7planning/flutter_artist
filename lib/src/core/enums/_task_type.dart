@@ -1,4 +1,6 @@
 enum TaskType {
+  shelfQuery,
+  //
   blockClearCurrentItem,
   blockDeleteItem,
   blockDeleteItems,
