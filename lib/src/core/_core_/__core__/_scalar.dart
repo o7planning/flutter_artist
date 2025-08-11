@@ -329,7 +329,7 @@ abstract class Scalar<
         var taskUnit = _ScalarQueryTaskUnit(
           xScalar: thisXScalar,
         );
-        FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+        FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
     }
     return true;
   }
@@ -512,7 +512,7 @@ abstract class Scalar<
   Actionable<ScalarQuickActionPrecheck> __canQuickAction({
     required bool checkBusy,
   }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
+    if (checkBusy && FlutterArtist._executor.isBusy) {
       return Actionable<ScalarQuickActionPrecheck>.no(
         errCode: ScalarQuickActionPrecheck.busy,
       );
@@ -624,9 +624,9 @@ abstract class Scalar<
       action: action,
     );
     //
-    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
     //
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist._executor._executeTaskUnitQueue();
     return taskUnit.taskResult;
   }
 
@@ -699,9 +699,9 @@ abstract class Scalar<
       afterQuickAction: afterQuickAction,
     );
     //
-    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
     //
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist._executor._executeTaskUnitQueue();
     return true;
   }
 

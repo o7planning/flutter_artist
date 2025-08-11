@@ -20,7 +20,7 @@ class _Executor {
 
   bool get isBusy {
     return __executingXShelfId != null &&
-        FlutterArtist.taskUnitQueue.isNotEmpty;
+        FlutterArtist._taskUnitQueue.isNotEmpty;
   }
 
   bool get isFree => !isBusy;
@@ -37,8 +37,8 @@ class _Executor {
       asyncFunction: () async {
         final Map<String, Shelf> shelfMap = {};
         try {
-          while (FlutterArtist.taskUnitQueue.hasNext()) {
-            _TaskUnit taskUnit = FlutterArtist.taskUnitQueue.getNextTaskUnit()!;
+          while (FlutterArtist._taskUnitQueue.hasNext()) {
+            _TaskUnit taskUnit = FlutterArtist._taskUnitQueue.getNextTaskUnit()!;
             //
             await __executeTaskUnit(taskUnit: taskUnit, shelfMap: shelfMap);
           }
@@ -52,7 +52,7 @@ class _Executor {
         }
         // May be AppError (FatalException).
         catch (e, stackTrace) {
-          FlutterArtist.taskUnitQueue.clear();
+          FlutterArtist._taskUnitQueue.clear();
           rethrow;
         } finally {
           for (Shelf shelf in shelfMap.values) {

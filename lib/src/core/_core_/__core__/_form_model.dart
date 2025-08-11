@@ -1470,8 +1470,8 @@ abstract class FormModel<
     _XFormModel xFormModel = xBlock.xFormModel!;
     _FormViewChangeTaskUnit taskUnit =
         _FormViewChangeTaskUnit(xFormModel: xFormModel);
-    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
-    await FlutterArtist.executor._executeTaskUnitQueue(showOverlay: false);
+    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
+    await FlutterArtist._executor._executeTaskUnitQueue(showOverlay: false);
   }
 
   // ***************************************************************************
@@ -1487,7 +1487,7 @@ abstract class FormModel<
   Actionable<EnterFormFieldsPrecheck> __canEnterFormFields({
     required bool checkBusy,
   }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
+    if (checkBusy && FlutterArtist._executor.isBusy) {
       return Actionable<EnterFormFieldsPrecheck>.no(
         errCode: EnterFormFieldsPrecheck.busy,
       );
@@ -1566,9 +1566,9 @@ abstract class FormModel<
       extraFormInput: extraFormInput,
     );
     //
-    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
     //
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist._executor._executeTaskUnitQueue();
     //
     return true;
   }
@@ -1615,9 +1615,9 @@ abstract class FormModel<
       xFormModel: xFormModel,
     );
     //
-    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
     //
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist._executor._executeTaskUnitQueue();
     //
     return taskUnit.taskResult;
   }

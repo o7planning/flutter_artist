@@ -938,13 +938,13 @@ abstract class Block<
     // - Find Item to Select as Current:
     //
     if (postQueryBehavior == PostQueryBehavior.clearCurrentItem) {
-      FlutterArtist.taskUnitQueue.addTaskUnit(
+      FlutterArtist._taskUnitQueue.addTaskUnit(
         _BlockClearCurrentTaskUnit<ITEM>(
           xBlock: thisXBlock,
         ),
       );
     } else if (postQueryBehavior == PostQueryBehavior.createNewItem) {
-      FlutterArtist.taskUnitQueue.addTaskUnit(
+      FlutterArtist._taskUnitQueue.addTaskUnit(
         _BlockPrepareFormToCreateItemTaskUnit(
           xBlock: thisXBlock,
           initDirty: false,
@@ -978,7 +978,7 @@ abstract class Block<
             throw UnimplementedError("Never Run");
         }
         //
-        FlutterArtist.taskUnitQueue.addTaskUnit(
+        FlutterArtist._taskUnitQueue.addTaskUnit(
           _BlockSelectAsCurrentTaskUnit<ITEM>(
             currentItemSelectionType: currentItemSelectionType,
             xBlock: thisXBlock,
@@ -1268,7 +1268,7 @@ abstract class Block<
             forceReloadItem: false,
             forceTypeForForm: null,
           );
-          FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+          FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
           return;
         }
         //
@@ -1296,7 +1296,7 @@ abstract class Block<
             forceReloadItem: false,
             forceTypeForForm: null,
           );
-          FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+          FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
           return;
         }
         return;
@@ -1352,7 +1352,7 @@ abstract class Block<
     //
     if (thisXBlock.xFormModel != null) {
       if (forceReloadForm) {
-        FlutterArtist.taskUnitQueue.addTaskUnit(
+        FlutterArtist._taskUnitQueue.addTaskUnit(
           _FormModelLoadFormTaskUnit(
             xFormModel: thisXBlock.xFormModel!,
           ),
@@ -1368,7 +1368,7 @@ abstract class Block<
 
     //
     for (_XBlock childXBlock in thisXBlock.childXBlocks) {
-      FlutterArtist.taskUnitQueue.addTaskUnit(
+      FlutterArtist._taskUnitQueue.addTaskUnit(
         _BlockQueryTaskUnit(
           xBlock: childXBlock,
         ),
@@ -1493,7 +1493,7 @@ abstract class Block<
       forceReloadItem: false,
       forceTypeForForm: null,
     );
-    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
   }
 
   // ***************************************************************************
@@ -1629,7 +1629,7 @@ abstract class Block<
       forceReloadItem: false,
       forceTypeForForm: null,
     );
-    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
   }
 
   // ***************************************************************************
@@ -1965,13 +1965,13 @@ abstract class Block<
             forceReloadItem: false,
             forceTypeForForm: null,
           );
-          FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+          FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
         }
       case AfterBlockQuickAction.query:
         var taskUnit = _BlockQueryTaskUnit(
           xBlock: thisXBlock,
         );
-        FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+        FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
     }
     return true;
   }
@@ -2193,7 +2193,7 @@ abstract class Block<
         forceReloadItem: false,
         forceTypeForForm: null,
       );
-      FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+      FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
       //
       return true;
     }
@@ -2292,9 +2292,9 @@ abstract class Block<
     _TaskUnit taskUnit = _BlockClearCurrentTaskUnit(
       xBlock: thisXBlock,
     );
-    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
     //
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist._executor._executeTaskUnitQueue();
   }
 
   // ***************************************************************************
@@ -2367,9 +2367,9 @@ abstract class Block<
       taskResult: taskResult,
     );
     //
-    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
     //
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist._executor._executeTaskUnitQueue();
     return taskResult;
   }
 
@@ -2440,9 +2440,9 @@ abstract class Block<
       taskResult: taskResult,
     );
     //
-    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
     //
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist._executor._executeTaskUnitQueue();
     return taskResult;
   }
 
@@ -2521,9 +2521,9 @@ abstract class Block<
           ? ForceType.force
           : ForceType.decidedAtRuntime,
     );
-    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
     //
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist._executor._executeTaskUnitQueue();
     var result = taskUnit.taskResult as BlockItemCurrSelectionResult<ITEM>;
     if (result.success) {
       if (navigate != null) {
@@ -3230,9 +3230,9 @@ abstract class Block<
       action: action,
     );
     //
-    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
     //
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist._executor._executeTaskUnitQueue();
     return taskUnit.taskResult;
   }
 
@@ -3307,9 +3307,9 @@ abstract class Block<
       action: action,
     );
     //
-    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
     //
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist._executor._executeTaskUnitQueue();
     return taskUnit.taskResult;
   }
 
@@ -3386,9 +3386,9 @@ abstract class Block<
       action: action,
     );
     //
-    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
     //
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist._executor._executeTaskUnitQueue();
     return taskUnit.taskResult;
   }
 
@@ -3463,9 +3463,9 @@ abstract class Block<
       action: action,
     );
     //
-    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
     //
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist._executor._executeTaskUnitQueue();
     return taskUnit.taskResult;
   }
 
@@ -3518,9 +3518,9 @@ abstract class Block<
       action: action,
     );
     //
-    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
     //
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist._executor._executeTaskUnitQueue();
     //
     return true;
   }
@@ -3646,9 +3646,9 @@ abstract class Block<
       navigate: navigate,
     );
     //
-    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
     //
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist._executor._executeTaskUnitQueue();
     return thisXBlock.itemCreationResult;
   }
 
@@ -4044,7 +4044,7 @@ abstract class Block<
     required bool checkBusy,
     required bool checkAllow,
   }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
+    if (checkBusy && FlutterArtist._executor.isBusy) {
       return Actionable<BlockQueryPrecheck>.no(
           errCode: BlockQueryPrecheck.busy);
     }
@@ -4079,7 +4079,7 @@ abstract class Block<
     required ErrCodeIfItemIsNull errCodeIfItemIsNull,
     required bool checkAllow,
   }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
+    if (checkBusy && FlutterArtist._executor.isBusy) {
       return Actionable<BlockItemDeletionPrecheck>.no(
         errCode: BlockItemDeletionPrecheck.busy,
       );
@@ -4140,7 +4140,7 @@ abstract class Block<
       getItemId: getItemId,
     );
     //
-    if (checkBusy && FlutterArtist.executor.isBusy) {
+    if (checkBusy && FlutterArtist._executor.isBusy) {
       return Actionable<BlockItemsDeletionPrecheck>.no(
         errCode: BlockItemsDeletionPrecheck.busy,
       );
@@ -4184,7 +4184,7 @@ abstract class Block<
   Actionable<BlockQuickActionPrecheck> __canQuickAction({
     required bool checkBusy,
   }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
+    if (checkBusy && FlutterArtist._executor.isBusy) {
       return Actionable<BlockQuickActionPrecheck>.no(
         errCode: BlockQuickActionPrecheck.busy,
       );
@@ -4217,7 +4217,7 @@ abstract class Block<
     required bool checkBusy,
     required bool checkAllow,
   }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
+    if (checkBusy && FlutterArtist._executor.isBusy) {
       return Actionable<BlockMultiItemsCreationPrecheck>.no(
         errCode: BlockMultiItemsCreationPrecheck.busy,
       );
@@ -4268,7 +4268,7 @@ abstract class Block<
     required ItemCreationType creationType,
     required bool checkAllow,
   }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
+    if (checkBusy && FlutterArtist._executor.isBusy) {
       return Actionable<BlockItemCreationPrecheck>.no(
         errCode: BlockItemCreationPrecheck.busy,
       );
@@ -4324,7 +4324,7 @@ abstract class Block<
   Actionable<BlockClearancePrecheck> __canClearBlock({
     required bool checkBusy,
   }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
+    if (checkBusy && FlutterArtist._executor.isBusy) {
       return Actionable<BlockClearancePrecheck>.no(
         errCode: BlockClearancePrecheck.busy,
       );
@@ -4348,7 +4348,7 @@ abstract class Block<
     required ItemUpdateType updateType,
     required bool checkAllow,
   }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
+    if (checkBusy && FlutterArtist._executor.isBusy) {
       return Actionable<BlockItemEditPrecheck>.no(
         errCode: BlockItemEditPrecheck.busy,
       );
@@ -4399,7 +4399,7 @@ abstract class Block<
     required bool checkBusy,
     required bool checkAllow,
   }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
+    if (checkBusy && FlutterArtist._executor.isBusy) {
       return Actionable<BlockQuickItemUpdatePrecheck>.no(
         errCode: BlockQuickItemUpdatePrecheck.busy,
       );
@@ -4458,7 +4458,7 @@ abstract class Block<
     required bool checkBusy,
     required bool checkAllow,
   }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
+    if (checkBusy && FlutterArtist._executor.isBusy) {
       return Actionable<BlockQuickItemCreationPrecheck>.no(
         errCode: BlockQuickItemCreationPrecheck.busy,
       );
@@ -4513,7 +4513,7 @@ abstract class Block<
         errCode: BlockFormResetPrecheck.noForm,
       );
     }
-    if (checkBusy && FlutterArtist.executor.isBusy) {
+    if (checkBusy && FlutterArtist._executor.isBusy) {
       return Actionable<BlockFormResetPrecheck>.no(
         errCode: BlockFormResetPrecheck.busy,
       );
@@ -4567,7 +4567,7 @@ abstract class Block<
     required bool checkAllow,
     required bool checkValidate,
   }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
+    if (checkBusy && FlutterArtist._executor.isBusy) {
       return Actionable<BlockFormSavePrecheck>.no(
         errCode: BlockFormSavePrecheck.busy,
       );
@@ -4607,7 +4607,7 @@ abstract class Block<
     required ITEM item,
     required bool checkAllow,
   }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
+    if (checkBusy && FlutterArtist._executor.isBusy) {
       return Actionable<BlockItemEditPrecheck>.no(
         errCode: BlockItemEditPrecheck.busy,
       );
@@ -4663,7 +4663,7 @@ abstract class Block<
     required bool checkBusy,
     required bool checkAllow,
   }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
+    if (checkBusy && FlutterArtist._executor.isBusy) {
       return Actionable<BlockItemEditPrecheck>.no(
         errCode: BlockItemEditPrecheck.busy,
       );
@@ -4689,7 +4689,7 @@ abstract class Block<
     required bool checkBusy,
     required ErrCodeIfItemIsNull errCodeIfItemIsNull,
   }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
+    if (checkBusy && FlutterArtist._executor.isBusy) {
       return Actionable<BlockItemCurrSelectionPrecheck>.no(
         errCode: BlockItemCurrSelectionPrecheck.busy,
       );
@@ -4726,7 +4726,7 @@ abstract class Block<
         errCode: BlockItemCurrSelectionPrecheck.noTarget,
       );
     }
-    if (checkBusy && FlutterArtist.executor.isBusy) {
+    if (checkBusy && FlutterArtist._executor.isBusy) {
       return Actionable<BlockItemCurrSelectionPrecheck>.no(
         errCode: BlockItemCurrSelectionPrecheck.busy,
       );

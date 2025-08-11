@@ -603,9 +603,9 @@ abstract class Shelf extends _Core {
     );
     //
     _ShelfQueryTaskUnit taskUnit = _ShelfQueryTaskUnit(xShelf: xShelf);
-    FlutterArtist.taskUnitQueue.addTaskUnit(taskUnit);
+    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
     //
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist._executor._executeTaskUnitQueue();
     return xShelf;
   }
 
@@ -626,7 +626,7 @@ abstract class Shelf extends _Core {
       //
       // Add to Queue:
       //
-      FlutterArtist.taskUnitQueue.addTaskUnit(
+      FlutterArtist._taskUnitQueue.addTaskUnit(
         _ScalarQueryTaskUnit(
           xScalar: xScalar,
         ),
@@ -637,7 +637,7 @@ abstract class Shelf extends _Core {
       //
       // Add to Queue:
       //
-      FlutterArtist.taskUnitQueue.addTaskUnit(
+      FlutterArtist._taskUnitQueue.addTaskUnit(
         _BlockQueryTaskUnit(
           xBlock: xBlock,
         ),
