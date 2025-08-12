@@ -1,30 +1,13 @@
 part of '../core.dart';
 
-class _SubTaskUnitQueue {
-  final List<_TaskUnit> _taskUnits = [];
-
-  _TaskUnit? getNextTaskUnit() {
-    if (_taskUnits.isEmpty) {
-    } else {
-      return _taskUnits.removeAt(0);
-    }
-  }
-
-  bool get isEmpty {
-    return _taskUnits.isEmpty;
-  }
-}
-
 class _TaskUnitQueue {
-  // Sorted Key Map.
-  final SplayTreeMap<int, _SubTaskUnitQueue> _map =
-      SplayTreeMap<int, _SubTaskUnitQueue>();
+  int __maxXShelfId = -1;
 
-  final List<_TaskUnit> _secondaryQueue = [];
-  final List<_TaskUnit> _taskUnits = [];
+  // Sorted Key Map.
+  final __splayTreeMap = SplayTreeMap<int, _SubTaskUnitQueue>();
 
   bool get isEmpty {
-    for (_SubTaskUnitQueue sub in _map.values) {
+    for (_SubTaskUnitQueue sub in __splayTreeMap.values) {
       if (!sub.isEmpty) {
         return false;
       }
@@ -35,8 +18,7 @@ class _TaskUnitQueue {
   bool get isNotEmpty => !isEmpty;
 
   void clear() {
-    _taskUnits.clear();
-    _secondaryQueue.clear();
+    // TODO: Remove.
   }
 
   bool hasNext() {
@@ -44,44 +26,75 @@ class _TaskUnitQueue {
   }
 
   _TaskUnit? getNextTaskUnit() {
-    if (_taskUnits.isEmpty) {
-      if (_secondaryQueue.isNotEmpty) {
-        return _secondaryQueue.removeAt(0);
+    while (true) {
+      int? xShelfId = __splayTreeMap.firstKey();
+      if (xShelfId == null) {
+        return null;
       }
-      return null;
-    } else {
-      return _taskUnits.removeAt(0);
-    }
-  }
-
-  bool contains(String id) {
-    for (_TaskUnit tu in _taskUnits) {
-      if (tu.getTaskUnitId() == id) {
-        return true;
+      _SubTaskUnitQueue subQueue = __splayTreeMap[xShelfId]!;
+      _TaskUnit? taskUnit = subQueue.getNextTaskUnit();
+      if (taskUnit == null) {
+        __splayTreeMap.remove(xShelfId);
+        continue;
       }
+      return taskUnit;
     }
-    return false;
   }
 
   void addTaskUnit(_TaskUnit taskUnit) {
     final int? executingXShelfId = FlutterArtist.executor.executingXShelfId;
     //
     if (executingXShelfId != null) {
-      if (taskUnit.xShelfId > executingXShelfId) {
-        _secondaryQueue.add(taskUnit);
-      } else if (taskUnit.xShelfId == executingXShelfId) {
-        _taskUnits.add(taskUnit);
-      } else {
-        print("Ignore TaskUnit: $taskUnit");
-        // Ignore this TaskUnit.
+      if (taskUnit.xShelfId < executingXShelfId) {
+        throw FatalAppError(
+          errorMessage:
+              "Development Error - taskUnit.xShelfId must be greater or equals than executingXShelfId.",
+        );
       }
-    } else {
-      _taskUnits.add(taskUnit);
+    }
+    if (taskUnit.xShelfId <= __maxXShelfId) {
+      _SubTaskUnitQueue? subQueue = __splayTreeMap[taskUnit.xShelfId];
+      if (subQueue == null) {
+        throw FatalAppError(
+          errorMessage:
+              "Development Error - taskUnit.xShelfId not found in Queue.",
+        );
+      }
+      subQueue.addTaskUnit(taskUnit);
+    }
+    // taskUnit.xShelfId > __maxXShelfId
+    else {
+      __maxXShelfId = taskUnit.xShelfId;
+      _SubTaskUnitQueue subQueue = _SubTaskUnitQueue();
+      __splayTreeMap[taskUnit.xShelfId] = subQueue;
+      subQueue.addTaskUnit(taskUnit);
     }
   }
 
   @override
   String toString() {
-    return "_taskUnits: $_taskUnits, _secondaryQueue: $_secondaryQueue";
+    return "TaskUnitQueue: $__splayTreeMap";
+  }
+}
+
+// *****************************************************************************
+
+class _SubTaskUnitQueue {
+  final List<_TaskUnit> _taskUnits = [];
+
+  _TaskUnit? getNextTaskUnit() {
+    if (_taskUnits.isEmpty) {
+      return null;
+    } else {
+      return _taskUnits.removeAt(0);
+    }
+  }
+
+  bool get isEmpty {
+    return _taskUnits.isEmpty;
+  }
+
+  void addTaskUnit(_TaskUnit taskUnit) {
+    _taskUnits.add(taskUnit);
   }
 }
