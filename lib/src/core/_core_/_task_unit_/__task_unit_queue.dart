@@ -1,11 +1,35 @@
 part of '../core.dart';
 
+class _SubTaskUnitQueue {
+  final List<_TaskUnit> _taskUnits = [];
+
+  _TaskUnit? getNextTaskUnit() {
+    if (_taskUnits.isEmpty) {
+    } else {
+      return _taskUnits.removeAt(0);
+    }
+  }
+
+  bool get isEmpty {
+    return _taskUnits.isEmpty;
+  }
+}
+
 class _TaskUnitQueue {
+  // Sorted Key Map.
+  final SplayTreeMap<int, _SubTaskUnitQueue> _map =
+      SplayTreeMap<int, _SubTaskUnitQueue>();
+
   final List<_TaskUnit> _secondaryQueue = [];
   final List<_TaskUnit> _taskUnits = [];
 
   bool get isEmpty {
-    return _taskUnits.isEmpty && _secondaryQueue.isEmpty;
+    for (_SubTaskUnitQueue sub in _map.values) {
+      if (!sub.isEmpty) {
+        return false;
+      }
+    }
+    return true;
   }
 
   bool get isNotEmpty => !isEmpty;
