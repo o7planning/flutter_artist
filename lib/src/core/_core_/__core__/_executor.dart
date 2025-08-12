@@ -30,6 +30,9 @@ class _Executor {
 
   Future<void> _executeTaskUnitQueue({bool showOverlay = true}) async {
     if (__executingXShelfId != null) {
+      // (This code causes an Error in FilterView).
+      // print("\n\nDevelopment Error - Illegal status - @@ executingXShelfId: $__executingXShelfId");
+      // throw FatalAppError(errorMessage: "Development Error - Illegal status.");
       return;
     }
     await FlutterArtist._executeTask(

@@ -286,7 +286,8 @@ abstract class FilterModel<
   ///
   /// Return null is error.
   ///
-  @_ImportantMethodAnnotation()
+  @_ImportantMethodAnnotation(
+      "Called after changing in FilterView or Querying in Block or Scalar.")
   Future<FILTER_CRITERIA?> _startNewFilterActivity({
     required FILTER_INPUT? filterInput,
     required FilterActivityType activityType,
@@ -745,7 +746,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   // Change Event from GUI.
-  @_ImportantMethodAnnotation()
+  @_ImportantMethodAnnotation("Called when the user makes a change on the FilterView")
   @_FilterViewChangeAnnotation()
   Future<void> _onChangeFromFilterView() async {
     print("#~~~~~~~~~~~~~~~> _onChangeFromFilterView");

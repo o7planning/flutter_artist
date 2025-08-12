@@ -473,7 +473,7 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  EffectedShelfMembers calculateEffectedShelfMembersByEvents(
+  EffectedShelfMembers _calculateEffectedShelfMembersByEvents(
       List<Type> events) {
     return _shelfExternalUtils.calculateEffectedShelfMembersByEvents(events);
   }
@@ -599,7 +599,7 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  @_ImportantMethodAnnotation()
+  @_ImportantMethodAnnotation("Called as the start of a series of TaskUnit(s).")
   @_BlockShelfQueryAnnotation()
   Future<_XShelf> _queryShelf({
     bool naturalMode = false,
@@ -622,6 +622,32 @@ abstract class Shelf extends _Core {
     //
     await FlutterArtist.executor._executeTaskUnitQueue();
     return xShelf;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _addShelfQueryTaskUnit({
+    required EffectedShelfMembers effectedShelfMembers,
+  }) {
+    List<_ScalarOpt> scalarOpts =
+        effectedShelfMembers._getForceReQueryScalarOpts();
+    List<_BlockOpt> blockOpts =
+        effectedShelfMembers._getForceReQueryBlockOpts();
+    List<_FormModelOpt> formModelOpts =
+        effectedShelfMembers._getForceReLoadFormModelOpts();
+
+    _XShelf xShelf = _XShelf(
+      naturalMode: false,
+      shelf: this,
+      forceFilterModelOpt: null,
+      forceQueryScalarOpts: scalarOpts,
+      forceQueryBlockOpts: blockOpts,
+      forceQueryFormModelOpts: formModelOpts,
+    );
+    //
+    _ShelfQueryTaskUnit taskUnit = _ShelfQueryTaskUnit(xShelf: xShelf);
+    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
   }
 
   // ***************************************************************************

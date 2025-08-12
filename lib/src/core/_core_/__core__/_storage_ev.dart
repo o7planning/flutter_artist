@@ -8,6 +8,7 @@ class _StorageEventHandler {
   // ***************************************************************************
   // ***************************************************************************
 
+  @_ImportantMethodAnnotation("Called after saving or deleting in the Block")
   void _fireEventSourceChanged({
     required Block eventBlock,
     required String? itemIdString,
@@ -15,40 +16,75 @@ class _StorageEventHandler {
     // Broadcast Data Types:
     List<Type> outsideEventTypes = eventBlock.config.outsideBroadcastEvents;
     //
-    print(
-        "~~~~~~~~~> ${outsideEventTypes.isNotEmpty ? 'FIRE EVENT TO OUTSIDE' : 'NOT FIRE EVENT TO OUTSIDE'}"
-        " --> Event Item Types: $outsideEventTypes"
-        " - ${getClassName(eventBlock)}");
-    //
     if (outsideEventTypes.isEmpty) {
+      print("~~~~~~~~~> NOT FIRE EVENT TO OUTSIDE"
+          " --> Event Item Types: $outsideEventTypes"
+          " - ${getClassName(eventBlock)}");
       return;
+    } else {
+      print("~~~~~~~~~> FIRE EVENT TO OUTSIDE"
+          " --> Event Item Types: $outsideEventTypes"
+          " - ${getClassName(eventBlock)}");
     }
     //
-    // for (String shelfName in storage._shelfMap.keys) {
-    //   Shelf shelf = storage._shelfMap[shelfName]!;
-    //   EffectedShelfMembers esm =
-    //       shelf.calculateEffectedShelfMembersByEvents(outsideEventTypes);
-    //   //
+    for (String shelfName in storage._shelfMap.keys) {
+      if (shelfName == eventBlock.shelf.name) {
+        continue;
+      }
+      Shelf shelf = storage._shelfMap[shelfName]!;
+      EffectedShelfMembers effectedShelfMembers =
+          shelf._calculateEffectedShelfMembersByEvents(outsideEventTypes);
+
+      if (!effectedShelfMembers.hasMember()) {
+        continue;
+      }
+      shelf._addShelfQueryTaskUnit(effectedShelfMembers: effectedShelfMembers);
+    }
+    // //
+    // final List<Scalar> listenerScalars = __getListenerScalarsByBlock(
+    //   eventBlock: eventBlock,
+    // );
+    // //
+    // final List<Block> listenerBlocks = __getListenerBlocksByBlock(
+    //   eventBlock: eventBlock,
+    // );
+    // print(
+    //     "~~~~~~~~~> listenerBlocks: $listenerBlocks, listenerScalars: $listenerScalars");
+    // //
+    // // TODO: Add to QUEUE lazy.
+    // //
+    // if (listenerScalars.isNotEmpty || listenerBlocks.isNotEmpty) {
+    //   __executeExternalListenersOfShelf(
+    //     listenerScalars: listenerScalars,
+    //     listenerBlocks: listenerBlocks,
+    //   );
     // }
-    //
-    final List<Scalar> listenerScalars = __getListenerScalarsByBlock(
-      eventBlock: eventBlock,
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_ImportantMethodAnnotation(
+      "Called after executing QuickAction in the Block or Scalar")
+  void _fireEventToAffectedItemTypes({
+    required Shelf eventShelf,
+    required List<Type> affectedItemTypes,
+  }) {
+    final List<Scalar> listenerScalars =
+        __getListenerScalarsByAffectedItemTypes(
+      eventShelf: eventShelf,
+      affectedItemTypes: affectedItemTypes,
     );
     //
-    final List<Block> listenerBlocks = __getListenerBlocksByBlock(
-      eventBlock: eventBlock,
+    final List<Block> listenerBlocks = __getListenerBlocksByAffectedItemTypes(
+      eventShelf: eventShelf,
+      affectedItemTypes: affectedItemTypes,
     );
-    print(
-        "~~~~~~~~~> listenerBlocks: $listenerBlocks, listenerScalars: $listenerScalars");
     //
-    // TODO: Add to QUEUE lazy.
-    //
-    if (listenerScalars.isNotEmpty || listenerBlocks.isNotEmpty) {
-      __executeExternalListenersOfShelf(
-        listenerScalars: listenerScalars,
-        listenerBlocks: listenerBlocks,
-      );
-    }
+    __executeExternalListenersOfShelf(
+      listenerScalars: listenerScalars,
+      listenerBlocks: listenerBlocks,
+    );
   }
 
   // ***************************************************************************
@@ -412,30 +448,6 @@ class _StorageEventHandler {
     } else {
       return [];
     }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _fireEventToAffectedItemTypes({
-    required Shelf eventShelf,
-    required List<Type> affectedItemTypes,
-  }) {
-    final List<Scalar> listenerScalars =
-        __getListenerScalarsByAffectedItemTypes(
-      eventShelf: eventShelf,
-      affectedItemTypes: affectedItemTypes,
-    );
-    //
-    final List<Block> listenerBlocks = __getListenerBlocksByAffectedItemTypes(
-      eventShelf: eventShelf,
-      affectedItemTypes: affectedItemTypes,
-    );
-    //
-    __executeExternalListenersOfShelf(
-      listenerScalars: listenerScalars,
-      listenerBlocks: listenerBlocks,
-    );
   }
 
   // ***************************************************************************

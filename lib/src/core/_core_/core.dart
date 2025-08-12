@@ -511,7 +511,8 @@ class _TaskUnitMethodAnnotation {
 }
 
 class _ImportantMethodAnnotation {
-  const _ImportantMethodAnnotation();
+  final String message;
+  const _ImportantMethodAnnotation(this.message);
 }
 
 class _MayThrowFormTempErrorAnnotation {

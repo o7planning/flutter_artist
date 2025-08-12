@@ -110,7 +110,6 @@ abstract class Block<
   final EffectedShelfMembers _internalEffectedShelfMembers =
       EffectedShelfMembers();
 
-
   // TODO: LOGIC-01
   final bool _alwaysTrySelectAnItemAsCurrent = true;
 
