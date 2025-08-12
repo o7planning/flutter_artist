@@ -73,6 +73,7 @@ import '../enums/_scalar_control_action_type.dart';
 import '../enums/_scalar_error_method.dart';
 import '../enums/_scalar_hidden_behavior.dart';
 import '../enums/_shelf_hidden_behavior.dart';
+import '../enums/_shelf_reaction_type.dart';
 import '../enums/_show_mode.dart';
 import '../enums/_sorting_direction.dart';
 import '../enums/_task_type.dart';
@@ -512,6 +513,7 @@ class _TaskUnitMethodAnnotation {
 
 class _ImportantMethodAnnotation {
   final String message;
+
   const _ImportantMethodAnnotation(this.message);
 }
 

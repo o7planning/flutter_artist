@@ -107,8 +107,9 @@ abstract class Block<
 
   final BlockConfig config;
 
-  final EffectedShelfMembers _internalEffectedShelfMembers =
-      EffectedShelfMembers();
+  final _internalEffectedShelfMembers = EffectedShelfMembers(
+    shelfReactionType: ShelfReactionType.internal,
+  );
 
   // TODO: LOGIC-01
   final bool _alwaysTrySelectAnItemAsCurrent = true;

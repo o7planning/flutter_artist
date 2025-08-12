@@ -17,13 +17,13 @@ class _StorageEventHandler {
     List<Type> outsideEventTypes = eventBlock.config.outsideBroadcastEvents;
     //
     if (outsideEventTypes.isEmpty) {
-      print("~~~~~~~~~> NOT FIRE EVENT TO OUTSIDE"
-          " --> Event Item Types: $outsideEventTypes"
+      print(
+          "~~~~~~~~~> NOT FIRE EVENT TO OUTSIDE --> Event Item Types: $outsideEventTypes"
           " - ${getClassName(eventBlock)}");
       return;
     } else {
-      print("~~~~~~~~~> FIRE EVENT TO OUTSIDE"
-          " --> Event Item Types: $outsideEventTypes"
+      print(
+          "~~~~~~~~~> FIRE EVENT TO OUTSIDE --> Event Item Types: $outsideEventTypes"
           " - ${getClassName(eventBlock)}");
     }
     //
@@ -32,6 +32,9 @@ class _StorageEventHandler {
         continue;
       }
       Shelf shelf = storage._shelfMap[shelfName]!;
+      if (shelf.isFullyPending) {
+        continue;
+      }
       EffectedShelfMembers effectedShelfMembers =
           shelf._calculateEffectedShelfMembersByEvents(outsideEventTypes);
 
@@ -491,6 +494,7 @@ class _StorageEventHandler {
       }
     }
 
+    // xxx;
     for (Block listenerBlock in listenerBlocks) {
       // TODO: Use hasActiveUiComponents()??
       final bool active = listenerBlock.ui.hasActiveBlockFragmentWidget(

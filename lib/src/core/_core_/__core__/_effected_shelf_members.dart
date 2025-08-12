@@ -2,6 +2,8 @@ part of '../core.dart';
 
 @_InternalEventReactAnnotation()
 class EffectedShelfMembers {
+  final ShelfReactionType shelfReactionType;
+
   final Map<String, Block> __reQueryBlockMAP = {};
   final Map<String, Scalar> __reQueryScalarMAP = {};
   final Map<String, Block> __refreshCurrItmBlockMAP = {};
@@ -22,7 +24,7 @@ class EffectedShelfMembers {
   /// ),
   /// ```
   ///
-  EffectedShelfMembers();
+  EffectedShelfMembers({required this.shelfReactionType});
 
   bool hasMember() {
     return __reQueryBlockMAP.isNotEmpty ||

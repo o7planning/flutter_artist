@@ -746,7 +746,8 @@ abstract class FilterModel<
   // ***************************************************************************
 
   // Change Event from GUI.
-  @_ImportantMethodAnnotation("Called when the user makes a change on the FilterView")
+  @_ImportantMethodAnnotation(
+      "Called when the user makes a change on the FilterView")
   @_FilterViewChangeAnnotation()
   Future<void> _onChangeFromFilterView() async {
     print("#~~~~~~~~~~~~~~~> _onChangeFromFilterView");

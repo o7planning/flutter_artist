@@ -470,6 +470,20 @@ abstract class Shelf extends _Core {
     return _shelfStruct.filterModels[filterModelName];
   }
 
+  bool get isFullyPending {
+    for (Scalar scalar in scalars) {
+      if (scalar.queryDataState != DataState.pending) {
+        return false;
+      }
+    }
+    for (Block block in rootBlocks) {
+      if (block.queryDataState != DataState.pending) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   // ***************************************************************************
   // ***************************************************************************
 

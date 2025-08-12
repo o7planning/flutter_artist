@@ -459,7 +459,8 @@ abstract class FormModel<
   ///
   /// Return null is error.
   ///
-  @_ImportantMethodAnnotation("Called when Form Data is being loaded or user makes changes in FormView")
+  @_ImportantMethodAnnotation(
+      "Called when Form Data is being loaded or user makes changes in FormView")
   Future<bool> _startNewFormActivity({
     required EXTRA_FORM_INPUT? extraFormInput,
     required FormActivityType activityType,
