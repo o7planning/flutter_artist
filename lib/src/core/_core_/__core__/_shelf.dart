@@ -64,6 +64,8 @@ abstract class Shelf extends _Core {
 
   late final _ShelfUIComponents ui = _ShelfUIComponents(shelf: this);
 
+  late final ShelfExternalUtils _shelfExternalUtils = ShelfExternalUtils(this);
+
   // ***************************************************************************
   // ***************************************************************************
 
@@ -218,7 +220,8 @@ abstract class Shelf extends _Core {
           Block? eventBlock = __blockMap[evt.srcName];
           if (eventBlock == null) {
             throw ___registerError(
-              "SHELF '${getClassName(listenerBlock.shelf)} -> BLOCK '${getClassName(listenerBlock)}' -> reQueryByInternalShelfEvents -> Configuration Error! \n"
+              "SHELF '${getClassName(listenerBlock.shelf)} -> BLOCK '${getClassName(listenerBlock)}'"
+              " --> reQueryByInternalShelfEvents -> Configuration Error! \n"
               " --> No Block Name: ${evt.srcName}. \n",
             );
           }
@@ -231,7 +234,8 @@ abstract class Shelf extends _Core {
           Scalar? eventScalar = __scalarMap[evt.srcName];
           if (eventScalar == null) {
             throw ___registerError(
-              "SHELF '${getClassName(listenerBlock.shelf)} -> BLOCK '${getClassName(listenerBlock)}' -> reQueryByInternalShelfEvents -> Configuration Error! \n"
+              "SHELF '${getClassName(listenerBlock.shelf)} -> BLOCK '${getClassName(listenerBlock)}'"
+              " --> reQueryByInternalShelfEvents -> Configuration Error! \n"
               " --> No Scalar Name: ${evt.srcName}. \n",
             );
           }
@@ -247,7 +251,8 @@ abstract class Shelf extends _Core {
           Block? eventBlock = __blockMap[evt.srcName];
           if (eventBlock == null) {
             throw ___registerError(
-              "SHELF '${getClassName(listenerBlock.shelf)} -> BLOCK '${getClassName(listenerBlock)}' -> refreshCurrItemByInternalShelfEvents -> Configuration Error! \n"
+              "SHELF '${getClassName(listenerBlock.shelf)} -> BLOCK '${getClassName(listenerBlock)}'"
+              " --> refreshCurrItemByInternalShelfEvents -> Configuration Error! \n"
               " --> No Block Name: ${evt.srcName}. \n",
             );
           }
@@ -260,7 +265,8 @@ abstract class Shelf extends _Core {
           Scalar? eventScalar = __scalarMap[evt.srcName];
           if (eventScalar == null) {
             throw ___registerError(
-              "SHELF '${getClassName(listenerBlock.shelf)} -> BLOCK '${getClassName(listenerBlock)}' -> refreshCurrItemByInternalShelfEvents -> Configuration Error! \n"
+              "SHELF '${getClassName(listenerBlock.shelf)} -> BLOCK '${getClassName(listenerBlock)}'"
+              " --> refreshCurrItemByInternalShelfEvents -> Configuration Error! \n"
               " --> No Scalar Name: ${evt.srcName}. \n",
             );
           }
@@ -278,7 +284,8 @@ abstract class Shelf extends _Core {
           Block? eventBlock = __blockMap[evt.srcName];
           if (eventBlock == null) {
             throw ___registerError(
-              "SHELF '${getClassName(listenterScalar.shelf)} -> SCALAR '${getClassName(listenterScalar)}' -> reQueryByInternalShelfEvents -> Configuration Error! \n"
+              "SHELF '${getClassName(listenterScalar.shelf)} -> SCALAR '${getClassName(listenterScalar)}'"
+              " --> reQueryByInternalShelfEvents -> Configuration Error! \n"
               " --> No Block Name: ${evt.srcName}. \n",
             );
           }
@@ -291,7 +298,8 @@ abstract class Shelf extends _Core {
           Scalar? eventScalar = __scalarMap[evt.srcName];
           if (eventScalar == null) {
             throw ___registerError(
-              "SHELF '${getClassName(listenterScalar.shelf)} -> SCALAR '${getClassName(listenterScalar)}' -> reQueryByInternalShelfEvents -> Configuration Error! \n"
+              "SHELF '${getClassName(listenterScalar.shelf)} -> SCALAR '${getClassName(listenterScalar)}'"
+              " --> reQueryByInternalShelfEvents -> Configuration Error! \n"
               " --> No Scalar Name: ${evt.srcName}. \n",
             );
           }
@@ -460,6 +468,14 @@ abstract class Shelf extends _Core {
 
   FilterModel? findFilterModel(String filterModelName) {
     return _shelfStruct.filterModels[filterModelName];
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  EffectedShelfMembers calculateEffectedShelfMembersByEvents(
+      List<Type> events) {
+    return _shelfExternalUtils.calculateEffectedShelfMembersByEvents(events);
   }
 
   // ***************************************************************************

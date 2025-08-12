@@ -163,7 +163,7 @@ part '__core__/_shelf.dart';
 
 part '__core__/_shelf_block_scalar_type.dart';
 
-part '__core__/_shelf_external_listeners.dart';
+part '__core__/_shelf_external_utils.dart';
 
 part '__core__/_effected_shelf_members.dart';
 

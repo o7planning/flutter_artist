@@ -19,27 +19,35 @@ class _StorageEventHandler {
         "~~~~~~~~~> ${outsideEventTypes.isNotEmpty ? 'FIRE EVENT TO OUTSIDE' : 'NOT FIRE EVENT TO OUTSIDE'}"
         " --> Event Item Types: $outsideEventTypes"
         " - ${getClassName(eventBlock)}");
-
     //
-    if (outsideEventTypes.isNotEmpty) {
-      final List<Scalar> listenerScalars = __getListenerScalarsByBlock(
-        eventBlock: eventBlock,
+    if (outsideEventTypes.isEmpty) {
+      return;
+    }
+    //
+    // for (String shelfName in storage._shelfMap.keys) {
+    //   Shelf shelf = storage._shelfMap[shelfName]!;
+    //   EffectedShelfMembers esm =
+    //       shelf.calculateEffectedShelfMembersByEvents(outsideEventTypes);
+    //   //
+    // }
+    //
+    final List<Scalar> listenerScalars = __getListenerScalarsByBlock(
+      eventBlock: eventBlock,
+    );
+    //
+    final List<Block> listenerBlocks = __getListenerBlocksByBlock(
+      eventBlock: eventBlock,
+    );
+    print(
+        "~~~~~~~~~> listenerBlocks: $listenerBlocks, listenerScalars: $listenerScalars");
+    //
+    // TODO: Add to QUEUE lazy.
+    //
+    if (listenerScalars.isNotEmpty || listenerBlocks.isNotEmpty) {
+      __executeExternalListenersOfShelf(
+        listenerScalars: listenerScalars,
+        listenerBlocks: listenerBlocks,
       );
-      //
-      final List<Block> listenerBlocks = __getListenerBlocksByBlock(
-        eventBlock: eventBlock,
-      );
-      print(
-          "~~~~~~~~~> listenerBlocks: $listenerBlocks, listenerScalars: $listenerScalars");
-      //
-      // TODO: Add to QUEUE lazy.
-      //
-      if (listenerScalars.isNotEmpty || listenerBlocks.isNotEmpty) {
-        __executeExternalListenersOfShelf(
-          listenerScalars: listenerScalars,
-          listenerBlocks: listenerBlocks,
-        );
-      }
     }
   }
 
