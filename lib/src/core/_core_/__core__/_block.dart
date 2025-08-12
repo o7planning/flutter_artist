@@ -1425,11 +1425,10 @@ abstract class Block<
       result = await callApiDeleteItemById(itemId: itemId);
       // Throw ApiError:
       result.throwIfError();
-      // TODO: Chuyen di noi khac?
-      FlutterArtist.storage.ev._fireEventSourceChanged(
-        eventBlock: this,
-        itemIdString: null,
-      );
+      //
+      // External React:
+      //
+      __addExternalReactTaskUnit();
     } catch (e, stackTrace) {
       AppError appError = _handleError(
         shelf: shelf,
@@ -1591,12 +1590,10 @@ abstract class Block<
       }
     }
     //
+    // External React:
+    //
     if (deletionResult.deletedItems.isNotEmpty) {
-      // TODO: Chuyen di noi khac?
-      FlutterArtist.storage.ev._fireEventSourceChanged(
-        eventBlock: this,
-        itemIdString: null,
-      );
+      __addExternalReactTaskUnit();
     }
     //
     if (deletionResult.failedItemDeletions.isEmpty) {
@@ -2083,11 +2080,7 @@ abstract class Block<
     }
     //
     if (fireOutsideEvent) {
-      // TODO: Chuyen di noi khac.
-      FlutterArtist.storage.ev._fireEventSourceChanged(
-        eventBlock: this,
-        itemIdString: null,
-      );
+      __addExternalReactTaskUnit();
     } else {
       print(">>> fireOutsideEvent: false (keepInList: $keepInList)");
     }
@@ -2218,11 +2211,11 @@ abstract class Block<
       );
       return false;
     }
-    // TODO: Chuyen di noi khac.
-    FlutterArtist.storage.ev._fireEventSourceChanged(
-      eventBlock: this,
-      itemIdString: null,
-    );
+    //
+    // External React:
+    //
+    __addExternalReactTaskUnit();
+    //
     final PageData<ITEM>? newItemsPage = result.data;
 
     final List<ITEM> keepInListItems = [];
@@ -3776,6 +3769,23 @@ abstract class Block<
       shelfInternalListeners: _internalListeners,
     );
     FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __addExternalReactTaskUnit() {
+    // _ShelfExternalReactTaskUnit taskUnit = _ShelfExternalReactTaskUnit(
+    //   shelf: shelf,
+    //   shelfInternalListeners: _internalListeners,
+    // );
+    // FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
+
+    // TODO: Chuyen di noi khac.
+    FlutterArtist.storage.ev._fireEventSourceChanged(
+      eventBlock: this,
+      itemIdString: null,
+    );
   }
 
   // ***************************************************************************
