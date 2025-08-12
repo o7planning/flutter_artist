@@ -223,7 +223,8 @@ abstract class Shelf extends _Core {
             );
           }
           // BLOCK EVENT
-          eventBlock._internalListeners._addBlockQueryListener(listenerBlock);
+          eventBlock._internalEffectedShelfMembers
+              ._addReQueryBlock(listenerBlock);
         }
         // SCALAR EVENT:
         else if (evt.srcType == SrcType.scalar) {
@@ -235,7 +236,7 @@ abstract class Shelf extends _Core {
             );
           }
           // SCALAR EVENT: update (Only One Events).
-          eventScalar._internalListeners._addBlockQueryListener(listenerBlock);
+          eventScalar._internalListeners._addReQueryBlock(listenerBlock);
         }
       }
       //
@@ -251,8 +252,8 @@ abstract class Shelf extends _Core {
             );
           }
           // BLOCK EVENTS
-          eventBlock._internalListeners
-              ._addBlockRefreshCurrListener(listenerBlock);
+          eventBlock._internalEffectedShelfMembers
+              ._addRefreshCurrItmBlock(listenerBlock);
         }
         // SCALAR EVENT:
         else if (evt.srcType == SrcType.scalar) {
@@ -264,8 +265,7 @@ abstract class Shelf extends _Core {
             );
           }
           // SCALAR EVENT: update (Only One Events).
-          eventScalar._internalListeners
-              ._addBlockRefreshCurrListener(listenerBlock);
+          eventScalar._internalListeners._addRefreshCurrItmBlock(listenerBlock);
         }
       }
     }
@@ -283,8 +283,8 @@ abstract class Shelf extends _Core {
             );
           }
           // BLOCK EVENT:
-          eventBlock._internalListeners
-              ._addScalarQueryListener(listenterScalar);
+          eventBlock._internalEffectedShelfMembers
+              ._addReQueryScalar(listenterScalar);
         }
         // SCALAR EVENT:
         else if (evt.srcType == SrcType.scalar) {
@@ -296,8 +296,7 @@ abstract class Shelf extends _Core {
             );
           }
           // SCALAR EVENT: update (Only One Events).
-          eventScalar._internalListeners
-              ._addScalarQueryListener(listenterScalar);
+          eventScalar._internalListeners._addReQueryScalar(listenterScalar);
         }
       }
     }
@@ -666,14 +665,14 @@ abstract class Shelf extends _Core {
   @_TaskUnitMethodAnnotation()
   @_ShelfInternalReactAnnotation()
   Future<void> _unitInternalReact({
-    required ShelfInternalListeners shelfInternalListeners,
+    required EffectedShelfMembers shelfInternalListeners,
   }) async {
     List<_ScalarOpt> scalarOpts =
-        shelfInternalListeners._getForceQueryScalarOpts();
+        shelfInternalListeners._getForceReQueryScalarOpts();
     List<_BlockOpt> blockOpts =
-        shelfInternalListeners._getForceQueryBlockOpts();
+        shelfInternalListeners._getForceReQueryBlockOpts();
     List<_FormModelOpt> formModelOpts =
-        shelfInternalListeners._getForceQueryFormModelOpts();
+        shelfInternalListeners._getForceReLoadFormModelOpts();
 
     _XShelf xShelf = _XShelf(
       naturalMode: false,

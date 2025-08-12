@@ -5,7 +5,7 @@ part of '../core.dart';
 class _ShelfExternalReactTaskUnit extends _TaskUnit {
   final int _xShelfId;
   final Shelf _shelf;
-  final ShelfInternalListeners shelfInternalListeners;
+  final EffectedShelfMembers shelfInternalListeners;
 
   _ShelfExternalReactTaskUnit({
     required Shelf shelf,

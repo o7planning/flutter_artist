@@ -1,10 +1,10 @@
 part of '../core.dart';
 
 @_InternalEventReactAnnotation()
-class ShelfInternalListeners {
-  final Map<String, Block> __blockReQueryListenerMAP = {};
-  final Map<String, Scalar> __scalarReQueryListenerMAP = {};
-  final Map<String, Block> __blockRefreshCurrListenerMAP = {};
+class EffectedShelfMembers {
+  final Map<String, Block> __reQueryBlockMAP = {};
+  final Map<String, Scalar> __reQueryScalarMAP = {};
+  final Map<String, Block> __refreshCurrItmBlockMAP = {};
 
   ///
   /// BlockConfig:
@@ -22,48 +22,48 @@ class ShelfInternalListeners {
   /// ),
   /// ```
   ///
-  ShelfInternalListeners();
+  EffectedShelfMembers();
 
-  bool hasListeners() {
-    return __blockReQueryListenerMAP.isNotEmpty ||
-        __scalarReQueryListenerMAP.isNotEmpty ||
-        __blockRefreshCurrListenerMAP.isNotEmpty;
+  bool hasMember() {
+    return __reQueryBlockMAP.isNotEmpty ||
+        __reQueryScalarMAP.isNotEmpty ||
+        __refreshCurrItmBlockMAP.isNotEmpty;
   }
 
   // ***************************************************************************
 
-  void _addScalarQueryListener(Scalar scalar) {
-    __scalarReQueryListenerMAP[scalar.name] = scalar;
+  void _addReQueryScalar(Scalar scalar) {
+    __reQueryScalarMAP[scalar.name] = scalar;
   }
 
-  void _addBlockQueryListener(Block block) {
-    __blockReQueryListenerMAP[block.name] = block;
+  void _addReQueryBlock(Block block) {
+    __reQueryBlockMAP[block.name] = block;
   }
 
-  void _addBlockRefreshCurrListener(Block block) {
-    __blockRefreshCurrListenerMAP[block.name] = block;
+  void _addRefreshCurrItmBlock(Block block) {
+    __refreshCurrItmBlockMAP[block.name] = block;
   }
 
   // ***************************************************************************
 
-  List<_ScalarOpt> _getForceQueryScalarOpts() {
+  List<_ScalarOpt> _getForceReQueryScalarOpts() {
     List<_ScalarOpt> ret = [];
 
-    for (Scalar s in __scalarReQueryListenerMAP.values) {
+    for (Scalar s in __reQueryScalarMAP.values) {
       ret.add(_ScalarOpt(scalar: s));
     }
     return ret;
   }
 
-  List<_BlockOpt> _getForceQueryBlockOpts() {
+  List<_BlockOpt> _getForceReQueryBlockOpts() {
     List<_BlockOpt> ret = [];
     Set<String> listenerBlockNames = {}
-      ..addAll(__blockReQueryListenerMAP.keys)
-      ..addAll(__blockRefreshCurrListenerMAP.keys);
+      ..addAll(__reQueryBlockMAP.keys)
+      ..addAll(__refreshCurrItmBlockMAP.keys);
 
     for (String listenerBlkName in listenerBlockNames) {
-      Block? reQryBlock = __blockReQueryListenerMAP[listenerBlkName];
-      Block? refreshCurrBlock = __blockRefreshCurrListenerMAP[listenerBlkName];
+      Block? reQryBlock = __reQueryBlockMAP[listenerBlkName];
+      Block? refreshCurrBlock = __refreshCurrItmBlockMAP[listenerBlkName];
       ret.add(
         _BlockOpt(
           block: (reQryBlock ?? refreshCurrBlock)!,
@@ -80,7 +80,7 @@ class ShelfInternalListeners {
     return ret;
   }
 
-  List<_FormModelOpt> _getForceQueryFormModelOpts() {
+  List<_FormModelOpt> _getForceReLoadFormModelOpts() {
     return [];
   }
 }

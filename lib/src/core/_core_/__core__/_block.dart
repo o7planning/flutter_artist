@@ -107,14 +107,15 @@ abstract class Block<
 
   final BlockConfig config;
 
-  final ShelfInternalListeners _internalListeners = ShelfInternalListeners();
+  final EffectedShelfMembers _internalEffectedShelfMembers =
+      EffectedShelfMembers();
 
   final ShelfExternalListeners _externallListeners = ShelfExternalListeners();
 
   // TODO: LOGIC-01
-  final bool _alwayTrySelectAnItemAsCurrent = true;
+  final bool _alwaysTrySelectAnItemAsCurrent = true;
 
-  bool get alwayTrySelectAnItemAsCurrent => _alwayTrySelectAnItemAsCurrent;
+  bool get alwayTrySelectAnItemAsCurrent => _alwaysTrySelectAnItemAsCurrent;
 
   ///
   /// Block name. It is unique in a Shelf.
@@ -2074,7 +2075,7 @@ abstract class Block<
         itemDetail: savedItemDetail,
       );
     }
-    bool fireInternalEvent = this._internalListeners.hasListeners();
+    bool fireInternalEvent = this._internalEffectedShelfMembers.hasMember();
     if (fireInternalEvent) {
       __addInternalReactTaskUnit();
     }
@@ -3766,7 +3767,7 @@ abstract class Block<
   Future<void> __addInternalReactTaskUnit() async {
     _ShelfInternalReactTaskUnit taskUnit = _ShelfInternalReactTaskUnit(
       shelf: shelf,
-      shelfInternalListeners: _internalListeners,
+      shelfInternalListeners: _internalEffectedShelfMembers,
     );
     FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
   }

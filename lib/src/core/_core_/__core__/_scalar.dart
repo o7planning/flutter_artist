@@ -63,7 +63,7 @@ abstract class Scalar<
 
   final ScalarConfig config;
 
-  final ShelfInternalListeners _internalListeners = ShelfInternalListeners();
+  final EffectedShelfMembers _internalListeners = EffectedShelfMembers();
 
   bool __isQuerying = false;
 
