@@ -608,13 +608,16 @@ abstract class Block<
       // If Natural Mode: Try to select an item as current if the Block has no current.
       //
       if (thisXBlock.xShelf.naturalMode) {
+        // Test Cases: [38b] - test_companyCreationScreen_to_employeeScreen.
+        // No need to select an Item as Current.
+        if (formModel?.formMode == FormMode.creation) {
+          return;
+        }
+        //
         final defaultPostQueryBehavior = FlutterArtist.defaultPostQueryBehavior;
         final defaultCurrentItemSelectionType =
             defaultPostQueryBehavior.toCurrentItemSelectionType();
-
-        if (formModel?.formMode != FormMode.creation) {
-          currentItemSelectionType = defaultCurrentItemSelectionType;
-        }
+        currentItemSelectionType = defaultCurrentItemSelectionType;
       }
 
       FlutterArtist._taskUnitQueue.addTaskUnit(
