@@ -602,9 +602,15 @@ abstract class Block<
     if (forceQuery == QryHint.none) {
       print("        ~~~~~~~> IGNORED --> forceQuery: $forceQuery - [$name]");
       candidateCurrentItem = null;
+      // if( currentItem == null)  {
+      //   // thisXBlock.xShelf.naturalMode
+      // }
+
       FlutterArtist._taskUnitQueue.addTaskUnit(
         _BlockSelectAsCurrentTaskUnit<ITEM>(
-          currentItemSelectionType: CurrentItemSelectionType.doNothing,
+          currentItemSelectionType: thisXBlock.xShelf.naturalMode
+              ? CurrentItemSelectionType.selectAnItemAsCurrentIfNeed
+              : CurrentItemSelectionType.doNothing,
           xBlock: thisXBlock,
           newQueriedList: [],
           candidateItem: candidateCurrentItem,
@@ -614,6 +620,7 @@ abstract class Block<
       );
       return;
     } else if (forceQuery == QryHint.markAsPending) {
+      // TODO: ???????????????????????????????????????????????????????????????????????????
       thisXBlock.block.setToPending();
       return;
     } else if (forceQuery != QryHint.force) {
