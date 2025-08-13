@@ -8,14 +8,42 @@ class _StorageEventHandler {
   // ***************************************************************************
   // ***************************************************************************
 
+  @DebugMethodAnnotation()
+  void debugFireEventSourceChanged({required List<Type> outsideEventTypes}) {
+    if (!FlutterArtist.testCaseMode) {
+      throw FatalAppError(errorMessage: "Not Test Case Mode");
+    }
+    __fireEventSourceChanged(
+      eventBlock: null,
+      outsideEventTypes: outsideEventTypes,
+      itemIdString: null,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   @_ImportantMethodAnnotation("Called after saving or deleting in the Block")
   void _fireEventSourceChanged({
     required Block eventBlock,
     required String? itemIdString,
   }) {
-    // Broadcast Data Types:
-    List<Type> outsideEventTypes = eventBlock.config.outsideBroadcastEvents;
-    //
+    __fireEventSourceChanged(
+      eventBlock: eventBlock,
+      outsideEventTypes: eventBlock.config.outsideBroadcastEvents,
+      itemIdString: itemIdString,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  // PRIVATE METHOD.
+  void __fireEventSourceChanged({
+    required Block? eventBlock,
+    required List<Type> outsideEventTypes,
+    required String? itemIdString,
+  }) {
     if (outsideEventTypes.isEmpty) {
       print(
           "~~~~~~~~~> NOT FIRE EVENT TO OUTSIDE --> Event Item Types: $outsideEventTypes"
@@ -28,7 +56,7 @@ class _StorageEventHandler {
     }
     //
     for (String shelfName in storage._shelfMap.keys) {
-      if (shelfName == eventBlock.shelf.name) {
+      if (shelfName == eventBlock?.shelf.name) {
         continue;
       }
       Shelf shelf = storage._shelfMap[shelfName]!;

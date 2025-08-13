@@ -644,6 +644,7 @@ abstract class Shelf extends _Core {
   void _addShelfQueryTaskUnit({
     required EffectedShelfMembers effectedShelfMembers,
   }) {
+    print(" -- @ addShelfQueryTaskUnit: ${getClassName(this)}");
     List<_ScalarOpt> scalarOpts =
         effectedShelfMembers._getForceReQueryScalarOpts();
     List<_BlockOpt> blockOpts =
