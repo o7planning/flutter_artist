@@ -602,15 +602,20 @@ abstract class Block<
     if (forceQuery == QryHint.none) {
       print("        ~~~~~~~> IGNORED --> forceQuery: $forceQuery - [$name]");
       candidateCurrentItem = null;
-      // if( currentItem == null)  {
-      //   // thisXBlock.xShelf.naturalMode
-      // }
+      var currentItemSelectionType = CurrentItemSelectionType.doNothing;
+      // If Natural Mode: Try to select an item as current if the Block has no current.
+      if (thisXBlock.xShelf.naturalMode && this.currentItem == null) {
+        if (formModel != null) {
+          if (formModel!.formMode != FormMode.creation) {
+            currentItemSelectionType =
+                CurrentItemSelectionType.selectAnItemAsCurrentIfNeed;
+          }
+        }
+      }
 
       FlutterArtist._taskUnitQueue.addTaskUnit(
         _BlockSelectAsCurrentTaskUnit<ITEM>(
-          currentItemSelectionType: thisXBlock.xShelf.naturalMode
-              ? CurrentItemSelectionType.selectAnItemAsCurrentIfNeed
-              : CurrentItemSelectionType.doNothing,
+          currentItemSelectionType: currentItemSelectionType,
           xBlock: thisXBlock,
           newQueriedList: [],
           candidateItem: candidateCurrentItem,
@@ -858,7 +863,7 @@ abstract class Block<
     }
     //
     //
-    final ITEM? currentItem = this.currentItem;
+    final ITEM? currItem = this.currentItem;
     try {
       //
       // Update queried items to the List:
@@ -888,8 +893,8 @@ abstract class Block<
     }
     //
     final bool currentItemInList =
-        currentItem != null && containsItem(item: currentItem);
-    candidateCurrentItem = currentItemInList ? currentItem : null;
+        currItem != null && containsItem(item: currItem);
+    candidateCurrentItem = currentItemInList ? currItem : null;
     //
     if (!currentItemInList) {
       __blockData._setCurrentItemOnly(
