@@ -602,14 +602,18 @@ abstract class Block<
     if (forceQuery == QryHint.none) {
       print("        ~~~~~~~> IGNORED --> forceQuery: $forceQuery - [$name]");
       candidateCurrentItem = null;
+      //
       var currentItemSelectionType = CurrentItemSelectionType.doNothing;
+      //
       // If Natural Mode: Try to select an item as current if the Block has no current.
-      if (thisXBlock.xShelf.naturalMode && this.currentItem == null) {
-        if (formModel != null) {
-          if (formModel!.formMode != FormMode.creation) {
-            currentItemSelectionType =
-                CurrentItemSelectionType.selectAnItemAsCurrentIfNeed;
-          }
+      //
+      if (thisXBlock.xShelf.naturalMode) {
+        final defaultPostQueryBehavior = FlutterArtist.defaultPostQueryBehavior;
+        final defaultCurrentItemSelectionType =
+            defaultPostQueryBehavior.toCurrentItemSelectionType();
+
+        if (formModel?.formMode != FormMode.creation) {
+          currentItemSelectionType = defaultCurrentItemSelectionType;
         }
       }
 

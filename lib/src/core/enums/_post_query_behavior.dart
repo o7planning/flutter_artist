@@ -1,4 +1,6 @@
 // TODO-XXX Change to PostQueryAction?
+import '../../../flutter_artist.dart';
+
 enum PostQueryBehavior {
   /// Do Nothing.
   doNothing,
@@ -16,5 +18,22 @@ enum PostQueryBehavior {
   selectAnItemAsCurrent,
 
   /// Select an available item in the List and prepare form to edit.
-  selectAnItemAsCurrentAndLoadForm,
+  selectAnItemAsCurrentAndLoadForm;
+
+  CurrentItemSelectionType toCurrentItemSelectionType() {
+    switch (this) {
+      case PostQueryBehavior.doNothing:
+        return CurrentItemSelectionType.doNothing;
+      case PostQueryBehavior.clearCurrentItem:
+        return CurrentItemSelectionType.doNothing;
+      case PostQueryBehavior.createNewItem:
+        return CurrentItemSelectionType.doNothing;
+      case PostQueryBehavior.selectAnItemAsCurrentIfNeed:
+        return CurrentItemSelectionType.selectAnItemAsCurrentIfNeed;
+      case PostQueryBehavior.selectAnItemAsCurrent:
+        return CurrentItemSelectionType.selectAnItemAsCurrent;
+      case PostQueryBehavior.selectAnItemAsCurrentAndLoadForm:
+        return CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm;
+    }
+  }
 }
