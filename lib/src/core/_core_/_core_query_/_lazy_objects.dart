@@ -2,7 +2,7 @@ part of '../core.dart';
 
 class _LazyBlock {
   final Block block;
-  final bool forceQuery;
+  final QryHint forceQuery;
 
   _LazyBlock({required this.block, required this.forceQuery});
 
@@ -51,7 +51,7 @@ class _LazyObjects {
     lazyScalars.add(_LazyScalar(scalar: scalar));
   }
 
-  void addLazyBlock({required Block block, required bool forceQuery}) {
+  void addLazyBlock({required Block block, required QryHint forceQuery}) {
     lazyBlocks.add(_LazyBlock(block: block, forceQuery: forceQuery));
   }
 

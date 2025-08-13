@@ -18,6 +18,8 @@ class _StorageEventHandler {
       outsideEventTypes: outsideEventTypes,
       itemIdString: null,
     );
+    print("QUEUE: ${FlutterArtist._taskUnitQueue}");
+    FlutterArtist.executor._executeTaskUnitQueue();
   }
 
   // ***************************************************************************
@@ -28,6 +30,7 @@ class _StorageEventHandler {
     required Block eventBlock,
     required String? itemIdString,
   }) {
+    // Appends TaskUnits to QUEUE (No need to call execute).
     __fireEventSourceChanged(
       eventBlock: eventBlock,
       outsideEventTypes: eventBlock.config.outsideBroadcastEvents,
@@ -561,7 +564,7 @@ class _StorageEventHandler {
             .map(
               (b) => _BlockOpt(
                   block: b,
-                  forceQuery: true,
+                  forceQuery: QryHint.force,
                   forceReloadItem: true,
                   pageable: null,
                   listBehavior: null,

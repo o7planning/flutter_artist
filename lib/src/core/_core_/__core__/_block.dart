@@ -436,21 +436,6 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __clearAllChildrenBlocksToReady({
-    required _XBlock thisXBlock,
-  }) {
-    __assertThisXBlock(thisXBlock);
-    //
-    for (var childXBlock in thisXBlock.childXBlocks) {
-      childXBlock.block.__clearWithDataStateAndChildrenToNonCascade(
-        thisXBlock: childXBlock,
-        qryDataState: DataState.ready,
-        frmDataState: DataState.none,
-        errorInFilter: false,
-      );
-    }
-  }
-
   void __clearAllChildrenBlocksToNone({
     required _XBlock thisXBlock,
   }) {
@@ -595,14 +580,14 @@ abstract class Block<
   @_BlockQueryPreviousPageAnnotation()
   @_BlockQueryAndPrepareToEditAnnotation()
   @_BlockQueryAndPrepareToCreateAnnotation()
-  Future<BlockQueryResult> _unitQuery({required _XBlock thisXBlock}) async {
+  Future<void> _unitQuery({required _XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
     //
     bool hasActiveUI = this.ui.hasActiveUIComponent(alsoCheckChildren: true);
-    bool forceQuery = thisXBlock.forceQuery;
-    if (!forceQuery) {
+    QryHint forceQuery = thisXBlock.forceQuery;
+    if (forceQuery != QryHint.force) {
       if (this.queryDataState != DataState.ready && hasActiveUI) {
-        forceQuery = true;
+        forceQuery = QryHint.force;
       }
     }
     //
@@ -613,315 +598,330 @@ abstract class Block<
     PageData<ITEM>? pageData;
     final ITEM? candidateCurrentItem;
     bool queried = false;
-    if (forceQuery) {
-      //
-      // thisXBlock.forceQuery || (hasActiveUI && this.queryDataState != DataState.ready)
-      //
-      FILTER_CRITERIA? filterCriteriaOfFilterModel;
-      try {
-        final _XFilterModel xFilterModel = thisXBlock.xFilterModel;
-        final FilterModel filterModel = xFilterModel.filterModel;
-        //
-        if (!xFilterModel.queried) {
-          FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
-          //
-          filterCriteriaOfFilterModel =
-              await filterModel._startNewFilterActivity(
-            activityType: FilterActivityType.newFilt,
-            filterInput: filterInput,
-          ) as FILTER_CRITERIA?;
-          //
-          xFilterModel.queried = true;
-        } else {
-          filterCriteriaOfFilterModel =
-              filterModel._filterCriteria! as FILTER_CRITERIA;
-        }
-      } catch (e, stackTrace) {
-        // @@TODO@@ 12 Test.
-        print("ERROR _unitQuery: $stackTrace");
-        /* Never Error */
-      }
-      //
-      // Has Error in FilterModel.
-      //
-      if (filterCriteriaOfFilterModel == null) {
-        // Test Cases: [23a].
-        // Set Block to error cascade.
-        __clearWithDataStateAndChildrenToNonCascade(
-          thisXBlock: thisXBlock,
-          qryDataState: DataState.error,
-          frmDataState: DataState.none,
-          errorInFilter: true,
-        );
-        thisXBlock.queryResult._setFilterError();
-        return thisXBlock.queryResult;
-      }
-      //
-      // Ready FilterCriteria:
-      //
-      final bool parentOrCriteriaChanged =
-          __blockData._isParentOrFilterCriteriaChanged(
-        newCurrentParentItemId: parentItemId,
-        newFilterCriteria: filterCriteriaOfFilterModel,
+
+    if (forceQuery == QryHint.none) {
+      print("        ~~~~~~~> IGNORED --> forceQuery: $forceQuery - [$name]");
+      candidateCurrentItem = null;
+      FlutterArtist._taskUnitQueue.addTaskUnit(
+        _BlockSelectAsCurrentTaskUnit<ITEM>(
+          currentItemSelectionType: CurrentItemSelectionType.doNothing,
+          xBlock: thisXBlock,
+          newQueriedList: [],
+          candidateItem: candidateCurrentItem,
+          forceReloadItem: false,
+          forceTypeForForm: null,
+        ),
       );
+      return;
+    } else if (forceQuery == QryHint.markAsPending) {
+      thisXBlock.block.setToPending();
+      return;
+    } else if (forceQuery != QryHint.force) {
+      throw "TODO"; // Never run.
+    }
+
+    //
+    // FORCE QUERY:
+    // thisXBlock.forceQuery || (hasActiveUI && this.queryDataState != DataState.ready)
+    //
+    FILTER_CRITERIA? filterCriteriaOfFilterModel;
+    try {
+      final _XFilterModel xFilterModel = thisXBlock.xFilterModel;
+      final FilterModel filterModel = xFilterModel.filterModel;
       //
-      ActionResultState queryResultState;
-      AppError? appError;
-      //
-      ListBehavior realListBehavior;
-      //
-      final PageableData? callingPageable;
-      //
-      if (thisXBlock.queryType == QueryType.realQuery) {
-        callingPageable = thisXBlock.pageable ?? config.pageable;
-        final QueryType newQueryType = thisXBlock.queryType;
-        final queryTypeChanged = __lastQueryType != newQueryType;
-        __lastQueryType = newQueryType;
+      if (!xFilterModel.queried) {
+        FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
         //
-        // Call Query API:
+        filterCriteriaOfFilterModel = await filterModel._startNewFilterActivity(
+          activityType: FilterActivityType.newFilt,
+          filterInput: filterInput,
+        ) as FILTER_CRITERIA?;
         //
-        try {
-          __clearBlockError();
-          __refreshQueryingState(isQuerying: true);
-          //
-          FlutterArtist.codeFlowLogger._addMethodCall(
-            isLibCode: false,
-            navigate: null,
-            ownerClassInstance: this,
-            methodName: callApiQueryMethod.name,
-            parameters: {},
-          );
-          //
-          __callApiQueryCount++;
-          ApiResult<PageData<ITEM>?> result = await callApiQuery(
-            parentBlockCurrentItem: parent?.currentItem,
-            filterCriteria: filterCriteriaOfFilterModel,
-            pageable: callingPageable,
-          );
-          // Throw ApiError:
-          result.throwIfError();
-          //
-          queried = true;
-          queryResultState = ActionResultState.success;
-          pageData = result.data;
-        } catch (e, stackTrace) {
-          queryResultState = ActionResultState.fail;
-          pageData = null;
-          //
-          final blockErrorInfo = BlockErrorInfo(
-            queryDataState: queryDataState,
-            blockErrorMethod: callApiQueryMethod,
-            error: e, // AppError, ApiError or others.
-            errorStackTrace: stackTrace,
-          );
-          __setBlockErrorInfo(blockErrorInfo);
-          //
-          appError = _handleError(
-            shelf: shelf,
-            methodName: callApiQueryMethod.name,
-            // AppError, ApiError or others.
-            error: e,
-            stackTrace: stackTrace,
-            showSnackBar: true,
-          );
-          thisXBlock.queryResult._setAppError(
-            appError: appError,
-            stackTrace: appError is ApiError ? null : stackTrace,
-          );
-        } finally {
-          __refreshQueryingState(isQuerying: false);
-        }
-        //
-        if (queryResultState == ActionResultState.fail) {
-          // Query Error + Parent or Criteria changed.
-          if (parentOrCriteriaChanged) {
-            switch (queryDataState) {
-              case DataState.ready:
-                // @FaCode-002.
-                // Test Case: [42a].
-                // Replace by empty items.
-                realListBehavior = ListBehavior.replace;
-                newQueryDataState = DataState.error;
-              case DataState.pending:
-                // Replace by empty items.
-                realListBehavior = ListBehavior.replace;
-                newQueryDataState = DataState.error;
-              case DataState.error:
-                // @FaCode-003.
-                // Test Case: [42a].
-                // Replace by empty items.
-                realListBehavior = ListBehavior.replace;
-                newQueryDataState = DataState.error;
-              case DataState.none:
-                // Replace by empty items.
-                realListBehavior = ListBehavior.replace;
-                newQueryDataState = DataState.error;
-            }
-          }
-          // Query Error + Parent not changed + Criteria not changed.
-          // Test Case: [42a].
-          else {
-            switch (queryDataState) {
-              case DataState.ready:
-                // Append empty items (No items got from Server).
-                // Test Case: [42a].
-                // @FaCode-001.
-                realListBehavior = ListBehavior.append;
-                newQueryDataState = DataState.ready;
-              case DataState.pending:
-                // Replace by empty items.
-                realListBehavior = ListBehavior.replace;
-                newQueryDataState = DataState.error;
-              case DataState.error:
-                // @FaCode-004.
-                // Replace by empty items.
-                realListBehavior = ListBehavior.replace;
-                newQueryDataState = DataState.error;
-              case DataState.none:
-                // Replace by empty items.
-                realListBehavior = ListBehavior.replace;
-                newQueryDataState = DataState.error;
-            }
-          }
-        }
-        // Query Successful:
-        else {
-          // Query Successful + Parent or Criteria changed.
-          if (parentOrCriteriaChanged) {
-            switch (queryDataState) {
-              case DataState.ready:
-                // Replace.
-                realListBehavior = ListBehavior.replace;
-                newQueryDataState = DataState.ready;
-              case DataState.pending:
-                // Replace.
-                realListBehavior = ListBehavior.replace;
-                newQueryDataState = DataState.ready;
-              case DataState.error:
-                // Replace.
-                realListBehavior = ListBehavior.replace;
-                newQueryDataState = DataState.ready;
-              case DataState.none:
-                // Replace.
-                realListBehavior = ListBehavior.replace;
-                newQueryDataState = DataState.ready;
-            }
-          }
-          // Query Successful + Parent not changed + Criteria not changed.
-          else {
-            switch (queryDataState) {
-              case DataState.ready:
-                // Replace or Append:
-                realListBehavior = thisXBlock.listBehavior;
-                newQueryDataState = DataState.ready;
-              case DataState.pending:
-                // Replace.
-                realListBehavior = ListBehavior.replace;
-                newQueryDataState = DataState.ready;
-              case DataState.error:
-                // Replace.
-                realListBehavior = ListBehavior.replace;
-                newQueryDataState = DataState.ready;
-              case DataState.none:
-                // Replace.
-                realListBehavior = ListBehavior.replace;
-                newQueryDataState = DataState.ready;
-            }
-          }
-        }
-        if (queryTypeChanged) {
-          // Replace:
-          realListBehavior = ListBehavior.replace;
-        }
+        xFilterModel.queried = true;
+      } else {
+        filterCriteriaOfFilterModel =
+            filterModel._filterCriteria! as FILTER_CRITERIA;
       }
-      // Query Empty:
-      else {
-        callingPageable = __blockData._emptyPageable;
-        __lastQueryType = thisXBlock.queryType;
-        realListBehavior = ListBehavior.replace;
-        newQueryDataState = DataState.ready;
-        pageData = PageData.empty<ITEM>();
-        queryResultState = ActionResultState.success;
-      }
+    } catch (e, stackTrace) {
+      // @@TODO@@ 12 Test.
+      print("ERROR _unitQuery: $stackTrace");
+      /* Never Error */
+    }
+    //
+    // Has Error in FilterModel.
+    //
+    if (filterCriteriaOfFilterModel == null) {
+      // Test Cases: [23a].
+      // Set Block to error cascade.
+      __clearWithDataStateAndChildrenToNonCascade(
+        thisXBlock: thisXBlock,
+        qryDataState: DataState.error,
+        frmDataState: DataState.none,
+        errorInFilter: true,
+      );
+      thisXBlock.queryResult._setFilterError();
+      return;
+    }
+    //
+    // Ready FilterCriteria:
+    //
+    final bool parentOrCriteriaChanged =
+        __blockData._isParentOrFilterCriteriaChanged(
+      newCurrentParentItemId: parentItemId,
+      newFilterCriteria: filterCriteriaOfFilterModel,
+    );
+    //
+    ActionResultState queryResultState;
+    AppError? appError;
+    //
+    ListBehavior realListBehavior;
+    //
+    final PageableData? callingPageable;
+    //
+    if (thisXBlock.queryType == QueryType.realQuery) {
+      callingPageable = thisXBlock.pageable ?? config.pageable;
+      final QueryType newQueryType = thisXBlock.queryType;
+      final queryTypeChanged = __lastQueryType != newQueryType;
+      __lastQueryType = newQueryType;
       //
+      // Call Query API:
       //
-      final ITEM? currentItem = this.currentItem;
       try {
+        __clearBlockError();
+        __refreshQueryingState(isQuerying: true);
         //
-        // Update queried items to the List:
+        FlutterArtist.codeFlowLogger._addMethodCall(
+          isLibCode: false,
+          navigate: null,
+          ownerClassInstance: this,
+          methodName: callApiQueryMethod.name,
+          parameters: {},
+        );
         //
-        __blockData._updateFrom(
-          forceListBehavior: realListBehavior,
-          currentParentItemId: this.parentItemId,
+        __callApiQueryCount++;
+        ApiResult<PageData<ITEM>?> result = await callApiQuery(
+          parentBlockCurrentItem: parent?.currentItem,
           filterCriteria: filterCriteriaOfFilterModel,
           pageable: callingPageable,
-          pageData: pageData,
-          queryDataState: newQueryDataState,
-          queryResultState: queryResultState,
         );
+        // Throw ApiError:
+        result.throwIfError();
+        //
+        queried = true;
+        queryResultState = ActionResultState.success;
+        pageData = result.data;
       } catch (e, stackTrace) {
-        AppError appError = _handleError(
+        queryResultState = ActionResultState.fail;
+        pageData = null;
+        //
+        final blockErrorInfo = BlockErrorInfo(
+          queryDataState: queryDataState,
+          blockErrorMethod: callApiQueryMethod,
+          error: e, // AppError, ApiError or others.
+          errorStackTrace: stackTrace,
+        );
+        __setBlockErrorInfo(blockErrorInfo);
+        //
+        appError = _handleError(
           shelf: shelf,
-          methodName: '__blockData._updateFrom()',
+          methodName: callApiQueryMethod.name,
+          // AppError, ApiError or others.
           error: e,
           stackTrace: stackTrace,
           showSnackBar: true,
         );
         thisXBlock.queryResult._setAppError(
           appError: appError,
-          stackTrace: stackTrace,
+          stackTrace: appError is ApiError ? null : stackTrace,
         );
-        return thisXBlock.queryResult;
+      } finally {
+        __refreshQueryingState(isQuerying: false);
       }
       //
-      final bool currentItemInList =
-          currentItem != null && containsItem(item: currentItem);
-      candidateCurrentItem = currentItemInList ? currentItem : null;
-      //
-      if (!currentItemInList) {
-        __blockData._setCurrentItemOnly(
-          refreshedItem: null,
-          refreshedItemDetail: null,
-        );
-        //
-        if (formModel != null) {
-          formModel!._clearDataWithDataState(formDataState: DataState.none);
+      if (queryResultState == ActionResultState.fail) {
+        // Query Error + Parent or Criteria changed.
+        if (parentOrCriteriaChanged) {
+          switch (queryDataState) {
+            case DataState.ready:
+              // @FaCode-002.
+              // Test Case: [42a].
+              // Replace by empty items.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.error;
+            case DataState.pending:
+              // Replace by empty items.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.error;
+            case DataState.error:
+              // @FaCode-003.
+              // Test Case: [42a].
+              // Replace by empty items.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.error;
+            case DataState.none:
+              // Replace by empty items.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.error;
+          }
         }
-        // (Currently, In _unitQuery && forceQuery).
+        // Query Error + Parent not changed + Criteria not changed.
         // Test Case: [42a].
-        this.__clearAllChildrenBlocksToNone(
-          thisXBlock: thisXBlock,
-        );
-      }
-      // currentItemInList.
-      else {
-        switch (newQueryDataState) {
-          case DataState.none:
-            // @@TODO@@ 04.
-            // Never run:
-            this.__clearAllChildrenBlocksToNone(
-              thisXBlock: thisXBlock,
-            );
-          case DataState.pending:
-            // @@TODO@@ 05.
-            // Never run:
-            this.__clearAllChildrenBlocksToNone(
-              thisXBlock: thisXBlock,
-            );
-          case DataState.error:
-            // @@TODO@@ 06.
-            this.__clearAllChildrenBlocksToNone(
-              thisXBlock: thisXBlock,
-            );
-          case DataState.ready:
-            break;
+        else {
+          switch (queryDataState) {
+            case DataState.ready:
+              // Append empty items (No items got from Server).
+              // Test Case: [42a].
+              // @FaCode-001.
+              realListBehavior = ListBehavior.append;
+              newQueryDataState = DataState.ready;
+            case DataState.pending:
+              // Replace by empty items.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.error;
+            case DataState.error:
+              // @FaCode-004.
+              // Replace by empty items.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.error;
+            case DataState.none:
+              // Replace by empty items.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.error;
+          }
         }
+      }
+      // Query Successful:
+      else {
+        // Query Successful + Parent or Criteria changed.
+        if (parentOrCriteriaChanged) {
+          switch (queryDataState) {
+            case DataState.ready:
+              // Replace.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.ready;
+            case DataState.pending:
+              // Replace.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.ready;
+            case DataState.error:
+              // Replace.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.ready;
+            case DataState.none:
+              // Replace.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.ready;
+          }
+        }
+        // Query Successful + Parent not changed + Criteria not changed.
+        else {
+          switch (queryDataState) {
+            case DataState.ready:
+              // Replace or Append:
+              realListBehavior = thisXBlock.listBehavior;
+              newQueryDataState = DataState.ready;
+            case DataState.pending:
+              // Replace.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.ready;
+            case DataState.error:
+              // Replace.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.ready;
+            case DataState.none:
+              // Replace.
+              realListBehavior = ListBehavior.replace;
+              newQueryDataState = DataState.ready;
+          }
+        }
+      }
+      if (queryTypeChanged) {
+        // Replace:
+        realListBehavior = ListBehavior.replace;
       }
     }
-    // forceQuery == false.
+    // Query Empty:
     else {
-      print("        ~~~~~~~> IGNORED --> forceQuery: $forceQuery - [$name]");
-      candidateCurrentItem = null;
+      callingPageable = __blockData._emptyPageable;
+      __lastQueryType = thisXBlock.queryType;
+      realListBehavior = ListBehavior.replace;
+      newQueryDataState = DataState.ready;
+      pageData = PageData.empty<ITEM>();
+      queryResultState = ActionResultState.success;
+    }
+    //
+    //
+    final ITEM? currentItem = this.currentItem;
+    try {
+      //
+      // Update queried items to the List:
+      //
+      __blockData._updateFrom(
+        forceListBehavior: realListBehavior,
+        currentParentItemId: this.parentItemId,
+        filterCriteria: filterCriteriaOfFilterModel,
+        pageable: callingPageable,
+        pageData: pageData,
+        queryDataState: newQueryDataState,
+        queryResultState: queryResultState,
+      );
+    } catch (e, stackTrace) {
+      AppError appError = _handleError(
+        shelf: shelf,
+        methodName: '__blockData._updateFrom()',
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      thisXBlock.queryResult._setAppError(
+        appError: appError,
+        stackTrace: stackTrace,
+      );
+      return;
+    }
+    //
+    final bool currentItemInList =
+        currentItem != null && containsItem(item: currentItem);
+    candidateCurrentItem = currentItemInList ? currentItem : null;
+    //
+    if (!currentItemInList) {
+      __blockData._setCurrentItemOnly(
+        refreshedItem: null,
+        refreshedItemDetail: null,
+      );
+      //
+      if (formModel != null) {
+        formModel!._clearDataWithDataState(formDataState: DataState.none);
+      }
+      // (Currently, In _unitQuery && forceQuery).
+      // Test Case: [42a].
+      this.__clearAllChildrenBlocksToNone(
+        thisXBlock: thisXBlock,
+      );
+    }
+    // currentItemInList.
+    else {
+      switch (newQueryDataState) {
+        case DataState.none:
+          // @@TODO@@ 04.
+          // Never run:
+          this.__clearAllChildrenBlocksToNone(
+            thisXBlock: thisXBlock,
+          );
+        case DataState.pending:
+          // @@TODO@@ 05.
+          // Never run:
+          this.__clearAllChildrenBlocksToNone(
+            thisXBlock: thisXBlock,
+          );
+        case DataState.error:
+          // @@TODO@@ 06.
+          this.__clearAllChildrenBlocksToNone(
+            thisXBlock: thisXBlock,
+          );
+        case DataState.ready:
+          break;
+      }
     }
 
     // TODO: LOGIC-01 (If not querying block --> No need to force select an item).
@@ -990,7 +990,6 @@ abstract class Block<
         );
       }
     }
-    return thisXBlock.queryResult;
   }
 
   // ***************************************************************************
@@ -2764,7 +2763,7 @@ abstract class Block<
       forceQueryBlockOpts: [
         _BlockOpt(
           block: this,
-          forceQuery: true,
+          forceQuery: QryHint.force,
           forceReloadItem: false,
           queryType: QueryType.emptyQuery,
           pageable: pageable,
@@ -2872,7 +2871,7 @@ abstract class Block<
       forceQueryBlockOpts: [
         _BlockOpt(
           block: this,
-          forceQuery: true,
+          forceQuery: QryHint.force,
           forceReloadItem: false,
           pageable: pageable,
           listBehavior: listBehavior,
@@ -2922,7 +2921,7 @@ abstract class Block<
       forceQueryBlockOpts: [
         _BlockOpt(
           block: this,
-          forceQuery: true,
+          forceQuery: QryHint.force,
           forceReloadItem: false,
           pageable: null,
           listBehavior: ListBehavior.replace,
@@ -3195,7 +3194,7 @@ abstract class Block<
         forceQueryBlockOpts = [
           _BlockOpt(
             block: this,
-            forceQuery: true,
+            forceQuery: QryHint.force,
             forceReloadItem: false,
             pageable: null,
             listBehavior: null,
@@ -3836,7 +3835,7 @@ abstract class Block<
       forceQueryBlockOpts: [
         _BlockOpt(
           block: this,
-          forceQuery: true,
+          forceQuery: QryHint.force,
           // Force Reload Item.
           forceReloadItem: false,
           // Must reload after query (????????????).

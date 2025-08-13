@@ -175,7 +175,7 @@ class _XShelf {
   void __setForceQueryBlockOpt(_BlockOpt forceQueryBlockOpt) {
     Block block = forceQueryBlockOpt.block;
     _XBlock xBlock = allXBlockMap[block.name]!;
-    if (forceQueryBlockOpt.forceQuery) {
+    if (forceQueryBlockOpt.forceQuery == QryHint.force) {
       xBlock.setForceQuery();
     }
     if (forceQueryBlockOpt.forceReloadItem) {

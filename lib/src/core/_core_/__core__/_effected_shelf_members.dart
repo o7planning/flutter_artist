@@ -64,13 +64,26 @@ class EffectedShelfMembers {
       ..addAll(__refreshCurrItmBlockMAP.keys);
 
     for (String listenerBlkName in listenerBlockNames) {
-      Block? reQryBlock = __reQueryBlockMAP[listenerBlkName];
-      Block? refreshCurrBlock = __refreshCurrItmBlockMAP[listenerBlkName];
+      final Block? reQryBlock = __reQueryBlockMAP[listenerBlkName];
+      final Block? refreshCurrBlock = __refreshCurrItmBlockMAP[listenerBlkName];
+      bool blockVisible = false;
+      QryHint forceQuery = QryHint.none;
+      bool forceReloadItem = false;
+      if (reQryBlock != null) {
+        blockVisible =
+            reQryBlock.ui.hasActiveBlockFragmentWidget(alsoCheckChildren: true);
+        forceQuery = blockVisible ? QryHint.force : QryHint.markAsPending;
+      }
+      if (refreshCurrBlock != null) {
+        blockVisible = refreshCurrBlock.ui
+            .hasActiveBlockFragmentWidget(alsoCheckChildren: true);
+        forceReloadItem = true;
+      }
       ret.add(
         _BlockOpt(
           block: (reQryBlock ?? refreshCurrBlock)!,
-          forceQuery: reQryBlock != null,
-          forceReloadItem: refreshCurrBlock != null,
+          forceQuery: forceQuery,
+          forceReloadItem: forceReloadItem,
           queryType: QueryType.realQuery,
           pageable: null,
           listBehavior: ListBehavior.replace,

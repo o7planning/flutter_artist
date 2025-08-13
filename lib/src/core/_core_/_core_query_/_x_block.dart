@@ -15,7 +15,7 @@ class _XBlock {
   // Query Options:
   // ***************************************************************************
 
-  bool __forceQuery = false;
+  QryHint __forceQuery = QryHint.none;
   bool __forceReloadItem = false;
 
   QueryType __queryType = QueryType.realQuery;
@@ -63,7 +63,7 @@ class _XBlock {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool get forceQuery {
+  QryHint  get forceQuery {
     return __forceQuery;
   }
 
@@ -72,7 +72,7 @@ class _XBlock {
   }
 
   void setForceQuery() {
-    __forceQuery = true;
+    __forceQuery = QryHint.force;
   }
 
   void setForceReloadItem() {

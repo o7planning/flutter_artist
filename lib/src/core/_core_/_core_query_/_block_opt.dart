@@ -6,7 +6,7 @@ part of '../core.dart';
 class _BlockOpt {
   final Block block;
 
-  final bool forceQuery;
+  final QryHint forceQuery;
   final bool forceReloadItem;
   final QueryType queryType;
   final ListBehavior? listBehavior;

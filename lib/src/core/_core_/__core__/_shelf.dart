@@ -644,7 +644,8 @@ abstract class Shelf extends _Core {
   void _addShelfQueryTaskUnit({
     required EffectedShelfMembers effectedShelfMembers,
   }) {
-    print(" -- @ addShelfQueryTaskUnit: ${getClassName(this)}");
+    print(
+        " ||-------------> addShelfQueryTaskUnit: ${getClassName(this)} [LISTENER]");
     List<_ScalarOpt> scalarOpts =
         effectedShelfMembers._getForceReQueryScalarOpts();
     List<_BlockOpt> blockOpts =
@@ -777,11 +778,17 @@ abstract class Shelf extends _Core {
       if (block.ui.hasActiveBlockFragmentWidget(alsoCheckChildren: true)) {
         if (block.queryDataState == DataState.pending ||
             block.queryDataState == DataState.error) {
-          founds.addLazyBlock(block: block, forceQuery: true);
+          founds.addLazyBlock(
+            block: block,
+            forceQuery: QryHint.force,
+          );
           found = true;
         } else if (block.queryDataState == DataState.ready) {
           if (block.itemCount > 0 && block.currentItem == null) {
-            founds.addLazyBlock(block: block, forceQuery: false);
+            founds.addLazyBlock(
+              block: block,
+              forceQuery: QryHint.none,
+            );
             found = true;
           }
         }
