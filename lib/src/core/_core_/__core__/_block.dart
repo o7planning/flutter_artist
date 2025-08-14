@@ -619,7 +619,11 @@ abstract class Block<
             defaultPostQueryBehavior.toCurrentItemSelectionType();
         currentItemSelectionType = defaultCurrentItemSelectionType;
       }
-
+      //
+      if (currentItemSelectionType == CurrentItemSelectionType.doNothing &&
+          currentItem == null) {
+        return;
+      }
       FlutterArtist._taskUnitQueue.addTaskUnit(
         _BlockSelectAsCurrentTaskUnit<ITEM>(
           currentItemSelectionType: currentItemSelectionType,
