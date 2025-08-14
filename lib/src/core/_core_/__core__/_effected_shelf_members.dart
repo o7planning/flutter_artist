@@ -72,25 +72,31 @@ class EffectedShelfMembers {
       if (reQryBlock != null) {
         blockVisible =
             reQryBlock.ui.hasActiveBlockFragmentWidget(alsoCheckChildren: true);
-        forceQuery = blockVisible ? QryHint.force : QryHint.markAsPending;
+        switch (shelfReactionType) {
+          case ShelfReactionType.natural:
+            forceQuery = blockVisible ? QryHint.force : QryHint.none;
+          case ShelfReactionType.internal:
+            forceQuery = blockVisible ? QryHint.force : QryHint.markAsPending;
+          case ShelfReactionType.external:
+            forceQuery = blockVisible ? QryHint.force : QryHint.markAsPending;
+        }
       }
       if (refreshCurrBlock != null) {
         blockVisible = refreshCurrBlock.ui
             .hasActiveBlockFragmentWidget(alsoCheckChildren: true);
         forceReloadItem = true;
       }
-      ret.add(
-        _BlockOpt(
-          block: (reQryBlock ?? refreshCurrBlock)!,
-          forceQuery: forceQuery,
-          forceReloadItem: forceReloadItem,
-          queryType: QueryType.realQuery,
-          pageable: null,
-          listBehavior: ListBehavior.replace,
-          suggestedSelection: null,
-          postQueryBehavior: null,
-        ),
+      final blockOpt = _BlockOpt(
+        block: (reQryBlock ?? refreshCurrBlock)!,
+        forceQuery: forceQuery,
+        forceReloadItem: forceReloadItem,
+        queryType: QueryType.realQuery,
+        pageable: null,
+        listBehavior: ListBehavior.replace,
+        suggestedSelection: null,
+        postQueryBehavior: null,
       );
+      ret.add(blockOpt);
     }
     return ret;
   }

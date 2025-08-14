@@ -609,6 +609,7 @@ abstract class Scalar<
     }
     //
     _XShelf xShelf = _XShelf(
+      xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
       forceFilterModelOpt: _FilterModelOpt(
         filterModel: _registeredOrDefaultFilterModel,
@@ -683,6 +684,7 @@ abstract class Scalar<
     }
     //
     _XShelf xShelf = _XShelf(
+      xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
       forceFilterModelOpt: _FilterModelOpt(
         filterModel: _registeredOrDefaultFilterModel,
@@ -728,6 +730,7 @@ abstract class Scalar<
     );
     //
     _XShelf xShelf = await shelf._queryShelf(
+      xShelfTaskType: XShelfTaskType.commonTask,
       forceFilterModelOpt: _FilterModelOpt(
         filterModel: _registeredOrDefaultFilterModel,
         filterInput: filterInput,

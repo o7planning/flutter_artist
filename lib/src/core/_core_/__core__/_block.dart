@@ -2291,6 +2291,7 @@ abstract class Block<
     }
     //
     _XShelf xShelf = _XShelf(
+      xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
@@ -2361,6 +2362,7 @@ abstract class Block<
       );
     }
     _XShelf xShelf = _XShelf(
+      xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
@@ -2432,6 +2434,7 @@ abstract class Block<
     }
     //
     _XShelf xShelf = _XShelf(
+      xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
@@ -2513,6 +2516,7 @@ abstract class Block<
     }
     //
     _XShelf xShelf = _XShelf(
+      xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
@@ -2598,6 +2602,7 @@ abstract class Block<
     }
     //
     _XShelf xShelf = _XShelf(
+      xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
@@ -2774,6 +2779,7 @@ abstract class Block<
     );
     //
     _XShelf xShelf = await shelf._queryShelf(
+      xShelfTaskType: XShelfTaskType.commonTask,
       forceFilterModelOpt: _FilterModelOpt(
         filterModel: _registeredOrDefaultFilterModel,
         filterInput: filterInput,
@@ -2882,6 +2888,7 @@ abstract class Block<
     );
     //
     _XShelf xShelf = await shelf._queryShelf(
+      xShelfTaskType: XShelfTaskType.commonTask,
       forceFilterModelOpt: _FilterModelOpt(
         filterModel: _registeredOrDefaultFilterModel,
         filterInput: filterInput,
@@ -2932,6 +2939,7 @@ abstract class Block<
     );
     //
     _XShelf xShelf = await shelf._queryShelf(
+      xShelfTaskType: XShelfTaskType.commonTask,
       forceFilterModelOpt: _FilterModelOpt(
         filterModel: this._registeredOrDefaultFilterModel,
         filterInput: filterInput,
@@ -3224,6 +3232,7 @@ abstract class Block<
     }
     //
     _XShelf xShelf = _XShelf(
+      xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
       forceFilterModelOpt: _FilterModelOpt(
         filterModel: _registeredOrDefaultFilterModel,
@@ -3304,6 +3313,7 @@ abstract class Block<
     }
     //
     _XShelf xShelf = _XShelf(
+      xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
@@ -3383,6 +3393,7 @@ abstract class Block<
     }
     //
     _XShelf xShelf = _XShelf(
+      xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
@@ -3460,6 +3471,7 @@ abstract class Block<
     }
     //
     _XShelf xShelf = _XShelf(
+      xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
@@ -3515,6 +3527,7 @@ abstract class Block<
     }
     //
     _XShelf xShelf = _XShelf(
+      xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
@@ -3642,6 +3655,7 @@ abstract class Block<
     extraFormInput?.formAction = FormAction.create;
     //
     _XShelf xShelf = _XShelf(
+      xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
@@ -3846,6 +3860,7 @@ abstract class Block<
     }
     //
     _XShelf xShelf = await shelf._queryShelf(
+      xShelfTaskType: XShelfTaskType.commonTask,
       forceFilterModelOpt: _FilterModelOpt(
         filterModel: _registeredOrDefaultFilterModel,
         filterInput: filterInput,

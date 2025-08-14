@@ -3,6 +3,8 @@ part of '../core.dart';
 int __xShelfIdSequence = 0;
 
 class _XShelf {
+  final XShelfTaskType xShelfTaskType;
+
   final bool naturalMode;
 
   late final int xShelfId;
@@ -38,6 +40,7 @@ class _XShelf {
   final Map<String, _XFormModel> allXFormModelMap = {};
 
   _XShelf({
+    required this.xShelfTaskType,
     this.naturalMode = false,
     required this.shelf,
     required _FilterModelOpt? forceFilterModelOpt,
@@ -167,7 +170,7 @@ class _XShelf {
       }
       //
       if (found) {
-        ancestorXBlock.setForceQuery();
+        ancestorXBlock.setForceQuery(QryHint.force);
       }
     }
   }
@@ -175,9 +178,7 @@ class _XShelf {
   void __setForceQueryBlockOpt(_BlockOpt forceQueryBlockOpt) {
     Block block = forceQueryBlockOpt.block;
     _XBlock xBlock = allXBlockMap[block.name]!;
-    if (forceQueryBlockOpt.forceQuery == QryHint.force) {
-      xBlock.setForceQuery();
-    }
+    xBlock.setForceQuery(forceQueryBlockOpt.forceQuery);
     if (forceQueryBlockOpt.forceReloadItem) {
       xBlock.setForceReloadItem();
     }

@@ -71,8 +71,8 @@ class _XBlock {
     return __forceReloadItem;
   }
 
-  void setForceQuery() {
-    __forceQuery = QryHint.force;
+  void setForceQuery(QryHint forceQuery) {
+    __forceQuery = forceQuery;
   }
 
   void setForceReloadItem() {

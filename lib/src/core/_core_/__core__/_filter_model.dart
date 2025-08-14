@@ -753,6 +753,7 @@ abstract class FilterModel<
     print("#~~~~~~~~~~~~~~~> _onChangeFromFilterView");
     //
     _XShelf xShelf = _XShelf(
+      xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
@@ -826,6 +827,7 @@ abstract class FilterModel<
       navigate: null,
     );
     _XShelf xShelf = await shelf._queryShelf(
+      xShelfTaskType: XShelfTaskType.commonTask,
       forceFilterModelOpt: _FilterModelOpt(
         filterModel: this,
         filterInput: filterInput,

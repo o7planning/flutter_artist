@@ -50,12 +50,12 @@ class _StorageEventHandler {
     if (outsideEventTypes.isEmpty) {
       print(
           "~~~~~~~~~> NOT FIRE EVENT TO OUTSIDE --> Event Item Types: $outsideEventTypes"
-          " - ${getClassName(eventBlock)}");
+          " - Src Event: ${getClassName(eventBlock)}");
       return;
     } else {
       print(
           "~~~~~~~~~> FIRE EVENT TO OUTSIDE --> Event Item Types: $outsideEventTypes"
-          " - ${getClassName(eventBlock)}");
+          " - Src Event: ${getClassName(eventBlock)}");
     }
     //
     for (String shelfName in storage._shelfMap.keys) {
@@ -72,7 +72,10 @@ class _StorageEventHandler {
       if (!effectedShelfMembers.hasMember()) {
         continue;
       }
-      shelf._addShelfQueryTaskUnit(effectedShelfMembers: effectedShelfMembers);
+      shelf._addShelfQueryTaskUnit(
+        xShelfTaskType: XShelfTaskType.reactionWithTheOutside,
+        effectedShelfMembers: effectedShelfMembers,
+      );
     }
     // //
     // final List<Scalar> listenerScalars = __getListenerScalarsByBlock(
@@ -487,6 +490,7 @@ class _StorageEventHandler {
   // ***************************************************************************
   // ***************************************************************************
 
+  @Deprecated("Xoa di, khong su dung nua")
   Future<void> __executeExternalListenersOfShelf({
     required List<Scalar> listenerScalars,
     required List<Block> listenerBlocks,
@@ -554,6 +558,7 @@ class _StorageEventHandler {
       _ScalarAndBlockList sbList = queryMap[shelfName]!;
       //
       await shelf._queryShelf(
+        xShelfTaskType: XShelfTaskType.reactionWithTheOutside,
         forceFilterModelOpt: null,
         forceQueryScalarOpts: sbList.queryScalars
             .map(

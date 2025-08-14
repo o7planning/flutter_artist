@@ -599,6 +599,7 @@ abstract class Shelf extends _Core {
       // TODO: Handle Error:
       //
       await _queryShelf(
+        xShelfTaskType: XShelfTaskType.naturalReaction,
         naturalMode: true,
         forceFilterModelOpt: null,
         forceQueryScalarOpts: scalarOpts,
@@ -616,6 +617,7 @@ abstract class Shelf extends _Core {
   @_ImportantMethodAnnotation("Called as the start of a series of TaskUnit(s).")
   @_BlockShelfQueryAnnotation()
   Future<_XShelf> _queryShelf({
+    required XShelfTaskType xShelfTaskType,
     bool naturalMode = false,
     required _FilterModelOpt? forceFilterModelOpt,
     required List<_ScalarOpt> forceQueryScalarOpts,
@@ -623,6 +625,7 @@ abstract class Shelf extends _Core {
     required List<_FormModelOpt> forceQueryFormModelOpts,
   }) async {
     _XShelf xShelf = _XShelf(
+      xShelfTaskType: xShelfTaskType,
       naturalMode: naturalMode,
       shelf: this,
       forceFilterModelOpt: forceFilterModelOpt,
@@ -642,10 +645,11 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
 
   void _addShelfQueryTaskUnit({
+    required XShelfTaskType xShelfTaskType,
     required EffectedShelfMembers effectedShelfMembers,
   }) {
     print(
-        " ||-------------> addShelfQueryTaskUnit: ${getClassName(this)} [LISTENER]");
+        " ||-------------> [${xShelfTaskType.name}] --> addShelfQueryTaskUnit: ${getClassName(this)} [LISTENER]");
     List<_ScalarOpt> scalarOpts =
         effectedShelfMembers._getForceReQueryScalarOpts();
     List<_BlockOpt> blockOpts =
@@ -654,6 +658,7 @@ abstract class Shelf extends _Core {
         effectedShelfMembers._getForceReLoadFormModelOpts();
 
     _XShelf xShelf = _XShelf(
+      xShelfTaskType: xShelfTaskType,
       naturalMode: false,
       shelf: this,
       forceFilterModelOpt: null,
@@ -733,6 +738,7 @@ abstract class Shelf extends _Core {
         shelfInternalListeners._getForceReLoadFormModelOpts();
 
     _XShelf xShelf = _XShelf(
+      xShelfTaskType: XShelfTaskType.reactionWithTheInside,
       naturalMode: false,
       shelf: this,
       forceFilterModelOpt: null,

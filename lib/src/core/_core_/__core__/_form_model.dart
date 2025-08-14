@@ -1460,6 +1460,7 @@ abstract class FormModel<
     print("#~~~~~~~~~~~~~~~> _onChangeFromFormView");
     //
     _XShelf xShelf = _XShelf(
+      xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
@@ -1553,6 +1554,7 @@ abstract class FormModel<
     }
     //
     _XShelf xShelf = _XShelf(
+      xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],
@@ -1603,6 +1605,7 @@ abstract class FormModel<
     }
     //
     _XShelf xShelf = _XShelf(
+      xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
       forceFilterModelOpt: null,
       forceQueryScalarOpts: [],

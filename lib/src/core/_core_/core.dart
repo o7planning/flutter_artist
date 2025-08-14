@@ -78,6 +78,7 @@ import '../enums/_shelf_reaction_type.dart';
 import '../enums/_show_mode.dart';
 import '../enums/_sorting_direction.dart';
 import '../enums/_task_type.dart';
+import '../enums/_x_shelf_task_type.dart';
 import '../enums/after_quick_action.dart';
 import '../error/_app_error_info.dart';
 import '../error/_block_error_info.dart';
