@@ -619,7 +619,7 @@ abstract class Block<
             defaultPostQueryBehavior.toCurrentItemSelectionType();
         currentItemSelectionType = defaultCurrentItemSelectionType;
       }
-      //
+      // Test Cases: [63a] - __test_event_63a__external_product_event_in_productScreen_1
       if (currentItemSelectionType == CurrentItemSelectionType.doNothing &&
           currentItem == null) {
         return;
