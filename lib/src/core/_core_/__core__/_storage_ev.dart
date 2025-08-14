@@ -77,25 +77,6 @@ class _StorageEventHandler {
         effectedShelfMembers: effectedShelfMembers,
       );
     }
-    // //
-    // final List<Scalar> listenerScalars = __getListenerScalarsByBlock(
-    //   eventBlock: eventBlock,
-    // );
-    // //
-    // final List<Block> listenerBlocks = __getListenerBlocksByBlock(
-    //   eventBlock: eventBlock,
-    // );
-    // print(
-    //     "~~~~~~~~~> listenerBlocks: $listenerBlocks, listenerScalars: $listenerScalars");
-    // //
-    // // TODO: Add to QUEUE lazy.
-    // //
-    // if (listenerScalars.isNotEmpty || listenerBlocks.isNotEmpty) {
-    //   __executeExternalListenersOfShelf(
-    //     listenerScalars: listenerScalars,
-    //     listenerBlocks: listenerBlocks,
-    //   );
-    // }
   }
 
   // ***************************************************************************
