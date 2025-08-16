@@ -4,7 +4,7 @@ part of '../core.dart';
 @_ScalarQuickActionAnnotation()
 class _ScalarQuickActionTaskUnit
     extends _ResultedTaskUnit<ScalarQuickActionResult> {
-  final _XScalar xScalar;
+  final _QScalar xScalar;
   final ScalarQuickAction action;
 
   _ScalarQuickActionTaskUnit({

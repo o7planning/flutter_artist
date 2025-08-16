@@ -424,6 +424,7 @@ class _QShelf {
   _QShelf.forScalarQuery({
     required Scalar scalar,
     required FilterInput? filterInput,
+    required AfterScalarQuickAction afterQuickAction,
   })  : xShelfType = QShelfType.scalarQuery,
         shelf = scalar.shelf {
     __initCore(shelf: shelf);
@@ -432,7 +433,17 @@ class _QShelf {
     final xFilterModel = thisXScalar.xFilterModel;
     xFilterModel.filterInput = filterInput;
     //
-    thisXScalar.setForceQuery();
+    bool forceQuery = false;
+    switch (afterQuickAction) {
+      case AfterScalarQuickAction.none:
+        forceQuery = false;
+      case AfterScalarQuickAction.query:
+        forceQuery = true;
+    }
+    //
+    if (forceQuery) {
+      thisXScalar.setForceQuery();
+    }
   }
 
   // ***************************************************************************

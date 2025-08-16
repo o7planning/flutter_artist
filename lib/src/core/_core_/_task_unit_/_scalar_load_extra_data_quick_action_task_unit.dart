@@ -4,7 +4,7 @@ part of '../core.dart';
 @_ScalarLoadExtraDataQuickActionAnnotation()
 class _ScalarLoadExtraDataQuickActionTaskUnit<DATA extends Object>
     extends _TaskUnit {
-  final _XScalar xScalar;
+  final _QScalar xScalar;
   final ScalarLoadExtraDataQuickAction<DATA> action;
   final AfterScalarLoadExtraDataQuickAction afterQuickAction;
 
