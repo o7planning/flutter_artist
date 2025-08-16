@@ -4,7 +4,7 @@ part of '../core.dart';
 @_FormModelEnterFormFieldsAnnotation()
 class _FormModelAutoEnterFormFieldsTaskUnit<
     EXTRA_FORM_INPUT extends ExtraFormInput> extends _TaskUnit {
-  _XFormModel xFormModel;
+  _QFormModel xFormModel;
   EXTRA_FORM_INPUT extraFormInput;
 
   _FormModelAutoEnterFormFieldsTaskUnit({

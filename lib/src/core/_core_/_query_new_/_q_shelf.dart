@@ -22,6 +22,7 @@ enum QShelfType {
   //
   filterModelQueryAll,
   formModelSave,
+  formModelEnterFields,
   formViewChange,
   //
   scalarQuery,
@@ -501,6 +502,17 @@ class _QShelf {
 
   _QShelf.forFormModelSave({required FormModel formModel})
       : xShelfType = QShelfType.formModelSave,
+        shelf = formModel.block.shelf {
+    __initCore(shelf: shelf);
+  }
+
+
+  // ***************************************************************************
+  // *** CONSTRUCTOR ***
+  // ***************************************************************************
+
+  _QShelf.forFormModelEnterFields({required FormModel formModel})
+      : xShelfType = QShelfType.formModelEnterFields,
         shelf = formModel.block.shelf {
     __initCore(shelf: shelf);
   }

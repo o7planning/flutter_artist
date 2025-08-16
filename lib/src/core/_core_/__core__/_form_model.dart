@@ -318,10 +318,10 @@ abstract class FormModel<
   @_TaskUnitMethodAnnotation()
   @_FormModelEnterFormFieldsAnnotation()
   Future<bool> _unitQuickExtraFormInput({
-    required _XFormModel thisXFormModel,
+    required _QFormModel thisXFormModel,
     required EXTRA_FORM_INPUT extraFormInput,
   }) async {
-    __assertThisXFormModelOLD(thisXFormModel);
+    __assertThisXFormModel(thisXFormModel);
     //
     await _startNewFormActivity(
       extraFormInput: extraFormInput,
@@ -1546,17 +1546,10 @@ abstract class FormModel<
       return false;
     }
     //
-    _XShelf xShelf = _XShelf(
-      xShelfTaskType: XShelfTaskType.commonTask,
-      shelf: shelf,
-      forceFilterModelOpt: null,
-      forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [],
-      forceQueryFormModelOpts: [],
-    );
+    _QShelf xShelf = _QShelf.forFormModelEnterFields(formModel: this);
     //
-    _XBlock xBlock = xShelf.findXBlockByName(this.block.name)!;
-    _XFormModel xFormModel = xBlock.xFormModel!;
+    _QBlock xBlock = xShelf.findXBlockByName(this.block.name)!;
+    _QFormModel xFormModel = xBlock.xFormModel!;
     _TaskUnit taskUnit = _FormModelAutoEnterFormFieldsTaskUnit(
       xFormModel: xFormModel,
       extraFormInput: extraFormInput,
