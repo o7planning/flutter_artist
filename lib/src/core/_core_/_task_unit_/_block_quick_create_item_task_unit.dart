@@ -4,7 +4,7 @@ part of '../core.dart';
 @_BlockQuickCreateItemActionAnnotation()
 class _BlockQuickCreateItemTaskUnit
     extends _ResultedTaskUnit<BlockQuickItemCreationResult> {
-  _XBlock xBlock;
+  _QBlock xBlock;
   BlockQuickCreateItemAction action;
 
   _BlockQuickCreateItemTaskUnit({
