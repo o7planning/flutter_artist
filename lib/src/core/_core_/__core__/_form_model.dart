@@ -263,9 +263,9 @@ abstract class FormModel<
   @_TaskUnitMethodAnnotation()
   @_FormViewChangeAnnotation()
   Future<bool> _unitFormViewChanged({
-    required _XFormModel xFormModel,
+    required _QFormModel xFormModel,
   }) async {
-    __assertThisXFormModelOLD(xFormModel);
+    __assertThisXFormModel(xFormModel);
     //
     await _startNewFormActivity(
       extraFormInput: null,
@@ -1459,17 +1459,10 @@ abstract class FormModel<
   Future<void> _onChangeFromFormView() async {
     print("#~~~~~~~~~~~~~~~> _onChangeFromFormView");
     //
-    _XShelf xShelf = _XShelf(
-      xShelfTaskType: XShelfTaskType.commonTask,
-      shelf: shelf,
-      forceFilterModelOpt: null,
-      forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [],
-      forceQueryFormModelOpts: [],
-    );
+    _QShelf xShelf = _QShelf.forFormViewChange(formModel: this);
     //
-    _XBlock xBlock = xShelf.findXBlockByName(block.name)!;
-    _XFormModel xFormModel = xBlock.xFormModel!;
+    _QBlock xBlock = xShelf.findXBlockByName(block.name)!;
+    _QFormModel xFormModel = xBlock.xFormModel!;
     _FormViewChangeTaskUnit taskUnit =
         _FormViewChangeTaskUnit(xFormModel: xFormModel);
     FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);

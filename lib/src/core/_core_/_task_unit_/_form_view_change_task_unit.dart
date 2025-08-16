@@ -3,7 +3,7 @@ part of '../core.dart';
 @_TaskUnitClassAnnotation()
 @_FormViewChangeAnnotation()
 class _FormViewChangeTaskUnit extends _TaskUnit {
-  _XFormModel xFormModel;
+  _QFormModel xFormModel;
 
   _FormViewChangeTaskUnit({
     required this.xFormModel,
