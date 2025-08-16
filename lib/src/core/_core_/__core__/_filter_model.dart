@@ -179,7 +179,7 @@ abstract class FilterModel<
   @_TaskUnitMethodAnnotation()
   @_FilterViewChangeAnnotation()
   Future<bool> _unitFilterViewChanged({
-    required _XFilterModel xFilterModel,
+    required _QFilterModel xFilterModel,
   }) async {
     __assertThisXFilterModel(xFilterModel);
     //
@@ -752,16 +752,9 @@ abstract class FilterModel<
   Future<void> _onChangeFromFilterView() async {
     print("#~~~~~~~~~~~~~~~> _onChangeFromFilterView");
     //
-    _XShelf xShelf = _XShelf(
-      xShelfTaskType: XShelfTaskType.commonTask,
-      shelf: shelf,
-      forceFilterModelOpt: null,
-      forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [],
-      forceQueryFormModelOpts: [],
-    );
+    _QShelf xShelf = _QShelf.forFilterViewChange(filterModel: this);
     //
-    _XFilterModel xFilterModel = xShelf.findXFilterModelByName(name)!;
+    _QFilterModel xFilterModel = xShelf.findXFilterModelByName(name)!;
     _FilterViewChangeTaskUnit taskUnit =
         _FilterViewChangeTaskUnit(xFilterModel: xFilterModel);
     FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
@@ -894,7 +887,7 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __assertThisXFilterModel(_XFilterModel thisXFilterModel) {
+  void __assertThisXFilterModel(_QFilterModel thisXFilterModel) {
     if (!identical(thisXFilterModel.filterModel, this)) {
       String message =
           "Error Assets filter model: ${thisXFilterModel.filterModel} - $this";

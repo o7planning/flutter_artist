@@ -3,7 +3,7 @@ part of '../core.dart';
 @_TaskUnitClassAnnotation()
 @_FilterViewChangeAnnotation()
 class _FilterViewChangeTaskUnit extends _TaskUnit {
-  _XFilterModel xFilterModel;
+  _QFilterModel xFilterModel;
 
   _FilterViewChangeTaskUnit({
     required this.xFilterModel,
