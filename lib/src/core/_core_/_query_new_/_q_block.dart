@@ -2,6 +2,7 @@ part of '../core.dart';
 
 class _QBlock {
   _QShelf get xShelf => xFilterModel.xShelf;
+
   int get xShelfId => xShelf.xShelfId;
 
   final Block block;
@@ -63,6 +64,7 @@ class _QBlock {
         return true;
       }
     }
+    print("BLOCK: ${block} - CHILD: ${childXBlocks}");
     for (_QBlock child in childXBlocks) {
       if (child.hasQryHintInTreeBranchAndNotProcessed()) {
         return true;
@@ -118,5 +120,10 @@ class _QBlock {
     for (_QBlock xBlock in childXBlocks) {
       xBlock.printInfoCascade();
     }
+  }
+
+  @override
+  String toString() {
+    return "${getClassName(this)}(${getClassName(block)} - forceQuery: $forceQuery) forceReloadItem: $__forceReloadItem - $xFormModel";
   }
 }

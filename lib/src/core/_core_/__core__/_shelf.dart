@@ -647,27 +647,25 @@ abstract class Shelf extends _Core {
     required _QShelf xShelf,
   }) async {
     xShelf.printMe();
-    // TODO: Uncomment:
-    // for (_XScalar xScalar in xShelf.allXScalars) {
-    //   if (!xScalar.needQuery) {
-    //     continue;
-    //   }
-    //   //
-    //   // Add to Queue:
-    //   //
-    //   FlutterArtist._taskUnitQueue.addTaskUnit(
-    //     _ScalarQueryTaskUnit(
-    //       xScalar: xScalar,
-    //     ),
-    //   );
-    // }
+    for (_QScalar xScalar in xShelf.allXScalars) {
+      // _QScalar? xScalar = xShelf.nextXScalarTask();
+      // if (xScalar == null) {
+      //   break;
+      // }
+      // xScalar._processed = true;
+      FlutterArtist._taskUnitQueue.addTaskUnit(
+        _ScalarQueryTaskUnit(
+          xScalar: xScalar,
+        ),
+      );
+    }
     //
-    while (true) {
-      _QBlock? rootXBlock = xShelf.nextRootXBlockTask();
-      if (rootXBlock == null) {
-        break;
-      }
-      rootXBlock._processed = true;
+    for (_QBlock rootXBlock in xShelf.allRootXBlocks) {
+      // _QBlock? rootXBlock = xShelf.nextRootXBlockTask();
+      // if (rootXBlock == null) {
+      //   break;
+      // }
+      // rootXBlock._processed = true;
       FlutterArtist._taskUnitQueue.addTaskUnit(
         _BlockQueryTaskUnit(
           xBlock: rootXBlock,

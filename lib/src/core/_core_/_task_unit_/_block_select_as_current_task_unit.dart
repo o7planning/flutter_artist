@@ -57,8 +57,6 @@ class _BlockSelectAsCurrentTaskUnitOLD<ITEM extends Object>
   }
 }
 
-
-
 @_TaskUnitClassAnnotation()
 @_BlockRefreshCurrentItemAnnotation()
 @_BlockSelectItemAsCurrentAnnotation()
@@ -81,16 +79,16 @@ class _BlockSelectAsCurrentTaskUnit<ITEM extends Object>
     required bool forceReloadItem,
     required this.forceTypeForForm,
   }) : super(
-    taskType: TaskType.blockSelectItemAsCurrent,
-    taskResult: BlockItemCurrSelectionResult<ITEM>(
-      precheck: null,
-      currentItemSelectionType: currentItemSelectionType,
-      getItemId: xBlock.block.getItemId,
-      candidateItem: candidateItem,
-      oldCurrentItem: xBlock.block.currentItem as ITEM?,
-      currentItem: xBlock.block.currentItem as ITEM?,
-    ),
-  ) {
+          taskType: TaskType.blockSelectItemAsCurrent,
+          taskResult: BlockItemCurrSelectionResult<ITEM>(
+            precheck: null,
+            currentItemSelectionType: currentItemSelectionType,
+            getItemId: xBlock.block.getItemId,
+            candidateItem: candidateItem,
+            oldCurrentItem: xBlock.block.currentItem as ITEM?,
+            currentItem: xBlock.block.currentItem as ITEM?,
+          ),
+        ) {
     if (forceReloadItem) {
       xBlock.setForceReloadItem();
     }
