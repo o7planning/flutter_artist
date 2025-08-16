@@ -38,6 +38,8 @@ class _QShelf {
   final List<_QFilterModel> allXFilterModels = [];
   final List<_QFormModel> allXFormModels = [];
 
+  bool get naturalMode => xShelfType == QShelfType.naturalQuery;
+
   bool isNothingTodo() {
     for (_QBlock rootXBlock in allRootXBlocks) {
       if (rootXBlock.hasQryHintInTreeBranchAndNotProcessed()) {

@@ -560,79 +560,79 @@ abstract class Shelf extends _Core {
       __lazyLoadLocked = false;
     }
 
-    // Top Lazy (Scalar, Block or FormModel).
-    final _LazyObjects lazyObjects = __findLazyObjects();
-
-    print(">>>> lazyObjects: $lazyObjects");
-    lazyObjects.printInfo();
+    // // Top Lazy (Scalar, Block or FormModel).
+    // final _LazyObjects lazyObjects = __findLazyObjects();
     //
-    if (lazyObjects.isEmpty) {
-      __lastLazyLoadId = __lazyLoadId;
-      __lazyLoadLocked = false;
-      // IMPORTANT: No Lazy entities, but need to refresh UIComponents:
-      ui.updateAllUIComponents();
-      return;
-    }
-    print("@@@@@@@@@@@@ Lazy Load - ID: $__lazyLoadId");
-    print("@@@@@@@@@@@@ Lazy Load - Count: ${lazyObjects.count}");
+    // print(">>>> lazyObjects: $lazyObjects");
+    // lazyObjects.printInfo();
+    // //
+    // if (lazyObjects.isEmpty) {
+    //   __lastLazyLoadId = __lazyLoadId;
+    //   __lazyLoadLocked = false;
+    //   // IMPORTANT: No Lazy entities, but need to refresh UIComponents:
+    //   ui.updateAllUIComponents();
+    //   return;
+    // }
+    // print("@@@@@@@@@@@@ Lazy Load - ID: $__lazyLoadId");
+    // print("@@@@@@@@@@@@ Lazy Load - Count: ${lazyObjects.count}");
+    // //
+    // __lastLazyLoadId = __lazyLoadId;
+    // //
     //
-    __lastLazyLoadId = __lazyLoadId;
-    //
-
-    final List<_ScalarOpt> scalarOpts = [];
-    final List<_BlockOpt> topLazyBlockOpts = [];
-    final List<_FormModelOpt> topLazyFormModelOpts = [];
-    //
-    for (_LazyScalar lazyScalar in lazyObjects.lazyScalars) {
-      lazyScalar.scalar._lazyLoadCount++;
-      //
-      scalarOpts.add(
-        _ScalarOpt(scalar: lazyScalar.scalar),
-      );
-    }
-    for (_LazyBlock lazyBlock in lazyObjects.lazyBlocks) {
-      lazyBlock.block._lazyLoadCount++;
-      //
-      topLazyBlockOpts.add(
-        _BlockOpt(
-          block: lazyBlock.block,
-          forceQuery: lazyBlock.forceQuery,
-          forceReloadItem: false,
-          pageable: null,
-          listBehavior: null,
-          suggestedSelection: null,
-          postQueryBehavior: null,
-        ),
-      );
-    }
-    for (_LazyFormModel lazyFormModel in lazyObjects.lazyFormModels) {
-      lazyFormModel.formModel._lazyLoadCount++;
-      //
-      topLazyFormModelOpts.add(
-        _FormModelOpt(formModel: lazyFormModel.formModel),
-      );
-    }
-    //
-    print("@@@@@@@@@@@@ Query Lazy List: scalarOpts: $scalarOpts");
-    print("@@@@@@@@@@@@ Query Lazy List: topLazyBlockOpts: $topLazyBlockOpts");
-    print(
-        "@@@@@@@@@@@@ Query Lazy List: topLazyFormModelOpts: $topLazyFormModelOpts");
-    //
-    try {
-      //
-      // TODO: Handle Error:
-      //
-      await _queryShelfOLD(
-        xShelfTaskType: XShelfTaskType.naturalReaction,
-        naturalMode: true,
-        forceFilterModelOpt: null,
-        forceQueryScalarOpts: scalarOpts,
-        forceQueryBlockOpts: topLazyBlockOpts,
-        forceQueryFormModelOpts: topLazyFormModelOpts,
-      );
-    } finally {
-      __lazyLoadLocked = false;
-    }
+    // final List<_ScalarOpt> scalarOpts = [];
+    // final List<_BlockOpt> topLazyBlockOpts = [];
+    // final List<_FormModelOpt> topLazyFormModelOpts = [];
+    // //
+    // for (_LazyScalar lazyScalar in lazyObjects.lazyScalars) {
+    //   lazyScalar.scalar._lazyLoadCount++;
+    //   //
+    //   scalarOpts.add(
+    //     _ScalarOpt(scalar: lazyScalar.scalar),
+    //   );
+    // }
+    // for (_LazyBlock lazyBlock in lazyObjects.lazyBlocks) {
+    //   lazyBlock.block._lazyLoadCount++;
+    //   //
+    //   topLazyBlockOpts.add(
+    //     _BlockOpt(
+    //       block: lazyBlock.block,
+    //       forceQuery: lazyBlock.forceQuery,
+    //       forceReloadItem: false,
+    //       pageable: null,
+    //       listBehavior: null,
+    //       suggestedSelection: null,
+    //       postQueryBehavior: null,
+    //     ),
+    //   );
+    // }
+    // for (_LazyFormModel lazyFormModel in lazyObjects.lazyFormModels) {
+    //   lazyFormModel.formModel._lazyLoadCount++;
+    //   //
+    //   topLazyFormModelOpts.add(
+    //     _FormModelOpt(formModel: lazyFormModel.formModel),
+    //   );
+    // }
+    // //
+    // print("@@@@@@@@@@@@ Query Lazy List: scalarOpts: $scalarOpts");
+    // print("@@@@@@@@@@@@ Query Lazy List: topLazyBlockOpts: $topLazyBlockOpts");
+    // print(
+    //     "@@@@@@@@@@@@ Query Lazy List: topLazyFormModelOpts: $topLazyFormModelOpts");
+    // //
+    // try {
+    //   //
+    //   // TODO: Handle Error:
+    //   //
+    //   await _queryShelfOLD(
+    //     xShelfTaskType: XShelfTaskType.naturalReaction,
+    //     naturalMode: true,
+    //     forceFilterModelOpt: null,
+    //     forceQueryScalarOpts: scalarOpts,
+    //     forceQueryBlockOpts: topLazyBlockOpts,
+    //     forceQueryFormModelOpts: topLazyFormModelOpts,
+    //   );
+    // } finally {
+    //   __lazyLoadLocked = false;
+    // }
   }
 
   // ***************************************************************************
@@ -718,34 +718,46 @@ abstract class Shelf extends _Core {
   @_TaskUnitMethodAnnotation()
   @_BlockShelfQueryAnnotation()
   Future<void> _unitQueryShelf({
-    required _XShelf xShelf,
+    required _QShelf xShelf,
   }) async {
     xShelf.printMe();
+    // TODO: Uncomment:
+    // for (_XScalar xScalar in xShelf.allXScalars) {
+    //   if (!xScalar.needQuery) {
+    //     continue;
+    //   }
+    //   //
+    //   // Add to Queue:
+    //   //
+    //   FlutterArtist._taskUnitQueue.addTaskUnit(
+    //     _ScalarQueryTaskUnit(
+    //       xScalar: xScalar,
+    //     ),
+    //   );
+    // }
     //
-    for (_XScalar xScalar in xShelf.allXScalars) {
-      if (!xScalar.needQuery) {
-        continue;
+    while (true) {
+      _QBlock? rootXBlock = xShelf.nextRootXBlockTask();
+      if (rootXBlock == null) {
+        break;
       }
-      //
-      // Add to Queue:
-      //
-      FlutterArtist._taskUnitQueue.addTaskUnit(
-        _ScalarQueryTaskUnit(
-          xScalar: xScalar,
-        ),
-      );
-    }
-    //
-    for (_XBlock xBlock in xShelf.allRootXBlocks) {
-      //
-      // Add to Queue:
-      //
+      rootXBlock._processed = true;
       FlutterArtist._taskUnitQueue.addTaskUnit(
         _BlockQueryTaskUnit(
-          xBlock: xBlock,
+          xBlock: rootXBlock,
         ),
       );
     }
+    // for (_XBlock xBlock in xShelf.allRootXBlocks) {
+    //   //
+    //   // Add to Queue:
+    //   //
+    //   FlutterArtist._taskUnitQueue.addTaskUnit(
+    //     _BlockQueryTaskUnitOLD(
+    //       xBlock: xBlock,
+    //     ),
+    //   );
+    // }
     //
     // for (_XFormModel xFormModel in xShelf.allXFormModels) {
     //   if (!xFormModel.forceForm) {
@@ -788,9 +800,10 @@ abstract class Shelf extends _Core {
       forceQueryFormModelOpts: formModelOpts,
     );
 
-    await _unitQueryShelf(
-      xShelf: xShelf,
-    );
+    // await _unitQueryShelf(
+    //   xShelf: xShelf,
+    // );
+    throw UnimplementedError();
   }
 
   // ***************************************************************************

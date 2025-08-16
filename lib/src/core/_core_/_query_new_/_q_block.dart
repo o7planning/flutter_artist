@@ -2,6 +2,8 @@ part of '../core.dart';
 
 class _QBlock {
   _QShelf get xShelf => xFilterModel.xShelf;
+  int get xShelfId => xShelf.xShelfId;
+
   final Block block;
 
   late final _QBlock? parentXBlock;
@@ -26,6 +28,8 @@ class _QBlock {
   SuggestedSelection? __suggestedSelection;
   PostQueryBehavior? __postQueryBehavior;
   PageableData? __pageable;
+
+  final queryResult = BlockQueryResult._();
 
   // ***************************************************************************
 
@@ -97,6 +101,10 @@ class _QBlock {
     __suggestedSelection = suggestedSelection;
     __postQueryBehavior = postQueryBehavior;
     __pageable = pageable;
+  }
+
+  void _printParameters({required bool hasActiveUI}) {
+    //
   }
 
   void printInfoCascade() {

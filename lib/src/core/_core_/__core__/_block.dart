@@ -387,8 +387,27 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __clearItemsWithDataState({
+  @Deprecated("Xoa di")
+  void __clearItemsWithDataStateOLD({
     required _XBlock thisXBlock,
+    required DataState queryDataState,
+    required DataState formDataState,
+    required bool errorInFilter,
+  }) {
+    __assertThisXBlockOLD(thisXBlock);
+    //
+    __blockData._clearItemsWithDataState(
+      qryDataState: queryDataState,
+      errorInFilter: errorInFilter,
+    );
+    //
+    if (formModel != null) {
+      formModel!._clearDataWithDataState(formDataState: formDataState);
+    }
+  }
+
+  void __clearItemsWithDataState({
+    required _QBlock thisXBlock,
     required DataState queryDataState,
     required DataState formDataState,
     required bool errorInFilter,
@@ -408,8 +427,34 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __clearWithDataStateAndChildrenToNonCascade({
+  @Deprecated("Xoa di")
+  void __clearWithDataStateAndChildrenToNonCascadeOLD({
     required _XBlock thisXBlock,
+    required DataState qryDataState,
+    required DataState frmDataState,
+    required bool errorInFilter,
+  }) {
+    __assertThisXBlockOLD(thisXBlock);
+    //
+    __clearItemsWithDataStateOLD(
+      thisXBlock: thisXBlock,
+      queryDataState: qryDataState,
+      formDataState: frmDataState,
+      errorInFilter: errorInFilter,
+    );
+    //
+    for (var childXBlock in thisXBlock.childXBlocks) {
+      childXBlock.block.__clearWithDataStateAndChildrenToNonCascadeOLD(
+        thisXBlock: childXBlock,
+        qryDataState: DataState.none,
+        frmDataState: DataState.none,
+        errorInFilter: false,
+      );
+    }
+  }
+
+  void __clearWithDataStateAndChildrenToNonCascade({
+    required _QBlock thisXBlock,
     required DataState qryDataState,
     required DataState frmDataState,
     required bool errorInFilter,
@@ -436,8 +481,24 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __clearAllChildrenBlocksToNone({
+  @Deprecated("Xoa di")
+  void __clearAllChildrenBlocksToNoneOLD({
     required _XBlock thisXBlock,
+  }) {
+    __assertThisXBlockOLD(thisXBlock);
+    //
+    for (var childXBlock in thisXBlock.childXBlocks) {
+      childXBlock.block.__clearWithDataStateAndChildrenToNonCascadeOLD(
+        thisXBlock: childXBlock,
+        qryDataState: DataState.none,
+        frmDataState: DataState.none,
+        errorInFilter: false,
+      );
+    }
+  }
+
+  void __clearAllChildrenBlocksToNone({
+    required _QBlock thisXBlock,
   }) {
     __assertThisXBlock(thisXBlock);
     //
@@ -454,10 +515,10 @@ abstract class Block<
   void __clearAllChildrenBlocksToPending({
     required _XBlock thisXBlock,
   }) {
-    __assertThisXBlock(thisXBlock);
+    __assertThisXBlockOLD(thisXBlock);
     //
     for (var childXBlock in thisXBlock.childXBlocks) {
-      childXBlock.block.__clearWithDataStateAndChildrenToNonCascade(
+      childXBlock.block.__clearWithDataStateAndChildrenToNonCascadeOLD(
         thisXBlock: childXBlock,
         qryDataState: DataState.pending,
         frmDataState: DataState.none,
@@ -558,14 +619,14 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockClearCurrentAnnotation()
   Future<void> _unitClearCurrent({required _XBlock thisXBlock}) async {
-    __assertThisXBlock(thisXBlock);
+    __assertThisXBlockOLD(thisXBlock);
     //
     this.__setCurrentItem(item: null, itemDetail: null);
     if (formModel != null) {
       formModel!._clearDataWithDataState(formDataState: DataState.none);
     }
     // Test Case: [38b].
-    this.__clearAllChildrenBlocksToNone(
+    this.__clearAllChildrenBlocksToNoneOLD(
       thisXBlock: thisXBlock,
     );
   }
@@ -580,7 +641,7 @@ abstract class Block<
   @_BlockQueryPreviousPageAnnotation()
   @_BlockQueryAndPrepareToEditAnnotation()
   @_BlockQueryAndPrepareToCreateAnnotation()
-  Future<void> _unitQuery({required _XBlock thisXBlock}) async {
+  Future<void> _unitQuery({required _QBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
     //
     bool hasActiveUI = this.ui.hasActiveUIComponent(alsoCheckChildren: true);
@@ -652,7 +713,7 @@ abstract class Block<
     //
     FILTER_CRITERIA? filterCriteriaOfFilterModel;
     try {
-      final _XFilterModel xFilterModel = thisXBlock.xFilterModel;
+      final _QFilterModel xFilterModel = thisXBlock.xFilterModel;
       final FilterModel filterModel = xFilterModel.filterModel;
       //
       if (!xFilterModel.queried) {
@@ -1035,7 +1096,7 @@ abstract class Block<
     required ITEM? candidateItem,
     required BlockItemCurrSelectionResult<ITEM> currentItemSelectionResult,
   }) async {
-    __assertThisXBlock(thisXBlock);
+    __assertThisXBlockOLD(thisXBlock);
     //
     formModel?._formPropsStructure._setManualDirty(false);
     //
@@ -1044,7 +1105,7 @@ abstract class Block<
     );
     //
     if (queryDataState == DataState.pending) {
-      this.__clearWithDataStateAndChildrenToNonCascade(
+      this.__clearWithDataStateAndChildrenToNonCascadeOLD(
         thisXBlock: thisXBlock,
         qryDataState: queryDataState,
         frmDataState: DataState.none,
@@ -1056,7 +1117,7 @@ abstract class Block<
     if (this.queryDataState == DataState.error) {
       print(
           "        ~~~~~~~> IGNORED --> this.queryDataState == DataState.error - [$name]");
-      this.__clearWithDataStateAndChildrenToNonCascade(
+      this.__clearWithDataStateAndChildrenToNonCascadeOLD(
         thisXBlock: thisXBlock,
         qryDataState: DataState.error,
         frmDataState: DataState.none,
@@ -1068,7 +1129,7 @@ abstract class Block<
     if (this.itemCount == 0) {
       print("        ~~~~~~~> IGNORED --> this.itemCount == 0 - [$name]");
       // @@TODO@@ 07.
-      this.__clearAllChildrenBlocksToNone(
+      this.__clearAllChildrenBlocksToNoneOLD(
         thisXBlock: thisXBlock,
       );
       return;
@@ -1122,7 +1183,7 @@ abstract class Block<
     //
     if (candidateCurrentItem == null) {
       print("        ~~~~~~~> candidateCurrentItem == null - [$name]");
-      this.__clearWithDataStateAndChildrenToNonCascade(
+      this.__clearWithDataStateAndChildrenToNonCascadeOLD(
         thisXBlock: thisXBlock,
         qryDataState: DataState.ready,
         frmDataState: DataState.none,
@@ -1285,7 +1346,7 @@ abstract class Block<
             return;
           }
           //
-          var taskUnit = _BlockSelectAsCurrentTaskUnit(
+          var taskUnit = _BlockSelectAsCurrentTaskUnitOLD(
             currentItemSelectionType: currentItemSelectionType,
             xBlock: thisXBlock,
             newQueriedList: newQueriedList,
@@ -1310,10 +1371,10 @@ abstract class Block<
         );
         formModel?._clearDataWithDataState(formDataState: DataState.none);
         // Test Case: [46a].
-        __clearAllChildrenBlocksToNone(thisXBlock: thisXBlock);
+        __clearAllChildrenBlocksToNoneOLD(thisXBlock: thisXBlock);
         //
         if (siblingItem != null) {
-          var taskUnit = _BlockSelectAsCurrentTaskUnit(
+          var taskUnit = _BlockSelectAsCurrentTaskUnitOLD(
             currentItemSelectionType: currentItemSelectionType,
             xBlock: thisXBlock,
             newQueriedList: newQueriedList,
@@ -1394,7 +1455,7 @@ abstract class Block<
     //
     for (_XBlock childXBlock in thisXBlock.childXBlocks) {
       FlutterArtist._taskUnitQueue.addTaskUnit(
-        _BlockQueryTaskUnit(
+        _BlockQueryTaskUnitOLD(
           xBlock: childXBlock,
         ),
       );
@@ -1414,7 +1475,7 @@ abstract class Block<
     required ITEM item,
     required BlockItemDeletionResult<ITEM> deletionResult,
   }) async {
-    __assertThisXBlock(thisXBlock);
+    __assertThisXBlockOLD(thisXBlock);
     //
     // No need to check again?
     //
@@ -1504,11 +1565,11 @@ abstract class Block<
       );
     }
     // @@TODO@@ 09.
-    __clearAllChildrenBlocksToNone(
+    __clearAllChildrenBlocksToNoneOLD(
       thisXBlock: thisXBlock,
     );
     //
-    _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+    _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnitOLD<ITEM>(
       currentItemSelectionType:
           CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
       xBlock: thisXBlock,
@@ -1531,7 +1592,7 @@ abstract class Block<
     required BlockItemsDeletionResult<ITEM> deletionResult,
     required bool stopIfError,
   }) async {
-    __assertThisXBlock(thisXBlock);
+    __assertThisXBlockOLD(thisXBlock);
     //
     // Precheck: No need to check again!.
     // Candidate Items to delete.
@@ -1588,7 +1649,7 @@ abstract class Block<
             formDataState: DataState.none,
           );
           // @@TODO@@ 09.
-          __clearAllChildrenBlocksToNone(
+          __clearAllChildrenBlocksToNoneOLD(
             thisXBlock: thisXBlock,
           );
         }
@@ -1642,7 +1703,7 @@ abstract class Block<
     if (siblingItem == null) {
       return;
     }
-    _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+    _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnitOLD<ITEM>(
       currentItemSelectionType:
           CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
       xBlock: thisXBlock,
@@ -1665,7 +1726,7 @@ abstract class Block<
     required EXTRA_FORM_INPUT? extraFormInput,
     required Function()? navigate,
   }) async {
-    __assertThisXBlock(thisXBlock);
+    __assertThisXBlockOLD(thisXBlock);
     //
     const ITEM? nullItem = null;
     const ITEM_DETAIL? nullItemDetail = null;
@@ -1674,7 +1735,7 @@ abstract class Block<
       item: nullItem,
     );
     // @@TODO@@ 01.
-    this.__clearAllChildrenBlocksToNone(
+    this.__clearAllChildrenBlocksToNoneOLD(
       thisXBlock: thisXBlock,
     );
     //
@@ -1722,7 +1783,7 @@ abstract class Block<
     required BlockQuickCreateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
         action,
   }) async {
-    __assertThisXBlock(thisXBlock);
+    __assertThisXBlockOLD(thisXBlock);
     //
     // (No Precheck Again)
     //
@@ -1796,7 +1857,7 @@ abstract class Block<
             FILTER_CRITERIA>
         action,
   }) async {
-    __assertThisXBlock(thisXBlock);
+    __assertThisXBlockOLD(thisXBlock);
     //
     FILTER_CRITERIA blockCurrentFilterCriteria = filterCriteria!;
     //
@@ -1859,7 +1920,7 @@ abstract class Block<
     required BlockQuickUpdateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
         action,
   }) async {
-    __assertThisXBlock(thisXBlock);
+    __assertThisXBlockOLD(thisXBlock);
     //
     // No Need Precheck Again.
     //
@@ -1932,7 +1993,7 @@ abstract class Block<
     required BlockQuickAction action,
     required BlockQuickActionResult taskResult,
   }) async {
-    __assertThisXBlock(thisXBlock);
+    __assertThisXBlockOLD(thisXBlock);
     //
     ApiResult<void>? result;
     try {
@@ -1979,7 +2040,7 @@ abstract class Block<
         }
         ITEM? currentItem = this.currentItem;
         if (currentItem != null) {
-          var taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+          var taskUnit = _BlockSelectAsCurrentTaskUnitOLD<ITEM>(
             currentItemSelectionType: CurrentItemSelectionType.refresh,
             xBlock: thisXBlock,
             newQueriedList: [],
@@ -1990,7 +2051,7 @@ abstract class Block<
           FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
         }
       case AfterBlockQuickAction.query:
-        var taskUnit = _BlockQueryTaskUnit(
+        var taskUnit = _BlockQueryTaskUnitOLD(
           xBlock: thisXBlock,
         );
         FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
@@ -2007,7 +2068,7 @@ abstract class Block<
     required _XBlock thisXBlock,
     required BlockQuickChildBlockItemsAction<ITEM, ITEM_DETAIL> action,
   }) async {
-    __assertThisXBlock(thisXBlock);
+    __assertThisXBlockOLD(thisXBlock);
     //
     ApiResult<ITEM_DETAIL> result;
     try {
@@ -2198,11 +2259,11 @@ abstract class Block<
         );
       }
       // @@TODO@@ 08.
-      __clearAllChildrenBlocksToNone(
+      __clearAllChildrenBlocksToNoneOLD(
         thisXBlock: thisXBlock,
       );
       //
-      _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+      _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnitOLD<ITEM>(
         currentItemSelectionType:
             CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
         xBlock: thisXBlock,
@@ -2308,7 +2369,7 @@ abstract class Block<
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    _TaskUnit taskUnit = _BlockClearCurrentTaskUnit(
+    _TaskUnit taskUnit = _BlockClearCurrentTaskUnitOLD(
       xBlock: thisXBlock,
     );
     FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
@@ -2534,7 +2595,7 @@ abstract class Block<
     //
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    _ResultedTaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+    _ResultedTaskUnit taskUnit = _BlockSelectAsCurrentTaskUnitOLD<ITEM>(
       currentItemSelectionType: currentItemSelectionType,
       xBlock: thisXBlock,
       newQueriedList: [],
@@ -2621,7 +2682,7 @@ abstract class Block<
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     // @@TODO@@ 13
     // TODO: Need to check, if current is ready then allow to do like this, else throw exception.
-    this.__clearWithDataStateAndChildrenToNonCascade(
+    this.__clearWithDataStateAndChildrenToNonCascadeOLD(
       thisXBlock: thisXBlock,
       qryDataState: DataState.pending,
       frmDataState: DataState.none,
@@ -3673,7 +3734,7 @@ abstract class Block<
     );
     _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    _TaskUnit taskUnit = _BlockPrepareFormToCreateItemTaskUnit(
+    _TaskUnit taskUnit = _BlockPrepareFormToCreateItemTaskUnitOLD(
       xBlock: thisXBlock,
       initDirty: initDirty,
       extraFormInput: extraFormInput,
@@ -5786,7 +5847,16 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __assertThisXBlock(_XBlock thisXBlock) {
+  @Deprecated("Xoa di")
+  void __assertThisXBlockOLD(_XBlock thisXBlock) {
+    if (thisXBlock.block != this || thisXBlock.name != name) {
+      String message = "Error Assets block: ${thisXBlock.block} - $this";
+      print("FATAL ERROR: $message");
+      throw message;
+    }
+  }
+
+  void __assertThisXBlock(_QBlock thisXBlock) {
     if (thisXBlock.block != this || thisXBlock.name != name) {
       String message = "Error Assets block: ${thisXBlock.block} - $this";
       print("FATAL ERROR: $message");
