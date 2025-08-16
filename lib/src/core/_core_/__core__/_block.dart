@@ -1603,12 +1603,12 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockDeleteItemsAnnotation()
   Future<void> _unitDeleteItems({
-    required _XBlock thisXBlock,
+    required _QBlock thisXBlock,
     required List<ITEM> items,
     required BlockItemsDeletionResult<ITEM> deletionResult,
     required bool stopIfError,
   }) async {
-    __assertThisXBlockOLD(thisXBlock);
+    __assertThisXBlock(thisXBlock);
     //
     // Precheck: No need to check again!.
     // Candidate Items to delete.
@@ -1665,7 +1665,7 @@ abstract class Block<
             formDataState: DataState.none,
           );
           // @@TODO@@ 09.
-          __clearAllChildrenBlocksToNoneOLD(
+          __clearAllChildrenBlocksToNone(
             thisXBlock: thisXBlock,
           );
         }
@@ -1719,7 +1719,7 @@ abstract class Block<
     if (siblingItem == null) {
       return;
     }
-    _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnitOLD<ITEM>(
+    _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
       currentItemSelectionType:
           CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
       xBlock: thisXBlock,
@@ -2668,16 +2668,9 @@ abstract class Block<
       );
     }
     // _QShelf.forBlockMultiItemsDeletion.
-    _XShelf xShelf = _XShelf(
-      xShelfTaskType: XShelfTaskType.commonTask,
-      shelf: shelf,
-      forceFilterModelOpt: null,
-      forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [],
-      forceQueryFormModelOpts: [],
-    );
+    _QShelf xShelf = _QShelf.forBlockMultiItemsDeletion(block: this);
     //
-    _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
+    _QBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
     final taskResult = _createEmptyItemsDeletionResult(
       candidateItems: candidateDeleteItems,
