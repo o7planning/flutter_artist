@@ -84,6 +84,7 @@ class _QShelf {
       if (parent != null) {
         _QBlock xBlockParent = xBlockMap[parent.name]!;
         xBlock.parentXBlock = xBlockParent;
+        xBlockParent.childXBlocks.add(xBlock);
       } else {
         xBlock.parentXBlock = null;
       }
