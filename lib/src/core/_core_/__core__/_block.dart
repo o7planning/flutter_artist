@@ -634,15 +634,15 @@ abstract class Block<
 
   @_TaskUnitMethodAnnotation()
   @_BlockClearCurrentAnnotation()
-  Future<void> _unitClearCurrent({required _XBlock thisXBlock}) async {
-    __assertThisXBlockOLD(thisXBlock);
+  Future<void> _unitClearCurrent({required _QBlock thisXBlock}) async {
+    __assertThisXBlock(thisXBlock);
     //
     this.__setCurrentItem(item: null, itemDetail: null);
     if (formModel != null) {
       formModel!._clearDataWithDataState(formDataState: DataState.none);
     }
     // Test Case: [38b].
-    this.__clearAllChildrenBlocksToNoneOLD(
+    this.__clearAllChildrenBlocksToNone(
       thisXBlock: thisXBlock,
     );
   }
@@ -2538,18 +2538,11 @@ abstract class Block<
       return;
     }
     // _QShelf.forBlockClearCurrentItem.
-    _XShelf xShelf = _XShelf(
-      xShelfTaskType: XShelfTaskType.commonTask,
-      shelf: shelf,
-      forceFilterModelOpt: null,
-      forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [],
-      forceQueryFormModelOpts: [],
-    );
+    _QShelf xShelf = _QShelf.forBlockClearCurrentItem(block: this);
     //
-    _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    _QBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    _TaskUnit taskUnit = _BlockClearCurrentTaskUnitOLD(
+    _TaskUnit taskUnit = _BlockClearCurrentTaskUnit(
       xBlock: thisXBlock,
     );
     FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);

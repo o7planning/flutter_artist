@@ -120,7 +120,7 @@ class _Executor {
       );
     }
     // Block Clear Current:
-    else if (taskUnit is _BlockClearCurrentTaskUnitOLD) {
+    else if (taskUnit is _BlockClearCurrentTaskUnit) {
       await taskUnit.xBlock.block._unitClearCurrent(
         thisXBlock: taskUnit.xBlock,
       );
