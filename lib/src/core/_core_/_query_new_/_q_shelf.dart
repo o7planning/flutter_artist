@@ -312,17 +312,29 @@ class _QShelf {
   _QShelf.forBlockQuickActionExecution({
     required Block block,
     required FilterInput? filterInput,
+    required AfterBlockQuickAction afterQuickAction,
   })  : xShelfType = QShelfType.blockQuickActionExecution,
         shelf = block.shelf {
     __initCore(shelf: shelf);
     //
-    final queryHint = QryHint.force;
-    final forceReloadItem = false;
+    QryHint queryHint = QryHint.none;
+    bool forceReloadItem = false;
     //
     final thisXBlock = xBlockMap[block.name]!;
     final xFilterModel = thisXBlock.xFilterModel;
     xFilterModel.filterInput = filterInput;
     //
+    switch (afterQuickAction) {
+      case AfterBlockQuickAction.none:
+        break;
+      case AfterBlockQuickAction.refreshCurrentItem:
+        break;
+      case AfterBlockQuickAction.query:
+        queryHint = QryHint.force;
+        forceReloadItem = false;
+    }
+    //
+    thisXBlock.setForceQuery(queryHint);
     if (forceReloadItem) {
       thisXBlock.setForceReloadItem();
     }

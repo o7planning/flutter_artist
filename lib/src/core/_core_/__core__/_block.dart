@@ -2005,11 +2005,11 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockQuickActionAnnotation()
   Future<bool> _unitQuickAction({
-    required _XBlock thisXBlock,
+    required _QBlock thisXBlock,
     required BlockQuickAction action,
     required BlockQuickActionResult taskResult,
   }) async {
-    __assertThisXBlockOLD(thisXBlock);
+    __assertThisXBlock(thisXBlock);
     //
     ApiResult<void>? result;
     try {
@@ -2056,7 +2056,7 @@ abstract class Block<
         }
         ITEM? currentItem = this.currentItem;
         if (currentItem != null) {
-          var taskUnit = _BlockSelectAsCurrentTaskUnitOLD<ITEM>(
+          var taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
             currentItemSelectionType: CurrentItemSelectionType.refresh,
             xBlock: thisXBlock,
             newQueriedList: [],
@@ -2067,7 +2067,7 @@ abstract class Block<
           FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
         }
       case AfterBlockQuickAction.query:
-        var taskUnit = _BlockQueryTaskUnitOLD(
+        var taskUnit = _BlockQueryTaskUnit(
           xBlock: thisXBlock,
         );
         FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
@@ -3439,39 +3439,14 @@ abstract class Block<
       );
     }
     //
-    List<_BlockOpt> forceQueryBlockOpts = [];
-    switch (action.config.afterQuickAction) {
-      case AfterBlockQuickAction.none:
-        forceQueryBlockOpts = [];
-      case AfterBlockQuickAction.refreshCurrentItem:
-        forceQueryBlockOpts = [];
-      case AfterBlockQuickAction.query:
-        forceQueryBlockOpts = [
-          _BlockOpt(
-            block: this,
-            forceQuery: QryHint.force,
-            forceReloadItem: false,
-            pageable: null,
-            listBehavior: null,
-            suggestedSelection: null,
-            postQueryBehavior: null,
-          ),
-        ];
-    }
     // _QShelf.forBlockQuickActionExecution
-    _XShelf xShelf = _XShelf(
-      xShelfTaskType: XShelfTaskType.commonTask,
-      shelf: shelf,
-      forceFilterModelOpt: _FilterModelOpt(
-        filterModel: _registeredOrDefaultFilterModel,
-        filterInput: filterInput,
-      ),
-      forceQueryScalarOpts: [],
-      forceQueryBlockOpts: forceQueryBlockOpts,
-      forceQueryFormModelOpts: [],
+    _QShelf xShelf = _QShelf.forBlockQuickActionExecution(
+      block: this,
+      filterInput: filterInput,
+      afterQuickAction: action.config.afterQuickAction,
     );
     //
-    _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    _QBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
     _ResultedTaskUnit taskUnit = _BlockQuickActionTaskUnit(
       xBlock: thisXBlock,

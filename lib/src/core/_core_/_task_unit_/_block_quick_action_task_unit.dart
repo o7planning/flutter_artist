@@ -4,7 +4,7 @@ part of '../core.dart';
 @_BlockQuickActionAnnotation()
 class _BlockQuickActionTaskUnit
     extends _ResultedTaskUnit<BlockQuickActionResult> {
-  final _XBlock xBlock;
+  final _QBlock xBlock;
   final BlockQuickAction action;
 
   _BlockQuickActionTaskUnit({
