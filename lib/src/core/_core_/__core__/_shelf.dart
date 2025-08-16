@@ -522,10 +522,10 @@ abstract class Shelf extends _Core {
       __lazyLoadId++;
       // __lazyBlocksToQuery.clear();
       //
-      Future.delayed(
+      await Future.delayed(
         const Duration(milliseconds: 0),
-        () {
-          __queryLazyList();
+        () async {
+          await __queryLazyList();
         },
       );
     }
@@ -542,6 +542,7 @@ abstract class Shelf extends _Core {
     xShelf.printInfo();
 
     if (xShelf.isNothingTodo()) {
+      print(">>>> XShelf NOTHING TODO");
       __lastLazyLoadId = __lazyLoadId;
       __lazyLoadLocked = false;
       // IMPORTANT: No Lazy entities, but need to refresh UIComponents:

@@ -172,6 +172,7 @@ class _QShelf {
           }
         }
         _QFormModel? xFormModel = xBlock.xFormModel;
+
         if (xFormModel != null &&
             xFormModel.formModel.ui.hasActiveUIComponent()) {
           if (xFormModel.formModel.formDataState == DataState.pending ||
