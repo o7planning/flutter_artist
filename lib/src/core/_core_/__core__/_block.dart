@@ -1868,12 +1868,12 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockQuickCreateMultiItemsActionAnnotation()
   Future<bool> _unitQuickCreateMultiItems({
-    required _XBlock thisXBlock,
+    required _QBlock thisXBlock,
     required BlockQuickCreateMultiItemsAction<ID, ITEM, ITEM_DETAIL,
             FILTER_CRITERIA>
         action,
   }) async {
-    __assertThisXBlockOLD(thisXBlock);
+    __assertThisXBlock(thisXBlock);
     //
     FILTER_CRITERIA blockCurrentFilterCriteria = filterCriteria!;
     //
@@ -2462,7 +2462,7 @@ abstract class Block<
   // ***************************************************************************
 
   Future<bool> _processCreateMultiItemsActionResult({
-    required _XBlock thisXBlock,
+    required _QBlock thisXBlock,
     required FILTER_CRITERIA blockCurrentFilterCriteria,
     required String calledMethodName,
     required ApiResult<PageData<ITEM>> result,
@@ -3588,16 +3588,9 @@ abstract class Block<
       );
     }
     // _QShelf.forBlockQuickMultiItemsCreation.
-    _XShelf xShelf = _XShelf(
-      xShelfTaskType: XShelfTaskType.commonTask,
-      shelf: shelf,
-      forceFilterModelOpt: null,
-      forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [],
-      forceQueryFormModelOpts: [],
-    );
+    _QShelf xShelf = _QShelf.forBlockQuickMultiItemsCreation(block: this);
     //
-    _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    _QBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
     _ResultedTaskUnit taskUnit = _BlockQuickCreateMultiItemsTaskUnit(
       xBlock: thisXBlock,
