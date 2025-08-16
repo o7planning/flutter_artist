@@ -21,6 +21,7 @@ enum QShelfType {
   formModelSave,
   //
   scalarQuery,
+  scalarQuickAction,
   scalarQuickExtraDataLoadAction;
 }
 
@@ -177,7 +178,6 @@ class _QShelf {
 
   _QShelf.forBlockQuery({
     required Block block,
-    required QueryType queryType,
     required FilterInput? filterInput,
     required PageableData? pageable,
     required ListBehavior? listBehavior,
@@ -198,8 +198,73 @@ class _QShelf {
       thisXBlock.setForceReloadItem();
     }
     //
+    thisXBlock.setForceQuery(queryHint);
     thisXBlock.setOptions(
-      queryType: queryType,
+      queryType: QueryType.realQuery,
+      listBehavior: listBehavior,
+      suggestedSelection: suggestedSelection,
+      postQueryBehavior: postQueryBehavior,
+      pageable: pageable,
+    );
+    _QBlock? parentXBlock = thisXBlock.parentXBlock;
+    while (true) {
+      if (parentXBlock == null) {
+        break;
+      }
+      //
+      final hasXActiveUI = parentXBlock.block.ui.hasActiveBlockFragmentWidget(
+        alsoCheckChildren: true,
+      );
+      if (hasXActiveUI) {
+        if (parentXBlock.block.queryDataState == DataState.pending ||
+            parentXBlock.block.queryDataState == DataState.error) {
+          parentXBlock.setForceQuery(QryHint.force);
+        }
+      }
+      // TODO: Need? Remove this code?
+      _QFormModel? parentXFormModel = parentXBlock.xFormModel;
+      if (parentXFormModel != null &&
+          parentXFormModel.formModel.ui.hasActiveUIComponent()) {
+        if (parentXFormModel.formModel.formDataState == DataState.pending ||
+            parentXFormModel.formModel.formDataState == DataState.error ||
+            parentXFormModel.formModel.formDataState == DataState.none) {
+          parentXFormModel.forceTypeForForm = ForceType.decidedAtRuntime;
+        }
+      }
+      //
+      parentXBlock = parentXBlock.parentXBlock;
+    }
+  }
+
+  // ***************************************************************************
+  // *** CONSTRUCTOR ***
+  // ***************************************************************************
+
+  _QShelf.forBlockQueryEmpty({
+    required Block block,
+    required FilterInput? filterInput,
+    required PageableData? pageable,
+    required ListBehavior? listBehavior,
+    required PostQueryBehavior? postQueryBehavior,
+    required SuggestedSelection<dynamic>? suggestedSelection,
+  })  : xShelfType = QShelfType.blockQuery,
+        shelf = block.shelf {
+    __initCore(shelf: shelf);
+    //
+    final queryHint = QryHint.force;
+    final forceReloadItem = false;
+    //
+    final thisXBlock = xBlockMap[block.name]!;
+    final xFilterModel = thisXBlock.xFilterModel;
+    xFilterModel.filterInput = filterInput;
+    //
+    if (forceReloadItem) {
+      thisXBlock.setForceReloadItem();
+    }
+    //
+    thisXBlock.setForceQuery(queryHint);
+    thisXBlock.setOptions(
+      queryType: QueryType.emptyQuery,
       listBehavior: listBehavior,
       suggestedSelection: suggestedSelection,
       postQueryBehavior: postQueryBehavior,
@@ -424,7 +489,6 @@ class _QShelf {
   _QShelf.forScalarQuery({
     required Scalar scalar,
     required FilterInput? filterInput,
-    required AfterScalarQuickAction afterQuickAction,
   })  : xShelfType = QShelfType.scalarQuery,
         shelf = scalar.shelf {
     __initCore(shelf: shelf);
@@ -433,17 +497,33 @@ class _QShelf {
     final xFilterModel = thisXScalar.xFilterModel;
     xFilterModel.filterInput = filterInput;
     //
-    bool forceQuery = false;
-    switch (afterQuickAction) {
-      case AfterScalarQuickAction.none:
-        forceQuery = false;
-      case AfterScalarQuickAction.query:
-        forceQuery = true;
-    }
+    // bool forceQuery = false;
+    // switch (afterQuickAction) {
+    //   case AfterScalarQuickAction.none:
+    //     forceQuery = false;
+    //   case AfterScalarQuickAction.query:
+    //     forceQuery = true;
+    // }
+    // //
+    // if (forceQuery) {
+    //   thisXScalar.setForceQuery();
+    // }
+    thisXScalar.setForceQuery();
+  }
+
+  // ***************************************************************************
+  // *** CONSTRUCTOR ***
+  // ***************************************************************************
+
+  _QShelf.forScalarQuickAction({
+    required Scalar scalar,
+  })  : xShelfType = QShelfType.scalarQuickAction,
+        shelf = scalar.shelf {
+    __initCore(shelf: shelf);
     //
-    if (forceQuery) {
-      thisXScalar.setForceQuery();
-    }
+    // final thisXScalar = xScalarMap[scalar.name]!;
+    // final xFilterModel = thisXScalar.xFilterModel;
+    // xFilterModel.filterInput = filterInput;
   }
 
   // ***************************************************************************

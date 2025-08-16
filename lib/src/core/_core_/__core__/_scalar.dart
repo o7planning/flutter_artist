@@ -597,11 +597,10 @@ abstract class Scalar<
         precheck: ScalarQuickActionPrecheck.cancelled,
       );
     }
-    // _QShelf.forScalarQuery.
-    _QShelf xShelf = _QShelf.forScalarQuery(
+
+    // _QShelf.forScalarQuickAction.
+    _QShelf xShelf = _QShelf.forScalarQuickAction(
       scalar: this,
-      filterInput: filterInput,
-      afterQuickAction: action.config.afterQuickAction,
     );
     //
     _QScalar thisXScalar = xShelf.findXScalarByName(this.name)!;
@@ -704,20 +703,24 @@ abstract class Scalar<
       parameters: {"filterInput": filterInput},
     );
     //
-    _XShelf xShelf = await shelf._queryShelfOLD(
-      xShelfTaskType: XShelfTaskType.commonTask,
-      forceFilterModelOpt: _FilterModelOpt(
-        filterModel: _registeredOrDefaultFilterModel,
-        filterInput: filterInput,
-      ),
-      forceQueryScalarOpts: [
-        _ScalarOpt(scalar: this),
-      ],
-      forceQueryBlockOpts: [],
-      forceQueryFormModelOpts: [],
+    _QShelf xShelf = _QShelf.forScalarQuery(
+      scalar: this,
+      filterInput: filterInput,
     );
+    // _XShelf xShelf = await shelf._queryShelfOLD(
+    //   xShelfTaskType: XShelfTaskType.commonTask,
+    //   forceFilterModelOpt: _FilterModelOpt(
+    //     filterModel: _registeredOrDefaultFilterModel,
+    //     filterInput: filterInput,
+    //   ),
+    //   forceQueryScalarOpts: [
+    //     _ScalarOpt(scalar: this),
+    //   ],
+    //   forceQueryBlockOpts: [],
+    //   forceQueryFormModelOpts: [],
+    // );
     //
-    _XScalar xScalar = xShelf.findXScalarByName(this.name)!;
+    _QScalar xScalar = xShelf.findXScalarByName(this.name)!;
     ScalarQueryResult result = xScalar.queryResult;
     return result;
   }

@@ -2751,31 +2751,46 @@ abstract class Block<
       },
     );
     //
-    _XShelf xShelf = await shelf._queryShelfOLD(
+    _QShelf xShelf = _QShelf.forBlockQueryEmpty(
+      block: this,
+      filterInput: filterInput,
+      pageable: pageable,
+      listBehavior: ListBehavior.replace,
+      postQueryBehavior: prepareFormToCreateItem
+          ? PostQueryBehavior.createNewItem
+          : PostQueryBehavior.selectAnItemAsCurrent,
+      suggestedSelection: null,
+    );
+    await xShelf.shelf._queryShelf(
       xShelfTaskType: XShelfTaskType.commonTask,
-      forceFilterModelOpt: _FilterModelOpt(
-        filterModel: _registeredOrDefaultFilterModel,
-        filterInput: filterInput,
-      ),
-      forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [
-        _BlockOpt(
-          block: this,
-          forceQuery: QryHint.force,
-          forceReloadItem: false,
-          queryType: QueryType.emptyQuery,
-          pageable: pageable,
-          listBehavior: ListBehavior.replace,
-          postQueryBehavior: prepareFormToCreateItem
-              ? PostQueryBehavior.createNewItem
-              : PostQueryBehavior.selectAnItemAsCurrent,
-          suggestedSelection: null,
-        ),
-      ],
-      forceQueryFormModelOpts: [],
+      xShelf: xShelf,
     );
     //
-    _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
+    // _QShelf xShelf = await shelf._queryShelfOLD(
+    //   xShelfTaskType: XShelfTaskType.commonTask,
+    //   forceFilterModelOpt: _FilterModelOpt(
+    //     filterModel: _registeredOrDefaultFilterModel,
+    //     filterInput: filterInput,
+    //   ),
+    //   forceQueryScalarOpts: [],
+    //   forceQueryBlockOpts: [
+    //     _BlockOpt(
+    //       block: this,
+    //       forceQuery: QryHint.force,
+    //       forceReloadItem: false,
+    //       queryType: QueryType.emptyQuery,
+    //       pageable: pageable,
+    //       listBehavior: ListBehavior.replace,
+    //       postQueryBehavior: prepareFormToCreateItem
+    //           ? PostQueryBehavior.createNewItem
+    //           : PostQueryBehavior.selectAnItemAsCurrent,
+    //       suggestedSelection: null,
+    //     ),
+    //   ],
+    //   forceQueryFormModelOpts: [],
+    // );
+    //
+    _QBlock xBlock = xShelf.findXBlockByName(this.name)!;
     BlockQueryResult queryResult = xBlock.queryResult;
     if (queryResult.success) {
       _executeNavigation(navigate: navigate);
@@ -3773,30 +3788,43 @@ abstract class Block<
         }
     }
     //
-    _XShelf xShelf = await shelf._queryShelfOLD(
-      xShelfTaskType: XShelfTaskType.commonTask,
-      forceFilterModelOpt: _FilterModelOpt(
-        filterModel: _registeredOrDefaultFilterModel,
-        filterInput: filterInput,
-      ),
-      forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [
-        _BlockOpt(
-          block: this,
-          forceQuery: QryHint.force,
-          // Force Reload Item.
-          forceReloadItem: false,
-          // Must reload after query (????????????).
-          pageable: usedPageable,
-          listBehavior: listBehavior,
-          postQueryBehavior: postQueryBehavior,
-          suggestedSelection: suggestedSelection,
-        ),
-      ],
-      forceQueryFormModelOpts: [],
+    _QShelf xShelf = _QShelf.forBlockQuery(
+      block: this,
+      filterInput: filterInput,
+      pageable: usedPageable,
+      listBehavior: listBehavior,
+      postQueryBehavior: postQueryBehavior,
+      suggestedSelection: suggestedSelection,
     );
+    await xShelf.shelf._queryShelf(
+      xShelfTaskType: XShelfTaskType.commonTask,
+      xShelf: xShelf,
+    );
+
+    // _XShelf xShelf = await shelf._queryShelfOLD(
+    //   xShelfTaskType: XShelfTaskType.commonTask,
+    //   forceFilterModelOpt: _FilterModelOpt(
+    //     filterModel: _registeredOrDefaultFilterModel,
+    //     filterInput: filterInput,
+    //   ),
+    //   forceQueryScalarOpts: [],
+    //   forceQueryBlockOpts: [
+    //     _BlockOpt(
+    //       block: this,
+    //       forceQuery: QryHint.force,
+    //       // Force Reload Item.
+    //       forceReloadItem: false,
+    //       // Must reload after query (????????????).
+    //       pageable: usedPageable,
+    //       listBehavior: listBehavior,
+    //       postQueryBehavior: postQueryBehavior,
+    //       suggestedSelection: suggestedSelection,
+    //     ),
+    //   ],
+    //   forceQueryFormModelOpts: [],
+    // );
     //
-    _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
+    _QBlock xBlock = xShelf.findXBlockByName(this.name)!;
     BlockQueryResult queryResult = xBlock.queryResult;
     if (queryResult.success) {
       _executeNavigation(navigate: navigate);
