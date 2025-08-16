@@ -1931,12 +1931,12 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockQuickUpdateItemActionAnnotation()
   Future<bool> _unitQuickUpdateItem({
-    required _XBlock thisXBlock,
+    required _QBlock thisXBlock,
     required BlockQuickItemUpdateResult taskResult,
     required BlockQuickUpdateItemAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
         action,
   }) async {
-    __assertThisXBlockOLD(thisXBlock);
+    __assertThisXBlock(thisXBlock);
     //
     // No Need Precheck Again.
     //
@@ -1976,7 +1976,7 @@ abstract class Block<
     }
     //
     try {
-      return await _processSaveActionRestResultOLD(
+      return await _processSaveActionRestResult(
         thisXBlock: thisXBlock,
         isNew: false,
         calledMethodName: "${getClassName(action)}.$methodName",
@@ -3691,16 +3691,9 @@ abstract class Block<
       );
     }
     // _QShelf.forBlockQuickItemUpdate.
-    _XShelf xShelf = _XShelf(
-      xShelfTaskType: XShelfTaskType.commonTask,
-      shelf: shelf,
-      forceFilterModelOpt: null,
-      forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [],
-      forceQueryFormModelOpts: [],
-    );
+    _QShelf xShelf = _QShelf.forBlockQuickItemUpdate(block: this);
     //
-    _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    _QBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
     _ResultedTaskUnit taskUnit = _BlockQuickUpdateItemTaskUnit(
       xBlock: thisXBlock,
