@@ -56,7 +56,7 @@ abstract class Shelf extends _Core {
 
   int __lazyLoadId = 0;
 
-  final List<Block> __lazyBlocksToQuery = [];
+  // final List<Block> __lazyBlocksToQuery = [];
 
   bool __lazyLoadLocked = false;
 
@@ -520,7 +520,7 @@ abstract class Shelf extends _Core {
 
     if (__lazyLoadId == __lastLazyLoadId) {
       __lazyLoadId++;
-      __lazyBlocksToQuery.clear();
+      // __lazyBlocksToQuery.clear();
       //
       Future.delayed(
         const Duration(milliseconds: 0),

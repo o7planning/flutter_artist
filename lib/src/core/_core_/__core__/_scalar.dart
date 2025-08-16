@@ -607,7 +607,7 @@ abstract class Scalar<
           _ScalarOpt(scalar: this),
         ];
     }
-    //
+    // _QShelf.forScalarQuery.
     _XShelf xShelf = _XShelf(
       xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
@@ -682,7 +682,7 @@ abstract class Scalar<
           _ScalarOpt(scalar: this),
         ];
     }
-    //
+    // _QShelf.forScalarQuickExtraDataLoadAction.
     _XShelf xShelf = _XShelf(
       xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,

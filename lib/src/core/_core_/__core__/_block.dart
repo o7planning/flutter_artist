@@ -2296,7 +2296,7 @@ abstract class Block<
     if (this.currentItem == null) {
       return;
     }
-    //
+    // _QShelf.forBlockClearCurrentItem.
     _XShelf xShelf = _XShelf(
       xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
@@ -2368,6 +2368,7 @@ abstract class Block<
         precheck: BlockItemDeletionPrecheck.cancelled,
       );
     }
+    // _QShelf.forBlockItemDeletion.
     _XShelf xShelf = _XShelf(
       xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
@@ -2439,7 +2440,7 @@ abstract class Block<
         precheck: BlockItemsDeletionPrecheck.cancelled,
       );
     }
-    //
+    // _QShelf.forBlockMultiItemsDeletion.
     _XShelf xShelf = _XShelf(
       xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
@@ -2521,7 +2522,7 @@ abstract class Block<
         currentItem: currentItem,
       );
     }
-    //
+    // _QShelf.forBlockCurrItemSelection.
     _XShelf xShelf = _XShelf(
       xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
@@ -2607,7 +2608,7 @@ abstract class Block<
         precheck: actionable.errCode,
       );
     }
-    //
+    // _QShelf.forBlockClearance.
     _XShelf xShelf = _XShelf(
       xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
@@ -3237,7 +3238,7 @@ abstract class Block<
           ),
         ];
     }
-    //
+    // _QShelf.forBlockQuickActionExecution
     _XShelf xShelf = _XShelf(
       xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
@@ -3318,7 +3319,7 @@ abstract class Block<
         precheck: BlockQuickItemCreationPrecheck.cancelled,
       );
     }
-    //
+    // _QShelf.forBlockQuickItemCreation.
     _XShelf xShelf = _XShelf(
       xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
@@ -3398,7 +3399,7 @@ abstract class Block<
         precheck: BlockMultiItemsCreationPrecheck.cancelled,
       );
     }
-    //
+    // _QShelf.forBlockQuickMultiItemsCreation.
     _XShelf xShelf = _XShelf(
       xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
@@ -3476,7 +3477,7 @@ abstract class Block<
         precheck: BlockQuickItemUpdatePrecheck.cancelled,
       );
     }
-    //
+    // _QShelf.forBlockQuickItemUpdate.
     _XShelf xShelf = _XShelf(
       xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
@@ -3505,6 +3506,7 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockQuickChildBlockItemsActionAnnotation()
+  @Deprecated("Xoa di")
   Future<bool> executeQuickChildBlockItemsAction<
       A extends BlockQuickChildBlockItemsAction<ITEM, ITEM_DETAIL>>({
     required A action,
@@ -3532,7 +3534,7 @@ abstract class Block<
     if (!confirm) {
       return false;
     }
-    //
+    // _QShelf.forQuickChildBlockItemsAction.
     _XShelf xShelf = _XShelf(
       xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,
@@ -3660,7 +3662,7 @@ abstract class Block<
     }
     //
     extraFormInput?.formAction = FormAction.create;
-    //
+    // _QShelf.forPrepareFormToCreateItem(
     _XShelf xShelf = _XShelf(
       xShelfTaskType: XShelfTaskType.commonTask,
       shelf: shelf,

@@ -12,11 +12,14 @@ class _QBlock {
 
   String get name => block.name;
 
+  bool _processed = false;
+
   // Options:
 
   QryHint __forceQuery = QryHint.none;
   bool __forceReloadItem = false;
   QueryType __queryType = QueryType.realQuery;
+
   QueryType get queryType => __queryType;
 
   ListBehavior? __listBehavior;
@@ -27,8 +30,11 @@ class _QBlock {
   // ***************************************************************************
 
   QryHint get forceQuery => __forceQuery;
+
   bool get forceReloadItem => __forceReloadItem;
+
   SuggestedSelection? get suggestedSelection => __suggestedSelection;
+
   PageableData? get pageable => __pageable;
 
   // ***************************************************************************
@@ -42,6 +48,21 @@ class _QBlock {
 
   // ***************************************************************************
   // ***************************************************************************
+
+  bool hasQryHintInTreeBranchAndNotProcessed() {
+    if (__forceQuery == QryHint.force ||
+        __forceQuery == QryHint.markAsPending) {
+      if (!_processed) {
+        return true;
+      }
+    }
+    for (_QBlock child in childXBlocks) {
+      if (child.hasQryHintInTreeBranchAndNotProcessed()) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   void setForceQuery(QryHint forceQuery) {
     __forceQuery = forceQuery;

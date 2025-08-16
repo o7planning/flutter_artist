@@ -6,6 +6,8 @@ class _QScalar {
   final Scalar scalar;
   final _QFilterModel xFilterModel;
 
+  bool _processed = false;
+
   //
 
   bool __forceQuery = false;
