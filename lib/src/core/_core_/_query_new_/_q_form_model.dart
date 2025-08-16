@@ -20,6 +20,10 @@ class _QFormModel {
     required this.extraFormInput,
   });
 
+  void printInfo()  {
+    print(toString());
+  }
+
   @override
   String toString() {
     return "${getClassName(this)}(${getClassName(formModel)} - needQuery: $forceTypeForForm)";

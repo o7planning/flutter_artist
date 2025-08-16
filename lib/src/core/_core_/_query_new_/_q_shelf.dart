@@ -844,5 +844,8 @@ class _QShelf {
     for (_QBlock xBlock in allRootXBlocks) {
       xBlock.printInfoCascade();
     }
+    for (_QFormModel  xFormModel in allXFormModels) {
+      xFormModel.printInfo();
+    }
   }
 }
