@@ -387,25 +387,6 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @Deprecated("Xoa di")
-  void __clearItemsWithDataStateOLD({
-    required _XBlock thisXBlock,
-    required DataState queryDataState,
-    required DataState formDataState,
-    required bool errorInFilter,
-  }) {
-    __assertThisXBlockOLD(thisXBlock);
-    //
-    __blockData._clearItemsWithDataState(
-      qryDataState: queryDataState,
-      errorInFilter: errorInFilter,
-    );
-    //
-    if (formModel != null) {
-      formModel!._clearDataWithDataState(formDataState: formDataState);
-    }
-  }
-
   void __clearItemsWithDataState({
     required _QBlock thisXBlock,
     required DataState queryDataState,
@@ -426,32 +407,6 @@ abstract class Block<
 
   // ***************************************************************************
   // ***************************************************************************
-
-  @Deprecated("Xoa di")
-  void __clearWithDataStateAndChildrenToNonCascadeOLD({
-    required _XBlock thisXBlock,
-    required DataState qryDataState,
-    required DataState frmDataState,
-    required bool errorInFilter,
-  }) {
-    __assertThisXBlockOLD(thisXBlock);
-    //
-    __clearItemsWithDataStateOLD(
-      thisXBlock: thisXBlock,
-      queryDataState: qryDataState,
-      formDataState: frmDataState,
-      errorInFilter: errorInFilter,
-    );
-    //
-    for (var childXBlock in thisXBlock.childXBlocks) {
-      childXBlock.block.__clearWithDataStateAndChildrenToNonCascadeOLD(
-        thisXBlock: childXBlock,
-        qryDataState: DataState.none,
-        frmDataState: DataState.none,
-        errorInFilter: false,
-      );
-    }
-  }
 
   void __clearWithDataStateAndChildrenToNonCascade({
     required _QBlock thisXBlock,
@@ -481,22 +436,6 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @Deprecated("Xoa di")
-  void __clearAllChildrenBlocksToNoneOLD({
-    required _XBlock thisXBlock,
-  }) {
-    __assertThisXBlockOLD(thisXBlock);
-    //
-    for (var childXBlock in thisXBlock.childXBlocks) {
-      childXBlock.block.__clearWithDataStateAndChildrenToNonCascadeOLD(
-        thisXBlock: childXBlock,
-        qryDataState: DataState.none,
-        frmDataState: DataState.none,
-        errorInFilter: false,
-      );
-    }
-  }
-
   void __clearAllChildrenBlocksToNone({
     required _QBlock thisXBlock,
   }) {
@@ -506,22 +445,6 @@ abstract class Block<
       childXBlock.block.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: childXBlock,
         qryDataState: DataState.none,
-        frmDataState: DataState.none,
-        errorInFilter: false,
-      );
-    }
-  }
-
-  @Deprecated("Xoa di")
-  void __clearAllChildrenBlocksToPendingOLD({
-    required _XBlock thisXBlock,
-  }) {
-    __assertThisXBlockOLD(thisXBlock);
-    //
-    for (var childXBlock in thisXBlock.childXBlocks) {
-      childXBlock.block.__clearWithDataStateAndChildrenToNonCascadeOLD(
-        thisXBlock: childXBlock,
-        qryDataState: DataState.pending,
         frmDataState: DataState.none,
         errorInFilter: false,
       );
@@ -2658,19 +2581,12 @@ abstract class Block<
       );
     }
     // _QShelf.forBlockClearance.
-    _XShelf xShelf = _XShelf(
-      xShelfTaskType: XShelfTaskType.commonTask,
-      shelf: shelf,
-      forceFilterModelOpt: null,
-      forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [],
-      forceQueryFormModelOpts: [],
-    );
+    _QShelf xShelf = _QShelf.forBlockClearance(block: this);
     //
-    _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    _QBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     // @@TODO@@ 13
     // TODO: Need to check, if current is ready then allow to do like this, else throw exception.
-    this.__clearWithDataStateAndChildrenToNonCascadeOLD(
+    this.__clearWithDataStateAndChildrenToNonCascade(
       thisXBlock: thisXBlock,
       qryDataState: DataState.pending,
       frmDataState: DataState.none,
