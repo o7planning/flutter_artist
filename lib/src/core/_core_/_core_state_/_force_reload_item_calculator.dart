@@ -1,7 +1,8 @@
 part of '../core.dart';
 
-_ForceReloadItemState _calculateBlockState({
-  required _XBlock thisXBlock,
+@Deprecated("Xoa di")
+_ForceReloadItemState _calculateBlockStateOLD({
+  required _QBlock thisXBlock,
   required bool hasXActiveUI,
   required CurrentItemSelectionType currentItemSelectionType,
   required bool isCandidateCurrentItemInNewQueriedList,

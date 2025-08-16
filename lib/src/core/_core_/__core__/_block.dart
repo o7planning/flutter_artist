@@ -512,13 +512,29 @@ abstract class Block<
     }
   }
 
-  void __clearAllChildrenBlocksToPending({
+  @Deprecated("Xoa di")
+  void __clearAllChildrenBlocksToPendingOLD({
     required _XBlock thisXBlock,
   }) {
     __assertThisXBlockOLD(thisXBlock);
     //
     for (var childXBlock in thisXBlock.childXBlocks) {
       childXBlock.block.__clearWithDataStateAndChildrenToNonCascadeOLD(
+        thisXBlock: childXBlock,
+        qryDataState: DataState.pending,
+        frmDataState: DataState.none,
+        errorInFilter: false,
+      );
+    }
+  }
+
+  void __clearAllChildrenBlocksToPending({
+    required _QBlock thisXBlock,
+  }) {
+    __assertThisXBlock(thisXBlock);
+    //
+    for (var childXBlock in thisXBlock.childXBlocks) {
+      childXBlock.block.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: childXBlock,
         qryDataState: DataState.pending,
         frmDataState: DataState.none,
@@ -1090,13 +1106,13 @@ abstract class Block<
   @_BlockRefreshAndSelectFirstItemAsCurrentAnnotation()
   @_BlockRefreshAndSelectPreviousItemAsCurrentAnnotation()
   Future<void> _unitSelectItemAsCurrent({
-    required _XBlock thisXBlock,
+    required _QBlock thisXBlock,
     required CurrentItemSelectionType currentItemSelectionType,
     required List<ITEM> newQueriedList,
     required ITEM? candidateItem,
     required BlockItemCurrSelectionResult<ITEM> currentItemSelectionResult,
   }) async {
-    __assertThisXBlockOLD(thisXBlock);
+    __assertThisXBlock(thisXBlock);
     //
     formModel?._formPropsStructure._setManualDirty(false);
     //
@@ -1105,7 +1121,7 @@ abstract class Block<
     );
     //
     if (queryDataState == DataState.pending) {
-      this.__clearWithDataStateAndChildrenToNonCascadeOLD(
+      this.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: thisXBlock,
         qryDataState: queryDataState,
         frmDataState: DataState.none,
@@ -1117,7 +1133,7 @@ abstract class Block<
     if (this.queryDataState == DataState.error) {
       print(
           "        ~~~~~~~> IGNORED --> this.queryDataState == DataState.error - [$name]");
-      this.__clearWithDataStateAndChildrenToNonCascadeOLD(
+      this.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: thisXBlock,
         qryDataState: DataState.error,
         frmDataState: DataState.none,
@@ -1129,7 +1145,7 @@ abstract class Block<
     if (this.itemCount == 0) {
       print("        ~~~~~~~> IGNORED --> this.itemCount == 0 - [$name]");
       // @@TODO@@ 07.
-      this.__clearAllChildrenBlocksToNoneOLD(
+      this.__clearAllChildrenBlocksToNone(
         thisXBlock: thisXBlock,
       );
       return;
@@ -1183,7 +1199,7 @@ abstract class Block<
     //
     if (candidateCurrentItem == null) {
       print("        ~~~~~~~> candidateCurrentItem == null - [$name]");
-      this.__clearWithDataStateAndChildrenToNonCascadeOLD(
+      this.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: thisXBlock,
         qryDataState: DataState.ready,
         frmDataState: DataState.none,
@@ -1223,7 +1239,7 @@ abstract class Block<
 
     //
     if (!forceReloadItem) {
-      _ForceReloadItemState blkState = _calculateBlockState(
+      _ForceReloadItemState blkState = _calculateBlockStateOLD(
         thisXBlock: thisXBlock,
         hasXActiveUI: hasXActiveUI,
         currentItemSelectionType: currentItemSelectionType,
@@ -1346,7 +1362,7 @@ abstract class Block<
             return;
           }
           //
-          var taskUnit = _BlockSelectAsCurrentTaskUnitOLD(
+          var taskUnit = _BlockSelectAsCurrentTaskUnit(
             currentItemSelectionType: currentItemSelectionType,
             xBlock: thisXBlock,
             newQueriedList: newQueriedList,
@@ -1371,10 +1387,10 @@ abstract class Block<
         );
         formModel?._clearDataWithDataState(formDataState: DataState.none);
         // Test Case: [46a].
-        __clearAllChildrenBlocksToNoneOLD(thisXBlock: thisXBlock);
+        __clearAllChildrenBlocksToNone(thisXBlock: thisXBlock);
         //
         if (siblingItem != null) {
-          var taskUnit = _BlockSelectAsCurrentTaskUnitOLD(
+          var taskUnit = _BlockSelectAsCurrentTaskUnit(
             currentItemSelectionType: currentItemSelectionType,
             xBlock: thisXBlock,
             newQueriedList: newQueriedList,
@@ -1453,9 +1469,9 @@ abstract class Block<
     }
 
     //
-    for (_XBlock childXBlock in thisXBlock.childXBlocks) {
+    for (_QBlock childXBlock in thisXBlock.childXBlocks) {
       FlutterArtist._taskUnitQueue.addTaskUnit(
-        _BlockQueryTaskUnitOLD(
+        _BlockQueryTaskUnit(
           xBlock: childXBlock,
         ),
       );
@@ -2196,7 +2212,7 @@ abstract class Block<
       // Test Case [01c]. New Code:
       // Test Case [02b] - __test_form_cat_product02b_newCat.
       if (isNew) {
-        __clearAllChildrenBlocksToPending(
+        __clearAllChildrenBlocksToPendingOLD(
           thisXBlock: thisXBlock,
         );
       }
@@ -2584,18 +2600,11 @@ abstract class Block<
       );
     }
     // _QShelf.forBlockCurrItemSelection.
-    _XShelf xShelf = _XShelf(
-      xShelfTaskType: XShelfTaskType.commonTask,
-      shelf: shelf,
-      forceFilterModelOpt: null,
-      forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [],
-      forceQueryFormModelOpts: [],
-    );
+    _QShelf xShelf = _QShelf.forBlockCurrItemSelection(block: this);
     //
-    _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    _QBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    _ResultedTaskUnit taskUnit = _BlockSelectAsCurrentTaskUnitOLD<ITEM>(
+    _ResultedTaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
       currentItemSelectionType: currentItemSelectionType,
       xBlock: thisXBlock,
       newQueriedList: [],

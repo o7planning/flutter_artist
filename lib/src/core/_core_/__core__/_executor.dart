@@ -141,7 +141,7 @@ class _Executor {
       );
     }
     // Block Select Item as Current:
-    else if (taskUnit is _BlockSelectAsCurrentTaskUnitOLD) {
+    else if (taskUnit is _BlockSelectAsCurrentTaskUnit) {
       await taskUnit.xBlock.block._unitSelectItemAsCurrent(
         currentItemSelectionType: taskUnit.currentItemSelectionType,
         newQueriedList: taskUnit.newQueriedList,
@@ -207,7 +207,7 @@ class _Executor {
       );
     }
     // FormModel LoadForm:
-    else if (taskUnit is _FormModelLoadFormTaskUnit) {
+    else if (taskUnit is _FormModelLoadFormTaskUnitOLD) {
       await taskUnit.xFormModel.formModel._unitLoadFormData(
         thisXFormModel: taskUnit.xFormModel,
         taskResult: taskUnit.taskResult as FormModelDataLoadResult,
