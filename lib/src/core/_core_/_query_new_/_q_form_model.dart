@@ -1,0 +1,27 @@
+part of '../core.dart';
+
+class _QFormModel {
+  _QShelf get xShelf => xBlock.xShelf;
+
+  final FormModel formModel;
+  late final _QBlock xBlock;
+  final ExtraFormInput? extraFormInput;
+
+  int get xShelfId => xShelf.xShelfId;
+
+  String get name => xBlock.name;
+
+  //
+  bool queried = false;
+  ForceType forceTypeForForm = ForceType.decidedAtRuntime;
+
+  _QFormModel({
+    required this.formModel,
+    required this.extraFormInput,
+  });
+
+  @override
+  String toString() {
+    return "${getClassName(this)}(${getClassName(formModel)} - needQuery: $forceTypeForForm)";
+  }
+}

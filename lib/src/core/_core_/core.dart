@@ -216,6 +216,16 @@ part '_core_query_/_scalar_and_block_list.dart';
 
 part '_core_query_/_scalar_opt.dart';
 
+part '_query_new_/_q_block.dart';
+
+part '_query_new_/_q_filter_model.dart';
+
+part '_query_new_/_q_form_model.dart';
+
+part '_query_new_/_q_scalar.dart';
+
+part '_query_new_/_q_shelf.dart';
+
 part '_core_query_/_x_block.dart';
 
 part '_core_query_/_x_filter_model.dart';
