@@ -172,7 +172,11 @@ class _QShelf {
           if (xFormModel.formModel.formDataState == DataState.pending ||
               xFormModel.formModel.formDataState == DataState.error ||
               xFormModel.formModel.formDataState == DataState.none) {
-            xFormModel.forceTypeForForm = ForceType.decidedAtRuntime;
+            if (naturalMode) {
+              xFormModel.forceTypeForForm = ForceType.decidedAtRuntime;
+            } else {
+              xFormModel.forceTypeForForm = ForceType.force;
+            }
           }
         }
         xBlock = xBlock.parentXBlock;
@@ -844,7 +848,7 @@ class _QShelf {
     for (_QBlock xBlock in allRootXBlocks) {
       xBlock.printInfoCascade();
     }
-    for (_QFormModel  xFormModel in allXFormModels) {
+    for (_QFormModel xFormModel in allXFormModels) {
       xFormModel.printInfo();
     }
   }
