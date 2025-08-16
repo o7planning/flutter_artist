@@ -5,7 +5,7 @@ part of '../core.dart';
 class _BlockQuickChildBlockItemsTaskUnit<
     ITEM extends Object, //
     ITEM_DETAIL extends Object> extends _TaskUnit {
-  _XBlock xBlock;
+  _QBlock xBlock;
   BlockQuickChildBlockItemsAction<ITEM, ITEM_DETAIL> action;
 
   _BlockQuickChildBlockItemsTaskUnit({

@@ -2081,10 +2081,10 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockQuickChildBlockItemsActionAnnotation()
   Future<bool> _unitQuickChildBlockItemsAction<DATA extends Object>({
-    required _XBlock thisXBlock,
+    required _QBlock thisXBlock,
     required BlockQuickChildBlockItemsAction<ITEM, ITEM_DETAIL> action,
   }) async {
-    __assertThisXBlockOLD(thisXBlock);
+    __assertThisXBlock(thisXBlock);
     //
     ApiResult<ITEM_DETAIL> result;
     try {
@@ -2120,7 +2120,7 @@ abstract class Block<
       return false;
     }
     //
-    return await _processSaveActionRestResultOLD(
+    return await _processSaveActionRestResult(
       thisXBlock: thisXBlock,
       isNew: true,
       calledMethodName: "${getClassName(action)}.callApiChildBlockItems",
@@ -3702,16 +3702,9 @@ abstract class Block<
       return false;
     }
     // _QShelf.forQuickChildBlockItemsAction.
-    _XShelf xShelf = _XShelf(
-      xShelfTaskType: XShelfTaskType.commonTask,
-      shelf: shelf,
-      forceFilterModelOpt: null,
-      forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [],
-      forceQueryFormModelOpts: [],
-    );
+    _QShelf xShelf = _QShelf.forQuickChildBlockItemsAction(block: this);
     //
-    _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    _QBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
     _TaskUnit taskUnit = _BlockQuickChildBlockItemsTaskUnit(
       xBlock: thisXBlock,
