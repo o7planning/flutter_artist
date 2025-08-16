@@ -1609,16 +1609,6 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  @Deprecated("Xoa di")
-  void __assertThisXFormModelOLD(_XFormModel thisXFormModel) {
-    if (!identical(thisXFormModel.formModel, this)) {
-      String message =
-          "Error Assets form model: ${thisXFormModel.formModel} - $this";
-      print("FATAL ERROR: $message");
-      throw message;
-    }
-  }
-
   void __assertThisXFormModel(_QFormModel thisXFormModel) {
     if (!identical(thisXFormModel.formModel, this)) {
       String message =
