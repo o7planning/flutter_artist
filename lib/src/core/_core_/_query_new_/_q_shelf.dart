@@ -236,15 +236,8 @@ class _QShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _QShelf.forPrepareFormToCreateItem({
-    required Block block,
-    required QueryType queryType,
-    required FilterInput? filterInput,
-    required PageableData? pageable,
-    required ListBehavior? listBehavior,
-    required PostQueryBehavior? postQueryBehavior,
-    required SuggestedSelection<dynamic>? suggestedSelection,
-  })  : xShelfType = QShelfType.blockPrepareFormToCreateItem,
+  _QShelf.forPrepareFormToCreateItem({required Block block})
+      : xShelfType = QShelfType.blockPrepareFormToCreateItem,
         shelf = block.shelf {
     __initCore(shelf: shelf);
   }

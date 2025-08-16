@@ -29,6 +29,9 @@ class _QBlock {
   PostQueryBehavior? __postQueryBehavior;
   PageableData? __pageable;
 
+  // TODO: Chuyen sang BlockQueryResult?
+  late final PrepareItemCreationResult itemCreationResult =
+      block._createEmptyItemCreationResult();
   final queryResult = BlockQueryResult._();
 
   // ***************************************************************************
