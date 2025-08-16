@@ -5,6 +5,8 @@ int __qShelfIdSequence = 0;
 enum QShelfType {
   naturalQuery,
   blockQuery,
+  blockQueryEmpty,
+  blockQueryAndPrepareToCreate,
   blockPrepareFormToCreateItem,
   blockCurrItemClearance,
   blockClearance,
@@ -247,7 +249,7 @@ class _QShelf {
     required ListBehavior? listBehavior,
     required PostQueryBehavior? postQueryBehavior,
     required SuggestedSelection<dynamic>? suggestedSelection,
-  })  : xShelfType = QShelfType.blockQuery,
+  })  : xShelfType = QShelfType.blockQueryEmpty,
         shelf = block.shelf {
     __initCore(shelf: shelf);
     //
@@ -265,6 +267,70 @@ class _QShelf {
     thisXBlock.setForceQuery(queryHint);
     thisXBlock.setOptions(
       queryType: QueryType.emptyQuery,
+      listBehavior: listBehavior,
+      suggestedSelection: suggestedSelection,
+      postQueryBehavior: postQueryBehavior,
+      pageable: pageable,
+    );
+    _QBlock? parentXBlock = thisXBlock.parentXBlock;
+    while (true) {
+      if (parentXBlock == null) {
+        break;
+      }
+      //
+      final hasXActiveUI = parentXBlock.block.ui.hasActiveBlockFragmentWidget(
+        alsoCheckChildren: true,
+      );
+      if (hasXActiveUI) {
+        if (parentXBlock.block.queryDataState == DataState.pending ||
+            parentXBlock.block.queryDataState == DataState.error) {
+          parentXBlock.setForceQuery(QryHint.force);
+        }
+      }
+      // TODO: Need? Remove this code?
+      _QFormModel? parentXFormModel = parentXBlock.xFormModel;
+      if (parentXFormModel != null &&
+          parentXFormModel.formModel.ui.hasActiveUIComponent()) {
+        if (parentXFormModel.formModel.formDataState == DataState.pending ||
+            parentXFormModel.formModel.formDataState == DataState.error ||
+            parentXFormModel.formModel.formDataState == DataState.none) {
+          parentXFormModel.forceTypeForForm = ForceType.decidedAtRuntime;
+        }
+      }
+      //
+      parentXBlock = parentXBlock.parentXBlock;
+    }
+  }
+
+  // ***************************************************************************
+  // *** CONSTRUCTOR ***
+  // ***************************************************************************
+
+  _QShelf.forBlockQueryAndPrepareToCreate({
+    required Block block,
+    required FilterInput? filterInput,
+    required PageableData? pageable,
+    required ListBehavior? listBehavior,
+    required PostQueryBehavior? postQueryBehavior,
+    required SuggestedSelection<dynamic>? suggestedSelection,
+  })  : xShelfType = QShelfType.blockQueryAndPrepareToCreate,
+        shelf = block.shelf {
+    __initCore(shelf: shelf);
+    //
+    final queryHint = QryHint.force;
+    final forceReloadItem = false;
+    //
+    final thisXBlock = xBlockMap[block.name]!;
+    final xFilterModel = thisXBlock.xFilterModel;
+    xFilterModel.filterInput = filterInput;
+    //
+    if (forceReloadItem) {
+      thisXBlock.setForceReloadItem();
+    }
+    //
+    thisXBlock.setForceQuery(queryHint);
+    thisXBlock.setOptions(
+      queryType: QueryType.realQuery,
       listBehavior: listBehavior,
       suggestedSelection: suggestedSelection,
       postQueryBehavior: postQueryBehavior,

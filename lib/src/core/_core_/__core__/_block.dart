@@ -2926,28 +2926,41 @@ abstract class Block<
       parameters: {},
     );
     //
-    _XShelf xShelf = await shelf._queryShelfOLD(
+    _QShelf xShelf = _QShelf.forBlockQueryAndPrepareToCreate(
+      block: this,
+      filterInput: filterInput,
+      pageable: null,
+      listBehavior: ListBehavior.replace,
+      postQueryBehavior: PostQueryBehavior.createNewItem,
+      suggestedSelection: null,
+    );
+    await xShelf.shelf._queryShelf(
       xShelfTaskType: XShelfTaskType.commonTask,
-      forceFilterModelOpt: _FilterModelOpt(
-        filterModel: this._registeredOrDefaultFilterModel,
-        filterInput: filterInput,
-      ),
-      forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [
-        _BlockOpt(
-          block: this,
-          forceQuery: QryHint.force,
-          forceReloadItem: false,
-          pageable: null,
-          listBehavior: ListBehavior.replace,
-          suggestedSelection: null,
-          postQueryBehavior: PostQueryBehavior.createNewItem,
-        ),
-      ],
-      forceQueryFormModelOpts: [],
+      xShelf: xShelf,
     );
     //
-    _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
+    // _XShelf xShelf = await shelf._queryShelfOLD(
+    //   xShelfTaskType: XShelfTaskType.commonTask,
+    //   forceFilterModelOpt: _FilterModelOpt(
+    //     filterModel: this._registeredOrDefaultFilterModel,
+    //     filterInput: filterInput,
+    //   ),
+    //   forceQueryScalarOpts: [],
+    //   forceQueryBlockOpts: [
+    //     _BlockOpt(
+    //       block: this,
+    //       forceQuery: QryHint.force,
+    //       forceReloadItem: false,
+    //       pageable: null,
+    //       listBehavior: ListBehavior.replace,
+    //       suggestedSelection: null,
+    //       postQueryBehavior: PostQueryBehavior.createNewItem,
+    //     ),
+    //   ],
+    //   forceQueryFormModelOpts: [],
+    // );
+    //
+    _QBlock xBlock = xShelf.findXBlockByName(this.name)!;
     BlockQueryResult queryResult = xBlock.queryResult;
     if (queryResult.success) {
       _executeNavigation(navigate: navigate);
