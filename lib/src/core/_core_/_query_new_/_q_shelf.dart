@@ -61,6 +61,11 @@ class _QShelf {
         return false;
       }
     }
+    for (_QFormModel xFormModel in allXFormModels) {
+      if (xFormModel.lazy) {
+        return false;
+      }
+    }
     return true;
   }
 
@@ -172,6 +177,7 @@ class _QShelf {
           if (xFormModel.formModel.formDataState == DataState.pending ||
               xFormModel.formModel.formDataState == DataState.error ||
               xFormModel.formModel.formDataState == DataState.none) {
+            xFormModel.lazy = true;
             if (naturalMode) {
               xFormModel.forceTypeForForm = ForceType.decidedAtRuntime;
             } else {

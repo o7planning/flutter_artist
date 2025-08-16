@@ -14,6 +14,7 @@ class _QFormModel {
   //
   bool queried = false;
   ForceType forceTypeForForm = ForceType.decidedAtRuntime;
+  bool lazy = false;
 
   _QFormModel({
     required this.formModel,
@@ -26,6 +27,6 @@ class _QFormModel {
 
   @override
   String toString() {
-    return "${getClassName(this)}(${getClassName(formModel)} - needQuery: $forceTypeForForm)";
+    return "${getClassName(this)}(${getClassName(formModel)} - lazy: $lazy - needQuery: $forceTypeForForm)";
   }
 }

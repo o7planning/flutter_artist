@@ -8,6 +8,7 @@ class _XFormModel {
   final ExtraFormInput? extraFormInput;
 
   late final _XBlock xBlock;
+  bool lazy = false;
 
   int get xShelfId => xShelf.xShelfId;
 
