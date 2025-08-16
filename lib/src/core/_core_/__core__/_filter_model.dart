@@ -826,7 +826,7 @@ abstract class FilterModel<
       },
       navigate: null,
     );
-    _XShelf xShelf = await shelf._queryShelf(
+    _XShelf xShelf = await shelf._queryShelfOLD(
       xShelfTaskType: XShelfTaskType.commonTask,
       forceFilterModelOpt: _FilterModelOpt(
         filterModel: this,

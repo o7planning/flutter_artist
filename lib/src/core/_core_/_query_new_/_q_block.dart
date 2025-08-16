@@ -98,4 +98,14 @@ class _QBlock {
     __postQueryBehavior = postQueryBehavior;
     __pageable = pageable;
   }
+
+  void printInfoCascade() {
+    bool hasActiveUI = block.ui.hasActiveUIComponent(alsoCheckChildren: false);
+    String msg =
+        "${getClassName(this)}(${getClassName(block)} - UIActive: $hasActiveUI - ForceQuery: $__forceQuery - RefreshItem: $__forceReloadItem";
+    print(msg);
+    for (_QBlock xBlock in childXBlocks) {
+      xBlock.printInfoCascade();
+    }
+  }
 }

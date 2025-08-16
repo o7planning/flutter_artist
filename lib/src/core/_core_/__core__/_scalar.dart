@@ -729,7 +729,7 @@ abstract class Scalar<
       parameters: {"filterInput": filterInput},
     );
     //
-    _XShelf xShelf = await shelf._queryShelf(
+    _XShelf xShelf = await shelf._queryShelfOLD(
       xShelfTaskType: XShelfTaskType.commonTask,
       forceFilterModelOpt: _FilterModelOpt(
         filterModel: _registeredOrDefaultFilterModel,

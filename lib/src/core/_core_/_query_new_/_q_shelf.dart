@@ -38,6 +38,20 @@ class _QShelf {
   final List<_QFilterModel> allXFilterModels = [];
   final List<_QFormModel> allXFormModels = [];
 
+  bool isNothingTodo() {
+    for (_QBlock rootXBlock in allRootXBlocks) {
+      if (rootXBlock.hasQryHintInTreeBranchAndNotProcessed()) {
+        return false;
+      }
+    }
+    for (_QScalar xScalar in allXScalars) {
+      if (xScalar.needQuery) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   // ***************************************************************************
 
   // This method will be called in all constructors to init an empty XShelf.
@@ -478,5 +492,19 @@ class _QShelf {
       }
     }
     return null;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void printInfo() {
+    for (_QScalar xScalar in allXScalars) {
+      if (xScalar.needQuery) {
+        xScalar.printInfo();
+      }
+    }
+    for (_QBlock xBlock in allRootXBlocks) {
+      xBlock.printInfoCascade();
+    }
   }
 }

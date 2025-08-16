@@ -33,6 +33,13 @@ class _QScalar {
     __forceQuery = true;
   }
 
+  void printInfo() {
+    bool hasActiveUI = scalar.ui.hasActiveUIComponent();
+    String msg =
+        "${getClassName(this)}(${getClassName(scalar)} - UIActive: $hasActiveUI - needQuery: $needQuery)";
+    print(msg);
+  }
+
   @override
   String toString() {
     return "${getClassName(this)}(${getClassName(scalar)} - needQuery: $needQuery)";

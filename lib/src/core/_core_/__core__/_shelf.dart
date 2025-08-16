@@ -536,6 +536,30 @@ abstract class Shelf extends _Core {
 
   Future<void> __queryLazyList() async {
     __lazyLoadLocked = true;
+
+    _QShelf xShelf = _QShelf.forNaturalQuery(shelf: shelf);
+    print(">>>> XShelf: $xShelf");
+    xShelf.printInfo();
+
+    if (xShelf.isNothingTodo()) {
+      __lastLazyLoadId = __lazyLoadId;
+      __lazyLoadLocked = false;
+      // IMPORTANT: No Lazy entities, but need to refresh UIComponents:
+      ui.updateAllUIComponents();
+      return;
+    }
+    try {
+      //
+      // TODO: Handle Error:
+      //
+      await _queryShelf(
+        xShelfTaskType: XShelfTaskType.naturalReaction,
+        xShelf: xShelf,
+      );
+    } finally {
+      __lazyLoadLocked = false;
+    }
+
     // Top Lazy (Scalar, Block or FormModel).
     final _LazyObjects lazyObjects = __findLazyObjects();
 
@@ -598,7 +622,7 @@ abstract class Shelf extends _Core {
       //
       // TODO: Handle Error:
       //
-      await _queryShelf(
+      await _queryShelfOLD(
         xShelfTaskType: XShelfTaskType.naturalReaction,
         naturalMode: true,
         forceFilterModelOpt: null,
@@ -616,7 +640,8 @@ abstract class Shelf extends _Core {
 
   @_ImportantMethodAnnotation("Called as the start of a series of TaskUnit(s).")
   @_BlockShelfQueryAnnotation()
-  Future<_XShelf> _queryShelf({
+  @Deprecated("Xoa di")
+  Future<_XShelf> _queryShelfOLD({
     required XShelfTaskType xShelfTaskType,
     bool naturalMode = false,
     required _FilterModelOpt? forceFilterModelOpt,
@@ -634,6 +659,22 @@ abstract class Shelf extends _Core {
       forceQueryFormModelOpts: forceQueryFormModelOpts,
     );
     //
+    _ShelfQueryTaskUnitOLD taskUnit = _ShelfQueryTaskUnitOLD(xShelf: xShelf);
+    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
+    //
+    await FlutterArtist.executor._executeTaskUnitQueue();
+    return xShelf;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_ImportantMethodAnnotation("Called as the start of a series of TaskUnit(s).")
+  @_BlockShelfQueryAnnotation()
+  Future<_QShelf> _queryShelf({
+    required XShelfTaskType xShelfTaskType,
+    required _QShelf xShelf,
+  }) async {
     _ShelfQueryTaskUnit taskUnit = _ShelfQueryTaskUnit(xShelf: xShelf);
     FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
     //
@@ -667,7 +708,7 @@ abstract class Shelf extends _Core {
       forceQueryFormModelOpts: formModelOpts,
     );
     //
-    _ShelfQueryTaskUnit taskUnit = _ShelfQueryTaskUnit(xShelf: xShelf);
+    _ShelfQueryTaskUnitOLD taskUnit = _ShelfQueryTaskUnitOLD(xShelf: xShelf);
     FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
   }
 

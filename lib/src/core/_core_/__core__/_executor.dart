@@ -96,7 +96,7 @@ class _Executor {
     //
     shelfMap[taskUnit.shelf.name] = taskUnit.shelf;
     //
-    if (taskUnit is _ShelfQueryTaskUnit) {
+    if (taskUnit is _ShelfQueryTaskUnitOLD) {
       await taskUnit.xShelf.shelf._unitQueryShelf(
         xShelf: taskUnit.xShelf,
       );
