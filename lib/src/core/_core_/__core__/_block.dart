@@ -1239,7 +1239,7 @@ abstract class Block<
 
     //
     if (!forceReloadItem) {
-      _ForceReloadItemState blkState = _calculateBlockStateOLD(
+      _ForceReloadItemState blkState = _calculateBlockState(
         thisXBlock: thisXBlock,
         hasXActiveUI: hasXActiveUI,
         currentItemSelectionType: currentItemSelectionType,

@@ -1,7 +1,6 @@
 part of '../core.dart';
 
-@Deprecated("Xoa di")
-_ForceReloadItemState _calculateBlockStateOLD({
+_ForceReloadItemState _calculateBlockState({
   required _QBlock thisXBlock,
   required bool hasXActiveUI,
   required CurrentItemSelectionType currentItemSelectionType,

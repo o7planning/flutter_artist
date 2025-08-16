@@ -265,7 +265,7 @@ abstract class FormModel<
   Future<bool> _unitFormViewChanged({
     required _XFormModel xFormModel,
   }) async {
-    __assertThisXFormModel(xFormModel);
+    __assertThisXFormModelOLD(xFormModel);
     //
     await _startNewFormActivity(
       extraFormInput: null,
@@ -280,7 +280,7 @@ abstract class FormModel<
   @_TaskUnitMethodAnnotation()
   @_FormModelLoadFormAnnotation()
   Future<bool> _unitLoadFormData({
-    required _XFormModel thisXFormModel,
+    required _QFormModel thisXFormModel,
     required FormModelDataLoadResult taskResult,
   }) async {
     __assertThisXFormModel(thisXFormModel);
@@ -321,7 +321,7 @@ abstract class FormModel<
     required _XFormModel thisXFormModel,
     required EXTRA_FORM_INPUT extraFormInput,
   }) async {
-    __assertThisXFormModel(thisXFormModel);
+    __assertThisXFormModelOLD(thisXFormModel);
     //
     await _startNewFormActivity(
       extraFormInput: extraFormInput,
@@ -1630,7 +1630,17 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __assertThisXFormModel(_XFormModel thisXFormModel) {
+  @Deprecated("Xoa di")
+  void __assertThisXFormModelOLD(_XFormModel thisXFormModel) {
+    if (!identical(thisXFormModel.formModel, this)) {
+      String message =
+          "Error Assets form model: ${thisXFormModel.formModel} - $this";
+      print("FATAL ERROR: $message");
+      throw message;
+    }
+  }
+
+  void __assertThisXFormModel(_QFormModel thisXFormModel) {
     if (!identical(thisXFormModel.formModel, this)) {
       String message =
           "Error Assets form model: ${thisXFormModel.formModel} - $this";
