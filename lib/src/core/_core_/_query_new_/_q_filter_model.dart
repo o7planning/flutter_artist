@@ -4,6 +4,9 @@ class _QFilterModel {
   final _QShelf xShelf;
   final FilterModel filterModel;
 
+  final List<_QBlock> xBlocks = [];
+  final List<_QScalar> xScalars = [];
+
   bool queried = false;
   FilterInput? filterInput;
 

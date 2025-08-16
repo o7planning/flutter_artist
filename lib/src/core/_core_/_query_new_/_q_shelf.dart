@@ -20,6 +20,7 @@ enum QShelfType {
   @Deprecated("Xoa di")
   blockQuickChildBlockItemsAction,
   //
+  filterModelQueryAll,
   formModelSave,
   //
   scalarQuery,
@@ -82,6 +83,7 @@ class _QShelf {
         scalar: scalar,
         xFilterModel: xFilterModel,
       );
+      xFilterModel.xScalars.add(xScalar);
       allXScalars.add(xScalar);
       xScalarMap[scalar.name] = xScalar;
     }
@@ -104,6 +106,7 @@ class _QShelf {
       );
       xFormModel?.xBlock = xBlock;
       //
+      xFilterModel.xBlocks.add(xBlock);
       allXBlocks.add(xBlock);
       xBlockMap[block.name] = xBlock;
       //
@@ -363,6 +366,131 @@ class _QShelf {
       }
       //
       parentXBlock = parentXBlock.parentXBlock;
+    }
+  }
+
+  // ***************************************************************************
+  // *** CONSTRUCTOR ***
+  // ***************************************************************************
+
+  _QShelf.forBlockQueryAndPrepareToEdit({
+    required Block block,
+    required FilterInput? filterInput,
+    required PageableData? pageable,
+    required ListBehavior? listBehavior,
+    required PostQueryBehavior? postQueryBehavior,
+    required SuggestedSelection<dynamic>? suggestedSelection,
+  })  : xShelfType = QShelfType.blockQueryAndPrepareToCreate,
+        shelf = block.shelf {
+    __initCore(shelf: shelf);
+    //
+    final queryHint = QryHint.force;
+    final forceReloadItem = false;
+    //
+    final thisXBlock = xBlockMap[block.name]!;
+    final xFilterModel = thisXBlock.xFilterModel;
+    xFilterModel.filterInput = filterInput;
+    //
+    if (forceReloadItem) {
+      thisXBlock.setForceReloadItem();
+    }
+    //
+    thisXBlock.setForceQuery(queryHint);
+    thisXBlock.setOptions(
+      queryType: QueryType.realQuery,
+      listBehavior: listBehavior,
+      suggestedSelection: suggestedSelection,
+      postQueryBehavior: postQueryBehavior,
+      pageable: pageable,
+    );
+    _QBlock? parentXBlock = thisXBlock.parentXBlock;
+    while (true) {
+      if (parentXBlock == null) {
+        break;
+      }
+      //
+      final hasXActiveUI = parentXBlock.block.ui.hasActiveBlockFragmentWidget(
+        alsoCheckChildren: true,
+      );
+      if (hasXActiveUI) {
+        if (parentXBlock.block.queryDataState == DataState.pending ||
+            parentXBlock.block.queryDataState == DataState.error) {
+          parentXBlock.setForceQuery(QryHint.force);
+        }
+      }
+      // TODO: Need? Remove this code?
+      _QFormModel? parentXFormModel = parentXBlock.xFormModel;
+      if (parentXFormModel != null &&
+          parentXFormModel.formModel.ui.hasActiveUIComponent()) {
+        if (parentXFormModel.formModel.formDataState == DataState.pending ||
+            parentXFormModel.formModel.formDataState == DataState.error ||
+            parentXFormModel.formModel.formDataState == DataState.none) {
+          parentXFormModel.forceTypeForForm = ForceType.decidedAtRuntime;
+        }
+      }
+      //
+      parentXBlock = parentXBlock.parentXBlock;
+    }
+  }
+
+  // ***************************************************************************
+  // *** CONSTRUCTOR ***
+  // ***************************************************************************
+
+  _QShelf.forFilterModelQueryAll({
+    required FilterModel filterModel,
+    required FilterInput? filterInput,
+  })  : xShelfType = QShelfType.filterModelQueryAll,
+        shelf = filterModel.shelf {
+    __initCore(shelf: shelf);
+    //
+    final queryHint = QryHint.force;
+    final forceReloadItem = false;
+    //
+    final thisXFilterModel = xFilterModelMap[filterModel.name]!;
+    thisXFilterModel.filterInput = filterInput;
+    //
+    for (_QBlock xBlock in thisXFilterModel.xBlocks) {
+      xBlock.setForceQuery(queryHint);
+      xBlock.setOptions(
+        queryType: QueryType.realQuery,
+        listBehavior: ListBehavior.replace,
+        suggestedSelection: null,
+        postQueryBehavior: null,
+        pageable: null,
+      );
+      //
+      _QBlock? parentXBlock = xBlock.parentXBlock;
+      while (true) {
+        if (parentXBlock == null) {
+          break;
+        }
+        //
+        final hasXActiveUI = parentXBlock.block.ui.hasActiveBlockFragmentWidget(
+          alsoCheckChildren: true,
+        );
+        if (hasXActiveUI) {
+          if (parentXBlock.block.queryDataState == DataState.pending ||
+              parentXBlock.block.queryDataState == DataState.error) {
+            parentXBlock.setForceQuery(QryHint.force);
+          }
+        }
+        // TODO: Need? Remove this code?
+        _QFormModel? parentXFormModel = parentXBlock.xFormModel;
+        if (parentXFormModel != null &&
+            parentXFormModel.formModel.ui.hasActiveUIComponent()) {
+          if (parentXFormModel.formModel.formDataState == DataState.pending ||
+              parentXFormModel.formModel.formDataState == DataState.error ||
+              parentXFormModel.formModel.formDataState == DataState.none) {
+            parentXFormModel.forceTypeForForm = ForceType.decidedAtRuntime;
+          }
+        }
+        //
+        parentXBlock = parentXBlock.parentXBlock;
+      }
+    }
+    for (_QScalar xScalar in thisXFilterModel.xScalars) {
+      xScalar.setForceQuery();
     }
   }
 

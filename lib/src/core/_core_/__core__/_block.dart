@@ -2875,28 +2875,41 @@ abstract class Block<
       },
     );
     //
-    _XShelf xShelf = await shelf._queryShelfOLD(
+    _QShelf xShelf = _QShelf.forBlockQueryAndPrepareToEdit(
+      block: this,
+      filterInput: filterInput,
+      pageable: null,
+      listBehavior: listBehavior,
+      postQueryBehavior: PostQueryBehavior.selectAnItemAsCurrentAndLoadForm,
+      suggestedSelection: suggestedSelection,
+    );
+    await xShelf.shelf._queryShelf(
       xShelfTaskType: XShelfTaskType.commonTask,
-      forceFilterModelOpt: _FilterModelOpt(
-        filterModel: _registeredOrDefaultFilterModel,
-        filterInput: filterInput,
-      ),
-      forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [
-        _BlockOpt(
-          block: this,
-          forceQuery: QryHint.force,
-          forceReloadItem: false,
-          pageable: pageable,
-          listBehavior: listBehavior,
-          suggestedSelection: suggestedSelection,
-          postQueryBehavior: PostQueryBehavior.selectAnItemAsCurrentAndLoadForm,
-        ),
-      ],
-      forceQueryFormModelOpts: [],
+      xShelf: xShelf,
     );
     //
-    _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
+    // _XShelf xShelf = await shelf._queryShelfOLD(
+    //   xShelfTaskType: XShelfTaskType.commonTask,
+    //   forceFilterModelOpt: _FilterModelOpt(
+    //     filterModel: _registeredOrDefaultFilterModel,
+    //     filterInput: filterInput,
+    //   ),
+    //   forceQueryScalarOpts: [],
+    //   forceQueryBlockOpts: [
+    //     _BlockOpt(
+    //       block: this,
+    //       forceQuery: QryHint.force,
+    //       forceReloadItem: false,
+    //       pageable: pageable,
+    //       listBehavior: listBehavior,
+    //       suggestedSelection: suggestedSelection,
+    //       postQueryBehavior: PostQueryBehavior.selectAnItemAsCurrentAndLoadForm,
+    //     ),
+    //   ],
+    //   forceQueryFormModelOpts: [],
+    // );
+    //
+    _QBlock xBlock = xShelf.findXBlockByName(this.name)!;
     BlockQueryResult queryResult = xBlock.queryResult;
     if (queryResult.success) {
       _executeNavigation(navigate: navigate);
