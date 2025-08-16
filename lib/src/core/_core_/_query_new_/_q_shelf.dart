@@ -17,6 +17,9 @@ enum QShelfType {
   blockQuickMultiItemsCreation,
   @Deprecated("Xoa di")
   blockQuickChildBlockItemsAction,
+  //
+  formModelSave,
+  //
   scalarQuery,
   scalarQuickExtraDataLoadAction;
 }
@@ -230,6 +233,16 @@ class _QShelf {
       //
       parentXBlock = parentXBlock.parentXBlock;
     }
+  }
+
+  // ***************************************************************************
+  // *** CONSTRUCTOR ***
+  // ***************************************************************************
+
+  _QShelf.forFormModelSave({required FormModel formModel})
+      : xShelfType = QShelfType.formModelSave,
+        shelf = formModel.block.shelf {
+    __initCore(shelf: shelf);
   }
 
   // ***************************************************************************

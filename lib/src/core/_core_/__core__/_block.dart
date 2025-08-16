@@ -1839,7 +1839,7 @@ abstract class Block<
     }
     //
     try {
-      return await _processSaveActionRestResult(
+      return await _processSaveActionRestResultOLD(
         thisXBlock: thisXBlock,
         isNew: true,
         calledMethodName: "${getClassName(action)}.$methodName",
@@ -1976,7 +1976,7 @@ abstract class Block<
     }
     //
     try {
-      return await _processSaveActionRestResult(
+      return await _processSaveActionRestResultOLD(
         thisXBlock: thisXBlock,
         isNew: false,
         calledMethodName: "${getClassName(action)}.$methodName",
@@ -2120,7 +2120,7 @@ abstract class Block<
       return false;
     }
     //
-    return await _processSaveActionRestResult(
+    return await _processSaveActionRestResultOLD(
       thisXBlock: thisXBlock,
       isNew: true,
       calledMethodName: "${getClassName(action)}.callApiChildBlockItems",
@@ -2131,7 +2131,8 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<bool> _processSaveActionRestResult({
+  @Deprecated("Xoa di")
+  Future<bool> _processSaveActionRestResultOLD({
     required _XBlock thisXBlock,
     required bool isNew,
     required String calledMethodName,
@@ -2280,6 +2281,169 @@ abstract class Block<
       );
       //
       _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnitOLD<ITEM>(
+        currentItemSelectionType:
+            CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
+        xBlock: thisXBlock,
+        newQueriedList: [],
+        candidateItem: siblingItem,
+        forceReloadItem: false,
+        forceTypeForForm: null,
+      );
+      FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
+      //
+      return true;
+    }
+  }
+
+  Future<bool> _processSaveActionRestResult({
+    required _QBlock thisXBlock,
+    required bool isNew,
+    required String calledMethodName,
+    required ApiResult<ITEM_DETAIL> result,
+  }) async {
+    if (result.error != null) {
+      _handleRestError(
+        shelf: shelf,
+        methodName: calledMethodName,
+        message: result.error!.errorMessage,
+        errorDetails: result.error!.errorDetails,
+        showSnackBar: true,
+      );
+      return false;
+    }
+    //
+    showSavedSnackBar();
+    //
+    FILTER_CRITERIA? blockCurrentFilterCriteria = filterCriteria;
+    if (blockCurrentFilterCriteria == null) {
+      print("????????????? ${this.name} - filterCriteria is null");
+      // TODO-Review.
+      return true;
+    }
+    bool fireOutsideEvent = false;
+    final ITEM_DETAIL? savedItemDetail = result.data;
+    print(">>> savedItemDetail: $savedItemDetail");
+    final bool keepInList;
+    if (savedItemDetail == null) {
+      keepInList = false;
+      if (isNew) {
+        fireOutsideEvent = false;
+      } else {
+        fireOutsideEvent = true;
+      }
+    } else {
+      fireOutsideEvent = true;
+      //
+      keepInList = needToKeepItemInList(
+        parentBlockCurrentItem: parent?.currentItem,
+        filterCriteria: blockCurrentFilterCriteria,
+        itemDetail: savedItemDetail,
+      );
+    }
+    bool fireInternalEvent = this._internalEffectedShelfMembers.hasMember();
+    if (fireInternalEvent) {
+      __addInternalReactTaskUnit();
+    }
+    //
+    if (fireOutsideEvent) {
+      __addExternalReactTaskUnit();
+    } else {
+      print(">>> fireOutsideEvent: false (keepInList: $keepInList)");
+    }
+    //
+    if (savedItemDetail != null && keepInList) {
+      // bool forceForm = false;
+      ITEM refreshedItem = convertItemDetailToItem(
+        itemDetail: savedItemDetail,
+      );
+      __blockData._insertOrReplaceItem(
+        item: refreshedItem,
+      );
+      //
+      Actionable<BlockItemEditPrecheck> actionable =
+          canEditItemOnForm(item: refreshedItem);
+      //
+      FlutterArtist.codeFlowLogger._addInfo(
+        ownerClassInstance: this,
+        info: 'Allow Edit? ${actionable.yes}',
+        isLibCode: true,
+      );
+      //
+      this.__setCurrentItem(
+        itemDetail: savedItemDetail,
+        item: refreshedItem,
+      );
+      // Test Case [01c]. New Code:
+      // Test Case [02b] - __test_form_cat_product02b_newCat.
+      if (isNew) {
+        __clearAllChildrenBlocksToPending(
+          thisXBlock: thisXBlock,
+        );
+      }
+      //
+      if (formModel != null) {
+        formModel!._formPropsStructure._setFormMode_TODO_DELETE(
+          formMode: FormMode.edit,
+          formDataState: DataState.ready,
+        );
+        //
+        // IMPORTANT:
+        // After save successful, update [initialFormData].
+        //
+        formModel!._formPropsStructure._updateInitialFormDataAfterSaveSuccess();
+        //
+        bool success = await formModel!._startNewFormActivity(
+          extraFormInput: null,
+          activityType: FormActivityType.itemFirstLoad,
+        );
+        if (!success) {
+          return false;
+        }
+      }
+      return true;
+    }
+    // savedItemDetail = null or !keepInList
+    else {
+      ITEM? savedItem = __convertItemDetailToItem(
+        itemDetail: savedItemDetail,
+      );
+      final ITEM? removeItem = savedItem ?? this.currentItem;
+      if (removeItem == null) {
+        // @@TODO@@ 11
+        // TODO: Xem lai.
+        return false;
+      }
+      //
+      // removeItem != null
+      //
+      bool isCurrent = isCurrentItem(item: removeItem);
+      if (!isCurrent) {
+        await __removeItemFromList(removeItem: removeItem);
+        return true;
+      }
+      //
+      // Deleted current item ==> find sibling.
+      //
+      final ITEM? siblingItem = findSiblingItem(item: removeItem);
+      // Remove Item (Current Item)
+      await __removeItemFromList(removeItem: removeItem);
+      __blockData._setCurrentItemOnly(
+        refreshedItem: null,
+        refreshedItemDetail: null,
+      );
+      //
+      if (this.formModel != null) {
+        // Clear Form:
+        formModel!._clearDataWithDataState(
+          formDataState: DataState.none,
+        );
+      }
+      // @@TODO@@ 08.
+      __clearAllChildrenBlocksToNone(
+        thisXBlock: thisXBlock,
+      );
+      //
+      _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
         currentItemSelectionType:
             CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
         xBlock: thisXBlock,

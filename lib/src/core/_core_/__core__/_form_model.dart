@@ -336,7 +336,7 @@ abstract class FormModel<
   @_TaskUnitMethodAnnotation()
   @_FormModelSaveFormAnnotation()
   Future<bool> _unitSaveForm({
-    required _XFormModel thisXFormModel,
+    required _QFormModel thisXFormModel,
     required FormSaveResult taskResult,
   }) async {
     FILTER_CRITERIA? blockCurrentFilterCriteria = block.filterCriteria;
@@ -1604,17 +1604,10 @@ abstract class FormModel<
       return FormSaveResult(precheck: actionable.errCode);
     }
     //
-    _XShelf xShelf = _XShelf(
-      xShelfTaskType: XShelfTaskType.commonTask,
-      shelf: shelf,
-      forceFilterModelOpt: null,
-      forceQueryScalarOpts: [],
-      forceQueryBlockOpts: [],
-      forceQueryFormModelOpts: [],
-    );
+    _QShelf xShelf = _QShelf.forFormModelSave(formModel: this);
     //
-    _XBlock xBlock = xShelf.findXBlockByName(this.block.name)!;
-    _XFormModel xFormModel = xBlock.xFormModel!;
+    _QBlock xBlock = xShelf.findXBlockByName(this.block.name)!;
+    _QFormModel xFormModel = xBlock.xFormModel!;
     _ResultedTaskUnit taskUnit = _FormModelSaveFormTaskUnit(
       xFormModel: xFormModel,
     );

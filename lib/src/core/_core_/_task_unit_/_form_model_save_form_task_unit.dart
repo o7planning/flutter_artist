@@ -3,7 +3,7 @@ part of '../core.dart';
 @_TaskUnitClassAnnotation()
 @_FormModelSaveFormAnnotation()
 class _FormModelSaveFormTaskUnit extends _ResultedTaskUnit<FormSaveResult> {
-  _XFormModel xFormModel;
+  _QFormModel xFormModel;
 
   _FormModelSaveFormTaskUnit({
     required this.xFormModel,
