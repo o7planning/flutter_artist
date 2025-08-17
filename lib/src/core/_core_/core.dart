@@ -204,17 +204,9 @@ part '_config_/_scalar_config.dart';
 
 part '_config_/_shelf_config.dart';
 
-part '_core_query_/_block_opt.dart';
-
-part '_core_query_/_filter_model_opt.dart';
-
-part '_core_query_/_form_model_opt.dart';
-
 part '_core_query_/_lazy_objects.dart';
 
 part '_core_query_/_scalar_and_block_list.dart';
-
-part '_core_query_/_scalar_opt.dart';
 
 part '_query_new_/_q_block.dart';
 
@@ -225,16 +217,6 @@ part '_query_new_/_q_form_model.dart';
 part '_query_new_/_q_scalar.dart';
 
 part '_query_new_/_q_shelf.dart';
-
-part '_core_query_/_x_block.dart';
-
-part '_core_query_/_x_filter_model.dart';
-
-part '_core_query_/_x_form_model.dart';
-
-part '_core_query_/_x_scalar.dart';
-
-part '_core_query_/_x_shelf.dart';
 
 part '_core_state_/__force_reload_throw.dart';
 
@@ -467,8 +449,6 @@ part '_ui_control_/_scalar_control_outlined_button.dart';
 part '_ui_control_/_scalar_control_text_button.dart';
 
 part '_utils_/_app_utils.dart';
-
-part '_utils_/_debug_query_utils.dart';
 
 part '_xdata_/_x_data.dart';
 

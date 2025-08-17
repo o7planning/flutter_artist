@@ -829,32 +829,6 @@ abstract class FilterModel<
       xShelf: xShelf,
     );
     //
-    // _XShelf xShelf = await shelf._queryShelfOLD(
-    //   xShelfTaskType: XShelfTaskType.commonTask,
-    //   forceFilterModelOpt: _FilterModelOpt(
-    //     filterModel: this,
-    //     filterInput: filterInput,
-    //   ),
-    //   forceQueryScalarOpts: _scalars
-    //       .map(
-    //         (s) => _ScalarOpt(scalar: s),
-    //       )
-    //       .toList(),
-    //   forceQueryBlockOpts: _blocks
-    //       .map(
-    //         (b) => _BlockOpt(
-    //             block: b,
-    //             forceQuery: QryHint.force,
-    //             forceReloadItem: false,
-    //             pageable: null,
-    //             listBehavior: null,
-    //             suggestedSelection: null,
-    //             postQueryBehavior: null),
-    //       )
-    //       .toList(),
-    //   forceQueryFormModelOpts: [],
-    // );
-    // TODO: Xem lai.
     return true;
   }
 

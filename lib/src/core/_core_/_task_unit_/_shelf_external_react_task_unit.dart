@@ -11,7 +11,7 @@ class _ShelfExternalReactTaskUnit extends _TaskUnit {
     required _QShelf xShelf,
     required this.shelfInternalListeners,
   })  : _xShelf = xShelf,
-        _xShelfId = __xShelfIdSequence++,
+        _xShelfId = __qShelfIdSequence++,
         super(
           taskType: TaskType.shelfInternalReact,
         );

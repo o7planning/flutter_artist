@@ -705,18 +705,6 @@ abstract class Scalar<
       scalar: this,
       filterInput: filterInput,
     );
-    // _XShelf xShelf = await shelf._queryShelfOLD(
-    //   xShelfTaskType: XShelfTaskType.commonTask,
-    //   forceFilterModelOpt: _FilterModelOpt(
-    //     filterModel: _registeredOrDefaultFilterModel,
-    //     filterInput: filterInput,
-    //   ),
-    //   forceQueryScalarOpts: [
-    //     _ScalarOpt(scalar: this),
-    //   ],
-    //   forceQueryBlockOpts: [],
-    //   forceQueryFormModelOpts: [],
-    // );
     //
     _QScalar xScalar = xShelf.findXScalarByName(this.name)!;
     ScalarQueryResult result = xScalar.queryResult;
