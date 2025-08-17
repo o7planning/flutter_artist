@@ -537,8 +537,7 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
 
   Future<void> __queryLazyList() async {
-    print("\n\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-    print(">>>> QUERY LAZY LIST <<<<");
+    print(">>>>>>>>>>>>>> QUERY LAZY LIST <<<<<<<<<<<<<<<<<<<<<<<<");
 
     _XShelf xShelf = _XShelf.forNaturalQuery(shelf: shelf);
     _LazyObjects lazyObjects = xShelf.getLazyObjectInfos();
