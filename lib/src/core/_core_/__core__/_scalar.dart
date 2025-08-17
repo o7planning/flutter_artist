@@ -705,6 +705,7 @@ abstract class Scalar<
       scalar: this,
       filterInput: filterInput,
     );
+    await xShelf.shelf._queryShelf(xShelf: xShelf);
     //
     _XScalar xScalar = xShelf.findXScalarByName(this.name)!;
     ScalarQueryResult result = xScalar.queryResult;
