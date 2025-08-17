@@ -1961,9 +1961,9 @@ abstract class Block<
       return false;
     }
     //
-    FlutterArtist.storage.ev._fireEventToAffectedItemTypes(
+    FlutterArtist.storage.ev._fireEventFromShelfToOtherShelves(
       eventShelf: shelf,
-      affectedItemTypes: action.config.affectedItemTypes,
+      eventTypes: action.config.affectedItemTypes,
     );
     //
     switch (action.config.afterQuickAction) {
@@ -3697,7 +3697,7 @@ abstract class Block<
     // FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
 
     // TODO: Chuyen di noi khac.
-    FlutterArtist.storage.ev._fireEventSourceChanged(
+    FlutterArtist.storage.ev._fireEventFromBlockToOtherShelves(
       eventBlock: this,
       itemIdString: null,
     );

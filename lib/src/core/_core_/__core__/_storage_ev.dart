@@ -13,7 +13,7 @@ class _StorageEventHandler {
     if (!FlutterArtist.testCaseMode) {
       throw FatalAppError(errorMessage: "Not Test Case Mode");
     }
-    __fireEventSourceChanged(
+    ___fireEventFromBlockToOtherShelves(
       eventBlock: null,
       outsideEventTypes: outsideEventTypes,
       itemIdString: null,
@@ -26,12 +26,12 @@ class _StorageEventHandler {
   // ***************************************************************************
 
   @_ImportantMethodAnnotation("Called after saving or deleting in the Block")
-  void _fireEventSourceChanged({
+  void _fireEventFromBlockToOtherShelves({
     required Block eventBlock,
     required String? itemIdString,
   }) {
     // Appends TaskUnits to QUEUE (No need to call execute).
-    __fireEventSourceChanged(
+    ___fireEventFromBlockToOtherShelves(
       eventBlock: eventBlock,
       outsideEventTypes: eventBlock.config.outsideBroadcastEvents,
       itemIdString: itemIdString,
@@ -42,7 +42,7 @@ class _StorageEventHandler {
   // ***************************************************************************
 
   // PRIVATE METHOD.
-  void __fireEventSourceChanged({
+  void ___fireEventFromBlockToOtherShelves({
     required Block? eventBlock,
     required List<Type> outsideEventTypes,
     required String? itemIdString,
@@ -62,18 +62,11 @@ class _StorageEventHandler {
       if (shelfName == eventBlock?.shelf.name) {
         continue;
       }
-      Shelf shelf = storage._shelfMap[shelfName]!;
-      if (shelf.isFullyPending) {
-        continue;
-      }
-      EffectedShelfMembers effectedShelfMembers =
-          shelf._calculateEffectedShelfMembersByEvents(outsideEventTypes);
-
-      if (!effectedShelfMembers.hasMember()) {
-        continue;
-      }
-      shelf._addShelfExternalReactionTaskUnit(
-        effectedShelfMembers: effectedShelfMembers,
+      Shelf listenerShelf = storage._shelfMap[shelfName]!;
+      //
+      __addReactionTaskUnitToEventTypes(
+        listenerShelf: listenerShelf,
+        outsideEventTypes: outsideEventTypes,
       );
     }
   }
@@ -83,25 +76,51 @@ class _StorageEventHandler {
 
   @_ImportantMethodAnnotation(
       "Called after executing QuickAction in the Block or Scalar")
-  void _fireEventToAffectedItemTypes({
+  void _fireEventFromShelfToOtherShelves({
     required Shelf eventShelf,
-    required List<Type> affectedItemTypes,
+    required List<Type> eventTypes,
   }) {
-    // final List<Scalar> listenerScalars =
-    //     __getListenerScalarsByAffectedItemTypes(
-    //   eventShelf: eventShelf,
-    //   affectedItemTypes: affectedItemTypes,
-    // );
-    // //
-    // final List<Block> listenerBlocks = __getListenerBlocksByAffectedItemTypes(
-    //   eventShelf: eventShelf,
-    //   affectedItemTypes: affectedItemTypes,
-    // );
-    // //
-    // __executeExternalListenersOfShelf(
-    //   listenerScalars: listenerScalars,
-    //   listenerBlocks: listenerBlocks,
-    // );
+    if (eventTypes.isEmpty) {
+      print(
+          "~~~~~~~~~> NOT FIRE EVENT TO OUTSIDE --> Event Item Types: $eventTypes"
+          " - Src Shelf: ${getClassName(eventShelf)}");
+      return;
+    } else {
+      print("~~~~~~~~~> FIRE EVENT TO OUTSIDE --> Event Item Types: $eventTypes"
+          " - Src Shelf: ${getClassName(eventShelf)}");
+    }
+    //
+    for (String shelfName in storage._shelfMap.keys) {
+      if (shelfName == eventShelf.name) {
+        continue;
+      }
+      Shelf listenerShelf = storage._shelfMap[shelfName]!;
+      //
+      __addReactionTaskUnitToEventTypes(
+        listenerShelf: listenerShelf,
+        outsideEventTypes: eventTypes,
+      );
+    }
+  }
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __addReactionTaskUnitToEventTypes({
+    required Shelf listenerShelf,
+    required List<Type> outsideEventTypes,
+  }) {
+    if (listenerShelf.isFullyPending) {
+      return;
+    }
+    EffectedShelfMembers effectedShelfMembers =
+        listenerShelf._calculateEffectedShelfMembersByEvents(outsideEventTypes);
+
+    if (!effectedShelfMembers.hasMember()) {
+      return;
+    }
+    listenerShelf._addShelfExternalReactionTaskUnit(
+      effectedShelfMembers: effectedShelfMembers,
+    );
   }
 
   // ***************************************************************************
@@ -251,43 +270,6 @@ class _StorageEventHandler {
       }
     }
     return foundMap.values.toList();
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  // Private Method. Only for use in this class.
-  void __findEventShelfCascade({
-    required Block listenerBlock,
-    required Map<String, Shelf> foundShelfMap,
-  }) {
-    List<Type> listenTypes = listenerBlock.getOutsideDataTypesToListen();
-
-    for (Shelf shelf in storage.getAllShelves()) {
-      if (shelf == listenerBlock.shelf) {
-        continue;
-      }
-      List<Block> allBlocks = shelf.blocks;
-      for (Block blk in allBlocks) {
-        if (blk.config.outsideBroadcastEvents.isEmpty) {
-          continue;
-        }
-        final Type itemType = blk.getItemType();
-        final Type itemDetailType = blk.getItemDetailType();
-        if (_contains(listenTypes, itemType) ||
-            _contains(listenTypes, itemDetailType)) {
-          String shelfType = storage._getShelfName(shelf.runtimeType);
-          foundShelfMap[shelfType] = shelf;
-          continue;
-        }
-      }
-    }
-    for (Block childListenerBlock in listenerBlock.childBlocks) {
-      __findEventShelfCascade(
-        listenerBlock: childListenerBlock,
-        foundShelfMap: foundShelfMap,
-      );
-    }
   }
 
   // ***************************************************************************
@@ -466,101 +448,6 @@ class _StorageEventHandler {
       return [];
     }
   }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  // @Deprecated("Xoa di, khong su dung nua")
-  // Future<void> __executeExternalListenersOfShelf({
-  //   required List<Scalar> listenerScalars,
-  //   required List<Block> listenerBlocks,
-  // }) async {
-  //   if (listenerScalars.isNotEmpty) {
-  //     print(">> ~~~~~~~~~~~~~~~~~~~~~~~~> listenerScalars: $listenerScalars");
-  //   }
-  //   if (listenerBlocks.isNotEmpty) {
-  //     print(">> ~~~~~~~~~~~~~~~~~~~~~~~~> listenerBlocks: $listenerBlocks");
-  //   }
-  //   for (Scalar listenerScalar in listenerScalars) {
-  //     if (!listenerScalar.ui.hasActiveUIComponent()) {
-  //       listenerScalar.setToPending();
-  //     }
-  //   }
-  //   // <String shelfName>
-  //   Map<String, _ScalarAndBlockList> queryMap = {};
-  //
-  //   for (Scalar listenerScalar in listenerScalars) {
-  //     if (listenerScalar.ui.hasActiveUIComponent()) {
-  //       String shelfName = listenerScalar.shelf.name;
-  //       _ScalarAndBlockList sbList =
-  //           queryMap[shelfName] ?? _ScalarAndBlockList();
-  //       queryMap[shelfName] = sbList;
-  //       sbList.queryScalars.add(listenerScalar);
-  //     }
-  //   }
-  //
-  //   for (Block listenerBlock in listenerBlocks) {
-  //     // TODO: Use hasActiveUiComponents()??
-  //     final bool active = listenerBlock.ui.hasActiveBlockFragmentWidget(
-  //       alsoCheckChildren: true,
-  //     );
-  //     if (!active) {
-  //       listenerBlock.setToPending();
-  //     }
-  //   }
-  //
-  //   // xxx;
-  //   for (Block listenerBlock in listenerBlocks) {
-  //     // TODO: Use hasActiveUiComponents()??
-  //     final bool active = listenerBlock.ui.hasActiveBlockFragmentWidget(
-  //       alsoCheckChildren: true,
-  //     );
-  //     if (active) {
-  //       String shelfName = listenerBlock.shelf.name;
-  //       _ScalarAndBlockList sbList =
-  //           queryMap[shelfName] ?? _ScalarAndBlockList();
-  //       queryMap[shelfName] = sbList;
-  //       sbList.queryBlocks.add(listenerBlock);
-  //     }
-  //   }
-  //   //
-  //   if (queryMap.isNotEmpty) {
-  //     print("|~~~~~~~~~~~~~~~~~~~~~~> Query Listeners: ${queryMap.keys}");
-  //     //
-  //     FlutterArtist.codeFlowLogger._addInfo(
-  //       ownerClassInstance: this,
-  //       info: "Query Listeners: ${queryMap.keys}",
-  //       isLibCode: true,
-  //     );
-  //   }
-  //   for (String shelfName in queryMap.keys) {
-  //     Shelf shelf = storage.findShelfByName(shelfName)!;
-  //     _ScalarAndBlockList sbList = queryMap[shelfName]!;
-  //     //
-  //     await shelf._queryShelfOLD(
-  //       xShelfTaskType: XShelfTaskType.reactionWithTheOutside,
-  //       forceFilterModelOpt: null,
-  //       forceQueryScalarOpts: sbList.queryScalars
-  //           .map(
-  //             (s) => _ScalarOpt(scalar: s),
-  //           )
-  //           .toList(),
-  //       forceQueryBlockOpts: sbList.queryBlocks
-  //           .map(
-  //             (b) => _BlockOpt(
-  //                 block: b,
-  //                 forceQuery: QryHint.force,
-  //                 forceReloadItem: true,
-  //                 pageable: null,
-  //                 listBehavior: null,
-  //                 suggestedSelection: null,
-  //                 postQueryBehavior: null),
-  //           )
-  //           .toList(),
-  //       forceQueryFormModelOpts: [],
-  //     );
-  //   }
-  // }
 
   // ***************************************************************************
   // ***************************************************************************
