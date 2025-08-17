@@ -20,6 +20,8 @@ enum QShelfType {
   @Deprecated("Xoa di")
   blockQuickChildBlockItemsAction,
   //
+  shelfExternalReaction,
+  //
   filterModelQueryAll,
   formModelSave,
   formModelEnterFields,
@@ -62,12 +64,12 @@ class _QShelf {
     }
     for (_QScalar xScalar in allXScalars) {
       if (xScalar.needQuery) {
-        ret.addLazyScalar(scalar:xScalar.scalar);
+        ret.addLazyScalar(scalar: xScalar.scalar);
       }
     }
     for (_QFormModel xFormModel in allXFormModels) {
       if (xFormModel.lazy) {
-        ret.addLazyFormModel(formModel: xFormModel.formModel) ;
+        ret.addLazyFormModel(formModel: xFormModel.formModel);
       }
     }
     return ret;
@@ -177,6 +179,91 @@ class _QShelf {
           xScalar.setForceQuery();
         }
       }
+    }
+    //
+    for (_QBlock leafXBlock in allLeafXBlocks) {
+      _QBlock? xBlock = leafXBlock;
+      while (true) {
+        if (xBlock == null) {
+          break;
+        }
+        bool hasXActiveUI = xBlock.block.ui.hasActiveBlockFragmentWidget(
+          alsoCheckChildren: true,
+        );
+        if (hasXActiveUI) {
+          if (xBlock.block.queryDataState == DataState.pending ||
+              xBlock.block.queryDataState == DataState.error) {
+            xBlock.setForceQuery(QryHint.force);
+          }
+        }
+        _QFormModel? xFormModel = xBlock.xFormModel;
+
+        if (xFormModel != null &&
+            xFormModel.formModel.ui.hasActiveUIComponent()) {
+          if (xFormModel.formModel.formDataState == DataState.pending ||
+              xFormModel.formModel.formDataState == DataState.error ||
+              xFormModel.formModel.formDataState == DataState.none) {
+            xFormModel.lazy = true;
+            if (naturalMode) {
+              xFormModel.forceTypeForForm = ForceType.decidedAtRuntime;
+            } else {
+              xFormModel.forceTypeForForm = ForceType.force;
+            }
+          }
+        }
+        xBlock = xBlock.parentXBlock;
+      }
+    }
+  }
+
+  // ***************************************************************************
+  // *** CONSTRUCTOR ***
+  // ***************************************************************************
+
+  _QShelf.forShelfExternalReaction({
+    required this.shelf,
+    required EffectedShelfMembers effectedShelfMembers,
+  }) : xShelfType = QShelfType.shelfExternalReaction {
+    __initCore(shelf: shelf);
+    //
+    Set<String> listenerBlockNames = {}
+      ..addAll(effectedShelfMembers._reQueryBlockMAP.keys)
+      ..addAll(effectedShelfMembers._refreshCurrItmBlockMAP.keys);
+
+    for (String listenerBlkName in listenerBlockNames) {
+      final Block? reQryBlock =
+          effectedShelfMembers._reQueryBlockMAP[listenerBlkName];
+      final Block? refreshCurrBlock =
+          effectedShelfMembers._refreshCurrItmBlockMAP[listenerBlkName];
+      //
+      bool blockVisible = false;
+      QryHint forceQuery = QryHint.none;
+      bool forceReloadItem = false;
+      //
+      if (reQryBlock != null) {
+        blockVisible = reQryBlock.ui.hasActiveBlockFragmentWidget(
+          alsoCheckChildren: true,
+        );
+        forceQuery = blockVisible ? QryHint.force : QryHint.markAsPending;
+      }
+      if (refreshCurrBlock != null) {
+        blockVisible = refreshCurrBlock.ui.hasActiveBlockFragmentWidget(
+          alsoCheckChildren: true,
+        );
+        forceReloadItem = true;
+      }
+      //
+      _QBlock xBlock = xBlockMap[listenerBlkName]!;
+      xBlock.setForceQuery(forceQuery);
+      if (forceReloadItem) {
+        xBlock.setForceReloadItem();
+      }
+    }
+    //
+    for (Scalar s in effectedShelfMembers._reQueryScalarMAP.values) {
+      String scalarName = s.name;
+      _QScalar xScalar = xScalarMap[scalarName]!;
+      xScalar.setForceQuery();
     }
     //
     for (_QBlock leafXBlock in allLeafXBlocks) {

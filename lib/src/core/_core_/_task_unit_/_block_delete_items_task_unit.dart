@@ -18,8 +18,6 @@ class _BlockDeleteItemsTaskUnit
     required this.stopIfError,
   }) : super(taskType: TaskType.blockDeleteItem);
 
-
-
   @override
   _QShelf get xShelf => xBlock.xShelf;
 

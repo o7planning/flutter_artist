@@ -12,11 +12,8 @@ class _FormModelSaveFormTaskUnit extends _ResultedTaskUnit<FormSaveResult> {
           taskResult: FormSaveResult(precheck: null),
         );
 
-
-
   @override
   _QShelf get xShelf => xFormModel.xShelf;
-
 
   @override
   int get xShelfId => xFormModel.xShelfId;

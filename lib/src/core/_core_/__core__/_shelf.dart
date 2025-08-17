@@ -627,28 +627,16 @@ abstract class Shelf extends _Core {
     required XShelfTaskType xShelfTaskType,
     required EffectedShelfMembers effectedShelfMembers,
   }) {
-    // print(
-    //     " ||-------------> [${xShelfTaskType.name}] --> addShelfQueryTaskUnit: ${getClassName(this)} [LISTENER]");
-    // List<_ScalarOpt> scalarOpts =
-    //     effectedShelfMembers._getForceReQueryScalarOpts();
-    // List<_BlockOpt> blockOpts =
-    //     effectedShelfMembers._getForceReQueryBlockOpts();
-    // List<_FormModelOpt> formModelOpts =
-    //     effectedShelfMembers._getForceReLoadFormModelOpts();
+    print(
+        " ||-------------> [${xShelfTaskType.name}] --> addShelfQueryTaskUnit: ${getClassName(this)} [LISTENER]");
+
+    _QShelf xShelf = _QShelf.forShelfExternalReaction(
+      shelf: this,
+      effectedShelfMembers: effectedShelfMembers,
+    );
     //
-    // _XShelf xShelf = _XShelf(
-    //   xShelfTaskType: xShelfTaskType,
-    //   naturalMode: false,
-    //   shelf: this,
-    //   forceFilterModelOpt: null,
-    //   forceQueryScalarOpts: scalarOpts,
-    //   forceQueryBlockOpts: blockOpts,
-    //   forceQueryFormModelOpts: formModelOpts,
-    // );
-    // //
-    // _ShelfQueryTaskUnitOLD taskUnit = _ShelfQueryTaskUnitOLD(xShelf: xShelf);
-    // FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
-    throw UnimplementedError("TODO-2");
+    _ShelfQueryTaskUnit taskUnit = _ShelfQueryTaskUnit(xShelf: xShelf);
+    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
   }
 
   // ***************************************************************************
@@ -720,22 +708,22 @@ abstract class Shelf extends _Core {
   Future<void> _unitInternalReact({
     required EffectedShelfMembers shelfInternalListeners,
   }) async {
-    List<_ScalarOpt> scalarOpts =
-        shelfInternalListeners._getForceReQueryScalarOpts();
-    List<_BlockOpt> blockOpts =
-        shelfInternalListeners._getForceReQueryBlockOpts();
-    List<_FormModelOpt> formModelOpts =
-        shelfInternalListeners._getForceReLoadFormModelOpts();
-
-    _XShelf xShelf = _XShelf(
-      xShelfTaskType: XShelfTaskType.reactionWithTheInside,
-      naturalMode: false,
-      shelf: this,
-      forceFilterModelOpt: null,
-      forceQueryScalarOpts: scalarOpts,
-      forceQueryBlockOpts: blockOpts,
-      forceQueryFormModelOpts: formModelOpts,
-    );
+    // List<_ScalarOpt> scalarOpts =
+    //     shelfInternalListeners._getForceReQueryScalarOpts();
+    // List<_BlockOpt> blockOpts =
+    //     shelfInternalListeners._getForceReQueryBlockOpts();
+    // List<_FormModelOpt> formModelOpts =
+    //     shelfInternalListeners._getForceReLoadFormModelOpts();
+    //
+    // _XShelf xShelf = _XShelf(
+    //   xShelfTaskType: XShelfTaskType.reactionWithTheInside,
+    //   naturalMode: false,
+    //   shelf: this,
+    //   forceFilterModelOpt: null,
+    //   forceQueryScalarOpts: scalarOpts,
+    //   forceQueryBlockOpts: blockOpts,
+    //   forceQueryFormModelOpts: formModelOpts,
+    // );
 
     // await _unitQueryShelf(
     //   xShelf: xShelf,

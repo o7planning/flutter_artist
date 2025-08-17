@@ -2,11 +2,10 @@ part of '../core.dart';
 
 @_TaskUnitClassAnnotation()
 @_ShelfQueryAnnotation()
-@Deprecated("Xoa di")
-class _ShelfQueryTaskUnitOLD extends _TaskUnit {
-  _QShelf _xShelf;
+class _ShelfQueryTaskUnit extends _TaskUnit {
+  final _QShelf _xShelf;
 
-  _ShelfQueryTaskUnitOLD({
+  _ShelfQueryTaskUnit({
     required _QShelf xShelf,
   })  : _xShelf = xShelf,
         super(
@@ -15,32 +14,6 @@ class _ShelfQueryTaskUnitOLD extends _TaskUnit {
 
   @override
   _QShelf get xShelf => _xShelf;
-
-  @override
-  int get xShelfId => xShelf.xShelfId;
-
-  @override
-  Shelf get shelf => xShelf.shelf;
-
-  @override
-  Shelf get owner => xShelf.shelf;
-
-  @override
-  String getObjectName() {
-    return xShelf.shelf.name;
-  }
-}
-
-@_TaskUnitClassAnnotation()
-@_ShelfQueryAnnotation()
-class _ShelfQueryTaskUnit extends _TaskUnit {
-  _QShelf xShelf;
-
-  _ShelfQueryTaskUnit({
-    required this.xShelf,
-  }) : super(
-          taskType: TaskType.shelfQuery,
-        );
 
   @override
   int get xShelfId => xShelf.xShelfId;

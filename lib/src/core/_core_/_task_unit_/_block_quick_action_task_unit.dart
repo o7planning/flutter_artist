@@ -15,8 +15,6 @@ class _BlockQuickActionTaskUnit
           taskResult: BlockQuickActionResult(),
         );
 
-
-
   @override
   _QShelf get xShelf => xBlock.xShelf;
 

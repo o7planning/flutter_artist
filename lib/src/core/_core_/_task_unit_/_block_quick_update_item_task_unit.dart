@@ -15,8 +15,6 @@ class _BlockQuickUpdateItemTaskUnit
           taskResult: BlockQuickItemUpdateResult(),
         );
 
-
-
   @override
   _QShelf get xShelf => xBlock.xShelf;
 

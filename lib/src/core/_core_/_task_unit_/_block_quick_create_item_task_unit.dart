@@ -15,11 +15,8 @@ class _BlockQuickCreateItemTaskUnit
           taskResult: BlockQuickItemCreationResult(),
         );
 
-
-
   @override
   _QShelf get xShelf => xBlock.xShelf;
-
 
   @override
   int get xShelfId => xBlock.xShelfId;

@@ -21,7 +21,7 @@ class _QFormModel {
     required this.extraFormInput,
   });
 
-  void printInfo()  {
+  void printInfo() {
     print(toString());
   }
 

@@ -16,7 +16,6 @@ class _BlockQuickCreateMultiItemsTaskUnit
           taskResult: BlockQuickMultiItemsCreationResult(),
         );
 
-
   @override
   _QShelf get xShelf => xBlock.xShelf;
 
