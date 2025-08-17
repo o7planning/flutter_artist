@@ -88,21 +88,21 @@ class _StorageEventHandler {
     required Shelf eventShelf,
     required List<Type> affectedItemTypes,
   }) {
-    final List<Scalar> listenerScalars =
-        __getListenerScalarsByAffectedItemTypes(
-      eventShelf: eventShelf,
-      affectedItemTypes: affectedItemTypes,
-    );
-    //
-    final List<Block> listenerBlocks = __getListenerBlocksByAffectedItemTypes(
-      eventShelf: eventShelf,
-      affectedItemTypes: affectedItemTypes,
-    );
-    //
-    __executeExternalListenersOfShelf(
-      listenerScalars: listenerScalars,
-      listenerBlocks: listenerBlocks,
-    );
+    // final List<Scalar> listenerScalars =
+    //     __getListenerScalarsByAffectedItemTypes(
+    //   eventShelf: eventShelf,
+    //   affectedItemTypes: affectedItemTypes,
+    // );
+    // //
+    // final List<Block> listenerBlocks = __getListenerBlocksByAffectedItemTypes(
+    //   eventShelf: eventShelf,
+    //   affectedItemTypes: affectedItemTypes,
+    // );
+    // //
+    // __executeExternalListenersOfShelf(
+    //   listenerScalars: listenerScalars,
+    //   listenerBlocks: listenerBlocks,
+    // );
   }
 
   // ***************************************************************************
@@ -471,97 +471,97 @@ class _StorageEventHandler {
   // ***************************************************************************
   // ***************************************************************************
 
-  @Deprecated("Xoa di, khong su dung nua")
-  Future<void> __executeExternalListenersOfShelf({
-    required List<Scalar> listenerScalars,
-    required List<Block> listenerBlocks,
-  }) async {
-    if (listenerScalars.isNotEmpty) {
-      print(">> ~~~~~~~~~~~~~~~~~~~~~~~~> listenerScalars: $listenerScalars");
-    }
-    if (listenerBlocks.isNotEmpty) {
-      print(">> ~~~~~~~~~~~~~~~~~~~~~~~~> listenerBlocks: $listenerBlocks");
-    }
-    for (Scalar listenerScalar in listenerScalars) {
-      if (!listenerScalar.ui.hasActiveUIComponent()) {
-        listenerScalar.setToPending();
-      }
-    }
-    // <String shelfName>
-    Map<String, _ScalarAndBlockList> queryMap = {};
-
-    for (Scalar listenerScalar in listenerScalars) {
-      if (listenerScalar.ui.hasActiveUIComponent()) {
-        String shelfName = listenerScalar.shelf.name;
-        _ScalarAndBlockList sbList =
-            queryMap[shelfName] ?? _ScalarAndBlockList();
-        queryMap[shelfName] = sbList;
-        sbList.queryScalars.add(listenerScalar);
-      }
-    }
-
-    for (Block listenerBlock in listenerBlocks) {
-      // TODO: Use hasActiveUiComponents()??
-      final bool active = listenerBlock.ui.hasActiveBlockFragmentWidget(
-        alsoCheckChildren: true,
-      );
-      if (!active) {
-        listenerBlock.setToPending();
-      }
-    }
-
-    // xxx;
-    for (Block listenerBlock in listenerBlocks) {
-      // TODO: Use hasActiveUiComponents()??
-      final bool active = listenerBlock.ui.hasActiveBlockFragmentWidget(
-        alsoCheckChildren: true,
-      );
-      if (active) {
-        String shelfName = listenerBlock.shelf.name;
-        _ScalarAndBlockList sbList =
-            queryMap[shelfName] ?? _ScalarAndBlockList();
-        queryMap[shelfName] = sbList;
-        sbList.queryBlocks.add(listenerBlock);
-      }
-    }
-    //
-    if (queryMap.isNotEmpty) {
-      print("|~~~~~~~~~~~~~~~~~~~~~~> Query Listeners: ${queryMap.keys}");
-      //
-      FlutterArtist.codeFlowLogger._addInfo(
-        ownerClassInstance: this,
-        info: "Query Listeners: ${queryMap.keys}",
-        isLibCode: true,
-      );
-    }
-    for (String shelfName in queryMap.keys) {
-      Shelf shelf = storage.findShelfByName(shelfName)!;
-      _ScalarAndBlockList sbList = queryMap[shelfName]!;
-      //
-      await shelf._queryShelfOLD(
-        xShelfTaskType: XShelfTaskType.reactionWithTheOutside,
-        forceFilterModelOpt: null,
-        forceQueryScalarOpts: sbList.queryScalars
-            .map(
-              (s) => _ScalarOpt(scalar: s),
-            )
-            .toList(),
-        forceQueryBlockOpts: sbList.queryBlocks
-            .map(
-              (b) => _BlockOpt(
-                  block: b,
-                  forceQuery: QryHint.force,
-                  forceReloadItem: true,
-                  pageable: null,
-                  listBehavior: null,
-                  suggestedSelection: null,
-                  postQueryBehavior: null),
-            )
-            .toList(),
-        forceQueryFormModelOpts: [],
-      );
-    }
-  }
+  // @Deprecated("Xoa di, khong su dung nua")
+  // Future<void> __executeExternalListenersOfShelf({
+  //   required List<Scalar> listenerScalars,
+  //   required List<Block> listenerBlocks,
+  // }) async {
+  //   if (listenerScalars.isNotEmpty) {
+  //     print(">> ~~~~~~~~~~~~~~~~~~~~~~~~> listenerScalars: $listenerScalars");
+  //   }
+  //   if (listenerBlocks.isNotEmpty) {
+  //     print(">> ~~~~~~~~~~~~~~~~~~~~~~~~> listenerBlocks: $listenerBlocks");
+  //   }
+  //   for (Scalar listenerScalar in listenerScalars) {
+  //     if (!listenerScalar.ui.hasActiveUIComponent()) {
+  //       listenerScalar.setToPending();
+  //     }
+  //   }
+  //   // <String shelfName>
+  //   Map<String, _ScalarAndBlockList> queryMap = {};
+  //
+  //   for (Scalar listenerScalar in listenerScalars) {
+  //     if (listenerScalar.ui.hasActiveUIComponent()) {
+  //       String shelfName = listenerScalar.shelf.name;
+  //       _ScalarAndBlockList sbList =
+  //           queryMap[shelfName] ?? _ScalarAndBlockList();
+  //       queryMap[shelfName] = sbList;
+  //       sbList.queryScalars.add(listenerScalar);
+  //     }
+  //   }
+  //
+  //   for (Block listenerBlock in listenerBlocks) {
+  //     // TODO: Use hasActiveUiComponents()??
+  //     final bool active = listenerBlock.ui.hasActiveBlockFragmentWidget(
+  //       alsoCheckChildren: true,
+  //     );
+  //     if (!active) {
+  //       listenerBlock.setToPending();
+  //     }
+  //   }
+  //
+  //   // xxx;
+  //   for (Block listenerBlock in listenerBlocks) {
+  //     // TODO: Use hasActiveUiComponents()??
+  //     final bool active = listenerBlock.ui.hasActiveBlockFragmentWidget(
+  //       alsoCheckChildren: true,
+  //     );
+  //     if (active) {
+  //       String shelfName = listenerBlock.shelf.name;
+  //       _ScalarAndBlockList sbList =
+  //           queryMap[shelfName] ?? _ScalarAndBlockList();
+  //       queryMap[shelfName] = sbList;
+  //       sbList.queryBlocks.add(listenerBlock);
+  //     }
+  //   }
+  //   //
+  //   if (queryMap.isNotEmpty) {
+  //     print("|~~~~~~~~~~~~~~~~~~~~~~> Query Listeners: ${queryMap.keys}");
+  //     //
+  //     FlutterArtist.codeFlowLogger._addInfo(
+  //       ownerClassInstance: this,
+  //       info: "Query Listeners: ${queryMap.keys}",
+  //       isLibCode: true,
+  //     );
+  //   }
+  //   for (String shelfName in queryMap.keys) {
+  //     Shelf shelf = storage.findShelfByName(shelfName)!;
+  //     _ScalarAndBlockList sbList = queryMap[shelfName]!;
+  //     //
+  //     await shelf._queryShelfOLD(
+  //       xShelfTaskType: XShelfTaskType.reactionWithTheOutside,
+  //       forceFilterModelOpt: null,
+  //       forceQueryScalarOpts: sbList.queryScalars
+  //           .map(
+  //             (s) => _ScalarOpt(scalar: s),
+  //           )
+  //           .toList(),
+  //       forceQueryBlockOpts: sbList.queryBlocks
+  //           .map(
+  //             (b) => _BlockOpt(
+  //                 block: b,
+  //                 forceQuery: QryHint.force,
+  //                 forceReloadItem: true,
+  //                 pageable: null,
+  //                 listBehavior: null,
+  //                 suggestedSelection: null,
+  //                 postQueryBehavior: null),
+  //           )
+  //           .toList(),
+  //       forceQueryFormModelOpts: [],
+  //     );
+  //   }
+  // }
 
   // ***************************************************************************
   // ***************************************************************************

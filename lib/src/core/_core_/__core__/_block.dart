@@ -5744,15 +5744,6 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @Deprecated("Xoa di")
-  void __assertThisXBlockOLD(_XBlock thisXBlock) {
-    if (thisXBlock.block != this || thisXBlock.name != name) {
-      String message = "Error Assets block: ${thisXBlock.block} - $this";
-      print("FATAL ERROR: $message");
-      throw message;
-    }
-  }
-
   void __assertThisXBlock(_QBlock thisXBlock) {
     if (thisXBlock.block != this || thisXBlock.name != name) {
       String message = "Error Assets block: ${thisXBlock.block} - $this";
