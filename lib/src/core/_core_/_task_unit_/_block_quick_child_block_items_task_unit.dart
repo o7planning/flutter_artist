@@ -13,6 +13,11 @@ class _BlockQuickChildBlockItemsTaskUnit<
     required this.action,
   }) : super(taskType: TaskType.blockQuickChildBlockItems);
 
+
+
+  @override
+  _QShelf get xShelf => xBlock.xShelf;
+
   @override
   int get xShelfId => xBlock.xShelfId;
 

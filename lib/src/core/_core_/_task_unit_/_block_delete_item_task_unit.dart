@@ -17,6 +17,9 @@ class _BlockDeleteItemTaskUnit
   }) : super(taskType: TaskType.blockDeleteItem);
 
   @override
+  _QShelf get xShelf => xBlock.xShelf;
+
+  @override
   int get xShelfId => xBlock.xShelfId;
 
   @override

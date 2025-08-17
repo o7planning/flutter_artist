@@ -50,6 +50,29 @@ class _QShelf {
 
   bool get naturalMode => xShelfType == QShelfType.naturalQuery;
 
+  _LazyObjects getLazyObjectInfos() {
+    final _LazyObjects ret = _LazyObjects();
+    for (_QBlock xBlock in allXBlocks) {
+      if (xBlock.forceQuery != QryHint.none) {
+        ret.addLazyBlock(
+          block: xBlock.block,
+          forceQuery: xBlock.forceQuery,
+        );
+      }
+    }
+    for (_QScalar xScalar in allXScalars) {
+      if (xScalar.needQuery) {
+        ret.addLazyScalar(scalar:xScalar.scalar);
+      }
+    }
+    for (_QFormModel xFormModel in allXFormModels) {
+      if (xFormModel.lazy) {
+        ret.addLazyFormModel(formModel: xFormModel.formModel) ;
+      }
+    }
+    return ret;
+  }
+
   bool isNothingTodo() {
     for (_QBlock rootXBlock in allRootXBlocks) {
       if (rootXBlock.hasQryHintInTreeBranchAndNotProcessed()) {

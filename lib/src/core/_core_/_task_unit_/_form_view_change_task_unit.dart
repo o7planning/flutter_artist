@@ -9,6 +9,12 @@ class _FormViewChangeTaskUnit extends _TaskUnit {
     required this.xFormModel,
   }) : super(taskType: TaskType.formModelFormViewChanged);
 
+
+
+  @override
+  _QShelf get xShelf => xFormModel.xShelf;
+
+
   @override
   int get xShelfId => xFormModel.xShelfId;
 

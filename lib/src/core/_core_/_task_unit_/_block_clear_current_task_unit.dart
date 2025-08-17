@@ -10,6 +10,9 @@ class _BlockClearCurrentTaskUnit<ITEM extends Object> extends _TaskUnit {
   }) : super(taskType: TaskType.blockClearCurrentItem);
 
   @override
+  _QShelf get xShelf => xBlock.xShelf;
+
+  @override
   int get xShelfId => xBlock.xShelfId;
 
   @override

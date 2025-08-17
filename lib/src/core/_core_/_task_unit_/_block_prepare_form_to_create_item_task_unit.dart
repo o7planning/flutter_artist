@@ -16,6 +16,9 @@ class _BlockPrepareFormToCreateItemTaskUnit extends _TaskUnit {
   }) : super(taskType: TaskType.blockPrepareToCreateItem);
 
   @override
+  _QShelf get xShelf => xBlock.xShelf;
+
+  @override
   int get xShelfId => xBlock.xShelfId;
 
   @override

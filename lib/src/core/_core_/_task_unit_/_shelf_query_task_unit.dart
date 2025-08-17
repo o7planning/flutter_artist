@@ -2,14 +2,19 @@ part of '../core.dart';
 
 @_TaskUnitClassAnnotation()
 @_ShelfQueryAnnotation()
+@Deprecated("Xoa di")
 class _ShelfQueryTaskUnitOLD extends _TaskUnit {
-  _XShelf xShelf;
+  _QShelf _xShelf;
 
   _ShelfQueryTaskUnitOLD({
-    required this.xShelf,
-  }) : super(
+    required _QShelf xShelf,
+  })  : _xShelf = xShelf,
+        super(
           taskType: TaskType.shelfQuery,
         );
+
+  @override
+  _QShelf get xShelf => _xShelf;
 
   @override
   int get xShelfId => xShelf.xShelfId;

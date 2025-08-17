@@ -537,18 +537,23 @@ abstract class Shelf extends _Core {
   Future<void> __queryLazyList() async {
     __lazyLoadLocked = true;
 
-    _QShelf xShelf = _QShelf.forNaturalQuery(shelf: shelf);
-    print(">>>> XShelf: $xShelf");
-    xShelf.printInfo();
+    print("\n\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+    print(">>>> QUERY LAZY LIST <<<<");
 
-    if (xShelf.isNothingTodo()) {
-      print(">>>> XShelf NOTHING TODO");
+    _QShelf xShelf = _QShelf.forNaturalQuery(shelf: shelf);
+    _LazyObjects lazyObjects = xShelf.getLazyObjectInfos();
+    lazyObjects.printInfo();
+    //
+    if (lazyObjects.isEmpty) {
+      print(">>>> LazyObjects is Empty <<<<");
       __lastLazyLoadId = __lazyLoadId;
       __lazyLoadLocked = false;
       // IMPORTANT: No Lazy entities, but need to refresh UIComponents:
       ui.updateAllUIComponents();
       return;
     }
+    print("@@@@@@@@@@@@ Lazy Load - ID: $__lazyLoadId");
+    print("@@@@@@@@@@@@ Lazy Load - Count: ${lazyObjects.count}");
     try {
       //
       // TODO: Handle Error:
@@ -576,21 +581,22 @@ abstract class Shelf extends _Core {
     required List<_BlockOpt> forceQueryBlockOpts,
     required List<_FormModelOpt> forceQueryFormModelOpts,
   }) async {
-    _XShelf xShelf = _XShelf(
-      xShelfTaskType: xShelfTaskType,
-      naturalMode: naturalMode,
-      shelf: this,
-      forceFilterModelOpt: forceFilterModelOpt,
-      forceQueryScalarOpts: forceQueryScalarOpts,
-      forceQueryBlockOpts: forceQueryBlockOpts,
-      forceQueryFormModelOpts: forceQueryFormModelOpts,
-    );
-    //
-    _ShelfQueryTaskUnitOLD taskUnit = _ShelfQueryTaskUnitOLD(xShelf: xShelf);
-    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
-    //
-    await FlutterArtist.executor._executeTaskUnitQueue();
-    return xShelf;
+    // _XShelf xShelf = _XShelf(
+    //   xShelfTaskType: xShelfTaskType,
+    //   naturalMode: naturalMode,
+    //   shelf: this,
+    //   forceFilterModelOpt: forceFilterModelOpt,
+    //   forceQueryScalarOpts: forceQueryScalarOpts,
+    //   forceQueryBlockOpts: forceQueryBlockOpts,
+    //   forceQueryFormModelOpts: forceQueryFormModelOpts,
+    // );
+    // //
+    // _ShelfQueryTaskUnitOLD taskUnit = _ShelfQueryTaskUnitOLD(xShelf: xShelf);
+    // FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
+    // //
+    // await FlutterArtist.executor._executeTaskUnitQueue();
+    // return xShelf;
+    throw UnimplementedError("TODO-1");
   }
 
   // ***************************************************************************
@@ -616,27 +622,28 @@ abstract class Shelf extends _Core {
     required XShelfTaskType xShelfTaskType,
     required EffectedShelfMembers effectedShelfMembers,
   }) {
-    print(
-        " ||-------------> [${xShelfTaskType.name}] --> addShelfQueryTaskUnit: ${getClassName(this)} [LISTENER]");
-    List<_ScalarOpt> scalarOpts =
-        effectedShelfMembers._getForceReQueryScalarOpts();
-    List<_BlockOpt> blockOpts =
-        effectedShelfMembers._getForceReQueryBlockOpts();
-    List<_FormModelOpt> formModelOpts =
-        effectedShelfMembers._getForceReLoadFormModelOpts();
-
-    _XShelf xShelf = _XShelf(
-      xShelfTaskType: xShelfTaskType,
-      naturalMode: false,
-      shelf: this,
-      forceFilterModelOpt: null,
-      forceQueryScalarOpts: scalarOpts,
-      forceQueryBlockOpts: blockOpts,
-      forceQueryFormModelOpts: formModelOpts,
-    );
+    // print(
+    //     " ||-------------> [${xShelfTaskType.name}] --> addShelfQueryTaskUnit: ${getClassName(this)} [LISTENER]");
+    // List<_ScalarOpt> scalarOpts =
+    //     effectedShelfMembers._getForceReQueryScalarOpts();
+    // List<_BlockOpt> blockOpts =
+    //     effectedShelfMembers._getForceReQueryBlockOpts();
+    // List<_FormModelOpt> formModelOpts =
+    //     effectedShelfMembers._getForceReLoadFormModelOpts();
     //
-    _ShelfQueryTaskUnitOLD taskUnit = _ShelfQueryTaskUnitOLD(xShelf: xShelf);
-    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
+    // _XShelf xShelf = _XShelf(
+    //   xShelfTaskType: xShelfTaskType,
+    //   naturalMode: false,
+    //   shelf: this,
+    //   forceFilterModelOpt: null,
+    //   forceQueryScalarOpts: scalarOpts,
+    //   forceQueryBlockOpts: blockOpts,
+    //   forceQueryFormModelOpts: formModelOpts,
+    // );
+    // //
+    // _ShelfQueryTaskUnitOLD taskUnit = _ShelfQueryTaskUnitOLD(xShelf: xShelf);
+    // FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
+    throw UnimplementedError("TODO-2");
   }
 
   // ***************************************************************************

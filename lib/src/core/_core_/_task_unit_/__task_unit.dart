@@ -12,6 +12,8 @@ abstract class _TaskUnit {
     return "${getClassName(this)}/${getObjectName()}";
   }
 
+  _QShelf get xShelf;
+
   int get xShelfId;
 
   String getObjectName();

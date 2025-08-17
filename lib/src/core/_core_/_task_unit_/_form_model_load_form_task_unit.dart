@@ -13,6 +13,12 @@ class _FormModelLoadFormTaskUnit
           taskResult: FormModelDataLoadResult(),
         );
 
+
+
+  @override
+  _QShelf get xShelf => xFormModel.xShelf;
+
+
   @override
   int get xShelfId => xFormModel.xShelfId;
 

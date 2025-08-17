@@ -92,7 +92,7 @@ class _Executor {
       }
     }
     print(
-        "\n@~~~~~~> Executing xShelfId:$__executingXShelfId - Task: ${taskUnit.taskType.name} - ${taskUnit.getObjectName()}");
+        "\n@~~~~~~> Executing xShelfId:$__executingXShelfId - [${taskUnit.xShelf.xShelfType.name}] - Task: ${taskUnit.taskType.name} - ${taskUnit.getObjectName()}");
     //
     shelfMap[taskUnit.shelf.name] = taskUnit.shelf;
     //

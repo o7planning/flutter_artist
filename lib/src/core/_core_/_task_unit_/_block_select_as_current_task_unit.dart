@@ -41,6 +41,12 @@ class _BlockSelectAsCurrentTaskUnit<ITEM extends Object>
     }
   }
 
+
+
+  @override
+  _QShelf get xShelf => xBlock.xShelf;
+
+
   @override
   int get xShelfId => xBlock.xShelfId;
 

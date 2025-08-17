@@ -14,6 +14,10 @@ class _BlockQueryTaskUnit extends _TaskUnit {
     required this.xBlock,
   }) : super(taskType: TaskType.blockQuery);
 
+
+  @override
+  _QShelf get xShelf => xBlock.xShelf;
+
   @override
   int get xShelfId => xBlock.xShelfId;
 

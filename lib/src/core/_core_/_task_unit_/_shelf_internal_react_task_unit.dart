@@ -3,30 +3,35 @@ part of '../core.dart';
 @_TaskUnitClassAnnotation()
 @_ShelfInternalReactAnnotation()
 class _ShelfInternalReactTaskUnit extends _TaskUnit {
-  final int _xShelfId;
-  final Shelf _shelf;
+
+  final _QShelf _xShelf;
   final EffectedShelfMembers shelfInternalListeners;
 
   _ShelfInternalReactTaskUnit({
-    required Shelf shelf,
+    required _QShelf xShelf,
     required this.shelfInternalListeners,
-  })  : _shelf = shelf,
-        _xShelfId = __xShelfIdSequence++,
+  })  : _xShelf = xShelf,
         super(
           taskType: TaskType.shelfInternalReact,
         );
 
-  @override
-  int get xShelfId => _xShelfId;
+
 
   @override
-  Shelf get shelf => _shelf;
+  _QShelf get xShelf => _xShelf;
+
 
   @override
-  Shelf get owner => _shelf;
+  int get xShelfId => _xShelf.xShelfId;
+
+  @override
+  Shelf get shelf => _xShelf.shelf;
+
+  @override
+  Shelf get owner => _xShelf.shelf;
 
   @override
   String getObjectName() {
-    return _shelf.name;
+    return _xShelf.shelf.name;
   }
 }

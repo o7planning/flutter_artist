@@ -3751,11 +3751,12 @@ abstract class Block<
 
   @_InternalEventReactAnnotation()
   Future<void> __addInternalReactTaskUnit() async {
-    _ShelfInternalReactTaskUnit taskUnit = _ShelfInternalReactTaskUnit(
-      shelf: shelf,
-      shelfInternalListeners: _internalEffectedShelfMembers,
-    );
-    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
+    // _ShelfInternalReactTaskUnit taskUnit = _ShelfInternalReactTaskUnit(
+    //   shelf: shelf,
+    //   shelfInternalListeners: _internalEffectedShelfMembers,
+    // );
+    // FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
+    throw UnimplementedError("TODO__addInternalReactTaskUnit");
   }
 
   // ***************************************************************************

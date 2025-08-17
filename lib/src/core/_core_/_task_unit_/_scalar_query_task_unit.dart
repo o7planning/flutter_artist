@@ -11,6 +11,13 @@ class _ScalarQueryTaskUnit extends _TaskUnit {
           taskType: TaskType.scalarQuery,
         );
 
+
+
+  @override
+  _QShelf get xShelf => xScalar.xShelf;
+
+
+
   @override
   int get xShelfId => xScalar.xShelfId;
 

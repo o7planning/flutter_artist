@@ -12,6 +12,11 @@ class _FormModelAutoEnterFormFieldsTaskUnit<
     required this.extraFormInput,
   }) : super(taskType: TaskType.formModelEnterFormFields);
 
+
+
+  @override
+  _QShelf get xShelf => xFormModel.xShelf;
+
   @override
   int get xShelfId => xFormModel.xShelfId;
 

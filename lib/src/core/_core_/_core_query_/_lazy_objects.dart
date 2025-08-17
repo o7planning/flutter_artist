@@ -51,7 +51,7 @@ class _LazyObjects {
     lazyScalars.add(_LazyScalar(scalar: scalar));
   }
 
-  void addLazyBlock({required Block block, required QryHint forceQuery}) {
+  void addLazyBlock( {required Block block, required QryHint forceQuery}) {
     lazyBlocks.add(_LazyBlock(block: block, forceQuery: forceQuery));
   }
 

@@ -9,6 +9,12 @@ class _FilterViewChangeTaskUnit extends _TaskUnit {
     required this.xFilterModel,
   }) : super(taskType: TaskType.filterModelFilterViewChanged);
 
+
+
+  @override
+  _QShelf get xShelf => xFilterModel.xShelf;
+
+
   @override
   int get xShelfId => xFilterModel.xShelfId;
 

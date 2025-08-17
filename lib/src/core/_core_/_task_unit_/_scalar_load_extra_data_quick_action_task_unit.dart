@@ -14,6 +14,12 @@ class _ScalarLoadExtraDataQuickActionTaskUnit<DATA extends Object>
     required this.afterQuickAction,
   }) : super(taskType: TaskType.scalarQuickAction);
 
+
+
+  @override
+  _QShelf get xShelf => xScalar.xShelf;
+
+
   @override
   int get xShelfId => xScalar.xShelfId;
 
