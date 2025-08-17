@@ -498,20 +498,24 @@ abstract class Shelf extends _Core {
 
   Future<void> _startLoadDataForLazyUIComponentsIfNeed() async {
     print("\n\n\n@@@@@@@@@@@@@ START LAZY LOAD @@@@@@@@@");
-    // if (__lazyLoadLocked) {
-    //   await Future.doWhile(
-    //     () => Future.delayed(const Duration(milliseconds: 1))
-    //         .then((_) => __lazyLoadLocked),
-    //   );
-    // }
+    if (__lazyLoadLocked) {
+      await Future.doWhile(
+        () => Future.delayed(const Duration(milliseconds: 1))
+            .then((_) => __lazyLoadLocked),
+      );
+    }
+    //
+    // IMPORTANT:
+    //
+    __lazyLoadLocked = true;
 
-    await Future.doWhile(
-      () => Future.delayed(const Duration(milliseconds: 1))
-          .then((_) => FlutterArtist.executor.isBusy),
-    );
+    // await Future.doWhile(
+    //   () => Future.delayed(const Duration(milliseconds: 1))
+    //       .then((_) => FlutterArtist.executor.isBusy),
+    // );
 
     // New Code:
-    await Future.delayed(Duration(microseconds: 200));
+    // await Future.delayed(Duration(microseconds: 200));
 
     // New Code:
     // SchedulerBinding binding = SchedulerBinding.instance;
@@ -538,8 +542,6 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
 
   Future<void> __queryLazyList() async {
-    __lazyLoadLocked = true;
-
     print("\n\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
     print(">>>> QUERY LAZY LIST <<<<");
 
