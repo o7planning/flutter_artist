@@ -1963,7 +1963,7 @@ abstract class Block<
     //
     FlutterArtist.storage.ev._fireEventFromShelfToOtherShelves(
       eventShelf: shelf,
-      eventTypes: action.config.affectedItemTypes,
+      events: action.config.affectedItemTypes,
     );
     //
     switch (action.config.afterQuickAction) {
