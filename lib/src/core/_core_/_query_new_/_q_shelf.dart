@@ -810,7 +810,7 @@ class _QShelf {
   // ***************************************************************************
 
   void printMe() {
-    print("\nXShelf BEFORE QUERY:");
+    print("\nXShelf BEFORE QUERY [${xShelfType.name}]:");
     for (String key in xBlockMap.keys) {
       print(" --> XShelf/Block: $key - ${xBlockMap[key]}");
     }

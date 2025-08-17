@@ -497,12 +497,18 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
 
   Future<void> _startLoadDataForLazyUIComponentsIfNeed() async {
-    if (__lazyLoadLocked) {
-      await Future.doWhile(
-        () => Future.delayed(const Duration(milliseconds: 1))
-            .then((_) => __lazyLoadLocked),
-      );
-    }
+    print("\n\n\n@@@@@@@@@@@@@ START LAZY LOAD @@@@@@@@@");
+    // if (__lazyLoadLocked) {
+    //   await Future.doWhile(
+    //     () => Future.delayed(const Duration(milliseconds: 1))
+    //         .then((_) => __lazyLoadLocked),
+    //   );
+    // }
+
+    await Future.doWhile(
+      () => Future.delayed(const Duration(milliseconds: 1))
+          .then((_) => FlutterArtist.executor.isBusy),
+    );
 
     // New Code:
     await Future.delayed(Duration(microseconds: 200));
@@ -518,17 +524,14 @@ abstract class Shelf extends _Core {
     //   });
     // }
 
-    if (__lazyLoadId == __lastLazyLoadId) {
-      __lazyLoadId++;
-      // __lazyBlocksToQuery.clear();
-      //
-      await Future.delayed(
-        const Duration(milliseconds: 0),
-        () async {
-          await __queryLazyList();
-        },
-      );
-    }
+    __lazyLoadId++;
+    //
+    await Future.delayed(
+      const Duration(milliseconds: 0),
+      () async {
+        await __queryLazyList();
+      },
+    );
   }
 
   // ***************************************************************************
