@@ -5,7 +5,7 @@ part of '../core.dart';
 class _BlockQuickChildBlockItemsTaskUnit<
     ITEM extends Object, //
     ITEM_DETAIL extends Object> extends _TaskUnit {
-  _QBlock xBlock;
+  _XBlock xBlock;
   BlockQuickChildBlockItemsAction<ITEM, ITEM_DETAIL> action;
 
   _BlockQuickChildBlockItemsTaskUnit({
@@ -14,7 +14,7 @@ class _BlockQuickChildBlockItemsTaskUnit<
   }) : super(taskType: TaskType.blockQuickChildBlockItems);
 
   @override
-  _QShelf get xShelf => xBlock.xShelf;
+  _XShelf get xShelf => xBlock.xShelf;
 
   @override
   int get xShelfId => xBlock.xShelfId;

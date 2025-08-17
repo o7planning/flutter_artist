@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 _ForceReloadItemState _calculateBlockState({
-  required _QBlock thisXBlock,
+  required _XBlock thisXBlock,
   required bool hasXActiveUI,
   required CurrentItemSelectionType currentItemSelectionType,
   required bool isCandidateCurrentItemInNewQueriedList,

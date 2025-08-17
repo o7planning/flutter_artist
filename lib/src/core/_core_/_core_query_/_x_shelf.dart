@@ -1,60 +1,29 @@
 part of '../core.dart';
 
-int __qShelfIdSequence = 0;
+int __xShelfSequence = 0;
 
-enum QShelfType {
-  naturalQuery,
-  blockQuery,
-  blockQueryEmpty,
-  blockQueryAndPrepareToCreate,
-  blockPrepareFormToCreateItem,
-  blockCurrItemClearance,
-  blockClearance,
-  blockItemDeletion,
-  blockMultiItemsDeletion,
-  blockCurrItemSelection,
-  blockQuickActionExecution,
-  blockQuickItemCreation,
-  blockQuickItemUpdate,
-  blockQuickMultiItemsCreation,
-  @Deprecated("Xoa di")
-  blockQuickChildBlockItemsAction,
-  //
-  shelfExternalReaction,
-  //
-  filterModelQueryAll,
-  formModelSave,
-  formModelEnterFields,
-  formViewChange,
-  filterViewChange,
-  //
-  scalarQuery,
-  scalarQuickAction,
-  scalarQuickExtraDataLoadAction;
-}
-
-class _QShelf {
-  final QShelfType xShelfType;
+class _XShelf {
+  final XShelfType xShelfType;
   final Shelf shelf;
   late final int xShelfId;
 
-  final Map<String, _QFilterModel> xFilterModelMap = {};
-  final Map<String, _QFormModel> xFormModelMap = {};
-  final Map<String, _QScalar> xScalarMap = {};
-  final Map<String, _QBlock> xBlockMap = {};
+  final Map<String, _XFilterModel> xFilterModelMap = {};
+  final Map<String, _XFormModel> xFormModelMap = {};
+  final Map<String, _XScalar> xScalarMap = {};
+  final Map<String, _XBlock> xBlockMap = {};
 
-  final List<_QBlock> allRootXBlocks = [];
-  final List<_QBlock> allLeafXBlocks = [];
-  final List<_QScalar> allXScalars = [];
-  final List<_QBlock> allXBlocks = [];
-  final List<_QFilterModel> allXFilterModels = [];
-  final List<_QFormModel> allXFormModels = [];
+  final List<_XBlock> allRootXBlocks = [];
+  final List<_XBlock> allLeafXBlocks = [];
+  final List<_XScalar> allXScalars = [];
+  final List<_XBlock> allXBlocks = [];
+  final List<_XFilterModel> allXFilterModels = [];
+  final List<_XFormModel> allXFormModels = [];
 
-  bool get naturalMode => xShelfType == QShelfType.naturalQuery;
+  bool get naturalMode => xShelfType == XShelfType.naturalQuery;
 
   _LazyObjects getLazyObjectInfos() {
     final _LazyObjects ret = _LazyObjects();
-    for (_QBlock xBlock in allXBlocks) {
+    for (_XBlock xBlock in allXBlocks) {
       if (xBlock.forceQuery != QryHint.none) {
         ret.addLazyBlock(
           block: xBlock.block,
@@ -62,12 +31,12 @@ class _QShelf {
         );
       }
     }
-    for (_QScalar xScalar in allXScalars) {
+    for (_XScalar xScalar in allXScalars) {
       if (xScalar.needQuery) {
         ret.addLazyScalar(scalar: xScalar.scalar);
       }
     }
-    for (_QFormModel xFormModel in allXFormModels) {
+    for (_XFormModel xFormModel in allXFormModels) {
       if (xFormModel.lazy) {
         ret.addLazyFormModel(formModel: xFormModel.formModel);
       }
@@ -76,17 +45,17 @@ class _QShelf {
   }
 
   bool isNothingTodo() {
-    for (_QBlock rootXBlock in allRootXBlocks) {
+    for (_XBlock rootXBlock in allRootXBlocks) {
       if (rootXBlock.hasQryHintInTreeBranchAndNotProcessed()) {
         return false;
       }
     }
-    for (_QScalar xScalar in allXScalars) {
+    for (_XScalar xScalar in allXScalars) {
       if (xScalar.needQuery) {
         return false;
       }
     }
-    for (_QFormModel xFormModel in allXFormModels) {
+    for (_XFormModel xFormModel in allXFormModels) {
       if (xFormModel.lazy) {
         return false;
       }
@@ -98,10 +67,10 @@ class _QShelf {
 
   // This method will be called in all constructors to init an empty XShelf.
   void __initCore({required Shelf shelf}) {
-    xShelfId = __qShelfIdSequence++;
+    xShelfId = __xShelfSequence++;
     //
     for (FilterModel filterModel in shelf._allFilterModels) {
-      final xFilterModel = _QFilterModel(
+      final xFilterModel = _XFilterModel(
         xShelf: this,
         filterModel: filterModel,
       );
@@ -112,7 +81,7 @@ class _QShelf {
     for (Scalar scalar in shelf.scalars) {
       final FilterModel filterModel = scalar._registeredOrDefaultFilterModel;
       final xFilterModel = xFilterModelMap[filterModel.name]!;
-      final xScalar = _QScalar(
+      final xScalar = _XScalar(
         scalar: scalar,
         xFilterModel: xFilterModel,
       );
@@ -122,9 +91,9 @@ class _QShelf {
     }
     for (Block block in shelf.blocks) {
       final FormModel? formModel = block.formModel;
-      _QFormModel? xFormModel;
+      _XFormModel? xFormModel;
       if (formModel != null) {
-        xFormModel = _QFormModel(formModel: formModel, extraFormInput: null);
+        xFormModel = _XFormModel(formModel: formModel, extraFormInput: null);
         allXFormModels.add(xFormModel);
         xFormModelMap[formModel.block.name] = xFormModel;
       }
@@ -132,7 +101,7 @@ class _QShelf {
       final FilterModel filterModel = block._registeredOrDefaultFilterModel;
       final xFilterModel = xFilterModelMap[filterModel.name]!;
       //
-      final xBlock = _QBlock(
+      final xBlock = _XBlock(
         block: block,
         xFilterModel: xFilterModel,
         xFormModel: xFormModel,
@@ -152,10 +121,10 @@ class _QShelf {
     }
     //
     for (Block block in shelf.blocks) {
-      _QBlock xBlock = xBlockMap[block.name]!;
+      _XBlock xBlock = xBlockMap[block.name]!;
       Block? parent = block.parent;
       if (parent != null) {
-        _QBlock xBlockParent = xBlockMap[parent.name]!;
+        _XBlock xBlockParent = xBlockMap[parent.name]!;
         xBlock.parentXBlock = xBlockParent;
         xBlockParent.childXBlocks.add(xBlock);
       } else {
@@ -168,11 +137,11 @@ class _QShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _QShelf.forNaturalQuery({required this.shelf})
-      : xShelfType = QShelfType.naturalQuery {
+  _XShelf.forNaturalQuery({required this.shelf})
+      : xShelfType = XShelfType.naturalQuery {
     __initCore(shelf: shelf);
     //
-    for (_QScalar xScalar in allXScalars) {
+    for (_XScalar xScalar in allXScalars) {
       if (xScalar.scalar.ui.hasActiveUIComponent()) {
         if (xScalar.scalar.queryDataState == DataState.pending ||
             xScalar.scalar.queryDataState == DataState.error) {
@@ -181,8 +150,8 @@ class _QShelf {
       }
     }
     //
-    for (_QBlock leafXBlock in allLeafXBlocks) {
-      _QBlock? xBlock = leafXBlock;
+    for (_XBlock leafXBlock in allLeafXBlocks) {
+      _XBlock? xBlock = leafXBlock;
       while (true) {
         if (xBlock == null) {
           break;
@@ -196,7 +165,7 @@ class _QShelf {
             xBlock.setForceQuery(QryHint.force);
           }
         }
-        _QFormModel? xFormModel = xBlock.xFormModel;
+        _XFormModel? xFormModel = xBlock.xFormModel;
 
         if (xFormModel != null &&
             xFormModel.formModel.ui.hasActiveUIComponent()) {
@@ -220,10 +189,10 @@ class _QShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _QShelf.forShelfExternalReaction({
+  _XShelf.forShelfExternalReaction({
     required this.shelf,
     required EffectedShelfMembers effectedShelfMembers,
-  }) : xShelfType = QShelfType.shelfExternalReaction {
+  }) : xShelfType = XShelfType.shelfExternalReaction {
     __initCore(shelf: shelf);
     //
     Set<String> listenerBlockNames = {}
@@ -253,7 +222,7 @@ class _QShelf {
         forceReloadItem = true;
       }
       //
-      _QBlock xBlock = xBlockMap[listenerBlkName]!;
+      _XBlock xBlock = xBlockMap[listenerBlkName]!;
       xBlock.setForceQuery(forceQuery);
       if (forceReloadItem) {
         xBlock.setForceReloadItem();
@@ -262,12 +231,12 @@ class _QShelf {
     //
     for (Scalar s in effectedShelfMembers._reQueryScalarMAP.values) {
       String scalarName = s.name;
-      _QScalar xScalar = xScalarMap[scalarName]!;
+      _XScalar xScalar = xScalarMap[scalarName]!;
       xScalar.setForceQuery();
     }
     //
-    for (_QBlock leafXBlock in allLeafXBlocks) {
-      _QBlock? xBlock = leafXBlock;
+    for (_XBlock leafXBlock in allLeafXBlocks) {
+      _XBlock? xBlock = leafXBlock;
       while (true) {
         if (xBlock == null) {
           break;
@@ -281,7 +250,7 @@ class _QShelf {
             xBlock.setForceQuery(QryHint.force);
           }
         }
-        _QFormModel? xFormModel = xBlock.xFormModel;
+        _XFormModel? xFormModel = xBlock.xFormModel;
 
         if (xFormModel != null &&
             xFormModel.formModel.ui.hasActiveUIComponent()) {
@@ -305,14 +274,14 @@ class _QShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _QShelf.forBlockQuery({
+  _XShelf.forBlockQuery({
     required Block block,
     required FilterInput? filterInput,
     required PageableData? pageable,
     required ListBehavior? listBehavior,
     required PostQueryBehavior? postQueryBehavior,
     required SuggestedSelection<dynamic>? suggestedSelection,
-  })  : xShelfType = QShelfType.blockQuery,
+  })  : xShelfType = XShelfType.blockQuery,
         shelf = block.shelf {
     __initCore(shelf: shelf);
     //
@@ -335,7 +304,7 @@ class _QShelf {
       postQueryBehavior: postQueryBehavior,
       pageable: pageable,
     );
-    _QBlock? parentXBlock = thisXBlock.parentXBlock;
+    _XBlock? parentXBlock = thisXBlock.parentXBlock;
     while (true) {
       if (parentXBlock == null) {
         break;
@@ -351,7 +320,7 @@ class _QShelf {
         }
       }
       // TODO: Need? Remove this code?
-      _QFormModel? parentXFormModel = parentXBlock.xFormModel;
+      _XFormModel? parentXFormModel = parentXBlock.xFormModel;
       if (parentXFormModel != null &&
           parentXFormModel.formModel.ui.hasActiveUIComponent()) {
         if (parentXFormModel.formModel.formDataState == DataState.pending ||
@@ -369,14 +338,14 @@ class _QShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _QShelf.forBlockQueryEmpty({
+  _XShelf.forBlockQueryEmpty({
     required Block block,
     required FilterInput? filterInput,
     required PageableData? pageable,
     required ListBehavior? listBehavior,
     required PostQueryBehavior? postQueryBehavior,
     required SuggestedSelection<dynamic>? suggestedSelection,
-  })  : xShelfType = QShelfType.blockQueryEmpty,
+  })  : xShelfType = XShelfType.blockQueryEmpty,
         shelf = block.shelf {
     __initCore(shelf: shelf);
     //
@@ -399,7 +368,7 @@ class _QShelf {
       postQueryBehavior: postQueryBehavior,
       pageable: pageable,
     );
-    _QBlock? parentXBlock = thisXBlock.parentXBlock;
+    _XBlock? parentXBlock = thisXBlock.parentXBlock;
     while (true) {
       if (parentXBlock == null) {
         break;
@@ -415,7 +384,7 @@ class _QShelf {
         }
       }
       // TODO: Need? Remove this code?
-      _QFormModel? parentXFormModel = parentXBlock.xFormModel;
+      _XFormModel? parentXFormModel = parentXBlock.xFormModel;
       if (parentXFormModel != null &&
           parentXFormModel.formModel.ui.hasActiveUIComponent()) {
         if (parentXFormModel.formModel.formDataState == DataState.pending ||
@@ -433,14 +402,14 @@ class _QShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _QShelf.forBlockQueryAndPrepareToCreate({
+  _XShelf.forBlockQueryAndPrepareToCreate({
     required Block block,
     required FilterInput? filterInput,
     required PageableData? pageable,
     required ListBehavior? listBehavior,
     required PostQueryBehavior? postQueryBehavior,
     required SuggestedSelection<dynamic>? suggestedSelection,
-  })  : xShelfType = QShelfType.blockQueryAndPrepareToCreate,
+  })  : xShelfType = XShelfType.blockQueryAndPrepareToCreate,
         shelf = block.shelf {
     __initCore(shelf: shelf);
     //
@@ -463,7 +432,7 @@ class _QShelf {
       postQueryBehavior: postQueryBehavior,
       pageable: pageable,
     );
-    _QBlock? parentXBlock = thisXBlock.parentXBlock;
+    _XBlock? parentXBlock = thisXBlock.parentXBlock;
     while (true) {
       if (parentXBlock == null) {
         break;
@@ -479,7 +448,7 @@ class _QShelf {
         }
       }
       // TODO: Need? Remove this code?
-      _QFormModel? parentXFormModel = parentXBlock.xFormModel;
+      _XFormModel? parentXFormModel = parentXBlock.xFormModel;
       if (parentXFormModel != null &&
           parentXFormModel.formModel.ui.hasActiveUIComponent()) {
         if (parentXFormModel.formModel.formDataState == DataState.pending ||
@@ -497,14 +466,14 @@ class _QShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _QShelf.forBlockQueryAndPrepareToEdit({
+  _XShelf.forBlockQueryAndPrepareToEdit({
     required Block block,
     required FilterInput? filterInput,
     required PageableData? pageable,
     required ListBehavior? listBehavior,
     required PostQueryBehavior? postQueryBehavior,
     required SuggestedSelection<dynamic>? suggestedSelection,
-  })  : xShelfType = QShelfType.blockQueryAndPrepareToCreate,
+  })  : xShelfType = XShelfType.blockQueryAndPrepareToCreate,
         shelf = block.shelf {
     __initCore(shelf: shelf);
     //
@@ -527,7 +496,7 @@ class _QShelf {
       postQueryBehavior: postQueryBehavior,
       pageable: pageable,
     );
-    _QBlock? parentXBlock = thisXBlock.parentXBlock;
+    _XBlock? parentXBlock = thisXBlock.parentXBlock;
     while (true) {
       if (parentXBlock == null) {
         break;
@@ -543,7 +512,7 @@ class _QShelf {
         }
       }
       // TODO: Need? Remove this code?
-      _QFormModel? parentXFormModel = parentXBlock.xFormModel;
+      _XFormModel? parentXFormModel = parentXBlock.xFormModel;
       if (parentXFormModel != null &&
           parentXFormModel.formModel.ui.hasActiveUIComponent()) {
         if (parentXFormModel.formModel.formDataState == DataState.pending ||
@@ -561,10 +530,10 @@ class _QShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _QShelf.forFilterModelQueryAll({
+  _XShelf.forFilterModelQueryAll({
     required FilterModel filterModel,
     required FilterInput? filterInput,
-  })  : xShelfType = QShelfType.filterModelQueryAll,
+  })  : xShelfType = XShelfType.filterModelQueryAll,
         shelf = filterModel.shelf {
     __initCore(shelf: shelf);
     //
@@ -574,7 +543,7 @@ class _QShelf {
     final thisXFilterModel = xFilterModelMap[filterModel.name]!;
     thisXFilterModel.filterInput = filterInput;
     //
-    for (_QBlock xBlock in thisXFilterModel.xBlocks) {
+    for (_XBlock xBlock in thisXFilterModel.xBlocks) {
       xBlock.setForceQuery(queryHint);
       xBlock.setOptions(
         queryType: QueryType.realQuery,
@@ -584,7 +553,7 @@ class _QShelf {
         pageable: null,
       );
       //
-      _QBlock? parentXBlock = xBlock.parentXBlock;
+      _XBlock? parentXBlock = xBlock.parentXBlock;
       while (true) {
         if (parentXBlock == null) {
           break;
@@ -600,7 +569,7 @@ class _QShelf {
           }
         }
         // TODO: Need? Remove this code?
-        _QFormModel? parentXFormModel = parentXBlock.xFormModel;
+        _XFormModel? parentXFormModel = parentXBlock.xFormModel;
         if (parentXFormModel != null &&
             parentXFormModel.formModel.ui.hasActiveUIComponent()) {
           if (parentXFormModel.formModel.formDataState == DataState.pending ||
@@ -613,7 +582,7 @@ class _QShelf {
         parentXBlock = parentXBlock.parentXBlock;
       }
     }
-    for (_QScalar xScalar in thisXFilterModel.xScalars) {
+    for (_XScalar xScalar in thisXFilterModel.xScalars) {
       xScalar.setForceQuery();
     }
   }
@@ -622,8 +591,8 @@ class _QShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _QShelf.forFormModelSave({required FormModel formModel})
-      : xShelfType = QShelfType.formModelSave,
+  _XShelf.forFormModelSave({required FormModel formModel})
+      : xShelfType = XShelfType.formModelSave,
         shelf = formModel.block.shelf {
     __initCore(shelf: shelf);
   }
@@ -632,8 +601,8 @@ class _QShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _QShelf.forFormModelEnterFields({required FormModel formModel})
-      : xShelfType = QShelfType.formModelEnterFields,
+  _XShelf.forFormModelEnterFields({required FormModel formModel})
+      : xShelfType = XShelfType.formModelEnterFields,
         shelf = formModel.block.shelf {
     __initCore(shelf: shelf);
   }
@@ -642,8 +611,8 @@ class _QShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _QShelf.forPrepareFormToCreateItem({required Block block})
-      : xShelfType = QShelfType.blockPrepareFormToCreateItem,
+  _XShelf.forPrepareFormToCreateItem({required Block block})
+      : xShelfType = XShelfType.blockPrepareFormToCreateItem,
         shelf = block.shelf {
     __initCore(shelf: shelf);
   }
@@ -652,8 +621,8 @@ class _QShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _QShelf.forBlockClearCurrentItem({required Block block})
-      : xShelfType = QShelfType.blockCurrItemClearance,
+  _XShelf.forBlockClearCurrentItem({required Block block})
+      : xShelfType = XShelfType.blockCurrItemClearance,
         shelf = block.shelf {
     __initCore(shelf: shelf);
   }
@@ -662,8 +631,8 @@ class _QShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _QShelf.forBlockClearance({required Block block})
-      : xShelfType = QShelfType.blockClearance,
+  _XShelf.forBlockClearance({required Block block})
+      : xShelfType = XShelfType.blockClearance,
         shelf = block.shelf {
     __initCore(shelf: shelf);
   }
@@ -672,8 +641,8 @@ class _QShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _QShelf.forBlockItemDeletion({required Block block})
-      : xShelfType = QShelfType.blockItemDeletion,
+  _XShelf.forBlockItemDeletion({required Block block})
+      : xShelfType = XShelfType.blockItemDeletion,
         shelf = block.shelf {
     __initCore(shelf: shelf);
   }
@@ -682,8 +651,8 @@ class _QShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _QShelf.forBlockMultiItemsDeletion({required Block block})
-      : xShelfType = QShelfType.blockMultiItemsDeletion,
+  _XShelf.forBlockMultiItemsDeletion({required Block block})
+      : xShelfType = XShelfType.blockMultiItemsDeletion,
         shelf = block.shelf {
     __initCore(shelf: shelf);
   }
@@ -692,8 +661,8 @@ class _QShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _QShelf.forBlockCurrItemSelection({required Block block})
-      : xShelfType = QShelfType.blockCurrItemSelection,
+  _XShelf.forBlockCurrItemSelection({required Block block})
+      : xShelfType = XShelfType.blockCurrItemSelection,
         shelf = block.shelf {
     __initCore(shelf: shelf);
   }
@@ -702,11 +671,11 @@ class _QShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _QShelf.forBlockQuickActionExecution({
+  _XShelf.forBlockQuickActionExecution({
     required Block block,
     required FilterInput? filterInput,
     required AfterBlockQuickAction afterQuickAction,
-  })  : xShelfType = QShelfType.blockQuickActionExecution,
+  })  : xShelfType = XShelfType.blockQuickActionExecution,
         shelf = block.shelf {
     __initCore(shelf: shelf);
     //
@@ -739,7 +708,7 @@ class _QShelf {
       postQueryBehavior: null,
       pageable: null,
     );
-    _QBlock? parentXBlock = thisXBlock.parentXBlock;
+    _XBlock? parentXBlock = thisXBlock.parentXBlock;
     while (true) {
       if (parentXBlock == null) {
         break;
@@ -755,7 +724,7 @@ class _QShelf {
         }
       }
       // TODO: Need? Remove this code?
-      _QFormModel? parentXFormModel = parentXBlock.xFormModel;
+      _XFormModel? parentXFormModel = parentXBlock.xFormModel;
       if (parentXFormModel != null &&
           parentXFormModel.formModel.ui.hasActiveUIComponent()) {
         if (parentXFormModel.formModel.formDataState == DataState.pending ||
@@ -773,8 +742,8 @@ class _QShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _QShelf.forBlockQuickItemCreation({required Block block})
-      : xShelfType = QShelfType.blockQuickItemCreation,
+  _XShelf.forBlockQuickItemCreation({required Block block})
+      : xShelfType = XShelfType.blockQuickItemCreation,
         shelf = block.shelf {
     __initCore(shelf: shelf);
   }
@@ -783,8 +752,8 @@ class _QShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _QShelf.forBlockQuickItemUpdate({required Block block})
-      : xShelfType = QShelfType.blockQuickItemUpdate,
+  _XShelf.forBlockQuickItemUpdate({required Block block})
+      : xShelfType = XShelfType.blockQuickItemUpdate,
         shelf = block.shelf {
     __initCore(shelf: shelf);
   }
@@ -793,8 +762,8 @@ class _QShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _QShelf.forBlockQuickMultiItemsCreation({required Block block})
-      : xShelfType = QShelfType.blockQuickMultiItemsCreation,
+  _XShelf.forBlockQuickMultiItemsCreation({required Block block})
+      : xShelfType = XShelfType.blockQuickMultiItemsCreation,
         shelf = block.shelf {
     __initCore(shelf: shelf);
   }
@@ -804,8 +773,8 @@ class _QShelf {
   // ***************************************************************************
 
   @Deprecated("Xoa di")
-  _QShelf.forQuickChildBlockItemsAction({required Block block})
-      : xShelfType = QShelfType.blockQuickChildBlockItemsAction,
+  _XShelf.forQuickChildBlockItemsAction({required Block block})
+      : xShelfType = XShelfType.blockQuickChildBlockItemsAction,
         shelf = block.shelf {
     __initCore(shelf: shelf);
   }
@@ -814,8 +783,8 @@ class _QShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _QShelf.forFormViewChange({required FormModel formModel})
-      : xShelfType = QShelfType.formViewChange,
+  _XShelf.forFormViewChange({required FormModel formModel})
+      : xShelfType = XShelfType.formViewChange,
         shelf = formModel.shelf {
     __initCore(shelf: shelf);
   }
@@ -824,8 +793,8 @@ class _QShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _QShelf.forFilterViewChange({required FilterModel filterModel})
-      : xShelfType = QShelfType.filterViewChange,
+  _XShelf.forFilterViewChange({required FilterModel filterModel})
+      : xShelfType = XShelfType.filterViewChange,
         shelf = filterModel.shelf {
     __initCore(shelf: shelf);
   }
@@ -834,10 +803,10 @@ class _QShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _QShelf.forScalarQuery({
+  _XShelf.forScalarQuery({
     required Scalar scalar,
     required FilterInput? filterInput,
-  })  : xShelfType = QShelfType.scalarQuery,
+  })  : xShelfType = XShelfType.scalarQuery,
         shelf = scalar.shelf {
     __initCore(shelf: shelf);
     //
@@ -863,9 +832,9 @@ class _QShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _QShelf.forScalarQuickAction({
+  _XShelf.forScalarQuickAction({
     required Scalar scalar,
-  })  : xShelfType = QShelfType.scalarQuickAction,
+  })  : xShelfType = XShelfType.scalarQuickAction,
         shelf = scalar.shelf {
     __initCore(shelf: shelf);
     //
@@ -878,10 +847,10 @@ class _QShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _QShelf.forScalarQuickExtraDataLoadAction({
+  _XShelf.forScalarQuickExtraDataLoadAction({
     required Scalar scalar,
     required FilterInput? filterInput,
-  })  : xShelfType = QShelfType.scalarQuickExtraDataLoadAction,
+  })  : xShelfType = XShelfType.scalarQuickExtraDataLoadAction,
         shelf = scalar.shelf {
     __initCore(shelf: shelf);
     //
@@ -904,7 +873,7 @@ class _QShelf {
     for (String key in xScalarMap.keys) {
       print(" --> XShelf/Scalar: $key - ${xScalarMap[key]}");
     }
-    for (_QFormModel xFormModel in allXFormModels) {
+    for (_XFormModel xFormModel in allXFormModels) {
       print(" --> XShelf/FormModel: ${xFormModel.xBlock.name} - $xFormModel");
     }
   }
@@ -913,15 +882,15 @@ class _QShelf {
   // ***************************************************************************
   // ***************************************************************************
 
-  _QFilterModel? findXFilterModelByName(String name) {
+  _XFilterModel? findXFilterModelByName(String name) {
     return xFilterModelMap[name];
   }
 
-  _QBlock? findXBlockByName(String name) {
+  _XBlock? findXBlockByName(String name) {
     return xBlockMap[name];
   }
 
-  _QScalar? findXScalarByName(String name) {
+  _XScalar? findXScalarByName(String name) {
     return xScalarMap[name];
   }
 
@@ -929,8 +898,8 @@ class _QShelf {
   // ***************************************************************************
   // ***************************************************************************
 
-  _QScalar? nextXScalarTask() {
-    for (_QScalar xScalar in allXScalars) {
+  _XScalar? nextXScalarTask() {
+    for (_XScalar xScalar in allXScalars) {
       if (!xScalar.needQuery) {
         continue;
       }
@@ -944,8 +913,8 @@ class _QShelf {
   // ***************************************************************************
   // ***************************************************************************
 
-  _QBlock? nextRootXBlockTask() {
-    for (_QBlock xBlock in allRootXBlocks) {
+  _XBlock? nextRootXBlockTask() {
+    for (_XBlock xBlock in allRootXBlocks) {
       if (xBlock.hasQryHintInTreeBranchAndNotProcessed()) {
         return xBlock;
       }
@@ -957,15 +926,15 @@ class _QShelf {
   // ***************************************************************************
 
   void printInfo() {
-    for (_QScalar xScalar in allXScalars) {
+    for (_XScalar xScalar in allXScalars) {
       if (xScalar.needQuery) {
         xScalar.printInfo();
       }
     }
-    for (_QBlock xBlock in allRootXBlocks) {
+    for (_XBlock xBlock in allRootXBlocks) {
       xBlock.printInfoCascade();
     }
-    for (_QFormModel xFormModel in allXFormModels) {
+    for (_XFormModel xFormModel in allXFormModels) {
       xFormModel.printInfo();
     }
   }

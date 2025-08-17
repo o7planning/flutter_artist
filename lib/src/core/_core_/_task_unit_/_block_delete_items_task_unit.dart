@@ -7,7 +7,7 @@ part of '../core.dart';
 @_BlockDeleteItemAnnotation()
 class _BlockDeleteItemsTaskUnit
     extends _ResultedTaskUnit<BlockItemsDeletionResult> {
-  _QBlock xBlock;
+  _XBlock xBlock;
   final List<Object> items;
   final bool stopIfError;
 
@@ -19,7 +19,7 @@ class _BlockDeleteItemsTaskUnit
   }) : super(taskType: TaskType.blockDeleteItem);
 
   @override
-  _QShelf get xShelf => xBlock.xShelf;
+  _XShelf get xShelf => xBlock.xShelf;
 
   @override
   int get xShelfId => xBlock.xShelfId;

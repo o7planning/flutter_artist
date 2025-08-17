@@ -4,7 +4,7 @@ part of '../core.dart';
 @_FormModelLoadFormAnnotation()
 class _FormModelLoadFormTaskUnit
     extends _ResultedTaskUnit<FormModelDataLoadResult> {
-  _QFormModel xFormModel;
+  _XFormModel xFormModel;
 
   _FormModelLoadFormTaskUnit({
     required this.xFormModel,
@@ -14,7 +14,7 @@ class _FormModelLoadFormTaskUnit
         );
 
   @override
-  _QShelf get xShelf => xFormModel.xShelf;
+  _XShelf get xShelf => xFormModel.xShelf;
 
   @override
   int get xShelfId => xFormModel.xShelfId;

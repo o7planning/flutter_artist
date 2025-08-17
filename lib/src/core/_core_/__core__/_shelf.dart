@@ -540,7 +540,7 @@ abstract class Shelf extends _Core {
     print("\n\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
     print(">>>> QUERY LAZY LIST <<<<");
 
-    _QShelf xShelf = _QShelf.forNaturalQuery(shelf: shelf);
+    _XShelf xShelf = _XShelf.forNaturalQuery(shelf: shelf);
     _LazyObjects lazyObjects = xShelf.getLazyObjectInfos();
     lazyObjects.printInfo();
     //
@@ -557,10 +557,7 @@ abstract class Shelf extends _Core {
       //
       // TODO: Handle Error:
       //
-      await _queryShelf(
-        xShelfTaskType: XShelfTaskType.naturalReaction,
-        xShelf: xShelf,
-      );
+      await _queryShelf(xShelf: xShelf);
     } finally {
       __lazyLoadLocked = false;
     }
@@ -571,9 +568,8 @@ abstract class Shelf extends _Core {
 
   @_ImportantMethodAnnotation("Called as the start of a series of TaskUnit(s).")
   @_BlockShelfQueryAnnotation()
-  Future<_QShelf> _queryShelf({
-    required XShelfTaskType xShelfTaskType,
-    required _QShelf xShelf,
+  Future<_XShelf> _queryShelf({
+    required _XShelf xShelf,
   }) async {
     _ShelfQueryTaskUnit taskUnit = _ShelfQueryTaskUnit(xShelf: xShelf);
     FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
@@ -585,14 +581,13 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _addShelfQueryTaskUnit({
-    required XShelfTaskType xShelfTaskType,
+  void _addShelfExternalReactionTaskUnit({
     required EffectedShelfMembers effectedShelfMembers,
   }) {
     print(
-        " ||-------------> [${xShelfTaskType.name}] --> addShelfQueryTaskUnit: ${getClassName(this)} [LISTENER]");
+        " ||-------------> [External Reaction] _addShelfExternalReactionTaskUnit: ${getClassName(this)} [LISTENER]");
 
-    _QShelf xShelf = _QShelf.forShelfExternalReaction(
+    _XShelf xShelf = _XShelf.forShelfExternalReaction(
       shelf: this,
       effectedShelfMembers: effectedShelfMembers,
     );
@@ -607,10 +602,10 @@ abstract class Shelf extends _Core {
   @_TaskUnitMethodAnnotation()
   @_BlockShelfQueryAnnotation()
   Future<void> _unitQueryShelf({
-    required _QShelf xShelf,
+    required _XShelf xShelf,
   }) async {
     xShelf.printMe();
-    for (_QScalar xScalar in xShelf.allXScalars) {
+    for (_XScalar xScalar in xShelf.allXScalars) {
       FlutterArtist._taskUnitQueue.addTaskUnit(
         _ScalarQueryTaskUnit(
           xScalar: xScalar,
@@ -618,7 +613,7 @@ abstract class Shelf extends _Core {
       );
     }
     //
-    for (_QBlock rootXBlock in xShelf.allRootXBlocks) {
+    for (_XBlock rootXBlock in xShelf.allRootXBlocks) {
       FlutterArtist._taskUnitQueue.addTaskUnit(
         _BlockQueryTaskUnit(
           xBlock: rootXBlock,

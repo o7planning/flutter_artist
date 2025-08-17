@@ -12,7 +12,7 @@ abstract class _TaskUnit {
     return "${getClassName(this)}/${getObjectName()}";
   }
 
-  _QShelf get xShelf;
+  _XShelf get xShelf;
 
   int get xShelfId;
 

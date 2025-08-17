@@ -1,10 +1,10 @@
 part of '../core.dart';
 
-class _QFormModel {
-  _QShelf get xShelf => xBlock.xShelf;
+class _XFormModel {
+  _XShelf get xShelf => xBlock.xShelf;
 
   final FormModel formModel;
-  late final _QBlock xBlock;
+  late final _XBlock xBlock;
   final ExtraFormInput? extraFormInput;
 
   int get xShelfId => xShelf.xShelfId;
@@ -16,7 +16,7 @@ class _QFormModel {
   ForceType forceTypeForForm = ForceType.decidedAtRuntime;
   bool lazy = false;
 
-  _QFormModel({
+  _XFormModel({
     required this.formModel,
     required this.extraFormInput,
   });

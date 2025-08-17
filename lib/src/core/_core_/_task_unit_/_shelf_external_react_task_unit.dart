@@ -4,20 +4,20 @@ part of '../core.dart';
 @_ShelfInternalReactAnnotation()
 class _ShelfExternalReactTaskUnit extends _TaskUnit {
   final int _xShelfId;
-  final _QShelf _xShelf;
+  final _XShelf _xShelf;
   final EffectedShelfMembers shelfInternalListeners;
 
   _ShelfExternalReactTaskUnit({
-    required _QShelf xShelf,
+    required _XShelf xShelf,
     required this.shelfInternalListeners,
   })  : _xShelf = xShelf,
-        _xShelfId = __qShelfIdSequence++,
+        _xShelfId = __xShelfSequence++,
         super(
           taskType: TaskType.shelfInternalReact,
         );
 
   @override
-  _QShelf get xShelf => _xShelf;
+  _XShelf get xShelf => _xShelf;
 
   @override
   int get xShelfId => _xShelfId;

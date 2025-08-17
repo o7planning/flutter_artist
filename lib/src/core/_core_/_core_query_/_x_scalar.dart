@@ -1,10 +1,10 @@
 part of '../core.dart';
 
-class _QScalar {
-  _QShelf get xShelf => xFilterModel.xShelf;
+class _XScalar {
+  _XShelf get xShelf => xFilterModel.xShelf;
 
   final Scalar scalar;
-  final _QFilterModel xFilterModel;
+  final _XFilterModel xFilterModel;
 
   bool _processed = false;
 
@@ -19,7 +19,7 @@ class _QScalar {
 
   final ScalarQueryResult queryResult = ScalarQueryResult(precheck: null);
 
-  _QScalar({
+  _XScalar({
     required this.scalar,
     required this.xFilterModel,
   });

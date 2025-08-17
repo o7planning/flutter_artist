@@ -4,7 +4,7 @@ part of '../core.dart';
 @_FormModelEnterFormFieldsAnnotation()
 class _FormModelAutoEnterFormFieldsTaskUnit<
     EXTRA_FORM_INPUT extends ExtraFormInput> extends _TaskUnit {
-  _QFormModel xFormModel;
+  _XFormModel xFormModel;
   EXTRA_FORM_INPUT extraFormInput;
 
   _FormModelAutoEnterFormFieldsTaskUnit({
@@ -13,7 +13,7 @@ class _FormModelAutoEnterFormFieldsTaskUnit<
   }) : super(taskType: TaskType.formModelEnterFormFields);
 
   @override
-  _QShelf get xShelf => xFormModel.xShelf;
+  _XShelf get xShelf => xFormModel.xShelf;
 
   @override
   int get xShelfId => xFormModel.xShelfId;

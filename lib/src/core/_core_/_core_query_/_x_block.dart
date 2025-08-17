@@ -1,17 +1,17 @@
 part of '../core.dart';
 
-class _QBlock {
-  _QShelf get xShelf => xFilterModel.xShelf;
+class _XBlock {
+  _XShelf get xShelf => xFilterModel.xShelf;
 
   int get xShelfId => xShelf.xShelfId;
 
   final Block block;
 
-  late final _QBlock? parentXBlock;
-  final List<_QBlock> childXBlocks = [];
+  late final _XBlock? parentXBlock;
+  final List<_XBlock> childXBlocks = [];
 
-  final _QFilterModel xFilterModel;
-  final _QFormModel? xFormModel;
+  final _XFilterModel xFilterModel;
+  final _XFormModel? xFormModel;
 
   String get name => block.name;
 
@@ -48,7 +48,7 @@ class _QBlock {
   // ***************************************************************************
   // ***************************************************************************
 
-  _QBlock({
+  _XBlock({
     required this.block,
     required this.xFilterModel,
     required this.xFormModel,
@@ -65,7 +65,7 @@ class _QBlock {
       }
     }
     print("BLOCK: ${block} - CHILD: ${childXBlocks}");
-    for (_QBlock child in childXBlocks) {
+    for (_XBlock child in childXBlocks) {
       if (child.hasQryHintInTreeBranchAndNotProcessed()) {
         return true;
       }
@@ -117,7 +117,7 @@ class _QBlock {
     String msg =
         "${getClassName(this)}(${getClassName(block)} - UIActive: $hasActiveUI - ForceQuery: $__forceQuery - RefreshItem: $__forceReloadItem";
     print(msg);
-    for (_QBlock xBlock in childXBlocks) {
+    for (_XBlock xBlock in childXBlocks) {
       xBlock.printInfoCascade();
     }
   }

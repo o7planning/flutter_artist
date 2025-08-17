@@ -3,7 +3,7 @@ part of '../core.dart';
 @_TaskUnitClassAnnotation()
 @_FormModelSaveFormAnnotation()
 class _FormModelSaveFormTaskUnit extends _ResultedTaskUnit<FormSaveResult> {
-  _QFormModel xFormModel;
+  _XFormModel xFormModel;
 
   _FormModelSaveFormTaskUnit({
     required this.xFormModel,
@@ -13,7 +13,7 @@ class _FormModelSaveFormTaskUnit extends _ResultedTaskUnit<FormSaveResult> {
         );
 
   @override
-  _QShelf get xShelf => xFormModel.xShelf;
+  _XShelf get xShelf => xFormModel.xShelf;
 
   @override
   int get xShelfId => xFormModel.xShelfId;

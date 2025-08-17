@@ -1,0 +1,30 @@
+enum XShelfType {
+  naturalQuery,
+  blockQuery,
+  blockQueryEmpty,
+  blockQueryAndPrepareToCreate,
+  blockPrepareFormToCreateItem,
+  blockCurrItemClearance,
+  blockClearance,
+  blockItemDeletion,
+  blockMultiItemsDeletion,
+  blockCurrItemSelection,
+  blockQuickActionExecution,
+  blockQuickItemCreation,
+  blockQuickItemUpdate,
+  blockQuickMultiItemsCreation,
+  @Deprecated("Xoa di")
+  blockQuickChildBlockItemsAction,
+  //
+  shelfExternalReaction,
+  //
+  filterModelQueryAll,
+  formModelSave,
+  formModelEnterFields,
+  formViewChange,
+  filterViewChange,
+  //
+  scalarQuery,
+  scalarQuickAction,
+  scalarQuickExtraDataLoadAction;
+}

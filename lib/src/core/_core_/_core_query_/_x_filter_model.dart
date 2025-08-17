@@ -1,11 +1,11 @@
 part of '../core.dart';
 
-class _QFilterModel {
-  final _QShelf xShelf;
+class _XFilterModel {
+  final _XShelf xShelf;
   final FilterModel filterModel;
 
-  final List<_QBlock> xBlocks = [];
-  final List<_QScalar> xScalars = [];
+  final List<_XBlock> xBlocks = [];
+  final List<_XScalar> xScalars = [];
 
   bool queried = false;
   FilterInput? filterInput;
@@ -14,7 +14,7 @@ class _QFilterModel {
 
   int get xShelfId => xShelf.xShelfId;
 
-  _QFilterModel({required this.xShelf, required this.filterModel});
+  _XFilterModel({required this.xShelf, required this.filterModel});
 
   @override
   String toString() {

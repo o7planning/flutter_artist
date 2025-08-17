@@ -72,8 +72,7 @@ class _StorageEventHandler {
       if (!effectedShelfMembers.hasMember()) {
         continue;
       }
-      shelf._addShelfQueryTaskUnit(
-        xShelfTaskType: XShelfTaskType.reactionWithTheOutside,
+      shelf._addShelfExternalReactionTaskUnit(
         effectedShelfMembers: effectedShelfMembers,
       );
     }

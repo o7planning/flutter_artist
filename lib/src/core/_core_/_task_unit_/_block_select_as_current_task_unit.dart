@@ -8,7 +8,7 @@ part of '../core.dart';
 @_BlockRefreshAndSelectPreviousItemAsCurrentAnnotation()
 class _BlockSelectAsCurrentTaskUnit<ITEM extends Object>
     extends _ResultedTaskUnit<BlockItemCurrSelectionResult<ITEM>> {
-  final _QBlock xBlock;
+  final _XBlock xBlock;
   final ForceType? forceTypeForForm;
   final CurrentItemSelectionType currentItemSelectionType;
   final ITEM? candidateItem;
@@ -42,7 +42,7 @@ class _BlockSelectAsCurrentTaskUnit<ITEM extends Object>
   }
 
   @override
-  _QShelf get xShelf => xBlock.xShelf;
+  _XShelf get xShelf => xBlock.xShelf;
 
   @override
   int get xShelfId => xBlock.xShelfId;

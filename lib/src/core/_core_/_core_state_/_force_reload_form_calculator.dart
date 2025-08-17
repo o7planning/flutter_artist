@@ -1,13 +1,13 @@
 part of '../core.dart';
 
 _ForceReloadFormState _calculateFormState({
-  required _QFormModel xFormModel,
+  required _XFormModel xFormModel,
   required CurrentItemSelectionType currentItemSelectionType,
   required bool isCandidateCurrentItemInNewQueriedList,
   required bool currentItemChanged,
   required final forceReloadItem,
 }) {
-  final _QBlock thisXBlock = xFormModel.xBlock;
+  final _XBlock thisXBlock = xFormModel.xBlock;
   final Block block = thisXBlock.block;
   final FormModel formModel = xFormModel.formModel;
 

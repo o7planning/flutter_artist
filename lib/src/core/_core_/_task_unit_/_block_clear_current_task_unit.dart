@@ -3,14 +3,14 @@ part of '../core.dart';
 @_TaskUnitClassAnnotation()
 @_BlockClearCurrentAnnotation()
 class _BlockClearCurrentTaskUnit<ITEM extends Object> extends _TaskUnit {
-  final _QBlock xBlock;
+  final _XBlock xBlock;
 
   _BlockClearCurrentTaskUnit({
     required this.xBlock,
   }) : super(taskType: TaskType.blockClearCurrentItem);
 
   @override
-  _QShelf get xShelf => xBlock.xShelf;
+  _XShelf get xShelf => xBlock.xShelf;
 
   @override
   int get xShelfId => xBlock.xShelfId;

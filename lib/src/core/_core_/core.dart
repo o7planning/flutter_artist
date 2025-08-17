@@ -74,11 +74,10 @@ import '../enums/_scalar_control_action_type.dart';
 import '../enums/_scalar_error_method.dart';
 import '../enums/_scalar_hidden_behavior.dart';
 import '../enums/_shelf_hidden_behavior.dart';
-import '../enums/_shelf_reaction_type.dart';
 import '../enums/_show_mode.dart';
 import '../enums/_sorting_direction.dart';
 import '../enums/_task_type.dart';
-import '../enums/_x_shelf_task_type.dart';
+import '../enums/_x_shelf_type.dart';
 import '../enums/after_quick_action.dart';
 import '../error/_app_error_info.dart';
 import '../error/_block_error_info.dart';
@@ -206,17 +205,15 @@ part '_config_/_shelf_config.dart';
 
 part '_core_query_/_lazy_objects.dart';
 
-part '_core_query_/_scalar_and_block_list.dart';
+part '_core_query_/_x_block.dart';
 
-part '_query_new_/_q_block.dart';
+part '_core_query_/_x_filter_model.dart';
 
-part '_query_new_/_q_filter_model.dart';
+part '_core_query_/_x_form_model.dart';
 
-part '_query_new_/_q_form_model.dart';
+part '_core_query_/_x_scalar.dart';
 
-part '_query_new_/_q_scalar.dart';
-
-part '_query_new_/_q_shelf.dart';
+part '_core_query_/_x_shelf.dart';
 
 part '_core_state_/__force_reload_throw.dart';
 
