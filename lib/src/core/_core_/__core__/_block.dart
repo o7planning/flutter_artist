@@ -3341,6 +3341,7 @@ abstract class Block<
       item: action.item,
       checkBusy: true,
       checkAllow: true,
+      errorIfItemNotInTheBlock: action.config.errorIfItemNotInTheBlock,
     );
     //
     if (!actionable.yes) {
@@ -4305,6 +4306,7 @@ abstract class Block<
     required ITEM item,
     required bool checkBusy,
     required bool checkAllow,
+    required bool errorIfItemNotInTheBlock,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
       return Actionable<BlockQuickItemUpdatePrecheck>.no(
@@ -4328,10 +4330,9 @@ abstract class Block<
         break;
     }
     //
-
     ITEM? internalItem = findItemSameIdWith(item: item);
     // Test Cases: [90b].
-    if (internalItem == null) {
+    if (errorIfItemNotInTheBlock && internalItem == null) {
       return Actionable<BlockQuickItemUpdatePrecheck>.no(
         errCode: BlockQuickItemUpdatePrecheck.invalidTarget,
       );
@@ -4811,11 +4812,13 @@ abstract class Block<
   Actionable<BlockQuickItemUpdatePrecheck> canQuickUpdateItem({
     required ITEM item,
     bool checkAllow = true,
+    bool errorIfItemNotInTheBlock = true,
   }) {
     return __canQuickUpdateItem(
       checkBusy: true,
       item: item,
       checkAllow: checkAllow,
+      errorIfItemNotInTheBlock: errorIfItemNotInTheBlock,
     );
   }
 

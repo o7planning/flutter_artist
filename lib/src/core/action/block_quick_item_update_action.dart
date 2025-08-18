@@ -8,10 +8,12 @@ abstract class BlockQuickUpdateItemAction<
     ITEM extends Object,
     ITEM_DETAIL extends Object,
     FILTER_CRITERIA extends FilterCriteria> extends QuickAction {
+  final BlockQuickUpdateItemActionConfig config;
   final ITEM item;
 
   const BlockQuickUpdateItemAction({
     required this.item,
+    required this.config,
     required super.needToConfirm,
     required super.actionInfo,
   });
@@ -20,4 +22,10 @@ abstract class BlockQuickUpdateItemAction<
     required Object? parentBlockItem,
     required FILTER_CRITERIA filterCriteria,
   });
+}
+
+class BlockQuickUpdateItemActionConfig {
+  final bool errorIfItemNotInTheBlock;
+
+  BlockQuickUpdateItemActionConfig({required this.errorIfItemNotInTheBlock});
 }
