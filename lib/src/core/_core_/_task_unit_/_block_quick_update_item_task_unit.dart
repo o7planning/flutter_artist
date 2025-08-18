@@ -5,7 +5,7 @@ part of '../core.dart';
 class _BlockQuickUpdateItemTaskUnit
     extends _ResultedTaskUnit<BlockQuickItemUpdateResult> {
   _XBlock xBlock;
-  BlockQuickUpdateItemAction action;
+  BlockQuickItemUpdateAction action;
 
   _BlockQuickUpdateItemTaskUnit({
     required this.xBlock,

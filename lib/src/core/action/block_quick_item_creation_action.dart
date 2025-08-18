@@ -3,12 +3,12 @@ import 'package:flutter_artist_core/flutter_artist_core.dart';
 import '../_core_/core.dart';
 import '_quick_action.dart';
 
-abstract class BlockQuickCreateItemAction<
+abstract class BlockQuickItemCreationAction<
     ID extends Object, //
     ITEM extends Object,
     ITEM_DETAIL extends Object,
     FILTER_CRITERIA extends FilterCriteria> extends QuickAction {
-  const BlockQuickCreateItemAction({
+  const BlockQuickItemCreationAction({
     required super.needToConfirm,
     required super.actionInfo,
   });

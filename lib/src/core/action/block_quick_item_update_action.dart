@@ -3,15 +3,15 @@ import 'package:flutter_artist_core/flutter_artist_core.dart';
 import '../_core_/core.dart';
 import '_quick_action.dart';
 
-abstract class BlockQuickUpdateItemAction<
+abstract class BlockQuickItemUpdateAction<
     ID extends Object, //
     ITEM extends Object,
     ITEM_DETAIL extends Object,
     FILTER_CRITERIA extends FilterCriteria> extends QuickAction {
-  final BlockQuickUpdateItemActionConfig config;
+  final BlockQuickItemUpdateActionConfig config;
   final ITEM item;
 
-  const BlockQuickUpdateItemAction({
+  const BlockQuickItemUpdateAction({
     required this.item,
     required this.config,
     required super.needToConfirm,
@@ -24,8 +24,8 @@ abstract class BlockQuickUpdateItemAction<
   });
 }
 
-class BlockQuickUpdateItemActionConfig {
+class BlockQuickItemUpdateActionConfig {
   final bool errorIfItemNotInTheBlock;
 
-  BlockQuickUpdateItemActionConfig({required this.errorIfItemNotInTheBlock});
+  BlockQuickItemUpdateActionConfig({required this.errorIfItemNotInTheBlock});
 }
