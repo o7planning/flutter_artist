@@ -2,14 +2,14 @@ part of '../core.dart';
 
 abstract class Coordinator extends _Core {
   final CoordinatorConfig config;
-  void Function()? customNavigate;
+  void Function(BuildContext context)? customNavigate;
 
   Coordinator({
     required this.config,
     required this.customNavigate,
   });
 
-  Future<bool> execute() async {
+  Future<bool> execute(BuildContext context) async {
     bool success;
     try {
       success = await coordinationLogic();
@@ -26,28 +26,28 @@ abstract class Coordinator extends _Core {
     }
     switch (config.navCondition) {
       case CoordinatorNavCondition.any:
-        _navigate();
+        _navigate(context);
       case CoordinatorNavCondition.success:
         if (success) {
-          _navigate();
+          _navigate(context);
         }
       case CoordinatorNavCondition.error:
         if (!success) {
-          _navigate();
+          _navigate(context);
         }
     }
     return success;
   }
 
-  void _navigate() async {
+  void _navigate(BuildContext context) async {
     String methodName = "";
     try {
       if (customNavigate != null) {
         methodName = "customNavigate";
-        customNavigate!();
+        customNavigate!(context);
       } else {
         methodName = "defaultNavigate";
-        defaultNavigate();
+        defaultNavigate(context);
       }
     } catch (e, stackTrace) {
       _handleError(
@@ -65,5 +65,5 @@ abstract class Coordinator extends _Core {
   ///
   Future<bool> coordinationLogic();
 
-  Future<void> defaultNavigate();
+  Future<void> defaultNavigate(BuildContext context);
 }

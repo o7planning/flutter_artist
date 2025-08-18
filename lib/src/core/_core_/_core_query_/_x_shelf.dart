@@ -44,25 +44,6 @@ class _XShelf {
     return ret;
   }
 
-  // bool isNothingTodo() {
-  //   for (_XBlock rootXBlock in allRootXBlocks) {
-  //     if (rootXBlock.hasQryHintInTreeBranchAndNotProcessed()) {
-  //       return false;
-  //     }
-  //   }
-  //   for (_XScalar xScalar in allXScalars) {
-  //     if (xScalar.needQuery ) {
-  //       return false;
-  //     }
-  //   }
-  //   for (_XFormModel xFormModel in allXFormModels) {
-  //     if (xFormModel.lazy) {
-  //       return false;
-  //     }
-  //   }
-  //   return true;
-  // }
-
   // ***************************************************************************
 
   // This method will be called in all constructors to init an empty XShelf.
