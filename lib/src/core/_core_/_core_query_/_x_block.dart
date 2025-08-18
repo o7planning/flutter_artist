@@ -19,7 +19,7 @@ class _XBlock {
 
   // Options:
 
-  QryHint __forceQuery = QryHint.none;
+  QryHint __qryHint = QryHint.none;
   bool __forceReloadItem = false;
   QueryType __queryType = QueryType.realQuery;
 
@@ -37,7 +37,7 @@ class _XBlock {
 
   // ***************************************************************************
 
-  QryHint get forceQuery => __forceQuery;
+  QryHint get queryHint => __qryHint;
 
   bool get forceReloadItem => __forceReloadItem;
 
@@ -58,13 +58,12 @@ class _XBlock {
   // ***************************************************************************
 
   bool hasQryHintInTreeBranchAndNotProcessed() {
-    if (__forceQuery == QryHint.force ||
-        __forceQuery == QryHint.markAsPending) {
+    if (__qryHint == QryHint.force || __qryHint == QryHint.markAsPending) {
       if (!_processed) {
         return true;
       }
     }
-    print("BLOCK: ${block} - CHILD: ${childXBlocks}");
+    // print("BLOCK: ${block} - CHILD: ${childXBlocks}");
     for (_XBlock child in childXBlocks) {
       if (child.hasQryHintInTreeBranchAndNotProcessed()) {
         return true;
@@ -73,8 +72,8 @@ class _XBlock {
     return false;
   }
 
-  void setForceQuery(QryHint forceQuery) {
-    __forceQuery = forceQuery;
+  void setQueryHint(QryHint queryHint) {
+    __qryHint = queryHint;
   }
 
   void setForceReloadItem() {
@@ -115,7 +114,7 @@ class _XBlock {
   void printInfoCascade() {
     bool hasActiveUI = block.ui.hasActiveUIComponent(alsoCheckChildren: false);
     String msg =
-        "${getClassName(this)}(${getClassName(block)} - UIActive: $hasActiveUI - ForceQuery: $__forceQuery - RefreshItem: $__forceReloadItem";
+        "${getClassName(this)}(${getClassName(block)} - UIActive: $hasActiveUI - ForceQuery: $__qryHint - RefreshItem: $__forceReloadItem";
     print(msg);
     for (_XBlock xBlock in childXBlocks) {
       xBlock.printInfoCascade();
@@ -124,6 +123,6 @@ class _XBlock {
 
   @override
   String toString() {
-    return "${getClassName(this)}(${getClassName(block)} - forceQuery: $forceQuery) forceReloadItem: $__forceReloadItem - $xFormModel";
+    return "${getClassName(this)}(${getClassName(block)} - forceQuery: $queryHint) forceReloadItem: $__forceReloadItem - $xFormModel";
   }
 }

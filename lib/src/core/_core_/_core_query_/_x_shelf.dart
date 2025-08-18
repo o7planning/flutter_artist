@@ -24,15 +24,15 @@ class _XShelf {
   _LazyObjects getLazyObjectInfos() {
     final _LazyObjects ret = _LazyObjects();
     for (_XBlock xBlock in allXBlocks) {
-      if (xBlock.forceQuery != QryHint.none) {
+      if (xBlock.queryHint != QryHint.none) {
         ret.addLazyBlock(
           block: xBlock.block,
-          forceQuery: xBlock.forceQuery,
+          forceQuery: xBlock.queryHint,
         );
       }
     }
     for (_XScalar xScalar in allXScalars) {
-      if (xScalar.needQuery) {
+      if (xScalar.queryHint != QryHint.none) {
         ret.addLazyScalar(scalar: xScalar.scalar);
       }
     }
@@ -44,24 +44,24 @@ class _XShelf {
     return ret;
   }
 
-  bool isNothingTodo() {
-    for (_XBlock rootXBlock in allRootXBlocks) {
-      if (rootXBlock.hasQryHintInTreeBranchAndNotProcessed()) {
-        return false;
-      }
-    }
-    for (_XScalar xScalar in allXScalars) {
-      if (xScalar.needQuery) {
-        return false;
-      }
-    }
-    for (_XFormModel xFormModel in allXFormModels) {
-      if (xFormModel.lazy) {
-        return false;
-      }
-    }
-    return true;
-  }
+  // bool isNothingTodo() {
+  //   for (_XBlock rootXBlock in allRootXBlocks) {
+  //     if (rootXBlock.hasQryHintInTreeBranchAndNotProcessed()) {
+  //       return false;
+  //     }
+  //   }
+  //   for (_XScalar xScalar in allXScalars) {
+  //     if (xScalar.needQuery ) {
+  //       return false;
+  //     }
+  //   }
+  //   for (_XFormModel xFormModel in allXFormModels) {
+  //     if (xFormModel.lazy) {
+  //       return false;
+  //     }
+  //   }
+  //   return true;
+  // }
 
   // ***************************************************************************
 
@@ -145,7 +145,7 @@ class _XShelf {
       if (xScalar.scalar.ui.hasActiveUIComponent()) {
         if (xScalar.scalar.queryDataState == DataState.pending ||
             xScalar.scalar.queryDataState == DataState.error) {
-          xScalar.setForceQuery();
+          xScalar.setForceHint(QryHint.force);
         }
       }
     }
@@ -162,7 +162,7 @@ class _XShelf {
         if (hasXActiveUI) {
           if (xBlock.block.queryDataState == DataState.pending ||
               xBlock.block.queryDataState == DataState.error) {
-            xBlock.setForceQuery(QryHint.force);
+            xBlock.setQueryHint(QryHint.force);
           }
         }
         _XFormModel? xFormModel = xBlock.xFormModel;
@@ -223,7 +223,7 @@ class _XShelf {
       }
       //
       _XBlock xBlock = xBlockMap[listenerBlkName]!;
-      xBlock.setForceQuery(forceQuery);
+      xBlock.setQueryHint(forceQuery);
       if (forceReloadItem) {
         xBlock.setForceReloadItem();
       }
@@ -232,7 +232,13 @@ class _XShelf {
     for (Scalar s in effectedShelfMembers._reQueryScalarMAP.values) {
       String scalarName = s.name;
       _XScalar xScalar = xScalarMap[scalarName]!;
-      xScalar.setForceQuery();
+      //
+      bool hasActiveUI = s.ui.hasActiveUIComponent();
+      if (hasActiveUI) {
+        xScalar.setForceHint(QryHint.force);
+      } else {
+        xScalar.setForceHint(QryHint.markAsPending);
+      }
     }
     //
     for (_XBlock leafXBlock in allLeafXBlocks) {
@@ -247,7 +253,7 @@ class _XShelf {
         if (hasXActiveUI) {
           if (xBlock.block.queryDataState == DataState.pending ||
               xBlock.block.queryDataState == DataState.error) {
-            xBlock.setForceQuery(QryHint.force);
+            xBlock.setQueryHint(QryHint.force);
           }
         }
         _XFormModel? xFormModel = xBlock.xFormModel;
@@ -296,7 +302,7 @@ class _XShelf {
       thisXBlock.setForceReloadItem();
     }
     //
-    thisXBlock.setForceQuery(queryHint);
+    thisXBlock.setQueryHint(queryHint);
     thisXBlock.setOptions(
       queryType: QueryType.realQuery,
       listBehavior: listBehavior,
@@ -316,7 +322,7 @@ class _XShelf {
       if (hasXActiveUI) {
         if (parentXBlock.block.queryDataState == DataState.pending ||
             parentXBlock.block.queryDataState == DataState.error) {
-          parentXBlock.setForceQuery(QryHint.force);
+          parentXBlock.setQueryHint(QryHint.force);
         }
       }
       // TODO: Need? Remove this code?
@@ -360,7 +366,7 @@ class _XShelf {
       thisXBlock.setForceReloadItem();
     }
     //
-    thisXBlock.setForceQuery(queryHint);
+    thisXBlock.setQueryHint(queryHint);
     thisXBlock.setOptions(
       queryType: QueryType.emptyQuery,
       listBehavior: listBehavior,
@@ -380,7 +386,7 @@ class _XShelf {
       if (hasXActiveUI) {
         if (parentXBlock.block.queryDataState == DataState.pending ||
             parentXBlock.block.queryDataState == DataState.error) {
-          parentXBlock.setForceQuery(QryHint.force);
+          parentXBlock.setQueryHint(QryHint.force);
         }
       }
       // TODO: Need? Remove this code?
@@ -424,7 +430,7 @@ class _XShelf {
       thisXBlock.setForceReloadItem();
     }
     //
-    thisXBlock.setForceQuery(queryHint);
+    thisXBlock.setQueryHint(queryHint);
     thisXBlock.setOptions(
       queryType: QueryType.realQuery,
       listBehavior: listBehavior,
@@ -444,7 +450,7 @@ class _XShelf {
       if (hasXActiveUI) {
         if (parentXBlock.block.queryDataState == DataState.pending ||
             parentXBlock.block.queryDataState == DataState.error) {
-          parentXBlock.setForceQuery(QryHint.force);
+          parentXBlock.setQueryHint(QryHint.force);
         }
       }
       // TODO: Need? Remove this code?
@@ -488,7 +494,7 @@ class _XShelf {
       thisXBlock.setForceReloadItem();
     }
     //
-    thisXBlock.setForceQuery(queryHint);
+    thisXBlock.setQueryHint(queryHint);
     thisXBlock.setOptions(
       queryType: QueryType.realQuery,
       listBehavior: listBehavior,
@@ -508,7 +514,7 @@ class _XShelf {
       if (hasXActiveUI) {
         if (parentXBlock.block.queryDataState == DataState.pending ||
             parentXBlock.block.queryDataState == DataState.error) {
-          parentXBlock.setForceQuery(QryHint.force);
+          parentXBlock.setQueryHint(QryHint.force);
         }
       }
       // TODO: Need? Remove this code?
@@ -544,7 +550,7 @@ class _XShelf {
     thisXFilterModel.filterInput = filterInput;
     //
     for (_XBlock xBlock in thisXFilterModel.xBlocks) {
-      xBlock.setForceQuery(queryHint);
+      xBlock.setQueryHint(queryHint);
       xBlock.setOptions(
         queryType: QueryType.realQuery,
         listBehavior: ListBehavior.replace,
@@ -565,7 +571,7 @@ class _XShelf {
         if (hasXActiveUI) {
           if (parentXBlock.block.queryDataState == DataState.pending ||
               parentXBlock.block.queryDataState == DataState.error) {
-            parentXBlock.setForceQuery(QryHint.force);
+            parentXBlock.setQueryHint(QryHint.force);
           }
         }
         // TODO: Need? Remove this code?
@@ -583,7 +589,7 @@ class _XShelf {
       }
     }
     for (_XScalar xScalar in thisXFilterModel.xScalars) {
-      xScalar.setForceQuery();
+      xScalar.setForceHint(QryHint.force);
     }
   }
 
@@ -696,7 +702,7 @@ class _XShelf {
         forceReloadItem = false;
     }
     //
-    thisXBlock.setForceQuery(queryHint);
+    thisXBlock.setQueryHint(queryHint);
     if (forceReloadItem) {
       thisXBlock.setForceReloadItem();
     }
@@ -720,7 +726,7 @@ class _XShelf {
       if (hasXActiveUI) {
         if (parentXBlock.block.queryDataState == DataState.pending ||
             parentXBlock.block.queryDataState == DataState.error) {
-          parentXBlock.setForceQuery(QryHint.force);
+          parentXBlock.setQueryHint(QryHint.force);
         }
       }
       // TODO: Need? Remove this code?
@@ -825,7 +831,7 @@ class _XShelf {
     // if (forceQuery) {
     //   thisXScalar.setForceQuery();
     // }
-    thisXScalar.setForceQuery();
+    thisXScalar.setForceHint(QryHint.force);
   }
 
   // ***************************************************************************
@@ -858,7 +864,7 @@ class _XShelf {
     final xFilterModel = thisXScalar.xFilterModel;
     xFilterModel.filterInput = filterInput;
     //
-    thisXScalar.setForceQuery();
+    thisXScalar.setForceHint(QryHint.force);
   }
 
   // ***************************************************************************
@@ -900,7 +906,7 @@ class _XShelf {
 
   _XScalar? nextXScalarTask() {
     for (_XScalar xScalar in allXScalars) {
-      if (!xScalar.needQuery) {
+      if (xScalar.queryHint == QryHint.none) {
         continue;
       }
       if (!xScalar._processed) {
@@ -927,7 +933,7 @@ class _XShelf {
 
   void printInfo() {
     for (_XScalar xScalar in allXScalars) {
-      if (xScalar.needQuery) {
+      if (xScalar.queryHint != QryHint.none) {
         xScalar.printInfo();
       }
     }

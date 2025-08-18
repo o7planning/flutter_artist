@@ -10,7 +10,7 @@ class _XScalar {
 
   //
 
-  bool __forceQuery = false;
+  QryHint __qryHint = QryHint.none;
   bool affectByFilterInput = false;
 
   String get name => scalar.name;
@@ -24,24 +24,23 @@ class _XScalar {
     required this.xFilterModel,
   });
 
-  // TODO: Rename?
-  bool get needQuery {
-    return __forceQuery;
+  QryHint get queryHint {
+    return __qryHint;
   }
 
-  void setForceQuery() {
-    __forceQuery = true;
+  void setForceHint(QryHint qryHint) {
+    __qryHint = qryHint;
   }
 
   void printInfo() {
     bool hasActiveUI = scalar.ui.hasActiveUIComponent();
     String msg =
-        "${getClassName(this)}(${getClassName(scalar)} - UIActive: $hasActiveUI - needQuery: $needQuery)";
+        "${getClassName(this)}(${getClassName(scalar)} - UIActive: $hasActiveUI - needQuery: $queryHint)";
     print(msg);
   }
 
   @override
   String toString() {
-    return "${getClassName(this)}(${getClassName(scalar)} - needQuery: $needQuery)";
+    return "${getClassName(this)}(${getClassName(scalar)} - needQuery: $queryHint)";
   }
 }

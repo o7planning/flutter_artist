@@ -150,17 +150,20 @@ abstract class Scalar<
     __assertThisXScalar(thisXScalar);
     //
     bool hasActiveUI = ui.hasActiveUIComponent();
-    bool forceQuery = thisXScalar.needQuery;
-    if (!forceQuery) {
+    QryHint forceQuery = thisXScalar.queryHint;
+    if (forceQuery != QryHint.force) {
       if (this.queryDataState != DataState.ready && hasActiveUI) {
-        forceQuery = true;
+        forceQuery = QryHint.force;
       }
     }
     //
     print(
-        ">> ${getClassName(this)}._unitQuery - queryState: $queryDataState, forceQuery: ${thisXScalar.needQuery}");
+        ">> ${getClassName(this)}._unitQuery - queryState: $queryDataState, forceQuery: ${thisXScalar.queryHint}");
     //
-    if (!forceQuery) {
+    if (forceQuery == QryHint.none) {
+      return;
+    } else if (forceQuery == QryHint.markAsPending) {
+      __scalarData._queryDataState = DataState.pending;
       return;
     }
     //

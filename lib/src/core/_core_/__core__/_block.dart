@@ -582,7 +582,7 @@ abstract class Block<
     __assertThisXBlock(thisXBlock);
     //
     bool hasActiveUI = this.ui.hasActiveUIComponent(alsoCheckChildren: true);
-    QryHint forceQuery = thisXBlock.forceQuery;
+    QryHint forceQuery = thisXBlock.queryHint;
     if (forceQuery != QryHint.force) {
       if (this.queryDataState != DataState.ready && hasActiveUI) {
         forceQuery = QryHint.force;
