@@ -28,7 +28,7 @@ class _XScalar {
     return __qryHint;
   }
 
-  void setForceHint(QryHint qryHint) {
+  void setQueryHint(QryHint qryHint) {
     __qryHint = qryHint;
   }
 

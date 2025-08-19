@@ -126,7 +126,7 @@ class _XShelf {
       if (xScalar.scalar.ui.hasActiveUIComponent()) {
         if (xScalar.scalar.queryDataState == DataState.pending ||
             xScalar.scalar.queryDataState == DataState.error) {
-          xScalar.setForceHint(QryHint.force);
+          xScalar.setQueryHint(QryHint.force);
         }
       }
     }
@@ -216,9 +216,11 @@ class _XShelf {
       //
       bool hasActiveUI = s.ui.hasActiveUIComponent();
       if (hasActiveUI) {
-        xScalar.setForceHint(QryHint.force);
+        // Test Cases: [84a].
+        xScalar.setQueryHint(QryHint.force);
       } else {
-        xScalar.setForceHint(QryHint.markAsPending);
+        // Test Cases: [84b].
+        xScalar.setQueryHint(QryHint.markAsPending);
       }
     }
     //
@@ -570,7 +572,7 @@ class _XShelf {
       }
     }
     for (_XScalar xScalar in thisXFilterModel.xScalars) {
-      xScalar.setForceHint(QryHint.force);
+      xScalar.setQueryHint(QryHint.force);
     }
   }
 
@@ -812,7 +814,7 @@ class _XShelf {
     // if (forceQuery) {
     //   thisXScalar.setForceQuery();
     // }
-    thisXScalar.setForceHint(QryHint.force);
+    thisXScalar.setQueryHint(QryHint.force);
   }
 
   // ***************************************************************************
@@ -845,7 +847,7 @@ class _XShelf {
     final xFilterModel = thisXScalar.xFilterModel;
     xFilterModel.filterInput = filterInput;
     //
-    thisXScalar.setForceHint(QryHint.force);
+    thisXScalar.setQueryHint(QryHint.force);
   }
 
   // ***************************************************************************
