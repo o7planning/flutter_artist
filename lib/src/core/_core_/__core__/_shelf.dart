@@ -567,14 +567,13 @@ abstract class Shelf extends _Core {
 
   @_ImportantMethodAnnotation("Called as the start of a series of TaskUnit(s).")
   @_BlockShelfQueryAnnotation()
-  Future<_XShelf> _queryShelf({
+  Future<void> _queryShelf({
     required _XShelf xShelf,
   }) async {
     _ShelfQueryTaskUnit taskUnit = _ShelfQueryTaskUnit(xShelf: xShelf);
     FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
     //
     await FlutterArtist.executor._executeTaskUnitQueue();
-    return xShelf;
   }
 
   // ***************************************************************************
