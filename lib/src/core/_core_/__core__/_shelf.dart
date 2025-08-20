@@ -611,12 +611,24 @@ abstract class Shelf extends _Core {
       );
     }
     //
-    for (_XBlock rootXBlock in xShelf.allRootXBlocks) {
+    // Execute rootVipXBlock first!!
+    //
+    final _XBlock? rootVipXBlock = xShelf.rootVipXBlock;
+    if (rootVipXBlock != null) {
       FlutterArtist._taskUnitQueue.addTaskUnit(
         _BlockQueryTaskUnit(
-          xBlock: rootXBlock,
+          xBlock: rootVipXBlock,
         ),
       );
+    }
+    for (_XBlock rootXBlock in xShelf.allRootXBlocks) {
+      if (rootXBlock != rootVipXBlock) {
+        FlutterArtist._taskUnitQueue.addTaskUnit(
+          _BlockQueryTaskUnit(
+            xBlock: rootXBlock,
+          ),
+        );
+      }
     }
   }
 

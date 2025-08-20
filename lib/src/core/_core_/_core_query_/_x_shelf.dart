@@ -19,7 +19,16 @@ class _XShelf {
   final List<_XFilterModel> allXFilterModels = [];
   final List<_XFormModel> allXFormModels = [];
 
+  _XBlock? __rootVipXBlock;
+  _XBlock? get rootVipXBlock => __rootVipXBlock;
+
   bool get naturalMode => xShelfType == XShelfType.naturalQuery;
+
+  // ***************************************************************************
+
+  void setRootVipXBlock({required _XBlock xBlock}) {
+    __rootVipXBlock = xBlock.rootXBlock;
+  }
 
   _LazyObjects getLazyObjectInfos() {
     final _LazyObjects ret = _LazyObjects();

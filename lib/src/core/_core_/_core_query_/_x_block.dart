@@ -7,6 +7,13 @@ class _XBlock {
 
   final Block block;
 
+  _XBlock get rootXBlock {
+    if (parentXBlock == null) {
+      return this;
+    }
+    return parentXBlock!.rootXBlock;
+  }
+
   late final _XBlock? parentXBlock;
   final List<_XBlock> childXBlocks = [];
 
