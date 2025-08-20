@@ -861,7 +861,7 @@ abstract class FilterModel<
   void __assertThisXFilterModel(_XFilterModel thisXFilterModel) {
     if (!identical(thisXFilterModel.filterModel, this)) {
       String message =
-          "Error Assets filter model: ${thisXFilterModel.filterModel} - $this";
+          "Error Assert filter model: ${thisXFilterModel.filterModel} - $this";
       print("FATAL ERROR: $message");
       throw message;
     }

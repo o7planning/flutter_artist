@@ -225,7 +225,7 @@ class _XShelf {
       //
       _XBlock xBlock = xBlockMap[listenerBlkName]!;
       xBlock.setQueryHint(queryHint);
-      xBlock.setForceReloadItem(forceReloadItem);
+      xBlock.setForceReloadCurrItem(forceReloadItem);
     }
     //
     for (Scalar s in effectedShelfMembers._reQueryScalarMAP.values) {
@@ -299,7 +299,7 @@ class _XShelf {
     final xFilterModel = thisXBlock.xFilterModel;
     xFilterModel.filterInput = filterInput;
     //
-    thisXBlock.setForceReloadItem(forceReloadItem);
+    thisXBlock.setForceReloadCurrItem(forceReloadItem);
     //
     thisXBlock.setQueryHint(queryHint);
     thisXBlock.setOptions(
@@ -365,7 +365,7 @@ class _XShelf {
     final xFilterModel = thisXBlock.xFilterModel;
     xFilterModel.filterInput = filterInput;
     //
-    thisXBlock.setForceReloadItem(forceReloadItem);
+    thisXBlock.setForceReloadCurrItem(forceReloadItem);
     //
     thisXBlock.setQueryHint(queryHint);
     thisXBlock.setOptions(
@@ -430,7 +430,7 @@ class _XShelf {
     final xFilterModel = thisXBlock.xFilterModel;
     xFilterModel.filterInput = filterInput;
     //
-    thisXBlock.setForceReloadItem(forceReloadItem);
+    thisXBlock.setForceReloadCurrItem(forceReloadItem);
     //
     thisXBlock.setQueryHint(queryHint);
     thisXBlock.setOptions(
@@ -496,7 +496,7 @@ class _XShelf {
     final xFilterModel = thisXBlock.xFilterModel;
     xFilterModel.filterInput = filterInput;
     //
-    thisXBlock.setForceReloadItem(forceReloadItem);
+    thisXBlock.setForceReloadCurrItem(forceReloadItem);
     //
     thisXBlock.setQueryHint(queryHint);
     thisXBlock.setOptions(
@@ -750,7 +750,7 @@ class _XShelf {
     }
     //
     thisXBlock.setQueryHint(queryHint);
-    thisXBlock.setForceReloadItem(forceReloadItem);
+    thisXBlock.setForceReloadCurrItem(forceReloadItem);
     //
     thisXBlock.setOptions(
       queryType: QueryType.realQuery,
@@ -946,6 +946,104 @@ class _XShelf {
   // ***************************************************************************
   // ***************************************************************************
 
+  //
+  // IMPORTANT: Sync Method.
+  //
+  void updateInternalReactionByEvtBlock({required _XBlock eventXBlock}) {
+    __assertXShelf(eventXBlock.xShelf);
+    //
+    if (__rootVipXBlock != eventXBlock.rootXBlock) {
+      throw "Development Logic Error";
+    }
+    final EffectedShelfMembers effectedShelfMembers =
+        eventXBlock.block._internalEffectedShelfMembers;
+
+    //
+    Set<String> listenerBlockNames = {}
+      ..addAll(effectedShelfMembers._reQueryBlockMAP.keys)
+      ..addAll(effectedShelfMembers._refreshCurrItmBlockMAP.keys);
+
+    for (String listenerBlkName in listenerBlockNames) {
+      final Block? reQryBlock =
+          effectedShelfMembers._reQueryBlockMAP[listenerBlkName];
+      final Block? refreshCurrBlock =
+          effectedShelfMembers._refreshCurrItmBlockMAP[listenerBlkName];
+      //
+      bool blockVisible = false;
+      QryHint queryHint = QryHint.none;
+      bool forceReloadItem = false;
+      //
+      if (reQryBlock != null) {
+        blockVisible = reQryBlock.ui.hasActiveBlockFragmentWidget(
+          alsoCheckChildren: true,
+        );
+        queryHint = blockVisible ? QryHint.force : QryHint.markAsPending;
+      }
+      if (refreshCurrBlock != null) {
+        blockVisible = refreshCurrBlock.ui.hasActiveBlockFragmentWidget(
+          alsoCheckChildren: true,
+        );
+        forceReloadItem = true;
+      }
+      //
+      _XBlock xBlock = xBlockMap[listenerBlkName]!;
+      xBlock.setQueryHint(queryHint);
+      xBlock.setForceReloadCurrItem(forceReloadItem);
+    }
+    //
+    for (Scalar s in effectedShelfMembers._reQueryScalarMAP.values) {
+      String scalarName = s.name;
+      _XScalar xScalar = xScalarMap[scalarName]!;
+      //
+      bool hasActiveUI = s.ui.hasActiveUIComponent();
+      if (hasActiveUI) {
+        //
+        xScalar.setQueryHint(QryHint.force);
+      } else {
+        //
+        xScalar.setQueryHint(QryHint.markAsPending);
+      }
+    }
+    //
+    for (_XBlock leafXBlock in allLeafXBlocks) {
+      _XBlock? xBlock = leafXBlock;
+      while (true) {
+        if (xBlock == null) {
+          break;
+        }
+        bool hasXActiveUI = xBlock.block.ui.hasActiveBlockFragmentWidget(
+          alsoCheckChildren: true,
+        );
+        if (hasXActiveUI) {
+          if (xBlock.block.queryDataState == DataState.pending ||
+              xBlock.block.queryDataState == DataState.error) {
+            xBlock.setQueryHint(QryHint.force);
+          }
+        }
+        _XFormModel? xFormModel = xBlock.xFormModel;
+
+        if (xFormModel != null &&
+            xFormModel.formModel.ui.hasActiveUIComponent()) {
+          if (xFormModel.formModel.formDataState == DataState.pending ||
+              xFormModel.formModel.formDataState == DataState.error ||
+              xFormModel.formModel.formDataState == DataState.none) {
+            xFormModel.lazy = true;
+            if (naturalMode) {
+              xFormModel.forceTypeForForm = ForceType.decidedAtRuntime;
+            } else {
+              xFormModel.forceTypeForForm = ForceType.force;
+            }
+          }
+        }
+        xBlock = xBlock.parentXBlock;
+      }
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+  // ***************************************************************************
+
   void printMe() {
     print("\nXShelf BEFORE QUERY [${xShelfType.name}]:");
     for (String key in xBlockMap.keys) {
@@ -1017,6 +1115,17 @@ class _XShelf {
     }
     for (_XFormModel xFormModel in allXFormModels) {
       xFormModel.printInfo();
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __assertXShelf(_XShelf xShelf) {
+    if (xShelf != this) {
+      String message = "Error Assert xShelf: $xShelf - $this";
+      print("FATAL ERROR: $message");
+      throw message;
     }
   }
 }

@@ -640,6 +640,7 @@ abstract class Block<
         frmDataState: DataState.none,
         errorInFilter: false,
       );
+      thisXBlock.setReQueryDone();
       return;
     } else if (queryHint != QryHint.force) {
       throw "TODO"; // Never run.
@@ -731,6 +732,9 @@ abstract class Block<
         // Throw ApiError:
         result.throwIfError();
         //
+        // Query DONE!
+        //
+        thisXBlock.setReQueryDone();
         queried = true;
         queryResultState = ActionResultState.success;
         pageData = result.data;
@@ -1151,8 +1155,8 @@ abstract class Block<
     final bool hasXActiveUI = ui.hasActiveUIComponent(alsoCheckChildren: true);
     //
     thisXBlock._printParameters(hasActiveUI: hasXActiveUI); // ---> Debug
-    bool originForceReloadItem = thisXBlock.forceReloadItem;
-    bool forceReloadItem = thisXBlock.forceReloadItem;
+    bool originForceReloadItem = thisXBlock.forceReloadCurrItem;
+    bool forceReloadItem = thisXBlock.forceReloadCurrItem;
     bool forceReloadForm = false;
 
     DebugPrint.printDebugState(DebugCat.dataLoad,
@@ -1230,6 +1234,7 @@ abstract class Block<
           result.throwIfError();
           //
           refreshedCurrentItemDetail = result.data;
+          thisXBlock.setForceReloadCurrItemDone();
         } catch (e, stackTrace) {
           isLoadItemError = true;
           //
@@ -2100,7 +2105,7 @@ abstract class Block<
     }
     bool fireInternalEvent = this._internalEffectedShelfMembers.hasMember();
     if (fireInternalEvent) {
-      __addInternalReactTaskUnit();
+      __updateInternalReactionByEvtBlock(eventXBlock: thisXBlock);
     }
     //
     if (fireOutsideEvent) {
@@ -3680,13 +3685,14 @@ abstract class Block<
   // ***************************************************************************
 
   @_InternalEventReactAnnotation()
-  Future<void> __addInternalReactTaskUnit() async {
-    // _ShelfInternalReactTaskUnit taskUnit = _ShelfInternalReactTaskUnit(
-    //   shelf: shelf,
-    //   shelfInternalListeners: _internalEffectedShelfMembers,
-    // );
-    // FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
-    throw UnimplementedError("TODO__addInternalReactTaskUnit");
+  void __updateInternalReactionByEvtBlock({
+    required _XBlock eventXBlock,
+  }) async {
+    __assertThisXBlock(eventXBlock);
+    //
+    eventXBlock.xShelf.updateInternalReactionByEvtBlock(
+      eventXBlock: eventXBlock,
+    );
   }
 
   // ***************************************************************************
@@ -5654,7 +5660,7 @@ abstract class Block<
 
   void __assertThisXBlock(_XBlock thisXBlock) {
     if (thisXBlock.block != this || thisXBlock.name != name) {
-      String message = "Error Assets block: ${thisXBlock.block} - $this";
+      String message = "Error Assert block: ${thisXBlock.block} - $this";
       print("FATAL ERROR: $message");
       throw message;
     }

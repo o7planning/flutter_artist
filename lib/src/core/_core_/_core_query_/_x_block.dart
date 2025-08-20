@@ -27,7 +27,7 @@ class _XBlock {
   // Options:
 
   QryHint __qryHint = QryHint.none;
-  bool __forceReloadItem = false;
+  bool __forceReloadCurrItem = false;
   QueryType __queryType = QueryType.realQuery;
 
   QueryType get queryType => __queryType;
@@ -46,7 +46,7 @@ class _XBlock {
 
   QryHint get queryHint => __qryHint;
 
-  bool get forceReloadItem => __forceReloadItem;
+  bool get forceReloadCurrItem => __forceReloadCurrItem;
 
   SuggestedSelection? get suggestedSelection => __suggestedSelection;
 
@@ -55,11 +55,20 @@ class _XBlock {
   // ***************************************************************************
   // ***************************************************************************
 
+  late final dynamic currItemIdToReload;
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   _XBlock({
     required this.block,
     required this.xFilterModel,
     required this.xFormModel,
-  });
+  }) {
+    // TODO: Check throw pending exception.
+    Object? currItem = block.currentItem;
+    currItemIdToReload = currItem == null ? null : block.getItemId(currItem);
+  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -79,12 +88,37 @@ class _XBlock {
     return false;
   }
 
+  bool isReQueryDone() {
+    return __qryHint == QryHint.none;
+  }
+
+  void setReQueryDone() {
+    __qryHint = QryHint.none;
+  }
+
+  bool isReloadCurrItemDone() {
+    if (currItemIdToReload == null) {
+      return true;
+    }
+    // TODO: Check throw pending exception.
+    final Object? currItem = block.currentItem;
+    dynamic currItemId = currItem == null ? null : block.getItemId(currItem);
+    if (currItemId != currItemIdToReload) {
+      return true;
+    }
+    return !__forceReloadCurrItem;
+  }
+
+  void setForceReloadCurrItemDone() {
+    __forceReloadCurrItem = false;
+  }
+
   void setQueryHint(QryHint queryHint) {
     __qryHint = queryHint;
   }
 
-  void setForceReloadItem(bool forceReloadItem) {
-    __forceReloadItem = forceReloadItem;
+  void setForceReloadCurrItem(bool forceReloadCurrItem) {
+    __forceReloadCurrItem = forceReloadCurrItem;
   }
 
   ListBehavior get listBehavior {
@@ -121,7 +155,7 @@ class _XBlock {
   void printInfoCascade() {
     bool hasActiveUI = block.ui.hasActiveUIComponent(alsoCheckChildren: false);
     String msg =
-        "${getClassName(this)}(${getClassName(block)} - UIActive: $hasActiveUI - QryHint: $__qryHint - RefreshItem: $__forceReloadItem";
+        "${getClassName(this)}(${getClassName(block)} - UIActive: $hasActiveUI - QryHint: $__qryHint - RefreshItem: $__forceReloadCurrItem";
     print(msg);
     for (_XBlock xBlock in childXBlocks) {
       xBlock.printInfoCascade();
@@ -130,6 +164,6 @@ class _XBlock {
 
   @override
   String toString() {
-    return "${getClassName(this)}(${getClassName(block)} - qryHint: $queryHint) forceReloadItem: $__forceReloadItem - $xFormModel";
+    return "${getClassName(this)}(${getClassName(block)} - qryHint: $queryHint) forceReloadItem: $__forceReloadCurrItem - $xFormModel";
   }
 }

@@ -783,7 +783,7 @@ abstract class Scalar<
 
   void __assertThisXScalar(_XScalar thisXScalar) {
     if (thisXScalar.scalar != this || thisXScalar.name != name) {
-      String message = "Error Assets scalar: ${thisXScalar.scalar} - $this";
+      String message = "Error Assert scalar: ${thisXScalar.scalar} - $this";
       print("FATAL ERROR: $message");
       throw message;
     }

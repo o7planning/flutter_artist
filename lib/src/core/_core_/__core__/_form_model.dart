@@ -1612,7 +1612,7 @@ abstract class FormModel<
   void __assertThisXFormModel(_XFormModel thisXFormModel) {
     if (!identical(thisXFormModel.formModel, this)) {
       String message =
-          "Error Assets form model: ${thisXFormModel.formModel} - $this";
+          "Error Assert form model: ${thisXFormModel.formModel} - $this";
       print("FATAL ERROR: $message");
       throw message;
     }
