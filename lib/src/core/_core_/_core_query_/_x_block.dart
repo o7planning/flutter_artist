@@ -22,8 +22,6 @@ class _XBlock {
 
   String get name => block.name;
 
-  bool _processed = false;
-
   // Options:
 
   QryHint __qryHint = QryHint.none;
@@ -75,9 +73,7 @@ class _XBlock {
 
   bool hasQryHintInTreeBranchAndNotProcessed() {
     if (__qryHint == QryHint.force || __qryHint == QryHint.markAsPending) {
-      if (!_processed) {
-        return true;
-      }
+      return true;
     }
     // print("BLOCK: ${block} - CHILD: ${childXBlocks}");
     for (_XBlock child in childXBlocks) {
