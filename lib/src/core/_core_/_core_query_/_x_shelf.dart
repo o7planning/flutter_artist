@@ -205,9 +205,7 @@ class _XShelf {
       //
       _XBlock xBlock = xBlockMap[listenerBlkName]!;
       xBlock.setQueryHint(forceQuery);
-      if (forceReloadItem) {
-        xBlock.setForceReloadItem();
-      }
+      xBlock.setForceReloadItem(forceReloadItem);
     }
     //
     for (Scalar s in effectedShelfMembers._reQueryScalarMAP.values) {
@@ -281,9 +279,7 @@ class _XShelf {
     final xFilterModel = thisXBlock.xFilterModel;
     xFilterModel.filterInput = filterInput;
     //
-    if (forceReloadItem) {
-      thisXBlock.setForceReloadItem();
-    }
+    thisXBlock.setForceReloadItem(forceReloadItem);
     //
     thisXBlock.setQueryHint(queryHint);
     thisXBlock.setOptions(
@@ -345,9 +341,7 @@ class _XShelf {
     final xFilterModel = thisXBlock.xFilterModel;
     xFilterModel.filterInput = filterInput;
     //
-    if (forceReloadItem) {
-      thisXBlock.setForceReloadItem();
-    }
+    thisXBlock.setForceReloadItem(forceReloadItem);
     //
     thisXBlock.setQueryHint(queryHint);
     thisXBlock.setOptions(
@@ -409,9 +403,7 @@ class _XShelf {
     final xFilterModel = thisXBlock.xFilterModel;
     xFilterModel.filterInput = filterInput;
     //
-    if (forceReloadItem) {
-      thisXBlock.setForceReloadItem();
-    }
+    thisXBlock.setForceReloadItem(forceReloadItem);
     //
     thisXBlock.setQueryHint(queryHint);
     thisXBlock.setOptions(
@@ -473,9 +465,7 @@ class _XShelf {
     final xFilterModel = thisXBlock.xFilterModel;
     xFilterModel.filterInput = filterInput;
     //
-    if (forceReloadItem) {
-      thisXBlock.setForceReloadItem();
-    }
+    thisXBlock.setForceReloadItem(forceReloadItem);
     //
     thisXBlock.setQueryHint(queryHint);
     thisXBlock.setOptions(
@@ -686,9 +676,7 @@ class _XShelf {
     }
     //
     thisXBlock.setQueryHint(queryHint);
-    if (forceReloadItem) {
-      thisXBlock.setForceReloadItem();
-    }
+    thisXBlock.setForceReloadItem(forceReloadItem);
     //
     thisXBlock.setOptions(
       queryType: QueryType.realQuery,

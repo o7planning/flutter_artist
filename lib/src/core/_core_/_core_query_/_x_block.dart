@@ -76,8 +76,8 @@ class _XBlock {
     __qryHint = queryHint;
   }
 
-  void setForceReloadItem() {
-    __forceReloadItem = true;
+  void setForceReloadItem(bool forceReloadItem) {
+    __forceReloadItem = forceReloadItem;
   }
 
   ListBehavior get listBehavior {

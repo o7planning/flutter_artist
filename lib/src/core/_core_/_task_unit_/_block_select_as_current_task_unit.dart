@@ -32,9 +32,7 @@ class _BlockSelectAsCurrentTaskUnit<ITEM extends Object>
             currentItem: xBlock.block.currentItem as ITEM?,
           ),
         ) {
-    if (forceReloadItem) {
-      xBlock.setForceReloadItem();
-    }
+    xBlock.setForceReloadItem(forceReloadItem);
     //
     if (forceTypeForForm != null) {
       xBlock.xFormModel?.forceTypeForForm = forceTypeForForm!;
