@@ -114,7 +114,7 @@ class _XBlock {
   void printInfoCascade() {
     bool hasActiveUI = block.ui.hasActiveUIComponent(alsoCheckChildren: false);
     String msg =
-        "${getClassName(this)}(${getClassName(block)} - UIActive: $hasActiveUI - ForceQuery: $__qryHint - RefreshItem: $__forceReloadItem";
+        "${getClassName(this)}(${getClassName(block)} - UIActive: $hasActiveUI - QryHint: $__qryHint - RefreshItem: $__forceReloadItem";
     print(msg);
     for (_XBlock xBlock in childXBlocks) {
       xBlock.printInfoCascade();
@@ -123,6 +123,6 @@ class _XBlock {
 
   @override
   String toString() {
-    return "${getClassName(this)}(${getClassName(block)} - forceQuery: $queryHint) forceReloadItem: $__forceReloadItem - $xFormModel";
+    return "${getClassName(this)}(${getClassName(block)} - qryHint: $queryHint) forceReloadItem: $__forceReloadItem - $xFormModel";
   }
 }

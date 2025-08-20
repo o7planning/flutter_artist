@@ -27,7 +27,7 @@ class _XShelf {
       if (xBlock.queryHint != QryHint.none) {
         ret.addLazyBlock(
           block: xBlock.block,
-          forceQuery: xBlock.queryHint,
+          queryHint: xBlock.queryHint,
         );
       }
     }
@@ -187,14 +187,14 @@ class _XShelf {
           effectedShelfMembers._refreshCurrItmBlockMAP[listenerBlkName];
       //
       bool blockVisible = false;
-      QryHint forceQuery = QryHint.none;
+      QryHint queryHint = QryHint.none;
       bool forceReloadItem = false;
       //
       if (reQryBlock != null) {
         blockVisible = reQryBlock.ui.hasActiveBlockFragmentWidget(
           alsoCheckChildren: true,
         );
-        forceQuery = blockVisible ? QryHint.force : QryHint.markAsPending;
+        queryHint = blockVisible ? QryHint.force : QryHint.markAsPending;
       }
       if (refreshCurrBlock != null) {
         blockVisible = refreshCurrBlock.ui.hasActiveBlockFragmentWidget(
@@ -204,7 +204,7 @@ class _XShelf {
       }
       //
       _XBlock xBlock = xBlockMap[listenerBlkName]!;
-      xBlock.setQueryHint(forceQuery);
+      xBlock.setQueryHint(queryHint);
       xBlock.setForceReloadItem(forceReloadItem);
     }
     //
@@ -793,17 +793,6 @@ class _XShelf {
     final xFilterModel = thisXScalar.xFilterModel;
     xFilterModel.filterInput = filterInput;
     //
-    // bool forceQuery = false;
-    // switch (afterQuickAction) {
-    //   case AfterScalarQuickAction.none:
-    //     forceQuery = false;
-    //   case AfterScalarQuickAction.query:
-    //     forceQuery = true;
-    // }
-    // //
-    // if (forceQuery) {
-    //   thisXScalar.setForceQuery();
-    // }
     thisXScalar.setQueryHint(QryHint.force);
   }
 

@@ -165,24 +165,24 @@ abstract class Scalar<
     __assertThisXScalar(thisXScalar);
     //
     bool hasActiveUI = ui.hasActiveUIComponent();
-    QryHint forceQuery = thisXScalar.queryHint;
-    if (forceQuery != QryHint.force) {
+    QryHint queryHint = thisXScalar.queryHint;
+    if (queryHint != QryHint.force) {
       if (this.queryDataState != DataState.ready && hasActiveUI) {
-        forceQuery = QryHint.force;
+        queryHint = QryHint.force;
       }
     }
     //
     print(
-        ">> ${getClassName(this)}._unitQuery - queryState: $queryDataState, forceQuery: ${thisXScalar.queryHint}");
+        ">> ${getClassName(this)}._unitQuery - queryState: $queryDataState, queryHint: ${thisXScalar.queryHint}");
     //
-    if (forceQuery == QryHint.none) {
+    if (queryHint == QryHint.none) {
       return;
-    } else if (forceQuery == QryHint.markAsPending) {
+    } else if (queryHint == QryHint.markAsPending) {
       __scalarData._queryDataState = DataState.pending;
       return;
     }
     //
-    // this.queryDataState != DataState.ready || thisXScalar.forceQuery
+    // this.queryDataState != DataState.ready || thisXScalar.queryHint
     //
     DataState newQueryDataState = this.queryDataState;
     //
@@ -672,16 +672,6 @@ abstract class Scalar<
       return false;
     }
     //
-    // List<_ScalarOpt> forceQueryScalarOpts = [];
-    // switch (afterQuickAction) {
-    //   case AfterScalarLoadExtraDataQuickAction.none:
-    //     break;
-    //   case AfterScalarLoadExtraDataQuickAction.update:
-    //     // TODO: Xem lai.
-    //     forceQueryScalarOpts = [
-    //       _ScalarOpt(scalar: this),
-    //     ];
-    // }
     // _QShelf.forScalarQuickExtraDataLoadAction.
     _XShelf xShelf = _XShelf.forScalarQuickExtraDataLoadAction(
         scalar: this, filterInput: filterInput);

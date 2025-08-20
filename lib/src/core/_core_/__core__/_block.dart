@@ -582,10 +582,10 @@ abstract class Block<
     __assertThisXBlock(thisXBlock);
     //
     bool hasActiveUI = this.ui.hasActiveUIComponent(alsoCheckChildren: true);
-    QryHint forceQuery = thisXBlock.queryHint;
-    if (forceQuery != QryHint.force) {
+    QryHint queryHint = thisXBlock.queryHint;
+    if (queryHint != QryHint.force) {
       if (this.queryDataState != DataState.ready && hasActiveUI) {
-        forceQuery = QryHint.force;
+        queryHint = QryHint.force;
       }
     }
     //
@@ -597,8 +597,8 @@ abstract class Block<
     final ITEM? candidateCurrentItem;
     bool queried = false;
 
-    if (forceQuery == QryHint.none) {
-      print("        ~~~~~~~> IGNORED --> forceQuery: $forceQuery - [$name]");
+    if (queryHint == QryHint.none) {
+      print("        ~~~~~~~> IGNORED --> queryHint: $queryHint - [$name]");
       candidateCurrentItem = null;
       //
       var currentItemSelectionType = CurrentItemSelectionType.doNothing;
@@ -633,7 +633,7 @@ abstract class Block<
         ),
       );
       return;
-    } else if (forceQuery == QryHint.markAsPending) {
+    } else if (queryHint == QryHint.markAsPending) {
       this.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: thisXBlock,
         qryDataState: DataState.pending,
@@ -641,12 +641,12 @@ abstract class Block<
         errorInFilter: false,
       );
       return;
-    } else if (forceQuery != QryHint.force) {
+    } else if (queryHint != QryHint.force) {
       throw "TODO"; // Never run.
     }
     //
     // FORCE QUERY:
-    // thisXBlock.forceQuery || (hasActiveUI && this.queryDataState != DataState.ready)
+    // thisXBlock.queryHint || (hasActiveUI && this.queryDataState != DataState.ready)
     //
     FILTER_CRITERIA? filterCriteriaOfFilterModel;
     try {
@@ -917,7 +917,7 @@ abstract class Block<
       if (formModel != null) {
         formModel!._clearDataWithDataState(formDataState: DataState.none);
       }
-      // (Currently, In _unitQuery && forceQuery).
+      // (Currently, In _unitQuery && queryHint).
       // Test Case: [42a].
       this.__clearAllChildrenBlocksToNone(
         thisXBlock: thisXBlock,
@@ -956,7 +956,7 @@ abstract class Block<
       }
     }
     print(
-        "   >>> ${getClassName(this)}    @@@@@@@@@ forceQuery: $forceQuery >>> postQueryBehavior: $postQueryBehavior");
+        "   >>> ${getClassName(this)}    @@@@@@@@@ queryHint: $queryHint >>> postQueryBehavior: $postQueryBehavior");
     //
     // Add TaskUnit:
     // - Find Item to Select as Current:

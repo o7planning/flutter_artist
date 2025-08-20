@@ -2,13 +2,13 @@ part of '../core.dart';
 
 class _LazyBlock {
   final Block block;
-  final QryHint forceQuery;
+  final QryHint queryHint;
 
-  _LazyBlock({required this.block, required this.forceQuery});
+  _LazyBlock({required this.block, required this.queryHint});
 
   @override
   String toString() {
-    return "(${block.name},forceQuery: $forceQuery)";
+    return "(${block.name},queryHint: $queryHint)";
   }
 }
 
@@ -51,8 +51,8 @@ class _LazyObjects {
     lazyScalars.add(_LazyScalar(scalar: scalar));
   }
 
-  void addLazyBlock({required Block block, required QryHint forceQuery}) {
-    lazyBlocks.add(_LazyBlock(block: block, forceQuery: forceQuery));
+  void addLazyBlock({required Block block, required QryHint queryHint}) {
+    lazyBlocks.add(_LazyBlock(block: block, queryHint: queryHint));
   }
 
   void addLazyFormModel({required FormModel formModel}) {
