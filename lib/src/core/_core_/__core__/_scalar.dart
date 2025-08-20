@@ -241,6 +241,7 @@ abstract class Scalar<
       __clearScalarError();
       __refreshQueryingState(isQuerying: true);
       //
+      __callApiQueryCount++;
       ApiResult<VALUE> result = await callApiQuery(
         filterCriteria: filterCriteriaOfFilterModel,
       );

@@ -84,3 +84,5 @@ export 'src/debug/state_view/_block_debug_options.dart';
 export 'src/debug/state_view/_block_debug_state_view.dart';
 export 'src/debug/state_view/_form_debug_options.dart';
 export 'src/debug/state_view/_pagination_debug_options.dart';
+export 'src/debug/state_view/_scalar_debug_options.dart';
+export 'src/debug/state_view/_scalar_debug_state_view.dart';
