@@ -609,7 +609,7 @@ abstract class Shelf extends _Core {
       throw "Development Logic Error";
     }
     xShelf.printMe();
-
+    //
     if (vipXScalar != null) {
       //
       // Execute vipXScalar first!!
@@ -619,8 +619,7 @@ abstract class Shelf extends _Core {
           xScalar: vipXScalar,
         ),
       );
-    }
-    if (rootVipXBlock != null) {
+    } else if (rootVipXBlock != null) {
       //
       // Execute rootVipXBlock first!!
       //
