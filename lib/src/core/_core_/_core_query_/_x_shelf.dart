@@ -955,6 +955,7 @@ class _XShelf {
     if (__rootVipXBlock != eventXBlock.rootXBlock) {
       throw "Development Logic Error";
     }
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> Chay vao day 1");
     final EffectedShelfMembers effectedShelfMembers =
         eventXBlock.block._internalEffectedShelfMembers;
 

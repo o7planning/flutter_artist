@@ -602,18 +602,35 @@ abstract class Shelf extends _Core {
   Future<void> _unitQueryShelf({
     required _XShelf xShelf,
   }) async {
-    xShelf.printMe();
-    //
-    // Execute vipXScalar first!!
-    //
     final _XScalar? vipXScalar = xShelf.vipXScalar;
+    final _XBlock? rootVipXBlock = xShelf.rootVipXBlock;
+    //
+    if (vipXScalar != null && rootVipXBlock != null) {
+      throw "Development Logic Error";
+    }
+    xShelf.printMe();
+
     if (vipXScalar != null) {
+      //
+      // Execute vipXScalar first!!
+      //
       FlutterArtist._taskUnitQueue.addTaskUnit(
         _ScalarQueryTaskUnit(
           xScalar: vipXScalar,
         ),
       );
     }
+    if (rootVipXBlock != null) {
+      //
+      // Execute rootVipXBlock first!!
+      //
+      FlutterArtist._taskUnitQueue.addTaskUnit(
+        _BlockQueryTaskUnit(
+          xBlock: rootVipXBlock,
+        ),
+      );
+    }
+    //
     for (_XScalar xScalar in xShelf.allXScalars) {
       if (xScalar != vipXScalar) {
         FlutterArtist._taskUnitQueue.addTaskUnit(
@@ -624,16 +641,6 @@ abstract class Shelf extends _Core {
       }
     }
     //
-    // Execute rootVipXBlock first!!
-    //
-    final _XBlock? rootVipXBlock = xShelf.rootVipXBlock;
-    if (rootVipXBlock != null) {
-      FlutterArtist._taskUnitQueue.addTaskUnit(
-        _BlockQueryTaskUnit(
-          xBlock: rootVipXBlock,
-        ),
-      );
-    }
     for (_XBlock rootXBlock in xShelf.allRootXBlocks) {
       if (rootXBlock != rootVipXBlock) {
         FlutterArtist._taskUnitQueue.addTaskUnit(
