@@ -603,12 +603,25 @@ abstract class Shelf extends _Core {
     required _XShelf xShelf,
   }) async {
     xShelf.printMe();
-    for (_XScalar xScalar in xShelf.allXScalars) {
+    //
+    // Execute vipXScalar first!!
+    //
+    final _XScalar? vipXScalar = xShelf.vipXScalar;
+    if (vipXScalar != null) {
       FlutterArtist._taskUnitQueue.addTaskUnit(
         _ScalarQueryTaskUnit(
-          xScalar: xScalar,
+          xScalar: vipXScalar,
         ),
       );
+    }
+    for (_XScalar xScalar in xShelf.allXScalars) {
+      if (xScalar != vipXScalar) {
+        FlutterArtist._taskUnitQueue.addTaskUnit(
+          _ScalarQueryTaskUnit(
+            xScalar: xScalar,
+          ),
+        );
+      }
     }
     //
     // Execute rootVipXBlock first!!

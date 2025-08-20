@@ -20,15 +20,26 @@ class _XShelf {
   final List<_XFormModel> allXFormModels = [];
 
   _XBlock? __rootVipXBlock;
+
   _XBlock? get rootVipXBlock => __rootVipXBlock;
+
+  _XScalar? __vipXScalar;
+
+  _XScalar? get vipXScalar => __vipXScalar;
 
   bool get naturalMode => xShelfType == XShelfType.naturalQuery;
 
   // ***************************************************************************
 
-  void setRootVipXBlock({required _XBlock xBlock}) {
-    __rootVipXBlock = xBlock.rootXBlock;
+  void setRootVipXBlock({required _XBlock descendantXBlock}) {
+    __rootVipXBlock = descendantXBlock.rootXBlock;
   }
+
+  void setVipXScalar({required _XScalar xScalar}) {
+    __vipXScalar = xScalar;
+  }
+
+  // ***************************************************************************
 
   _LazyObjects getLazyObjectInfos() {
     final _LazyObjects ret = _LazyObjects();
@@ -327,6 +338,9 @@ class _XShelf {
       //
       parentXBlock = parentXBlock.parentXBlock;
     }
+    //
+    _XBlock xBlock = xBlockMap[block.name]!;
+    setRootVipXBlock(descendantXBlock: xBlock);
   }
 
   // ***************************************************************************
@@ -389,6 +403,9 @@ class _XShelf {
       //
       parentXBlock = parentXBlock.parentXBlock;
     }
+    //
+    _XBlock xBlock = xBlockMap[block.name]!;
+    setRootVipXBlock(descendantXBlock: xBlock);
   }
 
   // ***************************************************************************
@@ -452,6 +469,9 @@ class _XShelf {
       //
       parentXBlock = parentXBlock.parentXBlock;
     }
+    //
+    _XBlock xBlock = xBlockMap[block.name]!;
+    setRootVipXBlock(descendantXBlock: xBlock);
   }
 
   // ***************************************************************************
@@ -514,6 +534,9 @@ class _XShelf {
       //
       parentXBlock = parentXBlock.parentXBlock;
     }
+    // IMPORTANT:
+    _XBlock xBlock = xBlockMap[block.name]!;
+    setRootVipXBlock(descendantXBlock: xBlock);
   }
 
   // ***************************************************************************
@@ -585,6 +608,11 @@ class _XShelf {
       : xShelfType = XShelfType.formModelSave,
         shelf = formModel.block.shelf {
     __initCore(shelf: shelf);
+    //
+    // IMPORTANT:
+    //
+    _XBlock xBlock = xBlockMap[formModel.block.name]!;
+    setRootVipXBlock(descendantXBlock: xBlock);
   }
 
   // ***************************************************************************
@@ -595,6 +623,11 @@ class _XShelf {
       : xShelfType = XShelfType.formModelEnterFields,
         shelf = formModel.block.shelf {
     __initCore(shelf: shelf);
+    //
+    // IMPORTANT:
+    //
+    _XBlock xBlock = xBlockMap[formModel.block.name]!;
+    setRootVipXBlock(descendantXBlock: xBlock);
   }
 
   // ***************************************************************************
@@ -605,6 +638,11 @@ class _XShelf {
       : xShelfType = XShelfType.blockPrepareFormToCreateItem,
         shelf = block.shelf {
     __initCore(shelf: shelf);
+    //
+    // IMPORTANT:
+    //
+    _XBlock xBlock = xBlockMap[block.name]!;
+    setRootVipXBlock(descendantXBlock: xBlock);
   }
 
   // ***************************************************************************
@@ -615,6 +653,11 @@ class _XShelf {
       : xShelfType = XShelfType.blockCurrItemClearance,
         shelf = block.shelf {
     __initCore(shelf: shelf);
+    //
+    // IMPORTANT:
+    //
+    _XBlock xBlock = xBlockMap[block.name]!;
+    setRootVipXBlock(descendantXBlock: xBlock);
   }
 
   // ***************************************************************************
@@ -625,6 +668,11 @@ class _XShelf {
       : xShelfType = XShelfType.blockClearance,
         shelf = block.shelf {
     __initCore(shelf: shelf);
+    //
+    // IMPORTANT:
+    //
+    _XBlock xBlock = xBlockMap[block.name]!;
+    setRootVipXBlock(descendantXBlock: xBlock);
   }
 
   // ***************************************************************************
@@ -635,6 +683,11 @@ class _XShelf {
       : xShelfType = XShelfType.blockItemDeletion,
         shelf = block.shelf {
     __initCore(shelf: shelf);
+    //
+    // IMPORTANT:
+    //
+    _XBlock xBlock = xBlockMap[block.name]!;
+    setRootVipXBlock(descendantXBlock: xBlock);
   }
 
   // ***************************************************************************
@@ -645,6 +698,11 @@ class _XShelf {
       : xShelfType = XShelfType.blockMultiItemsDeletion,
         shelf = block.shelf {
     __initCore(shelf: shelf);
+    //
+    // IMPORTANT:
+    //
+    _XBlock xBlock = xBlockMap[block.name]!;
+    setRootVipXBlock(descendantXBlock: xBlock);
   }
 
   // ***************************************************************************
@@ -655,6 +713,11 @@ class _XShelf {
       : xShelfType = XShelfType.blockCurrItemSelection,
         shelf = block.shelf {
     __initCore(shelf: shelf);
+    //
+    // IMPORTANT:
+    //
+    _XBlock xBlock = xBlockMap[block.name]!;
+    setRootVipXBlock(descendantXBlock: xBlock);
   }
 
   // ***************************************************************************
@@ -696,6 +759,7 @@ class _XShelf {
       postQueryBehavior: null,
       pageable: null,
     );
+    //
     _XBlock? parentXBlock = thisXBlock.parentXBlock;
     while (true) {
       if (parentXBlock == null) {
@@ -724,6 +788,11 @@ class _XShelf {
       //
       parentXBlock = parentXBlock.parentXBlock;
     }
+    //
+    // IMPORTANT:
+    //
+    _XBlock xBlock = xBlockMap[block.name]!;
+    setRootVipXBlock(descendantXBlock: xBlock);
   }
 
   // ***************************************************************************
@@ -734,6 +803,11 @@ class _XShelf {
       : xShelfType = XShelfType.blockQuickItemCreation,
         shelf = block.shelf {
     __initCore(shelf: shelf);
+    //
+    // IMPORTANT:
+    //
+    _XBlock xBlock = xBlockMap[block.name]!;
+    setRootVipXBlock(descendantXBlock: xBlock);
   }
 
   // ***************************************************************************
@@ -744,6 +818,11 @@ class _XShelf {
       : xShelfType = XShelfType.blockQuickItemUpdate,
         shelf = block.shelf {
     __initCore(shelf: shelf);
+    //
+    // IMPORTANT:
+    //
+    _XBlock xBlock = xBlockMap[block.name]!;
+    setRootVipXBlock(descendantXBlock: xBlock);
   }
 
   // ***************************************************************************
@@ -754,6 +833,11 @@ class _XShelf {
       : xShelfType = XShelfType.blockQuickMultiItemsCreation,
         shelf = block.shelf {
     __initCore(shelf: shelf);
+    //
+    // IMPORTANT:
+    //
+    _XBlock xBlock = xBlockMap[block.name]!;
+    setRootVipXBlock(descendantXBlock: xBlock);
   }
 
   // ***************************************************************************
@@ -765,6 +849,11 @@ class _XShelf {
       : xShelfType = XShelfType.blockQuickChildBlockItemsAction,
         shelf = block.shelf {
     __initCore(shelf: shelf);
+    //
+    // IMPORTANT:
+    //
+    _XBlock xBlock = xBlockMap[block.name]!;
+    setRootVipXBlock(descendantXBlock: xBlock);
   }
 
   // ***************************************************************************
@@ -775,6 +864,11 @@ class _XShelf {
       : xShelfType = XShelfType.formViewChange,
         shelf = formModel.shelf {
     __initCore(shelf: shelf);
+    //
+    // IMPORTANT:
+    //
+    _XBlock xBlock = xBlockMap[formModel.block.name]!;
+    setRootVipXBlock(descendantXBlock: xBlock);
   }
 
   // ***************************************************************************
@@ -790,7 +884,6 @@ class _XShelf {
   // ***************************************************************************
   // *** CONSTRUCTOR ***
   // ***************************************************************************
-
   _XShelf.forScalarQuery({
     required Scalar scalar,
     required FilterInput? filterInput,
@@ -803,6 +896,11 @@ class _XShelf {
     xFilterModel.filterInput = filterInput;
     //
     thisXScalar.setQueryHint(QryHint.force);
+    //
+    // IMPORTANT:
+    //
+    _XScalar xScalar = xScalarMap[scalar.name]!;
+    setVipXScalar(xScalar: xScalar);
   }
 
   // ***************************************************************************
@@ -815,9 +913,10 @@ class _XShelf {
         shelf = scalar.shelf {
     __initCore(shelf: shelf);
     //
-    // final thisXScalar = xScalarMap[scalar.name]!;
-    // final xFilterModel = thisXScalar.xFilterModel;
-    // xFilterModel.filterInput = filterInput;
+    // IMPORTANT:
+    //
+    _XScalar xScalar = xScalarMap[scalar.name]!;
+    setVipXScalar(xScalar: xScalar);
   }
 
   // ***************************************************************************
@@ -836,6 +935,11 @@ class _XShelf {
     xFilterModel.filterInput = filterInput;
     //
     thisXScalar.setQueryHint(QryHint.force);
+    //
+    // IMPORTANT:
+    //
+    _XScalar xScalar = xScalarMap[scalar.name]!;
+    setVipXScalar(xScalar: xScalar);
   }
 
   // ***************************************************************************
