@@ -3,6 +3,7 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../core/_core_/core.dart';
 import '_block_debug_box.dart';
+import '_debug_box.dart';
 import '_form_debug_options.dart';
 
 class FormDebugBox extends BaseDebugBox {

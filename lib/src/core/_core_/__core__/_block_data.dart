@@ -287,20 +287,6 @@ class _BlockData<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __setNewFilterCriteria(FILTER_CRITERIA? newFilterCriteria) {
-    final bool changed = _filterCriteria != newFilterCriteria;
-    _filterCriteria = newFilterCriteria;
-    if (changed) {
-      _filterCriteriaChangeCount++;
-      if (block.formModel != null) {
-        block.formModel!._triggerFilterCriteriaChanged();
-      }
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   void _removeItem({
     required ITEM removeItem,
   }) {
@@ -418,5 +404,19 @@ class _BlockData<
     //
     __appendItems(appendItems: ap.items);
     // block.formModel?.data._formMode = FormMode.none;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __setNewFilterCriteria(FILTER_CRITERIA? newFilterCriteria) {
+    final bool changed = _filterCriteria != newFilterCriteria;
+    _filterCriteria = newFilterCriteria;
+    if (changed) {
+      _filterCriteriaChangeCount++;
+      if (block.formModel != null) {
+        block.formModel!._triggerFilterCriteriaChanged();
+      }
+    }
   }
 }

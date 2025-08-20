@@ -1717,7 +1717,8 @@ abstract class Block<
   Future<bool> _unitQuickCreateItem({
     required _XBlock thisXBlock,
     required BlockQuickItemCreationResult taskResult,
-    required BlockQuickItemCreationAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
+    required BlockQuickItemCreationAction<ID, ITEM, ITEM_DETAIL,
+            FILTER_CRITERIA>
         action,
   }) async {
     __assertThisXBlock(thisXBlock);
@@ -3179,7 +3180,8 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockQuickCreateItemActionAnnotation()
   Future<BlockQuickItemCreationResult> executeQuickCreateItemAction({
-    required BlockQuickItemCreationAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
+    required BlockQuickItemCreationAction<ID, ITEM, ITEM_DETAIL,
+            FILTER_CRITERIA>
         action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(

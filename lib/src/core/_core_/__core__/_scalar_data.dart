@@ -15,6 +15,12 @@ class _ScalarData<
 
   DataState _queryDataState = DataState.pending;
 
+  PageData<VALUE>? _lastQueryResult;
+
+  ActionResultState? _lastQueryResultState;
+
+  int _filterCriteriaChangeCount = 0;
+
   // ***************************************************************************
   // ***************************************************************************
 
@@ -56,8 +62,19 @@ class _ScalarData<
     required VALUE? value,
     required DataState dataState,
   }) {
-    _filterCriteria = filterCriteria;
+    __setNewFilterCriteria(filterCriteria);
     _value = value;
     _queryDataState = dataState;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __setNewFilterCriteria(FILTER_CRITERIA? newFilterCriteria) {
+    final bool changed = _filterCriteria != newFilterCriteria;
+    _filterCriteria = newFilterCriteria;
+    if (changed) {
+      _filterCriteriaChangeCount++;
+    }
   }
 }

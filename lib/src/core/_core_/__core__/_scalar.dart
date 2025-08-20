@@ -27,9 +27,24 @@ abstract class Scalar<
     > extends _Core {
   late final Shelf shelf;
 
+  PageData<VALUE>? get lastQueryResult => __scalarData._lastQueryResult;
+
+  ActionResultState? get lastQueryResultState =>
+      __scalarData._lastQueryResultState;
+
+  QueryType __lastQueryType = QueryType.realQuery;
+
+  QueryType get lastQueryType => __lastQueryType;
+
   int _lazyLoadCount = 0;
 
   int get lazyLoadCount => _lazyLoadCount;
+
+  int __callApiQueryCount = 0;
+
+  int get callApiQueryCount => __callApiQueryCount;
+
+  int get filterCriteriaChangeCount => __scalarData._filterCriteriaChangeCount;
 
   ///
   /// Scalar name. It is unique in a Shelf.
