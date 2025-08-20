@@ -68,6 +68,12 @@ class ScalarDebugBox extends BaseDebugBox {
           labelStyle: labelStyle,
           textStyle: textStyle0,
         ),
+      IconLabelText(
+        label: "Has Value?: ",
+        text: (scalar.value != null).toString(),
+        labelStyle: labelStyle,
+        textStyle: textStyle0,
+      ),
     ];
   }
 }
