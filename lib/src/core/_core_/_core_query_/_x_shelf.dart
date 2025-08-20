@@ -289,6 +289,7 @@ class _XShelf {
       postQueryBehavior: postQueryBehavior,
       pageable: pageable,
     );
+    //
     _XBlock? parentXBlock = thisXBlock.parentXBlock;
     while (true) {
       if (parentXBlock == null) {
@@ -413,6 +414,7 @@ class _XShelf {
       postQueryBehavior: postQueryBehavior,
       pageable: pageable,
     );
+    //
     _XBlock? parentXBlock = thisXBlock.parentXBlock;
     while (true) {
       if (parentXBlock == null) {
