@@ -19,6 +19,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 import '../../debug/dialog/_block_error_viewer_dialog.dart';
 import '../../debug/dialog/_code_flow_viewer_dialog.dart';
 import '../../debug/dialog/_error_log_viewer_dialog.dart';
+import '../../debug/dialog/_executor_dialog.dart';
 import '../../debug/dialog/_filter_criteria_dialog.dart';
 import '../../debug/dialog/_filter_model_info_dialog.dart';
 import '../../debug/dialog/_form_error_viewer_dialog.dart';
@@ -165,6 +166,8 @@ part '__core__/_scalar.dart';
 part '__core__/_scalar_data.dart';
 
 part '__core__/_shelf.dart';
+
+part '__core__/_debug_options.dart';
 
 part '__core__/_shelf_block_scalar_type.dart';
 

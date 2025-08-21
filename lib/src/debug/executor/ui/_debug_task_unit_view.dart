@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../model/_debug_task_unit.dart';
 
@@ -20,11 +21,41 @@ class _DebugTaskUnitViewState extends State<DebugTaskUnitView> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 300,
       decoration: BoxDecoration(
-        color: Colors.black26,
+        border: Border.all(color: Colors.black26),
+        color: Colors.cyan.withAlpha(20),
       ),
-      padding: EdgeInsets.all(10),
-      child: Text("Task Unit: ${widget.taskUnit.shelf.name}"),
+      padding: EdgeInsets.all(5),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              IconLabelText(
+                label: "Task: ",
+                text: widget.taskUnit.taskType.name,
+                style: TextStyle(fontSize: 12),
+              ),
+              Spacer(),
+              IconLabelText(
+                label: "XShelfID: ",
+                text: "${widget.taskUnit.xShelfId}",
+                style: TextStyle(fontSize: 12),
+              ),
+            ],
+          ),
+          Divider(),
+          IconLabelText(
+            label: "Name: ",
+            text: widget.taskUnit.taskName,
+            style: TextStyle(fontSize: 12),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -35,12 +35,21 @@ class _Executor {
       // throw FatalAppError(errorMessage: "Development Error - Illegal status.");
       return;
     }
+    bool showOverlay2 = showOverlay;
+    if (FlutterArtist.debugOptions.showTaskUnitQueue) {
+      showOverlay2 = false;
+    }
     await FlutterArtist._executeTask(
-      showOverlay: showOverlay,
+      showOverlay: showOverlay2,
       asyncFunction: () async {
         final Map<String, Shelf> shelfMap = {};
         try {
           while (FlutterArtist._taskUnitQueue.hasNext()) {
+            BuildContext context = FlutterArtist.adapter.getCurrentContext();
+            await DebugTaskUnitQueueDialog.showTaskUnitQueueDialog(
+              context: context,
+            );
+            //
             _TaskUnit taskUnit =
                 FlutterArtist._taskUnitQueue.getNextTaskUnit()!;
             //

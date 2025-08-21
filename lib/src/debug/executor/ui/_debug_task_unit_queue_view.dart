@@ -22,13 +22,14 @@ class _DebugTaskUnitQueueViewState extends State<DebugTaskUnitQueueView> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.black26,
+        color: Colors.white,
       ),
       padding: EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: widget.taskUnitQueue.subQueues
+            .where((sq) => sq.isNotEmpty)
             .map((subQueue) =>
                 DebugSubTaskUnitQueueView(subTaskUnitQueue: subQueue))
             .toList(),

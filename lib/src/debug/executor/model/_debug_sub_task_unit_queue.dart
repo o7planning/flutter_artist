@@ -8,4 +8,8 @@ class DebugSubTaskUnitQueue {
     required this.subQueueId,
     required this.taskUnits,
   });
+
+  bool get isEmpty => taskUnits.isEmpty;
+
+  bool get isNotEmpty => taskUnits.isNotEmpty;
 }

@@ -22,17 +22,39 @@ class _DebugSubTaskUnitQueueViewState extends State<DebugSubTaskUnitQueueView> {
   Widget build(BuildContext context) {
     return Container(
       width: double.maxFinite,
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.all(5),
+      margin: EdgeInsets.all(5),
       decoration: BoxDecoration(
-        color: Colors.black26,
+        border: Border.all(color: Colors.grey),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
-        children: widget.subTaskUnitQueue.taskUnits
-            .map((taskUnit) => DebugTaskUnitView(taskUnit: taskUnit))
-            .toList(),
+        children: [
+          _buildTitle(),
+          Divider(),
+          ...widget.subTaskUnitQueue.taskUnits
+              .map((taskUnit) => DebugTaskUnitView(taskUnit: taskUnit)),
+        ],
       ),
+    );
+  }
+
+  Widget _buildTitle() {
+    return ListTile(
+      dense: true,
+      visualDensity: VisualDensity(horizontal: -3, vertical: -3),
+      contentPadding: EdgeInsets.all(0),
+      leading: CircleAvatar(
+        radius: 15,
+        child: Center(
+          child: Text(
+            widget.subTaskUnitQueue.subQueueId.toString(),
+            style: TextStyle(fontSize: 12),
+          ),
+        ),
+      ),
+      title: Text("Sub Queue (${widget.subTaskUnitQueue.taskUnits.length})"),
     );
   }
 }

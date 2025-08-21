@@ -23,7 +23,12 @@ abstract class _TaskUnit {
   Object get owner;
 
   DebugTaskUnit toDebugTaskUnit() {
-    return DebugTaskUnit(xShelfId: xShelfId, shelf: shelf);
+    return DebugTaskUnit(
+      xShelfId: xShelfId,
+      taskType: taskType,
+      shelf: shelf,
+      taskName:getObjectName(),
+    );
   }
 
   @override

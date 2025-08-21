@@ -7,6 +7,10 @@ const _isOverlayMode = false;
 class _FlutterArtist {
   bool testCaseMode = false;
 
+  DebugOptions __debugOptions = DebugOptions();
+
+  DebugOptions get debugOptions => __debugOptions;
+
   final _Storage storage = _Storage();
 
   final _Executor executor = _Executor();
@@ -132,6 +136,7 @@ class _FlutterArtist {
   }
 
   Future<void> config({
+    required DebugOptions? debugOptions,
     required IFlutterArtistAdapter flutterArtistAdapter,
     required INotificationAdapter? notificationAdapter,
     required ILoggedInUserAdapter loggedInUserAdapter,
@@ -147,6 +152,9 @@ class _FlutterArtist {
     }
     __adapter = flutterArtistAdapter;
     //
+    if (debugOptions != null) {
+      __debugOptions = debugOptions;
+    }
     __allowDebugCats
       ..clear()
       ..addAll(allowDebugCats);
