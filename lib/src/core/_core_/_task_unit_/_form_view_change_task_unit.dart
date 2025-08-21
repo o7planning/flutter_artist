@@ -3,14 +3,14 @@ part of '../core.dart';
 @_TaskUnitClassAnnotation()
 @_FormViewChangeAnnotation()
 class _FormViewChangeTaskUnit extends _TaskUnit {
-  _XFormModel xFormModel;
+  XFormModel xFormModel;
 
   _FormViewChangeTaskUnit({
     required this.xFormModel,
   }) : super(taskType: TaskType.formModelFormViewChanged);
 
   @override
-  _XShelf get xShelf => xFormModel.xShelf;
+  XShelf get xShelf => xFormModel.xShelf;
 
   @override
   int get xShelfId => xFormModel.xShelfId;

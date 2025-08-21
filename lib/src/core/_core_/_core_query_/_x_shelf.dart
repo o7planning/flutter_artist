@@ -2,40 +2,40 @@ part of '../core.dart';
 
 int __xShelfSequence = 0;
 
-class _XShelf {
+class XShelf {
   final XShelfType xShelfType;
   final Shelf shelf;
   late final int xShelfId;
 
-  final Map<String, _XFilterModel> xFilterModelMap = {};
-  final Map<String, _XFormModel> xFormModelMap = {};
-  final Map<String, _XScalar> xScalarMap = {};
-  final Map<String, _XBlock> xBlockMap = {};
+  final Map<String, XFilterModel> xFilterModelMap = {};
+  final Map<String, XFormModel> xFormModelMap = {};
+  final Map<String, XScalar> xScalarMap = {};
+  final Map<String, XBlock> xBlockMap = {};
 
-  final List<_XBlock> allRootXBlocks = [];
-  final List<_XBlock> allLeafXBlocks = [];
-  final List<_XScalar> allXScalars = [];
-  final List<_XBlock> allXBlocks = [];
-  final List<_XFilterModel> allXFilterModels = [];
-  final List<_XFormModel> allXFormModels = [];
+  final List<XBlock> allRootXBlocks = [];
+  final List<XBlock> allLeafXBlocks = [];
+  final List<XScalar> allXScalars = [];
+  final List<XBlock> allXBlocks = [];
+  final List<XFilterModel> allXFilterModels = [];
+  final List<XFormModel> allXFormModels = [];
 
-  _XBlock? __rootVipXBlock;
+  XBlock? __rootVipXBlock;
 
-  _XBlock? get rootVipXBlock => __rootVipXBlock;
+  XBlock? get rootVipXBlock => __rootVipXBlock;
 
-  _XScalar? __vipXScalar;
+  XScalar? __vipXScalar;
 
-  _XScalar? get vipXScalar => __vipXScalar;
+  XScalar? get vipXScalar => __vipXScalar;
 
   bool get naturalMode => xShelfType == XShelfType.naturalQuery;
 
   // ***************************************************************************
 
-  void setRootVipXBlock({required _XBlock descendantXBlock}) {
+  void setRootVipXBlock({required XBlock descendantXBlock}) {
     __rootVipXBlock = descendantXBlock.rootXBlock;
   }
 
-  void setVipXScalar({required _XScalar xScalar}) {
+  void setVipXScalar({required XScalar xScalar}) {
     __vipXScalar = xScalar;
   }
 
@@ -43,7 +43,7 @@ class _XShelf {
 
   _LazyObjects getLazyObjectInfos() {
     final _LazyObjects ret = _LazyObjects();
-    for (_XBlock xBlock in allXBlocks) {
+    for (XBlock xBlock in allXBlocks) {
       if (xBlock.queryHint != QryHint.none) {
         ret.addLazyBlock(
           block: xBlock.block,
@@ -51,12 +51,12 @@ class _XShelf {
         );
       }
     }
-    for (_XScalar xScalar in allXScalars) {
+    for (XScalar xScalar in allXScalars) {
       if (xScalar.queryHint != QryHint.none) {
         ret.addLazyScalar(scalar: xScalar.scalar);
       }
     }
-    for (_XFormModel xFormModel in allXFormModels) {
+    for (XFormModel xFormModel in allXFormModels) {
       if (xFormModel.lazy) {
         ret.addLazyFormModel(formModel: xFormModel.formModel);
       }
@@ -71,7 +71,7 @@ class _XShelf {
     xShelfId = __xShelfSequence++;
     //
     for (FilterModel filterModel in shelf._allFilterModels) {
-      final xFilterModel = _XFilterModel(
+      final xFilterModel = XFilterModel(
         xShelf: this,
         filterModel: filterModel,
       );
@@ -82,7 +82,7 @@ class _XShelf {
     for (Scalar scalar in shelf.scalars) {
       final FilterModel filterModel = scalar._registeredOrDefaultFilterModel;
       final xFilterModel = xFilterModelMap[filterModel.name]!;
-      final xScalar = _XScalar(
+      final xScalar = XScalar(
         scalar: scalar,
         xFilterModel: xFilterModel,
       );
@@ -92,9 +92,9 @@ class _XShelf {
     }
     for (Block block in shelf.blocks) {
       final FormModel? formModel = block.formModel;
-      _XFormModel? xFormModel;
+      XFormModel? xFormModel;
       if (formModel != null) {
-        xFormModel = _XFormModel(formModel: formModel, extraFormInput: null);
+        xFormModel = XFormModel(formModel: formModel, extraFormInput: null);
         allXFormModels.add(xFormModel);
         xFormModelMap[formModel.block.name] = xFormModel;
       }
@@ -102,7 +102,7 @@ class _XShelf {
       final FilterModel filterModel = block._registeredOrDefaultFilterModel;
       final xFilterModel = xFilterModelMap[filterModel.name]!;
       //
-      final xBlock = _XBlock(
+      final xBlock = XBlock(
         block: block,
         xFilterModel: xFilterModel,
         xFormModel: xFormModel,
@@ -122,10 +122,10 @@ class _XShelf {
     }
     //
     for (Block block in shelf.blocks) {
-      _XBlock xBlock = xBlockMap[block.name]!;
+      XBlock xBlock = xBlockMap[block.name]!;
       Block? parent = block.parent;
       if (parent != null) {
-        _XBlock xBlockParent = xBlockMap[parent.name]!;
+        XBlock xBlockParent = xBlockMap[parent.name]!;
         xBlock.parentXBlock = xBlockParent;
         xBlockParent.childXBlocks.add(xBlock);
       } else {
@@ -138,11 +138,11 @@ class _XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _XShelf.forNaturalQuery({required this.shelf})
+  XShelf.forNaturalQuery({required this.shelf})
       : xShelfType = XShelfType.naturalQuery {
     __initCore(shelf: shelf);
     //
-    for (_XScalar xScalar in allXScalars) {
+    for (XScalar xScalar in allXScalars) {
       if (xScalar.scalar.ui.hasActiveUIComponent()) {
         if (xScalar.scalar.queryDataState == DataState.pending ||
             xScalar.scalar.queryDataState == DataState.error) {
@@ -151,8 +151,8 @@ class _XShelf {
       }
     }
     //
-    for (_XBlock leafXBlock in allLeafXBlocks) {
-      _XBlock? xBlock = leafXBlock;
+    for (XBlock leafXBlock in allLeafXBlocks) {
+      XBlock? xBlock = leafXBlock;
       while (true) {
         if (xBlock == null) {
           break;
@@ -166,7 +166,7 @@ class _XShelf {
             xBlock.setQueryHint(QryHint.force);
           }
         }
-        _XFormModel? xFormModel = xBlock.xFormModel;
+        XFormModel? xFormModel = xBlock.xFormModel;
 
         if (xFormModel != null &&
             xFormModel.formModel.ui.hasActiveUIComponent()) {
@@ -190,7 +190,7 @@ class _XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _XShelf.forShelfExternalReaction({
+  XShelf.forShelfExternalReaction({
     required this.shelf,
     required EffectedShelfMembers effectedShelfMembers,
   }) : xShelfType = XShelfType.shelfExternalReaction {
@@ -223,14 +223,14 @@ class _XShelf {
         forceReloadItem = true;
       }
       //
-      _XBlock xBlock = xBlockMap[listenerBlkName]!;
+      XBlock xBlock = xBlockMap[listenerBlkName]!;
       xBlock.setQueryHint(queryHint);
       xBlock.setForceReloadCurrItem(forceReloadItem);
     }
     //
     for (Scalar s in effectedShelfMembers._reQueryScalarMAP.values) {
       String scalarName = s.name;
-      _XScalar xScalar = xScalarMap[scalarName]!;
+      XScalar xScalar = xScalarMap[scalarName]!;
       //
       bool hasActiveUI = s.ui.hasActiveUIComponent();
       if (hasActiveUI) {
@@ -242,8 +242,8 @@ class _XShelf {
       }
     }
     //
-    for (_XBlock leafXBlock in allLeafXBlocks) {
-      _XBlock? xBlock = leafXBlock;
+    for (XBlock leafXBlock in allLeafXBlocks) {
+      XBlock? xBlock = leafXBlock;
       while (true) {
         if (xBlock == null) {
           break;
@@ -257,7 +257,7 @@ class _XShelf {
             xBlock.setQueryHint(QryHint.force);
           }
         }
-        _XFormModel? xFormModel = xBlock.xFormModel;
+        XFormModel? xFormModel = xBlock.xFormModel;
 
         if (xFormModel != null &&
             xFormModel.formModel.ui.hasActiveUIComponent()) {
@@ -281,7 +281,7 @@ class _XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _XShelf.forBlockQuery({
+  XShelf.forBlockQuery({
     required Block block,
     required FilterInput? filterInput,
     required PageableData? pageable,
@@ -310,7 +310,7 @@ class _XShelf {
       pageable: pageable,
     );
     //
-    _XBlock? parentXBlock = thisXBlock.parentXBlock;
+    XBlock? parentXBlock = thisXBlock.parentXBlock;
     while (true) {
       if (parentXBlock == null) {
         break;
@@ -326,7 +326,7 @@ class _XShelf {
         }
       }
       // TODO: Need? Remove this code?
-      _XFormModel? parentXFormModel = parentXBlock.xFormModel;
+      XFormModel? parentXFormModel = parentXBlock.xFormModel;
       if (parentXFormModel != null &&
           parentXFormModel.formModel.ui.hasActiveUIComponent()) {
         if (parentXFormModel.formModel.formDataState == DataState.pending ||
@@ -339,7 +339,7 @@ class _XShelf {
       parentXBlock = parentXBlock.parentXBlock;
     }
     //
-    _XBlock xBlock = xBlockMap[block.name]!;
+    XBlock xBlock = xBlockMap[block.name]!;
     setRootVipXBlock(descendantXBlock: xBlock);
   }
 
@@ -347,7 +347,7 @@ class _XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _XShelf.forBlockQueryEmpty({
+  XShelf.forBlockQueryEmpty({
     required Block block,
     required FilterInput? filterInput,
     required PageableData? pageable,
@@ -375,7 +375,7 @@ class _XShelf {
       postQueryBehavior: postQueryBehavior,
       pageable: pageable,
     );
-    _XBlock? parentXBlock = thisXBlock.parentXBlock;
+    XBlock? parentXBlock = thisXBlock.parentXBlock;
     while (true) {
       if (parentXBlock == null) {
         break;
@@ -391,7 +391,7 @@ class _XShelf {
         }
       }
       // TODO: Need? Remove this code?
-      _XFormModel? parentXFormModel = parentXBlock.xFormModel;
+      XFormModel? parentXFormModel = parentXBlock.xFormModel;
       if (parentXFormModel != null &&
           parentXFormModel.formModel.ui.hasActiveUIComponent()) {
         if (parentXFormModel.formModel.formDataState == DataState.pending ||
@@ -404,7 +404,7 @@ class _XShelf {
       parentXBlock = parentXBlock.parentXBlock;
     }
     //
-    _XBlock xBlock = xBlockMap[block.name]!;
+    XBlock xBlock = xBlockMap[block.name]!;
     setRootVipXBlock(descendantXBlock: xBlock);
   }
 
@@ -412,7 +412,7 @@ class _XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _XShelf.forBlockQueryAndPrepareToCreate({
+  XShelf.forBlockQueryAndPrepareToCreate({
     required Block block,
     required FilterInput? filterInput,
     required PageableData? pageable,
@@ -441,7 +441,7 @@ class _XShelf {
       pageable: pageable,
     );
     //
-    _XBlock? parentXBlock = thisXBlock.parentXBlock;
+    XBlock? parentXBlock = thisXBlock.parentXBlock;
     while (true) {
       if (parentXBlock == null) {
         break;
@@ -457,7 +457,7 @@ class _XShelf {
         }
       }
       // TODO: Need? Remove this code?
-      _XFormModel? parentXFormModel = parentXBlock.xFormModel;
+      XFormModel? parentXFormModel = parentXBlock.xFormModel;
       if (parentXFormModel != null &&
           parentXFormModel.formModel.ui.hasActiveUIComponent()) {
         if (parentXFormModel.formModel.formDataState == DataState.pending ||
@@ -470,7 +470,7 @@ class _XShelf {
       parentXBlock = parentXBlock.parentXBlock;
     }
     //
-    _XBlock xBlock = xBlockMap[block.name]!;
+    XBlock xBlock = xBlockMap[block.name]!;
     setRootVipXBlock(descendantXBlock: xBlock);
   }
 
@@ -478,7 +478,7 @@ class _XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _XShelf.forBlockQueryAndPrepareToEdit({
+  XShelf.forBlockQueryAndPrepareToEdit({
     required Block block,
     required FilterInput? filterInput,
     required PageableData? pageable,
@@ -506,7 +506,7 @@ class _XShelf {
       postQueryBehavior: postQueryBehavior,
       pageable: pageable,
     );
-    _XBlock? parentXBlock = thisXBlock.parentXBlock;
+    XBlock? parentXBlock = thisXBlock.parentXBlock;
     while (true) {
       if (parentXBlock == null) {
         break;
@@ -522,7 +522,7 @@ class _XShelf {
         }
       }
       // TODO: Need? Remove this code?
-      _XFormModel? parentXFormModel = parentXBlock.xFormModel;
+      XFormModel? parentXFormModel = parentXBlock.xFormModel;
       if (parentXFormModel != null &&
           parentXFormModel.formModel.ui.hasActiveUIComponent()) {
         if (parentXFormModel.formModel.formDataState == DataState.pending ||
@@ -535,7 +535,7 @@ class _XShelf {
       parentXBlock = parentXBlock.parentXBlock;
     }
     // IMPORTANT:
-    _XBlock xBlock = xBlockMap[block.name]!;
+    XBlock xBlock = xBlockMap[block.name]!;
     setRootVipXBlock(descendantXBlock: xBlock);
   }
 
@@ -543,7 +543,7 @@ class _XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _XShelf.forFilterModelQueryAll({
+  XShelf.forFilterModelQueryAll({
     required FilterModel filterModel,
     required FilterInput? filterInput,
   })  : xShelfType = XShelfType.filterModelQueryAll,
@@ -556,7 +556,7 @@ class _XShelf {
     final thisXFilterModel = xFilterModelMap[filterModel.name]!;
     thisXFilterModel.filterInput = filterInput;
     //
-    for (_XBlock xBlock in thisXFilterModel.xBlocks) {
+    for (XBlock xBlock in thisXFilterModel.xBlocks) {
       xBlock.setQueryHint(queryHint);
       xBlock.setOptions(
         queryType: QueryType.realQuery,
@@ -566,7 +566,7 @@ class _XShelf {
         pageable: null,
       );
       //
-      _XBlock? parentXBlock = xBlock.parentXBlock;
+      XBlock? parentXBlock = xBlock.parentXBlock;
       while (true) {
         if (parentXBlock == null) {
           break;
@@ -582,7 +582,7 @@ class _XShelf {
           }
         }
         // TODO: Need? Remove this code?
-        _XFormModel? parentXFormModel = parentXBlock.xFormModel;
+        XFormModel? parentXFormModel = parentXBlock.xFormModel;
         if (parentXFormModel != null &&
             parentXFormModel.formModel.ui.hasActiveUIComponent()) {
           if (parentXFormModel.formModel.formDataState == DataState.pending ||
@@ -595,7 +595,7 @@ class _XShelf {
         parentXBlock = parentXBlock.parentXBlock;
       }
     }
-    for (_XScalar xScalar in thisXFilterModel.xScalars) {
+    for (XScalar xScalar in thisXFilterModel.xScalars) {
       xScalar.setQueryHint(QryHint.force);
     }
   }
@@ -604,14 +604,14 @@ class _XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _XShelf.forFormModelSave({required FormModel formModel})
+  XShelf.forFormModelSave({required FormModel formModel})
       : xShelfType = XShelfType.formModelSave,
         shelf = formModel.block.shelf {
     __initCore(shelf: shelf);
     //
     // IMPORTANT:
     //
-    _XBlock xBlock = xBlockMap[formModel.block.name]!;
+    XBlock xBlock = xBlockMap[formModel.block.name]!;
     setRootVipXBlock(descendantXBlock: xBlock);
   }
 
@@ -619,14 +619,14 @@ class _XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _XShelf.forFormModelEnterFields({required FormModel formModel})
+  XShelf.forFormModelEnterFields({required FormModel formModel})
       : xShelfType = XShelfType.formModelEnterFields,
         shelf = formModel.block.shelf {
     __initCore(shelf: shelf);
     //
     // IMPORTANT:
     //
-    _XBlock xBlock = xBlockMap[formModel.block.name]!;
+    XBlock xBlock = xBlockMap[formModel.block.name]!;
     setRootVipXBlock(descendantXBlock: xBlock);
   }
 
@@ -634,14 +634,14 @@ class _XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _XShelf.forPrepareFormToCreateItem({required Block block})
+  XShelf.forPrepareFormToCreateItem({required Block block})
       : xShelfType = XShelfType.blockPrepareFormToCreateItem,
         shelf = block.shelf {
     __initCore(shelf: shelf);
     //
     // IMPORTANT:
     //
-    _XBlock xBlock = xBlockMap[block.name]!;
+    XBlock xBlock = xBlockMap[block.name]!;
     setRootVipXBlock(descendantXBlock: xBlock);
   }
 
@@ -649,14 +649,14 @@ class _XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _XShelf.forBlockClearCurrentItem({required Block block})
+  XShelf.forBlockClearCurrentItem({required Block block})
       : xShelfType = XShelfType.blockCurrItemClearance,
         shelf = block.shelf {
     __initCore(shelf: shelf);
     //
     // IMPORTANT:
     //
-    _XBlock xBlock = xBlockMap[block.name]!;
+    XBlock xBlock = xBlockMap[block.name]!;
     setRootVipXBlock(descendantXBlock: xBlock);
   }
 
@@ -664,14 +664,14 @@ class _XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _XShelf.forBlockClearance({required Block block})
+  XShelf.forBlockClearance({required Block block})
       : xShelfType = XShelfType.blockClearance,
         shelf = block.shelf {
     __initCore(shelf: shelf);
     //
     // IMPORTANT:
     //
-    _XBlock xBlock = xBlockMap[block.name]!;
+    XBlock xBlock = xBlockMap[block.name]!;
     setRootVipXBlock(descendantXBlock: xBlock);
   }
 
@@ -679,14 +679,14 @@ class _XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _XShelf.forBlockItemDeletion({required Block block})
+  XShelf.forBlockItemDeletion({required Block block})
       : xShelfType = XShelfType.blockItemDeletion,
         shelf = block.shelf {
     __initCore(shelf: shelf);
     //
     // IMPORTANT:
     //
-    _XBlock xBlock = xBlockMap[block.name]!;
+    XBlock xBlock = xBlockMap[block.name]!;
     setRootVipXBlock(descendantXBlock: xBlock);
   }
 
@@ -694,14 +694,14 @@ class _XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _XShelf.forBlockMultiItemsDeletion({required Block block})
+  XShelf.forBlockMultiItemsDeletion({required Block block})
       : xShelfType = XShelfType.blockMultiItemsDeletion,
         shelf = block.shelf {
     __initCore(shelf: shelf);
     //
     // IMPORTANT:
     //
-    _XBlock xBlock = xBlockMap[block.name]!;
+    XBlock xBlock = xBlockMap[block.name]!;
     setRootVipXBlock(descendantXBlock: xBlock);
   }
 
@@ -709,14 +709,14 @@ class _XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _XShelf.forBlockCurrItemSelection({required Block block})
+  XShelf.forBlockCurrItemSelection({required Block block})
       : xShelfType = XShelfType.blockCurrItemSelection,
         shelf = block.shelf {
     __initCore(shelf: shelf);
     //
     // IMPORTANT:
     //
-    _XBlock xBlock = xBlockMap[block.name]!;
+    XBlock xBlock = xBlockMap[block.name]!;
     setRootVipXBlock(descendantXBlock: xBlock);
   }
 
@@ -724,7 +724,7 @@ class _XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _XShelf.forBlockQuickActionExecution({
+  XShelf.forBlockQuickActionExecution({
     required Block block,
     required FilterInput? filterInput,
     required AfterBlockQuickAction afterQuickAction,
@@ -760,7 +760,7 @@ class _XShelf {
       pageable: null,
     );
     //
-    _XBlock? parentXBlock = thisXBlock.parentXBlock;
+    XBlock? parentXBlock = thisXBlock.parentXBlock;
     while (true) {
       if (parentXBlock == null) {
         break;
@@ -776,7 +776,7 @@ class _XShelf {
         }
       }
       // TODO: Need? Remove this code?
-      _XFormModel? parentXFormModel = parentXBlock.xFormModel;
+      XFormModel? parentXFormModel = parentXBlock.xFormModel;
       if (parentXFormModel != null &&
           parentXFormModel.formModel.ui.hasActiveUIComponent()) {
         if (parentXFormModel.formModel.formDataState == DataState.pending ||
@@ -791,7 +791,7 @@ class _XShelf {
     //
     // IMPORTANT:
     //
-    _XBlock xBlock = xBlockMap[block.name]!;
+    XBlock xBlock = xBlockMap[block.name]!;
     setRootVipXBlock(descendantXBlock: xBlock);
   }
 
@@ -799,14 +799,14 @@ class _XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _XShelf.forBlockQuickItemCreation({required Block block})
+  XShelf.forBlockQuickItemCreation({required Block block})
       : xShelfType = XShelfType.blockQuickItemCreation,
         shelf = block.shelf {
     __initCore(shelf: shelf);
     //
     // IMPORTANT:
     //
-    _XBlock xBlock = xBlockMap[block.name]!;
+    XBlock xBlock = xBlockMap[block.name]!;
     setRootVipXBlock(descendantXBlock: xBlock);
   }
 
@@ -814,14 +814,14 @@ class _XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _XShelf.forBlockQuickItemUpdate({required Block block})
+  XShelf.forBlockQuickItemUpdate({required Block block})
       : xShelfType = XShelfType.blockQuickItemUpdate,
         shelf = block.shelf {
     __initCore(shelf: shelf);
     //
     // IMPORTANT:
     //
-    _XBlock xBlock = xBlockMap[block.name]!;
+    XBlock xBlock = xBlockMap[block.name]!;
     setRootVipXBlock(descendantXBlock: xBlock);
   }
 
@@ -829,14 +829,14 @@ class _XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _XShelf.forBlockQuickMultiItemsCreation({required Block block})
+  XShelf.forBlockQuickMultiItemsCreation({required Block block})
       : xShelfType = XShelfType.blockQuickMultiItemsCreation,
         shelf = block.shelf {
     __initCore(shelf: shelf);
     //
     // IMPORTANT:
     //
-    _XBlock xBlock = xBlockMap[block.name]!;
+    XBlock xBlock = xBlockMap[block.name]!;
     setRootVipXBlock(descendantXBlock: xBlock);
   }
 
@@ -845,14 +845,14 @@ class _XShelf {
   // ***************************************************************************
 
   @Deprecated("Xoa di")
-  _XShelf.forQuickChildBlockItemsAction({required Block block})
+  XShelf.forQuickChildBlockItemsAction({required Block block})
       : xShelfType = XShelfType.blockQuickChildBlockItemsAction,
         shelf = block.shelf {
     __initCore(shelf: shelf);
     //
     // IMPORTANT:
     //
-    _XBlock xBlock = xBlockMap[block.name]!;
+    XBlock xBlock = xBlockMap[block.name]!;
     setRootVipXBlock(descendantXBlock: xBlock);
   }
 
@@ -860,14 +860,14 @@ class _XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _XShelf.forFormViewChange({required FormModel formModel})
+  XShelf.forFormViewChange({required FormModel formModel})
       : xShelfType = XShelfType.formViewChange,
         shelf = formModel.shelf {
     __initCore(shelf: shelf);
     //
     // IMPORTANT:
     //
-    _XBlock xBlock = xBlockMap[formModel.block.name]!;
+    XBlock xBlock = xBlockMap[formModel.block.name]!;
     setRootVipXBlock(descendantXBlock: xBlock);
   }
 
@@ -875,7 +875,7 @@ class _XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _XShelf.forFilterViewChange({required FilterModel filterModel})
+  XShelf.forFilterViewChange({required FilterModel filterModel})
       : xShelfType = XShelfType.filterViewChange,
         shelf = filterModel.shelf {
     __initCore(shelf: shelf);
@@ -884,7 +884,7 @@ class _XShelf {
   // ***************************************************************************
   // *** CONSTRUCTOR ***
   // ***************************************************************************
-  _XShelf.forScalarQuery({
+  XShelf.forScalarQuery({
     required Scalar scalar,
     required FilterInput? filterInput,
   })  : xShelfType = XShelfType.scalarQuery,
@@ -899,7 +899,7 @@ class _XShelf {
     //
     // IMPORTANT:
     //
-    _XScalar xScalar = xScalarMap[scalar.name]!;
+    XScalar xScalar = xScalarMap[scalar.name]!;
     setVipXScalar(xScalar: xScalar);
   }
 
@@ -907,7 +907,7 @@ class _XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _XShelf.forScalarQuickAction({
+  XShelf.forScalarQuickAction({
     required Scalar scalar,
   })  : xShelfType = XShelfType.scalarQuickAction,
         shelf = scalar.shelf {
@@ -915,7 +915,7 @@ class _XShelf {
     //
     // IMPORTANT:
     //
-    _XScalar xScalar = xScalarMap[scalar.name]!;
+    XScalar xScalar = xScalarMap[scalar.name]!;
     setVipXScalar(xScalar: xScalar);
   }
 
@@ -923,7 +923,7 @@ class _XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  _XShelf.forScalarQuickExtraDataLoadAction({
+  XShelf.forScalarQuickExtraDataLoadAction({
     required Scalar scalar,
     required FilterInput? filterInput,
   })  : xShelfType = XShelfType.scalarQuickExtraDataLoadAction,
@@ -938,7 +938,7 @@ class _XShelf {
     //
     // IMPORTANT:
     //
-    _XScalar xScalar = xScalarMap[scalar.name]!;
+    XScalar xScalar = xScalarMap[scalar.name]!;
     setVipXScalar(xScalar: xScalar);
   }
 
@@ -949,7 +949,7 @@ class _XShelf {
   //
   // IMPORTANT: Sync Method.
   //
-  void updateInternalReactionByEvtBlock({required _XBlock eventXBlock}) {
+  void updateInternalReactionByEvtBlock({required XBlock eventXBlock}) {
     __assertXShelf(eventXBlock.xShelf);
     //
     if (__rootVipXBlock != eventXBlock.rootXBlock) {
@@ -987,14 +987,14 @@ class _XShelf {
         forceReloadItem = true;
       }
       //
-      _XBlock xBlock = xBlockMap[listenerBlkName]!;
+      XBlock xBlock = xBlockMap[listenerBlkName]!;
       xBlock.setQueryHint(queryHint);
       xBlock.setForceReloadCurrItem(forceReloadItem);
     }
     //
     for (Scalar s in effectedShelfMembers._reQueryScalarMAP.values) {
       String scalarName = s.name;
-      _XScalar xScalar = xScalarMap[scalarName]!;
+      XScalar xScalar = xScalarMap[scalarName]!;
       //
       bool hasActiveUI = s.ui.hasActiveUIComponent();
       if (hasActiveUI) {
@@ -1006,8 +1006,8 @@ class _XShelf {
       }
     }
     //
-    for (_XBlock leafXBlock in allLeafXBlocks) {
-      _XBlock? xBlock = leafXBlock;
+    for (XBlock leafXBlock in allLeafXBlocks) {
+      XBlock? xBlock = leafXBlock;
       while (true) {
         if (xBlock == null) {
           break;
@@ -1021,7 +1021,7 @@ class _XShelf {
             xBlock.setQueryHint(QryHint.force);
           }
         }
-        _XFormModel? xFormModel = xBlock.xFormModel;
+        XFormModel? xFormModel = xBlock.xFormModel;
 
         if (xFormModel != null &&
             xFormModel.formModel.ui.hasActiveUIComponent()) {
@@ -1053,7 +1053,7 @@ class _XShelf {
     for (String key in xScalarMap.keys) {
       print(" --> XShelf/Scalar: $key - ${xScalarMap[key]}");
     }
-    for (_XFormModel xFormModel in allXFormModels) {
+    for (XFormModel xFormModel in allXFormModels) {
       print(" --> XShelf/FormModel: ${xFormModel.xBlock.name} - $xFormModel");
     }
   }
@@ -1062,15 +1062,15 @@ class _XShelf {
   // ***************************************************************************
   // ***************************************************************************
 
-  _XFilterModel? findXFilterModelByName(String name) {
+  XFilterModel? findXFilterModelByName(String name) {
     return xFilterModelMap[name];
   }
 
-  _XBlock? findXBlockByName(String name) {
+  XBlock? findXBlockByName(String name) {
     return xBlockMap[name];
   }
 
-  _XScalar? findXScalarByName(String name) {
+  XScalar? findXScalarByName(String name) {
     return xScalarMap[name];
   }
 
@@ -1078,8 +1078,8 @@ class _XShelf {
   // ***************************************************************************
   // ***************************************************************************
 
-  _XScalar? nextXScalarTask() {
-    for (_XScalar xScalar in allXScalars) {
+  XScalar? nextXScalarTask() {
+    for (XScalar xScalar in allXScalars) {
       if (xScalar.queryHint == QryHint.none) {
         continue;
       }
@@ -1093,8 +1093,8 @@ class _XShelf {
   // ***************************************************************************
   // ***************************************************************************
 
-  _XBlock? nextRootXBlockTask() {
-    for (_XBlock xBlock in allRootXBlocks) {
+  XBlock? nextRootXBlockTask() {
+    for (XBlock xBlock in allRootXBlocks) {
       if (xBlock.hasQryHintInTreeBranchAndNotProcessed()) {
         return xBlock;
       }
@@ -1106,15 +1106,15 @@ class _XShelf {
   // ***************************************************************************
 
   void printInfo() {
-    for (_XScalar xScalar in allXScalars) {
+    for (XScalar xScalar in allXScalars) {
       if (xScalar.queryHint != QryHint.none) {
         xScalar.printInfo();
       }
     }
-    for (_XBlock xBlock in allRootXBlocks) {
+    for (XBlock xBlock in allRootXBlocks) {
       xBlock.printInfoCascade();
     }
-    for (_XFormModel xFormModel in allXFormModels) {
+    for (XFormModel xFormModel in allXFormModels) {
       xFormModel.printInfo();
     }
   }
@@ -1122,7 +1122,7 @@ class _XShelf {
   // ***************************************************************************
   // ***************************************************************************
 
-  void __assertXShelf(_XShelf xShelf) {
+  void __assertXShelf(XShelf xShelf) {
     if (xShelf != this) {
       String message = "Error Assert xShelf: $xShelf - $this";
       print("FATAL ERROR: $message");

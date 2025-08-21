@@ -386,7 +386,7 @@ abstract class Block<
   // ***************************************************************************
 
   void __clearItemsWithDataState({
-    required _XBlock thisXBlock,
+    required XBlock thisXBlock,
     required DataState queryDataState,
     required DataState formDataState,
     required bool errorInFilter,
@@ -407,7 +407,7 @@ abstract class Block<
   // ***************************************************************************
 
   void __clearWithDataStateAndChildrenToNonCascade({
-    required _XBlock thisXBlock,
+    required XBlock thisXBlock,
     required DataState qryDataState,
     required DataState frmDataState,
     required bool errorInFilter,
@@ -435,7 +435,7 @@ abstract class Block<
   // ***************************************************************************
 
   void __clearAllChildrenBlocksToNone({
-    required _XBlock thisXBlock,
+    required XBlock thisXBlock,
   }) {
     __assertThisXBlock(thisXBlock);
     //
@@ -450,7 +450,7 @@ abstract class Block<
   }
 
   void __clearAllChildrenBlocksToPending({
-    required _XBlock thisXBlock,
+    required XBlock thisXBlock,
   }) {
     __assertThisXBlock(thisXBlock);
     //
@@ -555,7 +555,7 @@ abstract class Block<
 
   @_TaskUnitMethodAnnotation()
   @_BlockClearCurrentAnnotation()
-  Future<void> _unitClearCurrent({required _XBlock thisXBlock}) async {
+  Future<void> _unitClearCurrent({required XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
     //
     this.__setCurrentItem(item: null, itemDetail: null);
@@ -578,7 +578,7 @@ abstract class Block<
   @_BlockQueryPreviousPageAnnotation()
   @_BlockQueryAndPrepareToEditAnnotation()
   @_BlockQueryAndPrepareToCreateAnnotation()
-  Future<void> _unitQuery({required _XBlock thisXBlock}) async {
+  Future<void> _unitQuery({required XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
     //
     bool hasActiveUI = this.ui.hasActiveUIComponent(alsoCheckChildren: true);
@@ -651,7 +651,7 @@ abstract class Block<
     //
     FILTER_CRITERIA? filterCriteriaOfFilterModel;
     try {
-      final _XFilterModel xFilterModel = thisXBlock.xFilterModel;
+      final XFilterModel xFilterModel = thisXBlock.xFilterModel;
       final FilterModel filterModel = xFilterModel.filterModel;
       //
       if (!xFilterModel.queried) {
@@ -1031,7 +1031,7 @@ abstract class Block<
   @_BlockRefreshAndSelectFirstItemAsCurrentAnnotation()
   @_BlockRefreshAndSelectPreviousItemAsCurrentAnnotation()
   Future<void> _unitSelectItemAsCurrent({
-    required _XBlock thisXBlock,
+    required XBlock thisXBlock,
     required CurrentItemSelectionType currentItemSelectionType,
     required List<ITEM> newQueriedList,
     required ITEM? candidateItem,
@@ -1395,7 +1395,7 @@ abstract class Block<
     }
 
     //
-    for (_XBlock childXBlock in thisXBlock.childXBlocks) {
+    for (XBlock childXBlock in thisXBlock.childXBlocks) {
       FlutterArtist._taskUnitQueue.addTaskUnit(
         _BlockQueryTaskUnit(
           xBlock: childXBlock,
@@ -1413,7 +1413,7 @@ abstract class Block<
   @_BlockDeleteCurrentItemAnnotation()
   @_BlockDeleteItemAnnotation()
   Future<void> _unitDeleteItem({
-    required _XBlock thisXBlock,
+    required XBlock thisXBlock,
     required ITEM item,
     required BlockItemDeletionResult<ITEM> deletionResult,
   }) async {
@@ -1529,7 +1529,7 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockDeleteItemsAnnotation()
   Future<void> _unitDeleteItems({
-    required _XBlock thisXBlock,
+    required XBlock thisXBlock,
     required List<ITEM> items,
     required BlockItemsDeletionResult<ITEM> deletionResult,
     required bool stopIfError,
@@ -1663,7 +1663,7 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockPrepareFormToCreateItemAnnotation()
   Future<bool> _unitPrepareFormToCreateItem({
-    required _XBlock thisXBlock,
+    required XBlock thisXBlock,
     required bool initDirty,
     required EXTRA_FORM_INPUT? extraFormInput,
     required Function()? navigate,
@@ -1720,7 +1720,7 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockQuickCreateItemActionAnnotation()
   Future<bool> _unitQuickCreateItem({
-    required _XBlock thisXBlock,
+    required XBlock thisXBlock,
     required BlockQuickItemCreationResult taskResult,
     required BlockQuickItemCreationAction<ID, ITEM, ITEM_DETAIL,
             FILTER_CRITERIA>
@@ -1795,7 +1795,7 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockQuickCreateMultiItemsActionAnnotation()
   Future<bool> _unitQuickCreateMultiItems({
-    required _XBlock thisXBlock,
+    required XBlock thisXBlock,
     required BlockQuickCreateMultiItemsAction<ID, ITEM, ITEM_DETAIL,
             FILTER_CRITERIA>
         action,
@@ -1858,7 +1858,7 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockQuickUpdateItemActionAnnotation()
   Future<bool> _unitQuickUpdateItem({
-    required _XBlock thisXBlock,
+    required XBlock thisXBlock,
     required BlockQuickItemUpdateResult taskResult,
     required BlockQuickItemUpdateAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
         action,
@@ -1932,7 +1932,7 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockQuickActionAnnotation()
   Future<bool> _unitQuickAction({
-    required _XBlock thisXBlock,
+    required XBlock thisXBlock,
     required BlockQuickAction action,
     required BlockQuickActionResult taskResult,
   }) async {
@@ -2008,7 +2008,7 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockQuickChildBlockItemsActionAnnotation()
   Future<bool> _unitQuickChildBlockItemsAction<DATA extends Object>({
-    required _XBlock thisXBlock,
+    required XBlock thisXBlock,
     required BlockQuickChildBlockItemsAction<ITEM, ITEM_DETAIL> action,
   }) async {
     __assertThisXBlock(thisXBlock);
@@ -2059,7 +2059,7 @@ abstract class Block<
   // ***************************************************************************
 
   Future<bool> _processSaveActionRestResult({
-    required _XBlock thisXBlock,
+    required XBlock thisXBlock,
     required bool isNew,
     required String calledMethodName,
     required ApiResult<ITEM_DETAIL> result,
@@ -2225,7 +2225,7 @@ abstract class Block<
   // ***************************************************************************
 
   Future<bool> _processCreateMultiItemsActionResult({
-    required _XBlock thisXBlock,
+    required XBlock thisXBlock,
     required FILTER_CRITERIA blockCurrentFilterCriteria,
     required String calledMethodName,
     required ApiResult<PageData<ITEM>> result,
@@ -2301,9 +2301,9 @@ abstract class Block<
       return;
     }
     // _QShelf.forBlockClearCurrentItem.
-    _XShelf xShelf = _XShelf.forBlockClearCurrentItem(block: this);
+    XShelf xShelf = XShelf.forBlockClearCurrentItem(block: this);
     //
-    _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
     _TaskUnit taskUnit = _BlockClearCurrentTaskUnit(
       xBlock: thisXBlock,
@@ -2366,9 +2366,9 @@ abstract class Block<
       );
     }
     // _QShelf.forBlockItemDeletion.
-    _XShelf xShelf = _XShelf.forBlockItemDeletion(block: this);
+    XShelf xShelf = XShelf.forBlockItemDeletion(block: this);
     //
-    _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
+    XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
     final taskResult = _createEmptyItemDeletionResult();
     //
@@ -2431,9 +2431,9 @@ abstract class Block<
       );
     }
     // _QShelf.forBlockMultiItemsDeletion.
-    _XShelf xShelf = _XShelf.forBlockMultiItemsDeletion(block: this);
+    XShelf xShelf = XShelf.forBlockMultiItemsDeletion(block: this);
     //
-    _XBlock thisXBlock = xShelf.findXBlockByName(name)!;
+    XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
     final taskResult = _createEmptyItemsDeletionResult(
       candidateItems: candidateDeleteItems,
@@ -2506,9 +2506,9 @@ abstract class Block<
       );
     }
     // _QShelf.forBlockCurrItemSelection.
-    _XShelf xShelf = _XShelf.forBlockCurrItemSelection(block: this);
+    XShelf xShelf = XShelf.forBlockCurrItemSelection(block: this);
     //
-    _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
     _ResultedTaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
       currentItemSelectionType: currentItemSelectionType,
@@ -2585,9 +2585,9 @@ abstract class Block<
       );
     }
     // _QShelf.forBlockClearance.
-    _XShelf xShelf = _XShelf.forBlockClearance(block: this);
+    XShelf xShelf = XShelf.forBlockClearance(block: this);
     //
-    _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     // @@TODO@@ 13
     // TODO: Need to check, if current is ready then allow to do like this, else throw exception.
     this.__clearWithDataStateAndChildrenToNonCascade(
@@ -2755,7 +2755,7 @@ abstract class Block<
       },
     );
     //
-    _XShelf xShelf = _XShelf.forBlockQueryEmpty(
+    XShelf xShelf = XShelf.forBlockQueryEmpty(
       block: this,
       filterInput: filterInput,
       pageable: pageable,
@@ -2769,7 +2769,7 @@ abstract class Block<
       xShelf: xShelf,
     );
     //
-    _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
+    XBlock xBlock = xShelf.findXBlockByName(this.name)!;
     BlockQueryResult queryResult = xBlock.queryResult;
     if (queryResult.success) {
       _executeNavigation(navigate: navigate);
@@ -2854,7 +2854,7 @@ abstract class Block<
       },
     );
     //
-    _XShelf xShelf = _XShelf.forBlockQueryAndPrepareToEdit(
+    XShelf xShelf = XShelf.forBlockQueryAndPrepareToEdit(
       block: this,
       filterInput: filterInput,
       pageable: null,
@@ -2866,7 +2866,7 @@ abstract class Block<
       xShelf: xShelf,
     );
     //
-    _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
+    XBlock xBlock = xShelf.findXBlockByName(this.name)!;
     BlockQueryResult queryResult = xBlock.queryResult;
     if (queryResult.success) {
       _executeNavigation(navigate: navigate);
@@ -2896,7 +2896,7 @@ abstract class Block<
       parameters: {},
     );
     //
-    _XShelf xShelf = _XShelf.forBlockQueryAndPrepareToCreate(
+    XShelf xShelf = XShelf.forBlockQueryAndPrepareToCreate(
       block: this,
       filterInput: filterInput,
       pageable: null,
@@ -2906,7 +2906,7 @@ abstract class Block<
     );
     await xShelf.shelf._queryShelf(xShelf: xShelf);
     //
-    _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
+    XBlock xBlock = xShelf.findXBlockByName(this.name)!;
     BlockQueryResult queryResult = xBlock.queryResult;
     if (queryResult.success) {
       _executeNavigation(navigate: navigate);
@@ -3159,13 +3159,13 @@ abstract class Block<
     }
     //
     // _QShelf.forBlockQuickActionExecution
-    _XShelf xShelf = _XShelf.forBlockQuickActionExecution(
+    XShelf xShelf = XShelf.forBlockQuickActionExecution(
       block: this,
       filterInput: filterInput,
       afterQuickAction: action.config.afterQuickAction,
     );
     //
-    _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
     _ResultedTaskUnit taskUnit = _BlockQuickActionTaskUnit(
       xBlock: thisXBlock,
@@ -3235,9 +3235,9 @@ abstract class Block<
       );
     }
     // _QShelf.forBlockQuickItemCreation.
-    _XShelf xShelf = _XShelf.forBlockQuickItemCreation(block: this);
+    XShelf xShelf = XShelf.forBlockQuickItemCreation(block: this);
     //
-    _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
     _ResultedTaskUnit taskUnit = _BlockQuickCreateItemTaskUnit(
       xBlock: thisXBlock,
@@ -3308,9 +3308,9 @@ abstract class Block<
       );
     }
     // _QShelf.forBlockQuickMultiItemsCreation.
-    _XShelf xShelf = _XShelf.forBlockQuickMultiItemsCreation(block: this);
+    XShelf xShelf = XShelf.forBlockQuickMultiItemsCreation(block: this);
     //
-    _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
     _ResultedTaskUnit taskUnit = _BlockQuickCreateMultiItemsTaskUnit(
       xBlock: thisXBlock,
@@ -3380,9 +3380,9 @@ abstract class Block<
       );
     }
     // _QShelf.forBlockQuickItemUpdate.
-    _XShelf xShelf = _XShelf.forBlockQuickItemUpdate(block: this);
+    XShelf xShelf = XShelf.forBlockQuickItemUpdate(block: this);
     //
-    _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
     _ResultedTaskUnit taskUnit = _BlockQuickUpdateItemTaskUnit(
       xBlock: thisXBlock,
@@ -3430,9 +3430,9 @@ abstract class Block<
       return false;
     }
     // _QShelf.forQuickChildBlockItemsAction.
-    _XShelf xShelf = _XShelf.forQuickChildBlockItemsAction(block: this);
+    XShelf xShelf = XShelf.forQuickChildBlockItemsAction(block: this);
     //
-    _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
     _TaskUnit taskUnit = _BlockQuickChildBlockItemsTaskUnit(
       xBlock: thisXBlock,
@@ -3551,8 +3551,8 @@ abstract class Block<
     //
     extraFormInput?.formAction = FormAction.create;
     // _QShelf.forPrepareFormToCreateItem(
-    _XShelf xShelf = _XShelf.forPrepareFormToCreateItem(block: this);
-    _XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    XShelf xShelf = XShelf.forPrepareFormToCreateItem(block: this);
+    XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
     _TaskUnit taskUnit = _BlockPrepareFormToCreateItemTaskUnit(
       xBlock: thisXBlock,
@@ -3686,7 +3686,7 @@ abstract class Block<
 
   @_InternalEventReactAnnotation()
   void __updateInternalReactionByEvtBlock({
-    required _XBlock eventXBlock,
+    required XBlock eventXBlock,
   }) async {
     __assertThisXBlock(eventXBlock);
     //
@@ -3751,7 +3751,7 @@ abstract class Block<
         }
     }
     //
-    _XShelf xShelf = _XShelf.forBlockQuery(
+    XShelf xShelf = XShelf.forBlockQuery(
       block: this,
       filterInput: filterInput,
       pageable: usedPageable,
@@ -3761,7 +3761,7 @@ abstract class Block<
     );
     await xShelf.shelf._queryShelf(xShelf: xShelf);
     //
-    _XBlock xBlock = xShelf.findXBlockByName(this.name)!;
+    XBlock xBlock = xShelf.findXBlockByName(this.name)!;
     BlockQueryResult queryResult = xBlock.queryResult;
     if (queryResult.success) {
       _executeNavigation(navigate: navigate);
@@ -5658,7 +5658,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __assertThisXBlock(_XBlock thisXBlock) {
+  void __assertThisXBlock(XBlock thisXBlock) {
     if (thisXBlock.block != this || thisXBlock.name != name) {
       String message = "Error Assert block: ${thisXBlock.block} - $this";
       print("FATAL ERROR: $message");

@@ -24,7 +24,7 @@ class _DebugTaskUnitQueueViewState extends State<DebugTaskUnitQueueView> {
       decoration: BoxDecoration(
         color: Colors.white,
       ),
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.all(5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,

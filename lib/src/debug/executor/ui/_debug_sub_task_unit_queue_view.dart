@@ -33,8 +33,15 @@ class _DebugSubTaskUnitQueueViewState extends State<DebugSubTaskUnitQueueView> {
         children: [
           _buildTitle(),
           Divider(),
-          ...widget.subTaskUnitQueue.taskUnits
-              .map((taskUnit) => DebugTaskUnitView(taskUnit: taskUnit)),
+          SingleChildScrollView(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: widget.subTaskUnitQueue.taskUnits
+                  .map((taskUnit) => DebugTaskUnitView(taskUnit: taskUnit))
+                  .toList(),
+            ),
+          ),
         ],
       ),
     );
@@ -45,16 +52,20 @@ class _DebugSubTaskUnitQueueViewState extends State<DebugSubTaskUnitQueueView> {
       dense: true,
       visualDensity: VisualDensity(horizontal: -3, vertical: -3),
       contentPadding: EdgeInsets.all(0),
-      leading: CircleAvatar(
-        radius: 15,
-        child: Center(
-          child: Text(
-            widget.subTaskUnitQueue.subQueueId.toString(),
-            style: TextStyle(fontSize: 12),
+      leading: Tooltip(
+        message: "XShelfID: ${widget.subTaskUnitQueue.subQueueId}",
+        child: CircleAvatar(
+          radius: 18,
+          child: Center(
+            child: Text(
+              widget.subTaskUnitQueue.subQueueId.toString(),
+              style: TextStyle(fontSize: 12),
+            ),
           ),
         ),
       ),
-      title: Text("Sub Queue (${widget.subTaskUnitQueue.taskUnits.length})"),
+      title:
+          Text("Sub Queue (${widget.subTaskUnitQueue.taskUnits.length} Tasks)"),
     );
   }
 }

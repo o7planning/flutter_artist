@@ -1,10 +1,10 @@
 part of '../core.dart';
 
-class _XScalar {
-  _XShelf get xShelf => xFilterModel.xShelf;
+class XScalar {
+  XShelf get xShelf => xFilterModel.xShelf;
 
   final Scalar scalar;
-  final _XFilterModel xFilterModel;
+  final XFilterModel xFilterModel;
 
   bool _processed = false;
 
@@ -19,7 +19,7 @@ class _XScalar {
 
   final ScalarQueryResult queryResult = ScalarQueryResult(precheck: null);
 
-  _XScalar({
+  XScalar({
     required this.scalar,
     required this.xFilterModel,
   });

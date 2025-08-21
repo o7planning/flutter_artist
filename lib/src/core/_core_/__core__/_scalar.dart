@@ -160,7 +160,7 @@ abstract class Scalar<
   @_TaskUnitMethodAnnotation()
   @_ScalarQueryAnnotation()
   Future<void> _unitQuery({
-    required _XScalar thisXScalar,
+    required XScalar thisXScalar,
   }) async {
     __assertThisXScalar(thisXScalar);
     //
@@ -196,7 +196,7 @@ abstract class Scalar<
     //
     FILTER_CRITERIA? filterCriteriaOfFilterModel;
     try {
-      final _XFilterModel xFilterModel = thisXScalar.xFilterModel;
+      final XFilterModel xFilterModel = thisXScalar.xFilterModel;
       final FilterModel filterModel = xFilterModel.filterModel;
       //
       if (!xFilterModel.queried) {
@@ -301,7 +301,7 @@ abstract class Scalar<
   @_TaskUnitMethodAnnotation()
   @_ScalarQuickActionAnnotation()
   Future<bool> _unitQuickAction({
-    required _XScalar thisXScalar,
+    required XScalar thisXScalar,
     required ScalarQuickAction action,
     required ScalarQuickActionResult taskResult,
   }) async {
@@ -359,7 +359,7 @@ abstract class Scalar<
   @_TaskUnitMethodAnnotation()
   @_ScalarLoadExtraDataQuickActionAnnotation()
   Future<bool> _unitLoadExtraDataQuickAction<DATA extends Object>({
-    required _XScalar thisXScalar,
+    required XScalar thisXScalar,
     required ScalarLoadExtraDataQuickAction<DATA> action,
     required AfterScalarLoadExtraDataQuickAction afterQuickAction,
   }) async {
@@ -464,7 +464,7 @@ abstract class Scalar<
   // ***************************************************************************
 
   void __setQueryDataWithState({
-    required _XScalar thisXScalar,
+    required XScalar thisXScalar,
     required FILTER_CRITERIA? filterCriteria,
     required DataState dataState,
     required VALUE? value,
@@ -482,7 +482,7 @@ abstract class Scalar<
   // ***************************************************************************
 
   void __clearWithDataState({
-    required _XScalar thisXScalar,
+    required XScalar thisXScalar,
     required DataState queryDataState,
   }) {
     __assertThisXScalar(thisXScalar);
@@ -616,11 +616,11 @@ abstract class Scalar<
     }
 
     // _QShelf.forScalarQuickAction.
-    _XShelf xShelf = _XShelf.forScalarQuickAction(
+    XShelf xShelf = XShelf.forScalarQuickAction(
       scalar: this,
     );
     //
-    _XScalar thisXScalar = xShelf.findXScalarByName(this.name)!;
+    XScalar thisXScalar = xShelf.findXScalarByName(this.name)!;
     //
     _ResultedTaskUnit taskUnit = _ScalarQuickActionTaskUnit(
       xScalar: thisXScalar,
@@ -673,10 +673,10 @@ abstract class Scalar<
     }
     //
     // _QShelf.forScalarQuickExtraDataLoadAction.
-    _XShelf xShelf = _XShelf.forScalarQuickExtraDataLoadAction(
+    XShelf xShelf = XShelf.forScalarQuickExtraDataLoadAction(
         scalar: this, filterInput: filterInput);
     //
-    _XScalar thisXScalar = xShelf.findXScalarByName(this.name)!;
+    XScalar thisXScalar = xShelf.findXScalarByName(this.name)!;
     //
     _TaskUnit taskUnit = _ScalarLoadExtraDataQuickActionTaskUnit(
       xScalar: thisXScalar,
@@ -710,13 +710,13 @@ abstract class Scalar<
       parameters: {"filterInput": filterInput},
     );
     //
-    _XShelf xShelf = _XShelf.forScalarQuery(
+    XShelf xShelf = XShelf.forScalarQuery(
       scalar: this,
       filterInput: filterInput,
     );
     await xShelf.shelf._queryShelf(xShelf: xShelf);
     //
-    _XScalar xScalar = xShelf.findXScalarByName(this.name)!;
+    XScalar xScalar = xShelf.findXScalarByName(this.name)!;
     ScalarQueryResult result = xScalar.queryResult;
     return result;
   }
@@ -781,7 +781,7 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __assertThisXScalar(_XScalar thisXScalar) {
+  void __assertThisXScalar(XScalar thisXScalar) {
     if (thisXScalar.scalar != this || thisXScalar.name != name) {
       String message = "Error Assert scalar: ${thisXScalar.scalar} - $this";
       print("FATAL ERROR: $message");

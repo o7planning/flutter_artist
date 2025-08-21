@@ -4,7 +4,7 @@ part of '../core.dart';
 @_ScalarLoadExtraDataQuickActionAnnotation()
 class _ScalarLoadExtraDataQuickActionTaskUnit<DATA extends Object>
     extends _TaskUnit {
-  final _XScalar xScalar;
+  final XScalar xScalar;
   final ScalarLoadExtraDataQuickAction<DATA> action;
   final AfterScalarLoadExtraDataQuickAction afterQuickAction;
 
@@ -15,7 +15,7 @@ class _ScalarLoadExtraDataQuickActionTaskUnit<DATA extends Object>
   }) : super(taskType: TaskType.scalarQuickAction);
 
   @override
-  _XShelf get xShelf => xScalar.xShelf;
+  XShelf get xShelf => xScalar.xShelf;
 
   @override
   int get xShelfId => xScalar.xShelfId;

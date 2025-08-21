@@ -539,7 +539,7 @@ abstract class Shelf extends _Core {
   Future<void> __queryLazyList() async {
     print(">>>>>>>>>>>>>> QUERY LAZY LIST <<<<<<<<<<<<<<<<<<<<<<<<");
 
-    _XShelf xShelf = _XShelf.forNaturalQuery(shelf: shelf);
+    XShelf xShelf = XShelf.forNaturalQuery(shelf: shelf);
     _LazyObjects lazyObjects = xShelf.getLazyObjectInfos();
     lazyObjects.printInfo();
     //
@@ -568,7 +568,7 @@ abstract class Shelf extends _Core {
   @_ImportantMethodAnnotation("Called as the start of a series of TaskUnit(s).")
   @_BlockShelfQueryAnnotation()
   Future<void> _queryShelf({
-    required _XShelf xShelf,
+    required XShelf xShelf,
   }) async {
     _ShelfQueryTaskUnit taskUnit = _ShelfQueryTaskUnit(xShelf: xShelf);
     FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
@@ -585,7 +585,7 @@ abstract class Shelf extends _Core {
     print(
         " ||-------------> [External Reaction] _addShelfExternalReactionTaskUnit: ${getClassName(this)} [LISTENER]");
 
-    _XShelf xShelf = _XShelf.forShelfExternalReaction(
+    XShelf xShelf = XShelf.forShelfExternalReaction(
       shelf: this,
       effectedShelfMembers: effectedShelfMembers,
     );
@@ -600,10 +600,10 @@ abstract class Shelf extends _Core {
   @_TaskUnitMethodAnnotation()
   @_BlockShelfQueryAnnotation()
   Future<void> _unitQueryShelf({
-    required _XShelf xShelf,
+    required XShelf xShelf,
   }) async {
-    final _XScalar? vipXScalar = xShelf.vipXScalar;
-    final _XBlock? rootVipXBlock = xShelf.rootVipXBlock;
+    final XScalar? vipXScalar = xShelf.vipXScalar;
+    final XBlock? rootVipXBlock = xShelf.rootVipXBlock;
     //
     if (vipXScalar != null && rootVipXBlock != null) {
       throw "Development Logic Error";
@@ -630,7 +630,7 @@ abstract class Shelf extends _Core {
       );
     }
     //
-    for (_XScalar xScalar in xShelf.allXScalars) {
+    for (XScalar xScalar in xShelf.allXScalars) {
       if (xScalar != vipXScalar) {
         FlutterArtist._taskUnitQueue.addTaskUnit(
           _ScalarQueryTaskUnit(
@@ -640,7 +640,7 @@ abstract class Shelf extends _Core {
       }
     }
     //
-    for (_XBlock rootXBlock in xShelf.allRootXBlocks) {
+    for (XBlock rootXBlock in xShelf.allRootXBlocks) {
       if (rootXBlock != rootVipXBlock) {
         FlutterArtist._taskUnitQueue.addTaskUnit(
           _BlockQueryTaskUnit(

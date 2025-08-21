@@ -263,7 +263,7 @@ abstract class FormModel<
   @_TaskUnitMethodAnnotation()
   @_FormViewChangeAnnotation()
   Future<bool> _unitFormViewChanged({
-    required _XFormModel xFormModel,
+    required XFormModel xFormModel,
   }) async {
     __assertThisXFormModel(xFormModel);
     //
@@ -280,7 +280,7 @@ abstract class FormModel<
   @_TaskUnitMethodAnnotation()
   @_FormModelLoadFormAnnotation()
   Future<bool> _unitLoadFormData({
-    required _XFormModel thisXFormModel,
+    required XFormModel thisXFormModel,
     required FormModelDataLoadResult taskResult,
   }) async {
     __assertThisXFormModel(thisXFormModel);
@@ -318,7 +318,7 @@ abstract class FormModel<
   @_TaskUnitMethodAnnotation()
   @_FormModelEnterFormFieldsAnnotation()
   Future<bool> _unitQuickExtraFormInput({
-    required _XFormModel thisXFormModel,
+    required XFormModel thisXFormModel,
     required EXTRA_FORM_INPUT extraFormInput,
   }) async {
     __assertThisXFormModel(thisXFormModel);
@@ -336,7 +336,7 @@ abstract class FormModel<
   @_TaskUnitMethodAnnotation()
   @_FormModelSaveFormAnnotation()
   Future<bool> _unitSaveForm({
-    required _XFormModel thisXFormModel,
+    required XFormModel thisXFormModel,
     required FormSaveResult taskResult,
   }) async {
     FILTER_CRITERIA? blockCurrentFilterCriteria = block.filterCriteria;
@@ -1459,10 +1459,10 @@ abstract class FormModel<
   Future<void> _onChangeFromFormView() async {
     print("#~~~~~~~~~~~~~~~> _onChangeFromFormView");
     //
-    _XShelf xShelf = _XShelf.forFormViewChange(formModel: this);
+    XShelf xShelf = XShelf.forFormViewChange(formModel: this);
     //
-    _XBlock xBlock = xShelf.findXBlockByName(block.name)!;
-    _XFormModel xFormModel = xBlock.xFormModel!;
+    XBlock xBlock = xShelf.findXBlockByName(block.name)!;
+    XFormModel xFormModel = xBlock.xFormModel!;
     _FormViewChangeTaskUnit taskUnit =
         _FormViewChangeTaskUnit(xFormModel: xFormModel);
     FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
@@ -1546,10 +1546,10 @@ abstract class FormModel<
       return false;
     }
     //
-    _XShelf xShelf = _XShelf.forFormModelEnterFields(formModel: this);
+    XShelf xShelf = XShelf.forFormModelEnterFields(formModel: this);
     //
-    _XBlock xBlock = xShelf.findXBlockByName(this.block.name)!;
-    _XFormModel xFormModel = xBlock.xFormModel!;
+    XBlock xBlock = xShelf.findXBlockByName(this.block.name)!;
+    XFormModel xFormModel = xBlock.xFormModel!;
     _TaskUnit taskUnit = _FormModelAutoEnterFormFieldsTaskUnit(
       xFormModel: xFormModel,
       extraFormInput: extraFormInput,
@@ -1590,10 +1590,10 @@ abstract class FormModel<
       return FormSaveResult(precheck: actionable.errCode);
     }
     //
-    _XShelf xShelf = _XShelf.forFormModelSave(formModel: this);
+    XShelf xShelf = XShelf.forFormModelSave(formModel: this);
     //
-    _XBlock xBlock = xShelf.findXBlockByName(this.block.name)!;
-    _XFormModel xFormModel = xBlock.xFormModel!;
+    XBlock xBlock = xShelf.findXBlockByName(this.block.name)!;
+    XFormModel xFormModel = xBlock.xFormModel!;
     _ResultedTaskUnit taskUnit = _FormModelSaveFormTaskUnit(
       xFormModel: xFormModel,
     );
@@ -1609,7 +1609,7 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __assertThisXFormModel(_XFormModel thisXFormModel) {
+  void __assertThisXFormModel(XFormModel thisXFormModel) {
     if (!identical(thisXFormModel.formModel, this)) {
       String message =
           "Error Assert form model: ${thisXFormModel.formModel} - $this";

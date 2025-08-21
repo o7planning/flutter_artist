@@ -3,7 +3,7 @@ part of '../core.dart';
 @_TaskUnitClassAnnotation()
 @_BlockPrepareFormToCreateItemAnnotation()
 class _BlockPrepareFormToCreateItemTaskUnit extends _TaskUnit {
-  _XBlock xBlock;
+  XBlock xBlock;
   ExtraFormInput? extraFormInput;
   Function()? navigate;
   final bool initDirty;
@@ -16,7 +16,7 @@ class _BlockPrepareFormToCreateItemTaskUnit extends _TaskUnit {
   }) : super(taskType: TaskType.blockPrepareToCreateItem);
 
   @override
-  _XShelf get xShelf => xBlock.xShelf;
+  XShelf get xShelf => xBlock.xShelf;
 
   @override
   int get xShelfId => xBlock.xShelfId;

@@ -21,12 +21,13 @@ class _DebugTaskUnitViewState extends State<DebugTaskUnitView> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.all(5),
+      margin: EdgeInsets.only(right: 5),
       width: 300,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.black26),
         color: Colors.cyan.withAlpha(20),
       ),
-      padding: EdgeInsets.all(5),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,

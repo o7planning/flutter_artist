@@ -1,10 +1,10 @@
 part of '../core.dart';
 
-class _XFormModel {
-  _XShelf get xShelf => xBlock.xShelf;
+class XFormModel {
+  XShelf get xShelf => xBlock.xShelf;
 
   final FormModel formModel;
-  late final _XBlock xBlock;
+  late final XBlock xBlock;
   final ExtraFormInput? extraFormInput;
 
   int get xShelfId => xShelf.xShelfId;
@@ -16,7 +16,7 @@ class _XFormModel {
   ForceType forceTypeForForm = ForceType.decidedAtRuntime;
   bool lazy = false;
 
-  _XFormModel({
+  XFormModel({
     required this.formModel,
     required this.extraFormInput,
   });

@@ -179,7 +179,7 @@ abstract class FilterModel<
   @_TaskUnitMethodAnnotation()
   @_FilterViewChangeAnnotation()
   Future<bool> _unitFilterViewChanged({
-    required _XFilterModel xFilterModel,
+    required XFilterModel xFilterModel,
   }) async {
     __assertThisXFilterModel(xFilterModel);
     //
@@ -752,9 +752,9 @@ abstract class FilterModel<
   Future<void> _onChangeFromFilterView() async {
     print("#~~~~~~~~~~~~~~~> _onChangeFromFilterView");
     //
-    _XShelf xShelf = _XShelf.forFilterViewChange(filterModel: this);
+    XShelf xShelf = XShelf.forFilterViewChange(filterModel: this);
     //
-    _XFilterModel xFilterModel = xShelf.findXFilterModelByName(name)!;
+    XFilterModel xFilterModel = xShelf.findXFilterModelByName(name)!;
     _FilterViewChangeTaskUnit taskUnit =
         _FilterViewChangeTaskUnit(xFilterModel: xFilterModel);
     FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
@@ -820,7 +820,7 @@ abstract class FilterModel<
       navigate: null,
     );
     //
-    _XShelf xShelf = _XShelf.forFilterModelQueryAll(
+    XShelf xShelf = XShelf.forFilterModelQueryAll(
       filterModel: this,
       filterInput: filterInput,
     );
@@ -858,7 +858,7 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __assertThisXFilterModel(_XFilterModel thisXFilterModel) {
+  void __assertThisXFilterModel(XFilterModel thisXFilterModel) {
     if (!identical(thisXFilterModel.filterModel, this)) {
       String message =
           "Error Assert filter model: ${thisXFilterModel.filterModel} - $this";

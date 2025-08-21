@@ -1,24 +1,24 @@
 part of '../core.dart';
 
-class _XBlock {
-  _XShelf get xShelf => xFilterModel.xShelf;
+class XBlock {
+  XShelf get xShelf => xFilterModel.xShelf;
 
   int get xShelfId => xShelf.xShelfId;
 
   final Block block;
 
-  _XBlock get rootXBlock {
+  XBlock get rootXBlock {
     if (parentXBlock == null) {
       return this;
     }
     return parentXBlock!.rootXBlock;
   }
 
-  late final _XBlock? parentXBlock;
-  final List<_XBlock> childXBlocks = [];
+  late final XBlock? parentXBlock;
+  final List<XBlock> childXBlocks = [];
 
-  final _XFilterModel xFilterModel;
-  final _XFormModel? xFormModel;
+  final XFilterModel xFilterModel;
+  final XFormModel? xFormModel;
 
   String get name => block.name;
 
@@ -58,7 +58,7 @@ class _XBlock {
   // ***************************************************************************
   // ***************************************************************************
 
-  _XBlock({
+  XBlock({
     required this.block,
     required this.xFilterModel,
     required this.xFormModel,
@@ -76,7 +76,7 @@ class _XBlock {
       return true;
     }
     // print("BLOCK: ${block} - CHILD: ${childXBlocks}");
-    for (_XBlock child in childXBlocks) {
+    for (XBlock child in childXBlocks) {
       if (child.hasQryHintInTreeBranchAndNotProcessed()) {
         return true;
       }
@@ -153,7 +153,7 @@ class _XBlock {
     String msg =
         "${getClassName(this)}(${getClassName(block)} - UIActive: $hasActiveUI - QryHint: $__qryHint - RefreshItem: $__forceReloadCurrItem";
     print(msg);
-    for (_XBlock xBlock in childXBlocks) {
+    for (XBlock xBlock in childXBlocks) {
       xBlock.printInfoCascade();
     }
   }

@@ -3,14 +3,14 @@ part of '../core.dart';
 @_TaskUnitClassAnnotation()
 @_FilterViewChangeAnnotation()
 class _FilterViewChangeTaskUnit extends _TaskUnit {
-  _XFilterModel xFilterModel;
+  XFilterModel xFilterModel;
 
   _FilterViewChangeTaskUnit({
     required this.xFilterModel,
   }) : super(taskType: TaskType.filterModelFilterViewChanged);
 
   @override
-  _XShelf get xShelf => xFilterModel.xShelf;
+  XShelf get xShelf => xFilterModel.xShelf;
 
   @override
   int get xShelfId => xFilterModel.xShelfId;

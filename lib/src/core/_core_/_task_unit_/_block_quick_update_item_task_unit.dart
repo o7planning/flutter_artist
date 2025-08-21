@@ -4,7 +4,7 @@ part of '../core.dart';
 @_BlockQuickUpdateItemActionAnnotation()
 class _BlockQuickUpdateItemTaskUnit
     extends _ResultedTaskUnit<BlockQuickItemUpdateResult> {
-  _XBlock xBlock;
+  XBlock xBlock;
   BlockQuickItemUpdateAction action;
 
   _BlockQuickUpdateItemTaskUnit({
@@ -16,7 +16,7 @@ class _BlockQuickUpdateItemTaskUnit
         );
 
   @override
-  _XShelf get xShelf => xBlock.xShelf;
+  XShelf get xShelf => xBlock.xShelf;
 
   @override
   int get xShelfId => xBlock.xShelfId;

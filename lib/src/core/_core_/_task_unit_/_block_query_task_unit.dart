@@ -8,14 +8,14 @@ part of '../core.dart';
 @_BlockQueryAndPrepareToEditAnnotation()
 @_BlockQueryAndPrepareToCreateAnnotation()
 class _BlockQueryTaskUnit extends _TaskUnit {
-  _XBlock xBlock;
+  XBlock xBlock;
 
   _BlockQueryTaskUnit({
     required this.xBlock,
   }) : super(taskType: TaskType.blockQuery);
 
   @override
-  _XShelf get xShelf => xBlock.xShelf;
+  XShelf get xShelf => xBlock.xShelf;
 
   @override
   int get xShelfId => xBlock.xShelfId;

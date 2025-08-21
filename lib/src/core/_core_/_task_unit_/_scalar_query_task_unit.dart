@@ -3,7 +3,7 @@ part of '../core.dart';
 @_TaskUnitClassAnnotation()
 @_ScalarQueryAnnotation()
 class _ScalarQueryTaskUnit extends _TaskUnit {
-  _XScalar xScalar;
+  XScalar xScalar;
 
   _ScalarQueryTaskUnit({
     required this.xScalar,
@@ -12,7 +12,7 @@ class _ScalarQueryTaskUnit extends _TaskUnit {
         );
 
   @override
-  _XShelf get xShelf => xScalar.xShelf;
+  XShelf get xShelf => xScalar.xShelf;
 
   @override
   int get xShelfId => xScalar.xShelfId;
