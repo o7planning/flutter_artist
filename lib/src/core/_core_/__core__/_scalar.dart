@@ -249,6 +249,9 @@ abstract class Scalar<
       // Throw ApiError:
       result.throwIfError();
       //
+      // Query DONE!
+      //
+      thisXScalar.setReQueryDone();
       value = result.data;
     } catch (e, stackTrace) {
       isQueryError = true;

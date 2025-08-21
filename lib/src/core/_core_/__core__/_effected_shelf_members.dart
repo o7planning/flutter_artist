@@ -43,4 +43,10 @@ class EffectedShelfMembers {
   void _addRefreshCurrItmBlock(Block block) {
     _refreshCurrItmBlockMAP[block.name] = block;
   }
+
+  void printInfo() {
+    print("@@reQueryScalar: ${_reQueryScalarMAP.keys}");
+    print("@@reQueryBlock: ${_reQueryBlockMAP.keys}");
+    print("@@refreshCurrItmBlock: ${_refreshCurrItmBlockMAP.keys}");
+  }
 }

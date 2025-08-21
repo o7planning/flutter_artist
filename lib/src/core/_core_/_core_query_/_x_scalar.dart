@@ -16,6 +16,10 @@ class XScalar {
     return this == xShelf.vipXScalar;
   }
 
+  void setReQueryDone() {
+    __qryHint = QryHint.none;
+  }
+
   bool isReQueryDone() {
     return __qryHint == QryHint.none;
   }

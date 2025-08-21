@@ -955,9 +955,15 @@ class XShelf {
     if (__rootVipXBlock != eventXBlock.rootXBlock) {
       throw "Development Logic Error";
     }
-    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> Chay vao day 1");
+
     final EffectedShelfMembers effectedShelfMembers =
         eventXBlock.block._internalEffectedShelfMembers;
+
+    print(
+        "\n\n~~~~~~~~~~~~~~~ INTERNAL EVENT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    effectedShelfMembers.printInfo();
+    print(
+        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n");
 
     //
     Set<String> listenerBlockNames = {}
@@ -972,7 +978,7 @@ class XShelf {
       //
       bool blockVisible = false;
       QryHint queryHint = QryHint.none;
-      bool forceReloadItem = false;
+      bool forceReloadCurrItem = false;
       //
       if (reQryBlock != null) {
         blockVisible = reQryBlock.ui.hasActiveBlockFragmentWidget(
@@ -984,12 +990,12 @@ class XShelf {
         blockVisible = refreshCurrBlock.ui.hasActiveBlockFragmentWidget(
           alsoCheckChildren: true,
         );
-        forceReloadItem = true;
+        forceReloadCurrItem = true;
       }
       //
       XBlock xBlock = xBlockMap[listenerBlkName]!;
       xBlock.setQueryHint(queryHint);
-      xBlock.setForceReloadCurrItem(forceReloadItem);
+      xBlock.setForceReloadCurrItem(forceReloadCurrItem);
     }
     //
     for (Scalar s in effectedShelfMembers._reQueryScalarMAP.values) {
@@ -1039,6 +1045,11 @@ class XShelf {
         xBlock = xBlock.parentXBlock;
       }
     }
+    print(
+        "\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    eventXBlock.xShelf.printInfo();
+    print(
+        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n");
   }
 
   // ***************************************************************************
