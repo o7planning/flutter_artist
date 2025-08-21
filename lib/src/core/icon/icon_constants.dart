@@ -149,6 +149,8 @@ class FaIconConstants {
   static const IconData developmentModeIconData =
       cupertino.CupertinoIcons.settings;
 
+  static const IconData vipBranchIconData = cupertino.CupertinoIcons.star;
+
 // static const  IconData _formCleanIconData = Icons.cleaning_services_outlined;
   static const IconData formCleanIconData = cupertino.CupertinoIcons.paintbrush;
 

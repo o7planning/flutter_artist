@@ -19,6 +19,8 @@ class DebugTaskUnitView extends StatefulWidget {
 }
 
 class _DebugTaskUnitViewState extends State<DebugTaskUnitView> {
+  final double fontSize = 14;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -40,14 +42,12 @@ class _DebugTaskUnitViewState extends State<DebugTaskUnitView> {
               IconLabelText(
                 label: "Task: ",
                 text: widget.taskUnit.taskType.name,
-                style: TextStyle(fontSize: 12),
+                style: TextStyle(fontSize: fontSize),
               ),
               Spacer(),
-              IconLabelText(
-                label: "XShelfID: ",
-                text: "",
-                style: TextStyle(fontSize: 12),
-                suffixIcon: ElevatedButton(
+              Tooltip(
+                message: "XShelf ID",
+                child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size.zero,
                     padding: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
@@ -60,11 +60,16 @@ class _DebugTaskUnitViewState extends State<DebugTaskUnitView> {
               ),
             ],
           ),
+          SizedBox(height: 10),
+          Text(
+            widget.taskUnit.xShelf.xShelfType.name,
+            style: TextStyle(fontSize: 13, color: Colors.indigo),
+          ),
           Divider(),
           IconLabelText(
             label: "Name: ",
             text: widget.taskUnit.taskName,
-            style: TextStyle(fontSize: 12),
+            style: TextStyle(fontSize: fontSize),
           ),
         ],
       ),

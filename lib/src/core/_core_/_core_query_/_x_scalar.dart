@@ -12,10 +12,13 @@ class XScalar {
 
   QryHint __qryHint = QryHint.none;
 
+  bool isVipBranch() {
+    return this == xShelf.vipXScalar;
+  }
+
   bool isReQueryDone() {
     return __qryHint == QryHint.none;
   }
-
 
   bool affectByFilterInput = false;
 

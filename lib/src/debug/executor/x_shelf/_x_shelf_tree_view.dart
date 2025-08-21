@@ -9,6 +9,9 @@ import '../../../core/_core_/core.dart';
 import '../../../core/icon/icon_constants.dart';
 import '../../../core/utils/_class_utils.dart';
 import '../../../core/widgets/_custom_app_container.dart';
+import '_x_block_view.dart';
+import '_x_scalar_view.dart';
+import '_x_shelf_view.dart';
 
 class XShelfTreeView extends StatefulWidget {
   final XShelf xShelf;
@@ -66,6 +69,7 @@ class _XShelfTreeViewState extends State<XShelfTreeView> {
       data: widget.xShelf,
       parent: null,
     );
+    _currentNode = xShelfNode;
     rootTreeNode = TreeNode.root()..add(xShelfNode);
     //
     List<XBlock> allRootXBlocks = widget.xShelf.allRootXBlocks;
@@ -101,7 +105,15 @@ class _XShelfTreeViewState extends State<XShelfTreeView> {
   }
 
   Widget _buildRight(BuildContext context) {
-    return Text("OK");
+    dynamic data = _currentNode?.data;
+    if (data is XShelf) {
+      return XShelfView(xShelf: data);
+    } else if (data is XBlock) {
+      return XBlockView(xBlock: data);
+    } else if (data is XScalar) {
+      return XScalarView(xScalar: data);
+    }
+    return Text("");
   }
 
   Widget _buildTreeView(BuildContext context) {
@@ -138,6 +150,7 @@ class _XShelfTreeViewState extends State<XShelfTreeView> {
           String title;
           String? tooltip;
           IconData prefixIconData;
+          bool rootVip = false;
           bool showReQueryIcon = false;
           bool showRefreshCurrItemIcon = false;
           Color textColor = Colors.black;
@@ -146,6 +159,7 @@ class _XShelfTreeViewState extends State<XShelfTreeView> {
             title = "${data.shelf.name} (ID: ${data.xShelfId})";
             tooltip = "XShelf: $title";
             prefixIconData = FaIconConstants.shelfStructureIconData;
+            rootVip = false;
           } else if (data is XScalar) {
             title = data.name;
             tooltip = "Scalar: $title";
@@ -154,6 +168,7 @@ class _XShelfTreeViewState extends State<XShelfTreeView> {
               textColor = Colors.red;
               showReQueryIcon = true;
             }
+            rootVip = data.isVipBranch();
           } else if (data is XBlock) {
             title = data.name;
             tooltip = "Block: $title";
@@ -166,10 +181,12 @@ class _XShelfTreeViewState extends State<XShelfTreeView> {
               textColor = Colors.red;
               showRefreshCurrItemIcon = true;
             }
+            rootVip = data.isRoot() && data.isVipBranch();
           } else if (data is XFormModel) {
             title = data.name;
             tooltip = "FormModel: $title";
             prefixIconData = FaIconConstants.optPropOrCriterionIconData;
+            rootVip = false;
           } else {
             prefixIconData = FaIconConstants.uknownIconData;
             title = "UKNOWN";
@@ -221,6 +238,15 @@ class _XShelfTreeViewState extends State<XShelfTreeView> {
                       child: Icon(
                         FaIconConstants.formRefreshIconData,
                         size: 16,
+                      ),
+                    ),
+                  if (rootVip)
+                    Tooltip(
+                      message: "VIP Branch",
+                      child: Icon(
+                        FaIconConstants.vipBranchIconData,
+                        size: 16,
+                        color: Colors.red,
                       ),
                     ),
                 ],

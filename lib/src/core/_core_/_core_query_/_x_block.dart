@@ -84,8 +84,20 @@ class XBlock {
     return false;
   }
 
+  bool isRoot() {
+    return parentXBlock == null;
+  }
+
+  bool isVipBranch() {
+    return rootXBlock == xShelf.rootVipXBlock;
+  }
+
   bool isReQueryDone() {
     return __qryHint == QryHint.none;
+  }
+
+  bool needToReQuery() {
+    return __qryHint == QryHint.force;
   }
 
   void setReQueryDone() {
