@@ -11,6 +11,12 @@ class XScalar {
   //
 
   QryHint __qryHint = QryHint.none;
+
+  bool isReQueryDone() {
+    return __qryHint == QryHint.none;
+  }
+
+
   bool affectByFilterInput = false;
 
   String get name => scalar.name;

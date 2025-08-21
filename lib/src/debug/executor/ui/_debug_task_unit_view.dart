@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_artist/src/debug/dialog/_x_shelf_dialog.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../model/_debug_task_unit.dart';
@@ -44,8 +45,18 @@ class _DebugTaskUnitViewState extends State<DebugTaskUnitView> {
               Spacer(),
               IconLabelText(
                 label: "XShelfID: ",
-                text: "${widget.taskUnit.xShelf.xShelfId}",
+                text: "",
                 style: TextStyle(fontSize: 12),
+                suffixIcon: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size.zero,
+                    padding: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                  ),
+                  onPressed: () {
+                    _showXShelfDialog();
+                  },
+                  child: Text("${widget.taskUnit.xShelf.xShelfId}"),
+                ),
               ),
             ],
           ),
@@ -57,6 +68,13 @@ class _DebugTaskUnitViewState extends State<DebugTaskUnitView> {
           ),
         ],
       ),
+    );
+  }
+
+  void _showXShelfDialog() {
+    XShelfDialog.showXShelfDialog(
+      context: context,
+      xShelf: widget.taskUnit.xShelf,
     );
   }
 }
