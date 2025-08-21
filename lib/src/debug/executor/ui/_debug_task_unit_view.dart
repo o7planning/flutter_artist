@@ -61,9 +61,13 @@ class _DebugTaskUnitViewState extends State<DebugTaskUnitView> {
             ],
           ),
           SizedBox(height: 10),
-          Text(
-            widget.taskUnit.xShelf.xShelfType.name,
-            style: TextStyle(fontSize: 13, color: Colors.indigo),
+          Tooltip(
+            message: "XShelfID: ${widget.taskUnit.xShelf.xShelfId}\n"
+                "XShelfType: ${widget.taskUnit.xShelf.xShelfType.name}",
+            child: Text(
+              widget.taskUnit.xShelf.xShelfType.name,
+              style: TextStyle(fontSize: 13, color: Colors.indigo),
+            ),
           ),
           Divider(),
           IconLabelText(
