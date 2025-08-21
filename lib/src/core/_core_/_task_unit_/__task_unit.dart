@@ -22,6 +22,10 @@ abstract class _TaskUnit {
 
   Object get owner;
 
+  DebugTaskUnit toDebugTaskUnit() {
+    return DebugTaskUnit(xShelfId: xShelfId, shelf: shelf);
+  }
+
   @override
   String toString() {
     return "${getClassName(this)}(${getObjectName()})";

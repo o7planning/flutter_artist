@@ -71,6 +71,15 @@ class _TaskUnitQueue {
     }
   }
 
+  DebugTaskUnitQueue toDebugTaskUnitQueue() {
+    return DebugTaskUnitQueue(
+      subQueues: __splayTreeMap.entries
+          .map((entry) =>
+              entry.value.toDebugSubTaskUnitQueue(subQueueId: entry.key))
+          .toList(),
+    );
+  }
+
   @override
   String toString() {
     return "TaskUnitQueue: $__splayTreeMap";
@@ -96,5 +105,16 @@ class _SubTaskUnitQueue {
 
   void addTaskUnit(_TaskUnit taskUnit) {
     _taskUnits.add(taskUnit);
+  }
+
+  DebugSubTaskUnitQueue toDebugSubTaskUnitQueue({required int subQueueId}) {
+    return DebugSubTaskUnitQueue(
+      subQueueId: subQueueId,
+      taskUnits: _taskUnits
+          .map(
+            (tu) => tu.toDebugTaskUnit(),
+          )
+          .toList(),
+    );
   }
 }

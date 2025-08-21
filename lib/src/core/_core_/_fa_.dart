@@ -15,6 +15,9 @@ class _FlutterArtist {
 
   final _TaskUnitQueue _taskUnitQueue = _TaskUnitQueue();
 
+  DebugTaskUnitQueue get debugTaskUnitQueue =>
+      _taskUnitQueue.toDebugTaskUnitQueue();
+
   int notificationFetchPeriodInSeconds = 60;
 
   IFlutterArtistAdapter? __adapter;
