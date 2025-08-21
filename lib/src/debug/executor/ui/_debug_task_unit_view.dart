@@ -44,7 +44,7 @@ class _DebugTaskUnitViewState extends State<DebugTaskUnitView> {
               Spacer(),
               IconLabelText(
                 label: "XShelfID: ",
-                text: "${widget.taskUnit.xShelfId}",
+                text: "${widget.taskUnit.xShelf.xShelfId}",
                 style: TextStyle(fontSize: 12),
               ),
             ],

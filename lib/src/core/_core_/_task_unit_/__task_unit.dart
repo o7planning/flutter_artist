@@ -24,9 +24,8 @@ abstract class _TaskUnit {
 
   DebugTaskUnit toDebugTaskUnit() {
     return DebugTaskUnit(
-      xShelfId: xShelfId,
+      xShelf: xShelf,
       taskType: taskType,
-      shelf: shelf,
       taskName: getObjectName(),
     );
   }
