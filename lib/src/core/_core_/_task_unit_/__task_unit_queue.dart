@@ -9,9 +9,18 @@ class _TaskUnitQueue {
   // Sorted Key Map.
   final __splayTreeMap = SplayTreeMap<int, _SubTaskUnitQueue>();
 
+  // bool get isEmpty {
+  //   for (_SubTaskUnitQueue sub in __splayTreeMap.values) {
+  //     if (!sub.isEmpty) {
+  //       return false;
+  //     }
+  //   }
+  //   return true;
+  // }
+
   bool get isEmpty {
-    for (_SubTaskUnitQueue sub in __splayTreeMap.values) {
-      if (!sub.isEmpty) {
+    for (XShelf xShelf in __xShelfMapQueue.values) {
+      if (!xShelf.isEmptyTask()) {
         return false;
       }
     }
@@ -28,19 +37,34 @@ class _TaskUnitQueue {
     return isNotEmpty;
   }
 
+  // _TaskUnit? getNextTaskUnit() {
+  //   while (true) {
+  //     int? xShelfId = __splayTreeMap.firstKey();
+  //     if (xShelfId == null) {
+  //       return null;
+  //     }
+  //     _SubTaskUnitQueue subQueue = __splayTreeMap[xShelfId]!;
+  //     _TaskUnit? taskUnit = subQueue.getNextTaskUnit();
+  //     if (taskUnit == null) {
+  //       __splayTreeMap.remove(xShelfId);
+  //       continue;
+  //     }
+  //     return taskUnit;
+  //   }
+  // }
+
   _TaskUnit? getNextTaskUnit() {
     while (true) {
-      int? xShelfId = __splayTreeMap.firstKey();
-      if (xShelfId == null) {
+      String? firstShelfName = __xShelfMapQueue.keys.firstOrNull;
+      if (firstShelfName == null) {
         return null;
       }
-      _SubTaskUnitQueue subQueue = __splayTreeMap[xShelfId]!;
-      _TaskUnit? taskUnit = subQueue.getNextTaskUnit();
-      if (taskUnit == null) {
-        __splayTreeMap.remove(xShelfId);
+      XShelf firstXShelf = __xShelfMapQueue[firstShelfName]!;
+      if (firstXShelf.isEmptyTask()) {
+        __xShelfMapQueue.remove(firstShelfName);
         continue;
       }
-      return taskUnit;
+      return firstXShelf.getNextTaskUnit()!;
     }
   }
 
@@ -86,38 +110,5 @@ class _TaskUnitQueue {
   @override
   String toString() {
     return "TaskUnitQueue: $__splayTreeMap";
-  }
-}
-
-// *****************************************************************************
-
-class _SubTaskUnitQueue {
-  final List<_TaskUnit> _taskUnits = [];
-
-  _TaskUnit? getNextTaskUnit() {
-    if (_taskUnits.isEmpty) {
-      return null;
-    } else {
-      return _taskUnits.removeAt(0);
-    }
-  }
-
-  bool get isEmpty {
-    return _taskUnits.isEmpty;
-  }
-
-  void addTaskUnit(_TaskUnit taskUnit) {
-    _taskUnits.add(taskUnit);
-  }
-
-  DebugSubTaskUnitQueue toDebugSubTaskUnitQueue({required int subQueueId}) {
-    return DebugSubTaskUnitQueue(
-      subQueueId: subQueueId,
-      taskUnits: _taskUnits
-          .map(
-            (tu) => tu.toDebugTaskUnit(),
-          )
-          .toList(),
-    );
   }
 }

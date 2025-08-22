@@ -7,6 +7,8 @@ class XShelf {
   final Shelf shelf;
   late final int xShelfId;
 
+  final __taskUnitQueue = _SubTaskUnitQueue();
+
   final Map<String, XFilterModel> xFilterModelMap = {};
   final Map<String, XFormModel> xFormModelMap = {};
   final Map<String, XScalar> xScalarMap = {};
@@ -1111,6 +1113,17 @@ class XShelf {
       }
     }
     return null;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool isEmptyTask() {
+    return __taskUnitQueue.isEmpty;
+  }
+
+  _TaskUnit? getNextTaskUnit()  {
+    return __taskUnitQueue.getNextTaskUnit();
   }
 
   // ***************************************************************************
