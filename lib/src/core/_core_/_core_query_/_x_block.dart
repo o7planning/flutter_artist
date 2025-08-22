@@ -84,6 +84,17 @@ class XBlock {
     return false;
   }
 
+  bool hasAncestorTask() {
+    XBlock? prXBlock = parentXBlock;
+    if (prXBlock == null) {
+      return false;
+    }
+    if (prXBlock.needToReQuery() || prXBlock.needToReloadCurrItem()) {
+      return true;
+    }
+    return prXBlock.hasAncestorTask();
+  }
+
   bool isRoot() {
     return parentXBlock == null;
   }
@@ -102,6 +113,10 @@ class XBlock {
 
   void setReQueryDone() {
     __qryHint = QryHint.none;
+  }
+
+  bool needToReloadCurrItem() {
+    return !isReloadCurrItemDone();
   }
 
   bool isReloadCurrItemDone() {
