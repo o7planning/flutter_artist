@@ -2616,17 +2616,6 @@ abstract class Block<
     xShelf._addTaskUnit(taskUnit);
     FlutterArtist._taskUnitQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
-
-    // // xxx;
-    // //
-    // // @@TODO@@ 13
-    // // TODO: Need to check, if current is ready then allow to do like this, else throw exception.
-    // this.__clearWithDataStateAndChildrenToNonCascade(
-    //   thisXBlock: thisXBlock,
-    //   qryDataState: DataState.pending,
-    //   frmDataState: DataState.none,
-    //   errorInFilter: false,
-    // );
     //
     _executeNavigation(navigate: navigate);
     //
@@ -2800,11 +2789,6 @@ abstract class Block<
     xShelf._initQueryTasks();
     FlutterArtist._taskUnitQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
-
-    // xxx;
-    // await xShelf.shelf._queryShelf(
-    //   xShelf: xShelf,
-    // );
     //
     XBlock xBlock = xShelf.findXBlockByName(this.name)!;
     BlockQueryResult queryResult = xBlock.queryResult;
@@ -2899,14 +2883,10 @@ abstract class Block<
       postQueryBehavior: PostQueryBehavior.selectAnItemAsCurrentAndLoadForm,
       suggestedSelection: suggestedSelection,
     );
+    //
     xShelf._initQueryTasks();
     FlutterArtist._taskUnitQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
-
-    // xxx;
-    // await xShelf.shelf._queryShelf(
-    //   xShelf: xShelf,
-    // );
     //
     XBlock xBlock = xShelf.findXBlockByName(this.name)!;
     BlockQueryResult queryResult = xBlock.queryResult;
@@ -2946,12 +2926,10 @@ abstract class Block<
       postQueryBehavior: PostQueryBehavior.createNewItem,
       suggestedSelection: null,
     );
+    //
     xShelf._initQueryTasks();
     FlutterArtist._taskUnitQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
-
-    // xxx;
-    // await xShelf.shelf._queryShelf(xShelf: xShelf);
     //
     XBlock xBlock = xShelf.findXBlockByName(this.name)!;
     BlockQueryResult queryResult = xBlock.queryResult;
@@ -3811,13 +3789,10 @@ abstract class Block<
       postQueryBehavior: postQueryBehavior,
       suggestedSelection: suggestedSelection,
     );
+    //
     xShelf._initQueryTasks();
     FlutterArtist._taskUnitQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
-
-    // xxx;
-    // await xShelf.shelf._queryShelf(xShelf: xShelf);
-
     //
     XBlock xBlock = xShelf.findXBlockByName(this.name)!;
     BlockQueryResult queryResult = xBlock.queryResult;

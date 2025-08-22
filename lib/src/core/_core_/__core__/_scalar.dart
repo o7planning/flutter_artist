@@ -352,8 +352,6 @@ abstract class Scalar<
           xScalar: thisXScalar,
         );
         thisXScalar.xShelf._addTaskUnit(taskUnit);
-      // xxx;
-      // FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
     }
     return true;
   }
@@ -727,8 +725,6 @@ abstract class Scalar<
     xShelf._initQueryTasks();
     FlutterArtist._taskUnitQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
-    //
-    // await xShelf.shelf._queryShelf(xShelf: xShelf); /// xxx;
     //
     XScalar xScalar = xShelf.findXScalarByName(this.name)!;
     ScalarQueryResult result = xScalar.queryResult;

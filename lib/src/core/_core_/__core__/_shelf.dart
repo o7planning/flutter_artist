@@ -558,8 +558,6 @@ abstract class Shelf extends _Core {
       xShelf._initQueryTasks();
       FlutterArtist._taskUnitQueue._addXShelf(xShelf);
       await FlutterArtist.executor._executeTaskUnitQueue();
-      // xxx;
-      // await _queryShelf(xShelf: xShelf);
     } finally {
       __lazyLoadLocked = false;
     }
@@ -573,7 +571,7 @@ abstract class Shelf extends _Core {
   }) async {
     print(
         " ||-------------> [External Reaction] _addShelfExternalReactionTaskUnit: ${getClassName(this)} [LISTENER]");
-
+    //
     XShelf xShelf = XShelf.forShelfExternalReaction(
       shelf: this,
       effectedShelfMembers: effectedShelfMembers,
@@ -582,11 +580,6 @@ abstract class Shelf extends _Core {
     xShelf._initQueryTasks();
     // IMPORTANT: No need to call "execute".
     FlutterArtist._taskUnitQueue._addXShelf(xShelf);
-
-    // xxx;
-    // await FlutterArtist.executor._executeTaskUnitQueue();
-    // _ShelfQueryTaskUnit taskUnit = _ShelfQueryTaskUnit(xShelf: xShelf);
-    // FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
   }
 
   // ***************************************************************************

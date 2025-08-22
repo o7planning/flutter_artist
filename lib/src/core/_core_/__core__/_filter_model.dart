@@ -826,11 +826,10 @@ abstract class FilterModel<
       filterModel: this,
       filterInput: filterInput,
     );
+    //
     xShelf._initQueryTasks();
     FlutterArtist._taskUnitQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
-    // xxx;
-    // await xShelf.shelf._queryShelf(xShelf: xShelf);
     //
     return true;
   }
