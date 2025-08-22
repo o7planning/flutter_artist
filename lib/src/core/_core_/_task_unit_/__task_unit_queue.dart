@@ -3,6 +3,9 @@ part of '../core.dart';
 class _TaskUnitQueue {
   int __maxXShelfId = -1;
 
+  // LinkedHashMap<String, XShelf>()
+  final __xShelfMapQueue = <String, XShelf>{};
+
   // Sorted Key Map.
   final __splayTreeMap = SplayTreeMap<int, _SubTaskUnitQueue>();
 
