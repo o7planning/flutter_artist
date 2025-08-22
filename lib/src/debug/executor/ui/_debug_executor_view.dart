@@ -3,21 +3,21 @@ import 'package:flutter_artist/src/debug/executor/ui/_debug_x_shelf_task_unit_qu
 
 import '../model/_debug_task_unit_queue.dart';
 
-class DebugTaskUnitQueueView extends StatefulWidget {
-  final DebugXShelfQueue taskUnitQueue;
+class DebugExecutorView extends StatefulWidget {
+  final DebugXShelfQueue debugXShelfQueue;
 
-  const DebugTaskUnitQueueView({
+  const DebugExecutorView({
     super.key,
-    required this.taskUnitQueue,
+    required this.debugXShelfQueue,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _DebugTaskUnitQueueViewState();
+    return _DebugExecutorViewState();
   }
 }
 
-class _DebugTaskUnitQueueViewState extends State<DebugTaskUnitQueueView> {
+class _DebugExecutorViewState extends State<DebugExecutorView> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,10 +28,12 @@ class _DebugTaskUnitQueueViewState extends State<DebugTaskUnitQueueView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
-        children: widget.taskUnitQueue.debugTaskUnitQueue
+        children: widget.debugXShelfQueue.debugTaskUnitQueue
             .where((sq) => sq.isNotEmpty)
-            .map((subQueue) =>
-                DebugSubTaskUnitQueueView(debugXShelfTaskUnitQueue: subQueue))
+            .map(
+              (subQueue) => DebugXShelfTaskUnitQueueView(
+                  debugXShelfTaskUnitQueue: subQueue),
+            )
             .toList(),
       ),
     );

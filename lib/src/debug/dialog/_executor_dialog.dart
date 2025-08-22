@@ -3,21 +3,21 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../core/_core_/core.dart';
 import '../../core/widgets/_custom_app_container.dart';
-import '../executor/ui/_debug_task_unit_queue_view.dart';
+import '../executor/ui/_debug_executor_view.dart';
 import '../utils/_dialog_size.dart';
 
-class DebugTaskUnitQueueDialog extends StatelessWidget {
-  const DebugTaskUnitQueueDialog({
+class DebugExecutorDialog extends StatelessWidget {
+  const DebugExecutorDialog({
     super.key,
   });
 
-  static Future<void> showTaskUnitQueueDialog({
+  static Future<void> showDebugExecutorDialog({
     required BuildContext context,
   }) async {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return DebugTaskUnitQueueDialog();
+        return DebugExecutorDialog();
       },
     );
   }
@@ -42,8 +42,8 @@ class DebugTaskUnitQueueDialog extends StatelessWidget {
   }
 
   Widget _buildMainWidget() {
-    return DebugTaskUnitQueueView(
-      taskUnitQueue: FlutterArtist.debugTaskUnitQueue,
+    return DebugExecutorView(
+      debugXShelfQueue: FlutterArtist.debugTaskUnitQueue,
     );
   }
 }

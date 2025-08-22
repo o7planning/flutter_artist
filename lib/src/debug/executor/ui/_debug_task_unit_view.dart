@@ -41,7 +41,10 @@ class _DebugTaskUnitViewState extends State<DebugTaskUnitView> {
               IconLabelText(
                 label: "Task: ",
                 text: widget.taskUnit.taskType.name,
-                style: TextStyle(fontSize: fontSize),
+                textStyle: TextStyle(
+                  fontSize: fontSize,
+                  color: Colors.blue,
+                ),
               ),
               // Spacer(),
               // Tooltip(

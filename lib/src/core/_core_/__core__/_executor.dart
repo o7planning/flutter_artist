@@ -46,7 +46,7 @@ class _Executor {
           while (FlutterArtist._xShelfQueue.hasNext()) {
             if (FlutterArtist.debugOptions.showTaskUnitQueue) {
               BuildContext context = FlutterArtist.adapter.getCurrentContext();
-              await DebugTaskUnitQueueDialog.showTaskUnitQueueDialog(
+              await DebugExecutorDialog.showDebugExecutorDialog(
                 context: context,
               );
             }

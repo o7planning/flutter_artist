@@ -24,9 +24,7 @@ class _XShelfTaskUnitQueue {
 
   DebugXShelfTaskUnitQueue toDebugXShelfTaskUnitQueue() {
     return DebugXShelfTaskUnitQueue(
-      xShelfId: xShelf.xShelfId,
-      shelfName: xShelf.shelf.name,
-      xShelfType: xShelf.xShelfType,
+      xShelf: xShelf,
       taskUnits: _taskUnits
           .map(
             (tu) => tu.toDebugTaskUnit(),

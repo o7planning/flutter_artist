@@ -1,16 +1,12 @@
-import '../../../core/enums/_x_shelf_type.dart';
+import '../../../core/_core_/core.dart';
 import '_debug_task_unit.dart';
 
 class DebugXShelfTaskUnitQueue {
-  final int xShelfId;
-  final String shelfName;
-  final XShelfType xShelfType;
+  final XShelf xShelf;
   final List<DebugTaskUnit> taskUnits;
 
   DebugXShelfTaskUnitQueue({
-    required this.xShelfId,
-    required this.shelfName,
-    required this.xShelfType,
+    required this.xShelf,
     required this.taskUnits,
   });
 
