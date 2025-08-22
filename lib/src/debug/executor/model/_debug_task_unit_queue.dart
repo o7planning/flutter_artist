@@ -1,7 +1,7 @@
-import '_debug_sub_task_unit_queue.dart';
+import '_debug_x_shelf_task_unit_queue.dart';
 
-class DebugTaskUnitQueue {
-  final List<DebugSubTaskUnitQueue> subQueues;
+class DebugXShelfQueue {
+  final List<DebugXShelfTaskUnitQueue> debugTaskUnitQueue;
 
-  DebugTaskUnitQueue({required this.subQueues});
+  DebugXShelfQueue({required this.debugTaskUnitQueue});
 }

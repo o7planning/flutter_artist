@@ -7,7 +7,7 @@ class XShelf {
   final Shelf shelf;
   late final int xShelfId;
 
-  final __taskUnitQueue = _SubTaskUnitQueue();
+  late final __xShelfTaskUnitQueue = _XShelfTaskUnitQueue(xShelf: this);
 
   final Map<String, XFilterModel> xFilterModelMap = {};
   final Map<String, XFormModel> xFormModelMap = {};
@@ -1163,16 +1163,16 @@ class XShelf {
   // ***************************************************************************
   // ***************************************************************************
 
-  DebugSubTaskUnitQueue toDebugSubTaskUnitQueue() {
-    return __taskUnitQueue.toDebugSubTaskUnitQueue();
+  DebugXShelfTaskUnitQueue toDebugXShelfTaskUnitQueue() {
+    return __xShelfTaskUnitQueue.toDebugXShelfTaskUnitQueue();
   }
 
   bool isEmptyTask() {
-    return __taskUnitQueue.isEmpty;
+    return __xShelfTaskUnitQueue.isEmpty;
   }
 
   _TaskUnit? getNextTaskUnit() {
-    return __taskUnitQueue.getNextTaskUnit();
+    return __xShelfTaskUnitQueue.getNextTaskUnit();
   }
 
   void _addTaskUnit(_TaskUnit taskUnit) {
@@ -1181,7 +1181,7 @@ class XShelf {
         errorMessage: "Development Logic Error.",
       );
     }
-    __taskUnitQueue.addTaskUnit(taskUnit);
+    __xShelfTaskUnitQueue.addTaskUnit(taskUnit);
   }
 
   // ***************************************************************************

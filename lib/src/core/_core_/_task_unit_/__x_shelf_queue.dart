@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class _TaskUnitQueue {
+class _XShelfQueue {
   //
   // LinkedHashMap<String, XShelf>().
   //
@@ -44,10 +44,10 @@ class _TaskUnitQueue {
     __xShelfMapQueue[xShelf.shelf.name] = xShelf;
   }
 
-  DebugTaskUnitQueue toDebugTaskUnitQueue() {
-    return DebugTaskUnitQueue(
-      subQueues: __xShelfMapQueue.entries
-          .map((entry) => entry.value.toDebugSubTaskUnitQueue())
+  DebugXShelfQueue toDebugXShelfQueue() {
+    return DebugXShelfQueue(
+      debugTaskUnitQueue: __xShelfMapQueue.entries
+          .map((entry) => entry.value.toDebugXShelfTaskUnitQueue())
           .toList(),
     );
   }

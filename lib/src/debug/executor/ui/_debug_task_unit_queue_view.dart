@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_artist/src/debug/executor/ui/_debug_sub_task_unit_queue_view.dart';
+import 'package:flutter_artist/src/debug/executor/ui/_debug_x_shelf_task_unit_queue_view.dart';
 
 import '../model/_debug_task_unit_queue.dart';
 
 class DebugTaskUnitQueueView extends StatefulWidget {
-  final DebugTaskUnitQueue taskUnitQueue;
+  final DebugXShelfQueue taskUnitQueue;
 
   const DebugTaskUnitQueueView({
     super.key,
@@ -28,10 +28,10 @@ class _DebugTaskUnitQueueViewState extends State<DebugTaskUnitQueueView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
-        children: widget.taskUnitQueue.subQueues
+        children: widget.taskUnitQueue.debugTaskUnitQueue
             .where((sq) => sq.isNotEmpty)
             .map((subQueue) =>
-                DebugSubTaskUnitQueueView(subTaskUnitQueue: subQueue))
+                DebugSubTaskUnitQueueView(debugXShelfTaskUnitQueue: subQueue))
             .toList(),
       ),
     );

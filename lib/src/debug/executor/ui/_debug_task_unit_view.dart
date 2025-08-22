@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_artist/src/debug/dialog/_x_shelf_dialog.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../model/_debug_task_unit.dart';
@@ -44,30 +43,21 @@ class _DebugTaskUnitViewState extends State<DebugTaskUnitView> {
                 text: widget.taskUnit.taskType.name,
                 style: TextStyle(fontSize: fontSize),
               ),
-              Spacer(),
-              Tooltip(
-                message: "XShelf ID",
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size.zero,
-                    padding: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-                  ),
-                  onPressed: () {
-                    _showXShelfDialog();
-                  },
-                  child: Text("${widget.taskUnit.xShelf.xShelfId}"),
-                ),
-              ),
+              // Spacer(),
+              // Tooltip(
+              //   message: "XShelf ID",
+              //   child: ElevatedButton(
+              //     style: ElevatedButton.styleFrom(
+              //       minimumSize: Size.zero,
+              //       padding: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+              //     ),
+              //     onPressed: () {
+              //       _showXShelfDialog();
+              //     },
+              //     child: Text("${widget.taskUnit.xShelf.xShelfId}"),
+              //   ),
+              // ),
             ],
-          ),
-          SizedBox(height: 10),
-          Tooltip(
-            message: "XShelfID: ${widget.taskUnit.xShelf.xShelfId}\n"
-                "XShelfType: ${widget.taskUnit.xShelf.xShelfType.name}",
-            child: Text(
-              widget.taskUnit.xShelf.xShelfType.name,
-              style: TextStyle(fontSize: 13, color: Colors.indigo),
-            ),
           ),
           Divider(),
           IconLabelText(
@@ -80,10 +70,10 @@ class _DebugTaskUnitViewState extends State<DebugTaskUnitView> {
     );
   }
 
-  void _showXShelfDialog() {
-    XShelfDialog.showXShelfDialog(
-      context: context,
-      xShelf: widget.taskUnit.xShelf,
-    );
-  }
+// void _showXShelfDialog() {
+//   XShelfDialog.showXShelfDialog(
+//     context: context,
+//     xShelf: widget.taskUnit.xShelf,
+//   );
+// }
 }

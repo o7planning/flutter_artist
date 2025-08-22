@@ -759,7 +759,7 @@ abstract class FilterModel<
       xFilterModel: xFilterModel,
     );
     xShelf._addTaskUnit(taskUnit);
-    FlutterArtist._taskUnitQueue._addXShelf(xShelf);
+    FlutterArtist._xShelfQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
   }
 
@@ -828,7 +828,7 @@ abstract class FilterModel<
     );
     //
     xShelf._initQueryTasks();
-    FlutterArtist._taskUnitQueue._addXShelf(xShelf);
+    FlutterArtist._xShelfQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     return true;

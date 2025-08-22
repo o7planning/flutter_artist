@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-import '../model/_debug_sub_task_unit_queue.dart';
+import '../model/_debug_x_shelf_task_unit_queue.dart';
 import '_debug_task_unit_view.dart';
 
 class DebugSubTaskUnitQueueView extends StatefulWidget {
-  final DebugSubTaskUnitQueue subTaskUnitQueue;
+  final DebugXShelfTaskUnitQueue debugXShelfTaskUnitQueue;
 
   const DebugSubTaskUnitQueueView({
     super.key,
-    required this.subTaskUnitQueue,
+    required this.debugXShelfTaskUnitQueue,
   });
 
   @override
@@ -37,7 +38,7 @@ class _DebugSubTaskUnitQueueViewState extends State<DebugSubTaskUnitQueueView> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: widget.subTaskUnitQueue.taskUnits
+              children: widget.debugXShelfTaskUnitQueue.taskUnits
                   .map((taskUnit) => DebugTaskUnitView(taskUnit: taskUnit))
                   .toList(),
             ),
@@ -53,19 +54,24 @@ class _DebugSubTaskUnitQueueViewState extends State<DebugSubTaskUnitQueueView> {
       visualDensity: VisualDensity(horizontal: -3, vertical: -3),
       contentPadding: EdgeInsets.all(0),
       leading: Tooltip(
-        message: "XShelfID: ${widget.subTaskUnitQueue.subQueueId}",
+        message: "XShelfID: ${widget.debugXShelfTaskUnitQueue.xShelfId}",
         child: CircleAvatar(
           radius: 18,
           child: Center(
             child: Text(
-              widget.subTaskUnitQueue.subQueueId.toString(),
+              widget.debugXShelfTaskUnitQueue.xShelfId.toString(),
               style: TextStyle(fontSize: 12),
             ),
           ),
         ),
       ),
-      title:
-          Text("Sub Queue (${widget.subTaskUnitQueue.taskUnits.length} Tasks)"),
+      title: Text(
+          "Task Units in the Queue of ${widget.debugXShelfTaskUnitQueue.shelfName}"),
+      subtitle: IconLabelText(
+        label: "XShelf Task Type: ",
+        text: widget.debugXShelfTaskUnitQueue.xShelfType.name,
+        textStyle: TextStyle(color: Colors.indigo, fontSize: 13),
+      ),
     );
   }
 }

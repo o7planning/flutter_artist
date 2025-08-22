@@ -2326,7 +2326,7 @@ abstract class Block<
     );
     //
     xShelf._addTaskUnit(taskUnit);
-    FlutterArtist._taskUnitQueue._addXShelf(xShelf);
+    FlutterArtist._xShelfQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
   }
 
@@ -2396,7 +2396,7 @@ abstract class Block<
     );
     //
     xShelf._addTaskUnit(taskUnit);
-    FlutterArtist._taskUnitQueue._addXShelf(xShelf);
+    FlutterArtist._xShelfQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     return taskResult;
@@ -2464,7 +2464,7 @@ abstract class Block<
     );
     //
     xShelf._addTaskUnit(taskUnit);
-    FlutterArtist._taskUnitQueue._addXShelf(xShelf);
+    FlutterArtist._xShelfQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     return taskResult;
@@ -2540,7 +2540,7 @@ abstract class Block<
           : ForceType.decidedAtRuntime,
     );
     xShelf._addTaskUnit(taskUnit);
-    FlutterArtist._taskUnitQueue._addXShelf(xShelf);
+    FlutterArtist._xShelfQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     var result = taskUnit.taskResult as BlockItemCurrSelectionResult<ITEM>;
@@ -2614,7 +2614,7 @@ abstract class Block<
     );
     //
     xShelf._addTaskUnit(taskUnit);
-    FlutterArtist._taskUnitQueue._addXShelf(xShelf);
+    FlutterArtist._xShelfQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     _executeNavigation(navigate: navigate);
@@ -2787,7 +2787,7 @@ abstract class Block<
     );
     //
     xShelf._initQueryTasks();
-    FlutterArtist._taskUnitQueue._addXShelf(xShelf);
+    FlutterArtist._xShelfQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     XBlock xBlock = xShelf.findXBlockByName(this.name)!;
@@ -2885,7 +2885,7 @@ abstract class Block<
     );
     //
     xShelf._initQueryTasks();
-    FlutterArtist._taskUnitQueue._addXShelf(xShelf);
+    FlutterArtist._xShelfQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     XBlock xBlock = xShelf.findXBlockByName(this.name)!;
@@ -2928,7 +2928,7 @@ abstract class Block<
     );
     //
     xShelf._initQueryTasks();
-    FlutterArtist._taskUnitQueue._addXShelf(xShelf);
+    FlutterArtist._xShelfQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     XBlock xBlock = xShelf.findXBlockByName(this.name)!;
@@ -3198,7 +3198,7 @@ abstract class Block<
     );
     //
     xShelf._addTaskUnit(taskUnit);
-    FlutterArtist._taskUnitQueue._addXShelf(xShelf);
+    FlutterArtist._xShelfQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     return taskUnit.taskResult;
@@ -3271,7 +3271,7 @@ abstract class Block<
     );
     //
     xShelf._addTaskUnit(taskUnit);
-    FlutterArtist._taskUnitQueue._addXShelf(xShelf);
+    FlutterArtist._xShelfQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     return taskUnit.taskResult;
@@ -3345,7 +3345,7 @@ abstract class Block<
     );
     //
     xShelf._addTaskUnit(taskUnit);
-    FlutterArtist._taskUnitQueue._addXShelf(xShelf);
+    FlutterArtist._xShelfQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     return taskUnit.taskResult;
@@ -3418,7 +3418,7 @@ abstract class Block<
     );
     //
     xShelf._addTaskUnit(taskUnit);
-    FlutterArtist._taskUnitQueue._addXShelf(xShelf);
+    FlutterArtist._xShelfQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     return taskUnit.taskResult;
@@ -3469,7 +3469,7 @@ abstract class Block<
     );
     //
     xShelf._addTaskUnit(taskUnit);
-    FlutterArtist._taskUnitQueue._addXShelf(xShelf);
+    FlutterArtist._xShelfQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     return true;
@@ -3591,7 +3591,7 @@ abstract class Block<
     );
     //
     xShelf._addTaskUnit(taskUnit);
-    FlutterArtist._taskUnitQueue._addXShelf(xShelf);
+    FlutterArtist._xShelfQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     return thisXBlock.itemCreationResult;
@@ -3791,7 +3791,7 @@ abstract class Block<
     );
     //
     xShelf._initQueryTasks();
-    FlutterArtist._taskUnitQueue._addXShelf(xShelf);
+    FlutterArtist._xShelfQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     XBlock xBlock = xShelf.findXBlockByName(this.name)!;
