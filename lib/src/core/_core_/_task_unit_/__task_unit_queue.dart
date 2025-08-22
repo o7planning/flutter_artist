@@ -68,35 +68,39 @@ class _TaskUnitQueue {
     }
   }
 
-  void addTaskUnit(_TaskUnit taskUnit) {
-    final int? executingXShelfId = FlutterArtist.executor.executingXShelfId;
-    //
-    if (executingXShelfId != null) {
-      if (taskUnit.xShelfId < executingXShelfId) {
-        throw FatalAppError(
-          errorMessage:
-              "Development Error - taskUnit.xShelfId must be greater or equals than executingXShelfId.",
-        );
-      }
-    }
-    if (taskUnit.xShelfId <= __maxXShelfId) {
-      _SubTaskUnitQueue? subQueue = __splayTreeMap[taskUnit.xShelfId];
-      if (subQueue == null) {
-        throw FatalAppError(
-          errorMessage:
-              "Development Error - taskUnit.xShelfId not found in Queue.",
-        );
-      }
-      subQueue.addTaskUnit(taskUnit);
-    }
-    // taskUnit.xShelfId > __maxXShelfId
-    else {
-      __maxXShelfId = taskUnit.xShelfId;
-      _SubTaskUnitQueue subQueue = _SubTaskUnitQueue();
-      __splayTreeMap[taskUnit.xShelfId] = subQueue;
-      subQueue.addTaskUnit(taskUnit);
-    }
+  void _addXShelf(XShelf xShelf) {
+    __xShelfMapQueue[xShelf.shelf.name] = xShelf;
   }
+
+  // void addTaskUnit(_TaskUnit taskUnit) {
+  //   final int? executingXShelfId = FlutterArtist.executor.executingXShelfId;
+  //   //
+  //   if (executingXShelfId != null) {
+  //     if (taskUnit.xShelfId < executingXShelfId) {
+  //       throw FatalAppError(
+  //         errorMessage:
+  //             "Development Error - taskUnit.xShelfId must be greater or equals than executingXShelfId.",
+  //       );
+  //     }
+  //   }
+  //   if (taskUnit.xShelfId <= __maxXShelfId) {
+  //     _SubTaskUnitQueue? subQueue = __splayTreeMap[taskUnit.xShelfId];
+  //     if (subQueue == null) {
+  //       throw FatalAppError(
+  //         errorMessage:
+  //             "Development Error - taskUnit.xShelfId not found in Queue.",
+  //       );
+  //     }
+  //     subQueue.addTaskUnit(taskUnit);
+  //   }
+  //   // taskUnit.xShelfId > __maxXShelfId
+  //   else {
+  //     __maxXShelfId = taskUnit.xShelfId;
+  //     _SubTaskUnitQueue subQueue = _SubTaskUnitQueue();
+  //     __splayTreeMap[taskUnit.xShelfId] = subQueue;
+  //     subQueue.addTaskUnit(taskUnit);
+  //   }
+  // }
 
   DebugTaskUnitQueue toDebugTaskUnitQueue() {
     return DebugTaskUnitQueue(

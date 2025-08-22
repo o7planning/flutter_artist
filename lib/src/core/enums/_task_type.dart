@@ -13,6 +13,7 @@ enum TaskType {
   blockQuickCreateMultiItems,
   blockQuickUpdateItem,
   blockSelectItemAsCurrent,
+  blockClearance,
   //
   filterModelFilterViewChanged,
   //

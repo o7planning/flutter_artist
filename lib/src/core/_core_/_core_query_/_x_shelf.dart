@@ -1054,6 +1054,53 @@ class XShelf {
         "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n");
   }
 
+  void _initQueryTasks() {
+    if (vipXScalar != null && rootVipXBlock != null) {
+      throw "Development Logic Error";
+    }
+    printMe();
+    //
+    if (vipXScalar != null) {
+      //
+      // Execute vipXScalar first!!
+      //
+      _addTaskUnit(
+        _ScalarQueryTaskUnit(
+          xScalar: vipXScalar!,
+        ),
+      );
+    } else if (rootVipXBlock != null) {
+      //
+      // Execute rootVipXBlock first!!
+      //
+      _addTaskUnit(
+        _BlockQueryTaskUnit(
+          xBlock: rootVipXBlock!,
+        ),
+      );
+    }
+    //
+    for (XScalar xScalar in allXScalars) {
+      if (xScalar != vipXScalar) {
+        _addTaskUnit(
+          _ScalarQueryTaskUnit(
+            xScalar: xScalar,
+          ),
+        );
+      }
+    }
+    //
+    for (XBlock rootXBlock in allRootXBlocks) {
+      if (rootXBlock != rootVipXBlock) {
+        _addTaskUnit(
+          _BlockQueryTaskUnit(
+            xBlock: rootXBlock,
+          ),
+        );
+      }
+    }
+  }
+
   // ***************************************************************************
   // ***************************************************************************
   // ***************************************************************************
@@ -1122,8 +1169,17 @@ class XShelf {
     return __taskUnitQueue.isEmpty;
   }
 
-  _TaskUnit? getNextTaskUnit()  {
+  _TaskUnit? getNextTaskUnit() {
     return __taskUnitQueue.getNextTaskUnit();
+  }
+
+  void _addTaskUnit(_TaskUnit taskUnit) {
+    if (taskUnit.xShelf != this) {
+      throw FatalAppError(
+        errorMessage: "Development Logic Error.",
+      );
+    }
+    __taskUnitQueue.addTaskUnit(taskUnit);
   }
 
   // ***************************************************************************

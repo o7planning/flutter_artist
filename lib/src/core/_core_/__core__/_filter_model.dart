@@ -755,9 +755,11 @@ abstract class FilterModel<
     XShelf xShelf = XShelf.forFilterViewChange(filterModel: this);
     //
     XFilterModel xFilterModel = xShelf.findXFilterModelByName(name)!;
-    _FilterViewChangeTaskUnit taskUnit =
-        _FilterViewChangeTaskUnit(xFilterModel: xFilterModel);
-    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
+    _FilterViewChangeTaskUnit taskUnit = _FilterViewChangeTaskUnit(
+      xFilterModel: xFilterModel,
+    );
+    xShelf._addTaskUnit(taskUnit);
+    FlutterArtist._taskUnitQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
   }
 
@@ -824,7 +826,11 @@ abstract class FilterModel<
       filterModel: this,
       filterInput: filterInput,
     );
-    await xShelf.shelf._queryShelf(xShelf: xShelf);
+    xShelf._initQueryTasks();
+    FlutterArtist._taskUnitQueue._addXShelf(xShelf);
+    await FlutterArtist.executor._executeTaskUnitQueue();
+    // xxx;
+    // await xShelf.shelf._queryShelf(xShelf: xShelf);
     //
     return true;
   }

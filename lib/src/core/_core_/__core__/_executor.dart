@@ -136,6 +136,12 @@ class _Executor {
         thisXBlock: taskUnit.xBlock,
       );
     }
+    // Block Clear Current:
+    else if (taskUnit is _BlockClearanceTaskUnit) {
+      await taskUnit.xBlock.block._unitClearance(
+        thisXBlock: taskUnit.xBlock,
+      );
+    }
     // Block Query:
     else if (taskUnit is _BlockQueryTaskUnit) {
       await taskUnit.xBlock.block._unitQuery(

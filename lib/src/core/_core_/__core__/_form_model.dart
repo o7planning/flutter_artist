@@ -1463,9 +1463,13 @@ abstract class FormModel<
     //
     XBlock xBlock = xShelf.findXBlockByName(block.name)!;
     XFormModel xFormModel = xBlock.xFormModel!;
-    _FormViewChangeTaskUnit taskUnit =
-        _FormViewChangeTaskUnit(xFormModel: xFormModel);
-    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
+    _FormViewChangeTaskUnit taskUnit = _FormViewChangeTaskUnit(
+      xFormModel: xFormModel,
+    );
+    //
+    xShelf._addTaskUnit(taskUnit);
+    FlutterArtist._taskUnitQueue._addXShelf(xShelf);
+    //
     await FlutterArtist.executor._executeTaskUnitQueue(showOverlay: false);
   }
 
@@ -1555,8 +1559,8 @@ abstract class FormModel<
       extraFormInput: extraFormInput,
     );
     //
-    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
-    //
+    xShelf._addTaskUnit(taskUnit);
+    FlutterArtist._taskUnitQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     return true;
@@ -1598,8 +1602,8 @@ abstract class FormModel<
       xFormModel: xFormModel,
     );
     //
-    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
-    //
+    xShelf._addTaskUnit(taskUnit);
+    FlutterArtist._taskUnitQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     return taskUnit.taskResult;

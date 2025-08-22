@@ -351,7 +351,9 @@ abstract class Scalar<
         var taskUnit = _ScalarQueryTaskUnit(
           xScalar: thisXScalar,
         );
-        FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
+        thisXScalar.xShelf._addTaskUnit(taskUnit);
+      // xxx;
+      // FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
     }
     return true;
   }
@@ -619,7 +621,7 @@ abstract class Scalar<
     }
 
     // _QShelf.forScalarQuickAction.
-    XShelf xShelf = XShelf.forScalarQuickAction(
+    final XShelf xShelf = XShelf.forScalarQuickAction(
       scalar: this,
     );
     //
@@ -630,9 +632,10 @@ abstract class Scalar<
       action: action,
     );
     //
-    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
-    //
+    xShelf._addTaskUnit(taskUnit);
+    FlutterArtist._taskUnitQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
+    //
     return taskUnit.taskResult;
   }
 
@@ -676,8 +679,10 @@ abstract class Scalar<
     }
     //
     // _QShelf.forScalarQuickExtraDataLoadAction.
-    XShelf xShelf = XShelf.forScalarQuickExtraDataLoadAction(
-        scalar: this, filterInput: filterInput);
+    final XShelf xShelf = XShelf.forScalarQuickExtraDataLoadAction(
+      scalar: this,
+      filterInput: filterInput,
+    );
     //
     XScalar thisXScalar = xShelf.findXScalarByName(this.name)!;
     //
@@ -687,9 +692,10 @@ abstract class Scalar<
       afterQuickAction: afterQuickAction,
     );
     //
-    FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
-    //
+    xShelf._addTaskUnit(taskUnit);
+    FlutterArtist._taskUnitQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
+    //
     return true;
   }
 
@@ -713,11 +719,16 @@ abstract class Scalar<
       parameters: {"filterInput": filterInput},
     );
     //
-    XShelf xShelf = XShelf.forScalarQuery(
+    final XShelf xShelf = XShelf.forScalarQuery(
       scalar: this,
       filterInput: filterInput,
     );
-    await xShelf.shelf._queryShelf(xShelf: xShelf);
+    //
+    xShelf._initQueryTasks();
+    FlutterArtist._taskUnitQueue._addXShelf(xShelf);
+    await FlutterArtist.executor._executeTaskUnitQueue();
+    //
+    // await xShelf.shelf._queryShelf(xShelf: xShelf); /// xxx;
     //
     XScalar xScalar = xShelf.findXScalarByName(this.name)!;
     ScalarQueryResult result = xScalar.queryResult;
