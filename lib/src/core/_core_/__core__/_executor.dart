@@ -45,10 +45,12 @@ class _Executor {
         final Map<String, Shelf> shelfMap = {};
         try {
           while (FlutterArtist._taskUnitQueue.hasNext()) {
-            BuildContext context = FlutterArtist.adapter.getCurrentContext();
-            await DebugTaskUnitQueueDialog.showTaskUnitQueueDialog(
-              context: context,
-            );
+            if (FlutterArtist.debugOptions.showTaskUnitQueue) {
+              BuildContext context = FlutterArtist.adapter.getCurrentContext();
+              await DebugTaskUnitQueueDialog.showTaskUnitQueueDialog(
+                context: context,
+              );
+            }
             //
             _TaskUnit taskUnit =
                 FlutterArtist._taskUnitQueue.getNextTaskUnit()!;
