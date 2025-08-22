@@ -1143,9 +1143,7 @@ class XShelf {
       if (xScalar.queryHint == QryHint.none) {
         continue;
       }
-      if (!xScalar._processed) {
-        return xScalar;
-      }
+      return xScalar;
     }
     return null;
   }
@@ -1164,6 +1162,10 @@ class XShelf {
 
   // ***************************************************************************
   // ***************************************************************************
+
+  DebugSubTaskUnitQueue toDebugSubTaskUnitQueue() {
+    return __taskUnitQueue.toDebugSubTaskUnitQueue();
+  }
 
   bool isEmptyTask() {
     return __taskUnitQueue.isEmpty;

@@ -1,11 +1,13 @@
 import '_debug_task_unit.dart';
 
+int __subQueueId = 0;
+
 class DebugSubTaskUnitQueue {
-  final int subQueueId;
+  final int subQueueId = __subQueueId++;
+
   final List<DebugTaskUnit> taskUnits;
 
   DebugSubTaskUnitQueue({
-    required this.subQueueId,
     required this.taskUnits,
   });
 

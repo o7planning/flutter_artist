@@ -19,9 +19,8 @@ class _SubTaskUnitQueue {
     _taskUnits.add(taskUnit);
   }
 
-  DebugSubTaskUnitQueue toDebugSubTaskUnitQueue({required int subQueueId}) {
+  DebugSubTaskUnitQueue toDebugSubTaskUnitQueue( ) {
     return DebugSubTaskUnitQueue(
-      subQueueId: subQueueId,
       taskUnits: _taskUnits
           .map(
             (tu) => tu.toDebugTaskUnit(),

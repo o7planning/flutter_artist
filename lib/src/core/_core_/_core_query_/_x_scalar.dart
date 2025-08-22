@@ -6,8 +6,6 @@ class XScalar {
   final Scalar scalar;
   final XFilterModel xFilterModel;
 
-  bool _processed = false;
-
   //
 
   QryHint __qryHint = QryHint.none;
