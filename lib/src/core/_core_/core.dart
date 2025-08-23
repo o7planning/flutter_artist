@@ -126,7 +126,7 @@ import '../utils/_hive_utils.dart';
 import '../utils/_string_utils.dart';
 import '../utils/_visibility_detector_utils.dart';
 import '../widgets/_custom_app_container.dart';
- 
+
 part '__core__/___core.dart';
 
 part '__core__/_activity.dart';

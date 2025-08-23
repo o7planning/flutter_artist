@@ -1459,7 +1459,7 @@ abstract class FormModel<
   Future<void> _onChangeFromFormView() async {
     print("#~~~~~~~~~~~~~~~> _onChangeFromFormView");
     //
-    XShelf xShelf = XShelf.forFormViewChange(formModel: this);
+    final XShelf xShelf = XShelf.forFormViewChange(formModel: this);
     //
     XBlock xBlock = xShelf.findXBlockByName(block.name)!;
     XFormModel xFormModel = xBlock.xFormModel!;
@@ -1550,7 +1550,7 @@ abstract class FormModel<
       return false;
     }
     //
-    XShelf xShelf = XShelf.forFormModelEnterFields(formModel: this);
+    final XShelf xShelf = XShelf.forFormModelEnterFields(formModel: this);
     //
     XBlock xBlock = xShelf.findXBlockByName(this.block.name)!;
     XFormModel xFormModel = xBlock.xFormModel!;
@@ -1594,11 +1594,11 @@ abstract class FormModel<
       return FormSaveResult(precheck: actionable.errCode);
     }
     //
-    XShelf xShelf = XShelf.forFormModelSave(formModel: this);
+    final XShelf xShelf = XShelf.forFormModelSave(formModel: this);
     //
     XBlock xBlock = xShelf.findXBlockByName(this.block.name)!;
     XFormModel xFormModel = xBlock.xFormModel!;
-    _ResultedTaskUnit taskUnit = _FormModelSaveFormTaskUnit(
+    final _ResultedTaskUnit taskUnit = _FormModelSaveFormTaskUnit(
       xFormModel: xFormModel,
     );
     //

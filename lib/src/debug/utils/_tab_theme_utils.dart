@@ -6,7 +6,7 @@ class TabThemeUtils {
     TabbedViewThemeData themeData = TabbedViewThemeData.classic();
     final borderSide = BorderSide(color: Colors.grey, width: 0.7);
     final borderSideTransparent =
-        BorderSide(color: Colors.transparent, width: 0.5);
+    BorderSide(color: Colors.transparent, width: 0.5);
     //
     final boxDecoTabDeselected = BoxDecoration(
       shape: BoxShape.rectangle,

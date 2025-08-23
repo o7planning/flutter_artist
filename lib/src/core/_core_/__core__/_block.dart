@@ -2318,10 +2318,10 @@ abstract class Block<
     if (this.currentItem == null) {
       return;
     }
-    // _QShelf.forBlockClearCurrentItem.
-    XShelf xShelf = XShelf.forBlockClearCurrentItem(block: this);
     //
-    XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    final XShelf xShelf = XShelf.forBlockClearCurrentItem(block: this);
+    //
+    final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
     _TaskUnit taskUnit = _BlockClearCurrentTaskUnit(
       xBlock: thisXBlock,
@@ -2384,14 +2384,14 @@ abstract class Block<
         precheck: BlockItemDeletionPrecheck.cancelled,
       );
     }
-    // _QShelf.forBlockItemDeletion.
-    XShelf xShelf = XShelf.forBlockItemDeletion(block: this);
     //
-    XBlock thisXBlock = xShelf.findXBlockByName(name)!;
+    final XShelf xShelf = XShelf.forBlockItemDeletion(block: this);
+    //
+    final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
     final taskResult = _createEmptyItemDeletionResult();
     //
-    _ResultedTaskUnit taskUnit = _BlockDeleteItemTaskUnit(
+    final _ResultedTaskUnit taskUnit = _BlockDeleteItemTaskUnit(
       xBlock: thisXBlock,
       item: item!,
       taskResult: taskResult,
@@ -2450,15 +2450,15 @@ abstract class Block<
         precheck: BlockItemsDeletionPrecheck.cancelled,
       );
     }
-    // _QShelf.forBlockMultiItemsDeletion.
-    XShelf xShelf = XShelf.forBlockMultiItemsDeletion(block: this);
     //
-    XBlock thisXBlock = xShelf.findXBlockByName(name)!;
+    final XShelf xShelf = XShelf.forBlockMultiItemsDeletion(block: this);
+    //
+    final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
     final taskResult = _createEmptyItemsDeletionResult(
       candidateItems: candidateDeleteItems,
     );
-    _ResultedTaskUnit taskUnit = _BlockDeleteItemsTaskUnit(
+    final _ResultedTaskUnit taskUnit = _BlockDeleteItemsTaskUnit(
       xBlock: thisXBlock,
       items: candidateDeleteItems,
       stopIfError: stopIfError,
@@ -2526,12 +2526,12 @@ abstract class Block<
         currentItem: currentItem,
       );
     }
-    // _QShelf.forBlockCurrItemSelection.
-    XShelf xShelf = XShelf.forBlockCurrItemSelection(block: this);
     //
-    XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    final XShelf xShelf = XShelf.forBlockCurrItemSelection(block: this);
     //
-    _ResultedTaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+    final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    //
+    final _ResultedTaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
       currentItemSelectionType: currentItemSelectionType,
       xBlock: thisXBlock,
       newQueriedList: [],
@@ -2607,11 +2607,11 @@ abstract class Block<
         precheck: actionable.errCode,
       );
     }
-    // _QShelf.forBlockClearance.
-    XShelf xShelf = XShelf.forBlockClearance(block: this);
+    //
+    final XShelf xShelf = XShelf.forBlockClearance(block: this);
 
-    XBlock thisXBlock = xShelf.findXBlockByName(name)!;
-    _ResultedTaskUnit taskUnit = _BlockClearanceTaskUnit(
+    final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
+    final _ResultedTaskUnit taskUnit = _BlockClearanceTaskUnit(
       xBlock: thisXBlock,
     );
     //
@@ -2777,7 +2777,7 @@ abstract class Block<
       },
     );
     //
-    XShelf xShelf = XShelf.forBlockQueryEmpty(
+    final XShelf xShelf = XShelf.forBlockQueryEmpty(
       block: this,
       filterInput: filterInput,
       pageable: pageable,
@@ -2877,7 +2877,7 @@ abstract class Block<
       },
     );
     //
-    XShelf xShelf = XShelf.forBlockQueryAndPrepareToEdit(
+    final XShelf xShelf = XShelf.forBlockQueryAndPrepareToEdit(
       block: this,
       filterInput: filterInput,
       pageable: null,
@@ -2920,7 +2920,7 @@ abstract class Block<
       parameters: {},
     );
     //
-    XShelf xShelf = XShelf.forBlockQueryAndPrepareToCreate(
+    final XShelf xShelf = XShelf.forBlockQueryAndPrepareToCreate(
       block: this,
       filterInput: filterInput,
       pageable: null,
@@ -3185,16 +3185,16 @@ abstract class Block<
       );
     }
     //
-    // _QShelf.forBlockQuickActionExecution
+    //
     final XShelf xShelf = XShelf.forBlockQuickActionExecution(
       block: this,
       filterInput: filterInput,
       afterQuickAction: action.config.afterQuickAction,
     );
     //
-    XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    _ResultedTaskUnit taskUnit = _BlockQuickActionTaskUnit(
+    final _ResultedTaskUnit taskUnit = _BlockQuickActionTaskUnit(
       xBlock: thisXBlock,
       action: action,
     );
@@ -3262,12 +3262,12 @@ abstract class Block<
         precheck: BlockQuickItemCreationPrecheck.cancelled,
       );
     }
-    // _QShelf.forBlockQuickItemCreation.
+    //
     final XShelf xShelf = XShelf.forBlockQuickItemCreation(block: this);
     //
-    XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    _ResultedTaskUnit taskUnit = _BlockQuickCreateItemTaskUnit(
+    final _ResultedTaskUnit taskUnit = _BlockQuickCreateItemTaskUnit(
       xBlock: thisXBlock,
       action: action,
     );
@@ -3336,12 +3336,12 @@ abstract class Block<
         precheck: BlockMultiItemsCreationPrecheck.cancelled,
       );
     }
-    // _QShelf.forBlockQuickMultiItemsCreation.
+    //
     final XShelf xShelf = XShelf.forBlockQuickMultiItemsCreation(block: this);
     //
-    XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    _ResultedTaskUnit taskUnit = _BlockQuickCreateMultiItemsTaskUnit(
+    final _ResultedTaskUnit taskUnit = _BlockQuickCreateMultiItemsTaskUnit(
       xBlock: thisXBlock,
       action: action,
     );
@@ -3409,12 +3409,12 @@ abstract class Block<
         precheck: BlockQuickItemUpdatePrecheck.cancelled,
       );
     }
-    // _QShelf.forBlockQuickItemUpdate.
+    //
     final XShelf xShelf = XShelf.forBlockQuickItemUpdate(block: this);
     //
-    XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    _ResultedTaskUnit taskUnit = _BlockQuickUpdateItemTaskUnit(
+    final _ResultedTaskUnit taskUnit = _BlockQuickUpdateItemTaskUnit(
       xBlock: thisXBlock,
       action: action,
     );
@@ -3460,10 +3460,10 @@ abstract class Block<
     if (!confirm) {
       return false;
     }
-    // _QShelf.forQuickChildBlockItemsAction.
+    //
     final XShelf xShelf = XShelf.forQuickChildBlockItemsAction(block: this);
     //
-    XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
     _TaskUnit taskUnit = _BlockQuickChildBlockItemsTaskUnit(
       xBlock: thisXBlock,
@@ -3581,9 +3581,9 @@ abstract class Block<
     }
     //
     extraFormInput?.formAction = FormAction.create;
-    // _QShelf.forPrepareFormToCreateItem(
+    //
     final XShelf xShelf = XShelf.forPrepareFormToCreateItem(block: this);
-    XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
     _TaskUnit taskUnit = _BlockPrepareFormToCreateItemTaskUnit(
       xBlock: thisXBlock,
@@ -3783,7 +3783,7 @@ abstract class Block<
         }
     }
     //
-    XShelf xShelf = XShelf.forBlockQuery(
+    final XShelf xShelf = XShelf.forBlockQuery(
       block: this,
       filterInput: filterInput,
       pageable: usedPageable,
