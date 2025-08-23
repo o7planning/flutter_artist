@@ -105,19 +105,7 @@ class _Executor {
     //
     shelfMap[taskUnit.shelf.name] = taskUnit.shelf;
     //
-    if (taskUnit is _ShelfQueryTaskUnit) {
-      await taskUnit.xShelf.shelf._unitQueryShelf(
-        xShelf: taskUnit.xShelf,
-      );
-    }
-    //
-    else if (taskUnit is _ShelfInternalReactTaskUnit) {
-      await taskUnit.shelf._unitInternalReact(
-        shelfInternalListeners: taskUnit.shelfInternalListeners,
-      );
-    }
-    //
-    else if (taskUnit is _FilterViewChangeTaskUnit) {
+    if (taskUnit is _FilterViewChangeTaskUnit) {
       await taskUnit.xFilterModel.filterModel._unitFilterViewChanged(
         xFilterModel: taskUnit.xFilterModel,
       );

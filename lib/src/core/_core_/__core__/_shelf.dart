@@ -60,7 +60,8 @@ abstract class Shelf extends _Core {
 
   late final _ShelfUIComponents ui = _ShelfUIComponents(shelf: this);
 
-  late final _ShelfExternalUtils _shelfExternalUtils = _ShelfExternalUtils(this);
+  late final _ShelfExternalUtils _shelfExternalUtils =
+      _ShelfExternalUtils(this);
 
   // ***************************************************************************
   // ***************************************************************************
@@ -580,73 +581,6 @@ abstract class Shelf extends _Core {
     xShelf._initQueryTasks();
     // IMPORTANT: No need to call "execute".
     FlutterArtist._xShelfQueue._addXShelf(xShelf);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @_TaskUnitMethodAnnotation()
-  @_BlockShelfQueryAnnotation()
-  Future<void> _unitQueryShelf({
-    required XShelf xShelf,
-  }) async {
-    final XScalar? vipXScalar = xShelf.vipXScalar;
-    final XBlock? rootVipXBlock = xShelf.rootVipXBlock;
-    //
-    if (vipXScalar != null && rootVipXBlock != null) {
-      throw "Development Logic Error";
-    }
-    xShelf.printMe();
-    //
-    if (vipXScalar != null) {
-      //
-      // Execute vipXScalar first!!
-      //
-      xShelf._addTaskUnit(
-        _ScalarQueryTaskUnit(
-          xScalar: vipXScalar,
-        ),
-      );
-    } else if (rootVipXBlock != null) {
-      //
-      // Execute rootVipXBlock first!!
-      //
-      xShelf._addTaskUnit(
-        _BlockQueryTaskUnit(
-          xBlock: rootVipXBlock,
-        ),
-      );
-    }
-    //
-    for (XScalar xScalar in xShelf.allXScalars) {
-      if (xScalar != vipXScalar) {
-        xShelf._addTaskUnit(
-          _ScalarQueryTaskUnit(
-            xScalar: xScalar,
-          ),
-        );
-      }
-    }
-    //
-    for (XBlock rootXBlock in xShelf.allRootXBlocks) {
-      if (rootXBlock != rootVipXBlock) {
-        xShelf._addTaskUnit(
-          _BlockQueryTaskUnit(
-            xBlock: rootXBlock,
-          ),
-        );
-      }
-    }
-  }
-
-  // ***************************************************************************
-
-  @_TaskUnitMethodAnnotation()
-  @_ShelfInternalReactAnnotation()
-  Future<void> _unitInternalReact({
-    required EffectedShelfMembers shelfInternalListeners,
-  }) async {
-    throw UnimplementedError();
   }
 
   // ***************************************************************************

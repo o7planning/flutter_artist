@@ -347,12 +347,6 @@ part '_task_unit_/_scalar_query_task_unit.dart';
 
 part '_task_unit_/_scalar_quick_action_task_unit.dart';
 
-part '_task_unit_/_shelf_external_react_task_unit.dart';
-
-part '_task_unit_/_shelf_internal_react_task_unit.dart';
-
-part '_task_unit_/_shelf_query_task_unit.dart';
-
 part '_ui_/__refreshable_widget.dart';
 
 part '_ui_/__refreshable_widget_state.dart';
@@ -554,14 +548,6 @@ class _BlockQueryPreviousPageAnnotation {
 
 class _BlockQueryMorePageAnnotation {
   const _BlockQueryMorePageAnnotation();
-}
-
-class _ShelfQueryAnnotation {
-  const _ShelfQueryAnnotation();
-}
-
-class _ShelfInternalReactAnnotation {
-  const _ShelfInternalReactAnnotation();
 }
 
 class _BlockQueryAnnotation {
