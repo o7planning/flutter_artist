@@ -1,11 +1,11 @@
 part of '../core.dart';
 
-class EffBlock {
+class _EffBlock {
   final bool reQuery;
   final bool refreshCurrItem;
   final Block block;
 
-  EffBlock({
+  _EffBlock({
     required this.block,
     required this.reQuery,
     required this.refreshCurrItem,

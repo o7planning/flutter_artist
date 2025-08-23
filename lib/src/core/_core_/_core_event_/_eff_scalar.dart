@@ -1,10 +1,10 @@
 part of '../core.dart';
 
-class EffScalar {
+class _EffScalar {
   final bool reQuery;
   final Scalar scalar;
 
-  EffScalar({
+  _EffScalar({
     required this.scalar,
     required this.reQuery,
   });

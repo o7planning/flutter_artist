@@ -1,10 +1,10 @@
 part of '../core.dart';
 
 @_ShelfExternalAnnotation()
-class ShelfExternalUtils {
+class _ShelfExternalUtils {
   final Shelf shelf;
 
-  ShelfExternalUtils(this.shelf);
+  _ShelfExternalUtils(this.shelf);
 
   EffectedShelfMembers calculateEffectedShelfMembersByEvents(
       List<Type> events) {

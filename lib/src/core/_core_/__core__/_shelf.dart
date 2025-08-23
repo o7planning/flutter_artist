@@ -60,7 +60,7 @@ abstract class Shelf extends _Core {
 
   late final _ShelfUIComponents ui = _ShelfUIComponents(shelf: this);
 
-  late final ShelfExternalUtils _shelfExternalUtils = ShelfExternalUtils(this);
+  late final _ShelfExternalUtils _shelfExternalUtils = _ShelfExternalUtils(this);
 
   // ***************************************************************************
   // ***************************************************************************
