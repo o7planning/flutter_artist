@@ -78,7 +78,9 @@ abstract class Scalar<
 
   final ScalarConfig config;
 
-  final _internalListeners = EffectedShelfMembers();
+  late final _internalListeners = EffectedShelfMembers.ofScalar(
+    eventScalar: this,
+  );
 
   bool __isQuerying = false;
 

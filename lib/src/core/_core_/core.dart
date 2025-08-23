@@ -145,7 +145,11 @@ part '__core__/_debug_options.dart';
 
 part '__core__/_default_filter_model.dart';
 
-part '__core__/_effected_shelf_members.dart';
+part '_core_event_/_eff_block.dart';
+
+part '_core_event_/_eff_scalar.dart';
+
+part '_core_event_/_effected_shelf_members.dart';
 
 part '__core__/_error_listener.dart';
 
@@ -173,7 +177,7 @@ part '__core__/_shelf.dart';
 
 part '__core__/_shelf_block_scalar_type.dart';
 
-part '__core__/_shelf_external_utils.dart';
+part '_core_event_/_shelf_external_utils.dart';
 
 part '__core__/_shelf_structure.dart';
 

@@ -8,7 +8,7 @@ class ShelfExternalUtils {
 
   EffectedShelfMembers calculateEffectedShelfMembersByEvents(
       List<Type> events) {
-    EffectedShelfMembers ret = EffectedShelfMembers();
+    EffectedShelfMembers ret = EffectedShelfMembers.ofNothing();
     for (Block block in shelf.blocks) {
       List<Type> types = block.config.reQueryByExternalShelfEvents;
       if (_hasIntersection(events, types)) {
