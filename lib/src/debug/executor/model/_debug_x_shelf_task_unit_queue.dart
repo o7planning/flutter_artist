@@ -3,14 +3,16 @@ import '_debug_task_unit.dart';
 
 class DebugXShelfTaskUnitQueue {
   final XShelf xShelf;
-  final List<DebugTaskUnit> taskUnits;
+  final List<DebugTaskUnit> mainTaskUnits;
+  final List<DebugTaskUnit> secondaryTaskUnits;
 
   DebugXShelfTaskUnitQueue({
     required this.xShelf,
-    required this.taskUnits,
+    required this.mainTaskUnits,
+    required this.secondaryTaskUnits,
   });
 
-  bool get isEmpty => taskUnits.isEmpty;
+  bool get isEmpty => mainTaskUnits.isEmpty && secondaryTaskUnits.isEmpty;
 
-  bool get isNotEmpty => taskUnits.isNotEmpty;
+  bool get isNotEmpty => !isEmpty;
 }

@@ -353,7 +353,7 @@ abstract class Scalar<
         var taskUnit = _ScalarQueryTaskUnit(
           xScalar: thisXScalar,
         );
-        thisXScalar.xShelf._addTaskUnit(taskUnit);
+        thisXScalar.xShelf._addTaskUnit(taskUnit: taskUnit);
     }
     return true;
   }
@@ -631,7 +631,7 @@ abstract class Scalar<
       action: action,
     );
     //
-    xShelf._addTaskUnit(taskUnit);
+    xShelf._addTaskUnit(taskUnit: taskUnit);
     FlutterArtist._xShelfQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
@@ -691,7 +691,7 @@ abstract class Scalar<
       afterQuickAction: afterQuickAction,
     );
     //
-    xShelf._addTaskUnit(taskUnit);
+    xShelf._addTaskUnit(taskUnit: taskUnit);
     FlutterArtist._xShelfQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //

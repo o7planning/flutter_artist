@@ -2,30 +2,46 @@ part of '../core.dart';
 
 class _XShelfTaskUnitQueue {
   final XShelf xShelf;
-  final List<_TaskUnit> _taskUnits = [];
+  final List<_TaskUnit> _mainTaskUnits = [];
+  final List<_TaskUnit> _secondaryTaskUnits = [];
 
   _XShelfTaskUnitQueue({required this.xShelf});
 
   _TaskUnit? getNextTaskUnit() {
-    if (_taskUnits.isEmpty) {
+    if (_mainTaskUnits.isEmpty) {
+      if (_secondaryTaskUnits.isNotEmpty) {
+        _mainTaskUnits.addAll(_secondaryTaskUnits);
+        _secondaryTaskUnits.clear();
+      }
+    }
+    if (_mainTaskUnits.isEmpty) {
       return null;
     } else {
-      return _taskUnits.removeAt(0);
+      return _mainTaskUnits.removeAt(0);
     }
   }
 
   bool get isEmpty {
-    return _taskUnits.isEmpty;
+    return _mainTaskUnits.isEmpty && _secondaryTaskUnits.isEmpty;
   }
 
-  void addTaskUnit(_TaskUnit taskUnit) {
-    _taskUnits.add(taskUnit);
+  void addTaskUnit({required _TaskUnit taskUnit, required bool toMainQueue}) {
+    if (toMainQueue) {
+      _mainTaskUnits.add(taskUnit);
+    } else {
+      _secondaryTaskUnits.add(taskUnit);
+    }
   }
 
   DebugXShelfTaskUnitQueue toDebugXShelfTaskUnitQueue() {
     return DebugXShelfTaskUnitQueue(
       xShelf: xShelf,
-      taskUnits: _taskUnits
+      mainTaskUnits: _mainTaskUnits
+          .map(
+            (tu) => tu.toDebugTaskUnit(),
+          )
+          .toList(),
+      secondaryTaskUnits: _secondaryTaskUnits
           .map(
             (tu) => tu.toDebugTaskUnit(),
           )

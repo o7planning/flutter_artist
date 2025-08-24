@@ -1059,33 +1059,37 @@ class XShelf {
       throw "Development Logic Error";
     }
     printMe();
+    final bool toMainQueue = false;
     //
     if (vipXScalar != null) {
       //
       // Execute vipXScalar first!!
       //
       _addTaskUnit(
-        _ScalarQueryTaskUnit(
+        taskUnit: _ScalarQueryTaskUnit(
           xScalar: vipXScalar!,
         ),
+        toMainQueue: toMainQueue,
       );
     } else if (rootVipXBlock != null) {
       //
       // Execute rootVipXBlock first!!
       //
       _addTaskUnit(
-        _BlockQueryTaskUnit(
+        taskUnit: _BlockQueryTaskUnit(
           xBlock: rootVipXBlock!,
         ),
+        toMainQueue: toMainQueue,
       );
     }
     //
     for (XScalar xScalar in allXScalars) {
       if (xScalar != vipXScalar) {
         _addTaskUnit(
-          _ScalarQueryTaskUnit(
+          taskUnit: _ScalarQueryTaskUnit(
             xScalar: xScalar,
           ),
+          toMainQueue: toMainQueue,
         );
       }
     }
@@ -1093,9 +1097,10 @@ class XShelf {
     for (XBlock rootXBlock in allRootXBlocks) {
       if (rootXBlock != rootVipXBlock) {
         _addTaskUnit(
-          _BlockQueryTaskUnit(
+          taskUnit: _BlockQueryTaskUnit(
             xBlock: rootXBlock,
           ),
+          toMainQueue: toMainQueue,
         );
       }
     }
@@ -1171,17 +1176,18 @@ class XShelf {
     return __xShelfTaskUnitQueue.isEmpty;
   }
 
-  _TaskUnit? getNextTaskUnit() {
+  _TaskUnit? _getNextTaskUnit() {
     return __xShelfTaskUnitQueue.getNextTaskUnit();
   }
 
-  void _addTaskUnit(_TaskUnit taskUnit) {
+  void _addTaskUnit({required _TaskUnit taskUnit, bool toMainQueue = true}) {
     if (taskUnit.xShelf != this) {
       throw FatalAppError(
         errorMessage: "Development Logic Error.",
       );
     }
-    __xShelfTaskUnitQueue.addTaskUnit(taskUnit);
+    __xShelfTaskUnitQueue.addTaskUnit(
+        taskUnit: taskUnit, toMainQueue: toMainQueue);
   }
 
   // ***************************************************************************

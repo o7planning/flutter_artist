@@ -36,7 +36,7 @@ class _XShelfQueue {
         __xShelfMapQueue.remove(firstShelfName);
         continue;
       }
-      return firstXShelf.getNextTaskUnit()!;
+      return firstXShelf._getNextTaskUnit()!;
     }
   }
 

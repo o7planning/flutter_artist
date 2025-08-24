@@ -5,10 +5,12 @@ import '../model/_debug_task_unit.dart';
 
 class DebugTaskUnitView extends StatefulWidget {
   final DebugTaskUnit taskUnit;
+  final bool isInMainQueue;
 
   const DebugTaskUnitView({
     super.key,
     required this.taskUnit,
+    required this.isInMainQueue,
   });
 
   @override
@@ -27,8 +29,12 @@ class _DebugTaskUnitViewState extends State<DebugTaskUnitView> {
       margin: EdgeInsets.only(right: 5),
       width: 300,
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.black26),
-        color: Colors.cyan.withAlpha(20),
+        border: Border.all(
+          color: Colors.black26,
+        ),
+        color: widget.isInMainQueue
+            ? Colors.cyan.withAlpha(20)
+            : Colors.black12,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,

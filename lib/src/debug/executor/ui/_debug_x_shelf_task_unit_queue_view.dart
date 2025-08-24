@@ -40,9 +40,15 @@ class _DebugXShelfTaskUnitQueueViewState
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: widget.debugXShelfTaskUnitQueue.taskUnits
-                  .map((taskUnit) => DebugTaskUnitView(taskUnit: taskUnit))
-                  .toList(),
+              children: [
+                ...widget.debugXShelfTaskUnitQueue.mainTaskUnits.map(
+                  (taskUnit) => DebugTaskUnitView(
+                      taskUnit: taskUnit, isInMainQueue: true),
+                ),
+                ...widget.debugXShelfTaskUnitQueue.secondaryTaskUnits.map(
+                    (taskUnit) => DebugTaskUnitView(
+                        taskUnit: taskUnit, isInMainQueue: false))
+              ],
             ),
           ),
         ],
@@ -76,7 +82,7 @@ class _DebugXShelfTaskUnitQueueViewState
         ),
       ),
       title: Text(
-          "Task Units in the Queue of ${widget.debugXShelfTaskUnitQueue.xShelf.shelf.name}"),
+          "Task Units in the Queue of XShelf (${widget.debugXShelfTaskUnitQueue.xShelf.shelf.name})"),
       subtitle: IconLabelText(
         label: "XShelf Task Type: ",
         text: widget.debugXShelfTaskUnitQueue.xShelf.xShelfType.name,
