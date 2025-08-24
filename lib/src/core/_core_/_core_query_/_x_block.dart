@@ -23,6 +23,7 @@ class XBlock {
   String get name => block.name;
 
   CurrentItemSelectionType? __currentItemSelectionType;
+  Object? __candidateCurrItem;
 
   // Options:
 
@@ -144,6 +145,12 @@ class XBlock {
 
   void setForceReloadCurrItem(bool forceReloadCurrItem) {
     __forceReloadCurrItem = forceReloadCurrItem;
+  }
+
+  Object? get candidateCurrItem => __candidateCurrItem;
+
+  void setCandidateCurrItem(Object? candidateCurrItem) {
+    __candidateCurrItem = candidateCurrItem;
   }
 
   CurrentItemSelectionType? get currentItemSelectionType =>

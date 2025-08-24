@@ -1063,6 +1063,9 @@ abstract class Block<
     //
     formModel?._formPropsStructure._setManualDirty(false);
     //
+    if (thisXBlock.candidateCurrItem != null) {
+      candidateItem ??= (thisXBlock.candidateCurrItem as ITEM);
+    }
     currentItemSelectionResult._addCandidateItem(
       candidateItem,
     );
@@ -1516,6 +1519,8 @@ abstract class Block<
     // Deleted current item ==> find sibling.
     //
     final ITEM? siblingItem = findSiblingItem(item: item);
+    thisXBlock.setCandidateCurrItem(siblingItem);
+
     // Remove Item (Current Item)
     await __removeItemFromList(removeItem: item);
     //
@@ -2176,10 +2181,6 @@ abstract class Block<
         itemDetail: savedItemDetail,
       );
     }
-    bool fireInternalEvent = this._internalEffectedShelfMembers.hasMember();
-    if (fireInternalEvent) {
-      __updateInternalReactionByEvtBlock(eventXBlock: thisXBlock);
-    }
     //
     if (fireOutsideEvent) {
       __addExternalReactTaskUnit();
@@ -2232,11 +2233,7 @@ abstract class Block<
           extraFormInput: null,
           activityType: FormActivityType.itemFirstLoad,
         );
-        if (!success) {
-          return;
-        }
       }
-      return;
     }
     // savedItemDetail = null or !keepInList
     else {
@@ -2244,51 +2241,56 @@ abstract class Block<
         itemDetail: savedItemDetail,
       );
       final ITEM? removeItem = savedItem ?? this.currentItem;
-      if (removeItem == null) {
-        // @@TODO@@ 11
-        // TODO: Xem lai.
-        return;
-      }
-      //
-      // removeItem != null
-      //
-      bool isCurrent = isCurrentItem(item: removeItem);
-      if (!isCurrent) {
+      if (removeItem != null) {
+        //
+        // removeItem != null
+        //
+        bool isCurrent = isCurrentItem(item: removeItem);
+        if (!isCurrent) {
+          await __removeItemFromList(removeItem: removeItem);
+          return;
+        }
+        //
+        // Deleted current item ==> find sibling.
+        //
+        final ITEM? siblingItem = findSiblingItem(item: removeItem);
+        // Remove Item (Current Item)
         await __removeItemFromList(removeItem: removeItem);
-        return;
-      }
-      //
-      // Deleted current item ==> find sibling.
-      //
-      final ITEM? siblingItem = findSiblingItem(item: removeItem);
-      // Remove Item (Current Item)
-      await __removeItemFromList(removeItem: removeItem);
-      __blockData._setCurrentItemOnly(
-        refreshedItem: null,
-        refreshedItemDetail: null,
-      );
-      //
-      if (this.formModel != null) {
-        // Clear Form:
-        formModel!._clearDataWithDataState(
-          formDataState: DataState.none,
+        __blockData._setCurrentItemOnly(
+          refreshedItem: null,
+          refreshedItemDetail: null,
         );
+        //
+        if (this.formModel != null) {
+          // Clear Form:
+          formModel!._clearDataWithDataState(
+            formDataState: DataState.none,
+          );
+        }
+        // @@TODO@@ 08.
+        __clearAllChildrenBlocksToNone(
+          thisXBlock: thisXBlock,
+        );
+        //
+        _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+          currentItemSelectionType:
+              CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
+          xBlock: thisXBlock,
+          newQueriedList: [],
+          candidateItem: siblingItem,
+          forceReloadItem: false,
+          forceTypeForForm: null,
+        );
+        thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
       }
-      // @@TODO@@ 08.
-      __clearAllChildrenBlocksToNone(
-        thisXBlock: thisXBlock,
+    }
+    // Fire Internal Events:
+    bool fireInternalEvent = this._internalEffectedShelfMembers.hasMember();
+    if (fireInternalEvent) {
+      thisXBlock.xShelf.updateInternalReactionByEvtBlock(
+        eventXBlock: thisXBlock,
       );
-      //
-      _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
-        currentItemSelectionType:
-            CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
-        xBlock: thisXBlock,
-        newQueriedList: [],
-        candidateItem: siblingItem,
-        forceReloadItem: false,
-        forceTypeForForm: null,
-      );
-      thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
+      thisXBlock.xShelf._initQueryTasks();
     }
   }
 
