@@ -308,6 +308,21 @@ abstract class Scalar<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
+  @_ScalarClearanceAnnotation()
+  Future<void> _unitClearance({required XScalar thisXScalar}) async {
+    __assertThisXScalar(thisXScalar);
+    //
+    __clearWithDataStateAndChildrenToNonCascade(
+      thisXScalar: thisXScalar,
+      qryDataState: DataState.pending,
+      errorInFilter: false,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_TaskUnitMethodAnnotation()
   @_ScalarQuickActionAnnotation()
   Future<bool> _unitQuickAction({
     required XScalar thisXScalar,
@@ -467,6 +482,32 @@ abstract class Scalar<
       context: context,
       scalarErrorInfo: _scalarErrorInfo!,
     );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __clearWithDataStateAndChildrenToNonCascade({
+    required XScalar thisXScalar,
+    required DataState qryDataState,
+    required bool errorInFilter,
+  }) {
+    __assertThisXScalar(thisXScalar);
+    //
+    __clearValueWithDataState(
+      thisXScalar: thisXScalar,
+      queryDataState: qryDataState,
+      errorInFilter: errorInFilter,
+    );
+    //
+    // for (var childXScalar in thisXScalar.childXScalars) {
+    //   childXScalar.block.__clearWithDataStateAndChildrenToNonCascade(
+    //     thisXScalar: childXScalar,
+    //     qryDataState: DataState.none,
+    //     frmDataState: DataState.none,
+    //     errorInFilter: false,
+    //   );
+    // }
   }
 
   // ***************************************************************************
@@ -739,10 +780,59 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
+  ///
+  /// Clear and set block to "Pending State".
+  ///
+  @_RootMethodAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
+  @_ScalarClearanceAnnotation()
+  Future<ScalarClearanceResult> clear({Function()? navigate}) async {
+    FlutterArtist.codeFlowLogger._addMethodCall(
+      isLibCode: true,
+      navigate: navigate,
+      ownerClassInstance: this,
+      methodName: "clear",
+      parameters: {},
+    );
+    // @Same-Code-Precheck-01
+    Actionable<ScalarClearancePrecheck> actionable = __canClearScalar(
+      checkBusy: true,
+    );
+    //
+    if (!actionable.yes) {
+      // _createItemErrorCount++;
+      _addErrorLogActionable(
+        shelf: shelf,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+      );
+      return ScalarClearanceResult(
+        precheck: actionable.errCode,
+      );
+    }
+    //
+    final XShelf xShelf = XShelf.forScalarClearance(scalar: this);
+
+    final XScalar thisXScalar = xShelf.findXScalarByName(name)!;
+    final _ResultedTaskUnit taskUnit = _ScalarClearanceTaskUnit(
+      xScalar: thisXScalar,
+    );
+    //
+    xShelf._addTaskUnit(taskUnit: taskUnit);
+    FlutterArtist._xShelfQueue._addXShelf(xShelf);
+    await FlutterArtist.executor._executeTaskUnitQueue();
+    //
+    // _executeNavigation(navigate: navigate); // ????
+    //
+    return taskUnit.taskResult;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void __clearValueWithDataState({
     required XScalar thisXScalar,
     required DataState queryDataState,
-    required DataState formDataState,
     required bool errorInFilter,
   }) {
     __assertThisXScalar(thisXScalar);
@@ -795,6 +885,27 @@ abstract class Scalar<
   ///
   bool canQuery() {
     return isAllowQuery();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_PrecheckPrivateMethod()
+  Actionable<ScalarClearancePrecheck> __canClearScalar({
+    required bool checkBusy,
+  }) {
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable<ScalarClearancePrecheck>.no(
+        errCode: ScalarClearancePrecheck.busy,
+      );
+    }
+    // bool hasActiveUI = ui.hasActiveUIComponent(alsoCheckChildren: true);
+    // if (hasActiveUI) {
+    //   return Actionable<ScalarClearancePrecheck>.no(
+    //     errCode: ScalarClearancePrecheck.hasActiveUI,
+    //   );
+    // }
+    return Actionable<ScalarClearancePrecheck>.yes();
   }
 
   // ***************************************************************************

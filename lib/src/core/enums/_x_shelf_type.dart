@@ -25,6 +25,7 @@ enum XShelfType {
   filterViewChange,
   //
   scalarQuery,
+  scalarClearance,
   scalarQuickAction,
   scalarQuickExtraDataLoadAction;
 }

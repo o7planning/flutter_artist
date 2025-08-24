@@ -681,6 +681,21 @@ class XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
+  XShelf.forScalarClearance({required Scalar scalar})
+      : xShelfType = XShelfType.scalarClearance,
+        shelf = scalar.shelf {
+    __initCore(shelf: shelf);
+    //
+    // IMPORTANT:
+    //
+    XScalar xScalar = xScalarMap[scalar.name]!;
+    // setRootVipXBlock(descendantXScalar: xScalar);
+  }
+
+  // ***************************************************************************
+  // *** CONSTRUCTOR ***
+  // ***************************************************************************
+
   XShelf.forBlockItemDeletion({required Block block})
       : xShelfType = XShelfType.blockItemDeletion,
         shelf = block.shelf {

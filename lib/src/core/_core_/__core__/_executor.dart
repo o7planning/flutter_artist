@@ -122,7 +122,7 @@ class _Executor {
         thisXBlock: taskUnit.xBlock,
       );
     }
-    // Block Clear Current:
+    // Block Clear All Items:
     else if (taskUnit is _BlockClearanceTaskUnit) {
       await taskUnit.xBlock.block._unitClearance(
         thisXBlock: taskUnit.xBlock,
@@ -233,6 +233,12 @@ class _Executor {
     // Scalar:
     else if (taskUnit is _ScalarQueryTaskUnit) {
       await taskUnit.xScalar.scalar._unitQuery(
+        thisXScalar: taskUnit.xScalar,
+      );
+    }
+    // Scalar Clear Value:
+    else if (taskUnit is _ScalarClearanceTaskUnit) {
+      await taskUnit.xScalar.scalar._unitClearance(
         thisXScalar: taskUnit.xScalar,
       );
     }

@@ -32,9 +32,8 @@ class _DebugTaskUnitViewState extends State<DebugTaskUnitView> {
         border: Border.all(
           color: Colors.black26,
         ),
-        color: widget.isInMainQueue
-            ? Colors.cyan.withAlpha(20)
-            : Colors.black12,
+        color:
+            widget.isInMainQueue ? Colors.cyan.withAlpha(20) : Colors.black12,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,

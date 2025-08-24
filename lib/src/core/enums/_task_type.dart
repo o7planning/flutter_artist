@@ -23,5 +23,6 @@ enum TaskType {
   formModelFormViewChanged,
   //
   scalarQuery,
+  scalarClearance,
   scalarQuickAction;
 }

@@ -100,6 +100,7 @@ import '../precheck/__actionable.dart';
 import '../precheck/_check_allow.dart';
 import '../precheck/background_action_precheck.dart';
 import '../precheck/block_clearance_precheck.dart';
+import '../precheck/scalar_clearance_precheck.dart';
 import '../precheck/block_form_enablement_chk.dart';
 import '../precheck/block_form_reset_precheck.dart';
 import '../precheck/block_form_save_precheck.dart';
@@ -273,6 +274,8 @@ part '_task_result_/_background_action_result.dart';
 
 part '_task_result_/_block_clearance_result.dart';
 
+part '_task_result_/_scalar_clearance_result.dart';
+
 part '_task_result_/_block_item_creation_result.dart';
 
 part '_task_result_/_block_item_curr_selection_result.dart';
@@ -308,6 +311,8 @@ part '_task_unit_/__task_unit.dart';
 part '_task_unit_/__x_shelf_queue.dart';
 
 part '_task_unit_/_block_clearance_task_unit.dart';
+
+part '_task_unit_/_scalar_clearance_task_unit.dart';
 
 part '_task_unit_/_block_clear_current_task_unit.dart';
 
@@ -620,6 +625,10 @@ class _FilterViewChangeAnnotation {
 
 class _ScalarQueryAnnotation {
   const _ScalarQueryAnnotation();
+}
+
+class _ScalarClearanceAnnotation {
+  const _ScalarClearanceAnnotation();
 }
 
 // ******* Scalar QuickAction (START) ******************************************
