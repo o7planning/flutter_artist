@@ -57,6 +57,27 @@ class _ScalarData<
   // ***************************************************************************
   // ***************************************************************************
 
+  void _clearValueWithDataState({
+    required DataState qryDataState,
+    required bool errorInFilter,
+  }) {
+    _queryDataState = qryDataState;
+    if (_queryDataState == DataState.error) {
+      _lastQueryResultState = ActionResultState.fail;
+      //
+      // Update FilterCriteria:
+      //
+      if (errorInFilter) {
+        __setNewFilterCriteria(null);
+      }
+    }
+    //
+    _value = null;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _updateFrom({
     required FILTER_CRITERIA? filterCriteria,
     required VALUE? value,

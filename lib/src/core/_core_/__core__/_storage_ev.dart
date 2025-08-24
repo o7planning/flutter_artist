@@ -48,11 +48,11 @@ class _StorageEventHandler {
     required String? itemIdString,
   }) {
     if (events.isEmpty) {
-      print("~~~~~~~~~> NOT FIRE EVENT TO OUTSIDE --> Event Item Types: $events"
+      print("*~~~~~~~~~> NOT FIRE EVENT TO OUTSIDE --> Event Item Types: $events"
           " - Src Event: ${getClassName(eventBlock)}");
       return;
     } else {
-      print("~~~~~~~~~> FIRE EVENT TO OUTSIDE --> Event Item Types: $events"
+      print("*~~~~~~~~~> FIRE EVENT TO OUTSIDE --> Event Item Types: $events"
           " - Src Event: ${getClassName(eventBlock)}");
     }
     //
@@ -79,11 +79,11 @@ class _StorageEventHandler {
     required List<Type> events,
   }) {
     if (events.isEmpty) {
-      print("~~~~~~~~~> NOT FIRE EVENT TO OUTSIDE --> Event Item Types: $events"
+      print("**~~~~~~~~~> NOT FIRE EVENT TO OUTSIDE --> Event Item Types: $events"
           " - Src Shelf: ${getClassName(eventShelf)}");
       return;
     } else {
-      print("~~~~~~~~~> FIRE EVENT TO OUTSIDE --> Event Item Types: $events"
+      print("**~~~~~~~~~> FIRE EVENT TO OUTSIDE --> Event Item Types: $events"
           " - Src Shelf: ${getClassName(eventShelf)}");
     }
     //

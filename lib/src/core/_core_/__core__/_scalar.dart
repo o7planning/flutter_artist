@@ -130,8 +130,11 @@ abstract class Scalar<
 
   VALUE? get value => __scalarData._value;
 
-  void setToPending() {
-    __scalarData._setToPending();
+  void _setToPending() {
+    __scalarData._clearValueWithDataState(
+      qryDataState: DataState.pending,
+      errorInFilter: false,
+    );
   }
 
   // ***************************************************************************
@@ -180,7 +183,8 @@ abstract class Scalar<
     if (queryHint == QryHint.none) {
       return;
     } else if (queryHint == QryHint.markAsPending) {
-      __scalarData._queryDataState = DataState.pending;
+      // __scalarData._queryDataState = DataState.pending;
+      _setToPending();
       return;
     }
     //
@@ -730,6 +734,23 @@ abstract class Scalar<
     XScalar xScalar = xShelf.findXScalarByName(this.name)!;
     ScalarQueryResult result = xScalar.queryResult;
     return result;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __clearValueWithDataState({
+    required XScalar thisXScalar,
+    required DataState queryDataState,
+    required DataState formDataState,
+    required bool errorInFilter,
+  }) {
+    __assertThisXScalar(thisXScalar);
+    //
+    __scalarData._clearValueWithDataState(
+      qryDataState: queryDataState,
+      errorInFilter: errorInFilter,
+    );
   }
 
   // ***************************************************************************

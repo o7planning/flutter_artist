@@ -344,7 +344,7 @@ abstract class Block<
     return PaginationData.copy(__blockData._pagination);
   }
 
-  void setToPending() {
+  void _setToPending() {
     __blockData._setToPending();
   }
 
