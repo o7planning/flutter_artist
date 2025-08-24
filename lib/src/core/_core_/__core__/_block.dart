@@ -634,6 +634,10 @@ abstract class Block<
         final defaultCurrentItemSelectionType =
             defaultPostQueryBehavior.toCurrentItemSelectionType();
         currentItemSelectionType = defaultCurrentItemSelectionType;
+      } else {
+        if (thisXBlock.currentItemSelectionType != null) {
+          currentItemSelectionType = thisXBlock.currentItemSelectionType!;
+        }
       }
       // Test Cases: [63a] - __test_event_63a__external_product_event_in_productScreen_1
       if (currentItemSelectionType == CurrentItemSelectionType.doNothing &&
@@ -1533,12 +1537,13 @@ abstract class Block<
     //
     // Fire Internal Event.
     //
-    print("@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1");
+    final currentItemSelectionType =
+        CurrentItemSelectionType.selectAnItemAsCurrentIfNeed;
+    thisXBlock.setCurrentItemSelectionType(currentItemSelectionType);
     final bool hasInternalEvent = _internalEffectedShelfMembers.hasMember();
     if (!hasInternalEvent) {
       _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
-        currentItemSelectionType:
-            CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
+        currentItemSelectionType: currentItemSelectionType,
         xBlock: thisXBlock,
         newQueriedList: <ITEM>[],
         candidateItem: siblingItem,
@@ -1548,7 +1553,6 @@ abstract class Block<
       thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
       return;
     }
-    print("@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 2");
     //
     // Update only (No add to queue).
     //
@@ -1562,11 +1566,8 @@ abstract class Block<
         _internalEffectedShelfMembers.getTopEffectedAncestor(
       forEventBlock: this,
     );
-    print("@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3");
     //
     if (effSelfInfo == null && topEffBlockInfo == null) {
-      print(
-          "@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3.1");
       _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
         currentItemSelectionType:
             CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
@@ -1582,15 +1583,12 @@ abstract class Block<
     }
     // topEffBlockInfo is NOT NULL:
     else if (topEffBlockInfo != null) {
-      print(
-          "@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3.2");
       // Add Query Tasks to the Queue of XShelf.
       thisXBlock.xShelf._initQueryTasks();
     }
     // effSelfInfo is NOT NULL:
     else if (effSelfInfo != null) {
-      print(
-          "@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3.3");
+      // ??????????????????????????????
       //
       thisXBlock.xShelf._initQueryTasks();
     }

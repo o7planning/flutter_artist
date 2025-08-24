@@ -22,6 +22,8 @@ class XBlock {
 
   String get name => block.name;
 
+  CurrentItemSelectionType? __currentItemSelectionType;
+
   // Options:
 
   QryHint __qryHint = QryHint.none;
@@ -142,6 +144,14 @@ class XBlock {
 
   void setForceReloadCurrItem(bool forceReloadCurrItem) {
     __forceReloadCurrItem = forceReloadCurrItem;
+  }
+
+  CurrentItemSelectionType? get currentItemSelectionType =>
+      __currentItemSelectionType;
+
+  void setCurrentItemSelectionType(
+      CurrentItemSelectionType? currentItemSelectionType) {
+    __currentItemSelectionType = currentItemSelectionType;
   }
 
   ListBehavior get listBehavior {
