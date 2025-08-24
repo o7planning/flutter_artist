@@ -335,7 +335,7 @@ abstract class FormModel<
 
   @_TaskUnitMethodAnnotation()
   @_FormModelSaveFormAnnotation()
-  Future<bool> _unitSaveForm({
+  Future<void> _unitSaveForm({
     required XFormModel thisXFormModel,
     required FormSaveResult taskResult,
   }) async {
@@ -352,7 +352,7 @@ abstract class FormModel<
       checkValidate: true,
     );
     if (!actionable.yes) {
-      return false;
+      return;
     }
     final Map<String, dynamic> formMapData =
         _formPropsStructure.currentFormData;
@@ -405,18 +405,19 @@ abstract class FormModel<
         stackTrace: appError is ApiError ? null : stackTrace,
       );
       //
-      return false;
+      return;
     } finally {
       block._refreshSavingState(isSaving: false);
     }
     //
     try {
-      return await block._processSaveActionRestResult(
+      await block._processSaveActionRestResult(
         thisXBlock: thisXFormModel.xBlock,
         isNew: isNew,
         calledMethodName: calledMethodName,
         result: result,
       );
+      return;
     } catch (e, stackTrace) {
       AppError appError = _handleError(
         shelf: shelf,
@@ -431,7 +432,7 @@ abstract class FormModel<
         stackTrace: appError is ApiError ? null : stackTrace,
       );
       //
-      return false;
+      return;
     }
   }
 

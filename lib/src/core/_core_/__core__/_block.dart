@@ -1790,7 +1790,7 @@ abstract class Block<
 
   @_TaskUnitMethodAnnotation()
   @_BlockQuickCreateItemActionAnnotation()
-  Future<bool> _unitQuickCreateItem({
+  Future<void> _unitQuickCreateItem({
     required XBlock thisXBlock,
     required BlockQuickItemCreationResult taskResult,
     required BlockQuickItemCreationAction<ID, ITEM, ITEM_DETAIL,
@@ -1833,16 +1833,17 @@ abstract class Block<
         appError: appError,
         stackTrace: appError is ApiError ? null : stackTrace,
       );
-      return false;
+      return;
     }
     //
     try {
-      return await _processSaveActionRestResult(
+      await _processSaveActionRestResult(
         thisXBlock: thisXBlock,
         isNew: true,
         calledMethodName: "${getClassName(action)}.$methodName",
         result: result,
       );
+      return;
     } catch (e, stackTrace) {
       AppError appError = _handleError(
         shelf: shelf,
@@ -1856,7 +1857,6 @@ abstract class Block<
         appError: appError,
         stackTrace: appError is ApiError ? null : stackTrace,
       );
-      return false;
     }
   }
 
@@ -1928,7 +1928,7 @@ abstract class Block<
 
   @_TaskUnitMethodAnnotation()
   @_BlockQuickUpdateItemActionAnnotation()
-  Future<bool> _unitQuickUpdateItem({
+  Future<void> _unitQuickUpdateItem({
     required XBlock thisXBlock,
     required BlockQuickItemUpdateResult taskResult,
     required BlockQuickItemUpdateAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
@@ -1970,16 +1970,17 @@ abstract class Block<
         appError: appError,
         stackTrace: appError is ApiError ? null : stackTrace,
       );
-      return false;
+      return;
     }
     //
     try {
-      return await _processSaveActionRestResult(
+      await _processSaveActionRestResult(
         thisXBlock: thisXBlock,
         isNew: false,
         calledMethodName: "${getClassName(action)}.$methodName",
         result: result,
       );
+      return;
     } catch (e, stackTrace) {
       AppError appError = _handleError(
         shelf: shelf,
@@ -1993,7 +1994,7 @@ abstract class Block<
         appError: appError,
         stackTrace: appError is ApiError ? null : stackTrace,
       );
-      return false;
+      return;
     }
   }
 
@@ -2078,7 +2079,7 @@ abstract class Block<
 
   @_TaskUnitMethodAnnotation()
   @_BlockQuickChildBlockItemsActionAnnotation()
-  Future<bool> _unitQuickChildBlockItemsAction<DATA extends Object>({
+  Future<void> _unitQuickChildBlockItemsAction<DATA extends Object>({
     required XBlock thisXBlock,
     required BlockQuickChildBlockItemsAction<ITEM, ITEM_DETAIL> action,
   }) async {
@@ -2103,7 +2104,7 @@ abstract class Block<
         stackTrace: stackTrace,
         showSnackBar: true,
       );
-      return false;
+      return;
     }
     //
     if (result.error != null) {
@@ -2115,21 +2116,22 @@ abstract class Block<
         showSnackBar: true,
       );
       // TODO: Xem lai (Hanh dong neu Error).
-      return false;
+      return;
     }
     //
-    return await _processSaveActionRestResult(
+    await _processSaveActionRestResult(
       thisXBlock: thisXBlock,
       isNew: true,
       calledMethodName: "${getClassName(action)}.callApiChildBlockItems",
       result: result,
     );
+    return;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<bool> _processSaveActionRestResult({
+  Future<void> _processSaveActionRestResult({
     required XBlock thisXBlock,
     required bool isNew,
     required String calledMethodName,
@@ -2143,7 +2145,7 @@ abstract class Block<
         errorDetails: result.error!.errorDetails,
         showSnackBar: true,
       );
-      return false;
+      return;
     }
     //
     showSavedSnackBar();
@@ -2152,7 +2154,7 @@ abstract class Block<
     if (blockCurrentFilterCriteria == null) {
       print("????????????? ${this.name} - filterCriteria is null");
       // TODO-Review.
-      return true;
+      return;
     }
     bool fireOutsideEvent = false;
     final ITEM_DETAIL? savedItemDetail = result.data;
@@ -2231,10 +2233,10 @@ abstract class Block<
           activityType: FormActivityType.itemFirstLoad,
         );
         if (!success) {
-          return false;
+          return;
         }
       }
-      return true;
+      return;
     }
     // savedItemDetail = null or !keepInList
     else {
@@ -2245,7 +2247,7 @@ abstract class Block<
       if (removeItem == null) {
         // @@TODO@@ 11
         // TODO: Xem lai.
-        return false;
+        return;
       }
       //
       // removeItem != null
@@ -2253,7 +2255,7 @@ abstract class Block<
       bool isCurrent = isCurrentItem(item: removeItem);
       if (!isCurrent) {
         await __removeItemFromList(removeItem: removeItem);
-        return true;
+        return;
       }
       //
       // Deleted current item ==> find sibling.
@@ -2287,8 +2289,6 @@ abstract class Block<
         forceTypeForForm: null,
       );
       thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
-      //
-      return true;
     }
   }
 
