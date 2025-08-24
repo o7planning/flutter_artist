@@ -78,7 +78,7 @@ abstract class Scalar<
 
   final ScalarConfig config;
 
-  late final _internalListeners = EffectedShelfMembers.ofScalar(
+  late final _internalEffectedShelfMembers = EffectedShelfMembers.ofScalar(
     eventScalar: this,
   );
 

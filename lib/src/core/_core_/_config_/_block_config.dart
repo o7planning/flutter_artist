@@ -8,6 +8,8 @@ class BlockConfig {
   final PageableData pageable;
 
   //
+  final bool selfReQueryable;
+  final bool currentItemSelfRefreshable;
 
   final List<Type> outsideBroadcastEvents;
 
@@ -26,6 +28,8 @@ class BlockConfig {
     List<Type>? refreshCurrItemByExternalShelfEvents,
     List<Type>? reQueryByExternalShelfEvents,
     //
+    this.selfReQueryable = false,
+    this.currentItemSelfRefreshable = false,
     List<Evt>? refreshCurrItemByInternalShelfEvents,
     List<Evt>? reQueryByInternalShelfEvents,
     //
@@ -58,6 +62,8 @@ class BlockConfig {
           refreshCurrItemByInternalShelfEvents,
       reQueryByInternalShelfEvents: reQueryByInternalShelfEvents,
       //
+      selfReQueryable: selfReQueryable,
+      currentItemSelfRefreshable: currentItemSelfRefreshable,
       refreshCurrItemByExternalShelfEvents:
           refreshCurrItemByExternalShelfEvents,
       reQueryByExternalShelfEvents: reQueryByExternalShelfEvents,

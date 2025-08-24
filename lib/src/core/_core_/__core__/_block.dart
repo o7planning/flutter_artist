@@ -1564,11 +1564,11 @@ abstract class Block<
     thisXBlock.xShelf.updateInternalReactionByEvtBlock(eventXBlock: thisXBlock);
     //
     final _EffBlock? effSelfInfo =
-        _internalEffectedShelfMembers.getSelfEffectedBlockInfo(
+        _internalEffectedShelfMembers._getSelfEffectedBlockInfo(
       forEventBlock: this,
     );
     final _EffBlock? topEffBlockInfo =
-        _internalEffectedShelfMembers.getTopEffectedAncestor(
+        _internalEffectedShelfMembers._getTopEffectedAncestor(
       forEventBlock: this,
     );
     //

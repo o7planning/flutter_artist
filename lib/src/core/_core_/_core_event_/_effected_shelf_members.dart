@@ -58,7 +58,7 @@ class EffectedShelfMembers {
   // ***************************************************************************
   // ***************************************************************************
 
-  _EffBlock? getSelfEffectedBlockInfo({
+  _EffBlock? _getSelfEffectedBlockInfo({
     required Block forEventBlock,
   }) {
     bool reQuery = false;
@@ -81,7 +81,7 @@ class EffectedShelfMembers {
   // ***************************************************************************
   // ***************************************************************************
 
-  _EffScalar? getSelfEffectedScalarInfo({
+  _EffScalar? _getSelfEffectedScalarInfo({
     required Scalar forEventScalar,
   }) {
     bool reQuery = false;
@@ -101,7 +101,7 @@ class EffectedShelfMembers {
   ///
   /// Find the Top Block effected by Event.
   ///
-  _EffBlock? getTopEffectedAncestor({
+  _EffBlock? _getTopEffectedAncestor({
     required Block forEventBlock,
   }) {
     Block? parentBlk = forEventBlock!.parent;
@@ -126,7 +126,7 @@ class EffectedShelfMembers {
             reQuery: reQuery,
             refreshCurrItem: refreshCurrItem,
           );
-    return getTopEffectedAncestor(forEventBlock: parentBlk) ?? effBlock;
+    return _getTopEffectedAncestor(forEventBlock: parentBlk) ?? effBlock;
   }
 
   // ***************************************************************************
