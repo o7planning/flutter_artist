@@ -203,6 +203,13 @@ abstract class Block<
   }
 
   ///
+  /// Ancestor Blocks + this Block + descendant Blocks.
+  ///
+  List<Block> get lineageBlocks {
+    return <Block>[...ancestorBlocks, this, ...descendantBlocks];
+  }
+
+  ///
   /// Ascending ancestor blocks.
   ///
   List<Block> get ascendingAncestorBlocks {
@@ -1546,6 +1553,13 @@ abstract class Block<
     final currentItemSelectionType =
         CurrentItemSelectionType.selectAnItemAsCurrentIfNeed;
     thisXBlock.setCurrentItemSelectionType(currentItemSelectionType);
+    //
+    // Has Effected Member outside of Lineage (Ancestors + this + Descendants).
+    //
+    final bool hasEffectedOutsideLineage =
+        _internalEffectedShelfMembers._hasEffectedMemberOutsideLineageOfBlock(
+      eventBlock: this,
+    );
     final bool hasInternalEvent = _internalEffectedShelfMembers.hasMember();
     if (!hasInternalEvent) {
       _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
@@ -1560,9 +1574,14 @@ abstract class Block<
       return;
     }
     //
-    // Update only (No add to queue).
-    //
-    thisXBlock.xShelf.updateInternalReactionByEvtBlock(eventXBlock: thisXBlock);
+    if (hasInternalEvent) {
+      //
+      // Update only (No add to queue).
+      //
+      thisXBlock.xShelf.updateInternalReactionByEvtBlock(
+        eventXBlock: thisXBlock,
+      );
+    }
     //
     final _EffBlock? effSelfInfo =
         _internalEffectedShelfMembers._getSelfEffectedBlockInfo(
@@ -1573,7 +1592,8 @@ abstract class Block<
       forEventBlock: this,
     );
     // The Internal Event effects to other branches.
-    if (effSelfInfo == null && topEffBlockInfo == null) { 
+    if (effSelfInfo == null && topEffBlockInfo == null) {
+      print("@@@@@@@@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1");
       // Test Case: [62a].
       _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
         currentItemSelectionType: currentItemSelectionType,
@@ -1584,16 +1604,20 @@ abstract class Block<
         forceTypeForForm: null,
       );
       thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
-      // Add Query Tasks to the Queue of XShelf.
-      thisXBlock.xShelf._initQueryTasks();
+      if (hasEffectedOutsideLineage) {
+        // Add Query Tasks to the Queue of XShelf.
+        thisXBlock.xShelf._initQueryTasks();
+      }
     }
     // topEffBlockInfo is NOT NULL:
     else if (topEffBlockInfo != null) {
+      print("@@@@@@@@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 2");
       // Add Query Tasks to the Queue of XShelf.
       thisXBlock.xShelf._initQueryTasks();
     }
     // effSelfInfo is NOT NULL:
     else if (effSelfInfo != null) {
+      print("@@@@@@@@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3");
       if (effSelfInfo.reQuery) {
         // Note: candidateCurrItem already set. (See @DEL-01)
         _TaskUnit taskUnit = _BlockQueryTaskUnit(xBlock: thisXBlock);
@@ -1608,6 +1632,10 @@ abstract class Block<
           forceTypeForForm: null,
         );
         thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
+      }
+      if (hasEffectedOutsideLineage) {
+        // Add Query Tasks to the Queue of XShelf.
+        thisXBlock.xShelf._initQueryTasks();
       }
     }
   }

@@ -98,6 +98,36 @@ class EffectedShelfMembers {
 
   // ***************************************************************************
 
+  bool __inList(List<Block> blocks, Block block) {
+    for (Block blk in blocks) {
+      if (blk.name == block.name) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // ***************************************************************************
+
+  bool _hasEffectedMemberOutsideLineageOfBlock({
+    required Block eventBlock,
+  }) {
+    if (_reQueryScalarMAP.isNotEmpty) {
+      return true;
+    }
+    final List<Block> lineageBlocks = eventBlock.lineageBlocks;
+    for (Block block in _reQueryBlockMAP.values) {
+      if (!__inList(lineageBlocks, block)) {
+        return true;
+      }
+    }
+    for (Block block in _refreshCurrItmBlockMAP.values) {
+      if (!__inList(lineageBlocks, block)) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   // ***************************************************************************
 
