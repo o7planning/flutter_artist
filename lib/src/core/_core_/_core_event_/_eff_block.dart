@@ -10,4 +10,8 @@ class _EffBlock {
     required this.reQuery,
     required this.refreshCurrItem,
   });
+
+  XBlock getXBlock({required XShelf xShelf}) {
+    return xShelf.findXBlockByName(block.name)!;
+  }
 }
