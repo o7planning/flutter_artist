@@ -1519,6 +1519,7 @@ abstract class Block<
     // Deleted current item ==> find sibling.
     //
     final ITEM? siblingItem = findSiblingItem(item: item);
+    // @DEL-01
     thisXBlock.setCandidateCurrItem(siblingItem);
 
     // Remove Item (Current Item)
@@ -1571,11 +1572,11 @@ abstract class Block<
         _internalEffectedShelfMembers._getTopEffectedAncestor(
       forEventBlock: this,
     );
-    //
-    if (effSelfInfo == null && topEffBlockInfo == null) {
+    // The Internal Event effects to other branches.
+    if (effSelfInfo == null && topEffBlockInfo == null) { 
+      // Test Case: [62a].
       _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
-        currentItemSelectionType:
-            CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
+        currentItemSelectionType: currentItemSelectionType,
         xBlock: thisXBlock,
         newQueriedList: <ITEM>[],
         candidateItem: siblingItem,
@@ -1593,9 +1594,21 @@ abstract class Block<
     }
     // effSelfInfo is NOT NULL:
     else if (effSelfInfo != null) {
-      // ??????????????????????????????
-      //
-      thisXBlock.xShelf._initQueryTasks();
+      if (effSelfInfo.reQuery) {
+        // Note: candidateCurrItem already set. (See @DEL-01)
+        _TaskUnit taskUnit = _BlockQueryTaskUnit(xBlock: thisXBlock);
+        thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
+      } else {
+        _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+          currentItemSelectionType: currentItemSelectionType,
+          xBlock: thisXBlock,
+          newQueriedList: <ITEM>[],
+          candidateItem: siblingItem,
+          forceReloadItem: false,
+          forceTypeForForm: null,
+        );
+        thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
+      }
     }
   }
 
