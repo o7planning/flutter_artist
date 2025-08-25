@@ -621,6 +621,7 @@ abstract class Block<
     PageData<ITEM>? pageData;
     final ITEM? candidateCurrentItem;
     bool queried = false;
+    print("@@@@@@@@@@@@@@@@@@@@ UNIT QUERY @@@@@@@@@@@@@@@@@@@@@@@@@@@");
 
     if (queryHint == QryHint.none) {
       print("        ~~~~~~~> IGNORED --> queryHint: $queryHint - [$name]");
@@ -641,7 +642,9 @@ abstract class Block<
         final defaultCurrentItemSelectionType =
             defaultPostQueryBehavior.toCurrentItemSelectionType();
         currentItemSelectionType = defaultCurrentItemSelectionType;
-      } else {
+      }
+      // Not Natural Mode.
+      else {
         if (thisXBlock.currentItemSelectionType != null) {
           currentItemSelectionType = thisXBlock.currentItemSelectionType!;
         }
@@ -1594,19 +1597,20 @@ abstract class Block<
     // The Internal Event effects to other branches.
     if (effSelfInfo == null && topEffBlockInfo == null) {
       print("@@@@@@@@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1");
-      // Test Case: [62a].
-      _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
-        currentItemSelectionType: currentItemSelectionType,
-        xBlock: thisXBlock,
-        newQueriedList: <ITEM>[],
-        candidateItem: siblingItem,
-        forceReloadItem: false,
-        forceTypeForForm: null,
-      );
-      thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
       if (hasEffectedOutsideLineage) {
         // Add Query Tasks to the Queue of XShelf.
         thisXBlock.xShelf._initQueryTasks();
+      } else {
+        // Test Case: [62a].
+        _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+          currentItemSelectionType: currentItemSelectionType,
+          xBlock: thisXBlock,
+          newQueriedList: <ITEM>[],
+          candidateItem: siblingItem,
+          forceReloadItem: false,
+          forceTypeForForm: null,
+        );
+        thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
       }
     }
     // topEffBlockInfo is NOT NULL:
