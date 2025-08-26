@@ -7,9 +7,6 @@ class XShelf {
   final Shelf shelf;
   late final int xShelfId;
 
-  int __debugInitQueryTasksCount = 0;
-  int get debugInitQueryTaskCount => __debugInitQueryTasksCount;
-
   late final __xShelfTaskUnitQueue = _XShelfTaskUnitQueue(xShelf: this);
 
   final Map<String, XFilterModel> xFilterModelMap = {};
@@ -1076,7 +1073,7 @@ class XShelf {
     if (vipXScalar != null && rootVipXBlock != null) {
       throw "Development Logic Error";
     }
-    __debugInitQueryTasksCount++;
+    shelf._debugInitQueryTasksCount++;
     printMe();
     final bool toMainQueue = false;
     //

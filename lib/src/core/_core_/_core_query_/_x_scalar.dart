@@ -1,9 +1,10 @@
 part of '../core.dart';
 
-class XScalar {
+class XScalar<VALUE extends Object, FILTER_INPUT extends FilterInput> {
   XShelf get xShelf => xFilterModel.xShelf;
 
-  final Scalar scalar;
+  final Scalar<VALUE, FilterInput, FilterCriteria> scalar;
+
   final XFilterModel xFilterModel;
 
   //

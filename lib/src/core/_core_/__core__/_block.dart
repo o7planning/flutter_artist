@@ -1529,8 +1529,6 @@ abstract class Block<
     // Deleted current item ==> find sibling.
     //
     final ITEM? siblingItem = findSiblingItem(item: item);
-    // @DEL-01
-    thisXBlock.setCandidateCurrItem(siblingItem);
 
     // Remove Item (Current Item)
     await __removeItemFromList(removeItem: item);
@@ -1551,6 +1549,24 @@ abstract class Block<
       thisXBlock: thisXBlock,
     );
     //
+    await _processInternalReaction(
+      thisXBlock: thisXBlock,
+      candidateCurrItem: siblingItem,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<void> _processInternalReaction({
+    required XBlock thisXBlock,
+    required ITEM? candidateCurrItem,
+  }) async {
+    __assertThisXBlock(thisXBlock);
+
+    // @DEL-01
+    thisXBlock.setCandidateCurrItem(candidateCurrItem);
+    //
     // Fire Internal Event.
     //
     final currentItemSelectionType =
@@ -1565,11 +1581,11 @@ abstract class Block<
     );
     final bool hasInternalEvent = _internalEffectedShelfMembers.hasMember();
     if (!hasInternalEvent) {
-      _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+      final _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
         currentItemSelectionType: currentItemSelectionType,
         xBlock: thisXBlock,
         newQueriedList: <ITEM>[],
-        candidateItem: siblingItem,
+        candidateItem: candidateCurrItem,
         forceReloadItem: false,
         forceTypeForForm: null,
       );
@@ -1585,7 +1601,14 @@ abstract class Block<
         eventXBlock: thisXBlock,
       );
     }
+    print(
+        "\n\n\n@@@@@@@@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 0");
+    //
+    // IMPORTANT: If has effected member Outside Lineage ==> Init Query Tasks for Shelf.
+    //
     if (hasEffectedOutsideLineage) {
+      // Test Case: [62a] - __test_event_62a_test_DELETE.
+      // Test Case: [62b] - __test_event_62b_test_DELETE.
       // Add Query Tasks to the Queue of XShelf.
       thisXBlock.xShelf._initQueryTasks();
       return;
@@ -1601,13 +1624,14 @@ abstract class Block<
     );
     // The Internal Event effects to other branches.
     if (effSelfInfo == null && topEffBlockInfo == null) {
-      print("@@@@@@@@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1");
-      // Test Case: [62a].
-      _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+      print(
+          "\n\n\n@@@@@@@@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1");
+      // Test Case:
+      final _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
         currentItemSelectionType: currentItemSelectionType,
         xBlock: thisXBlock,
         newQueriedList: <ITEM>[],
-        candidateItem: siblingItem,
+        candidateItem: candidateCurrItem,
         forceReloadItem: false,
         forceTypeForForm: null,
       );
@@ -1615,10 +1639,11 @@ abstract class Block<
     }
     // topEffBlockInfo is NOT NULL:
     else if (topEffBlockInfo != null) {
-      print("@@@@@@@@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 2");
+      print(
+          "\n\n\n@@@@@@@@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 2");
       if (topEffBlockInfo.reQuery) {
         // Note: candidateCurrItem already set. (See @DEL-01)
-        _TaskUnit taskUnit = _BlockQueryTaskUnit(xBlock: thisXBlock);
+        final _TaskUnit taskUnit = _BlockQueryTaskUnit(xBlock: thisXBlock);
         thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
         // TODO: Test Case?
         if (topEffBlockInfo.refreshCurrItem) {
@@ -1630,7 +1655,7 @@ abstract class Block<
           xShelf: thisXBlock.xShelf,
         );
         //
-        _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+        final _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
           currentItemSelectionType: currentItemSelectionType,
           xBlock: topXBlock,
           newQueriedList: <ITEM>[],
@@ -1644,7 +1669,8 @@ abstract class Block<
     }
     // effSelfInfo is NOT NULL:
     else if (effSelfInfo != null) {
-      print("@@@@@@@@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3");
+      print(
+          "\n\n\n@@@@@@@@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3");
       if (effSelfInfo.reQuery) {
         // Note: candidateCurrItem already set. (See @DEL-01)
         _TaskUnit taskUnit = _BlockQueryTaskUnit(xBlock: thisXBlock);
@@ -1654,11 +1680,11 @@ abstract class Block<
       else {
         // TODO: Check deleted item Is CURRENT??
         // Select an Item as Current after deleting.
-        _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+        final _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
           currentItemSelectionType: currentItemSelectionType,
           xBlock: thisXBlock,
           newQueriedList: <ITEM>[],
-          candidateItem: siblingItem,
+          candidateItem: candidateCurrItem,
           forceReloadItem: false,
           forceTypeForForm: null,
         );
@@ -2255,6 +2281,7 @@ abstract class Block<
     } else {
       print(">>> fireOutsideEvent: false (keepInList: $keepInList)");
     }
+    ITEM? siblingItem;
     //
     if (savedItemDetail != null && keepInList) {
       // bool forceForm = false;
@@ -2321,7 +2348,7 @@ abstract class Block<
         //
         // Deleted current item ==> find sibling.
         //
-        final ITEM? siblingItem = findSiblingItem(item: removeItem);
+        siblingItem = findSiblingItem(item: removeItem);
         // Remove Item (Current Item)
         await __removeItemFromList(removeItem: removeItem);
         __blockData._setCurrentItemOnly(
@@ -2340,26 +2367,25 @@ abstract class Block<
           thisXBlock: thisXBlock,
         );
         //
-        _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
-          currentItemSelectionType:
-              CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
-          xBlock: thisXBlock,
-          newQueriedList: [],
-          candidateItem: siblingItem,
-          forceReloadItem: false,
-          forceTypeForForm: null,
-        );
-        thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
+        // _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+        //   currentItemSelectionType:
+        //       CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
+        //   xBlock: thisXBlock,
+        //   newQueriedList: [],
+        //   candidateItem: siblingItem,
+        //   forceReloadItem: false,
+        //   forceTypeForForm: null,
+        // );
+        // thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
       }
     }
-    // Fire Internal Events:
-    bool fireInternalEvent = this._internalEffectedShelfMembers.hasMember();
-    if (fireInternalEvent) {
-      thisXBlock.xShelf.updateInternalReactionByEvtBlock(
-        eventXBlock: thisXBlock,
-      );
-      thisXBlock.xShelf._initQueryTasks();
-    }
+    //
+    // Process Internal Reaction (If Need).
+    //
+    await _processInternalReaction(
+      thisXBlock: thisXBlock,
+      candidateCurrItem: siblingItem,
+    );
   }
 
   // ***************************************************************************

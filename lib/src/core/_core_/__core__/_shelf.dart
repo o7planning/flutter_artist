@@ -63,6 +63,10 @@ abstract class Shelf extends _Core {
   late final _ShelfExternalUtils _shelfExternalUtils =
       _ShelfExternalUtils(this);
 
+  int _debugInitQueryTasksCount = 0;
+
+  int get debugInitQueryTaskCount => _debugInitQueryTasksCount;
+
   // ***************************************************************************
   // ***************************************************************************
 

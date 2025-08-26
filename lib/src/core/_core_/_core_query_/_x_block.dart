@@ -1,11 +1,22 @@
 part of '../core.dart';
 
-class XBlock {
+class XBlock<
+    ID extends Object, //
+    ITEM extends Object,
+    ITEM_DETAIL extends Object> {
   XShelf get xShelf => xFilterModel.xShelf;
 
   int get xShelfId => xShelf.xShelfId;
 
-  final Block block;
+  final _recentLoadedItemMap = <ID, _CurrentCoupleItem<ITEM, ITEM_DETAIL>>{};
+
+  final Block<
+      ID, //
+      ITEM,
+      ITEM_DETAIL,
+      FilterInput,
+      FilterCriteria,
+      ExtraFormInput> block;
 
   XBlock get rootXBlock {
     if (parentXBlock == null) {
@@ -67,7 +78,7 @@ class XBlock {
     required this.xFormModel,
   }) {
     // TODO: Check throw pending exception.
-    Object? currItem = block.currentItem;
+    ITEM? currItem = block.currentItem;
     currItemIdToReload = currItem == null ? null : block.getItemId(currItem);
   }
 
@@ -127,8 +138,8 @@ class XBlock {
       return true;
     }
     // TODO: Check throw pending exception.
-    final Object? currItem = block.currentItem;
-    dynamic currItemId = currItem == null ? null : block.getItemId(currItem);
+    final ITEM? currItem = block.currentItem;
+    ID? currItemId = currItem == null ? null : block.getItemId(currItem);
     if (currItemId != currItemIdToReload) {
       return true;
     }
@@ -186,6 +197,21 @@ class XBlock {
     __suggestedSelection = suggestedSelection;
     __postQueryBehavior = postQueryBehavior;
     __pageable = pageable;
+  }
+
+  void _addRecentLoadedItem({
+    required ID itemId,
+    required ITEM item,
+    required ITEM_DETAIL itemDetail,
+  }) {
+    _recentLoadedItemMap[itemId] = _CurrentCoupleItem(
+      item: item,
+      itemDetail: itemDetail,
+    );
+  }
+
+  _CurrentCoupleItem? _getRecentLoadedItem({required ID itemId}) {
+    return _recentLoadedItemMap[itemId];
   }
 
   void _printParameters({required bool hasActiveUI}) {
