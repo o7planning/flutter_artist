@@ -18,7 +18,11 @@ class XFormModel<
   ForceType forceTypeForForm = ForceType.decidedAtRuntime;
   bool lazy = false;
 
-  XFormModel({
+  ///
+  /// IMPORTANT: To create new XFormModel, use 'formModel._createXFormModel' method
+  /// to have the same Generics Parameters with the formModel.
+  ///
+  XFormModel._({
     required this.formModel,
     required this.extraFormInput,
   });

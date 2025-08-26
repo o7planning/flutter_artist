@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class XScalar<VALUE extends Object, FILTER_INPUT extends FilterInput> {
+class XScalar<VALUE extends Object> {
   XShelf get xShelf => xFilterModel.xShelf;
 
   final Scalar<VALUE, FilterInput, FilterCriteria> scalar;
@@ -31,7 +31,11 @@ class XScalar<VALUE extends Object, FILTER_INPUT extends FilterInput> {
 
   final ScalarQueryResult queryResult = ScalarQueryResult(precheck: null);
 
-  XScalar({
+  ///
+  /// IMPORTANT: To create new XScalar, use 'scalar._createXScalar' method
+  /// to have the same Generics Parameters with the scalar.
+  ///
+  XScalar._({
     required this.scalar,
     required this.xFilterModel,
   });

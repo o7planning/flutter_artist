@@ -86,6 +86,17 @@ abstract class FormModel<
   }
 
   // ***************************************************************************
+
+  XFormModel<ID, ITEM_DETAIL> _createXFormModel({
+    required EXTRA_FORM_INPUT? extraFormInput,
+  }) {
+    return XFormModel<ID, ITEM_DETAIL>._(
+      formModel: this,
+      extraFormInput: extraFormInput,
+    );
+  }
+
+  // ***************************************************************************
   // ***************************************************************************
 
   ///

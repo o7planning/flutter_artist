@@ -149,6 +149,16 @@ abstract class Scalar<
         registerFilterModelName = filterModelName;
 
   // ***************************************************************************
+
+  XScalar<VALUE> _createXScalar({
+    required XFilterModel xFilterModel,
+  }) {
+    return XScalar<VALUE>._(
+      scalar: this,
+      xFilterModel: xFilterModel,
+    );
+  }
+  // ***************************************************************************
   // ***************************************************************************
 
   List<Type> getOutsideDataTypesToListen() {

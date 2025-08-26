@@ -380,6 +380,19 @@ abstract class Block<
   }
 
   // ***************************************************************************
+
+  XBlock<ID, ITEM, ITEM_DETAIL> _createXBlock({
+    required XFilterModel xFilterModel,
+    required XFormModel? xFormModel,
+  }) {
+    return XBlock<ID, ITEM, ITEM_DETAIL>._(
+      block: this,
+      xFilterModel: xFilterModel,
+      xFormModel: xFormModel,
+    );
+  }
+
+  // ***************************************************************************
   // ***************************************************************************
 
   List<Type> getOutsideDataTypesToListen() {
@@ -1257,49 +1270,55 @@ abstract class Block<
             candidateCurrentItemInNewQueriedList as ITEM_DETAIL;
       } else {
         bool isLoadItemError = false;
-        try {
-          __refreshRefreshingCurrentItemState(
-            isRefreshingCurrentItem: true,
-          );
-          ID itemId = getItemId(candidateCurrentItem);
-          //
-          __callApiLoadItemDetailByIdCount++;
-          ApiResult<ITEM_DETAIL> result = await callApiLoadItemDetailById(
-            itemId: itemId,
-          );
-          // Throw ApiError:
-          result.throwIfError();
-          //
-          refreshedCurrentItemDetail = result.data;
-          thisXBlock.setForceReloadCurrItemDone();
-        } catch (e, stackTrace) {
-          isLoadItemError = true;
-          //
-          AppError appError = _handleError(
-            shelf: shelf,
-            methodName: "callApiLoadItemDetailById",
-            error: e,
-            stackTrace: stackTrace,
-            showSnackBar: true,
-          );
-          //
-          currentItemSelectionResult._setAppError(
-            appError: appError,
-            stackTrace: appError is ApiError ? null : stackTrace,
-          );
-        } finally {
-          __refreshRefreshingCurrentItemState(
-            isRefreshingCurrentItem: false,
-          );
-        }
-        if (isLoadItemError) {
-          currentItemSelectionResult._apiError = true;
-          // ???????????????????????????????
-          // TODO: Them test case:
-          // TODO: Alway return? Load ITEM Error
-          //   ==> Chuyen Form sang trang thai NULL??
-          //
-          return;
+        ID itemId = getItemId(candidateCurrentItem);
+        // Recent Loaded Item:
+        _CurrentCoupleItem? loadedCoupleItem =
+            thisXBlock._getRecentLoadedItem(itemId: itemId);
+        refreshedCurrentItemDetail = loadedCoupleItem?._itemDetail;
+        if (refreshedCurrentItemDetail == null) {
+          try {
+            __refreshRefreshingCurrentItemState(
+              isRefreshingCurrentItem: true,
+            );
+            //
+            __callApiLoadItemDetailByIdCount++;
+            ApiResult<ITEM_DETAIL> result = await callApiLoadItemDetailById(
+              itemId: itemId,
+            );
+            // Throw ApiError:
+            result.throwIfError();
+            //
+            refreshedCurrentItemDetail = result.data;
+            thisXBlock.setForceReloadCurrItemDone();
+          } catch (e, stackTrace) {
+            isLoadItemError = true;
+            //
+            AppError appError = _handleError(
+              shelf: shelf,
+              methodName: "callApiLoadItemDetailById",
+              error: e,
+              stackTrace: stackTrace,
+              showSnackBar: true,
+            );
+            //
+            currentItemSelectionResult._setAppError(
+              appError: appError,
+              stackTrace: appError is ApiError ? null : stackTrace,
+            );
+          } finally {
+            __refreshRefreshingCurrentItemState(
+              isRefreshingCurrentItem: false,
+            );
+          }
+          if (isLoadItemError) {
+            currentItemSelectionResult._apiError = true;
+            // ???????????????????????????????
+            // TODO: Them test case:
+            // TODO: Alway return? Load ITEM Error
+            //   ==> Chuyen Form sang trang thai NULL??
+            //
+            return;
+          }
         }
       }
       //

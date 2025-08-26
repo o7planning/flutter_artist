@@ -72,7 +72,11 @@ class XBlock<
   // ***************************************************************************
   // ***************************************************************************
 
-  XBlock({
+  ///
+  /// IMPORTANT: To create new XBlock, use 'block._createXBlock' method
+  /// to have the same Generics Parameters with the block.
+  ///
+  XBlock._({
     required this.block,
     required this.xFilterModel,
     required this.xFormModel,

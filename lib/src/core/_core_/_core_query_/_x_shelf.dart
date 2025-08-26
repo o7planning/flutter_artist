@@ -84,8 +84,11 @@ class XShelf {
     for (Scalar scalar in shelf.scalars) {
       final FilterModel filterModel = scalar._registeredOrDefaultFilterModel;
       final xFilterModel = xFilterModelMap[filterModel.name]!;
-      final xScalar = XScalar(
-        scalar: scalar,
+      //
+      // Create XScalar via 'scalar._createXScalar' method
+      // to have the same Generics Parameters with scalar.
+      //
+      final xScalar = scalar._createXScalar(
         xFilterModel: xFilterModel,
       );
       xFilterModel.xScalars.add(xScalar);
@@ -96,7 +99,11 @@ class XShelf {
       final FormModel? formModel = block.formModel;
       XFormModel? xFormModel;
       if (formModel != null) {
-        xFormModel = XFormModel(formModel: formModel, extraFormInput: null);
+        //
+        // Create new XFormModel via 'formModel._createXFormModel' method
+        // to have the same Generics Parameters with block.
+        //
+        xFormModel = formModel._createXFormModel(extraFormInput: null);
         allXFormModels.add(xFormModel);
         xFormModelMap[formModel.block.name] = xFormModel;
       }
@@ -104,8 +111,10 @@ class XShelf {
       final FilterModel filterModel = block._registeredOrDefaultFilterModel;
       final xFilterModel = xFilterModelMap[filterModel.name]!;
       //
-      final xBlock = XBlock(
-        block: block,
+      // Create new XBlock via 'block._createXBlock' method
+      // to have the same Generics Parameters with block.
+      //
+      final xBlock = block._createXBlock(
         xFilterModel: xFilterModel,
         xFormModel: xFormModel,
       );
