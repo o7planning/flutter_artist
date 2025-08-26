@@ -1063,7 +1063,7 @@ abstract class Block<
   @_BlockRefreshAndSelectFirstItemAsCurrentAnnotation()
   @_BlockRefreshAndSelectPreviousItemAsCurrentAnnotation()
   Future<void> _unitSelectItemAsCurrent({
-    required XBlock thisXBlock,
+    required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required CurrentItemSelectionType currentItemSelectionType,
     required List<ITEM> newQueriedList,
     required ITEM? candidateItem,
@@ -1071,6 +1071,8 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
+    print(
+        "\n\n\n######################################: recentLoaded: ${thisXBlock._recentLoadedItemMap}");
     formModel?._formPropsStructure._setManualDirty(false);
     //
     if (thisXBlock.candidateCurrItem != null) {
@@ -1450,7 +1452,7 @@ abstract class Block<
   @_BlockDeleteCurrentItemAnnotation()
   @_BlockDeleteItemAnnotation()
   Future<void> _unitDeleteItem({
-    required XBlock thisXBlock,
+    required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required ITEM item,
     required BlockItemDeletionResult<ITEM> deletionResult,
   }) async {
@@ -1559,7 +1561,7 @@ abstract class Block<
   // ***************************************************************************
 
   Future<void> _processInternalReaction({
-    required XBlock thisXBlock,
+    required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required ITEM? candidateCurrItem,
   }) async {
     __assertThisXBlock(thisXBlock);
@@ -1699,7 +1701,7 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockDeleteItemsAnnotation()
   Future<void> _unitDeleteItems({
-    required XBlock thisXBlock,
+    required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required List<ITEM> items,
     required BlockItemsDeletionResult<ITEM> deletionResult,
     required bool stopIfError,
@@ -1833,7 +1835,7 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockPrepareFormToCreateItemAnnotation()
   Future<bool> _unitPrepareFormToCreateItem({
-    required XBlock thisXBlock,
+    required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required bool initDirty,
     required EXTRA_FORM_INPUT? extraFormInput,
     required Function()? navigate,
@@ -1890,7 +1892,7 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockQuickCreateItemActionAnnotation()
   Future<void> _unitQuickCreateItem({
-    required XBlock thisXBlock,
+    required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockQuickItemCreationResult taskResult,
     required BlockQuickItemCreationAction<ID, ITEM, ITEM_DETAIL,
             FILTER_CRITERIA>
@@ -1965,7 +1967,7 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockQuickCreateMultiItemsActionAnnotation()
   Future<bool> _unitQuickCreateMultiItems({
-    required XBlock thisXBlock,
+    required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockQuickCreateMultiItemsAction<ID, ITEM, ITEM_DETAIL,
             FILTER_CRITERIA>
         action,
@@ -2028,7 +2030,7 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockQuickUpdateItemActionAnnotation()
   Future<void> _unitQuickUpdateItem({
-    required XBlock thisXBlock,
+    required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockQuickItemUpdateResult taskResult,
     required BlockQuickItemUpdateAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
         action,
@@ -2103,7 +2105,7 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockQuickActionAnnotation()
   Future<bool> _unitQuickAction({
-    required XBlock thisXBlock,
+    required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockQuickAction action,
     required BlockQuickActionResult taskResult,
   }) async {
@@ -2179,7 +2181,7 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockQuickChildBlockItemsActionAnnotation()
   Future<void> _unitQuickChildBlockItemsAction<DATA extends Object>({
-    required XBlock thisXBlock,
+    required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockQuickChildBlockItemsAction<ITEM, ITEM_DETAIL> action,
   }) async {
     __assertThisXBlock(thisXBlock);
@@ -2231,7 +2233,7 @@ abstract class Block<
   // ***************************************************************************
 
   Future<void> _processSaveActionRestResult({
-    required XBlock thisXBlock,
+    required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required bool isNew,
     required String calledMethodName,
     required ApiResult<ITEM_DETAIL> result,
@@ -2301,6 +2303,12 @@ abstract class Block<
         isLibCode: true,
       );
       //
+      ID itemId = getItemId(refreshedItem);
+      thisXBlock._addRecentLoadedItem(
+        itemId: itemId,
+        item: refreshedItem,
+        itemDetail: savedItemDetail,
+      );
       this.__setCurrentItem(
         itemDetail: savedItemDetail,
         item: refreshedItem,
@@ -2392,7 +2400,7 @@ abstract class Block<
   // ***************************************************************************
 
   Future<bool> _processCreateMultiItemsActionResult({
-    required XBlock thisXBlock,
+    required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required FILTER_CRITERIA blockCurrentFilterCriteria,
     required String calledMethodName,
     required ApiResult<PageData<ITEM>> result,
@@ -3859,20 +3867,6 @@ abstract class Block<
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
       forceForm: forceLoadForm,
       navigate: null,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @_InternalEventReactAnnotation()
-  void __updateInternalReactionByEvtBlock({
-    required XBlock eventXBlock,
-  }) async {
-    __assertThisXBlock(eventXBlock);
-    //
-    eventXBlock.xShelf.updateInternalReactionByEvtBlock(
-      eventXBlock: eventXBlock,
     );
   }
 

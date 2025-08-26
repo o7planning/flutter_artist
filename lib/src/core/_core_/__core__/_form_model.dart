@@ -336,7 +336,7 @@ abstract class FormModel<
   @_TaskUnitMethodAnnotation()
   @_FormModelSaveFormAnnotation()
   Future<void> _unitSaveForm({
-    required XFormModel thisXFormModel,
+    required XFormModel<ID, ITEM_DETAIL> thisXFormModel,
     required FormSaveResult taskResult,
   }) async {
     FILTER_CRITERIA? blockCurrentFilterCriteria = block.filterCriteria;

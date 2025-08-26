@@ -1,10 +1,12 @@
 part of '../core.dart';
 
-class XFormModel {
+class XFormModel<
+    ID extends Object, //
+    ITEM_DETAIL extends Object> {
   XShelf get xShelf => xBlock.xShelf;
 
   final FormModel formModel;
-  late final XBlock xBlock;
+  late final XBlock<ID, Object, ITEM_DETAIL> xBlock;
   final ExtraFormInput? extraFormInput;
 
   int get xShelfId => xShelf.xShelfId;

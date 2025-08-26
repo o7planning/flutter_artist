@@ -34,7 +34,7 @@ class XBlock<
   String get name => block.name;
 
   CurrentItemSelectionType? __currentItemSelectionType;
-  Object? __candidateCurrItem;
+  ITEM? __candidateCurrItem;
 
   // Options:
 
@@ -158,9 +158,9 @@ class XBlock<
     __forceReloadCurrItem = forceReloadCurrItem;
   }
 
-  Object? get candidateCurrItem => __candidateCurrItem;
+  ITEM? get candidateCurrItem => __candidateCurrItem;
 
-  void setCandidateCurrItem(Object? candidateCurrItem) {
+  void setCandidateCurrItem(ITEM? candidateCurrItem) {
     __candidateCurrItem = candidateCurrItem;
   }
 
