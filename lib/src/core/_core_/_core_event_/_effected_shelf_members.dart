@@ -137,7 +137,7 @@ class EffectedShelfMembers {
   _EffBlock? _getTopEffectedAncestor({
     required Block forEventBlock,
   }) {
-    Block? parentBlk = forEventBlock!.parent;
+    Block? parentBlk = forEventBlock.parent;
     if (parentBlk == null) {
       return null;
     }
@@ -170,7 +170,7 @@ class EffectedShelfMembers {
     required bool reQuery,
     required bool refreshCurrItem,
   }) {
-    Block? parentBlk = forEventBlock!.parent;
+    Block? parentBlk = forEventBlock.parent;
     if (parentBlk == null) {
       return false;
     }

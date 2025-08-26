@@ -634,7 +634,6 @@ abstract class Block<
     PageData<ITEM>? pageData;
     final ITEM? candidateCurrentItem;
     bool queried = false;
-    print("@@@@@@@@@@@@@@@@@@@@ UNIT QUERY @@@@@@@@@@@@@@@@@@@@@@@@@@@");
 
     if (queryHint == QryHint.none) {
       print("        ~~~~~~~> IGNORED --> queryHint: $queryHint - [$name]");
@@ -1240,7 +1239,7 @@ abstract class Block<
       forceReloadForm = frmState.forceReloadForm;
       //
       if (forceReloadForm) {
-        thisXBlock.xFormModel!.forceTypeForForm = ForceType.force;
+        thisXBlock.xFormModel!.setForceType(ForceType.force);
       }
     }
     //
@@ -2278,7 +2277,6 @@ abstract class Block<
     }
     bool fireOutsideEvent = false;
     final ITEM_DETAIL? savedItemDetail = result.data;
-    print(">>> savedItemDetail: $savedItemDetail");
     final bool keepInList;
     if (savedItemDetail == null) {
       keepInList = false;
@@ -2339,23 +2337,31 @@ abstract class Block<
           thisXBlock: thisXBlock,
         );
       }
-      //
-      if (formModel != null) {
-        formModel!._formPropsStructure._setFormMode_TODO_DELETE(
-          formMode: FormMode.edit,
-          formDataState: DataState.ready,
-        );
-        //
-        // IMPORTANT:
-        // After save successful, update [initialFormData].
-        //
-        formModel!._formPropsStructure._updateInitialFormDataAfterSaveSuccess();
-        //
-        bool success = await formModel!._startNewFormActivity(
-          extraFormInput: null,
-          activityType: FormActivityType.itemFirstLoad,
+      if (thisXBlock.xFormModel != null) {
+        thisXBlock.xFormModel!.setForceType(ForceType.force);
+        thisXBlock.xShelf._addTaskUnit(
+          taskUnit: _FormModelLoadFormTaskUnit(
+            xFormModel: thisXBlock.xFormModel!,
+          ),
         );
       }
+      // xxx;
+      // if (formModel != null) {
+      //   formModel!._formPropsStructure._setFormMode_TODO_DELETE(
+      //     formMode: FormMode.edit,
+      //     formDataState: DataState.ready,
+      //   );
+      //   //
+      //   // IMPORTANT:
+      //   // After save successful, update [initialFormData].
+      //   //
+      //   formModel!._formPropsStructure._updateInitialFormDataAfterSaveSuccess();
+      //   //
+      //   bool success = await formModel!._startNewFormActivity(
+      //     extraFormInput: null,
+      //     activityType: FormActivityType.itemFirstLoad,
+      //   );
+      // }
     }
     // savedItemDetail = null or !keepInList
     else {
@@ -2393,18 +2399,21 @@ abstract class Block<
         __clearAllChildrenBlocksToNone(
           thisXBlock: thisXBlock,
         );
-        //
-        // _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
-        //   currentItemSelectionType:
-        //       CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
-        //   xBlock: thisXBlock,
-        //   newQueriedList: [],
-        //   candidateItem: siblingItem,
-        //   forceReloadItem: false,
-        //   forceTypeForForm: null,
-        // );
-        // thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
+        //  xxx; Xoa di.
+        _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+          currentItemSelectionType:
+              CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
+          xBlock: thisXBlock,
+          newQueriedList: [],
+          candidateItem: siblingItem,
+          forceReloadItem: false,
+          forceTypeForForm: null,
+        );
+        thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
       }
+    }
+    if (true) {
+      return;
     }
     //
     // Process Internal Reaction (If Need).

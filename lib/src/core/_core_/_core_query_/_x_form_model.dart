@@ -15,7 +15,9 @@ class XFormModel<
 
   //
   bool queried = false;
-  ForceType forceTypeForForm = ForceType.decidedAtRuntime;
+  ForceType __forceTypeForForm = ForceType.decidedAtRuntime;
+
+  ForceType get forceTypeForForm => __forceTypeForForm;
   bool lazy = false;
 
   ///
@@ -26,6 +28,10 @@ class XFormModel<
     required this.formModel,
     required this.extraFormInput,
   });
+
+  void setForceType(ForceType forceType)  {
+    __forceTypeForForm = forceType;
+  }
 
   void printInfo() {
     print(toString());

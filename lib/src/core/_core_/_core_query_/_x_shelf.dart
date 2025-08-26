@@ -186,9 +186,9 @@ class XShelf {
               xFormModel.formModel.formDataState == DataState.none) {
             xFormModel.lazy = true;
             if (naturalMode) {
-              xFormModel.forceTypeForForm = ForceType.decidedAtRuntime;
+              xFormModel.setForceType(ForceType.decidedAtRuntime);
             } else {
-              xFormModel.forceTypeForForm = ForceType.force;
+              xFormModel.setForceType(ForceType.force);
             }
           }
         }
@@ -277,9 +277,9 @@ class XShelf {
               xFormModel.formModel.formDataState == DataState.none) {
             xFormModel.lazy = true;
             if (naturalMode) {
-              xFormModel.forceTypeForForm = ForceType.decidedAtRuntime;
+              xFormModel.setForceType(ForceType.decidedAtRuntime);
             } else {
-              xFormModel.forceTypeForForm = ForceType.force;
+              xFormModel.setForceType(ForceType.force);
             }
           }
         }
@@ -343,7 +343,7 @@ class XShelf {
         if (parentXFormModel.formModel.formDataState == DataState.pending ||
             parentXFormModel.formModel.formDataState == DataState.error ||
             parentXFormModel.formModel.formDataState == DataState.none) {
-          parentXFormModel.forceTypeForForm = ForceType.decidedAtRuntime;
+          parentXFormModel.setForceType(ForceType.decidedAtRuntime);
         }
       }
       //
@@ -408,7 +408,7 @@ class XShelf {
         if (parentXFormModel.formModel.formDataState == DataState.pending ||
             parentXFormModel.formModel.formDataState == DataState.error ||
             parentXFormModel.formModel.formDataState == DataState.none) {
-          parentXFormModel.forceTypeForForm = ForceType.decidedAtRuntime;
+          parentXFormModel.setForceType(ForceType.decidedAtRuntime);
         }
       }
       //
@@ -474,7 +474,7 @@ class XShelf {
         if (parentXFormModel.formModel.formDataState == DataState.pending ||
             parentXFormModel.formModel.formDataState == DataState.error ||
             parentXFormModel.formModel.formDataState == DataState.none) {
-          parentXFormModel.forceTypeForForm = ForceType.decidedAtRuntime;
+          parentXFormModel.setForceType(ForceType.decidedAtRuntime);
         }
       }
       //
@@ -539,7 +539,7 @@ class XShelf {
         if (parentXFormModel.formModel.formDataState == DataState.pending ||
             parentXFormModel.formModel.formDataState == DataState.error ||
             parentXFormModel.formModel.formDataState == DataState.none) {
-          parentXFormModel.forceTypeForForm = ForceType.decidedAtRuntime;
+          parentXFormModel.setForceType(ForceType.decidedAtRuntime);
         }
       }
       //
@@ -599,7 +599,7 @@ class XShelf {
           if (parentXFormModel.formModel.formDataState == DataState.pending ||
               parentXFormModel.formModel.formDataState == DataState.error ||
               parentXFormModel.formModel.formDataState == DataState.none) {
-            parentXFormModel.forceTypeForForm = ForceType.decidedAtRuntime;
+            parentXFormModel.setForceType(ForceType.decidedAtRuntime);
           }
         }
         //
@@ -808,7 +808,7 @@ class XShelf {
         if (parentXFormModel.formModel.formDataState == DataState.pending ||
             parentXFormModel.formModel.formDataState == DataState.error ||
             parentXFormModel.formModel.formDataState == DataState.none) {
-          parentXFormModel.forceTypeForForm = ForceType.decidedAtRuntime;
+          parentXFormModel.setForceType(ForceType.decidedAtRuntime);
         }
       }
       //
@@ -1062,9 +1062,9 @@ class XShelf {
               xFormModel.formModel.formDataState == DataState.none) {
             xFormModel.lazy = true;
             if (naturalMode) {
-              xFormModel.forceTypeForForm = ForceType.decidedAtRuntime;
+              xFormModel.setForceType(ForceType.decidedAtRuntime);
             } else {
-              xFormModel.forceTypeForForm = ForceType.force;
+              xFormModel.setForceType(ForceType.force);
             }
           }
         }
