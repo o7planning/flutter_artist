@@ -1212,7 +1212,9 @@ class XShelf {
       );
     }
     __xShelfTaskUnitQueue.addTaskUnit(
-        taskUnit: taskUnit, toMainQueue: toMainQueue);
+      taskUnit: taskUnit,
+      toMainQueue: toMainQueue,
+    );
   }
 
   // ***************************************************************************
