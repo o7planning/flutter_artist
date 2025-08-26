@@ -1083,8 +1083,6 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    print(
-        "\n\n\n######################################: recentLoaded: ${thisXBlock._recentLoadedItemMap}");
     formModel?._formPropsStructure._setManualDirty(false);
     //
     if (thisXBlock.candidateCurrItem != null) {
@@ -2337,31 +2335,18 @@ abstract class Block<
           thisXBlock: thisXBlock,
         );
       }
-      if (thisXBlock.xFormModel != null) {
-        thisXBlock.xFormModel!.setForceType(ForceType.force);
-        thisXBlock.xShelf._addTaskUnit(
-          taskUnit: _FormModelLoadFormTaskUnit(
-            xFormModel: thisXBlock.xFormModel!,
-          ),
-        );
-      }
-      // xxx;
-      // if (formModel != null) {
-      //   formModel!._formPropsStructure._setFormMode_TODO_DELETE(
-      //     formMode: FormMode.edit,
-      //     formDataState: DataState.ready,
-      //   );
-      //   //
-      //   // IMPORTANT:
-      //   // After save successful, update [initialFormData].
-      //   //
-      //   formModel!._formPropsStructure._updateInitialFormDataAfterSaveSuccess();
-      //   //
-      //   bool success = await formModel!._startNewFormActivity(
-      //     extraFormInput: null,
-      //     activityType: FormActivityType.itemFirstLoad,
+      // xxx; xoa dii
+      // if (thisXBlock.xFormModel != null) {
+      //   thisXBlock.xFormModel!.setForceType(ForceType.force);
+      //   thisXBlock.xShelf._addTaskUnit(
+      //     taskUnit: _FormModelLoadFormTaskUnit(
+      //       xFormModel: thisXBlock.xFormModel!,
+      //     ),
       //   );
       // }
+      if (thisXBlock.xFormModel != null) {
+        thisXBlock.xFormModel!.setForceType(ForceType.force);
+      }
     }
     // savedItemDetail = null or !keepInList
     else {
@@ -2411,9 +2396,6 @@ abstract class Block<
         );
         thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
       }
-    }
-    if (true) {
-      return;
     }
     //
     // Process Internal Reaction (If Need).
