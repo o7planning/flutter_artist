@@ -1591,13 +1591,31 @@ abstract class Block<
         CurrentItemSelectionType.selectAnItemAsCurrentIfNeed;
     thisXBlock.setCurrentItemSelectionType(currentItemSelectionType);
     //
+    final bool hasInternalEvent = _internalEffectedShelfMembers.hasMember();
+    //
     // Has Effected Member outside of Lineage (Ancestors + this + Descendants).
     //
     final bool hasEffectedOutsideLineage =
         _internalEffectedShelfMembers._hasEffectedMemberOutsideLineageOfBlock(
       eventBlock: this,
     );
-    final bool hasInternalEvent = _internalEffectedShelfMembers.hasMember();
+    final _EffBlock? effSelfInfo =
+        _internalEffectedShelfMembers._getSelfEffectedBlockInfo(
+      forEventBlock: this,
+    );
+    final _EffBlock? topEffBlockInfo =
+        _internalEffectedShelfMembers._getTopEffectedAncestor(
+      forEventBlock: this,
+    );
+
+    print("\n\n**************************************************************");
+    print("@@@ --> INTERNAL EVENT: [$name]");
+    print("@@@ --> hasInternalEvent: $hasInternalEvent");
+    print("@@@ --> hasEffectedOutsideLineage: $hasEffectedOutsideLineage (**)");
+    print("@@@ --> effected Self Block: $effSelfInfo");
+    print("@@@ --> effected Top Block: $topEffBlockInfo");
+    print("**************************************************************\n");
+
     if (!hasInternalEvent) {
       final _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
         currentItemSelectionType: currentItemSelectionType,
@@ -1619,8 +1637,6 @@ abstract class Block<
         eventXBlock: thisXBlock,
       );
     }
-    print(
-        "\n\n\n@@@@@@@@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 0");
     //
     // IMPORTANT: If has effected member Outside Lineage ==> Init Query Tasks for Shelf.
     //
@@ -1632,15 +1648,8 @@ abstract class Block<
       return;
     }
     //
-    final _EffBlock? effSelfInfo =
-        _internalEffectedShelfMembers._getSelfEffectedBlockInfo(
-      forEventBlock: this,
-    );
-    final _EffBlock? topEffBlockInfo =
-        _internalEffectedShelfMembers._getTopEffectedAncestor(
-      forEventBlock: this,
-    );
     // The Internal Event effects to other branches.
+    //
     if (effSelfInfo == null && topEffBlockInfo == null) {
       print(
           "\n\n\n@@@@@@@@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1");

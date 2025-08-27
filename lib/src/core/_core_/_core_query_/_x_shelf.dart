@@ -985,11 +985,10 @@ class XShelf {
     final EffectedShelfMembers effectedShelfMembers =
         eventXBlock.block._internalEffectedShelfMembers;
 
-    print(
-        "\n\n~~~~~~~~~~~~~~~ INTERNAL EVENT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    print("\n**************************************************************");
+    print(" --- INTERNAL EVENT --- ");
     effectedShelfMembers.printInfo();
-    print(
-        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n");
+    print("**************************************************************\n");
 
     //
     Set<String> listenerBlockNames = {}

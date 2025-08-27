@@ -65,7 +65,7 @@ abstract class Shelf extends _Core {
 
   int _debugInitQueryTasksCount = 0;
 
-  int get debugInitQueryTaskCount => _debugInitQueryTasksCount;
+  int get debugInitQueryTasksCount => _debugInitQueryTasksCount;
 
   // ***************************************************************************
   // ***************************************************************************
