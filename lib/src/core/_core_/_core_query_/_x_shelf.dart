@@ -1016,9 +1016,11 @@ class XShelf {
           alsoCheckChildren: true,
         );
         forceReloadCurrItem = true;
+        XBlock refreshCurrXBlock = findXBlockByName(refreshCurrBlock.name)!;
+        refreshCurrXBlock.setCurrItemToReload(refreshCurrBlock.currentItem);
       }
       //
-      XBlock xBlock = xBlockMap[listenerBlkName]!;
+      XBlock xBlock = findXBlockByName(listenerBlkName)!;
       xBlock.setQueryHint(queryHint);
       xBlock.setForceReloadCurrItem(forceReloadCurrItem);
     }

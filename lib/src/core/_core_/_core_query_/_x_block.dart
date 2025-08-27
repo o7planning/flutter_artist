@@ -67,7 +67,15 @@ class XBlock<
   // ***************************************************************************
   // ***************************************************************************
 
-  late final dynamic currItemIdToReload;
+  // Only Used for INTERNAL EVENT.
+  ITEM? __currItemToReload;
+
+  // Only Used for INTERNAL EVENT.
+  ITEM? get currItemToReload => __currItemToReload;
+
+  void setCurrItemToReload(ITEM? currItemToReload) {
+    __currItemToReload = currItemToReload;
+  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -80,11 +88,7 @@ class XBlock<
     required this.block,
     required this.xFilterModel,
     required this.xFormModel,
-  }) {
-    // TODO: Check throw pending exception.
-    ITEM? currItem = block.currentItem;
-    currItemIdToReload = currItem == null ? null : block.getItemId(currItem);
-  }
+  });
 
   // ***************************************************************************
   // ***************************************************************************
@@ -138,9 +142,10 @@ class XBlock<
   }
 
   bool isReloadCurrItemDone() {
-    if (currItemIdToReload == null) {
+    if (currItemToReload == null) {
       return true;
     }
+    final ID currItemIdToReload = block.getItemId(currItemToReload!);
     // TODO: Check throw pending exception.
     final ITEM? currItem = block.currentItem;
     ID? currItemId = currItem == null ? null : block.getItemId(currItem);

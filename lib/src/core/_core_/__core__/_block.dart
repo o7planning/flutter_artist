@@ -1611,7 +1611,8 @@ abstract class Block<
     print("\n\n**************************************************************");
     print("@@@ --> INTERNAL EVENT: [$name]");
     print("@@@ --> hasInternalEvent: $hasInternalEvent");
-    print("@@@ --> hasEffectedOutsideLineage: $hasEffectedOutsideLineage (**)");
+    print("@@@ --> hasEffectedOutsideLineage: $hasEffectedOutsideLineage "
+        "${hasEffectedOutsideLineage ? '(***)' : ''}");
     print("@@@ --> effected Self Block: $effSelfInfo");
     print("@@@ --> effected Top Block: $topEffBlockInfo");
     print("**************************************************************\n");
