@@ -2043,6 +2043,8 @@ abstract class Block<
       );
       return;
     }
+    // TODO: External Event? xxx
+
     //
     // Process Internal Reaction (If Need).
     //
@@ -2239,30 +2241,7 @@ abstract class Block<
       );
       return;
     }
-    //
-    // try {
-    //   await _processSaveActionRestResult(
-    //     thisXBlock: thisXBlock,
-    //     isNew: false,
-    //     calledMethodName: "${getClassName(action)}.$methodName",
-    //     result: result,
-    //   );
-    //   return;
-    // } catch (e, stackTrace) {
-    //   AppError appError = _handleError(
-    //     shelf: shelf,
-    //     methodName: "${getClassName(action)}.$methodName",
-    //     error: e,
-    //     stackTrace: stackTrace,
-    //     showSnackBar: true,
-    //   );
-    //   //
-    //   taskResult._setAppError(
-    //     appError: appError,
-    //     stackTrace: appError is ApiError ? null : stackTrace,
-    //   );
-    //   return;
-    // }
+    // TODO: External Event? xxx
 
     //
     // Process Internal Reaction (If Need).
