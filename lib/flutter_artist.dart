@@ -8,6 +8,8 @@ export 'src/core/action/block_quick_create_multi_items_action.dart';
 export 'src/core/action/block_quick_item_creation_action.dart';
 export 'src/core/action/block_quick_item_replacement_action.dart';
 export 'src/core/action/block_quick_item_update_action.dart';
+export 'src/core/action/block_silent_item_creation_action.dart';
+export 'src/core/action/block_silent_item_update_action.dart';
 export 'src/core/action/scalar_load_extra_data_quick_action.dart';
 export 'src/core/action/scalar_quick_action.dart';
 export 'src/core/adapter/_flutter_artist_adapter.dart';
