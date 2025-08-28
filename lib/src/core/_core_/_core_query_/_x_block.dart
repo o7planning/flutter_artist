@@ -68,13 +68,13 @@ class XBlock<
   // ***************************************************************************
 
   // Only Used for INTERNAL EVENT.
-  ITEM? __currItemToReload;
+  ITEM? __currItemInternalEVT;
 
   // Only Used for INTERNAL EVENT.
-  ITEM? get currItemToReload => __currItemToReload;
+  ITEM? get currItemInternalEVT => __currItemInternalEVT;
 
-  void setCurrItemToReload(ITEM? currItemToReload) {
-    __currItemToReload = currItemToReload;
+  void setCurrItemToReload(ITEM? currItemInternalEVT) {
+    __currItemInternalEVT = currItemInternalEVT;
   }
 
   // ***************************************************************************
@@ -142,10 +142,10 @@ class XBlock<
   }
 
   bool isReloadCurrItemDone() {
-    if (currItemToReload == null) {
+    if (currItemInternalEVT == null) {
       return true;
     }
-    final ID currItemIdToReload = block.getItemId(currItemToReload!);
+    final ID currItemIdToReload = block.getItemId(currItemInternalEVT!);
     // TODO: Check throw pending exception.
     final ITEM? currItem = block.currentItem;
     ID? currItemId = currItem == null ? null : block.getItemId(currItem);

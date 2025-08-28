@@ -840,8 +840,38 @@ class XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
+  XShelf.forBlockSilentItemCreation({required Block block})
+      : xShelfType = XShelfType.blockSilentItemCreation,
+        shelf = block.shelf {
+    __initCore(shelf: shelf);
+    //
+    // IMPORTANT:
+    //
+    XBlock xBlock = xBlockMap[block.name]!;
+    setRootVipXBlock(descendantXBlock: xBlock);
+  }
+
+  // ***************************************************************************
+  // *** CONSTRUCTOR ***
+  // ***************************************************************************
+
   XShelf.forBlockQuickItemUpdate({required Block block})
       : xShelfType = XShelfType.blockQuickItemUpdate,
+        shelf = block.shelf {
+    __initCore(shelf: shelf);
+    //
+    // IMPORTANT:
+    //
+    XBlock xBlock = xBlockMap[block.name]!;
+    setRootVipXBlock(descendantXBlock: xBlock);
+  }
+
+  // ***************************************************************************
+  // *** CONSTRUCTOR ***
+  // ***************************************************************************
+
+  XShelf.forBlockSilentItemUpdate({required Block block})
+      : xShelfType = XShelfType.blockSilentItemUpdate,
         shelf = block.shelf {
     __initCore(shelf: shelf);
     //

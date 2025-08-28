@@ -11,7 +11,9 @@ enum XShelfType {
   blockCurrItemSelection,
   blockQuickActionExecution,
   blockQuickItemCreation,
+  blockSilentItemCreation,
   blockQuickItemUpdate,
+  blockSilentItemUpdate,
   blockQuickMultiItemsCreation,
   @Deprecated("Xoa di")
   blockQuickChildBlockItemsAction,

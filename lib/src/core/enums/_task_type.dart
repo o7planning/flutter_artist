@@ -10,8 +10,10 @@ enum TaskType {
   blockQuickAction,
   blockQuickChildBlockItems,
   blockQuickCreateItem,
+  blockSilentCreateItem,
   blockQuickCreateMultiItems,
   blockQuickUpdateItem,
+  blockSilentUpdateItem,
   blockSelectItemAsCurrent,
   blockClearance,
   //

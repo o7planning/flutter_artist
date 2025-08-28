@@ -38,6 +38,8 @@ import '../action/block_quick_child_block_items_action.dart';
 import '../action/block_quick_create_multi_items_action.dart';
 import '../action/block_quick_item_creation_action.dart';
 import '../action/block_quick_item_update_action.dart';
+import '../action/block_silent_item_creation_action.dart';
+import '../action/block_silent_item_update_action.dart';
 import '../action/scalar_load_extra_data_quick_action.dart';
 import '../action/scalar_quick_action.dart';
 import '../adapter/_flutter_artist_adapter.dart';
@@ -100,6 +102,8 @@ import '../precheck/__actionable.dart';
 import '../precheck/_check_allow.dart';
 import '../precheck/background_action_precheck.dart';
 import '../precheck/block_clearance_precheck.dart';
+import '../precheck/block_silent_item_creation_precheck.dart';
+import '../precheck/block_silent_item_update_precheck.dart';
 import '../precheck/scalar_clearance_precheck.dart';
 import '../precheck/block_form_enablement_chk.dart';
 import '../precheck/block_form_reset_precheck.dart';
@@ -290,7 +294,11 @@ part '_task_result_/_block_quick_action_result.dart';
 
 part '_task_result_/_block_quick_item_creation_result.dart';
 
+part '_task_result_/_block_silent_item_creation_result.dart';
+
 part '_task_result_/_block_quick_item_update_result.dart';
+
+part '_task_result_/_block_silent_item_update_result.dart';
 
 part '_task_result_/_block_quick_multi_items_creation_result.dart';
 
@@ -330,9 +338,13 @@ part '_task_unit_/_block_quick_child_block_items_task_unit.dart';
 
 part '_task_unit_/_block_quick_create_item_task_unit.dart';
 
+part '_task_unit_/_block_silent_create_item_task_unit.dart';
+
 part '_task_unit_/_block_quick_create_multi_items_task_unit.dart';
 
 part '_task_unit_/_block_quick_update_item_task_unit.dart';
+
+part '_task_unit_/_block_silent_update_item_task_unit.dart';
 
 part '_task_unit_/_block_select_as_current_task_unit.dart';
 
@@ -653,12 +665,20 @@ class _BlockQuickCreateItemActionAnnotation {
   const _BlockQuickCreateItemActionAnnotation();
 }
 
+class _BlockSilentCreateItemActionAnnotation {
+  const _BlockSilentCreateItemActionAnnotation();
+}
+
 class _BlockQuickCreateMultiItemsActionAnnotation {
   const _BlockQuickCreateMultiItemsActionAnnotation();
 }
 
 class _BlockQuickUpdateItemActionAnnotation {
   const _BlockQuickUpdateItemActionAnnotation();
+}
+
+class _BlockSilentUpdateItemActionAnnotation {
+  const _BlockSilentUpdateItemActionAnnotation();
 }
 
 class _BlockQuickChildBlockItemsActionAnnotation {

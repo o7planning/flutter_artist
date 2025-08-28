@@ -29,7 +29,7 @@ class XFormModel<
     required this.extraFormInput,
   });
 
-  void setForceType(ForceType forceType)  {
+  void setForceType(ForceType forceType) {
     __forceTypeForForm = forceType;
   }
 

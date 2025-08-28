@@ -1695,22 +1695,31 @@ abstract class Block<
     }
     // effSelfInfo is NOT NULL:
     else if (effSelfInfo != null) {
-      print("\n\n\n@@@@@@@@@ INTERNAL EVENT ~~~~~> 3");
       if (effSelfInfo.reQuery) {
+        print("\n\n\n@@@@@@@@@ INTERNAL EVENT ~~~~~> 3.1 - Self ReQry");
         // Note: candidateCurrItem already set. (See @DEL-01)
         _TaskUnit taskUnit = _BlockQueryTaskUnit(xBlock: thisXBlock);
         thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
       }
-      // ITEM DELETED. effSelfInfo.refreshCurrItem  (TODO)
+      // effSelfInfo.refreshCurrItem.
       else {
-        // TODO: Check deleted item Is CURRENT??
-        // Select an Item as Current after deleting.
+        print("\n\n\n@@@@@@@@@ INTERNAL EVENT ~~~~~> 3.2 - Self Rfh Curr Item");
+        // Current Item to Reload (INTERNAL EVENT).
+        ITEM? currItemInternalEVT = thisXBlock.currItemInternalEVT;
+        //
+        bool isCurrInternalEV = currItemInternalEVT == null
+            ? false // Will be decided laster.
+            : isCurrentItem(item: currItemInternalEVT);
+        final bool forceReloadItem = isCurrInternalEV;
+        //
+        // Select an Item as Current.
+        //
         final _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
           currentItemSelectionType: currentItemSelectionType,
           xBlock: thisXBlock,
           newQueriedList: <ITEM>[],
           candidateItem: candidateCurrItem,
-          forceReloadItem: false,
+          forceReloadItem: forceReloadItem,
           forceTypeForForm: null,
         );
         thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
@@ -1988,6 +1997,81 @@ abstract class Block<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
+  @_BlockSilentCreateItemActionAnnotation()
+  Future<void> _unitSilentCreateItem({
+    required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
+    required BlockSilentItemCreationResult taskResult,
+    required BlockSilentItemCreationAction<ID, ITEM, ITEM_DETAIL,
+            FILTER_CRITERIA>
+        action,
+  }) async {
+    __assertThisXBlock(thisXBlock);
+    //
+    // (No Precheck Again)
+    //
+    FILTER_CRITERIA blockCurrentFilterCriteria = filterCriteria!;
+    //
+    ApiResult<void> result;
+    final String methodName = "callApiSilentCreateItem";
+    try {
+      FlutterArtist.codeFlowLogger._addMethodCall(
+        isLibCode: false,
+        navigate: null,
+        ownerClassInstance: action,
+        methodName: methodName,
+        parameters: {},
+      );
+      //
+      result = await action.callApiSilentCreateItem(
+        parentBlockItem: parent?.currentItem,
+        filterCriteria: blockCurrentFilterCriteria,
+      );
+      //
+    } catch (e, stackTrace) {
+      //
+      AppError appError = _handleError(
+        shelf: shelf,
+        methodName: '${getClassName(action)}.$methodName',
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      //
+      taskResult._setAppError(
+        appError: appError,
+        stackTrace: appError is ApiError ? null : stackTrace,
+      );
+      return;
+    }
+    //
+    // try {
+    //   await _processSaveActionRestResult(
+    //     thisXBlock: thisXBlock,
+    //     isNew: true,
+    //     calledMethodName: "${getClassName(action)}.$methodName",
+    //     result: result,
+    //   );
+    //   return;
+    // } catch (e, stackTrace) {
+    //   AppError appError = _handleError(
+    //     shelf: shelf,
+    //     methodName: "${getClassName(action)}.$methodName",
+    //     error: e,
+    //     stackTrace: stackTrace,
+    //     showSnackBar: true,
+    //   );
+    //   //
+    //   taskResult._setAppError(
+    //     appError: appError,
+    //     stackTrace: appError is ApiError ? null : stackTrace,
+    //   );
+    // }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_TaskUnitMethodAnnotation()
   @_BlockQuickCreateMultiItemsActionAnnotation()
   Future<bool> _unitQuickCreateMultiItems({
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
@@ -2120,6 +2204,81 @@ abstract class Block<
       );
       return;
     }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_TaskUnitMethodAnnotation()
+  @_BlockSilentUpdateItemActionAnnotation()
+  Future<void> _unitSilentUpdateItem({
+    required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
+    required BlockSilentItemUpdateResult taskResult,
+    required BlockSilentItemUpdateAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
+        action,
+  }) async {
+    __assertThisXBlock(thisXBlock);
+    //
+    // No Need Precheck Again.
+    //
+    FILTER_CRITERIA blockCurrentFilterCriteria = filterCriteria!;
+    //
+    ApiResult<void> result;
+    final String methodName = "callApiSilentUpdateItem";
+    try {
+      FlutterArtist.codeFlowLogger._addMethodCall(
+        isLibCode: false,
+        navigate: null,
+        ownerClassInstance: action,
+        methodName: methodName,
+        parameters: {},
+      );
+      //
+      result = await action.callApiSilentUpdateItem(
+        parentBlockItem: parent?.currentItem,
+        filterCriteria: blockCurrentFilterCriteria,
+      );
+      //
+    } catch (e, stackTrace) {
+      //
+      AppError appError = _handleError(
+        shelf: shelf,
+        methodName: '${getClassName(action)}.$methodName',
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      //
+      taskResult._setAppError(
+        appError: appError,
+        stackTrace: appError is ApiError ? null : stackTrace,
+      );
+      return;
+    }
+    //
+    // try {
+    //   await _processSaveActionRestResult(
+    //     thisXBlock: thisXBlock,
+    //     isNew: false,
+    //     calledMethodName: "${getClassName(action)}.$methodName",
+    //     result: result,
+    //   );
+    //   return;
+    // } catch (e, stackTrace) {
+    //   AppError appError = _handleError(
+    //     shelf: shelf,
+    //     methodName: "${getClassName(action)}.$methodName",
+    //     error: e,
+    //     stackTrace: stackTrace,
+    //     showSnackBar: true,
+    //   );
+    //   //
+    //   taskResult._setAppError(
+    //     appError: appError,
+    //     stackTrace: appError is ApiError ? null : stackTrace,
+    //   );
+    //   return;
+    // }
   }
 
   // ***************************************************************************
@@ -3458,6 +3617,79 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
+  @_BlockSilentCreateItemActionAnnotation()
+  Future<BlockSilentItemCreationResult> executeSilentCreateItemAction({
+    required BlockSilentItemCreationAction<ID, ITEM, ITEM_DETAIL,
+            FILTER_CRITERIA>
+        action,
+  }) async {
+    FlutterArtist.codeFlowLogger._addMethodCall(
+      isLibCode: true,
+      navigate: null,
+      ownerClassInstance: this,
+      methodName: "executeSilentCreateItemAction",
+      parameters: {
+        "action": action,
+      },
+    );
+    //
+    // @Same-Code-Precheck-01
+    //
+    final Actionable<BlockSilentItemCreationPrecheck> actionable =
+        __canSilentCreateItem(
+      checkBusy: true,
+      checkAllow: true,
+    );
+    if (!actionable.yes) {
+      // _refreshErrorCount++;
+      _addErrorLogActionable(
+        shelf: shelf,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+      );
+      return BlockSilentItemCreationResult(
+        precheck: actionable.errCode,
+        stackTrace: actionable.stackTrace,
+      );
+    }
+    //
+    // Confirmation:
+    //
+    bool confirm = true;
+    if (action.needToConfirm) {
+      confirm = await _showActionConfirmation(
+        shelf: shelf,
+        defaultConfirmation: action.defaultConfirmation,
+        customConfirmation: action.createCustomConfirmation(),
+      );
+    }
+    if (!confirm) {
+      return BlockSilentItemCreationResult(
+        precheck: BlockSilentItemCreationPrecheck.cancelled,
+      );
+    }
+    //
+    final XShelf xShelf = XShelf.forBlockSilentItemCreation(block: this);
+    //
+    final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    //
+    final _ResultedTaskUnit taskUnit = _BlockSilentCreateItemTaskUnit(
+      xBlock: thisXBlock,
+      action: action,
+    );
+    //
+    xShelf._addTaskUnit(taskUnit: taskUnit);
+    FlutterArtist._xShelfQueue._addXShelf(xShelf);
+    await FlutterArtist.executor._executeTaskUnitQueue();
+    //
+    return taskUnit.taskResult;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_RootMethodAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
   @_BlockQuickCreateMultiItemsActionAnnotation()
   Future<BlockQuickMultiItemsCreationResult>
       executeQuickCreateMultiItemsAction({
@@ -3589,6 +3821,79 @@ abstract class Block<
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
     final _ResultedTaskUnit taskUnit = _BlockQuickUpdateItemTaskUnit(
+      xBlock: thisXBlock,
+      action: action,
+    );
+    //
+    xShelf._addTaskUnit(taskUnit: taskUnit);
+    FlutterArtist._xShelfQueue._addXShelf(xShelf);
+    await FlutterArtist.executor._executeTaskUnitQueue();
+    //
+    return taskUnit.taskResult;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_RootMethodAnnotation()
+  @_ReturnTaskResultMethodAnnotation()
+  @_BlockSilentUpdateItemActionAnnotation()
+  Future<BlockSilentItemUpdateResult> executeSilentUpdateItemAction({
+    required BlockSilentItemUpdateAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
+        action,
+  }) async {
+    FlutterArtist.codeFlowLogger._addMethodCall(
+      isLibCode: true,
+      navigate: null,
+      ownerClassInstance: this,
+      methodName: "executeSilentUpdateItemAction",
+      parameters: {
+        "action": action,
+      },
+    );
+    // @Same-Code-Precheck-01
+    final Actionable<BlockSilentItemUpdatePrecheck> actionable =
+        __canSilentUpdateItem(
+      item: action.item,
+      checkBusy: true,
+      checkAllow: true,
+      errorIfItemNotInTheBlock: action.config.errorIfItemNotInTheBlock,
+    );
+    //
+    if (!actionable.yes) {
+      // _createItemErrorCount++;
+      _addErrorLogActionable(
+        shelf: shelf,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+      );
+      return BlockSilentItemUpdateResult(
+        precheck: actionable.errCode,
+        stackTrace: actionable.stackTrace,
+      );
+    }
+    //
+    // Confirmation:
+    //
+    bool confirm = true;
+    if (action.needToConfirm) {
+      confirm = await _showActionConfirmation(
+        shelf: shelf,
+        defaultConfirmation: action.defaultConfirmation,
+        customConfirmation: action.createCustomConfirmation(),
+      );
+    }
+    if (!confirm) {
+      return BlockSilentItemUpdateResult(
+        precheck: BlockSilentItemUpdatePrecheck.cancelled,
+      );
+    }
+    //
+    final XShelf xShelf = XShelf.forBlockSilentItemUpdate(block: this);
+    //
+    final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    //
+    final _ResultedTaskUnit taskUnit = _BlockSilentUpdateItemTaskUnit(
       xBlock: thisXBlock,
       action: action,
     );
@@ -4565,6 +4870,66 @@ abstract class Block<
   // ***************************************************************************
 
   @_PrecheckPrivateMethod()
+  Actionable<BlockSilentItemUpdatePrecheck> __canSilentUpdateItem({
+    required ITEM item,
+    required bool checkBusy,
+    required bool checkAllow,
+    required bool errorIfItemNotInTheBlock,
+  }) {
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable<BlockSilentItemUpdatePrecheck>.no(
+        errCode: BlockSilentItemUpdatePrecheck.busy,
+      );
+    }
+    switch (queryDataState) {
+      case DataState.pending:
+        return Actionable<BlockSilentItemUpdatePrecheck>.no(
+          errCode: BlockSilentItemUpdatePrecheck.blockInPendingState,
+        );
+      case DataState.error:
+        return Actionable<BlockSilentItemUpdatePrecheck>.no(
+          errCode: BlockSilentItemUpdatePrecheck.blockInErrorState,
+        );
+      case DataState.none:
+        return Actionable<BlockSilentItemUpdatePrecheck>.no(
+          errCode: BlockSilentItemUpdatePrecheck.blockInNoneState,
+        );
+      case DataState.ready:
+        break;
+    }
+    //
+    ITEM? internalItem = findItemSameIdWith(item: item);
+    // Test Cases: [90b].
+    if (errorIfItemNotInTheBlock && internalItem == null) {
+      return Actionable<BlockSilentItemUpdatePrecheck>.no(
+        errCode: BlockSilentItemUpdatePrecheck.invalidTarget,
+      );
+    }
+    //
+    if (checkAllow) {
+      CheckAllowResult result = _isAllowUpdateItem(item: item);
+      switch (result.result) {
+        case CheckAllow.allow:
+          return Actionable<BlockSilentItemUpdatePrecheck>.yes();
+        case CheckAllow.notAllow:
+          return Actionable<BlockSilentItemUpdatePrecheck>.no(
+            errCode: BlockSilentItemUpdatePrecheck.notAllow,
+          );
+        case CheckAllow.error:
+          return Actionable<BlockSilentItemUpdatePrecheck>.no(
+            errCode: BlockSilentItemUpdatePrecheck.checkAllowMethodError,
+            stackTrace: result.stackTrace,
+          );
+      }
+    }
+    //
+    return Actionable<BlockSilentItemUpdatePrecheck>.yes();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_PrecheckPrivateMethod()
   Actionable<BlockQuickItemCreationPrecheck> __canQuickCreateItem({
     required bool checkBusy,
     required bool checkAllow,
@@ -4609,6 +4974,56 @@ abstract class Block<
     }
     //
     return Actionable<BlockQuickItemCreationPrecheck>.yes();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_PrecheckPrivateMethod()
+  Actionable<BlockSilentItemCreationPrecheck> __canSilentCreateItem({
+    required bool checkBusy,
+    required bool checkAllow,
+  }) {
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable<BlockSilentItemCreationPrecheck>.no(
+        errCode: BlockSilentItemCreationPrecheck.busy,
+      );
+    }
+    switch (queryDataState) {
+      case DataState.pending:
+        return Actionable<BlockSilentItemCreationPrecheck>.no(
+          errCode: BlockSilentItemCreationPrecheck.blockInPendingState,
+        );
+      case DataState.error:
+        return Actionable<BlockSilentItemCreationPrecheck>.no(
+          errCode: BlockSilentItemCreationPrecheck.blockInErrorState,
+        );
+      case DataState.none:
+        return Actionable<BlockSilentItemCreationPrecheck>.no(
+          errCode: BlockSilentItemCreationPrecheck.blockInNoneState,
+        );
+      case DataState.ready:
+        break;
+    }
+    //
+    if (checkAllow) {
+      CheckAllowResult result = __isAllowCreateItem();
+      switch (result.result) {
+        case CheckAllow.allow:
+          return Actionable<BlockSilentItemCreationPrecheck>.yes();
+        case CheckAllow.notAllow:
+          return Actionable<BlockSilentItemCreationPrecheck>.no(
+            errCode: BlockSilentItemCreationPrecheck.notAllow,
+          );
+        case CheckAllow.error:
+          return Actionable<BlockSilentItemCreationPrecheck>.no(
+            errCode: BlockSilentItemCreationPrecheck.checkAllowMethodError,
+            stackTrace: result.stackTrace,
+          );
+      }
+    }
+    //
+    return Actionable<BlockSilentItemCreationPrecheck>.yes();
   }
 
   // ***************************************************************************

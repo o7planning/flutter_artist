@@ -179,6 +179,14 @@ class _Executor {
         taskResult: taskUnit.taskResult as BlockQuickItemCreationResult,
       );
     }
+    // Block SilentCreateItem:
+    else if (taskUnit is _BlockSilentCreateItemTaskUnit) {
+      await taskUnit.xBlock.block._unitSilentCreateItem(
+        thisXBlock: taskUnit.xBlock,
+        action: taskUnit.action,
+        taskResult: taskUnit.taskResult as BlockSilentItemCreationResult,
+      );
+    }
     // Block QuickCreateMultiItems:
     else if (taskUnit is _BlockQuickCreateMultiItemsTaskUnit) {
       await taskUnit.xBlock.block._unitQuickCreateMultiItems(
@@ -192,6 +200,14 @@ class _Executor {
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
         taskResult: taskUnit.taskResult as BlockQuickItemUpdateResult,
+      );
+    }
+    // Block SilentUpdateItem:
+    else if (taskUnit is _BlockSilentUpdateItemTaskUnit) {
+      await taskUnit.xBlock.block._unitSilentUpdateItem(
+        thisXBlock: taskUnit.xBlock,
+        action: taskUnit.action,
+        taskResult: taskUnit.taskResult as BlockSilentItemUpdateResult,
       );
     }
     // Block Quick Action:
