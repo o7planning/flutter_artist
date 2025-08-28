@@ -1,18 +1,18 @@
 part of '../core.dart';
 
 @_TaskUnitClassAnnotation()
-@_BlockSilentCreateItemActionAnnotation()
-class _BlockSilentCreateItemTaskUnit
-    extends _ResultedTaskUnit<BlockSilentItemCreationResult> {
+@_BlockQuickItemCreationActionAnnotation()
+class _BlockQuickItemCreationTaskUnit
+    extends _ResultedTaskUnit<BlockQuickItemCreationResult> {
   XBlock xBlock;
-  BlockSilentItemCreationAction action;
+  BlockQuickItemCreationAction action;
 
-  _BlockSilentCreateItemTaskUnit({
+  _BlockQuickItemCreationTaskUnit({
     required this.xBlock,
     required this.action,
   }) : super(
-          taskType: TaskType.blockSilentCreateItem,
-          taskResult: BlockSilentItemCreationResult(),
+          taskType: TaskType.blockQuickCreateItem,
+          taskResult: BlockQuickItemCreationResult(),
         );
 
   @override

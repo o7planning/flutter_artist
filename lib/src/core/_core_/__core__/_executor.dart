@@ -155,7 +155,7 @@ class _Executor {
       );
     }
     // Block Delete Item:
-    else if (taskUnit is _BlockDeleteItemTaskUnit) {
+    else if (taskUnit is _BlockItemDeletionTaskUnit) {
       await taskUnit.xBlock.block._unitDeleteItem(
         thisXBlock: taskUnit.xBlock,
         item: taskUnit.item,
@@ -163,7 +163,7 @@ class _Executor {
       );
     }
     // Block Delete Items:
-    else if (taskUnit is _BlockDeleteItemsTaskUnit) {
+    else if (taskUnit is _BlockMultiItemsDeletionTaskUnit) {
       await taskUnit.xBlock.block._unitDeleteItems(
         thisXBlock: taskUnit.xBlock,
         items: taskUnit.items,
@@ -172,7 +172,7 @@ class _Executor {
       );
     }
     // Block QuickCreateItem:
-    else if (taskUnit is _BlockQuickCreateItemTaskUnit) {
+    else if (taskUnit is _BlockQuickItemCreationTaskUnit) {
       await taskUnit.xBlock.block._unitQuickCreateItem(
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
@@ -180,7 +180,7 @@ class _Executor {
       );
     }
     // Block SilentCreateItem:
-    else if (taskUnit is _BlockSilentCreateItemTaskUnit) {
+    else if (taskUnit is _BlockSilentItemCreationTaskUnit) {
       await taskUnit.xBlock.block._unitSilentCreateItem(
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
@@ -188,14 +188,14 @@ class _Executor {
       );
     }
     // Block QuickCreateMultiItems:
-    else if (taskUnit is _BlockQuickCreateMultiItemsTaskUnit) {
+    else if (taskUnit is _BlockQuickMultiItemsCreationTaskUnit) {
       await taskUnit.xBlock.block._unitQuickCreateMultiItems(
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
       );
     }
     // Block QuickUpdateItem:
-    else if (taskUnit is _BlockQuickUpdateItemTaskUnit) {
+    else if (taskUnit is _BlockQuickItemUpdateTaskUnit) {
       await taskUnit.xBlock.block._unitQuickUpdateItem(
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
@@ -203,7 +203,7 @@ class _Executor {
       );
     }
     // Block SilentUpdateItem:
-    else if (taskUnit is _BlockSilentUpdateItemTaskUnit) {
+    else if (taskUnit is _BlockSilentItemUpdateTaskUnit) {
       await taskUnit.xBlock.block._unitSilentUpdateItem(
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,

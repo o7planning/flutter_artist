@@ -22,12 +22,11 @@ class _SimpleAccordionState extends State<SimpleAccordion> {
     return Column(
       children: widget.children
           .expand(
-            (w) =>
-        [
-          w,
-          SizedBox(height: 5),
-        ],
-      )
+            (w) => [
+              w,
+              SizedBox(height: 5),
+            ],
+          )
           .toList(),
     );
   }

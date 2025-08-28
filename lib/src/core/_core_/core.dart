@@ -324,9 +324,9 @@ part '_task_unit_/_scalar_clearance_task_unit.dart';
 
 part '_task_unit_/_block_clear_current_task_unit.dart';
 
-part '_task_unit_/_block_delete_item_task_unit.dart';
+part '_task_unit_/_block_item_deletion_task_unit.dart';
 
-part '_task_unit_/_block_delete_items_task_unit.dart';
+part '_task_unit_/_block_multi_items_deletion_task_unit.dart';
 
 part '_task_unit_/_block_prepare_form_to_create_item_task_unit.dart';
 
@@ -336,15 +336,15 @@ part '_task_unit_/_block_quick_action_task_unit.dart';
 
 part '_task_unit_/_block_quick_child_block_items_task_unit.dart';
 
-part '_task_unit_/_block_quick_create_item_task_unit.dart';
+part '_task_unit_/_block_quick_item_creation_task_unit.dart';
 
-part '_task_unit_/_block_silent_create_item_task_unit.dart';
+part '_task_unit_/_block_silent_item_creation_task_unit.dart';
 
-part '_task_unit_/_block_quick_create_multi_items_task_unit.dart';
+part '_task_unit_/_block_quick_multi_items_creation_task_unit.dart';
 
-part '_task_unit_/_block_quick_update_item_task_unit.dart';
+part '_task_unit_/_block_quick_item_update_task_unit.dart';
 
-part '_task_unit_/_block_silent_update_item_task_unit.dart';
+part '_task_unit_/_block_silent_item_update_task_unit.dart';
 
 part '_task_unit_/_block_select_as_current_task_unit.dart';
 
@@ -661,24 +661,24 @@ class _BlockQuickActionAnnotation {
   const _BlockQuickActionAnnotation();
 }
 
-class _BlockQuickCreateItemActionAnnotation {
-  const _BlockQuickCreateItemActionAnnotation();
+class _BlockQuickItemCreationActionAnnotation {
+  const _BlockQuickItemCreationActionAnnotation();
 }
 
-class _BlockSilentCreateItemActionAnnotation {
-  const _BlockSilentCreateItemActionAnnotation();
+class _BlockSilentItemCreationActionAnnotation {
+  const _BlockSilentItemCreationActionAnnotation();
 }
 
 class _BlockQuickCreateMultiItemsActionAnnotation {
   const _BlockQuickCreateMultiItemsActionAnnotation();
 }
 
-class _BlockQuickUpdateItemActionAnnotation {
-  const _BlockQuickUpdateItemActionAnnotation();
+class _BlockQuickItemUpdateActionAnnotation {
+  const _BlockQuickItemUpdateActionAnnotation();
 }
 
-class _BlockSilentUpdateItemActionAnnotation {
-  const _BlockSilentUpdateItemActionAnnotation();
+class _BlockSilentItemUpdateActionAnnotation {
+  const _BlockSilentItemUpdateActionAnnotation();
 }
 
 class _BlockQuickChildBlockItemsActionAnnotation {

@@ -1,13 +1,13 @@
 part of '../core.dart';
 
 @_TaskUnitClassAnnotation()
-@_BlockSilentUpdateItemActionAnnotation()
-class _BlockSilentUpdateItemTaskUnit
+@_BlockSilentItemUpdateActionAnnotation()
+class _BlockSilentItemUpdateTaskUnit
     extends _ResultedTaskUnit<BlockSilentItemUpdateResult> {
   XBlock xBlock;
   BlockSilentItemUpdateAction action;
 
-  _BlockSilentUpdateItemTaskUnit({
+  _BlockSilentItemUpdateTaskUnit({
     required this.xBlock,
     required this.action,
   }) : super(

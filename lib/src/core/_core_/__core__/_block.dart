@@ -1922,7 +1922,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_BlockQuickCreateItemActionAnnotation()
+  @_BlockQuickItemCreationActionAnnotation()
   Future<void> _unitQuickCreateItem({
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockQuickItemCreationResult taskResult,
@@ -1997,7 +1997,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_BlockSilentCreateItemActionAnnotation()
+  @_BlockSilentItemCreationActionAnnotation()
   Future<void> _unitSilentCreateItem({
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockSilentItemCreationResult taskResult,
@@ -2075,7 +2075,7 @@ abstract class Block<
   @_BlockQuickCreateMultiItemsActionAnnotation()
   Future<bool> _unitQuickCreateMultiItems({
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required BlockQuickCreateMultiItemsAction<ID, ITEM, ITEM_DETAIL,
+    required BlockQuickMultiItemsCreationAction<ID, ITEM, ITEM_DETAIL,
             FILTER_CRITERIA>
         action,
   }) async {
@@ -2135,7 +2135,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_BlockQuickUpdateItemActionAnnotation()
+  @_BlockQuickItemUpdateActionAnnotation()
   Future<void> _unitQuickUpdateItem({
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockQuickItemUpdateResult taskResult,
@@ -2210,7 +2210,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_BlockSilentUpdateItemActionAnnotation()
+  @_BlockSilentItemUpdateActionAnnotation()
   Future<void> _unitSilentUpdateItem({
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockSilentItemUpdateResult taskResult,
@@ -2724,7 +2724,7 @@ abstract class Block<
     //
     final taskResult = _createEmptyItemDeletionResult();
     //
-    final _ResultedTaskUnit taskUnit = _BlockDeleteItemTaskUnit(
+    final _ResultedTaskUnit taskUnit = _BlockItemDeletionTaskUnit(
       xBlock: thisXBlock,
       item: item!,
       taskResult: taskResult,
@@ -2791,7 +2791,7 @@ abstract class Block<
     final taskResult = _createEmptyItemsDeletionResult(
       candidateItems: candidateDeleteItems,
     );
-    final _ResultedTaskUnit taskUnit = _BlockDeleteItemsTaskUnit(
+    final _ResultedTaskUnit taskUnit = _BlockMultiItemsDeletionTaskUnit(
       xBlock: thisXBlock,
       items: candidateDeleteItems,
       stopIfError: stopIfError,
@@ -3544,8 +3544,8 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
-  @_BlockQuickCreateItemActionAnnotation()
-  Future<BlockQuickItemCreationResult> executeQuickCreateItemAction({
+  @_BlockQuickItemCreationActionAnnotation()
+  Future<BlockQuickItemCreationResult> executeQuickItemCreationAction({
     required BlockQuickItemCreationAction<ID, ITEM, ITEM_DETAIL,
             FILTER_CRITERIA>
         action,
@@ -3554,7 +3554,7 @@ abstract class Block<
       isLibCode: true,
       navigate: null,
       ownerClassInstance: this,
-      methodName: "executeQuickCreateItemAction",
+      methodName: "executeQuickItemCreationAction",
       parameters: {
         "action": action,
       },
@@ -3600,7 +3600,7 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    final _ResultedTaskUnit taskUnit = _BlockQuickCreateItemTaskUnit(
+    final _ResultedTaskUnit taskUnit = _BlockQuickItemCreationTaskUnit(
       xBlock: thisXBlock,
       action: action,
     );
@@ -3617,7 +3617,7 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
-  @_BlockSilentCreateItemActionAnnotation()
+  @_BlockSilentItemCreationActionAnnotation()
   Future<BlockSilentItemCreationResult> executeSilentCreateItemAction({
     required BlockSilentItemCreationAction<ID, ITEM, ITEM_DETAIL,
             FILTER_CRITERIA>
@@ -3673,7 +3673,7 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    final _ResultedTaskUnit taskUnit = _BlockSilentCreateItemTaskUnit(
+    final _ResultedTaskUnit taskUnit = _BlockSilentItemCreationTaskUnit(
       xBlock: thisXBlock,
       action: action,
     );
@@ -3693,7 +3693,7 @@ abstract class Block<
   @_BlockQuickCreateMultiItemsActionAnnotation()
   Future<BlockQuickMultiItemsCreationResult>
       executeQuickCreateMultiItemsAction({
-    required BlockQuickCreateMultiItemsAction<ID, ITEM, ITEM_DETAIL,
+    required BlockQuickMultiItemsCreationAction<ID, ITEM, ITEM_DETAIL,
             FILTER_CRITERIA>
         action,
   }) async {
@@ -3747,7 +3747,7 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    final _ResultedTaskUnit taskUnit = _BlockQuickCreateMultiItemsTaskUnit(
+    final _ResultedTaskUnit taskUnit = _BlockQuickMultiItemsCreationTaskUnit(
       xBlock: thisXBlock,
       action: action,
     );
@@ -3764,8 +3764,8 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
-  @_BlockQuickUpdateItemActionAnnotation()
-  Future<BlockQuickItemUpdateResult> executeQuickUpdateItemAction({
+  @_BlockQuickItemUpdateActionAnnotation()
+  Future<BlockQuickItemUpdateResult> executeQuickItemUpdateAction({
     required BlockQuickItemUpdateAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
         action,
   }) async {
@@ -3773,7 +3773,7 @@ abstract class Block<
       isLibCode: true,
       navigate: null,
       ownerClassInstance: this,
-      methodName: "executeQuickUpdateItemAction",
+      methodName: "executeQuickItemUpdateAction",
       parameters: {
         "action": action,
       },
@@ -3820,7 +3820,7 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    final _ResultedTaskUnit taskUnit = _BlockQuickUpdateItemTaskUnit(
+    final _ResultedTaskUnit taskUnit = _BlockQuickItemUpdateTaskUnit(
       xBlock: thisXBlock,
       action: action,
     );
@@ -3837,7 +3837,7 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
-  @_BlockSilentUpdateItemActionAnnotation()
+  @_BlockSilentItemUpdateActionAnnotation()
   Future<BlockSilentItemUpdateResult> executeSilentUpdateItemAction({
     required BlockSilentItemUpdateAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
         action,
@@ -3893,7 +3893,7 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    final _ResultedTaskUnit taskUnit = _BlockSilentUpdateItemTaskUnit(
+    final _ResultedTaskUnit taskUnit = _BlockSilentItemUpdateTaskUnit(
       xBlock: thisXBlock,
       action: action,
     );
