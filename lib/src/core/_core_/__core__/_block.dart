@@ -2044,28 +2044,12 @@ abstract class Block<
       return;
     }
     //
-    // try {
-    //   await _processSaveActionRestResult(
-    //     thisXBlock: thisXBlock,
-    //     isNew: true,
-    //     calledMethodName: "${getClassName(action)}.$methodName",
-    //     result: result,
-    //   );
-    //   return;
-    // } catch (e, stackTrace) {
-    //   AppError appError = _handleError(
-    //     shelf: shelf,
-    //     methodName: "${getClassName(action)}.$methodName",
-    //     error: e,
-    //     stackTrace: stackTrace,
-    //     showSnackBar: true,
-    //   );
-    //   //
-    //   taskResult._setAppError(
-    //     appError: appError,
-    //     stackTrace: appError is ApiError ? null : stackTrace,
-    //   );
-    // }
+    // Process Internal Reaction (If Need).
+    //
+    await _processInternalReaction(
+      thisXBlock: thisXBlock,
+      candidateCurrItem: null,
+    );
   }
 
   // ***************************************************************************
@@ -2279,6 +2263,14 @@ abstract class Block<
     //   );
     //   return;
     // }
+
+    //
+    // Process Internal Reaction (If Need).
+    //
+    await _processInternalReaction(
+      thisXBlock: thisXBlock,
+      candidateCurrItem: null,
+    );
   }
 
   // ***************************************************************************
@@ -2501,15 +2493,7 @@ abstract class Block<
           thisXBlock: thisXBlock,
         );
       }
-      // xxx; xoa dii
-      // if (thisXBlock.xFormModel != null) {
-      //   thisXBlock.xFormModel!.setForceType(ForceType.force);
-      //   thisXBlock.xShelf._addTaskUnit(
-      //     taskUnit: _FormModelLoadFormTaskUnit(
-      //       xFormModel: thisXBlock.xFormModel!,
-      //     ),
-      //   );
-      // }
+      //
       if (thisXBlock.xFormModel != null) {
         thisXBlock.xFormModel!.setForceType(ForceType.force);
       }
