@@ -4,7 +4,7 @@ export 'src/core/action/_quick_action.dart';
 export 'src/core/action/background_web_download_action.dart';
 export 'src/core/action/block_quick_action.dart';
 export 'src/core/action/block_quick_child_block_items_action.dart';
-export 'src/core/action/block_quick_create_multi_items_action.dart';
+export 'src/core/action/block_quick_multi_items_creation_action.dart';
 export 'src/core/action/block_quick_item_creation_action.dart';
 export 'src/core/action/block_quick_item_replacement_action.dart';
 export 'src/core/action/block_quick_item_update_action.dart';

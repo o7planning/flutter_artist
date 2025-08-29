@@ -35,7 +35,7 @@ import '../action/_background_action.dart';
 import '../action/_quick_action.dart';
 import '../action/block_quick_action.dart';
 import '../action/block_quick_child_block_items_action.dart';
-import '../action/block_quick_create_multi_items_action.dart';
+import '../action/block_quick_multi_items_creation_action.dart';
 import '../action/block_quick_item_creation_action.dart';
 import '../action/block_quick_item_update_action.dart';
 import '../action/block_silent_item_creation_action.dart';
