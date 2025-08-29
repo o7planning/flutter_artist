@@ -3,9 +3,9 @@ import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 import '_quick_action.dart';
 
-abstract class ScalarLoadExtraDataQuickAction<DATA extends Object>
+abstract class ScalarQuickExtraDataLoadAction<DATA extends Object>
     extends QuickAction {
-  const ScalarLoadExtraDataQuickAction({
+  const ScalarQuickExtraDataLoadAction({
     required super.needToConfirm,
     required super.actionInfo,
   });

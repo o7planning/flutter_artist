@@ -395,7 +395,7 @@ abstract class Scalar<
   @_ScalarLoadExtraDataQuickActionAnnotation()
   Future<bool> _unitLoadExtraDataQuickAction<DATA extends Object>({
     required XScalar thisXScalar,
-    required ScalarLoadExtraDataQuickAction<DATA> action,
+    required ScalarQuickExtraDataLoadAction<DATA> action,
     required AfterScalarLoadExtraDataQuickAction afterQuickAction,
   }) async {
     __assertThisXScalar(thisXScalar);
@@ -460,7 +460,7 @@ abstract class Scalar<
   }
 
   Future<void> _showAfterScalarLoadExtraData<DATA extends Object>({
-    required ScalarLoadExtraDataQuickAction<DATA> action,
+    required ScalarQuickExtraDataLoadAction<DATA> action,
     required AfterScalarLoadExtraDataQuickAction afterQuickAction,
     required DATA? extraData,
     required bool success,
@@ -702,7 +702,7 @@ abstract class Scalar<
   Future<bool> executeQuickLoadExtraDataAction<DATA extends Object>({
     FILTER_INPUT? filterInput,
     required ActionConfirmationType actionConfirmationType,
-    required ScalarLoadExtraDataQuickAction<DATA> action,
+    required ScalarQuickExtraDataLoadAction<DATA> action,
     required AfterScalarLoadExtraDataQuickAction afterQuickAction,
     required Function(BuildContext context)? navigate,
   }) async {

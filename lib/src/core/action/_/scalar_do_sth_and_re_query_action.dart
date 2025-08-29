@@ -1,7 +1,7 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../enums/after_silent_action.dart';
-import '_quick_action.dart';
+import '../../enums/after_silent_action.dart';
+import '../_quick_action.dart';
 
 ///
 /// Do something and then re-query the Scalar.

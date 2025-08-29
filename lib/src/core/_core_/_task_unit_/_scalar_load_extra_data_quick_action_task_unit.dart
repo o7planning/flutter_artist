@@ -5,7 +5,7 @@ part of '../core.dart';
 class _ScalarLoadExtraDataQuickActionTaskUnit<DATA extends Object>
     extends _TaskUnit {
   final XScalar xScalar;
-  final ScalarLoadExtraDataQuickAction<DATA> action;
+  final ScalarQuickExtraDataLoadAction<DATA> action;
   final AfterScalarLoadExtraDataQuickAction afterQuickAction;
 
   _ScalarLoadExtraDataQuickActionTaskUnit({
