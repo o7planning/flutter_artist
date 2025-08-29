@@ -2022,7 +2022,7 @@ abstract class Block<
         parameters: {},
       );
       //
-      result = await action.callApiSilentCreateItem(
+      result = await action.callApiSilenceCreateItem(
         parentBlockItem: parent?.currentItem,
         filterCriteria: blockCurrentFilterCriteria,
       );
@@ -2220,7 +2220,7 @@ abstract class Block<
         parameters: {},
       );
       //
-      result = await action.callApiSilentUpdateItem(
+      result = await action.callApiSilenceUpdateItem(
         parentBlockItem: parent?.currentItem,
         filterCriteria: blockCurrentFilterCriteria,
       );
