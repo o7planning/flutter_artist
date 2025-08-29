@@ -49,7 +49,7 @@ class _StorageEventHandler {
   }) {
     if (events.isEmpty) {
       print(
-          "*~~~~~~~~~> NOT FIRE EVENT TO OUTSIDE --> Event Item Types: $events"
+          "*~~~~~~~~~> NO EVENT FIRE TO OUTSIDE --> Event Item Types: $events"
           " - Src Event: ${getClassName(eventBlock)}");
       return;
     } else {
@@ -81,7 +81,7 @@ class _StorageEventHandler {
   }) {
     if (events.isEmpty) {
       print(
-          "**~~~~~~~~~> NOT FIRE EVENT TO OUTSIDE --> Event Item Types: $events"
+          "**~~~~~~~~~> NO EVENT FIRE TO OUTSIDE --> Event Item Types: $events"
           " - Src Shelf: ${getClassName(eventShelf)}");
       return;
     } else {
