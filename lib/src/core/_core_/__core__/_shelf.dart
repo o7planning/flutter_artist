@@ -595,7 +595,7 @@ abstract class Shelf extends _Core {
       // TODO: Handle Error:
       //
       xShelf._initQueryTasks();
-      FlutterArtist._xShelfQueue._addXShelf(xShelf);
+      FlutterArtist._rootQueue._addXShelf(xShelf);
       await FlutterArtist.executor._executeTaskUnitQueue();
     } finally {
       __lazyLoadLocked = false;
@@ -618,7 +618,7 @@ abstract class Shelf extends _Core {
     //
     xShelf._initQueryTasks();
     // IMPORTANT: No need to call "execute".
-    FlutterArtist._xShelfQueue._addXShelf(xShelf);
+    FlutterArtist._rootQueue._addXShelf(xShelf);
   }
 
   // ***************************************************************************
