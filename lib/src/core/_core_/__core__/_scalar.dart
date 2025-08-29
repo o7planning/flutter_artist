@@ -676,7 +676,7 @@ abstract class Scalar<
       );
     }
     //
-    final XShelf xShelf = XShelf.forScalarQuickAction(
+    final XShelf xShelf = XShelf.forScalarSilentAction(
       scalar: this,
     );
     //

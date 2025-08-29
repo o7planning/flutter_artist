@@ -963,9 +963,9 @@ class XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  XShelf.forScalarQuickAction({
+  XShelf.forScalarSilentAction({
     required Scalar scalar,
-  })  : xShelfType = XShelfType.scalarQuickAction,
+  })  : xShelfType = XShelfType.scalarSilentAction,
         shelf = scalar.shelf {
     __initCore(shelf: shelf);
     //
