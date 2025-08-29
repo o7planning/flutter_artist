@@ -2513,17 +2513,17 @@ abstract class Block<
         __clearAllChildrenBlocksToNone(
           thisXBlock: thisXBlock,
         );
-        //  xxx; Xoa di.
-        _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
-          currentItemSelectionType:
-              CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
-          xBlock: thisXBlock,
-          newQueriedList: [],
-          candidateItem: siblingItem,
-          forceReloadItem: false,
-          forceTypeForForm: null,
-        );
-        thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
+        //  xxx; Xoa di. // ????????????????
+        // _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+        //   currentItemSelectionType:
+        //       CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
+        //   xBlock: thisXBlock,
+        //   newQueriedList: [],
+        //   candidateItem: siblingItem,
+        //   forceReloadItem: false,
+        //   forceTypeForForm: null,
+        // );
+        // thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
       }
     }
     //
