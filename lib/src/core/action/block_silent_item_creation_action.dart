@@ -13,7 +13,7 @@ abstract class BlockSilentItemCreationAction<
     required super.actionInfo,
   });
 
-  Future<ApiResult<void>> callApiSilenceCreateItem({
+  Future<ApiResult<void>> callApiSilentlyCreateItem({
     required Object? parentBlockItem,
     required FILTER_CRITERIA filterCriteria,
   });

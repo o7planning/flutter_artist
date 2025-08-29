@@ -18,7 +18,7 @@ abstract class BlockSilentItemUpdateAction<
     required super.actionInfo,
   });
 
-  Future<ApiResult<void>> callApiSilenceUpdateItem({
+  Future<ApiResult<void>> callApiSilentlyUpdateItem({
     required Object? parentBlockItem,
     required FILTER_CRITERIA filterCriteria,
   });
