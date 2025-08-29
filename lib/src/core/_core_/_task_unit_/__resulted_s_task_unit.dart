@@ -1,10 +1,10 @@
 part of '../core.dart';
 
 @_TaskUnitClassAnnotation()
-abstract class _ResultedTaskUnit<RESULT> extends _TaskUnit {
+abstract class _ResultedSTaskUnit<RESULT> extends _STaskUnit {
   final RESULT? taskResult;
 
-  _ResultedTaskUnit({
+  _ResultedSTaskUnit({
     required super.taskType,
     this.taskResult,
   });

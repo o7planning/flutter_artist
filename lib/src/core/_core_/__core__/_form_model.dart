@@ -1566,7 +1566,7 @@ abstract class FormModel<
     //
     XBlock xBlock = xShelf.findXBlockByName(this.block.name)!;
     XFormModel xFormModel = xBlock.xFormModel!;
-    _TaskUnit taskUnit = _FormModelAutoEnterFormFieldsTaskUnit(
+    _STaskUnit taskUnit = _FormModelAutoEnterFormFieldsTaskUnit(
       xFormModel: xFormModel,
       extraFormInput: extraFormInput,
     );
@@ -1610,7 +1610,7 @@ abstract class FormModel<
     //
     XBlock xBlock = xShelf.findXBlockByName(this.block.name)!;
     XFormModel xFormModel = xBlock.xFormModel!;
-    final _ResultedTaskUnit taskUnit = _FormModelSaveFormTaskUnit(
+    final _ResultedSTaskUnit taskUnit = _FormModelSaveFormTaskUnit(
       xFormModel: xFormModel,
     );
     //

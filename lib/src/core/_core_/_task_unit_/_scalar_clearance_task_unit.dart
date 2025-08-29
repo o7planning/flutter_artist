@@ -2,7 +2,7 @@ part of '../core.dart';
 
 @_TaskUnitClassAnnotation()
 class _ScalarClearanceTaskUnit
-    extends _ResultedTaskUnit<ScalarClearanceResult> {
+    extends _ResultedSTaskUnit<ScalarClearanceResult> {
   final XScalar xScalar;
 
   _ScalarClearanceTaskUnit({

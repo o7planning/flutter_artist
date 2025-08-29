@@ -312,7 +312,7 @@ part '_task_result_/_scalar_query_result.dart';
 
 part '_task_result_/_storage_silent_action_result.dart';
 
-part '_task_unit_/__resulted_task_unit.dart';
+part '_task_unit_/__resulted_s_task_unit.dart';
 
 part '_task_unit_/__x_shelf_task_unit_queue.dart';
 

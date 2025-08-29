@@ -2,7 +2,7 @@ part of '../core.dart';
 
 @_TaskUnitClassAnnotation()
 @_BlockClearCurrentAnnotation()
-class _BlockClearCurrentTaskUnit<ITEM extends Object> extends _TaskUnit {
+class _BlockClearCurrentTaskUnit<ITEM extends Object> extends _STaskUnit {
   final XBlock xBlock;
 
   _BlockClearCurrentTaskUnit({

@@ -30,8 +30,8 @@ class _XRootQueue {
     return isNotEmpty;
   }
 
-  _TaskUnitBase? getNextTaskUnit() {
-    _TaskUnitBase? tu = _xStorage._getNextTaskUnit();
+  _TaskUnit? getNextTaskUnit() {
+    _TaskUnit? tu = _xStorage._getNextTaskUnit();
     if (tu != null) {
       return tu;
     }
@@ -50,7 +50,8 @@ class _XRootQueue {
   }
 
   void _addStorageSilentActionTaskUnit(
-      _StorageSilentActionTaskUnit storageSilentActionTaskUnit) {
+    _StorageSilentActionTaskUnit storageSilentActionTaskUnit,
+  ) {
     _xStorage._addStorageSilentActionTaskUnit(storageSilentActionTaskUnit);
   }
 

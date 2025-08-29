@@ -3,7 +3,7 @@ part of '../core.dart';
 @_TaskUnitClassAnnotation()
 @_FormModelLoadFormAnnotation()
 class _FormModelLoadFormTaskUnit
-    extends _ResultedTaskUnit<FormModelDataLoadResult> {
+    extends _ResultedSTaskUnit<FormModelDataLoadResult> {
   XFormModel xFormModel;
 
   _FormModelLoadFormTaskUnit({

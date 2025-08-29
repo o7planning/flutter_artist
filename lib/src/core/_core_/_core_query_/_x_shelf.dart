@@ -1232,11 +1232,11 @@ class XShelf {
     return __xShelfTaskUnitQueue.isEmpty;
   }
 
-  _TaskUnit? _getNextTaskUnit() {
+  _STaskUnit? _getNextTaskUnit() {
     return __xShelfTaskUnitQueue.getNextTaskUnit();
   }
 
-  void _addTaskUnit({required _TaskUnit taskUnit, bool toMainQueue = true}) {
+  void _addTaskUnit({required _STaskUnit taskUnit, bool toMainQueue = true}) {
     if (taskUnit.xShelf != this) {
       throw FatalAppError(
         errorMessage: "Development Logic Error.",

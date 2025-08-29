@@ -2,7 +2,7 @@ part of '../core.dart';
 
 @_TaskUnitClassAnnotation()
 @_FormViewChangeAnnotation()
-class _FormViewChangeTaskUnit extends _TaskUnit {
+class _FormViewChangeTaskUnit extends _STaskUnit {
   XFormModel xFormModel;
 
   _FormViewChangeTaskUnit({

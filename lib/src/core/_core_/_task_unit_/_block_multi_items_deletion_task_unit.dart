@@ -6,7 +6,7 @@ part of '../core.dart';
 @_BlockDeleteCurrentItemAnnotation()
 @_BlockDeleteItemAnnotation()
 class _BlockMultiItemsDeletionTaskUnit
-    extends _ResultedTaskUnit<BlockItemsDeletionResult> {
+    extends _ResultedSTaskUnit<BlockItemsDeletionResult> {
   XBlock xBlock;
   final List<Object> items;
   final bool stopIfError;

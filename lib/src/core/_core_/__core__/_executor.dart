@@ -51,8 +51,7 @@ class _Executor {
               );
             }
             //
-            _TaskUnitBase taskUnit =
-                FlutterArtist._rootQueue.getNextTaskUnit()!;
+            _TaskUnit taskUnit = FlutterArtist._rootQueue.getNextTaskUnit()!;
             //
             await __executeTaskUnit(taskUnit: taskUnit, shelfMap: shelfMap);
           }
@@ -83,10 +82,10 @@ class _Executor {
   // ***************************************************************************
 
   Future<void> __executeTaskUnit({
-    required _TaskUnitBase taskUnit,
+    required _TaskUnit taskUnit,
     required Map<String, Shelf> shelfMap,
   }) async {
-    if (taskUnit is _TaskUnit) {
+    if (taskUnit is _STaskUnit) {
       _updateProgressViews(
         owner: taskUnit.owner,
         taskType: taskUnit.taskType,

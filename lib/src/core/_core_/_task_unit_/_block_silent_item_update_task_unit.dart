@@ -3,7 +3,7 @@ part of '../core.dart';
 @_TaskUnitClassAnnotation()
 @_BlockSilentItemUpdateActionAnnotation()
 class _BlockSilentItemUpdateTaskUnit
-    extends _ResultedTaskUnit<BlockSilentItemUpdateResult> {
+    extends _ResultedSTaskUnit<BlockSilentItemUpdateResult> {
   XBlock xBlock;
   BlockSilentItemUpdateAction action;
 

@@ -3,7 +3,7 @@ part of '../core.dart';
 @_TaskUnitClassAnnotation()
 @_BlockQuickItemUpdateActionAnnotation()
 class _BlockQuickItemUpdateTaskUnit
-    extends _ResultedTaskUnit<BlockQuickItemUpdateResult> {
+    extends _ResultedSTaskUnit<BlockQuickItemUpdateResult> {
   XBlock xBlock;
   BlockQuickItemUpdateAction action;
 

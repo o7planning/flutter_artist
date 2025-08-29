@@ -2,7 +2,7 @@ part of '../core.dart';
 
 @_TaskUnitClassAnnotation()
 @_BlockPrepareFormToCreateItemAnnotation()
-class _BlockPrepareFormToCreateItemTaskUnit extends _TaskUnit {
+class _BlockPrepareFormToCreateItemTaskUnit extends _STaskUnit {
   XBlock xBlock;
   ExtraFormInput? extraFormInput;
   Function()? navigate;

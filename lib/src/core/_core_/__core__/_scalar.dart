@@ -574,7 +574,7 @@ abstract class Scalar<
     //
     final XScalar thisXScalar = xShelf.findXScalarByName(this.name)!;
     //
-    _TaskUnit taskUnit = _ScalarLoadExtraDataQuickActionTaskUnit(
+    _STaskUnit taskUnit = _ScalarLoadExtraDataQuickActionTaskUnit(
       xScalar: thisXScalar,
       action: action,
       afterQuickAction: afterQuickAction,
@@ -658,7 +658,7 @@ abstract class Scalar<
     final XShelf xShelf = XShelf.forScalarClearance(scalar: this);
 
     final XScalar thisXScalar = xShelf.findXScalarByName(name)!;
-    final _ResultedTaskUnit taskUnit = _ScalarClearanceTaskUnit(
+    final _ResultedSTaskUnit taskUnit = _ScalarClearanceTaskUnit(
       xScalar: thisXScalar,
     );
     //

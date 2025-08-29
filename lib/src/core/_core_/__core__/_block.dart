@@ -1618,7 +1618,7 @@ abstract class Block<
     print("**************************************************************\n");
 
     if (!hasInternalEvent) {
-      final _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+      final _STaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
         currentItemSelectionType: currentItemSelectionType,
         xBlock: thisXBlock,
         newQueriedList: <ITEM>[],
@@ -1654,7 +1654,7 @@ abstract class Block<
     if (effSelfInfo == null && topEffBlockInfo == null) {
       print("\n\n\n@@@@@@@@@ INTERNAL EVENT ~~~~~> 1");
       // Test Case:
-      final _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+      final _STaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
         currentItemSelectionType: currentItemSelectionType,
         xBlock: thisXBlock,
         newQueriedList: <ITEM>[],
@@ -1669,7 +1669,7 @@ abstract class Block<
       print("\n\n\n@@@@@@@@@ INTERNAL EVENT ~~~~~> 2");
       if (topEffBlockInfo.reQuery) {
         // Note: candidateCurrItem already set. (See @DEL-01)
-        final _TaskUnit taskUnit = _BlockQueryTaskUnit(xBlock: thisXBlock);
+        final _STaskUnit taskUnit = _BlockQueryTaskUnit(xBlock: thisXBlock);
         thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
         // TODO: Test Case?
         if (topEffBlockInfo.refreshCurrItem) {
@@ -1681,7 +1681,7 @@ abstract class Block<
           xShelf: thisXBlock.xShelf,
         );
         //
-        final _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+        final _STaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
           currentItemSelectionType: currentItemSelectionType,
           xBlock: topXBlock,
           newQueriedList: <ITEM>[],
@@ -1698,7 +1698,7 @@ abstract class Block<
       if (effSelfInfo.reQuery) {
         print("\n\n\n@@@@@@@@@ INTERNAL EVENT ~~~~~> 3.1 - Self ReQry");
         // Note: candidateCurrItem already set. (See @DEL-01)
-        _TaskUnit taskUnit = _BlockQueryTaskUnit(xBlock: thisXBlock);
+        _STaskUnit taskUnit = _BlockQueryTaskUnit(xBlock: thisXBlock);
         thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
       }
       // effSelfInfo.refreshCurrItem.
@@ -1714,7 +1714,7 @@ abstract class Block<
         //
         // Select an Item as Current.
         //
-        final _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+        final _STaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
           currentItemSelectionType: currentItemSelectionType,
           xBlock: thisXBlock,
           newQueriedList: <ITEM>[],
@@ -1849,7 +1849,7 @@ abstract class Block<
     if (siblingItem == null) {
       return;
     }
-    _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+    _STaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
       currentItemSelectionType:
           CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
       xBlock: thisXBlock,
@@ -2619,7 +2619,7 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    _TaskUnit taskUnit = _BlockClearCurrentTaskUnit(
+    _STaskUnit taskUnit = _BlockClearCurrentTaskUnit(
       xBlock: thisXBlock,
     );
     //
@@ -2687,7 +2687,7 @@ abstract class Block<
     //
     final taskResult = _createEmptyItemDeletionResult();
     //
-    final _ResultedTaskUnit taskUnit = _BlockItemDeletionTaskUnit(
+    final _ResultedSTaskUnit taskUnit = _BlockItemDeletionTaskUnit(
       xBlock: thisXBlock,
       item: item!,
       taskResult: taskResult,
@@ -2754,7 +2754,7 @@ abstract class Block<
     final taskResult = _createEmptyItemsDeletionResult(
       candidateItems: candidateDeleteItems,
     );
-    final _ResultedTaskUnit taskUnit = _BlockMultiItemsDeletionTaskUnit(
+    final _ResultedSTaskUnit taskUnit = _BlockMultiItemsDeletionTaskUnit(
       xBlock: thisXBlock,
       items: candidateDeleteItems,
       stopIfError: stopIfError,
@@ -2827,7 +2827,7 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    final _ResultedTaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+    final _ResultedSTaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
       currentItemSelectionType: currentItemSelectionType,
       xBlock: thisXBlock,
       newQueriedList: [],
@@ -2907,7 +2907,7 @@ abstract class Block<
     final XShelf xShelf = XShelf.forBlockClearance(block: this);
 
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
-    final _ResultedTaskUnit taskUnit = _BlockClearanceTaskUnit(
+    final _ResultedSTaskUnit taskUnit = _BlockClearanceTaskUnit(
       xBlock: thisXBlock,
     );
     //
@@ -3490,7 +3490,7 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    final _ResultedTaskUnit taskUnit = _BlockSilentActionTaskUnit(
+    final _ResultedSTaskUnit taskUnit = _BlockSilentActionTaskUnit(
       xBlock: thisXBlock,
       action: action,
     );
@@ -3563,7 +3563,7 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    final _ResultedTaskUnit taskUnit = _BlockQuickItemCreationTaskUnit(
+    final _ResultedSTaskUnit taskUnit = _BlockQuickItemCreationTaskUnit(
       xBlock: thisXBlock,
       action: action,
     );
@@ -3636,7 +3636,7 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    final _ResultedTaskUnit taskUnit = _BlockSilentItemCreationTaskUnit(
+    final _ResultedSTaskUnit taskUnit = _BlockSilentItemCreationTaskUnit(
       xBlock: thisXBlock,
       action: action,
     );
@@ -3710,7 +3710,7 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    final _ResultedTaskUnit taskUnit = _BlockQuickMultiItemsCreationTaskUnit(
+    final _ResultedSTaskUnit taskUnit = _BlockQuickMultiItemsCreationTaskUnit(
       xBlock: thisXBlock,
       action: action,
     );
@@ -3783,7 +3783,7 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    final _ResultedTaskUnit taskUnit = _BlockQuickItemUpdateTaskUnit(
+    final _ResultedSTaskUnit taskUnit = _BlockQuickItemUpdateTaskUnit(
       xBlock: thisXBlock,
       action: action,
     );
@@ -3856,7 +3856,7 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    final _ResultedTaskUnit taskUnit = _BlockSilentItemUpdateTaskUnit(
+    final _ResultedSTaskUnit taskUnit = _BlockSilentItemUpdateTaskUnit(
       xBlock: thisXBlock,
       action: action,
     );
@@ -3907,7 +3907,7 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    _TaskUnit taskUnit = _BlockQuickChildBlockItemsTaskUnit(
+    _STaskUnit taskUnit = _BlockQuickChildBlockItemsTaskUnit(
       xBlock: thisXBlock,
       action: action,
     );
@@ -4027,7 +4027,7 @@ abstract class Block<
     final XShelf xShelf = XShelf.forPrepareFormToCreateItem(block: this);
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    _TaskUnit taskUnit = _BlockPrepareFormToCreateItemTaskUnit(
+    _STaskUnit taskUnit = _BlockPrepareFormToCreateItemTaskUnit(
       xBlock: thisXBlock,
       initDirty: initDirty,
       extraFormInput: extraFormInput,

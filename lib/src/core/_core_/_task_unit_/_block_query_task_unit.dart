@@ -7,7 +7,7 @@ part of '../core.dart';
 @_BlockQueryPreviousPageAnnotation()
 @_BlockQueryAndPrepareToEditAnnotation()
 @_BlockQueryAndPrepareToCreateAnnotation()
-class _BlockQueryTaskUnit extends _TaskUnit {
+class _BlockQueryTaskUnit extends _STaskUnit {
   XBlock xBlock;
 
   _BlockQueryTaskUnit({

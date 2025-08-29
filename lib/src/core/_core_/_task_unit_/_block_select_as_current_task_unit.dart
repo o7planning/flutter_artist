@@ -7,7 +7,7 @@ part of '../core.dart';
 @_BlockRefreshAndSelectFirstItemAsCurrentAnnotation()
 @_BlockRefreshAndSelectPreviousItemAsCurrentAnnotation()
 class _BlockSelectAsCurrentTaskUnit<ITEM extends Object>
-    extends _ResultedTaskUnit<BlockItemCurrSelectionResult<ITEM>> {
+    extends _ResultedSTaskUnit<BlockItemCurrSelectionResult<ITEM>> {
   final XBlock xBlock;
   final ForceType? forceTypeForForm;
   final CurrentItemSelectionType currentItemSelectionType;

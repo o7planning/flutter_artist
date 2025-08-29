@@ -2,7 +2,7 @@ part of '../core.dart';
 
 @_TaskUnitClassAnnotation()
 @_ScalarQueryAnnotation()
-class _ScalarQueryTaskUnit extends _TaskUnit {
+class _ScalarQueryTaskUnit extends _STaskUnit {
   XScalar xScalar;
 
   _ScalarQueryTaskUnit({

@@ -2,12 +2,12 @@ part of '../core.dart';
 
 class _XShelfTaskUnitQueue {
   final XShelf xShelf;
-  final List<_TaskUnit> _mainTaskUnits = [];
-  final List<_TaskUnit> _secondaryTaskUnits = [];
+  final List<_STaskUnit> _mainTaskUnits = [];
+  final List<_STaskUnit> _secondaryTaskUnits = [];
 
   _XShelfTaskUnitQueue({required this.xShelf});
 
-  _TaskUnit? getNextTaskUnit() {
+  _STaskUnit? getNextTaskUnit() {
     if (_mainTaskUnits.isEmpty) {
       if (_secondaryTaskUnits.isNotEmpty) {
         _mainTaskUnits.addAll(_secondaryTaskUnits);
@@ -25,7 +25,7 @@ class _XShelfTaskUnitQueue {
     return _mainTaskUnits.isEmpty && _secondaryTaskUnits.isEmpty;
   }
 
-  void addTaskUnit({required _TaskUnit taskUnit, required bool toMainQueue}) {
+  void addTaskUnit({required _STaskUnit taskUnit, required bool toMainQueue}) {
     if (toMainQueue) {
       _mainTaskUnits.add(taskUnit);
     } else {

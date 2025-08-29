@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 @_TaskUnitClassAnnotation()
-class _BlockClearanceTaskUnit extends _ResultedTaskUnit<BlockClearanceResult> {
+class _BlockClearanceTaskUnit extends _ResultedSTaskUnit<BlockClearanceResult> {
   final XBlock xBlock;
 
   _BlockClearanceTaskUnit({

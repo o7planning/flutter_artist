@@ -1,14 +1,15 @@
 part of '../core.dart';
 
-abstract class _TaskUnitBase {
+@_TaskUnitClassAnnotation()
+abstract class _TaskUnit {
   //
 }
 
 @_TaskUnitClassAnnotation()
-abstract class _TaskUnit extends _TaskUnitBase {
+abstract class _STaskUnit extends _TaskUnit {
   final TaskType taskType;
 
-  _TaskUnit({
+  _STaskUnit({
     required this.taskType,
   });
 
