@@ -19,7 +19,7 @@ abstract class StorageSilentAction extends QuickAction {
 }
 
 class StorageSilentActionConfig {
-  final AfterScalarSilentAction afterQuickAction;
+  final AfterStorageSilentAction afterQuickAction;
   final List<Type> affectedItemTypes;
 
   const StorageSilentActionConfig({

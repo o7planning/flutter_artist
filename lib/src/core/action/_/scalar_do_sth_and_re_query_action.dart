@@ -24,7 +24,7 @@ abstract class ScalarDoSthAndReQueryAction extends QuickAction {
 }
 
 class ScalarDoSthAndReQueryActionConfig {
-  final AfterScalarSilentAction afterQuickAction;
+  final AfterStorageSilentAction afterQuickAction;
   final List<Type> affectedItemTypes;
 
   const ScalarDoSthAndReQueryActionConfig({

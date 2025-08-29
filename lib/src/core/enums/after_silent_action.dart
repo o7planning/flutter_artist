@@ -4,7 +4,7 @@ enum AfterBlockSilentAction {
   none;
 }
 
-enum AfterScalarSilentAction {
+enum AfterStorageSilentAction {
   none,
   query;
 }

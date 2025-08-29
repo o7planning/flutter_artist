@@ -340,15 +340,6 @@ class _Storage extends _Core {
       events: action.config.affectedItemTypes,
     );
     //
-    // switch (action.config.afterQuickAction) {
-    //   case AfterScalarSilentAction.none:
-    //     break;
-    //   case AfterScalarSilentAction.query:
-    //     var taskUnit = _ScalarQueryTaskUnit(
-    //       xScalar: thisXScalar,
-    //     );
-    //     thisXScalar.xShelf._addTaskUnit(taskUnit: taskUnit);
-    // }
     return true;
   }
 }
