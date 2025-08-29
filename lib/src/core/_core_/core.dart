@@ -41,7 +41,7 @@ import '../action/block_quick_item_update_action.dart';
 import '../action/block_silent_item_creation_action.dart';
 import '../action/block_silent_item_update_action.dart';
 import '../action/scalar_quick_extra_data_load_action.dart';
-import '../action/scalar_quick_action.dart';
+import '../action/scalar_silent_action.dart';
 import '../adapter/_flutter_artist_adapter.dart';
 import '../adapter/_global_data_adapter.dart';
 import '../adapter/_locale_adapter.dart';
