@@ -3,26 +3,26 @@ import 'package:flutter_artist_core/flutter_artist_core.dart';
 import '../enums/after_silent_action.dart';
 import '_quick_action.dart';
 
-abstract class ScalarSilentAction extends QuickAction {
-  late final ScalarSilentActionConfig config;
+abstract class StorageSilentAction extends QuickAction {
+  late final StorageSilentActionConfig config;
 
-  ScalarSilentAction({
+  StorageSilentAction({
     required super.needToConfirm,
     required super.actionInfo,
   }) {
     config = initConfig();
   }
 
-  ScalarSilentActionConfig initConfig();
+  StorageSilentActionConfig initConfig();
 
   Future<ApiResult<void>> callApi();
 }
 
-class ScalarSilentActionConfig {
+class StorageSilentActionConfig {
   final AfterScalarSilentAction afterQuickAction;
   final List<Type> affectedItemTypes;
 
-  const ScalarSilentActionConfig({
+  const StorageSilentActionConfig({
     required this.affectedItemTypes,
     required this.afterQuickAction,
   });

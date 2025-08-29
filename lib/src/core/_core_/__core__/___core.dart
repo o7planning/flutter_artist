@@ -157,13 +157,13 @@ abstract class _Core {
   // ***************************************************************************
 
   void _addErrorLogActionable({
-    required Shelf shelf,
+    required Shelf? shelf,
     required Actionable actionableFalse,
     required bool showErrSnackBar,
   }) {
     if (!actionableFalse.yes) {
       FlutterArtist.errorLogger.addError(
-        shelfName: shelf.name,
+        shelfName: shelf?.name,
         methodName: null,
         errorMessage: actionableFalse.message!,
         errorDetails: actionableFalse.details,

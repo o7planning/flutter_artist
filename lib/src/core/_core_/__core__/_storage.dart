@@ -212,4 +212,159 @@ class _Storage extends _Core {
   Shelf? _recentShelf() {
     return _rencentShelves.isEmpty ? null : _rencentShelves.first;
   }
+
+  // =============== @@@@@@@@@@@@@@@@@@ ========================================
+  // =============== @@@@@@@@@@@@@@@@@@ ========================================
+  // =============== @@@@@@@@@@@@@@@@@@ ========================================
+
+  @_RootMethodAnnotation()
+  @_StorageSilentActionAnnotation()
+  Future<StorageSilentActionResult> executeSilentAction({
+    required ActionConfirmationType actionConfirmationType,
+    required StorageSilentAction action,
+    required Function(BuildContext context)? navigate,
+  }) async {
+    FlutterArtist.codeFlowLogger._addMethodCall(
+      isLibCode: true,
+      navigate: null,
+      ownerClassInstance: this,
+      methodName: "executeSilentAction",
+      parameters: {
+        "action": action,
+      },
+    );
+    //
+    // @Same-Code-Precheck-01
+    //
+    final Actionable<StorageSilentActionPrecheck> actionable =
+        __canSilentAction(
+      checkBusy: true,
+    );
+    //
+    if (!actionable.yes) {
+      // _createItemErrorCount++;
+      _addErrorLogActionable(
+        shelf: null,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+      );
+      return StorageSilentActionResult(
+        precheck: actionable.errCode,
+        stackTrace: actionable.stackTrace,
+      );
+    }
+    //
+    // Confirmation:
+    //
+    bool confirm = true;
+    if (action.needToConfirm) {
+      confirm = await _showActionConfirmation(
+        shelf: null,
+        defaultConfirmation: action.defaultConfirmation,
+        customConfirmation: action.createCustomConfirmation(),
+      );
+    }
+    //
+    if (!confirm) {
+      return StorageSilentActionResult(
+        precheck: StorageSilentActionPrecheck.cancelled,
+      );
+    }
+    //
+    final taskUnit = _StorageSilentActionTaskUnit(
+      action: action,
+    );
+    //
+    FlutterArtist._rootQueue._addStorageSilentActionTaskUnit(taskUnit);
+    await FlutterArtist.executor._executeTaskUnitQueue();
+    //
+    return taskUnit.taskResult;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_PrecheckPrivateMethod()
+  Actionable<StorageSilentActionPrecheck> __canSilentAction({
+    required bool checkBusy,
+  }) {
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable<StorageSilentActionPrecheck>.no(
+        errCode: StorageSilentActionPrecheck.busy,
+      );
+    }
+    // switch (queryDataState) {
+    //   case DataState.pending:
+    //     return Actionable<ScalarSilentActionPrecheck>.no(
+    //       errCode: ScalarSilentActionPrecheck.scalarInPendingState,
+    //     );
+    //   case DataState.error:
+    //     return Actionable<ScalarSilentActionPrecheck>.no(
+    //       errCode: ScalarSilentActionPrecheck.scalarInErrorState,
+    //     );
+    //   case DataState.none:
+    //     return Actionable<ScalarSilentActionPrecheck>.no(
+    //       errCode: ScalarSilentActionPrecheck.scalarInNoneState,
+    //     );
+    //   case DataState.ready:
+    //     break;
+    // }
+    //
+    return Actionable<StorageSilentActionPrecheck>.yes();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_TaskUnitMethodAnnotation()
+  @_StorageSilentActionAnnotation()
+  Future<bool> _unitSilentAction({
+    required StorageSilentAction action,
+    required StorageSilentActionResult taskResult,
+  }) async {
+    ApiResult<void>? result;
+    try {
+      FlutterArtist.codeFlowLogger._addMethodCall(
+        ownerClassInstance: action,
+        methodName: "callApi",
+        parameters: null,
+        navigate: null,
+        isLibCode: false,
+      );
+      //
+      result = await action.callApi();
+      // Throw ApiError.
+      result.throwIfError();
+    } catch (e, stackTrace) {
+      AppError appError = _handleError(
+        shelf: null,
+        methodName: '${getClassName(action)}.callApi',
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      //
+      taskResult._setAppError(
+        appError: appError,
+        stackTrace: appError is ApiError ? null : stackTrace,
+      );
+      return false;
+    }
+    //
+    FlutterArtist.storage.ev._fireEventFromShelfToOtherShelves(
+      eventShelf: null,
+      events: action.config.affectedItemTypes,
+    );
+    //
+    // switch (action.config.afterQuickAction) {
+    //   case AfterScalarSilentAction.none:
+    //     break;
+    //   case AfterScalarSilentAction.query:
+    //     var taskUnit = _ScalarQueryTaskUnit(
+    //       xScalar: thisXScalar,
+    //     );
+    //     thisXScalar.xShelf._addTaskUnit(taskUnit: taskUnit);
+    // }
+    return true;
+  }
 }

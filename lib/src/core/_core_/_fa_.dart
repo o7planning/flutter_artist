@@ -17,9 +17,9 @@ class _FlutterArtist {
 
   final _BackgroundExecutor backgroundExecutor = _BackgroundExecutor();
 
-  final _XShelfQueue _xShelfQueue = _XShelfQueue();
+  final _XRootQueue _rootQueue = _XRootQueue();
 
-  DebugXShelfQueue get debugTaskUnitQueue => _xShelfQueue.toDebugXShelfQueue();
+  DebugXShelfQueue get debugTaskUnitQueue => _rootQueue.toDebugXShelfQueue();
 
   int notificationFetchPeriodInSeconds = 60;
 

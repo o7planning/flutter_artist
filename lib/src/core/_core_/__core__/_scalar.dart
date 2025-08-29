@@ -334,64 +334,6 @@ abstract class Scalar<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_ScalarSilentActionAnnotation()
-  Future<bool> _unitSilentAction({
-    required XScalar thisXScalar,
-    required ScalarSilentAction action,
-    required ScalarSilentActionResult taskResult,
-  }) async {
-    __assertThisXScalar(thisXScalar);
-    //
-    ApiResult<void>? result;
-    try {
-      FlutterArtist.codeFlowLogger._addMethodCall(
-        ownerClassInstance: action,
-        methodName: "callApi",
-        parameters: null,
-        navigate: null,
-        isLibCode: false,
-      );
-      //
-      result = await action.callApi();
-      // Throw ApiError.
-      result.throwIfError();
-    } catch (e, stackTrace) {
-      AppError appError = _handleError(
-        shelf: shelf,
-        methodName: '${getClassName(action)}.callApi',
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      //
-      taskResult._setAppError(
-        appError: appError,
-        stackTrace: appError is ApiError ? null : stackTrace,
-      );
-      return false;
-    }
-    //
-    FlutterArtist.storage.ev._fireEventFromShelfToOtherShelves(
-      eventShelf: shelf,
-      events: action.config.affectedItemTypes,
-    );
-    //
-    switch (action.config.afterQuickAction) {
-      case AfterScalarSilentAction.none:
-        break;
-      case AfterScalarSilentAction.query:
-        var taskUnit = _ScalarQueryTaskUnit(
-          xScalar: thisXScalar,
-        );
-        thisXScalar.xShelf._addTaskUnit(taskUnit: taskUnit);
-    }
-    return true;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @_TaskUnitMethodAnnotation()
   @_ScalarLoadExtraDataQuickActionAnnotation()
   Future<bool> _unitLoadExtraDataQuickAction<DATA extends Object>({
     required XScalar thisXScalar,
@@ -588,115 +530,6 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_PrecheckPrivateMethod()
-  Actionable<ScalarSilentActionPrecheck> __canQuickAction({
-    required bool checkBusy,
-  }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<ScalarSilentActionPrecheck>.no(
-        errCode: ScalarSilentActionPrecheck.busy,
-      );
-    }
-    switch (queryDataState) {
-      case DataState.pending:
-        return Actionable<ScalarSilentActionPrecheck>.no(
-          errCode: ScalarSilentActionPrecheck.scalarInPendingState,
-        );
-      case DataState.error:
-        return Actionable<ScalarSilentActionPrecheck>.no(
-          errCode: ScalarSilentActionPrecheck.scalarInErrorState,
-        );
-      case DataState.none:
-        return Actionable<ScalarSilentActionPrecheck>.no(
-          errCode: ScalarSilentActionPrecheck.scalarInNoneState,
-        );
-      case DataState.ready:
-        break;
-    }
-    //
-    return Actionable<ScalarSilentActionPrecheck>.yes();
-  }
-
-  // =============== @@@@@@@@@@@@@@@@@@ ========================================
-  // =============== @@@@@@@@@@@@@@@@@@ ========================================
-  // =============== @@@@@@@@@@@@@@@@@@ ========================================
-
-  @_RootMethodAnnotation()
-  @_ScalarSilentActionAnnotation()
-  Future<ScalarSilentActionResult> executeSilentAction({
-    FILTER_INPUT? filterInput,
-    required ActionConfirmationType actionConfirmationType,
-    required ScalarSilentAction action,
-    required Function(BuildContext context)? navigate,
-  }) async {
-    FlutterArtist.codeFlowLogger._addMethodCall(
-      isLibCode: true,
-      navigate: null,
-      ownerClassInstance: this,
-      methodName: "executeSilentAction",
-      parameters: {
-        "filterInput": filterInput,
-        "action": action,
-      },
-    );
-    //
-    // @Same-Code-Precheck-01
-    //
-    final Actionable<ScalarSilentActionPrecheck> actionable = __canQuickAction(
-      checkBusy: true,
-    );
-    //
-    if (!actionable.yes) {
-      // _createItemErrorCount++;
-      _addErrorLogActionable(
-        shelf: shelf,
-        actionableFalse: actionable,
-        showErrSnackBar: true,
-      );
-      return ScalarSilentActionResult(
-        precheck: actionable.errCode,
-        stackTrace: actionable.stackTrace,
-      );
-    }
-    //
-    // Confirmation:
-    //
-    bool confirm = true;
-    if (action.needToConfirm) {
-      confirm = await _showActionConfirmation(
-        shelf: shelf,
-        defaultConfirmation: action.defaultConfirmation,
-        customConfirmation: action.createCustomConfirmation(),
-      );
-    }
-    //
-    if (!confirm) {
-      return ScalarSilentActionResult(
-        precheck: ScalarSilentActionPrecheck.cancelled,
-      );
-    }
-    //
-    final XShelf xShelf = XShelf.forScalarSilentAction(
-      scalar: this,
-    );
-    //
-    final XScalar thisXScalar = xShelf.findXScalarByName(this.name)!;
-    //
-    final _ResultedTaskUnit taskUnit = _ScalarSilentActionTaskUnit(
-      xScalar: thisXScalar,
-      action: action,
-    );
-    //
-    xShelf._addTaskUnit(taskUnit: taskUnit);
-    FlutterArtist._xShelfQueue._addXShelf(xShelf);
-    await FlutterArtist.executor._executeTaskUnitQueue();
-    //
-    return taskUnit.taskResult;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   @_RootMethodAnnotation()
   @_ScalarLoadExtraDataQuickActionAnnotation()
   Future<bool> executeQuickLoadExtraDataAction<DATA extends Object>({
@@ -748,7 +581,7 @@ abstract class Scalar<
     );
     //
     xShelf._addTaskUnit(taskUnit: taskUnit);
-    FlutterArtist._xShelfQueue._addXShelf(xShelf);
+    FlutterArtist._rootQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     return true;
@@ -780,7 +613,7 @@ abstract class Scalar<
     );
     //
     xShelf._initQueryTasks();
-    FlutterArtist._xShelfQueue._addXShelf(xShelf);
+    FlutterArtist._rootQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     XScalar xScalar = xShelf.findXScalarByName(this.name)!;
@@ -830,7 +663,7 @@ abstract class Scalar<
     );
     //
     xShelf._addTaskUnit(taskUnit: taskUnit);
-    FlutterArtist._xShelfQueue._addXShelf(xShelf);
+    FlutterArtist._rootQueue._addXShelf(xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     // _executeNavigation(navigate: navigate); // ????

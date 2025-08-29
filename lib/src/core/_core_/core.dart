@@ -41,7 +41,7 @@ import '../action/block_quick_item_update_action.dart';
 import '../action/block_silent_item_creation_action.dart';
 import '../action/block_silent_item_update_action.dart';
 import '../action/scalar_quick_extra_data_load_action.dart';
-import '../action/scalar_silent_action.dart';
+import '../action/storage_silent_action.dart';
 import '../adapter/_flutter_artist_adapter.dart';
 import '../adapter/_global_data_adapter.dart';
 import '../adapter/_locale_adapter.dart';
@@ -230,6 +230,8 @@ part '_core_query_/_x_scalar.dart';
 
 part '_core_query_/_x_shelf.dart';
 
+part '_core_query_/_x_storage.dart';
+
 part '_core_state_/__force_reload_throw.dart';
 
 part '_core_state_/_force_reload_form_calculator.dart';
@@ -308,7 +310,7 @@ part '_task_result_/_form_save_result.dart';
 
 part '_task_result_/_scalar_query_result.dart';
 
-part '_task_result_/_scalar_silent_action_result.dart';
+part '_task_result_/_storage_silent_action_result.dart';
 
 part '_task_unit_/__resulted_task_unit.dart';
 
@@ -316,7 +318,7 @@ part '_task_unit_/__x_shelf_task_unit_queue.dart';
 
 part '_task_unit_/__task_unit.dart';
 
-part '_task_unit_/__x_shelf_queue.dart';
+part '_task_unit_/__x_root_queue.dart';
 
 part '_task_unit_/_block_clearance_task_unit.dart';
 
@@ -362,7 +364,7 @@ part '_task_unit_/_scalar_load_extra_data_quick_action_task_unit.dart';
 
 part '_task_unit_/_scalar_query_task_unit.dart';
 
-part '_task_unit_/_scalar_silent_action_task_unit.dart';
+part '_task_unit_/_storage_silent_action_task_unit.dart';
 
 part '_ui_/__refreshable_widget.dart';
 
@@ -645,8 +647,8 @@ class _ScalarClearanceAnnotation {
 
 // ******* Scalar QuickAction (START) ******************************************
 
-class _ScalarSilentActionAnnotation {
-  const _ScalarSilentActionAnnotation();
+class _StorageSilentActionAnnotation {
+  const _StorageSilentActionAnnotation();
 }
 
 class _ScalarLoadExtraDataQuickActionAnnotation {

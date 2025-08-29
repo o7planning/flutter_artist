@@ -1,12 +1,17 @@
 part of '../core.dart';
 
-class _XShelfQueue {
+class _XRootQueue {
+  final XStorage _xStorage = XStorage();
+
   //
   // LinkedHashMap<String, XShelf>().
   //
   final __xShelfMapQueue = <String, XShelf>{};
 
   bool get isEmpty {
+    if (_xStorage.isNotEmpty) {
+      return false;
+    }
     for (XShelf xShelf in __xShelfMapQueue.values) {
       if (!xShelf.isEmptyTask()) {
         return false;
@@ -25,7 +30,11 @@ class _XShelfQueue {
     return isNotEmpty;
   }
 
-  _TaskUnit? getNextTaskUnit() {
+  _TaskUnitBase? getNextTaskUnit() {
+    _TaskUnitBase? tu = _xStorage._getNextTaskUnit();
+    if (tu != null) {
+      return tu;
+    }
     while (true) {
       String? firstShelfName = __xShelfMapQueue.keys.firstOrNull;
       if (firstShelfName == null) {
@@ -38,6 +47,11 @@ class _XShelfQueue {
       }
       return firstXShelf._getNextTaskUnit()!;
     }
+  }
+
+  void _addStorageSilentActionTaskUnit(
+      _StorageSilentActionTaskUnit storageSilentActionTaskUnit) {
+    _xStorage._addStorageSilentActionTaskUnit(storageSilentActionTaskUnit);
   }
 
   void _addXShelf(XShelf xShelf) {

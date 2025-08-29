@@ -1,29 +1,11 @@
 import '__chk_code.dart';
 import '__precheck.dart';
 
-enum ScalarSilentActionPrecheck implements Precheck {
+enum StorageSilentActionPrecheck implements Precheck {
   busy(
     chkCode: ChkCode.busy,
     message: "Silent Action is disabled.",
     details: ["The executor is busy."],
-  ),
-  //
-  scalarInPendingState(
-    chkCode: ChkCode.inPendingState,
-    message: "Silent Action is disabled.",
-    details: ["The scalar is in a 'pending' state."],
-  ),
-  //
-  scalarInErrorState(
-    chkCode: ChkCode.inErrorState,
-    message: "Silent Action is disabled.",
-    details: ["The scalar is in an 'error' state."],
-  ),
-  // TODO: Remove this?
-  scalarInNoneState(
-    chkCode: ChkCode.inNoneState,
-    message: "Silent Action is disabled.",
-    details: ["The scalar is in an 'none' state."],
   ),
   //
   cancelled(
@@ -41,7 +23,7 @@ enum ScalarSilentActionPrecheck implements Precheck {
   @override
   final List<String>? details;
 
-  const ScalarSilentActionPrecheck({
+  const StorageSilentActionPrecheck({
     required this.chkCode,
     required this.message,
     required this.details,

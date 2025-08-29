@@ -18,7 +18,7 @@ class _StorageEventHandler {
       events: events,
       itemIdString: null,
     );
-    print("QUEUE: ${FlutterArtist._xShelfQueue}");
+    print("QUEUE: ${FlutterArtist._rootQueue}");
     FlutterArtist.executor._executeTaskUnitQueue();
   }
 
@@ -48,8 +48,7 @@ class _StorageEventHandler {
     required String? itemIdString,
   }) {
     if (events.isEmpty) {
-      print(
-          "*~~~~~~~~~> NO EVENT FIRE TO OUTSIDE --> Event Item Types: $events"
+      print("*~~~~~~~~~> NO EVENT FIRE TO OUTSIDE --> Event Item Types: $events"
           " - Src Event: ${getClassName(eventBlock)}");
       return;
     } else {
@@ -76,7 +75,7 @@ class _StorageEventHandler {
   @_ImportantMethodAnnotation(
       "Called after executing QuickAction in the Block or Scalar")
   void _fireEventFromShelfToOtherShelves({
-    required Shelf eventShelf,
+    required Shelf? eventShelf,
     required List<Type> events,
   }) {
     if (events.isEmpty) {
@@ -90,7 +89,7 @@ class _StorageEventHandler {
     }
     //
     for (String shelfName in storage._shelfMap.keys) {
-      if (shelfName == eventShelf.name) {
+      if (shelfName == eventShelf?.name) {
         continue;
       }
       Shelf listenerShelf = storage._shelfMap[shelfName]!;

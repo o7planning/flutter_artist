@@ -19,7 +19,7 @@ class _Executor {
   // ***************************************************************************
 
   bool get isBusy {
-    return __executingXShelfId != null && FlutterArtist._xShelfQueue.isNotEmpty;
+    return __executingXShelfId != null && FlutterArtist._rootQueue.isNotEmpty;
   }
 
   bool get isFree => !isBusy;
@@ -43,7 +43,7 @@ class _Executor {
       asyncFunction: () async {
         final Map<String, Shelf> shelfMap = {};
         try {
-          while (FlutterArtist._xShelfQueue.hasNext()) {
+          while (FlutterArtist._rootQueue.hasNext()) {
             if (FlutterArtist.debugOptions.showTaskUnitQueue) {
               BuildContext context = FlutterArtist.adapter.getCurrentContext();
               await DebugExecutorDialog.showDebugExecutorDialog(
@@ -51,7 +51,8 @@ class _Executor {
               );
             }
             //
-            _TaskUnit taskUnit = FlutterArtist._xShelfQueue.getNextTaskUnit()!;
+            _TaskUnitBase taskUnit =
+                FlutterArtist._rootQueue.getNextTaskUnit()!;
             //
             await __executeTaskUnit(taskUnit: taskUnit, shelfMap: shelfMap);
           }
@@ -65,7 +66,7 @@ class _Executor {
         }
         // May be AppError (FatalException).
         catch (e, stackTrace) {
-          FlutterArtist._xShelfQueue.clear();
+          FlutterArtist._rootQueue.clear();
           rethrow;
         } finally {
           for (Shelf shelf in shelfMap.values) {
@@ -82,30 +83,35 @@ class _Executor {
   // ***************************************************************************
 
   Future<void> __executeTaskUnit({
-    required _TaskUnit taskUnit,
+    required _TaskUnitBase taskUnit,
     required Map<String, Shelf> shelfMap,
   }) async {
-    _updateProgressViews(
-      owner: taskUnit.owner,
-      taskType: taskUnit.taskType,
-    );
-    //
-    if (__executingXShelfId == null) {
+    if (taskUnit is _TaskUnit) {
+      _updateProgressViews(
+        owner: taskUnit.owner,
+        taskType: taskUnit.taskType,
+      );
+      //
       __executingXShelfId = taskUnit.xShelfId;
+      //
+      print("\n@~~~~~~> Executing xShelfId:$__executingXShelfId"
+          " - [${taskUnit.xShelf.xShelfType.name}]"
+          " - Task: ${taskUnit.taskType.name}"
+          " - ${taskUnit.getObjectName()}");
+      //
+      shelfMap[taskUnit.shelf.name] = taskUnit.shelf;
     } else {
-      if (__executingXShelfId! > taskUnit.xShelfId) {
-        // Ignore taskUnit.
-        return;
-      } else {
-        __executingXShelfId = taskUnit.xShelfId;
-      }
+      __executingXShelfId = -1000;
     }
-    print(
-        "\n@~~~~~~> Executing xShelfId:$__executingXShelfId - [${taskUnit.xShelf.xShelfType.name}] - Task: ${taskUnit.taskType.name} - ${taskUnit.getObjectName()}");
-    //
-    shelfMap[taskUnit.shelf.name] = taskUnit.shelf;
-    //
-    if (taskUnit is _FilterViewChangeTaskUnit) {
+    // Storage Silent Action TaskUnit:
+    if (taskUnit is _StorageSilentActionTaskUnit) {
+      await FlutterArtist.storage._unitSilentAction(
+        action: taskUnit.action,
+        taskResult: taskUnit.taskResult as StorageSilentActionResult,
+      );
+    }
+    // FilterView Change:
+    else if (taskUnit is _FilterViewChangeTaskUnit) {
       await taskUnit.xFilterModel.filterModel._unitFilterViewChanged(
         xFilterModel: taskUnit.xFilterModel,
       );
@@ -256,14 +262,6 @@ class _Executor {
     else if (taskUnit is _ScalarClearanceTaskUnit) {
       await taskUnit.xScalar.scalar._unitClearance(
         thisXScalar: taskUnit.xScalar,
-      );
-    }
-    // Scalar Quick Action:
-    else if (taskUnit is _ScalarSilentActionTaskUnit) {
-      await taskUnit.xScalar.scalar._unitSilentAction(
-        thisXScalar: taskUnit.xScalar,
-        action: taskUnit.action,
-        taskResult: taskUnit.taskResult as ScalarSilentActionResult,
       );
     }
     // Scalar Quick Action:
