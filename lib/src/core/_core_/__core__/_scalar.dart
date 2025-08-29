@@ -474,11 +474,11 @@ abstract class Scalar<
   }) {
     __assertThisXScalar(thisXScalar);
     //
-    this.__scalarData._updateFrom(
-          filterCriteria: filterCriteria,
-          dataState: dataState,
-          value: value,
-        );
+    __scalarData._updateFrom(
+      filterCriteria: filterCriteria,
+      dataState: dataState,
+      value: value,
+    );
   }
 
   // ***************************************************************************
