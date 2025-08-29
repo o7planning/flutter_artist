@@ -26,5 +26,5 @@ enum TaskType {
   //
   scalarQuery,
   scalarClearance,
-  scalarQuickAction;
+  scalarSilentAction;
 }

@@ -334,11 +334,11 @@ abstract class Scalar<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_ScalarQuickActionAnnotation()
-  Future<bool> _unitQuickAction({
+  @_ScalarSilentActionAnnotation()
+  Future<bool> _unitSilentAction({
     required XScalar thisXScalar,
-    required ScalarQuickAction action,
-    required ScalarQuickActionResult taskResult,
+    required ScalarSilentAction action,
+    required ScalarSilentActionResult taskResult,
   }) async {
     __assertThisXScalar(thisXScalar);
     //
@@ -377,9 +377,9 @@ abstract class Scalar<
     );
     //
     switch (action.config.afterQuickAction) {
-      case AfterScalarQuickAction.none:
+      case AfterScalarSilentAction.none:
         break;
-      case AfterScalarQuickAction.query:
+      case AfterScalarSilentAction.query:
         var taskUnit = _ScalarQueryTaskUnit(
           xScalar: thisXScalar,
         );
@@ -589,32 +589,32 @@ abstract class Scalar<
   // ***************************************************************************
 
   @_PrecheckPrivateMethod()
-  Actionable<ScalarQuickActionPrecheck> __canQuickAction({
+  Actionable<ScalarSilentActionPrecheck> __canQuickAction({
     required bool checkBusy,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<ScalarQuickActionPrecheck>.no(
-        errCode: ScalarQuickActionPrecheck.busy,
+      return Actionable<ScalarSilentActionPrecheck>.no(
+        errCode: ScalarSilentActionPrecheck.busy,
       );
     }
     switch (queryDataState) {
       case DataState.pending:
-        return Actionable<ScalarQuickActionPrecheck>.no(
-          errCode: ScalarQuickActionPrecheck.scalarInPendingState,
+        return Actionable<ScalarSilentActionPrecheck>.no(
+          errCode: ScalarSilentActionPrecheck.scalarInPendingState,
         );
       case DataState.error:
-        return Actionable<ScalarQuickActionPrecheck>.no(
-          errCode: ScalarQuickActionPrecheck.scalarInErrorState,
+        return Actionable<ScalarSilentActionPrecheck>.no(
+          errCode: ScalarSilentActionPrecheck.scalarInErrorState,
         );
       case DataState.none:
-        return Actionable<ScalarQuickActionPrecheck>.no(
-          errCode: ScalarQuickActionPrecheck.scalarInNoneState,
+        return Actionable<ScalarSilentActionPrecheck>.no(
+          errCode: ScalarSilentActionPrecheck.scalarInNoneState,
         );
       case DataState.ready:
         break;
     }
     //
-    return Actionable<ScalarQuickActionPrecheck>.yes();
+    return Actionable<ScalarSilentActionPrecheck>.yes();
   }
 
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
@@ -622,18 +622,18 @@ abstract class Scalar<
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
   @_RootMethodAnnotation()
-  @_ScalarQuickActionAnnotation()
-  Future<ScalarQuickActionResult> executeQuickAction({
+  @_ScalarSilentActionAnnotation()
+  Future<ScalarSilentActionResult> executeSilentAction({
     FILTER_INPUT? filterInput,
     required ActionConfirmationType actionConfirmationType,
-    required ScalarQuickAction action,
+    required ScalarSilentAction action,
     required Function(BuildContext context)? navigate,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: null,
       ownerClassInstance: this,
-      methodName: "executeQuickAction",
+      methodName: "executeSilentAction",
       parameters: {
         "filterInput": filterInput,
         "action": action,
@@ -642,7 +642,7 @@ abstract class Scalar<
     //
     // @Same-Code-Precheck-01
     //
-    final Actionable<ScalarQuickActionPrecheck> actionable = __canQuickAction(
+    final Actionable<ScalarSilentActionPrecheck> actionable = __canQuickAction(
       checkBusy: true,
     );
     //
@@ -653,7 +653,7 @@ abstract class Scalar<
         actionableFalse: actionable,
         showErrSnackBar: true,
       );
-      return ScalarQuickActionResult(
+      return ScalarSilentActionResult(
         precheck: actionable.errCode,
         stackTrace: actionable.stackTrace,
       );
@@ -671,8 +671,8 @@ abstract class Scalar<
     }
     //
     if (!confirm) {
-      return ScalarQuickActionResult(
-        precheck: ScalarQuickActionPrecheck.cancelled,
+      return ScalarSilentActionResult(
+        precheck: ScalarSilentActionPrecheck.cancelled,
       );
     }
     //
@@ -682,7 +682,7 @@ abstract class Scalar<
     //
     final XScalar thisXScalar = xShelf.findXScalarByName(this.name)!;
     //
-    final _ResultedTaskUnit taskUnit = _ScalarQuickActionTaskUnit(
+    final _ResultedTaskUnit taskUnit = _ScalarSilentActionTaskUnit(
       xScalar: thisXScalar,
       action: action,
     );

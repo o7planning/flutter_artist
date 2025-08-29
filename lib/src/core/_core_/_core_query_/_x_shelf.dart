@@ -750,10 +750,10 @@ class XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  XShelf.forBlockQuickActionExecution({
+  XShelf.forBlockSilentActionExecution({
     required Block block,
     required FilterInput? filterInput,
-    required AfterBlockQuickAction afterQuickAction,
+    required AfterBlockSilentAction afterQuickAction,
   })  : xShelfType = XShelfType.blockQuickActionExecution,
         shelf = block.shelf {
     __initCore(shelf: shelf);
@@ -766,11 +766,11 @@ class XShelf {
     xFilterModel.filterInput = filterInput;
     //
     switch (afterQuickAction) {
-      case AfterBlockQuickAction.none:
+      case AfterBlockSilentAction.none:
         break;
-      case AfterBlockQuickAction.refreshCurrentItem:
+      case AfterBlockSilentAction.refreshCurrentItem:
         break;
-      case AfterBlockQuickAction.query:
+      case AfterBlockSilentAction.query:
         queryHint = QryHint.force;
         forceReloadItem = false;
     }

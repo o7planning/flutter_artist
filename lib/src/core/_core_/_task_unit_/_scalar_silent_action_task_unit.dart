@@ -1,18 +1,18 @@
 part of '../core.dart';
 
 @_TaskUnitClassAnnotation()
-@_ScalarQuickActionAnnotation()
-class _ScalarQuickActionTaskUnit
-    extends _ResultedTaskUnit<ScalarQuickActionResult> {
+@_ScalarSilentActionAnnotation()
+class _ScalarSilentActionTaskUnit
+    extends _ResultedTaskUnit<ScalarSilentActionResult> {
   final XScalar xScalar;
-  final ScalarQuickAction action;
+  final ScalarSilentAction action;
 
-  _ScalarQuickActionTaskUnit({
+  _ScalarSilentActionTaskUnit({
     required this.xScalar,
     required this.action,
   }) : super(
-          taskType: TaskType.scalarQuickAction,
-          taskResult: ScalarQuickActionResult(),
+          taskType: TaskType.scalarSilentAction,
+          taskResult: ScalarSilentActionResult(),
         );
 
   @override

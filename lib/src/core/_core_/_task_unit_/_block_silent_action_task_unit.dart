@@ -1,18 +1,18 @@
 part of '../core.dart';
 
 @_TaskUnitClassAnnotation()
-@_BlockQuickActionAnnotation()
-class _BlockQuickActionTaskUnit
-    extends _ResultedTaskUnit<BlockQuickActionResult> {
+@_BlockSilentActionAnnotation()
+class _BlockSilentActionTaskUnit
+    extends _ResultedTaskUnit<BlockSilentActionResult> {
   final XBlock xBlock;
-  final BlockQuickAction action;
+  final BlockSilentAction action;
 
-  _BlockQuickActionTaskUnit({
+  _BlockSilentActionTaskUnit({
     required this.xBlock,
     required this.action,
   }) : super(
           taskType: TaskType.blockQuickAction,
-          taskResult: BlockQuickActionResult(),
+          taskResult: BlockSilentActionResult(),
         );
 
   @override

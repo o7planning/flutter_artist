@@ -1,10 +1,10 @@
-enum AfterBlockQuickAction {
+enum AfterBlockSilentAction {
   refreshCurrentItem,
   query,
   none;
 }
 
-enum AfterScalarQuickAction {
+enum AfterScalarSilentAction {
   none,
   query;
 }

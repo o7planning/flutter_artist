@@ -211,11 +211,11 @@ class _Executor {
       );
     }
     // Block Quick Action:
-    else if (taskUnit is _BlockQuickActionTaskUnit) {
-      await taskUnit.xBlock.block._unitQuickAction(
+    else if (taskUnit is _BlockSilentActionTaskUnit) {
+      await taskUnit.xBlock.block._unitSilentAction(
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
-        taskResult: taskUnit.taskResult as BlockQuickActionResult,
+        taskResult: taskUnit.taskResult as BlockSilentActionResult,
       );
     }
     // Block QuickChildBlockItemsAction:
@@ -259,11 +259,11 @@ class _Executor {
       );
     }
     // Scalar Quick Action:
-    else if (taskUnit is _ScalarQuickActionTaskUnit) {
-      await taskUnit.xScalar.scalar._unitQuickAction(
+    else if (taskUnit is _ScalarSilentActionTaskUnit) {
+      await taskUnit.xScalar.scalar._unitSilentAction(
         thisXScalar: taskUnit.xScalar,
         action: taskUnit.action,
-        taskResult: taskUnit.taskResult as ScalarQuickActionResult,
+        taskResult: taskUnit.taskResult as ScalarSilentActionResult,
       );
     }
     // Scalar Quick Action:

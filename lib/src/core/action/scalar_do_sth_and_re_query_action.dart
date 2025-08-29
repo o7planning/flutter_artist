@@ -1,6 +1,6 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../enums/after_quick_action.dart';
+import '../enums/after_silent_action.dart';
 import '_quick_action.dart';
 
 ///
@@ -24,7 +24,7 @@ abstract class ScalarDoSthAndReQueryAction extends QuickAction {
 }
 
 class ScalarDoSthAndReQueryActionConfig {
-  final AfterScalarQuickAction afterQuickAction;
+  final AfterScalarSilentAction afterQuickAction;
   final List<Type> affectedItemTypes;
 
   const ScalarDoSthAndReQueryActionConfig({

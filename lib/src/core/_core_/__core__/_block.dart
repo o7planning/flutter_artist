@@ -2256,11 +2256,11 @@ abstract class Block<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_BlockQuickActionAnnotation()
-  Future<bool> _unitQuickAction({
+  @_BlockSilentActionAnnotation()
+  Future<bool> _unitSilentAction({
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required BlockQuickAction action,
-    required BlockQuickActionResult taskResult,
+    required BlockSilentAction action,
+    required BlockSilentActionResult taskResult,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -2298,10 +2298,10 @@ abstract class Block<
       events: action.config.affectedItemTypes,
     );
     //
-    switch (action.config.afterQuickAction) {
-      case AfterBlockQuickAction.none:
+    switch (action.config.afterSilentAction) {
+      case AfterBlockSilentAction.none:
         break;
-      case AfterBlockQuickAction.refreshCurrentItem:
+      case AfterBlockSilentAction.refreshCurrentItem:
         Actionable<BlockItemCurrSelectionPrecheck> actionable =
             canRefreshCurrentItem();
         if (!actionable.yes) {
@@ -2319,7 +2319,7 @@ abstract class Block<
           );
           thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
         }
-      case AfterBlockQuickAction.query:
+      case AfterBlockSilentAction.query:
         var taskUnit = _BlockQueryTaskUnit(
           xBlock: thisXBlock,
         );
@@ -3424,20 +3424,20 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
-  @_BlockQuickActionAnnotation()
+  @_BlockSilentActionAnnotation()
   @_ReturnTaskResultMethodAnnotation()
-  Future<BlockQuickActionResult> executeQuickAction({
+  Future<BlockSilentActionResult> executeSilentAction({
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
     required ActionConfirmationType actionConfirmationType,
-    required BlockQuickAction action,
+    required BlockSilentAction action,
     required Function(BuildContext context)? navigate,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       navigate: null,
       ownerClassInstance: this,
-      methodName: "executeQuickAction",
+      methodName: "executeSilentAction",
       parameters: {
         "filterInput": filterInput,
         "suggestedSelection": suggestedSelection,
@@ -3447,7 +3447,7 @@ abstract class Block<
     //
     // @Same-Code-Precheck-01
     //
-    final Actionable<BlockQuickActionPrecheck> actionable = __canQuickAction(
+    final Actionable<BlockSilentActionPrecheck> actionable = __canSilentAction(
       checkBusy: true,
     );
     //
@@ -3458,7 +3458,7 @@ abstract class Block<
         actionableFalse: actionable,
         showErrSnackBar: true,
       );
-      return BlockQuickActionResult(
+      return BlockSilentActionResult(
         precheck: actionable.errCode,
         stackTrace: actionable.stackTrace,
       );
@@ -3476,21 +3476,21 @@ abstract class Block<
     }
     //
     if (!confirm) {
-      return BlockQuickActionResult(
-        precheck: BlockQuickActionPrecheck.cancelled,
+      return BlockSilentActionResult(
+        precheck: BlockSilentActionPrecheck.cancelled,
       );
     }
     //
     //
-    final XShelf xShelf = XShelf.forBlockQuickActionExecution(
+    final XShelf xShelf = XShelf.forBlockSilentActionExecution(
       block: this,
       filterInput: filterInput,
-      afterQuickAction: action.config.afterQuickAction,
+      afterQuickAction: action.config.afterSilentAction,
     );
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    final _ResultedTaskUnit taskUnit = _BlockQuickActionTaskUnit(
+    final _ResultedTaskUnit taskUnit = _BlockSilentActionTaskUnit(
       xBlock: thisXBlock,
       action: action,
     );
@@ -4560,32 +4560,32 @@ abstract class Block<
   // ***************************************************************************
 
   @_PrecheckPrivateMethod()
-  Actionable<BlockQuickActionPrecheck> __canQuickAction({
+  Actionable<BlockSilentActionPrecheck> __canSilentAction({
     required bool checkBusy,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockQuickActionPrecheck>.no(
-        errCode: BlockQuickActionPrecheck.busy,
+      return Actionable<BlockSilentActionPrecheck>.no(
+        errCode: BlockSilentActionPrecheck.busy,
       );
     }
     switch (queryDataState) {
       case DataState.pending:
-        return Actionable<BlockQuickActionPrecheck>.no(
-          errCode: BlockQuickActionPrecheck.blockInPendingState,
+        return Actionable<BlockSilentActionPrecheck>.no(
+          errCode: BlockSilentActionPrecheck.blockInPendingState,
         );
       case DataState.error:
-        return Actionable<BlockQuickActionPrecheck>.no(
-          errCode: BlockQuickActionPrecheck.blockInErrorState,
+        return Actionable<BlockSilentActionPrecheck>.no(
+          errCode: BlockSilentActionPrecheck.blockInErrorState,
         );
       case DataState.none:
-        return Actionable<BlockQuickActionPrecheck>.no(
-          errCode: BlockQuickActionPrecheck.blockInNoneState,
+        return Actionable<BlockSilentActionPrecheck>.no(
+          errCode: BlockSilentActionPrecheck.blockInNoneState,
         );
       case DataState.ready:
         break;
     }
     //
-    return Actionable<BlockQuickActionPrecheck>.yes();
+    return Actionable<BlockSilentActionPrecheck>.yes();
   }
 
   // ***************************************************************************
@@ -5319,8 +5319,8 @@ abstract class Block<
   // ***************************************************************************
 
   @_PrecheckMethod()
-  Actionable<BlockQuickActionPrecheck> canQuickAction() {
-    return __canQuickAction(
+  Actionable<BlockSilentActionPrecheck> canQuickAction() {
+    return __canSilentAction(
       checkBusy: true,
     );
   }

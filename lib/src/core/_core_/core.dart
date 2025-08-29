@@ -33,7 +33,7 @@ import '../../debug/executor/model/_debug_task_unit_queue.dart';
 import '../../debug/storage/_block_or_scalar.dart';
 import '../action/_background_action.dart';
 import '../action/_quick_action.dart';
-import '../action/block_quick_action.dart';
+import '../action/block_silent_action.dart';
 import '../action/block_quick_child_block_items_action.dart';
 import '../action/block_quick_multi_items_creation_action.dart';
 import '../action/block_quick_item_creation_action.dart';
@@ -84,7 +84,7 @@ import '../enums/_show_mode.dart';
 import '../enums/_sorting_direction.dart';
 import '../enums/_task_type.dart';
 import '../enums/_x_shelf_type.dart';
-import '../enums/after_quick_action.dart';
+import '../enums/after_silent_action.dart';
 import '../error/_app_error_info.dart';
 import '../error/_block_error_info.dart';
 import '../error/_duplicate_filter_criterion_error.dart';
@@ -115,7 +115,7 @@ import '../precheck/block_item_edit_precheck.dart';
 import '../precheck/block_items_deletion_precheck.dart';
 import '../precheck/block_multi_items_creation_precheck.dart';
 import '../precheck/block_query_precheck.dart';
-import '../precheck/block_quick_action_precheck.dart';
+import '../precheck/block_silent_action_precheck.dart';
 import '../precheck/block_quick_item_creation_precheck.dart';
 import '../precheck/block_quick_item_update_precheck.dart';
 import '../precheck/enter_form_fields_precheck.dart';
@@ -290,7 +290,7 @@ part '_task_result_/_block_items_deletion_result.dart';
 
 part '_task_result_/_block_query_result.dart';
 
-part '_task_result_/_block_quick_action_result.dart';
+part '_task_result_/_block_silent_action_result.dart';
 
 part '_task_result_/_block_quick_item_creation_result.dart';
 
@@ -308,7 +308,7 @@ part '_task_result_/_form_save_result.dart';
 
 part '_task_result_/_scalar_query_result.dart';
 
-part '_task_result_/_scalar_quick_action_result.dart';
+part '_task_result_/_scalar_silent_action_result.dart';
 
 part '_task_unit_/__resulted_task_unit.dart';
 
@@ -332,7 +332,7 @@ part '_task_unit_/_block_prepare_form_to_create_item_task_unit.dart';
 
 part '_task_unit_/_block_query_task_unit.dart';
 
-part '_task_unit_/_block_quick_action_task_unit.dart';
+part '_task_unit_/_block_silent_action_task_unit.dart';
 
 part '_task_unit_/_block_quick_child_block_items_task_unit.dart';
 
@@ -362,7 +362,7 @@ part '_task_unit_/_scalar_load_extra_data_quick_action_task_unit.dart';
 
 part '_task_unit_/_scalar_query_task_unit.dart';
 
-part '_task_unit_/_scalar_quick_action_task_unit.dart';
+part '_task_unit_/_scalar_silent_action_task_unit.dart';
 
 part '_ui_/__refreshable_widget.dart';
 
@@ -645,8 +645,8 @@ class _ScalarClearanceAnnotation {
 
 // ******* Scalar QuickAction (START) ******************************************
 
-class _ScalarQuickActionAnnotation {
-  const _ScalarQuickActionAnnotation();
+class _ScalarSilentActionAnnotation {
+  const _ScalarSilentActionAnnotation();
 }
 
 class _ScalarLoadExtraDataQuickActionAnnotation {
@@ -657,8 +657,8 @@ class _ScalarLoadExtraDataQuickActionAnnotation {
 
 // ******* Block QuickAction (START) *******************************************
 
-class _BlockQuickActionAnnotation {
-  const _BlockQuickActionAnnotation();
+class _BlockSilentActionAnnotation {
+  const _BlockSilentActionAnnotation();
 }
 
 class _BlockQuickItemCreationActionAnnotation {
