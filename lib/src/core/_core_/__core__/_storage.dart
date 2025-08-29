@@ -293,22 +293,6 @@ class _Storage extends _Core {
         errCode: StorageSilentActionPrecheck.busy,
       );
     }
-    // switch (queryDataState) {
-    //   case DataState.pending:
-    //     return Actionable<ScalarSilentActionPrecheck>.no(
-    //       errCode: ScalarSilentActionPrecheck.scalarInPendingState,
-    //     );
-    //   case DataState.error:
-    //     return Actionable<ScalarSilentActionPrecheck>.no(
-    //       errCode: ScalarSilentActionPrecheck.scalarInErrorState,
-    //     );
-    //   case DataState.none:
-    //     return Actionable<ScalarSilentActionPrecheck>.no(
-    //       errCode: ScalarSilentActionPrecheck.scalarInNoneState,
-    //     );
-    //   case DataState.ready:
-    //     break;
-    // }
     //
     return Actionable<StorageSilentActionPrecheck>.yes();
   }
