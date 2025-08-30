@@ -1511,7 +1511,7 @@ abstract class Block<
       //
       // External React:
       //
-      __addExternalReactTaskUnit();
+      __fireEventFromBlockToOtherShelves();
     } catch (e, stackTrace) {
       AppError appError = _handleError(
         shelf: shelf,
@@ -1825,7 +1825,7 @@ abstract class Block<
     // External React:
     //
     if (deletionResult.deletedItems.isNotEmpty) {
-      __addExternalReactTaskUnit();
+      __fireEventFromBlockToOtherShelves();
     }
     //
     if (deletionResult.failedItemDeletions.isEmpty) {
@@ -2044,7 +2044,7 @@ abstract class Block<
       return;
     }
     // TODO: External Event? xxx
-
+    __fireEventFromBlockToOtherShelves();
     //
     // Process Internal Reaction (If Need).
     //
@@ -2241,8 +2241,8 @@ abstract class Block<
       );
       return;
     }
-    // TODO: External Event? xxx
-
+    // TODO: External Event? xxx-1
+    __fireEventFromBlockToOtherShelves();
     //
     // Process Internal Reaction (If Need).
     //
@@ -2293,10 +2293,11 @@ abstract class Block<
       return false;
     }
     //
-    FlutterArtist.storage.ev._fireEventFromShelfToOtherShelves(
-      eventShelf: shelf,
-      events: action.config.affectedItemTypes,
-    );
+    __fireEventFromBlockToOtherShelves();
+    // FlutterArtist.storage.ev._fireEventFromShelfToOtherShelves(
+    //   eventShelf: shelf,
+    //   events: action.config.affectedItemTypes,
+    // );
     //
     switch (action.config.afterSilentAction) {
       case AfterBlockSilentAction.none:
@@ -2377,7 +2378,7 @@ abstract class Block<
     }
     //
     if (fireOutsideEvent) {
-      __addExternalReactTaskUnit();
+      __fireEventFromBlockToOtherShelves();
     } else {
       print(">>> fireOutsideEvent: false (keepInList: $keepInList)");
     }
@@ -2503,7 +2504,7 @@ abstract class Block<
     //
     // External React:
     //
-    __addExternalReactTaskUnit();
+    __fireEventFromBlockToOtherShelves();
     //
     final PageData<ITEM>? newItemsPage = result.data;
 
@@ -2525,6 +2526,13 @@ abstract class Block<
         item: newItem,
       );
     }
+    //
+    // Internal Event:
+    //
+    await _processInternalReaction(
+      thisXBlock: thisXBlock,
+      candidateCurrItem: null,
+    );
     return true;
   }
 
@@ -3601,7 +3609,7 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockQuickCreateMultiItemsActionAnnotation()
   Future<BlockQuickMultiItemsCreationResult>
-      executeQuickCreateMultiItemsAction({
+      executeQuickMultiItemsCreationAction({
     required BlockQuickMultiItemsCreationAction<ID, ITEM, ITEM_DETAIL,
             FILTER_CRITERIA>
         action,
@@ -3610,7 +3618,7 @@ abstract class Block<
       isLibCode: true,
       navigate: null,
       ownerClassInstance: this,
-      methodName: "executeQuickCreateMultiItemsAction",
+      methodName: "executeQuickMultiItemsCreationAction",
       parameters: {
         "action": action,
       },
@@ -4053,7 +4061,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __addExternalReactTaskUnit() {
+  void __fireEventFromBlockToOtherShelves() {
     // _ShelfExternalReactTaskUnit taskUnit = _ShelfExternalReactTaskUnit(
     //   shelf: shelf,
     //   shelfInternalListeners: _internalListeners,
