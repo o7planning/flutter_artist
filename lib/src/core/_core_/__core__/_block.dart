@@ -672,7 +672,7 @@ abstract class Block<
           xBlock: thisXBlock,
           newQueriedList: [],
           candidateItem: candidateCurrentItem,
-          forceReloadItem: false,
+          forceReloadItem: thisXBlock.forceReloadCurrItem,
           forceTypeForForm: null,
         ),
       );
