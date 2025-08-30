@@ -20,6 +20,7 @@ abstract class BlockSilentAction extends QuickAction {
 
 class BlockSilentActionConfig {
   final AfterBlockSilentAction afterSilentAction;
+  @Deprecated("Xoa di")
   final List<Type> affectedItemTypes;
 
   const BlockSilentActionConfig({

@@ -9,7 +9,7 @@ enum XShelfType {
   blockItemDeletion,
   blockMultiItemsDeletion,
   blockCurrItemSelection,
-  blockQuickActionExecution,
+  blockSilentActionExecution,
   blockQuickItemCreation,
   blockSilentItemCreation,
   blockQuickItemUpdate,

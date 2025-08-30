@@ -187,7 +187,7 @@ abstract class _Core {
     required List<String>? errorDetails,
   }) {
     if (FlutterArtist.testCaseMode) {
-      return;
+      // return;
     }
     FlutterArtist.adapter.showErrorSnackBar(
       message: message,

@@ -2257,7 +2257,7 @@ abstract class Block<
 
   @_TaskUnitMethodAnnotation()
   @_BlockSilentActionAnnotation()
-  Future<bool> _unitSilentAction({
+  Future<void> _unitSilentAction({
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockSilentAction action,
     required BlockSilentActionResult taskResult,
@@ -2290,43 +2290,17 @@ abstract class Block<
         appError: appError,
         stackTrace: appError is ApiError ? null : stackTrace,
       );
-      return false;
+      return;
     }
     //
     __fireEventFromBlockToOtherShelves();
-    // FlutterArtist.storage.ev._fireEventFromShelfToOtherShelves(
-    //   eventShelf: shelf,
-    //   events: action.config.affectedItemTypes,
-    // );
     //
-    switch (action.config.afterSilentAction) {
-      case AfterBlockSilentAction.none:
-        break;
-      case AfterBlockSilentAction.refreshCurrentItem:
-        Actionable<BlockItemCurrSelectionPrecheck> actionable =
-            canRefreshCurrentItem();
-        if (!actionable.yes) {
-          return true;
-        }
-        ITEM? currentItem = this.currentItem;
-        if (currentItem != null) {
-          var taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
-            currentItemSelectionType: CurrentItemSelectionType.refresh,
-            xBlock: thisXBlock,
-            newQueriedList: [],
-            candidateItem: currentItem,
-            forceReloadItem: false,
-            forceTypeForForm: null,
-          );
-          thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
-        }
-      case AfterBlockSilentAction.query:
-        var taskUnit = _BlockQueryTaskUnit(
-          xBlock: thisXBlock,
-        );
-        thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
-    }
-    return true;
+    // Process Internal Reaction:
+    //
+    await _processInternalReaction(
+      thisXBlock: thisXBlock,
+      candidateCurrItem: null,
+    );
   }
 
   // ***************************************************************************
@@ -3439,7 +3413,7 @@ abstract class Block<
     final XShelf xShelf = XShelf.forBlockSilentActionExecution(
       block: this,
       filterInput: filterInput,
-      afterQuickAction: action.config.afterSilentAction,
+      afterSilentAction: action.config.afterSilentAction,
     );
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;

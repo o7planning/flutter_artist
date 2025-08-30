@@ -753,8 +753,8 @@ class XShelf {
   XShelf.forBlockSilentActionExecution({
     required Block block,
     required FilterInput? filterInput,
-    required AfterBlockSilentAction afterQuickAction,
-  })  : xShelfType = XShelfType.blockQuickActionExecution,
+    required AfterBlockSilentAction afterSilentAction,
+  })  : xShelfType = XShelfType.blockSilentActionExecution,
         shelf = block.shelf {
     __initCore(shelf: shelf);
     //
@@ -765,7 +765,7 @@ class XShelf {
     final xFilterModel = thisXBlock.xFilterModel;
     xFilterModel.filterInput = filterInput;
     //
-    switch (afterQuickAction) {
+    switch (afterSilentAction) {
       case AfterBlockSilentAction.none:
         break;
       case AfterBlockSilentAction.refreshCurrentItem:
