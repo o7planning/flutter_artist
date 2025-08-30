@@ -1,5 +1,6 @@
 export 'src/core/_core_/core.dart'
     hide XBlock, XShelf, XFilterModel, XFormModel, XScalar;
+export 'src/core/event/fire_silent_events_action.dart';
 export 'src/core/action/_quick_action.dart';
 export 'src/core/action/background_web_download_action.dart';
 export 'src/core/action/block_quick_child_block_items_action.dart';

@@ -342,4 +342,21 @@ class _Storage extends _Core {
     //
     return true;
   }
+
+  Future<StorageSilentActionResult> fireSilentEventsAction({
+    required List<Type> events,
+    required bool needToConfirm,
+    String? actionInfo,
+  }) async {
+    StorageSilentAction action = FireSilentEventsAction(
+      needToConfirm: needToConfirm,
+      events: events,
+      actionInfo: actionInfo,
+    );
+    return await executeSilentAction(
+      actionConfirmationType: ActionConfirmationType.custom,
+      action: action,
+      navigate: null,
+    );
+  }
 }
