@@ -8,23 +8,6 @@ class _StorageEventHandler {
   // ***************************************************************************
   // ***************************************************************************
 
-  @DebugMethodAnnotation()
-  void debugFireEventsToOtherShelves({required List<Type> events}) {
-    if (!FlutterArtist.testCaseMode) {
-      throw FatalAppError(errorMessage: "Not Test Case Mode");
-    }
-    ___fireEventFromBlockToOtherShelves(
-      eventBlock: null,
-      events: events,
-      itemIdString: null,
-    );
-    print("QUEUE: ${FlutterArtist._rootQueue}");
-    FlutterArtist.executor._executeTaskUnitQueue();
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   @_ImportantMethodAnnotation("Called after saving or deleting in the Block")
   void _fireEventFromBlockToOtherShelves({
     required Block eventBlock,
