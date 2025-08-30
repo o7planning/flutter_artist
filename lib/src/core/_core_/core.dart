@@ -35,7 +35,6 @@ import '../../debug/storage/_block_or_scalar.dart';
 import '../action/_background_action.dart';
 import '../action/_quick_action.dart';
 import '../action/block_silent_action.dart';
-import '../action/block_quick_child_block_items_action.dart';
 import '../action/block_quick_multi_items_creation_action.dart';
 import '../action/block_quick_item_creation_action.dart';
 import '../action/block_quick_item_update_action.dart';
@@ -336,8 +335,6 @@ part '_task_unit_/_block_prepare_form_to_create_item_task_unit.dart';
 part '_task_unit_/_block_query_task_unit.dart';
 
 part '_task_unit_/_block_silent_action_task_unit.dart';
-
-part '_task_unit_/_block_quick_child_block_items_task_unit.dart';
 
 part '_task_unit_/_block_quick_item_creation_task_unit.dart';
 
@@ -682,10 +679,6 @@ class _BlockQuickItemUpdateActionAnnotation {
 
 class _BlockSilentItemUpdateActionAnnotation {
   const _BlockSilentItemUpdateActionAnnotation();
-}
-
-class _BlockQuickChildBlockItemsActionAnnotation {
-  const _BlockQuickChildBlockItemsActionAnnotation();
 }
 
 // ******* Block QuickAction (END) *********************************************

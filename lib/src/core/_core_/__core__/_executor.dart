@@ -223,13 +223,6 @@ class _Executor {
         taskResult: taskUnit.taskResult as BlockSilentActionResult,
       );
     }
-    // Block QuickChildBlockItemsAction:
-    else if (taskUnit is _BlockQuickChildBlockItemsTaskUnit) {
-      await taskUnit.xBlock.block._unitQuickChildBlockItemsAction(
-        thisXBlock: taskUnit.xBlock,
-        action: taskUnit.action,
-      );
-    }
     // FormModel LoadForm:
     else if (taskUnit is _FormModelLoadFormTaskUnit) {
       await taskUnit.xFormModel.formModel._unitLoadFormData(

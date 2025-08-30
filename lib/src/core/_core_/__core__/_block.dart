@@ -2331,60 +2331,6 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_TaskUnitMethodAnnotation()
-  @_BlockQuickChildBlockItemsActionAnnotation()
-  Future<void> _unitQuickChildBlockItemsAction<DATA extends Object>({
-    required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required BlockQuickChildBlockItemsAction<ITEM, ITEM_DETAIL> action,
-  }) async {
-    __assertThisXBlock(thisXBlock);
-    //
-    ApiResult<ITEM_DETAIL> result;
-    try {
-      FlutterArtist.codeFlowLogger._addMethodCall(
-        isLibCode: false,
-        navigate: null,
-        ownerClassInstance: action,
-        methodName: "callApiChildBlockItems",
-        parameters: {},
-      );
-      //
-      result = await action.callApiChildBlockItems();
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: '${getClassName(action)}.callApiChildBlockItems',
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      return;
-    }
-    //
-    if (result.error != null) {
-      _handleRestError(
-        shelf: shelf,
-        methodName: "callApiChildBlockItems",
-        message: result.error!.errorMessage,
-        errorDetails: result.error!.errorDetails,
-        showSnackBar: true,
-      );
-      // TODO: Xem lai (Hanh dong neu Error).
-      return;
-    }
-    //
-    await _processSaveActionRestResult(
-      thisXBlock: thisXBlock,
-      isNew: true,
-      calledMethodName: "${getClassName(action)}.callApiChildBlockItems",
-      result: result,
-    );
-    return;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   Future<void> _processSaveActionRestResult({
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required bool isNew,
@@ -3866,57 +3812,6 @@ abstract class Block<
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     return taskUnit.taskResult;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @_RootMethodAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
-  @_BlockQuickChildBlockItemsActionAnnotation()
-  @Deprecated("Xoa di")
-  Future<bool> executeQuickChildBlockItemsAction<
-      A extends BlockQuickChildBlockItemsAction<ITEM, ITEM_DETAIL>>({
-    required A action,
-  }) async {
-    FlutterArtist.codeFlowLogger._addMethodCall(
-      isLibCode: true,
-      navigate: null,
-      ownerClassInstance: this,
-      methodName: "executeQuickChildBlockItemsAction",
-      parameters: {
-        "action": action,
-      },
-    );
-    //
-    // Confirmation:
-    //
-    bool confirm = true;
-    if (action.needToConfirm) {
-      confirm = await _showActionConfirmation(
-        shelf: shelf,
-        defaultConfirmation: action.defaultConfirmation,
-        customConfirmation: action.createCustomConfirmation(),
-      );
-    }
-    if (!confirm) {
-      return false;
-    }
-    //
-    final XShelf xShelf = XShelf.forQuickChildBlockItemsAction(block: this);
-    //
-    final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
-    //
-    _STaskUnit taskUnit = _BlockQuickChildBlockItemsTaskUnit(
-      xBlock: thisXBlock,
-      action: action,
-    );
-    //
-    xShelf._addTaskUnit(taskUnit: taskUnit);
-    FlutterArtist._rootQueue._addXShelf(xShelf);
-    await FlutterArtist.executor._executeTaskUnitQueue();
-    //
-    return true;
   }
 
   // ***************************************************************************
