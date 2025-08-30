@@ -769,6 +769,8 @@ class XShelf {
       case AfterBlockSilentAction.none:
         break;
       case AfterBlockSilentAction.refreshCurrentItem:
+        // Test Cases: [62a].
+        forceReloadItem = true;
         break;
       case AfterBlockSilentAction.query:
         queryHint = QryHint.force;
@@ -777,6 +779,9 @@ class XShelf {
     //
     thisXBlock.setQueryHint(queryHint);
     thisXBlock.setForceReloadCurrItem(forceReloadItem);
+    if(forceReloadItem) {
+      thisXBlock.setCandidateCurrItem(thisXBlock.block.currentItem);
+    }
     //
     thisXBlock.setOptions(
       queryType: QueryType.realQuery,
