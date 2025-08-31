@@ -1,6 +1,7 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 import '../_core_/core.dart';
+import '../enums/after_silent_action.dart';
 import '_quick_action.dart';
 
 abstract class BlockSilentItemUpdateAction<
@@ -25,7 +26,11 @@ abstract class BlockSilentItemUpdateAction<
 }
 
 class BlockSilentItemUpdateActionConfig {
+  final AfterBlockSilentAction afterSilentAction;
   final bool errorIfItemNotInTheBlock;
 
-  BlockSilentItemUpdateActionConfig({required this.errorIfItemNotInTheBlock});
+  const BlockSilentItemUpdateActionConfig({
+    required this.errorIfItemNotInTheBlock,
+    this.afterSilentAction = AfterBlockSilentAction.none,
+  });
 }

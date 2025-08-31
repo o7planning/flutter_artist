@@ -1,6 +1,5 @@
 export 'src/core/_core_/core.dart'
     hide XBlock, XShelf, XFilterModel, XFormModel, XScalar;
-export 'src/core/event/fire_silent_events_action.dart';
 export 'src/core/action/_quick_action.dart';
 export 'src/core/action/background_web_download_action.dart';
 export 'src/core/action/block_quick_item_creation_action.dart';
@@ -56,6 +55,7 @@ export 'src/core/enums/_sort_rule_side.dart';
 export 'src/core/enums/_sorting_direction.dart';
 export 'src/core/enums/_task_type.dart';
 export 'src/core/enums/after_silent_action.dart';
+export 'src/core/event/fire_silent_events_action.dart';
 export 'src/core/global/_global_data.dart';
 export 'src/core/notification/_notification.dart';
 export 'src/core/notification/_notification_listener.dart';

@@ -3560,7 +3560,10 @@ abstract class Block<
       );
     }
     //
-    final XShelf xShelf = XShelf.forBlockSilentItemCreation(block: this);
+    final XShelf xShelf = XShelf.forBlockSilentItemCreation(
+      block: this,
+      afterSilentAction: action.config.afterSilentAction,
+    );
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
@@ -3780,7 +3783,10 @@ abstract class Block<
       );
     }
     //
-    final XShelf xShelf = XShelf.forBlockSilentItemUpdate(block: this);
+    final XShelf xShelf = XShelf.forBlockSilentItemUpdate(
+      block: this,
+      afterSilentAction: action.config.afterSilentAction,
+    );
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
