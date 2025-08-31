@@ -11,7 +11,7 @@ class _BlockSilentActionTaskUnit
     required this.xBlock,
     required this.action,
   }) : super(
-          taskType: TaskType.blockQuickAction,
+          taskType: TaskType.blockSilentAction,
           taskResult: BlockSilentActionResult(),
         );
 

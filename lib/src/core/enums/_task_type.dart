@@ -7,7 +7,7 @@ enum TaskType {
   blockDeleteItems,
   blockPrepareToCreateItem,
   blockQuery,
-  blockQuickAction,
+  blockSilentAction,
   blockQuickChildBlockItems,
   blockQuickCreateItem,
   blockSilentCreateItem,
