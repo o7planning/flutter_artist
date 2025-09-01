@@ -1695,7 +1695,9 @@ abstract class Block<
     }
     // effSelfInfo is NOT NULL:
     else if (effSelfInfo != null) {
-      if (effSelfInfo.reQuery) {
+      // Value is Updated:
+      QryHint queryHint = thisXBlock.queryHint;
+      if (queryHint == QryHint.force) { // effSelfInfo.reQuery
         print("\n\n\n@@@@@@@@@ INTERNAL EVENT ~~~~~> 3.1 - Self ReQry");
         // Note: candidateCurrItem already set. (See @DEL-01)
         _STaskUnit taskUnit = _BlockQueryTaskUnit(xBlock: thisXBlock);

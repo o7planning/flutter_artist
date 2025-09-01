@@ -269,7 +269,7 @@ class XShelf {
           }
         }
         XFormModel? xFormModel = xBlock.xFormModel;
-
+        // Current: forShelfExternalReaction
         if (xFormModel != null &&
             xFormModel.formModel.ui.hasActiveUIComponent()) {
           if (xFormModel.formModel.formDataState == DataState.pending ||
@@ -791,39 +791,42 @@ class XShelf {
       pageable: null,
     );
     //
-    XBlock? parentXBlock = thisXBlock.parentXBlock;
-    while (true) {
-      if (parentXBlock == null) {
-        break;
-      }
-      //
-      final hasXActiveUI = parentXBlock.block.ui.hasActiveBlockFragmentWidget(
-        alsoCheckChildren: true,
-      );
-      if (hasXActiveUI) {
-        if (parentXBlock.block.queryDataState == DataState.pending ||
-            parentXBlock.block.queryDataState == DataState.error) {
-          parentXBlock.setQueryHint(QryHint.force);
-        }
-      }
-      // TODO: Need? Remove this code?
-      XFormModel? parentXFormModel = parentXBlock.xFormModel;
-      if (parentXFormModel != null &&
-          parentXFormModel.formModel.ui.hasActiveUIComponent()) {
-        if (parentXFormModel.formModel.formDataState == DataState.pending ||
-            parentXFormModel.formModel.formDataState == DataState.error ||
-            parentXFormModel.formModel.formDataState == DataState.none) {
-          parentXFormModel.setForceType(ForceType.decidedAtRuntime);
-        }
-      }
-      //
-      parentXBlock = parentXBlock.parentXBlock;
-    }
+    // XBlock? parentXBlock = thisXBlock.parentXBlock;
+    // while (true) {
+    //   if (parentXBlock == null) {
+    //     break;
+    //   }
+    //   //
+    //   final hasXActiveUI = parentXBlock.block.ui.hasActiveBlockFragmentWidget(
+    //     alsoCheckChildren: true,
+    //   );
+    //   if (hasXActiveUI) {
+    //     if (parentXBlock.block.queryDataState == DataState.pending ||
+    //         parentXBlock.block.queryDataState == DataState.error) {
+    //       parentXBlock.setQueryHint(QryHint.force);
+    //     }
+    //   }
+    //   // TODO: Need? Remove this code?
+    //   XFormModel? parentXFormModel = parentXBlock.xFormModel;
+    //   if (parentXFormModel != null &&
+    //       parentXFormModel.formModel.ui.hasActiveUIComponent()) {
+    //     if (parentXFormModel.formModel.formDataState == DataState.pending ||
+    //         parentXFormModel.formModel.formDataState == DataState.error ||
+    //         parentXFormModel.formModel.formDataState == DataState.none) {
+    //       parentXFormModel.setForceType(ForceType.decidedAtRuntime);
+    //     }
+    //   }
+    //   //
+    //   parentXBlock = parentXBlock.parentXBlock;
+    // }
     //
     // IMPORTANT:
     //
     XBlock xBlock = xBlockMap[block.name]!;
     setRootVipXBlock(descendantXBlock: xBlock);
+    print(
+        "????????????????????????????????????????????????????????????? Chay vao day 1");
+    thisXBlock.xShelf.printInfo();
   }
 
   // ***************************************************************************
@@ -971,22 +974,6 @@ class XShelf {
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
-  @Deprecated("Xoa di")
-  XShelf.forQuickChildBlockItemsAction({required Block block})
-      : xShelfType = XShelfType.blockQuickChildBlockItemsAction,
-        shelf = block.shelf {
-    __initCore(shelf: shelf);
-    //
-    // IMPORTANT:
-    //
-    XBlock xBlock = xBlockMap[block.name]!;
-    setRootVipXBlock(descendantXBlock: xBlock);
-  }
-
-  // ***************************************************************************
-  // *** CONSTRUCTOR ***
-  // ***************************************************************************
-
   XShelf.forFormViewChange({required FormModel formModel})
       : xShelfType = XShelfType.formViewChange,
         shelf = formModel.shelf {
@@ -1083,11 +1070,16 @@ class XShelf {
       throw "Development Logic Error";
     }
 
+    __printXShelfInfo(
+      message: "XSHELF BEFORE INTERNAL UPDATE",
+      xShelf: eventXBlock.xShelf,
+    );
+
     final EffectedShelfMembers effectedShelfMembers =
         eventXBlock.block._internalEffectedShelfMembers;
 
     print("\n**************************************************************");
-    print(" --- INTERNAL EVENT --- ");
+    print(" --- INTERNAL EVENT (EFFECTED SHELF MEMBER) --- ");
     effectedShelfMembers.printInfo();
     print("**************************************************************\n");
 
@@ -1122,8 +1114,12 @@ class XShelf {
       }
       //
       XBlock xBlock = findXBlockByName(listenerBlkName)!;
-      xBlock.setQueryHint(queryHint);
-      xBlock.setForceReloadCurrItem(forceReloadCurrItem);
+      if (xBlock.queryHint.isLessThan(queryHint)) {
+        xBlock.setQueryHint(queryHint);
+      }
+      if (forceReloadCurrItem) {
+        xBlock.setForceReloadCurrItem(forceReloadCurrItem);
+      }
     }
     //
     for (Scalar s in effectedShelfMembers._reQueryScalarMAP.values) {
@@ -1157,27 +1153,42 @@ class XShelf {
         }
         XFormModel? xFormModel = xBlock.xFormModel;
 
+        // Current: updateInternalReactionByEvtBlock.
         if (xFormModel != null &&
             xFormModel.formModel.ui.hasActiveUIComponent()) {
           if (xFormModel.formModel.formDataState == DataState.pending ||
               xFormModel.formModel.formDataState == DataState.error ||
               xFormModel.formModel.formDataState == DataState.none) {
             xFormModel.lazy = true;
+
+            // if (naturalMode) {
+            //   xFormModel.setForceType(ForceType.decidedAtRuntime);
+            // } else {
+            //   xFormModel.setForceType(ForceType.force);
+            // }
             if (naturalMode) {
-              xFormModel.setForceType(ForceType.decidedAtRuntime);
-            } else {
+              // Never Run.
               xFormModel.setForceType(ForceType.force);
+            } else {
+              xFormModel.setForceType(ForceType.decidedAtRuntime);
             }
           }
         }
         xBlock = xBlock.parentXBlock;
       }
     }
-    print(
-        "\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    eventXBlock.xShelf.printInfo();
-    print(
-        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n");
+    __printXShelfInfo(
+      message: "XSHELF AFTER INTERNAL UPDATE",
+      xShelf: eventXBlock.xShelf,
+    );
+  }
+
+  //
+  void __printXShelfInfo({required String message, required XShelf xShelf}) {
+    print("\n**************************************************************");
+    print(" -- $message --");
+    xShelf.printInfo();
+    print("**************************************************************\n");
   }
 
   void _initQueryTasks() {
