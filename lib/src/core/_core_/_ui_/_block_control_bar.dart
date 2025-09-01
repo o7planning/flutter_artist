@@ -11,6 +11,7 @@ class BlockControlBar extends _RefreshableWidget {
   final bool allowFormInfoButton;
   final bool allowBackButton;
   final bool allowFilterCriteriaButton;
+  final bool allowDebugButton;
 
   const BlockControlBar({
     super.key,
@@ -26,6 +27,7 @@ class BlockControlBar extends _RefreshableWidget {
     required this.allowBackButton,
     required this.allowFormInfoButton,
     this.allowFilterCriteriaButton = false,
+    this.allowDebugButton = false,
   });
 
   @override
@@ -320,6 +322,17 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
                   }
                 : null,
           ),
+        if (widget.allowDebugButton)
+          _ControlBarButton(
+            tooltip: "Debug",
+            iconData: FaIconConstants.restDebugIconData,
+            onAction: false,
+            onPressed: widget.allowDebugButton
+                ? () {
+                    _showDebugDialog(context, widget.block);
+                  }
+                : null,
+          ),
       ],
       divider: _buildSpaceSeparator(),
       overflow: ScrollableOverflow(
@@ -374,6 +387,13 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
       context: context,
       locationInfo: getClassName(widget.ownerClassInstance),
       formModel: block.formModel!,
+    );
+  }
+
+  void _showDebugDialog(BuildContext context, Block block) {
+    RootDebugDialog.showRootDebug(
+      context: context,
+      shelf: block.shelf,
     );
   }
 

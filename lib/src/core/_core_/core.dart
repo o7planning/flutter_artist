@@ -24,6 +24,7 @@ import '../../debug/dialog/_filter_criteria_dialog.dart';
 import '../../debug/dialog/_filter_model_info_dialog.dart';
 import '../../debug/dialog/_form_error_viewer_dialog.dart';
 import '../../debug/dialog/_form_model_info_dialog.dart';
+import '../../debug/dialog/_root_debug_dialog.dart';
 import '../../debug/dialog/_scalar_error_viewer_dialog.dart';
 import '../../debug/dialog/_storage_dialog.dart';
 import '../../debug/dialog/_ui_components_dialog.dart';

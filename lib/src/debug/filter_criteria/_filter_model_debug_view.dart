@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../core/_core_/core.dart';
 import '../../core/widgets/_custom_app_container.dart';
