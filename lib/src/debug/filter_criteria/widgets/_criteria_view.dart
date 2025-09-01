@@ -26,18 +26,34 @@ class FilterCriterionView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          IconLabelText(
-            icon: Icon(
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            visualDensity: VisualDensity(horizontal: -3, vertical: -3),
+            dense: true,
+            horizontalTitleGap: 0,
+            minVerticalPadding: 0,
+            minLeadingWidth: 40,
+            minTileHeight: 0,
+            leading: Icon(
               criterion is SimpleCriterion
                   ? FaIconConstants.simplePropOrCriterionIconData
                   : FaIconConstants.optPropOrCriterionIconData,
-              size: 18,
+              size: 20,
             ),
-            label: criterion is SimpleCriterion
-                ? 'Criterion Name: '
-                : 'Multi Opt Criterion Name: ',
-            text: criterion.criterionName,
+            title: IconLabelText(
+              label: criterion is SimpleCriterion
+                  ? 'Criterion Name: '
+                  : 'Multi Opt Criterion Name: ',
+              text: criterion.criterionName,
+            ),
+            subtitle: IconLabelText(
+              label: "Data Type: ",
+              text: criterion.dataType.toString(),
+              labelStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              textStyle: TextStyle(fontSize: 12, color: Colors.blue),
+            ),
           ),
+          Divider(),
           if (criterion is MultiOptCriterion) SizedBox(height: 5),
           if (criterion is MultiOptCriterion)
             LayoutBuilder(

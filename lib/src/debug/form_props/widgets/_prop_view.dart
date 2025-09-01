@@ -29,16 +29,33 @@ class FormPropView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          IconLabelText(
-            icon: Icon(
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            visualDensity: VisualDensity(horizontal: -3, vertical: -3),
+            dense: true,
+            horizontalTitleGap: 0,
+            minVerticalPadding: 0,
+            minLeadingWidth: 40,
+            minTileHeight: 0,
+            leading: Icon(
               prop is SimpleProp
                   ? FaIconConstants.simplePropOrCriterionIconData
                   : FaIconConstants.optPropOrCriterionIconData,
-              size: 18,
+              size: 20,
             ),
-            label: prop is SimpleProp ? 'Prop Name: ' : 'Multi Opt Prop Name: ',
-            text: prop.propName,
+            title: IconLabelText(
+              label:
+                  prop is SimpleProp ? 'Prop Name: ' : 'Multi Opt Prop Name: ',
+              text: prop.propName,
+            ),
+            subtitle: IconLabelText(
+              label: "Data Type: ",
+              text: prop.dataType.toString(),
+              labelStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              textStyle: TextStyle(fontSize: 12, color: Colors.blue),
+            ),
           ),
+          Divider(),
           if (prop is MultiOptProp) SizedBox(height: 5),
           if (prop is MultiOptProp)
             LayoutBuilder(
