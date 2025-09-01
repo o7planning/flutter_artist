@@ -58,6 +58,31 @@ class FilterCriteriaStructureViewState
     _splitViewController.addListener(_refresh);
   }
 
+  TreeNode _getRootWithChildren() {
+    TreeNode filterModelNode = TreeNode(
+      key: "FilterModel-${getClassName(widget.filterModel)}",
+      data: widget.filterModel,
+      parent: null,
+    );
+    _currentNode = filterModelNode;
+    rootTreeNode = TreeNode.root()..add(filterModelNode);
+    //
+    FilterCriteriaStructure structure =
+        widget.filterModel.filterCriteriaStructure;
+
+    List<MultiOptCriterion> rootMultiOptCriterion =
+        structure.debugRootOptCriteria;
+    for (MultiOptCriterion multiOptCriterion in rootMultiOptCriterion) {
+      _addMultiOptCriterionCascade(filterModelNode, multiOptCriterion);
+    }
+    List<SimpleCriterion> simpleCriteria = structure.debugSimpleCriteria;
+    for (SimpleCriterion simpleCriterion in simpleCriteria) {
+      _addSimpleCriterion(filterModelNode, simpleCriterion);
+    }
+
+    return rootTreeNode;
+  }
+
   Widget _buildRight() {
     if (_currentNode == null) {
       return Text("Null");
@@ -214,30 +239,6 @@ class FilterCriteriaStructureViewState
         },
       ),
     );
-  }
-
-  TreeNode _getRootWithChildren() {
-    TreeNode filterModelNode = TreeNode(
-      key: "FilterModel-${getClassName(widget.filterModel)}",
-      data: widget.filterModel,
-      parent: null,
-    );
-    rootTreeNode = TreeNode.root()..add(filterModelNode);
-    //
-    FilterCriteriaStructure structure =
-        widget.filterModel.filterCriteriaStructure;
-
-    List<MultiOptCriterion> rootMultiOptCriterion =
-        structure.debugRootOptCriteria;
-    for (MultiOptCriterion multiOptCriterion in rootMultiOptCriterion) {
-      _addMultiOptCriterionCascade(filterModelNode, multiOptCriterion);
-    }
-    List<SimpleCriterion> simpleCriteria = structure.debugSimpleCriteria;
-    for (SimpleCriterion simpleCriterion in simpleCriteria) {
-      _addSimpleCriterion(filterModelNode, simpleCriterion);
-    }
-
-    return rootTreeNode;
   }
 
   void _addMultiOptCriterionCascade(
