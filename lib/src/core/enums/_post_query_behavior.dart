@@ -1,5 +1,6 @@
 // TODO-XXX Change to PostQueryAction?
-import '../../../flutter_artist.dart';
+
+import '_current_item_selection_type.dart';
 
 enum PostQueryBehavior {
   /// Do Nothing.

@@ -1,5 +1,8 @@
-import 'package:flutter_artist/flutter_artist.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
+
+import '../action/storage_silent_action.dart';
+import '../enums/after_silent_action.dart';
+import '../typedef/custom_confirmation.dart';
 
 class FireSilentEventsAction extends StorageSilentAction {
   final List<Type> events;

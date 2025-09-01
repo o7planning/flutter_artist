@@ -16,7 +16,6 @@ import 'package:hive/hive.dart';
 import 'package:number_pagination/number_pagination.dart' as number_pagination;
 import 'package:visibility_detector/visibility_detector.dart';
 
-import '../../../flutter_artist.dart';
 import '../../debug/dialog/_block_error_viewer_dialog.dart';
 import '../../debug/dialog/_code_flow_viewer_dialog.dart';
 import '../../debug/dialog/_error_log_viewer_dialog.dart';
@@ -131,6 +130,7 @@ import '../utils/_hive_utils.dart';
 import '../utils/_string_utils.dart';
 import '../utils/_visibility_detector_utils.dart';
 import '../widgets/_custom_app_container.dart';
+import '../event/fire_silent_events_action.dart';
 
 part '__core__/___core.dart';
 
