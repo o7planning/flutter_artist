@@ -31,10 +31,10 @@ class BlockDebugBox extends BaseDebugBox {
           labelStyle: labelStyle,
           textStyle: textStyle0,
         ),
-      if (options.showQueryDataState)
+      if (options.showBlockDataState)
         IconLabelText(
           label: "Query State: ",
-          text: block.queryDataState.name.toString(),
+          text: block.blockDataState.name.toString(),
           labelStyle: labelStyle,
           textStyle: textStyle,
         ),

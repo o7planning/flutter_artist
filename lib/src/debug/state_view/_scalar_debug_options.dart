@@ -1,7 +1,7 @@
 class ScalarDebugOptions {
   final bool showLastQueryType;
   final bool showUIActive;
-  final bool showQueryDataState;
+  final bool showScalarDataState;
   final bool showLastQueryResultState;
   final bool showCallApiQueryCount;
   final bool showCallApiRefreshItemCount;
@@ -11,7 +11,7 @@ class ScalarDebugOptions {
   const ScalarDebugOptions({
     this.showLastQueryType = true,
     this.showUIActive = true,
-    this.showQueryDataState = true,
+    this.showScalarDataState = true,
     this.showCallApiQueryCount = true,
     this.showCallApiRefreshItemCount = true,
     this.showFilterCriteriaChangeCount = true,
@@ -22,7 +22,7 @@ class ScalarDebugOptions {
   const ScalarDebugOptions.custom({
     this.showLastQueryType = false,
     this.showUIActive = false,
-    this.showQueryDataState = false,
+    this.showScalarDataState = false,
     this.showCallApiQueryCount = false,
     this.showCallApiRefreshItemCount = false,
     this.showFilterCriteria = false,

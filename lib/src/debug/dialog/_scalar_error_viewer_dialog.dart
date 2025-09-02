@@ -44,8 +44,8 @@ class ScalarErrorViewerDialog extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("${scalarErrorInfo.queryDataState}"),
-          if (scalarErrorInfo.queryDataState == DataState.error)
+          Text("${scalarErrorInfo.scalarDataState}"),
+          if (scalarErrorInfo.scalarDataState == DataState.error)
             IconLabelText(
               icon: Icon(
                 FaIconConstants.formErrorDisabledIconData2,

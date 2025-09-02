@@ -13,7 +13,7 @@ class _ScalarData<
 
   VALUE? _value;
 
-  DataState _queryDataState = DataState.pending;
+  DataState _scalarDataState = DataState.pending;
 
   PageData<VALUE>? _lastQueryResult;
 
@@ -29,8 +29,8 @@ class _ScalarData<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _clearWithDataState({required DataState queryDataState}) {
-    _queryDataState = queryDataState;
+  void _clearWithDataState({required DataState scalarDataState}) {
+    _scalarDataState = scalarDataState;
     _value = null;
     _filterCriteria = null; // ???
   }
@@ -51,18 +51,18 @@ class _ScalarData<
   // ***************************************************************************
 
   void _setToPending() {
-    _queryDataState = DataState.pending;
+    _scalarDataState = DataState.pending;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   void _clearValueWithDataState({
-    required DataState qryDataState,
+    required DataState scalarDataState,
     required bool errorInFilter,
   }) {
-    _queryDataState = qryDataState;
-    if (_queryDataState == DataState.error) {
+    _scalarDataState = scalarDataState;
+    if (_scalarDataState == DataState.error) {
       _lastQueryResultState = ActionResultState.fail;
       //
       // Update FilterCriteria:
@@ -85,7 +85,7 @@ class _ScalarData<
   }) {
     __setNewFilterCriteria(filterCriteria);
     _value = value;
-    _queryDataState = dataState;
+    _scalarDataState = dataState;
   }
 
   // ***************************************************************************

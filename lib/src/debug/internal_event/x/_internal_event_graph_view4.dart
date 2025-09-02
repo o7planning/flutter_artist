@@ -11,6 +11,7 @@ import '../../../core/_core_/core.dart';
 
 class InternalEventGraphView4 extends StatelessWidget {
   final Shelf shelf;
+
   const InternalEventGraphView4({
     super.key,
     required this.shelf,
@@ -23,10 +24,10 @@ class InternalEventGraphView4 extends StatelessWidget {
     for (Block block in shelf.blocks) {
       vertexes.add(
         {
-          'id':  block.name ,
-          'tag': block.name ,
+          'id': block.name,
+          'tag': block.name,
           'tags': [
-             block.name ,
+            block.name,
           ],
         },
       );
@@ -38,14 +39,14 @@ class InternalEventGraphView4 extends StatelessWidget {
         Block? p = b.parent;
         if (p != null) {
           edges.add({
-            'srcId':  p.name ,
-            'dstId':   b.name ,
+            'srcId': p.name,
+            'dstId': b.name,
             'edgeName': 'edge-${p.name}-@-${b.name}',
             'ranking': DateTime.now().millisecond,
           });
           edges.add({
-            'srcId':  p.name ,
-            'dstId':   b.name ,
+            'srcId': p.name,
+            'dstId': b.name,
             'edgeName': 'edge-${p.name}-@-${b.name}',
             'ranking': DateTime.now().millisecond,
           });

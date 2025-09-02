@@ -1,7 +1,7 @@
 class BlockDebugOptions {
   final bool showLastQueryType;
   final bool showUIActive;
-  final bool showQueryDataState;
+  final bool showBlockDataState;
   final bool showLastQueryResultState;
   final bool showCallApiQueryCount;
   final bool showCallApiRefreshItemCount;
@@ -14,7 +14,7 @@ class BlockDebugOptions {
   const BlockDebugOptions({
     this.showLastQueryType = true,
     this.showUIActive = true,
-    this.showQueryDataState = true,
+    this.showBlockDataState = true,
     this.showCallApiQueryCount = true,
     this.showCallApiRefreshItemCount = true,
     this.showItemCount = true,
@@ -28,7 +28,7 @@ class BlockDebugOptions {
   const BlockDebugOptions.custom({
     this.showLastQueryType = false,
     this.showUIActive = false,
-    this.showQueryDataState = false,
+    this.showBlockDataState = false,
     this.showCallApiQueryCount = false,
     this.showCallApiRefreshItemCount = false,
     this.showItemCount = false,

@@ -124,7 +124,7 @@ abstract class Scalar<
 
   ScalarErrorInfo? get scalarErrorInfo => _scalarErrorInfo;
 
-  DataState get queryDataState => __scalarData._queryDataState;
+  DataState get scalarDataState => __scalarData._scalarDataState;
 
   FILTER_CRITERIA? get filterCriteria => __scalarData._filterCriteria;
 
@@ -132,7 +132,7 @@ abstract class Scalar<
 
   void _setToPending() {
     __scalarData._clearValueWithDataState(
-      qryDataState: DataState.pending,
+      scalarDataState: DataState.pending,
       errorInFilter: false,
     );
   }
@@ -183,25 +183,25 @@ abstract class Scalar<
     bool hasActiveUI = ui.hasActiveUIComponent();
     QryHint queryHint = thisXScalar.queryHint;
     if (queryHint != QryHint.force) {
-      if (this.queryDataState != DataState.ready && hasActiveUI) {
+      if (this.scalarDataState != DataState.ready && hasActiveUI) {
         queryHint = QryHint.force;
       }
     }
     //
     print(
-        ">> ${getClassName(this)}._unitQuery - queryState: $queryDataState, queryHint: ${thisXScalar.queryHint}");
+        ">> ${getClassName(this)}._unitQuery - queryState: $scalarDataState, queryHint: ${thisXScalar.queryHint}");
     //
     if (queryHint == QryHint.none) {
       return;
     } else if (queryHint == QryHint.markAsPending) {
-      // __scalarData._queryDataState = DataState.pending;
+      // __scalarData._scalarDataState = DataState.pending;
       _setToPending();
       return;
     }
     //
-    // this.queryDataState != DataState.ready || thisXScalar.queryHint
+    // this.scalarDataState != DataState.ready || thisXScalar.queryHint
     //
-    DataState newQueryDataState = this.queryDataState;
+    DataState newScalarDataState = this.scalarDataState;
     //
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: false,
@@ -239,7 +239,7 @@ abstract class Scalar<
       // Set Block to error cascade.
       __clearWithDataState(
         thisXScalar: thisXScalar,
-        queryDataState: DataState.error,
+        scalarDataState: DataState.error,
       );
       thisXScalar.queryResult._setFilterError();
       return;
@@ -274,7 +274,7 @@ abstract class Scalar<
       isQueryError = true;
       //
       final scalarErrorInfo = ScalarErrorInfo(
-        queryDataState: queryDataState,
+        scalarDataState: scalarDataState,
         scalarErrorMethod: callApiQueryMethod,
         error: e, // AppError, ApiError or others.
         errorStackTrace: stackTrace,
@@ -300,15 +300,15 @@ abstract class Scalar<
     }
     //
     if (isQueryError) {
-      newQueryDataState = DataState.error;
+      newScalarDataState = DataState.error;
     } else {
-      newQueryDataState = DataState.ready;
+      newScalarDataState = DataState.ready;
     }
     // TODO: Test Case.
     __setQueryDataWithState(
       thisXScalar: thisXScalar,
       filterCriteria: filterCriteriaOfFilterModel,
-      dataState: newQueryDataState,
+      dataState: newScalarDataState,
       value: value,
     );
     //
@@ -325,7 +325,7 @@ abstract class Scalar<
     //
     __clearWithDataStateAndChildrenToNonCascade(
       thisXScalar: thisXScalar,
-      qryDataState: DataState.pending,
+      scalarDataState: DataState.pending,
       errorInFilter: false,
     );
   }
@@ -426,7 +426,7 @@ abstract class Scalar<
 
   @_RootMethodAnnotation()
   void showScalarErrorViewerDialog(BuildContext context) {
-    if (queryDataState != DataState.error ||
+    if (scalarDataState != DataState.error ||
         _scalarErrorInfo == null ||
         _scalarErrorInfo!.scalarErrorMethod != ScalarErrorMethod.callApiQuery) {
       return;
@@ -442,21 +442,21 @@ abstract class Scalar<
 
   void __clearWithDataStateAndChildrenToNonCascade({
     required XScalar thisXScalar,
-    required DataState qryDataState,
+    required DataState scalarDataState,
     required bool errorInFilter,
   }) {
     __assertThisXScalar(thisXScalar);
     //
     __clearValueWithDataState(
       thisXScalar: thisXScalar,
-      queryDataState: qryDataState,
+      scalarDataState: scalarDataState,
       errorInFilter: errorInFilter,
     );
     //
     // for (var childXScalar in thisXScalar.childXScalars) {
     //   childXScalar.block.__clearWithDataStateAndChildrenToNonCascade(
     //     thisXScalar: childXScalar,
-    //     qryDataState: DataState.none,
+    //     scalarDataState: DataState.none,
     //     frmDataState: DataState.none,
     //     errorInFilter: false,
     //   );
@@ -486,11 +486,13 @@ abstract class Scalar<
 
   void __clearWithDataState({
     required XScalar thisXScalar,
-    required DataState queryDataState,
+    required DataState scalarDataState,
   }) {
     __assertThisXScalar(thisXScalar);
     //
-    this.__scalarData._clearWithDataState(queryDataState: queryDataState);
+    __scalarData._clearWithDataState(
+      scalarDataState: scalarDataState,
+    );
   }
 
   // ***************************************************************************
@@ -676,13 +678,13 @@ abstract class Scalar<
 
   void __clearValueWithDataState({
     required XScalar thisXScalar,
-    required DataState queryDataState,
+    required DataState scalarDataState,
     required bool errorInFilter,
   }) {
     __assertThisXScalar(thisXScalar);
     //
     __scalarData._clearValueWithDataState(
-      qryDataState: queryDataState,
+      scalarDataState: scalarDataState,
       errorInFilter: errorInFilter,
     );
   }

@@ -284,19 +284,19 @@ abstract class Block<
   ActionResultState? get lastQueryResultState =>
       __blockData._lastQueryResultState;
 
-  DataState get queryDataState => __blockData._queryDataState;
+  DataState get blockDataState => __blockData._blockDataState;
 
   DataState get selectionDataState => __blockData._selectionDataState;
 
-  // nearestAncestorNonNoneQueryDataState?
-  DataState get ancestralNonNoneQueryDataState {
+  // nearestAncestorNonNoneBlockDataState?
+  DataState get ancestralNonNoneBlockDataState {
     if (parent == null) {
       return DataState.ready;
     }
-    if (parent!.queryDataState != DataState.none) {
-      return parent!.queryDataState;
+    if (parent!.blockDataState != DataState.none) {
+      return parent!.blockDataState;
     }
-    return parent!.ancestralNonNoneQueryDataState;
+    return parent!.ancestralNonNoneBlockDataState;
   }
 
   FormMode? get formMode {
@@ -409,14 +409,14 @@ abstract class Block<
 
   void __clearItemsWithDataState({
     required XBlock thisXBlock,
-    required DataState queryDataState,
+    required DataState blockDataState,
     required DataState formDataState,
     required bool errorInFilter,
   }) {
     __assertThisXBlock(thisXBlock);
     //
     __blockData._clearItemsWithDataState(
-      qryDataState: queryDataState,
+      qryDataState: blockDataState,
       errorInFilter: errorInFilter,
     );
     //
@@ -438,7 +438,7 @@ abstract class Block<
     //
     __clearItemsWithDataState(
       thisXBlock: thisXBlock,
-      queryDataState: qryDataState,
+      blockDataState: qryDataState,
       formDataState: frmDataState,
       errorInFilter: errorInFilter,
     );
@@ -519,7 +519,7 @@ abstract class Block<
   // ***************************************************************************
 
   bool _needToQuery() {
-    if (queryDataState != DataState.ready) {
+    if (blockDataState != DataState.ready) {
       return true;
     }
     //
@@ -622,7 +622,7 @@ abstract class Block<
     bool hasActiveUI = this.ui.hasActiveUIComponent(alsoCheckChildren: true);
     QryHint queryHint = thisXBlock.queryHint;
     if (queryHint != QryHint.force) {
-      if (this.queryDataState != DataState.ready && hasActiveUI) {
+      if (this.blockDataState != DataState.ready && hasActiveUI) {
         queryHint = QryHint.force;
       }
     }
@@ -630,7 +630,7 @@ abstract class Block<
     thisXBlock._printParameters(hasActiveUI: hasActiveUI);
     //
     final callApiQueryMethod = BlockErrorMethod.callApiQuery;
-    DataState newQueryDataState = this.queryDataState;
+    DataState newBlockDataState = this.blockDataState;
     PageData<ITEM>? pageData;
     final ITEM? candidateCurrentItem;
     bool queried = false;
@@ -691,7 +691,7 @@ abstract class Block<
     }
     //
     // FORCE QUERY:
-    // thisXBlock.queryHint || (hasActiveUI && this.queryDataState != DataState.ready)
+    // thisXBlock.queryHint || (hasActiveUI && this.blockDataState != DataState.ready)
     //
     FILTER_CRITERIA? filterCriteriaOfFilterModel;
     try {
@@ -787,7 +787,7 @@ abstract class Block<
         pageData = null;
         //
         final blockErrorInfo = BlockErrorInfo(
-          queryDataState: queryDataState,
+          blockDataState: blockDataState,
           blockErrorMethod: callApiQueryMethod,
           error: e, // AppError, ApiError or others.
           errorStackTrace: stackTrace,
@@ -813,52 +813,52 @@ abstract class Block<
       if (queryResultState == ActionResultState.fail) {
         // Query Error + Parent or Criteria changed.
         if (parentOrCriteriaChanged) {
-          switch (queryDataState) {
+          switch (blockDataState) {
             case DataState.ready:
               // @FaCode-002.
               // Test Case: [42a].
               // Replace by empty items.
               realListBehavior = ListBehavior.replace;
-              newQueryDataState = DataState.error;
+              newBlockDataState = DataState.error;
             case DataState.pending:
               // Replace by empty items.
               realListBehavior = ListBehavior.replace;
-              newQueryDataState = DataState.error;
+              newBlockDataState = DataState.error;
             case DataState.error:
               // @FaCode-003.
               // Test Case: [42a].
               // Replace by empty items.
               realListBehavior = ListBehavior.replace;
-              newQueryDataState = DataState.error;
+              newBlockDataState = DataState.error;
             case DataState.none:
               // Replace by empty items.
               realListBehavior = ListBehavior.replace;
-              newQueryDataState = DataState.error;
+              newBlockDataState = DataState.error;
           }
         }
         // Query Error + Parent not changed + Criteria not changed.
         // Test Case: [42a].
         else {
-          switch (queryDataState) {
+          switch (blockDataState) {
             case DataState.ready:
               // Append empty items (No items got from Server).
               // Test Case: [42a].
               // @FaCode-001.
               realListBehavior = ListBehavior.append;
-              newQueryDataState = DataState.ready;
+              newBlockDataState = DataState.ready;
             case DataState.pending:
               // Replace by empty items.
               realListBehavior = ListBehavior.replace;
-              newQueryDataState = DataState.error;
+              newBlockDataState = DataState.error;
             case DataState.error:
               // @FaCode-004.
               // Replace by empty items.
               realListBehavior = ListBehavior.replace;
-              newQueryDataState = DataState.error;
+              newBlockDataState = DataState.error;
             case DataState.none:
               // Replace by empty items.
               realListBehavior = ListBehavior.replace;
-              newQueryDataState = DataState.error;
+              newBlockDataState = DataState.error;
           }
         }
       }
@@ -866,44 +866,44 @@ abstract class Block<
       else {
         // Query Successful + Parent or Criteria changed.
         if (parentOrCriteriaChanged) {
-          switch (queryDataState) {
+          switch (blockDataState) {
             case DataState.ready:
               // Replace.
               realListBehavior = ListBehavior.replace;
-              newQueryDataState = DataState.ready;
+              newBlockDataState = DataState.ready;
             case DataState.pending:
               // Replace.
               realListBehavior = ListBehavior.replace;
-              newQueryDataState = DataState.ready;
+              newBlockDataState = DataState.ready;
             case DataState.error:
               // Replace.
               realListBehavior = ListBehavior.replace;
-              newQueryDataState = DataState.ready;
+              newBlockDataState = DataState.ready;
             case DataState.none:
               // Replace.
               realListBehavior = ListBehavior.replace;
-              newQueryDataState = DataState.ready;
+              newBlockDataState = DataState.ready;
           }
         }
         // Query Successful + Parent not changed + Criteria not changed.
         else {
-          switch (queryDataState) {
+          switch (blockDataState) {
             case DataState.ready:
               // Replace or Append:
               realListBehavior = thisXBlock.listBehavior;
-              newQueryDataState = DataState.ready;
+              newBlockDataState = DataState.ready;
             case DataState.pending:
               // Replace.
               realListBehavior = ListBehavior.replace;
-              newQueryDataState = DataState.ready;
+              newBlockDataState = DataState.ready;
             case DataState.error:
               // Replace.
               realListBehavior = ListBehavior.replace;
-              newQueryDataState = DataState.ready;
+              newBlockDataState = DataState.ready;
             case DataState.none:
               // Replace.
               realListBehavior = ListBehavior.replace;
-              newQueryDataState = DataState.ready;
+              newBlockDataState = DataState.ready;
           }
         }
       }
@@ -917,7 +917,7 @@ abstract class Block<
       callingPageable = __blockData._emptyPageable;
       __lastQueryType = thisXBlock.queryType;
       realListBehavior = ListBehavior.replace;
-      newQueryDataState = DataState.ready;
+      newBlockDataState = DataState.ready;
       pageData = PageData.empty<ITEM>();
       queryResultState = ActionResultState.success;
     }
@@ -934,7 +934,7 @@ abstract class Block<
         filterCriteria: filterCriteriaOfFilterModel,
         pageable: callingPageable,
         pageData: pageData,
-        queryDataState: newQueryDataState,
+        blockDataState: newBlockDataState,
         queryResultState: queryResultState,
       );
     } catch (e, stackTrace) {
@@ -973,7 +973,7 @@ abstract class Block<
     }
     // currentItemInList.
     else {
-      switch (newQueryDataState) {
+      switch (newBlockDataState) {
         case DataState.none:
           // @@TODO@@ 04.
           // Never run:
@@ -1092,19 +1092,19 @@ abstract class Block<
       candidateItem,
     );
     //
-    if (queryDataState == DataState.pending) {
+    if (blockDataState == DataState.pending) {
       this.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: thisXBlock,
-        qryDataState: queryDataState,
+        qryDataState: blockDataState,
         frmDataState: DataState.none,
         errorInFilter: false,
       );
       return;
     }
     //
-    if (this.queryDataState == DataState.error) {
+    if (this.blockDataState == DataState.error) {
       print(
-          "        ~~~~~~~> IGNORED --> this.queryDataState == DataState.error - [$name]");
+          "        ~~~~~~~> IGNORED --> this.blockDataState == DataState.error - [$name]");
       this.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: thisXBlock,
         qryDataState: DataState.error,
@@ -2518,7 +2518,7 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   void showBlockErrorViewerDialog(BuildContext context) {
-    if (queryDataState != DataState.error ||
+    if (blockDataState != DataState.error ||
         _blockErrorInfo == null ||
         _blockErrorInfo!.blockErrorMethod != BlockErrorMethod.callApiQuery) {
       return;
@@ -3296,7 +3296,7 @@ abstract class Block<
   void __setChildrenForParent() {
     try {
       Object? itemParent = parent?.currentItemDetail;
-      if (itemParent != null && this.queryDataState == DataState.ready) {
+      if (itemParent != null && this.blockDataState == DataState.ready) {
         setChildrenForParent(
           currentItemOfParentBlock: itemParent,
           items: this.items,
@@ -4454,7 +4454,7 @@ abstract class Block<
         errCode: BlockSilentActionPrecheck.busy,
       );
     }
-    switch (queryDataState) {
+    switch (blockDataState) {
       case DataState.pending:
         return Actionable<BlockSilentActionPrecheck>.no(
           errCode: BlockSilentActionPrecheck.blockInPendingState,
@@ -4487,7 +4487,7 @@ abstract class Block<
         errCode: BlockMultiItemsCreationPrecheck.busy,
       );
     }
-    switch (queryDataState) {
+    switch (blockDataState) {
       case DataState.pending:
         return Actionable<BlockMultiItemsCreationPrecheck>.no(
           errCode: BlockMultiItemsCreationPrecheck.blockInPendingState,
@@ -4545,7 +4545,7 @@ abstract class Block<
         );
       }
     }
-    switch (queryDataState) {
+    switch (blockDataState) {
       case DataState.pending:
         return Actionable<BlockItemCreationPrecheck>.no(
           errCode: BlockItemCreationPrecheck.blockInPendingState,
@@ -4618,7 +4618,7 @@ abstract class Block<
         errCode: BlockItemEditPrecheck.busy,
       );
     }
-    switch (queryDataState) {
+    switch (blockDataState) {
       case DataState.pending:
         return Actionable<BlockItemEditPrecheck>.no(
           errCode: BlockItemEditPrecheck.inPendingState,
@@ -4670,7 +4670,7 @@ abstract class Block<
         errCode: BlockQuickItemUpdatePrecheck.busy,
       );
     }
-    switch (queryDataState) {
+    switch (blockDataState) {
       case DataState.pending:
         return Actionable<BlockQuickItemUpdatePrecheck>.no(
           errCode: BlockQuickItemUpdatePrecheck.blockInPendingState,
@@ -4730,7 +4730,7 @@ abstract class Block<
         errCode: BlockSilentItemUpdatePrecheck.busy,
       );
     }
-    switch (queryDataState) {
+    switch (blockDataState) {
       case DataState.pending:
         return Actionable<BlockSilentItemUpdatePrecheck>.no(
           errCode: BlockSilentItemUpdatePrecheck.blockInPendingState,
@@ -4788,7 +4788,7 @@ abstract class Block<
         errCode: BlockQuickItemCreationPrecheck.busy,
       );
     }
-    switch (queryDataState) {
+    switch (blockDataState) {
       case DataState.pending:
         return Actionable<BlockQuickItemCreationPrecheck>.no(
           errCode: BlockQuickItemCreationPrecheck.blockInPendingState,
@@ -4838,7 +4838,7 @@ abstract class Block<
         errCode: BlockSilentItemCreationPrecheck.busy,
       );
     }
-    switch (queryDataState) {
+    switch (blockDataState) {
       case DataState.pending:
         return Actionable<BlockSilentItemCreationPrecheck>.no(
           errCode: BlockSilentItemCreationPrecheck.blockInPendingState,

@@ -165,7 +165,7 @@ class _BlockData<
 
   ITEM_DETAIL? get __currentItemDetail => __current._itemDetail;
 
-  late DataState _queryDataState;
+  late DataState _blockDataState;
 
   DataState _selectionDataState = DataState.pending;
 
@@ -178,7 +178,7 @@ class _BlockData<
   )   : _pageable = pageable,
         _initialPageable = pageable,
         _pagination = PaginationData.empty() {
-    _queryDataState = block.isRoot ? DataState.pending : DataState.none;
+    _blockDataState = block.isRoot ? DataState.pending : DataState.none;
   }
 
   // ***************************************************************************
@@ -188,8 +188,8 @@ class _BlockData<
     required DataState qryDataState,
     required bool errorInFilter,
   }) {
-    _queryDataState = qryDataState;
-    if (_queryDataState == DataState.error) {
+    _blockDataState = qryDataState;
+    if (_blockDataState == DataState.error) {
       _lastQueryResultState = ActionResultState.fail;
       //
       // Update FilterCriteria:
@@ -245,7 +245,7 @@ class _BlockData<
   // ***************************************************************************
 
   void _setToPending() {
-    _queryDataState = DataState.pending;
+    _blockDataState = DataState.pending;
   }
 
   // ***************************************************************************
@@ -367,7 +367,7 @@ class _BlockData<
     required FILTER_CRITERIA? filterCriteria,
     required PageableData? pageable,
     required PageData<ITEM>? pageData,
-    required DataState queryDataState,
+    required DataState blockDataState,
     required ActionResultState queryResultState,
   }) {
     _lastQueryResultState = queryResultState;
@@ -394,7 +394,7 @@ class _BlockData<
     //
     _currentParentItemId = currentParentItemId;
     _lastQueryResult = pageData;
-    _queryDataState = queryDataState;
+    _blockDataState = blockDataState;
     //
     // Update FilterCriteria:
     //

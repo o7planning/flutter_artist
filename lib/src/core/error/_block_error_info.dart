@@ -4,13 +4,13 @@ import '../enums/_block_error_method.dart';
 import '../enums/_data_state.dart';
 
 class BlockErrorInfo {
-  final DataState queryDataState;
+  final DataState blockDataState;
   final BlockErrorMethod blockErrorMethod;
   final AppError error;
   final StackTrace errorStackTrace;
 
   BlockErrorInfo({
-    required this.queryDataState,
+    required this.blockDataState,
     required this.blockErrorMethod,
     required Object error,
     required this.errorStackTrace,

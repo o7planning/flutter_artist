@@ -31,10 +31,10 @@ class ScalarDebugBox extends BaseDebugBox {
           labelStyle: labelStyle,
           textStyle: textStyle0,
         ),
-      if (options.showQueryDataState)
+      if (options.showScalarDataState)
         IconLabelText(
           label: "Query State: ",
-          text: scalar.queryDataState.name.toString(),
+          text: scalar.scalarDataState.name.toString(),
           labelStyle: labelStyle,
           textStyle: textStyle,
         ),
