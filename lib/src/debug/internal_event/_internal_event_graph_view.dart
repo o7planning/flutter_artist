@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist/flutter_artist.dart';
+import 'package:flutter_force_directed_graph/flutter_force_directed_graph.dart';
 
 import '../__root_debug_view.dart';
-import 'package:flutter_force_directed_graph/flutter_force_directed_graph.dart';
 
 class InternalEventGraphView extends StatelessWidget {
   final RootDebugController controller;
@@ -18,7 +18,8 @@ class InternalEventGraphView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ForceDirectedGraphController<int> controller = ForceDirectedGraphController();
+    ForceDirectedGraphController<int> controller =
+        ForceDirectedGraphController();
 
     final fdgWidget = ForceDirectedGraphWidget(
       controller: controller,
@@ -50,6 +51,6 @@ class InternalEventGraphView extends StatelessWidget {
         );
       },
     );
-    return Center(child:  fdgWidget);
+    return Center(child: fdgWidget);
   }
 }
