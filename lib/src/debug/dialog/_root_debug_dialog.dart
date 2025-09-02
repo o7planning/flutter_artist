@@ -3,7 +3,7 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../core/_core_/core.dart';
 import '../../core/widgets/_custom_app_container.dart';
-import '../state_view/_shelf_debug_state_view.dart';
+import '../__root_debug_view.dart';
 
 class RootDebugDialog extends StatelessWidget {
   final Shelf shelf;
@@ -49,8 +49,6 @@ class RootDebugDialog extends StatelessWidget {
   }
 
   Widget _buildMainWidget() {
-    return ShelfDebugStateView(
-      shelf: shelf,
-    );
+    return RootDebugView();
   }
 }

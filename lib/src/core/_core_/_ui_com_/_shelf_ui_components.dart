@@ -13,6 +13,18 @@ class _ShelfUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  bool hasActiveUIComponent() {
+    bool hasActive = _hasActiveBlockUIComponentCascade(shelf._rootBlocks);
+    if (hasActive) {
+      return true;
+    }
+    hasActive = _hasActiveScalarUIComponentCascade(shelf._scalars);
+    return hasActive;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   @override
   bool hasMountedUIComponent() {
     bool hasMounted = __refreshableNeutralViewStates.isNotEmpty;
@@ -84,6 +96,30 @@ class _ShelfUIComponents extends _UIComponents {
       }
       bool hasMounted = _hasMountedBlockUIComponentCascade(block._childBlocks);
       if (hasMounted) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool _hasActiveBlockUIComponentCascade(List<Block> blocks) {
+    for (Block block in blocks) {
+      if (block.ui.hasActiveUIComponent(alsoCheckChildren: true)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool _hasActiveScalarUIComponentCascade(List<Scalar> scalars) {
+    for (Scalar scalar in scalars) {
+      if (scalar.ui.hasActiveUIComponent()) {
         return true;
       }
     }

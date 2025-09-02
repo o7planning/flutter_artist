@@ -5,6 +5,10 @@ abstract class Shelf extends _Core {
 
   late final ShelfConfig config;
 
+  bool __disposed = false;
+
+  bool get disposed => __disposed;
+
   late final ShelfStructure _shelfStruct;
 
   String? get description => _shelfStruct.description;

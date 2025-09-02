@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist/flutter_artist.dart';
 
+import '../__root_debug_view.dart';
+
 class ShelfDebugStateView extends StatelessWidget {
+  final RootDebugController controller;
   final Shelf shelf;
 
   final bool showTitle;
 
   const ShelfDebugStateView({
     super.key,
+    required this.controller,
     required this.shelf,
     this.showTitle = true,
   });
@@ -17,17 +21,22 @@ class ShelfDebugStateView extends StatelessWidget {
     List<Block> allBlocks = shelf.blocks;
     List<Scalar> allScalars = shelf.scalars;
 
-    return SingleChildScrollView(
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Container(
-          padding: EdgeInsets.all(5),
-          child: _buildMainContent(
-            allBlocks: allBlocks,
-            allScalars: allScalars,
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return SingleChildScrollView(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Container(
+              padding: EdgeInsets.all(5),
+              width: constraints.constrainWidth(),
+              child: _buildMainContent(
+                allBlocks: allBlocks,
+                allScalars: allScalars,
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 

@@ -213,6 +213,22 @@ class _Storage extends _Core {
     return _rencentShelves.isEmpty ? null : _rencentShelves.first;
   }
 
+  List<Shelf> getRecentShelves({required bool visibleOnly}) {
+    List<Shelf> ret = [];
+    for (Shelf shelf in _rencentShelves) {
+      if (shelf.disposed) {
+        continue;
+      }
+      if (visibleOnly) {
+        if (!shelf.ui.hasMountedUIComponent()) {
+          continue;
+        }
+      }
+      ret.add(shelf);
+    }
+    return ret;
+  }
+
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
