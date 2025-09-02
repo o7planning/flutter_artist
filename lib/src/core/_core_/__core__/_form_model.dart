@@ -35,7 +35,7 @@ abstract class FormModel<
 
   FormMode get formMode => _formPropsStructure.formMode;
 
-  DataState get formDataState => _formPropsStructure._formDataState;
+  DataState get dataState => _formPropsStructure._formDataState;
 
   FormErrorInfo? get formErrorInfo => _formPropsStructure.formErrorInfo;
 
@@ -247,7 +247,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   void showFormErrorViewerDialog(BuildContext context) {
-    if (formDataState != DataState.error) {
+    if (dataState != DataState.error) {
       return;
     }
     FormErrorViewerDialog.showFormErrorViewerDialog(
@@ -308,7 +308,7 @@ abstract class FormModel<
     //
     if (!forceReloadForm) {
       print("        ~~~~~~~> IGNORED --> form - [${block.name}]");
-      if (formDataState != DataState.ready) {
+      if (dataState != DataState.ready) {
         _clearDataWithDataState(formDataState: DataState.pending);
       }
       return true;
@@ -1508,7 +1508,7 @@ abstract class FormModel<
         errCode: EnterFormFieldsPrecheck.formInNoneMode,
       );
     }
-    if (formDataState == DataState.error) {
+    if (dataState == DataState.error) {
       return Actionable<EnterFormFieldsPrecheck>.no(
         errCode: EnterFormFieldsPrecheck.formInErrorState,
       );

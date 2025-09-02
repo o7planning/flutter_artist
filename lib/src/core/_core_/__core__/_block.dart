@@ -4992,7 +4992,7 @@ abstract class Block<
         errCode: BlockItemEditPrecheck.noForm,
       );
     }
-    if (formModel!.formDataState == DataState.error) {
+    if (formModel!.dataState == DataState.error) {
       // Test Case: TODO
       return Actionable<BlockItemEditPrecheck>.no(
         errCode: BlockItemEditPrecheck.formInErrorState,
@@ -5133,7 +5133,7 @@ abstract class Block<
           errCode: BlockFormEnablementChkCode.formInNoneMode,
         );
       case FormMode.creation:
-        if (formModel!.formDataState == DataState.error) {
+        if (formModel!.dataState == DataState.error) {
           // TODO-XXX (Test case).
           if (!formModel!.formInitialDataReady) {
             return Actionable<BlockFormEnablementChkCode>.no(

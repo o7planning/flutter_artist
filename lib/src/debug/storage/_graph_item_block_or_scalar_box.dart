@@ -392,7 +392,7 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
     FormModel formModel,
   ) {
     String className = getClassName(formModel);
-    final DataState dataState = formModel.formDataState;
+    final DataState dataState = formModel.dataState;
     final bool active = formModel.ui.hasActiveUIComponent();
     //
     return "FORM MODEL: $className \n"
@@ -487,7 +487,7 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
   Widget _buildFormDataState(FormModel formModel) {
     return Container(
       padding: const EdgeInsets.all(3),
-      color: _dataStateBgColor(formModel.formDataState),
+      color: _dataStateBgColor(formModel.dataState),
       child: TooltipUtils.buildCustomTooltip(
         message: _formTooltipMessage(
           formModel,
@@ -496,7 +496,7 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Icon(
-              _dataStateIconData(formModel.formDataState),
+              _dataStateIconData(formModel.dataState),
               size: 16,
               color: DebugConstants.graphBoxTextColor,
             ),

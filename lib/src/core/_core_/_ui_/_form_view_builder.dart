@@ -151,7 +151,7 @@ class _FormViewBuilderState extends _RefreshableWidgetState<FormViewBuilder> {
       return Stack(
         children: [
           _buildAbsorbPointer(),
-          if (widget.formModel.formDataState == DataState.error)
+          if (widget.formModel.dataState == DataState.error)
             Positioned(
               top: 5,
               right: 5,

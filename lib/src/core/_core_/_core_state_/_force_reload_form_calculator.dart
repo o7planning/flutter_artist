@@ -171,9 +171,9 @@ _ForceReloadFormState _calculateFormState({
                   DebugPrint.printDebugState(DebugCat.dataLoad,
                       "@~~~> ${getClassName(block)} ~~~~~> FRM 0.1.2.2.1.2: forceLoadItem: FALSE");
                   //
-                  if (formModel.formDataState != DataState.ready) {
+                  if (formModel.dataState != DataState.ready) {
                     DebugPrint.printDebugState(DebugCat.dataLoad,
-                        "@~~~> ${getClassName(block)} ~~~~~> FRM 0.1.2.2.1.2.1: formDataState: NOT READY - ${formModel.formDataState}");
+                        "@~~~> ${getClassName(block)} ~~~~~> FRM 0.1.2.2.1.2.1: formDataState: NOT READY - ${formModel.dataState}");
                     // Debug:
                     _addDebugForceReload(
                       debugCode: "FRM 0.1.2.2.1.2.1",
@@ -346,9 +346,9 @@ _ForceReloadFormState _calculateFormState({
                   DebugPrint.printDebugState(DebugCat.dataLoad,
                       "@~~~> ${getClassName(block)} ~~~~~> FRM 0.2.2.2.1.2: forceReloadItem: FALSE");
                   //
-                  if (formModel.formDataState != DataState.ready) {
+                  if (formModel.dataState != DataState.ready) {
                     DebugPrint.printDebugState(DebugCat.dataLoad,
-                        "@~~~> ${getClassName(block)} ~~~~~> FRM 0.2.2.2.1.2.1: formDataState: NOT READY - ${formModel.formDataState}");
+                        "@~~~> ${getClassName(block)} ~~~~~> FRM 0.2.2.2.1.2.1: formDataState: NOT READY - ${formModel.dataState}");
                     // Debug:
                     _addDebugForceReload(
                       debugCode: "FRM 0.2.2.2.1.2.1",
@@ -527,9 +527,9 @@ _ForceReloadFormState _calculateFormState({
                   DebugPrint.printDebugState(DebugCat.dataLoad,
                       "@~~~> ${getClassName(block)} ~~~~~> FRM 1.1.2.2.1.2: forceLoadItem: FALSE");
                   //
-                  if (formModel.formDataState != DataState.ready) {
+                  if (formModel.dataState != DataState.ready) {
                     DebugPrint.printDebugState(DebugCat.dataLoad,
-                        "@~~~> ${getClassName(block)} ~~~~~> FRM 1.1.2.2.1.2.1: formDataState: NOT READY - ${formModel.formDataState}");
+                        "@~~~> ${getClassName(block)} ~~~~~> FRM 1.1.2.2.1.2.1: formDataState: NOT READY - ${formModel.dataState}");
                     // Debug:
                     _addDebugForceReload(
                       debugCode: "FRM 1.1.2.2.1.2.1",
@@ -704,9 +704,9 @@ _ForceReloadFormState _calculateFormState({
                   DebugPrint.printDebugState(DebugCat.dataLoad,
                       "@~~~> ${getClassName(block)} ~~~~~> FRM 1.2.2.2.1.2: forceReloadItem: FALSE");
                   //
-                  if (formModel.formDataState != DataState.ready) {
+                  if (formModel.dataState != DataState.ready) {
                     DebugPrint.printDebugState(DebugCat.dataLoad,
-                        "@~~~> ${getClassName(block)} ~~~~~> FRM 1.2.2.2.1.2.1: formDataState: NOT READY - ${formModel.formDataState}");
+                        "@~~~> ${getClassName(block)} ~~~~~> FRM 1.2.2.2.1.2.1: formDataState: NOT READY - ${formModel.dataState}");
                     // Debug:
                     _addDebugForceReload(
                       debugCode: "FRM 1.2.2.2.1.2.1",
@@ -879,9 +879,9 @@ _ForceReloadFormState _calculateFormState({
                   DebugPrint.printDebugState(DebugCat.dataLoad,
                       "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1.2.2.1.2: forceReloadItem: FALSE");
                   //
-                  if (formModel.formDataState != DataState.ready) {
+                  if (formModel.dataState != DataState.ready) {
                     DebugPrint.printDebugState(DebugCat.dataLoad,
-                        "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1.2.2.1.2.1: formDataState: NOT READY - ${formModel.formDataState}");
+                        "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1.2.2.1.2.1: formDataState: NOT READY - ${formModel.dataState}");
                     // Debug:
                     _addDebugForceReload(
                       debugCode: "FRM 2.1.2.2.1.2.1",
@@ -1051,9 +1051,9 @@ _ForceReloadFormState _calculateFormState({
                   DebugPrint.printDebugState(DebugCat.dataLoad,
                       "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2.2.2.1.1: forceReloadItem: FALSE");
                   //
-                  if (formModel.formDataState != DataState.ready) {
+                  if (formModel.dataState != DataState.ready) {
                     DebugPrint.printDebugState(DebugCat.dataLoad,
-                        "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2.2.2.1.1.1: formDataState: NOT READY - ${formModel.formDataState}");
+                        "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2.2.2.1.1.1: formDataState: NOT READY - ${formModel.dataState}");
                     // Debug:
                     _addDebugForceReload(
                       debugCode: "FRM 2.2.2.2.1.1.1",
@@ -1230,9 +1230,9 @@ _ForceReloadFormState _calculateFormState({
                   DebugPrint.printDebugState(DebugCat.dataLoad,
                       "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.2.2.1.2: forceReloadItem: FALSE");
                   //
-                  if (formModel.formDataState != DataState.ready) {
+                  if (formModel.dataState != DataState.ready) {
                     DebugPrint.printDebugState(DebugCat.dataLoad,
-                        "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.2.2.1.2.1: formDataState: NOT READY - ${formModel.formDataState}");
+                        "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.2.2.1.2.1: formDataState: NOT READY - ${formModel.dataState}");
                     // Debug:
                     _addDebugForceReload(
                       debugCode: "FRM 3.1.2.2.1.2.1",
@@ -1261,9 +1261,9 @@ _ForceReloadFormState _calculateFormState({
                 DebugPrint.printDebugState(DebugCat.dataLoad,
                     "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.2.2.2: formLoadTimeUIActive: FALSE");
                 //
-                if (formModel.formDataState != DataState.ready) {
+                if (formModel.dataState != DataState.ready) {
                   DebugPrint.printDebugState(DebugCat.dataLoad,
-                      "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.2.2.2.1: formDataState: NOT READY - ${formModel.formDataState}");
+                      "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.2.2.2.1: formDataState: NOT READY - ${formModel.dataState}");
                   // Debug:
                   _addDebugForceReload(
                     debugCode: "FRM 3.1.2.2.2.1",
@@ -1422,9 +1422,9 @@ _ForceReloadFormState _calculateFormState({
                   DebugPrint.printDebugState(DebugCat.dataLoad,
                       "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2.2.1.2: forceReloadItem: FALSE");
                   //
-                  if (formModel.formDataState != DataState.ready) {
+                  if (formModel.dataState != DataState.ready) {
                     DebugPrint.printDebugState(DebugCat.dataLoad,
-                        "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2.2.1.2.1: formDataState: NOT READY - ${formModel.formDataState}");
+                        "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2.2.1.2.1: formDataState: NOT READY - ${formModel.dataState}");
                     // Debug:
                     _addDebugForceReload(
                       debugCode: "FRM 3.2.2.2.1.2.1",
@@ -1452,9 +1452,9 @@ _ForceReloadFormState _calculateFormState({
                 DebugPrint.printDebugState(DebugCat.dataLoad,
                     "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2.2.2: formLoadTimeUIActive: FALSE");
                 //
-                if (formModel.formDataState != DataState.ready) {
+                if (formModel.dataState != DataState.ready) {
                   DebugPrint.printDebugState(DebugCat.dataLoad,
-                      "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2.2.2.1: formDataState: NOT READY - ${formModel.formDataState}");
+                      "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2.2.2.1: formDataState: NOT READY - ${formModel.dataState}");
                   // Debug:
                   _addDebugForceReload(
                     debugCode: "FRM 3.2.2.2.2.1",

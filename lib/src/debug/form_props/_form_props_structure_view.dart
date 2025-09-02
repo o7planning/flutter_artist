@@ -154,7 +154,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
           if (data is FormModel) {
             title = getClassName(data);
             prefixIconData = FaIconConstants.formModelIconData;
-            isError = data.formDataState == DataState.error;
+            isError = data.dataState == DataState.error;
           } else if (data is SimpleProp) {
             title = data.propName;
             tooltip =

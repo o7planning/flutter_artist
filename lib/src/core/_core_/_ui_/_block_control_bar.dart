@@ -160,7 +160,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
                         : null,
               ),
             if (widget.block.formModel != null &&
-                widget.block.formModel!.formDataState == DataState.error)
+                widget.block.formModel!.dataState == DataState.error)
               _ControlBarButton(
                 tooltip:
                     'Error: ${widget.block.formModel!.formErrorInfo?.errorMessage}',

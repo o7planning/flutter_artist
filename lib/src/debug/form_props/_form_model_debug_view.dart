@@ -35,7 +35,7 @@ class FormModelDebugView extends StatelessWidget {
           SizedBox(height: 5),
           IconLabelText(
             label: "Form Data State: ",
-            text: formModel.formDataState.toString(),
+            text: formModel.dataState.toString(),
           ),
           SizedBox(height: 5),
           IconLabelText(
@@ -51,10 +51,10 @@ class FormModelDebugView extends StatelessWidget {
               size: 20,
             ),
           ),
-          if (formModel.formDataState == DataState.error &&
+          if (formModel.dataState == DataState.error &&
               !formModel.formInitialDataReady)
             SizedBox(height: 5),
-          if (formModel.formDataState == DataState.error &&
+          if (formModel.dataState == DataState.error &&
               !formModel.formInitialDataReady)
             ListTile(
               dense: true,
@@ -90,10 +90,10 @@ class FormModelDebugView extends StatelessWidget {
                 ),
               ),
             ),
-          if (formModel.formDataState == DataState.error &&
+          if (formModel.dataState == DataState.error &&
               formModel.formErrorInfo != null)
             SizedBox(height: 10),
-          if (formModel.formDataState == DataState.error &&
+          if (formModel.dataState == DataState.error &&
               formModel.formErrorInfo != null)
             IconLabelText(
               label: "Error Method: ",
@@ -103,10 +103,10 @@ class FormModelDebugView extends StatelessWidget {
                 color: Colors.red,
               ),
             ),
-          if (formModel.formDataState == DataState.error &&
+          if (formModel.dataState == DataState.error &&
               formModel.formErrorInfo != null)
             SizedBox(height: 10),
-          if (formModel.formDataState == DataState.error &&
+          if (formModel.dataState == DataState.error &&
               formModel.formErrorInfo != null)
             IconLabelText(
               label: "Error Message: ",

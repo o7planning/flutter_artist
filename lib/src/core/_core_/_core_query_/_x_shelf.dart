@@ -181,9 +181,9 @@ class XShelf {
 
         if (xFormModel != null &&
             xFormModel.formModel.ui.hasActiveUIComponent()) {
-          if (xFormModel.formModel.formDataState == DataState.pending ||
-              xFormModel.formModel.formDataState == DataState.error ||
-              xFormModel.formModel.formDataState == DataState.none) {
+          if (xFormModel.formModel.dataState == DataState.pending ||
+              xFormModel.formModel.dataState == DataState.error ||
+              xFormModel.formModel.dataState == DataState.none) {
             xFormModel.lazy = true;
             if (naturalMode) {
               xFormModel.setForceType(ForceType.decidedAtRuntime);
@@ -272,9 +272,9 @@ class XShelf {
         // Current: forShelfExternalReaction
         if (xFormModel != null &&
             xFormModel.formModel.ui.hasActiveUIComponent()) {
-          if (xFormModel.formModel.formDataState == DataState.pending ||
-              xFormModel.formModel.formDataState == DataState.error ||
-              xFormModel.formModel.formDataState == DataState.none) {
+          if (xFormModel.formModel.dataState == DataState.pending ||
+              xFormModel.formModel.dataState == DataState.error ||
+              xFormModel.formModel.dataState == DataState.none) {
             xFormModel.lazy = true;
             if (naturalMode) {
               xFormModel.setForceType(ForceType.decidedAtRuntime);
@@ -340,9 +340,9 @@ class XShelf {
       XFormModel? parentXFormModel = parentXBlock.xFormModel;
       if (parentXFormModel != null &&
           parentXFormModel.formModel.ui.hasActiveUIComponent()) {
-        if (parentXFormModel.formModel.formDataState == DataState.pending ||
-            parentXFormModel.formModel.formDataState == DataState.error ||
-            parentXFormModel.formModel.formDataState == DataState.none) {
+        if (parentXFormModel.formModel.dataState == DataState.pending ||
+            parentXFormModel.formModel.dataState == DataState.error ||
+            parentXFormModel.formModel.dataState == DataState.none) {
           parentXFormModel.setForceType(ForceType.decidedAtRuntime);
         }
       }
@@ -405,9 +405,9 @@ class XShelf {
       XFormModel? parentXFormModel = parentXBlock.xFormModel;
       if (parentXFormModel != null &&
           parentXFormModel.formModel.ui.hasActiveUIComponent()) {
-        if (parentXFormModel.formModel.formDataState == DataState.pending ||
-            parentXFormModel.formModel.formDataState == DataState.error ||
-            parentXFormModel.formModel.formDataState == DataState.none) {
+        if (parentXFormModel.formModel.dataState == DataState.pending ||
+            parentXFormModel.formModel.dataState == DataState.error ||
+            parentXFormModel.formModel.dataState == DataState.none) {
           parentXFormModel.setForceType(ForceType.decidedAtRuntime);
         }
       }
@@ -471,9 +471,9 @@ class XShelf {
       XFormModel? parentXFormModel = parentXBlock.xFormModel;
       if (parentXFormModel != null &&
           parentXFormModel.formModel.ui.hasActiveUIComponent()) {
-        if (parentXFormModel.formModel.formDataState == DataState.pending ||
-            parentXFormModel.formModel.formDataState == DataState.error ||
-            parentXFormModel.formModel.formDataState == DataState.none) {
+        if (parentXFormModel.formModel.dataState == DataState.pending ||
+            parentXFormModel.formModel.dataState == DataState.error ||
+            parentXFormModel.formModel.dataState == DataState.none) {
           parentXFormModel.setForceType(ForceType.decidedAtRuntime);
         }
       }
@@ -536,9 +536,9 @@ class XShelf {
       XFormModel? parentXFormModel = parentXBlock.xFormModel;
       if (parentXFormModel != null &&
           parentXFormModel.formModel.ui.hasActiveUIComponent()) {
-        if (parentXFormModel.formModel.formDataState == DataState.pending ||
-            parentXFormModel.formModel.formDataState == DataState.error ||
-            parentXFormModel.formModel.formDataState == DataState.none) {
+        if (parentXFormModel.formModel.dataState == DataState.pending ||
+            parentXFormModel.formModel.dataState == DataState.error ||
+            parentXFormModel.formModel.dataState == DataState.none) {
           parentXFormModel.setForceType(ForceType.decidedAtRuntime);
         }
       }
@@ -596,9 +596,9 @@ class XShelf {
         XFormModel? parentXFormModel = parentXBlock.xFormModel;
         if (parentXFormModel != null &&
             parentXFormModel.formModel.ui.hasActiveUIComponent()) {
-          if (parentXFormModel.formModel.formDataState == DataState.pending ||
-              parentXFormModel.formModel.formDataState == DataState.error ||
-              parentXFormModel.formModel.formDataState == DataState.none) {
+          if (parentXFormModel.formModel.dataState == DataState.pending ||
+              parentXFormModel.formModel.dataState == DataState.error ||
+              parentXFormModel.formModel.dataState == DataState.none) {
             parentXFormModel.setForceType(ForceType.decidedAtRuntime);
           }
         }
@@ -1125,9 +1125,9 @@ class XShelf {
         // Current: updateInternalReactionByEvtBlock.
         if (xFormModel != null &&
             xFormModel.formModel.ui.hasActiveUIComponent()) {
-          if (xFormModel.formModel.formDataState == DataState.pending ||
-              xFormModel.formModel.formDataState == DataState.error ||
-              xFormModel.formModel.formDataState == DataState.none) {
+          if (xFormModel.formModel.dataState == DataState.pending ||
+              xFormModel.formModel.dataState == DataState.error ||
+              xFormModel.formModel.dataState == DataState.none) {
             xFormModel.lazy = true;
 
             // if (naturalMode) {
