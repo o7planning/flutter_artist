@@ -18,6 +18,7 @@ dependencies:
   graphview:
   directed_graph: ^0.4.5
   flutter_force_directed_graph: ^1.0.6
+  flutter_graph_view: ^1.2.0
   flutter_breadcrumb: ^1.0.1
   visibility_detector: ^0.4.0+2
   uuid: ^4.5.1

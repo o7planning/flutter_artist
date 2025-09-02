@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -55,6 +56,28 @@ class CustomArrowEdgeRenderer extends EdgeRenderer {
           Offset(clippedLine[0], clippedLine[1]),
           Offset(triangleCentroid[0], triangleCentroid[1]),
           edge.paint ?? paint);
+
+      var point1 = Offset(clippedLine[0], clippedLine[1]);
+      var point2 = Offset(triangleCentroid[0], triangleCentroid[1]);
+      var d = math.sqrt((point1.dx - point2.dx) * (point1.dx - point2.dx) +
+          (point1.dy - point2.dy) * (point1.dy - point2.dy));
+      final Offset center = Offset(
+        (point1.dx + point2.dx) / 2,
+        (point1.dy + point2.dy) / 2,
+      ); // Placeholder - actual center depends on radius/curvature
+
+      final Rect rect = Rect.fromCircle(center: center, radius: d / 2);
+
+      // Calculate start and sweep angles based on point1, point2, and center
+      final double startAngle =
+          math.atan2(point1.dy - center.dy, point1.dx - center.dx);
+      final double endAngle =
+          math.atan2(point2.dy - center.dy, point2.dx - center.dx);
+      final double sweepAngle =
+          endAngle - startAngle; // Adjust for arc direction if needed
+
+      // canvas.drawOval(rect, startAngle, sweepAngle, false, paint);
+      canvas.drawOval(rect, paint);
     });
   }
 

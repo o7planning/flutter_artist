@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist/flutter_artist.dart';
 import 'package:flutter_force_directed_graph/flutter_force_directed_graph.dart';
 
-import '../__root_debug_view.dart';
+import '../../__root_debug_view.dart';
 
 class InternalEventGraphView extends StatelessWidget {
   final RootDebugController controller;

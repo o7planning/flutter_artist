@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:graphview/GraphView.dart';
 
-import 'custom_arrow_edge_renderer.dart';
+import '_custom_arrow_edge_renderer.dart';
 
 class InternalEventGraphViewTest extends StatefulWidget {
   @override

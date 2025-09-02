@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist/flutter_artist.dart';
 import 'package:flutter_artist/src/debug/state_view/_shelf_debug_state_view.dart';
 
-import 'internal_event/_internal_event_graph_view_test.dart';
+import 'internal_event/x/_internal_event_graph_view3.dart';
 import 'recent_shelves/_recent_shelves_view.dart';
 
 part 'root_debug_controller.dart';
@@ -92,10 +92,10 @@ class _RootDebugViewState extends State<RootDebugView> {
     // );
     // setState(() {});
 
-    currentView = InternalEventGraphViewTest(
-        // controller: controller,
-        // shelf: shelf,
-        );
+    // currentView = InternalEventGraphViewTest();
+    // setState(() {});
+
+    currentView = DecoratorDemo();
     setState(() {});
   }
 }
