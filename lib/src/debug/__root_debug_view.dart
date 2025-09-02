@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist/flutter_artist.dart';
 import 'package:flutter_artist/src/debug/state_view/_shelf_debug_state_view.dart';
 
+import 'internal_event/_internal_event_graph_view.dart';
 import 'recent_shelves/_recent_shelves_view.dart';
 
 part 'root_debug_controller.dart';
@@ -30,6 +31,8 @@ class _RootDebugViewState extends State<RootDebugView> {
     //
     controller = RootDebugController(
       showDebugShelfState: _showDebugShelfState,
+      showRecentShelves: _showRecentShelves,
+      showDebugInternalEventGraph: _showDebugInternalEventGraph,
     );
   }
 
@@ -44,7 +47,7 @@ class _RootDebugViewState extends State<RootDebugView> {
           children: [
             ElevatedButton(
               onPressed: () {
-                _buildScreen1(context);
+                _showRecentShelves();
               },
               child: Text("Recent Shelves"),
             ),
@@ -64,11 +67,6 @@ class _RootDebugViewState extends State<RootDebugView> {
     );
   }
 
-  void _buildScreen1(BuildContext context) {
-    currentView = RecentShelvesView(controller: controller);
-    setState(() {});
-  }
-
   void _buildScreen2(BuildContext context) {
     currentView = Text("Screen 2");
     setState(() {});
@@ -76,6 +74,19 @@ class _RootDebugViewState extends State<RootDebugView> {
 
   void _showDebugShelfState({required Shelf shelf}) {
     currentView = ShelfDebugStateView(
+      controller: controller,
+      shelf: shelf,
+    );
+    setState(() {});
+  }
+
+  void _showRecentShelves() {
+    currentView = RecentShelvesView(controller: controller);
+    setState(() {});
+  }
+
+  void _showDebugInternalEventGraph({required Shelf shelf}) {
+    currentView = InternalEventGraphView(
       controller: controller,
       shelf: shelf,
     );

@@ -19,12 +19,13 @@ class RecentShelvesView extends StatelessWidget {
         FlutterArtist.storage.getRecentShelves(visibleOnly: true);
 
     return Center(
-      child: Wrap(
+      child:  Wrap(
         children: recentShelves
             .map(
               (shelf) => ElevatedButton(
                 onPressed: () {
-                  controller.showDebugShelfState(shelf: shelf);
+                 /// controller.showDebugShelfState(shelf: shelf);
+                  controller.showDebugInternalEventGraph(shelf: shelf);
                 },
                 child: Text(shelf.name),
               ),
