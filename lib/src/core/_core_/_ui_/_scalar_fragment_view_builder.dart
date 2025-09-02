@@ -36,7 +36,7 @@ class _ScalarFragmentViewBuilderState
       return Stack(
         children: [
           widget.build(),
-          if (widget.scalar.scalarDataState == DataState.error)
+          if (widget.scalar.dataState == DataState.error)
             Positioned(
               top: 5,
               right: 5,

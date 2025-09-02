@@ -55,14 +55,14 @@ class BlocksScalarsView extends StatelessWidget {
           (block) => _buildItem(
             iconData: FaIconConstants.blockIconData,
             blockOrScalarClassName: getClassName(block),
-            dataState: block.blockDataState,
+            dataState: block.dataState,
           ),
         ),
         ...filterModel.scalars.map(
           (scalar) => _buildItem(
             iconData: FaIconConstants.scalarIconData,
             blockOrScalarClassName: getClassName(scalar),
-            dataState: scalar.scalarDataState,
+            dataState: scalar.dataState,
           ),
         ),
       ],

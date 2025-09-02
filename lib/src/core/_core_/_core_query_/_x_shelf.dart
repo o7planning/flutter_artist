@@ -155,8 +155,8 @@ class XShelf {
     //
     for (XScalar xScalar in allXScalars) {
       if (xScalar.scalar.ui.hasActiveUIComponent()) {
-        if (xScalar.scalar.scalarDataState == DataState.pending ||
-            xScalar.scalar.scalarDataState == DataState.error) {
+        if (xScalar.scalar.dataState == DataState.pending ||
+            xScalar.scalar.dataState == DataState.error) {
           xScalar.setQueryHint(QryHint.force);
         }
       }
@@ -172,8 +172,8 @@ class XShelf {
           alsoCheckChildren: true,
         );
         if (hasXActiveUI) {
-          if (xBlock.block.blockDataState == DataState.pending ||
-              xBlock.block.blockDataState == DataState.error) {
+          if (xBlock.block.dataState == DataState.pending ||
+              xBlock.block.dataState == DataState.error) {
             xBlock.setQueryHint(QryHint.force);
           }
         }
@@ -263,8 +263,8 @@ class XShelf {
           alsoCheckChildren: true,
         );
         if (hasXActiveUI) {
-          if (xBlock.block.blockDataState == DataState.pending ||
-              xBlock.block.blockDataState == DataState.error) {
+          if (xBlock.block.dataState == DataState.pending ||
+              xBlock.block.dataState == DataState.error) {
             xBlock.setQueryHint(QryHint.force);
           }
         }
@@ -331,8 +331,8 @@ class XShelf {
         alsoCheckChildren: true,
       );
       if (hasXActiveUI) {
-        if (parentXBlock.block.blockDataState == DataState.pending ||
-            parentXBlock.block.blockDataState == DataState.error) {
+        if (parentXBlock.block.dataState == DataState.pending ||
+            parentXBlock.block.dataState == DataState.error) {
           parentXBlock.setQueryHint(QryHint.force);
         }
       }
@@ -396,8 +396,8 @@ class XShelf {
         alsoCheckChildren: true,
       );
       if (hasXActiveUI) {
-        if (parentXBlock.block.blockDataState == DataState.pending ||
-            parentXBlock.block.blockDataState == DataState.error) {
+        if (parentXBlock.block.dataState == DataState.pending ||
+            parentXBlock.block.dataState == DataState.error) {
           parentXBlock.setQueryHint(QryHint.force);
         }
       }
@@ -462,8 +462,8 @@ class XShelf {
         alsoCheckChildren: true,
       );
       if (hasXActiveUI) {
-        if (parentXBlock.block.blockDataState == DataState.pending ||
-            parentXBlock.block.blockDataState == DataState.error) {
+        if (parentXBlock.block.dataState == DataState.pending ||
+            parentXBlock.block.dataState == DataState.error) {
           parentXBlock.setQueryHint(QryHint.force);
         }
       }
@@ -527,8 +527,8 @@ class XShelf {
         alsoCheckChildren: true,
       );
       if (hasXActiveUI) {
-        if (parentXBlock.block.blockDataState == DataState.pending ||
-            parentXBlock.block.blockDataState == DataState.error) {
+        if (parentXBlock.block.dataState == DataState.pending ||
+            parentXBlock.block.dataState == DataState.error) {
           parentXBlock.setQueryHint(QryHint.force);
         }
       }
@@ -587,8 +587,8 @@ class XShelf {
           alsoCheckChildren: true,
         );
         if (hasXActiveUI) {
-          if (parentXBlock.block.blockDataState == DataState.pending ||
-              parentXBlock.block.blockDataState == DataState.error) {
+          if (parentXBlock.block.dataState == DataState.pending ||
+              parentXBlock.block.dataState == DataState.error) {
             parentXBlock.setQueryHint(QryHint.force);
           }
         }
@@ -1115,8 +1115,8 @@ class XShelf {
           alsoCheckChildren: true,
         );
         if (hasXActiveUI) {
-          if (xBlock.block.blockDataState == DataState.pending ||
-              xBlock.block.blockDataState == DataState.error) {
+          if (xBlock.block.dataState == DataState.pending ||
+              xBlock.block.dataState == DataState.error) {
             xBlock.setQueryHint(QryHint.force);
           }
         }

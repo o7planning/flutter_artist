@@ -521,12 +521,12 @@ abstract class Shelf extends _Core {
 
   bool get isFullyPending {
     for (Scalar scalar in scalars) {
-      if (scalar.scalarDataState != DataState.pending) {
+      if (scalar.dataState != DataState.pending) {
         return false;
       }
     }
     for (Block block in rootBlocks) {
-      if (block.blockDataState != DataState.pending) {
+      if (block.dataState != DataState.pending) {
         return false;
       }
     }

@@ -44,7 +44,7 @@ class BlockErrorViewerDialog extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("?? ${blockErrorInfo.blockDataState}"),
+          Text("${blockErrorInfo.blockDataState}"),
           if (blockErrorInfo.blockDataState == DataState.error)
             IconLabelText(
               icon: Icon(

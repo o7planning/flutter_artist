@@ -284,19 +284,19 @@ abstract class Block<
   ActionResultState? get lastQueryResultState =>
       __blockData._lastQueryResultState;
 
-  DataState get blockDataState => __blockData._blockDataState;
+  DataState get dataState => __blockData._blockDataState;
 
   DataState get selectionDataState => __blockData._selectionDataState;
 
-  // nearestAncestorNonNoneBlockDataState?
-  DataState get ancestralNonNoneBlockDataState {
+  // nearestAncestorNonNoneDataState?
+  DataState get ancestralNonNoneDataState {
     if (parent == null) {
       return DataState.ready;
     }
-    if (parent!.blockDataState != DataState.none) {
-      return parent!.blockDataState;
+    if (parent!.dataState != DataState.none) {
+      return parent!.dataState;
     }
-    return parent!.ancestralNonNoneBlockDataState;
+    return parent!.ancestralNonNoneDataState;
   }
 
   FormMode? get formMode {
@@ -430,7 +430,7 @@ abstract class Block<
 
   void __clearWithDataStateAndChildrenToNonCascade({
     required XBlock thisXBlock,
-    required DataState qryDataState,
+    required DataState blkDataState,
     required DataState frmDataState,
     required bool errorInFilter,
   }) {
@@ -438,7 +438,7 @@ abstract class Block<
     //
     __clearItemsWithDataState(
       thisXBlock: thisXBlock,
-      blockDataState: qryDataState,
+      blockDataState: blkDataState,
       formDataState: frmDataState,
       errorInFilter: errorInFilter,
     );
@@ -446,7 +446,7 @@ abstract class Block<
     for (var childXBlock in thisXBlock.childXBlocks) {
       childXBlock.block.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: childXBlock,
-        qryDataState: DataState.none,
+        blkDataState: DataState.none,
         frmDataState: DataState.none,
         errorInFilter: false,
       );
@@ -464,7 +464,7 @@ abstract class Block<
     for (var childXBlock in thisXBlock.childXBlocks) {
       childXBlock.block.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: childXBlock,
-        qryDataState: DataState.none,
+        blkDataState: DataState.none,
         frmDataState: DataState.none,
         errorInFilter: false,
       );
@@ -479,7 +479,7 @@ abstract class Block<
     for (var childXBlock in thisXBlock.childXBlocks) {
       childXBlock.block.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: childXBlock,
-        qryDataState: DataState.pending,
+        blkDataState: DataState.pending,
         frmDataState: DataState.none,
         errorInFilter: false,
       );
@@ -519,7 +519,7 @@ abstract class Block<
   // ***************************************************************************
 
   bool _needToQuery() {
-    if (blockDataState != DataState.ready) {
+    if (dataState != DataState.ready) {
       return true;
     }
     //
@@ -582,7 +582,7 @@ abstract class Block<
     //
     __clearWithDataStateAndChildrenToNonCascade(
       thisXBlock: thisXBlock,
-      qryDataState: DataState.pending,
+      blkDataState: DataState.pending,
       frmDataState: DataState.none,
       errorInFilter: false,
     );
@@ -622,7 +622,7 @@ abstract class Block<
     bool hasActiveUI = this.ui.hasActiveUIComponent(alsoCheckChildren: true);
     QryHint queryHint = thisXBlock.queryHint;
     if (queryHint != QryHint.force) {
-      if (this.blockDataState != DataState.ready && hasActiveUI) {
+      if (this.dataState != DataState.ready && hasActiveUI) {
         queryHint = QryHint.force;
       }
     }
@@ -630,7 +630,7 @@ abstract class Block<
     thisXBlock._printParameters(hasActiveUI: hasActiveUI);
     //
     final callApiQueryMethod = BlockErrorMethod.callApiQuery;
-    DataState newBlockDataState = this.blockDataState;
+    DataState newBlockDataState = this.dataState;
     PageData<ITEM>? pageData;
     final ITEM? candidateCurrentItem;
     bool queried = false;
@@ -680,7 +680,7 @@ abstract class Block<
     } else if (queryHint == QryHint.markAsPending) {
       this.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: thisXBlock,
-        qryDataState: DataState.pending,
+        blkDataState: DataState.pending,
         frmDataState: DataState.none,
         errorInFilter: false,
       );
@@ -691,7 +691,7 @@ abstract class Block<
     }
     //
     // FORCE QUERY:
-    // thisXBlock.queryHint || (hasActiveUI && this.blockDataState != DataState.ready)
+    // thisXBlock.queryHint || (hasActiveUI && this.dataState != DataState.ready)
     //
     FILTER_CRITERIA? filterCriteriaOfFilterModel;
     try {
@@ -724,7 +724,7 @@ abstract class Block<
       // Set Block to error cascade.
       __clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: thisXBlock,
-        qryDataState: DataState.error,
+        blkDataState: DataState.error,
         frmDataState: DataState.none,
         errorInFilter: true,
       );
@@ -787,7 +787,7 @@ abstract class Block<
         pageData = null;
         //
         final blockErrorInfo = BlockErrorInfo(
-          blockDataState: blockDataState,
+          blockDataState: dataState,
           blockErrorMethod: callApiQueryMethod,
           error: e, // AppError, ApiError or others.
           errorStackTrace: stackTrace,
@@ -813,7 +813,7 @@ abstract class Block<
       if (queryResultState == ActionResultState.fail) {
         // Query Error + Parent or Criteria changed.
         if (parentOrCriteriaChanged) {
-          switch (blockDataState) {
+          switch (dataState) {
             case DataState.ready:
               // @FaCode-002.
               // Test Case: [42a].
@@ -839,7 +839,7 @@ abstract class Block<
         // Query Error + Parent not changed + Criteria not changed.
         // Test Case: [42a].
         else {
-          switch (blockDataState) {
+          switch (dataState) {
             case DataState.ready:
               // Append empty items (No items got from Server).
               // Test Case: [42a].
@@ -866,7 +866,7 @@ abstract class Block<
       else {
         // Query Successful + Parent or Criteria changed.
         if (parentOrCriteriaChanged) {
-          switch (blockDataState) {
+          switch (dataState) {
             case DataState.ready:
               // Replace.
               realListBehavior = ListBehavior.replace;
@@ -887,7 +887,7 @@ abstract class Block<
         }
         // Query Successful + Parent not changed + Criteria not changed.
         else {
-          switch (blockDataState) {
+          switch (dataState) {
             case DataState.ready:
               // Replace or Append:
               realListBehavior = thisXBlock.listBehavior;
@@ -1092,22 +1092,22 @@ abstract class Block<
       candidateItem,
     );
     //
-    if (blockDataState == DataState.pending) {
+    if (dataState == DataState.pending) {
       this.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: thisXBlock,
-        qryDataState: blockDataState,
+        blkDataState: dataState,
         frmDataState: DataState.none,
         errorInFilter: false,
       );
       return;
     }
     //
-    if (this.blockDataState == DataState.error) {
+    if (this.dataState == DataState.error) {
       print(
-          "        ~~~~~~~> IGNORED --> this.blockDataState == DataState.error - [$name]");
+          "        ~~~~~~~> IGNORED --> this.dataState == DataState.error - [$name]");
       this.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: thisXBlock,
-        qryDataState: DataState.error,
+        blkDataState: DataState.error,
         frmDataState: DataState.none,
         errorInFilter: false,
       );
@@ -1173,7 +1173,7 @@ abstract class Block<
       print("        ~~~~~~~> candidateCurrentItem == null - [$name]");
       this.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: thisXBlock,
-        qryDataState: DataState.ready,
+        blkDataState: DataState.ready,
         frmDataState: DataState.none,
         errorInFilter: false,
       );
@@ -2518,7 +2518,7 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   void showBlockErrorViewerDialog(BuildContext context) {
-    if (blockDataState != DataState.error ||
+    if (dataState != DataState.error ||
         _blockErrorInfo == null ||
         _blockErrorInfo!.blockErrorMethod != BlockErrorMethod.callApiQuery) {
       return;
@@ -3296,7 +3296,7 @@ abstract class Block<
   void __setChildrenForParent() {
     try {
       Object? itemParent = parent?.currentItemDetail;
-      if (itemParent != null && this.blockDataState == DataState.ready) {
+      if (itemParent != null && this.dataState == DataState.ready) {
         setChildrenForParent(
           currentItemOfParentBlock: itemParent,
           items: this.items,
@@ -4454,7 +4454,7 @@ abstract class Block<
         errCode: BlockSilentActionPrecheck.busy,
       );
     }
-    switch (blockDataState) {
+    switch (dataState) {
       case DataState.pending:
         return Actionable<BlockSilentActionPrecheck>.no(
           errCode: BlockSilentActionPrecheck.blockInPendingState,
@@ -4487,7 +4487,7 @@ abstract class Block<
         errCode: BlockMultiItemsCreationPrecheck.busy,
       );
     }
-    switch (blockDataState) {
+    switch (dataState) {
       case DataState.pending:
         return Actionable<BlockMultiItemsCreationPrecheck>.no(
           errCode: BlockMultiItemsCreationPrecheck.blockInPendingState,
@@ -4545,7 +4545,7 @@ abstract class Block<
         );
       }
     }
-    switch (blockDataState) {
+    switch (dataState) {
       case DataState.pending:
         return Actionable<BlockItemCreationPrecheck>.no(
           errCode: BlockItemCreationPrecheck.blockInPendingState,
@@ -4618,7 +4618,7 @@ abstract class Block<
         errCode: BlockItemEditPrecheck.busy,
       );
     }
-    switch (blockDataState) {
+    switch (dataState) {
       case DataState.pending:
         return Actionable<BlockItemEditPrecheck>.no(
           errCode: BlockItemEditPrecheck.inPendingState,
@@ -4670,7 +4670,7 @@ abstract class Block<
         errCode: BlockQuickItemUpdatePrecheck.busy,
       );
     }
-    switch (blockDataState) {
+    switch (dataState) {
       case DataState.pending:
         return Actionable<BlockQuickItemUpdatePrecheck>.no(
           errCode: BlockQuickItemUpdatePrecheck.blockInPendingState,
@@ -4730,7 +4730,7 @@ abstract class Block<
         errCode: BlockSilentItemUpdatePrecheck.busy,
       );
     }
-    switch (blockDataState) {
+    switch (dataState) {
       case DataState.pending:
         return Actionable<BlockSilentItemUpdatePrecheck>.no(
           errCode: BlockSilentItemUpdatePrecheck.blockInPendingState,
@@ -4788,7 +4788,7 @@ abstract class Block<
         errCode: BlockQuickItemCreationPrecheck.busy,
       );
     }
-    switch (blockDataState) {
+    switch (dataState) {
       case DataState.pending:
         return Actionable<BlockQuickItemCreationPrecheck>.no(
           errCode: BlockQuickItemCreationPrecheck.blockInPendingState,
@@ -4838,7 +4838,7 @@ abstract class Block<
         errCode: BlockSilentItemCreationPrecheck.busy,
       );
     }
-    switch (blockDataState) {
+    switch (dataState) {
       case DataState.pending:
         return Actionable<BlockSilentItemCreationPrecheck>.no(
           errCode: BlockSilentItemCreationPrecheck.blockInPendingState,

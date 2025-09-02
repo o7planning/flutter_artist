@@ -104,9 +104,9 @@ class BlockOrScalar extends Equatable {
 
   DataState get dataState {
     if (block != null) {
-      return block!.blockDataState;
+      return block!.dataState;
     } else {
-      return scalar!.scalarDataState;
+      return scalar!.dataState;
     }
   }
 

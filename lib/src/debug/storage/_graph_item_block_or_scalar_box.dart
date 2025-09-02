@@ -378,7 +378,7 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
     return Row(
       children: [
         Expanded(
-          child: _buildBlockDataState(widget.blockOrScalar),
+          child: _buildDataState(widget.blockOrScalar),
         ),
         if (widget.blockOrScalar.block?.formModel != null)
           const SizedBox(width: 5),
@@ -445,7 +445,7 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
     }
   }
 
-  Widget _buildBlockDataState(BlockOrScalar blockOrScalar) {
+  Widget _buildDataState(BlockOrScalar blockOrScalar) {
     final DataState dataState = blockOrScalar.dataState;
     bool active = blockOrScalar.hasActiveUIComponent();
     //

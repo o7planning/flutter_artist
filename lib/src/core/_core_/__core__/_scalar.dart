@@ -124,7 +124,7 @@ abstract class Scalar<
 
   ScalarErrorInfo? get scalarErrorInfo => _scalarErrorInfo;
 
-  DataState get scalarDataState => __scalarData._scalarDataState;
+  DataState get dataState => __scalarData._scalarDataState;
 
   FILTER_CRITERIA? get filterCriteria => __scalarData._filterCriteria;
 
@@ -183,13 +183,13 @@ abstract class Scalar<
     bool hasActiveUI = ui.hasActiveUIComponent();
     QryHint queryHint = thisXScalar.queryHint;
     if (queryHint != QryHint.force) {
-      if (this.scalarDataState != DataState.ready && hasActiveUI) {
+      if (this.dataState != DataState.ready && hasActiveUI) {
         queryHint = QryHint.force;
       }
     }
     //
     print(
-        ">> ${getClassName(this)}._unitQuery - queryState: $scalarDataState, queryHint: ${thisXScalar.queryHint}");
+        ">> ${getClassName(this)}._unitQuery - queryState: $this.dataState, queryHint: ${thisXScalar.queryHint}");
     //
     if (queryHint == QryHint.none) {
       return;
@@ -199,9 +199,9 @@ abstract class Scalar<
       return;
     }
     //
-    // this.scalarDataState != DataState.ready || thisXScalar.queryHint
+    // this.dataState != DataState.ready || thisXScalar.queryHint
     //
-    DataState newScalarDataState = this.scalarDataState;
+    DataState newScalarDataState = this.dataState;
     //
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: false,
@@ -274,7 +274,7 @@ abstract class Scalar<
       isQueryError = true;
       //
       final scalarErrorInfo = ScalarErrorInfo(
-        scalarDataState: scalarDataState,
+        scalarDataState: this.dataState,
         scalarErrorMethod: callApiQueryMethod,
         error: e, // AppError, ApiError or others.
         errorStackTrace: stackTrace,
@@ -426,7 +426,7 @@ abstract class Scalar<
 
   @_RootMethodAnnotation()
   void showScalarErrorViewerDialog(BuildContext context) {
-    if (scalarDataState != DataState.error ||
+    if (dataState != DataState.error ||
         _scalarErrorInfo == null ||
         _scalarErrorInfo!.scalarErrorMethod != ScalarErrorMethod.callApiQuery) {
       return;
