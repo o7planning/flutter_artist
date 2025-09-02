@@ -183,7 +183,7 @@ _ForceReloadFormState _calculateFormState({
                     //
                     forceReloadForm = false; // (**??**)
                   }
-                  // formModel.formDataState == DataState.ready
+                  // formModel.dataState == DataState.ready
                   else {
                     DebugPrint.printDebugState(DebugCat.dataLoad,
                         "@~~~> ${getClassName(block)} ~~~~~> FRM 0.1.2.2.1.2.2: formLoadTimeUIActive: READY");
@@ -358,7 +358,7 @@ _ForceReloadFormState _calculateFormState({
                     //
                     forceReloadForm = false; // (**??**)
                   }
-                  // formModel.formDataState == ready.
+                  // formModel.dataState == ready.
                   else {
                     DebugPrint.printDebugState(DebugCat.dataLoad,
                         "@~~~> ${getClassName(block)} ~~~~~> FRM 0.2.2.2.1.2.2: formDataState: READY");
@@ -539,7 +539,7 @@ _ForceReloadFormState _calculateFormState({
                     //
                     forceReloadForm = true;
                   }
-                  // formModel.formDataState == DataState.ready
+                  // formModel.dataState == DataState.ready
                   else {
                     DebugPrint.printDebugState(DebugCat.dataLoad,
                         "@~~~> ${getClassName(block)} ~~~~~> FRM 1.1.2.2.1.2.2: formLoadTimeUIActive: READY");
@@ -716,7 +716,7 @@ _ForceReloadFormState _calculateFormState({
                     //
                     forceReloadForm = true;
                   }
-                  // formModel.formDataState == ready.
+                  // formModel.dataState == ready.
                   else {
                     DebugPrint.printDebugState(DebugCat.dataLoad,
                         "@~~~> ${getClassName(block)} ~~~~~> FRM 1.2.2.2.1.2.2: formDataState: READY");
@@ -891,7 +891,7 @@ _ForceReloadFormState _calculateFormState({
                     // Test Cases: [43a] - _test_false2_productScreen_refreshProduct_1
                     forceReloadForm = true;
                   }
-                  // formModel.formDataState == ready.
+                  // formModel.dataState == ready.
                   else {
                     DebugPrint.printDebugState(DebugCat.dataLoad,
                         "@~~~> ${getClassName(block)} ~~~~~> FRM 2.1.2.2.1.2.2: formDataState: READY");
@@ -1062,7 +1062,7 @@ _ForceReloadFormState _calculateFormState({
                     );
                     forceReloadForm = true;
                   }
-                  // formModel.formDataState == ready.
+                  // formModel.dataState == ready.
                   else {
                     DebugPrint.printDebugState(DebugCat.dataLoad,
                         "@~~~> ${getClassName(block)} ~~~~~> FRM 2.2.2.2.1.1.2: formDataState: READY");
@@ -1241,7 +1241,7 @@ _ForceReloadFormState _calculateFormState({
                     );
                     forceReloadForm = true;
                   }
-                  // formModel.formDataState == ready.
+                  // formModel.dataState == ready.
                   else {
                     DebugPrint.printDebugState(DebugCat.dataLoad,
                         "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.2.2.1.2.2: formDataState: READY");
@@ -1273,7 +1273,7 @@ _ForceReloadFormState _calculateFormState({
                   // Test Case: [43a]
                   forceReloadForm = false;
                 }
-                // formModel.formDataState == ready.
+                // formModel.dataState == ready.
                 else {
                   DebugPrint.printDebugState(DebugCat.dataLoad,
                       "@~~~> ${getClassName(block)} ~~~~~> FRM 3.1.2.2.2.2: formDataState: READY");
@@ -1433,7 +1433,7 @@ _ForceReloadFormState _calculateFormState({
                     );
                     forceReloadForm = true;
                   }
-                  // formModel.formDataState == ready.
+                  // formModel.dataState == ready.
                   else {
                     DebugPrint.printDebugState(DebugCat.dataLoad,
                         "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2.2.1.2.2: formDataState: READY");
@@ -1463,7 +1463,7 @@ _ForceReloadFormState _calculateFormState({
                   );
                   forceReloadForm = true;
                 }
-                // formModel.formDataState == ready.
+                // formModel.dataState == ready.
                 else {
                   DebugPrint.printDebugState(DebugCat.dataLoad,
                       "@~~~> ${getClassName(block)} ~~~~~> FRM 3.2.2.2.2.2: formDataState: READY");
