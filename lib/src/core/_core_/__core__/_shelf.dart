@@ -48,6 +48,16 @@ abstract class Shelf extends _Core {
     return ret;
   }
 
+  List<Block> get leafBlocks {
+    List<Block> ret = [];
+    for (Block block in __blockMap.values) {
+      if (block.childBlocks.isEmpty) {
+        ret.add(block);
+      }
+    }
+    return ret;
+  }
+
   bool _isStructError = false;
 
   String? _structError;
