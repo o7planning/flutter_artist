@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class XList<ID, ITEM> extends XData<ID, ITEM, List<ITEM>> {
+class ListXData<ID, ITEM> extends XData<ID, ITEM, List<ITEM>> {
   final List<ITEM> _items;
 
   List<ITEM> get items => [..._items];
@@ -13,27 +13,27 @@ class XList<ID, ITEM> extends XData<ID, ITEM, List<ITEM>> {
 
   List<ITEM>? get candidateSelectedItems => _candidateSelectedItems;
 
-  XList({
+  ListXData({
     required List<ITEM> items,
     required super.getItemId,
   }) : _items = items;
 
-  XList.fromPageData({
+  ListXData.fromPageData({
     required PageData<ITEM>? pageData,
     required super.getItemId,
   }) : _items = pageData?.items ?? [];
 
-  XList.ofItems({
+  ListXData.ofItems({
     required List<ITEM> items,
     required super.getItemId,
   }) : _items = items;
 
-  XList.ofItem({
+  ListXData.ofItem({
     required ITEM item,
     required super.getItemId,
   }) : _items = [item];
 
-  XList.empty({
+  ListXData.empty({
     required super.getItemId,
   }) : _items = [];
 

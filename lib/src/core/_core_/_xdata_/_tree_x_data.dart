@@ -1,6 +1,7 @@
 part of '../core.dart';
 
-class XTree<ID, TREE_ITEM, TREE_DATA> extends XData<ID, TREE_ITEM, TREE_DATA> {
+class TreeXData<ID, TREE_ITEM, TREE_DATA>
+    extends XData<ID, TREE_ITEM, TREE_DATA> {
   final TREE_DATA treeData;
 
   List<TREE_ITEM> Function() getRootTreeItems;
@@ -8,7 +9,7 @@ class XTree<ID, TREE_ITEM, TREE_DATA> extends XData<ID, TREE_ITEM, TREE_DATA> {
   void Function(TREE_ITEM item) addNotFoundTreeItem;
   void Function(TREE_ITEM item) removeNotFoundTreeItem;
 
-  XTree({
+  TreeXData({
     required this.treeData,
     required super.getItemId,
     required this.getRootTreeItems,

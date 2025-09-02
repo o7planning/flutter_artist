@@ -26,7 +26,7 @@ class _DefaultFilterModel
   }
 
   @override
-  Future<XList?> callApiLoadMultiOptCriterionXData({
+  Future<ListXData?> callApiLoadMultiOptCriterionXData({
     required String multiOptCriterionName,
     required Object? parentMultiOptCriterionValue,
     required EmptyFilterInput? filterInput,

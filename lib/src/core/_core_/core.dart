@@ -475,9 +475,9 @@ part '_utils_/_app_utils.dart';
 
 part '_xdata_/_x_data.dart';
 
-part '_xdata_/_x_list.dart';
+part '_xdata_/_list_x_data.dart';
 
-part '_xdata_/_x_tree.dart';
+part '_xdata_/_tree_x_data.dart';
 
 // *****************************************************************************
 // *****************************************************************************
