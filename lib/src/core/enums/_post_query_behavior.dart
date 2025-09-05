@@ -10,6 +10,7 @@ enum PostQueryBehavior {
   clearCurrentItem,
 
   /// Create new Item.
+  @Deprecated("Xoa di?")
   createNewItem,
 
   /// Default behavior.

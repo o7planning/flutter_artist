@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class MultiOptCriterion extends Criterion {
+class MultiOptCriterion<V> extends Criterion<V> {
   late final MultiOptCriterion? parent;
 
   ///
