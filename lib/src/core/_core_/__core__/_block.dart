@@ -1074,7 +1074,7 @@ abstract class Block<
   @_BlockSelectNextItemAsCurrentAnnotation()
   @_BlockSelectFirstItemAsCurrentAnnotation()
   @_BlockSelectPreviousItemAsCurrentAnnotation()
-  Future<void> _unitSelectItemAsCurrent({
+  Future<void> _unitSetItemAsCurrent({
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required CurrentItemSelectionType currentItemSelectionType,
     required List<ITEM> newQueriedList,
@@ -2787,13 +2787,13 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockSelectItemAsCurrentAnnotation()
-  Future<BlockItemCurrSelectionResult<ITEM>> setItemAsCurrentThenRefresh({
+  Future<BlockItemCurrSelectionResult<ITEM>> refreshItemThenSetAsCurrent({
     required ITEM item,
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
     return await __refreshToShowOrEditItemAsCurrent(
-      methodName: "setItemAsCurrentThenRefresh",
+      methodName: "refreshItemThenSetAsCurrent",
       item: item,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.invalidTarget,
       forceForm: forceLoadForm,
@@ -3811,12 +3811,12 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockSelectFirstItemAsCurrentAnnotation()
-  Future<BlockItemCurrSelectionResult<ITEM>> setFirstItemAsCurrentThenRefresh({
+  Future<BlockItemCurrSelectionResult<ITEM>> refreshFirstItemThenSetAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
     return __refreshToShowOrEditItemAsCurrent(
-      methodName: "setFirstItemAsCurrentThenRefresh",
+      methodName: "refreshFirstItemThenSetAsCurrent",
       item: firstItem,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
       forceForm: forceLoadForm,
@@ -3830,14 +3830,14 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockSelectNextItemAsCurrentAnnotation()
-  Future<BlockItemCurrSelectionResult<ITEM>> setNextItemAsCurrentThenRefresh({
+  Future<BlockItemCurrSelectionResult<ITEM>> refreshNextItemThenSetAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
     ITEM? nextItem = nextSiblingItem;
     //
     return __refreshToShowOrEditItemAsCurrent(
-      methodName: "setNextItemAsCurrentThenRefresh",
+      methodName: "refreshNextItemThenSetAsCurrent",
       item: nextItem,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
       forceForm: forceLoadForm,
@@ -3851,14 +3851,14 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockSelectPreviousItemAsCurrentAnnotation()
-  Future<BlockItemCurrSelectionResult<ITEM>> selectPreviousItemAsCurrent({
+  Future<BlockItemCurrSelectionResult<ITEM>> refreshPreviousItemThenSetAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
     ITEM? previousItem = previousSiblingItem;
     //
     return __refreshToShowOrEditItemAsCurrent(
-      methodName: "selectPreviousItemAsCurrent",
+      methodName: "refreshPreviousItemThenSetAsCurrent",
       item: previousItem,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
       forceForm: forceLoadForm,

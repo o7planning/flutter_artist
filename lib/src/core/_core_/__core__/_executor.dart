@@ -150,7 +150,7 @@ class _Executor {
     }
     // Block Select Item as Current:
     else if (taskUnit is _BlockSelectAsCurrentTaskUnit) {
-      await taskUnit.xBlock.block._unitSelectItemAsCurrent(
+      await taskUnit.xBlock.block._unitSetItemAsCurrent(
         currentItemSelectionType: taskUnit.currentItemSelectionType,
         newQueriedList: taskUnit.newQueriedList,
         candidateItem: taskUnit.candidateItem,
