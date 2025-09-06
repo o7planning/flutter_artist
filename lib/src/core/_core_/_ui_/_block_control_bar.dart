@@ -3,15 +3,7 @@ part of '../core.dart';
 class BlockControlBar extends _RefreshableWidget {
   final EdgeInsets padding;
   final Block block;
-  final bool allowRefreshButton;
-  final bool allowQueryButton;
-  final bool allowCreateButton;
-  final bool allowSaveButton;
-  final bool allowDeleteButton;
-  final bool allowFormInfoButton;
-  final bool allowBackButton;
-  final bool allowFilterCriteriaButton;
-  final bool allowDebugButton;
+  final BlockControlBarConfig config;
 
   const BlockControlBar({
     super.key,
@@ -19,15 +11,7 @@ class BlockControlBar extends _RefreshableWidget {
     required super.ownerClassInstance,
     required super.description,
     required this.block,
-    required this.allowRefreshButton,
-    required this.allowQueryButton,
-    required this.allowCreateButton,
-    required this.allowSaveButton,
-    required this.allowDeleteButton,
-    required this.allowBackButton,
-    required this.allowFormInfoButton,
-    this.allowFilterCriteriaButton = false,
-    this.allowDebugButton = false,
+    required this.config,
   });
 
   @override
@@ -102,26 +86,26 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
     //
     return _buildBreadCrumb(
       children: [
-        if (widget.block.formModel != null && widget.allowCreateButton)
+        if (widget.block.formModel != null && widget.config.allowCreateButton)
           _ControlBarButton(
             tooltip: "Create",
             iconData: FaIconConstants.formCreateIconData,
             onAction: widget.block.isPreparingFormCreation,
-            onPressed: widget.allowCreateButton && createActionable.yes
+            onPressed: widget.config.allowCreateButton && createActionable.yes
                 ? () {
                     _prepareFormToCreateItem(widget.block);
                   }
                 : null,
           ),
-        if (widget.allowDeleteButton)
+        if (widget.config.allowDeleteButton)
           _ControlBarButton(
             tooltip: "Delete",
             iconData: FaIconConstants.formDeleteIconData,
-            iconColor: widget.allowDeleteButton && deleteActionable.yes
+            iconColor: widget.config.allowDeleteButton && deleteActionable.yes
                 ? Colors.red
                 : Colors.black26,
             onAction: widget.block.isDeleting,
-            onPressed: widget.allowDeleteButton && deleteActionable.yes
+            onPressed: widget.config.allowDeleteButton && deleteActionable.yes
                 ? () {
                     _doDelete(widget.block);
                   }
@@ -147,17 +131,17 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             direction: Axis.horizontal,
           ),
           children: [
-            if (widget.allowBackButton)
+            if (widget.config.allowBackButton)
               _ControlBarButton(
                 tooltip: "Back",
                 iconData: FaIconConstants.formBackIconData,
                 onAction: false,
-                onPressed:
-                    widget.allowBackButton && Navigator.of(context).canPop()
-                        ? () {
-                            _back(context);
-                          }
-                        : null,
+                onPressed: widget.config.allowBackButton &&
+                        Navigator.of(context).canPop()
+                    ? () {
+                        _back(context);
+                      }
+                    : null,
               ),
             if (widget.block.formModel != null &&
                 widget.block.formModel!.dataState == DataState.error)
@@ -221,23 +205,23 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
     //
     return _buildBreadCrumb(
       children: [
-        if (widget.allowRefreshButton)
+        if (widget.config.allowRefreshButton)
           _ControlBarButton(
             tooltip: "Refresh Current Item",
             iconData: FaIconConstants.formRefreshIconData,
             onAction: widget.block.isRefreshingCurrentItem,
-            onPressed: widget.allowRefreshButton && refreshActionable.yes
+            onPressed: widget.config.allowRefreshButton && refreshActionable.yes
                 ? () {
                     _refreshCurrentItem(widget.block);
                   }
                 : null,
           ),
-        if (widget.allowQueryButton)
+        if (widget.config.allowQueryButton)
           _ControlBarButton(
             tooltip: "Re Query",
             iconData: FaIconConstants.formQueryIconData,
             onAction: widget.block.isQuerying,
-            onPressed: widget.allowQueryButton && queryActionable.yes
+            onPressed: widget.config.allowQueryButton && queryActionable.yes
                 ? () {
                     _queryBlock(widget.block);
                   }
@@ -259,23 +243,23 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
     //
     return _buildBreadCrumb(
       children: [
-        if (widget.block.formModel != null && widget.allowSaveButton)
+        if (widget.block.formModel != null && widget.config.allowSaveButton)
           _ControlBarButton(
             tooltip: "Save",
             iconData: FaIconConstants.formSaveIconData,
             onAction: widget.block.__isSaving,
-            onPressed: widget.allowSaveButton && saveActionable.yes
+            onPressed: widget.config.allowSaveButton && saveActionable.yes
                 ? () {
                     _saveForm(widget.block);
                   }
                 : null,
           ),
-        if (widget.block.formModel != null && widget.allowSaveButton)
+        if (widget.block.formModel != null && widget.config.allowSaveButton)
           _ControlBarButton(
             tooltip: "Reset",
             iconData: FaIconConstants.formCleanIconData,
             onAction: false,
-            onPressed: widget.allowSaveButton && resetActionable.yes
+            onPressed: widget.config.allowSaveButton && resetActionable.yes
                 ? () {
                     _resetForm(widget.block);
                   }
@@ -296,13 +280,13 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
     //
     return _buildBreadCrumb(
       children: [
-        if (widget.allowFilterCriteriaButton &&
+        if (widget.config.allowFilterCriteriaButton &&
             widget.block.canShowFilterCriteria())
           _ControlBarButton(
             tooltip: "Current Filter Criteria of ${getClassName(widget.block)}",
             iconData: FaIconConstants.filterCriteriaIconData,
             onAction: false,
-            onPressed: widget.allowFilterCriteriaButton
+            onPressed: widget.config.allowFilterCriteriaButton
                 ? () {
                     FilterCriteriaDialog.showBlockFilterCriteriaDialog(
                       context: context,
@@ -311,23 +295,23 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
                   }
                 : null,
           ),
-        if (widget.allowFormInfoButton && formInfoActionable.yes)
+        if (widget.config.allowFormInfoButton && formInfoActionable.yes)
           _ControlBarButton(
             tooltip: "Form Data",
             iconData: FaIconConstants.blockIconData,
             onAction: false,
-            onPressed: widget.allowFormInfoButton
+            onPressed: widget.config.allowFormInfoButton
                 ? () {
                     _showFormInfo(context, widget.block);
                   }
                 : null,
           ),
-        if (widget.allowDebugButton)
+        if (widget.config.allowDebugButton)
           _ControlBarButton(
             tooltip: "Debug",
             iconData: FaIconConstants.restDebugIconData,
             onAction: false,
-            onPressed: widget.allowDebugButton
+            onPressed: widget.config.allowDebugButton
                 ? () {
                     _showDebugDialog(context, widget.block);
                   }

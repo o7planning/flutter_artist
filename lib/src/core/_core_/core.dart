@@ -373,6 +373,8 @@ part '_ui_/_activity_fragment_widget_builder.dart';
 
 part '_ui_/_block_control_bar.dart';
 
+part '_ui_/_block_control_bar_config.dart';
+
 part '_ui_/_block_fragment_view.dart';
 
 part '_ui_/_block_fragment_view_builder.dart';

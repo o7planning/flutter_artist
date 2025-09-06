@@ -2861,8 +2861,7 @@ abstract class Block<
   @_BlockQueryNextPageAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockQueryResult> queryNextPage({
-    PostQueryBehavior postQueryBehavior =
-        PostQueryBehavior.setAnItemAsCurrent,
+    PostQueryBehavior postQueryBehavior = PostQueryBehavior.setAnItemAsCurrent,
   }) async {
     if (filterModel != null && filterModel!._lockAddMoreQuery) {
       return BlockQueryResult._queryBlockedTemporarily();
@@ -2899,8 +2898,7 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockQueryPreviousPageAnnotation()
   Future<BlockQueryResult> queryPreviousPage({
-    PostQueryBehavior postQueryBehavior =
-        PostQueryBehavior.setAnItemAsCurrent,
+    PostQueryBehavior postQueryBehavior = PostQueryBehavior.setAnItemAsCurrent,
   }) async {
     if (filterModel != null && filterModel!._lockAddMoreQuery) {
       return BlockQueryResult._queryBlockedTemporarily();
@@ -2937,8 +2935,7 @@ abstract class Block<
   @_BlockQueryMorePageAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockQueryResult> queryMore({
-    PostQueryBehavior postQueryBehavior =
-        PostQueryBehavior.setAnItemAsCurrent,
+    PostQueryBehavior postQueryBehavior = PostQueryBehavior.setAnItemAsCurrent,
   }) async {
     if (filterModel != null && filterModel!._lockAddMoreQuery) {
       return BlockQueryResult._queryBlockedTemporarily();
@@ -3851,7 +3848,8 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockSelectPreviousItemAsCurrentAnnotation()
-  Future<BlockItemCurrSelectionResult<ITEM>> refreshPreviousItemThenSetAsCurrent({
+  Future<BlockItemCurrSelectionResult<ITEM>>
+      refreshPreviousItemThenSetAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
