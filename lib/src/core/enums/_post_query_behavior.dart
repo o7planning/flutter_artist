@@ -14,13 +14,13 @@ enum PostQueryBehavior {
   createNewItem,
 
   /// Default behavior.
-  selectAnItemAsCurrentIfNeed,
+  setAnItemAsCurrentIfNeed,
 
   /// Select an available item in the List or switch to non-selected if List is empty.
-  selectAnItemAsCurrent,
+  setAnItemAsCurrent,
 
   /// Select an available item in the List and prepare form to edit.
-  selectAnItemAsCurrentAndLoadForm;
+  setAnItemAsCurrentThenLoadForm;
 
   CurrentItemSelectionType toCurrentItemSelectionType() {
     switch (this) {
@@ -30,11 +30,11 @@ enum PostQueryBehavior {
         return CurrentItemSelectionType.doNothing;
       case PostQueryBehavior.createNewItem:
         return CurrentItemSelectionType.doNothing;
-      case PostQueryBehavior.selectAnItemAsCurrentIfNeed:
+      case PostQueryBehavior.setAnItemAsCurrentIfNeed:
         return CurrentItemSelectionType.selectAnItemAsCurrentIfNeed;
-      case PostQueryBehavior.selectAnItemAsCurrent:
+      case PostQueryBehavior.setAnItemAsCurrent:
         return CurrentItemSelectionType.selectAnItemAsCurrent;
-      case PostQueryBehavior.selectAnItemAsCurrentAndLoadForm:
+      case PostQueryBehavior.setAnItemAsCurrentThenLoadForm:
         return CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm;
     }
   }

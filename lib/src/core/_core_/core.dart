@@ -580,16 +580,16 @@ class _BlockQueryAndPrepareToCreateAnnotation {
   const _BlockQueryAndPrepareToCreateAnnotation();
 }
 
-class _BlockRefreshAndSelectFirstItemAsCurrentAnnotation {
-  const _BlockRefreshAndSelectFirstItemAsCurrentAnnotation();
+class _BlockSelectFirstItemAsCurrentAnnotation {
+  const _BlockSelectFirstItemAsCurrentAnnotation();
 }
 
-class _BlockRefreshAndSelectNextItemAsCurrentAnnotation {
-  const _BlockRefreshAndSelectNextItemAsCurrentAnnotation();
+class _BlockSelectNextItemAsCurrentAnnotation {
+  const _BlockSelectNextItemAsCurrentAnnotation();
 }
 
-class _BlockRefreshAndSelectPreviousItemAsCurrentAnnotation {
-  const _BlockRefreshAndSelectPreviousItemAsCurrentAnnotation();
+class _BlockSelectPreviousItemAsCurrentAnnotation {
+  const _BlockSelectPreviousItemAsCurrentAnnotation();
 }
 
 class _BlockDeleteSelectedItemsAnnotation {

@@ -3,9 +3,9 @@ part of '../core.dart';
 @_TaskUnitClassAnnotation()
 @_BlockRefreshCurrentItemAnnotation()
 @_BlockSelectItemAsCurrentAnnotation()
-@_BlockRefreshAndSelectNextItemAsCurrentAnnotation()
-@_BlockRefreshAndSelectFirstItemAsCurrentAnnotation()
-@_BlockRefreshAndSelectPreviousItemAsCurrentAnnotation()
+@_BlockSelectNextItemAsCurrentAnnotation()
+@_BlockSelectFirstItemAsCurrentAnnotation()
+@_BlockSelectPreviousItemAsCurrentAnnotation()
 class _BlockSelectAsCurrentTaskUnit<ITEM extends Object>
     extends _ResultedSTaskUnit<BlockItemCurrSelectionResult<ITEM>> {
   final XBlock xBlock;

@@ -1035,13 +1035,13 @@ abstract class Block<
         switch (postQueryBehavior) {
           case PostQueryBehavior.doNothing:
             currentItemSelectionType = CurrentItemSelectionType.doNothing;
-          case PostQueryBehavior.selectAnItemAsCurrentIfNeed:
+          case PostQueryBehavior.setAnItemAsCurrentIfNeed:
             currentItemSelectionType =
                 CurrentItemSelectionType.selectAnItemAsCurrentIfNeed;
-          case PostQueryBehavior.selectAnItemAsCurrent:
+          case PostQueryBehavior.setAnItemAsCurrent:
             currentItemSelectionType =
                 CurrentItemSelectionType.selectAnItemAsCurrent;
-          case PostQueryBehavior.selectAnItemAsCurrentAndLoadForm:
+          case PostQueryBehavior.setAnItemAsCurrentThenLoadForm:
             currentItemSelectionType =
                 CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm;
           case PostQueryBehavior.clearCurrentItem:
@@ -1071,9 +1071,9 @@ abstract class Block<
   @_FormModelLoadFormAnnotation()
   @_BlockRefreshCurrentItemAnnotation()
   @_BlockSelectItemAsCurrentAnnotation()
-  @_BlockRefreshAndSelectNextItemAsCurrentAnnotation()
-  @_BlockRefreshAndSelectFirstItemAsCurrentAnnotation()
-  @_BlockRefreshAndSelectPreviousItemAsCurrentAnnotation()
+  @_BlockSelectNextItemAsCurrentAnnotation()
+  @_BlockSelectFirstItemAsCurrentAnnotation()
+  @_BlockSelectPreviousItemAsCurrentAnnotation()
   Future<void> _unitSelectItemAsCurrent({
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required CurrentItemSelectionType currentItemSelectionType,
@@ -2787,13 +2787,13 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockSelectItemAsCurrentAnnotation()
-  Future<BlockItemCurrSelectionResult<ITEM>> refreshAndSelectItemAsCurrent({
+  Future<BlockItemCurrSelectionResult<ITEM>> setItemAsCurrentThenRefresh({
     required ITEM item,
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
     return await __refreshToShowOrEditItemAsCurrent(
-      methodName: "refreshAndSelectItemAsCurrent",
+      methodName: "setItemAsCurrentThenRefresh",
       item: item,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.invalidTarget,
       forceForm: forceLoadForm,
@@ -2862,7 +2862,7 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockQueryResult> queryNextPage({
     PostQueryBehavior postQueryBehavior =
-        PostQueryBehavior.selectAnItemAsCurrent,
+        PostQueryBehavior.setAnItemAsCurrent,
   }) async {
     if (filterModel != null && filterModel!._lockAddMoreQuery) {
       return BlockQueryResult._queryBlockedTemporarily();
@@ -2900,7 +2900,7 @@ abstract class Block<
   @_BlockQueryPreviousPageAnnotation()
   Future<BlockQueryResult> queryPreviousPage({
     PostQueryBehavior postQueryBehavior =
-        PostQueryBehavior.selectAnItemAsCurrent,
+        PostQueryBehavior.setAnItemAsCurrent,
   }) async {
     if (filterModel != null && filterModel!._lockAddMoreQuery) {
       return BlockQueryResult._queryBlockedTemporarily();
@@ -2938,7 +2938,7 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockQueryResult> queryMore({
     PostQueryBehavior postQueryBehavior =
-        PostQueryBehavior.selectAnItemAsCurrent,
+        PostQueryBehavior.setAnItemAsCurrent,
   }) async {
     if (filterModel != null && filterModel!._lockAddMoreQuery) {
       return BlockQueryResult._queryBlockedTemporarily();
@@ -3011,7 +3011,7 @@ abstract class Block<
       listBehavior: ListBehavior.replace,
       postQueryBehavior: prepareFormToCreateItem
           ? PostQueryBehavior.createNewItem
-          : PostQueryBehavior.selectAnItemAsCurrent,
+          : PostQueryBehavior.setAnItemAsCurrent,
       suggestedSelection: null,
     );
     //
@@ -3037,7 +3037,7 @@ abstract class Block<
   Future<BlockQueryResult> query({
     ListBehavior listBehavior = ListBehavior.replace,
     PostQueryBehavior postQueryBehavior =
-        PostQueryBehavior.selectAnItemAsCurrentIfNeed,
+        PostQueryBehavior.setAnItemAsCurrentIfNeed,
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
     PageableData? pageable,
@@ -3109,7 +3109,7 @@ abstract class Block<
       filterInput: filterInput,
       pageable: null,
       listBehavior: listBehavior,
-      postQueryBehavior: PostQueryBehavior.selectAnItemAsCurrentAndLoadForm,
+      postQueryBehavior: PostQueryBehavior.setAnItemAsCurrentThenLoadForm,
       suggestedSelection: suggestedSelection,
     );
     //
@@ -3810,14 +3810,13 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
-  @_BlockRefreshAndSelectFirstItemAsCurrentAnnotation()
-  Future<BlockItemCurrSelectionResult<ITEM>>
-      refreshAndSelectFirstItemAsCurrent({
+  @_BlockSelectFirstItemAsCurrentAnnotation()
+  Future<BlockItemCurrSelectionResult<ITEM>> setFirstItemAsCurrentThenRefresh({
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
     return __refreshToShowOrEditItemAsCurrent(
-      methodName: "refreshAndSelectFirstItemAsCurrent",
+      methodName: "setFirstItemAsCurrentThenRefresh",
       item: firstItem,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
       forceForm: forceLoadForm,
@@ -3830,15 +3829,15 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
-  @_BlockRefreshAndSelectNextItemAsCurrentAnnotation()
-  Future<BlockItemCurrSelectionResult<ITEM>> refreshAndSelectNextItemAsCurrent({
+  @_BlockSelectNextItemAsCurrentAnnotation()
+  Future<BlockItemCurrSelectionResult<ITEM>> setNextItemAsCurrentThenRefresh({
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
     ITEM? nextItem = nextSiblingItem;
     //
     return __refreshToShowOrEditItemAsCurrent(
-      methodName: "refreshAndSelectNextItemAsCurrent",
+      methodName: "setNextItemAsCurrentThenRefresh",
       item: nextItem,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
       forceForm: forceLoadForm,
@@ -3851,16 +3850,15 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
-  @_BlockRefreshAndSelectPreviousItemAsCurrentAnnotation()
-  Future<BlockItemCurrSelectionResult<ITEM>>
-      refreshAndSelectPreviousItemAsCurrent({
+  @_BlockSelectPreviousItemAsCurrentAnnotation()
+  Future<BlockItemCurrSelectionResult<ITEM>> selectPreviousItemAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
     ITEM? previousItem = previousSiblingItem;
     //
     return __refreshToShowOrEditItemAsCurrent(
-      methodName: "refreshAndSelectPreviousItemAsCurrent",
+      methodName: "selectPreviousItemAsCurrent",
       item: previousItem,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
       forceForm: forceLoadForm,

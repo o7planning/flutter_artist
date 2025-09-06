@@ -30,7 +30,7 @@ class _FlutterArtist {
   late final LocaleManager localeManager;
 
   PostQueryBehavior _defaultPostQueryBehavior =
-      PostQueryBehavior.selectAnItemAsCurrentIfNeed;
+      PostQueryBehavior.setAnItemAsCurrentIfNeed;
 
   PostQueryBehavior get defaultPostQueryBehavior => _defaultPostQueryBehavior;
 
