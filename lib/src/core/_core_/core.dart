@@ -4,7 +4,7 @@ import 'dart:collection';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart' as cupertino;
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Action;
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
     as dialogs;
@@ -33,7 +33,7 @@ import '../../debug/executor/model/_debug_task_unit.dart';
 import '../../debug/executor/model/_debug_task_unit_queue.dart';
 import '../../debug/storage/_block_or_scalar.dart';
 import '../action/_background_action.dart';
-import '../action/_quick_action.dart';
+import '../action/_action.dart';
 import '../action/block_silent_action.dart';
 import '../action/block_quick_multi_items_creation_action.dart';
 import '../action/block_quick_item_creation_action.dart';

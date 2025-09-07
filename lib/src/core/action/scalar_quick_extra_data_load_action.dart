@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Action;
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '_quick_action.dart';
+import '_action.dart';
 
 abstract class ScalarQuickExtraDataLoadAction<DATA extends Object>
-    extends QuickAction {
+    extends Action {
   const ScalarQuickExtraDataLoadAction({
     required super.needToConfirm,
     required super.actionInfo,

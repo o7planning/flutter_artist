@@ -1,9 +1,9 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 import '../enums/after_silent_action.dart';
-import '_quick_action.dart';
+import '_action.dart';
 
-abstract class BlockSilentAction extends QuickAction {
+abstract class BlockSilentAction extends Action {
   late final BlockSilentActionConfig config;
 
   BlockSilentAction({

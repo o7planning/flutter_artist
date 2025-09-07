@@ -4,11 +4,11 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
 
 import '../typedef/custom_confirmation.dart';
 
-abstract class QuickAction {
+abstract class Action {
   final bool needToConfirm;
   final String? actionInfo;
 
-  const QuickAction({
+  const Action({
     required this.needToConfirm,
     required this.actionInfo,
   });

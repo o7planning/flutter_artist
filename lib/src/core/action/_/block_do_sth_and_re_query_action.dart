@@ -1,13 +1,13 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../_quick_action.dart';
+import '../_action.dart';
 
 ///
 /// Do something and then re-query the Block.
 /// For example: Call an API to create or update an item and then re-query the block.
 ///
 // TODO: Hoàn thành logic.
-abstract class BlockDoSthAndReQueryAction extends QuickAction {
+abstract class BlockDoSthAndReQueryAction extends Action {
   late final BlockDoSthAndReQueryActionConfig config;
 
   BlockDoSthAndReQueryAction({

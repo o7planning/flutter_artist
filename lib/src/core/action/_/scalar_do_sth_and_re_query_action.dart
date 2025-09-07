@@ -1,14 +1,14 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 import '../../enums/after_silent_action.dart';
-import '../_quick_action.dart';
+import '../_action.dart';
 
 ///
 /// Do something and then re-query the Scalar.
 /// For example: Call an API to create or update an item and then re-query the Scalar.
 ///
 // TODO: Hoàn thành logic.
-abstract class ScalarDoSthAndReQueryAction extends QuickAction {
+abstract class ScalarDoSthAndReQueryAction extends Action {
   late final ScalarDoSthAndReQueryActionConfig config;
 
   ScalarDoSthAndReQueryAction({

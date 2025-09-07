@@ -1,7 +1,7 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 import '../_core_/core.dart';
-import '_quick_action.dart';
+import '_action.dart';
 
 ///
 ///
@@ -11,7 +11,7 @@ abstract class BlockQuickItemReplacementAction<
     ID extends Object, //
     ITEM extends Object,
     ITEM_DETAIL extends Object,
-    FILTER_CRITERIA extends FilterCriteria> extends QuickAction {
+    FILTER_CRITERIA extends FilterCriteria> extends Action {
   final ITEM item;
 
   const BlockQuickItemReplacementAction({

@@ -1,14 +1,14 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 import '../../enums/after_silent_action.dart';
-import '../_quick_action.dart';
+import '../_action.dart';
 
 ///
 /// Do something with an Item and and then refresh it.
 /// For Example: Update an Item and then refresh it.
 ///
 // TODO: Hoàn thành logic.
-abstract class BlockDoSthAndRefreshItemAction<ITEM> extends QuickAction {
+abstract class BlockDoSthAndRefreshItemAction<ITEM> extends Action {
   final ITEM item;
 
   late final BlockUpdateItemAndRefreshActionConfig config;
