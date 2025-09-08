@@ -413,6 +413,8 @@ part '_ui_/_refreshable_neutral_view.dart';
 
 part '_ui_/_refreshable_neutral_view_builder.dart';
 
+part '_ui_/_scalar_value_view.dart';
+
 part '_ui_/_scalar_fragment_view.dart';
 
 part '_ui_/_scalar_fragment_view_builder.dart';
