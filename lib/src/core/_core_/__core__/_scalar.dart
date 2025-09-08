@@ -46,6 +46,10 @@ abstract class Scalar<
 
   int get filterCriteriaChangeCount => __scalarData._filterCriteriaChangeCount;
 
+  final List<Scalar> _childScalars = [];
+
+  List<Scalar> get childScalars => [..._childScalars];
+
   ///
   /// Scalar name. It is unique in a Shelf.
   ///
