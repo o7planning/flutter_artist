@@ -21,6 +21,7 @@ part of '../core.dart';
 /// ```
 ///
 abstract class Scalar<
+    ID extends Object,
     VALUE extends Object,
     FILTER_INPUT extends FilterInput, // EmptyFilterInput
     FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
@@ -46,9 +47,59 @@ abstract class Scalar<
 
   int get filterCriteriaChangeCount => __scalarData._filterCriteriaChangeCount;
 
+  late final Scalar? parent;
+
+  String? get parentScalarName => parent?.name;
+
+  bool get isRoot => parent == null;
+
   final List<Scalar> _childScalars = [];
 
   List<Scalar> get childScalars => [..._childScalars];
+
+  List<Scalar> get descendantScalars {
+    List<Scalar> ret = [];
+    for (Scalar childScalar in _childScalars) {
+      ret.add(childScalar);
+      ret.addAll(childScalar.descendantScalars);
+    }
+    return ret;
+  }
+
+  List<Scalar> get ancestorScalars {
+    return ascendingAncestorScalars.reversed.toList();
+  }
+
+  ///
+  /// Ancestor Scalars + this Scalar + descendant Scalars.
+  ///
+  List<Scalar> get lineageScalars {
+    return <Scalar>[...ancestorScalars, this, ...descendantScalars];
+  }
+
+  ///
+  /// Ascending ancestor scalars.
+  ///
+  List<Scalar> get ascendingAncestorScalars {
+    List<Scalar> list = [];
+    Scalar slr = this;
+    while (true) {
+      Scalar? p = slr.parent;
+      if (p == null) {
+        break;
+      }
+      list.add(p);
+      slr = p;
+    }
+    return list;
+  }
+
+  ///
+  /// Descending ancestor scalars.
+  ///
+  List<Scalar> get descendingAncestorScalars {
+    return ascendingAncestorScalars.reversed.toList();
+  }
 
   ///
   /// Scalar name. It is unique in a Shelf.
@@ -117,7 +168,7 @@ abstract class Scalar<
   }
 
   late final __scalarData =
-      _ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
+      _ScalarData<ID, VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
 
   late final _ScalarUIComponents ui = _ScalarUIComponents(scalar: this);
 
@@ -149,15 +200,20 @@ abstract class Scalar<
     required this.description,
     required ScalarConfig config,
     required String? filterModelName,
+    required List<Scalar>? childScalars,
   })  : config = config.copy(),
-        registerFilterModelName = filterModelName;
+        registerFilterModelName = filterModelName {
+    for (Scalar childScalar in _childScalars) {
+      childScalar.parent = this;
+    }
+  }
 
   // ***************************************************************************
 
-  XScalar<VALUE> _createXScalar({
+  XScalar<ID, VALUE> _createXScalar({
     required XFilterModel xFilterModel,
   }) {
-    return XScalar<VALUE>._(
+    return XScalar<ID, VALUE>._(
       scalar: this,
       xFilterModel: xFilterModel,
     );
@@ -513,6 +569,12 @@ abstract class Scalar<
   Type getFilterCriteriaType() {
     return FILTER_CRITERIA;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_AbstractMethodAnnotation()
+  ID getValueId(VALUE value);
 
   // ***************************************************************************
   // ***************************************************************************

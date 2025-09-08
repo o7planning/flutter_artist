@@ -25,9 +25,9 @@ class XShelf {
 
   XBlock? get rootVipXBlock => __rootVipXBlock;
 
-  XScalar? __vipXScalar;
+  XScalar? __rootVipXScalar;
 
-  XScalar? get vipXScalar => __vipXScalar;
+  XScalar? get rootVipXScalar => __rootVipXScalar;
 
   bool get naturalMode => xShelfType == XShelfType.naturalQuery;
 
@@ -38,7 +38,7 @@ class XShelf {
   }
 
   void setVipXScalar({required XScalar xScalar}) {
-    __vipXScalar = xScalar;
+    __rootVipXScalar = xScalar;
   }
 
   // ***************************************************************************
@@ -168,7 +168,7 @@ class XShelf {
         if (xBlock == null) {
           break;
         }
-        bool hasXActiveUI = xBlock.block.ui.hasActiveBlockFragmentWidget(
+        bool hasXActiveUI = xBlock.block.ui.hasActiveBlockFragment(
           alsoCheckChildren: true,
         );
         if (hasXActiveUI) {
@@ -222,13 +222,13 @@ class XShelf {
       bool forceReloadItem = false;
       //
       if (reQryBlock != null) {
-        blockVisible = reQryBlock.ui.hasActiveBlockFragmentWidget(
+        blockVisible = reQryBlock.ui.hasActiveBlockFragment(
           alsoCheckChildren: true,
         );
         queryHint = blockVisible ? QryHint.force : QryHint.markAsPending;
       }
       if (refreshCurrBlock != null) {
-        blockVisible = refreshCurrBlock.ui.hasActiveBlockFragmentWidget(
+        blockVisible = refreshCurrBlock.ui.hasActiveBlockFragment(
           alsoCheckChildren: true,
         );
         forceReloadItem = true;
@@ -259,7 +259,7 @@ class XShelf {
         if (xBlock == null) {
           break;
         }
-        bool hasXActiveUI = xBlock.block.ui.hasActiveBlockFragmentWidget(
+        bool hasXActiveUI = xBlock.block.ui.hasActiveBlockFragment(
           alsoCheckChildren: true,
         );
         if (hasXActiveUI) {
@@ -327,7 +327,7 @@ class XShelf {
         break;
       }
       //
-      final hasXActiveUI = parentXBlock.block.ui.hasActiveBlockFragmentWidget(
+      final hasXActiveUI = parentXBlock.block.ui.hasActiveBlockFragment(
         alsoCheckChildren: true,
       );
       if (hasXActiveUI) {
@@ -392,7 +392,7 @@ class XShelf {
         break;
       }
       //
-      final hasXActiveUI = parentXBlock.block.ui.hasActiveBlockFragmentWidget(
+      final hasXActiveUI = parentXBlock.block.ui.hasActiveBlockFragment(
         alsoCheckChildren: true,
       );
       if (hasXActiveUI) {
@@ -458,7 +458,7 @@ class XShelf {
         break;
       }
       //
-      final hasXActiveUI = parentXBlock.block.ui.hasActiveBlockFragmentWidget(
+      final hasXActiveUI = parentXBlock.block.ui.hasActiveBlockFragment(
         alsoCheckChildren: true,
       );
       if (hasXActiveUI) {
@@ -523,7 +523,7 @@ class XShelf {
         break;
       }
       //
-      final hasXActiveUI = parentXBlock.block.ui.hasActiveBlockFragmentWidget(
+      final hasXActiveUI = parentXBlock.block.ui.hasActiveBlockFragment(
         alsoCheckChildren: true,
       );
       if (hasXActiveUI) {
@@ -583,7 +583,7 @@ class XShelf {
           break;
         }
         //
-        final hasXActiveUI = parentXBlock.block.ui.hasActiveBlockFragmentWidget(
+        final hasXActiveUI = parentXBlock.block.ui.hasActiveBlockFragment(
           alsoCheckChildren: true,
         );
         if (hasXActiveUI) {
@@ -1068,13 +1068,13 @@ class XShelf {
       bool forceReloadCurrItem = false;
       //
       if (reQryBlock != null) {
-        blockVisible = reQryBlock.ui.hasActiveBlockFragmentWidget(
+        blockVisible = reQryBlock.ui.hasActiveBlockFragment(
           alsoCheckChildren: true,
         );
         queryHint = blockVisible ? QryHint.force : QryHint.markAsPending;
       }
       if (refreshCurrBlock != null) {
-        blockVisible = refreshCurrBlock.ui.hasActiveBlockFragmentWidget(
+        blockVisible = refreshCurrBlock.ui.hasActiveBlockFragment(
           alsoCheckChildren: true,
         );
         forceReloadCurrItem = true;
@@ -1111,7 +1111,7 @@ class XShelf {
         if (xBlock == null) {
           break;
         }
-        bool hasXActiveUI = xBlock.block.ui.hasActiveBlockFragmentWidget(
+        bool hasXActiveUI = xBlock.block.ui.hasActiveBlockFragment(
           alsoCheckChildren: true,
         );
         if (hasXActiveUI) {
@@ -1161,20 +1161,20 @@ class XShelf {
   }
 
   void _initQueryTasks() {
-    if (vipXScalar != null && rootVipXBlock != null) {
+    if (rootVipXScalar != null && rootVipXBlock != null) {
       throw "Development Logic Error";
     }
     shelf._debugInitQueryTasksCount++;
     printMe();
     final bool toMainQueue = false;
     //
-    if (vipXScalar != null) {
+    if (rootVipXScalar != null) {
       //
       // Execute vipXScalar first!!
       //
       _addTaskUnit(
         taskUnit: _ScalarQueryTaskUnit(
-          xScalar: vipXScalar!,
+          xScalar: rootVipXScalar!,
         ),
         toMainQueue: toMainQueue,
       );
@@ -1191,7 +1191,7 @@ class XShelf {
     }
     //
     for (XScalar xScalar in allXScalars) {
-      if (xScalar != vipXScalar) {
+      if (xScalar != rootVipXScalar) {
         _addTaskUnit(
           taskUnit: _ScalarQueryTaskUnit(
             xScalar: xScalar,

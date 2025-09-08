@@ -23,9 +23,37 @@ class _ScalarUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveUIComponent() {
-    return _hasActiveScalarFragmentWidgetState() ||
-        _hasActiveControlWidgetState();
+  bool hasActiveUIComponent({bool alsoCheckChildren = false}) {
+    bool active = false;
+    // Filter
+    // if (block.filterModel != null) {
+    //   active = block.filterModel!.ui.hasActiveUIComponent();
+    //   if (active) {
+    //     return true;
+    //   }
+    // }
+    // Scalar Fragment:
+    active = hasActiveScalarFragment(alsoCheckChildren: false);
+    if (active) {
+      return true;
+    }
+    // ControlBar:
+    active = hasActiveControlBarWidget();
+    if (active) {
+      return true;
+    }
+    //
+    if (alsoCheckChildren) {
+      for (Scalar childScalar in scalar._childScalars) {
+        active = childScalar.ui.hasActiveUIComponent(
+          alsoCheckChildren: alsoCheckChildren,
+        );
+        if (active) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   // ***************************************************************************
@@ -67,11 +95,20 @@ class _ScalarUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _hasActiveScalarFragmentWidgetState() {
+  bool hasActiveScalarFragment({required bool alsoCheckChildren}) {
     for (State widgetState in __scalarFragmentWidgetStates.keys) {
       if (widgetState.mounted) {
         bool isShowing = __scalarFragmentWidgetStates[widgetState] ?? false;
         if (isShowing) {
+          return true;
+        }
+      }
+    }
+    if (alsoCheckChildren) {
+      for (Scalar childBlock in scalar._childScalars) {
+        bool active =
+            childBlock.ui.hasActiveScalarFragment(alsoCheckChildren: true);
+        if (active) {
           return true;
         }
       }
@@ -82,7 +119,7 @@ class _ScalarUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _hasActiveControlWidgetState() {
+  bool hasActiveControlBarWidget() {
     for (State widgetState in __scalarControlWidgetStates.keys) {
       if (widgetState.mounted) {
         bool isShowing = __scalarControlWidgetStates[widgetState] ?? false;

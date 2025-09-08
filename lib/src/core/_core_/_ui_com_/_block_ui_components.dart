@@ -77,12 +77,12 @@ class _BlockUIComponents extends _UIComponents {
   bool hasActiveUIComponent({bool alsoCheckChildren = false}) {
     bool active = false;
     // Filter
-    if (block.filterModel != null) {
-      active = block.filterModel!.ui.hasActiveUIComponent();
-      if (active) {
-        return true;
-      }
-    }
+    // if (block.filterModel != null) {
+    //   active = block.filterModel!.ui.hasActiveUIComponent();
+    //   if (active) {
+    //     return true;
+    //   }
+    // }
     // Form
     active =
         block.formModel != null && block.formModel!.ui.hasActiveUIComponent();
@@ -90,12 +90,12 @@ class _BlockUIComponents extends _UIComponents {
       return true;
     }
     // Block Fragment:
-    active = hasActiveBlockFragmentWidget(alsoCheckChildren: false);
+    active = hasActiveBlockFragment(alsoCheckChildren: false);
     if (active) {
       return true;
     }
     // ControlBar:
-    active = hasActiveControlBarWidget();
+    active = hasActiveControlBar();
     if (active) {
       return true;
     }
@@ -126,7 +126,7 @@ class _BlockUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveBlockFragmentWidget({required bool alsoCheckChildren}) {
+  bool hasActiveBlockFragment({required bool alsoCheckChildren}) {
     var map = {...__blockFragmentWidgetStates};
     for (State widgetState in map.keys) {
       if (widgetState.mounted) {
@@ -139,7 +139,7 @@ class _BlockUIComponents extends _UIComponents {
     if (alsoCheckChildren) {
       for (Block childBlock in block._childBlocks) {
         bool active =
-            childBlock.ui.hasActiveBlockFragmentWidget(alsoCheckChildren: true);
+            childBlock.ui.hasActiveBlockFragment(alsoCheckChildren: true);
         if (active) {
           return true;
         }
@@ -151,7 +151,7 @@ class _BlockUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveControlBarWidget() {
+  bool hasActiveControlBar() {
     for (_RefreshableWidgetState controlBarState
         in __controlBarWidgetStates.keys) {
       bool visible =

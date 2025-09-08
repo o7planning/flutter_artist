@@ -18,7 +18,7 @@ class _ShelfUIComponents extends _UIComponents {
     if (hasActive) {
       return true;
     }
-    hasActive = _hasActiveScalarUIComponentCascade(shelf._scalars);
+    hasActive = _hasActiveScalarUIComponentCascade(shelf._rootScalars);
     return hasActive;
   }
 
@@ -35,7 +35,7 @@ class _ShelfUIComponents extends _UIComponents {
     if (hasMounted) {
       return true;
     }
-    hasMounted = _hasMountedScalarUIComponent();
+    hasMounted = _hasMountedScalarUIComponentCascade(shelf._rootScalars);
     if (hasMounted) {
       return true;
     }
@@ -54,8 +54,8 @@ class _ShelfUIComponents extends _UIComponents {
         filterModel.ui.updateAllUIComponents();
       }
       //
-      for (Scalar scalar in shelf._scalars) {
-        scalar.ui.updateAllUIComponents(withoutFilters: true);
+      for (Scalar scalar in shelf._rootScalars) {
+        __updateAllScalarUIComponentsCascade(scalar, withoutFilters: true);
       }
       //
       for (Block block in shelf._rootBlocks) {
@@ -77,9 +77,14 @@ class _ShelfUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _hasMountedScalarUIComponent() {
-    for (Scalar scalar in shelf.scalars) {
+  bool _hasMountedScalarUIComponentCascade(List<Scalar> scalars) {
+    for (Scalar scalar in scalars) {
       if (scalar.ui.hasMountedUIComponent()) {
+        return true;
+      }
+      bool hasMounted =
+          _hasMountedScalarUIComponentCascade(scalar._childScalars);
+      if (hasMounted) {
         return true;
       }
     }
@@ -119,7 +124,7 @@ class _ShelfUIComponents extends _UIComponents {
 
   bool _hasActiveScalarUIComponentCascade(List<Scalar> scalars) {
     for (Scalar scalar in scalars) {
-      if (scalar.ui.hasActiveUIComponent()) {
+      if (scalar.ui.hasActiveUIComponent(alsoCheckChildren: true)) {
         return true;
       }
     }
@@ -142,6 +147,23 @@ class _ShelfUIComponents extends _UIComponents {
 
   void _removeShelfWidgetState({required State widgetState}) {
     __refreshableNeutralViewStates.remove(widgetState);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __updateAllScalarUIComponentsCascade(
+    Scalar scalar, {
+    required bool withoutFilters,
+  }) {
+    scalar.ui.updateAllUIComponents(withoutFilters: withoutFilters);
+    //
+    for (Scalar childScalar in scalar._childScalars) {
+      __updateAllScalarUIComponentsCascade(
+        childScalar,
+        withoutFilters: withoutFilters,
+      );
+    }
   }
 
   // ***************************************************************************

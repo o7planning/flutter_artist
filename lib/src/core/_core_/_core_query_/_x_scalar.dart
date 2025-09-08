@@ -1,18 +1,32 @@
 part of '../core.dart';
 
-class XScalar<VALUE extends Object> {
+class XScalar<ID extends Object, VALUE extends Object> {
   XShelf get xShelf => xFilterModel.xShelf;
 
-  final Scalar<VALUE, FilterInput, FilterCriteria> scalar;
+  final Scalar<ID, VALUE, FilterInput, FilterCriteria> scalar;
 
   final XFilterModel xFilterModel;
+
+  XScalar get rootXScalar {
+    if (parentXScalar == null) {
+      return this;
+    }
+    return parentXScalar!.rootXScalar;
+  }
+
+  late final XScalar? parentXScalar;
+  final List<XScalar> childXScalars = [];
 
   //
 
   QryHint __qryHint = QryHint.none;
 
+  bool isRoot() {
+    return parentXScalar == null;
+  }
+
   bool isVipBranch() {
-    return this == xShelf.vipXScalar;
+    return rootXScalar == xShelf.rootVipXScalar;
   }
 
   void setReQueryDone() {

@@ -29,9 +29,18 @@ abstract class Shelf extends _Core {
 
   final Map<String, Scalar> __scalarMap = {};
 
-  final List<Scalar> _scalars = [];
+  final List<Scalar> _rootScalars = [];
 
-  List<Scalar> get scalars => [..._scalars];
+  List<Scalar> get rootScalars => [..._rootScalars];
+
+  List<Scalar> get scalars {
+    List<Scalar> ret = [];
+    for (Scalar rootScalar in _rootScalars) {
+      ret.add(rootScalar);
+      ret.addAll(rootScalar.descendantScalars);
+    }
+    return ret;
+  }
 
   final Map<String, Block> __blockMap = {};
 
@@ -131,89 +140,11 @@ abstract class Shelf extends _Core {
     //
     // Scalar:
     //
-    final List<Scalar> scalars = _shelfStruct.scalars;
-    for (Scalar scalar in scalars) {
-      if (__scalarMap.containsKey(scalar.name)) {
-        throw ___registerError(
-            "Duplicated Scalar '${scalar.name}' in '${getClassName(this)}'\n"
-            "Double-check ${getClassName(this)}.registerStructure() method");
-      } else {
-        __scalarMap[scalar.name] = scalar;
-      }
-      scalar.shelf = this;
-      _scalars.add(scalar);
-      //
-      if (scalar.registerFilterModelName != null) {
-        FilterModel? filterModel =
-            _shelfStruct.filterModels[scalar.registerFilterModelName!];
-        if (filterModel == null) {
-          throw ___registerError(
-              "FilterModel not found '${scalar.registerFilterModelName}' in '${getClassName(this)}'\n"
-              "Double-check ${getClassName(this)}.registerStructure() method");
-        }
-        //
-        const Type filterInputType = FilterInput;
-        final filterInputBase = filterInputType.toString();
-        final filterInputBF = filterModel.getFilterInputType().toString();
-        final filterInputB = scalar.getFilterInputType().toString();
-        //
-        if (filterInputBF == filterInputBase) {
-          throw ___registerError(
-              "You need to create your own class that extends the '$filterInputBase' class \n"
-              "or use the 'EmptyFilterInput' class to use in the '${getClassName(filterModel)}' declaration \n\n"
-              " >> Currently, ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
-        }
-        //
-        if (filterInputBF != filterInputB) {
-          throw ___registerError(
-              "The Scalar and its FilterModel must have the same FILTER_INPUT type. \n\n"
-              " >> ${getClassName(scalar)}<FILTER_INPUT> = <$filterInputB> \n"
-              " >> ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
-        }
-        // ----------------
-        const Type filterCriteriaType = FilterCriteria;
-        final filterCriteriaBase = filterCriteriaType.toString();
-        final filterCriteriaBF = filterModel.getFilterCriteriaType().toString();
-        final filterCriteriaB = scalar.getFilterCriteriaType().toString();
-        //
-        if (filterCriteriaBF == filterCriteriaBase) {
-          throw ___registerError(
-              "You need to create your own class that extends the '$filterCriteriaBase' class \n"
-              "or use the 'EmptyFilterCriteria' class to use in the '${getClassName(filterModel)}' declaration \n\n"
-              " >> Currently, ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
-        }
-        //
-        if (filterCriteriaBF != filterCriteriaB) {
-          throw ___registerError(
-              "The Scalar and its Filter-Model must have the same FILTER_CRITERIA type. \n\n"
-              " >> ${getClassName(scalar)}<FILTER_CRITERIA> = <$filterCriteriaB> \n"
-              " >> ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
-        }
-        //
-        filterModel._scalars.add(scalar);
-        scalar._registeredOrDefaultFilterModel = filterModel;
-      } else {
-        // Default FilterModel.
-        FilterModel defaultFilterModel = _DefaultFilterModel(
-          name: "${scalar.name}-@-default-scalar-filter-model",
-          shelf: this,
-        );
-        defaultFilterModel._scalars.add(scalar);
-        scalar._registeredOrDefaultFilterModel = defaultFilterModel;
-        //
-        _allFilterModels.add(defaultFilterModel);
-        //
-        const Type emptyFilterCriteriaType = EmptyFilterCriteria;
-        final filterCriteriaEmpty = emptyFilterCriteriaType.toString();
-        final filterCriteriaB = scalar.getFilterCriteriaType().toString();
-        //
-        if (filterCriteriaB != filterCriteriaEmpty) {
-          throw ___registerError(
-              "FILTER_CRITERIA of '${getClassName(scalar)}' scalar must be '$filterCriteriaEmpty' "
-              "because this scalar does not have a FILTER_MODEL. \n\n"
-              " >> Currently, ${getClassName(scalar)}<FILTER_CRITERIA> = <$filterCriteriaB>");
-        }
-      }
+    List<Scalar> rootScalars = _shelfStruct.scalars;
+    for (Scalar rootScalar in rootScalars) {
+      rootScalar.parent = null;
+      _rootScalars.add(rootScalar);
+      __registerScalarCascade(rootScalar);
     }
     //
     // Block:
@@ -356,6 +287,96 @@ abstract class Shelf extends _Core {
               ._addReQueryScalar(listenerScalar);
         }
       }
+    }
+  }
+
+  // ***************************************************************************
+// ***************************************************************************
+
+  void __registerScalarCascade(Scalar scalar) {
+    if (__scalarMap.containsKey(scalar.name)) {
+      throw ___registerError(
+          "Duplicated scalar '${scalar.name}' in '${getClassName(this)}'\n"
+          "Double-check ${getClassName(this)}.registerStructure() method");
+    } else {
+      __scalarMap[scalar.name] = scalar;
+    }
+    //
+    scalar.shelf = this;
+    if (scalar.registerFilterModelName != null) {
+      FilterModel? filterModel =
+          _shelfStruct.filterModels[scalar.registerFilterModelName!];
+      if (filterModel == null) {
+        throw ___registerError(
+            "FilterModel not found '${scalar.registerFilterModelName}' in '${getClassName(this)}'\n"
+            "Double-check ${getClassName(this)}.registerStructure() method");
+      }
+      //
+      //
+      const Type filterInputType = FilterInput;
+      final filterInputBase = filterInputType.toString();
+      final filterInputBF = filterModel.getFilterInputType().toString();
+      final filterInputB = scalar.getFilterInputType().toString();
+      //
+      if (filterInputBF == filterInputBase) {
+        throw ___registerError(
+            "You need to create your own class that extends the '$filterInputBase' class \n"
+            "or use the 'EmptyFilterInput' class to use in the '${getClassName(filterModel)}' declaration \n\n"
+            " >> Currently, ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
+      }
+      //
+      if (filterInputBF != filterInputB) {
+        throw ___registerError(
+            "The Scalar and its FilterModel must have the same FILTER_INPUT type.\n\n"
+            " >> ${getClassName(scalar)}<FILTER_INPUT> = <$filterInputB> \n"
+            " >> ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
+      }
+      // -----------------
+      const Type filterCriteriaType = FilterCriteria;
+      final filterCriteriaBase = filterCriteriaType.toString();
+      final filterCriteriaBF = filterModel.getFilterCriteriaType().toString();
+      final String filterCriteriaB = scalar.getFilterCriteriaType().toString();
+      //
+      if (filterCriteriaBF == filterCriteriaBase) {
+        throw ___registerError(
+            "You need to create your own class that extends from '$filterCriteriaBase' "
+            "as FILTER_CRITERIA for '${getClassName(filterModel)}'\n\n"
+            " >> Currently, ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
+      }
+      //
+      if (filterCriteriaBF != filterCriteriaB) {
+        throw ___registerError(
+            "The Scalar and its Filter-Model must have the same FILTER_CRITERIA type. \n"
+            " >> ${getClassName(scalar)}<FILTER_CRITERIA> = <$filterCriteriaB> \n"
+            " >> ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
+      }
+      //
+      filterModel._scalars.add(scalar);
+      scalar._registeredOrDefaultFilterModel = filterModel;
+    } else {
+      FilterModel defaultFilterModel = _DefaultFilterModel(
+        name: "${scalar.name}-@-default-scalar-filter-model",
+        shelf: this,
+      );
+      defaultFilterModel._scalars.add(scalar);
+      scalar._registeredOrDefaultFilterModel = defaultFilterModel;
+      //
+      _allFilterModels.add(defaultFilterModel);
+      //
+      const Type emptyFilterCriteriaType = EmptyFilterCriteria;
+      final filterCriteriaEmpty = emptyFilterCriteriaType.toString();
+      final filterCriteriaB = scalar.getFilterCriteriaType().toString();
+      //
+      if (filterCriteriaB != filterCriteriaEmpty) {
+        throw ___registerError(
+            "Filter-Criteria of '${getClassName(scalar)}' scalar must be '$filterCriteriaEmpty' "
+            "because this scalar does not have a FILTER_MODEL.\n\n"
+            " >> Currently, ${getClassName(scalar)}<FILTER_CRITERIA> = <$filterCriteriaB>");
+      }
+    }
+    //
+    for (Scalar childScalar in scalar.childScalars) {
+      __registerScalarCascade(childScalar);
     }
   }
 
