@@ -53,7 +53,7 @@ abstract class Scalar<
 
   bool get isRoot => parent == null;
 
-  final List<Scalar> _childScalars = [];
+  final List<Scalar> _childScalars;
 
   List<Scalar> get childScalars => [..._childScalars];
 
@@ -202,7 +202,8 @@ abstract class Scalar<
     required String? filterModelName,
     required List<Scalar>? childScalars,
   })  : config = config.copy(),
-        registerFilterModelName = filterModelName {
+        registerFilterModelName = filterModelName,
+        _childScalars = childScalars ?? [] {
     for (Scalar childScalar in _childScalars) {
       childScalar.parent = this;
     }
@@ -343,7 +344,12 @@ abstract class Scalar<
       //
       thisXScalar.setReQueryDone();
       value = result.data;
-      valueId = value == null ? null : getValueId(value);
+      valueId = value == null
+          ? null
+          : toValueId(
+              filterCriteria: filterCriteriaOfFilterModel,
+              value: value,
+            );
     } catch (e, stackTrace) {
       isQueryError = true;
       //
@@ -645,7 +651,10 @@ abstract class Scalar<
   // ***************************************************************************
 
   @_AbstractMethodAnnotation()
-  ID getValueId(VALUE value);
+  ID toValueId({
+    required FILTER_CRITERIA filterCriteria,
+    required VALUE value,
+  });
 
   // ***************************************************************************
   // ***************************************************************************
