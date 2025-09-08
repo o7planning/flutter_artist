@@ -1448,7 +1448,6 @@ abstract class Block<
         }
       }
     }
-
     //
     for (XBlock childXBlock in thisXBlock.childXBlocks) {
       thisXBlock.xShelf._addTaskUnit(

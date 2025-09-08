@@ -12,6 +12,7 @@ class _ScalarData<
 
   FILTER_CRITERIA? _filterCriteria;
 
+  ID? _valueId;
   VALUE? _value;
 
   DataState _scalarDataState = DataState.pending;
@@ -32,6 +33,7 @@ class _ScalarData<
 
   void _clearWithDataState({required DataState scalarDataState}) {
     _scalarDataState = scalarDataState;
+    _valueId = null;
     _value = null;
     _filterCriteria = null; // ???
   }
@@ -81,10 +83,12 @@ class _ScalarData<
 
   void _updateFrom({
     required FILTER_CRITERIA? filterCriteria,
+    required ID? valueId,
     required VALUE? value,
     required DataState dataState,
   }) {
     __setNewFilterCriteria(filterCriteria);
+    _valueId = valueId;
     _value = value;
     _scalarDataState = dataState;
   }

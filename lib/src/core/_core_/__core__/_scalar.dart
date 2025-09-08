@@ -254,8 +254,12 @@ abstract class Scalar<
     if (queryHint == QryHint.none) {
       return;
     } else if (queryHint == QryHint.markAsPending) {
-      // __scalarData._scalarDataState = DataState.pending;
-      _setToPending();
+      this.__clearWithDataStateAndChildrenToNonCascade(
+        thisXScalar: thisXScalar,
+        scalarDataState: DataState.pending,
+        errorInFilter: false,
+      );
+      thisXScalar.setReQueryDone();
       return;
     }
     //
@@ -296,10 +300,17 @@ abstract class Scalar<
     // Has Error in FilterModel.
     //
     if (filterCriteriaOfFilterModel == null) {
-      // Set Block to error cascade.
-      __clearWithDataState(
+      // __clearWithDataState(
+      //   thisXScalar: thisXScalar,
+      //   scalarDataState: DataState.error,
+      // );
+      // thisXScalar.queryResult._setFilterError();
+
+      // Set Scalar to error cascade.
+      this.__clearWithDataStateAndChildrenToNonCascade(
         thisXScalar: thisXScalar,
         scalarDataState: DataState.error,
+        errorInFilter: true,
       );
       thisXScalar.queryResult._setFilterError();
       return;
@@ -307,12 +318,14 @@ abstract class Scalar<
     //
     // Ready FilterCriteria:
     //
-    bool xCriteriaChanged = this.__scalarData._isXCriteriaChanged(
-          newFilterCriteria: filterCriteriaOfFilterModel,
-        );
+    bool xCriteriaChanged = __scalarData._isXCriteriaChanged(
+      newFilterCriteria: filterCriteriaOfFilterModel,
+    );
     //
     final callApiQueryMethod = ScalarErrorMethod.callApiQuery;
     bool isQueryError = false;
+    final ID? oldValueId = __scalarData._valueId;
+    ID? valueId;
     VALUE? value;
     try {
       __clearScalarError();
@@ -330,6 +343,7 @@ abstract class Scalar<
       //
       thisXScalar.setReQueryDone();
       value = result.data;
+      valueId = value == null ? null : getValueId(value);
     } catch (e, stackTrace) {
       isQueryError = true;
       //
@@ -361,18 +375,43 @@ abstract class Scalar<
     //
     if (isQueryError) {
       newScalarDataState = DataState.error;
-    } else {
-      newScalarDataState = DataState.ready;
+      __setQueryDataWithState(
+        thisXScalar: thisXScalar,
+        filterCriteria: filterCriteriaOfFilterModel,
+        dataState: newScalarDataState,
+        valueId: valueId,
+        value: value,
+      );
+      return;
     }
-    // TODO: Test Case.
+    // No ERROR!
+    newScalarDataState = DataState.ready;
     __setQueryDataWithState(
       thisXScalar: thisXScalar,
       filterCriteria: filterCriteriaOfFilterModel,
       dataState: newScalarDataState,
+      valueId: valueId,
       value: value,
     );
     //
-    return;
+    if (value == null) {
+      __clearAllChildrenScalarsToNone(thisXScalar: thisXScalar);
+      return;
+    }
+    //
+    if (valueId != oldValueId) {
+      this.__clearAllChildrenScalarsToPending(
+        thisXScalar: thisXScalar,
+      );
+    }
+    //
+    for (XScalar childXScalar in thisXScalar.childXScalars) {
+      thisXScalar.xShelf._addTaskUnit(
+        taskUnit: _ScalarQueryTaskUnit(
+          xScalar: childXScalar,
+        ),
+      );
+    }
   }
 
   // ***************************************************************************
@@ -512,15 +551,14 @@ abstract class Scalar<
       scalarDataState: scalarDataState,
       errorInFilter: errorInFilter,
     );
-    //
-    // for (var childXScalar in thisXScalar.childXScalars) {
-    //   childXScalar.block.__clearWithDataStateAndChildrenToNonCascade(
-    //     thisXScalar: childXScalar,
-    //     scalarDataState: DataState.none,
-    //     frmDataState: DataState.none,
-    //     errorInFilter: false,
-    //   );
-    // }
+
+    for (var childXScalar in thisXScalar.childXScalars) {
+      childXScalar.scalar.__clearWithDataStateAndChildrenToNonCascade(
+        thisXScalar: childXScalar,
+        scalarDataState: DataState.none,
+        errorInFilter: false,
+      );
+    }
   }
 
   // ***************************************************************************
@@ -530,6 +568,7 @@ abstract class Scalar<
     required XScalar thisXScalar,
     required FILTER_CRITERIA? filterCriteria,
     required DataState dataState,
+    required ID? valueId,
     required VALUE? value,
   }) {
     __assertThisXScalar(thisXScalar);
@@ -537,8 +576,40 @@ abstract class Scalar<
     __scalarData._updateFrom(
       filterCriteria: filterCriteria,
       dataState: dataState,
+      valueId: valueId,
       value: value,
     );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __clearAllChildrenScalarsToNone({
+    required XScalar thisXScalar,
+  }) {
+    __assertThisXScalar(thisXScalar);
+    //
+    for (var childXScalar in thisXScalar.childXScalars) {
+      childXScalar.scalar.__clearWithDataStateAndChildrenToNonCascade(
+        thisXScalar: childXScalar,
+        scalarDataState: DataState.none,
+        errorInFilter: false,
+      );
+    }
+  }
+
+  void __clearAllChildrenScalarsToPending({
+    required XScalar thisXScalar,
+  }) {
+    __assertThisXScalar(thisXScalar);
+    //
+    for (var childXScalar in thisXScalar.childXScalars) {
+      childXScalar.scalar.__clearWithDataStateAndChildrenToNonCascade(
+        thisXScalar: childXScalar,
+        scalarDataState: DataState.pending,
+        errorInFilter: false,
+      );
+    }
   }
 
   // ***************************************************************************
