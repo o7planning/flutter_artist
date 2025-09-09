@@ -95,6 +95,19 @@ class XShelf {
       allXScalars.add(xScalar);
       xScalarMap[scalar.name] = xScalar;
     }
+    //
+    for (Scalar scalar in shelf.scalars) {
+      XScalar xScalar = xScalarMap[scalar.name]!;
+      Scalar? parent = scalar.parent;
+      if (parent != null) {
+        XScalar xScalarParent = xScalarMap[parent.name]!;
+        xScalar.parentXScalar = xScalarParent;
+        xScalarParent.childXScalars.add(xScalar);
+      } else {
+        xScalar.parentXScalar = null;
+      }
+    }
+    //
     for (Block block in shelf.blocks) {
       final FormModel? formModel = block.formModel;
       XFormModel? xFormModel;
