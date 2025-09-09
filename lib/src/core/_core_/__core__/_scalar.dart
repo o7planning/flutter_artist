@@ -334,6 +334,7 @@ abstract class Scalar<
       //
       __callApiQueryCount++;
       ApiResult<VALUE> result = await callApiQuery(
+        parentScalarValue: parent?.value,
         filterCriteria: filterCriteriaOfFilterModel,
       );
       //
@@ -661,6 +662,7 @@ abstract class Scalar<
 
   @_AbstractMethodAnnotation()
   Future<ApiResult<VALUE>> callApiQuery({
+    required Object? parentScalarValue,
     required FILTER_CRITERIA filterCriteria,
   });
 
