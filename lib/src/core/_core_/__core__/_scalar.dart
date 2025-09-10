@@ -717,7 +717,7 @@ abstract class Scalar<
     }
     //
     //
-    final XShelf xShelf = XShelf.forScalarQuickExtraDataLoadAction(
+    final XShelf xShelf = _XShelfScalarQuickExtraDataLoadAction(
       scalar: this,
       filterInput: filterInput,
     );
@@ -757,7 +757,7 @@ abstract class Scalar<
       parameters: {"filterInput": filterInput},
     );
     //
-    final XShelf xShelf = XShelf.forScalarQuery(
+    final XShelf xShelf = _XShelfScalarQuery(
       scalar: this,
       filterInput: filterInput,
     );
@@ -805,7 +805,7 @@ abstract class Scalar<
       );
     }
     //
-    final XShelf xShelf = XShelf.forScalarClearance(scalar: this);
+    final XShelf xShelf = _XShelfScalarClearance(scalar: this);
 
     final XScalar thisXScalar = xShelf.findXScalarByName(name)!;
     final _ResultedSTaskUnit taskUnit = _ScalarClearanceTaskUnit(

@@ -231,6 +231,60 @@ part '_core_query_/_x_scalar.dart';
 
 part '_core_query_/_x_shelf.dart';
 
+part '_core_query_/_x_shelf_/_x_shelf_shelf_natural_query.dart';
+
+part '_core_query_/_x_shelf_/_x_shelf_shelf_external_reaction.dart';
+
+part '_core_query_/_x_shelf_/_x_shelf_block_query.dart';
+
+part '_core_query_/_x_shelf_/_x_shelf_block_query_empty.dart';
+
+part '_core_query_/_x_shelf_/_x_shelf_block_query_and_prepare_to_edit.dart';
+
+part '_core_query_/_x_shelf_/_x_shelf_block_query_and_prepare_to_create.dart';
+
+part '_core_query_/_x_shelf_/_x_shelf_filter_model_query_all.dart';
+
+part '_core_query_/_x_shelf_/_x_shelf_form_model_save.dart';
+
+part '_core_query_/_x_shelf_/_x_shelf_form_model_enter_fields.dart';
+
+part '_core_query_/_x_shelf_/_x_shelf_block_multi_items_deletion.dart';
+
+part '_core_query_/_x_shelf_/_x_shelf_block_item_deletion.dart';
+
+part '_core_query_/_x_shelf_/_x_shelf_prepare_form_to_create_item.dart';
+
+part '_core_query_/_x_shelf_/_x_shelf_block_clear_current_item.dart';
+
+part '_core_query_/_x_shelf_/_x_shelf_block_quick_multi_items_creation.dart';
+
+part '_core_query_/_x_shelf_/_x_shelf_block_silent_item_update.dart';
+
+part '_core_query_/_x_shelf_/_x_shelf_block_quick_item_update.dart';
+
+part '_core_query_/_x_shelf_/_x_shelf_block_quick_item_creation.dart';
+
+part '_core_query_/_x_shelf_/_x_shelf_block_silent_action_execution.dart';
+
+part '_core_query_/_x_shelf_/_x_shelf_block_curr_item_selection.dart';
+
+part '_core_query_/_x_shelf_/_x_shelf_block_silent_item_creation.dart';
+
+part '_core_query_/_x_shelf_/_x_shelf_block_clearance.dart';
+
+part '_core_query_/_x_shelf_/_x_shelf_scalar_clearance.dart';
+
+part '_core_query_/_x_shelf_/_x_shelf_scalar_silent_action.dart';
+
+part '_core_query_/_x_shelf_/_x_shelf_scalar_quick_extra_data_load_action.dart';
+
+part '_core_query_/_x_shelf_/_x_shelf_scalar_query.dart';
+
+part '_core_query_/_x_shelf_/_x_shelf_form_view_change.dart';
+
+part '_core_query_/_x_shelf_/_x_shelf_filter_view_change.dart';
+
 part '_core_query_/_x_storage.dart';
 
 part '_core_state_/__force_reload_throw.dart';

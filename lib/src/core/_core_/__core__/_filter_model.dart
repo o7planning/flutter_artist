@@ -752,7 +752,7 @@ abstract class FilterModel<
   Future<void> _onChangeFromFilterView() async {
     print("#~~~~~~~~~~~~~~~> _onChangeFromFilterView");
     //
-    final XShelf xShelf = XShelf.forFilterViewChange(filterModel: this);
+    final XShelf xShelf = _XShelfFilterViewChange(filterModel: this);
     //
     final XFilterModel xFilterModel = xShelf.findXFilterModelByName(name)!;
     _FilterViewChangeTaskUnit taskUnit = _FilterViewChangeTaskUnit(
@@ -822,7 +822,7 @@ abstract class FilterModel<
       navigate: null,
     );
     //
-    final XShelf xShelf = XShelf.forFilterModelQueryAll(
+    final XShelf xShelf = _XShelfFilterModelQueryAll(
       filterModel: this,
       filterInput: filterInput,
     );

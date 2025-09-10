@@ -3,6 +3,7 @@ enum XShelfType {
   blockQuery,
   blockQueryEmpty,
   blockQueryAndPrepareToCreate,
+  blockQueryAndPrepareToEdit,
   blockPrepareFormToCreateItem,
   blockCurrItemClearance,
   blockClearance,

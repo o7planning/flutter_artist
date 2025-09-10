@@ -612,7 +612,10 @@ abstract class Shelf extends _Core {
 
   Future<void> __queryLazyList() async {
     print(">>>>>>>>>>>>>> QUERY LAZY LIST <<<<<<<<<<<<<<<<<<<<<<<<");
-    final XShelf xShelf = XShelf.forNaturalQuery(shelf: shelf);
+    //
+    // Natural Query:
+    //
+    final XShelf xShelf = _XShelfShelfNaturalQuery(shelf: shelf);
     _LazyObjects lazyObjects = xShelf.getLazyObjectInfos();
     lazyObjects.printInfo();
     //
@@ -646,7 +649,7 @@ abstract class Shelf extends _Core {
     print(
         " ||-------------> [External Reaction] _addShelfExternalReactionTaskUnit: ${getClassName(this)} [LISTENER]");
     //
-    final XShelf xShelf = XShelf.forShelfExternalReaction(
+    final XShelf xShelf = _XShelfShelfExternalReaction(
       shelf: this,
       effectedShelfMembers: effectedShelfMembers,
     );

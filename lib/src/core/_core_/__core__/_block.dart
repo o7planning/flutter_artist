@@ -2545,7 +2545,7 @@ abstract class Block<
       return;
     }
     //
-    final XShelf xShelf = XShelf.forBlockClearCurrentItem(block: this);
+    final XShelf xShelf = _XShelfBlockClearCurrentItem(block: this);
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
@@ -2611,7 +2611,7 @@ abstract class Block<
       );
     }
     //
-    final XShelf xShelf = XShelf.forBlockItemDeletion(block: this);
+    final XShelf xShelf = _XShelfBlockItemDeletion(block: this);
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
@@ -2677,7 +2677,7 @@ abstract class Block<
       );
     }
     //
-    final XShelf xShelf = XShelf.forBlockMultiItemsDeletion(block: this);
+    final XShelf xShelf = _XShelfBlockMultiItemDeletion(block: this);
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
@@ -2753,7 +2753,7 @@ abstract class Block<
       );
     }
     //
-    final XShelf xShelf = XShelf.forBlockCurrItemSelection(block: this);
+    final XShelf xShelf = _XShelfBlockCurrItemSelection(block: this);
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
@@ -2834,7 +2834,7 @@ abstract class Block<
       );
     }
     //
-    final XShelf xShelf = XShelf.forBlockClearance(block: this);
+    final XShelf xShelf = _XShelfBlockClearance(block: this);
 
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     final _ResultedSTaskUnit taskUnit = _BlockClearanceTaskUnit(
@@ -3000,7 +3000,7 @@ abstract class Block<
       },
     );
     //
-    final XShelf xShelf = XShelf.forBlockQueryEmpty(
+    final XShelf xShelf = _XShelfBlockQueryEmpty(
       block: this,
       filterInput: filterInput,
       pageable: pageable,
@@ -3100,7 +3100,7 @@ abstract class Block<
       },
     );
     //
-    final XShelf xShelf = XShelf.forBlockQueryAndPrepareToEdit(
+    final XShelf xShelf = _XShelfBlockQueryThenPrepareToEdit(
       block: this,
       filterInput: filterInput,
       pageable: null,
@@ -3143,7 +3143,7 @@ abstract class Block<
       parameters: {},
     );
     //
-    final XShelf xShelf = XShelf.forBlockQueryAndPrepareToCreate(
+    final XShelf xShelf = _XShelfBlockQueryThenPrepareToCreate(
       block: this,
       filterInput: filterInput,
       pageable: null,
@@ -3409,7 +3409,7 @@ abstract class Block<
     }
     //
     //
-    final XShelf xShelf = XShelf.forBlockSilentActionExecution(
+    final XShelf xShelf = _XShelfBlockSilentActionExecution(
       block: this,
       filterInput: filterInput,
       afterSilentAction: action.config.afterSilentAction,
@@ -3486,7 +3486,7 @@ abstract class Block<
       );
     }
     //
-    final XShelf xShelf = XShelf.forBlockQuickItemCreation(block: this);
+    final XShelf xShelf = _XShelfBlockQuickItemCreation(block: this);
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
@@ -3559,7 +3559,7 @@ abstract class Block<
       );
     }
     //
-    final XShelf xShelf = XShelf.forBlockSilentItemCreation(
+    final XShelf xShelf = _XShelfBlockSilentItemCreation(
       block: this,
       afterSilentAction: action.config.afterSilentAction,
     );
@@ -3636,7 +3636,7 @@ abstract class Block<
       );
     }
     //
-    final XShelf xShelf = XShelf.forBlockQuickMultiItemsCreation(block: this);
+    final XShelf xShelf = _XShelfBlockQuickMuliItemsCreation(block: this);
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
@@ -3709,7 +3709,7 @@ abstract class Block<
       );
     }
     //
-    final XShelf xShelf = XShelf.forBlockQuickItemUpdate(block: this);
+    final XShelf xShelf = _XShelfBlockQuickItemUpdate(block: this);
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
@@ -3782,7 +3782,7 @@ abstract class Block<
       );
     }
     //
-    final XShelf xShelf = XShelf.forBlockSilentItemUpdate(
+    final XShelf xShelf = _XShelfBlockSilentItemUpdate(
       block: this,
       afterSilentAction: action.config.afterSilentAction,
     );
@@ -3905,7 +3905,7 @@ abstract class Block<
     //
     extraFormInput?.formAction = FormAction.create;
     //
-    final XShelf xShelf = XShelf.forPrepareFormToCreateItem(block: this);
+    final XShelf xShelf = _XShelfPrepareFormToCreateItem(block: this);
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
     _STaskUnit taskUnit = _BlockPrepareFormToCreateItemTaskUnit(
@@ -4092,7 +4092,7 @@ abstract class Block<
         }
     }
     //
-    final XShelf xShelf = XShelf.forBlockQuery(
+    final XShelf xShelf = _XShelfBlockQuery(
       block: this,
       filterInput: filterInput,
       pageable: usedPageable,
