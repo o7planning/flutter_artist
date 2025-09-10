@@ -1633,7 +1633,7 @@ abstract class Block<
       //
       // Update only (No add to queue).
       //
-      thisXBlock.xShelf.updateInternalReactionByEvtBlock(
+      thisXBlock.xShelf._updateInternalReactionByEvtBlock(
         eventXBlock: thisXBlock,
       );
     }

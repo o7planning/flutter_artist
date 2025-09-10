@@ -32,52 +32,11 @@ abstract class XShelf {
   bool get naturalMode => xShelfType == XShelfType.naturalQuery;
 
   // ***************************************************************************
-
-  void setRootVipXBlock({required XBlock descendantXBlock}) {
-    __rootVipXBlock = descendantXBlock.rootXBlock;
-  }
-
-  void setRootVipXScalar({required XScalar descendantXScalar}) {
-    __rootVipXScalar = descendantXScalar.rootXScalar;
-  }
-
-  // ***************************************************************************
-
-  _LazyObjects getLazyObjectInfos() {
-    final _LazyObjects ret = _LazyObjects();
-    for (XBlock xBlock in allXBlocks) {
-      if (xBlock.queryHint != QryHint.none) {
-        ret.addLazyBlock(
-          block: xBlock.block,
-          queryHint: xBlock.queryHint,
-        );
-      }
-    }
-    for (XScalar xScalar in allXScalars) {
-      if (xScalar.queryHint != QryHint.none) {
-        ret.addLazyScalar(scalar: xScalar.scalar);
-      }
-    }
-    for (XFormModel xFormModel in allXFormModels) {
-      if (xFormModel.lazy) {
-        ret.addLazyFormModel(formModel: xFormModel.formModel);
-      }
-    }
-    return ret;
-  }
-
-  XShelf._({required this.xShelfType, required this.shelf}) {
-    __initCore(shelf: shelf);
-  }
-
-  // ***************************************************************************
   // ***************************************************************************
   // ***************************************************************************
 
-  // This method will be called in all constructors to init an empty XShelf.
-  void __initCore({required Shelf shelf}) {
-    xShelfId = __xShelfSequence++;
-    //
+  XShelf._({required this.xShelfType, required this.shelf})
+      : xShelfId = __xShelfSequence++ {
     for (FilterModel filterModel in shelf._allFilterModels) {
       final xFilterModel = XFilterModel(
         xShelf: this,
@@ -168,10 +127,49 @@ abstract class XShelf {
   // ***************************************************************************
   // ***************************************************************************
 
+  void setRootVipXBlock({required XBlock descendantXBlock}) {
+    __rootVipXBlock = descendantXBlock.rootXBlock;
+  }
+
+  void setRootVipXScalar({required XScalar descendantXScalar}) {
+    __rootVipXScalar = descendantXScalar.rootXScalar;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+  // ***************************************************************************
+
+  _LazyObjects getLazyObjectInfos() {
+    final _LazyObjects ret = _LazyObjects();
+    for (XBlock xBlock in allXBlocks) {
+      if (xBlock.queryHint != QryHint.none) {
+        ret.addLazyBlock(
+          block: xBlock.block,
+          queryHint: xBlock.queryHint,
+        );
+      }
+    }
+    for (XScalar xScalar in allXScalars) {
+      if (xScalar.queryHint != QryHint.none) {
+        ret.addLazyScalar(scalar: xScalar.scalar);
+      }
+    }
+    for (XFormModel xFormModel in allXFormModels) {
+      if (xFormModel.lazy) {
+        ret.addLazyFormModel(formModel: xFormModel.formModel);
+      }
+    }
+    return ret;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+  // ***************************************************************************
+
   //
   // IMPORTANT: Sync Method.
   //
-  void updateInternalReactionByEvtBlock({required XBlock eventXBlock}) {
+  void _updateInternalReactionByEvtBlock({required XBlock eventXBlock}) {
     __assertXShelf(eventXBlock.xShelf);
     //
     if (__rootVipXBlock != eventXBlock.rootXBlock) {
@@ -269,11 +267,6 @@ abstract class XShelf {
               xFormModel.formModel.dataState == DataState.none) {
             xFormModel.lazy = true;
 
-            // if (naturalMode) {
-            //   xFormModel.setForceType(ForceType.decidedAtRuntime);
-            // } else {
-            //   xFormModel.setForceType(ForceType.force);
-            // }
             if (naturalMode) {
               // Never Run.
               xFormModel.setForceType(ForceType.force);
@@ -291,7 +284,10 @@ abstract class XShelf {
     );
   }
 
-  //
+  // ***************************************************************************
+  // ***************************************************************************
+  // ***************************************************************************
+
   void __printXShelfInfo({required String message, required XShelf xShelf}) {
     print("\n**************************************************************");
     print(" -- $message --");
