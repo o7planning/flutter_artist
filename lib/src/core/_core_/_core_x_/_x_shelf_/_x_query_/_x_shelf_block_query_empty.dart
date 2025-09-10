@@ -12,16 +12,18 @@ class _XShelfBlockQueryEmpty extends _XShelfSbQuery {
           xShelfType: XShelfType.blockQueryEmpty,
           shelf: block.shelf,
         ) {
-    final queryHint = QryHint.force;
-    final forceReloadItem = false;
+    _updateQueryStateFromFilterModelAndFilterInput(
+      filterModel: block.registeredOrDefaultFilterModel,
+      filterInput: filterInput,
+    );
     //
     final thisXBlock = xBlockMap[block.name]!;
     final xFilterModel = thisXBlock.xFilterModel;
     xFilterModel.filterInput = filterInput;
     //
-    thisXBlock.setForceReloadCurrItem(forceReloadItem);
+    thisXBlock.setForceReloadCurrItem(false);
     //
-    thisXBlock.setQueryHint(queryHint);
+    thisXBlock.setQueryHint(QryHint.force);
     thisXBlock.setOptions(
       queryType: QueryType.emptyQuery,
       listBehavior: listBehavior,
@@ -29,34 +31,34 @@ class _XShelfBlockQueryEmpty extends _XShelfSbQuery {
       postQueryBehavior: postQueryBehavior,
       pageable: pageable,
     );
-    XBlock? parentXBlock = thisXBlock.parentXBlock;
-    while (true) {
-      if (parentXBlock == null) {
-        break;
-      }
-      //
-      final hasXActiveUI = parentXBlock.block.ui.hasActiveBlockFragment(
-        alsoCheckChildren: true,
-      );
-      if (hasXActiveUI) {
-        if (parentXBlock.block.dataState == DataState.pending ||
-            parentXBlock.block.dataState == DataState.error) {
-          parentXBlock.setQueryHint(QryHint.force);
-        }
-      }
-      // TODO: Need? Remove this code?
-      // XFormModel? parentXFormModel = parentXBlock.xFormModel;
-      // if (parentXFormModel != null &&
-      //     parentXFormModel.formModel.ui.hasActiveUIComponent()) {
-      //   if (parentXFormModel.formModel.dataState == DataState.pending ||
-      //       parentXFormModel.formModel.dataState == DataState.error ||
-      //       parentXFormModel.formModel.dataState == DataState.none) {
-      //     parentXFormModel.setForceType(ForceType.decidedAtRuntime);
-      //   }
-      // }
-      //
-      parentXBlock = parentXBlock.parentXBlock;
-    }
+    // XBlock? parentXBlock = thisXBlock.parentXBlock;
+    // while (true) {
+    //   if (parentXBlock == null) {
+    //     break;
+    //   }
+    //   //
+    //   final hasXActiveUI = parentXBlock.block.ui.hasActiveBlockFragment(
+    //     alsoCheckChildren: true,
+    //   );
+    //   if (hasXActiveUI) {
+    //     if (parentXBlock.block.dataState == DataState.pending ||
+    //         parentXBlock.block.dataState == DataState.error) {
+    //       parentXBlock.setQueryHint(QryHint.force);
+    //     }
+    //   }
+    //   // TODO: Need? Remove this code?
+    //   XFormModel? parentXFormModel = parentXBlock.xFormModel;
+    //   if (parentXFormModel != null &&
+    //       parentXFormModel.formModel.ui.hasActiveUIComponent()) {
+    //     if (parentXFormModel.formModel.dataState == DataState.pending ||
+    //         parentXFormModel.formModel.dataState == DataState.error ||
+    //         parentXFormModel.formModel.dataState == DataState.none) {
+    //       parentXFormModel.setForceType(ForceType.decidedAtRuntime);
+    //     }
+    //   }
+    //   //
+    //   parentXBlock = parentXBlock.parentXBlock;
+    // }
     //
     setRootVipXBlock(descendantXBlock: thisXBlock);
   }
