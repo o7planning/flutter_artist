@@ -8,6 +8,13 @@ class _XShelfScalarQuery extends _XShelfSbQuery {
           xShelfType: XShelfType.scalarQuery,
           shelf: scalar.shelf,
         ) {
+    _updateQueryStateFromFilterModelAndFilterInput(
+      filterModel: scalar.registeredOrDefaultFilterModel,
+      filterInput: filterInput,
+    );
+    //
+    // Replace:
+    //
     final thisXScalar = xScalarMap[scalar.name]!;
     final xFilterModel = thisXScalar.xFilterModel;
     xFilterModel.filterInput = filterInput;
@@ -16,7 +23,6 @@ class _XShelfScalarQuery extends _XShelfSbQuery {
     //
     // IMPORTANT:
     //
-    XScalar xScalar = xScalarMap[scalar.name]!;
-    setRootVipXScalar(descendantXScalar: xScalar);
+    setRootVipXScalar(descendantXScalar: thisXScalar);
   }
 }

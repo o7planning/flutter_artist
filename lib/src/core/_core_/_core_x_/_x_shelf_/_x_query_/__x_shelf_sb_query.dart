@@ -1,8 +1,7 @@
 part of '../../../core.dart';
 
 class _XShelfSbQuery extends XShelf {
-
-  _XShelfSbQuery({required super.xShelfType, required super.shelf}) ;
+  _XShelfSbQuery({required super.xShelfType, required super.shelf});
 
   // ***************************************************************************
   // ***************************************************************************
@@ -13,7 +12,9 @@ class _XShelfSbQuery extends XShelf {
     required FilterInput? filterInput,
   }) {
     if (filterModel.isDefaultFilterModel) {
-      return;
+      print(
+          "@@@@@@@@@@@@@@@@@@@@@@@@@@@ ------------------------------------------> Default isDefaultFilterModel");
+      // return;
     }
     final queryHintForce = QryHint.force;
     final forceReloadItem = false;
@@ -23,6 +24,7 @@ class _XShelfSbQuery extends XShelf {
     //
     for (XBlock xBlock in thisXFilterModel.xBlocks) {
       xBlock.setQueryHint(queryHintForce);
+      // Set Default Options. They will be replaced if need.
       xBlock.setOptions(
         queryType: QueryType.realQuery,
         listBehavior: ListBehavior.replace,
@@ -47,15 +49,15 @@ class _XShelfSbQuery extends XShelf {
           }
         }
         // TODO: Need? Remove this code?
-        XFormModel? parentXFormModel = parentXBlock.xFormModel;
-        if (parentXFormModel != null &&
-            parentXFormModel.formModel.ui.hasActiveUIComponent()) {
-          if (parentXFormModel.formModel.dataState == DataState.pending ||
-              parentXFormModel.formModel.dataState == DataState.error ||
-              parentXFormModel.formModel.dataState == DataState.none) {
-            parentXFormModel.setForceType(ForceType.decidedAtRuntime);
-          }
-        }
+        // XFormModel? parentXFormModel = parentXBlock.xFormModel;
+        // if (parentXFormModel != null &&
+        //     parentXFormModel.formModel.ui.hasActiveUIComponent()) {
+        //   if (parentXFormModel.formModel.dataState == DataState.pending ||
+        //       parentXFormModel.formModel.dataState == DataState.error ||
+        //       parentXFormModel.formModel.dataState == DataState.none) {
+        //     parentXFormModel.setForceType(ForceType.decidedAtRuntime);
+        //   }
+        // }
         //
         parentXBlock = parentXBlock.parentXBlock;
       }
