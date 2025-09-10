@@ -8,7 +8,7 @@ class _XShelfBlockQueryThenPrepareToCreate extends XShelf {
     required ListBehavior? listBehavior,
     required PostQueryBehavior? postQueryBehavior,
     required SuggestedSelection<dynamic>? suggestedSelection,
-  }) : super._(
+  }) : super(
           xShelfType: XShelfType.blockQueryAndPrepareToCreate,
           shelf: block.shelf,
         ) {

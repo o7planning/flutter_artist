@@ -235,6 +235,8 @@ part '_core_x_/_x_shelf_/_x_query_/_x_shelf_shelf_natural_query.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_shelf_external_reaction.dart';
 
+part '_core_x_/_x_shelf_/_x_query_/__x_shelf_sb_query.dart';
+
 part '_core_x_/_x_shelf_/_x_query_/_x_shelf_block_query.dart';
 
 part '_core_x_/_x_shelf_/_x_query_/_x_shelf_block_query_empty.dart';

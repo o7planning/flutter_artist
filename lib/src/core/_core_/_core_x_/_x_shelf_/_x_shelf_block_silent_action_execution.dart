@@ -5,7 +5,7 @@ class _XShelfBlockSilentActionExecution extends XShelf {
     required Block block,
     required FilterInput? filterInput,
     required AfterBlockSilentAction afterSilentAction,
-  }) : super._(
+  }) : super(
           xShelfType: XShelfType.blockSilentActionExecution,
           shelf: block.shelf,
         ) {

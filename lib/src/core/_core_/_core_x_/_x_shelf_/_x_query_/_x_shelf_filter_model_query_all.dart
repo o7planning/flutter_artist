@@ -4,7 +4,7 @@ class _XShelfFilterModelQueryAll extends XShelf {
   _XShelfFilterModelQueryAll({
     required FilterModel filterModel,
     required FilterInput? filterInput,
-  }) : super._(
+  }) : super(
           xShelfType: XShelfType.filterModelQueryAll,
           shelf: filterModel.shelf,
         ) {

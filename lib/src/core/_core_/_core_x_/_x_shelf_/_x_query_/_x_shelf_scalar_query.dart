@@ -4,7 +4,7 @@ class _XShelfScalarQuery extends XShelf {
   _XShelfScalarQuery({
     required Scalar scalar,
     required FilterInput? filterInput,
-  }) : super._(
+  }) : super(
           xShelfType: XShelfType.scalarQuery,
           shelf: scalar.shelf,
         ) {

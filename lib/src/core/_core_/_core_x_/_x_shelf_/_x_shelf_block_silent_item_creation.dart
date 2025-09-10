@@ -4,7 +4,7 @@ class _XShelfBlockSilentItemCreation extends XShelf {
   _XShelfBlockSilentItemCreation({
     required Block block,
     required AfterBlockSilentAction afterSilentAction,
-  }) : super._(
+  }) : super(
           xShelfType: XShelfType.blockSilentItemCreation,
           shelf: block.shelf,
         ) {

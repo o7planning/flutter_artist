@@ -2,7 +2,7 @@ part of '../../core.dart';
 
 class _XShelfBlockQuickMuliItemsCreation extends XShelf {
   _XShelfBlockQuickMuliItemsCreation({required Block block})
-      : super._(
+      : super(
           xShelfType: XShelfType.blockQuickMultiItemsCreation,
           shelf: block.shelf,
         ) {

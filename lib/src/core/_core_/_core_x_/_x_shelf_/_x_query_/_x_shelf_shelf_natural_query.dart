@@ -2,7 +2,7 @@ part of '../../../core.dart';
 
 class _XShelfShelfNaturalQuery extends XShelf {
   _XShelfShelfNaturalQuery({required super.shelf})
-      : super._(xShelfType: XShelfType.naturalQuery) {
+      : super(xShelfType: XShelfType.naturalQuery) {
     for (XScalar xScalar in allXScalars) {
       if (xScalar.scalar.ui.hasActiveUIComponent()) {
         if (xScalar.scalar.dataState == DataState.pending ||

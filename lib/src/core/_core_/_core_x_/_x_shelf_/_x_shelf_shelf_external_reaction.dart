@@ -4,7 +4,7 @@ class _XShelfShelfExternalReaction extends XShelf {
   _XShelfShelfExternalReaction({
     required super.shelf,
     required EffectedShelfMembers effectedShelfMembers,
-  }) : super._(xShelfType: XShelfType.shelfExternalReaction) {
+  }) : super(xShelfType: XShelfType.shelfExternalReaction) {
     Set<String> listenerBlockNames = {}
       ..addAll(effectedShelfMembers._reQueryBlockMAP.keys)
       ..addAll(effectedShelfMembers._refreshCurrItmBlockMAP.keys);

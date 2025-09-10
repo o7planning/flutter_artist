@@ -8,7 +8,7 @@ class _XShelfBlockQueryEmpty extends XShelf {
     required ListBehavior? listBehavior,
     required PostQueryBehavior? postQueryBehavior,
     required SuggestedSelection<dynamic>? suggestedSelection,
-  }) : super._(
+  }) : super(
           xShelfType: XShelfType.blockQueryEmpty,
           shelf: block.shelf,
         ) {

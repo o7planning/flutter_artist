@@ -35,7 +35,7 @@ abstract class XShelf {
   // ***************************************************************************
   // ***************************************************************************
 
-  XShelf._({required this.xShelfType, required this.shelf})
+  XShelf({required this.xShelfType, required this.shelf})
       : xShelfId = __xShelfSequence++ {
     for (FilterModel filterModel in shelf._allFilterModels) {
       final xFilterModel = XFilterModel(

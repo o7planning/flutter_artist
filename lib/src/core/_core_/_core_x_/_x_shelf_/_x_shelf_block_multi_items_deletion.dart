@@ -2,7 +2,7 @@ part of '../../core.dart';
 
 class _XShelfBlockMultiItemDeletion extends XShelf {
   _XShelfBlockMultiItemDeletion({required Block block})
-      : super._(
+      : super(
           xShelfType: XShelfType.blockMultiItemsDeletion,
           shelf: block.shelf,
         ) {

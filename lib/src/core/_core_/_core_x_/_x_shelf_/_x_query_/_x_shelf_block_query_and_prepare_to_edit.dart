@@ -8,7 +8,7 @@ class _XShelfBlockQueryThenPrepareToEdit extends XShelf {
     required ListBehavior? listBehavior,
     required PostQueryBehavior? postQueryBehavior,
     required SuggestedSelection<dynamic>? suggestedSelection,
-  }) : super._(
+  }) : super(
           xShelfType: XShelfType.blockQueryAndPrepareToEdit,
           shelf: block.shelf,
         ) {
