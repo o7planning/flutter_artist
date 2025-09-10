@@ -34,12 +34,16 @@ abstract class FilterModel<
 
   bool get lockAddMoreQuery => _lockAddMoreQuery;
 
+  bool _isDefaultFilterModel = false;
+
+  bool get isDefaultFilterModel => _isDefaultFilterModel;
+
   late final FilterCriteriaStructure _filterCriteriaStructure;
 
   FilterCriteriaStructure get filterCriteriaStructure =>
       _filterCriteriaStructure;
 
-  DataState? get filterDataState => _filterCriteriaStructure._filterDataState;
+  DataState? get dataState => _filterCriteriaStructure._filterDataState;
 
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 

@@ -1,6 +1,6 @@
 part of '../../../core.dart';
 
-class _XShelfBlockQuery extends XShelf {
+class _XShelfBlockQuery extends _XShelfSbQuery {
   _XShelfBlockQuery({
     required Block block,
     required FilterInput? filterInput,

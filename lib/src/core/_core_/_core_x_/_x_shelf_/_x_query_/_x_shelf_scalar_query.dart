@@ -1,6 +1,6 @@
 part of '../../../core.dart';
 
-class _XShelfScalarQuery extends XShelf {
+class _XShelfScalarQuery extends _XShelfSbQuery {
   _XShelfScalarQuery({
     required Scalar scalar,
     required FilterInput? filterInput,

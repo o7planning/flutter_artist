@@ -1,6 +1,6 @@
 part of '../../../core.dart';
 
-class _XShelfShelfNaturalQuery extends XShelf {
+class _XShelfShelfNaturalQuery extends _XShelfSbQuery {
   _XShelfShelfNaturalQuery({required super.shelf})
       : super(xShelfType: XShelfType.naturalQuery) {
     for (XScalar xScalar in allXScalars) {

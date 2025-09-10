@@ -10,6 +10,10 @@ class XFilterModel {
   bool queried = false;
   FilterInput? filterInput;
 
+  bool get isDefaultFilterModel => filterModel.isDefaultFilterModel;
+
+  bool get isCustomFilterModel => !filterModel.isDefaultFilterModel;
+
   String get name => filterModel.name;
 
   int get xShelfId => xShelf.xShelfId;
