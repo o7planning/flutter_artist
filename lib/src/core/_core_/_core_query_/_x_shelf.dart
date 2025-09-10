@@ -2,7 +2,7 @@ part of '../core.dart';
 
 int __xShelfSequence = 0;
 
-class XShelf {
+abstract class XShelf {
   final XShelfType xShelfType;
   final Shelf shelf;
   late final int xShelfId;

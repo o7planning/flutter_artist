@@ -5,8 +5,9 @@ class _XShelfScalarQuickExtraDataLoadAction extends XShelf {
     required Scalar scalar,
     required FilterInput? filterInput,
   }) : super._(
-            xShelfType: XShelfType.scalarQuickExtraDataLoadAction,
-            shelf: scalar.shelf) {
+          xShelfType: XShelfType.scalarQuickExtraDataLoadAction,
+          shelf: scalar.shelf,
+        ) {
     //
     final thisXScalar = xScalarMap[scalar.name]!;
     final xFilterModel = thisXScalar.xFilterModel;

@@ -5,8 +5,9 @@ class _XShelfFilterModelQueryAll extends XShelf {
     required FilterModel filterModel,
     required FilterInput? filterInput,
   }) : super._(
-            xShelfType: XShelfType.filterModelQueryAll,
-            shelf: filterModel.shelf) {
+          xShelfType: XShelfType.filterModelQueryAll,
+          shelf: filterModel.shelf,
+        ) {
     final queryHintForce = QryHint.force;
     final forceReloadItem = false;
     //

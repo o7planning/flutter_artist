@@ -2,7 +2,10 @@ part of '../../core.dart';
 
 class _XShelfFormViewChange extends XShelf {
   _XShelfFormViewChange({required FormModel formModel})
-      : super._(xShelfType: XShelfType.formViewChange, shelf: formModel.shelf) {
+      : super._(
+          xShelfType: XShelfType.formViewChange,
+          shelf: formModel.shelf,
+        ) {
     //
     // IMPORTANT:
     //
