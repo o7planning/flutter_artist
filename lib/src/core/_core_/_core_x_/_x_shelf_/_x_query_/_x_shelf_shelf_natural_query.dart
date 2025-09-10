@@ -27,21 +27,20 @@ class _XShelfShelfNaturalQuery extends _XShelfSbQuery {
             xBlock.setQueryHint(QryHint.force);
           }
         }
-        XFormModel? xFormModel = xBlock.xFormModel;
-
-        if (xFormModel != null &&
-            xFormModel.formModel.ui.hasActiveUIComponent()) {
-          if (xFormModel.formModel.dataState == DataState.pending ||
-              xFormModel.formModel.dataState == DataState.error ||
-              xFormModel.formModel.dataState == DataState.none) {
-            xFormModel.lazy = true;
-            if (naturalMode) {
-              xFormModel.setForceType(ForceType.decidedAtRuntime);
-            } else {
-              xFormModel.setForceType(ForceType.force);
-            }
-          }
-        }
+        // XFormModel? xFormModel = xBlock.xFormModel;
+        // if (xFormModel != null &&
+        //     xFormModel.formModel.ui.hasActiveUIComponent()) {
+        //   if (xFormModel.formModel.dataState == DataState.pending ||
+        //       xFormModel.formModel.dataState == DataState.error ||
+        //       xFormModel.formModel.dataState == DataState.none) {
+        //     xFormModel.lazy = true;
+        //     if (naturalMode) {
+        //       xFormModel.setForceType(ForceType.decidedAtRuntime);
+        //     } else {
+        //       xFormModel.setForceType(ForceType.force);
+        //     }
+        //   }
+        // }
         xBlock = xBlock.parentXBlock;
       }
     }

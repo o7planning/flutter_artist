@@ -59,7 +59,6 @@ class _XShelfBlockQueryThenPrepareToCreate extends _XShelfSbQuery {
       parentXBlock = parentXBlock.parentXBlock;
     }
     //
-    XBlock xBlock = xBlockMap[block.name]!;
-    setRootVipXBlock(descendantXBlock: xBlock);
+    setRootVipXBlock(descendantXBlock: thisXBlock);
   }
 }

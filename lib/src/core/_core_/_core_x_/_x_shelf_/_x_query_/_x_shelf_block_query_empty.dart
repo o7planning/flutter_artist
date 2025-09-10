@@ -45,20 +45,19 @@ class _XShelfBlockQueryEmpty extends _XShelfSbQuery {
         }
       }
       // TODO: Need? Remove this code?
-      XFormModel? parentXFormModel = parentXBlock.xFormModel;
-      if (parentXFormModel != null &&
-          parentXFormModel.formModel.ui.hasActiveUIComponent()) {
-        if (parentXFormModel.formModel.dataState == DataState.pending ||
-            parentXFormModel.formModel.dataState == DataState.error ||
-            parentXFormModel.formModel.dataState == DataState.none) {
-          parentXFormModel.setForceType(ForceType.decidedAtRuntime);
-        }
-      }
+      // XFormModel? parentXFormModel = parentXBlock.xFormModel;
+      // if (parentXFormModel != null &&
+      //     parentXFormModel.formModel.ui.hasActiveUIComponent()) {
+      //   if (parentXFormModel.formModel.dataState == DataState.pending ||
+      //       parentXFormModel.formModel.dataState == DataState.error ||
+      //       parentXFormModel.formModel.dataState == DataState.none) {
+      //     parentXFormModel.setForceType(ForceType.decidedAtRuntime);
+      //   }
+      // }
       //
       parentXBlock = parentXBlock.parentXBlock;
     }
     //
-    XBlock xBlock = xBlockMap[block.name]!;
-    setRootVipXBlock(descendantXBlock: xBlock);
+    setRootVipXBlock(descendantXBlock: thisXBlock);
   }
 }
