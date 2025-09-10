@@ -1,4 +1,4 @@
-part of '../../core.dart';
+part of '../../../core.dart';
 
 class _XShelfShelfNaturalQuery extends XShelf {
   _XShelfShelfNaturalQuery({required super.shelf})

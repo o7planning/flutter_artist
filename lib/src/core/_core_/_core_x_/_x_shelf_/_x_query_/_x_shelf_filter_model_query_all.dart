@@ -1,4 +1,4 @@
-part of '../../core.dart';
+part of '../../../core.dart';
 
 class _XShelfFilterModelQueryAll extends XShelf {
   _XShelfFilterModelQueryAll({

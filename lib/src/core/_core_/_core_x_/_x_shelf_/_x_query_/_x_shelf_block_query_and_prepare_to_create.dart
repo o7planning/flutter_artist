@@ -1,7 +1,7 @@
-part of '../../core.dart';
+part of '../../../core.dart';
 
-class _XShelfBlockQueryThenPrepareToEdit extends XShelf {
-  _XShelfBlockQueryThenPrepareToEdit({
+class _XShelfBlockQueryThenPrepareToCreate extends XShelf {
+  _XShelfBlockQueryThenPrepareToCreate({
     required Block block,
     required FilterInput? filterInput,
     required PageableData? pageable,
@@ -9,7 +9,7 @@ class _XShelfBlockQueryThenPrepareToEdit extends XShelf {
     required PostQueryBehavior? postQueryBehavior,
     required SuggestedSelection<dynamic>? suggestedSelection,
   }) : super._(
-          xShelfType: XShelfType.blockQueryAndPrepareToEdit,
+          xShelfType: XShelfType.blockQueryAndPrepareToCreate,
           shelf: block.shelf,
         ) {
     final queryHint = QryHint.force;
@@ -29,6 +29,7 @@ class _XShelfBlockQueryThenPrepareToEdit extends XShelf {
       postQueryBehavior: postQueryBehavior,
       pageable: pageable,
     );
+    //
     XBlock? parentXBlock = thisXBlock.parentXBlock;
     while (true) {
       if (parentXBlock == null) {
@@ -57,7 +58,7 @@ class _XShelfBlockQueryThenPrepareToEdit extends XShelf {
       //
       parentXBlock = parentXBlock.parentXBlock;
     }
-    // IMPORTANT:
+    //
     XBlock xBlock = xBlockMap[block.name]!;
     setRootVipXBlock(descendantXBlock: xBlock);
   }
