@@ -67,98 +67,6 @@ class XShelf {
   }
 
   // ***************************************************************************
-
-  // This method will be called in all constructors to init an empty XShelf.
-  void __initCore({required Shelf shelf}) {
-    xShelfId = __xShelfSequence++;
-    //
-    for (FilterModel filterModel in shelf._allFilterModels) {
-      final xFilterModel = XFilterModel(
-        xShelf: this,
-        filterModel: filterModel,
-      );
-      //
-      xFilterModelMap[filterModel.name] = xFilterModel;
-      allXFilterModels.add(xFilterModel);
-    }
-    for (Scalar scalar in shelf.scalars) {
-      final FilterModel filterModel = scalar._registeredOrDefaultFilterModel;
-      final xFilterModel = xFilterModelMap[filterModel.name]!;
-      //
-      // Create XScalar via 'scalar._createXScalar' method
-      // to have the same Generics Parameters with scalar.
-      //
-      final xScalar = scalar._createXScalar(
-        xFilterModel: xFilterModel,
-      );
-      xFilterModel.xScalars.add(xScalar);
-      allXScalars.add(xScalar);
-      xScalarMap[scalar.name] = xScalar;
-    }
-    //
-    for (Scalar scalar in shelf.scalars) {
-      XScalar xScalar = xScalarMap[scalar.name]!;
-      Scalar? parent = scalar.parent;
-      if (parent != null) {
-        XScalar xScalarParent = xScalarMap[parent.name]!;
-        xScalar.parentXScalar = xScalarParent;
-        xScalarParent.childXScalars.add(xScalar);
-      } else {
-        xScalar.parentXScalar = null;
-      }
-    }
-    //
-    for (Block block in shelf.blocks) {
-      final FormModel? formModel = block.formModel;
-      XFormModel? xFormModel;
-      if (formModel != null) {
-        //
-        // Create new XFormModel via 'formModel._createXFormModel' method
-        // to have the same Generics Parameters with block.
-        //
-        xFormModel = formModel._createXFormModel(extraFormInput: null);
-        allXFormModels.add(xFormModel);
-        xFormModelMap[formModel.block.name] = xFormModel;
-      }
-      //
-      final FilterModel filterModel = block._registeredOrDefaultFilterModel;
-      final xFilterModel = xFilterModelMap[filterModel.name]!;
-      //
-      // Create new XBlock via 'block._createXBlock' method
-      // to have the same Generics Parameters with block.
-      //
-      final xBlock = block._createXBlock(
-        xFilterModel: xFilterModel,
-        xFormModel: xFormModel,
-      );
-      xFormModel?.xBlock = xBlock;
-      //
-      xFilterModel.xBlocks.add(xBlock);
-      allXBlocks.add(xBlock);
-      xBlockMap[block.name] = xBlock;
-      //
-      if (block.parent == null) {
-        allRootXBlocks.add(xBlock);
-      }
-      if (block.childBlocks.isEmpty) {
-        allLeafXBlocks.add(xBlock);
-      }
-    }
-    //
-    for (Block block in shelf.blocks) {
-      XBlock xBlock = xBlockMap[block.name]!;
-      Block? parent = block.parent;
-      if (parent != null) {
-        XBlock xBlockParent = xBlockMap[parent.name]!;
-        xBlock.parentXBlock = xBlockParent;
-        xBlockParent.childXBlocks.add(xBlock);
-      } else {
-        xBlock.parentXBlock = null;
-      }
-    }
-  }
-
-  // ***************************************************************************
   // *** CONSTRUCTOR ***
   // ***************************************************************************
 
@@ -574,14 +482,14 @@ class XShelf {
         shelf = filterModel.shelf {
     __initCore(shelf: shelf);
     //
-    final queryHint = QryHint.force;
+    final queryHintForce = QryHint.force;
     final forceReloadItem = false;
     //
     final thisXFilterModel = xFilterModelMap[filterModel.name]!;
     thisXFilterModel.filterInput = filterInput;
     //
     for (XBlock xBlock in thisXFilterModel.xBlocks) {
-      xBlock.setQueryHint(queryHint);
+      xBlock.setQueryHint(queryHintForce);
       xBlock.setOptions(
         queryType: QueryType.realQuery,
         listBehavior: ListBehavior.replace,
@@ -602,7 +510,7 @@ class XShelf {
         if (hasXActiveUI) {
           if (parentXBlock.block.dataState == DataState.pending ||
               parentXBlock.block.dataState == DataState.error) {
-            parentXBlock.setQueryHint(QryHint.force);
+            parentXBlock.setQueryHint(queryHintForce);
           }
         }
         // TODO: Need? Remove this code?
@@ -620,7 +528,26 @@ class XShelf {
       }
     }
     for (XScalar xScalar in thisXFilterModel.xScalars) {
-      xScalar.setQueryHint(QryHint.force);
+      xScalar.setQueryHint(queryHintForce);
+      //
+      XScalar? parentXScalar = xScalar.parentXScalar;
+      while (true) {
+        if (parentXScalar == null) {
+          break;
+        }
+        //
+        final hasXActiveUI = parentXScalar.scalar.ui.hasActiveScalarFragment(
+          alsoCheckChildren: true,
+        );
+        if (hasXActiveUI) {
+          if (parentXScalar.scalar.dataState == DataState.pending ||
+              parentXScalar.scalar.dataState == DataState.error) {
+            parentXScalar.setQueryHint(queryHintForce);
+          }
+        }
+        //
+        parentXScalar = parentXScalar.parentXScalar;
+      }
     }
   }
 
@@ -1036,6 +963,100 @@ class XShelf {
     //
     XScalar xScalar = xScalarMap[scalar.name]!;
     setVipXScalar(xScalar: xScalar);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+  // ***************************************************************************
+
+  // This method will be called in all constructors to init an empty XShelf.
+  void __initCore({required Shelf shelf}) {
+    xShelfId = __xShelfSequence++;
+    //
+    for (FilterModel filterModel in shelf._allFilterModels) {
+      final xFilterModel = XFilterModel(
+        xShelf: this,
+        filterModel: filterModel,
+      );
+      //
+      xFilterModelMap[filterModel.name] = xFilterModel;
+      allXFilterModels.add(xFilterModel);
+    }
+    for (Scalar scalar in shelf.scalars) {
+      final FilterModel filterModel = scalar._registeredOrDefaultFilterModel;
+      final xFilterModel = xFilterModelMap[filterModel.name]!;
+      //
+      // Create XScalar via 'scalar._createXScalar' method
+      // to have the same Generics Parameters with scalar.
+      //
+      final xScalar = scalar._createXScalar(
+        xFilterModel: xFilterModel,
+      );
+      xFilterModel.xScalars.add(xScalar);
+      allXScalars.add(xScalar);
+      xScalarMap[scalar.name] = xScalar;
+    }
+    //
+    for (Scalar scalar in shelf.scalars) {
+      XScalar xScalar = xScalarMap[scalar.name]!;
+      Scalar? parent = scalar.parent;
+      if (parent != null) {
+        XScalar xScalarParent = xScalarMap[parent.name]!;
+        xScalar.parentXScalar = xScalarParent;
+        xScalarParent.childXScalars.add(xScalar);
+      } else {
+        xScalar.parentXScalar = null;
+      }
+    }
+    //
+    for (Block block in shelf.blocks) {
+      final FormModel? formModel = block.formModel;
+      XFormModel? xFormModel;
+      if (formModel != null) {
+        //
+        // Create new XFormModel via 'formModel._createXFormModel' method
+        // to have the same Generics Parameters with block.
+        //
+        xFormModel = formModel._createXFormModel(extraFormInput: null);
+        allXFormModels.add(xFormModel);
+        xFormModelMap[formModel.block.name] = xFormModel;
+      }
+      //
+      final FilterModel filterModel = block._registeredOrDefaultFilterModel;
+      final xFilterModel = xFilterModelMap[filterModel.name]!;
+      //
+      // Create new XBlock via 'block._createXBlock' method
+      // to have the same Generics Parameters with block.
+      //
+      final xBlock = block._createXBlock(
+        xFilterModel: xFilterModel,
+        xFormModel: xFormModel,
+      );
+      xFormModel?.xBlock = xBlock;
+      //
+      xFilterModel.xBlocks.add(xBlock);
+      allXBlocks.add(xBlock);
+      xBlockMap[block.name] = xBlock;
+      //
+      if (block.parent == null) {
+        allRootXBlocks.add(xBlock);
+      }
+      if (block.childBlocks.isEmpty) {
+        allLeafXBlocks.add(xBlock);
+      }
+    }
+    //
+    for (Block block in shelf.blocks) {
+      XBlock xBlock = xBlockMap[block.name]!;
+      Block? parent = block.parent;
+      if (parent != null) {
+        XBlock xBlockParent = xBlockMap[parent.name]!;
+        xBlock.parentXBlock = xBlockParent;
+        xBlockParent.childXBlocks.add(xBlock);
+      } else {
+        xBlock.parentXBlock = null;
+      }
+    }
   }
 
   // ***************************************************************************
