@@ -44,10 +44,11 @@ class _XShelfSbQuery extends XShelf {
     }
     //
     for (XBlock xBlock in thisXFilterModel.xBlocks) {
+      final Block block = xBlock.block;
       QryHint queryHint = QryHint.markAsPending;
       if (srcBlockAndOptions != null) {
         final Block srcBlock = srcBlockAndOptions.block;
-        final Block block = xBlock.block;
+
         if (srcBlock.isSameWith(block)) {
           // No need to review Ancestors??
           continue;
@@ -55,12 +56,13 @@ class _XShelfSbQuery extends XShelf {
         if (block.isAncestorOf(srcBlock)) {
           queryHint = QryHint.force;
         }
-        bool hasXActiveUI =
-            block.ui.hasActiveUIComponent(alsoCheckChildren: true);
-        if (hasXActiveUI) {
-          queryHint = QryHint.force;
-        }
       }
+      bool hasXActiveUI =
+          block.ui.hasActiveUIComponent(alsoCheckChildren: true);
+      if (hasXActiveUI) {
+        queryHint = QryHint.force;
+      }
+      //
       xBlock.setQueryHintToGreater(queryHint);
       // Set Default Options. They will be replaced if need.
       xBlock.setOptions(
@@ -103,10 +105,10 @@ class _XShelfSbQuery extends XShelf {
       }
     }
     for (XScalar xScalar in thisXFilterModel.xScalars) {
+      final Scalar scalar = xScalar.scalar;
       QryHint queryHint = QryHint.markAsPending;
       if (srcScalarAndOptions != null) {
         final Scalar srcScalar = srcScalarAndOptions.scalar;
-        final Scalar scalar = xScalar.scalar;
         if (srcScalar.isSameWith(scalar)) {
           // No need to review Ancestors??
           continue;
@@ -114,12 +116,13 @@ class _XShelfSbQuery extends XShelf {
         if (scalar.isAncestorOf(srcScalar)) {
           queryHint = QryHint.force;
         }
-        bool hasXActiveUI =
-            scalar.ui.hasActiveUIComponent(alsoCheckChildren: true);
-        if (hasXActiveUI) {
-          queryHint = QryHint.force;
-        }
       }
+      bool hasXActiveUI =
+          scalar.ui.hasActiveUIComponent(alsoCheckChildren: true);
+      if (hasXActiveUI) {
+        queryHint = QryHint.force;
+      }
+      //
       xScalar.setQueryHintToGreater(queryHint);
       // Set Default Options. They will be replaced if need.
       xScalar.setOptions(
