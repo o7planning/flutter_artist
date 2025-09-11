@@ -8,6 +8,8 @@ class _XShelfSbQuery extends XShelf {
   // ***************************************************************************
 
   void _updateQueryStateFromFilterModelAndFilterInput({
+    required SrcBlockAndOptions? srcBlockAndOptions,
+    required SrcScalarAndOptions? srcScalarAndOptions,
     required FilterModel filterModel,
     required FilterInput? filterInput,
   }) {

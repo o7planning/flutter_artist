@@ -11,6 +11,11 @@ class _XShelfScalarQuery extends _XShelfSbQuery {
     _updateQueryStateFromFilterModelAndFilterInput(
       filterModel: scalar.registeredOrDefaultFilterModel,
       filterInput: filterInput,
+      srcBlockAndOptions: null,
+      srcScalarAndOptions: SrcScalarAndOptions(
+        scalar: scalar,
+        queryType: QueryType.realQuery,
+      ),
     );
     //
     // Replace:

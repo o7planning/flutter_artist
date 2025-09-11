@@ -15,6 +15,15 @@ class _XShelfBlockQueryThenPrepareToEdit extends _XShelfSbQuery {
     _updateQueryStateFromFilterModelAndFilterInput(
       filterModel: block.registeredOrDefaultFilterModel,
       filterInput: filterInput,
+      srcBlockAndOptions: SrcBlockAndOptions(
+        block: block,
+        queryType: QueryType.realQuery,
+        listBehavior: listBehavior,
+        suggestedSelection: suggestedSelection,
+        postQueryBehavior: postQueryBehavior,
+        pageable: pageable,
+      ),
+      srcScalarAndOptions: null,
     );
     //
     final thisXBlock = xBlockMap[block.name]!;
