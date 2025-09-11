@@ -17,7 +17,7 @@ class _XShelfBlockQueryEmpty extends _XShelfSbQuery {
       filterInput: filterInput,
       srcBlockAndOptions: SrcBlockAndOptions(
         block: block,
-        queryType: QueryType.realQuery,
+        queryType: QueryType.emptyQuery,
         listBehavior: listBehavior,
         suggestedSelection: suggestedSelection,
         postQueryBehavior: postQueryBehavior,
@@ -26,20 +26,20 @@ class _XShelfBlockQueryEmpty extends _XShelfSbQuery {
       srcScalarAndOptions: null,
     );
     //
-    final thisXBlock = xBlockMap[block.name]!;
-    final xFilterModel = thisXBlock.xFilterModel;
-    xFilterModel.filterInput = filterInput;
-    //
-    thisXBlock.setForceReloadCurrItem(false);
-    //
-    thisXBlock.setQueryHintToGreater(QryHint.force);
-    thisXBlock.setOptions(
-      queryType: QueryType.emptyQuery,
-      listBehavior: listBehavior,
-      suggestedSelection: suggestedSelection,
-      postQueryBehavior: postQueryBehavior,
-      pageable: pageable,
-    );
+    // final thisXBlock = xBlockMap[block.name]!;
+    // final xFilterModel = thisXBlock.xFilterModel;
+    // xFilterModel.filterInput = filterInput;
+    // //
+    // thisXBlock.setForceReloadCurrItem(false);
+    // //
+    // thisXBlock.setQueryHintToGreater(QryHint.force);
+    // thisXBlock.setOptions(
+    //   queryType: QueryType.emptyQuery,
+    //   listBehavior: listBehavior,
+    //   suggestedSelection: suggestedSelection,
+    //   postQueryBehavior: postQueryBehavior,
+    //   pageable: pageable,
+    // );
     // XBlock? parentXBlock = thisXBlock.parentXBlock;
     // while (true) {
     //   if (parentXBlock == null) {
@@ -69,6 +69,6 @@ class _XShelfBlockQueryEmpty extends _XShelfSbQuery {
     //   parentXBlock = parentXBlock.parentXBlock;
     // }
     //
-    setRootVipXBlock(descendantXBlock: thisXBlock);
+    // setRootVipXBlock(descendantXBlock: thisXBlock);
   }
 }

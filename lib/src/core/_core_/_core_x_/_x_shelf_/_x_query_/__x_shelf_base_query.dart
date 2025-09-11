@@ -33,6 +33,7 @@ class _XShelfSbQuery extends XShelf {
         postQueryBehavior: srcBlockAndOptions.postQueryBehavior,
         pageable: srcBlockAndOptions.pageable,
       );
+      setRootVipXBlock(descendantXBlock: srcXBlock);
     }
     if (srcScalarAndOptions != null) {
       Scalar srcScalar = srcScalarAndOptions.scalar;
@@ -41,6 +42,7 @@ class _XShelfSbQuery extends XShelf {
       srcXScalar.setOptions(
         queryType: srcScalarAndOptions.queryType,
       );
+      setRootVipXScalar(descendantXScalar: srcXScalar);
     }
     //
     for (XBlock xBlock in thisXFilterModel.xBlocks) {
@@ -57,8 +59,9 @@ class _XShelfSbQuery extends XShelf {
           queryHint = QryHint.force;
         }
       }
-      bool hasXActiveUI =
-          block.ui.hasActiveUIComponent(alsoCheckChildren: true);
+      bool hasXActiveUI = block.ui.hasActiveUIComponent(
+        alsoCheckChildren: true,
+      );
       if (hasXActiveUI) {
         queryHint = QryHint.force;
       }
@@ -117,8 +120,9 @@ class _XShelfSbQuery extends XShelf {
           queryHint = QryHint.force;
         }
       }
-      bool hasXActiveUI =
-          scalar.ui.hasActiveUIComponent(alsoCheckChildren: true);
+      bool hasXActiveUI = scalar.ui.hasActiveUIComponent(
+        alsoCheckChildren: true,
+      );
       if (hasXActiveUI) {
         queryHint = QryHint.force;
       }

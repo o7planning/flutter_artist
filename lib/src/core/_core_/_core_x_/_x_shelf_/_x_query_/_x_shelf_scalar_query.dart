@@ -20,14 +20,14 @@ class _XShelfScalarQuery extends _XShelfSbQuery {
     //
     // Replace:
     //
-    final XScalar thisXScalar = xScalarMap[scalar.name]!;
-    final XFilterModel xFilterModel = thisXScalar.xFilterModel;
-    xFilterModel.filterInput = filterInput;
-    //
-    thisXScalar.setQueryHintToGreater(QryHint.force);
+    // final XScalar thisXScalar = xScalarMap[scalar.name]!;
+    // final XFilterModel xFilterModel = thisXScalar.xFilterModel;
+    // xFilterModel.filterInput = filterInput;
+    // //
+    // thisXScalar.setQueryHintToGreater(QryHint.force);
     //
     // IMPORTANT:
     //
-    setRootVipXScalar(descendantXScalar: thisXScalar);
+    // setRootVipXScalar(descendantXScalar: thisXScalar);
   }
 }

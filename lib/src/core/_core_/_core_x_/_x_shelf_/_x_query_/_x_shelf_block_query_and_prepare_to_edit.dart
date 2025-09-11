@@ -26,20 +26,20 @@ class _XShelfBlockQueryThenPrepareToEdit extends _XShelfSbQuery {
       srcScalarAndOptions: null,
     );
     //
-    final thisXBlock = xBlockMap[block.name]!;
-    final xFilterModel = thisXBlock.xFilterModel;
-    xFilterModel.filterInput = filterInput;
-    //
-    thisXBlock.setForceReloadCurrItem(false);
-    //
-    thisXBlock.setQueryHintToGreater(QryHint.force);
-    thisXBlock.setOptions(
-      queryType: QueryType.realQuery,
-      listBehavior: listBehavior,
-      suggestedSelection: suggestedSelection,
-      postQueryBehavior: postQueryBehavior,
-      pageable: pageable,
-    );
+    // final thisXBlock = xBlockMap[block.name]!;
+    // final xFilterModel = thisXBlock.xFilterModel;
+    // xFilterModel.filterInput = filterInput;
+    // //
+    // thisXBlock.setForceReloadCurrItem(false);
+    // //
+    // thisXBlock.setQueryHintToGreater(QryHint.force);
+    // thisXBlock.setOptions(
+    //   queryType: QueryType.realQuery,
+    //   listBehavior: listBehavior,
+    //   suggestedSelection: suggestedSelection,
+    //   postQueryBehavior: postQueryBehavior,
+    //   pageable: pageable,
+    // );
     // XBlock? parentXBlock = thisXBlock.parentXBlock;
     // while (true) {
     //   if (parentXBlock == null) {
@@ -69,6 +69,6 @@ class _XShelfBlockQueryThenPrepareToEdit extends _XShelfSbQuery {
     //   parentXBlock = parentXBlock.parentXBlock;
     // }
     // IMPORTANT:
-    setRootVipXBlock(descendantXBlock: thisXBlock);
+    // setRootVipXBlock(descendantXBlock: thisXBlock);
   }
 }
