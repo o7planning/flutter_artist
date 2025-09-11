@@ -7,7 +7,7 @@ class _XShelfShelfNaturalQuery extends _XShelfSbQuery {
       if (xScalar.scalar.ui.hasActiveUIComponent()) {
         if (xScalar.scalar.dataState == DataState.pending ||
             xScalar.scalar.dataState == DataState.error) {
-          xScalar.setQueryHint(QryHint.force);
+          xScalar.setQueryHintToGreater(QryHint.force);
         }
       }
     }
@@ -24,7 +24,7 @@ class _XShelfShelfNaturalQuery extends _XShelfSbQuery {
         if (hasXActiveUI) {
           if (xBlock.block.dataState == DataState.pending ||
               xBlock.block.dataState == DataState.error) {
-            xBlock.setQueryHint(QryHint.force);
+            xBlock.setQueryHintToGreater(QryHint.force);
           }
         }
         XFormModel? xFormModel = xBlock.xFormModel;

@@ -28,7 +28,7 @@ class _XShelfBlockSilentActionExecution extends XShelf {
         forceReloadItem = false;
     }
     //
-    thisXBlock.setQueryHint(queryHint);
+    thisXBlock.setQueryHintToGreater(queryHint);
     thisXBlock.setForceReloadCurrItem(forceReloadItem);
     if (forceReloadItem) {
       thisXBlock.setCandidateCurrItem(thisXBlock.block.currentItem);

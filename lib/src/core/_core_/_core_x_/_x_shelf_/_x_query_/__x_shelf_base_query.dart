@@ -25,7 +25,7 @@ class _XShelfSbQuery extends XShelf {
     if (srcBlockAndOptions != null) {
       final Block srcBlock = srcBlockAndOptions.block;
       final XBlock srcXBlock = xBlockMap[srcBlock.name]!;
-      srcXBlock.setQueryHint(QryHint.force);
+      srcXBlock.setQueryHintToGreater(QryHint.force);
       srcXBlock.setOptions(
         queryType: srcBlockAndOptions.queryType,
         listBehavior: srcBlockAndOptions.listBehavior,
@@ -37,7 +37,7 @@ class _XShelfSbQuery extends XShelf {
     if (srcScalarAndOptions != null) {
       Scalar srcScalar = srcScalarAndOptions.scalar;
       XScalar srcXScalar = xScalarMap[srcScalar.name]!;
-      srcXScalar.setQueryHint(QryHint.force);
+      srcXScalar.setQueryHintToGreater(QryHint.force);
       srcXScalar.setOptions(
         queryType: srcScalarAndOptions.queryType,
       );
@@ -86,7 +86,7 @@ class _XShelfSbQuery extends XShelf {
           if (hasXActiveUI) {
             if (parentXBlock.block.dataState == DataState.pending ||
                 parentXBlock.block.dataState == DataState.error) {
-              parentXBlock.setQueryHint(QryHint.force);
+              parentXBlock.setQueryHintToGreater(QryHint.force);
             }
           }
           // TODO: Need? Remove this code?

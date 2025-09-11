@@ -220,9 +220,7 @@ abstract class XShelf {
       }
       //
       XBlock xBlock = findXBlockByName(listenerBlkName)!;
-      if (xBlock.queryHint.isLessThan(queryHint)) {
-        xBlock.setQueryHint(queryHint);
-      }
+      xBlock.setQueryHintToGreater(queryHint);
       if (forceReloadCurrItem) {
         xBlock.setForceReloadCurrItem(forceReloadCurrItem);
       }
@@ -235,10 +233,10 @@ abstract class XShelf {
       bool hasActiveUI = s.ui.hasActiveUIComponent();
       if (hasActiveUI) {
         //
-        xScalar.setQueryHint(QryHint.force);
+        xScalar.setQueryHintToGreater(QryHint.force);
       } else {
         //
-        xScalar.setQueryHint(QryHint.markAsPending);
+        xScalar.setQueryHintToGreater(QryHint.markAsPending);
       }
     }
     //
@@ -254,7 +252,7 @@ abstract class XShelf {
         if (hasXActiveUI) {
           if (xBlock.block.dataState == DataState.pending ||
               xBlock.block.dataState == DataState.error) {
-            xBlock.setQueryHint(QryHint.force);
+            xBlock.setQueryHintToGreater(QryHint.force);
           }
         }
         XFormModel? xFormModel = xBlock.xFormModel;

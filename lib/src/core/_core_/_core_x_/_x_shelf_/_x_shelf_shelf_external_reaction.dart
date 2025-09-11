@@ -33,7 +33,7 @@ class _XShelfShelfExternalReaction extends XShelf {
       }
       //
       XBlock xBlock = xBlockMap[listenerBlkName]!;
-      xBlock.setQueryHint(queryHint);
+      xBlock.setQueryHintToGreater(queryHint);
       xBlock.setForceReloadCurrItem(forceReloadItem);
     }
     //
@@ -44,10 +44,10 @@ class _XShelfShelfExternalReaction extends XShelf {
       bool hasActiveUI = s.ui.hasActiveUIComponent();
       if (hasActiveUI) {
         // Test Cases: [84a].
-        xScalar.setQueryHint(QryHint.force);
+        xScalar.setQueryHintToGreater(QryHint.force);
       } else {
         // Test Cases: [84b].
-        xScalar.setQueryHint(QryHint.markAsPending);
+        xScalar.setQueryHintToGreater(QryHint.markAsPending);
       }
     }
     //
@@ -63,7 +63,7 @@ class _XShelfShelfExternalReaction extends XShelf {
         if (hasXActiveUI) {
           if (xBlock.block.dataState == DataState.pending ||
               xBlock.block.dataState == DataState.error) {
-            xBlock.setQueryHint(QryHint.force);
+            xBlock.setQueryHintToGreater(QryHint.force);
           }
         }
         XFormModel? xFormModel = xBlock.xFormModel;

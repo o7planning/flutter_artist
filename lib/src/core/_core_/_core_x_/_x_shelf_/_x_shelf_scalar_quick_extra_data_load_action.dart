@@ -13,7 +13,7 @@ class _XShelfScalarQuickExtraDataLoadAction extends XShelf {
     final xFilterModel = thisXScalar.xFilterModel;
     xFilterModel.filterInput = filterInput;
     //
-    thisXScalar.setQueryHint(QryHint.force);
+    thisXScalar.setQueryHintToGreater(QryHint.force);
     //
     // IMPORTANT:
     //

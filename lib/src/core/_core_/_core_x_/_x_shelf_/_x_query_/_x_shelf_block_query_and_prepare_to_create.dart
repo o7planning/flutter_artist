@@ -32,7 +32,7 @@ class _XShelfBlockQueryThenPrepareToCreate extends _XShelfSbQuery {
     //
     thisXBlock.setForceReloadCurrItem(false);
     //
-    thisXBlock.setQueryHint(QryHint.force);
+    thisXBlock.setQueryHintToGreater(QryHint.force);
     thisXBlock.setOptions(
       queryType: QueryType.realQuery,
       listBehavior: listBehavior,

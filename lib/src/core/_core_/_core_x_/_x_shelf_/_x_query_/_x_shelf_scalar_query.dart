@@ -24,7 +24,7 @@ class _XShelfScalarQuery extends _XShelfSbQuery {
     final XFilterModel xFilterModel = thisXScalar.xFilterModel;
     xFilterModel.filterInput = filterInput;
     //
-    thisXScalar.setQueryHint(QryHint.force);
+    thisXScalar.setQueryHintToGreater(QryHint.force);
     //
     // IMPORTANT:
     //
