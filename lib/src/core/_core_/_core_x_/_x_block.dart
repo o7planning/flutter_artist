@@ -163,6 +163,12 @@ class XBlock<
     __qryHint = queryHint;
   }
 
+  void setQueryHintToGreater(QryHint queryHint) {
+    if (__qryHint.isLessThan(queryHint)) {
+      __qryHint = queryHint;
+    }
+  }
+
   void setForceReloadCurrItem(bool forceReloadCurrItem) {
     __forceReloadCurrItem = forceReloadCurrItem;
   }

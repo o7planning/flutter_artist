@@ -18,14 +18,50 @@ class _XShelfSbQuery extends XShelf {
           "@@@@@@@@@@@@@@@@@@@@@@@@@@@ ------------------------------------------> Default isDefaultFilterModel");
       // return;
     }
-    final queryHintForce = QryHint.force;
-    final forceReloadItem = false;
     //
     final thisXFilterModel = xFilterModelMap[filterModel.name]!;
     thisXFilterModel.filterInput = filterInput;
     //
+    if (srcBlockAndOptions != null) {
+      final Block srcBlock = srcBlockAndOptions.block;
+      final XBlock srcXBlock = xBlockMap[srcBlock.name]!;
+      srcXBlock.setQueryHint(QryHint.force);
+      srcXBlock.setOptions(
+        queryType: srcBlockAndOptions.queryType,
+        listBehavior: srcBlockAndOptions.listBehavior,
+        suggestedSelection: srcBlockAndOptions.suggestedSelection,
+        postQueryBehavior: srcBlockAndOptions.postQueryBehavior,
+        pageable: srcBlockAndOptions.pageable,
+      );
+    }
+    if (srcScalarAndOptions != null) {
+      Scalar srcScalar = srcScalarAndOptions.scalar;
+      XScalar srcXScalar = xScalarMap[srcScalar.name]!;
+      srcXScalar.setQueryHint(QryHint.force);
+      srcXScalar.setOptions(
+        queryType: srcScalarAndOptions.queryType,
+      );
+    }
+    //
     for (XBlock xBlock in thisXFilterModel.xBlocks) {
-      xBlock.setQueryHint(queryHintForce);
+      QryHint queryHint = QryHint.markAsPending;
+      if (srcBlockAndOptions != null) {
+        final Block srcBlock = srcBlockAndOptions.block;
+        final Block block = xBlock.block;
+        if (srcBlock.isSameWith(block)) {
+          // No need to review Ancestors??
+          continue;
+        }
+        if (block.isAncestorOf(srcBlock)) {
+          queryHint = QryHint.force;
+        }
+        bool hasXActiveUI =
+            block.ui.hasActiveUIComponent(alsoCheckChildren: true);
+        if (hasXActiveUI) {
+          queryHint = QryHint.force;
+        }
+      }
+      xBlock.setQueryHintToGreater(queryHint);
       // Set Default Options. They will be replaced if need.
       xBlock.setOptions(
         queryType: QueryType.realQuery,
@@ -35,55 +71,80 @@ class _XShelfSbQuery extends XShelf {
         pageable: null,
       );
       //
-      XBlock? parentXBlock = xBlock.parentXBlock;
-      while (true) {
-        if (parentXBlock == null) {
-          break;
-        }
-        //
-        final hasXActiveUI = parentXBlock.block.ui.hasActiveBlockFragment(
-          alsoCheckChildren: true,
-        );
-        if (hasXActiveUI) {
-          if (parentXBlock.block.dataState == DataState.pending ||
-              parentXBlock.block.dataState == DataState.error) {
-            parentXBlock.setQueryHint(queryHintForce);
+      if (queryHint == QryHint.force) {
+        XBlock? parentXBlock = xBlock.parentXBlock;
+        while (true) {
+          if (parentXBlock == null) {
+            break;
           }
+          //
+          final hasXActiveUI = parentXBlock.block.ui.hasActiveBlockFragment(
+            alsoCheckChildren: true,
+          );
+          if (hasXActiveUI) {
+            if (parentXBlock.block.dataState == DataState.pending ||
+                parentXBlock.block.dataState == DataState.error) {
+              parentXBlock.setQueryHint(QryHint.force);
+            }
+          }
+          // TODO: Need? Remove this code?
+          // XFormModel? parentXFormModel = parentXBlock.xFormModel;
+          // if (parentXFormModel != null &&
+          //     parentXFormModel.formModel.ui.hasActiveUIComponent()) {
+          //   if (parentXFormModel.formModel.dataState == DataState.pending ||
+          //       parentXFormModel.formModel.dataState == DataState.error ||
+          //       parentXFormModel.formModel.dataState == DataState.none) {
+          //     parentXFormModel.setForceType(ForceType.decidedAtRuntime);
+          //   }
+          // }
+          //
+          parentXBlock = parentXBlock.parentXBlock;
         }
-        // TODO: Need? Remove this code?
-        // XFormModel? parentXFormModel = parentXBlock.xFormModel;
-        // if (parentXFormModel != null &&
-        //     parentXFormModel.formModel.ui.hasActiveUIComponent()) {
-        //   if (parentXFormModel.formModel.dataState == DataState.pending ||
-        //       parentXFormModel.formModel.dataState == DataState.error ||
-        //       parentXFormModel.formModel.dataState == DataState.none) {
-        //     parentXFormModel.setForceType(ForceType.decidedAtRuntime);
-        //   }
-        // }
-        //
-        parentXBlock = parentXBlock.parentXBlock;
       }
     }
     for (XScalar xScalar in thisXFilterModel.xScalars) {
-      xScalar.setQueryHint(queryHintForce);
-      //
-      XScalar? parentXScalar = xScalar.parentXScalar;
-      while (true) {
-        if (parentXScalar == null) {
-          break;
+      QryHint queryHint = QryHint.markAsPending;
+      if (srcScalarAndOptions != null) {
+        final Scalar srcScalar = srcScalarAndOptions.scalar;
+        final Scalar scalar = xScalar.scalar;
+        if (srcScalar.isSameWith(scalar)) {
+          // No need to review Ancestors??
+          continue;
         }
-        //
-        final hasXActiveUI = parentXScalar.scalar.ui.hasActiveScalarFragment(
-          alsoCheckChildren: true,
-        );
+        if (scalar.isAncestorOf(srcScalar)) {
+          queryHint = QryHint.force;
+        }
+        bool hasXActiveUI =
+            scalar.ui.hasActiveUIComponent(alsoCheckChildren: true);
         if (hasXActiveUI) {
-          if (parentXScalar.scalar.dataState == DataState.pending ||
-              parentXScalar.scalar.dataState == DataState.error) {
-            parentXScalar.setQueryHint(queryHintForce);
-          }
+          queryHint = QryHint.force;
         }
-        //
-        parentXScalar = parentXScalar.parentXScalar;
+      }
+      xScalar.setQueryHintToGreater(queryHint);
+      // Set Default Options. They will be replaced if need.
+      xScalar.setOptions(
+        queryType: QueryType.realQuery,
+      );
+      //
+      if (queryHint == QryHint.force) {
+        XScalar? parentXScalar = xScalar.parentXScalar;
+        while (true) {
+          if (parentXScalar == null) {
+            break;
+          }
+          //
+          final hasXActiveUI = parentXScalar.scalar.ui.hasActiveScalarFragment(
+            alsoCheckChildren: true,
+          );
+          if (hasXActiveUI) {
+            if (parentXScalar.scalar.dataState == DataState.pending ||
+                parentXScalar.scalar.dataState == DataState.error) {
+              parentXScalar.setQueryHintToGreater(QryHint.force);
+            }
+          }
+          //
+          parentXScalar = parentXScalar.parentXScalar;
+        }
       }
     }
   }

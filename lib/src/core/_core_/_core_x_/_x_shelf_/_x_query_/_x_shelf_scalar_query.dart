@@ -20,8 +20,8 @@ class _XShelfScalarQuery extends _XShelfSbQuery {
     //
     // Replace:
     //
-    final thisXScalar = xScalarMap[scalar.name]!;
-    final xFilterModel = thisXScalar.xFilterModel;
+    final XScalar thisXScalar = xScalarMap[scalar.name]!;
+    final XFilterModel xFilterModel = thisXScalar.xFilterModel;
     xFilterModel.filterInput = filterInput;
     //
     thisXScalar.setQueryHint(QryHint.force);

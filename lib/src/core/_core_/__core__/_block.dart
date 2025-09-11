@@ -179,6 +179,39 @@ abstract class Block<
 
   bool get isRoot => parent == null;
 
+  bool isSameWith(Block other) {
+    if (this.shelf.name != other.shelf.name) {
+      return false;
+    }
+    if (this.name == other.name) {
+      return true;
+    }
+    return false;
+  }
+
+  bool isAncestorOf(Block other) {
+    if (this.shelf.name != other.shelf.name) {
+      return false;
+    }
+    if (this.name == other.name) {
+      return false;
+    }
+    Block b = other;
+    while (true) {
+      Block? p = b.parent;
+      if (p == null) {
+        return false;
+      }
+      if (p.name == this.name) {
+        return true;
+      }
+    }
+  }
+
+  bool isDescendantOf(Block other) {
+    return other.isAncestorOf(this);
+  }
+
   final FormModel<
       ID, //
       ITEM_DETAIL,

@@ -51,8 +51,6 @@ abstract class Scalar<
 
   String? get parentScalarName => parent?.name;
 
-  bool get isRoot => parent == null;
-
   final List<Scalar> _childScalars;
 
   List<Scalar> get childScalars => [..._childScalars];
@@ -99,6 +97,41 @@ abstract class Scalar<
   ///
   List<Scalar> get descendingAncestorScalars {
     return ascendingAncestorScalars.reversed.toList();
+  }
+
+  bool get isRoot => parent == null;
+
+  bool isSameWith(Scalar other) {
+    if (this.shelf.name != other.shelf.name) {
+      return false;
+    }
+    if (this.name == other.name) {
+      return true;
+    }
+    return false;
+  }
+
+  bool isAncestorOf(Scalar other) {
+    if (this.shelf.name != other.shelf.name) {
+      return false;
+    }
+    if (this.name == other.name) {
+      return false;
+    }
+    Scalar b = other;
+    while (true) {
+      Scalar? p = b.parent;
+      if (p == null) {
+        return false;
+      }
+      if (p.name == this.name) {
+        return true;
+      }
+    }
+  }
+
+  bool isDescendantOf(Scalar other) {
+    return other.isAncestorOf(this);
   }
 
   ///

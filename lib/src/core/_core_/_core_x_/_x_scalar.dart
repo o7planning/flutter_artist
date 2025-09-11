@@ -3,6 +3,10 @@ part of '../core.dart';
 class XScalar<ID extends Object, VALUE extends Object> {
   XShelf get xShelf => xFilterModel.xShelf;
 
+  QueryType __queryType = QueryType.realQuery;
+
+  QueryType get queryType => __queryType;
+
   final Scalar<ID, VALUE, FilterInput, FilterCriteria> scalar;
 
   final XFilterModel xFilterModel;
@@ -60,6 +64,18 @@ class XScalar<ID extends Object, VALUE extends Object> {
 
   void setQueryHint(QryHint qryHint) {
     __qryHint = qryHint;
+  }
+
+  void setQueryHintToGreater(QryHint qryHint) {
+    if (__qryHint.isLessThan(qryHint)) {
+      __qryHint = qryHint;
+    }
+  }
+
+  void setOptions({
+    required QueryType queryType,
+  }) {
+    __queryType = queryType;
   }
 
   void printInfo() {
