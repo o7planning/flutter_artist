@@ -63,6 +63,22 @@ abstract class Scalar<
     return ret;
   }
 
+  List<Scalar> get descendantScalarsWithSameFilterModel {
+    if (this.filterModel == null) {
+      return [];
+    }
+    List<Scalar> ret = [];
+    for (Scalar childScalar in _childScalars) {
+      if (childScalar.filterModel != null) {
+        if (this.filterModel!.name == childScalar.filterModel!.name) {
+          ret.add(childScalar);
+        }
+      }
+      ret.addAll(childScalar.descendantScalarsWithSameFilterModel);
+    }
+    return ret;
+  }
+
   List<Scalar> get ancestorScalars {
     return ascendingAncestorScalars.reversed.toList();
   }

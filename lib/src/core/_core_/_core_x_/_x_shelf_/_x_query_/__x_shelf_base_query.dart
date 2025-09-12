@@ -55,6 +55,7 @@ class _XShelfSbQuery extends XShelf {
           // No need to review Ancestors??
           continue;
         }
+        // Search: LOGIC-02.
         if (block.isAncestorOf(srcBlock)) {
           queryHint = QryHint.force;
         }
@@ -116,6 +117,7 @@ class _XShelfSbQuery extends XShelf {
           // No need to review Ancestors??
           continue;
         }
+        // Search: LOGIC-02.
         if (scalar.isAncestorOf(srcScalar)) {
           queryHint = QryHint.force;
         }

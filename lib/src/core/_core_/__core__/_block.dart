@@ -232,6 +232,22 @@ abstract class Block<
     return ret;
   }
 
+  List<Block> get descendantBlocksWithSameFilterModel {
+    if (this.filterModel == null) {
+      return [];
+    }
+    List<Block> ret = [];
+    for (Block childBlock in _childBlocks) {
+      if (childBlock.filterModel != null) {
+        if (this.filterModel!.name == childBlock.filterModel!.name) {
+          ret.add(childBlock);
+        }
+      }
+      ret.addAll(childBlock.descendantBlocksWithSameFilterModel);
+    }
+    return ret;
+  }
+
   List<Block> get ancestorBlocks {
     return ascendingAncestorBlocks.reversed.toList();
   }

@@ -8,25 +8,25 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
     Set<String> listenerBlockNames = {}
       ..addAll(effectedShelfMembers._reQueryBlockMAP.keys)
       ..addAll(effectedShelfMembers._refreshCurrItmBlockMAP.keys);
-
+    // -------------------------------------------------------------------------
     for (String listenerBlkName in listenerBlockNames) {
       final Block? reQryBlock =
           effectedShelfMembers._reQueryBlockMAP[listenerBlkName];
       final Block? refreshCurrBlock =
           effectedShelfMembers._refreshCurrItmBlockMAP[listenerBlkName];
       //
-      bool blockVisible = false;
+      bool blockXVisible = false;
       QryHint queryHint = QryHint.none;
       bool forceReloadItem = false;
       //
       if (reQryBlock != null) {
-        blockVisible = reQryBlock.ui.hasActiveBlockFragment(
+        blockXVisible = reQryBlock.ui.hasActiveBlockFragment(
           alsoCheckChildren: true,
         );
-        queryHint = blockVisible ? QryHint.force : QryHint.markAsPending;
+        queryHint = blockXVisible ? QryHint.force : QryHint.markAsPending;
       }
       if (refreshCurrBlock != null) {
-        blockVisible = refreshCurrBlock.ui.hasActiveBlockFragment(
+        blockXVisible = refreshCurrBlock.ui.hasActiveBlockFragment(
           alsoCheckChildren: true,
         );
         forceReloadItem = true;
@@ -36,21 +36,7 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
       xBlock.setQueryHintToGreater(queryHint);
       xBlock.setForceReloadCurrItem(forceReloadItem);
     }
-    //
-    for (Scalar s in effectedShelfMembers._reQueryScalarMAP.values) {
-      String scalarName = s.name;
-      XScalar xScalar = xScalarMap[scalarName]!;
-      //
-      bool hasActiveUI = s.ui.hasActiveUIComponent();
-      if (hasActiveUI) {
-        // Test Cases: [84a].
-        xScalar.setQueryHintToGreater(QryHint.force);
-      } else {
-        // Test Cases: [84b].
-        xScalar.setQueryHintToGreater(QryHint.markAsPending);
-      }
-    }
-    //
+    // -------------------------------------------------------------------------
     for (XBlock leafXBlock in allLeafXBlocks) {
       XBlock? xBlock = leafXBlock;
       while (true) {
@@ -66,6 +52,18 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
             xBlock.setQueryHintToGreater(QryHint.force);
           }
         }
+        // Descendant Blocks with the same FilterModel:
+        List<Block> descendantSFMBlocks =
+            xBlock.block.descendantBlocksWithSameFilterModel;
+        for (Block descendantBlock in descendantSFMBlocks) {
+          XBlock descendantXBlock = xBlockMap[descendantBlock.name]!;
+          if (descendantXBlock.queryHint == QryHint.force) {
+            // Search: LOGIC-02.
+            xBlock.setQueryHintToGreater(QryHint.force);
+            break;
+          }
+        }
+        //
         XFormModel? xFormModel = xBlock.xFormModel;
         // Current: forShelfExternalReaction
         if (xFormModel != null &&
@@ -82,6 +80,53 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
           }
         }
         xBlock = xBlock.parentXBlock;
+      }
+    }
+    // -------------------------------------------------------------------------
+    for (Scalar scalar in effectedShelfMembers._reQueryScalarMAP.values) {
+      String scalarName = scalar.name;
+      XScalar xScalar = xScalarMap[scalarName]!;
+      //
+      bool scalarXVisible = scalar.ui.hasActiveUIComponent(
+        alsoCheckChildren: true,
+      );
+      if (scalarXVisible) {
+        // Test Cases: [84a].
+        xScalar.setQueryHintToGreater(QryHint.force);
+      } else {
+        // Test Cases: [84b].
+        xScalar.setQueryHintToGreater(QryHint.markAsPending);
+      }
+    }
+    // -------------------------------------------------------------------------
+    for (XScalar leafXScalar in allLeafXScalars) {
+      XScalar? xScalar = leafXScalar;
+      while (true) {
+        if (xScalar == null) {
+          break;
+        }
+        bool hasXActiveUI = xScalar.scalar.ui.hasActiveScalarFragment(
+          alsoCheckChildren: true,
+        );
+        if (hasXActiveUI) {
+          if (xScalar.scalar.dataState == DataState.pending ||
+              xScalar.scalar.dataState == DataState.error) {
+            xScalar.setQueryHintToGreater(QryHint.force);
+          }
+        }
+        // Descendant Scalars with the same FilterModel:
+        List<Scalar> descendantSFMScalars =
+            xScalar.scalar.descendantScalarsWithSameFilterModel;
+        for (Scalar descendantScalar in descendantSFMScalars) {
+          XScalar descendantXScalar = xScalarMap[descendantScalar.name]!;
+          if (descendantXScalar.queryHint == QryHint.force) {
+            // Search: LOGIC-02.
+            xScalar.setQueryHintToGreater(QryHint.force);
+            break;
+          }
+        }
+        //
+        xScalar = xScalar.parentXScalar;
       }
     }
   }

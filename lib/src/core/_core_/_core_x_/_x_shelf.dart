@@ -14,10 +14,19 @@ abstract class XShelf {
   final Map<String, XScalar> xScalarMap = {};
   final Map<String, XBlock> xBlockMap = {};
 
+  //
   final List<XBlock> allRootXBlocks = [];
+  final List<XScalar> allRootXScalars = [];
+
+  //
   final List<XBlock> allLeafXBlocks = [];
+  final List<XScalar> allLeafXScalars = [];
+
+  //
   final List<XScalar> allXScalars = [];
   final List<XBlock> allXBlocks = [];
+
+  //
   final List<XFilterModel> allXFilterModels = [];
   final List<XFormModel> allXFormModels = [];
 
@@ -59,6 +68,13 @@ abstract class XShelf {
       xFilterModel.xScalars.add(xScalar);
       allXScalars.add(xScalar);
       xScalarMap[scalar.name] = xScalar;
+      //
+      if (scalar.parent == null) {
+        allRootXScalars.add(xScalar);
+      }
+      if (scalar.childScalars.isEmpty) {
+        allLeafXScalars.add(xScalar);
+      }
     }
     //
     for (Scalar scalar in shelf.scalars) {
