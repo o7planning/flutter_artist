@@ -17,17 +17,5 @@ class _XShelfScalarQuery extends _XShelfSbQuery {
         queryType: QueryType.realQuery,
       ),
     );
-    //
-    // Replace:
-    //
-    // final XScalar thisXScalar = xScalarMap[scalar.name]!;
-    // final XFilterModel xFilterModel = thisXScalar.xFilterModel;
-    // xFilterModel.filterInput = filterInput;
-    // //
-    // thisXScalar.setQueryHintToGreater(QryHint.force);
-    //
-    // IMPORTANT:
-    //
-    // setRootVipXScalar(descendantXScalar: thisXScalar);
   }
 }
