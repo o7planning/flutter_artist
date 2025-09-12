@@ -205,6 +205,7 @@ abstract class Block<
       if (p.name == this.name) {
         return true;
       }
+      b = p;
     }
   }
 

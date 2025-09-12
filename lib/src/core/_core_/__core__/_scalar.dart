@@ -117,15 +117,16 @@ abstract class Scalar<
     if (this.name == other.name) {
       return false;
     }
-    Scalar b = other;
+    Scalar s = other;
     while (true) {
-      Scalar? p = b.parent;
+      Scalar? p = s.parent;
       if (p == null) {
         return false;
       }
       if (p.name == this.name) {
         return true;
       }
+      s = p;
     }
   }
 
