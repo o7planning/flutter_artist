@@ -6,6 +6,7 @@ class _ShelfExternalUtils {
 
   _ShelfExternalUtils(this.shelf);
 
+  // Test Cases: [99a]
   EffectedShelfMembers calculateEffectedShelfMembersByEvents(
       List<Type> events) {
     EffectedShelfMembers ret = EffectedShelfMembers.ofNothing();
