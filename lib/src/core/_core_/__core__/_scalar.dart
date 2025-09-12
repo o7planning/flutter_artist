@@ -21,7 +21,6 @@ part of '../core.dart';
 /// ```
 ///
 abstract class Scalar<
-    ID extends Object,
     VALUE extends Object,
     FILTER_INPUT extends FilterInput, // EmptyFilterInput
     FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
@@ -201,7 +200,7 @@ abstract class Scalar<
   }
 
   late final __scalarData =
-      _ScalarData<ID, VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
+      _ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
 
   late final _ScalarUIComponents ui = _ScalarUIComponents(scalar: this);
 
@@ -244,10 +243,10 @@ abstract class Scalar<
 
   // ***************************************************************************
 
-  XScalar<ID, VALUE> _createXScalar({
+  XScalar<VALUE> _createXScalar({
     required XFilterModel xFilterModel,
   }) {
-    return XScalar<ID, VALUE>._(
+    return XScalar<VALUE>._(
       scalar: this,
       xFilterModel: xFilterModel,
     );
@@ -358,8 +357,8 @@ abstract class Scalar<
     //
     final callApiQueryMethod = ScalarErrorMethod.callApiQuery;
     bool isQueryError = false;
-    final ID? oldValueId = __scalarData._valueId;
-    ID? valueId;
+    final String? oldValueId = __scalarData._valueId;
+    String? valueId;
     VALUE? value;
     try {
       __clearScalarError();
@@ -608,7 +607,7 @@ abstract class Scalar<
     required XScalar thisXScalar,
     required FILTER_CRITERIA? filterCriteria,
     required DataState dataState,
-    required ID? valueId,
+    required String? valueId,
     required VALUE? value,
   }) {
     __assertThisXScalar(thisXScalar);
@@ -684,11 +683,12 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_AbstractMethodAnnotation()
-  ID toValueId({
+  String toValueId({
     required FILTER_CRITERIA filterCriteria,
     required VALUE value,
-  });
+  }) {
+    return "";
+  }
 
   // ***************************************************************************
   // ***************************************************************************

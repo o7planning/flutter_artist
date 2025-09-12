@@ -1,18 +1,17 @@
 part of '../core.dart';
 
 class _ScalarData<
-    ID extends Object, //
     VALUE extends Object, //
     FILTER_INPUT extends FilterInput,
     FILTER_CRITERIA extends FilterCriteria> {
   ///
   /// Owner Scalar.
   ///
-  final Scalar<ID, VALUE, FILTER_INPUT, FILTER_CRITERIA> scalar;
+  final Scalar<VALUE, FILTER_INPUT, FILTER_CRITERIA> scalar;
 
   FILTER_CRITERIA? _filterCriteria;
 
-  ID? _valueId;
+  String? _valueId;
   VALUE? _value;
 
   DataState _scalarDataState = DataState.pending;
@@ -83,7 +82,7 @@ class _ScalarData<
 
   void _updateFrom({
     required FILTER_CRITERIA? filterCriteria,
-    required ID? valueId,
+    required String? valueId,
     required VALUE? value,
     required DataState dataState,
   }) {

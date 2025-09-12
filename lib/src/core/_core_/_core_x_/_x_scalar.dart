@@ -1,13 +1,13 @@
 part of '../core.dart';
 
-class XScalar<ID extends Object, VALUE extends Object> {
+class XScalar<VALUE extends Object> {
   XShelf get xShelf => xFilterModel.xShelf;
 
   QueryType __queryType = QueryType.realQuery;
 
   QueryType get queryType => __queryType;
 
-  final Scalar<ID, VALUE, FilterInput, FilterCriteria> scalar;
+  final Scalar<VALUE, FilterInput, FilterCriteria> scalar;
 
   final XFilterModel xFilterModel;
 
