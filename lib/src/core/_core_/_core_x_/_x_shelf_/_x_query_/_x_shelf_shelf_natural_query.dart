@@ -3,12 +3,22 @@ part of '../../../core.dart';
 class _XShelfShelfNaturalQuery extends _XShelfSbQuery {
   _XShelfShelfNaturalQuery({required super.shelf})
       : super(xShelfType: XShelfType.naturalQuery) {
-    for (XScalar xScalar in allXScalars) {
-      if (xScalar.scalar.ui.hasActiveUIComponent()) {
-        if (xScalar.scalar.dataState == DataState.pending ||
-            xScalar.scalar.dataState == DataState.error) {
-          xScalar.setQueryHintToGreater(QryHint.force);
+    for (XScalar leafXScalar in allLeafXScalars) {
+      XScalar? xScalar = leafXScalar;
+      while (true) {
+        if (xScalar == null) {
+          break;
         }
+        bool hasXActiveUI = xScalar.scalar.ui.hasActiveScalarFragment(
+          alsoCheckChildren: true,
+        );
+        if (hasXActiveUI) {
+          if (xScalar.scalar.dataState == DataState.pending ||
+              xScalar.scalar.dataState == DataState.error) {
+            xScalar.setQueryHintToGreater(QryHint.force);
+          }
+        }
+        xScalar = xScalar.parentXScalar;
       }
     }
     //
