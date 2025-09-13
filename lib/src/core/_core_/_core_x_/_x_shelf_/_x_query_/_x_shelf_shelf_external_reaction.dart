@@ -53,14 +53,21 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
           }
         }
         // Descendant Blocks with the same FilterModel:
+        // Shared FilterModel.
         List<Block> descendantSFMBlocks =
             xBlock.block.descendantBlocksWithSameFilterModel;
         for (Block descendantBlock in descendantSFMBlocks) {
           XBlock descendantXBlock = xBlockMap[descendantBlock.name]!;
           if (descendantXBlock.queryHint == QryHint.force) {
-            // Search: LOGIC-02.
-            xBlock.setQueryHintToGreater(QryHint.force);
-            break;
+            // Search: LOGIC-02.??
+            // xBlock.setQueryHintToGreater(QryHint.force);
+            // break;
+            // Test Cases: [65a].
+            if (xBlock.block.dataState == DataState.pending ||
+                xBlock.block.dataState == DataState.error) {
+              xBlock.setQueryHintToGreater(QryHint.force);
+              break;
+            }
           }
         }
         //
@@ -115,14 +122,21 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
           }
         }
         // Descendant Scalars with the same FilterModel:
+        // Shared FilterModel.
         List<Scalar> descendantSFMScalars =
             xScalar.scalar.descendantScalarsWithSameFilterModel;
         for (Scalar descendantScalar in descendantSFMScalars) {
           XScalar descendantXScalar = xScalarMap[descendantScalar.name]!;
           if (descendantXScalar.queryHint == QryHint.force) {
             // Search: LOGIC-02.
-            xScalar.setQueryHintToGreater(QryHint.force);
-            break;
+            // xScalar.setQueryHintToGreater(QryHint.force);
+            // break;
+            // Test Cases:
+            if (xScalar.scalar.dataState == DataState.pending ||
+                xScalar.scalar.dataState == DataState.error) {
+              xScalar.setQueryHintToGreater(QryHint.force);
+              break;
+            }
           }
         }
         //
