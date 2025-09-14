@@ -298,12 +298,21 @@ abstract class Scalar<
       }
     }
     //
-    print(
-        ">> ${getClassName(this)}._unitQuery - queryState: $this.dataState, queryHint: ${thisXScalar.queryHint}");
-    //
     if (queryHint == QryHint.none) {
+      print("        ~~~~~~~> IGNORED --> queryHint: $queryHint - [$name]");
+      //
+      if (this.dataState == DataState.ready && this.value != null) {
+        for (XScalar childXScalar in thisXScalar.childXScalars) {
+          thisXScalar.xShelf._addTaskUnit(
+            taskUnit: _ScalarQueryTaskUnit(
+              xScalar: childXScalar,
+            ),
+          );
+        }
+      }
       return;
     } else if (queryHint == QryHint.markAsPending) {
+      print("        ~~~~~~~> PENDING --> queryHint: $queryHint - [$name]");
       this.__clearWithDataStateAndChildrenToNonCascade(
         thisXScalar: thisXScalar,
         scalarDataState: DataState.pending,
@@ -455,7 +464,7 @@ abstract class Scalar<
       return;
     }
     //
-    if (valueId != oldValueId) {
+    if (xCriteriaChanged || valueId != oldValueId) {
       this.__clearAllChildrenScalarsToPending(
         thisXScalar: thisXScalar,
       );

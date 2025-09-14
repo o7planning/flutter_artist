@@ -339,7 +339,7 @@ abstract class XShelf {
       );
     }
     //
-    for (XScalar xScalar in allXScalars) {
+    for (XScalar xScalar in allRootXScalars) {
       if (xScalar != rootVipXScalar) {
         _addTaskUnit(
           taskUnit: _ScalarQueryTaskUnit(
