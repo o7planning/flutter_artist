@@ -85,11 +85,13 @@ class _ScalarData<
     required String? valueId,
     required VALUE? value,
     required DataState dataState,
+    required ActionResultState queryResultState,
   }) {
     __setNewFilterCriteria(filterCriteria);
     _valueId = valueId;
     _value = value;
     _scalarDataState = dataState;
+    _lastQueryResultState = queryResultState;
   }
 
   // ***************************************************************************

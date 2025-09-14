@@ -413,7 +413,7 @@ abstract class Scalar<
       isQueryError = true;
       //
       final scalarErrorInfo = ScalarErrorInfo(
-        scalarDataState: this.dataState,
+        scalarDataState: DataState.error,
         scalarErrorMethod: callApiQueryMethod,
         error: e, // AppError, ApiError or others.
         errorStackTrace: stackTrace,
@@ -437,15 +437,21 @@ abstract class Scalar<
     } finally {
       __refreshQueryingState(isQuerying: false);
     }
-    //
+    // Test Cases: [12a], [12b].
     if (isQueryError) {
       newScalarDataState = DataState.error;
       __setQueryDataWithState(
         thisXScalar: thisXScalar,
-        filterCriteria: filterCriteriaOfFilterModel,
+        filterCriteria: null,
         dataState: newScalarDataState,
-        valueId: valueId,
-        value: value,
+        valueId: null,
+        value: null,
+        queryResultState: ActionResultState.fail,
+      );
+      __clearWithDataStateAndChildrenToNonCascade(
+        thisXScalar: thisXScalar,
+        scalarDataState: newScalarDataState,
+        errorInFilter: false,
       );
       return;
     }
@@ -457,6 +463,7 @@ abstract class Scalar<
       dataState: newScalarDataState,
       valueId: valueId,
       value: value,
+      queryResultState: ActionResultState.success,
     );
     //
     if (value == null) {
@@ -635,6 +642,7 @@ abstract class Scalar<
     required DataState dataState,
     required String? valueId,
     required VALUE? value,
+    required ActionResultState queryResultState,
   }) {
     __assertThisXScalar(thisXScalar);
     //
@@ -643,6 +651,7 @@ abstract class Scalar<
       dataState: dataState,
       valueId: valueId,
       value: value,
+      queryResultState: queryResultState,
     );
   }
 

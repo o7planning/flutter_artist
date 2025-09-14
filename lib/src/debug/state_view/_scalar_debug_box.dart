@@ -59,7 +59,7 @@ class ScalarDebugBox extends BaseDebugBox {
           labelStyle: labelStyle,
           textStyle: textStyle0,
         ),
-      if (scalar.filterModel != null && options.showFilterCriteriaChangeCount)
+      if (options.showFilterCriteriaChangeCount)
         IconLabelText(
           label: "Filter Criteria Change Count: ",
           text: scalar.filterCriteriaChangeCount.toString(),
