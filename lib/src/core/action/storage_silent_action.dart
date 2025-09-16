@@ -10,10 +10,10 @@ abstract class StorageSilentAction extends Action {
     required super.needToConfirm,
     required super.actionInfo,
   }) {
-    config = initConfig();
+    config = initDefaultConfig();
   }
 
-  StorageSilentActionConfig initConfig();
+  StorageSilentActionConfig initDefaultConfig();
 
   Future<ApiResult<void>> callApi();
 }

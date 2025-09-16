@@ -10,10 +10,10 @@ abstract class BlockSilentAction extends Action {
     required super.needToConfirm,
     required super.actionInfo,
   }) {
-    config = initConfig();
+    config = initDefaultConfig();
   }
 
-  BlockSilentActionConfig initConfig();
+  BlockSilentActionConfig initDefaultConfig();
 
   Future<ApiResult<void>> callApi();
 }

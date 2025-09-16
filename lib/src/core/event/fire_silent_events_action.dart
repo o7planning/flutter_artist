@@ -14,7 +14,7 @@ class FireSilentEventsAction extends StorageSilentAction {
   }) : super(actionInfo: actionInfo ?? "Fire event $events");
 
   @override
-  StorageSilentActionConfig initConfig() {
+  StorageSilentActionConfig initDefaultConfig() {
     return StorageSilentActionConfig(
       affectedItemTypes: events,
       afterQuickAction: AfterStorageSilentAction.query,
