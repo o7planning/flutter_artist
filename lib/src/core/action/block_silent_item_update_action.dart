@@ -19,7 +19,7 @@ abstract class BlockSilentItemUpdateAction<
     required super.actionInfo,
   });
 
-  Future<ApiResult<void>> callApiSilentlyUpdateItem({
+  Future<ApiResult<ID>> callApiSilentlyUpdateItem({
     required Object? parentBlockItem,
     required FILTER_CRITERIA filterCriteria,
   });

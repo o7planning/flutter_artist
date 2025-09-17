@@ -360,7 +360,7 @@ class _Storage extends _Core {
   }
 
   Future<StorageSilentActionResult> fireSilentEventsAction({
-    required List<Type> events,
+    required List<Event> events,
     required bool needToConfirm,
     String? actionInfo,
   }) async {

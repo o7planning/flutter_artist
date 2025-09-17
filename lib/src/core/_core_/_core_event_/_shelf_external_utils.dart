@@ -8,30 +8,31 @@ class _ShelfExternalUtils {
 
   // Test Cases: [99a]
   EffectedShelfMembers calculateEffectedShelfMembersByEvents(
-      List<Type> events) {
+    List<Event> events,
+  ) {
     EffectedShelfMembers ret = EffectedShelfMembers.ofNothing();
     for (Block block in shelf.blocks) {
-      List<Type> types = block.config.reQueryByExternalShelfEvents;
-      if (_hasIntersection(events, types)) {
+      List<Event> typeEvents = block.config.reQueryByExternalShelfEvents;
+      if (_hasIntersection(events, typeEvents)) {
         ret._addReQueryBlock(block);
       }
-      types = block.config.refreshCurrItemByExternalShelfEvents;
-      if (_hasIntersection(events, types)) {
+      typeEvents = block.config.refreshCurrItemByExternalShelfEvents;
+      if (_hasIntersection(events, typeEvents)) {
         ret._addRefreshCurrItmBlock(block);
       }
     }
     for (Scalar scalar in shelf.scalars) {
-      List<Type> types = scalar.config.reQueryByExternalShelfEvents;
-      if (_hasIntersection(events, types)) {
+      List<Event> typeEvents = scalar.config.reQueryByExternalShelfEvents;
+      if (_hasIntersection(events, typeEvents)) {
         ret._addReQueryScalar(scalar);
       }
     }
     return ret;
   }
 
-  bool _hasIntersection(List<Type> type1s, List<Type> type2s) {
-    for (Type t1 in type1s) {
-      if (type2s.contains(t1)) {
+  bool _hasIntersection(List<Event> typeEvent1s, List<Event> typeEvent2s) {
+    for (Event te1 in typeEvent1s) {
+      if (typeEvent2s.contains(te1)) {
         return true;
       }
     }

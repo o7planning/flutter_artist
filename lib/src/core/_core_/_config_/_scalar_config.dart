@@ -5,14 +5,14 @@ class ScalarConfig {
 
   final bool selfReQueryable;
   final List<Evt> reQueryByInternalShelfEvents;
-  final List<Type> reQueryByExternalShelfEvents;
+  final List<Event> reQueryByExternalShelfEvents;
 
   ScalarConfig({
     this.hiddenBehavior = ScalarHiddenBehavior.none,
     //
     this.selfReQueryable = false,
     List<Evt>? reQueryByInternalShelfEvents,
-    List<Type>? reQueryByExternalShelfEvents,
+    List<Event>? reQueryByExternalShelfEvents,
   })  : reQueryByInternalShelfEvents =
             List.unmodifiable(reQueryByInternalShelfEvents?.toSet() ?? []),
         reQueryByExternalShelfEvents =

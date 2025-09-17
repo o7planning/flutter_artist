@@ -11,10 +11,10 @@ class BlockConfig {
   final bool selfReQueryable;
   final bool currentItemSelfRefreshable;
 
-  final List<Type> outsideBroadcastEvents;
+  final List<Event> outsideBroadcastEvents;
 
-  final List<Type> refreshCurrItemByExternalShelfEvents;
-  final List<Type> reQueryByExternalShelfEvents;
+  final List<Event> refreshCurrItemByExternalShelfEvents;
+  final List<Event> reQueryByExternalShelfEvents;
 
   final List<Evt> refreshCurrItemByInternalShelfEvents;
   final List<Evt> reQueryByInternalShelfEvents;
@@ -23,10 +23,10 @@ class BlockConfig {
     this.itemRefreshmentMode = BlockItemRefreshmentMode.auto,
     this.leaveTheFormSafely = true,
     this.hiddenBehavior = BlockHiddenBehavior.none,
-    List<Type>? outsideBroadcastEvents,
+    List<Event>? outsideBroadcastEvents,
     //
-    List<Type>? refreshCurrItemByExternalShelfEvents,
-    List<Type>? reQueryByExternalShelfEvents,
+    List<Event>? refreshCurrItemByExternalShelfEvents,
+    List<Event>? reQueryByExternalShelfEvents,
     //
     this.selfReQueryable = false,
     this.currentItemSelfRefreshable = false,

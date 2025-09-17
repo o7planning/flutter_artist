@@ -1,11 +1,12 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
+import '../_core_/core.dart';
 import '../action/storage_silent_action.dart';
 import '../enums/after_silent_action.dart';
 import '../typedef/custom_confirmation.dart';
 
 class FireSilentEventsAction extends StorageSilentAction {
-  final List<Type> events;
+  final List<Event> events;
 
   FireSilentEventsAction({
     required super.needToConfirm,

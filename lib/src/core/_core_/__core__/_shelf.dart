@@ -558,7 +558,8 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
 
   EffectedShelfMembers _calculateEffectedShelfMembersByEvents(
-      List<Type> events) {
+    List<Event> events,
+  ) {
     return _shelfExternalUtils.calculateEffectedShelfMembersByEvents(events);
   }
 

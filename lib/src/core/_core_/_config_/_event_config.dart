@@ -14,3 +14,9 @@ class Evt {
 
   Evt.insideScalar(this.srcName) : srcType = SrcType.scalar;
 }
+
+class Event {
+  final Type dataType;
+
+  const Event(this.dataType);
+}

@@ -445,13 +445,13 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  List<Type> getOutsideDataTypesToListen() {
-    List<Type> itemTypes = [];
+  List<Event> getOutsideDataTypesToListen() {
+    List<Event> itemTypeEvents = [];
     //
-    itemTypes.addAll(config.refreshCurrItemByExternalShelfEvents);
-    itemTypes.addAll(config.reQueryByExternalShelfEvents);
+    itemTypeEvents.addAll(config.refreshCurrItemByExternalShelfEvents);
+    itemTypeEvents.addAll(config.reQueryByExternalShelfEvents);
     //
-    return itemTypes.toSet().toList();
+    return itemTypeEvents.toSet().toList();
   }
 
   // ***************************************************************************

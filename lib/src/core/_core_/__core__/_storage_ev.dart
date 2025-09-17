@@ -27,7 +27,7 @@ class _StorageEventHandler {
   // PRIVATE METHOD.
   void ___fireEventFromBlockToOtherShelves({
     required Block? eventBlock,
-    required List<Type> events,
+    required List<Event> events,
     required String? itemIdString,
   }) {
     if (events.isEmpty) {
@@ -59,7 +59,7 @@ class _StorageEventHandler {
       "Called after executing QuickAction in the Block or Scalar")
   void _fireEventFromShelfToOtherShelves({
     required Shelf? eventShelf,
-    required List<Type> events,
+    required List<Event> events,
   }) {
     if (events.isEmpty) {
       print(
@@ -89,7 +89,7 @@ class _StorageEventHandler {
 
   void __addReactionTaskUnitToEvents({
     required Shelf listenerShelf,
-    required List<Type> outsideEvents,
+    required List<Event> outsideEvents,
   }) {
     if (listenerShelf.isFullyPending) {
       return;
@@ -111,14 +111,14 @@ class _StorageEventHandler {
   List<Scalar> __getListenerScalarsByBlock({
     required Block eventBlock,
   }) {
-    List<Type> itemTypes = eventBlock.config.outsideBroadcastEvents;
-    if (itemTypes.isEmpty) {
+    List<Event> itemTypeEvents = eventBlock.config.outsideBroadcastEvents;
+    if (itemTypeEvents.isEmpty) {
       return [];
     }
     //
     List<Scalar> scalarList = __getListenerScalarsByAffectedItemTypes(
       eventShelf: eventBlock.shelf,
-      affectedItemTypes: itemTypes,
+      affectedItemTypeEvents: itemTypeEvents,
     );
     return scalarList
         .where((scalar) => !identical(scalar.shelf, eventBlock.shelf))
@@ -152,14 +152,14 @@ class _StorageEventHandler {
   List<Block> __getListenerBlocksByBlock({
     required Block eventBlock,
   }) {
-    List<Type> itemTypes = eventBlock.config.outsideBroadcastEvents;
-    if (itemTypes.isEmpty) {
+    List<Event> itemTypeEvents = eventBlock.config.outsideBroadcastEvents;
+    if (itemTypeEvents.isEmpty) {
       return [];
     }
     //
     List<Block> blockList = __getListenerBlocksByAffectedItemTypes(
       eventShelf: eventBlock.shelf,
-      affectedItemTypes: itemTypes,
+      affectedItemTypeEvents: itemTypeEvents,
     );
     return blockList
         .where((block) => !identical(block.shelf, eventBlock.shelf))
@@ -172,7 +172,7 @@ class _StorageEventHandler {
   // Callable.
   List<Block> __getListenerBlocksByAffectedItemTypes({
     required Shelf eventShelf,
-    required List<Type> affectedItemTypes,
+    required List<Event> affectedItemTypeEvents,
   }) {
     // FullName, Block
     Map<String, Block> foundMap = {};
@@ -183,10 +183,10 @@ class _StorageEventHandler {
         continue;
       }
       for (Block blockToCheck in shelf.blocks) {
-        for (Type affectedItemType in affectedItemTypes) {
+        for (Event affectedItemTypeEvent in affectedItemTypeEvents) {
           if (_contains(
             blockToCheck.getOutsideDataTypesToListen(),
-            affectedItemType,
+            affectedItemTypeEvent,
           )) {
             foundMap[blockToCheck._shortPathName] = blockToCheck;
             break;
@@ -202,7 +202,7 @@ class _StorageEventHandler {
 
   List<Scalar> __getListenerScalarsByAffectedItemTypes({
     required Shelf eventShelf,
-    required List<Type> affectedItemTypes,
+    required List<Event> affectedItemTypeEvents,
   }) {
     // FullName, Scalar
     Map<String, Scalar> foundMap = {};
@@ -213,9 +213,9 @@ class _StorageEventHandler {
         continue;
       }
       for (Scalar scalar in shelf.scalars) {
-        List<Type> listenerTypes = scalar.getOutsideDataTypesToListen();
-        for (Type affectedItemType in affectedItemTypes) {
-          if (_contains(listenerTypes, affectedItemType)) {
+        List<Event> listenerTypeEvents = scalar.getOutsideDataTypesToListen();
+        for (Event affectedItemTypeEvent in affectedItemTypeEvents) {
+          if (_contains(listenerTypeEvents, affectedItemTypeEvent)) {
             foundMap[scalar._shortPathName] = scalar;
             break;
           }
@@ -241,12 +241,12 @@ class _StorageEventHandler {
         if (blk.config.outsideBroadcastEvents.isEmpty) {
           continue;
         }
-        final List<Type> listenToDataTypes =
+        final List<Event> listenToDataTypes =
             listenerBlock.getOutsideDataTypesToListen();
-        final Type itemType = blk.getItemType();
-        final Type itemDetailType = blk.getItemDetailType();
-        if (_contains(listenToDataTypes, itemType) ||
-            _contains(listenToDataTypes, itemDetailType)) {
+        final Event itemTypeEvent = Event(blk.getItemType());
+        final Event itemDetailTypeEvent = Event(blk.getItemDetailType());
+        if (_contains(listenToDataTypes, itemTypeEvent) ||
+            _contains(listenToDataTypes, itemDetailTypeEvent)) {
           foundMap[blk._shortPathName] = blk;
         }
       }
@@ -315,15 +315,15 @@ class _StorageEventHandler {
         if (blk.config.outsideBroadcastEvents.isEmpty) {
           continue;
         }
-        List<Type> listenerTypes =
+        List<Event> listenerTypes =
             listenerScalar.config.reQueryByExternalShelfEvents;
         if (listenerTypes.isEmpty) {
           continue;
         }
-        final Type itemType = blk.getItemType();
-        final Type itemDetailType = blk.getItemDetailType();
-        if (_contains(listenerTypes, itemType) ||
-            _contains(listenerTypes, itemDetailType)) {
+        final Event itemTypeEvent = Event(blk.getItemType());
+        final Event itemDetailTypeEvent = Event(blk.getItemDetailType());
+        if (_contains(listenerTypes, itemTypeEvent) ||
+            _contains(listenerTypes, itemDetailTypeEvent)) {
           foundMap[blk._shortPathName] = blk;
         }
       }
@@ -496,9 +496,9 @@ class _StorageEventHandler {
   // ***************************************************************************
 
   // TODO: Xem lai
-  bool _contains(List<Type> listenTypes, Type type) {
-    for (Type t in listenTypes) {
-      if (t == type) {
+  bool _contains(List<Event> listenTypeEvents, Event event) {
+    for (Event e in listenTypeEvents) {
+      if (e.dataType == event.dataType) {
         return true;
       }
     }

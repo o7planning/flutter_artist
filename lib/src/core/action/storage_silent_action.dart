@@ -1,7 +1,6 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../enums/after_silent_action.dart';
-import '_action.dart';
+import '../../../flutter_artist.dart';
 
 abstract class StorageSilentAction extends Action {
   late final StorageSilentActionConfig config;
@@ -20,7 +19,7 @@ abstract class StorageSilentAction extends Action {
 
 class StorageSilentActionConfig {
   final AfterStorageSilentAction afterQuickAction;
-  final List<Type> affectedItemTypes;
+  final List<Event> affectedItemTypes;
 
   const StorageSilentActionConfig({
     required this.affectedItemTypes,
