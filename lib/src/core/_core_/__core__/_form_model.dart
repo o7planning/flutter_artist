@@ -169,7 +169,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   @_AbstractMethodAnnotation()
-  Future<Map<String, dynamic>> getSimplePropValuesFromItemDetail({
+  Future<Map<String, dynamic>?> getSimplePropValuesFromItemDetail({
     required FILTER_CRITERIA filterCriteria,
     required ITEM_DETAIL itemDetail,
   });
@@ -538,9 +538,10 @@ abstract class FormModel<
       if (itemDetail != null) {
         try {
           simplePropValue = await getSimplePropValuesFromItemDetail(
-            filterCriteria: blockCurrentFilterCriteria,
-            itemDetail: itemDetail,
-          );
+                filterCriteria: blockCurrentFilterCriteria,
+                itemDetail: itemDetail,
+              ) ??
+              {};
           for (String propName in simplePropValue.keys) {
             // In (First load + itemDetail != null)
             _formPropsStructure._setTempSimplePropValue(
