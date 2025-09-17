@@ -58,11 +58,14 @@ abstract class LoginActivityBase<USER extends ILoggedInUser> extends Activity {
       return false;
     }
     try {
-      await FlutterArtist.setOrUpdateLoggedInUser(user);
+      await FlutterArtist._setOrUpdateLoggedInUser(
+        loggedInUser: user,
+        requiresTheSameUser: false,
+      );
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
-        methodName: "FlutterArtist.setOrUpdateLoggedInUser",
+        methodName: "FlutterArtist._setOrUpdateLoggedInUser",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,

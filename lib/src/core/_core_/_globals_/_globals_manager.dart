@@ -240,8 +240,12 @@ class GlobalsManager {
   ///
   /// This method is called when the user logs in successfully.
   ///
-  Future<void> setOrUpdateLoggedInUser(ILoggedInUser loggedInUser) async {
-    if (_loggedInUser != null &&
+  Future<void> setOrUpdateLoggedInUser({
+    required ILoggedInUser loggedInUser,
+    required bool requiresTheSameUser,
+  }) async {
+    if (requiresTheSameUser &&
+        _loggedInUser != null &&
         _loggedInUser!.userName != loggedInUser.userName) {
       throw Exception("The new and old user must have the same 'userName'"
           " or you must log out before calling this method.");

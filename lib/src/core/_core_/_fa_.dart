@@ -125,8 +125,19 @@ class _FlutterArtist {
   /// }
   /// ```
   ///
+  Future<void> _setOrUpdateLoggedInUser({
+    required ILoggedInUser loggedInUser,
+    required bool requiresTheSameUser,
+  }) async {
+    await globalsManager.setOrUpdateLoggedInUser(
+      loggedInUser: loggedInUser,
+      requiresTheSameUser: requiresTheSameUser,
+    );
+  }
+
   Future<void> setOrUpdateLoggedInUser(ILoggedInUser loggedInUser) async {
-    await globalsManager.setOrUpdateLoggedInUser(loggedInUser);
+    await _setOrUpdateLoggedInUser(
+        loggedInUser: loggedInUser, requiresTheSameUser: true);
   }
 
   void _printDebugState(String message) {
