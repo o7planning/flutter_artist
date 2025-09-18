@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class MultiOptProp<V> extends Prop<V> {
+abstract class MultiOptProp<V> extends Prop<V> {
   late final MultiOptProp? parent;
   final MultiOptPropReload reloadCondition;
 
@@ -23,18 +23,12 @@ class MultiOptProp<V> extends Prop<V> {
 
   List<MultiOptProp> get children => [..._children];
 
-  MultiOptProp({
+  MultiOptProp._({
     required super.propName,
-    this.reloadCondition = MultiOptPropReload.ifCriteriaChanged,
-    List<MultiOptProp> children = const [],
-  })  : singleSelection = true,
-        _children = children;
-
-  MultiOptProp.multiSelection({
-    required super.propName,
-    this.reloadCondition = MultiOptPropReload.ifCriteriaChanged,
-  })  : singleSelection = false,
-        _children = const [];
+    required this.reloadCondition,
+    required List<MultiOptProp> children,
+    required this.singleSelection,
+  }) : _children = children;
 
   void _updateTempValueCascade({
     required Map<String, dynamic> updateValues,

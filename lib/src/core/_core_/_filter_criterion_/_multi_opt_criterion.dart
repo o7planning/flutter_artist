@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class MultiOptCriterion<V> extends Criterion<V> {
+abstract class MultiOptCriterion<V> extends Criterion<V> {
   late final MultiOptCriterion? parent;
 
   ///
@@ -12,18 +12,16 @@ class MultiOptCriterion<V> extends Criterion<V> {
   /// Make sure you set the appropriate value for this property, otherwise an error will occur.
   /// For example: An error occurs when the library tries to set multiple selection values for the Dropdown.
   ///
-  bool singleSelection;
-  final List<MultiOptCriterion> children;
+  final bool singleSelection;
+  final List<MultiOptCriterion> _children;
 
-  MultiOptCriterion({
-    required super.criterionName,
-    this.children = const [],
-  }) : singleSelection = true;
+  List<MultiOptCriterion> get children => [..._children];
 
-  MultiOptCriterion.multiSelection({
+  MultiOptCriterion._({
     required super.criterionName,
-  })  : singleSelection = false,
-        children = [];
+    required List<MultiOptCriterion> children,
+    required this.singleSelection,
+  }) : _children = children;
 
   void _updateTempValueCascade({
     required Map<String, dynamic> updateValues,

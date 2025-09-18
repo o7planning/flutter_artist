@@ -105,10 +105,12 @@ abstract class FormModel<
   ///   return FormPropsStructure(
   ///     simpleProps: [],
   ///     multiOptProps: [
-  ///       MultiOptProp(
+  ///       // Multi Options Single Selection Property.
+  ///       MultiOptSsProp(
   ///         propName: "company",
   ///         children: [
-  ///           MultiOptProp(
+  ///           // Multi Options Multi Selections Property.
+  ///           MultiOptMsProp(
   ///              propName: "department",
   ///           ),
   ///         ],

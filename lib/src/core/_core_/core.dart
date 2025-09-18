@@ -311,6 +311,10 @@ part '_filter_criterion_/_filter_criteria_structure.dart';
 
 part '_filter_criterion_/_multi_opt_criterion.dart';
 
+part '_filter_criterion_/_multi_opt_ss_criterion.dart';
+
+part '_filter_criterion_/_multi_opt_ms_criterion.dart';
+
 part '_filter_criterion_/_simple_criterion.dart';
 
 part '_form_prop_/__prop.dart';
@@ -320,6 +324,10 @@ part '_form_prop_/_calculated_prop.dart';
 part '_form_prop_/_form_props_structure.dart';
 
 part '_form_prop_/_multi_opt_prop.dart';
+
+part '_form_prop_/_multi_opt_ss_prop.dart';
+
+part '_form_prop_/_multi_opt_ms_prop.dart';
 
 part '_form_prop_/_simple_prop.dart';
 

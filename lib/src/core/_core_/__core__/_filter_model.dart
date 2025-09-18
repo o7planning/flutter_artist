@@ -67,10 +67,12 @@ abstract class FilterModel<
   ///   return FilterCriteriaStructure(
   ///     simpleCriteria: [],
   ///     multiOptCriteria: [
-  ///       MultiOptCriterion(
+  ///       // Multi Options Single Selection Criterion:
+  ///       MultiOptSsCriterion(
   ///         criterionName: "company",
   ///         children: [
-  ///           MultiOptCriterion(
+  ///           // Multi Options Multi Selections Criterion:
+  ///           MultiOptMsCriterion(
   ///              criterionName: "department",
   ///           ),
   ///         ],
