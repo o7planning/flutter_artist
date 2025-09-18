@@ -5,34 +5,38 @@ abstract class Prop<V> {
 
   //
   final String propName;
-  V? _candidateUpdateValue;
+
+  // IMPORTANT: Do not change type (dynamic).
+  dynamic _candidateUpdateValue;
   bool _valueUpdated = false;
   bool _markTempDirty = false;
 
-  //
-
+  // 
   Type get dataType => V;
 
   //
-
-  V? _tempCurrentValue;
+  // IMPORTANT: Do not change type (dynamic).
+  dynamic _tempCurrentValue;
   XData? _tempCurrentXData;
-
-  V? _tempInitialValue;
+  // IMPORTANT: Do not change type (dynamic).
+  dynamic _tempInitialValue;
   XData? _tempInitialXData;
 
-  V? _currentValue;
+  // IMPORTANT: Do not change type (dynamic).
+  dynamic _currentValue;
   XData? _currentXData;
 
-  V? _initialValue;
+  // IMPORTANT: Do not change type (dynamic).
+  dynamic _initialValue;
   XData? _initialXData;
 
-  // @NEW-TODO
-  V? get initialValue => _initialValue;
+  // IMPORTANT: Do not change type (dynamic).
+  dynamic get initialValue => _initialValue;
 
   XData? get initialXData => _initialXData;
 
-  V? get currentValue => _currentValue;
+  // IMPORTANT: Do not change type (dynamic).
+  dynamic get currentValue => _currentValue;
 
   XData? get currentXData => _currentXData;
 

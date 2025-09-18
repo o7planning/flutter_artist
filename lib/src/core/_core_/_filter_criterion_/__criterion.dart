@@ -7,31 +7,35 @@ abstract class Criterion<V> {
 
   final String criterionName;
 
-  V? candidateUpdateValue;
+  // IMPORTANT: Do not change type (dynamic).
+  dynamic candidateUpdateValue;
   bool _valueUpdated = false;
   bool _markTempDirty = false;
 
   //
-
-  V? _tempCurrentValue;
+  // IMPORTANT: Do not change type (dynamic).
+  dynamic _tempCurrentValue;
   XData? _tempCurrentXData;
 
-  V? _tempInitialValue;
+  // IMPORTANT: Do not change type (dynamic).
+  dynamic _tempInitialValue;
   XData? _tempInitialXData;
 
-  V? _currentValue;
+  // IMPORTANT: Do not change type (dynamic).
+  dynamic _currentValue;
   XData? _currentXData;
 
-  V? _initialValue;
+  // IMPORTANT: Do not change type (dynamic).
+  dynamic _initialValue;
   XData? _initialXData;
 
   //
 
   XData? get currentXData => _currentXData;
 
-  V? get currentValue => _currentValue;
+  dynamic get currentValue => _currentValue;
 
-  V? get initialValue => _initialValue;
+  dynamic get initialValue => _initialValue;
 
   XData? get initialXData => _initialXData;
 
