@@ -33,11 +33,13 @@ abstract class Criterion<V> {
 
   XData? get currentXData => _currentXData;
 
+  // IMPORTANT: Do not change type (dynamic).
   dynamic get currentValue => _currentValue;
 
-  dynamic get initialValue => _initialValue;
-
   XData? get initialXData => _initialXData;
+
+  // IMPORTANT: Do not change type (dynamic).
+  dynamic get initialValue => _initialValue;
 
   Type get dataType => V;
 

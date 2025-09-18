@@ -5,6 +5,12 @@ class SimpleProp<V> extends Prop<V> {
     required super.propName,
   });
 
+  @override
+  V? get currentValue => _currentValue;
+
+  @override
+  V? get initialValue => _initialValue;
+
   static List<SimpleProp> listFromNames(List<String> propNames) {
     return propNames
         .map(

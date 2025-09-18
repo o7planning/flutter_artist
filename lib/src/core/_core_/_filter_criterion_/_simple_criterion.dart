@@ -5,6 +5,12 @@ class SimpleCriterion<V> extends Criterion<V> {
     required super.criterionName,
   });
 
+  @override
+  V? get currentValue => _currentValue;
+
+  @override
+  V? get initialValue => _initialValue;
+
   static List<SimpleCriterion> listFromNames(List<String> criterionNames) {
     return criterionNames
         .map(

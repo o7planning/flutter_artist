@@ -11,13 +11,14 @@ abstract class Prop<V> {
   bool _valueUpdated = false;
   bool _markTempDirty = false;
 
-  // 
+  //
   Type get dataType => V;
 
   //
   // IMPORTANT: Do not change type (dynamic).
   dynamic _tempCurrentValue;
   XData? _tempCurrentXData;
+
   // IMPORTANT: Do not change type (dynamic).
   dynamic _tempInitialValue;
   XData? _tempInitialXData;
