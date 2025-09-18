@@ -165,7 +165,7 @@ class FilterCriteriaStructureViewState
           } else if (data is SimpleCriterion) {
             title = data.criterionName;
             tooltip =
-                "SimpleCriterion<${data.dataType.toString()}> ${data.criterionName}";
+                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.criterionName}";
             prefixIconData = FaIconConstants.simplePropOrCriterionIconData;
             //
             isMultiOpt = false;
@@ -173,7 +173,7 @@ class FilterCriteriaStructureViewState
           } else if (data is MultiOptCriterion) {
             title = data.criterionName;
             tooltip =
-                "MultiOptCriterion<${data.dataType.toString()}> ${data.criterionName}";
+                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.criterionName}";
             prefixIconData = FaIconConstants.optPropOrCriterionIconData;
             //
             isMultiOpt = true;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-import '../../../core/_core_/core.dart';
+import '../../../../flutter_artist.dart';
 import '../../../core/icon/icon_constants.dart';
 import '../../../core/widgets/_custom_app_container.dart';
 import '../../../core/widgets/_simple_accordion.dart';
@@ -47,10 +47,11 @@ class FormPropView extends StatelessWidget {
               label:
                   prop is SimpleProp ? 'Prop Name: ' : 'Multi Opt Prop Name: ',
               text: prop.propName,
+              textStyle: TextStyle(color: Colors.indigo),
             ),
             subtitle: IconLabelText(
-              label: "Data Type: ",
-              text: prop.dataType.toString(),
+              label: getClassNameWithoutGenerics(prop),
+              text: "<${prop.dataType.toString()}>",
               labelStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
               textStyle: TextStyle(fontSize: 12, color: Colors.blue),
             ),

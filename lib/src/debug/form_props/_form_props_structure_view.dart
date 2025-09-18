@@ -29,7 +29,7 @@ class FormPropsStructureView extends StatefulWidget {
 
 class _FormPropsStructureViewState extends State<FormPropsStructureView> {
   final MultiSplitViewController _splitViewController =
-      MultiSplitViewController();
+  MultiSplitViewController();
   TreeViewController<dynamic, TreeNode<dynamic>>? _treeViewController;
   late TreeNode<dynamic> rootTreeNode;
   late TreeNode<dynamic> _currentNode;
@@ -44,7 +44,8 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
       parent: null,
     );
     _currentNode = formModelNode;
-    rootTreeNode = TreeNode.root()..add(formModelNode);
+    rootTreeNode = TreeNode.root()
+      ..add(formModelNode);
     //
     FormPropsStructure structure = widget.formModel.formPropsStructure;
 
@@ -136,8 +137,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
           width: 10,
         ),
         onTreeReady: (
-          TreeViewController<dynamic, TreeNode<dynamic>> controller,
-        ) {
+            TreeViewController<dynamic, TreeNode<dynamic>> controller,) {
           _treeViewController = controller;
           controller.expandAllChildren(rootTreeNode);
         },
@@ -158,7 +158,8 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
           } else if (data is SimpleProp) {
             title = data.propName;
             tooltip =
-                "SimpleProp<${data.dataType.toString()}> ${data.propName}";
+            "${getClassNameWithoutGenerics(data)}<${data.dataType
+                .toString()}> ${data.propName}";
             prefixIconData = FaIconConstants.simplePropOrCriterionIconData;
             //
             isMultiOpt = false;
@@ -168,7 +169,8 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
           } else if (data is MultiOptProp) {
             title = data.propName;
             tooltip =
-                "MultiOptProp<${data.dataType.toString()}> ${data.propName}";
+            "${getClassNameWithoutGenerics(data)}<${data.dataType
+                .toString()}> ${data.propName}";
             prefixIconData = FaIconConstants.optPropOrCriterionIconData;
             //
             isMultiOpt = true;
@@ -249,8 +251,8 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
     );
   }
 
-  void _addMultiOptPropCascade(
-      TreeNode currentNode, MultiOptProp multiOptProp) {
+  void _addMultiOptPropCascade(TreeNode currentNode,
+      MultiOptProp multiOptProp) {
     TreeNode childNode = TreeNode(
       key: "MultiOptProp-${multiOptProp.propName}",
       data: multiOptProp,
