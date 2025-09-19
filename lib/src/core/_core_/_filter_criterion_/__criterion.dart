@@ -8,7 +8,7 @@ abstract class Criterion<V> {
   final String criterionName;
 
   // IMPORTANT: Do not change type (dynamic).
-  dynamic candidateUpdateValue;
+  dynamic _candidateUpdateValue;
   bool _valueUpdated = false;
   bool _markTempDirty = false;
 

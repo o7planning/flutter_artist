@@ -30,7 +30,7 @@ abstract class MultiOptCriterion<V> extends Criterion<V> {
       final dynamic oldValue = _tempCurrentValue;
       final dynamic newValue = updateValues[criterionName];
       //
-      candidateUpdateValue = newValue;
+      _candidateUpdateValue = newValue;
       _valueUpdated = true;
       //
       bool isSame;
@@ -68,7 +68,7 @@ abstract class MultiOptCriterion<V> extends Criterion<V> {
 
   void _printTempInfoCascade({required int indentFactor}) {
     print(
-        "${("- - - " * indentFactor)} $criterionName >>> UpdateVal: $candidateUpdateValue >>> tempCurrentXData: $_tempCurrentXData");
+        "${("- - - " * indentFactor)} $criterionName >>> UpdateVal: $_candidateUpdateValue >>> tempCurrentXData: $_tempCurrentXData");
     for (var child in children) {
       child._printTempInfoCascade(indentFactor: indentFactor + 1);
     }

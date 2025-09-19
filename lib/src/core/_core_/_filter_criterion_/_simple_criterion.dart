@@ -26,7 +26,7 @@ class SimpleCriterion<V> extends Criterion<V> {
       // final dynamic oldValue = _tempCurrentValue;
       final dynamic newValue = updateValues[criterionName];
       //
-      candidateUpdateValue = newValue;
+      _candidateUpdateValue = newValue;
       _valueUpdated = true;
     }
   }

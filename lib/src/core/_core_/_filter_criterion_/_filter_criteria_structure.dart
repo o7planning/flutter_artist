@@ -284,7 +284,7 @@ class FilterCriteriaStructure {
     // And Update children-OptCriterion data to null if parent-Value is null or not selected.
     //
     for (Criterion criterion in _allCriteriaMap.values) {
-      criterion.candidateUpdateValue = null;
+      criterion._candidateUpdateValue = null;
       criterion._valueUpdated = false;
       criterion._markTempDirty = false;
     }
@@ -309,7 +309,7 @@ class FilterCriteriaStructure {
     // Apply to all _markTempDirty Criterion:
     for (Criterion criterion in _allCriteriaMap.values) {
       if (criterion._markTempDirty) {
-        criterion._tempCurrentValue = criterion.candidateUpdateValue;
+        criterion._tempCurrentValue = criterion._candidateUpdateValue;
       }
     }
   }
