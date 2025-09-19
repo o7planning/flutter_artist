@@ -79,6 +79,7 @@ import '../enums/_refreshable_widget_type.dart';
 import '../enums/_scalar_control_action_type.dart';
 import '../enums/_scalar_error_method.dart';
 import '../enums/_scalar_hidden_behavior.dart';
+import '../enums/_selection_type.dart';
 import '../enums/_shelf_hidden_behavior.dart';
 import '../enums/_show_mode.dart';
 import '../enums/_sorting_direction.dart';

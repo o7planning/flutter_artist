@@ -610,7 +610,7 @@ abstract class FilterModel<
     // TODO: Double check this code:
     //
     if (candidateSelectedItems != null && candidateSelectedItems.isNotEmpty) {
-      if (multiOptCriterion.singleSelection) {
+      if (multiOptCriterion.selectionType == SelectionType.single) {
         // IMPORTANT:
         //  - Update from ROOTs to LEAVES
         //  - And make sure children-OptCriterion to null if parent-Value is null or not selected.
@@ -670,7 +670,7 @@ abstract class FilterModel<
     }
     String message =
         "The ${getClassName(this)}.$methodName() method must return a non-null $ValueWrap for the multiOptCriterionName '$multiOptCriterionName'. ";
-    if (multiOptCriterion.singleSelection) {
+    if (multiOptCriterion.selectionType == SelectionType.single) {
       message += "$ValueWrap.single(null) or $ValueWrap.single(value). ";
     } else {
       message += "$ValueWrap.multi([null]) or $ValueWrap.multi([value]). ";

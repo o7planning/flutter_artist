@@ -5,7 +5,7 @@ class MultiOptSsProp<V> extends MultiOptProp<V> {
     required super.propName,
     super.reloadCondition = MultiOptPropReload.ifCriteriaChanged,
     super.children = const [],
-  }) : super._(singleSelection: true);
+  }) : super._(selectionType: SelectionType.single);
 
   @override
   V? get currentValue => _currentValue;

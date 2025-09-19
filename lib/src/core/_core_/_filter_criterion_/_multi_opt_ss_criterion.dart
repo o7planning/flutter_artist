@@ -7,7 +7,7 @@ class MultiOptSsCriterion<V> extends MultiOptCriterion<V> {
   MultiOptSsCriterion({
     required super.criterionName,
     super.children = const [],
-  }) : super._(singleSelection: true);
+  }) : super._(selectionType: SelectionType.single);
 
   @override
   V? get currentValue => _currentValue;

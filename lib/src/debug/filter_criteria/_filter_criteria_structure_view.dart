@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:multi_split_view/multi_split_view.dart';
 
 import '../../core/_core_/core.dart';
+import '../../core/enums/_selection_type.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/utils/_class_utils.dart';
 import '../../core/widgets/_custom_app_container.dart';
@@ -177,7 +178,7 @@ class FilterCriteriaStructureViewState
             prefixIconData = FaIconConstants.optPropOrCriterionIconData;
             //
             isMultiOpt = true;
-            isMultiSelection = !data.singleSelection;
+            isMultiSelection = data.selectionType == SelectionType.multi;
           } else {
             prefixIconData = FaIconConstants.uknownIconData;
             title = "UKNOWN";

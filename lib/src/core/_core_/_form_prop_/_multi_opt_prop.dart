@@ -10,7 +10,7 @@ abstract class MultiOptProp<V> extends Prop<V> {
   int get loadCount => _loadCount;
 
   ///
-  /// In most cases this value is [true].
+  /// In most cases this value is [SelectionType.single].
   /// For example a Dropdown that only allows selection of one element.
   ///
   /// IMPORTANT:
@@ -18,7 +18,7 @@ abstract class MultiOptProp<V> extends Prop<V> {
   /// Make sure you set the appropriate value for this property, otherwise an error will occur.
   /// For example: An error occurs when the library tries to set multiple selection values for the Dropdown.
   ///
-  final bool singleSelection;
+  final SelectionType selectionType;
   final List<MultiOptProp> _children;
 
   List<MultiOptProp> get children => [..._children];
@@ -27,7 +27,7 @@ abstract class MultiOptProp<V> extends Prop<V> {
     required super.propName,
     required this.reloadCondition,
     required List<MultiOptProp> children,
-    required this.singleSelection,
+    required this.selectionType,
   }) : _children = children;
 
   void _updateTempValueCascade({
@@ -42,7 +42,7 @@ abstract class MultiOptProp<V> extends Prop<V> {
       //
       bool isSame;
       if (_tempCurrentXData != null) {
-        if (singleSelection) {
+        if (selectionType == SelectionType.single) {
           isSame = _tempCurrentXData!.isSame(
             item1: oldValue,
             item2: newValue,

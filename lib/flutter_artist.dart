@@ -49,6 +49,7 @@ export 'src/core/enums/_refreshable_widget_type.dart';
 export 'src/core/enums/_scalar_control_action_type.dart';
 export 'src/core/enums/_scalar_error_method.dart';
 export 'src/core/enums/_scalar_hidden_behavior.dart';
+export 'src/core/enums/_selection_type.dart';
 export 'src/core/enums/_shelf_hidden_behavior.dart';
 export 'src/core/enums/_show_mode.dart';
 export 'src/core/enums/_sort_rule_side.dart';

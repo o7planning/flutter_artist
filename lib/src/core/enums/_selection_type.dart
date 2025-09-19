@@ -1,0 +1,4 @@
+enum SelectionType {
+  single,
+  multi;
+}

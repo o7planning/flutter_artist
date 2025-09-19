@@ -4,7 +4,7 @@ abstract class MultiOptCriterion<V> extends Criterion<V> {
   late final MultiOptCriterion? parent;
 
   ///
-  /// In most cases this value is [true].
+  /// In most cases this value is [SelectionType.single].
   /// For example a Dropdown that only allows selection of one element.
   ///
   /// IMPORTANT:
@@ -12,7 +12,7 @@ abstract class MultiOptCriterion<V> extends Criterion<V> {
   /// Make sure you set the appropriate value for this property, otherwise an error will occur.
   /// For example: An error occurs when the library tries to set multiple selection values for the Dropdown.
   ///
-  final bool singleSelection;
+  final SelectionType selectionType;
   final List<MultiOptCriterion> _children;
 
   List<MultiOptCriterion> get children => [..._children];
@@ -20,7 +20,7 @@ abstract class MultiOptCriterion<V> extends Criterion<V> {
   MultiOptCriterion._({
     required super.criterionName,
     required List<MultiOptCriterion> children,
-    required this.singleSelection,
+    required this.selectionType,
   }) : _children = children;
 
   void _updateTempValueCascade({
@@ -35,7 +35,7 @@ abstract class MultiOptCriterion<V> extends Criterion<V> {
       //
       bool isSame;
       if (_tempCurrentXData != null) {
-        if (singleSelection) {
+        if (selectionType == SelectionType.single) {
           isSame = _tempCurrentXData!.isSame(
             item1: oldValue,
             item2: newValue,

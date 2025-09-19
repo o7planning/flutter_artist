@@ -68,7 +68,8 @@ class FormPropView extends StatelessWidget {
                     Tooltip(
                       message: "Single Selection",
                       child: Radio(
-                        value: (prop as MultiOptProp).singleSelection,
+                        value: (prop as MultiOptProp).selectionType ==
+                            SelectionType.single,
                         onChanged: null,
                         groupValue: true,
                       ),
@@ -85,7 +86,8 @@ class FormPropView extends StatelessWidget {
                     Tooltip(
                       message: "Multi Selection",
                       child: Radio(
-                        value: !(prop as MultiOptProp).singleSelection,
+                        value: (prop as MultiOptProp).selectionType ==
+                            SelectionType.multi,
                         onChanged: null,
                         groupValue: true,
                       ),

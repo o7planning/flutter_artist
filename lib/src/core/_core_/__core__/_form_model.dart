@@ -1123,7 +1123,7 @@ abstract class FormModel<
     // TODO: Double check this code:
     //
     if (candidateSelectedItems.isNotEmpty) {
-      if (multiOptProp.singleSelection) {
+      if (multiOptProp.selectionType == SelectionType.single) {
         // IMPORTANT:
         //  - Update from ROOTs to LEAVES
         //  - And make sure children-OptProp to null if parent-Value is null or not selected.
@@ -1279,7 +1279,7 @@ abstract class FormModel<
     }
     String message =
         "The ${getClassName(this)}.$methodName() method must return a non-null $ValueWrap for the multiOptPropName '$multiOptPropName'. ";
-    if (multiOptProp.singleSelection) {
+    if (multiOptProp.selectionType == SelectionType.single) {
       message += "$ValueWrap.single(null) or $ValueWrap.single(value). ";
     } else {
       message += "$ValueWrap.multi([null]) or $ValueWrap.multi([value]). ";

@@ -6,7 +6,7 @@ part of '../core.dart';
 class MultiOptMsCriterion<V> extends MultiOptCriterion<V> {
   MultiOptMsCriterion({
     required super.criterionName,
-  }) : super._(singleSelection: false, children: const []);
+  }) : super._(selectionType: SelectionType.multi, children: const []);
 
   @override
   List<V>? get currentValue => _currentValue;
