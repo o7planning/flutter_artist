@@ -94,6 +94,7 @@ abstract class FilterModel<
   @_AbstractMethodAnnotation()
   Future<XData?> callApiLoadMultiOptCriterionXData({
     required String multiOptCriterionName,
+    required SelectionType selectionType,
     required FILTER_INPUT? filterInput,
     required Object? parentMultiOptCriterionValue,
   });
@@ -105,6 +106,7 @@ abstract class FilterModel<
   @_AbstractMethodAnnotation()
   ValueWrap? specifyDefaultMultiOptCriterionValue({
     required String multiOptCriterionName,
+    required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,
   });
@@ -125,6 +127,7 @@ abstract class FilterModel<
   /// @override
   /// ValueWrap? getMultiOptCriterionValueFromFilterInput({
   ///     required String multiOptCriterionName,
+  ///     required SelectionType selectionType,
   ///     required ExampleFilterInput filterInput,
   ///     required XData multiOptCriterionXData,
   ///     required Object? parentMultiOptCriterionValue,
@@ -141,6 +144,7 @@ abstract class FilterModel<
   @_AbstractMethodAnnotation()
   ValueWrap? getMultiOptCriterionValueFromFilterInput({
     required String multiOptCriterionName,
+    required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required FILTER_INPUT filterInput,
     required Object? parentMultiOptCriterionValue,
@@ -454,6 +458,7 @@ abstract class FilterModel<
     required FilterActivityType activityType,
   }) async {
     final String multiOptCriterionName = multiOptCriterion.criterionName;
+    final SelectionType selectionType = multiOptCriterion.selectionType;
 
     final MultiOptCriterion? multiOptCriterionParent = multiOptCriterion.parent;
 
@@ -539,6 +544,7 @@ abstract class FilterModel<
       filterInput: filterInput,
       parentMultiOptCriterionValue: parentMultiOptCriterionValue,
       multiOptCriterionName: multiOptCriterionName,
+      selectionType: selectionType,
     );
     //
     // IMPORTANT: Do not use empty list here
@@ -556,6 +562,7 @@ abstract class FilterModel<
           parentMultiOptCriterionValue: parentMultiOptCriterionValue,
           multiOptCriterionXData: tempMultiOptCriterionXData,
           multiOptCriterionName: multiOptCriterionName,
+          selectionType: selectionType,
         );
       } else {
         if (!__initiatedAtLeastOnce) {
@@ -563,6 +570,7 @@ abstract class FilterModel<
             parentMultiOptCriterionValue: parentMultiOptCriterionValue,
             multiOptCriterionXData: tempMultiOptCriterionXData,
             multiOptCriterionName: multiOptCriterionName,
+            selectionType: selectionType,
           );
         }
       }
@@ -685,6 +693,7 @@ abstract class FilterModel<
 
   ValueWrap? __getMultiOptCriterionValueFromFilterInput({
     required String multiOptCriterionName,
+    required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required FILTER_INPUT filterInput,
     required Object? parentMultiOptCriterionValue,
@@ -694,6 +703,7 @@ abstract class FilterModel<
       parentMultiOptCriterionValue: parentMultiOptCriterionValue,
       multiOptCriterionXData: multiOptCriterionXData,
       multiOptCriterionName: multiOptCriterionName,
+      selectionType: selectionType,
     );
     if (valueWrap == null) {
       __createNullValueWrapAppError(
@@ -714,6 +724,7 @@ abstract class FilterModel<
 
   ValueWrap? __specifyDefaultMultiOptCriterionValue({
     required String multiOptCriterionName,
+    required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,
   }) {
@@ -721,6 +732,7 @@ abstract class FilterModel<
       parentMultiOptCriterionValue: parentMultiOptCriterionValue,
       multiOptCriterionXData: multiOptCriterionXData,
       multiOptCriterionName: multiOptCriterionName,
+      selectionType: selectionType,
     );
     if (valueWrap == null) {
       __createNullValueWrapAppError(

@@ -132,6 +132,7 @@ abstract class FormModel<
   @_AbstractMethodAnnotation()
   Future<XData?> callApiLoadMultiOptPropXData({
     required String multiOptPropName,
+    required SelectionType selectionType,
     required Object? parentMultiOptPropValue,
     required Object? parentBlockCurrentItem,
     required FILTER_CRITERIA filterCriteria,
@@ -144,6 +145,7 @@ abstract class FormModel<
   @_AbstractMethodAnnotation()
   ValueWrap? specifyDefaultMultiOptPropValue({
     required String multiOptPropName,
+    required SelectionType selectionType,
     required XData multiOptPropXData,
     required Object? parentMultiOptPropValue,
   });
@@ -162,6 +164,7 @@ abstract class FormModel<
   @_AbstractMethodAnnotation()
   ValueWrap? getMultiOptPropValueFromItemDetail({
     required String multiOptPropName,
+    required SelectionType selectionType,
     required XData multiOptPropXData,
     required ITEM_DETAIL itemDetail,
     required Object? parentMultiOptPropValue,
@@ -182,6 +185,7 @@ abstract class FormModel<
   @_AbstractMethodAnnotation()
   ValueWrap? getMultiOptPropValueFromExtraFormInput({
     required String multiOptPropName,
+    required SelectionType selectionType,
     required XData multiOptPropXData,
     required EXTRA_FORM_INPUT extraFormInput,
     required Object? parentMultiOptPropValue,
@@ -889,6 +893,7 @@ abstract class FormModel<
     required FormActivityType activityType,
   }) async {
     final String multiOptPropName = multiOptProp.propName;
+    final SelectionType selectionType = multiOptProp.selectionType;
 
     // Get current OptProp data:
     XData? tempMultiOptPropXData =
@@ -969,6 +974,7 @@ abstract class FormModel<
           extraFormInput: extraFormInput,
           parentMultiOptPropValue: parentMultiOptPropValue,
           multiOptPropName: multiOptPropName,
+          selectionType: selectionType,
         );
       } catch (e, stackTrace) {
         throw FormTempError(
@@ -1002,6 +1008,7 @@ abstract class FormModel<
               extraFormInput: extraFormInput,
               multiOptPropXData: tempMultiOptPropXData,
               multiOptPropName: multiOptPropName,
+              selectionType: selectionType,
               parentMultiOptPropValue: parentMultiOptPropValue,
             );
             // TODO-XXX Test Case.
@@ -1010,6 +1017,7 @@ abstract class FormModel<
                 // May throw FormTempError.
                 initialValueWrap = __specifyDefaultMultiOptPropValue(
                   multiOptPropName: multiOptPropName,
+                  selectionType: selectionType,
                   multiOptPropXData: tempMultiOptPropXData,
                   parentMultiOptPropValue: parentMultiOptPropValue,
                 );
@@ -1020,6 +1028,7 @@ abstract class FormModel<
               // May throw FormTempError.
               initialValueWrap = __specifyDefaultMultiOptPropValue(
                 multiOptPropName: multiOptPropName,
+                selectionType: selectionType,
                 multiOptPropXData: tempMultiOptPropXData,
                 parentMultiOptPropValue: parentMultiOptPropValue,
               );
@@ -1033,6 +1042,7 @@ abstract class FormModel<
             itemDetail: currentItemDetail,
             multiOptPropXData: tempMultiOptPropXData,
             multiOptPropName: multiOptPropName,
+            selectionType: selectionType,
             parentMultiOptPropValue: parentMultiOptPropValue,
           );
         }
@@ -1045,6 +1055,7 @@ abstract class FormModel<
             extraFormInput: extraFormInput,
             multiOptPropXData: tempMultiOptPropXData,
             multiOptPropName: multiOptPropName,
+            selectionType: selectionType,
             parentMultiOptPropValue: parentMultiOptPropValue,
           );
         }
@@ -1231,6 +1242,7 @@ abstract class FormModel<
   @_MayThrowFormTempErrorAnnotation()
   ValueWrap? __specifyDefaultMultiOptPropValue({
     required String multiOptPropName,
+    required SelectionType selectionType,
     required XData multiOptPropXData,
     required Object? parentMultiOptPropValue,
   }) {
@@ -1238,6 +1250,7 @@ abstract class FormModel<
       ValueWrap? valueWrap = specifyDefaultMultiOptPropValue(
         multiOptPropXData: multiOptPropXData,
         multiOptPropName: multiOptPropName,
+        selectionType: selectionType,
         parentMultiOptPropValue: parentMultiOptPropValue,
       );
       if (valueWrap == null) {
@@ -1295,6 +1308,7 @@ abstract class FormModel<
   @_MayThrowFormTempErrorAnnotation()
   ValueWrap? __getMultiOptPropValueFromItemDetail({
     required String multiOptPropName,
+    required SelectionType selectionType,
     required XData multiOptPropXData,
     required ITEM_DETAIL itemDetail,
     required Object? parentMultiOptPropValue,
@@ -1302,6 +1316,7 @@ abstract class FormModel<
     try {
       ValueWrap? valueWrap = getMultiOptPropValueFromItemDetail(
         multiOptPropName: multiOptPropName,
+        selectionType: selectionType,
         multiOptPropXData: multiOptPropXData,
         itemDetail: itemDetail,
         parentMultiOptPropValue: parentMultiOptPropValue,
@@ -1329,6 +1344,7 @@ abstract class FormModel<
   @_MayThrowFormTempErrorAnnotation()
   ValueWrap? __getMultiOptPropValueFromExtraFormInput({
     required String multiOptPropName,
+    required SelectionType selectionType,
     required XData multiOptPropXData,
     required EXTRA_FORM_INPUT extraFormInput,
     required Object? parentMultiOptPropValue,
@@ -1341,6 +1357,7 @@ abstract class FormModel<
         extraFormInput: extraFormInput,
         multiOptPropXData: multiOptPropXData,
         multiOptPropName: multiOptPropName,
+        selectionType: selectionType,
         parentMultiOptPropValue: parentMultiOptPropValue,
       );
       if (valueWrap == null) {
