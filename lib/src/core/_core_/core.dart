@@ -448,7 +448,7 @@ part '_ui_/_block_fragment_view.dart';
 
 part '_ui_/_block_fragment_view_builder.dart';
 
-part '_ui_/_block_item_view.dart';
+part '_ui_/_block_item_detail_view.dart';
 
 part '_ui_/_block_items_view.dart';
 
