@@ -232,6 +232,12 @@ part '_core_x_/_x_scalar.dart';
 
 part '_core_x_/_x_shelf.dart';
 
+part '_core_x_/_x_condition_/_scalar_re_qry_condition.dart';
+
+part '_core_x_/_x_condition_/_block_re_qry_condition.dart';
+
+part '_core_x_/_x_condition_/_block_item_refresh_condition.dart';
+
 part '_core_x_/_x_shelf_/_x_query_/__src_block_and_options.dart';
 
 part '_core_x_/_x_shelf_/_x_query_/__src_scalar_and_options.dart';

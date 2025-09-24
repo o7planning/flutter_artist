@@ -49,6 +49,14 @@ class XScalar<VALUE extends Object> {
 
   final ScalarQueryResult queryResult = ScalarQueryResult(precheck: null);
 
+  // ***************************************************************************
+  // ***************************************************************************
+
+  _ScalarReQryCon? _scalarReQryCon;
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   ///
   /// IMPORTANT: To create new XScalar, use 'scalar._createXScalar' method
   /// to have the same Generics Parameters with the scalar.
@@ -56,7 +64,10 @@ class XScalar<VALUE extends Object> {
   XScalar._({
     required this.scalar,
     required this.xFilterModel,
-  });
+  }) {
+    _scalarReQryCon = scalar._scalarReQryCon;
+    scalar._scalarReQryCon = null;
+  }
 
   QryHint get queryHint {
     return __qryHint;

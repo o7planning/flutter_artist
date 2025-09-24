@@ -80,6 +80,13 @@ class XBlock<
   // ***************************************************************************
   // ***************************************************************************
 
+  _BlockReQryCon? _blockReQryCon;
+
+  _BlockItemRefreshCon? _blockItemRefreshCon;
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   ///
   /// IMPORTANT: To create new XBlock, use 'block._createXBlock' method
   /// to have the same Generics Parameters with the block.
@@ -88,7 +95,13 @@ class XBlock<
     required this.block,
     required this.xFilterModel,
     required this.xFormModel,
-  });
+  }) {
+    _blockReQryCon = block._blockReQryCon;
+    _blockItemRefreshCon = block._blockItemRefreshCon;
+    //
+    block._blockReQryCon = null;
+    block._blockItemRefreshCon = null;
+  }
 
   // ***************************************************************************
   // ***************************************************************************
