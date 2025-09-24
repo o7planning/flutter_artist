@@ -1,0 +1,50 @@
+rong tiếng Anh, người sắp đặt hàng hóa trong siêu thị được gọi là shelf stacker hoặc stocker.
+Cả hai thuật ngữ đều mô tả người chịu trách nhiệm sắp xếp,
+bổ sung và trưng bày hàng hóa trên kệ một cách gọn gàng và đầy đủ.
+
+Shelf stacker
+: Người chuyên sắp xếp hàng hóa lên kệ.
+Stocker
+: Một thuật ngữ chung hơn cho nhân viên phụ trách hàng hóa, bao gồm cả công việc sắp xếp,
+bố trí và tái cung cấp hàng hóa trên kệ trong siêu thị.
+
+
+-----------------------------------
+In the storage and logistics space,
+positions that are higher in hierarchy than a Coordinator typically include
+a Warehouse Supervisor, Manager, Director, or Specialist who has more experience and responsibility.
+While a Coordinator manages day-to-day logistics and schedules,
+a Supervisor or Manager typically oversees personnel and entire warehouse operations,
+and a Director sets high-level strategies for storage and logistics.
+
+
+Trong không gian lưu trữ và hậu cần, các vị trí có hệ thống phân cấp cao hơn
+so với điều phối viên thường bao gồm người giám sát kho, quản lý,
+giám đốc hoặc chuyên gia có nhiều kinh nghiệm và trách nhiệm hơn.
+Trong khi một điều phối viên quản lý hậu cần và lịch trình hàng ngày,
+người giám sát hoặc người quản lý thường giám sát nhân sự và toàn bộ hoạt động kho,
+và một giám đốc thiết lập các chiến lược cấp cao để lưu trữ và hậu cần.
+
+
+EventExecutorBehavior.ignoreDelayedExternalShelfEvents,
+EventExecutorBehavior.delayExternalShelfEvents,
+
+ExternalEventExecutorBehavior.
+
+
+
+delayAllExternalShelfEvents : true,
+
+delayAllExternalShelfEventsInGlobal
+
+
+delayTheReactionToTheExternalEvent
+
+
+delayReactionToExternalEventsGlobally
+
+delayExternalShelfReactionsGlobally.
+
+delay External-Shelf Reactions Globally
+
+block.controlBarConfig.saveTask.delayExternalShelfReactionsGlobally = true;
