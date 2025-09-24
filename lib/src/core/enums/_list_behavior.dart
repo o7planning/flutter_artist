@@ -1,4 +1,0 @@
-enum ListBehavior {
-  replace,
-  append,
-}

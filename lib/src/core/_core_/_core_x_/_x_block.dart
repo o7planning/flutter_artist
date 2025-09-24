@@ -44,7 +44,7 @@ class XBlock<
 
   QueryType get queryType => __queryType;
 
-  ListBehavior? __listBehavior;
+  ItemListMode? __itemListMode;
   SuggestedSelection? __suggestedSelection;
   PostQueryBehavior? __postQueryBehavior;
   PageableData? __pageable;
@@ -187,9 +187,9 @@ class XBlock<
     __currentItemSelectionType = currentItemSelectionType;
   }
 
-  ListBehavior get listBehavior {
+  ItemListMode get itemListMode {
     // TODO: Xem lai gia tri mac dinh
-    return __listBehavior ?? ListBehavior.replace;
+    return __itemListMode ?? ItemListMode.replace;
   }
 
   set suggestedSelection(value) {
@@ -202,13 +202,13 @@ class XBlock<
 
   void setOptions({
     required QueryType queryType,
-    required ListBehavior? listBehavior,
+    required ItemListMode? itemListMode,
     required SuggestedSelection? suggestedSelection,
     required PostQueryBehavior? postQueryBehavior,
     required PageableData? pageable,
   }) {
     __queryType = queryType;
-    __listBehavior = listBehavior;
+    __itemListMode = itemListMode;
     __suggestedSelection = suggestedSelection;
     __postQueryBehavior = postQueryBehavior;
     __pageable = pageable;

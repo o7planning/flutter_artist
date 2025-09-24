@@ -37,7 +37,7 @@ export 'src/core/enums/_form_debug_item_type.dart';
 export 'src/core/enums/_form_error_method.dart';
 export 'src/core/enums/_form_mode.dart';
 export 'src/core/enums/_item_creation_type.dart';
-export 'src/core/enums/_list_behavior.dart';
+export 'src/core/enums/_item_list_mode.dart';
 export 'src/core/enums/_multi_opt_prop_reload.dart';
 export 'src/core/enums/_nli_type.dart';
 export 'src/core/enums/_optioned_master_prop_type.dart';

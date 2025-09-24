@@ -3,7 +3,7 @@ part of '../../../core.dart';
 class SrcBlockAndOptions {
   final Block block;
   final QueryType queryType;
-  final ListBehavior? listBehavior;
+  final ItemListMode? itemListMode;
   final SuggestedSelection<dynamic>? suggestedSelection;
   final PostQueryBehavior? postQueryBehavior;
   final PageableData? pageable;
@@ -11,7 +11,7 @@ class SrcBlockAndOptions {
   SrcBlockAndOptions({
     required this.block,
     required this.queryType,
-    required this.listBehavior,
+    required this.itemListMode,
     required this.suggestedSelection,
     required this.postQueryBehavior,
     required this.pageable,

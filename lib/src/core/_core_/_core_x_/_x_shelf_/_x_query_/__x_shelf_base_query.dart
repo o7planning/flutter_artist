@@ -28,7 +28,7 @@ class _XShelfSbQuery extends XShelf {
       srcXBlock.setQueryHintToGreater(QryHint.force);
       srcXBlock.setOptions(
         queryType: srcBlockAndOptions.queryType,
-        listBehavior: srcBlockAndOptions.listBehavior,
+        itemListMode: srcBlockAndOptions.itemListMode,
         suggestedSelection: srcBlockAndOptions.suggestedSelection,
         postQueryBehavior: srcBlockAndOptions.postQueryBehavior,
         pageable: srcBlockAndOptions.pageable,
@@ -71,7 +71,7 @@ class _XShelfSbQuery extends XShelf {
       // Set Default Options. They will be replaced if need.
       xBlock.setOptions(
         queryType: QueryType.realQuery,
-        listBehavior: ListBehavior.replace,
+        itemListMode: ItemListMode.replace,
         suggestedSelection: null,
         postQueryBehavior: null,
         pageable: null,

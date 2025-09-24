@@ -793,7 +793,7 @@ abstract class Block<
     ActionResultState queryResultState;
     AppError? appError;
     //
-    ListBehavior realListBehavior;
+    ItemListMode realItemListMode;
     //
     final PageableData? callingPageable;
     //
@@ -868,21 +868,21 @@ abstract class Block<
               // @FaCode-002.
               // Test Case: [42a].
               // Replace by empty items.
-              realListBehavior = ListBehavior.replace;
+              realItemListMode = ItemListMode.replace;
               newBlockDataState = DataState.error;
             case DataState.pending:
               // Replace by empty items.
-              realListBehavior = ListBehavior.replace;
+              realItemListMode = ItemListMode.replace;
               newBlockDataState = DataState.error;
             case DataState.error:
               // @FaCode-003.
               // Test Case: [42a].
               // Replace by empty items.
-              realListBehavior = ListBehavior.replace;
+              realItemListMode = ItemListMode.replace;
               newBlockDataState = DataState.error;
             case DataState.none:
               // Replace by empty items.
-              realListBehavior = ListBehavior.replace;
+              realItemListMode = ItemListMode.replace;
               newBlockDataState = DataState.error;
           }
         }
@@ -894,20 +894,20 @@ abstract class Block<
               // Append empty items (No items got from Server).
               // Test Case: [42a].
               // @FaCode-001.
-              realListBehavior = ListBehavior.append;
+              realItemListMode = ItemListMode.expand;
               newBlockDataState = DataState.ready;
             case DataState.pending:
               // Replace by empty items.
-              realListBehavior = ListBehavior.replace;
+              realItemListMode = ItemListMode.replace;
               newBlockDataState = DataState.error;
             case DataState.error:
               // @FaCode-004.
               // Replace by empty items.
-              realListBehavior = ListBehavior.replace;
+              realItemListMode = ItemListMode.replace;
               newBlockDataState = DataState.error;
             case DataState.none:
               // Replace by empty items.
-              realListBehavior = ListBehavior.replace;
+              realItemListMode = ItemListMode.replace;
               newBlockDataState = DataState.error;
           }
         }
@@ -919,19 +919,19 @@ abstract class Block<
           switch (dataState) {
             case DataState.ready:
               // Replace.
-              realListBehavior = ListBehavior.replace;
+              realItemListMode = ItemListMode.replace;
               newBlockDataState = DataState.ready;
             case DataState.pending:
               // Replace.
-              realListBehavior = ListBehavior.replace;
+              realItemListMode = ItemListMode.replace;
               newBlockDataState = DataState.ready;
             case DataState.error:
               // Replace.
-              realListBehavior = ListBehavior.replace;
+              realItemListMode = ItemListMode.replace;
               newBlockDataState = DataState.ready;
             case DataState.none:
               // Replace.
-              realListBehavior = ListBehavior.replace;
+              realItemListMode = ItemListMode.replace;
               newBlockDataState = DataState.ready;
           }
         }
@@ -939,34 +939,34 @@ abstract class Block<
         else {
           switch (dataState) {
             case DataState.ready:
-              // Replace or Append:
-              realListBehavior = thisXBlock.listBehavior;
+              // Replace or Expand:
+              realItemListMode = thisXBlock.itemListMode;
               newBlockDataState = DataState.ready;
             case DataState.pending:
               // Replace.
-              realListBehavior = ListBehavior.replace;
+              realItemListMode = ItemListMode.replace;
               newBlockDataState = DataState.ready;
             case DataState.error:
               // Replace.
-              realListBehavior = ListBehavior.replace;
+              realItemListMode = ItemListMode.replace;
               newBlockDataState = DataState.ready;
             case DataState.none:
               // Replace.
-              realListBehavior = ListBehavior.replace;
+              realItemListMode = ItemListMode.replace;
               newBlockDataState = DataState.ready;
           }
         }
       }
       if (queryTypeChanged) {
         // Replace:
-        realListBehavior = ListBehavior.replace;
+        realItemListMode = ItemListMode.replace;
       }
     }
     // Query Empty:
     else {
       callingPageable = __blockData._emptyPageable;
       __lastQueryType = thisXBlock.queryType;
-      realListBehavior = ListBehavior.replace;
+      realItemListMode = ItemListMode.replace;
       newBlockDataState = DataState.ready;
       pageData = PageData.empty<ITEM>();
       queryResultState = ActionResultState.success;
@@ -979,7 +979,7 @@ abstract class Block<
       // Update queried items to the List:
       //
       __blockData._updateFrom(
-        forceListBehavior: realListBehavior,
+        forceItemListMode: realItemListMode,
         currentParentItemId: this.parentItemId,
         filterCriteria: filterCriteriaOfFilterModel,
         pageable: callingPageable,
@@ -2928,7 +2928,7 @@ abstract class Block<
     //
     return await __queryBlock(
       qryMethod: qryMethod,
-      listBehavior: ListBehavior.replace,
+      itemListMode: ItemListMode.replace,
       filterInput: null,
       postQueryBehavior: postQueryBehavior,
       suggestedSelection: null,
@@ -2965,7 +2965,7 @@ abstract class Block<
     //
     return await __queryBlock(
       qryMethod: qryMethod,
-      listBehavior: ListBehavior.replace,
+      itemListMode: ItemListMode.replace,
       filterInput: null,
       postQueryBehavior: postQueryBehavior,
       suggestedSelection: null,
@@ -3002,7 +3002,7 @@ abstract class Block<
     //
     return await __queryBlock(
       qryMethod: qryMethod,
-      listBehavior: ListBehavior.append,
+      itemListMode: ItemListMode.expand,
       postQueryBehavior: postQueryBehavior,
       filterInput: null,
       suggestedSelection: null,
@@ -3054,7 +3054,7 @@ abstract class Block<
       block: this,
       filterInput: filterInput,
       pageable: pageable,
-      listBehavior: ListBehavior.replace,
+      itemListMode: ItemListMode.replace,
       postQueryBehavior: prepareFormToCreateItem
           ? PostQueryBehavior.createNewItem
           : PostQueryBehavior.setAnItemAsCurrent,
@@ -3081,7 +3081,7 @@ abstract class Block<
   @_BlockQueryAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockQueryResult> query({
-    ListBehavior listBehavior = ListBehavior.replace,
+    ItemListMode itemListMode = ItemListMode.replace,
     PostQueryBehavior postQueryBehavior =
         PostQueryBehavior.setAnItemAsCurrentIfNeed,
     FILTER_INPUT? filterInput,
@@ -3101,7 +3101,7 @@ abstract class Block<
       ownerClassInstance: this,
       methodName: qryMethod.name,
       parameters: {
-        "listBehavior": listBehavior,
+        "itemListMode": itemListMode,
         "postQueryBehavior": postQueryBehavior,
         "filterInput": filterInput,
         "suggestedSelection": suggestedSelection,
@@ -3111,7 +3111,7 @@ abstract class Block<
     //
     return await __queryBlock(
       qryMethod: qryMethod,
-      listBehavior: listBehavior,
+      itemListMode: itemListMode,
       postQueryBehavior: postQueryBehavior,
       filterInput: filterInput,
       suggestedSelection: suggestedSelection,
@@ -3133,7 +3133,7 @@ abstract class Block<
   @_BlockQueryAndPrepareToEditAnnotation()
   Future<BlockQueryResult> queryAndPrepareToEdit({
     FILTER_INPUT? filterInput,
-    ListBehavior listBehavior = ListBehavior.replace,
+    ItemListMode itemListMode = ItemListMode.replace,
     SuggestedSelection<ID>? suggestedSelection,
     PageableData? pageable,
     Function()? navigate,
@@ -3154,7 +3154,7 @@ abstract class Block<
       block: this,
       filterInput: filterInput,
       pageable: null,
-      listBehavior: listBehavior,
+      itemListMode: itemListMode,
       postQueryBehavior: PostQueryBehavior.setAnItemAsCurrentThenLoadForm,
       suggestedSelection: suggestedSelection,
     );
@@ -3197,7 +3197,7 @@ abstract class Block<
       block: this,
       filterInput: filterInput,
       pageable: null,
-      listBehavior: ListBehavior.replace,
+      itemListMode: ItemListMode.replace,
       postQueryBehavior: PostQueryBehavior.createNewItem,
       suggestedSelection: null,
     );
@@ -4109,7 +4109,7 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockQueryResult> __queryBlock({
     required BlockQryMethodName qryMethod,
-    required ListBehavior listBehavior,
+    required ItemListMode itemListMode,
     required PostQueryBehavior postQueryBehavior,
     required FILTER_INPUT? filterInput,
     required SuggestedSelection? suggestedSelection,
@@ -4146,7 +4146,7 @@ abstract class Block<
       block: this,
       filterInput: filterInput,
       pageable: usedPageable,
-      listBehavior: listBehavior,
+      itemListMode: itemListMode,
       postQueryBehavior: postQueryBehavior,
       suggestedSelection: suggestedSelection,
     );

@@ -362,7 +362,7 @@ class _BlockData<
   // ***************************************************************************
 
   void _updateFrom({
-    required ListBehavior forceListBehavior,
+    required ItemListMode forceItemListMode,
     required Object? currentParentItemId,
     required FILTER_CRITERIA? filterCriteria,
     required PageableData? pageable,
@@ -372,7 +372,7 @@ class _BlockData<
   }) {
     _lastQueryResultState = queryResultState;
     // Check if filterCriteria changed.
-    if (forceListBehavior == ListBehavior.replace ||
+    if (forceItemListMode == ItemListMode.replace ||
         _currentParentItemId != currentParentItemId ||
         _filterCriteria != filterCriteria) {
       _items.clear();
