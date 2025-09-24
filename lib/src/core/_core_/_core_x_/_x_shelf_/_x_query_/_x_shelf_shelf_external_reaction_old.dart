@@ -1,40 +1,41 @@
 part of '../../../core.dart';
 
-class _XShelfShelfExternalReaction extends _XShelfSbQuery {
-  _XShelfShelfExternalReaction({
+class _XShelfShelfExternalReactionOLD extends _XShelfSbQuery {
+  _XShelfShelfExternalReactionOLD({
     required super.shelf,
+    required EffectedShelfMembers effectedShelfMembers,
   }) : super(xShelfType: XShelfType.shelfExternalReaction) {
-    // Set<String> listenerBlockNames = {}
-    //   ..addAll(effectedShelfMembers._reQueryBlockMAP.keys)
-    //   ..addAll(effectedShelfMembers._refreshCurrItmBlockMAP.keys);
-    // // -------------------------------------------------------------------------
-    // for (String listenerBlkName in listenerBlockNames) {
-    //   final Block? reQryBlock =
-    //       effectedShelfMembers._reQueryBlockMAP[listenerBlkName];
-    //   final Block? refreshCurrBlock =
-    //       effectedShelfMembers._refreshCurrItmBlockMAP[listenerBlkName];
-    //   //
-    //   bool blockXVisible = false;
-    //   QryHint queryHint = QryHint.none;
-    //   bool forceReloadItem = false;
-    //   //
-    //   if (reQryBlock != null) {
-    //     blockXVisible = reQryBlock.ui.hasActiveBlockFragment(
-    //       alsoCheckChildren: true,
-    //     );
-    //     queryHint = blockXVisible ? QryHint.force : QryHint.markAsPending;
-    //   }
-    //   if (refreshCurrBlock != null) {
-    //     blockXVisible = refreshCurrBlock.ui.hasActiveBlockFragment(
-    //       alsoCheckChildren: true,
-    //     );
-    //     forceReloadItem = true;
-    //   }
-    //   //
-    //   XBlock xBlock = xBlockMap[listenerBlkName]!;
-    //   xBlock.setQueryHintToGreater(queryHint);
-    //   xBlock.setForceReloadCurrItem(forceReloadItem);
-    // }
+    Set<String> listenerBlockNames = {}
+      ..addAll(effectedShelfMembers._reQueryBlockMAP.keys)
+      ..addAll(effectedShelfMembers._refreshCurrItmBlockMAP.keys);
+    // -------------------------------------------------------------------------
+    for (String listenerBlkName in listenerBlockNames) {
+      final Block? reQryBlock =
+          effectedShelfMembers._reQueryBlockMAP[listenerBlkName];
+      final Block? refreshCurrBlock =
+          effectedShelfMembers._refreshCurrItmBlockMAP[listenerBlkName];
+      //
+      bool blockXVisible = false;
+      QryHint queryHint = QryHint.none;
+      bool forceReloadItem = false;
+      //
+      if (reQryBlock != null) {
+        blockXVisible = reQryBlock.ui.hasActiveBlockFragment(
+          alsoCheckChildren: true,
+        );
+        queryHint = blockXVisible ? QryHint.force : QryHint.markAsPending;
+      }
+      if (refreshCurrBlock != null) {
+        blockXVisible = refreshCurrBlock.ui.hasActiveBlockFragment(
+          alsoCheckChildren: true,
+        );
+        forceReloadItem = true;
+      }
+      //
+      XBlock xBlock = xBlockMap[listenerBlkName]!;
+      xBlock.setQueryHintToGreater(queryHint);
+      xBlock.setForceReloadCurrItem(forceReloadItem);
+    }
     // -------------------------------------------------------------------------
     for (XBlock leafXBlock in allLeafXBlocks) {
       XBlock? xBlock = leafXBlock;
@@ -89,21 +90,21 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
       }
     }
     // -------------------------------------------------------------------------
-    // for (Scalar scalar in effectedShelfMembers._reQueryScalarMAP.values) {
-    //   String scalarName = scalar.name;
-    //   XScalar xScalar = xScalarMap[scalarName]!;
-    //   //
-    //   bool scalarXVisible = scalar.ui.hasActiveUIComponent(
-    //     alsoCheckChildren: true,
-    //   );
-    //   if (scalarXVisible) {
-    //     // Test Cases: [84a].
-    //     xScalar.setQueryHintToGreater(QryHint.force);
-    //   } else {
-    //     // Test Cases: [84b].
-    //     xScalar.setQueryHintToGreater(QryHint.markAsPending);
-    //   }
-    // }
+    for (Scalar scalar in effectedShelfMembers._reQueryScalarMAP.values) {
+      String scalarName = scalar.name;
+      XScalar xScalar = xScalarMap[scalarName]!;
+      //
+      bool scalarXVisible = scalar.ui.hasActiveUIComponent(
+        alsoCheckChildren: true,
+      );
+      if (scalarXVisible) {
+        // Test Cases: [84a].
+        xScalar.setQueryHintToGreater(QryHint.force);
+      } else {
+        // Test Cases: [84b].
+        xScalar.setQueryHintToGreater(QryHint.markAsPending);
+      }
+    }
     // -------------------------------------------------------------------------
     for (XScalar leafXScalar in allLeafXScalars) {
       XScalar? xScalar = leafXScalar;

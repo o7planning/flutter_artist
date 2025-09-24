@@ -93,6 +93,25 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
+  bool _hasReactionBookmark() {
+    for (Block block in __blockMap.values) {
+      bool has = block._hasReactionBookmark();
+      if (has) {
+        return true;
+      }
+    }
+    for (Scalar scalar in __scalarMap.values) {
+      bool has = scalar._hasReactionBookmark();
+      if (has) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   Shelf() {
     __onInit();
   }
@@ -644,15 +663,66 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> _addShelfExternalReactionTaskUnit({
+  Future<void> _markReactionForExternalShelfEvents({
     required EffectedShelfMembers effectedShelfMembers,
   }) async {
+    print(
+        " ||-------------> [External Reaction] _markReactionForExternalShelfEvents: ${getClassName(this)} [LISTENER]");
+    //
+    for (String blockName in effectedShelfMembers._reQueryBlockMAP.keys) {
+      Block block = __blockMap[blockName]!;
+      block._blockReQryCon = _BlockReQryCon(
+        parentItemId: block.parentItemId,
+        filterCriteria: block.filterCriteria,
+      );
+    }
+    //
+    for (String blockName
+        in effectedShelfMembers._refreshCurrItmBlockMAP.keys) {
+      Block block = __blockMap[blockName]!;
+      Object? itemId = block.currentItemId;
+      block._blockItemRefreshCon = itemId == null
+          ? null
+          : _BlockItemRefreshCon(
+              itemId: itemId,
+            );
+    }
+    //
+    for (String scalarName in effectedShelfMembers._reQueryScalarMAP.keys) {
+      Scalar scalar = __scalarMap[scalarName]!;
+      scalar._scalarReQryCon = _ScalarReQryCon(
+        valueId: scalar.valueId, //
+        filterCriteria: scalar.filterCriteria,
+      );
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @Deprecated("OLD Way, TODO Delete! --> _markReactionForExternalShelfEvents")
+  Future<void> _addShelfExternalReactionTaskUnitOLD({
+    required EffectedShelfMembers effectedShelfMembers,
+  }) async {
+    print(
+        " ||-------------> [External Reaction] _addShelfExternalReactionTaskUnitOLD: ${getClassName(this)} [LISTENER]");
+    //
+    final XShelf xShelf = _XShelfShelfExternalReactionOLD(
+      shelf: this,
+      effectedShelfMembers: effectedShelfMembers,
+    );
+    //
+    xShelf._initQueryTasks();
+    // IMPORTANT: No need to call "execute".
+    FlutterArtist._rootQueue._addXShelf(xShelf);
+  }
+
+  Future<void> _addShelfExternalReactionTaskUnit() async {
     print(
         " ||-------------> [External Reaction] _addShelfExternalReactionTaskUnit: ${getClassName(this)} [LISTENER]");
     //
     final XShelf xShelf = _XShelfShelfExternalReaction(
       shelf: this,
-      effectedShelfMembers: effectedShelfMembers,
     );
     //
     xShelf._initQueryTasks();

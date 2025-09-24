@@ -38,6 +38,7 @@ class _StorageEventHandler {
       print("*~~~~~~~~~> FIRE EVENT TO OUTSIDE --> Event Item Types: $events"
           " - Src Event: ${getClassName(eventBlock)}");
     }
+    final List<Shelf> visibleReactionShelves = [];
     //
     for (String shelfName in storage._shelfMap.keys) {
       if (shelfName == eventBlock?.shelf.name) {
@@ -45,12 +46,64 @@ class _StorageEventHandler {
       }
       Shelf listenerShelf = storage._shelfMap[shelfName]!;
       //
-      __addReactionTaskUnitToEvents(
+      // __addReactionTaskUnitToEvents(
+      //   listenerShelf: listenerShelf,
+      //   outsideEvents: events,
+      // );
+      __markReactionConditionsForEvents(
         listenerShelf: listenerShelf,
         outsideEvents: events,
       );
+      if (listenerShelf._hasReactionBookmark() &&
+          listenerShelf.ui.hasActiveUIComponent()) {
+        visibleReactionShelves.add(listenerShelf);
+      }
+    }
+    //
+    for (Shelf reactionShelf in visibleReactionShelves) {
+      reactionShelf._addShelfExternalReactionTaskUnit();
     }
   }
+
+  void __markReactionConditionsForEvents({
+    required Shelf listenerShelf,
+    required List<Event> outsideEvents,
+  }) {
+    if (listenerShelf.isFullyPending) {
+      return;
+    }
+    EffectedShelfMembers effectedShelfMembers =
+        listenerShelf._calculateEffectedShelfMembersByEvents(outsideEvents);
+
+    if (!effectedShelfMembers.hasMember()) {
+      return;
+    }
+    listenerShelf._markReactionForExternalShelfEvents(
+      effectedShelfMembers: effectedShelfMembers,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  // @Deprecated("Khong su dung nua, su dung __markReactionConditionsForEvents")
+  // void __addReactionTaskUnitToEvents({
+  //   required Shelf listenerShelf,
+  //   required List<Event> outsideEvents,
+  // }) {
+  //   if (listenerShelf.isFullyPending) {
+  //     return;
+  //   }
+  //   EffectedShelfMembers effectedShelfMembers =
+  //       listenerShelf._calculateEffectedShelfMembersByEvents(outsideEvents);
+  //
+  //   if (!effectedShelfMembers.hasMember()) {
+  //     return;
+  //   }
+  //   listenerShelf._addShelfExternalReactionTaskUnitOLD(
+  //     effectedShelfMembers: effectedShelfMembers,
+  //   );
+  // }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -70,6 +123,7 @@ class _StorageEventHandler {
       print("**~~~~~~~~~> FIRE EVENT TO OUTSIDE --> Event Item Types: $events"
           " - Src Shelf: ${getClassName(eventShelf)}");
     }
+    final List<Shelf> visibleReactionShelves = [];
     //
     for (String shelfName in storage._shelfMap.keys) {
       if (shelfName == eventShelf?.name) {
@@ -77,32 +131,23 @@ class _StorageEventHandler {
       }
       Shelf listenerShelf = storage._shelfMap[shelfName]!;
       //
-      __addReactionTaskUnitToEvents(
+      // __addReactionTaskUnitToEvents(
+      //   listenerShelf: listenerShelf,
+      //   outsideEvents: events,
+      // );
+      __markReactionConditionsForEvents(
         listenerShelf: listenerShelf,
         outsideEvents: events,
       );
+      if (listenerShelf._hasReactionBookmark() &&
+          listenerShelf.ui.hasActiveUIComponent()) {
+        visibleReactionShelves.add(listenerShelf);
+      }
     }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void __addReactionTaskUnitToEvents({
-    required Shelf listenerShelf,
-    required List<Event> outsideEvents,
-  }) {
-    if (listenerShelf.isFullyPending) {
-      return;
+    //
+    for (Shelf reactionShelf in visibleReactionShelves) {
+      reactionShelf._addShelfExternalReactionTaskUnit();
     }
-    EffectedShelfMembers effectedShelfMembers =
-        listenerShelf._calculateEffectedShelfMembersByEvents(outsideEvents);
-
-    if (!effectedShelfMembers.hasMember()) {
-      return;
-    }
-    listenerShelf._addShelfExternalReactionTaskUnit(
-      effectedShelfMembers: effectedShelfMembers,
-    );
   }
 
   // ***************************************************************************

@@ -412,6 +412,10 @@ abstract class Block<
 
   _BlockItemRefreshCon? _blockItemRefreshCon;
 
+  bool _hasReactionBookmark() {
+    return _blockReQryCon != null || _blockItemRefreshCon != null;
+  }
+
   // ***************************************************************************
   // ***************************************************************************
 
@@ -5521,6 +5525,12 @@ abstract class Block<
   // ***************************************************************************
 
   int get currentItemChangeCount => __blockData._currentItemChangeCount;
+
+  ID? get currentItemId {
+    ITEM? ci = currentItem;
+    // TODO: Get ID from __blockData.current!!.
+    return ci == null ? null : getItemId(ci);
+  }
 
   ITEM? get currentItem => __blockData.current._item;
 
