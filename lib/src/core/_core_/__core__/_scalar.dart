@@ -250,6 +250,14 @@ abstract class Scalar<
     return _scalarReQryCon != null;
   }
 
+  bool _isMatchScalarReQryCon(_ScalarReQryCon? scalarReQryCon) {
+    if (scalarReQryCon == null) {
+      return false;
+    }
+    return scalarReQryCon.parentScalarValueId == parentScalarValueId &&
+        scalarReQryCon.filterCriteria == filterCriteria;
+  }
+
   // ***************************************************************************
   // ***************************************************************************
 
@@ -301,12 +309,13 @@ abstract class Scalar<
     //
     bool hasActiveUI = ui.hasActiveUIComponent();
     QryHint queryHint = thisXScalar.queryHint;
+
     if (queryHint != QryHint.force) {
       if (this.dataState != DataState.ready && hasActiveUI) {
         queryHint = QryHint.force;
       }
     }
-    //
+
     if (queryHint == QryHint.none) {
       print("        ~~~~~~~> IGNORED --> queryHint: $queryHint - [$name]");
       //
@@ -729,6 +738,10 @@ abstract class Scalar<
 
   String get valueId {
     return ""; // TODO: Hardcode!.
+  }
+
+  String? get parentScalarValueId {
+    return parent?.valueId;
   }
 
   // ***************************************************************************

@@ -39,6 +39,7 @@ class _StorageEventHandler {
           " - Src Event: ${getClassName(eventBlock)}");
     }
     final List<Shelf> visibleReactionShelves = [];
+    final List<Shelf> invisibleReactionShelves = [];
     //
     for (String shelfName in storage._shelfMap.keys) {
       if (shelfName == eventBlock?.shelf.name) {
@@ -54,12 +55,18 @@ class _StorageEventHandler {
         listenerShelf: listenerShelf,
         outsideEvents: events,
       );
-      if (listenerShelf._hasReactionBookmark() &&
-          listenerShelf.ui.hasActiveUIComponent()) {
-        visibleReactionShelves.add(listenerShelf);
+      if (listenerShelf._hasReactionBookmark()) {
+        if (listenerShelf.ui.hasActiveUIComponent()) {
+          visibleReactionShelves.add(listenerShelf);
+        } else {
+          invisibleReactionShelves.add(listenerShelf);
+        }
       }
     }
     //
+    for (Shelf reactionShelf in invisibleReactionShelves) {
+      reactionShelf._addShelfExternalReactionTaskUnit();
+    }
     for (Shelf reactionShelf in visibleReactionShelves) {
       reactionShelf._addShelfExternalReactionTaskUnit();
     }
@@ -123,6 +130,7 @@ class _StorageEventHandler {
       print("**~~~~~~~~~> FIRE EVENT TO OUTSIDE --> Event Item Types: $events"
           " - Src Shelf: ${getClassName(eventShelf)}");
     }
+    final List<Shelf> invisibleReactionShelves = [];
     final List<Shelf> visibleReactionShelves = [];
     //
     for (String shelfName in storage._shelfMap.keys) {
@@ -139,12 +147,18 @@ class _StorageEventHandler {
         listenerShelf: listenerShelf,
         outsideEvents: events,
       );
-      if (listenerShelf._hasReactionBookmark() &&
-          listenerShelf.ui.hasActiveUIComponent()) {
-        visibleReactionShelves.add(listenerShelf);
+      if (listenerShelf._hasReactionBookmark()) {
+        if (listenerShelf.ui.hasActiveUIComponent()) {
+          visibleReactionShelves.add(listenerShelf);
+        } else {
+          invisibleReactionShelves.add(listenerShelf);
+        }
       }
     }
     //
+    for (Shelf reactionShelf in invisibleReactionShelves) {
+      reactionShelf._addShelfExternalReactionTaskUnit();
+    }
     for (Shelf reactionShelf in visibleReactionShelves) {
       reactionShelf._addShelfExternalReactionTaskUnit();
     }

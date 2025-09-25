@@ -258,6 +258,9 @@ class XBlock<
 
   @override
   String toString() {
-    return "${getClassName(this)}(${getClassName(block)} - qryHint: $queryHint) forceReloadItem: $__forceReloadCurrItem - $xFormModel";
+    return "XBlock (${getClassName(block)}) \n"
+        "            - qryHint: $queryHint / blockReQryCon: $_blockReQryCon \n"
+        "            - forceReloadItem: $__forceReloadCurrItem / blockItemRefreshCon: $_blockItemRefreshCon \n"
+        "            - xFormModel: $xFormModel";
   }
 }

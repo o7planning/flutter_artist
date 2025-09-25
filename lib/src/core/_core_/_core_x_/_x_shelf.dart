@@ -374,9 +374,6 @@ abstract class XShelf {
     for (String key in xScalarMap.keys) {
       print(" --> XShelf/Scalar: $key - ${xScalarMap[key]}");
     }
-    for (XFormModel xFormModel in allXFormModels) {
-      print(" --> XShelf/FormModel: ${xFormModel.xBlock.name} - $xFormModel");
-    }
   }
 
   // ***************************************************************************

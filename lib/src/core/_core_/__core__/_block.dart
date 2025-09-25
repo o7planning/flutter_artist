@@ -416,6 +416,21 @@ abstract class Block<
     return _blockReQryCon != null || _blockItemRefreshCon != null;
   }
 
+  bool _isMatchBlockReQryCon(_BlockReQryCon? blockReQryCon) {
+    if (blockReQryCon == null) {
+      return false;
+    }
+    return blockReQryCon.parentItemId == parentItemId &&
+        blockReQryCon.filterCriteria == filterCriteria;
+  }
+
+  bool _isMatchBlockItemRefreshCon(_BlockItemRefreshCon? blockItemRefreshCon) {
+    if (blockItemRefreshCon == null) {
+      return false;
+    }
+    return currentItemId != null && blockItemRefreshCon.itemId == currentItemId;
+  }
+
   // ***************************************************************************
   // ***************************************************************************
 

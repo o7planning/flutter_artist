@@ -9,4 +9,9 @@ class _BlockItemRefreshCon extends Equatable {
 
   @override
   List<Object?> get props => [itemId];
+
+  @override
+  String toString() {
+    return "itemId: $itemId";
+  }
 }

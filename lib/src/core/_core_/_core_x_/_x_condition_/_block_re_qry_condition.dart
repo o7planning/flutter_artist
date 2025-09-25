@@ -11,4 +11,9 @@ class _BlockReQryCon extends Equatable {
 
   @override
   List<Object?> get props => [parentItemId, filterCriteria];
+
+  @override
+  String toString() {
+    return "parentItemId: $parentItemId, filterCriteria: ${filterCriteria == null ? 'null' : 'OK'}";
+  }
 }

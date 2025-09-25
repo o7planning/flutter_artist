@@ -39,6 +39,6 @@ class XFormModel<
 
   @override
   String toString() {
-    return "${getClassName(this)}(${getClassName(formModel)} - lazy: $lazy - needQuery: $forceTypeForForm)";
+    return "${getClassName(formModel)} - lazy: $lazy - needQuery: $forceTypeForForm";
   }
 }

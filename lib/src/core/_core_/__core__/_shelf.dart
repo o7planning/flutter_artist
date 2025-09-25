@@ -691,7 +691,7 @@ abstract class Shelf extends _Core {
     for (String scalarName in effectedShelfMembers._reQueryScalarMAP.keys) {
       Scalar scalar = __scalarMap[scalarName]!;
       scalar._scalarReQryCon = _ScalarReQryCon(
-        valueId: scalar.valueId, //
+        parentScalarValueId: scalar.parentScalarValueId, //
         filterCriteria: scalar.filterCriteria,
       );
     }

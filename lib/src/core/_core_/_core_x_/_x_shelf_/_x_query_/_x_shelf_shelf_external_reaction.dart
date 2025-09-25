@@ -4,37 +4,33 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
   _XShelfShelfExternalReaction({
     required super.shelf,
   }) : super(xShelfType: XShelfType.shelfExternalReaction) {
-    // Set<String> listenerBlockNames = {}
-    //   ..addAll(effectedShelfMembers._reQueryBlockMAP.keys)
-    //   ..addAll(effectedShelfMembers._refreshCurrItmBlockMAP.keys);
-    // // -------------------------------------------------------------------------
-    // for (String listenerBlkName in listenerBlockNames) {
-    //   final Block? reQryBlock =
-    //       effectedShelfMembers._reQueryBlockMAP[listenerBlkName];
-    //   final Block? refreshCurrBlock =
-    //       effectedShelfMembers._refreshCurrItmBlockMAP[listenerBlkName];
-    //   //
-    //   bool blockXVisible = false;
-    //   QryHint queryHint = QryHint.none;
-    //   bool forceReloadItem = false;
-    //   //
-    //   if (reQryBlock != null) {
-    //     blockXVisible = reQryBlock.ui.hasActiveBlockFragment(
-    //       alsoCheckChildren: true,
-    //     );
-    //     queryHint = blockXVisible ? QryHint.force : QryHint.markAsPending;
-    //   }
-    //   if (refreshCurrBlock != null) {
-    //     blockXVisible = refreshCurrBlock.ui.hasActiveBlockFragment(
-    //       alsoCheckChildren: true,
-    //     );
-    //     forceReloadItem = true;
-    //   }
-    //   //
-    //   XBlock xBlock = xBlockMap[listenerBlkName]!;
-    //   xBlock.setQueryHintToGreater(queryHint);
-    //   xBlock.setForceReloadCurrItem(forceReloadItem);
-    // }
+    for (XBlock xBlk in allXBlocks) {
+      if (xBlk._blockReQryCon == null && xBlk._blockItemRefreshCon == null) {
+        continue;
+      }
+      //
+      bool blockXVisible = false;
+      QryHint queryHint = QryHint.none;
+      bool forceReloadItem = false;
+      //
+      if (xBlk._blockReQryCon != null &&
+          xBlk.block._isMatchBlockReQryCon(xBlk._blockReQryCon)) {
+        blockXVisible = xBlk.block.ui.hasActiveBlockFragment(
+          alsoCheckChildren: true,
+        );
+        queryHint = blockXVisible ? QryHint.force : QryHint.markAsPending;
+      }
+      if (xBlk._blockItemRefreshCon != null &&
+          xBlk.block._isMatchBlockItemRefreshCon(xBlk._blockItemRefreshCon)) {
+        blockXVisible = xBlk.block.ui.hasActiveBlockFragment(
+          alsoCheckChildren: true,
+        );
+        forceReloadItem = true;
+      }
+      //
+      xBlk.setQueryHintToGreater(queryHint);
+      xBlk.setForceReloadCurrItem(forceReloadItem);
+    }
     // -------------------------------------------------------------------------
     for (XBlock leafXBlock in allLeafXBlocks) {
       XBlock? xBlock = leafXBlock;
@@ -89,21 +85,24 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
       }
     }
     // -------------------------------------------------------------------------
-    // for (Scalar scalar in effectedShelfMembers._reQueryScalarMAP.values) {
-    //   String scalarName = scalar.name;
-    //   XScalar xScalar = xScalarMap[scalarName]!;
-    //   //
-    //   bool scalarXVisible = scalar.ui.hasActiveUIComponent(
-    //     alsoCheckChildren: true,
-    //   );
-    //   if (scalarXVisible) {
-    //     // Test Cases: [84a].
-    //     xScalar.setQueryHintToGreater(QryHint.force);
-    //   } else {
-    //     // Test Cases: [84b].
-    //     xScalar.setQueryHintToGreater(QryHint.markAsPending);
-    //   }
-    // }
+    for (XScalar xScalar in allXScalars) {
+      if (xScalar._scalarReQryCon == null) {
+        continue;
+      }
+      //
+      if (xScalar.scalar._isMatchScalarReQryCon(xScalar._scalarReQryCon)) {
+        bool scalarXVisible = xScalar.scalar.ui.hasActiveUIComponent(
+          alsoCheckChildren: true,
+        );
+        if (scalarXVisible) {
+          // Test Cases: [84a].
+          xScalar.setQueryHintToGreater(QryHint.force);
+        } else {
+          // Test Cases: [84b].
+          xScalar.setQueryHintToGreater(QryHint.markAsPending);
+        }
+      }
+    }
     // -------------------------------------------------------------------------
     for (XScalar leafXScalar in allLeafXScalars) {
       XScalar? xScalar = leafXScalar;

@@ -98,6 +98,7 @@ class XScalar<VALUE extends Object> {
 
   @override
   String toString() {
-    return "${getClassName(this)}(${getClassName(scalar)} - needQuery: $queryHint)";
+    return "XScalar (${getClassName(scalar)}) \n"
+        "            - needQuery: $queryHint) / scalarReQryCon: $_scalarReQryCon";
   }
 }
