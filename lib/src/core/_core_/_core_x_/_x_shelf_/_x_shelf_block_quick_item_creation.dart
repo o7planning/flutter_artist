@@ -5,6 +5,7 @@ class _XShelfBlockQuickItemCreation extends XShelf {
       : super(
           xShelfType: XShelfType.blockQuickItemCreation,
           shelf: block.shelf,
+          resetReactionTypeToExternal: true,
         ) {
     //
     // IMPORTANT:

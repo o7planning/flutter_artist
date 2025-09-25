@@ -11,6 +11,7 @@ class _XShelfBlockQueryEmpty extends _XShelfSbQuery {
   }) : super(
           xShelfType: XShelfType.blockQueryEmpty,
           shelf: block.shelf,
+          resetReactionTypeToExternal: true,
         ) {
     _updateQueryStateFromFilterModelAndFilterInput(
       filterModel: block.registeredOrDefaultFilterModel,

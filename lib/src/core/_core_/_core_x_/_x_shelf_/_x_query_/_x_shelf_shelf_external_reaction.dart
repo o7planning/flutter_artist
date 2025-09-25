@@ -3,7 +3,10 @@ part of '../../../core.dart';
 class _XShelfShelfExternalReaction extends _XShelfSbQuery {
   _XShelfShelfExternalReaction({
     required super.shelf,
-  }) : super(xShelfType: XShelfType.shelfExternalReaction) {
+  }) : super(
+          xShelfType: XShelfType.shelfExternalReaction,
+          resetReactionTypeToExternal: true,
+        ) {
     for (XBlock xBlk in allXBlocks) {
       if (xBlk._blockReQryCon == null && xBlk._blockItemRefreshCon == null) {
         continue;

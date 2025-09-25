@@ -3,6 +3,14 @@ part of '../core.dart';
 abstract class Shelf extends _Core {
   Shelf get shelf => this;
 
+  ReactionType __reactionTypeToExternal = ReactionType.immediate;
+
+  ReactionType get reactionTypeToExternal => __reactionTypeToExternal;
+
+  void _resetReactionTypeToExternal() {
+    __reactionTypeToExternal = ReactionType.immediate;
+  }
+
   late final ShelfConfig config;
 
   bool __disposed = false;

@@ -1,0 +1,4 @@
+enum ReactionType {
+  immediate,
+  delay;
+}

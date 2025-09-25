@@ -7,6 +7,7 @@ class _XShelfScalarQuickExtraDataLoadAction extends XShelf {
   }) : super(
           xShelfType: XShelfType.scalarQuickExtraDataLoadAction,
           shelf: scalar.shelf,
+          resetReactionTypeToExternal: true,
         ) {
     //
     final thisXScalar = xScalarMap[scalar.name]!;

@@ -5,6 +5,7 @@ class _XShelfBlockItemDeletion extends XShelf {
       : super(
           xShelfType: XShelfType.blockItemDeletion,
           shelf: block.shelf,
+          resetReactionTypeToExternal: true,
         ) {
     //
     // IMPORTANT:

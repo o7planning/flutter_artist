@@ -4,7 +4,10 @@ class _XShelfShelfExternalReactionOLD extends _XShelfSbQuery {
   _XShelfShelfExternalReactionOLD({
     required super.shelf,
     required EffectedShelfMembers effectedShelfMembers,
-  }) : super(xShelfType: XShelfType.shelfExternalReaction) {
+  }) : super(
+          xShelfType: XShelfType.shelfExternalReaction,
+          resetReactionTypeToExternal: true,
+        ) {
     Set<String> listenerBlockNames = {}
       ..addAll(effectedShelfMembers._reQueryBlockMAP.keys)
       ..addAll(effectedShelfMembers._refreshCurrItmBlockMAP.keys);

@@ -5,6 +5,7 @@ class _XShelfBlockCurrItemSelection extends XShelf {
       : super(
           xShelfType: XShelfType.blockCurrItemSelection,
           shelf: block.shelf,
+          resetReactionTypeToExternal: true,
         ) {
     //
     // IMPORTANT:

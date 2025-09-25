@@ -7,6 +7,7 @@ class _XShelfBlockSilentItemCreation extends XShelf {
   }) : super(
           xShelfType: XShelfType.blockSilentItemCreation,
           shelf: block.shelf,
+          resetReactionTypeToExternal: true,
         ) {
     QryHint queryHint = QryHint.none;
     bool forceReloadItem = false;

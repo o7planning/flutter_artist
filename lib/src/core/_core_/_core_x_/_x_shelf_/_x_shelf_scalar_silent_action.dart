@@ -5,6 +5,7 @@ class _XShelfScalarSilentAction extends XShelf {
       : super(
           xShelfType: XShelfType.scalarSilentAction,
           shelf: scalar.shelf,
+          resetReactionTypeToExternal: true,
         ) {
     //
     // IMPORTANT:

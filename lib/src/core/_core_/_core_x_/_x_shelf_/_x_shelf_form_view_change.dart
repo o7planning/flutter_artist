@@ -5,6 +5,7 @@ class _XShelfFormViewChange extends XShelf {
       : super(
           xShelfType: XShelfType.formViewChange,
           shelf: formModel.shelf,
+          resetReactionTypeToExternal: true,
         ) {
     //
     // IMPORTANT:

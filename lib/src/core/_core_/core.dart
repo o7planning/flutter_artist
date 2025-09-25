@@ -75,6 +75,7 @@ import '../enums/_qry_hint.dart';
 import '../enums/_qry_pagination_type.dart';
 import '../enums/_quick_suggestion_mode.dart';
 import '../enums/_quick_suggestion_type.dart';
+import '../enums/_reaction_type.dart';
 import '../enums/_refreshable_widget_type.dart';
 import '../enums/_scalar_control_action_type.dart';
 import '../enums/_scalar_error_method.dart';

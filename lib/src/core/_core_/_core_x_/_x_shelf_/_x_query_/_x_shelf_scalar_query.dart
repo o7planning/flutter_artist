@@ -7,6 +7,7 @@ class _XShelfScalarQuery extends _XShelfSbQuery {
   }) : super(
           xShelfType: XShelfType.scalarQuery,
           shelf: scalar.shelf,
+          resetReactionTypeToExternal: true,
         ) {
     _updateQueryStateFromFilterModelAndFilterInput(
       filterModel: scalar.registeredOrDefaultFilterModel,
