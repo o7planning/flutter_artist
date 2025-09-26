@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../core/_core_/core.dart';
@@ -15,14 +16,23 @@ class BlockDebugBox extends BaseDebugBox {
   });
 
   @override
-  List<IconLabelText> getChildIconLabelTexts() {
+  List<Widget> getChildIconLabelTexts() {
+    String? activeUI = block.ui.findActiveUIComponent();
+    String? xActiveUI = block.ui.findActiveUIComponent(alsoCheckChildren: true);
     return [
       if (options.showUIActive)
-        IconLabelText(
-          label: "UI Active?: ",
-          text: "${block.ui.hasActiveUIComponent()}",
-          labelStyle: labelStyle0,
-          textStyle: textStyle0,
+        Tooltip(
+          message: activeUI != null
+              ? "Active UI: $activeUI"
+              : xActiveUI != null
+                  ? "Active UI: $xActiveUI"
+                  : "",
+          child: IconLabelText(
+            label: "UI Active / XActive?: ",
+            text: "${activeUI != null} / ${xActiveUI != null}",
+            labelStyle: labelStyle0,
+            textStyle: textStyle0,
+          ),
         ),
       if (options.showLastQueryType)
         IconLabelText(

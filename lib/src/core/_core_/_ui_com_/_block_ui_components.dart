@@ -75,6 +75,13 @@ class _BlockUIComponents extends _UIComponents {
   // ***************************************************************************
 
   bool hasActiveUIComponent({bool alsoCheckChildren = false}) {
+    String? componentName = findActiveUIComponent(
+      alsoCheckChildren: alsoCheckChildren,
+    );
+    return componentName != null;
+  }
+
+  String? findActiveUIComponent({bool alsoCheckChildren = false}) {
     bool active = false;
     // Filter
     // if (block.filterModel != null) {
@@ -87,65 +94,73 @@ class _BlockUIComponents extends _UIComponents {
     active =
         block.formModel != null && block.formModel!.ui.hasActiveUIComponent();
     if (active) {
-      return true;
+      return getClassNameWithoutGenerics(block.formModel);
     }
     // Block Fragment:
-    active = hasActiveBlockFragment(alsoCheckChildren: false);
-    if (active) {
-      return true;
+    String? componentName = findActiveBlockFragment(alsoCheckChildren: false);
+    if (componentName != null) {
+      return componentName;
     }
     // ControlBar:
     active = hasActiveControlBar();
     if (active) {
-      return true;
+      return "BlockControlBar";
     }
     // Control
     active = hasActiveControlWidget();
     if (active) {
-      return true;
+      return "ControlWidget";
     }
     // Pagination
     active = hasActivePaginationWidget();
     if (active) {
-      return true;
+      return "PaginationWidget";
     }
     //
     if (alsoCheckChildren) {
       for (Block childBlock in block._childBlocks) {
-        active = childBlock.ui.hasActiveUIComponent(
+        componentName = childBlock.ui.findActiveUIComponent(
           alsoCheckChildren: alsoCheckChildren,
         );
-        if (active) {
-          return true;
+        if (componentName != null) {
+          return componentName;
         }
       }
     }
-    return false;
+    return null;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   bool hasActiveBlockFragment({required bool alsoCheckChildren}) {
+    String? componentName = findActiveBlockFragment(
+      alsoCheckChildren: alsoCheckChildren,
+    );
+    return componentName != null;
+  }
+
+  String? findActiveBlockFragment({required bool alsoCheckChildren}) {
     var map = {...__blockFragmentWidgetStates};
     for (State widgetState in map.keys) {
       if (widgetState.mounted) {
         bool isShowing = map[widgetState]?.isShowing ?? false;
         if (isShowing) {
-          return true;
+          return getClassNameWithoutGenerics(widgetState.widget);
         }
       }
     }
     if (alsoCheckChildren) {
       for (Block childBlock in block._childBlocks) {
-        bool active =
-            childBlock.ui.hasActiveBlockFragment(alsoCheckChildren: true);
-        if (active) {
-          return true;
+        String? componentName = childBlock.ui.findActiveBlockFragment(
+          alsoCheckChildren: true,
+        );
+        if (componentName != null) {
+          return componentName;
         }
       }
     }
-    return false;
+    return null;
   }
 
   // ***************************************************************************

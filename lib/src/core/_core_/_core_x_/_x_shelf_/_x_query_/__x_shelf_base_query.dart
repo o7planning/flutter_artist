@@ -85,8 +85,8 @@ class _XShelfSbQuery extends XShelf {
           if (parentXBlock == null) {
             break;
           }
-          //
-          final hasXActiveUI = parentXBlock.block.ui.hasActiveBlockFragment(
+          // @@@hasActiveBlockFragment
+          final hasXActiveUI = parentXBlock.block.ui.hasActiveUIComponent(
             alsoCheckChildren: true,
           );
           if (hasXActiveUI) {

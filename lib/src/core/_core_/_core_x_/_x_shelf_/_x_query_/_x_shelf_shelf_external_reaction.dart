@@ -11,23 +11,21 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
       if (xBlk._blockReQryCon == null && xBlk._blockItemRefreshCon == null) {
         continue;
       }
-      //
-      bool blockXVisible = false;
+      // @@@hasActiveBlockFragment
+      bool blockXVisible = xBlk.block.ui.hasActiveUIComponent(
+        alsoCheckChildren: true,
+      );
+      print(
+          "~~~~~~~~~~~~~~~~> _XShelfShelfExternalReaction / ${xBlk.block} - blockXVisible: $blockXVisible");
       QryHint queryHint = QryHint.none;
       bool forceReloadItem = false;
       //
       if (xBlk._blockReQryCon != null &&
           xBlk.block._isMatchBlockReQryCon(xBlk._blockReQryCon)) {
-        blockXVisible = xBlk.block.ui.hasActiveBlockFragment(
-          alsoCheckChildren: true,
-        );
         queryHint = blockXVisible ? QryHint.force : QryHint.markAsPending;
       }
       if (xBlk._blockItemRefreshCon != null &&
           xBlk.block._isMatchBlockItemRefreshCon(xBlk._blockItemRefreshCon)) {
-        blockXVisible = xBlk.block.ui.hasActiveBlockFragment(
-          alsoCheckChildren: true,
-        );
         forceReloadItem = true;
       }
       //
@@ -41,7 +39,8 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
         if (xBlock == null) {
           break;
         }
-        bool hasXActiveUI = xBlock.block.ui.hasActiveBlockFragment(
+        // @@@hasActiveBlockFragment
+        bool hasXActiveUI = xBlock.block.ui.hasActiveUIComponent(
           alsoCheckChildren: true,
         );
         if (hasXActiveUI) {
@@ -92,11 +91,11 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
       if (xScalar._scalarReQryCon == null) {
         continue;
       }
+      bool scalarXVisible = xScalar.scalar.ui.hasActiveUIComponent(
+        alsoCheckChildren: true,
+      );
       //
       if (xScalar.scalar._isMatchScalarReQryCon(xScalar._scalarReQryCon)) {
-        bool scalarXVisible = xScalar.scalar.ui.hasActiveUIComponent(
-          alsoCheckChildren: true,
-        );
         if (scalarXVisible) {
           // Test Cases: [84a].
           xScalar.setQueryHintToGreater(QryHint.force);

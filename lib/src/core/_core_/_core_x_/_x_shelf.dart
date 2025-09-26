@@ -227,13 +227,15 @@ abstract class XShelf {
       bool forceReloadCurrItem = false;
       //
       if (reQryBlock != null) {
-        blockVisible = reQryBlock.ui.hasActiveBlockFragment(
+        // @@@hasActiveBlockFragment
+        blockVisible = reQryBlock.ui.hasActiveUIComponent(
           alsoCheckChildren: true,
         );
         queryHint = blockVisible ? QryHint.force : QryHint.markAsPending;
       }
       if (refreshCurrBlock != null) {
-        blockVisible = refreshCurrBlock.ui.hasActiveBlockFragment(
+        // @@@hasActiveBlockFragment
+        blockVisible = refreshCurrBlock.ui.hasActiveUIComponent(
           alsoCheckChildren: true,
         );
         forceReloadCurrItem = true;
@@ -268,7 +270,8 @@ abstract class XShelf {
         if (xBlock == null) {
           break;
         }
-        bool hasXActiveUI = xBlock.block.ui.hasActiveBlockFragment(
+        // @@@hasActiveBlockFragment
+        bool hasXActiveUI = xBlock.block.ui.hasActiveUIComponent(
           alsoCheckChildren: true,
         );
         if (hasXActiveUI) {

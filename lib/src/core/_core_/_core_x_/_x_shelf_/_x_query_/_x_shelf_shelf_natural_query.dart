@@ -31,7 +31,8 @@ class _XShelfShelfNaturalQuery extends _XShelfSbQuery {
         if (xBlock == null) {
           break;
         }
-        bool hasXActiveUI = xBlock.block.ui.hasActiveBlockFragment(
+        // @@@hasActiveBlockFragment
+        bool hasXActiveUI = xBlock.block.ui.hasActiveUIComponent(
           alsoCheckChildren: true,
         );
         if (hasXActiveUI) {
