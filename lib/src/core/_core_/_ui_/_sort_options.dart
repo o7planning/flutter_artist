@@ -14,18 +14,18 @@ Widget _buildSortBtn({
   return InkWell(
     onTap: enabled
         ? () {
-            SortingDirection nextDirection = sortCriterion.getNextDirection(
-              acceptNoneDirection: acceptNoneDirection,
-            );
-            SortCriterion updateCriterion = sortCriterion.copyWith(
-              direction: nextDirection,
-            );
-            //
-            itemSortCriteria.updateSortCriterion(
-              updateCriterion: updateCriterion,
-              moveToFirst: false,
-            );
-          }
+      SortingDirection nextDirection = sortCriterion.getNextDirection(
+        acceptNoneDirection: acceptNoneDirection,
+      );
+      SortCriterion updateCriterion = sortCriterion.copyWith(
+        direction: nextDirection,
+      );
+      //
+      itemSortCriteria.updateSortCriterion(
+        updateCriterion: updateCriterion,
+        moveToFirst: false,
+      );
+    }
         : null,
     child: _getSortIcon(sortCriterion, isDragging),
   );

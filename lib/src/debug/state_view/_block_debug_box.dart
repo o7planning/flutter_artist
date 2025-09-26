@@ -21,18 +21,33 @@ class BlockDebugBox extends BaseDebugBox {
     String? xActiveUI = block.ui.findActiveUIComponent(alsoCheckChildren: true);
     return [
       if (options.showUIActive)
-        Tooltip(
-          message: activeUI != null
-              ? "Active UI: $activeUI"
-              : xActiveUI != null
-                  ? "Active UI: $xActiveUI"
-                  : "",
-          child: IconLabelText(
-            label: "UI Active / XActive?: ",
-            text: "${activeUI != null} / ${xActiveUI != null}",
-            labelStyle: labelStyle0,
-            textStyle: textStyle0,
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: Tooltip(
+                message: activeUI != null
+                    ? "Active UI: $activeUI"
+                    : xActiveUI != null
+                        ? "Active UI: $xActiveUI"
+                        : "",
+                child: IconLabelText(
+                  label: "UI Active / XActive?: ",
+                  text: "${activeUI != null} / ${xActiveUI != null}",
+                  labelStyle: labelStyle0,
+                  textStyle: textStyle0,
+                ),
+              ),
+            ),
+            SimpleSmallIconButton(
+              iconData: Icons.view_agenda,
+              iconSize: 14,
+              onPressed: activeUI == null
+                  ? null
+                  : () {
+                      // block.ui.hasActiveUIComponent();
+                    },
+            ),
+          ],
         ),
       if (options.showLastQueryType)
         IconLabelText(

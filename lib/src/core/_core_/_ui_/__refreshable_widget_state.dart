@@ -73,7 +73,7 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
       key: Key(keyId),
       onVisibilityChanged: (visibilityInfo) {
         var visiblePercentage = visibilityInfo.visibleFraction * 100;
-        addWidgetState(isShowing: visiblePercentage > 0);
+        __addWidgetState(isShowing: visiblePercentage > 0);
       },
       child: showMode == ShowMode.production
           ? buildContent(context)
@@ -81,6 +81,10 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
               child: buildContent(context),
             ),
     );
+  }
+
+  void __addWidgetState({required bool isShowing}) {
+    addWidgetState(isShowing: isShowing);
   }
 
   Future<void> __executeAfterBuild() async {

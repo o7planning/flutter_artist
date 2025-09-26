@@ -44,7 +44,7 @@ class _FormViewBuilderState extends _RefreshableWidgetState<FormViewBuilder> {
   void addWidgetState({required bool isShowing}) {
     widget.formModel.ui._addFormWidgetState(
       widgetState: this,
-      isShowing: true,
+      isShowing: isShowing,
     );
   }
 
