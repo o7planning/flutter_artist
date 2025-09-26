@@ -11,6 +11,18 @@ abstract class Shelf extends _Core {
     __reactionTypeToExternal = ReactionType.immediate;
   }
 
+  bool setReactionTypeDelayIfUIActive() {
+    if (__reactionTypeToExternal == ReactionType.delay) {
+      return false;
+    }
+    bool uiActive = ui.hasActiveUIComponent();
+    if (uiActive) {
+      __reactionTypeToExternal = ReactionType.delay;
+      return true;
+    }
+    return false;
+  }
+
   late final ShelfConfig config;
 
   bool __disposed = false;
@@ -671,11 +683,11 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> _markReactionForExternalShelfEvents({
+  Future<void> _markReactionToExternalShelfEvents({
     required EffectedShelfMembers effectedShelfMembers,
   }) async {
     print(
-        " ||-------------> [External Reaction] _markReactionForExternalShelfEvents: ${getClassName(this)} [LISTENER]");
+        " ||-------------> [External Reaction] _markReactionToExternalShelfEvents: ${getClassName(this)} [LISTENER]");
     //
     for (String blockName in effectedShelfMembers._reQueryBlockMAP.keys) {
       Block block = __blockMap[blockName]!;
@@ -708,23 +720,6 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  @Deprecated("OLD Way, TODO Delete! --> _markReactionForExternalShelfEvents")
-  Future<void> _addShelfExternalReactionTaskUnitOLD({
-    required EffectedShelfMembers effectedShelfMembers,
-  }) async {
-    print(
-        " ||-------------> [External Reaction] _addShelfExternalReactionTaskUnitOLD: ${getClassName(this)} [LISTENER]");
-    //
-    final XShelf xShelf = _XShelfShelfExternalReactionOLD(
-      shelf: this,
-      effectedShelfMembers: effectedShelfMembers,
-    );
-    //
-    xShelf._initQueryTasks();
-    // IMPORTANT: No need to call "execute".
-    FlutterArtist._rootQueue._addXShelf(xShelf);
-  }
-
   Future<void> _addShelfExternalReactionTaskUnit() async {
     print(
         " ||-------------> [External Reaction] _addShelfExternalReactionTaskUnit: ${getClassName(this)} [LISTENER]");
@@ -736,6 +731,49 @@ abstract class Shelf extends _Core {
     xShelf._initQueryTasks();
     // IMPORTANT: No need to call "execute".
     FlutterArtist._rootQueue._addXShelf(xShelf);
+  }
+
+  Future<ShelfDelayedReactionExecutionResult>
+      executeDelayedExternalReactionTaskUnit() async {
+    Actionable<ShelfDelayedReactionExecutionPrecheck> actionable =
+        __canExecuteDelayedExternalReaction(checkBusy: true);
+
+    //
+    if (!actionable.yes) {
+      // _createItemErrorCount++;
+      _addErrorLogActionable(
+        shelf: null,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+      );
+      return ShelfDelayedReactionExecutionResult(
+        precheck: actionable.errCode,
+        stackTrace: actionable.stackTrace,
+      );
+    }
+    _addShelfExternalReactionTaskUnit();
+    await FlutterArtist.executor._executeTaskUnitQueue();
+    return ShelfDelayedReactionExecutionResult();
+  }
+
+  @_PrecheckPrivateMethod()
+  Actionable<ShelfDelayedReactionExecutionPrecheck>
+      __canExecuteDelayedExternalReaction({
+    required bool checkBusy,
+  }) {
+    if (checkBusy && FlutterArtist.executor.isBusy) {
+      return Actionable<ShelfDelayedReactionExecutionPrecheck>.no(
+        errCode: ShelfDelayedReactionExecutionPrecheck.busy,
+      );
+    }
+    //
+    return Actionable<ShelfDelayedReactionExecutionPrecheck>.yes();
+  }
+
+  @_PrecheckPrivateMethod()
+  Actionable<ShelfDelayedReactionExecutionPrecheck>
+      canExecuteDelayedExternalReaction() {
+    return __canExecuteDelayedExternalReaction(checkBusy: true);
   }
 
   // ***************************************************************************

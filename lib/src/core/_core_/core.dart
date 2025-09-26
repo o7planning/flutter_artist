@@ -124,6 +124,7 @@ import '../precheck/enter_form_fields_precheck.dart';
 import '../precheck/form_model_data_load_precheck.dart';
 import '../precheck/scalar_query_precheck.dart';
 import '../precheck/scalar_quick_action_precheck.dart';
+import '../precheck/shelf_delayed_reaction_execution_precheck.dart';
 import '../precheck/show_form_info_precheck.dart';
 import '../typedef/custom_confirmation.dart';
 import '../utils/_class_utils.dart';
@@ -354,6 +355,8 @@ part '_login_/_simple_login_view.dart';
 part '_notification_/_notification_engine.dart';
 
 part '_task_result_/__task_result.dart';
+
+part '_task_result_/_shelf_delayed_reaction_execution_result.dart';
 
 part '_task_result_/_background_action_result.dart';
 

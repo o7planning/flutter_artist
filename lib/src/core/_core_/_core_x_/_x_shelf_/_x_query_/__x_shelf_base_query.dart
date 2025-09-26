@@ -18,8 +18,6 @@ class _XShelfSbQuery extends XShelf {
     required FilterInput? filterInput,
   }) {
     if (filterModel.isDefaultFilterModel) {
-      print(
-          "@@@@@@@@@@@@@@@@@@@@@@@@@@@ ------------------------------------------> Default isDefaultFilterModel");
       // return;
     }
     //

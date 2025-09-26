@@ -68,7 +68,9 @@ class _StorageEventHandler {
       reactionShelf._addShelfExternalReactionTaskUnit();
     }
     for (Shelf reactionShelf in visibleReactionShelves) {
-      reactionShelf._addShelfExternalReactionTaskUnit();
+      if (reactionShelf.reactionTypeToExternal == ReactionType.immediate) {
+        reactionShelf._addShelfExternalReactionTaskUnit();
+      }
     }
   }
 
@@ -85,32 +87,10 @@ class _StorageEventHandler {
     if (!effectedShelfMembers.hasMember()) {
       return;
     }
-    listenerShelf._markReactionForExternalShelfEvents(
+    listenerShelf._markReactionToExternalShelfEvents(
       effectedShelfMembers: effectedShelfMembers,
     );
   }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  // @Deprecated("Khong su dung nua, su dung __markReactionConditionsForEvents")
-  // void __addReactionTaskUnitToEvents({
-  //   required Shelf listenerShelf,
-  //   required List<Event> outsideEvents,
-  // }) {
-  //   if (listenerShelf.isFullyPending) {
-  //     return;
-  //   }
-  //   EffectedShelfMembers effectedShelfMembers =
-  //       listenerShelf._calculateEffectedShelfMembersByEvents(outsideEvents);
-  //
-  //   if (!effectedShelfMembers.hasMember()) {
-  //     return;
-  //   }
-  //   listenerShelf._addShelfExternalReactionTaskUnitOLD(
-  //     effectedShelfMembers: effectedShelfMembers,
-  //   );
-  // }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -139,14 +119,11 @@ class _StorageEventHandler {
       }
       Shelf listenerShelf = storage._shelfMap[shelfName]!;
       //
-      // __addReactionTaskUnitToEvents(
-      //   listenerShelf: listenerShelf,
-      //   outsideEvents: events,
-      // );
       __markReactionConditionsForEvents(
         listenerShelf: listenerShelf,
         outsideEvents: events,
       );
+
       if (listenerShelf._hasReactionBookmark()) {
         if (listenerShelf.ui.hasActiveUIComponent()) {
           visibleReactionShelves.add(listenerShelf);
@@ -160,7 +137,9 @@ class _StorageEventHandler {
       reactionShelf._addShelfExternalReactionTaskUnit();
     }
     for (Shelf reactionShelf in visibleReactionShelves) {
-      reactionShelf._addShelfExternalReactionTaskUnit();
+      if (reactionShelf.reactionTypeToExternal == ReactionType.immediate) {
+        reactionShelf._addShelfExternalReactionTaskUnit();
+      }
     }
   }
 
