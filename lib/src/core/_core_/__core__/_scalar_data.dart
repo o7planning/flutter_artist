@@ -11,8 +11,6 @@ class _ScalarData<
 
   FILTER_CRITERIA? _filterCriteria;
 
-  // String? _valueId;
-  // VALUE? _value;
   _ValueWrap<VALUE> __current = _ValueWrap<VALUE>(id: null, value: null);
 
   _ValueWrap<VALUE> get current => __current;
