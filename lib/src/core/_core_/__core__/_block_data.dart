@@ -27,7 +27,7 @@ class _BlockData<
   List<ITEM> moveCurrentItemToEndOfList({
     required List<ITEM> itemList,
   }) {
-    ITEM? currItem = this.__currentItem;
+    ITEM? currItem = this.__current._item;
     if (currItem == null) {
       return itemList;
     }
@@ -48,7 +48,7 @@ class _BlockData<
   List<ITEM> getCheckedItems({
     required CurrentItemChkInclusion currentItemInclusion,
   }) {
-    ITEM? currItem = this.__currentItem;
+    ITEM? currItem = this.__current._item;
     bool contains = this.isCurrentItemChecked;
     //
     //
@@ -77,7 +77,7 @@ class _BlockData<
   List<ITEM> getSelectedItems({
     required CurrentItemSelInclusion currentItemInclusion,
   }) {
-    ITEM? currItem = this.__currentItem;
+    ITEM? currItem = this.__current._item;
     bool contains = this.isCurrentItemSelected;
     //
     if (currItem != null) {
@@ -102,12 +102,12 @@ class _BlockData<
   // ***************************************************************************
 
   bool get isCurrentItemChecked {
-    ITEM? currentItem = this.__currentItem;
-    if (currentItem == null) {
+    ITEM? currItem = this.__current._item;
+    if (currItem == null) {
       return false;
     }
     return ItemsUtils.isListContainItem(
-      item: currentItem,
+      item: currItem,
       targetList: _checkedItems,
       getItemId: block.getItemId,
     );
@@ -116,12 +116,12 @@ class _BlockData<
   // ***************************************************************************
 
   bool get isCurrentItemSelected {
-    ITEM? currentItem = this.__currentItem;
-    if (currentItem == null) {
+    ITEM? currItem = this.__current._item;
+    if (currItem == null) {
       return false;
     }
     return ItemsUtils.isListContainItem(
-      item: currentItem,
+      item: currItem,
       targetList: _selectedItems,
       getItemId: block.getItemId,
     );
@@ -161,10 +161,6 @@ class _BlockData<
   );
 
   _CurrentItemWrap<ID, ITEM, ITEM_DETAIL> get current => __current;
-
-  ITEM? get __currentItem => __current._item;
-
-  ITEM_DETAIL? get __currentItemDetail => __current._itemDetail;
 
   late DataState _blockDataState;
 
@@ -270,15 +266,7 @@ class _BlockData<
     );
     //
     final bool changed = oldId != id;
-    // if (oldItem == null && newItem == null) {
-    //   changed = false;
-    // } else if (oldItem != null && newItem == null) {
-    //   changed = true;
-    // } else if (oldItem == null && newItem != null) {
-    //   changed = true;
-    // } else {
-    //   changed = block.getItemId(oldItem!) != block.getItemId(newItem!);
-    // }
+    //
     if (changed) {
       _currentItemChangeCount++;
       if (block.formModel != null) {

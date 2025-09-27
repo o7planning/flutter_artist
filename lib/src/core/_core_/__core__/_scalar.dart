@@ -232,7 +232,7 @@ abstract class Scalar<
 
   FILTER_CRITERIA? get filterCriteria => __scalarData._filterCriteria;
 
-  VALUE? get value => __scalarData._value;
+  VALUE? get value => __scalarData.current._value;
 
   void _setToPending() {
     __scalarData._clearValueWithDataState(
@@ -401,7 +401,7 @@ abstract class Scalar<
     //
     final callApiQueryMethod = ScalarErrorMethod.callApiQuery;
     bool isQueryError = false;
-    final String? oldValueId = __scalarData._valueId;
+    final String? oldValueId = __scalarData.current._id;
     String? valueId;
     VALUE? value;
     try {

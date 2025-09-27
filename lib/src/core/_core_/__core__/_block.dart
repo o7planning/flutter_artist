@@ -712,12 +712,12 @@ abstract class Block<
     final callApiQueryMethod = BlockErrorMethod.callApiQuery;
     DataState newBlockDataState = this.dataState;
     PageData<ITEM>? pageData;
-    final ITEM? candidateCurrentItem;
+    final ITEM? candidateCurrItem;
     bool queried = false;
 
     if (queryHint == QryHint.none) {
       print("        ~~~~~~~> IGNORED --> queryHint: $queryHint - [$name]");
-      candidateCurrentItem = null;
+      candidateCurrItem = null;
       //
       var currentItemSelectionType = CurrentItemSelectionType.doNothing;
       //
@@ -751,7 +751,7 @@ abstract class Block<
           currentItemSelectionType: currentItemSelectionType,
           xBlock: thisXBlock,
           newQueriedList: [],
-          candidateItem: candidateCurrentItem,
+          candidateItem: candidateCurrItem,
           forceReloadItem: thisXBlock.forceReloadCurrItem,
           forceTypeForForm: null,
         ),
@@ -1034,7 +1034,7 @@ abstract class Block<
     //
     final bool currentItemInList =
         currItem != null && containsItem(item: currItem);
-    candidateCurrentItem = currentItemInList ? currItem : null;
+    candidateCurrItem = currentItemInList ? currItem : null;
     //
     if (!currentItemInList) {
       __blockData._setCurrentItemOnly(
@@ -1136,7 +1136,7 @@ abstract class Block<
             currentItemSelectionType: currentItemSelectionType,
             xBlock: thisXBlock,
             newQueriedList: pageData?.items ?? [],
-            candidateItem: candidateCurrentItem,
+            candidateItem: candidateCurrItem,
             forceReloadItem: false,
             forceTypeForForm: null,
           ),
@@ -1204,54 +1204,54 @@ abstract class Block<
       return;
     }
     //
-    ITEM? candidateCurrentItem = candidateItem;
+    ITEM? candidateCurrItem = candidateItem;
     //
-    if (candidateCurrentItem != null) {
-      if (!containsItem(item: candidateCurrentItem)) {
-        candidateCurrentItem = null;
+    if (candidateCurrItem != null) {
+      if (!containsItem(item: candidateCurrItem)) {
+        candidateCurrItem = null;
       }
     }
     //
-    final ITEM? currentItemOrigin = this.currentItem;
-    final ITEM? currentItem;
-    if (currentItemOrigin != null) {
-      if (containsItem(item: currentItemOrigin)) {
-        currentItem = currentItemOrigin;
+    final ITEM? currItemOrigin = this.currentItem;
+    final ITEM? currItem;
+    if (currItemOrigin != null) {
+      if (containsItem(item: currItemOrigin)) {
+        currItem = currItemOrigin;
       } else {
-        currentItem = null;
+        currItem = null;
       }
     } else {
-      currentItem = null;
+      currItem = null;
     }
     //
-    final bool currentItemChanged;
-    if (currentItem == null) {
+    final bool currItemChanged;
+    if (currItem == null) {
       int? suggestIdx = specifyItemIndexToSelectAsCurrent();
       if (suggestIdx != null && suggestIdx >= 0 && suggestIdx < itemCount) {
-        candidateCurrentItem = candidateCurrentItem ?? items[suggestIdx];
+        candidateCurrItem = candidateCurrItem ?? items[suggestIdx];
       }
-      candidateCurrentItem = candidateCurrentItem ?? firstItem;
-      currentItemChanged = candidateCurrentItem != null;
+      candidateCurrItem = candidateCurrItem ?? firstItem;
+      currItemChanged = candidateCurrItem != null;
     }
-    // currentItem != null
+    // currItem != null
     else {
-      if (candidateCurrentItem == null) {
-        candidateCurrentItem = currentItem;
-        currentItemChanged = false;
+      if (candidateCurrItem == null) {
+        candidateCurrItem = currItem;
+        currItemChanged = false;
       } else {
-        // candidateCurrentItem != null && currentItem != null
-        if (getItemId(candidateCurrentItem) == getItemId(currentItem)) {
-          currentItemChanged = false;
+        // candidateCurrItem != null && currItem != null
+        if (getItemId(candidateCurrItem) == getItemId(currItem)) {
+          currItemChanged = false;
         } else {
-          currentItemChanged = true;
+          currItemChanged = true;
         }
       }
     }
     //
     // If no item can be current.
     //
-    if (candidateCurrentItem == null) {
-      print("        ~~~~~~~> candidateCurrentItem == null - [$name]");
+    if (candidateCurrItem == null) {
+      print("        ~~~~~~~> candidateCurrItem == null - [$name]");
       this.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: thisXBlock,
         blkDataState: DataState.ready,
@@ -1261,20 +1261,20 @@ abstract class Block<
       return;
     }
     //
-    // Now candidateCurrentItem != null.
+    // Now candidateCurrItem != null.
     //
     final bool isSameCandidateItem = isSame(
       item1: candidateItem,
-      item2: candidateCurrentItem,
+      item2: candidateCurrItem,
     );
     if (!isSameCandidateItem) {
-      currentItemSelectionResult._addCandidateItem(candidateCurrentItem);
+      currentItemSelectionResult._addCandidateItem(candidateCurrItem);
     }
     //
     final bool isCandidateCurrentItemInNewQueriedList =
         ItemsUtils.isListContainItem(
       targetList: newQueriedList,
-      item: candidateCurrentItem,
+      item: candidateCurrItem,
       getItemId: getItemId,
     );
     //
@@ -1298,7 +1298,7 @@ abstract class Block<
         currentItemSelectionType: currentItemSelectionType,
         isCandidateCurrentItemInNewQueriedList:
             isCandidateCurrentItemInNewQueriedList,
-        currentItemChanged: currentItemChanged,
+        currentItemChanged: currItemChanged,
       );
       //
       forceReloadItem = blkState.forceReloadItem;
@@ -1310,7 +1310,7 @@ abstract class Block<
         currentItemSelectionType: currentItemSelectionType,
         isCandidateCurrentItemInNewQueriedList:
             isCandidateCurrentItemInNewQueriedList,
-        currentItemChanged: currentItemChanged,
+        currentItemChanged: currItemChanged,
         forceReloadItem: forceReloadItem,
       );
       //
@@ -1328,18 +1328,18 @@ abstract class Block<
         "@~~~> ${getClassName(this)} ~~~~~> ITM/FRM: forceReloadForm: $forceReloadForm");
     //
     final bool isCandidateIsCurrent = isCurrentItem(
-      item: candidateCurrentItem,
+      item: candidateCurrItem,
     );
     ITEM_DETAIL? refreshedCurrentItemDetail;
     if (forceReloadItem) {
       // TODO-XXX (Check Error):
-      final ID itemId = getItemId(candidateCurrentItem);
+      final ID itemId = getItemId(candidateCurrItem);
       if (ITEM == ITEM_DETAIL &&
           config.itemRefreshmentMode == BlockItemRefreshmentMode.auto &&
           isCandidateCurrentItemInNewQueriedList) {
-        final ITEM? candidateCurrentItemInNewQueriedList =
+        final ITEM? candidateCurrItemInNewQueriedList =
             ItemsUtils.findItemInList(
-          item: candidateCurrentItem,
+          item: candidateCurrItem,
           targetList: newQueriedList,
           getItemId: getItemId,
         );
@@ -1347,7 +1347,7 @@ abstract class Block<
         // No need to refresh Item.
         //
         refreshedCurrentItemDetail =
-            candidateCurrentItemInNewQueriedList as ITEM_DETAIL;
+            candidateCurrItemInNewQueriedList as ITEM_DETAIL;
       } else {
         bool isLoadItemError = false;
         // Recent Loaded Item:
@@ -1405,15 +1405,15 @@ abstract class Block<
       //
       if (refreshedCurrentItemDetail == null) {
         final ITEM? siblingItem = findSiblingItem(
-          item: candidateCurrentItem,
+          item: candidateCurrItem,
         );
         // #SAME-CODE-001
         if (!isCandidateIsCurrent) {
           await __removeItemFromList(
-            removeItem: candidateCurrentItem,
+            removeItem: candidateCurrItem,
           );
           //
-          if (currentItem != null) {
+          if (currItem != null) {
             // TODO: Test case.
             return;
           }
@@ -1440,7 +1440,7 @@ abstract class Block<
         // Remove Item (Current Item)
         //
         await __removeItemFromList(
-          removeItem: candidateCurrentItem,
+          removeItem: candidateCurrItem,
         );
         // Test Case: [36b] - _testEdit_withoutCoordinator_itemNotFoundON
         this.__setCurrentItemOnly(
@@ -1472,7 +1472,7 @@ abstract class Block<
       //
       bool convertItemError = false;
       try {
-        candidateCurrentItem = this.__convertItemDetailToItem(
+        candidateCurrItem = this.__convertItemDetailToItem(
           itemDetail: refreshedCurrentItemDetail,
         );
         convertItemError = false;
@@ -1496,18 +1496,18 @@ abstract class Block<
       }
       //
       __blockData._selectionDataState = DataState.ready;
-      if (candidateCurrentItem != null) {
-        __blockData._insertOrReplaceItem(item: candidateCurrentItem);
+      if (candidateCurrItem != null) {
+        __blockData._insertOrReplaceItem(item: candidateCurrItem);
       }
       this.__setCurrentItemOnly(
         id: itemId,
-        item: candidateCurrentItem,
+        item: candidateCurrItem,
         itemDetail: refreshedCurrentItemDetail,
       );
       // (On _unitSelectItemAsCurrent method).
-      // candidateCurrentItem != null.
-      if (currentItemChanged) {
-        currentItemSelectionResult._currentItem = candidateCurrentItem;
+      // candidateCurrItem != null.
+      if (currItemChanged) {
+        currentItemSelectionResult._currentItem = candidateCurrItem;
         // @@TODO@@ 10.
         this.__clearAllChildrenBlocksToPending(
           thisXBlock: thisXBlock,
@@ -1832,6 +1832,7 @@ abstract class Block<
     //
     deletionResult._setCandidateItems(candidateItems: items);
     //
+    final ID? currItemId = currentItemId;
     final ITEM? currItem = currentItem;
     ITEM? siblingItem;
     //
@@ -1849,8 +1850,7 @@ abstract class Block<
             "item": delItem,
           },
         );
-        // TODO: Move to out of for loop (Need to catch error).
-        final ID? currentItemId = currItem == null ? null : getItemId(currItem);
+        // May be throw Error:
         final ID deletingItemId = getItemId(delItem);
         //
         siblingItem = findSiblingItem(item: delItem);
@@ -1868,7 +1868,7 @@ abstract class Block<
         //
         // Current Item DELETED!
         //
-        if (deletingItemId == currentItemId) {
+        if (deletingItemId == currItemId) {
           currentItemDeleted = true;
           //
           __blockData._setCurrentItemOnly(
@@ -3252,6 +3252,19 @@ abstract class Block<
       _executeNavigation(navigate: navigate);
     }
     return queryResult;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ID? __getItemIdErrorCatched(ITEM item) {
+    try {
+      ID id = getItemId(item);
+      return id;
+    } catch (e, stackTrace) {
+      return null;
+    }
   }
 
   // ***************************************************************************
@@ -5558,9 +5571,7 @@ abstract class Block<
   int get currentItemChangeCount => __blockData._currentItemChangeCount;
 
   ID? get currentItemId {
-    ITEM? ci = currentItem;
-    // TODO: Get ID from __blockData.current!!.
-    return ci == null ? null : getItemId(ci);
+    return __blockData.current._id;
   }
 
   ITEM? get currentItem => __blockData.current._item;
