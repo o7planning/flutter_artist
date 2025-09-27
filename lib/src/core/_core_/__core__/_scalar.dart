@@ -50,6 +50,13 @@ abstract class Scalar<
 
   String? get parentScalarName => parent?.name;
 
+  Scalar get rootScalar {
+    if (parent == null) {
+      return this;
+    }
+    return parent!.rootScalar;
+  }
+
   final List<Scalar> _childScalars;
 
   List<Scalar> get childScalars => [..._childScalars];

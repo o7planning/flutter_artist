@@ -179,6 +179,13 @@ abstract class Block<
 
   bool get isRoot => parent == null;
 
+  Block get rootBlock {
+    if (parent == null) {
+      return this;
+    }
+    return parent!.rootBlock;
+  }
+
   bool isSameWith(Block other) {
     if (this.shelf.name != other.shelf.name) {
       return false;
@@ -3372,17 +3379,6 @@ abstract class Block<
     return itemDetail == null
         ? null
         : convertItemDetailToItem(itemDetail: itemDetail);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @nonVirtual
-  Block getRootBlock() {
-    if (parent == null) {
-      return this;
-    }
-    return parent!.getRootBlock();
   }
 
   // ***************************************************************************
