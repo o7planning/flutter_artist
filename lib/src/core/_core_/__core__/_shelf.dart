@@ -692,7 +692,7 @@ abstract class Shelf extends _Core {
     for (String blockName in effectedShelfMembers._reQueryBlockMAP.keys) {
       Block block = __blockMap[blockName]!;
       block._blockReQryCon = _BlockReQryCon(
-        parentItemId: block.parentItemId,
+        parentItemId: block.parentBlockCurrentItemId,
         filterCriteria: block.filterCriteria,
       );
     }

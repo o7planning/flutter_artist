@@ -420,7 +420,7 @@ abstract class Block<
     if (blockReQryCon == null) {
       return false;
     }
-    return blockReQryCon.parentItemId == parentItemId &&
+    return blockReQryCon.parentItemId == parentBlockCurrentItemId &&
         blockReQryCon.filterCriteria == filterCriteria;
   }
 
@@ -600,7 +600,7 @@ abstract class Block<
     }
     //
     Object? parentInData = __blockData._currentParentItemId;
-    Object? parentInBlock = parentItemId;
+    Object? parentInBlock = parentBlockCurrentItemId;
     if (parentInData != parentInBlock) {
       return true;
     }
@@ -816,7 +816,7 @@ abstract class Block<
     //
     final bool parentOrCriteriaChanged =
         __blockData._isParentOrFilterCriteriaChanged(
-      newCurrentParentItemId: parentItemId,
+      newCurrentParentItemId: parentBlockCurrentItemId,
       newFilterCriteria: filterCriteriaOfFilterModel,
     );
     //
@@ -1010,7 +1010,7 @@ abstract class Block<
       //
       __blockData._updateFrom(
         forceItemListMode: realItemListMode,
-        currentParentItemId: this.parentItemId,
+        currentParentItemId: this.parentBlockCurrentItemId,
         filterCriteria: filterCriteriaOfFilterModel,
         pageable: callingPageable,
         pageData: pageData,
@@ -1240,7 +1240,16 @@ abstract class Block<
         currItemChanged = false;
       } else {
         // candidateCurrItem != null && currItem != null
-        if (getItemId(candidateCurrItem) == getItemId(currItem)) {
+        final ID candidateCurrItemId = __getItemIdShowErr(
+          candidateCurrItem,
+          showErr: true,
+        );
+        final ID currItemId = __getItemIdShowErr(
+          currItem,
+          showErr: true,
+        );
+        //
+        if (candidateCurrItemId == currItemId) {
           currItemChanged = false;
         } else {
           currItemChanged = true;
@@ -1332,8 +1341,10 @@ abstract class Block<
     );
     ITEM_DETAIL? refreshedCurrentItemDetail;
     if (forceReloadItem) {
-      // TODO-XXX (Check Error):
-      final ID itemId = getItemId(candidateCurrItem);
+      final ID itemId = __getItemIdShowErr(
+        candidateCurrItem,
+        showErr: true,
+      );
       if (ITEM == ITEM_DETAIL &&
           config.itemRefreshmentMode == BlockItemRefreshmentMode.auto &&
           isCandidateCurrentItemInNewQueriedList) {
@@ -1585,7 +1596,7 @@ abstract class Block<
         },
       );
       //
-      ID itemId = getItemId(item);
+      final ID itemId = __getItemIdShowErr(item, showErr: true);
       __refreshDeletingState(isDeleting: true);
       //
       result = await callApiDeleteItemById(itemId: itemId);
@@ -1851,7 +1862,7 @@ abstract class Block<
           },
         );
         // May be throw Error:
-        final ID deletingItemId = getItemId(delItem);
+        final ID deletingItemId = __getItemIdShowErr(delItem, showErr: true);
         //
         siblingItem = findSiblingItem(item: delItem);
         __refreshDeletingState(isDeleting: true);
@@ -2466,7 +2477,7 @@ abstract class Block<
         isLibCode: true,
       );
       //
-      final ID itemId = getItemId(refreshedItem);
+      final ID itemId = __getItemIdShowErr(refreshedItem, showErr: true);
       thisXBlock._addRecentLoadedItem(
         itemId: itemId,
         item: refreshedItem,
@@ -3258,12 +3269,21 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  ID? __getItemIdErrorCatched(ITEM item) {
+  ID __getItemIdShowErr(ITEM item, {required bool showErr}) {
     try {
       ID id = getItemId(item);
       return id;
     } catch (e, stackTrace) {
-      return null;
+      if (showErr) {
+        _handleError(
+          shelf: shelf,
+          methodName: "callApiLoadItemDetailById",
+          error: e,
+          stackTrace: stackTrace,
+          showSnackBar: true,
+        );
+      }
+      rethrow;
     }
   }
 
@@ -3348,34 +3368,10 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  ID? getCurrentItemId() {
-    if (this.currentItemDetail == null) {
-      return null;
-    }
-    ITEM item = convertItemDetailToItem(
-      itemDetail: this.currentItemDetail!,
-    );
-    return getItemId(item);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   ITEM? __convertItemDetailToItem({required ITEM_DETAIL? itemDetail}) {
     return itemDetail == null
         ? null
         : convertItemDetailToItem(itemDetail: itemDetail);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Object? get parentItemId {
-    if (parent == null) {
-      return null;
-    } else {
-      return parent!.getCurrentItemId();
-    }
   }
 
   // ***************************************************************************
@@ -5570,6 +5566,10 @@ abstract class Block<
 
   int get currentItemChangeCount => __blockData._currentItemChangeCount;
 
+  Object? get parentBlockCurrentItemId {
+    return parent?.currentItemId;
+  }
+
   ID? get currentItemId {
     return __blockData.current._id;
   }
@@ -5616,8 +5616,8 @@ abstract class Block<
   bool isCurrentItem({
     required ITEM item,
   }) {
-    final ITEM? currIt = currentItem;
-    return currIt != null && getItemId(item) == getItemId(currIt);
+    final ID? currItemId = this.currentItemId;
+    return getItemId(item) == currItemId;
   }
 
   // ***************************************************************************
@@ -5772,7 +5772,9 @@ abstract class Block<
       return true;
     }
     if (item1 != null && item2 != null) {
-      return getItemId(item1) == getItemId(item2);
+      final ID? id1 = getItemId(item1);
+      final ID? id2 = getItemId(item2);
+      return id1 == id2;
     }
     return false;
   }
