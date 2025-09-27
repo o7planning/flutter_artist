@@ -50,6 +50,8 @@ abstract class Scalar<
 
   String? get parentScalarName => parent?.name;
 
+  bool get isRoot => parent == null;
+
   Scalar get rootScalar {
     if (parent == null) {
       return this;
@@ -120,8 +122,6 @@ abstract class Scalar<
   List<Scalar> get descendingAncestorScalars {
     return ascendingAncestorScalars.reversed.toList();
   }
-
-  bool get isRoot => parent == null;
 
   bool isSameWith(Scalar other) {
     if (this.shelf.name != other.shelf.name) {
