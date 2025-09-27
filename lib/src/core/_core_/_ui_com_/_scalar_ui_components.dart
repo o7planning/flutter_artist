@@ -24,6 +24,13 @@ class _ScalarUIComponents extends _UIComponents {
   // ***************************************************************************
 
   bool hasActiveUIComponent({bool alsoCheckChildren = false}) {
+    String? componentName = findActiveUIComponent(
+      alsoCheckChildren: alsoCheckChildren,
+    );
+    return componentName != null;
+  }
+
+  String? findActiveUIComponent({bool alsoCheckChildren = false}) {
     bool active = false;
     // Filter
     // if (block.filterModel != null) {
@@ -33,27 +40,27 @@ class _ScalarUIComponents extends _UIComponents {
     //   }
     // }
     // Scalar Fragment:
-    active = hasActiveScalarFragment(alsoCheckChildren: false);
-    if (active) {
-      return true;
+    String? componentName = findActiveScalarFragment(alsoCheckChildren: false);
+    if (componentName != null) {
+      return componentName;
     }
     // ControlBar:
     active = hasActiveControlBarWidget();
     if (active) {
-      return true;
+      return "ScalarControlBar";
     }
     //
     if (alsoCheckChildren) {
       for (Scalar childScalar in scalar._childScalars) {
-        active = childScalar.ui.hasActiveUIComponent(
+        componentName = childScalar.ui.findActiveUIComponent(
           alsoCheckChildren: alsoCheckChildren,
         );
-        if (active) {
-          return true;
+        if (componentName != null) {
+          return componentName;
         }
       }
     }
-    return false;
+    return null;
   }
 
   // ***************************************************************************
@@ -96,24 +103,32 @@ class _ScalarUIComponents extends _UIComponents {
   // ***************************************************************************
 
   bool hasActiveScalarFragment({required bool alsoCheckChildren}) {
+    String? componentName = findActiveScalarFragment(
+      alsoCheckChildren: alsoCheckChildren,
+    );
+    return componentName != null;
+  }
+
+  String? findActiveScalarFragment({required bool alsoCheckChildren}) {
     for (State widgetState in __scalarFragmentWidgetStates.keys) {
       if (widgetState.mounted) {
         bool isShowing = __scalarFragmentWidgetStates[widgetState] ?? false;
         if (isShowing) {
-          return true;
+          return getClassNameWithoutGenerics(widgetState.widget);
         }
       }
     }
     if (alsoCheckChildren) {
-      for (Scalar childBlock in scalar._childScalars) {
-        bool active =
-            childBlock.ui.hasActiveScalarFragment(alsoCheckChildren: true);
-        if (active) {
-          return true;
+      for (Scalar childScalar in scalar._childScalars) {
+        String? componentName = childScalar.ui.findActiveScalarFragment(
+          alsoCheckChildren: true,
+        );
+        if (componentName != null) {
+          return componentName;
         }
       }
     }
-    return false;
+    return null;
   }
 
   // ***************************************************************************

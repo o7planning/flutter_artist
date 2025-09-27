@@ -99,7 +99,7 @@ class _Storage extends _Core {
     if (creator == null) {
       throw DebugPrint.printFatalError(
           " ERROR: '$shelfName' not found. You need to call:\n "
-              " FlutterArtist.storage.registerShelf(()=> $shelfName())");
+          " FlutterArtist.storage.registerShelf(()=> $shelfName())");
     }
     shelf = creator() as F;
     _shelfMap[shelfName] = shelf;
@@ -198,8 +198,7 @@ class _Storage extends _Core {
       );
       if (shelf.config.hiddenBehavior == ShelfHiddenBehavior.clear) {
         print(
-            "  ---------> Remove ${getClassName(
-                shelf)} from FlutterArtist Storage");
+            "  ---------> Remove ${getClassName(shelf)} from FlutterArtist Storage");
         _shelfMap.remove(shelf.name);
       } else {
         print("  ---------> Do Nothing");
@@ -254,7 +253,7 @@ class _Storage extends _Core {
     // @Same-Code-Precheck-01
     //
     final Actionable<StorageSilentActionPrecheck> actionable =
-    __canSilentAction(
+        __canSilentAction(
       checkBusy: true,
     );
     //

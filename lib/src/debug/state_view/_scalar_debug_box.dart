@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../core/_core_/core.dart';
+import '_active_info_widget.dart';
 import '_debug_box.dart';
 import '_scalar_debug_options.dart';
 
@@ -15,12 +17,15 @@ class ScalarDebugBox extends BaseDebugBox {
   });
 
   @override
-  List<IconLabelText> getChildIconLabelTexts() {
+  List<Widget> getChildIconLabelTexts() {
+    String? activeUI = scalar.ui.findActiveUIComponent();
+    String? xActiveUI =
+        scalar.ui.findActiveUIComponent(alsoCheckChildren: true);
     return [
       if (options.showUIActive)
-        IconLabelText(
-          label: "UI Active?: ",
-          text: "${scalar.ui.hasActiveUIComponent()}",
+        ActiveInfoWidget(
+          activeUIComponentName: activeUI,
+          xActiveUIComponentName: xActiveUI,
           labelStyle: labelStyle0,
           textStyle: textStyle0,
         ),

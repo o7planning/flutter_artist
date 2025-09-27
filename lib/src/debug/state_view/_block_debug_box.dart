@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../core/_core_/core.dart';
+import '_active_info_widget.dart';
 import '_block_debug_options.dart';
 import '_debug_box.dart';
 
@@ -21,33 +22,11 @@ class BlockDebugBox extends BaseDebugBox {
     String? xActiveUI = block.ui.findActiveUIComponent(alsoCheckChildren: true);
     return [
       if (options.showUIActive)
-        Row(
-          children: [
-            Expanded(
-              child: Tooltip(
-                message: activeUI != null
-                    ? "Active UI: $activeUI"
-                    : xActiveUI != null
-                        ? "Active UI: $xActiveUI"
-                        : "",
-                child: IconLabelText(
-                  label: "UI Active / XActive?: ",
-                  text: "${activeUI != null} / ${xActiveUI != null}",
-                  labelStyle: labelStyle0,
-                  textStyle: textStyle0,
-                ),
-              ),
-            ),
-            SimpleSmallIconButton(
-              iconData: Icons.view_agenda,
-              iconSize: 14,
-              onPressed: activeUI == null
-                  ? null
-                  : () {
-                      // block.ui.hasActiveUIComponent();
-                    },
-            ),
-          ],
+        ActiveInfoWidget(
+          activeUIComponentName: activeUI,
+          xActiveUIComponentName: xActiveUI,
+          labelStyle: labelStyle0,
+          textStyle: textStyle0,
         ),
       if (options.showLastQueryType)
         IconLabelText(
