@@ -154,12 +154,13 @@ class _BlockData<
 
   int _currentItemChangeCount = 0;
 
-  _CurrentCoupleItem<ITEM, ITEM_DETAIL> __current = _CurrentCoupleItem(
+  _CurrentItemWrap<ID, ITEM, ITEM_DETAIL> __current = _CurrentItemWrap(
+    id: null,
     item: null,
     itemDetail: null,
   );
 
-  _CurrentCoupleItem<ITEM, ITEM_DETAIL> get current => __current;
+  _CurrentItemWrap<ID, ITEM, ITEM_DETAIL> get current => __current;
 
   ITEM? get __currentItem => __current._item;
 
@@ -204,6 +205,7 @@ class _BlockData<
     _checkedItems.clear();
     //
     _setCurrentItemOnly(
+      id: null,
       refreshedItem: null,
       refreshedItemDetail: null,
     );
@@ -255,27 +257,28 @@ class _BlockData<
   /// Set item as current, and no more other actions (Insert, Update list).
   ///
   void _setCurrentItemOnly({
+    required ID? id,
     required ITEM? refreshedItem,
     required ITEM_DETAIL? refreshedItemDetail,
   }) {
-    final ITEM? oldItem = __current._item;
-    final ITEM? newItem = refreshedItem;
+    final ID? oldId = __current._id;
     //
-    __current = _CurrentCoupleItem(
+    __current = _CurrentItemWrap(
+      id: id,
       item: refreshedItem,
       itemDetail: refreshedItemDetail,
     );
     //
-    final bool changed;
-    if (oldItem == null && newItem == null) {
-      changed = false;
-    } else if (oldItem != null && newItem == null) {
-      changed = true;
-    } else if (oldItem == null && newItem != null) {
-      changed = true;
-    } else {
-      changed = block.getItemId(oldItem!) != block.getItemId(newItem!);
-    }
+    final bool changed = oldId != id;
+    // if (oldItem == null && newItem == null) {
+    //   changed = false;
+    // } else if (oldItem != null && newItem == null) {
+    //   changed = true;
+    // } else if (oldItem == null && newItem != null) {
+    //   changed = true;
+    // } else {
+    //   changed = block.getItemId(oldItem!) != block.getItemId(newItem!);
+    // }
     if (changed) {
       _currentItemChangeCount++;
       if (block.formModel != null) {

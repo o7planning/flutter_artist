@@ -672,7 +672,11 @@ abstract class Block<
   Future<void> _unitClearCurrent({required XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
     //
-    this.__setCurrentItem(item: null, itemDetail: null);
+    this.__setCurrentItemOnly(
+      id: null,
+      item: null,
+      itemDetail: null,
+    );
     if (formModel != null) {
       formModel!._clearDataWithDataState(formDataState: DataState.none);
     }
@@ -1034,6 +1038,7 @@ abstract class Block<
     //
     if (!currentItemInList) {
       __blockData._setCurrentItemOnly(
+        id: null,
         refreshedItem: null,
         refreshedItemDetail: null,
       );
@@ -1327,6 +1332,8 @@ abstract class Block<
     );
     ITEM_DETAIL? refreshedCurrentItemDetail;
     if (forceReloadItem) {
+      // TODO-XXX (Check Error):
+      final ID itemId = getItemId(candidateCurrentItem);
       if (ITEM == ITEM_DETAIL &&
           config.itemRefreshmentMode == BlockItemRefreshmentMode.auto &&
           isCandidateCurrentItemInNewQueriedList) {
@@ -1343,9 +1350,8 @@ abstract class Block<
             candidateCurrentItemInNewQueriedList as ITEM_DETAIL;
       } else {
         bool isLoadItemError = false;
-        ID itemId = getItemId(candidateCurrentItem);
         // Recent Loaded Item:
-        _CurrentCoupleItem? loadedCoupleItem =
+        _CurrentItemWrap? loadedCoupleItem =
             thisXBlock._getRecentLoadedItem(itemId: itemId);
         refreshedCurrentItemDetail = loadedCoupleItem?._itemDetail;
         if (refreshedCurrentItemDetail == null) {
@@ -1437,7 +1443,8 @@ abstract class Block<
           removeItem: candidateCurrentItem,
         );
         // Test Case: [36b] - _testEdit_withoutCoordinator_itemNotFoundON
-        __setCurrentItem(
+        this.__setCurrentItemOnly(
+          id: null,
           item: null,
           itemDetail: null,
         );
@@ -1492,9 +1499,10 @@ abstract class Block<
       if (candidateCurrentItem != null) {
         __blockData._insertOrReplaceItem(item: candidateCurrentItem);
       }
-      __blockData._setCurrentItemOnly(
-        refreshedItem: candidateCurrentItem,
-        refreshedItemDetail: refreshedCurrentItemDetail,
+      this.__setCurrentItemOnly(
+        id: itemId,
+        item: candidateCurrentItem,
+        itemDetail: refreshedCurrentItemDetail,
       );
       // (On _unitSelectItemAsCurrent method).
       // candidateCurrentItem != null.
@@ -1627,6 +1635,7 @@ abstract class Block<
     await __removeItemFromList(removeItem: item);
     //
     __blockData._setCurrentItemOnly(
+      id: null,
       refreshedItem: null,
       refreshedItemDetail: null,
     );
@@ -1863,6 +1872,7 @@ abstract class Block<
           currentItemDeleted = true;
           //
           __blockData._setCurrentItemOnly(
+            id: null,
             refreshedItem: null,
             refreshedItemDetail: null,
           );
@@ -1952,11 +1962,13 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
+    const ID? nullId = null;
     const ITEM? nullItem = null;
     const ITEM_DETAIL? nullItemDetail = null;
-    this.__setCurrentItem(
-      itemDetail: nullItemDetail,
+    this.__setCurrentItemOnly(
+      id: nullId,
       item: nullItem,
+      itemDetail: nullItemDetail,
     );
     // @@TODO@@ 01.
     this.__clearAllChildrenBlocksToNone(
@@ -2454,13 +2466,14 @@ abstract class Block<
         isLibCode: true,
       );
       //
-      ID itemId = getItemId(refreshedItem);
+      final ID itemId = getItemId(refreshedItem);
       thisXBlock._addRecentLoadedItem(
         itemId: itemId,
         item: refreshedItem,
         itemDetail: savedItemDetail,
       );
-      this.__setCurrentItem(
+      this.__setCurrentItemOnly(
+        id: itemId,
         itemDetail: savedItemDetail,
         item: refreshedItem,
       );
@@ -2498,6 +2511,7 @@ abstract class Block<
         // Remove Item (Current Item)
         await __removeItemFromList(removeItem: removeItem);
         __blockData._setCurrentItemOnly(
+          id: null,
           refreshedItem: null,
           refreshedItemDetail: null,
         );
@@ -3385,13 +3399,15 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __setCurrentItem({
+  void __setCurrentItemOnly({
+    required ID? id,
     required ITEM? item,
     required ITEM_DETAIL? itemDetail,
   }) {
     __blockData._setCurrentItemOnly(
-      refreshedItemDetail: itemDetail,
+      id: id,
       refreshedItem: item,
+      refreshedItemDetail: itemDetail,
     );
   }
 
