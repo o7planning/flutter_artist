@@ -3,7 +3,7 @@ part of '../core.dart';
 class _FormUIComponents extends _UIComponents {
   final FormModel formModel;
 
-  final Map<_RefreshableWidgetState, XState> _formWidgetStates = {};
+  final Map<_RefreshableWidgetState, XState> __formWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -22,15 +22,15 @@ class _FormUIComponents extends _UIComponents {
 
   @override
   bool hasMountedUIComponent() {
-    return _formWidgetStates.isNotEmpty;
+    return __formWidgetStates.isNotEmpty;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   bool hasActiveUIComponent() {
-    for (State formWidgetState in _formWidgetStates.keys) {
-      bool visible = _formWidgetStates[formWidgetState]?.isShowing ?? false;
+    for (State formWidgetState in __formWidgetStates.keys) {
+      bool visible = __formWidgetStates[formWidgetState]?.isShowing ?? false;
       if (visible && formWidgetState.mounted) {
         return true;
       }
@@ -41,11 +41,23 @@ class _FormUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  Map<_RefreshableWidgetState, XState> _findMountedFormWidgetStates({
+    required bool activeOnly,
+  }) {
+    return ___findMountedWidgetStates(
+      widgetStates: __formWidgetStates,
+      activeOnly: activeOnly,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _setFormViewBuildingState({
     required _RefreshableWidgetState widgetState,
     required bool isBuilding,
   }) {
-    _formWidgetStates.update(
+    __formWidgetStates.update(
       widgetState,
       (xState) => xState.._setBuilding(isBuilding),
       ifAbsent: () => XState().._setBuilding(isBuilding),
@@ -59,8 +71,8 @@ class _FormUIComponents extends _UIComponents {
     required _RefreshableWidgetState widgetState,
     required final bool isShowing,
   }) {
-    bool isShowingOLD = _formWidgetStates[widgetState]?.isShowing ?? false;
-    _formWidgetStates.update(
+    bool isShowingOLD = __formWidgetStates[widgetState]?.isShowing ?? false;
+    __formWidgetStates.update(
       widgetState,
       (xState) => xState.._setShowing(isShowing),
       ifAbsent: () => XState().._setShowing(isShowing),
@@ -79,7 +91,7 @@ class _FormUIComponents extends _UIComponents {
   void _removeFormWidgetState({
     required _RefreshableWidgetState widgetState,
   }) {
-    _formWidgetStates.remove(widgetState);
+    __formWidgetStates.remove(widgetState);
   }
 
   // ***************************************************************************
@@ -87,7 +99,7 @@ class _FormUIComponents extends _UIComponents {
 
   List<_RefreshableWidgetState> _getMountedFormWidgetStates() {
     List<_RefreshableWidgetState> ret = [];
-    for (_RefreshableWidgetState widgetState in [..._formWidgetStates.keys]) {
+    for (_RefreshableWidgetState widgetState in [...__formWidgetStates.keys]) {
       if (widgetState.mounted) {
         ret.add(widgetState);
       }
@@ -99,7 +111,7 @@ class _FormUIComponents extends _UIComponents {
   // ***************************************************************************
 
   bool _isWidgetStateBuilding({required _RefreshableWidgetState widgetState}) {
-    return _formWidgetStates[widgetState]?.isBuilding ?? false;
+    return __formWidgetStates[widgetState]?.isBuilding ?? false;
   }
 
   // ***************************************************************************

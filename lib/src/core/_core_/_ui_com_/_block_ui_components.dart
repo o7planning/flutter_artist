@@ -242,6 +242,36 @@ class _BlockUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  Map<_RefreshableWidgetState, XState> _findMountedFragmentWidgetStates({
+    required bool activeOnly,
+  }) {
+    return ___findMountedWidgetStates(
+      widgetStates: __blockFragmentWidgetStates,
+      activeOnly: activeOnly,
+    );
+  }
+
+  Map<_RefreshableWidgetState, XState> _findMountedControlBarWidgetStates({
+    required bool activeOnly,
+  }) {
+    return ___findMountedWidgetStates(
+      widgetStates: __blockControlBarWidgetStates,
+      activeOnly: activeOnly,
+    );
+  }
+
+  Map<_RefreshableWidgetState, XState> _findMountedPaginationWidgetStates({
+    required bool activeOnly,
+  }) {
+    return ___findMountedWidgetStates(
+      widgetStates: __paginationWidgetStates,
+      activeOnly: activeOnly,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _addPaginationWidgetState({
     required _RefreshableWidgetState widgetState,
     required bool isShowing,
@@ -393,27 +423,41 @@ class _BlockUIComponents extends _UIComponents {
     Map<_RefreshableWidgetState, XState> ret = {};
     //
     if (withFilter) {
+      final FilterModel filterModel = block._registeredOrDefaultFilterModel;
       ret.addAll(
-          block._registeredOrDefaultFilterModel.ui._filterFragmentWidgetStates);
+        filterModel.ui._findMountedFragmentWidgetStates(
+          activeOnly: true,
+        ),
+      );
     }
     //
     if (withBlockFragment) {
-      ret.addAll(__blockFragmentWidgetStates);
+      ret.addAll(
+        _findMountedFragmentWidgetStates(activeOnly: activeOnly),
+      );
     }
     //
     if (withPagination) {
-      ret.addAll(__paginationWidgetStates);
+      ret.addAll(
+        _findMountedPaginationWidgetStates(activeOnly: activeOnly),
+      );
     }
     //
     if (withBlockControlBar) {
-      ret.addAll(__blockControlBarWidgetStates);
+      ret.addAll(
+        _findMountedControlBarWidgetStates(activeOnly: activeOnly),
+      );
     }
-    if (withControl) {
-      ret.addAll(__controlWidgetStates);
-    }
+    // if (withControl) {
+    //   ret.addAll(__controlWidgetStates);
+    // }
     //
     if (withForm && block.formModel != null) {
-      ret.addAll(block.formModel!.ui._formWidgetStates);
+      ret.addAll(
+        block.formModel!.ui._findMountedFormWidgetStates(
+          activeOnly: activeOnly,
+        ),
+      );
     }
     return ret;
   }

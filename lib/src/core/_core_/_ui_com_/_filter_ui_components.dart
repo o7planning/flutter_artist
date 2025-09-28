@@ -13,6 +13,18 @@ class _FilterUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  Map<_RefreshableWidgetState, XState> _findMountedFragmentWidgetStates({
+    required bool activeOnly,
+  }) {
+    return ___findMountedWidgetStates(
+      widgetStates: _filterFragmentWidgetStates,
+      activeOnly: activeOnly,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   @override
   bool hasMountedUIComponent() {
     return _filterFragmentWidgetStates.isNotEmpty;

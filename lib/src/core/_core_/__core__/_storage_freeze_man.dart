@@ -51,13 +51,17 @@ class _StorageFreezeMan {
     required bool findForm,
     required bool findScalarFragment,
   }) {
-    // shelf.ui._findMountedWidgetStates(
-    //     withBlockFragment: withBlockFragment,
-    //     withPagination: withPagination,
-    //     withFilter: withFilter,
-    //     withForm: withForm,
-    //     withControlBar: withControlBar,
-    //     withControl: withControl,
-    //     activeOnly: activeOnly);
+    Map<_RefreshableWidgetState, XState> map =
+        shelf.ui._findMountedWidgetStates(
+      withBlockFragment: true,
+      withScalarFragment: true,
+      withPagination: true,
+      withFilter: false,
+      withForm: true,
+      withBlockControlBar: true,
+      withScalarControlBar: true,
+      withControl: false,
+      activeOnly: true,
+    );
   }
 }

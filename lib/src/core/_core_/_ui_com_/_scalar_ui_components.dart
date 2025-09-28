@@ -76,16 +76,22 @@ class _ScalarUIComponents extends _UIComponents {
     Map<_RefreshableWidgetState, XState> ret = {};
     //
     if (withFilter) {
-      ret.addAll(scalar
-          ._registeredOrDefaultFilterModel.ui._filterFragmentWidgetStates);
+      final FilterModel filterModel = scalar._registeredOrDefaultFilterModel;
+      ret.addAll(
+        filterModel.ui._findMountedFragmentWidgetStates(activeOnly: activeOnly),
+      );
     }
     //
     if (withScalarFragment) {
-      ret.addAll(__scalarFragmentWidgetStates);
+      ret.addAll(
+        _findMountedFragmentWidgetStates(activeOnly: activeOnly),
+      );
     }
     //
     if (withScalarControlBar) {
-      ret.addAll(__scalarControlBarWidgetStates);
+      ret.addAll(
+        _findMountedControlBarWidgetStates(activeOnly: activeOnly),
+      );
     }
     //
     return ret;
@@ -175,6 +181,27 @@ class _ScalarUIComponents extends _UIComponents {
       }
     }
     return false;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Map<_RefreshableWidgetState, XState> _findMountedFragmentWidgetStates({
+    required bool activeOnly,
+  }) {
+    return ___findMountedWidgetStates(
+      widgetStates: __scalarFragmentWidgetStates,
+      activeOnly: activeOnly,
+    );
+  }
+
+  Map<_RefreshableWidgetState, XState> _findMountedControlBarWidgetStates({
+    required bool activeOnly,
+  }) {
+    return ___findMountedWidgetStates(
+      widgetStates: __scalarControlBarWidgetStates,
+      activeOnly: activeOnly,
+    );
   }
 
   // ***************************************************************************
