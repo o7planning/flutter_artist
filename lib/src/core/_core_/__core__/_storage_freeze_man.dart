@@ -58,7 +58,7 @@ class _StorageFreezeMan {
   }
 
   bool createFreezingAgentWidgetState({
-    required Shelf shelf,
+    required List<Shelf> shelves,
     required bool findBlockFragment,
     required bool findForm,
     required bool findScalarFragment,
@@ -66,18 +66,21 @@ class _StorageFreezeMan {
     if (isFreezing) {
       return false;
     }
-    final Map<_RefreshableWidgetState, XState> map =
-        shelf.ui._findMountedWidgetStates(
-      withBlockFragment: true,
-      withScalarFragment: true,
-      withPagination: true,
-      withFilter: false,
-      withForm: true,
-      withBlockControlBar: true,
-      withScalarControlBar: true,
-      withControl: false,
-      activeOnly: true,
-    );
+    final map = <_RefreshableWidgetState, XState>{};
+    for (Shelf shelf in shelves) {
+      final m = shelf.ui._findMountedWidgetStates(
+        withBlockFragment: true,
+        withScalarFragment: true,
+        withPagination: true,
+        withFilter: false,
+        withForm: true,
+        withBlockControlBar: true,
+        withScalarControlBar: true,
+        withControl: false,
+        activeOnly: true,
+      );
+      map.addAll(m);
+    }
     if (map.isEmpty) {
       return false;
     }

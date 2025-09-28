@@ -235,6 +235,16 @@ class _Storage extends _Core {
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
   @_RootMethodAnnotation()
+  void freezeReactionOutSideOfShelves({required List<Shelf> shelves}) {
+    _storageFreezeMan.createFreezingAgentWidgetState(
+      shelves: shelves,
+      findBlockFragment: true,
+      findForm: true,
+      findScalarFragment: true,
+    );
+  }
+
+  @_RootMethodAnnotation()
   @_StorageSilentActionAnnotation()
   Future<StorageSilentActionResult> executeSilentAction({
     required ActionConfirmationType actionConfirmationType,

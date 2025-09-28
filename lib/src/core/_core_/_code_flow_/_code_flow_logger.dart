@@ -26,7 +26,7 @@ class CodeFlowLogger {
   // ===========================================================================
 
   void addMethodCall({
-    required Object ownerClassInstance,
+    required Object? ownerClassInstance,
     required StackTrace currentStackTrace,
     required Map<String, dynamic>? parameters,
   }) {

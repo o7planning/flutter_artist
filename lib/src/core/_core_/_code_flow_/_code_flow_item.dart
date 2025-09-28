@@ -13,7 +13,7 @@ class CodeFlowItem {
   bool get isDevCode => !isLibCode;
 
   CodeFlowType codeFlowType;
-  final Object ownerClassInstance;
+  final Object? ownerClassInstance;
 
   CodeFlowItem._methodCallFromStackTrace({
     required this.ownerClassInstance,
