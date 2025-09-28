@@ -5,7 +5,6 @@ class _XShelfBlockClearCurrentItem extends XShelf {
       : super(
           xShelfType: XShelfType.blockCurrItemClearance,
           shelf: block.shelf,
-          resetReactionTypeToExternal: true,
         ) {
     //
     // IMPORTANT:

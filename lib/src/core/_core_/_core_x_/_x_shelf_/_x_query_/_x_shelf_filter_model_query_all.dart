@@ -7,7 +7,6 @@ class _XShelfFilterModelQueryAll extends _XShelfSbQuery {
   }) : super(
           xShelfType: XShelfType.filterModelQueryAll,
           shelf: filterModel.shelf,
-          resetReactionTypeToExternal: true,
         ) {
     _updateQueryStateFromFilterModelAndFilterInput(
       filterModel: filterModel,

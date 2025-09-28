@@ -5,7 +5,6 @@ class _XShelfBlockClearance extends XShelf {
       : super(
           xShelfType: XShelfType.blockClearance,
           shelf: block.shelf,
-          resetReactionTypeToExternal: true,
         ) {
     //
     // IMPORTANT:

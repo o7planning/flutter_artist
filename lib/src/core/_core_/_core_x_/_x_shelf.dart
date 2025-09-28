@@ -47,11 +47,7 @@ abstract class XShelf {
   XShelf({
     required this.xShelfType,
     required this.shelf,
-    required bool resetReactionTypeToExternal,
   }) : xShelfId = __xShelfSequence++ {
-    if (resetReactionTypeToExternal) {
-      shelf._resetReactionTypeToExternal();
-    }
     for (FilterModel filterModel in shelf._allFilterModels) {
       final xFilterModel = XFilterModel(
         xShelf: this,

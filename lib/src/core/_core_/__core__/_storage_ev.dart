@@ -38,6 +38,7 @@ class _StorageEventHandler {
       print("*~~~~~~~~~> FIRE EVENT TO OUTSIDE --> Event Item Types: $events"
           " - Src Event: ${getClassName(eventBlock)}");
     }
+    final bool freezing = FlutterArtist.storage._storageFreezeMan.isFreezing;
     final List<Shelf> visibleReactionShelves = [];
     final List<Shelf> invisibleReactionShelves = [];
     //
@@ -47,10 +48,6 @@ class _StorageEventHandler {
       }
       Shelf listenerShelf = storage._shelfMap[shelfName]!;
       //
-      // __addReactionTaskUnitToEvents(
-      //   listenerShelf: listenerShelf,
-      //   outsideEvents: events,
-      // );
       __markReactionConditionsForEvents(
         listenerShelf: listenerShelf,
         outsideEvents: events,
@@ -63,12 +60,12 @@ class _StorageEventHandler {
         }
       }
     }
-    //
+    // SAME-AS: #0003
     for (Shelf reactionShelf in invisibleReactionShelves) {
       reactionShelf._addShelfExternalReactionTaskUnit();
     }
     for (Shelf reactionShelf in visibleReactionShelves) {
-      if (reactionShelf.reactionTypeToExternal == ReactionType.immediate) {
+      if (!freezing) {
         reactionShelf._addShelfExternalReactionTaskUnit();
       }
     }
@@ -110,6 +107,7 @@ class _StorageEventHandler {
       print("**~~~~~~~~~> FIRE EVENT TO OUTSIDE --> Event Item Types: $events"
           " - Src Shelf: ${getClassName(eventShelf)}");
     }
+    final bool freezing = FlutterArtist.storage._storageFreezeMan.isFreezing;
     final List<Shelf> invisibleReactionShelves = [];
     final List<Shelf> visibleReactionShelves = [];
     //
@@ -132,12 +130,12 @@ class _StorageEventHandler {
         }
       }
     }
-    //
+    // SAME-AS: #0003
     for (Shelf reactionShelf in invisibleReactionShelves) {
       reactionShelf._addShelfExternalReactionTaskUnit();
     }
     for (Shelf reactionShelf in visibleReactionShelves) {
-      if (reactionShelf.reactionTypeToExternal == ReactionType.immediate) {
+      if (!freezing) {
         reactionShelf._addShelfExternalReactionTaskUnit();
       }
     }

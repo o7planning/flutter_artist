@@ -11,7 +11,6 @@ class _XShelfBlockQueryThenPrepareToEdit extends _XShelfSbQuery {
   }) : super(
           xShelfType: XShelfType.blockQueryAndPrepareToEdit,
           shelf: block.shelf,
-          resetReactionTypeToExternal: true,
         ) {
     _updateQueryStateFromFilterModelAndFilterInput(
       filterModel: block.registeredOrDefaultFilterModel,

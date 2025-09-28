@@ -1,9 +1,11 @@
 part of '../core.dart';
 
 class _StorageFreezeMan {
+  final _Storage storage;
+
   final Map<_RefreshableWidgetState, bool> _freezingAgentWidgetStateMap = {};
 
-  _StorageFreezeMan();
+  _StorageFreezeMan(this.storage);
 
   bool get isFreezing {
     final m = {..._freezingAgentWidgetStateMap};
@@ -41,17 +43,30 @@ class _StorageFreezeMan {
   ///
   /// Check to execute delayed reaction.
   ///
-  void _recheckFreezingState() {
-    //
+  Future<void> _recheckFreezingState() async {
+    if (isFreezing) {
+      return;
+    }
+    // SAME-AS: #0003
+    for (String shelfName in storage._shelfMap.keys) {
+      Shelf reactionShelf = storage._shelfMap[shelfName]!;
+      if (reactionShelf._hasReactionBookmark()) {
+        reactionShelf._addShelfExternalReactionTaskUnit();
+      }
+    }
+    await FlutterArtist.executor._executeTaskUnitQueue();
   }
 
-  void createFreezingAgentWidgetState({
+  bool createFreezingAgentWidgetState({
     required Shelf shelf,
     required bool findBlockFragment,
     required bool findForm,
     required bool findScalarFragment,
   }) {
-    Map<_RefreshableWidgetState, XState> map =
+    if (isFreezing) {
+      return false;
+    }
+    final Map<_RefreshableWidgetState, XState> map =
         shelf.ui._findMountedWidgetStates(
       withBlockFragment: true,
       withScalarFragment: true,
@@ -63,5 +78,16 @@ class _StorageFreezeMan {
       withControl: false,
       activeOnly: true,
     );
+    if (map.isEmpty) {
+      return false;
+    }
+    _freezingAgentWidgetStateMap
+      ..clear()
+      ..addAll(
+        map.map(
+          (k, v) => MapEntry<_RefreshableWidgetState, bool>(k, v.isShowing),
+        ),
+      );
+    return true;
   }
 }

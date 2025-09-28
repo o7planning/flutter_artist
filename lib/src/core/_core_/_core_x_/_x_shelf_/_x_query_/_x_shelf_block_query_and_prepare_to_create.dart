@@ -11,7 +11,6 @@ class _XShelfBlockQueryThenPrepareToCreate extends _XShelfSbQuery {
   }) : super(
           xShelfType: XShelfType.blockQueryAndPrepareToCreate,
           shelf: block.shelf,
-          resetReactionTypeToExternal: true,
         ) {
     _updateQueryStateFromFilterModelAndFilterInput(
       filterModel: block.registeredOrDefaultFilterModel,

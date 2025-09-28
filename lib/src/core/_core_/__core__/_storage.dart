@@ -8,8 +8,6 @@ class _Storage extends _Core {
   final Map<String, ShelfCreator> __shelfCreatorMap = {};
   final Map<String, Shelf> _shelfMap = {};
 
-  final _StorageFreezeMan _storageFreezeMan = _StorageFreezeMan();
-
   Map<String, Shelf?> get shelfMap {
     Map<String, Shelf?> m = __shelfCreatorMap
         .map((k, v) => MapEntry<String, Shelf?>(k, null))
@@ -20,6 +18,7 @@ class _Storage extends _Core {
   List<String> get shelfNames => [..._shelfMap.keys];
 
   late final _StorageEventHandler ev = _StorageEventHandler(this);
+  late final _StorageFreezeMan _storageFreezeMan = _StorageFreezeMan(this);
 
   // ***************************************************************************
   // ***************************************************************************

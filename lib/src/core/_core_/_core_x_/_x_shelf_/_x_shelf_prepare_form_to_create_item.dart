@@ -5,7 +5,6 @@ class _XShelfPrepareFormToCreateItem extends XShelf {
       : super(
           xShelfType: XShelfType.blockPrepareFormToCreateItem,
           shelf: block.shelf,
-          resetReactionTypeToExternal: true,
         ) {
     //
     // IMPORTANT:

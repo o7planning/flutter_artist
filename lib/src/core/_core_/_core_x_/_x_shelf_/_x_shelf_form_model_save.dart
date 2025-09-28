@@ -5,7 +5,6 @@ class _XShelfFormModelSave extends XShelf {
       : super(
           xShelfType: XShelfType.formModelSave,
           shelf: formModel.block.shelf,
-          resetReactionTypeToExternal: true,
         ) {
     //
     // IMPORTANT:

@@ -3,26 +3,6 @@ part of '../core.dart';
 abstract class Shelf extends _Core {
   Shelf get shelf => this;
 
-  ReactionType __reactionTypeToExternal = ReactionType.immediate;
-
-  ReactionType get reactionTypeToExternal => __reactionTypeToExternal;
-
-  void _resetReactionTypeToExternal() {
-    __reactionTypeToExternal = ReactionType.immediate;
-  }
-
-  bool setReactionTypeDelayIfUIActive() {
-    if (__reactionTypeToExternal == ReactionType.delay) {
-      return false;
-    }
-    bool uiActive = ui.hasActiveUIComponent();
-    if (uiActive) {
-      __reactionTypeToExternal = ReactionType.delay;
-      return true;
-    }
-    return false;
-  }
-
   late final ShelfConfig config;
 
   bool __disposed = false;
@@ -720,7 +700,7 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> _addShelfExternalReactionTaskUnit() async {
+  void _addShelfExternalReactionTaskUnit() async {
     print(
         " ||-------------> [External Reaction] _addShelfExternalReactionTaskUnit: ${getClassName(this)} [LISTENER]");
     //

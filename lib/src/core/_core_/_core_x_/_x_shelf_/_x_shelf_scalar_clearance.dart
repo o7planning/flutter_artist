@@ -5,7 +5,6 @@ class _XShelfScalarClearance extends XShelf {
       : super(
           xShelfType: XShelfType.scalarClearance,
           shelf: scalar.shelf,
-          resetReactionTypeToExternal: true,
         ) {
     //
     // IMPORTANT:

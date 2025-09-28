@@ -5,7 +5,6 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
     required super.shelf,
   }) : super(
           xShelfType: XShelfType.shelfExternalReaction,
-          resetReactionTypeToExternal: true,
         ) {
     for (XBlock xBlk in allXBlocks) {
       if (xBlk._blockReQryCon == null && xBlk._blockItemRefreshCon == null) {

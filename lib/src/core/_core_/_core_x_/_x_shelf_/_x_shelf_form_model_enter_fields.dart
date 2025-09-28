@@ -5,7 +5,6 @@ class _XShelfFormModelEnterFields extends XShelf {
       : super(
           xShelfType: XShelfType.formModelEnterFields,
           shelf: formModel.block.shelf,
-          resetReactionTypeToExternal: true,
         ) {
     //
     // IMPORTANT:

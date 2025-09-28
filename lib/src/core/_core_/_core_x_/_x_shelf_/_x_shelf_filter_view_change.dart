@@ -5,7 +5,6 @@ class _XShelfFilterViewChange extends XShelf {
       : super(
           xShelfType: XShelfType.filterViewChange,
           shelf: filterModel.shelf,
-          resetReactionTypeToExternal: true,
         ) {
     // Nothing?
   }
