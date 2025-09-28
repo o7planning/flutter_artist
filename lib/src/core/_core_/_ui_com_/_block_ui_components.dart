@@ -4,7 +4,7 @@ class _BlockUIComponents extends _UIComponents {
   final Block block;
 
   final Map<_RefreshableWidgetState, XState> __blockFragmentWidgetStates = {};
-  final Map<_RefreshableWidgetState, XState> __controlBarWidgetStates = {};
+  final Map<_RefreshableWidgetState, XState> __blockControlBarWidgetStates = {};
   final Map<_RefreshableWidgetState, XState> __controlWidgetStates = {};
   final Map<_RefreshableWidgetState, XState> __paginationWidgetStates = {};
 
@@ -40,7 +40,8 @@ class _BlockUIComponents extends _UIComponents {
   // ***************************************************************************
 
   void updateControlBarWidgets({bool force = false}) {
-    for (_RefreshableWidgetState widgetState in __controlBarWidgetStates.keys) {
+    for (_RefreshableWidgetState widgetState
+        in __blockControlBarWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -65,7 +66,7 @@ class _BlockUIComponents extends _UIComponents {
   bool hasMountedUIComponent() {
     return (block.filterModel?.ui.hasMountedUIComponent() ?? false) ||
         __blockFragmentWidgetStates.isNotEmpty ||
-        __controlBarWidgetStates.isNotEmpty ||
+        __blockControlBarWidgetStates.isNotEmpty ||
         __controlWidgetStates.isNotEmpty ||
         __paginationWidgetStates.isNotEmpty ||
         (block.formModel?.ui.hasMountedUIComponent() ?? false);
@@ -168,9 +169,9 @@ class _BlockUIComponents extends _UIComponents {
 
   bool hasActiveControlBar() {
     for (_RefreshableWidgetState controlBarState
-        in __controlBarWidgetStates.keys) {
+        in __blockControlBarWidgetStates.keys) {
       bool visible =
-          __controlBarWidgetStates[controlBarState]?.isShowing ?? false;
+          __blockControlBarWidgetStates[controlBarState]?.isShowing ?? false;
       if (visible && controlBarState.mounted) {
         return true;
       }
@@ -273,7 +274,7 @@ class _BlockUIComponents extends _UIComponents {
     required bool isShowing,
   }) {
     bool activeOLD = hasActiveUIComponent();
-    __controlBarWidgetStates.update(
+    __blockControlBarWidgetStates.update(
       widgetState,
       (xState) => xState.._setShowing(isShowing),
       ifAbsent: () => XState().._setShowing(isShowing),
@@ -298,7 +299,7 @@ class _BlockUIComponents extends _UIComponents {
   void _removeControlBarWidgetState({
     required _RefreshableWidgetState widgetState,
   }) {
-    __controlBarWidgetStates.remove(widgetState);
+    __blockControlBarWidgetStates.remove(widgetState);
   }
 
   // ***************************************************************************
@@ -386,7 +387,7 @@ class _BlockUIComponents extends _UIComponents {
     required bool withFilter,
     required bool withForm,
     required bool withControl,
-    required bool withControlBar,
+    required bool withBlockControlBar,
     required bool activeOnly,
   }) {
     Map<_RefreshableWidgetState, XState> ret = {};
@@ -404,8 +405,8 @@ class _BlockUIComponents extends _UIComponents {
       ret.addAll(__paginationWidgetStates);
     }
     //
-    if (withControlBar) {
-      ret.addAll(__controlBarWidgetStates);
+    if (withBlockControlBar) {
+      ret.addAll(__blockControlBarWidgetStates);
     }
     if (withControl) {
       ret.addAll(__controlWidgetStates);
@@ -427,7 +428,7 @@ class _BlockUIComponents extends _UIComponents {
     required bool withFilter,
     required bool withForm,
     required bool withControl,
-    required bool withControlBar,
+    required bool withBlockControlBar,
     required bool activeOnly,
   }) {
     return _findMountedWidgetStates(
@@ -436,7 +437,7 @@ class _BlockUIComponents extends _UIComponents {
       withFilter: withFilter,
       withForm: withForm,
       withControl: withControl,
-      withControlBar: withControlBar,
+      withBlockControlBar: withBlockControlBar,
       activeOnly: activeOnly,
     );
   }

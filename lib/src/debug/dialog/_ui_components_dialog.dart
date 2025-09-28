@@ -9,19 +9,29 @@ import '../../core/utils/_class_utils.dart';
 class UiComponentsDialog extends StatefulWidget {
   final Shelf? shelf;
   final Block? block;
+  final Scalar? scalar;
   final bool showActiveOnly;
 
   const UiComponentsDialog.block({
     required Block this.block,
     this.showActiveOnly = true,
     super.key,
-  }) : shelf = null;
+  })  : shelf = null,
+        scalar = null;
+
+  const UiComponentsDialog.scalar({
+    required Scalar this.scalar,
+    this.showActiveOnly = true,
+    super.key,
+  })  : shelf = null,
+        block = null;
 
   const UiComponentsDialog.shelf({
     required Shelf this.shelf,
     this.showActiveOnly = true,
     super.key,
-  }) : block = null;
+  })  : block = null,
+        scalar = null;
 
   @override
   State<StatefulWidget> createState() {
@@ -51,6 +61,8 @@ class _UiComponentsDialogState extends State<UiComponentsDialog> {
       return "Active UI Components in current screen";
     } else if (widget.block != null) {
       return "Mounted UI Components of the Block";
+    } else if (widget.scalar != null) {
+      return "Mounted UI Components of the Scalar";
     } else {
       throw UnimplementedError();
     }
@@ -62,9 +74,11 @@ class _UiComponentsDialogState extends State<UiComponentsDialog> {
         activeOnly: true,
         withPagination: true,
         withBlockFragment: true,
+        withScalarFragment: true,
         withFilter: true,
         withForm: true,
-        withControlBar: true,
+        withBlockControlBar: true,
+        withScalarControlBar: true,
         withControl: true,
       );
     } else if (widget.block != null) {
@@ -74,8 +88,16 @@ class _UiComponentsDialogState extends State<UiComponentsDialog> {
         withBlockFragment: true,
         withFilter: true,
         withForm: true,
-        withControlBar: true,
+        withBlockControlBar: true,
         withControl: true,
+      );
+    } else if (widget.scalar != null) {
+      return widget.scalar!.ui.debugFindMountedWidgetStates(
+        activeOnly: false,
+        withPagination: true,
+        withScalarFragment: true,
+        withFilter: true,
+        withScalarControlBar: true,
       );
     } else {
       throw UnimplementedError();

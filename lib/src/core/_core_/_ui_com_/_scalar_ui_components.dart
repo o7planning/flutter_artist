@@ -3,8 +3,9 @@ part of '../core.dart';
 class _ScalarUIComponents extends _UIComponents {
   final Scalar scalar;
 
-  final Map<_RefreshableWidgetState, bool> __scalarFragmentWidgetStates = {};
-  final Map<_RefreshableWidgetState, bool> __scalarControlWidgetStates = {};
+  final Map<_RefreshableWidgetState, XState> __scalarFragmentWidgetStates = {};
+  final Map<_RefreshableWidgetState, XState> __scalarControlBarWidgetStates =
+      {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -17,7 +18,7 @@ class _ScalarUIComponents extends _UIComponents {
   @override
   bool hasMountedUIComponent() {
     return __scalarFragmentWidgetStates.isNotEmpty ||
-        __scalarControlWidgetStates.isNotEmpty;
+        __scalarControlBarWidgetStates.isNotEmpty;
   }
 
   // ***************************************************************************
@@ -66,10 +67,38 @@ class _ScalarUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateControlWidgets({bool force = true}) {
-    for (_RefreshableWidgetState state in __scalarControlWidgetStates.keys) {
-      if (state.mounted) {
-        state.refreshState(force: force);
+  Map<_RefreshableWidgetState, XState> _findMountedWidgetStates({
+    required bool withScalarFragment,
+    required bool withFilter,
+    required bool withScalarControlBar,
+    required bool activeOnly,
+  }) {
+    Map<_RefreshableWidgetState, XState> ret = {};
+    //
+    if (withFilter) {
+      ret.addAll(scalar
+          ._registeredOrDefaultFilterModel.ui._filterFragmentWidgetStates);
+    }
+    //
+    if (withScalarFragment) {
+      ret.addAll(__scalarFragmentWidgetStates);
+    }
+    //
+    if (withScalarControlBar) {
+      ret.addAll(__scalarControlBarWidgetStates);
+    }
+    //
+    return ret;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void updateControlBarWidgets({bool force = false}) {
+    for (_RefreshableWidgetState widgetState
+        in __scalarControlBarWidgetStates.keys) {
+      if (widgetState.mounted) {
+        widgetState.refreshState(force: force);
       }
     }
   }
@@ -95,7 +124,7 @@ class _ScalarUIComponents extends _UIComponents {
     if (!withoutFilters) {
       scalar.filterModel?.ui.updateAllUIComponents();
     }
-    updateControlWidgets(force: force);
+    updateControlBarWidgets(force: force);
     updateFragmentWidgets(force: force);
   }
 
@@ -112,7 +141,8 @@ class _ScalarUIComponents extends _UIComponents {
   String? findActiveScalarFragment({required bool alsoCheckChildren}) {
     for (State widgetState in __scalarFragmentWidgetStates.keys) {
       if (widgetState.mounted) {
-        bool isShowing = __scalarFragmentWidgetStates[widgetState] ?? false;
+        bool isShowing =
+            __scalarFragmentWidgetStates[widgetState]?.isShowing ?? false;
         if (isShowing) {
           return getClassNameWithoutGenerics(widgetState.widget);
         }
@@ -135,9 +165,10 @@ class _ScalarUIComponents extends _UIComponents {
   // ***************************************************************************
 
   bool hasActiveControlBarWidget() {
-    for (State widgetState in __scalarControlWidgetStates.keys) {
+    for (State widgetState in __scalarControlBarWidgetStates.keys) {
       if (widgetState.mounted) {
-        bool isShowing = __scalarControlWidgetStates[widgetState] ?? false;
+        bool isShowing =
+            __scalarControlBarWidgetStates[widgetState]?.isShowing ?? false;
         if (isShowing) {
           return true;
         }
@@ -154,7 +185,11 @@ class _ScalarUIComponents extends _UIComponents {
     required bool isShowing,
   }) {
     bool activeOLD = hasActiveUIComponent();
-    __scalarControlWidgetStates[widgetState] = isShowing;
+    __scalarControlBarWidgetStates.update(
+      widgetState,
+      (xState) => xState.._setShowing(isShowing),
+      ifAbsent: () => XState().._setShowing(isShowing),
+    );
     bool activeCURRENT = hasActiveUIComponent();
     //
     if (isShowing) {
@@ -174,7 +209,7 @@ class _ScalarUIComponents extends _UIComponents {
 
   void _removeControlWidgetState({required State widgetState}) {
     bool activeOLD = hasActiveUIComponent();
-    __scalarControlWidgetStates.remove(widgetState);
+    __scalarControlBarWidgetStates.remove(widgetState);
     bool activeCURRENT = hasActiveUIComponent();
     //
     if (activeOLD && !activeCURRENT) {
@@ -190,7 +225,11 @@ class _ScalarUIComponents extends _UIComponents {
     required bool isShowing,
   }) {
     bool activeOLD = hasActiveUIComponent();
-    __scalarFragmentWidgetStates[widgetState] = isShowing;
+    __scalarFragmentWidgetStates.update(
+      widgetState,
+      (xState) => xState.._setShowing(isShowing),
+      ifAbsent: () => XState().._setShowing(isShowing),
+    );
     bool activeCURRENT = hasActiveUIComponent();
     //
     if (isShowing) {
@@ -216,5 +255,24 @@ class _ScalarUIComponents extends _UIComponents {
     if (activeOLD && !activeCURRENT) {
       scalar._fireScalarHidden();
     }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @DebugMethodAnnotation()
+  Map<IRefreshableWidgetState, XState> debugFindMountedWidgetStates({
+    required bool withPagination,
+    required bool withScalarFragment,
+    required bool withFilter,
+    required bool withScalarControlBar,
+    required bool activeOnly,
+  }) {
+    return _findMountedWidgetStates(
+      withScalarFragment: withScalarFragment,
+      withFilter: withFilter,
+      withScalarControlBar: withScalarControlBar,
+      activeOnly: activeOnly,
+    );
   }
 }

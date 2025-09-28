@@ -14,6 +14,10 @@ interface class IRefreshableWidgetState {
 
 abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
     extends State<W> implements IRefreshableWidgetState {
+  double __maxSize = 0;
+
+  double get maxSize => __maxSize;
+
   int _refreshCount = 0;
 
   late final String keyId;
@@ -71,7 +75,11 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
     //
     return VisibilityDetector(
       key: Key(keyId),
-      onVisibilityChanged: (visibilityInfo) {
+      onVisibilityChanged: (VisibilityInfo visibilityInfo) {
+        double s = visibilityInfo.size.width * visibilityInfo.size.height;
+        if (__maxSize < s) {
+          __maxSize = s;
+        }
         var visiblePercentage = visibilityInfo.visibleFraction * 100;
         __addWidgetState(isShowing: visiblePercentage > 0);
       },
@@ -85,6 +93,17 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
 
   void __addWidgetState({required bool isShowing}) {
     addWidgetState(isShowing: isShowing);
+    FlutterArtist.storage._storageFreezeMan._onVisibilityChanged(
+      widgetState: this,
+      isShowing: isShowing,
+    );
+  }
+
+  void __removeWidgetState() {
+    removeWidgetState();
+    FlutterArtist.storage._storageFreezeMan._onWidgetStateDisposed(
+      widgetState: this,
+    );
   }
 
   Future<void> __executeAfterBuild() async {
@@ -110,7 +129,7 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
   void dispose() {
     super.dispose();
     //
-    removeWidgetState();
+    __removeWidgetState();
     //
     checkAndFreeMemory();
   }

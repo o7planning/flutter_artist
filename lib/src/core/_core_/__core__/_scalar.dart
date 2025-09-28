@@ -947,7 +947,7 @@ abstract class Scalar<
   void __refreshQueryingState({required bool isQuerying}) {
     try {
       __isQuerying = isQuerying;
-      ui.updateControlWidgets();
+      ui.updateControlBarWidgets();
     } catch (e) {}
   }
 

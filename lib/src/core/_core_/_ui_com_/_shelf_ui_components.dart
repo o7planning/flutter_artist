@@ -199,10 +199,13 @@ class _ShelfUIComponents extends _UIComponents {
 
   void __findMountedWidgetStates({
     required List<Block> blocks,
+    required List<Scalar> scalars,
     required bool withBlockFragment,
+    required bool withScalarFragment,
     required bool withFilter,
     required bool withForm,
-    required bool withControlBar,
+    required bool withBlockControlBar,
+    required bool withScalarControlBar,
     required bool withControl,
     required bool activeOnly,
     required bool withPagination,
@@ -216,20 +219,48 @@ class _ShelfUIComponents extends _UIComponents {
         withBlockFragment: withBlockFragment,
         withFilter: withFilter,
         withForm: withForm,
-        withControlBar: withControlBar,
+        withBlockControlBar: withBlockControlBar,
         withControl: withControl,
       );
       founds.addAll(m);
       //
       __findMountedWidgetStates(
+        blocks: block.childBlocks,
+        scalars: [],
         withPagination: withPagination,
         withBlockFragment: withBlockFragment,
+        withScalarFragment: withScalarFragment,
         withFilter: withFilter,
         withForm: withForm,
-        withControlBar: withControlBar,
+        withBlockControlBar: withBlockControlBar,
+        withScalarControlBar: withScalarControlBar,
         withControl: withControl,
         activeOnly: activeOnly,
-        blocks: block.childBlocks,
+        founds: founds,
+      );
+    }
+    for (Scalar scalar in scalars) {
+      Map<_RefreshableWidgetState, XState> m =
+          scalar.ui._findMountedWidgetStates(
+        activeOnly: activeOnly,
+        withFilter: withFilter,
+        withScalarControlBar: withScalarControlBar,
+        withScalarFragment: withScalarFragment,
+      );
+      founds.addAll(m);
+      //
+      __findMountedWidgetStates(
+        scalars: scalar.childScalars,
+        blocks: [],
+        withPagination: withPagination,
+        withBlockFragment: withBlockFragment,
+        withScalarFragment: withScalarFragment,
+        withFilter: withFilter,
+        withForm: withForm,
+        withBlockControlBar: withBlockControlBar,
+        withScalarControlBar: withScalarControlBar,
+        withControl: withControl,
+        activeOnly: activeOnly,
         founds: founds,
       );
     }
@@ -240,23 +271,28 @@ class _ShelfUIComponents extends _UIComponents {
 
   Map<_RefreshableWidgetState, XState> _findMountedWidgetStates({
     required bool withBlockFragment,
+    required bool withScalarFragment,
     required bool withPagination,
     required bool withFilter,
     required bool withForm,
-    required bool withControlBar,
+    required bool withBlockControlBar,
+    required bool withScalarControlBar,
     required bool withControl,
     required bool activeOnly,
   }) {
     Map<_RefreshableWidgetState, XState> founds = {};
     __findMountedWidgetStates(
+      blocks: shelf._rootBlocks,
+      scalars: shelf._rootScalars,
       withPagination: withPagination,
       withBlockFragment: withBlockFragment,
+      withScalarFragment: withScalarFragment,
       withFilter: withFilter,
       withForm: withForm,
-      withControlBar: withControlBar,
+      withBlockControlBar: withBlockControlBar,
+      withScalarControlBar: withScalarControlBar,
       withControl: withControl,
       activeOnly: activeOnly,
-      blocks: shelf._rootBlocks,
       founds: founds,
     );
     return founds;
@@ -268,19 +304,23 @@ class _ShelfUIComponents extends _UIComponents {
   @DebugMethodAnnotation()
   Map<IRefreshableWidgetState, XState> debugFindMountedWidgetStates({
     required bool withBlockFragment,
+    required bool withScalarFragment,
     required bool withPagination,
     required bool withFilter,
     required bool withForm,
-    required bool withControlBar,
+    required bool withBlockControlBar,
+    required bool withScalarControlBar,
     required bool withControl,
     required bool activeOnly,
   }) {
     return _findMountedWidgetStates(
       withBlockFragment: withBlockFragment,
+      withScalarFragment: withScalarFragment,
       withPagination: withPagination,
       withFilter: withFilter,
       withForm: withForm,
-      withControlBar: withControlBar,
+      withBlockControlBar: withBlockControlBar,
+      withScalarControlBar: withScalarControlBar,
       withControl: withControl,
       activeOnly: activeOnly,
     );
