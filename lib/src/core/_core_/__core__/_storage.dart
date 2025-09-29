@@ -235,14 +235,26 @@ class _Storage extends _Core {
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
   @_RootMethodAnnotation()
-  void freezeReactionOutSideOfShelves({required List<Shelf> shelves}) {
-    _storageFreezeMan.createFreezingAgentWidgetState(
-      shelves: shelves,
+  void freezeReactionToExternalShelfEvents({
+    required List<Shelf> byUIOfShelves,
+  }) {
+    _storageFreezeMan._freezeReactionToExternalShelfEvents(
+      shelves: byUIOfShelves,
       findBlockFragment: true,
       findForm: true,
       findScalarFragment: true,
     );
   }
+
+  // ===========================================================================
+
+  void freezeReactionToExternalShelfEventsOnce() {
+    _storageFreezeMan._freezeReactionToExternalShelfEventsOnce();
+  }
+
+  // =============== @@@@@@@@@@@@@@@@@@ ========================================
+  // =============== @@@@@@@@@@@@@@@@@@ ========================================
+  // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
   @_RootMethodAnnotation()
   @_StorageSilentActionAnnotation()
