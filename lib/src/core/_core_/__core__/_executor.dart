@@ -73,6 +73,7 @@ class _Executor {
           }
           //
           __executingXShelfId = null;
+          FlutterArtist.storage._storageFreezeMan._resetFreezeTemporarilyOnce();
         }
       },
     );

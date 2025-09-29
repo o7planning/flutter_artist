@@ -3,10 +3,12 @@ part of '../core.dart';
 class _StorageFreezeMan {
   final _Storage storage;
 
-  bool _freezeTemporarilyOnce = false;
+  bool __freezeTemporarilyOnce = false;
+
+  bool get freezeTemporarilyOnce => __freezeTemporarilyOnce;
 
   void _resetFreezeTemporarilyOnce() {
-    _freezeTemporarilyOnce = false;
+    __freezeTemporarilyOnce = false;
   }
 
   final Map<_RefreshableWidgetState, bool> _freezingAgentWidgetStateMap = {};
@@ -71,11 +73,12 @@ class _StorageFreezeMan {
     required bool findBlockFragment,
     required bool findForm,
     required bool findScalarFragment,
+    required bool highlightUIComponents,
   }) {
     if (isFreezingByUI) {
       return false;
     }
-    _freezeTemporarilyOnce = false;
+    __freezeTemporarilyOnce = false;
     //
     final map = <_RefreshableWidgetState, XState>{};
     for (Shelf shelf in shelves) {
@@ -102,6 +105,11 @@ class _StorageFreezeMan {
           (k, v) => MapEntry<_RefreshableWidgetState, bool>(k, v.isShowing),
         ),
       );
+    if(highlightUIComponents) {
+      for(_RefreshableWidgetState ws in map.keys)  {
+        ws.showMode == ShowMode.dev;
+      }
+    }
     return true;
   }
 
@@ -109,6 +117,6 @@ class _StorageFreezeMan {
   /// Called by Storage.
   ///
   void _freezeReactionToExternalShelfEventsOnce() {
-    _freezeTemporarilyOnce = true;
+    __freezeTemporarilyOnce = true;
   }
 }

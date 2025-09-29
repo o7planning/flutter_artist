@@ -237,12 +237,14 @@ class _Storage extends _Core {
   @_RootMethodAnnotation()
   void freezeReactionToExternalShelfEvents({
     required List<Shelf> byUIOfShelves,
+    required bool highlightUIComponents,
   }) {
     _storageFreezeMan._freezeReactionToExternalShelfEvents(
       shelves: byUIOfShelves,
       findBlockFragment: true,
       findForm: true,
       findScalarFragment: true,
+      highlightUIComponents: highlightUIComponents,
     );
   }
 
