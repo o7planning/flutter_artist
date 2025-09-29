@@ -56,27 +56,38 @@ class _StorageFreezeMan {
       return;
     }
     // SAME-AS: #0003
-    for (String shelfName in storage._shelfMap.keys) {
-      Shelf reactionShelf = storage._shelfMap[shelfName]!;
-      if (reactionShelf._hasReactionBookmark()) {
-        reactionShelf._addShelfExternalReactionTaskUnit();
-      }
-    }
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    Future.delayed(
+      Duration.zero,
+      () {
+        for (String shelfName in storage._shelfMap.keys) {
+          Shelf reactionShelf = storage._shelfMap[shelfName]!;
+          if (reactionShelf._hasReactionBookmark()) {
+            reactionShelf._addShelfExternalReactionTaskUnit();
+          }
+        }
+        FlutterArtist.executor._executeTaskUnitQueue();
+      },
+    );
   }
 
   ///
   /// Called by Storage.
   ///
-  bool _freezeReactionToExternalShelfEvents({
+  Future<bool> _freezeReactionToExternalShelfEvents({
     required List<Shelf> shelves,
     required bool findBlockFragment,
     required bool findForm,
     required bool findScalarFragment,
     required bool highlightUIComponents,
-  }) {
+    required int waitForUIReadyInMilliseconds,
+  }) async {
     if (isFreezingByUI) {
       return false;
+    }
+    if (waitForUIReadyInMilliseconds >= 0) {
+      await Future.delayed(
+        Duration(milliseconds: waitForUIReadyInMilliseconds),
+      );
     }
     __freezeTemporarilyOnce = false;
     //
@@ -105,9 +116,10 @@ class _StorageFreezeMan {
           (k, v) => MapEntry<_RefreshableWidgetState, bool>(k, v.isShowing),
         ),
       );
-    if(highlightUIComponents) {
-      for(_RefreshableWidgetState ws in map.keys)  {
+    if (highlightUIComponents) {
+      for (_RefreshableWidgetState ws in map.keys) {
         ws.showMode == ShowMode.dev;
+        ws.refreshState(force: true);
       }
     }
     return true;
