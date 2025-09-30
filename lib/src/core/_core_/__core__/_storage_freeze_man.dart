@@ -1,7 +1,20 @@
 part of '../core.dart';
 
+class FreezeByDialogResult<V> {
+  bool success;
+  V? dialogValue;
+
+  FreezeByDialogResult.fail() : success = false;
+
+  FreezeByDialogResult.success({
+    required this.dialogValue,
+  }) : success = true;
+}
+
 class _StorageFreezeMan {
   final _Storage storage;
+
+  FreezeType? __freezeType;
 
   bool __freezeTemporarilyOnce = false;
 
@@ -35,7 +48,7 @@ class _StorageFreezeMan {
   }) {
     if (_freezingAgentWidgetStateMap.containsKey(widgetState)) {
       _freezingAgentWidgetStateMap[widgetState] = isShowing;
-      _recheckFreezingState();
+      __checkFreezeByUIAndResumeReactionIfCan();
     }
   }
 
@@ -44,17 +57,22 @@ class _StorageFreezeMan {
   }) {
     if (_freezingAgentWidgetStateMap.containsKey(widgetState)) {
       _freezingAgentWidgetStateMap.remove(widgetState);
-      _recheckFreezingState();
+      __checkFreezeByUIAndResumeReactionIfCan();
     }
   }
 
   ///
   /// Check to execute delayed reaction.
   ///
-  Future<void> _recheckFreezingState() async {
+  Future<void> __checkFreezeByUIAndResumeReactionIfCan() async {
+    if (__freezeType != FreezeType.uiComponent) {
+      return;
+    }
     if (isFreezingByUI) {
       return;
     }
+    __freezeType = null;
+    //
     // SAME-AS: #0003
     Future.delayed(
       Duration.zero,
@@ -70,6 +88,40 @@ class _StorageFreezeMan {
     );
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool __ensureFreezeTypeIsNull() {
+    if (__freezeType != null) {
+      // TODO: Show notify!
+      return false;
+    }
+    return true;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  // Dialog:
+  Future<FreezeByDialogResult<V?>>
+      _freezeReactionToExternalShelfUntilDialogIsClosed<V>({
+    required Future<V?> Function() openDialog,
+  }) async {
+    if (!__ensureFreezeTypeIsNull()) {
+      return FreezeByDialogResult<V?>.fail();
+    }
+    try {
+      __freezeType = FreezeType.dialog;
+      V? value = await openDialog();
+      return FreezeByDialogResult.success(dialogValue: value);
+    } finally {
+      __freezeType = null;
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   ///
   /// Called by Storage.
   ///
@@ -81,9 +133,11 @@ class _StorageFreezeMan {
     required bool highlightUIComponents,
     required int waitForUIReadyInMilliseconds,
   }) async {
-    if (isFreezingByUI) {
+    if (!__ensureFreezeTypeIsNull()) {
       return false;
     }
+    __freezeType = FreezeType.uiComponent;
+    //
     if (waitForUIReadyInMilliseconds >= 0) {
       await Future.delayed(
         Duration(milliseconds: waitForUIReadyInMilliseconds),
@@ -107,6 +161,7 @@ class _StorageFreezeMan {
       map.addAll(m);
     }
     if (map.isEmpty) {
+      __freezeType = null;
       return false;
     }
     _freezingAgentWidgetStateMap
@@ -124,6 +179,9 @@ class _StorageFreezeMan {
     }
     return true;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   /// Called by Storage.

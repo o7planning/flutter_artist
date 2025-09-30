@@ -40,8 +40,8 @@ class _StorageEventHandler {
     }
     //
     final bool freezing =
-        FlutterArtist.storage._storageFreezeMan.freezeTemporarilyOnce ||
-            FlutterArtist.storage._storageFreezeMan.isFreezingByUI;
+        FlutterArtist.storage._freezeMan.freezeTemporarilyOnce ||
+            FlutterArtist.storage._freezeMan.isFreezingByUI;
     //
     final List<Shelf> visibleReactionShelves = [];
     final List<Shelf> invisibleReactionShelves = [];
@@ -112,8 +112,8 @@ class _StorageEventHandler {
           " - Src Shelf: ${getClassName(eventShelf)}");
     }
     final bool freezing =
-        FlutterArtist.storage._storageFreezeMan.freezeTemporarilyOnce ||
-            FlutterArtist.storage._storageFreezeMan.isFreezingByUI;
+        FlutterArtist.storage._freezeMan.freezeTemporarilyOnce ||
+            FlutterArtist.storage._freezeMan.isFreezingByUI;
     //
     final List<Shelf> invisibleReactionShelves = [];
     final List<Shelf> visibleReactionShelves = [];

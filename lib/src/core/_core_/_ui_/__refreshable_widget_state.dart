@@ -93,7 +93,7 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
 
   void __addWidgetState({required bool isShowing}) {
     addWidgetState(isShowing: isShowing);
-    FlutterArtist.storage._storageFreezeMan._onVisibilityChanged(
+    FlutterArtist.storage._freezeMan._onVisibilityChanged(
       widgetState: this,
       isShowing: isShowing,
     );
@@ -101,7 +101,7 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
 
   void __removeWidgetState() {
     removeWidgetState();
-    FlutterArtist.storage._storageFreezeMan._onWidgetStateDisposed(
+    FlutterArtist.storage._freezeMan._onWidgetStateDisposed(
       widgetState: this,
     );
   }

@@ -67,6 +67,7 @@ import '../enums/_form_action.dart';
 import '../enums/_form_activity_type.dart';
 import '../enums/_form_error_method.dart';
 import '../enums/_form_mode.dart';
+import '../enums/_freeze_type.dart';
 import '../enums/_item_creation_type.dart';
 import '../enums/_item_list_mode.dart';
 import '../enums/_multi_opt_prop_reload.dart';

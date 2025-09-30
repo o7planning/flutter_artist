@@ -18,7 +18,7 @@ class _Storage extends _Core {
   List<String> get shelfNames => [..._shelfMap.keys];
 
   late final _StorageEventHandler ev = _StorageEventHandler(this);
-  late final _StorageFreezeMan _storageFreezeMan = _StorageFreezeMan(this);
+  late final _StorageFreezeMan _freezeMan = _StorageFreezeMan(this);
 
   // ***************************************************************************
   // ***************************************************************************
@@ -235,12 +235,25 @@ class _Storage extends _Core {
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
   @_RootMethodAnnotation()
+  Future<FreezeByDialogResult<V?>>
+      freezeReactionToExternalShelfUntilDialogIsClosed<V>({
+    required Future<V?> Function() openDialog,
+  }) async {
+    return await _freezeMan
+        ._freezeReactionToExternalShelfUntilDialogIsClosed(
+      openDialog: openDialog,
+    );
+  }
+
+  // ===========================================================================
+
+  @_RootMethodAnnotation()
   Future<void> freezeReactionToExternalShelfEvents({
     required List<Shelf> byUIOfShelves,
     required bool highlightUIComponents,
     required int waitForUIReadyInMilliseconds,
   }) async {
-    await _storageFreezeMan._freezeReactionToExternalShelfEvents(
+    await _freezeMan._freezeReactionToExternalShelfEvents(
       shelves: byUIOfShelves,
       findBlockFragment: true,
       findForm: true,
@@ -253,7 +266,7 @@ class _Storage extends _Core {
   // ===========================================================================
 
   void freezeReactionToExternalShelfEventsOnce() {
-    _storageFreezeMan._freezeReactionToExternalShelfEventsOnce();
+    _freezeMan._freezeReactionToExternalShelfEventsOnce();
   }
 
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
