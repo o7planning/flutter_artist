@@ -101,7 +101,7 @@ class _StorageFreezeMan {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> __checkDilogAndResumeReactionIfCan() async {
+  Future<void> __checkDialogAndResumeReactionIfCan() async {
     if (__freezeType != null) {
       return;
     }
@@ -150,7 +150,7 @@ class _StorageFreezeMan {
       return FreezeByDialogResult.success(dialogValue: value);
     } finally {
       __freezeType = null;
-      __checkDilogAndResumeReactionIfCan();
+      __checkDialogAndResumeReactionIfCan();
     }
   }
 
