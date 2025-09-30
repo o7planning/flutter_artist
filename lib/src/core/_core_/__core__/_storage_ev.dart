@@ -38,10 +38,8 @@ class _StorageEventHandler {
       print("*~~~~~~~~~> FIRE EVENT TO OUTSIDE --> Event Item Types: $events"
           " - Src Event: ${getClassName(eventBlock)}");
     }
-    //
-    final bool freezing =
-        FlutterArtist.storage._freezeMan.freezeTemporarilyOnce ||
-            FlutterArtist.storage._freezeMan.isFreezingByUI;
+    // #0004.
+    final bool freezing = FlutterArtist.storage._freezeMan.isFreezing;
     //
     final List<Shelf> visibleReactionShelves = [];
     final List<Shelf> invisibleReactionShelves = [];
@@ -111,9 +109,8 @@ class _StorageEventHandler {
       print("**~~~~~~~~~> FIRE EVENT TO OUTSIDE --> Event Item Types: $events"
           " - Src Shelf: ${getClassName(eventShelf)}");
     }
-    final bool freezing =
-        FlutterArtist.storage._freezeMan.freezeTemporarilyOnce ||
-            FlutterArtist.storage._freezeMan.isFreezingByUI;
+    //  #0004.
+    final bool freezing = FlutterArtist.storage._freezeMan.isFreezing;
     //
     final List<Shelf> invisibleReactionShelves = [];
     final List<Shelf> visibleReactionShelves = [];

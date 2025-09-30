@@ -28,7 +28,14 @@ class _StorageFreezeMan {
 
   _StorageFreezeMan(this.storage);
 
-  bool get isFreezingByUI {
+  bool get isFreezing {
+    if (__freezeTemporarilyOnce) {
+      return true;
+    }
+    return __freezeType != null;
+  }
+
+  bool get __isFreezingByUI {
     final m = {..._freezingAgentWidgetStateMap};
     for (_RefreshableWidgetState widgetState in m.keys) {
       if (!widgetState.mounted) {
@@ -61,6 +68,9 @@ class _StorageFreezeMan {
     }
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   ///
   /// Check to execute delayed reaction.
   ///
@@ -68,10 +78,33 @@ class _StorageFreezeMan {
     if (__freezeType != FreezeType.uiComponent) {
       return;
     }
-    if (isFreezingByUI) {
+    if (__isFreezingByUI) {
       return;
     }
     __freezeType = null;
+    //
+    // SAME-AS: #0003
+    Future.delayed(
+      Duration.zero,
+      () {
+        for (String shelfName in storage._shelfMap.keys) {
+          Shelf reactionShelf = storage._shelfMap[shelfName]!;
+          if (reactionShelf._hasReactionBookmark()) {
+            reactionShelf._addShelfExternalReactionTaskUnit();
+          }
+        }
+        FlutterArtist.executor._executeTaskUnitQueue();
+      },
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<void> __checkDilogAndResumeReactionIfCan() async {
+    if (__freezeType != null) {
+      return;
+    }
     //
     // SAME-AS: #0003
     Future.delayed(
@@ -111,11 +144,13 @@ class _StorageFreezeMan {
       return FreezeByDialogResult<V?>.fail();
     }
     try {
+      // --> @see: #0004.
       __freezeType = FreezeType.dialog;
       V? value = await openDialog();
       return FreezeByDialogResult.success(dialogValue: value);
     } finally {
       __freezeType = null;
+      __checkDilogAndResumeReactionIfCan();
     }
   }
 
