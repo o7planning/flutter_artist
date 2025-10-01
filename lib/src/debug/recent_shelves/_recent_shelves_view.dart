@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_artist/flutter_artist.dart';
 
+import '../../core/_core_/core.dart';
 import '../__root_debug_view.dart';
 
 class RecentShelvesView extends StatelessWidget {

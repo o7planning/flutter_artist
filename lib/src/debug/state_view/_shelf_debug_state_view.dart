@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_artist/flutter_artist.dart';
 
+import '../../core/_core_/core.dart';
 import '../__root_debug_view.dart';
+import '_block_debug_options.dart';
+import '_block_debug_state_view.dart';
+import '_form_debug_options.dart';
+import '_pagination_debug_options.dart';
+import '_scalar_debug_options.dart';
+import '_scalar_debug_state_view.dart';
 
 class ShelfDebugStateView extends StatelessWidget {
   final RootDebugController controller;
