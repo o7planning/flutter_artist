@@ -15,8 +15,17 @@ class Evt {
   Evt.insideScalar(this.srcName) : srcType = SrcType.scalar;
 }
 
-class Event {
+class Event extends Equatable {
   final Type dataType;
 
   const Event(this.dataType);
+
+  // IMPORTANT:
+  @override
+  List<Object?> get props => [dataType];
+
+  @override
+  String toString() {
+    return "Event($dataType)";
+  }
 }
