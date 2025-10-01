@@ -1,5 +1,4 @@
 import '../_core_/core.dart';
-import '../enums/_selection_type.dart';
 
 class StringValueFilterCriteria extends FilterCriteria {
   final String? stringValue;

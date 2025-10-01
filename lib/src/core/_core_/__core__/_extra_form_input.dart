@@ -5,11 +5,3 @@ abstract class ExtraFormInput {
 
   ExtraFormInput();
 }
-
-// -----------------------------------------------------------------------------
-
-class EmptyExtraFormInput extends ExtraFormInput {
-  //
-}
-
-// -----------------------------------------------------------------------------

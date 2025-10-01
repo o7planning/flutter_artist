@@ -6,18 +6,3 @@ abstract class FilterCriteria extends Equatable {
 
   List<String> getDebugInfos();
 }
-
-// -----------------------------------------------------------------------------
-
-@immutable
-class EmptyFilterCriteria extends FilterCriteria {
-  const EmptyFilterCriteria();
-
-  @override
-  List<String> getDebugInfos() {
-    return [];
-  }
-
-  @override
-  List<Object?> get props => [];
-}

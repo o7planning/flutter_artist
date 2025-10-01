@@ -8,7 +8,7 @@ class _DefaultFilterModel
   }) {
     this.name = name;
     this.shelf = shelf;
-    this._isDefaultFilterModel = true;
+    _isDefaultFilterModel = true;
   }
 
   @override
