@@ -6,13 +6,22 @@ enum SrcType {
   activity;
 }
 
-class Evt {
+class Evt extends Equatable {
   final SrcType srcType;
   final String srcName;
 
-  Evt.insideBlock(this.srcName) : srcType = SrcType.block;
+  const Evt.insideBlock(this.srcName) : srcType = SrcType.block;
 
-  Evt.insideScalar(this.srcName) : srcType = SrcType.scalar;
+  const Evt.insideScalar(this.srcName) : srcType = SrcType.scalar;
+
+  // IMPORTANT:
+  @override
+  List<Object?> get props => [srcType, srcName];
+
+  @override
+  String toString() {
+    return "Evt($srcType, $srcName)";
+  }
 }
 
 class Event extends Equatable {
