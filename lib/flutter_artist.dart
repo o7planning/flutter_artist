@@ -90,3 +90,16 @@ export 'src/debug/state_view/_form_debug_options.dart';
 export 'src/debug/state_view/_pagination_debug_options.dart';
 export 'src/debug/state_view/_scalar_debug_options.dart';
 export 'src/debug/state_view/_scalar_debug_state_view.dart';
+
+export 'src/core/built_in/int_id_filter_criteria.dart';
+export 'src/core/built_in/int_id_filter_input.dart';
+export 'src/core/built_in/int_id_filter_model.dart';
+export 'src/core/built_in/search_text_filter_criteria.dart';
+export 'src/core/built_in/search_text_filter_input.dart';
+export 'src/core/built_in/search_text_filter_model.dart';
+export 'src/core/built_in/string_id_filter_criteria.dart';
+export 'src/core/built_in/string_id_filter_input.dart';
+export 'src/core/built_in/string_id_filter_model.dart';
+export 'src/core/built_in/string_value_filter_criteria.dart';
+export 'src/core/built_in/string_value_filter_input.dart';
+export 'src/core/built_in/string_value_filter_model.dart';

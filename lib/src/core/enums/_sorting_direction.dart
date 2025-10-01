@@ -11,9 +11,7 @@ enum SortingDirection {
     }
     return SortingDirection.none;
   }
-}
 
-extension SortingDirectionExt on SortingDirection {
   String get sign {
     switch (this) {
       case SortingDirection.ascending:

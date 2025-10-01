@@ -239,8 +239,7 @@ class _Storage extends _Core {
       freezeReactionToExternalShelfUntilDialogIsClosed<V>({
     required Future<V?> Function() openDialog,
   }) async {
-    return await _freezeMan
-        ._freezeReactionToExternalShelfUntilDialogIsClosed(
+    return await _freezeMan._freezeReactionToExternalShelfUntilDialogIsClosed(
       openDialog: openDialog,
     );
   }

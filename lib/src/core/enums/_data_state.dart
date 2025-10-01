@@ -7,9 +7,7 @@ enum DataState {
   pending,
   error,
   none;
-}
 
-extension DataStateExtension on DataState {
   IconData get iconData {
     switch (this) {
       case DataState.ready:

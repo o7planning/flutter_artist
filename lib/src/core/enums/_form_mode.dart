@@ -2,9 +2,7 @@ enum FormMode {
   creation,
   edit,
   none;
-}
 
-extension FormModeE on FormMode {
   String get tooltip {
     switch (this) {
       case FormMode.creation:
