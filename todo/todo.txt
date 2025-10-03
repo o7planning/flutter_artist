@@ -16,4 +16,7 @@ Thêm: BlockQuickReplacementItemAction?
 Xoa trang thai: createNewItem
 
 
+TODO: 57a (Mounted vs Active). IMPORTANT!!!
+
+
 
