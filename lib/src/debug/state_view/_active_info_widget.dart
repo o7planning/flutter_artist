@@ -6,6 +6,7 @@ class ActiveInfoWidget extends StatelessWidget {
   final TextStyle textStyle;
   final String? activeUIComponentName;
   final String? xActiveUIComponentName;
+  final Function() checkAgain;
 
   const ActiveInfoWidget({
     super.key,
@@ -13,6 +14,7 @@ class ActiveInfoWidget extends StatelessWidget {
     required this.xActiveUIComponentName,
     required this.labelStyle,
     required this.textStyle,
+    required this.checkAgain,
   });
 
   @override
@@ -43,7 +45,7 @@ class ActiveInfoWidget extends StatelessWidget {
           onPressed: activeUIComponentName == null
               ? null
               : () {
-                  // block.ui.hasActiveUIComponent();
+                  checkAgain();
                 },
         ),
       ],

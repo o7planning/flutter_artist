@@ -27,6 +27,9 @@ class BlockDebugBox extends BaseDebugBox {
           xActiveUIComponentName: xActiveUI,
           labelStyle: labelStyle0,
           textStyle: textStyle0,
+          checkAgain: () {
+            //
+          },
         ),
       if (options.showLastQueryType)
         IconLabelText(

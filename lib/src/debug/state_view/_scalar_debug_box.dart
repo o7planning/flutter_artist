@@ -28,6 +28,10 @@ class ScalarDebugBox extends BaseDebugBox {
           xActiveUIComponentName: xActiveUI,
           labelStyle: labelStyle0,
           textStyle: textStyle0,
+          checkAgain: () {
+            String? activeUI = scalar.ui.findActiveUIComponent();
+            print("Check again: $activeUI");
+          },
         ),
       if (options.showLastQueryType)
         IconLabelText(
