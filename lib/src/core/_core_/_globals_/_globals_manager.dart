@@ -71,25 +71,25 @@ class GlobalsManager {
   /// - theme
   ///
   Future<void> __readExtraGlobalProps() async {
-    DebugPrint.printDebugState(
+    DebugPrinter.printDebug(
         DebugCat.appStart, "  --- globalManager.__readExtraGlobalProps()...");
     // Store on local device:
     Box<String> hiveBox = await HiveUtils.openHiveBoxExtraGlobalPropNames();
     try {
       String key = __getHiveExtraGlobalPropNamesKey();
-      DebugPrint.printDebugState(DebugCat.appStart,
+      DebugPrinter.printDebug(DebugCat.appStart,
           "  --- globalManager.__readExtraGlobalProps(). key: $key");
-      DebugPrint.printDebugState(
+      DebugPrinter.printDebug(
           DebugCat.appStart, "  --- __readExtraGlobalProps(). key: $key");
       String extraGlobalPropNames = hiveBox.get(key) ?? "";
-      DebugPrint.printDebugState(DebugCat.appStart,
+      DebugPrinter.printDebug(DebugCat.appStart,
           "  --- __readExtraGlobalProps. extraGlobalPropNames: $extraGlobalPropNames");
       List<String> propNames = extraGlobalPropNames
           .split(__separator)
           .where((s) => s.isNotEmpty)
           .toList();
 
-      DebugPrint.printDebugState(DebugCat.appStart,
+      DebugPrinter.printDebug(DebugCat.appStart,
           "  --- __readExtraGlobalProps. propNames: $propNames");
       //
       __registeredExtraPropNames
@@ -106,22 +106,22 @@ class GlobalsManager {
     for (String propName in __registeredExtraPropNames) {
       dynamic value = await __readExtraGlobalProp(propName);
       __extraPropMap[propName] = value;
-      DebugPrint.printDebugState(DebugCat.appStart,
+      DebugPrinter.printDebug(DebugCat.appStart,
           "  --- __readExtraGlobalProps. propName: $propName --> $value");
     }
   }
 
   Future<bool> __storeExtraGlobalPropNames() async {
-    DebugPrint.printDebugState(
+    DebugPrinter.printDebug(
         DebugCat.globalManager, "   --- __storeExtraGlobalPropNames()...");
     // Store on local device:
     Box<String> hiveBox = await HiveUtils.openHiveBoxExtraGlobalPropNames();
     try {
       String key = __getHiveExtraGlobalPropNamesKey();
       String value = __registeredExtraPropNames.toList().join(__separator);
-      DebugPrint.printDebugState(DebugCat.globalManager,
+      DebugPrinter.printDebug(DebugCat.globalManager,
           "   --- __storeExtraGlobalPropNames(). key: $key");
-      DebugPrint.printDebugState(DebugCat.globalManager,
+      DebugPrinter.printDebug(DebugCat.globalManager,
           "   --- __storeExtraGlobalPropNames(). value: $value");
       await hiveBox.put(key, value);
       return true;
@@ -150,12 +150,12 @@ class GlobalsManager {
   }
 
   Future<void> storeExtraGlobalProp(String propName, dynamic value) async {
-    DebugPrint.printDebugState(DebugCat.globalManager,
+    DebugPrinter.printDebug(DebugCat.globalManager,
         "GlobalManager ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> storeExtraGlobalProp()...");
     __registeredExtraPropNames.add(propName);
-    DebugPrint.printDebugState(
+    DebugPrinter.printDebug(
         DebugCat.globalManager, "   --- propName: $propName");
-    DebugPrint.printDebugState(DebugCat.globalManager,
+    DebugPrinter.printDebug(DebugCat.globalManager,
         "   --- __registeredExtraPropNames: $__registeredExtraPropNames");
     bool success = await __storeExtraGlobalPropNames();
     if (!success) {
@@ -168,7 +168,7 @@ class GlobalsManager {
     String key = __getHiveExtraGlobalPropNameKey(propName);
     await hiveBox.put(key, value);
     await hiveBox.close();
-    DebugPrint.printDebugState(
+    DebugPrinter.printDebug(
         DebugCat.globalManager, "   --- hiveBox.put: key: $key, value: $value");
   }
 
@@ -176,18 +176,17 @@ class GlobalsManager {
   /// This method is called only once when FlutterArtist is started.
   ///
   Future<void> start() async {
-    DebugPrint.printDebugState(
-        DebugCat.appStart, "  --- globalManager start...");
+    DebugPrinter.printDebug(DebugCat.appStart, "  --- globalManager start...");
     Box<String> hiveBox = await HiveUtils.openHiveBoxLoggedInUser();
     String? loggedInUserJson = hiveBox.get(__hiveKeyLoggedInUser);
     await hiveBox.close();
 
     if (loggedInUserJson == null) {
-      DebugPrint.printDebugState(DebugCat.appStart,
+      DebugPrinter.printDebug(DebugCat.appStart,
           "  --- globalManager loggedInUserJson is null --> return");
       return;
     }
-    DebugPrint.printDebugState(DebugCat.appStart,
+    DebugPrinter.printDebug(DebugCat.appStart,
         "  --- globalManager loggedInUserJson is not null --> continue");
     ILoggedInUser? loggedInUser;
     try {
@@ -199,18 +198,18 @@ class GlobalsManager {
       print(stackTrace);
     }
     if (loggedInUser == null) {
-      DebugPrint.printDebugState(DebugCat.appStart,
+      DebugPrinter.printDebug(DebugCat.appStart,
           "  --- globalManager loggedInUser is null --> return");
       // This will open login screen.
       return;
     }
-    DebugPrint.printDebugState(DebugCat.appStart,
+    DebugPrinter.printDebug(DebugCat.appStart,
         "  --- globalManager loggedInUser is not null --> continue");
     IGlobalData? globalData;
     try {
       _loadGlobalDataCount++;
 
-      DebugPrint.printDebugState(DebugCat.appStart,
+      DebugPrinter.printDebug(DebugCat.appStart,
           "  --- globalManager --> globalData --> globalDataAdapter.loadFromServer()...");
       // Load Global Data:
       globalData = await globalDataAdapter.loadFromServer(
@@ -223,7 +222,7 @@ class GlobalsManager {
       print(stackTrace);
     }
     if (globalData == null) {
-      DebugPrint.printDebugState(DebugCat.appStart,
+      DebugPrinter.printDebug(DebugCat.appStart,
           "  --- globalManager --> globalData is null --> return");
       // This will open login screen.
       return;
@@ -231,7 +230,7 @@ class GlobalsManager {
     _loggedInUser = loggedInUser;
     _globalData = globalData;
     //
-    DebugPrint.printDebugState(DebugCat.appStart,
+    DebugPrinter.printDebug(DebugCat.appStart,
         "  --- globalManager --> __readExtraGlobalProps()...");
     // Load Extra Global Prop Names that stored in Hive Database.
     await __readExtraGlobalProps();

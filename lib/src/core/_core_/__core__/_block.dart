@@ -1303,7 +1303,7 @@ abstract class Block<
     bool forceReloadItem = thisXBlock.forceReloadCurrItem;
     bool forceReloadForm = false;
 
-    DebugPrint.printDebugState(DebugCat.dataLoad,
+    DebugPrinter.printDebug(DebugCat.dataLoad,
         "\n@~~~> ${getClassName(this)} ~~~~~> ITM - originForceReloadItem: $originForceReloadItem.\n");
 
     //
@@ -1338,9 +1338,9 @@ abstract class Block<
       }
     }
     //
-    DebugPrint.printDebugState(DebugCat.dataLoad,
+    DebugPrinter.printDebug(DebugCat.dataLoad,
         "\n@~~~> ${getClassName(this)} ~~~~~> ITM/FRM: forceReloadItem: $forceReloadItem");
-    DebugPrint.printDebugState(DebugCat.dataLoad,
+    DebugPrinter.printDebug(DebugCat.dataLoad,
         "@~~~> ${getClassName(this)} ~~~~~> ITM/FRM: forceReloadForm: $forceReloadForm");
     //
     final bool isCandidateIsCurrent = isCurrentItem(

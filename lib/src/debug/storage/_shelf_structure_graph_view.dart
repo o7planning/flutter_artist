@@ -5,7 +5,7 @@ import 'package:graphview/GraphView.dart';
 import '../../core/_core_/core.dart';
 import '../../core/utils/_tooltip_utils.dart';
 import '../../core/widgets/_custom_app_container.dart';
-import '_debug_utils.dart';
+import '_graph_debug_utils.dart';
 import '_graph_item_block_or_scalar_box.dart';
 import '_graph_item_shelf_box.dart';
 import '_shelf_structure_view_config.dart';
@@ -48,7 +48,7 @@ class _ShelfStructureGraphViewState extends State<ShelfStructureGraphView> {
   void initState() {
     super.initState();
     //
-    rootItem = DebugUtils.toRootDebugGraphItem(widget.shelf);
+    rootItem = GraphDebugUtils.toRootDebugGraphItem(widget.shelf);
     graphItemMap = <String, GraphItem>{};
     final String rootNodeId = rootItem.name;
     //

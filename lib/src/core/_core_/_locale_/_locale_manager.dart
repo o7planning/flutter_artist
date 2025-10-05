@@ -23,7 +23,7 @@ class LocaleManager {
   }
 
   Future<void> _updateLocale({required Locale locale}) async {
-    DebugPrint.printDebugState(DebugCat.appStart,
+    DebugPrinter.printDebug(DebugCat.appStart,
         "  --- localeManager._updateLocale(). locale: $locale");
     await _localeAdapter.updateLocale(locale);
   }
@@ -31,10 +31,10 @@ class LocaleManager {
   Locale? readStoredLocale() {
     // id: "languageCode-countryCode'.
     String? id = _globalsManager.getExtraGlobalProp(_propName);
-    DebugPrint.printDebugState(DebugCat.appStart,
+    DebugPrinter.printDebug(DebugCat.appStart,
         "  --- localeManager. readStoredLocale(): _propName: $_propName");
     if (id == null) {
-      DebugPrint.printDebugState(DebugCat.appStart,
+      DebugPrinter.printDebug(DebugCat.appStart,
           "  --- localeManager. readStoredLocale(): value: $id");
       return null;
     }

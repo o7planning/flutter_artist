@@ -132,7 +132,6 @@ import '../precheck/show_form_info_precheck.dart';
 import '../typedef/custom_confirmation.dart';
 import '../utils/_class_utils.dart';
 import '../utils/_compare_utils.dart';
-import '../utils/_debug_print.dart';
 import '../utils/_hive_utils.dart';
 import '../utils/_string_utils.dart';
 import '../utils/_visibility_detector_utils.dart';
@@ -155,7 +154,11 @@ part '__core__/_drawer_state.dart';
 
 part '__core__/_current_item_wrap.dart';
 
-part '__core__/_debug_options.dart';
+part '../debug/_debug_utils.dart';
+
+part '../debug/_debug_printer.dart';
+
+part '../debug/_debug_options.dart';
 
 part '__core__/_default_filter_model.dart';
 
@@ -360,6 +363,8 @@ part '_login_/_login_activity_base.dart';
 part '_login_/_simple_login_view.dart';
 
 part '_notification_/_notification_engine.dart';
+
+part '_observer_/_navigator_observer.dart';
 
 part '_task_result_/__task_result.dart';
 

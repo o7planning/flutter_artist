@@ -1,5 +1,8 @@
 https://stackoverflow.com/questions/55634168/how-to-check-whether-alert-dialog-is-open-in-flutter
 
+NavigatorObserver:
+https://stackoverflow.com/questions/46165705/flutter-how-the-navigatorobserver-class-works
+
 
 rong tiếng Anh, người sắp đặt hàng hóa trong siêu thị được gọi là shelf stacker hoặc stocker.
 Cả hai thuật ngữ đều mô tả người chịu trách nhiệm sắp xếp,

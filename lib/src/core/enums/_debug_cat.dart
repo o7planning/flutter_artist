@@ -1,5 +1,7 @@
 enum DebugCat {
   appStart,
   globalManager,
-  dataLoad;
+  dataLoad,
+  navigatorObserver,
+  visibilityDetector;
 }

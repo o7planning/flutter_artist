@@ -5,11 +5,17 @@ final FlutterArtist = _FlutterArtist();
 const _isOverlayMode = false;
 
 class _FlutterArtist {
+  final navigatorObserver = _FlutterArtistNavigatorObserver();
+
   bool testCaseMode = false;
 
-  DebugOptions __debugOptions = DebugOptions();
+  var __debugOptions = DebugOptions();
 
   DebugOptions get debugOptions => __debugOptions;
+
+  var __consoleDebugOptions = DebugCatOptions(enabled: false);
+
+  DebugCatOptions get consoleDebugOptions => __consoleDebugOptions;
 
   final _Storage storage = _Storage();
 
@@ -52,19 +58,10 @@ class _FlutterArtist {
 
   final List<Future<dynamic>> __futureTaskList = [];
 
-  final List<DebugCat> __allowDebugCats = [];
-
   // ***************************************************************************
   // ***************************************************************************
 
   _FlutterArtist();
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool isAllowDebugCat(DebugCat debugCat) {
-    return __allowDebugCats.contains(debugCat);
-  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -97,7 +94,7 @@ class _FlutterArtist {
 
   IFlutterArtistAdapter get adapter {
     if (__adapter == null) {
-      throw DebugPrint.getFatalError(
+      throw DebugUtils.getFatalError(
           " >>>>>> $IFlutterArtistAdapter is not registered!. "
           "\n >>>>>> You need to call $FlutterArtist.config() in main.dart");
     }
@@ -141,12 +138,13 @@ class _FlutterArtist {
   }
 
   void _printDebugState(String message) {
-    DebugPrint.printDebugState(DebugCat.appStart,
+    DebugPrinter.printDebug(DebugCat.appStart,
         "FlutterArtist.config ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> $message");
   }
 
   Future<void> config({
     required DebugOptions? debugOptions,
+    required DebugCatOptions? consoleDebugOptions,
     required IFlutterArtistAdapter flutterArtistAdapter,
     required INotificationAdapter? notificationAdapter,
     required ILoggedInUserAdapter loggedInUserAdapter,
@@ -154,10 +152,9 @@ class _FlutterArtist {
     required ILocaleAdapter localeAdapter,
     required Function(BuildContext context)? showRestDebugDialog,
     int notificationFetchPeriodInSeconds = 60,
-    List<DebugCat> allowDebugCats = const [],
   }) async {
     if (__adapter != null) {
-      throw DebugPrint.getFatalError(
+      throw DebugUtils.getFatalError(
           "${getClassName(__adapter)} already registered!");
     }
     __adapter = flutterArtistAdapter;
@@ -165,9 +162,9 @@ class _FlutterArtist {
     if (debugOptions != null) {
       __debugOptions = debugOptions;
     }
-    __allowDebugCats
-      ..clear()
-      ..addAll(allowDebugCats);
+    if (consoleDebugOptions != null) {
+      __consoleDebugOptions = consoleDebugOptions;
+    }
     //
     _printDebugState("start");
     //

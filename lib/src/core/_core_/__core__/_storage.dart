@@ -101,7 +101,7 @@ class _Storage extends _Core {
 
     ShelfCreator? creator = __shelfCreatorMap[shelfName];
     if (creator == null) {
-      throw DebugPrint.getFatalError(
+      throw DebugUtils.getFatalError(
           " ERROR: '$shelfName' not found. You need to call:\n "
           " FlutterArtist.storage.registerShelf(()=> $shelfName())");
     }

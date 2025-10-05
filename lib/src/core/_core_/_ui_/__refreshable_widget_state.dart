@@ -92,6 +92,10 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
   }
 
   void __addWidgetState({required bool isShowing}) {
+    DebugPrinter.printDebug(
+      DebugCat.visibilityDetector,
+      "[VisibilityDetector] ------------> ${getClassNameWithoutGenerics(widget)}: $isShowing (visible?)",
+    );
     addWidgetState(isShowing: isShowing);
     // FlutterArtist.storage._freezeMan._onVisibilityChanged(
     //   widgetState: this,
@@ -100,6 +104,10 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
   }
 
   void __removeWidgetState() {
+    DebugPrinter.printDebug(
+      DebugCat.visibilityDetector,
+      "[VisibilityDetector] ------------> Remove ${getClassNameWithoutGenerics(this.widget)}",
+    );
     removeWidgetState();
     // FlutterArtist.storage._freezeMan._onWidgetStateDisposed(
     //   widgetState: this,

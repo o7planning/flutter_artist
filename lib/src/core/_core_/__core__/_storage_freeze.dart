@@ -133,7 +133,7 @@ class _StorageFreeze {
             "See console for more details.",
         errorDetails: null,
       );
-      String message = DebugPrint.getFatalError(
+      String message = DebugUtils.getFatalError(
           " Method openEndDrawerThenFreezeReactionUntilClosed() is being used incorrectly!\n "
           " @see: https://document.com");
       print(message);

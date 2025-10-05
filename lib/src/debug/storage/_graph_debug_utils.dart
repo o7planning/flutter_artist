@@ -2,7 +2,7 @@ import '../../core/_core_/core.dart';
 import '_block_or_scalar.dart';
 import 'widgets/_graph_item.dart';
 
-class DebugUtils {
+class GraphDebugUtils {
   static GraphItem toRootDebugGraphItem(Shelf shelf) {
     GraphItem rootItem = GraphItem.shelf(shelf);
     for (Block rootBlock in shelf.rootBlocks) {
