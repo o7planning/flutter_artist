@@ -97,7 +97,7 @@ class _FlutterArtist {
 
   IFlutterArtistAdapter get adapter {
     if (__adapter == null) {
-      throw DebugPrint.printFatalError(
+      throw DebugPrint.getFatalError(
           " >>>>>> $IFlutterArtistAdapter is not registered!. "
           "\n >>>>>> You need to call $FlutterArtist.config() in main.dart");
     }
@@ -157,7 +157,7 @@ class _FlutterArtist {
     List<DebugCat> allowDebugCats = const [],
   }) async {
     if (__adapter != null) {
-      throw DebugPrint.printFatalError(
+      throw DebugPrint.getFatalError(
           "${getClassName(__adapter)} already registered!");
     }
     __adapter = flutterArtistAdapter;

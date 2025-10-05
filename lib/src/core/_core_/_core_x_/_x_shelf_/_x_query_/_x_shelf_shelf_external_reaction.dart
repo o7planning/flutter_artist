@@ -4,8 +4,8 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
   _XShelfShelfExternalReaction({
     required super.shelf,
   }) : super(
-          xShelfType: XShelfType.shelfExternalReaction,
-        ) {
+    xShelfType: XShelfType.shelfExternalReaction,
+  ) {
     for (XBlock xBlk in allXBlocks) {
       if (xBlk._blockReQryCon == null && xBlk._blockItemRefreshCon == null) {
         continue;
@@ -15,7 +15,8 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
         alsoCheckChildren: true,
       );
       print(
-          "~~~~~~~~~~~~~~~~> _XShelfShelfExternalReaction / ${xBlk.block} - blockXVisible: $blockXVisible");
+          "~~~~~~~~~~~~~~~~> _XShelfShelfExternalReaction / ${xBlk
+              .block} - blockXVisible: $blockXVisible");
       QryHint queryHint = QryHint.none;
       bool forceReloadItem = false;
       //

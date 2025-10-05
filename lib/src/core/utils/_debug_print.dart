@@ -12,7 +12,7 @@ class DebugPrint {
     }
   }
 
-  static String printFatalError(String message) {
+  static String getFatalError(String message) {
     return "\n*********************************************************************************************\n"
         "$message"
         "\n*********************************************************************************************\n";

@@ -151,6 +151,8 @@ part '__core__/_block_data.dart';
 
 part '__core__/_coordinator.dart';
 
+part '__core__/_drawer_state.dart';
+
 part '__core__/_current_item_wrap.dart';
 
 part '__core__/_debug_options.dart';

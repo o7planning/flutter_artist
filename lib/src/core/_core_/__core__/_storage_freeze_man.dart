@@ -12,7 +12,7 @@ class FreezeByDialogResult<V> {
 }
 
 class _StorageFreezeMan {
-  final _Storage storage;
+  final _Storage _storage;
 
   FreezeType? __freezeType;
 
@@ -26,7 +26,7 @@ class _StorageFreezeMan {
 
   final Map<_RefreshableWidgetState, bool> _freezingAgentWidgetStateMap = {};
 
-  _StorageFreezeMan(this.storage);
+  _StorageFreezeMan(_Storage storage) : _storage = storage;
 
   bool get isFreezing {
     if (__freezeTemporarilyOnce) {
@@ -87,8 +87,8 @@ class _StorageFreezeMan {
     Future.delayed(
       Duration.zero,
       () {
-        for (String shelfName in storage._shelfMap.keys) {
-          Shelf reactionShelf = storage._shelfMap[shelfName]!;
+        for (String shelfName in _storage._shelfMap.keys) {
+          Shelf reactionShelf = _storage._shelfMap[shelfName]!;
           if (reactionShelf._hasReactionBookmark()) {
             reactionShelf._addShelfExternalReactionTaskUnit();
           }
@@ -110,8 +110,28 @@ class _StorageFreezeMan {
     Future.delayed(
       Duration.zero,
       () {
-        for (String shelfName in storage._shelfMap.keys) {
-          Shelf reactionShelf = storage._shelfMap[shelfName]!;
+        for (String shelfName in _storage._shelfMap.keys) {
+          Shelf reactionShelf = _storage._shelfMap[shelfName]!;
+          if (reactionShelf._hasReactionBookmark()) {
+            reactionShelf._addShelfExternalReactionTaskUnit();
+          }
+        }
+        FlutterArtist.executor._executeTaskUnitQueue();
+      },
+    );
+  }
+
+  Future<void> __checkEndDrawerAndResumeReactionIfCan() async {
+    if (__freezeType != null) {
+      return;
+    }
+    //
+    // SAME-AS:
+    Future.delayed(
+      Duration.zero,
+      () {
+        for (String shelfName in _storage._shelfMap.keys) {
+          Shelf reactionShelf = _storage._shelfMap[shelfName]!;
           if (reactionShelf._hasReactionBookmark()) {
             reactionShelf._addShelfExternalReactionTaskUnit();
           }
@@ -136,8 +156,7 @@ class _StorageFreezeMan {
   // ***************************************************************************
 
   // Dialog:
-  Future<FreezeByDialogResult<V?>>
-      _freezeReactionToExternalShelfUntilDialogIsClosed<V>({
+  Future<FreezeByDialogResult<V?>> _openDialogThenFreezeReactionUntilClosed<V>({
     required Future<V?> Function() openDialog,
   }) async {
     if (!__ensureFreezeTypeIsNull()) {
@@ -152,6 +171,39 @@ class _StorageFreezeMan {
       __freezeType = null;
       __checkDialogAndResumeReactionIfCan();
     }
+  }
+
+  Future<void> _openEndDrawerThenFreezeReactionUntilClosed(
+    BuildContext context, {
+    bool showSuggestionIfNeed = true,
+  }) async {
+    if (!__ensureFreezeTypeIsNull()) {
+      return;
+    }
+    Scaffold.of(context).openEndDrawer();
+    __freezeType = FreezeType.endDrawer;
+    await Future.delayed(const Duration(milliseconds: 100));
+    if (showSuggestionIfNeed && !_storage.endDrawerState._isEndDrawerOpen) {
+      _storage.showErrorSnackBar(
+        message:
+            "Method openEndDrawerThenFreezeReactionUntilClosed() is being used incorrectly. "
+            "See console for more details.",
+        errorDetails: null,
+      );
+      String message = DebugPrint.getFatalError(
+          " Method openEndDrawerThenFreezeReactionUntilClosed() is being used incorrectly!\n "
+          " @see: https://document.com");
+      print(message);
+    }
+    await Future.doWhile(
+      () => Future.delayed(const Duration(milliseconds: 1)).then(
+        (_) {
+          return _storage.endDrawerState._isEndDrawerOpen == true;
+        },
+      ),
+    );
+    __freezeType = null;
+    __checkEndDrawerAndResumeReactionIfCan();
   }
 
   // ***************************************************************************

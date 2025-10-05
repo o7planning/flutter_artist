@@ -3,6 +3,9 @@ part of '../core.dart';
 typedef ShelfCreator<S> = S Function();
 
 class _Storage extends _Core {
+  late final drawerState = _DrawerState(this);
+  late final endDrawerState = _EndDrawerState(this);
+
   final List<Shelf> _rencentShelves = [];
 
   final Map<String, ShelfCreator> __shelfCreatorMap = {};
@@ -98,7 +101,7 @@ class _Storage extends _Core {
 
     ShelfCreator? creator = __shelfCreatorMap[shelfName];
     if (creator == null) {
-      throw DebugPrint.printFatalError(
+      throw DebugPrint.getFatalError(
           " ERROR: '$shelfName' not found. You need to call:\n "
           " FlutterArtist.storage.registerShelf(()=> $shelfName())");
     }
@@ -235,19 +238,25 @@ class _Storage extends _Core {
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
   @_RootMethodAnnotation()
-  Future<FreezeByDialogResult<V?>>
-      freezeReactionToExternalShelfUntilDialogIsClosed<V>({
+  Future<FreezeByDialogResult<V?>> openDialogThenFreezeReactionUntilClosed<V>({
     required Future<V?> Function() openDialog,
   }) async {
-    return await _freezeMan._freezeReactionToExternalShelfUntilDialogIsClosed(
+    return await _freezeMan._openDialogThenFreezeReactionUntilClosed(
       openDialog: openDialog,
     );
   }
 
+  @_RootMethodAnnotation()
+  Future<void> openEndDrawerThenFreezeReactionUntilClosed(
+      BuildContext context) async {
+    await _freezeMan._openEndDrawerThenFreezeReactionUntilClosed(context);
+  }
+
   // ===========================================================================
 
+  @Deprecated("Chua su dung")
   @_RootMethodAnnotation()
-  Future<void> freezeReactionToExternalShelfEvents({
+  Future<void> freezeReactionToExternalShelfEvents1({
     required List<Shelf> byUIOfShelves,
     required bool highlightUIComponents,
     required int waitForUIReadyInMilliseconds,
