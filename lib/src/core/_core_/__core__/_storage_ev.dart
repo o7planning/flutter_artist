@@ -39,7 +39,7 @@ class _StorageEventHandler {
           " - Src Event: ${getClassName(eventBlock)}");
     }
     // #0004.
-    final bool freezing = FlutterArtist.storage._freezeMan.isFreezing;
+    final bool freezing = FlutterArtist.stocker.isFreezing;
     //
     final List<Shelf> visibleReactionShelves = [];
     final List<Shelf> invisibleReactionShelves = [];
@@ -110,7 +110,7 @@ class _StorageEventHandler {
           " - Src Shelf: ${getClassName(eventShelf)}");
     }
     //  #0004.
-    final bool freezing = FlutterArtist.storage._freezeMan.isFreezing;
+    final bool freezing = FlutterArtist.stocker.isFreezing;
     //
     final List<Shelf> invisibleReactionShelves = [];
     final List<Shelf> visibleReactionShelves = [];

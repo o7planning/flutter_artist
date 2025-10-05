@@ -21,7 +21,6 @@ class _Storage extends _Core {
   List<String> get shelfNames => [..._shelfMap.keys];
 
   late final _StorageEventHandler ev = _StorageEventHandler(this);
-  late final _StorageFreezeMan _freezeMan = _StorageFreezeMan(this);
 
   // ***************************************************************************
   // ***************************************************************************
@@ -231,50 +230,6 @@ class _Storage extends _Core {
       ret.add(shelf);
     }
     return ret;
-  }
-
-  // =============== @@@@@@@@@@@@@@@@@@ ========================================
-  // =============== @@@@@@@@@@@@@@@@@@ ========================================
-  // =============== @@@@@@@@@@@@@@@@@@ ========================================
-
-  @_RootMethodAnnotation()
-  Future<FreezeByDialogResult<V?>> openDialogThenFreezeReactionUntilClosed<V>({
-    required Future<V?> Function() openDialog,
-  }) async {
-    return await _freezeMan._openDialogThenFreezeReactionUntilClosed(
-      openDialog: openDialog,
-    );
-  }
-
-  @_RootMethodAnnotation()
-  Future<void> openEndDrawerThenFreezeReactionUntilClosed(
-      BuildContext context) async {
-    await _freezeMan._openEndDrawerThenFreezeReactionUntilClosed(context);
-  }
-
-  // ===========================================================================
-
-  @Deprecated("Chua su dung")
-  @_RootMethodAnnotation()
-  Future<void> freezeReactionToExternalShelfEvents1({
-    required List<Shelf> byUIOfShelves,
-    required bool highlightUIComponents,
-    required int waitForUIReadyInMilliseconds,
-  }) async {
-    await _freezeMan._freezeReactionToExternalShelfEvents(
-      shelves: byUIOfShelves,
-      findBlockFragment: true,
-      findForm: true,
-      findScalarFragment: true,
-      highlightUIComponents: highlightUIComponents,
-      waitForUIReadyInMilliseconds: waitForUIReadyInMilliseconds,
-    );
-  }
-
-  // ===========================================================================
-
-  void freezeReactionToExternalShelfEventsOnce() {
-    _freezeMan._freezeReactionToExternalShelfEventsOnce();
   }
 
   // =============== @@@@@@@@@@@@@@@@@@ ========================================

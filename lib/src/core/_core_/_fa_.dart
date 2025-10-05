@@ -13,6 +13,8 @@ class _FlutterArtist {
 
   final _Storage storage = _Storage();
 
+  late final _Stocker stocker = _Stocker(storage);
+
   final _Executor executor = _Executor();
 
   final _BackgroundExecutor backgroundExecutor = _BackgroundExecutor();
