@@ -8,7 +8,7 @@ class DebugOptions {
   });
 }
 
-class DebugCatOptions {
+class ConsoleDebugOptions {
   final bool enabled;
 
   final bool navigatorObserver;
@@ -17,7 +17,7 @@ class DebugCatOptions {
   final bool globalManager;
   final bool dataLoad;
 
-  DebugCatOptions({
+  ConsoleDebugOptions({
     required this.enabled,
     this.navigatorObserver = false,
     this.visibilityDetector = false,

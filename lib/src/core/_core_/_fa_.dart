@@ -13,9 +13,9 @@ class _FlutterArtist {
 
   DebugOptions get debugOptions => __debugOptions;
 
-  var __consoleDebugOptions = DebugCatOptions(enabled: false);
+  var __consoleDebugOptions = ConsoleDebugOptions(enabled: false);
 
-  DebugCatOptions get consoleDebugOptions => __consoleDebugOptions;
+  ConsoleDebugOptions get consoleDebugOptions => __consoleDebugOptions;
 
   final _Storage storage = _Storage();
 
@@ -144,7 +144,7 @@ class _FlutterArtist {
 
   Future<void> config({
     required DebugOptions? debugOptions,
-    required DebugCatOptions? consoleDebugOptions,
+    required ConsoleDebugOptions? consoleDebugOptions,
     required IFlutterArtistAdapter flutterArtistAdapter,
     required INotificationAdapter? notificationAdapter,
     required ILoggedInUserAdapter loggedInUserAdapter,

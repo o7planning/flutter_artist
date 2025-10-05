@@ -2,7 +2,7 @@ part of '../_core_/core.dart';
 
 class DebugPrinter {
   static void printDebug(DebugCat consoleDebug, String message) {
-    DebugCatOptions options = FlutterArtist.consoleDebugOptions;
+    ConsoleDebugOptions options = FlutterArtist.consoleDebugOptions;
     if (!options.enabled) {
       return;
     }
