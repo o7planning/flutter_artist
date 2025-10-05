@@ -11,7 +11,7 @@ class FreezeByDialogResult<V> {
   }) : success = true;
 }
 
-class _Stocker {
+class _StorageFreeze {
   final _Storage _storage;
 
   FreezeType? __freezeType;
@@ -24,7 +24,7 @@ class _Stocker {
     __freezeTemporarilyOnce = false;
   }
 
-  _Stocker(_Storage storage) : _storage = storage;
+  _StorageFreeze(_Storage storage) : _storage = storage;
 
   bool get isFreezing {
     if (__freezeTemporarilyOnce) {
@@ -90,9 +90,10 @@ class _Stocker {
   // ***************************************************************************
   // ***************************************************************************
 
-  // Dialog:
-  @_RootMethodAnnotation()
-  Future<FreezeByDialogResult<V?>> openDialogThenFreezeReactionUntilClosed<V>({
+  ///
+  /// Dialog:
+  ///
+  Future<FreezeByDialogResult<V?>> _openDialogThenFreezeReactionUntilClosed<V>({
     required Future<V?> Function() openDialog,
   }) async {
     if (!__ensureFreezeTypeIsNull()) {
@@ -109,8 +110,13 @@ class _Stocker {
     }
   }
 
-  @_RootMethodAnnotation()
-  Future<void> openEndDrawerThenFreezeReactionUntilClosed(
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ///
+  /// EndDrawer:
+  ///
+  Future<void> _openEndDrawerThenFreezeReactionUntilClosed(
     BuildContext context, {
     bool showSuggestionIfNeed = true,
   }) async {
@@ -147,7 +153,7 @@ class _Stocker {
   // ***************************************************************************
 
   ///
-  /// Called by Storage.
+  /// Freeze Once:
   ///
   void _freezeReactionToExternalShelfEventsOnce() {
     __freezeTemporarilyOnce = true;

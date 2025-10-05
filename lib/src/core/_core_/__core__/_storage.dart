@@ -3,6 +3,7 @@ part of '../core.dart';
 typedef ShelfCreator<S> = S Function();
 
 class _Storage extends _Core {
+  late final _StorageFreeze __freeze = _StorageFreeze(this);
   late final drawerState = _DrawerState(this);
   late final endDrawerState = _EndDrawerState(this);
 
@@ -362,6 +363,9 @@ class _Storage extends _Core {
     return true;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<StorageSilentActionResult> fireSilentEventsAction({
     required List<Event> events,
     required bool needToConfirm,
@@ -377,5 +381,39 @@ class _Storage extends _Core {
       action: action,
       navigate: null,
     );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_RootMethodAnnotation()
+  Future<FreezeByDialogResult<V?>> openDialogThenFreezeReactionUntilClosed<V>({
+    required Future<V?> Function() openDialog,
+  }) async {
+    return await __freeze._openDialogThenFreezeReactionUntilClosed(
+      openDialog: openDialog,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_RootMethodAnnotation()
+  Future<void> openEndDrawerThenFreezeReactionUntilClosed(
+    BuildContext context, {
+    bool showSuggestionIfNeed = true,
+  }) async {
+    return await __freeze._openEndDrawerThenFreezeReactionUntilClosed(
+      context,
+      showSuggestionIfNeed: showSuggestionIfNeed,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_RootMethodAnnotation()
+  void freezeReactionToExternalShelfEventsOnce() {
+    __freeze._freezeReactionToExternalShelfEventsOnce();
   }
 }

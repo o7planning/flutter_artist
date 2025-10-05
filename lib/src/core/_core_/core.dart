@@ -191,7 +191,7 @@ part '__core__/_value_wrap.dart';
 
 part '__core__/_shelf.dart';
 
-part '__core__/_stocker.dart';
+part '__core__/_storage_freeze.dart';
 
 part '__core__/_shelf_block_scalar_type.dart';
 
