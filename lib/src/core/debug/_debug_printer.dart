@@ -11,6 +11,10 @@ class DebugPrinter {
         if (!options.navigatorObserver) {
           return;
         }
+      case DebugCat.routeAware:
+        if (!options.routeAware) {
+          return;
+        }
       case DebugCat.visibilityDetector:
         if (!options.visibilityDetector) {
           return;

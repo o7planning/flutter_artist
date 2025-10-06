@@ -12,6 +12,7 @@ class ConsoleDebugOptions {
   final bool enabled;
 
   final bool navigatorObserver;
+  final bool routeAware;
   final bool visibilityDetector;
   final bool appStart;
   final bool globalManager;
@@ -20,6 +21,7 @@ class ConsoleDebugOptions {
   ConsoleDebugOptions({
     required this.enabled,
     this.navigatorObserver = false,
+    this.routeAware = false,
     this.visibilityDetector = false,
     this.appStart = false,
     this.globalManager = false,

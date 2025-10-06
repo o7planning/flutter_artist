@@ -997,7 +997,7 @@ _ForceReloadItemState _calculateBlockState({
                 currentShelfCodes: "43a",
               );
               // Test Cases: [43a] - _test_false3_productScreen_refreshProduct_1
-              forceReloadItem = true;
+              forceReloadItem = false; // ????????????
             }
             // !hasXActiveUI
             else {
@@ -1010,7 +1010,7 @@ _ForceReloadItemState _calculateBlockState({
                 currentShelfCodes: "",
               );
               //
-              forceReloadItem = true;
+              forceReloadItem = false; // ????????????
             }
           }
         }

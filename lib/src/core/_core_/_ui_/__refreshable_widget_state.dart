@@ -15,11 +15,13 @@ interface class IRefreshableWidgetState {
 // Google Search: Flutter NavigatorObserver Aware.
 abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
     extends State<W> //
-    // Google Search: Flutter NavigatorObserver Aware.
+// Google Search: Flutter NavigatorObserver Aware.
     with
         RouteAware
     implements
         IRefreshableWidgetState {
+  String? __pageRouteName;
+
   double __maxSize = 0;
 
   double get maxSize => __maxSize;
@@ -87,7 +89,7 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
           __maxSize = s;
         }
         var visiblePercentage = visibilityInfo.visibleFraction * 100;
-        __addWidgetState(isShowing: visiblePercentage > 0);
+        // __addWidgetState(isShowing: visiblePercentage > 0);
       },
       child: showMode == ShowMode.production
           ? buildContent(context)
@@ -103,10 +105,6 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
       "[VisibilityDetector] ------------> ${getClassNameWithoutGenerics(widget)}: $isShowing (visible?)",
     );
     addWidgetState(isShowing: isShowing);
-    // FlutterArtist.storage._freezeMan._onVisibilityChanged(
-    //   widgetState: this,
-    //   isShowing: isShowing,
-    // );
   }
 
   void __removeWidgetState() {
@@ -115,9 +113,6 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
       "[VisibilityDetector] ------------> Remove ${getClassNameWithoutGenerics(widget)}",
     );
     removeWidgetState();
-    // FlutterArtist.storage._freezeMan._onWidgetStateDisposed(
-    //   widgetState: this,
-    // );
   }
 
   Future<void> __executeAfterBuild() async {
@@ -136,47 +131,107 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
     keyId = VisibilityDetectorUtils.generateVisibilityDetectorId(
         prefix: "${type.toString()}-${getWidgetOwnerClassName()}");
     //
-    addWidgetState(isShowing: true);
-  }
-
-  @override
-  void dispose() {
-    FlutterArtist.navigatorObserver.unsubscribe(this);
-    super.dispose();
-    __removeWidgetState();
-    //
-    checkAndFreeMemory();
+    // addWidgetState(isShowing: true);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    FlutterArtist.navigatorObserver
-        .subscribe(this, ModalRoute.of(context)! as PageRoute);
+    //
+    final  ModalRoute modalRoute = ModalRoute.of(context)!;
+    // PageRoute
+    if(modalRoute is PageRoute) {
+      final pageRoute = modalRoute as PageRoute;
+      FlutterArtist.navigatorObserver.subscribe(this, pageRoute);
+      //
+      __pageRouteName = pageRoute.settings.name;
+      final String? topRouteName =
+          FlutterArtist.navigatorObserver.topRoute?.settings.name;
+      //
+      if (__pageRouteName == topRouteName) {
+        __addWidgetState(isShowing: true);
+        //
+        DebugPrinter.printDebug(
+          DebugCat.routeAware,
+          ' ---->  [RouteAware] ---------> didChangeDependencies (+): $__pageRouteName'
+              ' ---->  ${getClassNameWithoutGenerics(widget)}',
+        );
+      } else {
+        __addWidgetState(isShowing: false);
+        //
+        DebugPrinter.printDebug(
+          DebugCat.routeAware,
+          ' ---->  [RouteAware] ---------> didChangeDependencies (-): $__pageRouteName'
+              ' ---->  ${getClassNameWithoutGenerics(widget)}',
+        );
+      }
+    }
+    // DialogRoute
+    else if(modalRoute is DialogRoute)  {
+      final dialogRoute = modalRoute as DialogRoute;
+    }
+  }
+
+  @override
+  void dispose() {
+    DebugPrinter.printDebug(
+      DebugCat.routeAware,
+      ' ---->  [RouteAware] ---------> unsubscribe: $__pageRouteName'
+      ' ---->  ${getClassNameWithoutGenerics(widget)}',
+    );
+    //
+    FlutterArtist.navigatorObserver.unsubscribe(this);
+    //
+    __removeWidgetState();
+    //
+    // Important (This code must be below of __removeWidgetState).
+    super.dispose();
+    //
+    checkAndFreeMemory();
   }
 
   @override
   void didPush() {
+    __addWidgetState(isShowing: true);
     // This route has been pushed onto the navigator.
     // You can infer this is the current route when this method is called.
-    print('  [RouteAware] ---------> didPush: ${ModalRoute.of(context)?.settings.name} - ${getClassNameWithoutGenerics(widget)}');
-  }
-
-  @override
-  void didPopNext() {
-    // Another route was popped off, and this route is now the current one.
-    print('  [RouteAware] ---------> didPopNext: ${ModalRoute.of(context)?.settings.name} - ${getClassNameWithoutGenerics(widget)}');
+    DebugPrinter.printDebug(
+      DebugCat.routeAware,
+      ' ---->  [RouteAware] ---------> didPush: ${ModalRoute.of(context)?.settings.name}'
+      ' ---->  ${getClassNameWithoutGenerics(widget)}',
+    );
   }
 
   @override
   void didPushNext() {
+    __addWidgetState(isShowing: false);
     // A new route has been pushed on top of this one.
-    print('  [RouteAware] ---------> didPushNext: ${ModalRoute.of(context)?.settings.name} - ${getClassNameWithoutGenerics(widget)}');
+    DebugPrinter.printDebug(
+      DebugCat.routeAware,
+      ' ---->  [RouteAware] ---------> didPushNext: ${ModalRoute.of(context)?.settings.name}'
+      ' ---->  ${getClassNameWithoutGenerics(widget)}',
+    );
+  }
+
+  @override
+  void didPopNext() {
+    __addWidgetState(isShowing: true);
+    // Another route was popped off, and this route is now the current one.
+    DebugPrinter.printDebug(
+      DebugCat.routeAware,
+      ' ---->  [RouteAware] ---------> didPopNext: ${ModalRoute.of(context)?.settings.name}'
+      ' ---->  ${getClassNameWithoutGenerics(widget)}',
+    );
   }
 
   @override
   void didPop() {
+    __addWidgetState(isShowing: false);
     // This route has been popped off the navigator.
-    print('  [RouteAware] ---------> didPop: ${ModalRoute.of(context)?.settings.name} - ${getClassNameWithoutGenerics(widget)}');
+    DebugPrinter.printDebug(
+      DebugCat.routeAware,
+      ' ---->  [RouteAware] ---------> didPop: ${ModalRoute.of(context)?.settings.name}'
+      ' ---->  ${getClassNameWithoutGenerics(widget)}',
+    );
   }
 }

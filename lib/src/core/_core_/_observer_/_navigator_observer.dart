@@ -2,9 +2,14 @@ part of '../core.dart';
 
 // https://pub.dev/packages/navigation_history_observer/example
 class _FlutterArtistNavigatorObserver extends RouteObserver<PageRoute> {
+  PageRoute? _topRoute;
+
+  PageRoute? get topRoute => _topRoute;
+
   @override
   void didPush(Route route, Route? previousRoute) {
     super.didPush(route, previousRoute);
+    //
     DebugPrinter.printDebug(
       DebugCat.navigatorObserver,
       '[NavigatorObserver] -----------------> Route didPush: ${route.settings.name} - previousRoute: ${previousRoute?.settings.name}',
@@ -23,6 +28,7 @@ class _FlutterArtistNavigatorObserver extends RouteObserver<PageRoute> {
   @override
   void didPop(Route route, Route? previousRoute) {
     super.didPop(route, previousRoute);
+    //
     DebugPrinter.printDebug(
       DebugCat.navigatorObserver,
       '[NavigatorObserver] -----------------> Route didPop: ${route.settings.name} - previousRoute: ${previousRoute?.settings.name}',
@@ -32,6 +38,11 @@ class _FlutterArtistNavigatorObserver extends RouteObserver<PageRoute> {
   @override
   void didChangeTop(Route<dynamic> topRoute, Route<dynamic>? previousTopRoute) {
     super.didChangeTop(topRoute, previousTopRoute);
+    //
+    if (topRoute is PageRoute) {
+      _topRoute = topRoute;
+    }
+    //
     DebugPrinter.printDebug(
       DebugCat.navigatorObserver,
       '[NavigatorObserver] -----------------> Route didChangeTop: ${topRoute.settings.name} - previousTopRoute: ${previousTopRoute?.settings.name}',
@@ -50,7 +61,7 @@ class _FlutterArtistNavigatorObserver extends RouteObserver<PageRoute> {
   @override
   void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
-
+    //
     DebugPrinter.printDebug(
       DebugCat.navigatorObserver,
       '[NavigatorObserver] -----------------> Route didReplace: ${newRoute?.settings?.name} - oldRoute: ${oldRoute?.settings.name}',
