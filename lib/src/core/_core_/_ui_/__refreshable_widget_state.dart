@@ -118,7 +118,7 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
     //
     __modelRouteName = modalRoute.settings.name;
     final bool topRouteIsDialog =
-        FlutterArtist.navigatorObserver.topRouteIsDialog;
+        FlutterArtist.navigatorObserver.topRouteIsPopupRoute;
 
     final String? topRouteName =
         FlutterArtist.navigatorObserver.topRoute?.settings.name;
