@@ -20,7 +20,7 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
         RouteAware
     implements
         IRefreshableWidgetState {
-  String? __pageRouteName;
+  String? __modelRouteName;
 
   double __maxSize = 0;
 
@@ -138,37 +138,30 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
   void didChangeDependencies() {
     super.didChangeDependencies();
     //
-    final  ModalRoute modalRoute = ModalRoute.of(context)!;
-    // PageRoute
-    if(modalRoute is PageRoute) {
-      final pageRoute = modalRoute as PageRoute;
-      FlutterArtist.navigatorObserver.subscribe(this, pageRoute);
+    final ModalRoute modalRoute = ModalRoute.of(context)!;
+    //
+    FlutterArtist.navigatorObserver.subscribe(this, modalRoute);
+    //
+    __modelRouteName = modalRoute.settings.name;
+    final String? topRouteName =
+        FlutterArtist.navigatorObserver.topRoute?.settings.name;
+    //
+    if (__modelRouteName == topRouteName) {
+      __addWidgetState(isShowing: true);
       //
-      __pageRouteName = pageRoute.settings.name;
-      final String? topRouteName =
-          FlutterArtist.navigatorObserver.topRoute?.settings.name;
+      DebugPrinter.printDebug(
+        DebugCat.routeAware,
+        ' ---->  [RouteAware] ---------> didChangeDependencies (+): $__modelRouteName'
+        ' ---->  ${getClassNameWithoutGenerics(widget)}',
+      );
+    } else {
+      __addWidgetState(isShowing: false);
       //
-      if (__pageRouteName == topRouteName) {
-        __addWidgetState(isShowing: true);
-        //
-        DebugPrinter.printDebug(
-          DebugCat.routeAware,
-          ' ---->  [RouteAware] ---------> didChangeDependencies (+): $__pageRouteName'
-              ' ---->  ${getClassNameWithoutGenerics(widget)}',
-        );
-      } else {
-        __addWidgetState(isShowing: false);
-        //
-        DebugPrinter.printDebug(
-          DebugCat.routeAware,
-          ' ---->  [RouteAware] ---------> didChangeDependencies (-): $__pageRouteName'
-              ' ---->  ${getClassNameWithoutGenerics(widget)}',
-        );
-      }
-    }
-    // DialogRoute
-    else if(modalRoute is DialogRoute)  {
-      final dialogRoute = modalRoute as DialogRoute;
+      DebugPrinter.printDebug(
+        DebugCat.routeAware,
+        ' ---->  [RouteAware] ---------> didChangeDependencies (-): $__modelRouteName'
+        ' ---->  ${getClassNameWithoutGenerics(widget)}',
+      );
     }
   }
 
@@ -176,7 +169,7 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
   void dispose() {
     DebugPrinter.printDebug(
       DebugCat.routeAware,
-      ' ---->  [RouteAware] ---------> unsubscribe: $__pageRouteName'
+      ' ---->  [RouteAware] ---------> unsubscribe: $__modelRouteName'
       ' ---->  ${getClassNameWithoutGenerics(widget)}',
     );
     //
