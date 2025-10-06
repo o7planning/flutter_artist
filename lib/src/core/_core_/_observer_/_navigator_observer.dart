@@ -6,6 +6,8 @@ class _FlutterArtistNavigatorObserver extends RouteObserver<ModalRoute> {
 
   ModalRoute? get topRoute => _topRoute;
 
+  bool get topRouteIsDialog => _topRoute is DialogRoute;
+
   @override
   void didPush(Route route, Route? previousRoute) {
     super.didPush(route, previousRoute);

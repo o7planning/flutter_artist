@@ -28,8 +28,6 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
 
   int _refreshCount = 0;
 
-  late final String keyId;
-
   @override
   ShowMode showMode = ShowMode.production;
 
@@ -81,22 +79,11 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
     });
     this.setBuildingState(isBuilding: true);
     //
-    return VisibilityDetector(
-      key: Key(keyId),
-      onVisibilityChanged: (VisibilityInfo visibilityInfo) {
-        double s = visibilityInfo.size.width * visibilityInfo.size.height;
-        if (__maxSize < s) {
-          __maxSize = s;
-        }
-        var visiblePercentage = visibilityInfo.visibleFraction * 100;
-        // __addWidgetState(isShowing: visiblePercentage > 0);
-      },
-      child: showMode == ShowMode.production
-          ? buildContent(context)
-          : _DevContainer(
-              child: buildContent(context),
-            ),
-    );
+    return showMode == ShowMode.production
+        ? buildContent(context)
+        : _DevContainer(
+            child: buildContent(context),
+          );
   }
 
   void __addWidgetState({required bool isShowing}) {
@@ -127,11 +114,6 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
   @override
   void initState() {
     super.initState();
-    //
-    keyId = VisibilityDetectorUtils.generateVisibilityDetectorId(
-        prefix: "${type.toString()}-${getWidgetOwnerClassName()}");
-    //
-    // addWidgetState(isShowing: true);
   }
 
   @override
@@ -143,25 +125,35 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
     FlutterArtist.navigatorObserver.subscribe(this, modalRoute);
     //
     __modelRouteName = modalRoute.settings.name;
+    final bool topRouteIsDialog =
+        FlutterArtist.navigatorObserver.topRouteIsDialog;
+
     final String? topRouteName =
         FlutterArtist.navigatorObserver.topRoute?.settings.name;
-    //
-    if (__modelRouteName == topRouteName) {
-      __addWidgetState(isShowing: true);
-      //
-      DebugPrinter.printDebug(
-        DebugCat.routeAware,
-        ' ---->  [RouteAware] ---------> didChangeDependencies (+): $__modelRouteName'
-        ' ---->  ${getClassNameWithoutGenerics(widget)}',
-      );
+
+    // Test: Event/62a  && Action/30a (Dialog)
+    if (topRouteIsDialog) {
+      // Do nothing!
     } else {
-      __addWidgetState(isShowing: false);
-      //
-      DebugPrinter.printDebug(
-        DebugCat.routeAware,
-        ' ---->  [RouteAware] ---------> didChangeDependencies (-): $__modelRouteName'
-        ' ---->  ${getClassNameWithoutGenerics(widget)}',
-      );
+      if (__modelRouteName == topRouteName) {
+        __addWidgetState(isShowing: true);
+        //
+        DebugPrinter.printDebug(
+          DebugCat.routeAware,
+          ' ---->  [RouteAware] ---------> didChangeDependencies (+): $__modelRouteName'
+          ' ---->  ${getClassNameWithoutGenerics(widget)}',
+        );
+      } else {
+        if (modalRoute is! DialogRoute) {
+          __addWidgetState(isShowing: false);
+          //
+          DebugPrinter.printDebug(
+            DebugCat.routeAware,
+            ' ---->  [RouteAware] ---------> didChangeDependencies (-): $__modelRouteName'
+            ' ---->  ${getClassNameWithoutGenerics(widget)}',
+          );
+        }
+      }
     }
   }
 
@@ -183,11 +175,12 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
     checkAndFreeMemory();
   }
 
+  // This route has been pushed onto the navigator.
+  // You can infer this is the current route when this method is called.
   @override
   void didPush() {
     __addWidgetState(isShowing: true);
-    // This route has been pushed onto the navigator.
-    // You can infer this is the current route when this method is called.
+    //
     DebugPrinter.printDebug(
       DebugCat.routeAware,
       ' ---->  [RouteAware] ---------> didPush: ${ModalRoute.of(context)?.settings.name}'
@@ -195,10 +188,23 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
     );
   }
 
+  // This route has been popped off the navigator.
+  @override
+  void didPop() {
+    __addWidgetState(isShowing: false);
+    //
+    DebugPrinter.printDebug(
+      DebugCat.routeAware,
+      ' ---->  [RouteAware] ---------> didPop: ${ModalRoute.of(context)?.settings.name}'
+      ' ---->  ${getClassNameWithoutGenerics(widget)}',
+    );
+  }
+
+  // A new route has been pushed on top of this one.
   @override
   void didPushNext() {
-    __addWidgetState(isShowing: false);
-    // A new route has been pushed on top of this one.
+    // __addWidgetState(isShowing: false);
+    //
     DebugPrinter.printDebug(
       DebugCat.routeAware,
       ' ---->  [RouteAware] ---------> didPushNext: ${ModalRoute.of(context)?.settings.name}'
@@ -206,24 +212,14 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
     );
   }
 
+  // Another route was popped off, and this route is now the current one.
   @override
   void didPopNext() {
-    __addWidgetState(isShowing: true);
-    // Another route was popped off, and this route is now the current one.
+    // __addWidgetState(isShowing: true);
+    //
     DebugPrinter.printDebug(
       DebugCat.routeAware,
       ' ---->  [RouteAware] ---------> didPopNext: ${ModalRoute.of(context)?.settings.name}'
-      ' ---->  ${getClassNameWithoutGenerics(widget)}',
-    );
-  }
-
-  @override
-  void didPop() {
-    __addWidgetState(isShowing: false);
-    // This route has been popped off the navigator.
-    DebugPrinter.printDebug(
-      DebugCat.routeAware,
-      ' ---->  [RouteAware] ---------> didPop: ${ModalRoute.of(context)?.settings.name}'
       ' ---->  ${getClassNameWithoutGenerics(widget)}',
     );
   }
