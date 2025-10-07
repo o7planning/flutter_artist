@@ -1,17 +1,17 @@
 part of '../core.dart';
 
 class SimpleLoginView extends StatelessWidget {
-  final Activity activity;
+  final Hook hook;
 
   const SimpleLoginView({
     super.key,
-    required this.activity,
+    required this.hook,
   });
 
   @override
   Widget build(BuildContext context) {
-    return ActivityFragmentWidgetBuilder(
-      activity: activity,
+    return HookFragmentWidgetBuilder(
+      hook: hook,
       ownerClassInstance: this,
       description: null,
       build: () {

@@ -93,7 +93,8 @@ class _StorageFreeze {
   ///
   /// Dialog:
   ///
-  Future<FreezeByDialogResult<V?>> _openDialogThenFreezeReactionBetweenShelvesUntilClosed<V>({
+  Future<FreezeByDialogResult<V?>>
+      _openDialogThenFreezeReactionBetweenShelvesUntilClosed<V>({
     required Future<V?> Function() openDialog,
   }) async {
     if (!__ensureFreezeTypeIsNull()) {

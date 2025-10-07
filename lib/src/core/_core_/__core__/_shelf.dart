@@ -21,11 +21,11 @@ abstract class Shelf extends _Core {
   // All formModels.
   final List<FormModel> _allFormModels = [];
 
-  final Map<String, Activity> __activityMap = {};
+  final Map<String, Hook> __hookMap = {};
 
-  final List<Activity> __activities = [];
+  final List<Hook> __hooks = [];
 
-  List<Activity> get activities => [...__activities];
+  List<Hook> get hooks => [...__hooks];
 
   final Map<String, Scalar> __scalarMap = {};
 
@@ -145,16 +145,16 @@ abstract class Shelf extends _Core {
     //
     // Activity:
     //
-    final List<Activity> activities = _shelfStruct.activities;
-    for (Activity activity in activities) {
-      if (__activityMap.containsKey(activity.name)) {
+    final List<Hook> hooks = _shelfStruct.hooks;
+    for (Hook hook in hooks) {
+      if (__hookMap.containsKey(hook.name)) {
         throw ___registerError(
-            "Duplicated Activity '${activity.name}' in '${getClassName(this)}'"
+            "Duplicated Activity '${hook.name}' in '${getClassName(this)}'"
             "\nDouble-check ${getClassName(this)}.registerStructure() method");
       } else {
-        __activityMap[activity.name] = activity;
+        __hookMap[hook.name] = hook;
       }
-      activity.shelf = this;
+      hook.shelf = this;
     }
     //
     // Scalar:
@@ -548,8 +548,8 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  Activity? findActivity(String activityName) {
-    return __activityMap[activityName];
+  Hook? findHook(String hookName) {
+    return __hookMap[hookName];
   }
 
   // ***************************************************************************

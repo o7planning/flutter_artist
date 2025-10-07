@@ -1,7 +1,7 @@
 part of '../core.dart';
 
-abstract class LoginActivityBase<USER extends ILoggedInUser> extends Activity {
-  LoginActivityBase({required super.name, required super.config});
+abstract class LoginHookBase<USER extends ILoggedInUser> extends Hook {
+  LoginHookBase({required super.name, required super.config});
 
   Future<ApiResult<USER>> callApiLogin();
 

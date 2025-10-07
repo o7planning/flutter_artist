@@ -53,7 +53,7 @@ import '../built_in/empty_filter_criteria.dart';
 import '../built_in/empty_filter_input.dart';
 import '../enums/_action_confirmation_type.dart';
 import '../enums/_action_result_state.dart';
-import '../enums/_activity_hidden_behavior.dart';
+import '../enums/_hook_hidden_behavior.dart';
 import '../enums/_block_control_action_type.dart';
 import '../enums/_block_error_method.dart';
 import '../enums/_block_hidden_behavior.dart';
@@ -140,7 +140,7 @@ import '../event/fire_silent_events_action.dart';
 
 part '__core__/___core.dart';
 
-part '__core__/_activity.dart';
+part '__core__/_hook.dart';
 
 part '__core__/_background_executor.dart';
 
@@ -218,7 +218,7 @@ part '_code_flow_/_code_flow_logger.dart';
 
 part '_code_flow_/_func_call_info.dart';
 
-part '_config_/_activity_config.dart';
+part '_config_/_hook_config.dart';
 
 part '_config_/_block_config.dart';
 
@@ -358,7 +358,7 @@ part '_globals_/_globals_manager.dart';
 
 part '_locale_/_locale_manager.dart';
 
-part '_login_/_login_activity_base.dart';
+part '_login_/_login_hook_base.dart';
 
 part '_login_/_simple_login_view.dart';
 
@@ -462,7 +462,7 @@ part '_ui_/__refreshable_widget.dart';
 
 part '_ui_/__refreshable_widget_state.dart';
 
-part '_ui_/_activity_fragment_widget_builder.dart';
+part '_ui_/_hook_fragment_widget_builder.dart';
 
 part '_ui_/_block_control_bar.dart';
 

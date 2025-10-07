@@ -8,7 +8,7 @@ class TaskProgressViewBuilder extends _RefreshableWidget {
   final List<TaskType> taskTypes;
   final List<Block> blocks;
   final List<Scalar> scalars;
-  final List<Activity> activities;
+  final List<Hook> hooks;
 
   final Widget Function(
     bool onProgress,
@@ -23,7 +23,7 @@ class TaskProgressViewBuilder extends _RefreshableWidget {
     required this.taskTypes,
     required this.blocks,
     required this.scalars,
-    required this.activities,
+    required this.hooks,
     required this.build,
   });
 
@@ -52,8 +52,8 @@ class _TaskProgressBuilderState
         return true;
       }
     }
-    for (Activity activity in widget.activities) {
-      if (identical(activity, owner)) {
+    for (Hook hook in widget.hooks) {
+      if (identical(hook, owner)) {
         return true;
       }
     }

@@ -1,28 +1,28 @@
 part of '../core.dart';
 
-class ActivityFragmentWidgetBuilder extends _RefreshableWidget {
-  final Activity activity;
+class HookFragmentWidgetBuilder extends _RefreshableWidget {
+  final Hook hook;
   final Widget Function() build;
 
-  const ActivityFragmentWidgetBuilder({
+  const HookFragmentWidgetBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
-    required this.activity,
+    required this.hook,
     required this.build,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _ActivityFragmentWidgetBuilderState();
+    return _HookFragmentWidgetBuilderState();
   }
 }
 
-class _ActivityFragmentWidgetBuilderState
-    extends _RefreshableWidgetState<ActivityFragmentWidgetBuilder> {
+class _HookFragmentWidgetBuilderState
+    extends _RefreshableWidgetState<HookFragmentWidgetBuilder> {
   @override
   String getWidgetOwnerClassName() {
-    return getClassName(widget.activity);
+    return getClassName(widget.hook);
   }
 
   @override
@@ -35,7 +35,7 @@ class _ActivityFragmentWidgetBuilderState
 
   @override
   void addWidgetState({required bool isShowing}) {
-    widget.activity._addActivityFragmentWidgetState(
+    widget.hook._addActivityFragmentWidgetState(
       widgetState: this,
       isShowing: isShowing,
     );
@@ -43,14 +43,14 @@ class _ActivityFragmentWidgetBuilderState
 
   @override
   void removeWidgetState() {
-    widget.activity._removeActivityFragmentWidgetState(
+    widget.hook._removeActivityFragmentWidgetState(
       widgetState: this,
     );
   }
 
   @override
   void checkAndFreeMemory() {
-    FlutterArtist.storage._checkToRemoveShelf(widget.activity.shelf);
+    FlutterArtist.storage._checkToRemoveShelf(widget.hook.shelf);
   }
 
   @override

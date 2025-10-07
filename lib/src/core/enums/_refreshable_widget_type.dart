@@ -50,7 +50,7 @@ enum RefreshableWidgetType {
   ),
   activityFragment(
     name: "ActivityFragment",
-    iconData: FaIconConstants.activityFragmentIconData,
+    iconData: FaIconConstants.hookFragmentIconData,
   ),
   loggedInUser(
     name: "LoggedInUser",

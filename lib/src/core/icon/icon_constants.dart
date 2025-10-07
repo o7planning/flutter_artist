@@ -118,7 +118,7 @@ class FaIconConstants {
   static const IconData scalarFragmentIconData =
       cupertino.CupertinoIcons.pano_fill;
 
-  static const IconData activityFragmentIconData =
+  static const IconData hookFragmentIconData =
       cupertino.CupertinoIcons.pencil_circle;
 
   static const IconData paginationIconData =

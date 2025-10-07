@@ -1,17 +1,17 @@
 part of '../core.dart';
 
-abstract class Activity extends _Core {
+abstract class Hook extends _Core {
   late final Shelf shelf;
 
   final String name;
-  final ActivityConfig config;
+  final HookConfig config;
 
   final Map<_RefreshableWidgetState, bool> _activityFragmentWidgetStates = {};
   final Map<_RefreshableWidgetState, bool> _activityControlWidgetStates = {};
 
-  Activity({
+  Hook({
     required this.name,
-    ActivityConfig config = const ActivityConfig(),
+    HookConfig config = const HookConfig(),
   }) : config = config.copy();
 
   // ***************************************************************************
@@ -94,7 +94,7 @@ abstract class Activity extends _Core {
       isLibCode: true,
     );
     switch (config.hiddenBehavior) {
-      case ActivityHiddenBehavior.none:
+      case HookHiddenBehavior.none:
         break;
     }
   }
