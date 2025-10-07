@@ -56,7 +56,10 @@ class _StorageFreeze {
     );
   }
 
-  Future<void> __checkEndDrawerAndResumeReactionIfCan() async {
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<void> __checkStartOrEndDrawerAndResumeReactionIfCan() async {
     if (__freezeType != null) {
       return;
     }
@@ -115,6 +118,45 @@ class _StorageFreeze {
   // ***************************************************************************
 
   ///
+  /// Drawer:
+  ///
+  Future<void> _openDrawerThenFreezeReactionBetweenShelvesUntilClosed(
+    BuildContext context, {
+    bool showSuggestionIfNeed = true,
+  }) async {
+    if (!__ensureFreezeTypeIsNull()) {
+      return;
+    }
+    Scaffold.of(context).openDrawer();
+    __freezeType = FreezeType.drawer;
+    await Future.delayed(const Duration(milliseconds: 100));
+    if (showSuggestionIfNeed && !_storage.drawerState._isDrawerOpen) {
+      _storage.showErrorSnackBar(
+        message:
+            "Method openDrawerThenFreezeReactionBetweenShelvesUntilClosed() is being used incorrectly. "
+            "See console for more details.",
+        errorDetails: null,
+      );
+      String message = DebugUtils.getFatalError(
+          " Method openDrawerThenFreezeReactionBetweenShelvesUntilClosed() is being used incorrectly!\n "
+          " @see: https://document.com");
+      print(message);
+    }
+    await Future.doWhile(
+      () => Future.delayed(const Duration(milliseconds: 1)).then(
+        (_) {
+          return _storage.drawerState._isDrawerOpen == true;
+        },
+      ),
+    );
+    __freezeType = null;
+    __checkStartOrEndDrawerAndResumeReactionIfCan();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ///
   /// EndDrawer:
   ///
   Future<void> _openEndDrawerThenFreezeReactionBetweenShelvesUntilClosed(
@@ -130,12 +172,12 @@ class _StorageFreeze {
     if (showSuggestionIfNeed && !_storage.endDrawerState._isEndDrawerOpen) {
       _storage.showErrorSnackBar(
         message:
-            "Method openEndDrawerThenFreezeReactionUntilClosed() is being used incorrectly. "
+            "Method openEndDrawerThenFreezeReactionBetweenShelvesUntilClosed() is being used incorrectly. "
             "See console for more details.",
         errorDetails: null,
       );
       String message = DebugUtils.getFatalError(
-          " Method openEndDrawerThenFreezeReactionUntilClosed() is being used incorrectly!\n "
+          " Method openEndDrawerThenFreezeReactionBetweenShelvesUntilClosed() is being used incorrectly!\n "
           " @see: https://document.com");
       print(message);
     }
@@ -147,7 +189,7 @@ class _StorageFreeze {
       ),
     );
     __freezeType = null;
-    __checkEndDrawerAndResumeReactionIfCan();
+    __checkStartOrEndDrawerAndResumeReactionIfCan();
   }
 
   // ***************************************************************************

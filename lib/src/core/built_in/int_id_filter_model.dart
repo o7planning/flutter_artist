@@ -20,13 +20,6 @@ class IntIdFilterModel
   }
 
   @override
-  IntIdFilterCriteria toFilterCriteriaObject({
-    required Map<String, dynamic> dataMap,
-  }) {
-    return IntIdFilterCriteria(idValue: dataMap["id"]);
-  }
-
-  @override
   Future<XData?> callApiLoadMultiOptCriterionXData({
     required String multiOptCriterionName,
     required SelectionType selectionType,
@@ -71,5 +64,12 @@ class IntIdFilterModel
     return {
       "id": _idValue,
     };
+  }
+
+  @override
+  IntIdFilterCriteria toFilterCriteriaObject({
+    required Map<String, dynamic> dataMap,
+  }) {
+    return IntIdFilterCriteria(idValue: dataMap["id"]);
   }
 }

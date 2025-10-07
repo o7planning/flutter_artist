@@ -21,15 +21,6 @@ class StringValueFilterModel
   }
 
   @override
-  StringValueFilterCriteria toFilterCriteriaObject({
-    required Map<String, dynamic> dataMap,
-  }) {
-    return StringValueFilterCriteria(
-      stringValue: dataMap["string"],
-    );
-  }
-
-  @override
   Future<XData?> callApiLoadMultiOptCriterionXData({
     required String multiOptCriterionName,
     required SelectionType selectionType,
@@ -74,5 +65,14 @@ class StringValueFilterModel
     return {
       "string": _stringValue,
     };
+  }
+
+  @override
+  StringValueFilterCriteria toFilterCriteriaObject({
+    required Map<String, dynamic> dataMap,
+  }) {
+    return StringValueFilterCriteria(
+      stringValue: dataMap["string"],
+    );
   }
 }

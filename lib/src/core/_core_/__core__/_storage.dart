@@ -402,6 +402,21 @@ class _Storage extends _Core {
   // ***************************************************************************
 
   @_RootMethodAnnotation()
+  Future<void> openDrawerThenFreezeReactionBetweenShelvesUntilClosed(
+    BuildContext context, {
+    bool showSuggestionIfNeed = true,
+  }) async {
+    return await __freeze
+        ._openDrawerThenFreezeReactionBetweenShelvesUntilClosed(
+      context,
+      showSuggestionIfNeed: showSuggestionIfNeed,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_RootMethodAnnotation()
   Future<void> openEndDrawerThenFreezeReactionBetweenShelvesUntilClosed(
     BuildContext context, {
     bool showSuggestionIfNeed = true,

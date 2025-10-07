@@ -20,13 +20,6 @@ class _DefaultFilterModel
   }
 
   @override
-  EmptyFilterCriteria toFilterCriteriaObject({
-    required Map<String, dynamic> dataMap,
-  }) {
-    return EmptyFilterCriteria();
-  }
-
-  @override
   Future<ListXData?> callApiLoadMultiOptCriterionXData({
     required String multiOptCriterionName,
     required SelectionType selectionType,
@@ -67,5 +60,12 @@ class _DefaultFilterModel
   @override
   Map<String, dynamic>? specifyDefaultSimpleCriterionValues() {
     return null;
+  }
+
+  @override
+  EmptyFilterCriteria toFilterCriteriaObject({
+    required Map<String, dynamic> dataMap,
+  }) {
+    return EmptyFilterCriteria();
   }
 }

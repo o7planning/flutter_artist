@@ -21,13 +21,6 @@ class SearchTextFilterModel
   }
 
   @override
-  SearchTextFilterCriteria toFilterCriteriaObject({
-    required Map<String, dynamic> dataMap,
-  }) {
-    return SearchTextFilterCriteria(searchText: dataMap["searchText"]);
-  }
-
-  @override
   Future<XData?> callApiLoadMultiOptCriterionXData({
     required String multiOptCriterionName,
     required SelectionType selectionType,
@@ -72,5 +65,12 @@ class SearchTextFilterModel
     return {
       "searchText": _searchText,
     };
+  }
+
+  @override
+  SearchTextFilterCriteria toFilterCriteriaObject({
+    required Map<String, dynamic> dataMap,
+  }) {
+    return SearchTextFilterCriteria(searchText: dataMap["searchText"]);
   }
 }
