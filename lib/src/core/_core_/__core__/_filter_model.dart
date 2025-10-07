@@ -116,7 +116,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   @_AbstractMethodAnnotation()
-  Future<Map<String, dynamic>?> specifyDefaultSimpleCriterionValues();
+  Map<String, dynamic>? specifyDefaultSimpleCriterionValues();
 
   // ***************************************************************************
   // ABSTRACT METHOD:
@@ -155,7 +155,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   @_AbstractMethodAnnotation()
-  Future<Map<String, dynamic>?> getSimpleCriterionValuesFromFilterInput({
+  Map<String, dynamic>? getSimpleCriterionValuesFromFilterInput({
     required FILTER_INPUT filterInput,
   });
 
@@ -349,7 +349,7 @@ abstract class FilterModel<
     if (filterInput != null) {
       try {
         Map<String, dynamic> simpleValues =
-            await getSimpleCriterionValuesFromFilterInput(
+            getSimpleCriterionValuesFromFilterInput(
                   filterInput: filterInput,
                 ) ??
                 {};
@@ -379,7 +379,7 @@ abstract class FilterModel<
       try {
         if (!__initiatedAtLeastOnce) {
           Map<String, dynamic> defaultValues =
-              await specifyDefaultSimpleCriterionValues() ?? {};
+              specifyDefaultSimpleCriterionValues() ?? {};
 
           for (String criterionName in defaultValues.keys) {
             dynamic value = defaultValues[criterionName];

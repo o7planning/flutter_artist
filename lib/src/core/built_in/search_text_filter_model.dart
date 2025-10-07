@@ -49,9 +49,9 @@ class SearchTextFilterModel
   }
 
   @override
-  Future<Map<String, dynamic>?> getSimpleCriterionValuesFromFilterInput({
+  Map<String, dynamic>? getSimpleCriterionValuesFromFilterInput({
     required SearchTextFilterInput filterInput,
-  }) async {
+  }) {
     return {
       "searchText": filterInput.searchText,
     };
@@ -68,7 +68,7 @@ class SearchTextFilterModel
   }
 
   @override
-  Future<Map<String, dynamic>?> specifyDefaultSimpleCriterionValues() async {
+  Map<String, dynamic>? specifyDefaultSimpleCriterionValues() {
     return {
       "searchText": _searchText,
     };

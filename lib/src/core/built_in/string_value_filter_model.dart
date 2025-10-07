@@ -51,9 +51,9 @@ class StringValueFilterModel
   }
 
   @override
-  Future<Map<String, dynamic>?> getSimpleCriterionValuesFromFilterInput({
+  Map<String, dynamic>? getSimpleCriterionValuesFromFilterInput({
     required StringValueFilterInput filterInput,
-  }) async {
+  }) {
     return {
       "string": filterInput.stringValue,
     };
@@ -70,7 +70,7 @@ class StringValueFilterModel
   }
 
   @override
-  Future<Map<String, dynamic>?> specifyDefaultSimpleCriterionValues() async {
+  Map<String, dynamic>? specifyDefaultSimpleCriterionValues() {
     return {
       "string": _stringValue,
     };

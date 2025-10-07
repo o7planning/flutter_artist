@@ -48,9 +48,9 @@ class IntIdFilterModel
   }
 
   @override
-  Future<Map<String, dynamic>?> getSimpleCriterionValuesFromFilterInput({
+  Map<String, dynamic>? getSimpleCriterionValuesFromFilterInput({
     required IntIdFilterInput filterInput,
-  }) async {
+  }) {
     return {
       "id": filterInput.idValue,
     };
@@ -67,7 +67,7 @@ class IntIdFilterModel
   }
 
   @override
-  Future<Map<String, dynamic>?> specifyDefaultSimpleCriterionValues() async {
+  Map<String, dynamic>? specifyDefaultSimpleCriterionValues() {
     return {
       "id": _idValue,
     };

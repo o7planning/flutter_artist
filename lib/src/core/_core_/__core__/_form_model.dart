@@ -154,7 +154,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   @_AbstractMethodAnnotation()
-  Future<Map<String, dynamic>?> specifyDefaultSimplePropValues({
+  Map<String, dynamic>? specifyDefaultSimplePropValues({
     required FILTER_CRITERIA filterCriteria,
   });
 
@@ -174,7 +174,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   @_AbstractMethodAnnotation()
-  Future<Map<String, dynamic>?> getSimplePropValuesFromItemDetail({
+  Map<String, dynamic>? getSimplePropValuesFromItemDetail({
     required FILTER_CRITERIA filterCriteria,
     required ITEM_DETAIL itemDetail,
   });
@@ -543,7 +543,7 @@ abstract class FormModel<
     if (activityType == FormActivityType.itemFirstLoad) {
       if (itemDetail != null) {
         try {
-          simplePropValue = await getSimplePropValuesFromItemDetail(
+          simplePropValue = getSimplePropValuesFromItemDetail(
                 filterCriteria: blockCurrentFilterCriteria,
                 itemDetail: itemDetail,
               ) ??
@@ -588,7 +588,7 @@ abstract class FormModel<
         Map<String, dynamic> simplePropValueExtra = {};
         if (!_defaultValueInitiated) {
           try {
-            simplePropValueDefault = await specifyDefaultSimplePropValues(
+            simplePropValueDefault = specifyDefaultSimplePropValues(
                   filterCriteria: blockCurrentFilterCriteria,
                 ) ??
                 {};
