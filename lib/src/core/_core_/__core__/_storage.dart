@@ -386,11 +386,14 @@ class _Storage extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
+  // Open Dialog then freeze Shelf Reaction until closed.
   @_RootMethodAnnotation()
-  Future<FreezeByDialogResult<V?>> openDialogThenFreezeReactionUntilClosed<V>({
+  Future<FreezeByDialogResult<V?>>
+      openDialogThenFreezeReactionBetweenShelvesUntilClosed<V>({
     required Future<V?> Function() openDialog,
   }) async {
-    return await __freeze._openDialogThenFreezeReactionUntilClosed(
+    return await __freeze
+        ._openDialogThenFreezeReactionBetweenShelvesUntilClosed(
       openDialog: openDialog,
     );
   }
@@ -399,11 +402,12 @@ class _Storage extends _Core {
   // ***************************************************************************
 
   @_RootMethodAnnotation()
-  Future<void> openEndDrawerThenFreezeReactionUntilClosed(
+  Future<void> openEndDrawerThenFreezeReactionBetweenShelvesUntilClosed(
     BuildContext context, {
     bool showSuggestionIfNeed = true,
   }) async {
-    return await __freeze._openEndDrawerThenFreezeReactionUntilClosed(
+    return await __freeze
+        ._openEndDrawerThenFreezeReactionBetweenShelvesUntilClosed(
       context,
       showSuggestionIfNeed: showSuggestionIfNeed,
     );
@@ -413,7 +417,7 @@ class _Storage extends _Core {
   // ***************************************************************************
 
   @_RootMethodAnnotation()
-  void freezeReactionToExternalShelfEventsOnce() {
-    __freeze._freezeReactionToExternalShelfEventsOnce();
+  void freezeReactionBetweenShelvesOnce() {
+    __freeze._freezeReactionBetweenShelvesOnce();
   }
 }

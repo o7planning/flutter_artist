@@ -93,7 +93,7 @@ class _StorageFreeze {
   ///
   /// Dialog:
   ///
-  Future<FreezeByDialogResult<V?>> _openDialogThenFreezeReactionUntilClosed<V>({
+  Future<FreezeByDialogResult<V?>> _openDialogThenFreezeReactionBetweenShelvesUntilClosed<V>({
     required Future<V?> Function() openDialog,
   }) async {
     if (!__ensureFreezeTypeIsNull()) {
@@ -116,7 +116,7 @@ class _StorageFreeze {
   ///
   /// EndDrawer:
   ///
-  Future<void> _openEndDrawerThenFreezeReactionUntilClosed(
+  Future<void> _openEndDrawerThenFreezeReactionBetweenShelvesUntilClosed(
     BuildContext context, {
     bool showSuggestionIfNeed = true,
   }) async {
@@ -155,7 +155,7 @@ class _StorageFreeze {
   ///
   /// Freeze Once:
   ///
-  void _freezeReactionToExternalShelfEventsOnce() {
+  void _freezeReactionBetweenShelvesOnce() {
     __freezeTemporarilyOnce = true;
   }
 }
