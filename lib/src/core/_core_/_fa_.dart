@@ -35,10 +35,10 @@ class _FlutterArtist {
 
   late final LocaleManager localeManager;
 
-  PostQueryBehavior _defaultPostQueryBehavior =
-      PostQueryBehavior.setAnItemAsCurrentIfNeed;
+  AfterQueryAction _defaultAfterQueryAction =
+      AfterQueryAction.setAnItemAsCurrentIfNeed;
 
-  PostQueryBehavior get defaultPostQueryBehavior => _defaultPostQueryBehavior;
+  AfterQueryAction get defaultAfterQueryAction => _defaultAfterQueryAction;
 
   Function(BuildContext context)? showRestDebugViewerDialog;
 
@@ -72,8 +72,9 @@ class _FlutterArtist {
   }
 
   @Deprecated("Do Not Use, Test Only")
-  void setDefaultPostQueryBehavior(PostQueryBehavior defaultPostQueryBehavior) {
-    _defaultPostQueryBehavior = defaultPostQueryBehavior;
+  void debugSetDefaultAfterQueryAction(
+      AfterQueryAction defaultAfterQueryAction) {
+    _defaultAfterQueryAction = defaultAfterQueryAction;
   }
 
   ///

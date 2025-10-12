@@ -56,8 +56,8 @@ class XBlockView extends StatelessWidget {
         ),
         SizedBox(height: 10),
         IconLabelText(
-          label: "Post Query Behavior: ",
-          text: xBlock.postQueryBehavior.name,
+          label: "After Query Action: ",
+          text: xBlock.afterQueryAction.name,
         ),
         SizedBox(height: 10),
         IconLabelText(

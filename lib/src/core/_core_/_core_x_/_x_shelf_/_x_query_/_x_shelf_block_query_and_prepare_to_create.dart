@@ -6,7 +6,7 @@ class _XShelfBlockQueryThenPrepareToCreate extends _XShelfSbQuery {
     required FilterInput? filterInput,
     required PageableData? pageable,
     required ItemListMode? itemListMode,
-    required PostQueryBehavior? postQueryBehavior,
+    required AfterQueryAction? afterQueryAction,
     required SuggestedSelection<dynamic>? suggestedSelection,
   }) : super(
           xShelfType: XShelfType.blockQueryAndPrepareToCreate,
@@ -20,7 +20,7 @@ class _XShelfBlockQueryThenPrepareToCreate extends _XShelfSbQuery {
         queryType: QueryType.realQuery,
         itemListMode: itemListMode,
         suggestedSelection: suggestedSelection,
-        postQueryBehavior: postQueryBehavior,
+        afterQueryAction: afterQueryAction,
         pageable: pageable,
       ),
       srcScalarAndOptions: null,

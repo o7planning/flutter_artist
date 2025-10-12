@@ -20,3 +20,7 @@ TODO: 57a (Mounted vs Active). IMPORTANT!!!
 
 
 
+FORM > emp-employment-history36a
+   Thay doi du lieu form > change record ==> Error!!
+
+

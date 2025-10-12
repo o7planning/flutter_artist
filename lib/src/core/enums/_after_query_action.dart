@@ -1,8 +1,6 @@
-// TODO-XXX Change to PostQueryAction?
-
 import '_current_item_selection_type.dart';
 
-enum PostQueryBehavior {
+enum AfterQueryAction {
   /// Do Nothing.
   doNothing,
 
@@ -24,17 +22,17 @@ enum PostQueryBehavior {
 
   CurrentItemSelectionType toCurrentItemSelectionType() {
     switch (this) {
-      case PostQueryBehavior.doNothing:
+      case AfterQueryAction.doNothing:
         return CurrentItemSelectionType.doNothing;
-      case PostQueryBehavior.clearCurrentItem:
+      case AfterQueryAction.clearCurrentItem:
         return CurrentItemSelectionType.doNothing;
-      case PostQueryBehavior.createNewItem:
+      case AfterQueryAction.createNewItem:
         return CurrentItemSelectionType.doNothing;
-      case PostQueryBehavior.setAnItemAsCurrentIfNeed:
+      case AfterQueryAction.setAnItemAsCurrentIfNeed:
         return CurrentItemSelectionType.selectAnItemAsCurrentIfNeed;
-      case PostQueryBehavior.setAnItemAsCurrent:
+      case AfterQueryAction.setAnItemAsCurrent:
         return CurrentItemSelectionType.selectAnItemAsCurrent;
-      case PostQueryBehavior.setAnItemAsCurrentThenLoadForm:
+      case AfterQueryAction.setAnItemAsCurrentThenLoadForm:
         return CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm;
     }
   }

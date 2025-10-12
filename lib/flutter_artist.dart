@@ -56,7 +56,7 @@ export 'src/core/enums/_item_list_mode.dart';
 export 'src/core/enums/_multi_opt_prop_reload.dart';
 export 'src/core/enums/_nli_type.dart';
 export 'src/core/enums/_optioned_master_prop_type.dart';
-export 'src/core/enums/_post_query_behavior.dart';
+export 'src/core/enums/_after_query_action.dart';
 export 'src/core/enums/_query_mode.dart';
 export 'src/core/enums/_quick_suggestion_mode.dart';
 export 'src/core/enums/_quick_suggestion_type.dart';

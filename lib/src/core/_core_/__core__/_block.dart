@@ -737,9 +737,9 @@ abstract class Block<
           return;
         }
         //
-        final defaultPostQueryBehavior = FlutterArtist.defaultPostQueryBehavior;
+        final defaultAfterQueryAction = FlutterArtist.defaultAfterQueryAction;
         final defaultCurrentItemSelectionType =
-            defaultPostQueryBehavior.toCurrentItemSelectionType();
+            defaultAfterQueryAction.toCurrentItemSelectionType();
         currentItemSelectionType = defaultCurrentItemSelectionType;
       }
       // Not Natural Mode.
@@ -1085,25 +1085,25 @@ abstract class Block<
     }
 
     // TODO: LOGIC-01 (If not querying block --> No need to force select an item).
-    PostQueryBehavior postQueryBehavior = thisXBlock.postQueryBehavior;
+    AfterQueryAction afterQueryAction = thisXBlock.afterQueryAction;
     if (!thisXBlock.xShelf.naturalMode) {
       if (!queried) {
-        postQueryBehavior = PostQueryBehavior.doNothing;
+        afterQueryAction = AfterQueryAction.doNothing;
       }
     }
     print(
-        "   >>> ${getClassName(this)}    @@@@@@@@@ queryHint: $queryHint >>> postQueryBehavior: $postQueryBehavior");
+        "   >>> ${getClassName(this)}    @@@@@@@@@ queryHint: $queryHint >>> afterQueryAction: $afterQueryAction");
     //
     // Add TaskUnit:
     // - Find Item to Select as Current:
     //
-    if (postQueryBehavior == PostQueryBehavior.clearCurrentItem) {
+    if (afterQueryAction == AfterQueryAction.clearCurrentItem) {
       thisXBlock.xShelf._addTaskUnit(
         taskUnit: _BlockClearCurrentTaskUnit<ITEM>(
           xBlock: thisXBlock,
         ),
       );
-    } else if (postQueryBehavior == PostQueryBehavior.createNewItem) {
+    } else if (afterQueryAction == AfterQueryAction.createNewItem) {
       thisXBlock.xShelf._addTaskUnit(
         taskUnit: _BlockPrepareFormToCreateItemTaskUnit(
           xBlock: thisXBlock,
@@ -1120,21 +1120,21 @@ abstract class Block<
         // Test Case: [38b].
       } else {
         final CurrentItemSelectionType currentItemSelectionType;
-        switch (postQueryBehavior) {
-          case PostQueryBehavior.doNothing:
+        switch (afterQueryAction) {
+          case AfterQueryAction.doNothing:
             currentItemSelectionType = CurrentItemSelectionType.doNothing;
-          case PostQueryBehavior.setAnItemAsCurrentIfNeed:
+          case AfterQueryAction.setAnItemAsCurrentIfNeed:
             currentItemSelectionType =
                 CurrentItemSelectionType.selectAnItemAsCurrentIfNeed;
-          case PostQueryBehavior.setAnItemAsCurrent:
+          case AfterQueryAction.setAnItemAsCurrent:
             currentItemSelectionType =
                 CurrentItemSelectionType.selectAnItemAsCurrent;
-          case PostQueryBehavior.setAnItemAsCurrentThenLoadForm:
+          case AfterQueryAction.setAnItemAsCurrentThenLoadForm:
             currentItemSelectionType =
                 CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm;
-          case PostQueryBehavior.clearCurrentItem:
+          case AfterQueryAction.clearCurrentItem:
             throw UnimplementedError("Never Run");
-          case PostQueryBehavior.createNewItem:
+          case AfterQueryAction.createNewItem:
             throw UnimplementedError("Never Run");
         }
         //
@@ -2968,7 +2968,7 @@ abstract class Block<
   @_BlockQueryNextPageAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockQueryResult> queryNextPage({
-    PostQueryBehavior postQueryBehavior = PostQueryBehavior.setAnItemAsCurrent,
+    AfterQueryAction afterQueryAction = AfterQueryAction.setAnItemAsCurrent,
   }) async {
     if (filterModel != null && filterModel!._lockAddMoreQuery) {
       return BlockQueryResult._queryBlockedTemporarily();
@@ -2981,14 +2981,14 @@ abstract class Block<
       navigate: null,
       ownerClassInstance: this,
       methodName: qryMethod.name,
-      parameters: {"postQueryBehavior": postQueryBehavior},
+      parameters: {"afterQueryAction": afterQueryAction},
     );
     //
     return await __queryBlock(
       qryMethod: qryMethod,
       itemListMode: ItemListMode.replace,
       filterInput: null,
-      postQueryBehavior: postQueryBehavior,
+      afterQueryAction: afterQueryAction,
       suggestedSelection: null,
       specifiedPageable: null,
       navigate: null,
@@ -3005,7 +3005,7 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockQueryPreviousPageAnnotation()
   Future<BlockQueryResult> queryPreviousPage({
-    PostQueryBehavior postQueryBehavior = PostQueryBehavior.setAnItemAsCurrent,
+    AfterQueryAction afterQueryAction = AfterQueryAction.setAnItemAsCurrent,
   }) async {
     if (filterModel != null && filterModel!._lockAddMoreQuery) {
       return BlockQueryResult._queryBlockedTemporarily();
@@ -3018,14 +3018,14 @@ abstract class Block<
       navigate: null,
       ownerClassInstance: this,
       methodName: qryMethod.name,
-      parameters: {"postQueryBehavior": postQueryBehavior},
+      parameters: {"afterQueryAction": afterQueryAction},
     );
     //
     return await __queryBlock(
       qryMethod: qryMethod,
       itemListMode: ItemListMode.replace,
       filterInput: null,
-      postQueryBehavior: postQueryBehavior,
+      afterQueryAction: afterQueryAction,
       suggestedSelection: null,
       specifiedPageable: null,
       navigate: null,
@@ -3042,7 +3042,7 @@ abstract class Block<
   @_BlockQueryMorePageAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockQueryResult> queryMore({
-    PostQueryBehavior postQueryBehavior = PostQueryBehavior.setAnItemAsCurrent,
+    AfterQueryAction afterQueryAction = AfterQueryAction.setAnItemAsCurrent,
   }) async {
     if (filterModel != null && filterModel!._lockAddMoreQuery) {
       return BlockQueryResult._queryBlockedTemporarily();
@@ -3055,13 +3055,13 @@ abstract class Block<
       navigate: null,
       ownerClassInstance: this,
       methodName: qryMethod.name,
-      parameters: {"postQueryBehavior": postQueryBehavior},
+      parameters: {"afterQueryAction": afterQueryAction},
     );
     //
     return await __queryBlock(
       qryMethod: qryMethod,
       itemListMode: ItemListMode.expand,
-      postQueryBehavior: postQueryBehavior,
+      afterQueryAction: afterQueryAction,
       filterInput: null,
       suggestedSelection: null,
       specifiedPageable: null,
@@ -3113,9 +3113,9 @@ abstract class Block<
       filterInput: filterInput,
       pageable: pageable,
       itemListMode: ItemListMode.replace,
-      postQueryBehavior: prepareFormToCreateItem
-          ? PostQueryBehavior.createNewItem
-          : PostQueryBehavior.setAnItemAsCurrent,
+      afterQueryAction: prepareFormToCreateItem
+          ? AfterQueryAction.createNewItem
+          : AfterQueryAction.setAnItemAsCurrent,
       suggestedSelection: null,
     );
     //
@@ -3140,8 +3140,8 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockQueryResult> query({
     ItemListMode itemListMode = ItemListMode.replace,
-    PostQueryBehavior postQueryBehavior =
-        PostQueryBehavior.setAnItemAsCurrentIfNeed,
+    AfterQueryAction afterQueryAction =
+        AfterQueryAction.setAnItemAsCurrentIfNeed,
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
     PageableData? pageable,
@@ -3160,7 +3160,7 @@ abstract class Block<
       methodName: qryMethod.name,
       parameters: {
         "itemListMode": itemListMode,
-        "postQueryBehavior": postQueryBehavior,
+        "afterQueryAction": afterQueryAction,
         "filterInput": filterInput,
         "suggestedSelection": suggestedSelection,
         "pageable": pageable,
@@ -3170,7 +3170,7 @@ abstract class Block<
     return await __queryBlock(
       qryMethod: qryMethod,
       itemListMode: itemListMode,
-      postQueryBehavior: postQueryBehavior,
+      afterQueryAction: afterQueryAction,
       filterInput: filterInput,
       suggestedSelection: suggestedSelection,
       specifiedPageable: pageable,
@@ -3213,7 +3213,7 @@ abstract class Block<
       filterInput: filterInput,
       pageable: null,
       itemListMode: itemListMode,
-      postQueryBehavior: PostQueryBehavior.setAnItemAsCurrentThenLoadForm,
+      afterQueryAction: AfterQueryAction.setAnItemAsCurrentThenLoadForm,
       suggestedSelection: suggestedSelection,
     );
     //
@@ -3256,7 +3256,7 @@ abstract class Block<
       filterInput: filterInput,
       pageable: null,
       itemListMode: ItemListMode.replace,
-      postQueryBehavior: PostQueryBehavior.createNewItem,
+      afterQueryAction: AfterQueryAction.createNewItem,
       suggestedSelection: null,
     );
     //
@@ -4157,7 +4157,7 @@ abstract class Block<
   Future<BlockQueryResult> __queryBlock({
     required BlockQryMethodName qryMethod,
     required ItemListMode itemListMode,
-    required PostQueryBehavior postQueryBehavior,
+    required AfterQueryAction afterQueryAction,
     required FILTER_INPUT? filterInput,
     required SuggestedSelection? suggestedSelection,
     required PageableData? specifiedPageable,
@@ -4194,7 +4194,7 @@ abstract class Block<
       filterInput: filterInput,
       pageable: usedPageable,
       itemListMode: itemListMode,
-      postQueryBehavior: postQueryBehavior,
+      afterQueryAction: afterQueryAction,
       suggestedSelection: suggestedSelection,
     );
     //

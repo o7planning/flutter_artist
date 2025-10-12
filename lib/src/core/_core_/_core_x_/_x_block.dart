@@ -46,7 +46,7 @@ class XBlock<
 
   ItemListMode? __itemListMode;
   SuggestedSelection? __suggestedSelection;
-  PostQueryBehavior? __postQueryBehavior;
+  AfterQueryAction? __afterQueryAction;
   PageableData? __pageable;
 
   // TODO: Chuyen sang BlockQueryResult?
@@ -209,21 +209,21 @@ class XBlock<
     __suggestedSelection = value;
   }
 
-  PostQueryBehavior get postQueryBehavior {
-    return __postQueryBehavior ?? FlutterArtist.defaultPostQueryBehavior;
+  AfterQueryAction get afterQueryAction {
+    return __afterQueryAction ?? FlutterArtist.defaultAfterQueryAction;
   }
 
   void setOptions({
     required QueryType queryType,
     required ItemListMode? itemListMode,
     required SuggestedSelection? suggestedSelection,
-    required PostQueryBehavior? postQueryBehavior,
+    required AfterQueryAction? afterQueryAction,
     required PageableData? pageable,
   }) {
     __queryType = queryType;
     __itemListMode = itemListMode;
     __suggestedSelection = suggestedSelection;
-    __postQueryBehavior = postQueryBehavior;
+    __afterQueryAction = afterQueryAction;
     __pageable = pageable;
   }
 

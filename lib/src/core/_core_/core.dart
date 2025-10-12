@@ -74,7 +74,7 @@ import '../enums/_freeze_type.dart';
 import '../enums/_item_creation_type.dart';
 import '../enums/_item_list_mode.dart';
 import '../enums/_multi_opt_prop_reload.dart';
-import '../enums/_post_query_behavior.dart';
+import '../enums/_after_query_action.dart';
 import '../enums/_qry_hint.dart';
 import '../enums/_qry_pagination_type.dart';
 import '../enums/_quick_suggestion_mode.dart';
