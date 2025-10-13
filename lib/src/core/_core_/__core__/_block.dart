@@ -2968,7 +2968,8 @@ abstract class Block<
   @_BlockQueryNextPageAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockQueryResult> queryNextPage({
-    AfterQueryAction afterQueryAction = AfterQueryAction.setAnItemAsCurrent,
+    AfterQueryAction afterQueryAction =
+        AfterQueryAction.setAnItemAsCurrentIfNeed,
   }) async {
     if (filterModel != null && filterModel!._lockAddMoreQuery) {
       return BlockQueryResult._queryBlockedTemporarily();
@@ -3005,7 +3006,8 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockQueryPreviousPageAnnotation()
   Future<BlockQueryResult> queryPreviousPage({
-    AfterQueryAction afterQueryAction = AfterQueryAction.setAnItemAsCurrent,
+    AfterQueryAction afterQueryAction =
+        AfterQueryAction.setAnItemAsCurrentIfNeed,
   }) async {
     if (filterModel != null && filterModel!._lockAddMoreQuery) {
       return BlockQueryResult._queryBlockedTemporarily();
@@ -3042,7 +3044,8 @@ abstract class Block<
   @_BlockQueryMorePageAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockQueryResult> queryMore({
-    AfterQueryAction afterQueryAction = AfterQueryAction.setAnItemAsCurrent,
+    AfterQueryAction afterQueryAction =
+        AfterQueryAction.setAnItemAsCurrentIfNeed,
   }) async {
     if (filterModel != null && filterModel!._lockAddMoreQuery) {
       return BlockQueryResult._queryBlockedTemporarily();
@@ -3133,6 +3136,7 @@ abstract class Block<
 
   ///
   ///
+  /// Docs: [14739], [14811*].
   ///
   @nonVirtual
   @_RootMethodAnnotation()
