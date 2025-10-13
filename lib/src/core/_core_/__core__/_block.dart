@@ -2880,7 +2880,7 @@ abstract class Block<
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     var result = taskUnit.taskResult as BlockItemCurrSelectionResult<ITEM>;
-    if (result.success) {
+    if (result.successForAll) {
       if (navigate != null) {
         navigate();
       }
@@ -3128,10 +3128,10 @@ abstract class Block<
     //
     XBlock xBlock = xShelf.findXBlockByName(this.name)!;
     BlockQueryResult queryResult = xBlock.queryResult;
-    if (queryResult.success) {
+    if (queryResult.successForAll) {
       _executeNavigation(navigate: navigate);
     }
-    return queryResult.success;
+    return queryResult.successForAll;
   }
 
   ///
@@ -3227,7 +3227,7 @@ abstract class Block<
     //
     XBlock xBlock = xShelf.findXBlockByName(this.name)!;
     BlockQueryResult queryResult = xBlock.queryResult;
-    if (queryResult.success) {
+    if (queryResult.successForAll) {
       _executeNavigation(navigate: navigate);
     }
     return queryResult;
@@ -3270,7 +3270,7 @@ abstract class Block<
     //
     XBlock xBlock = xShelf.findXBlockByName(this.name)!;
     BlockQueryResult queryResult = xBlock.queryResult;
-    if (queryResult.success) {
+    if (queryResult.successForAll) {
       _executeNavigation(navigate: navigate);
     }
     return queryResult;
@@ -4208,7 +4208,7 @@ abstract class Block<
     //
     XBlock xBlock = xShelf.findXBlockByName(this.name)!;
     BlockQueryResult queryResult = xBlock.queryResult;
-    if (queryResult.success) {
+    if (queryResult.successForAll) {
       _executeNavigation(navigate: navigate);
     }
     return queryResult;

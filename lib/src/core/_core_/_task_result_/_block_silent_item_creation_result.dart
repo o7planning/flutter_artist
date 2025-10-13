@@ -6,7 +6,7 @@ class BlockSilentItemCreationResult
   BlockSilentItemCreationResult({super.precheck, super.stackTrace});
 
   @override
-  bool get success {
+  bool get successForFirst {
     if (precheck != null) {
       return false;
     }

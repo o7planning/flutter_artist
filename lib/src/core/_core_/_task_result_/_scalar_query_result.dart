@@ -8,7 +8,7 @@ class ScalarQueryResult extends TaskResult<ScalarQueryPrecheck> {
   }
 
   @override
-  bool get success {
+  bool get successForFirst {
     if (precheck != null) {
       return false;
     }

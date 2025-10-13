@@ -4,7 +4,7 @@ class FormSaveResult extends TaskResult<BlockFormSavePrecheck> {
   FormSaveResult({required super.precheck});
 
   @override
-  bool get success {
+  bool get successForFirst {
     if (precheck != null) {
       return false;
     }

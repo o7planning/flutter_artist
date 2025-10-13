@@ -95,12 +95,12 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
     }
     //
     FormSaveResult result = await widget.block.formModel!.saveForm();
-    return result.success;
+    return result.successForAll;
   }
 
   Future<bool> __deleteCurrentItem() async {
     BlockItemDeletionResult result = await widget.block.deleteCurrentItem();
-    return result.success;
+    return result.successForAll;
   }
 
   Future<bool> __prepareFormToCreateItem() async {
@@ -116,7 +116,7 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
         await widget.block.prepareFormToCreateItem(
       navigate: null,
     );
-    return result.success;
+    return result.successForAll;
   }
 
   Future<bool> __resetForm() async {
@@ -127,7 +127,7 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
   Future<bool> __refreshCurrentItem() async {
     BlockItemCurrSelectionResult result =
         await widget.block.refreshCurrentItem();
-    return result.success;
+    return result.successForAll;
   }
 
   Future<bool> __showFormInfo() async {
@@ -149,7 +149,7 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
     }
     //
     BlockQueryResult result = await widget.block.query();
-    return result.success;
+    return result.successForAll;
   }
 
   @override

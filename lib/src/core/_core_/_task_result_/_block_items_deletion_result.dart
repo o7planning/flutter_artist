@@ -20,7 +20,7 @@ class BlockItemsDeletionResult<ITEM>
   }) : _candidateItems = candidateItems;
 
   @override
-  bool get success {
+  bool get successForFirst {
     if (precheck != null) {
       return false;
     }

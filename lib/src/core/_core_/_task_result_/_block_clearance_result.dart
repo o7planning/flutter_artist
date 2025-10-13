@@ -4,7 +4,7 @@ class BlockClearanceResult extends TaskResult<BlockClearancePrecheck> {
   BlockClearanceResult({super.precheck});
 
   @override
-  bool get success {
+  bool get successForFirst {
     if (precheck != null) {
       return false;
     }

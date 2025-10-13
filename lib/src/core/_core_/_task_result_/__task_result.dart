@@ -17,7 +17,9 @@ abstract class TaskResult<PRECHECK> {
   })  : _precheck = precheck,
         _stackTrace = stackTrace;
 
-  bool get success;
+  bool get successForFirst;
+
+  bool get successForAll => successForFirst;
 
   void _setPrecheck(PRECHECK? precheck) {
     _precheck = precheck;

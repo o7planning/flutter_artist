@@ -27,7 +27,13 @@ class BlockItemCurrSelectionResult<ITEM>
   }
 
   @override
-  bool get success {
+  bool get successForAll {
+    // TODO.
+    return successForFirst;
+  }
+
+  @override
+  bool get successForFirst {
     if (precheck != null) {
       return false;
     } else if (error != null) {
