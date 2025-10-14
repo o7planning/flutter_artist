@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class SortOptionsBar extends StatelessWidget {
+class SortingOptionBar extends StatelessWidget {
   final Block _block;
   final double itemSpacing;
   final double iconSpacing;
@@ -23,7 +23,7 @@ class SortOptionsBar extends StatelessWidget {
   final Color _dividerColor = Colors.indigo.withAlpha(80);
   static const double _dividerHeight = 20;
 
-  SortOptionsBar({
+  SortingOptionBar({
     super.key,
     required Block block,
     this.itemSpacing = 5,
@@ -43,7 +43,7 @@ class SortOptionsBar extends StatelessWidget {
     this.clipBehavior = Clip.none,
   }) : _block = block;
 
-  SortOptionsBar.simple({
+  SortingOptionBar.simple({
     super.key,
     required Block block,
     this.itemSpacing = 5,

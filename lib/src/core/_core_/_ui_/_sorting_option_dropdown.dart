@@ -1,18 +1,18 @@
 part of '../core.dart';
 
-class SortOptionsDropdown extends StatelessWidget {
+class SortingOptionDropdown extends StatelessWidget {
   final Block _block;
   final TextStyle textStyle;
   final double iconSpacing;
 
-  const SortOptionsDropdown({
+  const SortingOptionDropdown({
     super.key,
     required Block block,
     this.iconSpacing = 3,
     this.textStyle = const TextStyle(fontSize: 14),
   }) : _block = block;
 
-  const SortOptionsDropdown.simple({
+  const SortingOptionDropdown.simple({
     super.key,
     required Block block,
     this.iconSpacing = 3,
