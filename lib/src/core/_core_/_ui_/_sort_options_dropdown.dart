@@ -99,7 +99,8 @@ class SortOptionsDropdown extends StatelessWidget {
           sortCriterion: sortCriterion,
           isDragging: false,
           acceptNoneDirection: false,
-          enabled: sortCriterion.propName == selectedSortCriterion?.propName,
+          enabled: sortCriterion.criterionName ==
+              selectedSortCriterion?.criterionName,
         ),
       ],
     );

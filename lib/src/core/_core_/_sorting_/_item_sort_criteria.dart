@@ -3,7 +3,7 @@ part of '../core.dart';
 abstract class ItemSortCriteria<ITEM extends Object> {
   late final Block block;
   final bool multiOptions;
-  final List<String> _nonSignedPropNames = [];
+  final List<String> _nonSignedCriterionNames = [];
   final List<SortCriterion> _criteria = [];
   final Map<String, SortCriterion> _criteriaMap = {};
 
@@ -15,24 +15,24 @@ abstract class ItemSortCriteria<ITEM extends Object> {
 
   ///
   /// ```dart
-  /// List<String> sortablePropNames = ["userName", "+email", "-fullName"];
+  /// List<String> sortableCriterionNames = ["userName", "+email", "-fullName"];
   ///
   /// var myItemSortCriteria = MyItemSortCriteria(
-  ///    sortablePropNames: sortablePropNames,
+  ///    sortableCriterionNames: sortableCriterionNames,
   /// );
   /// ```
   ///
   ItemSortCriteria({
     this.multiOptions = false,
-    required List<String> sortablePropNames,
+    required List<String> sortableCriterionNames,
   }) {
-    if (sortablePropNames.isEmpty) {
-      throw Exception("Invalid sortablePropNames. Not Allow Empty");
+    if (sortableCriterionNames.isEmpty) {
+      throw Exception("Invalid sortableCriterionNames. Not Allow Empty");
     }
     int optCount = 0;
-    for (String sortablePropName in sortablePropNames) {
-      SortCriterion criterion = SortCriterion._parse(sortablePropName);
-      criterion._text = _getText(propName: criterion.propName);
+    for (String sortableCriterionName in sortableCriterionNames) {
+      SortCriterion criterion = SortCriterion._parse(sortableCriterionName);
+      criterion._text = _getText(criterionName: criterion.criterionName);
       //
       if (criterion.direction != SortingDirection.none) {
         optCount++;
@@ -42,27 +42,28 @@ abstract class ItemSortCriteria<ITEM extends Object> {
         _selectedCriterion ??= criterion;
       }
       //
-      if (!_criteriaMap.containsKey(criterion.propName)) {
-        _nonSignedPropNames.add(criterion.propName);
+      if (!_criteriaMap.containsKey(criterion.criterionName)) {
+        _nonSignedCriterionNames.add(criterion.criterionName);
         _criteria.add(criterion);
-        _criteriaMap[criterion.propName] = criterion;
+        _criteriaMap[criterion.criterionName] = criterion;
       }
     }
   }
 
   void setSelectedCriterion(SortCriterion? value) {
-    _selectedCriterion = value == null ? null : _criteriaMap[value.propName];
+    _selectedCriterion =
+        value == null ? null : _criteriaMap[value.criterionName];
   }
 
   void moveCriterion({
     required SortCriterion movingCriterion,
     required SortCriterion destCriterion,
   }) {
-    SortCriterion? moving = _criteriaMap[movingCriterion.propName];
-    SortCriterion? dest = _criteriaMap[destCriterion.propName];
+    SortCriterion? moving = _criteriaMap[movingCriterion.criterionName];
+    SortCriterion? dest = _criteriaMap[destCriterion.criterionName];
     if (moving == null || dest == null) {
       return;
-    } else if (moving.propName == dest.propName) {
+    } else if (moving.criterionName == dest.criterionName) {
       return;
     }
     int movingIdx = _criteria.indexOf(moving);
@@ -85,8 +86,8 @@ abstract class ItemSortCriteria<ITEM extends Object> {
     return _criteria.firstOrNull;
   }
 
-  SortCriterion? getCopyOfSortCriterion({required String propName}) {
-    SortCriterion? criterion = _criteriaMap[propName];
+  SortCriterion? getCopyOfSortCriterion({required String criterionName}) {
+    SortCriterion? criterion = _criteriaMap[criterionName];
     return criterion?.copy();
   }
 
@@ -99,19 +100,19 @@ abstract class ItemSortCriteria<ITEM extends Object> {
       if (clearAllDirections) {
         copy._direction = SortingDirection.none;
       }
-      if (copy.propName == appliedCriterion?.propName) {
+      if (copy.criterionName == appliedCriterion?.criterionName) {
         copy._direction = appliedCriterion!.direction;
       }
       return copy;
     }).toList();
   }
 
-  void updateSortCriterionByPropName({
-    required String propName,
+  void updateSortCriterionByCriterionName({
+    required String criterionName,
     required SortingDirection direction,
     required bool moveToFirst,
   }) {
-    SortCriterion? criterion = _criteriaMap[propName];
+    SortCriterion? criterion = _criteriaMap[criterionName];
     if (criterion == null) {
       return;
     }
@@ -143,8 +144,8 @@ abstract class ItemSortCriteria<ITEM extends Object> {
     List<SortCriterion> newArrangedCriteria = [];
     //
     for (SortCriterion updateCriterion in updateCriteria) {
-      String propName = updateCriterion.propName;
-      SortCriterion? currentCriterion = copyMap.remove(propName);
+      String criterionName = updateCriterion.criterionName;
+      SortCriterion? currentCriterion = copyMap.remove(criterionName);
       if (currentCriterion == null) {
         continue;
       }
@@ -186,27 +187,28 @@ abstract class ItemSortCriteria<ITEM extends Object> {
   ///
   /// ```dart
   /// myItemSortCriteria.updateSortCriteria(
-  ///   shuffledSortablePropNames: ['email', '+userName','-fullName'],
+  ///   shuffledSortableCriterionNames: ['email', '+userName','-fullName'],
   /// );
   /// ```
   ///
   @Deprecated("Delete It?")
   void __updateSortCriteriaString({
-    required List<String> shuffledSortablePropNames,
+    required List<String> shuffledSortableCriterionNames,
   }) {
-    if (shuffledSortablePropNames.length != _nonSignedPropNames.length) {
+    if (shuffledSortableCriterionNames.length !=
+        _nonSignedCriterionNames.length) {
       throw Exception(
-          "Invalid shuffledSignedPropNames. Length must be ${_nonSignedPropNames.length}");
+          "Invalid shuffledSignedCriterionNames. Length must be ${_nonSignedCriterionNames.length}");
     }
     //
     final List<SortCriterion> updateCriteria = [];
-    for (String sortablePropName in shuffledSortablePropNames) {
-      SortCriterion criterion = SortCriterion._parse(sortablePropName);
-      criterion._text = _getText(propName: criterion.propName);
+    for (String sortableCriterionName in shuffledSortableCriterionNames) {
+      SortCriterion criterion = SortCriterion._parse(sortableCriterionName);
+      criterion._text = _getText(criterionName: criterion.criterionName);
       //
-      if (!_nonSignedPropNames.contains(criterion.propName)) {
+      if (!_nonSignedCriterionNames.contains(criterion.criterionName)) {
         throw Exception(
-            "Invalid propName '${criterion.propName}' (Must be in $_nonSignedPropNames)");
+            "Invalid criterionName '${criterion.criterionName}' (Must be in $_nonSignedCriterionNames)");
       }
       updateCriteria.add(criterion);
     }
@@ -222,8 +224,10 @@ abstract class ItemSortCriteria<ITEM extends Object> {
       if (criterion.direction == SortingDirection.none) {
         continue;
       }
-      dynamic aValue = getValue(item: a, propName: criterion.propName);
-      dynamic bValue = getValue(item: b, propName: criterion.propName);
+      dynamic aValue =
+          getValue(item: a, criterionName: criterion.criterionName);
+      dynamic bValue =
+          getValue(item: b, criterionName: criterion.criterionName);
       //
       if (aValue == null && bValue == null) {
         continue;
@@ -274,22 +278,22 @@ abstract class ItemSortCriteria<ITEM extends Object> {
         return criterion.isAscending() ? x : -x;
       } else {
         throw Exception(
-            "Method ItemSortCriteria.getValue(item,propName) must be return int, double, bool, null or String");
+            "Method ItemSortCriteria.getValue(item,criterionName) must be return int, double, bool, null or String");
       }
     }
     return 0;
   }
 
-  String _getText({required String propName}) {
-    return getText(propName: propName) ?? propName;
+  String _getText({required String criterionName}) {
+    return getText(criterionName: criterionName) ?? criterionName;
   }
 
   ///
   /// The return type must be int, double, bool, null or String.
   ///
-  dynamic getValue({required ITEM item, required String propName});
+  dynamic getValue({required ITEM item, required String criterionName});
 
-  String? getText({required String propName});
+  String? getText({required String criterionName});
 
   @override
   String toString() {

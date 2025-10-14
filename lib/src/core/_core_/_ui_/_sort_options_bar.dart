@@ -120,7 +120,7 @@ class SortOptionsBar extends StatelessWidget {
       content: DragTarget<SortCriterion>(
         hitTestBehavior: HitTestBehavior.deferToChild,
         onWillAcceptWithDetails: (DragTargetDetails<SortCriterion> details) {
-          if (details.data.propName == criterion.propName) {
+          if (details.data.criterionName == criterion.criterionName) {
             return false;
           }
           return true;

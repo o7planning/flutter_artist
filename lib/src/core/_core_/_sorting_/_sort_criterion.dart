@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 class SortCriterion {
-  final String propName;
+  final String criterionName;
   String _text;
   SortingDirection _direction;
 
@@ -11,7 +11,7 @@ class SortCriterion {
 
   SortCriterion._({
     required SortingDirection direction,
-    required this.propName,
+    required this.criterionName,
     required String text,
   })  : _text = text,
         _direction = direction;
@@ -30,7 +30,7 @@ class SortCriterion {
 
   SortCriterion copyWith({required SortingDirection direction}) {
     return SortCriterion._(
-      propName: propName,
+      criterionName: criterionName,
       text: text,
       direction: direction,
     );
@@ -38,7 +38,7 @@ class SortCriterion {
 
   SortCriterion copy() {
     return SortCriterion._(
-      propName: propName,
+      criterionName: criterionName,
       text: text,
       direction: _direction,
     );
@@ -57,32 +57,33 @@ class SortCriterion {
     }
   }
 
-  static SortCriterion _parse(String sortablePropName) {
-    String pn = sortablePropName.trim();
-    if (pn.isEmpty) {
-      throw Exception("Invalid sortablePropName. Not allow empty");
+  static SortCriterion _parse(String sortableCriterionName) {
+    String name = sortableCriterionName.trim();
+    if (name.isEmpty) {
+      throw Exception("Invalid sortableCriterionName. Not allow empty");
     }
     String sign = "";
-    String propName = pn;
-    if (pn.startsWith("+") || pn.startsWith("-")) {
-      sign = pn.substring(0, 1);
-      propName = pn.substring(1).trim();
+    String criterionName = name;
+    if (name.startsWith("+") || name.startsWith("-")) {
+      sign = name.substring(0, 1);
+      criterionName = name.substring(1).trim();
     }
-    if (propName.isEmpty) {
-      throw Exception("Invalid sortablePropName. '$sortablePropName'. "
+    if (criterionName.isEmpty) {
+      throw Exception(
+          "Invalid sortableCriterionName. '$sortableCriterionName'. "
           "Valid example: 'email', '+email' or '-email'");
     }
     //
     SortingDirection direction = SortingDirection.fromSign(sign);
     return SortCriterion._(
       direction: direction,
-      propName: propName,
-      text: propName,
+      criterionName: criterionName,
+      text: criterionName,
     );
   }
 
   @override
   String toString() {
-    return "${direction.sign}$propName";
+    return "${direction.sign}$criterionName";
   }
 }
