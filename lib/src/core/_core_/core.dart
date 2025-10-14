@@ -204,6 +204,8 @@ part '__core__/_shelf_structure.dart';
 
 part '__core__/_single_item_block.dart';
 
+part '_sorting_/_sorting_criteria.dart';
+
 part '_sorting_/_sorting_criterion.dart';
 
 part '__core__/_storage.dart';
