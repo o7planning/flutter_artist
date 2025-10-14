@@ -867,6 +867,7 @@ abstract class Block<
         ApiResult<PageData<ITEM>?> result = await callApiQuery(
           parentBlockCurrentItem: parent?.currentItem,
           filterCriteria: filterCriteriaOfFilterModel,
+          sortingCriteria: sortingModel?.sortingCriteria,
           pageable: callingPageable,
         );
         // Throw ApiError:
@@ -3344,6 +3345,7 @@ abstract class Block<
   Future<ApiResult<PageData<ITEM>?>> callApiQuery({
     required Object? parentBlockCurrentItem,
     required FILTER_CRITERIA filterCriteria,
+    required SortingCriteria? sortingCriteria,
     required PageableData pageable,
   });
 

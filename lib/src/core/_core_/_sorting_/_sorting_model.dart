@@ -13,6 +13,9 @@ abstract class SortingModel<ITEM extends Object> {
 
   SortingCriterion? get selectedCriterion => _selectedCriterion;
 
+  // TODO: SortingCriteria.
+  SortingCriteria? get sortingCriteria => null;
+
   ///
   /// ```dart
   /// List<String> sortableCriterionNames = ["userName", "+email", "-fullName"];
