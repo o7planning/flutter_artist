@@ -5,8 +5,8 @@ const double _sortIconSize = 16;
 // ---------------------------------------------------------------------------
 
 Widget _buildSortBtn({
-  required ItemSortCriteria itemSortCriteria,
-  required SortCriterion sortCriterion,
+  required SortingModel sortingModel,
+  required SortingCriterion sortingCriterion,
   required bool enabled,
   required bool isDragging,
   required bool acceptNoneDirection,
@@ -14,26 +14,26 @@ Widget _buildSortBtn({
   return InkWell(
     onTap: enabled
         ? () {
-            SortingDirection nextDirection = sortCriterion.getNextDirection(
+            SortingDirection nextDirection = sortingCriterion.getNextDirection(
               acceptNoneDirection: acceptNoneDirection,
             );
-            SortCriterion updateCriterion = sortCriterion.copyWith(
+            SortingCriterion updateCriterion = sortingCriterion.copyWith(
               direction: nextDirection,
             );
             //
-            itemSortCriteria.updateSortCriterion(
+            sortingModel.updateSortingCriterion(
               updateCriterion: updateCriterion,
               moveToFirst: false,
             );
           }
         : null,
-    child: _getSortIcon(sortCriterion, isDragging),
+    child: _getSortIcon(sortingCriterion, isDragging),
   );
 }
 
 // ---------------------------------------------------------------------------
 
-Widget _getSortIcon(SortCriterion criterion, bool isDragging) {
+Widget _getSortIcon(SortingCriterion criterion, bool isDragging) {
   Color? color = isDragging ? Colors.grey : null;
   if (criterion.isAscending()) {
     return Icon(

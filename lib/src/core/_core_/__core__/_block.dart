@@ -377,9 +377,9 @@ abstract class Block<
   //   }
   // }
 
-  final ItemSortCriteria? _itemSortCriteria;
+  final SortingModel? _sortingModel;
 
-  ItemSortCriteria? get itemSortCriteria => _itemSortCriteria;
+  SortingModel? get sortingModel => _sortingModel;
 
   FILTER_CRITERIA? get filterCriteria => __blockData._filterCriteria;
 
@@ -448,12 +448,12 @@ abstract class Block<
     required String? filterModelName,
     required this.formModel,
     required List<Block>? childBlocks,
-    ItemSortCriteria<ITEM>? itemSortCriteria,
+    SortingModel<ITEM>? sortingModel,
   })  : registerFilterModelName = filterModelName,
         config = config.copy(),
-        _itemSortCriteria = itemSortCriteria,
+        _sortingModel = sortingModel,
         _childBlocks = childBlocks ?? [] {
-    itemSortCriteria?.block = this;
+    sortingModel?.block = this;
     for (Block childBlock in _childBlocks) {
       childBlock.parent = this;
     }

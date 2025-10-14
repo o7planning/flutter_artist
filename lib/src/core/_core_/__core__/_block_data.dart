@@ -231,8 +231,8 @@ class _BlockData<
 
   void _sortItems() {
     try {
-      if (block._itemSortCriteria != null) {
-        _items.sort((a, b) => block._itemSortCriteria!._compare(a, b));
+      if (block._sortingModel != null) {
+        _items.sort((a, b) => block._sortingModel!._compare(a, b));
       }
     } catch (e) {
       print("Sort Error: $e");

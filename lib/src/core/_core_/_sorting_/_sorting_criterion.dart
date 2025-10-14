@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class SortCriterion {
+class SortingCriterion {
   final String criterionName;
   String _text;
   SortingDirection _direction;
@@ -9,7 +9,7 @@ class SortCriterion {
 
   SortingDirection get direction => _direction;
 
-  SortCriterion._({
+  SortingCriterion._({
     required SortingDirection direction,
     required this.criterionName,
     required String text,
@@ -28,16 +28,16 @@ class SortCriterion {
     return _direction == SortingDirection.none;
   }
 
-  SortCriterion copyWith({required SortingDirection direction}) {
-    return SortCriterion._(
+  SortingCriterion copyWith({required SortingDirection direction}) {
+    return SortingCriterion._(
       criterionName: criterionName,
       text: text,
       direction: direction,
     );
   }
 
-  SortCriterion copy() {
-    return SortCriterion._(
+  SortingCriterion copy() {
+    return SortingCriterion._(
       criterionName: criterionName,
       text: text,
       direction: _direction,
@@ -57,7 +57,7 @@ class SortCriterion {
     }
   }
 
-  static SortCriterion _parse(String sortableCriterionName) {
+  static SortingCriterion _parse(String sortableCriterionName) {
     String name = sortableCriterionName.trim();
     if (name.isEmpty) {
       throw Exception("Invalid sortableCriterionName. Not allow empty");
@@ -75,7 +75,7 @@ class SortCriterion {
     }
     //
     SortingDirection direction = SortingDirection.fromSign(sign);
-    return SortCriterion._(
+    return SortingCriterion._(
       direction: direction,
       criterionName: criterionName,
       text: criterionName,

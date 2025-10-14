@@ -26,25 +26,25 @@ class SortOptionsDropdown extends StatelessWidget {
       description: null,
       block: _block,
       build: () {
-        ItemSortCriteria? itemSortCriteria = _block.itemSortCriteria;
+        SortingModel? sortingModel = _block.sortingModel;
         //
-        List<SortCriterion> criteria = itemSortCriteria?.criteria ?? [];
-        SortCriterion? selectedSortCriterion =
-            itemSortCriteria?.selectedCriterion ??
-                itemSortCriteria?.getFirstSortCriterion();
+        List<SortingCriterion> criteria = sortingModel?.criteria ?? [];
+        SortingCriterion? selectedSortingCriterion =
+            sortingModel?.selectedCriterion ??
+                sortingModel?.getFirstSortingCriterion();
         //
-        return DropdownButton<SortCriterion>(
+        return DropdownButton<SortingCriterion>(
           isDense: true,
-          value: selectedSortCriterion,
+          value: selectedSortingCriterion,
           icon: const Icon(Icons.keyboard_arrow_down),
           items: criteria.map(
             (criterion) {
               return DropdownMenuItem(
                 value: criterion,
-                child: _buildSortCriterionView(
-                  itemSortCriteria: itemSortCriteria!,
-                  sortCriterion: criterion,
-                  selectedSortCriterion: selectedSortCriterion,
+                child: _buildSortingCriterionView(
+                  sortingModel: sortingModel!,
+                  sortingCriterion: criterion,
+                  selectedSortingCriterion: selectedSortingCriterion,
                 ),
               );
             },
@@ -55,12 +55,12 @@ class SortOptionsDropdown extends StatelessWidget {
     );
   }
 
-  void _onChanged(SortCriterion? newValue) {
+  void _onChanged(SortingCriterion? newValue) {
     if (newValue == null) {
       return;
     }
-    ItemSortCriteria? itemSortCriteria = _block.itemSortCriteria;
-    if (itemSortCriteria == null) {
+    SortingModel? sortingModel = _block.sortingModel;
+    if (sortingModel == null) {
       return;
     }
     if (newValue.isNonDirection()) {
@@ -68,39 +68,40 @@ class SortOptionsDropdown extends StatelessWidget {
         direction: SortingDirection.ascending,
       );
     }
-    List<SortCriterion> updateCriteria = itemSortCriteria.getCopyOfSortCriteria(
+    List<SortingCriterion> updateCriteria =
+        sortingModel.getCopyOfSortingCriteria(
       clearAllDirections: true,
       appliedCriterion: newValue,
     );
     //
-    itemSortCriteria.setSelectedCriterion(newValue);
-    itemSortCriteria.updateSortCriteria(
+    sortingModel.setSelectedCriterion(newValue);
+    sortingModel.updateSortingCriteria(
       updateCriteria: updateCriteria,
       rearrangeCriteria: false,
     );
   }
 
-  Widget _buildSortCriterionView({
-    required ItemSortCriteria itemSortCriteria,
-    required SortCriterion sortCriterion,
-    required SortCriterion? selectedSortCriterion,
+  Widget _buildSortingCriterionView({
+    required SortingModel sortingModel,
+    required SortingCriterion sortingCriterion,
+    required SortingCriterion? selectedSortingCriterion,
   }) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          sortCriterion.text,
+          sortingCriterion.text,
           style: textStyle,
         ),
         SizedBox(width: iconSpacing),
         _buildSortBtn(
-          itemSortCriteria: itemSortCriteria,
-          sortCriterion: sortCriterion,
+          sortingModel: sortingModel,
+          sortingCriterion: sortingCriterion,
           isDragging: false,
           acceptNoneDirection: false,
-          enabled: sortCriterion.criterionName ==
-              selectedSortCriterion?.criterionName,
+          enabled: sortingCriterion.criterionName ==
+              selectedSortingCriterion?.criterionName,
         ),
       ],
     );

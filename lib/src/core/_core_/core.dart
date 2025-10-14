@@ -184,7 +184,7 @@ part '__core__/_form_leave_safely.dart';
 
 part '__core__/_form_model.dart';
 
-part '_sorting_/_item_sort_criteria.dart';
+part '_sorting_/_sorting_model.dart';
 
 part '__core__/_scalar.dart';
 
@@ -204,7 +204,7 @@ part '__core__/_shelf_structure.dart';
 
 part '__core__/_single_item_block.dart';
 
-part '_sorting_/_sort_criterion.dart';
+part '_sorting_/_sorting_criterion.dart';
 
 part '__core__/_storage.dart';
 

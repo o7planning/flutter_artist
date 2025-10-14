@@ -67,17 +67,17 @@ class SortOptionsBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ItemSortCriteria? itemSortCriteria = _block.itemSortCriteria;
+    SortingModel? sortingModel = _block.sortingModel;
     //
     return BlockFragmentViewBuilder(
       ownerClassInstance: this,
       description: null,
       block: _block,
       build: () {
-        if (itemSortCriteria == null) {
+        if (sortingModel == null) {
           return Text("[Sorting not supported]", style: textStyle);
         }
-        List<SortCriterion> criteria = itemSortCriteria._criteria;
+        List<SortingCriterion> criteria = sortingModel._criteria;
         //
         return Container(
           alignment: alignment,
@@ -101,7 +101,7 @@ class SortOptionsBar extends StatelessWidget {
             items: criteria
                 .map(
                   (criterion) => _buildBreadCrumbItem(
-                    itemSortCriteria,
+                    sortingModel,
                     criterion,
                   ),
                 )
@@ -113,20 +113,20 @@ class SortOptionsBar extends StatelessWidget {
   }
 
   BreadCrumbItem _buildBreadCrumbItem(
-    ItemSortCriteria itemSortCriteria,
-    SortCriterion criterion,
+    SortingModel sortingModel,
+    SortingCriterion criterion,
   ) {
     return BreadCrumbItem(
-      content: DragTarget<SortCriterion>(
+      content: DragTarget<SortingCriterion>(
         hitTestBehavior: HitTestBehavior.deferToChild,
-        onWillAcceptWithDetails: (DragTargetDetails<SortCriterion> details) {
+        onWillAcceptWithDetails: (DragTargetDetails<SortingCriterion> details) {
           if (details.data.criterionName == criterion.criterionName) {
             return false;
           }
           return true;
         },
-        onAcceptWithDetails: (DragTargetDetails<SortCriterion> details) {
-          itemSortCriteria.moveCriterion(
+        onAcceptWithDetails: (DragTargetDetails<SortingCriterion> details) {
+          sortingModel.moveCriterion(
             movingCriterion: details.data,
             destCriterion: criterion,
           );
@@ -137,26 +137,26 @@ class SortOptionsBar extends StatelessWidget {
         },
         builder: (
           BuildContext context,
-          List<SortCriterion?> candidateData,
+          List<SortingCriterion?> candidateData,
           List<dynamic> rejectedData,
         ) {
-          return Draggable<SortCriterion>(
+          return Draggable<SortingCriterion>(
             data: criterion,
             feedback: _buildDragFeedback(
-              itemSortCriteria: itemSortCriteria,
-              sortCriterion: criterion,
+              sortingModel: sortingModel,
+              sortingCriterion: criterion,
             ),
-            childWhenDragging: _builSortCriterionView(
-              itemSortCriteria: itemSortCriteria,
-              sortCriterion: criterion,
+            childWhenDragging: _builSortingCriterionView(
+              sortingModel: sortingModel,
+              sortingCriterion: criterion,
               isDragging: true,
             ),
             onDragCompleted: () {
               // Do nothing.
             },
-            child: _builSortCriterionView(
-              itemSortCriteria: itemSortCriteria,
-              sortCriterion: criterion,
+            child: _builSortingCriterionView(
+              sortingModel: sortingModel,
+              sortingCriterion: criterion,
               isDragging: false,
             ),
           );
@@ -166,8 +166,8 @@ class SortOptionsBar extends StatelessWidget {
   }
 
   Widget _buildDragFeedback({
-    required ItemSortCriteria itemSortCriteria,
-    required SortCriterion sortCriterion,
+    required SortingModel sortingModel,
+    required SortingCriterion sortingCriterion,
   }) {
     return Icon(
       Icons.video_file,
@@ -176,24 +176,24 @@ class SortOptionsBar extends StatelessWidget {
     );
   }
 
-  Widget _builSortCriterionView({
-    required ItemSortCriteria itemSortCriteria,
-    required SortCriterion sortCriterion,
+  Widget _builSortingCriterionView({
+    required SortingModel sortingModel,
+    required SortingCriterion sortingCriterion,
     required bool isDragging,
   }) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          sortCriterion.text,
+          sortingCriterion.text,
           style: isDragging //
               ? textStyle.copyWith(color: Colors.grey)
               : textStyle,
         ),
         SizedBox(width: iconSpacing),
         _buildSortBtn(
-          itemSortCriteria: itemSortCriteria,
-          sortCriterion: sortCriterion,
+          sortingModel: sortingModel,
+          sortingCriterion: sortingCriterion,
           isDragging: isDragging,
           acceptNoneDirection: true,
           enabled: true,
