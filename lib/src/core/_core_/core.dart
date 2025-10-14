@@ -494,9 +494,9 @@ part '_ui_/_logged_in_user_builder.dart';
 
 part '_ui_/_notification_button_builder.dart';
 
-part '_ui_/_number_pagination_view.dart';
+part '_ui_/_block_number_pagination.dart';
 
-part '_ui_/_pagination_view.dart';
+part '_ui_/_block_pagination.dart';
 
 part '_ui_/_quick_suggestion_bar.dart';
 

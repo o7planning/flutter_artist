@@ -1,9 +1,9 @@
 part of '../core.dart';
 
-abstract class PaginationView extends _RefreshableWidget {
+abstract class BlockPagination extends _RefreshableWidget {
   final Block block;
 
-  const PaginationView({
+  const BlockPagination({
     super.key,
     required this.block,
     required super.description,
@@ -14,11 +14,11 @@ abstract class PaginationView extends _RefreshableWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _PaginationViewState();
+    return _BlockPaginationState();
   }
 }
 
-class _PaginationViewState extends _RefreshableWidgetState<PaginationView> {
+class _BlockPaginationState extends _RefreshableWidgetState<BlockPagination> {
   @override
   Widget buildContent(BuildContext context) {
     return widget.build();

@@ -1,10 +1,10 @@
 part of '../core.dart';
 
-class NumberPaginationView extends PaginationView {
+class BlockNumberPagination extends BlockPagination {
   final EdgeInsets padding;
   final int visiblePagesCount;
 
-  const NumberPaginationView({
+  const BlockNumberPagination({
     super.key,
     required super.block,
     required super.description,
