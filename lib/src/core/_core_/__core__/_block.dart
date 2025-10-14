@@ -453,13 +453,22 @@ abstract class Block<
         config = config.copy(),
         _sortingModel = sortingModel,
         _childBlocks = childBlocks ?? [] {
-    sortingModel?.block = this;
     for (Block childBlock in _childBlocks) {
       childBlock.parent = this;
     }
     if (formModel != null) {
       formModel!.block = this;
     }
+    // TODO: Test Case.
+    if (sortingModel?.block != null) {
+      String fatalError = _createFatalAppError(
+        "You cannot use one SortingModel object for multiple Blocks.\n"
+        " ${getClassNameWithoutGenerics(shelf)} > registerStructure > ShelfStructure > blocks"
+        " > ${getClassNameWithoutGenerics(this)} > ${getClassNameWithoutGenerics(sortingModel)}",
+      );
+      throw fatalError;
+    }
+    sortingModel?.block = this;
   }
 
   // ***************************************************************************
