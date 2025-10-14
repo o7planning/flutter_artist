@@ -7,9 +7,9 @@ enum CoordinatorNavCondition {
 }
 
 class CoordinatorConfig {
-  final CoordinatorNavCondition navCondition;
-
-  const CoordinatorConfig({
-    this.navCondition = CoordinatorNavCondition.success,
-  });
+  // final CoordinatorNavCondition navCondition;
+  //
+  // const CoordinatorConfig({
+  //   this.navCondition = CoordinatorNavCondition.success,
+  // });
 }

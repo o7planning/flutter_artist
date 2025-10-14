@@ -3,11 +3,12 @@ import '../enums/_selection_type.dart';
 import 'int_id_filter_criteria.dart';
 import 'int_id_filter_input.dart';
 
+// Example: [14809].
 class IntIdFilterModel
     extends FilterModel<IntIdFilterInput, IntIdFilterCriteria> {
   final int? _idValue;
 
-  IntIdFilterModel({required int? idValue}) : _idValue = idValue;
+  IntIdFilterModel({int? idValue}) : _idValue = idValue;
 
   @override
   FilterCriteriaStructure registerCriteriaStructure() {

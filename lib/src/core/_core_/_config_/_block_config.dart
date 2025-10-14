@@ -14,6 +14,7 @@ class BlockConfig {
   final List<Event> outsideBroadcastEvents;
 
   final List<Event> refreshCurrItemByExternalShelfEvents;
+  // Docs: 14769/27a
   final List<Event> reQueryByExternalShelfEvents;
 
   final List<Evt> refreshCurrItemByInternalShelfEvents;

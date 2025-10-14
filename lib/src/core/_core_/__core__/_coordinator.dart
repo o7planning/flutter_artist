@@ -2,7 +2,7 @@ part of '../core.dart';
 
 abstract class Coordinator extends _Core {
   final CoordinatorConfig config;
-  void Function(BuildContext context)? customNavigate;
+  void Function(BuildContext context, {required bool success})? customNavigate;
 
   Coordinator({
     required this.config,
@@ -24,30 +24,31 @@ abstract class Coordinator extends _Core {
       );
       success = false;
     }
-    switch (config.navCondition) {
-      case CoordinatorNavCondition.any:
-        _navigate(context);
-      case CoordinatorNavCondition.success:
-        if (success) {
-          _navigate(context);
-        }
-      case CoordinatorNavCondition.error:
-        if (!success) {
-          _navigate(context);
-        }
-    }
+    _navigate(context, success: success);
+    // switch (config.navCondition) {
+    //   case CoordinatorNavCondition.any:
+    //     _navigate(context);
+    //   case CoordinatorNavCondition.success:
+    //     if (success) {
+    //       _navigate(context);
+    //     }
+    //   case CoordinatorNavCondition.error:
+    //     if (!success) {
+    //       _navigate(context);
+    //     }
+    // }
     return success;
   }
 
-  void _navigate(BuildContext context) async {
+  void _navigate(BuildContext context, {required bool success}) async {
     String methodName = "";
     try {
       if (customNavigate != null) {
         methodName = "customNavigate";
-        customNavigate!(context);
+        customNavigate!(context, success: success);
       } else {
         methodName = "defaultNavigate";
-        defaultNavigate(context);
+        defaultNavigate(context, success: success);
       }
     } catch (e, stackTrace) {
       _handleError(
@@ -65,5 +66,5 @@ abstract class Coordinator extends _Core {
   ///
   Future<bool> coordinationLogic();
 
-  Future<void> defaultNavigate(BuildContext context);
+  Future<void> defaultNavigate(BuildContext context, {required bool success});
 }
