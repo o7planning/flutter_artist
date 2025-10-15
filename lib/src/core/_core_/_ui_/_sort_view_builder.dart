@@ -80,7 +80,7 @@ class _SortViewBuilderState extends _RefreshableWidgetState<_SortViewBuilder> {
       isBuilding: true,
     );
     //
-    return Text("TODO-SortView");
+    return widget.build();
   }
 
   @override

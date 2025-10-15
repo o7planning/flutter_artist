@@ -16,6 +16,8 @@ export 'src/core/adapter/_global_data_adapter.dart';
 export 'src/core/adapter/_locale_adapter.dart';
 export 'src/core/adapter/_logged_in_user_adapter.dart';
 export 'src/core/adapter/_notification_adapter.dart';
+export 'src/core/built_in_ui/sorting_option_bar.dart';
+export 'src/core/built_in_ui/sorting_option_dropdown.dart';
 export 'src/core/built_in/empty_extra_form_input.dart';
 export 'src/core/built_in/empty_filter_criteria.dart';
 export 'src/core/built_in/empty_filter_input.dart';

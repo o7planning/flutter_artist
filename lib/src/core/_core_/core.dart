@@ -524,12 +524,6 @@ part '_ui_/_scalar_fragment_view.dart';
 
 part '_ui_/_scalar_fragment_view_builder.dart';
 
-part '_ui_/_sorting_options.dart';
-
-part '_ui_/_sorting_option_bar.dart';
-
-part '_ui_/_sorting_option_dropdown.dart';
-
 part '_ui_/_task_progress_view_builder.dart';
 
 part '_ui_/_x_state.dart';

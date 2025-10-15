@@ -466,14 +466,14 @@ abstract class Block<
       formModel!.block = this;
     }
     // TODO: Test Case.
-    if (sortingModel?.block != null) {
-      String fatalError = _createFatalAppError(
-        "You cannot use one SortingModel object for multiple Blocks.\n"
-        " ${getClassNameWithoutGenerics(shelf)} > registerStructure > ShelfStructure > blocks"
-        " > ${getClassNameWithoutGenerics(this)} > ${getClassNameWithoutGenerics(sortingModel)}",
-      );
-      throw fatalError;
-    }
+    // if (sortingModel?.block != null) {
+    //   String fatalError = _createFatalAppError(
+    //     "You cannot use one SortingModel object for multiple Blocks.\n"
+    //     " ${getClassNameWithoutGenerics(shelf)} > registerStructure > ShelfStructure > blocks"
+    //     " > ${getClassNameWithoutGenerics(this)} > ${getClassNameWithoutGenerics(sortingModel)}",
+    //   );
+    //   throw fatalError;
+    // }
     _serverSideSortingModel.block = this;
     _clientSideSortingModel.block = this;
   }
