@@ -3,6 +3,7 @@ part of '../core.dart';
 abstract class SortingModel<ITEM extends Object> {
   late final Block block;
   final bool multiOptions;
+  final List<String> _sortableCriterionNamesOrigin;
   final List<String> _nonSignedCriterionNames = [];
   final List<SortingCriterion> _criteria = [];
   final Map<String, SortingCriterion> _criteriaMap = {};
@@ -14,7 +15,7 @@ abstract class SortingModel<ITEM extends Object> {
   SortingCriterion? get selectedCriterion => _selectedCriterion;
 
   // TODO: SortingCriteria.
-  SortingCriteria? get sortingCriteria => null;
+  SortingCriteria get sortingCriteria => SortingCriteria._(_criteria);
 
   ///
   /// ```dart
@@ -28,9 +29,9 @@ abstract class SortingModel<ITEM extends Object> {
   SortingModel({
     this.multiOptions = false,
     required List<String> sortableCriterionNames,
-  }) {
+  }) : _sortableCriterionNamesOrigin = [...sortableCriterionNames] {
     if (sortableCriterionNames.isEmpty) {
-      throw Exception("Invalid sortableCriterionNames. Not Allow Empty");
+      // throw Exception("Invalid sortableCriterionNames. Not Allow Empty");
     }
     int optCount = 0;
     for (String sortableCriterionName in sortableCriterionNames) {

@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class SortingCriterion {
+class SortingCriterion extends Equatable {
   final String criterionName;
   String _text;
   SortingDirection _direction;
@@ -81,6 +81,9 @@ class SortingCriterion {
       text: criterionName,
     );
   }
+
+  @override
+  List<Object?> get props => [criterionName, _direction];
 
   @override
   String toString() {

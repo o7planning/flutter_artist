@@ -377,9 +377,11 @@ abstract class Block<
   //   }
   // }
 
-  final SortingModel? _sortingModel;
+  final SortingModel _clientSideSortingModel;
 
-  SortingModel? get sortingModel => _sortingModel;
+  final SortingModel _serverSideSortingModel;
+
+  SortingModel get sortingModel => _serverSideSortingModel;
 
   FILTER_CRITERIA? get filterCriteria => __blockData._filterCriteria;
 
@@ -439,6 +441,7 @@ abstract class Block<
   }
 
   // ***************************************************************************
+  // *** Constructor ***********************************************************
   // ***************************************************************************
 
   Block({
@@ -451,7 +454,10 @@ abstract class Block<
     SortingModel<ITEM>? sortingModel,
   })  : registerFilterModelName = filterModelName,
         config = config.copy(),
-        _sortingModel = sortingModel,
+        _serverSideSortingModel = sortingModel ?? EmptySortingModel(),
+        _clientSideSortingModel = sortingModel == null
+            ? EmptySortingModel()
+            : _ClientSideSortingModel(sortingModel),
         _childBlocks = childBlocks ?? [] {
     for (Block childBlock in _childBlocks) {
       childBlock.parent = this;
@@ -468,7 +474,8 @@ abstract class Block<
       );
       throw fatalError;
     }
-    sortingModel?.block = this;
+    _serverSideSortingModel.block = this;
+    _clientSideSortingModel.block = this;
   }
 
   // ***************************************************************************
@@ -867,7 +874,7 @@ abstract class Block<
         ApiResult<PageData<ITEM>?> result = await callApiQuery(
           parentBlockCurrentItem: parent?.currentItem,
           filterCriteria: filterCriteriaOfFilterModel,
-          sortingCriteria: sortingModel?.sortingCriteria,
+          sortingCriteria: sortingModel.sortingCriteria,
           pageable: callingPageable,
         );
         // Throw ApiError:
@@ -3345,7 +3352,7 @@ abstract class Block<
   Future<ApiResult<PageData<ITEM>?>> callApiQuery({
     required Object? parentBlockCurrentItem,
     required FILTER_CRITERIA filterCriteria,
-    required SortingCriteria? sortingCriteria,
+    required SortingCriteria sortingCriteria,
     required PageableData pageable,
   });
 
