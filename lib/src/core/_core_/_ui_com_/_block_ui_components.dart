@@ -65,6 +65,7 @@ class _BlockUIComponents extends _UIComponents {
   @override
   bool hasMountedUIComponent() {
     return (block.filterModel?.ui.hasMountedUIComponent() ?? false) ||
+        (block.sortingModel?.ui.hasMountedUIComponent() ?? false) ||
         __blockFragmentWidgetStates.isNotEmpty ||
         __blockControlBarWidgetStates.isNotEmpty ||
         __controlWidgetStates.isNotEmpty ||
@@ -91,6 +92,13 @@ class _BlockUIComponents extends _UIComponents {
     //     return true;
     //   }
     // }
+    // Filter
+    if (block.sortingModel != null) {
+      active = block.sortingModel!.ui.hasActiveUIComponent();
+      if (active) {
+        return getClassNameWithoutGenerics(block.sortingModel);
+      }
+    }
     // Form
     active =
         block.formModel != null && block.formModel!.ui.hasActiveUIComponent();
@@ -217,6 +225,8 @@ class _BlockUIComponents extends _UIComponents {
     if (!withoutFilters) {
       block.filterModel?.ui.updateAllUIComponents();
     }
+    //
+    block.sortingModel.ui.updateAllUIComponents(force: force);
     //
     updateBlockFragmentWidgets(force: force);
     updatePaginationWidgets(force: force);
@@ -415,6 +425,7 @@ class _BlockUIComponents extends _UIComponents {
     required bool withPagination,
     required bool withBlockFragment,
     required bool withFilter,
+    required bool withSort,
     required bool withForm,
     required bool withControl,
     required bool withBlockControlBar,
@@ -426,6 +437,15 @@ class _BlockUIComponents extends _UIComponents {
       final FilterModel filterModel = block._registeredOrDefaultFilterModel;
       ret.addAll(
         filterModel.ui._findMountedFragmentWidgetStates(
+          activeOnly: true,
+        ),
+      );
+    }
+    //
+    if (withSort) {
+      final SortingModel sortingModel = block.sortingModel;
+      ret.addAll(
+        sortingModel.ui._findMountedFragmentWidgetStates(
           activeOnly: true,
         ),
       );
@@ -470,6 +490,7 @@ class _BlockUIComponents extends _UIComponents {
     required bool withPagination,
     required bool withBlockFragment,
     required bool withFilter,
+    required bool withSort,
     required bool withForm,
     required bool withControl,
     required bool withBlockControlBar,
@@ -479,6 +500,7 @@ class _BlockUIComponents extends _UIComponents {
       withPagination: withPagination,
       withBlockFragment: withBlockFragment,
       withFilter: withFilter,
+      withSort: withSort,
       withForm: withForm,
       withControl: withControl,
       withBlockControlBar: withBlockControlBar,
