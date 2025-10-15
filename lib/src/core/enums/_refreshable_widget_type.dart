@@ -11,6 +11,10 @@ enum RefreshableWidgetType {
     name: "FilterModel",
     iconData: FaIconConstants.filterModelIconData,
   ),
+  sort(
+    name: "SortingModel",
+    iconData: FaIconConstants.filterModelIconData,
+  ),
   controlBar(
     name: "ControlBar",
     iconData: FaIconConstants.blockControlBarIconData,

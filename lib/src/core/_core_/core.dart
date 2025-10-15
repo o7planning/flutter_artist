@@ -317,6 +317,8 @@ part '_core_x_/_x_shelf_/_x_shelf_form_view_change.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_filter_view_change.dart';
 
+part '_core_x_/_x_shelf_/_x_shelf_sort_view_change.dart';
+
 part '_core_x_/_x_storage.dart';
 
 part '_core_state_/__force_reload_throw.dart';
@@ -491,6 +493,8 @@ part '_ui_/_filter_view.dart';
 
 part '_ui_/_filter_view_builder.dart';
 
+part '_ui_/_sort_view_builder.dart';
+
 part '_ui_/_form_view.dart';
 
 part '_ui_/_form_view_builder.dart';
@@ -532,6 +536,8 @@ part '_ui_com_/__ui_components.dart';
 part '_ui_com_/_block_ui_components.dart';
 
 part '_ui_com_/_filter_ui_components.dart';
+
+part '_ui_com_/_sort_ui_components.dart';
 
 part '_ui_com_/_form_ui_components.dart';
 
@@ -732,6 +738,10 @@ class _FormModelLoadFormAnnotation {
 
 class _FormViewChangeAnnotation {
   const _FormViewChangeAnnotation();
+}
+
+class _SortViewChangeAnnotation {
+  const _SortViewChangeAnnotation();
 }
 
 class _FilterViewChangeAnnotation {

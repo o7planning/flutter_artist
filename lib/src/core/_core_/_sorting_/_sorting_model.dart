@@ -2,6 +2,9 @@ part of '../core.dart';
 
 abstract class SortingModel<ITEM extends Object> {
   late final Block block;
+
+  Shelf get shelf => block.shelf;
+
   final bool multiOptions;
   final List<String> _sortableCriterionNamesOrigin;
   final List<String> _nonSignedCriterionNames = [];
@@ -16,6 +19,8 @@ abstract class SortingModel<ITEM extends Object> {
 
   // TODO: SortingCriteria.
   SortingCriteria get sortingCriteria => SortingCriteria._(_criteria);
+
+  late final _SortUIComponents ui = _SortUIComponents(sortingModel: this);
 
   ///
   /// ```dart
@@ -300,6 +305,27 @@ abstract class SortingModel<ITEM extends Object> {
   dynamic getValue({required ITEM item, required String criterionName});
 
   String? getText({required String criterionName});
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  // Change Event from GUI.
+  @_ImportantMethodAnnotation(
+      "Called when the user makes a change on the SortView")
+  @_SortViewChangeAnnotation()
+  Future<void> _onChangeFromSortView() async {
+    print("#~~~~~~~~~~~~~~~> _onChangeFromSortView");
+    //
+    final XShelf xShelf = _XShelfSortViewChange(sortingModel: this);
+    //
+    // final XFilterModel xFilterModel = xShelf.findXFilterModelByName(name)!;
+    // _FilterViewChangeTaskUnit taskUnit = _FilterViewChangeTaskUnit(
+    //   xFilterModel: xFilterModel,
+    // );
+    // xShelf._addTaskUnit(taskUnit: taskUnit);
+    // FlutterArtist._rootQueue._addXShelf(xShelf);
+    // await FlutterArtist.executor._executeTaskUnitQueue();
+  }
 
   @override
   String toString() {
