@@ -11,7 +11,6 @@ class SortingOptionDropdown<ITEM extends Object> extends SortView<ITEM> {
   const SortingOptionDropdown({
     super.key,
     required super.sortingModel,
-    required super.sortingSide,
     this.iconSpacing = 3,
     this.textStyle = const TextStyle(fontSize: 14),
   });
@@ -19,7 +18,6 @@ class SortingOptionDropdown<ITEM extends Object> extends SortView<ITEM> {
   const SortingOptionDropdown.simple({
     super.key,
     required super.sortingModel,
-    required super.sortingSide,
     this.iconSpacing = 3,
     this.textStyle = const TextStyle(fontSize: 14),
   });

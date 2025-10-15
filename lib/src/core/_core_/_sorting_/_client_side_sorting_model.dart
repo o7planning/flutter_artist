@@ -5,7 +5,7 @@ class _ClientSideSortingModel<ITEM extends Object> extends SortingModel<ITEM> {
 
   _ClientSideSortingModel(SortingModel<ITEM> innerSortingModel)
       : __innerSortingModel = innerSortingModel,
-        super(
+        super._client(
           multiOptions: innerSortingModel.multiOptions,
           sortableCriterionNames:
               innerSortingModel._sortableCriterionNamesOrigin,

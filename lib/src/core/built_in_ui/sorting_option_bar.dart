@@ -29,7 +29,6 @@ class SortingOptionBar<ITEM extends Object> extends SortView<ITEM> {
   SortingOptionBar({
     super.key,
     required super.sortingModel,
-    required super.sortingSide,
     this.itemSpacing = 5,
     this.iconSpacing = 3,
     this.textStyle = const TextStyle(fontSize: 14),
@@ -50,7 +49,6 @@ class SortingOptionBar<ITEM extends Object> extends SortView<ITEM> {
   SortingOptionBar.simple({
     super.key,
     required super.sortingModel,
-    required super.sortingSide,
     this.itemSpacing = 5,
     this.iconSpacing = 3,
     this.textStyle = const TextStyle(fontSize: 14),

@@ -65,7 +65,7 @@ class _BlockUIComponents extends _UIComponents {
   @override
   bool hasMountedUIComponent() {
     return (block.filterModel?.ui.hasMountedUIComponent() ?? false) ||
-        (block.sortingModel?.ui.hasMountedUIComponent() ?? false) ||
+        (block.serverSideSortingModel?.ui.hasMountedUIComponent() ?? false) ||
         __blockFragmentWidgetStates.isNotEmpty ||
         __blockControlBarWidgetStates.isNotEmpty ||
         __controlWidgetStates.isNotEmpty ||
@@ -93,10 +93,10 @@ class _BlockUIComponents extends _UIComponents {
     //   }
     // }
     // Filter
-    if (block.sortingModel != null) {
-      active = block.sortingModel!.ui.hasActiveUIComponent();
+    if (block.serverSideSortingModel != null) {
+      active = block.serverSideSortingModel!.ui.hasActiveUIComponent();
       if (active) {
-        return getClassNameWithoutGenerics(block.sortingModel);
+        return getClassNameWithoutGenerics(block.serverSideSortingModel);
       }
     }
     // Form
@@ -226,7 +226,7 @@ class _BlockUIComponents extends _UIComponents {
       block.filterModel?.ui.updateAllUIComponents();
     }
     //
-    block.sortingModel.ui.updateAllUIComponents(force: force);
+    block.serverSideSortingModel.ui.updateAllUIComponents(force: force);
     //
     updateBlockFragmentWidgets(force: force);
     updatePaginationWidgets(force: force);
@@ -443,7 +443,7 @@ class _BlockUIComponents extends _UIComponents {
     }
     //
     if (withSort) {
-      final SortingModel sortingModel = block.sortingModel;
+      final SortingModel sortingModel = block.serverSideSortingModel;
       ret.addAll(
         sortingModel.ui._findMountedFragmentWidgetStates(
           activeOnly: true,

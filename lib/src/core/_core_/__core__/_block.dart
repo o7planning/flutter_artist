@@ -377,11 +377,13 @@ abstract class Block<
   //   }
   // }
 
-  final SortingModel _clientSideSortingModel;
+  final SortingModel __clientSideSortingModel;
 
-  final SortingModel _serverSideSortingModel;
+  final SortingModel __serverSideSortingModel;
 
-  SortingModel get sortingModel => _serverSideSortingModel;
+  SortingModel get clientSideSortingModel => __clientSideSortingModel;
+
+  SortingModel get serverSideSortingModel => __serverSideSortingModel;
 
   FILTER_CRITERIA? get filterCriteria => __blockData._filterCriteria;
 
@@ -454,8 +456,8 @@ abstract class Block<
     SortingModel<ITEM>? sortingModel,
   })  : registerFilterModelName = filterModelName,
         config = config.copy(),
-        _serverSideSortingModel = sortingModel ?? EmptySortingModel(),
-        _clientSideSortingModel = sortingModel == null
+        __serverSideSortingModel = sortingModel ?? EmptySortingModel(),
+        __clientSideSortingModel = sortingModel == null
             ? EmptySortingModel()
             : _ClientSideSortingModel(sortingModel),
         _childBlocks = childBlocks ?? [] {
@@ -474,8 +476,8 @@ abstract class Block<
     //   );
     //   throw fatalError;
     // }
-    _serverSideSortingModel.block = this;
-    _clientSideSortingModel.block = this;
+    __serverSideSortingModel.block = this;
+    __clientSideSortingModel.block = this;
   }
 
   // ***************************************************************************
@@ -874,7 +876,7 @@ abstract class Block<
         ApiResult<PageData<ITEM>?> result = await callApiQuery(
           parentBlockCurrentItem: parent?.currentItem,
           filterCriteria: filterCriteriaOfFilterModel,
-          sortingCriteria: sortingModel.sortingCriteria,
+          sortingCriteria: serverSideSortingModel.sortingCriteria,
           pageable: callingPageable,
         );
         // Throw ApiError:

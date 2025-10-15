@@ -5,6 +5,7 @@ abstract class SortingModel<ITEM extends Object> {
 
   Shelf get shelf => block.shelf;
 
+  final SortingSide sortingSide;
   final bool multiOptions;
   final List<String> _sortableCriterionNamesOrigin;
   final List<String> _nonSignedCriterionNames = [];
@@ -34,10 +35,20 @@ abstract class SortingModel<ITEM extends Object> {
   SortingModel({
     this.multiOptions = false,
     required List<String> sortableCriterionNames,
-  }) : _sortableCriterionNamesOrigin = [...sortableCriterionNames] {
-    if (sortableCriterionNames.isEmpty) {
-      // throw Exception("Invalid sortableCriterionNames. Not Allow Empty");
-    }
+  })  : sortingSide = SortingSide.server,
+        _sortableCriterionNamesOrigin = [...sortableCriterionNames] {
+    __init(sortableCriterionNames);
+  }
+
+  SortingModel._client({
+    this.multiOptions = false,
+    required List<String> sortableCriterionNames,
+  })  : sortingSide = SortingSide.client,
+        _sortableCriterionNamesOrigin = [...sortableCriterionNames] {
+    __init(sortableCriterionNames);
+  }
+
+  void __init(List<String> sortableCriterionNames) {
     int optCount = 0;
     for (String sortableCriterionName in sortableCriterionNames) {
       SortingCriterion criterion =

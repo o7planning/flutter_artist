@@ -2,7 +2,6 @@ part of '../core.dart';
 
 class _SortViewBuilder extends _RefreshableWidget {
   final SortingModel sortingModel;
-  final SortingSide sortingSide;
 
   final Widget Function() build;
 
@@ -11,7 +10,6 @@ class _SortViewBuilder extends _RefreshableWidget {
     required super.ownerClassInstance,
     required super.description,
     required this.sortingModel,
-    required this.sortingSide,
     required this.build,
   });
 
