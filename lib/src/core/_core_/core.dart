@@ -88,6 +88,7 @@ import '../enums/_selection_type.dart';
 import '../enums/_shelf_hidden_behavior.dart';
 import '../enums/_show_mode.dart';
 import '../enums/_sorting_direction.dart';
+import '../enums/_sorting_side.dart';
 import '../enums/_task_type.dart';
 import '../enums/_x_shelf_type.dart';
 import '../enums/after_silent_action.dart';
@@ -494,6 +495,8 @@ part '_ui_/_filter_view.dart';
 part '_ui_/_filter_view_builder.dart';
 
 part '_ui_/_sort_view_builder.dart';
+
+part '_ui_/_sort_view.dart';
 
 part '_ui_/_form_view.dart';
 

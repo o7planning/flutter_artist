@@ -1,0 +1,4 @@
+enum SortingSide {
+  server,
+  client;
+}

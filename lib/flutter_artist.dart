@@ -68,6 +68,7 @@ export 'src/core/enums/_selection_type.dart';
 export 'src/core/enums/_shelf_hidden_behavior.dart';
 export 'src/core/enums/_show_mode.dart';
 export 'src/core/enums/_sorting_direction.dart';
+export 'src/core/enums/_sorting_side.dart';
 export 'src/core/enums/_task_type.dart';
 export 'src/core/enums/after_silent_action.dart';
 export 'src/core/event/fire_silent_events_action.dart';
