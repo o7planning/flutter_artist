@@ -40,6 +40,7 @@ export 'src/core/enums/_block_control_action_type.dart';
 export 'src/core/enums/_block_error_method.dart';
 export 'src/core/enums/_block_hidden_behavior.dart';
 export 'src/core/enums/_block_item_refreshment_mode.dart';
+export 'src/core/enums/_client_side_sort_mode.dart';
 export 'src/core/enums/_code_flow_item_type.dart';
 export 'src/core/enums/_code_flow_type.dart';
 export 'src/core/enums/_current_item_selection_type.dart';
