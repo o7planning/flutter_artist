@@ -213,26 +213,16 @@ abstract class SortingModel<ITEM extends Object> {
       } else if (aValue == null && bValue != null) {
         return criterion.isAscending() ? 1 : -1;
       }
-      // int value
-      if (aValue is int) {
-        bValue as int;
-        //
-        int x = aValue - bValue;
-        if (x == 0) {
-          continue;
-        }
-        return criterion.isAscending() ? x : -x;
-      }
-      // double value
-      else if (aValue is double) {
-        bValue as double;
+      // num value
+      if (aValue is num) {
+        bValue as num;
         //
         int x = aValue - bValue > 0 ? 1 : -1;
         if (x == 0) {
           continue;
         }
         return criterion.isAscending() ? x : -x;
-      }
+      } 
       // bool value
       else if (aValue is bool) {
         bValue as bool;

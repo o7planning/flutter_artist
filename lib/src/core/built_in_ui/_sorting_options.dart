@@ -19,6 +19,7 @@ Widget buildSortBtn({
   return InkWell(
     onTap: enabled
         ? () {
+      print("Chhayyy vao day 1: ${sortingCriterion.criterionName}");
             SortingDirection nextDirection = sortingCriterion.getNextDirection(
               acceptNoneDirection: acceptNoneDirection,
             );

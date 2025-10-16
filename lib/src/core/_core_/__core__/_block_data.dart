@@ -235,8 +235,9 @@ class _BlockData<
       if (sortingModel != null) {
         _items.sort((a, b) => sortingModel._compare(a, b));
       }
-    } catch (e) {
+    } catch (e,stackTrace) {
       print("Sort Error: $e");
+      print(stackTrace);
     }
   }
 
