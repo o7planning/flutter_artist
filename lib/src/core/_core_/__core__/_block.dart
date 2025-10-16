@@ -6067,17 +6067,21 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  // TODO: Allow change position??
-  bool _checkForChangeItemPosition() {
-    if (false) {
-      showErrorSnackBar(message: "Can not change position", errorDetails: null);
+  bool __checkBeforeChangeTheItemPositionManually() {
+    if (config.clientSideSortMode != ClientSideSortMode.manual) {
+      showErrorSnackBar(
+        message: "Can not change the position",
+        errorDetails: [
+          "You need to set block.config.clientSideSortMode to ${ClientSideSortMode.manual}"
+        ],
+      );
       return false;
     }
     return true;
   }
 
   // bool swapItemsByIndexes({required int index1, required int index2}) {
-  //   if (!_checkForChangeItemPosition()) {
+  //   if (!__checkBeforeChangeTheItemPositionManually()) {
   //     return false;
   //   }
   //   if (index1 >= 0 &&
@@ -6098,7 +6102,7 @@ abstract class Block<
   // ***************************************************************************
 
   bool swapPositions({required ITEM item1, required ITEM item2}) {
-    if (!_checkForChangeItemPosition()) {
+    if (!__checkBeforeChangeTheItemPositionManually()) {
       return false;
     }
     bool success = ItemsUtils.swapPositionsByIds(
@@ -6120,7 +6124,7 @@ abstract class Block<
     required ITEM item,
     required int newIndexPosition,
   }) {
-    if (!_checkForChangeItemPosition()) {
+    if (!__checkBeforeChangeTheItemPositionManually()) {
       return false;
     }
     bool success = ItemsUtils.moveItemToNewIndexPosition(
@@ -6196,7 +6200,7 @@ abstract class Block<
     required int oldIndexPosition,
     required int newIndexPosition,
   }) {
-    if (!_checkForChangeItemPosition()) {
+    if (!__checkBeforeChangeTheItemPositionManually()) {
       return false;
     }
     bool success = ItemsUtils.moveItemByIndexPosition(

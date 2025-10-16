@@ -22,6 +22,8 @@ class _BlockData<
   final List<ITEM> _selectedItems = [];
   final List<ITEM> _checkedItems = [];
 
+  final List<ID> __itemIdsManualArrangement = [];
+
   // ***************************************************************************
 
   List<ITEM> moveCurrentItemToEndOfList({
