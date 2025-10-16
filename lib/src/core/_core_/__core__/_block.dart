@@ -377,11 +377,11 @@ abstract class Block<
   //   }
   // }
 
-  final SortingModel<ITEM> __clientSideSortingModel;
+  final SortingModel<ITEM>? __clientSideSortingModel;
 
   final SortingModel<ITEM> __serverSideSortingModel;
 
-  SortingModel<ITEM> get clientSideSortingModel => __clientSideSortingModel;
+  SortingModel<ITEM>? get clientSideSortingModel => __clientSideSortingModel;
 
   SortingModel<ITEM> get serverSideSortingModel => __serverSideSortingModel;
 
@@ -457,8 +457,9 @@ abstract class Block<
   })  : registerFilterModelName = filterModelName,
         config = config.copy(),
         __serverSideSortingModel = sortingModel ?? EmptySortingModel(),
-        __clientSideSortingModel = sortingModel == null
-            ? EmptySortingModel()
+        __clientSideSortingModel = sortingModel == null ||
+                config.clientSideSortMode != ClientSideSortMode.sortingModel
+            ? null
             : _ClientSideSortingModel(sortingModel),
         _childBlocks = childBlocks ?? [] {
     for (Block childBlock in _childBlocks) {
@@ -477,7 +478,7 @@ abstract class Block<
     //   throw fatalError;
     // }
     __serverSideSortingModel.block = this;
-    __clientSideSortingModel.block = this;
+    __clientSideSortingModel?.block = this;
   }
 
   // ***************************************************************************

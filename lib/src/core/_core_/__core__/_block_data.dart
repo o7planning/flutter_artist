@@ -231,8 +231,19 @@ class _BlockData<
 
   void _clientSideSortItems() {
     try {
-      SortingModel<ITEM> sortingModel = block.clientSideSortingModel;
-      _items.sort((a, b) => sortingModel._compare(a, b));
+      switch (block.config.clientSideSortMode) {
+        case ClientSideSortMode.none:
+          // Do nothing
+          break;
+        case ClientSideSortMode.sortingModel:
+          SortingModel<ITEM>? sortingModel = block.clientSideSortingModel;
+          if (sortingModel != null) {
+            _items.sort((a, b) => sortingModel._compare(a, b));
+          }
+        case ClientSideSortMode.manual:
+          // TODO
+          break;
+      }
     } catch (e, stackTrace) {
       print("Sort Error: $e");
       print(stackTrace);

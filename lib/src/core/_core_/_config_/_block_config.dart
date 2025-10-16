@@ -21,6 +21,8 @@ class BlockConfig {
   final List<Evt> refreshCurrItemByInternalShelfEvents;
   final List<Evt> reQueryByInternalShelfEvents;
 
+  final ClientSideSortMode clientSideSortMode;
+
   BlockConfig({
     this.itemRefreshmentMode = BlockItemRefreshmentMode.auto,
     this.leaveTheFormSafely = true,
@@ -39,6 +41,7 @@ class BlockConfig {
       page: 1,
       pageSize: 20,
     ),
+    this.clientSideSortMode = ClientSideSortMode.none,
   })  : outsideBroadcastEvents =
             List.unmodifiable(outsideBroadcastEvents?.toSet() ?? []),
         refreshCurrItemByExternalShelfEvents = //

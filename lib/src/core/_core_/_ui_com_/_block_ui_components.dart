@@ -234,7 +234,7 @@ class _BlockUIComponents extends _UIComponents {
     }
     //
     block.serverSideSortingModel.ui.updateAllUIComponents(force: force);
-    block.clientSideSortingModel.ui.updateAllUIComponents(force: force);
+    block.clientSideSortingModel?.ui.updateAllUIComponents(force: force);
     //
     updateBlockFragmentWidgets(force: force);
     updatePaginationWidgets(force: force);
