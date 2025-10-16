@@ -737,8 +737,8 @@ class _FormViewChangeAnnotation {
   const _FormViewChangeAnnotation();
 }
 
-class _SortViewChangeAnnotation {
-  const _SortViewChangeAnnotation();
+class _SortingModelChangedAnnotation {
+  const _SortingModelChangedAnnotation();
 }
 
 class _FilterViewChangeAnnotation {

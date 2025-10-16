@@ -127,11 +127,16 @@ abstract class SortingModel<ITEM extends Object> {
       }
     }
     criterion._direction = direction;
-    block.clientSideSort(refresh: false);
-    block.ui.updateAllUIComponents(
-      withoutFilters: true,
-      force: true,
-    );
+
+    if (sortingSide == SortingSide.client) {
+      block.clientSideSort(refresh: false);
+      block.ui.updateAllUIComponents(
+        withoutFilters: true,
+        force: true,
+      );
+    } else {
+      _onSortingModelChanged();
+    }
   }
 
   void rearrangeSortingCriteria({
@@ -172,11 +177,15 @@ abstract class SortingModel<ITEM extends Object> {
       ..clear()
       ..addAll(newArrangementCriteria);
     //
-    block.clientSideSort(refresh: false);
-    block.ui.updateAllUIComponents(
-      withoutFilters: true,
-      force: true,
-    );
+    if (sortingSide == SortingSide.client) {
+      block.clientSideSort(refresh: false);
+      block.ui.updateAllUIComponents(
+        withoutFilters: true,
+        force: true,
+      );
+    } else {
+      _onSortingModelChanged();
+    }
   }
 
   int _compare(ITEM a, ITEM b) {
@@ -262,14 +271,13 @@ abstract class SortingModel<ITEM extends Object> {
   // ***************************************************************************
   // ***************************************************************************
 
-  // Change Event from GUI.
-  @_ImportantMethodAnnotation(
-      "Called when the user makes a change on the SortView")
-  @_SortViewChangeAnnotation()
-  Future<void> _onChangeFromSortView() async {
-    print("#~~~~~~~~~~~~~~~> _onChangeFromSortView");
+  @_ImportantMethodAnnotation("Called when SortingModel changed")
+  @_SortingModelChangedAnnotation()
+  Future<void> _onSortingModelChanged() async {
+    // print("#~~~~~~~~~~~~~~~> _onSortingModelChanged");
     //
-    final XShelf xShelf = _XShelfSortViewChange(sortingModel: this);
+    await block.query();
+    // final XShelf xShelf = _XShelfSortViewChange(sortingModel: this);
     //
     // final XFilterModel xFilterModel = xShelf.findXFilterModelByName(name)!;
     // _FilterViewChangeTaskUnit taskUnit = _FilterViewChangeTaskUnit(

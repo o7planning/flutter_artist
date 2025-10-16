@@ -56,22 +56,8 @@ class _SortViewBuilderState extends _RefreshableWidgetState<_SortViewBuilder> {
     // widget.sortingModel._afterBuildFilterView();
   }
 
-  @_SortViewChangeAnnotation()
-  Future<void> _onChanged() async {
-    if (FlutterArtist.executor.executingXShelfId != null) {
-      return;
-    }
-    //
-    bool isBuilding = widget.sortingModel.ui._isWidgetStateBuilding(
-      widgetState: this,
-    );
-    if (!isBuilding) {
-      await widget.sortingModel._onChangeFromSortView();
-    }
-  }
-
   @override
-  @_SortViewChangeAnnotation()
+  @_SortingModelChangedAnnotation()
   Widget buildContent(BuildContext context) {
     widget.sortingModel.ui._setSortViewBuildingState(
       widgetState: this,
