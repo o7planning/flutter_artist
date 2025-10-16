@@ -24,8 +24,16 @@ class SortingCriterion extends Equatable {
     return _direction == SortingDirection.descending;
   }
 
-  bool isNonDirection() {
+  bool hasDirection()  {
+    return _direction != SortingDirection.none;
+  }
+
+  bool hasNoDirection() {
     return _direction == SortingDirection.none;
+  }
+
+  String toCriterionString() {
+    return "${_direction.sign}$criterionName";
   }
 
   SortingCriterion copyWith({required SortingDirection direction}) {

@@ -80,12 +80,21 @@ abstract class SortingModel<ITEM extends Object> {
     }
   }
 
-  void moveCriterion({
-    required SortingCriterion movingCriterion,
-    required SortingCriterion destCriterion,
-  }) {
-    SortingCriterion? moving = _criteriaMap[movingCriterion.criterionName];
-    SortingCriterion? dest = _criteriaMap[destCriterion.criterionName];
+  bool hasDirection() {
+    for (SortingCriterion criterion in _criteria) {
+      if (criterion.hasDirection()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  Future<void> moveCriterion({
+    required String movingCriterionName,
+    required String destCriterionName,
+  }) async {
+    SortingCriterion? moving = _criteriaMap[movingCriterionName];
+    SortingCriterion? dest = _criteriaMap[destCriterionName];
     if (moving == null || dest == null) {
       return;
     } else if (moving.criterionName == dest.criterionName) {
@@ -100,23 +109,20 @@ abstract class SortingModel<ITEM extends Object> {
       _criteria.remove(moving);
       _criteria.insert(destIdx, moving);
     }
-    block.clientSideSort(refresh: false);
-    block.ui.updateAllUIComponents(
-      withoutFilters: false,
-      force: true,
-    );
+    //
+    await __applyChanges();
   }
 
   SortingCriterion? getFirstSortingCriterion() {
     return _criteria.firstOrNull;
   }
 
-  void updateSortingCriterionByName({
+  Future<void> updateSortingCriterionByName({
     required String criterionName,
     required SortingDirection direction,
     required bool moveToFirst,
     required bool clearDirectionOfOtherCriteria,
-  }) {
+  }) async {
     SortingCriterion? criterion = _criteriaMap[criterionName];
     if (criterion == null) {
       return;
@@ -127,21 +133,13 @@ abstract class SortingModel<ITEM extends Object> {
       }
     }
     criterion._direction = direction;
-
-    if (sortingSide == SortingSide.client) {
-      block.clientSideSort(refresh: false);
-      block.ui.updateAllUIComponents(
-        withoutFilters: true,
-        force: true,
-      );
-    } else {
-      _onSortingModelChanged();
-    }
+    //
+    await __applyChanges();
   }
 
-  void rearrangeSortingCriteria({
+  Future<void> rearrangeSortingCriteria({
     required List<String> newArrangementCriterionNames,
-  }) {
+  }) async {
     final List<String> oldArrangementCn =
         _criteria.map((c) => c.criterionName).toList();
     //
@@ -177,6 +175,26 @@ abstract class SortingModel<ITEM extends Object> {
       ..clear()
       ..addAll(newArrangementCriteria);
     //
+    await __applyChanges();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<void> clearAllSorts() async {
+    if (!hasDirection()) {
+      return;
+    }
+    for (SortingCriterion sc in _criteria) {
+      sc._direction = SortingDirection.none;
+    }
+    await __applyChanges();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<void> __applyChanges() async {
     if (sortingSide == SortingSide.client) {
       block.clientSideSort(refresh: false);
       block.ui.updateAllUIComponents(
@@ -184,9 +202,12 @@ abstract class SortingModel<ITEM extends Object> {
         force: true,
       );
     } else {
-      _onSortingModelChanged();
+      await block.query();
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   int _compare(ITEM a, ITEM b) {
     final List<SortingCriterion> criteriaList = [];
@@ -271,22 +292,22 @@ abstract class SortingModel<ITEM extends Object> {
   // ***************************************************************************
   // ***************************************************************************
 
-  @_ImportantMethodAnnotation("Called when SortingModel changed")
-  @_SortingModelChangedAnnotation()
-  Future<void> _onSortingModelChanged() async {
-    // print("#~~~~~~~~~~~~~~~> _onSortingModelChanged");
-    //
-    await block.query();
-    // final XShelf xShelf = _XShelfSortViewChange(sortingModel: this);
-    //
-    // final XFilterModel xFilterModel = xShelf.findXFilterModelByName(name)!;
-    // _FilterViewChangeTaskUnit taskUnit = _FilterViewChangeTaskUnit(
-    //   xFilterModel: xFilterModel,
-    // );
-    // xShelf._addTaskUnit(taskUnit: taskUnit);
-    // FlutterArtist._rootQueue._addXShelf(xShelf);
-    // await FlutterArtist.executor._executeTaskUnitQueue();
-  }
+  // @_ImportantMethodAnnotation("Called when SortingModel changed")
+  // @_SortingModelChangedAnnotation()
+  // Future<void> _onSortingModelChanged() async {
+  //   // print("#~~~~~~~~~~~~~~~> _onSortingModelChanged");
+  //   //
+  //   await block.query();
+  //   // final XShelf xShelf = _XShelfSortViewChange(sortingModel: this);
+  //   //
+  //   // final XFilterModel xFilterModel = xShelf.findXFilterModelByName(name)!;
+  //   // _FilterViewChangeTaskUnit taskUnit = _FilterViewChangeTaskUnit(
+  //   //   xFilterModel: xFilterModel,
+  //   // );
+  //   // xShelf._addTaskUnit(taskUnit: taskUnit);
+  //   // FlutterArtist._rootQueue._addXShelf(xShelf);
+  //   // await FlutterArtist.executor._executeTaskUnitQueue();
+  // }
 
   @override
   String toString() {

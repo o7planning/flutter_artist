@@ -111,11 +111,8 @@ class SortingOptionBar<ITEM extends Object> extends SortView<ITEM> {
         },
         onAcceptWithDetails: (DragTargetDetails<SortingCriterion> details) {
           sortingModel.moveCriterion(
-            movingCriterion: details.data,
-            destCriterion: criterion,
-          );
-          sortingModel.ui.updateAllUIComponents(
-            force: true,
+            movingCriterionName: details.data.criterionName,
+            destCriterionName: criterion.criterionName,
           );
         },
         builder: (

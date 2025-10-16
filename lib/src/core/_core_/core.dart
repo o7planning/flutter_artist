@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart' as cupertino;
