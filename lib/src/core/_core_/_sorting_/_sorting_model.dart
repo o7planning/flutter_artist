@@ -7,6 +7,7 @@ abstract class SortingModel<ITEM extends Object> {
 
   final SortingSide sortingSide;
   final bool multiOptionMode;
+
   bool get singleOptionMode => !multiOptionMode;
 
   final List<String> _sortableCriterionNamesOrigin;
@@ -19,9 +20,6 @@ abstract class SortingModel<ITEM extends Object> {
   SortingCriterion? _selectedCriterion;
 
   SortingCriterion? get selectedCriterion => _selectedCriterion;
-
-  // TODO: SortingCriteria.
-  SortingCriteria get sortingCriteria => SortingCriteria._(_criteria);
 
   late final _SortUIComponents ui = _SortUIComponents(sortingModel: this);
 
@@ -72,6 +70,28 @@ abstract class SortingModel<ITEM extends Object> {
       }
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ///
+  /// Returns the criteria used for sorting.
+  ///
+  SortingCriteria getApplyingSortingCriteria() {
+    // Logic: #0006
+    if (singleOptionMode) {
+      return _selectedCriterion == null || _selectedCriterion!.hasNoDirection()
+          ? SortingCriteria._([])
+          : SortingCriteria._([_selectedCriterion!]);
+    } else {
+      List<SortingCriterion> list =
+          _criteria.where((sc) => sc.hasDirection()).toList();
+      return SortingCriteria._(list);
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void setSelectedCriterion(SortingCriterion? value) {
     if (singleOptionMode) {
@@ -211,6 +231,7 @@ abstract class SortingModel<ITEM extends Object> {
 
   int _compare(ITEM a, ITEM b) {
     final List<SortingCriterion> criteriaList = [];
+    // Logic: #0006
     if (singleOptionMode) {
       SortingCriterion? selected = _selectedCriterion;
       if (selected != null) {

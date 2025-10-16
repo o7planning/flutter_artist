@@ -4,7 +4,7 @@ import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 import '../_core_/core.dart';
 import '_sorting_options.dart';
 
-class SortingOptionBar<ITEM extends Object> extends SortView<ITEM> {
+class BreadcrumbSortView<ITEM extends Object> extends SortView<ITEM> {
   final double itemSpacing;
   final double iconSpacing;
 
@@ -26,7 +26,7 @@ class SortingOptionBar<ITEM extends Object> extends SortView<ITEM> {
   final Color _dividerColor = Colors.indigo.withAlpha(80);
   static const double _dividerHeight = 20;
 
-  SortingOptionBar({
+  BreadcrumbSortView({
     super.key,
     required super.sortingModel,
     this.itemSpacing = 5,
@@ -46,7 +46,7 @@ class SortingOptionBar<ITEM extends Object> extends SortView<ITEM> {
     this.clipBehavior = Clip.none,
   });
 
-  SortingOptionBar.simple({
+  BreadcrumbSortView.simple({
     super.key,
     required super.sortingModel,
     this.itemSpacing = 5,

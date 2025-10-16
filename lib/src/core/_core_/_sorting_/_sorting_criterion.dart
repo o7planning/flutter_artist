@@ -24,7 +24,7 @@ class SortingCriterion extends Equatable {
     return _direction == SortingDirection.descending;
   }
 
-  bool hasDirection()  {
+  bool hasDirection() {
     return _direction != SortingDirection.none;
   }
 

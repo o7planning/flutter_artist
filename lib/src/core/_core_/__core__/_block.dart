@@ -876,7 +876,7 @@ abstract class Block<
         ApiResult<PageData<ITEM>?> result = await callApiQuery(
           parentBlockCurrentItem: parent?.currentItem,
           filterCriteria: filterCriteriaOfFilterModel,
-          sortingCriteria: serverSideSortingModel.sortingCriteria,
+          sortingCriteria: serverSideSortingModel.getApplyingSortingCriteria(),
           pageable: callingPageable,
         );
         // Throw ApiError:
