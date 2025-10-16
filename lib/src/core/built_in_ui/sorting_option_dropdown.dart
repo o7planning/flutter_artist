@@ -57,22 +57,12 @@ class SortingOptionDropdown<ITEM extends Object> extends SortView<ITEM> {
     if (direction == SortingDirection.none) {
       direction = SortingDirection.ascending;
     }
-    List<SortingCriterion> updateCriteria =
-        sortingModel.getCopyOfSortingCriteria(
-      clearAllDirections: true,
-      appliedCriterion: newValue,
-    );
-    //
     sortingModel.setSelectedCriterion(newValue);
-    // sortingModel.updateSortingCriterion(
-    //   updateCriteria: updateCriteria,
-    //   rearrangeCriteria: false,
-    // );
     sortingModel.updateSortingCriterionByName(
       criterionName: newValue.criterionName,
       direction: direction,
       moveToFirst: false,
-      clearDirectionOfOtherCriteria: true,
+      clearDirectionOfOtherCriteria: false,
     );
   }
 
@@ -95,7 +85,7 @@ class SortingOptionDropdown<ITEM extends Object> extends SortView<ITEM> {
           sortingCriterion: sortingCriterion,
           isDragging: false,
           acceptNoneDirection: false,
-          clearDirectionOfOtherCriteria: true,
+          clearDirectionOfOtherCriteria: false,
           enabled: sortingCriterion.criterionName ==
               selectedSortingCriterion?.criterionName,
         ),

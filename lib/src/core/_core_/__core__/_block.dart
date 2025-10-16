@@ -5574,7 +5574,7 @@ abstract class Block<
   }
 
   void clientSideSort({required bool refresh}) {
-    __blockData._sortItems();
+    __blockData._clientSideSortItems();
     if (refresh) {
       shelf.ui.updateAllUIComponents();
     }

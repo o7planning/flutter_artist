@@ -229,13 +229,11 @@ class _BlockData<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _sortItems() {
+  void _clientSideSortItems() {
     try {
       SortingModel<ITEM> sortingModel = block.clientSideSortingModel;
-      if (sortingModel != null) {
-        _items.sort((a, b) => sortingModel._compare(a, b));
-      }
-    } catch (e,stackTrace) {
+      _items.sort((a, b) => sortingModel._compare(a, b));
+    } catch (e, stackTrace) {
       print("Sort Error: $e");
       print(stackTrace);
     }
@@ -313,7 +311,7 @@ class _BlockData<
       getItemId: block.getItemId,
     );
     //
-    _sortItems();
+    _clientSideSortItems();
     //
     ItemsUtils.replaceItemInList(
       targetList: _checkedItems,
@@ -337,7 +335,7 @@ class _BlockData<
       getItemId: block.getItemId,
     );
     //
-    _sortItems();
+    _clientSideSortItems();
     //
     ItemsUtils.replaceItemsInList(
       replacementItems: appendItems,

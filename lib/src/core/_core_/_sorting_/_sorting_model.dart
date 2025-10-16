@@ -6,7 +6,9 @@ abstract class SortingModel<ITEM extends Object> {
   Shelf get shelf => block.shelf;
 
   final SortingSide sortingSide;
-  final bool multiOptions;
+  final bool multiOptionMode;
+  bool get singleOptionMode => !multiOptionMode;
+
   final List<String> _sortableCriterionNamesOrigin;
   final List<String> _nonSignedCriterionNames = [];
   final List<SortingCriterion> _criteria = [];
@@ -33,7 +35,7 @@ abstract class SortingModel<ITEM extends Object> {
   /// ```
   ///
   SortingModel({
-    this.multiOptions = false,
+    this.multiOptionMode = false,
     required List<String> sortableCriterionNames,
   })  : sortingSide = SortingSide.server,
         _sortableCriterionNamesOrigin = [...sortableCriterionNames] {
@@ -41,7 +43,7 @@ abstract class SortingModel<ITEM extends Object> {
   }
 
   SortingModel._client({
-    this.multiOptions = false,
+    this.multiOptionMode = false,
     required List<String> sortableCriterionNames,
   })  : sortingSide = SortingSide.client,
         _sortableCriterionNamesOrigin = [...sortableCriterionNames] {
@@ -57,7 +59,7 @@ abstract class SortingModel<ITEM extends Object> {
       //
       if (criterion.direction != SortingDirection.none) {
         optCount++;
-        if (optCount > 1 && !multiOptions) {
+        if (optCount > 1 && !multiOptionMode) {
           criterion._direction = SortingDirection.none;
         }
         _selectedCriterion ??= criterion;
@@ -72,8 +74,10 @@ abstract class SortingModel<ITEM extends Object> {
   }
 
   void setSelectedCriterion(SortingCriterion? value) {
-    _selectedCriterion =
-        value == null ? null : _criteriaMap[value.criterionName];
+    if (singleOptionMode) {
+      _selectedCriterion =
+          value == null ? null : _criteriaMap[value.criterionName];
+    }
   }
 
   void moveCriterion({
@@ -105,27 +109,6 @@ abstract class SortingModel<ITEM extends Object> {
 
   SortingCriterion? getFirstSortingCriterion() {
     return _criteria.firstOrNull;
-  }
-
-  SortingCriterion? getCopyOfSortingCriterion({required String criterionName}) {
-    SortingCriterion? criterion = _criteriaMap[criterionName];
-    return criterion?.copy();
-  }
-
-  List<SortingCriterion> getCopyOfSortingCriteria({
-    required bool clearAllDirections,
-    required SortingCriterion? appliedCriterion,
-  }) {
-    return _criteria.map((criterion) {
-      SortingCriterion copy = criterion.copy();
-      if (clearAllDirections) {
-        copy._direction = SortingDirection.none;
-      }
-      if (copy.criterionName == appliedCriterion?.criterionName) {
-        copy._direction = appliedCriterion!.direction;
-      }
-      return copy;
-    }).toList();
   }
 
   void updateSortingCriterionByName({
@@ -179,7 +162,7 @@ abstract class SortingModel<ITEM extends Object> {
       //
       if (criterion.direction != SortingDirection.none) {
         optCount++;
-        if (optCount > 1 && !multiOptions) {
+        if (optCount > 1 && !multiOptionMode) {
           criterion._direction = SortingDirection.none;
         }
       }
@@ -197,32 +180,46 @@ abstract class SortingModel<ITEM extends Object> {
   }
 
   int _compare(ITEM a, ITEM b) {
-    for (SortingCriterion criterion in _criteria) {
-      if (criterion.direction == SortingDirection.none) {
+    final List<SortingCriterion> criteriaList = [];
+    if (singleOptionMode) {
+      SortingCriterion? selected = _selectedCriterion;
+      if (selected != null) {
+        criteriaList.add(selected);
+      } else {
+        final String msg = _createFatalAppError(
+          "SortingModel is singleOptionMode so you need to call: "
+          "sortingModel.setSelectedCriterion()",
+        );
+        print(msg);
+      }
+    } else {
+      criteriaList.addAll(_criteria);
+    }
+    for (SortingCriterion sc in criteriaList) {
+      if (sc.direction == SortingDirection.none) {
         continue;
       }
-      dynamic aValue =
-          getValue(item: a, criterionName: criterion.criterionName);
-      dynamic bValue =
-          getValue(item: b, criterionName: criterion.criterionName);
+      dynamic aValue = getValue(item: a, criterionName: sc.criterionName);
+      dynamic bValue = getValue(item: b, criterionName: sc.criterionName);
       //
       if (aValue == null && bValue == null) {
         continue;
       } else if (aValue != null && bValue == null) {
-        return criterion.isAscending() ? -1 : 1;
+        return sc.isAscending() ? -1 : 1;
       } else if (aValue == null && bValue != null) {
-        return criterion.isAscending() ? 1 : -1;
+        return sc.isAscending() ? 1 : -1;
       }
       // num value
       if (aValue is num) {
         bValue as num;
         //
-        int x = aValue - bValue > 0 ? 1 : -1;
-        if (x == 0) {
+        num v = aValue - bValue;
+        if (v == 0) {
           continue;
         }
-        return criterion.isAscending() ? x : -x;
-      } 
+        int x = v > 0 ? 1 : -1;
+        return sc.isAscending() ? x : -x;
+      }
       // bool value
       else if (aValue is bool) {
         bValue as bool;
@@ -233,7 +230,7 @@ abstract class SortingModel<ITEM extends Object> {
         if (x == 0) {
           continue;
         }
-        return criterion.isAscending() ? x : -x;
+        return sc.isAscending() ? x : -x;
       }
       // String value
       else if (aValue is String) {
@@ -242,7 +239,7 @@ abstract class SortingModel<ITEM extends Object> {
         if (x == 0) {
           continue;
         }
-        return criterion.isAscending() ? x : -x;
+        return sc.isAscending() ? x : -x;
       } else {
         throw Exception(
             "Method SortingModel.getValue(item,criterionName) must be return int, double, bool, null or String");
@@ -285,6 +282,6 @@ abstract class SortingModel<ITEM extends Object> {
 
   @override
   String toString() {
-    return "multiOptions: $multiOptions ${_criteria.toString()}";
+    return "multiOptions: $multiOptionMode ${_criteria.toString()}";
   }
 }
