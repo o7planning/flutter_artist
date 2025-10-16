@@ -72,6 +72,8 @@ class BlockConfig {
       refreshCurrItemByExternalShelfEvents:
           refreshCurrItemByExternalShelfEvents,
       reQueryByExternalShelfEvents: reQueryByExternalShelfEvents,
+      //
+      clientSideSortMode: clientSideSortMode,
     );
   }
 }
