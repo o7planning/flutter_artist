@@ -66,6 +66,7 @@ class _BlockUIComponents extends _UIComponents {
   bool hasMountedUIComponent() {
     return (block.filterModel?.ui.hasMountedUIComponent() ?? false) ||
         (block.serverSideSortingModel?.ui.hasMountedUIComponent() ?? false) ||
+        (block.clientSideSortingModel?.ui.hasMountedUIComponent() ?? false) ||
         __blockFragmentWidgetStates.isNotEmpty ||
         __blockControlBarWidgetStates.isNotEmpty ||
         __controlWidgetStates.isNotEmpty ||
@@ -92,11 +93,17 @@ class _BlockUIComponents extends _UIComponents {
     //     return true;
     //   }
     // }
-    // Filter
+    // Sort
     if (block.serverSideSortingModel != null) {
       active = block.serverSideSortingModel!.ui.hasActiveUIComponent();
       if (active) {
         return getClassNameWithoutGenerics(block.serverSideSortingModel);
+      }
+    }
+    if (block.clientSideSortingModel != null) {
+      active = block.clientSideSortingModel!.ui.hasActiveUIComponent();
+      if (active) {
+        return getClassNameWithoutGenerics(block.clientSideSortingModel);
       }
     }
     // Form
@@ -227,6 +234,7 @@ class _BlockUIComponents extends _UIComponents {
     }
     //
     block.serverSideSortingModel.ui.updateAllUIComponents(force: force);
+    block.clientSideSortingModel.ui.updateAllUIComponents(force: force);
     //
     updateBlockFragmentWidgets(force: force);
     updatePaginationWidgets(force: force);

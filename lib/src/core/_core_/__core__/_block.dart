@@ -377,13 +377,13 @@ abstract class Block<
   //   }
   // }
 
-  final SortingModel __clientSideSortingModel;
+  final SortingModel<ITEM> __clientSideSortingModel;
 
-  final SortingModel __serverSideSortingModel;
+  final SortingModel<ITEM> __serverSideSortingModel;
 
-  SortingModel get clientSideSortingModel => __clientSideSortingModel;
+  SortingModel<ITEM> get clientSideSortingModel => __clientSideSortingModel;
 
-  SortingModel get serverSideSortingModel => __serverSideSortingModel;
+  SortingModel<ITEM> get serverSideSortingModel => __serverSideSortingModel;
 
   FILTER_CRITERIA? get filterCriteria => __blockData._filterCriteria;
 
@@ -5573,7 +5573,7 @@ abstract class Block<
     );
   }
 
-  void sort({required bool refresh}) {
+  void clientSideSort({required bool refresh}) {
     __blockData._sortItems();
     if (refresh) {
       shelf.ui.updateAllUIComponents();

@@ -96,7 +96,7 @@ abstract class SortingModel<ITEM extends Object> {
       _criteria.remove(moving);
       _criteria.insert(destIdx, moving);
     }
-    block.sort(refresh: false);
+    block.clientSideSort(refresh: false);
     block.ui.updateAllUIComponents(
       withoutFilters: false,
       force: true,
@@ -132,112 +132,67 @@ abstract class SortingModel<ITEM extends Object> {
     required String criterionName,
     required SortingDirection direction,
     required bool moveToFirst,
+    required bool clearDirectionOfOtherCriteria,
   }) {
     SortingCriterion? criterion = _criteriaMap[criterionName];
     if (criterion == null) {
       return;
     }
-    SortingCriterion updateCriterion = criterion.copyWith(direction: direction);
-    updateSortingCriterion(
-      updateCriterion: updateCriterion,
-      moveToFirst: moveToFirst,
-    );
-  }
-
-  void updateSortingCriterion({
-    required SortingCriterion updateCriterion,
-    required bool moveToFirst,
-  }) {
-    var updateCriteria = [updateCriterion];
-    updateSortingCriteria(
-      updateCriteria: updateCriteria,
-      rearrangeCriteria: false,
-    );
-  }
-
-  void updateSortingCriteria({
-    required List<SortingCriterion> updateCriteria,
-    required bool rearrangeCriteria,
-  }) {
-    final Map<String, SortingCriterion> copyMap = {..._criteriaMap};
-    //
-    int optCount = 0;
-    List<SortingCriterion> newArrangedCriteria = [];
-    //
-    for (SortingCriterion updateCriterion in updateCriteria) {
-      String criterionName = updateCriterion.criterionName;
-      SortingCriterion? currentCriterion = copyMap.remove(criterionName);
-      if (currentCriterion == null) {
-        continue;
-      }
-      //
-      newArrangedCriteria.add(currentCriterion);
-      //
-      if (updateCriterion.direction != SortingDirection.none) {
-        optCount++;
-        if (optCount > 1 && !multiOptions) {
-          currentCriterion._direction = SortingDirection.none;
-        } else {
-          currentCriterion._direction = updateCriterion.direction;
-        }
-      } else {
-        currentCriterion._direction = updateCriterion.direction;
+    if (clearDirectionOfOtherCriteria) {
+      for (SortingCriterion sc in _criteria) {
+        sc._direction = SortingDirection.none;
       }
     }
-    //
-    for (SortingCriterion criterion in copyMap.values) {
-      if (optCount >= 1 && !multiOptions) {
-        criterion._direction = SortingDirection.none;
-      }
-      newArrangedCriteria.add(criterion);
-    }
-    //
-    if (rearrangeCriteria) {
-      _criteria
-        ..clear()
-        ..addAll(newArrangedCriteria);
-    }
-    //
-    block.sort(refresh: false);
+    criterion._direction = direction;
+    block.clientSideSort(refresh: false);
     block.ui.updateAllUIComponents(
       withoutFilters: true,
       force: true,
     );
   }
 
-  ///
-  /// ```dart
-  /// mySortingModel.updateSortingCriteria(
-  ///   shuffledSortableCriterionNames: ['email', '+userName','-fullName'],
-  /// );
-  /// ```
-  ///
-  @Deprecated("Delete It?")
-  void __updateSortingCriteriaString({
-    required List<String> shuffledSortableCriterionNames,
+  void rearrangeSortingCriteria({
+    required List<String> newArrangementCriterionNames,
   }) {
-    if (shuffledSortableCriterionNames.length !=
-        _nonSignedCriterionNames.length) {
-      throw Exception(
-          "Invalid shuffledSignedCriterionNames. Length must be ${_nonSignedCriterionNames.length}");
+    final List<String> oldArrangementCn =
+        _criteria.map((c) => c.criterionName).toList();
+    //
+    final List<String> newArrangementCn = [
+      ...{...newArrangementCriterionNames, ...oldArrangementCn}
+    ]..retainWhere((cn) => oldArrangementCn.contains(cn));
+    //
+    bool arrangementChanged = !listEquals(oldArrangementCn, newArrangementCn);
+    if (!arrangementChanged) {
+      return;
     }
     //
-    final List<SortingCriterion> updateCriteria = [];
-    for (String sortableCriterionName in shuffledSortableCriterionNames) {
-      SortingCriterion criterion =
-          SortingCriterion._parse(sortableCriterionName);
-      criterion._text = _getText(criterionName: criterion.criterionName);
-      //
-      if (!_nonSignedCriterionNames.contains(criterion.criterionName)) {
-        throw Exception(
-            "Invalid criterionName '${criterion.criterionName}' (Must be in $_nonSignedCriterionNames)");
+    int optCount = 0;
+    List<SortingCriterion> newArrangementCriteria = [];
+    //
+    for (String criterionName in newArrangementCn) {
+      SortingCriterion? criterion = _criteriaMap[criterionName];
+      if (criterion == null) {
+        continue;
       }
-      updateCriteria.add(criterion);
+      //
+      newArrangementCriteria.add(criterion);
+      //
+      if (criterion.direction != SortingDirection.none) {
+        optCount++;
+        if (optCount > 1 && !multiOptions) {
+          criterion._direction = SortingDirection.none;
+        }
+      }
     }
     //
-    updateSortingCriteria(
-      updateCriteria: updateCriteria,
-      rearrangeCriteria: false,
+    _criteria
+      ..clear()
+      ..addAll(newArrangementCriteria);
+    //
+    block.clientSideSort(refresh: false);
+    block.ui.updateAllUIComponents(
+      withoutFilters: true,
+      force: true,
     );
   }
 

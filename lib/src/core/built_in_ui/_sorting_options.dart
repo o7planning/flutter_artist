@@ -14,6 +14,7 @@ Widget buildSortBtn({
   required bool enabled,
   required bool isDragging,
   required bool acceptNoneDirection,
+  required bool clearDirectionOfOtherCriteria,
 }) {
   return InkWell(
     onTap: enabled
@@ -21,41 +22,40 @@ Widget buildSortBtn({
             SortingDirection nextDirection = sortingCriterion.getNextDirection(
               acceptNoneDirection: acceptNoneDirection,
             );
-            SortingCriterion updateCriterion = sortingCriterion.copyWith(
+            sortingModel.updateSortingCriterionByName(
+              criterionName: sortingCriterion.criterionName,
               direction: nextDirection,
-            );
-            //
-            sortingModel.updateSortingCriterion(
-              updateCriterion: updateCriterion,
               moveToFirst: false,
+              clearDirectionOfOtherCriteria: clearDirectionOfOtherCriteria,
             );
           }
         : null,
-    child: getSortIcon(sortingCriterion, isDragging),
+    child: getSortIcon(sortingCriterion.direction, isDragging),
   );
 }
 
 // ---------------------------------------------------------------------------
 
-Widget getSortIcon(SortingCriterion criterion, bool isDragging) {
+Widget getSortIcon(SortingDirection direction, bool isDragging) {
   Color? color = isDragging ? Colors.grey : null;
-  if (criterion.isAscending()) {
-    return Icon(
-      cupertino.CupertinoIcons.sort_up,
-      size: _sortIconSize,
-      color: color,
-    );
-  } else if (criterion.isDescending()) {
-    return Icon(
-      cupertino.CupertinoIcons.sort_down,
-      size: _sortIconSize,
-      color: color,
-    );
-  } else {
-    return Icon(
-      cupertino.CupertinoIcons.line_horizontal_3,
-      size: _sortIconSize,
-      color: color,
-    );
+  switch (direction) {
+    case SortingDirection.ascending:
+      return Icon(
+        cupertino.CupertinoIcons.sort_up,
+        size: _sortIconSize,
+        color: color,
+      );
+    case SortingDirection.descending:
+      return Icon(
+        cupertino.CupertinoIcons.sort_down,
+        size: _sortIconSize,
+        color: color,
+      );
+    case SortingDirection.none:
+      return Icon(
+        cupertino.CupertinoIcons.line_horizontal_3,
+        size: _sortIconSize,
+        color: color,
+      );
   }
 }

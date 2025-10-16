@@ -171,6 +171,7 @@ class SortingOptionBar<ITEM extends Object> extends SortView<ITEM> {
           isDragging: isDragging,
           acceptNoneDirection: true,
           enabled: true,
+          clearDirectionOfOtherCriteria: false,
         ),
       ],
     );
