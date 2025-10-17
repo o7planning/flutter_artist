@@ -215,7 +215,7 @@ part '_sorting_/_sortable_criteria.dart';
 part '_sorting_/_sort_criterion.dart';
 
 part '_sorting_/_sortable_criterion.dart';
-
+part '_sorting_/_sort_criteria.dart';
 part '__core__/_storage.dart';
 
 part '__core__/_storage_ev.dart';

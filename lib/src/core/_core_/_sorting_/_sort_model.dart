@@ -55,7 +55,7 @@ abstract class SortModel<ITEM extends Object> {
   void __init(Map<String, SortDirection?> criteriaMap) {
     int optCount = 0;
     for (String criterionName in criteriaMap.keys) {
-      SortDirection sortDirection = criteriaMap[criterionName]!;
+      SortDirection? sortDirection = criteriaMap[criterionName];
       String text = _getText(criterionName: criterionName);
       SortCriterion criterion = SortCriterion._(
         direction: sortDirection,
