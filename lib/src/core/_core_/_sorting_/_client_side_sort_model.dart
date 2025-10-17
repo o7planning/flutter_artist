@@ -7,7 +7,7 @@ class _ClientSideSortModel<ITEM extends Object> extends SortModel<ITEM> {
       : __innerSortModel = innerSortModel,
         super._client(
           multiOptionMode: innerSortModel.multiOptionMode,
-          sortableCriterionNames: innerSortModel._originCriterionNameMap,
+          criteriaMap: innerSortModel._originCriterionNameMap,
         );
 
   @override

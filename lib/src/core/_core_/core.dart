@@ -210,9 +210,11 @@ part '__core__/_shelf_structure.dart';
 
 part '__core__/_single_item_block.dart';
 
-part '_sorting_/_sort_criteria.dart';
+part '_sorting_/_sortable_criteria.dart';
 
 part '_sorting_/_sort_criterion.dart';
+
+part '_sorting_/_sortable_criterion.dart';
 
 part '__core__/_storage.dart';
 

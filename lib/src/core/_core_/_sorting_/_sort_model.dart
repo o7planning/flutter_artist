@@ -25,37 +25,37 @@ abstract class SortModel<ITEM extends Object> {
 
   ///
   /// ```dart
-  /// List<String,SortDirection?> sortableCriterionNames = {
+  /// List<String,SortDirection?> criteriaMap = {
   ///   "userName": SortDirection.asc,
   ///   "email": null,
   ///   "fullName": SortDirection.desc
   /// };
   ///
   /// var mySortModel = MySortModel(
-  ///    sortableCriterionNames: sortableCriterionNames,
+  ///    criteriaMap: criteriaMap,
   /// );
   /// ```
   ///
   SortModel({
     this.multiOptionMode = false,
-    required Map<String, SortDirection?> sortableCriterionNames,
+    required Map<String, SortDirection?> criteriaMap,
   })  : sortingSide = SortingSide.server,
-        _originCriterionNameMap = {...sortableCriterionNames} {
-    __init(sortableCriterionNames);
+        _originCriterionNameMap = {...criteriaMap} {
+    __init(criteriaMap);
   }
 
   SortModel._client({
     this.multiOptionMode = false,
-    required Map<String, SortDirection?> sortableCriterionNames,
+    required Map<String, SortDirection?> criteriaMap,
   })  : sortingSide = SortingSide.client,
-        _originCriterionNameMap = {...sortableCriterionNames} {
-    __init(sortableCriterionNames);
+        _originCriterionNameMap = {...criteriaMap} {
+    __init(criteriaMap);
   }
 
-  void __init(Map<String, SortDirection?> sortableCriterionNames) {
+  void __init(Map<String, SortDirection?> criteriaMap) {
     int optCount = 0;
-    for (String criterionName in sortableCriterionNames.keys) {
-      SortDirection sortDirection = sortableCriterionNames[criterionName]!;
+    for (String criterionName in criteriaMap.keys) {
+      SortDirection sortDirection = criteriaMap[criterionName]!;
       String text = _getText(criterionName: criterionName);
       SortCriterion criterion = SortCriterion._(
         direction: sortDirection,
@@ -85,16 +85,30 @@ abstract class SortModel<ITEM extends Object> {
   ///
   /// Returns the criteria used for sorting.
   ///
-  SortCriteria getApplyingSortingCriteria() {
+  SortableCriteria getSortableCriteria() {
     // Logic: #0006
     if (singleOptionMode) {
-      return _selectedCriterion == null || _selectedCriterion!.hasNoDirection()
-          ? SortCriteria._([])
-          : SortCriteria._([_selectedCriterion!]);
+      return _selectedCriterion == null || _selectedCriterion!.direction == null
+          ? SortableCriteria._([])
+          : SortableCriteria._(
+              [
+                SortableCriterion._(
+                  direction: _selectedCriterion!.direction!,
+                  criterionName: _selectedCriterion!.criterionName,
+                )
+              ],
+            );
     } else {
-      List<SortCriterion> list =
-          _criteria.where((sc) => sc.hasDirection()).toList();
-      return SortCriteria._(list);
+      List<SortableCriterion> list = _criteria
+          .where((sc) => sc.hasDirection())
+          .map(
+            (sc) => SortableCriterion._(
+              direction: sc.direction!,
+              criterionName: sc.criterionName,
+            ),
+          )
+          .toList();
+      return SortableCriteria._(list);
     }
   }
 
