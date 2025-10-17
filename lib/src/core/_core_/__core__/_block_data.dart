@@ -22,7 +22,23 @@ class _BlockData<
   final List<ITEM> _selectedItems = [];
   final List<ITEM> _checkedItems = [];
 
-  final List<ID> __itemIdsManualArrangement = [];
+  final List<ITEM> __itemsManualArrangementBk = [];
+
+  // ***************************************************************************
+
+  void _backupManualArrangementBeforeQueryIfNeed() {
+    if (block.config.clientSideSortMode == ClientSideSortMode.manual) {
+      __itemsManualArrangementBk
+        ..clear()
+        ..addAll(_items);
+    }
+  }
+
+  void __restoreManualArrangementIfNeed() {
+    if (block.config.clientSideSortMode == ClientSideSortMode.manual) {
+      // TODO...
+    }
+  }
 
   // ***************************************************************************
 
@@ -375,11 +391,13 @@ class _BlockData<
     required ActionResultState queryResultState,
   }) {
     _lastQueryResultState = queryResultState;
+    bool cleared = false;
     // Check if filterCriteria changed.
     if (forceItemListMode == ItemListMode.replace ||
         _currentParentItemId != currentParentItemId ||
         _filterCriteria != filterCriteria) {
       _items.clear();
+      cleared = true;
     }
     //
     final PageData<ITEM> ap = pageData ?? DefaultPageData<ITEM>.empty();
@@ -408,6 +426,9 @@ class _BlockData<
     //
     __appendItems(appendItems: ap.items);
     // block.formModel?.data._formMode = FormMode.none;
+    if (cleared) {
+      __restoreManualArrangementIfNeed();
+    }
   }
 
   // ***************************************************************************

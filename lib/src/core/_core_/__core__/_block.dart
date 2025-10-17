@@ -862,6 +862,7 @@ abstract class Block<
       // Call Query API:
       //
       try {
+        __blockData._backupManualArrangementBeforeQueryIfNeed();
         __clearBlockError();
         __refreshQueryingState(isQuerying: true);
         //
