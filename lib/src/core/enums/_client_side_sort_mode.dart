@@ -1,5 +1,5 @@
 enum ClientSideSortMode {
   none,
-  sortingModel,
+  sortModel,
   manual;
 }

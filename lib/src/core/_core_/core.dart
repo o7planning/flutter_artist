@@ -52,7 +52,7 @@ import '../annotation/annotation.dart';
 import '../built_in/empty_extra_form_input.dart';
 import '../built_in/empty_filter_criteria.dart';
 import '../built_in/empty_filter_input.dart';
-import '../built_in/empty_sorting_model.dart';
+import '../built_in/empty_sort_model.dart';
 import '../enums/_action_confirmation_type.dart';
 import '../enums/_action_result_state.dart';
 import '../enums/_client_side_sort_mode.dart';
@@ -89,7 +89,7 @@ import '../enums/_scalar_hidden_behavior.dart';
 import '../enums/_selection_type.dart';
 import '../enums/_shelf_hidden_behavior.dart';
 import '../enums/_show_mode.dart';
-import '../enums/_sorting_direction.dart';
+import '../enums/_sort_direction.dart';
 import '../enums/_sorting_side.dart';
 import '../enums/_task_type.dart';
 import '../enums/_x_shelf_type.dart';
@@ -188,9 +188,9 @@ part '__core__/_form_leave_safely.dart';
 
 part '__core__/_form_model.dart';
 
-part '_sorting_/_client_side_sorting_model.dart';
+part '_sorting_/_client_side_sort_model.dart';
 
-part '_sorting_/_sorting_model.dart';
+part '_sorting_/_sort_model.dart';
 
 part '__core__/_scalar.dart';
 
@@ -210,9 +210,9 @@ part '__core__/_shelf_structure.dart';
 
 part '__core__/_single_item_block.dart';
 
-part '_sorting_/_sorting_criteria.dart';
+part '_sorting_/_sort_criteria.dart';
 
-part '_sorting_/_sorting_criterion.dart';
+part '_sorting_/_sort_criterion.dart';
 
 part '__core__/_storage.dart';
 
@@ -739,8 +739,8 @@ class _FormViewChangeAnnotation {
   const _FormViewChangeAnnotation();
 }
 
-class _SortingModelChangedAnnotation {
-  const _SortingModelChangedAnnotation();
+class _SortModelChangedAnnotation {
+  const _SortModelChangedAnnotation();
 }
 
 class _FilterViewChangeAnnotation {

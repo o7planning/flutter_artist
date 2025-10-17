@@ -1,10 +1,10 @@
 part of '../../core.dart';
 
 class _XShelfSortViewChange extends XShelf {
-  _XShelfSortViewChange({required SortingModel sortingModel})
+  _XShelfSortViewChange({required SortModel sortModel})
       : super(
           xShelfType: XShelfType.filterViewChange,
-          shelf: sortingModel.shelf,
+          shelf: sortModel.shelf,
         ) {
     // Nothing?
   }

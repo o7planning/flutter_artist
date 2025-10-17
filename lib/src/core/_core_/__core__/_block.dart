@@ -377,13 +377,13 @@ abstract class Block<
   //   }
   // }
 
-  final SortingModel<ITEM>? __clientSideSortingModel;
+  final SortModel<ITEM>? __clientSideSortModel;
 
-  final SortingModel<ITEM> __serverSideSortingModel;
+  final SortModel<ITEM> __serverSideSortModel;
 
-  SortingModel<ITEM>? get clientSideSortingModel => __clientSideSortingModel;
+  SortModel<ITEM>? get clientSideSortModel => __clientSideSortModel;
 
-  SortingModel<ITEM> get serverSideSortingModel => __serverSideSortingModel;
+  SortModel<ITEM> get serverSideSortModel => __serverSideSortModel;
 
   FILTER_CRITERIA? get filterCriteria => __blockData._filterCriteria;
 
@@ -453,14 +453,14 @@ abstract class Block<
     required String? filterModelName,
     required this.formModel,
     required List<Block>? childBlocks,
-    SortingModel<ITEM>? sortingModel,
+    SortModel<ITEM>? sortModel,
   })  : registerFilterModelName = filterModelName,
         config = config.copy(),
-        __serverSideSortingModel = sortingModel ?? EmptySortingModel(),
-        __clientSideSortingModel = sortingModel == null ||
-                config.clientSideSortMode != ClientSideSortMode.sortingModel
+        __serverSideSortModel = sortModel ?? EmptySortModel(),
+        __clientSideSortModel = sortModel == null ||
+                config.clientSideSortMode != ClientSideSortMode.sortModel
             ? null
-            : _ClientSideSortingModel(sortingModel),
+            : _ClientSideSortModel(sortModel),
         _childBlocks = childBlocks ?? [] {
     for (Block childBlock in _childBlocks) {
       childBlock.parent = this;
@@ -469,16 +469,16 @@ abstract class Block<
       formModel!.block = this;
     }
     // TODO: Test Case.
-    // if (sortingModel?.block != null) {
+    // if (sortModel?.block != null) {
     //   String fatalError = _createFatalAppError(
-    //     "You cannot use one SortingModel object for multiple Blocks.\n"
+    //     "You cannot use one SortModel object for multiple Blocks.\n"
     //     " ${getClassNameWithoutGenerics(shelf)} > registerStructure > ShelfStructure > blocks"
-    //     " > ${getClassNameWithoutGenerics(this)} > ${getClassNameWithoutGenerics(sortingModel)}",
+    //     " > ${getClassNameWithoutGenerics(this)} > ${getClassNameWithoutGenerics(sortModel)}",
     //   );
     //   throw fatalError;
     // }
-    __serverSideSortingModel.block = this;
-    __clientSideSortingModel?.block = this;
+    __serverSideSortModel.block = this;
+    __clientSideSortModel?.block = this;
   }
 
   // ***************************************************************************
@@ -878,7 +878,7 @@ abstract class Block<
         ApiResult<PageData<ITEM>?> result = await callApiQuery(
           parentBlockCurrentItem: parent?.currentItem,
           filterCriteria: filterCriteriaOfFilterModel,
-          sortingCriteria: serverSideSortingModel.getApplyingSortingCriteria(),
+          sortingCriteria: serverSideSortModel.getApplyingSortingCriteria(),
           pageable: callingPageable,
         );
         // Throw ApiError:
@@ -3356,7 +3356,7 @@ abstract class Block<
   Future<ApiResult<PageData<ITEM>?>> callApiQuery({
     required Object? parentBlockCurrentItem,
     required FILTER_CRITERIA filterCriteria,
-    required SortingCriteria sortingCriteria,
+    required SortCriteria sortingCriteria,
     required PageableData pageable,
   });
 

@@ -253,10 +253,10 @@ class _BlockData<
         case ClientSideSortMode.none:
           // Do nothing
           break;
-        case ClientSideSortMode.sortingModel:
-          SortingModel<ITEM>? sortingModel = block.clientSideSortingModel;
-          if (sortingModel != null) {
-            _items.sort((a, b) => sortingModel._compare(a, b));
+        case ClientSideSortMode.sortModel:
+          SortModel<ITEM>? sortModel = block.clientSideSortModel;
+          if (sortModel != null) {
+            _items.sort((a, b) => sortModel._compare(a, b));
           }
         case ClientSideSortMode.manual:
           // TODO

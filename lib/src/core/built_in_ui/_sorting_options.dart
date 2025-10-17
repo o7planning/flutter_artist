@@ -2,15 +2,15 @@ import 'package:flutter/cupertino.dart' as cupertino;
 import 'package:flutter/material.dart';
 
 import '../_core_/core.dart';
-import '../enums/_sorting_direction.dart';
+import '../enums/_sort_direction.dart';
 
 const double _sortIconSize = 16;
 
 // ---------------------------------------------------------------------------
 
 Widget buildSortBtn({
-  required SortingModel sortingModel,
-  required SortingCriterion sortingCriterion,
+  required SortModel sortModel,
+  required SortCriterion sortCriterion,
   required bool enabled,
   required bool isDragging,
   required bool acceptNoneDirection,
@@ -19,39 +19,39 @@ Widget buildSortBtn({
   return InkWell(
     onTap: enabled
         ? () {
-            SortingDirection nextDirection = sortingCriterion.getNextDirection(
+            SortDirection? nextDirection = sortCriterion.getNextDirection(
               acceptNoneDirection: acceptNoneDirection,
             );
-            sortingModel.updateSortingCriterionByName(
-              criterionName: sortingCriterion.criterionName,
+            sortModel.updateSortingCriterionByName(
+              criterionName: sortCriterion.criterionName,
               direction: nextDirection,
               moveToFirst: false,
               clearDirectionOfOtherCriteria: clearDirectionOfOtherCriteria,
             );
           }
         : null,
-    child: getSortIcon(sortingCriterion.direction, isDragging),
+    child: getSortIcon(sortCriterion.direction, isDragging),
   );
 }
 
 // ---------------------------------------------------------------------------
 
-Widget getSortIcon(SortingDirection direction, bool isDragging) {
+Widget getSortIcon(SortDirection? direction, bool isDragging) {
   Color? color = isDragging ? Colors.grey : null;
   switch (direction) {
-    case SortingDirection.ascending:
+    case SortDirection.ascending:
       return Icon(
         cupertino.CupertinoIcons.sort_up,
         size: _sortIconSize,
         color: color,
       );
-    case SortingDirection.descending:
+    case SortDirection.descending:
       return Icon(
         cupertino.CupertinoIcons.sort_down,
         size: _sortIconSize,
         color: color,
       );
-    case SortingDirection.none:
+    case null:
       return Icon(
         cupertino.CupertinoIcons.line_horizontal_3,
         size: _sortIconSize,

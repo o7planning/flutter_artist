@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-abstract class SortingModel<ITEM extends Object> {
+abstract class SortModel<ITEM extends Object> {
   late final Block block;
 
   Shelf get shelf => block.shelf;
@@ -10,55 +10,63 @@ abstract class SortingModel<ITEM extends Object> {
 
   bool get singleOptionMode => !multiOptionMode;
 
-  final List<String> _sortableCriterionNamesOrigin;
+  final Map<String, SortDirection?> _originCriterionNameMap;
   final List<String> _nonSignedCriterionNames = [];
-  final List<SortingCriterion> _criteria = [];
-  final Map<String, SortingCriterion> _criteriaMap = {};
+  final List<SortCriterion> _criteria = [];
+  final Map<String, SortCriterion> _criteriaMap = {};
 
-  List<SortingCriterion> get criteria => [..._criteria];
+  List<SortCriterion> get criteria => [..._criteria];
 
-  SortingCriterion? _selectedCriterion;
+  SortCriterion? _selectedCriterion;
 
-  SortingCriterion? get selectedCriterion => _selectedCriterion;
+  SortCriterion? get selectedCriterion => _selectedCriterion;
 
-  late final _SortUIComponents ui = _SortUIComponents(sortingModel: this);
+  late final _SortUIComponents ui = _SortUIComponents(sortModel: this);
 
   ///
   /// ```dart
-  /// List<String> sortableCriterionNames = ["userName", "+email", "-fullName"];
+  /// List<String,SortDirection?> sortableCriterionNames = {
+  ///   "userName": SortDirection.asc,
+  ///   "email": null,
+  ///   "fullName": SortDirection.desc
+  /// };
   ///
-  /// var mySortingModel = MySortingModel(
+  /// var mySortModel = MySortModel(
   ///    sortableCriterionNames: sortableCriterionNames,
   /// );
   /// ```
   ///
-  SortingModel({
+  SortModel({
     this.multiOptionMode = false,
-    required List<String> sortableCriterionNames,
+    required Map<String, SortDirection?> sortableCriterionNames,
   })  : sortingSide = SortingSide.server,
-        _sortableCriterionNamesOrigin = [...sortableCriterionNames] {
+        _originCriterionNameMap = {...sortableCriterionNames} {
     __init(sortableCriterionNames);
   }
 
-  SortingModel._client({
+  SortModel._client({
     this.multiOptionMode = false,
-    required List<String> sortableCriterionNames,
+    required Map<String, SortDirection?> sortableCriterionNames,
   })  : sortingSide = SortingSide.client,
-        _sortableCriterionNamesOrigin = [...sortableCriterionNames] {
+        _originCriterionNameMap = {...sortableCriterionNames} {
     __init(sortableCriterionNames);
   }
 
-  void __init(List<String> sortableCriterionNames) {
+  void __init(Map<String, SortDirection?> sortableCriterionNames) {
     int optCount = 0;
-    for (String sortableCriterionName in sortableCriterionNames) {
-      SortingCriterion criterion =
-          SortingCriterion._parse(sortableCriterionName);
-      criterion._text = _getText(criterionName: criterion.criterionName);
+    for (String criterionName in sortableCriterionNames.keys) {
+      SortDirection sortDirection = sortableCriterionNames[criterionName]!;
+      String text = _getText(criterionName: criterionName);
+      SortCriterion criterion = SortCriterion._(
+        direction: sortDirection,
+        criterionName: criterionName,
+        text: text,
+      );
       //
-      if (criterion.direction != SortingDirection.none) {
+      if (criterion.direction != null) {
         optCount++;
         if (optCount > 1 && !multiOptionMode) {
-          criterion._direction = SortingDirection.none;
+          criterion._direction = null;
         }
         _selectedCriterion ??= criterion;
       }
@@ -77,23 +85,23 @@ abstract class SortingModel<ITEM extends Object> {
   ///
   /// Returns the criteria used for sorting.
   ///
-  SortingCriteria getApplyingSortingCriteria() {
+  SortCriteria getApplyingSortingCriteria() {
     // Logic: #0006
     if (singleOptionMode) {
       return _selectedCriterion == null || _selectedCriterion!.hasNoDirection()
-          ? SortingCriteria._([])
-          : SortingCriteria._([_selectedCriterion!]);
+          ? SortCriteria._([])
+          : SortCriteria._([_selectedCriterion!]);
     } else {
-      List<SortingCriterion> list =
+      List<SortCriterion> list =
           _criteria.where((sc) => sc.hasDirection()).toList();
-      return SortingCriteria._(list);
+      return SortCriteria._(list);
     }
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void setSelectedCriterion(SortingCriterion? value) {
+  void setSelectedCriterion(SortCriterion? value) {
     if (singleOptionMode) {
       _selectedCriterion =
           value == null ? null : _criteriaMap[value.criterionName];
@@ -101,7 +109,7 @@ abstract class SortingModel<ITEM extends Object> {
   }
 
   bool hasDirection() {
-    for (SortingCriterion criterion in _criteria) {
+    for (SortCriterion criterion in _criteria) {
       if (criterion.hasDirection()) {
         return true;
       }
@@ -113,8 +121,8 @@ abstract class SortingModel<ITEM extends Object> {
     required String movingCriterionName,
     required String destCriterionName,
   }) async {
-    SortingCriterion? moving = _criteriaMap[movingCriterionName];
-    SortingCriterion? dest = _criteriaMap[destCriterionName];
+    SortCriterion? moving = _criteriaMap[movingCriterionName];
+    SortCriterion? dest = _criteriaMap[destCriterionName];
     if (moving == null || dest == null) {
       return;
     } else if (moving.criterionName == dest.criterionName) {
@@ -133,23 +141,23 @@ abstract class SortingModel<ITEM extends Object> {
     await __applyChanges();
   }
 
-  SortingCriterion? getFirstSortingCriterion() {
+  SortCriterion? getFirstSortingCriterion() {
     return _criteria.firstOrNull;
   }
 
   Future<void> updateSortingCriterionByName({
     required String criterionName,
-    required SortingDirection direction,
+    required SortDirection? direction,
     required bool moveToFirst,
     required bool clearDirectionOfOtherCriteria,
   }) async {
-    SortingCriterion? criterion = _criteriaMap[criterionName];
+    SortCriterion? criterion = _criteriaMap[criterionName];
     if (criterion == null) {
       return;
     }
     if (clearDirectionOfOtherCriteria) {
-      for (SortingCriterion sc in _criteria) {
-        sc._direction = SortingDirection.none;
+      for (SortCriterion sc in _criteria) {
+        sc._direction = null;
       }
     }
     criterion._direction = direction;
@@ -173,20 +181,20 @@ abstract class SortingModel<ITEM extends Object> {
     }
     //
     int optCount = 0;
-    List<SortingCriterion> newArrangementCriteria = [];
+    List<SortCriterion> newArrangementCriteria = [];
     //
     for (String criterionName in newArrangementCn) {
-      SortingCriterion? criterion = _criteriaMap[criterionName];
+      SortCriterion? criterion = _criteriaMap[criterionName];
       if (criterion == null) {
         continue;
       }
       //
       newArrangementCriteria.add(criterion);
       //
-      if (criterion.direction != SortingDirection.none) {
+      if (criterion.direction != null) {
         optCount++;
         if (optCount > 1 && !multiOptionMode) {
-          criterion._direction = SortingDirection.none;
+          criterion._direction = null;
         }
       }
     }
@@ -205,8 +213,8 @@ abstract class SortingModel<ITEM extends Object> {
     if (!hasDirection()) {
       return;
     }
-    for (SortingCriterion sc in _criteria) {
-      sc._direction = SortingDirection.none;
+    for (SortCriterion sc in _criteria) {
+      sc._direction = null;
     }
     await __applyChanges();
   }
@@ -230,24 +238,24 @@ abstract class SortingModel<ITEM extends Object> {
   // ***************************************************************************
 
   int _compare(ITEM a, ITEM b) {
-    final List<SortingCriterion> criteriaList = [];
+    final List<SortCriterion> criteriaList = [];
     // Logic: #0006
     if (singleOptionMode) {
-      SortingCriterion? selected = _selectedCriterion;
+      SortCriterion? selected = _selectedCriterion;
       if (selected != null) {
         criteriaList.add(selected);
       } else {
         final String msg = _createFatalAppError(
-          "SortingModel is singleOptionMode so you need to call: "
-          "sortingModel.setSelectedCriterion()",
+          "SortModel is singleOptionMode so you need to call: "
+          "sortModel.setSelectedCriterion()",
         );
         print(msg);
       }
     } else {
       criteriaList.addAll(_criteria);
     }
-    for (SortingCriterion sc in criteriaList) {
-      if (sc.direction == SortingDirection.none) {
+    for (SortCriterion sc in criteriaList) {
+      if (sc.direction == null) {
         continue;
       }
       dynamic aValue = getValue(item: a, criterionName: sc.criterionName);
@@ -293,7 +301,7 @@ abstract class SortingModel<ITEM extends Object> {
         return sc.isAscending() ? x : -x;
       } else {
         throw Exception(
-            "Method SortingModel.getValue(item,criterionName) must be return int, double, bool, null or String");
+            "Method SortModel.getValue(item,criterionName) must be return int, double, bool, null or String");
       }
     }
     return 0;
@@ -312,23 +320,6 @@ abstract class SortingModel<ITEM extends Object> {
 
   // ***************************************************************************
   // ***************************************************************************
-
-  // @_ImportantMethodAnnotation("Called when SortingModel changed")
-  // @_SortingModelChangedAnnotation()
-  // Future<void> _onSortingModelChanged() async {
-  //   // print("#~~~~~~~~~~~~~~~> _onSortingModelChanged");
-  //   //
-  //   await block.query();
-  //   // final XShelf xShelf = _XShelfSortViewChange(sortingModel: this);
-  //   //
-  //   // final XFilterModel xFilterModel = xShelf.findXFilterModelByName(name)!;
-  //   // _FilterViewChangeTaskUnit taskUnit = _FilterViewChangeTaskUnit(
-  //   //   xFilterModel: xFilterModel,
-  //   // );
-  //   // xShelf._addTaskUnit(taskUnit: taskUnit);
-  //   // FlutterArtist._rootQueue._addXShelf(xShelf);
-  //   // await FlutterArtist.executor._executeTaskUnitQueue();
-  // }
 
   @override
   String toString() {

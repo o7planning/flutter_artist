@@ -1,15 +1,12 @@
 part of '../core.dart';
 
-class SortingCriteria extends Equatable {
-  final List<SortingCriterion> _criteria;
+class SortCriteria extends Equatable {
+  final List<SortCriterion> _criteria;
 
-  SortingCriteria._(List<SortingCriterion> criteria)
-      : _criteria = [...criteria];
+  SortCriteria._(List<SortCriterion> criteria) : _criteria = [...criteria];
 
-  List<SortingCriterion> _getNondirectionalCriteria() {
-    return _criteria
-        .where((c) => c.direction != SortingDirection.none)
-        .toList();
+  List<SortCriterion> _getNondirectionalCriteria() {
+    return _criteria.where((c) => c.direction != null).toList();
   }
 
   ///
@@ -19,7 +16,7 @@ class SortingCriteria extends Equatable {
     bool ignoreNondirectional = true,
     String separator = ",",
   }) {
-    List<SortingCriterion> list;
+    List<SortCriterion> list;
     if (ignoreNondirectional) {
       list = _getNondirectionalCriteria();
     } else {
@@ -36,13 +33,16 @@ class SortingCriteria extends Equatable {
   /// ```
   ///
   Map<String, String> toCriteriaMap({bool ignoreNondirectional = true}) {
-    List<SortingCriterion> list;
+    List<SortCriterion> list;
     if (ignoreNondirectional) {
       list = _getNondirectionalCriteria();
     } else {
       list = _criteria;
     }
-    return {for (var e in list) e.criterionName: e.direction.sign};
+    return {
+      for (var e in list)
+        e.criterionName: e.direction == null ? "" : e.direction!.sign
+    };
   }
 
   ///

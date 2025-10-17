@@ -28,7 +28,7 @@ class BreadcrumbSortView<ITEM extends Object> extends SortView<ITEM> {
 
   BreadcrumbSortView({
     super.key,
-    required super.sortingModel,
+    required super.sortModel,
     this.itemSpacing = 5,
     this.iconSpacing = 3,
     this.textStyle = const TextStyle(fontSize: 14),
@@ -48,7 +48,7 @@ class BreadcrumbSortView<ITEM extends Object> extends SortView<ITEM> {
 
   BreadcrumbSortView.simple({
     super.key,
-    required super.sortingModel,
+    required super.sortModel,
     this.itemSpacing = 5,
     this.iconSpacing = 3,
     this.textStyle = const TextStyle(fontSize: 14),
@@ -88,7 +88,7 @@ class BreadcrumbSortView<ITEM extends Object> extends SortView<ITEM> {
           reverse: false,
           direction: Axis.horizontal,
         ),
-        items: sortingModel.criteria
+        items: sortModel.criteria
             .map(
               (criterion) => _buildBreadCrumbItem(
                 criterion,
@@ -99,28 +99,28 @@ class BreadcrumbSortView<ITEM extends Object> extends SortView<ITEM> {
     );
   }
 
-  BreadCrumbItem _buildBreadCrumbItem(SortingCriterion criterion) {
+  BreadCrumbItem _buildBreadCrumbItem(SortCriterion criterion) {
     return BreadCrumbItem(
-      content: DragTarget<SortingCriterion>(
+      content: DragTarget<SortCriterion>(
         hitTestBehavior: HitTestBehavior.deferToChild,
-        onWillAcceptWithDetails: (DragTargetDetails<SortingCriterion> details) {
+        onWillAcceptWithDetails: (DragTargetDetails<SortCriterion> details) {
           if (details.data.criterionName == criterion.criterionName) {
             return false;
           }
           return true;
         },
-        onAcceptWithDetails: (DragTargetDetails<SortingCriterion> details) {
-          sortingModel.moveCriterion(
+        onAcceptWithDetails: (DragTargetDetails<SortCriterion> details) {
+          sortModel.moveCriterion(
             movingCriterionName: details.data.criterionName,
             destCriterionName: criterion.criterionName,
           );
         },
         builder: (
           BuildContext context,
-          List<SortingCriterion?> candidateData,
+          List<SortCriterion?> candidateData,
           List<dynamic> rejectedData,
         ) {
-          return Draggable<SortingCriterion>(
+          return Draggable<SortCriterion>(
             data: criterion,
             feedback: _buildDragFeedback(criterion),
             childWhenDragging: _buildSortingCriterionView(
@@ -140,7 +140,7 @@ class BreadcrumbSortView<ITEM extends Object> extends SortView<ITEM> {
     );
   }
 
-  Widget _buildDragFeedback(SortingCriterion sortingCriterion) {
+  Widget _buildDragFeedback(SortCriterion sortingCriterion) {
     return Icon(
       Icons.video_file,
       size: 16,
@@ -149,7 +149,7 @@ class BreadcrumbSortView<ITEM extends Object> extends SortView<ITEM> {
   }
 
   Widget _buildSortingCriterionView({
-    required SortingCriterion sortingCriterion,
+    required SortCriterion sortingCriterion,
     required bool isDragging,
   }) {
     return Row(
@@ -163,8 +163,8 @@ class BreadcrumbSortView<ITEM extends Object> extends SortView<ITEM> {
         ),
         SizedBox(width: iconSpacing),
         buildSortBtn(
-          sortingModel: sortingModel,
-          sortingCriterion: sortingCriterion,
+          sortModel: sortModel,
+          sortCriterion: sortingCriterion,
           isDragging: isDragging,
           acceptNoneDirection: true,
           enabled: true,

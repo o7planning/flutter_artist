@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 class _SortViewBuilder extends _RefreshableWidget {
-  final SortingModel sortingModel;
+  final SortModel sortModel;
 
   final Widget Function() build;
 
@@ -9,7 +9,7 @@ class _SortViewBuilder extends _RefreshableWidget {
     super.key,
     required super.ownerClassInstance,
     required super.description,
-    required this.sortingModel,
+    required this.sortModel,
     required this.build,
   });
 
@@ -22,7 +22,7 @@ class _SortViewBuilder extends _RefreshableWidget {
 class _SortViewBuilderState extends _RefreshableWidgetState<_SortViewBuilder> {
   @override
   String getWidgetOwnerClassName() {
-    return getClassName(widget.sortingModel);
+    return getClassName(widget.sortModel);
   }
 
   @override
@@ -30,7 +30,7 @@ class _SortViewBuilderState extends _RefreshableWidgetState<_SortViewBuilder> {
 
   @override
   void setBuildingState({required bool isBuilding}) {
-    widget.sortingModel.ui._setSortViewBuildingState(
+    widget.sortModel.ui._setSortViewBuildingState(
       widgetState: this,
       isBuilding: isBuilding,
     );
@@ -38,7 +38,7 @@ class _SortViewBuilderState extends _RefreshableWidgetState<_SortViewBuilder> {
 
   @override
   void addWidgetState({required bool isShowing}) {
-    widget.sortingModel.ui._addSortFragmentWidgetState(
+    widget.sortModel.ui._addSortFragmentWidgetState(
       widgetState: this,
       isShowing: true,
     );
@@ -46,20 +46,20 @@ class _SortViewBuilderState extends _RefreshableWidgetState<_SortViewBuilder> {
 
   @override
   void removeWidgetState() {
-    widget.sortingModel.ui._removeSortFragmentWidgetState(
+    widget.sortModel.ui._removeSortFragmentWidgetState(
       widgetState: this,
     );
   }
 
   @override
   void executeAfterBuild() {
-    // widget.sortingModel._afterBuildFilterView();
+    // widget.sortModel._afterBuildFilterView();
   }
 
   @override
-  @_SortingModelChangedAnnotation()
+  @_SortModelChangedAnnotation()
   Widget buildContent(BuildContext context) {
-    widget.sortingModel.ui._setSortViewBuildingState(
+    widget.sortModel.ui._setSortViewBuildingState(
       widgetState: this,
       isBuilding: true,
     );
@@ -69,6 +69,6 @@ class _SortViewBuilderState extends _RefreshableWidgetState<_SortViewBuilder> {
 
   @override
   void checkAndFreeMemory() {
-    FlutterArtist.storage._checkToRemoveShelf(widget.sortingModel.shelf);
+    FlutterArtist.storage._checkToRemoveShelf(widget.sortModel.shelf);
   }
 }

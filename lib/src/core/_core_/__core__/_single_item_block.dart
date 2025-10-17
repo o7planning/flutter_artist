@@ -40,14 +40,14 @@ abstract class SingleItemBlock<
     required super.filterModelName,
     required super.formModel,
     required super.childBlocks,
-  }) : super(sortingModel: null);
+  }) : super(sortModel: null);
 
   @override
   @nonVirtual
   Future<ApiResult<PageData<ITEM_DETAIL>?>> callApiQuery({
     required Object? parentBlockCurrentItem,
     required FILTER_CRITERIA filterCriteria,
-    required SortingCriteria? sortingCriteria,
+    required SortCriteria? sortingCriteria,
     required PageableData? pageable,
   }) async {
     ApiResult<ITEM_DETAIL>? result = await callApiQuerySingleItem(

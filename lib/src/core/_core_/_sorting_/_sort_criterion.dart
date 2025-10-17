@@ -1,71 +1,69 @@
 part of '../core.dart';
 
-class SortingCriterion extends Equatable {
+class SortCriterion extends Equatable {
   final String criterionName;
   String _text;
-  SortingDirection _direction;
+  SortDirection? _direction;
 
   String get text => _text;
 
-  SortingDirection get direction => _direction;
+  SortDirection? get direction => _direction;
 
-  SortingCriterion._({
-    required SortingDirection direction,
+  SortCriterion._({
+    required SortDirection? direction,
     required this.criterionName,
     required String text,
   })  : _text = text,
         _direction = direction;
 
   bool isAscending() {
-    return _direction == SortingDirection.ascending;
+    return _direction == SortDirection.ascending;
   }
 
   bool isDescending() {
-    return _direction == SortingDirection.descending;
+    return _direction == SortDirection.descending;
   }
 
   bool hasDirection() {
-    return _direction != SortingDirection.none;
+    return _direction != null;
   }
 
   bool hasNoDirection() {
-    return _direction == SortingDirection.none;
+    return _direction == null;
   }
 
   String toCriterionString() {
-    return "${_direction.sign}$criterionName";
+    return "${_direction == null ? '' : _direction!.sign}$criterionName";
   }
 
-  SortingCriterion copyWith({required SortingDirection direction}) {
-    return SortingCriterion._(
+  SortCriterion copyWith({required SortDirection direction}) {
+    return SortCriterion._(
       criterionName: criterionName,
       text: text,
       direction: direction,
     );
   }
 
-  SortingCriterion copy() {
-    return SortingCriterion._(
+  SortCriterion copy() {
+    return SortCriterion._(
       criterionName: criterionName,
       text: text,
       direction: _direction,
     );
   }
 
-  SortingDirection getNextDirection({bool acceptNoneDirection = true}) {
+  SortDirection? getNextDirection({bool acceptNoneDirection = true}) {
     switch (_direction) {
-      case SortingDirection.ascending:
-        return SortingDirection.descending;
-      case SortingDirection.descending:
-        return acceptNoneDirection
-            ? SortingDirection.none
-            : SortingDirection.ascending;
-      case SortingDirection.none:
-        return SortingDirection.ascending;
+      case SortDirection.ascending:
+        return SortDirection.descending;
+      case SortDirection.descending:
+        return acceptNoneDirection ? null : SortDirection.ascending;
+      case null:
+        return SortDirection.ascending;
     }
   }
 
-  static SortingCriterion _parse(String sortableCriterionName) {
+  static SortCriterion _parse(String sortableCriterionName) {
     String name = sortableCriterionName.trim();
     if (name.isEmpty) {
       throw Exception("Invalid sortableCriterionName. Not allow empty");
@@ -82,8 +80,8 @@ class SortingCriterion extends Equatable {
           "Valid example: 'email', '+email' or '-email'");
     }
     //
-    SortingDirection direction = SortingDirection.fromSign(sign);
-    return SortingCriterion._(
+    SortDirection? direction = SortDirection.fromSign(sign);
+    return SortCriterion._(
       direction: direction,
       criterionName: criterionName,
       text: criterionName,
@@ -95,6 +93,6 @@ class SortingCriterion extends Equatable {
 
   @override
   String toString() {
-    return "${direction.sign}$criterionName";
+    return "${direction == null ? '' : direction!.sign}$criterionName";
   }
 }

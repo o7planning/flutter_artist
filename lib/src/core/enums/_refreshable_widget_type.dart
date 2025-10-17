@@ -12,8 +12,8 @@ enum RefreshableWidgetType {
     iconData: FaIconConstants.filterModelIconData,
   ),
   sort(
-    name: "SortingModel",
-    iconData: FaIconConstants.filterModelIconData,
+    name: "SortModel",
+    iconData: FaIconConstants.sortModelIconData,
   ),
   controlBar(
     name: "ControlBar",

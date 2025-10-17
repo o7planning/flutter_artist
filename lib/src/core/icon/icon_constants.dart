@@ -97,7 +97,7 @@ class FaIconConstants {
   static const IconData blockCustomControlBarIconData =
       cupertino.CupertinoIcons.gamecontroller_fill;
 
-  static const IconData sortingModelIconData = Icons.sort_by_alpha;
+  static const IconData sortModelIconData = Icons.sort_by_alpha;
 
   static const IconData filterModelIconData = Icons.filter_alt_outlined;
   static const IconData formModelIconData = cupertino.CupertinoIcons.film_fill;

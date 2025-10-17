@@ -65,8 +65,8 @@ class _BlockUIComponents extends _UIComponents {
   @override
   bool hasMountedUIComponent() {
     return (block.filterModel?.ui.hasMountedUIComponent() ?? false) ||
-        (block.serverSideSortingModel?.ui.hasMountedUIComponent() ?? false) ||
-        (block.clientSideSortingModel?.ui.hasMountedUIComponent() ?? false) ||
+        (block.serverSideSortModel?.ui.hasMountedUIComponent() ?? false) ||
+        (block.clientSideSortModel?.ui.hasMountedUIComponent() ?? false) ||
         __blockFragmentWidgetStates.isNotEmpty ||
         __blockControlBarWidgetStates.isNotEmpty ||
         __controlWidgetStates.isNotEmpty ||
@@ -94,16 +94,16 @@ class _BlockUIComponents extends _UIComponents {
     //   }
     // }
     // Sort
-    if (block.serverSideSortingModel != null) {
-      active = block.serverSideSortingModel!.ui.hasActiveUIComponent();
+    if (block.serverSideSortModel != null) {
+      active = block.serverSideSortModel!.ui.hasActiveUIComponent();
       if (active) {
-        return getClassNameWithoutGenerics(block.serverSideSortingModel);
+        return getClassNameWithoutGenerics(block.serverSideSortModel);
       }
     }
-    if (block.clientSideSortingModel != null) {
-      active = block.clientSideSortingModel!.ui.hasActiveUIComponent();
+    if (block.clientSideSortModel != null) {
+      active = block.clientSideSortModel!.ui.hasActiveUIComponent();
       if (active) {
-        return getClassNameWithoutGenerics(block.clientSideSortingModel);
+        return getClassNameWithoutGenerics(block.clientSideSortModel);
       }
     }
     // Form
@@ -233,8 +233,8 @@ class _BlockUIComponents extends _UIComponents {
       block.filterModel?.ui.updateAllUIComponents();
     }
     //
-    block.serverSideSortingModel.ui.updateAllUIComponents(force: force);
-    block.clientSideSortingModel?.ui.updateAllUIComponents(force: force);
+    block.serverSideSortModel.ui.updateAllUIComponents(force: force);
+    block.clientSideSortModel?.ui.updateAllUIComponents(force: force);
     //
     updateBlockFragmentWidgets(force: force);
     updatePaginationWidgets(force: force);
@@ -451,9 +451,9 @@ class _BlockUIComponents extends _UIComponents {
     }
     //
     if (withSort) {
-      final SortingModel sortingModel = block.serverSideSortingModel;
+      final SortModel sortModel = block.serverSideSortModel;
       ret.addAll(
-        sortingModel.ui._findMountedFragmentWidgetStates(
+        sortModel.ui._findMountedFragmentWidgetStates(
           activeOnly: true,
         ),
       );

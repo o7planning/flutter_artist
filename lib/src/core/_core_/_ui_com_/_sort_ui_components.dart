@@ -1,14 +1,14 @@
 part of '../core.dart';
 
 class _SortUIComponents extends _UIComponents {
-  final SortingModel sortingModel;
+  final SortModel sortModel;
 
   final Map<_RefreshableWidgetState, XState> _sortFragmentWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
 
-  _SortUIComponents({required this.sortingModel});
+  _SortUIComponents({required this.sortModel});
 
   // ***************************************************************************
   // ***************************************************************************
@@ -106,12 +106,12 @@ class _SortUIComponents extends _UIComponents {
     bool activeCURRENT = hasActiveUIComponent();
 
     if (isShowing) {
-      FlutterArtist.storage._addRecentShelf(sortingModel.shelf);
+      FlutterArtist.storage._addRecentShelf(sortModel.shelf);
     }
     //
     if (!activeOLD && activeCURRENT) {
       // Fire event:
-      sortingModel.shelf._startLoadDataForLazyUIComponentsIfNeed();
+      sortModel.shelf._startLoadDataForLazyUIComponentsIfNeed();
     } else if (activeOLD && !activeCURRENT) {
       // TODO: (Kiem tra phuong thuc cung ten trong Block).
       // block._fireBlockHidden();

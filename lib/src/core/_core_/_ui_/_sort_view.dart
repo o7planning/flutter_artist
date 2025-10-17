@@ -1,10 +1,10 @@
 part of '../core.dart';
 
 abstract class SortView<ITEM extends Object> extends StatelessWidget {
-  final SortingModel<ITEM> sortingModel;
+  final SortModel<ITEM> sortModel;
 
   const SortView({
-    required this.sortingModel,
+    required this.sortModel,
     super.key,
   });
 
@@ -14,7 +14,7 @@ abstract class SortView<ITEM extends Object> extends StatelessWidget {
     return _SortViewBuilder(
       ownerClassInstance: this,
       description: '',
-      sortingModel: sortingModel,
+      sortModel: sortModel,
       build: () {
         return buildContent(context);
       },

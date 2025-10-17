@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../_core_/core.dart';
-import '../enums/_sorting_direction.dart';
+import '../enums/_sort_direction.dart';
 import '_sorting_options.dart';
 
 class DropdownSortView<ITEM extends Object> extends SortView<ITEM> {
@@ -10,26 +10,25 @@ class DropdownSortView<ITEM extends Object> extends SortView<ITEM> {
 
   const DropdownSortView({
     super.key,
-    required super.sortingModel,
+    required super.sortModel,
     this.iconSpacing = 3,
     this.textStyle = const TextStyle(fontSize: 14),
   });
 
   const DropdownSortView.simple({
     super.key,
-    required super.sortingModel,
+    required super.sortModel,
     this.iconSpacing = 3,
     this.textStyle = const TextStyle(fontSize: 14),
   });
 
   @override
   Widget buildContent(BuildContext context) {
-    List<SortingCriterion> criteria = sortingModel.criteria;
-    SortingCriterion? selectedSortingCriterion =
-        sortingModel.selectedCriterion ??
-            sortingModel.getFirstSortingCriterion();
+    List<SortCriterion> criteria = sortModel.criteria;
+    SortCriterion? selectedSortingCriterion =
+        sortModel.selectedCriterion ?? sortModel.getFirstSortingCriterion();
     //
-    return DropdownButton<SortingCriterion>(
+    return DropdownButton<SortCriterion>(
       isDense: true,
       value: selectedSortingCriterion,
       icon: const Icon(Icons.keyboard_arrow_down),
@@ -38,8 +37,8 @@ class DropdownSortView<ITEM extends Object> extends SortView<ITEM> {
           return DropdownMenuItem(
             value: criterion,
             child: _buildSortingCriterionView(
-              sortingModel: sortingModel,
-              sortingCriterion: criterion,
+              sortModel: sortModel,
+              sortCriterion: criterion,
               selectedSortingCriterion: selectedSortingCriterion,
             ),
           );
@@ -49,16 +48,15 @@ class DropdownSortView<ITEM extends Object> extends SortView<ITEM> {
     );
   }
 
-  void _onChanged(SortingCriterion? newValue) {
+  void _onChanged(SortCriterion? newValue) {
     if (newValue == null) {
       return;
     }
-    SortingDirection direction = newValue.direction;
-    if (direction == SortingDirection.none) {
-      direction = SortingDirection.ascending;
-    }
-    sortingModel.setSelectedCriterion(newValue);
-    sortingModel.updateSortingCriterionByName(
+    SortDirection? direction = newValue.direction;
+    direction ??= SortDirection.ascending;
+
+    sortModel.setSelectedCriterion(newValue);
+    sortModel.updateSortingCriterionByName(
       criterionName: newValue.criterionName,
       direction: direction,
       moveToFirst: false,
@@ -67,26 +65,26 @@ class DropdownSortView<ITEM extends Object> extends SortView<ITEM> {
   }
 
   Widget _buildSortingCriterionView({
-    required SortingModel sortingModel,
-    required SortingCriterion sortingCriterion,
-    required SortingCriterion? selectedSortingCriterion,
+    required SortModel sortModel,
+    required SortCriterion sortCriterion,
+    required SortCriterion? selectedSortingCriterion,
   }) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          sortingCriterion.text,
+          sortCriterion.text,
           style: textStyle,
         ),
         SizedBox(width: iconSpacing),
         buildSortBtn(
-          sortingModel: sortingModel,
-          sortingCriterion: sortingCriterion,
+          sortModel: sortModel,
+          sortCriterion: sortCriterion,
           isDragging: false,
           acceptNoneDirection: false,
           clearDirectionOfOtherCriteria: false,
-          enabled: sortingCriterion.criterionName ==
+          enabled: sortCriterion.criterionName ==
               selectedSortingCriterion?.criterionName,
         ),
       ],
