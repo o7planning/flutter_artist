@@ -19,11 +19,11 @@ class SortCriteria extends Equatable {
   /// Return a Map<String, String>. For example:
   ///
   /// ```dart
-  /// {"categoryName": "+", "price": "-"}
+  /// {"categoryName": "asc", "price": "desc"}
   /// ```
   ///
   Map<String, String> toCriteriaMap() {
-    return {for (var e in _criteria) e.criterionName: e.direction.sign};
+    return {for (var e in _criteria) e.criterionName: e.direction.sqlKeyword};
   }
 
   ///
@@ -31,9 +31,9 @@ class SortCriteria extends Equatable {
   ///
   /// ```json
   /// {
-  ///    "categoryName": "+"
-  ///    "productName": "-",
-  ///    "price": "-"
+  ///    "categoryName": "asc"
+  ///    "productName": "desc",
+  ///    "price": "desc"
   /// }
   /// ```
   ///

@@ -11,6 +11,15 @@ enum SortDirection {
     return null;
   }
 
+  String get sqlKeyword {
+    switch (this) {
+      case SortDirection.ascending:
+        return "asc";
+      case SortDirection.descending:
+        return "desc";
+    }
+  }
+
   String get sign {
     switch (this) {
       case SortDirection.ascending:
