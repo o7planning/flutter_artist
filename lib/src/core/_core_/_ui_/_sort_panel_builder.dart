@@ -1,11 +1,11 @@
 part of '../core.dart';
 
-class _SortViewBuilder extends _RefreshableWidget {
+class _SortPanelBuilder extends _RefreshableWidget {
   final SortModel sortModel;
 
   final Widget Function() build;
 
-  const _SortViewBuilder({
+  const _SortPanelBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
@@ -15,11 +15,12 @@ class _SortViewBuilder extends _RefreshableWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _SortViewBuilderState();
+    return _SortPanelBuilderState();
   }
 }
 
-class _SortViewBuilderState extends _RefreshableWidgetState<_SortViewBuilder> {
+class _SortPanelBuilderState
+    extends _RefreshableWidgetState<_SortPanelBuilder> {
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.sortModel);
@@ -30,7 +31,7 @@ class _SortViewBuilderState extends _RefreshableWidgetState<_SortViewBuilder> {
 
   @override
   void setBuildingState({required bool isBuilding}) {
-    widget.sortModel.ui._setSortViewBuildingState(
+    widget.sortModel.ui._setSortPanelBuildingState(
       widgetState: this,
       isBuilding: isBuilding,
     );
@@ -59,7 +60,7 @@ class _SortViewBuilderState extends _RefreshableWidgetState<_SortViewBuilder> {
   @override
   @_SortModelChangedAnnotation()
   Widget buildContent(BuildContext context) {
-    widget.sortModel.ui._setSortViewBuildingState(
+    widget.sortModel.ui._setSortPanelBuildingState(
       widgetState: this,
       isBuilding: true,
     );

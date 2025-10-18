@@ -3,8 +3,7 @@ part of '../core.dart';
 class SortCriteria extends Equatable {
   final List<SortableCriterion> _criteria;
 
-  SortCriteria._(List<SortableCriterion> criteria)
-      : _criteria = [...criteria];
+  SortCriteria._(List<SortableCriterion> criteria) : _criteria = [...criteria];
 
   ///
   /// Return a String. For example: "+categoryName,productName,-price".

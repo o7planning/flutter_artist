@@ -4,18 +4,18 @@ import '../_core_/core.dart';
 import '../enums/_sort_direction.dart';
 import '_sorting_options.dart';
 
-class DropdownSortView<ITEM extends Object> extends SortView<ITEM> {
+class DropdownSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
   final TextStyle textStyle;
   final double iconSpacing;
 
-  const DropdownSortView({
+  const DropdownSortPanel({
     super.key,
     required super.sortModel,
     this.iconSpacing = 3,
     this.textStyle = const TextStyle(fontSize: 14),
   });
 
-  const DropdownSortView.simple({
+  const DropdownSortPanel.simple({
     super.key,
     required super.sortModel,
     this.iconSpacing = 3,

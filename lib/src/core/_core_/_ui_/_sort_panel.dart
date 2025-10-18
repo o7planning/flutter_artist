@@ -1,9 +1,9 @@
 part of '../core.dart';
 
-abstract class SortView<ITEM extends Object> extends StatelessWidget {
+abstract class SortPanel<ITEM extends Object> extends StatelessWidget {
   final SortModel<ITEM> sortModel;
 
-  const SortView({
+  const SortPanel({
     required this.sortModel,
     super.key,
   });
@@ -11,7 +11,7 @@ abstract class SortView<ITEM extends Object> extends StatelessWidget {
   @override
   @nonVirtual
   Widget build(BuildContext context) {
-    return _SortViewBuilder(
+    return _SortPanelBuilder(
       ownerClassInstance: this,
       description: '',
       sortModel: sortModel,

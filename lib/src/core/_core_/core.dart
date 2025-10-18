@@ -215,7 +215,9 @@ part '_sorting_/_sortable_criteria.dart';
 part '_sorting_/_sort_criterion.dart';
 
 part '_sorting_/_sortable_criterion.dart';
+
 part '_sorting_/_sort_criteria.dart';
+
 part '__core__/_storage.dart';
 
 part '__core__/_storage_ev.dart';
@@ -322,7 +324,7 @@ part '_core_x_/_x_shelf_/_x_shelf_form_view_change.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_filter_view_change.dart';
 
-part '_core_x_/_x_shelf_/_x_shelf_sort_view_change.dart';
+part '_core_x_/_x_shelf_/_x_shelf_sort_panel_change.dart';
 
 part '_core_x_/_x_storage.dart';
 
@@ -498,9 +500,9 @@ part '_ui_/_filter_view.dart';
 
 part '_ui_/_filter_view_builder.dart';
 
-part '_ui_/_sort_view_builder.dart';
+part '_ui_/_sort_panel_builder.dart';
 
-part '_ui_/_sort_view.dart';
+part '_ui_/_sort_panel.dart';
 
 part '_ui_/_form_view.dart';
 

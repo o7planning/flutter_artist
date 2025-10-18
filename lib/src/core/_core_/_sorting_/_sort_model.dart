@@ -10,8 +10,7 @@ abstract class SortModel<ITEM extends Object> {
 
   bool get singleOptionMode => !multiOptionMode;
 
-  final Map<String, SortDirection?> _originCriterionNameMap;
-  final List<String> _nonSignedCriterionNames = [];
+  final Map<String, SortDirection?> _originCriteriaMap;
   final List<SortCriterion> _criteria = [];
   final Map<String, SortCriterion> _criteriaMap = {};
 
@@ -40,7 +39,7 @@ abstract class SortModel<ITEM extends Object> {
     this.multiOptionMode = false,
     required Map<String, SortDirection?> criteriaMap,
   })  : sortingSide = SortingSide.server,
-        _originCriterionNameMap = {...criteriaMap} {
+        _originCriteriaMap = {...criteriaMap} {
     __init(criteriaMap);
   }
 
@@ -48,7 +47,7 @@ abstract class SortModel<ITEM extends Object> {
     this.multiOptionMode = false,
     required Map<String, SortDirection?> criteriaMap,
   })  : sortingSide = SortingSide.client,
-        _originCriterionNameMap = {...criteriaMap} {
+        _originCriteriaMap = {...criteriaMap} {
     __init(criteriaMap);
   }
 
@@ -72,7 +71,6 @@ abstract class SortModel<ITEM extends Object> {
       }
       //
       if (!_criteriaMap.containsKey(criterion.criterionName)) {
-        _nonSignedCriterionNames.add(criterion.criterionName);
         _criteria.add(criterion);
         _criteriaMap[criterion.criterionName] = criterion;
       }

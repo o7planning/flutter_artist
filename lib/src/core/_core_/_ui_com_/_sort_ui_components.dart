@@ -79,7 +79,7 @@ class _SortUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _setSortViewBuildingState({
+  void _setSortPanelBuildingState({
     required _RefreshableWidgetState widgetState,
     required bool isBuilding,
   }) {
