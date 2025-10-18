@@ -398,13 +398,13 @@ abstract class Block<
 
   int get itemCount => __blockData._items.length;
 
-  PageableData? get pageable => __blockData._pageable;
+  Pageable? get pageable => __blockData._pageable;
 
-  PageableData? get nextPageable {
+  Pageable? get nextPageable {
     if (lastQueryType == QueryType.emptyQuery) {
       return __blockData._initialPageable;
     }
-    PageableData? p = __blockData._pageable;
+    Pageable? p = __blockData._pageable;
     return p?.next();
   }
 
@@ -851,7 +851,7 @@ abstract class Block<
     //
     ItemListMode realItemListMode;
     //
-    final PageableData? callingPageable;
+    final Pageable? callingPageable;
     //
     if (thisXBlock.queryType == QueryType.realQuery) {
       callingPageable = thisXBlock.pageable ?? config.pageable;
@@ -3169,7 +3169,7 @@ abstract class Block<
         AfterQueryAction.setAnItemAsCurrentIfNeed,
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
-    PageableData? pageable,
+    Pageable? pageable,
     Function()? navigate,
   }) async {
     if (filterModel != null && filterModel!._lockAddMoreQuery) {
@@ -3218,7 +3218,7 @@ abstract class Block<
     FILTER_INPUT? filterInput,
     ItemListMode itemListMode = ItemListMode.replace,
     SuggestedSelection<ID>? suggestedSelection,
-    PageableData? pageable,
+    Pageable? pageable,
     Function()? navigate,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -3357,7 +3357,7 @@ abstract class Block<
     required Object? parentBlockCurrentItem,
     required FILTER_CRITERIA filterCriteria,
     required SortableCriteria sortableCriteria,
-    required PageableData pageable,
+    required Pageable pageable,
   });
 
   // ***************************************************************************
@@ -4186,21 +4186,21 @@ abstract class Block<
     required AfterQueryAction afterQueryAction,
     required FILTER_INPUT? filterInput,
     required SuggestedSelection? suggestedSelection,
-    required PageableData? specifiedPageable,
+    required Pageable? specifiedPageable,
     Function()? navigate,
   }) async {
-    PageableData? usedPageable;
+    Pageable? usedPageable;
     switch (qryMethod) {
       case BlockQryMethodName.query:
         usedPageable = specifiedPageable;
       case BlockQryMethodName.queryNextPage:
-        PageableData? currentPageable = __blockData.pageable;
+        Pageable? currentPageable = __blockData.pageable;
         if (currentPageable == null) {
           return BlockQueryResult._noCurrentPagination();
         }
         usedPageable = currentPageable.next();
       case BlockQryMethodName.queryPreviousPage:
-        PageableData? currentPageable = __blockData.pageable;
+        Pageable? currentPageable = __blockData.pageable;
         if (currentPageable == null) {
           return BlockQueryResult._noCurrentPagination();
         }

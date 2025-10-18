@@ -20,7 +20,7 @@ class BlockNumberPagination extends BlockPagination {
       child: number_pagination.NumberPagination(
         onPageChanged: (int pageNumber) {
           block.query(
-            pageable: PageableData(
+            pageable: Pageable(
               page: pageNumber,
               pageSize: block.pageable?.pageSize,
             ),

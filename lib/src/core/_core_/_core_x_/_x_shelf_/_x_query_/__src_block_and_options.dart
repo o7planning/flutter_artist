@@ -6,7 +6,7 @@ class SrcBlockAndOptions {
   final ItemListMode? itemListMode;
   final SuggestedSelection<dynamic>? suggestedSelection;
   final AfterQueryAction? afterQueryAction;
-  final PageableData? pageable;
+  final Pageable? pageable;
 
   SrcBlockAndOptions({
     required this.block,

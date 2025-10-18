@@ -5,7 +5,7 @@ class BlockConfig {
   final BlockItemRefreshmentMode itemRefreshmentMode;
   final BlockHiddenBehavior hiddenBehavior;
 
-  final PageableData pageable;
+  final Pageable pageable;
 
   //
   final bool selfReQueryable;
@@ -37,7 +37,7 @@ class BlockConfig {
     List<Evt>? refreshCurrItemByInternalShelfEvents,
     List<Evt>? reQueryByInternalShelfEvents,
     //
-    this.pageable = const PageableData(
+    this.pageable = const Pageable(
       page: 1,
       pageSize: 20,
     ),

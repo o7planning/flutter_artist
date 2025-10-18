@@ -157,16 +157,16 @@ class _BlockData<
 
   ActionResultState? _lastQueryResultState;
 
-  late final PageableData? _initialPageable;
+  late final Pageable? _initialPageable;
 
-  late PageableData? _pageable;
+  late Pageable? _pageable;
 
-  PageableData? get pageable => _pageable;
+  Pageable? get pageable => _pageable;
 
   ///
-  /// The PageableData will be set for [_pageable] when [Block.queryEmpty()] is called.
+  /// The Pageable will be set for [_pageable] when [Block.queryEmpty()] is called.
   ///
-  PageableData? get _emptyPageable => _initialPageable;
+  Pageable? get _emptyPageable => _initialPageable;
 
   late PaginationData? _pagination;
 
@@ -189,7 +189,7 @@ class _BlockData<
 
   _BlockData._(
     this.block,
-    PageableData? pageable,
+    Pageable? pageable,
   )   : _pageable = pageable,
         _initialPageable = pageable,
         _pagination = PaginationData.empty() {
@@ -385,7 +385,7 @@ class _BlockData<
     required ItemListMode forceItemListMode,
     required Object? currentParentItemId,
     required FILTER_CRITERIA? filterCriteria,
-    required PageableData? pageable,
+    required Pageable? pageable,
     required PageData<ITEM>? pageData,
     required DataState blockDataState,
     required ActionResultState queryResultState,

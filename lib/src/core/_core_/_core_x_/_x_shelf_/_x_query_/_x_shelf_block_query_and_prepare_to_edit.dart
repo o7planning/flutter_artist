@@ -4,7 +4,7 @@ class _XShelfBlockQueryThenPrepareToEdit extends _XShelfSbQuery {
   _XShelfBlockQueryThenPrepareToEdit({
     required Block block,
     required FilterInput? filterInput,
-    required PageableData? pageable,
+    required Pageable? pageable,
     required ItemListMode? itemListMode,
     required AfterQueryAction? afterQueryAction,
     required SuggestedSelection<dynamic>? suggestedSelection,

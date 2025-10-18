@@ -47,7 +47,7 @@ class XBlock<
   ItemListMode? __itemListMode;
   SuggestedSelection? __suggestedSelection;
   AfterQueryAction? __afterQueryAction;
-  PageableData? __pageable;
+  Pageable? __pageable;
 
   // TODO: Chuyen sang BlockQueryResult?
   late final PrepareItemCreationResult itemCreationResult =
@@ -62,7 +62,7 @@ class XBlock<
 
   SuggestedSelection? get suggestedSelection => __suggestedSelection;
 
-  PageableData? get pageable => __pageable;
+  Pageable? get pageable => __pageable;
 
   // ***************************************************************************
   // ***************************************************************************
@@ -218,7 +218,7 @@ class XBlock<
     required ItemListMode? itemListMode,
     required SuggestedSelection? suggestedSelection,
     required AfterQueryAction? afterQueryAction,
-    required PageableData? pageable,
+    required Pageable? pageable,
   }) {
     __queryType = queryType;
     __itemListMode = itemListMode;

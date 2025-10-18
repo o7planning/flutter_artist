@@ -48,7 +48,7 @@ abstract class SingleItemBlock<
     required Object? parentBlockCurrentItem,
     required FILTER_CRITERIA filterCriteria,
     required SortableCriteria? sortableCriteria,
-    required PageableData? pageable,
+    required Pageable? pageable,
   }) async {
     ApiResult<ITEM_DETAIL>? result = await callApiQuerySingleItem(
       parentBlockCurrentItem: parentBlockCurrentItem,
