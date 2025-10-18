@@ -16,7 +16,7 @@ dependencies:
   flutter_form_builder: ^10.0.1 # ^9.3.0
   tabbed_view: ^1.19.1
   equatable:
-  graphview:
+  graphview: ^1.5.1
   directed_graph: ^0.4.5
   flutter_force_directed_graph: ^1.0.6
   flutter_graph_view: ^1.2.0
