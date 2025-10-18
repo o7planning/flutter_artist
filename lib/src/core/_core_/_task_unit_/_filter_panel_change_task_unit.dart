@@ -1,13 +1,13 @@
 part of '../core.dart';
 
 @_TaskUnitClassAnnotation()
-@_FilterViewChangeAnnotation()
-class _FilterViewChangeTaskUnit extends _STaskUnit {
+@_FilterPanelChangeAnnotation()
+class _FilterPanelChangeTaskUnit extends _STaskUnit {
   XFilterModel xFilterModel;
 
-  _FilterViewChangeTaskUnit({
+  _FilterPanelChangeTaskUnit({
     required this.xFilterModel,
-  }) : super(taskType: TaskType.filterModelFilterViewChanged);
+  }) : super(taskType: TaskType.filterModelFilterPanelChanged);
 
   @override
   XShelf get xShelf => xFilterModel.xShelf;

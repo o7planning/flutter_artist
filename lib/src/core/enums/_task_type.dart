@@ -17,7 +17,7 @@ enum TaskType {
   blockSelectItemAsCurrent,
   blockClearance,
   //
-  filterModelFilterViewChanged,
+  filterModelFilterPanelChanged,
   //
   formModelEnterFormFields,
   formModelLoadForm,

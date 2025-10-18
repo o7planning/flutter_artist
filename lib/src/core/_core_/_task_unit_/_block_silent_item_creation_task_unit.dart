@@ -11,9 +11,9 @@ class _BlockSilentItemCreationTaskUnit
     required this.xBlock,
     required this.action,
   }) : super(
-    taskType: TaskType.blockSilentCreateItem,
-    taskResult: BlockSilentItemCreationResult(),
-  );
+          taskType: TaskType.blockSilentCreateItem,
+          taskResult: BlockSilentItemCreationResult(),
+        );
 
   @override
   XShelf get xShelf => xBlock.xShelf;

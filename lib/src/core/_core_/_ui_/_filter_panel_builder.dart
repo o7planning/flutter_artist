@@ -2,12 +2,12 @@ part of '../core.dart';
 
 // bool _lockChangeEvent1 = false;
 
-class _FilterViewBuilder extends _RefreshableWidget {
+class _FilterPanelBuilder extends _RefreshableWidget {
   final FilterModel filterModel;
 
   final Widget Function() build;
 
-  const _FilterViewBuilder({
+  const _FilterPanelBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
@@ -17,12 +17,12 @@ class _FilterViewBuilder extends _RefreshableWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _FilterViewBuilderState();
+    return _FilterPanelBuilderState();
   }
 }
 
-class _FilterViewBuilderState
-    extends _RefreshableWidgetState<_FilterViewBuilder> {
+class _FilterPanelBuilderState
+    extends _RefreshableWidgetState<_FilterPanelBuilder> {
   GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
 
   @override
@@ -35,7 +35,7 @@ class _FilterViewBuilderState
 
   @override
   void setBuildingState({required bool isBuilding}) {
-    widget.filterModel.ui._setFilterViewBuildingState(
+    widget.filterModel.ui._setFilterPanelBuildingState(
       widgetState: this,
       isBuilding: isBuilding,
     );
@@ -58,7 +58,7 @@ class _FilterViewBuilderState
 
   @override
   void executeAfterBuild() {
-    widget.filterModel._afterBuildFilterView();
+    widget.filterModel._afterBuildFilterPanel();
   }
 
   @override
@@ -67,7 +67,7 @@ class _FilterViewBuilderState
     widget.filterModel._formKey = formKey;
   }
 
-  @_FilterViewChangeAnnotation()
+  @_FilterPanelChangeAnnotation()
   Future<void> _onChanged() async {
     if (FlutterArtist.executor.executingXShelfId != null) {
       return;
@@ -77,21 +77,21 @@ class _FilterViewBuilderState
       widgetState: this,
     );
     if (!isBuilding) {
-      await widget.filterModel._onChangeFromFilterView();
+      await widget.filterModel._onChangeFromFilterPanel();
     }
   }
 
   @override
-  @_FilterViewChangeAnnotation()
+  @_FilterPanelChangeAnnotation()
   Widget buildContent(BuildContext context) {
-    widget.filterModel.ui._setFilterViewBuildingState(
+    widget.filterModel.ui._setFilterPanelBuildingState(
       widgetState: this,
       isBuilding: true,
     );
     //
     return FormBuilder(
       key: formKey,
-      initialValue: widget.filterModel._initialValuesForFilterView(),
+      initialValue: widget.filterModel._initialValuesForFilterPanel(),
       onChanged: _onChanged,
       child: AbsorbPointer(
         absorbing: !widget.filterModel.isEnabled(),

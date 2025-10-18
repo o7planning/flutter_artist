@@ -29,7 +29,7 @@ class _Executor {
 
   Future<void> _executeTaskUnitQueue({bool showOverlay = true}) async {
     if (__executingXShelfId != null) {
-      // (This code causes an Error in FilterView).
+      // (This code causes an Error in FilterPanel).
       // print("\n\nDevelopment Error - Illegal status - @@ executingXShelfId: $__executingXShelfId");
       // throw FatalAppError(errorMessage: "Development Error - Illegal status.");
       return;
@@ -110,9 +110,9 @@ class _Executor {
         taskResult: taskUnit.taskResult as StorageSilentActionResult,
       );
     }
-    // FilterView Change:
-    else if (taskUnit is _FilterViewChangeTaskUnit) {
-      await taskUnit.xFilterModel.filterModel._unitFilterViewChanged(
+    // FilterPanel Change:
+    else if (taskUnit is _FilterPanelChangeTaskUnit) {
+      await taskUnit.xFilterModel.filterModel._unitFilterPanelChanged(
         xFilterModel: taskUnit.xFilterModel,
       );
     }

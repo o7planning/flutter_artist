@@ -54,7 +54,7 @@ class _SortPanelBuilderState
 
   @override
   void executeAfterBuild() {
-    // widget.sortModel._afterBuildFilterView();
+    // widget.sortModel._afterBuildFilterPanel();
   }
 
   @override

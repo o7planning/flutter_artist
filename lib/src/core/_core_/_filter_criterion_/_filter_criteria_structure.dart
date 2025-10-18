@@ -182,7 +182,7 @@ class FilterCriteriaStructure {
               }
             }
           }
-        case FilterActivityType.updateFromFilterView:
+        case FilterActivityType.updateFromFilterPanel:
           criterion._tempCurrentValue = criterion._currentValue;
           criterion._tempCurrentXData = criterion._currentXData;
           criterion._tempInitialValue = criterion._initialValue;

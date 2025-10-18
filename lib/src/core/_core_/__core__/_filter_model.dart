@@ -187,8 +187,8 @@ abstract class FilterModel<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_FilterViewChangeAnnotation()
-  Future<bool> _unitFilterViewChanged({
+  @_FilterPanelChangeAnnotation()
+  Future<bool> _unitFilterPanelChanged({
     required XFilterModel xFilterModel,
   }) async {
     __assertThisXFilterModel(xFilterModel);
@@ -196,7 +196,7 @@ abstract class FilterModel<
     _filterCriteriaStructure._setFilterDataState(DataState.pending);
     //
     FILTER_CRITERIA? filterCriteria = await _startNewFilterActivity(
-      activityType: FilterActivityType.updateFromFilterView,
+      activityType: FilterActivityType.updateFromFilterPanel,
       filterInput: null,
     );
     return filterCriteria != null;
@@ -297,7 +297,7 @@ abstract class FilterModel<
   /// Return null is error.
   ///
   @_ImportantMethodAnnotation(
-      "Called after changing in FilterView or Querying in Block or Scalar.")
+      "Called after changing in FilterPanel or Querying in Block or Scalar.")
   Future<FILTER_CRITERIA?> _startNewFilterActivity({
     required FILTER_INPUT? filterInput,
     required FilterActivityType activityType,
@@ -475,7 +475,7 @@ abstract class FilterModel<
         _filterCriteriaStructure._getTempCurrentCriterionValue(
       criterionName: multiOptCriterionName,
     );
-    if (activityType == FilterActivityType.updateFromFilterView) {
+    if (activityType == FilterActivityType.updateFromFilterPanel) {
       if (formKeyInstantValues.containsKey(multiOptCriterionName)) {
         newSelectedValue = formKeyInstantValues[multiOptCriterionName];
       }
@@ -754,9 +754,9 @@ abstract class FilterModel<
   // ***************************************************************************
 
   ///
-  /// Used for FilterView.
+  /// Used for FilterPanel.
   ///
-  Map<String, dynamic> _initialValuesForFilterView() {
+  Map<String, dynamic> _initialValuesForFilterPanel() {
     return _filterCriteriaStructure._currentCriteriaValues;
   }
 
@@ -765,15 +765,15 @@ abstract class FilterModel<
 
   // Change Event from GUI.
   @_ImportantMethodAnnotation(
-      "Called when the user makes a change on the FilterView")
-  @_FilterViewChangeAnnotation()
-  Future<void> _onChangeFromFilterView() async {
-    print("#~~~~~~~~~~~~~~~> _onChangeFromFilterView");
+      "Called when the user makes a change on the FilterPanel")
+  @_FilterPanelChangeAnnotation()
+  Future<void> _onChangeFromFilterPanel() async {
+    print("#~~~~~~~~~~~~~~~> _onChangeFromFilterPanel");
     //
-    final XShelf xShelf = _XShelfFilterViewChange(filterModel: this);
+    final XShelf xShelf = _XShelfFilterPanelChange(filterModel: this);
     //
     final XFilterModel xFilterModel = xShelf.findXFilterModelByName(name)!;
-    _FilterViewChangeTaskUnit taskUnit = _FilterViewChangeTaskUnit(
+    _FilterPanelChangeTaskUnit taskUnit = _FilterPanelChangeTaskUnit(
       xFilterModel: xFilterModel,
     );
     xShelf._addTaskUnit(taskUnit: taskUnit);
@@ -784,7 +784,7 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _afterBuildFilterView() {
+  void _afterBuildFilterPanel() {
     //
   }
 

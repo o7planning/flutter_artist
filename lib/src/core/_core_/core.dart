@@ -322,7 +322,7 @@ part '_core_x_/_x_shelf_/_x_query_/_x_shelf_scalar_query.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_form_view_change.dart';
 
-part '_core_x_/_x_shelf_/_x_shelf_filter_view_change.dart';
+part '_core_x_/_x_shelf_/_x_shelf_filter_panel_change.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_sort_panel_change.dart';
 
@@ -456,7 +456,7 @@ part '_task_unit_/_block_silent_item_update_task_unit.dart';
 
 part '_task_unit_/_block_select_as_current_task_unit.dart';
 
-part '_task_unit_/_filter_view_change_task_unit.dart';
+part '_task_unit_/_filter_panel_change_task_unit.dart';
 
 part '_task_unit_/_form_model_auto_enter_form_fields_task_unit.dart';
 
@@ -496,9 +496,9 @@ part '_ui_/_control_bar_button.dart';
 
 part '_ui_/_dev_container.dart';
 
-part '_ui_/_filter_view.dart';
+part '_ui_/_filter_panel.dart';
 
-part '_ui_/_filter_view_builder.dart';
+part '_ui_/_filter_panel_builder.dart';
 
 part '_ui_/_sort_panel_builder.dart';
 
@@ -747,8 +747,8 @@ class _SortModelChangedAnnotation {
   const _SortModelChangedAnnotation();
 }
 
-class _FilterViewChangeAnnotation {
-  const _FilterViewChangeAnnotation();
+class _FilterPanelChangeAnnotation {
+  const _FilterPanelChangeAnnotation();
 }
 
 class _ScalarQueryAnnotation {

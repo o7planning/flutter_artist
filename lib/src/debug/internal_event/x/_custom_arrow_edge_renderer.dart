@@ -142,4 +142,9 @@ class CustomArrowEdgeRenderer extends EdgeRenderer {
 
     return resultLine;
   }
+
+  @override
+  void renderEdge(Canvas canvas, Edge edge, Paint paint) {
+    // TODO: implement renderEdge
+  }
 }

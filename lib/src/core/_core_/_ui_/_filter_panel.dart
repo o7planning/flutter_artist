@@ -1,10 +1,10 @@
 part of '../core.dart';
 
-abstract class FilterView<FILTER_MODEL extends FilterModel>
+abstract class FilterPanel<FILTER_MODEL extends FilterModel>
     extends StatelessWidget {
   final FILTER_MODEL filterModel;
 
-  const FilterView({
+  const FilterPanel({
     required this.filterModel,
     super.key,
   });
@@ -12,7 +12,7 @@ abstract class FilterView<FILTER_MODEL extends FilterModel>
   @override
   @nonVirtual
   Widget build(BuildContext context) {
-    return _FilterViewBuilder(
+    return _FilterPanelBuilder(
       ownerClassInstance: this,
       description: '',
       filterModel: filterModel,

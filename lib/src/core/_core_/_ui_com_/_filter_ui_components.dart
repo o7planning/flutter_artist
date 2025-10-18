@@ -79,7 +79,7 @@ class _FilterUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _setFilterViewBuildingState({
+  void _setFilterPanelBuildingState({
     required _RefreshableWidgetState widgetState,
     required bool isBuilding,
   }) {

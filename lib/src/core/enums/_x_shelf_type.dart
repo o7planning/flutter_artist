@@ -23,7 +23,7 @@ enum XShelfType {
   formModelSave,
   formModelEnterFields,
   formViewChange,
-  filterViewChange,
+  filterPanelChange,
   //
   scalarQuery,
   scalarClearance,

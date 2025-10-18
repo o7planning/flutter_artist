@@ -88,7 +88,8 @@ class _InternalEventGraphViewTestState
     graph.addEdge(g, h, paint: Paint()..color = Colors.red);
 
     builder = FruchtermanReingoldAlgorithm(
-      iterations: 1000,
+      // iterations: 1000,
+      FruchtermanReingoldConfiguration(),
       renderer: CustomArrowEdgeRenderer(),
     );
   }
