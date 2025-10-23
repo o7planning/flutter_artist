@@ -2915,13 +2915,13 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockSelectItemAsCurrentAnnotation()
-  Future<BlockItemCurrSelectionResult<ITEM>> refreshItemThenSetAsCurrent({
+  Future<BlockItemCurrSelectionResult<ITEM>> refreshItemAndSetAsCurrent({
     required ITEM item,
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
     return await __refreshToShowOrEditItemAsCurrent(
-      methodName: "refreshItemThenSetAsCurrent",
+      methodName: "refreshItemAndSetAsCurrent",
       item: item,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.invalidTarget,
       forceForm: forceLoadForm,
