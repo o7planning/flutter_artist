@@ -168,7 +168,7 @@ class _BlockData<
   ///
   Pageable? get _emptyPageable => _initialPageable;
 
-  late PaginationData? _pagination;
+  late PaginationInfo? _paginationInfo;
 
   int _currentItemChangeCount = 0;
 
@@ -192,7 +192,7 @@ class _BlockData<
     Pageable? pageable,
   )   : _pageable = pageable,
         _initialPageable = pageable,
-        _pagination = PaginationData.empty() {
+        _paginationInfo = PaginationInfo.empty() {
     _blockDataState = block.isRoot ? DataState.pending : DataState.none;
   }
 
@@ -404,13 +404,13 @@ class _BlockData<
     _pageable = pageable?.copy();
     if (_currentParentItemId != currentParentItemId ||
         _filterCriteria != filterCriteria) {
-      _pagination = PaginationData.copy(ap.pagination);
+      _paginationInfo = PaginationInfo.copy(ap.paginationInfo);
     } else {
       // Query Error:
       if (queryResultState == ActionResultState.fail) {
         // No change _pagination:
       } else {
-        _pagination = PaginationData.copy(ap.pagination);
+        _paginationInfo = PaginationInfo.copy(ap.paginationInfo);
       }
     }
     //

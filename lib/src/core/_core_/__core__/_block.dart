@@ -408,8 +408,8 @@ abstract class Block<
     return p?.next();
   }
 
-  PaginationData? get pagination {
-    return PaginationData.copy(__blockData._pagination);
+  PaginationInfo? get paginationInfo {
+    return PaginationInfo.copy(__blockData._paginationInfo);
   }
 
   void _setToPending() {

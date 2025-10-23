@@ -20,28 +20,28 @@ class PaginationDebugBox extends BaseDebugBox {
       if (options.showCurrentPage)
         IconLabelText(
           label: "Current Page: ",
-          text: "${block.pagination?.currentPage}",
+          text: "${block.paginationInfo?.currentPage}",
           labelStyle: labelStyle,
           textStyle: textStyle,
         ),
       if (options.showPageSize)
         IconLabelText(
           label: "Page Size: ",
-          text: "${block.pagination?.pageSize}",
+          text: "${block.paginationInfo?.pageSize}",
           labelStyle: labelStyle,
           textStyle: textStyle,
         ),
       if (options.showTotalItems)
         IconLabelText(
           label: "Total Items: ",
-          text: "${block.pagination?.totalItems}",
+          text: "${block.paginationInfo?.totalItems}",
           labelStyle: labelStyle,
           textStyle: textStyle,
         ),
       if (options.showTotalPages)
         IconLabelText(
           label: "Total Pages: ",
-          text: "${block.pagination?.totalPages}",
+          text: "${block.paginationInfo?.totalPages}",
           labelStyle: labelStyle,
           textStyle: textStyle,
         ),
