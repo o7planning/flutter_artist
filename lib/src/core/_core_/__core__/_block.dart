@@ -377,9 +377,9 @@ abstract class Block<
   //   }
   // }
 
-  final SortModel<ITEM>? __clientSideSortModel;
+  final _ClientSideSortModel<ITEM>? __clientSideSortModel;
 
-  final SortModel<ITEM> __serverSideSortModel;
+  final _ServerSideSortModel<ITEM> __serverSideSortModel;
 
   SortModel<ITEM>? get clientSideSortModel => __clientSideSortModel;
 
@@ -453,14 +453,16 @@ abstract class Block<
     required String? filterModelName,
     required this.formModel,
     required List<Block>? childBlocks,
-    SortModel<ITEM>? sortModel,
+    SortModelTemplate<ITEM>? sortModelTemplate,
   })  : registerFilterModelName = filterModelName,
         config = config.copy(),
-        __serverSideSortModel = sortModel ?? EmptySortModel(),
-        __clientSideSortModel = sortModel == null ||
+        __serverSideSortModel = _ServerSideSortModel(
+          sortModelTemplate: sortModelTemplate,
+        ),
+        __clientSideSortModel = sortModelTemplate == null ||
                 config.clientSideSortMode != ClientSideSortMode.sortModel
             ? null
-            : _ClientSideSortModel(sortModel),
+            : _ClientSideSortModel(sortModelTemplate: sortModelTemplate),
         _childBlocks = childBlocks ?? [] {
     for (Block childBlock in _childBlocks) {
       childBlock.parent = this;
@@ -468,15 +470,7 @@ abstract class Block<
     if (formModel != null) {
       formModel!.block = this;
     }
-    // TODO: Test Case.
-    // if (sortModel?.block != null) {
-    //   String fatalError = _createFatalAppError(
-    //     "You cannot use one SortModel object for multiple Blocks.\n"
-    //     " ${getClassNameWithoutGenerics(shelf)} > registerStructure > ShelfStructure > blocks"
-    //     " > ${getClassNameWithoutGenerics(this)} > ${getClassNameWithoutGenerics(sortModel)}",
-    //   );
-    //   throw fatalError;
-    // }
+    //
     __serverSideSortModel.block = this;
     __clientSideSortModel?.block = this;
   }

@@ -2,15 +2,15 @@ part of '../core.dart';
 
 abstract class SortModel<ITEM extends Object> {
   late final Block block;
+  final SortModelTemplate<ITEM>? sortModelTemplate;
 
   Shelf get shelf => block.shelf;
 
+  final bool multiSortCriteriaSelection;
+
+  bool get singleSortCriteriaSelection => !multiSortCriteriaSelection;
+
   final SortingSide sortingSide;
-  final bool multiOptionMode;
-
-  bool get singleOptionMode => !multiOptionMode;
-
-  final Map<String, SortDirection?> _originCriteriaMap;
   final List<SortCriterion> _criteria = [];
   final Map<String, SortCriterion> _criteriaMap = {};
 
@@ -22,57 +22,37 @@ abstract class SortModel<ITEM extends Object> {
 
   late final _SortUIComponents ui = _SortUIComponents(sortModel: this);
 
-  ///
-  /// ```dart
-  /// List<String,SortDirection?> criteriaMap = {
-  ///   "userName": SortDirection.asc,
-  ///   "email": null,
-  ///   "fullName": SortDirection.desc
-  /// };
-  ///
-  /// var mySortModel = MySortModel(
-  ///    criteriaMap: criteriaMap,
-  /// );
-  /// ```
-  ///
   SortModel({
-    this.multiOptionMode = false,
-    required Map<String, SortDirection?> criteriaMap,
-  })  : sortingSide = SortingSide.server,
-        _originCriteriaMap = {...criteriaMap} {
-    __init(criteriaMap);
-  }
-
-  SortModel._client({
-    this.multiOptionMode = false,
-    required Map<String, SortDirection?> criteriaMap,
-  })  : sortingSide = SortingSide.client,
-        _originCriteriaMap = {...criteriaMap} {
-    __init(criteriaMap);
-  }
-
-  void __init(Map<String, SortDirection?> criteriaMap) {
+    required this.sortModelTemplate,
+    required this.sortingSide,
+  }) : multiSortCriteriaSelection = sortingSide == SortingSide.server
+            ? sortModelTemplate?.serverMultiSortCriteriaSelection ?? false
+            : sortModelTemplate?.clientMultiSortCriteriaSelection ?? false {
     int optCount = 0;
-    for (String criterionName in criteriaMap.keys) {
-      SortDirection? sortDirection = criteriaMap[criterionName];
-      String text = _getText(criterionName: criterionName);
-      SortCriterion criterion = SortCriterion._(
-        direction: sortDirection,
-        criterionName: criterionName,
-        text: text,
-      );
-      //
-      if (criterion.direction != null) {
-        optCount++;
-        if (optCount > 1 && !multiOptionMode) {
-          criterion._direction = null;
+    if (sortModelTemplate != null) {
+      for (SortCriterionDef criterionDef in sortModelTemplate!._sortCriteria) {
+        SortDirection? sortDirection = sortingSide == SortingSide.server
+            ? criterionDef.serverDirection
+            : criterionDef.clientDirection;
+        String text = _getText(criterionName: criterionDef.criterionName);
+        SortCriterion criterion = SortCriterion._(
+          direction: sortDirection,
+          criterionName: criterionDef.criterionName,
+          text: text,
+        );
+        //
+        if (criterion.direction != null) {
+          optCount++;
+          if (optCount > 1 && !multiSortCriteriaSelection) {
+            criterion._direction = null;
+          }
+          _selectedCriterion ??= criterion;
         }
-        _selectedCriterion ??= criterion;
-      }
-      //
-      if (!_criteriaMap.containsKey(criterion.criterionName)) {
-        _criteria.add(criterion);
-        _criteriaMap[criterion.criterionName] = criterion;
+        //
+        if (!_criteriaMap.containsKey(criterion.criterionName)) {
+          _criteria.add(criterion);
+          _criteriaMap[criterion.criterionName] = criterion;
+        }
       }
     }
   }
@@ -85,7 +65,7 @@ abstract class SortModel<ITEM extends Object> {
   ///
   SortableCriteria getSortableCriteria() {
     // Logic: #0006
-    if (singleOptionMode) {
+    if (singleSortCriteriaSelection) {
       return _selectedCriterion == null || _selectedCriterion!.direction == null
           ? SortableCriteria._([])
           : SortableCriteria._(
@@ -114,7 +94,7 @@ abstract class SortModel<ITEM extends Object> {
   // ***************************************************************************
 
   void setSelectedCriterion(SortCriterion? value) {
-    if (singleOptionMode) {
+    if (singleSortCriteriaSelection) {
       _selectedCriterion =
           value == null ? null : _criteriaMap[value.criterionName];
     }
@@ -205,7 +185,7 @@ abstract class SortModel<ITEM extends Object> {
       //
       if (criterion.direction != null) {
         optCount++;
-        if (optCount > 1 && !multiOptionMode) {
+        if (optCount > 1 && singleSortCriteriaSelection) {
           criterion._direction = null;
         }
       }
@@ -252,13 +232,13 @@ abstract class SortModel<ITEM extends Object> {
   int _compare(ITEM a, ITEM b) {
     final List<SortCriterion> criteriaList = [];
     // Logic: #0006
-    if (singleOptionMode) {
+    if (singleSortCriteriaSelection) {
       SortCriterion? selected = _selectedCriterion;
       if (selected != null) {
         criteriaList.add(selected);
       } else {
         final String msg = _createFatalAppError(
-          "SortModel is singleOptionMode so you need to call: "
+          "SortModel is singleSortCriteriaSelection so you need to call: "
           "sortModel.setSelectedCriterion()",
         );
         print(msg);
@@ -323,18 +303,29 @@ abstract class SortModel<ITEM extends Object> {
     return getText(criterionName: criterionName) ?? criterionName;
   }
 
-  ///
-  /// The return type must be int, double, bool, null or String.
-  ///
-  dynamic getValue({required ITEM item, required String criterionName});
+  // ***************************************************************************
+  // ***************************************************************************
 
-  String? getText({required String criterionName});
+  String? getText({required String criterionName}) {
+    return sortModelTemplate?.getText(
+          criterionName: criterionName,
+        ) ??
+        "";
+  }
+
+  dynamic getValue({required ITEM item, required String criterionName}) {
+    return sortModelTemplate?.getValue(
+          item: item,
+          criterionName: criterionName,
+        ) ??
+        null;
+  }
 
   // ***************************************************************************
   // ***************************************************************************
 
   @override
   String toString() {
-    return "multiOptions: $multiOptionMode ${_criteria.toString()}";
+    return "multiSortCriteriaSelection: $multiSortCriteriaSelection ${_criteria.toString()}";
   }
 }
