@@ -377,13 +377,13 @@ abstract class Block<
   //   }
   // }
 
-  final _ClientSideSortModel<ITEM>? __clientSideSortModel;
+  late final SortModel<ITEM>? __clientSideSortModel;
 
-  final _ServerSideSortModel<ITEM> __serverSideSortModel;
+  late final SortModel<ITEM>? __serverSideSortModel;
 
   SortModel<ITEM>? get clientSideSortModel => __clientSideSortModel;
 
-  SortModel<ITEM> get serverSideSortModel => __serverSideSortModel;
+  SortModel<ITEM>? get serverSideSortModel => __serverSideSortModel;
 
   FILTER_CRITERIA? get filterCriteria => __blockData._filterCriteria;
 
@@ -456,22 +456,18 @@ abstract class Block<
     SortModelTemplate<ITEM>? sortModelTemplate,
   })  : registerFilterModelName = filterModelName,
         config = config.copy(),
-        __serverSideSortModel = _ServerSideSortModel(
-          sortModelTemplate: sortModelTemplate,
-        ),
-        __clientSideSortModel = sortModelTemplate == null ||
-                config.clientSideSortMode != ClientSideSortMode.sortModel
-            ? null
-            : _ClientSideSortModel(sortModelTemplate: sortModelTemplate),
         _childBlocks = childBlocks ?? [] {
     for (Block childBlock in _childBlocks) {
       childBlock.parent = this;
     }
-    if (formModel != null) {
-      formModel!.block = this;
-    }
+    formModel?.block = this;
     //
-    __serverSideSortModel.block = this;
+    __serverSideSortModel = sortModelTemplate?.createServerSideSortModel();
+    __clientSideSortModel =
+        config.clientSideSortMode != ClientSideSortMode.sortModel
+            ? null
+            : sortModelTemplate?.createClientSideSortModel();
+    __serverSideSortModel?.block = this;
     __clientSideSortModel?.block = this;
   }
 
@@ -872,7 +868,8 @@ abstract class Block<
         ApiResult<PageData<ITEM>?> result = await callApiQuery(
           parentBlockCurrentItem: parent?.currentItem,
           filterCriteria: filterCriteriaOfFilterModel,
-          sortableCriteria: serverSideSortModel.getSortableCriteria(),
+          sortableCriteria: serverSideSortModel?.getSortableCriteria() ??
+              SortableCriteria._empty(),
           pageable: callingPageable,
         );
         // Throw ApiError:

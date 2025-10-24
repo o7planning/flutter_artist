@@ -47,4 +47,31 @@ abstract class SortModelTemplate<ITEM extends Object> {
   });
 
   String? getTranslationText({required String translationKey});
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  SortModel<ITEM> createSortModel({required SortingSide sortingSide}) {
+    return sortingSide == SortingSide.server
+        ? _ServerSideSortModel(
+            sortModelTemplate: this,
+          )
+        : _ClientSideSortModel(
+            sortModelTemplate: this,
+          );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  SortModel<ITEM> createServerSideSortModel() {
+    return createSortModel(sortingSide: SortingSide.server);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  SortModel<ITEM> createClientSideSortModel() {
+    return createSortModel(sortingSide: SortingSide.client);
+  }
 }

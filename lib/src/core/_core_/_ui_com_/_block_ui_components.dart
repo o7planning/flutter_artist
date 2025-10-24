@@ -95,7 +95,7 @@ class _BlockUIComponents extends _UIComponents {
     // }
     // Sort
     if (block.serverSideSortModel != null) {
-      active = block.serverSideSortModel.ui.hasActiveUIComponent();
+      active = block.serverSideSortModel!.ui.hasActiveUIComponent();
       if (active) {
         return getClassNameWithoutGenerics(block.serverSideSortModel);
       }
@@ -233,7 +233,7 @@ class _BlockUIComponents extends _UIComponents {
       block.filterModel?.ui.updateAllUIComponents();
     }
     //
-    block.serverSideSortModel.ui.updateAllUIComponents(force: force);
+    block.serverSideSortModel?.ui.updateAllUIComponents(force: force);
     block.clientSideSortModel?.ui.updateAllUIComponents(force: force);
     //
     updateBlockFragmentWidgets(force: force);
@@ -451,12 +451,23 @@ class _BlockUIComponents extends _UIComponents {
     }
     //
     if (withSort) {
-      final SortModel sortModel = block.serverSideSortModel;
-      ret.addAll(
-        sortModel.ui._findMountedFragmentWidgetStates(
-          activeOnly: true,
-        ),
-      );
+      final SortModel? serverSortModel = block.serverSideSortModel;
+      if (serverSortModel != null) {
+        ret.addAll(
+          serverSortModel.ui._findMountedFragmentWidgetStates(
+            activeOnly: true,
+          ),
+        );
+      }
+      //
+      final SortModel? clientSortModel = block.clientSideSortModel;
+      if (clientSortModel != null) {
+        ret.addAll(
+          clientSortModel.ui._findMountedFragmentWidgetStates(
+            activeOnly: true,
+          ),
+        );
+      }
     }
     //
     if (withBlockFragment) {

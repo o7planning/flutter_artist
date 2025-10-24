@@ -6,6 +6,8 @@ class SortableCriteria extends Equatable {
   SortableCriteria._(List<SortableCriterion> criteria)
       : _criteria = [...criteria];
 
+  SortableCriteria._empty() : _criteria = [];
+
   ///
   /// Return a String. For example: "+categoryName,productName,-price".
   ///
