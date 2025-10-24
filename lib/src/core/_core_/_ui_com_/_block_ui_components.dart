@@ -95,7 +95,7 @@ class _BlockUIComponents extends _UIComponents {
     // }
     // Sort
     if (block.serverSideSortModel != null) {
-      active = block.serverSideSortModel!.ui.hasActiveUIComponent();
+      active = block.serverSideSortModel.ui.hasActiveUIComponent();
       if (active) {
         return getClassNameWithoutGenerics(block.serverSideSortModel);
       }

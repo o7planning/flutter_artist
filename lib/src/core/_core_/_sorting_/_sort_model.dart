@@ -267,8 +267,14 @@ abstract class SortModel<ITEM extends Object> {
       if (sc.direction == null) {
         continue;
       }
-      dynamic aValue = getValue(item: a, criterionName: sc.criterionName);
-      dynamic bValue = getValue(item: b, criterionName: sc.criterionName);
+      dynamic aValue = getValueForClientSideSorting(
+        item: a,
+        criterionName: sc.criterionName,
+      );
+      dynamic bValue = getValueForClientSideSorting(
+        item: b,
+        criterionName: sc.criterionName,
+      );
       //
       if (aValue == null && bValue == null) {
         continue;
@@ -319,8 +325,9 @@ abstract class SortModel<ITEM extends Object> {
   // ***************************************************************************
   // ***************************************************************************
 
-  dynamic getValue({required ITEM item, required String criterionName}) {
-    return sortModelTemplate?.getValue(
+  dynamic getValueForClientSideSorting(
+      {required ITEM item, required String criterionName}) {
+    return sortModelTemplate?.getValueForClientSideSorting(
       item: item,
       criterionName: criterionName,
     );
