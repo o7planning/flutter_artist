@@ -1,8 +1,8 @@
 part of '../core.dart';
 
-class SimpleProp<V> extends Prop<V> {
-  SimpleProp({
-    required super.propName,
+class SimpleFilterCriterion<V> extends FilterCriterion<V> {
+  SimpleFilterCriterion({
+    required super.criterionName,
   });
 
   @override
@@ -11,10 +11,10 @@ class SimpleProp<V> extends Prop<V> {
   @override
   V? get initialValue => _initialValue;
 
-  static List<SimpleProp> listFromNames(List<String> propNames) {
-    return propNames
+  static List<SimpleFilterCriterion> listFromNames(List<String> criterionNames) {
+    return criterionNames
         .map(
-          (name) => SimpleProp(propName: name),
+          (name) => SimpleFilterCriterion(criterionName: name),
         )
         .toList();
   }
@@ -24,7 +24,7 @@ class SimpleProp<V> extends Prop<V> {
   }) {
     if (!_valueUpdated && _markTempDirty) {
       // final dynamic oldValue = _tempCurrentValue;
-      final dynamic newValue = updateValues[propName];
+      final dynamic newValue = updateValues[criterionName];
       //
       _candidateUpdateValue = newValue;
       _valueUpdated = true;

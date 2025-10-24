@@ -1,9 +1,9 @@
 part of '../core.dart';
 
-class CalculatedCriterion<V> extends Criterion<V> {
+class CalculatedFilterCriterion<V> extends FilterCriterion<V> {
   final V Function() calculate;
 
-  CalculatedCriterion({
+  CalculatedFilterCriterion({
     required super.criterionName,
     required this.calculate,
   });

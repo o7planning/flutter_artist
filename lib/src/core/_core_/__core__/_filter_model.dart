@@ -317,7 +317,7 @@ abstract class FilterModel<
     // Load OptProp Data:
     //
     try {
-      for (MultiOptCriterion multiOptCriterion
+      for (MultiOptFilterCriterion multiOptCriterion
           in _filterCriteriaStructure._rootOptCriteria) {
         //
         // Load OptCriterion Data and set default and selected.
@@ -453,14 +453,14 @@ abstract class FilterModel<
   Future<void> _loadMultiOptCriterionDataCascade({
     required FILTER_INPUT? filterInput,
     required Object? parentMultiOptCriterionValue,
-    required MultiOptCriterion multiOptCriterion,
+    required MultiOptFilterCriterion multiOptCriterion,
     required Map<String, dynamic> formKeyInstantValues,
     required FilterActivityType activityType,
   }) async {
     final String multiOptCriterionName = multiOptCriterion.criterionName;
     final SelectionType selectionType = multiOptCriterion.selectionType;
 
-    final MultiOptCriterion? multiOptCriterionParent = multiOptCriterion.parent;
+    final MultiOptFilterCriterion? multiOptCriterionParent = multiOptCriterion.parent;
 
     // Get current OptCriterion data:
     XData? tempMultiOptCriterionXData =
@@ -650,7 +650,7 @@ abstract class FilterModel<
     );
 
     if (tempSelectedCriterionValue != null) {
-      for (MultiOptCriterion child in multiOptCriterion.children) {
+      for (MultiOptFilterCriterion child in multiOptCriterion.children) {
         await _loadMultiOptCriterionDataCascade(
           filterInput: filterInput,
           parentMultiOptCriterionValue: tempSelectedCriterionValue,
@@ -671,10 +671,10 @@ abstract class FilterModel<
     required String methodName,
     required String multiOptCriterionName,
   }) {
-    MultiOptCriterion? multiOptCriterion =
+    MultiOptFilterCriterion? multiOptCriterion =
         _filterCriteriaStructure._getMultiOptCriterion(multiOptCriterionName);
     if (multiOptCriterion == null) {
-      throw "The '$multiOptCriterionName' is not $MultiOptCriterion";
+      throw "The '$multiOptCriterionName' is not $MultiOptFilterCriterion";
     }
     String message =
         "The ${getClassName(this)}.$methodName() method must return a non-null $ValueWrap for the multiOptCriterionName '$multiOptCriterionName'. ";
@@ -684,7 +684,7 @@ abstract class FilterModel<
       message += "$ValueWrap.multi([null]) or $ValueWrap.multi([value]). ";
     }
     message +=
-        "And return null for not $MultiOptCriterion. See the specification of this method for more information.";
+        "And return null for not $MultiOptFilterCriterion. See the specification of this method for more information.";
     // throw AppError(errorMessage: message);
   }
 

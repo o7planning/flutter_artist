@@ -13,7 +13,7 @@ class StringIdFilterModel
   FilterCriteriaStructure registerCriteriaStructure() {
     return FilterCriteriaStructure(
       simpleCriteria: [
-        SimpleCriterion<String>(criterionName: "id"),
+        SimpleFilterCriterion<String>(criterionName: "id"),
       ],
       multiOptCriteria: [],
     );

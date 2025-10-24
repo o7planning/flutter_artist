@@ -1,4 +1,24 @@
 
+Criterion --> FilterCriterion
+
+SimpleCriterion --> SimpleFilterCriterion
+CalculatedCriterion  --> CalculatedFilterCriterion
+
+MultiOptCriterion --> MultiOptFilterCriterion
+MultiOptSsCriterion --> MultiOptSsFilterCriterion
+MultiOptSsCriterion -->  MultiOptMsFilterCriterion
+
+
+Prop --> FormProp
+
+SimpleProp ---> SimpleFormProp
+CalculatedProp  --> CalculatedFormProp
+
+MultiOptProp --> MultiOptFormProp
+MultiOptMsProp  ---> MultiOptMsFormProp
+MultiOptSsProp  --->  MultiOptSsFormProp
+
+
 
 
 Đổi tên emptyQuery() thành clear({newDataState: pending/ready})

@@ -1,9 +1,11 @@
 part of '../core.dart';
 
-class MultiOptSsProp<V> extends MultiOptProp<V> {
-  MultiOptSsProp({
-    required super.propName,
-    super.reloadCondition = MultiOptPropReload.ifCriteriaChanged,
+///
+/// Multi Options Criterion with Single Selection.
+///
+class MultiOptSsFilterCriterion<V> extends MultiOptFilterCriterion<V> {
+  MultiOptSsFilterCriterion({
+    required super.criterionName,
     super.children = const [],
   }) : super._(selectionType: SelectionType.single);
 

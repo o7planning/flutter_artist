@@ -1,18 +1,16 @@
 part of '../core.dart';
 
-abstract class Prop<V> {
-  late final FormPropsStructure _structure;
+abstract class FilterCriterion<V> {
+  late final FilterCriteriaStructure _structure;
 
   //
-  final String propName;
+
+  final String criterionName;
 
   // IMPORTANT: Do not change type (dynamic).
   dynamic _candidateUpdateValue;
   bool _valueUpdated = false;
   bool _markTempDirty = false;
-
-  //
-  Type get dataType => V;
 
   //
   // IMPORTANT: Do not change type (dynamic).
@@ -31,27 +29,21 @@ abstract class Prop<V> {
   dynamic _initialValue;
   XData? _initialXData;
 
-  // IMPORTANT: Do not change type (dynamic).
-  dynamic get initialValue => _initialValue;
+  //
 
-  XData? get initialXData => _initialXData;
+  XData? get currentXData => _currentXData;
 
   // IMPORTANT: Do not change type (dynamic).
   dynamic get currentValue => _currentValue;
 
-  XData? get currentXData => _currentXData;
+  XData? get initialXData => _initialXData;
 
-  // ------------ Error: -------------------------------------------------------
+  // IMPORTANT: Do not change type (dynamic).
+  dynamic get initialValue => _initialValue;
 
-  FormErrorInfo? _formErrorInfo;
+  Type get dataType => V;
 
-  FormErrorInfo? get formErrorInfo => _formErrorInfo;
-
-  // ---------------------------------------------------------------------------
-
-  Prop({
-    required this.propName,
-  });
+  FilterCriterion({required this.criterionName});
 
   bool isDirty() {
     return !ComparisonUtils.compareDynamicAndDynamic(

@@ -14,7 +14,7 @@ class IntIdFilterModel
   FilterCriteriaStructure registerCriteriaStructure() {
     return FilterCriteriaStructure(
       simpleCriteria: [
-        SimpleCriterion<int>(criterionName: "id"),
+        SimpleFilterCriterion<int>(criterionName: "id"),
       ],
       multiOptCriteria: [],
     );

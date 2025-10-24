@@ -1,7 +1,7 @@
 part of '../core.dart';
 
-class MultiOptMsProp<V> extends MultiOptProp<V> {
-  MultiOptMsProp({
+class MultiOptMsFormProp<V> extends MultiOptFormProp<V> {
+  MultiOptMsFormProp({
     required super.propName,
     super.reloadCondition = MultiOptPropReload.ifCriteriaChanged,
   }) : super._(selectionType: SelectionType.multi, children: const []);

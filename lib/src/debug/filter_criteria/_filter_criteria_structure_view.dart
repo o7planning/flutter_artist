@@ -71,13 +71,13 @@ class FilterCriteriaStructureViewState
     FilterCriteriaStructure structure =
         widget.filterModel.filterCriteriaStructure;
 
-    List<MultiOptCriterion> rootMultiOptCriterion =
+    List<MultiOptFilterCriterion> rootMultiOptCriterion =
         structure.debugRootOptCriteria;
-    for (MultiOptCriterion multiOptCriterion in rootMultiOptCriterion) {
+    for (MultiOptFilterCriterion multiOptCriterion in rootMultiOptCriterion) {
       _addMultiOptCriterionCascade(filterModelNode, multiOptCriterion);
     }
-    List<SimpleCriterion> simpleCriteria = structure.debugSimpleCriteria;
-    for (SimpleCriterion simpleCriterion in simpleCriteria) {
+    List<SimpleFilterCriterion> simpleCriteria = structure.debugSimpleCriteria;
+    for (SimpleFilterCriterion simpleCriterion in simpleCriteria) {
       _addSimpleCriterion(filterModelNode, simpleCriterion);
     }
 
@@ -91,7 +91,7 @@ class FilterCriteriaStructureViewState
       return FilterModelDebugView(
         filterModel: _currentNode!.data,
       );
-    } else if (_currentNode!.data is Criterion) {
+    } else if (_currentNode!.data is FilterCriterion) {
       return FilterCriterionView(
         criterion: _currentNode!.data,
       );
@@ -163,7 +163,7 @@ class FilterCriteriaStructureViewState
           if (data is FilterModel) {
             title = getClassName(data);
             prefixIconData = FaIconConstants.filterModelIconData;
-          } else if (data is SimpleCriterion) {
+          } else if (data is SimpleFilterCriterion) {
             title = data.criterionName;
             tooltip =
                 "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.criterionName}";
@@ -171,7 +171,7 @@ class FilterCriteriaStructureViewState
             //
             isMultiOpt = false;
             isMultiSelection = false;
-          } else if (data is MultiOptCriterion) {
+          } else if (data is MultiOptFilterCriterion) {
             title = data.criterionName;
             tooltip =
                 "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.criterionName}";
@@ -230,7 +230,7 @@ class FilterCriteriaStructureViewState
               onTap: () {
                 setState(() {
                   _currentNode = node;
-                  if (node.data is Criterion) {
+                  if (node.data is FilterCriterion) {
                     _onPressCriterion(node.data);
                   }
                 });
@@ -243,21 +243,21 @@ class FilterCriteriaStructureViewState
   }
 
   void _addMultiOptCriterionCascade(
-      TreeNode currentNode, MultiOptCriterion multiOptCriterion) {
+      TreeNode currentNode, MultiOptFilterCriterion multiOptCriterion) {
     TreeNode childNode = TreeNode(
       key: "MultiOptCriterion-${multiOptCriterion.criterionName}",
       data: multiOptCriterion,
     );
     //
     currentNode.add(childNode);
-    for (MultiOptCriterion childMultiOptCriterion
+    for (MultiOptFilterCriterion childMultiOptCriterion
         in multiOptCriterion.children) {
       _addMultiOptCriterionCascade(childNode, childMultiOptCriterion);
     }
   }
 
   void _addSimpleCriterion(
-      TreeNode currentNode, SimpleCriterion simpleCriterion) {
+      TreeNode currentNode, SimpleFilterCriterion simpleCriterion) {
     TreeNode childNode = TreeNode(
       key: "SimpleCriterion-${simpleCriterion.criterionName}",
       data: simpleCriterion,
@@ -268,7 +268,7 @@ class FilterCriteriaStructureViewState
     currentNode.add(childNode);
   }
 
-  void _onPressCriterion(Criterion criterion) {
+  void _onPressCriterion(FilterCriterion criterion) {
     print("Criterion: $criterion");
   }
 }

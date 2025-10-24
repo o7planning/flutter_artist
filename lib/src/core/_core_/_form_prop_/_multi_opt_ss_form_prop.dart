@@ -1,11 +1,9 @@
 part of '../core.dart';
 
-///
-/// Multi Options Criterion with Single Selection.
-///
-class MultiOptSsCriterion<V> extends MultiOptCriterion<V> {
-  MultiOptSsCriterion({
-    required super.criterionName,
+class MultiOptSsFormProp<V> extends MultiOptFormProp<V> {
+  MultiOptSsFormProp({
+    required super.propName,
+    super.reloadCondition = MultiOptPropReload.ifCriteriaChanged,
     super.children = const [],
   }) : super._(selectionType: SelectionType.single);
 

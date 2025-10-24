@@ -49,12 +49,12 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
     //
     FormPropsStructure structure = widget.formModel.formPropsStructure;
 
-    List<MultiOptProp> rootMultiOptProp = structure.debugRootOptProps;
-    for (MultiOptProp multiOptProp in rootMultiOptProp) {
+    List<MultiOptFormProp> rootMultiOptProp = structure.debugRootOptProps;
+    for (MultiOptFormProp multiOptProp in rootMultiOptProp) {
       _addMultiOptPropCascade(formModelNode, multiOptProp);
     }
-    List<SimpleProp> simpleProps = structure.simpleProps;
-    for (SimpleProp simpleProp in simpleProps) {
+    List<SimpleFormProp> simpleProps = structure.simpleProps;
+    for (SimpleFormProp simpleProp in simpleProps) {
       _addSimpleProp(formModelNode, simpleProp);
     }
     //
@@ -83,7 +83,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
       return FormModelDebugView(
         formModel: _currentNode.data,
       );
-    } else if (_currentNode.data is Prop) {
+    } else if (_currentNode.data is FormProp) {
       return FormPropView(
         formInitialDataReady: widget.formModel.formInitialDataReady,
         prop: _currentNode.data,
@@ -156,7 +156,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
             title = getClassName(data);
             prefixIconData = FaIconConstants.formModelIconData;
             isError = data.dataState == DataState.error;
-          } else if (data is SimpleProp) {
+          } else if (data is SimpleFormProp) {
             title = data.propName;
             tooltip =
                 "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.propName}";
@@ -166,7 +166,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
             isMultiSelection = false;
             isDirty = data.isDirty();
             isError = data.formErrorInfo != null;
-          } else if (data is MultiOptProp) {
+          } else if (data is MultiOptFormProp) {
             title = data.propName;
             tooltip =
                 "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.propName}";
@@ -238,7 +238,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
               onTap: () {
                 setState(() {
                   _currentNode = node;
-                  if (node.data is Prop) {
+                  if (node.data is FormProp) {
                     _onPressProp(node.data);
                   }
                 });
@@ -251,7 +251,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
   }
 
   void _addMultiOptPropCascade(
-      TreeNode currentNode, MultiOptProp multiOptProp) {
+      TreeNode currentNode, MultiOptFormProp multiOptProp) {
     TreeNode childNode = TreeNode(
       key: "MultiOptProp-${multiOptProp.propName}",
       data: multiOptProp,
@@ -260,12 +260,12 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
     //   _currentNode = childNode;
     // }
     currentNode.add(childNode);
-    for (MultiOptProp childMultiOptProp in multiOptProp.children) {
+    for (MultiOptFormProp childMultiOptProp in multiOptProp.children) {
       _addMultiOptPropCascade(childNode, childMultiOptProp);
     }
   }
 
-  void _addSimpleProp(TreeNode currentNode, SimpleProp simpleProp) {
+  void _addSimpleProp(TreeNode currentNode, SimpleFormProp simpleProp) {
     TreeNode childNode = TreeNode(
       key: "SimpleProp-${simpleProp.propName}",
       data: simpleProp,
@@ -276,7 +276,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
     currentNode.add(childNode);
   }
 
-  void _onPressProp(Prop prop) {
+  void _onPressProp(FormProp prop) {
     print("Prop: $prop");
   }
 }

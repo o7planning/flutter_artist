@@ -676,7 +676,7 @@ abstract class FormModel<
     // Load MultiOptProp Data:
     //
     try {
-      for (MultiOptProp multiOptProp in _formPropsStructure._rootOptProps) {
+      for (MultiOptFormProp multiOptProp in _formPropsStructure._rootOptProps) {
         //
         // Load OptProp Data and set default and selected.
         //
@@ -887,7 +887,7 @@ abstract class FormModel<
     required FILTER_CRITERIA blockCurrentFilterCriteria,
     required EXTRA_FORM_INPUT? extraFormInput,
     required Object? parentMultiOptPropValue,
-    required MultiOptProp multiOptProp,
+    required MultiOptFormProp multiOptProp,
     required bool parentValueIsInitialValue,
     required Map<String, dynamic> formKeyInstantValues,
     required FormActivityType activityType,
@@ -1162,7 +1162,7 @@ abstract class FormModel<
     );
 
     if (tempSelectedPropValue != null) {
-      for (MultiOptProp child in multiOptProp._children) {
+      for (MultiOptFormProp child in multiOptProp._children) {
         await _loadMultiOptPropDataCascade(
           blockCurrentFilterCriteria: blockCurrentFilterCriteria,
           extraFormInput: extraFormInput,
@@ -1285,10 +1285,10 @@ abstract class FormModel<
     required String methodName,
     required String multiOptPropName,
   }) {
-    MultiOptProp? multiOptProp =
+    MultiOptFormProp? multiOptProp =
         _formPropsStructure._getMultiOptProp(multiOptPropName);
     if (multiOptProp == null) {
-      throw "The '$multiOptPropName' is not $MultiOptProp";
+      throw "The '$multiOptPropName' is not $MultiOptFormProp";
     }
     String message =
         "The ${getClassName(this)}.$methodName() method must return a non-null $ValueWrap for the multiOptPropName '$multiOptPropName'. ";
@@ -1298,7 +1298,7 @@ abstract class FormModel<
       message += "$ValueWrap.multi([null]) or $ValueWrap.multi([value]). ";
     }
     message +=
-        "And return null for not $MultiOptProp. See the specification of this method for more information.";
+        "And return null for not $MultiOptFormProp. See the specification of this method for more information.";
     // throw AppError(errorMessage: message);
   }
 

@@ -14,7 +14,7 @@ class SearchTextFilterModel
   FilterCriteriaStructure registerCriteriaStructure() {
     return FilterCriteriaStructure(
       simpleCriteria: [
-        SimpleCriterion<String>(criterionName: "searchText"),
+        SimpleFilterCriterion<String>(criterionName: "searchText"),
       ],
       multiOptCriteria: [],
     );

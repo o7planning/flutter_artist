@@ -1,13 +1,7 @@
 part of '../core.dart';
 
-abstract class MultiOptProp<V> extends Prop<V> {
-  late final MultiOptProp? parent;
-  final MultiOptPropReload reloadCondition;
-
-  bool _markToReload = false;
-  int _loadCount = 0;
-
-  int get loadCount => _loadCount;
+abstract class MultiOptFilterCriterion<V> extends FilterCriterion<V> {
+  late final MultiOptFilterCriterion? parent;
 
   ///
   /// In most cases this value is [SelectionType.single].
@@ -19,14 +13,13 @@ abstract class MultiOptProp<V> extends Prop<V> {
   /// For example: An error occurs when the library tries to set multiple selection values for the Dropdown.
   ///
   final SelectionType selectionType;
-  final List<MultiOptProp> _children;
+  final List<MultiOptFilterCriterion> _children;
 
-  List<MultiOptProp> get children => [..._children];
+  List<MultiOptFilterCriterion> get children => [..._children];
 
-  MultiOptProp._({
-    required super.propName,
-    required this.reloadCondition,
-    required List<MultiOptProp> children,
+  MultiOptFilterCriterion._({
+    required super.criterionName,
+    required List<MultiOptFilterCriterion> children,
     required this.selectionType,
   }) : _children = children;
 
@@ -35,7 +28,7 @@ abstract class MultiOptProp<V> extends Prop<V> {
   }) {
     if (!_valueUpdated && _markTempDirty) {
       final dynamic oldValue = _tempCurrentValue;
-      final dynamic newValue = updateValues[propName];
+      final dynamic newValue = updateValues[criterionName];
       //
       _candidateUpdateValue = newValue;
       _valueUpdated = true;
@@ -58,15 +51,15 @@ abstract class MultiOptProp<V> extends Prop<V> {
       }
       //
       if (_tempCurrentXData == null || newValue == null || !isSame) {
-        for (MultiOptProp childItem in _children) {
+        for (MultiOptFilterCriterion childItem in children) {
           childItem._tempCurrentXData = null;
-          updateValues[childItem.propName] = null;
+          updateValues[childItem.criterionName] = null;
           childItem._markTempDirty = true;
         }
       }
     }
     //
-    for (MultiOptProp childItem in _children) {
+    for (MultiOptFilterCriterion childItem in children) {
       childItem._updateTempValueCascade(
         updateValues: updateValues,
       );
@@ -75,8 +68,8 @@ abstract class MultiOptProp<V> extends Prop<V> {
 
   void _printTempInfoCascade({required int indentFactor}) {
     print(
-        "${("- - - " * indentFactor)} $propName >>> UpdateVal: $_candidateUpdateValue >>> tempCurrentXData: $_tempCurrentXData");
-    for (var child in _children) {
+        "${("- - - " * indentFactor)} $criterionName >>> UpdateVal: $_candidateUpdateValue >>> tempCurrentXData: $_tempCurrentXData");
+    for (var child in children) {
       child._printTempInfoCascade(indentFactor: indentFactor + 1);
     }
   }
