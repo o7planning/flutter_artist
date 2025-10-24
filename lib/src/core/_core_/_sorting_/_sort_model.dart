@@ -25,7 +25,7 @@ abstract class SortModel<ITEM extends Object> {
 
   late final _SortUIComponents ui = _SortUIComponents(sortModel: this);
 
-  SortModel({
+  SortModel._({
     required this.sortModelTemplate,
     required this.sortingSide,
   }) : multiSortCriteriaSelection = sortingSide == SortingSide.server
@@ -267,11 +267,11 @@ abstract class SortModel<ITEM extends Object> {
       if (sc.direction == null) {
         continue;
       }
-      dynamic aValue = getValueForClientSideSorting(
+      dynamic aValue = getCriterionValueForClientSideSorting(
         item: a,
         criterionName: sc.criterionName,
       );
-      dynamic bValue = getValueForClientSideSorting(
+      dynamic bValue = getCriterionValueForClientSideSorting(
         item: b,
         criterionName: sc.criterionName,
       );
@@ -325,9 +325,11 @@ abstract class SortModel<ITEM extends Object> {
   // ***************************************************************************
   // ***************************************************************************
 
-  dynamic getValueForClientSideSorting(
-      {required ITEM item, required String criterionName}) {
-    return sortModelTemplate?.getValueForClientSideSorting(
+  dynamic getCriterionValueForClientSideSorting({
+    required ITEM item,
+    required String criterionName,
+  }) {
+    return sortModelTemplate?.getCriterionValueForClientSideSorting(
       item: item,
       criterionName: criterionName,
     );

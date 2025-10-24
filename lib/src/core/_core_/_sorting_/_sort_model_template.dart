@@ -41,7 +41,10 @@ abstract class SortModelTemplate<ITEM extends Object> {
   ///
   /// The return type must be int, double, bool, null or String.
   ///
-  dynamic getValueForClientSideSorting({required ITEM item, required String criterionName});
+  dynamic getCriterionValueForClientSideSorting({
+    required ITEM item,
+    required String criterionName,
+  });
 
   String? getTranslationText({required String translationKey});
 }
