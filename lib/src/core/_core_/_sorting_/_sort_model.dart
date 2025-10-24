@@ -30,7 +30,9 @@ abstract class SortModel<ITEM extends Object> {
             : sortModelTemplate?.clientMultiSortCriteriaSelection ?? false {
     int optCount = 0;
     if (sortModelTemplate != null) {
-      for (SortCriterionDef criterionDef in sortModelTemplate!._sortCriteria) {
+      SortCriteriaStructure structure =
+          sortModelTemplate!.registerCriteriaStructure();
+      for (SortCriterionDef criterionDef in structure._sortCriteria) {
         SortDirection? sortDirection = sortingSide == SortingSide.server
             ? criterionDef.serverDirection
             : criterionDef.clientDirection;

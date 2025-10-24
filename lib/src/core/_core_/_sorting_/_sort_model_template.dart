@@ -5,13 +5,10 @@ abstract class SortModelTemplate<ITEM extends Object> {
   final bool clientMultiSortCriteriaSelection;
   final bool serverMultiSortCriteriaSelection;
 
-  final List<SortCriterionDef> _sortCriteria;
-
   SortModelTemplate({
     this.clientMultiSortCriteriaSelection = false,
     this.serverMultiSortCriteriaSelection = false,
-    required List<SortCriterionDef> sortCriteria,
-  }) : _sortCriteria = sortCriteria;
+  });
 
   // ***************************************************************************
   // ***************************************************************************
@@ -28,12 +25,4 @@ abstract class SortModelTemplate<ITEM extends Object> {
   dynamic getValue({required ITEM item, required String criterionName});
 
   String? getText({required String criterionName});
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @override
-  String toString() {
-    return _sortCriteria.toString();
-  }
 }
