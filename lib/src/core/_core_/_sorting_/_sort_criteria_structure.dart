@@ -17,11 +17,13 @@ class SortCriterionDef {
 }
 
 class SortCriteriaStructure {
-  final List<SortCriterionDef> _sortCriteria;
+  late final Map<String, SortCriterionDef> _sortCriteriaMap;
 
-  List<SortCriterionDef> get sortCriteria => [..._sortCriteria];
+  Map<String, SortCriterionDef> get sortCriteriaMap => {..._sortCriteriaMap};
 
   SortCriteriaStructure({
     required List<SortCriterionDef> sortCriteria,
-  }) : _sortCriteria = sortCriteria;
+  }) {
+    _sortCriteriaMap = {for (var e in sortCriteria) e.criterionName: e};
+  }
 }

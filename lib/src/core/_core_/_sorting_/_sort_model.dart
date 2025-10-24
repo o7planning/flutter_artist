@@ -18,7 +18,10 @@ abstract class SortModel<ITEM extends Object> {
 
   SortCriterion? _selectedCriterion;
 
-  SortCriterion? get selectedCriterion => _selectedCriterion;
+  SortCriterion? get selectedCriterion {
+    _selectedCriterion ??= getFirstSortingCriterion();
+    return _selectedCriterion;
+  }
 
   late final _SortUIComponents ui = _SortUIComponents(sortModel: this);
 
@@ -32,11 +35,13 @@ abstract class SortModel<ITEM extends Object> {
     if (sortModelTemplate != null) {
       SortCriteriaStructure structure =
           sortModelTemplate!.registerCriteriaStructure();
-      for (SortCriterionDef criterionDef in structure._sortCriteria) {
+      for (SortCriterionDef criterionDef in structure._sortCriteriaMap.values) {
         SortDirection? sortDirection = sortingSide == SortingSide.server
             ? criterionDef.serverDirection
             : criterionDef.clientDirection;
-        String text = _getText(criterionName: criterionDef.criterionName);
+        String text = sortModelTemplate!._getText(
+          criterionName: criterionDef.criterionName,
+        );
         SortCriterion criterion = SortCriterion._(
           direction: sortDirection,
           criterionName: criterionDef.criterionName,
@@ -311,27 +316,8 @@ abstract class SortModel<ITEM extends Object> {
     return 0;
   }
 
-  String _getText({required String criterionName}) {
-    return getText(criterionName: criterionName) ?? criterionName;
-  }
-
   // ***************************************************************************
   // ***************************************************************************
-
-  String? getText({required String criterionName}) {
-    SortCriterion? criterion = _criteriaMap[criterionName];
-    if (criterion == null) {
-      return criterionName;
-    }
-    String? translationKey = criterion.translationKey;
-    if (translationKey == null) {
-      return criterion.text;
-    }
-    return sortModelTemplate?.getTranslationText(
-          translationKey: translationKey,
-        ) ??
-        criterion.text;
-  }
 
   dynamic getValue({required ITEM item, required String criterionName}) {
     return sortModelTemplate?.getValue(

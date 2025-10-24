@@ -25,8 +25,7 @@ class DropdownSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
   @override
   Widget buildContent(BuildContext context) {
     List<SortCriterion> criteria = sortModel.criteria;
-    SortCriterion? selectedSortingCriterion =
-        sortModel.selectedCriterion ?? sortModel.getFirstSortingCriterion();
+    SortCriterion? selectedSortingCriterion = sortModel.selectedCriterion;
     //
     return DropdownButton<SortCriterion>(
       isDense: true,
