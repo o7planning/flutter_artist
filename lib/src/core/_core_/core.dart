@@ -155,7 +155,7 @@ part '__core__/_coordinator.dart';
 
 part '__core__/_drawer_state.dart';
 
-part '__core__/_current_item_wrap.dart';
+part '__core__/_block_current_item_wrap.dart';
 
 part '../debug/_debug_utils.dart';
 
@@ -199,7 +199,7 @@ part '__core__/_scalar.dart';
 
 part '__core__/_scalar_data.dart';
 
-part '__core__/_value_wrap.dart';
+part '__core__/_scalar_value_wrap.dart';
 
 part '__core__/_shelf.dart';
 
@@ -371,7 +371,7 @@ part '_form_prop_/_multi_opt_ms_form_prop.dart';
 
 part '_form_prop_/_simple_form_prop.dart';
 
-part '_form_prop_/_value_wrap.dart';
+part '__core__/_value_wrap.dart';
 
 part '_globals_/_globals_manager.dart';
 

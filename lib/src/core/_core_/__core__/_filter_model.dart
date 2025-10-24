@@ -460,7 +460,8 @@ abstract class FilterModel<
     final String multiOptCriterionName = multiOptCriterion.criterionName;
     final SelectionType selectionType = multiOptCriterion.selectionType;
 
-    final MultiOptFilterCriterion? multiOptCriterionParent = multiOptCriterion.parent;
+    final MultiOptFilterCriterion? multiOptCriterionParent =
+        multiOptCriterion.parent;
 
     // Get current OptCriterion data:
     XData? tempMultiOptCriterionXData =

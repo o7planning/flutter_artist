@@ -34,6 +34,7 @@ abstract class SortModelTemplate<ITEM extends Object> {
     }
     return getTranslationText(translationKey: translationKey) ?? criterion.text;
   }
+
   // ***************************************************************************
   // ***************************************************************************
 

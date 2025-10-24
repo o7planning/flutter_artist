@@ -1381,7 +1381,7 @@ abstract class Block<
       } else {
         bool isLoadItemError = false;
         // Recent Loaded Item:
-        _CurrentItemWrap? loadedCoupleItem =
+        _BlockCurrentItemWrap? loadedCoupleItem =
             thisXBlock._getRecentLoadedItem(itemId: itemId);
         refreshedCurrentItemDetail = loadedCoupleItem?._itemDetail;
         if (refreshedCurrentItemDetail == null) {

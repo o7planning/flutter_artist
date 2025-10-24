@@ -101,7 +101,8 @@ class FilterCriteriaStructure {
   List<MultiOptFilterCriterion> get debugRootOptCriteria => _rootOptCriteria;
 
   @DebugMethodAnnotation()
-  List<SimpleFilterCriterion<dynamic>> get debugSimpleCriteria => _simpleCriteria;
+  List<SimpleFilterCriterion<dynamic>> get debugSimpleCriteria =>
+      _simpleCriteria;
 
   // ***************************************************************************
   // ***************************************************************************

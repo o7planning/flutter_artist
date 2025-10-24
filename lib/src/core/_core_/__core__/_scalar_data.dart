@@ -11,9 +11,10 @@ class _ScalarData<
 
   FILTER_CRITERIA? _filterCriteria;
 
-  _ValueWrap<VALUE> __current = _ValueWrap<VALUE>(id: null, value: null);
+  _ScalarValueWrap<VALUE> __current =
+      _ScalarValueWrap<VALUE>(id: null, value: null);
 
-  _ValueWrap<VALUE> get current => __current;
+  _ScalarValueWrap<VALUE> get current => __current;
 
   DataState _scalarDataState = DataState.pending;
 
@@ -33,7 +34,7 @@ class _ScalarData<
 
   void _clearWithDataState({required DataState scalarDataState}) {
     _scalarDataState = scalarDataState;
-    __current = _ValueWrap<VALUE>(id: null, value: null);
+    __current = _ScalarValueWrap<VALUE>(id: null, value: null);
     _filterCriteria = null; // ???
   }
 
@@ -74,7 +75,7 @@ class _ScalarData<
       }
     }
     //
-    __current = _ValueWrap<VALUE>(id: null, value: null);
+    __current = _ScalarValueWrap<VALUE>(id: null, value: null);
   }
 
   // ***************************************************************************
@@ -88,7 +89,7 @@ class _ScalarData<
     required ActionResultState queryResultState,
   }) {
     __setNewFilterCriteria(filterCriteria);
-    __current = _ValueWrap<VALUE>(id: valueId, value: value);
+    __current = _ScalarValueWrap<VALUE>(id: valueId, value: value);
     _scalarDataState = dataState;
     _lastQueryResultState = queryResultState;
   }

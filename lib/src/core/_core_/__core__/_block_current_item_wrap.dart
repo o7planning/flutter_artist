@@ -1,11 +1,11 @@
 part of '../core.dart';
 
-class _CurrentItemWrap<ID, ITEM, ITEM_DETAIL> {
+class _BlockCurrentItemWrap<ID, ITEM, ITEM_DETAIL> {
   final ID? _id;
   final ITEM? _item;
   final ITEM_DETAIL? _itemDetail;
 
-  _CurrentItemWrap({
+  _BlockCurrentItemWrap({
     required ID? id,
     required ITEM? item,
     required ITEM_DETAIL? itemDetail,

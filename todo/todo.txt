@@ -4,7 +4,7 @@ Criterion --> FilterCriterion
 SimpleCriterion --> SimpleFilterCriterion
 CalculatedCriterion  --> CalculatedFilterCriterion
 
-MultiOptCriterion --> MultiOptFilterCriterion
+MultiOptCriterion   --> MultiOptFilterCriterion
 MultiOptSsCriterion --> MultiOptSsFilterCriterion
 MultiOptSsCriterion -->  MultiOptMsFilterCriterion
 

@@ -46,8 +46,9 @@ class FormPropView extends StatelessWidget {
               size: 20,
             ),
             title: IconLabelText(
-              label:
-                  prop is SimpleFormProp ? 'Prop Name: ' : 'Multi Opt Prop Name: ',
+              label: prop is SimpleFormProp
+                  ? 'Prop Name: '
+                  : 'Multi Opt Prop Name: ',
               text: prop.propName,
               textStyle: TextStyle(color: Colors.indigo),
             ),
