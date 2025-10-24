@@ -17,6 +17,12 @@ abstract class SortModelTemplate<ITEM extends Object> {
   // ***************************************************************************
   // ***************************************************************************
 
+  @_AbstractMethodAnnotation()
+  SortCriteriaStructure registerCriteriaStructure();
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   String _getText({required String criterionName}) {
     SortCriterionDef? criterion = _structure._sortCriteriaMap[criterionName];
     if (criterion == null) {
@@ -28,13 +34,6 @@ abstract class SortModelTemplate<ITEM extends Object> {
     }
     return getTranslationText(translationKey: translationKey) ?? criterion.text;
   }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @_AbstractMethodAnnotation()
-  SortCriteriaStructure registerCriteriaStructure();
-
   // ***************************************************************************
   // ***************************************************************************
 
