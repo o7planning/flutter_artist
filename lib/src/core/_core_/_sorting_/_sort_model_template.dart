@@ -24,5 +24,5 @@ abstract class SortModelTemplate<ITEM extends Object> {
   ///
   dynamic getValue({required ITEM item, required String criterionName});
 
-  String? getText({required String criterionName});
+  String? getTranslationText({required String translationKey});
 }

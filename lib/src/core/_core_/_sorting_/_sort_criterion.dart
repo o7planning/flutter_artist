@@ -2,7 +2,8 @@ part of '../core.dart';
 
 class SortCriterion extends Equatable {
   final String criterionName;
-  String _text;
+  final String _text;
+  final String? translationKey;
   SortDirection? _direction;
 
   String get text => _text;
@@ -12,6 +13,7 @@ class SortCriterion extends Equatable {
   SortCriterion._({
     required SortDirection? direction,
     required this.criterionName,
+    required this.translationKey,
     required String text,
   })  : _text = text,
         _direction = direction;
@@ -39,6 +41,7 @@ class SortCriterion extends Equatable {
   SortCriterion copyWith({required SortDirection direction}) {
     return SortCriterion._(
       criterionName: criterionName,
+      translationKey: translationKey,
       text: text,
       direction: direction,
     );
@@ -47,6 +50,7 @@ class SortCriterion extends Equatable {
   SortCriterion copy() {
     return SortCriterion._(
       criterionName: criterionName,
+      translationKey: translationKey,
       text: text,
       direction: _direction,
     );
@@ -61,31 +65,6 @@ class SortCriterion extends Equatable {
       case null:
         return SortDirection.ascending;
     }
-  }
-
-  static SortCriterion _parse(String sortableCriterionName) {
-    String name = sortableCriterionName.trim();
-    if (name.isEmpty) {
-      throw Exception("Invalid sortableCriterionName. Not allow empty");
-    }
-    String sign = "";
-    String criterionName = name;
-    if (name.startsWith("+") || name.startsWith("-")) {
-      sign = name.substring(0, 1);
-      criterionName = name.substring(1).trim();
-    }
-    if (criterionName.isEmpty) {
-      throw Exception(
-          "Invalid sortableCriterionName. '$sortableCriterionName'. "
-          "Valid example: 'email', '+email' or '-email'");
-    }
-    //
-    SortDirection? direction = SortDirection.fromSign(sign);
-    return SortCriterion._(
-      direction: direction,
-      criterionName: criterionName,
-      text: criterionName,
-    );
   }
 
   @override
