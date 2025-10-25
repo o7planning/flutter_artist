@@ -9,7 +9,7 @@ class SortableCriteria extends Equatable {
   SortableCriteria._empty() : _criteria = [];
 
   ///
-  /// Return a String. For example: "+categoryName,productName,-price".
+  /// Return a String. For example: "+categoryName,-productName,-price".
   ///
   String toSignedString({
     String separator = ",",
