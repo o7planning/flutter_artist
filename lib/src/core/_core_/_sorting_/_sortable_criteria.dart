@@ -11,7 +11,7 @@ class SortableCriteria extends Equatable {
   ///
   /// Return a String. For example: "+categoryName,productName,-price".
   ///
-  String toCriteriaString({
+  String toSignedString({
     String separator = ",",
   }) {
     return _criteria.map((c) => c.toCriterionString()).join(separator);
@@ -24,7 +24,7 @@ class SortableCriteria extends Equatable {
   /// {"categoryName": "asc", "price": "desc"}
   /// ```
   ///
-  Map<String, String> toCriteriaMap() {
+  Map<String, String> toMap() {
     return {for (var e in _criteria) e.criterionName: e.direction.sqlKeyword};
   }
 
@@ -39,8 +39,8 @@ class SortableCriteria extends Equatable {
   /// }
   /// ```
   ///
-  String toCriteriaJsonString() {
-    Map<String, String> m = toCriteriaMap();
+  String toJsonString() {
+    Map<String, String> m = toMap();
     return json.encode(m);
   }
 
