@@ -453,7 +453,7 @@ abstract class Block<
     required String? filterModelName,
     required this.formModel,
     required List<Block>? childBlocks,
-    SortModelBuilder<ITEM>? sortModelTemplate,
+    SortModelBuilder<ITEM>? sortModelBuilder,
   })  : registerFilterModelName = filterModelName,
         config = config.copy(),
         _childBlocks = childBlocks ?? [] {
@@ -462,11 +462,11 @@ abstract class Block<
     }
     formModel?.block = this;
     //
-    __serverSideSortModel = sortModelTemplate?.createServerSideSortModel();
+    __serverSideSortModel = sortModelBuilder?.createServerSideSortModel();
     __clientSideSortModel =
         config.clientSideSortMode != ClientSideSortMode.sortModel
             ? null
-            : sortModelTemplate?.createClientSideSortModel();
+            : sortModelBuilder?.createClientSideSortModel();
     __serverSideSortModel?.block = this;
     __clientSideSortModel?.block = this;
   }

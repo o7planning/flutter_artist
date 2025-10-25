@@ -40,7 +40,7 @@ abstract class SingleItemBlock<
     required super.filterModelName,
     required super.formModel,
     required super.childBlocks,
-  }) : super(sortModelTemplate: null);
+  }) : super(sortModelBuilder: null);
 
   @override
   @nonVirtual
