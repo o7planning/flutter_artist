@@ -4,6 +4,9 @@ import '../_core_/core.dart';
 import '../enums/_sort_direction.dart';
 import '_sorting_options.dart';
 
+// TODO: Garbage collection.
+final __privateGlobalMap = <SortModel, SortCriterion?>{};
+
 class DropdownSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
   final TextStyle textStyle;
   final double iconSpacing;
@@ -25,11 +28,17 @@ class DropdownSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
   @override
   Widget buildContent(BuildContext context) {
     List<SortCriterion> criteria = sortModel.criteria;
-    SortCriterion? selectedSortingCriterion = sortModel.selectedCriterion;
+    SortCriterion? selected = __privateGlobalMap[sortModel];
+    if (selected == null) {
+      selected = sortModel.findFirstCriterionHasDirection() ??
+          sortModel.criteria.firstOrNull;
+      __privateGlobalMap[sortModel] = selected;
+    }
+
     //
     return DropdownButton<SortCriterion>(
       isDense: true,
-      value: selectedSortingCriterion,
+      value: selected,
       icon: const Icon(Icons.keyboard_arrow_down),
       items: criteria.map(
         (criterion) {
@@ -38,7 +47,7 @@ class DropdownSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
             child: _buildSortingCriterionView(
               sortModel: sortModel,
               sortCriterion: criterion,
-              selectedSortingCriterion: selectedSortingCriterion,
+              selectedSortingCriterion: selected,
             ),
           );
         },
@@ -51,12 +60,13 @@ class DropdownSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
     if (selectedSortCriterion == null) {
       return;
     }
+    __privateGlobalMap[sortModel] = selectedSortCriterion;
+
     SortDirection? direction = selectedSortCriterion.direction;
     direction ??= selectedSortCriterion.lastUsedDirection ??
         selectedSortCriterion.initialDirection ??
         SortDirection.asc;
 
-    sortModel.setSelectedCriterion(selectedSortCriterion);
     sortModel.updateSortingCriterionByName(
       criterionName: selectedSortCriterion.criterionName,
       direction: direction,

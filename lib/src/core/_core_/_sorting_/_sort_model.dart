@@ -16,14 +16,9 @@ abstract class SortModel<ITEM extends Object> {
 
   List<SortCriterion> get criteria => [..._criteria];
 
-  SortCriterion? _selectedCriterion;
-
-  SortCriterion? get selectedCriterion {
-    _selectedCriterion ??= getFirstSortingCriterion();
-    return _selectedCriterion;
-  }
-
   late final _SortUIComponents ui = _SortUIComponents(sortModel: this);
+
+  SortCriterion? get firstOrNullCriterion => _criteria.firstOrNull;
 
   SortModel._({
     required this.sortModelBuilder,
@@ -57,7 +52,6 @@ abstract class SortModel<ITEM extends Object> {
           if (optCount > 1 && !multiSortCriteriaSelection) {
             criterion._direction = null;
           }
-          _selectedCriterion ??= criterion;
         }
         //
         if (!_criteriaMap.containsKey(criterion.criterionName)) {
@@ -71,47 +65,40 @@ abstract class SortModel<ITEM extends Object> {
   // ***************************************************************************
   // ***************************************************************************
 
+  SortCriterion? findFirstCriterionHasDirection() {
+    return _criteria.where((c) => c._direction != null).firstOrNull;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   ///
   /// Returns the criteria used for sorting.
   ///
   SortableCriteria getSortableCriteria() {
-    // Logic: #0006
+    List<SortableCriterion> list = _criteria
+        .where((sc) => sc.hasDirection())
+        .map(
+          (sc) => SortableCriterion._(
+            direction: sc.direction!,
+            criterionName: sc.criterionName,
+          ),
+        )
+        .toList();
+    //
     if (singleSortCriteriaSelection) {
-      // IMPORTANT: Using getter:
-      SortCriterion? selected = selectedCriterion;
-      return selected == null || selected.direction == null
-          ? SortableCriteria._([])
-          : SortableCriteria._(
-              [
-                SortableCriterion._(
-                  direction: selected.direction!,
-                  criterionName: selected.criterionName,
-                )
-              ],
-            );
+      if (list.isEmpty) {
+        return SortableCriteria._([]);
+      } else {
+        return SortableCriteria._([list.first]);
+      }
     } else {
-      List<SortableCriterion> list = _criteria
-          .where((sc) => sc.hasDirection())
-          .map(
-            (sc) => SortableCriterion._(
-              direction: sc.direction!,
-              criterionName: sc.criterionName,
-            ),
-          )
-          .toList();
       return SortableCriteria._(list);
     }
   }
 
   // ***************************************************************************
   // ***************************************************************************
-
-  void setSelectedCriterion(SortCriterion? value) {
-    if (singleSortCriteriaSelection) {
-      _selectedCriterion =
-          value == null ? null : _criteriaMap[value.criterionName];
-    }
-  }
 
   bool hasDirection() {
     for (SortCriterion criterion in _criteria) {
@@ -258,27 +245,18 @@ abstract class SortModel<ITEM extends Object> {
   // ***************************************************************************
 
   int _compare(ITEM a, ITEM b) {
-    final List<SortCriterion> criteriaList = [];
-    // Logic: #0006
-    if (singleSortCriteriaSelection) {
-      // IMPORTANT: Using getter.
-      SortCriterion? selected = selectedCriterion;
-      if (selected != null) {
-        criteriaList.add(selected);
-      } else {
-        final String msg = _createFatalAppError(
-          "SortModel is singleSortCriteriaSelection so you need to call: "
-          "sortModel.setSelectedCriterion()",
-        );
-        print(msg);
-      }
-    } else {
-      criteriaList.addAll(_criteria);
-    }
+    final List<SortCriterion> criteriaList = [..._criteria];
+    //
+    int criterionSortedCount = 0;
     for (SortCriterion sc in criteriaList) {
       if (sc.direction == null) {
         continue;
       }
+      if (singleSortCriteriaSelection && criterionSortedCount >= 1) {
+        break;
+      }
+      criterionSortedCount++;
+      //
       dynamic aValue = getCriterionValueForClientSideSorting(
         item: a,
         criterionName: sc.criterionName,
