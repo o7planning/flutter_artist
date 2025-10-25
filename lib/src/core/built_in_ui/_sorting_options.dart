@@ -39,13 +39,13 @@ Widget buildSortBtn({
 Widget getSortIcon(SortDirection? direction, bool isDragging) {
   Color? color = isDragging ? Colors.grey : null;
   switch (direction) {
-    case SortDirection.ascending:
+    case SortDirection.asc:
       return Icon(
         cupertino.CupertinoIcons.sort_up,
         size: _sortIconSize,
         color: color,
       );
-    case SortDirection.descending:
+    case SortDirection.desc:
       return Icon(
         cupertino.CupertinoIcons.sort_down,
         size: _sortIconSize,

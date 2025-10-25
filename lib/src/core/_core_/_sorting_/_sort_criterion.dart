@@ -19,11 +19,11 @@ class SortCriterion extends Equatable {
         _direction = direction;
 
   bool isAscending() {
-    return _direction == SortDirection.ascending;
+    return _direction == SortDirection.asc;
   }
 
   bool isDescending() {
-    return _direction == SortDirection.descending;
+    return _direction == SortDirection.desc;
   }
 
   bool hasDirection() {
@@ -58,12 +58,12 @@ class SortCriterion extends Equatable {
 
   SortDirection? getNextDirection({bool acceptNoneDirection = true}) {
     switch (_direction) {
-      case SortDirection.ascending:
-        return SortDirection.descending;
-      case SortDirection.descending:
-        return acceptNoneDirection ? null : SortDirection.ascending;
+      case SortDirection.asc:
+        return SortDirection.desc;
+      case SortDirection.desc:
+        return acceptNoneDirection ? null : SortDirection.asc;
       case null:
-        return SortDirection.ascending;
+        return SortDirection.asc;
     }
   }
 

@@ -52,7 +52,7 @@ class DropdownSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
       return;
     }
     SortDirection? direction = newValue.direction;
-    direction ??= SortDirection.ascending;
+    direction ??= SortDirection.asc;
 
     sortModel.setSelectedCriterion(newValue);
     sortModel.updateSortingCriterionByName(

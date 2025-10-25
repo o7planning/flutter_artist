@@ -13,11 +13,11 @@ class SortableCriterion extends Equatable {
   }) : _direction = direction;
 
   bool isAscending() {
-    return _direction == SortDirection.ascending;
+    return _direction == SortDirection.asc;
   }
 
   bool isDescending() {
-    return _direction == SortDirection.descending;
+    return _direction == SortDirection.desc;
   }
 
   String toCriterionString() {

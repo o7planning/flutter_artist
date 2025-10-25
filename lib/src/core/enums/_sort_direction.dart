@@ -1,6 +1,6 @@
 enum SortDirection {
-  ascending,
-  descending;
+  asc,
+  desc;
 
   static SortDirection? fromSign(String sign) {
     for (SortDirection ss in SortDirection.values) {
@@ -13,18 +13,18 @@ enum SortDirection {
 
   String get sqlKeyword {
     switch (this) {
-      case SortDirection.ascending:
+      case SortDirection.asc:
         return "asc";
-      case SortDirection.descending:
+      case SortDirection.desc:
         return "desc";
     }
   }
 
   String get sign {
     switch (this) {
-      case SortDirection.ascending:
+      case SortDirection.asc:
         return "+";
-      case SortDirection.descending:
+      case SortDirection.desc:
         return "-";
     }
   }
