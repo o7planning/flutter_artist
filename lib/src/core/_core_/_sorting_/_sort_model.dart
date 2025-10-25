@@ -37,8 +37,8 @@ abstract class SortModel<ITEM extends Object> {
           sortModelBuilder!.registerCriteriaStructure();
       for (SortCriterionDef criterionDef in structure._sortCriteriaMap.values) {
         SortDirection? sortDirection = sortingSide == SortingSide.server
-            ? criterionDef.serverDirection
-            : criterionDef.clientDirection;
+            ? criterionDef.initialServerSideSortingDirection
+            : criterionDef.initialClientSideSortingDirection;
         String text = sortModelBuilder!._getText(
           criterionName: criterionDef.criterionName,
         );

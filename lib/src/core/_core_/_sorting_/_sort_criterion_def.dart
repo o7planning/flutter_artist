@@ -4,14 +4,18 @@ class SortCriterionDef {
   final String criterionName;
   final String text;
   final String? translationKey;
-  final SortDirection? serverDirection;
-  final SortDirection? clientDirection;
+  final bool severSideAcceptNoneDirection;
+  final bool clientSideAcceptNoneDirection;
+  final SortDirection? initialServerSideSortingDirection;
+  final SortDirection? initialClientSideSortingDirection;
 
   SortCriterionDef({
     required this.criterionName,
     required this.text,
     this.translationKey,
-    required this.serverDirection,
-    this.clientDirection,
+    this.severSideAcceptNoneDirection = true,
+    this.clientSideAcceptNoneDirection = true,
+    required this.initialServerSideSortingDirection,
+    this.initialClientSideSortingDirection,
   });
 }
