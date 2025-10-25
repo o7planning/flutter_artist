@@ -4,6 +4,7 @@ class SortCriterion extends Equatable {
   final String criterionName;
   final String _text;
   final String? translationKey;
+  final bool acceptNonDirection;
   SortDirection? _direction;
 
   String get text => _text;
@@ -13,6 +14,7 @@ class SortCriterion extends Equatable {
   SortCriterion._({
     required SortDirection? direction,
     required this.criterionName,
+    required this.acceptNonDirection,
     required this.translationKey,
     required String text,
   })  : _text = text,
@@ -41,6 +43,7 @@ class SortCriterion extends Equatable {
   SortCriterion copyWith({required SortDirection direction}) {
     return SortCriterion._(
       criterionName: criterionName,
+      acceptNonDirection: acceptNonDirection,
       translationKey: translationKey,
       text: text,
       direction: direction,
@@ -50,18 +53,19 @@ class SortCriterion extends Equatable {
   SortCriterion copy() {
     return SortCriterion._(
       criterionName: criterionName,
+      acceptNonDirection: acceptNonDirection,
       translationKey: translationKey,
       text: text,
       direction: _direction,
     );
   }
 
-  SortDirection? getNextDirection({bool acceptNoneDirection = true}) {
+  SortDirection? getNextDirection() {
     switch (_direction) {
       case SortDirection.asc:
         return SortDirection.desc;
       case SortDirection.desc:
-        return acceptNoneDirection ? null : SortDirection.asc;
+        return acceptNonDirection ? null : SortDirection.asc;
       case null:
         return SortDirection.asc;
     }

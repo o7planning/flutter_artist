@@ -13,15 +13,13 @@ Widget buildSortBtn({
   required SortCriterion sortCriterion,
   required bool enabled,
   required bool isDragging,
-  required bool acceptNoneDirection,
+  required bool acceptNonDirection,
   required bool clearDirectionOfOtherCriteria,
 }) {
   return InkWell(
     onTap: enabled
         ? () {
-            SortDirection? nextDirection = sortCriterion.getNextDirection(
-              acceptNoneDirection: acceptNoneDirection,
-            );
+            SortDirection? nextDirection = sortCriterion.getNextDirection();
             sortModel.updateSortingCriterionByName(
               criterionName: sortCriterion.criterionName,
               direction: nextDirection,

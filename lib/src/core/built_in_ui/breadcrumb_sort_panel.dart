@@ -124,14 +124,14 @@ class BreadcrumbSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
             data: criterion,
             feedback: _buildDragFeedback(criterion),
             childWhenDragging: _buildSortingCriterionView(
-              sortingCriterion: criterion,
+              sortCriterion: criterion,
               isDragging: true,
             ),
             onDragCompleted: () {
               // Do nothing.
             },
             child: _buildSortingCriterionView(
-              sortingCriterion: criterion,
+              sortCriterion: criterion,
               isDragging: false,
             ),
           );
@@ -149,14 +149,14 @@ class BreadcrumbSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
   }
 
   Widget _buildSortingCriterionView({
-    required SortCriterion sortingCriterion,
+    required SortCriterion sortCriterion,
     required bool isDragging,
   }) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          sortingCriterion.text,
+          sortCriterion.text,
           style: isDragging //
               ? textStyle.copyWith(color: Colors.grey)
               : textStyle,
@@ -164,9 +164,9 @@ class BreadcrumbSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
         SizedBox(width: iconSpacing),
         buildSortBtn(
           sortModel: sortModel,
-          sortCriterion: sortingCriterion,
+          sortCriterion: sortCriterion,
           isDragging: isDragging,
-          acceptNoneDirection: true,
+          acceptNonDirection: sortCriterion.acceptNonDirection,
           enabled: true,
           clearDirectionOfOtherCriteria: false,
         ),

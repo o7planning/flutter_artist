@@ -81,7 +81,7 @@ class DropdownSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
           sortModel: sortModel,
           sortCriterion: sortCriterion,
           isDragging: false,
-          acceptNoneDirection: false,
+          acceptNonDirection: sortCriterion.acceptNonDirection,
           clearDirectionOfOtherCriteria: false,
           enabled: sortCriterion.criterionName ==
               selectedSortingCriterion?.criterionName,

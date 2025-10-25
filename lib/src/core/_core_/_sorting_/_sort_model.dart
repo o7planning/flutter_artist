@@ -45,6 +45,9 @@ abstract class SortModel<ITEM extends Object> {
         SortCriterion criterion = SortCriterion._(
           direction: sortDirection,
           criterionName: criterionDef.criterionName,
+          acceptNonDirection: sortingSide == SortingSide.server
+              ? criterionDef.severSideAcceptNonDirection
+              : criterionDef.clientSideAcceptNonDirection,
           translationKey: criterionDef.translationKey,
           text: text,
         );
