@@ -14,7 +14,6 @@ Widget buildSortBtn({
   required bool enabled,
   required bool isDragging,
   required bool acceptNonDirection,
-  required bool clearDirectionOfOtherCriteria,
 }) {
   return InkWell(
     onTap: enabled
@@ -24,7 +23,6 @@ Widget buildSortBtn({
               criterionName: sortCriterion.criterionName,
               direction: nextDirection,
               moveToFirst: false,
-              clearDirectionOfOtherCriteria: clearDirectionOfOtherCriteria,
             );
           }
         : null,

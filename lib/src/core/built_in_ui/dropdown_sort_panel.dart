@@ -59,7 +59,6 @@ class DropdownSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
       criterionName: newValue.criterionName,
       direction: direction,
       moveToFirst: false,
-      clearDirectionOfOtherCriteria: false,
     );
   }
 
@@ -82,7 +81,6 @@ class DropdownSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
           sortCriterion: sortCriterion,
           isDragging: false,
           acceptNonDirection: sortCriterion.acceptNonDirection,
-          clearDirectionOfOtherCriteria: false,
           enabled: sortCriterion.criterionName ==
               selectedSortingCriterion?.criterionName,
         ),

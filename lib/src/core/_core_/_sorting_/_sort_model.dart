@@ -160,13 +160,13 @@ abstract class SortModel<ITEM extends Object> {
     required String criterionName,
     required SortDirection? direction,
     required bool moveToFirst,
-    required bool clearDirectionOfOtherCriteria,
+    // required bool clearDirectionOfOtherCriteria,
   }) async {
     SortCriterion? criterion = _criteriaMap[criterionName];
     if (criterion == null) {
       return;
     }
-    if (clearDirectionOfOtherCriteria) {
+    if (singleSortCriteriaSelection) {
       for (SortCriterion sc in _criteria) {
         sc._direction = null;
       }
