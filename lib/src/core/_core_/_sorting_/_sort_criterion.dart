@@ -7,6 +7,12 @@ class SortCriterion extends Equatable {
   final bool acceptNonDirection;
   SortDirection? _direction;
 
+  SortDirection? _initialDirection;
+  SortDirection? _lastUsedDirection;
+
+  SortDirection? get initialDirection => _initialDirection;
+  SortDirection? get lastUsedDirection => _lastUsedDirection;
+
   String get text => _text;
 
   SortDirection? get direction => _direction;
@@ -18,7 +24,9 @@ class SortCriterion extends Equatable {
     required this.translationKey,
     required String text,
   })  : _text = text,
-        _direction = direction;
+        _direction = direction,
+        _initialDirection = direction,
+        _lastUsedDirection = direction;
 
   bool isAscending() {
     return _direction == SortDirection.asc;

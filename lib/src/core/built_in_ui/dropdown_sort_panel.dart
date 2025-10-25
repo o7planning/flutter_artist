@@ -47,16 +47,18 @@ class DropdownSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
     );
   }
 
-  void _onChanged(SortCriterion? newValue) {
-    if (newValue == null) {
+  void _onChanged(SortCriterion? selectedSortCriterion) {
+    if (selectedSortCriterion == null) {
       return;
     }
-    SortDirection? direction = newValue.direction;
-    direction ??= SortDirection.asc;
+    SortDirection? direction = selectedSortCriterion.direction;
+    direction ??= selectedSortCriterion.lastUsedDirection ??
+        selectedSortCriterion.initialDirection ??
+        SortDirection.asc;
 
-    sortModel.setSelectedCriterion(newValue);
+    sortModel.setSelectedCriterion(selectedSortCriterion);
     sortModel.updateSortingCriterionByName(
-      criterionName: newValue.criterionName,
+      criterionName: selectedSortCriterion.criterionName,
       direction: direction,
       moveToFirst: false,
     );

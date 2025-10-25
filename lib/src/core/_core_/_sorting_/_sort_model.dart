@@ -159,8 +159,7 @@ abstract class SortModel<ITEM extends Object> {
   Future<void> updateSortingCriterionByName({
     required String criterionName,
     required SortDirection? direction,
-    required bool moveToFirst,
-    // required bool clearDirectionOfOtherCriteria,
+    required bool moveToFirst, // TODO-XXX: Do it!!
   }) async {
     SortCriterion? criterion = _criteriaMap[criterionName];
     if (criterion == null) {
@@ -168,10 +167,17 @@ abstract class SortModel<ITEM extends Object> {
     }
     if (singleSortCriteriaSelection) {
       for (SortCriterion sc in _criteria) {
+        if (sc._direction != null) {
+          // Backup Direction.
+          sc._lastUsedDirection = sc._direction;
+        }
         sc._direction = null;
       }
     }
     criterion._direction = direction;
+    if (direction != null) {
+      criterion._lastUsedDirection = direction;
+    }
     //
     await __applyChanges();
   }
