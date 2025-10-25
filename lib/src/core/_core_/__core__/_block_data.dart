@@ -27,7 +27,7 @@ class _BlockData<
   // ***************************************************************************
 
   void _backupManualArrangementBeforeQueryIfNeed() {
-    if (block.config.clientSideSortMode == ClientSideSortMode.manual) {
+    if (block.config.clientSideSortMode == ClientSideSortMode.manualSorting) {
       __itemsManualArrangementBk
         ..clear()
         ..addAll(_items);
@@ -35,7 +35,7 @@ class _BlockData<
   }
 
   void __restoreManualArrangementIfNeed() {
-    if (block.config.clientSideSortMode == ClientSideSortMode.manual) {
+    if (block.config.clientSideSortMode == ClientSideSortMode.manualSorting) {
       // TODO...
     }
   }
@@ -254,12 +254,12 @@ class _BlockData<
         case ClientSideSortMode.none:
           // Do nothing
           break;
-        case ClientSideSortMode.sortModel:
+        case ClientSideSortMode.modelBasedSorting:
           SortModel<ITEM>? sortModel = block.clientSideSortModel;
           if (sortModel != null) {
             _items.sort((a, b) => sortModel._compare(a, b));
           }
-        case ClientSideSortMode.manual:
+        case ClientSideSortMode.manualSorting:
           // TODO
           break;
       }

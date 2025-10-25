@@ -464,7 +464,7 @@ abstract class Block<
     //
     __serverSideSortModel = sortModelBuilder?.createServerSideSortModel();
     __clientSideSortModel =
-        config.clientSideSortMode != ClientSideSortMode.sortModel
+        config.clientSideSortMode != ClientSideSortMode.modelBasedSorting
             ? null
             : sortModelBuilder?.createClientSideSortModel();
     __serverSideSortModel?.block = this;
@@ -6060,11 +6060,11 @@ abstract class Block<
   // ***************************************************************************
 
   bool __checkBeforeChangeTheItemPositionManually() {
-    if (config.clientSideSortMode != ClientSideSortMode.manual) {
+    if (config.clientSideSortMode != ClientSideSortMode.manualSorting) {
       showErrorSnackBar(
         message: "Can not change the position",
         errorDetails: [
-          "You need to set block.config.clientSideSortMode to ${ClientSideSortMode.manual}"
+          "You need to set block.config.clientSideSortMode to ${ClientSideSortMode.manualSorting}"
         ],
       );
       return false;
