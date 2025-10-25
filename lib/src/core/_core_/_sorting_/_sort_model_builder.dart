@@ -8,8 +8,8 @@ abstract class SortModelBuilder<ITEM extends Object> {
   late final SortCriteriaStructure _structure;
 
   SortModelBuilder({
-    this.clientMultiSortCriteriaSelection = false,
-    this.serverMultiSortCriteriaSelection = false,
+    required this.clientMultiSortCriteriaSelection,
+    required this.serverMultiSortCriteriaSelection,
   }) {
     _structure = registerCriteriaStructure();
   }

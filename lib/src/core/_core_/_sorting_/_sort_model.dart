@@ -74,13 +74,15 @@ abstract class SortModel<ITEM extends Object> {
   SortableCriteria getSortableCriteria() {
     // Logic: #0006
     if (singleSortCriteriaSelection) {
-      return _selectedCriterion == null || _selectedCriterion!.direction == null
+      // IMPORTANT: Using getter:
+      SortCriterion? selected = selectedCriterion;
+      return selected == null || selected.direction == null
           ? SortableCriteria._([])
           : SortableCriteria._(
               [
                 SortableCriterion._(
-                  direction: _selectedCriterion!.direction!,
-                  criterionName: _selectedCriterion!.criterionName,
+                  direction: selected.direction!,
+                  criterionName: selected.criterionName,
                 )
               ],
             );
@@ -250,7 +252,8 @@ abstract class SortModel<ITEM extends Object> {
     final List<SortCriterion> criteriaList = [];
     // Logic: #0006
     if (singleSortCriteriaSelection) {
-      SortCriterion? selected = _selectedCriterion;
+      // IMPORTANT: Using getter.
+      SortCriterion? selected = selectedCriterion;
       if (selected != null) {
         criteriaList.add(selected);
       } else {
