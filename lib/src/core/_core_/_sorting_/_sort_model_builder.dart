@@ -1,13 +1,13 @@
 part of '../core.dart';
 
-abstract class SortModelTemplate<ITEM extends Object> {
+abstract class SortModelBuilder<ITEM extends Object> {
   // Multi-sort criteria selection
   final bool clientMultiSortCriteriaSelection;
   final bool serverMultiSortCriteriaSelection;
 
   late final SortCriteriaStructure _structure;
 
-  SortModelTemplate({
+  SortModelBuilder({
     this.clientMultiSortCriteriaSelection = false,
     this.serverMultiSortCriteriaSelection = false,
   }) {
@@ -53,12 +53,8 @@ abstract class SortModelTemplate<ITEM extends Object> {
 
   SortModel<ITEM> createSortModel({required SortingSide sortingSide}) {
     return sortingSide == SortingSide.server
-        ? _ServerSideSortModel(
-            sortModelTemplate: this,
-          )
-        : _ClientSideSortModel(
-            sortModelTemplate: this,
-          );
+        ? _ServerSideSortModel(sortModelBuilder: this)
+        : _ClientSideSortModel(sortModelBuilder: this);
   }
 
   // ***************************************************************************

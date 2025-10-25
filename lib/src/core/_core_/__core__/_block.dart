@@ -453,7 +453,7 @@ abstract class Block<
     required String? filterModelName,
     required this.formModel,
     required List<Block>? childBlocks,
-    SortModelTemplate<ITEM>? sortModelTemplate,
+    SortModelBuilder<ITEM>? sortModelTemplate,
   })  : registerFilterModelName = filterModelName,
         config = config.copy(),
         _childBlocks = childBlocks ?? [] {

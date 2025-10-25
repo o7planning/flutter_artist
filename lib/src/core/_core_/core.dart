@@ -193,7 +193,7 @@ part '_sorting_/_server_side_sort_model.dart';
 
 part '_sorting_/_sort_model.dart';
 
-part '_sorting_/_sort_model_template.dart';
+part '_sorting_/_sort_model_builder.dart';
 
 part '__core__/_scalar.dart';
 
@@ -346,6 +346,8 @@ part '_filtering_/__filter_criterion.dart';
 part '_filtering_/_calculated_filter_criterion.dart';
 
 part '_filtering_/_filter_criteria_structure.dart';
+
+part '_sorting_/_sort_criterion_def.dart';
 
 part '_sorting_/_sort_criteria_structure.dart';
 

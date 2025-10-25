@@ -2,7 +2,7 @@ part of '../core.dart';
 
 abstract class SortModel<ITEM extends Object> {
   late final Block block;
-  final SortModelTemplate<ITEM>? sortModelTemplate;
+  final SortModelBuilder<ITEM>? sortModelBuilder;
 
   Shelf get shelf => block.shelf;
 
@@ -26,20 +26,20 @@ abstract class SortModel<ITEM extends Object> {
   late final _SortUIComponents ui = _SortUIComponents(sortModel: this);
 
   SortModel._({
-    required this.sortModelTemplate,
+    required this.sortModelBuilder,
     required this.sortingSide,
   }) : multiSortCriteriaSelection = sortingSide == SortingSide.server
-            ? sortModelTemplate?.serverMultiSortCriteriaSelection ?? false
-            : sortModelTemplate?.clientMultiSortCriteriaSelection ?? false {
+            ? sortModelBuilder?.serverMultiSortCriteriaSelection ?? false
+            : sortModelBuilder?.clientMultiSortCriteriaSelection ?? false {
     int optCount = 0;
-    if (sortModelTemplate != null) {
+    if (sortModelBuilder != null) {
       SortCriteriaStructure structure =
-          sortModelTemplate!.registerCriteriaStructure();
+          sortModelBuilder!.registerCriteriaStructure();
       for (SortCriterionDef criterionDef in structure._sortCriteriaMap.values) {
         SortDirection? sortDirection = sortingSide == SortingSide.server
             ? criterionDef.serverDirection
             : criterionDef.clientDirection;
-        String text = sortModelTemplate!._getText(
+        String text = sortModelBuilder!._getText(
           criterionName: criterionDef.criterionName,
         );
         SortCriterion criterion = SortCriterion._(
@@ -329,7 +329,7 @@ abstract class SortModel<ITEM extends Object> {
     required ITEM item,
     required String criterionName,
   }) {
-    return sortModelTemplate?.getCriterionValueForClientSideSorting(
+    return sortModelBuilder?.getCriterionValueForClientSideSorting(
       item: item,
       criterionName: criterionName,
     );
