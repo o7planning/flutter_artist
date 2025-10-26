@@ -6,9 +6,9 @@ abstract class SortModel<ITEM extends Object> {
 
   Shelf get shelf => block.shelf;
 
-  final bool multiSortCriteriaSelection;
+  final bool multiSort;
 
-  bool get singleSortCriteriaSelection => !multiSortCriteriaSelection;
+  bool get singleSort => !multiSort;
 
   final SortingSide sortingSide;
   final List<SortCriterion> _criteria = [];
@@ -23,9 +23,9 @@ abstract class SortModel<ITEM extends Object> {
   SortModel._({
     required this.sortModelBuilder,
     required this.sortingSide,
-  }) : multiSortCriteriaSelection = sortingSide == SortingSide.server
-            ? sortModelBuilder?.serverMultiSortCriteriaSelection ?? false
-            : sortModelBuilder?.clientMultiSortCriteriaSelection ?? false {
+  }) : multiSort = sortingSide == SortingSide.server
+            ? sortModelBuilder?.serverSideMultiSort ?? false
+            : sortModelBuilder?.clientSideMultiSort ?? false {
     int optCount = 0;
     if (sortModelBuilder != null) {
       SortCriteriaStructure structure =
@@ -49,7 +49,7 @@ abstract class SortModel<ITEM extends Object> {
         //
         if (criterion.direction != null) {
           optCount++;
-          if (optCount > 1 && !multiSortCriteriaSelection) {
+          if (optCount > 1 && !multiSort) {
             criterion._direction = null;
           }
         }
@@ -86,7 +86,7 @@ abstract class SortModel<ITEM extends Object> {
         )
         .toList();
     //
-    if (singleSortCriteriaSelection) {
+    if (singleSort) {
       if (list.isEmpty) {
         return SortableCriteria._([]);
       } else {
@@ -152,7 +152,7 @@ abstract class SortModel<ITEM extends Object> {
     if (criterion == null) {
       return;
     }
-    if (singleSortCriteriaSelection) {
+    if (singleSort) {
       for (SortCriterion sc in _criteria) {
         if (sc._direction != null) {
           // Backup Direction.
@@ -200,7 +200,7 @@ abstract class SortModel<ITEM extends Object> {
       //
       if (criterion.direction != null) {
         optCount++;
-        if (optCount > 1 && singleSortCriteriaSelection) {
+        if (optCount > 1 && singleSort) {
           criterion._direction = null;
         }
       }
@@ -252,7 +252,7 @@ abstract class SortModel<ITEM extends Object> {
       if (sc.direction == null) {
         continue;
       }
-      if (singleSortCriteriaSelection && criterionSortedCount >= 1) {
+      if (singleSort && criterionSortedCount >= 1) {
         break;
       }
       criterionSortedCount++;
@@ -330,6 +330,6 @@ abstract class SortModel<ITEM extends Object> {
 
   @override
   String toString() {
-    return "multiSortCriteriaSelection: $multiSortCriteriaSelection ${_criteria.toString()}";
+    return "multiSort: $multiSort ${_criteria.toString()}";
   }
 }
