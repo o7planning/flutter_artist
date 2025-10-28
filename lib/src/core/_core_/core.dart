@@ -197,6 +197,8 @@ part '_sorting_/_sort_model_builder.dart';
 
 part '__core__/_scalar.dart';
 
+part '__core__/_identifiable.dart';
+
 part '__core__/_scalar_data.dart';
 
 part '__core__/_scalar_value_wrap.dart';
