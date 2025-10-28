@@ -1,7 +1,9 @@
 
 
 
-RENAME: severSideAcceptNonDirection --> serverSideSkipNonDirectionWhileSelecting
+RENAME:
+ severSideAcceptNonDirection --> serverSideSkipNonDirectionWhileSelecting
+ clientSideAcceptNonDirection --> clientSideSkipNonDirectionWhileSelecting
 
 
 

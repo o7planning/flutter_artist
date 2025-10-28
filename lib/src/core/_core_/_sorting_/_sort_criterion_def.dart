@@ -4,8 +4,8 @@ class SortCriterionDef {
   final String criterionName;
   final String text;
   final String? translationKey;
-  final bool severSideAcceptNonDirection;
-  final bool clientSideAcceptNonDirection;
+  final bool serverSideSkipNonDirectionWhileSelecting;
+  final bool clientSideSkipNonDirectionWhileSelecting;
   final SortDirection? initialServerSideSortingDirection;
   final SortDirection? initialClientSideSortingDirection;
 
@@ -13,8 +13,8 @@ class SortCriterionDef {
     required this.criterionName,
     required this.text,
     this.translationKey,
-    this.severSideAcceptNonDirection = true,
-    this.clientSideAcceptNonDirection = true,
+    this.serverSideSkipNonDirectionWhileSelecting = false,
+    this.clientSideSkipNonDirectionWhileSelecting = false,
     required this.initialServerSideSortingDirection,
     this.initialClientSideSortingDirection,
   });

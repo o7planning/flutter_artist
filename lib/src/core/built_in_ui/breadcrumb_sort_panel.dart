@@ -166,7 +166,6 @@ class BreadcrumbSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
           sortModel: sortModel,
           sortCriterion: sortCriterion,
           isDragging: isDragging,
-          acceptNonDirection: sortCriterion.acceptNonDirection,
           enabled: true,
         ),
       ],

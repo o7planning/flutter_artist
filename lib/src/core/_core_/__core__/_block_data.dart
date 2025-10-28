@@ -53,7 +53,8 @@ class _BlockData<
     List<ITEM> newList = [...itemList];
     final itemCount = newList.length;
     newList.removeWhere(
-      (it) => block._getItemIdInternal(it) == block._getItemIdInternal(currItem),
+      (it) =>
+          block._getItemIdInternal(it) == block._getItemIdInternal(currItem),
     );
     if (itemCount > newList.length) {
       newList.add(currItem);

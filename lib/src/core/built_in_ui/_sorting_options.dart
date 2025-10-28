@@ -13,7 +13,6 @@ Widget buildSortBtn({
   required SortCriterion sortCriterion,
   required bool enabled,
   required bool isDragging,
-  required bool acceptNonDirection,
 }) {
   return InkWell(
     onTap: enabled
