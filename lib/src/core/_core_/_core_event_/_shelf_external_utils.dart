@@ -12,17 +12,17 @@ class _ShelfExternalUtils {
   ) {
     EffectedShelfMembers ret = EffectedShelfMembers.ofNothing();
     for (Block block in shelf.blocks) {
-      List<Event> typeEvents = block.config.reQueryByExternalShelfEvents;
+      List<Event> typeEvents = block.config.blockLevelReactionToEvents;
       if (_hasIntersection(events, typeEvents)) {
         ret._addReQueryBlock(block);
       }
-      typeEvents = block.config.refreshCurrItemByExternalShelfEvents;
+      typeEvents = block.config.itemLevelReactionToEvents;
       if (_hasIntersection(events, typeEvents)) {
         ret._addRefreshCurrItmBlock(block);
       }
     }
     for (Scalar scalar in shelf.scalars) {
-      List<Event> typeEvents = scalar.config.reQueryByExternalShelfEvents;
+      List<Event> typeEvents = scalar.config.scalarLevelReactionToEvents;
       if (_hasIntersection(events, typeEvents)) {
         ret._addReQueryScalar(scalar);
       }

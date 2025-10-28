@@ -188,7 +188,7 @@ abstract class Shelf extends _Core {
         listenerBlock._internalEffectedShelfMembers
             ._addRefreshCurrItmBlock(listenerBlock);
       }
-      for (Evt evt in listenerBlock.config.reQueryByInternalShelfEvents) {
+      for (Evt evt in listenerBlock.config.blockLevelReactionToEvts) {
         // BLOCK EVENT:
         if (evt.srcType == SrcType.block) {
           Block? eventBlock = __blockMap[evt.srcName];
@@ -196,13 +196,13 @@ abstract class Shelf extends _Core {
             throw ___registerError(
               "Configuration Error! --> No Block Name: '${evt.srcName}'. \n"
               " ${getClassName(listenerBlock.shelf)} > registerStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
-              " > config > reQueryByInternalShelfEvents > '${evt.srcName}'.",
+              " > config > blockLevelReactionToEvts > '${evt.srcName}'.",
             );
           } else if (identical(listenerBlock, eventBlock)) {
             throw ___registerError(
               "Configuration Error! --> Do not use: '${evt.srcName}', let use 'selfReQueryable:true' property. \n"
               " ${getClassName(listenerBlock.shelf)} > registerStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
-              " > config > reQueryByInternalShelfEvents > '${evt.srcName}'.",
+              " > config > blockLevelReactionToEvts > '${evt.srcName}'.",
             );
           }
           // BLOCK EVENT
@@ -216,7 +216,7 @@ abstract class Shelf extends _Core {
             throw ___registerError(
               "Configuration Error! --> No Scalar Name: ${evt.srcName}. \n"
               " ${getClassName(listenerBlock.shelf)} > registerStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
-              " > config > reQueryByInternalShelfEvents > '${evt.srcName}'.",
+              " > config > scalarLevelReactionToEvts > '${evt.srcName}'.",
             );
           }
           // SCALAR EVENT: update (Only One Events).
@@ -226,7 +226,7 @@ abstract class Shelf extends _Core {
       }
       //
       for (Evt evt
-          in listenerBlock.config.refreshCurrItemByInternalShelfEvents) {
+          in listenerBlock.config.itemLevelReactionToEvts) {
         // BLOCK EVENT:
         if (evt.srcType == SrcType.block) {
           Block? eventBlock = __blockMap[evt.srcName];
@@ -234,13 +234,13 @@ abstract class Shelf extends _Core {
             throw ___registerError(
               "Configuration Error! --> No Block Name: ${evt.srcName}. \n"
               " ${getClassName(listenerBlock.shelf)} > registerStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
-              " > config > refreshCurrItemByInternalShelfEvents > '${evt.srcName}'.",
+              " > config > itemLevelReactionToEvts > '${evt.srcName}'.",
             );
           } else if (identical(listenerBlock, eventBlock)) {
             throw ___registerError(
               "Configuration Error! --> Do not use: '${evt.srcName}', let use 'currentItemSelfRefreshable:true' property. \n"
               " ${getClassName(listenerBlock.shelf)} > registerStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
-              " > config > refreshCurrItemByInternalShelfEvents > '${evt.srcName}'.",
+              " > config > itemLevelReactionToEvts > '${evt.srcName}'.",
             );
           }
           // BLOCK EVENTS
@@ -254,7 +254,7 @@ abstract class Shelf extends _Core {
             throw ___registerError(
               "Configuration Error! --> No Scalar Name: ${evt.srcName}.\n"
               " ${getClassName(listenerBlock.shelf)} > registerStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
-              " > config > refreshCurrItemByInternalShelfEvents > '${evt.srcName}'.",
+              " > config > itemLevelReactionToEvts > '${evt.srcName}'.",
             );
           }
           // SCALAR EVENT: update (Only One Events).
@@ -270,7 +270,7 @@ abstract class Shelf extends _Core {
         listenerScalar._internalEffectedShelfMembers
             ._addReQueryScalar(listenerScalar);
       }
-      for (Evt evt in listenerScalar.config.reQueryByInternalShelfEvents) {
+      for (Evt evt in listenerScalar.config.scalarLevelReactionToEvts) {
         // BLOCK EVENT:
         if (evt.srcType == SrcType.block) {
           Block? eventBlock = __blockMap[evt.srcName];
@@ -278,7 +278,7 @@ abstract class Shelf extends _Core {
             throw ___registerError(
               "Configuration Error! --> No Block Name: ${evt.srcName}. \n"
               " ${getClassName(listenerScalar.shelf)} > registerStructure > ShelfStructure > scalars > ${getClassName(listenerScalar)}"
-              " > config > reQueryByInternalShelfEvents > '${evt.srcName}'.",
+              " > config > blockLevelReactionToEvts > '${evt.srcName}'.",
             );
           }
           // BLOCK EVENT:
@@ -292,13 +292,13 @@ abstract class Shelf extends _Core {
             throw ___registerError(
               "Configuration Error! --> No Scalar Name: ${evt.srcName}. \n"
               " ${getClassName(listenerScalar.shelf)} > registerStructure > ShelfStructure > scalars > ${getClassName(listenerScalar)}"
-              " > config > reQueryByInternalShelfEvents > '${evt.srcName}'.",
+              " > config > scalarLevelReactionToEvts > '${evt.srcName}'.",
             );
           } else if (identical(listenerScalar, eventScalar)) {
             throw ___registerError(
               "Configuration Error! --> Do not use: '${evt.srcName}', let use 'selfReQueryable:true' property.\n"
               " ${getClassName(listenerScalar.shelf)} > registerStructure > ShelfStructure > scalars > ${getClassName(listenerScalar)}"
-              " > config > reQueryByInternalShelfEvents > '${evt.srcName}'.",
+              " > config > scalarLevelReactionToEvts > '${evt.srcName}'.",
             );
           }
           // SCALAR EVENT: update (Only One Events).

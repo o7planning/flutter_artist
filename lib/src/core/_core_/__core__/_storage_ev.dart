@@ -356,7 +356,7 @@ class _StorageEventHandler {
           continue;
         }
         List<Event> listenerTypes =
-            listenerScalar.config.reQueryByExternalShelfEvents;
+            listenerScalar.config.scalarLevelReactionToEvents;
         if (listenerTypes.isEmpty) {
           continue;
         }

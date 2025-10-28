@@ -4,27 +4,27 @@ class ScalarConfig {
   final ScalarHiddenBehavior hiddenBehavior;
 
   final bool selfReQueryable;
-  final List<Evt> reQueryByInternalShelfEvents;
-  final List<Event> reQueryByExternalShelfEvents;
+  final List<Evt> scalarLevelReactionToEvts;
+  final List<Event> scalarLevelReactionToEvents;
 
   ScalarConfig({
     this.hiddenBehavior = ScalarHiddenBehavior.none,
     //
     this.selfReQueryable = false,
-    List<Evt>? reQueryByInternalShelfEvents,
-    List<Event>? reQueryByExternalShelfEvents,
-  })  : reQueryByInternalShelfEvents =
-            List.unmodifiable(reQueryByInternalShelfEvents?.toSet() ?? []),
-        reQueryByExternalShelfEvents =
-            List.unmodifiable(reQueryByExternalShelfEvents?.toSet() ?? []);
+    List<Evt>? scalarLevelReactionToEvts,
+    List<Event>? scalarLevelReactionToEvents,
+  })  : scalarLevelReactionToEvts =
+            List.unmodifiable(scalarLevelReactionToEvts?.toSet() ?? []),
+        scalarLevelReactionToEvents =
+            List.unmodifiable(scalarLevelReactionToEvents?.toSet() ?? []);
 
   ScalarConfig copy() {
     return ScalarConfig(
       hiddenBehavior: hiddenBehavior,
       //
       selfReQueryable: selfReQueryable,
-      reQueryByInternalShelfEvents: reQueryByInternalShelfEvents,
-      reQueryByExternalShelfEvents: reQueryByExternalShelfEvents,
+      scalarLevelReactionToEvts: scalarLevelReactionToEvts,
+      scalarLevelReactionToEvents: scalarLevelReactionToEvents,
     );
   }
 }
