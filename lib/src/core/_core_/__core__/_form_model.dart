@@ -2,7 +2,7 @@ part of '../core.dart';
 
 abstract class FormModel<
     ID extends Object,
-    ITEM_DETAIL extends Object,
+    ITEM_DETAIL extends Identifiable<ID>,
     FILTER_CRITERIA extends FilterCriteria,
     EXTRA_FORM_INPUT extends ExtraFormInput> extends _Core {
   final FormModelConfig config;
@@ -45,7 +45,7 @@ abstract class FormModel<
 
   late final Block<
       ID, //
-      Object,
+      Identifiable<ID>, // ITEM
       ITEM_DETAIL,
       FilterInput,
       FILTER_CRITERIA,

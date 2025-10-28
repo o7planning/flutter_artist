@@ -22,7 +22,7 @@ part of '../core.dart';
 ///
 abstract class SingleItemBlock<
         ID extends Object, //
-        ITEM_DETAIL extends Object,
+        ITEM_DETAIL extends Identifiable<ID>,
         FILTER_INPUT extends FilterInput,
         FILTER_CRITERIA extends FilterCriteria,
         EXTRA_FORM_INPUT extends ExtraFormInput> //

@@ -6,7 +6,7 @@ part of '../core.dart';
 @_BlockSelectNextItemAsCurrentAnnotation()
 @_BlockSelectFirstItemAsCurrentAnnotation()
 @_BlockSelectPreviousItemAsCurrentAnnotation()
-class _BlockSelectAsCurrentTaskUnit<ITEM extends Object>
+class _BlockSelectAsCurrentTaskUnit<ID extends Object, ITEM extends Identifiable<ID> >
     extends _ResultedSTaskUnit<BlockItemCurrSelectionResult<ITEM>> {
   final XBlock xBlock;
   final ForceType? forceTypeForForm;

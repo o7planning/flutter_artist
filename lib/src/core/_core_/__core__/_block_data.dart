@@ -2,8 +2,8 @@ part of '../core.dart';
 
 class _BlockData<
     ID extends Object,
-    ITEM extends Object,
-    ITEM_DETAIL extends Object,
+    ITEM extends Identifiable<ID>,
+    ITEM_DETAIL extends Identifiable<ID>,
     FILTER_INPUT extends FilterInput,
     FILTER_CRITERIA extends FilterCriteria,
     EXTRA_FORM_INPUT extends ExtraFormInput> {

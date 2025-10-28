@@ -2,8 +2,8 @@ part of '../core.dart';
 
 class XBlock<
     ID extends Object, //
-    ITEM extends Object,
-    ITEM_DETAIL extends Object> {
+    ITEM extends Identifiable<ID>,
+    ITEM_DETAIL extends Identifiable<ID>> {
   XShelf get xShelf => xFilterModel.xShelf;
 
   int get xShelfId => xShelf.xShelfId;

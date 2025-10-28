@@ -5,8 +5,8 @@ import '_action.dart';
 
 abstract class BlockQuickItemUpdateAction<
     ID extends Object, //
-    ITEM extends Object,
-    ITEM_DETAIL extends Object,
+    ITEM extends Identifiable<ID>,
+    ITEM_DETAIL extends Identifiable<ID>,
     FILTER_CRITERIA extends FilterCriteria> extends Action {
   final BlockQuickItemUpdateActionConfig config;
   final ITEM item;

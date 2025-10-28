@@ -69,8 +69,8 @@ part of '../core.dart';
 ///
 abstract class Block<
     ID extends Object,
-    ITEM extends Object,
-    ITEM_DETAIL extends Object,
+    ITEM extends Identifiable<ID>,
+    ITEM_DETAIL extends Identifiable<ID>,
     FILTER_INPUT extends FilterInput, // EmptyFilterInput
     FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
     EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
@@ -763,7 +763,7 @@ abstract class Block<
         return;
       }
       thisXBlock.xShelf._addTaskUnit(
-        taskUnit: _BlockSelectAsCurrentTaskUnit<ITEM>(
+        taskUnit: _BlockSelectAsCurrentTaskUnit<ID,ITEM>(
           currentItemSelectionType: currentItemSelectionType,
           xBlock: thisXBlock,
           newQueriedList: [],
@@ -1151,7 +1151,7 @@ abstract class Block<
         }
         //
         thisXBlock.xShelf._addTaskUnit(
-          taskUnit: _BlockSelectAsCurrentTaskUnit<ITEM>(
+          taskUnit: _BlockSelectAsCurrentTaskUnit<ID,ITEM>(
             currentItemSelectionType: currentItemSelectionType,
             xBlock: thisXBlock,
             newQueriedList: pageData?.items ?? [],
@@ -1732,7 +1732,7 @@ abstract class Block<
     print("**************************************************************\n");
 
     if (!hasInternalEvent) {
-      final _STaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+      final _STaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ID,ITEM>(
         currentItemSelectionType: currentItemSelectionType,
         xBlock: thisXBlock,
         newQueriedList: <ITEM>[],
@@ -1768,7 +1768,7 @@ abstract class Block<
     if (effSelfInfo == null && topEffBlockInfo == null) {
       print("\n\n\n@@@@@@@@@ INTERNAL EVENT ~~~~~> 1");
       // Test Case:
-      final _STaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+      final _STaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ID,ITEM>(
         currentItemSelectionType: currentItemSelectionType,
         xBlock: thisXBlock,
         newQueriedList: <ITEM>[],
@@ -1795,7 +1795,7 @@ abstract class Block<
           xShelf: thisXBlock.xShelf,
         );
         //
-        final _STaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+        final _STaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ID, ITEM >(
           currentItemSelectionType: currentItemSelectionType,
           xBlock: topXBlock,
           newQueriedList: <ITEM>[],
@@ -1831,7 +1831,7 @@ abstract class Block<
         //
         // Select an Item as Current.
         //
-        final _STaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+        final _STaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ID, ITEM>(
           currentItemSelectionType: currentItemSelectionType,
           xBlock: thisXBlock,
           newQueriedList: <ITEM>[],
@@ -1967,7 +1967,7 @@ abstract class Block<
     if (siblingItem == null) {
       return;
     }
-    _STaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+    _STaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ID, ITEM>(
       currentItemSelectionType:
           CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
       xBlock: thisXBlock,
@@ -2877,7 +2877,7 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
     //
-    final _ResultedSTaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+    final _ResultedSTaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ID,ITEM>(
       currentItemSelectionType: currentItemSelectionType,
       xBlock: thisXBlock,
       newQueriedList: [],

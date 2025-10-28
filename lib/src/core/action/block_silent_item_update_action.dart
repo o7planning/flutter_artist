@@ -6,8 +6,8 @@ import '_action.dart';
 
 abstract class BlockSilentItemUpdateAction<
     ID extends Object, //
-    ITEM extends Object,
-    ITEM_DETAIL extends Object,
+    ITEM extends Identifiable<ID>,
+    ITEM_DETAIL extends Identifiable<ID>,
     FILTER_CRITERIA extends FilterCriteria> extends Action {
   final BlockSilentItemUpdateActionConfig config;
   final ITEM item;

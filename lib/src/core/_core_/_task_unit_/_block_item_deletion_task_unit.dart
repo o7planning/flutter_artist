@@ -8,7 +8,7 @@ part of '../core.dart';
 class _BlockItemDeletionTaskUnit
     extends _ResultedSTaskUnit<BlockItemDeletionResult> {
   XBlock xBlock;
-  final Object item;
+  final Identifiable item;
 
   _BlockItemDeletionTaskUnit({
     required this.xBlock,
