@@ -11,6 +11,7 @@ class SortCriterion extends Equatable {
   SortDirection? _lastUsedDirection;
 
   SortDirection? get initialDirection => _initialDirection;
+
   SortDirection? get lastUsedDirection => _lastUsedDirection;
 
   String get text => _text;

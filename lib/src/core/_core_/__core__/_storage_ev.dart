@@ -356,7 +356,7 @@ class _StorageEventHandler {
           continue;
         }
         List<Event> listenerTypes =
-            listenerScalar.config.scalarLevelReactionToEvents;
+            listenerScalar.config.executeScalarLevelReactionToEvents;
         if (listenerTypes.isEmpty) {
           continue;
         }
