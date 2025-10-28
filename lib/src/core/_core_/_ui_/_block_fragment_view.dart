@@ -1,6 +1,13 @@
 part of '../core.dart';
 
-abstract class BlockFragmentView<BLOCK extends Block> extends StatelessWidget {
+abstract class BlockFragmentView<
+    BLOCK extends Block<
+        Object, //
+        Identifiable,
+        Identifiable,
+        FilterInput,
+        FilterCriteria,
+        ExtraFormInput>> extends StatelessWidget {
   final BLOCK block;
 
   const BlockFragmentView({

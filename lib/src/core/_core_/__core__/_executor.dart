@@ -165,7 +165,8 @@ class _Executor {
       await taskUnit.xBlock.block._unitDeleteItem(
         thisXBlock: taskUnit.xBlock,
         item: taskUnit.item,
-        deletionResult: taskUnit.taskResult as BlockItemDeletionResult<Identifiable>,
+        deletionResult:
+            taskUnit.taskResult as BlockItemDeletionResult<Identifiable>,
       );
     }
     // Block Delete Items:
@@ -174,7 +175,8 @@ class _Executor {
         thisXBlock: taskUnit.xBlock,
         items: taskUnit.items,
         stopIfError: taskUnit.stopIfError,
-        deletionResult: taskUnit.taskResult as BlockItemsDeletionResult<Identifiable>,
+        deletionResult:
+            taskUnit.taskResult as BlockItemsDeletionResult<Identifiable>,
       );
     }
     // Block QuickCreateItem:

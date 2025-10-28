@@ -1,7 +1,13 @@
 part of '../core.dart';
 
-abstract class BlockItemDetailView<BLOCK extends Block>
-    extends StatelessWidget {
+abstract class BlockItemDetailView<
+    BLOCK extends Block<
+        Object, //
+        Identifiable,
+        Identifiable,
+        FilterInput,
+        FilterCriteria,
+        ExtraFormInput>> extends StatelessWidget {
   final BLOCK block;
 
   const BlockItemDetailView({

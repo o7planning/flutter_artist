@@ -8,7 +8,7 @@ part of '../core.dart';
 class _BlockMultiItemsDeletionTaskUnit
     extends _ResultedSTaskUnit<BlockItemsDeletionResult> {
   XBlock xBlock;
-  final List<Object> items;
+  final List<Identifiable> items;
   final bool stopIfError;
 
   _BlockMultiItemsDeletionTaskUnit({
