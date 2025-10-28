@@ -1303,7 +1303,7 @@ abstract class Block<
         ItemsUtils.isListContainItem(
       targetList: newQueriedList,
       item: candidateCurrItem,
-      getItemId: getItemId,
+      getItemId: _getItemIdInternal,
     );
     //
     // This block has UI Active (Or child block has UI Active).
@@ -1371,7 +1371,7 @@ abstract class Block<
             ItemsUtils.findItemInList(
           item: candidateCurrItem,
           targetList: newQueriedList,
-          getItemId: getItemId,
+          getItemId: _getItemIdInternal,
         );
         //
         // No need to refresh Item.
@@ -2866,7 +2866,7 @@ abstract class Block<
       return BlockItemCurrSelectionResult<ITEM>(
         precheck: actionable.errCode,
         currentItemSelectionType: currentItemSelectionType,
-        getItemId: getItemId,
+        getItemId: _getItemIdInternal,
         candidateItem: item,
         oldCurrentItem: currentItem,
         currentItem: currentItem,
@@ -3294,7 +3294,7 @@ abstract class Block<
 
   ID __getItemIdShowErr(ITEM item, {required bool showErr}) {
     try {
-      ID id = getItemId(item);
+      ID id = _getItemIdInternal(item);
       return id;
     } catch (e, stackTrace) {
       if (showErr) {
@@ -3314,8 +3314,12 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_AbstractMethodAnnotation()
-  ID getItemId(ITEM item);
+  // @_AbstractMethodAnnotation()
+  // ID getItemId(ITEM item);
+
+  ID _getItemIdInternal(ITEM item) {
+    return item.id;
+  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -4511,7 +4515,7 @@ abstract class Block<
   }) {
     List<ITEM> rmvItems = ItemsUtils.removeDuplicatedItems(
       items: items,
-      getItemId: getItemId,
+      getItemId: _getItemIdInternal,
     );
     //
     if (checkBusy && FlutterArtist.executor.isBusy) {
@@ -5630,7 +5634,7 @@ abstract class Block<
     required ITEM item,
   }) {
     final ID? currItemId = this.currentItemId;
-    return getItemId(item) == currItemId;
+    return _getItemIdInternal(item) == currItemId;
   }
 
   // ***************************************************************************
@@ -5662,7 +5666,7 @@ abstract class Block<
     return ItemsUtils.isListContainItem(
       targetList: __blockData._selectedItems,
       item: item,
-      getItemId: getItemId,
+      getItemId: _getItemIdInternal,
     );
   }
 
@@ -5718,13 +5722,13 @@ abstract class Block<
       ItemsUtils.insertOrReplaceItemInList(
         item: item,
         targetList: __blockData._selectedItems,
-        getItemId: getItemId,
+        getItemId: _getItemIdInternal,
       );
     } else {
       ItemsUtils.removeItemFromList(
         removeItem: item,
         targetList: __blockData._selectedItems,
-        getItemId: getItemId,
+        getItemId: _getItemIdInternal,
       );
     }
   }
@@ -5760,7 +5764,7 @@ abstract class Block<
     ItemsUtils.insertOrReplaceItemsInList(
       items: items,
       targetList: __blockData._selectedItems,
-      getItemId: getItemId,
+      getItemId: _getItemIdInternal,
     );
   }
 
@@ -5785,8 +5789,8 @@ abstract class Block<
       return true;
     }
     if (item1 != null && item2 != null) {
-      final ID? id1 = getItemId(item1);
-      final ID? id2 = getItemId(item2);
+      final ID? id1 = _getItemIdInternal(item1);
+      final ID? id2 = _getItemIdInternal(item2);
       return id1 == id2;
     }
     return false;
@@ -5818,7 +5822,7 @@ abstract class Block<
     if (first == null || current == null) {
       return false;
     }
-    return getItemId(first) == getItemId(current);
+    return _getItemIdInternal(first) == _getItemIdInternal(current);
   }
 
   // ***************************************************************************
@@ -5833,7 +5837,7 @@ abstract class Block<
     if (last == null || current == null) {
       return false;
     }
-    return getItemId(last) == getItemId(current);
+    return _getItemIdInternal(last) == _getItemIdInternal(current);
   }
 
   // ***************************************************************************
@@ -5845,7 +5849,7 @@ abstract class Block<
     return ItemsUtils.findNextSiblingItemInList(
       item: item,
       targetList: __blockData._items,
-      getItemId: getItemId,
+      getItemId: _getItemIdInternal,
     );
   }
 
@@ -5858,7 +5862,7 @@ abstract class Block<
     return ItemsUtils.findPreviousSiblingItemInList(
       item: item,
       targetList: __blockData._items,
-      getItemId: getItemId,
+      getItemId: _getItemIdInternal,
     );
   }
 
@@ -5871,7 +5875,7 @@ abstract class Block<
     return ItemsUtils.findSiblingItemInList(
       item: item,
       targetList: __blockData._items,
-      getItemId: getItemId,
+      getItemId: _getItemIdInternal,
     );
   }
 
@@ -5881,7 +5885,7 @@ abstract class Block<
   ITEM? findItemSameIdWith({
     required ITEM item,
   }) {
-    ID id = getItemId(item);
+    ID id = _getItemIdInternal(item);
     return findItemById(id);
   }
 
@@ -5892,7 +5896,7 @@ abstract class Block<
     return ItemsUtils.findItemInListById(
       id: itemId,
       targetList: __blockData._items,
-      getItemId: getItemId,
+      getItemId: _getItemIdInternal,
     );
   }
 
@@ -5931,7 +5935,7 @@ abstract class Block<
     return ItemsUtils.isListContainItem(
       targetList: __blockData._items,
       item: item,
-      getItemId: getItemId,
+      getItemId: _getItemIdInternal,
     );
   }
 
@@ -5939,7 +5943,7 @@ abstract class Block<
     return ItemsUtils.isListContainItem(
       targetList: __blockData._checkedItems,
       item: item,
-      getItemId: getItemId,
+      getItemId: _getItemIdInternal,
     );
   }
 
@@ -5962,13 +5966,13 @@ abstract class Block<
       ItemsUtils.insertOrReplaceItemInList(
         item: item,
         targetList: __blockData._checkedItems,
-        getItemId: getItemId,
+        getItemId: _getItemIdInternal,
       );
     } else {
       ItemsUtils.removeItemFromList(
         removeItem: item,
         targetList: __blockData._checkedItems,
-        getItemId: getItemId,
+        getItemId: _getItemIdInternal,
       );
     }
   }
@@ -5995,7 +5999,7 @@ abstract class Block<
     ItemsUtils.insertOrReplaceItemsInList(
       items: items,
       targetList: __blockData._checkedItems,
-      getItemId: getItemId,
+      getItemId: _getItemIdInternal,
     );
   }
 
@@ -6098,10 +6102,10 @@ abstract class Block<
       return false;
     }
     bool success = ItemsUtils.swapPositionsByIds(
-      itemId1: getItemId(item1),
-      itemId2: getItemId(item2),
+      itemId1: _getItemIdInternal(item1),
+      itemId2: _getItemIdInternal(item2),
       targetList: __blockData._items,
-      getItemId: getItemId,
+      getItemId: _getItemIdInternal,
     );
     if (success) {
       ui.updateAllUIComponents(withoutFilters: true);
@@ -6123,7 +6127,7 @@ abstract class Block<
       item: item,
       newIndexPosition: newIndexPosition,
       targetList: __blockData._items,
-      getItemId: getItemId,
+      getItemId: _getItemIdInternal,
     );
     if (success) {
       ui.updateAllUIComponents(withoutFilters: true);
@@ -6199,7 +6203,7 @@ abstract class Block<
       oldIndexPosition: oldIndexPosition,
       newIndexPosition: newIndexPosition,
       targetList: __blockData._items,
-      getItemId: getItemId,
+      getItemId: _getItemIdInternal,
     );
     if (success) {
       ui.updateAllUIComponents(withoutFilters: true);

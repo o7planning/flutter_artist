@@ -53,7 +53,7 @@ class _BlockData<
     List<ITEM> newList = [...itemList];
     final itemCount = newList.length;
     newList.removeWhere(
-      (it) => block.getItemId(it) == block.getItemId(currItem),
+      (it) => block._getItemIdInternal(it) == block._getItemIdInternal(currItem),
     );
     if (itemCount > newList.length) {
       newList.add(currItem);
@@ -127,7 +127,7 @@ class _BlockData<
     return ItemsUtils.isListContainItem(
       item: currItem,
       targetList: _checkedItems,
-      getItemId: block.getItemId,
+      getItemId: block._getItemIdInternal,
     );
   }
 
@@ -141,7 +141,7 @@ class _BlockData<
     return ItemsUtils.isListContainItem(
       item: currItem,
       targetList: _selectedItems,
-      getItemId: block.getItemId,
+      getItemId: block._getItemIdInternal,
     );
   }
 
@@ -314,17 +314,17 @@ class _BlockData<
     ItemsUtils.removeItemFromList(
       targetList: _items,
       removeItem: removeItem,
-      getItemId: block.getItemId,
+      getItemId: block._getItemIdInternal,
     );
     ItemsUtils.removeItemFromList(
       targetList: _checkedItems,
       removeItem: removeItem,
-      getItemId: block.getItemId,
+      getItemId: block._getItemIdInternal,
     );
     ItemsUtils.removeItemFromList(
       targetList: _selectedItems,
       removeItem: removeItem,
-      getItemId: block.getItemId,
+      getItemId: block._getItemIdInternal,
     );
   }
 
@@ -338,7 +338,7 @@ class _BlockData<
     ItemsUtils.insertOrReplaceItemInList(
       targetList: _items,
       item: item,
-      getItemId: block.getItemId,
+      getItemId: block._getItemIdInternal,
     );
     //
     _clientSideSortItems();
@@ -346,12 +346,12 @@ class _BlockData<
     ItemsUtils.replaceItemInList(
       targetList: _checkedItems,
       replacementItem: item,
-      getItemId: block.getItemId,
+      getItemId: block._getItemIdInternal,
     );
     ItemsUtils.replaceItemInList(
       targetList: _selectedItems,
       replacementItem: item,
-      getItemId: block.getItemId,
+      getItemId: block._getItemIdInternal,
     );
   }
 
@@ -362,7 +362,7 @@ class _BlockData<
     ItemsUtils.appendItemsToList(
       appendItems: appendItems,
       targetList: _items,
-      getItemId: block.getItemId,
+      getItemId: block._getItemIdInternal,
     );
     //
     _clientSideSortItems();
@@ -370,12 +370,12 @@ class _BlockData<
     ItemsUtils.replaceItemsInList(
       replacementItems: appendItems,
       targetList: _selectedItems,
-      getItemId: block.getItemId,
+      getItemId: block._getItemIdInternal,
     );
     ItemsUtils.replaceItemsInList(
       replacementItems: appendItems,
       targetList: _checkedItems,
-      getItemId: block.getItemId,
+      getItemId: block._getItemIdInternal,
     );
   }
 

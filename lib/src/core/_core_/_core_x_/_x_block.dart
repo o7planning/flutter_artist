@@ -159,10 +159,10 @@ class XBlock<
     if (currItemInternalEVT == null) {
       return true;
     }
-    final ID currItemIdToReload = block.getItemId(currItemInternalEVT!);
+    final ID currItemIdToReload = block._getItemIdInternal(currItemInternalEVT!);
     // TODO: Check throw pending exception.
     final ITEM? currItem = block.currentItem;
-    ID? currItemId = currItem == null ? null : block.getItemId(currItem);
+    ID? currItemId = currItem == null ? null : block._getItemIdInternal(currItem);
     if (currItemId != currItemIdToReload) {
       return true;
     }

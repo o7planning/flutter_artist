@@ -27,7 +27,7 @@ class _BlockSelectAsCurrentTaskUnit<ID extends Object,
           taskResult: BlockItemCurrSelectionResult<ITEM>(
             precheck: null,
             currentItemSelectionType: currentItemSelectionType,
-            getItemId: xBlock.block.getItemId,
+            getItemId: xBlock.block._getItemIdInternal,
             candidateItem: candidateItem,
             oldCurrentItem: xBlock.block.currentItem as ITEM?,
             currentItem: xBlock.block.currentItem as ITEM?,
