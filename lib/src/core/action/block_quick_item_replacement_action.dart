@@ -9,8 +9,8 @@ import '_action.dart';
 // TODO: Hoàn thành logic.
 abstract class BlockQuickItemReplacementAction<
     ID extends Object, //
-    ITEM extends Object,
-    ITEM_DETAIL extends Object,
+    ITEM extends Identifiable<ID>,
+    ITEM_DETAIL extends Identifiable<ID>,
     FILTER_CRITERIA extends FilterCriteria> extends Action {
   final ITEM item;
 
