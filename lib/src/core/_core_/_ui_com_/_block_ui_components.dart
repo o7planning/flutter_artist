@@ -85,57 +85,104 @@ class _BlockUIComponents extends _UIComponents {
   }
 
   String? findActiveUIComponent({bool alsoCheckChildren = false}) {
-    bool active = false;
+    return findActiveUIComponentWithRepresentativeType(
+      representativeType: null,
+      alsoCheckChildren: alsoCheckChildren,
+    );
+  }
+
+  String? findActiveUIComponentWithRepresentativeType({
+    required RepresentativeType? representativeType,
+    bool alsoCheckChildren = false,
+  }) {
+    bool has = false;
+    //
     // Filter
-    // if (block.filterModel != null) {
-    //   active = block.filterModel!.ui.hasActiveUIComponent();
-    //   if (active) {
-    //     return true;
-    //   }
-    // }
+    //
+    if (block.filterModel != null) {
+      has = block.filterModel!.ui.hasActiveUIComponentWithRepresentativeType(
+        representativeType: representativeType,
+      );
+      if (has) {
+        return getClassNameWithoutGenerics(block.filterModel);
+      }
+    }
+    //
     // Sort
+    //
     if (block.serverSideSortModel != null) {
-      active = block.serverSideSortModel!.ui.hasActiveUIComponent();
-      if (active) {
+      has = block.serverSideSortModel!.ui
+          .hasActiveUIComponentWithRepresentativeType(
+        representativeType: representativeType,
+      );
+      if (has) {
         return getClassNameWithoutGenerics(block.serverSideSortModel);
       }
     }
+    //
     if (block.clientSideSortModel != null) {
-      active = block.clientSideSortModel!.ui.hasActiveUIComponent();
-      if (active) {
+      has = block.clientSideSortModel!.ui
+          .hasActiveUIComponentWithRepresentativeType(
+        representativeType: representativeType,
+      );
+      if (has) {
         return getClassNameWithoutGenerics(block.clientSideSortModel);
       }
     }
+    //
     // Form
-    active =
-        block.formModel != null && block.formModel!.ui.hasActiveUIComponent();
-    if (active) {
-      return getClassNameWithoutGenerics(block.formModel);
+    //
+    if (block.formModel != null) {
+      has = block.formModel!.ui.hasActiveUIComponentWithRepresentativeType(
+        representativeType: representativeType,
+      );
+      if (has) {
+        return getClassNameWithoutGenerics(block.formModel);
+      }
     }
+    //
     // Block Fragment:
-    String? componentName = findActiveBlockFragment(alsoCheckChildren: false);
+    //
+    String? componentName = findActiveBlockFragmentWithRepresentativeType(
+      representativeType: representativeType,
+      alsoCheckChildren: false,
+    );
     if (componentName != null) {
       return componentName;
     }
+    //
     // ControlBar:
-    active = hasActiveControlBar();
-    if (active) {
+    //
+    has = hasActiveControlBarWithRepresentativeType(
+      representativeType: representativeType,
+    );
+    if (has) {
       return "BlockControlBar";
     }
+    //
     // Control
-    active = hasActiveControlWidget();
-    if (active) {
+    //
+    has = hasActiveControlWidgetWithRepresentativeType(
+      representativeType: representativeType,
+    );
+    if (has) {
       return "ControlWidget";
     }
+    //
     // Pagination
-    active = hasActivePaginationWidget();
-    if (active) {
+    //
+    has = hasActivePaginationWithRepresentativeType(
+      representativeType: representativeType,
+    );
+    if (has) {
       return "PaginationWidget";
     }
     //
     if (alsoCheckChildren) {
       for (Block childBlock in block._childBlocks) {
-        componentName = childBlock.ui.findActiveUIComponent(
+        componentName =
+            childBlock.ui.findActiveUIComponentWithRepresentativeType(
+          representativeType: representativeType,
           alsoCheckChildren: alsoCheckChildren,
         );
         if (componentName != null) {
@@ -157,18 +204,35 @@ class _BlockUIComponents extends _UIComponents {
   }
 
   String? findActiveBlockFragment({required bool alsoCheckChildren}) {
+    return findActiveBlockFragmentWithRepresentativeType(
+      representativeType: null,
+      alsoCheckChildren: alsoCheckChildren,
+    );
+  }
+
+  String? findActiveBlockFragmentWithRepresentativeType({
+    required RepresentativeType? representativeType,
+    required bool alsoCheckChildren,
+  }) {
     var map = {...__blockFragmentWidgetStates};
-    for (State widgetState in map.keys) {
-      if (widgetState.mounted) {
-        bool isShowing = map[widgetState]?.isShowing ?? false;
-        if (isShowing) {
-          return getClassNameWithoutGenerics(widgetState.widget);
-        }
+    for (_RefreshableWidgetState widgetState in map.keys) {
+      if (!widgetState.mounted) {
+        continue;
+      }
+      bool visible = map[widgetState]?.isShowing ?? false;
+      if (!visible) {
+        continue;
+      }
+      bool ok = widgetState.isRepresentativeType(representativeType);
+      if (ok) {
+        return getClassNameWithoutGenerics(widgetState.widget);
       }
     }
     if (alsoCheckChildren) {
       for (Block childBlock in block._childBlocks) {
-        String? componentName = childBlock.ui.findActiveBlockFragment(
+        String? componentName =
+            childBlock.ui.findActiveBlockFragmentWithRepresentativeType(
+          representativeType: representativeType,
           alsoCheckChildren: true,
         );
         if (componentName != null) {
@@ -183,11 +247,24 @@ class _BlockUIComponents extends _UIComponents {
   // ***************************************************************************
 
   bool hasActiveControlBar() {
-    for (_RefreshableWidgetState controlBarState
+    return hasActiveControlBarWithRepresentativeType(representativeType: null);
+  }
+
+  bool hasActiveControlBarWithRepresentativeType({
+    required RepresentativeType? representativeType,
+  }) {
+    for (_RefreshableWidgetState widgetState
         in __blockControlBarWidgetStates.keys) {
+      if (!widgetState.mounted) {
+        continue;
+      }
       bool visible =
-          __blockControlBarWidgetStates[controlBarState]?.isShowing ?? false;
-      if (visible && controlBarState.mounted) {
+          __blockControlBarWidgetStates[widgetState]?.isShowing ?? false;
+      if (!visible) {
+        continue;
+      }
+      bool ok = widgetState.isRepresentativeType(representativeType);
+      if (ok) {
         return true;
       }
     }
@@ -198,9 +275,24 @@ class _BlockUIComponents extends _UIComponents {
   // ***************************************************************************
 
   bool hasActiveControlWidget() {
-    for (_RefreshableWidgetState controlState in __controlWidgetStates.keys) {
-      bool visible = __controlWidgetStates[controlState]?.isShowing ?? false;
-      if (visible && controlState.mounted) {
+    return hasActiveControlWidgetWithRepresentativeType(
+      representativeType: null,
+    );
+  }
+
+  bool hasActiveControlWidgetWithRepresentativeType({
+    required RepresentativeType? representativeType,
+  }) {
+    for (_RefreshableWidgetState widgetState in __controlWidgetStates.keys) {
+      if (!widgetState.mounted) {
+        continue;
+      }
+      bool visible = __controlWidgetStates[widgetState]?.isShowing ?? false;
+      if (!visible) {
+        continue;
+      }
+      bool ok = widgetState.isRepresentativeType(representativeType);
+      if (ok) {
         return true;
       }
     }
@@ -210,12 +302,23 @@ class _BlockUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActivePaginationWidget() {
-    for (_RefreshableWidgetState paginationState
-        in __paginationWidgetStates.keys) {
-      bool visible =
-          __paginationWidgetStates[paginationState]?.isShowing ?? false;
-      if (visible && paginationState.mounted) {
+  bool hasActivePagination() {
+    return hasActivePaginationWithRepresentativeType(representativeType: null);
+  }
+
+  bool hasActivePaginationWithRepresentativeType({
+    required RepresentativeType? representativeType,
+  }) {
+    for (_RefreshableWidgetState widgetState in __paginationWidgetStates.keys) {
+      if (!widgetState.mounted) {
+        continue;
+      }
+      bool visible = __paginationWidgetStates[widgetState]?.isShowing ?? false;
+      if (!visible) {
+        continue;
+      }
+      bool ok = widgetState.isRepresentativeType(representativeType);
+      if (ok) {
         return true;
       }
     }

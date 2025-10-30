@@ -34,10 +34,26 @@ class _FilterUIComponents extends _UIComponents {
   // ***************************************************************************
 
   bool hasActiveUIComponent() {
-    for (State widgetState in _filterFragmentWidgetStates.keys) {
-      bool isShowing =
+    return hasActiveUIComponentWithRepresentativeType(
+      representativeType: null,
+    );
+  }
+
+  bool hasActiveUIComponentWithRepresentativeType({
+    required RepresentativeType? representativeType,
+  }) {
+    for (_RefreshableWidgetState widgetState
+        in _filterFragmentWidgetStates.keys) {
+      if (!widgetState.mounted) {
+        continue;
+      }
+      bool visible =
           _filterFragmentWidgetStates[widgetState]?.isShowing ?? false;
-      if (isShowing && widgetState.mounted) {
+      if (!visible) {
+        continue;
+      }
+      bool ok = widgetState.isRepresentativeType(representativeType);
+      if (ok) {
         return true;
       }
     }

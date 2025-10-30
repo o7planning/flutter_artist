@@ -31,6 +31,26 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
   @override
   ShowMode showMode = ShowMode.production;
 
+  bool get isBlockRepresentative;
+
+  bool get isScalarRepresentative;
+
+  bool get isItemRepresentative;
+
+  bool isRepresentativeType(RepresentativeType? representativeType) {
+    switch (representativeType) {
+      case null:
+        // Do not change!
+        return true;
+      case RepresentativeType.scalarRepresentative:
+        return isScalarRepresentative;
+      case RepresentativeType.blockRepresentative:
+        return isBlockRepresentative;
+      case RepresentativeType.itemRepresentative:
+        return isItemRepresentative;
+    }
+  }
+
   @override
   RefreshableWidgetType get type;
 

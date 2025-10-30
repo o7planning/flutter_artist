@@ -33,6 +33,21 @@ class _FormViewBuilderState extends _RefreshableWidgetState<FormViewBuilder> {
   RefreshableWidgetType get type => RefreshableWidgetType.form;
 
   @override
+  bool get isScalarRepresentative {
+    return false;
+  }
+
+  @override
+  bool get isBlockRepresentative {
+    return true;
+  }
+
+  @override
+  bool get isItemRepresentative {
+    return true;
+  }
+
+  @override
   void setBuildingState({required bool isBuilding}) {
     widget.formModel.ui._setFormViewBuildingState(
       widgetState: this,

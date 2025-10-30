@@ -31,6 +31,21 @@ class _ScalarFragmentViewBuilderState
   RefreshableWidgetType get type => RefreshableWidgetType.scalarFragment;
 
   @override
+  bool get isScalarRepresentative {
+    return true;
+  }
+
+  @override
+  bool get isBlockRepresentative {
+    return false;
+  }
+
+  @override
+  bool get isItemRepresentative {
+    return false;
+  }
+
+  @override
   Widget buildContent(BuildContext context) {
     if (widget.quickSuggestionMode == QuickSuggestionMode.showIfError) {
       return Stack(

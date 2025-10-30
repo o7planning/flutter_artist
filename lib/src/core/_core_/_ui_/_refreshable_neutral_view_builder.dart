@@ -29,6 +29,21 @@ class _RefreshableNeutralViewState
   RefreshableWidgetType get type => RefreshableWidgetType.shelfFragment;
 
   @override
+  bool get isScalarRepresentative {
+    return false;
+  }
+
+  @override
+  bool get isBlockRepresentative {
+    return false;
+  }
+
+  @override
+  bool get isItemRepresentative {
+    return false;
+  }
+
+  @override
   Widget buildContent(BuildContext context) {
     return widget.build();
   }

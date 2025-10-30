@@ -29,9 +29,24 @@ class _FormUIComponents extends _UIComponents {
   // ***************************************************************************
 
   bool hasActiveUIComponent() {
-    for (State formWidgetState in __formWidgetStates.keys) {
-      bool visible = __formWidgetStates[formWidgetState]?.isShowing ?? false;
-      if (visible && formWidgetState.mounted) {
+    return hasActiveUIComponentWithRepresentativeType(
+      representativeType: null,
+    );
+  }
+
+  bool hasActiveUIComponentWithRepresentativeType({
+    required RepresentativeType? representativeType,
+  }) {
+    for (_RefreshableWidgetState widgetState in __formWidgetStates.keys) {
+      if (!widgetState.mounted) {
+        continue;
+      }
+      bool visible = __formWidgetStates[widgetState]?.isShowing ?? false;
+      if (!visible) {
+        continue;
+      }
+      bool ok = widgetState.isRepresentativeType(representativeType);
+      if (ok) {
         return true;
       }
     }

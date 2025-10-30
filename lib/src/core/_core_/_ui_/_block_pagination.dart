@@ -20,6 +20,24 @@ abstract class BlockPagination extends _RefreshableWidget {
 
 class _BlockPaginationState extends _RefreshableWidgetState<BlockPagination> {
   @override
+  RefreshableWidgetType get type => RefreshableWidgetType.pagination;
+
+  @override
+  bool get isScalarRepresentative {
+    return false;
+  }
+
+  @override
+  bool get isBlockRepresentative {
+    return true;
+  }
+
+  @override
+  bool get isItemRepresentative {
+    return false;
+  }
+
+  @override
   Widget buildContent(BuildContext context) {
     return widget.build();
   }
@@ -38,9 +56,6 @@ class _BlockPaginationState extends _RefreshableWidgetState<BlockPagination> {
       widgetState: this,
     );
   }
-
-  @override
-  RefreshableWidgetType get type => RefreshableWidgetType.pagination;
 
   @override
   String getWidgetOwnerClassName() {

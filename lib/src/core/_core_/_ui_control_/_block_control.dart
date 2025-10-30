@@ -36,6 +36,21 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
   RefreshableWidgetType get type => RefreshableWidgetType.blockControlButton;
 
   @override
+  bool get isScalarRepresentative {
+    return false;
+  }
+
+  @override
+  bool get isBlockRepresentative {
+    return false;
+  }
+
+  @override
+  bool get isItemRepresentative {
+    return false;
+  }
+
+  @override
   Widget buildContent(BuildContext context) {
     ControlPressedAsyncFunction? onPressedAsync = _getOnPressedFunction();
     //

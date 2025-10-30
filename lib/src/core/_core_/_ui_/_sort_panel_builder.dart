@@ -30,6 +30,21 @@ class _SortPanelBuilderState
   RefreshableWidgetType get type => RefreshableWidgetType.sort;
 
   @override
+  bool get isScalarRepresentative {
+    return false;
+  }
+
+  @override
+  bool get isBlockRepresentative {
+    return true;
+  }
+
+  @override
+  bool get isItemRepresentative {
+    return false;
+  }
+
+  @override
   void setBuildingState({required bool isBuilding}) {
     widget.sortModel.ui._setSortPanelBuildingState(
       widgetState: this,

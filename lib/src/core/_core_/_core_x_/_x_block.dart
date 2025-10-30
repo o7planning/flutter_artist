@@ -8,8 +8,7 @@ class XBlock<
 
   int get xShelfId => xShelf.xShelfId;
 
-  final _recentLoadedItemMap =
-      <ID, _BlockCurrentItemWrap<ID, ITEM, ITEM_DETAIL>>{};
+  final _recentLoadedItemMap = <ID, _BlockItem2Wrap<ID, ITEM, ITEM_DETAIL>>{};
 
   final Block<
       ID, //
@@ -235,14 +234,14 @@ class XBlock<
     required ITEM item,
     required ITEM_DETAIL itemDetail,
   }) {
-    _recentLoadedItemMap[itemId] = _BlockCurrentItemWrap(
+    _recentLoadedItemMap[itemId] = _BlockItem2Wrap(
       id: itemId,
       item: item,
       itemDetail: itemDetail,
     );
   }
 
-  _BlockCurrentItemWrap? _getRecentLoadedItem({required ID itemId}) {
+  _BlockItem2Wrap? _getRecentLoadedItem({required ID itemId}) {
     return _recentLoadedItemMap[itemId];
   }
 

@@ -37,13 +37,16 @@ abstract class Hook extends _Core {
   // ***************************************************************************
 
   bool _hasActiveActivityFragmentWidgetState() {
-    for (State widgetState in _activityFragmentWidgetStates.keys) {
-      if (widgetState.mounted) {
-        bool isShowing = _activityFragmentWidgetStates[widgetState] ?? false;
-        if (isShowing) {
-          return true;
-        }
+    for (_RefreshableWidgetState widgetState
+        in _activityFragmentWidgetStates.keys) {
+      if (!widgetState.mounted) {
+        continue;
       }
+      bool visible = _activityFragmentWidgetStates[widgetState] ?? false;
+      if (!visible) {
+        continue;
+      }
+      return true;
     }
     return false;
   }
@@ -112,12 +115,14 @@ abstract class Hook extends _Core {
 
   bool _hasActiveControlWidgetState() {
     for (State widgetState in _activityControlWidgetStates.keys) {
-      if (widgetState.mounted) {
-        bool isShowing = _activityControlWidgetStates[widgetState] ?? false;
-        if (isShowing) {
-          return true;
-        }
+      if (!widgetState.mounted) {
+        continue;
       }
+      bool visible = _activityControlWidgetStates[widgetState] ?? false;
+      if (!visible) {
+        continue;
+      }
+      return true;
     }
     return false;
   }

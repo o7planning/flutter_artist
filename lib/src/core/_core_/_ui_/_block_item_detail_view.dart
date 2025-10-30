@@ -22,6 +22,7 @@ abstract class BlockItemDetailView<
       ownerClassInstance: this,
       description: '',
       block: block,
+      itemRepresentative: true,
       build: () {
         return buildContent(context);
       },

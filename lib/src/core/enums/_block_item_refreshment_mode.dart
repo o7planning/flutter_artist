@@ -1,4 +1,7 @@
+@Deprecated("Replaced by IgnoreItemRefreshCondition")
 enum BlockItemRefreshmentMode {
-  auto,
-  force;
+  // auto,
+  always,
+  ignoreIfItemSameItemDetail,
+  ignoreIfItemInNewQueryAndSameItemDetail;
 }

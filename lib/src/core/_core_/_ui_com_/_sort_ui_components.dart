@@ -34,10 +34,25 @@ class _SortUIComponents extends _UIComponents {
   // ***************************************************************************
 
   bool hasActiveUIComponent() {
-    for (State widgetState in _sortFragmentWidgetStates.keys) {
-      bool isShowing =
-          _sortFragmentWidgetStates[widgetState]?.isShowing ?? false;
-      if (isShowing && widgetState.mounted) {
+    return hasActiveUIComponentWithRepresentativeType(
+      representativeType: null,
+    );
+  }
+
+  bool hasActiveUIComponentWithRepresentativeType({
+    required RepresentativeType? representativeType,
+  }) {
+    for (_RefreshableWidgetState widgetState
+        in _sortFragmentWidgetStates.keys) {
+      if (!widgetState.mounted) {
+        continue;
+      }
+      bool visible = _sortFragmentWidgetStates[widgetState]?.isShowing ?? false;
+      if (!visible) {
+        continue;
+      }
+      bool ok = widgetState.isRepresentativeType(representativeType);
+      if (ok) {
         return true;
       }
     }

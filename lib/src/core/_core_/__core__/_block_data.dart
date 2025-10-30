@@ -173,14 +173,9 @@ class _BlockData<
 
   int _currentItemChangeCount = 0;
 
-  _BlockCurrentItemWrap<ID, ITEM, ITEM_DETAIL> __current =
-      _BlockCurrentItemWrap(
-    id: null,
-    item: null,
-    itemDetail: null,
-  );
+  _BlockItem2Wrap<ID, ITEM, ITEM_DETAIL> __current = _BlockItem2Wrap.ofNull();
 
-  _BlockCurrentItemWrap<ID, ITEM, ITEM_DETAIL> get current => __current;
+  _BlockItem2Wrap<ID, ITEM, ITEM_DETAIL> get current => __current;
 
   late DataState _blockDataState;
 
@@ -290,11 +285,13 @@ class _BlockData<
   }) {
     final ID? oldId = __current._id;
     //
-    __current = _BlockCurrentItemWrap(
-      id: id,
-      item: refreshedItem,
-      itemDetail: refreshedItemDetail,
-    );
+    __current = id == null
+        ? _BlockItem2Wrap.ofNull()
+        : _BlockItem2Wrap(
+            id: id,
+            item: refreshedItem!,
+            itemDetail: refreshedItemDetail!,
+          );
     //
     final bool changed = oldId != id;
     //

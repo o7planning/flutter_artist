@@ -88,7 +88,7 @@ class _FlutterArtist {
   Future<void> logout({required Function() offAllAndGotoRoute}) async {
     _totalErrorCount = 0;
     storage._logout();
-    storage._rencentShelves.clear();
+    storage._recentShelves.clear();
     await globalsManager._logout();
     offAllAndGotoRoute();
   }

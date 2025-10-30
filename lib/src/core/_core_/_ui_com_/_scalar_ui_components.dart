@@ -144,19 +144,36 @@ class _ScalarUIComponents extends _UIComponents {
     return componentName != null;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   String? findActiveScalarFragment({required bool alsoCheckChildren}) {
+    return findActiveScalarFragmentWithRepresentativeType(
+      representativeType: null,
+      alsoCheckChildren: alsoCheckChildren,
+    );
+  }
+
+  String? findActiveScalarFragmentWithRepresentativeType({
+    required RepresentativeType? representativeType,
+    required bool alsoCheckChildren,
+  }) {
     for (State widgetState in __scalarFragmentWidgetStates.keys) {
-      if (widgetState.mounted) {
-        bool isShowing =
-            __scalarFragmentWidgetStates[widgetState]?.isShowing ?? false;
-        if (isShowing) {
-          return getClassNameWithoutGenerics(widgetState.widget);
-        }
+      if (!widgetState.mounted) {
+        continue;
       }
+      bool visible =
+          __scalarFragmentWidgetStates[widgetState]?.isShowing ?? false;
+      if (!visible) {
+        continue;
+      }
+      return getClassNameWithoutGenerics(widgetState.widget);
     }
     if (alsoCheckChildren) {
       for (Scalar childScalar in scalar._childScalars) {
-        String? componentName = childScalar.ui.findActiveScalarFragment(
+        String? componentName =
+            childScalar.ui.findActiveScalarFragmentWithRepresentativeType(
+          representativeType: representativeType,
           alsoCheckChildren: true,
         );
         if (componentName != null) {
@@ -171,13 +188,27 @@ class _ScalarUIComponents extends _UIComponents {
   // ***************************************************************************
 
   bool hasActiveControlBarWidget() {
-    for (State widgetState in __scalarControlBarWidgetStates.keys) {
-      if (widgetState.mounted) {
-        bool isShowing =
-            __scalarControlBarWidgetStates[widgetState]?.isShowing ?? false;
-        if (isShowing) {
-          return true;
-        }
+    return hasActiveControlBarWidgetWithRepresentativeType(
+      representativeType: null,
+    );
+  }
+
+  bool hasActiveControlBarWidgetWithRepresentativeType({
+    required RepresentativeType? representativeType,
+  }) {
+    for (_RefreshableWidgetState widgetState
+        in __scalarControlBarWidgetStates.keys) {
+      if (!widgetState.mounted) {
+        continue;
+      }
+      bool visible =
+          __scalarControlBarWidgetStates[widgetState]?.isShowing ?? false;
+      if (!visible) {
+        continue;
+      }
+      bool ok = widgetState.isRepresentativeType(representativeType);
+      if (ok) {
+        return true;
       }
     }
     return false;

@@ -34,6 +34,21 @@ class _ControlButtonState extends _RefreshableWidgetState<ScalarControl> {
   RefreshableWidgetType get type => RefreshableWidgetType.scalarControlButton;
 
   @override
+  bool get isScalarRepresentative {
+    return true;
+  }
+
+  @override
+  bool get isBlockRepresentative {
+    return false;
+  }
+
+  @override
+  bool get isItemRepresentative {
+    return false;
+  }
+
+  @override
   Widget buildContent(BuildContext context) {
     ControlPressedAsyncFunction? onPressedAsync = _getOnPressedFunction();
     //

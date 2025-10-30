@@ -38,6 +38,21 @@ class _TaskProgressBuilderState
   // Update from Executor:
   bool onProgress = false;
 
+  @override
+  bool get isScalarRepresentative {
+    return false;
+  }
+
+  @override
+  bool get isBlockRepresentative {
+    return false;
+  }
+
+  @override
+  bool get isItemRepresentative {
+    return false;
+  }
+
   bool isMatches({required Object owner, required TaskType taskType}) {
     if (!widget.taskTypes.contains(taskType)) {
       return false;

@@ -2,6 +2,7 @@ part of '../core.dart';
 
 class BlockFragmentViewBuilder extends _RefreshableWidget {
   final Block block;
+  final bool itemRepresentative;
   final Widget Function() build;
 
   const BlockFragmentViewBuilder({
@@ -9,6 +10,7 @@ class BlockFragmentViewBuilder extends _RefreshableWidget {
     required super.ownerClassInstance,
     required super.description,
     required this.block,
+    required this.itemRepresentative,
     required this.build,
   });
 
@@ -27,6 +29,21 @@ class _BlockFragmentWidgetBuilderState
 
   @override
   RefreshableWidgetType get type => RefreshableWidgetType.blockFragment;
+
+  @override
+  bool get isScalarRepresentative {
+    return false;
+  }
+
+  @override
+  bool get isBlockRepresentative {
+    return true;
+  }
+
+  @override
+  bool get isItemRepresentative {
+    return widget.itemRepresentative;
+  }
 
   @override
   void addWidgetState({required bool isShowing}) {

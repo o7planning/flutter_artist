@@ -73,6 +73,7 @@ import '../enums/_form_activity_type.dart';
 import '../enums/_form_error_method.dart';
 import '../enums/_form_mode.dart';
 import '../enums/_freeze_type.dart';
+import '../enums/_ignore_item_refresh_condition.dart';
 import '../enums/_item_creation_type.dart';
 import '../enums/_item_list_mode.dart';
 import '../enums/_multi_opt_prop_reload.dart';
@@ -82,6 +83,7 @@ import '../enums/_qry_pagination_type.dart';
 import '../enums/_quick_suggestion_mode.dart';
 import '../enums/_quick_suggestion_type.dart';
 import '../enums/_refreshable_widget_type.dart';
+import '../enums/_representative_type.dart';
 import '../enums/_scalar_control_action_type.dart';
 import '../enums/_scalar_error_method.dart';
 import '../enums/_scalar_hidden_behavior.dart';
@@ -155,7 +157,7 @@ part '__core__/_coordinator.dart';
 
 part '__core__/_drawer_state.dart';
 
-part '__core__/_block_current_item_wrap.dart';
+part '__core__/_block_item2_wrap.dart';
 
 part '../debug/_debug_utils.dart';
 
@@ -194,6 +196,12 @@ part '_sorting_/_server_side_sort_model.dart';
 part '_sorting_/_sort_model.dart';
 
 part '_sorting_/_sort_model_builder.dart';
+
+part '__core__/_storage_core.dart';
+
+part '__core__/_stockers_manager.dart';
+
+part '__core__/_stocker.dart';
 
 part '__core__/_scalar.dart';
 

@@ -28,6 +28,29 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   RefreshableWidgetType get type => RefreshableWidgetType.controlBar;
 
   @override
+  bool get isScalarRepresentative {
+    return false;
+  }
+
+  @override
+  bool get isBlockRepresentative {
+    return true;
+  }
+
+  @override
+  bool get isItemRepresentative {
+    if (widget.config.allowDeleteButton || widget.config.allowRefreshButton) {
+      return true;
+    }
+    if (widget.block.formModel != null) {
+      if (widget.config.allowCreateButton || widget.config.allowSaveButton) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);
   }

@@ -34,6 +34,21 @@ class _FilterPanelBuilderState
   RefreshableWidgetType get type => RefreshableWidgetType.filter;
 
   @override
+  bool get isScalarRepresentative {
+    return false;
+  }
+
+  @override
+  bool get isBlockRepresentative {
+    return false;
+  }
+
+  @override
+  bool get isItemRepresentative {
+    return false;
+  }
+
+  @override
   void setBuildingState({required bool isBuilding}) {
     widget.filterModel.ui._setFilterPanelBuildingState(
       widgetState: this,

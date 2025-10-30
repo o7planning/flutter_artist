@@ -64,6 +64,7 @@ export 'src/core/enums/_query_mode.dart';
 export 'src/core/enums/_quick_suggestion_mode.dart';
 export 'src/core/enums/_quick_suggestion_type.dart';
 export 'src/core/enums/_refreshable_widget_type.dart';
+export 'src/core/enums/_representative_type.dart';
 export 'src/core/enums/_scalar_control_action_type.dart';
 export 'src/core/enums/_scalar_error_method.dart';
 export 'src/core/enums/_scalar_hidden_behavior.dart';

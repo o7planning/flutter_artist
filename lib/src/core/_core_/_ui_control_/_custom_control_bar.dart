@@ -37,6 +37,23 @@ class _CustomControlBarState extends _RefreshableWidgetState<CustomControlBar> {
   RefreshableWidgetType get type => RefreshableWidgetType.customControlBar;
 
   @override
+  bool get isScalarRepresentative {
+    return false;
+  }
+
+  @override
+  bool get isBlockRepresentative {
+    // TODO:
+    return false;
+  }
+
+  @override
+  bool get isItemRepresentative {
+    // TODO:
+    return false;
+  }
+
+  @override
   void addWidgetState({required bool isShowing}) {
     // TODO: implement addWidgetState
   }

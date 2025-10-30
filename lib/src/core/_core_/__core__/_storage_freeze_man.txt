@@ -41,8 +41,8 @@ class _StorageFreezeMan {
       if (!widgetState.mounted) {
         continue;
       }
-      bool isShowing = _freezingAgentWidgetStateMap[widgetState] ?? false;
-      if (isShowing) {
+      bool visible = _freezingAgentWidgetStateMap[widgetState] ?? false;
+      if (visible) {
         return true;
       }
     }

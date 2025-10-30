@@ -1364,9 +1364,19 @@ abstract class Block<
         candidateCurrItem,
         showErr: true,
       );
+      final bool noForm = formModel == null;
+      final bool noChild = childBlocks.isEmpty;
+      // Test Cases: [13a], [42a].
       if (ITEM == ITEM_DETAIL &&
-          config.itemRefreshmentMode == BlockItemRefreshmentMode.auto &&
-          isCandidateCurrentItemInNewQueriedList) {
+          noForm &&
+          noChild &&
+          (config.conditionToIgnoreItemRefreshWhileSelecting ==
+                  IgnoreItemRefreshCondition
+                      .itemSameItemDetailAndNoFormNoChild ||
+              (config.conditionToIgnoreItemRefreshWhileSelecting ==
+                      IgnoreItemRefreshCondition
+                          .itemSameItemDetailAndNoFormNoChildAndInNewQuery &&
+                  isCandidateCurrentItemInNewQueriedList))) {
         final ITEM? candidateCurrItemInNewQueriedList =
             ItemsUtils.findItemInList(
           item: candidateCurrItem,
@@ -1379,9 +1389,10 @@ abstract class Block<
         refreshedCurrentItemDetail =
             candidateCurrItemInNewQueriedList as ITEM_DETAIL;
       } else {
+        String? methodName;
         bool isLoadItemError = false;
         // Recent Loaded Item:
-        _BlockCurrentItemWrap? loadedCoupleItem =
+        _BlockItem2Wrap? loadedCoupleItem =
             thisXBlock._getRecentLoadedItem(itemId: itemId);
         refreshedCurrentItemDetail = loadedCoupleItem?._itemDetail;
         if (refreshedCurrentItemDetail == null) {
@@ -1389,10 +1400,15 @@ abstract class Block<
             __refreshRefreshingCurrentItemState(
               isRefreshingCurrentItem: true,
             );
+            // This may throw error
+            final Stocker<ID, ITEM_DETAIL> stocker = FlutterArtist
+                .storage._stockersManager
+                ._findStocker<ID, ITEM_DETAIL>(itmType: ITEM_DETAIL);
             //
+            methodName = "stocker.loadById";
             __callApiLoadItemDetailByIdCount++;
-            ApiResult<ITEM_DETAIL> result = await callApiLoadItemDetailById(
-              itemId: itemId,
+            ApiResult<ITEM_DETAIL> result = await stocker.loadById(
+              id: itemId,
             );
             // Throw ApiError:
             result.throwIfError();
@@ -1404,7 +1420,7 @@ abstract class Block<
             //
             AppError appError = _handleError(
               shelf: shelf,
-              methodName: "callApiLoadItemDetailById",
+              methodName: methodName,
               error: e,
               stackTrace: stackTrace,
               showSnackBar: true,
@@ -1603,13 +1619,21 @@ abstract class Block<
     //
     final bool isCurrent = isCurrentItem(item: item);
     //
+    String? methodName;
     ApiResult<void> result;
     try {
+      // This may throw error
+      final Stocker<ID, ITEM_DETAIL> stocker = FlutterArtist
+          .storage._stockersManager
+          ._findStocker<ID, ITEM_DETAIL>(itmType: ITEM_DETAIL);
+      //
+      methodName = "stocker.deleteById";
+      //
       FlutterArtist.codeFlowLogger._addMethodCall(
         isLibCode: false,
         navigate: null,
         ownerClassInstance: this,
-        methodName: "callApiDeleteItemById",
+        methodName: methodName,
         parameters: {
           "item": item,
         },
@@ -1618,7 +1642,7 @@ abstract class Block<
       final ID itemId = __getItemIdShowErr(item, showErr: true);
       __refreshDeletingState(isDeleting: true);
       //
-      result = await callApiDeleteItemById(itemId: itemId);
+      result = await stocker.deleteById(id: itemId);
       // Throw ApiError:
       result.throwIfError();
       //
@@ -1628,7 +1652,7 @@ abstract class Block<
     } catch (e, stackTrace) {
       AppError appError = _handleError(
         shelf: shelf,
-        methodName: "callApiDeleteItemById",
+        methodName: methodName,
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -1868,6 +1892,24 @@ abstract class Block<
     //
     bool currentItemDeleted = false;
     //
+    String? methodName;
+    final Stocker<ID, ITEM_DETAIL> stocker;
+    try {
+      // This may throw error
+      stocker = FlutterArtist.storage._stockersManager
+          ._findStocker<ID, ITEM_DETAIL>(itmType: ITEM_DETAIL);
+    } catch (e, stackTrace) {
+      AppError appError = _handleError(
+        shelf: shelf,
+        methodName: methodName,
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      //
+      return;
+    }
+    //
     for (ITEM delItem in [...items]) {
       ApiResult<void> result;
       try {
@@ -1886,7 +1928,7 @@ abstract class Block<
         siblingItem = findSiblingItem(item: delItem);
         __refreshDeletingState(isDeleting: true);
         //
-        result = await callApiDeleteItemById(itemId: deletingItemId);
+        result = await stocker.deleteById(id: deletingItemId);
         // Throw ApiError:
         result.throwIfError();
         //
@@ -1920,7 +1962,7 @@ abstract class Block<
       } catch (e, stackTrace) {
         AppError appError = _handleError(
           shelf: shelf,
-          methodName: "callApiDeleteItemById",
+          methodName: methodName,
           error: e,
           stackTrace: stackTrace,
           showSnackBar: false,
@@ -3314,9 +3356,6 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  // @_AbstractMethodAnnotation()
-  // ID getItemId(ITEM item);
-
   ID _getItemIdInternal(ITEM item) {
     return item.id;
   }
@@ -3358,18 +3397,18 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_AbstractMethodAnnotation()
-  Future<ApiResult<void>> callApiDeleteItemById({
-    required ID itemId,
-  });
+  // @_AbstractMethodAnnotation()
+  // Future<ApiResult<void>> callApiDeleteItemById({
+  //   required ID itemId,
+  // });
 
   // ***************************************************************************
   // ***************************************************************************
 
-  @_AbstractMethodAnnotation()
-  Future<ApiResult<ITEM_DETAIL>> callApiLoadItemDetailById({
-    required ID itemId,
-  });
+  // @_AbstractMethodAnnotation()
+  // Future<ApiResult<ITEM_DETAIL>> callApiLoadItemDetailById({
+  //   required ID itemId,
+  // });
 
   // ***************************************************************************
   // ***************************************************************************

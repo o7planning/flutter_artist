@@ -31,6 +31,21 @@ class _BlockItemsViewBuilderState
   RefreshableWidgetType get type => RefreshableWidgetType.blockItemsView;
 
   @override
+  bool get isScalarRepresentative {
+    return false;
+  }
+
+  @override
+  bool get isBlockRepresentative {
+    return true;
+  }
+
+  @override
+  bool get isItemRepresentative {
+    return false;
+  }
+
+  @override
   void addWidgetState({required bool isShowing}) {
     widget.block.ui._addBlockFragmentWidgetState(
       widgetState: this,
