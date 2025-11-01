@@ -61,10 +61,10 @@ class _XShelfSbQuery extends XShelf {
           queryHint = QryHint.force;
         }
       }
-      bool hasXActiveUI = block.ui.hasActiveUIComponent(
+      bool hasXBlockRep = block.ui.hasActiveUIComponentBlockRepresentative(
         alsoCheckChildren: true,
       );
-      if (hasXActiveUI) {
+      if (hasXBlockRep) {
         queryHint = QryHint.force;
       }
       //
@@ -85,10 +85,11 @@ class _XShelfSbQuery extends XShelf {
             break;
           }
           // @@@hasActiveBlockFragment
-          final hasXActiveUI = parentXBlock.block.ui.hasActiveUIComponent(
+          final hasXBlockRep =
+              parentXBlock.block.ui.hasActiveUIComponentBlockRepresentative(
             alsoCheckChildren: true,
           );
-          if (hasXActiveUI) {
+          if (hasXBlockRep) {
             if (parentXBlock.block.dataState == DataState.pending ||
                 parentXBlock.block.dataState == DataState.error) {
               parentXBlock.setQueryHintToGreater(QryHint.force);

@@ -11,17 +11,18 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
         continue;
       }
       // @@@hasActiveBlockFragment
-      bool blockXVisible = xBlk.block.ui.hasActiveUIComponent(
+      bool blockXBlockRep =
+          xBlk.block.ui.hasActiveUIComponentBlockRepresentative(
         alsoCheckChildren: true,
       );
       print(
-          "~~~~~~~~~~~~~~~~> _XShelfShelfExternalReaction / ${xBlk.block} - blockXVisible: $blockXVisible");
+          "~~~~~~~~~~~~~~~~> _XShelfShelfExternalReaction / ${xBlk.block} - blockXBlockRep: $blockXBlockRep");
       QryHint queryHint = QryHint.none;
       bool forceReloadItem = false;
       //
       if (xBlk._blockReQryCon != null &&
           xBlk.block._isMatchBlockReQryCon(xBlk._blockReQryCon)) {
-        queryHint = blockXVisible ? QryHint.force : QryHint.markAsPending;
+        queryHint = blockXBlockRep ? QryHint.force : QryHint.markAsPending;
       }
       if (xBlk._blockItemRefreshCon != null &&
           xBlk.block._isMatchBlockItemRefreshCon(xBlk._blockItemRefreshCon)) {
@@ -39,10 +40,11 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
           break;
         }
         // @@@hasActiveBlockFragment
-        bool hasXActiveUI = xBlock.block.ui.hasActiveUIComponent(
+        bool blockXBlockRep =
+            xBlock.block.ui.hasActiveUIComponentBlockRepresentative(
           alsoCheckChildren: true,
         );
-        if (hasXActiveUI) {
+        if (blockXBlockRep) {
           if (xBlock.block.dataState == DataState.pending ||
               xBlock.block.dataState == DataState.error) {
             xBlock.setQueryHintToGreater(QryHint.force);

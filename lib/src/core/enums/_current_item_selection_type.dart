@@ -1,8 +1,8 @@
 enum CurrentItemSelectionType {
   doNothing,
-  selectAnItemAsCurrentIfNeed, // DEFAULT.
-  selectAnItemAsCurrent,
-  selectAnItemAsCurrentAndLoadForm,
+  setAnItemAsCurrentIfNeed, // DEFAULT.
+  setAnItemAsCurrent,
+  setAnItemAsCurrentAndLoadForm,
   refresh;
 }
 

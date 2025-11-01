@@ -299,7 +299,7 @@ _ForceReloadItemState _calculateBlockState({
         }
       }
     /* ---------------------------------------------------------------------*/
-    case CurrentItemSelectionType.selectAnItemAsCurrentIfNeed:
+    case CurrentItemSelectionType.setAnItemAsCurrentIfNeed:
       DebugPrinter.printDebug(DebugCat.dataLoad,
           "@~~~> ${getClassName(block)} ~~~~~> ITM 1: currentItemSelectionType: ${currentItemSelectionType.name}");
       //
@@ -585,7 +585,7 @@ _ForceReloadItemState _calculateBlockState({
         }
       }
     /* ---------------------------------------------------------------------*/
-    case CurrentItemSelectionType.selectAnItemAsCurrent:
+    case CurrentItemSelectionType.setAnItemAsCurrent:
       DebugPrinter.printDebug(DebugCat.dataLoad,
           "@~~~> ${getClassName(block)} ~~~~~> ITM 2: currentItemSelectionType: ${currentItemSelectionType.name}");
       //
@@ -871,7 +871,7 @@ _ForceReloadItemState _calculateBlockState({
         }
       }
     /* ---------------------------------------------------------------------*/
-    case CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm:
+    case CurrentItemSelectionType.setAnItemAsCurrentAndLoadForm:
       DebugPrinter.printDebug(DebugCat.dataLoad,
           "@~~~> ${getClassName(block)} ~~~~~> ITM 3: currentItemSelectionType: ${currentItemSelectionType.name}");
       //

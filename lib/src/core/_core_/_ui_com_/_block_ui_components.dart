@@ -77,6 +77,26 @@ class _BlockUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  bool hasActiveUIComponentBlockRepresentative({
+    bool alsoCheckChildren = false,
+  }) {
+    String? componentName = _findActiveUIComponentWithRepresentativeType(
+      representativeType: RepresentativeType.blockRepresentative,
+      alsoCheckChildren: alsoCheckChildren,
+    );
+    return componentName != null;
+  }
+
+  bool hasActiveUIComponentItemRepresentative({
+    bool alsoCheckChildren = false,
+  }) {
+    String? componentName = _findActiveUIComponentWithRepresentativeType(
+      representativeType: RepresentativeType.itemRepresentative,
+      alsoCheckChildren: alsoCheckChildren,
+    );
+    return componentName != null;
+  }
+
   bool hasActiveUIComponent({bool alsoCheckChildren = false}) {
     String? componentName = findActiveUIComponent(
       alsoCheckChildren: alsoCheckChildren,
@@ -85,13 +105,31 @@ class _BlockUIComponents extends _UIComponents {
   }
 
   String? findActiveUIComponent({bool alsoCheckChildren = false}) {
-    return findActiveUIComponentWithRepresentativeType(
+    return _findActiveUIComponentWithRepresentativeType(
       representativeType: null,
       alsoCheckChildren: alsoCheckChildren,
     );
   }
 
-  String? findActiveUIComponentWithRepresentativeType({
+  String? findActiveUIComponentBlockRepresentative({
+    bool alsoCheckChildren = false,
+  }) {
+    return _findActiveUIComponentWithRepresentativeType(
+      representativeType: RepresentativeType.blockRepresentative,
+      alsoCheckChildren: alsoCheckChildren,
+    );
+  }
+
+  String? findActiveUIComponentItemRepresentative({
+    bool alsoCheckChildren = false,
+  }) {
+    return _findActiveUIComponentWithRepresentativeType(
+      representativeType: RepresentativeType.itemRepresentative,
+      alsoCheckChildren: alsoCheckChildren,
+    );
+  }
+
+  String? _findActiveUIComponentWithRepresentativeType({
     required RepresentativeType? representativeType,
     bool alsoCheckChildren = false,
   }) {
@@ -99,14 +137,14 @@ class _BlockUIComponents extends _UIComponents {
     //
     // Filter
     //
-    if (block.filterModel != null) {
-      has = block.filterModel!.ui.hasActiveUIComponentWithRepresentativeType(
-        representativeType: representativeType,
-      );
-      if (has) {
-        return getClassNameWithoutGenerics(block.filterModel);
-      }
-    }
+    // if (block.filterModel != null) {
+    //   has = block.filterModel!.ui.hasActiveUIComponentWithRepresentativeType(
+    //     representativeType: representativeType,
+    //   );
+    //   if (has) {
+    //     return getClassNameWithoutGenerics(block.filterModel);
+    //   }
+    // }
     //
     // Sort
     //
@@ -181,7 +219,7 @@ class _BlockUIComponents extends _UIComponents {
     if (alsoCheckChildren) {
       for (Block childBlock in block._childBlocks) {
         componentName =
-            childBlock.ui.findActiveUIComponentWithRepresentativeType(
+            childBlock.ui._findActiveUIComponentWithRepresentativeType(
           representativeType: representativeType,
           alsoCheckChildren: alsoCheckChildren,
         );
@@ -424,22 +462,26 @@ class _BlockUIComponents extends _UIComponents {
     required _RefreshableWidgetState widgetState,
     required bool isShowing,
   }) {
-    bool activeOLD = hasActiveUIComponent();
+    bool blockXBlockRepOLD = hasActiveUIComponentBlockRepresentative(
+      alsoCheckChildren: true,
+    );
     __blockControlBarWidgetStates.update(
       widgetState,
       (xState) => xState.._setShowing(isShowing),
       ifAbsent: () => XState().._setShowing(isShowing),
     );
-    bool activeCURRENT = hasActiveUIComponent();
+    bool blockXBlockRepCURRENT = hasActiveUIComponentBlockRepresentative(
+      alsoCheckChildren: true,
+    );
     //
     if (isShowing) {
       FlutterArtist.storage._addRecentShelf(block.shelf);
     }
     //
-    if (!activeOLD && activeCURRENT) {
+    if (!blockXBlockRepOLD && blockXBlockRepCURRENT) {
       // Fire event:
       block.shelf._startLoadDataForLazyUIComponentsIfNeed();
-    } else if (activeOLD && !activeCURRENT) {
+    } else if (blockXBlockRepOLD && !blockXBlockRepCURRENT) {
       block._fireBlockHidden();
     }
   }
@@ -460,22 +502,26 @@ class _BlockUIComponents extends _UIComponents {
     required _RefreshableWidgetState widgetState,
     required bool isShowing,
   }) {
-    bool activeOLD = hasActiveUIComponent();
+    bool blockXBlockRepOLD = hasActiveUIComponentBlockRepresentative(
+      alsoCheckChildren: true,
+    );
     __controlWidgetStates.update(
       widgetState,
       (xState) => xState.._setShowing(isShowing),
       ifAbsent: () => XState().._setShowing(isShowing),
     );
-    bool activeCURRENT = hasActiveUIComponent();
+    bool blockXBlockRepCURRENT = hasActiveUIComponentBlockRepresentative(
+      alsoCheckChildren: true,
+    );
     //
     if (isShowing) {
       FlutterArtist.storage._addRecentShelf(block.shelf);
     }
     //
-    if (!activeOLD && activeCURRENT) {
+    if (!blockXBlockRepOLD && blockXBlockRepCURRENT) {
       // Fire event:
       block.shelf._startLoadDataForLazyUIComponentsIfNeed();
-    } else if (activeOLD && !activeCURRENT) {
+    } else if (blockXBlockRepOLD && !blockXBlockRepCURRENT) {
       block._fireBlockHidden();
     }
   }
@@ -496,22 +542,26 @@ class _BlockUIComponents extends _UIComponents {
     required _RefreshableWidgetState widgetState,
     required bool isShowing,
   }) {
-    bool activeOLD = hasActiveUIComponent();
+    bool hasXBlockRepOLD = hasActiveUIComponentBlockRepresentative(
+      alsoCheckChildren: true,
+    );
     __blockFragmentWidgetStates.update(
       widgetState,
       (xState) => xState.._setShowing(isShowing),
       ifAbsent: () => XState().._setShowing(isShowing),
     );
-    bool activeCURRENT = hasActiveUIComponent();
+    bool hasXBlockRepCURRENT = hasActiveUIComponentBlockRepresentative(
+      alsoCheckChildren: true,
+    );
     //
     if (isShowing) {
       FlutterArtist.storage._addRecentShelf(block.shelf);
     }
     //
-    if (!activeOLD && activeCURRENT) {
+    if (!hasXBlockRepOLD && hasXBlockRepCURRENT) {
       // Fire event:
       block.shelf._startLoadDataForLazyUIComponentsIfNeed();
-    } else if (activeOLD && !activeCURRENT) {
+    } else if (hasXBlockRepOLD && !hasXBlockRepCURRENT) {
       block._fireBlockHidden();
     }
   }

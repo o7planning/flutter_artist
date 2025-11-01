@@ -31,10 +31,11 @@ class _XShelfShelfNaturalQuery extends _XShelfSbQuery {
           break;
         }
         // @@@hasActiveBlockFragment
-        bool hasXActiveUI = xBlock.block.ui.hasActiveUIComponent(
+        bool blockXBlockRep =
+            xBlock.block.ui.hasActiveUIComponentBlockRepresentative(
           alsoCheckChildren: true,
         );
-        if (hasXActiveUI) {
+        if (blockXBlockRep) {
           if (xBlock.block.dataState == DataState.pending ||
               xBlock.block.dataState == DataState.error) {
             xBlock.setQueryHintToGreater(QryHint.force);

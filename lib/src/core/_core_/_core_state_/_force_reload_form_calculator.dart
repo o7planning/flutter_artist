@@ -390,7 +390,7 @@ _ForceReloadFormState _calculateFormState({
           }
         }
       /* ---------------------------------------------------------------------*/
-      case CurrentItemSelectionType.selectAnItemAsCurrentIfNeed:
+      case CurrentItemSelectionType.setAnItemAsCurrentIfNeed:
         DebugPrinter.printDebug(DebugCat.dataLoad,
             "@~~~> ${getClassName(block)} ~~~~~> FRM 1: currentItemSelectionType: ${currentItemSelectionType.name}");
         //
@@ -747,7 +747,7 @@ _ForceReloadFormState _calculateFormState({
           }
         }
       /* ---------------------------------------------------------------------*/
-      case CurrentItemSelectionType.selectAnItemAsCurrent:
+      case CurrentItemSelectionType.setAnItemAsCurrent:
         DebugPrinter.printDebug(DebugCat.dataLoad,
             "@~~~> ${getClassName(block)} ~~~~~> FRM 2: currentItemSelectionType: ${currentItemSelectionType.name}");
         //
@@ -1093,7 +1093,7 @@ _ForceReloadFormState _calculateFormState({
           }
         }
       /* ---------------------------------------------------------------------*/
-      case CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm:
+      case CurrentItemSelectionType.setAnItemAsCurrentAndLoadForm:
         DebugPrinter.printDebug(DebugCat.dataLoad,
             "@~~~> ${getClassName(block)} ~~~~~> FRM 3: currentItemSelectionType: ${currentItemSelectionType.name}");
         //

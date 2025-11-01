@@ -18,19 +18,39 @@ class BlockDebugBox extends BaseDebugBox {
 
   @override
   List<Widget> getChildIconLabelTexts() {
-    String? activeUI = block.ui.findActiveUIComponent();
-    String? xActiveUI = block.ui.findActiveUIComponent(alsoCheckChildren: true);
+    String? activeUIBlockRep = block.ui.findActiveUIComponentBlockRepresentative();
+    String? xActiveUIIBlockRep = block.ui.findActiveUIComponentBlockRepresentative(
+      alsoCheckChildren: true,
+    );
+    //
+    String? activeUIItemRep = block.ui.findActiveUIComponentItemRepresentative();
+    String? xActiveUIItemRep = block.ui.findActiveUIComponentItemRepresentative(
+      alsoCheckChildren: true,
+    );
     return [
       if (options.showUIActive)
         ActiveInfoWidget(
-          activeUIComponentName: activeUI,
-          xActiveUIComponentName: xActiveUI,
+          activeElementType: ActiveElementType.block,
+          activeUIComponentName: activeUIBlockRep,
+          xActiveUIComponentName: xActiveUIIBlockRep,
           labelStyle: labelStyle0,
           textStyle: textStyle0,
           checkAgain: () {
             //
           },
         ),
+      if (options.showUIActive)
+        ActiveInfoWidget(
+          activeElementType: ActiveElementType.item,
+          activeUIComponentName: activeUIItemRep,
+          xActiveUIComponentName: xActiveUIItemRep,
+          labelStyle: labelStyle0,
+          textStyle: textStyle0,
+          checkAgain: () {
+            //
+          },
+        ),
+
       if (options.showLastQueryType)
         IconLabelText(
           label: "Last Query Type: ",

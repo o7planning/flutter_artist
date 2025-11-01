@@ -715,15 +715,18 @@ abstract class Block<
   Future<void> _unitQuery({required XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
     //
-    bool hasActiveUI = this.ui.hasActiveUIComponent(alsoCheckChildren: true);
+    bool hasBlockRepresentative =
+        this.ui.hasActiveUIComponentBlockRepresentative(
+              alsoCheckChildren: true,
+            );
     QryHint queryHint = thisXBlock.queryHint;
     if (queryHint != QryHint.force) {
-      if (this.dataState != DataState.ready && hasActiveUI) {
+      if (this.dataState != DataState.ready && hasBlockRepresentative) {
         queryHint = QryHint.force;
       }
     }
     //
-    thisXBlock._printParameters(hasActiveUI: hasActiveUI);
+    thisXBlock._printParameters(hasBlockRepresentative: hasBlockRepresentative);
     //
     final callApiQueryMethod = BlockErrorMethod.callApiQuery;
     DataState newBlockDataState = this.dataState;
@@ -787,7 +790,7 @@ abstract class Block<
     }
     //
     // FORCE QUERY:
-    // thisXBlock.queryHint || (hasActiveUI && this.dataState != DataState.ready)
+    // thisXBlock.queryHint || (hasBlockRepresentative && this.dataState != DataState.ready)
     //
     FILTER_CRITERIA? filterCriteriaOfFilterModel;
     try {
@@ -1103,11 +1106,13 @@ abstract class Block<
         afterQueryAction = AfterQueryAction.doNothing;
       }
     }
+    if (afterQueryAction == AfterQueryAction.setAnItemAsCurrentIfNeed) {
+      // afterQueryAction = AfterQueryAction.doNothingIfPossible;
+    }
     print(
         "   >>> ${getClassName(this)}    @@@@@@@@@ queryHint: $queryHint >>> afterQueryAction: $afterQueryAction");
     //
-    // Add TaskUnit:
-    // - Find Item to Select as Current:
+    // Begin AfterQueryAction
     //
     if (afterQueryAction == AfterQueryAction.clearCurrentItem) {
       thisXBlock.xShelf._addTaskUnit(
@@ -1115,6 +1120,7 @@ abstract class Block<
           xBlock: thisXBlock,
         ),
       );
+      return;
     } else if (afterQueryAction == AfterQueryAction.createNewItem) {
       thisXBlock.xShelf._addTaskUnit(
         taskUnit: _BlockPrepareFormToCreateItemTaskUnit(
@@ -1124,44 +1130,42 @@ abstract class Block<
           navigate: null,
         ),
       );
-    } else {
-      // If "Lazy Load" is natural, and Form in "creation" mode
-      //  ==> Do not "select an item as current".
-      if (thisXBlock.xShelf.naturalMode && formMode == FormMode.creation) {
-        // Do nothing.
-        // Test Case: [38b].
-      } else {
-        final CurrentItemSelectionType currentItemSelectionType;
-        switch (afterQueryAction) {
-          case AfterQueryAction.doNothing:
-            currentItemSelectionType = CurrentItemSelectionType.doNothing;
-          case AfterQueryAction.setAnItemAsCurrentIfNeed:
-            currentItemSelectionType =
-                CurrentItemSelectionType.selectAnItemAsCurrentIfNeed;
-          case AfterQueryAction.setAnItemAsCurrent:
-            currentItemSelectionType =
-                CurrentItemSelectionType.selectAnItemAsCurrent;
-          case AfterQueryAction.setAnItemAsCurrentThenLoadForm:
-            currentItemSelectionType =
-                CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm;
-          case AfterQueryAction.clearCurrentItem:
-            throw UnimplementedError("Never Run");
-          case AfterQueryAction.createNewItem:
-            throw UnimplementedError("Never Run");
-        }
-        //
-        thisXBlock.xShelf._addTaskUnit(
-          taskUnit: _BlockSelectAsCurrentTaskUnit<ID, ITEM>(
-            currentItemSelectionType: currentItemSelectionType,
-            xBlock: thisXBlock,
-            newQueriedList: pageData?.items ?? [],
-            candidateItem: candidateCurrItem,
-            forceReloadItem: false,
-            forceTypeForForm: null,
-          ),
-        );
-      }
+      return;
     }
+    if (thisXBlock.xShelf.naturalMode && formMode == FormMode.creation) {
+      // Do nothing.
+      // Test Case: [38b].
+      return;
+    }
+    //
+    final CurrentItemSelectionType currentItemSelectionType;
+    switch (afterQueryAction) {
+      case AfterQueryAction.clearCurrentItem:
+        throw UnimplementedError("Never ran. Handled above.");
+      case AfterQueryAction.createNewItem:
+        throw UnimplementedError("Never ran. Handled above.");
+      case AfterQueryAction.doNothing:
+        currentItemSelectionType = CurrentItemSelectionType.doNothing;
+      case AfterQueryAction.setAnItemAsCurrentIfNeed:
+        currentItemSelectionType =
+            CurrentItemSelectionType.setAnItemAsCurrentIfNeed;
+      case AfterQueryAction.setAnItemAsCurrent:
+        currentItemSelectionType = CurrentItemSelectionType.setAnItemAsCurrent;
+      case AfterQueryAction.setAnItemAsCurrentThenLoadForm:
+        currentItemSelectionType =
+            CurrentItemSelectionType.setAnItemAsCurrentAndLoadForm;
+    }
+    //
+    thisXBlock.xShelf._addTaskUnit(
+      taskUnit: _BlockSelectAsCurrentTaskUnit<ID, ITEM>(
+        currentItemSelectionType: currentItemSelectionType,
+        xBlock: thisXBlock,
+        newQueriedList: pageData?.items ?? [],
+        candidateItem: candidateCurrItem,
+        forceReloadItem: false,
+        forceTypeForForm: null,
+      ),
+    );
   }
 
   // ***************************************************************************
@@ -1245,12 +1249,28 @@ abstract class Block<
     //
     final bool currItemChanged;
     if (currItem == null) {
-      int? suggestIdx = specifyItemIndexToSelectAsCurrent();
-      if (suggestIdx != null && suggestIdx >= 0 && suggestIdx < itemCount) {
-        candidateCurrItem = candidateCurrItem ?? items[suggestIdx];
+      if (candidateCurrItem == null) {
+        // If UI Component Active need an ITEM-load.
+        bool hasItemRep = ui.hasActiveUIComponentItemRepresentative(
+          alsoCheckChildren: true,
+        );
+        if ((currentItemSelectionType !=
+                    CurrentItemSelectionType.setAnItemAsCurrentIfNeed &&
+                currentItemSelectionType !=
+                    CurrentItemSelectionType.doNothing) ||
+            hasItemRep) {
+          int? suggestIdx = specifyItemIndexToSelectAsCurrent();
+          if (suggestIdx != null && suggestIdx >= 0 && suggestIdx < itemCount) {
+            candidateCurrItem = candidateCurrItem ?? items[suggestIdx];
+          }
+          candidateCurrItem = candidateCurrItem ?? firstItem;
+          currItemChanged = candidateCurrItem != null;
+        } else {
+          currItemChanged = false;
+        }
+      } else {
+        currItemChanged = true;
       }
-      candidateCurrItem = candidateCurrItem ?? firstItem;
-      currItemChanged = candidateCurrItem != null;
     }
     // currItem != null
     else {
@@ -1280,11 +1300,9 @@ abstract class Block<
     //
     if (candidateCurrItem == null) {
       print("        ~~~~~~~> candidateCurrItem == null - [$name]");
-      this.__clearWithDataStateAndChildrenToNonCascade(
+      // Test Cases: [74a].
+      this.__clearAllChildrenBlocksToNone(
         thisXBlock: thisXBlock,
-        blkDataState: DataState.ready,
-        frmDataState: DataState.none,
-        errorInFilter: false,
       );
       return;
     }
@@ -1308,9 +1326,13 @@ abstract class Block<
     //
     // This block has UI Active (Or child block has UI Active).
     //
-    final bool hasXActiveUI = ui.hasActiveUIComponent(alsoCheckChildren: true);
-    //
-    thisXBlock._printParameters(hasActiveUI: hasXActiveUI); // ---> Debug
+    final bool hasXBlockRep = ui.hasActiveUIComponentBlockRepresentative(
+      alsoCheckChildren: true,
+    );
+    // ---> Debug.
+    thisXBlock._printParameters(
+      hasBlockRepresentative: hasXBlockRep,
+    );
     bool originForceReloadItem = thisXBlock.forceReloadCurrItem;
     bool forceReloadItem = thisXBlock.forceReloadCurrItem;
     bool forceReloadForm = false;
@@ -1322,7 +1344,7 @@ abstract class Block<
     if (!forceReloadItem) {
       _ForceReloadItemState blkState = _calculateBlockState(
         thisXBlock: thisXBlock,
-        hasXActiveUI: hasXActiveUI,
+        hasXActiveUI: hasXBlockRep,
         currentItemSelectionType: currentItemSelectionType,
         isCandidateCurrentItemInNewQueriedList:
             isCandidateCurrentItemInNewQueriedList,
@@ -1550,7 +1572,7 @@ abstract class Block<
         item: candidateCurrItem,
         itemDetail: refreshedCurrentItemDetail,
       );
-      // (On _unitSelectItemAsCurrent method).
+      // (On _unitSetItemAsCurrent method).
       // candidateCurrItem != null.
       if (currItemChanged) {
         currentItemSelectionResult._currentItem = candidateCurrItem;
@@ -1726,7 +1748,7 @@ abstract class Block<
     // Fire Internal Event.
     //
     final currentItemSelectionType =
-        CurrentItemSelectionType.selectAnItemAsCurrentIfNeed;
+        CurrentItemSelectionType.setAnItemAsCurrentIfNeed;
     thisXBlock.setCurrentItemSelectionType(currentItemSelectionType);
     //
     final bool hasInternalEvent = _internalEffectedShelfMembers.hasMember();
@@ -2011,7 +2033,7 @@ abstract class Block<
     }
     _STaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ID, ITEM>(
       currentItemSelectionType:
-          CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
+          CurrentItemSelectionType.setAnItemAsCurrentIfNeed,
       xBlock: thisXBlock,
       newQueriedList: <ITEM>[],
       candidateItem: siblingItem,
@@ -2885,8 +2907,8 @@ abstract class Block<
     );
     //
     final currentItemSelectionType = forceForm
-        ? CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm
-        : CurrentItemSelectionType.selectAnItemAsCurrent;
+        ? CurrentItemSelectionType.setAnItemAsCurrentAndLoadForm
+        : CurrentItemSelectionType.setAnItemAsCurrent;
     //
     // @Same-Code-Precheck-01
     //
@@ -4746,8 +4768,10 @@ abstract class Block<
         errCode: BlockClearancePrecheck.busy,
       );
     }
-    bool hasActiveUI = ui.hasActiveUIComponent(alsoCheckChildren: true);
-    if (hasActiveUI) {
+    bool hasBlockRep = ui.hasActiveUIComponentBlockRepresentative(
+      alsoCheckChildren: true,
+    );
+    if (hasBlockRep) {
       return Actionable<BlockClearancePrecheck>.no(
         errCode: BlockClearancePrecheck.hasActiveUI,
       );

@@ -8,7 +8,6 @@ enum AfterQueryAction {
   clearCurrentItem,
 
   /// Create new Item.
-  @Deprecated("Xoa di?")
   createNewItem,
 
   /// Default behavior.
@@ -29,11 +28,11 @@ enum AfterQueryAction {
       case AfterQueryAction.createNewItem:
         return CurrentItemSelectionType.doNothing;
       case AfterQueryAction.setAnItemAsCurrentIfNeed:
-        return CurrentItemSelectionType.selectAnItemAsCurrentIfNeed;
+        return CurrentItemSelectionType.setAnItemAsCurrentIfNeed;
       case AfterQueryAction.setAnItemAsCurrent:
-        return CurrentItemSelectionType.selectAnItemAsCurrent;
+        return CurrentItemSelectionType.setAnItemAsCurrent;
       case AfterQueryAction.setAnItemAsCurrentThenLoadForm:
-        return CurrentItemSelectionType.selectAnItemAsCurrentAndLoadForm;
+        return CurrentItemSelectionType.setAnItemAsCurrentAndLoadForm;
     }
   }
 }

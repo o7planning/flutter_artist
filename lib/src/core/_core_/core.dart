@@ -199,6 +199,8 @@ part '_sorting_/_sort_model_builder.dart';
 
 part '__core__/_storage_core.dart';
 
+part '__core__/_storage_structure.dart';
+
 part '__core__/_stockers_manager.dart';
 
 part '__core__/_stocker.dart';

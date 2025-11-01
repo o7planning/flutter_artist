@@ -24,6 +24,7 @@ class ScalarDebugBox extends BaseDebugBox {
     return [
       if (options.showUIActive)
         ActiveInfoWidget(
+          activeElementType: ActiveElementType.scalar,
           activeUIComponentName: activeUI,
           xActiveUIComponentName: xActiveUI,
           labelStyle: labelStyle0,

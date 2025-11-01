@@ -218,20 +218,23 @@ abstract class XShelf {
       final Block? refreshCurrBlock =
           effectedShelfMembers._refreshCurrItmBlockMAP[listenerBlkName];
       //
-      bool blockVisible = false;
+      bool hasXBlockRep = false;
+      bool hasXItemRep = false;
+      //  bool blockVisible = false;
       QryHint queryHint = QryHint.none;
       bool forceReloadCurrItem = false;
       //
       if (reQryBlock != null) {
         // @@@hasActiveBlockFragment
-        blockVisible = reQryBlock.ui.hasActiveUIComponent(
+        hasXBlockRep = reQryBlock.ui.hasActiveUIComponentBlockRepresentative(
           alsoCheckChildren: true,
         );
-        queryHint = blockVisible ? QryHint.force : QryHint.markAsPending;
+        queryHint = hasXBlockRep ? QryHint.force : QryHint.markAsPending;
       }
       if (refreshCurrBlock != null) {
         // @@@hasActiveBlockFragment
-        blockVisible = refreshCurrBlock.ui.hasActiveUIComponent(
+        hasXItemRep =
+            refreshCurrBlock.ui.hasActiveUIComponentItemRepresentative(
           alsoCheckChildren: true,
         );
         forceReloadCurrItem = true;
@@ -267,10 +270,11 @@ abstract class XShelf {
           break;
         }
         // @@@hasActiveBlockFragment
-        bool hasXActiveUI = xBlock.block.ui.hasActiveUIComponent(
+        bool hasXBlockRep =
+            xBlock.block.ui.hasActiveUIComponentBlockRepresentative(
           alsoCheckChildren: true,
         );
-        if (hasXActiveUI) {
+        if (hasXBlockRep) {
           if (xBlock.block.dataState == DataState.pending ||
               xBlock.block.dataState == DataState.error) {
             xBlock.setQueryHintToGreater(QryHint.force);

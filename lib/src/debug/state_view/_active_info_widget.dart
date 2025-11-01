@@ -1,15 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
+enum ActiveElementType {
+  block,
+  item,
+  scalar;
+
+
+  String shortInf() {
+    switch (this) {
+      case ActiveElementType.block:
+        return "B";
+      case ActiveElementType.item:
+        return "I";
+      case ActiveElementType.scalar:
+        return "S";
+    }
+  }
+}
+
 class ActiveInfoWidget extends StatelessWidget {
   final TextStyle labelStyle;
   final TextStyle textStyle;
+  final ActiveElementType activeElementType;
   final String? activeUIComponentName;
   final String? xActiveUIComponentName;
   final Function() checkAgain;
 
   const ActiveInfoWidget({
     super.key,
+    required this.activeElementType,
     required this.activeUIComponentName,
     required this.xActiveUIComponentName,
     required this.labelStyle,
@@ -31,7 +51,7 @@ class ActiveInfoWidget extends StatelessWidget {
                     ? "Active UI: $xActiveUIComponentName"
                     : "",
             child: IconLabelText(
-              label: "UI Active / XActive?: ",
+              label: "UI A/XActive? (${activeElementType.shortInf()}): ",
               text:
                   "${activeUIComponentName != null} / ${xActiveUIComponentName != null}",
               labelStyle: labelStyle,
