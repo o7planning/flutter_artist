@@ -10,10 +10,12 @@ abstract class BlockItemsView<
         ExtraFormInput>> extends StatelessWidget {
   final BLOCK block;
   final QuickSuggestionMode quickSuggestionMode;
+  final bool itemRepresentative;
 
   const BlockItemsView({
     required this.block,
     this.quickSuggestionMode = QuickSuggestionMode.showIfError,
+    this.itemRepresentative = false,
     super.key,
   });
 
@@ -24,6 +26,7 @@ abstract class BlockItemsView<
       ownerClassInstance: this,
       description: '',
       block: block,
+      itemRepresentative: itemRepresentative,
       quickSuggestionMode: quickSuggestionMode,
       build: () {
         return buildContent(context);

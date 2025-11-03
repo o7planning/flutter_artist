@@ -1153,7 +1153,7 @@ abstract class Block<
         currentItemSelectionType = CurrentItemSelectionType.setAnItemAsCurrent;
       case AfterQueryAction.setAnItemAsCurrentThenLoadForm:
         currentItemSelectionType =
-            CurrentItemSelectionType.setAnItemAsCurrentAndLoadForm;
+            CurrentItemSelectionType.setAnItemAsCurrentThenLoadForm;
     }
     //
     thisXBlock.xShelf._addTaskUnit(
@@ -1254,16 +1254,36 @@ abstract class Block<
         bool hasItemRep = ui.hasActiveUIComponentItemRepresentative(
           alsoCheckChildren: true,
         );
-        if ((currentItemSelectionType !=
-                    CurrentItemSelectionType.setAnItemAsCurrentIfNeed &&
-                currentItemSelectionType !=
-                    CurrentItemSelectionType.doNothing) ||
-            hasItemRep) {
-          int? suggestIdx = specifyItemIndexToSelectAsCurrent();
-          if (suggestIdx != null && suggestIdx >= 0 && suggestIdx < itemCount) {
-            candidateCurrItem = candidateCurrItem ?? items[suggestIdx];
-          }
-          candidateCurrItem = candidateCurrItem ?? firstItem;
+        //
+        ITEM? candidateCurrItem2 = candidateCurrItem;
+        int? suggestIdx = specifyItemIndexToSelectAsCurrent();
+        if (suggestIdx != null && suggestIdx >= 0 && suggestIdx < itemCount) {
+          candidateCurrItem2 = candidateCurrItem2 ?? items[suggestIdx];
+        }
+        candidateCurrItem2 = candidateCurrItem2 ?? firstItem;
+
+        final bool isInNewQueryList2;
+        if (candidateCurrItem2 == null) {
+          isInNewQueryList2 = false;
+        } else {
+          isInNewQueryList2 = ItemsUtils.isListContainItem(
+            targetList: newQueriedList,
+            item: candidateCurrItem2,
+            getItemId: _getItemIdInternal,
+          );
+        }
+        //
+        if (hasItemRep ||
+            currentItemSelectionType ==
+                CurrentItemSelectionType.setAnItemAsCurrent ||
+            currentItemSelectionType ==
+                CurrentItemSelectionType.setAnItemAsCurrentThenLoadForm) {
+          candidateCurrItem = candidateCurrItem2;
+          currItemChanged = candidateCurrItem != null;
+        } else if (currentItemSelectionType ==
+                CurrentItemSelectionType.setAnItemAsCurrentIfNeed &&
+            (ITEM == ITEM_DETAIL && isInNewQueryList2)) {
+          candidateCurrItem = isInNewQueryList2 ? candidateCurrItem2 : null;
           currItemChanged = candidateCurrItem != null;
         } else {
           currItemChanged = false;
@@ -1339,7 +1359,6 @@ abstract class Block<
 
     DebugPrinter.printDebug(DebugCat.dataLoad,
         "\n@~~~> ${getClassName(this)} ~~~~~> ITM - originForceReloadItem: $originForceReloadItem.\n");
-
     //
     if (!forceReloadItem) {
       _ForceReloadItemState blkState = _calculateBlockState(
@@ -1390,15 +1409,8 @@ abstract class Block<
       final bool noChild = childBlocks.isEmpty;
       // Test Cases: [13a], [42a].
       if (ITEM == ITEM_DETAIL &&
-          noForm &&
-          noChild &&
-          (config.conditionToIgnoreItemRefreshWhileSelecting ==
-                  IgnoreItemRefreshCondition
-                      .itemSameItemDetailAndNoFormNoChild ||
-              (config.conditionToIgnoreItemRefreshWhileSelecting ==
-                      IgnoreItemRefreshCondition
-                          .itemSameItemDetailAndNoFormNoChildAndInNewQuery &&
-                  isCandidateCurrentItemInNewQueriedList))) {
+          config.itemRefreshMode == BlockItemRefreshMode.auto &&
+          isCandidateCurrentItemInNewQueriedList) {
         final ITEM? candidateCurrItemInNewQueriedList =
             ItemsUtils.findItemInList(
           item: candidateCurrItem,
@@ -2907,7 +2919,7 @@ abstract class Block<
     );
     //
     final currentItemSelectionType = forceForm
-        ? CurrentItemSelectionType.setAnItemAsCurrentAndLoadForm
+        ? CurrentItemSelectionType.setAnItemAsCurrentThenLoadForm
         : CurrentItemSelectionType.setAnItemAsCurrent;
     //
     // @Same-Code-Precheck-01
@@ -5310,7 +5322,7 @@ abstract class Block<
         );
       case FormMode.creation:
         if (formModel!.dataState == DataState.error) {
-          // TODO-XXX (Test case).
+          // Test Cases: [16a].
           if (!formModel!.formInitialDataReady) {
             return Actionable<BlockFormEnablementChkCode>.no(
               errCode: BlockFormEnablementChkCode.formInitialDataNotReady,
@@ -5319,6 +5331,14 @@ abstract class Block<
         }
         return Actionable<BlockFormEnablementChkCode>.yes();
       case FormMode.edit:
+        if (formModel!.dataState == DataState.error) {
+          // Test Cases: [16b].
+          if (!formModel!.formInitialDataReady) {
+            return Actionable<BlockFormEnablementChkCode>.no(
+              errCode: BlockFormEnablementChkCode.formInitialDataNotReady,
+            );
+          }
+        }
         if (checkAllow) {
           CheckAllowResult result = _isAllowUpdateItem(item: currentItem!);
           switch (result.result) {

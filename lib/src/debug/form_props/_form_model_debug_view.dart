@@ -39,7 +39,7 @@ class FormModelDebugView extends StatelessWidget {
           ),
           SizedBox(height: 5),
           IconLabelText(
-            label: "Initial Form Data Ready?: ",
+            label: "FormModel.formInitialDataReady?: ",
             text: "",
             suffixIcon: Icon(
               formModel.formInitialDataReady

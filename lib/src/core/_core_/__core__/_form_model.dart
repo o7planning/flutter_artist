@@ -51,7 +51,11 @@ abstract class FormModel<
       FILTER_CRITERIA,
       EXTRA_FORM_INPUT> block;
 
-  bool _defaultValueInitiated = false;
+  bool _defaultSimpleValuesInitiated = false;
+  bool _defaultMultiOptValuesInitiated = false;
+
+  bool get defaultSimpleValuesInitiated => _defaultSimpleValuesInitiated;
+  bool get defaultMultiOptValuesInitiated => _defaultMultiOptValuesInitiated;
 
   AutovalidateMode _autovalidateMode = AutovalidateMode.onUserInteraction;
 
@@ -524,7 +528,8 @@ abstract class FormModel<
     //
     if (activityType == FormActivityType.itemFirstLoad) {
       if (isNoneMode || isCreationMode) {
-        _defaultValueInitiated = false;
+        _defaultSimpleValuesInitiated = false;
+        _defaultMultiOptValuesInitiated = false;
       }
     }
     //
@@ -586,7 +591,7 @@ abstract class FormModel<
       else {
         Map<String, dynamic> simplePropValueDefault = {};
         Map<String, dynamic> simplePropValueExtra = {};
-        if (!_defaultValueInitiated) {
+        if (!_defaultSimpleValuesInitiated) {
           try {
             simplePropValueDefault = specifyDefaultSimplePropValues(
                   filterCriteria: blockCurrentFilterCriteria,
@@ -627,6 +632,7 @@ abstract class FormModel<
             return false;
           }
         }
+
         //
         if (extraFormInput != null) {
           try {
@@ -807,7 +813,7 @@ abstract class FormModel<
         newCurrentValue: _formPropsStructure.currentFormData,
       );
       //
-      _defaultValueInitiated = true;
+      // _defaultValueInitiated = true;
       _formPropsStructure._setFormDataState(
         formDataState: formDataState,
         error: error,
@@ -1013,7 +1019,7 @@ abstract class FormModel<
             );
             // TODO-XXX Test Case.
             if (initialValueWrap == null) {
-              if (!_defaultValueInitiated) {
+              if (!_defaultMultiOptValuesInitiated) {
                 // May throw FormTempError.
                 initialValueWrap = __specifyDefaultMultiOptPropValue(
                   multiOptPropName: multiOptPropName,
@@ -1024,7 +1030,7 @@ abstract class FormModel<
               }
             }
           } else {
-            if (!_defaultValueInitiated) {
+            if (!_defaultMultiOptValuesInitiated) {
               // May throw FormTempError.
               initialValueWrap = __specifyDefaultMultiOptPropValue(
                 multiOptPropName: multiOptPropName,

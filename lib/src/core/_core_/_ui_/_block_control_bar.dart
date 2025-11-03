@@ -37,7 +37,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
     return true;
   }
 
-  // Test Cases: [74a].
+  // Test Cases: [74b], [74d].
   @override
   bool get isItemRepresentative {
     // if (widget.config.allowDeleteButton || widget.config.allowRefreshButton) {

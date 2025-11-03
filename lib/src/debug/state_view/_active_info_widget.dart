@@ -6,7 +6,6 @@ enum ActiveElementType {
   item,
   scalar;
 
-
   String shortInf() {
     switch (this) {
       case ActiveElementType.block:

@@ -1093,7 +1093,7 @@ _ForceReloadFormState _calculateFormState({
           }
         }
       /* ---------------------------------------------------------------------*/
-      case CurrentItemSelectionType.setAnItemAsCurrentAndLoadForm:
+      case CurrentItemSelectionType.setAnItemAsCurrentThenLoadForm:
         DebugPrinter.printDebug(DebugCat.dataLoad,
             "@~~~> ${getClassName(block)} ~~~~~> FRM 3: currentItemSelectionType: ${currentItemSelectionType.name}");
         //

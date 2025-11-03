@@ -597,25 +597,9 @@ abstract class Shelf extends _Core {
     // IMPORTANT:
     //
     __lazyLoadLocked = true;
-
-    // await Future.doWhile(
-    //   () => Future.delayed(const Duration(milliseconds: 1))
-    //       .then((_) => FlutterArtist.executor.isBusy),
-    // );
-
     // New Code:
-    // await Future.delayed(Duration(microseconds: 200));
-
-    // New Code:
-    // SchedulerBinding binding = SchedulerBinding.instance;
-    // bool hasScheduledFrame = binding.hasScheduledFrame;
-    // if (hasScheduledFrame) {
-    //   await Future.doWhile(() async {
-    //     await Future.delayed(Duration.zero);
-    //     bool hasScheduledFrame2 = binding.hasScheduledFrame;
-    //     return hasScheduledFrame2;
-    //   });
-    // }
+    await Future.delayed(Duration(microseconds: 20));
+    //
     __lazyLoadId++;
     //
     await Future.delayed(

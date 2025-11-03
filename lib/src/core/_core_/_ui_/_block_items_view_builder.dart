@@ -4,12 +4,14 @@ class BlockItemsViewBuilder extends _RefreshableWidget {
   final Block block;
   final QuickSuggestionMode quickSuggestionMode;
   final Widget Function() build;
+  final bool itemRepresentative;
 
   const BlockItemsViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
     required this.block,
+    this.itemRepresentative = false,
     this.quickSuggestionMode = QuickSuggestionMode.showIfError,
     required this.build,
   });
@@ -42,7 +44,7 @@ class _BlockItemsViewBuilderState
 
   @override
   bool get isItemRepresentative {
-    return false;
+    return widget.itemRepresentative;
   }
 
   @override

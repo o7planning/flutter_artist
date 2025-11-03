@@ -32,7 +32,7 @@ enum AfterQueryAction {
       case AfterQueryAction.setAnItemAsCurrent:
         return CurrentItemSelectionType.setAnItemAsCurrent;
       case AfterQueryAction.setAnItemAsCurrentThenLoadForm:
-        return CurrentItemSelectionType.setAnItemAsCurrentAndLoadForm;
+        return CurrentItemSelectionType.setAnItemAsCurrentThenLoadForm;
     }
   }
 }

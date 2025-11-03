@@ -871,7 +871,7 @@ _ForceReloadItemState _calculateBlockState({
         }
       }
     /* ---------------------------------------------------------------------*/
-    case CurrentItemSelectionType.setAnItemAsCurrentAndLoadForm:
+    case CurrentItemSelectionType.setAnItemAsCurrentThenLoadForm:
       DebugPrinter.printDebug(DebugCat.dataLoad,
           "@~~~> ${getClassName(block)} ~~~~~> ITM 3: currentItemSelectionType: ${currentItemSelectionType.name}");
       //

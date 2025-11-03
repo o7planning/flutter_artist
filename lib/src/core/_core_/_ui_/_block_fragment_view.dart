@@ -8,12 +8,12 @@ abstract class BlockFragmentView<
         FilterInput,
         FilterCriteria,
         ExtraFormInput>> extends StatelessWidget {
-  final bool representative;
+  final bool itemRepresentative;
   final BLOCK block;
 
   const BlockFragmentView({
     required this.block,
-    this.representative = true,
+    this.itemRepresentative = true,
     super.key,
   });
 
@@ -24,7 +24,7 @@ abstract class BlockFragmentView<
       ownerClassInstance: this,
       description: '',
       block: block,
-      itemRepresentative: representative,
+      itemRepresentative: itemRepresentative,
       build: () {
         return buildContent(context);
       },

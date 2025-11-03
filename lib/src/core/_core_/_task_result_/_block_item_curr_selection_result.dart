@@ -42,7 +42,7 @@ class BlockItemCurrSelectionResult<ITEM>
     switch (currentItemSelectionType) {
       case CurrentItemSelectionType.doNothing:
         return _successfullyDoNothing();
-      case CurrentItemSelectionType.setAnItemAsCurrentAndLoadForm:
+      case CurrentItemSelectionType.setAnItemAsCurrentThenLoadForm:
         return _successfullySelectedToEdit();
       case CurrentItemSelectionType.setAnItemAsCurrent:
         return _successfullySelectedToShow();
