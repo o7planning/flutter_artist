@@ -959,7 +959,9 @@ abstract class FormModel<
       // IMPORTANT:
       //  - Update from ROOTs to LEAVES
       //  - And make sure children-OptProp to null if parent-Value is null or not selected.
-      _formPropsStructure._updatePropsTempValues({multiOptPropName: null});
+      _formPropsStructure._updatePropsTempValues({
+        multiOptPropName: null,
+      });
     }
     //
     bool forceReload =
@@ -1146,21 +1148,25 @@ abstract class FormModel<
         //  - Update from ROOTs to LEAVES
         //  - And make sure children-OptProp to null if parent-Value is null or not selected.
         Object? candidateSelectedItem = candidateSelectedItems.first;
-        _formPropsStructure
-            ._updatePropsTempValues({multiOptPropName: candidateSelectedItem});
+        _formPropsStructure._updatePropsTempValues({
+          multiOptPropName: candidateSelectedItem,
+        });
       } else {
         // IMPORTANT:
         //  - Update from ROOTs to LEAVES
         //  - And make sure children-OptProp to null if parent-Value is null or not selected.
         // Try MULTI SELECTED ITEMS:
-        _formPropsStructure
-            ._updatePropsTempValues({multiOptPropName: candidateSelectedItems});
+        _formPropsStructure._updatePropsTempValues({
+          multiOptPropName: candidateSelectedItems,
+        });
       }
     } else {
       // IMPORTANT:
       //  - Update from ROOTs to LEAVES
       //  - And make sure children-OptProp to null if parent-Value is null or not selected.
-      _formPropsStructure._updatePropsTempValues({multiOptPropName: null});
+      _formPropsStructure._updatePropsTempValues({
+        multiOptPropName: null,
+      });
     }
     //
     Object? tempSelectedPropValue =

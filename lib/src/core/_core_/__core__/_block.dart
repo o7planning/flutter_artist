@@ -3403,6 +3403,18 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  ///
+  /// This method is called before calling a Form to create or edit.
+  ///
+  @_AbstractMethodAnnotation()
+  EXTRA_FORM_INPUT createExtraFormInput({
+    required Object? parentBlockItem,
+    required FILTER_CRITERIA filterCriteria,
+  });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   // TODO: Them tham so ITEM.
   @_AbstractMethodAnnotation()
   bool needToKeepItemInList({
