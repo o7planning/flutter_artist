@@ -1,65 +1,48 @@
 part of '../core.dart';
 
-class BlockItemsViewBuilder extends _RefreshableWidget {
-  final Block block;
+class ScalarValueViewBuilder extends _RefreshableWidget {
+  final Scalar scalar;
   final QuickSuggestionMode quickSuggestionMode;
   final Widget Function() build;
-  final bool itemRepresentative;
 
-  const BlockItemsViewBuilder({
+  const ScalarValueViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
-    required this.block,
-    this.itemRepresentative = false,
+    required this.scalar,
     this.quickSuggestionMode = QuickSuggestionMode.showIfError,
     required this.build,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _BlockItemsViewBuilderState();
+    return _ScalarValueViewBuilderState();
   }
 }
 
-class _BlockItemsViewBuilderState
-    extends _RefreshableWidgetState<BlockItemsViewBuilder> {
+class _ScalarValueViewBuilderState
+    extends _RefreshableWidgetState<ScalarValueViewBuilder> {
   @override
   String getWidgetOwnerClassName() {
-    return getClassName(widget.block);
+    return getClassName(widget.scalar);
   }
 
   @override
-  RefreshableWidgetType get type => RefreshableWidgetType.blockItemsView;
+  RefreshableWidgetType get type => RefreshableWidgetType.scalarValueView;
 
   @override
   bool get isScalarRepresentative {
-    return false;
-  }
-
-  @override
-  bool get isBlockRepresentative {
     return true;
   }
 
   @override
+  bool get isBlockRepresentative {
+    return false;
+  }
+
+  @override
   bool get isItemRepresentative {
-    return widget.itemRepresentative;
-  }
-
-  @override
-  void addWidgetState({required bool isShowing}) {
-    widget.block.ui._addBlockPieceWidgetState(
-      widgetState: this,
-      isShowing: isShowing,
-    );
-  }
-
-  @override
-  void removeWidgetState() {
-    widget.block.ui._removeBlockPieceWidgetState(
-      widgetState: this,
-    );
+    return false;
   }
 
   @override
@@ -68,7 +51,7 @@ class _BlockItemsViewBuilderState
       return Stack(
         children: [
           widget.build(),
-          if (widget.block.dataState == DataState.error)
+          if (widget.scalar.dataState == DataState.error)
             Positioned(
               top: 5,
               right: 5,
@@ -87,13 +70,13 @@ class _BlockItemsViewBuilderState
         _QuickSuggestionButton.error(
           tooltip: "Error",
           onPressed: () {
-            widget.block.showBlockErrorViewerDialog(context);
+            widget.scalar.showScalarErrorViewerDialog(context);
           },
         ),
         _QuickSuggestionButton.reQuery(
           tooltip: "Re Query",
           onPressed: () async {
-            await widget.block.query();
+            await widget.scalar.query();
           },
         ),
       ],
@@ -101,8 +84,23 @@ class _BlockItemsViewBuilderState
   }
 
   @override
+  void addWidgetState({required bool isShowing}) {
+    widget.scalar.ui._addScalarPieceWidgetState(
+      widgetState: this,
+      isShowing: isShowing,
+    );
+  }
+
+  @override
+  void removeWidgetState() {
+    widget.scalar.ui._removeScalarPieceWidgetState(
+      widgetState: this,
+    );
+  }
+
+  @override
   void checkAndFreeMemory() {
-    FlutterArtist.storage._checkToRemoveShelf(widget.block.shelf);
+    FlutterArtist.storage._checkToRemoveShelf(widget.scalar.shelf);
   }
 
   @override

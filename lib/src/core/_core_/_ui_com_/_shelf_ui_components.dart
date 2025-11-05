@@ -217,7 +217,7 @@ class _ShelfUIComponents extends _UIComponents {
           block.ui._findMountedWidgetStates(
         activeOnly: activeOnly,
         withPagination: withPagination,
-        withBlockFragment: withBlockFragment,
+        withBlockPiece: withBlockFragment,
         withFilter: withFilter,
         withSort: withSort,
         withForm: withForm,
@@ -248,7 +248,7 @@ class _ShelfUIComponents extends _UIComponents {
         activeOnly: activeOnly,
         withFilter: withFilter,
         withScalarControlBar: withScalarControlBar,
-        withScalarFragment: withScalarFragment,
+        withScalarPiece: withScalarFragment,
       );
       founds.addAll(m);
       //

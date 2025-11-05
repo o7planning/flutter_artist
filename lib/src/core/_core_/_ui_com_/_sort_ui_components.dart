@@ -3,7 +3,7 @@ part of '../core.dart';
 class _SortUIComponents extends _UIComponents {
   final SortModel sortModel;
 
-  final Map<_RefreshableWidgetState, XState> _sortFragmentWidgetStates = {};
+  final Map<_RefreshableWidgetState, XState> _sortWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -13,11 +13,11 @@ class _SortUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_RefreshableWidgetState, XState> _findMountedFragmentWidgetStates({
+  Map<_RefreshableWidgetState, XState> _findMountedPieceWidgetStates({
     required bool activeOnly,
   }) {
     return ___findMountedWidgetStates(
-      widgetStates: _sortFragmentWidgetStates,
+      widgetStates: _sortWidgetStates,
       activeOnly: activeOnly,
     );
   }
@@ -27,7 +27,7 @@ class _SortUIComponents extends _UIComponents {
 
   @override
   bool hasMountedUIComponent() {
-    return _sortFragmentWidgetStates.isNotEmpty;
+    return _sortWidgetStates.isNotEmpty;
   }
 
   // ***************************************************************************
@@ -42,12 +42,11 @@ class _SortUIComponents extends _UIComponents {
   bool hasActiveUIComponentWithRepresentativeType({
     required RepresentativeType? representativeType,
   }) {
-    for (_RefreshableWidgetState widgetState
-        in _sortFragmentWidgetStates.keys) {
+    for (_RefreshableWidgetState widgetState in _sortWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
-      bool visible = _sortFragmentWidgetStates[widgetState]?.isShowing ?? false;
+      bool visible = _sortWidgetStates[widgetState]?.isShowing ?? false;
       if (!visible) {
         continue;
       }
@@ -63,9 +62,7 @@ class _SortUIComponents extends _UIComponents {
   // ***************************************************************************
 
   void updateAllUIComponents({bool force = true}) {
-    for (_RefreshableWidgetState widgetState in [
-      ..._sortFragmentWidgetStates.keys
-    ]) {
+    for (_RefreshableWidgetState widgetState in [..._sortWidgetStates.keys]) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -76,14 +73,14 @@ class _SortUIComponents extends _UIComponents {
   // ***************************************************************************
 
   bool _isWidgetStateBuilding({required _RefreshableWidgetState widgetState}) {
-    return _sortFragmentWidgetStates[widgetState]?.isBuilding ?? false;
+    return _sortWidgetStates[widgetState]?.isBuilding ?? false;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   bool _isBuilding() {
-    for (XState xState in _sortFragmentWidgetStates.values) {
+    for (XState xState in _sortWidgetStates.values) {
       if (xState.isBuilding) {
         return true;
       }
@@ -98,7 +95,7 @@ class _SortUIComponents extends _UIComponents {
     required _RefreshableWidgetState widgetState,
     required bool isBuilding,
   }) {
-    _sortFragmentWidgetStates.update(
+    _sortWidgetStates.update(
       widgetState,
       (xState) => xState.._setBuilding(isBuilding),
       ifAbsent: () => XState().._setBuilding(isBuilding),
@@ -113,7 +110,7 @@ class _SortUIComponents extends _UIComponents {
     required bool isShowing,
   }) {
     bool activeOLD = hasActiveUIComponent();
-    _sortFragmentWidgetStates.update(
+    _sortWidgetStates.update(
       widgetState,
       (xState) => xState.._setShowing(isShowing),
       ifAbsent: () => XState().._setShowing(isShowing),
@@ -139,6 +136,6 @@ class _SortUIComponents extends _UIComponents {
   void _removeSortFragmentWidgetState({
     required State widgetState,
   }) {
-    _sortFragmentWidgetStates.remove(widgetState);
+    _sortWidgetStates.remove(widgetState);
   }
 }

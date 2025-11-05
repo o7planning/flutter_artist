@@ -144,7 +144,7 @@ class _XShelfSbQuery extends XShelf {
             break;
           }
           //
-          final hasXActiveUI = parentXScalar.scalar.ui.hasActiveScalarFragment(
+          final hasXActiveUI = parentXScalar.scalar.ui.hasActiveScalarPiece(
             alsoCheckChildren: true,
           );
           if (hasXActiveUI) {

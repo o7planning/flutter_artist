@@ -13,7 +13,7 @@ class _FilterUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_RefreshableWidgetState, XState> _findMountedFragmentWidgetStates({
+  Map<_RefreshableWidgetState, XState> _findMountedPieceWidgetStates({
     required bool activeOnly,
   }) {
     return ___findMountedWidgetStates(

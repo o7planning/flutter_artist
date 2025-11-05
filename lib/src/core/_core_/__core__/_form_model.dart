@@ -55,6 +55,7 @@ abstract class FormModel<
   bool _defaultMultiOptValuesInitiated = false;
 
   bool get defaultSimpleValuesInitiated => _defaultSimpleValuesInitiated;
+
   bool get defaultMultiOptValuesInitiated => _defaultMultiOptValuesInitiated;
 
   AutovalidateMode _autovalidateMode = AutovalidateMode.onUserInteraction;

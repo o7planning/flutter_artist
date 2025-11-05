@@ -3,7 +3,8 @@ part of '../core.dart';
 class _ScalarUIComponents extends _UIComponents {
   final Scalar scalar;
 
-  final Map<_RefreshableWidgetState, XState> __scalarFragmentWidgetStates = {};
+
+  final Map<_RefreshableWidgetState, XState> __scalarPieceWidgetStates = {};
   final Map<_RefreshableWidgetState, XState> __scalarControlBarWidgetStates =
       {};
 
@@ -17,7 +18,8 @@ class _ScalarUIComponents extends _UIComponents {
 
   @override
   bool hasMountedUIComponent() {
-    return __scalarFragmentWidgetStates.isNotEmpty ||
+    return
+        __scalarPieceWidgetStates.isNotEmpty ||
         __scalarControlBarWidgetStates.isNotEmpty;
   }
 
@@ -40,8 +42,8 @@ class _ScalarUIComponents extends _UIComponents {
     //     return true;
     //   }
     // }
-    // Scalar Fragment:
-    String? componentName = findActiveScalarFragment(alsoCheckChildren: false);
+    // Scalar Piece:
+    String? componentName = findActiveScalarPiece(alsoCheckChildren: false);
     if (componentName != null) {
       return componentName;
     }
@@ -68,7 +70,7 @@ class _ScalarUIComponents extends _UIComponents {
   // ***************************************************************************
 
   Map<_RefreshableWidgetState, XState> _findMountedWidgetStates({
-    required bool withScalarFragment,
+    required bool withScalarPiece,
     required bool withFilter,
     required bool withScalarControlBar,
     required bool activeOnly,
@@ -78,13 +80,13 @@ class _ScalarUIComponents extends _UIComponents {
     if (withFilter) {
       final FilterModel filterModel = scalar._registeredOrDefaultFilterModel;
       ret.addAll(
-        filterModel.ui._findMountedFragmentWidgetStates(activeOnly: activeOnly),
+        filterModel.ui._findMountedPieceWidgetStates(activeOnly: activeOnly),
       );
     }
     //
-    if (withScalarFragment) {
+    if (withScalarPiece) {
       ret.addAll(
-        _findMountedFragmentWidgetStates(activeOnly: activeOnly),
+        _findMountedPieceWidgetStates(activeOnly: activeOnly),
       );
     }
     //
@@ -112,8 +114,9 @@ class _ScalarUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateFragmentWidgets({bool force = true}) {
-    for (_RefreshableWidgetState state in __scalarFragmentWidgetStates.keys) {
+
+  void updatePieceWidgets({bool force = true}) {
+    for (_RefreshableWidgetState state in __scalarPieceWidgetStates.keys) {
       if (state.mounted) {
         state.refreshState(force: force);
       }
@@ -131,14 +134,14 @@ class _ScalarUIComponents extends _UIComponents {
       scalar.filterModel?.ui.updateAllUIComponents();
     }
     updateControlBarWidgets(force: force);
-    updateFragmentWidgets(force: force);
+    updatePieceWidgets(force: force);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveScalarFragment({required bool alsoCheckChildren}) {
-    String? componentName = findActiveScalarFragment(
+  bool hasActiveScalarPiece({required bool alsoCheckChildren}) {
+    String? componentName = findActiveScalarPiece(
       alsoCheckChildren: alsoCheckChildren,
     );
     return componentName != null;
@@ -147,23 +150,23 @@ class _ScalarUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  String? findActiveScalarFragment({required bool alsoCheckChildren}) {
-    return findActiveScalarFragmentWithRepresentativeType(
+  String? findActiveScalarPiece({required bool alsoCheckChildren}) {
+    return findActiveScalarPieceWithRepresentativeType(
       representativeType: null,
       alsoCheckChildren: alsoCheckChildren,
     );
   }
 
-  String? findActiveScalarFragmentWithRepresentativeType({
+  String? findActiveScalarPieceWithRepresentativeType({
     required RepresentativeType? representativeType,
     required bool alsoCheckChildren,
   }) {
-    for (State widgetState in __scalarFragmentWidgetStates.keys) {
+    for (State widgetState in __scalarPieceWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
       bool visible =
-          __scalarFragmentWidgetStates[widgetState]?.isShowing ?? false;
+          __scalarPieceWidgetStates[widgetState]?.isShowing ?? false;
       if (!visible) {
         continue;
       }
@@ -172,7 +175,7 @@ class _ScalarUIComponents extends _UIComponents {
     if (alsoCheckChildren) {
       for (Scalar childScalar in scalar._childScalars) {
         String? componentName =
-            childScalar.ui.findActiveScalarFragmentWithRepresentativeType(
+            childScalar.ui.findActiveScalarPieceWithRepresentativeType(
           representativeType: representativeType,
           alsoCheckChildren: true,
         );
@@ -217,11 +220,11 @@ class _ScalarUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_RefreshableWidgetState, XState> _findMountedFragmentWidgetStates({
+  Map<_RefreshableWidgetState, XState> _findMountedPieceWidgetStates({
     required bool activeOnly,
   }) {
     return ___findMountedWidgetStates(
-      widgetStates: __scalarFragmentWidgetStates,
+      widgetStates: __scalarPieceWidgetStates,
       activeOnly: activeOnly,
     );
   }
@@ -278,12 +281,12 @@ class _ScalarUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _addScalarFragmentWidgetState({
+  void _addScalarPieceWidgetState({
     required _RefreshableWidgetState widgetState,
     required bool isShowing,
   }) {
     bool activeOLD = hasActiveUIComponent();
-    __scalarFragmentWidgetStates.update(
+    __scalarPieceWidgetStates.update(
       widgetState,
       (xState) => xState.._setShowing(isShowing),
       ifAbsent: () => XState().._setShowing(isShowing),
@@ -305,9 +308,9 @@ class _ScalarUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _removeScalarFragmentWidgetState({required State widgetState}) {
+  void _removeScalarPieceWidgetState({required State widgetState}) {
     bool activeOLD = hasActiveUIComponent();
-    __scalarFragmentWidgetStates.remove(widgetState);
+    __scalarPieceWidgetStates.remove(widgetState);
     bool activeCURRENT = hasActiveUIComponent();
     //
     if (activeOLD && !activeCURRENT) {
@@ -321,13 +324,13 @@ class _ScalarUIComponents extends _UIComponents {
   @DebugMethodAnnotation()
   Map<IRefreshableWidgetState, XState> debugFindMountedWidgetStates({
     required bool withPagination,
-    required bool withScalarFragment,
+    required bool withScalarPiece,
     required bool withFilter,
     required bool withScalarControlBar,
     required bool activeOnly,
   }) {
     return _findMountedWidgetStates(
-      withScalarFragment: withScalarFragment,
+      withScalarPiece: withScalarPiece,
       withFilter: withFilter,
       withScalarControlBar: withScalarControlBar,
       activeOnly: activeOnly,

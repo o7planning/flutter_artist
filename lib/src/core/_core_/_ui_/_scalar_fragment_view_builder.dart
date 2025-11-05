@@ -85,7 +85,7 @@ class _ScalarFragmentViewBuilderState
 
   @override
   void addWidgetState({required bool isShowing}) {
-    widget.scalar.ui._addScalarFragmentWidgetState(
+    widget.scalar.ui._addScalarPieceWidgetState(
       widgetState: this,
       isShowing: isShowing,
     );
@@ -93,7 +93,7 @@ class _ScalarFragmentViewBuilderState
 
   @override
   void removeWidgetState() {
-    widget.scalar.ui._removeScalarFragmentWidgetState(
+    widget.scalar.ui._removeScalarPieceWidgetState(
       widgetState: this,
     );
   }

@@ -18,11 +18,10 @@ abstract class BlockItemDetailView<
   @override
   @nonVirtual
   Widget build(BuildContext context) {
-    return BlockFragmentViewBuilder(
+    return BlockItemDetailViewBuilder(
       ownerClassInstance: this,
       description: '',
       block: block,
-      itemRepresentative: true,
       build: () {
         return buildContent(context);
       },

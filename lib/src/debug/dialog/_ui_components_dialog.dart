@@ -86,7 +86,7 @@ class _UiComponentsDialogState extends State<UiComponentsDialog> {
       return widget.block!.ui.debugFindMountedWidgetStates(
         activeOnly: false,
         withPagination: true,
-        withBlockFragment: true,
+        withBlockPiece: true,
         withFilter: true,
         withSort: true,
         withForm: true,
@@ -97,7 +97,7 @@ class _UiComponentsDialogState extends State<UiComponentsDialog> {
       return widget.scalar!.ui.debugFindMountedWidgetStates(
         activeOnly: false,
         withPagination: true,
-        withScalarFragment: true,
+        withScalarPiece: true,
         withFilter: true,
         withScalarControlBar: true,
       );

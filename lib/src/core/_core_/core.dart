@@ -507,6 +507,8 @@ part '_ui_/_block_fragment_view_builder.dart';
 
 part '_ui_/_block_item_detail_view.dart';
 
+part '_ui_/_block_item_detail_view_builder.dart';
+
 part '_ui_/_block_items_view.dart';
 
 part '_ui_/_block_items_view_builder.dart';
@@ -544,6 +546,8 @@ part '_ui_/_refreshable_neutral_view.dart';
 part '_ui_/_refreshable_neutral_view_builder.dart';
 
 part '_ui_/_scalar_value_view.dart';
+
+part '_ui_/_scalar_value_view_builder.dart';
 
 part '_ui_/_scalar_fragment_view.dart';
 

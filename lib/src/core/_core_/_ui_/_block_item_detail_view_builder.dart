@@ -1,34 +1,32 @@
 part of '../core.dart';
 
-class BlockFragmentViewBuilder extends _RefreshableWidget {
+class BlockItemDetailViewBuilder extends _RefreshableWidget {
   final Block block;
-  final bool itemRepresentative;
   final Widget Function() build;
 
-  const BlockFragmentViewBuilder({
+  const BlockItemDetailViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
     required this.block,
-    required this.itemRepresentative,
     required this.build,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _BlockFragmentViewBuilderState();
+    return _BlockItemDetailViewBuilderState();
   }
 }
 
-class _BlockFragmentViewBuilderState
-    extends _RefreshableWidgetState<BlockFragmentViewBuilder> {
+class _BlockItemDetailViewBuilderState
+    extends _RefreshableWidgetState<BlockItemDetailViewBuilder> {
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);
   }
 
   @override
-  RefreshableWidgetType get type => RefreshableWidgetType.blockFragment;
+  RefreshableWidgetType get type => RefreshableWidgetType.blockItemDetailView;
 
   @override
   bool get isScalarRepresentative {
@@ -42,7 +40,7 @@ class _BlockFragmentViewBuilderState
 
   @override
   bool get isItemRepresentative {
-    return widget.itemRepresentative;
+    return true;
   }
 
   @override

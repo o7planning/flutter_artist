@@ -11,7 +11,7 @@ class _XShelfShelfNaturalQuery extends _XShelfSbQuery {
         if (xScalar == null) {
           break;
         }
-        bool hasXActiveUI = xScalar.scalar.ui.hasActiveScalarFragment(
+        bool hasXActiveUI = xScalar.scalar.ui.hasActiveScalarPiece(
           alsoCheckChildren: true,
         );
         if (hasXActiveUI) {

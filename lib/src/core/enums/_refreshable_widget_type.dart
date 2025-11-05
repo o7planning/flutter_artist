@@ -31,6 +31,10 @@ enum RefreshableWidgetType {
     name: "BlockFragment",
     iconData: FaIconConstants.blockFragmentIconData,
   ),
+  blockItemDetailView(
+    name: "BlockItemDetailView",
+    iconData: FaIconConstants.blockFragmentIconData,
+  ),
   blockItemsView(
     name: "BlockItemsView",
     iconData: FaIconConstants.blockItemsViewIconData,
@@ -50,6 +54,10 @@ enum RefreshableWidgetType {
   //
   scalarFragment(
     name: "ScalarFragment",
+    iconData: FaIconConstants.scalarFragmentIconData,
+  ),
+  scalarValueView(
+    name: "ScalarValue",
     iconData: FaIconConstants.scalarFragmentIconData,
   ),
   activityFragment(
