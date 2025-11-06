@@ -1,0 +1,4 @@
+enum FormInputSource {
+  block,
+  other;
+}

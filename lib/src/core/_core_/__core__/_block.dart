@@ -223,7 +223,6 @@ abstract class Block<
   final FormModel<
       ID, //
       ITEM_DETAIL,
-      FILTER_CRITERIA,
       EXTRA_FORM_INPUT>? formModel;
 
   final List<Block> _childBlocks;
@@ -3403,12 +3402,29 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  EXTRA_FORM_INPUT _createExtraFormInput() {
+    final Object? parentBlockCurrentItem = parent?.currentItem;
+    final FILTER_CRITERIA? currentFilterCriteria = this.filterCriteria;
+
+    if (currentFilterCriteria == null) {
+      // Test Case: [01c]
+      // Make sure never get this error.
+      throw AppError(errorMessage: "FilterCriteria is null");
+    }
+    return createExtraFormInput(
+      parentBlockCurrentItem: parentBlockCurrentItem,
+      currentItem: currentItem,
+      filterCriteria: currentFilterCriteria,
+    );
+  }
+
   ///
   /// This method is called before calling a Form to create or edit.
   ///
   @_AbstractMethodAnnotation()
   EXTRA_FORM_INPUT createExtraFormInput({
-    required Object? parentBlockItem,
+    required Object? parentBlockCurrentItem,
+    required ITEM? currentItem,
     required FILTER_CRITERIA filterCriteria,
   });
 

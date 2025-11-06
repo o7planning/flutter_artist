@@ -3,7 +3,6 @@ part of '../core.dart';
 class _ScalarUIComponents extends _UIComponents {
   final Scalar scalar;
 
-
   final Map<_RefreshableWidgetState, XState> __scalarPieceWidgetStates = {};
   final Map<_RefreshableWidgetState, XState> __scalarControlBarWidgetStates =
       {};
@@ -18,8 +17,7 @@ class _ScalarUIComponents extends _UIComponents {
 
   @override
   bool hasMountedUIComponent() {
-    return
-        __scalarPieceWidgetStates.isNotEmpty ||
+    return __scalarPieceWidgetStates.isNotEmpty ||
         __scalarControlBarWidgetStates.isNotEmpty;
   }
 
@@ -114,7 +112,6 @@ class _ScalarUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-
   void updatePieceWidgets({bool force = true}) {
     for (_RefreshableWidgetState state in __scalarPieceWidgetStates.keys) {
       if (state.mounted) {
@@ -165,8 +162,7 @@ class _ScalarUIComponents extends _UIComponents {
       if (!widgetState.mounted) {
         continue;
       }
-      bool visible =
-          __scalarPieceWidgetStates[widgetState]?.isShowing ?? false;
+      bool visible = __scalarPieceWidgetStates[widgetState]?.isShowing ?? false;
       if (!visible) {
         continue;
       }

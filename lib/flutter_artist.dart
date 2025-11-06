@@ -53,6 +53,7 @@ export 'src/core/enums/_form_action.dart';
 export 'src/core/enums/_form_activity_type.dart';
 export 'src/core/enums/_form_debug_item_type.dart';
 export 'src/core/enums/_form_error_method.dart';
+export 'src/core/enums/_form_input_source.dart';
 export 'src/core/enums/_form_mode.dart';
 export 'src/core/enums/_hook_hidden_behavior.dart';
 export 'src/core/enums/_item_creation_type.dart';

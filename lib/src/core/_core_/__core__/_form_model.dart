@@ -3,7 +3,6 @@ part of '../core.dart';
 abstract class FormModel<
     ID extends Object,
     ITEM_DETAIL extends Identifiable<ID>,
-    FILTER_CRITERIA extends FilterCriteria,
     EXTRA_FORM_INPUT extends ExtraFormInput> extends _Core {
   final FormModelConfig config;
 
@@ -48,7 +47,7 @@ abstract class FormModel<
       Identifiable<ID>, // ITEM
       ITEM_DETAIL,
       FilterInput,
-      FILTER_CRITERIA,
+      FilterCriteria,
       EXTRA_FORM_INPUT> block;
 
   bool _defaultSimpleValuesInitiated = false;
@@ -140,7 +139,6 @@ abstract class FormModel<
     required SelectionType selectionType,
     required Object? parentMultiOptPropValue,
     required Object? parentBlockCurrentItem,
-    required FILTER_CRITERIA filterCriteria,
     required EXTRA_FORM_INPUT? extraFormInput,
   });
 
@@ -160,7 +158,7 @@ abstract class FormModel<
 
   @_AbstractMethodAnnotation()
   Map<String, dynamic>? specifyDefaultSimplePropValues({
-    required FILTER_CRITERIA filterCriteria,
+    required EXTRA_FORM_INPUT? extraFormInput,
   });
 
   // ***************************************************************************
@@ -180,7 +178,6 @@ abstract class FormModel<
 
   @_AbstractMethodAnnotation()
   Map<String, dynamic>? getSimplePropValuesFromItemDetail({
-    required FILTER_CRITERIA filterCriteria,
     required ITEM_DETAIL itemDetail,
   });
 
@@ -210,7 +207,6 @@ abstract class FormModel<
   @_AbstractMethodAnnotation()
   Future<ApiResult<ITEM_DETAIL>> callApiCreateItem({
     required Object? parentBlockItem,
-    required FILTER_CRITERIA filterCriteria,
     required Map<String, dynamic> formMapData,
   });
 
@@ -220,7 +216,6 @@ abstract class FormModel<
   @_AbstractMethodAnnotation()
   Future<ApiResult<ITEM_DETAIL>> callApiUpdateItem({
     required Object? parentBlockItem,
-    required FILTER_CRITERIA filterCriteria,
     required Map<String, dynamic> formMapData,
   });
 
@@ -235,10 +230,6 @@ abstract class FormModel<
     return ITEM_DETAIL;
   }
 
-  Type getFilterCriteriaType() {
-    return FILTER_CRITERIA;
-  }
-
   Type getExtraFormInputType() {
     return EXTRA_FORM_INPUT;
   }
@@ -250,8 +241,7 @@ abstract class FormModel<
 
   @DebugMethodAnnotation()
   String get debugClassParametersDefinition {
-    return "<${getIdType()}, ${getItemDetailType()}, "
-        "${getFilterCriteriaType()}, ${getExtraFormInputType()}>";
+    return "<${getIdType()}, ${getItemDetailType()}, ${getExtraFormInputType()}>";
   }
 
   // ***************************************************************************
@@ -361,10 +351,6 @@ abstract class FormModel<
     required XFormModel<ID, ITEM_DETAIL> thisXFormModel,
     required FormSaveResult taskResult,
   }) async {
-    FILTER_CRITERIA? blockCurrentFilterCriteria = block.filterCriteria;
-    if (blockCurrentFilterCriteria == null) {
-      throw FatalAppError(errorMessage: "FilterCriteria is null");
-    }
     //
     // No need to check again?
     //
@@ -402,12 +388,10 @@ abstract class FormModel<
       //
       result = isNew
           ? await callApiCreateItem(
-              filterCriteria: blockCurrentFilterCriteria,
               parentBlockItem: parentBlockItem,
               formMapData: formMapData,
             )
           : await callApiUpdateItem(
-              filterCriteria: blockCurrentFilterCriteria,
               parentBlockItem: parentBlockItem,
               formMapData: formMapData,
             );
@@ -488,12 +472,15 @@ abstract class FormModel<
     required EXTRA_FORM_INPUT? extraFormInput,
     required FormActivityType activityType,
   }) async {
-    FILTER_CRITERIA? blockCurrentFilterCriteria = block.filterCriteria;
-    if (blockCurrentFilterCriteria == null) {
-      // Test Case: [01c]
-      // Make sure never get this error.
-      throw AppError(errorMessage: "FilterCriteria is null");
-    }
+    // FILTER_CRITERIA? blockCurrentFilterCriteria = block.filterCriteria;
+    // if (blockCurrentFilterCriteria == null) {
+    //   // Test Case: [01c]
+    //   // Make sure never get this error.
+    //   throw AppError(errorMessage: "FilterCriteria is null");
+    // }
+    // ???
+    // EXTRA_FORM_INPUT extraFormInput = block._createExtraFormInput();
+
     __formActivityCount++;
     print(
         "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFormActivity, activityType: $activityType");
@@ -550,7 +537,6 @@ abstract class FormModel<
       if (itemDetail != null) {
         try {
           simplePropValue = getSimplePropValuesFromItemDetail(
-                filterCriteria: blockCurrentFilterCriteria,
                 itemDetail: itemDetail,
               ) ??
               {};
@@ -595,7 +581,7 @@ abstract class FormModel<
         if (!_defaultSimpleValuesInitiated) {
           try {
             simplePropValueDefault = specifyDefaultSimplePropValues(
-                  filterCriteria: blockCurrentFilterCriteria,
+                  extraFormInput: extraFormInput,
                 ) ??
                 {};
             //
@@ -690,7 +676,6 @@ abstract class FormModel<
         // May throw ApiError or FormTempError.
         //
         await _loadMultiOptPropDataCascade(
-          blockCurrentFilterCriteria: blockCurrentFilterCriteria,
           extraFormInput: extraFormInput,
           parentMultiOptPropValue: null,
           parentValueIsInitialValue: true,
@@ -891,7 +876,6 @@ abstract class FormModel<
   // ***************************************************************************
 
   Future<void> _loadMultiOptPropDataCascade({
-    required FILTER_CRITERIA blockCurrentFilterCriteria,
     required EXTRA_FORM_INPUT? extraFormInput,
     required Object? parentMultiOptPropValue,
     required MultiOptFormProp multiOptProp,
@@ -979,7 +963,6 @@ abstract class FormModel<
         // May throw AppError, ApiError or others.
         tempMultiOptPropXData = await callApiLoadMultiOptPropXData(
           parentBlockCurrentItem: parentBlockItem,
-          filterCriteria: blockCurrentFilterCriteria,
           extraFormInput: extraFormInput,
           parentMultiOptPropValue: parentMultiOptPropValue,
           multiOptPropName: multiOptPropName,
@@ -1177,7 +1160,6 @@ abstract class FormModel<
     if (tempSelectedPropValue != null) {
       for (MultiOptFormProp child in multiOptProp._children) {
         await _loadMultiOptPropDataCascade(
-          blockCurrentFilterCriteria: blockCurrentFilterCriteria,
           extraFormInput: extraFormInput,
           parentMultiOptPropValue: tempSelectedPropValue,
           parentValueIsInitialValue: multiOptValueIsInitialValue,
