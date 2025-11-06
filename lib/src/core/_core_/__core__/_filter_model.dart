@@ -104,7 +104,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   @_AbstractMethodAnnotation()
-  ValueWrap? specifyDefaultMultiOptCriterionValue({
+  OptValueWrap? specifyDefaultMultiOptCriterionValue({
     required String multiOptCriterionName,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
@@ -142,7 +142,7 @@ abstract class FilterModel<
   /// ```
   ///
   @_AbstractMethodAnnotation()
-  ValueWrap? getMultiOptCriterionValueFromFilterInput({
+  OptValueWrap? getMultiOptCriterionValueFromFilterInput({
     required String multiOptCriterionName,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
@@ -555,7 +555,7 @@ abstract class FilterModel<
     // Candidate Selected Items:
     List? candidateSelectedItems;
     if (tempMultiOptCriterionXData != null) {
-      ValueWrap? inputValueWrap;
+      OptValueWrap? inputValueWrap;
       if (filterInput != null) {
         // Test Case: [20c], [20d].
         inputValueWrap = __getMultiOptCriterionValueFromFilterInput(
@@ -678,11 +678,13 @@ abstract class FilterModel<
       throw "The '$multiOptCriterionName' is not $MultiOptFilterCriterion";
     }
     String message =
-        "The ${getClassName(this)}.$methodName() method must return a non-null $ValueWrap for the multiOptCriterionName '$multiOptCriterionName'. ";
+        "The ${getClassName(this)}.$methodName() method must return a non-null $OptValueWrap for the multiOptCriterionName '$multiOptCriterionName'. ";
     if (multiOptCriterion.selectionType == SelectionType.single) {
-      message += "$ValueWrap.single(null) or $ValueWrap.single(value). ";
+      message +=
+          "$OptValueWrap.single(null) or $OptValueWrap.single(value). ";
     } else {
-      message += "$ValueWrap.multi([null]) or $ValueWrap.multi([value]). ";
+      message +=
+          "$OptValueWrap.multi([null]) or $OptValueWrap.multi([value]). ";
     }
     message +=
         "And return null for not $MultiOptFilterCriterion. See the specification of this method for more information.";
@@ -692,14 +694,14 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  ValueWrap? __getMultiOptCriterionValueFromFilterInput({
+  OptValueWrap? __getMultiOptCriterionValueFromFilterInput({
     required String multiOptCriterionName,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required FILTER_INPUT filterInput,
     required Object? parentMultiOptCriterionValue,
   }) {
-    ValueWrap? valueWrap = getMultiOptCriterionValueFromFilterInput(
+    OptValueWrap? valueWrap = getMultiOptCriterionValueFromFilterInput(
       filterInput: filterInput,
       parentMultiOptCriterionValue: parentMultiOptCriterionValue,
       multiOptCriterionXData: multiOptCriterionXData,
@@ -714,7 +716,7 @@ abstract class FilterModel<
       return null;
     }
     List? value = valueWrap.values;
-    return ValueWrap.multi(
+    return OptValueWrap.multi(
       multiOptCriterionXData._findInternalItemsByDynamics(
         dynamicValues: value,
         addToInternalIfNotFound: false,
@@ -723,13 +725,13 @@ abstract class FilterModel<
     );
   }
 
-  ValueWrap? __specifyDefaultMultiOptCriterionValue({
+  OptValueWrap? __specifyDefaultMultiOptCriterionValue({
     required String multiOptCriterionName,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,
   }) {
-    ValueWrap? valueWrap = specifyDefaultMultiOptCriterionValue(
+    OptValueWrap? valueWrap = specifyDefaultMultiOptCriterionValue(
       parentMultiOptCriterionValue: parentMultiOptCriterionValue,
       multiOptCriterionXData: multiOptCriterionXData,
       multiOptCriterionName: multiOptCriterionName,
@@ -742,7 +744,7 @@ abstract class FilterModel<
       );
     }
     List? value = valueWrap?.values ?? [];
-    return ValueWrap.multi(
+    return OptValueWrap.multi(
       multiOptCriterionXData._findInternalItemsByDynamics(
         dynamicValues: value,
         addToInternalIfNotFound: false,

@@ -30,7 +30,7 @@ class _DefaultFilterModel
   }
 
   @override
-  ValueWrap? getMultiOptCriterionValueFromFilterInput({
+  OptValueWrap? getMultiOptCriterionValueFromFilterInput({
     required String multiOptCriterionName,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
@@ -48,7 +48,7 @@ class _DefaultFilterModel
   }
 
   @override
-  ValueWrap? specifyDefaultMultiOptCriterionValue({
+  OptValueWrap? specifyDefaultMultiOptCriterionValue({
     required String multiOptCriterionName,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,

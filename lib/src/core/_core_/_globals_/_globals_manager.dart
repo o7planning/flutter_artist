@@ -209,8 +209,10 @@ class GlobalsManager {
     try {
       _loadGlobalDataCount++;
 
-      DebugPrinter.printDebug(DebugCat.appStart,
-          "  --- globalManager --> globalData --> globalDataAdapter.loadFromServer()...");
+      DebugPrinter.printDebug(
+        DebugCat.appStart,
+        "  --- globalManager --> globalData --> globalDataAdapter.loadFromServer()...",
+      );
       // Load Global Data:
       globalData = await globalDataAdapter.loadFromServer(
         loggedInUser: loggedInUser,
@@ -222,16 +224,20 @@ class GlobalsManager {
       print(stackTrace);
     }
     if (globalData == null) {
-      DebugPrinter.printDebug(DebugCat.appStart,
-          "  --- globalManager --> globalData is null --> return");
+      DebugPrinter.printDebug(
+        DebugCat.appStart,
+        "  --- globalManager --> globalData is null --> return",
+      );
       // This will open login screen.
       return;
     }
     _loggedInUser = loggedInUser;
     _globalData = globalData;
     //
-    DebugPrinter.printDebug(DebugCat.appStart,
-        "  --- globalManager --> __readExtraGlobalProps()...");
+    DebugPrinter.printDebug(
+      DebugCat.appStart,
+      "  --- globalManager --> __readExtraGlobalProps()...",
+    );
     // Load Extra Global Prop Names that stored in Hive Database.
     await __readExtraGlobalProps();
   }

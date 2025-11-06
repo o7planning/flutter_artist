@@ -97,6 +97,7 @@ import '../enums/_x_shelf_type.dart';
 import '../enums/after_silent_action.dart';
 import '../error/_app_error_info.dart';
 import '../error/_block_error_info.dart';
+import '../error/_dev_error.dart';
 import '../error/_duplicate_filter_criterion_error.dart';
 import '../error/_duplicate_form_prop_error.dart';
 import '../error/_fatal_app_error.dart';

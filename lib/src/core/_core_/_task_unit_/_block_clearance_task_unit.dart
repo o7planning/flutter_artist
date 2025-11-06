@@ -7,11 +7,11 @@ class _BlockClearanceTaskUnit extends _ResultedSTaskUnit<BlockClearanceResult> {
   _BlockClearanceTaskUnit({
     required this.xBlock,
   }) : super(
-          taskType: TaskType.blockClearance,
-          taskResult: BlockClearanceResult(
-            precheck: null,
-          ),
-        );
+    taskType: TaskType.blockClearance,
+    taskResult: BlockClearanceResult(
+      precheck: null,
+    ),
+  );
 
   @override
   XShelf get xShelf => xBlock.xShelf;

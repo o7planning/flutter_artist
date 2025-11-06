@@ -3402,7 +3402,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  EXTRA_FORM_INPUT _createExtraFormInput() {
+  EXTRA_FORM_INPUT _initInputForCreationForm() {
     final Object? parentBlockCurrentItem = parent?.currentItem;
     final FILTER_CRITERIA? currentFilterCriteria = this.filterCriteria;
 
@@ -3411,20 +3411,18 @@ abstract class Block<
       // Make sure never get this error.
       throw AppError(errorMessage: "FilterCriteria is null");
     }
-    return createExtraFormInput(
+    return initInputForCreationForm(
       parentBlockCurrentItem: parentBlockCurrentItem,
-      currentItem: currentItem,
       filterCriteria: currentFilterCriteria,
     );
   }
 
   ///
-  /// This method is called before calling a Form to create or edit.
+  /// This method is called before calling a Form to create.
   ///
   @_AbstractMethodAnnotation()
-  EXTRA_FORM_INPUT createExtraFormInput({
+  EXTRA_FORM_INPUT initInputForCreationForm({
     required Object? parentBlockCurrentItem,
-    required ITEM? currentItem,
     required FILTER_CRITERIA filterCriteria,
   });
 

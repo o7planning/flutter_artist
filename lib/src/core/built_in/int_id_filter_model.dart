@@ -31,7 +31,7 @@ class IntIdFilterModel
   }
 
   @override
-  ValueWrap? getMultiOptCriterionValueFromFilterInput({
+  OptValueWrap? getMultiOptCriterionValueFromFilterInput({
     required String multiOptCriterionName,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
@@ -51,7 +51,7 @@ class IntIdFilterModel
   }
 
   @override
-  ValueWrap? specifyDefaultMultiOptCriterionValue({
+  OptValueWrap? specifyDefaultMultiOptCriterionValue({
     required String multiOptCriterionName,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,

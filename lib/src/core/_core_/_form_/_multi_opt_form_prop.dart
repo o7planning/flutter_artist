@@ -21,6 +21,8 @@ abstract class MultiOptFormProp<V> extends FormProp<V> {
   final SelectionType selectionType;
   final List<MultiOptFormProp> _children;
 
+  bool get isRoot => parent == null;
+
   List<MultiOptFormProp> get children => [..._children];
 
   MultiOptFormProp._({
