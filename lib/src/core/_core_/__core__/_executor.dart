@@ -145,7 +145,7 @@ class _Executor {
       await taskUnit.xBlock.block._unitPrepareFormToCreateItem(
         thisXBlock: taskUnit.xBlock,
         initDirty: taskUnit.initDirty,
-        extraFormInput: taskUnit.extraFormInput,
+        formInput: taskUnit.formInput,
         navigate: taskUnit.navigate,
       );
     }
@@ -240,11 +240,11 @@ class _Executor {
         taskResult: taskUnit.taskResult as FormSaveResult,
       );
     }
-    // FormModel QuickExtraFormInputAction:
+    // FormModel QuickFormInputAction:
     else if (taskUnit is _FormModelAutoEnterFormFieldsTaskUnit) {
-      await taskUnit.xFormModel.formModel._unitQuickExtraFormInput(
+      await taskUnit.xFormModel.formModel._unitQuickFormInput(
         thisXFormModel: taskUnit.xFormModel,
-        extraFormInput: taskUnit.extraFormInput,
+        formInput: taskUnit.formInput,
       );
     }
     // Scalar:

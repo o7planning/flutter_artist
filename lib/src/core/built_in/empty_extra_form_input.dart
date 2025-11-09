@@ -1,5 +1,5 @@
 import '../_core_/core.dart';
 
-class EmptyExtraFormInput extends ExtraFormInput {
+class EmptyFormInput extends FormInput {
   // Empty Code.
 }

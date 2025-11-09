@@ -1,12 +1,20 @@
 enum FormErrorMethod {
   callApiLoadMultiOptPropXData,
-  getMultiOptPropValueFromItemDetail,
-  getMultiOptPropValueFromExtraFormInput,
   //
-  specifyDefaultSimplePropValues,
-  specifyDefaultMultiOptPropValue,
   getSimplePropValuesFromItemDetail,
-  getSimplePropValuesFromExtraFormInput,
+  getMultiOptPropValueFromItemDetail,
+
+  // OLD: getMultiOptPropValueFromFormInput
+  getUpdatedValueForMultiOptProp,
+
+  // OLD: getSimplePropValuesFromFormInput
+  getUpdatedValuesForSimpleProps,
+
+  // OLD: specifyDefaultSimplePropValues
+  specifyDefaultValuesForSimpleProps,
+
+  // OLD: specifyDefaultMultiOptPropValue
+  specifyDefaultValueForMultiOptProp,
   //
   unknown;
 }

@@ -3,7 +3,8 @@ part of '../core.dart';
 abstract class FormModel<
     ID extends Object,
     ITEM_DETAIL extends Identifiable<ID>,
-    EXTRA_FORM_INPUT extends ExtraFormInput> extends _Core {
+    FORM_RELATED_DATA extends FormRelatedData, // EmptyFormRelatedData
+    FORM_INPUT extends FormInput> extends _Core {
   final FormModelConfig config;
 
   int __loadCount = 0;
@@ -26,7 +27,8 @@ abstract class FormModel<
     return "block-form > ${shelf.name} > ${block.name}";
   }
 
-  EXTRA_FORM_INPUT? __creationExtraFormInput;
+  FORM_RELATED_DATA? __formRelatedData;
+  FORM_INPUT? __creationFormInput;
 
   bool _changeEventLocked = false;
 
@@ -50,7 +52,8 @@ abstract class FormModel<
       ITEM_DETAIL,
       FilterInput,
       FilterCriteria,
-      EXTRA_FORM_INPUT> block;
+      FORM_RELATED_DATA,
+      FORM_INPUT> block;
 
   bool _defaultSimpleValuesInitiated = false;
   bool _defaultMultiOptValuesInitiated = false;
@@ -94,11 +97,11 @@ abstract class FormModel<
   // ***************************************************************************
 
   XFormModel<ID, ITEM_DETAIL> _createXFormModel({
-    required EXTRA_FORM_INPUT? extraFormInput,
+    required FORM_INPUT? formInput,
   }) {
     return XFormModel<ID, ITEM_DETAIL>._(
       formModel: this,
-      extraFormInput: extraFormInput,
+      formInput: formInput,
     );
   }
 
@@ -132,35 +135,35 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  /// In all the cases: @itemDetail not null or @extraFormInput not null or both.
+  /// In all the cases: @itemDetail not null or @formInput not null or both.
   ///
-  /// In case of you are editing an ITEM with and ExtraFormInput
-  /// then @itemDetail & @extraFormInput will be not null.
+  /// In case of you are editing an ITEM with and FormInput
+  /// then @itemDetail & @formInput will be not null.
   ///
   /// ```
   /// Case FormActivityType.itemFirstLoad:
   ///     - @formMode = FormMode.creation:
   ///         - @itemDetail     --> Null.
-  ///         - @extraFormInput --> Not null.
+  ///         - @formInput --> Not null.
   ///     - @formMode = FormMode.edit:
   ///         - @itemDetail     --> Not Null.
-  ///         - @extraFormInput --> Null or Not null.
+  ///         - @formInput --> Null or Not null.
   ///
   /// Case FormActivityType.enterFormFields:
   ///     - @formMode = FormMode.creation:
   ///         - @itemDetail     --> Null.
-  ///         - @extraFormInput --> Not null.
+  ///         - @formInput --> Not null.
   ///     - @formMode = FormMode.edit:
   ///         - @itemDetail     --> Not Null.
-  ///         - @extraFormInput --> Not null. -
+  ///         - @formInput --> Not null. -
   ///
   /// Case FormActivityType.updateFromFormView:
   ///     - @formMode = FormMode.creation:
   ///         - @itemDetail     --> Null.
-  ///         - @extraFormInput --> Not Null.
+  ///         - @formInput --> Not Null.
   ///     - @formMode = FormMode.edit:
   ///         - @itemDetail     --> Not Null.
-  ///         - @extraFormInput --> Null or Not null.
+  ///         - @formInput --> Null or Not null.
   /// ```
   ///
   @_AbstractMethodAnnotation()
@@ -168,8 +171,8 @@ abstract class FormModel<
     required String multiOptPropName,
     required SelectionType selectionType,
     required Object? parentMultiOptPropValue,
-    required Object? parentBlockCurrentItem,
-    required EXTRA_FORM_INPUT? extraFormInput,
+    required FORM_RELATED_DATA formRelatedData,
+    required FORM_INPUT? formInput,
     required ITEM_DETAIL? itemDetail,
   });
 
@@ -177,7 +180,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   @_AbstractMethodAnnotation()
-  OptValueWrap? specifyDefaultMultiOptPropValue({
+  OptValueWrap? specifyDefaultValueForMultiOptProp({
     required String multiOptPropName,
     required SelectionType selectionType,
     required XData multiOptPropXData,
@@ -188,7 +191,9 @@ abstract class FormModel<
   // ***************************************************************************
 
   @_AbstractMethodAnnotation()
-  Map<String, dynamic>? specifyDefaultSimplePropValues();
+  Map<String, dynamic>? specifyDefaultValuesForSimpleProps({
+    required Object? parentBlockCurrentItemId,
+  });
 
   // ***************************************************************************
   // ***************************************************************************
@@ -198,8 +203,9 @@ abstract class FormModel<
     required String multiOptPropName,
     required SelectionType selectionType,
     required XData multiOptPropXData,
-    required ITEM_DETAIL itemDetail,
     required Object? parentMultiOptPropValue,
+    required FORM_RELATED_DATA formRelatedData,
+    required ITEM_DETAIL itemDetail,
   });
 
   // ***************************************************************************
@@ -207,27 +213,35 @@ abstract class FormModel<
 
   @_AbstractMethodAnnotation()
   Map<String, dynamic>? getSimplePropValuesFromItemDetail({
+    required Object? parentBlockCurrentItemId,
+    required FORM_RELATED_DATA formRelatedData,
     required ITEM_DETAIL itemDetail,
   });
 
   // ***************************************************************************
   // ***************************************************************************
 
+  // OLD: getMultiOptPropValueFromFormInput.
   @_AbstractMethodAnnotation()
-  OptValueWrap? getMultiOptPropValueFromExtraFormInput({
+  OptValueWrap? getUpdatedValueForMultiOptProp({
     required String multiOptPropName,
     required SelectionType selectionType,
     required XData multiOptPropXData,
-    required EXTRA_FORM_INPUT extraFormInput,
     required Object? parentMultiOptPropValue,
+    required Object? parentBlockCurrentItemId,
+    required FORM_RELATED_DATA formRelatedData,
+    required FORM_INPUT formInput,
   });
 
   // ***************************************************************************
   // ***************************************************************************
 
+  // OLD: getUpdatedValuesForSimpleProps.
   @_AbstractMethodAnnotation()
-  Map<String, SimpleValueWrap?>? getSimplePropValuesFromExtraFormInput({
-    required EXTRA_FORM_INPUT extraFormInput,
+  Map<String, SimpleValueWrap?>? getUpdatedValuesForSimpleProps({
+    required Object? parentBlockCurrentItemId,
+    required FORM_RELATED_DATA formRelatedData,
+    required FORM_INPUT formInput,
   });
 
   // ***************************************************************************
@@ -235,7 +249,6 @@ abstract class FormModel<
 
   @_AbstractMethodAnnotation()
   Future<ApiResult<ITEM_DETAIL>> callApiCreateItem({
-    required Object? parentBlockItem,
     required Map<String, dynamic> formMapData,
   });
 
@@ -244,7 +257,6 @@ abstract class FormModel<
 
   @_AbstractMethodAnnotation()
   Future<ApiResult<ITEM_DETAIL>> callApiUpdateItem({
-    required Object? parentBlockItem,
     required Map<String, dynamic> formMapData,
   });
 
@@ -259,8 +271,8 @@ abstract class FormModel<
     return ITEM_DETAIL;
   }
 
-  Type getExtraFormInputType() {
-    return EXTRA_FORM_INPUT;
+  Type getFormInputType() {
+    return FORM_INPUT;
   }
 
   @DebugMethodAnnotation()
@@ -270,7 +282,7 @@ abstract class FormModel<
 
   @DebugMethodAnnotation()
   String get debugClassParametersDefinition {
-    return "<${getIdType()}, ${getItemDetailType()}, ${getExtraFormInputType()}>";
+    return "<${getIdType()}, ${getItemDetailType()}, ${getFormInputType()}>";
   }
 
   // ***************************************************************************
@@ -309,7 +321,8 @@ abstract class FormModel<
     __assertThisXFormModel(xFormModel);
     //
     await _startNewFormActivity(
-      extraFormInput: null,
+      formRelatedData: null,
+      formInput: null,
       activityType: FormActivityType.updateFromFormView,
     );
     return true;
@@ -344,11 +357,15 @@ abstract class FormModel<
       return true;
     }
     //
-    EXTRA_FORM_INPUT? extraFormInput =
-        thisXFormModel.extraFormInput as EXTRA_FORM_INPUT?;
+    FORM_RELATED_DATA? formRelatedData = block._initFormRelatedData();
+    if (formRelatedData == null) {
+      return false;
+    }
+    var formInput = thisXFormModel.formInput as FORM_INPUT?;
     // TODO: Bắt lỗi cho vào "taskResult" ???????
     return await _startNewFormActivity(
-      extraFormInput: extraFormInput,
+      formRelatedData: formRelatedData,
+      formInput: formInput,
       activityType: FormActivityType.itemFirstLoad,
     );
   }
@@ -358,14 +375,15 @@ abstract class FormModel<
 
   @_TaskUnitMethodAnnotation()
   @_FormModelEnterFormFieldsAnnotation()
-  Future<bool> _unitQuickExtraFormInput({
+  Future<bool> _unitQuickFormInput({
     required XFormModel thisXFormModel,
-    required EXTRA_FORM_INPUT extraFormInput,
+    required FORM_INPUT formInput,
   }) async {
     __assertThisXFormModel(thisXFormModel);
     //
     await _startNewFormActivity(
-      extraFormInput: extraFormInput,
+      formRelatedData: null,
+      formInput: formInput,
       activityType: FormActivityType.autoEnterFormFields,
     );
     return true;
@@ -413,17 +431,10 @@ abstract class FormModel<
       );
       //
       block._refreshSavingState(isSaving: true);
-      Object? parentBlockItem = block.parent?.currentItem;
       //
       result = isNew
-          ? await callApiCreateItem(
-              parentBlockItem: parentBlockItem,
-              formMapData: formMapData,
-            )
-          : await callApiUpdateItem(
-              parentBlockItem: parentBlockItem,
-              formMapData: formMapData,
-            );
+          ? await callApiCreateItem(formMapData: formMapData)
+          : await callApiUpdateItem(formMapData: formMapData);
     } catch (e, stackTrace) {
       saveError = true;
       //
@@ -498,18 +509,10 @@ abstract class FormModel<
   @_ImportantMethodAnnotation(
       "Called when Form Data is being loaded or user makes changes in FormView")
   Future<bool> _startNewFormActivity({
-    required EXTRA_FORM_INPUT? extraFormInput,
+    required FORM_RELATED_DATA? formRelatedData,
+    required FORM_INPUT? formInput,
     required FormActivityType activityType,
   }) async {
-    // FILTER_CRITERIA? blockCurrentFilterCriteria = block.filterCriteria;
-    // if (blockCurrentFilterCriteria == null) {
-    //   // Test Case: [01c]
-    //   // Make sure never get this error.
-    //   throw AppError(errorMessage: "FilterCriteria is null");
-    // }
-    // ???
-    // EXTRA_FORM_INPUT extraFormInput = block._createExtraFormInput();
-
     __formActivityCount++;
     print(
         "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFormActivity, activityType: $activityType");
@@ -534,27 +537,48 @@ abstract class FormModel<
           error: null,
         );
         if (currentFormMode == FormMode.creation) {
-          __creationExtraFormInput = extraFormInput;
+          __creationFormInput = formInput;
         } else {
-          __creationExtraFormInput = null;
+          __creationFormInput = null;
         }
-      case FormActivityType.updateFromFormView:
-        currentFormMode = formMode;
-        if (extraFormInput != null) {
+        if (formRelatedData == null) {
           throw DevError(
             errorMessage:
-                "Dev Error. extraFormInput must be null if FormModel.activityType = updateFromFormView.",
+                "Dev Error. formRelatedData must be not null if FormModel.activityType = itemFirstLoad.",
+          );
+        }
+        __formRelatedData = formRelatedData;
+      case FormActivityType.updateFromFormView:
+        currentFormMode = formMode;
+        if (formRelatedData != null) {
+          throw DevError(
+            errorMessage:
+                "Dev Error. formRelatedData must be null if FormModel.activityType = updateFromFormView.",
+          );
+        }
+        formRelatedData = __formRelatedData!;
+        if (formInput != null) {
+          throw DevError(
+            errorMessage:
+                "Dev Error. formInput must be null if FormModel.activityType = updateFromFormView.",
           );
         }
         if (currentFormMode == FormMode.creation) {
-          extraFormInput = __creationExtraFormInput;
+          formInput = __creationFormInput;
         }
       case FormActivityType.autoEnterFormFields:
         currentFormMode = formMode;
-        if (extraFormInput == null) {
+        if (formRelatedData != null) {
           throw DevError(
             errorMessage:
-                "Dev Error. extraFormInput must be not null if FormModel.activityType = autoEnterFormFields.",
+                "Dev Error. formRelatedData must be null if FormModel.activityType = autoEnterFormFields.",
+          );
+        }
+        formRelatedData = __formRelatedData!;
+        if (formInput == null) {
+          throw DevError(
+            errorMessage:
+                "Dev Error. formInput must be not null if FormModel.activityType = autoEnterFormFields.",
           );
         }
     }
@@ -573,7 +597,7 @@ abstract class FormModel<
     final Map<String, dynamic> formKeyInstantValues =
         _formKey.currentState?.instantValue ?? {};
     //
-    _formPropsStructure._initTemporaryForNewTransaction(
+    _formPropsStructure._initTemporaryForNewActivity(
       activityType: activityType,
       // Data from FormView:
       formKeyInstantValues: formKeyInstantValues,
@@ -586,11 +610,21 @@ abstract class FormModel<
       if (itemDetail != null) {
         try {
           var simplePropValueMap = getSimplePropValuesFromItemDetail(
+                parentBlockCurrentItemId: block.parentBlockCurrentItemId,
+                formRelatedData: formRelatedData,
                 itemDetail: itemDetail,
               ) ??
               {};
           for (String propName in simplePropValueMap.keys) {
-            // In (First load + itemDetail != null)
+            // Check and throw error if 'propName' is not a SimpleFormProp:
+            __throwErrorIfNotASimplePropName(
+              propName: propName,
+              formErrorMethod:
+                  FormErrorMethod.getSimplePropValuesFromItemDetail,
+            );
+            //
+            // In (First load + itemDetail != null).
+            //
             dynamic value = simplePropValueMap[propName];
             _formPropsStructure._setTempSimplePropValue(
               propName: propName,
@@ -627,14 +661,23 @@ abstract class FormModel<
       // itemDetail == null. [[Currently Condition: itemFirstLoad && itemDetail == null]].
       else {
         Map<String, dynamic> simplePropValueDefault = {};
-        Map<String, SimpleValueWrap?> simplePropValueExtra = {};
         if (!_defaultSimpleValuesInitiated) {
           try {
             // In case of activityType = itemFirstLoad.
-            simplePropValueDefault = specifyDefaultSimplePropValues() ?? {};
+            simplePropValueDefault = specifyDefaultValuesForSimpleProps(
+                  parentBlockCurrentItemId: block.parentBlockCurrentItemId,
+                ) ??
+                {};
             //
             for (String propName in simplePropValueDefault.keys) {
-              // In (Item First Load + itemDetail == null + !_defaultValueInitiated)
+              // Check and throw error if 'propName' is not a SimpleFormProp:
+              __throwErrorIfNotASimplePropName(
+                propName: propName,
+                formErrorMethod: FormErrorMethod.specifyDefaultValuesForSimpleProps,
+              );
+              //
+              // In (Item First Load + itemDetail == null + !_defaultValueInitiated).
+              //
               dynamic value = simplePropValueDefault[propName];
               _formPropsStructure._setTempSimplePropValue(
                 propName: propName,
@@ -646,7 +689,7 @@ abstract class FormModel<
             final formErrorInfo = FormErrorInfo(
               activityType: activityType,
               propName: null,
-              formErrorMethod: FormErrorMethod.specifyDefaultSimplePropValues,
+              formErrorMethod: FormErrorMethod.specifyDefaultValuesForSimpleProps,
               error: e,
               errorStackTrace: stackTrace,
             );
@@ -672,18 +715,27 @@ abstract class FormModel<
         // In Condition: itemFirstLoad && itemDetail == null.
         // TODO: Handle Error:
         //
-        extraFormInput = block._initInputForCreationForm();
-
-        if (extraFormInput != null) {
+        formInput = block.__initInputForCreationForm();
+        if (formInput != null) {
           try {
-            simplePropValueExtra = getSimplePropValuesFromExtraFormInput(
-                  extraFormInput: extraFormInput!,
-                ) ??
-                {};
+            final Map<String, SimpleValueWrap?> updatedSimplePropValues =
+                getUpdatedValuesForSimpleProps(
+                      parentBlockCurrentItemId: block.parentBlockCurrentItemId,
+                      formRelatedData: formRelatedData,
+                      formInput: formInput!,
+                    ) ??
+                    {};
             //
-            for (String propName in simplePropValueExtra.keys) {
-              // In (ItemFirstLoad + extraFormInput != null).
-              SimpleValueWrap? valueWrap = simplePropValueDefault[propName];
+            for (String propName in updatedSimplePropValues.keys) {
+              // Check and throw error if 'propName' is not a SimpleFormProp:
+              __throwErrorIfNotASimplePropName(
+                propName: propName,
+                formErrorMethod: FormErrorMethod.getUpdatedValuesForSimpleProps,
+              );
+              //
+              // In (ItemFirstLoad + formInput != null).
+              //
+              SimpleValueWrap? valueWrap = updatedSimplePropValues[propName];
               if (valueWrap != null) {
                 _formPropsStructure._setTempSimplePropValue(
                   propName: propName,
@@ -696,8 +748,7 @@ abstract class FormModel<
             final formErrorInfo = FormErrorInfo(
               activityType: activityType,
               propName: null,
-              formErrorMethod:
-                  FormErrorMethod.getSimplePropValuesFromExtraFormInput,
+              formErrorMethod: FormErrorMethod.getUpdatedValuesForSimpleProps,
               error: e,
               errorStackTrace: stackTrace,
             );
@@ -723,21 +774,30 @@ abstract class FormModel<
     } // end of "itemFirstLoad".
     // Begin of 'autoEnterFormFields'.
     else if (activityType == FormActivityType.autoEnterFormFields) {
-      if (extraFormInput != null) {
+      if (formInput != null) {
         try {
-          Map<String, SimpleValueWrap?> simplePropValueExtra =
-              getSimplePropValuesFromExtraFormInput(
-                    extraFormInput: extraFormInput!,
+          final Map<String, SimpleValueWrap?> updatedSimplePropValues =
+              getUpdatedValuesForSimpleProps(
+                    parentBlockCurrentItemId: block.parentBlockCurrentItemId,
+                    formRelatedData: formRelatedData,
+                    formInput: formInput!,
                   ) ??
                   {};
           //
-          for (String propName in simplePropValueExtra.keys) {
-            // In (autoEnterFormFields + extraFormInput != null)
-            SimpleValueWrap? valueWrap = simplePropValueExtra[propName];
+          for (String propName in updatedSimplePropValues.keys) {
+            // Check and throw error if 'propName' is not a SimpleFormProp:
+            __throwErrorIfNotASimplePropName(
+              propName: propName,
+              formErrorMethod: FormErrorMethod.getUpdatedValuesForSimpleProps,
+            );
+            //
+            // In (autoEnterFormFields + formInput != null)
+            //
+            SimpleValueWrap? valueWrap = updatedSimplePropValues[propName];
             if (valueWrap != null) {
               _formPropsStructure._setTempSimplePropValue(
                 propName: propName,
-                value: simplePropValueExtra[propName],
+                value: updatedSimplePropValues[propName],
                 setForInitial: false,
               );
             }
@@ -746,8 +806,7 @@ abstract class FormModel<
           final formErrorInfo = FormErrorInfo(
             activityType: activityType,
             propName: null,
-            formErrorMethod:
-                FormErrorMethod.getSimplePropValuesFromExtraFormInput,
+            formErrorMethod: FormErrorMethod.getUpdatedValuesForSimpleProps,
             error: e,
             errorStackTrace: stackTrace,
           );
@@ -781,7 +840,8 @@ abstract class FormModel<
         // May throw ApiError or FormTempError.
         //
         await _loadMultiOptPropDataCascade(
-          extraFormInput: extraFormInput,
+          formRelatedData: formRelatedData,
+          formInput: formInput,
           parentMultiOptPropValue: null,
           parentValueIsInitialValue: true,
           multiOptProp: multiOptProp,
@@ -832,6 +892,24 @@ abstract class FormModel<
       activityType: activityType,
       error: null,
     );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __throwErrorIfNotASimplePropName({
+    required String propName,
+    required FormErrorMethod formErrorMethod,
+  }) {
+    if (_formPropsStructure._isMultiOptFormProp(propName)) {
+      throw DevError(
+        errorMessage:
+            '$propName is not a ${getTypeNameWithoutGenerics(SimpleFormProp)}',
+        errorDetails: [
+          "See ${getClassNameWithoutGenerics(this)}.${getClassNameWithoutGenerics(formErrorMethod)}() method."
+        ],
+      );
+    }
   }
 
   // ***************************************************************************
@@ -936,7 +1014,8 @@ abstract class FormModel<
 
   Future<void> _loadMultiOptPropDataCascade({
     required FormActivityType activityType,
-    required EXTRA_FORM_INPUT? extraFormInput,
+    required FORM_RELATED_DATA formRelatedData,
+    required FORM_INPUT? formInput,
     required Object? parentMultiOptPropValue,
     required MultiOptFormProp multiOptProp,
     required bool parentValueIsInitialValue,
@@ -1017,14 +1096,13 @@ abstract class FormModel<
     if (tempMultiOptPropXData == null || forceReload) {
       // Always increase "__loadCount" value regardless of error.
       multiOptProp._loadCount++;
-      Object? parentBlockItem = this.block.parent?.currentItem;
       //
       try {
         // May throw AppError, ApiError or others.
         tempMultiOptPropXData = await callApiLoadMultiOptPropXData(
-          extraFormInput: extraFormInput,
+          formInput: formInput,
           itemDetail: block.currentItemDetail,
-          parentBlockCurrentItem: parentBlockItem,
+          formRelatedData: formRelatedData,
           parentMultiOptPropValue: parentMultiOptPropValue,
           multiOptPropName: multiOptPropName,
           selectionType: selectionType,
@@ -1055,10 +1133,11 @@ abstract class FormModel<
       // Item First Load:
       if (activityType == FormActivityType.itemFirstLoad) {
         if (currentItemDetail == null) {
-          if (extraFormInput != null) {
+          if (formInput != null) {
             // May throw FormTempError.
-            initialValueWrap = __getMultiOptPropValueFromExtraFormInput(
-              extraFormInput: extraFormInput,
+            initialValueWrap = __getUpdatedValueForMultiOptProp(
+              formRelatedData: formRelatedData,
+              formInput: formInput,
               multiOptPropXData: tempMultiOptPropXData,
               multiOptPropName: multiOptPropName,
               selectionType: selectionType,
@@ -1068,7 +1147,7 @@ abstract class FormModel<
             if (initialValueWrap == null) {
               if (!_defaultMultiOptValuesInitiated) {
                 // May throw FormTempError.
-                initialValueWrap = __specifyDefaultMultiOptPropValue(
+                initialValueWrap = __specifyDefaultValueForMultiOptProp(
                   multiOptPropName: multiOptPropName,
                   selectionType: selectionType,
                   multiOptPropXData: tempMultiOptPropXData,
@@ -1077,11 +1156,11 @@ abstract class FormModel<
               }
             }
           }
-          // extraFormInput == null (In itemFirstLoad).
+          // formInput == null (In itemFirstLoad).
           else {
             if (!_defaultMultiOptValuesInitiated) {
               // May throw FormTempError.
-              initialValueWrap = __specifyDefaultMultiOptPropValue(
+              initialValueWrap = __specifyDefaultValueForMultiOptProp(
                 multiOptPropName: multiOptPropName,
                 selectionType: selectionType,
                 multiOptPropXData: tempMultiOptPropXData,
@@ -1094,6 +1173,7 @@ abstract class FormModel<
         else {
           // May throw FormTempError.
           initialValueWrap = __getMultiOptPropValueFromItemDetail(
+            formRelatedData: formRelatedData,
             itemDetail: currentItemDetail,
             multiOptPropXData: tempMultiOptPropXData,
             multiOptPropName: multiOptPropName,
@@ -1104,10 +1184,11 @@ abstract class FormModel<
       } // end of 'itemFirstLoad'.
       // Auto Enter Form Fields:
       else if (activityType == FormActivityType.autoEnterFormFields) {
-        if (extraFormInput != null) {
+        if (formInput != null) {
           // May throw FormTempError.
-          initialValueWrap = __getMultiOptPropValueFromExtraFormInput(
-            extraFormInput: extraFormInput,
+          initialValueWrap = __getUpdatedValueForMultiOptProp(
+            formRelatedData: formRelatedData,
+            formInput: formInput,
             multiOptPropXData: tempMultiOptPropXData,
             multiOptPropName: multiOptPropName,
             selectionType: selectionType,
@@ -1224,7 +1305,8 @@ abstract class FormModel<
     if (tempSelectedPropValue != null) {
       for (MultiOptFormProp child in multiOptProp._children) {
         await _loadMultiOptPropDataCascade(
-          extraFormInput: extraFormInput,
+          formRelatedData: formRelatedData,
+          formInput: formInput,
           parentMultiOptPropValue: tempSelectedPropValue,
           parentValueIsInitialValue: multiOptValueIsInitialValue,
           multiOptProp: child,
@@ -1299,14 +1381,14 @@ abstract class FormModel<
   // ***************************************************************************
 
   @_MayThrowFormTempErrorAnnotation()
-  OptValueWrap? __specifyDefaultMultiOptPropValue({
+  OptValueWrap? __specifyDefaultValueForMultiOptProp({
     required String multiOptPropName,
     required SelectionType selectionType,
     required XData multiOptPropXData,
     required Object? parentMultiOptPropValue,
   }) {
     try {
-      OptValueWrap? valueWrap = specifyDefaultMultiOptPropValue(
+      OptValueWrap? valueWrap = specifyDefaultValueForMultiOptProp(
         multiOptPropXData: multiOptPropXData,
         multiOptPropName: multiOptPropName,
         selectionType: selectionType,
@@ -1314,7 +1396,7 @@ abstract class FormModel<
       );
       if (valueWrap == null) {
         __createNullValueWrapAppError(
-          methodName: "specifyDefaultMultiOptPropValue",
+          methodName: "specifyDefaultValueForMultiOptProp",
           multiOptPropName: multiOptPropName,
         );
         return null;
@@ -1330,7 +1412,7 @@ abstract class FormModel<
     } catch (e, stackTrace) {
       throw FormTempError(
         propName: multiOptPropName,
-        formErrorMethod: FormErrorMethod.specifyDefaultMultiOptPropValue,
+        formErrorMethod: FormErrorMethod.specifyDefaultValueForMultiOptProp,
         error: e,
         stackTrace: stackTrace,
       );
@@ -1345,15 +1427,14 @@ abstract class FormModel<
     required String multiOptPropName,
   }) {
     MultiOptFormProp? multiOptProp =
-        _formPropsStructure._getMultiOptProp(multiOptPropName);
+        _formPropsStructure._getMultiOptFormProp(multiOptPropName);
     if (multiOptProp == null) {
       throw "The '$multiOptPropName' is not $MultiOptFormProp";
     }
     String message =
         "The ${getClassName(this)}.$methodName() method must return a non-null $OptValueWrap for the multiOptPropName '$multiOptPropName'. ";
     if (multiOptProp.selectionType == SelectionType.single) {
-      message +=
-          "$OptValueWrap.single(null) or $OptValueWrap.single(value). ";
+      message += "$OptValueWrap.single(null) or $OptValueWrap.single(value). ";
     } else {
       message +=
           "$OptValueWrap.multi([null]) or $OptValueWrap.multi([value]). ";
@@ -1371,6 +1452,7 @@ abstract class FormModel<
     required String multiOptPropName,
     required SelectionType selectionType,
     required XData multiOptPropXData,
+    required FORM_RELATED_DATA formRelatedData,
     required ITEM_DETAIL itemDetail,
     required Object? parentMultiOptPropValue,
   }) {
@@ -1379,6 +1461,7 @@ abstract class FormModel<
         multiOptPropName: multiOptPropName,
         selectionType: selectionType,
         multiOptPropXData: multiOptPropXData,
+        formRelatedData: formRelatedData,
         itemDetail: itemDetail,
         parentMultiOptPropValue: parentMultiOptPropValue,
       );
@@ -1403,27 +1486,30 @@ abstract class FormModel<
   // ***************************************************************************
 
   @_MayThrowFormTempErrorAnnotation()
-  OptValueWrap? __getMultiOptPropValueFromExtraFormInput({
+  OptValueWrap? __getUpdatedValueForMultiOptProp({
     required String multiOptPropName,
     required SelectionType selectionType,
     required XData multiOptPropXData,
-    required EXTRA_FORM_INPUT extraFormInput,
+    required FORM_RELATED_DATA formRelatedData,
+    required FORM_INPUT formInput,
     required Object? parentMultiOptPropValue,
   }) {
-    if (extraFormInput is EmptyExtraFormInput) {
+    if (formInput is EmptyFormInput) {
       return null;
     }
     try {
-      OptValueWrap? valueWrap = getMultiOptPropValueFromExtraFormInput(
-        extraFormInput: extraFormInput,
-        multiOptPropXData: multiOptPropXData,
+      OptValueWrap? valueWrap = getUpdatedValueForMultiOptProp(
         multiOptPropName: multiOptPropName,
+        multiOptPropXData: multiOptPropXData,
         selectionType: selectionType,
         parentMultiOptPropValue: parentMultiOptPropValue,
+        parentBlockCurrentItemId: block.parentBlockCurrentItemId,
+        formRelatedData: formRelatedData,
+        formInput: formInput,
       );
       if (valueWrap == null) {
         __createNullValueWrapAppError(
-          methodName: "getMultiOptPropValueFromExtraFormInput",
+          methodName: "getUpdatedValueForMultiOptProp",
           multiOptPropName: multiOptPropName,
         );
       }
@@ -1438,7 +1524,7 @@ abstract class FormModel<
     } catch (e, stackTrace) {
       throw FormTempError(
         propName: multiOptPropName,
-        formErrorMethod: FormErrorMethod.getMultiOptPropValueFromExtraFormInput,
+        formErrorMethod: FormErrorMethod.getUpdatedValueForMultiOptProp,
         error: e,
         stackTrace: stackTrace,
       );
@@ -1625,13 +1711,13 @@ abstract class FormModel<
   @_RootMethodAnnotation()
   @_FormModelEnterFormFieldsAnnotation()
   Future<bool> enterFormFields({
-    required EXTRA_FORM_INPUT extraFormInput,
+    required FORM_INPUT formInput,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       ownerClassInstance: this,
       methodName: "enterFormFields",
-      parameters: {"extraFormInput": extraFormInput},
+      parameters: {"formInput": formInput},
       navigate: null,
     );
     //
@@ -1649,7 +1735,7 @@ abstract class FormModel<
     XFormModel xFormModel = xBlock.xFormModel!;
     _STaskUnit taskUnit = _FormModelAutoEnterFormFieldsTaskUnit(
       xFormModel: xFormModel,
-      extraFormInput: extraFormInput,
+      formInput: formInput,
     );
     //
     xShelf._addTaskUnit(taskUnit: taskUnit);

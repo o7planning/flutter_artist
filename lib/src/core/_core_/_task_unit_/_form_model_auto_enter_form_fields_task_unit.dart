@@ -2,14 +2,14 @@ part of '../core.dart';
 
 @_TaskUnitClassAnnotation()
 @_FormModelEnterFormFieldsAnnotation()
-class _FormModelAutoEnterFormFieldsTaskUnit<
-    EXTRA_FORM_INPUT extends ExtraFormInput> extends _STaskUnit {
+class _FormModelAutoEnterFormFieldsTaskUnit<FORM_INPUT extends FormInput>
+    extends _STaskUnit {
   XFormModel xFormModel;
-  EXTRA_FORM_INPUT extraFormInput;
+  FORM_INPUT formInput;
 
   _FormModelAutoEnterFormFieldsTaskUnit({
     required this.xFormModel,
-    required this.extraFormInput,
+    required this.formInput,
   }) : super(taskType: TaskType.formModelEnterFormFields);
 
   @override

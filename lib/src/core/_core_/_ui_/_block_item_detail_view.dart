@@ -7,7 +7,8 @@ abstract class BlockItemDetailView<
         Identifiable,
         FilterInput,
         FilterCriteria,
-        ExtraFormInput>> extends StatelessWidget {
+        FormRelatedData,
+        FormInput>> extends StatelessWidget {
   final BLOCK block;
 
   const BlockItemDetailView({

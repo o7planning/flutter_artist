@@ -7,7 +7,7 @@ class XFormModel<
 
   final FormModel formModel;
   late final XBlock<ID, Identifiable<ID>, ITEM_DETAIL> xBlock;
-  final ExtraFormInput? extraFormInput;
+  final FormInput? formInput;
 
   int get xShelfId => xShelf.xShelfId;
 
@@ -26,7 +26,7 @@ class XFormModel<
   ///
   XFormModel._({
     required this.formModel,
-    required this.extraFormInput,
+    required this.formInput,
   });
 
   void setForceType(ForceType forceType) {

@@ -99,7 +99,7 @@ abstract class XShelf {
         // Create new XFormModel via 'formModel._createXFormModel' method
         // to have the same Generics Parameters with block.
         //
-        xFormModel = formModel._createXFormModel(extraFormInput: null);
+        xFormModel = formModel._createXFormModel(formInput: null);
         allXFormModels.add(xFormModel);
         xFormModelMap[formModel.block.name] = xFormModel;
       }

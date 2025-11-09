@@ -25,14 +25,16 @@ abstract class SingleItemBlock<
         ITEM_DETAIL extends Identifiable<ID>,
         FILTER_INPUT extends FilterInput,
         FILTER_CRITERIA extends FilterCriteria,
-        EXTRA_FORM_INPUT extends ExtraFormInput> //
+        FORM_RELATED_DATA extends FormRelatedData,
+        FORM_INPUT extends FormInput> //
     extends Block<
         ID, //
         ITEM_DETAIL,
         ITEM_DETAIL,
         FILTER_INPUT,
         FILTER_CRITERIA,
-        EXTRA_FORM_INPUT> {
+        FORM_RELATED_DATA,
+        FORM_INPUT> {
   SingleItemBlock({
     required super.name,
     required super.description,

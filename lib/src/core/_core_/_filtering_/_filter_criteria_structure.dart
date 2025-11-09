@@ -124,7 +124,8 @@ class FilterCriteriaStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  MultiOptFilterCriterion? _getMultiOptCriterion(String multiOptCriterionName) {
+  MultiOptFilterCriterion? _getMultiOptFilterCriterion(
+      String multiOptCriterionName) {
     FilterCriterion? criterion = _allCriteriaMap[multiOptCriterionName];
     if (criterion is MultiOptFilterCriterion) {
       return criterion;
@@ -135,7 +136,7 @@ class FilterCriteriaStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  SimpleFilterCriterion? _getSimpleCriterion(String criterionName) {
+  SimpleFilterCriterion? _getSimpleFilterCriterion(String criterionName) {
     FilterCriterion? criterion = _allCriteriaMap[criterionName];
     if (criterion is SimpleFilterCriterion) {
       return criterion;
@@ -146,14 +147,14 @@ class FilterCriteriaStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _isOptCriterion(String criterionName) {
-    return _getMultiOptCriterion(criterionName) != null;
+  bool _isMultiOptFilterCriterion(String criterionName) {
+    return _getMultiOptFilterCriterion(criterionName) != null;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void _initTemporaryForNewTransaction({
+  void _initTemporaryForNewActivity({
     required FilterActivityType activityType,
     required Map<String, dynamic> formKeyInstantValues,
     required FilterInput? filterInput,
@@ -225,20 +226,6 @@ class FilterCriteriaStructure {
       //
       _updateChildrenMultiOptValueToNullCascade(multiOptCriterion: child);
     }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  XData? _getTempOptCriterionXData(String criterionName) {
-    FilterCriterion? criterion = _allCriteriaMap[criterionName];
-    if (criterion == null) {
-      return null;
-    }
-    if (criterion is MultiOptFilterCriterion) {
-      return criterion._tempCurrentXData;
-    }
-    return null;
   }
 
   // ***************************************************************************

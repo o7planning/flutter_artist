@@ -33,4 +33,9 @@ class SimpleValueWrap<VALUE extends Object> {
     }
     return SimpleValueWrap(value);
   }
+
+  @override
+  String toString() {
+    return "SimpleValueWrap($value)";
+  }
 }

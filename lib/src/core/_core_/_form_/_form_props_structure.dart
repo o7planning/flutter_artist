@@ -295,7 +295,7 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  MultiOptFormProp? _getMultiOptProp(String multiOptPropName) {
+  MultiOptFormProp? _getMultiOptFormProp(String multiOptPropName) {
     FormProp? prop = _allPropMap[multiOptPropName];
     if (prop is MultiOptFormProp) {
       return prop;
@@ -306,7 +306,7 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  SimpleFormProp? _getSimpleProp(String propName) {
+  SimpleFormProp? _getSimpleFormProp(String propName) {
     FormProp? prop = _allPropMap[propName];
     if (prop is SimpleFormProp) {
       return prop;
@@ -317,14 +317,14 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _isOptProp(String propName) {
-    return _getMultiOptProp(propName) != null;
+  bool _isMultiOptFormProp(String propName) {
+    return _getMultiOptFormProp(propName) != null;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void _initTemporaryForNewTransaction({
+  void _initTemporaryForNewActivity({
     required FormActivityType activityType,
     required Map<String, dynamic> formKeyInstantValues,
   }) {

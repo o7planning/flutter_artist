@@ -31,7 +31,7 @@ class SearchTextFilterModel
   }
 
   @override
-  OptValueWrap? getMultiOptCriterionValueFromFilterInput({
+  OptValueWrap? getUpdatedValueForMultiOptCriterion({
     required String multiOptCriterionName,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
@@ -42,7 +42,7 @@ class SearchTextFilterModel
   }
 
   @override
-  Map<String, dynamic>? getSimpleCriterionValuesFromFilterInput({
+  Map<String, dynamic>? getUpdatedValuesForSimpleCriteria({
     required SearchTextFilterInput filterInput,
   }) {
     return {
@@ -51,7 +51,7 @@ class SearchTextFilterModel
   }
 
   @override
-  OptValueWrap? specifyDefaultMultiOptCriterionValue({
+  OptValueWrap? specifyDefaultValueForMultiOptCriterion({
     required String multiOptCriterionName,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
@@ -61,7 +61,7 @@ class SearchTextFilterModel
   }
 
   @override
-  Map<String, dynamic>? specifyDefaultSimpleCriterionValues() {
+  Map<String, dynamic>? specifyDefaultValuesForSimpleCriteria() {
     return {
       "searchText": _searchText,
     };

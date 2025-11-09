@@ -30,7 +30,7 @@ class _DefaultFilterModel
   }
 
   @override
-  OptValueWrap? getMultiOptCriterionValueFromFilterInput({
+  OptValueWrap? getUpdatedValueForMultiOptCriterion({
     required String multiOptCriterionName,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
@@ -41,14 +41,14 @@ class _DefaultFilterModel
   }
 
   @override
-  Map<String, dynamic>? getSimpleCriterionValuesFromFilterInput({
+  Map<String, dynamic>? getUpdatedValuesForSimpleCriteria({
     required EmptyFilterInput filterInput,
   }) {
     return null;
   }
 
   @override
-  OptValueWrap? specifyDefaultMultiOptCriterionValue({
+  OptValueWrap? specifyDefaultValueForMultiOptCriterion({
     required String multiOptCriterionName,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
@@ -58,7 +58,7 @@ class _DefaultFilterModel
   }
 
   @override
-  Map<String, dynamic>? specifyDefaultSimpleCriterionValues() {
+  Map<String, dynamic>? specifyDefaultValuesForSimpleCriteria() {
     return null;
   }
 

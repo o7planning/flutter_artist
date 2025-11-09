@@ -31,7 +31,7 @@ class StringValueFilterModel
   }
 
   @override
-  OptValueWrap? getMultiOptCriterionValueFromFilterInput({
+  OptValueWrap? getUpdatedValueForMultiOptCriterion({
     required String multiOptCriterionName,
     required SelectionType selectionType,
     required StringValueFilterInput filterInput,
@@ -42,7 +42,7 @@ class StringValueFilterModel
   }
 
   @override
-  Map<String, dynamic>? getSimpleCriterionValuesFromFilterInput({
+  Map<String, dynamic>? getUpdatedValuesForSimpleCriteria({
     required StringValueFilterInput filterInput,
   }) {
     return {
@@ -51,7 +51,7 @@ class StringValueFilterModel
   }
 
   @override
-  OptValueWrap? specifyDefaultMultiOptCriterionValue({
+  OptValueWrap? specifyDefaultValueForMultiOptCriterion({
     required String multiOptCriterionName,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
@@ -61,7 +61,7 @@ class StringValueFilterModel
   }
 
   @override
-  Map<String, dynamic>? specifyDefaultSimpleCriterionValues() {
+  Map<String, dynamic>? specifyDefaultValuesForSimpleCriteria() {
     return {
       "string": _stringValue,
     };

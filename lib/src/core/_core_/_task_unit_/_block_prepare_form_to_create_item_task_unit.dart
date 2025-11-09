@@ -4,14 +4,14 @@ part of '../core.dart';
 @_BlockPrepareFormToCreateItemAnnotation()
 class _BlockPrepareFormToCreateItemTaskUnit extends _STaskUnit {
   XBlock xBlock;
-  ExtraFormInput? extraFormInput;
+  FormInput? formInput;
   Function()? navigate;
   final bool initDirty;
 
   _BlockPrepareFormToCreateItemTaskUnit({
     required this.xBlock,
     required this.initDirty,
-    required this.extraFormInput,
+    required this.formInput,
     required this.navigate,
   }) : super(taskType: TaskType.blockPrepareToCreateItem);
 

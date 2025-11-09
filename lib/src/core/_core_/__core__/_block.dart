@@ -5,7 +5,7 @@ part of '../core.dart';
 /// ```dart
 /// class EmployeeBlock
 ///       extends Block<int, EmployeeInfo, EmployeeData,
-///                     EmptyFilerInput, EmptyFilterCriteria, EmptyExtraFormInput> {
+///                     EmptyFilerInput, EmptyFilterCriteria, EmptyFormInput> {
 ///
 /// }
 /// ```
@@ -59,11 +59,19 @@ part of '../core.dart';
 /// }
 /// ```
 ///
-/// [EXTRA_FORM_INPUT]: Additional form data are used to create a record in the Form.
-/// For example: Create an employee with the specified department.
+/// [FORM_RELATED_DATA]: Ancestral Data used for Form.
 /// ```
-/// class EmployeeExtraFormInput extends ExtraFormInput {
-///    DepartmentInfo? department;
+/// class EmployeeFormRelatedData  {
+///    final int departmentId;
+///    final String departmentName;
+/// }
+/// ```
+///
+/// [FORM_INPUT]: Form data are used to create a record in the Form.
+/// For example: Create an employee with the specified name,...
+/// ```
+/// class EmployeeFormInput extends FormInput {
+///    String? name;
 /// }
 /// ```
 ///
@@ -73,7 +81,8 @@ abstract class Block<
     ITEM_DETAIL extends Identifiable<ID>,
     FILTER_INPUT extends FilterInput, // EmptyFilterInput
     FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
-    EXTRA_FORM_INPUT extends ExtraFormInput // EmptyExtraFormInput
+    FORM_RELATED_DATA extends FormRelatedData, // EmptyFormRelatedData
+    FORM_INPUT extends FormInput // EmptyFormInput
     > extends _Core {
   late final Shelf shelf;
 
@@ -137,7 +146,7 @@ abstract class Block<
   @DebugMethodAnnotation()
   String get debugClassParametersDefinition {
     return "<${getItemIdType()}, ${getItemType()}, ${getItemDetailType()}, "
-        "${getFilterInputType()}, ${getFilterCriteriaType()}, ${getExtraFormInputType()}>";
+        "${getFilterInputType()}, ${getFilterCriteriaType()}, ${getFormInputType()}>";
   }
 
   final String? description;
@@ -223,7 +232,8 @@ abstract class Block<
   final FormModel<
       ID, //
       ITEM_DETAIL,
-      EXTRA_FORM_INPUT>? formModel;
+      FORM_RELATED_DATA,
+      FORM_INPUT>? formModel;
 
   final List<Block> _childBlocks;
 
@@ -307,7 +317,8 @@ abstract class Block<
       ITEM_DETAIL,
       FILTER_INPUT,
       FILTER_CRITERIA,
-      EXTRA_FORM_INPUT>._(
+      FORM_RELATED_DATA,
+      FORM_INPUT>._(
     this,
     config.pageable,
   );
@@ -601,8 +612,8 @@ abstract class Block<
     return FILTER_CRITERIA;
   }
 
-  Type getExtraFormInputType() {
-    return EXTRA_FORM_INPUT;
+  Type getFormInputType() {
+    return FORM_INPUT;
   }
 
   // ***************************************************************************
@@ -1125,7 +1136,7 @@ abstract class Block<
         taskUnit: _BlockPrepareFormToCreateItemTaskUnit(
           xBlock: thisXBlock,
           initDirty: false,
-          extraFormInput: null,
+          formInput: null,
           navigate: null,
         ),
       );
@@ -2062,7 +2073,7 @@ abstract class Block<
   Future<bool> _unitPrepareFormToCreateItem({
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required bool initDirty,
-    required EXTRA_FORM_INPUT? extraFormInput,
+    required FORM_INPUT? formInput,
     required Function()? navigate,
   }) async {
     __assertThisXBlock(thisXBlock);
@@ -2090,9 +2101,15 @@ abstract class Block<
       __refreshPreparingFormCreationState(
         isPreparingFormCreation: true,
       );
+      // TODO: Test Cases??
+      FORM_RELATED_DATA? formRelatedData = _initFormRelatedData();
+      if (formRelatedData == null) {
+        return false;
+      }
       //
       success = await formModel!._startNewFormActivity(
-        extraFormInput: extraFormInput,
+        formRelatedData: formRelatedData,
+        formInput: formInput,
         activityType: FormActivityType.itemFirstLoad,
       );
       if (success) {
@@ -3280,6 +3297,7 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockQueryAndPrepareToEditAnnotation()
+  // TODO: @Rename --> queryThenPrepareToEdit (queryThenSetAnItemAsCurrentThenEdit).
   Future<BlockQueryResult> queryAndPrepareToEdit({
     FILTER_INPUT? filterInput,
     ItemListMode itemListMode = ItemListMode.replace,
@@ -3330,6 +3348,7 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockQueryAndPrepareToCreateAnnotation()
+  // TODO: @Rename --> queryThenPrepareToCreate
   Future<BlockQueryResult> queryAndPrepareToCreate({
     FILTER_INPUT? filterInput,
     Function()? navigate,
@@ -3402,7 +3421,29 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  EXTRA_FORM_INPUT _initInputForCreationForm() {
+  ///
+  /// This method is called before calling a Form to create.
+  ///
+  @_AbstractMethodAnnotation()
+  FORM_INPUT initInputForCreationForm({
+    required Object? parentBlockCurrentItem,
+    required FILTER_CRITERIA filterCriteria,
+  });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_AbstractMethodAnnotation()
+  FORM_RELATED_DATA initFormRelatedData({
+    required Object? parentBlockCurrentItem,
+    required ITEM_DETAIL? currentItemDetail,
+    required FILTER_CRITERIA filterCriteria,
+  });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  FORM_INPUT __initInputForCreationForm() {
     final Object? parentBlockCurrentItem = parent?.currentItem;
     final FILTER_CRITERIA? currentFilterCriteria = this.filterCriteria;
 
@@ -3417,14 +3458,33 @@ abstract class Block<
     );
   }
 
-  ///
-  /// This method is called before calling a Form to create.
-  ///
-  @_AbstractMethodAnnotation()
-  EXTRA_FORM_INPUT initInputForCreationForm({
-    required Object? parentBlockCurrentItem,
-    required FILTER_CRITERIA filterCriteria,
-  });
+  FORM_RELATED_DATA? _initFormRelatedData() {
+    try {
+      final Object? parentBlockCurrentItem = parent?.currentItem;
+      final FILTER_CRITERIA? currentFilterCriteria = this.filterCriteria;
+
+      if (currentFilterCriteria == null) {
+        // Test Case: TODO.
+        // Make sure never get this error.
+        throw AppError(errorMessage: "FilterCriteria is null");
+      }
+
+      return initFormRelatedData(
+        parentBlockCurrentItem: parentBlockCurrentItem,
+        currentItemDetail: currentItemDetail,
+        filterCriteria: currentFilterCriteria,
+      );
+    } catch (e, stackTrace) {
+      _handleError(
+        shelf: shelf,
+        methodName: "initFormRelatedData",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+      );
+      return null;
+    }
+  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -3653,7 +3713,10 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockQuickItemCreationActionAnnotation()
   Future<BlockQuickItemCreationResult> executeQuickItemCreationAction({
-    required BlockQuickItemCreationAction<ID, ITEM, ITEM_DETAIL,
+    required BlockQuickItemCreationAction<
+            ID, //
+            ITEM,
+            ITEM_DETAIL,
             FILTER_CRITERIA>
         action,
   }) async {
@@ -3726,7 +3789,10 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockSilentItemCreationActionAnnotation()
   Future<BlockSilentItemCreationResult> executeSilentCreateItemAction({
-    required BlockSilentItemCreationAction<ID, ITEM, ITEM_DETAIL,
+    required BlockSilentItemCreationAction<
+            ID, //
+            ITEM,
+            ITEM_DETAIL,
             FILTER_CRITERIA>
         action,
   }) async {
@@ -3803,7 +3869,10 @@ abstract class Block<
   @_BlockQuickCreateMultiItemsActionAnnotation()
   Future<BlockQuickMultiItemsCreationResult>
       executeQuickMultiItemsCreationAction({
-    required BlockQuickMultiItemsCreationAction<ID, ITEM, ITEM_DETAIL,
+    required BlockQuickMultiItemsCreationAction<
+            ID, //
+            ITEM,
+            ITEM_DETAIL,
             FILTER_CRITERIA>
         action,
   }) async {
@@ -3876,7 +3945,11 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockQuickItemUpdateActionAnnotation()
   Future<BlockQuickItemUpdateResult> executeQuickItemUpdateAction({
-    required BlockQuickItemUpdateAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
+    required BlockQuickItemUpdateAction<
+            ID, //
+            ITEM,
+            ITEM_DETAIL,
+            FILTER_CRITERIA>
         action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -3949,7 +4022,11 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockSilentItemUpdateActionAnnotation()
   Future<BlockSilentItemUpdateResult> executeSilentUpdateItemAction({
-    required BlockSilentItemUpdateAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
+    required BlockSilentItemUpdateAction<
+            ID, //
+            ITEM,
+            ITEM_DETAIL,
+            FILTER_CRITERIA>
         action,
   }) async {
     FlutterArtist.codeFlowLogger._addMethodCall(
@@ -4024,6 +4101,7 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockSelectFirstItemAsCurrentAnnotation()
+  // TODO: @Rename --> refreshFirstItemAndSetAsCurrent
   Future<BlockItemCurrSelectionResult<ITEM>> refreshFirstItemThenSetAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
@@ -4043,6 +4121,7 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockSelectNextItemAsCurrentAnnotation()
+  // TODO: @Rename --> refreshNextItemAndSetAsCurrent
   Future<BlockItemCurrSelectionResult<ITEM>> refreshNextItemThenSetAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
@@ -4064,6 +4143,7 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockSelectPreviousItemAsCurrentAnnotation()
+  // TODO: @Rename --> refreshPreviousItemAndSetAsCurrent
   Future<BlockItemCurrSelectionResult<ITEM>>
       refreshPreviousItemThenSetAsCurrent({
     bool forceLoadForm = false,
@@ -4090,7 +4170,7 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockPrepareFormToCreateItemAnnotation()
   Future<PrepareItemCreationResult> prepareFormToCreateItem({
-    EXTRA_FORM_INPUT? extraFormInput,
+    FORM_INPUT? formInput,
     required Function()? navigate,
     bool initDirty = false,
   }) async {
@@ -4099,7 +4179,7 @@ abstract class Block<
       navigate: navigate,
       ownerClassInstance: this,
       methodName: "prepareFormToCreateItem",
-      parameters: {"extraFormInput": extraFormInput},
+      parameters: {"formInput": formInput},
     );
     // @Same-Code-Precheck-01
     Actionable<BlockItemCreationPrecheck> actionable = __canCreateItem(
@@ -4120,7 +4200,7 @@ abstract class Block<
       );
     }
     //
-    extraFormInput?.formAction = FormAction.create;
+    formInput?.formAction = FormAction.create;
     //
     final XShelf xShelf = _XShelfPrepareFormToCreateItem(block: this);
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
@@ -4128,7 +4208,7 @@ abstract class Block<
     _STaskUnit taskUnit = _BlockPrepareFormToCreateItemTaskUnit(
       xBlock: thisXBlock,
       initDirty: initDirty,
-      extraFormInput: extraFormInput,
+      formInput: formInput,
       navigate: navigate,
     );
     //

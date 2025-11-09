@@ -1,7 +1,7 @@
 part of '../core.dart';
 
-abstract class ExtraFormInput {
+abstract class FormInput {
   FormAction formAction = FormAction.create;
 
-  ExtraFormInput();
+  FormInput();
 }

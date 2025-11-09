@@ -486,15 +486,15 @@ abstract class Shelf extends _Core {
       }
     }
     //
-    Type extraFormInputB = ExtraFormInput;
-    String extraFormInputTypeB = extraFormInputB.toString();
-    String extraFormInputTypeStr = block.getExtraFormInputType().toString();
+    Type formInputB = FormInput;
+    String formInputTypeB = formInputB.toString();
+    String formInputTypeStr = block.getFormInputType().toString();
 
-    if (extraFormInputTypeStr == extraFormInputTypeB) {
+    if (formInputTypeStr == formInputTypeB) {
       throw ___registerError(
-          "You need to create your own class that extends the '$extraFormInputTypeB' class \n"
-          "or use the 'EmptyExtraFormInput' class to use in the '${getClassName(block)}' declaration \n\n"
-          " >> Currently, ${getClassName(block)}<EXTRA_FORM_INPUT> = <$extraFormInputTypeStr>");
+          "You need to create your own class that extends the '$formInputTypeB' class \n"
+          "or use the 'EmptyFormInput' class to use in the '${getClassName(block)}' declaration \n\n"
+          " >> Currently, ${getClassName(block)}<FORM_INPUT> = <$formInputTypeStr>");
     }
     //
     for (Block childBlock in block.childBlocks) {
