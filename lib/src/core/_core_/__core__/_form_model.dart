@@ -190,6 +190,31 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  ///
+  /// If this Block HAS a parent Block:
+  /// ```dart
+  ///  Map<String, dynamic>? specifyDefaultValuesForSimpleProps({
+  ///     required Object? parentBlockCurrentItemId,
+  ///  }) {
+  ///     return {
+  ///        // ID of current item of parent Block.
+  ///        "companyId": parentBlockCurrentItemId,
+  ///        "departmentName": "Some Name",
+  ///     };
+  ///  }
+  /// ```
+  ///
+  /// If this Block HAS NO a parent Block:
+  /// ```dart
+  ///  Map<String, dynamic>? specifyDefaultValuesForSimpleProps({
+  ///     required Object? parentBlockCurrentItemId,
+  ///  }) {
+  ///     return {
+  ///        "departmentName": "Some Name",
+  ///     };
+  ///  }
+  /// ```
+  ///
   @_AbstractMethodAnnotation()
   Map<String, dynamic>? specifyDefaultValuesForSimpleProps({
     required Object? parentBlockCurrentItemId,
@@ -197,6 +222,7 @@ abstract class FormModel<
 
   // ***************************************************************************
   // ***************************************************************************
+
 
   @_AbstractMethodAnnotation()
   OptValueWrap? getMultiOptPropValueFromItemDetail({
@@ -211,6 +237,37 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  ///
+  /// [itemDetail] should include the ID of the parent Block's currentItem.
+  /// Let's look at an example with class [DepartmentFormModel]:
+  /// ```dart
+  ///  Map<String, dynamic>? getSimplePropValuesFromItemDetail({
+  ///      required Object? parentBlockCurrentItemId,
+  ///      required EmptyFormRelatedData formRelatedData,
+  ///      required DepartmentData itemDetail,
+  ///  }) {
+  ///     return {
+  ///        "companyId": itemDetail.companyId,
+  ///        "departmentName": itemDetail.name,
+  ///     };
+  ///  }
+  /// ```
+  ///
+  /// [formRelatedData] can include other information from the parent Block's [currentItem].
+  /// ```dart
+  ///  Map<String, dynamic>? getSimplePropValuesFromItemDetail({
+  ///      required Object? parentBlockCurrentItemId,
+  ///      required DepartmentFormRelatedData formRelatedData,
+  ///      required DepartmentData itemDetail,
+  ///  }) {
+  ///     return {
+  ///        "companyId": itemDetail.companyId,
+  ///        "companyName": formRelatedData.companyName,
+  ///        "departmentName": itemDetail.name,
+  ///     };
+  ///  }
+  /// ```
+  ///
   @_AbstractMethodAnnotation()
   Map<String, dynamic>? getSimplePropValuesFromItemDetail({
     required Object? parentBlockCurrentItemId,
@@ -236,6 +293,22 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  ///
+  ///
+  /// ```dart
+  ///  Map<String, SimpleValueWrap?>? getUpdatedValuesForSimpleProps({
+  ///     required Object? parentBlockCurrentItemId,
+  ///     required FORM_RELATED_DATA formRelatedData,
+  ///     required DepartmentFormInput formInput,
+  ///  }) {
+  ///     return {
+  ///        "departmentName": SimpleValueWrap.useIfNotNull(formInput.name),
+  ///        "departmentPhone": SimpleValueWrap.useIfNotNull(formInput.phone),
+  ///     };
+  ///  }
+  /// ```
+  /// Note: In your design, [FormInput] should not include the ID of the parent Block's [currentItem].
+  ///
   // OLD: getUpdatedValuesForSimpleProps.
   @_AbstractMethodAnnotation()
   Map<String, SimpleValueWrap?>? getUpdatedValuesForSimpleProps({
@@ -673,7 +746,8 @@ abstract class FormModel<
               // Check and throw error if 'propName' is not a SimpleFormProp:
               __throwErrorIfNotASimplePropName(
                 propName: propName,
-                formErrorMethod: FormErrorMethod.specifyDefaultValuesForSimpleProps,
+                formErrorMethod:
+                    FormErrorMethod.specifyDefaultValuesForSimpleProps,
               );
               //
               // In (Item First Load + itemDetail == null + !_defaultValueInitiated).
@@ -689,7 +763,8 @@ abstract class FormModel<
             final formErrorInfo = FormErrorInfo(
               activityType: activityType,
               propName: null,
-              formErrorMethod: FormErrorMethod.specifyDefaultValuesForSimpleProps,
+              formErrorMethod:
+                  FormErrorMethod.specifyDefaultValuesForSimpleProps,
               error: e,
               errorStackTrace: stackTrace,
             );
@@ -715,7 +790,7 @@ abstract class FormModel<
         // In Condition: itemFirstLoad && itemDetail == null.
         // TODO: Handle Error:
         //
-        formInput = block.__initInputForCreationForm();
+        formInput ??= block.__initInputForCreationForm();
         if (formInput != null) {
           try {
             final Map<String, SimpleValueWrap?> updatedSimplePropValues =
@@ -797,7 +872,7 @@ abstract class FormModel<
             if (valueWrap != null) {
               _formPropsStructure._setTempSimplePropValue(
                 propName: propName,
-                value: updatedSimplePropValues[propName],
+                value: valueWrap.value,
                 setForInitial: false,
               );
             }

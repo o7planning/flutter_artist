@@ -13,7 +13,7 @@ abstract class ScalarValueView<SCALAR extends Scalar> extends StatelessWidget {
   @override
   @nonVirtual
   Widget build(BuildContext context) {
-    return ScalarFragmentViewBuilder(
+    return ScalarValueViewBuilder(
       ownerClassInstance: this,
       description: '',
       scalar: scalar,
