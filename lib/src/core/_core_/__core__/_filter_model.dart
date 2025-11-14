@@ -26,6 +26,18 @@ abstract class FilterModel<
 
   FILTER_CRITERIA? get filterCriteria => _filterCriteria;
 
+  int __loadCount = 0;
+
+  int get loadCount => __loadCount;
+
+  int __filterActivityCount = 0;
+
+  int get filterActivityCount => __filterActivityCount;
+
+  bool _loadTimeUIActive = false;
+
+  bool get loadTimeUIActive => _loadTimeUIActive;
+
   bool __initiatedAtLeastOnce = false;
 
   bool get initiatedAtLeastOnce => __initiatedAtLeastOnce;
@@ -43,7 +55,7 @@ abstract class FilterModel<
   FilterCriteriaStructure get filterCriteriaStructure =>
       _filterCriteriaStructure;
 
-  DataState? get dataState => _filterCriteriaStructure._filterDataState;
+  DataState get dataState => _filterCriteriaStructure._filterDataState;
 
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
@@ -304,7 +316,12 @@ abstract class FilterModel<
     required FILTER_INPUT? filterInput,
     required FilterActivityType activityType,
   }) async {
+    __filterActivityCount++;
     print("#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFilterActivity");
+
+    if (activityType == FilterActivityType.newFilt) {
+      __loadCount++;
+    }
 
     final Map<String, dynamic> formKeyInstantValues =
         _formKey.currentState?.instantValue ?? {};
@@ -552,16 +569,34 @@ abstract class FilterModel<
         multiOptCriterionName: null,
       });
     }
-    //
-    // Load OptCriterion data from Rest API.
-    // May throw ApiError.
-    //
-    tempMultiOptCriterionXData ??= await callApiLoadMultiOptCriterionXData(
-      filterInput: filterInput,
-      parentMultiOptCriterionValue: parentMultiOptCriterionValue,
-      multiOptCriterionName: multiOptCriterionName,
-      selectionType: selectionType,
-    );
+
+    if (tempMultiOptCriterionXData == null) {
+      // Always increase "_loadCount" value regardless of error.
+      multiOptCriterion._loadCount++;
+      //
+      try {
+        // May throw AppError, ApiError or others.
+        //
+        // Load OptCriterion data from Rest API.
+        // May throw ApiError.
+        //
+        tempMultiOptCriterionXData = await callApiLoadMultiOptCriterionXData(
+          filterInput: filterInput,
+          parentMultiOptCriterionValue: parentMultiOptCriterionValue,
+          multiOptCriterionName: multiOptCriterionName,
+          selectionType: selectionType,
+        );
+      } catch (e, stackTrace) {
+        // TODO: Test Case??
+        throw FilterTempError(
+          propName: multiOptCriterionName,
+          filterErrorMethod:
+              FilterErrorMethod.callApiLoadMultiOptCriterionXData,
+          error: e, // May be AppError, ApiError or others.
+          stackTrace: stackTrace,
+        );
+      }
+    }
     //
     // IMPORTANT: Do not use empty list here
     // to avoid cast Error (List<dynamic> to List<ITEM>)

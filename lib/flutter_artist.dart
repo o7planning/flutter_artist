@@ -107,6 +107,7 @@ export 'src/core/utils/_class_utils.dart';
 export 'src/debug/menu/_debug_menu.dart';
 export 'src/debug/state_view/_block_debug_options.dart';
 export 'src/debug/state_view/_block_debug_state_view.dart';
+export 'src/debug/state_view/_filter_debug_options.dart';
 export 'src/debug/state_view/_form_debug_options.dart';
 export 'src/debug/state_view/_pagination_debug_options.dart';
 export 'src/debug/state_view/_scalar_debug_options.dart';

@@ -3,6 +3,10 @@ part of '../core.dart';
 abstract class MultiOptFilterCriterion<V> extends FilterCriterion<V> {
   late final MultiOptFilterCriterion? parent;
 
+  int _loadCount = 0;
+
+  int get loadCount => _loadCount;
+
   ///
   /// In most cases this value is [SelectionType.single].
   /// For example a Dropdown that only allows selection of one element.

@@ -10,9 +10,7 @@ enum FilterErrorMethod {
 
   // OLD: getMultiOptCriterionValueFromFilterInput
   getUpdatedValueForMultiOptCriterion,
-
   toFilterCriteriaObject,
-  
   callApiLoadMultiOptCriterionXData,
   //
   unknown;

@@ -223,7 +223,6 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-
   @_AbstractMethodAnnotation()
   OptValueWrap? getMultiOptPropValueFromItemDetail({
     required String multiOptPropName,
@@ -1169,7 +1168,7 @@ abstract class FormModel<
     // May throw ApiError.
     //
     if (tempMultiOptPropXData == null || forceReload) {
-      // Always increase "__loadCount" value regardless of error.
+      // Always increase "_loadCount" value regardless of error.
       multiOptProp._loadCount++;
       //
       try {

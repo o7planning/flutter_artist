@@ -63,6 +63,16 @@ class FilterCriteriaStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  List<MultiOptFilterCriterion> get allMultiOptCriteria {
+    return _allCriteriaMap.values
+        .where((p) => p is MultiOptFilterCriterion)
+        .cast<MultiOptFilterCriterion>()
+        .toList();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   dynamic _getCurrentCriterionValue({required String criterionName}) {
     FilterCriterion? criterion = _allCriteriaMap[criterionName];
     if (criterion != null) {

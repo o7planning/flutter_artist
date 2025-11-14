@@ -1030,7 +1030,7 @@ abstract class Block<
       __lastQueryType = thisXBlock.queryType;
       realItemListMode = ItemListMode.replace;
       newBlockDataState = DataState.ready;
-      pageData = PageData.empty<ITEM>();
+      pageData = PageData.empty();
       queryResultState = ActionResultState.success;
     }
     //

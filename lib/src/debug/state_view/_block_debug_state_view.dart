@@ -4,6 +4,8 @@ import '../../core/_core_/core.dart';
 import '../../core/widgets/_table_container.dart';
 import '_block_debug_box.dart';
 import '_block_debug_options.dart';
+import '_filter_debug_box.dart';
+import '_filter_debug_options.dart';
 import '_form_debug_box.dart';
 import '_form_debug_options.dart';
 import '_pagination_debug_box.dart';
@@ -11,6 +13,7 @@ import '_pagination_debug_options.dart';
 
 class BlockDebugStateView extends StatelessWidget {
   final Block block;
+  final FilterDebugOptions? filterDebugOptions;
   final BlockDebugOptions? blockDebugOptions;
   final FormDebugOptions? formDebugOptions;
   final PaginationDebugOptions? paginationDebugOptions;
@@ -23,6 +26,7 @@ class BlockDebugStateView extends StatelessWidget {
     required this.block,
     required this.vertical,
     this.showTitle = true,
+    this.filterDebugOptions,
     required this.blockDebugOptions,
     required this.formDebugOptions,
     required this.paginationDebugOptions,
@@ -37,6 +41,14 @@ class BlockDebugStateView extends StatelessWidget {
       shelves: [block.shelf],
       build: () {
         List<Widget> children = [];
+        if (filterDebugOptions != null && block.filterModel != null) {
+          children.add(
+            FilterDebugBox(
+              filterModel: block.filterModel!,
+              options: filterDebugOptions!,
+            ),
+          );
+        }
         if (blockDebugOptions != null) {
           children.add(
             BlockDebugBox(
