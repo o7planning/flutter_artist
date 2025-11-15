@@ -11,15 +11,6 @@ class SimpleFilterCriterion<V> extends FilterCriterion<V> {
   @override
   V? get initialValue => _initialValue;
 
-  static List<SimpleFilterCriterion> listFromNames(
-      List<String> criterionNames) {
-    return criterionNames
-        .map(
-          (name) => SimpleFilterCriterion(criterionName: name),
-        )
-        .toList();
-  }
-
   void _updateTempValue({
     required Map<String, dynamic> updateValues,
   }) {

@@ -61,7 +61,7 @@ abstract class Scalar<
 
   final List<Scalar> _childScalars;
 
-  List<Scalar> get childScalars => [..._childScalars];
+  List<Scalar> get childScalars => List.unmodifiable(_childScalars);
 
   List<Scalar> get descendantScalars {
     List<Scalar> ret = [];
@@ -69,7 +69,7 @@ abstract class Scalar<
       ret.add(childScalar);
       ret.addAll(childScalar.descendantScalars);
     }
-    return ret;
+    return List.unmodifiable(ret);
   }
 
   List<Scalar> get descendantScalarsWithSameFilterModel {
@@ -96,7 +96,7 @@ abstract class Scalar<
   /// Ancestor Scalars + this Scalar + descendant Scalars.
   ///
   List<Scalar> get lineageScalars {
-    return <Scalar>[...ancestorScalars, this, ...descendantScalars];
+    return List.unmodifiable([...ancestorScalars, this, ...descendantScalars]);
   }
 
   ///
@@ -113,7 +113,7 @@ abstract class Scalar<
       list.add(p);
       slr = p;
     }
-    return list;
+    return List.unmodifiable(list);
   }
 
   ///
@@ -363,7 +363,7 @@ abstract class Scalar<
     try {
       final XFilterModel xFilterModel = thisXScalar.xFilterModel;
       final FilterModel filterModel = xFilterModel.filterModel;
-      //
+      // SAME-AS: #0004
       if (!xFilterModel.queried) {
         FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
         //

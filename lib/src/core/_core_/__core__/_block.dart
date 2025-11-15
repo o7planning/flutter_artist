@@ -237,7 +237,7 @@ abstract class Block<
 
   final List<Block> _childBlocks;
 
-  List<Block> get childBlocks => [..._childBlocks];
+  List<Block> get childBlocks => List.unmodifiable(_childBlocks);
 
   List<Block> get descendantBlocks {
     List<Block> ret = [];
@@ -725,10 +725,9 @@ abstract class Block<
   Future<void> _unitQuery({required XBlock thisXBlock}) async {
     __assertThisXBlock(thisXBlock);
     //
-    bool hasBlockRepresentative =
-        this.ui.hasActiveUIComponentBlockRepresentative(
-              alsoCheckChildren: true,
-            );
+    bool hasBlockRepresentative = ui.hasActiveUIComponentBlockRepresentative(
+      alsoCheckChildren: true,
+    );
     QryHint queryHint = thisXBlock.queryHint;
     if (queryHint != QryHint.force) {
       if (this.dataState != DataState.ready && hasBlockRepresentative) {
@@ -786,7 +785,10 @@ abstract class Block<
         ),
       );
       return;
-    } else if (queryHint == QryHint.markAsPending) {
+    }
+
+    //
+    else if (queryHint == QryHint.markAsPending) {
       this.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: thisXBlock,
         blkDataState: DataState.pending,
@@ -806,7 +808,7 @@ abstract class Block<
     try {
       final XFilterModel xFilterModel = thisXBlock.xFilterModel;
       final FilterModel filterModel = xFilterModel.filterModel;
-      //
+      // SAME-AS: #0004
       if (!xFilterModel.queried) {
         FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
         //
@@ -1182,7 +1184,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_FormModelLoadFormAnnotation()
+  @_FormModelLoadDataAnnotation()
   @_BlockRefreshCurrentItemAnnotation()
   @_BlockSelectItemAsCurrentAnnotation()
   @_BlockSelectNextItemAsCurrentAnnotation()
@@ -1610,7 +1612,7 @@ abstract class Block<
     if (thisXBlock.xFormModel != null) {
       if (forceReloadForm) {
         thisXBlock.xShelf._addTaskUnit(
-          taskUnit: _FormModelLoadFormTaskUnit(
+          taskUnit: _FormModelLoadDataTaskUnit(
             xFormModel: thisXBlock.xFormModel!,
           ),
         );
@@ -5806,14 +5808,14 @@ abstract class Block<
   /// return a copied list of checked items.
   ///
   List<ITEM> get checkedItems {
-    return [...__blockData._checkedItems];
+    return List.unmodifiable(__blockData._checkedItems);
   }
 
   ///
   /// return a copied list of selected items.
   ///
   List<ITEM> get selectedItems {
-    return [...__blockData._selectedItems];
+    return List.unmodifiable(__blockData._selectedItems);
   }
 
   // ***************************************************************************

@@ -19,7 +19,7 @@ enum XShelfType {
   //
   shelfExternalReaction,
   //
-  filterModelQueryAll,
+  filterModelQuery,
   formModelSave,
   formModelEnterFields,
   formViewChange,

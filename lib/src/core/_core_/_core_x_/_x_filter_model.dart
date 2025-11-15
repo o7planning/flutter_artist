@@ -1,6 +1,9 @@
 part of '../core.dart';
 
+int __xFilterModelSeq = 0;
+
 class XFilterModel {
+  final int _xFilterModelId;
   final XShelf xShelf;
   final FilterModel filterModel;
 
@@ -18,7 +21,21 @@ class XFilterModel {
 
   int get xShelfId => xShelf.xShelfId;
 
-  XFilterModel({required this.xShelf, required this.filterModel});
+  XFilterModel({required this.xShelf, required this.filterModel})
+      : _xFilterModelId = __xFilterModelSeq++;
+
+  bool isVisibleNeedToQuery() {
+    if (isDefaultFilterModel) {
+      return false;
+    }
+    if (!filterModel.ui.hasActiveUIComponent()) {
+      return false;
+    }
+    if (filterModel.dataState == DataState.ready) {
+      return false;
+    }
+    return true;
+  }
 
   @override
   String toString() {

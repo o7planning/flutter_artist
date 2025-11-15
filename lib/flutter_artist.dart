@@ -99,6 +99,7 @@ export 'src/core/precheck/block_quick_item_creation_precheck.dart';
 export 'src/core/precheck/block_quick_item_update_precheck.dart';
 export 'src/core/precheck/block_silent_action_precheck.dart';
 export 'src/core/precheck/enter_form_fields_precheck.dart';
+export 'src/core/precheck/filter_model_data_load_precheck.dart';
 export 'src/core/precheck/form_model_data_load_precheck.dart';
 export 'src/core/precheck/scalar_query_precheck.dart';
 export 'src/core/precheck/show_form_info_precheck.dart';

@@ -6,12 +6,12 @@ class BlockItemsDeletionResult<ITEM>
   final List<ITEM> _deletedItems = [];
   final List<FailedItemDeletion<ITEM>> _failedItemDeletions = [];
 
-  List<ITEM> get candidateItems => [..._candidateItems];
+  List<ITEM> get candidateItems => List.unmodifiable(_candidateItems);
 
-  List<ITEM> get deletedItems => [..._deletedItems];
+  List<ITEM> get deletedItems => List.unmodifiable(_deletedItems);
 
   List<FailedItemDeletion<ITEM>> get failedItemDeletions =>
-      [..._failedItemDeletions];
+      List.unmodifiable(_failedItemDeletions);
 
   BlockItemsDeletionResult({
     required List<ITEM> candidateItems,

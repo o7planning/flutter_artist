@@ -1,11 +1,12 @@
 part of '../../../core.dart';
 
-class _XShelfFilterModelQueryAll extends _XShelfSbQuery {
-  _XShelfFilterModelQueryAll({
+class _XShelfFilterModelQuery extends _XShelfSbQuery {
+  _XShelfFilterModelQuery({
     required FilterModel filterModel,
     required FilterInput? filterInput,
+    required bool forceQueryAll,
   }) : super(
-          xShelfType: XShelfType.filterModelQueryAll,
+          xShelfType: XShelfType.filterModelQuery,
           shelf: filterModel.shelf,
         ) {
     _updateQueryStateFromFilterModelAndFilterInput(
@@ -13,6 +14,7 @@ class _XShelfFilterModelQueryAll extends _XShelfSbQuery {
       filterInput: filterInput,
       srcBlockAndOptions: null,
       srcScalarAndOptions: null,
+      forceQueryAll: forceQueryAll,
     );
   }
 }

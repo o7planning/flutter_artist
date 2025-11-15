@@ -34,7 +34,7 @@ class FormPropsStructure {
     required List<SimpleFormProp> simpleProps,
     required List<MultiOptFormProp> multiOptProps,
     List<CalculatedFormProp> calculatedProps = const [],
-  }) : _rootOptProps = [...multiOptProps] {
+  }) : _rootOptProps = List.unmodifiable(multiOptProps) {
     for (MultiOptFormProp rootOptProp in multiOptProps) {
       __standardizeCascade(rootOptProp, null);
     }
@@ -120,6 +120,7 @@ class FormPropsStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  // SAME-AS: #0007 (filterCriteriaStructure.allMultiOptCriteria)
   List<MultiOptFormProp> get allMultiOptProps {
     return _allPropMap.values
         .where((p) => p is MultiOptFormProp)
@@ -431,12 +432,22 @@ class FormPropsStructure {
     return multiOptPropXData?.data;
   }
 
-  int _getMultiOptPropLoadCount({required String propName}) {
-    FormProp? prop = _allPropMap[propName];
+  // ***************************************************************************
+  // ***************************************************************************
+
+  MultiOptFormProp? _findMultiOptFormProp(String multiOptPropName) {
+    FormProp? prop = _allPropMap[multiOptPropName];
     if (prop is MultiOptFormProp) {
-      return prop._loadCount;
+      return prop;
     }
-    return 0;
+    return null;
+  }
+
+  int _debugGetMultiOptPropLoadCount({
+    required String multiOptPropName,
+  }) {
+    MultiOptFormProp? prop = _findMultiOptFormProp(multiOptPropName);
+    return prop?._loadCount ?? 0;
   }
 
   // ***************************************************************************

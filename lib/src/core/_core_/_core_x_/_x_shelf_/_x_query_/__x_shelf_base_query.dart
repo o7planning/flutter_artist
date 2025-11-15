@@ -15,7 +15,11 @@ class _XShelfSbQuery extends XShelf {
     required SrcScalarAndOptions? srcScalarAndOptions,
     required FilterModel filterModel,
     required FilterInput? filterInput,
+    required bool forceQueryAll,
   }) {
+    assert(!forceQueryAll ||
+        (srcBlockAndOptions == null && srcScalarAndOptions == null));
+    //
     if (filterModel.isDefaultFilterModel) {
       // return;
     }
@@ -48,7 +52,7 @@ class _XShelfSbQuery extends XShelf {
     //
     for (XBlock xBlock in thisXFilterModel.xBlocks) {
       final Block block = xBlock.block;
-      QryHint queryHint = QryHint.markAsPending;
+      QryHint queryHint = forceQueryAll ? QryHint.force : QryHint.markAsPending;
       if (srcBlockAndOptions != null) {
         final Block srcBlock = srcBlockAndOptions.block;
 
@@ -110,9 +114,10 @@ class _XShelfSbQuery extends XShelf {
         }
       }
     }
+    //
     for (XScalar xScalar in thisXFilterModel.xScalars) {
       final Scalar scalar = xScalar.scalar;
-      QryHint queryHint = QryHint.markAsPending;
+      QryHint queryHint = forceQueryAll ? QryHint.force : QryHint.markAsPending;
       if (srcScalarAndOptions != null) {
         final Scalar srcScalar = srcScalarAndOptions.scalar;
         if (srcScalar.isSameWith(scalar)) {

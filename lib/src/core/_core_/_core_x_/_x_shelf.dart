@@ -160,6 +160,11 @@ abstract class XShelf {
   _LazyObjects getLazyObjectInfos() {
     final _LazyObjects ret = _LazyObjects();
     for (XBlock xBlock in allXBlocks) {
+      // Test Case: [06b] - Only Filter in the Screen.
+      XFilterModel xFilterModel = xBlock.xFilterModel;
+      if (xFilterModel.isVisibleNeedToQuery()) {
+        ret.addLazyFilterModel(filterModel: xFilterModel.filterModel);
+      }
       if (xBlock.queryHint != QryHint.none) {
         ret.addLazyBlock(
           block: xBlock.block,
@@ -168,6 +173,10 @@ abstract class XShelf {
       }
     }
     for (XScalar xScalar in allXScalars) {
+      XFilterModel xFilterModel = xScalar.xFilterModel;
+      if (xFilterModel.isVisibleNeedToQuery()) {
+        ret.addLazyFilterModel(filterModel: xFilterModel.filterModel);
+      }
       if (xScalar.queryHint != QryHint.none) {
         ret.addLazyScalar(scalar: xScalar.scalar);
       }
@@ -326,9 +335,26 @@ abstract class XShelf {
     printMe();
     final bool toMainQueue = false;
     //
+    if (xShelfType == XShelfType.naturalQuery) {
+      for (XFilterModel xFilterModel in allXFilterModels) {
+        if (!xFilterModel.isVisibleNeedToQuery()) {
+          continue;
+        }
+        //
+        // Execute xFilterModel first!!
+        //
+        _addTaskUnit(
+          taskUnit: _FilterModelLoadDataTaskUnit(
+            xFilterModel: xFilterModel,
+          ),
+          toMainQueue: toMainQueue,
+        );
+      }
+    }
+    //
     if (rootVipXScalar != null) {
       //
-      // Execute vipXScalar first!!
+      // Execute vipXScalar before XBlock(s)!!
       //
       _addTaskUnit(
         taskUnit: _ScalarQueryTaskUnit(
@@ -338,7 +364,7 @@ abstract class XShelf {
       );
     } else if (rootVipXBlock != null) {
       //
-      // Execute rootVipXBlock first!!
+      // Execute rootVipXBlock!!
       //
       _addTaskUnit(
         taskUnit: _BlockQueryTaskUnit(

@@ -1,15 +1,15 @@
 part of '../core.dart';
 
 @_TaskUnitClassAnnotation()
-@_FormModelLoadFormAnnotation()
-class _FormModelLoadFormTaskUnit
+@_FormModelLoadDataAnnotation()
+class _FormModelLoadDataTaskUnit
     extends _ResultedSTaskUnit<FormModelDataLoadResult> {
   XFormModel xFormModel;
 
-  _FormModelLoadFormTaskUnit({
+  _FormModelLoadDataTaskUnit({
     required this.xFormModel,
   }) : super(
-          taskType: TaskType.formModelLoadForm,
+          taskType: TaskType.formModelLoadData,
           taskResult: FormModelDataLoadResult(),
         );
 

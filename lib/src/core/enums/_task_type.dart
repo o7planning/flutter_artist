@@ -17,10 +17,11 @@ enum TaskType {
   blockSelectItemAsCurrent,
   blockClearance,
   //
+  filterModelLoadData,
   filterModelFilterPanelChanged,
   //
   formModelEnterFormFields,
-  formModelLoadForm,
+  formModelLoadData,
   formModelSaveForm,
   formModelFormViewChanged,
   //

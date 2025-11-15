@@ -4,7 +4,7 @@ class SortableCriteria extends Equatable {
   final List<SortableCriterion> _criteria;
 
   SortableCriteria._(List<SortableCriterion> criteria)
-      : _criteria = [...criteria];
+      : _criteria = List.unmodifiable(criteria);
 
   SortableCriteria._empty() : _criteria = [];
 
@@ -45,5 +45,5 @@ class SortableCriteria extends Equatable {
   }
 
   @override
-  List<Object?> get props => [..._criteria];
+  List<Object?> get props => List.unmodifiable(_criteria);
 }

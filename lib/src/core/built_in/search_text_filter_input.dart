@@ -4,4 +4,9 @@ class SearchTextFilterInput extends FilterInput {
   final String? searchText;
 
   SearchTextFilterInput({required this.searchText});
+
+  @override
+  String toString() {
+    return "SearchTextFilterInput('$searchText')";
+  }
 }

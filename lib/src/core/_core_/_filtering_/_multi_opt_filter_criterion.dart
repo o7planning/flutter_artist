@@ -19,7 +19,7 @@ abstract class MultiOptFilterCriterion<V> extends FilterCriterion<V> {
   final SelectionType selectionType;
   final List<MultiOptFilterCriterion> _children;
 
-  List<MultiOptFilterCriterion> get children => [..._children];
+  List<MultiOptFilterCriterion> get children => List.unmodifiable(_children);
 
   MultiOptFilterCriterion._({
     required super.criterionName,

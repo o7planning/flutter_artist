@@ -16,11 +16,11 @@ abstract class FilterModel<
 
   final List<Block> _blocks = [];
 
-  List<Block> get blocks => [..._blocks];
+  List<Block> get blocks => List.unmodifiable(_blocks);
 
   final List<Scalar> _scalars = [];
 
-  List<Scalar> get scalars => [..._scalars];
+  List<Scalar> get scalars => List.unmodifiable(_scalars);
 
   FILTER_CRITERIA? _filterCriteria;
 
@@ -127,6 +127,7 @@ abstract class FilterModel<
   // ABSTRACT METHOD:
   // ***************************************************************************
 
+  // SAME-AS: #0011 (form - specifyDefaultValuesForSimpleProps)
   @_AbstractMethodAnnotation()
   Map<String, dynamic>? specifyDefaultValuesForSimpleCriteria();
 
@@ -168,8 +169,9 @@ abstract class FilterModel<
   // ***************************************************************************
 
   // OLD: getSimpleCriterionValuesFromFilterInput.
+  // SAME-AS: #0010 (form - getUpdatedValuesForSimpleProps)
   @_AbstractMethodAnnotation()
-  Map<String, dynamic>? getUpdatedValuesForSimpleCriteria({
+  Map<String, SimpleValueWrap?>? getUpdatedValuesForSimpleCriteria({
     required FILTER_INPUT filterInput,
   });
 
@@ -184,7 +186,7 @@ abstract class FilterModel<
   /// ```
   ///  MyFilterCriteria toFilterCriteriaObject({
   ///     required Map<String, dynamic> dataMap,
-  ///   }) {
+  ///  }) {
   ///      return MyFilterCriteria(
   ///         company: dataMap["company"],
   ///         department: dataMap["department"],
@@ -196,6 +198,39 @@ abstract class FilterModel<
   FILTER_CRITERIA toFilterCriteriaObject({
     required Map<String, dynamic> dataMap,
   });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_TaskUnitMethodAnnotation()
+  @_FilterModelLoadDataAnnotation()
+  Future<bool> _unitLoadFilterData({
+    required XFilterModel thisXFilterModel,
+    required FilterModelDataLoadResult taskResult,
+  }) async {
+    __assertThisXFilterModel(thisXFilterModel);
+    //
+    try {
+      // SAME-AS: #0004
+      if (!thisXFilterModel.queried) {
+        FILTER_INPUT? filterInput =
+            thisXFilterModel.filterInput as FILTER_INPUT?;
+        //
+        _filterCriteria = await _startNewFilterActivity(
+          activityType: FilterActivityType.newFilt,
+          filterInput: filterInput,
+        ) as FILTER_CRITERIA?;
+        //
+        thisXFilterModel.queried = true;
+      }
+      return true;
+    } catch (e, stackTrace) {
+      // @@TODO@@ 12 Test.
+      print("ERROR _unitQuery: $stackTrace");
+      /* Never Error */
+    }
+    return false;
+  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -367,7 +402,7 @@ abstract class FilterModel<
     //
     if (filterInput != null) {
       try {
-        final Map<String, dynamic> updatedSimpleCriterionValues =
+        final Map<String, SimpleValueWrap?> updatedSimpleCriterionValues =
             getUpdatedValuesForSimpleCriteria(
                   filterInput: filterInput,
                 ) ??
@@ -379,11 +414,15 @@ abstract class FilterModel<
             filterErrorMethod:
                 FilterErrorMethod.getUpdatedValuesForSimpleCriteria,
           );
-          dynamic value = updatedSimpleCriterionValues[criterionName];
-          _filterCriteriaStructure._setTempSimpleCriterionValue(
-            criterionName: criterionName,
-            value: value,
-          );
+          SimpleValueWrap? valueWrap =
+              updatedSimpleCriterionValues[criterionName];
+          // SAME-AS: #0012 (formModel)
+          if (valueWrap != null) {
+            _filterCriteriaStructure._setTempSimpleCriterionValue(
+              criterionName: criterionName,
+              value: valueWrap.value,
+            );
+          }
         }
       } catch (e, stackTrace) {
         _handleError(
@@ -890,12 +929,44 @@ abstract class FilterModel<
   // ***************************************************************************
 
   ///
+  /// Query all Scalars and Blocks of this FilterModel.
+  ///
+  @_RootMethodAnnotation()
+  Future<bool> queryAll({
+    FILTER_INPUT? filterInput,
+  }) async {
+    // Test Cases: [48b] - query() & queryAll().
+    return await __query(
+      methodName: "queryAll",
+      filterInput: filterInput,
+      forceQueryAll: true,
+    );
+  }
+
+  ///
   /// Query all Scalars and Blocks of this FilterModel if they are visible on the UI.
   ///
   /// Any Scalar or Block that is not queried will be set to LAZY state.
   ///
-  Future<bool> queryAll({
+  @_RootMethodAnnotation()
+  Future<bool> query({
     FILTER_INPUT? filterInput,
+  }) async {
+    // Test Cases: [48b] - query() & queryAll().
+    return await __query(
+      methodName: "query",
+      filterInput: filterInput,
+      forceQueryAll: false,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<bool> __query({
+    FILTER_INPUT? filterInput,
+    required String methodName,
+    required bool forceQueryAll,
   }) async {
     if (_lockAddMoreQuery) {
       return false;
@@ -903,16 +974,17 @@ abstract class FilterModel<
     FlutterArtist.codeFlowLogger._addMethodCall(
       isLibCode: true,
       ownerClassInstance: this,
-      methodName: "queryAll",
+      methodName: methodName,
       parameters: {
         "filterInput": filterInput,
       },
       navigate: null,
     );
     //
-    final XShelf xShelf = _XShelfFilterModelQueryAll(
+    final XShelf xShelf = _XShelfFilterModelQuery(
       filterModel: this,
       filterInput: filterInput,
+      forceQueryAll: forceQueryAll,
     );
     //
     xShelf._initQueryTasks();
@@ -944,6 +1016,25 @@ abstract class FilterModel<
     FilterCriteriaDialog.showFilterCriteriaDialog(
       context: context,
       filterModel: this,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  // SAME-AS: #0009 (form)
+  MultiOptFilterCriterion? findMultiOptFilterCriterion({
+    required String multiOptCriterionName,
+  }) {
+    return _filterCriteriaStructure._findMultiOptFilterCriterion(
+      multiOptCriterionName,
+    );
+  }
+
+  // SAME-AS: #0008 (formModel.debugGetMultiOptPropLoadCount())
+  int debugGetMultiOptCriteriaLoadCount(String multiOptCriterionName) {
+    return _filterCriteriaStructure._debugGetMultiOptCriterionLoadCount(
+      multiOptCriterionName: multiOptCriterionName,
     );
   }
 

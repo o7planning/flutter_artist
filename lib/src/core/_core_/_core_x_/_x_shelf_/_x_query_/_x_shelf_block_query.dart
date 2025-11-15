@@ -24,6 +24,7 @@ class _XShelfBlockQuery extends _XShelfSbQuery {
         pageable: pageable,
       ),
       srcScalarAndOptions: null,
+      forceQueryAll: false,
     );
   }
 }

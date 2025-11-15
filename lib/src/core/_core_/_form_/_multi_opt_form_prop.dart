@@ -23,7 +23,7 @@ abstract class MultiOptFormProp<V> extends FormProp<V> {
 
   bool get isRoot => parent == null;
 
-  List<MultiOptFormProp> get children => [..._children];
+  List<MultiOptFormProp> get children => List.unmodifiable(_children);
 
   MultiOptFormProp._({
     required super.propName,

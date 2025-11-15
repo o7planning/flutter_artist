@@ -11,14 +11,6 @@ class SimpleFormProp<V> extends FormProp<V> {
   @override
   V? get initialValue => _initialValue;
 
-  static List<SimpleFormProp> listFromNames(List<String> propNames) {
-    return propNames
-        .map(
-          (name) => SimpleFormProp(propName: name),
-        )
-        .toList();
-  }
-
   void _updateTempValue({
     required Map<String, dynamic> updateValues,
   }) {

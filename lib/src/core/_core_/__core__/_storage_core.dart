@@ -15,7 +15,7 @@ abstract class _StorageCore extends _Core {
     return m;
   }
 
-  List<String> get shelfNames => [..._shelfMap.keys];
+  List<String> get shelfNames => List.unmodifiable(_shelfMap.keys);
 
   // ***************************************************************************
   // ***************************************************************************
@@ -30,7 +30,7 @@ abstract class _StorageCore extends _Core {
   }
 
   List<Shelf> getAllShelves() {
-    return [..._shelfMap.values];
+    return List.unmodifiable(_shelfMap.values);
   }
 
   // ***************************************************************************

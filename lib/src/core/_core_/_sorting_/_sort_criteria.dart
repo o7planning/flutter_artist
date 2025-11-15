@@ -3,7 +3,8 @@ part of '../core.dart';
 class SortCriteria extends Equatable {
   final List<SortableCriterion> _criteria;
 
-  SortCriteria._(List<SortableCriterion> criteria) : _criteria = [...criteria];
+  SortCriteria._(List<SortableCriterion> criteria)
+      : _criteria = List.unmodifiable(criteria);
 
   ///
   /// Return a String. For example: "+categoryName,productName,-price".
@@ -42,5 +43,5 @@ class SortCriteria extends Equatable {
   }
 
   @override
-  List<Object?> get props => [..._criteria];
+  List<Object?> get props => List.unmodifiable(_criteria);
 }

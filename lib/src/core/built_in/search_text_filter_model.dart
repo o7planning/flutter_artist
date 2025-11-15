@@ -42,11 +42,11 @@ class SearchTextFilterModel
   }
 
   @override
-  Map<String, dynamic>? getUpdatedValuesForSimpleCriteria({
+  Map<String, SimpleValueWrap?>? getUpdatedValuesForSimpleCriteria({
     required SearchTextFilterInput filterInput,
   }) {
     return {
-      "searchText": filterInput.searchText,
+      "searchText": SimpleValueWrap(filterInput.searchText),
     };
   }
 

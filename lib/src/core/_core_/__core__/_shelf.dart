@@ -16,7 +16,8 @@ abstract class Shelf extends _Core {
   // All filterModels including the default filterModel.
   final List<FilterModel> _allFilterModels = [];
 
-  List<String> get filterNames => [..._shelfStruct.filterModels.keys];
+  List<String> get filterNames =>
+      List.unmodifiable(_shelfStruct.filterModels.keys);
 
   // All formModels.
   final List<FormModel> _allFormModels = [];
@@ -25,13 +26,13 @@ abstract class Shelf extends _Core {
 
   final List<Hook> __hooks = [];
 
-  List<Hook> get hooks => [...__hooks];
+  List<Hook> get hooks => List.unmodifiable(__hooks);
 
   final Map<String, Scalar> __scalarMap = {};
 
   final List<Scalar> _rootScalars = [];
 
-  List<Scalar> get rootScalars => [..._rootScalars];
+  List<Scalar> get rootScalars => List.unmodifiable(_rootScalars);
 
   List<Scalar> get scalars {
     List<Scalar> ret = [];
@@ -46,7 +47,7 @@ abstract class Shelf extends _Core {
 
   final List<Block> _rootBlocks = [];
 
-  List<Block> get rootBlocks => [..._rootBlocks];
+  List<Block> get rootBlocks => List.unmodifiable(_rootBlocks);
 
   List<Block> get blocks {
     List<Block> ret = [];

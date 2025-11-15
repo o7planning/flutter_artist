@@ -5,7 +5,7 @@ abstract class XData<ID, ITEM, DATA> {
 
   final Map<ID, ITEM> _notFoundItemsMap = {};
 
-  List<ITEM> get notFoundItems => [..._notFoundItemsMap.values];
+  List<ITEM> get notFoundItems => List.unmodifiable(_notFoundItemsMap.values);
 
   XData({
     required ID Function(ITEM item) getItemId,

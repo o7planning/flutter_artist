@@ -3,7 +3,7 @@ part of '../core.dart';
 class ListXData<ID, ITEM> extends XData<ID, ITEM, List<ITEM>> {
   final List<ITEM> _items;
 
-  List<ITEM> get items => [..._items];
+  List<ITEM> get items => List.unmodifiable(_items);
 
   bool valid = true;
 

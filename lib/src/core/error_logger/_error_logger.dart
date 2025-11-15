@@ -11,7 +11,7 @@ class ErrorLogger {
 
   ErrorLogger({required this.maxDisplayErrorCount});
 
-  List<LogErrorInfo> get errorInfos => [..._errorInfos];
+  List<LogErrorInfo> get errorInfos => List.unmodifiable(_errorInfos);
 
   LogErrorInfo? get lastError => _errorInfos.isEmpty ? null : _errorInfos.first;
 

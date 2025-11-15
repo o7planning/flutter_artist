@@ -41,7 +41,7 @@ class _DefaultFilterModel
   }
 
   @override
-  Map<String, dynamic>? getUpdatedValuesForSimpleCriteria({
+  Map<String, SimpleValueWrap?>? getUpdatedValuesForSimpleCriteria({
     required EmptyFilterInput filterInput,
   }) {
     return null;

@@ -42,11 +42,11 @@ class IntIdFilterModel
   }
 
   @override
-  Map<String, dynamic>? getUpdatedValuesForSimpleCriteria({
+  Map<String, SimpleValueWrap?>? getUpdatedValuesForSimpleCriteria({
     required IntIdFilterInput filterInput,
   }) {
     return {
-      "id": filterInput.idValue,
+      "id": SimpleValueWrap(filterInput.idValue),
     };
   }
 

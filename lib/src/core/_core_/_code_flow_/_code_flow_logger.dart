@@ -5,7 +5,7 @@ class CodeFlowLogger {
 
   final List<CodeFlowItem> _codeFlowItems = [];
 
-  List<CodeFlowItem> get codeFlowItems => [..._codeFlowItems];
+  List<CodeFlowItem> get codeFlowItems => List.unmodifiable(_codeFlowItems);
 
   DateTime __lastDateTime = DateTime.now();
 

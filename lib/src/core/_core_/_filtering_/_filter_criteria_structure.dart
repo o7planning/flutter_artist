@@ -13,7 +13,7 @@ class FilterCriteriaStructure {
     required List<SimpleFilterCriterion> simpleCriteria,
     required List<MultiOptFilterCriterion> multiOptCriteria,
     List<CalculatedFilterCriterion> calculatedCriteria = const [],
-  }) : _rootOptCriteria = [...multiOptCriteria] {
+  }) : _rootOptCriteria = List.unmodifiable(multiOptCriteria) {
     for (MultiOptFilterCriterion rootOptCriterion in multiOptCriteria) {
       __standardizeCascade(rootOptCriterion, null);
     }
@@ -63,6 +63,7 @@ class FilterCriteriaStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  // SAME-AS: #0007 (formPropsStructure.allMultiOptProps)
   List<MultiOptFilterCriterion> get allMultiOptCriteria {
     return _allCriteriaMap.values
         .where((p) => p is MultiOptFilterCriterion)
@@ -441,5 +442,25 @@ class FilterCriteriaStructure {
       rootItem._printTempInfoCascade(indentFactor: 1);
     }
     print("--------------------------------------------------------------\n\n");
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  MultiOptFilterCriterion? _findMultiOptFilterCriterion(
+      String multiOptFilterCriterion) {
+    FilterCriterion? criterion = _allCriteriaMap[multiOptFilterCriterion];
+    if (criterion is MultiOptFilterCriterion) {
+      return criterion;
+    }
+    return null;
+  }
+
+  int _debugGetMultiOptCriterionLoadCount({
+    required String multiOptCriterionName,
+  }) {
+    MultiOptFilterCriterion? criterion =
+        _findMultiOptFilterCriterion(multiOptCriterionName);
+    return criterion?._loadCount ?? 0;
   }
 }

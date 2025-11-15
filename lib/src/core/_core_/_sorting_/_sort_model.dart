@@ -14,7 +14,7 @@ abstract class SortModel<ITEM extends Object> {
   final List<SortCriterion> _criteria = [];
   final Map<String, SortCriterion> _criteriaMap = {};
 
-  List<SortCriterion> get criteria => [..._criteria];
+  List<SortCriterion> get criteria => List.unmodifiable(_criteria);
 
   late final _SortUIComponents ui = _SortUIComponents(sortModel: this);
 

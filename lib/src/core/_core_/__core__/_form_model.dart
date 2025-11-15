@@ -215,6 +215,7 @@ abstract class FormModel<
   ///  }
   /// ```
   ///
+  // SAME-AS: #0011 (filter - specifyDefaultValuesForSimpleCriteria)
   @_AbstractMethodAnnotation()
   Map<String, dynamic>? specifyDefaultValuesForSimpleProps({
     required Object? parentBlockCurrentItemId,
@@ -309,6 +310,7 @@ abstract class FormModel<
   /// Note: In your design, [FormInput] should not include the ID of the parent Block's [currentItem].
   ///
   // OLD: getUpdatedValuesForSimpleProps.
+  // SAME-AS: #0010 (filter - getUpdatedValuesForSimpleCriteria)
   @_AbstractMethodAnnotation()
   Map<String, SimpleValueWrap?>? getUpdatedValuesForSimpleProps({
     required Object? parentBlockCurrentItemId,
@@ -404,7 +406,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_FormModelLoadFormAnnotation()
+  @_FormModelLoadDataAnnotation()
   Future<bool> _unitLoadFormData({
     required XFormModel thisXFormModel,
     required FormModelDataLoadResult taskResult,
@@ -810,6 +812,7 @@ abstract class FormModel<
               // In (ItemFirstLoad + formInput != null).
               //
               SimpleValueWrap? valueWrap = updatedSimplePropValues[propName];
+              // SAME-AS: #0012 (filterModel)
               if (valueWrap != null) {
                 _formPropsStructure._setTempSimplePropValue(
                   propName: propName,
@@ -1433,12 +1436,6 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  int getMultiOptPropLoadCount(String multiOptPropName) {
-    return _formPropsStructure._getMultiOptPropLoadCount(
-      propName: multiOptPropName,
-    );
-  }
-
   XData? getMultiOptPropXData(String multiOptPropName) {
     return _formPropsStructure._getCurrentMultiOptPropXData(
       propName: multiOptPropName,
@@ -1860,6 +1857,25 @@ abstract class FormModel<
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     return taskUnit.taskResult;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  // SAME-AS: #0009 (filter)
+  MultiOptFormProp? findMultiOptFormProp({
+    required String multiOptPropName,
+  }) {
+    return _formPropsStructure._findMultiOptFormProp(
+      multiOptPropName,
+    );
+  }
+
+  // SAME-AS: #0008 (filterModel.debugGetMultiOptCriterionLoadCount())
+  int debugGetMultiOptPropLoadCount(String multiOptPropName) {
+    return _formPropsStructure._debugGetMultiOptPropLoadCount(
+      multiOptPropName: multiOptPropName,
+    );
   }
 
   // ***************************************************************************
