@@ -255,7 +255,9 @@ class _ScalarUIComponents extends _UIComponents {
     //
     if (!activeOLD && activeCURRENT) {
       // Fire event:
-      scalar.shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // scalar.shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // LOGIC: #0000
+      FlutterArtist.storage._naturalQueryQueue.addShelf(scalar.shelf);
     } else if (activeOLD && !activeCURRENT) {
       scalar._fireScalarHidden();
     }
@@ -295,7 +297,9 @@ class _ScalarUIComponents extends _UIComponents {
     //
     if (!activeOLD && activeCURRENT) {
       // Fire event:
-      scalar.shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // scalar.shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // LOGIC: #0000
+      FlutterArtist.storage._naturalQueryQueue.addShelf(scalar.shelf);
     } else if (activeOLD && !activeCURRENT) {
       scalar._fireScalarHidden();
     }

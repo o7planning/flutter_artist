@@ -123,7 +123,9 @@ class _SortUIComponents extends _UIComponents {
     //
     if (!activeOLD && activeCURRENT) {
       // Fire event:
-      sortModel.shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // sortModel.shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // LOGIC: #0000
+      FlutterArtist.storage._naturalQueryQueue.addShelf(sortModel.shelf);
     } else if (activeOLD && !activeCURRENT) {
       // TODO: (Kiem tra phuong thuc cung ten trong Block).
       // block._fireBlockHidden();

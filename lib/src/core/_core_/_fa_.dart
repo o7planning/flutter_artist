@@ -5,7 +5,17 @@ final FlutterArtist = _FlutterArtist();
 const _isOverlayMode = false;
 
 class _FlutterArtist {
-  final navigatorObserver = _FlutterArtistNavigatorObserver();
+  _FlutterArtistNavigatorObserver? __navigatorObserver;
+
+  _FlutterArtistNavigatorObserver get navigatorObserver {
+    if (__navigatorObserver == null) {
+      // IMPORTANT:
+      // LOGIC: #0001
+      storage._setStarted();
+      __navigatorObserver = _FlutterArtistNavigatorObserver();
+    }
+    return __navigatorObserver!;
+  }
 
   bool testCaseMode = false;
 
@@ -139,8 +149,10 @@ class _FlutterArtist {
   }
 
   void _printDebugState(String message) {
-    DebugPrinter.printDebug(DebugCat.appStart,
-        "FlutterArtist.config ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> $message");
+    DebugPrinter.printDebug(
+      DebugCat.appStart,
+      "FlutterArtist.config ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> $message",
+    );
   }
 
   Future<void> config({

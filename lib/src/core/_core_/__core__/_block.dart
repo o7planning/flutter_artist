@@ -1447,7 +1447,7 @@ abstract class Block<
               isRefreshingCurrentItem: true,
             );
             // This may throw error
-            final Stocker<ID, ITEM_DETAIL> stocker = FlutterArtist
+            final AutoStocker<ID, ITEM_DETAIL> stocker = FlutterArtist
                 .storage._stockersManager
                 ._findStocker<ID, ITEM_DETAIL>(itmType: ITEM_DETAIL);
             //
@@ -1455,6 +1455,9 @@ abstract class Block<
             __callApiLoadItemDetailByIdCount++;
             ApiResult<ITEM_DETAIL> result = await stocker.loadById(
               id: itemId,
+              oldItem: ITEM != ITEM_DETAIL //
+                  ? null
+                  : candidateCurrItem as ITEM_DETAIL,
             );
             // Throw ApiError:
             result.throwIfError();
@@ -1669,7 +1672,7 @@ abstract class Block<
     ApiResult<void> result;
     try {
       // This may throw error
-      final Stocker<ID, ITEM_DETAIL> stocker = FlutterArtist
+      final AutoStocker<ID, ITEM_DETAIL> stocker = FlutterArtist
           .storage._stockersManager
           ._findStocker<ID, ITEM_DETAIL>(itmType: ITEM_DETAIL);
       //
@@ -1939,7 +1942,7 @@ abstract class Block<
     bool currentItemDeleted = false;
     //
     String? methodName;
-    final Stocker<ID, ITEM_DETAIL> stocker;
+    final AutoStocker<ID, ITEM_DETAIL> stocker;
     try {
       // This may throw error
       stocker = FlutterArtist.storage._stockersManager

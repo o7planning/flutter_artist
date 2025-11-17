@@ -5,7 +5,7 @@ typedef StockerCreator<S> = S Function();
 class _StockersManager {
   // Type: ITM.
   final Map<Type, StockerCreator> __stockerCreatorMap = {};
-  final Map<Type, Stocker> _stockerMap = {};
+  final Map<Type, AutoStocker> _stockerMap = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -15,21 +15,22 @@ class _StockersManager {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _registerStocker<F extends Stocker<Object, Identifiable<Object>>>(
+  void
+      _registerAutoStocker<F extends AutoStocker<Object, Identifiable<Object>>>(
     StockerCreator<F> builder,
   ) {
     F stocker = builder();
-    Type itmType = stocker.getItmType();
+    Type itmType = stocker.getItemType();
     __stockerCreatorMap[itmType] = builder;
   }
 
-  Stocker<ID, ITM>
+  AutoStocker<ID, ITM>
       _findStocker<ID extends Object, ITM extends Identifiable<ID>>({
     required Type itmType,
   }) {
-    Stocker? stocker = _stockerMap[itmType];
+    AutoStocker? stocker = _stockerMap[itmType];
     if (stocker != null) {
-      return stocker as Stocker<ID, ITM>;
+      return stocker as AutoStocker<ID, ITM>;
     }
     StockerCreator? builder = __stockerCreatorMap[itmType];
     if (builder == null) {
@@ -39,16 +40,17 @@ class _StockersManager {
       print(error);
       throw AppError(
         errorMessage:
-            "No Stocker found for itm type $itmType. @see console for more details.",
+            "No Stocker found for $itmType. @see console for more details.",
       );
     }
     try {
-      print(
-        "FLUTTER ARTIST DEBUG >>>>>>>>>>>>>>> create Stocker for itm type: $itmType",
+      DebugPrinter.printDebug(
+        DebugCat.autoStockerCreation,
+        "FLUTTER ARTIST DEBUG >>>>>>>>>>>>>>> create AutoStocker for $itmType",
       );
       stocker = builder();
       _stockerMap[itmType] = stocker!;
-      return stocker as Stocker<ID, ITM>;
+      return stocker as AutoStocker<ID, ITM>;
     } catch (e, stackTrace) {
       print(stackTrace);
       throw AppError(

@@ -1,15 +1,19 @@
 part of '../core.dart';
 
-abstract class Stocker<ID extends Object, ITM extends Identifiable<ID>> {
-  Type getItmIdType() {
+abstract class AutoStocker<ID extends Object,
+    ITEM_DETAIL extends Identifiable<ID>> {
+  Type getItemIdType() {
     return ID;
   }
 
-  Type getItmType() {
-    return ITM;
+  Type getItemType() {
+    return ITEM_DETAIL;
   }
 
-  Future<ApiResult<ITM>> loadById({required ID id});
+  Future<ApiResult<ITEM_DETAIL>> loadById({
+    required ID id,
+    required ITEM_DETAIL? oldItem,
+  });
 
   Future<ApiResult<void>> deleteById({required ID id});
 }

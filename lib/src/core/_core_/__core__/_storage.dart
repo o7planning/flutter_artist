@@ -7,6 +7,8 @@ class _Storage extends _StorageCore {
 
   late final _StorageEventHandler ev = _StorageEventHandler(this);
   final _StockersManager _stockersManager = _StockersManager();
+  final _StorageNaturalQueryQueue _naturalQueryQueue =
+      _StorageNaturalQueryQueue();
 
   // ***************************************************************************
   // ***************************************************************************
@@ -16,10 +18,16 @@ class _Storage extends _StorageCore {
   // ***************************************************************************
   // ***************************************************************************
 
-  void registerStocker<F extends Stocker<Object, Identifiable<Object>>>(
+  void registerAutoStocker<F extends AutoStocker<Object, Identifiable<Object>>>(
     StockerCreator<F> builder,
   ) {
-    _stockersManager._registerStocker(builder);
+    if (__started) {
+      // LOGIC: #0001
+      throw DebugUtils.getFatalError(
+        " ERROR: It is not possible to register a new AutoStocker after the application has been started.",
+      );
+    }
+    _stockersManager._registerAutoStocker(builder);
   }
 
   // ***************************************************************************

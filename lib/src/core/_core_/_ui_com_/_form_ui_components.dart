@@ -93,7 +93,9 @@ class _FormUIComponents extends _UIComponents {
       ifAbsent: () => XState().._setShowing(isShowing),
     );
     if (!isShowingOLD && isShowing) {
-      formModel.shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // formModel.shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // LOGIC: #0000
+      FlutterArtist.storage._naturalQueryQueue.addShelf(formModel.shelf);
     }
     if (isShowing) {
       FlutterArtist.storage._addRecentShelf(formModel.shelf);

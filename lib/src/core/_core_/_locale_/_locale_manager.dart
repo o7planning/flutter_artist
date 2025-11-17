@@ -23,19 +23,25 @@ class LocaleManager {
   }
 
   Future<void> _updateLocale({required Locale locale}) async {
-    DebugPrinter.printDebug(DebugCat.appStart,
-        "  --- localeManager._updateLocale(). locale: $locale");
+    DebugPrinter.printDebug(
+      DebugCat.appStart,
+      "  --- localeManager._updateLocale(). locale: $locale",
+    );
     await _localeAdapter.updateLocale(locale);
   }
 
   Locale? readStoredLocale() {
     // id: "languageCode-countryCode'.
     String? id = _globalsManager.getExtraGlobalProp(_propName);
-    DebugPrinter.printDebug(DebugCat.appStart,
-        "  --- localeManager. readStoredLocale(): _propName: $_propName");
+    DebugPrinter.printDebug(
+      DebugCat.appStart,
+      "  --- localeManager. readStoredLocale(): _propName: $_propName",
+    );
     if (id == null) {
-      DebugPrinter.printDebug(DebugCat.appStart,
-          "  --- localeManager. readStoredLocale(): value: $id");
+      DebugPrinter.printDebug(
+        DebugCat.appStart,
+        "  --- localeManager. readStoredLocale(): value: $id",
+      );
       return null;
     }
     List<String> ss = id.split("-");

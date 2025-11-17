@@ -10,13 +10,13 @@ class _FlutterArtistNavigatorObserver extends RouteObserver<ModalRoute> {
 
   @override
   void didPush(Route route, Route? previousRoute) {
-    super.didPush(route, previousRoute);
-    //
     DebugPrinter.printDebug(
       DebugCat.navigatorObserver,
       '[NavigatorObserver] -----------------> Route didPush: ${route.settings.name}'
       ' - previousRoute: ${previousRoute?.settings.name}',
     );
+    //
+    super.didPush(route, previousRoute);
   }
 
   @override
@@ -25,93 +25,98 @@ class _FlutterArtistNavigatorObserver extends RouteObserver<ModalRoute> {
       DebugCat.navigatorObserver,
       '[NavigatorObserver] -----------------> Route debugObservingRoute: ${route.settings.name}',
     );
+    //
     return super.debugObservingRoute(route);
   }
 
   @override
   void didPop(Route route, Route? previousRoute) {
-    super.didPop(route, previousRoute);
-    //
     DebugPrinter.printDebug(
       DebugCat.navigatorObserver,
       '[NavigatorObserver] -----------------> Route didPop: ${route.settings.name}'
       ' - previousRoute: ${previousRoute?.settings.name}',
     );
+    //
+    super.didPop(route, previousRoute);
   }
 
   @override
   void didChangeTop(Route<dynamic> topRoute, Route<dynamic>? previousTopRoute) {
-    super.didChangeTop(topRoute, previousTopRoute);
-    //
-    if (topRoute is ModalRoute) {
-      _topRoute = topRoute;
-    }
-    //
     DebugPrinter.printDebug(
       DebugCat.navigatorObserver,
       '[NavigatorObserver] -----------------> Route didChangeTop: ${topRoute.settings.name}'
       ' - previousTopRoute: ${previousTopRoute?.settings.name}',
     );
+    //
+    super.didChangeTop(topRoute, previousTopRoute);
+    //
+    if (topRoute is ModalRoute) {
+      _topRoute = topRoute;
+    }
   }
 
   @override
   void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    super.didRemove(route, previousRoute);
     DebugPrinter.printDebug(
       DebugCat.navigatorObserver,
       '[NavigatorObserver] -----------------> Route didRemove: ${route.settings.name}'
       ' - previousRoute: ${previousRoute?.settings.name}',
     );
+    //
+    super.didRemove(route, previousRoute);
   }
 
   @override
   void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
-    super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
-    //
     DebugPrinter.printDebug(
       DebugCat.navigatorObserver,
       '[NavigatorObserver] -----------------> Route didReplace: ${newRoute?.settings?.name}'
       ' - oldRoute: ${oldRoute?.settings.name}',
     );
+    //
+    super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
   }
 
   @override
   void didStartUserGesture(
       Route<dynamic> route, Route<dynamic>? previousRoute) {
-    super.didStartUserGesture(route, previousRoute);
-
     DebugPrinter.printDebug(
       DebugCat.navigatorObserver,
       '[NavigatorObserver] -----------------> Route didStartUserGesture: ${route.settings.name}'
       ' - previousRoute: ${previousRoute?.settings.name}',
     );
+    //
+    super.didStartUserGesture(route, previousRoute);
   }
 
   @override
   void didStopUserGesture() {
-    super.didStopUserGesture();
     DebugPrinter.printDebug(
       DebugCat.navigatorObserver,
       '[NavigatorObserver] -----------------> Route didStopUserGesture',
     );
+    //
+    super.didStopUserGesture();
   }
 
   @override
   void subscribe(RouteAware routeAware, ModalRoute route) {
-    super.subscribe(routeAware, route);
     DebugPrinter.printDebug(
       DebugCat.navigatorObserver,
       '[NavigatorObserver] -----------------> Route subscribe: ${route.settings.name}'
-      ' - routeAware: ${routeAware}',
+      ' - routeAware: $routeAware',
     );
+    //
+    super.subscribe(routeAware, route);
   }
 
   @override
   void unsubscribe(RouteAware routeAware) {
-    super.unsubscribe(routeAware);
     DebugPrinter.printDebug(
       DebugCat.navigatorObserver,
-      '[NavigatorObserver] -----------------> Route unsubscribe: routeAware: ${routeAware}',
+      '[NavigatorObserver] -----------------> Route unsubscribe: routeAware: $routeAware',
     );
+    //
+    super.unsubscribe(routeAware);
   }
 }

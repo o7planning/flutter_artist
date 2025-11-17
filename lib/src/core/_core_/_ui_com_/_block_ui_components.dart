@@ -479,7 +479,9 @@ class _BlockUIComponents extends _UIComponents {
     //
     if (!blockXBlockRepOLD && blockXBlockRepCURRENT) {
       // Fire event:
-      block.shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // block.shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // LOGIC: #0000
+      FlutterArtist.storage._naturalQueryQueue.addShelf(block.shelf);
     } else if (blockXBlockRepOLD && !blockXBlockRepCURRENT) {
       block._fireBlockHidden();
     }
@@ -519,7 +521,9 @@ class _BlockUIComponents extends _UIComponents {
     //
     if (!blockXBlockRepOLD && blockXBlockRepCURRENT) {
       // Fire event:
-      block.shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // block.shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // LOGIC: #0000
+      FlutterArtist.storage._naturalQueryQueue.addShelf(block.shelf);
     } else if (blockXBlockRepOLD && !blockXBlockRepCURRENT) {
       block._fireBlockHidden();
     }
@@ -559,7 +563,9 @@ class _BlockUIComponents extends _UIComponents {
     //
     if (!hasXBlockRepOLD && hasXBlockRepCURRENT) {
       // Fire event:
-      block.shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // block.shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // LOGIC: #0000
+      FlutterArtist.storage._naturalQueryQueue.addShelf(block.shelf);
     } else if (hasXBlockRepOLD && !hasXBlockRepCURRENT) {
       block._fireBlockHidden();
     }

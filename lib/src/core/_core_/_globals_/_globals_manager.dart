@@ -72,25 +72,35 @@ class GlobalsManager {
   ///
   Future<void> __readExtraGlobalProps() async {
     DebugPrinter.printDebug(
-        DebugCat.appStart, "  --- globalManager.__readExtraGlobalProps()...");
+      DebugCat.appStart,
+      "  --- globalManager.__readExtraGlobalProps()...",
+    );
     // Store on local device:
     Box<String> hiveBox = await HiveUtils.openHiveBoxExtraGlobalPropNames();
     try {
       String key = __getHiveExtraGlobalPropNamesKey();
-      DebugPrinter.printDebug(DebugCat.appStart,
-          "  --- globalManager.__readExtraGlobalProps(). key: $key");
       DebugPrinter.printDebug(
-          DebugCat.appStart, "  --- __readExtraGlobalProps(). key: $key");
+        DebugCat.appStart,
+        "  --- globalManager.__readExtraGlobalProps(). key: $key",
+      );
+      DebugPrinter.printDebug(
+        DebugCat.appStart,
+        "  --- __readExtraGlobalProps(). key: $key",
+      );
       String extraGlobalPropNames = hiveBox.get(key) ?? "";
-      DebugPrinter.printDebug(DebugCat.appStart,
-          "  --- __readExtraGlobalProps. extraGlobalPropNames: $extraGlobalPropNames");
+      DebugPrinter.printDebug(
+        DebugCat.appStart,
+        "  --- __readExtraGlobalProps. extraGlobalPropNames: $extraGlobalPropNames",
+      );
       List<String> propNames = extraGlobalPropNames
           .split(__separator)
           .where((s) => s.isNotEmpty)
           .toList();
 
-      DebugPrinter.printDebug(DebugCat.appStart,
-          "  --- __readExtraGlobalProps. propNames: $propNames");
+      DebugPrinter.printDebug(
+        DebugCat.appStart,
+        "  --- __readExtraGlobalProps. propNames: $propNames",
+      );
       //
       __registeredExtraPropNames
         ..clear()

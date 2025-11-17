@@ -78,8 +78,6 @@ abstract class Shelf extends _Core {
 
   int __lazyLoadId = 0;
 
-  bool __lazyLoadLocked = false;
-
   String get name => FlutterArtist.storage._getShelfName(runtimeType);
 
   late final _ShelfUIComponents ui = _ShelfUIComponents(shelf: this);
@@ -586,36 +584,9 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
+  // LOGIC: #0000
   Future<void> _startLoadDataForLazyUIComponentsIfNeed() async {
-    print("\n\n\n@@@@@@@@@@@@@ START LAZY LOAD @@@@@@@@@");
-    if (__lazyLoadLocked) {
-      await Future.doWhile(
-        () => Future.delayed(const Duration(milliseconds: 1))
-            .then((_) => __lazyLoadLocked),
-      );
-    }
-    //
-    // IMPORTANT:
-    //
-    __lazyLoadLocked = true;
-    // New Code:
-    await Future.delayed(Duration(microseconds: 20));
-    //
     __lazyLoadId++;
-    //
-    await Future.delayed(
-      const Duration(milliseconds: 0),
-      () async {
-        await __queryLazyList();
-      },
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Future<void> __queryLazyList() async {
-    print(">>>>>>>>>>>>>> QUERY LAZY LIST <<<<<<<<<<<<<<<<<<<<<<<<");
     //
     // Natural Query:
     //
@@ -625,7 +596,6 @@ abstract class Shelf extends _Core {
     //
     if (lazyObjects.isEmpty) {
       print(">>>> LazyObjects is Empty <<<<");
-      __lazyLoadLocked = false;
       // IMPORTANT: No Lazy entities, but need to refresh UIComponents:
       ui.updateAllUIComponents();
       return;
@@ -640,7 +610,7 @@ abstract class Shelf extends _Core {
       FlutterArtist._rootQueue._addXShelf(xShelf);
       await FlutterArtist.executor._executeTaskUnitQueue();
     } finally {
-      __lazyLoadLocked = false;
+      // Nothing
     }
   }
 

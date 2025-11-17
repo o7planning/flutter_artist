@@ -5,8 +5,11 @@ typedef ShelfCreator<S> = S Function();
 abstract class _StorageCore extends _Core {
   final Map<String, ShelfCreator> __shelfCreatorMap = {};
   final Map<String, Shelf> _shelfMap = {};
-
   final List<Shelf> _recentShelves = [];
+
+  bool __started = false;
+
+  bool get started => __started;
 
   Map<String, Shelf?> get shelfMap {
     Map<String, Shelf?> m = __shelfCreatorMap
@@ -21,6 +24,20 @@ abstract class _StorageCore extends _Core {
   // ***************************************************************************
 
   _StorageCore();
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _setStarted() {
+    if (!__started) {
+      __started = true;
+      //
+      DebugPrinter.printDebug(
+        DebugCat.appStart,
+        "\n<<<<<<<<<<<<<< APP HAS BEEN STARTED! >>>>>>>>>>>>>>>>>>>>>>>>>>>>\n",
+      );
+    }
+  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -49,6 +66,12 @@ abstract class _StorageCore extends _Core {
   // ***************************************************************************
 
   void registerShelf<F extends Shelf>(ShelfCreator<F> builder) {
+    if (__started) {
+      // LOGIC: #0001
+      throw DebugUtils.getFatalError(
+        " ERROR: It is not possible to register a new Shelf after the application has been started.",
+      );
+    }
     final String shelfName = _getShelfName(F);
     ShelfCreator? creator = __shelfCreatorMap[shelfName];
     if (creator == null) {
@@ -65,7 +88,12 @@ abstract class _StorageCore extends _Core {
     if (shelf != null) {
       return shelf;
     }
-    print("FLUTTER ARTIST DEBUG >>>>>>>>>>>>>>> create Shelf: $shelfName");
+    if (!__started) {
+      DebugPrinter.printDebug(
+        DebugCat.appStart,
+        "FLUTTER ARTIST DEBUG >>>>>>>>>>>>>>> Validating Shelf: $shelfName",
+      );
+    }
 
     ShelfCreator? creator = __shelfCreatorMap[shelfName];
     if (creator == null) {
@@ -74,7 +102,14 @@ abstract class _StorageCore extends _Core {
           " FlutterArtist.storage.registerShelf(()=> $shelfName())");
     }
     shelf = creator() as F;
-    _shelfMap[shelfName] = shelf;
+    if (__started) {
+      _shelfMap[shelfName] = shelf;
+      //
+      DebugPrinter.printDebug(
+        DebugCat.shelfCreation,
+        "FLUTTER ARTIST DEBUG >>>>>>>>>>>>>>> Create Shelf: $shelfName",
+      );
+    }
     //
     return shelf;
   }

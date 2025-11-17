@@ -68,7 +68,9 @@ abstract class Hook extends _Core {
     //
     if (!activeOLD && activeCURRENT) {
       // Fire event:
-      shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // LOGIC: #0000
+      FlutterArtist.storage._naturalQueryQueue.addShelf(shelf);
     } else if (activeOLD && !activeCURRENT) {
       _fireActivityHidden();
     }

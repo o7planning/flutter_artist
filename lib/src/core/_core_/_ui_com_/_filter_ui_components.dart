@@ -127,7 +127,9 @@ class _FilterUIComponents extends _UIComponents {
     //
     if (!activeOLD && activeCURRENT) {
       // Fire event:
-      filterModel.shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // filterModel.shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // LOGIC: #0000
+      FlutterArtist.storage._naturalQueryQueue.addShelf(filterModel.shelf);
     } else if (activeOLD && !activeCURRENT) {
       // TODO: (Kiem tra phuong thuc cung ten trong Block).
       // block._fireBlockHidden();
