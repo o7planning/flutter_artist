@@ -11,9 +11,9 @@ class _BlockSilentItemUpdateTaskUnit
     required this.xBlock,
     required this.action,
   }) : super(
-    taskType: TaskType.blockSilentUpdateItem,
-    taskResult: BlockSilentItemUpdateResult(),
-  );
+          taskType: TaskType.blockSilentUpdateItem,
+          taskResult: BlockSilentItemUpdateResult(),
+        );
 
   @override
   XShelf get xShelf => xBlock.xShelf;

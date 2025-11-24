@@ -81,7 +81,7 @@ class _StorageEventHandler {
       return;
     }
     EffectedShelfMembers effectedShelfMembers =
-    listenerShelf._calculateEffectedShelfMembersByEvents(outsideEvents);
+        listenerShelf._calculateEffectedShelfMembersByEvents(outsideEvents);
 
     if (!effectedShelfMembers.hasMember()) {
       return;
@@ -103,7 +103,7 @@ class _StorageEventHandler {
     if (events.isEmpty) {
       print(
           "**~~~~~~~~~> NO EVENT FIRE TO OUTSIDE --> Event Item Types: $events"
-              " - Src Shelf: ${getClassName(eventShelf)}");
+          " - Src Shelf: ${getClassName(eventShelf)}");
       return;
     } else {
       print("**~~~~~~~~~> FIRE EVENT TO OUTSIDE --> Event Item Types: $events"
@@ -282,7 +282,7 @@ class _StorageEventHandler {
           continue;
         }
         final List<Event> listenToDataTypes =
-        listenerBlock.getOutsideDataTypesToListen();
+            listenerBlock.getOutsideDataTypesToListen();
         final Event itemTypeEvent = Event(blk.getItemType());
         final Event itemDetailTypeEvent = Event(blk.getItemDetailType());
         if (_contains(listenToDataTypes, itemTypeEvent) ||
@@ -418,7 +418,7 @@ class _StorageEventHandler {
       }
 
       List<Block> eventBlocks =
-      _getEventBlocksByShelf(listenerShelf: listenerShelf);
+          _getEventBlocksByShelf(listenerShelf: listenerShelf);
       if (eventBlocks.isNotEmpty) {
         foundShelfMap[shelfName] = listenerShelf;
         continue;
@@ -450,7 +450,7 @@ class _StorageEventHandler {
             blockType: listenerBlock.runtimeType,
             classDefinition: listenerBlock.debugClassDefinition,
             classParameterDefinition:
-            listenerBlock.debugClassParametersDefinition,
+                listenerBlock.debugClassParametersDefinition,
           ),
         );
       }
@@ -461,7 +461,7 @@ class _StorageEventHandler {
             scalarType: listenerScalar.runtimeType,
             classDefinition: listenerScalar.debugClassDefinition,
             classParameterDefinition:
-            listenerScalar.debugClassParametersDefinition,
+                listenerScalar.debugClassParametersDefinition,
           ),
         );
       }
@@ -480,8 +480,8 @@ class _StorageEventHandler {
     Map<String, Shelf> listenerMap = _getListenerShelves();
     Map<String, Shelf> map = {}..addAll(storage._shelfMap);
     map.removeWhere(
-          (shelfName, shelf) =>
-      eventMap.keys.contains(shelfName) ||
+      (shelfName, shelf) =>
+          eventMap.keys.contains(shelfName) ||
           listenerMap.keys.contains(shelfName),
     );
     return map;

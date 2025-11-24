@@ -1110,7 +1110,6 @@ abstract class Block<
           break;
       }
     }
-
     // TODO: LOGIC-01 (If not querying block --> No need to force select an item).
     AfterQueryAction afterQueryAction = thisXBlock.afterQueryAction;
     if (!thisXBlock.xShelf.naturalMode) {
@@ -1119,6 +1118,12 @@ abstract class Block<
       }
     }
     if (afterQueryAction == AfterQueryAction.setAnItemAsCurrentIfNeed) {
+      bool hasItemXActive = this
+          .ui
+          .hasActiveUIComponentItemRepresentative(alsoCheckChildren: true);
+      if (hasItemXActive) {
+        // afterQueryAction = AfterQueryAction.setAnItemAsCurrent ;
+      }
       // afterQueryAction = AfterQueryAction.doNothingIfPossible;
     }
     print(
@@ -1246,6 +1251,7 @@ abstract class Block<
         candidateCurrItem = null;
       }
     }
+
     //
     final ITEM? currItemOrigin = this.currentItem;
     final ITEM? currItem;
@@ -1273,7 +1279,6 @@ abstract class Block<
           candidateCurrItem2 = candidateCurrItem2 ?? items[suggestIdx];
         }
         candidateCurrItem2 = candidateCurrItem2 ?? firstItem;
-
         final bool isInNewQueryList2;
         if (candidateCurrItem2 == null) {
           isInNewQueryList2 = false;
@@ -1442,16 +1447,39 @@ abstract class Block<
             thisXBlock._getRecentLoadedItem(itemId: itemId);
         refreshedCurrentItemDetail = loadedCoupleItem?._itemDetail;
         if (refreshedCurrentItemDetail == null) {
+          final AutoStocker<ID, ITEM_DETAIL> stocker;
+          try {
+            // This may throw error
+            stocker = FlutterArtist.storage._stockersManager
+                ._findStocker<ID, ITEM_DETAIL>(
+              itmType: ITEM_DETAIL,
+            );
+          } catch (e, stackTrace) {
+            print(stackTrace);
+            isLoadItemError = true;
+            //
+            AppError appError = _handleError(
+              shelf: shelf,
+              methodName: null,
+              error: e,
+              stackTrace: stackTrace,
+              showSnackBar: true,
+            );
+            //
+            currentItemSelectionResult._setAppError(
+              appError: appError,
+              stackTrace: appError is ApiError ? null : stackTrace,
+            );
+            // TODO: Them test case:
+            // TODO: Alway return? Load ITEM Error
+            return;
+          }
           try {
             __refreshRefreshingCurrentItemState(
               isRefreshingCurrentItem: true,
             );
-            // This may throw error
-            final AutoStocker<ID, ITEM_DETAIL> stocker = FlutterArtist
-                .storage._stockersManager
-                ._findStocker<ID, ITEM_DETAIL>(itmType: ITEM_DETAIL);
             //
-            methodName = "stocker.loadById";
+            methodName = "${getClassNameWithoutGenerics(stocker)}.loadById";
             __callApiLoadItemDetailByIdCount++;
             ApiResult<ITEM_DETAIL> result = await stocker.loadById(
               id: itemId,
@@ -1479,19 +1507,13 @@ abstract class Block<
               appError: appError,
               stackTrace: appError is ApiError ? null : stackTrace,
             );
+            // TODO: Them test case:
+            // TODO: Alway return? Load ITEM Error
+            return;
           } finally {
             __refreshRefreshingCurrentItemState(
               isRefreshingCurrentItem: false,
             );
-          }
-          if (isLoadItemError) {
-            currentItemSelectionResult._apiError = true;
-            // ???????????????????????????????
-            // TODO: Them test case:
-            // TODO: Alway return? Load ITEM Error
-            //   ==> Chuyen Form sang trang thai NULL??
-            //
-            return;
           }
         }
       }
@@ -4046,7 +4068,7 @@ abstract class Block<
     // @Same-Code-Precheck-01
     final Actionable<BlockSilentItemUpdatePrecheck> actionable =
         __canSilentUpdateItem(
-      item: action.item,
+      itemId: action.itemId,
       checkBusy: true,
       checkAllow: true,
       errorIfItemNotInTheBlock: action.config.errorIfItemNotInTheBlock,
@@ -5019,7 +5041,7 @@ abstract class Block<
 
   @_PrecheckPrivateMethod()
   Actionable<BlockSilentItemUpdatePrecheck> __canSilentUpdateItem({
-    required ITEM item,
+    required ID itemId,
     required bool checkBusy,
     required bool checkAllow,
     required bool errorIfItemNotInTheBlock,
@@ -5046,7 +5068,7 @@ abstract class Block<
         break;
     }
     //
-    ITEM? internalItem = findItemSameIdWith(item: item);
+    ITEM? internalItem = findItemById(itemId);
     // Test Cases: [90b].
     if (errorIfItemNotInTheBlock && internalItem == null) {
       return Actionable<BlockSilentItemUpdatePrecheck>.no(
@@ -5054,8 +5076,8 @@ abstract class Block<
       );
     }
     //
-    if (checkAllow) {
-      CheckAllowResult result = _isAllowUpdateItem(item: item);
+    if (checkAllow && internalItem != null) {
+      CheckAllowResult result = _isAllowUpdateItem(item: internalItem);
       switch (result.result) {
         case CheckAllow.allow:
           return Actionable<BlockSilentItemUpdatePrecheck>.yes();

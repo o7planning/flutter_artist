@@ -8,9 +8,9 @@ class _FormModelSaveFormTaskUnit extends _ResultedSTaskUnit<FormSaveResult> {
   _FormModelSaveFormTaskUnit({
     required this.xFormModel,
   }) : super(
-    taskType: TaskType.formModelSaveForm,
-    taskResult: FormSaveResult(precheck: null),
-  );
+          taskType: TaskType.formModelSaveForm,
+          taskResult: FormSaveResult(precheck: null),
+        );
 
   @override
   XShelf get xShelf => xFormModel.xShelf;

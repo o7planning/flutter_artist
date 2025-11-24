@@ -10,10 +10,10 @@ abstract class BlockSilentItemUpdateAction<
     ITEM_DETAIL extends Identifiable<ID>,
     FILTER_CRITERIA extends FilterCriteria> extends Action {
   final BlockSilentItemUpdateActionConfig config;
-  final ITEM item;
+  final ID itemId;
 
   const BlockSilentItemUpdateAction({
-    required this.item,
+    required this.itemId,
     required this.config,
     required super.needToConfirm,
     required super.actionInfo,

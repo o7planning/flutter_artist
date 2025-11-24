@@ -25,6 +25,7 @@ class BlockDebugBox extends BaseDebugBox {
       alsoCheckChildren: true,
     );
     //
+
     String? activeUIItemRep =
         block.ui.findActiveUIComponentItemRepresentative();
     String? xActiveUIItemRep = block.ui.findActiveUIComponentItemRepresentative(
