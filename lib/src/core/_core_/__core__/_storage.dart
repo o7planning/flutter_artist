@@ -5,8 +5,8 @@ class _Storage extends _StorageCore {
   late final drawerState = _DrawerState(this);
   late final endDrawerState = _EndDrawerState(this);
 
-  late final _StorageItemVariantManager _itemVariantManager =
-      _StorageItemVariantManager(this);
+  late final _StoragePolymorphismManager _polymorphismManager =
+      _StoragePolymorphismManager(this);
   late final _StorageEventHandler ev = _StorageEventHandler(this);
   final _StockersManager _stockersManager = _StockersManager();
   final _StorageNaturalQueryQueue _naturalQueryQueue =
@@ -16,6 +16,15 @@ class _Storage extends _StorageCore {
   // ***************************************************************************
 
   _Storage();
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _initStorage(StorageStructure storageStructure) {
+    storageStructure.registerShelves();
+    storageStructure.registerAutoStockers();
+    storageStructure.registerPolymorphisms();
+  }
 
   // ***************************************************************************
   // ***************************************************************************

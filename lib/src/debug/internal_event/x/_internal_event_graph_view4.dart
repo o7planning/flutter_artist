@@ -42,17 +42,13 @@ class InternalEventGraphView4 extends StatelessWidget {
             'srcId': p.name,
             'dstId': b.name,
             'edgeName': 'edge-${p.name}-@-${b.name}',
-            'ranking': DateTime
-                .now()
-                .millisecond,
+            'ranking': DateTime.now().millisecond,
           });
           edges.add({
             'srcId': p.name,
             'dstId': b.name,
             'edgeName': 'edge-${p.name}-@-${b.name}',
-            'ranking': DateTime
-                .now()
-                .millisecond,
+            'ranking': DateTime.now().millisecond,
           });
           b = p;
         } else {
@@ -84,7 +80,7 @@ class InternalEventGraphView4 extends StatelessWidget {
         ..enableHit = false
         ..panelDelay = const Duration(milliseconds: 500)
         ..graphStyle = (GraphStyle()
-        // tagColor is prior to tagColorByIndex. use vertex.tags to get color
+          // tagColor is prior to tagColorByIndex. use vertex.tags to get color
           ..tagColor = {'tag8': Colors.orangeAccent.shade200}
           ..tagColorByIndex = [
             Colors.red.shade200,
@@ -120,8 +116,7 @@ class InternalEventGraphView4 extends StatelessWidget {
               color: Colors.grey.shade900.withAlpha(200),
               child: ListTile(
                 title: Text(
-                    '${edge.edgeName} @${edge
-                        .ranking}\nDelay controlled by \noptions.panelDelay\ndefault to 300ms'),
+                    '${edge.edgeName} @${edge.ranking}\nDelay controlled by \noptions.panelDelay\ndefault to 300ms'),
               ),
             ),
           ),
@@ -146,8 +141,7 @@ class InternalEventGraphView4 extends StatelessWidget {
                   'Id: ${hoverVertex.id}',
                 ),
                 subtitle: Text(
-                    'Tag: ${hoverVertex.data['tag']}\nDegree: ${hoverVertex
-                        .degree} ${hoverVertex.prevVertex?.id}'),
+                    'Tag: ${hoverVertex.data['tag']}\nDegree: ${hoverVertex.degree} ${hoverVertex.prevVertex?.id}'),
               ),
             ),
           ),

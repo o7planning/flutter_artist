@@ -1,3 +1,9 @@
 part of '../core.dart';
 
-class StorageStructure {}
+abstract class StorageStructure {
+  void registerAutoStockers();
+
+  void registerShelves();
+
+  void registerPolymorphisms();
+}

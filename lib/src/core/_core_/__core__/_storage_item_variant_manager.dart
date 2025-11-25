@@ -1,12 +1,10 @@
 part of '../core.dart';
 
-class _StorageItemVariantManager {
+class _StoragePolymorphismManager {
   final _Storage storage;
 
-  _StorageItemVariantManager(this.storage);
+  _StoragePolymorphismManager(this.storage);
 
-  // ***************************************************************************
-  // ***************************************************************************
-
-
+// ***************************************************************************
+// ***************************************************************************
 }

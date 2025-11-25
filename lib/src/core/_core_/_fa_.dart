@@ -156,6 +156,7 @@ class _FlutterArtist {
   }
 
   Future<void> config({
+    required StorageStructure storageStructure,
     required DebugOptions? debugOptions,
     required ConsoleDebugOptions? consoleDebugOptions,
     required IFlutterArtistAdapter flutterArtistAdapter,
@@ -171,6 +172,8 @@ class _FlutterArtist {
           "${getClassName(__adapter)} already registered!");
     }
     __adapter = flutterArtistAdapter;
+    //
+    storage._initStorage(storageStructure);
     //
     if (debugOptions != null) {
       __debugOptions = debugOptions;
