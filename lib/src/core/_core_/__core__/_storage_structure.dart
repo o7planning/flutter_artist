@@ -5,5 +5,5 @@ abstract class StorageStructure {
 
   void registerShelves();
 
-  void registerPolymorphisms();
+  List<PolymorphismFamily> registerPolymorphisms();
 }
