@@ -205,6 +205,8 @@ part '_sorting_/_sort_model_builder.dart';
 
 part '__core__/_storage_core.dart';
 
+part '__core__/_storage_item_variant_manager.dart';
+
 part '__core__/_storage_natural_query_queue.dart';
 
 part '__core__/_storage_structure.dart';

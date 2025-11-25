@@ -5,6 +5,8 @@ class _Storage extends _StorageCore {
   late final drawerState = _DrawerState(this);
   late final endDrawerState = _EndDrawerState(this);
 
+  late final _StorageItemVariantManager _itemVariantManager =
+      _StorageItemVariantManager(this);
   late final _StorageEventHandler ev = _StorageEventHandler(this);
   final _StockersManager _stockersManager = _StockersManager();
   final _StorageNaturalQueryQueue _naturalQueryQueue =
@@ -14,6 +16,13 @@ class _Storage extends _StorageCore {
   // ***************************************************************************
 
   _Storage();
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void registerItemVariants({required String name}) {
+    //
+  }
 
   // ***************************************************************************
   // ***************************************************************************
