@@ -23,7 +23,7 @@ class _Storage extends _StorageCore {
   void _initStorage(StorageStructure storageStructure) {
     storageStructure.registerShelves();
     storageStructure.registerAutoStockers();
-    storageStructure.registerPolymorphisms();
+    storageStructure.registerPolymorphismFamilies();
   }
 
   // ***************************************************************************
