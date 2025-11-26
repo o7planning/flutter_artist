@@ -682,7 +682,7 @@ abstract class Shelf extends _Core {
       );
       return ShelfDelayedReactionExecutionResult(
         precheck: actionable.errCode,
-        stackTrace: actionable.stackTrace,
+        errorInfo: actionable.errorInfo,
       );
     }
     _addShelfExternalReactionTaskUnit();

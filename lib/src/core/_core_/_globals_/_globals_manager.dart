@@ -213,6 +213,12 @@ class GlobalsManager {
       // This will open login screen.
       return;
     }
+    final ILoggedInUser? loggedInUserBACKUP = _loggedInUser;
+    //
+    // IMPORTANT: Set before globalData.
+    //
+    _loggedInUser = loggedInUser;
+    //
     DebugPrinter.printDebug(DebugCat.appStart,
         "  --- globalManager loggedInUser is not null --> continue");
     IGlobalData? globalData;
@@ -238,10 +244,11 @@ class GlobalsManager {
         DebugCat.appStart,
         "  --- globalManager --> globalData is null --> return",
       );
+      // Restore!!
+      _loggedInUser = loggedInUserBACKUP;
       // This will open login screen.
       return;
     }
-    _loggedInUser = loggedInUser;
     _globalData = globalData;
     //
     DebugPrinter.printDebug(
@@ -250,6 +257,18 @@ class GlobalsManager {
     );
     // Load Extra Global Prop Names that stored in Hive Database.
     await __readExtraGlobalProps();
+  }
+
+  Future<void> removeStoredLoggedInUser() async {
+    try {
+      Box<String> hiveBox = await HiveUtils.openHiveBoxLoggedInUser();
+      hiveBox.delete(__hiveKeyLoggedInUser);
+      await hiveBox.close();
+    } catch (e, stackTrace) {
+      print("\n\n******** Error removeStoredLoggedInUser: $e ************");
+      print(stackTrace);
+      return;
+    }
   }
 
   ///
@@ -281,7 +300,7 @@ class GlobalsManager {
       await hiveBox.put(__hiveKeyLoggedInUser, json);
       await hiveBox.close();
     } catch (e, stackTrace) {
-      print("Error setLoggedInUser: $e");
+      print("\n\n******** Error setLoggedInUser: $e ************");
       print(stackTrace);
       return;
     }

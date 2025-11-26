@@ -8,6 +8,6 @@ class FormModelDataLoadResult extends TaskResult<FormModelDataLoadPrecheck> {
     if (precheck != null) {
       return false;
     }
-    return error == null;
+    return errorInfo == null;
   }
 }

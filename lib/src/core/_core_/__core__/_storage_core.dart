@@ -196,10 +196,10 @@ abstract class _StorageCore extends _Core {
     bool hasMountedUIComponent = shelf.ui.hasMountedUIComponent();
     if (!hasMountedUIComponent) {
       print(">>>>>>>>>>> Shelf: ${getClassName(shelf)} dispose all component");
-      FlutterArtist.codeFlowLogger.addInfo(
-        ownerClassInstance: this,
-        info: "Shelf: ${getClassName(shelf)} dispose all UI components",
-      );
+      // FlutterArtist.codeFlowLogger.addInfo(
+      //   ownerClassInstance: this,
+      //   info: "Shelf: ${getClassName(shelf)} dispose all UI components",
+      // );
       if (shelf.config.hiddenBehavior == ShelfHiddenBehavior.clear) {
         print(
             "  ---------> Remove ${getClassName(shelf)} from FlutterArtist Storage");

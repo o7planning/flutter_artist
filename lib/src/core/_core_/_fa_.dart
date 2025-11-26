@@ -143,6 +143,10 @@ class _FlutterArtist {
     );
   }
 
+  Future<void> removeStoredLoggedInUser() async {
+    await globalsManager.removeStoredLoggedInUser();
+  }
+
   Future<void> setOrUpdateLoggedInUser(ILoggedInUser loggedInUser) async {
     await _setOrUpdateLoggedInUser(
         loggedInUser: loggedInUser, requiresTheSameUser: true);

@@ -41,16 +41,15 @@ class _BackgroundExecutor extends _Core {
       // Throw ApiError:
       result.throwIfError();
     } catch (e, stackTrace) {
-      AppError appError = _handleError(
+      ErrorInfo errorInfo = _handleError(
         shelf: null,
         methodName: "executeBackgroundAction",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: false,
       );
-      backgroundResult._setAppError(
-        appError: appError,
-        stackTrace: stackTrace,
+      backgroundResult._setErrorInfo(
+        errorInfo: errorInfo,
       );
     }
     return backgroundResult;

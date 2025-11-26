@@ -1,62 +1,81 @@
 part of '../core.dart';
 
-int __flowLogItemSEQ = 0;
+int __flowLogItemSEQ = 1;
 
-class CodeFlowItem {
+class MasterFlowItem {
   final int id;
-
-  final String? info;
-  final AppErrorInfo? errorInfo;
+  final MasterFlowItemType masterFlowItemType;
   final FuncCallInfo? funcCallInfo;
   final bool isLibCode;
+  final TaskType? taskType;
 
   bool get isDevCode => !isLibCode;
 
-  CodeFlowType codeFlowType;
-  final Object? ownerClassInstance;
+  final Object ownerClassInstance;
+  final List<LineFlowItem> __lineFlowItems = [];
 
-  CodeFlowItem._methodCallFromStackTrace({
+  List<LineFlowItem> get lineFlowItems => List.unmodifiable(__lineFlowItems);
+
+  MasterFlowItem._taskCall({
+    required this.ownerClassInstance,
+    required this.taskType,
+  })  : masterFlowItemType = MasterFlowItemType.taskCall,
+        funcCallInfo = null,
+        isLibCode = false,
+        id = __flowLogItemSEQ++;
+
+  MasterFlowItem._methodCallFromStackTrace({
     required this.ownerClassInstance,
     required StackTrace currentStackTrace,
     required Map<String, dynamic>? arguments,
     required this.isLibCode,
-  })  : codeFlowType = CodeFlowType.methodCalled,
+  })  : taskType = null,
+        masterFlowItemType = MasterFlowItemType.methodCall,
         funcCallInfo = FuncCallInfo.fromCurrentStackTrace(
           currentStackTrace: currentStackTrace,
           arguments: arguments,
         ),
-        info = null,
-        errorInfo = null,
         id = __flowLogItemSEQ++;
 
-  CodeFlowItem._methodCall({
+  MasterFlowItem._methodCall({
     required this.ownerClassInstance,
     required String methodName,
     required Map<String, dynamic>? arguments,
     required this.isLibCode,
-  })  : codeFlowType = CodeFlowType.methodCalled,
+  })  : taskType = null,
+        masterFlowItemType = MasterFlowItemType.methodCall,
         funcCallInfo = FuncCallInfo(funcName: methodName, arguments: arguments),
-        info = null,
-        errorInfo = null,
         id = __flowLogItemSEQ++;
 
-  CodeFlowItem._info({
-    required this.ownerClassInstance,
-    required this.info,
-    required this.isLibCode,
-  })  : codeFlowType = CodeFlowType.info,
-        funcCallInfo = null,
-        errorInfo = null,
-        id = __flowLogItemSEQ++;
+  void _addLineFlowItem({
+    LineFlowType? lineFlowType,
+    required String codeId,
+    required String shortDesc,
+    TipDocument? tipDocument,
+    ErrorInfo? errorInfo,
+  }) {
+    __lineFlowItems.add(
+      LineFlowItem(
+        lineId: codeId,
+        shortDesc: shortDesc,
+        tipDocument: tipDocument,
+        errorInfo: errorInfo,
+      ),
+    );
+  }
 
-  CodeFlowItem._error({
-    required this.ownerClassInstance,
-    required this.errorInfo,
-    required this.isLibCode,
-  })  : codeFlowType = CodeFlowType.error,
-        funcCallInfo = null,
-        info = null,
-        id = __flowLogItemSEQ++;
+  bool hasError() {
+    return getErrorInfo() != null;
+  }
+
+  ErrorInfo? getErrorInfo() {
+    for (LineFlowItem item in __lineFlowItems) {
+      if (item.errorInfo != null) {
+        return item.errorInfo;
+      }
+    }
+    return null;
+  }
 
   bool get isLibPublicMethod {
     return isLibCode && isPublicMethodCall();
@@ -91,22 +110,15 @@ class CodeFlowItem {
   }
 
   bool isMethodCall() {
-    return funcCallInfo != null && info == null && errorInfo == null;
+    return masterFlowItemType == MasterFlowItemType.methodCall;
+  }
+
+  bool isTaskCall() {
+    return masterFlowItemType == MasterFlowItemType.taskCall;
   }
 
   bool isMethodCallWithTrace() {
-    return info == null &&
-        errorInfo == null &&
-        funcCallInfo != null &&
-        funcCallInfo!.hasTraceInfo();
-  }
-
-  bool isInfo() {
-    return info != null;
-  }
-
-  bool isError() {
-    return errorInfo != null;
+    return funcCallInfo != null && funcCallInfo!.hasTraceInfo();
   }
 
   Shelf? getShelf() {

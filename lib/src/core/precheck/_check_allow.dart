@@ -1,3 +1,5 @@
+import 'package:flutter_artist_core/flutter_artist_core.dart';
+
 enum CheckAllow {
   allow,
   notAllow,
@@ -6,16 +8,15 @@ enum CheckAllow {
 
 class CheckAllowResult {
   final CheckAllow result;
-  final StackTrace? stackTrace;
+  final ErrorInfo? errorInfo;
 
   CheckAllowResult.allow()
       : result = CheckAllow.allow,
-        stackTrace = null;
+        errorInfo = null;
 
   CheckAllowResult.notAllow()
       : result = CheckAllow.notAllow,
-        stackTrace = null;
+        errorInfo = null;
 
-  CheckAllowResult.error({required this.stackTrace})
-      : result = CheckAllow.error;
+  CheckAllowResult.error({required this.errorInfo}) : result = CheckAllow.error;
 }

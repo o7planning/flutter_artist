@@ -310,23 +310,49 @@ abstract class Scalar<
   @_TaskUnitMethodAnnotation()
   @_ScalarQueryAnnotation()
   Future<void> _unitQuery({
+    required MasterFlowItem? masterFlowItem,
     required XScalar thisXScalar,
   }) async {
     __assertThisXScalar(thisXScalar);
     //
-    bool hasActiveUI = ui.hasActiveUIComponent();
+    masterFlowItem?._addLineFlowItem(
+      codeId: "#12000",
+      shortDesc:
+          "${_debugObjHtml(this)} -> Begin ${TaskType.scalarQuery.asDebugTaskUnit()}",
+    );
+    //
+    bool hasXActiveUI = ui.hasActiveUIComponent(alsoCheckChildren: true);
+    //
+    masterFlowItem?._addLineFlowItem(
+      codeId: "#12020",
+      shortDesc: "${_debugObjHtml(this)} has UIX Visible? $hasXActiveUI",
+    );
+    //
     QryHint queryHint = thisXScalar.queryHint;
 
     if (queryHint != QryHint.force) {
-      if (this.dataState != DataState.ready && hasActiveUI) {
+      if (this.dataState != DataState.ready && hasXActiveUI) {
         queryHint = QryHint.force;
       }
     }
+    masterFlowItem?._addLineFlowItem(
+      codeId: "#12040",
+      shortDesc: "Calculated: @queryHint: $queryHint.",
+    );
 
     if (queryHint == QryHint.none) {
-      print("        ~~~~~~~> IGNORED --> queryHint: $queryHint - [$name]");
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#12080",
+        shortDesc:
+            "@queryHint: $queryHint, @dataState: $dataState, @value: ${_debugObjHtml(this.value)}.",
+      );
       //
       if (this.dataState == DataState.ready && this.value != null) {
+        masterFlowItem?._addLineFlowItem(
+          codeId: "#12100",
+          shortDesc:
+              "Create ${TaskType.scalarQuery.asDebugTaskUnit()}(s) for all child scalars and add to Queue.",
+        );
         for (XScalar childXScalar in thisXScalar.childXScalars) {
           thisXScalar.xShelf._addTaskUnit(
             taskUnit: _ScalarQueryTaskUnit(
@@ -337,7 +363,20 @@ abstract class Scalar<
       }
       return;
     } else if (queryHint == QryHint.markAsPending) {
-      print("        ~~~~~~~> PENDING --> queryHint: $queryHint - [$name]");
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#12140",
+        shortDesc:
+            "@queryHint: $queryHint, @dataState: $dataState, @value: ${_debugObjHtml(this.value)}.",
+      );
+      //
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#12180",
+        shortDesc:
+            "${_debugObjHtml(this)} --> clear data and set to pending state. "
+            "Clear data of child scalars and set them to none.",
+        lineFlowType: LineFlowType.info,
+      );
+      //
       this.__clearWithDataStateAndChildrenToNonCascade(
         thisXScalar: thisXScalar,
         scalarDataState: DataState.pending,
@@ -351,13 +390,13 @@ abstract class Scalar<
     //
     DataState newScalarDataState = this.dataState;
     //
-    FlutterArtist.codeFlowLogger._addMethodCall(
-      isLibCode: false,
-      navigate: null,
-      ownerClassInstance: this,
-      methodName: "callApiQuery",
-      parameters: {},
-    );
+    // FlutterArtist.codeFlowLogger._addMethodCall(
+    //   isLibCode: false,
+    //   navigate: null,
+    //   ownerClassInstance: this,
+    //   methodName: "callApiQuery",
+    //   parameters: {},
+    // );
     //
     FILTER_CRITERIA? filterCriteriaOfFilterModel;
     try {
@@ -365,6 +404,11 @@ abstract class Scalar<
       final FilterModel filterModel = xFilterModel.filterModel;
       // SAME-AS: #0004
       if (!xFilterModel.queried) {
+        masterFlowItem?._addLineFlowItem(
+          codeId: "#12220",
+          shortDesc:
+              "${_debugObjHtml(this)} @queried: ${xFilterModel.queried} --> need to load data",
+        );
         FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
         //
         filterCriteriaOfFilterModel = await filterModel._startNewFilterActivity(
@@ -374,6 +418,11 @@ abstract class Scalar<
         //
         xFilterModel.queried = true;
       } else {
+        masterFlowItem?._addLineFlowItem(
+          codeId: "#12300",
+          shortDesc:
+              "${_debugObjHtml(this)} @queried: ${xFilterModel.queried} --> no need to load data.",
+        );
         filterCriteriaOfFilterModel =
             filterModel._filterCriteria! as FILTER_CRITERIA;
       }
@@ -384,12 +433,13 @@ abstract class Scalar<
     // Has Error in FilterModel.
     //
     if (filterCriteriaOfFilterModel == null) {
-      // __clearWithDataState(
-      //   thisXScalar: thisXScalar,
-      //   scalarDataState: DataState.error,
-      // );
-      // thisXScalar.queryResult._setFilterError();
-
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#12340",
+        shortDesc:
+            "${_debugObjHtml(filterModel)} error --> clear data of ${_debugObjHtml(this)} and set to error. "
+            "Clear data of child scalar and set them to none.",
+        lineFlowType: LineFlowType.info,
+      );
       // Set Scalar to error cascade.
       this.__clearWithDataStateAndChildrenToNonCascade(
         thisXScalar: thisXScalar,
@@ -416,6 +466,10 @@ abstract class Scalar<
       __refreshQueryingState(isQuerying: true);
       //
       __callApiQueryCount++;
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#12400",
+        shortDesc: "Calling ${_debugObjHtml(this)}.callApiQuery()...",
+      );
       ApiResult<VALUE> result = await callApiQuery(
         parentScalarValue: parent?.value,
         filterCriteria: filterCriteriaOfFilterModel,
@@ -445,7 +499,7 @@ abstract class Scalar<
       );
       __setScalarErrorInfo(scalarErrorInfo);
       //
-      AppError appError = _handleError(
+      ErrorInfo errorInfo = _handleError(
         shelf: shelf,
         methodName: callApiQueryMethod.name,
         // AppError, ApiError or others.
@@ -454,9 +508,15 @@ abstract class Scalar<
         showSnackBar: true,
       );
       //
-      thisXScalar.queryResult._setAppError(
-        appError: appError,
-        stackTrace: appError is ApiError ? null : stackTrace,
+      thisXScalar.queryResult._setErrorInfo(
+        errorInfo: errorInfo,
+      );
+      //
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#12440",
+        shortDesc:
+            "The ${_debugObjHtml(this)}.callApiQuery() was called with an error!",
+        errorInfo: errorInfo,
       );
       isQueryError = true;
     } finally {
@@ -465,6 +525,11 @@ abstract class Scalar<
     // Test Cases: [12a], [12b].
     if (isQueryError) {
       newScalarDataState = DataState.error;
+      //
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#12500",
+        shortDesc: "${_debugObjHtml(this)} --> set value to null",
+      );
       __setQueryDataWithState(
         thisXScalar: thisXScalar,
         filterCriteria: null,
@@ -472,6 +537,12 @@ abstract class Scalar<
         valueId: null,
         value: null,
         queryResultState: ActionResultState.fail,
+      );
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#12520",
+        shortDesc:
+            "${_debugObjHtml(this)} --> clear value and set state to error. "
+            "Clear value of child scalars and set them to none.",
       );
       __clearWithDataStateAndChildrenToNonCascade(
         thisXScalar: thisXScalar,
@@ -481,6 +552,11 @@ abstract class Scalar<
       return;
     }
     // No ERROR!
+    masterFlowItem?._addLineFlowItem(
+      codeId: "#12600",
+      shortDesc:
+          "${_debugObjHtml(this)} --> set state to ready and set value to ${_debugObjHtml(value)}.",
+    );
     newScalarDataState = DataState.ready;
     __setQueryDataWithState(
       thisXScalar: thisXScalar,
@@ -492,16 +568,34 @@ abstract class Scalar<
     );
     //
     if (value == null) {
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#12680",
+        shortDesc:
+            "${_debugObjHtml(this)} --> @value: null --> clear data of all child scalars and set them to none.",
+        lineFlowType: LineFlowType.info,
+      );
       __clearAllChildrenScalarsToNone(thisXScalar: thisXScalar);
       return;
     }
     //
     if (xCriteriaChanged || valueId != oldValueId) {
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#12700",
+        shortDesc:
+            "${_debugObjHtml(this)} --> @filterCriteria changed --> clear data of child scalars and set them to pending.",
+        lineFlowType: LineFlowType.info,
+      );
       this.__clearAllChildrenScalarsToPending(
         thisXScalar: thisXScalar,
       );
     }
     //
+    masterFlowItem?._addLineFlowItem(
+      codeId: "#12800",
+      shortDesc:
+          "Create ${TaskType.scalarQuery.asDebugTaskUnit()}(s) for all child scalars and add to queue.",
+      lineFlowType: LineFlowType.info,
+    );
     for (XScalar childXScalar in thisXScalar.childXScalars) {
       thisXScalar.xShelf._addTaskUnit(
         taskUnit: _ScalarQueryTaskUnit(
@@ -540,13 +634,13 @@ abstract class Scalar<
     //
     ApiResult<DATA>? result;
     try {
-      FlutterArtist.codeFlowLogger._addMethodCall(
-        ownerClassInstance: action,
-        methodName: "callApiLoadExtraData",
-        parameters: null,
-        navigate: null,
-        isLibCode: false,
-      );
+      // FlutterArtist.codeFlowLogger._addMethodCall(
+      //   ownerClassInstance: action,
+      //   methodName: "callApiLoadExtraData",
+      //   parameters: null,
+      //   navigate: null,
+      //   isLibCode: false,
+      // );
       //
       result = await action.callApiLoadExtraData();
     } catch (e, stackTrace) {
@@ -793,17 +887,17 @@ abstract class Scalar<
     required AfterScalarLoadExtraDataQuickAction afterQuickAction,
     required Function(BuildContext context)? navigate,
   }) async {
-    FlutterArtist.codeFlowLogger._addMethodCall(
-      isLibCode: true,
-      navigate: null,
-      ownerClassInstance: this,
-      methodName: "executeQuickLoadExtraDataAction",
-      parameters: {
-        "filterInput": filterInput,
-        "action": action,
-        "afterQuickAction": afterQuickAction,
-      },
-    );
+    // FlutterArtist.codeFlowLogger._addMethodCall(
+    //   isLibCode: true,
+    //   navigate: null,
+    //   ownerClassInstance: this,
+    //   methodName: "executeQuickLoadExtraDataAction",
+    //   parameters: {
+    //     "filterInput": filterInput,
+    //     "action": action,
+    //     "afterQuickAction": afterQuickAction,
+    //   },
+    // );
     //
     // Confirmation:
     //
@@ -853,13 +947,13 @@ abstract class Scalar<
   Future<ScalarQueryResult> query({
     FILTER_INPUT? filterInput,
   }) async {
-    FlutterArtist.codeFlowLogger._addMethodCall(
-      isLibCode: true,
-      navigate: null,
-      ownerClassInstance: this,
-      methodName: "query",
-      parameters: {"filterInput": filterInput},
-    );
+    // FlutterArtist.codeFlowLogger._addMethodCall(
+    //   isLibCode: true,
+    //   navigate: null,
+    //   ownerClassInstance: this,
+    //   methodName: "query",
+    //   parameters: {"filterInput": filterInput},
+    // );
     //
     final XShelf xShelf = _XShelfScalarQuery(
       scalar: this,
@@ -885,13 +979,13 @@ abstract class Scalar<
   @_ReturnTaskResultMethodAnnotation()
   @_ScalarClearanceAnnotation()
   Future<ScalarClearanceResult> clear({Function()? navigate}) async {
-    FlutterArtist.codeFlowLogger._addMethodCall(
-      isLibCode: true,
-      navigate: navigate,
-      ownerClassInstance: this,
-      methodName: "clear",
-      parameters: {},
-    );
+    // FlutterArtist.codeFlowLogger._addMethodCall(
+    //   isLibCode: true,
+    //   navigate: navigate,
+    //   ownerClassInstance: this,
+    //   methodName: "clear",
+    //   parameters: {},
+    // );
     // @Same-Code-Precheck-01
     Actionable<ScalarClearancePrecheck> actionable = __canClearScalar(
       checkBusy: true,
@@ -955,11 +1049,11 @@ abstract class Scalar<
   // ***************************************************************************
 
   void _fireScalarHidden() {
-    FlutterArtist.codeFlowLogger._addEvent(
-      ownerClassInstance: this,
-      event: "Scalar '${getClassName(this)}' just hides all UI Components!",
-      isLibCode: true,
-    );
+    // FlutterArtist.codeFlowLogger._addEvent(
+    //   ownerClassInstance: this,
+    //   event: "Scalar '${getClassName(this)}' just hides all UI Components!",
+    //   isLibCode: true,
+    // );
     switch (config.hiddenBehavior) {
       case ScalarHiddenBehavior.none:
         break;

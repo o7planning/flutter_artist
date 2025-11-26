@@ -971,15 +971,15 @@ abstract class FilterModel<
     if (_lockAddMoreQuery) {
       return false;
     }
-    FlutterArtist.codeFlowLogger._addMethodCall(
-      isLibCode: true,
-      ownerClassInstance: this,
-      methodName: methodName,
-      parameters: {
-        "filterInput": filterInput,
-      },
-      navigate: null,
-    );
+    // FlutterArtist.codeFlowLogger._addMethodCall(
+    //   isLibCode: true,
+    //   ownerClassInstance: this,
+    //   methodName: methodName,
+    //   parameters: {
+    //     "filterInput": filterInput,
+    //   },
+    //   navigate: null,
+    // );
     //
     final XShelf xShelf = _XShelfFilterModelQuery(
       filterModel: this,

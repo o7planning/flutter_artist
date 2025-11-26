@@ -12,6 +12,6 @@ class ScalarQueryResult extends TaskResult<ScalarQueryPrecheck> {
     if (precheck != null) {
       return false;
     }
-    return error == null;
+    return errorInfo == null;
   }
 }

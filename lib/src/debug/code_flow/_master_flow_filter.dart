@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 
-import '../../core/enums/_code_flow_item_type.dart';
+import '../../core/enums/_task_flow_item_type.dart';
 import '../../core/widgets/_custom_app_container.dart';
 import '../../core/widgets/_labeled_checkbox.dart';
 
-class CodeFlowFilter extends StatelessWidget {
-  final List<CodeFlowItemType> codeFlowItemTypes;
+class MasterFlowFilter extends StatelessWidget {
+  final List<MasterFlowItemType> masterFlowItemTypes;
 
   final bool showDevMethod;
 
@@ -28,9 +28,9 @@ class CodeFlowFilter extends StatelessWidget {
   final Function(bool? value) onShowInfoChanged;
   final Function(bool? value) onShowErrorChanged;
 
-  const CodeFlowFilter({
+  const MasterFlowFilter({
     super.key,
-    required this.codeFlowItemTypes,
+    required this.masterFlowItemTypes,
     required this.showDevMethod,
     required this.showPublicMethod,
     required this.showPrivateMethod,

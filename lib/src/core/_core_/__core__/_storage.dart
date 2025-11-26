@@ -66,15 +66,15 @@ class _Storage extends _StorageCore {
     required StorageSilentAction action,
     required Function(BuildContext context)? navigate,
   }) async {
-    FlutterArtist.codeFlowLogger._addMethodCall(
-      isLibCode: true,
-      navigate: null,
-      ownerClassInstance: this,
-      methodName: "executeSilentAction",
-      parameters: {
-        "action": action,
-      },
-    );
+    // FlutterArtist.codeFlowLogger._addMethodCall(
+    //   isLibCode: true,
+    //   navigate: null,
+    //   ownerClassInstance: this,
+    //   methodName: "executeSilentAction",
+    //   parameters: {
+    //     "action": action,
+    //   },
+    // );
     //
     // @Same-Code-Precheck-01
     //
@@ -92,7 +92,7 @@ class _Storage extends _StorageCore {
       );
       return StorageSilentActionResult(
         precheck: actionable.errCode,
-        stackTrace: actionable.stackTrace,
+        errorInfo: actionable.errorInfo,
       );
     }
     //
@@ -150,19 +150,19 @@ class _Storage extends _StorageCore {
   }) async {
     ApiResult<void>? result;
     try {
-      FlutterArtist.codeFlowLogger._addMethodCall(
-        ownerClassInstance: action,
-        methodName: "callApi",
-        parameters: null,
-        navigate: null,
-        isLibCode: false,
-      );
+      // FlutterArtist.codeFlowLogger._addMethodCall(
+      //   ownerClassInstance: action,
+      //   methodName: "callApi",
+      //   parameters: null,
+      //   navigate: null,
+      //   isLibCode: false,
+      // );
       //
       result = await action.callApi();
       // Throw ApiError.
       result.throwIfError();
     } catch (e, stackTrace) {
-      AppError appError = _handleError(
+      ErrorInfo errorInfo = _handleError(
         shelf: null,
         methodName: '${getClassName(action)}.callApi',
         error: e,
@@ -170,9 +170,8 @@ class _Storage extends _StorageCore {
         showSnackBar: true,
       );
       //
-      taskResult._setAppError(
-        appError: appError,
-        stackTrace: appError is ApiError ? null : stackTrace,
+      taskResult._setErrorInfo(
+        errorInfo: errorInfo,
       );
       return false;
     }

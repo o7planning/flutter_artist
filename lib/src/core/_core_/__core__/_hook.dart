@@ -93,11 +93,11 @@ abstract class Hook extends _Core {
   // ***************************************************************************
 
   void _fireActivityHidden() {
-    FlutterArtist.codeFlowLogger._addEvent(
-      ownerClassInstance: this,
-      event: "Activity '${getClassName(this)}' just hides all UI Components!",
-      isLibCode: true,
-    );
+    // FlutterArtist.codeFlowLogger._addEvent(
+    //   ownerClassInstance: this,
+    //   event: "Activity '${getClassName(this)}' just hides all UI Components!",
+    //   isLibCode: true,
+    // );
     switch (config.hiddenBehavior) {
       case HookHiddenBehavior.none:
         break;

@@ -8,6 +8,6 @@ class BackgroundActionResult extends TaskResult<BackgroundActionPrecheck> {
     if (precheck != null) {
       return false;
     }
-    return error == null;
+    return errorInfo == null;
   }
 }

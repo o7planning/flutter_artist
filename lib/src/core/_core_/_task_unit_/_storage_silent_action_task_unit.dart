@@ -9,4 +9,7 @@ class _StorageSilentActionTaskUnit extends _TaskUnit {
   _StorageSilentActionTaskUnit({
     required this.action,
   });
+
+  @override
+  Object get owner => FlutterArtist.storage;
 }

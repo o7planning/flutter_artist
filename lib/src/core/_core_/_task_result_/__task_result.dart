@@ -2,20 +2,17 @@ part of '../core.dart';
 
 abstract class TaskResult<PRECHECK> {
   PRECHECK? _precheck;
-  AppError? _appError;
-  StackTrace? _stackTrace;
+  ErrorInfo? _errorInfo;
 
   PRECHECK? get precheck => _precheck;
 
-  AppError? get error => _appError;
-
-  StackTrace? get stackTrace => _stackTrace;
+  ErrorInfo? get errorInfo => _errorInfo;
 
   TaskResult({
     PRECHECK? precheck,
-    StackTrace? stackTrace,
+    ErrorInfo? errorInfo,
   })  : _precheck = precheck,
-        _stackTrace = stackTrace;
+        _errorInfo = errorInfo;
 
   bool get successForFirst;
 
@@ -25,11 +22,9 @@ abstract class TaskResult<PRECHECK> {
     _precheck = precheck;
   }
 
-  void _setAppError({
-    required AppError appError,
-    required StackTrace? stackTrace,
+  void _setErrorInfo({
+    required ErrorInfo errorInfo,
   }) {
-    _appError = appError;
-    _stackTrace = stackTrace;
+    _errorInfo = errorInfo;
   }
 }

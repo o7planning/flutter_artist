@@ -14,7 +14,7 @@ enum TaskType {
   blockQuickCreateMultiItems,
   blockQuickUpdateItem,
   blockSilentUpdateItem,
-  blockSelectItemAsCurrent,
+  blockSetItemAsCurrent,
   blockClearance,
   //
   filterModelLoadData,
@@ -28,4 +28,8 @@ enum TaskType {
   scalarQuery,
   scalarClearance,
   scalarSilentAction;
+
+  String asDebugTaskUnit() {
+    return "<b>$name</b> task unit";
+  }
 }

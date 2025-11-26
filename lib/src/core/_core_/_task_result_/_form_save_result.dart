@@ -8,6 +8,6 @@ class FormSaveResult extends TaskResult<BlockFormSavePrecheck> {
     if (precheck != null) {
       return false;
     }
-    return error == null;
+    return errorInfo == null;
   }
 }

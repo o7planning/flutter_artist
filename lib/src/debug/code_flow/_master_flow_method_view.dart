@@ -3,20 +3,14 @@ import 'package:flutter/material.dart';
 import '../../core/_core_/core.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/utils/_class_utils.dart';
-import '__code_flow_const.dart';
+import '__task_flow_const.dart';
 
 class CodeFlowMethodView extends StatelessWidget {
-  final CodeFlowItem codeFlowItem;
-  final bool selected;
-  final bool textSelectable;
-  final Function()? onTap;
+  final MasterFlowItem masterFlowItem;
 
   const CodeFlowMethodView({
     super.key,
-    required this.codeFlowItem,
-    required this.textSelectable,
-    required this.selected,
-    required this.onTap,
+    required this.masterFlowItem,
   });
 
   @override
@@ -34,39 +28,21 @@ class CodeFlowMethodView extends StatelessWidget {
         color: _titleIconColor(),
         size: 18,
       ),
-      trailing: selected
-          ? const Icon(
-              Icons.check_box_outlined,
-              size: 16,
-              color: Colors.deepOrangeAccent,
-            )
-          : null,
-      title: textSelectable
-          ? SelectableText(
-              _title(),
-              style: _titleStyle(),
-            )
-          : Text(
-              _title(),
-              style: _titleStyle(),
-            ),
-      subtitle: textSelectable
-          ? SelectableText(
-              _subtitle(),
-              style: _subtitleStyle(),
-            )
-          : Text(
-              _subtitle(),
-              style: _subtitleStyle(),
-            ),
-      onTap: onTap,
+      title: SelectableText(
+        getClassName(masterFlowItem.ownerClassInstance),
+        style: _titleStyle(),
+      ),
+      subtitle: SelectableText(
+        ".${masterFlowItem.funcCallInfo?.funcName}()",
+        style: _subtitleStyle(),
+      ),
     );
   }
 
   TextStyle _titleStyle() {
     return TextStyle(
       fontSize: 12,
-      fontWeight: codeFlowItem.isPublicMethodCall()
+      fontWeight: masterFlowItem.isPublicMethodCall()
           ? FontWeight.bold
           : FontWeight.normal,
       color: Colors.black,
@@ -77,7 +53,7 @@ class CodeFlowMethodView extends StatelessWidget {
   TextStyle _subtitleStyle() {
     return TextStyle(
       fontSize: 11,
-      fontWeight: codeFlowItem.isPublicMethodCall()
+      fontWeight: masterFlowItem.isPublicMethodCall()
           ? FontWeight.bold
           : FontWeight.normal,
       overflow: TextOverflow.ellipsis,
@@ -85,11 +61,11 @@ class CodeFlowMethodView extends StatelessWidget {
   }
 
   IconData _titleIconData() {
-    if (codeFlowItem.isBlock()) {
+    if (masterFlowItem.isBlock()) {
       return FaIconConstants.blockIconData;
-    } else if (codeFlowItem.isFilterModel()) {
+    } else if (masterFlowItem.isFilterModel()) {
       return FaIconConstants.filterModelIconData;
-    } else if (codeFlowItem.isFormModel()) {
+    } else if (masterFlowItem.isFormModel()) {
       return FaIconConstants.formModelIconData;
     } else {
       return FaIconConstants.otherClassIconData;
@@ -97,8 +73,8 @@ class CodeFlowMethodView extends StatelessWidget {
   }
 
   Color _titleIconColor() {
-    if (codeFlowItem.isLibCode) {
-      if (codeFlowItem.isLibPublicMethod) {
+    if (masterFlowItem.isLibCode) {
+      if (masterFlowItem.isLibPublicMethod) {
         return CodeFlowConstants.libPublicCodeIconColor;
       } else {
         return CodeFlowConstants.libPrivateCodeIconColor;
@@ -106,13 +82,5 @@ class CodeFlowMethodView extends StatelessWidget {
     } else {
       return CodeFlowConstants.devCodeIconColor;
     }
-  }
-
-  String _title() {
-    return getClassName(codeFlowItem.ownerClassInstance);
-  }
-
-  String _subtitle() {
-    return ".${codeFlowItem.funcCallInfo?.funcName}()";
   }
 }

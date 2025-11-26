@@ -23,7 +23,7 @@ class _BlockSelectAsCurrentTaskUnit<ID extends Object,
     required bool forceReloadItem,
     required this.forceTypeForForm,
   }) : super(
-          taskType: TaskType.blockSelectItemAsCurrent,
+          taskType: TaskType.blockSetItemAsCurrent,
           taskResult: BlockItemCurrSelectionResult<ITEM>(
             precheck: null,
             currentItemSelectionType: currentItemSelectionType,

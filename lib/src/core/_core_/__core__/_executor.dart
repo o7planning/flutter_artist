@@ -86,6 +86,7 @@ class _Executor {
     required _TaskUnit taskUnit,
     required Map<String, Shelf> shelfMap,
   }) async {
+    final MasterFlowItem? masterFlowItem;
     if (taskUnit is _STaskUnit) {
       _updateProgressViews(
         owner: taskUnit.owner,
@@ -94,14 +95,19 @@ class _Executor {
       //
       __executingXShelfId = taskUnit.xShelfId;
       //
-      print("\n@~~~~~~> Executing xShelfId:$__executingXShelfId"
-          " - [${taskUnit.xShelf.xShelfType.name}]"
-          " - Task: ${taskUnit.taskType.name}"
-          " - ${taskUnit.getObjectName()}");
+      // print("\n@~~~~~~> Executing xShelfId:$__executingXShelfId"
+      //     " - [${taskUnit.xShelf.xShelfType.name}]"
+      //     " - Task: ${taskUnit.taskType.name}"
+      //     " - ${taskUnit.getObjectName()}");
       //
       shelfMap[taskUnit.shelf.name] = taskUnit.shelf;
+      masterFlowItem = FlutterArtist.codeFlowLogger._addTaskCall(
+        ownerClassInstance: taskUnit.owner,
+        taskType: taskUnit.taskType,
+      );
     } else {
       __executingXShelfId = -1000;
+      masterFlowItem = null;
     }
     // Storage Silent Action TaskUnit:
     if (taskUnit is _StorageSilentActionTaskUnit) {
@@ -126,30 +132,35 @@ class _Executor {
     //
     else if (taskUnit is _FormViewChangeTaskUnit) {
       await taskUnit.xFormModel.formModel._unitFormViewChanged(
+        masterFlowItem: masterFlowItem,
         xFormModel: taskUnit.xFormModel,
       );
     }
     // Block Clear Current:
     else if (taskUnit is _BlockClearCurrentTaskUnit) {
       await taskUnit.xBlock.block._unitClearCurrent(
+        masterFlowItem: masterFlowItem,
         thisXBlock: taskUnit.xBlock,
       );
     }
     // Block Clear All Items:
     else if (taskUnit is _BlockClearanceTaskUnit) {
       await taskUnit.xBlock.block._unitClearance(
+        masterFlowItem: masterFlowItem,
         thisXBlock: taskUnit.xBlock,
       );
     }
     // Block Query:
     else if (taskUnit is _BlockQueryTaskUnit) {
       await taskUnit.xBlock.block._unitQuery(
+        masterFlowItem: masterFlowItem,
         thisXBlock: taskUnit.xBlock,
       );
     }
     // Block PrepareCreate:
     else if (taskUnit is _BlockPrepareFormToCreateItemTaskUnit) {
       await taskUnit.xBlock.block._unitPrepareFormToCreateItem(
+        masterFlowItem: masterFlowItem,
         thisXBlock: taskUnit.xBlock,
         initDirty: taskUnit.initDirty,
         formInput: taskUnit.formInput,
@@ -159,6 +170,7 @@ class _Executor {
     // Block Select Item as Current:
     else if (taskUnit is _BlockSelectAsCurrentTaskUnit) {
       await taskUnit.xBlock.block._unitSetItemAsCurrent(
+        masterFlowItem: masterFlowItem,
         currentItemSelectionType: taskUnit.currentItemSelectionType,
         newQueriedList: taskUnit.newQueriedList,
         candidateItem: taskUnit.candidateItem,
@@ -170,6 +182,7 @@ class _Executor {
     // Block Delete Item:
     else if (taskUnit is _BlockItemDeletionTaskUnit) {
       await taskUnit.xBlock.block._unitDeleteItem(
+        masterFlowItem: masterFlowItem,
         thisXBlock: taskUnit.xBlock,
         item: taskUnit.item,
         deletionResult:
@@ -189,6 +202,7 @@ class _Executor {
     // Block QuickCreateItem:
     else if (taskUnit is _BlockQuickItemCreationTaskUnit) {
       await taskUnit.xBlock.block._unitQuickCreateItem(
+        masterFlowItem: masterFlowItem,
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
         taskResult: taskUnit.taskResult as BlockQuickItemCreationResult,
@@ -197,6 +211,7 @@ class _Executor {
     // Block SilentCreateItem:
     else if (taskUnit is _BlockSilentItemCreationTaskUnit) {
       await taskUnit.xBlock.block._unitSilentCreateItem(
+        masterFlowItem: masterFlowItem,
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
         taskResult: taskUnit.taskResult as BlockSilentItemCreationResult,
@@ -212,6 +227,7 @@ class _Executor {
     // Block QuickUpdateItem:
     else if (taskUnit is _BlockQuickItemUpdateTaskUnit) {
       await taskUnit.xBlock.block._unitQuickUpdateItem(
+        masterFlowItem: masterFlowItem,
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
         taskResult: taskUnit.taskResult as BlockQuickItemUpdateResult,
@@ -220,6 +236,7 @@ class _Executor {
     // Block SilentUpdateItem:
     else if (taskUnit is _BlockSilentItemUpdateTaskUnit) {
       await taskUnit.xBlock.block._unitSilentUpdateItem(
+        masterFlowItem: masterFlowItem,
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
         taskResult: taskUnit.taskResult as BlockSilentItemUpdateResult,
@@ -236,6 +253,7 @@ class _Executor {
     // FormModel LoadForm:
     else if (taskUnit is _FormModelLoadDataTaskUnit) {
       await taskUnit.xFormModel.formModel._unitLoadFormData(
+        masterFlowItem: masterFlowItem,
         thisXFormModel: taskUnit.xFormModel,
         taskResult: taskUnit.taskResult as FormModelDataLoadResult,
       );
@@ -243,6 +261,7 @@ class _Executor {
     // FormModel Save:
     else if (taskUnit is _FormModelSaveFormTaskUnit) {
       await taskUnit.xFormModel.formModel._unitSaveForm(
+        masterFlowItem: masterFlowItem,
         thisXFormModel: taskUnit.xFormModel,
         taskResult: taskUnit.taskResult as FormSaveResult,
       );
@@ -250,6 +269,7 @@ class _Executor {
     // FormModel QuickFormInputAction:
     else if (taskUnit is _FormModelAutoEnterFormFieldsTaskUnit) {
       await taskUnit.xFormModel.formModel._unitQuickFormInput(
+        masterFlowItem: masterFlowItem,
         thisXFormModel: taskUnit.xFormModel,
         formInput: taskUnit.formInput,
       );
@@ -257,6 +277,7 @@ class _Executor {
     // Scalar:
     else if (taskUnit is _ScalarQueryTaskUnit) {
       await taskUnit.xScalar.scalar._unitQuery(
+        masterFlowItem: masterFlowItem,
         thisXScalar: taskUnit.xScalar,
       );
     }

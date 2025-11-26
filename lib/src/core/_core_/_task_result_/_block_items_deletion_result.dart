@@ -16,7 +16,7 @@ class BlockItemsDeletionResult<ITEM>
   BlockItemsDeletionResult({
     required List<ITEM> candidateItems,
     super.precheck,
-    super.stackTrace,
+    super.errorInfo,
   }) : _candidateItems = candidateItems;
 
   @override

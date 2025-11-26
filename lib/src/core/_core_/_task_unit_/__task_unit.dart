@@ -2,7 +2,7 @@ part of '../core.dart';
 
 @_TaskUnitClassAnnotation()
 abstract class _TaskUnit {
-  //
+  Object get owner;
 }
 
 @_TaskUnitClassAnnotation()
@@ -24,8 +24,6 @@ abstract class _STaskUnit extends _TaskUnit {
   String getObjectName();
 
   Shelf get shelf;
-
-  Object get owner;
 
   DebugTaskUnit toDebugTaskUnit() {
     return DebugTaskUnit(

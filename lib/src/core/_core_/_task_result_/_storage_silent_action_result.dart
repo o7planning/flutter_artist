@@ -2,13 +2,16 @@ part of '../core.dart';
 
 class StorageSilentActionResult
     extends TaskResult<StorageSilentActionPrecheck> {
-  StorageSilentActionResult({super.precheck, super.stackTrace});
+  StorageSilentActionResult({
+    super.precheck,
+    super.errorInfo,
+  });
 
   @override
   bool get successForFirst {
     if (precheck != null) {
       return false;
     }
-    return error == null;
+    return errorInfo == null;
   }
 }

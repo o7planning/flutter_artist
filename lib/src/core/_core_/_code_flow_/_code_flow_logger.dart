@@ -3,9 +3,10 @@ part of '../core.dart';
 class CodeFlowLogger {
   static const double resetSeconds = 10;
 
-  final List<CodeFlowItem> _codeFlowItems = [];
+  final List<MasterFlowItem> _masterFlowItems = [];
 
-  List<CodeFlowItem> get codeFlowItems => List.unmodifiable(_codeFlowItems);
+  List<MasterFlowItem> get masterFlowItems =>
+      List.unmodifiable(_masterFlowItems);
 
   DateTime __lastDateTime = DateTime.now();
 
@@ -19,36 +20,51 @@ class CodeFlowLogger {
   }
 
   void clear() {
-    _codeFlowItems.clear();
+    _masterFlowItems.clear();
+  }
+
+  // ===========================================================================
+  // ===========================================================================
+
+  MasterFlowItem _addTaskCall({
+    required Object ownerClassInstance,
+    required TaskType taskType,
+  }) {
+    final masterFlowItem = MasterFlowItem._taskCall(
+      ownerClassInstance: ownerClassInstance,
+      taskType: taskType,
+    );
+    _masterFlowItems.add(masterFlowItem);
+    return masterFlowItem;
   }
 
   // ===========================================================================
   // ===========================================================================
 
   void addMethodCall({
-    required Object? ownerClassInstance,
+    required Object ownerClassInstance,
     required StackTrace currentStackTrace,
     required Map<String, dynamic>? parameters,
   }) {
     __markDateTime();
     //
-    CodeFlowItem item;
+    MasterFlowItem item;
     try {
-      item = CodeFlowItem._methodCallFromStackTrace(
+      item = MasterFlowItem._methodCallFromStackTrace(
         ownerClassInstance: ownerClassInstance,
         currentStackTrace: currentStackTrace,
         arguments: parameters,
         isLibCode: false,
       );
     } catch (e) {
-      item = CodeFlowItem._methodCall(
+      item = MasterFlowItem._methodCall(
         ownerClassInstance: ownerClassInstance,
         methodName: "Something Error",
         arguments: parameters,
         isLibCode: false,
       );
     }
-    _codeFlowItems.add(item);
+    _masterFlowItems.add(item);
   }
 
   void _addMethodCall({
@@ -60,95 +76,12 @@ class CodeFlowLogger {
   }) {
     __markDateTime();
     //
-    CodeFlowItem log = CodeFlowItem._methodCall(
+    MasterFlowItem log = MasterFlowItem._methodCall(
       ownerClassInstance: ownerClassInstance,
       methodName: methodName,
       arguments: parameters,
       isLibCode: isLibCode,
     );
-    _codeFlowItems.add(log);
-  }
-
-  // ===========================================================================
-  // ===========================================================================
-
-  void addInfo({
-    required Object ownerClassInstance,
-    required String info,
-  }) {
-    return _addInfo(
-      ownerClassInstance: ownerClassInstance,
-      info: info,
-      isLibCode: false,
-    );
-  }
-
-  void _addInfo({
-    required Object ownerClassInstance,
-    required String info,
-    required bool isLibCode,
-  }) {
-    __markDateTime();
-    //
-    CodeFlowItem log = CodeFlowItem._info(
-      ownerClassInstance: ownerClassInstance,
-      info: info,
-      isLibCode: isLibCode,
-    );
-    _codeFlowItems.add(log);
-  }
-
-  void _addEvent({
-    required Object ownerClassInstance,
-    required String event,
-    required bool isLibCode,
-  }) {
-    __markDateTime();
-    //
-    CodeFlowItem log = CodeFlowItem._info(
-      ownerClassInstance: ownerClassInstance,
-      info: event,
-      isLibCode: isLibCode,
-    );
-    _codeFlowItems.add(log);
-  }
-
-  // ===========================================================================
-  // ===========================================================================
-
-  void addError({
-    required Object ownerClassInstance,
-    required String? methodName,
-    required AppError error,
-    required StackTrace? stackTrace,
-  }) {
-    return _addError(
-      ownerClassInstance: ownerClassInstance,
-      error: error,
-      stackTrace: stackTrace,
-      methodName: methodName,
-      isLibCode: false,
-    );
-  }
-
-  void _addError({
-    required Object ownerClassInstance,
-    required AppError error,
-    required StackTrace? stackTrace,
-    required String? methodName,
-    required bool isLibCode,
-  }) {
-    __markDateTime();
-    //
-    CodeFlowItem log = CodeFlowItem._error(
-      ownerClassInstance: ownerClassInstance,
-      errorInfo: AppErrorInfo(
-        error: error,
-        stackTrace: stackTrace,
-        methodName: methodName,
-      ),
-      isLibCode: isLibCode,
-    );
-    _codeFlowItems.add(log);
+    _masterFlowItems.add(log);
   }
 }

@@ -18,7 +18,7 @@ import 'package:number_pagination/number_pagination.dart' as number_pagination;
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../debug/dialog/_block_error_viewer_dialog.dart';
-import '../../debug/dialog/_code_flow_viewer_dialog.dart';
+import '../../debug/dialog/_task_flow_viewer_dialog.dart';
 import '../../debug/dialog/_error_log_viewer_dialog.dart';
 import '../../debug/dialog/_executor_dialog.dart';
 import '../../debug/dialog/_filter_criteria_dialog.dart';
@@ -61,7 +61,9 @@ import '../enums/_block_control_action_type.dart';
 import '../enums/_block_error_method.dart';
 import '../enums/_block_hidden_behavior.dart';
 import '../enums/_block_item_refresh_mode.dart';
-import '../enums/_code_flow_type.dart';
+import '../enums/_line_flow_type.dart';
+import '../enums/_task_flow_item_type.dart';
+import '../enums/_task_flow_type.dart';
 import '../enums/_current_item_selection_type.dart';
 import '../enums/_data_mode.dart';
 import '../enums/_data_state.dart';
@@ -94,6 +96,7 @@ import '../enums/_show_mode.dart';
 import '../enums/_sort_direction.dart';
 import '../enums/_sorting_side.dart';
 import '../enums/_task_type.dart';
+import '../enums/_tip_document.dart';
 import '../enums/_x_shelf_type.dart';
 import '../enums/after_silent_action.dart';
 import '../error/_app_error_info.dart';
@@ -249,9 +252,11 @@ part '__core__/_storage_ev.dart';
 
 part '__core__/_suggested_selection.dart';
 
-part '_code_flow_/_code_flow_item.dart';
+part '_code_flow_/_task_flow_item.dart';
 
 part '_code_flow_/_code_flow_logger.dart';
+
+part '_code_flow_/_line_flow_item.dart';
 
 part '_code_flow_/_func_call_info.dart';
 

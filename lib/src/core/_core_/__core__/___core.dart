@@ -67,7 +67,7 @@ abstract class _Core {
   // *********** HANDLE ERROR **************************************************
   // ***************************************************************************
 
-  AppError _handleError({
+  ErrorInfo _handleError({
     required Shelf? shelf,
     required String? methodName,
     required Object error,
@@ -94,14 +94,6 @@ abstract class _Core {
       print(st);
     }
     //
-    FlutterArtist.codeFlowLogger._addError(
-      isLibCode: true,
-      ownerClassInstance: this,
-      error: appError,
-      stackTrace: st,
-      methodName: methodName,
-    );
-    //
     LogErrorInfo errorInfo = FlutterArtist.errorLogger.addError(
       shelfName: FlutterArtist.storage._getShelfName(shelf.runtimeType),
       methodName: methodName,
@@ -116,41 +108,43 @@ abstract class _Core {
         errorDetails: appError.errorDetails,
       );
     }
-    return appError;
+    return errorInfo;
   }
 
-  void _handleRestError({
+  ErrorInfo _handleRestError({
     required Shelf shelf,
     required String methodName,
     required String message,
     required List<String>? errorDetails,
     required bool showSnackBar,
   }) {
-    FlutterArtist.errorLogger.addError(
+    final String msg;
+    if (methodName == null) {
+      msg = "Error: $message";
+    } else {
+      if (methodName.contains("\\.")) {
+        msg = "Call $methodName() error: $message";
+      } else {
+        msg = "Call ${getClassName(this)}.$methodName() error: $message";
+      }
+    }
+    print(msg);
+    //
+    LogErrorInfo errorInfo = FlutterArtist.errorLogger.addError(
       shelfName: FlutterArtist.storage._getShelfName(shelf.runtimeType),
       methodName: methodName,
       errorMessage: message,
       errorDetails: errorDetails,
       stackTrace: null,
     );
-    FlutterArtist.codeFlowLogger._addError(
-      ownerClassInstance: this,
-      error: AppError(
-        errorMessage: message,
-        errorDetails: errorDetails,
-      ),
-      stackTrace: null,
-      methodName: methodName,
-      isLibCode: true,
-    );
-    String msg = "Call ${getClassName(this)}.$methodName() error: $message";
-    print(msg);
+    //
     if (showSnackBar) {
       showErrorSnackBar(
         message: msg,
         errorDetails: errorDetails,
       );
     }
+    return errorInfo;
   }
 
   // ***************************************************************************
@@ -167,7 +161,7 @@ abstract class _Core {
         methodName: null,
         errorMessage: actionableFalse.message!,
         errorDetails: actionableFalse.details,
-        stackTrace: actionableFalse.stackTrace,
+        stackTrace: actionableFalse.errorInfo?.stackTrace,
       );
       if (showErrSnackBar) {
         showErrorSnackBar(
@@ -176,6 +170,19 @@ abstract class _Core {
         );
       }
     }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  String _debugObjHtml(Object? obj) {
+    if (obj == null) {
+      return "null";
+    }
+    if (obj is Identifiable) {
+      return "<b>${getClassNameWithoutGenerics(obj)}(${obj.id})</b>";
+    }
+    return "<b>${getClassNameWithoutGenerics(obj)}</b>";
   }
 
   // ***************************************************************************

@@ -36,7 +36,7 @@ class BlockItemCurrSelectionResult<ITEM>
   bool get successForFirst {
     if (precheck != null) {
       return false;
-    } else if (error != null) {
+    } else if (errorInfo != null) {
       return false;
     }
     switch (currentItemSelectionType) {

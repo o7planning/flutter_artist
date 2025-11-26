@@ -9,6 +9,6 @@ class FilterModelDataLoadResult
     if (precheck != null) {
       return false;
     }
-    return error == null;
+    return errorInfo == null;
   }
 }

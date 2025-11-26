@@ -2,13 +2,16 @@ part of '../core.dart';
 
 @RenameAnnotation()
 class PrepareItemCreationResult extends TaskResult<BlockItemCreationPrecheck> {
-  PrepareItemCreationResult({super.precheck, super.stackTrace});
+  PrepareItemCreationResult({
+    super.precheck,
+    super.errorInfo,
+  });
 
   @override
   bool get successForFirst {
     if (precheck != null) {
       return false;
     }
-    return error == null;
+    return errorInfo == null;
   }
 }

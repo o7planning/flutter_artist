@@ -24,7 +24,7 @@ class BlockQueryResult extends TaskResult<BlockQueryPrecheck> {
     if (precheck != null) {
       return false;
     }
-    if (_appError != null) {
+    if (_errorInfo != null) {
       return false;
     }
     return true;

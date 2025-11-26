@@ -15,7 +15,7 @@ class BlockItemDeletionResult<ITEM>
   BlockItemDeletionResult({
     required ITEM? candidateItem,
     super.precheck,
-    super.stackTrace,
+    super.errorInfo,
   }) : _candidateItem = candidateItem;
 
   @override
@@ -23,7 +23,7 @@ class BlockItemDeletionResult<ITEM>
     if (precheck != null) {
       return false;
     }
-    if (error != null) {
+    if (errorInfo != null) {
       return false;
     }
     // TODO: Xem lai.
@@ -40,10 +40,9 @@ class BlockItemDeletionResult<ITEM>
 
   void _setFailedItem({
     required ITEM failedItem,
-    required AppError appError,
-    required StackTrace? stackTrace,
+    required ErrorInfo errorInfo,
   }) {
     _failedItem = failedItem;
-    _setAppError(appError: appError, stackTrace: stackTrace);
+    _setErrorInfo(errorInfo: errorInfo);
   }
 }
