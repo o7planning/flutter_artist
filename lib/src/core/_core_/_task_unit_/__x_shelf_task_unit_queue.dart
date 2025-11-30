@@ -33,8 +33,8 @@ class _XShelfTaskUnitQueue {
     }
   }
 
-  DebugXShelfTaskUnitQueue toDebugXShelfTaskUnitQueue() {
-    return DebugXShelfTaskUnitQueue(
+  DebugXRootQueueItem toDebugXRootQueueItem() {
+    return DebugXRootQueueItem(
       xShelf: xShelf,
       mainTaskUnits: _mainTaskUnits
           .map(

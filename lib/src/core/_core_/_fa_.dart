@@ -4,7 +4,8 @@ final FlutterArtist = _FlutterArtist();
 
 const _isOverlayMode = false;
 
-class _FlutterArtist {
+class _FlutterArtist extends _Core {
+  bool _lockAddMoreQuery = false;
   _FlutterArtistNavigatorObserver? __navigatorObserver;
 
   _FlutterArtistNavigatorObserver get navigatorObserver {
@@ -27,15 +28,15 @@ class _FlutterArtist {
 
   ConsoleDebugOptions get consoleDebugOptions => __consoleDebugOptions;
 
-  final _Storage storage = _Storage();
+  final storage = _Storage();
 
-  final _Executor executor = _Executor();
+  final executor = _Executor();
 
-  final _BackgroundExecutor backgroundExecutor = _BackgroundExecutor();
+  final backgroundExecutor = _BackgroundExecutor();
 
-  final _XRootQueue _rootQueue = _XRootQueue();
+  final _rootQueue = _XRootQueue();
 
-  DebugXShelfQueue get debugTaskUnitQueue => _rootQueue.toDebugXShelfQueue();
+  DebugXRootQueue get debugTaskUnitQueue => _rootQueue.toDebugXRootQueue();
 
   int notificationFetchPeriodInSeconds = 60;
 
@@ -134,10 +135,17 @@ class _FlutterArtist {
   /// ```
   ///
   Future<void> _setOrUpdateLoggedInUser({
+    required MasterFlowItem? masterFlowItem,
     required ILoggedInUser loggedInUser,
     required bool requiresTheSameUser,
   }) async {
-    await globalsManager.setOrUpdateLoggedInUser(
+    masterFlowItem?._addLineFlowItem(
+      codeId: "#21000",
+      shortDesc: "Calling <b>globalsManager.setOrUpdateLoggedInUser</b> "
+          "with @loggedInUser: ${_debugObjHtml(loggedInUser)}, @requiresTheSameUser: $requiresTheSameUser",
+    );
+    await globalsManager._setOrUpdateLoggedInUser(
+      masterFlowItem: masterFlowItem,
       loggedInUser: loggedInUser,
       requiresTheSameUser: requiresTheSameUser,
     );
@@ -149,13 +157,9 @@ class _FlutterArtist {
 
   Future<void> setOrUpdateLoggedInUser(ILoggedInUser loggedInUser) async {
     await _setOrUpdateLoggedInUser(
-        loggedInUser: loggedInUser, requiresTheSameUser: true);
-  }
-
-  void _printDebugState(String message) {
-    DebugPrinter.printDebug(
-      DebugCat.appStart,
-      "FlutterArtist.config ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> $message",
+      masterFlowItem: null,
+      loggedInUser: loggedInUser,
+      requiresTheSameUser: true,
     );
   }
 
@@ -175,9 +179,24 @@ class _FlutterArtist {
       throw DebugUtils.getFatalError(
           "${getClassName(__adapter)} already registered!");
     }
-    __adapter = flutterArtistAdapter;
     //
-    storage._initStorage(storageStructure);
+    final masterFlowItem =
+        FlutterArtist.codeFlowLogger._addStartup(ownerClassInstance: this);
+    storage._masterFlowItem = masterFlowItem;
+
+    masterFlowItem._addLineFlowItem(
+      codeId: "#S0000",
+      shortDesc: "Begin FlutterArtist Config...\n"
+          "Note: You see this debug information because the <b>FlutterArtist.config()</b> method is called in <b>main.dart</b>."
+          "\n - @storageStructure: ${_debugObjHtml(storageStructure)}."
+          "\n - @flutterArtistAdapter: ${_debugObjHtml(flutterArtistAdapter)}."
+          "\n - @loggedInUserAdapter: ${_debugObjHtml(loggedInUserAdapter)}."
+          "\n - @globalDataAdapter: ${_debugObjHtml(globalDataAdapter)}."
+          "\n - @notificationAdapter: ${_debugObjHtml(notificationAdapter)}.",
+      tipDocument: TipDocument.config,
+    );
+    //
+    __adapter = flutterArtistAdapter;
     //
     if (debugOptions != null) {
       __debugOptions = debugOptions;
@@ -186,17 +205,34 @@ class _FlutterArtist {
       __consoleDebugOptions = consoleDebugOptions;
     }
     //
-    _printDebugState("start");
+    masterFlowItem._addLineFlowItem(
+      codeId: "#S0200",
+      shortDesc: "Calling <b>storage._init()</b> with parameters:"
+          "\n - @storageStructure: ${_debugObjHtml(storageStructure)}.",
+      lineFlowType: LineFlowType.calling,
+      tipDocument: TipDocument.storageStructure,
+    );
+    storage._init(
+      masterFlowItem: masterFlowItem,
+      storageStructure: storageStructure,
+    );
     //
     // Global Manager:
     //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#S0400",
+      shortDesc: "Creating <b>globalsManager</b>..",
+      tipDocument: TipDocument.globalData,
+    );
     globalsManager = GlobalsManager._(
       loggedInUserAdapter: loggedInUserAdapter,
       globalDataAdapter: globalDataAdapter,
     );
-    _printDebugState("globalsManager start...");
-    await globalsManager.start();
-    _printDebugState("globalsManager loggedInUser: $loggedInUser");
+    masterFlowItem._addLineFlowItem(
+      codeId: "#S0500",
+      shortDesc: "Calling <b>globalsManager.init()</b>...",
+    );
+    await globalsManager._init(masterFlowItem);
     //
     // Locale Manager:
     //
@@ -204,13 +240,29 @@ class _FlutterArtist {
       globalsManager: globalsManager,
       localeAdapter: localeAdapter,
     );
-    _printDebugState("localeManager readStoredLocale()");
-    final Locale? locale = localeManager.readStoredLocale();
-    _printDebugState("localeManager readStoredLocale() -> locale: $locale");
+    masterFlowItem._addLineFlowItem(
+      codeId: "#S0540",
+      shortDesc:
+          "Calling <b>localeManager._readStoredLocale()</b> to read saved locale from Local...",
+    );
+    final Locale? locale = localeManager._readStoredLocale(
+      masterFlowItem: masterFlowItem,
+    );
+    masterFlowItem._addLineFlowItem(
+      codeId: "#S0560",
+      shortDesc: "Got stored @locale: $locale",
+    );
     if (locale != null) {
-      _printDebugState("localeManager _updateLocale() delay 2s (***)");
+      masterFlowItem._addLineFlowItem(
+        codeId: "#S0580",
+        shortDesc:
+            "Calling <b>localeManager._updateLocale()</b> with parameter $locale.",
+      );
       Future.delayed(Duration(seconds: 2), () async {
-        await localeManager._updateLocale(locale: locale);
+        await localeManager._updateLocale(
+          masterFlowItem: masterFlowItem,
+          locale: locale,
+        );
       });
     }
     //
@@ -221,9 +273,13 @@ class _FlutterArtist {
     this.notificationFetchPeriodInSeconds = notificationFetchPeriodInSeconds;
     __notificationEngine = _NotificationEngine(notificationAdapter);
     //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#S0600",
+      shortDesc: "Start notificationEngine.",
+    );
+    //
     // IMPORTANT: No await:
     //
-    _printDebugState("__notificationEngine start()");
     __notificationEngine.start();
   }
 

@@ -86,6 +86,10 @@ class MasterFlowItemBox extends StatelessWidget {
   Widget _buildTitle(BuildContext context) {
     String title;
     switch (masterFlowItem.masterFlowItemType) {
+      case MasterFlowItemType.startup:
+        title = "Startup";
+      case MasterFlowItemType.naturalUIEvent:
+        title = "Natural UI Event";
       case MasterFlowItemType.taskCall:
         title = masterFlowItem.taskType?.name ?? "";
       case MasterFlowItemType.methodCall:
@@ -110,6 +114,10 @@ class MasterFlowItemBox extends StatelessWidget {
   Widget _buildSubTitle() {
     String subtitle;
     switch (masterFlowItem.masterFlowItemType) {
+      case MasterFlowItemType.startup:
+        subtitle = "Application start";
+      case MasterFlowItemType.naturalUIEvent:
+        subtitle = "Detect newly displayed UI component";
       case MasterFlowItemType.taskCall:
         subtitle =
             "${getClassNameWithoutGenerics(masterFlowItem.ownerClassInstance)} - (${masterFlowItem.lineFlowItems.length})";

@@ -38,6 +38,11 @@ class _BlockPaginationState extends _RefreshableWidgetState<BlockPagination> {
   }
 
   @override
+  bool get isHookRepresentative {
+    return false;
+  }
+
+  @override
   Widget buildContent(BuildContext context) {
     return widget.build();
   }

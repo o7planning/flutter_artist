@@ -48,6 +48,11 @@ class _FormViewBuilderState extends _RefreshableWidgetState<FormViewBuilder> {
   }
 
   @override
+  bool get isHookRepresentative {
+    return false;
+  }
+
+  @override
   void setBuildingState({required bool isBuilding}) {
     widget.formModel.ui._setFormViewBuildingState(
       widgetState: this,

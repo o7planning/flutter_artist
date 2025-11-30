@@ -49,6 +49,11 @@ class _FilterPanelBuilderState
   }
 
   @override
+  bool get isHookRepresentative {
+    return false;
+  }
+
+  @override
   void setBuildingState({required bool isBuilding}) {
     widget.filterModel.ui._setFilterPanelBuildingState(
       widgetState: this,

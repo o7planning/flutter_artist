@@ -42,6 +42,11 @@ class _LoggedInUserBuilderState
   }
 
   @override
+  bool get isHookRepresentative {
+    return false;
+  }
+
+  @override
   Widget buildContent(BuildContext context) {
     ILoggedInUser? user = FlutterArtist.loggedInUser;
     //

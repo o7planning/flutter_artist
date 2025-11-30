@@ -43,8 +43,13 @@ class CodeFlowViewerDialogState extends State<CodeFlowViewerDialog> {
       height: size.height,
       child: _buildMainWidget(),
     );
-
+    //
     FaAlertDialog alert = FaAlertDialog(
+      icon: Icon(
+        Icons.code,
+        size: 18,
+        color: Colors.indigo,
+      ),
       titleText: "Code Flow Viewer",
       content: contentWidget,
       contentPadding: EdgeInsets.zero,

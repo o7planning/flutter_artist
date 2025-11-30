@@ -44,10 +44,6 @@ class _StockersManager {
       );
     }
     try {
-      DebugPrinter.printDebug(
-        DebugCat.autoStockerCreation,
-        "FLUTTER ARTIST DEBUG >>>>>>>>>>>>>>> create AutoStocker for $itmType",
-      );
       stocker = builder();
       _stockerMap[itmType] = stocker!;
       return stocker as AutoStocker<ID, ITM>;

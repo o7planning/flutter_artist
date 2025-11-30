@@ -1,12 +1,12 @@
 import '../../../core/_core_/core.dart';
 import '_debug_task_unit.dart';
 
-class DebugXShelfTaskUnitQueue {
+class DebugXRootQueueItem {
   final XShelf xShelf;
   final List<DebugTaskUnit> mainTaskUnits;
   final List<DebugTaskUnit> secondaryTaskUnits;
 
-  DebugXShelfTaskUnitQueue({
+  DebugXRootQueueItem({
     required this.xShelf,
     required this.mainTaskUnits,
     required this.secondaryTaskUnits,

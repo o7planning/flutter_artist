@@ -3,7 +3,7 @@ import 'package:flutter_artist_core/flutter_artist_core.dart';
 import '../global/_global_data.dart';
 
 interface class IGlobalDataAdapter<G extends IGlobalData> {
-  Future<G> loadFromServer({
+  Future<G> loadGlobalData({
     required ILoggedInUser loggedInUser,
   }) async {
     throw UnimplementedError();

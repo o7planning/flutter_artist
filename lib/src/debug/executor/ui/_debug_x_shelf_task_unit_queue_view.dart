@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../dialog/_x_shelf_dialog.dart';
-import '../model/_debug_x_shelf_task_unit_queue.dart';
+import '../model/_debug_x_root_queue_item.dart';
 import '_debug_task_unit_view.dart';
 
 class DebugXShelfTaskUnitQueueView extends StatefulWidget {
-  final DebugXShelfTaskUnitQueue debugXShelfTaskUnitQueue;
+  final DebugXRootQueueItem debugXShelfTaskUnitQueue;
 
   const DebugXShelfTaskUnitQueueView({
     super.key,

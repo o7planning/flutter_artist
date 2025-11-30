@@ -80,14 +80,13 @@ abstract class Shelf extends _Core {
 
   String get name => FlutterArtist.storage._getShelfName(runtimeType);
 
-  late final _ShelfUIComponents ui = _ShelfUIComponents(shelf: this);
+  late final ui = _ShelfUIComponents(shelf: this);
 
-  late final _ShelfExternalUtils _shelfExternalUtils =
-      _ShelfExternalUtils(this);
+  late final _shelfExternalUtils = _ShelfExternalUtils(this);
 
-  int _debugInitQueryTasksCount = 0;
+  int _debugInitQueryTaskUnitsCount = 0;
 
-  int get debugInitQueryTasksCount => _debugInitQueryTasksCount;
+  int get debugInitQueryTasksCount => _debugInitQueryTaskUnitsCount;
 
   // ***************************************************************************
   // ***************************************************************************
@@ -585,29 +584,67 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
 
   // LOGIC: #0000
-  Future<void> _startLoadDataForLazyUIComponentsIfNeed() async {
+  Future<void> _startLoadDataForLazyUIComponentsIfNeed(
+      MasterFlowItem masterFlowItem) async {
     __lazyLoadId++;
+    //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#02000",
+      shortDesc:
+          "Find lazy model-components (block, scalar or formModel) that are in a state where they need to query or load data.",
+    );
     //
     // Natural Query:
     //
     final XShelf xShelf = _XShelfShelfNaturalQuery(shelf: shelf);
     _LazyObjects lazyObjects = xShelf.getLazyObjectInfos();
-    lazyObjects.printInfo();
     //
     if (lazyObjects.isEmpty) {
-      print(">>>> LazyObjects is Empty <<<<");
+      masterFlowItem._addLineFlowItem(
+        codeId: "#02020",
+        shortDesc:
+            "No lazy model-components found. Just update All UI components and nothing else. "
+            "Call ${_debugObjHtml(this)}.ui.updateAllUIComponents().",
+      );
       // IMPORTANT: No Lazy entities, but need to refresh UIComponents:
       ui.updateAllUIComponents();
       return;
     }
-    print("@@@@@@@@@@@@ Lazy Load - ID: $__lazyLoadId");
-    print("@@@@@@@@@@@@ Lazy Load - Count: ${lazyObjects.count}");
+    masterFlowItem._addLineFlowItem(
+      codeId: "#02060",
+      shortDesc: "Found some lazy model-components.\n"
+          "${lazyObjects.toDebugString()}",
+    );
     try {
+      masterFlowItem._addLineFlowItem(
+        codeId: "#02100",
+        shortDesc: "Create ${_debugObjHtml(xShelf)} for Natural-Query. "
+            "Note: <b>XShelf</b> is a <b>RootQueueItem</b> and contains multiple <b>Task Units</b>.",
+      );
+      masterFlowItem._addLineFlowItem(
+        codeId: "#02120",
+        shortDesc:
+            "Calling ${_debugObjHtml(xShelf)}._initQueryTaskUnits() to create Natural-Query task units...",
+      );
       //
       // TODO: Handle Error:
       //
-      xShelf._initQueryTasks();
-      FlutterArtist._rootQueue._addXShelf(xShelf);
+      xShelf._initQueryTaskUnits(masterFlowItem);
+      //
+      masterFlowItem._addLineFlowItem(
+        codeId: "#02160",
+        shortDesc:
+            "Add ${_debugObjHtml(xShelf)} (RootQueueItem) to <b>Root-Queue</b>.",
+      );
+      FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
+      //
+      masterFlowItem._addLineFlowItem(
+        codeId: "#02200",
+        shortDesc:
+            "Calling <b>FlutterArtist.executor._executeTaskUnitQueue()</b> "
+            "to execute <b>RootQueueItem(s)</b> on the queue and its <b>Task Units</b>...",
+        lineFlowType: LineFlowType.calling,
+      );
       await FlutterArtist.executor._executeTaskUnitQueue();
     } finally {
       // Nothing
@@ -662,9 +699,9 @@ abstract class Shelf extends _Core {
       shelf: this,
     );
     //
-    xShelf._initQueryTasks();
+    xShelf._initQueryTaskUnits();
     // IMPORTANT: No need to call "execute".
-    FlutterArtist._rootQueue._addXShelf(xShelf);
+    FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
   }
 
   Future<ShelfDelayedReactionExecutionResult>

@@ -226,7 +226,7 @@ abstract class Scalar<
   late final __scalarData =
       _ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
 
-  late final _ScalarUIComponents ui = _ScalarUIComponents(scalar: this);
+  late final ui = _ScalarUIComponents(scalar: this);
 
   // ***************************************************************************
   // ***************************************************************************
@@ -350,14 +350,21 @@ abstract class Scalar<
       if (this.dataState == DataState.ready && this.value != null) {
         masterFlowItem?._addLineFlowItem(
           codeId: "#12100",
-          shortDesc:
-              "Create ${TaskType.scalarQuery.asDebugTaskUnit()}(s) for all child scalars and add to Queue.",
+          shortDesc: "Create ${TaskType.scalarQuery.asDebugTaskUnit()}(s) "
+              "for all child scalars and add to Queue.",
+          lineFlowType: LineFlowType.info,
         );
         for (XScalar childXScalar in thisXScalar.childXScalars) {
+          final taskUnit = _ScalarQueryTaskUnit(
+            xScalar: childXScalar,
+          );
+          masterFlowItem?._addLineFlowItem(
+            codeId: "#12120",
+            shortDesc: "Create ${taskUnit.asDebugTaskUnit()} and add to Queue.",
+            lineFlowType: LineFlowType.addTaskUnit,
+          );
           thisXScalar.xShelf._addTaskUnit(
-            taskUnit: _ScalarQueryTaskUnit(
-              xScalar: childXScalar,
-            ),
+            taskUnit: taskUnit,
           );
         }
       }
@@ -390,14 +397,6 @@ abstract class Scalar<
     //
     DataState newScalarDataState = this.dataState;
     //
-    // FlutterArtist.codeFlowLogger._addMethodCall(
-    //   isLibCode: false,
-    //   navigate: null,
-    //   ownerClassInstance: this,
-    //   methodName: "callApiQuery",
-    //   parameters: {},
-    // );
-    //
     FILTER_CRITERIA? filterCriteriaOfFilterModel;
     try {
       final XFilterModel xFilterModel = thisXScalar.xFilterModel;
@@ -412,6 +411,7 @@ abstract class Scalar<
         FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
         //
         filterCriteriaOfFilterModel = await filterModel._startNewFilterActivity(
+          masterFlowItem: masterFlowItem,
           activityType: FilterActivityType.newFilt,
           filterInput: filterInput,
         ) as FILTER_CRITERIA?;
@@ -592,15 +592,21 @@ abstract class Scalar<
     //
     masterFlowItem?._addLineFlowItem(
       codeId: "#12800",
-      shortDesc:
-          "Create ${TaskType.scalarQuery.asDebugTaskUnit()}(s) for all child scalars and add to queue.",
+      shortDesc: "Create ${TaskType.scalarQuery.asDebugTaskUnit()}(s) "
+          "for all child scalars and add to queue.",
       lineFlowType: LineFlowType.info,
     );
     for (XScalar childXScalar in thisXScalar.childXScalars) {
+      final taskUnit = _ScalarQueryTaskUnit(
+        xScalar: childXScalar,
+      );
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#12840",
+        shortDesc: "Create ${taskUnit.asDebugTaskUnit()} and add to queue.",
+        lineFlowType: LineFlowType.addTaskUnit,
+      );
       thisXScalar.xShelf._addTaskUnit(
-        taskUnit: _ScalarQueryTaskUnit(
-          xScalar: childXScalar,
-        ),
+        taskUnit: taskUnit,
       );
     }
   }
@@ -612,6 +618,8 @@ abstract class Scalar<
   @_ScalarClearanceAnnotation()
   Future<void> _unitClearance({required XScalar thisXScalar}) async {
     __assertThisXScalar(thisXScalar);
+    //
+    // $$$
     //
     __clearWithDataStateAndChildrenToNonCascade(
       thisXScalar: thisXScalar,
@@ -631,6 +639,8 @@ abstract class Scalar<
     required AfterScalarLoadExtraDataQuickAction afterQuickAction,
   }) async {
     __assertThisXScalar(thisXScalar);
+    //
+    // $$$
     //
     ApiResult<DATA>? result;
     try {
@@ -929,7 +939,7 @@ abstract class Scalar<
     );
     //
     xShelf._addTaskUnit(taskUnit: taskUnit);
-    FlutterArtist._rootQueue._addXShelf(xShelf);
+    FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     return true;
@@ -960,8 +970,8 @@ abstract class Scalar<
       filterInput: filterInput,
     );
     //
-    xShelf._initQueryTasks();
-    FlutterArtist._rootQueue._addXShelf(xShelf);
+    xShelf._initQueryTaskUnits();
+    FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     XScalar xScalar = xShelf.findXScalarByName(this.name)!;
@@ -1011,7 +1021,7 @@ abstract class Scalar<
     );
     //
     xShelf._addTaskUnit(taskUnit: taskUnit);
-    FlutterArtist._rootQueue._addXShelf(xShelf);
+    FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     // _executeNavigation(navigate: navigate); // ????

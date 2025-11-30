@@ -1,17 +1,17 @@
 part of '../core.dart';
 
-class GlobalsManager {
+class GlobalsManager extends _Core {
   final String __separator = "\n";
 
   ///
   /// Hive Prefix Key for "Extra Prop Names", for example: {'language', 'theme'}.
   ///
-  final String __prefixHiveExtraPropNamesKey = "@__hiveExtraPropNamesKey__@";
+  final String __prefixHiveExtraPropNamesKey = "--hive-extra-prop-names-key--";
 
   ///
   /// Hive Prefix Key for "Extra Prop Name", for example: 'language'.
   ///
-  final String __prefixHiveExtraPropNameKey = "@__hiveExtraPropNameKey__@";
+  final String __prefixHiveExtraPropNameKey = "--hive-extra-prop-name-key--";
 
   //
   final String __hiveKeyLoggedInUser =
@@ -42,7 +42,7 @@ class GlobalsManager {
 
   final Map<String, dynamic> __extraPropMap = {};
 
-  final _LoggedInUserUIComponents ui = _LoggedInUserUIComponents();
+  final ui = _LoggedInUserUIComponents();
 
   GlobalsManager._({
     required this.loggedInUserAdapter,
@@ -70,36 +70,32 @@ class GlobalsManager {
   /// - language
   /// - theme
   ///
-  Future<void> __readExtraGlobalProps() async {
-    DebugPrinter.printDebug(
-      DebugCat.appStart,
-      "  --- globalManager.__readExtraGlobalProps()...",
+  Future<void> __readExtraGlobalProps(MasterFlowItem? masterFlowItem) async {
+    masterFlowItem?._addLineFlowItem(
+      codeId: "#GM300",
+      shortDesc:
+          "Open <b>HiveBox</b> to read <b>Extra Global Props</b> from local.",
     );
     // Store on local device:
     Box<String> hiveBox = await HiveUtils.openHiveBoxExtraGlobalPropNames();
     try {
+      // $key-**-${_loggedInUser!.userName}
       String key = __getHiveExtraGlobalPropNamesKey();
-      DebugPrinter.printDebug(
-        DebugCat.appStart,
-        "  --- globalManager.__readExtraGlobalProps(). key: $key",
-      );
-      DebugPrinter.printDebug(
-        DebugCat.appStart,
-        "  --- __readExtraGlobalProps(). key: $key",
-      );
       String extraGlobalPropNames = hiveBox.get(key) ?? "";
-      DebugPrinter.printDebug(
-        DebugCat.appStart,
-        "  --- __readExtraGlobalProps. extraGlobalPropNames: $extraGlobalPropNames",
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#GM320",
+        shortDesc:
+            " - @key: $key --> @extraGlobalPropNames: $extraGlobalPropNames.",
       );
       List<String> propNames = extraGlobalPropNames
           .split(__separator)
+          .map((s) => s.trim())
           .where((s) => s.isNotEmpty)
           .toList();
 
-      DebugPrinter.printDebug(
-        DebugCat.appStart,
-        "  --- __readExtraGlobalProps. propNames: $propNames",
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#GM340",
+        shortDesc: " - @propNames: $propNames.",
       );
       //
       __registeredExtraPropNames
@@ -108,16 +104,32 @@ class GlobalsManager {
     } catch (e, stackTrace) {
       print("Error __readExtraGlobalProps: $e");
       print(stackTrace);
+      //
+      ErrorInfo errorInfo = ErrorInfo.fromError(
+        error: e,
+        stackTrace: stackTrace,
+      );
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#GM360",
+        shortDesc: "Has an error.",
+        errorInfo: errorInfo,
+      );
       return;
     } finally {
       await hiveBox.close();
     }
     //
     for (String propName in __registeredExtraPropNames) {
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#GM370",
+        shortDesc: "Reading prop '$propName' from HiveBox...",
+      );
       dynamic value = await __readExtraGlobalProp(propName);
       __extraPropMap[propName] = value;
-      DebugPrinter.printDebug(DebugCat.appStart,
-          "  --- __readExtraGlobalProps. propName: $propName --> $value");
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#GM380",
+        shortDesc: "Read: @key: $propName --> @value: $value",
+      );
     }
   }
 
@@ -159,7 +171,7 @@ class GlobalsManager {
     return __extraPropMap[propName];
   }
 
-  Future<void> storeExtraGlobalProp(String propName, dynamic value) async {
+  Future<void> _storeExtraGlobalProp(String propName, dynamic value) async {
     DebugPrinter.printDebug(DebugCat.globalManager,
         "GlobalManager ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> storeExtraGlobalProp()...");
     __registeredExtraPropNames.add(propName);
@@ -185,32 +197,77 @@ class GlobalsManager {
   ///
   /// This method is called only once when FlutterArtist is started.
   ///
-  Future<void> start() async {
-    DebugPrinter.printDebug(DebugCat.appStart, "  --- globalManager start...");
+  Future<void> _init(MasterFlowItem? masterFlowItem) async {
+    masterFlowItem?._addLineFlowItem(
+      codeId: "#GM000",
+      shortDesc:
+          "Open <b>HiveBox</b> to read user information that was previously saved locally.",
+    );
     Box<String> hiveBox = await HiveUtils.openHiveBoxLoggedInUser();
+    masterFlowItem?._addLineFlowItem(
+      codeId: "#GM020",
+      shortDesc: "Read <b>LoggedInUser JSON String</b> from <b>HiveBox</b>.\n"
+          "<i>This information has been stored locally when the user successfully logged in before.</i>",
+    );
     String? loggedInUserJson = hiveBox.get(__hiveKeyLoggedInUser);
     await hiveBox.close();
 
     if (loggedInUserJson == null) {
-      DebugPrinter.printDebug(DebugCat.appStart,
-          "  --- globalManager loggedInUserJson is null --> return");
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#GM040",
+        shortDesc: "Read @loggedInUserJson: null.",
+      );
       return;
     }
-    DebugPrinter.printDebug(DebugCat.appStart,
-        "  --- globalManager loggedInUserJson is not null --> continue");
+    if (loggedInUserJson == null) {
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#GM060",
+        shortDesc: "Read @loggedInUserJson: not null.",
+      );
+      return;
+    }
     ILoggedInUser? loggedInUser;
     try {
+      if (loggedInUserJson == null) {
+        masterFlowItem?._addLineFlowItem(
+          codeId: "#GM080",
+          shortDesc: "Call ${_debugObjHtml(loggedInUserAdapter)}.fromJson() "
+              "to convert above JSON to ${getTypeNameWithoutGenerics(ILoggedInUser)} object.",
+        );
+        return;
+      }
       loggedInUser = loggedInUserAdapter.fromJson(loggedInUserJson);
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#GM100",
+        shortDesc: "Got @loggedInUser: ${_debugObjHtml(loggedInUser)}.",
+      );
     } catch (e, stackTrace) {
       print("****************************************************************");
       print("Error ${getClassName(loggedInUserAdapter)}.fromJson(): $e");
       print("****************************************************************");
       print(stackTrace);
+      //
+      ErrorInfo errorInfo = ErrorInfo.fromError(
+        error: e,
+        stackTrace: stackTrace,
+      );
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#GM120",
+        shortDesc:
+            "The ${_debugObjHtml(loggedInUserAdapter)}.fromJson() method was called with an error. "
+            "You need to log in again via the login page.",
+        errorInfo: errorInfo,
+      );
+      return;
     }
+    //
     if (loggedInUser == null) {
-      DebugPrinter.printDebug(DebugCat.appStart,
-          "  --- globalManager loggedInUser is null --> return");
-      // This will open login screen.
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#GM140",
+        shortDesc:
+            "The ${_debugObjHtml(loggedInUserAdapter)}.fromJson() method returned null. "
+            "You need to log in again via the login page.",
+      );
       return;
     }
     final ILoggedInUser? loggedInUserBACKUP = _loggedInUser;
@@ -219,30 +276,44 @@ class GlobalsManager {
     //
     _loggedInUser = loggedInUser;
     //
-    DebugPrinter.printDebug(DebugCat.appStart,
-        "  --- globalManager loggedInUser is not null --> continue");
     IGlobalData? globalData;
     try {
       _loadGlobalDataCount++;
-
-      DebugPrinter.printDebug(
-        DebugCat.appStart,
-        "  --- globalManager --> globalData --> globalDataAdapter.loadFromServer()...",
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#GM160",
+        shortDesc:
+            "Calling ${_debugObjHtml(loggedInUserAdapter)}.loadGlobalData() method "
+            "to load global data for @loggedInUser: ${_debugUserHtml(loggedInUser)}.\n"
+            "<i>This information has been stored locally when the user successfully logged in before.</i>",
+        lineFlowType: LineFlowType.calling,
       );
       // Load Global Data:
-      globalData = await globalDataAdapter.loadFromServer(
+      globalData = await globalDataAdapter.loadGlobalData(
         loggedInUser: loggedInUser,
       );
     } catch (e, stackTrace) {
       print("****************************************************************");
-      print("Error ${getClassName(globalDataAdapter)}.loadFromServer(): $e");
+      print("Error ${getClassName(globalDataAdapter)}.loadGlobalData(): $e");
       print("****************************************************************");
       print(stackTrace);
+      //
+      ErrorInfo errorInfo = ErrorInfo.fromError(
+        error: e,
+        stackTrace: stackTrace,
+      );
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#GM200",
+        shortDesc:
+            "The ${_debugObjHtml(loggedInUserAdapter)}.loadGlobalData() method was called with an error.",
+        errorInfo: errorInfo,
+      );
+      return;
     }
     if (globalData == null) {
-      DebugPrinter.printDebug(
-        DebugCat.appStart,
-        "  --- globalManager --> globalData is null --> return",
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#GM220",
+        shortDesc:
+            "The ${_debugObjHtml(loggedInUserAdapter)}.loadGlobalData() method returned null. <i>Requires not null.</i>",
       );
       // Restore!!
       _loggedInUser = loggedInUserBACKUP;
@@ -251,12 +322,15 @@ class GlobalsManager {
     }
     _globalData = globalData;
     //
-    DebugPrinter.printDebug(
-      DebugCat.appStart,
-      "  --- globalManager --> __readExtraGlobalProps()...",
+    masterFlowItem?._addLineFlowItem(
+      codeId: "#GM240",
+      shortDesc:
+          "Reading <b>Extra Global Props</b> from Local. For example: favorite locale and theme.\n"
+          "<i>This information is stored locally when the user selects a preferred theme or locale.</i>",
+      tipDocument: TipDocument.localeAndTheme,
     );
     // Load Extra Global Prop Names that stored in Hive Database.
-    await __readExtraGlobalProps();
+    await __readExtraGlobalProps(masterFlowItem);
   }
 
   Future<void> removeStoredLoggedInUser() async {
@@ -274,34 +348,62 @@ class GlobalsManager {
   ///
   /// This method is called when the user logs in successfully.
   ///
-  Future<void> setOrUpdateLoggedInUser({
+  Future<void> _setOrUpdateLoggedInUser({
+    required MasterFlowItem? masterFlowItem,
     required ILoggedInUser loggedInUser,
     required bool requiresTheSameUser,
   }) async {
     if (requiresTheSameUser &&
         _loggedInUser != null &&
         _loggedInUser!.userName != loggedInUser.userName) {
-      throw Exception("The new and old user must have the same 'userName'"
-          " or you must log out before calling this method.");
+      String message = "The new and old user must have the same 'userName'"
+          " or you must log out before calling this method.";
+      throw AppError(errorMessage: message);
     }
     if (_loggedInUser == null) {
       _loadGlobalDataCount++;
       // Load GlobalData:
-      IGlobalData globalData = await globalDataAdapter.loadFromServer(
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#22040",
+        shortDesc:
+            "Calling ${_debugObjHtml(globalDataAdapter)}.loadGlobalData() to load global data for @loggedInUser: ${_debugObjHtml(loggedInUser)}. "
+            "<i>You can access global data via </i><b>FlutterArtist.globalsManager.globalData</b>",
+      );
+      IGlobalData globalData = await globalDataAdapter.loadGlobalData(
         loggedInUser: loggedInUser,
       );
       _globalData = globalData;
+
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#22080",
+        shortDesc: "Got @globalData: ${_debugObjHtml(globalData)}",
+      );
     }
     _loggedInUser = loggedInUser;
     // Store on local device:
     Box<String> hiveBox = await HiveUtils.openHiveBoxLoggedInUser();
     try {
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#22120",
+        shortDesc:
+            "Calling ${_debugObjHtml(loggedInUserAdapter)}.toJson()... to convert ${_debugObjHtml(loggedInUser)} to JSON String.",
+      );
       String json = loggedInUserAdapter.toJson(loggedInUser);
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#22140",
+        shortDesc: "Storing the above JSON String to local.",
+      );
       await hiveBox.put(__hiveKeyLoggedInUser, json);
       await hiveBox.close();
     } catch (e, stackTrace) {
       print("\n\n******** Error setLoggedInUser: $e ************");
       print(stackTrace);
+      //
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#22180",
+        shortDesc:
+            "Error unable to store JSON String to local.. <i>This means that the login information cannot be remembered.</i>",
+      );
       return;
     }
     ui.updateAllUIComponents();

@@ -46,6 +46,11 @@ class _BlockFragmentViewBuilderState
   }
 
   @override
+  bool get isHookRepresentative {
+    return false;
+  }
+
+  @override
   void addWidgetState({required bool isShowing}) {
     widget.block.ui._addBlockPieceWidgetState(
       widgetState: this,

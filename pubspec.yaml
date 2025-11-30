@@ -31,6 +31,7 @@ dependencies:
   flutter_advanced_switch: ^3.1.0
   web: ^1.1.1
   back_button_interceptor: ^8.0.4
+  url_launcher: ^6.3.2
 
   flutter_artist_core:
     path: ../flutter_artist_core

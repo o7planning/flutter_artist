@@ -29,9 +29,6 @@ class _Executor {
 
   Future<void> _executeTaskUnitQueue({bool showOverlay = true}) async {
     if (__executingXShelfId != null) {
-      // (This code causes an Error in FilterPanel).
-      // print("\n\nDevelopment Error - Illegal status - @@ executingXShelfId: $__executingXShelfId");
-      // throw FatalAppError(errorMessage: "Development Error - Illegal status.");
       return;
     }
     bool showOverlay2 = showOverlay;
@@ -86,7 +83,6 @@ class _Executor {
     required _TaskUnit taskUnit,
     required Map<String, Shelf> shelfMap,
   }) async {
-    final MasterFlowItem? masterFlowItem;
     if (taskUnit is _STaskUnit) {
       _updateProgressViews(
         owner: taskUnit.owner,
@@ -95,22 +91,26 @@ class _Executor {
       //
       __executingXShelfId = taskUnit.xShelfId;
       //
-      // print("\n@~~~~~~> Executing xShelfId:$__executingXShelfId"
-      //     " - [${taskUnit.xShelf.xShelfType.name}]"
-      //     " - Task: ${taskUnit.taskType.name}"
-      //     " - ${taskUnit.getObjectName()}");
-      //
       shelfMap[taskUnit.shelf.name] = taskUnit.shelf;
-      masterFlowItem = FlutterArtist.codeFlowLogger._addTaskCall(
-        ownerClassInstance: taskUnit.owner,
-        taskType: taskUnit.taskType,
-      );
     } else {
       __executingXShelfId = -1000;
-      masterFlowItem = null;
+    }
+    //
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addTaskCall(
+      ownerClassInstance: taskUnit.owner,
+      taskType: taskUnit.taskType,
+    );
+    //
+    if (taskUnit is _ActivityTaskUnit) {
+      // TODO: Remove in next version.
+      taskUnit.xActivity.activity._masterFlowItem = masterFlowItem;
+      //
+      await taskUnit.xActivity.activity._unitExecuteActivity(
+        thisXActivity: taskUnit.xActivity,
+      );
     }
     // Storage Silent Action TaskUnit:
-    if (taskUnit is _StorageSilentActionTaskUnit) {
+    else if (taskUnit is _StorageSilentActionTaskUnit) {
       await FlutterArtist.storage._unitSilentAction(
         action: taskUnit.action,
         taskResult: taskUnit.taskResult as StorageSilentActionResult,
@@ -119,6 +119,7 @@ class _Executor {
     // Filter FilterModel:
     else if (taskUnit is _FilterModelLoadDataTaskUnit) {
       await taskUnit.xFilterModel.filterModel._unitLoadFilterData(
+        masterFlowItem: masterFlowItem,
         thisXFilterModel: taskUnit.xFilterModel,
         taskResult: taskUnit.taskResult as FilterModelDataLoadResult,
       );
@@ -126,6 +127,7 @@ class _Executor {
     // FilterPanel Change:
     else if (taskUnit is _FilterPanelChangeTaskUnit) {
       await taskUnit.xFilterModel.filterModel._unitFilterPanelChanged(
+        masterFlowItem: masterFlowItem,
         xFilterModel: taskUnit.xFilterModel,
       );
     }

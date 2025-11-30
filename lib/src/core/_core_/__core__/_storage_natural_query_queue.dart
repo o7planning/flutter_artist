@@ -33,16 +33,34 @@ class _StorageNaturalQueryQueue {
 
   // LOGIC: #0000 (**)
   Future<void> _executeNaturalQueryQueue() async {
-    List<Shelf> lazyShelves = getAllRemoveAll();
+    List<Shelf> lazyShelves =
+        getAllRemoveAll().where((s) => !s.disposed).toList();
+
     if (lazyShelves.isEmpty) {
       return;
     }
-    print("\n\n\n@@@@@@@@@@@@@ EXECUTE NATURAL QUERY @@@@@@@@@\n\n");
+    //
+    var masterFlowItem = FlutterArtist.codeFlowLogger._addNaturalUIEvent(
+      ownerClassInstance: this,
+    );
+    masterFlowItem._addLineFlowItem(
+      codeId: "#00000",
+      shortDesc:
+          "Just detected some UI Components that have just been displayed. "
+          "This will trigger a query execution on the associated <b>Shelves</b>:\n"
+          " - ${lazyShelves.map((s) => _debugObjHtml(s)).join(", ")}",
+      tipDocument: TipDocument.naturalQuery,
+    );
     for (Shelf lazyShelf in lazyShelves) {
       if (lazyShelf.disposed) {
         continue;
       }
-      await lazyShelf._startLoadDataForLazyUIComponentsIfNeed();
+      masterFlowItem._addLineFlowItem(
+        codeId: "#00100",
+        shortDesc:
+            "Start checking lazy model-components of ${_debugObjHtml(lazyShelf)}...",
+      );
+      await lazyShelf._startLoadDataForLazyUIComponentsIfNeed(masterFlowItem);
     }
   }
 }

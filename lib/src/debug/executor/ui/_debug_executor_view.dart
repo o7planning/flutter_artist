@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist/src/debug/executor/ui/_debug_x_shelf_task_unit_queue_view.dart';
 
-import '../model/_debug_task_unit_queue.dart';
+import '../model/_debug_x_root_queue.dart';
 
 class DebugExecutorView extends StatefulWidget {
-  final DebugXShelfQueue debugXShelfQueue;
+  final DebugXRootQueue debugXShelfQueue;
 
   const DebugExecutorView({
     super.key,
@@ -28,7 +28,7 @@ class _DebugExecutorViewState extends State<DebugExecutorView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
-        children: widget.debugXShelfQueue.debugTaskUnitQueue
+        children: widget.debugXShelfQueue.debugXRootQueueItems
             .where((sq) => sq.isNotEmpty)
             .map(
               (subQueue) => DebugXShelfTaskUnitQueueView(

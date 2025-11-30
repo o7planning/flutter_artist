@@ -29,9 +29,9 @@ import '../../debug/dialog/_root_debug_dialog.dart';
 import '../../debug/dialog/_scalar_error_viewer_dialog.dart';
 import '../../debug/dialog/_storage_dialog.dart';
 import '../../debug/dialog/_ui_components_dialog.dart';
-import '../../debug/executor/model/_debug_x_shelf_task_unit_queue.dart';
+import '../../debug/executor/model/_debug_x_root_queue_item.dart';
 import '../../debug/executor/model/_debug_task_unit.dart';
-import '../../debug/executor/model/_debug_task_unit_queue.dart';
+import '../../debug/executor/model/_debug_x_root_queue.dart';
 import '../../debug/storage/_block_or_scalar.dart';
 import '../action/_background_action.dart';
 import '../action/_action.dart';
@@ -49,11 +49,12 @@ import '../adapter/_locale_adapter.dart';
 import '../adapter/_logged_in_user_adapter.dart';
 import '../adapter/_notification_adapter.dart';
 import '../annotation/annotation.dart';
-import '../built_in/empty_extra_form_input.dart';
+import '../built_in/empty_form_input.dart';
 import '../built_in/empty_filter_criteria.dart';
 import '../built_in/empty_filter_input.dart';
 import '../enums/_action_confirmation_type.dart';
 import '../enums/_action_result_state.dart';
+import '../enums/_activity_hidden_behavior.dart';
 import '../enums/_client_side_sort_mode.dart';
 import '../enums/_filter_error_method.dart';
 import '../enums/_hook_hidden_behavior.dart';
@@ -62,8 +63,8 @@ import '../enums/_block_error_method.dart';
 import '../enums/_block_hidden_behavior.dart';
 import '../enums/_block_item_refresh_mode.dart';
 import '../enums/_line_flow_type.dart';
-import '../enums/_task_flow_item_type.dart';
-import '../enums/_task_flow_type.dart';
+import '../enums/_master_flow_item_type.dart';
+import '../enums/_master_flow_item_type.dart';
 import '../enums/_current_item_selection_type.dart';
 import '../enums/_data_mode.dart';
 import '../enums/_data_state.dart';
@@ -152,7 +153,11 @@ import '../event/fire_silent_events_action.dart';
 
 part '__core__/___core.dart';
 
+part '__core__/___debug.dart';
+
 part '__core__/_hook.dart';
+
+part '__core__/_activity.dart';
 
 part '__core__/_background_executor.dart';
 
@@ -252,7 +257,7 @@ part '__core__/_storage_ev.dart';
 
 part '__core__/_suggested_selection.dart';
 
-part '_code_flow_/_task_flow_item.dart';
+part '_code_flow_/_master_flow_item.dart';
 
 part '_code_flow_/_code_flow_logger.dart';
 
@@ -261,6 +266,8 @@ part '_code_flow_/_line_flow_item.dart';
 part '_code_flow_/_func_call_info.dart';
 
 part '_config_/_hook_config.dart';
+
+part '_config_/_activity_config.dart';
 
 part '_config_/_block_config.dart';
 
@@ -286,7 +293,11 @@ part '_core_x_/_lazy_obj_/_lazy_scalar.dart';
 
 part '_core_x_/_lazy_obj_/_lazy_objects.dart';
 
+part '_core_x_/_root_queue_/_x_activity.dart';
+
 part '_core_x_/_x_block.dart';
+
+part '_core_x_/_x_hook.dart';
 
 part '_core_x_/_x_filter_model.dart';
 
@@ -294,7 +305,9 @@ part '_core_x_/_x_form_model.dart';
 
 part '_core_x_/_x_scalar.dart';
 
-part '_core_x_/_x_shelf.dart';
+part '_core_x_/_root_queue_/_x_root_queue_item.dart';
+
+part '_core_x_/_root_queue_/_x_shelf.dart';
 
 part '_core_x_/_x_condition_/_scalar_re_qry_condition.dart';
 
@@ -311,6 +324,8 @@ part '_core_x_/_x_shelf_/_x_query_/_x_shelf_shelf_natural_query.dart';
 part '_core_x_/_x_shelf_/_x_query_/_x_shelf_shelf_external_reaction.dart';
 
 part '_core_x_/_x_shelf_/_x_query_/__x_shelf_base_query.dart';
+
+part '_core_x_/_x_shelf_/_x_query_/_x_shelf_hook.dart';
 
 part '_core_x_/_x_shelf_/_x_query_/_x_shelf_block_query.dart';
 
@@ -414,7 +429,7 @@ part '_globals_/_globals_manager.dart';
 
 part '_locale_/_locale_manager.dart';
 
-part '_login_/_login_hook_base.dart';
+part '_login_/_login_activity.dart';
 
 part '_login_/_simple_login_view.dart';
 
@@ -464,13 +479,15 @@ part '_task_result_/_scalar_query_result.dart';
 
 part '_task_result_/_storage_silent_action_result.dart';
 
+part '_task_unit_/_hook_task_unit.dart';
+
 part '_task_unit_/__resulted_s_task_unit.dart';
 
 part '_task_unit_/__x_shelf_task_unit_queue.dart';
 
 part '_task_unit_/__task_unit.dart';
 
-part '_task_unit_/__x_root_queue.dart';
+part '_core_x_/_root_queue_/__x_root_queue.dart';
 
 part '_task_unit_/_block_clearance_task_unit.dart';
 
@@ -479,6 +496,8 @@ part '_task_unit_/_scalar_clearance_task_unit.dart';
 part '_task_unit_/_block_clear_current_task_unit.dart';
 
 part '_task_unit_/_block_item_deletion_task_unit.dart';
+
+part '_task_unit_/_activity_task_unit.dart';
 
 part '_task_unit_/_block_multi_items_deletion_task_unit.dart';
 
@@ -522,7 +541,13 @@ part '_ui_/__refreshable_widget.dart';
 
 part '_ui_/__refreshable_widget_state.dart';
 
-part '_ui_/_hook_fragment_widget_builder.dart';
+part '_ui_/_activity_fragment_view.dart';
+
+part '_ui_/_activity_fragment_view_builder.dart';
+
+part '_ui_/_hook_fragment_view.dart';
+
+part '_ui_/_hook_fragment_view_builder.dart';
 
 part '_ui_/_block_control_bar.dart';
 
@@ -586,9 +611,13 @@ part '_ui_/_x_state.dart';
 
 part '_ui_com_/__ui_components.dart';
 
+part '_ui_com_/_activity_ui_components.dart';
+
 part '_ui_com_/_block_ui_components.dart';
 
 part '_ui_com_/_filter_ui_components.dart';
+
+part '_ui_com_/_hook_ui_components.dart';
 
 part '_ui_com_/_sort_ui_components.dart';
 
@@ -681,6 +710,14 @@ class _OverridableMethodAnnotation {
 
 class _TaskUnitClassAnnotation {
   const _TaskUnitClassAnnotation();
+}
+
+class _HookAnnotation {
+  const _HookAnnotation();
+}
+
+class _ActivityAnnotation {
+  const _ActivityAnnotation();
 }
 
 class _TaskUnitMethodAnnotation {

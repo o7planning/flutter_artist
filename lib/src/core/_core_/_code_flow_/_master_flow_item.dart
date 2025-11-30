@@ -8,6 +8,7 @@ class MasterFlowItem {
   final FuncCallInfo? funcCallInfo;
   final bool isLibCode;
   final TaskType? taskType;
+  final DateTime createdDateTime = DateTime.now();
 
   bool get isDevCode => !isLibCode;
 
@@ -15,6 +16,22 @@ class MasterFlowItem {
   final List<LineFlowItem> __lineFlowItems = [];
 
   List<LineFlowItem> get lineFlowItems => List.unmodifiable(__lineFlowItems);
+
+  MasterFlowItem._naturalUIEvent({
+    required this.ownerClassInstance,
+  })  : masterFlowItemType = MasterFlowItemType.naturalUIEvent,
+        taskType = null,
+        funcCallInfo = null,
+        isLibCode = false,
+        id = __flowLogItemSEQ++;
+
+  MasterFlowItem._startup({
+    required this.ownerClassInstance,
+  })  : masterFlowItemType = MasterFlowItemType.startup,
+        taskType = null,
+        funcCallInfo = null,
+        isLibCode = false,
+        id = __flowLogItemSEQ++;
 
   MasterFlowItem._taskCall({
     required this.ownerClassInstance,
@@ -47,21 +64,26 @@ class MasterFlowItem {
         funcCallInfo = FuncCallInfo(funcName: methodName, arguments: arguments),
         id = __flowLogItemSEQ++;
 
-  void _addLineFlowItem({
+  LineFlowItem _addLineFlowItem({
     LineFlowType? lineFlowType,
     required String codeId,
     required String shortDesc,
+    List<String>? extraInfos,
     TipDocument? tipDocument,
     ErrorInfo? errorInfo,
+    bool showIconAndLabel = true,
   }) {
-    __lineFlowItems.add(
-      LineFlowItem(
-        lineId: codeId,
-        shortDesc: shortDesc,
-        tipDocument: tipDocument,
-        errorInfo: errorInfo,
-      ),
+    var item = LineFlowItem(
+      lineId: codeId,
+      lineFlowType: lineFlowType ?? LineFlowType.line,
+      showIconAndLabel: showIconAndLabel,
+      shortDesc: shortDesc,
+      tipDocument: tipDocument,
+      errorInfo: errorInfo,
+      extraInfos: extraInfos,
     );
+    __lineFlowItems.add(item);
+    return item;
   }
 
   bool hasError() {

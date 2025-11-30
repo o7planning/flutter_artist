@@ -37,6 +37,11 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
     return true;
   }
 
+  @override
+  bool get isHookRepresentative {
+    return false;
+  }
+
   // Test Cases: [74b], [74d].
   @override
   bool get isItemRepresentative {

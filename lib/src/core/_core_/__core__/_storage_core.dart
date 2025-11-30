@@ -1,11 +1,19 @@
 part of '../core.dart';
 
 typedef ShelfCreator<S> = S Function();
+typedef ActivityCreator<S> = S Function();
 
 abstract class _StorageCore extends _Core {
+  MasterFlowItem? _masterFlowItem;
+
   final Map<String, ShelfCreator> __shelfCreatorMap = {};
+  final Map<String, ActivityCreator> __activityCreatorMap = {};
+
   final Map<String, Shelf> _shelfMap = {};
+  final Map<String, Activity> _activityMap = {};
+
   final List<Shelf> _recentShelves = [];
+  final List<Activity> _recentActivities = [];
 
   bool __started = false;
 
@@ -18,7 +26,16 @@ abstract class _StorageCore extends _Core {
     return m;
   }
 
+  Map<String, Activity?> get activityMap {
+    Map<String, Activity?> m = __activityCreatorMap
+        .map((k, v) => MapEntry<String, Activity?>(k, null))
+      ..addAll(_activityMap);
+    return m;
+  }
+
   List<String> get shelfNames => List.unmodifiable(_shelfMap.keys);
+
+  List<String> get activityNames => List.unmodifiable(_activityMap.keys);
 
   // ***************************************************************************
   // ***************************************************************************
@@ -31,11 +48,6 @@ abstract class _StorageCore extends _Core {
   void _setStarted() {
     if (!__started) {
       __started = true;
-      //
-      DebugPrinter.printDebug(
-        DebugCat.appStart,
-        "\n<<<<<<<<<<<<<< APP HAS BEEN STARTED! >>>>>>>>>>>>>>>>>>>>>>>>>>>>\n",
-      );
     }
   }
 
@@ -53,13 +65,48 @@ abstract class _StorageCore extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
+  String _getAutoStockerName(Type type) {
+    return type.toString();
+  }
+
   String _getShelfName(Type type) {
+    return type.toString();
+  }
+
+  String _getActivityName(Type type) {
     return type.toString();
   }
 
   @DebugMethodAnnotation()
   String debugGetShelfName(Type type) {
     return _getShelfName(type);
+  }
+
+  @DebugMethodAnnotation()
+  String debugGetActivityName(Type type) {
+    return _getActivityName(type);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void registerActivity<F extends Activity>(ActivityCreator<F> builder) {
+    if (__started) {
+      // LOGIC: #0001
+      throw DebugUtils.getFatalError(
+        " ERROR: It is not possible to register a new Activity after the application has been started.",
+      );
+    }
+    //
+    final String activityName = _getActivityName(F);
+    _debugRegister.addDebugRegisterActivity(
+        "<b>FlutterArtist.storage.registerActivity()</b> for <b>$activityName</b>.");
+    //
+    ActivityCreator? creator = __activityCreatorMap[activityName];
+    if (creator == null) {
+      __activityCreatorMap[activityName] = builder;
+    }
+    _createActivity(activityName);
   }
 
   // ***************************************************************************
@@ -72,7 +119,11 @@ abstract class _StorageCore extends _Core {
         " ERROR: It is not possible to register a new Shelf after the application has been started.",
       );
     }
+    //
     final String shelfName = _getShelfName(F);
+    _debugRegister.addDebugRegisterShelf(
+        "<b>FlutterArtist.storage.registerShelf()</b> for <b>$shelfName</b>.");
+    //
     ShelfCreator? creator = __shelfCreatorMap[shelfName];
     if (creator == null) {
       __shelfCreatorMap[shelfName] = builder;
@@ -89,10 +140,7 @@ abstract class _StorageCore extends _Core {
       return shelf;
     }
     if (!__started) {
-      DebugPrinter.printDebug(
-        DebugCat.appStart,
-        "FLUTTER ARTIST DEBUG >>>>>>>>>>>>>>> Validating Shelf: $shelfName",
-      );
+      // Nothing.
     }
 
     ShelfCreator? creator = __shelfCreatorMap[shelfName];
@@ -104,20 +152,38 @@ abstract class _StorageCore extends _Core {
     shelf = creator() as F;
     if (__started) {
       _shelfMap[shelfName] = shelf;
-      //
-      DebugPrinter.printDebug(
-        DebugCat.shelfCreation,
-        "FLUTTER ARTIST DEBUG >>>>>>>>>>>>>>> Create Shelf: $shelfName",
-      );
     }
     //
     return shelf;
   }
 
+  F _createActivity<F extends Activity>(String activityName) {
+    F? activity = _activityMap[activityName] as F?;
+    if (activity != null) {
+      return activity;
+    }
+    if (!__started) {
+      // Nothing.
+    }
+
+    ActivityCreator? creator = __activityCreatorMap[activityName];
+    if (creator == null) {
+      throw DebugUtils.getFatalError(
+          " ERROR: '$activityName' not found. You need to call:\n "
+          " FlutterArtist.storage.registerActivity(()=> $activityName())");
+    }
+    activity = creator() as F;
+    if (__started) {
+      _activityMap[activityName] = activity;
+    }
+    //
+    return activity;
+  }
+
   // ***************************************************************************
   // ***************************************************************************
 
-  void _loadAll() {
+  void _loadAllShelves() {
     for (String shelfName in __shelfCreatorMap.keys) {
       _createShelf(shelfName);
     }
@@ -131,6 +197,13 @@ abstract class _StorageCore extends _Core {
     Shelf? shelf = _shelfMap[shelfName];
     shelf ??= _createShelf(shelfName);
     return shelf;
+  }
+
+  Activity? _findActivity(Type activityType) {
+    final String activityName = _getActivityName(activityType);
+    Activity? activity = _activityMap[activityName];
+    activity ??= _createActivity(activityName);
+    return activity;
   }
 
   // TODO: Internal Use.
@@ -149,6 +222,13 @@ abstract class _StorageCore extends _Core {
     return shelf as F;
   }
 
+  F findActivity<F extends Activity>() {
+    final String activityName = _getActivityName(F);
+    Activity? activity = _activityMap[activityName];
+    activity ??= _createActivity(activityName);
+    return activity as F;
+  }
+
   // ***************************************************************************
   // ***************************************************************************
 
@@ -158,6 +238,12 @@ abstract class _StorageCore extends _Core {
     return shelf;
   }
 
+  F? findOrNullActivity<F extends Activity>() {
+    final String activityName = _getActivityName(F);
+    F? activity = _activityMap[activityName] as F?;
+    return activity;
+  }
+
   // ***************************************************************************
   // ***************************************************************************
 
@@ -165,9 +251,20 @@ abstract class _StorageCore extends _Core {
   /// Very Dangerous!!! Only call on startup.
   ///
   void __clear() {
+    __clearShelves();
+    __clearActivities();
+  }
+
+  void __clearShelves() {
     _recentShelves.clear();
     __shelfCreatorMap.clear();
     _shelfMap.clear();
+  }
+
+  void __clearActivities() {
+    _recentActivities.clear();
+    __activityCreatorMap.clear();
+    _activityMap.clear();
   }
 
   // ***************************************************************************
@@ -180,7 +277,7 @@ abstract class _StorageCore extends _Core {
   // TODO: Internal Use.
   @DebugMethodAnnotation()
   void debugLoadAll() {
-    _loadAll();
+    _loadAllShelves();
   }
 
   // TODO: Internal Use.
@@ -191,6 +288,10 @@ abstract class _StorageCore extends _Core {
 
   // ***************************************************************************
   // ***************************************************************************
+
+  void _checkToRemoveActivity(Activity activity) {
+    //
+  }
 
   void _checkToRemoveShelf(Shelf shelf) {
     bool hasMountedUIComponent = shelf.ui.hasMountedUIComponent();
@@ -235,6 +336,10 @@ abstract class _StorageCore extends _Core {
 
   // ***************************************************************************
   // ***************************************************************************
+
+  void _addRecentActivity(Activity activity) {
+    //
+  }
 
   void _addRecentShelf(Shelf shelf) {
     if (_recentShelves.isEmpty) {

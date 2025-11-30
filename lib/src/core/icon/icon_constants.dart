@@ -99,6 +99,8 @@ class FaIconConstants {
 
   static const IconData sortModelIconData = Icons.sort_by_alpha;
 
+  static const IconData activityFragmentIconData =
+      Icons.local_activity_outlined;
   static const IconData filterModelIconData = Icons.filter_alt_outlined;
   static const IconData formModelIconData = cupertino.CupertinoIcons.film_fill;
   static const IconData formModelNoneIconData =

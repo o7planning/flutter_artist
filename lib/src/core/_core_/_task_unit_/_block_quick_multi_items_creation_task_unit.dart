@@ -12,9 +12,9 @@ class _BlockQuickMultiItemsCreationTaskUnit
     required this.xBlock,
     required this.action,
   }) : super(
-          taskType: TaskType.blockQuickCreateMultiItems,
-          taskResult: BlockQuickMultiItemsCreationResult(),
-        );
+    taskType: TaskType.blockQuickCreateMultiItems,
+    taskResult: BlockQuickMultiItemsCreationResult(),
+  );
 
   @override
   XShelf get xShelf => xBlock.xShelf;

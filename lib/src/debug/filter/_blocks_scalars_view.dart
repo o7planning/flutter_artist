@@ -52,18 +52,20 @@ class BlocksScalarsView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ...filterModel.blocks.map(
-          (block) => _buildItem(
-            iconData: FaIconConstants.blockIconData,
-            blockOrScalarClassName: getClassName(block),
-            dataState: block.dataState,
-          ),
+              (block) =>
+              _buildItem(
+                iconData: FaIconConstants.blockIconData,
+                blockOrScalarClassName: getClassName(block),
+                dataState: block.dataState,
+              ),
         ),
         ...filterModel.scalars.map(
-          (scalar) => _buildItem(
-            iconData: FaIconConstants.scalarIconData,
-            blockOrScalarClassName: getClassName(scalar),
-            dataState: scalar.dataState,
-          ),
+              (scalar) =>
+              _buildItem(
+                iconData: FaIconConstants.scalarIconData,
+                blockOrScalarClassName: getClassName(scalar),
+                dataState: scalar.dataState,
+              ),
         ),
       ],
     );

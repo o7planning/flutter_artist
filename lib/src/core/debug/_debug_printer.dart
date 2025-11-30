@@ -7,18 +7,6 @@ class DebugPrinter {
       return;
     }
     switch (consoleDebug) {
-      case DebugCat.appStart:
-        if (!options.appStart) {
-          return;
-        }
-      case DebugCat.shelfCreation:
-        if (!options.shelfCreation) {
-          return;
-        }
-      case DebugCat.autoStockerCreation:
-        if (!options.autoStockerCreation) {
-          return;
-        }
       case DebugCat.navigatorObserver:
         if (!options.navigatorObserver) {
           return;

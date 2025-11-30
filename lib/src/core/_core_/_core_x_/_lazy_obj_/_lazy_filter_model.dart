@@ -5,8 +5,7 @@ class _LazyFilterModel {
 
   _LazyFilterModel({required this.filterModel});
 
-  @override
-  String toString() {
-    return "(${filterModel.name})";
+  String toDebugString() {
+    return _debugObjHtml(filterModel);
   }
 }

@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 
 enum MasterFlowItemType {
+  startup,
+  naturalUIEvent,
   taskCall,
   methodCall;
 
   IconData getIconData() {
     switch (this) {
+      case MasterFlowItemType.startup:
+        return Icons.start;
+      case MasterFlowItemType.naturalUIEvent:
+        return Icons.event_note_rounded;
       case MasterFlowItemType.taskCall:
         return Icons.miscellaneous_services_outlined;
       case MasterFlowItemType.methodCall:
@@ -18,6 +24,10 @@ enum MasterFlowItemType {
       return Colors.red;
     }
     switch (this) {
+      case MasterFlowItemType.startup:
+        return Colors.black;
+      case MasterFlowItemType.naturalUIEvent:
+        return Colors.orange;
       case MasterFlowItemType.taskCall:
         return Colors.indigo;
       case MasterFlowItemType.methodCall:
@@ -27,10 +37,14 @@ enum MasterFlowItemType {
 
   String getTooltipText() {
     switch (this) {
+      case MasterFlowItemType.startup:
+        return "Startup";
+      case MasterFlowItemType.naturalUIEvent:
+        return "Detect newly displayed UI Component";
       case MasterFlowItemType.taskCall:
         return "Task Unit.";
       case MasterFlowItemType.methodCall:
-        return "Method called by user.";
+        return "Method called by user";
     }
   }
 }

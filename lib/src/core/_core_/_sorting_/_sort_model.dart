@@ -16,7 +16,7 @@ abstract class SortModel<ITEM extends Object> {
 
   List<SortCriterion> get criteria => List.unmodifiable(_criteria);
 
-  late final _SortUIComponents ui = _SortUIComponents(sortModel: this);
+  late final ui = _SortUIComponents(sortModel: this);
 
   SortCriterion? get firstOrNullCriterion => _criteria.firstOrNull;
 

@@ -37,6 +37,10 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
 
   bool get isItemRepresentative;
 
+  bool get isHookRepresentative;
+
+  bool get isActivityRepresentative => false;
+
   bool isRepresentativeType(RepresentativeType? representativeType) {
     switch (representativeType) {
       case null:
@@ -48,6 +52,10 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
         return isBlockRepresentative;
       case RepresentativeType.itemRepresentative:
         return isItemRepresentative;
+      case RepresentativeType.hookRepresentative:
+        return isHookRepresentative;
+      case RepresentativeType.activityRepresentative:
+        return isActivityRepresentative;
     }
   }
 

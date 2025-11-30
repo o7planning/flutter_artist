@@ -44,10 +44,10 @@ class _LazyObjects {
     lazyFormModels.add(_LazyFormModel(formModel: formModel));
   }
 
-  void printInfo() {
-    print("@@-LazyFilterModels: $lazyFilterModels");
-    print("@@-LazyBlocks: $lazyBlocks");
-    print("@@-lazyScalars: $lazyScalars");
-    print("@@-LazyFormModels: $lazyFormModels");
+  String toDebugString() {
+    return " - LazyFilterModels: ${lazyFilterModels.map((e) => e.toDebugString()).join(", ")}.\n"
+        " - LazyBlocks: ${lazyBlocks.map((e) => e.toDebugString()).join(", ")}.\n"
+        " - LazyScalars: ${lazyScalars.map((e) => e.toDebugString()).join(", ")}.\n"
+        " - LazyFormModels: ${lazyFormModels.map((e) => e.toDebugString()).join(", ")}.";
   }
 }

@@ -46,6 +46,11 @@ class _ScalarValueViewBuilderState
   }
 
   @override
+  bool get isHookRepresentative {
+    return false;
+  }
+
+  @override
   Widget buildContent(BuildContext context) {
     if (widget.quickSuggestionMode == QuickSuggestionMode.showIfError) {
       return Stack(

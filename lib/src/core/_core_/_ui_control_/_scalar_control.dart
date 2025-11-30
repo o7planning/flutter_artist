@@ -49,6 +49,11 @@ class _ControlButtonState extends _RefreshableWidgetState<ScalarControl> {
   }
 
   @override
+  bool get isHookRepresentative {
+    return false;
+  }
+
+  @override
   Widget buildContent(BuildContext context) {
     ControlPressedAsyncFunction? onPressedAsync = _getOnPressedFunction();
     //

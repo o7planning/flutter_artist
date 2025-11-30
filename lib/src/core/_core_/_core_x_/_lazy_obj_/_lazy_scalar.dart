@@ -5,8 +5,7 @@ class _LazyScalar {
 
   _LazyScalar({required this.scalar});
 
-  @override
-  String toString() {
-    return "(${scalar.name})";
+  String toDebugString() {
+    return _debugObjHtml(scalar);
   }
 }

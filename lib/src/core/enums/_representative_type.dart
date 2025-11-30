@@ -1,5 +1,7 @@
 enum RepresentativeType {
   scalarRepresentative,
   blockRepresentative,
-  itemRepresentative;
+  itemRepresentative,
+  hookRepresentative,
+  activityRepresentative;
 }

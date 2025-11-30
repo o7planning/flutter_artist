@@ -42,9 +42,9 @@ abstract class FilterModel<
 
   bool get initiatedAtLeastOnce => __initiatedAtLeastOnce;
 
-  bool _lockAddMoreQuery = false;
+  bool __lockAddMoreQuery = false;
 
-  bool get lockAddMoreQuery => _lockAddMoreQuery;
+  bool get lockAddMoreQuery => __lockAddMoreQuery;
 
   bool _isDefaultFilterModel = false;
 
@@ -59,7 +59,7 @@ abstract class FilterModel<
 
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
-  late final _FilterUIComponents ui = _FilterUIComponents(filterModel: this);
+  late final ui = _FilterUIComponents(filterModel: this);
 
   // ***************************************************************************
   // ***************************************************************************
@@ -205,10 +205,16 @@ abstract class FilterModel<
   @_TaskUnitMethodAnnotation()
   @_FilterModelLoadDataAnnotation()
   Future<bool> _unitLoadFilterData({
+    required MasterFlowItem? masterFlowItem,
     required XFilterModel thisXFilterModel,
     required FilterModelDataLoadResult taskResult,
   }) async {
     __assertThisXFilterModel(thisXFilterModel);
+    //
+    masterFlowItem?._addLineFlowItem(
+      codeId: "#24000",
+      shortDesc: "Begin ${TaskType.filterModelLoadData.asDebugTaskUnit()}.",
+    );
     //
     try {
       // SAME-AS: #0004
@@ -217,6 +223,7 @@ abstract class FilterModel<
             thisXFilterModel.filterInput as FILTER_INPUT?;
         //
         _filterCriteria = await _startNewFilterActivity(
+          masterFlowItem: masterFlowItem,
           activityType: FilterActivityType.newFilt,
           filterInput: filterInput,
         ) as FILTER_CRITERIA?;
@@ -238,13 +245,21 @@ abstract class FilterModel<
   @_TaskUnitMethodAnnotation()
   @_FilterPanelChangeAnnotation()
   Future<bool> _unitFilterPanelChanged({
+    required MasterFlowItem? masterFlowItem,
     required XFilterModel xFilterModel,
   }) async {
     __assertThisXFilterModel(xFilterModel);
     //
+    masterFlowItem?._addLineFlowItem(
+      codeId: "#30000",
+      shortDesc:
+          "${_debugObjHtml(this)} -> Begin ${TaskType.filterModelFilterPanelChanged.asDebugTaskUnit()}.",
+    );
+    //
     _filterCriteriaStructure._setFilterDataState(DataState.pending);
     //
     FILTER_CRITERIA? filterCriteria = await _startNewFilterActivity(
+      masterFlowItem: masterFlowItem,
       activityType: FilterActivityType.updateFromFilterPanel,
       filterInput: null,
     );
@@ -332,10 +347,12 @@ abstract class FilterModel<
 
   void _formKeyPatchValue({required Map<String, dynamic> newCurrentValue}) {
     try {
-      _lockAddMoreQuery = true;
+      FlutterArtist._lockAddMoreQuery = true;
+      __lockAddMoreQuery = true;
       _formKey.currentState?.patchValue(newCurrentValue);
     } finally {
-      _lockAddMoreQuery = false;
+      FlutterArtist._lockAddMoreQuery = false;
+      __lockAddMoreQuery = false;
     }
   }
 
@@ -348,20 +365,34 @@ abstract class FilterModel<
   @_ImportantMethodAnnotation(
       "Called after changing in FilterPanel or Querying in Block or Scalar.")
   Future<FILTER_CRITERIA?> _startNewFilterActivity({
+    required MasterFlowItem? masterFlowItem,
     required FILTER_INPUT? filterInput,
     required FilterActivityType activityType,
   }) async {
     __filterActivityCount++;
-    print("#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> _startNewFilterActivity");
-
+    //
+    if (this is! _DefaultFilterModel) {
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#31000",
+        shortDesc:
+            "${_debugObjHtml(this)}._startNewFilterActivity()... @activityType: $activityType",
+      );
+    }
+    //
     if (activityType == FilterActivityType.newFilt) {
       __loadCount++;
     }
-
     final Map<String, dynamic> formKeyInstantValues =
         _formKey.currentState?.instantValue ?? {};
-
     //
+    if (this is! _DefaultFilterModel) {
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#31020",
+        shortDesc:
+            "${_debugObjHtml(this)} --> Calling <b>_filterCriteriaStructure._initTemporaryForNewActivity()</b>..",
+        lineFlowType: LineFlowType.calling,
+      );
+    }
     _filterCriteriaStructure._initTemporaryForNewActivity(
       activityType: activityType,
       formKeyInstantValues: formKeyInstantValues,
@@ -373,6 +404,13 @@ abstract class FilterModel<
     try {
       for (MultiOptFilterCriterion multiOptCriterion
           in _filterCriteriaStructure._rootOptCriteria) {
+        masterFlowItem?._addLineFlowItem(
+          codeId: "#31040",
+          shortDesc:
+              "Calling ${_debugObjHtml(this)}._loadMultiOptCriterionDataCascade() method "
+              "to load data for ${_debugObjHtml(multiOptCriterion)} and its descendants.",
+          lineFlowType: LineFlowType.calling,
+        );
         //
         // Load OptCriterion Data and set default and selected.
         //
@@ -387,12 +425,18 @@ abstract class FilterModel<
         );
       }
     } catch (e, stackTrace) {
-      _handleError(
+      ErrorInfo errorInfo = _handleError(
         shelf: shelf,
         methodName: "callApiLoadMultiOptCriterionXData",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
+      );
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#31080",
+        shortDesc:
+            "The ${_debugObjHtml(this)}._loadMultiOptCriterionDataCascade() was called with an error.",
+        errorInfo: errorInfo,
       );
       //
       _filterCriteriaStructure._setFilterDataState(DataState.error);
@@ -402,6 +446,14 @@ abstract class FilterModel<
     //
     if (filterInput != null) {
       try {
+        masterFlowItem?._addLineFlowItem(
+          codeId: "#31140",
+          shortDesc:
+              "Calling ${_debugObjHtml(this)}.updatedSimpleCriterionValues() method "
+              "with @filterInput: ${_debugObjHtml(filterInput)} "
+              "to get values from filterInput to update for simpleCriteria",
+          lineFlowType: LineFlowType.calling,
+        );
         final Map<String, SimpleValueWrap?> updatedSimpleCriterionValues =
             getUpdatedValuesForSimpleCriteria(
                   filterInput: filterInput,
@@ -425,12 +477,19 @@ abstract class FilterModel<
           }
         }
       } catch (e, stackTrace) {
-        _handleError(
+        ErrorInfo errorInfo = _handleError(
           shelf: shelf,
           methodName: "getUpdatedValuesForSimpleCriteria",
           error: e,
           stackTrace: stackTrace,
           showSnackBar: true,
+        );
+        //
+        masterFlowItem?._addLineFlowItem(
+          codeId: "#31200",
+          shortDesc:
+              "The ${_debugObjHtml(this)}.updatedSimpleCriterionValues() method was called with an error.",
+          errorInfo: errorInfo,
         );
         //
         _filterCriteriaStructure._setFilterDataState(DataState.error);
@@ -442,6 +501,14 @@ abstract class FilterModel<
     else {
       try {
         if (!__initiatedAtLeastOnce) {
+          if (this is! _DefaultFilterModel) {
+            masterFlowItem?._addLineFlowItem(
+              codeId: "#31300",
+              shortDesc:
+                  "Calling ${_debugObjHtml(this)}.specifyDefaultValuesForSimpleCriteria() method to get default values for simpleCriteria.",
+              lineFlowType: LineFlowType.calling,
+            );
+          }
           final Map<String, dynamic> defaultSimpleCriterionValues =
               specifyDefaultValuesForSimpleCriteria() ?? {};
 
@@ -461,12 +528,18 @@ abstract class FilterModel<
           }
         }
       } catch (e, stackTrace) {
-        _handleError(
+        ErrorInfo errorInfo = _handleError(
           shelf: shelf,
           methodName: "specifyDefaultValuesForSimpleCriteria",
           error: e,
           stackTrace: stackTrace,
           showSnackBar: true,
+        );
+        masterFlowItem?._addLineFlowItem(
+          codeId: "#31380",
+          shortDesc:
+              "The ${_debugObjHtml(this)}.specifyDefaultValuesForSimpleCriteria() method was called with an error.",
+          errorInfo: errorInfo,
         );
         //
         _filterCriteriaStructure._setFilterDataState(DataState.error);
@@ -476,11 +549,27 @@ abstract class FilterModel<
     }
     //
     try {
+      if (this is! _DefaultFilterModel) {
+        masterFlowItem?._addLineFlowItem(
+          codeId: "#31420",
+          shortDesc:
+              "Calling ${_debugObjHtml(this)}.toFilterCriteriaObject() method "
+              "to convert criteria in type of Map to a Dart object.",
+          lineFlowType: LineFlowType.calling,
+        );
+      }
       // Convert Map Data to FilterCriteria Object.
       FILTER_CRITERIA newCriteria = toFilterCriteriaObject(
         dataMap: _filterCriteriaStructure._tempCriteriaValues,
       );
-      _filterCriteria = newCriteria;
+      // _filterCriteria = newCriteria; // has moved down.
+      //
+      if (this is! _DefaultFilterModel) {
+        masterFlowItem?._addLineFlowItem(
+          codeId: "#31460",
+          shortDesc: "Got ${_debugObjHtml(newCriteria)}.",
+        );
+      }
       //
       // Update Real FromData from Temporary FormData:
       //
@@ -498,7 +587,7 @@ abstract class FilterModel<
       _filterCriteria = newCriteria;
       return _filterCriteria;
     } catch (e, stackTrace) {
-      _handleError(
+      ErrorInfo errorInfo = _handleError(
         shelf: shelf,
         methodName: "toFilterCriteriaObject",
         error: e,
@@ -514,6 +603,12 @@ abstract class FilterModel<
       );
       //
       _filterCriteria = null;
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#31500",
+        shortDesc:
+            "The ${_debugObjHtml(this)}.toFilterCriteriaObject() method was called with an error!",
+        errorInfo: errorInfo,
+      );
       return _filterCriteria;
     }
   }
@@ -886,7 +981,7 @@ abstract class FilterModel<
       xFilterModel: xFilterModel,
     );
     xShelf._addTaskUnit(taskUnit: taskUnit);
-    FlutterArtist._rootQueue._addXShelf(xShelf);
+    FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
   }
 
@@ -968,7 +1063,7 @@ abstract class FilterModel<
     required String methodName,
     required bool forceQueryAll,
   }) async {
-    if (_lockAddMoreQuery) {
+    if (__lockAddMoreQuery) {
       return false;
     }
     // FlutterArtist.codeFlowLogger._addMethodCall(
@@ -987,8 +1082,8 @@ abstract class FilterModel<
       forceQueryAll: forceQueryAll,
     );
     //
-    xShelf._initQueryTasks();
-    FlutterArtist._rootQueue._addXShelf(xShelf);
+    xShelf._initQueryTaskUnits();
+    FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     return true;

@@ -44,6 +44,11 @@ class _RefreshableNeutralViewState
   }
 
   @override
+  bool get isHookRepresentative {
+    return false;
+  }
+
+  @override
   Widget buildContent(BuildContext context) {
     return widget.build();
   }

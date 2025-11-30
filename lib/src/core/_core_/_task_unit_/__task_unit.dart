@@ -2,15 +2,23 @@ part of '../core.dart';
 
 @_TaskUnitClassAnnotation()
 abstract class _TaskUnit {
+  final TaskType taskType;
+
   Object get owner;
+
+  _TaskUnit({required this.taskType});
+
+  String getObjectName();
+
+  String asDebugTaskUnit() {
+    return taskType.asDebugTaskUnit(getObjectName());
+  }
 }
 
 @_TaskUnitClassAnnotation()
 abstract class _STaskUnit extends _TaskUnit {
-  final TaskType taskType;
-
   _STaskUnit({
-    required this.taskType,
+    required super.taskType,
   });
 
   String getTaskUnitId() {

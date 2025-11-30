@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 
-import '../../core/enums/_task_flow_item_type.dart';
+import '../../core/enums/_master_flow_item_type.dart';
 import '../../core/widgets/_custom_app_container.dart';
 import '../../core/widgets/_labeled_checkbox.dart';
 

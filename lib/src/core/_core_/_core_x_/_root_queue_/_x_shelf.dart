@@ -1,13 +1,16 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 int __xShelfSequence = 0;
 
-abstract class XShelf {
+abstract class XShelf extends XRootQueueItem {
   final XShelfType xShelfType;
   final Shelf shelf;
   late final int xShelfId;
 
   late final __xShelfTaskUnitQueue = _XShelfTaskUnitQueue(xShelf: this);
+
+  @override
+  String get _fullName => "@XShelf-${shelf.name}";
 
   final Map<String, XFilterModel> xFilterModelMap = {};
   final Map<String, XFormModel> xFormModelMap = {};
@@ -327,12 +330,29 @@ abstract class XShelf {
     print("**************************************************************\n");
   }
 
-  void _initQueryTasks() {
+  void _initHookTaskUnit() {
+    shelf._debugInitQueryTaskUnitsCount++;
+    //
+    // _addTaskUnit(
+    //   taskUnit: _HookTaskUnit(
+    //       xHook: null,
+    //   ),
+    //   toMainQueue: toMainQueue,
+    // );
+  }
+
+  // debug [#01000]
+  void _initQueryTaskUnits([MasterFlowItem? masterFlowItem]) {
     if (rootVipXScalar != null && rootVipXBlock != null) {
       throw "Development Logic Error";
     }
-    shelf._debugInitQueryTasksCount++;
-    printMe();
+    shelf._debugInitQueryTaskUnitsCount++;
+    //
+    masterFlowItem?._addLineFlowItem(
+      codeId: "#01000",
+      shortDesc: toDebugXShelfState(),
+    );
+    //
     final bool toMainQueue = false;
     //
     if (xShelfType == XShelfType.naturalQuery) {
@@ -340,46 +360,74 @@ abstract class XShelf {
         if (!xFilterModel.isVisibleNeedToQuery()) {
           continue;
         }
+        final taskUnit = _FilterModelLoadDataTaskUnit(
+          xFilterModel: xFilterModel,
+        );
+        masterFlowItem?._addLineFlowItem(
+          codeId: "#01060",
+          shortDesc:
+              "Create ${taskUnit.asDebugTaskUnit()} and add to ${_debugObjHtml(this)}.",
+          lineFlowType: LineFlowType.addTaskUnit,
+        );
         //
         // Execute xFilterModel first!!
         //
         _addTaskUnit(
-          taskUnit: _FilterModelLoadDataTaskUnit(
-            xFilterModel: xFilterModel,
-          ),
+          taskUnit: taskUnit,
           toMainQueue: toMainQueue,
         );
       }
     }
     //
     if (rootVipXScalar != null) {
+      final taskUnit = _ScalarQueryTaskUnit(
+        xScalar: rootVipXScalar!,
+      );
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#01080",
+        shortDesc:
+            "Create ${taskUnit.asDebugTaskUnit()} and add to ${_debugObjHtml(this)}.",
+        lineFlowType: LineFlowType.addTaskUnit,
+      );
       //
       // Execute vipXScalar before XBlock(s)!!
       //
       _addTaskUnit(
-        taskUnit: _ScalarQueryTaskUnit(
-          xScalar: rootVipXScalar!,
-        ),
+        taskUnit: taskUnit,
         toMainQueue: toMainQueue,
       );
     } else if (rootVipXBlock != null) {
+      final taskUnit = _BlockQueryTaskUnit(
+        xBlock: rootVipXBlock!,
+      );
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#01120",
+        shortDesc:
+            "Create ${taskUnit.asDebugTaskUnit()} and add to ${_debugObjHtml(this)}.",
+        lineFlowType: LineFlowType.addTaskUnit,
+      );
       //
       // Execute rootVipXBlock!!
       //
       _addTaskUnit(
-        taskUnit: _BlockQueryTaskUnit(
-          xBlock: rootVipXBlock!,
-        ),
+        taskUnit: taskUnit,
         toMainQueue: toMainQueue,
       );
     }
     //
     for (XScalar xScalar in allRootXScalars) {
       if (xScalar != rootVipXScalar) {
+        final taskUnit = _ScalarQueryTaskUnit(
+          xScalar: xScalar,
+        );
+        masterFlowItem?._addLineFlowItem(
+          codeId: "#01160",
+          shortDesc:
+              "Create ${taskUnit.asDebugTaskUnit()} and add to ${_debugObjHtml(this)}.",
+          lineFlowType: LineFlowType.addTaskUnit,
+        );
         _addTaskUnit(
-          taskUnit: _ScalarQueryTaskUnit(
-            xScalar: xScalar,
-          ),
+          taskUnit: taskUnit,
           toMainQueue: toMainQueue,
         );
       }
@@ -387,10 +435,17 @@ abstract class XShelf {
     //
     for (XBlock rootXBlock in allRootXBlocks) {
       if (rootXBlock != rootVipXBlock) {
+        final taskUnit = _BlockQueryTaskUnit(
+          xBlock: rootXBlock,
+        );
+        masterFlowItem?._addLineFlowItem(
+          codeId: "#01200",
+          shortDesc:
+              "Create ${taskUnit.asDebugTaskUnit()} and add to ${_debugObjHtml(this)}.",
+          lineFlowType: LineFlowType.addTaskUnit,
+        );
         _addTaskUnit(
-          taskUnit: _BlockQueryTaskUnit(
-            xBlock: rootXBlock,
-          ),
+          taskUnit: taskUnit,
           toMainQueue: toMainQueue,
         );
       }
@@ -401,14 +456,16 @@ abstract class XShelf {
   // ***************************************************************************
   // ***************************************************************************
 
-  void printMe() {
-    print("\nXShelf BEFORE QUERY [${xShelfType.name}]:");
+  String toDebugXShelfState() {
+    String s = "${_debugObjHtml(this)}\n"
+        " --- STATE BEFORE CREATING TASK UNITS ---";
     for (String key in xBlockMap.keys) {
-      print(" --> XShelf/Block: $key - ${xBlockMap[key]}");
+      s += "\n  >> XShelf/Block: $key - ${xBlockMap[key]}.";
     }
     for (String key in xScalarMap.keys) {
-      print(" --> XShelf/Scalar: $key - ${xScalarMap[key]}");
+      s += "\n  >> XShelf/Scalar: $key - ${xScalarMap[key]}.";
     }
+    return s;
   }
 
   // ***************************************************************************
@@ -456,10 +513,12 @@ abstract class XShelf {
   // ***************************************************************************
   // ***************************************************************************
 
-  DebugXShelfTaskUnitQueue toDebugXShelfTaskUnitQueue() {
-    return __xShelfTaskUnitQueue.toDebugXShelfTaskUnitQueue();
+  @override
+  DebugXRootQueueItem toDebugXRootQueueItem() {
+    return __xShelfTaskUnitQueue.toDebugXRootQueueItem();
   }
 
+  @override
   bool isEmptyTask() {
     return __xShelfTaskUnitQueue.isEmpty;
   }

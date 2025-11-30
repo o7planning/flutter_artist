@@ -4,6 +4,8 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import '../../core/_core_/core.dart';
 import '../../core/widgets/_html_selectable_rich_text.dart';
 import '../dialog/_error_viewer_dialog.dart';
+import '../dialog/_extra_info_viewer_dialog.dart';
+import '../dialog/_tip_document_viewer_dialog.dart';
 
 class LineFlowItemBox extends StatelessWidget {
   final LineFlowItem lineFlowItem;
@@ -30,14 +32,18 @@ class LineFlowItemBox extends StatelessWidget {
                 lineFlowItem.shortDesc,
                 icon: Icon(
                   lineFlowItem.lineFlowType.getIconData(),
-                  color: lineFlowItem.lineFlowType.getIconColor(),
+                  color: lineFlowItem.showIconAndLabel
+                      ? lineFlowItem.lineFlowType.getIconColor()
+                      : Colors.transparent,
                   size: 16,
                 ),
                 label: lineFlowItem.lineId,
                 labelStyle: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
-                  color: Colors.indigo,
+                  color: lineFlowItem.showIconAndLabel
+                      ? Colors.indigo
+                      : Colors.transparent,
                 ),
                 tagStyles: {
                   'b': TextStyle(fontWeight: FontWeight.bold),
@@ -45,27 +51,8 @@ class LineFlowItemBox extends StatelessWidget {
                 },
                 style: TextStyle(fontSize: 12),
               ),
-              // IconLabelSelectableText(
-              //   icon: Icon(
-              //     lineFlowItem.lineFlowType.getIconData(),
-              //     color: lineFlowItem.lineFlowType.getIconColor(),
-              //     size: 16,
-              //   ),
-              //   label: lineFlowItem.lineId,
-              //   text: lineFlowItem.shortDesc,
-              //   labelStyle: TextStyle(
-              //     fontSize: 12,
-              //     fontWeight: FontWeight.bold,
-              //     color: Colors.indigo,
-              //   ),
-              //   textStyle: TextStyle(fontSize: 12),
-              // ),
-              if (lineFlowItem.errorInfo != null ||
-                  lineFlowItem.tipDocument != null)
-                SizedBox(height: 5),
-              if (lineFlowItem.errorInfo != null ||
-                  lineFlowItem.tipDocument != null)
-                _buildControlBar(context),
+              if (lineFlowItem.needControlBar()) SizedBox(height: 5),
+              if (lineFlowItem.needControlBar()) _buildControlBar(context),
             ],
           ),
         ),
@@ -77,26 +64,49 @@ class LineFlowItemBox extends StatelessWidget {
     return Wrap(
       spacing: 0,
       children: [
-        SimpleSmallIconButton(
-          iconData: Icons.error_outline_rounded,
-          iconColor: lineFlowItem.errorInfo == null ? null : Colors.red,
-          onPressed: lineFlowItem.errorInfo == null
-              ? null
-              : () {
-                  _showErrorDialog(context);
-                },
+        Tooltip(
+          message: "Error Info",
+          child: SimpleSmallIconButton(
+            iconData: Icons.error_outline_rounded,
+            iconColor: lineFlowItem.errorInfo == null ? null : Colors.red,
+            onPressed: lineFlowItem.errorInfo == null
+                ? null
+                : () {
+                    _showErrorDialog(context);
+                  },
+          ),
         ),
-        SimpleSmallIconButton(
-            iconData: Icons.playlist_add_check_circle_outlined),
-        SimpleSmallIconButton(
-          iconData: Icons.account_balance_wallet_outlined,
-          onPressed: lineFlowItem.tipDocument == null
-              ? null
-              : () {
-                  _showTipDocumentDialog(context);
-                },
+        Tooltip(
+          message: "Extra Info",
+          child: SimpleSmallIconButton(
+            iconData: Icons.playlist_add_check_circle_outlined,
+            onPressed: lineFlowItem.hasExtraInfos()
+                ? () {
+                    _showExtraInfoDialog(context);
+                  }
+                : null,
+          ),
+        ),
+        Tooltip(
+          message: "Tip & Document",
+          child: SimpleSmallIconButton(
+            iconData: Icons.account_balance_wallet_outlined,
+            onPressed: lineFlowItem.tipDocument == null
+                ? null
+                : () {
+                    _showTipDocumentDialog(context);
+                  },
+          ),
         ),
       ],
+    );
+  }
+
+  void _showExtraInfoDialog(BuildContext context) {
+    ExtraInfoViewerDialog.showExtraInfoViewerDialog(
+      context: context,
+      title: "Extra Info",
+      extraInfos: lineFlowItem.extraInfos ?? [],
     );
   }
 
@@ -112,11 +122,10 @@ class LineFlowItemBox extends StatelessWidget {
 
   void _showTipDocumentDialog(BuildContext context) {
     if (lineFlowItem.tipDocument != null) {
-      // ErrorViewerDialog.showErrorViewerDialog(
-      //   context: context,
-      //   title: "Error Viewer",
-      //   errorInfo: lineFlowItem.errorInfo!,
-      // );
+      TipDocumentViewerDialog.showTipDocumentDialog(
+        context: context,
+        tipDocument: lineFlowItem.tipDocument!,
+      );
     }
   }
 }

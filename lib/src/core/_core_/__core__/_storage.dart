@@ -1,16 +1,14 @@
 part of '../core.dart';
 
 class _Storage extends _StorageCore {
-  late final _StorageFreeze __freeze = _StorageFreeze(this);
+  late final __freeze = _StorageFreeze(this);
   late final drawerState = _DrawerState(this);
   late final endDrawerState = _EndDrawerState(this);
 
-  late final _StoragePolymorphismManager _polymorphismManager =
-      _StoragePolymorphismManager(this);
-  late final _StorageEventHandler ev = _StorageEventHandler(this);
-  final _StockersManager _stockersManager = _StockersManager();
-  final _StorageNaturalQueryQueue _naturalQueryQueue =
-      _StorageNaturalQueryQueue();
+  late final _polymorphismManager = _StoragePolymorphismManager(this);
+  late final ev = _StorageEventHandler(this);
+  final _stockersManager = _StockersManager();
+  final _naturalQueryQueue = _StorageNaturalQueryQueue();
 
   // ***************************************************************************
   // ***************************************************************************
@@ -20,10 +18,46 @@ class _Storage extends _StorageCore {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _initStorage(StorageStructure storageStructure) {
+  void _init({
+    required MasterFlowItem masterFlowItem,
+    required StorageStructure storageStructure,
+  }) {
+    LineFlowItem item = masterFlowItem._addLineFlowItem(
+      codeId: "#SS000",
+      shortDesc: "${_debugObjHtml(storageStructure)}.registerActivities().",
+      lineFlowType: LineFlowType.calling,
+      tipDocument: TipDocument.activity,
+    );
+    storageStructure.registerActivities();
+    item._extraInfos = _debugRegister.debugRegisterActivities..sort();
+    //
+    item = masterFlowItem._addLineFlowItem(
+      codeId: "#SS020",
+      shortDesc: "${_debugObjHtml(storageStructure)}.registerShelves().",
+      lineFlowType: LineFlowType.calling,
+      tipDocument: TipDocument.shelf,
+    );
     storageStructure.registerShelves();
+    item._extraInfos = _debugRegister.debugRegisterShelves..sort();
+    //
+    item = masterFlowItem._addLineFlowItem(
+      codeId: "#SS040",
+      shortDesc: "${_debugObjHtml(storageStructure)}.registerAutoStockers().",
+      lineFlowType: LineFlowType.calling,
+      tipDocument: TipDocument.autoStocker,
+    );
     storageStructure.registerAutoStockers();
+    item._extraInfos = _debugRegister.debugRegisterAutoStockers..sort();
+    //
+    item = masterFlowItem._addLineFlowItem(
+      codeId: "#SS060",
+      shortDesc:
+          "${_debugObjHtml(storageStructure)}.registerPolymorphismFamilies().",
+      lineFlowType: LineFlowType.calling,
+      tipDocument: TipDocument.polymorphism,
+    );
     storageStructure.registerPolymorphismFamilies();
+    item._extraInfos = _debugRegister.debugRegisterPolymorphisms..sort();
   }
 
   // ***************************************************************************
@@ -45,6 +79,10 @@ class _Storage extends _StorageCore {
         " ERROR: It is not possible to register a new AutoStocker after the application has been started.",
       );
     }
+    //
+    final String autoStockerName = _getAutoStockerName(F);
+    _debugRegister.addDebugRegisterAutoStocker(
+        "<b>FlutterArtist.storage.registerAutoStocker()</b> for <b>$autoStockerName</b>.");
     _stockersManager._registerAutoStocker(builder);
   }
 
@@ -149,6 +187,9 @@ class _Storage extends _StorageCore {
     required StorageSilentActionResult taskResult,
   }) async {
     ApiResult<void>? result;
+    //
+    // $$$
+    //
     try {
       // FlutterArtist.codeFlowLogger._addMethodCall(
       //   ownerClassInstance: action,

@@ -8,19 +8,49 @@ class CodeFlowLogger {
   List<MasterFlowItem> get masterFlowItems =>
       List.unmodifiable(_masterFlowItems);
 
-  DateTime __lastDateTime = DateTime.now();
-
-  void __markDateTime() {
-    DateTime now = DateTime.now();
-    Duration duration = now.difference(__lastDateTime);
-    if (duration.inSeconds > resetSeconds) {
-      clear();
-    }
-    __lastDateTime = now;
-  }
-
   void clear() {
     _masterFlowItems.clear();
+  }
+
+  // ===========================================================================
+  // ===========================================================================
+
+  void __addMasterFlowItem(MasterFlowItem masterFlowItem) {
+    _masterFlowItems.removeWhere((item) {
+      DateTime now = DateTime.now();
+      Duration duration = now.difference(item.createdDateTime);
+      if (duration.inSeconds > resetSeconds) {
+        return true;
+      }
+      return false;
+    });
+    _masterFlowItems.add(masterFlowItem);
+  }
+
+  // ===========================================================================
+  // ===========================================================================
+
+  MasterFlowItem _addNaturalUIEvent({
+    required Object ownerClassInstance,
+  }) {
+    final masterFlowItem = MasterFlowItem._naturalUIEvent(
+      ownerClassInstance: ownerClassInstance,
+    );
+    __addMasterFlowItem(masterFlowItem);
+    return masterFlowItem;
+  }
+
+  // ===========================================================================
+  // ===========================================================================
+
+  MasterFlowItem _addStartup({
+    required Object ownerClassInstance,
+  }) {
+    final masterFlowItem = MasterFlowItem._startup(
+      ownerClassInstance: ownerClassInstance,
+    );
+    __addMasterFlowItem(masterFlowItem);
+    return masterFlowItem;
   }
 
   // ===========================================================================
@@ -34,7 +64,7 @@ class CodeFlowLogger {
       ownerClassInstance: ownerClassInstance,
       taskType: taskType,
     );
-    _masterFlowItems.add(masterFlowItem);
+    __addMasterFlowItem(masterFlowItem);
     return masterFlowItem;
   }
 
@@ -46,7 +76,12 @@ class CodeFlowLogger {
     required StackTrace currentStackTrace,
     required Map<String, dynamic>? parameters,
   }) {
-    __markDateTime();
+    if (FlutterArtist.executor.isBusy) {
+      // return;
+    }
+    if (FlutterArtist._lockAddMoreQuery) {
+      return;
+    }
     //
     MasterFlowItem item;
     try {
@@ -64,7 +99,7 @@ class CodeFlowLogger {
         isLibCode: false,
       );
     }
-    _masterFlowItems.add(item);
+    __addMasterFlowItem(item);
   }
 
   void _addMethodCall({
@@ -74,14 +109,12 @@ class CodeFlowLogger {
     required Function()? navigate,
     required bool isLibCode,
   }) {
-    __markDateTime();
-    //
     MasterFlowItem log = MasterFlowItem._methodCall(
       ownerClassInstance: ownerClassInstance,
       methodName: methodName,
       arguments: parameters,
       isLibCode: isLibCode,
     );
-    _masterFlowItems.add(log);
+    __addMasterFlowItem(log);
   }
 }

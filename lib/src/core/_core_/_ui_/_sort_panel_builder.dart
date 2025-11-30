@@ -45,6 +45,11 @@ class _SortPanelBuilderState
   }
 
   @override
+  bool get isHookRepresentative {
+    return false;
+  }
+
+  @override
   void setBuildingState({required bool isBuilding}) {
     widget.sortModel.ui._setSortPanelBuildingState(
       widgetState: this,

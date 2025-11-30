@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 enum LineFlowType {
   line, // Default.
   info,
+  addTaskUnit,
   calling,
   fireEvent;
 
@@ -16,6 +17,8 @@ enum LineFlowType {
         return Icons.call;
       case LineFlowType.fireEvent:
         return Icons.light_mode_outlined;
+      case LineFlowType.addTaskUnit:
+        return Icons.miscellaneous_services_outlined;
     }
   }
 
@@ -29,6 +32,8 @@ enum LineFlowType {
         return Colors.green;
       case LineFlowType.fireEvent:
         return Colors.deepOrange;
+      case LineFlowType.addTaskUnit:
+        return Colors.orange;
     }
   }
 }

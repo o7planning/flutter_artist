@@ -267,8 +267,8 @@ class XBlock<
   @override
   String toString() {
     return "XBlock (${getClassName(block)}) \n"
-        "            - qryHint: $queryHint / blockReQryCon: $_blockReQryCon \n"
-        "            - forceReloadItem: $__forceReloadCurrItem / blockItemRefreshCon: $_blockItemRefreshCon \n"
-        "            - xFormModel: $xFormModel";
+        "      - qryHint: $queryHint / blockReQryCon: $_blockReQryCon \n"
+        "      - forceReloadItem: $__forceReloadCurrItem / blockItemRefreshCon: $_blockItemRefreshCon \n"
+        "      - xFormModel: $xFormModel";
   }
 }

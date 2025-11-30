@@ -53,6 +53,11 @@ class _TaskProgressBuilderState
     return false;
   }
 
+  @override
+  bool get isHookRepresentative {
+    return false;
+  }
+
   bool isMatches({required Object owner, required TaskType taskType}) {
     if (!widget.taskTypes.contains(taskType)) {
       return false;

@@ -5,8 +5,7 @@ class _LazyFormModel {
 
   _LazyFormModel({required this.formModel});
 
-  @override
-  String toString() {
-    return "(${formModel.block.name})";
+  String toDebugString() {
+    return _debugObjHtml(formModel);
   }
 }

@@ -1,0 +1,4 @@
+enum ActivityHiddenBehavior {
+  none,
+  clear;
+}

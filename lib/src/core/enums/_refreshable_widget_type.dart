@@ -27,6 +27,10 @@ enum RefreshableWidgetType {
     name: "FormModel",
     iconData: FaIconConstants.formModelIconData,
   ),
+  activityFragment(
+    name: "ActivityFragment",
+    iconData: FaIconConstants.activityFragmentIconData,
+  ),
   blockFragment(
     name: "BlockFragment",
     iconData: FaIconConstants.blockFragmentIconData,
@@ -60,7 +64,7 @@ enum RefreshableWidgetType {
     name: "ScalarValue",
     iconData: FaIconConstants.scalarFragmentIconData,
   ),
-  activityFragment(
+  hookFragment(
     name: "ActivityFragment",
     iconData: FaIconConstants.hookFragmentIconData,
   ),
