@@ -46,7 +46,7 @@ import '../action/storage_silent_action.dart';
 import '../adapter/_flutter_artist_adapter.dart';
 import '../adapter/_global_data_adapter.dart';
 import '../adapter/_locale_adapter.dart';
-import '../adapter/_logged_in_user_adapter.dart';
+import '../adapter/_login_logout_adapter.dart';
 import '../adapter/_notification_adapter.dart';
 import '../annotation/annotation.dart';
 import '../built_in/empty_form_input.dart';

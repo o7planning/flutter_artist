@@ -46,13 +46,15 @@ abstract class Activity extends _Core {
       codeId: "#19000",
       shortDesc:
           "Begin ${_debugObjHtml(this)} > ${TaskType.activity.asDebugTaskUnit()} task unit.\n"
-          "<i>Note: This is called because you called the ${_debugObjHtml(this)}.executeActivity() method.</i>",
+          "Note: This is called because you called the ${_debugObjHtml(this)}.executeActivity() method.",
     );
     //
     try {
       _masterFlowItem?._addLineFlowItem(
         codeId: "#19100",
         shortDesc: "Calling ${_debugObjHtml(this)}.callApiLogic()...",
+        lineFlowType: LineFlowType.calling,
+        isLibCall: true,
       );
       await callApiLogic();
     } catch (e, stackTrace) {

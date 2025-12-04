@@ -148,7 +148,7 @@ class _FlutterArtist extends _Core {
       isLibCall: true,
     );
     // This method never throw error.
-    return await globalsManager._setOrUpdateLoggedInUser(
+    return await globalsManager._setOrUpdateLoggedInUserSafely(
       masterFlowItem: masterFlowItem,
       loggedInUser: loggedInUser,
       requiresTheSameUser: requiresTheSameUser,
@@ -173,7 +173,7 @@ class _FlutterArtist extends _Core {
     required ConsoleDebugOptions? consoleDebugOptions,
     required IFlutterArtistAdapter flutterArtistAdapter,
     required INotificationAdapter? notificationAdapter,
-    required ILoggedInUserAdapter loggedInUserAdapter,
+    required ILoginLogoutAdapter loginLogoutAdapter,
     required IGlobalDataAdapter globalDataAdapter,
     required ILocaleAdapter localeAdapter,
     required Function(BuildContext context)? showRestDebugDialog,
@@ -194,7 +194,7 @@ class _FlutterArtist extends _Core {
           "Note: You see this debug information because the <b>FlutterArtist.config()</b> method is called in <b>main.dart</b>."
           "\n - @storageStructure: ${_debugObjHtml(storageStructure)}."
           "\n - @flutterArtistAdapter: ${_debugObjHtml(flutterArtistAdapter)}."
-          "\n - @loggedInUserAdapter: ${_debugObjHtml(loggedInUserAdapter)}."
+          "\n - @loginLogoutAdapter: ${_debugObjHtml(loginLogoutAdapter)}."
           "\n - @globalDataAdapter: ${_debugObjHtml(globalDataAdapter)}."
           "\n - @notificationAdapter: ${_debugObjHtml(notificationAdapter)}.",
       lineFlowType: LineFlowType.debug,
@@ -231,7 +231,7 @@ class _FlutterArtist extends _Core {
       tipDocument: TipDocument.globalData,
     );
     globalsManager = GlobalsManager._(
-      loggedInUserAdapter: loggedInUserAdapter,
+      loginLogoutAdapter: loginLogoutAdapter,
       globalDataAdapter: globalDataAdapter,
     );
     masterFlowItem._addLineFlowItem(

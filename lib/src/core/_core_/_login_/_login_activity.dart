@@ -14,6 +14,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
       _masterFlowItem?._addLineFlowItem(
         codeId: "#20000",
         shortDesc: "Calling ${_debugObjHtml(this)}.callApiLogin()...",
+        lineFlowType: LineFlowType.calling,
       );
       result = await callApiLogin();
       // Throw if Error.
@@ -34,14 +35,14 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
       );
       return;
     }
-    USER? loggedInUser = result.data;
+    final USER? loggedInUser = result.data;
     if (loggedInUser == null) {
       final message =
           "No data from ${getClassNameWithoutGenerics(this)}.callApiLogin().";
       _masterFlowItem?._addLineFlowItem(
         codeId: "#20060",
-        shortDesc:
-            "Got value >> @loggedInUser: ${_debugObjHtml(loggedInUser)}.\n$message",
+        shortDesc: "Got value >> @loggedInUser: ${_debugObjHtml(loggedInUser)}."
+            "\n$message",
       );
       //
       showErrorSnackBar(
@@ -54,57 +55,90 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
       );
       return;
     }
+    //
+    // Right Now, Has not null @loggedInUser.
+    //
     String? tokenPrefix = loggedInUser.accessToken;
     if (tokenPrefix != null) {
-      tokenPrefix =
-          tokenPrefix.length > 2 ? tokenPrefix.substring(0, 2) : tokenPrefix;
+      tokenPrefix = tokenPrefix.length > 2 //
+          ? tokenPrefix.substring(0, 2)
+          : tokenPrefix;
       tokenPrefix = "$tokenPrefix...";
     }
+    //
     _masterFlowItem?._addLineFlowItem(
       codeId: "#20100",
       shortDesc: "Got LoggedInUser: ${_debugObjHtml(loggedInUser)}."
           "\n - @accessToken: <b>$tokenPrefix</b>.",
       lineFlowType: LineFlowType.debug,
     );
+    //
+    _masterFlowItem?._addLineFlowItem(
+      codeId: "#20200",
+      shortDesc:
+          "Calling <b>globalsManager._setOrUpdateLoggedInUserSafely()</b> with parameters:"
+          "\n - @loggedInUser: ${_debugObjHtml(loggedInUser)}.",
+      lineFlowType: LineFlowType.calling,
+      isLibCall: true,
+    );
+    //
+    // IMPORTANT:
+    // This method never throw an error!
+    //
+    bool success =
+        await FlutterArtist.globalsManager._setOrUpdateLoggedInUserSafely(
+      masterFlowItem: _masterFlowItem,
+      loggedInUser: loggedInUser,
+      requiresTheSameUser: false,
+    );
+    if (!success) {
+      _masterFlowItem?.printToConsole();
+      return;
+    }
+    //
+    // After Login with username/password successful.
+    // Load Global Data.
+    //
+    final loginLogoutAdapter = FlutterArtist.globalsManager.loginLogoutAdapter;
     try {
       _masterFlowItem?._addLineFlowItem(
-        codeId: "#20200",
+        codeId: "#22060",
         shortDesc:
-            "Calling <b>FlutterArtist._setOrUpdateLoggedInUser()</b> with parameters:"
+            "Calling ${_debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() with parameters:"
             "\n - @loggedInUser: ${_debugObjHtml(loggedInUser)}.",
         lineFlowType: LineFlowType.calling,
-        isLibCall: true,
+        tipDocument: TipDocument.loginLogoutAdapter,
       );
-      // This method never throw an error!
-      bool success = await FlutterArtist._setOrUpdateLoggedInUser(
-        masterFlowItem: _masterFlowItem,
-        loggedInUser: loggedInUser,
-        requiresTheSameUser: false,
-      );
-      if (!success) {
-        _masterFlowItem?.printToConsole();
-        return;
-      }
+      loginLogoutAdapter.addThirdPartyLogicOnLogin(loggedInUser);
     } catch (e, stackTrace) {
-      ErrorInfo errorInfo = _handleError(
-        shelf: null,
-        methodName: "FlutterArtist._setOrUpdateLoggedInUser",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
+      final errorInfo = ErrorInfo.fromError(error: e, stackTrace: stackTrace);
+      //
       _masterFlowItem?._addLineFlowItem(
-        codeId: "#20300",
+        codeId: "#22080",
         shortDesc:
-            "The <b>FlutterArtist._setOrUpdateLoggedInUser()</b> method was called with and error.",
+            "The ${_debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() method was called with an error.",
         errorInfo: errorInfo,
       );
       _masterFlowItem?.printToConsole();
       return;
     }
+    //
+    // Load Global Data.
+    // IMPORTANT: This method never throw an error!
+    //
+    success = await FlutterArtist.globalsManager._loadGlobalDataSafely(
+      masterFlowItem: _masterFlowItem,
+      loggedInUser: loggedInUser,
+    );
+    if (!success) {
+      _masterFlowItem?.printToConsole();
+      return;
+    }
+    //
     _masterFlowItem?._addLineFlowItem(
       codeId: "#20400",
       shortDesc: "Calling ${_debugObjHtml(this)}.navigateToSuccessScreen()...",
+      lineFlowType: LineFlowType.calling,
     );
     // IMPORTANT: No await:
     navigateToSuccessScreen();

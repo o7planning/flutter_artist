@@ -52,7 +52,7 @@ class _Storage extends _StorageCore {
     item = masterFlowItem._addLineFlowItem(
       codeId: "#SS060",
       shortDesc:
-          "${_debugObjHtml(storageStructure)}.registerPolymorphismFamilies().",
+      "${_debugObjHtml(storageStructure)}.registerPolymorphismFamilies().",
       lineFlowType: LineFlowType.calling,
       tipDocument: TipDocument.polymorphism,
     );
@@ -71,8 +71,7 @@ class _Storage extends _StorageCore {
   // ***************************************************************************
 
   void registerAutoStocker<F extends AutoStocker<Object, Identifiable<Object>>>(
-    StockerCreator<F> builder,
-  ) {
+      StockerCreator<F> builder,) {
     if (__started) {
       // LOGIC: #0001
       throw DebugUtils.getFatalError(
@@ -117,7 +116,7 @@ class _Storage extends _StorageCore {
     // @Same-Code-Precheck-01
     //
     final Actionable<StorageSilentActionPrecheck> actionable =
-        __canSilentAction(
+    __canSilentAction(
       checkBusy: true,
     );
     //
@@ -251,7 +250,7 @@ class _Storage extends _StorageCore {
   // Open Dialog then freeze Shelf Reaction until closed.
   @_RootMethodAnnotation()
   Future<FreezeByDialogResult<V?>>
-      openDialogThenFreezeReactionBetweenShelvesUntilClosed<V>({
+  openDialogThenFreezeReactionBetweenShelvesUntilClosed<V>({
     required Future<V?> Function() openDialog,
   }) async {
     return await __freeze
@@ -265,9 +264,9 @@ class _Storage extends _StorageCore {
 
   @_RootMethodAnnotation()
   Future<void> openDrawerThenFreezeReactionBetweenShelvesUntilClosed(
-    BuildContext context, {
-    bool showSuggestionIfNeed = true,
-  }) async {
+      BuildContext context, {
+        bool showSuggestionIfNeed = true,
+      }) async {
     return await __freeze
         ._openDrawerThenFreezeReactionBetweenShelvesUntilClosed(
       context,
@@ -280,9 +279,9 @@ class _Storage extends _StorageCore {
 
   @_RootMethodAnnotation()
   Future<void> openEndDrawerThenFreezeReactionBetweenShelvesUntilClosed(
-    BuildContext context, {
-    bool showSuggestionIfNeed = true,
-  }) async {
+      BuildContext context, {
+        bool showSuggestionIfNeed = true,
+      }) async {
     return await __freeze
         ._openEndDrawerThenFreezeReactionBetweenShelvesUntilClosed(
       context,

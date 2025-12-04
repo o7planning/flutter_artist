@@ -16,7 +16,7 @@ class _ActivityUIComponents extends _UIComponents {
 
   void updateActivityPieceWidgets({bool force = false}) {
     for (_RefreshableWidgetState widgetState
-        in __activityPieceWidgetStates.keys) {
+    in __activityPieceWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -156,8 +156,10 @@ class _ActivityUIComponents extends _UIComponents {
     );
     __activityPieceWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isShowing),
-      ifAbsent: () => XState().._setShowing(isShowing),
+          (xState) => xState.._setShowing(isShowing),
+      ifAbsent: () =>
+      XState()
+        .._setShowing(isShowing),
     );
     bool hasXActivityRepCURRENT = hasActiveUIComponentActivityRepresentative(
       alsoCheckChildren: true,

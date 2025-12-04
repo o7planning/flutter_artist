@@ -29,7 +29,7 @@ class GlobalsManager extends _Core {
 
   IGlobalData? get globalData => _globalData;
 
-  final ILoggedInUserAdapter loggedInUserAdapter;
+  final ILoginLogoutAdapter loginLogoutAdapter;
 
   final IGlobalDataAdapter globalDataAdapter;
 
@@ -45,7 +45,7 @@ class GlobalsManager extends _Core {
   final ui = _LoggedInUserUIComponents();
 
   GlobalsManager._({
-    required this.loggedInUserAdapter,
+    required this.loginLogoutAdapter,
     required this.globalDataAdapter,
   });
 
@@ -72,7 +72,7 @@ class GlobalsManager extends _Core {
   ///
   Future<void> __readExtraGlobalProps(MasterFlowItem? masterFlowItem) async {
     masterFlowItem?._addLineFlowItem(
-      codeId: "#GM300",
+      codeId: "#E0000",
       shortDesc:
           "Open <b>HiveBox</b> to read <b>Extra Global Props</b> from local.",
     );
@@ -83,7 +83,7 @@ class GlobalsManager extends _Core {
       String key = __getHiveExtraGlobalPropNamesKey();
       String extraGlobalPropNames = hiveBox.get(key) ?? "";
       masterFlowItem?._addLineFlowItem(
-        codeId: "#GM320",
+        codeId: "#E0100",
         shortDesc:
             " - @key: $key --> @extraGlobalPropNames: $extraGlobalPropNames.",
       );
@@ -94,7 +94,7 @@ class GlobalsManager extends _Core {
           .toList();
 
       masterFlowItem?._addLineFlowItem(
-        codeId: "#GM340",
+        codeId: "#E0200",
         shortDesc: " - @propNames: $propNames.",
       );
       //
@@ -102,15 +102,12 @@ class GlobalsManager extends _Core {
         ..clear()
         ..addAll(propNames);
     } catch (e, stackTrace) {
-      print("Error __readExtraGlobalProps: $e");
-      print(stackTrace);
-      //
       ErrorInfo errorInfo = ErrorInfo.fromError(
         error: e,
         stackTrace: stackTrace,
       );
       masterFlowItem?._addLineFlowItem(
-        codeId: "#GM360",
+        codeId: "#E0300",
         shortDesc: "Has an error.",
         errorInfo: errorInfo,
       );
@@ -121,13 +118,13 @@ class GlobalsManager extends _Core {
     //
     for (String propName in __registeredExtraPropNames) {
       masterFlowItem?._addLineFlowItem(
-        codeId: "#GM370",
+        codeId: "#E0400",
         shortDesc: "Reading prop '$propName' from HiveBox...",
       );
       dynamic value = await __readExtraGlobalProp(propName);
       __extraPropMap[propName] = value;
       masterFlowItem?._addLineFlowItem(
-        codeId: "#GM380",
+        codeId: "#E0500",
         shortDesc: "Read: @key: $propName --> @value: $value",
       );
     }
@@ -228,25 +225,19 @@ class GlobalsManager extends _Core {
     }
     ILoggedInUser? loggedInUser;
     try {
-      if (loggedInUserJson == null) {
-        masterFlowItem?._addLineFlowItem(
-          codeId: "#GM080",
-          shortDesc: "Call ${_debugObjHtml(loggedInUserAdapter)}.fromJson() "
-              "to convert above JSON to ${getTypeNameWithoutGenerics(ILoggedInUser)} object.",
-        );
-        return;
-      }
-      loggedInUser = loggedInUserAdapter.fromJson(loggedInUserJson);
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#GM080",
+        shortDesc: "Call ${_debugObjHtml(loginLogoutAdapter)}.fromJson() "
+            "to convert above JSON to ${getTypeNameWithoutGenerics(ILoggedInUser)} object.",
+        lineFlowType: LineFlowType.calling,
+        tipDocument: TipDocument.loginLogoutAdapter,
+      );
+      loggedInUser = loginLogoutAdapter.fromJson(loggedInUserJson);
       masterFlowItem?._addLineFlowItem(
         codeId: "#GM100",
         shortDesc: "Got @loggedInUser: ${_debugObjHtml(loggedInUser)}.",
       );
     } catch (e, stackTrace) {
-      print("****************************************************************");
-      print("Error ${getClassName(loggedInUserAdapter)}.fromJson(): $e");
-      print("****************************************************************");
-      print(stackTrace);
-      //
       ErrorInfo errorInfo = ErrorInfo.fromError(
         error: e,
         stackTrace: stackTrace,
@@ -254,7 +245,7 @@ class GlobalsManager extends _Core {
       masterFlowItem?._addLineFlowItem(
         codeId: "#GM120",
         shortDesc:
-            "The ${_debugObjHtml(loggedInUserAdapter)}.fromJson() method was called with an error. "
+            "The ${_debugObjHtml(loginLogoutAdapter)}.fromJson() method was called with an error. "
             "You need to log in again via the login page.",
         errorInfo: errorInfo,
       );
@@ -265,30 +256,52 @@ class GlobalsManager extends _Core {
       masterFlowItem?._addLineFlowItem(
         codeId: "#GM140",
         shortDesc:
-            "The ${_debugObjHtml(loggedInUserAdapter)}.fromJson() method returned null. "
+            "The ${_debugObjHtml(loginLogoutAdapter)}.fromJson() method returned null. "
             "You need to log in again via the login page.",
       );
       return;
     }
-    //
-    // SAME-AS: #0020
-    //
-    final ILoggedInUser? loggedInUserBACKUP = _loggedInUser;
     //
     // IMPORTANT: Set before calling globalData.
     // (Do not remove this line).
     //
     _loggedInUser = loggedInUser;
     //
+    // After load User from Local successfully.
+    //
+    try {
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#GM160",
+        shortDesc:
+            "Calling ${_debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() with parameters:"
+            "\n - @loggedInUser: ${_debugObjHtml(loggedInUser)}.",
+        lineFlowType: LineFlowType.calling,
+      );
+      loginLogoutAdapter.addThirdPartyLogicOnLogin(loggedInUser);
+    } catch (e, stackTrace) {
+      final errorInfo = ErrorInfo.fromError(error: e, stackTrace: stackTrace);
+      //
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#GM240",
+        shortDesc:
+            "The ${_debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() method was called with an error.",
+        errorInfo: errorInfo,
+      );
+      masterFlowItem?.printToConsole();
+      return;
+    }
+    //
+    // Load Global Data:
+    //
     IGlobalData? globalData;
     try {
       _loadGlobalDataCount++;
       masterFlowItem?._addLineFlowItem(
-        codeId: "#GM160",
+        codeId: "#GM360",
         shortDesc:
-            "Calling ${_debugObjHtml(loggedInUserAdapter)}.loadGlobalData() method "
-            "to load global data for @loggedInUser: ${_debugUserHtml(loggedInUser)}.\n"
-            "<i>This information has been stored locally when the user successfully logged in before.</i>",
+            "Calling ${_debugObjHtml(loginLogoutAdapter)}.loadGlobalData() method with parameters:"
+            "\n - @loggedInUser: ${_debugUserHtml(loggedInUser)}."
+            "\n  <i>This information has been stored locally when the user successfully logged in before.</i>",
         lineFlowType: LineFlowType.calling,
       );
       // Load Global Data:
@@ -296,39 +309,34 @@ class GlobalsManager extends _Core {
         loggedInUser: loggedInUser,
       );
     } catch (e, stackTrace) {
-      // Restore!!
-      _loggedInUser = loggedInUserBACKUP;
-      //
-      print("****************************************************************");
-      print("Error ${getClassName(globalDataAdapter)}.loadGlobalData(): $e");
-      print("****************************************************************");
-      print(stackTrace);
-      //
       ErrorInfo errorInfo = ErrorInfo.fromError(
         error: e,
         stackTrace: stackTrace,
       );
       masterFlowItem?._addLineFlowItem(
-        codeId: "#GM200",
+        codeId: "#GM420",
         shortDesc:
-            "The ${_debugObjHtml(loggedInUserAdapter)}.loadGlobalData() method was called with an error.",
+            "The ${_debugObjHtml(loginLogoutAdapter)}.loadGlobalData() method was called with an error.",
         errorInfo: errorInfo,
       );
+      masterFlowItem?.printToConsole();
       return;
     }
     if (globalData == null) {
       masterFlowItem?._addLineFlowItem(
-        codeId: "#GM220",
+        codeId: "#GM520",
         shortDesc:
-            "The ${_debugObjHtml(loggedInUserAdapter)}.loadGlobalData() method returned null. <i>Requires not null.</i>",
+            "The ${_debugObjHtml(loginLogoutAdapter)}.loadGlobalData() method returned null. "
+            "\n <i>Requires not null.</i>",
       );
+      masterFlowItem?.printToConsole();
       // This will open login screen.
       return;
     }
     _globalData = globalData;
     //
     masterFlowItem?._addLineFlowItem(
-      codeId: "#GM240",
+      codeId: "#GM640",
       shortDesc:
           "Reading <b>Extra Global Props</b> from Local. For example: favorite locale and theme.\n"
           "<i>This information is stored locally when the user selects a preferred theme or locale.</i>",
@@ -351,9 +359,10 @@ class GlobalsManager extends _Core {
   }
 
   ///
-  /// This method is called when the user logs in successfully.
+  /// IMPORTANT: This method never throw an error!
+  /// Store LoggedInUser data to Local.
   ///
-  Future<bool> _setOrUpdateLoggedInUser({
+  Future<bool> _setOrUpdateLoggedInUserSafely({
     required MasterFlowItem? masterFlowItem,
     required ILoggedInUser loggedInUser,
     required bool requiresTheSameUser,
@@ -361,8 +370,8 @@ class GlobalsManager extends _Core {
     if (requiresTheSameUser &&
         _loggedInUser != null &&
         _loggedInUser!.userName != loggedInUser.userName) {
-      final errorMessage = "The new and old user must have the same 'userName'"
-          " or you must log out before calling this method.";
+      final errorMessage = "The new and old user must have the same 'userName' "
+          "or you must log out before calling this method.";
       final List<String>? errorDetails = null;
       //
       showErrorSnackBar(
@@ -381,71 +390,21 @@ class GlobalsManager extends _Core {
       );
       return false;
     }
-    //
-    // SAME-AS: #0020
-    //
-    final ILoggedInUser? loggedInUserBACKUP = _loggedInUser;
-    //
-    // IMPORTANT: Set before calling globalData.
-    // (Do not remove this line).
-    //
-    _loggedInUser = loggedInUser;
-    //
-    try {
-      // Load GlobalData:
-      masterFlowItem?._addLineFlowItem(
-        codeId: "#22040",
-        shortDesc:
-            "Calling ${_debugObjHtml(globalDataAdapter)}.loadGlobalData() to load global data for @loggedInUser:"
-            "\n - @loggedInUser: ${_debugObjHtml(loggedInUser)}."
-            "\n<i>You can access global data via </i><b>FlutterArtist.globalsManager.globalData</b>.",
-        lineFlowType: LineFlowType.calling,
-      );
-      _loadGlobalDataCount++;
-      IGlobalData globalData = await globalDataAdapter.loadGlobalData(
-        loggedInUser: loggedInUser,
-      );
-      _globalData = globalData;
-      masterFlowItem?._addLineFlowItem(
-        codeId: "#22080",
-        shortDesc: "Got @globalData: ${_debugObjHtml(globalData)}",
-        lineFlowType: LineFlowType.debug,
-      );
-    } catch (e, stackTrace) {
-      // Restore:
-      _loggedInUser = loggedInUserBACKUP;
-      //
-      ErrorInfo errorInfo = ErrorInfo.fromError(
-        error: e,
-        stackTrace: stackTrace,
-      );
-      showErrorSnackBar(
-        message: errorInfo.errorMessage,
-        errorDetails: errorInfo.errorDetails,
-      );
-      masterFlowItem?._addLineFlowItem(
-        codeId: "#22100",
-        shortDesc:
-            "The ${_debugObjHtml(globalDataAdapter)}.loadGlobalData() method called with an error!",
-        errorInfo: errorInfo,
-      );
-      return false;
-    }
-    //
     _loggedInUser = loggedInUser;
     // Store on local device:
     Box<String> hiveBox = await HiveUtils.openHiveBoxLoggedInUser();
     try {
       masterFlowItem?._addLineFlowItem(
-        codeId: "#22120",
-        shortDesc:
-            "Calling ${_debugObjHtml(loggedInUserAdapter)}.toJson()... to convert ${_debugObjHtml(loggedInUser)} to JSON String.",
+        codeId: "#22420",
+        shortDesc: "Calling ${_debugObjHtml(loginLogoutAdapter)}.toJson()... "
+            "to convert ${_debugObjHtml(loggedInUser)} to JSON String.",
         lineFlowType: LineFlowType.calling,
+        tipDocument: TipDocument.loginLogoutAdapter,
       );
-      String json = loggedInUserAdapter.toJson(loggedInUser);
+      String json = loginLogoutAdapter.toJson(loggedInUser);
       masterFlowItem?._addLineFlowItem(
-        codeId: "#22140",
-        shortDesc: "Storing the above JSON String to local.",
+        codeId: "#22440",
+        shortDesc: "Storing the above JSON String to Local.",
         lineFlowType: LineFlowType.info,
       );
       await hiveBox.put(__hiveKeyLoggedInUser, json);
@@ -465,12 +424,61 @@ class GlobalsManager extends _Core {
       );
       // This is warning.
       masterFlowItem?._addLineFlowItem(
-        codeId: "#22180",
+        codeId: "#22480",
         shortDesc: warningHtmlMessage,
         errorInfo: errorInfo,
       );
       return true;
     }
+    return true;
+  }
+
+  ///
+  /// IMPORTANT: This method never throw an error!
+  ///
+  Future<bool> _loadGlobalDataSafely({
+    MasterFlowItem? masterFlowItem,
+    required ILoggedInUser loggedInUser,
+  }) async {
+    try {
+      // Load GlobalData:
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#34240",
+        shortDesc:
+            "Calling ${_debugObjHtml(globalDataAdapter)}.loadGlobalData() to load global data for @loggedInUser:"
+            "\n - @loggedInUser: ${_debugObjHtml(loggedInUser)}."
+            "\n  You can access global data via <b>FlutterArtist.globalsManager.globalData</b>.",
+        lineFlowType: LineFlowType.calling,
+        tipDocument: TipDocument.globalData,
+      );
+      _loadGlobalDataCount++;
+      IGlobalData globalData = await globalDataAdapter.loadGlobalData(
+        loggedInUser: loggedInUser,
+      );
+      _globalData = globalData;
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#34280",
+        shortDesc: "Got @globalData: ${_debugObjHtml(globalData)}",
+        lineFlowType: LineFlowType.debug,
+      );
+    } catch (e, stackTrace) {
+      ErrorInfo errorInfo = ErrorInfo.fromError(
+        error: e,
+        stackTrace: stackTrace,
+      );
+      showErrorSnackBar(
+        message: errorInfo.errorMessage,
+        errorDetails: errorInfo.errorDetails,
+      );
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#34300",
+        shortDesc:
+            "The ${_debugObjHtml(globalDataAdapter)}.loadGlobalData() method called with an error!",
+        errorInfo: errorInfo,
+      );
+      return false;
+    }
+    //
     try {
       ui.updateAllUIComponents();
     } catch (e, stackTrace) {

@@ -15,7 +15,7 @@ String _debugUserHtml(ILoggedInUser? user) {
 
 String _debugObjHtml(Object? obj) {
   if (obj == null) {
-    return "null";
+    return "<b>null</b>";
   }
   if (obj is Identifiable) {
     return "<b>${getClassNameWithoutGenerics(obj)}(${obj.id})</b>";

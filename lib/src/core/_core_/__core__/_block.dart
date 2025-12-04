@@ -1421,7 +1421,7 @@ abstract class Block<
       codeId: "#28000",
       shortDesc:
           "${_debugObjHtml(this)} -> Begin ${TaskType.blockSetItemAsCurrent.asDebugTaskUnit()}."
-          "\n - @currentItemSelectionType: $currentItemSelectionType."
+          "\n - @currentItemSelectionType: <b>$currentItemSelectionType</b>."
           "\n - @newQueriedList: ${_debugObjHtml(newQueriedList)} <b>(${newQueriedList.length} items)</b>."
           "\n - @candidateItem: ${_debugObjHtml(candidateItem)}.",
       lineFlowType: LineFlowType.debug,

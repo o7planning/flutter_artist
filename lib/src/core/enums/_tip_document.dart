@@ -2,7 +2,7 @@ enum TipDocument {
   config,
   storageStructure,
   flutterArtistAdapter,
-  loggedInUserAdapter,
+  loginLogoutAdapter,
   activity,
   shelf,
   autoStocker,
@@ -31,8 +31,8 @@ enum TipDocument {
         return "FlutterArtist StorageStructure";
       case TipDocument.flutterArtistAdapter:
         return "FlutterArtistAdapter";
-      case TipDocument.loggedInUserAdapter:
-        return "LoggedInUserAdapter";
+      case TipDocument.loginLogoutAdapter:
+        return "ILoginLogoutAdapter";
       case TipDocument.activity:
         return "FlutterArtist Activities";
       case TipDocument.shelf:
@@ -58,8 +58,8 @@ enum TipDocument {
         return "FlutterArtist StorageStructure";
       case TipDocument.flutterArtistAdapter:
         return "FlutterArtistAdapter";
-      case TipDocument.loggedInUserAdapter:
-        return "LoggedInUserAdapter";
+      case TipDocument.loginLogoutAdapter:
+        return "ILoginLogoutAdapter";
       case TipDocument.activity:
         return "FlutterArtist Activities";
       case TipDocument.shelf:
@@ -94,7 +94,7 @@ enum TipDocument {
           "https://o7planning.org/11111/config1",
           "https://o7planning.org/11112/config2",
         ];
-      case TipDocument.loggedInUserAdapter:
+      case TipDocument.loginLogoutAdapter:
         return [
           "https://o7planning.org/11111/config1",
           "https://o7planning.org/11112/config2",
