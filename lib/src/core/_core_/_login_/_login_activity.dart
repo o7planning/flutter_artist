@@ -36,7 +36,13 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
     }
     USER? loggedInUser = result.data;
     if (loggedInUser == null) {
-      final message = "No data from ${getClassName(this)}.callApiLogin()";
+      final message =
+          "No data from ${getClassNameWithoutGenerics(this)}.callApiLogin().";
+      _masterFlowItem?._addLineFlowItem(
+        codeId: "#20060",
+        shortDesc:
+            "Got value >> @loggedInUser: ${_debugObjHtml(loggedInUser)}.\n$message",
+      );
       //
       showErrorSnackBar(
         message: message,
@@ -48,17 +54,37 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
       );
       return;
     }
+    String? tokenPrefix = loggedInUser.accessToken;
+    if (tokenPrefix != null) {
+      tokenPrefix =
+          tokenPrefix.length > 2 ? tokenPrefix.substring(0, 2) : tokenPrefix;
+      tokenPrefix = "$tokenPrefix...";
+    }
+    _masterFlowItem?._addLineFlowItem(
+      codeId: "#20100",
+      shortDesc: "Got LoggedInUser: ${_debugObjHtml(loggedInUser)}."
+          "\n - @accessToken: <b>$tokenPrefix</b>.",
+      lineFlowType: LineFlowType.debug,
+    );
     try {
       _masterFlowItem?._addLineFlowItem(
         codeId: "#20200",
         shortDesc:
-            "Calling <b>FlutterArtist._setOrUpdateLoggedInUser()</b> with @loggedInUser: ${_debugObjHtml(loggedInUser)}",
+            "Calling <b>FlutterArtist._setOrUpdateLoggedInUser()</b> with parameters:"
+            "\n - @loggedInUser: ${_debugObjHtml(loggedInUser)}.",
+        lineFlowType: LineFlowType.calling,
+        isLibCall: true,
       );
-      await FlutterArtist._setOrUpdateLoggedInUser(
+      // This method never throw an error!
+      bool success = await FlutterArtist._setOrUpdateLoggedInUser(
         masterFlowItem: _masterFlowItem,
         loggedInUser: loggedInUser,
         requiresTheSameUser: false,
       );
+      if (!success) {
+        _masterFlowItem?.printToConsole();
+        return;
+      }
     } catch (e, stackTrace) {
       ErrorInfo errorInfo = _handleError(
         shelf: null,
@@ -73,6 +99,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
             "The <b>FlutterArtist._setOrUpdateLoggedInUser()</b> method was called with and error.",
         errorInfo: errorInfo,
       );
+      _masterFlowItem?.printToConsole();
       return;
     }
     _masterFlowItem?._addLineFlowItem(

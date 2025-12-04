@@ -7,6 +7,6 @@ class _LazyBlock {
   _LazyBlock({required this.block, required this.queryHint});
 
   String toDebugString() {
-    return "${_debugObjHtml(block)}, queryHint: $queryHint";
+    return "(${_debugObjHtml(block)}, queryHint: $queryHint)";
   }
 }

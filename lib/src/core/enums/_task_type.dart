@@ -38,7 +38,7 @@ enum TaskType {
     if (forName == null) {
       return "<b>$name</b> task unit";
     } else {
-      return "<b>$name</b>($forName) task unit";
+      return "<b>$name($forName)</b> task unit";
     }
   }
 }

@@ -777,6 +777,7 @@ abstract class Block<
     masterFlowItem?._addLineFlowItem(
       codeId: "#03020",
       shortDesc: "<i>@hasBlockRepresentative: $hasBlockRepresentative</i>.",
+      lineFlowType: LineFlowType.debug,
     );
     //
     QryHint queryHint = thisXBlock.queryHint;
@@ -789,6 +790,7 @@ abstract class Block<
     masterFlowItem?._addLineFlowItem(
       codeId: "#03040",
       shortDesc: "<i>@queryHint: $queryHint</i>.",
+      lineFlowType: LineFlowType.debug,
     );
     //
     thisXBlock._printParameters(hasBlockRepresentative: hasBlockRepresentative);
@@ -1169,6 +1171,7 @@ abstract class Block<
     masterFlowItem?._addLineFlowItem(
       codeId: "#03520",
       shortDesc: "@realItemListMode: $realItemListMode.",
+      lineFlowType: LineFlowType.debug,
     );
     //
     //
@@ -1177,7 +1180,10 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#03540",
         shortDesc:
-            "Update queried data to block. New item count: ${pageData?.items.length ?? 0}",
+            "Calling <b>__blockData._updateFrom()</b> to update queried data to block.\n"
+            "New item count: ${pageData?.items.length ?? 0}",
+        lineFlowType: LineFlowType.calling,
+        isLibCall: true,
       );
       //
       // Update queried items to the List:
@@ -1217,6 +1223,7 @@ abstract class Block<
     masterFlowItem?._addLineFlowItem(
       codeId: "#03580",
       shortDesc: "@currentItemInList: $currentItemInList.",
+      lineFlowType: LineFlowType.debug,
     );
     //
     if (!currentItemInList) {
@@ -1298,6 +1305,7 @@ abstract class Block<
     masterFlowItem?._addLineFlowItem(
       codeId: "#03700",
       shortDesc: "@afterQueryAction: $afterQueryAction.",
+      lineFlowType: LineFlowType.debug,
     );
     //
     // Begin AfterQueryAction
@@ -1367,6 +1375,7 @@ abstract class Block<
       codeId: "#03780",
       shortDesc:
           "Calculated: @currentItemSelectionType = $currentItemSelectionType.",
+      lineFlowType: LineFlowType.debug,
     );
     //
     final taskUnit = _BlockSelectAsCurrentTaskUnit<ID, ITEM>(
@@ -1411,8 +1420,11 @@ abstract class Block<
     masterFlowItem?._addLineFlowItem(
       codeId: "#28000",
       shortDesc:
-          "${_debugObjHtml(this)} -> Begin ${TaskType.blockSetItemAsCurrent.asDebugTaskUnit()}. "
-          "Candidate ITEM given by parameter: ${_debugObjHtml(candidateItem)}",
+          "${_debugObjHtml(this)} -> Begin ${TaskType.blockSetItemAsCurrent.asDebugTaskUnit()}."
+          "\n - @currentItemSelectionType: $currentItemSelectionType."
+          "\n - @newQueriedList: ${_debugObjHtml(newQueriedList)} <b>(${newQueriedList.length} items)</b>."
+          "\n - @candidateItem: ${_debugObjHtml(candidateItem)}.",
+      lineFlowType: LineFlowType.debug,
     );
     //
     if (formModel != null) {
@@ -1567,8 +1579,10 @@ abstract class Block<
         //
         masterFlowItem?._addLineFlowItem(
           codeId: "#28300",
-          shortDesc: "@currentItemSelectionType: $currentItemSelectionType. "
-              "${ITEM == ITEM_DETAIL ? 'ITEM = ITEM_DETAIL' : 'ITEM != ITEM_DETAIL'}",
+          shortDesc: "State:"
+              "\n - ITEM == ITEM_DETAIL?: <b>${ITEM == ITEM_DETAIL}</b>."
+              "\n - @currentItemSelectionType: <b>$currentItemSelectionType</b>.",
+          lineFlowType: LineFlowType.debug,
         );
         //
         if (hasItemRep ||
@@ -1818,8 +1832,9 @@ abstract class Block<
               shortDesc: "Calling $methodName() with parameters:\n"
                   " - @id: $itemId.\n"
                   " - @oldItem: ${_debugObjHtml(oldItemDetail)}.\n"
-                  "The <b>@oldItem</b> parameter will be <i>non-null</i> if <b>ITEM = ITEM_DETAIL</b>.",
+                  "The <b>@oldItem</b> parameter will be <b>non-null</b> if <b>ITEM = ITEM_DETAIL</b>.",
               lineFlowType: LineFlowType.calling,
+              tipDocument: TipDocument.autoStocker,
             );
             //
             __callApiLoadItemDetailByIdCount++;
@@ -1989,8 +2004,9 @@ abstract class Block<
         masterFlowItem?._addLineFlowItem(
           codeId: "#29400",
           shortDesc:
-              "Call $debugMethodName method to convert ITEM_DETAIL to ITEM.\n"
+              "Calling $debugMethodName method to convert ITEM_DETAIL to ITEM.\n"
               " ${_debugObjHtml(refreshedCurrentItemDetail)} --> ${_debugItemTypeHtml()}.",
+          lineFlowType: LineFlowType.calling,
         );
         //
         candidateCurrItem = this.__convertItemDetailToItem(
@@ -2025,8 +2041,10 @@ abstract class Block<
       if (candidateCurrItem != null) {
         masterFlowItem?._addLineFlowItem(
           codeId: "#29480",
-          shortDesc:
-              "Insert or replace ${_debugObjHtml(candidateCurrItem)} into the list.",
+          shortDesc: "Calling <b>__blockData._insertOrReplaceItem()</b> method "
+              "to insert or replace ${_debugObjHtml(candidateCurrItem)} into the list.",
+          lineFlowType: LineFlowType.calling,
+          isLibCall: true,
         );
         __blockData._insertOrReplaceItem(item: candidateCurrItem);
       }
@@ -2067,7 +2085,7 @@ abstract class Block<
         );
         masterFlowItem?._addLineFlowItem(
           codeId: "#29600",
-          shortDesc: "@forceReloadForm: $forceReloadForm --> "
+          shortDesc: "@forceReloadForm: $forceReloadForm.\n"
               "Create ${taskUnit.asDebugTaskUnit()} and add to Queue. "
               "This task unit will load data for ${_debugObjHtml(thisXBlock.xFormModel!.formModel)}.",
           lineFlowType: LineFlowType.addTaskUnit,

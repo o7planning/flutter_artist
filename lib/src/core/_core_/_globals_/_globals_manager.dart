@@ -270,9 +270,13 @@ class GlobalsManager extends _Core {
       );
       return;
     }
+    //
+    // SAME-AS: #0020
+    //
     final ILoggedInUser? loggedInUserBACKUP = _loggedInUser;
     //
-    // IMPORTANT: Set before globalData.
+    // IMPORTANT: Set before calling globalData.
+    // (Do not remove this line).
     //
     _loggedInUser = loggedInUser;
     //
@@ -292,6 +296,9 @@ class GlobalsManager extends _Core {
         loggedInUser: loggedInUser,
       );
     } catch (e, stackTrace) {
+      // Restore!!
+      _loggedInUser = loggedInUserBACKUP;
+      //
       print("****************************************************************");
       print("Error ${getClassName(globalDataAdapter)}.loadGlobalData(): $e");
       print("****************************************************************");
@@ -315,8 +322,6 @@ class GlobalsManager extends _Core {
         shortDesc:
             "The ${_debugObjHtml(loggedInUserAdapter)}.loadGlobalData() method returned null. <i>Requires not null.</i>",
       );
-      // Restore!!
-      _loggedInUser = loggedInUserBACKUP;
       // This will open login screen.
       return;
     }
@@ -348,7 +353,7 @@ class GlobalsManager extends _Core {
   ///
   /// This method is called when the user logs in successfully.
   ///
-  Future<void> _setOrUpdateLoggedInUser({
+  Future<bool> _setOrUpdateLoggedInUser({
     required MasterFlowItem? masterFlowItem,
     required ILoggedInUser loggedInUser,
     required bool requiresTheSameUser,
@@ -356,29 +361,77 @@ class GlobalsManager extends _Core {
     if (requiresTheSameUser &&
         _loggedInUser != null &&
         _loggedInUser!.userName != loggedInUser.userName) {
-      String message = "The new and old user must have the same 'userName'"
+      final errorMessage = "The new and old user must have the same 'userName'"
           " or you must log out before calling this method.";
-      throw AppError(errorMessage: message);
+      final List<String>? errorDetails = null;
+      //
+      showErrorSnackBar(
+        message: errorMessage,
+        errorDetails: errorDetails,
+      );
+      //
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#22020",
+        shortDesc: errorMessage,
+        errorInfo: ErrorInfo(
+          errorMessage: errorMessage,
+          errorDetails: errorDetails,
+          stackTrace: null,
+        ),
+      );
+      return false;
     }
-    if (_loggedInUser == null) {
-      _loadGlobalDataCount++;
+    //
+    // SAME-AS: #0020
+    //
+    final ILoggedInUser? loggedInUserBACKUP = _loggedInUser;
+    //
+    // IMPORTANT: Set before calling globalData.
+    // (Do not remove this line).
+    //
+    _loggedInUser = loggedInUser;
+    //
+    try {
       // Load GlobalData:
       masterFlowItem?._addLineFlowItem(
         codeId: "#22040",
         shortDesc:
-            "Calling ${_debugObjHtml(globalDataAdapter)}.loadGlobalData() to load global data for @loggedInUser: ${_debugObjHtml(loggedInUser)}. "
-            "<i>You can access global data via </i><b>FlutterArtist.globalsManager.globalData</b>",
+            "Calling ${_debugObjHtml(globalDataAdapter)}.loadGlobalData() to load global data for @loggedInUser:"
+            "\n - @loggedInUser: ${_debugObjHtml(loggedInUser)}."
+            "\n<i>You can access global data via </i><b>FlutterArtist.globalsManager.globalData</b>.",
+        lineFlowType: LineFlowType.calling,
       );
+      _loadGlobalDataCount++;
       IGlobalData globalData = await globalDataAdapter.loadGlobalData(
         loggedInUser: loggedInUser,
       );
       _globalData = globalData;
-
       masterFlowItem?._addLineFlowItem(
         codeId: "#22080",
         shortDesc: "Got @globalData: ${_debugObjHtml(globalData)}",
+        lineFlowType: LineFlowType.debug,
       );
+    } catch (e, stackTrace) {
+      // Restore:
+      _loggedInUser = loggedInUserBACKUP;
+      //
+      ErrorInfo errorInfo = ErrorInfo.fromError(
+        error: e,
+        stackTrace: stackTrace,
+      );
+      showErrorSnackBar(
+        message: errorInfo.errorMessage,
+        errorDetails: errorInfo.errorDetails,
+      );
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#22100",
+        shortDesc:
+            "The ${_debugObjHtml(globalDataAdapter)}.loadGlobalData() method called with an error!",
+        errorInfo: errorInfo,
+      );
+      return false;
     }
+    //
     _loggedInUser = loggedInUser;
     // Store on local device:
     Box<String> hiveBox = await HiveUtils.openHiveBoxLoggedInUser();
@@ -387,26 +440,43 @@ class GlobalsManager extends _Core {
         codeId: "#22120",
         shortDesc:
             "Calling ${_debugObjHtml(loggedInUserAdapter)}.toJson()... to convert ${_debugObjHtml(loggedInUser)} to JSON String.",
+        lineFlowType: LineFlowType.calling,
       );
       String json = loggedInUserAdapter.toJson(loggedInUser);
       masterFlowItem?._addLineFlowItem(
         codeId: "#22140",
         shortDesc: "Storing the above JSON String to local.",
+        lineFlowType: LineFlowType.info,
       );
       await hiveBox.put(__hiveKeyLoggedInUser, json);
       await hiveBox.close();
     } catch (e, stackTrace) {
-      print("\n\n******** Error setLoggedInUser: $e ************");
-      print(stackTrace);
+      final warningHtmlMessage =
+          "Warning: Unable to store JSON String to Local..\n"
+          "<i>This means that the login information cannot be remembered.</i>";
+      final appWarning = _createAppWarning(
+          warningHtmlMessage.replaceAll("<i>", "").replaceAll("</i>", ""));
       //
+      print(appWarning);
+      //
+      final errorInfo = ErrorInfo.fromError(
+        error: e,
+        stackTrace: stackTrace,
+      );
+      // This is warning.
       masterFlowItem?._addLineFlowItem(
         codeId: "#22180",
-        shortDesc:
-            "Error unable to store JSON String to local.. <i>This means that the login information cannot be remembered.</i>",
+        shortDesc: warningHtmlMessage,
+        errorInfo: errorInfo,
       );
-      return;
+      return true;
     }
-    ui.updateAllUIComponents();
+    try {
+      ui.updateAllUIComponents();
+    } catch (e, stackTrace) {
+      print(stackTrace);
+    }
+    return true;
   }
 
   Future<void> _logout() async {

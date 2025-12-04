@@ -6,3 +6,11 @@ String _createFatalAppError(String message) {
       "\n\n  *** You may need to restart the application after editing the code. ***"
       "\n*********************************************************************************************\n";
 }
+
+String _createAppWarning(String message) {
+  return "\n*********************************************************************************************\n"
+      "---- WARNING ----\n"
+      "$message"
+      "\n\n  *** You may need to restart the application after editing the code. ***"
+      "\n*********************************************************************************************\n";
+}

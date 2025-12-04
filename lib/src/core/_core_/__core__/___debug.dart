@@ -19,6 +19,8 @@ String _debugObjHtml(Object? obj) {
   }
   if (obj is Identifiable) {
     return "<b>${getClassNameWithoutGenerics(obj)}(${obj.id})</b>";
+  } else if (obj is ILoggedInUser) {
+    return "<b>${getClassNameWithoutGenerics(obj)}(${obj.userName})</b>";
   } else if (obj is XShelf) {
     return "<b>${getClassNameWithoutGenerics(obj)}(${obj.shelf.name})</b>";
   } else if (obj is FormProp) {

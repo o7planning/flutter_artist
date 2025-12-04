@@ -391,6 +391,7 @@ abstract class FilterModel<
         shortDesc:
             "${_debugObjHtml(this)} --> Calling <b>_filterCriteriaStructure._initTemporaryForNewActivity()</b>..",
         lineFlowType: LineFlowType.calling,
+        isLibCall: true,
       );
     }
     _filterCriteriaStructure._initTemporaryForNewActivity(
@@ -410,6 +411,7 @@ abstract class FilterModel<
               "Calling ${_debugObjHtml(this)}._loadMultiOptCriterionDataCascade() method "
               "to load data for ${_debugObjHtml(multiOptCriterion)} and its descendants.",
           lineFlowType: LineFlowType.calling,
+          isLibCall: true,
         );
         //
         // Load OptCriterion Data and set default and selected.

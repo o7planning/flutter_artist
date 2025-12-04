@@ -66,6 +66,7 @@ class MasterFlowItem {
 
   LineFlowItem _addLineFlowItem({
     LineFlowType? lineFlowType,
+    bool isLibCall = false,
     required String codeId,
     required String shortDesc,
     List<String>? extraInfos,
@@ -76,6 +77,7 @@ class MasterFlowItem {
     var item = LineFlowItem(
       lineId: codeId,
       lineFlowType: lineFlowType ?? LineFlowType.line,
+      isLibCall: isLibCall,
       showIconAndLabel: showIconAndLabel,
       shortDesc: shortDesc,
       tipDocument: tipDocument,
@@ -152,5 +154,11 @@ class MasterFlowItem {
       return (ownerClassInstance as FormModel).block.shelf;
     }
     return null;
+  }
+
+  void printToConsole() {
+    for (LineFlowItem lineFlowItem in __lineFlowItems) {
+      lineFlowItem.printToConsole();
+    }
   }
 }

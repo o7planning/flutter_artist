@@ -568,6 +568,7 @@ abstract class FormModel<
         shortDesc:
             "Calling ${_debugObjHtml(this)}._processSaveActionRestResult().",
         lineFlowType: LineFlowType.calling,
+        isLibCall: true,
       );
       await block._processSaveActionRestResult(
         masterFlowItem: masterFlowItem,
@@ -736,7 +737,10 @@ abstract class FormModel<
       if (itemDetail != null) {
         masterFlowItem?._addLineFlowItem(
           codeId: "#06180",
-          shortDesc: "@itemDetail != null. Edit item in the form.",
+          shortDesc: "Editing item in the form."
+              "\n - @activityType: <b>$activityType</b>."
+              "\n - @itemDetail: ${_debugObjHtml(itemDetail)}.",
+          lineFlowType: LineFlowType.debug,
         );
         try {
           masterFlowItem?._addLineFlowItem(
@@ -804,7 +808,10 @@ abstract class FormModel<
       else {
         masterFlowItem?._addLineFlowItem(
           codeId: "#06500",
-          shortDesc: "@itemDetail = null. Create item in the form.",
+          shortDesc: "Creating item in the form."
+              "\n - @activityType: <b>$activityType</b>."
+              "\n - @itemDetail: ${_debugObjHtml(itemDetail)}.",
+          lineFlowType: LineFlowType.debug,
         );
         Map<String, dynamic> simplePropValueDefault = {};
         if (!_defaultSimpleValuesInitiated) {
@@ -955,7 +962,10 @@ abstract class FormModel<
     else if (activityType == FormActivityType.autoEnterFormFields) {
       masterFlowItem?._addLineFlowItem(
         codeId: "#06700",
-        shortDesc: "@activityType: $activityType.",
+        shortDesc: "Enter Form Fields."
+            "\n - @activityType: <b>$activityType</b>."
+            "\n - @itemDetail: ${_debugObjHtml(itemDetail)}.",
+        lineFlowType: LineFlowType.debug,
       );
       if (formInput != null) {
         try {
@@ -1033,9 +1043,10 @@ abstract class FormModel<
         masterFlowItem?._addLineFlowItem(
           codeId: "#06780",
           shortDesc:
-              "Call ${_debugObjHtml(this)}._loadMultiOptPropDataCascade() "
+              "Calling ${_debugObjHtml(this)}._loadMultiOptPropDataCascade() "
               "to load data for ${_debugObjHtml(multiOptProp)} and its descendants.",
-          lineFlowType: LineFlowType.info,
+          lineFlowType: LineFlowType.calling,
+          isLibCall: true,
         );
         //
         // Load OptProp Data and set default and selected.
@@ -1319,7 +1330,7 @@ abstract class FormModel<
           codeId: "#17400",
           shortDesc:
               "Calling ${_debugObjHtml(this)}.callApiLoadMultiOptPropXData() method with parameters:"
-              "\n - @multiOptPropName: $multiOptPropName.",
+              "\n - @multiOptPropName: <b>$multiOptPropName</b>.",
           lineFlowType: LineFlowType.calling,
         );
         // May throw AppError, ApiError or others.
@@ -1365,7 +1376,7 @@ abstract class FormModel<
                 " - @tempMultiOptPropXData: ${_debugObjHtml(tempMultiOptPropXData)}\n"
                 " - @currentItemDetail: ${_debugObjHtml(currentItemDetail)}\n"
                 " - @formInput: ${_debugObjHtml(formInput)}",
-            lineFlowType: LineFlowType.info,
+            lineFlowType: LineFlowType.debug,
           );
           // In itemFirstLoad & currentItemDetail == null.
           if (!_defaultMultiOptValuesInitiated) {
@@ -1409,7 +1420,7 @@ abstract class FormModel<
                 " - @tempMultiOptPropXData: ${_debugObjHtml(tempMultiOptPropXData)}\n"
                 " - @currentItemDetail: ${_debugObjHtml(currentItemDetail)}\n"
                 " - @formInput: ${_debugObjHtml(formInput)}",
-            lineFlowType: LineFlowType.info,
+            lineFlowType: LineFlowType.debug,
           );
           // May throw FormTempError.
           initialValueWrap = __getMultiOptPropValueFromItemDetail(
@@ -1437,7 +1448,7 @@ abstract class FormModel<
                 " - @activityType: <b>$activityType</b>\n"
                 " - @currentItemDetail: ${_debugObjHtml(currentItemDetail)}\n"
                 " - @formInput: ${_debugObjHtml(formInput)}",
-            lineFlowType: LineFlowType.info,
+            lineFlowType: LineFlowType.debug,
           );
           // May throw FormTempError.
           initialValueWrap = __getUpdatedValueForMultiOptProp(

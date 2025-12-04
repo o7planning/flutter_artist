@@ -4,15 +4,7 @@ abstract class Activity extends _Core {
   // TODO: Remove in next version!
   MasterFlowItem? _masterFlowItem;
 
-  // final String name;
-  // final ActivityConfig config;
-
   late final ui = _ActivityUIComponents(activity: this);
-
-  // Activity({
-  //   required this.name,
-  //   ActivityConfig config = const ActivityConfig(),
-  // }) : config = config.copy();
 
   Activity();
 

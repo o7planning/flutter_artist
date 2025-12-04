@@ -614,6 +614,7 @@ abstract class Shelf extends _Core {
       codeId: "#02060",
       shortDesc: "Found some lazy model-components.\n"
           "${lazyObjects.toDebugString()}",
+      lineFlowType: LineFlowType.debug,
     );
     try {
       masterFlowItem._addLineFlowItem(
@@ -625,6 +626,8 @@ abstract class Shelf extends _Core {
         codeId: "#02120",
         shortDesc:
             "Calling ${_debugObjHtml(xShelf)}._initQueryTaskUnits() to create Natural-Query task units...",
+        lineFlowType: LineFlowType.calling,
+        isLibCall: true,
       );
       //
       // TODO: Handle Error:
@@ -644,6 +647,7 @@ abstract class Shelf extends _Core {
             "Calling <b>FlutterArtist.executor._executeTaskUnitQueue()</b> "
             "to execute <b>RootQueueItem(s)</b> on the queue and its <b>Task Units</b>...",
         lineFlowType: LineFlowType.calling,
+        isLibCall: true,
       );
       await FlutterArtist.executor._executeTaskUnitQueue();
     } finally {

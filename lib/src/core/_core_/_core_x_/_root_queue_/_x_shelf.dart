@@ -351,6 +351,7 @@ abstract class XShelf extends XRootQueueItem {
     masterFlowItem?._addLineFlowItem(
       codeId: "#01000",
       shortDesc: toDebugXShelfState(),
+      lineFlowType: LineFlowType.debug,
     );
     //
     final bool toMainQueue = false;

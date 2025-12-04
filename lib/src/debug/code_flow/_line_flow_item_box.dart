@@ -33,7 +33,8 @@ class LineFlowItemBox extends StatelessWidget {
                 icon: Icon(
                   lineFlowItem.lineFlowType.getIconData(),
                   color: lineFlowItem.showIconAndLabel
-                      ? lineFlowItem.lineFlowType.getIconColor()
+                      ? lineFlowItem.lineFlowType
+                          .getIconColor(lineFlowItem.isLibCall)
                       : Colors.transparent,
                   size: 16,
                 ),
