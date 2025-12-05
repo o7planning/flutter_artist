@@ -350,7 +350,7 @@ abstract class XShelf extends XRootQueueItem {
     //
     masterFlowItem?._addLineFlowItem(
       codeId: "#01000",
-      shortDesc: toDebugXShelfState(),
+      shortDesc: toDebugXShelfStateAsHtml(),
       lineFlowType: LineFlowType.debug,
     );
     //
@@ -457,14 +457,16 @@ abstract class XShelf extends XRootQueueItem {
   // ***************************************************************************
   // ***************************************************************************
 
-  String toDebugXShelfState() {
+  String toDebugXShelfStateAsHtml() {
     String s = "${_debugObjHtml(this)}\n"
-        " --- STATE BEFORE CREATING TASK UNITS ---";
+        " --- STATE BEFORE CREATING TASK UNITS ---\n";
     for (String key in xBlockMap.keys) {
-      s += "\n  >> XShelf/Block: $key - ${xBlockMap[key]}.";
+      final XBlock xBlock = xBlockMap[key]!;
+      s += xBlock.toDebugHtmlString();
     }
     for (String key in xScalarMap.keys) {
-      s += "\n  >> XShelf/Scalar: $key - ${xScalarMap[key]}.";
+      final XScalar xScalar = xScalarMap[key]!;
+      s += xScalar.toDebugHtmlString();
     }
     return s;
   }

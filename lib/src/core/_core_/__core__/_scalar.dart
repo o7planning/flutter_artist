@@ -469,6 +469,11 @@ abstract class Scalar<
       masterFlowItem?._addLineFlowItem(
         codeId: "#12400",
         shortDesc: "Calling ${_debugObjHtml(this)}.callApiQuery()...",
+        parameters: {
+          "parentScalarValue": parent?.value,
+          "filterCriteria": filterCriteriaOfFilterModel,
+        },
+        lineFlowType: LineFlowType.calling,
       );
       ApiResult<VALUE> result = await callApiQuery(
         parentScalarValue: parent?.value,
@@ -775,7 +780,7 @@ abstract class Scalar<
   }) {
     __assertThisXScalar(thisXScalar);
     //
-    __scalarData._updateFrom(
+    __scalarData._updateData(
       filterCriteria: filterCriteria,
       dataState: dataState,
       valueId: valueId,

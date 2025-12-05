@@ -81,7 +81,7 @@ class _ScalarData<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _updateFrom({
+  void _updateData({
     required FILTER_CRITERIA? filterCriteria,
     required String? valueId,
     required VALUE? value,

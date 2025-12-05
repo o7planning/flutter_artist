@@ -97,10 +97,8 @@ class _SortUIComponents extends _UIComponents {
   }) {
     _sortWidgetStates.update(
       widgetState,
-          (xState) => xState.._setBuilding(isBuilding),
-      ifAbsent: () =>
-      XState()
-        .._setBuilding(isBuilding),
+      (xState) => xState.._setBuilding(isBuilding),
+      ifAbsent: () => XState().._setBuilding(isBuilding),
     );
   }
 
@@ -114,10 +112,8 @@ class _SortUIComponents extends _UIComponents {
     bool activeOLD = hasActiveUIComponent();
     _sortWidgetStates.update(
       widgetState,
-          (xState) => xState.._setShowing(isShowing),
-      ifAbsent: () =>
-      XState()
-        .._setShowing(isShowing),
+      (xState) => xState.._setShowing(isShowing),
+      ifAbsent: () => XState().._setShowing(isShowing),
     );
     bool activeCURRENT = hasActiveUIComponent();
 

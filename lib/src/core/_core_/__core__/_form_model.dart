@@ -530,6 +530,9 @@ abstract class FormModel<
       masterFlowItem?._addLineFlowItem(
         codeId: "#11400",
         shortDesc: "Calling ${_debugObjHtml(this)}.$calledMethodName()...",
+        parameters: {
+          "formMapData": formMapData,
+        },
         lineFlowType: LineFlowType.calling,
       );
       //
@@ -639,8 +642,7 @@ abstract class FormModel<
     //
     masterFlowItem?._addLineFlowItem(
       codeId: "#06000",
-      shortDesc:
-          "${_debugObjHtml(this)} @formActivityCount: $__formActivityCount.",
+      shortDesc: "${_debugObjHtml(this)} FormView Changed.",
     );
     //
     if (activityType == FormActivityType.itemFirstLoad) {
@@ -745,9 +747,14 @@ abstract class FormModel<
         try {
           masterFlowItem?._addLineFlowItem(
             codeId: "#06200",
+            lineFlowType: LineFlowType.calling,
             shortDesc:
                 "Calling ${_debugObjHtml(this)}.getSimplePropValuesFromItemDetail().",
-            lineFlowType: LineFlowType.calling,
+            parameters: {
+              "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
+              "itemDetail": itemDetail,
+              "formRelatedData": formRelatedData,
+            },
           );
           var simplePropValueMap = getSimplePropValuesFromItemDetail(
                 parentBlockCurrentItemId: block.parentBlockCurrentItemId,
@@ -825,6 +832,9 @@ abstract class FormModel<
               codeId: "#06540",
               shortDesc:
                   "Calling ${_debugObjHtml(this)}.specifyDefaultValuesForSimpleProps().",
+              parameters: {
+                "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
+              },
               lineFlowType: LineFlowType.calling,
             );
             // In case of activityType = itemFirstLoad.
@@ -894,6 +904,11 @@ abstract class FormModel<
               codeId: "#06620",
               shortDesc:
                   "Calling ${_debugObjHtml(this)}.getUpdatedValuesForSimpleProps().",
+              parameters: {
+                "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
+                "formInput": formInput,
+                "formRelatedData": formRelatedData,
+              },
               lineFlowType: LineFlowType.calling,
             );
             final Map<String, SimpleValueWrap?> updatedSimplePropValues =
@@ -972,15 +987,19 @@ abstract class FormModel<
           masterFlowItem?._addLineFlowItem(
             codeId: "#06720",
             shortDesc:
-                "Calling ${_debugObjHtml(this)}.getUpdatedValuesForSimpleProps() with parameters:"
-                "\n - @formInput: ${_debugObjHtml(formInput)}.",
+                "Calling ${_debugObjHtml(this)}.getUpdatedValuesForSimpleProps() with parameters:",
+            parameters: {
+              "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
+              "formInput": formInput,
+              "formRelatedData": formRelatedData,
+            },
             lineFlowType: LineFlowType.calling,
           );
           final Map<String, SimpleValueWrap?> updatedSimplePropValues =
               getUpdatedValuesForSimpleProps(
                     parentBlockCurrentItemId: block.parentBlockCurrentItemId,
                     formRelatedData: formRelatedData,
-                    formInput: formInput!,
+                    formInput: formInput,
                   ) ??
                   {};
           //
@@ -1045,6 +1064,15 @@ abstract class FormModel<
           shortDesc:
               "Calling ${_debugObjHtml(this)}._loadMultiOptPropDataCascade() "
               "to load data for ${_debugObjHtml(multiOptProp)} and its descendants.",
+          parameters: {
+            "formRelatedData": formRelatedData,
+            "formInput": formInput,
+            "parentMultiOptPropValue": null,
+            "parentValueIsInitialValue": true,
+            "multiOptProp": multiOptProp,
+            "formKeyInstantValues": formKeyInstantValues,
+            "activityType": activityType,
+          },
           lineFlowType: LineFlowType.calling,
           isLibCall: true,
         );
@@ -1249,7 +1277,8 @@ abstract class FormModel<
     masterFlowItem?._addLineFlowItem(
       codeId: "#17000",
       shortDesc:
-          "Loading Data for ${_debugObjHtml(multiOptProp)}, @selectionType: $selectionType!",
+          "Loading Data for ${_debugObjHtml(multiOptProp)} and its children..",
+      lineFlowType: LineFlowType.info,
     );
 
     // Get current OptProp data:
@@ -1329,8 +1358,15 @@ abstract class FormModel<
         masterFlowItem?._addLineFlowItem(
           codeId: "#17400",
           shortDesc:
-              "Calling ${_debugObjHtml(this)}.callApiLoadMultiOptPropXData() method with parameters:"
-              "\n - @multiOptPropName: <b>$multiOptPropName</b>.",
+              "Calling ${_debugObjHtml(this)}.callApiLoadMultiOptPropXData().",
+          parameters: {
+            "multiOptPropName": multiOptPropName,
+            "parentMultiOptPropValue": parentMultiOptPropValue,
+            "selectionType": selectionType,
+            "itemDetail": block.currentItemDetail,
+            "formInput": formInput,
+            "formRelatedData": formRelatedData,
+          },
           lineFlowType: LineFlowType.calling,
         );
         // May throw AppError, ApiError or others.
@@ -1414,12 +1450,7 @@ abstract class FormModel<
         else {
           masterFlowItem?._addLineFlowItem(
             codeId: "#17580",
-            shortDesc:
-                "(In _loadMultiOptPropDataCascade() method for ${_debugObjHtml(multiOptProp)}):\n"
-                " - @activityType: <b>$activityType</b>\n"
-                " - @tempMultiOptPropXData: ${_debugObjHtml(tempMultiOptPropXData)}\n"
-                " - @currentItemDetail: ${_debugObjHtml(currentItemDetail)}\n"
-                " - @formInput: ${_debugObjHtml(formInput)}",
+            shortDesc: " - ",
             lineFlowType: LineFlowType.debug,
           );
           // May throw FormTempError.
@@ -1654,6 +1685,12 @@ abstract class FormModel<
         codeId: "#33000",
         shortDesc:
             "Calling ${_debugObjHtml(this)}.specifyDefaultValueForMultiOptProp() for <b>'$multiOptPropName'</b>.",
+        parameters: {
+          "multiOptPropXData": multiOptPropXData,
+          "multiOptPropName": multiOptPropName,
+          "selectionType": selectionType,
+          "parentMultiOptPropValue": parentMultiOptPropValue,
+        },
         lineFlowType: LineFlowType.calling,
       );
       OptValueWrap? valueWrap = specifyDefaultValueForMultiOptProp(
@@ -1730,6 +1767,14 @@ abstract class FormModel<
         codeId: "#32000",
         shortDesc:
             "Calling ${_debugObjHtml(this)}.getMultiOptPropValueFromItemDetail() for <b>'$multiOptPropName'</b>.",
+        parameters: {
+          "multiOptPropName": multiOptPropName,
+          "parentMultiOptPropValue": parentMultiOptPropValue,
+          "selectionType": selectionType,
+          "multiOptPropXData": multiOptPropXData,
+          "itemDetail": itemDetail,
+          "formRelatedData": formRelatedData,
+        },
         lineFlowType: LineFlowType.calling,
       );
       OptValueWrap? valueWrap = getMultiOptPropValueFromItemDetail(
@@ -1777,8 +1822,17 @@ abstract class FormModel<
       masterFlowItem?._addLineFlowItem(
         codeId: "#18000",
         shortDesc:
-            "Calling ${_debugObjHtml(this)}.getUpdatedValueForMultiOptProp() for "
-            "@multiOptPropName: $multiOptPropName, @selectionType: $selectionType!",
+            "Calling ${_debugObjHtml(this)}.getUpdatedValueForMultiOptProp() for <b>'$multiOptPropName'</b>.",
+        parameters: {
+          "multiOptPropName": multiOptPropName,
+          "multiOptPropXData": multiOptPropXData,
+          "selectionType": selectionType,
+          "parentMultiOptPropValue": parentMultiOptPropValue,
+          "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
+          "formRelatedData": formRelatedData,
+          "formInput": formInput,
+        },
+        lineFlowType: LineFlowType.calling,
       );
       OptValueWrap? valueWrap = getUpdatedValueForMultiOptProp(
         multiOptPropName: multiOptPropName,

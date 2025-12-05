@@ -76,8 +76,11 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
     _masterFlowItem?._addLineFlowItem(
       codeId: "#20200",
       shortDesc:
-          "Calling <b>globalsManager._setOrUpdateLoggedInUserSafely()</b> with parameters:"
-          "\n - @loggedInUser: ${_debugObjHtml(loggedInUser)}.",
+          "Calling <b>globalsManager._setOrUpdateLoggedInUserSafely()</b> with parameters:",
+      parameters: {
+        "loggedInUser": loggedInUser,
+        "requiresTheSameUser": false,
+      },
       lineFlowType: LineFlowType.calling,
       isLibCall: true,
     );
@@ -104,8 +107,10 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
       _masterFlowItem?._addLineFlowItem(
         codeId: "#22060",
         shortDesc:
-            "Calling ${_debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() with parameters:"
-            "\n - @loggedInUser: ${_debugObjHtml(loggedInUser)}.",
+            "Calling ${_debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() with parameters:",
+        parameters: {
+          "loggedInUser": loggedInUser,
+        },
         lineFlowType: LineFlowType.calling,
         tipDocument: TipDocument.loginLogoutAdapter,
       );

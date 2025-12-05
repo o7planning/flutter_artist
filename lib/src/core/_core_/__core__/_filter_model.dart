@@ -371,13 +371,15 @@ abstract class FilterModel<
   }) async {
     __filterActivityCount++;
     //
-    if (this is! _DefaultFilterModel) {
-      masterFlowItem?._addLineFlowItem(
-        codeId: "#31000",
-        shortDesc:
-            "${_debugObjHtml(this)}._startNewFilterActivity()... @activityType: $activityType",
-      );
-    }
+    // if (this is! _DefaultFilterModel) {
+    //   masterFlowItem?._addLineFlowItem(
+    //     codeId: "#31000",
+    //     shortDesc:
+    //         "Calling ${_debugObjHtml(this)}._startNewFilterActivity() with parameters:",
+    //     lineFlowType: LineFlowType.calling,
+    //     isLibCall: true,
+    //   );
+    // }
     //
     if (activityType == FilterActivityType.newFilt) {
       __loadCount++;
@@ -389,7 +391,7 @@ abstract class FilterModel<
       masterFlowItem?._addLineFlowItem(
         codeId: "#31020",
         shortDesc:
-            "${_debugObjHtml(this)} --> Calling <b>_filterCriteriaStructure._initTemporaryForNewActivity()</b>..",
+            "Calling <b>_filterCriteriaStructure._initTemporaryForNewActivity()</b>..",
         lineFlowType: LineFlowType.calling,
         isLibCall: true,
       );
@@ -410,6 +412,13 @@ abstract class FilterModel<
           shortDesc:
               "Calling ${_debugObjHtml(this)}._loadMultiOptCriterionDataCascade() method "
               "to load data for ${_debugObjHtml(multiOptCriterion)} and its descendants.",
+          parameters: {
+            "activityType": activityType,
+            "filterInput": filterInput,
+            "parentMultiOptCriterionValue": null,
+            "multiOptCriterion": multiOptCriterion,
+            "formKeyInstantValues": formKeyInstantValues,
+          },
           lineFlowType: LineFlowType.calling,
           isLibCall: true,
         );
@@ -452,8 +461,10 @@ abstract class FilterModel<
           codeId: "#31140",
           shortDesc:
               "Calling ${_debugObjHtml(this)}.updatedSimpleCriterionValues() method "
-              "with @filterInput: ${_debugObjHtml(filterInput)} "
               "to get values from filterInput to update for simpleCriteria",
+          parameters: {
+            "filterInput": filterInput,
+          },
           lineFlowType: LineFlowType.calling,
         );
         final Map<String, SimpleValueWrap?> updatedSimpleCriterionValues =
@@ -507,7 +518,8 @@ abstract class FilterModel<
             masterFlowItem?._addLineFlowItem(
               codeId: "#31300",
               shortDesc:
-                  "Calling ${_debugObjHtml(this)}.specifyDefaultValuesForSimpleCriteria() method to get default values for simpleCriteria.",
+                  "Calling ${_debugObjHtml(this)}.specifyDefaultValuesForSimpleCriteria() method "
+                  "to get default values for <b>simple criteria</b>.",
               lineFlowType: LineFlowType.calling,
             );
           }
@@ -557,7 +569,11 @@ abstract class FilterModel<
           shortDesc:
               "Calling ${_debugObjHtml(this)}.toFilterCriteriaObject() method "
               "to convert criteria in type of Map to a Dart object.",
+          parameters: {
+            "dataMap": _filterCriteriaStructure._tempCriteriaValues,
+          },
           lineFlowType: LineFlowType.calling,
+          tipDocument: TipDocument.filterCriteria,
         );
       }
       // Convert Map Data to FilterCriteria Object.
@@ -569,7 +585,11 @@ abstract class FilterModel<
       if (this is! _DefaultFilterModel) {
         masterFlowItem?._addLineFlowItem(
           codeId: "#31460",
-          shortDesc: "Got ${_debugObjHtml(newCriteria)}.",
+          shortDesc:
+              "Got an instance of ${_debugObjHtml(newCriteria)} (Dart object).\n"
+              "This object will be passed to the <b>@filterCriteria</b> parameter "
+              "of the <b>Block.query()</b> or <b>Scalar.query</b> method.",
+          tipDocument: TipDocument.filterCriteria,
         );
       }
       //

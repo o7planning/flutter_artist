@@ -141,9 +141,11 @@ class _FlutterArtist extends _Core {
   }) async {
     masterFlowItem?._addLineFlowItem(
       codeId: "#21000",
-      shortDesc: "Calling <b>globalsManager._setOrUpdateLoggedInUser()</b>."
-          "\n - @loggedInUser: ${_debugObjHtml(loggedInUser)}."
-          "\n - @requiresTheSameUser: <b>$requiresTheSameUser</b>.",
+      shortDesc: "Calling <b>globalsManager._setOrUpdateLoggedInUser()</b>.",
+      parameters: {
+        "loggedInUser": loggedInUser,
+        "requiresTheSameUser": requiresTheSameUser,
+      },
       lineFlowType: LineFlowType.calling,
       isLibCall: true,
     );
@@ -191,12 +193,15 @@ class _FlutterArtist extends _Core {
     masterFlowItem._addLineFlowItem(
       codeId: "#S0000",
       shortDesc: "Begin FlutterArtist Config...\n"
-          "Note: You see this debug information because the <b>FlutterArtist.config()</b> method is called in <b>main.dart</b>."
-          "\n - @storageStructure: ${_debugObjHtml(storageStructure)}."
-          "\n - @flutterArtistAdapter: ${_debugObjHtml(flutterArtistAdapter)}."
-          "\n - @loginLogoutAdapter: ${_debugObjHtml(loginLogoutAdapter)}."
-          "\n - @globalDataAdapter: ${_debugObjHtml(globalDataAdapter)}."
-          "\n - @notificationAdapter: ${_debugObjHtml(notificationAdapter)}.",
+          "Note: You see this debug information because the <b>FlutterArtist.config()</b> method is called in <b>main.dart</b>.",
+      parameters: {
+        "storageStructure": storageStructure,
+        "flutterArtistAdapter": flutterArtistAdapter,
+        "loginLogoutAdapter": loginLogoutAdapter,
+        "globalDataAdapter": globalDataAdapter,
+        "notificationAdapter": notificationAdapter,
+        "notificationFetchPeriodInSeconds": notificationFetchPeriodInSeconds,
+      },
       lineFlowType: LineFlowType.debug,
       tipDocument: TipDocument.config,
     );
@@ -212,8 +217,10 @@ class _FlutterArtist extends _Core {
     //
     masterFlowItem._addLineFlowItem(
       codeId: "#S0200",
-      shortDesc: "Calling <b>storage._init()</b> with parameters:"
-          "\n - @storageStructure: ${_debugObjHtml(storageStructure)}.",
+      shortDesc: "Calling <b>storage._init()</b> with parameters:",
+      parameters: {
+        "storageStructure": storageStructure,
+      },
       lineFlowType: LineFlowType.calling,
       isLibCall: true,
       tipDocument: TipDocument.storageStructure,
@@ -236,10 +243,12 @@ class _FlutterArtist extends _Core {
     );
     masterFlowItem._addLineFlowItem(
       codeId: "#S0500",
-      shortDesc: "Calling <b>globalsManager._init()</b>...\n"
-          "<i>This method will read all the user data that was previously stored in Local.</i>",
+      shortDesc: "Calling <b>globalsManager._init()</b>...",
+      note:
+          "This method will read all the user data that was previously stored in <b>Local</b>.",
       lineFlowType: LineFlowType.calling,
       isLibCall: true,
+      tipDocument: TipDocument.globalData,
     );
     await globalsManager._init(masterFlowItem);
     //
@@ -252,7 +261,7 @@ class _FlutterArtist extends _Core {
     masterFlowItem._addLineFlowItem(
       codeId: "#S0540",
       shortDesc:
-          "Calling <b>localeManager._readStoredLocale()</b> to read saved locale from Local...",
+          "Calling <b>localeManager._readStoredLocale()</b> to read saved locale from <b>Local</b>...",
       lineFlowType: LineFlowType.calling,
       isLibCall: true,
     );
@@ -267,7 +276,10 @@ class _FlutterArtist extends _Core {
       masterFlowItem._addLineFlowItem(
         codeId: "#S0580",
         shortDesc:
-            "Calling <b>localeManager._updateLocale()</b> with parameter $locale.",
+            "Calling <b>localeManager._updateLocale()</b> with parameters:",
+        parameters: {
+          "locale": locale,
+        },
       );
       Future.delayed(Duration(seconds: 2), () async {
         await localeManager._updateLocale(

@@ -150,7 +150,7 @@ class _BlockData<
 
   // ***************************************************************************
 
-  Object? _currentParentItemId;
+  Object? _parentBlockCurrentItemId;
 
   FILTER_CRITERIA? _filterCriteria;
 
@@ -234,7 +234,7 @@ class _BlockData<
     required Object? newCurrentParentItemId,
     required FILTER_CRITERIA newFilterCriteria,
   }) {
-    if (newCurrentParentItemId != _currentParentItemId) {
+    if (newCurrentParentItemId != _parentBlockCurrentItemId) {
       return true;
     }
     if (newFilterCriteria != _filterCriteria) {
@@ -382,9 +382,9 @@ class _BlockData<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _updateFrom({
+  void _updateData({
     required ItemListMode forceItemListMode,
-    required Object? currentParentItemId,
+    required Object? parentBlockCurrentItemId,
     required FILTER_CRITERIA? filterCriteria,
     required Pageable? pageable,
     required PageData<ITEM>? pageData,
@@ -395,7 +395,7 @@ class _BlockData<
     bool cleared = false;
     // Check if filterCriteria changed.
     if (forceItemListMode == ItemListMode.replace ||
-        _currentParentItemId != currentParentItemId ||
+        _parentBlockCurrentItemId != parentBlockCurrentItemId ||
         _filterCriteria != filterCriteria) {
       _items.clear();
       cleared = true;
@@ -403,7 +403,7 @@ class _BlockData<
     //
     final PageData<ITEM> ap = pageData ?? DefaultPageData<ITEM>.empty();
     _pageable = pageable?.copy();
-    if (_currentParentItemId != currentParentItemId ||
+    if (_parentBlockCurrentItemId != parentBlockCurrentItemId ||
         _filterCriteria != filterCriteria) {
       _paginationInfo = PaginationInfo.copy(ap.paginationInfo);
     } else {
@@ -415,7 +415,7 @@ class _BlockData<
       }
     }
     //
-    _currentParentItemId = currentParentItemId;
+    _parentBlockCurrentItemId = parentBlockCurrentItemId;
     _lastQueryResult = pageData;
     _blockDataState = blockDataState;
     //

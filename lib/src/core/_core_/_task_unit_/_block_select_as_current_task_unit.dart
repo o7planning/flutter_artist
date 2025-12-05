@@ -7,7 +7,7 @@ part of '../core.dart';
 @_BlockSelectFirstItemAsCurrentAnnotation()
 @_BlockSelectPreviousItemAsCurrentAnnotation()
 class _BlockSelectAsCurrentTaskUnit<ID extends Object,
-ITEM extends Identifiable<ID>>
+        ITEM extends Identifiable<ID>>
     extends _ResultedSTaskUnit<BlockItemCurrSelectionResult<ITEM>> {
   final XBlock xBlock;
   final ForceType? forceTypeForForm;
@@ -23,16 +23,16 @@ ITEM extends Identifiable<ID>>
     required bool forceReloadItem,
     required this.forceTypeForForm,
   }) : super(
-    taskType: TaskType.blockSetItemAsCurrent,
-    taskResult: BlockItemCurrSelectionResult<ITEM>(
-      precheck: null,
-      currentItemSelectionType: currentItemSelectionType,
-      getItemId: xBlock.block._getItemIdInternal,
-      candidateItem: candidateItem,
-      oldCurrentItem: xBlock.block.currentItem as ITEM?,
-      currentItem: xBlock.block.currentItem as ITEM?,
-    ),
-  ) {
+          taskType: TaskType.blockSetItemAsCurrent,
+          taskResult: BlockItemCurrSelectionResult<ITEM>(
+            precheck: null,
+            currentItemSelectionType: currentItemSelectionType,
+            getItemId: xBlock.block._getItemIdInternal,
+            candidateItem: candidateItem,
+            oldCurrentItem: xBlock.block.currentItem as ITEM?,
+            currentItem: xBlock.block.currentItem as ITEM?,
+          ),
+        ) {
     xBlock.setForceReloadCurrItem(forceReloadItem);
     //
     if (forceTypeForForm != null) {

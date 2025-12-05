@@ -61,13 +61,14 @@ class _ControlButtonState extends _RefreshableWidgetState<ScalarControl> {
       onPressedAsync == null
           ? null
           : () {
-              () async {
-                bool success = await onPressedAsync();
-                if (success && widget.navigate != null) {
-                  widget.navigate!();
-                }
-              }();
-            },
+        () async {
+          bool success = await onPressedAsync();
+          if (success && widget.navigate != null) {
+            widget.navigate!();
+          }
+        }
+        ();
+      },
     );
   }
 

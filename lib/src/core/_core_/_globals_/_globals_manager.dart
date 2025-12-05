@@ -203,8 +203,9 @@ class GlobalsManager extends _Core {
     Box<String> hiveBox = await HiveUtils.openHiveBoxLoggedInUser();
     masterFlowItem?._addLineFlowItem(
       codeId: "#GM020",
-      shortDesc: "Read <b>LoggedInUser JSON String</b> from <b>HiveBox</b>.\n"
-          "<i>This information has been stored locally when the user successfully logged in before.</i>",
+      shortDesc: "Read <b>LoggedInUser JSON String</b> from <b>HiveBox</b>.",
+      note:
+          "This information has been stored locally when the user successfully logged in before.",
     );
     String? loggedInUserJson = hiveBox.get(__hiveKeyLoggedInUser);
     await hiveBox.close();
@@ -212,14 +213,14 @@ class GlobalsManager extends _Core {
     if (loggedInUserJson == null) {
       masterFlowItem?._addLineFlowItem(
         codeId: "#GM040",
-        shortDesc: "Read @loggedInUserJson: null.",
+        shortDesc: "Read @loggedInUserJson: <b>null</b>.",
       );
       return;
     }
     if (loggedInUserJson == null) {
       masterFlowItem?._addLineFlowItem(
         codeId: "#GM060",
-        shortDesc: "Read @loggedInUserJson: not null.",
+        shortDesc: "Read @loggedInUserJson: <b>not null</b>.",
       );
       return;
     }
@@ -228,7 +229,7 @@ class GlobalsManager extends _Core {
       masterFlowItem?._addLineFlowItem(
         codeId: "#GM080",
         shortDesc: "Call ${_debugObjHtml(loginLogoutAdapter)}.fromJson() "
-            "to convert above JSON to ${getTypeNameWithoutGenerics(ILoggedInUser)} object.",
+            "to convert above <b>JSON</b> to <b>${getTypeNameWithoutGenerics(ILoggedInUser)}</b> object.",
         lineFlowType: LineFlowType.calling,
         tipDocument: TipDocument.loginLogoutAdapter,
       );
@@ -245,8 +246,8 @@ class GlobalsManager extends _Core {
       masterFlowItem?._addLineFlowItem(
         codeId: "#GM120",
         shortDesc:
-            "The ${_debugObjHtml(loginLogoutAdapter)}.fromJson() method was called with an error. "
-            "You need to log in again via the login page.",
+            "The ${_debugObjHtml(loginLogoutAdapter)}.fromJson() method was called with an error.",
+        note: "You need to log in again via the login page.",
         errorInfo: errorInfo,
       );
       return;
@@ -256,8 +257,8 @@ class GlobalsManager extends _Core {
       masterFlowItem?._addLineFlowItem(
         codeId: "#GM140",
         shortDesc:
-            "The ${_debugObjHtml(loginLogoutAdapter)}.fromJson() method returned null. "
-            "You need to log in again via the login page.",
+            "The ${_debugObjHtml(loginLogoutAdapter)}.fromJson() method returned null.",
+        note: "You need to log in again via the login page.",
       );
       return;
     }
@@ -273,9 +274,12 @@ class GlobalsManager extends _Core {
       masterFlowItem?._addLineFlowItem(
         codeId: "#GM160",
         shortDesc:
-            "Calling ${_debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() with parameters:"
-            "\n - @loggedInUser: ${_debugObjHtml(loggedInUser)}.",
+            "Calling ${_debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() with parameters:",
+        parameters: {
+          "loggedInUser": loggedInUser,
+        },
         lineFlowType: LineFlowType.calling,
+        tipDocument: TipDocument.loginLogoutAdapter,
       );
       loginLogoutAdapter.addThirdPartyLogicOnLogin(loggedInUser);
     } catch (e, stackTrace) {
@@ -299,10 +303,14 @@ class GlobalsManager extends _Core {
       masterFlowItem?._addLineFlowItem(
         codeId: "#GM360",
         shortDesc:
-            "Calling ${_debugObjHtml(loginLogoutAdapter)}.loadGlobalData() method with parameters:"
-            "\n - @loggedInUser: ${_debugUserHtml(loggedInUser)}."
-            "\n  <i>This information has been stored locally when the user successfully logged in before.</i>",
+            "Calling ${_debugObjHtml(loginLogoutAdapter)}.loadGlobalData() method with parameters:",
+        parameters: {
+          "loggedInUser": loggedInUser,
+        },
+        note:
+            "This information has been stored locally when the user successfully logged in before.",
         lineFlowType: LineFlowType.calling,
+        tipDocument: TipDocument.loginLogoutAdapter,
       );
       // Load Global Data:
       globalData = await globalDataAdapter.loadGlobalData(
@@ -338,9 +346,10 @@ class GlobalsManager extends _Core {
     masterFlowItem?._addLineFlowItem(
       codeId: "#GM640",
       shortDesc:
-          "Reading <b>Extra Global Props</b> from Local. For example: favorite locale and theme.\n"
-          "<i>This information is stored locally when the user selects a preferred theme or locale.</i>",
-      tipDocument: TipDocument.localeAndTheme,
+          "Reading <b>Extra Global Props</b> from <b>Local</b>. For example: favorite locale and theme.",
+      note:
+          "This information is stored locally when the user selects a preferred theme or locale.",
+      tipDocument: TipDocument.locale,
     );
     // Load Extra Global Prop Names that stored in Hive Database.
     await __readExtraGlobalProps(masterFlowItem);
@@ -397,24 +406,28 @@ class GlobalsManager extends _Core {
       masterFlowItem?._addLineFlowItem(
         codeId: "#22420",
         shortDesc: "Calling ${_debugObjHtml(loginLogoutAdapter)}.toJson()... "
-            "to convert ${_debugObjHtml(loggedInUser)} to JSON String.",
+            "to convert ${_debugObjHtml(loggedInUser)} to <b>JSON String</b>.",
+        parameters: {
+          "loggedInUser": loggedInUser,
+        },
         lineFlowType: LineFlowType.calling,
         tipDocument: TipDocument.loginLogoutAdapter,
       );
       String json = loginLogoutAdapter.toJson(loggedInUser);
+      //
       masterFlowItem?._addLineFlowItem(
         codeId: "#22440",
-        shortDesc: "Storing the above JSON String to Local.",
+        shortDesc: "Storing the above <b>JSON String</b> to <b>Local</b>.",
         lineFlowType: LineFlowType.info,
       );
       await hiveBox.put(__hiveKeyLoggedInUser, json);
       await hiveBox.close();
     } catch (e, stackTrace) {
       final warningHtmlMessage =
-          "Warning: Unable to store JSON String to Local..\n"
-          "<i>This means that the login information cannot be remembered.</i>";
+          "Warning: Unable to store <b>JSON String</b> to <b>Local</b>..\n"
+          "This means that the login information cannot be remembered.";
       final appWarning = _createAppWarning(
-          warningHtmlMessage.replaceAll("<i>", "").replaceAll("</i>", ""));
+          warningHtmlMessage.replaceAll("<b>", "").replaceAll("</b>", ""));
       //
       print(appWarning);
       //
@@ -445,9 +458,12 @@ class GlobalsManager extends _Core {
       masterFlowItem?._addLineFlowItem(
         codeId: "#34240",
         shortDesc:
-            "Calling ${_debugObjHtml(globalDataAdapter)}.loadGlobalData() to load global data for @loggedInUser:"
-            "\n - @loggedInUser: ${_debugObjHtml(loggedInUser)}."
-            "\n  You can access global data via <b>FlutterArtist.globalsManager.globalData</b>.",
+            "Calling ${_debugObjHtml(globalDataAdapter)}.loadGlobalData() to load global data for @loggedInUser:",
+        parameters: {
+          "loggedInUser": loggedInUser,
+        },
+        note:
+            "You can access global data via <b>FlutterArtist.globalsManager.globalData</b>.",
         lineFlowType: LineFlowType.calling,
         tipDocument: TipDocument.globalData,
       );

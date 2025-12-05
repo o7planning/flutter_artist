@@ -8,8 +8,18 @@ enum TipDocument {
   autoStocker,
   polymorphism,
   globalData,
-  localeAndTheme,
-  naturalQuery;
+  pageData,
+  locale,
+  naturalQuery,
+  filterCriteria,
+  scalarActiveUIComponents,
+  blockActiveUIComponents,
+  blockQueryType,
+  dataState;
+
+  int getPosition() {
+    return TipDocument.values.indexOf(this) + 1;
+  }
 
   TipDocument next() {
     int idx = TipDocument.values.indexOf(this);
@@ -43,10 +53,22 @@ enum TipDocument {
         return "FlutterArtist Polymorphism";
       case TipDocument.globalData:
         return "FlutterArtist Global Data";
-      case TipDocument.localeAndTheme:
+      case TipDocument.locale:
         return "FlutterArtist Locale and Theme";
       case TipDocument.naturalQuery:
         return "Natural Query";
+      case TipDocument.filterCriteria:
+        return "Filter Criteria";
+      case TipDocument.scalarActiveUIComponents:
+        return "Scalar's Active UI Components";
+      case TipDocument.blockActiveUIComponents:
+        return "Block's Active UI Components";
+      case TipDocument.blockQueryType:
+        return "Block's QueryType";
+      case TipDocument.pageData:
+        return "PageData";
+      case TipDocument.dataState:
+        return "DataState";
     }
   }
 
@@ -70,10 +92,22 @@ enum TipDocument {
         return "FlutterArtist Polymorphism";
       case TipDocument.globalData:
         return "FlutterArtist Global Data";
-      case TipDocument.localeAndTheme:
+      case TipDocument.locale:
         return "FlutterArtist Locale and Theme";
       case TipDocument.naturalQuery:
         return "Natural Query";
+      case TipDocument.filterCriteria:
+        return "Filter Criteria";
+      case TipDocument.scalarActiveUIComponents:
+        return "Scalar's Active UI Components";
+      case TipDocument.blockActiveUIComponents:
+        return "Block's Active UI Components";
+      case TipDocument.blockQueryType:
+        return "Block's QueryType";
+      case TipDocument.pageData:
+        return "PageData";
+      case TipDocument.dataState:
+        return "DataState";
     }
   }
 
@@ -111,19 +145,49 @@ enum TipDocument {
         ];
       case TipDocument.autoStocker:
         return [
-          "https://o7planning.org/11111/config1",
-          "https://o7planning.org/11112/config2",
+          "https://o7planning.org/14833/flutterartist-autostocker",
         ];
       case TipDocument.polymorphism:
-        return [];
+        return [
+          "https://o7planning.org/14835/flutterartist-polymorphisms",
+        ];
       case TipDocument.globalData:
-        return [];
-      case TipDocument.localeAndTheme:
-        return [];
+        return [
+          "https://o7planning.org/14839/flutterartist-global-data",
+        ];
+      case TipDocument.pageData:
+        return [
+          "https://o7planning.org/14749/flutterartist-pagedata",
+        ];
+      case TipDocument.locale:
+        return [
+          "https://o7planning.org/14837/flutterartist-locales",
+        ];
       case TipDocument.naturalQuery:
         return [
           "https://o7planning.org/11111/config1",
           "https://o7planning.org/11112/config2",
+        ];
+      case TipDocument.filterCriteria:
+        return [
+          "https://o7planning.org/11111/config1",
+          "https://o7planning.org/11112/config2",
+        ];
+      case TipDocument.scalarActiveUIComponents:
+        return [
+          "https://o7planning.org/14827/xxx",
+        ];
+      case TipDocument.blockActiveUIComponents:
+        return [
+          "https://o7planning.org/14829/xxx",
+        ];
+      case TipDocument.blockQueryType:
+        return [
+          "https://o7planning.org/14831/flutterartist-querytype",
+        ];
+      case TipDocument.dataState:
+        return [
+          "https://o7planning.org/14749/flutterartist-block-datastate",
         ];
     }
   }

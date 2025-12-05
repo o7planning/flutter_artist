@@ -625,7 +625,7 @@ abstract class Shelf extends _Core {
       masterFlowItem._addLineFlowItem(
         codeId: "#02120",
         shortDesc:
-            "Calling ${_debugObjHtml(xShelf)}._initQueryTaskUnits() to create Natural-Query task units...",
+            "Calling ${_debugObjHtml(xShelf)}._initQueryTaskUnits() to create <b>Natural-Query</b> task units...",
         lineFlowType: LineFlowType.calling,
         isLibCall: true,
       );

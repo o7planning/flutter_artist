@@ -29,7 +29,7 @@ class LineFlowItemBox extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               HtmlSelectableRichText(
-                lineFlowItem.shortDesc,
+                "${lineFlowItem.shortDesc}${lineFlowItem.getParametersAsHtmlString()}${lineFlowItem.getNoteAsHtmlString()}",
                 icon: Icon(
                   lineFlowItem.lineFlowType.getIconData(),
                   color: lineFlowItem.showIconAndLabel

@@ -625,7 +625,7 @@ abstract class Block<
       return true;
     }
     //
-    Object? parentInData = __blockData._currentParentItemId;
+    Object? parentInData = __blockData._parentBlockCurrentItemId;
     Object? parentInBlock = parentBlockCurrentItemId;
     if (parentInData != parentInBlock) {
       return true;
@@ -778,6 +778,7 @@ abstract class Block<
       codeId: "#03020",
       shortDesc: "<i>@hasBlockRepresentative: $hasBlockRepresentative</i>.",
       lineFlowType: LineFlowType.debug,
+      tipDocument: TipDocument.blockActiveUIComponents,
     );
     //
     QryHint queryHint = thisXBlock.queryHint;
@@ -976,6 +977,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#03280",
         shortDesc: "@queryType: ${thisXBlock.queryType}",
+        tipDocument: TipDocument.blockQueryType,
       );
       callingPageable = thisXBlock.pageable ?? config.pageable;
       final QueryType newQueryType = thisXBlock.queryType;
@@ -997,17 +999,25 @@ abstract class Block<
         //   parameters: {},
         // );
         //
+        final sortableCriteria = serverSideSortModel?.getSortableCriteria() ??
+            SortableCriteria._empty();
+        //
         masterFlowItem?._addLineFlowItem(
           codeId: "#03340",
           shortDesc: "Calling ${_debugObjHtml(this)}.callApiQuery()...",
+          parameters: {
+            "parentBlockCurrentItem": parent?.currentItem,
+            "filterCriteria": filterCriteria,
+            "sortableCriteria": sortableCriteria,
+            "pageable": callingPageable,
+          },
           lineFlowType: LineFlowType.calling,
         );
         __callApiQueryCount++;
         ApiResult<PageData<ITEM>?> result = await callApiQuery(
           parentBlockCurrentItem: parent?.currentItem,
           filterCriteria: filterCriteriaOfFilterModel,
-          sortableCriteria: serverSideSortModel?.getSortableCriteria() ??
-              SortableCriteria._empty(),
+          sortableCriteria: sortableCriteria,
           pageable: callingPageable,
         );
         // Throw ApiError:
@@ -1019,6 +1029,13 @@ abstract class Block<
         queried = true;
         queryResultState = ActionResultState.success;
         pageData = result.data;
+        //
+        masterFlowItem?._addLineFlowItem(
+          codeId: "#03360",
+          shortDesc: "Got @pageData: ${_debugObjHtml(pageData)}.",
+          lineFlowType: LineFlowType.debug,
+          tipDocument: TipDocument.pageData,
+        );
       } catch (e, stackTrace) {
         queryResultState = ActionResultState.fail;
         pageData = null;
@@ -1031,7 +1048,7 @@ abstract class Block<
         );
         __setBlockErrorInfo(blockErrorInfo);
         //
-        ErrorInfo errorInfo = _handleError(
+        final errorInfo = _handleError(
           shelf: shelf,
           methodName: callApiQueryMethod.name,
           // AppError, ApiError or others.
@@ -1044,8 +1061,9 @@ abstract class Block<
         );
         //
         masterFlowItem?._addLineFlowItem(
-          codeId: "#03360",
-          shortDesc: "Call ${_debugObjHtml(this)}.callApiQuery() error.",
+          codeId: "#03400",
+          shortDesc:
+              "The ${_debugObjHtml(this)}.callApiQuery() method was called with an error!",
           errorInfo: errorInfo,
         );
       } finally {
@@ -1180,17 +1198,25 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#03540",
         shortDesc:
-            "Calling <b>__blockData._updateFrom()</b> to update queried data to block.\n"
-            "New item count: ${pageData?.items.length ?? 0}",
+            "Calling <b>__blockData._updateData()</b> to update queried data to block.",
+        parameters: {
+          "forceItemListMode": realItemListMode,
+          "parentBlockCurrentItemId": parentBlockCurrentItemId,
+          "filterCriteria": filterCriteria,
+          "pageable": pageable,
+          "pageData": pageData,
+          "blockDataState": newBlockDataState,
+          "queryResultState": queryResultState,
+        },
         lineFlowType: LineFlowType.calling,
         isLibCall: true,
       );
       //
       // Update queried items to the List:
       //
-      __blockData._updateFrom(
+      __blockData._updateData(
         forceItemListMode: realItemListMode,
-        currentParentItemId: this.parentBlockCurrentItemId,
+        parentBlockCurrentItemId: parentBlockCurrentItemId,
         filterCriteria: filterCriteriaOfFilterModel,
         pageable: callingPageable,
         pageData: pageData,
@@ -1200,7 +1226,7 @@ abstract class Block<
     } catch (e, stackTrace) {
       ErrorInfo errorInfo = _handleError(
         shelf: shelf,
-        methodName: '__blockData._updateFrom()',
+        methodName: '__blockData._updateData()',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -1420,10 +1446,12 @@ abstract class Block<
     masterFlowItem?._addLineFlowItem(
       codeId: "#28000",
       shortDesc:
-          "${_debugObjHtml(this)} -> Begin ${TaskType.blockSetItemAsCurrent.asDebugTaskUnit()}."
-          "\n - @currentItemSelectionType: <b>$currentItemSelectionType</b>."
-          "\n - @newQueriedList: ${_debugObjHtml(newQueriedList)} <b>(${newQueriedList.length} items)</b>."
-          "\n - @candidateItem: ${_debugObjHtml(candidateItem)}.",
+          "${_debugObjHtml(this)} -> Begin ${TaskType.blockSetItemAsCurrent.asDebugTaskUnit()}.",
+      parameters: {
+        "candidateItem": candidateItem,
+        "newQueriedList": newQueriedList,
+        "currentItemSelectionType": currentItemSelectionType,
+      },
       lineFlowType: LineFlowType.debug,
     );
     //
@@ -1535,20 +1563,24 @@ abstract class Block<
           shortDesc: hasItemRep
               ? "Found a UI-X-Component that displays and represents the ITEM. So setting a currentItem is required."
               : "This block does not have any visible UI-Component but represents the ITEM.",
+          tipDocument: TipDocument.blockActiveUIComponents,
         );
         //
         ITEM? candidateCurrItem2;
         masterFlowItem?._addLineFlowItem(
           codeId: "#28220",
           shortDesc:
-              "Calling ${_debugObjHtml(this)}.specifyItemIndexToSelectAsCurrent() method to specify an itemIndex as the current one. "
+              "Calling ${_debugObjHtml(this)}.specifyItemIndexToSelectAsCurrent() method "
+              "to specify an <b>itemIndex</b> as the current one.",
+          note:
               "You can override this method, otherwise the first ITEM will be the candidate. ",
           lineFlowType: LineFlowType.calling,
         );
         int? suggestIdx = specifyItemIndexToSelectAsCurrent();
+        //
         masterFlowItem?._addLineFlowItem(
           codeId: "#28240",
-          shortDesc: "Got value: $suggestIdx.",
+          shortDesc: "Got value: <b>$suggestIdx</b>.",
         );
         if (suggestIdx != null && suggestIdx >= 0 && suggestIdx < itemCount) {
           candidateCurrItem2 = candidateCurrItem2 ?? items[suggestIdx];
@@ -1777,7 +1809,7 @@ abstract class Block<
             masterFlowItem?._addLineFlowItem(
               codeId: "#28840",
               shortDesc:
-                  "Finding AutoStocker for ${_debugItemDetailTypeHtml()} ...",
+                  "Finding <b>AutoStocker</b> for ${_debugItemDetailTypeHtml()} ...",
               tipDocument: TipDocument.autoStocker,
             );
             // This may throw error
@@ -1788,7 +1820,7 @@ abstract class Block<
             masterFlowItem?._addLineFlowItem(
               codeId: "#28850",
               shortDesc:
-                  "Found AutoStocker for ${_debugItemDetailTypeHtml()} data type --> ${_debugObjHtml(stocker)}",
+                  "Found <b>AutoStocker</b> for ${_debugItemDetailTypeHtml()} data type --> ${_debugObjHtml(stocker)}",
               tipDocument: TipDocument.autoStocker,
             );
           } catch (e, stackTrace) {
@@ -1829,10 +1861,13 @@ abstract class Block<
             //
             masterFlowItem?._addLineFlowItem(
               codeId: "#28900",
-              shortDesc: "Calling $methodName() with parameters:\n"
-                  " - @id: $itemId.\n"
-                  " - @oldItem: ${_debugObjHtml(oldItemDetail)}.\n"
+              shortDesc: "Calling $methodName() with parameters:",
+              note:
                   "The <b>@oldItem</b> parameter will be <b>non-null</b> if <b>ITEM = ITEM_DETAIL</b>.",
+              parameters: {
+                "id": itemId,
+                "oldItem": oldItemDetail,
+              },
               lineFlowType: LineFlowType.calling,
               tipDocument: TipDocument.autoStocker,
             );
@@ -1874,7 +1909,7 @@ abstract class Block<
               errorInfo: errorInfo,
             );
             // TODO: Them test case:
-            // TODO: Alway return? Load ITEM Error
+            // TODO: Always return? Load ITEM Error
             return;
           } finally {
             __refreshRefreshingCurrentItemState(
@@ -2153,18 +2188,28 @@ abstract class Block<
       shortDesc:
           "${_debugObjHtml(this)} --> Begin ${TaskType.blockDeleteItem.asDebugTaskUnit()} for ${_debugObjHtml(this)}.",
     );
+
+    ///
+    final errorIfItemNotInTheBlock = true;
+    //
     masterFlowItem?._addLineFlowItem(
       codeId: "#08020",
-      shortDesc:
-          "Check before deleting --> Calling ${_debugObjHtml(this)}.canDeleteItem(). "
+      shortDesc: "Calling ${_debugObjHtml(this)}.canDeleteItem().",
+      parameters: {
+        "item": item,
+        "errorIfItemNotInTheBlock": errorIfItemNotInTheBlock,
+      },
+      note: "Call this method to check before deleting an item. "
           "(**) You can override ${_debugObjHtml(this)}.isAllowDeleteItem() method.",
+      lineFlowType: LineFlowType.calling,
+      isLibCall: true,
     );
     //
     // No need to check again?
     //
     Actionable<BlockItemDeletionPrecheck> actionable = canDeleteItem(
       item: item,
-      errorIfItemNotInTheBlock: true,
+      errorIfItemNotInTheBlock: errorIfItemNotInTheBlock,
     );
     if (!actionable.yes) {
       masterFlowItem?._addLineFlowItem(
@@ -2697,6 +2742,12 @@ abstract class Block<
       codeId: "#04000",
       shortDesc:
           "Begin ${TaskType.blockPrepareToCreateItem.asDebugTaskUnit()}.",
+      parameters: {
+        "formInput": formInput,
+        "initDirty": initDirty,
+        "navigate": navigate,
+      },
+      lineFlowType: LineFlowType.debug,
     );
     //
     masterFlowItem?._addLineFlowItem(
@@ -3080,6 +3131,11 @@ abstract class Block<
         codeId: "#14020",
         shortDesc:
             "Calling ${_debugObjHtml(action)}.callApiQuickUpdateItem()...",
+        parameters: {
+          "parentBlockItem": parent?.currentItem,
+          "filterCriteria": blockCurrentFilterCriteria,
+        },
+        lineFlowType: LineFlowType.calling,
       );
       //
       result = await action.callApiQuickUpdateItem(
@@ -3115,6 +3171,8 @@ abstract class Block<
         codeId: "#14100",
         shortDesc:
             "Calling ${_debugObjHtml(this)}._processSaveActionRestResult()...",
+        lineFlowType: LineFlowType.calling,
+        isLibCall: true,
       );
       await _processSaveActionRestResult(
         masterFlowItem: masterFlowItem,
@@ -3126,7 +3184,7 @@ abstract class Block<
       );
       return;
     } catch (e, stackTrace) {
-      ErrorInfo errorInfo = _handleError(
+      final errorInfo = _handleError(
         shelf: shelf,
         methodName: "${getClassName(action)}.$methodName",
         error: e,
@@ -3175,17 +3233,14 @@ abstract class Block<
     ApiResult<void> result;
     final String methodName = "callApiSilentUpdateItem";
     try {
-      // FlutterArtist.codeFlowLogger._addMethodCall(
-      //   isLibCode: false,
-      //   navigate: null,
-      //   ownerClassInstance: action,
-      //   methodName: methodName,
-      //   parameters: {},
-      // );
-      //
       masterFlowItem?._addLineFlowItem(
         codeId: "#15020",
         shortDesc: "Calling ${_debugObjHtml(action)}.$methodName()...",
+        parameters: {
+          "parentBlockItem": parent?.currentItem,
+          "filterCriteria": filterCriteria,
+        },
+        lineFlowType: LineFlowType.calling,
       );
       //
       result = await action.callApiSilentlyUpdateItem(
@@ -3345,6 +3400,11 @@ abstract class Block<
         shortDesc:
             "Calling: ${_debugObjHtml(this)}.needToKeepItemInList() to decide "
             "whether to keep item ${_debugObjHtml(savedItemDetail)} in the list or not..",
+        parameters: {
+          "parentBlockCurrentItem": parent?.currentItem,
+          "filterCriteria": filterCriteria,
+          "itemDetail": savedItemDetail,
+        },
         lineFlowType: LineFlowType.calling,
       );
       keepInList = needToKeepItemInList(
@@ -3376,8 +3436,8 @@ abstract class Block<
       );
       masterFlowItem?._addLineFlowItem(
         codeId: "#16240",
-        shortDesc:
-            "Calling ${_debugObjHtml(this)}.convertItemDetailToItem() to convert ${_debugObjHtml(savedItemDetail)} to ${_debugItemTypeHtml()}.",
+        shortDesc: "Calling ${_debugObjHtml(this)}.convertItemDetailToItem() "
+            "to convert ${_debugObjHtml(savedItemDetail)} to ${_debugItemTypeHtml()}.",
         lineFlowType: LineFlowType.calling,
       );
       ITEM refreshedItem = __convertItemDetailToItem(
@@ -3449,8 +3509,8 @@ abstract class Block<
       if (savedItemDetail != null) {
         masterFlowItem?._addLineFlowItem(
           codeId: "#16520",
-          shortDesc:
-              "Calling ${_debugObjHtml(this)}.convertItemDetailToItem() to convert ${_debugObjHtml(savedItemDetail)} to ${_debugItemTypeHtml()}.",
+          shortDesc: "Calling ${_debugObjHtml(this)}.convertItemDetailToItem() "
+              "to convert ${_debugObjHtml(savedItemDetail)} to ${_debugItemTypeHtml()}.",
           lineFlowType: LineFlowType.calling,
         );
         savedItem = __convertItemDetailToItem(
@@ -3480,6 +3540,8 @@ abstract class Block<
           codeId: "#16580",
           shortDesc:
               "Calling ${_debugObjHtml(this)}.findSiblingItem() to find sibling item of ${_debugObjHtml(removeItem)}.",
+          parameters: {"item": removeItem},
+          lineFlowType: LineFlowType.calling,
         );
         //
         // Deleted current item ==> find sibling.
@@ -4352,6 +4414,11 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#05000",
         shortDesc: "Calling ${_debugObjHtml(this)}.initFormRelatedData()...",
+        parameters: {
+          "parentBlockCurrentItem": parentBlockCurrentItem,
+          "currentItemDetail": currentItemDetail,
+          "filterCriteria": filterCriteria,
+        },
         lineFlowType: LineFlowType.calling,
       );
       return initFormRelatedData(

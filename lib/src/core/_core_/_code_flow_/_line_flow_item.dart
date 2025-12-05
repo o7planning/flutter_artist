@@ -6,10 +6,13 @@ class LineFlowItem {
   final bool isLibCall;
   final String lineId;
   final String shortDesc;
+  final String? note;
   final TipDocument? tipDocument;
   final ErrorInfo? errorInfo;
   List<String>? _extraInfos;
 
+  Map<String, dynamic>? parameters;
+ 
   List<String>? get extraInfos => _extraInfos;
 
   LineFlowItem({
@@ -18,9 +21,11 @@ class LineFlowItem {
     required this.isLibCall,
     required this.lineId,
     required this.shortDesc,
+    required this.note,
     required this.tipDocument,
     required this.errorInfo,
     required List<String>? extraInfos,
+    required this.parameters,
   }) : _extraInfos = extraInfos;
 
   bool needControlBar() {
@@ -29,6 +34,25 @@ class LineFlowItem {
 
   bool hasExtraInfos() {
     return _extraInfos != null && _extraInfos!.isNotEmpty;
+  }
+
+  String getNoteAsHtmlString() {
+    if (note == null || note!.isEmpty) {
+      return "";
+    }
+    return "\n $note";
+  }
+
+  String getParametersAsHtmlString() {
+    if (parameters == null) {
+      return "";
+    }
+    String s = "";
+    for (String key in parameters!.keys) {
+      dynamic value = parameters![key];
+      s += "\n  - @$key: ${_debugObjHtml(value)}";
+    }
+    return s;
   }
 
   void printToConsole() {

@@ -178,7 +178,7 @@ class _Executor {
         candidateItem: taskUnit.candidateItem,
         thisXBlock: taskUnit.xBlock,
         currentItemSelectionResult:
-            taskUnit.taskResult as BlockItemCurrSelectionResult<Identifiable>,
+        taskUnit.taskResult as BlockItemCurrSelectionResult<Identifiable>,
       );
     }
     // Block Delete Item:
@@ -188,7 +188,7 @@ class _Executor {
         thisXBlock: taskUnit.xBlock,
         item: taskUnit.item,
         deletionResult:
-            taskUnit.taskResult as BlockItemDeletionResult<Identifiable>,
+        taskUnit.taskResult as BlockItemDeletionResult<Identifiable>,
       );
     }
     // Block Delete Items:
@@ -198,7 +198,7 @@ class _Executor {
         items: taskUnit.items,
         stopIfError: taskUnit.stopIfError,
         deletionResult:
-            taskUnit.taskResult as BlockItemsDeletionResult<Identifiable>,
+        taskUnit.taskResult as BlockItemsDeletionResult<Identifiable>,
       );
     }
     // Block QuickCreateItem:
@@ -316,9 +316,9 @@ class _Executor {
       bool onProgress = owner == null || taskType == null
           ? false
           : state.isMatches(
-              owner: owner,
-              taskType: taskType,
-            );
+        owner: owner,
+        taskType: taskType,
+      );
       //
       state.onProgress = onProgress;
       state.refreshState(force: true);

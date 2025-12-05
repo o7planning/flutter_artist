@@ -92,11 +92,15 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
       child: Card(
         margin: EdgeInsets.zero,
         child: Padding(
-          padding: EdgeInsets.all(3),
+          padding: EdgeInsets.fromLTRB(8, 3, 3, 3),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              Text(
+                "${tipDocument.getPosition()} / ${TipDocument.values.length}",
+                style: TextStyle(fontSize: 12),
+              ),
               Spacer(),
               SimpleSmallIconButton(
                 iconData: Icons.arrow_circle_left_outlined,

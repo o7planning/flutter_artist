@@ -29,7 +29,11 @@ class LocaleManager extends _Core {
     masterFlowItem?._addLineFlowItem(
       codeId: "#LM100",
       shortDesc:
-          "Calling ${_debugObjHtml(_localeAdapter)}.updateLocale() with parameter $locale.",
+          "Calling ${_debugObjHtml(_localeAdapter)}.updateLocale() with parameters:",
+      parameters: {
+        "locale": locale,
+      },
+      lineFlowType: LineFlowType.calling,
     );
     await _localeAdapter.updateLocale(locale);
   }

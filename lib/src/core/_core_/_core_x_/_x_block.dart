@@ -264,6 +264,15 @@ class XBlock<
     }
   }
 
+  String toDebugHtmlString() {
+    return " - <b>XBlock (${getClassName(block)})</b>"
+        "\n    - <b>qryHint</b>: $queryHint"
+        "\n    - <b>blockReQryCondition</b>: $_blockReQryCon"
+        "\n    - <b>forceReloadItem</b>: $__forceReloadCurrItem"
+        "\n    - <b>blockItemRefreshCondition</b>: $_blockItemRefreshCon"
+        "\n    - <b>xFormModel</b>: $xFormModel";
+  }
+
   @override
   String toString() {
     return "XBlock (${getClassName(block)}) \n"
