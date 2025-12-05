@@ -27,7 +27,9 @@ abstract class Activity extends _Core {
   Future<void> executeActivity() async {
     _masterFlowItem?._addLineFlowItem(
       codeId: "#23000",
-      shortDesc: "Call ${_debugObjHtml(this)}.executeActivity().",
+      shortDesc:
+          "Creating <b>XActivity</b> for ${_debugObjHtml(this)} and add it to <b>RootQueue</b>.",
+      lineFlowType: LineFlowType.info,
     );
     XActivity xActivity = _createXActivity();
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
@@ -38,6 +40,7 @@ abstract class Activity extends _Core {
   // ***************************************************************************
 
   Future<void> _unitExecuteActivity({
+    required TaskType taskType,
     required XActivity thisXActivity,
   }) async {
     __assertThisXActivity(thisXActivity);
@@ -45,8 +48,9 @@ abstract class Activity extends _Core {
     _masterFlowItem?._addLineFlowItem(
       codeId: "#19000",
       shortDesc:
-          "Begin ${_debugObjHtml(this)} > ${TaskType.activity.asDebugTaskUnit()} task unit.\n"
+          "Begin ${_debugObjHtml(this)} > ${taskType.asDebugTaskUnit()}.\n"
           "Note: This is called because you called the ${_debugObjHtml(this)}.executeActivity() method.",
+      lineFlowType: LineFlowType.debug,
     );
     //
     try {

@@ -16,7 +16,7 @@ class _BlockMultiItemsDeletionTaskUnit
     required this.items,
     required super.taskResult,
     required this.stopIfError,
-  }) : super(taskType: TaskType.blockDeleteItem);
+  }) : super(taskType: TaskType.blockDeleteItems);
 
   @override
   XShelf get xShelf => xBlock.xShelf;

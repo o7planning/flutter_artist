@@ -96,6 +96,19 @@ class MasterFlowItem {
     return getErrorInfo() != null;
   }
 
+  bool hasEvent() {
+    return getLineFlowEvent() != null;
+  }
+
+  LineFlowItem? getLineFlowEvent() {
+    for (LineFlowItem item in __lineFlowItems) {
+      if (item.lineFlowType == LineFlowType.fireEvent) {
+        return item;
+      }
+    }
+    return null;
+  }
+
   ErrorInfo? getErrorInfo() {
     for (LineFlowItem item in __lineFlowItems) {
       if (item.errorInfo != null) {

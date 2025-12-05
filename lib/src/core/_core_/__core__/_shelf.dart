@@ -604,7 +604,9 @@ abstract class Shelf extends _Core {
         codeId: "#02020",
         shortDesc:
             "No lazy model-components found. Just update All UI components and nothing else. "
-            "Call ${_debugObjHtml(this)}.ui.updateAllUIComponents().",
+            "Calling ${_debugObjHtml(this)}.ui.updateAllUIComponents().",
+        lineFlowType: LineFlowType.calling,
+        isLibCall: true,
       );
       // IMPORTANT: No Lazy entities, but need to refresh UIComponents:
       ui.updateAllUIComponents();
@@ -619,7 +621,7 @@ abstract class Shelf extends _Core {
     try {
       masterFlowItem._addLineFlowItem(
         codeId: "#02100",
-        shortDesc: "Create ${_debugObjHtml(xShelf)} for Natural-Query. "
+        shortDesc: "Create ${_debugObjHtml(xShelf)} for <b>Natural-Query</b>. "
             "Note: <b>XShelf</b> is a <b>RootQueueItem</b> and contains multiple <b>Task Units</b>.",
       );
       masterFlowItem._addLineFlowItem(

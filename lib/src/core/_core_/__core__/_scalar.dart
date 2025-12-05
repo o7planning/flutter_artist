@@ -311,6 +311,7 @@ abstract class Scalar<
   @_ScalarQueryAnnotation()
   Future<void> _unitQuery({
     required MasterFlowItem? masterFlowItem,
+    required TaskType taskType,
     required XScalar thisXScalar,
   }) async {
     __assertThisXScalar(thisXScalar);
@@ -318,7 +319,8 @@ abstract class Scalar<
     masterFlowItem?._addLineFlowItem(
       codeId: "#12000",
       shortDesc:
-          "${_debugObjHtml(this)} -> Begin ${TaskType.scalarQuery.asDebugTaskUnit()}",
+          "${_debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
+      lineFlowType: LineFlowType.debug,
     );
     //
     bool hasXActiveUI = ui.hasActiveUIComponent(alsoCheckChildren: true);
@@ -351,7 +353,8 @@ abstract class Scalar<
         masterFlowItem?._addLineFlowItem(
           codeId: "#12100",
           shortDesc: "Create ${TaskType.scalarQuery.asDebugTaskUnit()}(s) "
-              "for all child scalars and add to Queue.",
+              "for all child scalars and add to Queue."
+              "${_childScalars.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
           lineFlowType: LineFlowType.info,
         );
         for (XScalar childXScalar in thisXScalar.childXScalars) {
@@ -379,8 +382,9 @@ abstract class Scalar<
       masterFlowItem?._addLineFlowItem(
         codeId: "#12180",
         shortDesc:
-            "${_debugObjHtml(this)} --> clear data and set to pending state. "
-            "Clear data of child scalars and set them to none.",
+            "${_debugObjHtml(this)} --> clear data and set to <b>pending</b> state. "
+            "Clear data of child scalars and set them to <b>none</b>."
+            "${_childScalars.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
         lineFlowType: LineFlowType.info,
       );
       //
@@ -436,8 +440,8 @@ abstract class Scalar<
       masterFlowItem?._addLineFlowItem(
         codeId: "#12340",
         shortDesc:
-            "${_debugObjHtml(filterModel)} error --> clear data of ${_debugObjHtml(this)} and set to error. "
-            "Clear data of child scalar and set them to none.",
+            "${_debugObjHtml(filterModel)} error --> clear data of ${_debugObjHtml(this)} and set to <b>error</b>. "
+            "Clear data of child scalar and set them to <b>none</b>.",
         lineFlowType: LineFlowType.info,
       );
       // Set Scalar to error cascade.
@@ -546,8 +550,9 @@ abstract class Scalar<
       masterFlowItem?._addLineFlowItem(
         codeId: "#12520",
         shortDesc:
-            "${_debugObjHtml(this)} --> clear value and set state to error. "
-            "Clear value of child scalars and set them to none.",
+            "${_debugObjHtml(this)} --> clear value and set state to <b>error</b>. "
+            "Clear value of child scalars and set them to <b>none</b>."
+            "${_childScalars.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
       );
       __clearWithDataStateAndChildrenToNonCascade(
         thisXScalar: thisXScalar,
@@ -576,7 +581,8 @@ abstract class Scalar<
       masterFlowItem?._addLineFlowItem(
         codeId: "#12680",
         shortDesc:
-            "${_debugObjHtml(this)} --> @value: null --> clear data of all child scalars and set them to none.",
+            "${_debugObjHtml(this)} --> @value: null --> clear data of all child scalars and set them to <b>none</b>."
+            "${_childScalars.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
         lineFlowType: LineFlowType.info,
       );
       __clearAllChildrenScalarsToNone(thisXScalar: thisXScalar);
@@ -587,7 +593,8 @@ abstract class Scalar<
       masterFlowItem?._addLineFlowItem(
         codeId: "#12700",
         shortDesc:
-            "${_debugObjHtml(this)} --> @filterCriteria changed --> clear data of child scalars and set them to pending.",
+            "${_debugObjHtml(this)} --> @filterCriteria changed --> clear data of child scalars and set them to <b>pending</b>."
+            "${_childScalars.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
         lineFlowType: LineFlowType.info,
       );
       this.__clearAllChildrenScalarsToPending(
@@ -598,7 +605,8 @@ abstract class Scalar<
     masterFlowItem?._addLineFlowItem(
       codeId: "#12800",
       shortDesc: "Create ${TaskType.scalarQuery.asDebugTaskUnit()}(s) "
-          "for all child scalars and add to queue.",
+          "for all child scalars and add to queue."
+          "${_childScalars.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
       lineFlowType: LineFlowType.info,
     );
     for (XScalar childXScalar in thisXScalar.childXScalars) {
@@ -621,10 +629,28 @@ abstract class Scalar<
 
   @_TaskUnitMethodAnnotation()
   @_ScalarClearanceAnnotation()
-  Future<void> _unitClearance({required XScalar thisXScalar}) async {
+  Future<void> _unitClearance({
+    required MasterFlowItem masterFlowItem,
+    required TaskType taskType,
+    required XScalar thisXScalar,
+  }) async {
     __assertThisXScalar(thisXScalar);
     //
-    // $$$
+    masterFlowItem._addLineFlowItem(
+      codeId: "#39000",
+      shortDesc:
+          "Begin ${_debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
+      lineFlowType: LineFlowType.debug,
+    );
+    //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#39000",
+      shortDesc:
+          "${_debugObjHtml(this)} ->  Clear data and set to <b>pending</b>. "
+          "Clear data of child scalars and set its to <b>none</b>."
+          "${_childScalars.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
+      lineFlowType: LineFlowType.info,
+    );
     //
     __clearWithDataStateAndChildrenToNonCascade(
       thisXScalar: thisXScalar,
@@ -639,32 +665,43 @@ abstract class Scalar<
   @_TaskUnitMethodAnnotation()
   @_ScalarLoadExtraDataQuickActionAnnotation()
   Future<bool> _unitLoadExtraDataQuickAction<DATA extends Object>({
+    required MasterFlowItem masterFlowItem,
+    required TaskType taskType,
     required XScalar thisXScalar,
     required ScalarQuickExtraDataLoadAction<DATA> action,
     required AfterScalarLoadExtraDataQuickAction afterQuickAction,
   }) async {
     __assertThisXScalar(thisXScalar);
     //
-    // $$$
+    masterFlowItem._addLineFlowItem(
+      codeId: "#40000",
+      shortDesc:
+          "Begin ${_debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
+      lineFlowType: LineFlowType.debug,
+    );
     //
     ApiResult<DATA>? result;
     try {
-      // FlutterArtist.codeFlowLogger._addMethodCall(
-      //   ownerClassInstance: action,
-      //   methodName: "callApiLoadExtraData",
-      //   parameters: null,
-      //   navigate: null,
-      //   isLibCode: false,
-      // );
+      masterFlowItem._addLineFlowItem(
+        codeId: "#40100",
+        shortDesc: "Calling ${_debugObjHtml(action)}.callApiLoadExtraData().",
+        lineFlowType: LineFlowType.calling,
+      );
       //
       result = await action.callApiLoadExtraData();
     } catch (e, stackTrace) {
-      _handleError(
+      final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
         methodName: '${getClassName(action)}.callApiLoadExtraData',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
+      );
+      masterFlowItem._addLineFlowItem(
+        codeId: "#40200",
+        shortDesc:
+            "The ${_debugObjHtml(action)}.callApiLoadExtraData() method was called with an error!",
+        errorInfo: errorInfo,
       );
       return false;
     }
@@ -673,57 +710,75 @@ abstract class Scalar<
     if (result != null && result.error != null) {
       success = false;
       //
-      _handleRestError(
+      final ErrorInfo errorInfo = _handleRestError(
         shelf: shelf,
         methodName: "${getClassName(action)}.callApiLoadExtraData",
         message: result.error!.errorMessage,
         errorDetails: result.error!.errorDetails,
         showSnackBar: true,
       );
+      masterFlowItem._addLineFlowItem(
+        codeId: "#40300",
+        shortDesc:
+            "The ${_debugObjHtml(action)}.callApiLoadExtraData() method was called with an error!",
+        errorInfo: errorInfo,
+      );
     }
     //
-    try {
-      DATA? extraData = result?.data;
-      //
-      // IMPORTANT: No await.
-      //
-      _showAfterScalarLoadExtraData(
-        action: action,
-        afterQuickAction: afterQuickAction,
-        extraData: extraData,
-        success: success,
-      );
-    } catch (e, stackTrace) {
-      _handleError(
-        shelf: shelf,
-        methodName: '${getClassName(action)}.callApi',
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
-      return false;
-    }
-    return true;
+    DATA? extraData = result?.data;
+    //
+    return await _showAfterScalarLoadExtraData(
+      masterFlowItem: masterFlowItem,
+      action: action,
+      afterQuickAction: afterQuickAction,
+      extraData: extraData,
+      success: success,
+    );
   }
 
-  Future<void> _showAfterScalarLoadExtraData<DATA extends Object>({
+  Future<bool> _showAfterScalarLoadExtraData<DATA extends Object>({
+    required MasterFlowItem masterFlowItem,
     required ScalarQuickExtraDataLoadAction<DATA> action,
     required AfterScalarLoadExtraDataQuickAction afterQuickAction,
     required DATA? extraData,
     required bool success,
   }) async {
     BuildContext context = FlutterArtist.adapter.getCurrentContext();
-    await action.doWithExtraData(
-      context,
-      success: success,
-      extraData: extraData,
-    );
+    bool success2;
+    try {
+      masterFlowItem._addLineFlowItem(
+        codeId: "#41000",
+        shortDesc: "Calling ${_debugObjHtml(action)}.doWithExtraData().",
+        parameters: {
+          "success": success,
+          "extraData": extraData,
+        },
+        lineFlowType: LineFlowType.calling,
+      );
+      await action.doWithExtraData(
+        context,
+        success: success,
+        extraData: extraData,
+      );
+      success2 = true;
+    } catch (e, stackTrace) {
+      final errorInfo = ErrorInfo.fromError(error: e, stackTrace: stackTrace);
+      //
+      masterFlowItem._addLineFlowItem(
+        codeId: "#41300",
+        shortDesc:
+            "The ${_debugObjHtml(action)}.doWithExtraData() method was called with an error!",
+        errorInfo: errorInfo,
+      );
+      success2 = false;
+    }
     switch (afterQuickAction) {
       case AfterScalarLoadExtraDataQuickAction.none:
         break;
       case AfterScalarLoadExtraDataQuickAction.update:
         ui.updateAllUIComponents(withoutFilters: true);
     }
+    return success2;
   }
 
   // ***************************************************************************

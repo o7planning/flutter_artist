@@ -17,7 +17,7 @@ enum LineFlowType {
       case LineFlowType.calling:
         return Icons.call;
       case LineFlowType.fireEvent:
-        return Icons.light_mode_outlined;
+        return Icons.electric_bolt_outlined;
       case LineFlowType.addTaskUnit:
         return Icons.miscellaneous_services_outlined;
       case LineFlowType.debug:

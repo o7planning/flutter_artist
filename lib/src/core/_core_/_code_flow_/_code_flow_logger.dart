@@ -102,7 +102,7 @@ class CodeFlowLogger {
     __addMasterFlowItem(item);
   }
 
-  void _addMethodCall({
+  MasterFlowItem _addMethodCall({
     required Object ownerClassInstance,
     required String methodName,
     required Map<String, dynamic>? parameters,
@@ -116,5 +116,6 @@ class CodeFlowLogger {
       isLibCode: isLibCode,
     );
     __addMasterFlowItem(log);
+    return log;
   }
 }

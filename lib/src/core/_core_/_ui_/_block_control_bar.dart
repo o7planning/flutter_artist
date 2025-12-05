@@ -99,14 +99,14 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
     return children.isEmpty
         ? null
         : BreadCrumb(
-            divider: divider,
-            overflow: overflow,
-            items: children
-                .map(
-                  (child) => BreadCrumbItem(content: child),
-                )
-                .toList(),
-          );
+      divider: divider,
+      overflow: overflow,
+      items: children
+          .map(
+            (child) => BreadCrumbItem(content: child),
+      )
+          .toList(),
+    );
   }
 
   Widget? _buildLeft2Buttons() {
@@ -122,8 +122,8 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             onAction: widget.block.isPreparingFormCreation,
             onPressed: widget.config.allowCreateButton && createActionable.yes
                 ? () {
-                    _prepareFormToCreateItem(widget.block);
-                  }
+              _prepareFormToCreateItem(widget.block);
+            }
                 : null,
           ),
         if (widget.config.allowDeleteButton)
@@ -136,8 +136,8 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             onAction: widget.block.isDeleting,
             onPressed: widget.config.allowDeleteButton && deleteActionable.yes
                 ? () {
-                    _doDelete(widget.block);
-                  }
+              _doDelete(widget.block);
+            }
                 : null,
           ),
       ],
@@ -154,56 +154,57 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
     ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
     Widget? left2 = _buildLeft2Buttons();
     return _buildBreadCrumb(
-          overflow: ScrollableOverflow(
-            keepLastDivider: false,
-            reverse: false,
-            direction: Axis.horizontal,
+      overflow: ScrollableOverflow(
+        keepLastDivider: false,
+        reverse: false,
+        direction: Axis.horizontal,
+      ),
+      children: [
+        if (widget.config.allowBackButton)
+          _ControlBarButton(
+            tooltip: "Back",
+            iconData: FaIconConstants.formBackIconData,
+            onAction: false,
+            onPressed: widget.config.allowBackButton &&
+                Navigator.of(context).canPop()
+                ? () {
+              _back(context);
+            }
+                : null,
           ),
-          children: [
-            if (widget.config.allowBackButton)
-              _ControlBarButton(
-                tooltip: "Back",
-                iconData: FaIconConstants.formBackIconData,
-                onAction: false,
-                onPressed: widget.config.allowBackButton &&
-                        Navigator.of(context).canPop()
-                    ? () {
-                        _back(context);
-                      }
-                    : null,
-              ),
-            if (widget.block.formModel != null &&
-                widget.block.formModel!.dataState == DataState.error)
-              _ControlBarButton(
-                tooltip:
-                    'Error: ${widget.block.formModel!.formErrorInfo?.errorMessage}',
-                iconData: widget.block.formModel!.formInitialDataReady
-                    ? FaIconConstants.formErrorModeIconData
-                    : FaIconConstants.formErrorDisabledIconData,
-                iconColor: Colors.red,
-                onAction: false,
-                onPressed: () {
-                  widget.block.formModel!.showFormErrorViewerDialog(context);
-                },
-              ),
-            if (widget.block.formModel != null &&
-                (loggedInUser?.isSystemUser ?? false))
-              Tooltip(
-                message:
-                    "${widget.block.formModel!.formMode.tooltip} [${getClassName(widget.block)}]",
-                child: Icon(
-                  widget.block.formModel!.formMode == FormMode.none
-                      ? FaIconConstants.formNoneModeIconData
-                      : widget.block.formModel!.formMode == FormMode.creation
-                          ? FaIconConstants.formCreationModeIconData
-                          : FaIconConstants.formEditModeIconData,
-                  size: _ControlBarButton.iconSize,
-                ),
-              ),
-            if (left2 != null) left2
-          ],
-          divider: _buildVerticalSeparator(),
-        ) ??
+        if (widget.block.formModel != null &&
+            widget.block.formModel!.dataState == DataState.error)
+          _ControlBarButton(
+            tooltip:
+            'Error: ${widget.block.formModel!.formErrorInfo?.errorMessage}',
+            iconData: widget.block.formModel!.formInitialDataReady
+                ? FaIconConstants.formErrorModeIconData
+                : FaIconConstants.formErrorDisabledIconData,
+            iconColor: Colors.red,
+            onAction: false,
+            onPressed: () {
+              widget.block.formModel!.showFormErrorViewerDialog(context);
+            },
+          ),
+        if (widget.block.formModel != null &&
+            (loggedInUser?.isSystemUser ?? false))
+          Tooltip(
+            message:
+            "${widget.block.formModel!.formMode.tooltip} [${getClassName(
+                widget.block)}]",
+            child: Icon(
+              widget.block.formModel!.formMode == FormMode.none
+                  ? FaIconConstants.formNoneModeIconData
+                  : widget.block.formModel!.formMode == FormMode.creation
+                  ? FaIconConstants.formCreationModeIconData
+                  : FaIconConstants.formEditModeIconData,
+              size: _ControlBarButton.iconSize,
+            ),
+          ),
+        if (left2 != null) left2
+      ],
+      divider: _buildVerticalSeparator(),
+    ) ??
         const SizedBox();
   }
 
@@ -213,18 +214,18 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
     Widget? right3 = _buildRight3Buttons(context);
     //
     return _buildBreadCrumb(
-          overflow: ScrollableOverflow(
-            keepLastDivider: false,
-            reverse: false,
-            direction: Axis.horizontal,
-          ),
-          children: [
-            if (right1 != null) right1,
-            if (right2 != null) right2,
-            if (right3 != null) right3,
-          ],
-          divider: _buildVerticalSeparator(),
-        ) ??
+      overflow: ScrollableOverflow(
+        keepLastDivider: false,
+        reverse: false,
+        direction: Axis.horizontal,
+      ),
+      children: [
+        if (right1 != null) right1,
+        if (right2 != null) right2,
+        if (right3 != null) right3,
+      ],
+      divider: _buildVerticalSeparator(),
+    ) ??
         const SizedBox();
   }
 
@@ -241,8 +242,8 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             onAction: widget.block.isRefreshingCurrentItem,
             onPressed: widget.config.allowRefreshButton && refreshActionable.yes
                 ? () {
-                    _refreshCurrentItem(widget.block);
-                  }
+              _refreshCurrentItem(widget.block);
+            }
                 : null,
           ),
         if (widget.config.allowQueryButton)
@@ -252,8 +253,8 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             onAction: widget.block.isQuerying,
             onPressed: widget.config.allowQueryButton && queryActionable.yes
                 ? () {
-                    _queryBlock(widget.block);
-                  }
+              _queryBlock(widget.block);
+            }
                 : null,
           ),
       ],
@@ -279,8 +280,8 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             onAction: widget.block.__isSaving,
             onPressed: widget.config.allowSaveButton && saveActionable.yes
                 ? () {
-                    _saveForm(widget.block);
-                  }
+              _saveForm(widget.block);
+            }
                 : null,
           ),
         if (widget.block.formModel != null && widget.config.allowSaveButton)
@@ -290,8 +291,8 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             onAction: false,
             onPressed: widget.config.allowSaveButton && resetActionable.yes
                 ? () {
-                    _resetForm(widget.block);
-                  }
+              _resetForm(widget.block);
+            }
                 : null,
           ),
       ],
@@ -317,11 +318,11 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             onAction: false,
             onPressed: widget.config.allowFilterCriteriaButton
                 ? () {
-                    FilterCriteriaDialog.showBlockFilterCriteriaDialog(
-                      context: context,
-                      block: widget.block,
-                    );
-                  }
+              FilterCriteriaDialog.showBlockFilterCriteriaDialog(
+                context: context,
+                block: widget.block,
+              );
+            }
                 : null,
           ),
         if (widget.config.allowFormInfoButton && formInfoActionable.yes)
@@ -331,8 +332,8 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             onAction: false,
             onPressed: widget.config.allowFormInfoButton
                 ? () {
-                    _showFormInfo(context, widget.block);
-                  }
+              _showFormInfo(context, widget.block);
+            }
                 : null,
           ),
         if (widget.config.allowDebugButton)
@@ -342,8 +343,8 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             onAction: false,
             onPressed: widget.config.allowDebugButton
                 ? () {
-                    _showDebugDialog(context, widget.block);
-                  }
+              _showDebugDialog(context, widget.block);
+            }
                 : null,
           ),
       ],

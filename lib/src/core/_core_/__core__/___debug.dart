@@ -61,6 +61,8 @@ String _debugObjHtml(Object? obj) {
     return "<b>${getClassName(obj)}(${obj.length} items)</b>";
   } else if (obj is Function) {
     return "<b>[Function]</b>";
+  } else if (obj is Locale) {
+    return "<b>${getClassName(obj)}(${obj.languageCode}, ${obj.countryCode})</b>";
   }
   return "<b>${getClassNameWithoutGenerics(obj)}</b>";
 }

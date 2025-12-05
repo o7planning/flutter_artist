@@ -17,9 +17,57 @@ class LocaleManager extends _Core {
   /// Apply Locale and store it in local.
   ///
   Future<void> updateAndStoreLocale({required Locale locale}) async {
-    await _updateLocale(masterFlowItem: null, locale: locale);
-    String id = "${locale.languageCode}-${locale.countryCode ?? ''}";
-    await _globalsManager._storeExtraGlobalProp(_propName, id);
+    final MasterFlowItem masterFlowItem =
+        FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "updateAndStoreLocale",
+      parameters: {
+        "locale": locale,
+      },
+      navigate: null,
+      isLibCode: true,
+    );
+    //
+    masterFlowItem?._addLineFlowItem(
+      codeId: "#46000",
+      shortDesc:
+          "On the ${_debugObjHtml(this)}.updateAndStoreLocale() method, parameters:",
+      parameters: {
+        "locale": locale,
+      },
+      lineFlowType: LineFlowType.calling,
+      isLibCall: true,
+    );
+    masterFlowItem?._addLineFlowItem(
+      codeId: "#46100",
+      shortDesc:
+          "Calling ${_debugObjHtml(this)}._updateLocale() with parameters:",
+      parameters: {
+        "locale": locale,
+      },
+      lineFlowType: LineFlowType.calling,
+      isLibCall: true,
+    );
+    await _updateLocale(masterFlowItem: masterFlowItem, locale: locale);
+    //
+    final String localeValue =
+        "${locale.languageCode}-${locale.countryCode ?? ''}";
+    masterFlowItem?._addLineFlowItem(
+      codeId: "#46200",
+      shortDesc:
+          "Calling ${_debugObjHtml(_globalsManager)}._storeExtraGlobalProp():",
+      parameters: {
+        "propName": _propName,
+        "value": localeValue,
+      },
+      lineFlowType: LineFlowType.calling,
+      isLibCall: true,
+    );
+    await _globalsManager._storeExtraGlobalProp(
+      masterFlowItem: masterFlowItem,
+      propName: _propName,
+      value: localeValue,
+    );
   }
 
   Future<void> _updateLocale({
@@ -27,13 +75,14 @@ class LocaleManager extends _Core {
     required Locale locale,
   }) async {
     masterFlowItem?._addLineFlowItem(
-      codeId: "#LM100",
+      codeId: "#47100",
       shortDesc:
           "Calling ${_debugObjHtml(_localeAdapter)}.updateLocale() with parameters:",
       parameters: {
         "locale": locale,
       },
       lineFlowType: LineFlowType.calling,
+      tipDocument: TipDocument.locale,
     );
     await _localeAdapter.updateLocale(locale);
   }
@@ -44,13 +93,13 @@ class LocaleManager extends _Core {
     // localeId: "languageCode-countryCode'.
     String? localeId = _globalsManager.getExtraGlobalProp(_propName);
     masterFlowItem?._addLineFlowItem(
-      codeId: "#LM200",
+      codeId: "#48200",
       shortDesc:
-          "Read Stored Locale @propName: $_propName --> @localeId: $localeId.",
+          "@propName: <b>$_propName</b> --> @localeId: <b>$localeId</b>.",
     );
     if (localeId == null) {
       masterFlowItem?._addLineFlowItem(
-        codeId: "#LM220",
+        codeId: "#48220",
         shortDesc: "@localeId is null --> nothing to do.",
       );
       return null;
@@ -67,15 +116,15 @@ class LocaleManager extends _Core {
       if (locale.languageCode == languageCode &&
           locale.countryCode == countryCode) {
         masterFlowItem?._addLineFlowItem(
-          codeId: "#LM240",
-          shortDesc: "Found Locale: $locale.",
+          codeId: "#48240",
+          shortDesc: "Found Locale: ${_debugObjHtml(locale)}.",
         );
         return locale;
       }
     }
     masterFlowItem?._addLineFlowItem(
-      codeId: "#LM260",
-      shortDesc: "No Local Found for @localeId: $localeId.",
+      codeId: "#48260",
+      shortDesc: "No Local Found for @localeId: <b>$localeId</b>.",
     );
     return null;
   }

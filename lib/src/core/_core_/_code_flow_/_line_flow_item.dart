@@ -12,7 +12,7 @@ class LineFlowItem {
   List<String>? _extraInfos;
 
   Map<String, dynamic>? parameters;
- 
+
   List<String>? get extraInfos => _extraInfos;
 
   LineFlowItem({

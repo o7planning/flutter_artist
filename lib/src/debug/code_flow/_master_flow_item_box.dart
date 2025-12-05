@@ -96,13 +96,25 @@ class MasterFlowItemBox extends StatelessWidget {
         title = ".${masterFlowItem.funcCallInfo?.funcName}()";
     }
     ErrorInfo? errorInfo = masterFlowItem.getErrorInfo();
+    bool hasEvent = masterFlowItem.hasEvent();
     return IconLabelText(
       text: title,
       style: _titleStyle(),
-      suffixIcon: errorInfo != null
+      suffixIcon: hasEvent
+          ? Tooltip(
+              message: "There was an event broadcast here.",
+              child: Icon(
+                Icons.electric_bolt_outlined,
+                color: Colors.deepOrangeAccent,
+                size: 14,
+              ),
+            )
+          : null,
+      suffixIcon2: errorInfo != null
           ? SimpleSmallIconButton(
               iconData: Icons.error_outline,
               iconColor: Colors.red,
+              iconSize: 14,
               onPressed: () {
                 _showErrorDialog(context, errorInfo);
               },

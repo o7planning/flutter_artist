@@ -74,7 +74,7 @@ class GlobalsManager extends _Core {
     masterFlowItem?._addLineFlowItem(
       codeId: "#E0000",
       shortDesc:
-          "Open <b>HiveBox</b> to read <b>Extra Global Props</b> from local.",
+          "Open <b>HiveBox</b> to read <b>Extra Global Props</b> from <b>Local</b>.",
     );
     // Store on local device:
     Box<String> hiveBox = await HiveUtils.openHiveBoxExtraGlobalPropNames();
@@ -84,8 +84,10 @@ class GlobalsManager extends _Core {
       String extraGlobalPropNames = hiveBox.get(key) ?? "";
       masterFlowItem?._addLineFlowItem(
         codeId: "#E0100",
-        shortDesc:
-            " - @key: $key --> @extraGlobalPropNames: $extraGlobalPropNames.",
+        shortDesc: "Result from <b>HiveBox</b>:"
+            "\n - @key: <b>$key</b>"
+            "\n - @extraGlobalPropNames: <b>$extraGlobalPropNames</b>",
+        lineFlowType: LineFlowType.debug,
       );
       List<String> propNames = extraGlobalPropNames
           .split(__separator)
@@ -95,7 +97,7 @@ class GlobalsManager extends _Core {
 
       masterFlowItem?._addLineFlowItem(
         codeId: "#E0200",
-        shortDesc: " - @propNames: $propNames.",
+        shortDesc: " - @propNames: <b>$propNames</b>.",
       );
       //
       __registeredExtraPropNames
@@ -119,34 +121,46 @@ class GlobalsManager extends _Core {
     for (String propName in __registeredExtraPropNames) {
       masterFlowItem?._addLineFlowItem(
         codeId: "#E0400",
-        shortDesc: "Reading prop '$propName' from HiveBox...",
+        shortDesc: "Reading prop <b>'$propName'</b> from <b>HiveBox</b>...",
       );
       dynamic value = await __readExtraGlobalProp(propName);
       __extraPropMap[propName] = value;
       masterFlowItem?._addLineFlowItem(
         codeId: "#E0500",
-        shortDesc: "Read: @key: $propName --> @value: $value",
+        shortDesc: "Result from <b>HiveBox</b>:"
+            "\n - @key: <b>$propName</b>"
+            "\n - @value: <b>$value</b>",
       );
     }
   }
 
-  Future<bool> __storeExtraGlobalPropNames() async {
-    DebugPrinter.printDebug(
-        DebugCat.globalManager, "   --- __storeExtraGlobalPropNames()...");
+  Future<bool> __storeExtraGlobalPropNames(
+      MasterFlowItem? masterFlowItem) async {
     // Store on local device:
     Box<String> hiveBox = await HiveUtils.openHiveBoxExtraGlobalPropNames();
+    String key = __getHiveExtraGlobalPropNamesKey();
     try {
-      String key = __getHiveExtraGlobalPropNamesKey();
       String value = __registeredExtraPropNames.toList().join(__separator);
-      DebugPrinter.printDebug(DebugCat.globalManager,
-          "   --- __storeExtraGlobalPropNames(). key: $key");
-      DebugPrinter.printDebug(DebugCat.globalManager,
-          "   --- __storeExtraGlobalPropNames(). value: $value");
+
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#LE000",
+        shortDesc: "Store to the <b>HiveBox</b>:"
+            "\n - @key: <b>$key</b>"
+            "\n - @value: <b>$value</b>",
+        lineFlowType: LineFlowType.debug,
+      );
       await hiveBox.put(key, value);
       return true;
     } catch (e, stackTrace) {
-      print("Error __storeExtraGlobalPropNames: $e");
-      print(stackTrace);
+      final ErrorInfo errorInfo = ErrorInfo.fromError(
+        error: e,
+        stackTrace: stackTrace,
+      );
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#LE020",
+        shortDesc: "Store @key: <b>$key</b> error!",
+        errorInfo: errorInfo,
+      );
       return false;
     } finally {
       await hiveBox.close();
@@ -168,15 +182,19 @@ class GlobalsManager extends _Core {
     return __extraPropMap[propName];
   }
 
-  Future<void> _storeExtraGlobalProp(String propName, dynamic value) async {
-    DebugPrinter.printDebug(DebugCat.globalManager,
-        "GlobalManager ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> storeExtraGlobalProp()...");
+  Future<void> _storeExtraGlobalProp({
+    required MasterFlowItem? masterFlowItem,
+    required String propName,
+    required dynamic value,
+  }) async {
     __registeredExtraPropNames.add(propName);
-    DebugPrinter.printDebug(
-        DebugCat.globalManager, "   --- propName: $propName");
-    DebugPrinter.printDebug(DebugCat.globalManager,
-        "   --- __registeredExtraPropNames: $__registeredExtraPropNames");
-    bool success = await __storeExtraGlobalPropNames();
+    masterFlowItem?._addLineFlowItem(
+      codeId: "#LS000",
+      shortDesc:
+          "Registered extraPropNames: <b>${__registeredExtraPropNames.toList()}</b>.",
+      lineFlowType: LineFlowType.debug,
+    );
+    bool success = await __storeExtraGlobalPropNames(masterFlowItem);
     if (!success) {
       return;
     }
@@ -185,10 +203,15 @@ class GlobalsManager extends _Core {
     //
     Box<dynamic> hiveBox = await HiveUtils.openHiveBoxExtraGlobalProp();
     String key = __getHiveExtraGlobalPropNameKey(propName);
+    masterFlowItem?._addLineFlowItem(
+      codeId: "#LS100",
+      shortDesc: "Store to the <b>HiveBox</b>:"
+          "\n - @key: <b>$key</b>"
+          "\n - @value: <b>$value</b>",
+      lineFlowType: LineFlowType.debug,
+    );
     await hiveBox.put(key, value);
     await hiveBox.close();
-    DebugPrinter.printDebug(
-        DebugCat.globalManager, "   --- hiveBox.put: key: $key, value: $value");
   }
 
   ///
@@ -228,8 +251,11 @@ class GlobalsManager extends _Core {
     try {
       masterFlowItem?._addLineFlowItem(
         codeId: "#GM080",
-        shortDesc: "Call ${_debugObjHtml(loginLogoutAdapter)}.fromJson() "
+        shortDesc: "Calling ${_debugObjHtml(loginLogoutAdapter)}.fromJson() "
             "to convert above <b>JSON</b> to <b>${getTypeNameWithoutGenerics(ILoggedInUser)}</b> object.",
+        parameters: {
+          "loggedInUserJson": loggedInUserJson,
+        },
         lineFlowType: LineFlowType.calling,
         tipDocument: TipDocument.loginLogoutAdapter,
       );

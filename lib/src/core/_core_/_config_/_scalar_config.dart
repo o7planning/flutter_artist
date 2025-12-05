@@ -21,8 +21,9 @@ class ScalarConfig {
     this.selfReQueryable = false,
     List<Evt>? executeScalarLevelReactionToEvts,
     List<Event>? executeScalarLevelReactionToEvents,
-  })  : executeScalarLevelReactionToEvts =
-            List.unmodifiable(executeScalarLevelReactionToEvts?.toSet() ?? []),
+  })
+      : executeScalarLevelReactionToEvts =
+  List.unmodifiable(executeScalarLevelReactionToEvts?.toSet() ?? []),
         executeScalarLevelReactionToEvents = List.unmodifiable(
             executeScalarLevelReactionToEvents?.toSet() ?? []);
 

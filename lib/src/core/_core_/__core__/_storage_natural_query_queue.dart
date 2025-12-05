@@ -46,7 +46,7 @@ class _StorageNaturalQueryQueue {
     masterFlowItem._addLineFlowItem(
       codeId: "#00000",
       shortDesc:
-          "Just detected some UI Components that have just been displayed. "
+          "Just detected some <b>UI Components</b> that have just been displayed. "
           "This will trigger a query execution on the associated <b>Shelves</b>:\n"
           " - ${lazyShelves.map((s) => _debugObjHtml(s)).join(", ")}",
       tipDocument: TipDocument.naturalQuery,

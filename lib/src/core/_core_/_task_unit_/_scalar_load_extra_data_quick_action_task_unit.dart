@@ -12,7 +12,7 @@ class _ScalarLoadExtraDataQuickActionTaskUnit<DATA extends Object>
     required this.xScalar,
     required this.action,
     required this.afterQuickAction,
-  }) : super(taskType: TaskType.scalarSilentAction);
+  }) : super(taskType: TaskType.scalarLoadExtraData);
 
   @override
   XShelf get xShelf => xScalar.xShelf;

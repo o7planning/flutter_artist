@@ -85,7 +85,7 @@ abstract class _Core {
         msg = "Call $methodName() error: ${appError.errorMessage}";
       } else {
         msg =
-            "Call ${getClassName(this)}.$methodName() error: ${appError.errorMessage}";
+            "Call ${getClassNameWithoutGenerics(this)}.$methodName() error: ${appError.errorMessage}";
       }
     }
     print(msg);
@@ -125,7 +125,8 @@ abstract class _Core {
       if (methodName.contains("\\.")) {
         msg = "Call $methodName() error: $message";
       } else {
-        msg = "Call ${getClassName(this)}.$methodName() error: $message";
+        msg =
+            "Call ${getClassNameWithoutGenerics(this)}.$methodName() error: $message";
       }
     }
     print(msg);

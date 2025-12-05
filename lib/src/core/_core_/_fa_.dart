@@ -270,7 +270,7 @@ class _FlutterArtist extends _Core {
     );
     masterFlowItem._addLineFlowItem(
       codeId: "#S0560",
-      shortDesc: "Got stored @locale: $locale",
+      shortDesc: "Got stored @locale: ${_debugObjHtml(locale)}.",
     );
     if (locale != null) {
       masterFlowItem._addLineFlowItem(
@@ -280,6 +280,7 @@ class _FlutterArtist extends _Core {
         parameters: {
           "locale": locale,
         },
+        lineFlowType: LineFlowType.calling,
       );
       Future.delayed(Duration(seconds: 2), () async {
         await localeManager._updateLocale(

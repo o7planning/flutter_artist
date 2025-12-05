@@ -147,7 +147,7 @@ abstract class _StorageCore extends _Core {
     if (creator == null) {
       throw DebugUtils.getFatalError(
           " ERROR: '$shelfName' not found. You need to call:\n "
-              " FlutterArtist.storage.registerShelf(()=> $shelfName())");
+          " FlutterArtist.storage.registerShelf(()=> $shelfName())");
     }
     shelf = creator() as F;
     if (__started) {
@@ -170,7 +170,7 @@ abstract class _StorageCore extends _Core {
     if (creator == null) {
       throw DebugUtils.getFatalError(
           " ERROR: '$activityName' not found. You need to call:\n "
-              " FlutterArtist.storage.registerActivity(()=> $activityName())");
+          " FlutterArtist.storage.registerActivity(()=> $activityName())");
     }
     activity = creator() as F;
     if (__started) {
@@ -303,8 +303,7 @@ abstract class _StorageCore extends _Core {
       // );
       if (shelf.config.hiddenBehavior == ShelfHiddenBehavior.clear) {
         print(
-            "  ---------> Remove ${getClassName(
-                shelf)} from FlutterArtist Storage");
+            "  ---------> Remove ${getClassName(shelf)} from FlutterArtist Storage");
         _shelfMap.remove(shelf.name);
       } else {
         print("  ---------> Do Nothing");

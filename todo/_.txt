@@ -22,5 +22,7 @@
 #22000
 #23000
 #24000
+#42600
+#44000
 
 https://pub.dev/packages/flutter_artist

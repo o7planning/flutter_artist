@@ -141,7 +141,7 @@ abstract class FormModel<
   /// then @itemDetail & @formInput will be not null.
   ///
   /// ```
-  /// Case FormActivityType.itemFirstLoad:
+  /// Case FormActivityType.startCreatingOrEditing:
   ///     - @formMode = FormMode.creation:
   ///         - @itemDetail     --> Null.
   ///         - @formInput --> Not null.
@@ -390,12 +390,18 @@ abstract class FormModel<
   @_TaskUnitMethodAnnotation()
   @_FormViewChangeAnnotation()
   Future<bool> _unitFormViewChanged({
-    required MasterFlowItem? masterFlowItem,
+    required MasterFlowItem masterFlowItem,
+    required TaskType taskType,
     required XFormModel xFormModel,
   }) async {
     __assertThisXFormModel(xFormModel);
     //
-    // $$$
+    masterFlowItem._addLineFlowItem(
+      codeId: "#36000",
+      shortDesc:
+          "Begin ${_debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
+      lineFlowType: LineFlowType.debug,
+    );
     //
     await _startNewFormActivity(
       masterFlowItem: masterFlowItem,
@@ -412,13 +418,19 @@ abstract class FormModel<
   @_TaskUnitMethodAnnotation()
   @_FormModelLoadDataAnnotation()
   Future<bool> _unitLoadFormData({
-    required MasterFlowItem? masterFlowItem,
+    required MasterFlowItem masterFlowItem,
+    required TaskType taskType,
     required XFormModel thisXFormModel,
     required FormModelDataLoadResult taskResult,
   }) async {
     __assertThisXFormModel(thisXFormModel);
     //
-    // $$$
+    masterFlowItem._addLineFlowItem(
+      codeId: "#37000",
+      shortDesc:
+          "Begin ${_debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
+      lineFlowType: LineFlowType.debug,
+    );
     //
     final bool forceReloadForm;
     switch (thisXFormModel.forceTypeForForm) {
@@ -430,26 +442,61 @@ abstract class FormModel<
         forceReloadForm = false;
     }
     //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#37060",
+      shortDesc:
+          "Calculate >>  @forceReloadForm: ${_debugObjHtml(forceReloadForm)}",
+    );
+    //
     if (!forceReloadForm) {
-      print("        ~~~~~~~> IGNORED --> form - [${block.name}]");
       if (dataState != DataState.ready) {
+        masterFlowItem._addLineFlowItem(
+          codeId: "#37100",
+          shortDesc:
+              "${_debugObjHtml(this)} - @dataState: ${_debugObjHtml(dataState)} --> Clear data and set to <b>pending</b>.",
+        );
         _clearDataWithDataState(formDataState: DataState.pending);
       }
+      masterFlowItem._addLineFlowItem(
+        codeId: "#37120",
+        shortDesc:
+            "@forceReloadForm: ${_debugObjHtml(forceReloadForm)} --> do nothing.",
+      );
       return true;
     }
     //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#37160",
+      shortDesc: "Calling ${_debugObjHtml(block)}._initFormRelatedData().",
+      lineFlowType: LineFlowType.calling,
+      isLibCall: true,
+    );
     FORM_RELATED_DATA? formRelatedData =
         block._initFormRelatedData(masterFlowItem);
     if (formRelatedData == null) {
       return false;
     }
-    var formInput = thisXFormModel.formInput as FORM_INPUT?;
+    //
+    final formInput = thisXFormModel.formInput as FORM_INPUT?;
+    final activityType = FormActivityType.startCreatingOrEditing;
+    //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#37260",
+      shortDesc: "Calling ${_debugObjHtml(this)}._startNewFormActivity().",
+      parameters: {
+        "activityType": activityType,
+        "formInput": formInput,
+        "formRelatedData": formRelatedData,
+      },
+      lineFlowType: LineFlowType.calling,
+      isLibCall: true,
+    );
     // TODO: Bắt lỗi cho vào "taskResult" ???????
     return await _startNewFormActivity(
       masterFlowItem: masterFlowItem,
       formRelatedData: formRelatedData,
       formInput: formInput,
-      activityType: FormActivityType.itemFirstLoad,
+      activityType: activityType,
     );
   }
 
@@ -458,20 +505,41 @@ abstract class FormModel<
 
   @_TaskUnitMethodAnnotation()
   @_FormModelEnterFormFieldsAnnotation()
-  Future<bool> _unitQuickFormInput({
-    required MasterFlowItem? masterFlowItem,
+  Future<bool> _unitEnterFormFields({
+    required MasterFlowItem masterFlowItem,
+    required TaskType taskType,
     required XFormModel thisXFormModel,
     required FORM_INPUT formInput,
   }) async {
     __assertThisXFormModel(thisXFormModel);
     //
-    // $$$
+    masterFlowItem._addLineFlowItem(
+      codeId: "#38000",
+      shortDesc:
+          "Begin ${_debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
+      lineFlowType: LineFlowType.debug,
+    );
+    //
+    final FORM_RELATED_DATA? formRelatedData = null;
+    final activityType = FormActivityType.autoEnterFormFields;
+
+    masterFlowItem._addLineFlowItem(
+      codeId: "#38100",
+      shortDesc: "Calling ${_debugObjHtml(this)}._startNewFormActivity().",
+      parameters: {
+        "activityType": activityType,
+        "formInput": formInput,
+        "formRelatedData": formRelatedData,
+      },
+      lineFlowType: LineFlowType.calling,
+      isLibCall: true,
+    );
     //
     await _startNewFormActivity(
       masterFlowItem: masterFlowItem,
-      formRelatedData: null,
+      formRelatedData: formRelatedData, // null
       formInput: formInput,
-      activityType: FormActivityType.autoEnterFormFields,
+      activityType: activityType,
     );
     return true;
   }
@@ -483,6 +551,7 @@ abstract class FormModel<
   @_FormModelSaveFormAnnotation()
   Future<void> _unitSaveForm({
     required MasterFlowItem? masterFlowItem,
+    required TaskType taskType,
     required XFormModel<ID, ITEM_DETAIL> thisXFormModel,
     required FormSaveResult taskResult,
   }) async {
@@ -491,7 +560,8 @@ abstract class FormModel<
     masterFlowItem?._addLineFlowItem(
       codeId: "#11000",
       shortDesc:
-          "${_debugObjHtml(this)} -> Begin ${TaskType.formModelSaveForm.asDebugTaskUnit()}",
+          "${_debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
+      lineFlowType: LineFlowType.debug,
     );
     //
     // No need to check again?
@@ -556,7 +626,8 @@ abstract class FormModel<
       //
       masterFlowItem?._addLineFlowItem(
         codeId: "#11500",
-        shortDesc: "Call ${_debugObjHtml(this)}.$calledMethodName() --> error!",
+        shortDesc:
+            "The ${_debugObjHtml(this)}.$calledMethodName() method was called with an error!",
         errorInfo: errorInfo,
       );
       //
@@ -645,7 +716,7 @@ abstract class FormModel<
       shortDesc: "${_debugObjHtml(this)} FormView Changed.",
     );
     //
-    if (activityType == FormActivityType.itemFirstLoad) {
+    if (activityType == FormActivityType.startCreatingOrEditing) {
       __loadCount++;
       _autovalidateMode = AutovalidateMode.disabled;
     } else {
@@ -655,7 +726,7 @@ abstract class FormModel<
     final ITEM_DETAIL? itemDetail = block.currentItemDetail;
     final FormMode currentFormMode;
     switch (activityType) {
-      case FormActivityType.itemFirstLoad:
+      case FormActivityType.startCreatingOrEditing:
         currentFormMode = itemDetail == null //
             ? FormMode.creation
             : FormMode.edit;
@@ -673,7 +744,7 @@ abstract class FormModel<
         if (formRelatedData == null) {
           throw DevError(
             errorMessage:
-                "Dev Error. formRelatedData must be not null if FormModel.activityType = itemFirstLoad.",
+                "Dev Error. formRelatedData must be not null if FormModel.activityType = startCreatingOrEditing.",
           );
         }
         __formRelatedData = formRelatedData;
@@ -716,7 +787,7 @@ abstract class FormModel<
     final bool isNoneMode = currentFormMode == FormMode.none;
     final bool isCreationMode = currentFormMode == FormMode.creation;
     //
-    if (activityType == FormActivityType.itemFirstLoad) {
+    if (activityType == FormActivityType.startCreatingOrEditing) {
       if (isNoneMode || isCreationMode) {
         _defaultSimpleValuesInitiated = false;
         _defaultMultiOptValuesInitiated = false;
@@ -734,8 +805,8 @@ abstract class FormModel<
     //
     // Get SimpleProp Value:
     //
-    // FormActivityType.itemFirstLoad (Begin Create or Update).
-    if (activityType == FormActivityType.itemFirstLoad) {
+    // FormActivityType.startCreatingOrEditing (Begin Create or Update).
+    if (activityType == FormActivityType.startCreatingOrEditing) {
       if (itemDetail != null) {
         masterFlowItem?._addLineFlowItem(
           codeId: "#06180",
@@ -811,7 +882,7 @@ abstract class FormModel<
           return false;
         }
       }
-      // itemDetail == null. [[Currently Condition: itemFirstLoad && itemDetail == null]].
+      // itemDetail == null. [[Currently Condition: startCreatingOrEditing && itemDetail == null]].
       else {
         masterFlowItem?._addLineFlowItem(
           codeId: "#06500",
@@ -837,7 +908,7 @@ abstract class FormModel<
               },
               lineFlowType: LineFlowType.calling,
             );
-            // In case of activityType = itemFirstLoad.
+            // In case of activityType = startCreatingOrEditing.
             simplePropValueDefault = specifyDefaultValuesForSimpleProps(
                   parentBlockCurrentItemId: block.parentBlockCurrentItemId,
                 ) ??
@@ -894,7 +965,7 @@ abstract class FormModel<
           }
         }
         //
-        // In Condition: itemFirstLoad && itemDetail == null.
+        // In Condition: startCreatingOrEditing && itemDetail == null.
         // TODO: Handle Error:
         //
         formInput ??= block.__initInputForCreationForm(masterFlowItem);
@@ -972,7 +1043,7 @@ abstract class FormModel<
           }
         }
       }
-    } // end of "itemFirstLoad".
+    } // end of "startCreatingOrEditing".
     // Begin of 'autoEnterFormFields'.
     else if (activityType == FormActivityType.autoEnterFormFields) {
       masterFlowItem?._addLineFlowItem(
@@ -1175,7 +1246,7 @@ abstract class FormModel<
       //
       _formPropsStructure._updateTempToReal();
       //
-      if (activityType == FormActivityType.itemFirstLoad) {
+      if (activityType == FormActivityType.startCreatingOrEditing) {
         _formPropsStructure._setInitialFormDataForItemFirstLoad();
       }
       //
@@ -1191,7 +1262,7 @@ abstract class FormModel<
         error: error,
       );
       //
-      if (activityType == FormActivityType.itemFirstLoad) {
+      if (activityType == FormActivityType.startCreatingOrEditing) {
         if (formDataState == DataState.ready) {
           _formPropsStructure._formInitialDataReady = true;
         }
@@ -1203,7 +1274,7 @@ abstract class FormModel<
       // Form Initial Data Ready
       else {
         // Validate Form
-        if (activityType == FormActivityType.itemFirstLoad) {
+        if (activityType == FormActivityType.startCreatingOrEditing) {
           if (formMode == FormMode.edit && _formKey.currentState != null) {
             if (_formPropsStructure._formInitialDataReady) {
               _formKey.currentState!.validate(focusOnInvalid: false);
@@ -1325,6 +1396,12 @@ abstract class FormModel<
     multiOptProp._tempCurrentValue = newSelectedValue;
     //
     if (valueChanged) {
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#17200",
+        shortDesc:
+            "Value of <b>'$multiOptPropName'</b> has changed --> Clear data of all descendant <b>MultiOptFormProp(s)</b>.",
+        lineFlowType: LineFlowType.info,
+      );
       _formPropsStructure._updateChildrenMultiOptValueToNullCascade(
         multiOptProp: multiOptProp,
       );
@@ -1402,19 +1479,21 @@ abstract class FormModel<
     //
     if (tempMultiOptPropXData != null) {
       // Item First Load:
-      if (activityType == FormActivityType.itemFirstLoad) {
+      if (activityType == FormActivityType.startCreatingOrEditing) {
         if (currentItemDetail == null) {
           masterFlowItem?._addLineFlowItem(
             codeId: "#17500",
             shortDesc:
-                "(In _loadMultiOptPropDataCascade() method for ${_debugObjHtml(multiOptProp)}):\n"
-                " - @activityType: <b>$activityType</b>\n"
-                " - @tempMultiOptPropXData: ${_debugObjHtml(tempMultiOptPropXData)}\n"
-                " - @currentItemDetail: ${_debugObjHtml(currentItemDetail)}\n"
-                " - @formInput: ${_debugObjHtml(formInput)}",
+                "(In _loadMultiOptPropDataCascade() method for ${_debugObjHtml(multiOptProp)}):",
+            parameters: {
+              "activityType": activityType,
+              "currentItemDetail": currentItemDetail,
+              "tempMultiOptPropXData": tempMultiOptPropXData,
+              "formInput": formInput,
+            },
             lineFlowType: LineFlowType.debug,
           );
-          // In itemFirstLoad & currentItemDetail == null.
+          // In startCreatingOrEditing & currentItemDetail == null.
           if (!_defaultMultiOptValuesInitiated) {
             // May throw FormTempError.
             initialValueWrap = __specifyDefaultValueForMultiOptProp(
@@ -1450,7 +1529,13 @@ abstract class FormModel<
         else {
           masterFlowItem?._addLineFlowItem(
             codeId: "#17580",
-            shortDesc: " - ",
+            shortDesc: "Debug:",
+            parameters: {
+              "activityType": activityType,
+              "currentItemDetail": currentItemDetail,
+              "tempMultiOptPropXData": tempMultiOptPropXData,
+              "formInput": formInput,
+            },
             lineFlowType: LineFlowType.debug,
           );
           // May throw FormTempError.
@@ -1468,17 +1553,19 @@ abstract class FormModel<
             shortDesc: "Got value: ${_debugObjHtml(initialValueWrap)}",
           );
         }
-      } // end of 'itemFirstLoad'.
+      } // end of 'startCreatingOrEditing'.
       // Auto Enter Form Fields:
       else if (activityType == FormActivityType.autoEnterFormFields) {
         if (formInput != null && formInput is! EmptyFormInput) {
           masterFlowItem?._addLineFlowItem(
             codeId: "#17600",
             shortDesc:
-                "(In _loadMultiOptPropDataCascade() method for ${_debugObjHtml(multiOptProp)}):\n"
-                " - @activityType: <b>$activityType</b>\n"
-                " - @currentItemDetail: ${_debugObjHtml(currentItemDetail)}\n"
-                " - @formInput: ${_debugObjHtml(formInput)}",
+                "(In _loadMultiOptPropDataCascade() method for ${_debugObjHtml(multiOptProp)}):",
+            parameters: {
+              "activityType": activityType,
+              "currentItemDetail": currentItemDetail,
+              "formInput": formInput,
+            },
             lineFlowType: LineFlowType.debug,
           );
           // May throw FormTempError.
@@ -1538,7 +1625,7 @@ abstract class FormModel<
     );
     //
     final dynamic initialValue;
-    if (activityType == FormActivityType.itemFirstLoad) {
+    if (activityType == FormActivityType.startCreatingOrEditing) {
       initialValue = initialValueWrap?.values;
     } else {
       initialValue = _formPropsStructure._getInitialPropValue(
@@ -1546,7 +1633,7 @@ abstract class FormModel<
       );
     }
     //
-    if (activityType == FormActivityType.itemFirstLoad ||
+    if (activityType == FormActivityType.startCreatingOrEditing ||
         parentValueIsInitialValue) {
       tempMultiOptPropXData?._addInitialValueIfNotFound(
         initialValue: initialValue,

@@ -106,12 +106,15 @@ class _Executor {
       taskUnit.xActivity.activity._masterFlowItem = masterFlowItem;
       //
       await taskUnit.xActivity.activity._unitExecuteActivity(
+        taskType: taskUnit.taskType,
         thisXActivity: taskUnit.xActivity,
       );
     }
     // Storage Silent Action TaskUnit:
     else if (taskUnit is _StorageSilentActionTaskUnit) {
       await FlutterArtist.storage._unitSilentAction(
+        masterFlowItem: masterFlowItem,
+        taskType: taskUnit.taskType,
         action: taskUnit.action,
         taskResult: taskUnit.taskResult as StorageSilentActionResult,
       );
@@ -120,6 +123,7 @@ class _Executor {
     else if (taskUnit is _FilterModelLoadDataTaskUnit) {
       await taskUnit.xFilterModel.filterModel._unitLoadFilterData(
         masterFlowItem: masterFlowItem,
+        taskType: taskUnit.taskType,
         thisXFilterModel: taskUnit.xFilterModel,
         taskResult: taskUnit.taskResult as FilterModelDataLoadResult,
       );
@@ -128,6 +132,7 @@ class _Executor {
     else if (taskUnit is _FilterPanelChangeTaskUnit) {
       await taskUnit.xFilterModel.filterModel._unitFilterPanelChanged(
         masterFlowItem: masterFlowItem,
+        taskType: taskUnit.taskType,
         xFilterModel: taskUnit.xFilterModel,
       );
     }
@@ -135,6 +140,7 @@ class _Executor {
     else if (taskUnit is _FormViewChangeTaskUnit) {
       await taskUnit.xFormModel.formModel._unitFormViewChanged(
         masterFlowItem: masterFlowItem,
+        taskType: taskUnit.taskType,
         xFormModel: taskUnit.xFormModel,
       );
     }
@@ -142,6 +148,7 @@ class _Executor {
     else if (taskUnit is _BlockClearCurrentTaskUnit) {
       await taskUnit.xBlock.block._unitClearCurrent(
         masterFlowItem: masterFlowItem,
+        taskType: taskUnit.taskType,
         thisXBlock: taskUnit.xBlock,
       );
     }
@@ -149,6 +156,7 @@ class _Executor {
     else if (taskUnit is _BlockClearanceTaskUnit) {
       await taskUnit.xBlock.block._unitClearance(
         masterFlowItem: masterFlowItem,
+        taskType: taskUnit.taskType,
         thisXBlock: taskUnit.xBlock,
       );
     }
@@ -156,6 +164,7 @@ class _Executor {
     else if (taskUnit is _BlockQueryTaskUnit) {
       await taskUnit.xBlock.block._unitQuery(
         masterFlowItem: masterFlowItem,
+        taskType: taskUnit.taskType,
         thisXBlock: taskUnit.xBlock,
       );
     }
@@ -163,6 +172,7 @@ class _Executor {
     else if (taskUnit is _BlockPrepareFormToCreateItemTaskUnit) {
       await taskUnit.xBlock.block._unitPrepareFormToCreateItem(
         masterFlowItem: masterFlowItem,
+        taskType: taskUnit.taskType,
         thisXBlock: taskUnit.xBlock,
         initDirty: taskUnit.initDirty,
         formInput: taskUnit.formInput,
@@ -173,38 +183,43 @@ class _Executor {
     else if (taskUnit is _BlockSelectAsCurrentTaskUnit) {
       await taskUnit.xBlock.block._unitSetItemAsCurrent(
         masterFlowItem: masterFlowItem,
+        taskType: taskUnit.taskType,
         currentItemSelectionType: taskUnit.currentItemSelectionType,
         newQueriedList: taskUnit.newQueriedList,
         candidateItem: taskUnit.candidateItem,
         thisXBlock: taskUnit.xBlock,
         currentItemSelectionResult:
-        taskUnit.taskResult as BlockItemCurrSelectionResult<Identifiable>,
+            taskUnit.taskResult as BlockItemCurrSelectionResult<Identifiable>,
       );
     }
     // Block Delete Item:
     else if (taskUnit is _BlockItemDeletionTaskUnit) {
       await taskUnit.xBlock.block._unitDeleteItem(
         masterFlowItem: masterFlowItem,
+        taskType: taskUnit.taskType,
         thisXBlock: taskUnit.xBlock,
         item: taskUnit.item,
         deletionResult:
-        taskUnit.taskResult as BlockItemDeletionResult<Identifiable>,
+            taskUnit.taskResult as BlockItemDeletionResult<Identifiable>,
       );
     }
     // Block Delete Items:
     else if (taskUnit is _BlockMultiItemsDeletionTaskUnit) {
       await taskUnit.xBlock.block._unitDeleteItems(
+        masterFlowItem: masterFlowItem,
+        taskType: taskUnit.taskType,
         thisXBlock: taskUnit.xBlock,
         items: taskUnit.items,
         stopIfError: taskUnit.stopIfError,
         deletionResult:
-        taskUnit.taskResult as BlockItemsDeletionResult<Identifiable>,
+            taskUnit.taskResult as BlockItemsDeletionResult<Identifiable>,
       );
     }
     // Block QuickCreateItem:
     else if (taskUnit is _BlockQuickItemCreationTaskUnit) {
       await taskUnit.xBlock.block._unitQuickCreateItem(
         masterFlowItem: masterFlowItem,
+        taskType: taskUnit.taskType,
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
         taskResult: taskUnit.taskResult as BlockQuickItemCreationResult,
@@ -214,6 +229,7 @@ class _Executor {
     else if (taskUnit is _BlockSilentItemCreationTaskUnit) {
       await taskUnit.xBlock.block._unitSilentCreateItem(
         masterFlowItem: masterFlowItem,
+        taskType: taskUnit.taskType,
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
         taskResult: taskUnit.taskResult as BlockSilentItemCreationResult,
@@ -222,6 +238,8 @@ class _Executor {
     // Block QuickCreateMultiItems:
     else if (taskUnit is _BlockQuickMultiItemsCreationTaskUnit) {
       await taskUnit.xBlock.block._unitQuickCreateMultiItems(
+        masterFlowItem: masterFlowItem,
+        taskType: taskUnit.taskType,
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
       );
@@ -230,6 +248,7 @@ class _Executor {
     else if (taskUnit is _BlockQuickItemUpdateTaskUnit) {
       await taskUnit.xBlock.block._unitQuickUpdateItem(
         masterFlowItem: masterFlowItem,
+        taskType: taskUnit.taskType,
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
         taskResult: taskUnit.taskResult as BlockQuickItemUpdateResult,
@@ -239,6 +258,7 @@ class _Executor {
     else if (taskUnit is _BlockSilentItemUpdateTaskUnit) {
       await taskUnit.xBlock.block._unitSilentUpdateItem(
         masterFlowItem: masterFlowItem,
+        taskType: taskUnit.taskType,
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
         taskResult: taskUnit.taskResult as BlockSilentItemUpdateResult,
@@ -247,6 +267,8 @@ class _Executor {
     // Block Quick Action:
     else if (taskUnit is _BlockSilentActionTaskUnit) {
       await taskUnit.xBlock.block._unitSilentAction(
+        masterFlowItem: masterFlowItem,
+        taskType: taskUnit.taskType,
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
         taskResult: taskUnit.taskResult as BlockSilentActionResult,
@@ -256,6 +278,7 @@ class _Executor {
     else if (taskUnit is _FormModelLoadDataTaskUnit) {
       await taskUnit.xFormModel.formModel._unitLoadFormData(
         masterFlowItem: masterFlowItem,
+        taskType: taskUnit.taskType,
         thisXFormModel: taskUnit.xFormModel,
         taskResult: taskUnit.taskResult as FormModelDataLoadResult,
       );
@@ -264,14 +287,16 @@ class _Executor {
     else if (taskUnit is _FormModelSaveFormTaskUnit) {
       await taskUnit.xFormModel.formModel._unitSaveForm(
         masterFlowItem: masterFlowItem,
+        taskType: taskUnit.taskType,
         thisXFormModel: taskUnit.xFormModel,
         taskResult: taskUnit.taskResult as FormSaveResult,
       );
     }
     // FormModel QuickFormInputAction:
     else if (taskUnit is _FormModelAutoEnterFormFieldsTaskUnit) {
-      await taskUnit.xFormModel.formModel._unitQuickFormInput(
+      await taskUnit.xFormModel.formModel._unitEnterFormFields(
         masterFlowItem: masterFlowItem,
+        taskType: taskUnit.taskType,
         thisXFormModel: taskUnit.xFormModel,
         formInput: taskUnit.formInput,
       );
@@ -280,18 +305,23 @@ class _Executor {
     else if (taskUnit is _ScalarQueryTaskUnit) {
       await taskUnit.xScalar.scalar._unitQuery(
         masterFlowItem: masterFlowItem,
+        taskType: taskUnit.taskType,
         thisXScalar: taskUnit.xScalar,
       );
     }
     // Scalar Clear Value:
     else if (taskUnit is _ScalarClearanceTaskUnit) {
       await taskUnit.xScalar.scalar._unitClearance(
+        masterFlowItem: masterFlowItem,
+        taskType: taskUnit.taskType,
         thisXScalar: taskUnit.xScalar,
       );
     }
     // Scalar Quick Action:
     else if (taskUnit is _ScalarLoadExtraDataQuickActionTaskUnit) {
       await taskUnit.xScalar.scalar._unitLoadExtraDataQuickAction(
+        masterFlowItem: masterFlowItem,
+        taskType: taskUnit.taskType,
         thisXScalar: taskUnit.xScalar,
         action: taskUnit.action,
         afterQuickAction: taskUnit.afterQuickAction,
@@ -316,9 +346,9 @@ class _Executor {
       bool onProgress = owner == null || taskType == null
           ? false
           : state.isMatches(
-        owner: owner,
-        taskType: taskType,
-      );
+              owner: owner,
+              taskType: taskType,
+            );
       //
       state.onProgress = onProgress;
       state.refreshState(force: true);

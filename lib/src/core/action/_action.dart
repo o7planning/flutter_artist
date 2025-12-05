@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
-as dialogs;
+    as dialogs;
 
 import '../typedef/custom_confirmation.dart';
 

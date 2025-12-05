@@ -336,7 +336,7 @@ class FormPropsStructure {
     //
     for (FormProp prop in _allPropMap.values) {
       switch (activityType) {
-        case FormActivityType.itemFirstLoad:
+        case FormActivityType.startCreatingOrEditing:
           _formInitialDataReady = false;
           if (prop is SimpleFormProp) {
             prop._tempCurrentValue = null;

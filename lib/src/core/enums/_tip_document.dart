@@ -12,6 +12,7 @@ enum TipDocument {
   locale,
   naturalQuery,
   filterCriteria,
+  sorting,
   scalarActiveUIComponents,
   blockActiveUIComponents,
   blockQueryType,
@@ -69,6 +70,8 @@ enum TipDocument {
         return "PageData";
       case TipDocument.dataState:
         return "DataState";
+      case TipDocument.sorting:
+        return "Sorting";
     }
   }
 
@@ -108,6 +111,8 @@ enum TipDocument {
         return "PageData";
       case TipDocument.dataState:
         return "DataState";
+      case TipDocument.sorting:
+        return "Sorting";
     }
   }
 
@@ -188,6 +193,11 @@ enum TipDocument {
       case TipDocument.dataState:
         return [
           "https://o7planning.org/14749/flutterartist-block-datastate",
+        ];
+      case TipDocument.sorting:
+        return [
+          "https://o7planning.org/11111/config1",
+          "https://o7planning.org/11112/config2",
         ];
     }
   }

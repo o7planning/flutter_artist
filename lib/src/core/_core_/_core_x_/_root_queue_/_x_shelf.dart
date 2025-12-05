@@ -459,14 +459,14 @@ abstract class XShelf extends XRootQueueItem {
 
   String toDebugXShelfStateAsHtml() {
     String s = "${_debugObjHtml(this)}\n"
-        " --- STATE BEFORE CREATING TASK UNITS ---\n";
+        " --- STATE BEFORE CREATING TASK UNITS ---";
     for (String key in xBlockMap.keys) {
       final XBlock xBlock = xBlockMap[key]!;
-      s += xBlock.toDebugHtmlString();
+      s += "\n${xBlock.toDebugHtmlString()}";
     }
     for (String key in xScalarMap.keys) {
       final XScalar xScalar = xScalarMap[key]!;
-      s += xScalar.toDebugHtmlString();
+      s += "\n${xScalar.toDebugHtmlString()}";
     }
     return s;
   }

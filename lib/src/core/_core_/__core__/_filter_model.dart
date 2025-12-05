@@ -206,6 +206,7 @@ abstract class FilterModel<
   @_FilterModelLoadDataAnnotation()
   Future<bool> _unitLoadFilterData({
     required MasterFlowItem? masterFlowItem,
+    required TaskType taskType,
     required XFilterModel thisXFilterModel,
     required FilterModelDataLoadResult taskResult,
   }) async {
@@ -213,7 +214,8 @@ abstract class FilterModel<
     //
     masterFlowItem?._addLineFlowItem(
       codeId: "#24000",
-      shortDesc: "Begin ${TaskType.filterModelLoadData.asDebugTaskUnit()}.",
+      shortDesc: "Begin ${taskType.asDebugTaskUnit()}.",
+      lineFlowType: LineFlowType.debug,
     );
     //
     try {
@@ -246,6 +248,7 @@ abstract class FilterModel<
   @_FilterPanelChangeAnnotation()
   Future<bool> _unitFilterPanelChanged({
     required MasterFlowItem? masterFlowItem,
+    required TaskType taskType,
     required XFilterModel xFilterModel,
   }) async {
     __assertThisXFilterModel(xFilterModel);
@@ -253,7 +256,8 @@ abstract class FilterModel<
     masterFlowItem?._addLineFlowItem(
       codeId: "#30000",
       shortDesc:
-          "${_debugObjHtml(this)} -> Begin ${TaskType.filterModelFilterPanelChanged.asDebugTaskUnit()}.",
+          "${_debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}.",
+      lineFlowType: LineFlowType.debug,
     );
     //
     _filterCriteriaStructure._setFilterDataState(DataState.pending);

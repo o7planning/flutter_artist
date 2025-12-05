@@ -30,6 +30,7 @@ enum TaskType {
   scalarQuery,
   scalarClearance,
   scalarSilentAction,
+  scalarLoadExtraData,
   //
   hook,
   activity;

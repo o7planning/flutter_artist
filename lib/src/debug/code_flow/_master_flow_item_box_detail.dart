@@ -42,15 +42,17 @@ class MasterFlowItemDetailView extends StatelessWidget {
         Card(
           child: CodeFlowMethodView(masterFlowItem: masterFlowItem),
         ),
-        if (masterFlowItem.funcCallInfo != null) const SizedBox(height: 5),
-        if (masterFlowItem.funcCallInfo != null)
+        if (masterFlowItem.funcCallInfo != null && !masterFlowItem.isLibCode)
+          const SizedBox(height: 5),
+        if (masterFlowItem.funcCallInfo != null && !masterFlowItem.isLibCode)
           CodeFlowFuncTraceInfoView(
             funcCallInfo: masterFlowItem.funcCallInfo!,
           ),
-        const SizedBox(height: 10),
-        CodeFlowMethodArgsView(
-          arguments: masterFlowItem.funcCallInfo?.arguments,
-        ),
+        if (!masterFlowItem.isLibCode) const SizedBox(height: 10),
+        if (!masterFlowItem.isLibCode)
+          CodeFlowMethodArgsView(
+            arguments: masterFlowItem.funcCallInfo?.arguments,
+          ),
         const SizedBox(height: 10),
         _buildLineFlowItemList(),
       ],
