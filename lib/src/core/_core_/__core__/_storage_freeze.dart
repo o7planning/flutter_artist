@@ -36,7 +36,9 @@ class _StorageFreeze {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> __checkDialogAndResumeReactionIfCan() async {
+  Future<void> __checkDialogAndResumeReactionIfCan({
+    required MasterFlowItem masterFlowItem,
+  }) async {
     if (__freezeType != null) {
       return;
     }
@@ -48,7 +50,9 @@ class _StorageFreeze {
         for (String shelfName in _storage._shelfMap.keys) {
           Shelf reactionShelf = _storage._shelfMap[shelfName]!;
           if (reactionShelf._hasReactionBookmark()) {
-            reactionShelf._addShelfExternalReactionTaskUnit();
+            reactionShelf._addShelfExternalReactionTaskUnit(
+              masterFlowItem: masterFlowItem,
+            );
           }
         }
         FlutterArtist.executor._executeTaskUnitQueue();
@@ -59,7 +63,9 @@ class _StorageFreeze {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> __checkStartOrEndDrawerAndResumeReactionIfCan() async {
+  Future<void> __checkStartOrEndDrawerAndResumeReactionIfCan({
+    required MasterFlowItem masterFlowItem,
+  }) async {
     if (__freezeType != null) {
       return;
     }
@@ -71,7 +77,9 @@ class _StorageFreeze {
         for (String shelfName in _storage._shelfMap.keys) {
           Shelf reactionShelf = _storage._shelfMap[shelfName]!;
           if (reactionShelf._hasReactionBookmark()) {
-            reactionShelf._addShelfExternalReactionTaskUnit();
+            reactionShelf._addShelfExternalReactionTaskUnit(
+              masterFlowItem: masterFlowItem,
+            );
           }
         }
         FlutterArtist.executor._executeTaskUnitQueue();
@@ -97,9 +105,9 @@ class _StorageFreeze {
   /// Dialog:
   ///
   Future<FreezeByDialogResult<V?>>
-      _openDialogThenFreezeReactionBetweenShelvesUntilClosed<V>({
-    required Future<V?> Function() openDialog,
-  }) async {
+      _openDialogThenFreezeQueuedEventsUntilClosed<V>(
+          {required Future<V?> Function() openDialog,
+          required MasterFlowItem masterFlowItem}) async {
     if (!__ensureFreezeTypeIsNull()) {
       return FreezeByDialogResult<V?>.fail();
     }
@@ -110,7 +118,9 @@ class _StorageFreeze {
       return FreezeByDialogResult.success(dialogValue: value);
     } finally {
       __freezeType = null;
-      __checkDialogAndResumeReactionIfCan();
+      __checkDialogAndResumeReactionIfCan(
+        masterFlowItem: masterFlowItem,
+      );
     }
   }
 
@@ -120,8 +130,9 @@ class _StorageFreeze {
   ///
   /// Drawer:
   ///
-  Future<void> _openDrawerThenFreezeReactionBetweenShelvesUntilClosed(
+  Future<void> _openDrawerThenFreezeQueuedEventsUntilClosed(
     BuildContext context, {
+    required MasterFlowItem masterFlowItem,
     bool showSuggestionIfNeed = true,
   }) async {
     if (!__ensureFreezeTypeIsNull()) {
@@ -133,12 +144,12 @@ class _StorageFreeze {
     if (showSuggestionIfNeed && !_storage.drawerState._isDrawerOpen) {
       _storage.showErrorSnackBar(
         message:
-            "Method openDrawerThenFreezeReactionBetweenShelvesUntilClosed() is being used incorrectly. "
+            "Method openDrawerThenFreezeQueuedEventsUntilClosed() is being used incorrectly. "
             "See console for more details.",
         errorDetails: null,
       );
       String message = DebugUtils.getFatalError(
-          " Method openDrawerThenFreezeReactionBetweenShelvesUntilClosed() is being used incorrectly!\n "
+          " Method openDrawerThenFreezeQueuedEventsUntilClosed() is being used incorrectly!\n "
           " @see: https://document.com");
       print(message);
     }
@@ -150,7 +161,9 @@ class _StorageFreeze {
       ),
     );
     __freezeType = null;
-    __checkStartOrEndDrawerAndResumeReactionIfCan();
+    __checkStartOrEndDrawerAndResumeReactionIfCan(
+      masterFlowItem: masterFlowItem,
+    );
   }
 
   // ***************************************************************************
@@ -161,6 +174,7 @@ class _StorageFreeze {
   ///
   Future<void> _openEndDrawerThenFreezeReactionBetweenShelvesUntilClosed(
     BuildContext context, {
+    required MasterFlowItem masterFlowItem,
     bool showSuggestionIfNeed = true,
   }) async {
     if (!__ensureFreezeTypeIsNull()) {
@@ -189,7 +203,9 @@ class _StorageFreeze {
       ),
     );
     __freezeType = null;
-    __checkStartOrEndDrawerAndResumeReactionIfCan();
+    __checkStartOrEndDrawerAndResumeReactionIfCan(
+      masterFlowItem: masterFlowItem,
+    );
   }
 
   // ***************************************************************************

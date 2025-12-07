@@ -146,8 +146,7 @@ class _FlutterArtist extends _Core {
         "loggedInUser": loggedInUser,
         "requiresTheSameUser": requiresTheSameUser,
       },
-      lineFlowType: LineFlowType.calling,
-      isLibCall: true,
+      lineFlowType: LineFlowType.nonControllableCalling,
     );
     // This method never throw error.
     return await globalsManager._setOrUpdateLoggedInUserSafely(
@@ -221,10 +220,10 @@ class _FlutterArtist extends _Core {
       parameters: {
         "storageStructure": storageStructure,
       },
-      lineFlowType: LineFlowType.calling,
-      isLibCall: true,
+      lineFlowType: LineFlowType.nonControllableCalling,
       tipDocument: TipDocument.storageStructure,
     );
+    // This method may throw error and stop app.
     storage._init(
       masterFlowItem: masterFlowItem,
       storageStructure: storageStructure,
@@ -246,8 +245,7 @@ class _FlutterArtist extends _Core {
       shortDesc: "Calling <b>globalsManager._init()</b>...",
       note:
           "This method will read all the user data that was previously stored in <b>Local</b>.",
-      lineFlowType: LineFlowType.calling,
-      isLibCall: true,
+      lineFlowType: LineFlowType.nonControllableCalling,
       tipDocument: TipDocument.globalData,
     );
     await globalsManager._init(masterFlowItem);
@@ -262,8 +260,7 @@ class _FlutterArtist extends _Core {
       codeId: "#S0540",
       shortDesc:
           "Calling <b>localeManager._readStoredLocale()</b> to read saved locale from <b>Local</b>...",
-      lineFlowType: LineFlowType.calling,
-      isLibCall: true,
+      lineFlowType: LineFlowType.nonControllableCalling,
     );
     final Locale? locale = localeManager._readStoredLocale(
       masterFlowItem: masterFlowItem,
@@ -280,7 +277,7 @@ class _FlutterArtist extends _Core {
         parameters: {
           "locale": locale,
         },
-        lineFlowType: LineFlowType.calling,
+        lineFlowType: LineFlowType.controllableCalling,
       );
       Future.delayed(Duration(seconds: 2), () async {
         await localeManager._updateLocale(
@@ -388,6 +385,12 @@ class _FlutterArtist extends _Core {
 
   bool isOverlaysOpen() {
     return adapter.isOverlaysOpen();
+  }
+
+  @Deprecated("Delete")
+  Future<void> showStorageDialogOLD() async {
+    BuildContext context = adapter.getCurrentContext();
+    await StorageDialogOLD.showStorageDialog(context: context, shelf: null);
   }
 
   Future<void> showStorageDialog() async {

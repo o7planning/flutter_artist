@@ -1,10 +1,10 @@
 import '__chk_code.dart';
 import '__precheck.dart';
 
-enum ShelfDelayedReactionExecutionPrecheck implements Precheck {
+enum ShelfQueuedEventExecutionPrecheck implements Precheck {
   busy(
     chkCode: ChkCode.busy,
-    message: "Can not execute delayed reaction",
+    message: "Can not execute queued event",
     details: ["The executor is busy."],
   );
 
@@ -17,7 +17,7 @@ enum ShelfDelayedReactionExecutionPrecheck implements Precheck {
   @override
   final List<String>? details;
 
-  const ShelfDelayedReactionExecutionPrecheck({
+  const ShelfQueuedEventExecutionPrecheck({
     required this.chkCode,
     required this.message,
     required this.details,

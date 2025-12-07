@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../core/widgets/_custom_app_container.dart';
-import '../code_flow/_master_flow_viewer.dart';
+import '../code_flow/_code_flow_viewer.dart';
 import '../utils/_dialog_size.dart';
 
 class CodeFlowViewerDialog extends StatefulWidget {

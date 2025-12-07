@@ -251,10 +251,10 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
-  _ScalarReQryCon? _scalarReQryCon;
+  _ScalarReQryCon? _scalarReQryCondition;
 
   bool _hasReactionBookmark() {
-    return _scalarReQryCon != null;
+    return _scalarReQryCondition != null;
   }
 
   bool _isMatchScalarReQryCon(_ScalarReQryCon? scalarReQryCon) {
@@ -477,7 +477,7 @@ abstract class Scalar<
           "parentScalarValue": parent?.value,
           "filterCriteria": filterCriteriaOfFilterModel,
         },
-        lineFlowType: LineFlowType.calling,
+        lineFlowType: LineFlowType.controllableCalling,
       );
       ApiResult<VALUE> result = await callApiQuery(
         parentScalarValue: parent?.value,
@@ -685,7 +685,7 @@ abstract class Scalar<
       masterFlowItem._addLineFlowItem(
         codeId: "#40100",
         shortDesc: "Calling ${_debugObjHtml(action)}.callApiLoadExtraData().",
-        lineFlowType: LineFlowType.calling,
+        lineFlowType: LineFlowType.controllableCalling,
       );
       //
       result = await action.callApiLoadExtraData();
@@ -753,7 +753,7 @@ abstract class Scalar<
           "success": success,
           "extraData": extraData,
         },
-        lineFlowType: LineFlowType.calling,
+        lineFlowType: LineFlowType.controllableCalling,
       );
       await action.doWithExtraData(
         context,
@@ -1017,20 +1017,32 @@ abstract class Scalar<
   Future<ScalarQueryResult> query({
     FILTER_INPUT? filterInput,
   }) async {
-    // FlutterArtist.codeFlowLogger._addMethodCall(
-    //   isLibCode: true,
-    //   navigate: null,
-    //   ownerClassInstance: this,
-    //   methodName: "query",
-    //   parameters: {"filterInput": filterInput},
-    // );
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "query",
+      parameters: {
+        "filterInput": filterInput,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
+    masterFlowItem._addLineFlowItem(
+      codeId: "#54000",
+      shortDesc: "Creating <b>$_XShelfScalarQuery</b>..",
+    );
     //
     final XShelf xShelf = _XShelfScalarQuery(
       scalar: this,
       filterInput: filterInput,
     );
     //
-    xShelf._initQueryTaskUnits();
+    masterFlowItem._addLineFlowItem(
+      codeId: "#54100",
+      shortDesc: "Calling ${_debugObjHtml(xShelf)}._initQueryTaskUnits()..",
+      lineFlowType: LineFlowType.nonControllableCalling,
+    );
+    xShelf._initQueryTaskUnits(masterFlowItem: masterFlowItem);
+    //
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //

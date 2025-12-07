@@ -12,7 +12,7 @@ import '../../core/widgets/_custom_app_container.dart';
 import '../filter_criteria/_filter_criteria_structure_view.dart';
 import '../storage/widgets/_shelf_block_scalar_type_widget.dart';
 import '../utils/_tab_theme_utils.dart';
-import '../widgets/_info_view.dart';
+import '../widgets/_html_info_view.dart';
 import '../widgets/_json_view.dart';
 
 class FilterDataDebugView extends StatefulWidget {
@@ -129,7 +129,7 @@ class _FilterDataDebugViewState extends State<FilterDataDebugView> {
           size: iconSize,
         ),
         content: _buildTabContent(
-          info: "Initial Form values",
+          infoAsHtml: "Initial Form values",
           json: initial1Json,
         ),
       ),
@@ -144,8 +144,8 @@ class _FilterDataDebugViewState extends State<FilterDataDebugView> {
           size: iconSize,
         ),
         content: _buildTabContent(
-          info: "The current values of the filter (Will be passed to the "
-              "${getClassName(widget.filterModel)}.toFilterCriteriaObject()).",
+          infoAsHtml: "The current values of the filter (Will be passed to the "
+              "<b>${getClassName(widget.filterModel)}.toFilterCriteriaObject()</b> method).",
           json: currentJson,
         ),
       ),
@@ -186,16 +186,16 @@ class _FilterDataDebugViewState extends State<FilterDataDebugView> {
   }
 
   Widget _buildTabContent({
-    required String info,
+    required String infoAsHtml,
     required String json,
   }) {
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          InfoView(info: info),
+          HtmlInfoView(infoAsHtml: infoAsHtml),
           const Divider(height: 10),
           Expanded(
             child: JsonView(json: json),
@@ -213,8 +213,8 @@ class _FilterDataDebugViewState extends State<FilterDataDebugView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            InfoView(
-                info:
+            HtmlInfoView(
+                infoAsHtml:
                     "When you successfully add or modify a record on the '${getClassName(widget.filterModel)}' block, "
                     "the listening blocks will be switched to the 'pending' state, "
                     "they will be lazily queried again when they are visible on the screen.\n"

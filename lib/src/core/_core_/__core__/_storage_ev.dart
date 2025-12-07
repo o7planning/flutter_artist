@@ -10,12 +10,26 @@ class _StorageEventHandler {
 
   @_ImportantMethodAnnotation("Called after saving or deleting in the Block")
   void _fireEventFromBlockToOtherShelves({
+    required MasterFlowItem? masterFlowItem,
+    required EventType eventType,
     required Block eventBlock,
     required String? itemIdString,
   }) {
+    List<Event> events = eventBlock.config.outsideBroadcastEvents;
+    if (events.isEmpty) {
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#25000",
+        shortDesc:
+            "${_debugObjHtml(eventBlock)}.config.outsideBroadcastEvents is empty! --> This event will be ignored.",
+        lineFlowType: LineFlowType.debug,
+      );
+      return;
+    }
     // Appends TaskUnits to QUEUE (No need to call execute).
     ___fireEventFromBlockToOtherShelves(
-      eventBlock: eventBlock,
+      masterFlowItem: masterFlowItem,
+      eventType: eventType,
+      srcEventBlock: eventBlock,
       events: eventBlock.config.outsideBroadcastEvents,
       itemIdString: itemIdString,
     );
@@ -26,69 +40,50 @@ class _StorageEventHandler {
 
   // PRIVATE METHOD.
   void ___fireEventFromBlockToOtherShelves({
-    required Block? eventBlock,
+    required MasterFlowItem? masterFlowItem,
+    required EventType eventType,
+    required Block? srcEventBlock,
     required List<Event> events,
-    required String? itemIdString,
+    required dynamic itemIdString,
   }) {
+    // Never run.
     if (events.isEmpty) {
-      print("*~~~~~~~~~> NO EVENT FIRE TO OUTSIDE --> Event Item Types: $events"
-          " - Src Event: ${getClassName(eventBlock)}");
-      return;
-    } else {
-      print("*~~~~~~~~~> FIRE EVENT TO OUTSIDE --> Event Item Types: $events"
-          " - Src Event: ${getClassName(eventBlock)}");
-    }
-    // #0004.
-    final bool freezing = FlutterArtist.storage.__freeze.isFreezing;
-    //
-    final List<Shelf> visibleReactionShelves = [];
-    final List<Shelf> invisibleReactionShelves = [];
-    //
-    for (String shelfName in storage._shelfMap.keys) {
-      if (shelfName == eventBlock?.shelf.name) {
-        continue;
-      }
-      Shelf listenerShelf = storage._shelfMap[shelfName]!;
-      //
-      __markReactionConditionsForEvents(
-        listenerShelf: listenerShelf,
-        outsideEvents: events,
+      masterFlowItem?._addLineFlowItem(
+        codeId: "#26000",
+        shortDesc: "Events is empty! --> This event will be ignored.",
+        lineFlowType: LineFlowType.eventInfo,
       );
-      if (listenerShelf._hasReactionBookmark()) {
-        if (listenerShelf.ui.hasActiveUIComponent()) {
-          visibleReactionShelves.add(listenerShelf);
-        } else {
-          invisibleReactionShelves.add(listenerShelf);
-        }
-      }
-    }
-    // SAME-AS: #0003
-    for (Shelf reactionShelf in invisibleReactionShelves) {
-      reactionShelf._addShelfExternalReactionTaskUnit();
-    }
-    for (Shelf reactionShelf in visibleReactionShelves) {
-      if (!freezing) {
-        reactionShelf._addShelfExternalReactionTaskUnit();
-      }
-    }
-  }
-
-  void __markReactionConditionsForEvents({
-    required Shelf listenerShelf,
-    required List<Event> outsideEvents,
-  }) {
-    if (listenerShelf.isFullyPending) {
       return;
     }
-    EffectedShelfMembers effectedShelfMembers =
-        listenerShelf._calculateEffectedShelfMembersByEvents(outsideEvents);
-
-    if (!effectedShelfMembers.hasMember()) {
-      return;
-    }
-    listenerShelf._markReactionToExternalShelfEvents(
-      effectedShelfMembers: effectedShelfMembers,
+    Type itemDetailType = events.first.dataType;
+    //
+    masterFlowItem?._addLineFlowItem(
+      codeId: "#26100",
+      shortDesc: "Creating <b>QueuedEvent</b> and add to the queue.",
+      parameters: {
+        "eventType": eventType,
+        "eventShelf": srcEventBlock?.shelf,
+        "events": events,
+        "itemId": itemIdString,
+      },
+      lineFlowType: LineFlowType.eventInfo,
     );
+    //
+    final QueuedEvent queuedEvent = QueuedEvent(
+      eventType: eventType,
+      eventShelf: srcEventBlock?.shelf,
+      events: events,
+      itemId: itemIdString,
+    );
+    //
+    masterFlowItem?._addLineFlowItem(
+      codeId: "#26120",
+      shortDesc:
+          "The <b>QueuedEvent</b> is created, It will be executed later....",
+      lineFlowType: LineFlowType.eventInfo,
+    );
+    //
+    storage._queuedEventManager.addQueuedEvent(queuedEvent);
   }
 
   // ***************************************************************************
@@ -97,52 +92,97 @@ class _StorageEventHandler {
   @_ImportantMethodAnnotation(
       "Called after executing QuickAction in the Block or Scalar")
   void _fireEventFromShelfToOtherShelves({
+    required MasterFlowItem masterFlowItem,
+    required EventType eventType,
     required Shelf? eventShelf,
     required List<Event> events,
   }) {
     if (events.isEmpty) {
-      print(
-          "**~~~~~~~~~> NO EVENT FIRE TO OUTSIDE --> Event Item Types: $events"
-          " - Src Shelf: ${getClassName(eventShelf)}");
-      return;
-    } else {
-      print("**~~~~~~~~~> FIRE EVENT TO OUTSIDE --> Event Item Types: $events"
-          " - Src Shelf: ${getClassName(eventShelf)}");
-    }
-    //  #0004.
-    final bool freezing = FlutterArtist.storage.__freeze.isFreezing;
-    //
-    final List<Shelf> invisibleReactionShelves = [];
-    final List<Shelf> visibleReactionShelves = [];
-    //
-    for (String shelfName in storage._shelfMap.keys) {
-      if (shelfName == eventShelf?.name) {
-        continue;
-      }
-      Shelf listenerShelf = storage._shelfMap[shelfName]!;
-      //
-      __markReactionConditionsForEvents(
-        listenerShelf: listenerShelf,
-        outsideEvents: events,
+      masterFlowItem._addLineFlowItem(
+        codeId: "#60000",
+        shortDesc: "Events is empty! --> This event will be ignored.",
+        lineFlowType: LineFlowType.eventInfo,
       );
+      return;
+    }
+    Type itemDetailType = events.first.dataType;
+    //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#60100",
+      shortDesc: "Creating <b>$QueuedEvent</b> and add to queue.",
+      parameters: {
+        "eventType": eventType,
+        "eventShelf": eventShelf,
+        "events": events,
+      },
+      lineFlowType: LineFlowType.eventInfo,
+    );
+    //
+    final QueuedEvent queuedEvent = QueuedEvent(
+      eventType: eventType,
+      eventShelf: eventShelf,
+      events: events,
+      itemId: null,
+    );
+    //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#26120",
+      shortDesc:
+          "<b>$QueuedEvent</b> is created, It will be executed later....",
+      lineFlowType: LineFlowType.eventInfo,
+    );
+    //
+    storage._queuedEventManager.addQueuedEvent(queuedEvent);
 
-      if (listenerShelf._hasReactionBookmark()) {
-        if (listenerShelf.ui.hasActiveUIComponent()) {
-          visibleReactionShelves.add(listenerShelf);
-        } else {
-          invisibleReactionShelves.add(listenerShelf);
-        }
-      }
-    }
-    // SAME-AS: #0003
-    for (Shelf reactionShelf in invisibleReactionShelves) {
-      reactionShelf._addShelfExternalReactionTaskUnit();
-    }
-    for (Shelf reactionShelf in visibleReactionShelves) {
-      if (!freezing) {
-        reactionShelf._addShelfExternalReactionTaskUnit();
-      }
-    }
+    ///
+    ///
+    ///
+
+    // //
+    // // #0004.
+    // //
+    // final bool freezing = FlutterArtist.storage.__freeze.isFreezing;
+    //
+    // masterFlowItem._addLineFlowItem(
+    //   codeId: "#60100",
+    //   shortDesc: freezing
+    //       ? "Event-reaction freezing is <b>enabled</b>."
+    //       : "Event-reaction freezing is <b>disabled</b>.",
+    //   lineFlowType: LineFlowType.debug,
+    //   tipDocument: TipDocument.eventReactionFreezing,
+    // );
+    // //
+    // final List<Shelf> invisibleReactionShelves = [];
+    // final List<Shelf> visibleReactionShelves = [];
+    //
+    // for (String shelfName in storage._shelfMap.keys) {
+    //   if (shelfName == eventShelf?.name) {
+    //     continue;
+    //   }
+    //   Shelf listenerShelf = storage._shelfMap[shelfName]!;
+    //   //
+    //   __markReactionConditionsForEvents(
+    //     listenerShelf: listenerShelf,
+    //     outsideEvents: events,
+    //   );
+    //
+    //   if (listenerShelf._hasReactionBookmark()) {
+    //     if (listenerShelf.ui.hasActiveUIComponent()) {
+    //       visibleReactionShelves.add(listenerShelf);
+    //     } else {
+    //       invisibleReactionShelves.add(listenerShelf);
+    //     }
+    //   }
+    // }
+    // // SAME-AS: #0003
+    // for (Shelf reactionShelf in invisibleReactionShelves) {
+    //   reactionShelf._addShelfExternalReactionTaskUnit();
+    // }
+    // for (Shelf reactionShelf in visibleReactionShelves) {
+    //   if (!freezing) {
+    //     reactionShelf._addShelfExternalReactionTaskUnit();
+    //   }
+    // }
   }
 
   // ***************************************************************************
@@ -248,7 +288,9 @@ class _StorageEventHandler {
     Map<String, Scalar> foundMap = {};
 
     for (String shelfName in storage.shelfNames) {
+      print("@~~~~~~~~~~~~> shelfName: $shelfName ");
       Shelf? shelf = storage.findShelfByName(shelfName);
+      print("@~~~~~~~~~~~~> shelfName: $shelfName --> shelf: $shelf");
       if (shelf == null || identical(shelf, eventShelf)) {
         continue;
       }

@@ -6,7 +6,7 @@ import '../../core/utils/_class_utils.dart';
 import '__task_flow_const.dart';
 
 class CodeFlowMethodView extends StatelessWidget {
-  final MasterFlowItem masterFlowItem;
+  final MethodCallMasterFlowItem masterFlowItem;
 
   const CodeFlowMethodView({
     super.key,
@@ -24,16 +24,16 @@ class CodeFlowMethodView extends StatelessWidget {
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 5),
       leading: Icon(
-        _titleIconData(),
-        color: _titleIconColor(),
+        masterFlowItem.titleIconData(),
+        color: masterFlowItem.titleIconColor(),
         size: 18,
       ),
       title: SelectableText(
-        getClassName(masterFlowItem.ownerClassInstance),
+        masterFlowItem.getTitle(),
         style: _titleStyle(),
       ),
       subtitle: SelectableText(
-        ".${masterFlowItem.funcCallInfo?.funcName}()",
+        masterFlowItem.getSubtitle(),
         style: _subtitleStyle(),
       ),
     );
@@ -42,9 +42,7 @@ class CodeFlowMethodView extends StatelessWidget {
   TextStyle _titleStyle() {
     return TextStyle(
       fontSize: 12,
-      fontWeight: masterFlowItem.isPublicMethodCall()
-          ? FontWeight.bold
-          : FontWeight.normal,
+      fontWeight: FontWeight.normal,
       color: Colors.black,
       overflow: TextOverflow.ellipsis,
     );
@@ -53,34 +51,8 @@ class CodeFlowMethodView extends StatelessWidget {
   TextStyle _subtitleStyle() {
     return TextStyle(
       fontSize: 11,
-      fontWeight: masterFlowItem.isPublicMethodCall()
-          ? FontWeight.bold
-          : FontWeight.normal,
+      fontWeight: FontWeight.normal,
       overflow: TextOverflow.ellipsis,
     );
-  }
-
-  IconData _titleIconData() {
-    if (masterFlowItem.isBlock()) {
-      return FaIconConstants.blockIconData;
-    } else if (masterFlowItem.isFilterModel()) {
-      return FaIconConstants.filterModelIconData;
-    } else if (masterFlowItem.isFormModel()) {
-      return FaIconConstants.formModelIconData;
-    } else {
-      return FaIconConstants.otherClassIconData;
-    }
-  }
-
-  Color _titleIconColor() {
-    if (masterFlowItem.isLibCode) {
-      if (masterFlowItem.isLibPublicMethod) {
-        return CodeFlowConstants.libPublicCodeIconColor;
-      } else {
-        return CodeFlowConstants.libPrivateCodeIconColor;
-      }
-    } else {
-      return CodeFlowConstants.devCodeIconColor;
-    }
   }
 }

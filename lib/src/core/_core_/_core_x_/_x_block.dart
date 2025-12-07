@@ -97,11 +97,11 @@ class XBlock<
     required this.xFilterModel,
     required this.xFormModel,
   }) {
-    _blockReQryCon = block._blockReQryCon;
-    _blockItemRefreshCon = block._blockItemRefreshCon;
+    _blockReQryCon = block._blockReQryCondition;
+    _blockItemRefreshCon = block._blockItemRefreshCondition;
     //
-    block._blockReQryCon = null;
-    block._blockItemRefreshCon = null;
+    block._blockReQryCondition = null;
+    block._blockItemRefreshCondition = null;
   }
 
   // ***************************************************************************

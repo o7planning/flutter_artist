@@ -1,8 +1,8 @@
 part of '../core.dart';
 
-class ShelfDelayedReactionExecutionResult
-    extends TaskResult<ShelfDelayedReactionExecutionPrecheck> {
-  ShelfDelayedReactionExecutionResult({
+class ShelfQueuedEventExecutionResult
+    extends TaskResult<ShelfQueuedEventExecutionPrecheck> {
+  ShelfQueuedEventExecutionResult({
     super.precheck,
     super.errorInfo,
   });

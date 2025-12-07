@@ -2,67 +2,215 @@ part of '../core.dart';
 
 int __flowLogItemSEQ = 1;
 
-class MasterFlowItem {
+class MethodCallMasterFlowItem extends MasterFlowItem {
+  final FuncCallInfo funcCallInfo;
+  final bool isLibMethod;
+
+  bool get isUserMethod => !isLibMethod;
+
+  MethodCallMasterFlowItem({
+    required super.ownerClassInstance,
+    required this.funcCallInfo,
+    required this.isLibMethod,
+  }) : super(
+          masterFlowItemType: isLibMethod
+              ? MasterFlowItemType.libMethodCall
+              : MasterFlowItemType.userMethodCall,
+        );
+
+  MethodCallMasterFlowItem._methodCallFromStackTrace({
+    required super.ownerClassInstance,
+    required StackTrace currentStackTrace,
+    required Map<String, dynamic>? arguments,
+    required this.isLibMethod,
+  })  : funcCallInfo = FuncCallInfo.fromCurrentStackTrace(
+          currentStackTrace: currentStackTrace,
+          arguments: arguments,
+        ),
+        super(
+          masterFlowItemType: isLibMethod
+              ? MasterFlowItemType.libMethodCall
+              : MasterFlowItemType.userMethodCall,
+        );
+
+  MethodCallMasterFlowItem._methodCall({
+    required super.ownerClassInstance,
+    required String methodName,
+    required Map<String, dynamic>? arguments,
+    required this.isLibMethod,
+  })  : funcCallInfo = FuncCallInfo(funcName: methodName, arguments: arguments),
+        super(
+          masterFlowItemType: isLibMethod
+              ? MasterFlowItemType.libMethodCall
+              : MasterFlowItemType.userMethodCall,
+        );
+
+  @override
+  String getSubtitle() {
+    return ".${funcCallInfo.funcName}()";
+  }
+
+  @override
+  String getTitle() {
+    return getClassNameWithoutGenerics(ownerClassInstance);
+  }
+
+  IconData titleIconData() {
+    if (isBlock()) {
+      return FaIconConstants.blockIconData;
+    } else if (isFilterModel()) {
+      return FaIconConstants.filterModelIconData;
+    } else if (isFormModel()) {
+      return FaIconConstants.formModelIconData;
+    } else {
+      return FaIconConstants.otherClassIconData;
+    }
+  }
+
+  Color titleIconColor() {
+    if (isLibMethod) {
+      // if (isLibPublicMethod) {
+      //   return CodeFlowConstants.libPublicCodeIconColor;
+      // } else {
+      //   return CodeFlowConstants.libPrivateCodeIconColor;
+      // }
+      return CodeFlowConstants.libPrivateCodeIconColor;
+    } else {
+      return CodeFlowConstants.devCodeIconColor;
+    }
+  }
+
+  bool isBlock() {
+    return ownerClassInstance is Block;
+  }
+
+  bool isFilterModel() {
+    return ownerClassInstance is FilterModel;
+  }
+
+  bool isFormModel() {
+    return ownerClassInstance is FormModel;
+  }
+
+  bool isOtherClass() {
+    return !isBlock() && !isFilterModel() && !isFormModel();
+  }
+
+  bool isPrivateMethodCall() {
+    return funcCallInfo.isPrivateFunc();
+  }
+
+  bool isPublicMethodCall() {
+    return funcCallInfo.isPublicFunc();
+  }
+
+  bool isMethodCallWithTrace() {
+    return funcCallInfo.hasTraceInfo();
+  }
+}
+
+class NaturalLoadMasterFlowItem extends MasterFlowItem {
+  NaturalLoadMasterFlowItem({
+    required super.ownerClassInstance,
+  }) : super(masterFlowItemType: MasterFlowItemType.naturalLoad);
+
+  @override
+  String getSubtitle() {
+    return "Detect newly displayed UI component";
+  }
+
+  @override
+  String getTitle() {
+    return "Natural Load";
+  }
+}
+
+class TaskUnitMasterFlowItem extends MasterFlowItem {
+  final TaskType taskType;
+
+  TaskUnitMasterFlowItem({
+    required super.ownerClassInstance,
+    required this.taskType,
+  }) : super(masterFlowItemType: MasterFlowItemType.taskUnitCall);
+
+  @override
+  String getSubtitle() {
+    return "${getClassNameWithoutGenerics(ownerClassInstance)} - (${lineFlowItems.length})";
+  }
+
+  @override
+  String getTitle() {
+    return taskType.name;
+  }
+}
+
+class StartupMasterFlowItem extends MasterFlowItem {
+  StartupMasterFlowItem({
+    required super.ownerClassInstance,
+  }) : super(masterFlowItemType: MasterFlowItemType.startup);
+
+  @override
+  String getSubtitle() {
+    return "Application start";
+  }
+
+  @override
+  String getTitle() {
+    return "Startup";
+  }
+}
+
+class QueuedEventMasterFlowItem extends MasterFlowItem {
+  QueuedEventMasterFlowItem({
+    required super.ownerClassInstance,
+  }) : super(masterFlowItemType: MasterFlowItemType.queuedEvent);
+
+  @override
+  String getSubtitle() {
+    return "Processing Queued Events...";
+  }
+
+  @override
+  String getTitle() {
+    return "Queued Events";
+  }
+}
+
+abstract class MasterFlowItem {
   final int id;
   final MasterFlowItemType masterFlowItemType;
-  final FuncCallInfo? funcCallInfo;
-  final bool isLibCode;
-  final TaskType? taskType;
-  final DateTime createdDateTime = DateTime.now();
 
-  bool get isDevCode => !isLibCode;
+  final DateTime createdDateTime = DateTime.now();
 
   final Object ownerClassInstance;
   final List<LineFlowItem> __lineFlowItems = [];
 
   List<LineFlowItem> get lineFlowItems => List.unmodifiable(__lineFlowItems);
 
-  MasterFlowItem._naturalUIEvent({
+  MasterFlowItem({
     required this.ownerClassInstance,
-  })  : masterFlowItemType = MasterFlowItemType.naturalUIEvent,
-        taskType = null,
-        funcCallInfo = null,
-        isLibCode = false,
-        id = __flowLogItemSEQ++;
+    required this.masterFlowItemType,
+  }) : id = __flowLogItemSEQ++;
 
-  MasterFlowItem._startup({
-    required this.ownerClassInstance,
-  })  : masterFlowItemType = MasterFlowItemType.startup,
-        taskType = null,
-        funcCallInfo = null,
-        isLibCode = false,
-        id = __flowLogItemSEQ++;
+  String getTitle();
 
-  MasterFlowItem._taskCall({
-    required this.ownerClassInstance,
-    required this.taskType,
-  })  : masterFlowItemType = MasterFlowItemType.taskCall,
-        funcCallInfo = null,
-        isLibCode = false,
-        id = __flowLogItemSEQ++;
+  String getSubtitle();
 
-  MasterFlowItem._methodCallFromStackTrace({
-    required this.ownerClassInstance,
-    required StackTrace currentStackTrace,
-    required Map<String, dynamic>? arguments,
-    required this.isLibCode,
-  })  : taskType = null,
-        masterFlowItemType = MasterFlowItemType.methodCall,
-        funcCallInfo = FuncCallInfo.fromCurrentStackTrace(
-          currentStackTrace: currentStackTrace,
-          arguments: arguments,
-        ),
-        id = __flowLogItemSEQ++;
-
-  MasterFlowItem._methodCall({
-    required this.ownerClassInstance,
-    required String methodName,
-    required Map<String, dynamic>? arguments,
-    required this.isLibCode,
-  })  : taskType = null,
-        masterFlowItemType = MasterFlowItemType.methodCall,
-        funcCallInfo = FuncCallInfo(funcName: methodName, arguments: arguments),
-        id = __flowLogItemSEQ++;
+  void _addLineFlowSeparator() {
+    var item = LineFlowItem(
+      lineId: "-----",
+      lineFlowType: LineFlowType.separator,
+      isLibCall: false,
+      showIconAndLabel: false,
+      shortDesc: "",
+      parameters: null,
+      note: null,
+      tipDocument: null,
+      errorInfo: null,
+      extraInfos: null,
+    );
+    __lineFlowItems.add(item);
+  }
 
   LineFlowItem _addLineFlowItem({
     LineFlowType? lineFlowType,
@@ -118,50 +266,6 @@ class MasterFlowItem {
     return null;
   }
 
-  bool get isLibPublicMethod {
-    return isLibCode && isPublicMethodCall();
-  }
-
-  bool get isLibPrivateMethod {
-    return isLibCode && isPrivateMethodCall();
-  }
-
-  bool isBlock() {
-    return ownerClassInstance is Block;
-  }
-
-  bool isFilterModel() {
-    return ownerClassInstance is FilterModel;
-  }
-
-  bool isFormModel() {
-    return ownerClassInstance is FormModel;
-  }
-
-  bool isOtherClass() {
-    return !isBlock() && !isFilterModel() && !isFormModel();
-  }
-
-  bool isPrivateMethodCall() {
-    return isMethodCall() && funcCallInfo!.isPrivateFunc();
-  }
-
-  bool isPublicMethodCall() {
-    return isMethodCall() && funcCallInfo!.isPublicFunc();
-  }
-
-  bool isMethodCall() {
-    return masterFlowItemType == MasterFlowItemType.methodCall;
-  }
-
-  bool isTaskCall() {
-    return masterFlowItemType == MasterFlowItemType.taskCall;
-  }
-
-  bool isMethodCallWithTrace() {
-    return funcCallInfo != null && funcCallInfo!.hasTraceInfo();
-  }
-
   Shelf? getShelf() {
     if (ownerClassInstance is Block) {
       return (ownerClassInstance as Block).shelf;
@@ -173,9 +277,17 @@ class MasterFlowItem {
     return null;
   }
 
-  void printToConsole() {
+  String getText() {
+    String s = "";
+    bool first = true;
     for (LineFlowItem lineFlowItem in __lineFlowItems) {
-      lineFlowItem.printToConsole();
+      s += (first ? "" : "\n\n") + lineFlowItem.getText();
+      first = false;
     }
+    return s;
+  }
+
+  void printToConsole() {
+    print(getText());
   }
 }

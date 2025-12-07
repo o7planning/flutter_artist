@@ -41,9 +41,9 @@ String _debugObjHtml(Object? obj) {
   } else if (obj is XShelf) {
     return "<b>${getClassNameWithoutGenerics(obj)}(${obj.shelf.name})</b>";
   } else if (obj is FormProp) {
-    return "<b>${getClassName(obj)}(${obj.propName})</b>";
+    return "<b>${getClassName(obj)}('${obj.propName}')</b>";
   } else if (obj is FilterCriterion) {
-    return "<b>${getClassName(obj)}(${obj.criterionName})</b>";
+    return "<b>${getClassName(obj)}('${obj.criterionName}')</b>";
   } else if (obj is XData) {
     return "<b>${getClassName(obj)}</b>";
   } else if (obj is OptValueWrap) {
@@ -58,11 +58,13 @@ String _debugObjHtml(Object? obj) {
   } else if (obj is List) {
     return "<b>${getClassName(obj)}(${obj.length} items)</b>";
   } else if (obj is Map) {
-    return "<b>${getClassName(obj)}(${obj.length} items)</b>";
+    return "<b>${getClassName(obj)}(${obj.length} entries)</b>";
   } else if (obj is Function) {
     return "<b>[Function]</b>";
   } else if (obj is Locale) {
     return "<b>${getClassName(obj)}(${obj.languageCode}, ${obj.countryCode})</b>";
+  } else if (obj is Type) {
+    return "<b>$obj</b>";
   }
   return "<b>${getClassNameWithoutGenerics(obj)}</b>";
 }

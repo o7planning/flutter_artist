@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../core/_core_/core.dart';
+import '../../core/enums/_line_flow_type.dart';
 import '../../core/widgets/_html_selectable_rich_text.dart';
 import '../dialog/_error_viewer_dialog.dart';
 import '../dialog/_extra_info_viewer_dialog.dart';
@@ -17,11 +18,21 @@ class LineFlowItemBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (lineFlowItem.lineFlowType == LineFlowType.separator) {
+      return SizedBox(
+        width: double.maxFinite,
+        child: Card(
+          color: Colors.lightBlueAccent,
+          margin: EdgeInsets.symmetric(vertical: 2),
+          child: SizedBox(height: 3),
+        ),
+      );
+    }
     return SizedBox(
       width: double.maxFinite,
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-        margin: EdgeInsets.all(2),
+        margin: EdgeInsets.symmetric(vertical: 2),
         child: Padding(
           padding: EdgeInsets.all(5),
           child: Column(
@@ -33,8 +44,7 @@ class LineFlowItemBox extends StatelessWidget {
                 icon: Icon(
                   lineFlowItem.lineFlowType.getIconData(),
                   color: lineFlowItem.showIconAndLabel
-                      ? lineFlowItem.lineFlowType
-                          .getIconColor(lineFlowItem.isLibCall)
+                      ? lineFlowItem.lineFlowType.getIconColor()
                       : Colors.transparent,
                   size: 16,
                 ),

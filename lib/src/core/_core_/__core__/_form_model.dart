@@ -468,8 +468,7 @@ abstract class FormModel<
     masterFlowItem._addLineFlowItem(
       codeId: "#37160",
       shortDesc: "Calling ${_debugObjHtml(block)}._initFormRelatedData().",
-      lineFlowType: LineFlowType.calling,
-      isLibCall: true,
+      lineFlowType: LineFlowType.nonControllableCalling,
     );
     FORM_RELATED_DATA? formRelatedData =
         block._initFormRelatedData(masterFlowItem);
@@ -488,8 +487,7 @@ abstract class FormModel<
         "formInput": formInput,
         "formRelatedData": formRelatedData,
       },
-      lineFlowType: LineFlowType.calling,
-      isLibCall: true,
+      lineFlowType: LineFlowType.nonControllableCalling,
     );
     // TODO: Bắt lỗi cho vào "taskResult" ???????
     return await _startNewFormActivity(
@@ -531,8 +529,7 @@ abstract class FormModel<
         "formInput": formInput,
         "formRelatedData": formRelatedData,
       },
-      lineFlowType: LineFlowType.calling,
-      isLibCall: true,
+      lineFlowType: LineFlowType.nonControllableCalling,
     );
     //
     await _startNewFormActivity(
@@ -550,7 +547,7 @@ abstract class FormModel<
   @_TaskUnitMethodAnnotation()
   @_FormModelSaveFormAnnotation()
   Future<void> _unitSaveForm({
-    required MasterFlowItem? masterFlowItem,
+    required MasterFlowItem masterFlowItem,
     required TaskType taskType,
     required XFormModel<ID, ITEM_DETAIL> thisXFormModel,
     required FormSaveResult taskResult,
@@ -603,7 +600,7 @@ abstract class FormModel<
         parameters: {
           "formMapData": formMapData,
         },
-        lineFlowType: LineFlowType.calling,
+        lineFlowType: LineFlowType.controllableCalling,
       );
       //
       result = isNew
@@ -641,8 +638,7 @@ abstract class FormModel<
         codeId: "#11800",
         shortDesc:
             "Calling ${_debugObjHtml(this)}._processSaveActionRestResult().",
-        lineFlowType: LineFlowType.calling,
-        isLibCall: true,
+        lineFlowType: LineFlowType.nonControllableCalling,
       );
       await block._processSaveActionRestResult(
         masterFlowItem: masterFlowItem,
@@ -713,7 +709,7 @@ abstract class FormModel<
     //
     masterFlowItem?._addLineFlowItem(
       codeId: "#06000",
-      shortDesc: "${_debugObjHtml(this)} FormView Changed.",
+      shortDesc: "${_debugObjHtml(this)} Form View Changed.",
     );
     //
     if (activityType == FormActivityType.startCreatingOrEditing) {
@@ -818,7 +814,7 @@ abstract class FormModel<
         try {
           masterFlowItem?._addLineFlowItem(
             codeId: "#06200",
-            lineFlowType: LineFlowType.calling,
+            lineFlowType: LineFlowType.controllableCalling,
             shortDesc:
                 "Calling ${_debugObjHtml(this)}.getSimplePropValuesFromItemDetail().",
             parameters: {
@@ -906,7 +902,7 @@ abstract class FormModel<
               parameters: {
                 "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
               },
-              lineFlowType: LineFlowType.calling,
+              lineFlowType: LineFlowType.controllableCalling,
             );
             // In case of activityType = startCreatingOrEditing.
             simplePropValueDefault = specifyDefaultValuesForSimpleProps(
@@ -980,7 +976,7 @@ abstract class FormModel<
                 "formInput": formInput,
                 "formRelatedData": formRelatedData,
               },
-              lineFlowType: LineFlowType.calling,
+              lineFlowType: LineFlowType.controllableCalling,
             );
             final Map<String, SimpleValueWrap?> updatedSimplePropValues =
                 getUpdatedValuesForSimpleProps(
@@ -1064,7 +1060,7 @@ abstract class FormModel<
               "formInput": formInput,
               "formRelatedData": formRelatedData,
             },
-            lineFlowType: LineFlowType.calling,
+            lineFlowType: LineFlowType.controllableCalling,
           );
           final Map<String, SimpleValueWrap?> updatedSimplePropValues =
               getUpdatedValuesForSimpleProps(
@@ -1144,8 +1140,7 @@ abstract class FormModel<
             "formKeyInstantValues": formKeyInstantValues,
             "activityType": activityType,
           },
-          lineFlowType: LineFlowType.calling,
-          isLibCall: true,
+          lineFlowType: LineFlowType.nonControllableCalling,
         );
         //
         // Load OptProp Data and set default and selected.
@@ -1444,7 +1439,7 @@ abstract class FormModel<
             "formInput": formInput,
             "formRelatedData": formRelatedData,
           },
-          lineFlowType: LineFlowType.calling,
+          lineFlowType: LineFlowType.controllableCalling,
         );
         // May throw AppError, ApiError or others.
         tempMultiOptPropXData = await callApiLoadMultiOptPropXData(
@@ -1778,7 +1773,7 @@ abstract class FormModel<
           "selectionType": selectionType,
           "parentMultiOptPropValue": parentMultiOptPropValue,
         },
-        lineFlowType: LineFlowType.calling,
+        lineFlowType: LineFlowType.controllableCalling,
       );
       OptValueWrap? valueWrap = specifyDefaultValueForMultiOptProp(
         multiOptPropXData: multiOptPropXData,
@@ -1862,7 +1857,7 @@ abstract class FormModel<
           "itemDetail": itemDetail,
           "formRelatedData": formRelatedData,
         },
-        lineFlowType: LineFlowType.calling,
+        lineFlowType: LineFlowType.controllableCalling,
       );
       OptValueWrap? valueWrap = getMultiOptPropValueFromItemDetail(
         multiOptPropName: multiOptPropName,
@@ -1919,7 +1914,7 @@ abstract class FormModel<
           "formRelatedData": formRelatedData,
           "formInput": formInput,
         },
-        lineFlowType: LineFlowType.calling,
+        lineFlowType: LineFlowType.controllableCalling,
       );
       OptValueWrap? valueWrap = getUpdatedValueForMultiOptProp(
         multiOptPropName: multiOptPropName,

@@ -33,7 +33,7 @@ class CodeFlowLogger {
   MasterFlowItem _addNaturalUIEvent({
     required Object ownerClassInstance,
   }) {
-    final masterFlowItem = MasterFlowItem._naturalUIEvent(
+    final masterFlowItem = NaturalLoadMasterFlowItem(
       ownerClassInstance: ownerClassInstance,
     );
     __addMasterFlowItem(masterFlowItem);
@@ -46,7 +46,7 @@ class CodeFlowLogger {
   MasterFlowItem _addStartup({
     required Object ownerClassInstance,
   }) {
-    final masterFlowItem = MasterFlowItem._startup(
+    final masterFlowItem = StartupMasterFlowItem(
       ownerClassInstance: ownerClassInstance,
     );
     __addMasterFlowItem(masterFlowItem);
@@ -60,7 +60,7 @@ class CodeFlowLogger {
     required Object ownerClassInstance,
     required TaskType taskType,
   }) {
-    final masterFlowItem = MasterFlowItem._taskCall(
+    final masterFlowItem = TaskUnitMasterFlowItem(
       ownerClassInstance: ownerClassInstance,
       taskType: taskType,
     );
@@ -85,18 +85,18 @@ class CodeFlowLogger {
     //
     MasterFlowItem item;
     try {
-      item = MasterFlowItem._methodCallFromStackTrace(
+      item = MethodCallMasterFlowItem._methodCallFromStackTrace(
         ownerClassInstance: ownerClassInstance,
         currentStackTrace: currentStackTrace,
         arguments: parameters,
-        isLibCode: false,
+        isLibMethod: false,
       );
     } catch (e) {
-      item = MasterFlowItem._methodCall(
+      item = MethodCallMasterFlowItem._methodCall(
         ownerClassInstance: ownerClassInstance,
         methodName: "Something Error",
         arguments: parameters,
-        isLibCode: false,
+        isLibMethod: false,
       );
     }
     __addMasterFlowItem(item);
@@ -107,13 +107,23 @@ class CodeFlowLogger {
     required String methodName,
     required Map<String, dynamic>? parameters,
     required Function()? navigate,
-    required bool isLibCode,
+    required bool isLibMethod,
   }) {
-    MasterFlowItem log = MasterFlowItem._methodCall(
+    MasterFlowItem log = MethodCallMasterFlowItem._methodCall(
       ownerClassInstance: ownerClassInstance,
       methodName: methodName,
       arguments: parameters,
-      isLibCode: isLibCode,
+      isLibMethod: isLibMethod,
+    );
+    __addMasterFlowItem(log);
+    return log;
+  }
+
+  MasterFlowItem _initTaskUnitForQueuedEvent({
+    required Object ownerClassInstance,
+  }) {
+    MasterFlowItem log = QueuedEventMasterFlowItem(
+      ownerClassInstance: ownerClassInstance,
     );
     __addMasterFlowItem(log);
     return log;

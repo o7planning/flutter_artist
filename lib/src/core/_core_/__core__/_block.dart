@@ -429,12 +429,12 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  _BlockReQryCon? _blockReQryCon;
+  _BlockReQryCon? _blockReQryCondition;
 
-  _BlockItemRefreshCon? _blockItemRefreshCon;
+  _BlockItemRefreshCon? _blockItemRefreshCondition;
 
   bool _hasReactionBookmark() {
-    return _blockReQryCon != null || _blockItemRefreshCon != null;
+    return _blockReQryCondition != null || _blockItemRefreshCondition != null;
   }
 
   bool _isMatchBlockReQryCon(_BlockReQryCon? blockReQryCon) {
@@ -1010,8 +1010,7 @@ abstract class Block<
             codeId: "#03320",
             shortDesc:
                 "Calling ${_debugObjHtml(serverSideSortModel)}.getSortableCriteria():",
-            lineFlowType: LineFlowType.calling,
-            isLibCall: true,
+            lineFlowType: LineFlowType.nonControllableCalling,
             tipDocument: TipDocument.sorting,
           );
           sortableCriteria = serverSideSortModel!.getSortableCriteria();
@@ -1041,7 +1040,7 @@ abstract class Block<
             "sortableCriteria": sortableCriteria,
             "pageable": callingPageable,
           },
-          lineFlowType: LineFlowType.calling,
+          lineFlowType: LineFlowType.controllableCalling,
         );
         __callApiQueryCount++;
         ApiResult<PageData<ITEM>?> result = await callApiQuery(
@@ -1238,8 +1237,7 @@ abstract class Block<
           "blockDataState": newBlockDataState,
           "queryResultState": queryResultState,
         },
-        lineFlowType: LineFlowType.calling,
-        isLibCall: true,
+        lineFlowType: LineFlowType.nonControllableCalling,
       );
       //
       // Update queried items to the List:
@@ -1615,7 +1613,7 @@ abstract class Block<
               "to specify an <b>itemIndex</b> as the current one.",
           note:
               "You can override this method, otherwise the first ITEM will be the candidate. ",
-          lineFlowType: LineFlowType.calling,
+          lineFlowType: LineFlowType.controllableCalling,
         );
         int? suggestIdx = specifyItemIndexToSelectAsCurrent();
         //
@@ -1915,7 +1913,7 @@ abstract class Block<
                 "id": itemId,
                 "oldItem": oldItemDetail,
               },
-              lineFlowType: LineFlowType.calling,
+              lineFlowType: LineFlowType.controllableCalling,
               tipDocument: TipDocument.autoStocker,
             );
             //
@@ -2093,7 +2091,7 @@ abstract class Block<
           shortDesc:
               "Calling $debugMethodName method to convert <b>ITEM_DETAIL</b> to <b>ITEM</b>.\n"
               " ${_debugObjHtml(refreshedCurrentItemDetail)} --> ${_debugItemTypeHtml()}.",
-          lineFlowType: LineFlowType.calling,
+          lineFlowType: LineFlowType.controllableCalling,
         );
         //
         candidateCurrItem = this.__convertItemDetailToItem(
@@ -2138,8 +2136,7 @@ abstract class Block<
           parameters: {
             "item": candidateCurrItem,
           },
-          lineFlowType: LineFlowType.calling,
-          isLibCall: true,
+          lineFlowType: LineFlowType.nonControllableCalling,
         );
         __blockData._insertOrReplaceItem(item: candidateCurrItem);
       }
@@ -2239,7 +2236,7 @@ abstract class Block<
   @_BlockDeleteCurrentItemAnnotation()
   @_BlockDeleteItemAnnotation()
   Future<void> _unitDeleteItem({
-    required MasterFlowItem? masterFlowItem,
+    required MasterFlowItem masterFlowItem,
     required TaskType taskType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required ITEM item,
@@ -2266,8 +2263,7 @@ abstract class Block<
       },
       note: "Call this method to check before deleting an item. "
           "(**) You can override ${_debugObjHtml(this)}.isAllowDeleteItem() method.",
-      lineFlowType: LineFlowType.calling,
-      isLibCall: true,
+      lineFlowType: LineFlowType.nonControllableCalling,
     );
     //
     // No need to check again?
@@ -2366,7 +2362,7 @@ abstract class Block<
         parameters: {
           "id": itemId,
         },
-        lineFlowType: LineFlowType.calling,
+        lineFlowType: LineFlowType.controllableCalling,
       );
       //
       result = await stocker.deleteById(id: itemId);
@@ -2382,7 +2378,10 @@ abstract class Block<
       //
       // External React:
       //
-      __fireEventFromBlockToOtherShelves();
+      __fireEventFromBlockToOtherShelves(
+        masterFlowItem: masterFlowItem,
+        eventType: EventType.deletion,
+      );
     } catch (e, stackTrace) {
       ErrorInfo errorInfo = _handleError(
         shelf: shelf,
@@ -2484,6 +2483,7 @@ abstract class Block<
     );
     //
     await _processInternalReaction(
+      masterFlowItem: masterFlowItem,
       thisXBlock: thisXBlock,
       candidateCurrItem: siblingItem,
     );
@@ -2493,6 +2493,7 @@ abstract class Block<
   // ***************************************************************************
 
   Future<void> _processInternalReaction({
+    required MasterFlowItem masterFlowItem,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required ITEM? candidateCurrItem,
   }) async {
@@ -2561,7 +2562,7 @@ abstract class Block<
       // Test Case: [62a] - __test_event_62a_test_DELETE.
       // Test Case: [62b] - __test_event_62b_test_DELETE.
       // Add Query Tasks to the Queue of XShelf.
-      thisXBlock.xShelf._initQueryTaskUnits();
+      thisXBlock.xShelf._initQueryTaskUnits(masterFlowItem: masterFlowItem);
       return;
     }
     //
@@ -2741,7 +2742,7 @@ abstract class Block<
             "id": deletingItemId,
           },
           tipDocument: TipDocument.autoStocker,
-          lineFlowType: LineFlowType.calling,
+          lineFlowType: LineFlowType.controllableCalling,
         );
         //
         result = await stocker.deleteById(id: deletingItemId);
@@ -2855,7 +2856,10 @@ abstract class Block<
             "${_debugObjHtml(this)} > Fire event after deleting. (${deletionResult.deletedItems.length} items deleted!).",
         lineFlowType: LineFlowType.fireEvent,
       );
-      __fireEventFromBlockToOtherShelves();
+      __fireEventFromBlockToOtherShelves(
+        masterFlowItem: masterFlowItem,
+        eventType: EventType.deletion,
+      );
     }
     //
     if (deletionResult.failedItemDeletions.isEmpty) {
@@ -2987,8 +2991,7 @@ abstract class Block<
           "formInput": formInput,
           "formRelatedData": formRelatedData,
         },
-        lineFlowType: LineFlowType.calling,
-        isLibCall: true,
+        lineFlowType: LineFlowType.nonControllableCalling,
       );
       success = await formModel!._startNewFormActivity(
         masterFlowItem: masterFlowItem,
@@ -3029,7 +3032,7 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockQuickItemCreationActionAnnotation()
   Future<void> _unitQuickCreateItem({
-    required MasterFlowItem? masterFlowItem,
+    required MasterFlowItem masterFlowItem,
     required TaskType taskType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockQuickItemCreationResult taskResult,
@@ -3056,7 +3059,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#09100",
         shortDesc: "Calling ${_debugObjHtml(action)}.$methodName()",
-        lineFlowType: LineFlowType.calling,
+        lineFlowType: LineFlowType.controllableCalling,
       );
       //
       result = await action.callApiQuickCreateItem(
@@ -3091,8 +3094,7 @@ abstract class Block<
         codeId: "#09220",
         shortDesc:
             "Calling ${_debugObjHtml(this)}._processSaveActionRestResult().",
-        lineFlowType: LineFlowType.calling,
-        isLibCall: true,
+        lineFlowType: LineFlowType.nonControllableCalling,
       );
       await _processSaveActionRestResult(
         masterFlowItem: masterFlowItem,
@@ -3131,7 +3133,7 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockSilentItemCreationActionAnnotation()
   Future<void> _unitSilentCreateItem({
-    required MasterFlowItem? masterFlowItem,
+    required MasterFlowItem masterFlowItem,
     required TaskType taskType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockSilentItemCreationResult taskResult,
@@ -3170,7 +3172,7 @@ abstract class Block<
           "parentBlockItem": parent?.currentItem,
           "filterCriteria": blockCurrentFilterCriteria,
         },
-        lineFlowType: LineFlowType.calling,
+        lineFlowType: LineFlowType.controllableCalling,
       );
       result = await action.callApiSilentlyCreateItem(
         parentBlockItem: parent?.currentItem,
@@ -3203,7 +3205,10 @@ abstract class Block<
       codeId: "#10200",
       shortDesc: "${_debugObjHtml(action)} --> Fire event after creating item.",
     );
-    __fireEventFromBlockToOtherShelves();
+    __fireEventFromBlockToOtherShelves(
+      masterFlowItem: masterFlowItem,
+      eventType: EventType.creation,
+    );
     //
     masterFlowItem?._addLineFlowItem(
       codeId: "#10400",
@@ -3213,6 +3218,7 @@ abstract class Block<
     // Process Internal Reaction (If Need).
     //
     await _processInternalReaction(
+      masterFlowItem: masterFlowItem,
       thisXBlock: thisXBlock,
       candidateCurrItem: null,
     );
@@ -3252,7 +3258,7 @@ abstract class Block<
           "parentBlockItem": parent?.currentItem,
           "filterCriteria": blockCurrentFilterCriteria,
         },
-        lineFlowType: LineFlowType.calling,
+        lineFlowType: LineFlowType.controllableCalling,
       );
       //
       result = await action.callApiQuickCreateMultiItems(
@@ -3283,10 +3289,10 @@ abstract class Block<
         codeId: "#44300",
         shortDesc:
             "Calling ${_debugObjHtml(this)}._processCreateMultiItemsActionResult()..",
-        lineFlowType: LineFlowType.calling,
-        isLibCall: true,
+        lineFlowType: LineFlowType.nonControllableCalling,
       );
       return await _processCreateMultiItemsActionResult(
+        masterFlowItem: masterFlowItem,
         thisXBlock: thisXBlock,
         blockCurrentFilterCriteria: blockCurrentFilterCriteria,
         calledMethodName:
@@ -3318,7 +3324,7 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockQuickItemUpdateActionAnnotation()
   Future<void> _unitQuickUpdateItem({
-    required MasterFlowItem? masterFlowItem,
+    required MasterFlowItem masterFlowItem,
     required TaskType taskType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockQuickItemUpdateResult taskResult,
@@ -3357,7 +3363,7 @@ abstract class Block<
           "parentBlockItem": parent?.currentItem,
           "filterCriteria": blockCurrentFilterCriteria,
         },
-        lineFlowType: LineFlowType.calling,
+        lineFlowType: LineFlowType.controllableCalling,
       );
       //
       result = await action.callApiQuickUpdateItem(
@@ -3393,8 +3399,7 @@ abstract class Block<
         codeId: "#14100",
         shortDesc:
             "Calling ${_debugObjHtml(this)}._processSaveActionRestResult()...",
-        lineFlowType: LineFlowType.calling,
-        isLibCall: true,
+        lineFlowType: LineFlowType.nonControllableCalling,
       );
       await _processSaveActionRestResult(
         masterFlowItem: masterFlowItem,
@@ -3434,7 +3439,7 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockSilentItemUpdateActionAnnotation()
   Future<void> _unitSilentUpdateItem({
-    required MasterFlowItem? masterFlowItem,
+    required MasterFlowItem masterFlowItem,
     required TaskType taskType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockSilentItemUpdateResult taskResult,
@@ -3464,7 +3469,7 @@ abstract class Block<
           "parentBlockItem": parent?.currentItem,
           "filterCriteria": filterCriteria,
         },
-        lineFlowType: LineFlowType.calling,
+        lineFlowType: LineFlowType.controllableCalling,
       );
       //
       result = await action.callApiSilentlyUpdateItem(
@@ -3497,7 +3502,10 @@ abstract class Block<
       codeId: "#15200",
       shortDesc: "Fire event after update item.",
     );
-    __fireEventFromBlockToOtherShelves();
+    __fireEventFromBlockToOtherShelves(
+      masterFlowItem: masterFlowItem,
+      eventType: EventType.update,
+    );
     //
     masterFlowItem?._addLineFlowItem(
       codeId: "#15300",
@@ -3507,6 +3515,7 @@ abstract class Block<
     // Process Internal Reaction (If Need).
     //
     await _processInternalReaction(
+      masterFlowItem: masterFlowItem,
       thisXBlock: thisXBlock,
       candidateCurrItem: null,
     );
@@ -3538,7 +3547,7 @@ abstract class Block<
       masterFlowItem._addLineFlowItem(
         codeId: "#45100",
         shortDesc: "Calling ${_debugObjHtml(action)}.callApi().",
-        lineFlowType: LineFlowType.calling,
+        lineFlowType: LineFlowType.controllableCalling,
       );
       //
       result = await action.callApi();
@@ -3571,7 +3580,10 @@ abstract class Block<
           "${_debugObjHtml(this)} > Fire event after execute silent action.",
       lineFlowType: LineFlowType.fireEvent,
     );
-    __fireEventFromBlockToOtherShelves();
+    __fireEventFromBlockToOtherShelves(
+      masterFlowItem: masterFlowItem,
+      eventType: EventType.unknown,
+    );
     //
     final ITEM? candidateCurrItem = null;
     masterFlowItem._addLineFlowItem(
@@ -3580,13 +3592,13 @@ abstract class Block<
       parameters: {
         "candidateCurrItem": candidateCurrItem,
       },
-      lineFlowType: LineFlowType.calling,
-      isLibCall: true,
+      lineFlowType: LineFlowType.nonControllableCalling,
     );
     //
     // Process Internal Reaction:
     //
     await _processInternalReaction(
+      masterFlowItem: masterFlowItem,
       thisXBlock: thisXBlock,
       candidateCurrItem: candidateCurrItem,
     );
@@ -3596,7 +3608,7 @@ abstract class Block<
   // ***************************************************************************
 
   Future<void> _processSaveActionRestResult({
-    required MasterFlowItem? masterFlowItem,
+    required MasterFlowItem masterFlowItem,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required bool isNew,
     required String callingClassName,
@@ -3661,7 +3673,7 @@ abstract class Block<
           "filterCriteria": filterCriteria,
           "itemDetail": savedItemDetail,
         },
-        lineFlowType: LineFlowType.calling,
+        lineFlowType: LineFlowType.controllableCalling,
       );
       keepInList = needToKeepItemInList(
         parentBlockCurrentItem: parent?.currentItem,
@@ -3671,12 +3683,20 @@ abstract class Block<
     }
     //
     if (fireOutsideEvent) {
+      masterFlowItem?._addLineFlowSeparator();
+      //
       masterFlowItem?._addLineFlowItem(
         codeId: "#16200",
-        shortDesc: "${_debugObjHtml(this)} > Fire event after saving ITEM.",
+        shortDesc:
+            "${_debugObjHtml(this)} > Save successful --> An event occurred --> checking if it should be emitted.",
         lineFlowType: LineFlowType.fireEvent,
       );
-      __fireEventFromBlockToOtherShelves();
+      __fireEventFromBlockToOtherShelves(
+        masterFlowItem: masterFlowItem,
+        eventType: isNew ? EventType.creation : EventType.update,
+      );
+      //
+      masterFlowItem?._addLineFlowSeparator();
     } else {}
     ITEM? siblingItem;
     //
@@ -3694,7 +3714,7 @@ abstract class Block<
         codeId: "#16240",
         shortDesc: "Calling ${_debugObjHtml(this)}.convertItemDetailToItem() "
             "to convert ${_debugObjHtml(savedItemDetail)} to ${_debugItemTypeHtml()}.",
-        lineFlowType: LineFlowType.calling,
+        lineFlowType: LineFlowType.controllableCalling,
       );
       ITEM refreshedItem = __convertItemDetailToItem(
         itemDetail: savedItemDetail,
@@ -3768,7 +3788,7 @@ abstract class Block<
           codeId: "#16520",
           shortDesc: "Calling ${_debugObjHtml(this)}.convertItemDetailToItem() "
               "to convert ${_debugObjHtml(savedItemDetail)} to ${_debugItemTypeHtml()}.",
-          lineFlowType: LineFlowType.calling,
+          lineFlowType: LineFlowType.controllableCalling,
         );
         savedItem = __convertItemDetailToItem(
           itemDetail: savedItemDetail,
@@ -3801,7 +3821,7 @@ abstract class Block<
           shortDesc:
               "Calling ${_debugObjHtml(this)}.findSiblingItem() to find sibling item of ${_debugObjHtml(removeItem)}.",
           parameters: {"item": removeItem},
-          lineFlowType: LineFlowType.calling,
+          lineFlowType: LineFlowType.controllableCalling,
         );
         //
         // Deleted current item ==> find sibling.
@@ -3869,6 +3889,7 @@ abstract class Block<
     // Process Internal Reaction (If Need).
     //
     await _processInternalReaction(
+      masterFlowItem: masterFlowItem,
       thisXBlock: thisXBlock,
       candidateCurrItem: siblingItem,
     );
@@ -3878,6 +3899,7 @@ abstract class Block<
   // ***************************************************************************
 
   Future<bool> _processCreateMultiItemsActionResult({
+    required MasterFlowItem masterFlowItem,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required FILTER_CRITERIA blockCurrentFilterCriteria,
     required String calledMethodName,
@@ -3896,7 +3918,10 @@ abstract class Block<
     //
     // External React:
     //
-    __fireEventFromBlockToOtherShelves();
+    __fireEventFromBlockToOtherShelves(
+      masterFlowItem: masterFlowItem,
+      eventType: EventType.creation,
+    );
     //
     final PageData<ITEM>? newItemsPage = result.data;
 
@@ -3922,6 +3947,7 @@ abstract class Block<
     // Internal Event:
     //
     await _processInternalReaction(
+      masterFlowItem: masterFlowItem,
       thisXBlock: thisXBlock,
       candidateCurrItem: null,
     );
@@ -3950,17 +3976,25 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_BlockClearCurrentAnnotation()
   Future<void> clearCurrent() async {
-    // FlutterArtist.codeFlowLogger._addMethodCall(
-    //   isLibCode: true,
-    //   navigate: null,
-    //   ownerClassInstance: this,
-    //   methodName: "clearCurrent",
-    //   parameters: {},
-    // );
-    if (this.currentItem == null) {
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "clearCurrent",
+      parameters: null,
+      navigate: null,
+      isLibMethod: true,
+    );
+    if (currentItem == null) {
+      masterFlowItem._addLineFlowItem(
+        codeId: "#63000",
+        shortDesc: "No current item -> do nothing.",
+      );
       return;
     }
     //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#63100",
+      shortDesc: "Creating <b>$_XShelfBlockClearCurrentItem</b>..",
+    );
     final XShelf xShelf = _XShelfBlockClearCurrentItem(block: this);
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
@@ -4051,6 +4085,7 @@ abstract class Block<
 
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockItemsDeletionResult<ITEM>> __deleteItems({
+    required MasterFlowItem masterFlowItem,
     required String methodName,
     required List<ITEM> items,
     required bool stopIfError,
@@ -4059,6 +4094,10 @@ abstract class Block<
     final List<ITEM> candidateDeleteItems =
         __blockData.moveCurrentItemToEndOfList(
       itemList: items,
+    );
+    masterFlowItem._addLineFlowItem(
+      codeId: "#65000",
+      shortDesc: "Check before deletion..",
     );
     // @Same-Code-Precheck-01
     Actionable<BlockItemsDeletionPrecheck> actionable = __canDeleteItems(
@@ -4069,10 +4108,15 @@ abstract class Block<
     );
     if (!actionable.yes) {
       _deletionErrorCount++;
-      _addErrorLogActionable(
+      LogErrorInfo? errorInfo = _addErrorLogActionable(
         shelf: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
+      );
+      masterFlowItem._addLineFlowItem(
+        codeId: "#65100",
+        shortDesc: "@actionable = ${_debugObjHtml(actionable)}.",
+        errorInfo: errorInfo,
       );
       return BlockItemsDeletionResult<ITEM>(
         candidateItems: candidateDeleteItems,
@@ -4087,12 +4131,20 @@ abstract class Block<
       details: "Delete Multi Items",
     );
     if (!confirm) {
+      masterFlowItem._addLineFlowItem(
+        codeId: "#65200",
+        shortDesc: "@confirm = <b>false</b> --> Cancelled!",
+      );
       return BlockItemsDeletionResult<ITEM>(
         candidateItems: candidateDeleteItems,
         precheck: BlockItemsDeletionPrecheck.cancelled,
       );
     }
     //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#65300",
+      shortDesc: "Creating <b>$_XShelfBlockMultiItemDeletion</b>..",
+    );
     final XShelf xShelf = _XShelfBlockMultiItemDeletion(block: this);
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
@@ -4226,13 +4278,19 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockClearanceAnnotation()
   Future<BlockClearanceResult> clear({Function()? navigate}) async {
-    // FlutterArtist.codeFlowLogger._addMethodCall(
-    //   isLibCode: true,
-    //   navigate: navigate,
-    //   ownerClassInstance: this,
-    //   methodName: "clear",
-    //   parameters: {},
-    // );
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "clear",
+      parameters: {
+        "navigate": navigate,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
+    masterFlowItem._addLineFlowItem(
+      codeId: "#62000",
+      shortDesc: "Check before clear the ${_debugObjHtml(this)}...",
+    );
     // @Same-Code-Precheck-01
     Actionable<BlockClearancePrecheck> actionable = __canClearBlock(
       checkBusy: true,
@@ -4240,16 +4298,25 @@ abstract class Block<
     //
     if (!actionable.yes) {
       // _createItemErrorCount++;
-      _addErrorLogActionable(
+      LogErrorInfo? errorInfo = _addErrorLogActionable(
         shelf: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
+      );
+      masterFlowItem._addLineFlowItem(
+        codeId: "#62100",
+        shortDesc: "@actionable --> ${_debugObjHtml(actionable)}.",
+        errorInfo: errorInfo,
       );
       return BlockClearanceResult(
         precheck: actionable.errCode,
       );
     }
     //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#62200",
+      shortDesc: "Creating <b>$_XShelfBlockClearance</b>.",
+    );
     final XShelf xShelf = _XShelfBlockClearance(block: this);
 
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
@@ -4285,15 +4352,18 @@ abstract class Block<
     //
     var qryMethod = BlockQryMethodName.queryNextPage;
     //
-    // FlutterArtist.codeFlowLogger._addMethodCall(
-    //   isLibCode: true,
-    //   navigate: null,
-    //   ownerClassInstance: this,
-    //   methodName: qryMethod.name,
-    //   parameters: {"afterQueryAction": afterQueryAction},
-    // );
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "queryNextPage",
+      parameters: {
+        "afterQueryAction": afterQueryAction,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
     //
     return await __queryBlock(
+      masterFlowItem: masterFlowItem,
       qryMethod: qryMethod,
       itemListMode: ItemListMode.replace,
       filterInput: null,
@@ -4323,15 +4393,18 @@ abstract class Block<
     //
     final qryMethod = BlockQryMethodName.queryPreviousPage;
     //
-    // FlutterArtist.codeFlowLogger._addMethodCall(
-    //   isLibCode: true,
-    //   navigate: null,
-    //   ownerClassInstance: this,
-    //   methodName: qryMethod.name,
-    //   parameters: {"afterQueryAction": afterQueryAction},
-    // );
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "queryPreviousPage",
+      parameters: {
+        "afterQueryAction": afterQueryAction,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
     //
     return await __queryBlock(
+      masterFlowItem: masterFlowItem,
       qryMethod: qryMethod,
       itemListMode: ItemListMode.replace,
       filterInput: null,
@@ -4361,15 +4434,18 @@ abstract class Block<
     //
     final qryMethod = BlockQryMethodName.queryMore;
     //
-    // FlutterArtist.codeFlowLogger._addMethodCall(
-    //   isLibCode: true,
-    //   navigate: null,
-    //   ownerClassInstance: this,
-    //   methodName: qryMethod.name,
-    //   parameters: {"afterQueryAction": afterQueryAction},
-    // );
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "queryMore",
+      parameters: {
+        "afterQueryAction": afterQueryAction,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
     //
     return await __queryBlock(
+      masterFlowItem: masterFlowItem,
       qryMethod: qryMethod,
       itemListMode: ItemListMode.expand,
       afterQueryAction: afterQueryAction,
@@ -4389,7 +4465,23 @@ abstract class Block<
     FILTER_INPUT? filterInput,
     Function()? navigate,
   }) async {
-    return await queryEmpty(
+    if (filterModel != null && filterModel!.lockAddMoreQuery) {
+      return false;
+    }
+    //
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "queryEmptyAndPrepareToCreate",
+      parameters: {
+        "filterInput": filterInput,
+        "navigate": navigate,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
+    //
+    return await __queryEmpty(
+      masterFlowItem: masterFlowItem,
       filterInput: filterInput,
       prepareFormToCreateItem: true,
       navigate: navigate,
@@ -4409,38 +4501,29 @@ abstract class Block<
     if (filterModel != null && filterModel!.lockAddMoreQuery) {
       return false;
     }
-    // FlutterArtist.codeFlowLogger._addMethodCall(
-    //   isLibCode: true,
-    //   navigate: navigate,
-    //   ownerClassInstance: this,
-    //   methodName: "queryEmpty",
-    //   parameters: {
-    //     "filterInput": filterInput,
-    //   },
-    // );
     //
-    final XShelf xShelf = _XShelfBlockQueryEmpty(
-      block: this,
-      filterInput: filterInput,
-      pageable: pageable,
-      itemListMode: ItemListMode.replace,
-      afterQueryAction: prepareFormToCreateItem
-          ? AfterQueryAction.createNewItem
-          : AfterQueryAction.setAnItemAsCurrent,
-      suggestedSelection: null,
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "queryEmpty",
+      parameters: {
+        "filterInput": filterInput,
+        "prepareFormToCreateItem": prepareFormToCreateItem,
+        "navigate": navigate,
+      },
+      navigate: null,
+      isLibMethod: true,
     );
     //
-    xShelf._initQueryTaskUnits();
-    FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    await FlutterArtist.executor._executeTaskUnitQueue();
-    //
-    XBlock xBlock = xShelf.findXBlockByName(this.name)!;
-    BlockQueryResult queryResult = xBlock.queryResult;
-    if (queryResult.successForAll) {
-      _executeNavigation(navigate: navigate);
-    }
-    return queryResult.successForAll;
+    return await __queryEmpty(
+      masterFlowItem: masterFlowItem,
+      filterInput: filterInput,
+      prepareFormToCreateItem: prepareFormToCreateItem,
+      navigate: navigate,
+    );
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   ///
   ///
@@ -4465,21 +4548,23 @@ abstract class Block<
     //
     final qryMethod = BlockQryMethodName.query;
     //
-    // FlutterArtist.codeFlowLogger._addMethodCall(
-    //   isLibCode: true,
-    //   navigate: navigate,
-    //   ownerClassInstance: this,
-    //   methodName: qryMethod.name,
-    //   parameters: {
-    //     "itemListMode": itemListMode,
-    //     "afterQueryAction": afterQueryAction,
-    //     "filterInput": filterInput,
-    //     "suggestedSelection": suggestedSelection,
-    //     "pageable": pageable,
-    //   },
-    // );
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "query",
+      parameters: {
+        "afterQueryAction": afterQueryAction,
+        "itemListMode": itemListMode,
+        "filterInput": filterInput,
+        "suggestedSelection": suggestedSelection,
+        "pageable": pageable,
+        "navigate": navigate,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
     //
     return await __queryBlock(
+      masterFlowItem: masterFlowItem,
       qryMethod: qryMethod,
       itemListMode: itemListMode,
       afterQueryAction: afterQueryAction,
@@ -4509,17 +4594,19 @@ abstract class Block<
     Pageable? pageable,
     Function()? navigate,
   }) async {
-    // FlutterArtist.codeFlowLogger._addMethodCall(
-    //   isLibCode: true,
-    //   navigate: navigate,
-    //   ownerClassInstance: this,
-    //   methodName: "queryAndPrepareToEdit",
-    //   parameters: {
-    //     "filterInput": filterInput,
-    //     "suggestedSelection": suggestedSelection,
-    //     "pageable": pageable,
-    //   },
-    // );
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "queryAndPrepareToEdit",
+      parameters: {
+        "filterInput": filterInput,
+        "itemListMode": itemListMode,
+        "suggestedSelection": suggestedSelection,
+        "pageable": pageable,
+        "navigate": navigate,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
     //
     final XShelf xShelf = _XShelfBlockQueryThenPrepareToEdit(
       block: this,
@@ -4530,7 +4617,7 @@ abstract class Block<
       suggestedSelection: suggestedSelection,
     );
     //
-    xShelf._initQueryTaskUnits();
+    xShelf._initQueryTaskUnits(masterFlowItem: masterFlowItem);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
@@ -4557,13 +4644,20 @@ abstract class Block<
     FILTER_INPUT? filterInput,
     Function()? navigate,
   }) async {
-    // FlutterArtist.codeFlowLogger._addMethodCall(
-    //   isLibCode: true,
-    //   navigate: navigate,
-    //   ownerClassInstance: this,
-    //   methodName: "queryAndPrepareToCreate",
-    //   parameters: {},
-    // );
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "queryAndPrepareToCreate",
+      parameters: {
+        "filterInput": filterInput,
+        "navigate": navigate,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
+    masterFlowItem._addLineFlowItem(
+      codeId: "#56000",
+      shortDesc: "Creating <b>$_XShelfBlockQueryThenPrepareToCreate</b>..",
+    );
     //
     final XShelf xShelf = _XShelfBlockQueryThenPrepareToCreate(
       block: this,
@@ -4574,7 +4668,13 @@ abstract class Block<
       suggestedSelection: null,
     );
     //
-    xShelf._initQueryTaskUnits();
+    masterFlowItem._addLineFlowItem(
+      codeId: "#57000",
+      shortDesc: "Calling ${_debugObjHtml(xShelf)}._initQueryTaskUnits()...",
+      lineFlowType: LineFlowType.nonControllableCalling,
+    );
+    xShelf._initQueryTaskUnits(masterFlowItem: masterFlowItem);
+    //
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
@@ -4663,7 +4763,7 @@ abstract class Block<
         "parentBlockCurrentItem": parentBlockCurrentItem,
         "filterCriteria": currentFilterCriteria,
       },
-      lineFlowType: LineFlowType.calling,
+      lineFlowType: LineFlowType.controllableCalling,
     );
     return initInputForCreationForm(
       parentBlockCurrentItem: parentBlockCurrentItem,
@@ -4689,7 +4789,7 @@ abstract class Block<
           "currentItemDetail": currentItemDetail,
           "filterCriteria": filterCriteria,
         },
-        lineFlowType: LineFlowType.calling,
+        lineFlowType: LineFlowType.controllableCalling,
       );
       return initFormRelatedData(
         parentBlockCurrentItem: parentBlockCurrentItem,
@@ -5438,11 +5538,26 @@ abstract class Block<
     required CurrentItemSelInclusion currentItemInclusion,
     required bool stopIfError,
   }) async {
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "deleteSelectedItems",
+      parameters: {
+        "currentItemInclusion": currentItemInclusion,
+        "stopIfError": stopIfError,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
     List<ITEM> selItems = __blockData.getSelectedItems(
       currentItemInclusion: currentItemInclusion,
     );
+    masterFlowItem._addLineFlowItem(
+      codeId: "#66000",
+      shortDesc: "Selected Items: ${_debugObjHtml(selItems)}..",
+    );
     //
     return await __deleteItems(
+      masterFlowItem: masterFlowItem,
       methodName: "deleteSelectedItems",
       items: selItems,
       stopIfError: stopIfError,
@@ -5459,11 +5574,26 @@ abstract class Block<
     required CurrentItemChkInclusion currentItemInclusion,
     required bool stopIfError,
   }) async {
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "deleteCheckedItems",
+      parameters: {
+        "currentItemInclusion": currentItemInclusion,
+        "stopIfError": stopIfError,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
     List<ITEM> chkItems = __blockData.getCheckedItems(
       currentItemInclusion: currentItemInclusion,
     );
+    masterFlowItem._addLineFlowItem(
+      codeId: "#64000",
+      shortDesc: "Checked Items: ${_debugObjHtml(chkItems)}..",
+    );
     //
     return await __deleteItems(
+      masterFlowItem: masterFlowItem,
       methodName: "deleteCheckedItems",
       items: chkItems,
       stopIfError: stopIfError,
@@ -5479,7 +5609,22 @@ abstract class Block<
     required List<ITEM> items,
     required bool stopIfError,
   }) async {
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "deleteItems",
+      parameters: {
+        "items": items,
+        "stopIfError": stopIfError,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
+    masterFlowItem._addLineFlowItem(
+      codeId: "#67000",
+      shortDesc: "Items: ${_debugObjHtml(items)}..",
+    );
     return await __deleteItems(
+      masterFlowItem: masterFlowItem,
       methodName: "deleteItems",
       items: items,
       stopIfError: stopIfError,
@@ -5545,15 +5690,14 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __fireEventFromBlockToOtherShelves() {
-    // _ShelfExternalReactTaskUnit taskUnit = _ShelfExternalReactTaskUnit(
-    //   shelf: shelf,
-    //   shelfInternalListeners: _internalListeners,
-    // );
-    // FlutterArtist._taskUnitQueue.addTaskUnit(taskUnit);
-
+  void __fireEventFromBlockToOtherShelves({
+    MasterFlowItem? masterFlowItem,
+    required EventType eventType,
+  }) {
     // TODO: Chuyen di noi khac.
     FlutterArtist.storage.ev._fireEventFromBlockToOtherShelves(
+      masterFlowItem: masterFlowItem,
+      eventType: eventType,
       eventBlock: this,
       itemIdString: null,
     );
@@ -5564,6 +5708,7 @@ abstract class Block<
 
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockQueryResult> __queryBlock({
+    required MasterFlowItem masterFlowItem,
     required BlockQryMethodName qryMethod,
     required ItemListMode itemListMode,
     required AfterQueryAction afterQueryAction,
@@ -5607,7 +5752,7 @@ abstract class Block<
       suggestedSelection: suggestedSelection,
     );
     //
-    xShelf._initQueryTaskUnits();
+    xShelf._initQueryTaskUnits(masterFlowItem: masterFlowItem);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
@@ -5617,6 +5762,52 @@ abstract class Block<
       _executeNavigation(navigate: navigate);
     }
     return queryResult;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<bool> __queryEmpty({
+    required MasterFlowItem masterFlowItem,
+    required FILTER_INPUT? filterInput,
+    bool prepareFormToCreateItem = false,
+    required Function()? navigate,
+  }) async {
+    if (filterModel != null && filterModel!.lockAddMoreQuery) {
+      return false;
+    }
+    //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#53000",
+      shortDesc: "Creating <b>$_XShelfBlockQueryEmpty</b>..",
+    );
+    //
+    final XShelf xShelf = _XShelfBlockQueryEmpty(
+      block: this,
+      filterInput: filterInput,
+      pageable: pageable,
+      itemListMode: ItemListMode.replace,
+      afterQueryAction: prepareFormToCreateItem
+          ? AfterQueryAction.createNewItem
+          : AfterQueryAction.setAnItemAsCurrent,
+      suggestedSelection: null,
+    );
+    //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#53100",
+      shortDesc: "Calling ${_debugObjHtml(xShelf)}._initQueryTaskUnits()..",
+      lineFlowType: LineFlowType.nonControllableCalling,
+    );
+    xShelf._initQueryTaskUnits(masterFlowItem: masterFlowItem);
+    FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
+    await FlutterArtist.executor._executeTaskUnitQueue();
+    //
+    XBlock xBlock = xShelf.findXBlockByName(this.name)!;
+    BlockQueryResult queryResult = xBlock.queryResult;
+    if (queryResult.successForAll) {
+      _executeNavigation(navigate: navigate);
+    }
+    return queryResult.successForAll;
   }
 
   // ***************************************************************************

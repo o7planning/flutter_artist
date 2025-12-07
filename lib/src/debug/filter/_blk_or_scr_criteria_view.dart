@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_artist/src/debug/widgets/_html_info_view.dart';
 
 import '../../core/_core_/core.dart';
 import '../../core/built_in/empty_filter_criteria.dart';
 import '../../core/utils/_class_utils.dart';
-import '../constants/_debug_constants.dart';
 import '_criteria_values_info_view.dart';
 
 abstract class BlkOrScrCriteriaView extends StatelessWidget {
@@ -47,18 +47,10 @@ abstract class BlkOrScrCriteriaView extends StatelessWidget {
   }
 
   Widget _showNoFilterModelInfo() {
-    return SelectableText.rich(
-      TextSpan(
-        children: [
-          TextSpan(
-            text: getBlockOrScalarClassName(),
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          TextSpan(text: " is using $EmptyFilterCriteria."),
-        ],
-      ),
+    return HtmlInfoView(
+      showIcon: false,
+      infoAsHtml:
+          "<b>${getBlockOrScalarClassName()}</b> is using <b>$EmptyFilterCriteria</b>.",
     );
   }
 
@@ -67,43 +59,13 @@ abstract class BlkOrScrCriteriaView extends StatelessWidget {
     required String? criteriaClassName,
   }) {
     if (criteriaClassName == null) {
-      return Text("filterCriteria is null");
+      return HtmlInfoView(infoAsHtml: "<b>filterCriteria</b> is <b>null</b>.");
     } else {
-      return SelectableText.rich(
-        style: TextStyle(fontSize: DebugConstants.debugFontSize),
-        TextSpan(
-          children: [
-            TextSpan(
-              text: criteriaClassName,
-              style: TextStyle(
-                color: Colors.indigo,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            TextSpan(text: " is used as the criteria for filtering data on "),
-            TextSpan(
-              text: getBlockOrScalarClassName(),
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            TextSpan(text: ". It is created by "),
-            TextSpan(
-              text: "$filterModelClassName.toFilterCriteriaObject()",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            TextSpan(text: " and can be retrieved via "),
-            TextSpan(
-              text: "${getBlockOrScalarClassName()}.data.filterCriteria",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            TextSpan(text: " property."),
-          ],
-        ),
+      return HtmlInfoView(
+        infoAsHtml:
+            "<b>$criteriaClassName</b> is used as the criteria for filtering data on "
+            "<b>${getBlockOrScalarClassName()}</b>. It is created by <b>$filterModelClassName.toFilterCriteriaObject()</b> "
+            "and can be retrieved via <b>${getBlockOrScalarClassName()}.filterCriteria</b> property.",
       );
     }
   }

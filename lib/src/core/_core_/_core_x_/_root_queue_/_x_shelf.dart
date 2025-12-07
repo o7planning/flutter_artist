@@ -342,7 +342,7 @@ abstract class XShelf extends XRootQueueItem {
   }
 
   // debug [#01000]
-  void _initQueryTaskUnits([MasterFlowItem? masterFlowItem]) {
+  void _initQueryTaskUnits({required MasterFlowItem masterFlowItem}) {
     if (rootVipXScalar != null && rootVipXBlock != null) {
       throw "Development Logic Error";
     }

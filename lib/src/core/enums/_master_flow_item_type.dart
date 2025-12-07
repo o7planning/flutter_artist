@@ -2,20 +2,30 @@ import 'package:flutter/material.dart';
 
 enum MasterFlowItemType {
   startup,
-  naturalUIEvent,
-  taskCall,
-  methodCall;
+  naturalLoad,
+  taskUnitCall,
+  userMethodCall,
+  libMethodCall,
+  queuedEvent;
+
+  String get desc {
+    return name;
+  }
 
   IconData getIconData() {
     switch (this) {
       case MasterFlowItemType.startup:
         return Icons.start;
-      case MasterFlowItemType.naturalUIEvent:
+      case MasterFlowItemType.naturalLoad:
         return Icons.event_note_rounded;
-      case MasterFlowItemType.taskCall:
+      case MasterFlowItemType.taskUnitCall:
         return Icons.miscellaneous_services_outlined;
-      case MasterFlowItemType.methodCall:
+      case MasterFlowItemType.userMethodCall:
         return Icons.call;
+      case MasterFlowItemType.libMethodCall:
+        return Icons.call;
+      case MasterFlowItemType.queuedEvent:
+        return Icons.star;
     }
   }
 
@@ -26,12 +36,16 @@ enum MasterFlowItemType {
     switch (this) {
       case MasterFlowItemType.startup:
         return Colors.black;
-      case MasterFlowItemType.naturalUIEvent:
+      case MasterFlowItemType.naturalLoad:
         return Colors.orange;
-      case MasterFlowItemType.taskCall:
+      case MasterFlowItemType.taskUnitCall:
         return Colors.indigo;
-      case MasterFlowItemType.methodCall:
+      case MasterFlowItemType.userMethodCall:
         return Colors.blue;
+      case MasterFlowItemType.libMethodCall:
+        return Colors.black;
+      case MasterFlowItemType.queuedEvent:
+        return Colors.deepOrange;
     }
   }
 
@@ -39,12 +53,16 @@ enum MasterFlowItemType {
     switch (this) {
       case MasterFlowItemType.startup:
         return "Startup";
-      case MasterFlowItemType.naturalUIEvent:
+      case MasterFlowItemType.naturalLoad:
         return "Detect newly displayed UI Component";
-      case MasterFlowItemType.taskCall:
+      case MasterFlowItemType.taskUnitCall:
         return "Task Unit.";
-      case MasterFlowItemType.methodCall:
-        return "Method called by user";
+      case MasterFlowItemType.userMethodCall:
+        return "User's Method";
+      case MasterFlowItemType.libMethodCall:
+        return "Lib's Method";
+      case MasterFlowItemType.queuedEvent:
+        return "Init Task Unit for Lazied Events";
     }
   }
 }

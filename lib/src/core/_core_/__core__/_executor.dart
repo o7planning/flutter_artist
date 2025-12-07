@@ -40,7 +40,16 @@ class _Executor {
       asyncFunction: () async {
         final Map<String, Shelf> shelfMap = {};
         try {
-          while (FlutterArtist._rootQueue.hasNext()) {
+          while (true) {
+            bool hasNext = FlutterArtist._rootQueue.hasNext();
+            if (!hasNext) {
+              FlutterArtist.storage._queuedEventManager
+                  .addTaskUnitForQueuedEvents();
+              hasNext = FlutterArtist._rootQueue.hasNext();
+              if (!hasNext) {
+                break;
+              }
+            }
             if (FlutterArtist.debugOptions.showTaskUnitQueue) {
               BuildContext context = FlutterArtist.adapter.getCurrentContext();
               await DebugExecutorDialog.showDebugExecutorDialog(
@@ -116,7 +125,7 @@ class _Executor {
         masterFlowItem: masterFlowItem,
         taskType: taskUnit.taskType,
         action: taskUnit.action,
-        taskResult: taskUnit.taskResult as StorageSilentActionResult,
+        taskResult: taskUnit.taskResult,
       );
     }
     // Filter FilterModel:

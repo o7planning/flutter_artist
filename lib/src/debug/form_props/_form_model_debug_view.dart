@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_artist/flutter_artist.dart';
+import 'package:flutter_artist/src/debug/widgets/_html_info_view.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../../core/_core_/core.dart';
-import '../../core/enums/_data_state.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/widgets/_custom_app_container.dart';
 import '../../core/widgets/_small_text_button.dart';
@@ -26,7 +26,11 @@ class FormModelDebugView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(formModel.debugClassDefinition),
+          HtmlInfoView(
+            padding: EdgeInsets.symmetric(vertical: 5),
+            infoAsHtml:
+                "<b>${getClassNameWithoutGenerics(formModel)}</b><i>${formModel.debugClassParametersDefinition}</i>",
+          ),
           Divider(),
           IconLabelText(
             label: "Form Mode: ",

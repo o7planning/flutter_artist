@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../core/_core_/core.dart';
+import '../../core/utils/_class_utils.dart';
 import '../../core/widgets/_custom_app_container.dart';
+import '../widgets/_html_info_view.dart';
 
 class FilterModelDebugView extends StatelessWidget {
   final FilterModel filterModel;
@@ -20,7 +22,11 @@ class FilterModelDebugView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(filterModel.debugClassDefinition),
+          HtmlInfoView(
+            padding: EdgeInsets.symmetric(vertical: 5),
+            infoAsHtml:
+                "<b>${getClassNameWithoutGenerics(filterModel)}</b><i>${filterModel.debugClassParametersDefinition}</i>",
+          ),
           Divider(),
         ],
       ),

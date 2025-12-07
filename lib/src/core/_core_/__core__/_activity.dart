@@ -57,8 +57,7 @@ abstract class Activity extends _Core {
       _masterFlowItem?._addLineFlowItem(
         codeId: "#19100",
         shortDesc: "Calling ${_debugObjHtml(this)}.callApiLogic()...",
-        lineFlowType: LineFlowType.calling,
-        isLibCall: true,
+        lineFlowType: LineFlowType.nonControllableCalling,
       );
       await callApiLogic();
     } catch (e, stackTrace) {

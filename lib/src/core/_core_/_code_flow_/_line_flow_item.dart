@@ -55,20 +55,17 @@ class LineFlowItem {
     return s;
   }
 
-  void printToConsole() {
-    String sd = shortDesc
-        .replaceAll("<b>", "")
-        .replaceAll("</b>", "")
-        .replaceAll("<i>", "")
-        .replaceAll("</i>", "")
-        .replaceAll("<u>", "")
-        .replaceAll("</u>", "");
-    print("\n$lineId: $sd");
+  String getText() {
+    String sd =
+        HtmlUtils.removeTags("$shortDesc${getParametersAsHtmlString()}");
+    String s = "$lineId: $sd";
     if (errorInfo != null) {
-      print("@errorMessage: ${errorInfo!.errorMessage}");
-      if (errorInfo!.errorDetails != null) {
-        print("@errorDetails: ${errorInfo!.errorDetails}");
+      s += "\n@errorMessage: ${errorInfo!.errorMessage}";
+      if (errorInfo!.errorDetails != null &&
+          errorInfo!.errorDetails!.isNotEmpty) {
+        s += "\n@errorDetails: ${errorInfo!.errorDetails}";
       }
     }
+    return s;
   }
 }

@@ -13,21 +13,16 @@ dependencies:
     sdk: flutter
 
 
-  flutter_form_builder: ^10.0.1 # ^9.3.0
-  tabbed_view: ^1.19.1
+  flutter_form_builder: ^10.2.0 # ^10.0.1
+  tabbed_view: ^2.0.0 # ^1.19.1
   equatable:
   graphview: ^1.5.1
-  directed_graph: ^0.4.5
-  flutter_force_directed_graph: ^1.0.6
-  flutter_graph_view: ^1.2.0
   flutter_breadcrumb: ^1.0.1
-  visibility_detector: ^0.4.0+2
   uuid: ^4.5.1
   animated_tree_view: ^2.3.0
   hive: ^2.2.3
   number_pagination: ^1.1.6
-  flutter_svg:
-  multi_split_view: ^3.6.0
+  multi_split_view: ^3.6.1
   flutter_advanced_switch: ^3.1.0
   web: ^1.1.1
   back_button_interceptor: ^8.0.4
@@ -41,7 +36,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

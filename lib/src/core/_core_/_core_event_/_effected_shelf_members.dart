@@ -188,6 +188,13 @@ class EffectedShelfMembers {
     );
   }
 
+  String getDebugInfoHtml() {
+    String s = "\n - @reQueryScalars: <b>${_reQueryScalarMAP.keys}</b>."
+        "\n - @reQueryBlocks: <b>${_reQueryBlockMAP.keys}</b>."
+        "\n - @refreshCurrItmBlocks: <b>${_refreshCurrItmBlockMAP.keys}</b>.";
+    return s;
+  }
+
   // ***************************************************************************
   // ***************************************************************************
 

@@ -72,7 +72,7 @@ class _StorageFreezeMan {
   // ***************************************************************************
 
   ///
-  /// Check to execute delayed reaction.
+  /// Check to execute queued event.
   ///
   Future<void> __checkFreezeByUIAndResumeReactionIfCan() async {
     if (__freezeType != FreezeType.uiComponent) {

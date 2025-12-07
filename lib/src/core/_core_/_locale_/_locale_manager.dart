@@ -25,7 +25,7 @@ class LocaleManager extends _Core {
         "locale": locale,
       },
       navigate: null,
-      isLibCode: true,
+      isLibMethod: true,
     );
     //
     masterFlowItem?._addLineFlowItem(
@@ -35,8 +35,7 @@ class LocaleManager extends _Core {
       parameters: {
         "locale": locale,
       },
-      lineFlowType: LineFlowType.calling,
-      isLibCall: true,
+      lineFlowType: LineFlowType.nonControllableCalling,
     );
     masterFlowItem?._addLineFlowItem(
       codeId: "#46100",
@@ -45,8 +44,7 @@ class LocaleManager extends _Core {
       parameters: {
         "locale": locale,
       },
-      lineFlowType: LineFlowType.calling,
-      isLibCall: true,
+      lineFlowType: LineFlowType.nonControllableCalling,
     );
     await _updateLocale(masterFlowItem: masterFlowItem, locale: locale);
     //
@@ -60,8 +58,7 @@ class LocaleManager extends _Core {
         "propName": _propName,
         "value": localeValue,
       },
-      lineFlowType: LineFlowType.calling,
-      isLibCall: true,
+      lineFlowType: LineFlowType.nonControllableCalling,
     );
     await _globalsManager._storeExtraGlobalProp(
       masterFlowItem: masterFlowItem,
@@ -81,7 +78,7 @@ class LocaleManager extends _Core {
       parameters: {
         "locale": locale,
       },
-      lineFlowType: LineFlowType.calling,
+      lineFlowType: LineFlowType.controllableCalling,
       tipDocument: TipDocument.locale,
     );
     await _localeAdapter.updateLocale(locale);

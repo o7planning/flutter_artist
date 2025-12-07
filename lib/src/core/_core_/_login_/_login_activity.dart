@@ -14,7 +14,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
       _masterFlowItem?._addLineFlowItem(
         codeId: "#20000",
         shortDesc: "Calling ${_debugObjHtml(this)}.callApiLogin()...",
-        lineFlowType: LineFlowType.calling,
+        lineFlowType: LineFlowType.controllableCalling,
       );
       result = await callApiLogin();
       // Throw if Error.
@@ -81,8 +81,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
         "loggedInUser": loggedInUser,
         "requiresTheSameUser": false,
       },
-      lineFlowType: LineFlowType.calling,
-      isLibCall: true,
+      lineFlowType: LineFlowType.nonControllableCalling,
     );
     //
     // IMPORTANT:
@@ -111,7 +110,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
         parameters: {
           "loggedInUser": loggedInUser,
         },
-        lineFlowType: LineFlowType.calling,
+        lineFlowType: LineFlowType.controllableCalling,
         tipDocument: TipDocument.loginLogoutAdapter,
       );
       loginLogoutAdapter.addThirdPartyLogicOnLogin(loggedInUser);
@@ -143,7 +142,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
     _masterFlowItem?._addLineFlowItem(
       codeId: "#20400",
       shortDesc: "Calling ${_debugObjHtml(this)}.navigateToSuccessScreen()...",
-      lineFlowType: LineFlowType.calling,
+      lineFlowType: LineFlowType.controllableCalling,
     );
     // IMPORTANT: No await:
     navigateToSuccessScreen();

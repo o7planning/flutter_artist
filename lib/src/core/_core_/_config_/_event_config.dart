@@ -6,6 +6,13 @@ enum SrcType {
   activity;
 }
 
+enum EventType {
+  creation,
+  update,
+  deletion,
+  unknown;
+}
+
 class Evt extends Equatable {
   final SrcType srcType;
   final String srcName;

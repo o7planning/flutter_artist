@@ -5,10 +5,12 @@ class _Storage extends _StorageCore {
   late final drawerState = _DrawerState(this);
   late final endDrawerState = _EndDrawerState(this);
 
-  late final _polymorphismManager = _StoragePolymorphismManager(this);
+  late final _polymorphismManager = _PolymorphismManager(this);
   late final ev = _StorageEventHandler(this);
   final _stockersManager = _StockersManager();
   final _naturalQueryQueue = _StorageNaturalQueryQueue();
+
+  late final _queuedEventManager = _QueuedEventManager(this);
 
   // ***************************************************************************
   // ***************************************************************************
@@ -22,42 +24,54 @@ class _Storage extends _StorageCore {
     required MasterFlowItem masterFlowItem,
     required StorageStructure storageStructure,
   }) {
-    LineFlowItem item = masterFlowItem._addLineFlowItem(
-      codeId: "#SS000",
-      shortDesc:
-          "${_debugObjHtml(storageStructure)}.registerPolymorphismFamilies().",
-      lineFlowType: LineFlowType.calling,
-      tipDocument: TipDocument.polymorphism,
-    );
-    storageStructure.registerPolymorphismFamilies();
-    //
-    item = masterFlowItem._addLineFlowItem(
-      codeId: "#SS020",
-      shortDesc: "${_debugObjHtml(storageStructure)}.registerAutoStockers().",
-      lineFlowType: LineFlowType.calling,
-      tipDocument: TipDocument.autoStocker,
-    );
-    storageStructure.registerAutoStockers();
-    item._extraInfos = _debugRegister.debugRegisterAutoStockers..sort();
-    //
-    item._extraInfos = _debugRegister.debugRegisterPolymorphisms..sort();
-    item = masterFlowItem._addLineFlowItem(
-      codeId: "#SS040",
-      shortDesc: "${_debugObjHtml(storageStructure)}.registerActivities().",
-      lineFlowType: LineFlowType.calling,
-      tipDocument: TipDocument.activity,
-    );
-    storageStructure.registerActivities();
-    item._extraInfos = _debugRegister.debugRegisterActivities..sort();
-    //
-    item = masterFlowItem._addLineFlowItem(
-      codeId: "#SS060",
-      shortDesc: "${_debugObjHtml(storageStructure)}.registerShelves().",
-      lineFlowType: LineFlowType.calling,
-      tipDocument: TipDocument.shelf,
-    );
-    storageStructure.registerShelves();
-    item._extraInfos = _debugRegister.debugRegisterShelves..sort();
+    try {
+      LineFlowItem item = masterFlowItem._addLineFlowItem(
+        codeId: "#SS000",
+        shortDesc:
+            "${_debugObjHtml(storageStructure)}.registerPolymorphismFamilies().",
+        lineFlowType: LineFlowType.controllableCalling,
+        tipDocument: TipDocument.polymorphism,
+      );
+      final List<PolymorphismFamily> polymorphismFamilies =
+          storageStructure.registerPolymorphismFamilies();
+      // This method may throw Fatal Error cause stop app.
+      _polymorphismManager._init(
+        masterFlowItem: masterFlowItem,
+        polymorphismFamilies: polymorphismFamilies,
+      );
+      //
+      item = masterFlowItem._addLineFlowItem(
+        codeId: "#SS020",
+        shortDesc: "${_debugObjHtml(storageStructure)}.registerAutoStockers().",
+        lineFlowType: LineFlowType.controllableCalling,
+        tipDocument: TipDocument.autoStocker,
+      );
+      storageStructure.registerAutoStockers();
+      item._extraInfos = _debugRegister.debugRegisterAutoStockers..sort();
+      //
+      item._extraInfos = _debugRegister.debugRegisterPolymorphisms..sort();
+      item = masterFlowItem._addLineFlowItem(
+        codeId: "#SS040",
+        shortDesc: "${_debugObjHtml(storageStructure)}.registerActivities().",
+        lineFlowType: LineFlowType.controllableCalling,
+        tipDocument: TipDocument.activity,
+      );
+      storageStructure.registerActivities();
+      item._extraInfos = _debugRegister.debugRegisterActivities..sort();
+      //
+      item = masterFlowItem._addLineFlowItem(
+        codeId: "#SS060",
+        shortDesc: "${_debugObjHtml(storageStructure)}.registerShelves().",
+        lineFlowType: LineFlowType.controllableCalling,
+        tipDocument: TipDocument.shelf,
+      );
+      storageStructure.registerShelves();
+      item._extraInfos = _debugRegister.debugRegisterShelves..sort();
+    } catch (e) {
+      masterFlowItem.printToConsole();
+      print("\n\n");
+      rethrow;
+    }
   }
 
   // ***************************************************************************
@@ -201,7 +215,7 @@ class _Storage extends _StorageCore {
       masterFlowItem?._addLineFlowItem(
         codeId: "#35100",
         shortDesc: "Calling ${_debugObjHtml(action)}.callApi().",
-        lineFlowType: LineFlowType.calling,
+        lineFlowType: LineFlowType.controllableCalling,
       );
       //
       result = await action.callApi();
@@ -234,6 +248,8 @@ class _Storage extends _StorageCore {
       lineFlowType: LineFlowType.fireEvent,
     );
     FlutterArtist.storage.ev._fireEventFromShelfToOtherShelves(
+      masterFlowItem: masterFlowItem,
+      eventType: EventType.unknown,
       eventShelf: null,
       events: action.config.affectedItemTypes,
     );
@@ -267,12 +283,19 @@ class _Storage extends _StorageCore {
   // Open Dialog then freeze Shelf Reaction until closed.
   @_RootMethodAnnotation()
   Future<FreezeByDialogResult<V?>>
-      openDialogThenFreezeReactionBetweenShelvesUntilClosed<V>({
+      openDialogThenFreezeQueuedEventsUntilClosed<V>({
     required Future<V?> Function() openDialog,
   }) async {
-    return await __freeze
-        ._openDialogThenFreezeReactionBetweenShelvesUntilClosed(
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "openDialogThenFreezeQueuedEventsUntilClosed",
+      parameters: null,
+      navigate: null,
+      isLibMethod: true,
+    );
+    return await __freeze._openDialogThenFreezeQueuedEventsUntilClosed(
       openDialog: openDialog,
+      masterFlowItem: masterFlowItem,
     );
   }
 
@@ -280,13 +303,20 @@ class _Storage extends _StorageCore {
   // ***************************************************************************
 
   @_RootMethodAnnotation()
-  Future<void> openDrawerThenFreezeReactionBetweenShelvesUntilClosed(
+  Future<void> openDrawerThenFreezeQueuedEventsUntilClosed(
     BuildContext context, {
     bool showSuggestionIfNeed = true,
   }) async {
-    return await __freeze
-        ._openDrawerThenFreezeReactionBetweenShelvesUntilClosed(
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: 'openDrawerThenFreezeQueuedEventsUntilClosed',
+      parameters: null,
+      navigate: null,
+      isLibMethod: true,
+    );
+    return await __freeze._openDrawerThenFreezeQueuedEventsUntilClosed(
       context,
+      masterFlowItem: masterFlowItem,
       showSuggestionIfNeed: showSuggestionIfNeed,
     );
   }
@@ -299,9 +329,17 @@ class _Storage extends _StorageCore {
     BuildContext context, {
     bool showSuggestionIfNeed = true,
   }) async {
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: 'openEndDrawerThenFreezeReactionBetweenShelvesUntilClosed',
+      parameters: null,
+      navigate: null,
+      isLibMethod: true,
+    );
     return await __freeze
         ._openEndDrawerThenFreezeReactionBetweenShelvesUntilClosed(
       context,
+      masterFlowItem: masterFlowItem,
       showSuggestionIfNeed: showSuggestionIfNeed,
     );
   }

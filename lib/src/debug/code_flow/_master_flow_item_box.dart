@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../../../flutter_artist.dart';
+import '../../core/_core_/core.dart';
 import '../dialog/_error_viewer_dialog.dart';
 import '__task_flow_const.dart';
 
@@ -65,9 +65,7 @@ class MasterFlowItemBox extends StatelessWidget {
   TextStyle _titleStyle() {
     return TextStyle(
       fontSize: 12,
-      fontWeight: masterFlowItem.isPublicMethodCall()
-          ? FontWeight.bold
-          : FontWeight.normal,
+      fontWeight: FontWeight.normal,
       color: Colors.black,
       overflow: TextOverflow.ellipsis,
     );
@@ -76,29 +74,16 @@ class MasterFlowItemBox extends StatelessWidget {
   TextStyle _subtitleStyle() {
     return TextStyle(
       fontSize: 11,
-      fontWeight: masterFlowItem.isPublicMethodCall()
-          ? FontWeight.bold
-          : FontWeight.normal,
+      fontWeight: FontWeight.normal,
       overflow: TextOverflow.ellipsis,
     );
   }
 
   Widget _buildTitle(BuildContext context) {
-    String title;
-    switch (masterFlowItem.masterFlowItemType) {
-      case MasterFlowItemType.startup:
-        title = "Startup";
-      case MasterFlowItemType.naturalUIEvent:
-        title = "Natural UI Event";
-      case MasterFlowItemType.taskCall:
-        title = masterFlowItem.taskType?.name ?? "";
-      case MasterFlowItemType.methodCall:
-        title = ".${masterFlowItem.funcCallInfo?.funcName}()";
-    }
     ErrorInfo? errorInfo = masterFlowItem.getErrorInfo();
     bool hasEvent = masterFlowItem.hasEvent();
     return IconLabelText(
-      text: title,
+      text: masterFlowItem.getTitle(),
       style: _titleStyle(),
       suffixIcon: hasEvent
           ? Tooltip(
@@ -124,20 +109,7 @@ class MasterFlowItemBox extends StatelessWidget {
   }
 
   Widget _buildSubTitle() {
-    String subtitle;
-    switch (masterFlowItem.masterFlowItemType) {
-      case MasterFlowItemType.startup:
-        subtitle = "Application start";
-      case MasterFlowItemType.naturalUIEvent:
-        subtitle = "Detect newly displayed UI component";
-      case MasterFlowItemType.taskCall:
-        subtitle =
-            "${getClassNameWithoutGenerics(masterFlowItem.ownerClassInstance)} - (${masterFlowItem.lineFlowItems.length})";
-      case MasterFlowItemType.methodCall:
-        subtitle =
-            getClassNameWithoutGenerics(masterFlowItem.ownerClassInstance);
-    }
-    return Text(subtitle, style: _subtitleStyle());
+    return Text(masterFlowItem.getSubtitle(), style: _subtitleStyle());
   }
 
   void _showErrorDialog(BuildContext context, ErrorInfo errorInfo) {

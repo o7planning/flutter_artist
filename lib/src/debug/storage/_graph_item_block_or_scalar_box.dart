@@ -14,7 +14,7 @@ import '_block_or_scalar.dart';
 
 class GraphItemBlockOrScalarBox extends StatefulWidget {
   final BlockOrScalar blockOrScalar;
-  final String? highlighFilterModelName;
+  final String? highlightFilterModelName;
 
   final bool showClassParameters;
 
@@ -24,7 +24,7 @@ class GraphItemBlockOrScalarBox extends StatefulWidget {
     required super.key,
     required this.blockOrScalar,
     required this.refreshGraph,
-    required this.highlighFilterModelName,
+    required this.highlightFilterModelName,
     required this.showClassParameters,
   });
 
@@ -353,13 +353,13 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
       decoration: BoxDecoration(
         border: Border.all(
           width: 0.5,
-          color: widget.highlighFilterModelName != null &&
-                  filterModel?.name == widget.highlighFilterModelName
+          color: widget.highlightFilterModelName != null &&
+                  filterModel?.name == widget.highlightFilterModelName
               ? DebugConstants.graphBoxHighlighFilterColor
               : Colors.grey,
         ),
-        color: widget.highlighFilterModelName != null &&
-                filterModel?.name == widget.highlighFilterModelName
+        color: widget.highlightFilterModelName != null &&
+                filterModel?.name == widget.highlightFilterModelName
             ? DebugConstants.graphBoxHighlighFilterColor
             : Colors.transparent,
       ),

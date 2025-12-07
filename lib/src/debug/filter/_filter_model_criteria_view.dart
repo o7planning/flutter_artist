@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/_core_/core.dart';
 import '../../core/utils/_class_utils.dart';
-import '../constants/_debug_constants.dart';
+import '../widgets/_html_info_view.dart';
 import '_blocks_scalars_view.dart';
 import '_criteria_values_info_view.dart';
 
@@ -44,37 +44,11 @@ class FilterModelCriteriaView extends StatelessWidget {
     required String filterModelClassName,
     required String criteriaClassName,
   }) {
-    return SelectableText.rich(
-      style: TextStyle(fontSize: DebugConstants.debugFontSize),
-      TextSpan(
-        children: [
-          TextSpan(text: "The "),
-          TextSpan(
-            text: criteriaClassName,
-            style: TextStyle(
-              color: Colors.indigo,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          TextSpan(text: " object is created by the "),
-          TextSpan(
-            text: "$filterModelClassName.toFilterCriteriaObject()",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          TextSpan(text: " method, and can be retrieved via the "),
-          TextSpan(
-            text: "$filterModelClassName.filterCriteria",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          TextSpan(
-              text:
-                  " property. It is used as criteria to query data on the following blocks and scales:"),
-        ],
-      ),
+    return HtmlInfoView(
+      infoAsHtml: "The <b>$criteriaClassName</b> object is created by the "
+          "<b>$filterModelClassName.toFilterCriteriaObject()</b> method, and can be retrieved via the "
+          "<b>$filterModelClassName.filterCriteria</b> property. "
+          "It is used as criteria to query data on the following blocks and scales:",
     );
   }
 }

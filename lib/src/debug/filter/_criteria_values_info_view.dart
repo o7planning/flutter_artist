@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/_core_/core.dart';
 import '../../core/utils/_class_utils.dart';
 import '../constants/_debug_constants.dart';
+import '../widgets/_html_info_view.dart';
 
 class CriteriaValuesView extends StatelessWidget {
   final String filterCriteriaPath;
@@ -24,41 +25,19 @@ class CriteriaValuesView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SelectableText.rich(
-          style: TextStyle(fontSize: DebugConstants.graphBoxFontSizeRootBox),
-          TextSpan(
-            children: [
-              TextSpan(text: "Data of "),
-              TextSpan(
-                text: filterCriteriaPath,
-                style: TextStyle(
-                  color: Colors.indigo,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              TextSpan(text: ":"),
-            ],
-          ),
+        HtmlInfoView(
+          showIcon: false,
+          infoAsHtml: "Data of <b>filterCriteriaPath</b>:",
         ),
         SizedBox(height: 5),
         if (filterCriteria != null)
-          SelectableText.rich(
-            TextSpan(
-              style: TextStyle(
-                fontSize: 11,
-                fontStyle: FontStyle.normal,
-              ),
-              children: [
-                TextSpan(text: "(This debug information is returned from the "),
-                TextSpan(
-                  text: "${getClassName(filterCriteria)}.getDebugInfos()",
-                  style: TextStyle(
-                    color: Colors.indigo,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                TextSpan(text: " method)."),
-              ],
+          HtmlInfoView(
+            showIcon: false,
+            infoAsHtml: "(This debug information is returned from the "
+                "<b>${getClassName(filterCriteria)}.getDebugInfos()</b> method).",
+            style: TextStyle(
+              fontSize: 11,
+              fontStyle: FontStyle.normal,
             ),
           ),
         SizedBox(height: 10),

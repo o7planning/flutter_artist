@@ -3,7 +3,6 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart' as cupertino;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter/scheduler.dart';
@@ -15,9 +14,10 @@ import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:hive/hive.dart';
 import 'package:number_pagination/number_pagination.dart' as number_pagination;
-import 'package:visibility_detector/visibility_detector.dart';
 
+import '../../debug/code_flow/__task_flow_const.dart';
 import '../../debug/dialog/_block_error_viewer_dialog.dart';
+import '../../debug/dialog/_storage_dialog_old.dart';
 import '../../debug/dialog/_task_flow_viewer_dialog.dart';
 import '../../debug/dialog/_error_log_viewer_dialog.dart';
 import '../../debug/dialog/_executor_dialog.dart';
@@ -77,7 +77,6 @@ import '../enums/_form_activity_type.dart';
 import '../enums/_form_error_method.dart';
 import '../enums/_form_mode.dart';
 import '../enums/_freeze_type.dart';
-import '../enums/_ignore_item_refresh_condition.dart';
 import '../enums/_item_creation_type.dart';
 import '../enums/_item_list_mode.dart';
 import '../enums/_multi_opt_prop_reload.dart';
@@ -100,7 +99,6 @@ import '../enums/_task_type.dart';
 import '../enums/_tip_document.dart';
 import '../enums/_x_shelf_type.dart';
 import '../enums/after_silent_action.dart';
-import '../error/_app_error_info.dart';
 import '../error/_block_error_info.dart';
 import '../error/_dev_error.dart';
 import '../error/_duplicate_filter_criterion_error.dart';
@@ -146,8 +144,7 @@ import '../typedef/custom_confirmation.dart';
 import '../utils/_class_utils.dart';
 import '../utils/_compare_utils.dart';
 import '../utils/_hive_utils.dart';
-import '../utils/_string_utils.dart';
-import '../utils/_visibility_detector_utils.dart';
+import '../utils/_html_utils.dart';
 import '../widgets/_custom_app_container.dart';
 import '../event/fire_silent_events_action.dart';
 
@@ -178,6 +175,10 @@ part '../debug/_debug_printer.dart';
 part '../debug/_debug_options.dart';
 
 part '__core__/_default_filter_model.dart';
+
+part '__core__/_queued_event.dart';
+
+part '__core__/_queued_event_manager.dart';
 
 part '_core_event_/_eff_block.dart';
 
@@ -213,7 +214,7 @@ part '_sorting_/_sort_model_builder.dart';
 
 part '__core__/_storage_core.dart';
 
-part '__core__/_storage_item_variant_manager.dart';
+part '__core__/_polymorphism_manager.dart';
 
 part '__core__/_storage_natural_query_queue.dart';
 

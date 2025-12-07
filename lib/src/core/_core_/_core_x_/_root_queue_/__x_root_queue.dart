@@ -1,7 +1,7 @@
 part of '../../core.dart';
 
 class _XRootQueue {
-  final XStorage _xStorage = XStorage();
+  final _xStorage = XStorage();
 
   //
   // LinkedHashMap<String fullName, XRootQueueItem>().
@@ -47,9 +47,9 @@ class _XRootQueue {
         continue;
       }
       if (rootQueueItem is XShelf) {
-        return rootQueueItem._getNextTaskUnit()!;
+        return rootQueueItem._getNextTaskUnit();
       } else if (rootQueueItem is XActivity) {
-        return rootQueueItem._getNextTaskUnit()!;
+        return rootQueueItem._getNextTaskUnit();
       } else {
         throw "TODO";
       }
@@ -65,14 +65,6 @@ class _XRootQueue {
   void _addXRootQueueItem({required XRootQueueItem xRootQueueItem}) {
     __xRootQueueItemMap[xRootQueueItem._fullName] = xRootQueueItem;
   }
-
-  // void _addXActivity(XActivity xActivity) {
-  //   __xRootQueueItemMap[xActivity._fullName] = xActivity;
-  // }
-  //
-  // void _addXShelf(XShelf xShelf) {
-  //   __xRootQueueItemMap[xShelf._fullName] = xShelf;
-  // }
 
   DebugXRootQueue toDebugXRootQueue() {
     return DebugXRootQueue(

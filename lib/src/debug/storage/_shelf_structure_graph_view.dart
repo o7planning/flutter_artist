@@ -170,7 +170,7 @@ class _ShelfStructureGraphViewState extends State<ShelfStructureGraphView> {
           : GraphItemBlockOrScalarBox(
               key: Key("Blk-${item.blockOrScalar!.name}"),
               blockOrScalar: item.blockOrScalar!,
-              highlighFilterModelName: _highlighFilterModelName,
+              highlightFilterModelName: _highlighFilterModelName,
               showClassParameters: _showClassParameters,
               refreshGraph: (String? filterName) {
                 _highlighFilterModelName = filterName;

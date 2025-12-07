@@ -65,8 +65,8 @@ class XScalar<VALUE extends Object> {
     required this.scalar,
     required this.xFilterModel,
   }) {
-    _scalarReQryCon = scalar._scalarReQryCon;
-    scalar._scalarReQryCon = null;
+    _scalarReQryCon = scalar._scalarReQryCondition;
+    scalar._scalarReQryCondition = null;
   }
 
   QryHint get queryHint {

@@ -256,7 +256,7 @@ class GlobalsManager extends _Core {
         parameters: {
           "loggedInUserJson": loggedInUserJson,
         },
-        lineFlowType: LineFlowType.calling,
+        lineFlowType: LineFlowType.controllableCalling,
         tipDocument: TipDocument.loginLogoutAdapter,
       );
       loggedInUser = loginLogoutAdapter.fromJson(loggedInUserJson);
@@ -304,7 +304,7 @@ class GlobalsManager extends _Core {
         parameters: {
           "loggedInUser": loggedInUser,
         },
-        lineFlowType: LineFlowType.calling,
+        lineFlowType: LineFlowType.controllableCalling,
         tipDocument: TipDocument.loginLogoutAdapter,
       );
       loginLogoutAdapter.addThirdPartyLogicOnLogin(loggedInUser);
@@ -335,7 +335,7 @@ class GlobalsManager extends _Core {
         },
         note:
             "This information has been stored locally when the user successfully logged in before.",
-        lineFlowType: LineFlowType.calling,
+        lineFlowType: LineFlowType.controllableCalling,
         tipDocument: TipDocument.loginLogoutAdapter,
       );
       // Load Global Data:
@@ -436,7 +436,7 @@ class GlobalsManager extends _Core {
         parameters: {
           "loggedInUser": loggedInUser,
         },
-        lineFlowType: LineFlowType.calling,
+        lineFlowType: LineFlowType.controllableCalling,
         tipDocument: TipDocument.loginLogoutAdapter,
       );
       String json = loginLogoutAdapter.toJson(loggedInUser);
@@ -452,8 +452,8 @@ class GlobalsManager extends _Core {
       final warningHtmlMessage =
           "Warning: Unable to store <b>JSON String</b> to <b>Local</b>..\n"
           "This means that the login information cannot be remembered.";
-      final appWarning = _createAppWarning(
-          warningHtmlMessage.replaceAll("<b>", "").replaceAll("</b>", ""));
+      final appWarning =
+          _createAppWarning(HtmlUtils.removeTags(warningHtmlMessage));
       //
       print(appWarning);
       //
@@ -490,7 +490,7 @@ class GlobalsManager extends _Core {
         },
         note:
             "You can access global data via <b>FlutterArtist.globalsManager.globalData</b>.",
-        lineFlowType: LineFlowType.calling,
+        lineFlowType: LineFlowType.controllableCalling,
         tipDocument: TipDocument.globalData,
       );
       _loadGlobalDataCount++;
@@ -502,6 +502,7 @@ class GlobalsManager extends _Core {
         codeId: "#34280",
         shortDesc: "Got @globalData: ${_debugObjHtml(globalData)}",
         lineFlowType: LineFlowType.debug,
+        tipDocument: TipDocument.globalData,
       );
     } catch (e, stackTrace) {
       ErrorInfo errorInfo = ErrorInfo.fromError(

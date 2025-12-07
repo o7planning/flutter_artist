@@ -3,8 +3,12 @@ import 'package:tabbed_view/tabbed_view.dart';
 
 class TabThemeUtils {
   static TabbedViewThemeData getTabbedViewThemeData() {
-    TabbedViewThemeData themeData = TabbedViewThemeData.classic();
+    // .classic (borderColor: Colors.grey)
+    TabbedViewThemeData themeData = TabbedViewThemeData.underline();
     final borderSide = BorderSide(color: Colors.grey, width: 0.7);
+    final borderSideSelected = BorderSide(color: Colors.grey, width: 2);
+    final borderSideNone = BorderSide(color: Colors.grey, width: 0);
+
     final borderSideTransparent =
         BorderSide(color: Colors.transparent, width: 0.5);
     //
@@ -37,24 +41,38 @@ class TabThemeUtils {
     );
     //
     TabStatusThemeData selectedStatus = TabStatusThemeData()
-      ..decoration = boxDecoTabSelected
+      ..buttonBackground = boxDecoTabSelected
       ..fontColor = Colors.indigo;
     themeData.tab
-      ..hoverButtonColor = Colors.indigo.withAlpha(40)
-      ..highlightedStatus.decoration = boxDecoTabSelected
+      ..decorationBuilder = ({
+        required TabStatus status,
+        required TabBarPosition tabBarPosition,
+      }) {
+        return TabDecoration(
+          border: Border(
+            left: borderSide,
+            right: borderSide,
+            top: borderSide,
+            bottom: status == TabStatus.selected
+                ? borderSideSelected
+                : borderSideNone,
+          ),
+        );
+      }
+      ..hoveredButtonColor = Colors.indigo.withAlpha(40)
+      ..hoveredStatus.hoveredButtonBackground = boxDecoTabSelected
       ..selectedStatus = selectedStatus
-      ..decoration = boxDecoTabDeselected;
+      ..buttonsOffset = 2;
     //
     themeData.tabsArea
-      ..border = Border(bottom: BorderSide(color: Colors.transparent, width: 0))
-      ..gapBottomBorder = borderSide
-      ..initialGap = 20
-      ..middleGap = 5
+      ..border = BorderSide(color: Colors.transparent, width: 1)
+      ..initialGap = 10
+      ..middleGap = 3
       ..minimalFinalGap = 2;
     //
     themeData.contentArea
-      ..decoration = boxDecoContent
-      ..padding = EdgeInsets.all(5);
+      ..padding = EdgeInsets.all(5)
+      ..border = borderSide;
     //
     return themeData;
   }

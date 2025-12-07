@@ -510,7 +510,7 @@ abstract class Shelf extends _Core {
 
   Future<void> showShelfStructureDialog() async {
     BuildContext context = FlutterArtist.adapter.getCurrentContext();
-    await StorageDialog.showStorageDialog(
+    await StorageDialogOLD.showStorageDialog(
       context: context,
       shelf: this,
     );
@@ -584,8 +584,9 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
 
   // LOGIC: #0000
-  Future<void> _startLoadDataForLazyUIComponentsIfNeed(
-      MasterFlowItem masterFlowItem) async {
+  Future<void> _startLoadDataForLazyUIComponentsIfNeed({
+    required MasterFlowItem masterFlowItem,
+  }) async {
     __lazyLoadId++;
     //
     masterFlowItem._addLineFlowItem(
@@ -605,8 +606,7 @@ abstract class Shelf extends _Core {
         shortDesc:
             "No lazy model-components found. Just update All UI components and nothing else. "
             "Calling ${_debugObjHtml(this)}.ui.updateAllUIComponents().",
-        lineFlowType: LineFlowType.calling,
-        isLibCall: true,
+        lineFlowType: LineFlowType.nonControllableCalling,
       );
       // IMPORTANT: No Lazy entities, but need to refresh UIComponents:
       ui.updateAllUIComponents();
@@ -628,13 +628,12 @@ abstract class Shelf extends _Core {
         codeId: "#02120",
         shortDesc:
             "Calling ${_debugObjHtml(xShelf)}._initQueryTaskUnits() to create <b>Natural-Query</b> task units...",
-        lineFlowType: LineFlowType.calling,
-        isLibCall: true,
+        lineFlowType: LineFlowType.nonControllableCalling,
       );
       //
       // TODO: Handle Error:
       //
-      xShelf._initQueryTaskUnits(masterFlowItem);
+      xShelf._initQueryTaskUnits(masterFlowItem: masterFlowItem);
       //
       masterFlowItem._addLineFlowItem(
         codeId: "#02160",
@@ -648,8 +647,7 @@ abstract class Shelf extends _Core {
         shortDesc:
             "Calling <b>FlutterArtist.executor._executeTaskUnitQueue()</b> "
             "to execute <b>RootQueueItem(s)</b> on the queue and its <b>Task Units</b>...",
-        lineFlowType: LineFlowType.calling,
-        isLibCall: true,
+        lineFlowType: LineFlowType.nonControllableCalling,
       );
       await FlutterArtist.executor._executeTaskUnitQueue();
     } finally {
@@ -661,16 +659,20 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
 
   Future<void> _markReactionToExternalShelfEvents({
+    required MasterFlowItem masterFlowItem,
     required EffectedShelfMembers effectedShelfMembers,
   }) async {
-    print(
-        " ||-------------> [External Reaction] _markReactionToExternalShelfEvents: ${getClassName(this)} [LISTENER]");
-    //
     for (String blockName in effectedShelfMembers._reQueryBlockMAP.keys) {
       Block block = __blockMap[blockName]!;
-      block._blockReQryCon = _BlockReQryCon(
+      final blockReQryCondition = _BlockReQryCon(
         parentItemId: block.parentBlockCurrentItemId,
         filterCriteria: block.filterCriteria,
+      );
+      block._blockReQryCondition = blockReQryCondition;
+      masterFlowItem._addLineFlowItem(
+        codeId: "#50000",
+        shortDesc: " - <b>$blockName</b>:"
+            "\n  --> @blockReQryCondition: <b>$blockReQryCondition</b>.",
       );
     }
     //
@@ -678,18 +680,31 @@ abstract class Shelf extends _Core {
         in effectedShelfMembers._refreshCurrItmBlockMAP.keys) {
       Block block = __blockMap[blockName]!;
       Object? itemId = block.currentItemId;
-      block._blockItemRefreshCon = itemId == null
+      final blockItemRefreshCondition = itemId == null
           ? null
           : _BlockItemRefreshCon(
               itemId: itemId,
             );
+      block._blockItemRefreshCondition = blockItemRefreshCondition;
+      masterFlowItem._addLineFlowItem(
+        codeId: "#50100",
+        shortDesc: " - <b>$blockName</b>:"
+            "\n  --> @blockItemRefreshCondition: <b>$blockItemRefreshCondition</b>.",
+      );
     }
     //
     for (String scalarName in effectedShelfMembers._reQueryScalarMAP.keys) {
       Scalar scalar = __scalarMap[scalarName]!;
-      scalar._scalarReQryCon = _ScalarReQryCon(
+      final scalarReQryCondition = _ScalarReQryCon(
         parentScalarValueId: scalar.parentScalarValueId, //
         filterCriteria: scalar.filterCriteria,
+      );
+      scalar._scalarReQryCondition = scalarReQryCondition;
+      //
+      masterFlowItem._addLineFlowItem(
+        codeId: "#50200",
+        shortDesc: " - <b>$scalarName</b>:"
+            "\n  --> @scalarReQryCondition: <b>$scalarReQryCondition</b>.",
       );
     }
   }
@@ -697,58 +712,90 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _addShelfExternalReactionTaskUnit() async {
-    print(
-        " ||-------------> [External Reaction] _addShelfExternalReactionTaskUnit: ${getClassName(this)} [LISTENER]");
+  void _addShelfExternalReactionTaskUnit({
+    required MasterFlowItem masterFlowItem,
+  }) async {
+    masterFlowItem._addLineFlowItem(
+      codeId: "#52000",
+      shortDesc:
+          "Creating <b>$_XShelfShelfExternalReaction</b> for ${_debugObjHtml(this)}..",
+    );
     //
     final XShelf xShelf = _XShelfShelfExternalReaction(
       shelf: this,
     );
     //
-    xShelf._initQueryTaskUnits();
+    masterFlowItem._addLineFlowItem(
+      codeId: "#52100",
+      shortDesc: "Calling ${_debugObjHtml(xShelf)}._initQueryTaskUnits()..",
+      lineFlowType: LineFlowType.nonControllableCalling,
+    );
+    xShelf._initQueryTaskUnits(masterFlowItem: masterFlowItem);
+    //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#52200",
+      shortDesc: "Add ${_debugObjHtml(xShelf)} to <b>RootQueue</b>.",
+      lineFlowType: LineFlowType.info,
+    );
     // IMPORTANT: No need to call "execute".
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
   }
 
-  Future<ShelfDelayedReactionExecutionResult>
+  Future<ShelfQueuedEventExecutionResult>
       executeDelayedExternalReactionTaskUnit() async {
-    Actionable<ShelfDelayedReactionExecutionPrecheck> actionable =
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "executeDelayedExternalReactionTaskUnit",
+      parameters: null,
+      navigate: null,
+      isLibMethod: true,
+    );
+    masterFlowItem._addLineFlowItem(
+      codeId: "#68000",
+      shortDesc:
+          "Checking before <b>executeDelayedExternalReactionTaskUnit</b>..",
+    );
+    Actionable<ShelfQueuedEventExecutionPrecheck> actionable =
         __canExecuteDelayedExternalReaction(checkBusy: true);
-
     //
     if (!actionable.yes) {
       // _createItemErrorCount++;
-      _addErrorLogActionable(
+      LogErrorInfo? errorInfo = _addErrorLogActionable(
         shelf: null,
         actionableFalse: actionable,
         showErrSnackBar: true,
       );
-      return ShelfDelayedReactionExecutionResult(
+      masterFlowItem._addLineFlowItem(
+        codeId: "#68100",
+        shortDesc: "@actionable = ${_debugObjHtml(actionable)}.",
+        errorInfo: errorInfo,
+      );
+      return ShelfQueuedEventExecutionResult(
         precheck: actionable.errCode,
         errorInfo: actionable.errorInfo,
       );
     }
-    _addShelfExternalReactionTaskUnit();
+    _addShelfExternalReactionTaskUnit(masterFlowItem: masterFlowItem);
     await FlutterArtist.executor._executeTaskUnitQueue();
-    return ShelfDelayedReactionExecutionResult();
+    return ShelfQueuedEventExecutionResult();
   }
 
   @_PrecheckPrivateMethod()
-  Actionable<ShelfDelayedReactionExecutionPrecheck>
+  Actionable<ShelfQueuedEventExecutionPrecheck>
       __canExecuteDelayedExternalReaction({
     required bool checkBusy,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<ShelfDelayedReactionExecutionPrecheck>.no(
-        errCode: ShelfDelayedReactionExecutionPrecheck.busy,
+      return Actionable<ShelfQueuedEventExecutionPrecheck>.no(
+        errCode: ShelfQueuedEventExecutionPrecheck.busy,
       );
     }
     //
-    return Actionable<ShelfDelayedReactionExecutionPrecheck>.yes();
+    return Actionable<ShelfQueuedEventExecutionPrecheck>.yes();
   }
 
   @_PrecheckPrivateMethod()
-  Actionable<ShelfDelayedReactionExecutionPrecheck>
+  Actionable<ShelfQueuedEventExecutionPrecheck>
       canExecuteDelayedExternalReaction() {
     return __canExecuteDelayedExternalReaction(checkBusy: true);
   }

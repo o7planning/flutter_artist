@@ -16,7 +16,8 @@ enum TipDocument {
   scalarActiveUIComponents,
   blockActiveUIComponents,
   blockQueryType,
-  dataState;
+  dataState,
+  eventReactionFreezing;
 
   int getPosition() {
     return TipDocument.values.indexOf(this) + 1;
@@ -72,6 +73,8 @@ enum TipDocument {
         return "DataState";
       case TipDocument.sorting:
         return "Sorting";
+      case TipDocument.eventReactionFreezing:
+        return "Event-reaction Freezing";
     }
   }
 
@@ -113,6 +116,8 @@ enum TipDocument {
         return "DataState";
       case TipDocument.sorting:
         return "Sorting";
+      case TipDocument.eventReactionFreezing:
+        return "Event-reaction Freezing";
     }
   }
 
@@ -195,6 +200,11 @@ enum TipDocument {
           "https://o7planning.org/14749/flutterartist-block-datastate",
         ];
       case TipDocument.sorting:
+        return [
+          "https://o7planning.org/11111/config1",
+          "https://o7planning.org/11112/config2",
+        ];
+      case TipDocument.eventReactionFreezing:
         return [
           "https://o7planning.org/11111/config1",
           "https://o7planning.org/11112/config2",

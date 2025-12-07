@@ -60,7 +60,9 @@ class _StorageNaturalQueryQueue {
         shortDesc:
             "Start checking lazy model-components of ${_debugObjHtml(lazyShelf)}...",
       );
-      await lazyShelf._startLoadDataForLazyUIComponentsIfNeed(masterFlowItem);
+      await lazyShelf._startLoadDataForLazyUIComponentsIfNeed(
+        masterFlowItem: masterFlowItem,
+      );
     }
   }
 }
