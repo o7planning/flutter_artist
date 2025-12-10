@@ -7,7 +7,7 @@ import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 import '../../core/_core_/core.dart';
 import '../../core/enums/_line_flow_type.dart';
 import '../../core/widgets/_iconed_checkbox.dart';
-import '../storage/widgets/_shelf_info_view.dart';
+import '../shelf/widget/_shelf_info_view.dart';
 import '_master_flow_func_trace_info_view.dart';
 import '_master_flow_method_args_view.dart';
 import '_master_flow_method_view.dart';
@@ -48,7 +48,7 @@ class _MasterFlowItemDetailViewState extends State<MasterFlowItemDetailView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildFilter(),
-        Divider(color: Colors.transparent,height: 10),
+        Divider(color: Colors.transparent, height: 10),
         Expanded(
           child: SingleChildScrollView(
             child: _buildLineFlowItemList(),

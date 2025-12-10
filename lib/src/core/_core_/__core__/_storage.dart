@@ -28,7 +28,7 @@ class _Storage extends _StorageCore {
       LineFlowItem item = masterFlowItem._addLineFlowItem(
         codeId: "#SS000",
         shortDesc:
-            "${_debugObjHtml(storageStructure)}.registerPolymorphismFamilies().",
+            "${debugObjHtml(storageStructure)}.registerPolymorphismFamilies().",
         lineFlowType: LineFlowType.controllableCalling,
         tipDocument: TipDocument.polymorphism,
       );
@@ -42,31 +42,35 @@ class _Storage extends _StorageCore {
       //
       item = masterFlowItem._addLineFlowItem(
         codeId: "#SS020",
-        shortDesc: "${_debugObjHtml(storageStructure)}.registerAutoStockers().",
+        shortDesc: "${debugObjHtml(storageStructure)}.registerAutoStockers().",
         lineFlowType: LineFlowType.controllableCalling,
         tipDocument: TipDocument.autoStocker,
       );
       storageStructure.registerAutoStockers();
-      item._extraInfos = _debugRegister.debugRegisterAutoStockers..sort();
+      item._extraInfos = FlutterArtist.debugRegister.debugRegisterAutoStockers
+        ..sort();
       //
-      item._extraInfos = _debugRegister.debugRegisterPolymorphisms..sort();
+      item._extraInfos = FlutterArtist.debugRegister.debugRegisterPolymorphisms
+        ..sort();
       item = masterFlowItem._addLineFlowItem(
         codeId: "#SS040",
-        shortDesc: "${_debugObjHtml(storageStructure)}.registerActivities().",
+        shortDesc: "${debugObjHtml(storageStructure)}.registerActivities().",
         lineFlowType: LineFlowType.controllableCalling,
         tipDocument: TipDocument.activity,
       );
       storageStructure.registerActivities();
-      item._extraInfos = _debugRegister.debugRegisterActivities..sort();
+      item._extraInfos = FlutterArtist.debugRegister.debugRegisterActivities
+        ..sort();
       //
       item = masterFlowItem._addLineFlowItem(
         codeId: "#SS060",
-        shortDesc: "${_debugObjHtml(storageStructure)}.registerShelves().",
+        shortDesc: "${debugObjHtml(storageStructure)}.registerShelves().",
         lineFlowType: LineFlowType.controllableCalling,
         tipDocument: TipDocument.shelf,
       );
       storageStructure.registerShelves();
-      item._extraInfos = _debugRegister.debugRegisterShelves..sort();
+      item._extraInfos = FlutterArtist.debugRegister.debugRegisterShelves
+        ..sort();
     } catch (e) {
       masterFlowItem.printToConsole();
       print("\n\n");
@@ -95,7 +99,7 @@ class _Storage extends _StorageCore {
     }
     //
     final String autoStockerName = _getAutoStockerName(F);
-    _debugRegister.addDebugRegisterAutoStocker(
+    FlutterArtist.debugRegister._addDebugRegisterAutoStocker(
         "<b>FlutterArtist.storage.registerAutoStocker()</b> for <b>$autoStockerName</b>.");
     _stockersManager._registerAutoStocker(builder);
   }
@@ -207,14 +211,14 @@ class _Storage extends _StorageCore {
     masterFlowItem?._addLineFlowItem(
       codeId: "#35000",
       shortDesc:
-          "Begin ${_debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
+          "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
       lineFlowType: LineFlowType.debug,
     );
     //
     try {
       masterFlowItem?._addLineFlowItem(
         codeId: "#35100",
-        shortDesc: "Calling ${_debugObjHtml(action)}.callApi().",
+        shortDesc: "Calling ${debugObjHtml(action)}.callApi().",
         lineFlowType: LineFlowType.controllableCalling,
       );
       //
@@ -236,7 +240,7 @@ class _Storage extends _StorageCore {
       masterFlowItem?._addLineFlowItem(
         codeId: "#35200",
         shortDesc:
-            "The ${_debugObjHtml(action)}.callApi() method was called with an error!",
+            "The ${debugObjHtml(action)}.callApi() method was called with an error!",
         errorInfo: errorInfo,
       );
       return false;
@@ -244,7 +248,7 @@ class _Storage extends _StorageCore {
     //
     masterFlowItem?._addLineFlowItem(
       codeId: "#35300",
-      shortDesc: "${_debugObjHtml(this)} > Fire event after silent action.",
+      shortDesc: "${debugObjHtml(this)} > Fire event after silent action.",
       lineFlowType: LineFlowType.fireEvent,
     );
     FlutterArtist.storage.ev._fireEventFromShelfToOtherShelves(

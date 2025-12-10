@@ -88,12 +88,6 @@ class __DebugMenuState extends State<DebugMenu> implements IErrorListener {
                     _buildPopupMenuItem(
                       iconData: FaIconConstants.storageIconData,
                       title: 'Storage Viewer',
-                      onTab: _showStorageOLD,
-                    ),
-                  if (isSystemUser)
-                    _buildPopupMenuItem(
-                      iconData: FaIconConstants.storageIconData,
-                      title: 'Storage Viewer (New)',
                       onTab: _showStorage,
                     ),
                   if (isSystemUser) _divider(),
@@ -162,11 +156,6 @@ class __DebugMenuState extends State<DebugMenu> implements IErrorListener {
   Future<void> _showRestDebugViewerDialog() async {
     Navigator.pop(context, null);
     FlutterArtist.showRestDebugViewerDialog!(context);
-  }
-
-  Future<void> _showStorageOLD() async {
-    Navigator.pop(context, null);
-    await FlutterArtist.showStorageDialogOLD();
   }
 
   Future<void> _showStorage() async {

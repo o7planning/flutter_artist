@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import '../../core/_core_/core.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/utils/_class_utils.dart';
-import '../../core/widgets/_custom_app_container.dart';
 import '../constants/_debug_constants.dart';
 import '_block_or_scalar.dart';
 
@@ -33,10 +32,13 @@ class _ShelfStructureTreeViewState extends State<ShelfStructureTreeView> {
   TreeViewController<dynamic, TreeNode<dynamic>>? _treeViewController;
   late TreeNode<dynamic> rootTreeNode;
   TreeNode<dynamic>? _currentNode;
+  BlockOrScalar? selectedBlockOrScalar;
 
   @override
   void initState() {
     super.initState();
+    //
+    selectedBlockOrScalar = widget.selectedBlockOrScalar;
     rootTreeNode = _getRootWithChildren();
   }
 
@@ -47,115 +49,111 @@ class _ShelfStructureTreeViewState extends State<ShelfStructureTreeView> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomAppContainer(
-      margin: const EdgeInsets.all(5),
-      padding: const EdgeInsets.all(5),
-      child: TreeView.simple(
-        tree: rootTreeNode,
-        showRootNode: false,
-        expansionBehavior: ExpansionBehavior.none,
-        expansionIndicatorBuilder: (context, node) {
-          return ChevronIndicator.upDown(
-            tree: node,
-            color: Colors.grey[700],
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.fromLTRB(0, 8, 20, 8),
-            icon: Icons.keyboard_arrow_down_outlined,
-          );
-        },
-        indentation: const Indentation(
-          style: IndentStyle.squareJoint,
-          thickness: 1,
-          width: 10,
-        ),
-        onTreeReady: (
-          TreeViewController<dynamic, TreeNode<dynamic>> controller,
-        ) {
-          _treeViewController = controller;
-          controller.expandAllChildren(rootTreeNode);
-        },
-        builder: (context, node) {
-          dynamic data = node.data;
-          String title;
-          bool isListener = false;
-          bool isNotifier = false;
+    return TreeView.simple(
+      tree: rootTreeNode,
+      showRootNode: false,
+      expansionBehavior: ExpansionBehavior.none,
+      expansionIndicatorBuilder: (context, node) {
+        return ChevronIndicator.upDown(
+          tree: node,
+          color: Colors.grey[700],
+          alignment: Alignment.centerLeft,
+          padding: const EdgeInsets.fromLTRB(0, 8, 20, 8),
+          icon: Icons.keyboard_arrow_down_outlined,
+        );
+      },
+      indentation: const Indentation(
+        style: IndentStyle.squareJoint,
+        thickness: 1,
+        width: 10,
+      ),
+      onTreeReady: (
+        TreeViewController<dynamic, TreeNode<dynamic>> controller,
+      ) {
+        _treeViewController = controller;
+        controller.expandAllChildren(rootTreeNode);
+      },
+      builder: (context, node) {
+        dynamic data = node.data;
+        String title;
+        bool isListener = false;
+        bool isNotifier = false;
 
-          if (data is Shelf) {
-            title = getClassName(data);
-          } else if (data is BlockOrScalar) {
-            if (data.block != null) {
-              title = getClassName(data.block!);
-            } else {
-              title = getClassName(data.scalar!);
-            }
-            //
-            List<ShelfBlockScalarType> listeners =
-                FlutterArtist.storage.ev.getListenerShelfBlockScalarTypes(
-              eventBlockOrScalar: data,
-            );
-
-            List<ShelfBlockScalarType> notifiers = FlutterArtist.storage.ev
-                .getEventShelfBlockTypes(listenerBlockOrScalar: data);
-            isListener = notifiers.isNotEmpty;
-            isNotifier = listeners.isNotEmpty;
+        if (data is Shelf) {
+          title = getClassName(data);
+        } else if (data is BlockOrScalar) {
+          if (data.block != null) {
+            title = getClassName(data.block!);
           } else {
-            title = "ROOT";
+            title = getClassName(data.scalar!);
           }
-          return Material(
-            child: ListTile(
-              dense: true,
-              visualDensity: const VisualDensity(
-                horizontal: -3,
-                vertical: -3,
-              ),
-              contentPadding: const EdgeInsets.only(left: 25),
-              title: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                        overflow: TextOverflow.ellipsis,
-                        fontSize: 12,
-                        color: isListener
-                            ? DebugConstants.listenerTextColor
-                            : isNotifier
-                                ? DebugConstants.eventSourceTextColor
-                                : Colors.black,
-                        fontWeight: _currentNode == node
-                            ? FontWeight.bold
-                            : FontWeight.normal,
-                      ),
+          //
+          List<ShelfBlockScalarType> listeners =
+              FlutterArtist.storage.ev.getListenerShelfBlockScalarTypes(
+            eventBlockOrScalar: data,
+          );
+
+          List<ShelfBlockScalarType> notifiers = FlutterArtist.storage.ev
+              .getEventShelfBlockTypes(listenerBlockOrScalar: data);
+          isListener = notifiers.isNotEmpty;
+          isNotifier = listeners.isNotEmpty;
+        } else {
+          title = "ROOT";
+        }
+        return Material(
+          child: ListTile(
+            dense: true,
+            visualDensity: const VisualDensity(
+              horizontal: -3,
+              vertical: -3,
+            ),
+            contentPadding: const EdgeInsets.only(left: 25),
+            title: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                      overflow: TextOverflow.ellipsis,
+                      fontSize: 12,
+                      color: isListener
+                          ? DebugConstants.listenerTextColor
+                          : isNotifier
+                              ? DebugConstants.eventSourceTextColor
+                              : Colors.black,
+                      fontWeight: _currentNode == node
+                          ? FontWeight.bold
+                          : FontWeight.normal,
                     ),
                   ),
-                  if (isNotifier) const SizedBox(width: 5),
-                  if (isNotifier)
-                    const Icon(
-                      FaIconConstants.eventSourceIconData,
-                      size: 16,
-                      color: DebugConstants.eventSourceIconColor,
-                    ),
-                  if (isListener) const SizedBox(width: 5),
-                  if (isListener)
-                    const Icon(
-                      FaIconConstants.listenerIconData,
-                      size: 16,
-                      color: DebugConstants.listenerIconColor,
-                    )
-                ],
-              ),
-              onTap: () {
-                setState(() {
-                  _currentNode = node;
-                  if (node.data is BlockOrScalar) {
-                    widget.onSelectBlockOrScalar(node.data);
-                  }
-                });
-              },
+                ),
+                if (isNotifier) const SizedBox(width: 5),
+                if (isNotifier)
+                  const Icon(
+                    FaIconConstants.eventSourceIconData,
+                    size: 16,
+                    color: DebugConstants.eventSourceIconColor,
+                  ),
+                if (isListener) const SizedBox(width: 5),
+                if (isListener)
+                  const Icon(
+                    FaIconConstants.listenerIconData,
+                    size: 16,
+                    color: DebugConstants.listenerIconColor,
+                  )
+              ],
             ),
-          );
-        },
-      ),
+            onTap: () {
+              setState(() {
+                _currentNode = node;
+                if (node.data is BlockOrScalar) {
+                  widget.onSelectBlockOrScalar(node.data);
+                }
+              });
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -186,7 +184,7 @@ class _ShelfStructureTreeViewState extends State<ShelfStructureTreeView> {
       data: blockOrScalar,
       // parent: currentNode,
     );
-    if (blockOrScalar == widget.selectedBlockOrScalar) {
+    if (blockOrScalar == selectedBlockOrScalar) {
       _currentNode = childNode;
     }
     currentNode.add(childNode);
@@ -202,7 +200,7 @@ class _ShelfStructureTreeViewState extends State<ShelfStructureTreeView> {
       data: blockOrScalar,
       // parent: currentNode,
     );
-    if (blockOrScalar == widget.selectedBlockOrScalar) {
+    if (blockOrScalar == selectedBlockOrScalar) {
       _currentNode = childNode;
     }
     currentNode.add(childNode);

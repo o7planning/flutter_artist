@@ -9,10 +9,10 @@ import '_graph_debug_utils.dart';
 import '_graph_item_block_or_scalar_box.dart';
 import '_graph_item_shelf_box.dart';
 import '_shelf_structure_view_config.dart';
-import 'widgets/_graph_item.dart';
+import 'widget/_graph_item.dart';
 
 class ShelfStructureGraphView extends StatefulWidget {
-  final Function() onPressedBack;
+  final Function()? onPressedBack;
   final Shelf shelf;
 
   const ShelfStructureGraphView({
@@ -118,7 +118,9 @@ class _ShelfStructureGraphViewState extends State<ShelfStructureGraphView> {
           _showClassParameters = !_showClassParameters;
           setState(() {});
         },
-        iconData: Icons.more_outlined,
+        iconData: _showClassParameters //
+            ? Icons.fullscreen_exit
+            : Icons.fullscreen,
       ),
       message: 'Show/Hide Class Parameters Definition',
     );

@@ -3,19 +3,19 @@ import '__precheck.dart';
 
 enum StorageSilentActionPrecheck implements Precheck {
   busy(
-    chkCode: ChkCode.busy,
+    precheckCode: PrecheckCode.busy,
     message: "Silent Action is disabled.",
     details: ["The executor is busy."],
   ),
   //
   cancelled(
-    chkCode: ChkCode.cancelled,
+    precheckCode: PrecheckCode.cancelled,
     message: "Silent Action Cancelled.",
     details: null,
   );
 
   @override
-  final ChkCode chkCode;
+  final PrecheckCode precheckCode;
 
   @override
   final String message;
@@ -24,7 +24,7 @@ enum StorageSilentActionPrecheck implements Precheck {
   final List<String>? details;
 
   const StorageSilentActionPrecheck({
-    required this.chkCode,
+    required this.precheckCode,
     required this.message,
     required this.details,
   });

@@ -34,7 +34,7 @@ class _MasterFlowViewerState extends State<MasterFlowViewer> {
         return true;
       });
     }
-    masterFlowItemTypeFilterMap[MasterFlowItemType.libMethodCall] = false;
+    // masterFlowItemTypeFilterMap[MasterFlowItemType.libMethodCall] = false;
   }
 
   @override

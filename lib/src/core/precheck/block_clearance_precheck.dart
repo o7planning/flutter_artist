@@ -4,19 +4,19 @@ import '__precheck.dart';
 // Name (OK)
 enum BlockClearancePrecheck implements Precheck {
   busy(
-    chkCode: ChkCode.busy,
+    precheckCode: PrecheckCode.busy,
     message: "Can not clear block.",
     details: ["The executor is busy."],
   ),
   hasActiveUI(
-    chkCode: ChkCode.hasActiveUI,
+    precheckCode: PrecheckCode.hasActiveUI,
     message: "Can not clear block.",
     details: ["The Block currently has active UI components."],
   ),
   ;
 
   @override
-  final ChkCode chkCode;
+  final PrecheckCode precheckCode;
 
   @override
   final String message;
@@ -25,7 +25,7 @@ enum BlockClearancePrecheck implements Precheck {
   final List<String>? details;
 
   const BlockClearancePrecheck({
-    required this.chkCode,
+    required this.precheckCode,
     required this.message,
     required this.details,
   });

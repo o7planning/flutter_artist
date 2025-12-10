@@ -6,6 +6,6 @@ class _LazyFilterModel {
   _LazyFilterModel({required this.filterModel});
 
   String toDebugString() {
-    return _debugObjHtml(filterModel);
+    return debugObjHtml(filterModel);
   }
 }

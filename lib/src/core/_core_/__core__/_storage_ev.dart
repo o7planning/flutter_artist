@@ -20,7 +20,7 @@ class _StorageEventHandler {
       masterFlowItem?._addLineFlowItem(
         codeId: "#25000",
         shortDesc:
-            "${_debugObjHtml(eventBlock)}.config.outsideBroadcastEvents is empty! --> This event will be ignored.",
+            "${debugObjHtml(eventBlock)}.config.outsideBroadcastEvents is empty! --> This event will be ignored.",
         lineFlowType: LineFlowType.debug,
       );
       return;
@@ -133,56 +133,6 @@ class _StorageEventHandler {
     );
     //
     storage._queuedEventManager.addQueuedEvent(queuedEvent);
-
-    ///
-    ///
-    ///
-
-    // //
-    // // #0004.
-    // //
-    // final bool freezing = FlutterArtist.storage.__freeze.isFreezing;
-    //
-    // masterFlowItem._addLineFlowItem(
-    //   codeId: "#60100",
-    //   shortDesc: freezing
-    //       ? "Event-reaction freezing is <b>enabled</b>."
-    //       : "Event-reaction freezing is <b>disabled</b>.",
-    //   lineFlowType: LineFlowType.debug,
-    //   tipDocument: TipDocument.eventReactionFreezing,
-    // );
-    // //
-    // final List<Shelf> invisibleReactionShelves = [];
-    // final List<Shelf> visibleReactionShelves = [];
-    //
-    // for (String shelfName in storage._shelfMap.keys) {
-    //   if (shelfName == eventShelf?.name) {
-    //     continue;
-    //   }
-    //   Shelf listenerShelf = storage._shelfMap[shelfName]!;
-    //   //
-    //   __markReactionConditionsForEvents(
-    //     listenerShelf: listenerShelf,
-    //     outsideEvents: events,
-    //   );
-    //
-    //   if (listenerShelf._hasReactionBookmark()) {
-    //     if (listenerShelf.ui.hasActiveUIComponent()) {
-    //       visibleReactionShelves.add(listenerShelf);
-    //     } else {
-    //       invisibleReactionShelves.add(listenerShelf);
-    //     }
-    //   }
-    // }
-    // // SAME-AS: #0003
-    // for (Shelf reactionShelf in invisibleReactionShelves) {
-    //   reactionShelf._addShelfExternalReactionTaskUnit();
-    // }
-    // for (Shelf reactionShelf in visibleReactionShelves) {
-    //   if (!freezing) {
-    //     reactionShelf._addShelfExternalReactionTaskUnit();
-    //   }
-    // }
   }
 
   // ***************************************************************************
@@ -257,7 +207,7 @@ class _StorageEventHandler {
     // FullName, Block
     Map<String, Block> foundMap = {};
 
-    for (String shelfName in storage.shelfNames) {
+    for (String shelfName in storage.activeShelfNames) {
       Shelf? shelf = storage.findShelfByName(shelfName);
       if (shelf == null) {
         continue;
@@ -287,7 +237,7 @@ class _StorageEventHandler {
     // FullName, Scalar
     Map<String, Scalar> foundMap = {};
 
-    for (String shelfName in storage.shelfNames) {
+    for (String shelfName in storage.activeShelfNames) {
       print("@~~~~~~~~~~~~> shelfName: $shelfName ");
       Shelf? shelf = storage.findShelfByName(shelfName);
       print("@~~~~~~~~~~~~> shelfName: $shelfName --> shelf: $shelf");
@@ -453,7 +403,7 @@ class _StorageEventHandler {
     // Name, Shelf
     Map<String, Shelf> foundShelfMap = {};
     //
-    for (String shelfName in storage.shelfNames) {
+    for (String shelfName in storage.activeShelfNames) {
       Shelf? listenerShelf = storage.findShelfByName(shelfName);
       if (listenerShelf == null) {
         continue;

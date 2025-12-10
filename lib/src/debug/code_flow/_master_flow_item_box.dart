@@ -42,6 +42,7 @@ class MasterFlowItemBox extends StatelessWidget {
         masterFlowItem.id.toString(),
         style: TextStyle(
           color: Colors.black45,
+          fontSize: 9,
         ),
       ),
       title: _buildTitle(context),

@@ -20,6 +20,8 @@ class _FlutterArtist extends _Core {
 
   bool testCaseMode = false;
 
+  final debugRegister = _DebugRegister();
+
   var __debugOptions = DebugOptions();
 
   DebugOptions get debugOptions => __debugOptions;
@@ -187,7 +189,6 @@ class _FlutterArtist extends _Core {
     //
     final masterFlowItem =
         FlutterArtist.codeFlowLogger._addStartup(ownerClassInstance: this);
-    storage._masterFlowItem = masterFlowItem;
 
     masterFlowItem._addLineFlowItem(
       codeId: "#S0000",
@@ -256,35 +257,47 @@ class _FlutterArtist extends _Core {
       globalsManager: globalsManager,
       localeAdapter: localeAdapter,
     );
-    masterFlowItem._addLineFlowItem(
-      codeId: "#S0540",
-      shortDesc:
-          "Calling <b>localeManager._readStoredLocale()</b> to read saved locale from <b>Local</b>...",
-      lineFlowType: LineFlowType.nonControllableCalling,
-    );
-    final Locale? locale = localeManager._readStoredLocale(
-      masterFlowItem: masterFlowItem,
-    );
-    masterFlowItem._addLineFlowItem(
-      codeId: "#S0560",
-      shortDesc: "Got stored @locale: ${_debugObjHtml(locale)}.",
-    );
-    if (locale != null) {
+    //
+    final ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
+    //
+    if (loggedInUser != null) {
+      masterFlowItem._addLineFlowItem(
+        codeId: "#S0540",
+        shortDesc: "Automatic authentication successful!",
+        parameters: {
+          "loggedInUser": loggedInUser,
+        },
+      );
+      masterFlowItem._addLineFlowItem(
+        codeId: "#S0560",
+        shortDesc:
+            "Calling <b>localeManager._readStoredLocale()</b> to read saved locale from <b>Local</b>...",
+        lineFlowType: LineFlowType.nonControllableCalling,
+      );
+      final Locale? locale = localeManager._readStoredLocale(
+        loggedInUser: loggedInUser,
+        masterFlowItem: masterFlowItem,
+      );
       masterFlowItem._addLineFlowItem(
         codeId: "#S0580",
-        shortDesc:
-            "Calling <b>localeManager._updateLocale()</b> with parameters:",
-        parameters: {
-          "locale": locale,
-        },
-        lineFlowType: LineFlowType.controllableCalling,
+        shortDesc: "Got stored @locale: ${debugObjHtml(locale)}.",
       );
-      Future.delayed(Duration(seconds: 2), () async {
-        await localeManager._updateLocale(
-          masterFlowItem: masterFlowItem,
-          locale: locale,
+      if (locale != null) {
+        masterFlowItem._addLineFlowItem(
+          codeId: "#S0620",
+          shortDesc: "Calling <b>localeManager._updateLocale()</b>:",
+          parameters: {
+            "locale": locale,
+          },
+          lineFlowType: LineFlowType.nonControllableCalling,
         );
-      });
+        Future.delayed(Duration(seconds: 2), () async {
+          await localeManager._updateLocale(
+            masterFlowItem: masterFlowItem,
+            locale: locale,
+          );
+        });
+      }
     }
     //
     showRestDebugViewerDialog = showRestDebugDialog;
@@ -295,7 +308,7 @@ class _FlutterArtist extends _Core {
     __notificationEngine = _NotificationEngine(notificationAdapter);
     //
     masterFlowItem._addLineFlowItem(
-      codeId: "#S0600",
+      codeId: "#S0680",
       shortDesc: "Start notificationEngine.",
     );
     //
@@ -385,12 +398,6 @@ class _FlutterArtist extends _Core {
 
   bool isOverlaysOpen() {
     return adapter.isOverlaysOpen();
-  }
-
-  @Deprecated("Delete")
-  Future<void> showStorageDialogOLD() async {
-    BuildContext context = adapter.getCurrentContext();
-    await StorageDialogOLD.showStorageDialog(context: context, shelf: null);
   }
 
   Future<void> showStorageDialog() async {

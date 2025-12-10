@@ -256,7 +256,7 @@ abstract class FilterModel<
     masterFlowItem?._addLineFlowItem(
       codeId: "#30000",
       shortDesc:
-          "${_debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}.",
+          "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}.",
       lineFlowType: LineFlowType.debug,
     );
     //
@@ -413,8 +413,8 @@ abstract class FilterModel<
         masterFlowItem?._addLineFlowItem(
           codeId: "#31040",
           shortDesc:
-              "Calling ${_debugObjHtml(this)}._loadMultiOptCriterionDataCascade() method "
-              "to load data for ${_debugObjHtml(multiOptCriterion)} and its descendants.",
+              "Calling ${debugObjHtml(this)}._loadMultiOptCriterionDataCascade() method "
+              "to load data for ${debugObjHtml(multiOptCriterion)} and its descendants.",
           parameters: {
             "activityType": activityType,
             "filterInput": filterInput,
@@ -448,7 +448,7 @@ abstract class FilterModel<
       masterFlowItem?._addLineFlowItem(
         codeId: "#31080",
         shortDesc:
-            "The ${_debugObjHtml(this)}._loadMultiOptCriterionDataCascade() was called with an error.",
+            "The ${debugObjHtml(this)}._loadMultiOptCriterionDataCascade() was called with an error.",
         errorInfo: errorInfo,
       );
       //
@@ -462,7 +462,7 @@ abstract class FilterModel<
         masterFlowItem?._addLineFlowItem(
           codeId: "#31140",
           shortDesc:
-              "Calling ${_debugObjHtml(this)}.updatedSimpleCriterionValues() method "
+              "Calling ${debugObjHtml(this)}.updatedSimpleCriterionValues() method "
               "to get values from filterInput to update for simpleCriteria",
           parameters: {
             "filterInput": filterInput,
@@ -503,7 +503,7 @@ abstract class FilterModel<
         masterFlowItem?._addLineFlowItem(
           codeId: "#31200",
           shortDesc:
-              "The ${_debugObjHtml(this)}.updatedSimpleCriterionValues() method was called with an error.",
+              "The ${debugObjHtml(this)}.updatedSimpleCriterionValues() method was called with an error.",
           errorInfo: errorInfo,
         );
         //
@@ -520,7 +520,7 @@ abstract class FilterModel<
             masterFlowItem?._addLineFlowItem(
               codeId: "#31300",
               shortDesc:
-                  "Calling ${_debugObjHtml(this)}.specifyDefaultValuesForSimpleCriteria() method "
+                  "Calling ${debugObjHtml(this)}.specifyDefaultValuesForSimpleCriteria() method "
                   "to get default values for <b>simple criteria</b>.",
               lineFlowType: LineFlowType.controllableCalling,
             );
@@ -554,7 +554,7 @@ abstract class FilterModel<
         masterFlowItem?._addLineFlowItem(
           codeId: "#31380",
           shortDesc:
-              "The ${_debugObjHtml(this)}.specifyDefaultValuesForSimpleCriteria() method was called with an error.",
+              "The ${debugObjHtml(this)}.specifyDefaultValuesForSimpleCriteria() method was called with an error.",
           errorInfo: errorInfo,
         );
         //
@@ -569,7 +569,7 @@ abstract class FilterModel<
         masterFlowItem?._addLineFlowItem(
           codeId: "#31420",
           shortDesc:
-              "Calling ${_debugObjHtml(this)}.toFilterCriteriaObject() method "
+              "Calling ${debugObjHtml(this)}.toFilterCriteriaObject() method "
               "to convert criteria in type of Map to a Dart object.",
           parameters: {
             "dataMap": _filterCriteriaStructure._tempCriteriaValues,
@@ -588,7 +588,7 @@ abstract class FilterModel<
         masterFlowItem?._addLineFlowItem(
           codeId: "#31460",
           shortDesc:
-              "Got an instance of ${_debugObjHtml(newCriteria)} (Dart object).\n"
+              "Got an instance of ${debugObjHtml(newCriteria)} (Dart object).\n"
               "This object will be passed to the <b>@filterCriteria</b> parameter "
               "of the <b>Block.query()</b> or <b>Scalar.query</b> method.",
           tipDocument: TipDocument.filterCriteria,
@@ -630,7 +630,7 @@ abstract class FilterModel<
       masterFlowItem?._addLineFlowItem(
         codeId: "#31500",
         shortDesc:
-            "The ${_debugObjHtml(this)}.toFilterCriteriaObject() method was called with an error!",
+            "The ${debugObjHtml(this)}.toFilterCriteriaObject() method was called with an error!",
         errorInfo: errorInfo,
       );
       return _filterCriteria;
@@ -1130,7 +1130,7 @@ abstract class FilterModel<
     //
     masterFlowItem._addLineFlowItem(
       codeId: "#55100",
-      shortDesc: "Calling ${_debugObjHtml(xShelf)}._initQueryTaskUnits()..",
+      shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryTaskUnits()..",
       lineFlowType: LineFlowType.nonControllableCalling,
     );
     xShelf._initQueryTaskUnits(masterFlowItem: masterFlowItem);

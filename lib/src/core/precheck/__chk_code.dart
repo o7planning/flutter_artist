@@ -1,4 +1,4 @@
-enum ChkCode {
+enum PrecheckCode {
   busy,
   noForm,
   formInitialDataNotReady,

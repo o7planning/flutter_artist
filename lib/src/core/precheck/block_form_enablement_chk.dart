@@ -3,36 +3,36 @@ import '__chk_code.dart';
 import '__precheck.dart';
 
 @RenameAnnotation()
-enum BlockFormEnablementChkCode implements Precheck {
+enum BlockFormEnablementPrecheckCode implements Precheck {
   noForm(
-    chkCode: ChkCode.noForm,
+    precheckCode: PrecheckCode.noForm,
     message: "Block has no Form",
     details: [],
   ),
   formInNoneMode(
-    chkCode: ChkCode.inNoneMode,
+    precheckCode: PrecheckCode.inNoneMode,
     message: "The Form is disabled",
     details: ["The form in 'none' mode"],
   ),
   formInitialDataNotReady(
-    chkCode: ChkCode.formInitialDataNotReady,
+    precheckCode: PrecheckCode.formInitialDataNotReady,
     message: "The Form is disabled.",
     details: ["The formInitialData is not ready."],
   ),
   notAllow(
-    chkCode: ChkCode.notAllow,
+    precheckCode: PrecheckCode.notAllow,
     message: "The Form is disabled.",
     details: ["The application logic does not allow this item to be updated."],
   ),
   checkAllowMethodError(
-    chkCode: ChkCode.checkAllowMethodError,
+    precheckCode: PrecheckCode.checkAllowMethodError,
     message: "The Form is disabled.",
     details: ["The isAllowUpdateItem() method error."],
   ),
   ;
 
   @override
-  final ChkCode chkCode;
+  final PrecheckCode precheckCode;
 
   @override
   final String message;
@@ -40,8 +40,8 @@ enum BlockFormEnablementChkCode implements Precheck {
   @override
   final List<String>? details;
 
-  const BlockFormEnablementChkCode({
-    required this.chkCode,
+  const BlockFormEnablementPrecheckCode({
+    required this.precheckCode,
     required this.message,
     required this.details,
   });

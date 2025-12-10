@@ -399,7 +399,7 @@ abstract class FormModel<
     masterFlowItem._addLineFlowItem(
       codeId: "#36000",
       shortDesc:
-          "Begin ${_debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
+          "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
       lineFlowType: LineFlowType.debug,
     );
     //
@@ -428,7 +428,7 @@ abstract class FormModel<
     masterFlowItem._addLineFlowItem(
       codeId: "#37000",
       shortDesc:
-          "Begin ${_debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
+          "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
       lineFlowType: LineFlowType.debug,
     );
     //
@@ -445,7 +445,7 @@ abstract class FormModel<
     masterFlowItem._addLineFlowItem(
       codeId: "#37060",
       shortDesc:
-          "Calculate >>  @forceReloadForm: ${_debugObjHtml(forceReloadForm)}",
+          "Calculate >>  @forceReloadForm: ${debugObjHtml(forceReloadForm)}",
     );
     //
     if (!forceReloadForm) {
@@ -453,21 +453,21 @@ abstract class FormModel<
         masterFlowItem._addLineFlowItem(
           codeId: "#37100",
           shortDesc:
-              "${_debugObjHtml(this)} - @dataState: ${_debugObjHtml(dataState)} --> Clear data and set to <b>pending</b>.",
+              "${debugObjHtml(this)} - @dataState: ${debugObjHtml(dataState)} --> Clear data and set to <b>pending</b>.",
         );
         _clearDataWithDataState(formDataState: DataState.pending);
       }
       masterFlowItem._addLineFlowItem(
         codeId: "#37120",
         shortDesc:
-            "@forceReloadForm: ${_debugObjHtml(forceReloadForm)} --> do nothing.",
+            "@forceReloadForm: ${debugObjHtml(forceReloadForm)} --> do nothing.",
       );
       return true;
     }
     //
     masterFlowItem._addLineFlowItem(
       codeId: "#37160",
-      shortDesc: "Calling ${_debugObjHtml(block)}._initFormRelatedData().",
+      shortDesc: "Calling ${debugObjHtml(block)}._initFormRelatedData().",
       lineFlowType: LineFlowType.nonControllableCalling,
     );
     FORM_RELATED_DATA? formRelatedData =
@@ -481,7 +481,7 @@ abstract class FormModel<
     //
     masterFlowItem._addLineFlowItem(
       codeId: "#37260",
-      shortDesc: "Calling ${_debugObjHtml(this)}._startNewFormActivity().",
+      shortDesc: "Calling ${debugObjHtml(this)}._startNewFormActivity().",
       parameters: {
         "activityType": activityType,
         "formInput": formInput,
@@ -514,7 +514,7 @@ abstract class FormModel<
     masterFlowItem._addLineFlowItem(
       codeId: "#38000",
       shortDesc:
-          "Begin ${_debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
+          "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
       lineFlowType: LineFlowType.debug,
     );
     //
@@ -523,7 +523,7 @@ abstract class FormModel<
 
     masterFlowItem._addLineFlowItem(
       codeId: "#38100",
-      shortDesc: "Calling ${_debugObjHtml(this)}._startNewFormActivity().",
+      shortDesc: "Calling ${debugObjHtml(this)}._startNewFormActivity().",
       parameters: {
         "activityType": activityType,
         "formInput": formInput,
@@ -556,8 +556,7 @@ abstract class FormModel<
     //
     masterFlowItem?._addLineFlowItem(
       codeId: "#11000",
-      shortDesc:
-          "${_debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
+      shortDesc: "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
       lineFlowType: LineFlowType.debug,
     );
     //
@@ -596,7 +595,7 @@ abstract class FormModel<
       //
       masterFlowItem?._addLineFlowItem(
         codeId: "#11400",
-        shortDesc: "Calling ${_debugObjHtml(this)}.$calledMethodName()...",
+        shortDesc: "Calling ${debugObjHtml(this)}.$calledMethodName()...",
         parameters: {
           "formMapData": formMapData,
         },
@@ -624,7 +623,7 @@ abstract class FormModel<
       masterFlowItem?._addLineFlowItem(
         codeId: "#11500",
         shortDesc:
-            "The ${_debugObjHtml(this)}.$calledMethodName() method was called with an error!",
+            "The ${debugObjHtml(this)}.$calledMethodName() method was called with an error!",
         errorInfo: errorInfo,
       );
       //
@@ -637,7 +636,7 @@ abstract class FormModel<
       masterFlowItem?._addLineFlowItem(
         codeId: "#11800",
         shortDesc:
-            "Calling ${_debugObjHtml(this)}._processSaveActionRestResult().",
+            "Calling ${debugObjHtml(this)}._processSaveActionRestResult().",
         lineFlowType: LineFlowType.nonControllableCalling,
       );
       await block._processSaveActionRestResult(
@@ -665,7 +664,7 @@ abstract class FormModel<
       masterFlowItem?._addLineFlowItem(
         codeId: "#11900",
         shortDesc:
-            "The ${_debugObjHtml(this)}.$calledMethodName() method was called with an error!",
+            "The ${debugObjHtml(this)}.$calledMethodName() method was called with an error!",
         errorInfo: errorInfo,
       );
       //
@@ -709,7 +708,7 @@ abstract class FormModel<
     //
     masterFlowItem?._addLineFlowItem(
       codeId: "#06000",
-      shortDesc: "${_debugObjHtml(this)} Form View Changed.",
+      shortDesc: "${debugObjHtml(this)} Form View Changed.",
     );
     //
     if (activityType == FormActivityType.startCreatingOrEditing) {
@@ -808,7 +807,7 @@ abstract class FormModel<
           codeId: "#06180",
           shortDesc: "Editing item in the form."
               "\n - @activityType: <b>$activityType</b>."
-              "\n - @itemDetail: ${_debugObjHtml(itemDetail)}.",
+              "\n - @itemDetail: ${debugObjHtml(itemDetail)}.",
           lineFlowType: LineFlowType.debug,
         );
         try {
@@ -816,7 +815,7 @@ abstract class FormModel<
             codeId: "#06200",
             lineFlowType: LineFlowType.controllableCalling,
             shortDesc:
-                "Calling ${_debugObjHtml(this)}.getSimplePropValuesFromItemDetail().",
+                "Calling ${debugObjHtml(this)}.getSimplePropValuesFromItemDetail().",
             parameters: {
               "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
               "itemDetail": itemDetail,
@@ -872,7 +871,7 @@ abstract class FormModel<
           masterFlowItem?._addLineFlowItem(
             codeId: "#06400",
             shortDesc:
-                "The ${_debugObjHtml(this)}.getSimplePropValuesFromItemDetail() method was called with an error!",
+                "The ${debugObjHtml(this)}.getSimplePropValuesFromItemDetail() method was called with an error!",
             errorInfo: errorInfo,
           );
           return false;
@@ -884,7 +883,7 @@ abstract class FormModel<
           codeId: "#06500",
           shortDesc: "Creating item in the form."
               "\n - @activityType: <b>$activityType</b>."
-              "\n - @itemDetail: ${_debugObjHtml(itemDetail)}.",
+              "\n - @itemDetail: ${debugObjHtml(itemDetail)}.",
           lineFlowType: LineFlowType.debug,
         );
         Map<String, dynamic> simplePropValueDefault = {};
@@ -898,7 +897,7 @@ abstract class FormModel<
             masterFlowItem?._addLineFlowItem(
               codeId: "#06540",
               shortDesc:
-                  "Calling ${_debugObjHtml(this)}.specifyDefaultValuesForSimpleProps().",
+                  "Calling ${debugObjHtml(this)}.specifyDefaultValuesForSimpleProps().",
               parameters: {
                 "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
               },
@@ -954,7 +953,7 @@ abstract class FormModel<
             masterFlowItem?._addLineFlowItem(
               codeId: "#06580",
               shortDesc:
-                  "The ${_debugObjHtml(this)}.specifyDefaultValuesForSimpleProps() method was called with an error!",
+                  "The ${debugObjHtml(this)}.specifyDefaultValuesForSimpleProps() method was called with an error!",
               errorInfo: errorInfo,
             );
             return false;
@@ -970,7 +969,7 @@ abstract class FormModel<
             masterFlowItem?._addLineFlowItem(
               codeId: "#06620",
               shortDesc:
-                  "Calling ${_debugObjHtml(this)}.getUpdatedValuesForSimpleProps().",
+                  "Calling ${debugObjHtml(this)}.getUpdatedValuesForSimpleProps().",
               parameters: {
                 "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
                 "formInput": formInput,
@@ -1032,7 +1031,7 @@ abstract class FormModel<
             masterFlowItem?._addLineFlowItem(
               codeId: "#06660",
               shortDesc:
-                  "The ${_debugObjHtml(this)}.getUpdatedValuesForSimpleProps() method was called with an error!",
+                  "The ${debugObjHtml(this)}.getUpdatedValuesForSimpleProps() method was called with an error!",
               errorInfo: errorInfo,
             );
             return false;
@@ -1046,7 +1045,7 @@ abstract class FormModel<
         codeId: "#06700",
         shortDesc: "Enter Form Fields."
             "\n - @activityType: <b>$activityType</b>."
-            "\n - @itemDetail: ${_debugObjHtml(itemDetail)}.",
+            "\n - @itemDetail: ${debugObjHtml(itemDetail)}.",
         lineFlowType: LineFlowType.debug,
       );
       if (formInput != null) {
@@ -1054,7 +1053,7 @@ abstract class FormModel<
           masterFlowItem?._addLineFlowItem(
             codeId: "#06720",
             shortDesc:
-                "Calling ${_debugObjHtml(this)}.getUpdatedValuesForSimpleProps() with parameters:",
+                "Calling ${debugObjHtml(this)}.getUpdatedValuesForSimpleProps() with parameters:",
             parameters: {
               "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
               "formInput": formInput,
@@ -1114,7 +1113,7 @@ abstract class FormModel<
           masterFlowItem?._addLineFlowItem(
             codeId: "#06760",
             shortDesc:
-                "The ${_debugObjHtml(this)}.getUpdatedValuesForSimpleProps() method was called with an error!",
+                "The ${debugObjHtml(this)}.getUpdatedValuesForSimpleProps() method was called with an error!",
             errorInfo: errorInfo,
           );
           return false;
@@ -1129,8 +1128,8 @@ abstract class FormModel<
         masterFlowItem?._addLineFlowItem(
           codeId: "#06780",
           shortDesc:
-              "Calling ${_debugObjHtml(this)}._loadMultiOptPropDataCascade() "
-              "to load data for ${_debugObjHtml(multiOptProp)} and its descendants.",
+              "Calling ${debugObjHtml(this)}._loadMultiOptPropDataCascade() "
+              "to load data for ${debugObjHtml(multiOptProp)} and its descendants.",
           parameters: {
             "formRelatedData": formRelatedData,
             "formInput": formInput,
@@ -1196,7 +1195,7 @@ abstract class FormModel<
       masterFlowItem?._addLineFlowItem(
         codeId: "#06800",
         shortDesc:
-            "The ${_debugObjHtml(this)}.${formErrorInfo.methodName}() method was called with an error!",
+            "The ${debugObjHtml(this)}.${formErrorInfo.methodName}() method was called with an error!",
         errorInfo: errorInfo,
       );
       return false;
@@ -1343,7 +1342,7 @@ abstract class FormModel<
     masterFlowItem?._addLineFlowItem(
       codeId: "#17000",
       shortDesc:
-          "Loading Data for ${_debugObjHtml(multiOptProp)} and its children..",
+          "Loading Data for ${debugObjHtml(multiOptProp)} and its children..",
       lineFlowType: LineFlowType.info,
     );
 
@@ -1430,7 +1429,7 @@ abstract class FormModel<
         masterFlowItem?._addLineFlowItem(
           codeId: "#17400",
           shortDesc:
-              "Calling ${_debugObjHtml(this)}.callApiLoadMultiOptPropXData().",
+              "Calling ${debugObjHtml(this)}.callApiLoadMultiOptPropXData().",
           parameters: {
             "multiOptPropName": multiOptPropName,
             "parentMultiOptPropValue": parentMultiOptPropValue,
@@ -1479,7 +1478,7 @@ abstract class FormModel<
           masterFlowItem?._addLineFlowItem(
             codeId: "#17500",
             shortDesc:
-                "(In _loadMultiOptPropDataCascade() method for ${_debugObjHtml(multiOptProp)}):",
+                "(In _loadMultiOptPropDataCascade() method for ${debugObjHtml(multiOptProp)}):",
             parameters: {
               "activityType": activityType,
               "currentItemDetail": currentItemDetail,
@@ -1500,7 +1499,7 @@ abstract class FormModel<
             );
             masterFlowItem?._addLineFlowItem(
               codeId: "#17540",
-              shortDesc: "Got Value: ${_debugObjHtml(initialValueWrap)}.",
+              shortDesc: "Got Value: ${debugObjHtml(initialValueWrap)}.",
             );
           }
           if (formInput != null && formInput is! EmptyFormInput) {
@@ -1516,7 +1515,7 @@ abstract class FormModel<
             );
             masterFlowItem?._addLineFlowItem(
               codeId: "#17560",
-              shortDesc: "Got Value: ${_debugObjHtml(initialValueWrap)}.",
+              shortDesc: "Got Value: ${debugObjHtml(initialValueWrap)}.",
             );
           }
         }
@@ -1545,7 +1544,7 @@ abstract class FormModel<
           );
           masterFlowItem?._addLineFlowItem(
             codeId: "#17590",
-            shortDesc: "Got value: ${_debugObjHtml(initialValueWrap)}",
+            shortDesc: "Got value: ${debugObjHtml(initialValueWrap)}",
           );
         }
       } // end of 'startCreatingOrEditing'.
@@ -1555,7 +1554,7 @@ abstract class FormModel<
           masterFlowItem?._addLineFlowItem(
             codeId: "#17600",
             shortDesc:
-                "(In _loadMultiOptPropDataCascade() method for ${_debugObjHtml(multiOptProp)}):",
+                "(In _loadMultiOptPropDataCascade() method for ${debugObjHtml(multiOptProp)}):",
             parameters: {
               "activityType": activityType,
               "currentItemDetail": currentItemDetail,
@@ -1766,7 +1765,7 @@ abstract class FormModel<
       masterFlowItem?._addLineFlowItem(
         codeId: "#33000",
         shortDesc:
-            "Calling ${_debugObjHtml(this)}.specifyDefaultValueForMultiOptProp() for <b>'$multiOptPropName'</b>.",
+            "Calling ${debugObjHtml(this)}.specifyDefaultValueForMultiOptProp() for <b>'$multiOptPropName'</b>.",
         parameters: {
           "multiOptPropXData": multiOptPropXData,
           "multiOptPropName": multiOptPropName,
@@ -1848,7 +1847,7 @@ abstract class FormModel<
       masterFlowItem?._addLineFlowItem(
         codeId: "#32000",
         shortDesc:
-            "Calling ${_debugObjHtml(this)}.getMultiOptPropValueFromItemDetail() for <b>'$multiOptPropName'</b>.",
+            "Calling ${debugObjHtml(this)}.getMultiOptPropValueFromItemDetail() for <b>'$multiOptPropName'</b>.",
         parameters: {
           "multiOptPropName": multiOptPropName,
           "parentMultiOptPropValue": parentMultiOptPropValue,
@@ -1904,7 +1903,7 @@ abstract class FormModel<
       masterFlowItem?._addLineFlowItem(
         codeId: "#18000",
         shortDesc:
-            "Calling ${_debugObjHtml(this)}.getUpdatedValueForMultiOptProp() for <b>'$multiOptPropName'</b>.",
+            "Calling ${debugObjHtml(this)}.getUpdatedValueForMultiOptProp() for <b>'$multiOptPropName'</b>.",
         parameters: {
           "multiOptPropName": multiOptPropName,
           "multiOptPropXData": multiOptPropXData,
@@ -2010,7 +2009,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   bool isEnabled() {
-    Actionable<BlockFormEnablementChkCode> actionable =
+    Actionable<BlockFormEnablementPrecheckCode> actionable =
         block._isEnableFormToModify();
     return actionable.yes;
   }

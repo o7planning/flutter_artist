@@ -3,19 +3,19 @@ import '__precheck.dart';
 
 enum BlockItemsDeletionPrecheck implements Precheck {
   busy(
-    chkCode: ChkCode.busy,
+    precheckCode: PrecheckCode.busy,
     message: "Can not delete the item",
     details: ["The executor is busy."],
   ),
   //
   notAllow(
-    chkCode: ChkCode.notAllow,
+    precheckCode: PrecheckCode.notAllow,
     message: "Can not delete the item",
     details: ["The application logic does not allow to delete this item."],
   ),
   //
   checkAllowMethodError(
-    chkCode: ChkCode.checkAllowMethodError,
+    precheckCode: PrecheckCode.checkAllowMethodError,
     message: "Can not delete the item",
     details: ["The isAllowDeleteItem() method is error."],
   ),
@@ -24,25 +24,25 @@ enum BlockItemsDeletionPrecheck implements Precheck {
   /// Try to delete items not in the list.
   ///
   invalidTarget(
-    chkCode: ChkCode.invalidTarget,
+    precheckCode: PrecheckCode.invalidTarget,
     message: "Deletion Ignored",
     details: ["Target item is not in the list"],
   ),
   //
   noTarget(
-    chkCode: ChkCode.noTarget,
+    precheckCode: PrecheckCode.noTarget,
     message: "Deletion Ignored",
     details: ["No target item to delete"],
   ),
   //
   cancelled(
-    chkCode: ChkCode.cancelled,
+    precheckCode: PrecheckCode.cancelled,
     message: "Deletion Cancelled",
     details: ["Cancelled by user"],
   );
 
   @override
-  final ChkCode chkCode;
+  final PrecheckCode precheckCode;
 
   @override
   final String message;
@@ -51,7 +51,7 @@ enum BlockItemsDeletionPrecheck implements Precheck {
   final List<String>? details;
 
   const BlockItemsDeletionPrecheck({
-    required this.chkCode,
+    required this.precheckCode,
     required this.message,
     required this.details,
   });

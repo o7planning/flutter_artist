@@ -10,7 +10,7 @@ import '../../core/utils/_class_utils.dart';
 import '../../core/utils/_text_size_utils.dart';
 import '../../core/utils/_tooltip_utils.dart';
 import '../constants/_debug_constants.dart';
-import '_block_or_scalar.dart';
+import '../storage/_block_or_scalar.dart';
 
 class GraphItemBlockOrScalarBox extends StatefulWidget {
   final BlockOrScalar blockOrScalar;
@@ -376,6 +376,8 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
 
   Widget _buildDataStateRow() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
           child: _buildDataState(widget.blockOrScalar),

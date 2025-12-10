@@ -30,6 +30,8 @@ dependencies:
 
   flutter_artist_core:
     path: ../flutter_artist_core
+  flutter_left_right_container:
+    path: ../flutter_left_right_container
   flutter_artist_commons_ui:
     path: ../flutter_artist_commons_ui
 

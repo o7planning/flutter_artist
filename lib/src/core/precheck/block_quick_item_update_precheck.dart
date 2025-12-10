@@ -3,61 +3,61 @@ import '__precheck.dart';
 
 enum BlockQuickItemUpdatePrecheck implements Precheck {
   busy(
-    chkCode: ChkCode.busy,
+    precheckCode: PrecheckCode.busy,
     message: "Item update is disabled.",
     details: ["The executor is busy."],
   ),
 
   // Test Cases: [91b].
   blockInPendingState(
-    chkCode: ChkCode.inPendingState,
+    precheckCode: PrecheckCode.inPendingState,
     message: "Item update is disabled.",
     details: ["The block is in a 'pending' state."],
   ),
   // Test Cases: [91b].
   blockInErrorState(
-    chkCode: ChkCode.inErrorState,
+    precheckCode: PrecheckCode.inErrorState,
     message: "Item update is disabled.",
     details: ["The block is in an 'error' state."],
   ),
   // Test Cases: [91b].
   blockInNoneState(
-    chkCode: ChkCode.inNoneState,
+    precheckCode: PrecheckCode.inNoneState,
     message: "Item update is disabled.",
     details: ["The block is in a 'none' state."],
   ),
   // Test Cases: [90b], [91b].
   invalidTarget(
-    chkCode: ChkCode.invalidTarget,
+    precheckCode: PrecheckCode.invalidTarget,
     message: "Not allow to update the item.",
     details: ["Item not in the List."],
   ),
   // Test Cases: [90b].
   notAllow(
-    chkCode: ChkCode.notAllow,
+    precheckCode: PrecheckCode.notAllow,
     message: "Not allow to update the item.",
     details: ["The application logic does not allow this item to be updated."],
   ),
   // Test Cases: [90b].
   checkAllowMethodError(
-    chkCode: ChkCode.checkAllowMethodError,
+    precheckCode: PrecheckCode.checkAllowMethodError,
     message: "Not allow to update the item.",
     details: ["The isAllowUpdateItem() method error."],
   ),
   // TODO: Not Use?
   noTarget(
-    chkCode: ChkCode.noTarget,
+    precheckCode: PrecheckCode.noTarget,
     message: "Not allow to update the item.",
     details: ["The target item is not available."],
   ),
   cancelled(
-    chkCode: ChkCode.cancelled,
+    precheckCode: PrecheckCode.cancelled,
     message: "Quick Update Item Action Cancelled.",
     details: null,
   );
 
   @override
-  final ChkCode chkCode;
+  final PrecheckCode precheckCode;
 
   @override
   final String message;
@@ -66,7 +66,7 @@ enum BlockQuickItemUpdatePrecheck implements Precheck {
   final List<String>? details;
 
   const BlockQuickItemUpdatePrecheck({
-    required this.chkCode,
+    required this.precheckCode,
     required this.message,
     required this.details,
   });

@@ -6,16 +6,16 @@ part of '../core.dart';
 @_BlockSelectNextItemAsCurrentAnnotation()
 @_BlockSelectFirstItemAsCurrentAnnotation()
 @_BlockSelectPreviousItemAsCurrentAnnotation()
-class _BlockSelectAsCurrentTaskUnit<ID extends Object,
+class _BlockSetItemAsCurrentTaskUnit<ID extends Object,
         ITEM extends Identifiable<ID>>
-    extends _ResultedSTaskUnit<BlockItemCurrSelectionResult<ITEM>> {
+    extends _ResultedSTaskUnit<BlockCurrentItemSettingResult<ITEM>> {
   final XBlock xBlock;
   final ForceType? forceTypeForForm;
   final CurrentItemSelectionType currentItemSelectionType;
   final ITEM? candidateItem;
   final List<ITEM> newQueriedList;
 
-  _BlockSelectAsCurrentTaskUnit({
+  _BlockSetItemAsCurrentTaskUnit({
     required this.currentItemSelectionType,
     required this.xBlock,
     required this.newQueriedList,
@@ -24,7 +24,7 @@ class _BlockSelectAsCurrentTaskUnit<ID extends Object,
     required this.forceTypeForForm,
   }) : super(
           taskType: TaskType.blockSetItemAsCurrent,
-          taskResult: BlockItemCurrSelectionResult<ITEM>(
+          taskResult: BlockCurrentItemSettingResult<ITEM>(
             precheck: null,
             currentItemSelectionType: currentItemSelectionType,
             getItemId: xBlock.block._getItemIdInternal,

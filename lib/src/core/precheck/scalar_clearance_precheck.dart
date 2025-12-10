@@ -4,19 +4,19 @@ import '__precheck.dart';
 // Name (OK)
 enum ScalarClearancePrecheck implements Precheck {
   busy(
-    chkCode: ChkCode.busy,
+    precheckCode: PrecheckCode.busy,
     message: "Can not clear scalar.",
     details: ["The executor is busy."],
   ),
   hasActiveUI(
-    chkCode: ChkCode.hasActiveUI,
+    precheckCode: PrecheckCode.hasActiveUI,
     message: "Can not clear scalar.",
     details: ["The Scalar currently has active UI components."],
   ),
   ;
 
   @override
-  final ChkCode chkCode;
+  final PrecheckCode precheckCode;
 
   @override
   final String message;
@@ -25,7 +25,7 @@ enum ScalarClearancePrecheck implements Precheck {
   final List<String>? details;
 
   const ScalarClearancePrecheck({
-    required this.chkCode,
+    required this.precheckCode,
     required this.message,
     required this.details,
   });

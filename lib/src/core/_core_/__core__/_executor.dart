@@ -189,7 +189,7 @@ class _Executor {
       );
     }
     // Block Select Item as Current:
-    else if (taskUnit is _BlockSelectAsCurrentTaskUnit) {
+    else if (taskUnit is _BlockSetItemAsCurrentTaskUnit) {
       await taskUnit.xBlock.block._unitSetItemAsCurrent(
         masterFlowItem: masterFlowItem,
         taskType: taskUnit.taskType,
@@ -198,7 +198,7 @@ class _Executor {
         candidateItem: taskUnit.candidateItem,
         thisXBlock: taskUnit.xBlock,
         currentItemSelectionResult:
-            taskUnit.taskResult as BlockItemCurrSelectionResult<Identifiable>,
+            taskUnit.taskResult as BlockCurrentItemSettingResult<Identifiable>,
       );
     }
     // Block Delete Item:

@@ -4,30 +4,30 @@ import '__precheck.dart';
 // Name (OK)
 enum ScalarQueryPrecheck implements Precheck {
   busy(
-    chkCode: ChkCode.busy,
+    precheckCode: PrecheckCode.busy,
     message: "The Scalar querying is disabled.",
     details: ["The executor is busy."],
   ),
   @Deprecated("Xoa di, thay the bang cach khac")
   filterError(
-    chkCode: ChkCode.filterError,
+    precheckCode: PrecheckCode.filterError,
     message: "The Scalar querying is disabled.",
     details: ["The Filter is Error"],
   ),
   notAllow(
-    chkCode: ChkCode.notAllow,
+    precheckCode: PrecheckCode.notAllow,
     message: "The Scalar querying is disabled.",
     details: ["The application logic does not allow query this block."],
   ),
   checkAllowMethodError(
-    chkCode: ChkCode.checkAllowMethodError,
+    precheckCode: PrecheckCode.checkAllowMethodError,
     message: "The Scalar querying is disabled.",
     details: ["The isAllowQuery() method error."],
   ),
   ;
 
   @override
-  final ChkCode chkCode;
+  final PrecheckCode precheckCode;
 
   @override
   final String message;
@@ -36,7 +36,7 @@ enum ScalarQueryPrecheck implements Precheck {
   final List<String>? details;
 
   const ScalarQueryPrecheck({
-    required this.chkCode,
+    required this.precheckCode,
     required this.message,
     required this.details,
   });

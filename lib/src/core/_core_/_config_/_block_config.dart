@@ -16,7 +16,7 @@ class BlockConfig {
   ///
   /// Reaction to External Events.
   ///
-  final List<Event> executeItemLevelReactionToEvents;
+  // final List<Event> executeItemLevelReactionToEvents;
 
   ///
   /// Reaction to External Events. Docs: 14769/27a
@@ -56,8 +56,8 @@ class BlockConfig {
     this.clientSideSortMode = ClientSideSortMode.none,
   })  : outsideBroadcastEvents =
             List.unmodifiable(outsideBroadcastEvents?.toSet() ?? []),
-        executeItemLevelReactionToEvents = //
-            List.unmodifiable(executeItemLevelReactionToEvents?.toSet() ?? []),
+        // executeItemLevelReactionToEvents = //
+        //     List.unmodifiable(executeItemLevelReactionToEvents?.toSet() ?? []),
         executeBlockLevelReactionToEvents =
             List.unmodifiable(executeBlockLevelReactionToEvents?.toSet() ?? []),
         executeItemLevelReactionToEvts = //
@@ -72,13 +72,14 @@ class BlockConfig {
       hiddenBehavior: hiddenBehavior,
       pageable: pageable.copy(),
       //
+      selfReQueryable: selfReQueryable,
       outsideBroadcastEvents: outsideBroadcastEvents,
+      //
+      currentItemSelfRefreshable: currentItemSelfRefreshable,
       executeItemLevelReactionToEvts: executeItemLevelReactionToEvts,
       executeBlockLevelReactionToEvts: executeBlockLevelReactionToEvts,
       //
-      selfReQueryable: selfReQueryable,
-      currentItemSelfRefreshable: currentItemSelfRefreshable,
-      executeItemLevelReactionToEvents: executeItemLevelReactionToEvents,
+      // executeItemLevelReactionToEvents: executeItemLevelReactionToEvents,
       executeBlockLevelReactionToEvents: executeBlockLevelReactionToEvents,
       //
       clientSideSortMode: clientSideSortMode,

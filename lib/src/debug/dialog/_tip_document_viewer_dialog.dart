@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_artist/src/core/icon/icon_constants.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -51,7 +52,7 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
     );
     FaAlertDialog alert = FaAlertDialog(
       icon: Icon(
-        Icons.tips_and_updates_outlined,
+        FaIconConstants.tipDocument,
         color: Colors.deepOrange,
         size: 16,
       ),

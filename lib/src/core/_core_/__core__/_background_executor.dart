@@ -37,7 +37,7 @@ class _BackgroundExecutor extends _Core {
     masterFlowItem._addLineFlowItem(
       codeId: "#61000",
       shortDesc:
-          "${_debugObjHtml(action)}.needToConfirm = <b>$needToConfirm<b>.",
+          "${debugObjHtml(action)}.needToConfirm = <b>$needToConfirm<b>.",
       lineFlowType: LineFlowType.debug,
     );
     //
@@ -64,7 +64,7 @@ class _BackgroundExecutor extends _Core {
     try {
       masterFlowItem._addLineFlowItem(
         codeId: "#61200",
-        shortDesc: "Calling ${_debugObjHtml(action)}.run()...",
+        shortDesc: "Calling ${debugObjHtml(action)}.run()...",
         lineFlowType: LineFlowType.controllableCalling,
       );
       ApiResult<void> result = await action.run();
@@ -84,7 +84,7 @@ class _BackgroundExecutor extends _Core {
       masterFlowItem._addLineFlowItem(
         codeId: "#61300",
         shortDesc:
-            "The ${_debugObjHtml(action)}.run() method was called with an error!",
+            "The ${debugObjHtml(action)}.run() method was called with an error!",
         errorInfo: errorInfo,
       );
     }

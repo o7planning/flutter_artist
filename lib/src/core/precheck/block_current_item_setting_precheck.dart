@@ -1,33 +1,33 @@
 import '__chk_code.dart';
 import '__precheck.dart';
 
-enum BlockItemCurrSelectionPrecheck implements Precheck {
+enum BlockCurrentItemSettingPrecheck implements Precheck {
   busy(
-    chkCode: ChkCode.busy,
+    precheckCode: PrecheckCode.busy,
     message: "Cannot refresh the current item.",
     details: ["The executor is busy."],
   ),
   // Test Cases: [03b]
   noTarget(
-    chkCode: ChkCode.noTarget,
+    precheckCode: PrecheckCode.noTarget,
     message: "The Refresh Ignored",
     details: ["No target item to refresh"],
   ),
   // Test Cases: [03b]
   invalidTarget(
-    chkCode: ChkCode.invalidTarget,
+    precheckCode: PrecheckCode.invalidTarget,
     message: "The Refresh Ignored",
     details: ["Item is not in the List"],
   ),
   // Test Cases: [03b] ??
   notAllow(
-    chkCode: ChkCode.notAllow,
+    precheckCode: PrecheckCode.notAllow,
     message: "The Refresh Ignored",
     details: ["Not Allow to Refresh Item"],
   );
 
   @override
-  final ChkCode chkCode;
+  final PrecheckCode precheckCode;
 
   @override
   final String message;
@@ -35,8 +35,8 @@ enum BlockItemCurrSelectionPrecheck implements Precheck {
   @override
   final List<String>? details;
 
-  const BlockItemCurrSelectionPrecheck({
-    required this.chkCode,
+  const BlockCurrentItemSettingPrecheck({
+    required this.precheckCode,
     required this.message,
     required this.details,
   });

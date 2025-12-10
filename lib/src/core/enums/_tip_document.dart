@@ -17,7 +17,8 @@ enum TipDocument {
   blockActiveUIComponents,
   blockQueryType,
   dataState,
-  eventReactionFreezing;
+  eventReactionFreezing,
+  debugState;
 
   int getPosition() {
     return TipDocument.values.indexOf(this) + 1;
@@ -74,7 +75,9 @@ enum TipDocument {
       case TipDocument.sorting:
         return "Sorting";
       case TipDocument.eventReactionFreezing:
-        return "Event-reaction Freezing";
+        return "Queued-Event Freezing";
+      case TipDocument.debugState:
+        return "Debug State";
     }
   }
 
@@ -117,7 +120,9 @@ enum TipDocument {
       case TipDocument.sorting:
         return "Sorting";
       case TipDocument.eventReactionFreezing:
-        return "Event-reaction Freezing";
+        return "Queued-Event Freezing";
+      case TipDocument.debugState:
+        return "Debug State";
     }
   }
 
@@ -205,6 +210,11 @@ enum TipDocument {
           "https://o7planning.org/11112/config2",
         ];
       case TipDocument.eventReactionFreezing:
+        return [
+          "https://o7planning.org/11111/config1",
+          "https://o7planning.org/11112/config2",
+        ];
+      case TipDocument.debugState:
         return [
           "https://o7planning.org/11111/config1",
           "https://o7planning.org/11112/config2",

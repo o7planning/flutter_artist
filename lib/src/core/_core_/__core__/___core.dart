@@ -119,15 +119,11 @@ abstract class _Core {
     required bool showSnackBar,
   }) {
     final String msg;
-    if (methodName == null) {
-      msg = "Error: $message";
+    if (methodName.contains("\\.")) {
+      msg = "Call $methodName() error: $message";
     } else {
-      if (methodName.contains("\\.")) {
-        msg = "Call $methodName() error: $message";
-      } else {
-        msg =
-            "Call ${getClassNameWithoutGenerics(this)}.$methodName() error: $message";
-      }
+      msg =
+          "Call ${getClassNameWithoutGenerics(this)}.$methodName() error: $message";
     }
     print(msg);
     //

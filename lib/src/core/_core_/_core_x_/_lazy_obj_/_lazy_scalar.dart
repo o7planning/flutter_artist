@@ -6,6 +6,6 @@ class _LazyScalar {
   _LazyScalar({required this.scalar});
 
   String toDebugString() {
-    return _debugObjHtml(scalar);
+    return debugObjHtml(scalar);
   }
 }

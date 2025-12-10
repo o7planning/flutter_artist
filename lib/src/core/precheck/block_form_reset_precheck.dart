@@ -4,43 +4,43 @@ import '__precheck.dart';
 // Name (OK)
 enum BlockFormResetPrecheck implements Precheck {
   busy(
-    chkCode: ChkCode.busy,
+    precheckCode: PrecheckCode.busy,
     message: "Form reset is disabled.",
     details: ["The executor is busy."],
   ),
   noForm(
-    chkCode: ChkCode.noForm,
+    precheckCode: PrecheckCode.noForm,
     message: "Form reset is disabled.",
     details: ["The block has no form."],
   ),
   formIsNotDirty(
-    chkCode: ChkCode.formIsNotDirty,
+    precheckCode: PrecheckCode.formIsNotDirty,
     message: "Form reset is disabled.",
     details: ["The form is not in dirty state."],
   ),
   formInitialDataNotReady(
-    chkCode: ChkCode.formInitialDataNotReady,
+    precheckCode: PrecheckCode.formInitialDataNotReady,
     message: "Form reset is disabled.",
     details: ["The formInitialData is not ready."],
   ),
   formInNoneMode(
-    chkCode: ChkCode.inNoneMode,
+    precheckCode: PrecheckCode.inNoneMode,
     message: "Form reset is disabled.",
     details: ["The form is in 'none' mode."],
   ),
   notAllow(
-    chkCode: ChkCode.notAllow,
+    precheckCode: PrecheckCode.notAllow,
     message: "Form Resetting is disabled.",
     details: ["The application logic does not allow to reset the form."],
   ),
   checkAllowMethodError(
-    chkCode: ChkCode.checkAllowMethodError,
+    precheckCode: PrecheckCode.checkAllowMethodError,
     message: "Form Resetting is disabled.",
     details: ["The isAllowResetForm() method error.."],
   );
 
   @override
-  final ChkCode chkCode;
+  final PrecheckCode precheckCode;
 
   @override
   final String message;
@@ -49,7 +49,7 @@ enum BlockFormResetPrecheck implements Precheck {
   final List<String>? details;
 
   const BlockFormResetPrecheck({
-    required this.chkCode,
+    required this.precheckCode,
     required this.message,
     required this.details,
   });

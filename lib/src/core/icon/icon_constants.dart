@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart' as cupertino;
 import 'package:flutter/material.dart';
 
 class FaIconConstants {
+  static const IconData tipDocument = Icons.tips_and_updates_outlined;
+
   static const IconData visibleTrueIconData = cupertino.CupertinoIcons.eye;
   static const IconData visibleFalseIconData =
       cupertino.CupertinoIcons.eye_slash;
@@ -68,7 +70,16 @@ class FaIconConstants {
   static const IconData shelfStructureIconData =
       cupertino.CupertinoIcons.layers_alt;
 
-  static const IconData storageIconData = cupertino.CupertinoIcons.globe;
+  static const IconData storageIconData = Icons.storage;
+  // static const IconData storageIconData = cupertino.CupertinoIcons.globe;
+  // static const IconData shelfIconData = cupertino.CupertinoIcons.layers_alt;
+
+  static const IconData shelfIconData = Icons.shelves;
+
+  static const IconData autoStockerIconData =
+      cupertino.CupertinoIcons.game_controller;
+  static const IconData activityIconData =
+      cupertino.CupertinoIcons.person_2_square_stack;
 
   static const IconData flowLogIconData = cupertino.CupertinoIcons.flowchart;
 

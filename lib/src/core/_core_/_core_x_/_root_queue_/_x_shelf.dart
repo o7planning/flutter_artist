@@ -367,7 +367,7 @@ abstract class XShelf extends XRootQueueItem {
         masterFlowItem?._addLineFlowItem(
           codeId: "#01060",
           shortDesc:
-              "Create ${taskUnit.asDebugTaskUnit()} and add to ${_debugObjHtml(this)}.",
+              "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(this)}.",
           lineFlowType: LineFlowType.addTaskUnit,
         );
         //
@@ -387,7 +387,7 @@ abstract class XShelf extends XRootQueueItem {
       masterFlowItem?._addLineFlowItem(
         codeId: "#01080",
         shortDesc:
-            "Create ${taskUnit.asDebugTaskUnit()} and add to ${_debugObjHtml(this)}.",
+            "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(this)}.",
         lineFlowType: LineFlowType.addTaskUnit,
       );
       //
@@ -404,7 +404,7 @@ abstract class XShelf extends XRootQueueItem {
       masterFlowItem?._addLineFlowItem(
         codeId: "#01120",
         shortDesc:
-            "Create ${taskUnit.asDebugTaskUnit()} and add to ${_debugObjHtml(this)}.",
+            "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(this)}.",
         lineFlowType: LineFlowType.addTaskUnit,
       );
       //
@@ -424,7 +424,7 @@ abstract class XShelf extends XRootQueueItem {
         masterFlowItem?._addLineFlowItem(
           codeId: "#01160",
           shortDesc:
-              "Create ${taskUnit.asDebugTaskUnit()} and add to ${_debugObjHtml(this)}.",
+              "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(this)}.",
           lineFlowType: LineFlowType.addTaskUnit,
         );
         _addTaskUnit(
@@ -442,7 +442,7 @@ abstract class XShelf extends XRootQueueItem {
         masterFlowItem?._addLineFlowItem(
           codeId: "#01200",
           shortDesc:
-              "Create ${taskUnit.asDebugTaskUnit()} and add to ${_debugObjHtml(this)}.",
+              "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(this)}.",
           lineFlowType: LineFlowType.addTaskUnit,
         );
         _addTaskUnit(
@@ -458,7 +458,7 @@ abstract class XShelf extends XRootQueueItem {
   // ***************************************************************************
 
   String toDebugXShelfStateAsHtml() {
-    String s = "${_debugObjHtml(this)}\n"
+    String s = "${debugObjHtml(this)}\n"
         " --- STATE BEFORE CREATING TASK UNITS ---";
     for (String key in xBlockMap.keys) {
       final XBlock xBlock = xBlockMap[key]!;

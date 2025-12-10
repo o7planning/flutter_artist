@@ -1,7 +1,7 @@
 part of '../../core.dart';
 
-class _XShelfBlockCurrItemSelection extends XShelf {
-  _XShelfBlockCurrItemSelection({required Block block})
+class _XShelfBlockSetItemAsCurrent extends XShelf {
+  _XShelfBlockSetItemAsCurrent({required Block block})
       : super(
           xShelfType: XShelfType.blockCurrItemSelection,
           shelf: block.shelf,

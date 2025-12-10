@@ -3,23 +3,23 @@ import '__precheck.dart';
 
 enum ShowFormInfoPrecheck implements Precheck {
   noForm(
-    chkCode: ChkCode.noForm,
+    precheckCode: PrecheckCode.noForm,
     message: "Can not show Form Info.",
     details: ["The block has no Form."],
   ),
   noLoggedInUser(
-    chkCode: ChkCode.noLoggedInUser,
+    precheckCode: PrecheckCode.noLoggedInUser,
     message: "Can not show Form Info.",
     details: ["The user is not logged in."],
   ),
   userIsNotSystemUser(
-    chkCode: ChkCode.permissionDenied,
+    precheckCode: PrecheckCode.permissionDenied,
     message: "Can not show Form Info.",
     details: ["The user is not a system user."],
   );
 
   @override
-  final ChkCode chkCode;
+  final PrecheckCode precheckCode;
 
   @override
   final String message;
@@ -28,7 +28,7 @@ enum ShowFormInfoPrecheck implements Precheck {
   final List<String>? details;
 
   const ShowFormInfoPrecheck({
-    required this.chkCode,
+    required this.precheckCode,
     required this.message,
     required this.details,
   });

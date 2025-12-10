@@ -7,7 +7,7 @@ import '../../core/utils/_text_size_utils.dart';
 import '../constants/_debug_constants.dart';
 
 class GraphItemShelfBox extends StatefulWidget {
-  final Function() gotoStorage;
+  final Function()? gotoStorage;
   final Shelf shelf;
 
   const GraphItemShelfBox({
@@ -82,21 +82,22 @@ class GraphItemShelfBoxState extends State<GraphItemShelfBox> {
                 ),
               ),
             ),
-            TextButton(
-              style: TextButton.styleFrom(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 10,
-                  horizontal: 5,
+            if (widget.gotoStorage != null)
+              TextButton(
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 5,
+                  ),
+                  minimumSize: Size.zero,
                 ),
-                minimumSize: Size.zero,
+                onPressed: widget.gotoStorage,
+                child: const Icon(
+                  FaIconConstants.uptoStorageIconData,
+                  color: Colors.white,
+                  size: iconSize,
+                ),
               ),
-              onPressed: widget.gotoStorage,
-              child: const Icon(
-                FaIconConstants.uptoStorageIconData,
-                color: Colors.white,
-                size: iconSize,
-              ),
-            ),
           ],
         ),
       ],

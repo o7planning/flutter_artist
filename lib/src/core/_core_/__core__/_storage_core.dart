@@ -4,8 +4,6 @@ typedef ShelfCreator<S> = S Function();
 typedef ActivityCreator<S> = S Function();
 
 abstract class _StorageCore extends _Core {
-  MasterFlowItem? _masterFlowItem;
-
   final Map<String, ShelfCreator> __shelfCreatorMap = {};
   final Map<String, ActivityCreator> __activityCreatorMap = {};
 
@@ -19,23 +17,27 @@ abstract class _StorageCore extends _Core {
 
   bool get started => __started;
 
-  Map<String, Shelf?> get shelfMap {
-    Map<String, Shelf?> m = __shelfCreatorMap
-        .map((k, v) => MapEntry<String, Shelf?>(k, null))
-      ..addAll(_shelfMap);
-    return m;
-  }
+  // Map<String, Shelf?> get shelfMap {
+  //   Map<String, Shelf?> m = __shelfCreatorMap
+  //       .map((k, v) => MapEntry<String, Shelf?>(k, null))
+  //     ..addAll(_shelfMap);
+  //   return m;
+  // }
 
-  Map<String, Activity?> get activityMap {
-    Map<String, Activity?> m = __activityCreatorMap
-        .map((k, v) => MapEntry<String, Activity?>(k, null))
-      ..addAll(_activityMap);
-    return m;
-  }
+  // Map<String, Activity?> get activityMap {
+  //   Map<String, Activity?> m = __activityCreatorMap
+  //       .map((k, v) => MapEntry<String, Activity?>(k, null))
+  //     ..addAll(_activityMap);
+  //   return m;
+  // }
 
-  List<String> get shelfNames => List.unmodifiable(_shelfMap.keys);
+  List<String> get activeShelfNames => List.unmodifiable(_shelfMap.keys);
 
-  List<String> get activityNames => List.unmodifiable(_activityMap.keys);
+  List<Shelf> get activeShelves => List.unmodifiable(_shelfMap.values);
+
+  List<String> get activeActivityNames => List.unmodifiable(_activityMap.keys);
+
+  List<Activity> get activeActivities => List.unmodifiable(_activityMap.values);
 
   // ***************************************************************************
   // ***************************************************************************
@@ -99,7 +101,7 @@ abstract class _StorageCore extends _Core {
     }
     //
     final String activityName = _getActivityName(F);
-    _debugRegister.addDebugRegisterActivity(
+    FlutterArtist.debugRegister._addDebugRegisterActivity(
         "<b>FlutterArtist.storage.registerActivity()</b> for <b>$activityName</b>.");
     //
     ActivityCreator? creator = __activityCreatorMap[activityName];
@@ -121,7 +123,7 @@ abstract class _StorageCore extends _Core {
     }
     //
     final String shelfName = _getShelfName(F);
-    _debugRegister.addDebugRegisterShelf(
+    FlutterArtist.debugRegister._addDebugRegisterShelf(
         "<b>FlutterArtist.storage.registerShelf()</b> for <b>$shelfName</b>.");
     //
     ShelfCreator? creator = __shelfCreatorMap[shelfName];
@@ -183,7 +185,7 @@ abstract class _StorageCore extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _loadAllShelves() {
+  void __loadAllShelves() {
     for (String shelfName in __shelfCreatorMap.keys) {
       _createShelf(shelfName);
     }
@@ -274,17 +276,17 @@ abstract class _StorageCore extends _Core {
     _shelfMap.clear();
   }
 
-  // TODO: Internal Use.
-  @DebugMethodAnnotation()
-  void debugLoadAll() {
-    _loadAllShelves();
-  }
+  // // TODO: Internal Use.
+  // @DebugMethodAnnotation()
+  // void debugLoadAll() {
+  //   __loadAllShelves();
+  // }
 
-  // TODO: Internal Use.
-  @DebugMethodAnnotation()
-  F debugCreateShelf<F extends Shelf>(String shelfName) {
-    return _createShelf(shelfName);
-  }
+  // // TODO: Internal Use.
+  // @DebugMethodAnnotation()
+  // F debugCreateShelf<F extends Shelf>(String shelfName) {
+  //   return _createShelf(shelfName);
+  // }
 
   // ***************************************************************************
   // ***************************************************************************

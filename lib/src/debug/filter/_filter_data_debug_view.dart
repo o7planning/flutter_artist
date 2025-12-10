@@ -10,7 +10,7 @@ import '../../core/icon/icon_constants.dart';
 import '../../core/utils/_class_utils.dart';
 import '../../core/widgets/_custom_app_container.dart';
 import '../filter_criteria/_filter_criteria_structure_view.dart';
-import '../storage/widgets/_shelf_block_scalar_type_widget.dart';
+import '../shelf/widget/_shelf_block_scalar_type_widget.dart';
 import '../utils/_tab_theme_utils.dart';
 import '../widgets/_html_info_view.dart';
 import '../widgets/_json_view.dart';

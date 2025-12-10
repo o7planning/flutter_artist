@@ -1,7 +1,7 @@
 part of '../core.dart';
 
-class BlockItemCurrSelectionResult<ITEM>
-    extends TaskResult<BlockItemCurrSelectionPrecheck> {
+class BlockCurrentItemSettingResult<ITEM>
+    extends TaskResult<BlockCurrentItemSettingPrecheck> {
   final CurrentItemSelectionType currentItemSelectionType;
   final List<ITEM?> _candidateItems = [];
   ITEM? _oldCurrentItem;
@@ -10,7 +10,7 @@ class BlockItemCurrSelectionResult<ITEM>
   bool _apiError = false;
   bool _convertError = false;
 
-  BlockItemCurrSelectionResult({
+  BlockCurrentItemSettingResult({
     required super.precheck,
     required this.currentItemSelectionType,
     required Object Function(ITEM item) getItemId,

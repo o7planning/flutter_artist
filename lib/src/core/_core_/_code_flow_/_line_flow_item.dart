@@ -50,7 +50,7 @@ class LineFlowItem {
     String s = "";
     for (String key in parameters!.keys) {
       dynamic value = parameters![key];
-      s += "\n  - @$key: ${_debugObjHtml(value)}";
+      s += "\n  - @$key: ${debugObjHtml(value)}";
     }
     return s;
   }

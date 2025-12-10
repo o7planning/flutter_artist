@@ -17,7 +17,7 @@ import 'package:number_pagination/number_pagination.dart' as number_pagination;
 
 import '../../debug/code_flow/__task_flow_const.dart';
 import '../../debug/dialog/_block_error_viewer_dialog.dart';
-import '../../debug/dialog/_storage_dialog_old.dart';
+import '../../debug/dialog/_shelf_structure_view_dialog.dart';
 import '../../debug/dialog/_task_flow_viewer_dialog.dart';
 import '../../debug/dialog/_error_log_viewer_dialog.dart';
 import '../../debug/dialog/_executor_dialog.dart';
@@ -33,6 +33,7 @@ import '../../debug/executor/model/_debug_x_root_queue_item.dart';
 import '../../debug/executor/model/_debug_task_unit.dart';
 import '../../debug/executor/model/_debug_x_root_queue.dart';
 import '../../debug/storage/_block_or_scalar.dart';
+import '../../debug/utils/_debug.dart';
 import '../action/_background_action.dart';
 import '../action/_action.dart';
 import '../action/block_silent_action.dart';
@@ -125,7 +126,7 @@ import '../precheck/block_form_enablement_chk.dart';
 import '../precheck/block_form_reset_precheck.dart';
 import '../precheck/block_form_save_precheck.dart';
 import '../precheck/block_item_creation_precheck.dart';
-import '../precheck/block_item_curr_selection_precheck.dart';
+import '../precheck/block_current_item_setting_precheck.dart';
 import '../precheck/block_item_deletion_precheck.dart';
 import '../precheck/block_item_edit_precheck.dart';
 import '../precheck/block_items_deletion_precheck.dart';
@@ -149,8 +150,6 @@ import '../widgets/_custom_app_container.dart';
 import '../event/fire_silent_events_action.dart';
 
 part '__core__/___core.dart';
-
-part '__core__/___debug.dart';
 
 part '__core__/_hook.dart';
 
@@ -360,7 +359,7 @@ part '_core_x_/_x_shelf_/_x_shelf_block_quick_item_creation.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_block_silent_action_execution.dart';
 
-part '_core_x_/_x_shelf_/_x_shelf_block_curr_item_selection.dart';
+part '_core_x_/_x_shelf_/_x_shelf_block_set_item_as_current.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_block_silent_item_creation.dart';
 
@@ -450,7 +449,7 @@ part '_task_result_/_scalar_clearance_result.dart';
 
 part '_task_result_/_block_item_creation_result.dart';
 
-part '_task_result_/_block_item_curr_selection_result.dart';
+part '_task_result_/_block_current_item_setting_result.dart';
 
 part '_task_result_/_block_item_deletion_result.dart';
 
@@ -518,7 +517,7 @@ part '_task_unit_/_block_quick_item_update_task_unit.dart';
 
 part '_task_unit_/_block_silent_item_update_task_unit.dart';
 
-part '_task_unit_/_block_select_as_current_task_unit.dart';
+part '_task_unit_/_block_set_item_as_current_task_unit.dart';
 
 part '_task_unit_/_filter_panel_change_task_unit.dart';
 

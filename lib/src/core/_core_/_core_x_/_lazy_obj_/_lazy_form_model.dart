@@ -6,6 +6,6 @@ class _LazyFormModel {
   _LazyFormModel({required this.formModel});
 
   String toDebugString() {
-    return _debugObjHtml(formModel);
+    return debugObjHtml(formModel);
   }
 }

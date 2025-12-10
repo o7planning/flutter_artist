@@ -66,8 +66,8 @@ class _QueuedEventManager {
     masterFlowItem._addLineFlowItem(
       codeId: "#27040",
       shortDesc: freezing
-          ? "<b>QueuedEvent</b> freezing is <b>enabled</b>."
-          : "<b>QueuedEvent</b> freezing is <b>disabled</b>.",
+          ? "The mode to freeze <b>QueuedEvent</b> execution is <b>enabled</b>."
+          : "The mode to freeze <b>QueuedEvent</b> execution is <b>not enabled</b>.",
       lineFlowType: LineFlowType.debug,
       tipDocument: TipDocument.eventReactionFreezing,
     );
@@ -120,7 +120,7 @@ class _QueuedEventManager {
       masterFlowItem._addLineFlowItem(
         codeId: "#27300",
         shortDesc:
-            "Calling ${_debugObjHtml(reactionShelf)}._addShelfExternalReactionTaskUnit():",
+            "Calling ${debugObjHtml(reactionShelf)}._addShelfExternalReactionTaskUnit():",
         note: " This Shelf is <b>INVISIBLE</b>.",
         lineFlowType: LineFlowType.nonControllableCalling,
       );
@@ -133,7 +133,7 @@ class _QueuedEventManager {
         masterFlowItem._addLineFlowItem(
           codeId: "#27400",
           shortDesc:
-              "Calling ${_debugObjHtml(reactionShelf)}._addShelfExternalReactionTaskUnit():",
+              "Calling ${debugObjHtml(reactionShelf)}._addShelfExternalReactionTaskUnit():",
           note: " This Shelf is <b>VISIBLE</b> and <b>is not frozen</b>.",
           lineFlowType: LineFlowType.nonControllableCalling,
         );

@@ -145,7 +145,7 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
   }
 
   Future<bool> __refreshCurrentItem() async {
-    BlockItemCurrSelectionResult result =
+    BlockCurrentItemSettingResult result =
         await widget.block.refreshCurrentItem();
     return result.successForAll;
   }

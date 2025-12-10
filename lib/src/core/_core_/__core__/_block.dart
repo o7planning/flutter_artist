@@ -500,7 +500,7 @@ abstract class Block<
   List<Event> getOutsideDataTypesToListen() {
     List<Event> itemTypeEvents = [];
     //
-    itemTypeEvents.addAll(config.executeItemLevelReactionToEvents);
+    // itemTypeEvents.addAll(config.executeItemLevelReactionToEvents);
     itemTypeEvents.addAll(config.executeBlockLevelReactionToEvents);
     //
     return itemTypeEvents.toSet().toList();
@@ -688,14 +688,13 @@ abstract class Block<
     //
     masterFlowItem?._addLineFlowItem(
       codeId: "#07000",
-      shortDesc:
-          "Begin ${_debugObjHtml(this)} > ${taskType.asDebugTaskUnit()}.",
+      shortDesc: "Begin ${debugObjHtml(this)} > ${taskType.asDebugTaskUnit()}.",
       lineFlowType: LineFlowType.debug,
     );
     masterFlowItem?._addLineFlowItem(
       codeId: "#07020",
       shortDesc:
-          "Clear all item of ${_debugObjHtml(this)} and set to <b>pending</b>. "
+          "Clear all item of ${debugObjHtml(this)} and set to <b>pending</b>. "
           "Clear all data of child blocks and set them to <b>none</b>."
           "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
     );
@@ -721,14 +720,13 @@ abstract class Block<
     //
     masterFlowItem?._addLineFlowItem(
       codeId: "#13000",
-      shortDesc:
-          "${_debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
+      shortDesc: "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
       lineFlowType: LineFlowType.debug,
     );
     //
     masterFlowItem?._addLineFlowItem(
       codeId: "#13100",
-      shortDesc: "${_debugObjHtml(this)} -> set currentItem to null.",
+      shortDesc: "${debugObjHtml(this)} -> set currentItem to null.",
     );
     this.__setCurrentItemOnly(
       id: null,
@@ -739,7 +737,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#13200",
         shortDesc:
-            "${_debugObjHtml(formModel)} clear data and set state to <b>none</b>.",
+            "${debugObjHtml(formModel)} clear data and set state to <b>none</b>.",
       );
       formModel!._clearDataWithDataState(formDataState: DataState.none);
     }
@@ -775,7 +773,7 @@ abstract class Block<
     masterFlowItem?._addLineFlowItem(
       codeId: "#03000",
       shortDesc:
-          "${_debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}.",
+          "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}.",
       lineFlowType: LineFlowType.debug,
     );
     //
@@ -786,7 +784,7 @@ abstract class Block<
     masterFlowItem?._addLineFlowItem(
       codeId: "#03020",
       shortDesc:
-          "@hasBlockRepresentative: ${_debugObjHtml(hasBlockRepresentative)}.",
+          "@hasBlockRepresentative: ${debugObjHtml(hasBlockRepresentative)}.",
       lineFlowType: LineFlowType.debug,
       tipDocument: TipDocument.blockActiveUIComponents,
     );
@@ -800,7 +798,7 @@ abstract class Block<
     //
     masterFlowItem?._addLineFlowItem(
       codeId: "#03040",
-      shortDesc: "@queryHint: ${_debugObjHtml(queryHint)}.",
+      shortDesc: "@queryHint: ${debugObjHtml(queryHint)}.",
       lineFlowType: LineFlowType.debug,
     );
     //
@@ -815,7 +813,7 @@ abstract class Block<
     if (queryHint == QryHint.none) {
       masterFlowItem?._addLineFlowItem(
         codeId: "#03060",
-        shortDesc: "@queryHint: ${_debugObjHtml(queryHint)}.",
+        shortDesc: "@queryHint: ${debugObjHtml(queryHint)}.",
       );
       candidateCurrItem = null;
       //
@@ -826,7 +824,7 @@ abstract class Block<
       if (thisXBlock.xShelf.naturalMode) {
         masterFlowItem?._addLineFlowItem(
           codeId: "#03080",
-          shortDesc: "Currently, ${_debugObjHtml(this)} query in naturalMode.",
+          shortDesc: "Currently, ${debugObjHtml(this)} query in naturalMode.",
         );
         // Test Cases: [38b] - test_companyCreationScreen_to_employeeScreen.
         // No need to select an Item as Current.
@@ -834,7 +832,7 @@ abstract class Block<
           masterFlowItem?._addLineFlowItem(
             codeId: "#03100",
             shortDesc:
-                "The ${_debugObjHtml(this)} is in creation mode --> cancel query.",
+                "The ${debugObjHtml(this)} is in creation mode --> cancel query.",
           );
           return;
         }
@@ -861,7 +859,7 @@ abstract class Block<
         return;
       }
       //
-      final taskUnit = _BlockSelectAsCurrentTaskUnit<ID, ITEM>(
+      final taskUnit = _BlockSetItemAsCurrentTaskUnit<ID, ITEM>(
         currentItemSelectionType: currentItemSelectionType,
         xBlock: thisXBlock,
         newQueriedList: [],
@@ -888,7 +886,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#03180",
         shortDesc:
-            "Clear all items of ${_debugObjHtml(this)} and set to <b>pending</b>. "
+            "Clear all items of ${debugObjHtml(this)} and set to <b>pending</b>. "
             "Clear data of all child blocks and set them to <b>none</b>."
             "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
       );
@@ -916,7 +914,7 @@ abstract class Block<
         if (filterModel is! _DefaultFilterModel) {
           masterFlowItem?._addLineFlowItem(
             codeId: "#03200",
-            shortDesc: "Need to load data for ${_debugObjHtml(filterModel)}.",
+            shortDesc: "Need to load data for ${debugObjHtml(filterModel)}.",
           );
         }
         FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
@@ -933,7 +931,7 @@ abstract class Block<
           masterFlowItem?._addLineFlowItem(
             codeId: "#03220",
             shortDesc:
-                "${_debugObjHtml(filterModel)} data ready --> no need to load data.",
+                "${debugObjHtml(filterModel)} data ready --> no need to load data.",
           );
         }
         filterCriteriaOfFilterModel =
@@ -942,7 +940,7 @@ abstract class Block<
     } catch (e, stackTrace) {
       masterFlowItem?._addLineFlowItem(
         codeId: "#03240",
-        shortDesc: "Load data for ${_debugObjHtml(filterModel)} error!",
+        shortDesc: "Load data for ${debugObjHtml(filterModel)} error!",
       );
       // @@TODO@@ 12 Test.
       print("ERROR _unitQuery: $stackTrace");
@@ -955,7 +953,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#03260",
         shortDesc:
-            "Clear all items of ${_debugObjHtml(this)} and set dataState to <b>error</b>. "
+            "Clear all items of ${debugObjHtml(this)} and set dataState to <b>error</b>. "
             "Clear data of all child blocks and set them to <b>none</b>."
             "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
       );
@@ -988,7 +986,7 @@ abstract class Block<
     if (thisXBlock.queryType == QueryType.realQuery) {
       masterFlowItem?._addLineFlowItem(
         codeId: "#03280",
-        shortDesc: "@queryType: ${_debugObjHtml(thisXBlock.queryType)}.",
+        shortDesc: "@queryType: ${debugObjHtml(thisXBlock.queryType)}.",
         lineFlowType: LineFlowType.debug,
         tipDocument: TipDocument.blockQueryType,
       );
@@ -1009,7 +1007,7 @@ abstract class Block<
           masterFlowItem?._addLineFlowItem(
             codeId: "#03320",
             shortDesc:
-                "Calling ${_debugObjHtml(serverSideSortModel)}.getSortableCriteria():",
+                "Calling ${debugObjHtml(serverSideSortModel)}.getSortableCriteria():",
             lineFlowType: LineFlowType.nonControllableCalling,
             tipDocument: TipDocument.sorting,
           );
@@ -1017,7 +1015,7 @@ abstract class Block<
           masterFlowItem?._addLineFlowItem(
             codeId: "#03324",
             shortDesc:
-                "Got @sortableCriteria: ${_debugObjHtml(sortableCriteria)}.",
+                "Got @sortableCriteria: ${debugObjHtml(sortableCriteria)}.",
             lineFlowType: LineFlowType.debug,
           );
         } else {
@@ -1025,7 +1023,7 @@ abstract class Block<
           masterFlowItem?._addLineFlowItem(
             codeId: "#03330",
             shortDesc:
-                "No <b>serverSideSortModel</b> --> @sortableCriteria: ${_debugObjHtml(sortableCriteria)}.",
+                "No <b>serverSideSortModel</b> --> @sortableCriteria: ${debugObjHtml(sortableCriteria)}.",
             lineFlowType: LineFlowType.debug,
             tipDocument: TipDocument.sorting,
           );
@@ -1033,7 +1031,7 @@ abstract class Block<
         //
         masterFlowItem?._addLineFlowItem(
           codeId: "#03340",
-          shortDesc: "Calling ${_debugObjHtml(this)}.callApiQuery()...",
+          shortDesc: "Calling ${debugObjHtml(this)}.callApiQuery()...",
           parameters: {
             "parentBlockCurrentItem": parent?.currentItem,
             "filterCriteria": filterCriteria,
@@ -1061,7 +1059,7 @@ abstract class Block<
         //
         masterFlowItem?._addLineFlowItem(
           codeId: "#03360",
-          shortDesc: "Got @pageData: ${_debugObjHtml(pageData)}.",
+          shortDesc: "Got @pageData: ${debugObjHtml(pageData)}.",
           lineFlowType: LineFlowType.debug,
           tipDocument: TipDocument.pageData,
         );
@@ -1092,7 +1090,7 @@ abstract class Block<
         masterFlowItem?._addLineFlowItem(
           codeId: "#03400",
           shortDesc:
-              "The ${_debugObjHtml(this)}.callApiQuery() method was called with an error!",
+              "The ${debugObjHtml(this)}.callApiQuery() method was called with an error!",
           errorInfo: errorInfo,
         );
       } finally {
@@ -1217,7 +1215,7 @@ abstract class Block<
     //
     masterFlowItem?._addLineFlowItem(
       codeId: "#03520",
-      shortDesc: "@realItemListMode: ${_debugObjHtml(realItemListMode)}.",
+      shortDesc: "@realItemListMode: ${debugObjHtml(realItemListMode)}.",
       lineFlowType: LineFlowType.debug,
     );
     //
@@ -1276,7 +1274,7 @@ abstract class Block<
     //
     masterFlowItem?._addLineFlowItem(
       codeId: "#03580",
-      shortDesc: "@currentItemInList: ${_debugObjHtml(currentItemInList)}.",
+      shortDesc: "@currentItemInList: ${debugObjHtml(currentItemInList)}.",
       lineFlowType: LineFlowType.debug,
     );
     //
@@ -1295,7 +1293,7 @@ abstract class Block<
         masterFlowItem?._addLineFlowItem(
           codeId: "#03610",
           shortDesc:
-              "Clear ${_debugObjHtml(formModel)} data and set to <b>none</b>.",
+              "Clear ${debugObjHtml(formModel)} data and set to <b>none</b>.",
           lineFlowType: LineFlowType.info,
         );
         formModel!._clearDataWithDataState(formDataState: DataState.none);
@@ -1362,7 +1360,7 @@ abstract class Block<
     }
     masterFlowItem?._addLineFlowItem(
       codeId: "#03700",
-      shortDesc: "@afterQueryAction: ${_debugObjHtml(afterQueryAction)}.",
+      shortDesc: "@afterQueryAction: ${debugObjHtml(afterQueryAction)}.",
       lineFlowType: LineFlowType.debug,
     );
     //
@@ -1374,7 +1372,7 @@ abstract class Block<
       );
       masterFlowItem?._addLineFlowItem(
         codeId: "#03720",
-        shortDesc: "@afterQueryAction: ${_debugObjHtml(afterQueryAction)} --> "
+        shortDesc: "@afterQueryAction: ${debugObjHtml(afterQueryAction)} --> "
             "Create ${taskUnit.asDebugTaskUnit()} and add to queue.",
         lineFlowType: LineFlowType.addTaskUnit,
       );
@@ -1432,11 +1430,11 @@ abstract class Block<
     masterFlowItem?._addLineFlowItem(
       codeId: "#03780",
       shortDesc:
-          "Calculated >> @currentItemSelectionType: ${_debugObjHtml(currentItemSelectionType)}.",
+          "Calculated >> @currentItemSelectionType: ${debugObjHtml(currentItemSelectionType)}.",
       lineFlowType: LineFlowType.debug,
     );
     //
-    final taskUnit = _BlockSelectAsCurrentTaskUnit<ID, ITEM>(
+    final taskUnit = _BlockSetItemAsCurrentTaskUnit<ID, ITEM>(
       currentItemSelectionType: currentItemSelectionType,
       xBlock: thisXBlock,
       newQueriedList: pageData?.items ?? [],
@@ -1472,14 +1470,14 @@ abstract class Block<
     required CurrentItemSelectionType currentItemSelectionType,
     required List<ITEM> newQueriedList,
     required ITEM? candidateItem,
-    required BlockItemCurrSelectionResult<ITEM> currentItemSelectionResult,
+    required BlockCurrentItemSettingResult<ITEM> currentItemSelectionResult,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
     masterFlowItem?._addLineFlowItem(
       codeId: "#28000",
       shortDesc:
-          "${_debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}.",
+          "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}.",
       parameters: {
         "candidateItem": candidateItem,
         "newQueriedList": newQueriedList,
@@ -1493,7 +1491,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#28020",
         shortDesc:
-            "${_debugObjHtml(formModel)} -> set <b>manualDirty</b> to ${_debugObjHtml(manualDirty)}.",
+            "${debugObjHtml(formModel)} -> set <b>manualDirty</b> to ${debugObjHtml(manualDirty)}.",
       );
       formModel?._formPropsStructure._setManualDirty(manualDirty);
     }
@@ -1503,7 +1501,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#28030",
         shortDesc:
-            "Candidate Item specified by XBlock: ${_debugObjHtml(candidateItem)}",
+            "Candidate Item specified by XBlock: ${debugObjHtml(candidateItem)}",
       );
     }
     currentItemSelectionResult._addCandidateItem(
@@ -1514,7 +1512,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#28040",
         shortDesc:
-            "${_debugObjHtml(this)} dataState is pending -> clear all data in child blocks and set them to <b>none</b>."
+            "${debugObjHtml(this)} dataState is pending -> clear all data in child blocks and set them to <b>none</b>."
             "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
         lineFlowType: LineFlowType.info,
       );
@@ -1531,7 +1529,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#28060",
         shortDesc:
-            "${_debugObjHtml(this)} dataState is error -> clear all data in child blocks and set them to <b>none</b>."
+            "${debugObjHtml(this)} dataState is error -> clear all data in child blocks and set them to <b>none</b>."
             "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
         lineFlowType: LineFlowType.info,
       );
@@ -1548,7 +1546,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#28080",
         shortDesc:
-            "${_debugObjHtml(this)} has no item -> clear all data in child blocks and set them to <b>none</b>."
+            "${debugObjHtml(this)} has no item -> clear all data in child blocks and set them to <b>none</b>."
             "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
         lineFlowType: LineFlowType.info,
       );
@@ -1566,7 +1564,7 @@ abstract class Block<
         masterFlowItem?._addLineFlowItem(
           codeId: "#28120",
           shortDesc:
-              "Candidate Item ${_debugObjHtml(candidateCurrItem)} not in the list items of the block -> set candidate item to null.",
+              "Candidate Item ${debugObjHtml(candidateCurrItem)} not in the list items of the block -> set candidate item to null.",
         );
         candidateCurrItem = null;
       }
@@ -1609,7 +1607,7 @@ abstract class Block<
         masterFlowItem?._addLineFlowItem(
           codeId: "#28220",
           shortDesc:
-              "Calling ${_debugObjHtml(this)}.specifyItemIndexToSelectAsCurrent() method "
+              "Calling ${debugObjHtml(this)}.specifyItemIndexToSelectAsCurrent() method "
               "to specify an <b>itemIndex</b> as the current one.",
           note:
               "You can override this method, otherwise the first ITEM will be the candidate. ",
@@ -1628,7 +1626,7 @@ abstract class Block<
         masterFlowItem?._addLineFlowItem(
           codeId: "#28260",
           shortDesc:
-              "Found an ITEM that could be a candidate - ${_debugObjHtml(candidateCurrItem2)}",
+              "Found an ITEM that could be a candidate - ${debugObjHtml(candidateCurrItem2)}",
         );
         final bool isInNewQueryList2;
         if (candidateCurrItem2 == null) {
@@ -1644,7 +1642,7 @@ abstract class Block<
           masterFlowItem?._addLineFlowItem(
             codeId: "#28280",
             shortDesc:
-                "The ITEM ${_debugObjHtml(candidateCurrItem2)} is in the list of ITEM(s) just queried.",
+                "The ITEM ${debugObjHtml(candidateCurrItem2)} is in the list of ITEM(s) just queried.",
           );
         }
         //
@@ -1680,7 +1678,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#28460",
         shortDesc:
-            "Currently, this block contains <b>$itemCount items</b> and has a <b>currentItem</b> - ${_debugObjHtml(currItem)}.",
+            "Currently, this block contains <b>$itemCount items</b> and has a <b>currentItem</b> - ${debugObjHtml(currItem)}.",
       );
       if (candidateCurrItem == null) {
         candidateCurrItem = currItem;
@@ -1707,8 +1705,8 @@ abstract class Block<
     masterFlowItem?._addLineFlowItem(
       codeId: "#28560",
       shortDesc:
-          "Finally, the candidate ITEM is ${_debugObjHtml(candidateCurrItem)}. "
-          "@currItemWillChanged: ${_debugObjHtml(currItemWillChanged)}",
+          "Finally, the candidate ITEM is ${debugObjHtml(candidateCurrItem)}. "
+          "@currItemWillChanged: ${debugObjHtml(currItemWillChanged)}",
     );
     //
     // If no item can be current.
@@ -1717,7 +1715,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#28600",
         shortDesc:
-            "No ITEM is determined to be the currentItem of ${_debugObjHtml(this)} -> "
+            "No ITEM is determined to be the currentItem of ${debugObjHtml(this)} -> "
             "clear all data of the child blocks and set them to <b>none</b> state."
             "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
         lineFlowType: LineFlowType.info,
@@ -1826,8 +1824,9 @@ abstract class Block<
         masterFlowItem?._addLineFlowItem(
           codeId: "#28800",
           shortDesc:
-              "The candidate ${_debugObjHtml(candidateCurrItem)} will not need to be reloaded, "
-              "because ITEM == ITEM_DETAIL and this candidate in the list is just queried and blockConfig.itemRefreshMode = auto",
+              "The candidate ${debugObjHtml(candidateCurrItem)} will not need to be reloaded, "
+              "because <b>ITEM == ITEM_DETAIL</b> and this candidate in the list is just queried "
+              "and <b>blockConfig.itemRefreshMode = auto</b>.",
         );
         //
         final ITEM? candidateCurrItemInNewQueriedList =
@@ -1865,7 +1864,7 @@ abstract class Block<
             masterFlowItem?._addLineFlowItem(
               codeId: "#28850",
               shortDesc:
-                  "Found <b>AutoStocker</b> for the ${_debugItemDetailTypeHtml()} data type --> ${_debugObjHtml(stocker)}",
+                  "Found <b>AutoStocker</b> for the ${_debugItemDetailTypeHtml()} data type --> ${debugObjHtml(stocker)}",
               tipDocument: TipDocument.autoStocker,
             );
           } catch (e, stackTrace) {
@@ -1894,7 +1893,7 @@ abstract class Block<
             // TODO: Always return? Load ITEM Error
             return;
           }
-          methodName = "${_debugObjHtml(stocker)}.loadById";
+          methodName = "${debugObjHtml(stocker)}.loadById";
           try {
             __refreshRefreshingCurrentItemState(
               isRefreshingCurrentItem: true,
@@ -1931,7 +1930,7 @@ abstract class Block<
             masterFlowItem?._addLineFlowItem(
               codeId: "#28920",
               shortDesc:
-                  "Result --> @refreshedCurrentItemDetail: ${_debugObjHtml(refreshedCurrentItemDetail)}.",
+                  "Result --> @refreshedCurrentItemDetail: ${debugObjHtml(refreshedCurrentItemDetail)}.",
             );
           } catch (e, stackTrace) {
             isLoadItemError = true;
@@ -1970,7 +1969,7 @@ abstract class Block<
         masterFlowItem?._addLineFlowItem(
           codeId: "#29040",
           shortDesc:
-              "Candidate ${_debugObjHtml(candidateCurrItem)} seems to have been deleted from the system "
+              "Candidate ${debugObjHtml(candidateCurrItem)} seems to have been deleted from the system "
               "--> remove it from the block..",
         );
         //
@@ -1982,7 +1981,7 @@ abstract class Block<
           masterFlowItem?._addLineFlowItem(
             codeId: "#29060",
             shortDesc:
-                "Remove ${_debugObjHtml(candidateCurrItem)} from the list.",
+                "Remove ${debugObjHtml(candidateCurrItem)} from the list.",
           );
           await __removeItemFromList(
             masterFlowItem: masterFlowItem,
@@ -2002,11 +2001,11 @@ abstract class Block<
           masterFlowItem?._addLineFlowItem(
             codeId: "#29100",
             shortDesc:
-                "Found new candidate ${_debugObjHtml(siblingItem)} --> set it as current.",
+                "Found new candidate ${debugObjHtml(siblingItem)} --> set it as current.",
           );
           //
           thisXBlock.xShelf._addTaskUnit(
-            taskUnit: _BlockSelectAsCurrentTaskUnit(
+            taskUnit: _BlockSetItemAsCurrentTaskUnit(
               currentItemSelectionType: currentItemSelectionType,
               xBlock: thisXBlock,
               newQueriedList: newQueriedList,
@@ -2024,7 +2023,7 @@ abstract class Block<
         masterFlowItem?._addLineFlowItem(
           codeId: "#29160",
           shortDesc:
-              "Remove current item ${_debugObjHtml(candidateCurrItem)} from the ${_debugObjHtml(this)}.",
+              "Remove current item ${debugObjHtml(candidateCurrItem)} from the ${debugObjHtml(this)}.",
         );
         await __removeItemFromList(
           masterFlowItem: masterFlowItem,
@@ -2045,7 +2044,7 @@ abstract class Block<
           masterFlowItem?._addLineFlowItem(
             codeId: "#29200",
             shortDesc:
-                "Set ${_debugObjHtml(formModel!)} dataState to <b>none</b>.",
+                "Set ${debugObjHtml(formModel!)} dataState to <b>none</b>.",
           );
           formModel?._clearDataWithDataState(formDataState: DataState.none);
         }
@@ -2063,10 +2062,10 @@ abstract class Block<
           masterFlowItem?._addLineFlowItem(
             codeId: "#29240",
             shortDesc:
-                "Found new candidate ${_debugObjHtml(siblingItem)} --> set it as current.",
+                "Found new candidate ${debugObjHtml(siblingItem)} --> set it as current.",
           );
           thisXBlock.xShelf._addTaskUnit(
-            taskUnit: _BlockSelectAsCurrentTaskUnit(
+            taskUnit: _BlockSetItemAsCurrentTaskUnit(
               currentItemSelectionType: currentItemSelectionType,
               xBlock: thisXBlock,
               newQueriedList: newQueriedList,
@@ -2084,13 +2083,13 @@ abstract class Block<
       //
       bool convertItemError = false;
       final String debugMethodName =
-          "${_debugObjHtml(this)}.convertItemDetailToItem()";
+          "${debugObjHtml(this)}.convertItemDetailToItem()";
       try {
         masterFlowItem?._addLineFlowItem(
           codeId: "#29400",
           shortDesc:
               "Calling $debugMethodName method to convert <b>ITEM_DETAIL</b> to <b>ITEM</b>.\n"
-              " ${_debugObjHtml(refreshedCurrentItemDetail)} --> ${_debugItemTypeHtml()}.",
+              " ${debugObjHtml(refreshedCurrentItemDetail)} --> ${_debugItemTypeHtml()}.",
           lineFlowType: LineFlowType.controllableCalling,
         );
         //
@@ -2100,7 +2099,7 @@ abstract class Block<
         convertItemError = false;
         masterFlowItem?._addLineFlowItem(
           codeId: "#29420",
-          shortDesc: "Got value: ${_debugObjHtml(candidateCurrItem)}.",
+          shortDesc: "Got value: ${debugObjHtml(candidateCurrItem)}.",
           lineFlowType: LineFlowType.debug,
         );
       } catch (e, stackTrace) {
@@ -2132,7 +2131,7 @@ abstract class Block<
         masterFlowItem?._addLineFlowItem(
           codeId: "#29480",
           shortDesc: "Calling <b>__blockData._insertOrReplaceItem()</b> method "
-              "to insert or replace ${_debugObjHtml(candidateCurrItem)} into the list.",
+              "to insert or replace ${debugObjHtml(candidateCurrItem)} into the list.",
           parameters: {
             "item": candidateCurrItem,
           },
@@ -2142,7 +2141,7 @@ abstract class Block<
       }
       masterFlowItem?._addLineFlowItem(
         codeId: "#29500",
-        shortDesc: "Set ${_debugObjHtml(candidateCurrItem)} as current.",
+        shortDesc: "Set ${debugObjHtml(candidateCurrItem)} as current.",
       );
       this.__setCurrentItemOnly(
         id: itemId,
@@ -2178,10 +2177,10 @@ abstract class Block<
         );
         masterFlowItem?._addLineFlowItem(
           codeId: "#29600",
-          shortDesc: "@forceReloadForm: ${_debugObjHtml(forceReloadForm)}.\n"
+          shortDesc: "@forceReloadForm: ${debugObjHtml(forceReloadForm)}.\n"
               "Create ${taskUnit.asDebugTaskUnit()} and add to Queue.",
           note:
-              "This task unit will load data for ${_debugObjHtml(thisXBlock.xFormModel!.formModel)}.",
+              "This task unit will load data for ${debugObjHtml(thisXBlock.xFormModel!.formModel)}.",
           lineFlowType: LineFlowType.addTaskUnit,
         );
         thisXBlock.xShelf._addTaskUnit(
@@ -2195,7 +2194,7 @@ abstract class Block<
             codeId: "#29620",
             shortDesc:
                 "@forceReloadForm: $forceReloadForm, @forceReloadItem: $forceReloadItem --> "
-                "Set FormModel ${_debugObjHtml(thisXBlock.xFormModel!.formModel)} dataState to <b>pending</b>.",
+                "Set FormModel ${debugObjHtml(thisXBlock.xFormModel!.formModel)} dataState to <b>pending</b>.",
           );
           // TODO: Test Cases.
           formModel!._clearDataWithDataState(formDataState: DataState.pending);
@@ -2208,7 +2207,7 @@ abstract class Block<
     masterFlowItem?._addLineFlowItem(
       codeId: "#29700",
       shortDesc: "Create ${TaskType.blockQuery.asDebugTaskUnit()}(s) "
-          "for all child blocks of ${_debugObjHtml(this)} and add to Queue."
+          "for all child blocks of ${debugObjHtml(this)} and add to Queue."
           "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
       lineFlowType: LineFlowType.info,
     );
@@ -2247,7 +2246,7 @@ abstract class Block<
     masterFlowItem?._addLineFlowItem(
       codeId: "#08000",
       shortDesc:
-          "${_debugObjHtml(this)} --> Begin ${taskType.asDebugTaskUnit()} for ${_debugObjHtml(this)}.",
+          "${debugObjHtml(this)} --> Begin ${taskType.asDebugTaskUnit()} for ${debugObjHtml(this)}.",
       lineFlowType: LineFlowType.debug,
     );
 
@@ -2256,13 +2255,13 @@ abstract class Block<
     //
     masterFlowItem?._addLineFlowItem(
       codeId: "#08020",
-      shortDesc: "Calling ${_debugObjHtml(this)}.canDeleteItem().",
+      shortDesc: "Calling ${debugObjHtml(this)}.canDeleteItem().",
       parameters: {
         "item": item,
         "errorIfItemNotInTheBlock": errorIfItemNotInTheBlock,
       },
       note: "Call this method to check before deleting an item. "
-          "(**) You can override ${_debugObjHtml(this)}.isAllowDeleteItem() method.",
+          "(**) You can override ${debugObjHtml(this)}.isAllowDeleteItem() method.",
       lineFlowType: LineFlowType.nonControllableCalling,
     );
     //
@@ -2276,7 +2275,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#08040",
         shortDesc:
-            "Can not delete ${_debugObjHtml(item)}. Cause: ${actionable.message}.",
+            "Can not delete ${debugObjHtml(item)}. Cause: ${actionable.message}.",
       );
       return;
     }
@@ -2290,8 +2289,8 @@ abstract class Block<
     masterFlowItem?._addLineFlowItem(
       codeId: "#08060",
       shortDesc: isCurrent
-          ? "You are deleting the current item - ${_debugObjHtml(item)}."
-          : "You are deleting an item that is not the current item - ${_debugObjHtml(item)}.",
+          ? "You are deleting the current item - ${debugObjHtml(item)}."
+          : "You are deleting an item that is not the current item - ${debugObjHtml(item)}.",
       lineFlowType: LineFlowType.info,
     );
     //
@@ -2310,7 +2309,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#08080",
         shortDesc:
-            "Found AutoStocker for ${_debugItemDetailTypeHtml()} --> ${_debugObjHtml(stocker)}",
+            "Found AutoStocker for ${_debugItemDetailTypeHtml()} --> ${debugObjHtml(stocker)}",
         tipDocument: TipDocument.autoStocker,
       );
     } catch (e, stackTrace) {
@@ -2358,7 +2357,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#08160",
         shortDesc:
-            "Calling ${_debugObjHtml(stocker)}.$methodName() with parameters:",
+            "Calling ${debugObjHtml(stocker)}.$methodName() with parameters:",
         parameters: {
           "id": itemId,
         },
@@ -2372,7 +2371,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#08180",
         shortDesc:
-            "${_debugObjHtml(this)} > Fire event after deleting ${_debugItemTypeHtml()}($itemId).",
+            "${debugObjHtml(this)} > Fire event after deleting ${_debugItemTypeHtml()}($itemId).",
         lineFlowType: LineFlowType.fireEvent,
       );
       //
@@ -2418,7 +2417,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#08240",
         shortDesc:
-            "Remove ${_debugObjHtml(item)} from ${_debugObjHtml(this)}. (*) This item was not current item.",
+            "Remove ${debugObjHtml(item)} from ${debugObjHtml(this)}. (*) This item was not current item.",
       );
       await __removeItemFromList(
         masterFlowItem: masterFlowItem,
@@ -2438,7 +2437,7 @@ abstract class Block<
     masterFlowItem?._addLineFlowItem(
       codeId: "#08280",
       shortDesc:
-          "Remove ${_debugObjHtml(item)} from ${_debugObjHtml(this)}. (*) This item was current item.",
+          "Remove ${debugObjHtml(item)} from ${debugObjHtml(this)}. (*) This item was current item.",
     );
     // Remove Item (Current Item)
     await __removeItemFromList(
@@ -2448,7 +2447,7 @@ abstract class Block<
     //
     masterFlowItem?._addLineFlowItem(
       codeId: "#08300",
-      shortDesc: "${_debugObjHtml(this)} --> set current item to <b>null</b>.",
+      shortDesc: "${debugObjHtml(this)} --> set current item to <b>null</b>.",
     );
     __blockData._setCurrentItemOnly(
       id: null,
@@ -2460,7 +2459,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#08320",
         shortDesc:
-            "${_debugObjHtml(formModel)} --> clear formModel, set dataState to <b>none</b>.",
+            "${debugObjHtml(formModel)} --> clear formModel, set dataState to <b>none</b>.",
       );
       // Clear Form:
       formModel!._clearDataWithDataState(
@@ -2535,7 +2534,7 @@ abstract class Block<
     print("**************************************************************\n");
 
     if (!hasInternalEvent) {
-      final _STaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ID, ITEM>(
+      final _STaskUnit taskUnit = _BlockSetItemAsCurrentTaskUnit<ID, ITEM>(
         currentItemSelectionType: currentItemSelectionType,
         xBlock: thisXBlock,
         newQueriedList: <ITEM>[],
@@ -2571,7 +2570,7 @@ abstract class Block<
     if (effSelfInfo == null && topEffBlockInfo == null) {
       print("\n\n\n@@@@@@@@@ INTERNAL EVENT ~~~~~> 1");
       // Test Case:
-      final _STaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ID, ITEM>(
+      final _STaskUnit taskUnit = _BlockSetItemAsCurrentTaskUnit<ID, ITEM>(
         currentItemSelectionType: currentItemSelectionType,
         xBlock: thisXBlock,
         newQueriedList: <ITEM>[],
@@ -2598,7 +2597,7 @@ abstract class Block<
           xShelf: thisXBlock.xShelf,
         );
         //
-        final _STaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ID, ITEM>(
+        final _STaskUnit taskUnit = _BlockSetItemAsCurrentTaskUnit<ID, ITEM>(
           currentItemSelectionType: currentItemSelectionType,
           xBlock: topXBlock,
           newQueriedList: <ITEM>[],
@@ -2634,7 +2633,7 @@ abstract class Block<
         //
         // Select an Item as Current.
         //
-        final _STaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ID, ITEM>(
+        final _STaskUnit taskUnit = _BlockSetItemAsCurrentTaskUnit<ID, ITEM>(
           currentItemSelectionType: currentItemSelectionType,
           xBlock: thisXBlock,
           newQueriedList: <ITEM>[],
@@ -2665,7 +2664,7 @@ abstract class Block<
     masterFlowItem._addLineFlowItem(
       codeId: "#42000",
       shortDesc:
-          "Begin ${_debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
+          "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
       parameters: {
         "items": items,
         "stopIfError": stopIfError,
@@ -2700,7 +2699,7 @@ abstract class Block<
       masterFlowItem._addLineFlowItem(
         codeId: "#42400",
         shortDesc:
-            "Found <b>AutoStocker</b> for the ${_debugItemDetailTypeHtml()} data type --> ${_debugObjHtml(stocker)}.",
+            "Found <b>AutoStocker</b> for the ${_debugItemDetailTypeHtml()} data type --> ${debugObjHtml(stocker)}.",
         tipDocument: TipDocument.autoStocker,
       );
     } catch (e, stackTrace) {
@@ -2734,7 +2733,7 @@ abstract class Block<
         masterFlowItem._addLineFlowItem(
           codeId: "#42600",
           shortDesc:
-              "Calling ${_debugObjHtml(stocker)}.deleteById() method to delete the ${_debugObjHtml(delItem)}.",
+              "Calling ${debugObjHtml(stocker)}.deleteById() method to delete the ${debugObjHtml(delItem)}.",
           note: currItemId == deletingItemId
               ? null
               : " * (Deleting the current item).",
@@ -2752,7 +2751,7 @@ abstract class Block<
         masterFlowItem._addLineFlowItem(
           codeId: "#42660",
           shortDesc:
-              "The ${_debugObjHtml(delItem)} item has been successful deleted!",
+              "The ${debugObjHtml(delItem)} item has been successful deleted!",
           lineFlowType: LineFlowType.info,
         );
         //
@@ -2760,7 +2759,7 @@ abstract class Block<
         //
         masterFlowItem._addLineFlowItem(
           codeId: "#42720",
-          shortDesc: "Remove ${_debugObjHtml(delItem)} from the list.",
+          shortDesc: "Remove ${debugObjHtml(delItem)} from the list.",
           lineFlowType: LineFlowType.info,
         );
         //
@@ -2792,7 +2791,7 @@ abstract class Block<
             masterFlowItem._addLineFlowItem(
               codeId: "#42780",
               shortDesc:
-                  "Clear ${_debugObjHtml(formModel)} and set to <b>none</b>.",
+                  "Clear ${debugObjHtml(formModel)} and set to <b>none</b>.",
               lineFlowType: LineFlowType.debug,
             );
             //
@@ -2837,7 +2836,7 @@ abstract class Block<
           masterFlowItem?._addLineFlowItem(
             codeId: "#42860",
             shortDesc:
-                "@stopIfError: ${_debugObjHtml(stopIfError)} --> Stop deleting!",
+                "@stopIfError: ${debugObjHtml(stopIfError)} --> Stop deleting!",
             errorInfo: errorInfo,
           );
           break;
@@ -2853,7 +2852,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#42900",
         shortDesc:
-            "${_debugObjHtml(this)} > Fire event after deleting. (${deletionResult.deletedItems.length} items deleted!).",
+            "${debugObjHtml(this)} > Fire event after deleting. (${deletionResult.deletedItems.length} items deleted!).",
         lineFlowType: LineFlowType.fireEvent,
       );
       __fireEventFromBlockToOtherShelves(
@@ -2891,7 +2890,7 @@ abstract class Block<
       lineFlowType: LineFlowType.info,
     );
     //
-    _STaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ID, ITEM>(
+    _STaskUnit taskUnit = _BlockSetItemAsCurrentTaskUnit<ID, ITEM>(
       currentItemSelectionType:
           CurrentItemSelectionType.setAnItemAsCurrentIfNeed,
       xBlock: thisXBlock,
@@ -2936,7 +2935,7 @@ abstract class Block<
     //
     masterFlowItem?._addLineFlowItem(
       codeId: "#04020",
-      shortDesc: "${_debugObjHtml(this)} set currentItem to null.",
+      shortDesc: "${debugObjHtml(this)} set currentItem to null.",
     );
     const ID? nullId = null;
     const ITEM? nullItem = null;
@@ -2958,7 +2957,7 @@ abstract class Block<
     //
     masterFlowItem?._addLineFlowItem(
       codeId: "#04060",
-      shortDesc: "${_debugObjHtml(formModel)} set formMode to creation.",
+      shortDesc: "${debugObjHtml(formModel)} set formMode to creation.",
     );
     formModel!._formPropsStructure._setFormMode_TODO_DELETE(
       formMode: FormMode.creation,
@@ -2973,7 +2972,7 @@ abstract class Block<
       // TODO: Test Cases??
       masterFlowItem?._addLineFlowItem(
         codeId: "#04080",
-        shortDesc: "${_debugObjHtml(formModel)} set formMode to creation.",
+        shortDesc: "${debugObjHtml(formModel)} set formMode to creation.",
       );
       FORM_RELATED_DATA? formRelatedData = _initFormRelatedData(masterFlowItem);
       if (formRelatedData == null) {
@@ -2985,7 +2984,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#04100",
         shortDesc:
-            "Calling ${_debugObjHtml(formModel)}._startNewFormActivity() with parameters:",
+            "Calling ${debugObjHtml(formModel)}._startNewFormActivity() with parameters:",
         parameters: {
           "activityType": activityType,
           "formInput": formInput,
@@ -3003,7 +3002,7 @@ abstract class Block<
         masterFlowItem?._addLineFlowItem(
           codeId: "#04120",
           shortDesc:
-              "${_debugObjHtml(formModel)} manually set dirty to $initDirty.",
+              "${debugObjHtml(formModel)} manually set dirty to $initDirty.",
         );
         formModel!._formPropsStructure._setManualDirty(initDirty);
       }
@@ -3044,8 +3043,7 @@ abstract class Block<
     //
     masterFlowItem?._addLineFlowItem(
       codeId: "#09000",
-      shortDesc:
-          "${_debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
+      shortDesc: "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
       lineFlowType: LineFlowType.debug,
     );
     //
@@ -3058,7 +3056,7 @@ abstract class Block<
     try {
       masterFlowItem?._addLineFlowItem(
         codeId: "#09100",
-        shortDesc: "Calling ${_debugObjHtml(action)}.$methodName()",
+        shortDesc: "Calling ${debugObjHtml(action)}.$methodName()",
         lineFlowType: LineFlowType.controllableCalling,
       );
       //
@@ -3083,7 +3081,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#09200",
         shortDesc:
-            "The ${_debugObjHtml(action)}.$methodName() method was called with an error!",
+            "The ${debugObjHtml(action)}.$methodName() method was called with an error!",
         errorInfo: errorInfo,
       );
       return;
@@ -3093,7 +3091,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#09220",
         shortDesc:
-            "Calling ${_debugObjHtml(this)}._processSaveActionRestResult().",
+            "Calling ${debugObjHtml(this)}._processSaveActionRestResult().",
         lineFlowType: LineFlowType.nonControllableCalling,
       );
       await _processSaveActionRestResult(
@@ -3121,7 +3119,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#09260",
         shortDesc:
-            "The ${_debugObjHtml(this)}._processSaveActionRestResult() method was called with an error!",
+            "The ${debugObjHtml(this)}._processSaveActionRestResult() method was called with an error!",
         errorInfo: errorInfo,
       );
     }
@@ -3145,8 +3143,7 @@ abstract class Block<
     //
     masterFlowItem?._addLineFlowItem(
       codeId: "#10000",
-      shortDesc:
-          "${_debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
+      shortDesc: "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
       lineFlowType: LineFlowType.debug,
     );
     //
@@ -3167,7 +3164,7 @@ abstract class Block<
       //
       masterFlowItem?._addLineFlowItem(
         codeId: "#10100",
-        shortDesc: "Calling ${_debugObjHtml(action)}.$methodName().",
+        shortDesc: "Calling ${debugObjHtml(action)}.$methodName().",
         parameters: {
           "parentBlockItem": parent?.currentItem,
           "filterCriteria": blockCurrentFilterCriteria,
@@ -3195,7 +3192,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#10200",
         shortDesc:
-            "The ${_debugObjHtml(action)}.$methodName() method was called with an error!",
+            "The ${debugObjHtml(action)}.$methodName() method was called with an error!",
         errorInfo: errorInfo,
       );
       return;
@@ -3203,7 +3200,7 @@ abstract class Block<
     // TODO: External Event? xxx
     masterFlowItem?._addLineFlowItem(
       codeId: "#10200",
-      shortDesc: "${_debugObjHtml(action)} --> Fire event after creating item.",
+      shortDesc: "${debugObjHtml(action)} --> Fire event after creating item.",
     );
     __fireEventFromBlockToOtherShelves(
       masterFlowItem: masterFlowItem,
@@ -3241,8 +3238,7 @@ abstract class Block<
     //
     masterFlowItem._addLineFlowItem(
       codeId: "#44000",
-      shortDesc:
-          "${_debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
+      shortDesc: "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
       lineFlowType: LineFlowType.debug,
     );
     //
@@ -3253,7 +3249,7 @@ abstract class Block<
       masterFlowItem._addLineFlowItem(
         codeId: "#44100",
         shortDesc:
-            "Calling ${_debugObjHtml(action)}.callApiQuickCreateMultiItems().",
+            "Calling ${debugObjHtml(action)}.callApiQuickCreateMultiItems().",
         parameters: {
           "parentBlockItem": parent?.currentItem,
           "filterCriteria": blockCurrentFilterCriteria,
@@ -3277,7 +3273,7 @@ abstract class Block<
       masterFlowItem._addLineFlowItem(
         codeId: "#44200",
         shortDesc:
-            "The ${_debugObjHtml(action)}.callApiQuickCreateMultiItems() method was called with an error!",
+            "The ${debugObjHtml(action)}.callApiQuickCreateMultiItems() method was called with an error!",
         errorInfo: errorInfo,
       );
       //
@@ -3288,7 +3284,7 @@ abstract class Block<
       masterFlowItem._addLineFlowItem(
         codeId: "#44300",
         shortDesc:
-            "Calling ${_debugObjHtml(this)}._processCreateMultiItemsActionResult()..",
+            "Calling ${debugObjHtml(this)}._processCreateMultiItemsActionResult()..",
         lineFlowType: LineFlowType.nonControllableCalling,
       );
       return await _processCreateMultiItemsActionResult(
@@ -3310,7 +3306,7 @@ abstract class Block<
       masterFlowItem._addLineFlowItem(
         codeId: "#44400",
         shortDesc:
-            "The ${_debugObjHtml(this)}._processCreateMultiItemsActionResult() method was called with an error!",
+            "The ${debugObjHtml(this)}._processCreateMultiItemsActionResult() method was called with an error!",
         errorInfo: errorInfo,
       );
       //
@@ -3335,8 +3331,7 @@ abstract class Block<
     //
     masterFlowItem?._addLineFlowItem(
       codeId: "#14000",
-      shortDesc:
-          "${_debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
+      shortDesc: "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
       lineFlowType: LineFlowType.debug,
     );
     //
@@ -3358,7 +3353,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#14020",
         shortDesc:
-            "Calling ${_debugObjHtml(action)}.callApiQuickUpdateItem()...",
+            "Calling ${debugObjHtml(action)}.callApiQuickUpdateItem()...",
         parameters: {
           "parentBlockItem": parent?.currentItem,
           "filterCriteria": blockCurrentFilterCriteria,
@@ -3388,7 +3383,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#14060",
         shortDesc:
-            "The ${_debugObjHtml(action)}.callApiQuickUpdateItem() method was called with an error.",
+            "The ${debugObjHtml(action)}.callApiQuickUpdateItem() method was called with an error.",
         errorInfo: errorInfo,
       );
       return;
@@ -3398,7 +3393,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#14100",
         shortDesc:
-            "Calling ${_debugObjHtml(this)}._processSaveActionRestResult()...",
+            "Calling ${debugObjHtml(this)}._processSaveActionRestResult()...",
         lineFlowType: LineFlowType.nonControllableCalling,
       );
       await _processSaveActionRestResult(
@@ -3426,7 +3421,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#14100",
         shortDesc:
-            "The ${_debugObjHtml(this)}._processSaveActionRestResult() method was called with an error.",
+            "The ${debugObjHtml(this)}._processSaveActionRestResult() method was called with an error.",
         errorInfo: errorInfo,
       );
       return;
@@ -3450,8 +3445,7 @@ abstract class Block<
     //
     masterFlowItem?._addLineFlowItem(
       codeId: "#15000",
-      shortDesc:
-          "${_debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
+      shortDesc: "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
       lineFlowType: LineFlowType.debug,
     );
     //
@@ -3464,7 +3458,7 @@ abstract class Block<
     try {
       masterFlowItem?._addLineFlowItem(
         codeId: "#15020",
-        shortDesc: "Calling ${_debugObjHtml(action)}.$methodName()...",
+        shortDesc: "Calling ${debugObjHtml(action)}.$methodName()...",
         parameters: {
           "parentBlockItem": parent?.currentItem,
           "filterCriteria": filterCriteria,
@@ -3492,7 +3486,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#15100",
         shortDesc:
-            "The ${_debugObjHtml(action)}.$methodName() method was called with an error.",
+            "The ${debugObjHtml(action)}.$methodName() method was called with an error.",
         errorInfo: errorInfo,
       );
       return;
@@ -3538,7 +3532,7 @@ abstract class Block<
     masterFlowItem._addLineFlowItem(
       codeId: "#45000",
       shortDesc:
-          "Begin ${_debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
+          "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
       lineFlowType: LineFlowType.debug,
     );
     //
@@ -3546,7 +3540,7 @@ abstract class Block<
     try {
       masterFlowItem._addLineFlowItem(
         codeId: "#45100",
-        shortDesc: "Calling ${_debugObjHtml(action)}.callApi().",
+        shortDesc: "Calling ${debugObjHtml(action)}.callApi().",
         lineFlowType: LineFlowType.controllableCalling,
       );
       //
@@ -3568,7 +3562,7 @@ abstract class Block<
       masterFlowItem._addLineFlowItem(
         codeId: "#45200",
         shortDesc:
-            "The ${_debugObjHtml(action)}.callApi() method was called with an error!",
+            "The ${debugObjHtml(action)}.callApi() method was called with an error!",
         errorInfo: errorInfo,
       );
       return;
@@ -3577,7 +3571,7 @@ abstract class Block<
     masterFlowItem?._addLineFlowItem(
       codeId: "#45300",
       shortDesc:
-          "${_debugObjHtml(this)} > Fire event after execute silent action.",
+          "${debugObjHtml(this)} > Fire event after execute silent action.",
       lineFlowType: LineFlowType.fireEvent,
     );
     __fireEventFromBlockToOtherShelves(
@@ -3588,7 +3582,7 @@ abstract class Block<
     final ITEM? candidateCurrItem = null;
     masterFlowItem._addLineFlowItem(
       codeId: "#45400",
-      shortDesc: "Calling ${_debugObjHtml(this)}._processInternalReaction()..",
+      shortDesc: "Calling ${debugObjHtml(this)}._processInternalReaction()..",
       parameters: {
         "candidateCurrItem": candidateCurrItem,
       },
@@ -3648,7 +3642,7 @@ abstract class Block<
     //
     masterFlowItem?._addLineFlowItem(
       codeId: "#16100",
-      shortDesc: "Got @savedItemDetail: ${_debugObjHtml(savedItemDetail)}.",
+      shortDesc: "Got @savedItemDetail: ${debugObjHtml(savedItemDetail)}.",
       lineFlowType: LineFlowType.debug,
     );
     //
@@ -3666,8 +3660,8 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#16140",
         shortDesc:
-            "Calling: ${_debugObjHtml(this)}.needToKeepItemInList() to decide "
-            "whether to keep item ${_debugObjHtml(savedItemDetail)} in the list or not..",
+            "Calling: ${debugObjHtml(this)}.needToKeepItemInList() to decide "
+            "whether to keep item ${debugObjHtml(savedItemDetail)} in the list or not..",
         parameters: {
           "parentBlockCurrentItem": parent?.currentItem,
           "filterCriteria": filterCriteria,
@@ -3688,7 +3682,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#16200",
         shortDesc:
-            "${_debugObjHtml(this)} > Save successful --> An event occurred --> checking if it should be emitted.",
+            "${debugObjHtml(this)} > Save successful --> An event occurred --> checking if it should be emitted.",
         lineFlowType: LineFlowType.fireEvent,
       );
       __fireEventFromBlockToOtherShelves(
@@ -3712,8 +3706,8 @@ abstract class Block<
       );
       masterFlowItem?._addLineFlowItem(
         codeId: "#16240",
-        shortDesc: "Calling ${_debugObjHtml(this)}.convertItemDetailToItem() "
-            "to convert ${_debugObjHtml(savedItemDetail)} to ${_debugItemTypeHtml()}.",
+        shortDesc: "Calling ${debugObjHtml(this)}.convertItemDetailToItem() "
+            "to convert ${debugObjHtml(savedItemDetail)} to ${_debugItemTypeHtml()}.",
         lineFlowType: LineFlowType.controllableCalling,
       );
       ITEM refreshedItem = __convertItemDetailToItem(
@@ -3722,7 +3716,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#16280",
         shortDesc:
-            "Insert or replace ${_debugObjHtml(refreshedItem)} into the list.",
+            "Insert or replace ${debugObjHtml(refreshedItem)} into the list.",
       );
       __blockData._insertOrReplaceItem(
         item: refreshedItem,
@@ -3739,7 +3733,7 @@ abstract class Block<
       );
       masterFlowItem?._addLineFlowItem(
         codeId: "#16320",
-        shortDesc: "Set ${_debugObjHtml(refreshedItem)} as current.",
+        shortDesc: "Set ${debugObjHtml(refreshedItem)} as current.",
       );
       this.__setCurrentItemOnly(
         id: itemId,
@@ -3766,7 +3760,7 @@ abstract class Block<
         masterFlowItem?._addLineFlowItem(
           codeId: "#16400",
           shortDesc:
-              "${_debugObjHtml(formModel)} -> set @forceType to ${_debugObjHtml(newForceType)}",
+              "${debugObjHtml(formModel)} -> set @forceType to ${debugObjHtml(newForceType)}",
         );
         thisXBlock.xFormModel!.setForceType(newForceType);
       }
@@ -3786,8 +3780,8 @@ abstract class Block<
       if (savedItemDetail != null) {
         masterFlowItem?._addLineFlowItem(
           codeId: "#16520",
-          shortDesc: "Calling ${_debugObjHtml(this)}.convertItemDetailToItem() "
-              "to convert ${_debugObjHtml(savedItemDetail)} to ${_debugItemTypeHtml()}.",
+          shortDesc: "Calling ${debugObjHtml(this)}.convertItemDetailToItem() "
+              "to convert ${debugObjHtml(savedItemDetail)} to ${_debugItemTypeHtml()}.",
           lineFlowType: LineFlowType.controllableCalling,
         );
         savedItem = __convertItemDetailToItem(
@@ -3806,7 +3800,7 @@ abstract class Block<
           masterFlowItem?._addLineFlowItem(
             codeId: "#16560",
             shortDesc:
-                "${_debugObjHtml(this)} --> remove the ${_debugObjHtml(removeItem)} from the list. "
+                "${debugObjHtml(this)} --> remove the ${debugObjHtml(removeItem)} from the list. "
                 "(*) This item is not current item.",
           );
           await __removeItemFromList(
@@ -3819,7 +3813,7 @@ abstract class Block<
         masterFlowItem?._addLineFlowItem(
           codeId: "#16580",
           shortDesc:
-              "Calling ${_debugObjHtml(this)}.findSiblingItem() to find sibling item of ${_debugObjHtml(removeItem)}.",
+              "Calling ${debugObjHtml(this)}.findSiblingItem() to find sibling item of ${debugObjHtml(removeItem)}.",
           parameters: {"item": removeItem},
           lineFlowType: LineFlowType.controllableCalling,
         );
@@ -3831,7 +3825,7 @@ abstract class Block<
         masterFlowItem?._addLineFlowItem(
           codeId: "#16600",
           shortDesc:
-              "${_debugObjHtml(this)} --> remove the current item ${_debugObjHtml(removeItem)}.",
+              "${debugObjHtml(this)} --> remove the current item ${debugObjHtml(removeItem)}.",
         );
         // Remove Item (Current Item)
         await __removeItemFromList(
@@ -3841,7 +3835,7 @@ abstract class Block<
         //
         masterFlowItem?._addLineFlowItem(
           codeId: "#16620",
-          shortDesc: "${_debugObjHtml(this)} --> set current item to null.",
+          shortDesc: "${debugObjHtml(this)} --> set current item to null.",
         );
         __blockData._setCurrentItemOnly(
           id: null,
@@ -3853,7 +3847,7 @@ abstract class Block<
           masterFlowItem?._addLineFlowItem(
             codeId: "#16660",
             shortDesc:
-                "${_debugObjHtml(formModel)} clear form data and set to <b>none</b>.",
+                "${debugObjHtml(formModel)} clear form data and set to <b>none</b>.",
           );
           // Clear Form:
           formModel!._clearDataWithDataState(
@@ -3871,9 +3865,9 @@ abstract class Block<
         __clearAllChildrenBlocksToNone(
           thisXBlock: thisXBlock,
         );
-        // TODO-XXX: Add _BlockSelectAsCurrentTaskUnit?
+        // TODO-XXX: Add _BlockSetItemAsCurrentTaskUnit?
         //  xxx; Xoa di.
-        // _TaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ITEM>(
+        // _TaskUnit taskUnit = _BlockSetItemAsCurrentTaskUnit<ITEM>(
         //   currentItemSelectionType:
         //       CurrentItemSelectionType.selectAnItemAsCurrentIfNeed,
         //   xBlock: thisXBlock,
@@ -4115,7 +4109,7 @@ abstract class Block<
       );
       masterFlowItem._addLineFlowItem(
         codeId: "#65100",
-        shortDesc: "@actionable = ${_debugObjHtml(actionable)}.",
+        shortDesc: "@actionable = ${debugObjHtml(actionable)}.",
         errorInfo: errorInfo,
       );
       return BlockItemsDeletionResult<ITEM>(
@@ -4171,33 +4165,40 @@ abstract class Block<
 
   @_BlockSelectItemAsCurrentAnnotation()
   @_ReturnTaskResultMethodAnnotation()
-  Future<BlockItemCurrSelectionResult<ITEM>>
+  Future<BlockCurrentItemSettingResult<ITEM>>
       __refreshToShowOrEditItemAsCurrent({
+    required MasterFlowItem masterFlowItem,
     required String methodName,
     required ITEM? item,
     required ErrCodeIfItemIsNull errCodeIfItemIsNull,
     required bool forceForm,
     required Function()? navigate,
   }) async {
-    // FlutterArtist.codeFlowLogger._addMethodCall(
-    //   isLibCode: true,
-    //   navigate: navigate,
-    //   ownerClassInstance: this,
-    //   methodName: methodName,
-    //   parameters: {
-    //     "item": item,
-    //     "forceForm": forceForm,
-    //   },
-    // );
-    //
     final currentItemSelectionType = forceForm
         ? CurrentItemSelectionType.setAnItemAsCurrentThenLoadForm
         : CurrentItemSelectionType.setAnItemAsCurrent;
     //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#69000",
+      shortDesc:
+          "Calculated > @currentItemSelectionType: ${debugObjHtml(currentItemSelectionType)}",
+      lineFlowType: LineFlowType.debug,
+    );
+    masterFlowItem._addLineFlowItem(
+      codeId: "#69100",
+      shortDesc: "Calling ${debugObjHtml(this)}.__canSetItemAsCurrent()...",
+      parameters: {
+        "item": item,
+        "errCodeIfItemIsNull": errCodeIfItemIsNull,
+        "checkBusy": true,
+      },
+      lineFlowType: LineFlowType.nonControllableCalling,
+    );
+    //
     // @Same-Code-Precheck-01
     //
-    Actionable<BlockItemCurrSelectionPrecheck> actionable =
-        this.__canSelectItemAsCurrent(
+    Actionable<BlockCurrentItemSettingPrecheck> actionable =
+        __canSetItemAsCurrent(
       item: item,
       errCodeIfItemIsNull: errCodeIfItemIsNull,
       checkBusy: true,
@@ -4205,13 +4206,18 @@ abstract class Block<
     //
     if (!actionable.yes) {
       // _refreshErrorCount++;
-      _addErrorLogActionable(
+      LogErrorInfo? errorInfo = _addErrorLogActionable(
         shelf: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
       );
+      masterFlowItem._addLineFlowItem(
+        codeId: "#69200",
+        shortDesc: "Has error:",
+        errorInfo: errorInfo,
+      );
       //
-      return BlockItemCurrSelectionResult<ITEM>(
+      return BlockCurrentItemSettingResult<ITEM>(
         precheck: actionable.errCode,
         currentItemSelectionType: currentItemSelectionType,
         getItemId: _getItemIdInternal,
@@ -4221,11 +4227,16 @@ abstract class Block<
       );
     }
     //
-    final XShelf xShelf = _XShelfBlockCurrItemSelection(block: this);
+    masterFlowItem._addLineFlowItem(
+      codeId: "#69300",
+      shortDesc: "Creating <b>_XShelfBlockSetItemAsCurrent</b>...",
+    );
+    final XShelf xShelf = _XShelfBlockSetItemAsCurrent(block: this);
     //
-    final XBlock thisXBlock = xShelf.findXBlockByName(this.name)!;
+    final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
-    final _ResultedSTaskUnit taskUnit = _BlockSelectAsCurrentTaskUnit<ID, ITEM>(
+    final _ResultedSTaskUnit taskUnit =
+        _BlockSetItemAsCurrentTaskUnit<ID, ITEM>(
       currentItemSelectionType: currentItemSelectionType,
       xBlock: thisXBlock,
       newQueriedList: [],
@@ -4239,7 +4250,7 @@ abstract class Block<
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
-    var result = taskUnit.taskResult as BlockItemCurrSelectionResult<ITEM>;
+    var result = taskUnit.taskResult as BlockCurrentItemSettingResult<ITEM>;
     if (result.successForAll) {
       if (navigate != null) {
         navigate();
@@ -4254,12 +4265,24 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockSelectItemAsCurrentAnnotation()
-  Future<BlockItemCurrSelectionResult<ITEM>> refreshItemAndSetAsCurrent({
+  Future<BlockCurrentItemSettingResult<ITEM>> refreshItemAndSetAsCurrent({
     required ITEM item,
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "refreshItemAndSetAsCurrent",
+      parameters: {
+        "item": item,
+        "forceLoadForm": forceLoadForm,
+        "navigate": navigate,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
     return await __refreshToShowOrEditItemAsCurrent(
+      masterFlowItem: masterFlowItem,
       methodName: "refreshItemAndSetAsCurrent",
       item: item,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.invalidTarget,
@@ -4289,7 +4312,7 @@ abstract class Block<
     );
     masterFlowItem._addLineFlowItem(
       codeId: "#62000",
-      shortDesc: "Check before clear the ${_debugObjHtml(this)}...",
+      shortDesc: "Check before clear the ${debugObjHtml(this)}...",
     );
     // @Same-Code-Precheck-01
     Actionable<BlockClearancePrecheck> actionable = __canClearBlock(
@@ -4305,7 +4328,7 @@ abstract class Block<
       );
       masterFlowItem._addLineFlowItem(
         codeId: "#62100",
-        shortDesc: "@actionable --> ${_debugObjHtml(actionable)}.",
+        shortDesc: "@actionable --> ${debugObjHtml(actionable)}.",
         errorInfo: errorInfo,
       );
       return BlockClearanceResult(
@@ -4670,7 +4693,7 @@ abstract class Block<
     //
     masterFlowItem._addLineFlowItem(
       codeId: "#57000",
-      shortDesc: "Calling ${_debugObjHtml(xShelf)}._initQueryTaskUnits()...",
+      shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryTaskUnits()...",
       lineFlowType: LineFlowType.nonControllableCalling,
     );
     xShelf._initQueryTaskUnits(masterFlowItem: masterFlowItem);
@@ -4758,7 +4781,7 @@ abstract class Block<
     }
     masterFlowItem?._addLineFlowItem(
       codeId: "#05100",
-      shortDesc: "Calling ${_debugObjHtml(this)}.initInputForCreationForm().",
+      shortDesc: "Calling ${debugObjHtml(this)}.initInputForCreationForm().",
       parameters: {
         "parentBlockCurrentItem": parentBlockCurrentItem,
         "filterCriteria": currentFilterCriteria,
@@ -4783,7 +4806,7 @@ abstract class Block<
       }
       masterFlowItem?._addLineFlowItem(
         codeId: "#05000",
-        shortDesc: "Calling ${_debugObjHtml(this)}.initFormRelatedData()...",
+        shortDesc: "Calling ${debugObjHtml(this)}.initFormRelatedData()...",
         parameters: {
           "parentBlockCurrentItem": parentBlockCurrentItem,
           "currentItemDetail": currentItemDetail,
@@ -4807,7 +4830,7 @@ abstract class Block<
       masterFlowItem?._addLineFlowItem(
         codeId: "#05020",
         shortDesc:
-            "The ${_debugObjHtml(this)}.initFormRelatedData() method was called with an error!",
+            "The ${debugObjHtml(this)}.initFormRelatedData() method was called with an error!",
         errorInfo: errorInfo,
       );
       return null;
@@ -5411,12 +5434,23 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockSelectFirstItemAsCurrentAnnotation()
   // TODO: @Rename --> refreshFirstItemAndSetAsCurrent
-  Future<BlockItemCurrSelectionResult<ITEM>> refreshFirstItemThenSetAsCurrent({
+  Future<BlockCurrentItemSettingResult<ITEM>> refreshFirstItemAndSetAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "refreshFirstItemAndSetAsCurrent",
+      parameters: {
+        "forceLoadForm": forceLoadForm,
+        "navigate": navigate,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
     return __refreshToShowOrEditItemAsCurrent(
-      methodName: "refreshFirstItemThenSetAsCurrent",
+      masterFlowItem: masterFlowItem,
+      methodName: "refreshFirstItemAndSetAsCurrent",
       item: firstItem,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
       forceForm: forceLoadForm,
@@ -5431,14 +5465,26 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockSelectNextItemAsCurrentAnnotation()
   // TODO: @Rename --> refreshNextItemAndSetAsCurrent
-  Future<BlockItemCurrSelectionResult<ITEM>> refreshNextItemThenSetAsCurrent({
+  Future<BlockCurrentItemSettingResult<ITEM>> refreshNextItemAndSetAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "refreshNextItemAndSetAsCurrent",
+      parameters: {
+        "forceLoadForm": forceLoadForm,
+        "navigate": navigate,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
+    //
     ITEM? nextItem = nextSiblingItem;
     //
     return __refreshToShowOrEditItemAsCurrent(
-      methodName: "refreshNextItemThenSetAsCurrent",
+      masterFlowItem: masterFlowItem,
+      methodName: "refreshNextItemAndSetAsCurrent",
       item: nextItem,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
       forceForm: forceLoadForm,
@@ -5453,15 +5499,27 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockSelectPreviousItemAsCurrentAnnotation()
   // TODO: @Rename --> refreshPreviousItemAndSetAsCurrent
-  Future<BlockItemCurrSelectionResult<ITEM>>
-      refreshPreviousItemThenSetAsCurrent({
+  Future<BlockCurrentItemSettingResult<ITEM>>
+      refreshPreviousItemAndSetAsCurrent({
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "refreshPreviousItemAndSetAsCurrent",
+      parameters: {
+        "forceLoadForm": forceLoadForm,
+        "navigate": navigate,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
+    //
     ITEM? previousItem = previousSiblingItem;
     //
     return __refreshToShowOrEditItemAsCurrent(
-      methodName: "refreshPreviousItemThenSetAsCurrent",
+      masterFlowItem: masterFlowItem,
+      methodName: "refreshPreviousItemAndSetAsCurrent",
       item: previousItem,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
       forceForm: forceLoadForm,
@@ -5553,7 +5611,7 @@ abstract class Block<
     );
     masterFlowItem._addLineFlowItem(
       codeId: "#66000",
-      shortDesc: "Selected Items: ${_debugObjHtml(selItems)}..",
+      shortDesc: "Selected Items: ${debugObjHtml(selItems)}..",
     );
     //
     return await __deleteItems(
@@ -5589,7 +5647,7 @@ abstract class Block<
     );
     masterFlowItem._addLineFlowItem(
       codeId: "#64000",
-      shortDesc: "Checked Items: ${_debugObjHtml(chkItems)}..",
+      shortDesc: "Checked Items: ${debugObjHtml(chkItems)}..",
     );
     //
     return await __deleteItems(
@@ -5621,7 +5679,7 @@ abstract class Block<
     );
     masterFlowItem._addLineFlowItem(
       codeId: "#67000",
-      shortDesc: "Items: ${_debugObjHtml(items)}..",
+      shortDesc: "Items: ${debugObjHtml(items)}..",
     );
     return await __deleteItems(
       masterFlowItem: masterFlowItem,
@@ -5675,10 +5733,21 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockRefreshCurrentItemAnnotation()
-  Future<BlockItemCurrSelectionResult<ITEM>> refreshCurrentItem({
+  Future<BlockCurrentItemSettingResult<ITEM>> refreshCurrentItem({
     bool forceLoadForm = false,
   }) async {
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "refreshCurrentItem",
+      parameters: {
+        "forceLoadForm": forceLoadForm,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
+    //
     return await __refreshToShowOrEditItemAsCurrent(
+      masterFlowItem: masterFlowItem,
       methodName: 'refreshCurrentItem',
       item: this.currentItem,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
@@ -5795,7 +5864,7 @@ abstract class Block<
     //
     masterFlowItem._addLineFlowItem(
       codeId: "#53100",
-      shortDesc: "Calling ${_debugObjHtml(xShelf)}._initQueryTaskUnits()..",
+      shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryTaskUnits()..",
       lineFlowType: LineFlowType.nonControllableCalling,
     );
     xShelf._initQueryTaskUnits(masterFlowItem: masterFlowItem);
@@ -6767,14 +6836,14 @@ abstract class Block<
 
   @_PrecheckPrivateMethod()
   // @seeAlso: __canRefreshCurrentItem()
-  Actionable<BlockItemCurrSelectionPrecheck> __canSelectItemAsCurrent({
+  Actionable<BlockCurrentItemSettingPrecheck> __canSetItemAsCurrent({
     required ITEM? item,
     required bool checkBusy,
     required ErrCodeIfItemIsNull errCodeIfItemIsNull,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockItemCurrSelectionPrecheck>.no(
-        errCode: BlockItemCurrSelectionPrecheck.busy,
+      return Actionable<BlockCurrentItemSettingPrecheck>.no(
+        errCode: BlockCurrentItemSettingPrecheck.busy,
       );
     }
     ITEM? internalItem = item;
@@ -6784,38 +6853,38 @@ abstract class Block<
     // Test Cases: [03b].
     if (internalItem == null) {
       if (errCodeIfItemIsNull == ErrCodeIfItemIsNull.noTarget) {
-        return Actionable<BlockItemCurrSelectionPrecheck>.no(
-          errCode: BlockItemCurrSelectionPrecheck.noTarget,
+        return Actionable<BlockCurrentItemSettingPrecheck>.no(
+          errCode: BlockCurrentItemSettingPrecheck.noTarget,
         );
       } else {
-        return Actionable<BlockItemCurrSelectionPrecheck>.no(
-          errCode: BlockItemCurrSelectionPrecheck.invalidTarget,
+        return Actionable<BlockCurrentItemSettingPrecheck>.no(
+          errCode: BlockCurrentItemSettingPrecheck.invalidTarget,
         );
       }
     }
     //
-    return Actionable<BlockItemCurrSelectionPrecheck>.yes();
+    return Actionable<BlockCurrentItemSettingPrecheck>.yes();
   }
 
   // ***************************************************************************
 
   @_PrecheckPrivateMethod()
-  // @seeAlso: __canSelectItemAsCurrent()
-  Actionable<BlockItemCurrSelectionPrecheck> __canRefreshCurrentItem({
+  // @seeAlso: __canSetItemAsCurrent()
+  Actionable<BlockCurrentItemSettingPrecheck> __canRefreshCurrentItem({
     required bool checkBusy,
   }) {
     if (currentItem == null) {
-      return Actionable<BlockItemCurrSelectionPrecheck>.no(
-        errCode: BlockItemCurrSelectionPrecheck.noTarget,
+      return Actionable<BlockCurrentItemSettingPrecheck>.no(
+        errCode: BlockCurrentItemSettingPrecheck.noTarget,
       );
     }
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockItemCurrSelectionPrecheck>.no(
-        errCode: BlockItemCurrSelectionPrecheck.busy,
+      return Actionable<BlockCurrentItemSettingPrecheck>.no(
+        errCode: BlockCurrentItemSettingPrecheck.busy,
       );
     }
     //
-    return Actionable<BlockItemCurrSelectionPrecheck>.yes();
+    return Actionable<BlockCurrentItemSettingPrecheck>.yes();
   }
 
   // ***************************************************************************
@@ -6826,36 +6895,36 @@ abstract class Block<
   /// Edit on creation-mode
   ///
   @_PrecheckPrivateMethod()
-  Actionable<BlockFormEnablementChkCode> __isEnableFormToModify({
+  Actionable<BlockFormEnablementPrecheckCode> __isEnableFormToModify({
     required bool checkAllow,
   }) {
     if (formModel == null) {
-      return Actionable<BlockFormEnablementChkCode>.no(
-        errCode: BlockFormEnablementChkCode.noForm,
+      return Actionable<BlockFormEnablementPrecheckCode>.no(
+        errCode: BlockFormEnablementPrecheckCode.noForm,
       );
     }
     //
     switch (formModel!.formMode) {
       case FormMode.none:
-        return Actionable<BlockFormEnablementChkCode>.no(
-          errCode: BlockFormEnablementChkCode.formInNoneMode,
+        return Actionable<BlockFormEnablementPrecheckCode>.no(
+          errCode: BlockFormEnablementPrecheckCode.formInNoneMode,
         );
       case FormMode.creation:
         if (formModel!.dataState == DataState.error) {
           // Test Cases: [16a].
           if (!formModel!.formInitialDataReady) {
-            return Actionable<BlockFormEnablementChkCode>.no(
-              errCode: BlockFormEnablementChkCode.formInitialDataNotReady,
+            return Actionable<BlockFormEnablementPrecheckCode>.no(
+              errCode: BlockFormEnablementPrecheckCode.formInitialDataNotReady,
             );
           }
         }
-        return Actionable<BlockFormEnablementChkCode>.yes();
+        return Actionable<BlockFormEnablementPrecheckCode>.yes();
       case FormMode.edit:
         if (formModel!.dataState == DataState.error) {
           // Test Cases: [16b].
           if (!formModel!.formInitialDataReady) {
-            return Actionable<BlockFormEnablementChkCode>.no(
-              errCode: BlockFormEnablementChkCode.formInitialDataNotReady,
+            return Actionable<BlockFormEnablementPrecheckCode>.no(
+              errCode: BlockFormEnablementPrecheckCode.formInitialDataNotReady,
             );
           }
         }
@@ -6863,19 +6932,19 @@ abstract class Block<
           CheckAllowResult result = _isAllowUpdateItem(item: currentItem!);
           switch (result.result) {
             case CheckAllow.allow:
-              return Actionable<BlockFormEnablementChkCode>.yes();
+              return Actionable<BlockFormEnablementPrecheckCode>.yes();
             case CheckAllow.notAllow:
-              return Actionable<BlockFormEnablementChkCode>.no(
-                errCode: BlockFormEnablementChkCode.notAllow,
+              return Actionable<BlockFormEnablementPrecheckCode>.no(
+                errCode: BlockFormEnablementPrecheckCode.notAllow,
               );
             case CheckAllow.error:
-              return Actionable<BlockFormEnablementChkCode>.no(
-                errCode: BlockFormEnablementChkCode.checkAllowMethodError,
+              return Actionable<BlockFormEnablementPrecheckCode>.no(
+                errCode: BlockFormEnablementPrecheckCode.checkAllowMethodError,
                 errorInfo: result.errorInfo,
               );
           }
         }
-        return Actionable<BlockFormEnablementChkCode>.yes();
+        return Actionable<BlockFormEnablementPrecheckCode>.yes();
     }
   }
 
@@ -7059,10 +7128,10 @@ abstract class Block<
 
   @_PrecheckMethod()
   // @seeAlso: canRefreshCurrentItem()
-  Actionable<BlockItemCurrSelectionPrecheck> canSelectItemAsCurrent({
+  Actionable<BlockCurrentItemSettingPrecheck> canSelectItemAsCurrent({
     required ITEM item,
   }) {
-    return __canSelectItemAsCurrent(
+    return __canSetItemAsCurrent(
       checkBusy: true,
       item: item,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.invalidTarget,
@@ -7076,7 +7145,7 @@ abstract class Block<
   ///
   @_PrecheckMethod()
   // @seeAlso: canSelectItemAsCurrent()
-  Actionable<BlockItemCurrSelectionPrecheck> canRefreshCurrentItem() {
+  Actionable<BlockCurrentItemSettingPrecheck> canRefreshCurrentItem() {
     return __canRefreshCurrentItem(
       checkBusy: true,
     );
@@ -7112,7 +7181,7 @@ abstract class Block<
   /// Edit on creation-mode
   ///
   @_PrecheckMethod()
-  Actionable<BlockFormEnablementChkCode> isEnableFormToModify({
+  Actionable<BlockFormEnablementPrecheckCode> isEnableFormToModify({
     bool checkAllow = true,
   }) {
     return __isEnableFormToModify(
@@ -7123,7 +7192,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable<BlockFormEnablementChkCode> _isEnableFormToModify() {
+  Actionable<BlockFormEnablementPrecheckCode> _isEnableFormToModify() {
     return __isEnableFormToModify(checkAllow: true);
   }
 

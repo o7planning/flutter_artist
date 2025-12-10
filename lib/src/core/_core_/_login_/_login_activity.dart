@@ -13,7 +13,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
     try {
       _masterFlowItem?._addLineFlowItem(
         codeId: "#20000",
-        shortDesc: "Calling ${_debugObjHtml(this)}.callApiLogin()...",
+        shortDesc: "Calling ${debugObjHtml(this)}.callApiLogin()...",
         lineFlowType: LineFlowType.controllableCalling,
       );
       result = await callApiLogin();
@@ -30,7 +30,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
       _masterFlowItem?._addLineFlowItem(
         codeId: "#20040",
         shortDesc:
-            "The ${_debugObjHtml(this)}.callApiLogin() method was called with an error!",
+            "The ${debugObjHtml(this)}.callApiLogin() method was called with an error!",
         errorInfo: errorInfo,
       );
       return;
@@ -41,7 +41,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
           "No data from ${getClassNameWithoutGenerics(this)}.callApiLogin().";
       _masterFlowItem?._addLineFlowItem(
         codeId: "#20060",
-        shortDesc: "Got value >> @loggedInUser: ${_debugObjHtml(loggedInUser)}."
+        shortDesc: "Got value >> @loggedInUser: ${debugObjHtml(loggedInUser)}."
             "\n$message",
       );
       //
@@ -68,7 +68,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
     //
     _masterFlowItem?._addLineFlowItem(
       codeId: "#20100",
-      shortDesc: "Got LoggedInUser: ${_debugObjHtml(loggedInUser)}."
+      shortDesc: "Got LoggedInUser: ${debugObjHtml(loggedInUser)}."
           "\n - @accessToken: <b>$tokenPrefix</b>.",
       lineFlowType: LineFlowType.debug,
     );
@@ -106,7 +106,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
       _masterFlowItem?._addLineFlowItem(
         codeId: "#22060",
         shortDesc:
-            "Calling ${_debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() with parameters:",
+            "Calling ${debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() with parameters:",
         parameters: {
           "loggedInUser": loggedInUser,
         },
@@ -120,7 +120,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
       _masterFlowItem?._addLineFlowItem(
         codeId: "#22080",
         shortDesc:
-            "The ${_debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() method was called with an error.",
+            "The ${debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() method was called with an error.",
         errorInfo: errorInfo,
       );
       _masterFlowItem?.printToConsole();
@@ -141,7 +141,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
     //
     _masterFlowItem?._addLineFlowItem(
       codeId: "#20400",
-      shortDesc: "Calling ${_debugObjHtml(this)}.navigateToSuccessScreen()...",
+      shortDesc: "Calling ${debugObjHtml(this)}.navigateToSuccessScreen()...",
       lineFlowType: LineFlowType.controllableCalling,
     );
     // IMPORTANT: No await:

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../core/_core_/core.dart';
+import '../utils/_debug.dart';
 import '_active_info_widget.dart';
 import '_block_debug_options.dart';
 import '_debug_box.dart';
@@ -119,8 +120,8 @@ class BlockDebugBox extends BaseDebugBox {
         ),
       if (options.showHasCurrentItem)
         IconLabelText(
-          label: "Has Current Item?: ",
-          text: (block.currentItem != null).toString(),
+          label: "Current Item: ",
+          text: debugObj(block.currentItem),
           labelStyle: labelStyle,
           textStyle: textStyle0,
         ),

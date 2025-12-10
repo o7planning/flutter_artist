@@ -3,37 +3,37 @@ import '__precheck.dart';
 
 enum BlockSilentActionPrecheck implements Precheck {
   busy(
-    chkCode: ChkCode.busy,
+    precheckCode: PrecheckCode.busy,
     message: "Silent Action is disabled.",
     details: ["The executor is busy."],
   ),
   //
   blockInPendingState(
-    chkCode: ChkCode.inPendingState,
+    precheckCode: PrecheckCode.inPendingState,
     message: "Silent Action is disabled.",
     details: ["The block is in a 'pending' state."],
   ),
   //
   blockInErrorState(
-    chkCode: ChkCode.inErrorState,
+    precheckCode: PrecheckCode.inErrorState,
     message: "Silent Action is disabled.",
     details: ["The block is in an 'error' state."],
   ),
   //
   blockInNoneState(
-    chkCode: ChkCode.inNoneState,
+    precheckCode: PrecheckCode.inNoneState,
     message: "Silent Action is disabled.",
     details: ["The block is in a 'none' state."],
   ),
   //
   cancelled(
-    chkCode: ChkCode.cancelled,
+    precheckCode: PrecheckCode.cancelled,
     message: "Silent Action Cancelled.",
     details: null,
   );
 
   @override
-  final ChkCode chkCode;
+  final PrecheckCode precheckCode;
 
   @override
   final String message;
@@ -42,7 +42,7 @@ enum BlockSilentActionPrecheck implements Precheck {
   final List<String>? details;
 
   const BlockSilentActionPrecheck({
-    required this.chkCode,
+    required this.precheckCode,
     required this.message,
     required this.details,
   });

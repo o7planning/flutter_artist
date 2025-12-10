@@ -7,7 +7,7 @@ class TooltipUtils {
   }) {
     return Tooltip(
       textStyle: TextStyle(fontSize: 11.5, color: Colors.white),
-      message: message,
+      message: "", // message,
       child: child,
     );
   }
@@ -19,7 +19,8 @@ class TooltipUtils {
   }) {
     return Tooltip(
       textStyle: TextStyle(fontSize: 11.5, color: Colors.white),
-      message: message,
+      message: "",
+      // message,
       verticalOffset: verticalOffset,
       triggerMode: TooltipTriggerMode.manual,
       decoration: BoxDecoration(

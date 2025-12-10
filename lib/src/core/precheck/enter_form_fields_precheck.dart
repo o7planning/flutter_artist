@@ -3,21 +3,21 @@ import '__precheck.dart';
 
 enum EnterFormFieldsPrecheck implements Precheck {
   busy(
-    chkCode: ChkCode.busy,
+    precheckCode: PrecheckCode.busy,
     message: "Enter-form-fields feature is disabled",
     details: [
       "The executor is busy.",
     ],
   ),
   formInNoneMode(
-    chkCode: ChkCode.inNoneMode,
+    precheckCode: PrecheckCode.inNoneMode,
     message: "Enter-form-fields feature is disabled",
     details: [
       "The form in 'none' mode.",
     ],
   ),
   formInErrorState(
-    chkCode: ChkCode.inErrorState,
+    precheckCode: PrecheckCode.inErrorState,
     message: "Enter-form-fields feature is disabled",
     details: [
       "The form in 'error' state.",
@@ -25,7 +25,7 @@ enum EnterFormFieldsPrecheck implements Precheck {
   );
 
   @override
-  final ChkCode chkCode;
+  final PrecheckCode precheckCode;
 
   @override
   final String message;
@@ -34,7 +34,7 @@ enum EnterFormFieldsPrecheck implements Precheck {
   final List<String>? details;
 
   const EnterFormFieldsPrecheck({
-    required this.chkCode,
+    required this.precheckCode,
     required this.message,
     required this.details,
   });

@@ -3,60 +3,60 @@ import '__precheck.dart';
 
 enum BlockItemEditPrecheck implements Precheck {
   busy(
-    chkCode: ChkCode.busy,
+    precheckCode: PrecheckCode.busy,
     message: "Item edit is disabled.",
     details: ["The executor is busy."],
   ),
   noForm(
-    chkCode: ChkCode.noForm,
+    precheckCode: PrecheckCode.noForm,
     message: "The item cannot be edited on the form.",
     details: ["The block has no form."],
   ),
   formInErrorState(
-    chkCode: ChkCode.inErrorState,
+    precheckCode: PrecheckCode.inErrorState,
     message: "The item cannot be edited on the form.",
     details: ["Form data state is error."],
   ),
 
   // Block In Pending State.
   inPendingState(
-    chkCode: ChkCode.inPendingState,
+    precheckCode: PrecheckCode.inPendingState,
     message: "Item edit is disabled.",
     details: ["The block is in a 'pending' state."],
   ),
   blockInErrorState(
-    chkCode: ChkCode.inErrorState,
+    precheckCode: PrecheckCode.inErrorState,
     message: "Item edit is disabled.",
     details: ["The block is in an 'error' state."],
   ),
   blockInNoneState(
-    chkCode: ChkCode.inNoneState,
+    precheckCode: PrecheckCode.inNoneState,
     message: "Item update is disabled.",
     details: ["The block is in a 'none' state."],
   ),
   formModeInNone(
-    chkCode: ChkCode.inNoneMode,
+    precheckCode: PrecheckCode.inNoneMode,
     message: "The item cannot be edited on the form.",
     details: ["The form is in 'none' mode."],
   ),
   notAllow(
-    chkCode: ChkCode.notAllow,
+    precheckCode: PrecheckCode.notAllow,
     message: "Not allow to edit the item.",
     details: ["The application logic does not allow this item to be updated."],
   ),
   checkAllowMethodError(
-    chkCode: ChkCode.checkAllowMethodError,
+    precheckCode: PrecheckCode.checkAllowMethodError,
     message: "Not allow to edit the item.",
     details: ["The isAllowUpdateItem() method error."],
   ),
   noTarget(
-    chkCode: ChkCode.noTarget,
+    precheckCode: PrecheckCode.noTarget,
     message: "Not allow to edit item.",
     details: ["The target item is not available."],
   );
 
   @override
-  final ChkCode chkCode;
+  final PrecheckCode precheckCode;
 
   @override
   final String message;
@@ -65,7 +65,7 @@ enum BlockItemEditPrecheck implements Precheck {
   final List<String>? details;
 
   const BlockItemEditPrecheck({
-    required this.chkCode,
+    required this.precheckCode,
     required this.message,
     required this.details,
   });

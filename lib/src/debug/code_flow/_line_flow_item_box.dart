@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_artist/src/core/icon/icon_constants.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../core/_core_/core.dart';
@@ -101,7 +102,9 @@ class LineFlowItemBox extends StatelessWidget {
         Tooltip(
           message: "Tip & Document",
           child: SimpleSmallIconButton(
-            iconData: Icons.account_balance_wallet_outlined,
+            iconData: FaIconConstants.tipDocument,
+            iconColor:
+                lineFlowItem.tipDocument == null ? null : Colors.deepOrange,
             onPressed: lineFlowItem.tipDocument == null
                 ? null
                 : () {

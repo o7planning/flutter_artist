@@ -3,19 +3,19 @@ import '__precheck.dart';
 
 enum BackgroundActionPrecheck implements Precheck {
   busy(
-    chkCode: ChkCode.busy,
+    precheckCode: PrecheckCode.busy,
     message: "Background Action is disabled.",
     details: ["The executor is busy."],
   ),
   cancelled(
-    chkCode: ChkCode.cancelled,
+    precheckCode: PrecheckCode.cancelled,
     message: "Background Action cancelled.",
     details: null,
   ),
   ;
 
   @override
-  final ChkCode chkCode;
+  final PrecheckCode precheckCode;
 
   @override
   final String message;
@@ -24,7 +24,7 @@ enum BackgroundActionPrecheck implements Precheck {
   final List<String>? details;
 
   const BackgroundActionPrecheck({
-    required this.chkCode,
+    required this.precheckCode,
     required this.message,
     required this.details,
   });

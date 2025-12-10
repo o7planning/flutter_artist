@@ -24,19 +24,19 @@ class _DebugRegister {
 
   List<String> get debugRegisterPolymorphisms => __debugRegisterPolymorphisms;
 
-  void addDebugRegisterShelf(String info) {
+  void _addDebugRegisterShelf(String info) {
     __debugRegisterShelves.add(info);
   }
 
-  void addDebugRegisterActivity(String info) {
+  void _addDebugRegisterActivity(String info) {
     __debugRegisterActivities.add(info);
   }
 
-  void addDebugRegisterAutoStocker(String info) {
+  void _addDebugRegisterAutoStocker(String info) {
     __debugRegisterAutoStockers.add(info);
   }
 
-  void addDebugRegisterPolymorphism(String info) {
+  void _addDebugRegisterPolymorphism(String info) {
     __debugRegisterPolymorphisms.add(info);
   }
 
@@ -47,5 +47,3 @@ class _DebugRegister {
     print("4 - ${__debugRegisterPolymorphisms.firstOrNull}");
   }
 }
-
-final _debugRegister = _DebugRegister();

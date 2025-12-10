@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_artist/src/core/icon/icon_constants.dart';
+import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../../core/_core_/core.dart';
 import '../../../core/utils/_class_utils.dart';
@@ -24,6 +26,17 @@ class ShelfInfoView extends StatelessWidget {
         "packages/flutter_artist/static-rs/shelf.png",
         width: 40,
         height: 40,
+      ),
+      trailing: Tooltip(
+        message: "Show Shelf Structure",
+        child: SimpleSmallIconButton(
+            iconData: FaIconConstants.shelfStructureIconData,
+            iconSize: 18,
+            onPressed: shelf == null
+                ? null
+                : () {
+                    shelf!.showShelfStructureDialog();
+                  }),
       ),
       title: Text(
         getClassName(shelf),

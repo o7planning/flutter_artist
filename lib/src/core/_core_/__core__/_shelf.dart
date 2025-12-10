@@ -510,7 +510,7 @@ abstract class Shelf extends _Core {
 
   Future<void> showShelfStructureDialog() async {
     BuildContext context = FlutterArtist.adapter.getCurrentContext();
-    await StorageDialogOLD.showStorageDialog(
+    await ShelfStructureViewDialog.showShelfStructureViewDialog(
       context: context,
       shelf: this,
     );
@@ -605,7 +605,7 @@ abstract class Shelf extends _Core {
         codeId: "#02020",
         shortDesc:
             "No lazy model-components found. Just update All UI components and nothing else. "
-            "Calling ${_debugObjHtml(this)}.ui.updateAllUIComponents().",
+            "Calling ${debugObjHtml(this)}.ui.updateAllUIComponents().",
         lineFlowType: LineFlowType.nonControllableCalling,
       );
       // IMPORTANT: No Lazy entities, but need to refresh UIComponents:
@@ -621,13 +621,14 @@ abstract class Shelf extends _Core {
     try {
       masterFlowItem._addLineFlowItem(
         codeId: "#02100",
-        shortDesc: "Create ${_debugObjHtml(xShelf)} for <b>Natural-Query</b>. "
-            "Note: <b>XShelf</b> is a <b>RootQueueItem</b> and contains multiple <b>Task Units</b>.",
+        shortDesc: "Create ${debugObjHtml(xShelf)} for <b>Natural-Load</b>.",
+        note:
+            "<b>XShelf</b> is a <b>RootQueueItem</b> and contains multiple <b>Task Units</b>.",
       );
       masterFlowItem._addLineFlowItem(
         codeId: "#02120",
         shortDesc:
-            "Calling ${_debugObjHtml(xShelf)}._initQueryTaskUnits() to create <b>Natural-Query</b> task units...",
+            "Calling ${debugObjHtml(xShelf)}._initQueryTaskUnits() to create <b>Natural-Load</b> task units...",
         lineFlowType: LineFlowType.nonControllableCalling,
       );
       //
@@ -638,7 +639,7 @@ abstract class Shelf extends _Core {
       masterFlowItem._addLineFlowItem(
         codeId: "#02160",
         shortDesc:
-            "Add ${_debugObjHtml(xShelf)} (RootQueueItem) to <b>Root-Queue</b>.",
+            "Add ${debugObjHtml(xShelf)} (RootQueueItem) to <b>Root-Queue</b>.",
       );
       FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
       //
@@ -718,7 +719,7 @@ abstract class Shelf extends _Core {
     masterFlowItem._addLineFlowItem(
       codeId: "#52000",
       shortDesc:
-          "Creating <b>$_XShelfShelfExternalReaction</b> for ${_debugObjHtml(this)}..",
+          "Creating <b>$_XShelfShelfExternalReaction</b> for ${debugObjHtml(this)}..",
     );
     //
     final XShelf xShelf = _XShelfShelfExternalReaction(
@@ -727,14 +728,14 @@ abstract class Shelf extends _Core {
     //
     masterFlowItem._addLineFlowItem(
       codeId: "#52100",
-      shortDesc: "Calling ${_debugObjHtml(xShelf)}._initQueryTaskUnits()..",
+      shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryTaskUnits()..",
       lineFlowType: LineFlowType.nonControllableCalling,
     );
     xShelf._initQueryTaskUnits(masterFlowItem: masterFlowItem);
     //
     masterFlowItem._addLineFlowItem(
       codeId: "#52200",
-      shortDesc: "Add ${_debugObjHtml(xShelf)} to <b>RootQueue</b>.",
+      shortDesc: "Add ${debugObjHtml(xShelf)} to <b>RootQueue</b>.",
       lineFlowType: LineFlowType.info,
     );
     // IMPORTANT: No need to call "execute".
@@ -767,7 +768,7 @@ abstract class Shelf extends _Core {
       );
       masterFlowItem._addLineFlowItem(
         codeId: "#68100",
-        shortDesc: "@actionable = ${_debugObjHtml(actionable)}.",
+        shortDesc: "@actionable = ${debugObjHtml(actionable)}.",
         errorInfo: errorInfo,
       );
       return ShelfQueuedEventExecutionResult(

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_artist/src/core/icon/icon_constants.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../core/_core_/core.dart';
 import '../../core/widgets/_custom_app_container.dart';
-import '../storage2/_storage_view.dart';
+import '../storage/_storage_view.dart';
 import '../utils/_dialog_size.dart';
 
 class StorageDialog extends StatefulWidget {
@@ -50,6 +51,11 @@ class _StorageDialogState extends State<StorageDialog> {
     );
 
     FaAlertDialog alert = FaAlertDialog(
+      icon: Icon(
+        FaIconConstants.storageIconData,
+        size: 16,
+        color: Colors.indigo,
+      ),
       titleText: "Storage Viewer",
       content: contentWidget,
       contentPadding: EdgeInsets.zero,

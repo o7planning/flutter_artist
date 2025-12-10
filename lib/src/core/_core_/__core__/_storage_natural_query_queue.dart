@@ -48,7 +48,7 @@ class _StorageNaturalQueryQueue {
       shortDesc:
           "Just detected some <b>UI Components</b> that have just been displayed. "
           "This will trigger a query execution on the associated <b>Shelves</b>:\n"
-          " - ${lazyShelves.map((s) => _debugObjHtml(s)).join(", ")}",
+          " - ${lazyShelves.map((s) => debugObjHtml(s)).join(", ")}",
       tipDocument: TipDocument.naturalQuery,
     );
     for (Shelf lazyShelf in lazyShelves) {
@@ -58,7 +58,7 @@ class _StorageNaturalQueryQueue {
       masterFlowItem._addLineFlowItem(
         codeId: "#00100",
         shortDesc:
-            "Start checking lazy model-components of ${_debugObjHtml(lazyShelf)}...",
+            "Start checking lazy model-components of ${debugObjHtml(lazyShelf)}...",
       );
       await lazyShelf._startLoadDataForLazyUIComponentsIfNeed(
         masterFlowItem: masterFlowItem,

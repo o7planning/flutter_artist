@@ -16,10 +16,10 @@ class _ShelfExternalUtils {
       if (_hasIntersection(events, typeEvents)) {
         ret._addReQueryBlock(block);
       }
-      typeEvents = block.config.executeItemLevelReactionToEvents;
-      if (_hasIntersection(events, typeEvents)) {
-        ret._addRefreshCurrItmBlock(block);
-      }
+      // typeEvents = block.config.executeItemLevelReactionToEvents;
+      // if (_hasIntersection(events, typeEvents)) {
+      //   ret._addRefreshCurrItmBlock(block);
+      // }
     }
     for (Scalar scalar in shelf.scalars) {
       List<Event> typeEvents = scalar.config.executeScalarLevelReactionToEvents;
