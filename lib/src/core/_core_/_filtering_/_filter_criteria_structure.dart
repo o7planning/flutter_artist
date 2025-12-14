@@ -66,7 +66,7 @@ class FilterCriteriaStructure {
   // SAME-AS: #0007 (formPropsStructure.allMultiOptProps)
   List<MultiOptFilterCriterion> get allMultiOptCriteria {
     return _allCriteriaMap.values
-        .where((p) => p is MultiOptFilterCriterion)
+        .whereType<MultiOptFilterCriterion>()
         .cast<MultiOptFilterCriterion>()
         .toList();
   }

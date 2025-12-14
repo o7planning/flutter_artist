@@ -19,10 +19,6 @@ class _XShelfBlockSilentActionExecution extends XShelf {
     switch (afterSilentAction) {
       case AfterBlockSilentAction.none:
         break;
-      case AfterBlockSilentAction.refreshCurrentItem:
-        // Test Cases: [62a].
-        forceReloadItem = true;
-        break;
       case AfterBlockSilentAction.query:
         queryHint = QryHint.force;
         forceReloadItem = false;

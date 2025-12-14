@@ -107,6 +107,26 @@ class XBlock<
   // ***************************************************************************
   // ***************************************************************************
 
+  _BlockSetItemAsCurrentTaskUnit createBlockSetItemAsCurrentTaskUnit({
+    required CurrentItemSelectionType currentItemSelectionType,
+    required List<Object> newQueriedList, // Do not change <Object>
+    required Object? candidateItem, // Do not change <Object>
+    required bool forceReloadItem,
+    required ForceType? forceTypeForForm,
+  }) {
+    return _BlockSetItemAsCurrentTaskUnit<ID, ITEM>(
+      currentItemSelectionType: currentItemSelectionType,
+      xBlock: this,
+      newQueriedList: newQueriedList.whereType<ITEM>().toList(),
+      candidateItem: candidateItem as ITEM?,
+      forceReloadItem: forceReloadItem,
+      forceTypeForForm: forceTypeForForm,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool hasQryHintInTreeBranchAndNotProcessed() {
     if (__qryHint == QryHint.force || __qryHint == QryHint.markAsPending) {
       return true;

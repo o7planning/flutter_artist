@@ -10,8 +10,15 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
   @override
   Future<void> callApiLogic() async {
     ApiResult<USER> result;
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "callApiLogic",
+      parameters: null,
+      navigate: null,
+      isLibMethod: true,
+    );
     try {
-      _masterFlowItem?._addLineFlowItem(
+      masterFlowItem._addLineFlowItem(
         codeId: "#20000",
         shortDesc: "Calling ${debugObjHtml(this)}.callApiLogin()...",
         lineFlowType: LineFlowType.controllableCalling,
@@ -27,7 +34,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
         stackTrace: stackTrace,
         showSnackBar: true,
       );
-      _masterFlowItem?._addLineFlowItem(
+      masterFlowItem._addLineFlowItem(
         codeId: "#20040",
         shortDesc:
             "The ${debugObjHtml(this)}.callApiLogin() method was called with an error!",
@@ -39,7 +46,8 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
     if (loggedInUser == null) {
       final message =
           "No data from ${getClassNameWithoutGenerics(this)}.callApiLogin().";
-      _masterFlowItem?._addLineFlowItem(
+      //
+      masterFlowItem._addLineFlowItem(
         codeId: "#20060",
         shortDesc: "Got value >> @loggedInUser: ${debugObjHtml(loggedInUser)}."
             "\n$message",
@@ -49,7 +57,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
         message: message,
         errorDetails: null,
       );
-      _masterFlowItem?._addLineFlowItem(
+      masterFlowItem._addLineFlowItem(
         codeId: "#20080",
         shortDesc: message,
       );
@@ -66,14 +74,14 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
       tokenPrefix = "$tokenPrefix...";
     }
     //
-    _masterFlowItem?._addLineFlowItem(
+    masterFlowItem._addLineFlowItem(
       codeId: "#20100",
       shortDesc: "Got LoggedInUser: ${debugObjHtml(loggedInUser)}."
           "\n - @accessToken: <b>$tokenPrefix</b>.",
       lineFlowType: LineFlowType.debug,
     );
     //
-    _masterFlowItem?._addLineFlowItem(
+    masterFlowItem._addLineFlowItem(
       codeId: "#20200",
       shortDesc:
           "Calling <b>globalsManager._setOrUpdateLoggedInUserSafely()</b> with parameters:",
@@ -89,12 +97,12 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
     //
     bool success =
         await FlutterArtist.globalsManager._setOrUpdateLoggedInUserSafely(
-      masterFlowItem: _masterFlowItem,
+      masterFlowItem: masterFlowItem,
       loggedInUser: loggedInUser,
       requiresTheSameUser: false,
     );
     if (!success) {
-      _masterFlowItem?.printToConsole();
+      masterFlowItem.printToConsole();
       return;
     }
     //
@@ -103,7 +111,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
     //
     final loginLogoutAdapter = FlutterArtist.globalsManager.loginLogoutAdapter;
     try {
-      _masterFlowItem?._addLineFlowItem(
+      masterFlowItem._addLineFlowItem(
         codeId: "#22060",
         shortDesc:
             "Calling ${debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() with parameters:",
@@ -117,13 +125,13 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
     } catch (e, stackTrace) {
       final errorInfo = ErrorInfo.fromError(error: e, stackTrace: stackTrace);
       //
-      _masterFlowItem?._addLineFlowItem(
+      masterFlowItem._addLineFlowItem(
         codeId: "#22080",
         shortDesc:
             "The ${debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() method was called with an error.",
         errorInfo: errorInfo,
       );
-      _masterFlowItem?.printToConsole();
+      masterFlowItem.printToConsole();
       return;
     }
     //
@@ -131,15 +139,15 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
     // IMPORTANT: This method never throw an error!
     //
     success = await FlutterArtist.globalsManager._loadGlobalDataSafely(
-      masterFlowItem: _masterFlowItem,
+      masterFlowItem: masterFlowItem,
       loggedInUser: loggedInUser,
     );
     if (!success) {
-      _masterFlowItem?.printToConsole();
+      masterFlowItem.printToConsole();
       return;
     }
     //
-    _masterFlowItem?._addLineFlowItem(
+    masterFlowItem._addLineFlowItem(
       codeId: "#20400",
       shortDesc: "Calling ${debugObjHtml(this)}.navigateToSuccessScreen()...",
       lineFlowType: LineFlowType.controllableCalling,

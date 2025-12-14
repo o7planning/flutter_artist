@@ -310,13 +310,13 @@ abstract class Scalar<
   @_TaskUnitMethodAnnotation()
   @_ScalarQueryAnnotation()
   Future<void> _unitQuery({
-    required MasterFlowItem? masterFlowItem,
+    required MasterFlowItem masterFlowItem,
     required TaskType taskType,
     required XScalar thisXScalar,
   }) async {
     __assertThisXScalar(thisXScalar);
     //
-    masterFlowItem?._addLineFlowItem(
+    masterFlowItem._addLineFlowItem(
       codeId: "#12000",
       shortDesc: "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
       lineFlowType: LineFlowType.debug,
@@ -324,7 +324,7 @@ abstract class Scalar<
     //
     bool hasXActiveUI = ui.hasActiveUIComponent(alsoCheckChildren: true);
     //
-    masterFlowItem?._addLineFlowItem(
+    masterFlowItem._addLineFlowItem(
       codeId: "#12020",
       shortDesc: "${debugObjHtml(this)} has UIX Visible? $hasXActiveUI",
     );
@@ -336,20 +336,20 @@ abstract class Scalar<
         queryHint = QryHint.force;
       }
     }
-    masterFlowItem?._addLineFlowItem(
+    masterFlowItem._addLineFlowItem(
       codeId: "#12040",
       shortDesc: "Calculated: @queryHint: $queryHint.",
     );
 
     if (queryHint == QryHint.none) {
-      masterFlowItem?._addLineFlowItem(
+      masterFlowItem._addLineFlowItem(
         codeId: "#12080",
         shortDesc:
             "@queryHint: $queryHint, @dataState: $dataState, @value: ${debugObjHtml(this.value)}.",
       );
       //
       if (this.dataState == DataState.ready && this.value != null) {
-        masterFlowItem?._addLineFlowItem(
+        masterFlowItem._addLineFlowItem(
           codeId: "#12100",
           shortDesc: "Create ${TaskType.scalarQuery.asDebugTaskUnit()}(s) "
               "for all child scalars and add to Queue."
@@ -360,7 +360,7 @@ abstract class Scalar<
           final taskUnit = _ScalarQueryTaskUnit(
             xScalar: childXScalar,
           );
-          masterFlowItem?._addLineFlowItem(
+          masterFlowItem._addLineFlowItem(
             codeId: "#12120",
             shortDesc: "Create ${taskUnit.asDebugTaskUnit()} and add to Queue.",
             lineFlowType: LineFlowType.addTaskUnit,
@@ -372,13 +372,13 @@ abstract class Scalar<
       }
       return;
     } else if (queryHint == QryHint.markAsPending) {
-      masterFlowItem?._addLineFlowItem(
+      masterFlowItem._addLineFlowItem(
         codeId: "#12140",
         shortDesc:
             "@queryHint: $queryHint, @dataState: $dataState, @value: ${debugObjHtml(this.value)}.",
       );
       //
-      masterFlowItem?._addLineFlowItem(
+      masterFlowItem._addLineFlowItem(
         codeId: "#12180",
         shortDesc:
             "${debugObjHtml(this)} --> clear data and set to <b>pending</b> state. "
@@ -406,7 +406,7 @@ abstract class Scalar<
       final FilterModel filterModel = xFilterModel.filterModel;
       // SAME-AS: #0004
       if (!xFilterModel.queried) {
-        masterFlowItem?._addLineFlowItem(
+        masterFlowItem._addLineFlowItem(
           codeId: "#12220",
           shortDesc:
               "${debugObjHtml(this)} @queried: ${xFilterModel.queried} --> need to load data",
@@ -421,7 +421,7 @@ abstract class Scalar<
         //
         xFilterModel.queried = true;
       } else {
-        masterFlowItem?._addLineFlowItem(
+        masterFlowItem._addLineFlowItem(
           codeId: "#12300",
           shortDesc:
               "${debugObjHtml(this)} @queried: ${xFilterModel.queried} --> no need to load data.",
@@ -436,7 +436,7 @@ abstract class Scalar<
     // Has Error in FilterModel.
     //
     if (filterCriteriaOfFilterModel == null) {
-      masterFlowItem?._addLineFlowItem(
+      masterFlowItem._addLineFlowItem(
         codeId: "#12340",
         shortDesc:
             "${debugObjHtml(filterModel)} error --> clear data of ${debugObjHtml(this)} and set to <b>error</b>. "
@@ -469,7 +469,7 @@ abstract class Scalar<
       __refreshQueryingState(isQuerying: true);
       //
       __callApiQueryCount++;
-      masterFlowItem?._addLineFlowItem(
+      masterFlowItem._addLineFlowItem(
         codeId: "#12400",
         shortDesc: "Calling ${debugObjHtml(this)}.callApiQuery()...",
         parameters: {
@@ -520,7 +520,7 @@ abstract class Scalar<
         errorInfo: errorInfo,
       );
       //
-      masterFlowItem?._addLineFlowItem(
+      masterFlowItem._addLineFlowItem(
         codeId: "#12440",
         shortDesc:
             "The ${debugObjHtml(this)}.callApiQuery() was called with an error!",
@@ -534,7 +534,7 @@ abstract class Scalar<
     if (isQueryError) {
       newScalarDataState = DataState.error;
       //
-      masterFlowItem?._addLineFlowItem(
+      masterFlowItem._addLineFlowItem(
         codeId: "#12500",
         shortDesc: "${debugObjHtml(this)} --> set value to null",
       );
@@ -546,7 +546,7 @@ abstract class Scalar<
         value: null,
         queryResultState: ActionResultState.fail,
       );
-      masterFlowItem?._addLineFlowItem(
+      masterFlowItem._addLineFlowItem(
         codeId: "#12520",
         shortDesc:
             "${debugObjHtml(this)} --> clear value and set state to <b>error</b>. "
@@ -561,7 +561,7 @@ abstract class Scalar<
       return;
     }
     // No ERROR!
-    masterFlowItem?._addLineFlowItem(
+    masterFlowItem._addLineFlowItem(
       codeId: "#12600",
       shortDesc:
           "${debugObjHtml(this)} --> set state to ready and set value to ${debugObjHtml(value)}.",
@@ -577,7 +577,7 @@ abstract class Scalar<
     );
     //
     if (value == null) {
-      masterFlowItem?._addLineFlowItem(
+      masterFlowItem._addLineFlowItem(
         codeId: "#12680",
         shortDesc:
             "${debugObjHtml(this)} --> @value: null --> clear data of all child scalars and set them to <b>none</b>."
@@ -589,7 +589,7 @@ abstract class Scalar<
     }
     //
     if (xCriteriaChanged || valueId != oldValueId) {
-      masterFlowItem?._addLineFlowItem(
+      masterFlowItem._addLineFlowItem(
         codeId: "#12700",
         shortDesc:
             "${debugObjHtml(this)} --> @filterCriteria changed --> clear data of child scalars and set them to <b>pending</b>."
@@ -601,7 +601,7 @@ abstract class Scalar<
       );
     }
     //
-    masterFlowItem?._addLineFlowItem(
+    masterFlowItem._addLineFlowItem(
       codeId: "#12800",
       shortDesc: "Create ${TaskType.scalarQuery.asDebugTaskUnit()}(s) "
           "for all child scalars and add to queue."
@@ -612,7 +612,7 @@ abstract class Scalar<
       final taskUnit = _ScalarQueryTaskUnit(
         xScalar: childXScalar,
       );
-      masterFlowItem?._addLineFlowItem(
+      masterFlowItem._addLineFlowItem(
         codeId: "#12840",
         shortDesc: "Create ${taskUnit.asDebugTaskUnit()} and add to queue.",
         lineFlowType: LineFlowType.addTaskUnit,

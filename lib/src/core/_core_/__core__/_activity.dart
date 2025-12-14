@@ -2,7 +2,7 @@ part of '../core.dart';
 
 abstract class Activity extends _Core {
   // TODO: Remove in next version!
-  MasterFlowItem? _masterFlowItem;
+  // MasterFlowItem? _masterFlowItem;
 
   late final ui = _ActivityUIComponents(activity: this);
 
@@ -25,7 +25,15 @@ abstract class Activity extends _Core {
   // ***************************************************************************
 
   Future<void> executeActivity() async {
-    _masterFlowItem?._addLineFlowItem(
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "executeActivity",
+      parameters: null,
+      navigate: null,
+      isLibMethod: false,
+    );
+    //
+    masterFlowItem._addLineFlowItem(
       codeId: "#23000",
       shortDesc:
           "Creating <b>XActivity</b> for ${debugObjHtml(this)} and add it to <b>RootQueue</b>.",
@@ -40,12 +48,13 @@ abstract class Activity extends _Core {
   // ***************************************************************************
 
   Future<void> _unitExecuteActivity({
+    required MasterFlowItem masterFlowItem,
     required TaskType taskType,
     required XActivity thisXActivity,
   }) async {
     __assertThisXActivity(thisXActivity);
     //
-    _masterFlowItem?._addLineFlowItem(
+    masterFlowItem._addLineFlowItem(
       codeId: "#19000",
       shortDesc:
           "Begin ${debugObjHtml(this)} > ${taskType.asDebugTaskUnit()}.\n"
@@ -54,7 +63,7 @@ abstract class Activity extends _Core {
     );
     //
     try {
-      _masterFlowItem?._addLineFlowItem(
+      masterFlowItem._addLineFlowItem(
         codeId: "#19100",
         shortDesc: "Calling ${debugObjHtml(this)}.callApiLogic()...",
         lineFlowType: LineFlowType.nonControllableCalling,
@@ -69,7 +78,7 @@ abstract class Activity extends _Core {
         stackTrace: stackTrace,
         showSnackBar: true,
       );
-      _masterFlowItem?._addLineFlowItem(
+      masterFlowItem._addLineFlowItem(
         codeId: "#19200",
         shortDesc:
             "The ${debugObjHtml(this)}.callApiLogic() method was called with an error!",

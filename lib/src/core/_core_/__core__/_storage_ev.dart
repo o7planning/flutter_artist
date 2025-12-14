@@ -10,14 +10,14 @@ class _StorageEventHandler {
 
   @_ImportantMethodAnnotation("Called after saving or deleting in the Block")
   void _fireEventFromBlockToOtherShelves({
-    required MasterFlowItem? masterFlowItem,
+    required MasterFlowItem masterFlowItem,
     required EventType eventType,
     required Block eventBlock,
     required String? itemIdString,
   }) {
     List<Event> events = eventBlock.config.outsideBroadcastEvents;
     if (events.isEmpty) {
-      masterFlowItem?._addLineFlowItem(
+      masterFlowItem._addLineFlowItem(
         codeId: "#25000",
         shortDesc:
             "${debugObjHtml(eventBlock)}.config.outsideBroadcastEvents is empty! --> This event will be ignored.",
@@ -40,7 +40,7 @@ class _StorageEventHandler {
 
   // PRIVATE METHOD.
   void ___fireEventFromBlockToOtherShelves({
-    required MasterFlowItem? masterFlowItem,
+    required MasterFlowItem masterFlowItem,
     required EventType eventType,
     required Block? srcEventBlock,
     required List<Event> events,
@@ -48,7 +48,7 @@ class _StorageEventHandler {
   }) {
     // Never run.
     if (events.isEmpty) {
-      masterFlowItem?._addLineFlowItem(
+      masterFlowItem._addLineFlowItem(
         codeId: "#26000",
         shortDesc: "Events is empty! --> This event will be ignored.",
         lineFlowType: LineFlowType.eventInfo,
@@ -57,7 +57,7 @@ class _StorageEventHandler {
     }
     Type itemDetailType = events.first.dataType;
     //
-    masterFlowItem?._addLineFlowItem(
+    masterFlowItem._addLineFlowItem(
       codeId: "#26100",
       shortDesc: "Creating <b>QueuedEvent</b> and add to the queue.",
       parameters: {
@@ -76,7 +76,7 @@ class _StorageEventHandler {
       itemId: itemIdString,
     );
     //
-    masterFlowItem?._addLineFlowItem(
+    masterFlowItem._addLineFlowItem(
       codeId: "#26120",
       shortDesc:
           "The <b>QueuedEvent</b> is created, It will be executed later....",

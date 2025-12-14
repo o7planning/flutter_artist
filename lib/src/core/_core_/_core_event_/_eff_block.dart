@@ -14,4 +14,8 @@ class _EffBlock {
   XBlock getXBlock({required XShelf xShelf}) {
     return xShelf.findXBlockByName(block.name)!;
   }
+
+  String getDebugInfo() {
+    return "${block.name}(reQuery: $reQuery, refreshCurrItem: $refreshCurrItem)";
+  }
 }

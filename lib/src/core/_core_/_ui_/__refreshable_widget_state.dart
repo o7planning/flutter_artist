@@ -105,7 +105,7 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
     SchedulerBinding.instance.addPostFrameCallback((_) {
       __executeAfterBuild();
     });
-    this.setBuildingState(isBuilding: true);
+    setBuildingState(isBuilding: true);
     //
     return showMode == ShowMode.production
         ? buildContent(context)

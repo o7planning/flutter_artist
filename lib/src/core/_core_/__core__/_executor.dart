@@ -111,10 +111,8 @@ class _Executor {
     );
     //
     if (taskUnit is _ActivityTaskUnit) {
-      // TODO: Remove in next version.
-      taskUnit.xActivity.activity._masterFlowItem = masterFlowItem;
-      //
       await taskUnit.xActivity.activity._unitExecuteActivity(
+        masterFlowItem: masterFlowItem,
         taskType: taskUnit.taskType,
         thisXActivity: taskUnit.xActivity,
       );
@@ -234,16 +232,6 @@ class _Executor {
         taskResult: taskUnit.taskResult as BlockQuickItemCreationResult,
       );
     }
-    // Block SilentCreateItem:
-    else if (taskUnit is _BlockSilentItemCreationTaskUnit) {
-      await taskUnit.xBlock.block._unitSilentCreateItem(
-        masterFlowItem: masterFlowItem,
-        taskType: taskUnit.taskType,
-        thisXBlock: taskUnit.xBlock,
-        action: taskUnit.action,
-        taskResult: taskUnit.taskResult as BlockSilentItemCreationResult,
-      );
-    }
     // Block QuickCreateMultiItems:
     else if (taskUnit is _BlockQuickMultiItemsCreationTaskUnit) {
       await taskUnit.xBlock.block._unitQuickCreateMultiItems(
@@ -261,16 +249,6 @@ class _Executor {
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
         taskResult: taskUnit.taskResult as BlockQuickItemUpdateResult,
-      );
-    }
-    // Block SilentUpdateItem:
-    else if (taskUnit is _BlockSilentItemUpdateTaskUnit) {
-      await taskUnit.xBlock.block._unitSilentUpdateItem(
-        masterFlowItem: masterFlowItem,
-        taskType: taskUnit.taskType,
-        thisXBlock: taskUnit.xBlock,
-        action: taskUnit.action,
-        taskResult: taskUnit.taskResult as BlockSilentItemUpdateResult,
       );
     }
     // Block Quick Action:

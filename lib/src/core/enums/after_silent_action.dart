@@ -1,5 +1,4 @@
 enum AfterBlockSilentAction {
-  refreshCurrentItem,
   query,
   none;
 }

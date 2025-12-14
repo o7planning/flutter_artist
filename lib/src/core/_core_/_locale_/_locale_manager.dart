@@ -82,10 +82,10 @@ class LocaleManager extends _Core {
   }
 
   Future<void> _updateLocale({
-    required MasterFlowItem? masterFlowItem,
+    required MasterFlowItem masterFlowItem,
     required Locale locale,
   }) async {
-    masterFlowItem?._addLineFlowItem(
+    masterFlowItem._addLineFlowItem(
       codeId: "#47100",
       shortDesc:
           "Calling ${debugObjHtml(_localeAdapter)}.updateLocale() with parameters:",
@@ -99,10 +99,10 @@ class LocaleManager extends _Core {
   }
 
   Locale? _readStoredLocale({
+    required MasterFlowItem masterFlowItem,
     required ILoggedInUser loggedInUser,
-    required MasterFlowItem? masterFlowItem,
   }) {
-    masterFlowItem?._addLineFlowItem(
+    masterFlowItem._addLineFlowItem(
       codeId: "#48000",
       shortDesc:
           "Calling <b>_globalsManager.getExtraGlobalProp()</b> to get <b>localeId</b>.",
@@ -113,12 +113,12 @@ class LocaleManager extends _Core {
     );
     // localeId: "languageCode-countryCode'.
     String? localeId = _globalsManager.getExtraGlobalProp(propName);
-    masterFlowItem?._addLineFlowItem(
+    masterFlowItem._addLineFlowItem(
       codeId: "#48200",
       shortDesc: "Got @localeId: <b>$localeId</b>.",
     );
     if (localeId == null) {
-      masterFlowItem?._addLineFlowItem(
+      masterFlowItem._addLineFlowItem(
         codeId: "#48300",
         shortDesc: "@localeId is <b>null</b> --> nothing to do.",
       );
@@ -135,14 +135,14 @@ class LocaleManager extends _Core {
     for (Locale locale in supportedLocales) {
       if (locale.languageCode == languageCode &&
           locale.countryCode == countryCode) {
-        masterFlowItem?._addLineFlowItem(
+        masterFlowItem._addLineFlowItem(
           codeId: "#48400",
           shortDesc: "Found Locale: ${debugObjHtml(locale)}.",
         );
         return locale;
       }
     }
-    masterFlowItem?._addLineFlowItem(
+    masterFlowItem._addLineFlowItem(
       codeId: "#48500",
       shortDesc: "No Local Found for @localeId: <b>$localeId</b>.",
     );

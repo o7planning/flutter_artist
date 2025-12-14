@@ -123,7 +123,7 @@ class FormPropsStructure {
   // SAME-AS: #0007 (filterCriteriaStructure.allMultiOptCriteria)
   List<MultiOptFormProp> get allMultiOptProps {
     return _allPropMap.values
-        .where((p) => p is MultiOptFormProp)
+        .whereType<MultiOptFormProp>()
         .cast<MultiOptFormProp>()
         .toList();
   }

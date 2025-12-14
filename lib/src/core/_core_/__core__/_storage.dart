@@ -208,7 +208,7 @@ class _Storage extends _StorageCore {
   }) async {
     ApiResult<void>? result;
     //
-    masterFlowItem?._addLineFlowItem(
+    masterFlowItem._addLineFlowItem(
       codeId: "#35000",
       shortDesc:
           "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
@@ -216,7 +216,7 @@ class _Storage extends _StorageCore {
     );
     //
     try {
-      masterFlowItem?._addLineFlowItem(
+      masterFlowItem._addLineFlowItem(
         codeId: "#35100",
         shortDesc: "Calling ${debugObjHtml(action)}.callApi().",
         lineFlowType: LineFlowType.controllableCalling,
@@ -237,7 +237,7 @@ class _Storage extends _StorageCore {
       taskResult._setErrorInfo(
         errorInfo: errorInfo,
       );
-      masterFlowItem?._addLineFlowItem(
+      masterFlowItem._addLineFlowItem(
         codeId: "#35200",
         shortDesc:
             "The ${debugObjHtml(action)}.callApi() method was called with an error!",
@@ -246,7 +246,7 @@ class _Storage extends _StorageCore {
       return false;
     }
     //
-    masterFlowItem?._addLineFlowItem(
+    masterFlowItem._addLineFlowItem(
       codeId: "#35300",
       shortDesc: "${debugObjHtml(this)} > Fire event after silent action.",
       lineFlowType: LineFlowType.fireEvent,

@@ -205,14 +205,14 @@ abstract class FilterModel<
   @_TaskUnitMethodAnnotation()
   @_FilterModelLoadDataAnnotation()
   Future<bool> _unitLoadFilterData({
-    required MasterFlowItem? masterFlowItem,
+    required MasterFlowItem masterFlowItem,
     required TaskType taskType,
     required XFilterModel thisXFilterModel,
     required FilterModelDataLoadResult taskResult,
   }) async {
     __assertThisXFilterModel(thisXFilterModel);
     //
-    masterFlowItem?._addLineFlowItem(
+    masterFlowItem._addLineFlowItem(
       codeId: "#24000",
       shortDesc: "Begin ${taskType.asDebugTaskUnit()}.",
       lineFlowType: LineFlowType.debug,
@@ -247,13 +247,13 @@ abstract class FilterModel<
   @_TaskUnitMethodAnnotation()
   @_FilterPanelChangeAnnotation()
   Future<bool> _unitFilterPanelChanged({
-    required MasterFlowItem? masterFlowItem,
+    required MasterFlowItem masterFlowItem,
     required TaskType taskType,
     required XFilterModel xFilterModel,
   }) async {
     __assertThisXFilterModel(xFilterModel);
     //
-    masterFlowItem?._addLineFlowItem(
+    masterFlowItem._addLineFlowItem(
       codeId: "#30000",
       shortDesc:
           "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}.",
@@ -369,21 +369,11 @@ abstract class FilterModel<
   @_ImportantMethodAnnotation(
       "Called after changing in FilterPanel or Querying in Block or Scalar.")
   Future<FILTER_CRITERIA?> _startNewFilterActivity({
-    required MasterFlowItem? masterFlowItem,
+    required MasterFlowItem masterFlowItem,
     required FILTER_INPUT? filterInput,
     required FilterActivityType activityType,
   }) async {
     __filterActivityCount++;
-    //
-    // if (this is! _DefaultFilterModel) {
-    //   masterFlowItem?._addLineFlowItem(
-    //     codeId: "#31000",
-    //     shortDesc:
-    //         "Calling ${_debugObjHtml(this)}._startNewFilterActivity() with parameters:",
-    //     lineFlowType: LineFlowType.calling,
-    //     isLibCall: true,
-    //   );
-    // }
     //
     if (activityType == FilterActivityType.newFilt) {
       __loadCount++;
@@ -392,7 +382,7 @@ abstract class FilterModel<
         _formKey.currentState?.instantValue ?? {};
     //
     if (this is! _DefaultFilterModel) {
-      masterFlowItem?._addLineFlowItem(
+      masterFlowItem._addLineFlowItem(
         codeId: "#31020",
         shortDesc:
             "Calling <b>_filterCriteriaStructure._initTemporaryForNewActivity()</b>..",
@@ -410,7 +400,7 @@ abstract class FilterModel<
     try {
       for (MultiOptFilterCriterion multiOptCriterion
           in _filterCriteriaStructure._rootOptCriteria) {
-        masterFlowItem?._addLineFlowItem(
+        masterFlowItem._addLineFlowItem(
           codeId: "#31040",
           shortDesc:
               "Calling ${debugObjHtml(this)}._loadMultiOptCriterionDataCascade() method "
@@ -445,7 +435,7 @@ abstract class FilterModel<
         stackTrace: stackTrace,
         showSnackBar: true,
       );
-      masterFlowItem?._addLineFlowItem(
+      masterFlowItem._addLineFlowItem(
         codeId: "#31080",
         shortDesc:
             "The ${debugObjHtml(this)}._loadMultiOptCriterionDataCascade() was called with an error.",
@@ -459,7 +449,7 @@ abstract class FilterModel<
     //
     if (filterInput != null) {
       try {
-        masterFlowItem?._addLineFlowItem(
+        masterFlowItem._addLineFlowItem(
           codeId: "#31140",
           shortDesc:
               "Calling ${debugObjHtml(this)}.updatedSimpleCriterionValues() method "
@@ -500,7 +490,7 @@ abstract class FilterModel<
           showSnackBar: true,
         );
         //
-        masterFlowItem?._addLineFlowItem(
+        masterFlowItem._addLineFlowItem(
           codeId: "#31200",
           shortDesc:
               "The ${debugObjHtml(this)}.updatedSimpleCriterionValues() method was called with an error.",
@@ -517,7 +507,7 @@ abstract class FilterModel<
       try {
         if (!__initiatedAtLeastOnce) {
           if (this is! _DefaultFilterModel) {
-            masterFlowItem?._addLineFlowItem(
+            masterFlowItem._addLineFlowItem(
               codeId: "#31300",
               shortDesc:
                   "Calling ${debugObjHtml(this)}.specifyDefaultValuesForSimpleCriteria() method "
@@ -551,7 +541,7 @@ abstract class FilterModel<
           stackTrace: stackTrace,
           showSnackBar: true,
         );
-        masterFlowItem?._addLineFlowItem(
+        masterFlowItem._addLineFlowItem(
           codeId: "#31380",
           shortDesc:
               "The ${debugObjHtml(this)}.specifyDefaultValuesForSimpleCriteria() method was called with an error.",
@@ -566,7 +556,7 @@ abstract class FilterModel<
     //
     try {
       if (this is! _DefaultFilterModel) {
-        masterFlowItem?._addLineFlowItem(
+        masterFlowItem._addLineFlowItem(
           codeId: "#31420",
           shortDesc:
               "Calling ${debugObjHtml(this)}.toFilterCriteriaObject() method "
@@ -585,7 +575,7 @@ abstract class FilterModel<
       // _filterCriteria = newCriteria; // has moved down.
       //
       if (this is! _DefaultFilterModel) {
-        masterFlowItem?._addLineFlowItem(
+        masterFlowItem._addLineFlowItem(
           codeId: "#31460",
           shortDesc:
               "Got an instance of ${debugObjHtml(newCriteria)} (Dart object).\n"
@@ -627,7 +617,7 @@ abstract class FilterModel<
       );
       //
       _filterCriteria = null;
-      masterFlowItem?._addLineFlowItem(
+      masterFlowItem._addLineFlowItem(
         codeId: "#31500",
         shortDesc:
             "The ${debugObjHtml(this)}.toFilterCriteriaObject() method was called with an error!",

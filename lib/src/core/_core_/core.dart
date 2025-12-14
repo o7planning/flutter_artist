@@ -40,8 +40,6 @@ import '../action/block_silent_action.dart';
 import '../action/block_quick_multi_items_creation_action.dart';
 import '../action/block_quick_item_creation_action.dart';
 import '../action/block_quick_item_update_action.dart';
-import '../action/block_silent_item_creation_action.dart';
-import '../action/block_silent_item_update_action.dart';
 import '../action/scalar_quick_extra_data_load_action.dart';
 import '../action/storage_silent_action.dart';
 import '../adapter/_flutter_artist_adapter.dart';
@@ -118,8 +116,6 @@ import '../precheck/__actionable.dart';
 import '../precheck/_check_allow.dart';
 import '../precheck/background_action_precheck.dart';
 import '../precheck/block_clearance_precheck.dart';
-import '../precheck/block_silent_item_creation_precheck.dart';
-import '../precheck/block_silent_item_update_precheck.dart';
 import '../precheck/filter_model_data_load_precheck.dart';
 import '../precheck/scalar_clearance_precheck.dart';
 import '../precheck/block_form_enablement_chk.dart';
@@ -351,8 +347,6 @@ part '_core_x_/_x_shelf_/_x_shelf_block_clear_current_item.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_block_quick_multi_items_creation.dart';
 
-part '_core_x_/_x_shelf_/_x_shelf_block_silent_item_update.dart';
-
 part '_core_x_/_x_shelf_/_x_shelf_block_quick_item_update.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_block_quick_item_creation.dart';
@@ -360,8 +354,6 @@ part '_core_x_/_x_shelf_/_x_shelf_block_quick_item_creation.dart';
 part '_core_x_/_x_shelf_/_x_shelf_block_silent_action_execution.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_block_set_item_as_current.dart';
-
-part '_core_x_/_x_shelf_/_x_shelf_block_silent_item_creation.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_block_clearance.dart';
 
@@ -461,11 +453,7 @@ part '_task_result_/_block_silent_action_result.dart';
 
 part '_task_result_/_block_quick_item_creation_result.dart';
 
-part '_task_result_/_block_silent_item_creation_result.dart';
-
 part '_task_result_/_block_quick_item_update_result.dart';
-
-part '_task_result_/_block_silent_item_update_result.dart';
 
 part '_task_result_/_block_quick_multi_items_creation_result.dart';
 
@@ -509,13 +497,9 @@ part '_task_unit_/_block_silent_action_task_unit.dart';
 
 part '_task_unit_/_block_quick_item_creation_task_unit.dart';
 
-part '_task_unit_/_block_silent_item_creation_task_unit.dart';
-
 part '_task_unit_/_block_quick_multi_items_creation_task_unit.dart';
 
 part '_task_unit_/_block_quick_item_update_task_unit.dart';
-
-part '_task_unit_/_block_silent_item_update_task_unit.dart';
 
 part '_task_unit_/_block_set_item_as_current_task_unit.dart';
 
@@ -872,20 +856,12 @@ class _BlockQuickItemCreationActionAnnotation {
   const _BlockQuickItemCreationActionAnnotation();
 }
 
-class _BlockSilentItemCreationActionAnnotation {
-  const _BlockSilentItemCreationActionAnnotation();
-}
-
 class _BlockQuickCreateMultiItemsActionAnnotation {
   const _BlockQuickCreateMultiItemsActionAnnotation();
 }
 
 class _BlockQuickItemUpdateActionAnnotation {
   const _BlockQuickItemUpdateActionAnnotation();
-}
-
-class _BlockSilentItemUpdateActionAnnotation {
-  const _BlockSilentItemUpdateActionAnnotation();
 }
 
 // ******* Block QuickAction (END) *********************************************

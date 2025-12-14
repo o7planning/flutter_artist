@@ -70,7 +70,7 @@ class _FlutterArtistNavigatorObserver extends RouteObserver<ModalRoute> {
   void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
     DebugPrinter.printDebug(
       DebugCat.navigatorObserver,
-      '[NavigatorObserver] -----------------> Route didReplace: ${newRoute?.settings?.name}'
+      '[NavigatorObserver] -----------------> Route didReplace: ${newRoute?.settings.name}'
       ' - oldRoute: ${oldRoute?.settings.name}',
     );
     //

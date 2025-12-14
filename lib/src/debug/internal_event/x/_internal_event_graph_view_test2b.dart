@@ -20,7 +20,7 @@ class _InternalEventGraphViewTest2bState
           children: [
             Wrap(
               children: [
-                Container(
+                SizedBox(
                   width: 100,
                   child: TextFormField(
                     initialValue: builder.nodeSeparation.toString(),
@@ -31,7 +31,7 @@ class _InternalEventGraphViewTest2bState
                     },
                   ),
                 ),
-                Container(
+                SizedBox(
                   width: 100,
                   child: TextFormField(
                     initialValue: builder.levelSeparation.toString(),
@@ -42,7 +42,7 @@ class _InternalEventGraphViewTest2bState
                     },
                   ),
                 ),
-                Container(
+                SizedBox(
                   width: 100,
                   child: TextFormField(
                     initialValue: builder.orientation.toString(),
@@ -53,7 +53,7 @@ class _InternalEventGraphViewTest2bState
                     },
                   ),
                 ),
-                Container(
+                SizedBox(
                   width: 100,
                   child: Column(
                     children: [

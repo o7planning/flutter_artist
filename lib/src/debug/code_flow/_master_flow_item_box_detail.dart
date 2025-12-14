@@ -153,15 +153,14 @@ class _MasterFlowItemDetailViewState extends State<MasterFlowItemDetailView> {
         Card(
           child: CodeFlowMethodView(masterFlowItem: masterFlowItem),
         ),
-        if (masterFlowItem.funcCallInfo != null && !masterFlowItem.isLibMethod)
-          const SizedBox(height: 5),
-        if (masterFlowItem.funcCallInfo != null && !masterFlowItem.isLibMethod)
+        if (!masterFlowItem.isLibMethod) const SizedBox(height: 5),
+        if (!masterFlowItem.isLibMethod)
           CodeFlowFuncTraceInfoView(
-            funcCallInfo: masterFlowItem.funcCallInfo!,
+            funcCallInfo: masterFlowItem.funcCallInfo,
           ),
         const SizedBox(height: 10),
         CodeFlowMethodArgsView(
-          arguments: masterFlowItem.funcCallInfo?.arguments,
+          arguments: masterFlowItem.funcCallInfo.arguments,
         ),
       ],
     );
@@ -190,8 +189,7 @@ class _MasterFlowItemDetailViewState extends State<MasterFlowItemDetailView> {
             )
             .expand(
               (w) => [w, SizedBox(height: 5)],
-            )
-            .toList(),
+            ),
       ],
     );
   }

@@ -18,7 +18,8 @@ enum TipDocument {
   blockQueryType,
   dataState,
   eventReactionFreezing,
-  debugState;
+  debugState,
+  canDoAction;
 
   int getPosition() {
     return TipDocument.values.indexOf(this) + 1;
@@ -78,6 +79,8 @@ enum TipDocument {
         return "Queued-Event Freezing";
       case TipDocument.debugState:
         return "Debug State";
+      case TipDocument.canDoAction:
+        return "Can Do Action";
     }
   }
 
@@ -123,6 +126,8 @@ enum TipDocument {
         return "Queued-Event Freezing";
       case TipDocument.debugState:
         return "Debug State";
+      case TipDocument.canDoAction:
+        return "Can Do Action";
     }
   }
 
@@ -215,6 +220,11 @@ enum TipDocument {
           "https://o7planning.org/11112/config2",
         ];
       case TipDocument.debugState:
+        return [
+          "https://o7planning.org/11111/config1",
+          "https://o7planning.org/11112/config2",
+        ];
+      case TipDocument.canDoAction:
         return [
           "https://o7planning.org/11111/config1",
           "https://o7planning.org/11112/config2",

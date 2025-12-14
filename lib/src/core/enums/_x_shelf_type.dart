@@ -12,9 +12,7 @@ enum XShelfType {
   blockCurrItemSelection,
   blockSilentActionExecution,
   blockQuickItemCreation,
-  blockSilentItemCreation,
   blockQuickItemUpdate,
-  blockSilentItemUpdate,
   blockQuickMultiItemsCreation,
   //
   shelfExternalReaction,

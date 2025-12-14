@@ -137,11 +137,11 @@ class _FlutterArtist extends _Core {
   /// ```
   ///
   Future<bool> _setOrUpdateLoggedInUser({
-    required MasterFlowItem? masterFlowItem,
+    required MasterFlowItem masterFlowItem,
     required ILoggedInUser loggedInUser,
     required bool requiresTheSameUser,
   }) async {
-    masterFlowItem?._addLineFlowItem(
+    masterFlowItem._addLineFlowItem(
       codeId: "#21000",
       shortDesc: "Calling <b>globalsManager._setOrUpdateLoggedInUser()</b>.",
       parameters: {
@@ -163,8 +163,17 @@ class _FlutterArtist extends _Core {
   }
 
   Future<void> setOrUpdateLoggedInUser(ILoggedInUser loggedInUser) async {
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "setOrUpdateLoggedInUser",
+      parameters: {
+        "loggedInUser": loggedInUser,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
     await _setOrUpdateLoggedInUser(
-      masterFlowItem: null,
+      masterFlowItem: masterFlowItem,
       loggedInUser: loggedInUser,
       requiresTheSameUser: true,
     );
