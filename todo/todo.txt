@@ -1,7 +1,6 @@
 queryAndPrepareToEdit ==> queryThenPrepareToEdit
 queryAndPrepareToCreate ==> queryThenPrepareToCreate
 queryEmptyAndPrepareToCreate ==> queryEmptyThenPrepareToCreate
-clearCurrent ==> clearCurrentItem?
 
 getMultiOptPropValueFromFormInput ==> getUpdatedValueForMultiOptProp
 getSimplePropValuesFromFormInput  ==> getUpdatedValuesForSimpleProps

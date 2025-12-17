@@ -608,7 +608,7 @@ abstract class FormModel<
     } catch (e, stackTrace) {
       saveError = true;
       //
-      ErrorInfo errorInfo = _handleError(
+      final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
         methodName: calledMethodName,
         error: e,
@@ -649,7 +649,7 @@ abstract class FormModel<
       );
       return;
     } catch (e, stackTrace) {
-      ErrorInfo errorInfo = _handleError(
+      final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
         methodName: calledMethodName,
         error: e,
@@ -855,7 +855,7 @@ abstract class FormModel<
           );
           _formPropsStructure._setFormError(formErrorInfo);
           //
-          ErrorInfo errorInfo = _handleError(
+          final ErrorInfo errorInfo = _handleError(
             shelf: shelf,
             methodName: formErrorInfo.methodName,
             error: formErrorInfo.error,
@@ -937,7 +937,7 @@ abstract class FormModel<
             );
             _formPropsStructure._setFormError(formErrorInfo);
             //
-            ErrorInfo errorInfo = _handleError(
+            final ErrorInfo errorInfo = _handleError(
               shelf: shelf,
               methodName: formErrorInfo.methodName,
               error: formErrorInfo.error,
@@ -1014,7 +1014,7 @@ abstract class FormModel<
             );
             _formPropsStructure._setFormError(formErrorInfo);
             //
-            ErrorInfo errorInfo = _handleError(
+            final ErrorInfo errorInfo = _handleError(
               shelf: shelf,
               methodName: formErrorInfo.methodName,
               error: formErrorInfo.error,
@@ -1097,7 +1097,7 @@ abstract class FormModel<
           );
           _formPropsStructure._setFormError(formErrorInfo);
           //
-          ErrorInfo errorInfo = _handleError(
+          final ErrorInfo errorInfo = _handleError(
             shelf: shelf,
             methodName: formErrorInfo.methodName,
             error: formErrorInfo.error,
@@ -1179,7 +1179,7 @@ abstract class FormModel<
         _formPropsStructure._setFormError(formErrorInfo);
       }
       //
-      ErrorInfo errorInfo = _handleError(
+      final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
         methodName: formErrorInfo.methodName,
         error: formErrorInfo.error,

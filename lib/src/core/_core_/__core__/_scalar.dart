@@ -507,7 +507,7 @@ abstract class Scalar<
       );
       __setScalarErrorInfo(scalarErrorInfo);
       //
-      ErrorInfo errorInfo = _handleError(
+      final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
         methodName: callApiQueryMethod.name,
         // AppError, ApiError or others.

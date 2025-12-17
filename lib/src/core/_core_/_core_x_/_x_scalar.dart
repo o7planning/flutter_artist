@@ -98,7 +98,7 @@ class XScalar<VALUE extends Object> {
 
   String toDebugHtmlString() {
     return " - <b>XScalar (${getClassName(scalar)})</b>"
-        "\n    - <b>needQuery</b>: $queryHint)"
+        "\n    - <b>needQuery</b>: $queryHint"
         "\n    - <b>scalarReQryCondition</b>: $_scalarReQryCon";
   }
 

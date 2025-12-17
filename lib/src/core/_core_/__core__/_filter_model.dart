@@ -428,7 +428,7 @@ abstract class FilterModel<
         );
       }
     } catch (e, stackTrace) {
-      ErrorInfo errorInfo = _handleError(
+      final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
         methodName: "callApiLoadMultiOptCriterionXData",
         error: e,
@@ -482,7 +482,7 @@ abstract class FilterModel<
           }
         }
       } catch (e, stackTrace) {
-        ErrorInfo errorInfo = _handleError(
+        final ErrorInfo errorInfo = _handleError(
           shelf: shelf,
           methodName: "getUpdatedValuesForSimpleCriteria",
           error: e,
@@ -534,7 +534,7 @@ abstract class FilterModel<
           }
         }
       } catch (e, stackTrace) {
-        ErrorInfo errorInfo = _handleError(
+        final ErrorInfo errorInfo = _handleError(
           shelf: shelf,
           methodName: "specifyDefaultValuesForSimpleCriteria",
           error: e,
@@ -601,7 +601,7 @@ abstract class FilterModel<
       _filterCriteria = newCriteria;
       return _filterCriteria;
     } catch (e, stackTrace) {
-      ErrorInfo errorInfo = _handleError(
+      final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
         methodName: "toFilterCriteriaObject",
         error: e,

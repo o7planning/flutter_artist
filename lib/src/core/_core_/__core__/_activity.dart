@@ -70,7 +70,7 @@ abstract class Activity extends _Core {
       );
       await callApiLogic();
     } catch (e, stackTrace) {
-      ErrorInfo errorInfo = _handleError(
+      final ErrorInfo errorInfo = _handleError(
         shelf: null,
         methodName: "callApiLogic",
         // AppError, ApiError or others.

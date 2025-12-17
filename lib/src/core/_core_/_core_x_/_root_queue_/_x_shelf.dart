@@ -200,6 +200,7 @@ abstract class XShelf extends XRootQueueItem {
   // IMPORTANT: Sync Method.
   //
   void _updateInternalReactionByEvtBlock({
+    required MasterFlowItem masterFlowItem,
     required XBlock eventXBlock,
     required bool forceReQuery,
   }) {
@@ -209,21 +210,25 @@ abstract class XShelf extends XRootQueueItem {
       throw "Development Logic Error";
     }
 
-    __printXShelfInfo(
-      message: "XSHELF BEFORE INTERNAL UPDATE",
-      xShelf: eventXBlock.xShelf,
-    );
-
     final EffectedShelfMembers effectedShelfMembers =
         eventXBlock.block._internalEffectedShelfMembers;
 
-    print("\n**************************************************************");
-    print(" --- INTERNAL EVENT (EFFECTED SHELF MEMBER) --- ");
-    effectedShelfMembers.printInfo();
-    print("**************************************************************\n");
+    masterFlowItem._addLineFlowItem(
+      codeId: "#10000",
+      shortDesc:
+          "Registered Effected Shelf Members:${effectedShelfMembers.getDebugInfoHtml()}",
+      lineFlowType: LineFlowType.debug,
+    );
 
     if (forceReQuery) {
-      eventXBlock.setQueryHintToGreater(QryHint.force);
+      final forceQryHint = QryHint.force;
+      //
+      masterFlowItem._addLineFlowItem(
+        codeId: "#10100",
+        shortDesc:
+            "Set ${debugObjHtml(eventXBlock.block)} qryHint: ${debugObjHtml(forceQryHint)}.",
+      );
+      eventXBlock.setQueryHintToGreater(forceQryHint);
     }
 
     //
@@ -320,22 +325,11 @@ abstract class XShelf extends XRootQueueItem {
         xBlock = xBlock.parentXBlock;
       }
     }
-    __printXShelfInfo(
-      message: "XSHELF AFTER INTERNAL UPDATE",
-      xShelf: eventXBlock.xShelf,
-    );
   }
 
   // ***************************************************************************
   // ***************************************************************************
   // ***************************************************************************
-
-  void __printXShelfInfo({required String message, required XShelf xShelf}) {
-    print("\n**************************************************************");
-    print(" -- $message --");
-    xShelf.printInfo();
-    print("**************************************************************\n");
-  }
 
   void _initHookTaskUnit() {
     shelf._debugInitQueryTaskUnitsCount++;

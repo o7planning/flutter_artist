@@ -726,16 +726,16 @@ class _BlockPrepareFormToCreateItemAnnotation {
   const _BlockPrepareFormToCreateItemAnnotation();
 }
 
-class _BlockSelectItemAsCurrentAnnotation {
-  const _BlockSelectItemAsCurrentAnnotation();
+class _BlockSetItemAsCurrentAnnotation {
+  const _BlockSetItemAsCurrentAnnotation();
 }
 
 class _BlockClearanceAnnotation {
   const _BlockClearanceAnnotation();
 }
 
-class _BlockClearCurrentAnnotation {
-  const _BlockClearCurrentAnnotation();
+class _BlockClearCurrentItemAnnotation {
+  const _BlockClearCurrentItemAnnotation();
 }
 
 class _BlockQueryNextPageAnnotation {

@@ -2,7 +2,7 @@ part of '../core.dart';
 
 @_TaskUnitClassAnnotation()
 @_BlockRefreshCurrentItemAnnotation()
-@_BlockSelectItemAsCurrentAnnotation()
+@_BlockSetItemAsCurrentAnnotation()
 @_BlockSelectNextItemAsCurrentAnnotation()
 @_BlockSelectFirstItemAsCurrentAnnotation()
 @_BlockSelectPreviousItemAsCurrentAnnotation()

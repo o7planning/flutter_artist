@@ -47,7 +47,7 @@ class _BlockData<
   List<ITEM> moveCurrentItemToEndOfList({
     required List<ITEM> itemList,
   }) {
-    ITEM? currItem = this.__current._item;
+    ITEM? currItem = __current._item;
     if (currItem == null) {
       return itemList;
     }
@@ -69,8 +69,8 @@ class _BlockData<
   List<ITEM> getCheckedItems({
     required CurrentItemChkInclusion currentItemInclusion,
   }) {
-    ITEM? currItem = this.__current._item;
-    bool contains = this.isCurrentItemChecked;
+    ITEM? currItem = __current._item;
+    bool contains = isCurrentItemChecked;
     //
     //
     if (currItem != null) {
@@ -98,8 +98,8 @@ class _BlockData<
   List<ITEM> getSelectedItems({
     required CurrentItemSelInclusion currentItemInclusion,
   }) {
-    ITEM? currItem = this.__current._item;
-    bool contains = this.isCurrentItemSelected;
+    ITEM? currItem = __current._item;
+    bool contains = isCurrentItemSelected;
     //
     if (currItem != null) {
       List<ITEM> selItems =
@@ -116,14 +116,14 @@ class _BlockData<
       }
       return selItems;
     } else {
-      return [..._checkedItems];
+      return [..._selectedItems];
     }
   }
 
   // ***************************************************************************
 
   bool get isCurrentItemChecked {
-    ITEM? currItem = this.__current._item;
+    ITEM? currItem = __current._item;
     if (currItem == null) {
       return false;
     }
@@ -137,7 +137,7 @@ class _BlockData<
   // ***************************************************************************
 
   bool get isCurrentItemSelected {
-    ITEM? currItem = this.__current._item;
+    ITEM? currItem = __current._item;
     if (currItem == null) {
       return false;
     }

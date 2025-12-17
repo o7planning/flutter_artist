@@ -71,7 +71,7 @@ class _BackgroundExecutor extends _Core {
       // Throw ApiError:
       result.throwIfError();
     } catch (e, stackTrace) {
-      ErrorInfo errorInfo = _handleError(
+      final ErrorInfo errorInfo = _handleError(
         shelf: null,
         methodName: "executeBackgroundAction",
         error: e,

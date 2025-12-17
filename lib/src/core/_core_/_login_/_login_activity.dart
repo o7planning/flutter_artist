@@ -27,7 +27,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
       // Throw if Error.
       result.throwIfError();
     } catch (e, stackTrace) {
-      ErrorInfo errorInfo = _handleError(
+      final ErrorInfo errorInfo = _handleError(
         shelf: null,
         methodName: "callApiLogin",
         error: e,

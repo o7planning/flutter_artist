@@ -710,7 +710,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_BlockClearCurrentAnnotation()
+  @_BlockClearCurrentItemAnnotation()
   Future<void> _unitClearCurrent({
     required MasterFlowItem masterFlowItem,
     required TaskType taskType,
@@ -1459,7 +1459,7 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_FormModelLoadDataAnnotation()
   @_BlockRefreshCurrentItemAnnotation()
-  @_BlockSelectItemAsCurrentAnnotation()
+  @_BlockSetItemAsCurrentAnnotation()
   @_BlockSelectNextItemAsCurrentAnnotation()
   @_BlockSelectFirstItemAsCurrentAnnotation()
   @_BlockSelectPreviousItemAsCurrentAnnotation()
@@ -1592,14 +1592,19 @@ abstract class Block<
       );
       if (candidateCurrItem == null) {
         // If UI Component Active need an ITEM-load.
-        bool hasItemRep = ui.hasActiveUIComponentItemRepresentative(
+        final String? itemRepComponent =
+            ui.findActiveUIComponentItemRepresentative(
           alsoCheckChildren: true,
         );
+        final bool hasItemRep = itemRepComponent != null;
         masterFlowItem._addLineFlowItem(
           codeId: "#28200",
           shortDesc: hasItemRep
               ? "Found a <b>UI-X-Component</b> that displays and represents the ITEM. So setting a currentItem is required."
               : "This block does not have any visible <b>UI-Component</b> but represents the ITEM.",
+          parameters: {
+            "itemRepComponent": itemRepComponent,
+          },
           tipDocument: TipDocument.blockActiveUIComponents,
         );
         //
@@ -1871,7 +1876,7 @@ abstract class Block<
             print(stackTrace);
             isLoadItemError = true;
             //
-            ErrorInfo errorInfo = _handleError(
+            final ErrorInfo errorInfo = _handleError(
               shelf: shelf,
               methodName: null,
               error: e,
@@ -1935,7 +1940,7 @@ abstract class Block<
           } catch (e, stackTrace) {
             isLoadItemError = true;
             //
-            ErrorInfo errorInfo = _handleError(
+            final ErrorInfo errorInfo = _handleError(
               shelf: shelf,
               methodName: methodName,
               error: e,
@@ -2104,7 +2109,7 @@ abstract class Block<
         );
       } catch (e, stackTrace) {
         convertItemError = true;
-        ErrorInfo errorInfo = _handleError(
+        final ErrorInfo errorInfo = _handleError(
           shelf: shelf,
           methodName: "convertItemDetailToItem",
           error: e,
@@ -2249,8 +2254,7 @@ abstract class Block<
           "${debugObjHtml(this)} --> Begin ${taskType.asDebugTaskUnit()} for ${debugObjHtml(this)}.",
       lineFlowType: LineFlowType.debug,
     );
-
-    ///
+    //
     final errorIfItemNotInTheBlock = true;
     //
     masterFlowItem._addLineFlowItem(
@@ -2313,7 +2317,7 @@ abstract class Block<
         tipDocument: TipDocument.autoStocker,
       );
     } catch (e, stackTrace) {
-      ErrorInfo errorInfo = _handleError(
+      final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
         methodName: null,
         error: e,
@@ -2341,16 +2345,6 @@ abstract class Block<
     final String methodName = "deleteById";
     ApiResult<void> result;
     try {
-      // FlutterArtist.codeFlowLogger._addMethodCall(
-      //   isLibCode: false,
-      //   navigate: null,
-      //   ownerClassInstance: this,
-      //   methodName: methodName,
-      //   parameters: {
-      //     "item": item,
-      //   },
-      // );
-      //
       final ID itemId = __getItemIdShowErr(item, showErr: true);
       __refreshDeletingState(isDeleting: true);
       //
@@ -2382,7 +2376,7 @@ abstract class Block<
         eventType: EventType.deletion,
       );
     } catch (e, stackTrace) {
-      ErrorInfo errorInfo = _handleError(
+      final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
         methodName: methodName,
         error: e,
@@ -2425,15 +2419,40 @@ abstract class Block<
       );
       return;
     }
+    //
+    final String? itemRepComponent = ui.findActiveUIComponentItemRepresentative(
+      alsoCheckChildren: true,
+    );
     masterFlowItem._addLineFlowItem(
-      codeId: "#08260",
-      shortDesc: "Finding sibling item...",
+      codeId: "#08250",
+      shortDesc: "Debug:",
+      parameters: {
+        "itemRepComponent": itemRepComponent,
+      },
+      lineFlowType: LineFlowType.debug,
+      tipDocument: TipDocument.blockActiveUIComponents,
+    );
+    final ITEM? siblingItem;
+    if (itemRepComponent != null) {
+      masterFlowItem._addLineFlowItem(
+        codeId: "#08260",
+        shortDesc: "Finding sibling item...",
+      );
+      //
+      // Finding sibling.
+      //
+      siblingItem = findSiblingItem(item: item);
+    } else {
+      siblingItem = null;
+    }
+    masterFlowItem._addLineFlowItem(
+      codeId: "#08270",
+      shortDesc: "Found sibling item:",
+      parameters: {
+        "siblingItem": siblingItem,
+      },
     );
     //
-    // Finding sibling.
-    //
-    final ITEM? siblingItem = findSiblingItem(item: item);
-
     masterFlowItem._addLineFlowItem(
       codeId: "#08280",
       shortDesc:
@@ -2455,7 +2474,7 @@ abstract class Block<
       refreshedItemDetail: null,
     );
     //
-    if (this.formModel != null) {
+    if (formModel != null) {
       masterFlowItem._addLineFlowItem(
         codeId: "#08320",
         shortDesc:
@@ -2476,11 +2495,22 @@ abstract class Block<
       thisXBlock: thisXBlock,
     );
     //
+    masterFlowItem._addLineFlowSeparator();
+    //
     masterFlowItem._addLineFlowItem(
       codeId: "#08400",
       shortDesc: "Deleted Successfully --> Process Internal Reaction.",
     );
-    //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#08440",
+      shortDesc: "Calling ${debugObjHtml(this)}._processInternalReaction()",
+      parameters: {
+        "candidateCurrItem": siblingItem,
+      },
+      lineFlowType: LineFlowType.nonControllableCalling,
+    );
+    // This: _unitDeleteItem() method.
+    // SAME-AS: #0013 (Same as _unitDeleteItems() method)
     await _processInternalReaction(
       masterFlowItem: masterFlowItem,
       thisXBlock: thisXBlock,
@@ -2508,7 +2538,7 @@ abstract class Block<
         CurrentItemSelectionType.setAnItemAsCurrentIfNeed;
     thisXBlock.setCurrentItemSelectionType(currentItemSelectionType);
     //
-    final bool hasInternalEvent = _internalEffectedShelfMembers.hasMember();
+    final bool hasInternalReaction = _internalEffectedShelfMembers.hasMember();
     //
     // Has Effected Member outside of Lineage (Ancestors + this + Descendants).
     //
@@ -2524,40 +2554,50 @@ abstract class Block<
         _internalEffectedShelfMembers._getTopEffectedAncestor(
       forEventBlock: this,
     );
-
-    print("\n\n**************************************************************");
-    print("@@@ --> INTERNAL EVENT: [$name]");
-    print("@@@ --> hasInternalEvent: $hasInternalEvent");
-    print("@@@ --> hasEffectedOutsideLineage: $hasEffectedOutsideLineage "
-        "${hasEffectedOutsideLineage ? '(***)' : ''}");
-    print("@@@ --> effected Self Block: $effSelfInfo");
-    print("@@@ --> effected Top Block: $topEffBlockInfo");
-    print("**************************************************************\n");
-
-    if (!hasInternalEvent) {
+    //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#70260",
+      shortDesc: "Processing INTERNAL EVENT [$name]...",
+      parameters: {
+        "hasInternalReaction": hasInternalReaction,
+        "hasEffectedOutsideLineage": hasEffectedOutsideLineage,
+        "effectedSelfBlock": effSelfInfo,
+        "topEffBlockInfo": topEffBlockInfo,
+      },
+      lineFlowType: LineFlowType.debug,
+    );
+    //
+    if (!hasInternalReaction) {
       masterFlowItem._addLineFlowItem(
         codeId: "#70300",
         shortDesc: "Calculated:",
         parameters: {
-          "hasInternalEvent": hasInternalEvent,
+          "hasInternalReaction": hasInternalReaction,
         },
         lineFlowType: LineFlowType.debug,
       );
+      // forceReQuery (In !hasInternalReaction).
       if (forceReQuery) {
         masterFlowItem._addLineFlowItem(
           codeId: "#70320",
-          shortDesc:
-              "@forceReQuery: ${debugObjHtml(forceReQuery)} -> Creating <b>_BlockQueryTaskUnit</b>.",
+          shortDesc: "Creating <b>_BlockQueryTaskUnit</b>.",
           lineFlowType: LineFlowType.addTaskUnit,
         );
         // Test Cases: [72a].
         final _STaskUnit taskUnit = _BlockQueryTaskUnit(xBlock: thisXBlock);
         thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
-      } else {
+      }
+      // !forceReQuery (In !hasInternalReaction).
+      else {
         masterFlowItem._addLineFlowItem(
           codeId: "#70380",
-          shortDesc:
-              "@forceReQuery: ${debugObjHtml(forceReQuery)} -> Creating <b>_BlockSetItemAsCurrentTaskUnit</b>.",
+          shortDesc: "Creating <b>_BlockSetItemAsCurrentTaskUnit</b>.",
+          parameters: {
+            "currentItemSelectionType": currentItemSelectionType,
+            "candidateItem": candidateCurrItem,
+            "forceReloadItem": false,
+            "forceTypeForForm": null,
+          },
           lineFlowType: LineFlowType.addTaskUnit,
         );
         //
@@ -2572,9 +2612,9 @@ abstract class Block<
         thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
       }
       return;
-    }
+    } // End of !hasInternalReaction.
     //
-    if (hasInternalEvent) {
+    if (hasInternalReaction) {
       masterFlowItem._addLineFlowItem(
         codeId: "#70400",
         shortDesc: "Calling <b>xShelf._updateInternalReactionByEvtBlock()</b>.",
@@ -2587,6 +2627,7 @@ abstract class Block<
       // Update only (No add to queue).
       //
       thisXBlock.xShelf._updateInternalReactionByEvtBlock(
+        masterFlowItem: masterFlowItem,
         eventXBlock: thisXBlock,
         forceReQuery: forceReQuery,
       );
@@ -2835,7 +2876,7 @@ abstract class Block<
         tipDocument: TipDocument.autoStocker,
       );
     } catch (e, stackTrace) {
-      ErrorInfo errorInfo = _handleError(
+      final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
         methodName: methodName,
         error: e,
@@ -2853,13 +2894,27 @@ abstract class Block<
       return;
     }
     //
+    final String? itemRepComponent = ui.findActiveUIComponentItemRepresentative(
+      alsoCheckChildren: true,
+    );
+    masterFlowItem._addLineFlowItem(
+      codeId: "#42560",
+      shortDesc: "Debug:",
+      parameters: {
+        "itemRepComponent": itemRepComponent,
+      },
+      lineFlowType: LineFlowType.debug,
+      tipDocument: TipDocument.blockActiveUIComponents,
+    );
     for (ITEM delItem in [...items]) {
       ApiResult<void> result;
       try {
         // May be throw Error:
         final ID deletingItemId = __getItemIdShowErr(delItem, showErr: true);
         //
-        siblingItem = findSiblingItem(item: delItem);
+        if (itemRepComponent != null) {
+          siblingItem = findSiblingItem(item: delItem);
+        }
         __refreshDeletingState(isDeleting: true);
         //
         masterFlowItem._addLineFlowItem(
@@ -2943,9 +2998,9 @@ abstract class Block<
           __clearAllChildrenBlocksToNone(
             thisXBlock: thisXBlock,
           );
-        }
+        } // End of "Current Item DELETED!".
       } catch (e, stackTrace) {
-        ErrorInfo errorInfo = _handleError(
+        final ErrorInfo errorInfo = _handleError(
           shelf: shelf,
           methodName: methodName,
           error: e,
@@ -2987,6 +3042,7 @@ abstract class Block<
             "${debugObjHtml(this)} > Fire event after deleting. (${deletionResult.deletedItems.length} items deleted!).",
         lineFlowType: LineFlowType.fireEvent,
       );
+      //
       __fireEventFromBlockToOtherShelves(
         masterFlowItem: masterFlowItem,
         eventType: EventType.deletion,
@@ -3008,35 +3064,28 @@ abstract class Block<
       );
     }
     //
-    if (!currentItemDeleted) {
-      return;
-    }
-    if (siblingItem == null) {
-      return;
-    }
+    masterFlowItem._addLineFlowSeparator();
     //
     masterFlowItem._addLineFlowItem(
       codeId: "#42920",
-      shortDesc:
-          "Now the block has no current item, need to set other as current item.",
-      lineFlowType: LineFlowType.info,
-    );
-    //
-    _STaskUnit taskUnit = _BlockSetItemAsCurrentTaskUnit<ID, ITEM>(
-      currentItemSelectionType:
-          CurrentItemSelectionType.setAnItemAsCurrentIfNeed,
-      xBlock: thisXBlock,
-      newQueriedList: <ITEM>[],
-      candidateItem: siblingItem,
-      forceReloadItem: false,
-      forceTypeForForm: null,
+      shortDesc: "After Deleting --> Process Internal Reaction.",
     );
     masterFlowItem._addLineFlowItem(
       codeId: "#42940",
-      shortDesc: "Create ${taskUnit.asDebugTaskUnit()} and add to queue.",
-      lineFlowType: LineFlowType.addTaskUnit,
+      shortDesc: "Calling ${debugObjHtml(this)}._processInternalReaction()",
+      parameters: {
+        "candidateCurrItem": siblingItem,
+      },
+      lineFlowType: LineFlowType.nonControllableCalling,
     );
-    thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
+    // This: _unitDeleteItems() method.
+    // SAME-AS: #0013 (Same as _unitDeleteItem() method)
+    // Test Cases: [52a] (Multi Deletions with Internal Event).
+    await _processInternalReaction(
+      masterFlowItem: masterFlowItem,
+      thisXBlock: thisXBlock,
+      candidateCurrItem: siblingItem,
+    );
   }
 
   // ***************************************************************************
@@ -3198,7 +3247,7 @@ abstract class Block<
       );
     } catch (e, stackTrace) {
       // Test Cases: [90b].
-      ErrorInfo errorInfo = _handleError(
+      final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
         methodName: '${getClassName(action)}.$methodName',
         error: e,
@@ -3236,7 +3285,7 @@ abstract class Block<
       );
       return;
     } catch (e, stackTrace) {
-      ErrorInfo errorInfo = _handleError(
+      final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
         methodName: "${getClassName(action)}.$methodName",
         error: e,
@@ -3396,7 +3445,7 @@ abstract class Block<
       //
     } catch (e, stackTrace) {
       // Test Cases: [90b].
-      ErrorInfo errorInfo = _handleError(
+      final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
         methodName: '${getClassName(action)}.$methodName',
         error: e,
@@ -3536,7 +3585,8 @@ abstract class Block<
     await _processInternalReaction(
       masterFlowItem: masterFlowItem,
       thisXBlock: thisXBlock,
-      forceReQuery: true,
+      forceReQuery:
+          action.config.afterSilentAction == AfterBlockSilentAction.query,
       candidateCurrItem: candidateCurrItem,
     );
   }
@@ -3911,11 +3961,11 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
-  @_BlockClearCurrentAnnotation()
-  Future<void> clearCurrent() async {
+  @_BlockClearCurrentItemAnnotation()
+  Future<void> clearCurrentItem() async {
     final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
-      methodName: "clearCurrent",
+      methodName: "clearCurrentItem",
       parameters: null,
       navigate: null,
       isLibMethod: true,
@@ -4106,7 +4156,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_BlockSelectItemAsCurrentAnnotation()
+  @_BlockSetItemAsCurrentAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockCurrentItemSettingResult<ITEM>>
       __refreshToShowOrEditItemAsCurrent({
@@ -4207,7 +4257,7 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
-  @_BlockSelectItemAsCurrentAnnotation()
+  @_BlockSetItemAsCurrentAnnotation()
   Future<BlockCurrentItemSettingResult<ITEM>> refreshItemAndSetAsCurrent({
     required ITEM item,
     bool forceLoadForm = false,
@@ -4763,7 +4813,7 @@ abstract class Block<
         filterCriteria: currentFilterCriteria,
       );
     } catch (e, stackTrace) {
-      ErrorInfo errorInfo = _handleError(
+      final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
         methodName: "initFormRelatedData",
         error: e,
@@ -4909,7 +4959,7 @@ abstract class Block<
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
     required ActionConfirmationType actionConfirmationType,
-    required BlockSilentAction<ID,dynamic> action,
+    required BlockSilentAction<ID, dynamic> action,
     required Function(BuildContext context)? navigate,
   }) async {
     final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
@@ -6805,7 +6855,7 @@ abstract class Block<
 
   @_PrecheckMethod()
   // @seeAlso: canRefreshCurrentItem()
-  Actionable<BlockCurrentItemSettingPrecheck> canSelectItemAsCurrent({
+  Actionable<BlockCurrentItemSettingPrecheck> canSetItemAsCurrent({
     required ITEM item,
   }) {
     return __canSetItemAsCurrent(
@@ -6821,7 +6871,7 @@ abstract class Block<
   /// Checks whether the current item can be refreshed.
   ///
   @_PrecheckMethod()
-  // @seeAlso: canSelectItemAsCurrent()
+  // @seeAlso: canSetItemAsCurrent()
   Actionable<BlockCurrentItemSettingPrecheck> canRefreshCurrentItem() {
     return __canRefreshCurrentItem(
       checkBusy: true,
