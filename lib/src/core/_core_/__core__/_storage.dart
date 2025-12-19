@@ -7,7 +7,6 @@ class _Storage extends _StorageCore {
 
   late final _polymorphismManager = _PolymorphismManager(this);
   late final ev = _StorageEventHandler(this);
-  final _stockersManager = _StockersManager();
   final _naturalQueryQueue = _StorageNaturalQueryQueue();
 
   late final _queuedEventManager = _QueuedEventManager(this);
@@ -39,16 +38,6 @@ class _Storage extends _StorageCore {
         masterFlowItem: masterFlowItem,
         polymorphismFamilies: polymorphismFamilies,
       );
-      //
-      item = masterFlowItem._addLineFlowItem(
-        codeId: "#SS020",
-        shortDesc: "${debugObjHtml(storageStructure)}.registerAutoStockers().",
-        lineFlowType: LineFlowType.controllableCalling,
-        tipDocument: TipDocument.autoStocker,
-      );
-      storageStructure.registerAutoStockers();
-      item._extraInfos = FlutterArtist.debugRegister.debugRegisterAutoStockers
-        ..sort();
       //
       item._extraInfos = FlutterArtist.debugRegister.debugRegisterPolymorphisms
         ..sort();
@@ -83,25 +72,6 @@ class _Storage extends _StorageCore {
 
   void registerItemVariants({required String name}) {
     //
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void registerAutoStocker<F extends AutoStocker<Object, Identifiable<Object>>>(
-    StockerCreator<F> builder,
-  ) {
-    if (__started) {
-      // LOGIC: #0001
-      throw DebugUtils.getFatalError(
-        " ERROR: It is not possible to register a new AutoStocker after the application has been started.",
-      );
-    }
-    //
-    final String autoStockerName = _getAutoStockerName(F);
-    FlutterArtist.debugRegister._addDebugRegisterAutoStocker(
-        "<b>FlutterArtist.storage.registerAutoStocker()</b> for <b>$autoStockerName</b>.");
-    _stockersManager._registerAutoStocker(builder);
   }
 
   // ***************************************************************************

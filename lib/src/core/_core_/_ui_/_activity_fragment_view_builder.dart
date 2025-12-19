@@ -44,6 +44,11 @@ class _ActivityFragmentViewBuilderState
   }
 
   @override
+  bool get isFormRepresentative {
+    return false;
+  }
+
+  @override
   bool get isActivityRepresentative {
     return false;
   }

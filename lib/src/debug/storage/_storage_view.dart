@@ -5,7 +5,6 @@ import '../../core/icon/icon_constants.dart';
 import '../utils/_tab_theme_utils.dart';
 import '_active_shelves_view.dart';
 import '_activities_view.dart';
-import '_auto_stockers_view.dart';
 import '_shelves_view.dart';
 
 class StorageView extends StatefulWidget {
@@ -63,18 +62,6 @@ class _StorageViewState extends State<StorageView> {
           size: iconSize,
         ),
         content: ActiveShelvesView(),
-      ),
-    );
-    tabs.add(
-      TabData(
-        text: ' Auto Stockers',
-        closable: false,
-        leading: (context, status) => Icon(
-          FaIconConstants.autoStockerIconData,
-          color: Colors.black,
-          size: iconSize,
-        ),
-        content: AutoStockersView(),
       ),
     );
     tabs.add(

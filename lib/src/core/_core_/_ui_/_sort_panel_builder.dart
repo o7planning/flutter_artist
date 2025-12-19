@@ -45,6 +45,11 @@ class _SortPanelBuilderState
   }
 
   @override
+  bool get isFormRepresentative {
+    return false;
+  }
+
+  @override
   bool get isHookRepresentative {
     return false;
   }

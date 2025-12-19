@@ -1,5 +1,4 @@
-enum CurrentItemSelectionType {
-  doNothing,
+enum CurrentItemSettingType {
   setAnItemAsCurrentIfNeed, // DEFAULT.
   setAnItemAsCurrent,
   setAnItemAsCurrentThenLoadForm,

@@ -46,6 +46,11 @@ class _BlockFragmentViewBuilderState
   }
 
   @override
+  bool get isFormRepresentative {
+    return false;
+  }
+
+  @override
   bool get isHookRepresentative {
     return false;
   }

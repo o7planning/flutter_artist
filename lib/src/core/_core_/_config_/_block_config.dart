@@ -2,7 +2,8 @@ part of '../core.dart';
 
 class BlockConfig {
   final bool leaveTheFormSafely;
-  final BlockItemRefreshMode itemRefreshMode;
+  final NonItemRepresentativeBehavior nonItemRepresentativeBehavior;
+  final UniformItemRefreshMode uniformItemRefreshMode;
   final BlockHiddenBehavior hiddenBehavior;
 
   final Pageable pageable;
@@ -36,7 +37,9 @@ class BlockConfig {
   final ClientSideSortMode clientSideSortMode;
 
   BlockConfig({
-    this.itemRefreshMode = BlockItemRefreshMode.auto,
+    this.nonItemRepresentativeBehavior =
+        NonItemRepresentativeBehavior.tryNotSetAnItemAsCurrent,
+    this.uniformItemRefreshMode = UniformItemRefreshMode.auto,
     this.leaveTheFormSafely = true,
     this.hiddenBehavior = BlockHiddenBehavior.none,
     List<Event>? outsideBroadcastEvents,
@@ -67,7 +70,7 @@ class BlockConfig {
 
   BlockConfig copy() {
     return BlockConfig(
-      itemRefreshMode: itemRefreshMode,
+      nonItemRepresentativeBehavior: nonItemRepresentativeBehavior,
       leaveTheFormSafely: leaveTheFormSafely,
       hiddenBehavior: hiddenBehavior,
       pageable: pageable.copy(),

@@ -1,9 +1,6 @@
-import '_current_item_selection_type.dart';
+import '_current_item_setting_type.dart';
 
 enum AfterQueryAction {
-  /// Do Nothing.
-  doNothing,
-
   /// Clear Current Item.
   clearCurrentItem,
 
@@ -19,20 +16,18 @@ enum AfterQueryAction {
   /// Select an available item in the List and prepare form to edit.
   setAnItemAsCurrentThenLoadForm;
 
-  CurrentItemSelectionType toCurrentItemSelectionType() {
+  CurrentItemSettingType? toCurrentItemSettingType() {
     switch (this) {
-      case AfterQueryAction.doNothing:
-        return CurrentItemSelectionType.doNothing;
       case AfterQueryAction.clearCurrentItem:
-        return CurrentItemSelectionType.doNothing;
+        return null;
       case AfterQueryAction.createNewItem:
-        return CurrentItemSelectionType.doNothing;
+        return null;
       case AfterQueryAction.setAnItemAsCurrentIfNeed:
-        return CurrentItemSelectionType.setAnItemAsCurrentIfNeed;
+        return CurrentItemSettingType.setAnItemAsCurrentIfNeed;
       case AfterQueryAction.setAnItemAsCurrent:
-        return CurrentItemSelectionType.setAnItemAsCurrent;
+        return CurrentItemSettingType.setAnItemAsCurrent;
       case AfterQueryAction.setAnItemAsCurrentThenLoadForm:
-        return CurrentItemSelectionType.setAnItemAsCurrentThenLoadForm;
+        return CurrentItemSettingType.setAnItemAsCurrentThenLoadForm;
     }
   }
 }

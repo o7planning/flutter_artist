@@ -3,10 +3,16 @@ import 'package:flutter_artist/src/core/icon/icon_constants.dart';
 import 'package:flutter_artist/src/debug/dialog/_tip_document_viewer_dialog.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-import '../../../flutter_artist.dart';
+import '../../core/_core_/core.dart';
 import '../../core/enums/_tip_document.dart';
 import '../shelf/widget/_block_or_scalar_info_view.dart';
 import '../shelf/widget/_shelf_info_view.dart';
+import '../state_view/_block_debug_options.dart';
+import '../state_view/_block_debug_state_view.dart';
+import '../state_view/_form_debug_options.dart';
+import '../state_view/_pagination_debug_options.dart';
+import '../state_view/_scalar_debug_options.dart';
+import '../state_view/_scalar_debug_state_view.dart';
 import '_block_or_scalar.dart';
 
 class BlockOrScalarView extends StatelessWidget {

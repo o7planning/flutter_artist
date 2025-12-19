@@ -168,7 +168,13 @@ class _ForceReloadFormState {
 }
 
 class _ForceReloadItemState {
+  final bool candidateAccepted;
   final bool forceReloadItem;
+  final bool forceReloadForm;
 
-  const _ForceReloadItemState({required this.forceReloadItem});
+  const _ForceReloadItemState({
+    required this.candidateAccepted,
+    required this.forceReloadItem,
+    required this.forceReloadForm,
+  });
 }

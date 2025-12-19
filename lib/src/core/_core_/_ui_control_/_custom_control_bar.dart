@@ -54,6 +54,11 @@ class _CustomControlBarState extends _RefreshableWidgetState<CustomControlBar> {
   }
 
   @override
+  bool get isFormRepresentative {
+    return false;
+  }
+
+  @override
   void addWidgetState({required bool isShowing}) {
     // TODO: implement addWidgetState
   }

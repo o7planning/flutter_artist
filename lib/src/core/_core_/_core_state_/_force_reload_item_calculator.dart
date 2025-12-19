@@ -1,1169 +1,758 @@
 part of '../core.dart';
 
 _ForceReloadItemState _calculateBlockState({
-  required XBlock thisXBlock,
-  required bool hasXActiveUI,
-  required CurrentItemSelectionType currentItemSelectionType,
-  required bool isCandidateCurrentItemInNewQueriedList,
-  required bool currentItemChanged,
+  required final MasterFlowItem masterFlowItem,
+  required final XBlock thisXBlock,
+  required final Object? inputCandidateCurrItem,
+  required final Object candidateCurrItem,
+  required final bool inputForceReloadItem,
+  required final bool hasBlockXRepresentative,
+  required final bool hasItemXRepresentative,
+  required final bool hasFormRepresentative,
+  required final NonItemRepresentativeBehavior nonItemRepresentativeBehavior,
+  required final UniformItemRefreshMode uniformItemRefreshMode,
+  required final CurrentItemSettingType currentItemSettingType,
+  required final bool isCandidateCurrentItemInNewQueriedList,
+  required final bool currentItemIdChanged,
 }) {
   final Block block = thisXBlock.block;
+  final FormModel? formModel = block.formModel;
   //
-  bool forceReloadItem = false;
-  DebugPrinter.printDebug(
-      DebugCat.dataLoad, "@~~~> ${getClassName(block)} ~~~~~> ITM #");
+  bool candidateAccepted = inputCandidateCurrItem != null;
+  bool retForceReloadItem = false;
+  bool retForceReloadForm = false;
   //
-  switch (currentItemSelectionType) {
-    /* ---------------------------------------------------------------------*/
-    case CurrentItemSelectionType.doNothing:
-      DebugPrinter.printDebug(DebugCat.dataLoad,
-          "@~~~> ${getClassName(block)} ~~~~~> ITM 0: currentItemSelectionType: ${currentItemSelectionType.name}");
-      //
-      // ITEM == ITEM_DETAIL.
-      //
-      if (block.getItemType() == block.getItemDetailType()) {
-        DebugPrinter.printDebug(DebugCat.dataLoad,
-            "@~~~> ${getClassName(block)} ~~~~~> ITM 0.1: ITEM == ITEM_DETAIL");
-        // Just Queried.
-        if (isCandidateCurrentItemInNewQueriedList) {
-          DebugPrinter.printDebug(DebugCat.dataLoad,
-              "@~~~> ${getClassName(block)} ~~~~~> ITM 0.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
-          //
-          if (currentItemChanged) {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 0.1.1.1: currentItemChanged: TRUE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 0.1.1.1.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 0.1.1.1.1",
-                shelf: block.shelf,
-                currentShelfCodes: "",
-              );
-              //
-              forceReloadItem = false; // (**??**)
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 0.1.1.1.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 0.1.1.1.2",
-                shelf: block.shelf,
-                currentShelfCodes: "",
-              );
-              //
-              forceReloadItem = false; // (**??**)
-            }
-          }
-          // !currentItemChanged
-          else {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 0.1.1.2: currentItemChanged: FALSE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 0.1.1.2.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 0.1.1.2.1",
-                shelf: block.shelf,
-                currentShelfCodes: "",
-              );
-              //
-              forceReloadItem = false; // (**??**)
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 0.1.1.2.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 0.1.1.2.2",
-                shelf: block.shelf,
-                currentShelfCodes: "",
-              );
-              //
-              forceReloadItem = false; // (**??**)
-            }
-          }
-        }
-        // !isCandidateCurrentItemInNewQueriedList
-        else {
-          DebugPrinter.printDebug(DebugCat.dataLoad,
-              "@~~~> ${getClassName(block)} ~~~~~> ITM 0.1.2: isCandidateCurrentItemInNewQueriedList: FALSE");
-          //
-          if (currentItemChanged) {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 0.1.2.1: currentItemChanged: TRUE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 0.1.2.1.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 0.1.2.1.1",
-                shelf: block.shelf,
-                currentShelfCodes: "",
-              );
-              //
-              forceReloadItem = false; // (**??**)
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 0.1.2.1.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 0.1.2.1.2",
-                shelf: block.shelf,
-                currentShelfCodes: "43a",
-              );
-              // Test Cases: [43a] -  _test_false1_categoryScreen_refreshCategory_3_prodREADY_curr0_form0
-              forceReloadItem = false;
-            }
-          }
-          // !currentItemChanged
-          else {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 0.1.2.2: currentItemChanged: FALSE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 0.1.2.2.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 0.1.2.2.1",
-                shelf: block.shelf,
-                currentShelfCodes: "43a",
-              );
-              // Test Cases: [43a] - _test_false1_categoryScreen_refreshCategory_2_prodREADY_curr1_form0
-              forceReloadItem = false;
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 0.1.2.2.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 0.1.2.2.2",
-                shelf: block.shelf,
-                currentShelfCodes: "43a",
-              );
-              // Test Cases: [43a] - _test_false1_categoryScreen_refreshCategory_2_prodREADY_curr1_form0
-              forceReloadItem = false;
-            }
-          }
-        }
-      }
-      // ITEM != ITEM_DETAIL
-      else {
-        DebugPrinter.printDebug(DebugCat.dataLoad,
-            "@~~~> ${getClassName(block)} ~~~~~> ITM 0.2: ITEM != ITEM_DETAIL");
-        // Just Queried.
-        if (isCandidateCurrentItemInNewQueriedList) {
-          DebugPrinter.printDebug(DebugCat.dataLoad,
-              "@~~~> ${getClassName(block)} ~~~~~> ITM 0.2.1: isCandidateCurrentItemInNewQueriedList: TRUE");
-          //
-          if (currentItemChanged) {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 0.2.1.1: currentItemChanged: TRUE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 0.2.1.1.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 0.2.1.1.1",
-                shelf: block.shelf,
-                currentShelfCodes: "",
-              );
-              //
-              forceReloadItem = false; // (**??**)
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 0.2.1.1.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 0.2.1.1.2",
-                shelf: block.shelf,
-                currentShelfCodes: "",
-              );
-              //
-              forceReloadItem = false;
-            }
-          }
-          // !currentItemChanged
-          else {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 0.2.1.2: currentItemChanged: FALSE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 0.2.1.2.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 0.2.1.2.1",
-                shelf: block.shelf,
-                currentShelfCodes: "",
-              );
-              //
-              forceReloadItem = false; // (**??**)
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 0.2.1.2.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 0.2.1.2.2",
-                shelf: block.shelf,
-                currentShelfCodes: "",
-              );
-              //
-              forceReloadItem = false; // (**??**)
-            }
-          }
-        }
-        // !isCandidateCurrentItemInNewQueriedList
-        else {
-          DebugPrinter.printDebug(DebugCat.dataLoad,
-              "@~~~> ${getClassName(block)} ~~~~~> ITM 0.2.2: isCandidateCurrentItemInNewQueriedList: FALSE");
-          //
-          if (currentItemChanged) {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 0.2.2.1: currentItemChanged: TRUE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 0.2.2.1.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 0.2.2.1.1",
-                shelf: block.shelf,
-                currentShelfCodes: "",
-              );
-              //
-              forceReloadItem = false; // (**??**)
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 0.2.2.1.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 0.2.2.1.2",
-                shelf: block.shelf,
-                currentShelfCodes: "44a",
-              );
-              // Test Cases: [44a] -  _test_false1_productScreen_refreshCategory_1
-              forceReloadItem = false;
-            }
-          }
-          // !currentItemChanged
-          else {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 0.2.2.2: currentItemChanged: FALSE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 0.2.2.2.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 0.2.2.2.1",
-                shelf: block.shelf,
-                currentShelfCodes: "44a",
-              );
-              // Test Cases: [44a] - _test_false1_productScreen_refreshCategory_1
-              forceReloadItem = false;
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 0.2.2.2.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 0.2.2.2.2",
-                shelf: block.shelf,
-                currentShelfCodes: "44a",
-              );
-              // Test Cases: [44a] - _test_false1_productScreen_refreshCategory_1
-              forceReloadItem = false;
-            }
-          }
-        }
-      }
-    /* ---------------------------------------------------------------------*/
-    case CurrentItemSelectionType.setAnItemAsCurrentIfNeed:
-      DebugPrinter.printDebug(DebugCat.dataLoad,
-          "@~~~> ${getClassName(block)} ~~~~~> ITM 1: currentItemSelectionType: ${currentItemSelectionType.name}");
-      //
-      // ITEM == ITEM_DETAIL.
-      //
-      if (block.getItemType() == block.getItemDetailType()) {
-        DebugPrinter.printDebug(DebugCat.dataLoad,
-            "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1: ITEM == ITEM_DETAIL");
-        // Just Queried.
-        if (isCandidateCurrentItemInNewQueriedList) {
-          DebugPrinter.printDebug(DebugCat.dataLoad,
-              "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
-          //
-          if (currentItemChanged) {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.1.1: currentItemChanged: TRUE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.1.1.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 1.1.1.1.1",
-                shelf: block.shelf,
-                currentShelfCodes: "13a, 42a",
-              );
-              // Test Cases: [43a] -
-              forceReloadItem = true;
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.1.1.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 1.1.1.1.2",
-                shelf: block.shelf,
-                currentShelfCodes: "13a, 36c, 41a",
-              );
-              // Test Cases: [43a] -
-              forceReloadItem = true;
-            }
-          }
-          // !currentItemChanged
-          else {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.1.2: currentItemChanged: FALSE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.1.2.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 1.1.1.2.1",
-                shelf: block.shelf,
-                currentShelfCodes: "13a, 36c, 41a",
-              );
-              // Test Cases: [43a] -
-              forceReloadItem = true;
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.1.2.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 1.1.1.2.2",
-                shelf: block.shelf,
-                currentShelfCodes: "36c, 41a",
-              );
-              //
-              forceReloadItem = true;
-            }
-          }
-        }
-        // !isCandidateCurrentItemInNewQueriedList
-        else {
-          DebugPrinter.printDebug(DebugCat.dataLoad,
-              "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.2: isCandidateCurrentItemInNewQueriedList: FALSE");
-          //
-          if (currentItemChanged) {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.2.1: currentItemChanged: TRUE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.2.1.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 1.1.2.1.1",
-                shelf: block.shelf,
-                currentShelfCodes: "",
-              );
-              //
-              forceReloadItem = true;
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.2.1.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 1.1.2.1.2",
-                shelf: block.shelf,
-                currentShelfCodes: "",
-              );
-              // (43a) -
-              forceReloadItem = false;
-            }
-          }
-          // !currentItemChanged
-          else {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.2.2: currentItemChanged: FALSE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.2.2.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 1.1.2.2.1",
-                shelf: block.shelf,
-                currentShelfCodes: "13a, 36b, 36c, 42a",
-              );
-              // Test Cases: [43a] -
-              forceReloadItem = false;
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 1.1.2.2.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 1.1.2.2.2",
-                shelf: block.shelf,
-                currentShelfCodes: "43a",
-              );
-              // Test Cases: [43a] - _test_false1_productScreen_refreshCategory_1
-              forceReloadItem = false;
-            }
-          }
-        }
-      }
-      // ITEM != ITEM_DETAIL
-      else {
-        DebugPrinter.printDebug(DebugCat.dataLoad,
-            "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2: ITEM != ITEM_DETAIL");
-        // Just Queried.
-        if (isCandidateCurrentItemInNewQueriedList) {
-          DebugPrinter.printDebug(DebugCat.dataLoad,
-              "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.1: isCandidateCurrentItemInNewQueriedList: TRUE");
-          //
-          if (currentItemChanged) {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.1.1: currentItemChanged: TRUE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.1.1.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 1.2.1.1.1",
-                shelf: block.shelf,
-                currentShelfCodes:
-                    "11a, 11b, 29a, 36a, 36b, 36c, 37a, 38a, 38b, 39a, 39b, 40a, 40b, 41a",
-              );
-              // Test Cases: [44a] -
-              forceReloadItem = true;
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.1.1.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 1.2.1.1.2",
-                shelf: block.shelf,
-                currentShelfCodes: "11a, 39b, 40b",
-              );
-              // Test Cases: [44a] -
-              forceReloadItem = false;
-            }
-          }
-          // !currentItemChanged
-          else {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.1.2: currentItemChanged: FALSE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.1.2.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 1.2.1.2.1",
-                shelf: block.shelf,
-                currentShelfCodes: "29a, 39a, 40a",
-              );
-              // Test Cases: [44a] -
-              forceReloadItem = true;
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.1.2.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 1.2.1.2.2",
-                shelf: block.shelf,
-                currentShelfCodes: "",
-              );
-              //
-              forceReloadItem = true;
-            }
-          }
-        }
-        // !isCandidateCurrentItemInNewQueriedList
-        else {
-          DebugPrinter.printDebug(DebugCat.dataLoad,
-              "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.2: isCandidateCurrentItemInNewQueriedList: FALSE");
-          //
-          if (currentItemChanged) {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.2.1: currentItemChanged: TRUE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.2.1.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 1.2.2.1.1",
-                shelf: block.shelf,
-                currentShelfCodes: "11a, 11b, 29a, 37a, 38b, 39b, 40a, 40b",
-              );
-              // Test Cases: [44a] -
-              forceReloadItem = true;
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.2.1.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 1.2.2.1.2",
-                shelf: block.shelf,
-                currentShelfCodes: "",
-              );
-              //
-              forceReloadItem = false;
-            }
-          }
-          // !currentItemChanged
-          else {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.2.2: currentItemChanged: FALSE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.2.2.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 1.2.2.2.1",
-                shelf: block.shelf,
-                currentShelfCodes:
-                    "11a, 36a, 36b, 36c, 37a, 38a, 38b, 39b, 40a, 40b",
-              );
-              // Test Cases: [44a] -
-              forceReloadItem = false;
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 1.2.2.2.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 1.2.2.2.2",
-                shelf: block.shelf,
-                currentShelfCodes: "38b, 40b",
-              );
-              // Test Cases: [44a] -
-              forceReloadItem = false;
-            }
-          }
-        }
-      }
-    /* ---------------------------------------------------------------------*/
-    case CurrentItemSelectionType.setAnItemAsCurrent:
-      DebugPrinter.printDebug(DebugCat.dataLoad,
-          "@~~~> ${getClassName(block)} ~~~~~> ITM 2: currentItemSelectionType: ${currentItemSelectionType.name}");
-      //
-      // ITEM == ITEM_DETAIL.
-      //
-      if (block.getItemType() == block.getItemDetailType()) {
-        DebugPrinter.printDebug(DebugCat.dataLoad,
-            "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1: ITEM == ITEM_DETAIL");
-        // Just Queried.
-        if (isCandidateCurrentItemInNewQueriedList) {
-          DebugPrinter.printDebug(DebugCat.dataLoad,
-              "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
-          //
-          if (currentItemChanged) {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.1.1: currentItemChanged: TRUE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.1.1.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 2.1.1.1.1",
-                shelf: block.shelf,
-                currentShelfCodes: "",
-              );
-              //
-              forceReloadItem = true;
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.1.1.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 2.1.1.1.2",
-                shelf: block.shelf,
-                currentShelfCodes: "36b, 41a",
-              );
-              //
-              forceReloadItem = true;
-            }
-          }
-          // !currentItemChanged
-          else {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.1.2: currentItemChanged: FALSE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.1.2.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 2.1.1.2.1",
-                shelf: block.shelf,
-                currentShelfCodes: "36b, 41a",
-              );
-              //
-              forceReloadItem = true;
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.1.2.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 2.1.1.2.2",
-                shelf: block.shelf,
-                currentShelfCodes: "36b, 41a",
-              );
-              //
-              forceReloadItem = true;
-            }
-          }
-        }
-        // !isCandidateCurrentItemInNewQueriedList
-        else {
-          DebugPrinter.printDebug(DebugCat.dataLoad,
-              "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.2: isCandidateCurrentItemInNewQueriedList: FALSE");
-          //
-          if (currentItemChanged) {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.2.1: currentItemChanged: TRUE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.2.1.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 2.1.2.1.1",
-                shelf: block.shelf,
-                currentShelfCodes: "",
-              );
-              //
-              forceReloadItem = true;
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.2.1.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 2.1.2.1.2",
-                shelf: block.shelf,
-                currentShelfCodes: "",
-              );
-              //
-              forceReloadItem = true;
-            }
-          }
-          // !currentItemChanged
-          else {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.2.2: currentItemChanged: FALSE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.2.2.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 2.1.2.2.1",
-                shelf: block.shelf,
-                currentShelfCodes: "43a",
-              );
-              // Test Cases: [43a] - _test_false2_productScreen_refreshProduct_1
-              // Ready selected as current (No need to refresh):
-              forceReloadItem = false;
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 2.1.2.2.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 2.1.2.2.2",
-                shelf: block.shelf,
-                currentShelfCodes: "",
-              );
-              //
-              // Ready selected as current (No need to refresh):
-              forceReloadItem = false;
-            }
-          }
-        }
-      }
-      // ITEM != ITEM_DETAIL
-      else {
-        DebugPrinter.printDebug(DebugCat.dataLoad,
-            "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2: ITEM != ITEM_DETAIL");
-        // Just Queried.
-        if (isCandidateCurrentItemInNewQueriedList) {
-          DebugPrinter.printDebug(DebugCat.dataLoad,
-              "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.1: isCandidateCurrentItemInNewQueriedList: TRUE");
-          //
-          if (currentItemChanged) {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.1.1: currentItemChanged: TRUE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.1.1.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 2.2.1.1.1",
-                shelf: block.shelf,
-                currentShelfCodes: "39b, 40a, 40b",
-              );
-              //
-              forceReloadItem = true;
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.1.1.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 2.2.1.1.2",
-                shelf: block.shelf,
-                currentShelfCodes: "39b",
-              );
-              //
-              forceReloadItem = true;
-            }
-          }
-          // !currentItemChanged
-          else {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.1.2: currentItemChanged: FALSE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.1.2.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 2.2.1.2.1",
-                shelf: block.shelf,
-                currentShelfCodes: "39a",
-              );
-              //
-              forceReloadItem = true;
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.1.2.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 2.2.1.2.2",
-                shelf: block.shelf,
-                currentShelfCodes: "",
-              );
-              //
-              forceReloadItem = true;
-            }
-          }
-        }
-        // !isCandidateCurrentItemInNewQueriedList
-        else {
-          DebugPrinter.printDebug(DebugCat.dataLoad,
-              "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.2: isCandidateCurrentItemInNewQueriedList: FALSE");
-          //
-          if (currentItemChanged) {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.2.1: currentItemChanged: TRUE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.2.1.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 2.2.2.1.1",
-                shelf: block.shelf,
-                currentShelfCodes: "40a",
-              );
-              // Test Cases: [44a] -
-              forceReloadItem = true;
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.2.1.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 2.2.2.1.2",
-                shelf: block.shelf,
-                currentShelfCodes: "40b",
-              );
-              //
-              forceReloadItem = true;
-            }
-          }
-          // !currentItemChanged
-          else {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.2.2: currentItemChanged: FALSE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.2.2.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 2.2.2.2.1",
-                shelf: block.shelf,
-                currentShelfCodes: "40a, 40b",
-              );
-              // Test Cases: [44a] -
-              forceReloadItem = false;
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 2.2.2.2.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 2.2.2.2.2",
-                shelf: block.shelf,
-                currentShelfCodes: "40b",
-              );
-              //
-              forceReloadItem = false;
-            }
-          }
-        }
-      }
-    /* ---------------------------------------------------------------------*/
-    case CurrentItemSelectionType.setAnItemAsCurrentThenLoadForm:
-      DebugPrinter.printDebug(DebugCat.dataLoad,
-          "@~~~> ${getClassName(block)} ~~~~~> ITM 3: currentItemSelectionType: ${currentItemSelectionType.name}");
-      //
-      // ITEM == ITEM_DETAIL.
-      //
-      if (block.getItemType() == block.getItemDetailType()) {
-        DebugPrinter.printDebug(DebugCat.dataLoad,
-            "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1: ITEM == ITEM_DETAIL");
-        // Just Queried.
-        if (isCandidateCurrentItemInNewQueriedList) {
-          DebugPrinter.printDebug(DebugCat.dataLoad,
-              "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.1: isCandidateCurrentItemInNewQueriedList: TRUE");
-          //
-          if (currentItemChanged) {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.1.1: currentItemChanged: TRUE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.1.1.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 3.1.1.1.1",
-                shelf: block.shelf,
-                currentShelfCodes: "",
-              );
-              //
-              forceReloadItem = true;
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.1.1.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 3.1.1.1.2",
-                shelf: block.shelf,
-                currentShelfCodes: "36a, 41a",
-              );
-              // Test Cases: [43a] -
-              forceReloadItem = true;
-            }
-          }
-          // !currentItemChanged
-          else {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.1.2: currentItemChanged: FALSE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.1.2.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 3.1.1.2.1",
-                shelf: block.shelf,
-                currentShelfCodes: "36a, 41a",
-              );
-              // Test Cases: [43a] -
-              forceReloadItem = true;
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.1.2.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 3.1.1.2.2",
-                shelf: block.shelf,
-                currentShelfCodes: "36a, 41a",
-              );
-              //
-              forceReloadItem = true;
-            }
-          }
-        }
-        // !isCandidateCurrentItemInNewQueriedList
-        else {
-          DebugPrinter.printDebug(DebugCat.dataLoad,
-              "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.2: isCandidateCurrentItemInNewQueriedList: FALSE");
-          //
-          if (currentItemChanged) {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.2.1: currentItemChanged: TRUE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.2.1.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 3.1.2.1.1",
-                shelf: block.shelf,
-                currentShelfCodes: "",
-              );
-              //
-              forceReloadItem = true;
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.2.1.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 3.1.2.1.2",
-                shelf: block.shelf,
-                currentShelfCodes: "",
-              );
-              //
-              forceReloadItem = true;
-            }
-          }
-          // !currentItemChanged
-          else {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.2.2: currentItemChanged: FALSE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.2.2.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 3.1.2.2.1",
-                shelf: block.shelf,
-                currentShelfCodes: "43a",
-              );
-              // Test Cases: [43a] - _test_false3_productScreen_refreshProduct_1
-              forceReloadItem = false; // ????????????
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 3.1.2.2.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 3.1.2.2.2",
-                shelf: block.shelf,
-                currentShelfCodes: "",
-              );
-              //
-              forceReloadItem = false; // ????????????
-            }
-          }
-        }
-      }
-      // ITEM != ITEM_DETAIL
-      else {
-        DebugPrinter.printDebug(DebugCat.dataLoad,
-            "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2: ITEM != ITEM_DETAIL");
-        // Just Queried.
-        if (isCandidateCurrentItemInNewQueriedList) {
-          DebugPrinter.printDebug(DebugCat.dataLoad,
-              "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.1: isCandidateCurrentItemInNewQueriedList: TRUE");
-          //
-          if (currentItemChanged) {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.1.1: currentItemChanged: TRUE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.1.1.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 3.2.1.1.1",
-                shelf: block.shelf,
-                currentShelfCodes: "39b, 40a, 40b",
-              );
-              //
-              forceReloadItem = true;
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.1.1.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 3.2.1.1.2",
-                shelf: block.shelf,
-                currentShelfCodes: "39b, 40b",
-              );
-              // Test Cases: [44a] -
-              forceReloadItem = true;
-            }
-          }
-          // !currentItemChanged
-          else {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.1.2: currentItemChanged: FALSE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.1.2.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 3.2.1.2.1",
-                shelf: block.shelf,
-                currentShelfCodes: "39a",
-              );
-              // Test Cases: [44a] -
-              forceReloadItem = true;
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.1.2.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 3.2.1.2.2",
-                shelf: block.shelf,
-                currentShelfCodes: "",
-              );
-              //
-              forceReloadItem = true;
-            }
-          }
-        }
-        // !isCandidateCurrentItemInNewQueriedList
-        else {
-          DebugPrinter.printDebug(DebugCat.dataLoad,
-              "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.2: isCandidateCurrentItemInNewQueriedList: FALSE");
-          //
-          if (currentItemChanged) {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.2.1: currentItemChanged: TRUE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.2.1.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 3.2.2.1.1",
-                shelf: block.shelf,
-                currentShelfCodes: "40a",
-              );
-              // Test Casese: [44a] -
-              forceReloadItem = true;
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.2.1.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 3.2.2.1.2",
-                shelf: block.shelf,
-                currentShelfCodes: "40b",
-              );
-              //
-              forceReloadItem = true;
-            }
-          }
-          // !currentItemChanged
-          else {
-            DebugPrinter.printDebug(DebugCat.dataLoad,
-                "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.2.2: currentItemChanged: FALSE");
-            //
-            if (hasXActiveUI) {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.2.2.1: hasXActiveUI: TRUE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 3.2.2.2.1",
-                shelf: block.shelf,
-                currentShelfCodes: "40a, 40b",
-              );
-              // Test Cases: [44a] -
-              // Ready selected as current (No need to refresh):
-              forceReloadItem = false;
-            }
-            // !hasXActiveUI
-            else {
-              DebugPrinter.printDebug(DebugCat.dataLoad,
-                  "@~~~> ${getClassName(block)} ~~~~~> ITM 3.2.2.2.2: hasXActiveUI: FALSE");
-              // Debug:
-              _addDebugForceReload(
-                debugCode: "ITM 3.2.2.2.2",
-                shelf: block.shelf,
-                currentShelfCodes: "40b",
-              );
-              // Ready selected as current (No need to refresh):
-              forceReloadItem = false;
-            }
-          }
-        }
-      }
-    /* ---------------------------------------------------------------------*/
-    case CurrentItemSelectionType.refresh:
-      DebugPrinter.printDebug(DebugCat.dataLoad,
-          "@~~~> ${getClassName(block)} ~~~~~> ITM 4: currentItemSelectionType: ${currentItemSelectionType.name}");
-      //
-      break;
+  bool forceReloadItem = inputForceReloadItem;
+  bool forceReloadForm = false;
+  bool hasItemXRepresentativeExt = hasItemXRepresentative;
+  bool hasFormRepresentativeExt = hasFormRepresentative;
+
+  if (thisXBlock.xFormModel != null &&
+      thisXBlock.xFormModel!.forceTypeForForm == ForceType.force) {
+    // Test Case: [43a].
+    forceReloadForm = true;
+  }
+  if (forceReloadForm) {
+    return _ForceReloadItemState(
+      candidateAccepted: true,
+      forceReloadItem: true,
+      forceReloadForm: true,
+    );
   }
   //
-  return _ForceReloadItemState(
-    forceReloadItem: forceReloadItem,
+  switch (currentItemSettingType) {
+    case CurrentItemSettingType.setAnItemAsCurrentIfNeed:
+      break;
+    case CurrentItemSettingType.setAnItemAsCurrent:
+      hasItemXRepresentativeExt = true;
+    case CurrentItemSettingType.setAnItemAsCurrentThenLoadForm:
+      hasItemXRepresentativeExt = true;
+      hasFormRepresentativeExt = true;
+    case CurrentItemSettingType.refresh:
+      hasItemXRepresentativeExt = true;
+      forceReloadItem = true;
+  }
+
+  final bool isSpecialUniformITEM;
+  // ITEM == ITEM_DETAIL
+  if (block.getItemType() == block.getItemDetailType()) {
+    if (uniformItemRefreshMode == UniformItemRefreshMode.always) {
+      hasItemXRepresentativeExt = true;
+      isSpecialUniformITEM = false;
+    } else {
+      isSpecialUniformITEM = true; // (***)
+    }
+  } else {
+    isSpecialUniformITEM = false;
+  }
+  //
+  if (!hasItemXRepresentative) {
+    if (nonItemRepresentativeBehavior ==
+        NonItemRepresentativeBehavior.trySetAnItemAsCurrent) {
+      hasItemXRepresentativeExt = true;
+    }
+  }
+  //
+  // Start:
+  //
+  masterFlowItem._addLineFlowItem(
+    codeId: "A11000",
+    shortDesc: "ITM 1: ITEM == ITEM_DETAIL",
   );
+  // hasItemXRepresentativeExt
+  if (hasItemXRepresentativeExt) {
+    masterFlowItem._addLineFlowItem(
+      codeId: "A12000",
+      shortDesc: "ITM 1.1: @hasItemXRepresentativeExt: <b>true</b>",
+    );
+    // currentItemIdChanged
+    if (currentItemIdChanged) {
+      masterFlowItem._addLineFlowItem(
+        codeId: "A13000",
+        shortDesc: "ITM 1.1.1: @currentItemIdChanged: <b>true</b>",
+      );
+      // isCandidateCurrentItemInNewQueriedList
+      if (isCandidateCurrentItemInNewQueriedList) {
+        masterFlowItem._addLineFlowItem(
+          codeId: "A14000",
+          shortDesc:
+              "ITM 1.1.1.1: @isCandidateCurrentItemInNewQueriedList: <b>true</b>",
+        );
+        // ON hasItemXRepresentativeExt. (1)
+        // ON currentItemIdChanged. (2)
+        // ON isCandidateCurrentItemInNewQueriedList. (3)
+        if (formModel == null) {
+          // (1)(2)(3) --> SPECIAL!! (****)
+          retForceReloadItem = !isSpecialUniformITEM;
+          retForceReloadForm = false;
+          //
+          masterFlowItem._addLineFlowItem(
+            codeId: "A14100",
+            shortDesc: "ITM 1.1.1.1.1 Calculated:",
+            parameters: {
+              "isSpecialUniformITEM": isSpecialUniformITEM,
+              "retForceReloadItem": retForceReloadItem,
+              "retForceReloadForm": retForceReloadForm,
+            },
+          );
+        }
+        // formModel != null && !hasFormRepresentativeExt
+        else if (!hasFormRepresentativeExt) {
+          // (1)(2)(3) --> SPECIAL!! (****)
+          retForceReloadItem = !isSpecialUniformITEM;
+          retForceReloadForm = false;
+          //
+          masterFlowItem._addLineFlowItem(
+            codeId: "A14200",
+            shortDesc: "ITM 1.1.1.1.2 Calculated:",
+            parameters: {
+              "isSpecialUniformITEM": isSpecialUniformITEM,
+              "retForceReloadItem": retForceReloadItem,
+              "retForceReloadForm": retForceReloadForm,
+            },
+          );
+        }
+        // ON hasItemXRepresentativeExt. (1)
+        // ON currentItemIdChanged. (2)
+        // ON isCandidateCurrentItemInNewQueriedList. (3)
+        // formModel != null && hasFormRepresentativeExt
+        else {
+          // (1)(2)(3) --> SPECIAL!! (****)
+          retForceReloadItem = !isSpecialUniformITEM;
+          // currentItemIdChanged && hasFormRepresentativeExt
+          retForceReloadForm = true;
+          //
+          masterFlowItem._addLineFlowItem(
+            codeId: "A14300",
+            shortDesc: "ITM 1.1.1.1.3 Calculated:",
+            parameters: {
+              "isSpecialUniformITEM": isSpecialUniformITEM,
+              "retForceReloadItem": retForceReloadItem,
+              "retForceReloadForm": retForceReloadForm,
+            },
+          );
+        }
+      }
+      // !isCandidateCurrentItemInNewQueriedList
+      else {
+        masterFlowItem._addLineFlowItem(
+          codeId: "A17000",
+          shortDesc:
+              "ITM 1.1.1.2: @isCandidateCurrentItemInNewQueriedList: <b>false</b>",
+        );
+        // ON hasItemXRepresentativeExt. (1)
+        // ON currentItemIdChanged. (2)
+        // ON !isCandidateCurrentItemInNewQueriedList. (3)
+        if (formModel == null) {
+          retForceReloadItem = true; // (2*)
+          retForceReloadForm = false;
+          //
+          masterFlowItem._addLineFlowItem(
+            codeId: "A17100",
+            shortDesc: "ITM 1.1.1.2.1 Calculated:",
+            parameters: {
+              "isSpecialUniformITEM": isSpecialUniformITEM,
+              "retForceReloadItem": retForceReloadItem,
+              "retForceReloadForm": retForceReloadForm,
+            },
+          );
+        }
+        // formModel != null && !hasFormRepresentativeExt
+        else if (!hasFormRepresentativeExt) {
+          retForceReloadItem = true; // (2*)
+          retForceReloadForm = false;
+          //
+          masterFlowItem._addLineFlowItem(
+            codeId: "A17200",
+            shortDesc: "ITM 1.1.1.2.2 Calculated:",
+            parameters: {
+              "isSpecialUniformITEM": isSpecialUniformITEM,
+              "retForceReloadItem": retForceReloadItem,
+              "retForceReloadForm": retForceReloadForm,
+            },
+          );
+        }
+        // formModel != null && hasFormRepresentativeExt
+        else {
+          retForceReloadItem = true; // (2*)
+          // retForceReloadItem && hasFormRepresentativeExt
+          retForceReloadForm = true;
+          //
+          masterFlowItem._addLineFlowItem(
+            codeId: "A17300",
+            shortDesc: "ITM 1.1.1.2.3 Calculated:",
+            parameters: {
+              "isSpecialUniformITEM": isSpecialUniformITEM,
+              "retForceReloadItem": retForceReloadItem,
+              "retForceReloadForm": retForceReloadForm,
+            },
+          );
+        }
+      }
+    }
+    // !currentItemIdChanged
+    else {
+      masterFlowItem._addLineFlowItem(
+        codeId: "A21000",
+        shortDesc: "ITM 1.1.2: @currentItemIdChanged: $currentItemIdChanged",
+      );
+      // isCandidateCurrentItemInNewQueriedList
+      if (isCandidateCurrentItemInNewQueriedList) {
+        masterFlowItem._addLineFlowItem(
+          codeId: "A22000",
+          shortDesc:
+              "ITM 1.1.2.1: @isCandidateCurrentItemInNewQueriedList: <b>true</b>",
+        );
+        // ON hasItemXRepresentativeExt. (1)
+        // ON !currentItemIdChanged. (2) --> currentItemReady before!
+        // ON isCandidateCurrentItemInNewQueriedList. (3)
+        if (formModel == null) {
+          // (1)(2*)(3*)
+          retForceReloadItem = !isSpecialUniformITEM; // (****)
+          retForceReloadForm = false;
+          //
+          masterFlowItem._addLineFlowItem(
+            codeId: "A22100",
+            shortDesc: "ITM 1.1.2.1.1 Calculated:",
+            parameters: {
+              "isSpecialUniformITEM": isSpecialUniformITEM,
+              "retForceReloadItem": retForceReloadItem,
+              "retForceReloadForm": retForceReloadForm,
+            },
+          );
+        }
+        // formModel != null && !hasFormRepresentativeExt
+        else if (!hasFormRepresentativeExt) {
+          // (1)(2*)(3*)
+          retForceReloadItem = !isSpecialUniformITEM; // (****)
+          retForceReloadForm = false;
+          //
+          masterFlowItem._addLineFlowItem(
+            codeId: "A22200",
+            shortDesc: "ITM 1.1.2.1.2 Calculated:",
+            parameters: {
+              "isSpecialUniformITEM": isSpecialUniformITEM,
+              "retForceReloadItem": retForceReloadItem,
+              "retForceReloadForm": retForceReloadForm,
+            },
+          );
+        }
+        // ON hasItemXRepresentativeExt. (1)
+        // ON !currentItemIdChanged. (2) --> currentItemReady before!
+        // ON isCandidateCurrentItemInNewQueriedList. (3)
+        // formModel != null && hasFormRepresentativeExt
+        else {
+          // (1)(2*)(3*)
+          retForceReloadItem = !isSpecialUniformITEM; // (****)
+          // isCandidateCurrentItemInNewQueriedList && hasFormRepresentativeExt
+          retForceReloadForm = true;
+          //
+          masterFlowItem._addLineFlowItem(
+            codeId: "A22300",
+            shortDesc: "ITM 1.1.2.1.3 Calculated:",
+            parameters: {
+              "isSpecialUniformITEM": isSpecialUniformITEM,
+              "retForceReloadItem": retForceReloadItem,
+              "retForceReloadForm": retForceReloadForm,
+            },
+          );
+        }
+      }
+      // !isCandidateCurrentItemInNewQueriedList
+      else {
+        masterFlowItem._addLineFlowItem(
+          codeId: "A25000",
+          shortDesc:
+              "ITM 1.1.2.2: @isCandidateCurrentItemInNewQueriedList: <b>false</b>",
+        );
+        // ON hasItemXRepresentativeExt. (1)
+        // ON !currentItemIdChanged. (2) --> currentItemReady before!
+        // ON !isCandidateCurrentItemInNewQueriedList. (3)
+        if (formModel == null) {
+          // (2*)(3*)
+          retForceReloadItem = false || forceReloadItem;
+          retForceReloadForm = false;
+          //
+          masterFlowItem._addLineFlowItem(
+            codeId: "A25100",
+            shortDesc: "ITM 1.1.2.2.1 Calculated:",
+            parameters: {
+              "isSpecialUniformITEM": isSpecialUniformITEM,
+              "retForceReloadItem": retForceReloadItem,
+              "retForceReloadForm": retForceReloadForm,
+            },
+          );
+        }
+        // ON hasItemXRepresentativeExt. (1)
+        // ON !currentItemIdChanged. (2) --> currentItemReady before!
+        // ON !isCandidateCurrentItemInNewQueriedList. (3)
+        // formModel != null && !hasFormRepresentativeExt
+        else if (!hasFormRepresentativeExt) {
+          // (2*)(3*)
+          retForceReloadItem = false || forceReloadItem;
+          retForceReloadForm = false;
+          //
+          masterFlowItem._addLineFlowItem(
+            codeId: "A25200",
+            shortDesc: "ITM 1.1.2.2.2 Calculated:",
+            parameters: {
+              "isSpecialUniformITEM": isSpecialUniformITEM,
+              "retForceReloadItem": retForceReloadItem,
+              "retForceReloadForm": retForceReloadForm,
+            },
+          );
+        }
+        // ON hasItemXRepresentativeExt. (1)
+        // ON !currentItemIdChanged. (2) --> currentItemReady before!
+        // ON !isCandidateCurrentItemInNewQueriedList. (3)
+        // formModel != null && hasFormRepresentativeExt
+        else {
+          masterFlowItem._addLineFlowItem(
+            codeId: "A25300",
+            shortDesc: "ITM 1.1.2.2.3",
+          );
+          if (!__isReady(formModel!)) {
+            // hasFormRepresentativeExt && !formReady
+            retForceReloadForm = true;
+            // retForceReloadForm && (2)
+            retForceReloadItem = true;
+            //
+            masterFlowItem._addLineFlowItem(
+              codeId: "A25410",
+              shortDesc: "ITM 1.1.2.2.3.1 Calculated:",
+              parameters: {
+                "isSpecialUniformITEM": isSpecialUniformITEM,
+                "retForceReloadItem": retForceReloadItem,
+                "retForceReloadForm": retForceReloadForm,
+              },
+            );
+          }
+          // ON hasItemXRepresentativeExt. (1)
+          // ON !currentItemIdChanged. (2) --> currentItemReady before!
+          // ON !isCandidateCurrentItemInNewQueriedList. (3)
+          // ON hasFormRepresentativeExt
+          // ON formModel != null
+          // formReady
+          else {
+            // (2*)(3*)
+            retForceReloadItem = false || forceReloadItem;
+            // formReady && hasFormRepresentativeExt
+            retForceReloadForm = false || retForceReloadItem;
+            //
+            masterFlowItem._addLineFlowItem(
+              codeId: "A25420",
+              shortDesc: "ITM 1.1.2.2.3.2 Calculated:",
+              parameters: {
+                "isSpecialUniformITEM": isSpecialUniformITEM,
+                "retForceReloadItem": retForceReloadItem,
+                "retForceReloadForm": retForceReloadForm,
+              },
+            );
+          }
+        }
+      }
+    }
+  }
+  // !hasItemXRepresentativeExt
+  else {
+    masterFlowItem._addLineFlowItem(
+      codeId: "A28000",
+      shortDesc: "ITM 1.2: @hasItemXRepresentativeExt: <b>false</b>",
+    );
+    // currentItemIdChanged
+    if (currentItemIdChanged) {
+      masterFlowItem._addLineFlowItem(
+        codeId: "A29000",
+        shortDesc: "ITM 1.2.1: @currentItemIdChanged: $currentItemIdChanged",
+      );
+      // isCandidateCurrentItemInNewQueriedList
+      if (isCandidateCurrentItemInNewQueriedList) {
+        masterFlowItem._addLineFlowItem(
+          codeId: "A31000",
+          shortDesc:
+              "ITM 1.2.1.1: @isCandidateCurrentItemInNewQueriedList: <b>true</b>",
+        );
+        // ON !hasItemXRepresentativeExt. (1)
+        // ON currentItemIdChanged. (2)
+        // ON isCandidateCurrentItemInNewQueriedList. (3)
+        if (formModel == null) {
+          // (1*)
+          retForceReloadItem = false || forceReloadItem;
+          retForceReloadForm = false;
+          //
+          masterFlowItem._addLineFlowItem(
+            codeId: "A31100",
+            shortDesc: "ITM 1.2.1.1.1 Calculated:",
+            parameters: {
+              "isSpecialUniformITEM": isSpecialUniformITEM,
+              "retForceReloadItem": retForceReloadItem,
+              "retForceReloadForm": retForceReloadForm,
+            },
+          );
+        }
+        // formModel != null && !hasFormRepresentativeExt
+        else if (!hasFormRepresentativeExt) {
+          // (1*)
+          retForceReloadItem = false || forceReloadItem;
+          retForceReloadForm = false;
+          //
+          masterFlowItem._addLineFlowItem(
+            codeId: "A31200",
+            shortDesc: "ITM 1.2.1.1.2 Calculated:",
+            parameters: {
+              "isSpecialUniformITEM": isSpecialUniformITEM,
+              "retForceReloadItem": retForceReloadItem,
+              "retForceReloadForm": retForceReloadForm,
+            },
+          );
+        }
+        // formModel != null && hasFormRepresentativeExt
+        else {
+          masterFlowItem._addLineFlowItem(
+            codeId: "A31300",
+            shortDesc: "ITM 1.2.1.1.3",
+          );
+          if (!__isReady(formModel!)) {
+            // hasFormRepresentativeExt && !formReady
+            retForceReloadForm = true;
+            // retForceReloadForm && (2-currentItemIdChanged)
+            retForceReloadItem = true;
+            //
+            masterFlowItem._addLineFlowItem(
+              codeId: "A31410",
+              shortDesc: "ITM 1.2.1.1.3.1 Calculated:",
+              parameters: {
+                "isSpecialUniformITEM": isSpecialUniformITEM,
+                "retForceReloadItem": retForceReloadItem,
+                "retForceReloadForm": retForceReloadForm,
+              },
+            );
+          }
+          // formReady
+          else {
+            // formReady && hasFormRepresentativeExt && (2-currentItemIdChanged)
+            retForceReloadForm = true;
+            // retForceReloadForm && (2-currentItemIdChanged)
+            retForceReloadItem = true;
+            //
+            masterFlowItem._addLineFlowItem(
+              codeId: "A31420",
+              shortDesc: "ITM 1.2.1.1.3.2 Calculated:",
+              parameters: {
+                "isSpecialUniformITEM": isSpecialUniformITEM,
+                "retForceReloadItem": retForceReloadItem,
+                "retForceReloadForm": retForceReloadForm,
+              },
+            );
+          }
+        }
+      }
+      // !isCandidateCurrentItemInNewQueriedList
+      else {
+        masterFlowItem._addLineFlowItem(
+          codeId: "A34000",
+          shortDesc:
+              "ITM 1.2.1.2: @isCandidateCurrentItemInNewQueriedList: <b>false</b>",
+        );
+        // ON !hasItemXRepresentativeExt. (1)
+        // ON currentItemIdChanged. (2)
+        // ON !isCandidateCurrentItemInNewQueriedList. (3)
+        if (formModel == null) {
+          // (1*)
+          retForceReloadItem = false || forceReloadItem;
+          retForceReloadForm = false;
+          //
+          masterFlowItem._addLineFlowItem(
+            codeId: "A34100",
+            shortDesc: "ITM 1.2.1.2.1 Calculated:",
+            parameters: {
+              "isSpecialUniformITEM": isSpecialUniformITEM,
+              "retForceReloadItem": retForceReloadItem,
+              "retForceReloadForm": retForceReloadForm,
+            },
+          );
+        }
+        // formModel != null && !hasFormRepresentativeExt
+        else if (!hasFormRepresentativeExt) {
+          // (1*)
+          retForceReloadItem = false || forceReloadItem;
+          retForceReloadForm = false;
+          //
+          masterFlowItem._addLineFlowItem(
+            codeId: "A34200",
+            shortDesc: "ITM 1.2.1.2.2 Calculated:",
+            parameters: {
+              "isSpecialUniformITEM": isSpecialUniformITEM,
+              "retForceReloadItem": retForceReloadItem,
+              "retForceReloadForm": retForceReloadForm,
+            },
+          );
+        }
+        // formModel != null && hasFormRepresentativeExt
+        else {
+          //
+          masterFlowItem._addLineFlowItem(
+            codeId: "A34300",
+            shortDesc: "ITM 1.2.1.2.3",
+          );
+          if (!__isReady(formModel!)) {
+            // hasFormRepresentativeExt && !formReady
+            retForceReloadForm = true;
+            // retForceReloadForm && (2-currentItemIdChanged)
+            retForceReloadItem = true;
+            //
+            masterFlowItem._addLineFlowItem(
+              codeId: "A34410",
+              shortDesc: "ITM 1.2.1.2.3.1 Calculated:",
+              parameters: {
+                "isSpecialUniformITEM": isSpecialUniformITEM,
+                "retForceReloadItem": retForceReloadItem,
+                "retForceReloadForm": retForceReloadForm,
+              },
+            );
+          }
+          // formReady
+          else {
+            // formReady && hasFormRepresentativeExt && (2-currentItemIdChanged)
+            retForceReloadForm = true;
+            // retForceReloadForm && (2-currentItemIdChanged)
+            retForceReloadItem = true;
+            //
+            masterFlowItem._addLineFlowItem(
+              codeId: "A34420",
+              shortDesc: "ITM 1.2.1.2.3.2 Calculated:",
+              parameters: {
+                "isSpecialUniformITEM": isSpecialUniformITEM,
+                "retForceReloadItem": retForceReloadItem,
+                "retForceReloadForm": retForceReloadForm,
+              },
+            );
+          }
+        }
+      }
+    }
+    // !currentItemIdChanged
+    else {
+      masterFlowItem._addLineFlowItem(
+        codeId: "A37000",
+        shortDesc: "ITM 1.2.2: @currentItemIdChanged: $currentItemIdChanged",
+      );
+      // isCandidateCurrentItemInNewQueriedList
+      if (isCandidateCurrentItemInNewQueriedList) {
+        masterFlowItem._addLineFlowItem(
+          codeId: "A38000",
+          shortDesc:
+              "ITM 1.2.2.1: @isCandidateCurrentItemInNewQueriedList: <b>true</b>",
+        );
+        // ON !hasItemXRepresentativeExt. (1)
+        // ON !currentItemIdChanged. (2) --> currentItemReady before!
+        // ON isCandidateCurrentItemInNewQueriedList. (3)
+        if (formModel == null) {
+          // (1*)
+          retForceReloadItem = false || forceReloadItem;
+          retForceReloadForm = false;
+          //
+          masterFlowItem._addLineFlowItem(
+            codeId: "A38100",
+            shortDesc: "ITM 1.2.2.1.1 Calculated:",
+            parameters: {
+              "isSpecialUniformITEM": isSpecialUniformITEM,
+              "retForceReloadItem": retForceReloadItem,
+              "retForceReloadForm": retForceReloadForm,
+            },
+          );
+        }
+        // formModel != null && !hasFormRepresentativeExt
+        else if (!hasFormRepresentativeExt) {
+          // (1*)
+          retForceReloadItem = false || forceReloadItem;
+          retForceReloadForm = false;
+          //
+          masterFlowItem._addLineFlowItem(
+            codeId: "A38200",
+            shortDesc: "ITM 1.2.2.1.2 Calculated:",
+            parameters: {
+              "isSpecialUniformITEM": isSpecialUniformITEM,
+              "retForceReloadItem": retForceReloadItem,
+              "retForceReloadForm": retForceReloadForm,
+            },
+          );
+        }
+        // formModel != null && hasFormRepresentativeExt
+        else {
+          masterFlowItem._addLineFlowItem(
+            codeId: "A38300",
+            shortDesc: "ITM 1.2.2.1.3",
+          );
+          if (!__isReady(formModel!)) {
+            // hasFormRepresentativeExt && !formReady
+            retForceReloadForm = true;
+            // retForceReloadForm && (3-isCandidateCurrentItemInNewQueriedList)
+            retForceReloadItem = true;
+            //
+            masterFlowItem._addLineFlowItem(
+              codeId: "A38410",
+              shortDesc: "ITM 1.2.2.1.3.1 Calculated:",
+              parameters: {
+                "isSpecialUniformITEM": isSpecialUniformITEM,
+                "retForceReloadItem": retForceReloadItem,
+                "retForceReloadForm": retForceReloadForm,
+              },
+            );
+          }
+          // formReady
+          else {
+            // formReady && hasFormRepresentativeExt && (3-isCandidateCurrentItemInNewQueriedList)
+            retForceReloadForm = true;
+            // retForceReloadForm && (3-isCandidateCurrentItemInNewQueriedList)
+            retForceReloadItem = true;
+            //
+            masterFlowItem._addLineFlowItem(
+              codeId: "A38420",
+              shortDesc: "ITM 1.2.2.1.3.2 Calculated:",
+              parameters: {
+                "isSpecialUniformITEM": isSpecialUniformITEM,
+                "retForceReloadItem": retForceReloadItem,
+                "retForceReloadForm": retForceReloadForm,
+              },
+            );
+          }
+        }
+      }
+      // !isCandidateCurrentItemInNewQueriedList
+      else {
+        masterFlowItem._addLineFlowItem(
+          codeId: "A42000",
+          shortDesc:
+              "ITM 1.2.2.2: @currentItemIdChanged: $currentItemIdChanged",
+        );
+        // ON !hasItemXRepresentativeExt. (1)
+        // ON !currentItemIdChanged. (2) --> currentItemReady before!
+        // ON !isCandidateCurrentItemInNewQueriedList. (3)
+        if (formModel == null) {
+          // (1*)
+          retForceReloadItem = false || forceReloadItem;
+          retForceReloadForm = false;
+          //
+          masterFlowItem._addLineFlowItem(
+            codeId: "A42100",
+            shortDesc: "ITM 1.2.2.2.1 Calculated:",
+            parameters: {
+              "isSpecialUniformITEM": isSpecialUniformITEM,
+              "retForceReloadItem": retForceReloadItem,
+              "retForceReloadForm": retForceReloadForm,
+            },
+          );
+        }
+        // formModel != null && !hasFormRepresentativeExt
+        else if (!hasFormRepresentativeExt) {
+          // (1*)
+          retForceReloadItem = false || forceReloadItem;
+          retForceReloadForm = false;
+          //
+          masterFlowItem._addLineFlowItem(
+            codeId: "A42200",
+            shortDesc: "ITM 1.2.2.2.2 Calculated:",
+            parameters: {
+              "isSpecialUniformITEM": isSpecialUniformITEM,
+              "retForceReloadItem": retForceReloadItem,
+              "retForceReloadForm": retForceReloadForm,
+            },
+          );
+        }
+        // formModel != null && hasFormRepresentativeExt
+        else {
+          masterFlowItem._addLineFlowItem(
+            codeId: "A42300",
+            shortDesc: "ITM 1.2.2.2.3",
+          );
+          if (!__isReady(formModel!)) {
+            // hasFormRepresentativeExt && !formReady
+            retForceReloadForm = true;
+            // retForceReloadForm
+            retForceReloadItem = true;
+            //
+            masterFlowItem._addLineFlowItem(
+              codeId: "A42410",
+              shortDesc: "ITM 1.2.2.2.3.1 Calculated:",
+              parameters: {
+                "isSpecialUniformITEM": isSpecialUniformITEM,
+                "retForceReloadItem": retForceReloadItem,
+                "retForceReloadForm": retForceReloadForm,
+              },
+            );
+          }
+          // formReady
+          else {
+            // (1*)
+            retForceReloadItem = false || forceReloadItem;
+            // formReady && hasFormRepresentativeExt
+            retForceReloadForm = false || retForceReloadItem;
+            //
+            masterFlowItem._addLineFlowItem(
+              codeId: "A42420",
+              shortDesc: "ITM 1.2.2.2.3.2 Calculated:",
+              parameters: {
+                "isSpecialUniformITEM": isSpecialUniformITEM,
+                "retForceReloadItem": retForceReloadItem,
+                "retForceReloadForm": retForceReloadForm,
+              },
+            );
+          }
+        }
+      }
+    }
+  }
+  //
+  switch (currentItemSettingType) {
+    case CurrentItemSettingType.setAnItemAsCurrentIfNeed:
+      if (retForceReloadItem != null || retForceReloadForm != null) {
+        candidateAccepted = true;
+      }
+    case CurrentItemSettingType.setAnItemAsCurrent:
+    case CurrentItemSettingType.setAnItemAsCurrentThenLoadForm:
+    case CurrentItemSettingType.refresh:
+      candidateAccepted = true;
+  }
+  //
+  masterFlowItem._addLineFlowItem(
+    codeId: "A12800",
+    shortDesc: "Calculated:",
+    parameters: {
+      "candidateAccepted": candidateAccepted,
+      "isSpecialUniformITEM": isSpecialUniformITEM,
+      "retForceReloadItem": retForceReloadItem,
+      "retForceReloadForm": retForceReloadForm,
+    },
+  );
+  //
+  return _ForceReloadItemState(
+    candidateAccepted: candidateAccepted,
+    forceReloadItem: retForceReloadItem,
+    forceReloadForm: retForceReloadForm,
+  );
+}
+
+bool __isReady(FormModel formModel) {
+  return formModel.dataState == DataState.ready;
 }

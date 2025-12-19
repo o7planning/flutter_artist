@@ -38,6 +38,11 @@ class _BlockPaginationState extends _RefreshableWidgetState<BlockPagination> {
   }
 
   @override
+  bool get isFormRepresentative {
+    return false;
+  }
+
+  @override
   bool get isHookRepresentative {
     return false;
   }

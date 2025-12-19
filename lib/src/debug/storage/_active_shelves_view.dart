@@ -3,7 +3,7 @@ import 'package:flutter_artist/src/core/icon/icon_constants.dart';
 import 'package:flutter_artist/src/core/widgets/_custom_app_container.dart';
 import 'package:flutter_left_right_container/left_right_container.dart';
 
-import '../../../flutter_artist.dart';
+import '../../core/_core_/core.dart';
 import '_block_or_scalar.dart';
 import '_block_or_scalar_view.dart';
 import '_shelf_structure_tree_view.dart';

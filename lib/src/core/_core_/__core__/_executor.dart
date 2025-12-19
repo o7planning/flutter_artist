@@ -191,11 +191,11 @@ class _Executor {
       await taskUnit.xBlock.block._unitSetItemAsCurrent(
         masterFlowItem: masterFlowItem,
         taskType: taskUnit.taskType,
-        currentItemSelectionType: taskUnit.currentItemSelectionType,
+        currentItemSettingType: taskUnit.currentItemSettingType,
         newQueriedList: taskUnit.newQueriedList,
-        candidateItem: taskUnit.candidateItem,
+        inputCandidateCurrItem: taskUnit.candidateItem,
         thisXBlock: taskUnit.xBlock,
-        currentItemSelectionResult:
+        blockCurrentItemSettingResult:
             taskUnit.taskResult as BlockCurrentItemSettingResult<Identifiable>,
       );
     }

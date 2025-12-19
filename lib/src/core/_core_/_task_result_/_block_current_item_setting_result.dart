@@ -2,8 +2,8 @@ part of '../core.dart';
 
 class BlockCurrentItemSettingResult<ITEM>
     extends TaskResult<BlockCurrentItemSettingPrecheck> {
-  final CurrentItemSelectionType currentItemSelectionType;
-  final List<ITEM?> _candidateItems = [];
+  final CurrentItemSettingType currentItemSettingType;
+  final List<ITEM> _candidateItems = [];
   ITEM? _oldCurrentItem;
   ITEM? _currentItem;
   final Object Function(ITEM item) _getItemId;
@@ -12,7 +12,7 @@ class BlockCurrentItemSettingResult<ITEM>
 
   BlockCurrentItemSettingResult({
     required super.precheck,
-    required this.currentItemSelectionType,
+    required this.currentItemSettingType,
     required Object Function(ITEM item) getItemId,
     //
     required ITEM? candidateItem,
@@ -39,21 +39,19 @@ class BlockCurrentItemSettingResult<ITEM>
     } else if (errorInfo != null) {
       return false;
     }
-    switch (currentItemSelectionType) {
-      case CurrentItemSelectionType.doNothing:
-        return _successfullyDoNothing();
-      case CurrentItemSelectionType.setAnItemAsCurrentThenLoadForm:
+    switch (currentItemSettingType) {
+      case CurrentItemSettingType.setAnItemAsCurrentThenLoadForm:
         return _successfullySelectedToEdit();
-      case CurrentItemSelectionType.setAnItemAsCurrent:
+      case CurrentItemSettingType.setAnItemAsCurrent:
         return _successfullySelectedToShow();
-      case CurrentItemSelectionType.setAnItemAsCurrentIfNeed:
+      case CurrentItemSettingType.setAnItemAsCurrentIfNeed:
         return _successfullySelectedDefault();
-      case CurrentItemSelectionType.refresh:
+      case CurrentItemSettingType.refresh:
         return _successfullySelectedToRefresh();
     }
   }
 
-  void _addCandidateItem(ITEM? candidateItem) {
+  void _addCandidateItem(ITEM candidateItem) {
     _candidateItems.add(candidateItem);
   }
 

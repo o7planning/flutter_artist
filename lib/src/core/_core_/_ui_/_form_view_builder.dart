@@ -48,6 +48,11 @@ class _FormViewBuilderState extends _RefreshableWidgetState<FormViewBuilder> {
   }
 
   @override
+  bool get isFormRepresentative {
+    return true;
+  }
+
+  @override
   bool get isHookRepresentative {
     return false;
   }

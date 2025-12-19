@@ -77,8 +77,6 @@ class FaIconConstants {
 
   static const IconData shelfIconData = Icons.shelves;
 
-  static const IconData autoStockerIconData =
-      cupertino.CupertinoIcons.game_controller;
   static const IconData activityIconData =
       cupertino.CupertinoIcons.person_2_square_stack;
 

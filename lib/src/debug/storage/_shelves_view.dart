@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../flutter_artist.dart';
+import '../../core/_core_/core.dart';
 import '../../core/widgets/_html_selectable_rich_text.dart';
 
 class ShelvesView extends StatefulWidget {

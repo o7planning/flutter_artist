@@ -11,12 +11,12 @@ class _BlockSetItemAsCurrentTaskUnit<ID extends Object,
     extends _ResultedSTaskUnit<BlockCurrentItemSettingResult<ITEM>> {
   final XBlock xBlock;
   final ForceType? forceTypeForForm;
-  final CurrentItemSelectionType currentItemSelectionType;
+  final CurrentItemSettingType currentItemSettingType;
   final ITEM? candidateItem;
   final List<ITEM> newQueriedList;
 
   _BlockSetItemAsCurrentTaskUnit({
-    required this.currentItemSelectionType,
+    required this.currentItemSettingType,
     required this.xBlock,
     required this.newQueriedList,
     required this.candidateItem,
@@ -26,7 +26,7 @@ class _BlockSetItemAsCurrentTaskUnit<ID extends Object,
           taskType: TaskType.blockSetItemAsCurrent,
           taskResult: BlockCurrentItemSettingResult<ITEM>(
             precheck: null,
-            currentItemSelectionType: currentItemSelectionType,
+            currentItemSettingType: currentItemSettingType,
             getItemId: xBlock.block._getItemIdInternal,
             candidateItem: candidateItem,
             oldCurrentItem: xBlock.block.currentItem as ITEM?,

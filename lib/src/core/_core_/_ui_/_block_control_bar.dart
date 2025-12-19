@@ -57,6 +57,16 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   }
 
   @override
+  bool get isFormRepresentative {
+    if (widget.block.formModel != null) {
+      if (widget.config.allowCreateButton || widget.config.allowSaveButton) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);
   }

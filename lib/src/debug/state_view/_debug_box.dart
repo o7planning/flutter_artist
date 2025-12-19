@@ -19,6 +19,12 @@ abstract class BaseDebugBox extends StatelessWidget {
     fontSize: _debugBoxFontSize,
   );
 
+  final labelStyle1 = const TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: _debugBoxFontSize,
+    color: Colors.blue,
+  );
+
   final textStyle = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: _debugBoxFontSize,

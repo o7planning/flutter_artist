@@ -87,6 +87,14 @@ class _BlockUIComponents extends _UIComponents {
     return componentName != null;
   }
 
+  bool hasActiveUIComponentFormRepresentative() {
+    String? componentName = _findActiveUIComponentWithRepresentativeType(
+      representativeType: RepresentativeType.formRepresentative,
+      alsoCheckChildren: false,
+    );
+    return componentName != null;
+  }
+
   bool hasActiveUIComponentItemRepresentative({
     bool alsoCheckChildren = false,
   }) {
@@ -125,6 +133,15 @@ class _BlockUIComponents extends _UIComponents {
   }) {
     return _findActiveUIComponentWithRepresentativeType(
       representativeType: RepresentativeType.itemRepresentative,
+      alsoCheckChildren: alsoCheckChildren,
+    );
+  }
+
+  String? findActiveUIComponentFormRepresentative({
+    bool alsoCheckChildren = false,
+  }) {
+    return _findActiveUIComponentWithRepresentativeType(
+      representativeType: RepresentativeType.formRepresentative,
       alsoCheckChildren: alsoCheckChildren,
     );
   }

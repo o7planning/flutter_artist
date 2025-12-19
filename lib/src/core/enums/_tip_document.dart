@@ -5,7 +5,6 @@ enum TipDocument {
   loginLogoutAdapter,
   activity,
   shelf,
-  autoStocker,
   polymorphism,
   globalData,
   pageData,
@@ -51,8 +50,6 @@ enum TipDocument {
         return "FlutterArtist Activities";
       case TipDocument.shelf:
         return "FlutterArtist Shelves";
-      case TipDocument.autoStocker:
-        return "FlutterArtist AutoStocker";
       case TipDocument.polymorphism:
         return "FlutterArtist Polymorphism";
       case TipDocument.globalData:
@@ -98,8 +95,6 @@ enum TipDocument {
         return "FlutterArtist Activities";
       case TipDocument.shelf:
         return "FlutterArtist Shelves";
-      case TipDocument.autoStocker:
-        return "FlutterArtist AutoStocker";
       case TipDocument.polymorphism:
         return "FlutterArtist Polymorphism";
       case TipDocument.globalData:
@@ -162,10 +157,6 @@ enum TipDocument {
         return [
           "https://o7planning.org/11111/config1",
           "https://o7planning.org/11112/config2",
-        ];
-      case TipDocument.autoStocker:
-        return [
-          "https://o7planning.org/14833/flutterartist-autostocker",
         ];
       case TipDocument.polymorphism:
         return [

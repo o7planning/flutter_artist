@@ -761,7 +761,7 @@ abstract class Shelf extends _Core {
     //
     if (!actionable.yes) {
       // _createItemErrorCount++;
-      LogErrorInfo? errorInfo = _addErrorLogActionable(
+      final LogErrorInfo? errorInfo = _addErrorLogActionable(
         shelf: null,
         actionableFalse: actionable,
         showErrSnackBar: true,

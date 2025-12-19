@@ -55,6 +55,20 @@ class BlockDebugBox extends BaseDebugBox {
             //
           },
         ),
+      if (block.getItemType() == block.getItemDetailType())
+        IconLabelText(
+          label: "Behavior (*): ",
+          text: block.config.nonItemRepresentativeBehavior.name,
+          labelStyle: labelStyle1,
+          textStyle: textStyle0,
+        ),
+      if (block.getItemType() == block.getItemDetailType())
+        IconLabelText(
+          label: "RefreshMode (*): ",
+          text: block.config.uniformItemRefreshMode.name,
+          labelStyle: labelStyle1,
+          textStyle: textStyle0,
+        ),
       if (options.showLastQueryType)
         IconLabelText(
           label: "Last Query Type: ",

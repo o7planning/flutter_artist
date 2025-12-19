@@ -67,10 +67,6 @@ abstract class _StorageCore extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  String _getAutoStockerName(Type type) {
-    return type.toString();
-  }
-
   String _getShelfName(Type type) {
     return type.toString();
   }

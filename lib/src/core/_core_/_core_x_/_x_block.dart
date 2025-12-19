@@ -34,7 +34,7 @@ class XBlock<
 
   String get name => block.name;
 
-  CurrentItemSelectionType? __currentItemSelectionType;
+  CurrentItemSettingType? __currentItemSettingType;
   ITEM? __candidateCurrItem;
 
   // Options:
@@ -108,14 +108,14 @@ class XBlock<
   // ***************************************************************************
 
   _BlockSetItemAsCurrentTaskUnit createBlockSetItemAsCurrentTaskUnit({
-    required CurrentItemSelectionType currentItemSelectionType,
+    required CurrentItemSettingType currentItemSettingType,
     required List<Object> newQueriedList, // Do not change <Object>
     required Object? candidateItem, // Do not change <Object>
     required bool forceReloadItem,
     required ForceType? forceTypeForForm,
   }) {
     return _BlockSetItemAsCurrentTaskUnit<ID, ITEM>(
-      currentItemSelectionType: currentItemSelectionType,
+      currentItemSettingType: currentItemSettingType,
       xBlock: this,
       newQueriedList: newQueriedList.whereType<ITEM>().toList(),
       candidateItem: candidateItem as ITEM?,
@@ -215,12 +215,12 @@ class XBlock<
     __candidateCurrItem = candidateCurrItem;
   }
 
-  CurrentItemSelectionType? get currentItemSelectionType =>
-      __currentItemSelectionType;
+  CurrentItemSettingType? get currentItemSettingType =>
+      __currentItemSettingType;
 
-  void setCurrentItemSelectionType(
-      CurrentItemSelectionType? currentItemSelectionType) {
-    __currentItemSelectionType = currentItemSelectionType;
+  void setCurrentItemSettingType(
+      CurrentItemSettingType? currentItemSettingType) {
+    __currentItemSettingType = currentItemSettingType;
   }
 
   ItemListMode get itemListMode {
