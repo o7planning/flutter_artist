@@ -3,8 +3,9 @@ part of '../core.dart';
 abstract class FormModel<
     ID extends Object,
     ITEM_DETAIL extends Identifiable<ID>,
-    FORM_RELATED_DATA extends FormRelatedData, // EmptyFormRelatedData
-    FORM_INPUT extends FormInput> extends _Core {
+    FORM_INPUT extends FormInput,
+    FORM_RELATED_DATA extends FormRelatedData // EmptyFormRelatedData
+    > extends _Core {
   final FormModelConfig config;
 
   int __loadCount = 0;
@@ -52,8 +53,8 @@ abstract class FormModel<
       ITEM_DETAIL,
       FilterInput,
       FilterCriteria,
-      FORM_RELATED_DATA,
-      FORM_INPUT> block;
+      FORM_INPUT,
+      FORM_RELATED_DATA> block;
 
   bool _defaultSimpleValuesInitiated = false;
   bool _defaultMultiOptValuesInitiated = false;

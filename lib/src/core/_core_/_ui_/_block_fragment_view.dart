@@ -7,8 +7,8 @@ abstract class BlockFragmentView<
         Identifiable,
         FilterInput,
         FilterCriteria,
-        FormRelatedData,
-        FormInput>> extends StatelessWidget {
+        FormInput,
+        FormRelatedData>> extends StatelessWidget {
   final bool itemRepresentative;
   final BLOCK block;
 

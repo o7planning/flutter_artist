@@ -81,8 +81,8 @@ abstract class Block<
     ITEM_DETAIL extends Identifiable<ID>,
     FILTER_INPUT extends FilterInput, // EmptyFilterInput
     FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
-    FORM_RELATED_DATA extends FormRelatedData, // EmptyFormRelatedData
-    FORM_INPUT extends FormInput // EmptyFormInput
+    FORM_INPUT extends FormInput, // EmptyFormInput
+    FORM_RELATED_DATA extends FormRelatedData // EmptyFormRelatedData
     > extends _Core {
   late final Shelf shelf;
 
@@ -232,8 +232,8 @@ abstract class Block<
   final FormModel<
       ID, //
       ITEM_DETAIL,
-      FORM_RELATED_DATA,
-      FORM_INPUT>? formModel;
+      FORM_INPUT,
+      FORM_RELATED_DATA>? formModel;
 
   final List<Block> _childBlocks;
 

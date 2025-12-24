@@ -17,8 +17,8 @@ class _BlockData<
       ITEM_DETAIL,
       FILTER_INPUT,
       FILTER_CRITERIA,
-      FORM_RELATED_DATA,
-      FORM_INPUT> block;
+      FORM_INPUT,
+      FORM_RELATED_DATA> block;
 
   final List<ITEM> _items = [];
   final List<ITEM> _selectedItems = [];

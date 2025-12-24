@@ -7,8 +7,8 @@ abstract class BlockItemsView<
         Identifiable,
         FilterInput,
         FilterCriteria,
-        FormRelatedData,
-        FormInput>> extends StatelessWidget {
+        FormInput,
+        FormRelatedData>> extends StatelessWidget {
   final BLOCK block;
   final QuickSuggestionMode quickSuggestionMode;
   final bool itemRepresentative;
