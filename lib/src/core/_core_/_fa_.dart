@@ -42,7 +42,7 @@ class _FlutterArtist extends _Core {
 
   int notificationFetchPeriodInSeconds = 60;
 
-  IFlutterArtistAdapter? __adapter;
+  IFlutterArtistCoreFeaturesAdapter? __coreFeaturesAdapter;
 
   late final GlobalsManager globalsManager;
 
@@ -55,19 +55,15 @@ class _FlutterArtist extends _Core {
 
   Function(BuildContext context)? showRestDebugViewerDialog;
 
-  late final ErrorLogger errorLogger = ErrorLogger(
-    maxDisplayErrorCount: 20,
+  late final Logger logger = Logger(
+    maxDisplayLogEntryCount: 20,
   );
 
   late final _NotificationEngine __notificationEngine;
   late final CodeFlowLogger codeFlowLogger = CodeFlowLogger();
 
-  final List<IErrorListener> _errorListeners = [];
+  final List<ILogListener> _logListeners = [];
   final List<INotificationListener> _notificationListeners = [];
-
-  int _totalErrorCount = 0;
-
-  int get totalErrorCount => _totalErrorCount;
 
   final List<Future<dynamic>> __futureTaskList = [];
 
@@ -99,20 +95,20 @@ class _FlutterArtist extends _Core {
   /// ```
   ///
   Future<void> logout({required Function() offAllAndGotoRoute}) async {
-    _totalErrorCount = 0;
+    logger.clear();
     storage._logout();
     storage._recentShelves.clear();
     await globalsManager._logout();
     offAllAndGotoRoute();
   }
 
-  IFlutterArtistAdapter get adapter {
-    if (__adapter == null) {
+  IFlutterArtistCoreFeaturesAdapter get coreFeaturesAdapter {
+    if (__coreFeaturesAdapter == null) {
       throw DebugUtils.getFatalError(
-          " >>>>>> $IFlutterArtistAdapter is not registered!. "
+          " >>>>>> $IFlutterArtistCoreFeaturesAdapter is not registered!. "
           "\n >>>>>> You need to call $FlutterArtist.config() in main.dart");
     }
-    return __adapter!;
+    return __coreFeaturesAdapter!;
   }
 
   // docs: [14683].
@@ -183,7 +179,7 @@ class _FlutterArtist extends _Core {
     required StorageStructure storageStructure,
     required DebugOptions? debugOptions,
     required ConsoleDebugOptions? consoleDebugOptions,
-    required IFlutterArtistAdapter flutterArtistAdapter,
+    required IFlutterArtistCoreFeaturesAdapter coreFeaturesAdapter,
     required INotificationAdapter? notificationAdapter,
     required ILoginLogoutAdapter loginLogoutAdapter,
     required IGlobalDataAdapter globalDataAdapter,
@@ -191,9 +187,9 @@ class _FlutterArtist extends _Core {
     required Function(BuildContext context)? showRestDebugDialog,
     int notificationFetchPeriodInSeconds = 60,
   }) async {
-    if (__adapter != null) {
+    if (__coreFeaturesAdapter != null) {
       throw DebugUtils.getFatalError(
-          "${getClassName(__adapter)} already registered!");
+          "${getClassName(__coreFeaturesAdapter)} already registered!");
     }
     //
     final masterFlowItem =
@@ -205,7 +201,7 @@ class _FlutterArtist extends _Core {
           "Note: You see this debug information because the <b>FlutterArtist.config()</b> method is called in <b>main.dart</b>.",
       parameters: {
         "storageStructure": storageStructure,
-        "flutterArtistAdapter": flutterArtistAdapter,
+        "flutterArtistAdapter": coreFeaturesAdapter,
         "loginLogoutAdapter": loginLogoutAdapter,
         "globalDataAdapter": globalDataAdapter,
         "notificationAdapter": notificationAdapter,
@@ -215,7 +211,7 @@ class _FlutterArtist extends _Core {
       tipDocument: TipDocument.config,
     );
     //
-    __adapter = flutterArtistAdapter;
+    __coreFeaturesAdapter = coreFeaturesAdapter;
     //
     if (debugOptions != null) {
       __debugOptions = debugOptions;
@@ -326,14 +322,14 @@ class _FlutterArtist extends _Core {
     __notificationEngine.start();
   }
 
-  void addErrorListener(IErrorListener listener) {
-    if (!_errorListeners.contains(listener)) {
-      _errorListeners.add(listener);
+  void addLogListener(ILogListener listener) {
+    if (!_logListeners.contains(listener)) {
+      _logListeners.add(listener);
     }
   }
 
-  void removeErrorListener(IErrorListener listener) {
-    _errorListeners.remove(listener);
+  void removeLogListener(ILogListener listener) {
+    _logListeners.remove(listener);
   }
 
   void addNotificationListener(INotificationListener listener) {
@@ -399,23 +395,23 @@ class _FlutterArtist extends _Core {
   Future<void> showOverlay({
     required Future<dynamic> Function() asyncFunction,
   }) async {
-    await adapter.showOverlay(
+    await coreFeaturesAdapter.showOverlay(
       opacity: _isOverlayMode ? 0.3 : 0.02,
       asyncFunction: asyncFunction,
     );
   }
 
   bool isOverlaysOpen() {
-    return adapter.isOverlaysOpen();
+    return coreFeaturesAdapter.isOverlaysOpen();
   }
 
   Future<void> showStorageDialog() async {
-    BuildContext context = adapter.getCurrentContext();
+    BuildContext context = coreFeaturesAdapter.getCurrentContext();
     await StorageDialog.showStorageDialog(context: context, shelf: null);
   }
 
   Future<void> showCodeFlowViewerDialog() async {
-    BuildContext context = adapter.getCurrentContext();
+    BuildContext context = coreFeaturesAdapter.getCurrentContext();
     await CodeFlowViewerDialog.showCodeFlowViewerDialog(context: context);
   }
 
@@ -432,42 +428,57 @@ class _FlutterArtist extends _Core {
     return shelf != null;
   }
 
-  Future<void> showRecentErrors() async {
-    showErrorViewerDialog();
+  Future<void> showRecentLogs() async {
+    showLogViewerDialog();
   }
 
-  Future<void> showErrorViewerDialog() async {
-    BuildContext context = adapter.getCurrentContext();
+  Future<void> showLogViewerDialog() async {
+    BuildContext context = coreFeaturesAdapter.getCurrentContext();
     //
-    await ErrorLogViewerDialog.showErrorLogViewerDialog(
+    await LogViewerDialog.showLogViewerDialog(
       context: context,
-      errorLogger: errorLogger,
+      logger: logger,
     );
   }
 
+  bool hasRecentLogs() {
+    return logger.recentLogCount != 0;
+  }
+
   bool hasRecentErrors() {
-    return errorLogger.errorCount != 0;
+    return logger.recentErrorCount != 0;
+  }
+
+  bool hasRecentWarnings() {
+    return logger.recentWarningCount != 0;
+  }
+
+  bool hasLogs() {
+    return logger.totalLogCount != 0;
+  }
+
+  bool hasErrors() {
+    return logger.totalErrorCount != 0;
+  }
+
+  bool hasWarnings() {
+    return logger.totalWarningCount != 0;
   }
 
   // TODO: (Internal)
-  void internalIncreaseTotalErrorCount() {
-    _totalErrorCount++;
-  }
-
-  // TODO: (Internal)
-  void internalNotifyError() {
+  void internalNotifyLog() {
     Future.delayed(
       Duration.zero,
       () {
-        for (IErrorListener listener in [..._errorListeners]) {
+        for (ILogListener listener in [..._logListeners]) {
           if (listener is State) {
             State state = listener as State;
             if (!state.mounted) {
-              _errorListeners.remove(listener);
+              _logListeners.remove(listener);
               continue;
             }
           }
-          listener.onError();
+          listener.onLog();
         }
       },
     );
@@ -478,7 +489,7 @@ class _FlutterArtist extends _Core {
       if (listener is State) {
         State state = listener as State;
         if (!state.mounted) {
-          _errorListeners.remove(listener);
+          _logListeners.remove(listener);
           continue;
         }
       }

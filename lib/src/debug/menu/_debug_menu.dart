@@ -7,7 +7,7 @@ import '../../core/icon/icon_constants.dart';
 class DebugMenu extends StatefulWidget {
   final double menuItemIconSize;
   final Color? menuItemIconColor;
-  final Widget Function({required int errorCount}) menuButtonBuilder;
+  final Widget Function({required LogSummary logSummary}) menuButtonBuilder;
   final RelativeRect Function(TapDownDetails details)? calculatePopupPosition;
 
   const DebugMenu.custom({
@@ -24,15 +24,15 @@ class DebugMenu extends StatefulWidget {
   }
 }
 
-class __DebugMenuState extends State<DebugMenu> implements IErrorListener {
+class __DebugMenuState extends State<DebugMenu> implements ILogListener {
   @override
   void initState() {
     super.initState();
-    FlutterArtist.addErrorListener(this);
+    FlutterArtist.addLogListener(this);
   }
 
   @override
-  void onError() {
+  void onLog() {
     setState(() {});
   }
 
@@ -40,11 +40,11 @@ class __DebugMenuState extends State<DebugMenu> implements IErrorListener {
   Widget build(BuildContext context) {
     // docs: [14683].
     ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
-    bool hasRecentErrors = FlutterArtist.hasRecentErrors();
+    bool hasLogs = FlutterArtist.hasLogs();
     bool isSystemUser = loggedInUser?.isSystemUser ?? false;
     //
     return InkWell(
-      onTapDown: !isSystemUser && !hasRecentErrors
+      onTapDown: !isSystemUser && !hasLogs
           ? null
           : (TapDownDetails details) {
               // Getting the tap position
@@ -63,14 +63,14 @@ class __DebugMenuState extends State<DebugMenu> implements IErrorListener {
                 context: context,
                 position: position,
                 items: [
-                  if (hasRecentErrors)
+                  if (hasLogs)
                     _buildPopupMenuItem(
                       iconData: FaIconConstants.errorIconData,
                       iconColor: Colors.red,
-                      title: 'Recent Errors',
-                      onTab: _showRecentErrors,
+                      title: 'Recent Errs/Warns',
+                      onTab: _showRecentLogs,
                     ),
-                  if (isSystemUser && hasRecentErrors) _divider(),
+                  if (isSystemUser && hasLogs) _divider(),
                   if (isSystemUser && FlutterArtist.canShowShelfStructure())
                     _buildPopupMenuItem(
                       iconData: FaIconConstants.shelfStructureIconData,
@@ -117,7 +117,13 @@ class __DebugMenuState extends State<DebugMenu> implements IErrorListener {
               );
             },
       child: widget.menuButtonBuilder(
-        errorCount: FlutterArtist.totalErrorCount,
+        logSummary: LogSummary(
+          recentErrorCount: FlutterArtist.logger.recentErrorCount,
+          recentWarningCount: FlutterArtist.logger.recentWarningCount,
+          totalErrorCount: FlutterArtist.logger.totalErrorCount,
+          totalWarningCount: FlutterArtist.logger.totalWarningCount,
+          viewed: FlutterArtist.logger.viewed,
+        ),
       ),
     );
   }
@@ -178,9 +184,9 @@ class __DebugMenuState extends State<DebugMenu> implements IErrorListener {
     await FlutterArtist.showShelfStructure();
   }
 
-  Future<void> _showRecentErrors() async {
+  Future<void> _showRecentLogs() async {
     Navigator.pop(context, null);
     // docs: [14683].
-    await FlutterArtist.showRecentErrors();
+    await FlutterArtist.showRecentLogs();
   }
 }

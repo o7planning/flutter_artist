@@ -1,7 +1,7 @@
 part of '../core.dart';
 
-interface class IErrorListener {
-  void onError() {
+interface class ILogListener {
+  void onLog() {
     throw UnimplementedError();
   }
 }

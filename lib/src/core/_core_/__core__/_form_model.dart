@@ -472,7 +472,7 @@ abstract class FormModel<
       lineFlowType: LineFlowType.nonControllableCalling,
     );
     FORM_RELATED_DATA? formRelatedData =
-        block._initFormRelatedData(masterFlowItem);
+        await block._initFormRelatedData(masterFlowItem);
     if (formRelatedData == null) {
       return false;
     }

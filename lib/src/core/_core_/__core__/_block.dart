@@ -806,7 +806,7 @@ abstract class Block<
     //
     final callApiQueryMethod = BlockErrorMethod.callApiQuery;
     DataState newBlockDataState = dataState;
-    PageData<ITEM>? pageData;
+    PageData<ITEM>? queriedPageData;
     final ITEM? candidateCurrItem;
     bool queried = false;
 
@@ -904,7 +904,9 @@ abstract class Block<
       );
       thisXBlock.setReQueryDone();
       return;
-    } else if (queryHint != QryHint.force) {
+    }
+    //
+    else if (queryHint != QryHint.force) {
       throw "TODO"; // Never run.
     }
     //
@@ -987,7 +989,7 @@ abstract class Block<
     //
     ItemListMode realItemListMode;
     //
-    final Pageable? callingPageable;
+    final Pageable? usedPageable;
     //
     if (thisXBlock.queryType == QueryType.realQuery) {
       masterFlowItem._addLineFlowItem(
@@ -996,7 +998,7 @@ abstract class Block<
         lineFlowType: LineFlowType.debug,
         tipDocument: TipDocument.blockQueryType,
       );
-      callingPageable = thisXBlock.pageable ?? config.pageable;
+      usedPageable = thisXBlock.pageable ?? config.pageable;
       final QueryType newQueryType = thisXBlock.queryType;
       final queryTypeChanged = __lastQueryType != newQueryType;
       __lastQueryType = newQueryType;
@@ -1040,18 +1042,18 @@ abstract class Block<
           shortDesc: "Calling ${debugObjHtml(this)}.callApiQuery()...",
           parameters: {
             "parentBlockCurrentItem": parent?.currentItem,
-            "filterCriteria": filterCriteria,
+            "filterCriteria": filterCriteriaOfFilterModel,
             "sortableCriteria": sortableCriteria,
-            "pageable": callingPageable,
+            "pageable": usedPageable,
           },
           lineFlowType: LineFlowType.controllableCalling,
         );
         __callApiQueryCount++;
-        ApiResult<PageData<ITEM>?> result = await callApiQuery(
+        final ApiResult<PageData<ITEM>?> result = await callApiQuery(
           parentBlockCurrentItem: parent?.currentItem,
           filterCriteria: filterCriteriaOfFilterModel,
           sortableCriteria: sortableCriteria,
-          pageable: callingPageable,
+          pageable: usedPageable,
         );
         // Throw ApiError:
         result.throwIfError();
@@ -1061,17 +1063,17 @@ abstract class Block<
         thisXBlock.setReQueryDone();
         queried = true;
         queryResultState = ActionResultState.success;
-        pageData = result.data;
+        queriedPageData = result.data;
         //
         masterFlowItem._addLineFlowItem(
           codeId: "#03360",
-          shortDesc: "Got @pageData: ${debugObjHtml(pageData)}.",
+          shortDesc: "Got @queriedPageData: ${debugObjHtml(queriedPageData)}.",
           lineFlowType: LineFlowType.debug,
           tipDocument: TipDocument.pageData,
         );
       } catch (e, stackTrace) {
         queryResultState = ActionResultState.fail;
-        pageData = null;
+        queriedPageData = null;
         //
         final blockErrorInfo = BlockErrorInfo(
           blockDataState: dataState,
@@ -1211,17 +1213,20 @@ abstract class Block<
         codeId: "#03500",
         shortDesc: "@queryType: ${thisXBlock.queryType}.",
       );
-      callingPageable = __blockData._emptyPageable;
+      usedPageable = __blockData._emptyPageable;
       __lastQueryType = thisXBlock.queryType;
       realItemListMode = ItemListMode.replace;
       newBlockDataState = DataState.ready;
-      pageData = PageData.empty();
+      queriedPageData = PageData.empty();
       queryResultState = ActionResultState.success;
     }
     //
     masterFlowItem._addLineFlowItem(
       codeId: "#03520",
-      shortDesc: "@realItemListMode: ${debugObjHtml(realItemListMode)}.",
+      shortDesc: "Calculated:",
+      parameters: {
+        "realItemListMode": realItemListMode,
+      },
       lineFlowType: LineFlowType.debug,
     );
     //
@@ -1231,29 +1236,30 @@ abstract class Block<
       masterFlowItem._addLineFlowItem(
         codeId: "#03540",
         shortDesc:
-            "Calling <b>__blockData._updateData()</b> to update queried data to block.",
+            "Calling ${debugObjHtml(this)}.__processQueryResult() to process queried data.",
         parameters: {
-          "forceItemListMode": realItemListMode,
-          "parentBlockCurrentItemId": parentBlockCurrentItemId,
-          "filterCriteria": filterCriteria,
-          "pageable": pageable,
-          "pageData": pageData,
-          "blockDataState": newBlockDataState,
+          "usedFilterCriteria": filterCriteriaOfFilterModel,
+          "usedPageable": usedPageable,
+          "queriedPageData": queriedPageData,
+          "newBlockDataState": newBlockDataState,
           "queryResultState": queryResultState,
         },
         lineFlowType: LineFlowType.nonControllableCalling,
+      );
+      final processedQueryResult = __processQueryResult(
+        usedFilterCriteria: filterCriteriaOfFilterModel,
+        usedPageable: usedPageable,
+        queriedPageData: queriedPageData,
+        newBlockDataState: newBlockDataState,
+        queryResultState: queryResultState,
       );
       //
       // Update queried items to the List:
       //
       __blockData._updateData(
+        masterFlowItem: masterFlowItem,
         forceItemListMode: realItemListMode,
-        parentBlockCurrentItemId: parentBlockCurrentItemId,
-        filterCriteria: filterCriteriaOfFilterModel,
-        pageable: callingPageable,
-        pageData: pageData,
-        blockDataState: newBlockDataState,
-        queryResultState: queryResultState,
+        processedQueryResult: processedQueryResult,
       );
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
@@ -1437,7 +1443,7 @@ abstract class Block<
     final taskUnit = _BlockSetItemAsCurrentTaskUnit<ID, ITEM>(
       currentItemSettingType: currentItemSettingType,
       xBlock: thisXBlock,
-      newQueriedList: pageData?.items ?? [],
+      newQueriedList: queriedPageData?.items ?? [],
       candidateItem: candidateCurrItem,
       forceReloadItem: false,
       forceTypeForForm: null,
@@ -1613,13 +1619,13 @@ abstract class Block<
         masterFlowItem._addLineFlowItem(
           codeId: "#28220",
           shortDesc:
-              "Calling ${debugObjHtml(this)}.specifyItemIndexToSelectAsCurrent() method "
+              "Calling ${debugObjHtml(this)}.specifyItemIndexToSetAsCurrent() method "
               "to specify an <b>itemIndex</b> as the current one.",
           note:
               "You can override this method, otherwise the first ITEM will be the candidate. ",
           lineFlowType: LineFlowType.controllableCalling,
         );
-        int? suggestIdx = specifyItemIndexToSelectAsCurrent();
+        int? suggestIdx = specifyItemIndexToSetAsCurrent();
         //
         masterFlowItem._addLineFlowItem(
           codeId: "#28240",
@@ -1967,7 +1973,6 @@ abstract class Block<
         }
       }
     }
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 1");
     //
     // If candidate not found in database --> remove.
     //
@@ -2082,9 +2087,7 @@ abstract class Block<
       }
       return;
     } // End if refreshedCurrentItemDetail == null.
-
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 2");
-
+    //
     if (currItemWillChanged || itemRefreshed) {
       masterFlowItem._addLineFlowItem(
         codeId: "#29400",
@@ -2167,9 +2170,6 @@ abstract class Block<
         itemDetail: refreshedCurrentItemDetail,
       );
     }
-
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 3");
-
     //
     // FormModel:
     //
@@ -2212,8 +2212,6 @@ abstract class Block<
     // (On _unitSetItemAsCurrent method).
     // candidateCurrItem != null.
     if (currItemWillChanged) {
-      print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 4");
-
       blockCurrentItemSettingResult._currentItem = candidateCurrItem;
       //
       masterFlowItem._addLineFlowItem(
@@ -2229,9 +2227,6 @@ abstract class Block<
         thisXBlock: thisXBlock,
       );
     }
-
-    print("@~~~~~~~~~~~~~~~~~~~~~~~~~~~~> 5");
-
     //
     masterFlowItem._addLineFlowItem(
       codeId: "#29700",
@@ -3099,7 +3094,8 @@ abstract class Block<
         codeId: "#04080",
         shortDesc: "${debugObjHtml(formModel)} set formMode to creation.",
       );
-      FORM_RELATED_DATA? formRelatedData = _initFormRelatedData(masterFlowItem);
+      FORM_RELATED_DATA? formRelatedData =
+          await _initFormRelatedData(masterFlowItem);
       if (formRelatedData == null) {
         return false;
       }
@@ -3980,7 +3976,7 @@ abstract class Block<
       );
     }
     //
-    BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     bool confirm = await showConfirmDeleteDialog(
       context: context,
       details: getClassName(item),
@@ -4039,7 +4035,7 @@ abstract class Block<
     );
     if (!actionable.yes) {
       _deletionErrorCount++;
-      final LogErrorInfo? errorInfo = _addErrorLogActionable(
+      final ErrorInfo? errorInfo = _addErrorLogActionable(
         shelf: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
@@ -4056,7 +4052,7 @@ abstract class Block<
       );
     }
     //
-    BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     bool confirm = await showConfirmDeleteDialog(
       context: context,
       details: "Delete Multi Items",
@@ -4144,7 +4140,7 @@ abstract class Block<
     //
     if (!actionable.yes) {
       // _refreshErrorCount++
-      final LogErrorInfo? errorInfo = _addErrorLogActionable(
+      final ErrorInfo? errorInfo = _addErrorLogActionable(
         shelf: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
@@ -4259,7 +4255,7 @@ abstract class Block<
     //
     if (!actionable.yes) {
       // _createItemErrorCount++;
-      final LogErrorInfo? errorInfo = _addErrorLogActionable(
+      final ErrorInfo? errorInfo = _addErrorLogActionable(
         shelf: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
@@ -4715,7 +4711,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_AbstractMethodAnnotation()
-  FORM_RELATED_DATA initFormRelatedData({
+  Future<FORM_RELATED_DATA> initFormRelatedData({
     required Object? parentBlockCurrentItem,
     required ITEM_DETAIL? currentItemDetail,
     required FILTER_CRITERIA filterCriteria,
@@ -4748,7 +4744,9 @@ abstract class Block<
     );
   }
 
-  FORM_RELATED_DATA? _initFormRelatedData(MasterFlowItem masterFlowItem) {
+  Future<FORM_RELATED_DATA?> _initFormRelatedData(
+    MasterFlowItem masterFlowItem,
+  ) async {
     try {
       final Object? parentBlockCurrentItem = parent?.currentItem;
       final FILTER_CRITERIA? currentFilterCriteria = filterCriteria;
@@ -4768,7 +4766,7 @@ abstract class Block<
         },
         lineFlowType: LineFlowType.controllableCalling,
       );
-      return initFormRelatedData(
+      return await initFormRelatedData(
         parentBlockCurrentItem: parentBlockCurrentItem,
         currentItemDetail: currentItemDetail,
         filterCriteria: currentFilterCriteria,
@@ -4803,13 +4801,38 @@ abstract class Block<
   });
 
   // ***************************************************************************
-  // ************* API METHOD **************************************************
+  // ***************************************************************************
+
+  ///
+  /// This method is called for each ITEM in the list you just queried
+  /// to ensure that it actually matches the current item of the parent Block.
+  /// If it doesn't match, it will be removed from this Block's list.
+  ///
+  /// If you don't care about this method, you can simply throw an [UnsupportedError].
+  ///
+  /// ```
+  /// @override
+  /// Object extractParentBlockItemId({required ITEM fromThisBlockItem}) {
+  ///     throw UnsupportedError("This feature will be ignored!");
+  /// }
+  /// ```
+  ///
+  @_AbstractMethodAnnotation()
+  Object extractParentBlockItemId({required ITEM fromThisBlockItem}) {
+    throw UnsupportedError("You can override this method.");
+  }
+
+  // ***************************************************************************
   // ***************************************************************************
 
   @_AbstractMethodAnnotation()
-  int? specifyItemIndexToSelectAsCurrent() {
+  int? specifyItemIndexToSetAsCurrent() {
     return null;
   }
+
+  // ***************************************************************************
+  // ************* API METHOD **************************************************
+  // ***************************************************************************
 
   @_AbstractMethodAnnotation()
   Future<ApiResult<PageData<ITEM>?>> callApiQuery({
@@ -7502,6 +7525,84 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  _ProcessedQueryResult<ID, ITEM, FILTER_CRITERIA> __processQueryResult({
+    required FILTER_CRITERIA? usedFilterCriteria,
+    required Pageable? usedPageable,
+    //
+    required PageData<ITEM>? queriedPageData,
+    required DataState newBlockDataState,
+    required ActionResultState queryResultState,
+  }) {
+    final PageData<ITEM> ap = queriedPageData ?? DefaultPageData<ITEM>.empty();
+    final List<ITEM> queriedItems = ap.items;
+    //
+    final List<ITEM> validItems = [];
+    final List<ITEM> invalidItems = [];
+    final List<ITEM> errorItems = [];
+    ErrorInfo? errorInfo;
+    //
+    final Object? parentBlkCurrItemId = parentBlockCurrentItemId;
+    if (parentBlkCurrItemId == null) {
+      validItems.addAll(queriedItems);
+    } else {
+      for (var item in queriedItems) {
+        try {
+          Object parentBlkItemId =
+              extractParentBlockItemId(fromThisBlockItem: item);
+          if (parentBlkItemId == parentBlkCurrItemId) {
+            validItems.add(item);
+          } else {
+            invalidItems.add(item);
+          }
+        } on UnsupportedError {
+          validItems.add(item);
+        } catch (e, stackTrace) {
+          errorInfo ??= _handleError(
+            shelf: shelf,
+            methodName: "extractParentBlockItemId",
+            error: e,
+            stackTrace: stackTrace,
+            showSnackBar: true,
+          );
+          errorItems.add(item);
+        }
+      }
+    }
+    //
+    if (errorInfo == null) {
+      if (invalidItems.isNotEmpty) {
+        _handleWarning(
+          shelf: shelf,
+          methodName: "extractParentBlockItemId",
+          warningMessage:
+              '${queriedItems.length} items were just queried (${getClassNameWithoutGenerics(this)}). '
+              '${errorItems.length} items failed during the validation process, '
+              'and ${invalidItems.length} items did not match the current item of the parent block.',
+          stackTrace: null,
+          showSnackBar: true,
+        );
+      }
+    }
+    //
+    return _ProcessedQueryResult(
+      parentBlockCurrentItemId: parentBlockCurrentItemId,
+      usedFilterCriteria: usedFilterCriteria,
+      usedPageable: usedPageable,
+      //
+      queriedPageData: queriedPageData,
+      queryResultState: queryResultState,
+      newBlockDataState: newBlockDataState,
+      //
+      validItems: validItems,
+      invalidItems: invalidItems,
+      errorItems: errorItems,
+      errorInfo: errorInfo,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void __refreshQueryingState({required bool isQuerying}) {
     try {
       __isQuerying = isQuerying;
@@ -7596,7 +7697,7 @@ abstract class Block<
   // ***************************************************************************
 
   void showFilterCriteriaDialog() {
-    BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     //
     FilterCriteriaDialog.showBlockFilterCriteriaDialog(
       context: context,

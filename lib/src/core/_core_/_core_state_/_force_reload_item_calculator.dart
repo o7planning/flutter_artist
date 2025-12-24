@@ -60,7 +60,12 @@ _ForceReloadItemState _calculateBlockState({
       hasItemXRepresentativeExt = true;
       isSpecialUniformITEM = false;
     } else {
-      isSpecialUniformITEM = true; // (***)
+      if (isCandidateCurrentItemInNewQueriedList) {
+        // Use if: isCandidateCurrentItemInNewQueriedList && hasItemXRepresentativeExt
+        isSpecialUniformITEM = true; // (***)
+      } else {
+        isSpecialUniformITEM = false;
+      }
     }
   } else {
     isSpecialUniformITEM = false;
@@ -119,7 +124,7 @@ _ForceReloadItemState _calculateBlockState({
         // formModel != null && !hasFormRepresentativeExt
         else if (!hasFormRepresentativeExt) {
           // (1)(2)(3) --> SPECIAL!! (****)
-          retForceReloadItem = !isSpecialUniformITEM;
+          retForceReloadItem = !isSpecialUniformITEM; // Only If (1)&&(3)
           retForceReloadForm = false;
           //
           masterFlowItem._addLineFlowItem(
@@ -138,7 +143,7 @@ _ForceReloadItemState _calculateBlockState({
         // formModel != null && hasFormRepresentativeExt
         else {
           // (1)(2)(3) --> SPECIAL!! (****)
-          retForceReloadItem = !isSpecialUniformITEM;
+          retForceReloadItem = !isSpecialUniformITEM; // Only If (1)&&(3)
           // currentItemIdChanged && hasFormRepresentativeExt
           retForceReloadForm = true;
           //
@@ -227,8 +232,8 @@ _ForceReloadItemState _calculateBlockState({
         // ON !currentItemIdChanged. (2) --> currentItemReady before!
         // ON isCandidateCurrentItemInNewQueriedList. (3)
         if (formModel == null) {
-          // (1)(2*)(3*)
-          retForceReloadItem = !isSpecialUniformITEM; // (****)
+          // (1)(2*)(3*) --> SPECIAL!! (****)
+          retForceReloadItem = !isSpecialUniformITEM; // Only If (1)&&(3)
           retForceReloadForm = false;
           //
           masterFlowItem._addLineFlowItem(
@@ -243,8 +248,8 @@ _ForceReloadItemState _calculateBlockState({
         }
         // formModel != null && !hasFormRepresentativeExt
         else if (!hasFormRepresentativeExt) {
-          // (1)(2*)(3*)
-          retForceReloadItem = !isSpecialUniformITEM; // (****)
+          // (1)(2*)(3*) --> SPECIAL!! (****)
+          retForceReloadItem = !isSpecialUniformITEM; // Only If (1)&&(3)
           retForceReloadForm = false;
           //
           masterFlowItem._addLineFlowItem(
@@ -262,8 +267,8 @@ _ForceReloadItemState _calculateBlockState({
         // ON isCandidateCurrentItemInNewQueriedList. (3)
         // formModel != null && hasFormRepresentativeExt
         else {
-          // (1)(2*)(3*)
-          retForceReloadItem = !isSpecialUniformITEM; // (****)
+          // (1)(2*)(3*) --> SPECIAL!! (****)
+          retForceReloadItem = !isSpecialUniformITEM; // Only If (1)&&(3)
           // isCandidateCurrentItemInNewQueriedList && hasFormRepresentativeExt
           retForceReloadForm = true;
           //

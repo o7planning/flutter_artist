@@ -742,7 +742,7 @@ abstract class Scalar<
     required DATA? extraData,
     required bool success,
   }) async {
-    BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     bool success2;
     try {
       masterFlowItem._addLineFlowItem(
@@ -1185,7 +1185,7 @@ abstract class Scalar<
   // ***************************************************************************
 
   void showFilterCriteriaDialog() {
-    BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     //
     FilterCriteriaDialog.showScalarFilterCriteriaDialog(
       context: context,

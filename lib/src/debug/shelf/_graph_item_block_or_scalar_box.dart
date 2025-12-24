@@ -231,7 +231,8 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
     FilterModel? filterModel = widget.blockOrScalar.filterModel;
     Color color = Colors.white;
     if (filterModel != null) {
-      List<String> filterNames = widget.blockOrScalar.shelf.filterNames
+      // Sort an Unmodifiable List:
+      List<String> filterNames = [...widget.blockOrScalar.shelf.filterNames]
         ..sort((a, b) => a.compareTo(b));
       //
       int idx = filterNames.indexOf(filterModel.name);
@@ -239,7 +240,6 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
           ? DebugConstants.filterColors[idx]
           : Colors.transparent;
     }
-
     //
     return Container(
       width: double.maxFinite,

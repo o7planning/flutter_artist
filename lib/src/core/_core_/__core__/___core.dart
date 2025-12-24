@@ -6,7 +6,7 @@ abstract class _Core {
     required String message,
     String? details,
   }) async {
-    BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     bool confirm = await dialogs.showConfirmDialog(
       context: context,
       message: message,
@@ -17,7 +17,7 @@ abstract class _Core {
 
   // TODO: Them tham so BuildContext?
   Future<bool> showConfirmDeleteDialog({String? details}) async {
-    BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     bool confirm = await dialogs.showConfirmDeleteDialog(
       context: context,
       details: details ?? "",
@@ -30,7 +30,7 @@ abstract class _Core {
     required String message,
     String? details,
   }) async {
-    BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     await dialogs.showMessageDialog(
       context: context,
       message: message,
@@ -43,7 +43,7 @@ abstract class _Core {
     required DefaultConfirmation defaultConfirmation,
     required CustomConfirmation? customConfirmation,
   }) async {
-    BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     //
     if (customConfirmation != null) {
       try {
@@ -61,6 +61,44 @@ abstract class _Core {
     } else {
       return await defaultConfirmation(context);
     }
+  }
+
+  // ***************************************************************************
+  // *********** HANDLE WARN ***************************************************
+  // ***************************************************************************
+
+  WarningInfo _handleWarning({
+    required Shelf? shelf,
+    required String? methodName,
+    required String warningMessage,
+    required StackTrace? stackTrace,
+    required bool showSnackBar,
+  }) {
+    final String msg;
+    if (methodName == null) {
+      msg = "Warning: $warningMessage";
+    } else {
+      if (methodName.contains("\\.")) {
+        msg = "Call $methodName() warning: $warningMessage";
+      } else {
+        msg =
+            "Call ${getClassNameWithoutGenerics(this)}.$methodName() warning: $warningMessage";
+      }
+    }
+    //
+    final LogEntry logEntry = FlutterArtist.logger.addWarning(
+      shelfName: FlutterArtist.storage._getShelfName(shelf.runtimeType),
+      methodName: methodName,
+      warningMessage: msg,
+      stackTrace: null,
+    );
+    //
+    if (showSnackBar) {
+      showWarningSnackBar(
+        message: msg,
+      );
+    }
+    return logEntry.warningInfo!;
   }
 
   // ***************************************************************************
@@ -94,7 +132,7 @@ abstract class _Core {
       print(st);
     }
     //
-    LogErrorInfo errorInfo = FlutterArtist.errorLogger.addError(
+    final LogEntry logEntry = FlutterArtist.logger.addError(
       shelfName: FlutterArtist.storage._getShelfName(shelf.runtimeType),
       methodName: methodName,
       errorMessage: appError.errorMessage,
@@ -108,7 +146,7 @@ abstract class _Core {
         errorDetails: appError.errorDetails,
       );
     }
-    return errorInfo;
+    return logEntry.errorInfo!;
   }
 
   ErrorInfo _handleRestError({
@@ -127,7 +165,7 @@ abstract class _Core {
     }
     print(msg);
     //
-    LogErrorInfo errorInfo = FlutterArtist.errorLogger.addError(
+    final LogEntry logEntry = FlutterArtist.logger.addError(
       shelfName: FlutterArtist.storage._getShelfName(shelf.runtimeType),
       methodName: methodName,
       errorMessage: message,
@@ -141,19 +179,19 @@ abstract class _Core {
         errorDetails: errorDetails,
       );
     }
-    return errorInfo;
+    return logEntry.errorInfo!;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  LogErrorInfo? _addErrorLogActionable({
+  ErrorInfo? _addErrorLogActionable({
     required Shelf? shelf,
     required Actionable actionableFalse,
     required bool showErrSnackBar,
   }) {
     if (!actionableFalse.yes) {
-      LogErrorInfo errorInfo = FlutterArtist.errorLogger.addError(
+      final LogEntry logEntry = FlutterArtist.logger.addError(
         shelfName: shelf?.name,
         methodName: null,
         errorMessage: actionableFalse.message!,
@@ -166,7 +204,7 @@ abstract class _Core {
           errorDetails: actionableFalse.details,
         );
       }
-      return errorInfo;
+      return logEntry.errorInfo!;
     }
     return null;
   }
@@ -175,6 +213,18 @@ abstract class _Core {
   // *********** HANDLE ERROR **************************************************
   // ***************************************************************************
 
+  void showWarningSnackBar({
+    required String message,
+  }) {
+    if (FlutterArtist.testCaseMode) {
+      // return;
+    }
+    FlutterArtist.coreFeaturesAdapter.showWarningSnackBar(
+      message: message,
+      details: null,
+    );
+  }
+
   void showErrorSnackBar({
     required String message,
     required List<String>? errorDetails,
@@ -182,7 +232,7 @@ abstract class _Core {
     if (FlutterArtist.testCaseMode) {
       // return;
     }
-    FlutterArtist.adapter.showErrorSnackBar(
+    FlutterArtist.coreFeaturesAdapter.showErrorSnackBar(
       message: message,
       details: errorDetails,
     );
@@ -195,18 +245,18 @@ abstract class _Core {
     if (FlutterArtist.testCaseMode) {
       return;
     }
-    FlutterArtist.adapter.showErrorSnackBar(
+    FlutterArtist.coreFeaturesAdapter.showErrorSnackBar(
       message: message,
       details: details,
     );
   }
 
   void showSavedSnackBar() {
-    FlutterArtist.adapter.showSavedSnackBar();
+    FlutterArtist.coreFeaturesAdapter.showSavedSnackBar();
   }
 
   void showDeletedSnackBar({String? customMessage}) {
-    FlutterArtist.adapter.showDeletedSnackBar(
+    FlutterArtist.coreFeaturesAdapter.showDeletedSnackBar(
       customMessage: customMessage,
     );
   }

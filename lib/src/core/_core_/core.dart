@@ -19,7 +19,7 @@ import '../../debug/code_flow/__task_flow_const.dart';
 import '../../debug/dialog/_block_error_viewer_dialog.dart';
 import '../../debug/dialog/_shelf_structure_view_dialog.dart';
 import '../../debug/dialog/_task_flow_viewer_dialog.dart';
-import '../../debug/dialog/_error_log_viewer_dialog.dart';
+import '../../debug/dialog/_log_viewer_dialog.dart';
 import '../../debug/dialog/_executor_dialog.dart';
 import '../../debug/dialog/_filter_criteria_dialog.dart';
 import '../../debug/dialog/_filter_model_info_dialog.dart';
@@ -42,10 +42,7 @@ import '../action/block_quick_item_creation_action.dart';
 import '../action/block_quick_item_update_action.dart';
 import '../action/scalar_quick_extra_data_load_action.dart';
 import '../action/storage_silent_action.dart';
-import '../adapter/_flutter_artist_adapter.dart';
 import '../adapter/_global_data_adapter.dart';
-import '../adapter/_locale_adapter.dart';
-import '../adapter/_login_logout_adapter.dart';
 import '../adapter/_notification_adapter.dart';
 import '../annotation/annotation.dart';
 import '../built_in/empty_form_input.dart';
@@ -106,9 +103,9 @@ import '../error/_filter_temp_error.dart';
 import '../error/_form_error_info.dart';
 import '../error/_form_temp_error.dart';
 import '../error/_scalar_error_info.dart';
-import '../error_logger/_error_logger.dart';
 import '../global/_global_data.dart';
 import '../icon/icon_constants.dart';
+import '../logger/_logger.dart';
 import '../notification/_notification_listener.dart';
 import '../notification/_notification_summary.dart';
 import '../precheck/__actionable.dart';
@@ -180,7 +177,7 @@ part '_core_event_/_eff_scalar.dart';
 
 part '_core_event_/_effected_shelf_members.dart';
 
-part '__core__/_error_listener.dart';
+part '__core__/_log_listener.dart';
 
 part '__core__/_executor.dart';
 
@@ -207,6 +204,8 @@ part '_sorting_/_sort_model.dart';
 part '_sorting_/_sort_model_builder.dart';
 
 part '__core__/_storage_core.dart';
+
+part '__core__/_processed_query_result.dart';
 
 part '__core__/_polymorphism_manager.dart';
 

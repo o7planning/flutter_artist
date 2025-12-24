@@ -358,78 +358,122 @@ class _BlockData<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __appendItems({required List<ITEM> appendItems}) {
-    ItemsUtils.appendItemsToList(
-      appendItems: appendItems,
-      targetList: _items,
-      getItemId: block._getItemIdInternal,
-    );
-    //
-    _clientSideSortItems();
-    //
-    ItemsUtils.replaceItemsInList(
-      replacementItems: appendItems,
-      targetList: _selectedItems,
-      getItemId: block._getItemIdInternal,
-    );
-    ItemsUtils.replaceItemsInList(
-      replacementItems: appendItems,
-      targetList: _checkedItems,
-      getItemId: block._getItemIdInternal,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   void _updateData({
+    required MasterFlowItem masterFlowItem,
     required ItemListMode forceItemListMode,
-    required Object? parentBlockCurrentItemId,
-    required FILTER_CRITERIA? filterCriteria,
-    required Pageable? pageable,
-    required PageData<ITEM>? pageData,
-    required DataState blockDataState,
-    required ActionResultState queryResultState,
+    required _ProcessedQueryResult<ID, ITEM, FILTER_CRITERIA>
+        processedQueryResult,
   }) {
-    _lastQueryResultState = queryResultState;
+    _lastQueryResultState = processedQueryResult.queryResultState;
     bool cleared = false;
     // Check if filterCriteria changed.
     if (forceItemListMode == ItemListMode.replace ||
-        _parentBlockCurrentItemId != parentBlockCurrentItemId ||
-        _filterCriteria != filterCriteria) {
+        _parentBlockCurrentItemId !=
+            processedQueryResult.parentBlockCurrentItemId ||
+        _filterCriteria != processedQueryResult.usedFilterCriteria) {
       _items.clear();
       cleared = true;
     }
     //
-    final PageData<ITEM> ap = pageData ?? DefaultPageData<ITEM>.empty();
-    _pageable = pageable?.copy();
-    if (_parentBlockCurrentItemId != parentBlockCurrentItemId ||
-        _filterCriteria != filterCriteria) {
+    final PageData<ITEM> ap =
+        processedQueryResult.queriedPageData ?? DefaultPageData<ITEM>.empty();
+    _pageable = processedQueryResult.usedPageable?.copy();
+    if (_parentBlockCurrentItemId !=
+            processedQueryResult.parentBlockCurrentItemId ||
+        _filterCriteria != processedQueryResult.usedFilterCriteria) {
       _paginationInfo = PaginationInfo.copy(ap.paginationInfo);
     } else {
       // Query Error:
-      if (queryResultState == ActionResultState.fail) {
+      if (processedQueryResult.queryResultState == ActionResultState.fail) {
         // No change _pagination:
       } else {
         _paginationInfo = PaginationInfo.copy(ap.paginationInfo);
       }
     }
     //
-    _parentBlockCurrentItemId = parentBlockCurrentItemId;
-    _lastQueryResult = pageData;
-    _blockDataState = blockDataState;
+    _parentBlockCurrentItemId = processedQueryResult.parentBlockCurrentItemId;
+    _lastQueryResult = processedQueryResult.queriedPageData;
+    _blockDataState = processedQueryResult.newBlockDataState;
     //
     // Update FilterCriteria:
     //
-    __setNewFilterCriteria(filterCriteria);
+    __setNewFilterCriteria(processedQueryResult.usedFilterCriteria);
     //
     // Append to _items:
     //
-    __appendItems(appendItems: ap.items);
+    __appendQueriedItems(
+      masterFlowItem: masterFlowItem,
+      processedQueryResult: processedQueryResult,
+    );
     // block.formModel?.data._formMode = FormMode.none;
     if (cleared) {
       __restoreManualArrangementIfNeed();
     }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __appendQueriedItems({
+    required MasterFlowItem masterFlowItem,
+    required _ProcessedQueryResult<ID, ITEM, FILTER_CRITERIA>
+        processedQueryResult,
+  }) {
+    if (processedQueryResult.errorItems.isNotEmpty) {
+      ItemsUtils.removeItemsFromList(
+        removeItems: processedQueryResult.errorItems,
+        targetList: _items,
+        getItemId: block._getItemIdInternal,
+      );
+      ItemsUtils.removeItemsFromList(
+        removeItems: processedQueryResult.errorItems,
+        targetList: _selectedItems,
+        getItemId: block._getItemIdInternal,
+      );
+      ItemsUtils.removeItemsFromList(
+        removeItems: processedQueryResult.errorItems,
+        targetList: _checkedItems,
+        getItemId: block._getItemIdInternal,
+      );
+    }
+    //
+    if (processedQueryResult.invalidItems.isNotEmpty) {
+      ItemsUtils.removeItemsFromList(
+        removeItems: processedQueryResult.invalidItems,
+        targetList: _items,
+        getItemId: block._getItemIdInternal,
+      );
+      ItemsUtils.removeItemsFromList(
+        removeItems: processedQueryResult.invalidItems,
+        targetList: _selectedItems,
+        getItemId: block._getItemIdInternal,
+      );
+      ItemsUtils.removeItemsFromList(
+        removeItems: processedQueryResult.invalidItems,
+        targetList: _checkedItems,
+        getItemId: block._getItemIdInternal,
+      );
+    }
+    //
+    if (processedQueryResult.validItems.isNotEmpty) {
+      ItemsUtils.appendItemsToList(
+        appendItems: processedQueryResult.validItems,
+        targetList: _items,
+        getItemId: block._getItemIdInternal,
+      );
+      ItemsUtils.replaceItemsInList(
+        replacementItems: processedQueryResult.validItems,
+        targetList: _selectedItems,
+        getItemId: block._getItemIdInternal,
+      );
+      ItemsUtils.replaceItemsInList(
+        replacementItems: processedQueryResult.validItems,
+        targetList: _checkedItems,
+        getItemId: block._getItemIdInternal,
+      );
+    }
+    //
+    _clientSideSortItems();
   }
 
   // ***************************************************************************

@@ -1135,7 +1135,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   Future<void> showFilterModelDebugDialog() async {
-    BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     //
     await FilterModelInfoDialog.showFilterModelInfoDialog(
       context: context,
@@ -1148,7 +1148,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   void showFilterCriteriaDialog() {
-    BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     //
     FilterCriteriaDialog.showFilterCriteriaDialog(
       context: context,

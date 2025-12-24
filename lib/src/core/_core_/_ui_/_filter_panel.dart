@@ -66,7 +66,7 @@ abstract class FilterPanel<FILTER_MODEL extends FilterModel>
   }
 
   Future<void> showFilterModelDebugDialog() async {
-    BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     //
     await FilterModelInfoDialog.showFilterModelInfoDialog(
       context: context,

@@ -18,8 +18,9 @@ class FaIconConstants {
       cupertino.CupertinoIcons.arrow_3_trianglepath;
 
   // Show in FormErrorViewerDialog:
-  static const IconData dataStateErrorIconData =
-      cupertino.CupertinoIcons.exclamationmark_triangle_fill;
+  // cupertino.CupertinoIcons.exclamationmark_triangle_fill
+  static const IconData dataStateErrorIconData = Icons.error;
+  static const IconData dataStateWarningIconData = Icons.warning_amber_sharp;
 
   static const IconData dataStateNoneIconData = cupertino.CupertinoIcons.app;
 

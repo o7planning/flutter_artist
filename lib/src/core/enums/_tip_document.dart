@@ -18,7 +18,8 @@ enum TipDocument {
   dataState,
   eventReactionFreezing,
   debugState,
-  canDoAction;
+  canDoAction,
+  extractParentBlockItemId;
 
   int getPosition() {
     return TipDocument.values.indexOf(this) + 1;
@@ -78,6 +79,8 @@ enum TipDocument {
         return "Debug State";
       case TipDocument.canDoAction:
         return "Can Do Action";
+      case TipDocument.extractParentBlockItemId:
+        return "Block.extractParentBlockItemId()";
     }
   }
 
@@ -123,6 +126,8 @@ enum TipDocument {
         return "Debug State";
       case TipDocument.canDoAction:
         return "Can Do Action";
+      case TipDocument.extractParentBlockItemId:
+        return "Block.extractParentBlockItemId() method.";
     }
   }
 
@@ -216,6 +221,11 @@ enum TipDocument {
           "https://o7planning.org/11112/config2",
         ];
       case TipDocument.canDoAction:
+        return [
+          "https://o7planning.org/11111/config1",
+          "https://o7planning.org/11112/config2",
+        ];
+      case TipDocument.extractParentBlockItemId:
         return [
           "https://o7planning.org/11111/config1",
           "https://o7planning.org/11112/config2",

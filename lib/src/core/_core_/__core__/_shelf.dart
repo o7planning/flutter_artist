@@ -509,7 +509,7 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
 
   Future<void> showShelfStructureDialog() async {
-    BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     await ShelfStructureViewDialog.showShelfStructureViewDialog(
       context: context,
       shelf: this,
@@ -520,7 +520,7 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
 
   Future<void> showActiveUiComponentsDialog() async {
-    BuildContext context = FlutterArtist.adapter.getCurrentContext();
+    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     await UiComponentsDialog.showActiveUIComponentsDialog(
       context: context,
       shelf: this,
@@ -761,7 +761,7 @@ abstract class Shelf extends _Core {
     //
     if (!actionable.yes) {
       // _createItemErrorCount++;
-      final LogErrorInfo? errorInfo = _addErrorLogActionable(
+      final ErrorInfo? errorInfo = _addErrorLogActionable(
         shelf: null,
         actionableFalse: actionable,
         showErrSnackBar: true,
