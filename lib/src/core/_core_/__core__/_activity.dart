@@ -77,6 +77,7 @@ abstract class Activity extends _Core {
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
+        tipDocument: TipDocument.activity,
       );
       masterFlowItem._addLineFlowItem(
         codeId: "#19200",

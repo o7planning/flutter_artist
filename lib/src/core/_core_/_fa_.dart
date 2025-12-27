@@ -55,9 +55,7 @@ class _FlutterArtist extends _Core {
 
   Function(BuildContext context)? showRestDebugViewerDialog;
 
-  late final Logger logger = Logger(
-    maxDisplayLogEntryCount: 20,
-  );
+  late final Logger logger;
 
   late final _NotificationEngine __notificationEngine;
   late final CodeFlowLogger codeFlowLogger = CodeFlowLogger();
@@ -186,6 +184,7 @@ class _FlutterArtist extends _Core {
     required ILocaleAdapter localeAdapter,
     required Function(BuildContext context)? showRestDebugDialog,
     int notificationFetchPeriodInSeconds = 60,
+    int maxStoredLogEntryCount = 20,
   }) async {
     if (__coreFeaturesAdapter != null) {
       throw DebugUtils.getFatalError(
@@ -201,14 +200,19 @@ class _FlutterArtist extends _Core {
           "Note: You see this debug information because the <b>FlutterArtist.config()</b> method is called in <b>main.dart</b>.",
       parameters: {
         "storageStructure": storageStructure,
-        "flutterArtistAdapter": coreFeaturesAdapter,
+        "coreFeaturesAdapter": coreFeaturesAdapter,
         "loginLogoutAdapter": loginLogoutAdapter,
         "globalDataAdapter": globalDataAdapter,
         "notificationAdapter": notificationAdapter,
+        "maxStoredLogEntryCount": maxStoredLogEntryCount,
         "notificationFetchPeriodInSeconds": notificationFetchPeriodInSeconds,
       },
       lineFlowType: LineFlowType.debug,
       tipDocument: TipDocument.config,
+    );
+    //
+    logger = Logger(
+      maxStoredLogEntryCount: maxStoredLogEntryCount,
     );
     //
     __coreFeaturesAdapter = coreFeaturesAdapter;
@@ -428,9 +432,9 @@ class _FlutterArtist extends _Core {
     return shelf != null;
   }
 
-  Future<void> showRecentLogs() async {
-    showLogViewerDialog();
-  }
+  // Future<void> showRecentLogs() async {
+  //   showLogViewerDialog();
+  // }
 
   Future<void> showLogViewerDialog() async {
     BuildContext context = coreFeaturesAdapter.getCurrentContext();

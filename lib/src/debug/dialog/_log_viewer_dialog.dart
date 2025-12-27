@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_artist/flutter_artist.dart';
 import 'package:flutter_artist/src/core/icon/icon_constants.dart';
+import 'package:flutter_artist/src/debug/dialog/_tip_document_viewer_dialog.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
     as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_artist_core/src/_enum/_log_entry_type.dart';
 
+import '../../core/enums/_tip_document.dart';
 import '../../core/logger/_logger.dart';
 import '../../core/widgets/_custom_app_container.dart';
 import '../section/_error_info_viewer.dart';
@@ -58,16 +61,31 @@ class _LogViewerDialogState extends State<LogViewerDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
+
     Size preferredSize = calculatePreferredDialogSize(
       context,
-      preferredWidth: 620,
-      preferredHeight: 400,
+      preferredWidth: 640,
+      preferredHeight: 380,
     );
 
     dialogs.FaAlertDialog alert = dialogs.FaAlertDialog(
+      icon: Icon(
+        FaIconConstants.logViewerIconData,
+        size: 20,
+        color: Colors.indigo,
+      ),
       titleText: widget.title,
       contentPadding: EdgeInsets.all(8),
       content: _buildContent(preferredSize.width, preferredSize.height),
+      onHelpPressed: loggedInUser == null || !loggedInUser.isSystemUser
+          ? null
+          : () {
+              TipDocumentViewerDialog.showTipDocumentDialog(
+                context: context,
+                tipDocument: TipDocument.logViewer,
+              );
+            },
     );
     return alert;
   }
@@ -75,13 +93,39 @@ class _LogViewerDialogState extends State<LogViewerDialog> {
   Widget _buildSummaryInfo() {
     final double fontSize = 12;
     final double iconSize = 14;
+    final TipDocument? tipDocument = _logEntry?.tipDocument as TipDocument?;
 
     return Card(
       margin: EdgeInsets.all(0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(4),
+        ),
+      ),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 2, horizontal: 5),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Tooltip(
+              message: "Tip & Document",
+              child: SimpleSmallIconButton(
+                iconData: FaIconConstants.tipDocument,
+                iconSize: iconSize,
+                iconColor: tipDocument == null || !tipDocument.enabled
+                    ? null
+                    : Colors.deepOrange,
+                onPressed: tipDocument == null || !tipDocument.enabled
+                    ? null
+                    : () {
+                        TipDocumentViewerDialog.showTipDocumentDialog(
+                          context: context,
+                          tipDocument: tipDocument,
+                        );
+                      },
+              ),
+            ),
             Spacer(),
             Text(
               "Recent: ",

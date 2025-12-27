@@ -41,7 +41,8 @@ class LineFlowItemBox extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               HtmlSelectableRichText(
-                "${lineFlowItem.shortDesc}${lineFlowItem.getParametersAsHtmlString()}${lineFlowItem.getNoteAsHtmlString()}",
+                "${lineFlowItem.shortDesc}${lineFlowItem.getParametersAsHtmlString()}"
+                "${lineFlowItem.getActionableAsHtmlString()}${lineFlowItem.getNoteAsHtmlString()}",
                 icon: Icon(
                   lineFlowItem.lineFlowType.getIconData(),
                   color: lineFlowItem.showIconAndLabel
@@ -103,9 +104,11 @@ class LineFlowItemBox extends StatelessWidget {
           message: "Tip & Document",
           child: SimpleSmallIconButton(
             iconData: FaIconConstants.tipDocument,
-            iconColor:
-                lineFlowItem.tipDocument == null ? null : Colors.deepOrange,
-            onPressed: lineFlowItem.tipDocument == null
+            iconColor: lineFlowItem.tipDocument == null //
+                ? null
+                : Colors.deepOrange,
+            onPressed: lineFlowItem.tipDocument == null ||
+                    !lineFlowItem.tipDocument!.enabled
                 ? null
                 : () {
                     _showTipDocumentDialog(context);

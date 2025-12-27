@@ -92,29 +92,47 @@ class _Storage extends _StorageCore {
     required StorageSilentAction action,
     required Function(BuildContext context)? navigate,
   }) async {
-    // FlutterArtist.codeFlowLogger._addMethodCall(
-    //   isLibCode: true,
-    //   navigate: null,
-    //   ownerClassInstance: this,
-    //   methodName: "executeSilentAction",
-    //   parameters: {
-    //     "action": action,
-    //   },
-    // );
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "executeSilentAction",
+      parameters: {
+        "action": action,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
+    //
+    final bool checkBusyTrue = true;
+    //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#75000",
+      shortDesc:
+          "Calling ${debugObjHtml(this)}.__canSilentAction() to check before execute the action.",
+      parameters: {
+        "checkBusy": checkBusyTrue,
+      },
+    );
     //
     // @Same-Code-Precheck-01
     //
     final Actionable<StorageSilentActionPrecheck> actionable =
         __canSilentAction(
-      checkBusy: true,
+      checkBusy: checkBusyTrue,
     );
     //
     if (!actionable.yes) {
+      masterFlowItem._addLineFlowItem(
+        codeId: "#75040",
+        shortDesc: "Got @actionable:",
+        actionable: actionable,
+        lineFlowType: LineFlowType.debug,
+      );
       // _createItemErrorCount++;
       _addErrorLogActionable(
         shelf: null,
         actionableFalse: actionable,
         showErrSnackBar: true,
+        tipDocument: null,
       );
       return StorageSilentActionResult(
         precheck: actionable.errCode,
@@ -139,6 +157,11 @@ class _Storage extends _StorageCore {
       );
     }
     //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#75340",
+      shortDesc: "Creating <b>_StorageSilentActionTaskUnit</b>.",
+      lineFlowType: LineFlowType.addTaskUnit,
+    );
     final taskUnit = _StorageSilentActionTaskUnit(
       action: action,
     );
@@ -202,6 +225,7 @@ class _Storage extends _StorageCore {
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
+        tipDocument: TipDocument.storageCallApi,
       );
       //
       taskResult._setErrorInfo(

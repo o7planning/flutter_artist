@@ -226,7 +226,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   @_AbstractMethodAnnotation()
-  OptValueWrap? getMultiOptPropValueFromItemDetail({
+  OptValueWrap? extractMultiOptPropValueFromItemDetail({
     required String multiOptPropName,
     required SelectionType selectionType,
     required XData multiOptPropXData,
@@ -242,7 +242,7 @@ abstract class FormModel<
   /// [itemDetail] should include the ID of the parent Block's currentItem.
   /// Let's look at an example with class [DepartmentFormModel]:
   /// ```dart
-  ///  Map<String, dynamic>? getSimplePropValuesFromItemDetail({
+  ///  Map<String, dynamic>? extractSimplePropValuesFromItemDetail({
   ///      required Object? parentBlockCurrentItemId,
   ///      required EmptyFormRelatedData formRelatedData,
   ///      required DepartmentData itemDetail,
@@ -256,7 +256,7 @@ abstract class FormModel<
   ///
   /// [formRelatedData] can include other information from the parent Block's [currentItem].
   /// ```dart
-  ///  Map<String, dynamic>? getSimplePropValuesFromItemDetail({
+  ///  Map<String, dynamic>? extractSimplePropValuesFromItemDetail({
   ///      required Object? parentBlockCurrentItemId,
   ///      required DepartmentFormRelatedData formRelatedData,
   ///      required DepartmentData itemDetail,
@@ -270,7 +270,7 @@ abstract class FormModel<
   /// ```
   ///
   @_AbstractMethodAnnotation()
-  Map<String, dynamic>? getSimplePropValuesFromItemDetail({
+  Map<String, dynamic>? extractSimplePropValuesFromItemDetail({
     required Object? parentBlockCurrentItemId,
     required FORM_RELATED_DATA formRelatedData,
     required ITEM_DETAIL itemDetail,
@@ -281,7 +281,7 @@ abstract class FormModel<
 
   // OLD: getMultiOptPropValueFromFormInput.
   @_AbstractMethodAnnotation()
-  OptValueWrap? getUpdatedValueForMultiOptProp({
+  OptValueWrap? getUpdatedValueForMultiOptProp({ 
     required String multiOptPropName,
     required SelectionType selectionType,
     required XData multiOptPropXData,
@@ -582,16 +582,6 @@ abstract class FormModel<
     bool saveError = false;
     final bool isNew = _formPropsStructure.isNew;
     try {
-      // FlutterArtist.codeFlowLogger._addMethodCall(
-      //   isLibCode: false,
-      //   ownerClassInstance: this,
-      //   methodName: calledMethodName,
-      //   parameters: {
-      //     "formMapData": formMapData,
-      //   },
-      //   navigate: null,
-      // );
-      //
       block._refreshSavingState(isSaving: true);
       //
       masterFlowItem._addLineFlowItem(
@@ -610,12 +600,14 @@ abstract class FormModel<
       saveError = true;
       //
       final ErrorInfo errorInfo = _handleError(
-        shelf: shelf,
-        methodName: calledMethodName,
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-      );
+          shelf: shelf,
+          methodName: calledMethodName,
+          error: e,
+          stackTrace: stackTrace,
+          showSnackBar: true,
+          tipDocument: isNew
+              ? TipDocument.formModelCallApiCreateItem
+              : TipDocument.formModelCallApiUpdateItem);
       //
       taskResult._setErrorInfo(
         errorInfo: errorInfo,
@@ -656,6 +648,7 @@ abstract class FormModel<
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
+        tipDocument: null,
       );
       //
       taskResult._setErrorInfo(
@@ -816,14 +809,14 @@ abstract class FormModel<
             codeId: "#06200",
             lineFlowType: LineFlowType.controllableCalling,
             shortDesc:
-                "Calling ${debugObjHtml(this)}.getSimplePropValuesFromItemDetail().",
+                "Calling ${debugObjHtml(this)}.extractSimplePropValuesFromItemDetail().",
             parameters: {
               "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
               "itemDetail": itemDetail,
               "formRelatedData": formRelatedData,
             },
           );
-          var simplePropValueMap = getSimplePropValuesFromItemDetail(
+          var simplePropValueMap = extractSimplePropValuesFromItemDetail(
                 parentBlockCurrentItemId: block.parentBlockCurrentItemId,
                 formRelatedData: formRelatedData,
                 itemDetail: itemDetail,
@@ -834,7 +827,7 @@ abstract class FormModel<
             __throwErrorIfNotASimplePropName(
               propName: propName,
               formErrorMethod:
-                  FormErrorMethod.getSimplePropValuesFromItemDetail,
+                  FormErrorMethod.extractSimplePropValuesFromItemDetail,
             );
             //
             // In (First load + itemDetail != null).
@@ -850,7 +843,7 @@ abstract class FormModel<
           final formErrorInfo = FormErrorInfo(
             activityType: activityType,
             propName: null,
-            formErrorMethod: FormErrorMethod.getSimplePropValuesFromItemDetail,
+            formErrorMethod: FormErrorMethod.extractSimplePropValuesFromItemDetail,
             error: e,
             errorStackTrace: stackTrace,
           );
@@ -862,6 +855,7 @@ abstract class FormModel<
             error: formErrorInfo.error,
             stackTrace: formErrorInfo.errorStackTrace,
             showSnackBar: true,
+            tipDocument: null,
           );
           //
           __endFormActivityWithDataState(
@@ -872,7 +866,7 @@ abstract class FormModel<
           masterFlowItem._addLineFlowItem(
             codeId: "#06400",
             shortDesc:
-                "The ${debugObjHtml(this)}.getSimplePropValuesFromItemDetail() method was called with an error!",
+                "The ${debugObjHtml(this)}.extractSimplePropValuesFromItemDetail() method was called with an error!",
             errorInfo: errorInfo,
           );
           return false;
@@ -944,6 +938,8 @@ abstract class FormModel<
               error: formErrorInfo.error,
               stackTrace: formErrorInfo.errorStackTrace,
               showSnackBar: true,
+              tipDocument:
+                  TipDocument.formModelSpecifyDefaultValuesForSimpleProps,
             );
             //
             __endFormActivityWithDataState(
@@ -1021,6 +1017,7 @@ abstract class FormModel<
               error: formErrorInfo.error,
               stackTrace: formErrorInfo.errorStackTrace,
               showSnackBar: true,
+              tipDocument: TipDocument.formModelGetUpdatedValuesForSimpleProps,
             );
             //
             __endFormActivityWithDataState(
@@ -1104,6 +1101,7 @@ abstract class FormModel<
             error: formErrorInfo.error,
             stackTrace: formErrorInfo.errorStackTrace,
             showSnackBar: true,
+            tipDocument: TipDocument.formModelGetUpdatedValuesForSimpleProps,
           );
           //
           __endFormActivityWithDataState(
@@ -1186,6 +1184,7 @@ abstract class FormModel<
         error: formErrorInfo.error,
         stackTrace: formErrorInfo.errorStackTrace,
         showSnackBar: true,
+        tipDocument: null,
       );
       //
       __endFormActivityWithDataState(
@@ -1286,6 +1285,7 @@ abstract class FormModel<
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
+        tipDocument: null,
       );
       //
       // IMPORTANT:
@@ -1534,7 +1534,7 @@ abstract class FormModel<
             lineFlowType: LineFlowType.debug,
           );
           // May throw FormTempError.
-          initialValueWrap = __getMultiOptPropValueFromItemDetail(
+          initialValueWrap = __extractMultiOptPropValueFromItemDetail(
             masterFlowItem: masterFlowItem,
             formRelatedData: formRelatedData,
             itemDetail: currentItemDetail,
@@ -1835,7 +1835,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   @_MayThrowFormTempErrorAnnotation()
-  OptValueWrap? __getMultiOptPropValueFromItemDetail({
+  OptValueWrap? __extractMultiOptPropValueFromItemDetail({
     required MasterFlowItem masterFlowItem,
     required String multiOptPropName,
     required SelectionType selectionType,
@@ -1848,7 +1848,7 @@ abstract class FormModel<
       masterFlowItem._addLineFlowItem(
         codeId: "#32000",
         shortDesc:
-            "Calling ${debugObjHtml(this)}.getMultiOptPropValueFromItemDetail() for <b>'$multiOptPropName'</b>.",
+            "Calling ${debugObjHtml(this)}.extractMultiOptPropValueFromItemDetail() for <b>'$multiOptPropName'</b>.",
         parameters: {
           "multiOptPropName": multiOptPropName,
           "parentMultiOptPropValue": parentMultiOptPropValue,
@@ -1859,7 +1859,7 @@ abstract class FormModel<
         },
         lineFlowType: LineFlowType.controllableCalling,
       );
-      OptValueWrap? valueWrap = getMultiOptPropValueFromItemDetail(
+      OptValueWrap? valueWrap = extractMultiOptPropValueFromItemDetail(
         multiOptPropName: multiOptPropName,
         selectionType: selectionType,
         multiOptPropXData: multiOptPropXData,
@@ -1869,7 +1869,7 @@ abstract class FormModel<
       );
       if (valueWrap == null) {
         __createNullValueWrapAppError(
-          methodName: "getMultiOptPropValueFromItemDetail",
+          methodName: "extractMultiOptPropValueFromItemDetail",
           multiOptPropName: multiOptPropName,
         );
       }
@@ -1877,7 +1877,7 @@ abstract class FormModel<
     } catch (e, stackTrace) {
       throw FormTempError(
         propName: multiOptPropName,
-        formErrorMethod: FormErrorMethod.getMultiOptPropValueFromItemDetail,
+        formErrorMethod: FormErrorMethod.extractMultiOptPropValueFromItemDetail,
         error: e,
         stackTrace: stackTrace,
       );
@@ -1983,6 +1983,7 @@ abstract class FormModel<
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
+        tipDocument: null,
       );
     }
   }
@@ -2114,6 +2115,7 @@ abstract class FormModel<
           shelf: shelf,
           actionableFalse: createActionable,
           showErrSnackBar: showErrSnackBar,
+          tipDocument: null,
         );
       }
       return false;
@@ -2127,30 +2129,64 @@ abstract class FormModel<
   // Test Case: [26a]
   @_RootMethodAnnotation()
   @_FormModelEnterFormFieldsAnnotation()
-  Future<bool> enterFormFields({
+  Future<FormModelEnterFormFieldsResult> enterFormFields({
     required FORM_INPUT formInput,
   }) async {
-    // FlutterArtist.codeFlowLogger._addMethodCall(
-    //   isLibCode: true,
-    //   ownerClassInstance: this,
-    //   methodName: "enterFormFields",
-    //   parameters: {"formInput": formInput},
-    //   navigate: null,
-    // );
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "enterFormFields",
+      parameters: {
+        "formInput": formInput,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
     //
-    if (!__checkBeforeEnterFormFields(
-      checkBusy: true,
-      addErrorLog: true,
-      showErrSnackBar: true,
-    )) {
-      return false;
+    final bool checkBusyTrue = true;
+    final bool checkAllowTrue = true;
+    //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#78000",
+      shortDesc:
+          "Calling ${debugObjHtml(this)}.__canEnterFormFields() to check before execute the action.",
+      parameters: {
+        "checkBusy": checkBusyTrue,
+      },
+    );
+    //
+    final Actionable<EnterFormFieldsPrecheck> actionable = __canEnterFormFields(
+      checkBusy: checkBusyTrue,
+    );
+    if (!actionable.yes) {
+      masterFlowItem._addLineFlowItem(
+        codeId: "#78040",
+        shortDesc: "Got @actionable:",
+        actionable: actionable,
+        lineFlowType: LineFlowType.debug,
+      );
+      // _createItemErrorCount++;
+      _addErrorLogActionable(
+        shelf: shelf,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+        tipDocument: null,
+      );
+      return FormModelEnterFormFieldsResult(
+        precheck: actionable.errCode,
+      );
     }
     //
     final XShelf xShelf = _XShelfFormModelEnterFields(formModel: this);
     //
     XBlock xBlock = xShelf.findXBlockByName(this.block.name)!;
     XFormModel xFormModel = xBlock.xFormModel!;
-    _STaskUnit taskUnit = _FormModelAutoEnterFormFieldsTaskUnit(
+    //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#78340",
+      shortDesc: "Creating <b>_FormModelAutoEnterFormFieldsTaskUnit</b>.",
+      lineFlowType: LineFlowType.addTaskUnit,
+    );
+    _ResultedSTaskUnit taskUnit = _FormModelAutoEnterFormFieldsTaskUnit(
       xFormModel: xFormModel,
       formInput: formInput,
     );
@@ -2159,7 +2195,7 @@ abstract class FormModel<
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
-    return true;
+    return taskUnit.taskResult;
   }
 
   // ***************************************************************************
@@ -2167,33 +2203,62 @@ abstract class FormModel<
 
   @_FormModelSaveFormAnnotation()
   Future<FormSaveResult> saveForm() async {
-    // FlutterArtist.codeFlowLogger._addMethodCall(
-    //   isLibCode: true,
-    //   ownerClassInstance: this,
-    //   methodName: "saveForm",
-    //   parameters: {},
-    //   navigate: null,
-    // );
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "saveForm",
+      parameters: null,
+      navigate: null,
+      isLibMethod: true,
+    );
+    //
+    final bool checkBusyTrue = true;
+    final bool checkAllowTrue = true;
+    final bool checkValidateTrue = true;
+    //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#79000",
+      shortDesc:
+          "Calling ${debugObjHtml(block)}.__canSaveForm() to check before execute the action.",
+      parameters: {
+        "checkBusy": checkBusyTrue,
+        "checkAllow": checkAllowTrue,
+        "checkValidate": checkValidateTrue,
+      },
+    );
     //
     Actionable<BlockFormSavePrecheck> actionable = block.__canSaveForm(
-      checkBusy: true,
-      checkAllow: true,
-      checkValidate: true,
+      checkBusy: checkBusyTrue,
+      checkAllow: checkAllowTrue,
+      checkValidate: checkValidateTrue,
     );
     if (!actionable.yes) {
+      masterFlowItem._addLineFlowItem(
+        codeId: "#79040",
+        shortDesc: "Got @actionable:",
+        actionable: actionable,
+        lineFlowType: LineFlowType.debug,
+      );
+      //
       _saveErrorCount++;
       _addErrorLogActionable(
         shelf: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
+        tipDocument: null,
       );
       return FormSaveResult(precheck: actionable.errCode);
     }
     //
     final XShelf xShelf = _XShelfFormModelSave(formModel: this);
     //
-    XBlock xBlock = xShelf.findXBlockByName(this.block.name)!;
+    XBlock xBlock = xShelf.findXBlockByName(block.name)!;
     XFormModel xFormModel = xBlock.xFormModel!;
+    //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#79340",
+      shortDesc: "Creating <b>_FormModelSaveFormTaskUnit</b>.",
+      lineFlowType: LineFlowType.addTaskUnit,
+    );
     final _ResultedSTaskUnit taskUnit = _FormModelSaveFormTaskUnit(
       xFormModel: xFormModel,
     );

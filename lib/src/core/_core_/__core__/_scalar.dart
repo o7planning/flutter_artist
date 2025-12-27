@@ -514,6 +514,7 @@ abstract class Scalar<
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
+        tipDocument: TipDocument.scalarCallApiQuery,
       );
       //
       thisXScalar.queryResult._setErrorInfo(
@@ -695,6 +696,7 @@ abstract class Scalar<
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
+        tipDocument: null,
       );
       masterFlowItem._addLineFlowItem(
         codeId: "#40200",
@@ -715,6 +717,7 @@ abstract class Scalar<
         message: result.error!.errorMessage,
         errorDetails: result.error!.errorDetails,
         showSnackBar: true,
+        tipDocument: null,
       );
       masterFlowItem._addLineFlowItem(
         codeId: "#40300",
@@ -742,7 +745,8 @@ abstract class Scalar<
     required DATA? extraData,
     required bool success,
   }) async {
-    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
+    BuildContext context =
+        FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     bool success2;
     try {
       masterFlowItem._addLineFlowItem(
@@ -956,17 +960,19 @@ abstract class Scalar<
     required AfterScalarLoadExtraDataQuickAction afterQuickAction,
     required Function(BuildContext context)? navigate,
   }) async {
-    // FlutterArtist.codeFlowLogger._addMethodCall(
-    //   isLibCode: true,
-    //   navigate: null,
-    //   ownerClassInstance: this,
-    //   methodName: "executeQuickLoadExtraDataAction",
-    //   parameters: {
-    //     "filterInput": filterInput,
-    //     "action": action,
-    //     "afterQuickAction": afterQuickAction,
-    //   },
-    // );
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "executeQuickLoadExtraDataAction",
+      parameters: {
+        "filterInput": filterInput,
+        "actionConfirmationType": actionConfirmationType,
+        "action": action,
+        "afterQuickAction": afterQuickAction,
+        "navigate": navigate,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
     //
     // Confirmation:
     //
@@ -991,6 +997,11 @@ abstract class Scalar<
     //
     final XScalar thisXScalar = xShelf.findXScalarByName(this.name)!;
     //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#80340",
+      shortDesc: "Creating <b>_ScalarLoadExtraDataQuickActionTaskUnit</b>.",
+      lineFlowType: LineFlowType.addTaskUnit,
+    );
     _STaskUnit taskUnit = _ScalarLoadExtraDataQuickActionTaskUnit(
       xScalar: thisXScalar,
       action: action,
@@ -1060,24 +1071,46 @@ abstract class Scalar<
   @_ReturnTaskResultMethodAnnotation()
   @_ScalarClearanceAnnotation()
   Future<ScalarClearanceResult> clear({Function()? navigate}) async {
-    // FlutterArtist.codeFlowLogger._addMethodCall(
-    //   isLibCode: true,
-    //   navigate: navigate,
-    //   ownerClassInstance: this,
-    //   methodName: "clear",
-    //   parameters: {},
-    // );
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "clear",
+      parameters: {
+        "navigate": navigate,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
+    //
+    final bool checkBusyTrue = true;
+    //
+    //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#80000",
+      shortDesc:
+          "Calling ${debugObjHtml(this)}.__canClearScalar() to check before execute the action.",
+      parameters: {
+        "checkBusy": checkBusyTrue,
+      },
+    );
+    //
     // @Same-Code-Precheck-01
     Actionable<ScalarClearancePrecheck> actionable = __canClearScalar(
       checkBusy: true,
     );
     //
     if (!actionable.yes) {
+      masterFlowItem._addLineFlowItem(
+        codeId: "#80040",
+        shortDesc: "Got @actionable:",
+        actionable: actionable,
+        lineFlowType: LineFlowType.debug,
+      );
       // _createItemErrorCount++;
       _addErrorLogActionable(
         shelf: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
+        tipDocument: null,
       );
       return ScalarClearanceResult(
         precheck: actionable.errCode,
@@ -1085,8 +1118,13 @@ abstract class Scalar<
     }
     //
     final XShelf xShelf = _XShelfScalarClearance(scalar: this);
-
     final XScalar thisXScalar = xShelf.findXScalarByName(name)!;
+    //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#80340",
+      shortDesc: "Creating <b>_ScalarClearanceTaskUnit</b>.",
+      lineFlowType: LineFlowType.addTaskUnit,
+    );
     final _ResultedSTaskUnit taskUnit = _ScalarClearanceTaskUnit(
       xScalar: thisXScalar,
     );
@@ -1185,7 +1223,8 @@ abstract class Scalar<
   // ***************************************************************************
 
   void showFilterCriteriaDialog() {
-    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
+    BuildContext context =
+        FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     //
     FilterCriteriaDialog.showScalarFilterCriteriaDialog(
       context: context,

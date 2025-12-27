@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-import '../../core/_core_/core.dart';
+import '../../../core/_core_/core.dart';
+import '../options/_debug_filter_options.dart';
 import '_debug_box.dart';
-import '_filter_debug_options.dart';
 
 class FilterDebugBox extends BaseDebugBox {
   final FilterModel filterModel;
-  final FilterDebugOptions options;
+  final DebugFilterOptions options;
 
   const FilterDebugBox({
     super.key,

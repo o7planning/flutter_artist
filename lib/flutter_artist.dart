@@ -1,5 +1,7 @@
 export 'src/core/_core_/core.dart'
     hide XBlock, XShelf, XFilterModel, XFormModel, XScalar;
+
+export 'src/core/logger/_logger.dart';
 export 'src/core/action/_action.dart';
 export 'src/core/action/background_web_download_action.dart';
 export 'src/core/action/block_quick_item_creation_action.dart';
@@ -101,10 +103,10 @@ export 'src/core/precheck/show_form_info_precheck.dart';
 export 'src/core/typedef/custom_confirmation.dart';
 export 'src/core/utils/_class_utils.dart';
 export 'src/debug/menu/_debug_menu.dart';
-export 'src/debug/state_view/_block_debug_options.dart';
-export 'src/debug/state_view/_block_debug_state_view.dart';
-export 'src/debug/state_view/_filter_debug_options.dart';
-export 'src/debug/state_view/_form_debug_options.dart';
-export 'src/debug/state_view/_pagination_debug_options.dart';
-export 'src/debug/state_view/_scalar_debug_options.dart';
-export 'src/debug/state_view/_scalar_debug_state_view.dart';
+export 'src/debug/state_view/_debug_block_state_view.dart';
+export 'src/debug/state_view/_debug_scalar_state_view.dart';
+export 'src/debug/state_view/options/_debug_block_options.dart';
+export 'src/debug/state_view/options/_debug_filter_options.dart';
+export 'src/debug/state_view/options/_debug_form_options.dart';
+export 'src/debug/state_view/options/_debug_pagination_options.dart';
+export 'src/debug/state_view/options/_debug_scalar_options.dart';

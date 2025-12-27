@@ -63,6 +63,12 @@ class _PolymorphismManager {
         _typeToFamilyMap[type] = family;
       }
     }
+    // Valid alls:
+    for (PolymorphismFamily family in polymorphismFamilies) {
+      String info = "<b>${family.familyName}</b> - ${family._members}";
+      FlutterArtist.debugRegister._addDebugRegisterPolymorphism(info);
+    }
+    //
     _ready = true;
   }
 
@@ -78,5 +84,21 @@ class _PolymorphismManager {
     required String familyName,
   }) {
     return _nameToFamilyMap[familyName];
+  }
+
+  // ***************************************************************************
+
+  Set<Event> getPolymorphismEvents(Set<Event> originEvents) {
+    final Set<Type> polyTypes = {};
+    for (Event event in originEvents) {
+      polyTypes.add(event.dataType);
+      final PolymorphismFamily? family =
+          findPolymorphismFamilyByType(type: event.dataType);
+      if (family == null) {
+        continue;
+      }
+      polyTypes.addAll(family._members);
+    }
+    return polyTypes.map((type) => Event(type)).toSet();
   }
 }

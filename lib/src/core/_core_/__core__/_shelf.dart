@@ -509,7 +509,8 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
 
   Future<void> showShelfStructureDialog() async {
-    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
+    BuildContext context =
+        FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     await ShelfStructureViewDialog.showShelfStructureViewDialog(
       context: context,
       shelf: this,
@@ -520,7 +521,8 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
 
   Future<void> showActiveUiComponentsDialog() async {
-    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
+    BuildContext context =
+        FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     await UiComponentsDialog.showActiveUIComponentsDialog(
       context: context,
       shelf: this,
@@ -765,6 +767,7 @@ abstract class Shelf extends _Core {
         shelf: null,
         actionableFalse: actionable,
         showErrSnackBar: true,
+        tipDocument: null,
       );
       masterFlowItem._addLineFlowItem(
         codeId: "#68100",

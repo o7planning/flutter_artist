@@ -17,20 +17,6 @@ abstract class _StorageCore extends _Core {
 
   bool get started => __started;
 
-  // Map<String, Shelf?> get shelfMap {
-  //   Map<String, Shelf?> m = __shelfCreatorMap
-  //       .map((k, v) => MapEntry<String, Shelf?>(k, null))
-  //     ..addAll(_shelfMap);
-  //   return m;
-  // }
-
-  // Map<String, Activity?> get activityMap {
-  //   Map<String, Activity?> m = __activityCreatorMap
-  //       .map((k, v) => MapEntry<String, Activity?>(k, null))
-  //     ..addAll(_activityMap);
-  //   return m;
-  // }
-
   List<String> get activeShelfNames => List.unmodifiable(_shelfMap.keys);
 
   List<Shelf> get activeShelves => List.unmodifiable(_shelfMap.values);
@@ -272,18 +258,6 @@ abstract class _StorageCore extends _Core {
     _shelfMap.clear();
   }
 
-  // // TODO: Internal Use.
-  // @DebugMethodAnnotation()
-  // void debugLoadAll() {
-  //   __loadAllShelves();
-  // }
-
-  // // TODO: Internal Use.
-  // @DebugMethodAnnotation()
-  // F debugCreateShelf<F extends Shelf>(String shelfName) {
-  //   return _createShelf(shelfName);
-  // }
-
   // ***************************************************************************
   // ***************************************************************************
 
@@ -295,10 +269,6 @@ abstract class _StorageCore extends _Core {
     bool hasMountedUIComponent = shelf.ui.hasMountedUIComponent();
     if (!hasMountedUIComponent) {
       print(">>>>>>>>>>> Shelf: ${getClassName(shelf)} dispose all component");
-      // FlutterArtist.codeFlowLogger.addInfo(
-      //   ownerClassInstance: this,
-      //   info: "Shelf: ${getClassName(shelf)} dispose all UI components",
-      // );
       if (shelf.config.hiddenBehavior == ShelfHiddenBehavior.clear) {
         print(
             "  ---------> Remove ${getClassName(shelf)} from FlutterArtist Storage");

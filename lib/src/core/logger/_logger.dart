@@ -10,7 +10,7 @@ class Logger {
   int __totalErrorCount = 0;
   int __totalWarningCount = 0;
 
-  final int maxDisplayLogEntryCount;
+  final int maxStoredLogEntryCount;
 
   final List<LogEntry> __logEntries = [];
 
@@ -36,7 +36,7 @@ class Logger {
         totalWarningCount: __totalWarningCount,
       );
 
-  Logger({required this.maxDisplayLogEntryCount});
+  Logger({required this.maxStoredLogEntryCount});
 
   List<LogEntry> get logEntries => List.unmodifiable(__logEntries);
 
@@ -63,6 +63,7 @@ class Logger {
     required String errorMessage,
     required List<String>? errorDetails,
     required StackTrace? stackTrace,
+    required Object? tipDocument,
   }) {
     __viewed = false;
     __recentErrorCount++;
@@ -76,8 +77,9 @@ class Logger {
       shelfName: shelfName,
       methodName: methodName,
       errorInfo: errorInfo,
+      tipDocument: tipDocument,
     );
-    if (__logEntries.length > maxDisplayLogEntryCount) {
+    if (__logEntries.length > maxStoredLogEntryCount) {
       __logEntries.removeLast();
     }
     __logEntries.insert(0, logEntry);
@@ -90,6 +92,7 @@ class Logger {
     required String? methodName,
     required String warningMessage,
     required StackTrace? stackTrace,
+    required Object? tipDocument,
   }) {
     __viewed = false;
     __recentWarningCount++;
@@ -101,8 +104,9 @@ class Logger {
         warningMessage: warningMessage,
         stackTrace: stackTrace,
       ),
+      tipDocument: tipDocument,
     );
-    if (__logEntries.length > maxDisplayLogEntryCount) {
+    if (__logEntries.length > maxStoredLogEntryCount) {
       __logEntries.removeLast();
     }
     __logEntries.insert(0, logEntry);

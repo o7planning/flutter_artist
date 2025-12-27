@@ -2,34 +2,22 @@ import 'package:flutter/material.dart';
 
 import '../../core/_core_/core.dart';
 import '../../core/widgets/_table_container.dart';
-import '_block_debug_box.dart';
-import '_block_debug_options.dart';
-import '_filter_debug_box.dart';
-import '_filter_debug_options.dart';
-import '_form_debug_box.dart';
-import '_form_debug_options.dart';
-import '_pagination_debug_box.dart';
-import '_pagination_debug_options.dart';
+import 'options/_debug_scalar_options.dart';
+import 'widgets/_scalar_debug_box.dart';
 
-class BlockDebugStateView extends StatelessWidget {
-  final Block block;
-  final FilterDebugOptions? filterDebugOptions;
-  final BlockDebugOptions? blockDebugOptions;
-  final FormDebugOptions? formDebugOptions;
-  final PaginationDebugOptions? paginationDebugOptions;
+class DebugScalarStateView extends StatelessWidget {
+  final Scalar scalar;
+  final DebugScalarOptions? debugScalarOptions;
 
   final bool showTitle;
   final bool vertical;
 
-  const BlockDebugStateView({
+  const DebugScalarStateView({
     super.key,
-    required this.block,
+    required this.scalar,
     required this.vertical,
     this.showTitle = true,
-    this.filterDebugOptions,
-    required this.blockDebugOptions,
-    required this.formDebugOptions,
-    required this.paginationDebugOptions,
+    required this.debugScalarOptions,
   });
 
   @override
@@ -38,38 +26,14 @@ class BlockDebugStateView extends StatelessWidget {
     return RefreshableNeutralViewBuilder(
       ownerClassInstance: this,
       description: null,
-      shelves: [block.shelf],
+      shelves: [scalar.shelf],
       build: () {
         List<Widget> children = [];
-        if (filterDebugOptions != null && block.filterModel != null) {
+        if (debugScalarOptions != null) {
           children.add(
-            FilterDebugBox(
-              filterModel: block.filterModel!,
-              options: filterDebugOptions!,
-            ),
-          );
-        }
-        if (blockDebugOptions != null) {
-          children.add(
-            BlockDebugBox(
-              block: block,
-              options: blockDebugOptions!,
-            ),
-          );
-        }
-        if (formDebugOptions != null && block.formModel != null) {
-          children.add(
-            FormDebugBox(
-              formModel: block.formModel!,
-              options: formDebugOptions!,
-            ),
-          );
-        }
-        if (paginationDebugOptions != null) {
-          children.add(
-            PaginationDebugBox(
-              block: block,
-              options: paginationDebugOptions!,
+            ScalarDebugBox(
+              scalar: scalar,
+              options: debugScalarOptions!,
             ),
           );
         }
@@ -111,7 +75,7 @@ class BlockDebugStateView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (showTitle) Text(block.name),
+                  if (showTitle) Text(scalar.name),
                   if (showTitle) const Divider(height: 10),
                   mainWidget,
                 ],

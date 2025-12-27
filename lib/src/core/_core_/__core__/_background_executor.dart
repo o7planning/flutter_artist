@@ -77,6 +77,7 @@ class _BackgroundExecutor extends _Core {
         error: e,
         stackTrace: stackTrace,
         showSnackBar: false,
+        tipDocument: TipDocument.backgroundActionRun,
       );
       backgroundResult._setErrorInfo(
         errorInfo: errorInfo,

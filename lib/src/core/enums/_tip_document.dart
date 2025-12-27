@@ -1,40 +1,82 @@
 enum TipDocument {
-  config,
-  storageStructure,
-  flutterArtistAdapter,
-  loginLogoutAdapter,
-  activity,
-  shelf,
-  polymorphism,
-  globalData,
-  pageData,
-  locale,
-  naturalQuery,
-  filterCriteria,
-  sorting,
-  scalarActiveUIComponents,
-  blockActiveUIComponents,
-  blockQueryType,
-  dataState,
-  eventReactionFreezing,
-  debugState,
-  canDoAction,
-  extractParentBlockItemId;
+  config(enabled: true),
+  logViewer(enabled: true),
+  storageStructure(enabled: true),
+  coreFeaturesAdapter(enabled: true),
+  loginLogoutAdapter(enabled: true),
+  activity(enabled: true),
+  shelf(enabled: true),
+  polymorphism(enabled: true),
+  globalData(enabled: true),
+  pageData(enabled: true),
+  locale(enabled: true),
+  naturalQuery(enabled: true),
+  filterCriteria(enabled: true),
+  blockActiveUIComponents(enabled: true),
+  blockQueryType(enabled: true),
+  sorting(enabled: true),
+  scalarActiveUIComponents(enabled: true),
+  dataState(enabled: true),
+  eventReactionFreezing(enabled: true),
+  debugState(enabled: true),
+  canDoAction(enabled: true),
+  //
+  blockCallApiDeleteItemById(enabled: false),
+  blockCallApiQuery(enabled: false),
+  blockConvertItemDetailToItem(enabled: false),
+  blockCallApiLoadItemDetailById(enabled: false),
+  blockExtractParentBlockItemId(enabled: true),
+  blockInitFormRelatedData(enabled: false),
+  //
+  blockSilentActionCallApi(enabled: false),
+  //
+  blockQuickItemUpdateActionCallApiQuickUpdateItem(enabled: false),
+  blockQuickMultiItemsCreationActionCallApiQuickCreateMultiItems(
+      enabled: false),
+  blockQuickItemCreationActionCallApiQuickCreateItem(enabled: false),
+  //
+  scalarCallApiQuery(enabled: false),
+  //
+  formModelCallApiCreateItem(enabled: false),
+  formModelCallApiUpdateItem(enabled: false),
+  formModelGetUpdatedValuesForSimpleProps(enabled: false),
+  formModelSpecifyDefaultValuesForSimpleProps(enabled: false),
+  //
+  filterModelCallApiLoadMultiOptCriterionXData(enabled: false),
+  //
+  storageCallApi(enabled: false),
+  //
+  backgroundActionRun(enabled: false),
+  loginActivityCallApiLogin(enabled: false),
+  coordinatorCoordinationLogic(enabled: false),
+  ;
+
+  final bool enabled;
+  static List<TipDocument>? __enabledValues;
+
+  static List<TipDocument> get enabledValues {
+    __enabledValues ??= values.where((e) => e.enabled).toList();
+    return __enabledValues!;
+  }
+
+  const TipDocument({required this.enabled});
 
   int getPosition() {
-    return TipDocument.values.indexOf(this) + 1;
+    return enabledValues.indexOf(this) + 1;
   }
 
   TipDocument next() {
-    int idx = TipDocument.values.indexOf(this);
-    idx = (idx + 1) % TipDocument.values.length;
-    return TipDocument.values[idx];
+    int idx = enabledValues.indexOf(this);
+    idx = (idx + 1) % enabledValues.length;
+    TipDocument next = enabledValues[idx];
+    return next;
   }
 
   TipDocument previous() {
-    int idx = TipDocument.values.indexOf(this);
-    idx = (idx - 1) % TipDocument.values.length;
-    return TipDocument.values[idx];
+    int idx = enabledValues.indexOf(this);
+    idx = (idx - 1) % enabledValues.length;
+    TipDocument previous = enabledValues[idx];
+    return previous;
   }
 
   String getTitle() {
@@ -43,7 +85,7 @@ enum TipDocument {
         return "FlutterArtist Config";
       case TipDocument.storageStructure:
         return "FlutterArtist StorageStructure";
-      case TipDocument.flutterArtistAdapter:
+      case TipDocument.coreFeaturesAdapter:
         return "FlutterArtistAdapter";
       case TipDocument.loginLogoutAdapter:
         return "ILoginLogoutAdapter";
@@ -56,7 +98,7 @@ enum TipDocument {
       case TipDocument.globalData:
         return "FlutterArtist Global Data";
       case TipDocument.locale:
-        return "FlutterArtist Locale and Theme";
+        return "FlutterArtist Locale";
       case TipDocument.naturalQuery:
         return "Natural Query";
       case TipDocument.filterCriteria:
@@ -79,8 +121,49 @@ enum TipDocument {
         return "Debug State";
       case TipDocument.canDoAction:
         return "Can Do Action";
-      case TipDocument.extractParentBlockItemId:
+      case TipDocument.blockExtractParentBlockItemId:
         return "Block.extractParentBlockItemId()";
+      case TipDocument.blockCallApiDeleteItemById:
+        return "Block.callApiDeleteItemById()";
+      case TipDocument.blockCallApiQuery:
+        return "Block.callApiQuery()";
+      case TipDocument.blockConvertItemDetailToItem:
+        return "Block.convertItemDetailToItem()";
+      case TipDocument.blockCallApiLoadItemDetailById:
+        return "Block.callApiLoadItemDetailById()";
+      case TipDocument.blockInitFormRelatedData:
+        return "Block.initFormRelatedData()";
+      case TipDocument.blockSilentActionCallApi:
+        return "BlockSilentAction.callApi()";
+      case TipDocument.blockQuickItemUpdateActionCallApiQuickUpdateItem:
+        return "BlockQuickItemUpdateAction.callApiQuickUpdateItem()";
+      case TipDocument
+            .blockQuickMultiItemsCreationActionCallApiQuickCreateMultiItems:
+        return "BlockQuickMultiItemsCreationAction.callApiQuickCreateMultiItems()";
+      case TipDocument.blockQuickItemCreationActionCallApiQuickCreateItem:
+        return "BlockQuickItemCreationAction.callApiQuickCreateItem()";
+      case TipDocument.scalarCallApiQuery:
+        return "Scalar.callApiQuery()";
+      case TipDocument.formModelCallApiCreateItem:
+        return "FormModel.callApiCreateItem()";
+      case TipDocument.formModelCallApiUpdateItem:
+        return "FormModel.callApiUpdateItem()";
+      case TipDocument.formModelGetUpdatedValuesForSimpleProps:
+        return "FormModel.getUpdatedValuesForSimpleProps()";
+      case TipDocument.formModelSpecifyDefaultValuesForSimpleProps:
+        return "FormModel.specifyDefaultValuesForSimpleProps()";
+      case TipDocument.filterModelCallApiLoadMultiOptCriterionXData:
+        return "FilterModel.callApiLoadMultiOptCriterionXData()";
+      case TipDocument.storageCallApi:
+        return "Storage.callApi()";
+      case TipDocument.backgroundActionRun:
+        return "BackgroundAction.run()";
+      case TipDocument.loginActivityCallApiLogin:
+        return "LoginActivity.callApiLogin()";
+      case TipDocument.coordinatorCoordinationLogic:
+        return "Coordinator.coordinationLogic()";
+      case TipDocument.logViewer:
+        return "LogViewer";
     }
   }
 
@@ -90,7 +173,7 @@ enum TipDocument {
         return "FlutterArtist.config()";
       case TipDocument.storageStructure:
         return "FlutterArtist StorageStructure";
-      case TipDocument.flutterArtistAdapter:
+      case TipDocument.coreFeaturesAdapter:
         return "FlutterArtistAdapter";
       case TipDocument.loginLogoutAdapter:
         return "ILoginLogoutAdapter";
@@ -126,8 +209,49 @@ enum TipDocument {
         return "Debug State";
       case TipDocument.canDoAction:
         return "Can Do Action";
-      case TipDocument.extractParentBlockItemId:
+      case TipDocument.blockExtractParentBlockItemId:
         return "Block.extractParentBlockItemId() method.";
+      case TipDocument.blockCallApiDeleteItemById:
+        return "Block.callApiDeleteItemById()";
+      case TipDocument.blockCallApiQuery:
+        return "Block.callApiQuery()";
+      case TipDocument.blockConvertItemDetailToItem:
+        return "Block.convertItemDetailToItem()";
+      case TipDocument.blockCallApiLoadItemDetailById:
+        return "Block.callApiLoadItemDetailById()";
+      case TipDocument.blockInitFormRelatedData:
+        return "Block.initFormRelatedData()";
+      case TipDocument.blockSilentActionCallApi:
+        return "BlockSilentAction.callApi()";
+      case TipDocument.blockQuickItemUpdateActionCallApiQuickUpdateItem:
+        return "BlockQuickItemUpdateAction.callApiQuickUpdateItem()";
+      case TipDocument
+            .blockQuickMultiItemsCreationActionCallApiQuickCreateMultiItems:
+        return "BlockQuickMultiItemsCreationAction.callApiQuickCreateMultiItems()";
+      case TipDocument.blockQuickItemCreationActionCallApiQuickCreateItem:
+        return "BlockQuickItemCreationAction.callApiQuickCreateItem()";
+      case TipDocument.scalarCallApiQuery:
+        return "Scalar.callApiQuery()";
+      case TipDocument.formModelCallApiCreateItem:
+        return "FormModel.callApiCreateItem()";
+      case TipDocument.formModelCallApiUpdateItem:
+        return "FormModel.callApiUpdateItem()";
+      case TipDocument.formModelGetUpdatedValuesForSimpleProps:
+        return "FormModel.getUpdatedValuesForSimpleProps()";
+      case TipDocument.formModelSpecifyDefaultValuesForSimpleProps:
+        return "FormModel.specifyDefaultValuesForSimpleProps()";
+      case TipDocument.filterModelCallApiLoadMultiOptCriterionXData:
+        return "FilterModel.callApiLoadMultiOptCriterionXData()";
+      case TipDocument.storageCallApi:
+        return "Storage.callApi()";
+      case TipDocument.backgroundActionRun:
+        return "BackgroundAction.run()";
+      case TipDocument.loginActivityCallApiLogin:
+        return "LoginActivity.callApiLogin()";
+      case TipDocument.coordinatorCoordinationLogic:
+        return "Coordinator.coordinationLogic()";
+      case TipDocument.logViewer:
+        return "LogViewer";
     }
   }
 
@@ -143,7 +267,7 @@ enum TipDocument {
           "https://o7planning.org/11111/config1",
           "https://o7planning.org/11112/config2",
         ];
-      case TipDocument.flutterArtistAdapter:
+      case TipDocument.coreFeaturesAdapter:
         return [
           "https://o7planning.org/11111/config1",
           "https://o7planning.org/11112/config2",
@@ -225,11 +349,54 @@ enum TipDocument {
           "https://o7planning.org/11111/config1",
           "https://o7planning.org/11112/config2",
         ];
-      case TipDocument.extractParentBlockItemId:
+      case TipDocument.blockExtractParentBlockItemId:
         return [
           "https://o7planning.org/11111/config1",
           "https://o7planning.org/11112/config2",
         ];
+      case TipDocument.logViewer:
+        return [
+          "https://o7planning.org/14545/flutterartist-logviewer",
+        ];
+      case TipDocument.blockCallApiDeleteItemById:
+        return [];
+      case TipDocument.blockCallApiQuery:
+        return [];
+      case TipDocument.blockConvertItemDetailToItem:
+        return [];
+      case TipDocument.blockCallApiLoadItemDetailById:
+        return [];
+      case TipDocument.blockInitFormRelatedData:
+        return [];
+      case TipDocument.blockSilentActionCallApi:
+        return [];
+      case TipDocument.blockQuickItemUpdateActionCallApiQuickUpdateItem:
+        return [];
+      case TipDocument
+            .blockQuickMultiItemsCreationActionCallApiQuickCreateMultiItems:
+        return [];
+      case TipDocument.blockQuickItemCreationActionCallApiQuickCreateItem:
+        return [];
+      case TipDocument.scalarCallApiQuery:
+        return [];
+      case TipDocument.formModelCallApiCreateItem:
+        return [];
+      case TipDocument.formModelCallApiUpdateItem:
+        return [];
+      case TipDocument.formModelGetUpdatedValuesForSimpleProps:
+        return [];
+      case TipDocument.formModelSpecifyDefaultValuesForSimpleProps:
+        return [];
+      case TipDocument.filterModelCallApiLoadMultiOptCriterionXData:
+        return [];
+      case TipDocument.storageCallApi:
+        return [];
+      case TipDocument.backgroundActionRun:
+        return [];
+      case TipDocument.loginActivityCallApiLogin:
+        return [];
+      case TipDocument.coordinatorCoordinationLogic:
+        return [];
     }
   }
 }

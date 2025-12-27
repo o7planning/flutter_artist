@@ -434,6 +434,7 @@ abstract class FilterModel<
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
+        tipDocument: TipDocument.filterModelCallApiLoadMultiOptCriterionXData,
       );
       masterFlowItem._addLineFlowItem(
         codeId: "#31080",
@@ -488,6 +489,7 @@ abstract class FilterModel<
           error: e,
           stackTrace: stackTrace,
           showSnackBar: true,
+          tipDocument: null,
         );
         //
         masterFlowItem._addLineFlowItem(
@@ -540,6 +542,7 @@ abstract class FilterModel<
           error: e,
           stackTrace: stackTrace,
           showSnackBar: true,
+          tipDocument: null,
         );
         masterFlowItem._addLineFlowItem(
           codeId: "#31380",
@@ -607,6 +610,7 @@ abstract class FilterModel<
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
+        tipDocument: null,
       );
       _filterCriteriaStructure._setFilterDataState(DataState.error);
       //
@@ -1135,7 +1139,8 @@ abstract class FilterModel<
   // ***************************************************************************
 
   Future<void> showFilterModelDebugDialog() async {
-    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
+    BuildContext context =
+        FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     //
     await FilterModelInfoDialog.showFilterModelInfoDialog(
       context: context,
@@ -1148,7 +1153,8 @@ abstract class FilterModel<
   // ***************************************************************************
 
   void showFilterCriteriaDialog() {
-    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
+    BuildContext context =
+        FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     //
     FilterCriteriaDialog.showFilterCriteriaDialog(
       context: context,

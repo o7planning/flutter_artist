@@ -2,22 +2,34 @@ import 'package:flutter/material.dart';
 
 import '../../core/_core_/core.dart';
 import '../../core/widgets/_table_container.dart';
-import '_scalar_debug_box.dart';
-import '_scalar_debug_options.dart';
+import 'options/_debug_block_options.dart';
+import 'options/_debug_filter_options.dart';
+import 'options/_debug_form_options.dart';
+import 'options/_debug_pagination_options.dart';
+import 'widgets/_block_debug_box.dart';
+import 'widgets/_filter_debug_box.dart';
+import 'widgets/_form_debug_box.dart';
+import 'widgets/_pagination_debug_box.dart';
 
-class ScalarDebugStateView extends StatelessWidget {
-  final Scalar scalar;
-  final ScalarDebugOptions? scalarDebugOptions;
+class DebugBlockStateView extends StatelessWidget {
+  final Block block;
+  final DebugFilterOptions? debugFilterOptions;
+  final DebugBlockOptions? debugBlockOptions;
+  final DebugFormOptions? debugFormOptions;
+  final DebugPaginationOptions? debugPaginationOptions;
 
   final bool showTitle;
   final bool vertical;
 
-  const ScalarDebugStateView({
+  const DebugBlockStateView({
     super.key,
-    required this.scalar,
+    required this.block,
     required this.vertical,
     this.showTitle = true,
-    required this.scalarDebugOptions,
+    this.debugFilterOptions,
+    required this.debugBlockOptions,
+    required this.debugFormOptions,
+    required this.debugPaginationOptions,
   });
 
   @override
@@ -26,14 +38,38 @@ class ScalarDebugStateView extends StatelessWidget {
     return RefreshableNeutralViewBuilder(
       ownerClassInstance: this,
       description: null,
-      shelves: [scalar.shelf],
+      shelves: [block.shelf],
       build: () {
         List<Widget> children = [];
-        if (scalarDebugOptions != null) {
+        if (debugFilterOptions != null && block.filterModel != null) {
           children.add(
-            ScalarDebugBox(
-              scalar: scalar,
-              options: scalarDebugOptions!,
+            FilterDebugBox(
+              filterModel: block.filterModel!,
+              options: debugFilterOptions!,
+            ),
+          );
+        }
+        if (debugBlockOptions != null) {
+          children.add(
+            BlockDebugBox(
+              block: block,
+              options: debugBlockOptions!,
+            ),
+          );
+        }
+        if (debugFormOptions != null && block.formModel != null) {
+          children.add(
+            FormDebugBox(
+              formModel: block.formModel!,
+              options: debugFormOptions!,
+            ),
+          );
+        }
+        if (debugPaginationOptions != null) {
+          children.add(
+            PaginationDebugBox(
+              block: block,
+              options: debugPaginationOptions!,
             ),
           );
         }
@@ -75,7 +111,7 @@ class ScalarDebugStateView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (showTitle) Text(scalar.name),
+                  if (showTitle) Text(block.name),
                   if (showTitle) const Divider(height: 10),
                   mainWidget,
                 ],

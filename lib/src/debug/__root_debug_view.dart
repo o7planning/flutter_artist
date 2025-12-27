@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_artist/src/debug/state_view/_shelf_debug_state_view.dart';
+import 'package:flutter_artist/src/debug/state_view/_debug_shelf_state_view.dart';
 
 import '../core/_core_/core.dart';
 import 'internal_event/x/_internal_event_graph_view_test2b.dart';
@@ -73,7 +73,7 @@ class _RootDebugViewState extends State<RootDebugView> {
   }
 
   void _showDebugShelfState({required Shelf shelf}) {
-    currentView = ShelfDebugStateView(
+    currentView = DebugShelfStateView(
       controller: controller,
       shelf: shelf,
     );

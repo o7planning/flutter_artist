@@ -67,8 +67,8 @@ class __DebugMenuState extends State<DebugMenu> implements ILogListener {
                     _buildPopupMenuItem(
                       iconData: FaIconConstants.errorIconData,
                       iconColor: Colors.red,
-                      title: 'Recent Errs/Warns',
-                      onTab: _showRecentLogs,
+                      title: 'Log Viewer',
+                      onTab: _showLogViewerDialog,
                     ),
                   if (isSystemUser && hasLogs) _divider(),
                   if (isSystemUser && FlutterArtist.canShowShelfStructure())
@@ -184,9 +184,9 @@ class __DebugMenuState extends State<DebugMenu> implements ILogListener {
     await FlutterArtist.showShelfStructure();
   }
 
-  Future<void> _showRecentLogs() async {
+  Future<void> _showLogViewerDialog() async {
     Navigator.pop(context, null);
-    // docs: [14683].
-    await FlutterArtist.showRecentLogs();
+    // docs: [14545].
+    await FlutterArtist.showLogViewerDialog();
   }
 }

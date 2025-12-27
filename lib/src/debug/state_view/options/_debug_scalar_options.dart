@@ -1,4 +1,4 @@
-class ScalarDebugOptions {
+class DebugScalarOptions {
   final bool showLastQueryType;
   final bool showUIActive;
   final bool showScalarDataState;
@@ -8,7 +8,7 @@ class ScalarDebugOptions {
   final bool showFilterCriteriaChangeCount;
   final bool showFilterCriteria;
 
-  const ScalarDebugOptions({
+  const DebugScalarOptions({
     this.showLastQueryType = true,
     this.showUIActive = true,
     this.showScalarDataState = true,
@@ -19,7 +19,7 @@ class ScalarDebugOptions {
     this.showLastQueryResultState = true,
   });
 
-  const ScalarDebugOptions.custom({
+  const DebugScalarOptions.custom({
     this.showLastQueryType = false,
     this.showUIActive = false,
     this.showScalarDataState = false,

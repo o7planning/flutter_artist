@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 
 import '../../core/_core_/core.dart';
 import '../__root_debug_view.dart';
-import '_block_debug_options.dart';
-import '_block_debug_state_view.dart';
-import '_form_debug_options.dart';
-import '_pagination_debug_options.dart';
-import '_scalar_debug_options.dart';
-import '_scalar_debug_state_view.dart';
+import '_debug_block_state_view.dart';
+import '_debug_scalar_state_view.dart';
+import 'options/_debug_block_options.dart';
+import 'options/_debug_form_options.dart';
+import 'options/_debug_pagination_options.dart';
+import 'options/_debug_scalar_options.dart';
 
-class ShelfDebugStateView extends StatelessWidget {
+class DebugShelfStateView extends StatelessWidget {
   final RootDebugController controller;
   final Shelf shelf;
 
   final bool showTitle;
 
-  const ShelfDebugStateView({
+  const DebugShelfStateView({
     super.key,
     required this.controller,
     required this.shelf,
@@ -101,12 +101,12 @@ class ShelfDebugStateView extends StatelessWidget {
     required bool vertical,
     required double fixedWidth,
   }) {
-    final Widget w = BlockDebugStateView(
+    final Widget w = DebugBlockStateView(
       block: block,
       vertical: vertical,
-      blockDebugOptions: BlockDebugOptions(),
-      formDebugOptions: FormDebugOptions(),
-      paginationDebugOptions: PaginationDebugOptions(),
+      debugBlockOptions: DebugBlockOptions(),
+      debugFormOptions: DebugFormOptions(),
+      debugPaginationOptions: DebugPaginationOptions(),
     );
     return SizedBox(
       width: fixedWidth,
@@ -119,10 +119,10 @@ class ShelfDebugStateView extends StatelessWidget {
     required double fixedWidth,
     required bool vertical,
   }) {
-    final Widget w = ScalarDebugStateView(
+    final Widget w = DebugScalarStateView(
       scalar: scalar,
       vertical: vertical,
-      scalarDebugOptions: ScalarDebugOptions(),
+      debugScalarOptions: DebugScalarOptions(),
     );
     return SizedBox(
       width: fixedWidth,

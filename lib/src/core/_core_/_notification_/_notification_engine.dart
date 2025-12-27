@@ -65,6 +65,7 @@ class _NotificationEngine {
           errorMessage: "Invalid Local Notification Summary JSON",
           errorDetails: null,
           stackTrace: stackTrace,
+          tipDocument: null,
         );
         notificationSummaryBox.delete(notificationSummaryKey);
       }
@@ -93,6 +94,7 @@ class _NotificationEngine {
             errorMessage: result.error!.errorMessage,
             errorDetails: result.error!.errorDetails,
             stackTrace: null,
+            tipDocument: null,
           );
           return;
         }
@@ -106,6 +108,7 @@ class _NotificationEngine {
           errorMessage: "Fetch Notification Error: $e",
           errorDetails: null,
           stackTrace: stackTrace,
+          tipDocument: null,
         );
         return;
       }
@@ -117,6 +120,7 @@ class _NotificationEngine {
           errorMessage: "No Notification Summary Data",
           errorDetails: null,
           stackTrace: null,
+          tipDocument: null,
         );
         if (notificationSummaryLocal != null) {
           FlutterArtist._notifyNotification(notificationSummaryLocal);
@@ -139,6 +143,7 @@ class _NotificationEngine {
           errorMessage: "Error ${getClassName(adapter)}.toJson()",
           errorDetails: null,
           stackTrace: stackTrace,
+          tipDocument: null,
         );
       }
     } finally {

@@ -33,6 +33,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
+        tipDocument: TipDocument.loginActivityCallApiLogin,
       );
       masterFlowItem._addLineFlowItem(
         codeId: "#20040",

@@ -79,7 +79,7 @@ class _StorageEventHandler {
     masterFlowItem._addLineFlowItem(
       codeId: "#26120",
       shortDesc:
-          "The <b>QueuedEvent</b> is created, It will be executed later....",
+          "The <b>${getTypeNameWithoutGenerics(QueuedEvent)}</b> is created, It will be executed later....",
       lineFlowType: LineFlowType.eventInfo,
     );
     //
@@ -109,7 +109,8 @@ class _StorageEventHandler {
     //
     masterFlowItem._addLineFlowItem(
       codeId: "#60100",
-      shortDesc: "Creating <b>$QueuedEvent</b> and add to queue.",
+      shortDesc:
+          "Creating <b>${getTypeNameWithoutGenerics(QueuedEvent)}</b> and add to queue.",
       parameters: {
         "eventType": eventType,
         "eventShelf": eventShelf,
@@ -126,9 +127,9 @@ class _StorageEventHandler {
     );
     //
     masterFlowItem._addLineFlowItem(
-      codeId: "#26120",
+      codeId: "#60200",
       shortDesc:
-          "<b>$QueuedEvent</b> is created, It will be executed later....",
+          "The <b>${getTypeNameWithoutGenerics(QueuedEvent)}</b> is created, It will be executed later....",
       lineFlowType: LineFlowType.eventInfo,
     );
     //

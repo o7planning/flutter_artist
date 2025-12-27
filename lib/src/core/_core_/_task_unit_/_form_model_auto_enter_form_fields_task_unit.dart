@@ -3,7 +3,7 @@ part of '../core.dart';
 @_TaskUnitClassAnnotation()
 @_FormModelEnterFormFieldsAnnotation()
 class _FormModelAutoEnterFormFieldsTaskUnit<FORM_INPUT extends FormInput>
-    extends _STaskUnit {
+    extends _ResultedSTaskUnit {
   XFormModel xFormModel;
   FORM_INPUT formInput;
 

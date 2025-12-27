@@ -99,7 +99,7 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                "${tipDocument.getPosition()} / ${TipDocument.values.length}",
+                "${tipDocument.getPosition()} / ${TipDocument.enabledValues.length}",
                 style: TextStyle(fontSize: 12),
               ),
               Spacer(),

@@ -1,4 +1,4 @@
-class BlockDebugOptions {
+class DebugBlockOptions {
   final bool showLastQueryType;
   final bool showUIActive;
   final bool showBlockDataState;
@@ -11,7 +11,7 @@ class BlockDebugOptions {
   final bool showFilterCriteria;
   final bool showHasCurrentItem;
 
-  const BlockDebugOptions({
+  const DebugBlockOptions({
     this.showLastQueryType = true,
     this.showUIActive = true,
     this.showBlockDataState = true,
@@ -25,7 +25,7 @@ class BlockDebugOptions {
     this.showLastQueryResultState = true,
   });
 
-  const BlockDebugOptions.custom({
+  const DebugBlockOptions.custom({
     this.showLastQueryType = false,
     this.showUIActive = false,
     this.showBlockDataState = false,

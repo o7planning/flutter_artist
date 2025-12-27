@@ -55,7 +55,7 @@ class _QueuedEventManager {
     masterFlowItem._addLineFlowItem(
       codeId: "#27000",
       shortDesc:
-          "Several events have occurred, and they have generated <b>QueuedEvent(s)</b>. "
+          "Several originEvents have occurred, and they have generated <b>QueuedEvent(s)</b>. "
           "It's time to execute them.",
       lineFlowType: LineFlowType.debug,
     );
@@ -77,29 +77,41 @@ class _QueuedEventManager {
     //
     bool hasSeparator = false;
     for (String listenerShelfName in storage._shelfMap.keys) {
-      Set<Event> events = _findEventsForListenerShelf(
+      Set<Event> originEvents = _findEventsForListenerShelf(
         queuedEvents: queuedEvents,
         listenerShelfName: listenerShelfName,
       );
-      if (events.isEmpty) {
+      if (originEvents.isEmpty) {
         continue;
       }
+
       hasSeparator = true;
       // SEPARATOR.
       masterFlowItem._addLineFlowSeparator();
       //
       masterFlowItem._addLineFlowItem(
         codeId: "#27140",
-        shortDesc: "The <b>$listenerShelfName</b> received the events:"
-            "\n - @event: <b>${events.toList()}</b>.",
+        shortDesc:
+            "The <b>$listenerShelfName</b> received the <b>originEvents</b>:"
+            "\n - @originEvents: <b>${originEvents.toList()}</b>.",
         lineFlowType: LineFlowType.debug,
+      );
+      Set<Event> polymorphismEvents = FlutterArtist.storage._polymorphismManager
+          .getPolymorphismEvents(originEvents);
+      masterFlowItem._addLineFlowItem(
+        codeId: "#27160",
+        shortDesc:
+            "Calculated <b>polymorphismEvents</b> from <b>originEvents</b>:"
+            "\n - @polymorphismEvents: <b>${polymorphismEvents.toList()}</b>.",
+        lineFlowType: LineFlowType.debug,
+        tipDocument: TipDocument.polymorphism,
       );
       Shelf listenerShelf = storage._shelfMap[listenerShelfName]!;
       //
       __markReactionConditionsForEvents(
         masterFlowItem: masterFlowItem,
         listenerShelf: listenerShelf,
-        outsideEvents: events.toList(),
+        outsideEvents: polymorphismEvents.toList(),
       );
       if (listenerShelf._hasReactionBookmark()) {
         if (listenerShelf.ui.hasActiveUIComponent()) {
@@ -136,6 +148,7 @@ class _QueuedEventManager {
               "Calling ${debugObjHtml(reactionShelf)}._addShelfExternalReactionTaskUnit():",
           note: " This Shelf is <b>VISIBLE</b> and <b>is not frozen</b>.",
           lineFlowType: LineFlowType.nonControllableCalling,
+          tipDocument: TipDocument.eventReactionFreezing,
         );
         reactionShelf._addShelfExternalReactionTaskUnit(
           masterFlowItem: masterFlowItem,

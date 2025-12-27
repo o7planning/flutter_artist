@@ -6,7 +6,8 @@ abstract class _Core {
     required String message,
     String? details,
   }) async {
-    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
+    BuildContext context =
+        FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     bool confirm = await dialogs.showConfirmDialog(
       context: context,
       message: message,
@@ -17,7 +18,8 @@ abstract class _Core {
 
   // TODO: Them tham so BuildContext?
   Future<bool> showConfirmDeleteDialog({String? details}) async {
-    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
+    BuildContext context =
+        FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     bool confirm = await dialogs.showConfirmDeleteDialog(
       context: context,
       details: details ?? "",
@@ -30,7 +32,8 @@ abstract class _Core {
     required String message,
     String? details,
   }) async {
-    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
+    BuildContext context =
+        FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     await dialogs.showMessageDialog(
       context: context,
       message: message,
@@ -43,7 +46,8 @@ abstract class _Core {
     required DefaultConfirmation defaultConfirmation,
     required CustomConfirmation? customConfirmation,
   }) async {
-    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
+    BuildContext context =
+        FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     //
     if (customConfirmation != null) {
       try {
@@ -55,6 +59,7 @@ abstract class _Core {
           error: e,
           stackTrace: stackTrace,
           showSnackBar: true,
+          tipDocument: null,
         );
         return false;
       }
@@ -73,6 +78,7 @@ abstract class _Core {
     required String warningMessage,
     required StackTrace? stackTrace,
     required bool showSnackBar,
+    required TipDocument? tipDocument,
   }) {
     final String msg;
     if (methodName == null) {
@@ -91,6 +97,7 @@ abstract class _Core {
       methodName: methodName,
       warningMessage: msg,
       stackTrace: null,
+      tipDocument: tipDocument,
     );
     //
     if (showSnackBar) {
@@ -111,19 +118,21 @@ abstract class _Core {
     required Object error,
     required StackTrace stackTrace,
     required bool showSnackBar,
+    required TipDocument? tipDocument,
   }) {
     AppError appError = ErrorUtils.toAppError(error);
     StackTrace? st = appError is ApiError ? null : stackTrace;
     //
     final String msg;
     if (methodName == null) {
-      msg = "Error: ${appError.errorMessage}";
+      msg = appError.errorMessage;
     } else {
       if (methodName.contains("\\.")) {
-        msg = "Call $methodName() error: ${appError.errorMessage}";
+        msg =
+            "The $methodName() method was called with an error:\n${appError.errorMessage}";
       } else {
         msg =
-            "Call ${getClassNameWithoutGenerics(this)}.$methodName() error: ${appError.errorMessage}";
+            "The ${getClassNameWithoutGenerics(this)}.$methodName() method was called with an error:\n${appError.errorMessage}";
       }
     }
     print(msg);
@@ -138,6 +147,7 @@ abstract class _Core {
       errorMessage: appError.errorMessage,
       errorDetails: appError.errorDetails,
       stackTrace: st,
+      tipDocument: tipDocument,
     );
     //
     if (showSnackBar) {
@@ -155,6 +165,7 @@ abstract class _Core {
     required String message,
     required List<String>? errorDetails,
     required bool showSnackBar,
+    required TipDocument? tipDocument,
   }) {
     final String msg;
     if (methodName.contains("\\.")) {
@@ -171,6 +182,7 @@ abstract class _Core {
       errorMessage: message,
       errorDetails: errorDetails,
       stackTrace: null,
+      tipDocument: tipDocument,
     );
     //
     if (showSnackBar) {
@@ -189,6 +201,7 @@ abstract class _Core {
     required Shelf? shelf,
     required Actionable actionableFalse,
     required bool showErrSnackBar,
+    required TipDocument? tipDocument,
   }) {
     if (!actionableFalse.yes) {
       final LogEntry logEntry = FlutterArtist.logger.addError(
@@ -197,6 +210,7 @@ abstract class _Core {
         errorMessage: actionableFalse.message!,
         errorDetails: actionableFalse.details,
         stackTrace: actionableFalse.errorInfo?.stackTrace,
+        tipDocument: tipDocument,
       );
       if (showErrSnackBar) {
         showErrorSnackBar(

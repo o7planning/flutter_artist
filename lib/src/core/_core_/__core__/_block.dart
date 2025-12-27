@@ -5,7 +5,8 @@ part of '../core.dart';
 /// ```dart
 /// class EmployeeBlock
 ///       extends Block<int, EmployeeInfo, EmployeeData,
-///                     EmptyFilerInput, EmptyFilterCriteria, EmptyFormInput> {
+///                     EmptyFilerInput, EmptyFilterCriteria,
+///                     EmptyFormInput, EmptyFormRelatedData> {
 ///
 /// }
 /// ```
@@ -848,11 +849,7 @@ abstract class Block<
           currentItemSettingType = thisXBlock.currentItemSettingType!;
         }
       }
-      print(
-          "Get currentItemSettingType from XBLOK: ${thisXBlock.currentItemSettingType}");
-      print(
-          "Get currentItemSettingType from XBLOCK: $currentItem > $currentItemSettingType");
-
+      //
       // Test Cases: [63a] - __test_event_63a__external_product_event_in_productScreen_1
       //
       if (currentItem == null && currentItemSettingType == null) {
@@ -1090,6 +1087,7 @@ abstract class Block<
           error: e,
           stackTrace: stackTrace,
           showSnackBar: true,
+          tipDocument: TipDocument.blockCallApiQuery,
         );
         thisXBlock.queryResult._setErrorInfo(
           errorInfo: errorInfo,
@@ -1268,6 +1266,7 @@ abstract class Block<
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
+        tipDocument: null,
       );
       thisXBlock.queryResult._setErrorInfo(
         errorInfo: errorInfo,
@@ -1952,6 +1951,7 @@ abstract class Block<
             error: e,
             stackTrace: stackTrace,
             showSnackBar: true,
+            tipDocument: TipDocument.blockCallApiLoadItemDetailById,
           );
           //
           blockCurrentItemSettingResult._setErrorInfo(
@@ -2129,6 +2129,7 @@ abstract class Block<
           error: e,
           stackTrace: stackTrace,
           showSnackBar: true,
+          tipDocument: TipDocument.blockConvertItemDetailToItem,
         );
         masterFlowItem._addLineFlowItem(
           codeId: "#29440",
@@ -2357,6 +2358,7 @@ abstract class Block<
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
+        tipDocument: TipDocument.blockCallApiDeleteItemById,
       );
       //
       deletionResult._setFailedItem(
@@ -2945,6 +2947,7 @@ abstract class Block<
           error: e,
           stackTrace: stackTrace,
           showSnackBar: false,
+          tipDocument: TipDocument.blockCallApiDeleteItemById,
         );
         //
         deletionResult._addFailedItem(
@@ -3193,6 +3196,8 @@ abstract class Block<
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
+        tipDocument:
+            TipDocument.blockQuickItemCreationActionCallApiQuickCreateItem,
       );
       //
       taskResult._setErrorInfo(
@@ -3231,6 +3236,8 @@ abstract class Block<
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
+        tipDocument:
+            TipDocument.blockQuickItemCreationActionCallApiQuickCreateItem,
       );
       //
       taskResult._setErrorInfo(
@@ -3294,6 +3301,8 @@ abstract class Block<
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
+        tipDocument: TipDocument
+            .blockQuickMultiItemsCreationActionCallApiQuickCreateMultiItems,
       );
       masterFlowItem._addLineFlowItem(
         codeId: "#44200",
@@ -3327,6 +3336,8 @@ abstract class Block<
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
+        tipDocument: TipDocument
+            .blockQuickMultiItemsCreationActionCallApiQuickCreateMultiItems,
       );
       masterFlowItem._addLineFlowItem(
         codeId: "#44400",
@@ -3391,6 +3402,8 @@ abstract class Block<
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
+        tipDocument:
+            TipDocument.blockQuickItemUpdateActionCallApiQuickUpdateItem,
       );
       //
       taskResult._setErrorInfo(
@@ -3429,6 +3442,8 @@ abstract class Block<
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
+        tipDocument:
+            TipDocument.blockQuickItemUpdateActionCallApiQuickUpdateItem,
       );
       //
       taskResult._setErrorInfo(
@@ -3484,6 +3499,7 @@ abstract class Block<
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
+        tipDocument: TipDocument.blockSilentActionCallApi,
       );
       //
       taskResult._setErrorInfo(
@@ -3549,6 +3565,7 @@ abstract class Block<
         message: result.error!.errorMessage,
         errorDetails: result.error!.errorDetails,
         showSnackBar: true,
+        tipDocument: null,
       );
       masterFlowItem._addLineFlowItem(
         codeId: "#16000",
@@ -3596,14 +3613,14 @@ abstract class Block<
             "Calling: ${debugObjHtml(this)}.needToKeepItemInList() to decide "
             "whether to keep item ${debugObjHtml(savedItemDetail)} in the list or not..",
         parameters: {
-          "parentBlockCurrentItem": parent?.currentItem,
+          "parentBlockCurrentItem": parentBlockCurrentItemId,
           "filterCriteria": filterCriteria,
           "itemDetail": savedItemDetail,
         },
         lineFlowType: LineFlowType.controllableCalling,
       );
       keepInList = needToKeepItemInList(
-        parentBlockCurrentItem: parent?.currentItem,
+        parentBlockCurrentItemId: parentBlockCurrentItemId,
         filterCriteria: blockCurrentFilterCriteria,
         itemDetail: savedItemDetail,
       );
@@ -3839,6 +3856,7 @@ abstract class Block<
         message: result.error!.errorMessage,
         errorDetails: result.error!.errorDetails,
         showSnackBar: true,
+        tipDocument: null,
       );
       return false;
     }
@@ -3940,34 +3958,49 @@ abstract class Block<
 
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockItemDeletionResult<ITEM>> __deleteItem({
+    required MasterFlowItem masterFlowItem,
     required String methodName,
     required ITEM? item,
     required ErrCodeIfItemIsNull errCodeIfItemIsNull,
     bool errorIfItemNotInTheBlock = true,
   }) async {
-    // FlutterArtist.codeFlowLogger._addMethodCall(
-    //   isLibCode: true,
-    //   navigate: null,
-    //   ownerClassInstance: this,
-    //   methodName: methodName,
-    //   parameters: {
-    //     "item": item,
-    //   },
-    // );
+    final bool checkBusyTrue = true;
+    final bool checkAllowTrue = true;
+    //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#76000",
+      shortDesc:
+          "Calling ${debugObjHtml(this)}.__canDeleteItem() to check before execute the action.",
+      parameters: {
+        "checkBusy": checkBusyTrue,
+        "checkBusy": checkBusyTrue,
+        "item": item,
+        "errCodeIfItemIsNull": errCodeIfItemIsNull,
+        "errorIfItemNotInTheBlock": errorIfItemNotInTheBlock,
+      },
+    );
     // @Same-Code-Precheck-01
     Actionable<BlockItemDeletionPrecheck> actionable = __canDeleteItem(
-      checkBusy: true,
+      checkBusy: checkBusyTrue,
+      checkAllow: checkBusyTrue,
       item: item,
       errCodeIfItemIsNull: errCodeIfItemIsNull,
       errorIfItemNotInTheBlock: errorIfItemNotInTheBlock,
-      checkAllow: true,
     );
     if (!actionable.yes) {
+      masterFlowItem._addLineFlowItem(
+        codeId: "#76040",
+        shortDesc: "Got @actionable:",
+        actionable: actionable,
+        lineFlowType: LineFlowType.debug,
+      );
+      //
       _deletionErrorCount++;
       _addErrorLogActionable(
         shelf: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
+        tipDocument: null,
       );
       return BlockItemDeletionResult<ITEM>(
         candidateItem: item,
@@ -3976,7 +4009,8 @@ abstract class Block<
       );
     }
     //
-    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
+    BuildContext context =
+        FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     bool confirm = await showConfirmDeleteDialog(
       context: context,
       details: getClassName(item),
@@ -3994,6 +4028,11 @@ abstract class Block<
     //
     final taskResult = _createEmptyItemDeletionResult();
     //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#76340",
+      shortDesc: "Creating <b>_BlockItemDeletionTaskUnit</b>.",
+      lineFlowType: LineFlowType.addTaskUnit,
+    );
     final _ResultedSTaskUnit taskUnit = _BlockItemDeletionTaskUnit(
       xBlock: thisXBlock,
       item: item!,
@@ -4039,6 +4078,7 @@ abstract class Block<
         shelf: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
+        tipDocument: null,
       );
       masterFlowItem._addLineFlowItem(
         codeId: "#65100",
@@ -4052,7 +4092,8 @@ abstract class Block<
       );
     }
     //
-    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
+    BuildContext context =
+        FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     bool confirm = await showConfirmDeleteDialog(
       context: context,
       details: "Delete Multi Items",
@@ -4144,6 +4185,7 @@ abstract class Block<
         shelf: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
+        tipDocument: null,
       );
       masterFlowItem._addLineFlowItem(
         codeId: "#69200",
@@ -4259,6 +4301,7 @@ abstract class Block<
         shelf: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
+        tipDocument: null,
       );
       masterFlowItem._addLineFlowItem(
         codeId: "#62100",
@@ -4659,6 +4702,7 @@ abstract class Block<
           error: e,
           stackTrace: stackTrace,
           showSnackBar: true,
+          tipDocument: null,
         );
       }
       rethrow;
@@ -4778,6 +4822,7 @@ abstract class Block<
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
+        tipDocument: TipDocument.blockInitFormRelatedData,
       );
       masterFlowItem._addLineFlowItem(
         codeId: "#05020",
@@ -4795,7 +4840,7 @@ abstract class Block<
   // TODO: Them tham so ITEM.
   @_AbstractMethodAnnotation()
   bool needToKeepItemInList({
-    required Object? parentBlockCurrentItem,
+    required Object? parentBlockCurrentItemId,
     required FILTER_CRITERIA filterCriteria,
     required ITEM_DETAIL itemDetail,
   });
@@ -4808,19 +4853,17 @@ abstract class Block<
   /// to ensure that it actually matches the current item of the parent Block.
   /// If it doesn't match, it will be removed from this Block's list.
   ///
-  /// If you don't care about this method, you can simply throw an [UnsupportedError].
+  /// If you don't care about this method, you can simply throw an [FeatureUnsupportedException].
   ///
   /// ```
   /// @override
   /// Object extractParentBlockItemId({required ITEM fromThisBlockItem}) {
-  ///     throw UnsupportedError("This feature will be ignored!");
+  ///     throw FeatureUnsupportedException("This feature will be ignored!");
   /// }
   /// ```
   ///
   @_AbstractMethodAnnotation()
-  Object extractParentBlockItemId({required ITEM fromThisBlockItem}) {
-    throw UnsupportedError("You can override this method.");
-  }
+  Object extractParentBlockItemId({required ITEM fromThisBlockItem});
 
   // ***************************************************************************
   // ***************************************************************************
@@ -4953,7 +4996,6 @@ abstract class Block<
       navigate: null,
       isLibMethod: true,
     );
-
     masterFlowItem._addLineFlowItem(
       codeId: "#71000",
       shortDesc: "Calling ${debugObjHtml(this)}.__canSilentAction()",
@@ -4971,11 +5013,18 @@ abstract class Block<
     );
     //
     if (!actionable.yes) {
+      masterFlowItem._addLineFlowItem(
+        codeId: "#71040",
+        shortDesc: "Got @actionable:",
+        actionable: actionable,
+        lineFlowType: LineFlowType.debug,
+      );
       // _createItemErrorCount++;
       _addErrorLogActionable(
         shelf: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
+        tipDocument: null,
       );
       return BlockSilentActionResult(
         precheck: actionable.errCode,
@@ -5009,6 +5058,11 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#71340",
+      shortDesc: "Creating <b>_BlockSilentActionTaskUnit</b>.",
+      lineFlowType: LineFlowType.addTaskUnit,
+    );
     final _ResultedSTaskUnit taskUnit = _BlockSilentActionTaskUnit(
       xBlock: thisXBlock,
       action: action,
@@ -5035,29 +5089,49 @@ abstract class Block<
             FILTER_CRITERIA>
         action,
   }) async {
-    // FlutterArtist.codeFlowLogger._addMethodCall(
-    //   isLibCode: true,
-    //   navigate: null,
-    //   ownerClassInstance: this,
-    //   methodName: "executeQuickItemCreationAction",
-    //   parameters: {
-    //     "action": action,
-    //   },
-    // );
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "executeQuickItemCreationAction",
+      parameters: {
+        "action": action,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
+    //
+    final bool checkBusyTrue = true;
+    final bool checkAllowTrue = true;
+    //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#73000",
+      shortDesc:
+          "Calling ${debugObjHtml(this)}.__canQuickCreateItem() to check before execute the action.",
+      parameters: {
+        "checkBusy": checkBusyTrue,
+        "checkAllow": checkAllowTrue,
+      },
+    );
     //
     // @Same-Code-Precheck-01
     //
     final Actionable<BlockQuickItemCreationPrecheck> actionable =
         __canQuickCreateItem(
-      checkBusy: true,
-      checkAllow: true,
+      checkBusy: checkBusyTrue,
+      checkAllow: checkAllowTrue,
     );
     if (!actionable.yes) {
+      masterFlowItem._addLineFlowItem(
+        codeId: "#73040",
+        shortDesc: "Got @actionable:",
+        actionable: actionable,
+        lineFlowType: LineFlowType.debug,
+      );
       // _refreshErrorCount++;
       _addErrorLogActionable(
         shelf: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
+        tipDocument: null,
       );
       return BlockQuickItemCreationResult(
         precheck: actionable.errCode,
@@ -5085,6 +5159,11 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#73340",
+      shortDesc: "Creating <b>_BlockQuickItemCreationTaskUnit</b>.",
+      lineFlowType: LineFlowType.addTaskUnit,
+    );
     final _ResultedSTaskUnit taskUnit = _BlockQuickItemCreationTaskUnit(
       xBlock: thisXBlock,
       action: action,
@@ -5112,29 +5191,49 @@ abstract class Block<
             FILTER_CRITERIA>
         action,
   }) async {
-    // FlutterArtist.codeFlowLogger._addMethodCall(
-    //   isLibCode: true,
-    //   navigate: null,
-    //   ownerClassInstance: this,
-    //   methodName: "executeQuickMultiItemsCreationAction",
-    //   parameters: {
-    //     "action": action,
-    //   },
-    // );
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "executeQuickMultiItemsCreationAction",
+      parameters: {
+        "action": action,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
+    //
+    final bool checkBusyTrue = true;
+    final bool checkAllowTrue = true;
+    //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#74000",
+      shortDesc:
+          "Calling ${debugObjHtml(this)}.__canCreateMultiItems() to check before execute the action.",
+      parameters: {
+        "checkBusy": checkBusyTrue,
+        "checkAllow": checkAllowTrue,
+      },
+    );
     //
     // @Same-Code-Precheck-01
     //
     Actionable<BlockMultiItemsCreationPrecheck> actionable =
         __canCreateMultiItems(
-      checkBusy: true,
-      checkAllow: true,
+      checkBusy: checkBusyTrue,
+      checkAllow: checkAllowTrue,
     );
     if (!actionable.yes) {
+      masterFlowItem._addLineFlowItem(
+        codeId: "#74040",
+        shortDesc: "Got @actionable:",
+        actionable: actionable,
+        lineFlowType: LineFlowType.debug,
+      );
       // _refreshErrorCount++;
       _addErrorLogActionable(
         shelf: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
+        tipDocument: null,
       );
       return BlockQuickMultiItemsCreationResult(
         precheck: actionable.errCode,
@@ -5162,6 +5261,11 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#74340",
+      shortDesc: "Creating <b>_BlockQuickMultiItemsCreationTaskUnit</b>.",
+      lineFlowType: LineFlowType.addTaskUnit,
+    );
     final _ResultedSTaskUnit taskUnit = _BlockQuickMultiItemsCreationTaskUnit(
       xBlock: thisXBlock,
       action: action,
@@ -5188,30 +5292,52 @@ abstract class Block<
             FILTER_CRITERIA>
         action,
   }) async {
-    // FlutterArtist.codeFlowLogger._addMethodCall(
-    //   isLibCode: true,
-    //   navigate: null,
-    //   ownerClassInstance: this,
-    //   methodName: "executeQuickItemUpdateAction",
-    //   parameters: {
-    //     "action": action,
-    //   },
-    // );
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "executeQuickItemUpdateAction",
+      parameters: {
+        "action": action,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
+    //
+    final bool checkBusyTrue = true;
+    final bool checkAllowTrue = true;
+    //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#72000",
+      shortDesc:
+          "Calling ${debugObjHtml(this)}.__canQuickUpdateItem() to check before execute the action.",
+      parameters: {
+        "item": action.item,
+        "checkBusy": checkBusyTrue,
+        "checkAllow": checkAllowTrue,
+        "errorIfItemNotInTheBlock": action.config.errorIfItemNotInTheBlock,
+      },
+    );
     // @Same-Code-Precheck-01
     final Actionable<BlockQuickItemUpdatePrecheck> actionable =
         __canQuickUpdateItem(
       item: action.item,
-      checkBusy: true,
-      checkAllow: true,
+      checkBusy: checkBusyTrue,
+      checkAllow: checkAllowTrue,
       errorIfItemNotInTheBlock: action.config.errorIfItemNotInTheBlock,
     );
     //
     if (!actionable.yes) {
+      masterFlowItem._addLineFlowItem(
+        codeId: "#72040",
+        shortDesc: "Got @actionable:",
+        actionable: actionable,
+        lineFlowType: LineFlowType.debug,
+      );
       // _createItemErrorCount++;
       _addErrorLogActionable(
         shelf: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
+        tipDocument: null,
       );
       return BlockQuickItemUpdateResult(
         precheck: actionable.errCode,
@@ -5239,6 +5365,11 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#72340",
+      shortDesc: "Creating <b>_BlockQuickItemUpdateTaskUnit</b>.",
+      lineFlowType: LineFlowType.addTaskUnit,
+    );
     final _ResultedSTaskUnit taskUnit = _BlockQuickItemUpdateTaskUnit(
       xBlock: thisXBlock,
       action: action,
@@ -5365,25 +5496,50 @@ abstract class Block<
     required Function()? navigate,
     bool initDirty = false,
   }) async {
-    // FlutterArtist.codeFlowLogger._addMethodCall(
-    //   isLibCode: true,
-    //   navigate: navigate,
-    //   ownerClassInstance: this,
-    //   methodName: "prepareFormToCreateItem",
-    //   parameters: {"formInput": formInput},
-    // );
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "prepareFormToCreateItem",
+      parameters: {
+        "formInput": formInput,
+        "initDirty": initDirty,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
+    //
+    final bool checkBusyTrue = true;
+    final bool checkAllowTrue = true;
+    final creationTypeForm = ItemCreationType.form;
+    //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#77000",
+      shortDesc:
+          "Calling ${debugObjHtml(this)}.__canCreateItem() to check before execute the action.",
+      parameters: {
+        "checkBusy": checkBusyTrue,
+        "checkAllow": checkAllowTrue,
+        "creationType": creationTypeForm,
+      },
+    );
     // @Same-Code-Precheck-01
     Actionable<BlockItemCreationPrecheck> actionable = __canCreateItem(
-      checkBusy: true,
-      checkAllow: true,
-      creationType: ItemCreationType.form,
+      checkBusy: checkBusyTrue,
+      checkAllow: checkAllowTrue,
+      creationType: creationTypeForm,
     );
     if (!actionable.yes) {
+      masterFlowItem._addLineFlowItem(
+        codeId: "#77040",
+        shortDesc: "Got @actionable:",
+        actionable: actionable,
+        lineFlowType: LineFlowType.debug,
+      );
       // _createItemErrorCount++;
       _addErrorLogActionable(
         shelf: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
+        tipDocument: null,
       );
       return PrepareItemCreationResult(
         precheck: actionable.errCode,
@@ -5396,6 +5552,11 @@ abstract class Block<
     final XShelf xShelf = _XShelfPrepareFormToCreateItem(block: this);
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#77340",
+      shortDesc: "Creating <b>_BlockPrepareFormToCreateItemTaskUnit</b>.",
+      lineFlowType: LineFlowType.addTaskUnit,
+    );
     _STaskUnit taskUnit = _BlockPrepareFormToCreateItemTaskUnit(
       xBlock: thisXBlock,
       initDirty: initDirty,
@@ -5520,9 +5681,17 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockDeleteCurrentItemAnnotation()
   Future<BlockItemDeletionResult<ITEM>> deleteCurrentItem() async {
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "deleteCurrentItem",
+      parameters: null,
+      navigate: null,
+      isLibMethod: true,
+    );
     ITEM? currItem = currentItem;
     //
     return __deleteItem(
+      masterFlowItem: masterFlowItem,
       methodName: "deleteCurrentItem",
       item: currItem,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
@@ -5540,7 +5709,18 @@ abstract class Block<
     required ITEM item,
     bool errorIfItemNotInTheBlock = true,
   }) async {
+    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "deleteItem",
+      parameters: {
+        "item": item,
+        "errorIfItemNotInTheBlock": errorIfItemNotInTheBlock,
+      },
+      navigate: null,
+      isLibMethod: true,
+    );
     return __deleteItem(
+      masterFlowItem: masterFlowItem,
       methodName: "deleteItem",
       item: item,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.invalidTarget,
@@ -7554,7 +7734,7 @@ abstract class Block<
           } else {
             invalidItems.add(item);
           }
-        } on UnsupportedError {
+        } on FeatureUnsupportedException {
           validItems.add(item);
         } catch (e, stackTrace) {
           errorInfo ??= _handleError(
@@ -7563,6 +7743,7 @@ abstract class Block<
             error: e,
             stackTrace: stackTrace,
             showSnackBar: true,
+            tipDocument: TipDocument.blockExtractParentBlockItemId,
           );
           errorItems.add(item);
         }
@@ -7580,6 +7761,7 @@ abstract class Block<
               'and ${invalidItems.length} items did not match the current item of the parent block.',
           stackTrace: null,
           showSnackBar: true,
+          tipDocument: TipDocument.blockExtractParentBlockItemId,
         );
       }
     }
@@ -7697,7 +7879,8 @@ abstract class Block<
   // ***************************************************************************
 
   void showFilterCriteriaDialog() {
-    BuildContext context = FlutterArtist.coreFeaturesAdapter.getCurrentContext();
+    BuildContext context =
+        FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     //
     FilterCriteriaDialog.showBlockFilterCriteriaDialog(
       context: context,

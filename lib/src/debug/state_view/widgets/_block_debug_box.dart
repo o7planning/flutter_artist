@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-import '../../core/_core_/core.dart';
-import '../utils/_debug.dart';
+import '../../../core/_core_/core.dart';
+import '../../utils/_debug.dart';
+import '../options/_debug_block_options.dart';
 import '_active_info_widget.dart';
-import '_block_debug_options.dart';
 import '_debug_box.dart';
 
 class BlockDebugBox extends BaseDebugBox {
   final Block block;
-  final BlockDebugOptions options;
+  final DebugBlockOptions options;
 
   const BlockDebugBox({
     super.key,

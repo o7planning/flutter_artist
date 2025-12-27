@@ -12,6 +12,7 @@ class LineFlowItem {
   List<String>? _extraInfos;
 
   Map<String, dynamic>? parameters;
+  Actionable? actionable;
 
   List<String>? get extraInfos => _extraInfos;
 
@@ -26,6 +27,7 @@ class LineFlowItem {
     required this.errorInfo,
     required List<String>? extraInfos,
     required this.parameters,
+    required this.actionable,
   }) : _extraInfos = extraInfos;
 
   bool needControlBar() {
@@ -41,6 +43,22 @@ class LineFlowItem {
       return "";
     }
     return "\n $note";
+  }
+
+  String getActionableAsHtmlString() {
+    if (actionable == null) {
+      return "";
+    }
+    String s = "";
+    s += "\n  - <b>@actionable.message</b>: ${actionable!.message}";
+    if (actionable!.details != null) {
+      s += "\n  - <b>@actionable.details</b>:";
+      for (String detail in actionable!.details!) {
+        s += "\n    --> $detail";
+      }
+    }
+    s += "\n  - <b>@actionable.errCode</b>: ${actionable!.errCode}";
+    return s;
   }
 
   String getParametersAsHtmlString() {

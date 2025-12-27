@@ -5,6 +5,7 @@ import '../../core/icon/icon_constants.dart';
 import '../utils/_tab_theme_utils.dart';
 import '_active_shelves_view.dart';
 import '_activities_view.dart';
+import '_polymorphisms_view.dart';
 import '_shelves_view.dart';
 
 class StorageView extends StatefulWidget {
@@ -86,6 +87,18 @@ class _StorageViewState extends State<StorageView> {
           size: iconSize,
         ),
         content: ShelvesView(),
+      ),
+    );
+    tabs.add(
+      TabData(
+        text: ' Polymorphisms',
+        closable: false,
+        leading: (context, status) => Icon(
+          FaIconConstants.polymorphismIconData,
+          color: Colors.black,
+          size: iconSize,
+        ),
+        content: PolymorphismsView(),
       ),
     );
     //

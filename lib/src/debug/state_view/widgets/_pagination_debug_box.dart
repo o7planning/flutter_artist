@@ -1,12 +1,12 @@
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-import '../../core/_core_/core.dart';
+import '../../../core/_core_/core.dart';
+import '../options/_debug_pagination_options.dart';
 import '_debug_box.dart';
-import '_pagination_debug_options.dart';
 
 class PaginationDebugBox extends BaseDebugBox {
   final Block block;
-  final PaginationDebugOptions options;
+  final DebugPaginationOptions options;
 
   const PaginationDebugBox({
     super.key,

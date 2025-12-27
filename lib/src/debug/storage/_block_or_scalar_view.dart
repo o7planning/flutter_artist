@@ -7,12 +7,12 @@ import '../../core/_core_/core.dart';
 import '../../core/enums/_tip_document.dart';
 import '../shelf/widget/_block_or_scalar_info_view.dart';
 import '../shelf/widget/_shelf_info_view.dart';
-import '../state_view/_block_debug_options.dart';
-import '../state_view/_block_debug_state_view.dart';
-import '../state_view/_form_debug_options.dart';
-import '../state_view/_pagination_debug_options.dart';
-import '../state_view/_scalar_debug_options.dart';
-import '../state_view/_scalar_debug_state_view.dart';
+import '../state_view/_debug_block_state_view.dart';
+import '../state_view/_debug_scalar_state_view.dart';
+import '../state_view/options/_debug_block_options.dart';
+import '../state_view/options/_debug_form_options.dart';
+import '../state_view/options/_debug_pagination_options.dart';
+import '../state_view/options/_debug_scalar_options.dart';
 import '_block_or_scalar.dart';
 
 class BlockOrScalarView extends StatelessWidget {
@@ -54,18 +54,18 @@ class BlockOrScalarView extends StatelessWidget {
           _buildControlBar(context),
           SizedBox(height: 10),
           if (blockOrScalar.block != null)
-            BlockDebugStateView(
+            DebugBlockStateView(
               block: blockOrScalar.block!,
               vertical: false,
-              blockDebugOptions: BlockDebugOptions(),
-              formDebugOptions: FormDebugOptions(),
-              paginationDebugOptions: PaginationDebugOptions(),
+              debugBlockOptions: DebugBlockOptions(),
+              debugFormOptions: DebugFormOptions(),
+              debugPaginationOptions: DebugPaginationOptions(),
             ),
           if (blockOrScalar.scalar != null)
-            ScalarDebugStateView(
+            DebugScalarStateView(
               scalar: blockOrScalar.scalar!,
               vertical: false,
-              scalarDebugOptions: ScalarDebugOptions(),
+              debugScalarOptions: DebugScalarOptions(),
             ),
         ],
       ),
