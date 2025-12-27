@@ -42,7 +42,7 @@ class _FlutterArtist extends _Core {
 
   int notificationFetchPeriodInSeconds = 60;
 
-  IFlutterArtistCoreFeaturesAdapter? __coreFeaturesAdapter;
+  ICoreFeaturesAdapter? __coreFeaturesAdapter;
 
   late final GlobalsManager globalsManager;
 
@@ -102,10 +102,10 @@ class _FlutterArtist extends _Core {
     offAllAndGotoRoute();
   }
 
-  IFlutterArtistCoreFeaturesAdapter get coreFeaturesAdapter {
+  ICoreFeaturesAdapter get coreFeaturesAdapter {
     if (__coreFeaturesAdapter == null) {
       throw DebugUtils.getFatalError(
-          " >>>>>> $IFlutterArtistCoreFeaturesAdapter is not registered!. "
+          " >>>>>> $ICoreFeaturesAdapter is not registered!. "
           "\n >>>>>> You need to call $FlutterArtist.config() in main.dart");
     }
     return __coreFeaturesAdapter!;
@@ -179,7 +179,7 @@ class _FlutterArtist extends _Core {
     required StorageStructure storageStructure,
     required DebugOptions? debugOptions,
     required ConsoleDebugOptions? consoleDebugOptions,
-    required IFlutterArtistCoreFeaturesAdapter coreFeaturesAdapter,
+    required ICoreFeaturesAdapter coreFeaturesAdapter,
     required INotificationAdapter? notificationAdapter,
     required ILoginLogoutAdapter loginLogoutAdapter,
     required IGlobalDataAdapter globalDataAdapter,
