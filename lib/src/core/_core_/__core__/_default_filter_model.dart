@@ -64,7 +64,7 @@ class _DefaultFilterModel
 
   @override
   EmptyFilterCriteria toFilterCriteriaObject({
-    required Map<String, dynamic> dataMap,
+    required Map<String, dynamic> criteriaMap,
   }) {
     return EmptyFilterCriteria();
   }

@@ -22,9 +22,12 @@ abstract class FilterModel<
 
   List<Scalar> get scalars => List.unmodifiable(_scalars);
 
-  FILTER_CRITERIA? _filterCriteria;
+  XFilterCriteria<FILTER_CRITERIA>? _xFilterCriteria;
 
-  FILTER_CRITERIA? get filterCriteria => _filterCriteria;
+  FILTER_CRITERIA? get filterCriteria => _xFilterCriteria?.filterCriteria;
+
+  XFilterCriteria<FILTER_CRITERIA>? get debugXFilterCriteria =>
+      _xFilterCriteria;
 
   int __loadCount = 0;
 
@@ -185,19 +188,31 @@ abstract class FilterModel<
   ///
   /// ```
   ///  MyFilterCriteria toFilterCriteriaObject({
-  ///     required Map<String, dynamic> dataMap,
+  ///     required Map<String, dynamic> criteriaMap,
   ///  }) {
   ///      return MyFilterCriteria(
-  ///         company: dataMap["company"],
-  ///         department: dataMap["department"],
+  ///         company: criteriaMap["company"],
+  ///         department: criteriaMap["department"],
   ///      );
   ///  }
   /// ```
   ///
   @_AbstractMethodAnnotation()
   FILTER_CRITERIA toFilterCriteriaObject({
-    required Map<String, dynamic> dataMap,
+    required Map<String, dynamic> criteriaMap,
   });
+
+  XFilterCriteria<FILTER_CRITERIA> _toXFilterCriteria({
+    required Map<String, dynamic> criteriaMap,
+  }) {
+    FILTER_CRITERIA filterCriteria = toFilterCriteriaObject(
+      criteriaMap: criteriaMap,
+    );
+    return XFilterCriteria(
+      filterCriteria: filterCriteria,
+      filterCriteriaMap: criteriaMap,
+    );
+  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -224,7 +239,7 @@ abstract class FilterModel<
         FILTER_INPUT? filterInput =
             thisXFilterModel.filterInput as FILTER_INPUT?;
         //
-        _filterCriteria = await _startNewFilterActivity(
+        _xFilterCriteria = await _startNewFilterActivity(
           masterFlowItem: masterFlowItem,
           activityType: FilterActivityType.newFilt,
           filterInput: filterInput,
@@ -262,12 +277,13 @@ abstract class FilterModel<
     //
     _filterCriteriaStructure._setFilterDataState(DataState.pending);
     //
-    FILTER_CRITERIA? filterCriteria = await _startNewFilterActivity(
+    XFilterCriteria<FILTER_CRITERIA>? xFilterCriteria =
+        await _startNewFilterActivity(
       masterFlowItem: masterFlowItem,
       activityType: FilterActivityType.updateFromFilterPanel,
       filterInput: null,
     );
-    return filterCriteria != null;
+    return xFilterCriteria != null;
   }
 
   // ***************************************************************************
@@ -368,7 +384,7 @@ abstract class FilterModel<
   ///
   @_ImportantMethodAnnotation(
       "Called after changing in FilterPanel or Querying in Block or Scalar.")
-  Future<FILTER_CRITERIA?> _startNewFilterActivity({
+  Future<XFilterCriteria<FILTER_CRITERIA>?> _startNewFilterActivity({
     required MasterFlowItem masterFlowItem,
     required FILTER_INPUT? filterInput,
     required FilterActivityType activityType,
@@ -444,8 +460,8 @@ abstract class FilterModel<
       );
       //
       _filterCriteriaStructure._setFilterDataState(DataState.error);
-      _filterCriteria = null;
-      return _filterCriteria;
+      _xFilterCriteria = null;
+      return _xFilterCriteria;
     }
     //
     if (filterInput != null) {
@@ -500,8 +516,8 @@ abstract class FilterModel<
         );
         //
         _filterCriteriaStructure._setFilterDataState(DataState.error);
-        _filterCriteria = null;
-        return _filterCriteria;
+        _xFilterCriteria = null;
+        return _xFilterCriteria;
       }
     }
     // filterInput is null
@@ -552,8 +568,8 @@ abstract class FilterModel<
         );
         //
         _filterCriteriaStructure._setFilterDataState(DataState.error);
-        _filterCriteria = null;
-        return _filterCriteria;
+        _xFilterCriteria = null;
+        return _xFilterCriteria;
       }
     }
     //
@@ -571,9 +587,14 @@ abstract class FilterModel<
           tipDocument: TipDocument.filterCriteria,
         );
       }
+      //
+      final Map<String, dynamic> newCriteriaMap = {
+        ..._filterCriteriaStructure._tempCriteriaValues
+      };
       // Convert Map Data to FilterCriteria Object.
-      FILTER_CRITERIA newCriteria = toFilterCriteriaObject(
-        dataMap: _filterCriteriaStructure._tempCriteriaValues,
+      final XFilterCriteria<FILTER_CRITERIA> newCriteriaCouple =
+          _toXFilterCriteria(
+        criteriaMap: newCriteriaMap,
       );
       // _filterCriteria = newCriteria; // has moved down.
       //
@@ -581,7 +602,7 @@ abstract class FilterModel<
         masterFlowItem._addLineFlowItem(
           codeId: "#31460",
           shortDesc:
-              "Got an instance of ${debugObjHtml(newCriteria)} (Dart object).\n"
+              "Got an instance of ${debugObjHtml(newCriteriaCouple)} (Dart object).\n"
               "This object will be passed to the <b>@filterCriteria</b> parameter "
               "of the <b>Block.query()</b> or <b>Scalar.query</b> method.",
           tipDocument: TipDocument.filterCriteria,
@@ -601,8 +622,8 @@ abstract class FilterModel<
       __initiatedAtLeastOnce = true;
       _filterCriteriaStructure._setFilterDataState(DataState.ready);
       //
-      _filterCriteria = newCriteria;
-      return _filterCriteria;
+      _xFilterCriteria = newCriteriaCouple;
+      return _xFilterCriteria;
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
@@ -620,14 +641,14 @@ abstract class FilterModel<
         newCurrentValue: _filterCriteriaStructure._currentCriteriaValues,
       );
       //
-      _filterCriteria = null;
+      _xFilterCriteria = null;
       masterFlowItem._addLineFlowItem(
         codeId: "#31500",
         shortDesc:
             "The ${debugObjHtml(this)}.toFilterCriteriaObject() method was called with an error!",
         errorInfo: errorInfo,
       );
-      return _filterCriteria;
+      return _xFilterCriteria;
     }
   }
 

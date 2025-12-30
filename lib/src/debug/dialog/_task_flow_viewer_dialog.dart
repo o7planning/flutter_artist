@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_artist/src/debug/dialog/_tip_document_viewer_dialog.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
+import '../../core/enums/_tip_document.dart';
 import '../../core/widgets/_custom_app_container.dart';
 import '../code_flow/_code_flow_viewer.dart';
 import '../utils/_dialog_size.dart';
@@ -53,6 +55,12 @@ class CodeFlowViewerDialogState extends State<CodeFlowViewerDialog> {
       titleText: "Code Flow Viewer",
       content: contentWidget,
       contentPadding: EdgeInsets.zero,
+      onHelpPressed: () {
+        TipDocumentViewerDialog.showTipDocumentDialog(
+          context: context,
+          tipDocument: TipDocument.codeFlowViewer,
+        );
+      },
     );
     return alert;
   }

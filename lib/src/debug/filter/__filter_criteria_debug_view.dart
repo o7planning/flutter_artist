@@ -41,7 +41,7 @@ class FilterCriteriaDebugView extends StatelessWidget {
       //
       tabs.add(
         TabData(
-          text: getClassName(block!),
+          text: getClassNameWithoutGenerics(block!),
           closable: false,
           leading: (context, status) => Icon(
             FaIconConstants.blockIconData,
@@ -61,7 +61,7 @@ class FilterCriteriaDebugView extends StatelessWidget {
       //
       tabs.add(
         TabData(
-          text: getClassName(scalar!),
+          text: getClassNameWithoutGenerics(scalar!),
           closable: false,
           leading: (context, status) => Icon(
             FaIconConstants.scalarIconData,
@@ -79,7 +79,7 @@ class FilterCriteriaDebugView extends StatelessWidget {
     if (_filterModel != null) {
       tabs.add(
         TabData(
-          text: getClassName(_filterModel),
+          text: getClassNameWithoutGenerics(_filterModel),
           closable: false,
           leading: (context, status) => Icon(
             FaIconConstants.filterModelIconData,

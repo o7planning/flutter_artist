@@ -68,7 +68,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
 
   @override
   String getWidgetOwnerClassName() {
-    return getClassName(widget.block);
+    return getClassNameWithoutGenerics(widget.block);
   }
 
   @override
@@ -200,7 +200,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
                 (loggedInUser?.isSystemUser ?? false))
               Tooltip(
                 message:
-                    "${widget.block.formModel!.formMode.tooltip} [${getClassName(widget.block)}]",
+                    "${widget.block.formModel!.formMode.tooltip} [${getClassNameWithoutGenerics(widget.block)}]",
                 child: Icon(
                   widget.block.formModel!.formMode == FormMode.none
                       ? FaIconConstants.formNoneModeIconData
@@ -322,7 +322,8 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
         if (widget.config.allowFilterCriteriaButton &&
             widget.block.canShowFilterCriteria())
           _ControlBarButton(
-            tooltip: "Current Filter Criteria of ${getClassName(widget.block)}",
+            tooltip:
+                "Current Filter Criteria of ${getClassNameWithoutGenerics(widget.block)}",
             iconData: FaIconConstants.filterCriteriaIconData,
             onAction: false,
             onPressed: widget.config.allowFilterCriteriaButton
@@ -408,7 +409,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   void _showFormInfo(BuildContext context, Block block) {
     FormModelInfoDialog.showFormModelInfoDialog(
       context: context,
-      locationInfo: getClassName(widget.ownerClassInstance),
+      locationInfo: getClassNameWithoutGenerics(widget.ownerClassInstance),
       formModel: block.formModel!,
     );
   }

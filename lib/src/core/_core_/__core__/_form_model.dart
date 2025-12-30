@@ -281,7 +281,7 @@ abstract class FormModel<
 
   // OLD: getMultiOptPropValueFromFormInput.
   @_AbstractMethodAnnotation()
-  OptValueWrap? getUpdatedValueForMultiOptProp({ 
+  OptValueWrap? getUpdatedValueForMultiOptProp({
     required String multiOptPropName,
     required SelectionType selectionType,
     required XData multiOptPropXData,
@@ -843,7 +843,8 @@ abstract class FormModel<
           final formErrorInfo = FormErrorInfo(
             activityType: activityType,
             propName: null,
-            formErrorMethod: FormErrorMethod.extractSimplePropValuesFromItemDetail,
+            formErrorMethod:
+                FormErrorMethod.extractSimplePropValuesFromItemDetail,
             error: e,
             errorStackTrace: stackTrace,
           );

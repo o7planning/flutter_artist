@@ -9,7 +9,7 @@ class _ScalarData<
   ///
   final Scalar<VALUE, FILTER_INPUT, FILTER_CRITERIA> scalar;
 
-  FILTER_CRITERIA? _filterCriteria;
+  XFilterCriteria<FILTER_CRITERIA>? _xFilterCriteria;
 
   _ScalarValueWrap<VALUE> __current =
       _ScalarValueWrap<VALUE>(id: null, value: null);
@@ -35,16 +35,16 @@ class _ScalarData<
   void _clearWithDataState({required DataState scalarDataState}) {
     _scalarDataState = scalarDataState;
     __current = _ScalarValueWrap<VALUE>(id: null, value: null);
-    _filterCriteria = null; // ???
+    _xFilterCriteria = null; // ???
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   bool _isXCriteriaChanged({
-    required FILTER_CRITERIA newFilterCriteria,
+    required XFilterCriteria<FILTER_CRITERIA> newXFilterCriteria,
   }) {
-    if (newFilterCriteria != _filterCriteria) {
+    if (newXFilterCriteria != _xFilterCriteria) {
       return true;
     }
     return false;
@@ -82,13 +82,13 @@ class _ScalarData<
   // ***************************************************************************
 
   void _updateData({
-    required FILTER_CRITERIA? filterCriteria,
+    required XFilterCriteria<FILTER_CRITERIA>? xFilterCriteria,
     required String? valueId,
     required VALUE? value,
     required DataState dataState,
     required ActionResultState queryResultState,
   }) {
-    __setNewFilterCriteria(filterCriteria);
+    __setNewFilterCriteria(xFilterCriteria);
     __current = _ScalarValueWrap<VALUE>(id: valueId, value: value);
     _scalarDataState = dataState;
     _lastQueryResultState = queryResultState;
@@ -97,9 +97,10 @@ class _ScalarData<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __setNewFilterCriteria(FILTER_CRITERIA? newFilterCriteria) {
-    final bool changed = _filterCriteria != newFilterCriteria;
-    _filterCriteria = newFilterCriteria;
+  void __setNewFilterCriteria(
+      XFilterCriteria<FILTER_CRITERIA>? newXFilterCriteria) {
+    final bool changed = _xFilterCriteria != newXFilterCriteria;
+    _xFilterCriteria = newXFilterCriteria;
     if (changed) {
       _filterCriteriaChangeCount++;
     }

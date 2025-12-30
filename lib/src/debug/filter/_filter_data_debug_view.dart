@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
+import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 
@@ -66,21 +67,7 @@ class _FilterDataDebugViewState extends State<FilterDataDebugView> {
     );
   }
 
-  String toJson(Map<String, dynamic> map) {
-    String json;
-    try {
-      json = jsonEncode(
-        map,
-        toEncodable: (obj) => obj.toString(),
-      );
-      Map<String, dynamic> m2 = jsonDecode(json);
-      JsonEncoder encoder = const JsonEncoder.withIndent('  ');
-      String s = encoder.convert(m2);
-      return s;
-    } catch (e) {
-      return "Error convert to JSON: $e";
-    }
-  }
+
 
   Color _getTabIconColor(TabStatus tabStatus) {
     return tabStatus == TabStatus.selected ? Colors.indigo : Colors.black;
@@ -99,9 +86,9 @@ class _FilterDataDebugViewState extends State<FilterDataDebugView> {
     Map<String, dynamic> currentValue =
         filterCriteriaStructure.debugCurrentCriteriaValues;
 
-    String initial1Json = toJson(initial1Value);
-    String instantJson = toJson(instantValue);
-    String currentJson = toJson(currentValue);
+    String initial1Json = MapUtils.toOneLevelJson(initial1Value);
+    String instantJson = MapUtils.toOneLevelJson(instantValue);
+    String currentJson = MapUtils.toOneLevelJson(currentValue);
 
     //
 
@@ -129,7 +116,7 @@ class _FilterDataDebugViewState extends State<FilterDataDebugView> {
           size: iconSize,
         ),
         content: _buildTabContent(
-          infoAsHtml: "Initial Form values",
+          infoAsHtml: "Initial Filter values",
           json: initial1Json,
         ),
       ),

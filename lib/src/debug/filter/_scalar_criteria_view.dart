@@ -19,7 +19,7 @@ class ScalarCriteriaView extends BlkOrScrCriteriaView {
   }
 
   @override
-  FilterCriteria? getFilterCriteria() {
-    return scalar.filterCriteria;
+  XFilterCriteria? getXFilterCriteria() {
+    return scalar.debugXFilterCriteria ;
   }
 }

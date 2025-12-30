@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 class JsonView extends StatelessWidget {
   final String json;
@@ -7,6 +10,14 @@ class JsonView extends StatelessWidget {
     super.key,
     required this.json,
   });
+
+  factory JsonView.map({
+    Key? key,
+    required Map<String, dynamic> map,
+  }) {
+    String? json = JsonUtils.toBeautifulJson(map);
+    return JsonView(key: key, json: json ?? "");
+  }
 
   @override
   Widget build(BuildContext context) {

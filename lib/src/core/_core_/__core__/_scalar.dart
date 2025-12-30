@@ -237,7 +237,11 @@ abstract class Scalar<
 
   DataState get dataState => __scalarData._scalarDataState;
 
-  FILTER_CRITERIA? get filterCriteria => __scalarData._filterCriteria;
+  FILTER_CRITERIA? get filterCriteria =>
+      __scalarData._xFilterCriteria?.filterCriteria;
+
+  XFilterCriteria<FILTER_CRITERIA>? get debugXFilterCriteria =>
+      __scalarData._xFilterCriteria;
 
   VALUE? get value => __scalarData.current._value;
 
@@ -400,7 +404,7 @@ abstract class Scalar<
     //
     DataState newScalarDataState = this.dataState;
     //
-    FILTER_CRITERIA? filterCriteriaOfFilterModel;
+    XFilterCriteria<FILTER_CRITERIA>? xFilterCriteriaOfFilterModel;
     try {
       final XFilterModel xFilterModel = thisXScalar.xFilterModel;
       final FilterModel filterModel = xFilterModel.filterModel;
@@ -413,11 +417,12 @@ abstract class Scalar<
         );
         FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
         //
-        filterCriteriaOfFilterModel = await filterModel._startNewFilterActivity(
+        xFilterCriteriaOfFilterModel =
+            await filterModel._startNewFilterActivity(
           masterFlowItem: masterFlowItem,
           activityType: FilterActivityType.newFilt,
           filterInput: filterInput,
-        ) as FILTER_CRITERIA?;
+        ) as XFilterCriteria<FILTER_CRITERIA>?;
         //
         xFilterModel.queried = true;
       } else {
@@ -426,8 +431,8 @@ abstract class Scalar<
           shortDesc:
               "${debugObjHtml(this)} @queried: ${xFilterModel.queried} --> no need to load data.",
         );
-        filterCriteriaOfFilterModel =
-            filterModel._filterCriteria! as FILTER_CRITERIA;
+        xFilterCriteriaOfFilterModel =
+            filterModel._xFilterCriteria! as XFilterCriteria<FILTER_CRITERIA>;
       }
     } catch (e, stackTrace) {
       /* Never Error */
@@ -435,7 +440,7 @@ abstract class Scalar<
     //
     // Has Error in FilterModel.
     //
-    if (filterCriteriaOfFilterModel == null) {
+    if (xFilterCriteriaOfFilterModel == null) {
       masterFlowItem._addLineFlowItem(
         codeId: "#12340",
         shortDesc:
@@ -456,7 +461,7 @@ abstract class Scalar<
     // Ready FilterCriteria:
     //
     bool xCriteriaChanged = __scalarData._isXCriteriaChanged(
-      newFilterCriteria: filterCriteriaOfFilterModel,
+      newXFilterCriteria: xFilterCriteriaOfFilterModel,
     );
     //
     final callApiQueryMethod = ScalarErrorMethod.callApiQuery;
@@ -474,13 +479,13 @@ abstract class Scalar<
         shortDesc: "Calling ${debugObjHtml(this)}.callApiQuery()...",
         parameters: {
           "parentScalarValue": parent?.value,
-          "filterCriteria": filterCriteriaOfFilterModel,
+          "filterCriteria": xFilterCriteriaOfFilterModel.filterCriteria,
         },
         lineFlowType: LineFlowType.controllableCalling,
       );
       ApiResult<VALUE> result = await callApiQuery(
         parentScalarValue: parent?.value,
-        filterCriteria: filterCriteriaOfFilterModel,
+        filterCriteria: xFilterCriteriaOfFilterModel.filterCriteria,
       );
       //
       // Throw ApiError:
@@ -493,7 +498,7 @@ abstract class Scalar<
       valueId = value == null
           ? null
           : toValueId(
-              filterCriteria: filterCriteriaOfFilterModel,
+              filterCriteria: xFilterCriteriaOfFilterModel.filterCriteria,
               value: value,
             );
     } catch (e, stackTrace) {
@@ -541,7 +546,7 @@ abstract class Scalar<
       );
       __setQueryDataWithState(
         thisXScalar: thisXScalar,
-        filterCriteria: null,
+        xFilterCriteria: null,
         dataState: newScalarDataState,
         valueId: null,
         value: null,
@@ -570,7 +575,7 @@ abstract class Scalar<
     newScalarDataState = DataState.ready;
     __setQueryDataWithState(
       thisXScalar: thisXScalar,
-      filterCriteria: filterCriteriaOfFilterModel,
+      xFilterCriteria: xFilterCriteriaOfFilterModel,
       dataState: newScalarDataState,
       valueId: valueId,
       value: value,
@@ -830,7 +835,7 @@ abstract class Scalar<
 
   void __setQueryDataWithState({
     required XScalar thisXScalar,
-    required FILTER_CRITERIA? filterCriteria,
+    required XFilterCriteria<FILTER_CRITERIA>? xFilterCriteria,
     required DataState dataState,
     required String? valueId,
     required VALUE? value,
@@ -839,7 +844,7 @@ abstract class Scalar<
     __assertThisXScalar(thisXScalar);
     //
     __scalarData._updateData(
-      filterCriteria: filterCriteria,
+      xFilterCriteria: xFilterCriteria,
       dataState: dataState,
       valueId: valueId,
       value: value,

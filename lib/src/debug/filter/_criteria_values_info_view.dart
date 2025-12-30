@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_artist/src/debug/widgets/_json_view.dart';
+import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 import '../../core/_core_/core.dart';
 import '../../core/utils/_class_utils.dart';
@@ -7,19 +9,23 @@ import '../widgets/_html_info_view.dart';
 
 class CriteriaValuesView extends StatelessWidget {
   final String filterCriteriaPath;
-  final FilterCriteria? filterCriteria;
+  final XFilterCriteria? xFilterCriteria;
 
   static const double fontSize = 11;
 
   const CriteriaValuesView({
     super.key,
-    required this.filterCriteria,
+    required this.xFilterCriteria,
     required this.filterCriteriaPath,
   });
 
   @override
   Widget build(BuildContext context) {
+    final FilterCriteria? filterCriteria = xFilterCriteria?.filterCriteria;
+    final Map<String, dynamic>? filterCriteriaMap =
+        xFilterCriteria?.filterCriteriaMap;
     List<String> criteriaValueInfos = filterCriteria?.getDebugInfos() ?? [];
+    final oneLevelJson = MapUtils.toOneLevelJson(filterCriteriaMap ?? {});
     //
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -27,14 +33,14 @@ class CriteriaValuesView extends StatelessWidget {
       children: [
         HtmlInfoView(
           showIcon: false,
-          infoAsHtml: "Data of <b>filterCriteriaPath</b>:",
+          infoAsHtml: "Data of <b>$filterCriteriaPath</b>:",
         ),
         SizedBox(height: 5),
         if (filterCriteria != null)
           HtmlInfoView(
             showIcon: false,
             infoAsHtml: "(This debug information is returned from the "
-                "<b>${getClassName(filterCriteria)}.getDebugInfos()</b> method).",
+                "<b>${getClassNameWithoutGenerics(filterCriteria)}.getDebugInfos()</b> method).",
             style: TextStyle(
               fontSize: 11,
               fontStyle: FontStyle.normal,
@@ -44,6 +50,8 @@ class CriteriaValuesView extends StatelessWidget {
         ...criteriaValueInfos.map(
           (line) => ListTile(
             minLeadingWidth: 0,
+            minVerticalPadding: 0,
+            minTileHeight: 0,
             dense: true,
             visualDensity: VisualDensity(vertical: -3, horizontal: -3),
             contentPadding: EdgeInsets.zero,
@@ -64,6 +72,22 @@ class CriteriaValuesView extends StatelessWidget {
               fontSize: DebugConstants.debugFontSize,
               fontStyle: FontStyle.normal,
             ),
+          ),
+        if (filterCriteriaMap != null && filterCriteriaMap.isNotEmpty)
+          Divider(),
+        if (filterCriteriaMap != null && filterCriteriaMap.isNotEmpty)
+          Text(
+            "Original Filter Criteria as Map<String,dynamic>:",
+            style: TextStyle(
+              fontSize: DebugConstants.debugFontSize,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        if (filterCriteriaMap != null && filterCriteriaMap.isNotEmpty)
+          SizedBox(height: 5),
+        if (filterCriteriaMap != null && filterCriteriaMap.isNotEmpty)
+          JsonView(
+            json: oneLevelJson,
           ),
       ],
     );

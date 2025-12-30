@@ -396,9 +396,13 @@ abstract class Block<
 
   SortModel<ITEM>? get serverSideSortModel => __serverSideSortModel;
 
-  FILTER_CRITERIA? get filterCriteria => __blockData._filterCriteria;
+  FILTER_CRITERIA? get filterCriteria =>
+      __blockData._xFilterCriteria?.filterCriteria;
 
   int get filterCriteriaChangeCount => __blockData._filterCriteriaChangeCount;
+
+  XFilterCriteria<FILTER_CRITERIA>? get debugXFilterCriteria =>
+      __blockData._xFilterCriteria;
 
   ///
   /// return a copied list of items.
@@ -910,7 +914,7 @@ abstract class Block<
     // FORCE QUERY:
     // thisXBlock.queryHint || (hasBlockRepresentative && this.dataState != DataState.ready)
     //
-    FILTER_CRITERIA? filterCriteriaOfFilterModel;
+    XFilterCriteria<FILTER_CRITERIA>? xFilterCriteriaOfFilterModel;
     try {
       final XFilterModel xFilterModel = thisXBlock.xFilterModel;
       final FilterModel filterModel = xFilterModel.filterModel;
@@ -924,11 +928,12 @@ abstract class Block<
         }
         FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
         //
-        filterCriteriaOfFilterModel = await filterModel._startNewFilterActivity(
+        xFilterCriteriaOfFilterModel =
+            await filterModel._startNewFilterActivity(
           masterFlowItem: masterFlowItem,
           activityType: FilterActivityType.newFilt,
           filterInput: filterInput,
-        ) as FILTER_CRITERIA?;
+        ) as XFilterCriteria<FILTER_CRITERIA>?;
         //
         xFilterModel.queried = true;
       } else {
@@ -939,8 +944,8 @@ abstract class Block<
                 "${debugObjHtml(filterModel)} data ready --> no need to load data.",
           );
         }
-        filterCriteriaOfFilterModel =
-            filterModel._filterCriteria! as FILTER_CRITERIA;
+        xFilterCriteriaOfFilterModel =
+            filterModel._xFilterCriteria! as XFilterCriteria<FILTER_CRITERIA>;
       }
     } catch (e, stackTrace) {
       masterFlowItem._addLineFlowItem(
@@ -954,7 +959,7 @@ abstract class Block<
     //
     // Has Error in FilterModel.
     //
-    if (filterCriteriaOfFilterModel == null) {
+    if (xFilterCriteriaOfFilterModel == null) {
       masterFlowItem._addLineFlowItem(
         codeId: "#03260",
         shortDesc:
@@ -979,7 +984,7 @@ abstract class Block<
     final bool parentOrCriteriaChanged =
         __blockData._isParentOrFilterCriteriaChanged(
       newCurrentParentItemId: parentBlockCurrentItemId,
-      newFilterCriteria: filterCriteriaOfFilterModel,
+      newXFilterCriteria: xFilterCriteriaOfFilterModel,
     );
     //
     ActionResultState queryResultState;
@@ -1039,7 +1044,7 @@ abstract class Block<
           shortDesc: "Calling ${debugObjHtml(this)}.callApiQuery()...",
           parameters: {
             "parentBlockCurrentItem": parent?.currentItem,
-            "filterCriteria": filterCriteriaOfFilterModel,
+            "filterCriteria": xFilterCriteriaOfFilterModel.filterCriteria,
             "sortableCriteria": sortableCriteria,
             "pageable": usedPageable,
           },
@@ -1048,7 +1053,7 @@ abstract class Block<
         __callApiQueryCount++;
         final ApiResult<PageData<ITEM>?> result = await callApiQuery(
           parentBlockCurrentItem: parent?.currentItem,
-          filterCriteria: filterCriteriaOfFilterModel,
+          filterCriteria: xFilterCriteriaOfFilterModel.filterCriteria,
           sortableCriteria: sortableCriteria,
           pageable: usedPageable,
         );
@@ -1236,7 +1241,7 @@ abstract class Block<
         shortDesc:
             "Calling ${debugObjHtml(this)}.__processQueryResult() to process queried data.",
         parameters: {
-          "usedFilterCriteria": filterCriteriaOfFilterModel,
+          "usedXFilterCriteria": xFilterCriteriaOfFilterModel,
           "usedPageable": usedPageable,
           "queriedPageData": queriedPageData,
           "newBlockDataState": newBlockDataState,
@@ -1245,7 +1250,7 @@ abstract class Block<
         lineFlowType: LineFlowType.nonControllableCalling,
       );
       final processedQueryResult = __processQueryResult(
-        usedFilterCriteria: filterCriteriaOfFilterModel,
+        usedXFilterCriteria: xFilterCriteriaOfFilterModel,
         usedPageable: usedPageable,
         queriedPageData: queriedPageData,
         newBlockDataState: newBlockDataState,
@@ -4855,10 +4860,18 @@ abstract class Block<
   ///
   /// If you don't care about this method, you can simply throw an [FeatureUnsupportedException].
   ///
-  /// ```
+  /// ```dart
   /// @override
   /// Object extractParentBlockItemId({required ITEM fromThisBlockItem}) {
   ///     throw FeatureUnsupportedException("This feature will be ignored!");
+  /// }
+  /// ```
+  ///
+  /// For example:
+  /// ```dart
+  /// @override
+  /// Object extractParentBlockItemId({required ProductInfo fromThisBlockItem}) {
+  ///   return fromThisBlockItem.categoryId;
   /// }
   /// ```
   ///
@@ -7706,7 +7719,7 @@ abstract class Block<
   // ***************************************************************************
 
   _ProcessedQueryResult<ID, ITEM, FILTER_CRITERIA> __processQueryResult({
-    required FILTER_CRITERIA? usedFilterCriteria,
+    required XFilterCriteria<FILTER_CRITERIA>? usedXFilterCriteria,
     required Pageable? usedPageable,
     //
     required PageData<ITEM>? queriedPageData,
@@ -7768,7 +7781,7 @@ abstract class Block<
     //
     return _ProcessedQueryResult(
       parentBlockCurrentItemId: parentBlockCurrentItemId,
-      usedFilterCriteria: usedFilterCriteria,
+      usedXFilterCriteria: usedXFilterCriteria,
       usedPageable: usedPageable,
       //
       queriedPageData: queriedPageData,

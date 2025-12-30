@@ -5,7 +5,7 @@ class _ProcessedQueryResult<
     ITEM extends Identifiable<ID>,
     FILTER_CRITERIA extends FilterCriteria> {
   final Object? parentBlockCurrentItemId;
-  final FILTER_CRITERIA? usedFilterCriteria;
+  final XFilterCriteria<FILTER_CRITERIA>? usedXFilterCriteria;
   final Pageable? usedPageable;
 
   //
@@ -22,7 +22,7 @@ class _ProcessedQueryResult<
 
   _ProcessedQueryResult({
     required this.parentBlockCurrentItemId,
-    required this.usedFilterCriteria,
+    required this.usedXFilterCriteria,
     required this.usedPageable,
     //
     required this.queriedPageData,

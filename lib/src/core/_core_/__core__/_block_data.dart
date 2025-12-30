@@ -152,7 +152,7 @@ class _BlockData<
 
   Object? _parentBlockCurrentItemId;
 
-  FILTER_CRITERIA? _filterCriteria;
+  XFilterCriteria<FILTER_CRITERIA>? _xFilterCriteria;
 
   int _filterCriteriaChangeCount = 0;
 
@@ -209,7 +209,9 @@ class _BlockData<
       // Update FilterCriteria:
       //
       if (errorInFilter) {
-        __setNewFilterCriteria(null);
+        __setNewFilterCriteria(
+          newXFilterCriteria: null,
+        );
       }
     }
     //
@@ -232,12 +234,12 @@ class _BlockData<
 
   bool _isParentOrFilterCriteriaChanged({
     required Object? newCurrentParentItemId,
-    required FILTER_CRITERIA newFilterCriteria,
+    required XFilterCriteria<FILTER_CRITERIA> newXFilterCriteria,
   }) {
     if (newCurrentParentItemId != _parentBlockCurrentItemId) {
       return true;
     }
-    if (newFilterCriteria != _filterCriteria) {
+    if (newXFilterCriteria != _xFilterCriteria) {
       return true;
     }
     return false;
@@ -370,7 +372,7 @@ class _BlockData<
     if (forceItemListMode == ItemListMode.replace ||
         _parentBlockCurrentItemId !=
             processedQueryResult.parentBlockCurrentItemId ||
-        _filterCriteria != processedQueryResult.usedFilterCriteria) {
+        _xFilterCriteria != processedQueryResult.usedXFilterCriteria) {
       _items.clear();
       cleared = true;
     }
@@ -380,7 +382,7 @@ class _BlockData<
     _pageable = processedQueryResult.usedPageable?.copy();
     if (_parentBlockCurrentItemId !=
             processedQueryResult.parentBlockCurrentItemId ||
-        _filterCriteria != processedQueryResult.usedFilterCriteria) {
+        _xFilterCriteria != processedQueryResult.usedXFilterCriteria) {
       _paginationInfo = PaginationInfo.copy(ap.paginationInfo);
     } else {
       // Query Error:
@@ -397,7 +399,9 @@ class _BlockData<
     //
     // Update FilterCriteria:
     //
-    __setNewFilterCriteria(processedQueryResult.usedFilterCriteria);
+    __setNewFilterCriteria(
+      newXFilterCriteria: processedQueryResult.usedXFilterCriteria,
+    );
     //
     // Append to _items:
     //
@@ -479,9 +483,11 @@ class _BlockData<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __setNewFilterCriteria(FILTER_CRITERIA? newFilterCriteria) {
-    final bool changed = _filterCriteria != newFilterCriteria;
-    _filterCriteria = newFilterCriteria;
+  void __setNewFilterCriteria({
+    required XFilterCriteria<FILTER_CRITERIA>? newXFilterCriteria,
+  }) {
+    final bool changed = _xFilterCriteria != newXFilterCriteria;
+    _xFilterCriteria = newXFilterCriteria;
     if (changed) {
       _filterCriteriaChangeCount++;
       if (block.formModel != null) {

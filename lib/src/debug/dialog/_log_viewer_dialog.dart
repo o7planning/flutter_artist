@@ -6,10 +6,8 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
     as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
-import 'package:flutter_artist_core/src/_enum/_log_entry_type.dart';
 
 import '../../core/enums/_tip_document.dart';
-import '../../core/logger/_logger.dart';
 import '../../core/widgets/_custom_app_container.dart';
 import '../section/_error_info_viewer.dart';
 import '../section/_warn_info_viewer.dart';

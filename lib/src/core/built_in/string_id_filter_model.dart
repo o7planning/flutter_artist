@@ -68,8 +68,8 @@ class StringIdFilterModel
 
   @override
   StringIdFilterCriteria toFilterCriteriaObject({
-    required Map<String, dynamic> dataMap,
+    required Map<String, dynamic> criteriaMap,
   }) {
-    return StringIdFilterCriteria(idValue: dataMap["id"]);
+    return StringIdFilterCriteria(idValue: criteriaMap["id"]);
   }
 }

@@ -14,7 +14,7 @@ dependencies:
 
 
   flutter_form_builder: ^10.2.0 # ^10.0.1
-  tabbed_view: ^2.0.0 # ^1.19.1
+  tabbed_view: ^2.1.0 # ^2.0.0
   equatable:
   graphview: ^1.5.1
   flutter_breadcrumb: ^1.0.1

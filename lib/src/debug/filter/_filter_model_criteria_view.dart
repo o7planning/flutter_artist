@@ -13,9 +13,9 @@ class FilterModelCriteriaView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String filterModelClassName = getClassName(filterModel);
+    String filterModelClassName = getClassNameWithoutGenerics(filterModel);
     String criteriaClassName = filterModel.getFilterCriteriaType().toString();
-    FilterCriteria? filterCriteria = filterModel.filterCriteria;
+    XFilterCriteria? xFilterCriteria   = filterModel.debugXFilterCriteria ;
     //
     return Padding(
       padding: EdgeInsets.all(5),
@@ -32,7 +32,7 @@ class FilterModelCriteriaView extends StatelessWidget {
           ),
           Divider(),
           CriteriaValuesView(
-            filterCriteria: filterCriteria,
+            xFilterCriteria : xFilterCriteria ,
             filterCriteriaPath: "$filterModelClassName.filterCriteria",
           ),
         ],

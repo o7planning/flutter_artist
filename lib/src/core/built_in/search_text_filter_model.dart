@@ -69,8 +69,8 @@ class SearchTextFilterModel
 
   @override
   SearchTextFilterCriteria toFilterCriteriaObject({
-    required Map<String, dynamic> dataMap,
+    required Map<String, dynamic> criteriaMap,
   }) {
-    return SearchTextFilterCriteria(searchText: dataMap["searchText"]);
+    return SearchTextFilterCriteria(searchText: criteriaMap["searchText"]);
   }
 }

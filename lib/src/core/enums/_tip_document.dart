@@ -1,6 +1,8 @@
 enum TipDocument {
   config(enabled: true),
   logViewer(enabled: true),
+  codeFlowViewer(enabled: true),
+  storageViewer(enabled: true),
   storageStructure(enabled: true),
   coreFeaturesAdapter(enabled: true),
   loginLogoutAdapter(enabled: true),
@@ -163,7 +165,11 @@ enum TipDocument {
       case TipDocument.coordinatorCoordinationLogic:
         return "Coordinator.coordinationLogic()";
       case TipDocument.logViewer:
-        return "LogViewer";
+        return "Log Viewer";
+      case TipDocument.codeFlowViewer:
+        return "Code Flow Viewer";
+      case TipDocument.storageViewer:
+        return "Storage Viewer";
     }
   }
 
@@ -251,7 +257,11 @@ enum TipDocument {
       case TipDocument.coordinatorCoordinationLogic:
         return "Coordinator.coordinationLogic()";
       case TipDocument.logViewer:
-        return "LogViewer";
+        return "Log Viewer";
+      case TipDocument.codeFlowViewer:
+        return "Code Flow Viewer";
+      case TipDocument.storageViewer:
+        return "Storage Viewer";
     }
   }
 
@@ -356,7 +366,15 @@ enum TipDocument {
         ];
       case TipDocument.logViewer:
         return [
-          "https://o7planning.org/14545/flutterartist-logviewer",
+          "https://o7planning.org/14545/flutterartist-log-viewer",
+        ];
+      case TipDocument.codeFlowViewer:
+        return [
+          "https://o7planning.org/14833/flutterartist-code-flow-viewer",
+        ];
+      case TipDocument.storageViewer:
+        return [
+          "https://o7planning.org/14849/flutterartist-storage-viewer",
         ];
       case TipDocument.blockCallApiDeleteItemById:
         return [];

@@ -69,10 +69,10 @@ class StringValueFilterModel
 
   @override
   StringValueFilterCriteria toFilterCriteriaObject({
-    required Map<String, dynamic> dataMap,
+    required Map<String, dynamic> criteriaMap,
   }) {
     return StringValueFilterCriteria(
-      stringValue: dataMap["string"],
+      stringValue: criteriaMap["string"],
     );
   }
 }

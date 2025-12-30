@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist/src/core/icon/icon_constants.dart';
+import 'package:flutter_artist/src/debug/dialog/_tip_document_viewer_dialog.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../core/_core_/core.dart';
+import '../../core/enums/_tip_document.dart';
 import '../../core/widgets/_custom_app_container.dart';
 import '../storage/_storage_view.dart';
 import '../utils/_dialog_size.dart';
@@ -59,6 +61,12 @@ class _StorageDialogState extends State<StorageDialog> {
       titleText: "Storage Viewer",
       content: contentWidget,
       contentPadding: EdgeInsets.zero,
+      onHelpPressed: () {
+        TipDocumentViewerDialog.showTipDocumentDialog(
+          context: context,
+          tipDocument: TipDocument.storageViewer,
+        );
+      },
     );
     return alert;
   }

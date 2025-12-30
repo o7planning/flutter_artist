@@ -107,18 +107,11 @@ class _FilterCriteriaDialogState extends State<FilterCriteriaDialog> {
   }
 
   Widget _buildMainContent(BuildContext context) {
-    double width = MediaQuery.sizeOf(context).width;
-    double height = MediaQuery.sizeOf(context).height;
-    if (width > 620) {
-      width = 600;
-    } else {
-      width = 0.9 * width;
-    }
-    if (height > 420) {
-      height = 320;
-    } else {
-      height = height - 60;
-    }
+    final preferSize = calculateDialogSize(
+      context,
+      preferredWidth: 720,
+      preferredHeight: 420,
+    );
     //
     Widget child;
     if (widget.block != null) {
@@ -135,8 +128,8 @@ class _FilterCriteriaDialogState extends State<FilterCriteriaDialog> {
       );
     }
     return SizedBox(
-      width: width,
-      height: height,
+      width: preferSize.width,
+      height: preferSize.height,
       child: child,
     );
   }
