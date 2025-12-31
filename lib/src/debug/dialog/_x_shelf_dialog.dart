@@ -13,7 +13,7 @@ class XShelfDialog extends StatelessWidget {
     super.key,
   });
 
-  static Future<void> showXShelfDialog({
+  static Future<void> open({
     required BuildContext context,
     required XShelf xShelf,
   }) async {

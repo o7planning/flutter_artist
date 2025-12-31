@@ -86,7 +86,7 @@ class BlockOrScalarView extends StatelessWidget {
               iconSize: 14,
               iconColor: Colors.deepOrange,
               onPressed: () {
-                TipDocumentViewerDialog.showTipDocumentDialog(
+                TipDocumentViewerDialog.open(
                   context: context,
                   tipDocument: TipDocument.debugState,
                 );

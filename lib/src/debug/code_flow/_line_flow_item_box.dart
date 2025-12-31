@@ -120,7 +120,7 @@ class LineFlowItemBox extends StatelessWidget {
   }
 
   void _showExtraInfoDialog(BuildContext context) {
-    ExtraInfoViewerDialog.showExtraInfoViewerDialog(
+    ExtraInfoViewerDialog.open(
       context: context,
       title: "Extra Info",
       extraInfos: lineFlowItem.extraInfos ?? [],
@@ -129,7 +129,7 @@ class LineFlowItemBox extends StatelessWidget {
 
   void _showErrorDialog(BuildContext context) {
     if (lineFlowItem.errorInfo != null) {
-      ErrorViewerDialog.showErrorViewerDialog(
+      ErrorViewerDialog.open(
         context: context,
         title: "Error Viewer",
         errorInfo: lineFlowItem.errorInfo!,
@@ -139,7 +139,7 @@ class LineFlowItemBox extends StatelessWidget {
 
   void _showTipDocumentDialog(BuildContext context) {
     if (lineFlowItem.tipDocument != null) {
-      TipDocumentViewerDialog.showTipDocumentDialog(
+      TipDocumentViewerDialog.open(
         context: context,
         tipDocument: lineFlowItem.tipDocument!,
       );

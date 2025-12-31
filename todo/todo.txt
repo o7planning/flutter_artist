@@ -1,3 +1,11 @@
+FilterCriteriaViewerDialog ==> DebugFilterCriteriaViewerDialog
+FilterModelViewerDialog ==> DebugFilterModelViewerDialog
+FormModelViewerDialog ==> DebugFormModelViewerDialog
+ShelfStructureViewerDialog ==> DebugShelfStructureViewerDialog
+StorageViewer ==> DebugStorageViewerDialog
+UiComponentsViewerDialog ==> UiComponentsViewerDialog
+
+
 queryAndPrepareToEdit ==> queryThenPrepareToEdit
 queryAndPrepareToCreate ==> queryThenPrepareToCreate
 queryEmptyAndPrepareToCreate ==> queryEmptyThenPrepareToCreate

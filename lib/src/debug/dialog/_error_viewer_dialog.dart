@@ -34,7 +34,7 @@ class ErrorViewerDialog extends StatelessWidget {
     return alert;
   }
 
-  static Future<void> showErrorViewerDialog({
+  static Future<void> open({
     required BuildContext context,
     required String title,
     required ErrorInfo errorInfo,

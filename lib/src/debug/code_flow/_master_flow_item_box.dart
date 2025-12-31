@@ -114,7 +114,7 @@ class MasterFlowItemBox extends StatelessWidget {
   }
 
   void _showErrorDialog(BuildContext context, ErrorInfo errorInfo) {
-    ErrorViewerDialog.showErrorViewerDialog(
+    ErrorViewerDialog.open(
       context: context,
       title: "Error Viewer",
       errorInfo: errorInfo,

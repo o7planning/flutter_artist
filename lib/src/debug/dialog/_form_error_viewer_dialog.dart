@@ -122,7 +122,7 @@ class FormErrorViewerDialog extends StatelessWidget {
     );
   }
 
-  static Future<void> showFormErrorViewerDialog({
+  static Future<void> open({
     required BuildContext context,
     required FormErrorInfo formErrorInfo,
     required bool formInitialDataReady,

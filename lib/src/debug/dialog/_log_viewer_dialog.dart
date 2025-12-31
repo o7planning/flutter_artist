@@ -27,7 +27,7 @@ class LogViewerDialog extends StatefulWidget {
     return _LogViewerDialogState();
   }
 
-  static Future<void> showLogViewerDialog({
+  static Future<void> open({
     required BuildContext context,
     required Logger logger,
   }) async {
@@ -79,7 +79,7 @@ class _LogViewerDialogState extends State<LogViewerDialog> {
       onHelpPressed: loggedInUser == null || !loggedInUser.isSystemUser
           ? null
           : () {
-              TipDocumentViewerDialog.showTipDocumentDialog(
+              TipDocumentViewerDialog.open(
                 context: context,
                 tipDocument: TipDocument.logViewer,
               );
@@ -117,7 +117,7 @@ class _LogViewerDialogState extends State<LogViewerDialog> {
                 onPressed: tipDocument == null || !tipDocument.enabled
                     ? null
                     : () {
-                        TipDocumentViewerDialog.showTipDocumentDialog(
+                        TipDocumentViewerDialog.open(
                           context: context,
                           tipDocument: tipDocument,
                         );

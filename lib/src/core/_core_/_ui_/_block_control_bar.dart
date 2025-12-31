@@ -319,28 +319,29 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
     //
     return _buildBreadCrumb(
       children: [
-        if (widget.config.allowFilterCriteriaButton &&
+        if (widget.config.allowDebugFilterCriteriaViewerButton &&
             widget.block.canShowFilterCriteria())
           _ControlBarButton(
             tooltip:
                 "Current Filter Criteria of ${getClassNameWithoutGenerics(widget.block)}",
             iconData: FaIconConstants.filterCriteriaIconData,
             onAction: false,
-            onPressed: widget.config.allowFilterCriteriaButton
+            onPressed: widget.config.allowDebugFilterCriteriaViewerButton
                 ? () {
-                    FilterCriteriaDialog.showBlockFilterCriteriaDialog(
+                    DebugFilterCriteriaViewerDialog
+                        .showBlockFilterCriteriaDialog(
                       context: context,
                       block: widget.block,
                     );
                   }
                 : null,
           ),
-        if (widget.config.allowFormInfoButton && formInfoActionable.yes)
+        if (widget.config.allowDebugFormModelViewerButton && formInfoActionable.yes)
           _ControlBarButton(
             tooltip: "Form Data",
             iconData: FaIconConstants.blockIconData,
             onAction: false,
-            onPressed: widget.config.allowFormInfoButton
+            onPressed: widget.config.allowDebugFormModelViewerButton
                 ? () {
                     _showFormInfo(context, widget.block);
                   }
@@ -407,7 +408,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   }
 
   void _showFormInfo(BuildContext context, Block block) {
-    FormModelInfoDialog.showFormModelInfoDialog(
+    DebugFormModelViewerDialog.open(
       context: context,
       locationInfo: getClassNameWithoutGenerics(widget.ownerClassInstance),
       formModel: block.formModel!,
@@ -415,7 +416,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   }
 
   void _showDebugDialog(BuildContext context, Block block) {
-    RootDebugDialog.showRootDebug(
+    RootDebugDialog.open(
       context: context,
       shelf: block.shelf,
     );

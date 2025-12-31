@@ -53,7 +53,7 @@ class _Executor {
             if (FlutterArtist.debugOptions.showTaskUnitQueue) {
               BuildContext context =
                   FlutterArtist.coreFeaturesAdapter.getCurrentContext();
-              await DebugExecutorDialog.showDebugExecutorDialog(
+              await DebugExecutorDialog.open(
                 context: context,
               );
             }

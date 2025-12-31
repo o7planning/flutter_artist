@@ -2,7 +2,15 @@ enum TipDocument {
   config(enabled: true),
   logViewer(enabled: true),
   codeFlowViewer(enabled: true),
-  storageViewer(enabled: true),
+
+  debugStorageViewer(enabled: true),
+  debugShelfStructureViewer(enabled: true),
+  debugFilterCriteriaViewer(enabled: true),
+  debugFilterModelViewer(enabled: true),
+  debugFormModelViewer(enabled: true),
+  debugUiComponentsViewer(enabled: true),
+
+  debugMenu(enabled: true),
   storageStructure(enabled: true),
   coreFeaturesAdapter(enabled: true),
   loginLogoutAdapter(enabled: true),
@@ -168,8 +176,20 @@ enum TipDocument {
         return "Log Viewer";
       case TipDocument.codeFlowViewer:
         return "Code Flow Viewer";
-      case TipDocument.storageViewer:
+      case TipDocument.debugStorageViewer:
         return "Storage Viewer";
+      case TipDocument.debugShelfStructureViewer:
+        return "Debug Shelf Structure Viewer";
+      case TipDocument.debugFilterCriteriaViewer:
+        return "FilterCriteria Viewer";
+      case TipDocument.debugFilterModelViewer:
+        return "Debug Filter Model Viewer";
+      case TipDocument.debugFormModelViewer:
+        return "Debug Form Model Viewer";
+      case TipDocument.debugUiComponentsViewer:
+        return "UI Components Viewer";
+      case TipDocument.debugMenu:
+        return "Debug Menu";
     }
   }
 
@@ -260,8 +280,20 @@ enum TipDocument {
         return "Log Viewer";
       case TipDocument.codeFlowViewer:
         return "Code Flow Viewer";
-      case TipDocument.storageViewer:
-        return "Storage Viewer";
+      case TipDocument.debugStorageViewer:
+        return "Debug Storage Viewer";
+      case TipDocument.debugShelfStructureViewer:
+        return "Debug Shelf Structure Viewer";
+      case TipDocument.debugFilterCriteriaViewer:
+        return "Debug FilterCriteria Viewer";
+      case TipDocument.debugFilterModelViewer:
+        return "Debug Filter Model Viewer";
+      case TipDocument.debugFormModelViewer:
+        return "Debug Form Model Viewer";
+      case TipDocument.debugUiComponentsViewer:
+        return "UI Components Viewer";
+      case TipDocument.debugMenu:
+        return "Debug Menu";
     }
   }
 
@@ -269,112 +301,135 @@ enum TipDocument {
     switch (this) {
       case TipDocument.config:
         return [
-          "https://o7planning.org/11111/config1",
-          "https://o7planning.org/11112/config2",
+          "http://51.195.44.134:8080/vi/14841/flutterartist-config",
         ];
       case TipDocument.storageStructure:
         return [
-          "https://o7planning.org/11111/config1",
-          "https://o7planning.org/11112/config2",
+          "http://51.195.44.134:8080/vi/11111/config1",
+          "http://51.195.44.134:8080/vi/11112/config2",
         ];
       case TipDocument.coreFeaturesAdapter:
         return [
-          "https://o7planning.org/11111/config1",
-          "https://o7planning.org/11112/config2",
+          "http://51.195.44.134:8080/vi/14863/flutterartist-icorefeaturesadapter",
         ];
       case TipDocument.loginLogoutAdapter:
         return [
-          "https://o7planning.org/11111/config1",
-          "https://o7planning.org/11112/config2",
+          "http://51.195.44.134:8080/vi/11111/config1",
+          "http://51.195.44.134:8080/vi/11112/config2",
         ];
       case TipDocument.activity:
         return [
-          "https://o7planning.org/11111/config1",
-          "https://o7planning.org/11112/config2",
+          "http://51.195.44.134:8080/vi/11111/config1",
+          "http://51.195.44.134:8080/vi/11112/config2",
         ];
       case TipDocument.shelf:
         return [
-          "https://o7planning.org/11111/config1",
-          "https://o7planning.org/11112/config2",
+          "http://51.195.44.134:8080/vi/11111/config1",
+          "http://51.195.44.134:8080/vi/11112/config2",
         ];
       case TipDocument.polymorphism:
         return [
-          "https://o7planning.org/14835/flutterartist-polymorphisms",
+          "http://51.195.44.134:8080/vi/14835/flutterartist-polymorphisms",
         ];
       case TipDocument.globalData:
         return [
-          "https://o7planning.org/14839/flutterartist-global-data",
+          "http://51.195.44.134:8080/vi/14839/flutterartist-global-data",
         ];
       case TipDocument.pageData:
         return [
-          "https://o7planning.org/14749/flutterartist-pagedata",
+          "http://51.195.44.134:8080/vi/14749/flutterartist-pagedata",
         ];
       case TipDocument.locale:
         return [
-          "https://o7planning.org/14837/flutterartist-locales",
+          "http://51.195.44.134:8080/vi/14837/flutterartist-locales",
         ];
       case TipDocument.naturalQuery:
         return [
-          "https://o7planning.org/11111/config1",
-          "https://o7planning.org/11112/config2",
+          "http://51.195.44.134:8080/vi/11111/config1",
+          "http://51.195.44.134:8080/vi/11112/config2",
         ];
       case TipDocument.filterCriteria:
         return [
-          "https://o7planning.org/11111/config1",
-          "https://o7planning.org/11112/config2",
+          "http://51.195.44.134:8080/vi/11111/config1",
+          "http://51.195.44.134:8080/vi/11112/config2",
         ];
       case TipDocument.scalarActiveUIComponents:
         return [
-          "https://o7planning.org/14827/xxx",
+          "http://51.195.44.134:8080/vi/14827/xxx",
         ];
       case TipDocument.blockActiveUIComponents:
         return [
-          "https://o7planning.org/14829/xxx",
+          "http://51.195.44.134:8080/vi/14829/xxx",
         ];
       case TipDocument.blockQueryType:
         return [
-          "https://o7planning.org/14831/flutterartist-querytype",
+          "http://51.195.44.134:8080/vi/14831/flutterartist-querytype",
         ];
       case TipDocument.dataState:
         return [
-          "https://o7planning.org/14749/flutterartist-block-datastate",
+          "http://51.195.44.134:8080/vi/14749/flutterartist-block-datastate",
         ];
       case TipDocument.sorting:
         return [
-          "https://o7planning.org/11111/config1",
-          "https://o7planning.org/11112/config2",
+          "http://51.195.44.134:8080/vi/11111/config1",
+          "http://51.195.44.134:8080/vi/11112/config2",
         ];
       case TipDocument.eventReactionFreezing:
         return [
-          "https://o7planning.org/11111/config1",
-          "https://o7planning.org/11112/config2",
+          "http://51.195.44.134:8080/vi/11111/config1",
+          "http://51.195.44.134:8080/vi/11112/config2",
         ];
       case TipDocument.debugState:
         return [
-          "https://o7planning.org/11111/config1",
-          "https://o7planning.org/11112/config2",
+          "http://51.195.44.134:8080/vi/11111/config1",
+          "http://51.195.44.134:8080/vi/11112/config2",
         ];
       case TipDocument.canDoAction:
         return [
-          "https://o7planning.org/11111/config1",
-          "https://o7planning.org/11112/config2",
+          "http://51.195.44.134:8080/vi/11111/config1",
+          "http://51.195.44.134:8080/vi/11112/config2",
         ];
       case TipDocument.blockExtractParentBlockItemId:
         return [
-          "https://o7planning.org/11111/config1",
-          "https://o7planning.org/11112/config2",
+          "http://51.195.44.134:8080/vi/11111/config1",
+          "http://51.195.44.134:8080/vi/11112/config2",
         ];
       case TipDocument.logViewer:
         return [
-          "https://o7planning.org/14545/flutterartist-log-viewer",
+          "http://51.195.44.134:8080/vi/14545/flutterartist-log-viewer",
         ];
       case TipDocument.codeFlowViewer:
         return [
-          "https://o7planning.org/14833/flutterartist-code-flow-viewer",
+          "http://51.195.44.134:8080/vi/14833/flutterartist-code-flow-viewer",
         ];
-      case TipDocument.storageViewer:
+      case TipDocument.debugStorageViewer:
         return [
-          "https://o7planning.org/14849/flutterartist-storage-viewer",
+          "http://51.195.44.134:8080/vi/14849/flutterartist-debug-storage-viewer",
+        ];
+      case TipDocument.debugShelfStructureViewer:
+        return [
+          "http://51.195.44.134:8080/vi/14865/flutterartist-debug-shelf-structure-viewer",
+        ];
+      case TipDocument.debugFilterCriteriaViewer:
+        return [
+          "http://51.195.44.134:8080/vi/14701/flutterartist-filtercriteria",
+          "http://51.195.44.134:8080/vi/14851/flutterartist-debug-filter-criteria-viewer",
+        ];
+      case TipDocument.debugFilterModelViewer:
+        return [
+          "http://51.195.44.134:8080/vi/14853/flutterartist-debug-filter-model-viewer",
+        ];
+      case TipDocument.debugFormModelViewer:
+        return [
+          "http://51.195.44.134:8080/vi/14855/flutterartist-debug-form-model-viewer",
+        ];
+      case TipDocument.debugUiComponentsViewer:
+        return [
+          "http://51.195.44.134:8080/vi/14861/flutterartist-debug-ui-components-viewer",
+        ];
+      case TipDocument.debugMenu:
+        return [
+          "http://51.195.44.134:8080/vi/14857/flutterartist-debugmenu",
         ];
       case TipDocument.blockCallApiDeleteItemById:
         return [];

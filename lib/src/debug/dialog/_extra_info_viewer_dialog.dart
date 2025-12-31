@@ -63,7 +63,7 @@ class ExtraInfoViewerDialog extends StatelessWidget {
     return alert;
   }
 
-  static Future<void> showExtraInfoViewerDialog({
+  static Future<void> open({
     required BuildContext context,
     required String title,
     required List<String> extraInfos,

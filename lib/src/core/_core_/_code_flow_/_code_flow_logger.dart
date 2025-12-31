@@ -1,12 +1,14 @@
 part of '../core.dart';
 
 class CodeFlowLogger {
-  static const double resetSeconds = 10;
+  final int codeFlowRetentionPeriodInSeconds;
 
   final List<MasterFlowItem> _masterFlowItems = [];
 
   List<MasterFlowItem> get masterFlowItems =>
       List.unmodifiable(_masterFlowItems);
+
+  CodeFlowLogger({required this.codeFlowRetentionPeriodInSeconds});
 
   void clear() {
     _masterFlowItems.clear();
@@ -19,7 +21,7 @@ class CodeFlowLogger {
     _masterFlowItems.removeWhere((item) {
       DateTime now = DateTime.now();
       Duration duration = now.difference(item.createdDateTime);
-      if (duration.inSeconds > resetSeconds) {
+      if (duration.inSeconds > codeFlowRetentionPeriodInSeconds) {
         return true;
       }
       return false;

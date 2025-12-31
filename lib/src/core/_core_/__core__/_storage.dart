@@ -345,6 +345,19 @@ class _Storage extends _StorageCore {
   // ***************************************************************************
   // ***************************************************************************
 
+  Future<void> showDebugStorageViewerDialog() async {
+    BuildContext context =
+        FlutterArtist.coreFeaturesAdapter.getCurrentContext();
+    //
+    await DebugStorageViewerDialog.open(
+      context: context,
+      shelf: null,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   @_RootMethodAnnotation()
   void freezeReactionBetweenShelvesOnce() {
     __freeze._freezeReactionBetweenShelvesOnce();

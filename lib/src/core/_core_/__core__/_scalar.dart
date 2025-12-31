@@ -799,7 +799,7 @@ abstract class Scalar<
         _scalarErrorInfo!.scalarErrorMethod != ScalarErrorMethod.callApiQuery) {
       return;
     }
-    ScalarErrorViewerDialog.showScalarErrorViewerDialog(
+    ScalarErrorViewerDialog.open(
       context: context,
       scalarErrorInfo: _scalarErrorInfo!,
     );
@@ -1227,11 +1227,11 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
-  void showFilterCriteriaDialog() {
+  Future<void> showDebugFilterCriteriaViewerDialog() async {
     BuildContext context =
         FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     //
-    FilterCriteriaDialog.showScalarFilterCriteriaDialog(
+    await DebugFilterCriteriaViewerDialog.showScalarFilterCriteriaDialog(
       context: context,
       scalar: this,
     );

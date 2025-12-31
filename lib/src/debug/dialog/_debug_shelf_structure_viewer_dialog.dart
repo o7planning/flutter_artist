@@ -1,34 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist/src/core/icon/icon_constants.dart';
+import 'package:flutter_artist/src/debug/dialog/_tip_document_viewer_dialog.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
     as dialogs;
 
 import '../../core/_core_/core.dart';
+import '../../core/enums/_tip_document.dart';
 import '../../core/utils/_class_utils.dart';
 import '../shelf/_shelf_structure_graph_view.dart';
 import '../utils/_dialog_size.dart';
 
-class ShelfStructureViewDialog extends StatefulWidget {
+class DebugShelfStructureViewerDialog extends StatefulWidget {
   final Shelf shelf;
 
-  const ShelfStructureViewDialog({
+  const DebugShelfStructureViewerDialog({
     required this.shelf,
     super.key,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _ShelfStructureViewDialogState();
+    return _DebugShelfStructureViewerDialogState();
   }
 
-  static Future<void> showShelfStructureViewDialog({
+  static Future<void> open({
     required BuildContext context,
     required Shelf shelf,
   }) async {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return ShelfStructureViewDialog(
+        return DebugShelfStructureViewerDialog(
           shelf: shelf,
         );
       },
@@ -36,7 +38,8 @@ class ShelfStructureViewDialog extends StatefulWidget {
   }
 }
 
-class _ShelfStructureViewDialogState extends State<ShelfStructureViewDialog> {
+class _DebugShelfStructureViewerDialogState
+    extends State<DebugShelfStructureViewerDialog> {
   @override
   Widget build(BuildContext context) {
     Size size = DialogSizeUtils.calculateDebugDialogSize(context);
@@ -47,7 +50,7 @@ class _ShelfStructureViewDialogState extends State<ShelfStructureViewDialog> {
         FaIconConstants.shelfStructureIconData,
         size: 18,
       ),
-      titleText: "${getClassName(widget.shelf)} - Structure",
+      titleText: "Debug Shelf Structure Viewer - ${getClassName(widget.shelf)}",
       contentPadding: const EdgeInsets.all(5),
       content: _buildMainContent(
         context,
@@ -55,6 +58,12 @@ class _ShelfStructureViewDialogState extends State<ShelfStructureViewDialog> {
         size.height,
       ),
       clipBehavior: Clip.hardEdge,
+      onHelpPressed: () {
+        TipDocumentViewerDialog.open(
+          context: context,
+          tipDocument: TipDocument.debugShelfStructureViewer,
+        );
+      },
     );
     return alert;
   }

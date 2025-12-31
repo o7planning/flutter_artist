@@ -181,6 +181,6 @@ class _MasterFlowViewerState extends State<MasterFlowViewer> {
   }
 
   void _showCodeFlowSetting() {
-    CodeFlowSettingsDialog.showCodeFlowSettingsDialog(context: context);
+    CodeFlowSettingsDialog.open(context: context);
   }
 }

@@ -9,33 +9,33 @@ import '../../core/widgets/_custom_app_container.dart';
 import '../storage/_storage_view.dart';
 import '../utils/_dialog_size.dart';
 
-class StorageDialog extends StatefulWidget {
+class DebugStorageViewerDialog extends StatefulWidget {
   final Shelf? shelf;
 
-  const StorageDialog({
+  const DebugStorageViewerDialog({
     required this.shelf,
     super.key,
   });
 
   @override
-  State<StorageDialog> createState() {
-    return _StorageDialogState();
+  State<DebugStorageViewerDialog> createState() {
+    return _DebugStorageViewerDialogState();
   }
 
-  static Future<void> showStorageDialog({
+  static Future<void> open({
     required BuildContext context,
     required Shelf? shelf,
   }) async {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return StorageDialog(shelf: shelf);
+        return DebugStorageViewerDialog(shelf: shelf);
       },
     );
   }
 }
 
-class _StorageDialogState extends State<StorageDialog> {
+class _DebugStorageViewerDialogState extends State<DebugStorageViewerDialog> {
   @override
   void initState() {
     super.initState();
@@ -58,13 +58,13 @@ class _StorageDialogState extends State<StorageDialog> {
         size: 16,
         color: Colors.indigo,
       ),
-      titleText: "Storage Viewer",
+      titleText: "Debug Storage Viewer",
       content: contentWidget,
       contentPadding: EdgeInsets.zero,
       onHelpPressed: () {
-        TipDocumentViewerDialog.showTipDocumentDialog(
+        TipDocumentViewerDialog.open(
           context: context,
-          tipDocument: TipDocument.storageViewer,
+          tipDocument: TipDocument.debugStorageViewer,
         );
       },
     );

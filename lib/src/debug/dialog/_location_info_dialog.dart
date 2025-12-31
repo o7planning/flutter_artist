@@ -73,7 +73,7 @@ class LocationInfoDialog extends StatelessWidget {
   }
 }
 
-Future<void> _showLocationInfoDialog({
+Future<void> open({
   required BuildContext context,
   required String locationInfo,
 }) async {

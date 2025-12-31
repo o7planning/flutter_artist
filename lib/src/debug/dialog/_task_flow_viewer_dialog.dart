@@ -17,7 +17,7 @@ class CodeFlowViewerDialog extends StatefulWidget {
     return CodeFlowViewerDialogState();
   }
 
-  static Future<void> showCodeFlowViewerDialog({
+  static Future<void> open({
     required BuildContext context,
   }) async {
     await showDialog(
@@ -56,7 +56,7 @@ class CodeFlowViewerDialogState extends State<CodeFlowViewerDialog> {
       content: contentWidget,
       contentPadding: EdgeInsets.zero,
       onHelpPressed: () {
-        TipDocumentViewerDialog.showTipDocumentDialog(
+        TipDocumentViewerDialog.open(
           context: context,
           tipDocument: TipDocument.codeFlowViewer,
         );

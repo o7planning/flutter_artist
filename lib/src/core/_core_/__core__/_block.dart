@@ -3914,7 +3914,7 @@ abstract class Block<
         _blockErrorInfo!.blockErrorMethod != BlockErrorMethod.callApiQuery) {
       return;
     }
-    BlockErrorViewerDialog.showBlockErrorViewerDialog(
+    BlockErrorViewerDialog.open(
       context: context,
       blockErrorInfo: _blockErrorInfo!,
     );
@@ -7891,11 +7891,11 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void showFilterCriteriaDialog() {
+  Future<void> showDebugFilterCriteriaViewerDialog() async {
     BuildContext context =
         FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     //
-    FilterCriteriaDialog.showBlockFilterCriteriaDialog(
+    await DebugFilterCriteriaViewerDialog.showBlockFilterCriteriaDialog(
       context: context,
       block: this,
     );

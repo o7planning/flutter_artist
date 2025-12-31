@@ -30,13 +30,14 @@ class ShelfInfoView extends StatelessWidget {
       trailing: Tooltip(
         message: "Show Shelf Structure",
         child: SimpleSmallIconButton(
-            iconData: FaIconConstants.shelfStructureIconData,
-            iconSize: 18,
-            onPressed: shelf == null
-                ? null
-                : () {
-                    shelf!.showShelfStructureDialog();
-                  }),
+          iconData: FaIconConstants.shelfStructureIconData,
+          iconSize: 18,
+          onPressed: shelf == null
+              ? null
+              : () {
+                  shelf!.showDebugShelfStructureViewerDialog();
+                },
+        ),
       ),
       title: Text(
         getClassName(shelf),

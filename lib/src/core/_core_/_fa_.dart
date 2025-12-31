@@ -55,10 +55,10 @@ class _FlutterArtist extends _Core {
 
   Function(BuildContext context)? showRestDebugViewerDialog;
 
-  late final Logger logger;
-
   late final _NotificationEngine __notificationEngine;
-  late final CodeFlowLogger codeFlowLogger = CodeFlowLogger();
+
+  late final Logger logger;
+  late final CodeFlowLogger codeFlowLogger;
 
   final List<ILogListener> _logListeners = [];
   final List<INotificationListener> _notificationListeners = [];
@@ -173,6 +173,7 @@ class _FlutterArtist extends _Core {
     );
   }
 
+  // Docs: [14841] - FlutterArtist Config.
   Future<void> config({
     required StorageStructure storageStructure,
     required DebugOptions? debugOptions,
@@ -185,11 +186,17 @@ class _FlutterArtist extends _Core {
     required Function(BuildContext context)? showRestDebugDialog,
     int notificationFetchPeriodInSeconds = 60,
     int maxStoredLogEntryCount = 20,
+    int codeFlowRetentionPeriodInSeconds = 20,
   }) async {
     if (__coreFeaturesAdapter != null) {
       throw DebugUtils.getFatalError(
           "${getClassName(__coreFeaturesAdapter)} already registered!");
     }
+    //
+    logger = Logger(maxStoredLogEntryCount: maxStoredLogEntryCount);
+    // IMPORTANT: Call this before using MasterFlowItem.
+    codeFlowLogger = CodeFlowLogger(
+        codeFlowRetentionPeriodInSeconds: codeFlowRetentionPeriodInSeconds);
     //
     final masterFlowItem =
         FlutterArtist.codeFlowLogger._addStartup(ownerClassInstance: this);
@@ -209,10 +216,6 @@ class _FlutterArtist extends _Core {
       },
       lineFlowType: LineFlowType.debug,
       tipDocument: TipDocument.config,
-    );
-    //
-    logger = Logger(
-      maxStoredLogEntryCount: maxStoredLogEntryCount,
     );
     //
     __coreFeaturesAdapter = coreFeaturesAdapter;
@@ -409,64 +412,31 @@ class _FlutterArtist extends _Core {
     return coreFeaturesAdapter.isOverlaysOpen();
   }
 
-  Future<void> showStorageDialog() async {
-    BuildContext context = coreFeaturesAdapter.getCurrentContext();
-    await StorageDialog.showStorageDialog(context: context, shelf: null);
-  }
-
   Future<void> showCodeFlowViewerDialog() async {
     BuildContext context = coreFeaturesAdapter.getCurrentContext();
-    await CodeFlowViewerDialog.showCodeFlowViewerDialog(context: context);
+    await CodeFlowViewerDialog.open(context: context);
   }
 
-  Future<void> showShelfStructure() async {
+  Future<void> showDebugShelfStructureViewerDialog() async {
     Shelf? shelf = storage._recentShelf();
     if (shelf == null) {
       return;
     }
-    await shelf.showShelfStructureDialog();
+    await shelf.showDebugShelfStructureViewerDialog();
   }
 
-  bool canShowShelfStructure() {
+  bool canShowDebugShelfStructureViewerDialog() {
     Shelf? shelf = storage._recentShelf();
     return shelf != null;
   }
 
-  // Future<void> showRecentLogs() async {
-  //   showLogViewerDialog();
-  // }
-
   Future<void> showLogViewerDialog() async {
     BuildContext context = coreFeaturesAdapter.getCurrentContext();
     //
-    await LogViewerDialog.showLogViewerDialog(
+    await LogViewerDialog.open(
       context: context,
       logger: logger,
     );
-  }
-
-  bool hasRecentLogs() {
-    return logger.recentLogCount != 0;
-  }
-
-  bool hasRecentErrors() {
-    return logger.recentErrorCount != 0;
-  }
-
-  bool hasRecentWarnings() {
-    return logger.recentWarningCount != 0;
-  }
-
-  bool hasLogs() {
-    return logger.totalLogCount != 0;
-  }
-
-  bool hasErrors() {
-    return logger.totalErrorCount != 0;
-  }
-
-  bool hasWarnings() {
-    return logger.totalWarningCount != 0;
   }
 
   // TODO: (Internal)

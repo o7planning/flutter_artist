@@ -367,7 +367,7 @@ abstract class FormModel<
     if (dataState != DataState.error) {
       return;
     }
-    FormErrorViewerDialog.showFormErrorViewerDialog(
+    FormErrorViewerDialog.open(
       context: context,
       formErrorInfo: formErrorInfo!,
       formInitialDataReady: formInitialDataReady,
@@ -2269,6 +2269,20 @@ abstract class FormModel<
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     return taskUnit.taskResult;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<void> showDebugFormModelViewerDialog() async {
+    BuildContext context =
+        FlutterArtist.coreFeaturesAdapter.getCurrentContext();
+    //
+    await DebugFormModelViewerDialog.open(
+      context: context,
+      locationInfo: getClassName(this),
+      formModel: this,
+    );
   }
 
   // ***************************************************************************

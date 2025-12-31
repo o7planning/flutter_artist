@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_artist/src/debug/dialog/_tip_document_viewer_dialog.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
     as dialogs;
 
 import '../../core/_core_/core.dart';
+import '../../core/enums/_tip_document.dart';
 import '../../core/utils/_class_utils.dart';
 import '../form/_form_data_debug_view.dart';
 import '../shelf/_shelf_structure_graph_view.dart';
 import '../utils/_dialog_size.dart';
 
-class FormModelInfoDialog extends StatefulWidget {
+class DebugFormModelViewerDialog extends StatefulWidget {
   final FormModel formModel;
   final String locationInfo;
 
-  const FormModelInfoDialog({
+  const DebugFormModelViewerDialog({
     required this.formModel,
     required this.locationInfo,
     super.key,
@@ -20,10 +22,10 @@ class FormModelInfoDialog extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _FormModelInfoDialogState();
+    return _DebugFormModelViewerDialogState();
   }
 
-  static Future<void> showFormModelInfoDialog({
+  static Future<void> open({
     required BuildContext context,
     required String locationInfo,
     required FormModel formModel,
@@ -31,7 +33,7 @@ class FormModelInfoDialog extends StatefulWidget {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return FormModelInfoDialog(
+        return DebugFormModelViewerDialog(
           formModel: formModel,
           locationInfo: locationInfo,
         );
@@ -40,7 +42,8 @@ class FormModelInfoDialog extends StatefulWidget {
   }
 }
 
-class _FormModelInfoDialogState extends State<FormModelInfoDialog> {
+class _DebugFormModelViewerDialogState
+    extends State<DebugFormModelViewerDialog> {
   bool showFormData = true;
 
   @override
@@ -50,7 +53,7 @@ class _FormModelInfoDialogState extends State<FormModelInfoDialog> {
     // Set up the AlertDialog
     dialogs.FaAlertDialog alert = dialogs.FaAlertDialog(
       titleText: showFormData
-          ? "${getClassName(widget.formModel)} - Form Data"
+          ? "${getClassName(widget.formModel)} - Debug Form Model Viewer"
           : "${getClassName(widget.formModel.block.shelf)} - Structure",
       contentPadding: const EdgeInsets.all(5),
       content: _buildMainContent(
@@ -59,6 +62,12 @@ class _FormModelInfoDialogState extends State<FormModelInfoDialog> {
         size.height,
       ),
       clipBehavior: Clip.hardEdge,
+      onHelpPressed: () {
+        TipDocumentViewerDialog.open(
+          context: context,
+          tipDocument: TipDocument.debugFormModelViewer,
+        );
+      },
     );
     return alert;
   }

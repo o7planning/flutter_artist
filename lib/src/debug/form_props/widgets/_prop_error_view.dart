@@ -71,7 +71,7 @@ class FormErrorPropView extends StatelessWidget {
   void _showErrorDetails(BuildContext context) {
     ErrorInfo? errorInfo = formErrorInfo.toErrorInfo();
     //
-    ErrorViewerDialog.showErrorViewerDialog(
+    ErrorViewerDialog.open(
       context: context,
       title: "Error",
       errorInfo: errorInfo,

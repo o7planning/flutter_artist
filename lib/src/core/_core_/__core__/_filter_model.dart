@@ -1159,11 +1159,11 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> showFilterModelDebugDialog() async {
+  Future<void> showDebugFilterModelViewerDialog() async {
     BuildContext context =
         FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     //
-    await FilterModelInfoDialog.showFilterModelInfoDialog(
+    await DebugFilterModelViewerDialog.open(
       context: context,
       locationInfo: "locationInfo", // TODO: Remove.
       filterModel: this,
@@ -1173,11 +1173,11 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void showFilterCriteriaDialog() {
+  Future<void> showDebugFilterCriteriaViewerDialog() async {
     BuildContext context =
         FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     //
-    FilterCriteriaDialog.showFilterCriteriaDialog(
+    await DebugFilterCriteriaViewerDialog.showFilterCriteriaViewerDialog(
       context: context,
       filterModel: this,
     );

@@ -20,6 +20,6 @@ class BlockCriteriaView extends BlkOrScrCriteriaView {
 
   @override
   XFilterCriteria? getXFilterCriteria() {
-    return block.debugXFilterCriteria ;
+    return block.debugXFilterCriteria;
   }
 }

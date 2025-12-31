@@ -6,9 +6,9 @@ class BlockControlBarConfig {
   final bool allowCreateButton;
   final bool allowSaveButton;
   final bool allowDeleteButton;
-  final bool allowFormInfoButton;
   final bool allowBackButton;
-  final bool allowFilterCriteriaButton;
+  final bool allowDebugFormModelViewerButton;
+  final bool allowDebugFilterCriteriaViewerButton;
   final bool allowDebugButton;
 
   const BlockControlBarConfig({
@@ -18,8 +18,8 @@ class BlockControlBarConfig {
     required this.allowSaveButton,
     required this.allowDeleteButton,
     required this.allowBackButton,
-    required this.allowFormInfoButton,
-    this.allowFilterCriteriaButton = false,
+    required this.allowDebugFormModelViewerButton,
+    this.allowDebugFilterCriteriaViewerButton = false,
     this.allowDebugButton = false,
   });
 }

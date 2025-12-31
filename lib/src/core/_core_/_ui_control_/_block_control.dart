@@ -101,7 +101,7 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
         return deleteActionable.yes ? __deleteCurrentItem : null;
       case BlockControlActionType.showFormInfo:
         Actionable formInfoActionable = widget.block.canShowFormInfo();
-        return formInfoActionable.yes ? __showFormInfo : null;
+        return formInfoActionable.yes ? __showDebugFormModelViewerDialog : null;
     }
   }
 
@@ -155,8 +155,8 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
     return result.successForAll;
   }
 
-  Future<bool> __showFormInfo() async {
-    FormModelInfoDialog.showFormModelInfoDialog(
+  Future<bool> __showDebugFormModelViewerDialog() async {
+    DebugFormModelViewerDialog.open(
       context: context,
       locationInfo: getClassName(widget.ownerClassInstance),
       formModel: widget.block.formModel!,

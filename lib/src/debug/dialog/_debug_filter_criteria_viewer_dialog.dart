@@ -1,29 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_artist/src/debug/dialog/_tip_document_viewer_dialog.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../core/_core_/core.dart';
+import '../../core/enums/_tip_document.dart';
 import '../../core/icon/icon_constants.dart';
-import '../../core/utils/_class_utils.dart';
 import '../filter/__filter_criteria_debug_view.dart';
 
-class FilterCriteriaDialog extends StatefulWidget {
+class DebugFilterCriteriaViewerDialog extends StatefulWidget {
   final FilterModel? filterModel;
   final Scalar? scalar;
   final Block? block;
 
-  const FilterCriteriaDialog.block({
+  const DebugFilterCriteriaViewerDialog.block({
     required Block this.block,
     super.key,
   })  : scalar = null,
         filterModel = null;
 
-  const FilterCriteriaDialog.scalar({
+  const DebugFilterCriteriaViewerDialog.scalar({
     required Scalar this.scalar,
     super.key,
   })  : block = null,
         filterModel = null;
 
-  const FilterCriteriaDialog.filterModel({
+  const DebugFilterCriteriaViewerDialog.filterModel({
     required FilterModel this.filterModel,
     super.key,
   })  : block = null,
@@ -31,17 +32,17 @@ class FilterCriteriaDialog extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _FilterCriteriaDialogState();
+    return _DebugFilterCriteriaViewerDialogState();
   }
 
-  static Future<void> showFilterCriteriaDialog({
+  static Future<void> showFilterCriteriaViewerDialog({
     required BuildContext context,
     required FilterModel filterModel,
   }) async {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return FilterCriteriaDialog.filterModel(
+        return DebugFilterCriteriaViewerDialog.filterModel(
           filterModel: filterModel,
         );
       },
@@ -55,7 +56,7 @@ class FilterCriteriaDialog extends StatefulWidget {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return FilterCriteriaDialog.block(
+        return DebugFilterCriteriaViewerDialog.block(
           block: block,
         );
       },
@@ -69,7 +70,7 @@ class FilterCriteriaDialog extends StatefulWidget {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return FilterCriteriaDialog.scalar(
+        return DebugFilterCriteriaViewerDialog.scalar(
           scalar: scalar,
         );
       },
@@ -77,19 +78,21 @@ class FilterCriteriaDialog extends StatefulWidget {
   }
 }
 
-class _FilterCriteriaDialogState extends State<FilterCriteriaDialog> {
+class _DebugFilterCriteriaViewerDialogState
+    extends State<DebugFilterCriteriaViewerDialog> {
   static const double fontSize = 13;
 
   String _title() {
-    if (widget.scalar != null) {
-      return "Current FilterCriteria of ${getClassName(widget.scalar!)}";
-    } else if (widget.block != null) {
-      return "Current FilterCriteria of ${getClassName(widget.block!)}";
-    } else if (widget.filterModel != null) {
-      return "Current FilterCriteria of ${getClassName(widget.filterModel!)}";
-    } else {
-      throw UnimplementedError();
-    }
+    // if (widget.scalar != null) {
+    //   return "Current FilterCriteria of ${getClassName(widget.scalar!)}";
+    // } else if (widget.block != null) {
+    //   return "Current FilterCriteria of ${getClassName(widget.block!)}";
+    // } else if (widget.filterModel != null) {
+    //   return "Current FilterCriteria of ${getClassName(widget.filterModel!)}";
+    // } else {
+    //   throw UnimplementedError();
+    // }
+    return "Debug Filter Criteria Viewer";
   }
 
   @override
@@ -102,6 +105,12 @@ class _FilterCriteriaDialogState extends State<FilterCriteriaDialog> {
       titleText: _title(),
       contentPadding: const EdgeInsets.all(5),
       content: _buildMainContent(context),
+      onHelpPressed: () {
+        TipDocumentViewerDialog.open(
+          context: context,
+          tipDocument: TipDocument.debugFilterCriteriaViewer,
+        );
+      },
     );
     return alert;
   }

@@ -4,6 +4,7 @@ import 'package:flutter_artist_core/flutter_artist_core.dart';
 import '../../core/_core_/core.dart';
 import '../../core/icon/icon_constants.dart';
 
+// Docs: [14857] - Debug Menu.
 class DebugMenu extends StatefulWidget {
   final double menuItemIconSize;
   final Color? menuItemIconColor;
@@ -40,7 +41,7 @@ class __DebugMenuState extends State<DebugMenu> implements ILogListener {
   Widget build(BuildContext context) {
     // docs: [14683].
     ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
-    bool hasLogs = FlutterArtist.hasLogs();
+    bool hasLogs = FlutterArtist.logger.hasLogEntries();
     bool isSystemUser = loggedInUser?.isSystemUser ?? false;
     //
     return InkWell(
@@ -71,24 +72,24 @@ class __DebugMenuState extends State<DebugMenu> implements ILogListener {
                       onTab: _showLogViewerDialog,
                     ),
                   if (isSystemUser && hasLogs) _divider(),
-                  if (isSystemUser && FlutterArtist.canShowShelfStructure())
+                  if (isSystemUser && FlutterArtist.canShowDebugShelfStructureViewerDialog())
                     _buildPopupMenuItem(
                       iconData: FaIconConstants.shelfStructureIconData,
-                      title: 'Shelf Structure',
-                      onTab: _showShelfStructure,
+                      title: 'Shelf Structure Viewer',
+                      onTab: _showDebugShelfStructureViewer,
                     ),
                   if (isSystemUser &&
                       FlutterArtist.debugCanShowUiComponentDialog())
                     _buildPopupMenuItem(
                       iconData: FaIconConstants.uiComponentsIconData,
-                      title: 'UI Components',
+                      title: 'UI Components Viewer',
                       onTab: _showUiComponentsDialog,
                     ),
                   if (isSystemUser)
                     _buildPopupMenuItem(
                       iconData: FaIconConstants.storageIconData,
                       title: 'Storage Viewer',
-                      onTab: _showStorage,
+                      onTab: _showDebugStorageViewerDialog,
                     ),
                   if (isSystemUser) _divider(),
                   if (isSystemUser)
@@ -122,7 +123,6 @@ class __DebugMenuState extends State<DebugMenu> implements ILogListener {
           recentWarningCount: FlutterArtist.logger.recentWarningCount,
           totalErrorCount: FlutterArtist.logger.totalErrorCount,
           totalWarningCount: FlutterArtist.logger.totalWarningCount,
-          viewed: FlutterArtist.logger.viewed,
         ),
       ),
     );
@@ -164,9 +164,9 @@ class __DebugMenuState extends State<DebugMenu> implements ILogListener {
     FlutterArtist.showRestDebugViewerDialog!(context);
   }
 
-  Future<void> _showStorage() async {
+  Future<void> _showDebugStorageViewerDialog() async {
     Navigator.pop(context, null);
-    await FlutterArtist.showStorageDialog();
+    await FlutterArtist.storage.showDebugStorageViewerDialog();
   }
 
   void _clearCodeFlow() {
@@ -179,9 +179,9 @@ class __DebugMenuState extends State<DebugMenu> implements ILogListener {
     await FlutterArtist.showCodeFlowViewerDialog();
   }
 
-  Future<void> _showShelfStructure() async {
+  Future<void> _showDebugShelfStructureViewer() async {
     Navigator.pop(context, null);
-    await FlutterArtist.showShelfStructure();
+    await FlutterArtist.showDebugShelfStructureViewerDialog();
   }
 
   Future<void> _showLogViewerDialog() async {

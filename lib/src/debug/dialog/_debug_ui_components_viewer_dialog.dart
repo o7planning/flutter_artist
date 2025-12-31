@@ -1,32 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_artist/src/debug/dialog/_tip_document_viewer_dialog.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../core/_core_/core.dart';
 import '../../core/enums/_show_mode.dart';
+import '../../core/enums/_tip_document.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/utils/_class_utils.dart';
 
-class UiComponentsDialog extends StatefulWidget {
+class DebugUiComponentsViewerDialog extends StatefulWidget {
   final Shelf? shelf;
   final Block? block;
   final Scalar? scalar;
   final bool showActiveOnly;
 
-  const UiComponentsDialog.block({
+  const DebugUiComponentsViewerDialog.block({
     required Block this.block,
     this.showActiveOnly = true,
     super.key,
   })  : shelf = null,
         scalar = null;
 
-  const UiComponentsDialog.scalar({
+  const DebugUiComponentsViewerDialog.scalar({
     required Scalar this.scalar,
     this.showActiveOnly = true,
     super.key,
   })  : shelf = null,
         block = null;
 
-  const UiComponentsDialog.shelf({
+  const DebugUiComponentsViewerDialog.shelf({
     required Shelf this.shelf,
     this.showActiveOnly = true,
     super.key,
@@ -35,17 +37,17 @@ class UiComponentsDialog extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _UiComponentsDialogState();
+    return _DebugUiComponentsViewerDialogState();
   }
 
-  static Future<void> showActiveUIComponentsDialog({
+  static Future<void> open({
     required BuildContext context,
     required Shelf shelf,
   }) async {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return UiComponentsDialog.shelf(
+        return DebugUiComponentsViewerDialog.shelf(
           shelf: shelf,
         );
       },
@@ -53,7 +55,8 @@ class UiComponentsDialog extends StatefulWidget {
   }
 }
 
-class _UiComponentsDialogState extends State<UiComponentsDialog> {
+class _DebugUiComponentsViewerDialogState
+    extends State<DebugUiComponentsViewerDialog> {
   static const double fontSize = 13;
 
   String _title() {
@@ -109,31 +112,34 @@ class _UiComponentsDialogState extends State<UiComponentsDialog> {
   @override
   Widget build(BuildContext context) {
     FaAlertDialog alert = FaAlertDialog(
-      titleText: _title(),
+      icon: Icon(
+        FaIconConstants.uiComponentsIconData,
+        size: 18,
+      ),
+      titleText: "Debug UI Components Viewer",
       contentPadding: const EdgeInsets.all(5),
       content: _buildMainContent(context),
+      onHelpPressed: () {
+        TipDocumentViewerDialog.open(
+          context: context,
+          tipDocument: TipDocument.debugUiComponentsViewer,
+        );
+      },
     );
     return alert;
   }
 
   Widget _buildMainContent(BuildContext context) {
-    double width = MediaQuery.sizeOf(context).width;
-    double height = MediaQuery.sizeOf(context).height;
-    if (width > 520) {
-      width = 500;
-    } else {
-      width = 0.9 * width;
-    }
-    if (height > 420) {
-      height = 320;
-    } else {
-      height = height - 60;
-    }
+    final size = calculatePreferredDialogSize(
+      context,
+      preferredWidth: 560,
+      preferredHeight: 320,
+    );
     //
     Map<IRefreshableWidgetState, XState> widgetStates = _findWidgetStates();
     return SizedBox(
-      width: width,
-      height: height,
+      width: size.width,
+      height: size.height,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -144,6 +150,8 @@ class _UiComponentsDialogState extends State<UiComponentsDialog> {
               label: "Block: ",
               text: "${getClassName(widget.block)} (${widget.block!.name})",
             ),
+          if (widget.block != null) const SizedBox(height: 10),
+          Text(_title()),
           const SizedBox(height: 10),
           Expanded(
             child: ListView(
@@ -216,18 +224,4 @@ class _UiComponentsDialogState extends State<UiComponentsDialog> {
       ),
     );
   }
-}
-
-Future<void> _showBlockUIComponentsDialog({
-  required BuildContext context,
-  required Block block,
-}) async {
-  await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return UiComponentsDialog.block(
-        block: block,
-      );
-    },
-  );
 }

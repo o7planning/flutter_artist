@@ -13,7 +13,7 @@ class RootDebugDialog extends StatelessWidget {
     super.key,
   });
 
-  static Future<void> showRootDebug({
+  static Future<void> open({
     required BuildContext context,
     required Shelf shelf,
   }) async {

@@ -55,7 +55,7 @@ abstract class FilterPanel<FILTER_MODEL extends FilterModel>
             padding: EdgeInsets.zero,
           ),
       onPressed: () {
-        showFilterModelDebugDialog();
+        showDebugFilterModelViewerDialog();
       },
       child: Icon(
         FaIconConstants.filterModelDebugIconData,
@@ -65,11 +65,11 @@ abstract class FilterPanel<FILTER_MODEL extends FilterModel>
     );
   }
 
-  Future<void> showFilterModelDebugDialog() async {
+  Future<void> showDebugFilterModelViewerDialog() async {
     BuildContext context =
         FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     //
-    await FilterModelInfoDialog.showFilterModelInfoDialog(
+    await DebugFilterModelViewerDialog.open(
       context: context,
       locationInfo: getClassName(this),
       filterModel: filterModel,

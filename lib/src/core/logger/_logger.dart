@@ -3,7 +3,6 @@ import 'package:flutter_artist_core/flutter_artist_core.dart';
 import '../_core_/core.dart';
 
 class Logger {
-  bool __viewed = true;
   int __recentErrorCount = 0;
   int __recentWarningCount = 0;
 
@@ -14,7 +13,8 @@ class Logger {
 
   final List<LogEntry> __logEntries = [];
 
-  bool get viewed => __viewed;
+  bool get hasRecentLogEntries =>
+      __recentErrorCount != 0 || __recentWarningCount != 0;
 
   int get recentLogCount => __recentErrorCount + __recentWarningCount;
 
@@ -29,7 +29,6 @@ class Logger {
   int get totalWarningCount => __totalWarningCount;
 
   LogSummary get logSummary => LogSummary(
-        viewed: __viewed,
         recentErrorCount: __recentErrorCount,
         recentWarningCount: __recentWarningCount,
         totalErrorCount: __totalErrorCount,
@@ -42,15 +41,37 @@ class Logger {
 
   LogEntry? get lastEntry => __logEntries.isEmpty ? null : __logEntries.first;
 
+  bool hasRecentLogs() {
+    return recentLogCount != 0;
+  }
+
+  bool hasRecentErrors() {
+    return recentErrorCount != 0;
+  }
+
+  bool hasRecentWarnings() {
+    return recentWarningCount != 0;
+  }
+
+  bool hasLogEntries() {
+    return totalLogCount != 0;
+  }
+
+  bool hasErrors() {
+    return totalErrorCount != 0;
+  }
+
+  bool hasWarnings() {
+    return totalWarningCount != 0;
+  }
+
   void setViewed() {
-    __viewed = true;
     __recentErrorCount = 0;
     __recentWarningCount = 0;
     FlutterArtist.internalNotifyLog();
   }
 
   void clear() {
-    __viewed = true;
     __recentErrorCount = 0;
     __recentWarningCount = 0;
     __totalErrorCount = 0;
@@ -65,7 +86,6 @@ class Logger {
     required StackTrace? stackTrace,
     required Object? tipDocument,
   }) {
-    __viewed = false;
     __recentErrorCount++;
     __totalErrorCount++;
     final errorInfo = ErrorInfo(
@@ -94,7 +114,6 @@ class Logger {
     required StackTrace? stackTrace,
     required Object? tipDocument,
   }) {
-    __viewed = false;
     __recentWarningCount++;
     __totalWarningCount++;
     final logEntry = LogEntry.warning(

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
@@ -66,8 +64,6 @@ class _FilterDataDebugViewState extends State<FilterDataDebugView> {
       ],
     );
   }
-
-
 
   Color _getTabIconColor(TabStatus tabStatus) {
     return tabStatus == TabStatus.selected ? Colors.indigo : Colors.black;

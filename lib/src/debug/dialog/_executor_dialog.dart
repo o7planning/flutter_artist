@@ -11,7 +11,7 @@ class DebugExecutorDialog extends StatelessWidget {
     super.key,
   });
 
-  static Future<void> showDebugExecutorDialog({
+  static Future<void> open({
     required BuildContext context,
   }) async {
     await showDialog(

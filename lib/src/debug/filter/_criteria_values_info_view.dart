@@ -33,7 +33,8 @@ class CriteriaValuesView extends StatelessWidget {
       children: [
         HtmlInfoView(
           showIcon: false,
-          infoAsHtml: "Data of <b>$filterCriteriaPath</b>:",
+          infoAsHtml:
+              "Data of <b>$filterCriteriaPath</b> (<b>${getClassNameWithoutGenerics(filterCriteria)}</b>):",
         ),
         SizedBox(height: 5),
         if (filterCriteria != null)

@@ -30,7 +30,7 @@ abstract class Activity extends _Core {
       methodName: "executeActivity",
       parameters: null,
       navigate: null,
-      isLibMethod: false,
+      isLibMethod: true,
     );
     //
     masterFlowItem._addLineFlowItem(

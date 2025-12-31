@@ -122,7 +122,7 @@ class ScalarErrorViewerDialog extends StatelessWidget {
     );
   }
 
-  static Future<void> showScalarErrorViewerDialog({
+  static Future<void> open({
     required BuildContext context,
     required ScalarErrorInfo scalarErrorInfo,
   }) async {

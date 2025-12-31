@@ -19,7 +19,7 @@ class TipDocumentViewerDialog extends StatefulWidget {
     return _TipDocumentViewerDialogState();
   }
 
-  static Future<void> showTipDocumentDialog({
+  static Future<void> open({
     required BuildContext context,
     required TipDocument tipDocument,
   }) async {
@@ -56,7 +56,7 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
         color: Colors.deepOrange,
         size: 16,
       ),
-      titleText: "${tipDocument.getTitle()} (Tip & Docs)",
+      titleText: "Tip & Docs - ${tipDocument.getTitle()}",
       contentPadding: EdgeInsets.all(8),
       content: SizedBox(
         width: preferredSize.width,
